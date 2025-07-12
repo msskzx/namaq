@@ -23,7 +23,7 @@ const NavBar: React.FC = () => {
           <Link href="/" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
             {translations[language].home}
           </Link>
-          <Link href="/learn" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
+          <Link href="/arabic" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
             {translations[language].learn}
           </Link>
           <Link href="/grammar" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
@@ -59,7 +59,7 @@ const NavBar: React.FC = () => {
             <Link href="/" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2" onClick={() => setMenuOpen(false)}>
               {translations[language].home}
             </Link>
-            <Link href="/learn" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2" onClick={() => setMenuOpen(false)}>
+            <Link href="/arabic" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2" onClick={() => setMenuOpen(false)}>
               {translations[language].learn}
             </Link>
             <Link href="/grammar" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2" onClick={() => setMenuOpen(false)}>
