@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { LanguageProvider } from "@/components/LanguageContext";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
+import CookieConsent from "@/components/CookieConsent";
+import ConditionalAnalytics from "@/components/ConditionalAnalytics";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,6 +41,9 @@ export default function RootLayout({
             </main>
             <Footer />
           </div>
+          <SpeedInsights />
+          <ConditionalAnalytics />
+          <CookieConsent />
         </LanguageProvider>
       </body>
     </html>

@@ -24,15 +24,15 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article, language }) => {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300 hover:scale-105">
       <div className="p-4 sm:p-6">
-        {/* Icon */}
-        <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center mb-3 sm:mb-4 ${getColorClasses(article.color)}`}>
-          <FontAwesomeIcon icon={article.icon} className="w-5 h-5 sm:w-6 sm:h-6" />
+        {/* Title with Icon */}
+        <div className="flex items-center gap-3 mb-2">
+          <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center ${getColorClasses(article.color)}`}>
+            <FontAwesomeIcon icon={article.icon} className="w-4 h-4 sm:w-5 sm:h-5" />
+          </div>
+          <h3 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-white">
+            {language === 'ar' ? article.titleAr : article.title}
+          </h3>
         </div>
-
-        {/* Title */}
-        <h3 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-white mb-2">
-          {language === 'ar' ? article.titleAr : article.title}
-        </h3>
 
         {/* Description */}
         <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 mb-4">
