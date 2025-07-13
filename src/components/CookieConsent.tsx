@@ -17,6 +17,9 @@ const CookieConsent: React.FC = () => {
   const { language } = useLanguage();
 
   useEffect(() => {
+    // Only run on client side
+    if (typeof window === 'undefined') return;
+    
     const consent = localStorage.getItem('cookie-consent');
     if (!consent) {
       setShowBanner(true);
@@ -24,6 +27,9 @@ const CookieConsent: React.FC = () => {
   }, []);
 
   const handleAccept = () => {
+    // Only run on client side
+    if (typeof window === 'undefined') return;
+    
     localStorage.setItem('cookie-consent', 'accepted');
     setShowBanner(false);
     setShowSettings(false);
@@ -32,6 +38,9 @@ const CookieConsent: React.FC = () => {
   };
 
   const handleDecline = () => {
+    // Only run on client side
+    if (typeof window === 'undefined') return;
+    
     localStorage.setItem('cookie-consent', 'declined');
     setShowBanner(false);
     setShowSettings(false);

@@ -7,6 +7,7 @@ import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import CookieConsent from "@/components/CookieConsent";
 import ConditionalAnalytics from "@/components/ConditionalAnalytics";
+import SWRProvider from "@/components/SWRProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,16 +35,18 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <LanguageProvider>
-          <div className="min-h-screen flex flex-col">
-            <NavBar />
-            <main className="flex-1">
-              {children}
-            </main>
-            <Footer />
-          </div>
-          <SpeedInsights />
-          <ConditionalAnalytics />
-          <CookieConsent />
+          <SWRProvider>
+            <div className="min-h-screen flex flex-col">
+              <NavBar />
+              <main className="flex-1">
+                {children}
+              </main>
+              <Footer />
+            </div>
+            <SpeedInsights />
+            <ConditionalAnalytics />
+            <CookieConsent />
+          </SWRProvider>
         </LanguageProvider>
       </body>
     </html>

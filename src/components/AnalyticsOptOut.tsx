@@ -8,11 +8,17 @@ const AnalyticsOptOut: React.FC = () => {
   const { language } = useLanguage();
 
   useEffect(() => {
+    // Only run on client side
+    if (typeof window === 'undefined') return;
+    
     const consent = localStorage.getItem('cookie-consent');
     setAnalyticsEnabled(consent === 'accepted');
   }, []);
 
   const handleToggleAnalytics = (enabled: boolean) => {
+    // Only run on client side
+    if (typeof window === 'undefined') return;
+    
     if (enabled) {
       localStorage.setItem('cookie-consent', 'accepted');
       window.gtag = window.gtag || function() {};
