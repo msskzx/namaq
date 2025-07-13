@@ -1,5 +1,5 @@
 import { prisma } from './prisma';
-import type { Article, Category, User, UserPreferences } from '../generated/prisma';
+import type { UserPreferences } from '../generated/prisma';
 
 // Article operations
 export const getArticles = async () => {
@@ -76,7 +76,7 @@ export const createAnalyticsEvent = async (data: {
   userId?: string;
   sessionId: string;
   eventType: string;
-  eventData?: any;
+  eventData?: Record<string, unknown>;
   userAgent?: string;
   ipAddress?: string;
 }) => {
@@ -85,7 +85,8 @@ export const createAnalyticsEvent = async (data: {
       userId: data.userId,
       sessionId: data.sessionId,
       eventType: data.eventType,
-      eventData: data.eventData,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      eventData: data.eventData as any, // TODO: Fix type issue
       userAgent: data.userAgent,
       ipAddress: data.ipAddress,
     },
