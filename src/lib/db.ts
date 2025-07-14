@@ -129,4 +129,25 @@ export const updateUserProgress = async (
       completedAt: data.completed ? new Date() : undefined,
     },
   });
+};
+
+// People operations
+export const getPeople = async () => {
+  return await prisma.person.findMany({
+    orderBy: { name: 'asc' },
+  });
+};
+
+export const getPersonBySlug = async (slug: string) => {
+  return await prisma.person.findUnique({
+    where: { slug },
+    include: {
+      relationsFrom: {
+        include: { to: true },
+      },
+      relationsTo: {
+        include: { from: true },
+      },
+    },
+  });
 }; 
