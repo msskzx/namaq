@@ -5,6 +5,7 @@ import type { Person, PersonRelation } from '@/generated/prisma';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import PersonRelationsGraph from '@/components/PersonRelationsGraph';
+import Image from 'next/image';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -31,7 +32,7 @@ const PersonDetailPage = ({ params }: PageProps) => {
         }
         const data = await response.json();
         setPerson(data);
-      } catch (err) {
+      } catch {
         setError('حدث خطأ أثناء تحميل البيانات');
       } finally {
         setIsLoading(false);
@@ -62,7 +63,7 @@ const PersonDetailPage = ({ params }: PageProps) => {
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col items-center justify-center mb-4 gap-4">
         {person.picture ? (
-          <img src={person.picture} alt={person.name} className="w-16 h-16 rounded-full object-cover border" />
+          <Image src={person.picture} alt={person.name} width={64} height={64} className="w-16 h-16 rounded-full object-cover border" />
         ) : (
           <span className="w-16 h-16 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700">
             <FontAwesomeIcon icon={faUser} className="text-3xl text-gray-500 dark:text-gray-300" />

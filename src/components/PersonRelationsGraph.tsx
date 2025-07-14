@@ -62,7 +62,7 @@ export default function PersonRelationsGraph({ person, relationsFrom, relationsT
     <div className="flex justify-center my-8">
       <svg width={400} height={400}>
         {/* Render all lines first so they appear beneath the nodes */}
-        {relationPairList.map(([key, rel], i) => {
+        {relationPairList.map(([, rel], i) => {
           const angle = i * angleStep - Math.PI / 2;
           const x = CENTER_X + RADIUS * Math.cos(angle);
           const y = CENTER_Y + RADIUS * Math.sin(angle);
@@ -76,12 +76,10 @@ export default function PersonRelationsGraph({ person, relationsFrom, relationsT
           {person.name}
         </text>
         {/* Relation nodes */}
-        {relationPairList.map(([key, rel], i) => {
+        {relationPairList.map(([, rel], i) => {
           const angle = i * angleStep - Math.PI / 2;
           const x = CENTER_X + RADIUS * Math.cos(angle);
           const y = CENTER_Y + RADIUS * Math.sin(angle);
-          // Spread labels along the line
-          const labelSpacing = 18;
           return (
             <g key={rel.id}>
               {/* Node as a link if slug exists; only circle and text are clickable */}
@@ -104,8 +102,7 @@ export default function PersonRelationsGraph({ person, relationsFrom, relationsT
               </g>
               {/* All relation type labels under the node, reversed order */}
               {[...rel.types].reverse().map((type, idx) => {
-                const labelSpacing = 18;
-                const labelY = y + 40 + labelSpacing + idx * 16; // 40 is node radius, 18 is spacing, 16 is line height
+                const labelY = y + 40 + 18 + idx * 16; // 40 is node radius, 18 is spacing, 16 is line height
                 return (
                   <text key={type} x={x} y={labelY} textAnchor="middle" fill="#888" fontSize={13} fontWeight="bold">
                     {relationTypeArabic[type as keyof typeof relationTypeArabic] || type}
