@@ -64,8 +64,7 @@ async function main() {
     const battleSlugToId: Record<string, string> = {};
     for (const battle of battleRecords) {
       // Use slug from nameEn or name (assuming slug is not a field in Battle)
-      const slug = (battle.nameEn || battle.name || '').toLowerCase().replace(/\s+/g, '-');
-      battleSlugToId[slug] = battle.id;
+      battleSlugToId[battle.slug] = battle.id;
     }
     for (const participation of peopleBattleParticipations) {
       const person = personRecords[participation.personSlug];
@@ -81,6 +80,7 @@ async function main() {
         });
         console.log(`  [BattleParticipation] Seeded: ${person.name} in ${participation.battleSlug}`);
       } else {
+        console.warn(battleId)
         console.warn(`⚠️ Could not find person or battle for participation:`, participation);
       }
     }

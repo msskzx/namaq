@@ -149,6 +149,9 @@ export const getPersonBySlug = async (slug: string) => {
       relationsTo: {
         include: { from: true },
       },
+      participations: {
+        include: { battle: true },
+      },
     },
   });
 }; 

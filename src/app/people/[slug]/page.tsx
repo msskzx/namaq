@@ -22,6 +22,7 @@ const PersonDetailPage = ({ params }: PageProps) => {
       titles: Title[];
       relationsFrom: (PersonRelation & { to: Person })[];
       relationsTo: (PersonRelation & { from: Person })[];
+      participations?: { battle: { id: string; name: string; nameEn: string | null; slug: string } }[];
     }) | null
   >(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -76,19 +77,26 @@ const PersonDetailPage = ({ params }: PageProps) => {
           </span>
         )}
         <h1 className="text-3xl font-bold text-center">{person.name}</h1>
-        {person.titles && person.titles.length > 0 && (
-          <div className="flex flex-wrap gap-2 justify-center">
-            {person.titles.map((title) => (
-              <Link
-                key={title.id}
-                href={`/people?title=${encodeURIComponent(title.slug)}`}
-                className="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-indigo-100 dark:bg-indigo-800 text-indigo-800 dark:text-indigo-100 border border-indigo-200 dark:border-indigo-700 hover:bg-indigo-200 dark:hover:bg-indigo-700 transition-colors duration-150"
-              >
-                {language === 'ar' && title.nameAr ? title.nameAr : title.name}
-              </Link>
-            ))}
-          </div>
-        )}
+        <div className="flex flex-wrap gap-2 justify-center">
+          {person.titles && person.titles.length > 0 && person.titles.map((title) => (
+            <Link
+              key={title.id}
+              href={{ pathname: '/people', query: { title: title.slug } }}
+              className="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-indigo-100 dark:bg-indigo-800 text-indigo-800 dark:text-indigo-100 border border-indigo-200 dark:border-indigo-700 hover:bg-indigo-200 dark:hover:bg-indigo-700 transition-colors duration-150"
+            >
+              {language === 'ar' && title.nameAr ? title.nameAr : title.name}
+            </Link>
+          ))}
+          {person.participations && person.participations.length > 0 && person.participations.map((p) => (
+            <Link
+              key={p.battle.id}
+              href={`/battles/${p.battle.slug}`}
+              className="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-100 border border-yellow-200 dark:border-yellow-700 hover:bg-yellow-200 dark:hover:bg-yellow-700 transition-colors duration-150"
+            >
+              {language === 'ar' ? p.battle.name : p.battle.nameEn || p.battle.name}
+            </Link>
+          ))}
+        </div>
       </div>
 
       <div className="grid gap-6 max-w-xl mx-auto">
