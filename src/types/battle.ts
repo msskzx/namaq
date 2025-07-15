@@ -5,4 +5,5 @@ export interface Battle {
   hijri_year: number | null;
   nameEn: string | null;
   locationEn: string | null;
+  slug: string;
 } 

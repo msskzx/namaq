@@ -26,9 +26,6 @@ const NavBar: React.FC = () => {
           <Link href="/arabic" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
             {translations[language].learn}
           </Link>
-          <Link href="/history" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
-            {translations[language].history}
-          </Link>
           <Link href="/people/prophet-muhammad" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
             {translations[language].prophet}
           </Link>
@@ -36,7 +33,7 @@ const NavBar: React.FC = () => {
             {translations[language].companions}
           </Link>
           <Link href="/battles" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
-            {translations[language].battles}
+            {translations[language].battles.title}
           </Link>
           <LanguageSwitcher />
         </div>
@@ -59,12 +56,6 @@ const NavBar: React.FC = () => {
             <Link href="/arabic" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2" onClick={() => setMenuOpen(false)}>
               {translations[language].learn}
             </Link>
-            <Link href="/grammar" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2" onClick={() => setMenuOpen(false)}>
-              {translations[language].grammar}
-            </Link>
-            <Link href="/history" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2" onClick={() => setMenuOpen(false)}>
-              {translations[language].history}
-            </Link>
             <Link href="/prophet" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2" onClick={() => setMenuOpen(false)}>
               {translations[language].prophet}
             </Link>
@@ -72,7 +63,7 @@ const NavBar: React.FC = () => {
               {translations[language].companions}
             </Link>
             <Link href="/battles" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2" onClick={() => setMenuOpen(false)}>
-              {translations[language].battles}
+              {translations[language].battles.title}
             </Link>
             <Link href="/practice" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2" onClick={() => setMenuOpen(false)}>
               {translations[language].practice}

@@ -3,7 +3,6 @@ import { prisma } from '../src/lib/prisma';
 
 async function seedBattles() {
   try {
-    console.log(prisma)
     console.log('🌟 Seeding battles...');
     await prisma.battle.createMany({
       data: battles,

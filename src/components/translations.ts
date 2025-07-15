@@ -10,8 +10,7 @@ const translations = {
     prophet: 'Prophet Muhammad ﷺ',
     companions: 'Companions',
     practice: 'Practice',
-    battles: 'Battles',
-    battlesPage: {
+    battles: {
       title: 'Battles & Expeditions',
       name: 'Name',
       location: 'Location',
@@ -118,8 +117,7 @@ const translations = {
     prophet: 'النبي محمد ﷺ',
     companions: 'الصحابة',
     practice: 'تدرب',
-    battles: 'المعارك',
-    battlesPage: {
+    battles: {
       title: 'المعارك والغزوات',
       name: 'الاسم',
       location: 'الموقع',
