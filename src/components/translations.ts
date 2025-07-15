@@ -36,6 +36,8 @@ const translations = {
     spiritualGrowthDesc: 'Deepen your faith through learning the language of the Quran and understanding Islamic teachings',
     interactiveLearning: 'Interactive Learning',
     interactiveLearningDesc: 'Engage with animated lessons, quizzes, and interactive exercises designed for effective learning',
+    search: 'Search',
+    people: 'People',
     // Categories
     categories: {
       arabicBasics: 'Arabic Basics',
@@ -126,6 +128,8 @@ const translations = {
     spiritualGrowthDesc: 'عمق إيمانك من خلال تعلم لغة القرآن وفهم التعاليم الإسلامية',
     interactiveLearning: 'التعلم التفاعلي',
     interactiveLearningDesc: 'تفاعل مع الدروس المتحركة والاختبارات والتمارين التفاعلية المصممة للتعلم الفعال',
+    search: 'بحث',
+    people: 'الشخصيات',
     // Categories
     categories: {
       arabicBasics: 'أساسيات العربية',

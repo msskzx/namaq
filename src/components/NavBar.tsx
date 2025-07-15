@@ -35,7 +35,7 @@ const NavBar: React.FC = () => {
           <Link href="/people/prophet-muhammad" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
             {translations[language].prophet}
           </Link>
-          <Link href="/people" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
+          <Link href="/people?title=companion" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
             {translations[language].companions}
           </Link>
           <Link href="/practice" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
@@ -71,7 +71,7 @@ const NavBar: React.FC = () => {
             <Link href="/prophet" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2" onClick={() => setMenuOpen(false)}>
               {translations[language].prophet}
             </Link>
-            <Link href="/companions" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2" onClick={() => setMenuOpen(false)}>
+            <Link href="/people?title=companion" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2" onClick={() => setMenuOpen(false)}>
               {translations[language].companions}
             </Link>
             <Link href="/practice" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2" onClick={() => setMenuOpen(false)}>
