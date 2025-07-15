@@ -12,7 +12,8 @@
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",
-    "seed:people": "tsx prisma/seedPeople.ts"
+    "seed:people": "tsx prisma/seedPeople.ts",
+    "seed:titles": "tsx prisma/seedTitles.ts"
   },
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.7.2",

@@ -1,7 +1,7 @@
 import { PrismaClient } from '../src/generated/prisma';
-import { people, peopleRelations } from './peopleSeedData';
 import { articles } from './articlesSeedData';
 import { categories } from './categoriesSeedData';
+import { seedTitles } from './seedTitles';
 
 const prisma = new PrismaClient();
 
@@ -45,42 +45,6 @@ async function main() {
         console.log(`  [Article] Seeded: ${record.title} (${record.slug})`);
       } catch (err) {
         console.error(`❌ Error seeding article (${article.slug}):`, err);
-      }
-    }
-
-    // Seed people from external data file
-    const personRecords: Record<string, any> = {};
-    for (const person of people) {
-      try {
-        const record = await prisma.person.upsert({
-          where: { slug: person.slug },
-          update: {},
-          create: person,
-        });
-        personRecords[person.slug] = record;
-        console.log(`  [Person] Seeded: ${record.name} (${record.slug})`);
-      } catch (err) {
-        console.error(`❌ Error seeding person (${person.slug}):`, err);
-      }
-    }
-
-    // Seed relations using slugs
-    for (const relation of peopleRelations) {
-      try {
-        const from = personRecords[relation.fromSlug];
-        const to = personRecords[relation.toSlug];
-        if (from && to) {
-          const rel = await prisma.personRelation.create({
-            data: {
-              fromId: from.id,
-              toId: to.id,
-              type: relation.type as any, // Fix type error if needed
-            },
-          });
-          console.log(`  [Relation] Seeded: ${from.name} -> ${relation.type} -> ${to.name}`);
-        }
-      } catch (err) {
-        console.error(`❌ Error seeding relation (${relation.fromSlug} -> ${relation.type} -> ${relation.toSlug}):`, err);
       }
     }
 

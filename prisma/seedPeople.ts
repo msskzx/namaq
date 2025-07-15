@@ -15,10 +15,23 @@ async function main() {
     const personRecords: Record<string, any> = {};
     for (const person of people) {
       try {
+        let titleRecords: any[] = [];
+        if (person.titles && person.titles.length > 0) {
+          titleRecords = await prisma.title.findMany({
+            where: { slug: { in: person.titles } },
+          });
+        }
+        const { titles, ...personData } = person;
         const record = await prisma.person.upsert({
           where: { slug: person.slug },
-          update: {},
-          create: person,
+          update: {
+            ...personData,
+            titles: { set: titleRecords.map(t => ({ id: t.id })) },
+          },
+          create: {
+            ...personData,
+            titles: { connect: titleRecords.map(t => ({ id: t.id })) },
+          },
         });
         personRecords[person.slug] = record;
         console.log(`  [Person] Seeded: ${record.name} (${record.slug})`);

@@ -32,10 +32,10 @@ const NavBar: React.FC = () => {
           <Link href="/history" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
             {translations[language].history}
           </Link>
-          <Link href="/prophet" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
+          <Link href="/people/prophet-muhammad" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
             {translations[language].prophet}
           </Link>
-          <Link href="/companions" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
+          <Link href="/people" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
             {translations[language].companions}
           </Link>
           <Link href="/practice" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">

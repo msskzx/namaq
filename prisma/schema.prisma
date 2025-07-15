@@ -146,6 +146,7 @@ model Person {
   // Relations
   relationsFrom PersonRelation[] @relation("FromPerson")
   relationsTo   PersonRelation[] @relation("ToPerson")
+  titles        Title[] @relation("PersonTitles")
 
   @@map("persons")
 }
@@ -200,4 +201,12 @@ enum RelationType {
   MATERNAL_NIECE
   PATERNAL_NEPHEW
   PATERNAL_NIECE
+}
+
+model Title {
+  id     String @id @default(cuid())
+  name   String
+  nameAr String
+  slug   String @unique
+  people Person[] @relation("PersonTitles")
 }

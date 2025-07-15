@@ -8,6 +8,7 @@ export const people = [
     appearance: 'كان متوسط القامة، عريض المنكبين، كث اللحية، مشرق الوجه، يوصف بأنه أجمل الناس.',
     virtues: 'خاتم الأنبياء، رحمة للعالمين، صاحب الخلق العظيم، قائد، معلم، رجل دولة.',
     picture: null,
+    titles: ['prophet', 'messenger'], // keep for lookup, but do not pass to Prisma
   },
   {
     name: 'سعد بن أبي وقاص',
@@ -16,6 +17,7 @@ export const people = [
     appearance: 'كان جميل الوجه، طويل القامة، قوي البنية، اشتهر بمهارته في الرماية.',
     virtues: 'أحد العشرة المبشرين بالجنة، أحد الستة أصحاب الشورى، أول من رمى بسهم في سبيل الله، خال النبي صلى الله عليه وسلم، مستجاب الدعوة، شجاع، قائد في فتح العراق وفارس.',
     picture: null,
+    titles: ['the-ten-promised-paradise', 'the-six-of-the-shura', 'companion'], // keep for lookup, but do not pass to Prisma
   },
 ];
 
