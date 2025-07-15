@@ -26,9 +26,6 @@ const NavBar: React.FC = () => {
           <Link href="/arabic" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
             {translations[language].learn}
           </Link>
-          <Link href="/grammar" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
-            {translations[language].grammar}
-          </Link>
           <Link href="/history" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
             {translations[language].history}
           </Link>
@@ -38,8 +35,8 @@ const NavBar: React.FC = () => {
           <Link href="/people?title=companion" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
             {translations[language].companions}
           </Link>
-          <Link href="/practice" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
-            {translations[language].practice}
+          <Link href="/battles" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
+            {translations[language].battles}
           </Link>
           <LanguageSwitcher />
         </div>
@@ -73,6 +70,9 @@ const NavBar: React.FC = () => {
             </Link>
             <Link href="/people?title=companion" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2" onClick={() => setMenuOpen(false)}>
               {translations[language].companions}
+            </Link>
+            <Link href="/battles" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2" onClick={() => setMenuOpen(false)}>
+              {translations[language].battles}
             </Link>
             <Link href="/practice" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2" onClick={() => setMenuOpen(false)}>
               {translations[language].practice}

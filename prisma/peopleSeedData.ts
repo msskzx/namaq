@@ -32,4 +32,46 @@ export const peopleRelations = [
     toSlug: 'saad-ibn-abi-waqqas',
     type: 'MATERNAL_NEPHEW',
   },
+];
+
+export const peopleBattleParticipations = [
+  {
+    personSlug: 'saad-ibn-abi-waqqas',
+    battleSlug: 'badr',
+    isMuslim: true,
+    status: ['INJURED'],
+  },
+  {
+    personSlug: 'prophet-muhammad',
+    battleSlug: 'badr',
+    isMuslim: true,
+    status: [],
+  },
+  // Uhud participations
+  {
+    personSlug: 'saad-ibn-abi-waqqas',
+    battleSlug: 'uhud',
+    isMuslim: true,
+    status: ['INJURED'],
+  },
+  {
+    personSlug: 'prophet-muhammad',
+    battleSlug: 'uhud',
+    isMuslim: true,
+    status: ['INJURED'],
+  },
+  // Khandaq participations
+  {
+    personSlug: 'saad-ibn-abi-waqqas',
+    battleSlug: 'khandaq',
+    isMuslim: true,
+    status: [],
+  },
+  {
+    personSlug: 'prophet-muhammad',
+    battleSlug: 'khandaq',
+    isMuslim: true,
+    status: [],
+  },
+  // ... more participations
 ]; 

@@ -1,5 +1,5 @@
 import { prisma } from '../src/lib/prisma';
-import { people, peopleRelations } from './peopleSeedData';
+import { people, peopleRelations, peopleBattleParticipations } from './peopleSeedData';
 
 async function main() {
   try {
@@ -7,6 +7,7 @@ async function main() {
 
     // Clean up existing people and relations
     await prisma.personRelation.deleteMany({});
+    await prisma.battleParticipation.deleteMany({});
     await prisma.person.deleteMany({});
 
     // Seed people
@@ -58,12 +59,36 @@ async function main() {
       }
     }
 
+    // Seed battle participations
+    const battleRecords = await prisma.battle.findMany();
+    const battleSlugToId: Record<string, string> = {};
+    for (const battle of battleRecords) {
+      // Use slug from nameEn or name (assuming slug is not a field in Battle)
+      const slug = (battle.nameEn || battle.name || '').toLowerCase().replace(/\s+/g, '-');
+      battleSlugToId[slug] = battle.id;
+    }
+    for (const participation of peopleBattleParticipations) {
+      const person = personRecords[participation.personSlug];
+      const battleId = battleSlugToId[participation.battleSlug];
+      if (person && battleId) {
+        await prisma.battleParticipation.create({
+          data: {
+            personId: person.id,
+            battleId,
+            isMuslim: participation.isMuslim,
+            status: participation.status as any, // Cast string[] to ParticipationStatus[]
+          },
+        });
+        console.log(`  [BattleParticipation] Seeded: ${person.name} in ${participation.battleSlug}`);
+      } else {
+        console.warn(`⚠️ Could not find person or battle for participation:`, participation);
+      }
+    }
+
     console.log('✅ People seeded successfully!');
   } catch (e) {
     console.error('❌ Error seeding people:', e);
     process.exit(1);
-  } finally {
-    await prisma.$disconnect();
   }
 }
 

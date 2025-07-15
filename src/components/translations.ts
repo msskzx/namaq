@@ -10,6 +10,16 @@ const translations = {
     prophet: 'Prophet Muhammad ﷺ',
     companions: 'Companions',
     practice: 'Practice',
+    battles: 'Battles',
+    battlesPage: {
+      title: 'Battles & Expeditions',
+      name: 'Name',
+      location: 'Location',
+      hijriYear: 'Hijri Year',
+      nameEn: 'Name (EN)',
+      locationEn: 'Location (EN)',
+      loadError: 'Failed to load battles',
+    },
     // Homepage
     welcome: 'Welcome to Namaq',
     intro: 'Learn Arabic language, Islamic history, and the beautiful teachings of our Prophet Muhammad ﷺ and his noble companions',
@@ -108,6 +118,16 @@ const translations = {
     prophet: 'النبي محمد ﷺ',
     companions: 'الصحابة',
     practice: 'تدرب',
+    battles: 'المعارك',
+    battlesPage: {
+      title: 'المعارك والغزوات',
+      name: 'الاسم',
+      location: 'الموقع',
+      hijriYear: 'السنة الهجرية',
+      nameEn: 'الاسم بالإنجليزية',
+      locationEn: 'الموقع بالإنجليزية',
+      loadError: 'تعذر تحميل المعارك',
+    },
     // Homepage
     welcome: 'مرحبًا بكم في نَمَق',
     intro: 'تعلم اللغة العربية والتاريخ الإسلامي والتعاليم الجميلة لنبينا محمد ﷺ وأصحابه الكرام',

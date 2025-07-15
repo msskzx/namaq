@@ -135,18 +135,19 @@ model AnalyticsEvent {
 
 // Historical figures model
 model Person {
-  id         String @id @default(cuid())
-  name       String
-  picture    String?
-  fullName   String?
-  appearance String?
-  virtues    String?
-  slug       String @unique
+  id          String   @id @default(cuid())
+  name        String
+  picture     String?
+  fullName    String?
+  appearance  String?
+  virtues     String?
+  slug        String @unique
 
   // Relations
   relationsFrom PersonRelation[] @relation("FromPerson")
   relationsTo   PersonRelation[] @relation("ToPerson")
   titles        Title[] @relation("PersonTitles")
+  participations BattleParticipation[]
 
   @@map("persons")
 }
@@ -209,4 +210,41 @@ model Title {
   nameAr String
   slug   String @unique
   people Person[] @relation("PersonTitles")
+}
+
+model Battle {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  location    String?
+  hijri_year  Int?
+  nameEn      String?
+  locationEn  String?
+
+  // Relations
+  participations BattleParticipation[]
+
+  @@map("battles")
+}
+
+enum ParticipationStatus {
+  DIED
+  INJURED
+  CAPTURED
+  WAS_CAPTURED
+  ABSENT
+  // Add more as needed
+}
+
+model BattleParticipation {
+  id           String   @id @default(cuid())
+  person       Person   @relation(fields: [personId], references: [id])
+  personId     String
+  battle       Battle   @relation(fields: [battleId], references: [id])
+  battleId     String
+
+  isMuslim     Boolean
+  status       ParticipationStatus[]
+
+  @@unique([personId, battleId])
 }

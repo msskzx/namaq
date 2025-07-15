@@ -45,7 +45,7 @@ const PersonDetailPage = ({ params }: PageProps) => {
       }
     };
     fetchPerson();
-  }, [params, language]);
+  }, [params, language, t]);
 
   if (error) {
     return (
