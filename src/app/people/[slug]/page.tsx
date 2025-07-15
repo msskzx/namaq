@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { useLanguage } from '@/components/LanguageContext';
 import translations from '@/components/translations';
 import Link from 'next/link';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -59,9 +60,7 @@ const PersonDetailPage = ({ params }: PageProps) => {
   if (isLoading || !person) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="flex justify-center items-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900 dark:border-white"></div>
-        </div>
+        <LoadingSpinner />
       </div>
     );
   }

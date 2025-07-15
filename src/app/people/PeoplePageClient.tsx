@@ -1,12 +1,13 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
 import { useLanguage } from '@/components/LanguageContext';
 import { useSearchParams, useRouter } from 'next/navigation';
 import translations from '@/components/translations';
 import PeopleFilter from '@/components/PeopleFilter';
 import type { Person, Title } from '@/generated/prisma';
+import LoadingSpinner from '@/components/LoadingSpinner';
+import PersonCard from '@/components/PersonCard';
 
 type PersonWithTitles = Person & { titles: Title[] };
 
@@ -22,12 +23,17 @@ export default function PeoplePageClient() {
   const [search, setSearch] = React.useState(initialSearch);
   const [people, setPeople] = React.useState<PersonWithTitles[]>([]);
   const [titles, setTitles] = React.useState<Title[]>([]);
+  const [loadingPeople, setLoadingPeople] = React.useState(true);
+  const [loadingTitles, setLoadingTitles] = React.useState(true);
 
   // Fetch titles on mount
   React.useEffect(() => {
     fetch('/api/titles')
       .then(res => res.json())
-      .then(setTitles);
+      .then((data) => {
+        setTitles(data);
+        setLoadingTitles(false);
+      });
   }, []);
 
   // Update filters when URL changes (for back/forward navigation)
@@ -43,9 +49,13 @@ export default function PeoplePageClient() {
     if (titleFilter) params.set('title', titleFilter);
     if (search) params.set('search', search);
     if ([...params].length > 0) url += `?${params.toString()}`;
+    setLoadingPeople(true);
     fetch(url)
       .then((res) => res.json())
-      .then(setPeople);
+      .then((data) => {
+        setPeople(data);
+        setLoadingPeople(false);
+      });
   }, [titleFilter, search]);
 
   const isArabic = language === 'ar';
@@ -84,19 +94,19 @@ export default function PeoplePageClient() {
         onSearchChange={handleSearchChange}
         language={language as 'en' | 'ar'}
       />
-      <ul className="space-y-4">
-        {people.map((person) => (
-          <li key={person.slug} className="bg-white dark:bg-gray-800 rounded shadow p-4">
-            <Link href={`/people/${person.slug}`}
-              className="text-xl font-semibold text-blue-600 hover:underline">
-              {person.name}
-            </Link>
-            {person.fullName && (
-              <div className="text-gray-600 dark:text-gray-300 text-sm mt-1">{person.fullName}</div>
-            )}
-          </li>
-        ))}
-      </ul>
+      {(loadingPeople || loadingTitles) ? (
+        <LoadingSpinner />
+      ) : (
+        <>
+          <ul className="space-y-4">
+            {people.map((person) => (
+              <li key={person.slug}>
+                <PersonCard person={person} language={language} />
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
     </div>
   );
 } 

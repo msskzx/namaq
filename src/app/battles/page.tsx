@@ -6,6 +6,7 @@ import { useLanguage } from "@/components/LanguageContext";
 import translations from "@/components/translations";
 import type { Battle } from "@/types/battle";
 import BattleCard from '@/components/BattleCard';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -25,9 +26,7 @@ const BattlesPage: React.FC = () => {
         </div>
       )}
       {isLoading || !battles ? (
-        <div className="flex justify-center items-center py-8">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900 dark:border-white"></div>
-        </div>
+        <LoadingSpinner />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8">
           {Array.isArray(battles) && battles.length > 0 ? (
