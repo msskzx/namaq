@@ -9,14 +9,19 @@ import type { Battle } from "@/types/battle";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShieldHalved, faLocationDot, faCalendarDays } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import BattleParticipants from '@/components/BattleParticipants';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
+interface BattleWithParticipants extends Battle {
+  participations?: { person: { slug: string; name: string; nameAr?: string } }[];
+}
 
 const BattleDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const { language } = useLanguage();
   const t = translations[language];
-  const { data: battle, error, isLoading } = useSWR<Battle>(slug ? `/api/battles/${slug}` : null, fetcher);
+  const { data: battle, error, isLoading } = useSWR<BattleWithParticipants>(slug ? `/api/battles/${slug}` : null, fetcher);
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-xl" dir={language === 'ar' ? 'rtl' : 'ltr'}>
@@ -51,6 +56,7 @@ const BattleDetailPage: React.FC = () => {
                   <span>{battle.hijri_year}</span>
                 </div>
               )}
+              <BattleParticipants participations={battle.participations || []} language={language} />
             </div>
           )}
         </>

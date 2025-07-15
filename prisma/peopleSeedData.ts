@@ -44,7 +44,7 @@ export const people = [
     appearance: 'كان حسن الوجه، كث اللحية، طويل القامة.',
     virtues: 'ثالث الخلفاء الراشدين، ذو النورين، أحد العشرة المبشرين بالجنة، كريم وسخي.',
     picture: null,
-    titles: ['the-ten-promised-paradise', 'caliph', 'companion', 'dhu-al-nurayn'],
+    titles: ['the-ten-promised-paradise', 'caliph', 'companion', 'dhu-al-nurayn', 'the-six-of-the-shura'],
   },
   {
     name: 'علي بن أبي طالب',
@@ -53,7 +53,7 @@ export const people = [
     appearance: 'كان ربعة، عريض المنكبين، قوي البنية، كث اللحية.',
     virtues: 'رابع الخلفاء الراشدين، أبو الحسن، أحد العشرة المبشرين بالجنة، شجاع وعالم.',
     picture: null,
-    titles: ['the-ten-promised-paradise', 'caliph', 'companion', 'abu-al-hasan'],
+    titles: ['the-ten-promised-paradise', 'caliph', 'companion', 'abu-al-hasan', 'the-six-of-the-shura'],
   },
   {
     name: 'الزبير بن العوام',
@@ -62,7 +62,7 @@ export const people = [
     appearance: 'كان طويلًا، نحيفًا، خفيف اللحية.',
     virtues: 'حَوَارِيّ النبي، أحد العشرة المبشرين بالجنة، شجاع ومقدام.',
     picture: null,
-    titles: ['the-ten-promised-paradise', 'companion', 'hawari-al-ummah'],
+    titles: ['the-ten-promised-paradise', 'companion', 'hawari-al-ummah', 'the-six-of-the-shura'],
   },
   {
     name: 'طلحة بن عبيد الله',
@@ -71,7 +71,7 @@ export const people = [
     appearance: 'كان أشعر، حسن الوجه، كريم اليد.',
     virtues: 'أحد العشرة المبشرين بالجنة، كريم، شجاع، من السابقين إلى الإسلام.',
     picture: null,
-    titles: ['the-ten-promised-paradise', 'companion', 'al-sabiqeen'],
+    titles: ['the-ten-promised-paradise', 'companion', 'al-sabiqeen', 'the-six-of-the-shura'],
   },
   {
     name: 'عبد الرحمن بن عوف',
@@ -80,7 +80,7 @@ export const people = [
     appearance: 'كان طويلًا، أسمر اللون، كث اللحية.',
     virtues: 'أحد العشرة المبشرين بالجنة، تاجر غني، كريم وسخي.',
     picture: null,
-    titles: ['the-ten-promised-paradise', 'companion', 'amin-al-ummah'],
+    titles: ['the-ten-promised-paradise', 'companion', 'amin-al-ummah', 'the-six-of-the-shura'],
   },
   {
     name: 'سعيد بن زيد',
