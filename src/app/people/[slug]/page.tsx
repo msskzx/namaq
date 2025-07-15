@@ -1,19 +1,25 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import type { Person, PersonRelation } from '@/generated/prisma';
+import type { Person, PersonRelation, Title } from '@/generated/prisma';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import PersonRelationsGraph from '@/components/PersonRelationsGraph';
 import Image from 'next/image';
+import { useLanguage } from '@/components/LanguageContext';
+import translations from '@/components/translations';
+import Link from 'next/link';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
 const PersonDetailPage = ({ params }: PageProps) => {
+  const { language } = useLanguage();
+  const t = translations[language];
   const [person, setPerson] = useState<
     (Person & {
+      titles: Title[];
       relationsFrom: (PersonRelation & { to: Person })[];
       relationsTo: (PersonRelation & { from: Person })[];
     }) | null
@@ -27,19 +33,19 @@ const PersonDetailPage = ({ params }: PageProps) => {
         const { slug } = await params;
         const response = await fetch(`/api/people/${slug}`);
         if (!response.ok) {
-          setError('تعذر تحميل بيانات الشخصية');
+          setError(t.personLoadError);
           return;
         }
         const data = await response.json();
         setPerson(data);
       } catch {
-        setError('حدث خطأ أثناء تحميل البيانات');
+        setError(t.personGenericError);
       } finally {
         setIsLoading(false);
       }
     };
     fetchPerson();
-  }, [params]);
+  }, [params, language]);
 
   if (error) {
     return (
@@ -70,30 +76,43 @@ const PersonDetailPage = ({ params }: PageProps) => {
           </span>
         )}
         <h1 className="text-3xl font-bold text-center">{person.name}</h1>
+        {person.titles && person.titles.length > 0 && (
+          <div className="flex flex-wrap gap-2 justify-center">
+            {person.titles.map((title) => (
+              <Link
+                key={title.id}
+                href={`/people?title=${encodeURIComponent(title.slug)}`}
+                className="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-indigo-100 dark:bg-indigo-800 text-indigo-800 dark:text-indigo-100 border border-indigo-200 dark:border-indigo-700 hover:bg-indigo-200 dark:hover:bg-indigo-700 transition-colors duration-150"
+              >
+                {language === 'ar' && title.nameAr ? title.nameAr : title.name}
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="grid gap-6 max-w-xl mx-auto">
         {person.fullName && (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4" dir="rtl">
-            <div className="font-bold text-lg mb-2">الاسم الكامل</div>
+            <div className="font-bold text-lg mb-2">{t.fullName}</div>
             <div>{person.fullName}</div>
           </div>
         )}
         {person.appearance && (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4" dir="rtl">
-            <div className="font-bold text-lg mb-2">الهيئة</div>
+            <div className="font-bold text-lg mb-2">{t.appearance}</div>
             <div>{person.appearance}</div>
           </div>
         )}
         {person.virtues && (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4" dir="rtl">
-            <div className="font-bold text-lg mb-2">الفضائل</div>
+            <div className="font-bold text-lg mb-2">{t.virtues}</div>
             <div>{person.virtues}</div>
           </div>
         )}
         {(person.relationsFrom.length > 0 || person.relationsTo.length > 0) && (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4" dir="rtl">
-            <div className="font-bold text-lg mb-2">العلاقات</div>
+            <div className="font-bold text-lg mb-2">{t.relations}</div>
             <PersonRelationsGraph person={person} relationsFrom={person.relationsFrom} relationsTo={person.relationsTo} />
           </div>
         )}

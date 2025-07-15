@@ -38,6 +38,12 @@ const translations = {
     interactiveLearningDesc: 'Engage with animated lessons, quizzes, and interactive exercises designed for effective learning',
     search: 'Search',
     people: 'People',
+    fullName: 'Full Name',
+    appearance: 'Appearance',
+    virtues: 'Virtues',
+    relations: 'Relations',
+    personLoadError: 'Failed to load person data',
+    personGenericError: 'An error occurred while loading data',
     // Categories
     categories: {
       arabicBasics: 'Arabic Basics',
@@ -130,6 +136,12 @@ const translations = {
     interactiveLearningDesc: 'تفاعل مع الدروس المتحركة والاختبارات والتمارين التفاعلية المصممة للتعلم الفعال',
     search: 'بحث',
     people: 'الشخصيات',
+    fullName: 'الاسم الكامل',
+    appearance: 'الهيئة',
+    virtues: 'الفضائل',
+    relations: 'العلاقات',
+    personLoadError: 'تعذر تحميل بيانات الشخصية',
+    personGenericError: 'حدث خطأ أثناء تحميل البيانات',
     // Categories
     categories: {
       arabicBasics: 'أساسيات العربية',

@@ -1,9 +1,6 @@
-import { PrismaClient } from '../src/generated/prisma';
+import { prisma } from '../src/lib/prisma';
 import { articles } from './articlesSeedData';
 import { categories } from './categoriesSeedData';
-import { seedTitles } from './seedTitles';
-
-const prisma = new PrismaClient();
 
 async function main() {
   try {

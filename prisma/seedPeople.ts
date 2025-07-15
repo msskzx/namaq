@@ -1,7 +1,5 @@
-import { PrismaClient } from '../src/generated/prisma';
+import { prisma } from '../src/lib/prisma';
 import { people, peopleRelations } from './peopleSeedData';
-
-const prisma = new PrismaClient();
 
 async function main() {
   try {

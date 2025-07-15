@@ -1,5 +1,5 @@
 import { prisma } from './prisma';
-import type { UserPreferences } from '../generated/prisma';
+import type { UserPreferences } from '@/generated/prisma';
 
 // Article operations
 export const getArticles = async () => {
@@ -142,6 +142,7 @@ export const getPersonBySlug = async (slug: string) => {
   return await prisma.person.findUnique({
     where: { slug },
     include: {
+      titles: true,
       relationsFrom: {
         include: { to: true },
       },
