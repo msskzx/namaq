@@ -5,11 +5,10 @@ import { useLanguage } from '@/components/LanguageContext';
 import { useSearchParams, useRouter } from 'next/navigation';
 import translations from '@/components/translations';
 import PeopleFilter from '@/components/PeopleFilter';
-import type { Person, Title } from '@/generated/prisma';
+import type { Person } from '@/types/person';
+import type { Title } from '@/generated/prisma';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import PersonCard from '@/components/PersonCard';
-
-type PersonWithTitles = Person & { titles: Title[] };
 
 export default function PeoplePageClient() {
   const { language } = useLanguage();
@@ -21,7 +20,7 @@ export default function PeoplePageClient() {
   const initialSearch = searchParams.get('search') || '';
   const [titleFilter, setTitleFilter] = React.useState(initialTitle);
   const [search, setSearch] = React.useState(initialSearch);
-  const [people, setPeople] = React.useState<PersonWithTitles[]>([]);
+  const [people, setPeople] = React.useState<Person[]>([]);
   const [titles, setTitles] = React.useState<Title[]>([]);
   const [loadingPeople, setLoadingPeople] = React.useState(true);
   const [loadingTitles, setLoadingTitles] = React.useState(true);

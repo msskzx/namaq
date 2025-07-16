@@ -1,0 +1,1 @@
+export type Person = import("@/generated/prisma").Person & { titles: import("@/generated/prisma").Title[] }; 

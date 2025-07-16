@@ -12,6 +12,16 @@ const NavBar: React.FC = () => {
   const { language } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
 
+  // Define nav links
+  const navLinks = [
+    { href: '/', label: translations[language].home },
+    { href: '/people/prophet-muhammad', label: translations[language].prophet },
+    { href: '/people?title=companion', label: translations[language].companions },
+    { href: '/battles', label: translations[language].battles.title },
+    { href: '/arabic', label: translations[language].learn },
+  ];
+  const sortedNavLinks = language === 'ar' ? [...navLinks].reverse() : navLinks;
+
   return (
     <nav className="bg-gradient-to-r from-indigo-600 to-purple-600 w-full border-b border-indigo-700 shadow-lg">
       <div className="container mx-auto flex justify-between items-center py-4 px-4">
@@ -20,21 +30,11 @@ const NavBar: React.FC = () => {
         </Link>
         {/* Desktop Nav */}
         <div className="hidden lg:flex space-x-4 items-center">
-          <Link href="/" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
-            {translations[language].home}
-          </Link>
-          <Link href="/arabic" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
-            {translations[language].learn}
-          </Link>
-          <Link href="/people/prophet-muhammad" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
-            {translations[language].prophet}
-          </Link>
-          <Link href="/people?title=companion" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
-            {translations[language].companions}
-          </Link>
-          <Link href="/battles" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
-            {translations[language].battles.title}
-          </Link>
+          {sortedNavLinks.map((link) => (
+            <Link key={link.href} href={link.href} className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2">
+              {link.label}
+            </Link>
+          ))}
           <LanguageSwitcher />
         </div>
         {/* Hamburger Icon for Mobile */}
@@ -50,24 +50,16 @@ const NavBar: React.FC = () => {
       {menuOpen && (
         <div className="lg:hidden bg-gradient-to-r from-indigo-600 to-purple-600 border-t border-indigo-700 px-4 pb-4 animate-fade-in-down">
           <div className="flex flex-col gap-3 mt-2">
-            <Link href="/" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2" onClick={() => setMenuOpen(false)}>
-              {translations[language].home}
-            </Link>
-            <Link href="/arabic" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2" onClick={() => setMenuOpen(false)}>
-              {translations[language].learn}
-            </Link>
-            <Link href="/prophet" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2" onClick={() => setMenuOpen(false)}>
-              {translations[language].prophet}
-            </Link>
-            <Link href="/people?title=companion" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2" onClick={() => setMenuOpen(false)}>
-              {translations[language].companions}
-            </Link>
-            <Link href="/battles" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2" onClick={() => setMenuOpen(false)}>
-              {translations[language].battles.title}
-            </Link>
-            <Link href="/practice" className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2" onClick={() => setMenuOpen(false)}>
-              {translations[language].practice}
-            </Link>
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-white rounded-md transition-colors hover:bg-indigo-700 font-medium px-3 py-2"
+                onClick={() => setMenuOpen(false)}
+              >
+                {link.label}
+              </Link>
+            ))}
             <div className="pt-2">
               <LanguageSwitcher />
             </div>

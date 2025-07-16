@@ -4,13 +4,7 @@ import { useLanguage } from "@/components/LanguageContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
-
-interface ArabicLetter {
-  letter: string;
-  name: string;
-  examples: string[];
-  pronunciation: string;
-}
+import { ArabicLetter } from "@/types/arabicLetter";
 
 const arabicLetters: ArabicLetter[] = [
   {
@@ -258,7 +252,7 @@ export default function ArabicLetters() {
                 {language === 'ar' ? 'أمثلة' : 'Examples'}
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-                {currentLetter.examples.map((example, index) => (
+                {currentLetter.examples.map((example: string, index: number) => (
                   <div key={index} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 sm:p-4 text-center">
                     <p className="text-lg sm:text-xl font-medium text-gray-800 dark:text-white" dir="rtl">
                       {example}
