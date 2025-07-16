@@ -15,12 +15,14 @@
     "db:studio": "prisma studio",
     "seed:people": "tsx prisma/seedPeople.ts",
     "seed:titles": "tsx prisma/seedTitles.ts",
-    "seed:battles": "tsx prisma/seedBattles.ts"
+    "seed:battles": "tsx prisma/seedBattles.ts",
+    "seed:categories": "tsx prisma/categorySeed.ts",
+    "seed:articles": "tsx prisma/articleSeed.ts"
   },
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
-    "@prisma/client": "^6.11.1",
+    "@prisma/client": "^6.12.0",
     "@types/js-cookie": "^3.0.6",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",

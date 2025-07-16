@@ -52,7 +52,7 @@ const PersonDetailPage = ({ params }: PageProps) => {
   if (error) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <p className="text-red-600 dark:text-red-400 text-lg my-8">{error}</p>
+        <p className="text-red-600 dark:text-red-400 text-lg my-8" dir={language === 'ar' ? 'rtl' : 'ltr'}>{error}</p>
       </div>
     );
   }
@@ -98,7 +98,7 @@ const PersonDetailPage = ({ params }: PageProps) => {
         </div>
       </div>
 
-      <div className="grid gap-6 max-w-xl mx-auto">
+      <div className="flex flex-col gap-6">
         {person.fullName && (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4" dir="rtl">
             <div className="font-bold text-lg mb-2">{t.fullName}</div>

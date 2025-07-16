@@ -10,6 +10,12 @@ const translations = {
     prophet: 'Prophet Muhammad ﷺ',
     companions: 'Companions',
     practice: 'Practice',
+    articles: 'Articles',
+    articlesLoadError: 'Failed to load articles.',
+    articlesNotFound: 'No articles found.',
+    categories: 'Categories',
+    categoriesLoadError: 'Failed to load categories.',
+    categoriesNotFound: 'No categories found.',
     battles: {
       title: 'Battles & Expeditions',
       name: 'Name',
@@ -54,16 +60,6 @@ const translations = {
     personLoadError: 'Failed to load person data',
     personGenericError: 'An error occurred while loading data',
     // Categories
-    categories: {
-      arabicBasics: 'Arabic Basics',
-      grammar: 'Arabic Grammar',
-      islamicHistory: 'Islamic History',
-      prophetLife: 'Life of Prophet Muhammad ﷺ',
-      companions: 'Noble Companions',
-      quranicArabic: 'Quranic Arabic',
-      hadithStudies: 'Hadith Studies',
-      islamicCulture: 'Islamic Culture'
-    },
     relationTypes: {
       FATHER: 'Father',
       MOTHER: 'Mother',
@@ -105,6 +101,7 @@ const translations = {
       PATERNAL_NEPHEW: 'Paternal Nephew',
       PATERNAL_NIECE: 'Paternal Niece',
     },
+    articlesInCategory: 'Articles in this category:',
   },
   ar: {
     // NavBar
@@ -117,6 +114,12 @@ const translations = {
     prophet: 'النبي محمد ﷺ',
     companions: 'الصحابة',
     practice: 'تدرب',
+    articles: 'المقالات',
+    articlesLoadError: 'تعذر تحميل المقالات.',
+    articlesNotFound: 'لا توجد مقالات.',
+    categories: 'التصنيفات',
+    categoriesLoadError: 'تعذر تحميل التصنيفات.',
+    categoriesNotFound: 'لا توجد تصنيفات.',
     battles: {
       title: 'المعارك والغزوات',
       name: 'الاسم',
@@ -160,17 +163,6 @@ const translations = {
     relations: 'العلاقات',
     personLoadError: 'تعذر تحميل بيانات الشخصية',
     personGenericError: 'حدث خطأ أثناء تحميل البيانات',
-    // Categories
-    categories: {
-      arabicBasics: 'أساسيات العربية',
-      grammar: 'نحو العربية',
-      islamicHistory: 'التاريخ الإسلامي',
-      prophetLife: 'حياة النبي محمد ﷺ',
-      companions: 'الصحابة الكرام',
-      quranicArabic: 'عربية القرآن',
-      hadithStudies: 'دراسات الحديث',
-      islamicCulture: 'الثقافة الإسلامية'
-    },
     relationTypes: {
       FATHER: 'أب',
       MOTHER: 'أم',
@@ -212,6 +204,7 @@ const translations = {
       PATERNAL_NEPHEW: 'ابن الأخ',
       PATERNAL_NIECE: 'ابنة الأخ',
     },
+    articlesInCategory: 'المقالات في هذا التصنيف:',
   },
 };
 

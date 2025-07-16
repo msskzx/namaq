@@ -2,60 +2,20 @@
 
 import { useLanguage } from "@/components/LanguageContext";
 import translations from "@/components/translations";
-import { faBook, faMosque, faPen, faLandmark, faDove, faFilm } from '@fortawesome/free-solid-svg-icons';
 import CategoryCard from '@/components/CategoryCard';
+import useSWR from 'swr';
+import LoadingSpinner from '../components/LoadingSpinner';
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function Home() {
   const { language } = useLanguage();
-
-  const cards = [
-    {
-      title: translations[language].arabicLanguage,
-      description: translations[language].arabicLanguageDesc,
-      icon: faBook,
-      iconColor: 'indigo',
-      href: '/arabic'
-    },
-    {
-      title: translations[language].islamicHistory,
-      description: translations[language].islamicHistoryDesc,
-      icon: faMosque,
-      iconColor: 'green',
-      href: '/history'
-    },
-    {
-      title: translations[language].grammarMastery,
-      description: translations[language].grammarMasteryDesc,
-      icon: faPen,
-      iconColor: 'purple',
-      href: '/grammar'
-    },
-    {
-      title: translations[language].culturalHeritage,
-      description: translations[language].culturalHeritageDesc,
-      icon: faLandmark,
-      iconColor: 'orange',
-      href: '/about'
-    },
-    {
-      title: translations[language].spiritualGrowth,
-      description: translations[language].spiritualGrowthDesc,
-      icon: faDove,
-      iconColor: 'blue',
-      href: '/prophet'
-    },
-    {
-      title: translations[language].interactiveLearning,
-      description: translations[language].interactiveLearningDesc,
-      icon: faFilm,
-      iconColor: 'red',
-      href: '/practice'
-    }
-  ];
+  // Add ?limit=3 to the API request
+  const { data: categories, error, isLoading } = useSWR<any[]>("/api/categories?limit=3", fetcher);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         {/* Header with Namaq in English and Arabic */}
         <header className="text-center mb-8 sm:mb-12">
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold text-gray-800 dark:text-white mb-2 sm:mb-4">
@@ -97,27 +57,30 @@ export default function Home() {
             </div>
           </div>
         </div>
-
-        {/* Educational Categories */}
-        <div className="max-w-6xl mx-auto">
-          <h3 className="text-2xl sm:text-3xl font-bold text-center text-gray-800 dark:text-white mb-6 sm:mb-8 px-4">
-            {translations[language].whyLearn}
-          </h3>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {cards.map((card, index) => (
-              <CategoryCard
-                key={index}
-                title={card.title}
-                description={card.description}
-                icon={card.icon}
-                color={card.iconColor}
-                href={card.href}
-              />
-            ))}
-          </div>
+        {/* Category Cards Section */}
+        <div className="max-w-6xl mx-auto mt-12">
+          <h2 className="text-2xl font-bold mb-6 text-center">{translations[language].categories}</h2>
+          {error && (
+            <div className="text-red-600 dark:text-red-400 text-center mb-4">
+              {translations[language].categoriesLoadError}
+            </div>
+          )}
+          {isLoading || !categories ? (
+            <LoadingSpinner />
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {Array.isArray(categories) && categories.length > 0 ? (
+                categories.map((category) => (
+                  <CategoryCard key={category.id} category={category} />
+                ))
+              ) : (
+                <div className="col-span-full text-center py-4 text-gray-500 dark:text-gray-400">
+                  {translations[language].categoriesNotFound}
+                </div>
+              )}
+            </div>
+          )}
         </div>
-
       </div>
     </div>
   );

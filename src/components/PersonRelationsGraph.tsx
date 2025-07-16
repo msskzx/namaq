@@ -9,10 +9,12 @@ interface PersonRelationsGraphProps {
   relationsTo: (PersonRelation & { from: Person })[];
 }
 
-const NODE_RADIUS = 60;
-const CENTER_X = 200;
-const CENTER_Y = 200;
-const RADIUS = 140;
+const CANVAS_SIZE = 800;
+const NODE_RADIUS = 80;
+const CHILD_NODE_RADIUS = 60;
+const CENTER_X = CANVAS_SIZE / 2;
+const CENTER_Y = CANVAS_SIZE / 2;
+const RADIUS = 220;
 
 export default function PersonRelationsGraph({ person, relationsFrom, relationsTo }: PersonRelationsGraphProps) {
   // Combine all relations for display
@@ -59,8 +61,8 @@ export default function PersonRelationsGraph({ person, relationsFrom, relationsT
   const relationTypeArabic = translations.ar.relationTypes;
 
   return (
-    <div className="flex justify-center my-8">
-      <svg width={400} height={400}>
+    <div className="flex justify-center items-center my-8">
+      <svg width={CANVAS_SIZE} height={CANVAS_SIZE} style={{ display: 'block', margin: '0 auto' }}>
         {/* Render all lines first so they appear beneath the nodes */}
         {relationPairList.map(([, rel], i) => {
           const angle = i * angleStep - Math.PI / 2;
@@ -86,14 +88,14 @@ export default function PersonRelationsGraph({ person, relationsFrom, relationsT
               <g>
                 {rel.slug ? (
                   <Link href={`/people/${rel.slug}`}>
-                    <circle cx={x} cy={y} r={40} fill="#f3f4f6" style={{ cursor: 'pointer' }} />
+                    <circle cx={x} cy={y} r={CHILD_NODE_RADIUS} fill="#f3f4f6" style={{ cursor: 'pointer' }} />
                     <text x={x} y={y} textAnchor="middle" dominantBaseline="middle" fill="#222" fontSize={14} fontWeight="bold" style={{ cursor: 'pointer' }}>
                       {rel.names[0]}
                     </text>
                   </Link>
                 ) : (
                   <>
-                    <circle cx={x} cy={y} r={40} fill="#f3f4f6" />
+                    <circle cx={x} cy={y} r={CHILD_NODE_RADIUS} fill="#f3f4f6" />
                     <text x={x} y={y} textAnchor="middle" dominantBaseline="middle" fill="#222" fontSize={14} fontWeight="bold">
                       {rel.names[0]}
                     </text>
@@ -102,7 +104,7 @@ export default function PersonRelationsGraph({ person, relationsFrom, relationsT
               </g>
               {/* All relation type labels under the node, reversed order */}
               {[...rel.types].reverse().map((type, idx) => {
-                const labelY = y + 40 + 18 + idx * 16; // 40 is node radius, 18 is spacing, 16 is line height
+                const labelY = y + CHILD_NODE_RADIUS + 18 + idx * 16; // CHILD_NODE_RADIUS is node radius, 18 is spacing, 16 is line height
                 return (
                   <text key={type} x={x} y={labelY} textAnchor="middle" fill="#888" fontSize={13} fontWeight="bold">
                     {relationTypeArabic[type as keyof typeof relationTypeArabic] || type}

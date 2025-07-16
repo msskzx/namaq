@@ -1,13 +1,15 @@
-import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
-
 export interface Article {
   id: string;
   title: string;
-  titleAr: string;
-  description: string;
-  descriptionAr: string;
-  icon: IconDefinition;
-  color: string;
-  href: string;
-  available: boolean;
+  titleEn?: string;
+  summary?: string;
+  summaryEn?: string;
+  content?: string;
+  contentEn?: string;
+  slug: string;
+  img?: string | null;
+  isPublished: boolean;
+  publishedAt?: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
 } 
