@@ -8,8 +8,8 @@ import PersonRelationsGraph from '@/components/PersonRelationsGraph';
 import Image from 'next/image';
 import { useLanguage } from '@/components/LanguageContext';
 import translations from '@/components/translations';
-import Link from 'next/link';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import Badge from '@/components/Badge';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -78,22 +78,22 @@ const PersonDetailPage = ({ params }: PageProps) => {
         <h1 className="text-3xl font-bold text-center">{person.name}</h1>
         <div className="flex flex-wrap gap-2 justify-center">
           {person.titles && person.titles.length > 0 && person.titles.map((title) => (
-            <Link
+            <Badge
               key={title.id}
-              href={{ pathname: '/people', query: { title: title.slug } }}
-              className="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-indigo-100 dark:bg-indigo-800 text-indigo-800 dark:text-indigo-100 border border-indigo-200 dark:border-indigo-700 hover:bg-indigo-200 dark:hover:bg-indigo-700 transition-colors duration-150"
-            >
-              {language === 'ar' && title.nameAr ? title.nameAr : title.name}
-            </Link>
+              href={`/people?title=${title.slug}`}
+              text={language === 'ar' && title.nameAr ? title.nameAr : title.name}
+              color="bg-indigo-100 dark:bg-indigo-800"
+              className="text-xs font-semibold border border-indigo-200 dark:border-indigo-700"
+            />
           ))}
           {person.participations && person.participations.length > 0 && person.participations.map((p) => (
-            <Link
+            <Badge
               key={p.battle.id}
               href={`/battles/${p.battle.slug}`}
-              className="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-100 border border-yellow-200 dark:border-yellow-700 hover:bg-yellow-200 dark:hover:bg-yellow-700 transition-colors duration-150"
-            >
-              {language === 'ar' ? p.battle.name : p.battle.nameEn || p.battle.name}
-            </Link>
+              text={language === 'ar' ? p.battle.name : p.battle.nameEn || p.battle.name}
+              color="bg-yellow-100 dark:bg-yellow-800"
+              className="text-xs font-semibold border border-yellow-200 dark:border-yellow-700"
+            />
           ))}
         </div>
       </div>
