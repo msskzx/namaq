@@ -101,7 +101,7 @@ const translations = {
       PATERNAL_NEPHEW: 'Paternal Nephew',
       PATERNAL_NIECE: 'Paternal Niece',
     },
-    articlesInCategory: 'Articles in this category:',
+    articlesInCategory: 'Articles in this category',
   },
   ar: {
     // NavBar
@@ -204,7 +204,7 @@ const translations = {
       PATERNAL_NEPHEW: 'ابن الأخ',
       PATERNAL_NIECE: 'ابنة الأخ',
     },
-    articlesInCategory: 'المقالات في هذا التصنيف:',
+    articlesInCategory: 'المقالات في هذا التصنيف',
   },
 };
 

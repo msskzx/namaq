@@ -10,7 +10,7 @@ import Badge from '@/components/Badge';
 
 const fetcher = (url: string) => fetch(url).then(res => res.ok ? res.json() : null);
 
-export default function ArticleDetailPage({ params }: { params: { slug: string } }) {
+export default function ArticleDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const { language } = useLanguage();
   const { data: article, error, isLoading } = useSWR(`/api/articles/${slug}`, fetcher);
