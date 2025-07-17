@@ -6,12 +6,13 @@ import CategoryCard from '../../components/CategoryCard';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { useLanguage } from '@/components/LanguageContext';
 import translations from '@/components/translations';
+import { Category } from '@/types/category';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const CategoriesPage: React.FC = () => {
   const { language } = useLanguage();
-  const { data: categories, error, isLoading } = useSWR<any[]>("/api/categories", fetcher);
+  const { data: categories, error, isLoading } = useSWR<Category[]>("/api/categories", fetcher);
 
   return (
     <div className="container mx-auto px-4 py-8" dir={language === 'ar' ? 'rtl' : 'ltr'}>

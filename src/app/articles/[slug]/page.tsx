@@ -7,6 +7,7 @@ import LoadingSpinner from '@/components/LoadingSpinner';
 import useSWR from 'swr';
 import { useParams } from "next/navigation";
 import Badge from '@/components/Badge';
+import { Category } from '@/types/category';
 
 const fetcher = (url: string) => fetch(url).then(res => res.ok ? res.json() : null);
 
@@ -29,7 +30,7 @@ export default function ArticleDetailPage() {
           {article.categories && article.categories.length > 0 && (
             <div className="mb-4">
               <ul className="flex flex-wrap gap-2">
-                {article.categories.map((cat: any) => (
+                {article.categories.map((cat: Category) => (
                   <li key={cat.id}>
                     <Badge
                       href={`/categories/${cat.slug}`}
@@ -49,4 +50,4 @@ export default function ArticleDetailPage() {
       )}
     </div>
   );
-} 
+}

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getPersonBySlug } from '@/lib/db';
 
 export async function GET(
-  request: Request,
+  _request: Request,
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {

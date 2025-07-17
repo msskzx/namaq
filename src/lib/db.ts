@@ -1,38 +1,6 @@
 import { prisma } from './prisma';
 import type { UserPreferences } from '@/generated/prisma';
 
-// Article operations
-export const getArticles = async () => {
-  return await prisma.article.findMany({
-    where: { isActive: true, isPublished: true },
-    include: { category: true },
-    orderBy: { order: 'asc' },
-  });
-};
-
-export const getArticleBySlug = async (slug: string) => {
-  return await prisma.article.findUnique({
-    where: { slug },
-    include: { category: true },
-  });
-};
-
-// Category operations
-export const getCategories = async () => {
-  return await prisma.category.findMany({
-    where: { isActive: true },
-    include: { articles: { where: { isActive: true, isPublished: true } } },
-    orderBy: { order: 'asc' },
-  });
-};
-
-export const getCategoryBySlug = async (slug: string) => {
-  return await prisma.category.findUnique({
-    where: { slug },
-    include: { articles: { where: { isActive: true, isPublished: true } } },
-  });
-};
-
 // User operations
 export const getUserByEmail = async (email: string) => {
   return await prisma.user.findUnique({

@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { useLanguage } from '@/components/LanguageContext';
+import { Article } from '@/types/article';
 
-function ArticleCard({ article }: { article: any }) {
+function ArticleCard({ article }: { article: Article }) {
   const { language } = useLanguage();
   if (!article || !article.slug) {
     return null;

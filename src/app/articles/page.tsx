@@ -6,12 +6,13 @@ import ArticleCard from '../../components/ArticleCard';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { useLanguage } from '@/components/LanguageContext';
 import translations from '@/components/translations';
+import { Article } from '@/types/article';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const ArticlesPage: React.FC = () => {
   const { language } = useLanguage();
-  const { data: articles, error, isLoading } = useSWR<any[]>("/api/articles", fetcher);
+  const { data: articles, error, isLoading } = useSWR<Article[]>("/api/articles", fetcher);
 
   return (
     <div className="container mx-auto px-4 py-8" dir={language === 'ar' ? 'rtl' : 'ltr'}>

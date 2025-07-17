@@ -5,13 +5,14 @@ import translations from "@/components/translations";
 import CategoryCard from '@/components/CategoryCard';
 import useSWR from 'swr';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { Category } from '@/types/category';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function Home() {
   const { language } = useLanguage();
   // Add ?limit=3 to the API request
-  const { data: categories, error, isLoading } = useSWR<any[]>("/api/categories?limit=3", fetcher);
+  const { data: categories, error, isLoading } = useSWR<Category[]>("/api/categories?limit=3", fetcher);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">

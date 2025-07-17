@@ -6,6 +6,7 @@ import LoadingSpinner from '@/components/LoadingSpinner';
 import { useParams } from 'next/navigation';
 import translations from '@/components/translations';
 import ArticleCard from '@/components/ArticleCard';
+import { Article } from '@/types/article';
 
 const fetcher = (url: string) => fetch(url).then(res => res.ok ? res.json() : null);
 
@@ -30,7 +31,7 @@ export default function CategoryDetailPage() {
             <div>
               <h2 className="text-xl font-semibold mb-2">{translations[language].articlesInCategory}</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
-                {category.articles.map((article: any) => (
+                {category.articles.map((article: Article) => (
                   <ArticleCard key={article.id} article={article} />
                 ))}
               </div>
