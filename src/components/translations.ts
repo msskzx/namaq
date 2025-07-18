@@ -102,6 +102,33 @@ const translations = {
       PATERNAL_NIECE: 'Paternal Niece',
     },
     articlesInCategory: 'Articles in this category',
+    // Motivation Cards
+    motivation: {
+      prophet: {
+        title: 'Prophet Muhammad ﷺ',
+        desc: 'Learn about the life, teachings, and legacy of the Prophet Muhammad ﷺ.'
+      },
+      companions: {
+        title: 'Companions',
+        desc: 'Explore the stories and virtues of the noble companions of the Prophet.'
+      },
+      battles: {
+        title: 'Battles',
+        desc: 'Discover the key battles and expeditions in Islamic history.'
+      },
+      articles: {
+        title: 'Articles',
+        desc: 'Read insightful articles on Arabic, Islam, and history.'
+      },
+      categories: {
+        title: 'Categories',
+        desc: 'Browse topics by category for focused learning.'
+      },
+      poems: {
+        title: 'Poems',
+        desc: 'Enjoy classical and modern Arabic poetry.'
+      },
+    },
   },
   ar: {
     // NavBar
@@ -205,6 +232,33 @@ const translations = {
       PATERNAL_NIECE: 'ابنة الأخ',
     },
     articlesInCategory: 'المقالات في هذا التصنيف',
+    // Motivation Cards
+    motivation: {
+      prophet: {
+        title: 'النبي محمد ﷺ',
+        desc: 'تعرّف على حياة النبي محمد ﷺ وتعاليمه وإرثه.'
+      },
+      companions: {
+        title: 'الصحابة',
+        desc: 'استكشف قصص وفضائل الصحابة الكرام.'
+      },
+      battles: {
+        title: 'المعارك',
+        desc: 'اكتشف أهم المعارك والغزوات في التاريخ الإسلامي.'
+      },
+      articles: {
+        title: 'المقالات',
+        desc: 'اقرأ مقالات مميزة عن العربية والإسلام والتاريخ.'
+      },
+      categories: {
+        title: 'التصنيفات',
+        desc: 'تصفح المواضيع حسب التصنيف للتعلم المركّز.'
+      },
+      poems: {
+        title: 'القصائد',
+        desc: 'استمتع بالشعر العربي الكلاسيكي والحديث.'
+      },
+    },
   },
 };
 

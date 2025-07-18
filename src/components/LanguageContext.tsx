@@ -8,12 +8,14 @@ export type Language = 'en' | 'ar';
 interface LanguageContextType {
   language: Language;
   toggleLanguage: () => void;
+  languageLoaded: boolean;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguage] = useState<Language>('ar');
+  const [languageLoaded, setLanguageLoaded] = useState(false);
 
   // Initialize language from storage on mount
   useEffect(() => {
@@ -35,6 +37,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         setLanguage(savedLanguage);
       }
     }
+    setLanguageLoaded(true);
   }, []);
 
   const toggleLanguage = () => {
@@ -56,7 +59,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   return (
-    <LanguageContext.Provider value={{ language, toggleLanguage }}>
+    <LanguageContext.Provider value={{ language, toggleLanguage, languageLoaded }}>
       {children}
     </LanguageContext.Provider>
   );

@@ -11,20 +11,20 @@ interface PersonCardProps {
 
 const PersonCard: React.FC<PersonCardProps> = ({ person }) => {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded shadow p-4">
-      <div className="flex items-center gap-3 mb-2">
-        <FontAwesomeIcon icon={faUser} className="text-indigo-600 dark:text-indigo-400 w-5 h-5" />
-        <Link href={`/people/${person.slug}`} className="text-xl font-semibold text-blue-600 hover:underline">
-          {person.name}
-        </Link>
-      </div>
-      {person.fullName && (
-        <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300 text-sm mt-1">
-          <FontAwesomeIcon icon={faSignature} className="text-indigo-400 w-4 h-4" />
-          <span>{person.fullName}</span>
+    <Link href={`/people/${person.slug}`} className="block">
+      <div className="bg-white dark:bg-indigo-800 border border-amber-400 rounded-lg p-4 shadow transition-transform duration-200 hover:shadow-xl hover:scale-105 hover:bg-gray-50 dark:hover:bg-indigo-700 cursor-pointer">
+        <div className="flex items-center gap-2 mb-2">
+          <FontAwesomeIcon icon={faUser} className="text-amber-400 w-5 h-5" />
+          <h3 className="text-lg font-semibold text-amber-400 dark:text-amber-400">{person.name}</h3>
         </div>
-      )}
-    </div>
+        {person.fullName && (
+          <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300 text-sm mt-1">
+            <FontAwesomeIcon icon={faSignature} className="text-indigo-400 w-4 h-4" />
+            <span>{person.fullName}</span>
+          </div>
+        )}
+      </div>
+    </Link>
   );
 };
 

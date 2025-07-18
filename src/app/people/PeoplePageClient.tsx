@@ -84,7 +84,7 @@ export default function PeoplePageClient() {
 
   return (
     <div className="container mx-auto px-4 py-8" dir={isArabic ? 'rtl' : 'ltr'} style={{ textAlign: isArabic ? 'right' : 'left' }}>
-      <h1 className="text-3xl font-bold mb-6">{translations[language]?.people}</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center text-amber-400">{translations[language]?.people}</h1>
       <PeopleFilter
         titles={titles}
         selectedTitle={titleFilter}

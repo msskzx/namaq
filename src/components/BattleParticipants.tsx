@@ -18,7 +18,7 @@ const BattleParticipants: React.FC<BattleParticipantsProps> = ({ participations,
   return (
     <div className="mt-4">
       <div className="font-semibold mb-2">{language === 'ar' ? 'المشاركون' : 'Participants'}:</div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {participations.map((p) => (
           <a
             key={p.person.slug}

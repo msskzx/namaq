@@ -32,7 +32,7 @@ const AnalyticsOptOut: React.FC = () => {
   if (analyticsEnabled === null) return null;
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-md mx-auto">
+    <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 mx-auto">
       <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
         {language === 'ar' ? 'إعدادات التحليلات' : 'Analytics Settings'}
       </h3>

@@ -24,16 +24,17 @@ const BattleDetailPage: React.FC = () => {
   const { data: battle, error, isLoading } = useSWR<BattleWithParticipants>(slug ? `/api/battles/${slug}` : null, fetcher);
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-xl" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-indigo-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+      <div className="container mx-auto px-4 py-8">
       {isLoading ? (
         <LoadingSpinner />
       ) : (
         <>
           <div className="flex items-center gap-4 mb-6">
             <div className="w-16 h-16 flex items-center justify-center rounded-full bg-indigo-100 dark:bg-indigo-900">
-              <FontAwesomeIcon icon={faShieldHalved} className="text-indigo-600 dark:text-indigo-400 w-10 h-10" />
+              <FontAwesomeIcon icon={faShieldHalved} className="text-amber-400 w-10 h-10" />
             </div>
-            <h1 className="text-4xl font-bold text-indigo-700 dark:text-indigo-300">
+            <h1 className="text-4xl font-bold text-amber-400">
               {battle ? (language === 'ar' ? battle.name : battle.nameEn || battle.name) : t.battles.title}
             </h1>
           </div>
@@ -43,15 +44,15 @@ const BattleDetailPage: React.FC = () => {
             </div>
           )}
           {battle && (
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 font-geistmono">
+            <div className="bg-white dark:bg-indigo-800 rounded-xl shadow-lg border border-amber-400 p-6 font-geistmono">
               <div className="mb-2 flex items-center gap-2">
-                <FontAwesomeIcon icon={faLocationDot} className="text-indigo-500 w-5 h-5" />
+                <FontAwesomeIcon icon={faLocationDot} className="text-amber-400 w-5 h-5" />
                 <span className="font-semibold">{language === 'ar' ? t.battles.location : t.battles.locationEn}:</span>
                 <span>{language === 'ar' ? battle.location : battle.locationEn || battle.location || '-'}</span>
               </div>
               {battle.hijri_year && (
                 <div className="mb-2 flex items-center gap-2">
-                  <FontAwesomeIcon icon={faCalendarDays} className="text-indigo-500 w-5 h-5" />
+                  <FontAwesomeIcon icon={faCalendarDays} className="text-amber-400 w-5 h-5" />
                   <span className="font-semibold">{t.battles.hijriYear}:</span>
                   <span>{battle.hijri_year}</span>
                 </div>
@@ -61,6 +62,7 @@ const BattleDetailPage: React.FC = () => {
           )}
         </>
       )}
+      </div>
     </div>
   );
 };

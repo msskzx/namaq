@@ -10,7 +10,7 @@ const LanguageSwitcher: React.FC = () => {
   return (
     <button
       onClick={toggleLanguage}
-      className="flex items-center gap-2 px-2 py-1 rounded-full bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-400"
+      className="flex items-center gap-2 px-2 py-1 rounded-full bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-amber-400"
       aria-label={language === 'en' ? 'Switch to Arabic' : 'التبديل إلى الإنجليزية'}
       style={{ minWidth: 64 }}
     >

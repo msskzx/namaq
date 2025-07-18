@@ -15,28 +15,30 @@ const ArticlesPage: React.FC = () => {
   const { data: articles, error, isLoading } = useSWR<Article[]>("/api/articles", fetcher);
 
   return (
-    <div className="container mx-auto px-4 py-8" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-      <h1 className="text-2xl font-bold mb-6">{translations[language].articles}</h1>
-      {error && (
-        <div className="text-red-600 dark:text-red-400 text-center mb-4">
-          {translations[language].articlesLoadError}
-        </div>
-      )}
-      {isLoading || !articles ? (
-        <LoadingSpinner />
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {Array.isArray(articles) && articles.length > 0 ? (
-            articles.map((article) => (
-              <ArticleCard key={article.id} article={article} />
-            ))
-          ) : (
-            <div className="col-span-full text-center py-4 text-gray-500 dark:text-gray-400">
-              {translations[language].articlesNotFound}
-            </div>
-          )}
-        </div>
-      )}
+    <div className="min-h-screen bg-indigo-950">
+      <div className="container mx-auto px-4 py-8" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+        <h1 className="text-3xl font-bold mb-6 text-amber-400 text-center">{translations[language].articles}</h1>
+        {error && (
+          <div className="text-red-600 dark:text-red-400 text-center mb-4">
+            {translations[language].articlesLoadError}
+          </div>
+        )}
+        {isLoading || !articles ? (
+          <LoadingSpinner />
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+            {Array.isArray(articles) && articles.length > 0 ? (
+              articles.map((article) => (
+                <ArticleCard key={article.id} article={article} />
+              ))
+            ) : (
+              <div className="col-span-full text-center py-4 text-gray-500 dark:text-gray-400">
+                {translations[language].articlesNotFound}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
