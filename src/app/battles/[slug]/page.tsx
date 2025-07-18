@@ -9,7 +9,7 @@ import type { Battle } from "@/types/battle";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShieldHalved, faLocationDot, faCalendarDays } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from '@/components/LoadingSpinner';
-import BattleParticipants from '@/components/BattleParticipants';
+import PersonNameCard from '@/components/PersonNameCard';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -57,7 +57,24 @@ const BattleDetailPage: React.FC = () => {
                   <span>{battle.hijri_year}</span>
                 </div>
               )}
-              <BattleParticipants participations={battle.participations || []} language={language} />
+              <h2 className="text-2xl font-bold mb-4 text-amber-400 mt-8">
+                {language === 'ar' ? 'المشاركون' : 'Participants'}
+              </h2>
+              {battle.participations && battle.participations.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                  {battle.participations.map((p: any) => (
+                    <PersonNameCard key={p.person.slug} person={{
+                      slug: p.person.slug,
+                      name: p.person.name,
+                      nameEn: p.person.nameEn || p.person.name
+                    }} language={language} />
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center text-gray-400 py-4">
+                  {language === 'ar' ? 'لا يوجد مشاركون في هذه المعركة.' : 'No participants in this battle.'}
+                </div>
+              )}
             </div>
           )}
         </>

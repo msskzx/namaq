@@ -8,7 +8,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import { Category } from '@/types/category';
 import MotivationCard from '@/components/MotivationCard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMosque, faUsers, faShieldAlt, faFileAlt, faThLarge, faPenNib } from '@fortawesome/free-solid-svg-icons';
+import { faMosque, faUsers, faShieldAlt, faFileAlt, faThLarge, faPenNib, faCrown, faBook, faQuoteRight } from '@fortawesome/free-solid-svg-icons';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -38,7 +38,7 @@ export default function Home() {
         {/* Definition Cards */}
         <div className="max-w-6xl mx-auto mb-8 sm:mb-12 grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Noun Card */}
-          <div className="bg-gray-100 dark:bg-indigo-900 rounded-2xl shadow-lg border-l-4 border-amber-400 p-6 flex flex-col items-center">
+          <div className="bg-gray-100 dark:bg-indigo-800 rounded-2xl shadow-lg border-l-4 border-amber-400 p-6 flex flex-col items-center">
             <h4 className="font-arabicDisplay text-amber-400 text-2xl mb-3 text-center" dir="rtl">
               {translations[language].nounTitle}
             </h4>
@@ -47,7 +47,7 @@ export default function Home() {
             </p>
           </div>
           {/* Verb Card */}
-          <div className="bg-gray-100 dark:bg-indigo-900 rounded-2xl shadow-lg border-l-4 border-amber-400 p-6 flex flex-col items-center">
+          <div className="bg-gray-100 dark:bg-indigo-800 rounded-2xl shadow-lg border-l-4 border-amber-400 p-6 flex flex-col items-center">
             <h4 className="font-arabicDisplay text-amber-400 text-2xl mb-3 text-center" dir="rtl">
               {translations[language].verbTitle}
             </h4>
@@ -110,6 +110,24 @@ export default function Home() {
               title={translations[language].motivation.poems.title}
               desc={translations[language].motivation.poems.desc}
               url="/poems"
+            />
+            <MotivationCard
+              icon={<FontAwesomeIcon icon={faCrown} className="w-10 h-10 text-amber-400" />}
+              title={translations[language].motivation.titles.title}
+              desc={translations[language].motivation.titles.desc}
+              url="/titles"
+            />
+            <MotivationCard
+              icon={<FontAwesomeIcon icon={faBook} className="w-10 h-10 text-amber-400" />}
+              title={translations[language].motivation.quran.title}
+              desc={translations[language].motivation.quran.desc}
+              url="/quran"
+            />
+            <MotivationCard
+              icon={<FontAwesomeIcon icon={faQuoteRight} className="w-10 h-10 text-amber-400" />}
+              title={translations[language].motivation.hadith.title}
+              desc={translations[language].motivation.hadith.desc}
+              url="/hadith"
             />
           </div>
         </div>

@@ -6,7 +6,7 @@ export async function GET() {
     select: {
       id: true,
       name: true,
-      nameAr: true,
+      nameEn: true,
       slug: true,
     },
     orderBy: { name: 'asc' },

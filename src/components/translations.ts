@@ -11,6 +11,7 @@ const translations = {
     companions: 'Companions',
     practice: 'Practice',
     articles: 'Articles',
+    titles: 'Titles',
     articlesLoadError: 'Failed to load articles.',
     articlesNotFound: 'No articles found.',
     categories: 'Categories',
@@ -128,6 +129,18 @@ const translations = {
         title: 'Poems',
         desc: 'Enjoy classical and modern Arabic poetry.'
       },
+      titles: {
+        title: 'Titles',
+        desc: 'Explore Islamic titles and their significance in history.'
+      },
+      quran: {
+        title: 'Quran',
+        desc: 'Learn and reflect on the verses of the Quran.'
+      },
+      hadith: {
+        title: 'Hadith',
+        desc: 'Discover the sayings of Prophet Muhammad ﷺ and understand their meanings.'
+      },
     },
   },
   ar: {
@@ -182,6 +195,7 @@ const translations = {
     spiritualGrowthDesc: 'عمق إيمانك من خلال تعلم لغة القرآن وفهم التعاليم الإسلامية',
     interactiveLearning: 'التعلم التفاعلي',
     interactiveLearningDesc: 'تفاعل مع الدروس المتحركة والاختبارات والتمارين التفاعلية المصممة للتعلم الفعال',
+    titles: 'الألقاب',
     search: 'بحث',
     people: 'الشخصيات',
     fullName: 'الاسم الكامل',
@@ -257,6 +271,18 @@ const translations = {
       poems: {
         title: 'القصائد',
         desc: 'استمتع بالشعر العربي الكلاسيكي والحديث.'
+      },
+      titles: {
+        title: 'الألقاب',
+        desc: 'استكشف الألقاب الإسلامية وأهميتها في التاريخ.'
+      },
+      quran: {
+        title: 'القرآن الكريم',
+        desc: 'تعلم وتدبر آيات القرآن الكريم.'
+      },
+      hadith: {
+        title: 'الحديث الشريف',
+        desc: 'اكتشف أحاديث النبي محمد ﷺ وفهم معانيها.'
       },
     },
   },

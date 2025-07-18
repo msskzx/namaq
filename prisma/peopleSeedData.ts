@@ -80,7 +80,7 @@ export const people = [
     appearance: 'كان طويلًا، أسمر اللون، كث اللحية.',
     virtues: 'أحد العشرة المبشرين بالجنة، تاجر غني، كريم وسخي.',
     picture: null,
-    titles: ['the-ten-promised-paradise', 'companion', 'amin-al-ummah', 'the-six-of-the-shura'],
+    titles: ['the-ten-promised-paradise', 'companion', 'the-six-of-the-shura'],
   },
   {
     name: 'سعيد بن زيد',

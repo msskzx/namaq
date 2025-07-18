@@ -198,7 +198,8 @@ enum RelationType {
 model Title {
   id     String @id @default(cuid())
   name   String
-  nameAr String
+  nameEn String?
+  desc   String?
   slug   String @unique
   people Person[] @relation("PersonTitles")
 }

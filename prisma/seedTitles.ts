@@ -7,12 +7,15 @@ export async function seedTitles(prismaInstance: PrismaClient) {
     try {
       await prismaInstance.title.upsert({
         where: { slug: title.slug },
-        update: {},
+        update: {
+          name: title.name,
+          nameEn: title.nameEn,
+        },
         create: title,
       });
-      console.log(`  [Title] Seeded: ${title.nameAr} (${title.slug})`);
+      console.log(`  [Title] Seeded: ${title.name} (${title.slug})`);
     } catch (err) {
-      console.error(` [31m Error seeding title (${title.slug}):`, err);
+      console.error(` [Error seeding title (${title.slug}):`, err);
     }
   }
 }
