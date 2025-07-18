@@ -38,7 +38,7 @@ export default function Home() {
         {/* Definition Cards */}
         <div className="max-w-6xl mx-auto mb-8 sm:mb-12 grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Noun Card */}
-          <div className="bg-gray-100 dark:bg-indigo-800 rounded-2xl shadow-lg border-l-4 border-amber-400 p-6 flex flex-col items-center">
+          <div className="bg-gray-100 dark:bg-indigo-900 rounded-2xl shadow-lg border-l-4 border-amber-400 p-6 flex flex-col items-center">
             <h4 className="font-arabicDisplay text-amber-400 text-2xl mb-3 text-center" dir="rtl">
               {translations[language].nounTitle}
             </h4>
@@ -47,7 +47,7 @@ export default function Home() {
             </p>
           </div>
           {/* Verb Card */}
-          <div className="bg-gray-100 dark:bg-indigo-800 rounded-2xl shadow-lg border-l-4 border-amber-400 p-6 flex flex-col items-center">
+          <div className="bg-gray-100 dark:bg-indigo-900 rounded-2xl shadow-lg border-l-4 border-amber-400 p-6 flex flex-col items-center">
             <h4 className="font-arabicDisplay text-amber-400 text-2xl mb-3 text-center" dir="rtl">
               {translations[language].verbTitle}
             </h4>

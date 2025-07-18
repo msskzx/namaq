@@ -214,7 +214,7 @@ export default function ArabicLetters() {
             <div className="flex justify-between items-center mb-6 sm:mb-8">
               <button
                 onClick={prevLetter}
-                className="p-2 sm:p-3 rounded-full bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-200 dark:hover:bg-indigo-800 transition-colors"
+                className="p-2 sm:p-3 rounded-full bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-200 dark:hover:bg-indigo-900 transition-colors"
               >
                 <FontAwesomeIcon icon={faChevronLeft} className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
@@ -227,7 +227,7 @@ export default function ArabicLetters() {
               
               <button
                 onClick={nextLetter}
-                className="p-2 sm:p-3 rounded-full bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-200 dark:hover:bg-indigo-800 transition-colors"
+                className="p-2 sm:p-3 rounded-full bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-200 dark:hover:bg-indigo-900 transition-colors"
               >
                 <FontAwesomeIcon icon={faChevronRight} className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>

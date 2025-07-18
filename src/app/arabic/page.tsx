@@ -23,7 +23,7 @@ export default function LearnPage() {
 
         {/* Coming Soon Notice */}
         <div className="max-w-4xl mx-auto mt-8 sm:mt-12">
-          <div className="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-4 sm:p-6 border border-amber-400 dark:border-indigo-800">
+          <div className="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-4 sm:p-6 border border-amber-400 dark:border-indigo-900">
             <h3 className="text-base sm:text-lg font-semibold text-amber-400 dark:text-indigo-200 mb-2">
               {language === 'ar' ? 'المزيد من المحتوى قادم' : 'More Content Coming Soon'}
             </h3>
