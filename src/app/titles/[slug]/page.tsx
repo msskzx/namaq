@@ -42,7 +42,7 @@ export default function TitleDetailPage() {
                   <LoadingSpinner />
                 ) : people && people.length > 0 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    {people.map((person: any) => (
+                    {people.map((person: import("@/generated/prisma").Person) => (
                       <PersonNameCard key={person.slug} person={person} language={language} />
                     ))}
                   </div>

@@ -5,8 +5,7 @@ import { useLanguage } from '@/components/LanguageContext';
 import { useSearchParams, useRouter } from 'next/navigation';
 import translations from '@/components/translations';
 import PeopleFilter from '@/components/PeopleFilter';
-import type { Person } from '@/types/person';
-import type { Title } from '@/generated/prisma';
+import type { Title, Person } from '@/generated/prisma';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import PersonCard from '@/components/PersonCard';
 

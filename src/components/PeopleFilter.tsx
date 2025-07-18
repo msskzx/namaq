@@ -2,13 +2,7 @@ import React, { useRef } from 'react';
 import translations from './translations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-
-interface Title {
-  id: string;
-  name: string;
-  nameAr: string;
-  slug: string;
-}
+import type { Title } from '@/generated/prisma';
 
 interface PeopleFilterProps {
   titles: Title[];
@@ -58,7 +52,7 @@ const PeopleFilter: React.FC<PeopleFilterProps> = ({
           <option value="" className="text-indigo-950">{isArabic ? 'الكل' : 'All'}</option>
           {titles.map((title) => (
             <option key={title.id} value={title.slug} className="text-indigo-950">
-              {isArabic ? title.nameAr : title.name}
+              {isArabic ? title.name : title.nameEn}
             </option>
           ))}
         </select>

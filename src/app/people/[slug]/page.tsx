@@ -77,7 +77,7 @@ const PersonDetailPage = ({ params }: PageProps) => {
             <Image src={person.picture} alt={person.name} width={64} height={64} className="w-16 h-16 rounded-full object-cover border" />
           ) : (
             <span className="w-16 h-16 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700">
-              <FontAwesomeIcon icon={faUser} className="text-3xl text-gray-500 dark:text-gray-300" />
+              <FontAwesomeIcon icon={faUser} className="text-3xl text-gray-500 dark:text-gray-300 text-indigo-950" />
             </span>
           )}
           <h1 className="text-3xl font-bold text-center text-amber-400">{person.name}</h1>
@@ -86,7 +86,7 @@ const PersonDetailPage = ({ params }: PageProps) => {
               <Badge
                 key={title.id}
                 href={`/people?title=${title.slug}`}
-                text={language === 'ar' && title.nameAr ? title.nameAr : title.name}
+                text={language === 'ar' && title.name ? title.name : title.nameEn || title.name}
                 color="bg-indigo-100 dark:bg-indigo-900"
                 className="text-xs font-semibold border border-amber-400"
               />

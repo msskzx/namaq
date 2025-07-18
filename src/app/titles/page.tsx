@@ -27,8 +27,8 @@ export default function TitlesPage() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8">
             {Array.isArray(titles) && titles.length > 0 ? (
-              titles.map((title: any) => (
-                <TitleCard key={title.id} title={title} language={language} url={`/titles/${title.slug}`} />
+              titles.map((title: import("@/generated/prisma").Title) => (
+                <TitleCard key={title.slug} title={title} language={language} url={`/titles/${title.slug}`} />
               ))
             ) : (
               <div className="col-span-full text-center py-4 text-gray-400 font-arabic">

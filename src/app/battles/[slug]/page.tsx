@@ -62,7 +62,7 @@ const BattleDetailPage: React.FC = () => {
               </h2>
               {battle.participations && battle.participations.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                  {battle.participations.map((p: any) => (
+                  {battle.participations.map((p: { person: { slug: string; name: string; nameAr?: string; nameEn?: string } }) => (
                     <PersonNameCard key={p.person.slug} person={{
                       slug: p.person.slug,
                       name: p.person.name,
