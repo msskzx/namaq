@@ -34,7 +34,7 @@ export default function QuranPage() {
     const fetchSurahs = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://api.alquran.cloud/v1/surah');
+        const response = await fetch('https://api.alquran.cloud/v1/surah');
         const data: QuranListResponse = await response.json();
         
         if (data.code === 200) {
