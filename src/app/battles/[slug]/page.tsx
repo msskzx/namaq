@@ -31,7 +31,7 @@ const BattleDetailPage: React.FC = () => {
       ) : (
         <>
           <div className="flex items-center gap-4 mb-6">
-            <div className="w-16 h-16 flex items-center justify-center rounded-full bg-indigo-100 dark:bg-indigo-950">
+            <div className="w-16 h-16 flex items-center justify-center rounded-full bg-indigo-100 dark:bg-gray-900">
               <FontAwesomeIcon icon={faShieldHalved} className="text-amber-400 w-10 h-10" />
             </div>
             <h1 className="text-4xl font-bold text-amber-400">
@@ -44,7 +44,7 @@ const BattleDetailPage: React.FC = () => {
             </div>
           )}
           {battle && (
-            <div className="bg-white dark:bg-indigo-950 rounded-xl shadow-lg border border-amber-400 p-6 font-geistmono">
+            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-amber-400 p-6 font-geistmono">
               <div className="mb-2 flex items-center gap-2">
                 <FontAwesomeIcon icon={faLocationDot} className="text-amber-400 w-5 h-5" />
                 <span className="font-semibold">{language === 'ar' ? t.battles.location : t.battles.locationEn}:</span>

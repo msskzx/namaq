@@ -13,7 +13,7 @@ export default function PoemsPage() {
     <div className="min-h-screen bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center gap-4 mb-6">
-          <div className="w-16 h-16 flex items-center justify-center rounded-full bg-gray-100 dark:bg-indigo-950">
+          <div className="w-16 h-16 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-900">
             <FontAwesomeIcon icon={faPenNib} className="text-amber-400 w-10 h-10" />
           </div>
           <h1 className="text-4xl font-bold text-amber-400">
@@ -21,7 +21,7 @@ export default function PoemsPage() {
           </h1>
         </div>
         
-        <div className="bg-white dark:bg-indigo-950 rounded-xl shadow-lg p-6">
+        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6">
           <p className="text-center text-gray-600 dark:text-gray-300 mb-6">
             {t.motivation.poems.desc}
           </p>
