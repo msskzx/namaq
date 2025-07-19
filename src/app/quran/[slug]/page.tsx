@@ -157,20 +157,29 @@ export default function SurahPage() {
                 <span className="text-2xl text-amber-600 dark:text-amber-400 font-bold">
                   بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
                 </span>
+                {parseInt(surahNumber) === 1 && (
+                  <span className="inline-block w-8 h-8 bg-amber-100 dark:bg-amber-900 rounded-full text-center leading-8 mx-2 align-middle">
+                    <span className="text-amber-600 dark:text-amber-400 font-bold text-xs">
+                      1
+                    </span>
+                  </span>
+                )}
               </div>
               
               {/* Ayahs */}
               {surah.ayahs.map((ayah, index) => (
                 <span key={ayah.number}>
                   {index === 0 
-                    ? ayah.text.substring(ayah.text.indexOf('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ') + 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ'.length + 1).trim()
+                    ? ayah.text.substring('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ'.length + 1).trim()
                     : ayah.text
                   }
-                  <span className="inline-block w-8 h-8 bg-amber-100 dark:bg-amber-900 rounded-full text-center leading-8 mx-2 align-middle">
-                    <span className="text-amber-600 dark:text-amber-400 font-bold text-xs">
-                      {ayah.numberInSurah}
+                  {!(parseInt(surahNumber) === 1 && index === 0) && (
+                    <span className="inline-block w-8 h-8 bg-amber-100 dark:bg-amber-900 rounded-full text-center leading-8 mx-2 align-middle">
+                      <span className="text-amber-600 dark:text-amber-400 font-bold text-xs">
+                        {ayah.numberInSurah}
+                      </span>
                     </span>
-                  </span>
+                  )}
                   {index < surah.ayahs.length - 1 && ' '}
                 </span>
               ))}
