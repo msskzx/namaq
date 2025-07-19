@@ -17,7 +17,7 @@ export default function ArticleDetailPage() {
   const { data: article, error, isLoading } = useSWR(`/api/articles/${slug}`, fetcher);
 
   return (
-    <div className="min-h-screen bg-indigo-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div className="container mx-auto py-8">
         {isLoading ? (
           <LoadingSpinner />
@@ -36,7 +36,7 @@ export default function ArticleDetailPage() {
                       <Badge
                         href={`/categories/${cat.slug}`}
                         text={language === 'ar' ? cat.name : cat.nameEn || cat.name}
-                        color="bg-indigo-100 dark:bg-indigo-900"
+                        color="bg-indigo-100 dark:bg-indigo-950"
                         className="border border-amber-400 text-xs font-semibold"
                       />
                     </li>

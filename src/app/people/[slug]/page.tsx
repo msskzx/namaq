@@ -51,7 +51,7 @@ const PersonDetailPage = ({ params }: PageProps) => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-indigo-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+      <div className="min-h-screen bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <div className="container mx-auto px-4 py-8">
           <p className="text-red-600 dark:text-red-400 text-lg my-8">{error}</p>
         </div>
@@ -61,7 +61,7 @@ const PersonDetailPage = ({ params }: PageProps) => {
 
   if (isLoading || !person) {
     return (
-      <div className="min-h-screen bg-indigo-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+      <div className="min-h-screen bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <div className="container mx-auto px-4 py-8">
           <LoadingSpinner />
         </div>
@@ -70,14 +70,14 @@ const PersonDetailPage = ({ params }: PageProps) => {
   }
 
   return (
-    <div className="min-h-screen bg-indigo-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col items-center justify-center mb-4 gap-4">
           {person.picture ? (
             <Image src={person.picture} alt={person.name} width={64} height={64} className="w-16 h-16 rounded-full object-cover border" />
           ) : (
             <span className="w-16 h-16 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700">
-              <FontAwesomeIcon icon={faUser} className="text-3xl text-gray-500 dark:text-gray-300 text-indigo-950" />
+              <FontAwesomeIcon icon={faUser} className="text-3xl text-gray-950 dark:text-gray-400" />
             </span>
           )}
           <h1 className="text-3xl font-bold text-center text-amber-400">{person.name}</h1>
@@ -87,7 +87,7 @@ const PersonDetailPage = ({ params }: PageProps) => {
                 key={title.id}
                 href={`/people?title=${title.slug}`}
                 text={language === 'ar' && title.name ? title.name : title.nameEn || title.name}
-                color="bg-indigo-100 dark:bg-indigo-900"
+                color="bg-indigo-100 dark:bg-indigo-950"
                 className="text-xs font-semibold border border-amber-400"
               />
             ))}
@@ -105,25 +105,25 @@ const PersonDetailPage = ({ params }: PageProps) => {
 
         <div className="flex flex-col gap-6">
           {person.fullName && (
-            <div className="bg-white dark:bg-indigo-900 rounded-lg shadow p-4">
+            <div className="bg-white dark:bg-indigo-950 rounded-lg shadow p-4">
               <div className="font-bold text-lg mb-2 text-amber-400">{t.fullName}</div>
               <div>{person.fullName}</div>
             </div>
           )}
           {person.appearance && (
-            <div className="bg-white dark:bg-indigo-900 rounded-lg shadow p-4">
+            <div className="bg-white dark:bg-indigo-950 rounded-lg shadow p-4">
               <div className="font-bold text-lg mb-2 text-amber-400">{t.appearance}</div>
               <div>{person.appearance}</div>
             </div>
           )}
           {person.virtues && (
-            <div className="bg-white dark:bg-indigo-900 rounded-lg shadow p-4">
+            <div className="bg-white dark:bg-indigo-950 rounded-lg shadow p-4">
               <div className="font-bold text-lg mb-2 text-amber-400">{t.virtues}</div>
               <div>{person.virtues}</div>
             </div>
           )}
           {(person.relationsFrom.length > 0 || person.relationsTo.length > 0) && (
-            <div className="bg-white dark:bg-indigo-900 rounded-lg shadow p-4">
+            <div className="bg-white dark:bg-indigo-950 rounded-lg shadow p-4">
               <div className="font-bold text-lg mb-2 text-amber-400">{t.relations}</div>
               <PersonRelationsGraph person={person} relationsFrom={person.relationsFrom} relationsTo={person.relationsTo} />
             </div>

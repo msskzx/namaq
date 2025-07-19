@@ -45,13 +45,13 @@ const PeopleFilter: React.FC<PeopleFilterProps> = ({
     >
       <div className="w-full sm:w-auto">
         <select
-          className="border border-amber-400 rounded px-3 h-10 text-base w-full min-w-[140px] bg-indigo-950 text-amber-400 focus:border-amber-400 focus:ring-amber-400 focus-visible:outline-amber-400 dark:focus-visible:outline-amber-400"
+          className="border border-amber-400 rounded px-3 h-10 text-base w-full min-w-[140px] bg-gray-950 text-amber-400 focus:border-amber-400 focus:ring-amber-400 focus-visible:outline-amber-400 dark:focus-visible:outline-amber-400"
           value={selectedTitle}
           onChange={e => onTitleChange(e.target.value)}
         >
-          <option value="" className="text-indigo-950">{isArabic ? 'الكل' : 'All'}</option>
+          <option value="" className="text-gray-950">{isArabic ? 'الكل' : 'All'}</option>
           {titles.map((title) => (
-            <option key={title.id} value={title.slug} className="text-indigo-950">
+            <option key={title.id} value={title.slug} className="text-gray-950">
               {isArabic ? title.name : title.nameEn}
             </option>
           ))}
@@ -62,14 +62,14 @@ const PeopleFilter: React.FC<PeopleFilterProps> = ({
         <input
           ref={inputRef}
           type="text"
-          className="border border-amber-400 rounded px-3 h-10 text-base w-full bg-indigo-950 text-amber-400 focus:border-amber-400 focus:ring-amber-400 dark:focus:border-amber-400 dark:focus:ring-amber-400 placeholder:text-amber-300 dark:placeholder-amber-200 focus-visible:outline-amber-400 dark:focus-visible:outline-amber-400"
+          className="border border-amber-400 rounded px-3 h-10 text-base w-full bg-gray-950 text-amber-400 focus:border-amber-400 focus:ring-amber-400 dark:focus:border-amber-400 dark:focus:ring-amber-400 placeholder:text-amber-300 dark:placeholder-amber-200 focus-visible:outline-amber-400 dark:focus-visible:outline-amber-400"
           placeholder={translations[language]?.search}
           value={inputValue}
           onChange={handleInputChange}
         />
         <button
           type="submit"
-          className="bg-amber-400 hover:bg-amber-300 text-indigo-950 rounded flex items-center justify-center h-10 w-full sm:w-10 border border-amber-400 transition-colors"
+          className="bg-amber-400 hover:bg-amber-300 text-gray-950 rounded flex items-center justify-center h-10 w-full sm:w-10 border border-amber-400 transition-colors"
           aria-label={translations[language]?.search}
         >
           <FontAwesomeIcon icon={faMagnifyingGlass} />

@@ -17,14 +17,14 @@ export default function TitleDetailPage() {
   const { data: title, error, isLoading } = useSWR(slug ? `/api/titles/${slug}` : null, fetcher);
   const { data: people, isLoading: isLoadingPeople } = useSWR(slug ? `/api/people?title=${slug}` : null, fetcher);
   return (
-    <div className="min-h-screen bg-indigo-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div className="container mx-auto px-4 py-8">
         {isLoading ? (
           <LoadingSpinner />
         ) : (
           <>
             <div className="flex items-center gap-4 mb-6">
-              <div className="w-16 h-16 flex items-center justify-center rounded-full bg-indigo-100 dark:bg-indigo-900">
+              <div className="w-16 h-16 flex items-center justify-center rounded-full bg-indigo-100 dark:bg-indigo-950">
                 <FontAwesomeIcon icon={faCrown} className="text-amber-400 w-10 h-10" />
               </div>
               <h1 className="text-4xl font-bold text-amber-400">
@@ -37,7 +37,7 @@ export default function TitleDetailPage() {
               </div>
             )}
             {title && (
-              <div className="bg-white dark:bg-indigo-900 rounded-xl shadow-lg border border-amber-400 p-6 mb-8">
+              <div className="bg-white dark:bg-indigo-950 rounded-xl shadow-lg border border-amber-400 p-6 mb-8">
                 {isLoadingPeople ? (
                   <LoadingSpinner />
                 ) : people && people.length > 0 ? (

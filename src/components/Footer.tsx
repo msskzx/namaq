@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
     const currentLanguage = language || 'ar';
     
     return (
-        <footer className="w-full bg-indigo-950 text-amber-400 py-8 border-t-2 border-amber-400">
+        <footer className="w-full bg-gray-950 text-amber-400 py-8 border-t-2 border-amber-400">
             <div className="container mx-auto px-4">
                 <div className="flex flex-col md:flex-row justify-between items-center">
                     <div className="mb-4 md:mb-0">

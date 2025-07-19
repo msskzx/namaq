@@ -23,9 +23,9 @@ const BattleParticipants: React.FC<BattleParticipantsProps> = ({ participations,
           <a
             key={p.person.slug}
             href={`/people/${p.person.slug}`}
-            className="block bg-white dark:bg-gray-800 rounded-lg shadow border border-indigo-100 dark:border-indigo-700 p-4 hover:shadow-lg transition-all duration-200"
+            className="block bg-white dark:bg-gray-800 rounded-lg shadow border border-indigo-100 dark:border-indigo-950 p-4 hover:shadow-lg transition-all duration-200"
           >
-            <span className="text-indigo-700 dark:text-indigo-200 font-semibold">
+            <span className="text-indigo-950 dark:text-indigo-200 font-semibold">
               {language === 'ar' && p.person.nameAr ? p.person.nameAr : p.person.name}
             </span>
           </a>

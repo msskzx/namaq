@@ -15,7 +15,7 @@ const ArticlesPage: React.FC = () => {
   const { data: articles, error, isLoading } = useSWR<Article[]>("/api/articles", fetcher);
 
   return (
-    <div className="min-h-screen bg-indigo-950">
+    <div className="min-h-screen bg-gray-950">
       <div className="container mx-auto px-4 py-8" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <h1 className="text-3xl font-bold mb-6 text-amber-400 text-center">{translations[language].articles}</h1>
         {error && (
