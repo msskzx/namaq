@@ -83,67 +83,76 @@ export default function Home() {
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             <MotivationCard
-              icon={<FontAwesomeIcon icon={faMosque} className="w-10 h-10 text-cyan-500" />}
+              icon={<FontAwesomeIcon icon={faMosque} className="w-10 h-10 text-sky-400" />}
               title={translations[language].motivation.prophet.title}
               desc={translations[language].motivation.prophet.desc}
               url="/people/prophet-muhammad"
-              color="text-cyan-500"
+              color="text-sky-400"
+              borderColor="border-sky-400"
             />
             <MotivationCard
-              icon={<FontAwesomeIcon icon={faUsers} className="w-10 h-10 text-indigo-400" />}
+              icon={<FontAwesomeIcon icon={faUsers} className="w-10 h-10 text-sky-500" />}
               title={translations[language].motivation.companions.title}
               desc={translations[language].motivation.companions.desc}
               url="/people?title=companion"
-              color="text-indigo-400"
+              color="text-sky-500"
+              borderColor="border-sky-500"
             />
             <MotivationCard
-              icon={<FontAwesomeIcon icon={faShieldAlt} className="w-10 h-10 text-red-400" />}
+              icon={<FontAwesomeIcon icon={faShieldAlt} className="w-10 h-10 text-sky-600" />}
               title={translations[language].motivation.battles.title}
               desc={translations[language].motivation.battles.desc}
               url="/battles"
-              color="text-red-400"
+              color="text-sky-600"
+              borderColor="border-sky-600"
             />
             <MotivationCard
-              icon={<FontAwesomeIcon icon={faFileAlt} className="w-10 h-10 text-blue-600" />}
+              icon={<FontAwesomeIcon icon={faFileAlt} className="w-10 h-10 text-blue-400" />}
               title={translations[language].motivation.articles.title}
               desc={translations[language].motivation.articles.desc}
               url="/articles"
-              color="text-blue-600"
+              color="text-blue-400"
+              borderColor="border-blue-400"
             />
             <MotivationCard
-              icon={<FontAwesomeIcon icon={faThLarge} className="w-10 h-10 text-green-600" />}
+              icon={<FontAwesomeIcon icon={faThLarge} className="w-10 h-10 text-blue-500" />}
               title={translations[language].motivation.categories.title}
               desc={translations[language].motivation.categories.desc}
               url="/categories"
-              color="text-green-600"
+              color="text-blue-500"
+              borderColor="border-blue-500"
             />
             <MotivationCard
-              icon={<FontAwesomeIcon icon={faPenNib} className="w-10 h-10 text-purple-600" />}
+              icon={<FontAwesomeIcon icon={faPenNib} className="w-10 h-10 text-blue-600" />}
               title={translations[language].motivation.poems.title}
               desc={translations[language].motivation.poems.desc}
               url="/poems"
-              color="text-purple-600"
+              color="text-blue-600"
+              borderColor="border-blue-600"
             />
             <MotivationCard
-              icon={<FontAwesomeIcon icon={faCrown} className="w-10 h-10 text-yellow-600" />}
-              title={translations[language].motivation.titles.title}
-              desc={translations[language].motivation.titles.desc}
-              url="/titles"
-              color="text-yellow-600"
-            />
-            <MotivationCard
-              icon={<FontAwesomeIcon icon={faBook} className="w-10 h-10 text-emerald-600" />}
+              icon={<FontAwesomeIcon icon={faBook} className="w-10 h-10 text-indigo-400" />}
               title={translations[language].motivation.quran.title}
               desc={translations[language].motivation.quran.desc}
               url="/quran"
-              color="text-emerald-600"
+              color="text-indigo-400"
+              borderColor="border-indigo-400"
             />
             <MotivationCard
-              icon={<FontAwesomeIcon icon={faQuoteRight} className="w-10 h-10 text-rose-600" />}
+              icon={<FontAwesomeIcon icon={faQuoteRight} className="w-10 h-10 text-indigo-500" />}
               title={translations[language].motivation.hadith.title}
               desc={translations[language].motivation.hadith.desc}
               url="/hadith"
-              color="text-rose-600"
+              color="text-indigo-500"
+              borderColor="border-indigo-500"
+            />
+            <MotivationCard
+              icon={<FontAwesomeIcon icon={faCrown} className="w-10 h-10 text-indigo-600" />}
+              title={translations[language].motivation.titles.title}
+              desc={translations[language].motivation.titles.desc}
+              url="/titles"
+              color="text-indigo-600"
+              borderColor="border-indigo-600"
             />
           </div>
         </div>
