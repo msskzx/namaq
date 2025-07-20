@@ -22,7 +22,7 @@ export default function HadithPage() {
         </div>
         
         <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6">
-          <p className="text-center text-gray-600 dark:text-gray-300 mb-6">
+          <p className="text-center text-gray-600 dark:text-gray-200 mb-6">
             {t.motivation.hadith.desc}
           </p>
           

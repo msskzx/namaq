@@ -1,3 +1,5 @@
+import { Category } from './category';
+
 export interface Article {
   id: string;
   title: string;
@@ -12,4 +14,5 @@ export interface Article {
   publishedAt?: Date | null;
   createdAt: Date;
   updatedAt: Date;
+  categories?: Category[];
 } 

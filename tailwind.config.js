@@ -6,6 +6,7 @@ module.exports = {
     extend: {
       fontFamily: {
         geistmono: ['Geist Mono', 'monospace'],
+        arabic: ['Amiri', 'serif'],
       },
     },
   },

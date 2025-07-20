@@ -18,7 +18,7 @@ const PrivacyPage: React.FC = () => {
               {language === 'ar' ? 'سياسة الخصوصية' : 'Privacy Policy'}
             </h1>
             
-            <div className="space-y-6 text-gray-700 dark:text-gray-300">
+            <div className="space-y-6 text-gray-700 dark:text-gray-200">
               <section>
                 <h2 className="text-xl font-semibold text-amber-400 mb-3">
                   {language === 'ar' ? 'المعلومات التي نجمعها' : 'Information We Collect'}

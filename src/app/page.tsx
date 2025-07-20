@@ -31,7 +31,7 @@ export default function Home() {
           <h1 className="font-arabicDisplay text-amber-400 text-4xl sm:text-6xl md:text-7xl lg:text-8xl mb-4 drop-shadow-lg tracking-wide">
             {translations[language].title}
           </h1>
-          <p className="font-arabic text-gray-100 text-lg sm:text-2xl mb-4">
+          <p className="font-arabic text-gray-200 text-lg sm:text-2xl mb-4">
             {translations[language].intro}
           </p>
         </header>
@@ -42,20 +42,20 @@ export default function Home() {
         {/* Definition Section */}
         <div className="max-w-6xl mx-auto mb-8 sm:mb-12 grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Noun Card */}
-          <div className="bg-gray-100 dark:bg-indigo-950 rounded-2xl shadow-lg border-r-4 border-rose-800 p-6 flex flex-col items-center">
+          <div className="bg-gray-100 dark:bg-gray-900 rounded-2xl shadow-lg border-r-4 border-rose-800 p-6 flex flex-col items-center">
             <h4 className="font-arabicDisplay text-amber-400 text-2xl mb-3 text-center" dir="rtl">
               {translations[language].nounTitle}
             </h4>
-            <p className="font-arabic text-gray-800 dark:text-gray-100 text-lg leading-relaxed text-center" dir="rtl">
+            <p className="font-arabic text-gray-800 dark:text-gray-200 text-lg leading-relaxed text-center" dir="rtl">
               {translations[language].nounDefinition}
             </p>
           </div>
           {/* Verb Card */}
-          <div className="bg-gray-100 dark:bg-indigo-950 rounded-2xl shadow-lg border-l-4 border-rose-800 p-6 flex flex-col items-center">
+          <div className="bg-gray-100 dark:bg-gray-900 rounded-2xl shadow-lg border-l-4 border-rose-800 p-6 flex flex-col items-center">
             <h4 className="font-arabicDisplay text-amber-400 text-2xl mb-3 text-center" dir="rtl">
               {translations[language].verbTitle}
             </h4>
-            <p className="font-arabic text-gray-800 dark:text-gray-100 text-lg leading-relaxed text-center mb-3" dir="rtl">
+            <p className="font-arabic text-gray-800 dark:text-gray-200 text-lg leading-relaxed text-center mb-3" dir="rtl">
               {translations[language].verbDefinition}
             </p>
             <div className="space-y-2">
@@ -87,7 +87,7 @@ export default function Home() {
               title={translations[language].motivation.prophet.title}
               desc={translations[language].motivation.prophet.desc}
               url="/people/prophet-muhammad"
-              color="text-sky-400"
+              color="text-gray-200"
               borderColor="border-sky-400"
             />
             <MotivationCard
@@ -95,7 +95,7 @@ export default function Home() {
               title={translations[language].motivation.companions.title}
               desc={translations[language].motivation.companions.desc}
               url="/people?title=companion"
-              color="text-sky-500"
+              color="text-gray-200"
               borderColor="border-sky-500"
             />
             <MotivationCard
@@ -103,7 +103,7 @@ export default function Home() {
               title={translations[language].motivation.battles.title}
               desc={translations[language].motivation.battles.desc}
               url="/battles"
-              color="text-sky-600"
+              color="text-gray-200"
               borderColor="border-sky-600"
             />
             <MotivationCard
@@ -111,7 +111,7 @@ export default function Home() {
               title={translations[language].motivation.articles.title}
               desc={translations[language].motivation.articles.desc}
               url="/articles"
-              color="text-blue-400"
+              color="text-gray-200"
               borderColor="border-blue-400"
             />
             <MotivationCard
@@ -119,7 +119,7 @@ export default function Home() {
               title={translations[language].motivation.categories.title}
               desc={translations[language].motivation.categories.desc}
               url="/categories"
-              color="text-blue-500"
+              color="text-gray-200"
               borderColor="border-blue-500"
             />
             <MotivationCard
@@ -127,7 +127,7 @@ export default function Home() {
               title={translations[language].motivation.poems.title}
               desc={translations[language].motivation.poems.desc}
               url="/poems"
-              color="text-blue-600"
+              color="text-gray-200"
               borderColor="border-blue-600"
             />
             <MotivationCard
@@ -135,7 +135,7 @@ export default function Home() {
               title={translations[language].motivation.quran.title}
               desc={translations[language].motivation.quran.desc}
               url="/quran"
-              color="text-indigo-400"
+              color="text-gray-200"
               borderColor="border-indigo-400"
             />
             <MotivationCard
@@ -143,7 +143,7 @@ export default function Home() {
               title={translations[language].motivation.hadith.title}
               desc={translations[language].motivation.hadith.desc}
               url="/hadith"
-              color="text-indigo-500"
+              color="text-gray-200"
               borderColor="border-indigo-500"
             />
             <MotivationCard
@@ -151,9 +151,53 @@ export default function Home() {
               title={translations[language].motivation.titles.title}
               desc={translations[language].motivation.titles.desc}
               url="/titles"
-              color="text-indigo-600"
+              color="text-gray-200"
               borderColor="border-indigo-600"
             />
+          </div>
+        </div>
+
+        <hr className="border-t-2 border-amber-400 my-8 max-w-2xl mx-auto" />
+
+        {/* Special Articles Section */}
+        <div className="mx-auto my-12">
+          <h2 className="font-arabicDisplay text-amber-400 text-2xl font-bold mb-4 text-center">
+            {language === 'ar' ? 'مقالات مميزة' : 'Special Articles'}
+          </h2>
+          <p className="text-center text-gray-200 mb-8 text-base sm:text-lg font-arabic max-w-4xl mx-auto">
+            {language === 'ar'
+              ? 'في هذا القسم نقدم مقالات تفاعلية مصممة خصيصاً لتجربة تعلم فريدة. ستجد محتوى غني بالرسوم المتحركة، الإحصائيات، الأشكال التوضيحية، والتصاميم المبتكرة التي تساعدك على الفهم والتفاعل بشكل أفضل.'
+              : 'In this section, we present custom-made articles focused on building interactive content for a unique learning experience. You will find content rich with animations, statistics, figures, and creative designs to help you understand and engage more deeply.'}
+          </p>
+          <div className="flex flex-col sm:flex-row gap-8 justify-center items-stretch">
+            {/* Arabic Letters Card */}
+            <div className="flex-1 bg-gray-900 rounded-2xl shadow-lg border-l-4 border-amber-400 p-8 flex flex-col items-center max-w-md mx-auto">
+              <h3 className="font-arabicDisplay text-amber-400 text-xl font-bold mb-3 text-center">
+                {language === 'ar' ? 'تعلم الحروف العربية' : 'Learn the Arabic Letters'}
+              </h3>
+              <p className="text-center text-gray-200 mb-6 text-base sm:text-lg font-arabic">
+                {language === 'ar'
+                  ? 'إتقان الحروف العربية هو الخطوة الأولى لفهم اللغة وقراءة القرآن الكريم. ابدأ رحلتك مع الأبجدية العربية وتعرف على أشكال الحروف وأصواتها من خلال أمثلة تفاعلية ومبسطة.'
+                  : 'Mastering the Arabic letters is the first step to understanding the language and reading the Holy Quran. Start your journey with the Arabic alphabet and discover the shapes and sounds of the letters through interactive and simple examples.'}
+              </p>
+              <a href="/arabic-letters" className="inline-block px-8 py-3 bg-amber-400 text-gray-950 font-semibold rounded-lg hover:bg-amber-300 transition-colors duration-200 shadow-lg hover:shadow-xl text-lg">
+                {language === 'ar' ? 'ابدأ تعلم الحروف' : 'Start Learning the Letters'}
+              </a>
+            </div>
+            {/* Upcoming Content Card */}
+            <div className="flex-1 bg-gray-900 rounded-2xl shadow-lg border-l-4 border-indigo-400 p-8 flex flex-col items-center max-w-md mx-auto opacity-70">
+              <h3 className="font-arabicDisplay text-indigo-300 text-xl font-bold mb-3 text-center">
+                {language === 'ar' ? 'قريباً: محتوى جديد' : 'Coming Soon: New Content'}
+              </h3>
+              <p className="text-center text-gray-200 mb-6 text-base sm:text-lg font-arabic">
+                {language === 'ar'
+                  ? 'ترقبوا إضافة مقالات ومواد تفاعلية جديدة قريباً ضمن هذا القسم المميز.'
+                  : 'Stay tuned for new articles and interactive materials coming soon to this special section.'}
+              </p>
+              <button disabled className="inline-block px-8 py-3 bg-indigo-400 text-gray-950 font-semibold rounded-lg cursor-not-allowed text-lg opacity-80">
+                {language === 'ar' ? 'قريباً' : 'Coming Soon'}
+              </button>
+            </div>
           </div>
         </div>
 
