@@ -35,6 +35,7 @@ export default function PersonRelationsGraph({ person, relationsFrom, relationsT
     })),
   ];
 
+  // TODO check this or maybe remove it
   // Group relations by slug to show all types between the same two people
   const relationPairs: Record<string, { types: string[]; names: string[]; id: string; slug?: string }> = {};
   allRelations.forEach(rel => {
@@ -60,6 +61,9 @@ export default function PersonRelationsGraph({ person, relationsFrom, relationsT
   // Use Arabic translations for relation types
   const relationTypeArabic = translations.ar.relationTypes;
 
+  // Track which node is hovered (by id or 'center')
+  const [hoveredNode, setHoveredNode] = React.useState<string | null>(null);
+
   return (
     <div className="flex justify-center items-center my-8">
       <svg width={CANVAS_SIZE} height={CANVAS_SIZE} style={{ display: 'block', margin: '0 auto' }}>
@@ -72,31 +76,59 @@ export default function PersonRelationsGraph({ person, relationsFrom, relationsT
             <line key={rel.id + '-line'} x1={CENTER_X} y1={CENTER_Y} x2={x} y2={y} stroke="#888" strokeWidth={2} />
           );
         })}
-        {/* Center node (the person) */}
-        <circle cx={CENTER_X} cy={CENTER_Y} r={NODE_RADIUS} fill="#6366f1" />
-        <text x={CENTER_X} y={CENTER_Y} textAnchor="middle" dominantBaseline="middle" fill="#fff" fontSize={18} fontWeight="bold">
-          {person.name}
-        </text>
+        {/* Center node (the person) with hover effect */}
+        {(() => {
+          const isHovered = hoveredNode === 'center';
+          const centerRadius = isHovered ? NODE_RADIUS + 12 : NODE_RADIUS;
+          const centerFill = isHovered ? '#312e81' : '#1e1b4b'; // indigo-900 on hover, indigo-950 default
+          const centerTextFill = '#fbbf24';
+          const centerTextWeight = isHovered ? 900 : 700;
+          if (person.slug) {
+            return (
+              <g onMouseEnter={() => setHoveredNode('center')} onMouseLeave={() => setHoveredNode(null)} style={{ transition: 'all 0.2s' }}>
+                <Link href={`/people/${person.slug}`}>
+                  <circle cx={CENTER_X} cy={CENTER_Y} r={centerRadius} fill={centerFill} style={{ cursor: 'pointer', transition: 'all 0.2s' }} />
+                  <text x={CENTER_X} y={CENTER_Y} textAnchor="middle" dominantBaseline="middle" fill={centerTextFill} fontSize={22} fontWeight={centerTextWeight} style={{ cursor: 'pointer', transition: 'all 0.2s' }}>
+                    {person.name}
+                  </text>
+                </Link>
+              </g>
+            );
+          } else {
+            return (
+              <g onMouseEnter={() => setHoveredNode('center')} onMouseLeave={() => setHoveredNode(null)} style={{ transition: 'all 0.2s' }}>
+                <circle cx={CENTER_X} cy={CENTER_Y} r={centerRadius} fill={centerFill} style={{ transition: 'all 0.2s' }} />
+                <text x={CENTER_X} y={CENTER_Y} textAnchor="middle" dominantBaseline="middle" fill={centerTextFill} fontSize={22} fontWeight={centerTextWeight} style={{ transition: 'all 0.2s' }}>
+                  {person.name}
+                </text>
+              </g>
+            );
+          }
+        })()}
         {/* Relation nodes */}
         {relationPairList.map(([, rel], i) => {
           const angle = i * angleStep - Math.PI / 2;
           const x = CENTER_X + RADIUS * Math.cos(angle);
           const y = CENTER_Y + RADIUS * Math.sin(angle);
+          const isHovered = hoveredNode === rel.id;
+          const nodeRadius = isHovered ? CHILD_NODE_RADIUS + 10 : CHILD_NODE_RADIUS;
+          const nodeFill = isHovered ? '#374151' : '#1f2937'; // gray-700 on hover, gray-800 default
+          const textWeight = isHovered ? 900 : 700;
           return (
-            <g key={rel.id}>
+            <g key={rel.id} onMouseEnter={() => setHoveredNode(rel.id)} onMouseLeave={() => setHoveredNode(null)} style={{ transition: 'all 0.2s' }}>
               {/* Node as a link if slug exists; only circle and text are clickable */}
               <g>
                 {rel.slug ? (
                   <Link href={`/people/${rel.slug}`}>
-                    <circle cx={x} cy={y} r={CHILD_NODE_RADIUS} fill="#f3f4f6" style={{ cursor: 'pointer' }} />
-                    <text x={x} y={y} textAnchor="middle" dominantBaseline="middle" fill="#222" fontSize={14} fontWeight="bold" style={{ cursor: 'pointer' }}>
+                    <circle cx={x} cy={y} r={nodeRadius} fill={nodeFill} style={{ cursor: 'pointer', transition: 'all 0.2s' }} />
+                    <text x={x} y={y} textAnchor="middle" dominantBaseline="middle" fill="#fbbf24" fontSize={16} fontWeight={textWeight} style={{ cursor: 'pointer', transition: 'all 0.2s' }}>
                       {rel.names[0]}
                     </text>
                   </Link>
                 ) : (
                   <>
-                    <circle cx={x} cy={y} r={CHILD_NODE_RADIUS} fill="#f3f4f6" />
-                    <text x={x} y={y} textAnchor="middle" dominantBaseline="middle" fill="#222" fontSize={14} fontWeight="bold">
+                    <circle cx={x} cy={y} r={nodeRadius} fill={nodeFill} style={{ transition: 'all 0.2s' }} />
+                    <text x={x} y={y} textAnchor="middle" dominantBaseline="middle" fill="#fbbf24" fontSize={16} fontWeight={textWeight} style={{ transition: 'all 0.2s' }}>
                       {rel.names[0]}
                     </text>
                   </>
@@ -104,9 +136,9 @@ export default function PersonRelationsGraph({ person, relationsFrom, relationsT
               </g>
               {/* All relation type labels under the node, reversed order */}
               {[...rel.types].reverse().map((type, idx) => {
-                const labelY = y + CHILD_NODE_RADIUS + 18 + idx * 16; // CHILD_NODE_RADIUS is node radius, 18 is spacing, 16 is line height
+                const labelY = y + nodeRadius + 18 + idx * 16;
                 return (
-                  <text key={type} x={x} y={labelY} textAnchor="middle" fill="#888" fontSize={13} fontWeight="bold">
+                  <text key={type} x={x} y={labelY} textAnchor="middle" fill="#818cf8" fontSize={13} fontWeight="bold">
                     {relationTypeArabic[type as keyof typeof relationTypeArabic] || type}
                   </text>
                 );

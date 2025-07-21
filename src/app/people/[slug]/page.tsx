@@ -80,15 +80,15 @@ const PersonDetailPage = ({ params }: PageProps) => {
               <FontAwesomeIcon icon={faUser} className="text-3xl text-gray-950 dark:text-gray-400" />
             </span>
           )}
-          <h1 className="text-3xl font-bold text-center text-amber-400">{person.name}</h1>
+          <h1 className="text-8xl font-bold text-center text-amber-400 mb-4">{person.name}</h1>
           <div className="flex flex-wrap gap-2 justify-center">
             {person.titles && person.titles.length > 0 && person.titles.map((title) => (
               <Badge
                 key={title.id}
                 href={`/people?title=${title.slug}`}
                 text={language === 'ar' && title.name ? title.name : title.nameEn || title.name}
-                color="bg-indigo-100 dark:bg-indigo-950"
-                className="text-xs font-semibold border border-amber-400"
+                color="bg-indigo-100 dark:bg-indigo-900"
+                className="text-s font-semibold border border-amber-400"
               />
             ))}
             {person.participations && person.participations.length > 0 && person.participations.map((p) => (
@@ -96,8 +96,8 @@ const PersonDetailPage = ({ params }: PageProps) => {
                 key={p.battle.id}
                 href={`/battles/${p.battle.slug}`}
                 text={language === 'ar' ? p.battle.name : p.battle.nameEn || p.battle.name}
-                color="bg-yellow-100 dark:bg-yellow-800"
-                className="text-xs font-semibold border border-amber-400"
+                color="bg-yellow-100 dark:bg-amber-900"
+                className="text-s font-semibold border border-amber-400"
               />
             ))}
           </div>
@@ -106,25 +106,25 @@ const PersonDetailPage = ({ params }: PageProps) => {
         <div className="flex flex-col gap-6">
           {person.fullName && (
             <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-4">
-              <div className="font-bold text-lg mb-2 text-amber-400">{t.fullName}</div>
+              <div className="font-bold text-2xl mb-2 text-amber-400">{t.fullName}</div>
               <div>{person.fullName}</div>
             </div>
           )}
           {person.appearance && (
             <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-4">
-              <div className="font-bold text-lg mb-2 text-amber-400">{t.appearance}</div>
+              <div className="font-bold text-2xl mb-2 text-amber-400">{t.appearance}</div>
               <div>{person.appearance}</div>
             </div>
           )}
           {person.virtues && (
             <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-4">
-              <div className="font-bold text-lg mb-2 text-amber-400">{t.virtues}</div>
+              <div className="font-bold text-2xl mb-2 text-amber-400">{t.virtues}</div>
               <div>{person.virtues}</div>
             </div>
           )}
           {(person.relationsFrom.length > 0 || person.relationsTo.length > 0) && (
             <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-4">
-              <div className="font-bold text-lg mb-2 text-amber-400">{t.relations}</div>
+              <div className="font-bold text-2xl mb-2 text-amber-400">{t.relations}</div>
               <PersonRelationsGraph person={person} relationsFrom={person.relationsFrom} relationsTo={person.relationsTo} />
             </div>
           )}

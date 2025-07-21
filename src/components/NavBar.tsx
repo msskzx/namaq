@@ -45,7 +45,7 @@ const NavBar: React.FC = () => {
 
   // Define nav links
   const navLinks = [
-    { href: '/', label: translations[language].home },
+    { href: '/specials', label: language === 'ar' ? 'مقالات مميزة' : 'Special Articles' },
     { href: '/people/prophet-muhammad', label: translations[language].prophet },
     { href: '/people?title=companion', label: translations[language].companions },
     { href: '/battles', label: translations[language].battles.title },
