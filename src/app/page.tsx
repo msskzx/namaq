@@ -154,46 +154,68 @@ export default function Home() {
           </div>
         </div>
 
-        <hr className="border-t-2 border-amber-400 my-8 max-w-2xl mx-auto" />
-
-        {/* Special Articles Section */}
-        <div className="mx-auto my-12">
+        {/* Ayat About People Section */}
+        <div className="max-w-5xl mx-auto my-16 bg-gray-900 rounded-2xl shadow-lg border-l-4 border-amber-400 p-8 flex flex-col items-center">
           <h2 className="font-arabicDisplay text-amber-400 text-3xl font-bold mb-6 text-center">
-            {language === 'ar' ? 'مقالات مميزة' : 'Special Articles'}
+            {language === 'ar' ? 'آيات نزلت في الأشخاص' : 'Quranic Verses About People'}
           </h2>
-          <p className="text-center text-gray-200 mb-10 text-lg sm:text-2xl font-arabic max-w-4xl mx-auto leading-relaxed">
+          <p className="text-center text-indigo-100 mb-10 text-lg sm:text-2xl font-arabic max-w-3xl mx-auto">
             {language === 'ar'
-              ? 'في هذا القسم نقدم مقالات تفاعلية مصممة خصيصاً لتجربة تعلم فريدة. ستجد محتوى غني بالرسوم المتحركة، الإحصائيات، الأشكال التوضيحية، والتصاميم المبتكرة التي تساعدك على الفهم والتفاعل بشكل أفضل.'
-              : 'In this section, we present custom-made articles focused on building interactive content for a unique learning experience. You will find content rich with animations, statistics, figures, and creative designs to help you understand and engage more deeply.'}
+              ? 'كل صفحة شخصية في الموقع تحتوي على قسم خاص بالآيات التي نزلت فيه أو ذُكر فيها الشخص. يمكنك استكشاف هذه الآيات والتعرف على سياقها مباشرة من صفحة الشخصية.'
+              : 'Each person page on Namaq features a special section with Quranic verses that were revealed about or mention that person. You can explore these verses and their context directly from the person’s page.'}
           </p>
-          <div className="flex flex-col sm:flex-row gap-8 justify-center items-stretch">
-            {/* Arabic Letters Card */}
-            <div className="flex-1 bg-gray-900 rounded-2xl shadow-lg border-l-4 border-amber-400 p-8 flex flex-col items-center max-w-md mx-auto">
-              <h3 className="font-arabicDisplay text-amber-400 text-xl font-bold mb-3 text-center">
-                {language === 'ar' ? 'تعلم الحروف العربية' : 'Learn the Arabic Letters'}
-              </h3>
-              <p className="text-center text-gray-200 mb-6 text-base sm:text-lg font-arabic">
-                {language === 'ar'
-                  ? 'إتقان الحروف العربية هو الخطوة الأولى لفهم اللغة وقراءة القرآن الكريم. ابدأ رحلتك مع الأبجدية العربية وتعرف على أشكال الحروف وأصواتها من خلال أمثلة تفاعلية ومبسطة.'
-                  : 'Mastering the Arabic letters is the first step to understanding the language and reading the Holy Quran. Start your journey with the Arabic alphabet and discover the shapes and sounds of the letters through interactive and simple examples.'}
-              </p>
-              <a href="/arabic-letters" className="inline-block px-8 py-3 bg-amber-400 text-gray-950 font-semibold rounded-lg hover:bg-amber-300 transition-colors duration-200 shadow-lg hover:shadow-xl text-lg">
-                {language === 'ar' ? 'ابدأ تعلم الحروف' : 'Start Learning the Letters'}
-              </a>
+          <div className="w-full max-w-2xl">
+            <h3 className="text-xl font-bold text-amber-400 mb-4 text-center">
+              {language === 'ar' ? 'نماذج من الآيات عن النبي محمد ﷺ' : 'Sample Verses About Prophet Muhammad ﷺ'}
+            </h3>
+            <div className="flex flex-col gap-4">
+              {/* Al-Ahzab 33:40 */}
+              <div className="border border-amber-300 dark:border-amber-700 rounded-lg bg-amber-50 dark:bg-gray-800 p-4 shadow-sm">
+                <div className="text-lg font-semibold mb-2 text-amber-700 dark:text-amber-400">
+                  {language === 'ar' ? 'سورة الأحزاب، آية 40' : 'Surah Al-Ahzab, 33:40'}
+                </div>
+                <div className="text-2xl text-gray-800 dark:text-gray-200 font-arabic mb-2" style={{ fontFamily: 'Amiri, serif' }}>
+                  {language === 'ar'
+                    ? 'مَا كَانَ مُحَمَّدٌ أَبَا أَحَدٍ مِّن رِّجَالِكُمْ وَلَـٰكِن رَّسُولَ اللَّهِ وَخَاتَمَ النَّبِيِّينَ'
+                    : 'Muhammad is not the father of any of your men, but (he is) the Messenger of Allah and the Seal of the Prophets.'}
+                </div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  {language === 'ar' ? 'الأحزاب: 40' : 'Al-Ahzab: 40'}
+                </div>
+              </div>
+              {/* Al-Anbiya 21:107 */}
+              <div className="border border-amber-300 dark:border-amber-700 rounded-lg bg-amber-50 dark:bg-gray-800 p-4 shadow-sm">
+                <div className="text-lg font-semibold mb-2 text-amber-700 dark:text-amber-400">
+                  {language === 'ar' ? 'سورة الأنبياء، آية 107' : 'Surah Al-Anbiya, 21:107'}
+                </div>
+                <div className="text-2xl text-gray-800 dark:text-gray-200 font-arabic mb-2" style={{ fontFamily: 'Amiri, serif' }}>
+                  {language === 'ar'
+                    ? 'وَمَا أَرْسَلْنَاكَ إِلَّا رَحْمَةً لِّلْعَالَمِينَ'
+                    : 'And We have not sent you, [O Muhammad], except as a mercy to the worlds.'}
+                </div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  {language === 'ar' ? 'الأنبياء: 107' : 'Al-Anbiya: 107'}
+                </div>
+              </div>
+              {/* At-Tawbah 9:40 */}
+              <div className="border border-amber-300 dark:border-amber-700 rounded-lg bg-amber-50 dark:bg-gray-800 p-4 shadow-sm">
+                <div className="text-lg font-semibold mb-2 text-amber-700 dark:text-amber-400">
+                  {language === 'ar' ? 'سورة التوبة، آية 40' : 'Surah At-Tawbah, 9:40'}
+                </div>
+                <div className="text-2xl text-gray-800 dark:text-gray-200 font-arabic mb-2" style={{ fontFamily: 'Amiri, serif' }}>
+                  {language === 'ar'
+                    ? 'إِذْ يَقُولُ لِصَاحِبِهِ لَا تَحْزَنْ إِنَّ اللَّهَ مَعَنَا'
+                    : 'When he said to his companion, "Do not grieve; indeed Allah is with us."'}
+                </div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  {language === 'ar' ? 'التوبة: 40' : 'At-Tawbah: 40'}
+                </div>
+              </div>
             </div>
-            {/* Upcoming Content Card */}
-            <div className="flex-1 bg-gray-900 rounded-2xl shadow-lg border-l-4 border-indigo-400 p-8 flex flex-col items-center max-w-md mx-auto opacity-70">
-              <h3 className="font-arabicDisplay text-indigo-300 text-xl font-bold mb-3 text-center">
-                {language === 'ar' ? 'قريباً: محتوى جديد' : 'Coming Soon: New Content'}
-              </h3>
-              <p className="text-center text-gray-200 mb-6 text-base sm:text-lg font-arabic">
-                {language === 'ar'
-                  ? 'ترقبوا إضافة مقالات ومواد تفاعلية جديدة قريباً ضمن هذا القسم المميز.'
-                  : 'Stay tuned for new articles and interactive materials coming soon to this special section.'}
-              </p>
-              <button disabled className="inline-block px-8 py-3 bg-indigo-400 text-gray-950 font-semibold rounded-lg cursor-not-allowed text-lg opacity-80">
-                {language === 'ar' ? 'قريباً' : 'Coming Soon'}
-              </button>
+            <div className="text-center mt-6">
+              <Link href="/people/prophet-muhammad" className="inline-flex items-center px-6 py-3 bg-amber-400 text-gray-950 font-semibold rounded-lg hover:bg-amber-300 transition-colors duration-200 shadow-lg hover:shadow-xl">
+                {language === 'ar' ? 'المزيد عن النبي محمد ﷺ' : 'More about Prophet Muhammad ﷺ'}
+              </Link>
             </div>
           </div>
         </div>
