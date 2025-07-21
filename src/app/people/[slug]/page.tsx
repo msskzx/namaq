@@ -10,6 +10,7 @@ import { useLanguage } from '@/components/LanguageContext';
 import translations from '@/components/translations';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import Badge from '@/components/Badge';
+import type { Ayah } from '@/types/person';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -24,8 +25,10 @@ const PersonDetailPage = ({ params }: PageProps) => {
       relationsFrom: (PersonRelation & { to: Person })[];
       relationsTo: (PersonRelation & { from: Person })[];
       participations?: { battle: { id: string; name: string; nameEn: string | null; slug: string } }[];
+      ayat?: Ayah[];
     }) | null
   >(null);
+  const [ayatText, setAyatText] = useState<Ayah[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -40,10 +43,39 @@ const PersonDetailPage = ({ params }: PageProps) => {
         }
         const data = await response.json();
         setPerson(data);
+        setIsLoading(false);
+        // Fetch ayah text for each ayat reference
+        if (Array.isArray(data.ayat) && data.ayat.length > 0) {
+          const fetchAyahText = async (surah: number, ayah: number): Promise<Ayah | null> => {
+            const surahInfoRes = await fetch(`https://api.alquran.cloud/v1/surah/${surah}/ar.hafs`);
+            const surahInfo = await surahInfoRes.json();
+            if (!surahInfo.data || !Array.isArray(surahInfo.data.ayahs)) return null;
+            const ayahObj = (surahInfo.data.ayahs as { numberInSurah: number; number: number }[]).find((a) => a.numberInSurah === ayah);
+            if (!ayahObj) return null;
+            const globalAyahNumber = ayahObj.number;
+            const ayahRes = await fetch(`https://api.alquran.cloud/v1/ayah/${globalAyahNumber}/ar.hafs`);
+            const ayahData = await ayahRes.json();
+            if (ayahData.code === 200 && ayahData.data && ayahData.data.text) {
+              return { surah, ayah, text: ayahData.data.text };
+            }
+            return null;
+          };
+          const fetchAllAyat = async () => {
+            const results = await Promise.all(
+              (data.ayat as Ayah[]).map((ref) =>
+                ref && typeof ref.surah === 'number' && typeof ref.ayah === 'number'
+                  ? fetchAyahText(ref.surah, ref.ayah)
+                  : null
+              )
+            );
+            setAyatText(results.filter((a): a is Ayah => !!a));
+          };
+          fetchAllAyat();
+        } else {
+          setAyatText([]);
+        }
       } catch {
         setError(t.personGenericError);
-      } finally {
-        setIsLoading(false);
       }
     };
     fetchPerson();
@@ -120,6 +152,29 @@ const PersonDetailPage = ({ params }: PageProps) => {
             <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-4">
               <div className="font-bold text-2xl mb-2 text-amber-400">{t.virtues}</div>
               <div>{person.virtues}</div>
+            </div>
+          )}
+          {/* Quranic References (Ayat) */}
+          {ayatText.length > 0 && (
+            <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-4">
+              <div className="font-bold text-2xl mb-4 text-amber-400">{t.ayatReferences}</div>
+              <div className="flex flex-col gap-4">
+                {ayatText.map((ref, idx) => (
+                  <div
+                    key={idx}
+                    className="border border-amber-300 dark:border-amber-700 rounded-lg bg-amber-50 dark:bg-gray-800 p-4 shadow-sm"
+                  >
+                    <div className="text-lg font-semibold mb-2 text-amber-700 dark:text-amber-400">
+                      {language === 'ar'
+                        ? `سورة ${ref.surah}، آية ${ref.ayah}`
+                        : `Surah ${ref.surah}:${ref.ayah}`}
+                    </div>
+                    <div className="text-2xl text-gray-800 dark:text-gray-200 font-arabic" style={{ fontFamily: 'Amiri, serif' }}>
+                      {ref.text}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
           {(person.relationsFrom.length > 0 || person.relationsTo.length > 0) && (

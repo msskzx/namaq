@@ -6,7 +6,7 @@ import FactCard from '@/components/FactCard';
 import StatsCard from '@/components/StatsCard';
 import { faChevronLeft, faChevronRight, faBookOpen, faArrowRightArrowLeft, faGlobe, faFeatherPointed } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
-import { arabicLetters } from "@/types/arabicLettersData";
+import { arabicLetters } from "./arabicLettersData";
 
 export default function ArabicLetters() {
   const { language } = useLanguage();

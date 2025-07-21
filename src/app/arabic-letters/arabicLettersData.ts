@@ -1,4 +1,4 @@
-import { ArabicLetter } from "./arabicLetter";
+import { ArabicLetter } from "@/types/arabicLetter";
 
 export const arabicLetters: ArabicLetter[] = [
   {

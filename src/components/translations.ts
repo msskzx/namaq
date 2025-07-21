@@ -63,6 +63,7 @@ const translations = {
     relations: 'Relations',
     personLoadError: 'Failed to load person data',
     personGenericError: 'An error occurred while loading data',
+    ayatReferences: 'Verses revealed about',
     // Categories
     relationTypes: {
       FATHER: 'Father',
@@ -210,6 +211,7 @@ const translations = {
     relations: 'العلاقات',
     personLoadError: 'تعذر تحميل بيانات الشخصية',
     personGenericError: 'حدث خطأ أثناء تحميل البيانات',
+    ayatReferences: 'آيات نزلت في',
     relationTypes: {
       FATHER: 'أب',
       MOTHER: 'أم',
