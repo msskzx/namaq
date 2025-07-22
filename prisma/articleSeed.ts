@@ -4,6 +4,10 @@ import { prisma } from '../src/lib/prisma';
 async function seedArticles() {
   try {
     console.log('🌟 Seeding articles (upsert with categories)...');
+
+    // delete articles
+    await prisma.article.deleteMany({});
+    
     for (const article of articleData) {
       const { categories, ...articleFields } = article;
       await prisma.article.upsert({

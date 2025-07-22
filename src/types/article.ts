@@ -4,6 +4,7 @@ export interface Article {
   id: string;
   title: string;
   titleEn?: string;
+  special: boolean;
   summary?: string;
   summaryEn?: string;
   content?: string;

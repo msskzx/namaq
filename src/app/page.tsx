@@ -35,6 +35,7 @@ export default function Home() {
   // Add ?limit=3 to the API request
   const { data: categories, error, isLoading } = useSWR<Category[]>("/api/categories?limit=3", fetcher);
   const { data: articles, error: articlesError, isLoading: articlesLoading } = useSWR<Article[]>("/api/articles?limit=3", fetcher);
+  const { data: specialArticles, error: specialArticlesError, isLoading: specialArticlesLoading } = useSWR<Article[]>("/api/articles?special=true&limit=4", fetcher);
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 relative overflow-x-hidden">
@@ -63,6 +64,47 @@ export default function Home() {
               ))}
             </div>
           </div>
+        </div>
+
+        {/* Special Articles Section */}
+        <div className="max-w-6xl mx-auto my-12">
+          <h2 className="font-arabicDisplay text-amber-400 text-3xl font-bold mb-6 text-center">
+            {language === 'ar' ? 'مقالات مميزة' : 'Special Articles'}
+          </h2>
+          <p className="text-center text-gray-800 dark:text-gray-200 mb-10 text-lg sm:text-2xl font-arabic max-w-4xl mx-auto leading-relaxed">
+            {language === 'ar'
+              ? 'في هذا القسم نقدم مقالات تفاعلية مصممة خصيصاً لتجربة تعلم فريدة. ستجد محتوى غني بالرسوم المتحركة، الإحصائيات، الأشكال التوضيحية، والتصاميم المبتكرة التي تساعدك على الفهم والتفاعل بشكل أفضل.'
+              : 'In this section, we present custom-made articles focused on building interactive content for a unique learning experience. You will find content rich with animations, statistics, figures, and creative designs to help you understand and engage more deeply.'}
+          </p>
+          {specialArticlesError && (
+            <div className="text-red-600 dark:text-red-400 text-center mb-4">
+              {translations[language].articlesLoadError}
+            </div>
+          )}
+          {specialArticlesLoading || !specialArticles ? (
+            <LoadingSpinner />
+          ) : (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                {Array.isArray(specialArticles) && specialArticles.length > 0 ? (
+                  specialArticles.map((article) => (
+                    <ArticleCard key={article.id} article={article} />
+                  ))
+                ) : (
+                  <div className="col-span-full text-center py-4 text-gray-400 font-arabic">
+                    {language === 'ar' ? 'لا توجد مقالات مميزة حالياً' : 'No special articles available'}
+                  </div>
+                )}
+              </div>
+              {Array.isArray(specialArticles) && specialArticles.length > 0 && (
+                <div className="text-center">
+                  <Link href="/articles?special=true" className="inline-flex items-center px-6 py-3 bg-amber-400 text-gray-950 font-semibold rounded-lg hover:bg-amber-300 transition-colors duration-200 shadow-lg hover:shadow-xl">
+                    {language === 'ar' ? 'عرض جميع المقالات المميزة' : 'View All Special Articles'}
+                  </Link>
+                </div>
+              )}
+            </>
+          )}
         </div>
 
         {/* Section Divider (amber-400) */}
@@ -154,47 +196,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Special Articles Section */}
-        <div className="mx-auto my-12">
-          <h2 className="font-arabicDisplay text-amber-400 text-3xl font-bold mb-6 text-center">
-            {language === 'ar' ? 'مقالات مميزة' : 'Special Articles'}
-          </h2>
-          <p className="text-center text-gray-800 dark:text-gray-200 mb-10 text-lg sm:text-2xl font-arabic max-w-4xl mx-auto leading-relaxed">
-            {language === 'ar'
-              ? 'في هذا القسم نقدم مقالات تفاعلية مصممة خصيصاً لتجربة تعلم فريدة. ستجد محتوى غني بالرسوم المتحركة، الإحصائيات، الأشكال التوضيحية، والتصاميم المبتكرة التي تساعدك على الفهم والتفاعل بشكل أفضل.'
-              : 'In this section, we present custom-made articles focused on building interactive content for a unique learning experience. You will find content rich with animations, statistics, figures, and creative designs to help you understand and engage more deeply.'}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-8 justify-center items-stretch">
-            {/* Arabic Letters Card */}
-            <div className="flex-1 bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-lg border-l-4 border-amber-400 p-8 flex flex-col items-center max-w-md mx-auto">
-              <h3 className="font-arabicDisplay text-amber-400 text-xl font-bold mb-3 text-center">
-                {language === 'ar' ? 'تعلم الحروف العربية' : 'Learn the Arabic Letters'}
-              </h3>
-              <p className="text-center text-gray-800 dark:text-gray-200 mb-6 text-base sm:text-lg font-arabic">
-                {language === 'ar'
-                  ? 'إتقان الحروف العربية هو الخطوة الأولى لفهم اللغة وقراءة القرآن الكريم. ابدأ رحلتك مع الأبجدية العربية وتعرف على أشكال الحروف وأصواتها من خلال أمثلة تفاعلية ومبسطة.'
-                  : 'Mastering the Arabic letters is the first step to understanding the language and reading the Holy Quran. Start your journey with the Arabic alphabet and discover the shapes and sounds of the letters through interactive and simple examples.'}
-              </p>
-              <a href="/arabic-letters" className="inline-block px-8 py-3 bg-amber-400 text-gray-950 font-semibold rounded-lg hover:bg-amber-300 transition-colors duration-200 shadow-lg hover:shadow-xl text-lg">
-                {language === 'ar' ? 'ابدأ تعلم الحروف' : 'Start Learning the Letters'}
-              </a>
-            </div>
-            {/* Upcoming Content Card */}
-            <div className="flex-1 bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-lg border-l-4 border-indigo-400 p-8 flex flex-col items-center max-w-md mx-auto opacity-70">
-              <h3 className="font-arabicDisplay text-indigo-300 text-xl font-bold mb-3 text-center">
-                {language === 'ar' ? 'قريباً: محتوى جديد' : 'Coming Soon: New Content'}
-              </h3>
-              <p className="text-center text-gray-800 dark:text-gray-200 mb-6 text-base sm:text-lg font-arabic">
-                {language === 'ar'
-                  ? 'ترقبوا إضافة مقالات ومواد تفاعلية جديدة قريباً ضمن هذا القسم المميز.'
-                  : 'Stay tuned for new articles and interactive materials coming soon to this special section.'}
-              </p>
-              <button disabled className="inline-block px-8 py-3 bg-indigo-400 text-gray-950 font-semibold rounded-lg cursor-not-allowed text-lg opacity-80">
-                {language === 'ar' ? 'قريباً' : 'Coming Soon'}
-              </button>
-            </div>
-          </div>
-        </div>
 
         {/* Ayat About People Section */}
         <div className="max-w-5xl mx-auto my-16 bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-lg border-l-4 border-amber-400 p-8 flex flex-col items-center">

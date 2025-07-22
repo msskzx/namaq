@@ -71,6 +71,7 @@ model Article {
   id            String   @id @default(cuid())
   title         String
   titleEn       String?
+  special       Boolean @default(false)
   summary       String?
   summaryEn     String?
   content       String?
