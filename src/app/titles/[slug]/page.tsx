@@ -17,7 +17,7 @@ export default function TitleDetailPage() {
   const { data: title, error, isLoading } = useSWR(slug ? `/api/titles/${slug}` : null, fetcher);
   const { data: people, isLoading: isLoadingPeople } = useSWR(slug ? `/api/people?title=${slug}` : null, fetcher);
   return (
-    <div className="min-h-screen bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-white dark:bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div className="container mx-auto px-4 py-8">
         {isLoading ? (
           <LoadingSpinner />

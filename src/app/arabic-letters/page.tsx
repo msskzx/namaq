@@ -23,14 +23,14 @@ export default function ArabicLetters() {
   const currentLetter = arabicLetters[currentIndex];
 
   return (
-    <div className="min-h-screen bg-gray-950 relative overflow-x-hidden">
+    <div className="min-h-screen bg-white dark:bg-gray-950 relative overflow-x-hidden">
       <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 z-10">
         {/* Header */}
         <header className="text-center mb-8 sm:mb-12">
-          <h1 className="font-arabicDisplay text-amber-400 text-4xl sm:text-6xl md:text-7xl lg:text-8xl mb-4 drop-shadow-lg tracking-wide">
+          <h1 className="font-arabicDisplay text-amber-400 text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-4 drop-shadow-lg tracking-wide">
             {language === 'ar' ? 'الحروف العربية' : 'Arabic Letters'}
           </h1>
-          <p className="font-arabic text-gray-200 text-lg sm:text-2xl mb-4">
+          <p className="font-arabic text-gray-800 dark:text-gray-200 text-lg sm:text-2xl mb-4">
             {language === 'ar' 
               ? 'اللغة العربية لغة عريقة ضاربة في أعماق التاريخ، حملت عبر حروفها الثمانية والعشرين تراث أمة كاملة وعلومها وآدابها. صمدت العربية أمام تحديات الزمن، وانتشرت في بقاع الأرض، وبقيت لغة القرآن الكريم والعلوم والفكر. حروفها ليست مجرد رموز، بل مفاتيح لفهم حضارة عظيمة، وستظل العربية حية نابضة في قلوب الملايين لأجيال قادمة.'
               : 'The Arabic language is an ancient tongue with deep historical roots, carrying through its 28 letters the heritage, knowledge, and literature of an entire civilization. Arabic has withstood the tests of time, spreading across continents and remaining the language of the Holy Quran, science, and thought. Its letters are not just symbols, but keys to understanding a great civilization, and Arabic will continue to thrive in the hearts of millions for generations to come.'
@@ -93,7 +93,7 @@ export default function ArabicLetters() {
               </button>
               
               <div className="text-center">
-                <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                   {currentIndex + 1} / {arabicLetters.length}
                 </span>
               </div>
@@ -114,7 +114,7 @@ export default function ArabicLetters() {
               <h2 className="text-xl sm:text-2xl font-bold text-amber-400 dark:text-amber-400 mb-2 font-arabicDisplay">
                 {currentLetter.name}
               </h2>
-              <p className="text-base sm:text-lg text-gray-300 dark:text-gray-200">
+              <p className="text-base sm:text-lg text-gray-600 dark:text-gray-200">
                 {currentLetter.pronunciation}
               </p>
             </div>
@@ -137,13 +137,13 @@ export default function ArabicLetters() {
 
             {/* Progress Bar */}
             <div className="mb-6 sm:mb-8">
-              <div className="w-full bg-gray-800 dark:bg-gray-700 rounded-full h-2 sm:h-3">
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 sm:h-3">
                 <div 
                   className="bg-amber-400 h-2 sm:h-3 rounded-full transition-all duration-300"
                   style={{ width: `${((currentIndex + 1) / arabicLetters.length) * 100}%` }}
                 ></div>
               </div>
-              <p className="text-center text-sm sm:text-base text-gray-400 dark:text-gray-300 mt-2">
+              <p className="text-center text-sm sm:text-base text-gray-500 dark:text-gray-300 mt-2">
                 {language === 'ar' 
                   ? `الحرف ${currentIndex + 1} من ${arabicLetters.length}`
                   : `Letter ${currentIndex + 1} of ${arabicLetters.length}`

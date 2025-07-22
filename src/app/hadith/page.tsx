@@ -10,10 +10,10 @@ export default function HadithPage() {
   const t = translations[language];
 
   return (
-    <div className="min-h-screen bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-white dark:bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center gap-4 mb-6">
-          <div className="w-16 h-16 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-900">
+          <div className="w-16 h-16 flex items-center justify-center rounded-full bg-gray-50 dark:bg-gray-900">
             <FontAwesomeIcon icon={faQuoteRight} className="text-amber-400 w-10 h-10" />
           </div>
           <h1 className="text-4xl font-bold text-amber-400">

@@ -43,7 +43,6 @@ const PersonDetailPage = ({ params }: PageProps) => {
         }
         const data = await response.json();
         setPerson(data);
-        setIsLoading(false);
         // Fetch ayah text for each ayat reference
         if (Array.isArray(data.ayat) && data.ayat.length > 0) {
           const fetchAyahText = async (surah: number, ayah: number): Promise<Ayah | null> => {
@@ -76,6 +75,8 @@ const PersonDetailPage = ({ params }: PageProps) => {
         }
       } catch {
         setError(t.personGenericError);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchPerson();
@@ -83,7 +84,7 @@ const PersonDetailPage = ({ params }: PageProps) => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+      <div className="min-h-screen bg-white dark:bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <div className="container mx-auto px-4 py-8">
           <p className="text-red-600 dark:text-red-400 text-lg my-8">{error}</p>
         </div>
@@ -93,7 +94,7 @@ const PersonDetailPage = ({ params }: PageProps) => {
 
   if (isLoading || !person) {
     return (
-      <div className="min-h-screen bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+      <div className="min-h-screen bg-white dark:bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <div className="container mx-auto px-4 py-8">
           <LoadingSpinner />
         </div>
@@ -102,7 +103,7 @@ const PersonDetailPage = ({ params }: PageProps) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-white dark:bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col items-center justify-center mb-4 gap-4">
           {person.picture ? (
@@ -112,7 +113,7 @@ const PersonDetailPage = ({ params }: PageProps) => {
               <FontAwesomeIcon icon={faUser} className="text-3xl text-gray-950 dark:text-gray-400" />
             </span>
           )}
-          <h1 className="text-8xl font-bold text-center text-amber-400 mb-4">{person.name}</h1>
+          <h1 className="text-5xl font-bold text-center text-amber-400 mb-4">{person.name}</h1>
           <div className="flex flex-wrap gap-2 justify-center">
             {person.titles && person.titles.length > 0 && person.titles.map((title) => (
               <Badge
@@ -137,26 +138,26 @@ const PersonDetailPage = ({ params }: PageProps) => {
 
         <div className="flex flex-col gap-6">
           {person.fullName && (
-            <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-4">
+            <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
               <div className="font-bold text-2xl mb-2 text-amber-400">{t.fullName}</div>
-              <div>{person.fullName}</div>
+              <div className="text-gray-800 dark:text-gray-200">{person.fullName}</div>
             </div>
           )}
           {person.appearance && (
-            <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-4">
+            <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
               <div className="font-bold text-2xl mb-2 text-amber-400">{t.appearance}</div>
-              <div>{person.appearance}</div>
+              <div className="text-gray-800 dark:text-gray-200">{person.appearance}</div>
             </div>
           )}
           {person.virtues && (
-            <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-4">
+            <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
               <div className="font-bold text-2xl mb-2 text-amber-400">{t.virtues}</div>
-              <div>{person.virtues}</div>
+              <div className="text-gray-800 dark:text-gray-200">{person.virtues}</div>
             </div>
           )}
           {/* Quranic References (Ayat) */}
           {ayatText.length > 0 && (
-            <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-4">
+            <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
               <div className="font-bold text-2xl mb-4 text-amber-400">{t.ayatReferences}</div>
               <div className="flex flex-col gap-4">
                 {ayatText.map((ref, idx) => (
@@ -178,7 +179,7 @@ const PersonDetailPage = ({ params }: PageProps) => {
             </div>
           )}
           {(person.relationsFrom.length > 0 || person.relationsTo.length > 0) && (
-            <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-4">
+            <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
               <div className="font-bold text-2xl mb-2 text-amber-400">{t.relations}</div>
               <PersonRelationsGraph person={person} relationsFrom={person.relationsFrom} relationsTo={person.relationsTo} />
             </div>

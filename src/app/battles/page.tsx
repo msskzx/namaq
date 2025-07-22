@@ -16,7 +16,7 @@ const BattlesPage: React.FC = () => {
   const { data: battles, error, isLoading } = useSWR<Battle[]>("/api/battles", fetcher);
 
   return (
-    <div className="min-h-screen bg-gray-950">
+    <div className="min-h-screen bg-white dark:bg-gray-950">
       <div className="container mx-auto px-4 py-8" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <h1 className="text-3xl font-bold mb-6 text-center text-amber-400">
           {t.battles.title}

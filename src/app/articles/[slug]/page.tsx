@@ -17,7 +17,7 @@ export default function ArticleDetailPage() {
   const { data: article, error, isLoading } = useSWR(`/api/articles/${slug}`, fetcher);
 
   return (
-    <div className="min-h-screen bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-white dark:bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div className="container mx-auto py-8">
         {isLoading ? (
           <LoadingSpinner />
@@ -44,8 +44,8 @@ export default function ArticleDetailPage() {
                 </ul>
               </div>
             )}
-            <p className="mb-4 text-gray-600 dark:text-gray-200">{language === 'ar' ? article.summary : article.summaryEn || article.summary}</p>
-            <div className="prose dark:prose-invert max-w-none mb-8">
+            <p className="mb-4 text-gray-900 dark:text-gray-200">{language === 'ar' ? article.summary : article.summaryEn || article.summary}</p>
+            <div className="prose dark:prose-invert max-w-none mb-8 text-gray-900 dark:text-gray-200">
               {language === 'ar' ? article.content : article.contentEn || article.content}
             </div>
           </>

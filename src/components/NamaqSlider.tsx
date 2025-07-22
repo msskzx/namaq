@@ -42,7 +42,7 @@ export default function NamaqSlider() {
         <button
           onClick={language == 'ar' ? goLeft : goRight}
           aria-label={language === 'ar' ? 'التالي' : 'Previous'}
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-gray-900 text-amber-400 rounded-full p-2 shadow hover:bg-amber-400 hover:text-gray-900 transition"
+          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-gray-900 text-amber-400 rounded-full p-2 shadow hover:bg-amber-400 hover:text-gray-800 transition"
           style={{ left: '-2.5rem' }}
         >
           <FontAwesomeIcon icon={faChevronLeft} className="w-6 h-6" />
@@ -55,7 +55,7 @@ export default function NamaqSlider() {
         <button
           onClick={language == 'ar' ? goRight : goLeft}
           aria-label={language === 'ar' ? 'السابق' : 'Next'}
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-gray-900 text-amber-400 rounded-full p-2 shadow hover:bg-amber-400 hover:text-gray-900 transition"
+          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-gray-900 text-amber-400 rounded-full p-2 shadow hover:bg-amber-400 hover:text-gray-800 transition"
           style={{ right: '-2.5rem' }}
         >
           <FontAwesomeIcon icon={faChevronRight} className="w-6 h-6" />

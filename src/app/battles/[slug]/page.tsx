@@ -24,7 +24,7 @@ const BattleDetailPage: React.FC = () => {
   const { data: battle, error, isLoading } = useSWR<BattleWithParticipants>(slug ? `/api/battles/${slug}` : null, fetcher);
 
   return (
-    <div className="min-h-screen bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-white dark:bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div className="container mx-auto px-4 py-8">
       {isLoading ? (
         <LoadingSpinner />
@@ -47,17 +47,17 @@ const BattleDetailPage: React.FC = () => {
             <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-amber-400 p-6 font-geistmono">
               <div className="mb-2 flex items-center gap-2">
                 <FontAwesomeIcon icon={faLocationDot} className="text-amber-400 w-5 h-5" />
-                <span className="font-semibold">{language === 'ar' ? t.battles.location : t.battles.locationEn}:</span>
-                <span>{language === 'ar' ? battle.location : battle.locationEn || battle.location || '-'}</span>
+                <span className="font-semibold text-gray-800 dark:text-gray-400">{language === 'ar' ? t.battles.location : t.battles.locationEn}:</span>
+                <span className="text-gray-800 dark:text-gray-400">{language === 'ar' ? battle.location : battle.locationEn || battle.location || '-'}</span>
               </div>
               {battle.hijri_year && (
                 <div className="mb-2 flex items-center gap-2">
                   <FontAwesomeIcon icon={faCalendarDays} className="text-amber-400 w-5 h-5" />
-                  <span className="font-semibold">{t.battles.hijriYear}:</span>
-                  <span>{battle.hijri_year}</span>
+                  <span className="font-semibold text-gray-800 dark:text-gray-400">{t.battles.hijriYear}:</span>
+                  <span className="text-gray-800 dark:text-gray-400">{battle.hijri_year}</span>
                 </div>
               )}
-              <h2 className="text-2xl font-bold mb-4 text-amber-400 mt-8">
+              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100 mt-8">
                 {language === 'ar' ? 'المشاركون' : 'Participants'}
               </h2>
               {battle.participations && battle.participations.length > 0 ? (

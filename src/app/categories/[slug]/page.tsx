@@ -16,7 +16,7 @@ export default function CategoryDetailPage() {
   const { data: category, error, isLoading } = useSWR(slug ? `/api/categories/${slug}` : null, fetcher);
 
   return (
-    <div className="min-h-screen bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-white dark:bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div className="container mx-auto py-8">
         {isLoading ? (
           <LoadingSpinner />

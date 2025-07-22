@@ -12,9 +12,9 @@ export default function TitlesPage() {
   const { language } = useLanguage();
   const { data: titles, error, isLoading } = useSWR("/api/titles", fetcher);
   return (
-    <div className="min-h-screen bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-white dark:bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div className="container mx-auto px-4 py-12">
-        <h1 className="text-3xl font-bold mb-8 text-center text-amber-400">
+        <h1 className="text-3xl font-bold mb-8 text-center text-amber-400 dark:text-amber-400">
           {translations[language].titles}
         </h1>
         {error && (

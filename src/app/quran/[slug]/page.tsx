@@ -74,7 +74,7 @@ export default function SurahPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+      <div className="min-h-screen bg-white dark:bg-gray-950 flex items-center justify-center" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <LoadingSpinner />
       </div>
     );
@@ -82,7 +82,7 @@ export default function SurahPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+      <div className="min-h-screen bg-white dark:bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <div className="container mx-auto px-4 py-8">
           <div className="text-center text-red-400">
             {error}
@@ -94,7 +94,7 @@ export default function SurahPage() {
 
   if (!surah) {
     return (
-      <div className="min-h-screen bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+      <div className="min-h-screen bg-white dark:bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <div className="container mx-auto px-4 py-8">
           <div className="text-center text-red-400">
             {language === 'ar' ? 'السورة غير موجودة' : 'Surah not found'}
@@ -105,7 +105,7 @@ export default function SurahPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-white dark:bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div className="container mx-auto px-4 py-8">
         {/* Back button */}
         <div className="mb-6">
@@ -119,7 +119,7 @@ export default function SurahPage() {
         </div>
 
         <div className="flex items-center gap-4 mb-6">
-          <div className="w-16 h-16 flex items-center justify-center rounded-full bg-gray-100 dark:bg-indigo-950">
+          <div className="w-16 h-16 flex items-center justify-center rounded-full bg-gray-50 dark:bg-indigo-950">
             <FontAwesomeIcon icon={faBook} className="text-amber-400 w-10 h-10" />
           </div>
           <h1 className="text-4xl font-bold text-amber-400">
@@ -127,7 +127,7 @@ export default function SurahPage() {
           </h1>
         </div>
         
-        <div className="bg-white dark:bg-gray-950 rounded-xl shadow-lg p-6">
+        <div className="bg-gray-50 dark:bg-gray-950 rounded-xl shadow-lg p-6">
           {/* Surah Header */}
           <div className="text-center mb-8 pb-6 border-b border-gray-200 dark:border-gray-700">
             <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-2">

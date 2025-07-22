@@ -48,11 +48,11 @@ export default function Home() {
         {/* Definition Section */}
         <div className="max-w-6xl mx-auto mb-8 sm:mb-12 flex justify-center">
           {/* Verb Card */}
-          <div className="bg-gray-100 dark:bg-gray-900 rounded-2xl shadow-lg border-l-4 border-rose-800 p-6 flex flex-col items-center">
+          <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-lg border-l-4 border-rose-800 p-6 flex flex-col items-center">
             <h4 className="font-arabicDisplay text-amber-400 text-2xl mb-3 text-center" dir="rtl">
               {translations[language].verbTitle}
             </h4>
-            <p className="font-arabic text-gray-800 dark:text-gray-200 text-lg leading-relaxed text-center mb-3" dir="rtl">
+            <p className="font-arabic text-gray-900 dark:text-gray-200 text-lg leading-relaxed text-center mb-3" dir="rtl">
               {translations[language].verbDefinition}
             </p>
             <div className="space-y-2">
@@ -73,7 +73,7 @@ export default function Home() {
           <h2 className="font-arabicDisplay text-amber-400 text-4xl font-bold mb-8 text-center">
             {language === 'ar' ? 'ابدأ رحلتك التعليمية' : 'Start Your Learning Journey'}
           </h2>
-          <p className="text-center text-gray-200 mb-10 text-lg sm:text-2xl font-arabic max-w-4xl mx-auto leading-relaxed">
+          <p className="text-center text-black dark:text-gray-200 mb-10 text-lg sm:text-2xl font-arabic max-w-4xl mx-auto leading-relaxed">
             {language === 'ar'
               ? 'استكشف هذه الأقسام المتنوعة لتبدأ رحلتك الشاملة في تعلم اللغة العربية وفهم التاريخ الإسلامي والثقافة الإسلامية. من دراسة حياة النبي محمد ﷺ وأصحابه الكرام إلى استكشاف المعارك التاريخية المهمة، ومن قراءة المقالات التعليمية إلى التعمق في الشعر العربي والأدب الإسلامي. كل قسم مصمم لمساعدتك على بناء أساس قوي في اللغة والثقافة الإسلامية بطريقة تفاعلية وممتعة.'
               : 'Explore these diverse sections to begin your comprehensive journey in learning Arabic and understanding Islamic history and culture. From studying the life of Prophet Muhammad ﷺ and his noble companions to exploring important historical battles, from reading educational articles to delving into Arabic poetry and Islamic literature. Each section is designed to help you build a strong foundation in Arabic language and Islamic culture in an interactive and enjoyable way.'}
@@ -84,7 +84,7 @@ export default function Home() {
               title={translations[language].motivation.prophet.title}
               desc={translations[language].motivation.prophet.desc}
               url="/people/prophet-muhammad"
-              color="text-gray-200"
+              color="text-gray-900 dark:text-gray-200"
               borderColor="border-sky-400"
             />
             <MotivationCard
@@ -92,7 +92,7 @@ export default function Home() {
               title={translations[language].motivation.companions.title}
               desc={translations[language].motivation.companions.desc}
               url="/people?title=companion"
-              color="text-gray-200"
+              color="text-gray-900 dark:text-gray-200"
               borderColor="border-sky-500"
             />
             <MotivationCard
@@ -100,7 +100,7 @@ export default function Home() {
               title={translations[language].motivation.battles.title}
               desc={translations[language].motivation.battles.desc}
               url="/battles"
-              color="text-gray-200"
+              color="text-gray-900 dark:text-gray-200"
               borderColor="border-sky-600"
             />
             <MotivationCard
@@ -108,7 +108,7 @@ export default function Home() {
               title={translations[language].motivation.articles.title}
               desc={translations[language].motivation.articles.desc}
               url="/articles"
-              color="text-gray-200"
+              color="text-gray-900 dark:text-gray-200"
               borderColor="border-blue-400"
             />
             <MotivationCard
@@ -116,7 +116,7 @@ export default function Home() {
               title={translations[language].motivation.categories.title}
               desc={translations[language].motivation.categories.desc}
               url="/categories"
-              color="text-gray-200"
+              color="text-gray-900 dark:text-gray-200"
               borderColor="border-blue-500"
             />
             <MotivationCard
@@ -124,7 +124,7 @@ export default function Home() {
               title={translations[language].motivation.poems.title}
               desc={translations[language].motivation.poems.desc}
               url="/poems"
-              color="text-gray-200"
+              color="text-gray-900 dark:text-gray-200"
               borderColor="border-blue-600"
             />
             <MotivationCard
@@ -132,7 +132,7 @@ export default function Home() {
               title={translations[language].motivation.quran.title}
               desc={translations[language].motivation.quran.desc}
               url="/quran"
-              color="text-gray-200"
+              color="text-gray-900 dark:text-gray-200"
               borderColor="border-indigo-400"
             />
             <MotivationCard
@@ -140,7 +140,7 @@ export default function Home() {
               title={translations[language].motivation.hadith.title}
               desc={translations[language].motivation.hadith.desc}
               url="/hadith"
-              color="text-gray-200"
+              color="text-gray-900 dark:text-gray-200"
               borderColor="border-indigo-500"
             />
             <MotivationCard
@@ -148,7 +148,7 @@ export default function Home() {
               title={translations[language].motivation.titles.title}
               desc={translations[language].motivation.titles.desc}
               url="/titles"
-              color="text-gray-200"
+              color="text-gray-900 dark:text-gray-200"
               borderColor="border-indigo-600"
             />
           </div>
@@ -159,18 +159,18 @@ export default function Home() {
           <h2 className="font-arabicDisplay text-amber-400 text-3xl font-bold mb-6 text-center">
             {language === 'ar' ? 'مقالات مميزة' : 'Special Articles'}
           </h2>
-          <p className="text-center text-gray-200 mb-10 text-lg sm:text-2xl font-arabic max-w-4xl mx-auto leading-relaxed">
+          <p className="text-center text-gray-800 dark:text-gray-200 mb-10 text-lg sm:text-2xl font-arabic max-w-4xl mx-auto leading-relaxed">
             {language === 'ar'
               ? 'في هذا القسم نقدم مقالات تفاعلية مصممة خصيصاً لتجربة تعلم فريدة. ستجد محتوى غني بالرسوم المتحركة، الإحصائيات، الأشكال التوضيحية، والتصاميم المبتكرة التي تساعدك على الفهم والتفاعل بشكل أفضل.'
               : 'In this section, we present custom-made articles focused on building interactive content for a unique learning experience. You will find content rich with animations, statistics, figures, and creative designs to help you understand and engage more deeply.'}
           </p>
           <div className="flex flex-col sm:flex-row gap-8 justify-center items-stretch">
             {/* Arabic Letters Card */}
-            <div className="flex-1 bg-gray-100 dark:bg-gray-900 rounded-2xl shadow-lg border-l-4 border-amber-400 p-8 flex flex-col items-center max-w-md mx-auto">
+            <div className="flex-1 bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-lg border-l-4 border-amber-400 p-8 flex flex-col items-center max-w-md mx-auto">
               <h3 className="font-arabicDisplay text-amber-400 text-xl font-bold mb-3 text-center">
                 {language === 'ar' ? 'تعلم الحروف العربية' : 'Learn the Arabic Letters'}
               </h3>
-              <p className="text-center text-gray-200 mb-6 text-base sm:text-lg font-arabic">
+              <p className="text-center text-gray-800 dark:text-gray-200 mb-6 text-base sm:text-lg font-arabic">
                 {language === 'ar'
                   ? 'إتقان الحروف العربية هو الخطوة الأولى لفهم اللغة وقراءة القرآن الكريم. ابدأ رحلتك مع الأبجدية العربية وتعرف على أشكال الحروف وأصواتها من خلال أمثلة تفاعلية ومبسطة.'
                   : 'Mastering the Arabic letters is the first step to understanding the language and reading the Holy Quran. Start your journey with the Arabic alphabet and discover the shapes and sounds of the letters through interactive and simple examples.'}
@@ -180,11 +180,11 @@ export default function Home() {
               </a>
             </div>
             {/* Upcoming Content Card */}
-            <div className="flex-1 bg-gray-100 dark:bg-gray-900 rounded-2xl shadow-lg border-l-4 border-indigo-400 p-8 flex flex-col items-center max-w-md mx-auto opacity-70">
+            <div className="flex-1 bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-lg border-l-4 border-indigo-400 p-8 flex flex-col items-center max-w-md mx-auto opacity-70">
               <h3 className="font-arabicDisplay text-indigo-300 text-xl font-bold mb-3 text-center">
                 {language === 'ar' ? 'قريباً: محتوى جديد' : 'Coming Soon: New Content'}
               </h3>
-              <p className="text-center text-gray-200 mb-6 text-base sm:text-lg font-arabic">
+              <p className="text-center text-gray-800 dark:text-gray-200 mb-6 text-base sm:text-lg font-arabic">
                 {language === 'ar'
                   ? 'ترقبوا إضافة مقالات ومواد تفاعلية جديدة قريباً ضمن هذا القسم المميز.'
                   : 'Stay tuned for new articles and interactive materials coming soon to this special section.'}
@@ -197,11 +197,11 @@ export default function Home() {
         </div>
 
         {/* Ayat About People Section */}
-        <div className="max-w-5xl mx-auto my-16 bg-gray-900 rounded-2xl shadow-lg border-l-4 border-amber-400 p-8 flex flex-col items-center">
+        <div className="max-w-5xl mx-auto my-16 bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-lg border-l-4 border-amber-400 p-8 flex flex-col items-center">
           <h2 className="font-arabicDisplay text-amber-400 text-3xl font-bold mb-6 text-center">
             {language === 'ar' ? 'آيات نزلت في الأشخاص' : 'Quranic Verses About People'}
           </h2>
-          <p className="text-center text-indigo-100 mb-10 text-lg sm:text-2xl font-arabic max-w-3xl mx-auto">
+          <p className="text-center text-gray-800 dark:text-indigo-100 mb-10 text-lg sm:text-2xl font-arabic max-w-3xl mx-auto">
             {language === 'ar'
               ? 'كل صفحة شخصية في الموقع تحتوي على قسم خاص بالآيات التي نزلت فيه أو ذُكر فيها الشخص. يمكنك استكشاف هذه الآيات والتعرف على سياقها مباشرة من صفحة الشخصية.'
               : 'Each person page on Namaq features a special section with Quranic verses that were revealed about or mention that person. You can explore these verses and their context directly from the person’s page.'}
@@ -266,11 +266,11 @@ export default function Home() {
         <hr className="border-t-2 border-amber-400 my-8 max-w-2xl mx-auto" />
 
         {/* Relation Graph Feature Section */}
-        <div className="max-w-5xl mx-auto my-16 bg-white dark:bg-gray-900 rounded-2xl shadow-lg border-l-4 border-amber-400 p-8 flex flex-col items-center">
+        <div className="max-w-5xl mx-auto my-16 bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-lg border-l-4 border-amber-400 p-8 flex flex-col items-center">
           <h2 className="font-arabicDisplay text-amber-400 text-3xl font-bold mb-6 text-center">
             {language === 'ar' ? 'شبكة العلاقات العائلية' : 'Family Relation Graph'}
           </h2>
-          <p className="text-center text-indigo-100 mb-10 text-lg sm:text-2xl font-arabic max-w-3xl mx-auto">
+          <p className="text-center text-gray-800 dark:text-indigo-100 mb-10 text-lg sm:text-2xl font-arabic max-w-3xl mx-auto">
             {language === 'ar'
               ? 'استكشف العلاقات العائلية للنبي محمد ﷺ وجميع الصحابة والأنبياء من خلال رسم بياني تفاعلي يوضح الأبناء، البنات، الأزواج، الأقارب وغيرهم. هذه الميزة متوفرة لكل شخصية في الموقع.'
               : 'Explore the family and relation graph of Prophet Muhammad ﷺ and all companions and prophets through an interactive diagram showing children, spouses, relatives, and more. This feature is available for every person on the site.'}
@@ -283,7 +283,7 @@ export default function Home() {
           <h2 className="font-arabicDisplay text-amber-400 text-2xl font-bold mb-6 text-center">
             {translations[language].categories}
           </h2>
-          <p className="text-center text-gray-200 mb-8 text-base sm:text-lg font-arabic max-w-4xl mx-auto leading-relaxed">
+          <p className="text-center text-gray-800 dark:text-gray-200 mb-8 text-base sm:text-lg font-arabic max-w-4xl mx-auto leading-relaxed">
             {language === 'ar'
               ? 'تصفح مقالاتنا المنظمة حسب الموضوعات المختلفة لتسهيل رحلتك التعليمية. اختر التصنيف الذي يهمك لاستكشاف المحتوى المرتبط باللغة العربية والنحو والصرف والتاريخ الإسلامي والثقافة. كل تصنيف يحتوي على مجموعة من المقالات المختارة بعناية لمساعدتك على التعلم بطريقة منظمة ومتسلسلة.'
               : 'Browse our articles organized by different topics to facilitate your learning journey. Choose the category that interests you to explore content related to Arabic language, grammar, morphology, Islamic history, and culture. Each category contains a carefully selected collection of articles to help you learn in an organized and sequential manner.'}
@@ -325,7 +325,7 @@ export default function Home() {
           <h2 className="font-arabicDisplay text-amber-400 text-2xl font-bold mb-6 text-center">
             {translations[language].articles}
           </h2>
-          <p className="text-center text-gray-200 mb-10 text-lg sm:text-2xl font-arabic max-w-4xl mx-auto leading-relaxed">
+          <p className="text-center text-gray-800 dark:text-gray-200 mb-10 text-lg sm:text-2xl font-arabic max-w-4xl mx-auto leading-relaxed">
             {language === 'ar'
               ? 'اقرأ أحدث المقالات المكتوبة بعناية فائقة حول اللغة العربية والنحو والصرف والتاريخ الإسلامي والثقافة الإسلامية. اكتشف رؤى جديدة وتعمق في معرفتك من خلال محتوى غني ومتنوع يغطي مواضيع مختلفة من أساسيات اللغة العربية إلى القصص التاريخية العميقة. كل مقال مصمم لمساعدتك على فهم أفضل للغة والثقافة الإسلامية.'
               : 'Read our latest carefully crafted articles about Arabic language, grammar, morphology, Islamic history, and Islamic culture. Discover new insights and deepen your knowledge through rich and diverse content covering various topics from Arabic language fundamentals to deep historical narratives. Each article is designed to help you gain a better understanding of the language and Islamic culture.'}
