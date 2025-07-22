@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import CookieConsent from "@/components/CookieConsent";
 import ConditionalAnalytics from "@/components/ConditionalAnalytics";
 import SWRProvider from "@/components/SWRProvider";
+import CustomThemeProvider from "@/components/CustomThemeProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,24 +31,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <LanguageProvider>
-          <SWRProvider>
-            <div className="min-h-screen flex flex-col">
-              <NavBar />
-              <main className="flex-1">
-                {children}
-              </main>
-              <Footer />
-            </div>
-            <SpeedInsights />
-            <ConditionalAnalytics />
-            <CookieConsent />
-          </SWRProvider>
-        </LanguageProvider>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <CustomThemeProvider>
+          <LanguageProvider>
+            <SWRProvider>
+              <div className="min-h-screen flex flex-col">
+                <NavBar />
+                <main className="flex-1">
+                  {children}
+                </main>
+                <Footer />
+              </div>
+              <SpeedInsights />
+              <ConditionalAnalytics />
+              <CookieConsent />
+            </SWRProvider>
+          </LanguageProvider>
+        </CustomThemeProvider>
       </body>
     </html>
   );

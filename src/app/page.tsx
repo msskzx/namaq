@@ -17,6 +17,7 @@ import NamaqSlider from '@/components/NamaqSlider';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
+// TODO add to the component page instead of here
 // Helper component to fetch and show Prophet Muhammad's relation graph
 function RelationGraphPreview({ language }: { language: string }) {
   const { data, error, isLoading } = useSWR('/api/people/prophet-muhammad', (url) => fetch(url).then(res => res.json()));
@@ -36,7 +37,7 @@ export default function Home() {
   const { data: articles, error: articlesError, isLoading: articlesLoading } = useSWR<Article[]>("/api/articles?limit=3", fetcher);
 
   return (
-    <div className="min-h-screen bg-gray-950 relative overflow-x-hidden">
+    <div className="min-h-screen bg-white dark:bg-gray-950 relative overflow-x-hidden">
       {/* Geometric SVG background overlay (add your SVG in public/arabesque-pattern.svg) */}
       <div className="absolute inset-0 opacity-10 pointer-events-none z-0" style={{ backgroundImage: 'url(/gemini-arabesque.png)', backgroundRepeat: 'repeat' }} />
       <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 z-10" dir={language === 'ar' ? 'rtl' : 'ltr'}>
@@ -44,11 +45,10 @@ export default function Home() {
         <NamaqSlider />
         
 
-        {/* TODO add slider with definitions */}
         {/* Definition Section */}
         <div className="max-w-6xl mx-auto mb-8 sm:mb-12 flex justify-center">
           {/* Verb Card */}
-          <div className="bg-gray-100 dark:bg-gray-900 rounded-2xl shadow-lg border-r-4 border-rose-800 p-6 flex flex-col items-center">
+          <div className="bg-gray-100 dark:bg-gray-900 rounded-2xl shadow-lg border-l-4 border-rose-800 p-6 flex flex-col items-center">
             <h4 className="font-arabicDisplay text-amber-400 text-2xl mb-3 text-center" dir="rtl">
               {translations[language].verbTitle}
             </h4>
@@ -166,7 +166,7 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-8 justify-center items-stretch">
             {/* Arabic Letters Card */}
-            <div className="flex-1 bg-gray-900 rounded-2xl shadow-lg border-l-4 border-amber-400 p-8 flex flex-col items-center max-w-md mx-auto">
+            <div className="flex-1 bg-gray-100 dark:bg-gray-900 rounded-2xl shadow-lg border-l-4 border-amber-400 p-8 flex flex-col items-center max-w-md mx-auto">
               <h3 className="font-arabicDisplay text-amber-400 text-xl font-bold mb-3 text-center">
                 {language === 'ar' ? 'تعلم الحروف العربية' : 'Learn the Arabic Letters'}
               </h3>
@@ -180,7 +180,7 @@ export default function Home() {
               </a>
             </div>
             {/* Upcoming Content Card */}
-            <div className="flex-1 bg-gray-900 rounded-2xl shadow-lg border-l-4 border-indigo-400 p-8 flex flex-col items-center max-w-md mx-auto opacity-70">
+            <div className="flex-1 bg-gray-100 dark:bg-gray-900 rounded-2xl shadow-lg border-l-4 border-indigo-400 p-8 flex flex-col items-center max-w-md mx-auto opacity-70">
               <h3 className="font-arabicDisplay text-indigo-300 text-xl font-bold mb-3 text-center">
                 {language === 'ar' ? 'قريباً: محتوى جديد' : 'Coming Soon: New Content'}
               </h3>
@@ -212,7 +212,7 @@ export default function Home() {
             </h3>
             <div className="flex flex-col gap-4">
               {/* Al-Ahzab 33:40 */}
-              <div className="border border-amber-300 dark:border-amber-700 rounded-lg bg-amber-50 dark:bg-gray-800 p-4 shadow-sm">
+              <div className="border border-amber-300 dark:border-amber-700 rounded-lg bg-amber-100 dark:bg-gray-800 p-4 shadow-sm">
                 <div className="text-lg font-semibold mb-2 text-amber-700 dark:text-amber-400">
                   {language === 'ar' ? 'سورة الأحزاب، آية 40' : 'Surah Al-Ahzab, 33:40'}
                 </div>
@@ -226,7 +226,7 @@ export default function Home() {
                 </div>
               </div>
               {/* Al-Anbiya 21:107 */}
-              <div className="border border-amber-300 dark:border-amber-700 rounded-lg bg-amber-50 dark:bg-gray-800 p-4 shadow-sm">
+              <div className="border border-amber-300 dark:border-amber-700 rounded-lg bg-amber-100 dark:bg-gray-800 p-4 shadow-sm">
                 <div className="text-lg font-semibold mb-2 text-amber-700 dark:text-amber-400">
                   {language === 'ar' ? 'سورة الأنبياء، آية 107' : 'Surah Al-Anbiya, 21:107'}
                 </div>
@@ -240,7 +240,7 @@ export default function Home() {
                 </div>
               </div>
               {/* At-Tawbah 9:40 */}
-              <div className="border border-amber-300 dark:border-amber-700 rounded-lg bg-amber-50 dark:bg-gray-800 p-4 shadow-sm">
+              <div className="border border-amber-300 dark:border-amber-700 rounded-lg bg-amber-100 dark:bg-gray-800 p-4 shadow-sm">
                 <div className="text-lg font-semibold mb-2 text-amber-700 dark:text-amber-400">
                   {language === 'ar' ? 'سورة التوبة، آية 40' : 'Surah At-Tawbah, 9:40'}
                 </div>
@@ -266,7 +266,7 @@ export default function Home() {
         <hr className="border-t-2 border-amber-400 my-8 max-w-2xl mx-auto" />
 
         {/* Relation Graph Feature Section */}
-        <div className="max-w-5xl mx-auto my-16 bg-gray-900 rounded-2xl shadow-lg border-l-4 border-amber-400 p-8 flex flex-col items-center">
+        <div className="max-w-5xl mx-auto my-16 bg-white dark:bg-gray-900 rounded-2xl shadow-lg border-l-4 border-amber-400 p-8 flex flex-col items-center">
           <h2 className="font-arabicDisplay text-amber-400 text-3xl font-bold mb-6 text-center">
             {language === 'ar' ? 'شبكة العلاقات العائلية' : 'Family Relation Graph'}
           </h2>

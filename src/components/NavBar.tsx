@@ -5,20 +5,26 @@ import Link from 'next/link';
 import LanguageSwitcher from './LanguageSwitcher';
 import { useLanguage } from './LanguageContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faXmark, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faXmark, faChevronDown, faGear } from '@fortawesome/free-solid-svg-icons';
 import translations from './translations';
+import ThemeSwitcher from './ThemeSwitcher';
 
 const NavBar: React.FC = () => {
   const { language, languageLoaded } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const settingsRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setDropdownOpen(false);
+      }
+      if (settingsRef.current && !settingsRef.current.contains(event.target as Node)) {
+        setSettingsOpen(false);
       }
     };
 
@@ -131,7 +137,26 @@ const NavBar: React.FC = () => {
             </div>
           )}
           
-          <LanguageSwitcher />
+          {/* Gear Icon for Settings */}
+          <div className="relative" ref={settingsRef}>
+            <button
+              onClick={() => setSettingsOpen((open) => !open)}
+              className="text-amber-400 rounded-full p-2 hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-amber-300 ml-2"
+              aria-label="Settings"
+            >
+              <FontAwesomeIcon icon={faGear} className="w-6 h-6" />
+            </button>
+            {settingsOpen && (
+              <div className="absolute top-full right-0 mt-2 bg-gray-950 border border-amber-400 rounded-md shadow-lg z-50 p-4 flex flex-col gap-4">
+                <div>
+                  <LanguageSwitcher />
+                </div>
+                <div>
+                  <ThemeSwitcher />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
         {/* Hamburger Icon for Mobile */}
         <button
@@ -194,9 +219,6 @@ const NavBar: React.FC = () => {
                 </div>
               )}
               
-              <div className="pt-2">
-                <LanguageSwitcher />
-              </div>
             </div>
           </div>
         )}
