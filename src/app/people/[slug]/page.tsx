@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import type { Person, PersonRelation, Title } from '@/generated/prisma';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faShield, faCalendarAlt, faTimeline } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faTimeline } from '@fortawesome/free-solid-svg-icons';
 import PersonRelationsGraph from '@/components/PersonRelationsGraph';
 import Image from 'next/image';
 import { useLanguage } from '@/components/LanguageContext';
@@ -12,6 +12,7 @@ import LoadingSpinner from '@/components/LoadingSpinner';
 import Badge from '@/components/Badge';
 import type { Ayah } from '@/types/person';
 import Link from 'next/link';
+import BattleParticipationTimeline from '@/components/BattleParticipationTimeline';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -246,87 +247,8 @@ const PersonDetailPage = ({ params }: PageProps) => {
             </div>
           )}
 
-          {/* Battle Timeline */}
-          {person.participations && person.participations.length > 0 && (
-            <div className="bg-gray-100 dark:bg-gray-900 rounded-lg shadow p-6">
-              <div className="font-bold text-2xl mb-6 text-amber-400 flex items-center gap-2">
-                <FontAwesomeIcon icon={faShield} className="w-6 h-6" />
-                {language === 'ar' ? 'المعارك والغزوات' : 'Battles & Expeditions'}
-              </div>
-              <div className="relative">
-                {/* Timeline line */}
-                <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-amber-400"></div>
-                
-                {person.participations
-                  .sort((a, b) => (a.battle.hijri_year || 0) - (b.battle.hijri_year || 0))
-                  .map((participation) => (
-                    <div key={participation.battle.id} className="relative flex items-start mb-8 last:mb-0">
-                      {/* Timeline dot */}
-                      <div className="absolute left-6 w-4 h-4 bg-amber-400 rounded-full border-4 border-white dark:border-gray-900 z-10"></div>
-                      
-                      {/* Content - Clickable Card */}
-                      <Link 
-                        href={`/battles/${participation.battle.slug}`}
-                        className="ml-16 w-full block group"
-                      >
-                        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-4 w-full transition-all duration-200 hover:shadow-lg hover:border-amber-300 dark:hover:border-amber-500 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
-                          <div className="flex items-center justify-between mb-2">
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
-                              {language === 'ar' ? participation.battle.name : participation.battle.nameEn || participation.battle.name}
-                            </h3>
-                            {participation.battle.hijri_year && (
-                              <div className="flex items-center gap-1 text-amber-600 dark:text-amber-400 font-medium">
-                                <FontAwesomeIcon icon={faCalendarAlt} className="w-4 h-4" />
-                                <span>{participation.battle.hijri_year} {language === 'ar' ? 'هـ' : 'AH'}</span>
-                              </div>
-                            )}
-                          </div>
-                          
-                          {participation.battle.location && (
-                            <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                              <span className="font-medium">{language === 'ar' ? 'الموقع:' : 'Location:'}</span> 
-                              {language === 'ar' ? participation.battle.location : participation.battle.locationEn || participation.battle.location}
-                            </div>
-                          )}
-                          
-                          {participation.status && participation.status.length > 0 && (
-                            <div className="flex flex-wrap gap-1 mt-2">
-                              {participation.status.map((status, statusIndex) => (
-                                <span 
-                                  key={statusIndex}
-                                  className={`px-2 py-1 text-xs rounded-full font-medium ${
-                                    status === 'MARTYRED' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' :
-                                    status === 'INJURED' ? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200' :
-                                    status === 'CAPTURED' ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200' :
-                                    status === 'ABSENT_EXCUSED' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' :
-                                    'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'
-                                  }`}
-                                >
-                                  {language === 'ar' ? (
-                                    status === 'MARTYRED' ? 'استشهد' :
-                                    status === 'INJURED' ? 'جُرح' :
-                                    status === 'CAPTURED' ? 'أُسر' :
-                                    status === 'ABSENT_EXCUSED' ? 'غائب بعذر' :
-                                    status
-                                  ) : (
-                                    status === 'MARTYRED' ? 'Martyred' :
-                                    status === 'INJURED' ? 'Injured' :
-                                    status === 'CAPTURED' ? 'Captured' :
-                                    status === 'ABSENT_EXCUSED' ? 'Absent (Excused)' :
-                                    status
-                                  )}
-                                </span>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      </Link>
-                    </div>
-                  ))
-                }
-              </div>
-            </div>
-          )}
+          {/* Battle Participation Timeline */}
+          <BattleParticipationTimeline participations={person.participations || []} />
         </div>
       </div>
     </div>

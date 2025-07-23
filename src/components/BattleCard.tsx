@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import type { Battle } from '@/types/battle';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShieldHalved, faLocationDot, faCalendarDays } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 
 interface BattleCardProps {
   battle: Battle;
@@ -12,24 +12,33 @@ interface BattleCardProps {
 
 const BattleCard: React.FC<BattleCardProps> = ({ battle, language, url }) => {
   return (
-    <Link href={url} className="block">
-      <div className="bg-white dark:bg-gray-900 border border-amber-400 rounded-lg p-4 shadow transition-transform duration-200 hover:shadow-xl hover:scale-105 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
-        <div className="flex items-center gap-2 mb-2">
-          <FontAwesomeIcon icon={faShieldHalved} className="text-amber-400 w-5 h-5" />
-          <h3 className="text-lg font-semibold text-amber-400 dark:text-amber-400">{battle.name}</h3>
-        </div>
-        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-200 mb-1">
-          <FontAwesomeIcon icon={faLocationDot} className="text-indigo-500 w-4 h-4" />
-          <span>{language === 'ar' ? battle.location : battle.locationEn || battle.location || '-'}</span>
-        </div>
-        {battle.hijri_year && (
-          <div className="flex items-center gap-2 text-xs text-gray-400 mt-2">
-            <FontAwesomeIcon icon={faCalendarDays} className="text-indigo-500 w-4 h-4" />
-            <span>{language === 'ar' ? `السنة الهجرية: ${battle.hijri_year}` : `Hijri Year: ${battle.hijri_year}`}</span>
-          </div>
-        )}
-      </div>
-    </Link>
+   <Link 
+   href={url}
+   className="ml-16 w-full block group"
+ >
+   <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-4 w-full transition-all duration-200 hover:shadow-lg hover:border-amber-300 dark:hover:border-amber-500 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
+     <div className="flex items-center justify-between mb-2">
+       <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+         {language === 'ar' ? battle.name : battle.nameEn || battle.name}
+       </h3>
+       {battle.hijri_year && (
+         <div className="flex items-center gap-1 text-amber-600 dark:text-amber-400 font-medium">
+           <FontAwesomeIcon icon={faCalendarAlt} className="w-4 h-4" />
+           <span>{battle.hijri_year} {language === 'ar' ? 'هـ' : 'AH'}</span>
+         </div>
+       )}
+     </div>
+     
+     {battle.location && (
+       <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+         <span className="font-medium">{language === 'ar' ? 'الموقع:' : 'Location:'}</span> 
+         {language === 'ar' ? battle.location : battle.locationEn || battle.location}
+       </div>
+     )}
+     
+     
+   </div>
+ </Link>
   );
 };
 
