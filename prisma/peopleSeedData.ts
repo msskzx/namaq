@@ -162,95 +162,153 @@ export const people = [
 ];
 
 export const peopleRelations = [
-  {
-    fromSlug: 'saad-ibn-abi-waqqas',
-    toSlug: 'prophet-muhammad',
-    type: 'MATERNAL_UNCLE',
-  },
-  {
-    fromSlug: 'prophet-muhammad',
-    toSlug: 'saad-ibn-abi-waqqas',
-    type: 'MATERNAL_NEPHEW',
-  },
-  {
-    fromSlug: 'abu-bakr-as-siddiq',
-    toSlug: 'prophet-muhammad',
-    type: 'FATHER_IN_LAW',
-  },
-  {
-    fromSlug: 'umar-ibn-al-khattab',
-    toSlug: 'prophet-muhammad',
-    type: 'FATHER_IN_LAW',
-  },
-  {
-    fromSlug: 'uthman-ibn-affan',
-    toSlug: 'prophet-muhammad',
-    type: 'FATHER_IN_LAW',
-  },
-  {
-    fromSlug: 'ali-ibn-abi-talib',
-    toSlug: 'prophet-muhammad',
-    type: 'FATHER_IN_LAW',
-  },
-  {
-    fromSlug: 'az-zubayr-ibn-al-awwam',
-    toSlug: 'prophet-muhammad',
-    type: 'PATERNAL_COUSIN',
-  },
-  {
-    fromSlug: 'abdur-rahman-ibn-awf',
-    toSlug: 'prophet-muhammad',
-    type: 'FATHER_IN_LAW',
-  },
+  { fromSlug: 'saad-ibn-abi-waqqas', toSlug: 'prophet-muhammad', type: 'MATERNAL_UNCLE' },
+  { fromSlug: 'prophet-muhammad', toSlug: 'saad-ibn-abi-waqqas', type: 'MATERNAL_NEPHEW' },
+  { fromSlug: 'abu-bakr-as-siddiq', toSlug: 'prophet-muhammad', type: 'FATHER_IN_LAW' },
+  { fromSlug: 'umar-ibn-al-khattab', toSlug: 'prophet-muhammad', type: 'FATHER_IN_LAW' },
+  { fromSlug: 'uthman-ibn-affan', toSlug: 'prophet-muhammad', type: 'FATHER_IN_LAW' },
+  { fromSlug: 'ali-ibn-abi-talib', toSlug: 'prophet-muhammad', type: 'FATHER_IN_LAW' },
+  { fromSlug: 'az-zubayr-ibn-al-awwam', toSlug: 'prophet-muhammad', type: 'PATERNAL_COUSIN' },
+  { fromSlug: 'abdur-rahman-ibn-awf', toSlug: 'prophet-muhammad', type: 'FATHER_IN_LAW' },
 ];
 
 export const peopleBattleParticipations = [
-  {
-    personSlug: 'saad-ibn-abi-waqqas',
-    battleSlug: 'badr',
-    isMuslim: true,
-    status: ['INJURED'],
-  },
-  {
-    personSlug: 'prophet-muhammad',
-    battleSlug: 'badr',
-    isMuslim: true,
-    status: [],
-  },
-  // Uhud participations
-  {
-    personSlug: 'saad-ibn-abi-waqqas',
-    battleSlug: 'uhud',
-    isMuslim: true,
-    status: ['INJURED'],
-  },
-  {
-    personSlug: 'prophet-muhammad',
-    battleSlug: 'uhud',
-    isMuslim: true,
-    status: ['INJURED'],
-  },
-  // Khandaq participations
-  {
-    personSlug: 'saad-ibn-abi-waqqas',
-    battleSlug: 'khandaq',
-    isMuslim: true,
-    status: [],
-  },
-  {
-    personSlug: 'prophet-muhammad',
-    battleSlug: 'khandaq',
-    isMuslim: true,
-    status: [],
-  },
-  // Ten promised paradise companions (example participations)
+  // Battle of Badr (2 AH)
+  { personSlug: 'abdur-rahman-ibn-awf', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'badr', isMuslim: true, status: [] },
-  { personSlug: 'umar-ibn-al-khattab', battleSlug: 'badr', isMuslim: true, status: [] },
-  { personSlug: 'uthman-ibn-affan', battleSlug: 'badr', isMuslim: true, status: [] },
+  { personSlug: 'abu-ubaydah-ibn-al-jarrah', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'ali-ibn-abi-talib', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'az-zubayr-ibn-al-awwam', battleSlug: 'badr', isMuslim: true, status: [] },
-  { personSlug: 'talhah-ibn-ubaydullah', battleSlug: 'badr', isMuslim: true, status: [] },
-  { personSlug: 'abdur-rahman-ibn-awf', battleSlug: 'badr', isMuslim: true, status: [] },
+  { personSlug: 'prophet-muhammad', battleSlug: 'badr', isMuslim: true, status: [] },
+  { personSlug: 'saad-ibn-abi-waqqas', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'saeed-ibn-zaid', battleSlug: 'badr', isMuslim: true, status: [] },
-  { personSlug: 'abu-ubaydah-ibn-al-jarrah', battleSlug: 'badr', isMuslim: true, status: [] },
-]; 
+  { personSlug: 'talhah-ibn-ubaydullah', battleSlug: 'badr', isMuslim: true, status: [] },
+  { personSlug: 'umar-ibn-al-khattab', battleSlug: 'badr', isMuslim: true, status: [] },
+  { personSlug: 'uthman-ibn-affan', battleSlug: 'badr', isMuslim: true, status: ['ABSENT_EXCUSED'] },
+
+  // Battle of Uhud (3 AH)
+  { personSlug: 'abdur-rahman-ibn-awf', battleSlug: 'uhud', isMuslim: true, status: [] },
+  { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'uhud', isMuslim: true, status: [] },
+  { personSlug: 'abu-ubaydah-ibn-al-jarrah', battleSlug: 'uhud', isMuslim: true, status: [] },
+  { personSlug: 'ali-ibn-abi-talib', battleSlug: 'uhud', isMuslim: true, status: [] },
+  { personSlug: 'az-zubayr-ibn-al-awwam', battleSlug: 'uhud', isMuslim: true, status: [] },
+  { personSlug: 'prophet-muhammad', battleSlug: 'uhud', isMuslim: true, status: ['INJURED'] },
+  { personSlug: 'saad-ibn-abi-waqqas', battleSlug: 'uhud', isMuslim: true, status: [] },
+  { personSlug: 'saeed-ibn-zaid', battleSlug: 'uhud', isMuslim: true, status: [] },
+  { personSlug: 'talhah-ibn-ubaydullah', battleSlug: 'uhud', isMuslim: true, status: ['INJURED'] },
+  { personSlug: 'umar-ibn-al-khattab', battleSlug: 'uhud', isMuslim: true, status: [] },
+  { personSlug: 'uthman-ibn-affan', battleSlug: 'uhud', isMuslim: true, status: [] },
+
+  // Battle of the Trench (Khandaq) (5 AH)
+  { personSlug: 'abdur-rahman-ibn-awf', battleSlug: 'khandaq', isMuslim: true, status: [] },
+  { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'khandaq', isMuslim: true, status: [] },
+  { personSlug: 'abu-ubaydah-ibn-al-jarrah', battleSlug: 'khandaq', isMuslim: true, status: [] },
+  { personSlug: 'ali-ibn-abi-talib', battleSlug: 'khandaq', isMuslim: true, status: [] },
+  { personSlug: 'az-zubayr-ibn-al-awwam', battleSlug: 'khandaq', isMuslim: true, status: [] },
+  { personSlug: 'prophet-muhammad', battleSlug: 'khandaq', isMuslim: true, status: [] },
+  { personSlug: 'saad-ibn-abi-waqqas', battleSlug: 'khandaq', isMuslim: true, status: [] },
+  { personSlug: 'saeed-ibn-zaid', battleSlug: 'khandaq', isMuslim: true, status: [] },
+  { personSlug: 'talhah-ibn-ubaydullah', battleSlug: 'khandaq', isMuslim: true, status: [] },
+  { personSlug: 'umar-ibn-al-khattab', battleSlug: 'khandaq', isMuslim: true, status: [] },
+  { personSlug: 'uthman-ibn-affan', battleSlug: 'khandaq', isMuslim: true, status: [] },
+
+  // Siege of Banu Qurayzah (5 AH)
+  { personSlug: 'ali-ibn-abi-talib', battleSlug: 'banu-qurayzah', isMuslim: true, status: [] },
+  { personSlug: 'az-zubayr-ibn-al-awwam', battleSlug: 'banu-qurayzah', isMuslim: true, status: [] },
+  { personSlug: 'prophet-muhammad', battleSlug: 'banu-qurayzah', isMuslim: true, status: [] },
+
+  // Treaty of Hudaybiyyah (6 AH)
+  { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'hudaybiyyah', isMuslim: true, status: [] },
+  { personSlug: 'prophet-muhammad', battleSlug: 'hudaybiyyah', isMuslim: true, status: [] },
+  { personSlug: 'umar-ibn-al-khattab', battleSlug: 'hudaybiyyah', isMuslim: true, status: [] },
+  { personSlug: 'uthman-ibn-affan', battleSlug: 'hudaybiyyah', isMuslim: true, status: [] },
+
+  // Battle of Khaybar (7 AH)
+  { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'khaybar', isMuslim: true, status: [] },
+  { personSlug: 'ali-ibn-abi-talib', battleSlug: 'khaybar', isMuslim: true, status: [] },
+  { personSlug: 'prophet-muhammad', battleSlug: 'khaybar', isMuslim: true, status: [] },
+  { personSlug: 'umar-ibn-al-khattab', battleSlug: 'khaybar', isMuslim: true, status: [] },
+
+  // Battle of Mu'tah (8 AH)
+  { personSlug: 'prophet-muhammad', battleSlug: 'mutah', isMuslim: true, status: [] },
+
+  // Conquest of Mecca (8 AH)
+  { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'fath-makkah', isMuslim: true, status: [] },
+  { personSlug: 'ali-ibn-abi-talib', battleSlug: 'fath-makkah', isMuslim: true, status: [] },
+  { personSlug: 'prophet-muhammad', battleSlug: 'fath-makkah', isMuslim: true, status: [] },
+  { personSlug: 'umar-ibn-al-khattab', battleSlug: 'fath-makkah', isMuslim: true, status: [] },
+  { personSlug: 'uthman-ibn-affan', battleSlug: 'fath-makkah', isMuslim: true, status: [] },
+
+  // Battle of Hunayn (8 AH)
+  { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'hunayn', isMuslim: true, status: [] },
+  { personSlug: 'abu-ubaydah-ibn-al-jarrah', battleSlug: 'hunayn', isMuslim: true, status: [] },
+  { personSlug: 'ali-ibn-abi-talib', battleSlug: 'hunayn', isMuslim: true, status: [] },
+  { personSlug: 'prophet-muhammad', battleSlug: 'hunayn', isMuslim: true, status: [] },
+  { personSlug: 'umar-ibn-al-khattab', battleSlug: 'hunayn', isMuslim: true, status: [] },
+
+  // Siege of Taif (8 AH)
+  { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'taif', isMuslim: true, status: [] },
+  { personSlug: 'prophet-muhammad', battleSlug: 'taif', isMuslim: true, status: [] },
+  { personSlug: 'umar-ibn-al-khattab', battleSlug: 'taif', isMuslim: true, status: [] },
+
+  // Expedition of Tabuk (9 AH)
+  { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'tabuk', isMuslim: true, status: [] },
+  { personSlug: 'prophet-muhammad', battleSlug: 'tabuk', isMuslim: true, status: [] },
+  { personSlug: 'umar-ibn-al-khattab', battleSlug: 'tabuk', isMuslim: true, status: [] },
+  { personSlug: 'uthman-ibn-affan', battleSlug: 'tabuk', isMuslim: true, status: [] },
+
+  // Battle of Chains (Dhat al-Salasil) (12 AH)
+  { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'zat-as-salasil', isMuslim: true, status: [] },
+
+  // Battle of Ajnadayn (13 AH)
+  { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'ajnadayn', isMuslim: true, status: [] },
+  { personSlug: 'abu-ubaydah-ibn-al-jarrah', battleSlug: 'ajnadayn', isMuslim: true, status: [] },
+  { personSlug: 'umar-ibn-al-khattab', battleSlug: 'ajnadayn', isMuslim: true, status: [] },
+
+  // Battle of Fihl (13 AH)
+  { personSlug: 'abu-ubaydah-ibn-al-jarrah', battleSlug: 'fihl', isMuslim: true, status: [] },
+  { personSlug: 'umar-ibn-al-khattab', battleSlug: 'fihl', isMuslim: true, status: [] },
+
+  // Conquest of Damascus (14 AH)
+  { personSlug: 'abu-ubaydah-ibn-al-jarrah', battleSlug: 'fath-damascus', isMuslim: true, status: [] },
+  { personSlug: 'umar-ibn-al-khattab', battleSlug: 'fath-damascus', isMuslim: true, status: [] },
+
+  // Battle of Yarmuk (15 AH)
+  { personSlug: 'abu-ubaydah-ibn-al-jarrah', battleSlug: 'yarmuk', isMuslim: true, status: [] },
+  { personSlug: 'umar-ibn-al-khattab', battleSlug: 'yarmuk', isMuslim: true, status: [] },
+
+  // Battle of al-Qadisiyyah (15 AH)
+  { personSlug: 'saad-ibn-abi-waqqas', battleSlug: 'qadisiyyah', isMuslim: true, status: [] },
+  { personSlug: 'umar-ibn-al-khattab', battleSlug: 'qadisiyyah', isMuslim: true, status: [] },
+
+  // Conquest of Ctesiphon (16 AH)
+  { personSlug: 'saad-ibn-abi-waqqas', battleSlug: 'fath-ctesiphon', isMuslim: true, status: [] },
+  { personSlug: 'umar-ibn-al-khattab', battleSlug: 'fath-ctesiphon', isMuslim: true, status: [] },
+
+  // Conquest of Jerusalem (16 AH)
+  { personSlug: 'abu-ubaydah-ibn-al-jarrah', battleSlug: 'fath-jerusalem', isMuslim: true, status: [] },
+  { personSlug: 'umar-ibn-al-khattab', battleSlug: 'fath-jerusalem', isMuslim: true, status: [] },
+
+  // Conquest of Alexandria (20 AH)
+  { personSlug: 'umar-ibn-al-khattab', battleSlug: 'fath-alexandria', isMuslim: true, status: [] },
+
+  // Battle of Nahavand (21 AH)
+  { personSlug: 'umar-ibn-al-khattab', battleSlug: 'nahavand', isMuslim: true, status: [] },
+
+  // Conquest of Cyprus (28 AH)
+  { personSlug: 'uthman-ibn-affan', battleSlug: 'fath-cyprus', isMuslim: true, status: [] },
+
+  // Battle of the Masts (Dhat al-Sawari) (34 AH)
+  { personSlug: 'uthman-ibn-affan', battleSlug: 'zat-as-sawari', isMuslim: true, status: [] },
+
+  // Battle of the Camel (36 AH)
+  { personSlug: 'ali-ibn-abi-talib', battleSlug: 'jamal', isMuslim: true, status: [] },
+  { personSlug: 'az-zubayr-ibn-al-awwam', battleSlug: 'jamal', isMuslim: true, status: ['MARTYRED'] },
+  { personSlug: 'talhah-ibn-ubaydullah', battleSlug: 'jamal', isMuslim: true, status: ['MARTYRED'] },
+
+  // Battle of Siffin (37 AH)
+  { personSlug: 'ali-ibn-abi-talib', battleSlug: 'siffin', isMuslim: true, status: [] },
+
+  // Battle of Nahrawan (38 AH)
+  { personSlug: 'ali-ibn-abi-talib', battleSlug: 'nahrawan', isMuslim: true, status: [] },
+];

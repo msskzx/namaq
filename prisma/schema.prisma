@@ -226,8 +226,8 @@ enum ParticipationStatus {
   INJURED
   CAPTURED
   WAS_CAPTURED
-  ABSENT
-  // Add more as needed
+  ABSENT_EXCUSED
+  MARTYRED
 }
 
 model BattleParticipation {
