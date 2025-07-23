@@ -12,6 +12,56 @@ export const titles = [
     slug: 'messenger',
   },
   {
+    name: 'المصطفى',
+    nameEn: 'The Chosen One',
+    slug: 'the-chosen-one',
+  },
+  {
+    name: 'أحمد',
+    nameEn: 'Ahmad',
+    slug: 'ahmad',
+  },
+  {
+    name: 'الشفیع',
+    nameEn: 'The Intercessor',
+    slug: 'the-intercessor',
+  },
+  {
+    name: 'الحاشر',
+    nameEn: 'The Gatherer',
+    slug: 'the-gatherer',
+  },
+  {
+    name: 'العاقب',
+    nameEn: 'The Last (Prophet)',
+    slug: 'the-last',
+  },
+  {
+    name: 'نبي الرحمة',
+    nameEn: 'Prophet of Mercy',
+    slug: 'prophet-of-mercy',
+  },
+  {
+    name: 'نبي التوبة',
+    nameEn: 'Prophet of Repentance',
+    slug: 'prophet-of-repentance',
+  },
+  {
+    name: 'الصادق الأمين',
+    nameEn: 'The Truthful and Trustworthy',
+    slug: 'truthful-trustworthy',
+  },
+  {
+    name: 'سيد ولد آدم',
+    nameEn: 'Master of the Children of Adam',
+    slug: 'master-of-children-of-adam',
+  },
+  {
+    name: 'خاتم النبيين',
+    nameEn: 'Seal of the Prophets',
+    slug: 'seal-of-the-prophets',
+  },
+  {
     name: 'صحابي',
     nameEn: 'Companion',
     slug: 'companion',

@@ -8,7 +8,7 @@ export const people = [
     appearance: 'كان متوسط القامة، عريض المنكبين، كث اللحية، مشرق الوجه، يوصف بأنه أجمل الناس.',
     virtues: 'خاتم الأنبياء، رحمة للعالمين، صاحب الخلق العظيم، قائد، معلم، رجل دولة.',
     picture: null,
-    titles: ['prophet', 'messenger'], // keep for lookup, but do not pass to Prisma
+    titles: ['prophet', 'messenger', 'the-chosen-one', 'ahmad', 'the-intercessor', 'the-gatherer', 'the-last', 'prophet-of-mercy', 'prophet-of-repentance', 'truthful-trustworthy', 'master-of-children-of-adam', 'seal-of-the-prophets'], // keep for lookup, but do not pass to Prisma
     ayat: [
       { surah: 33, ayah: 40 }, // الأحزاب: 40 (محمد رسول الله)
       { surah: 21, ayah: 107 }, // الأنبياء: 107 (رحمة للعالمين)

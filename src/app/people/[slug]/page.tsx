@@ -1,9 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import type { Person, PersonRelation, Title } from '@/generated/prisma';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faTimeline } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 import PersonRelationsGraph from '@/components/PersonRelationsGraph';
 import Image from 'next/image';
 import { useLanguage } from '@/components/LanguageContext';
@@ -11,8 +10,9 @@ import translations from '@/components/translations';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import Badge from '@/components/Badge';
 import type { Ayah } from '@/types/person';
-import Link from 'next/link';
 import BattleParticipationTimeline from '@/components/BattleParticipationTimeline';
+import Timeline from '@/components/Timeline';
+import type { Person } from '@/types/person';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -21,26 +21,7 @@ interface PageProps {
 const PersonDetailPage = ({ params }: PageProps) => {
   const { language } = useLanguage();
   const t = translations[language];
-  const [person, setPerson] = useState<
-    (Person & {
-      titles: Title[];
-      relationsFrom: (PersonRelation & { to: Person })[];
-      relationsTo: (PersonRelation & { from: Person })[];
-      participations?: { 
-        battle: { 
-          id: string; 
-          name: string; 
-          nameEn: string | null; 
-          slug: string;
-          hijri_year: number | null;
-          location: string | null;
-          locationEn: string | null;
-        };
-        status: string[];
-      }[];
-      ayat?: Ayah[];
-    }) | null
-  >(null);
+  const [person, setPerson] = useState<Person | null>(null);
   const [ayatText, setAyatText] = useState<Ayah[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -151,50 +132,7 @@ const PersonDetailPage = ({ params }: PageProps) => {
 
         
         {/* Horizontal Timeline */}
-        {person.participations && person.participations.length > 0 && (
-          <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-6 mb-6">
-            <div className="font-bold text-xl mb-6 text-amber-400 flex items-center gap-2">
-              <FontAwesomeIcon icon={faTimeline} className="w-5 h-5" />
-              {language === 'ar' ? 'الخط الزمني' : 'Timeline'}
-            </div>
-            
-            <div className="relative overflow-x-auto pb-4">
-              <div className="flex items-center min-w-max px-4">
-                {/* Timeline line */}
-                <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-amber-400 transform -translate-y-1/2 z-0 min-w-[1700px]"></div>
-                
-                {person.participations
-                  .sort((a, b) => (a.battle.hijri_year || 0) - (b.battle.hijri_year || 0))
-                  .map((participation) => (
-                    <div key={participation.battle.id} className="relative flex flex-col items-center mx-8 first:ml-0 last:mr-0">
-                      {/* Battle Name above dot */}
-                      <Link 
-                        href={`/battles/${participation.battle.slug}`}
-                        className="group mb-4 text-center"
-                      >
-                        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 px-3 py-2 min-w-max transition-all duration-200 hover:shadow-md hover:border-amber-300 dark:hover:border-amber-500 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
-                          <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors whitespace-nowrap">
-                            {language === 'ar' ? participation.battle.name : participation.battle.nameEn || participation.battle.name}
-                          </h3>
-                        </div>
-                      </Link>
-                      
-                      {/* Timeline dot */}
-                      <div className="w-4 h-4 top-1/2 left-0 right-0 bg-amber-400 rounded-full border-4 border-amber-400 dark:border-gray-900 z-10 shadow-sm"></div>
-                      
-                      {/* Year below dot */}
-                      {participation.battle.hijri_year && (
-                        <div className="mt-2 text-xs font-medium text-amber-600 dark:text-amber-400">
-                          {participation.battle.hijri_year} {language === 'ar' ? 'هـ' : 'AH'}
-                        </div>
-                      )}
-                    </div>
-                  ))
-                }
-              </div>
-            </div>
-          </div>
-        )}
+        <Timeline participations={person.participations || []} />
       
       <div className="flex flex-col gap-6 mt-10">
           {person.fullName && (

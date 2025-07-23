@@ -1,12 +1,13 @@
 import React, { useState, useRef, useCallback } from 'react';
-import type { Person, PersonRelation } from '@/generated/prisma';
+import type { Person } from '@/generated/prisma';
 import translations from './translations';
 import Link from 'next/link';
+import type { RelationFrom, RelationTo } from '@/types/person';
 
 interface PersonRelationsGraphProps {
   person: Person;
-  relationsFrom: (PersonRelation & { to: Person })[];
-  relationsTo: (PersonRelation & { from: Person })[];
+  relationsFrom: RelationFrom[];
+  relationsTo: RelationTo[];
 }
 
 const CANVAS_SIZE = 800;
