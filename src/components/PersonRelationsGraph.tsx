@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import type { Person, PersonRelation } from '@/generated/prisma';
 import translations from './translations';
 import Link from 'next/link';
@@ -14,7 +14,8 @@ const NODE_RADIUS = 80;
 const CHILD_NODE_RADIUS = 60;
 const CENTER_X = CANVAS_SIZE / 2;
 const CENTER_Y = CANVAS_SIZE / 2;
-const RADIUS = 220;
+const MIN_RADIUS = 180;
+const MAX_RADIUS = 350;
 
 export default function PersonRelationsGraph({ person, relationsFrom, relationsTo }: PersonRelationsGraphProps) {
   // Combine all relations for display
@@ -55,27 +56,175 @@ export default function PersonRelationsGraph({ person, relationsFrom, relationsT
   });
   const relationPairList = Object.entries(relationPairs);
 
-  // Calculate positions for related nodes in a circle
+  // Calculate dynamic radius based on number of nodes to prevent overlaps
+  const calculateOptimalRadius = (nodeCount: number) => {
+    if (nodeCount <= 1) return MIN_RADIUS;
+    
+    // Calculate minimum radius needed to fit all nodes without overlap
+    // Each node needs space for its radius plus some padding
+    const nodeSpacing = (CHILD_NODE_RADIUS * 2) + 20; // Node diameter + padding
+    const circumference = nodeCount * nodeSpacing;
+    const calculatedRadius = circumference / (2 * Math.PI);
+    
+    // Clamp between min and max radius
+    return Math.max(MIN_RADIUS, Math.min(MAX_RADIUS, calculatedRadius));
+  };
+
+  const radius = calculateOptimalRadius(relationPairList.length);
   const angleStep = (2 * Math.PI) / Math.max(relationPairList.length, 1);
+
+  // Calculate positions with collision detection
+  const calculateNodePositions = () => {
+    const positions: Array<{ x: number; y: number; id: string }> = [];
+    
+    relationPairList.forEach(([, rel], i) => {
+      let angle = i * angleStep - Math.PI / 2;
+      let x = CENTER_X + radius * Math.cos(angle);
+      let y = CENTER_Y + radius * Math.sin(angle);
+      
+      // Simple collision detection and adjustment
+      let attempts = 0;
+      const maxAttempts = 20;
+      
+      while (attempts < maxAttempts) {
+        let hasCollision = false;
+        
+        // Check collision with existing nodes
+        for (const pos of positions) {
+          const distance = Math.sqrt((x - pos.x) ** 2 + (y - pos.y) ** 2);
+          const minDistance = (CHILD_NODE_RADIUS * 2) + 15; // Minimum distance between node centers
+          
+          if (distance < minDistance) {
+            hasCollision = true;
+            break;
+          }
+        }
+        
+        // Check collision with center node
+        const centerDistance = Math.sqrt((x - CENTER_X) ** 2 + (y - CENTER_Y) ** 2);
+        const minCenterDistance = NODE_RADIUS + CHILD_NODE_RADIUS + 20;
+        
+        if (centerDistance < minCenterDistance) {
+          hasCollision = true;
+        }
+        
+        if (!hasCollision) {
+          break;
+        }
+        
+        // Adjust position if collision detected
+        angle += Math.PI / 12; // Rotate by 15 degrees
+        const adjustedRadius = radius + (attempts * 15); // Gradually increase radius
+        x = CENTER_X + adjustedRadius * Math.cos(angle);
+        y = CENTER_Y + adjustedRadius * Math.sin(angle);
+        
+        attempts++;
+      }
+      
+      positions.push({ x, y, id: rel.id });
+    });
+    
+    return positions;
+  };
+
+  const nodePositions = calculateNodePositions();
 
   // Use Arabic translations for relation types
   const relationTypeArabic = translations.ar.relationTypes;
 
   // Track which node is hovered (by id or 'center')
-  const [hoveredNode, setHoveredNode] = React.useState<string | null>(null);
+  const [hoveredNode, setHoveredNode] = useState<string | null>(null);
+  
+  // Zoom and pan state
+  const [transform, setTransform] = useState({ x: 50, y: 50, scale: 0.8 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const svgRef = useRef<SVGSVGElement>(null);
+  
+  // Zoom functionality
+  const handleWheel = useCallback((e: React.WheelEvent) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    const newScale = Math.max(0.1, Math.min(3, transform.scale * delta));
+    
+    // Get mouse position relative to SVG
+    const rect = svgRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    
+    // Calculate new transform to zoom towards mouse position
+    const newX = mouseX - (mouseX - transform.x) * (newScale / transform.scale);
+    const newY = mouseY - (mouseY - transform.y) * (newScale / transform.scale);
+    
+    setTransform({ x: newX, y: newY, scale: newScale });
+  }, [transform]);
+  
+  // Pan functionality
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    // Only start dragging if clicking on the SVG background (not on nodes)
+    if (e.target === svgRef.current || (e.target as Element).tagName === 'svg') {
+      setIsDragging(true);
+      setDragStart({ x: e.clientX - transform.x, y: e.clientY - transform.y });
+    }
+  }, [transform]);
+  
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (!isDragging) return;
+    
+    const newX = e.clientX - dragStart.x;
+    const newY = e.clientY - dragStart.y;
+    
+    setTransform(prev => ({ ...prev, x: newX, y: newY }));
+  }, [isDragging, dragStart]);
+  
+  const handleMouseUp = useCallback(() => {
+    setIsDragging(false);
+  }, []);
+  
+  // Reset zoom and pan
+  const resetView = useCallback(() => {
+    setTransform({ x: 50, y: 50, scale: 0.8 });
+  }, []);
 
   return (
-    <div className="flex justify-center items-center my-8">
-      <svg width={CANVAS_SIZE} height={CANVAS_SIZE} style={{ display: 'block', margin: '0 auto' }}>
-        {/* Render all lines first so they appear beneath the nodes */}
-        {relationPairList.map(([, rel], i) => {
-          const angle = i * angleStep - Math.PI / 2;
-          const x = CENTER_X + RADIUS * Math.cos(angle);
-          const y = CENTER_Y + RADIUS * Math.sin(angle);
-          return (
-            <line key={rel.id + '-line'} x1={CENTER_X} y1={CENTER_Y} x2={x} y2={y} stroke="#888" strokeWidth={2} />
-          );
-        })}
+    <div className="flex flex-col items-center my-8">
+      {/* Controls */}
+      <div className="mb-4 flex gap-2">
+        <button
+          onClick={resetView}
+          className="px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors text-sm"
+        >
+          إعادة تعيين العرض
+        </button>
+        <div className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-2">
+          <span>تكبير: عجلة الماوس</span>
+          <span>•</span>
+          <span>سحب: اسحب الخلفية</span>
+        </div>
+      </div>
+      
+      <div className="border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
+        <svg 
+          ref={svgRef}
+          width={CANVAS_SIZE} 
+          height={CANVAS_SIZE} 
+          style={{ display: 'block', cursor: isDragging ? 'grabbing' : 'grab' }}
+          onWheel={handleWheel}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+        >
+          {/* Transform group for zoom and pan */}
+          <g transform={`translate(${transform.x}, ${transform.y}) scale(${transform.scale})`}>
+            {/* Render all lines first so they appear beneath the nodes */}
+            {nodePositions.map((pos) => {
+              return (
+                <line key={pos.id + '-line'} x1={CENTER_X} y1={CENTER_Y} x2={pos.x} y2={pos.y} stroke="#888" strokeWidth={2} />
+              );
+            })}
         {/* Center node (the person) with hover effect */}
         {(() => {
           const isHovered = hoveredNode === 'center';
@@ -107,9 +256,10 @@ export default function PersonRelationsGraph({ person, relationsFrom, relationsT
         })()}
         {/* Relation nodes */}
         {relationPairList.map(([, rel], i) => {
-          const angle = i * angleStep - Math.PI / 2;
-          const x = CENTER_X + RADIUS * Math.cos(angle);
-          const y = CENTER_Y + RADIUS * Math.sin(angle);
+          const position = nodePositions.find(pos => pos.id === rel.id);
+          if (!position) return null;
+          
+          const { x, y } = position;
           const isHovered = hoveredNode === rel.id;
           const nodeRadius = isHovered ? CHILD_NODE_RADIUS + 10 : CHILD_NODE_RADIUS;
           const nodeFill = isHovered ? '#374151' : '#1f2937'; // gray-700 on hover, gray-800 default
@@ -146,7 +296,9 @@ export default function PersonRelationsGraph({ person, relationsFrom, relationsT
             </g>
           );
         })}
-      </svg>
+          </g>
+        </svg>
+      </div>
     </div>
   );
 } 

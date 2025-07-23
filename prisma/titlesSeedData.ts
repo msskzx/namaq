@@ -27,7 +27,7 @@ export const titles = [
     slug: 'caliph',
   },
   {
-    name: 'الصديق الأمة',
+    name: 'صديق الأمة',
     nameEn: 'Siddiq al-Ummah',
     slug: 'siddiq-al-ummah',
   },
@@ -52,9 +52,9 @@ export const titles = [
     slug: 'abu-al-hasan',
   },
   {
-    name: 'السابقين',
-    nameEn: 'Al-Sabiqeen',
-    slug: 'al-sabiqeen',
+    name: 'السابقون',
+    nameEn: 'Al-Sabiqoon',
+    slug: 'al-sabiqoon',
   },
   {
     name: 'حواري الأمة',
@@ -71,4 +71,84 @@ export const titles = [
     nameEn: 'The Six of the Shura',
     slug: 'the-six-of-the-shura',
   },
-]; 
+  {
+    name: 'أم المؤمنين',
+    nameEn: 'Mother of the Believers',
+    slug: 'mother-of-believers',
+  },
+  {
+    name: 'سيدة نساء أهل الجنة',
+    nameEn: 'Mistress of the Women of Paradise',
+    slug: 'sayyidat-nisa-ahl-al-jannah',
+  },
+  {
+    name: 'أم المساكين',
+    nameEn: 'Mother of the Destitute',
+    slug: 'umm-al-masakeen',
+  },
+  {
+    name: 'صديقة',
+    nameEn: 'Siddiqa',
+    slug: 'siddiqa',
+  },
+  {
+    name: 'أسد الله',
+    nameEn: 'Lion of Allah',
+    slug: 'asadu-allah',
+  },
+  {
+    name: 'سيد الشهداء',
+    nameEn: 'Master of the Martyrs',
+    slug: 'sayyid-al-shuhada',
+  },
+  {
+    name: 'سبط النبي',
+    nameEn: 'Grandson of the Prophet',
+    slug: 'grandson-of-prophet',
+  },
+  {
+    name: 'سيد شباب أهل الجنة',
+    nameEn: 'Master of the Youth of Paradise',
+    slug: 'sayyid-shabab-ahl-al-jannah',
+  },
+  {
+    name: 'شهيد',
+    nameEn: 'Martyr',
+    slug: 'martyr',
+  },
+  {
+    name: 'ابنة النبي',
+    nameEn: 'Daughter of the Prophet',
+    slug: 'daughter-of-prophet',
+  },
+  {
+    name: 'ابن النبي',
+    nameEn: 'Son of the Prophet',
+    slug: 'son-of-prophet',
+  },
+  {
+    name: 'عم النبي',
+    nameEn: 'Uncle of the Prophet',
+    slug: 'uncle-of-prophet',
+  },
+  {
+    name: 'حفيدة النبي',
+    nameEn: 'Granddaughter of the Prophet',
+    slug: 'granddaughter-of-prophet',
+  },
+  {
+    name: 'زوجة النبي',
+    nameEn: 'Wife of the Prophet',
+    slug: 'wife-of-prophet',
+  },
+  {
+    name: 'أول زوجات النبي',
+    nameEn: 'First Wife of the Prophet',
+    slug: 'first-wife',
+  },
+  {
+    name: 'ابن عم النبي',
+    nameEn: 'Cousin of the Prophet',
+    slug: 'cousin-of-prophet',
+  },
+];

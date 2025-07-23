@@ -78,7 +78,7 @@ async function main() {
             status: participation.status as any, // Cast string[] to ParticipationStatus[]
           },
         });
-        console.log(`  [BattleParticipation] Seeded: ${person.name} in ${participation.battleSlug}`);
+        console.log(`  [BattleParticipation] Seeded: ${person.slug} in ${participation.battleSlug}`);
       } else {
         console.warn(battleId)
         console.warn(`⚠️ Could not find person or battle for participation:`, participation);

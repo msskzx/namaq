@@ -64,6 +64,14 @@ const translations = {
     personLoadError: 'Failed to load person data',
     personGenericError: 'An error occurred while loading data',
     ayatReferences: 'Verses revealed about',
+    // Battle participation statuses
+    battleStatus: {
+      MARTYRED: 'Martyred',
+      INJURED: 'Injured',
+      CAPTURED: 'Captured',
+      ABSENT_EXCUSED: 'Absent (Excused)',
+    },
+    battlesAndExpeditions: 'Battles & Expeditions',
     // Categories
     relationTypes: {
       FATHER: 'Father',
@@ -212,6 +220,14 @@ const translations = {
     personLoadError: 'تعذر تحميل بيانات الشخصية',
     personGenericError: 'حدث خطأ أثناء تحميل البيانات',
     ayatReferences: 'آيات نزلت في',
+    // Battle participation statuses
+    battleStatus: {
+      MARTYRED: 'استشهد',
+      INJURED: 'جُرح',
+      CAPTURED: 'أُسر',
+      ABSENT_EXCUSED: 'غائب بعذر',
+    },
+    battlesAndExpeditions: 'المعارك والغزوات',
     relationTypes: {
       FATHER: 'أب',
       MOTHER: 'أم',
