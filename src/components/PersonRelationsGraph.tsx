@@ -255,7 +255,7 @@ export default function PersonRelationsGraph({ person, relationsFrom, relationsT
           }
         })()}
         {/* Relation nodes */}
-        {relationPairList.map(([, rel], i) => {
+        {relationPairList.map(([, rel]) => {
           const position = nodePositions.find(pos => pos.id === rel.id);
           if (!position) return null;
           
