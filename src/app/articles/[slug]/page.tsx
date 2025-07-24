@@ -36,8 +36,7 @@ export default function ArticleDetailPage() {
                       <Badge
                         href={`/categories/${cat.slug}`}
                         text={language === 'ar' ? cat.name : cat.nameEn || cat.name}
-                        color="bg-indigo-100 dark:bg-indigo-950"
-                        className="border border-amber-400 text-xs font-semibold"
+                        color="blue"
                       />
                     </li>
                   ))}

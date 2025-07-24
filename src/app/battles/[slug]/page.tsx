@@ -57,7 +57,7 @@ const BattleDetailPage: React.FC = () => {
                   <span className="text-gray-800 dark:text-gray-300">{battle.hijri_year}</span>
                 </div>
               )}
-              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100 mt-8">
+              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-200 mt-8">
                 {language === 'ar' ? 'المشاركون' : 'Participants'}
               </h2>
               {battle.participations && battle.participations.length > 0 ? (

@@ -23,8 +23,7 @@ const PersonCard: React.FC<PersonCardProps> = ({ person, language = 'ar' }) => {
               <Badge
                 key={title.id}
                 text={language === 'ar' && title.name ? title.name : title.nameEn || title.name}
-                color="bg-indigo-100 dark:bg-indigo-900"
-                className="text-s font-semibold border border-amber-400"
+                color="indigo"
               />
             ))}
         </div>

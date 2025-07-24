@@ -10,7 +10,7 @@ interface PersonRelationsGraphProps {
   relationsTo: RelationTo[];
 }
 
-const CANVAS_SIZE = 800;
+const CANVAS_SIZE = 1200;
 const NODE_RADIUS = 80;
 const CHILD_NODE_RADIUS = 60;
 const CENTER_X = CANVAS_SIZE / 2;
@@ -137,7 +137,7 @@ export default function PersonRelationsGraph({ person, relationsFrom, relationsT
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
   
   // Zoom and pan state
-  const [transform, setTransform] = useState({ x: 50, y: 50, scale: 0.8 });
+  const [transform, setTransform] = useState({ x: 100, y: 100, scale: 0.8 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const svgRef = useRef<SVGSVGElement>(null);
@@ -186,7 +186,7 @@ export default function PersonRelationsGraph({ person, relationsFrom, relationsT
   
   // Reset zoom and pan
   const resetView = useCallback(() => {
-    setTransform({ x: 50, y: 50, scale: 0.8 });
+    setTransform({ x: 100, y: 100, scale: 0.8 });
   }, []);
 
   return (

@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import type { Battle } from '@/types/battle';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarAlt, faShieldAlt, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 
 interface BattleCardProps {
   battle: Battle;
@@ -18,7 +18,8 @@ const BattleCard: React.FC<BattleCardProps> = ({ battle, language, url }) => {
  >
    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-4 w-full transition-all duration-200 hover:shadow-lg hover:border-amber-300 dark:hover:border-amber-500 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
      <div className="flex items-center justify-between mb-2">
-       <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+       <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-200 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors flex items-center gap-2">
+         <FontAwesomeIcon icon={faShieldAlt} className="w-5 h-5 text-amber-500 dark:text-amber-400" />
          {language === 'ar' ? battle.name : battle.nameEn || battle.name}
        </h3>
        {battle.hijri_year && (
@@ -31,12 +32,11 @@ const BattleCard: React.FC<BattleCardProps> = ({ battle, language, url }) => {
      
      {battle.location && (
        <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+         <FontAwesomeIcon icon={faLocationDot} className="w-5 h-5 text-indigo-400" />
          <span className="font-medium">{language === 'ar' ? 'الموقع:' : 'Location:'}</span> 
          {language === 'ar' ? battle.location : battle.locationEn || battle.location}
        </div>
      )}
-     
-     
    </div>
  </Link>
   );

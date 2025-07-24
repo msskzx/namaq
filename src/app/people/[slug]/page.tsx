@@ -114,17 +114,7 @@ const PersonDetailPage = ({ params }: PageProps) => {
                 key={title.id}
                 href={`/people?title=${title.slug}`}
                 text={language === 'ar' && title.name ? title.name : title.nameEn || title.name}
-                color="bg-indigo-100 dark:bg-indigo-900"
-                className="text-s font-semibold border border-amber-400"
-              />
-            ))}
-            {person.participations && person.participations.length > 0 && person.participations.map((p) => (
-              <Badge
-                key={p.battle.id}
-                href={`/battles/${p.battle.slug}`}
-                text={language === 'ar' ? p.battle.name : p.battle.nameEn || p.battle.name}
-                color="bg-yellow-100 dark:bg-amber-900"
-                className="text-s font-semibold border border-amber-400"
+                color="indigo"
               />
             ))}
           </div>
