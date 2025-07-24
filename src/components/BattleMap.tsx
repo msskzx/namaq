@@ -24,7 +24,7 @@ const BattleMap: React.FC<BattleMapProps> = ({
   const { language } = useLanguage();
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<google.maps.Map | null>(null);
-  const markersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>([]);
+  const markersRef = useRef<google.maps.Marker[]>([]);
   const infoWindowsRef = useRef<google.maps.InfoWindow[]>([]);
 
   useEffect(() => {
@@ -79,22 +79,38 @@ const BattleMap: React.FC<BattleMapProps> = ({
       if (!mapInstance.current) return;
 
       // Clear existing markers and info windows
-      markersRef.current.forEach(marker => marker.remove());
+      markersRef.current.forEach(marker => marker.setMap(null));
       infoWindowsRef.current.forEach(window => window.close());
       markersRef.current = [];
       infoWindowsRef.current = [];
 
       battles.forEach(battle => {
-        if (!battle.location) return;
+        // Skip if battle doesn't have coordinates
+        if (battle.latitude == null || battle.longitude == null) return;
 
-        // In a real app, you would geocode the location string to get coordinates
-        // For now, we'll use a mock function that returns random coordinates near the center
-        const coordinates = getMockCoordinates(defaultCenter);
+        const coordinates = {
+          lat: battle.latitude,
+          lng: battle.longitude
+        };
 
-        const marker = new google.maps.marker.AdvancedMarkerElement({
+        const marker = new google.maps.Marker({
           map: mapInstance.current,
           position: coordinates,
           title: language === 'ar' ? battle.name : battle.nameEn || battle.name,
+          icon: {
+            path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+            fillColor: '#ec4899',
+            fillOpacity: 0.9,
+            strokeWeight: 2,
+            strokeColor: '#ffffff',
+            scale: 8,
+          },
+          label: {
+            text: language === 'ar' ? battle.name : battle.nameEn || battle.name,
+            color: '#000', // any CSS color
+            fontSize: '14px',
+            fontWeight: 'bold', // optional
+          }
         });
 
         const infoWindow = new google.maps.InfoWindow({
@@ -130,20 +146,13 @@ const BattleMap: React.FC<BattleMapProps> = ({
       });
     };
 
-    // Helper function to get mock coordinates (replace with actual geocoding in production)
-    const getMockCoordinates = (center: { lat: number; lng: number }) => {
-      // Add small random offset to center for demo purposes
-      return {
-        lat: center.lat + (Math.random() * 4 - 2),
-        lng: center.lng + (Math.random() * 4 - 2),
-      };
-    };
+
 
     initMap();
 
     // Clean up
     return () => {
-      markersRef.current.forEach(marker => marker.remove());
+      markersRef.current.forEach(marker => marker.setMap(null));
       infoWindowsRef.current.forEach(window => window.close());
     };
   }, [battles, defaultCenter, defaultZoom, language]);
