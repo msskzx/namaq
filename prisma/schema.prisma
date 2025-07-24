@@ -127,20 +127,37 @@ model AnalyticsEvent {
 
 // Historical figures model
 model Person {
-  id          String   @id @default(cuid())
-  name        String
-  picture     String?
-  fullName    String?
-  appearance  String?
-  virtues     String?
-  ayat        Json? // Array of { surah: number, ayah: number }
-  slug        String @unique
+  id                          String               @id @default(cuid())
+  name                        String
+  fullName                    String?              
+  nameTransliterated          String?              // Transliterated name for search/display
+  birthYearHijri              String?              // e.g., "53 BH", "1 AH" (store as string for flexibility)
+  birthYearGregorian          String?              // e.g., "570 CE", "622 CE"
+  deathYearHijri              String?
+  deathYearGregorian          String?
+  placeOfBirthArabic          String?
+  placeOfBirthTransliterated  String?
+  placeOfDeathArabic          String?
+  placeOfDeathTransliterated  String?
+
+  bioTextSiyarArabic          String?              @db.Text // Full biography text from Siyar
+  bioTextSiyarSummaryEn       String?              // Optional: AI-generated or manual summary
+  siyarSourceVolume           String?              // e.g., "1", "28"
+  siyarSourcePageStart        String?              // e.g., "150"
+  siyarSourcePageEnd          String?              // e.g., "160"
+
+  picture                     String?                // will contain some illustraion of the name probably
+  appearance                  String?                // description of the appearance
+  virtues                     String?                // description of the virtues should be fetched from a book
+  ayat                        Json?                // Array of { surah: number, ayah: number } for Quranic references
+  slug                        String               @unique // Unique slug for person's page
 
   // Relations
-  relationsFrom PersonRelation[] @relation("FromPerson")
-  relationsTo   PersonRelation[] @relation("ToPerson")
-  titles        Title[] @relation("PersonTitles")
-  participations BattleParticipation[]
+  relationsFrom               PersonRelation[] @relation("FromPerson")
+  relationsTo                 PersonRelation[] @relation("ToPerson")
+  titles                      Title[] @relation("PersonTitles")
+  participations              BattleParticipation[]
+  events                      Event[] // Renamed from PersonEvent
 
   @@map("persons")
 }
@@ -207,16 +224,24 @@ model Title {
 }
 
 model Battle {
-  id          String   @id @default(cuid())
-  name        String
-  slug        String   @unique
-  location    String?
-  hijri_year  Int?
-  nameEn      String?
-  locationEn  String?
+  id           String              @id @default(cuid())
+  name         String
+  slug         String              @unique
+  location     String?             
+  locationEn   String?             
+  hijri_year   Int?
+  nameEn       String?
+
+  // New fields for Google Maps coordinates
+  latitude     Float?              // Latitude coordinate (e.g., 27.6099)
+  longitude    Float?              // Longitude coordinate (e.g., 35.7501)
 
   // Relations
   participations BattleParticipation[]
+  events         Event[] // Add a relation from Event to Battle if needed for a specific event type
+
+  createdAt    DateTime            @default(now()) // Add createdAt and updatedAt for better tracking
+  updatedAt    DateTime            @updatedAt
 
   @@map("battles")
 }
@@ -241,4 +266,40 @@ model BattleParticipation {
   status       ParticipationStatus[]
 
   @@unique([personId, battleId])
+}
+
+model Event {
+  id                      String       @id @default(cuid())
+  type                    EventType
+  hijriYear               String?
+  gregorianYear           String?
+  hijriDate               String?
+  gregorianDate           DateTime?
+  location                String?
+  locationTransliterated  String?
+  description             String?      @db.Text
+  descriptionTransliterated String?  @db.Text
+  metadata                Json?
+  createdAt               DateTime     @default(now())
+  updatedAt               DateTime     @updatedAt
+  
+  // Relations
+  people                  Person[]
+  battleId                String?
+  battle                  Battle?      @relation(fields: [battleId], references: [id])
+
+  @@map("events") // Map to 'events' table
+} 
+
+enum EventType {
+  BIRTH
+  DEATH
+  MARRIAGE
+  BATTLE
+  GAVE_BIRTH
+  LIBERATED
+  MET
+  TRAVEL
+  HIJRA
+  HIJRA_HABASHA
 }

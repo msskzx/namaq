@@ -6,6 +6,8 @@ export const battles = [
     hijri_year: 2,
     nameEn: 'Battle of Badr',
     locationEn: 'Badr',
+    latitude: 27.6099, // Approximate latitudeitude for Badr, Saudi Arabia
+    longitude: 35.7501, // Approximate Longitude for Badr, Saudi Arabia
   },
   {
     name: 'غزوة أحد',
@@ -14,6 +16,8 @@ export const battles = [
     hijri_year: 3,
     nameEn: 'Battle of Uhud',
     locationEn: 'Uhud',
+    latitude: 24.5085, // Approximate latitudeitude for Mount Uhud, Medina
+    longitude: 39.5960, // Approximate Longitude for Mount Uhud, Medina
   },
   {
     name: 'غزوة الخندق',
@@ -22,6 +26,8 @@ export const battles = [
     hijri_year: 5,
     nameEn: 'Battle of the Trench',
     locationEn: 'Medina',
+    latitude: 24.4706, // Approximate latitudeitude for Medina, Saudi Arabia
+    longitude: 39.6121, // Approximate Longitude for Medina, Saudi Arabia
   },
   {
     name: 'غزوة بني قريظة',
@@ -30,6 +36,8 @@ export const battles = [
     hijri_year: 5,
     nameEn: 'Siege of Banu Qurayzah',
     locationEn: 'Medina',
+    latitude: 24.4706, // Approximate latitudeitude for Medina, Saudi Arabia
+    longitude: 39.6121, // Approximate Longitude for Medina, Saudi Arabia
   },
   {
     name: 'صلح الحديبية',
@@ -38,6 +46,8 @@ export const battles = [
     hijri_year: 6,
     nameEn: 'Treaty of Hudaybiyyah',
     locationEn: 'Hudaybiyyah',
+    latitude: 21.5794, // Approximate latitudeitude for Al-Hudaybiyyah (near Mecca)
+    longitude: 39.6806, // Approximate Longitude for Al-Hudaybiyyah (near Mecca)
   },
   {
     name: 'غزوة خيبر',
@@ -46,6 +56,8 @@ export const battles = [
     hijri_year: 7,
     nameEn: 'Battle of Khaybar',
     locationEn: 'Khaybar',
+    latitude: 25.4194, // Approximate latitudeitude for Khaybar, Saudi Arabia
+    longitude: 39.4678, // Approximate Longitude for Khaybar, Saudi Arabia
   },
   {
     name: 'غزوة مؤتة',
@@ -54,6 +66,8 @@ export const battles = [
     hijri_year: 8,
     nameEn: 'Battle of Mu\'tah',
     locationEn: 'Mu\'tah',
+    latitude: 31.1092, // Approximate latitudeitude for Mutah, Jordan
+    longitude: 35.7336, // Approximate Longitude for Mutah, Jordan
   },
   {
     name: 'فتح مكة',
@@ -62,6 +76,8 @@ export const battles = [
     hijri_year: 8,
     nameEn: 'Conquest of Mecca',
     locationEn: 'Mecca',
+    latitude: 21.3891, // Approximate latitudeitude for Mecca, Saudi Arabia
+    longitude: 39.8579, // Approximate Longitude for Mecca, Saudi Arabia
   },
   {
     name: 'غزوة حنين',
@@ -70,6 +86,8 @@ export const battles = [
     hijri_year: 8,
     nameEn: 'Battle of Hunayn',
     locationEn: 'Hunayn',
+    latitude: 21.6667, // Approximate latitudeitude for Wadi Hunayn (near Mecca)
+    longitude: 39.9833, // Approximate Longitude for Wadi Hunayn (near Mecca)
   },
   {
     name: 'غزوة الطائف',
@@ -78,6 +96,8 @@ export const battles = [
     hijri_year: 8,
     nameEn: 'Siege of Taif',
     locationEn: 'Taif',
+    latitude: 21.2703, // Approximate latitudeitude for Taif, Saudi Arabia
+    longitude: 40.4162, // Approximate Longitude for Taif, Saudi Arabia
   },
   {
     name: 'غزوة تبوك',
@@ -86,6 +106,8 @@ export const battles = [
     hijri_year: 9,
     nameEn: 'Expedition of Tabuk',
     locationEn: 'Tabuk',
+    latitude: 28.3996, // Approximate latitudeitude for Tabuk, Saudi Arabia
+    longitude: 36.5714, // Approximate Longitude for Tabuk, Saudi Arabia
   },
   {
     name: 'معركة ذات السلاسل',
@@ -94,6 +116,8 @@ export const battles = [
     hijri_year: 12,
     nameEn: 'Battle of Chains',
     locationEn: 'Iraq',
+    latitude: 30.5562, // Approximate latitudeitude for Kazma (near Basra), Kuwait (historical location sometimes disputed, often placed near the modern Kuwait-Iraq border)
+    longitude: 47.7958, // Approximate Longitude for Kazma
   },
   {
     name: 'معركة أجنادين',
@@ -102,6 +126,8 @@ export const battles = [
     hijri_year: 13,
     nameEn: 'Battle of Ajnadayn',
     locationEn: 'Palestine',
+    latitude: 31.7000, // Approximate latitudeitude for the general area of Ajnadayn, Palestine
+    longitude: 34.8000, // Approximate Longitude for the general area of Ajnadayn, Palestine
   },
   {
     name: 'معركة فحل',
@@ -110,6 +136,8 @@ export const battles = [
     hijri_year: 13,
     nameEn: 'Battle of Fihl',
     locationEn: 'Jordan',
+    latitude: 32.4833, // Approximate latitudeitude for Pella (Fihl), Jordan
+    longitude: 35.6000, // Approximate Longitude for Pella (Fihl), Jordan
   },
   {
     name: 'معركة اليرموك',
@@ -118,6 +146,8 @@ export const battles = [
     hijri_year: 15,
     nameEn: 'Battle of Yarmuk',
     locationEn: 'Jordan',
+    latitude: 32.7431, // Approximate latitudeitude for Yarmouk River area, Jordan/Syria border
+    longitude: 35.8016, // Approximate Longitude for Yarmouk River area
   },
   {
     name: 'فتح دمشق',
@@ -126,6 +156,8 @@ export const battles = [
     hijri_year: 14,
     nameEn: 'Conquest of Damascus',
     locationEn: 'Damascus',
+    latitude: 33.5130, // Approximate latitudeitude for Damascus, Syria
+    longitude: 36.2913, // Approximate Longitude for Damascus, Syria
   },
   {
     name: 'فتح بيت المقدس',
@@ -134,6 +166,8 @@ export const battles = [
     hijri_year: 16,
     nameEn: 'Conquest of Jerusalem',
     locationEn: 'Jerusalem',
+    latitude: 31.7683, // Approximate latitudeitude for Jerusalem
+    longitude: 35.2137, // Approximate Longitude for Jerusalem
   },
   {
     name: 'معركة القادسية',
@@ -142,6 +176,8 @@ export const battles = [
     hijri_year: 15,
     nameEn: 'Battle of al-Qadisiyyah',
     locationEn: 'Iraq',
+    latitude: 31.6833, // Approximate latitudeitude for Al-Qadisiyyah (modern-day Iraq)
+    longitude: 44.1500, // Approximate Longitude for Al-Qadisiyyah
   },
   {
     name: 'فتح المدائن',
@@ -150,6 +186,8 @@ export const battles = [
     hijri_year: 16,
     nameEn: 'Conquest of Ctesiphon',
     locationEn: 'Iraq',
+    latitude: 33.0988, // Approximate latitudeitude for Ctesiphon (Salman Pak, Iraq)
+    longitude: 44.5779, // Approximate Longitude for Ctesiphon
   },
   {
     name: 'معركة نهاوند',
@@ -158,6 +196,8 @@ export const battles = [
     hijri_year: 21,
     nameEn: 'Battle of Nahavand',
     locationEn: 'Iran',
+    latitude: 34.1950, // Approximate latitudeitude for Nahavand, Iran
+    longitude: 48.3750, // Approximate Longitude for Nahavand, Iran
   },
   {
     name: 'فتح الإسكندرية',
@@ -166,6 +206,8 @@ export const battles = [
     hijri_year: 20,
     nameEn: 'Conquest of Alexandria',
     locationEn: 'Egypt',
+    latitude: 31.2001, // Approximate latitudeitude for Alexandria, Egypt
+    longitude: 29.9187, // Approximate Longitude for Alexandria, Egypt
   },
   {
     name: 'معركة ذات الصواري',
@@ -174,6 +216,8 @@ export const battles = [
     hijri_year: 34,
     nameEn: 'Battle of the Masts',
     locationEn: 'Mediterranean Sea',
+    latitude: 34.0000, // Central Mediterranean Sea, approximate
+    longitude: 28.0000, // Central Mediterranean Sea, approximate
   },
   {
     name: 'فتح قبرص',
@@ -182,6 +226,8 @@ export const battles = [
     hijri_year: 28,
     nameEn: 'Conquest of Cyprus',
     locationEn: 'Cyprus',
+    latitude: 35.1264, // Central Cyprus, approximate
+    longitude: 33.4299, // Central Cyprus, approximate
   },
   {
     name: 'معركة صفين',
@@ -190,6 +236,8 @@ export const battles = [
     hijri_year: 37,
     nameEn: 'Battle of Siffin',
     locationEn: 'Syria',
+    latitude: 35.8000, // Approximate latitudeitude for Siffin (near Raqqa, Syria)
+    longitude: 39.0000, // Approximate Longitude for Siffin
   },
   {
     name: 'معركة الجمل',
@@ -198,6 +246,8 @@ export const battles = [
     hijri_year: 36,
     nameEn: 'Battle of the Camel',
     locationEn: 'Basra',
+    latitude: 30.5000, // Approximate latitudeitude for Basra, Iraq
+    longitude: 47.8000, // Approximate Longitude for Basra, Iraq
   },
   {
     name: 'معركة النهروان',
@@ -206,6 +256,8 @@ export const battles = [
     hijri_year: 38,
     nameEn: 'Battle of Nahrawan',
     locationEn: 'Iraq',
+    latitude: 33.3000, // Approximate latitudeitude for Nahrawan Canal area, Iraq
+    longitude: 45.0000, // Approximate Longitude for Nahrawan Canal area
   },
   {
     name: 'معركة كربلاء',
@@ -214,6 +266,8 @@ export const battles = [
     hijri_year: 61,
     nameEn: 'Battle of Karbala',
     locationEn: 'Karbala',
+    latitude: 32.6163, // Approximate latitudeitude for Karbala, Iraq
+    longitude: 44.0768, // Approximate Longitude for Karbala, Iraq
   },
   {
     name: 'فتح الأندلس',
@@ -222,13 +276,17 @@ export const battles = [
     hijri_year: 92,
     nameEn: 'Conquest of Al-Andalus',
     locationEn: 'Iberian Peninsula',
+    latitude: 39.0000, // Central Iberian Peninsula, approximate
+    longitude: -4.0000, // Central Iberian Peninsula, approximate
   },
   {
     name: 'معركة بلاط الشهداء',
-    slug: 'balat-ash-shuhada',
+    slug: 'balatitude-ash-shuhada',
     location: 'فرنسا',
     hijri_year: 114,
     nameEn: 'Battle of Tours',
     locationEn: 'France',
+    latitude: 47.3871, // Approximate latitudeitude for Tours, France
+    longitude: 0.6896, // Approximate Longitude for Tours, France
   },
-]; 
+];

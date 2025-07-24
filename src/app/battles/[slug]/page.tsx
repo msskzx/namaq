@@ -3,19 +3,24 @@
 import React from "react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
+import dynamic from 'next/dynamic';
 import { useLanguage } from "@/components/LanguageContext";
 import translations from "@/components/translations";
-import type { Battle } from "@/types/battle";
+import type { BattleWithParticipants } from "@/types/battle";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShieldHalved, faLocationDot, faCalendarDays } from '@fortawesome/free-solid-svg-icons';
+import { faShieldHalved, faLocationDot, faCalendarDays, faMapLocationDot } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import PersonNameCard from '@/components/PersonNameCard';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+// Dynamically import the BattleMap component with SSR disabled
+const BattleMap = dynamic(() => import('@/components/BattleMap'), {
+  ssr: false, // Disable server-side rendering for the map component
+  loading: () => <div className="h-[500px] w-full bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse flex items-center justify-center">
+    <span className="text-gray-500">Loading map...</span>
+  </div>
+});
 
-interface BattleWithParticipants extends Battle {
-  participations?: { person: { slug: string; name: string; nameAr?: string } }[];
-}
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const BattleDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -45,16 +50,38 @@ const BattleDetailPage: React.FC = () => {
           )}
           {battle && (
             <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-amber-400 p-6 font-geistmono">
-              <div className="mb-2 flex items-center gap-2">
-                <FontAwesomeIcon icon={faLocationDot} className="text-amber-400 w-5 h-5" />
-                <span className="font-semibold text-gray-800 dark:text-gray-300">{language === 'ar' ? t.battles.location : t.battles.locationEn}:</span>
-                <span className="text-gray-800 dark:text-gray-300">{language === 'ar' ? battle.location : battle.locationEn || battle.location || '-'}</span>
+              <div className="mb-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <FontAwesomeIcon icon={faLocationDot} className="text-amber-400 w-5 h-5" />
+                  <span className="font-semibold text-gray-800 dark:text-gray-300">{language === 'ar' ? t.battles.location : t.battles.locationEn}:</span>
+                  <span className="text-gray-800 dark:text-gray-300">{language === 'ar' ? battle.location : battle.locationEn || battle.location || '-'}</span>
+                </div>
               </div>
               {battle.hijri_year && (
                 <div className="mb-2 flex items-center gap-2">
                   <FontAwesomeIcon icon={faCalendarDays} className="text-amber-400 w-5 h-5" />
                   <span className="font-semibold text-gray-800 dark:text-gray-300">{t.battles.hijriYear}:</span>
                   <span className="text-gray-800 dark:text-gray-300">{battle.hijri_year}</span>
+                </div>
+              )}
+              {battle.latitude && battle.longitude && (
+                <div className="mt-4 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+                  <div className="p-4 bg-amber-50 dark:bg-gray-800 flex items-center gap-2">
+                    <FontAwesomeIcon icon={faMapLocationDot} className="text-amber-500" />
+                    <h3 className="font-semibold text-amber-800 dark:text-amber-400">
+                      {language === 'ar' ? 'موقع المعركة على الخريطة' : 'Battle Location on Map'}
+                    </h3>
+                  </div>
+                  <div className="h-[500px] w-full">
+                    <BattleMap 
+                      battles={[battle]} 
+                      defaultCenter={{
+                        lat: battle.latitude,
+                        lng: battle.longitude
+                      }}
+                      defaultZoom={12}
+                    />
+                  </div>
                 </div>
               )}
               <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-200 mt-8">

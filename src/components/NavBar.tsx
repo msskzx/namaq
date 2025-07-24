@@ -72,7 +72,11 @@ const NavBar: React.FC = () => {
   return (
     <nav className="bg-gray-50 dark:bg-gray-950 w-full border-b-2 border-amber-400 shadow-lg">
       <div className="container mx-auto flex justify-between items-center py-4 px-4">
-        <Link href="/" className="text-amber-600 dark:text-amber-400 text-2xl font-bold hover:text-amber-300 transition-colors">
+        <Link 
+          href="/" 
+          className="text-amber-600 dark:text-amber-400 text-2xl font-bold hover:text-amber-300 transition-colors"
+          onClick={() => setMenuOpen(false)}
+        >
           {translations[language].title}
         </Link>
         {/* Desktop Nav */}
