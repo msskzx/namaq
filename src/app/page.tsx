@@ -118,7 +118,7 @@ export default function Home() {
               : 'Explore the lives and events of the Prophet Muhammad and his noble Companions through clear timelines, animations, and interactive figures, making learning a unique experience.'}
           </p>
           
-          <Timeline participations={prophet?.participations || []} />
+          <Timeline events={prophet?.events || []} />
         </div>
 
         

@@ -157,7 +157,7 @@ model Person {
   relationsTo                 PersonRelation[] @relation("ToPerson")
   titles                      Title[] @relation("PersonTitles")
   participations              BattleParticipation[]
-  events                      Event[] // Renamed from PersonEvent
+  events                      Event[] 
 
   @@map("persons")
 }
@@ -270,9 +270,13 @@ model BattleParticipation {
 
 model Event {
   id                      String       @id @default(cuid())
+  name                    String
+  nameEn                  String?
   type                    EventType
-  hijriYear               String?
-  gregorianYear           String?
+  hijriYear               Int?
+  hijriPeriod             String?
+  gregorianYear           Int?
+  gregorianPeriod         String?
   hijriDate               String?
   gregorianDate           DateTime?
   location                String?
@@ -302,4 +306,5 @@ enum EventType {
   TRAVEL
   HIJRA
   HIJRA_HABASHA
+  OTHER
 }

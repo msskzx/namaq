@@ -122,9 +122,9 @@ const PersonDetailPage = ({ params }: PageProps) => {
 
         
         {/* Horizontal Timeline */}
-        <Timeline participations={person.participations || []} />
+        <Timeline events={person.events || [] } />
       
-      <div className="flex flex-col gap-6 mt-10">
+        <div className="flex flex-col gap-6 mt-10">
           {person.fullName && (
             <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
               <div className="font-bold text-2xl mb-2 text-amber-400">{t.fullName}</div>
@@ -183,4 +183,4 @@ const PersonDetailPage = ({ params }: PageProps) => {
   );
 };
 
-export default PersonDetailPage; 
+export default PersonDetailPage;

@@ -17,7 +17,8 @@
     "seed:titles": "tsx prisma/seedTitles.ts",
     "seed:battles": "tsx prisma/seedBattles.ts",
     "seed:categories": "tsx prisma/categorySeed.ts",
-    "seed:articles": "tsx prisma/articleSeed.ts"
+    "seed:articles": "tsx prisma/articleSeed.ts",
+    "seed:events": "tsx prisma/seedEvents.ts"
   },
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.7.2",

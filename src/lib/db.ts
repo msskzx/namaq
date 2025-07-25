@@ -105,21 +105,3 @@ export const getPeople = async () => {
     orderBy: { name: 'asc' },
   });
 };
-
-export const getPersonBySlug = async (slug: string) => {
-  return await prisma.person.findUnique({
-    where: { slug },
-    include: {
-      titles: true,
-      relationsFrom: {
-        include: { to: true },
-      },
-      relationsTo: {
-        include: { from: true },
-      },
-      participations: {
-        include: { battle: true },
-      },
-    },
-  });
-}; 

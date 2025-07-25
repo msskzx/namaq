@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getPersonBySlug } from '@/lib/db';
+import { prisma } from '@/lib/prisma';
 
 export async function GET(
   _request: Request,
@@ -7,7 +7,26 @@ export async function GET(
 ) {
   try {
     const { slug } = await params;
-    const person = await getPersonBySlug(slug);
+
+    const person = await prisma.person.findUnique({
+      where: { slug },
+      include: {
+        titles: true,
+        relationsFrom: {
+          include: { to: true },
+        },
+        relationsTo: {
+          include: { from: true },
+        },
+        participations: {
+          include: { battle: true },
+        },
+        events: {
+          include: { battle: true },
+        },
+      },
+    });
+
     if (!person) {
       return NextResponse.json(
         { error: 'Not found' },

@@ -72,6 +72,20 @@ const translations = {
       ABSENT_EXCUSED: 'Absent (Excused)',
     },
     battlesAndExpeditions: 'Battles & Expeditions',
+    // Event Types
+    eventTypes: {
+      BIRTH: 'Birth',
+      DEATH: 'Death',
+      MARRIAGE: 'Marriage',
+      BATTLE: 'Battle',
+      GAVE_BIRTH: 'Gave Birth',
+      LIBERATED: 'Liberated',
+      MET: 'Met',
+      TRAVEL: 'Travel',
+      HIJRA: 'Hijra',
+      HIJRA_HABASHA: 'Hijra to Abyssinia',
+      OTHER: 'Other',
+    },
     // Categories
     relationTypes: {
       FATHER: 'Father',
@@ -228,6 +242,20 @@ const translations = {
       ABSENT_EXCUSED: 'غائب بعذر',
     },
     battlesAndExpeditions: 'المعارك والغزوات',
+    // أنواع الأحداث
+    eventTypes: {
+      BIRTH: 'ولادة',
+      DEATH: 'وفاة',
+      MARRIAGE: 'زواج',
+      BATTLE: 'معركة',
+      GAVE_BIRTH: 'ولادة',
+      LIBERATED: 'تحرير',
+      MET: 'لقاء',
+      TRAVEL: 'سفر',
+      HIJRA: 'هجرة',
+      HIJRA_HABASHA: 'هجرة الحبشة',
+      OTHER: 'أخرى',
+    },
     relationTypes: {
       FATHER: 'أب',
       MOTHER: 'أم',
