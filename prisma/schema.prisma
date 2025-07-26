@@ -52,9 +52,9 @@ model UserPreferences {
 model Category {
   id            String   @id @default(cuid())
   name          String
-  nameEn        String?
+  nameTransliterated        String?
   description   String?
-  descriptionEn String?
+  descriptionTransliterated String?
   img           String?  // Image URL or path for the category
   slug          String   @unique
   createdAt     DateTime @default(now())
@@ -217,7 +217,7 @@ enum RelationType {
 model Title {
   id     String @id @default(cuid())
   name   String
-  nameEn String?
+  nameTransliterated String?
   desc   String?
   slug   String @unique
   people Person[] @relation("PersonTitles")
@@ -229,8 +229,11 @@ model Battle {
   slug         String              @unique
   location     String?             
   locationEn   String?             
-  hijri_year   Int?
-  nameEn       String?
+  hijriYear    Int?
+  hijriPeriod  String?
+  gregorianYear    Int?
+  gregorianPeriod  String?
+  nameTransliterated       String?
 
   // New fields for Google Maps coordinates
   latitude     Float?              // Latitude coordinate (e.g., 27.6099)
@@ -271,14 +274,13 @@ model BattleParticipation {
 model Event {
   id                      String       @id @default(cuid())
   name                    String
-  nameEn                  String?
+  nameTransliterated                  String?
+  slug                    String       @unique
   type                    EventType
   hijriYear               Int?
   hijriPeriod             String?
   gregorianYear           Int?
   gregorianPeriod         String?
-  hijriDate               String?
-  gregorianDate           DateTime?
   location                String?
   locationTransliterated  String?
   description             String?      @db.Text

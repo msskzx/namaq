@@ -22,7 +22,7 @@ const PersonCard: React.FC<PersonCardProps> = ({ person, language = 'ar' }) => {
             {person.titles && person.titles.length > 0 && person.titles.map((title) => (
               <Badge
                 key={title.id}
-                text={language === 'ar' && title.name ? title.name : title.nameEn || title.name}
+                text={language === 'ar' && title.name ? title.name : title.nameTransliterated || title.name}
                 color="indigo"
               />
             ))}

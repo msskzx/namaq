@@ -9,7 +9,7 @@ export async function seedTitles(prismaInstance: PrismaClient) {
         where: { slug: title.slug },
         update: {
           name: title.name,
-          nameEn: title.nameEn,
+          nameTransliterated: title.nameTransliterated,
         },
         create: title,
       });

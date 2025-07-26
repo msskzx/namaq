@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 export async function GET() {
   try {
     const battles = await prisma.battle.findMany({
-      orderBy: { hijri_year: 'asc' },
+      orderBy: { hijriYear: 'asc' },
     });
     return NextResponse.json(battles);
   } catch {

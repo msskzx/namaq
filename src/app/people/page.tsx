@@ -1,11 +1,11 @@
 import { Suspense } from 'react';
-import PeoplePageClient from './PeoplePageClient';
+import PersonPage from './PersonPage';
 
 export default function PeoplePage() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950">
       <Suspense fallback={<div>Loading...</div>}>
-        <PeoplePageClient />
+        <PersonPage />
       </Suspense>
     </div>
   );

@@ -7,7 +7,7 @@ interface TitleCardProps {
   title: {
     id: string;
     name: string;
-    nameEn: string | null;
+    nameTransliterated: string | null;
     slug: string;
   };
   language: string;
@@ -21,7 +21,7 @@ const TitleCard: React.FC<TitleCardProps> = ({ title, language, url }) => {
         <div className="flex items-center gap-2 mb-2">
           <FontAwesomeIcon icon={faCrown} className="text-amber-400 w-5 h-5" />
           <h3 className="text-lg font-semibold text-gray-800 dark:text-amber-400">
-            {language === 'ar' ? title.name : title.nameEn || title.name}
+            {language === 'ar' ? title.name : title.nameTransliterated || title.name}
           </h3>
         </div>
       </div>

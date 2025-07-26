@@ -96,7 +96,7 @@ const BattleMap: React.FC<BattleMapProps> = ({
         const marker = new google.maps.Marker({
           map: mapInstance.current,
           position: coordinates,
-          title: language === 'ar' ? battle.name : battle.nameEn || battle.name,
+          title: language === 'ar' ? battle.name : battle.nameTransliterated || battle.name,
           icon: {
             path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
             fillColor: '#ec4899',
@@ -106,7 +106,7 @@ const BattleMap: React.FC<BattleMapProps> = ({
             scale: 8,
           },
           label: {
-            text: language === 'ar' ? battle.name : battle.nameEn || battle.name,
+            text: language === 'ar' ? battle.name : battle.nameTransliterated || battle.name,
             color: '#000', // any CSS color
             fontSize: '14px',
             fontWeight: 'bold', // optional
@@ -117,11 +117,11 @@ const BattleMap: React.FC<BattleMapProps> = ({
           content: `
             <div class="p-2 max-w-xs">
               <h3 class="font-bold text-amber-600 dark:text-amber-400">
-                ${language === 'ar' ? battle.name : battle.nameEn || battle.name}
+                ${language === 'ar' ? battle.name : battle.nameTransliterated || battle.name}
               </h3>
-              ${battle.hijri_year ? `
+              ${battle.hijriYear ? `
                 <p class="text-sm text-gray-600 dark:text-gray-300">
-                  ${battle.hijri_year} ${language === 'ar' ? 'هـ' : 'AH'}
+                  ${battle.hijriYear} ${language === 'ar' ? 'هـ' : 'AH'}
                 </p>
               ` : ''}
               <p class="text-sm text-gray-700 dark:text-gray-200 mt-1">

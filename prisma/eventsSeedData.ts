@@ -4,7 +4,8 @@ export const eventsData = [
   // Birth Events
   {
     name: 'مولد النبي محمد ﷺ',
-    nameEn: 'Birth of the Prophet Muhammad (PBUH)',
+    nameTransliterated: 'Birth of the Prophet Muhammad (PBUH)',
+    slug: 'birth-prophet-muhammad',
     type: EventType.BIRTH,
     hijriYear: -53,
     hijriPeriod: '53 قبل الهجرة',
@@ -18,7 +19,8 @@ export const eventsData = [
   },
   {
     name: 'مولد فاطمة بنت محمد',
-    nameEn: 'Birth of Fatimah bint Muhammad',
+    nameTransliterated: 'Birth of Fatimah bint Muhammad',
+    slug: 'birth-fatimah',
     type: EventType.BIRTH,
     hijriYear: -3,
     hijriPeriod: '3 قبل الهجرة',
@@ -34,7 +36,8 @@ export const eventsData = [
   // Hijra Events
   {
     name: 'هجرة إلى المدينة',
-    nameEn: 'Hijra to Medina',
+    nameTransliterated: 'Hijra to Medina',
+    slug: 'hijra-to-medina',
     type: EventType.HIJRA,
     hijriYear: 1,
     hijriPeriod: '1 هـ',
@@ -49,7 +52,8 @@ export const eventsData = [
   },
   {
     name: 'الهجرة الأولى إلى الحبشة',
-    nameEn: 'First Hijra to Abyssinia',
+    nameTransliterated: 'First Hijra to Abyssinia',
+    slug: 'first-hijra-to-abyssinia',
     type: EventType.HIJRA_HABASHA,
     hijriYear: -7,
     hijriPeriod: '7 قبل الهجرة',
@@ -65,7 +69,8 @@ export const eventsData = [
   // Battle Events
   {
     name: 'غزوة بدر',
-    nameEn: 'Battle of Badr',
+    nameTransliterated: 'Battle of Badr',
+    slug: 'battle-of-badr',
     type: EventType.BATTLE,
     battleSlug: 'badr',
     hijriYear: 2,
@@ -84,7 +89,8 @@ export const eventsData = [
   },
   {
     name: 'غزوة أحد',
-    nameEn: 'Battle of Uhud',
+    nameTransliterated: 'Battle of Uhud',
+    slug: 'battle-of-uhud',
     type: EventType.BATTLE,
     battleSlug: 'uhud',
     hijriYear: 3,
@@ -103,7 +109,8 @@ export const eventsData = [
   },
   {
     name: 'غزوة الخندق',
-    nameEn: 'Battle of the Trench',
+    nameTransliterated: 'Battle of the Trench',
+    slug: 'battle-of-the-trench',
     type: EventType.BATTLE,
     battleSlug: 'khandaq',
     hijriYear: 5,
@@ -123,7 +130,8 @@ export const eventsData = [
   // Death Events
   {
     name: 'وفاة النبي محمد ﷺ',
-    nameEn: 'Passing of the Prophet Muhammad (PBUH)',
+    nameTransliterated: 'Passing of the Prophet Muhammad (PBUH)',
+    slug: 'passing-of-the-prophet-muhammad',
     type: EventType.DEATH,
     hijriYear: 11,
     hijriPeriod: '11 هـ',
@@ -138,7 +146,8 @@ export const eventsData = [
   },
   {
     name: 'نزول القرآن',
-    nameEn: 'First Revelation of the Quran',
+    nameTransliterated: 'First Revelation of the Quran',
+    slug: 'first-revelation-of-the-quran',
     type: EventType.OTHER,
     hijriYear: -12,
     hijriPeriod: '12 قبل الهجرة',
@@ -155,7 +164,8 @@ export const eventsData = [
   },
   {
     name: 'الإسراء والمعراج',
-    nameEn: 'Night Journey and Ascension (Isra and Mi\'raj)',
+    nameTransliterated: 'Night Journey and Ascension (Isra and Mi\'raj)',
+    slug: 'night-journey-and-ascension-isra-and-miraaj',
     type: EventType.TRAVEL,
     hijriYear: -10,
     hijriPeriod: '10 قبل الهجرة',
@@ -175,7 +185,8 @@ export const eventsData = [
   // slug: 'banu-qurayzah',
   {
     name: 'غزوة بني قريظة',
-    nameEn: 'Battle of Banu Qurayzah',
+    nameTransliterated: 'Battle of Banu Qurayzah',
+    slug: 'battle-of-bani-qurayzah',
     type: EventType.BATTLE,
     battleSlug: 'banu-qurayzah',
     hijriYear: 5,
@@ -195,7 +206,8 @@ export const eventsData = [
   // slug: 'hudaybiyyah',
   {
     name: 'صلح الحديبية',
-    nameEn: 'Treaty of Hudaybiyyah',
+    nameTransliterated: 'Treaty of Hudaybiyyah',
+    slug: 'treaty-of-hudaybiyyah',
     type: EventType.OTHER,
     hijriYear: 6,
     hijriPeriod: '6 هـ',
@@ -214,7 +226,8 @@ export const eventsData = [
   // slug: 'khaybar',
   {
     name: 'غزوة خيبر',
-    nameEn: 'Battle of Khaybar',
+    nameTransliterated: 'Battle of Khaybar',
+    slug: 'battle-of-khaybar',
     type: EventType.BATTLE,
     battleSlug: 'khaybar',
     hijriYear: 7,
@@ -234,7 +247,8 @@ export const eventsData = [
   // slug: 'fath-makkah',
   {
     name: 'فتح مكة',
-    nameEn: 'Conquest of Mecca',
+    nameTransliterated: 'Conquest of Mecca',
+    slug: 'conquest-of-mecca',
     type: EventType.BATTLE,
     battleSlug: 'fath-makkah',
     hijriYear: 8,
@@ -254,7 +268,8 @@ export const eventsData = [
   // slug: 'hunayn',
   {
     name: 'غزوة حنين',
-    nameEn: 'Battle of Hunayn',
+    nameTransliterated: 'Battle of Hunayn',
+    slug: 'battle-of-hunayn',
     type: EventType.BATTLE,
     battleSlug: 'hunayn',
     hijriYear: 8,
@@ -274,7 +289,8 @@ export const eventsData = [
   // slug: 'taif',
   {
     name: 'غزوة الطائف',
-    nameEn: 'Battle of Taif',
+    nameTransliterated: 'Battle of Taif',
+    slug: 'battle-of-taif',
     type: EventType.BATTLE,
     battleSlug: 'taif',
     hijriYear: 8,
@@ -294,7 +310,8 @@ export const eventsData = [
   // slug: 'tabuk',
   {
     name: 'غزوة تبوك',
-    nameEn: 'Battle of Tabuk',
+    nameTransliterated: 'Battle of Tabuk',
+    slug: 'battle-of-tabuk',
     type: EventType.BATTLE,
     battleSlug: 'tabuk',
     hijriYear: 9,

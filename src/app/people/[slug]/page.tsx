@@ -13,32 +13,24 @@ import type { Ayah } from '@/types/person';
 import BattleParticipationTimeline from '@/components/BattleParticipationTimeline';
 import Timeline from '@/components/Timeline';
 import type { Person } from '@/types/person';
+import useSWR from 'swr';
+import { useParams } from 'next/navigation';
+import { EventWithBattle } from '@/types/event';
 
-interface PageProps {
-  params: Promise<{ slug: string }>;
-}
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const PersonDetailPage = ({ params }: PageProps) => {
+const PersonDetailPage: React.FC = () => {
   const { language } = useLanguage();
   const t = translations[language];
-  const [person, setPerson] = useState<Person | null>(null);
+  const { slug } = useParams<{ slug: string }>();
+  const { data: person, error, isLoading } = useSWR<Person>(slug ? `/api/people/${slug}` : null, fetcher);
   const [ayatText, setAyatText] = useState<Ayah[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchPerson = async () => {
+    const fetchAyatText = async () => {
       try {
-        const { slug } = await params;
-        const response = await fetch(`/api/people/${slug}`);
-        if (!response.ok) {
-          setError(t.personLoadError);
-          return;
-        }
-        const data = await response.json();
-        setPerson(data);
         // Fetch ayah text for each ayat reference
-        if (Array.isArray(data.ayat) && data.ayat.length > 0) {
+        if (Array.isArray(person?.ayat) && person?.ayat.length > 0) {
           const fetchAyahText = async (surah: number, ayah: number): Promise<Ayah | null> => {
             const surahInfoRes = await fetch(`https://api.alquran.cloud/v1/surah/${surah}/ar.hafs`);
             const surahInfo = await surahInfoRes.json();
@@ -55,7 +47,7 @@ const PersonDetailPage = ({ params }: PageProps) => {
           };
           const fetchAllAyat = async () => {
             const results = await Promise.all(
-              (data.ayat as Ayah[]).map((ref) =>
+              (person.ayat as Ayah[]).map((ref) =>
                 ref && typeof ref.surah === 'number' && typeof ref.ayah === 'number'
                   ? fetchAyahText(ref.surah, ref.ayah)
                   : null
@@ -68,13 +60,12 @@ const PersonDetailPage = ({ params }: PageProps) => {
           setAyatText([]);
         }
       } catch {
-        setError(t.personGenericError);
-      } finally {
-        setIsLoading(false);
+        setAyatText([]);
+
       }
     };
-    fetchPerson();
-  }, [params, language, t]);
+    fetchAyatText();
+  }, [person?.ayat, language, t]);
 
   if (error) {
     return (
@@ -113,7 +104,7 @@ const PersonDetailPage = ({ params }: PageProps) => {
               <Badge
                 key={title.id}
                 href={`/people?title=${title.slug}`}
-                text={language === 'ar' && title.name ? title.name : title.nameEn || title.name}
+                text={language === 'ar' && title.name ? title.name : title.nameTransliterated || title.name}
                 color="indigo"
               />
             ))}
@@ -122,7 +113,7 @@ const PersonDetailPage = ({ params }: PageProps) => {
 
         
         {/* Horizontal Timeline */}
-        <Timeline events={person.events || [] } />
+        <Timeline events={person.events as EventWithBattle[] || [] } />
       
         <div className="flex flex-col gap-6 mt-10">
           {person.fullName && (

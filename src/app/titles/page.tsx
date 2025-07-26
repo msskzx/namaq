@@ -5,6 +5,7 @@ import translations from "@/components/translations";
 import useSWR from "swr";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import TitleCard from '@/components/TitleCard';
+import { TitleBase } from "@/types/title";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -27,7 +28,7 @@ export default function TitlesPage() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8">
             {Array.isArray(titles) && titles.length > 0 ? (
-              titles.map((title: import("@/generated/prisma").Title) => (
+              titles.map((title: TitleBase) => (
                 <TitleCard key={title.slug} title={title} language={language} url={`/titles/${title.slug}`} />
               ))
             ) : (

@@ -8,6 +8,8 @@ import { useParams } from "next/navigation";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCrown } from '@fortawesome/free-solid-svg-icons';
 import PersonNameCard from '@/components/PersonNameCard';
+import { PersonBase } from "@/types/person";
+import { TitleBase } from "@/types/title";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -15,7 +17,6 @@ export default function TitleDetailPage() {
   const { language } = useLanguage();
   const { slug } = useParams<{ slug: string }>();
   const { data: title, error, isLoading } = useSWR(slug ? `/api/titles/${slug}` : null, fetcher);
-  const { data: people, isLoading: isLoadingPeople } = useSWR(slug ? `/api/people?title=${slug}` : null, fetcher);
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div className="container mx-auto px-4 py-8">
@@ -28,7 +29,7 @@ export default function TitleDetailPage() {
                 <FontAwesomeIcon icon={faCrown} className="text-amber-400 w-10 h-10" />
               </div>
               <h1 className="text-4xl font-bold text-amber-400">
-                {title ? (language === 'ar' ? title.name : title.nameEn) : translations[language].motivation.titles.title}
+                {title ? (language === 'ar' ? title.name : title.nameTransliterated) : translations[language].motivation.titles.title}
               </h1>
             </div>
             {error && (
@@ -37,13 +38,14 @@ export default function TitleDetailPage() {
               </div>
             )}
             {title && (
-              <div className="bg-white dark:bg-indigo-950 rounded-xl shadow-lg border border-amber-400 p-6 mb-8">
-                {isLoadingPeople ? (
-                  <LoadingSpinner />
-                ) : people && people.length > 0 ? (
+              <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-amber-400 p-6 mb-4">
+                <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-200 mt-2">
+                  {language === 'ar' ? 'الأشخاص' : 'People'}
+                </h2>
+                {title.people && title.people.length > 0 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    {people.map((person: import("@/generated/prisma").Person) => (
-                      <PersonNameCard key={person.slug} person={person} language={language} />
+                    {title.people.map((person: PersonBase) => (
+                      <PersonNameCard key={person.id} person={person} language={language} />
                     ))}
                   </div>
                 ) : (

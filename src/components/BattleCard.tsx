@@ -20,12 +20,12 @@ const BattleCard: React.FC<BattleCardProps> = ({ battle, language, url }) => {
      <div className="flex items-center justify-between mb-2">
        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-200 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors flex items-center gap-2">
          <FontAwesomeIcon icon={faShieldAlt} className="w-5 h-5 text-amber-500 dark:text-amber-400" />
-         {language === 'ar' ? battle.name : battle.nameEn || battle.name}
+         {language === 'ar' ? battle.name : battle.nameTransliterated || battle.name}
        </h3>
-       {battle.hijri_year && (
+       {battle.hijriYear && (
          <div className="flex items-center gap-1 text-amber-600 dark:text-amber-400 font-medium">
            <FontAwesomeIcon icon={faCalendarAlt} className="w-4 h-4" />
-           <span>{battle.hijri_year} {language === 'ar' ? 'هـ' : 'AH'}</span>
+           <span>{battle.hijriYear} {language === 'ar' ? 'هـ' : 'AH'}</span>
          </div>
        )}
      </div>

@@ -26,8 +26,8 @@ export default function CategoryDetailPage() {
           </div>
         ) : (
           <>
-            <h1 className="text-3xl font-bold mb-4 text-amber-400">{language === 'ar' ? category.name : category.nameEn || category.name}</h1>
-            <p className="mb-6">{language === 'ar' ? category.description : category.descriptionEn || category.description}</p>
+            <h1 className="text-3xl font-bold mb-4 text-amber-400">{language === 'ar' ? category.name : category.nameTransliterated || category.name}</h1>
+            <p className="mb-6">{language === 'ar' ? category.description : category.descriptionTransliterated || category.description}</p>
             {category.articles && category.articles.length > 0 && (
               <div>
                 <h2 className="text-xl font-semibold mb-2 text-amber-400">{translations[language].articlesInCategory}</h2>

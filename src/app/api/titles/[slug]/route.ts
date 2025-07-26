@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { titles } from '@/../prisma/titlesSeedData';
+import { prisma } from '@/lib/prisma';
 
 export async function GET(
   _request: Request,
@@ -7,7 +7,10 @@ export async function GET(
 ) {
   try {
     const { slug } = await params;
-    const title = titles.find((t) => t.slug === slug);
+    const title = await prisma.title.findUnique({
+      where: { slug },
+      include: { people: true },
+    });
     if (!title) {
       return NextResponse.json({ error: 'Not found' }, { status: 404 });
     }
@@ -15,4 +18,4 @@ export async function GET(
   } catch {
     return NextResponse.json({ error: 'Failed to fetch title' }, { status: 500 });
   }
-} 
+}

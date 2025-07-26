@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShieldHalved, faLocationDot, faCalendarDays, faMapLocationDot } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import PersonNameCard from '@/components/PersonNameCard';
+import { PersonBase } from "@/types/person";
 
 // Dynamically import the BattleMap component with SSR disabled
 const BattleMap = dynamic(() => import('@/components/BattleMap'), {
@@ -40,7 +41,7 @@ const BattleDetailPage: React.FC = () => {
               <FontAwesomeIcon icon={faShieldHalved} className="text-amber-400 w-10 h-10" />
             </div>
             <h1 className="text-4xl font-bold text-amber-400">
-              {battle ? (language === 'ar' ? battle.name : battle.nameEn || battle.name) : t.battles.title}
+              {battle ? (language === 'ar' ? battle.name : battle.nameTransliterated || battle.name) : t.battles.title}
             </h1>
           </div>
           {error && (
@@ -57,11 +58,11 @@ const BattleDetailPage: React.FC = () => {
                   <span className="text-gray-800 dark:text-gray-300">{language === 'ar' ? battle.location : battle.locationEn || battle.location || '-'}</span>
                 </div>
               </div>
-              {battle.hijri_year && (
+              {battle.hijriYear && (
                 <div className="mb-2 flex items-center gap-2">
                   <FontAwesomeIcon icon={faCalendarDays} className="text-amber-400 w-5 h-5" />
                   <span className="font-semibold text-gray-800 dark:text-gray-300">{t.battles.hijriYear}:</span>
-                  <span className="text-gray-800 dark:text-gray-300">{battle.hijri_year}</span>
+                  <span className="text-gray-800 dark:text-gray-300">{battle.hijriYear}</span>
                 </div>
               )}
               {battle.latitude && battle.longitude && (
@@ -89,12 +90,8 @@ const BattleDetailPage: React.FC = () => {
               </h2>
               {battle.participations && battle.participations.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                  {battle.participations.map((p: { person: { slug: string; name: string; nameAr?: string; nameEn?: string } }) => (
-                    <PersonNameCard key={p.person.slug} person={{
-                      slug: p.person.slug,
-                      name: p.person.name,
-                      nameEn: p.person.nameEn || p.person.name
-                    }} language={language} />
+                  {battle.participations.map((p: { person: PersonBase }) => (
+                    <PersonNameCard key={p.person.id} person={p.person} language={language} />
                   ))}
                 </div>
               ) : (

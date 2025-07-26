@@ -3,6 +3,10 @@ import { prisma } from '../src/lib/prisma';
 import { EventType } from '../src/generated/prisma';
 
 async function main() {
+  console.log('🌱 Deleting events...');
+  await prisma.event.deleteMany();
+
+  console.log('🌱 Seeding events...');
   // Get all battles to map slugs to IDs
   const battles = await prisma.battle.findMany({
     select: {

@@ -19,12 +19,12 @@ const BattleParticipationCard: React.FC<BattleParticipationCardProps> = ({partic
    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-4 w-full transition-all duration-200 hover:shadow-lg hover:border-amber-300 dark:hover:border-amber-500 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
      <div className="flex items-center justify-between mb-2">
        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-200 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
-         {language === 'ar' ? participation.battle.name : participation.battle.nameEn || participation.battle.name}
+         {language === 'ar' ? participation.battle.name : participation.battle.nameTransliterated || participation.battle.name}
        </h3>
-       {participation.battle.hijri_year && (
+       {participation.battle.hijriYear && (
          <div className="flex items-center gap-1 text-amber-600 dark:text-amber-400 font-medium">
            <FontAwesomeIcon icon={faCalendarAlt} className="w-4 h-4" />
-           <span>{participation.battle.hijri_year} {language === 'ar' ? 'هـ' : 'AH'}</span>
+           <span>{participation.battle.hijriYear} {language === 'ar' ? 'هـ' : 'AH'}</span>
          </div>
        )}
      </div>

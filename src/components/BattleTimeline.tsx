@@ -29,7 +29,7 @@ const BattleTimeline: React.FC<BattleTimelineProps> = ({ battles }) => {
         <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-amber-400"></div>
         
         {battles
-          .sort((a, b) => (a.hijri_year || 0) - (b.hijri_year || 0))
+          .sort((a, b) => (a.hijriYear || 0) - (b.hijriYear || 0))
           .map((battle) => (
             <div key={battle.id} className="relative flex items-start mb-8 last:mb-0">
               {/* Timeline dot */}

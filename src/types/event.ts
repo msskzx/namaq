@@ -1,22 +1,25 @@
 import { Event as PrismaEvent, EventType, Battle } from "@/generated/prisma";
+import { PersonBase } from "./person";
 
-  export type EventInput = {
-    type: string;
-    hijriYear?: string | null;
-    gregorianYear?: string | null;
-    hijriDate?: string | null;
-    description: string;
-    descriptionTransliterated?: string | null;
-    location?: string | null;
-    locationTransliterated?: string | null;
-    metadata?: JSON;
-    battleSlug?: string;
-    personSlugs?: string[];
-  };
-  
-  export type Event = PrismaEvent & {
-    type: EventType;
-    battle?: Battle;
-    personSlugs?: string[];
-  };
-  
+export type EventBase = {
+  id: string,
+  name: string,
+  nameTransliterated?: string,
+  slug: string,
+  type: EventType,
+  hijriYear: number,
+  hijriPeriod: string,
+  gregorianYear: number,
+  gregorianPeriod: string,
+  location?: string,
+  locationTransliterated?: string,
+}
+
+export type EventWithBattle = EventBase & {
+  battle: Battle | null,
+}
+
+export type EventAll = PrismaEvent & {
+  battle: Battle,
+  people: PersonBase[],
+}

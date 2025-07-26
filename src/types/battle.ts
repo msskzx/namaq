@@ -1,9 +1,11 @@
+import { PersonBase } from "./person";
+
 export interface Battle {
   id: string;
   name: string;
-  nameEn: string | null;
+  nameTransliterated: string | null;
   slug: string;
-  hijri_year: number | null;
+  hijriYear: number | null;
   location: string | null;
   locationEn: string | null;
   latitude?: number | null;
@@ -16,5 +18,5 @@ export interface BattleParticipation {
 }
 
 export interface BattleWithParticipants extends Battle {
-  participations?: { person: { slug: string; name: string; nameAr?: string } }[];
+  participations?: { person: PersonBase }[];
 }

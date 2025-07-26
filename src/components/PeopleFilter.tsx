@@ -52,7 +52,7 @@ const PeopleFilter: React.FC<PeopleFilterProps> = ({
           <option value="" className="text-gray-800 dark:text-gray-950">{isArabic ? 'الكل' : 'All'}</option>
           {titles.map((title) => (
             <option key={title.id} value={title.slug} className="text-gray-800 dark:text-gray-950">
-              {isArabic ? title.name : title.nameEn}
+              {isArabic ? title.name : title.nameTransliterated}
             </option>
           ))}
         </select>

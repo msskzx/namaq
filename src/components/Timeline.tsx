@@ -4,12 +4,12 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimeline } from '@fortawesome/free-solid-svg-icons';
 import { useLanguage } from '@/components/LanguageContext';
-import type { Event } from '@/types/event';
+import type { EventWithBattle } from '@/types/event';
 import { EventType } from '@/generated/prisma';
 import Link from 'next/link';
 
 interface TimelineItemProps {
-  event: Event;
+  event: EventWithBattle;
   language: string;
 }
 
@@ -18,14 +18,14 @@ const TimelineItem: React.FC<TimelineItemProps> = ({ event, language }) => {
   return (
     <div className="relative flex flex-col items-center mx-8 first:ml-0 last:mr-0 min-w-[120px]"> {/* Added min-w to ensure spacing */}
       <Link
-        href={event.type === EventType.BATTLE ? `/battles/${event.battle?.slug}` : `/events/${event.id}`}
+        href={event.type === EventType.BATTLE ? `/battles/${event.battle?.slug}` : `/events/${event.slug}`}
         className="group mt-4 mb-8 text-center block" 
       >
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-amber-500 dark:border-amber-400 px-3 py-2
                     min-w-max transition-all duration-200 hover:shadow-md hover:border-amber-600 dark:hover:border-amber-500
                     hover:bg-amber-100 dark:hover:bg-amber-600 cursor-pointer">
           <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-200 transition-colors whitespace-nowrap">
-            {language === 'ar' ? event.name : event.nameEn}
+            {language === 'ar' ? event.name : event.nameTransliterated}
           </h3>
         </div>
       </Link>
@@ -45,7 +45,7 @@ const TimelineItem: React.FC<TimelineItemProps> = ({ event, language }) => {
 
 // --- BattleTimeline Component ---
 interface TimelineProps {
-  events: Event[];
+  events: EventWithBattle[];
 }
 
 const Timeline: React.FC<TimelineProps> = ({ events }) => {

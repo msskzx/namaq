@@ -63,7 +63,7 @@ async function main() {
     const battleRecords = await prisma.battle.findMany();
     const battleSlugToId: Record<string, string> = {};
     for (const battle of battleRecords) {
-      // Use slug from nameEn or name (assuming slug is not a field in Battle)
+      // Use slug from nameTransliterated or name (assuming slug is not a field in Battle)
       battleSlugToId[battle.slug] = battle.id;
     }
     for (const participation of peopleBattleParticipations) {

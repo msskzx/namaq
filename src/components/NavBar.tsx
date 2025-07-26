@@ -65,6 +65,7 @@ const NavBar: React.FC = () => {
     { href: '/titles', label: translations[language].titles },
     { href: '/quran', label: translations[language].quran },
     { href: '/hadith', label: translations[language].hadith },
+    { href: '/events', label: translations[language].events },
   ];
 
   const sortedNavLinks = language === 'ar' ? [...navLinks].reverse() : navLinks;

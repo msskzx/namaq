@@ -35,7 +35,7 @@ export default function ArticleDetailPage() {
                     <li key={cat.id}>
                       <Badge
                         href={`/categories/${cat.slug}`}
-                        text={language === 'ar' ? cat.name : cat.nameEn || cat.name}
+                        text={language === 'ar' ? cat.name : cat.nameTransliterated || cat.name}
                         color="blue"
                       />
                     </li>
