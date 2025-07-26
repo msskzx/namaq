@@ -9,7 +9,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCrown } from '@fortawesome/free-solid-svg-icons';
 import PersonNameCard from '@/components/PersonNameCard';
 import { PersonBase } from "@/types/person";
-import { TitleBase } from "@/types/title";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
