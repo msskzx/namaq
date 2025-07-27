@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import { useLanguage } from '@/components/LanguageContext';
-import { Article } from '@/types/article';
+import { ArticleBase } from '@/types/article';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 
-function ArticleCard({ article }: { article: Article }) {
+function ArticleCard({ article }: { article: ArticleBase }) {
   const { language } = useLanguage();
   if (!article || !article.slug) {
     return null;

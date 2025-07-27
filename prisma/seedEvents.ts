@@ -23,6 +23,13 @@ async function main() {
     },
   });
 
+  const categories = await prisma.category.findMany({
+    select: {
+      id: true,
+      slug: true,
+    },
+  });
+
   const battleSlugToId = new Map(battles.map((battle: { id: string; slug: string }) => [battle.slug, battle.id]));
   const personSlugToId = new Map(
     people
@@ -30,9 +37,15 @@ async function main() {
       .map((person: { id: string; slug: string }) => [person.slug, person.id])
   );
 
+  const categorySlugToId = new Map(
+    categories
+      .filter((category): category is { id: string; slug: string } => category.slug !== null)
+      .map((category: { id: string; slug: string }) => [category.slug, category.id])
+  );
+
   // Create events
   for (const eventData of eventsData) {
-    const { battleSlug, personSlugs, ...eventInput } = eventData;
+    const { battleSlug, personSlugs, categories, ...eventInput } = eventData;
     
     // Prepare the data for create/update
     const eventDataForUpsert: any = {
@@ -99,6 +112,28 @@ async function main() {
           });
           
           console.log(`   ↳ Connected ${personIds.length} people to event`);
+        }
+      }
+
+      // Handle category relationships if categories exist
+      if (categories && categories.length > 0) {
+        // Get valid category IDs from the slugs
+        const categoryIds = categories
+          .map(slug => categorySlugToId.get(slug))
+          .filter((id): id is string => id !== undefined);
+
+        if (categoryIds.length > 0) {
+          // Update the event to connect the categories
+          await prisma.event.update({
+            where: { id: eventId },
+            data: {
+              categories: {
+                connect: categoryIds.map(id => ({ id }))
+              }
+            }
+          });
+          
+          console.log(`   ↳ Connected ${categoryIds.length} categories to event`);
         }
       }
     } catch (error) {

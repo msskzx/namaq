@@ -9,7 +9,7 @@ async function seedArticles() {
     await prisma.article.deleteMany({});
     
     for (const article of articleData) {
-      const { categories, ...articleFields } = article;
+      const { categories, events, ...articleFields } = article;
       await prisma.article.upsert({
         where: { slug: article.slug },
         update: {
@@ -18,11 +18,18 @@ async function seedArticles() {
             set: [], // clear existing
             connect: categories.map((slug: string) => ({ slug })),
           },
+          events: {
+            set: [], // clear existing
+            connect: events?.map((slug: string) => ({ slug })),
+          },
         },
         create: {
           ...articleFields,
           categories: {
             connect: categories.map((slug: string) => ({ slug })),
+          },
+          events: {
+            connect: events?.map((slug: string) => ({ slug })),
           },
         },
       });

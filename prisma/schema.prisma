@@ -62,6 +62,7 @@ model Category {
 
   // Relations
   articles Article[]
+  events Event[]
 
   @@map("categories")
 }
@@ -86,6 +87,7 @@ model Article {
   // Relations
   categories Category[]
   progress UserProgress[]
+  events Event[]
 
   @@map("articles")
 }
@@ -293,6 +295,8 @@ model Event {
   people                  Person[]
   battleId                String?
   battle                  Battle?      @relation(fields: [battleId], references: [id])
+  articles Article[]
+  categories Category[]
 
   @@map("events") // Map to 'events' table
 } 

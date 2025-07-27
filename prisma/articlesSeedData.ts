@@ -28,7 +28,8 @@ export const articleData = [
     publishedAt: new Date(),
     createdAt: new Date(),
     updatedAt: new Date(),
-    categories: ["hijra"]
+    categories: ["hijra"],
+    events: ["hijra-to-medina"]
   },
   {
     title: "الكعبة المشرفة",
@@ -61,21 +62,4 @@ export const articleData = [
     updatedAt: new Date(),
     categories: ["arabic"]
   },
-  {
-    // add one about the arabic letters
-    title: "الحروف العربية",
-    titleEn: "The Arabic Letters",
-    summary: "إتقان الحروف العربية هو الخطوة الأولى لفهم اللغة وقراءة القرآن الكريم. ابدأ رحلتك مع الأبجدية العربية وتعرف على أشكال الحروف وأصواتها من خلال أمثلة تفاعلية ومبسطة.",
-    summaryEn: "Mastering the Arabic letters is the first step to understanding the language and reading the Holy Quran. Start your journey with the Arabic alphabet and discover the shapes and sounds of the letters through interactive and simple examples.",
-    content: "اللغة العربية لغة عريقة ضاربة في أعماق التاريخ، حملت عبر حروفها الثمانية والعشرين تراث أمة كاملة وعلومها وآدابها. صمدت العربية أمام تحديات الزمن، وانتشرت في بقاع الأرض، وبقيت لغة القرآن الكريم والعلوم والفكر. حروفها ليست مجرد رموز، بل مفاتيح لفهم حضارة عظيمة، وستظل العربية حية نابضة في قلوب الملايين لأجيال قادمة.",
-    contentEn: "The Arabic language is a unique and rich language that dates back to the depths of history. It carried through its 28 letters the heritage of a complete nation and its sciences and arts. Arabic stood against the challenges of time and spread across the world. It remained the language of the Hol y Quran, science, and thought. Its letters are not mere symbols, but keys to understanding a great civilization, and will remain Arabic alive and vibrant in the hearts of millions for generations to come.",
-    slug: "arabic-letters",
-    isPublished: true,
-    special: true,
-    img: null,
-    publishedAt: new Date(),
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    categories: ["arabic"]
-  }
 ]; 

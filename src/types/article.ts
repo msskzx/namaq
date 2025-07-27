@@ -17,3 +17,13 @@ export interface Article {
   updatedAt: Date;
   categories?: Category[];
 } 
+
+export interface ArticleBase {
+  id: string;
+  title: string;
+  titleEn?: string;
+  slug: string;
+  special: boolean;
+  summary?: string;
+  summaryEn?: string;
+}

@@ -9,3 +9,10 @@ export interface Category {
   createdAt: Date;
   updatedAt: Date;
 } 
+
+export interface CategoryBase {
+  id: string;
+  name: string;
+  slug: string;
+  nameTransliterated?: string;
+}

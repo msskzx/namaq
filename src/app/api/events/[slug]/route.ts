@@ -38,6 +38,23 @@ export async function GET(
             location: true,
           },
         },
+        articles: {
+          select: {
+            id: true,
+            title: true,
+            slug: true,
+            special: true,
+            summary: true,
+            summaryEn: true,
+          },
+        },
+        categories: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+          },
+        },
       },
     });
 
