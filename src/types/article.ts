@@ -26,4 +26,5 @@ export interface ArticleBase {
   special: boolean;
   summary?: string;
   summaryEn?: string;
+  img?: string | null;
 }

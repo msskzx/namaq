@@ -13,7 +13,7 @@ export default function SpecialsPage() {
   const { data: specialArticles, error, isLoading } = useSWR<Article[]>("/api/articles?special=true", fetcher);
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 py-12" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="font-arabicDisplay text-amber-400 text-3xl sm:text-4xl font-bold mb-4 text-center">
           {language === 'ar' ? 'مقالات مميزة' : 'Special Articles'}
         </h1>
@@ -34,7 +34,7 @@ export default function SpecialsPage() {
           ) : (
             <>
               {Array.isArray(specialArticles) && specialArticles.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
                   {specialArticles.map((article) => (
                     <ArticleCard key={article.id} article={article} />
                   ))}

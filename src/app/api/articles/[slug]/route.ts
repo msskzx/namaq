@@ -9,7 +9,7 @@ export async function GET(
     const { slug } = await params;
     const article = await prisma.article.findUnique({
       where: { slug: slug },
-      include: { categories: true },
+      include: { categories: true, events: true },
     });
     if (!article) {
       return NextResponse.json({ error: 'Article not found.' }, { status: 404 });

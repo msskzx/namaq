@@ -22,9 +22,7 @@ export async function GET(request: Request) {
     const whereClause: WhereClause = { isPublished: true };
     
     // Filter by special articles if specified
-    if (special !== null) {
-      whereClause.special = special === 'true';
-    }
+    whereClause.special = special === 'true';
     
     // Filter by category if specified
     if (category) {

@@ -86,7 +86,7 @@ export default function Home() {
             <LoadingSpinner />
           ) : (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 {Array.isArray(specialArticles) && specialArticles.length > 0 ? (
                   specialArticles.map((article) => (
                     <ArticleCard key={article.id} article={article} />

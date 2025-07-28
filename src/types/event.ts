@@ -15,6 +15,8 @@ export type EventBase = {
   gregorianPeriod: string,
   location?: string,
   locationTransliterated?: string,
+  description?: string,
+  descriptionTransliterated?: string,
 }
 
 export type EventWithBattle = EventBase & {

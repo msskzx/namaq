@@ -6,13 +6,13 @@ import EventCard from '../../components/EventCard';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { useLanguage } from '@/components/LanguageContext';
 import translations from '@/components/translations';
-import { Event } from '@/generated/prisma';
+import { EventBase } from '@/types/event';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const EventsPage: React.FC = () => {
   const { language } = useLanguage();
-  const { data: events, error, isLoading } = useSWR<Event[]>("/api/events", fetcher);
+  const { data: events, error, isLoading } = useSWR<EventBase[]>("/api/events", fetcher);
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950">

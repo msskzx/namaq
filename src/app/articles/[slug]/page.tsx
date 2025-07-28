@@ -8,12 +8,15 @@ import useSWR from 'swr';
 import { useParams } from "next/navigation";
 import Badge from '@/components/Badge';
 import { CategoryBase } from '@/types/category';
+import { EventBase } from '@/types/event';
+import EventCard from '@/components/EventCard';
 
 const fetcher = (url: string) => fetch(url).then(res => res.ok ? res.json() : null);
 
 export default function ArticleDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const { language } = useLanguage();
+  const t = translations[language];
   const { data: article, error, isLoading } = useSWR(`/api/articles/${slug}`, fetcher);
 
   return (
@@ -44,11 +47,23 @@ export default function ArticleDetailPage() {
               </div>
             )}
             <p className="mb-4 text-gray-900 dark:text-gray-200">{language === 'ar' ? article.summary : article.summaryEn || article.summary}</p>
-            <div className="prose dark:prose-invert max-w-none mb-8 text-gray-900 dark:text-gray-200">
+            <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
               {language === 'ar' ? article.content : article.contentEn || article.content}
             </div>
+
+            {article.events && article.events.length > 0 && (
+            <div className="mt-8">
+              <h2 className="text-2xl font-bold mb-4 text-amber-400">{t.events}</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {article.events?.map((event: EventBase) => (
+                  <EventCard key={event.id} event={event} />
+                ))}
+              </div>
+            </div>
+            )}
           </>
         )}
+        
       </div>
     </div>
   );

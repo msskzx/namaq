@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import Chart from 'chart.js/auto'; // Import Chart.js
 
 export default function Arabic() {
@@ -235,11 +236,15 @@ export default function Arabic() {
         {/* Section 1: Hero */}
         <header className="text-center my-12 md:my-16">
           <h1 className="text-4xl md:text-6xl font-black text-blue-600 dark:text-blue-400 tracking-tight arabic-text">اللغة العربية</h1>
-          <p className="text-lg md:text-xl text-gray-600 dark:text-gray-200 mt-4 arabic-text">رحلة بصرية إلى إحدى أكثر اللغات تأثيراً في العالم.</p>
-          <div className="mt-10 bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-8 max-w-2xl mx-auto border-4 border-blue-500 dark:border-blue-400 transition-colors duration-300">
-            <p className="text-2xl font-bold text-gray-700 dark:text-gray-200 arabic-text">لغة عالمية يتحدث بها أكثر من</p>
-            <p className="text-7xl md:text-8xl font-extrabold text-blue-600 dark:text-blue-400 my-4 arabic-text">٤٢٢ مليون</p>
-            <p className="text-2xl font-bold text-gray-700 dark:text-gray-200 arabic-text">شخص حول العالم</p>
+          <p className="text-lg md:text-xl text-gray-600 dark:text-gray-200 mt-6 arabic-text">رحلة بصرية إلى إحدى أكثر اللغات تأثيراً في العالم.</p>
+
+          <div className="mt-8 flex flex-row items-center justify-center gap-4 bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-2xl p-8 mx-auto transition-colors duration-300">
+            <div className="bg-white dark:bg-gray-900 rounded-2xl p-8 max-w-2xl mx-auto">
+              <p className="text-2xl font-bold text-gray-700 dark:text-gray-200 arabic-text">لغة عالمية يتحدث بها أكثر من</p>
+              <p className="text-7xl md:text-8xl font-extrabold text-blue-600 dark:text-blue-400 my-4 arabic-text">٤٢٢ مليون</p>
+              <p className="text-2xl font-bold text-gray-700 dark:text-gray-200 arabic-text mt-6">شخص حول العالم</p>
+            </div>
+            <Image src={"/arabic_language.png"} alt="arabic-language" className="w-1/2 h-auto object-cover rounded-lg" />
           </div>
         </header>
 
@@ -290,7 +295,7 @@ export default function Arabic() {
                 تحتل اللغة العربية مرتبة متقدمة بين لغات العالم من حيث ثراء المفردات، حيث تحتوي على أكثر من ١٢ مليون كلمة، 
                 مقارنة بنحو ٦٠٠ ألف كلمة في الإنجليزية و٣٥٠ ألف كلمة في الفرنسية. 
                 وتتميز العربية بقدرتها على الاشتقاق من الجذور اللغوية، حيث يمكن اشتقاق مئات الكلمات من الجذر الواحد.
-              </p>
+            shadow-2xl   </p>
               <p className="text-gray-600 dark:text-gray-200 text-lg mt-4 leading-relaxed arabic-text">
                 من المثير للاهتمام أن المعاجم العربية القديمة مثل لسان العرب لابن منظور تحتوي على أكثر من ٨٠ ألف مادة، 
                 بينما تحتوي أضخم معاجم اللغة الإنجليزية (أكسفورد) على حوالي ٦٠٠ ألف كلمة.
