@@ -5,24 +5,58 @@ import Link from 'next/link';
 import LanguageSwitcher from './LanguageSwitcher';
 import { useLanguage } from './LanguageContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faXmark, faChevronDown, faGear } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faXmark, faGear } from '@fortawesome/free-solid-svg-icons';
 import translations from './translations';
 import ThemeSwitcher from './ThemeSwitcher';
 
-const NavBar: React.FC = () => {
-  const { language, languageLoaded } = useLanguage();
+interface NavLink {
+  href: string;
+  label: string;
+}
+
+const getLinkItems = (href: string, language: 'en' | 'ar'): NavLink[] => {
+  switch (href) {
+    case '/people':
+      return [
+        { href: '/people/prophet-muhammad', label: translations[language].prophet as string },
+        { href: '/people?title=companion', label: translations[language].companions as string },
+        { href: '/people', label: translations[language].people as string },
+        { href: '/titles', label: translations[language].titles as string },
+      ];
+    case '/battles':
+      return [
+        { href: '/battles', label: translations[language].battles.title },
+        { href: '/events', label: translations[language].events as string },
+      ];
+    case '/specials':
+      return [
+        { href: '/specials', label: language === 'ar' ? 'مقالات مميزة' : 'Special Articles' },
+        { href: '/articles', label: translations[language].articles as string },
+        { href: '/categories', label: translations[language].categories as string },
+      ];
+    case '/arabic':
+      return [
+        { href: '/arabic', label: translations[language].arabic as string },
+        { href: '/quran', label: translations[language].quran as string },
+        { href: '/hadith', label: translations[language].hadith as string },
+        { href: '/poems', label: translations[language].poems as string },
+      ];
+    default:
+      return [];
+  }
+};
+
+const NavBar = () => {
+  const { language, languageLoaded } = useLanguage() as { language: 'en' | 'ar'; languageLoaded: boolean };
   const [menuOpen, setMenuOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const settingsRef = useRef<HTMLDivElement>(null);
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setDropdownOpen(false);
-      }
       if (settingsRef.current && !settingsRef.current.contains(event.target as Node)) {
         setSettingsOpen(false);
       }
@@ -31,6 +65,9 @@ const NavBar: React.FC = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
     };
   }, []);
 
@@ -49,26 +86,30 @@ const NavBar: React.FC = () => {
     );
   }
 
-  // Define nav links
-  const navLinks = [
+  const mainLinks = [
+    { href: '/specials', label: language === 'ar' ? 'مقالات مميزة' : 'Special Articles' },
+    { href: '/people', label: translations[language].people },
+    { href: '/battles', label: translations[language].battles.title },
+    { href: '/arabic', label: translations[language].arabic },
+  ];
+  
+  const allLinks = [
     { href: '/specials', label: language === 'ar' ? 'مقالات مميزة' : 'Special Articles' },
     { href: '/people/prophet-muhammad', label: translations[language].prophet },
     { href: '/people?title=companion', label: translations[language].companions },
+    { href: '/people', label: translations[language].people },
     { href: '/battles', label: translations[language].battles.title },
-  ];
-
-  // Define dropdown items
-  const dropdownItems = [
+    { href: '/events', label: translations[language].events },
     { href: '/articles', label: translations[language].articles },
     { href: '/categories', label: translations[language].categories },
-    { href: '/poems', label: translations[language].poems },
-    { href: '/titles', label: translations[language].titles },
+    { href: '/arabic', label: translations[language].arabic },
     { href: '/quran', label: translations[language].quran },
     { href: '/hadith', label: translations[language].hadith },
-    { href: '/events', label: translations[language].events },
+    { href: '/poems', label: translations[language].poems },
   ];
 
-  const sortedNavLinks = language === 'ar' ? [...navLinks].reverse() : navLinks;
+
+  const sortedMainLinks = language === 'ar' ? [...mainLinks].reverse() : mainLinks;
 
   return (
     <nav className="bg-gray-50 dark:bg-gray-950 w-full border-b-2 border-amber-400 shadow-lg">
@@ -80,41 +121,69 @@ const NavBar: React.FC = () => {
         >
           {translations[language].title}
         </Link>
-        {/* Desktop Nav */}
+        {/* TODO Desktop Nav */}
         <div className="hidden lg:flex space-x-4 items-center">
-          {language && (
-            <div className="relative" ref={dropdownRef}>
-              <button
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="text-black dark:text-amber-400 rounded-md transition-colors hover:bg-gray-200 dark:hover:bg-indigo-950 dark:hover:text-amber-300 font-medium px-3 py-2 flex items-center gap-1"
+          {sortedMainLinks.map((link) => {
+            const linkItems = getLinkItems(link.href, language);
+            const isHovered = hoveredLink === link.href;
+            
+            return (
+              <div 
+                key={link.href}
+                className="relative"
+                onMouseEnter={() => {
+                  if (hoverTimeoutRef.current) {
+                    clearTimeout(hoverTimeoutRef.current);
+                  }
+                  setHoveredLink(link.href);
+                }}
+                onMouseLeave={() => {
+                  hoverTimeoutRef.current = setTimeout(() => {
+                    setHoveredLink(null);
+                  }, 200);
+                }}
               >
-                {language === 'ar' ? 'المزيد' : 'More'} 
-                <FontAwesomeIcon icon={faChevronDown} className={`w-3 h-3 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
-              </button>
-              
-              {dropdownOpen && (
-                <div className="absolute top-full right-0 mt-1 bg-gray-50 dark:bg-gray-950 border border-amber-400 rounded-md shadow-lg z-50 min-w-[200px]">
-                  {dropdownItems.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className="block text-black dark:text-amber-400 dark:hover:text-amber-300 hover:bg-gray-200 dark:hover:bg-indigo-950 px-4 py-2 text-sm transition-colors"
-                      onClick={() => setDropdownOpen(false)}
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-          
-          {sortedNavLinks.map((link) => (
-            <Link key={link.href} href={link.href} className="text-black dark:text-amber-400 rounded-md transition-colors hover:bg-gray-200 dark:hover:bg-indigo-950 dark:hover:text-amber-300 font-medium px-3 py-2">
-              {link.label}
-            </Link>
-          ))}
-          
+                <Link
+                  href={link.href}
+                  className="text-black dark:text-amber-400 rounded-md transition-colors hover:text-gray-800 dark:hover:text-amber-300 font-medium px-3 py-2 flex items-center"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {link.label}
+                </Link>
+                
+                {linkItems.length > 0 && isHovered && (
+                  <div 
+                    className="absolute top-full left-0 mt-1 bg-white dark:bg-gray-900 border border-amber-400 rounded-md shadow-lg z-50 min-w-[200px] py-1"
+                    onMouseEnter={() => {
+                      if (hoverTimeoutRef.current) {
+                        clearTimeout(hoverTimeoutRef.current);
+                      }
+                      setHoveredLink(link.href);
+                    }}
+                    onMouseLeave={() => {
+                      hoverTimeoutRef.current = setTimeout(() => {
+                        setHoveredLink(null);
+                      }, 200);
+                    }}
+                  >
+                    {linkItems.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="block px-4 py-2 text-sm text-gray-800 dark:text-amber-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                        onClick={() => setHoveredLink(null)}
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+        
+         <div> 
           {/* Gear Icon for Settings */}
           <div className="relative" ref={settingsRef}>
             <button
@@ -145,42 +214,23 @@ const NavBar: React.FC = () => {
           <FontAwesomeIcon icon={menuOpen ? faXmark : faBars} className="w-6 h-6" />
         </button>
       </div>
-              {/* Mobile Dropdown Menu */}
-        {menuOpen && (
-          <div className="lg:hidden bg-gray-950 border-t-2 border-amber-400 px-4 pb-4 animate-fade-in-down">
-            <div className="flex flex-col gap-3 mt-2">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-black dark:text-amber-400 rounded-md transition-colors hover:text-gray-800 dark:hover:text-amber-300 font-medium px-3 py-2"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
-              
-              {/* Mobile Dropdown Items */}
-              {language && (
-                <div className="border-t border-amber-400 pt-3">
-                  <div className="text-black dark:text-amber-400 font-medium px-3 py-2 mb-2">
-                    {language === 'ar' ? 'المزيد' : 'More'}
-                  </div>
-                  {dropdownItems.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className="block text-black dark:text-amber-400 rounded-md transition-colors hover:text-gray-800 dark:hover:text-amber-300 font-medium px-3 py-2 ml-4"
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
+      {/* Mobile Dropdown Menu */}
+      {menuOpen && (
+        <div className="lg:hidden bg-gray-950 border-t-2 border-amber-400 px-4 pb-4 animate-fade-in-down">
+          <div className="flex flex-col gap-3 mt-2">
+            {allLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-black dark:text-amber-400 rounded-md transition-colors hover:text-gray-800 dark:hover:text-amber-300 font-medium px-3 py-2"
+                onClick={() => setMenuOpen(false)}
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
-        )}
+        </div>
+      )}
     </nav>
   );
 };

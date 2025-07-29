@@ -2,6 +2,7 @@ const translations = {
   en: {
     // NavBar
     title: 'Namaq',
+    arabic: 'Arabic Language',
     home: 'Home',
     about: 'About',
     learn: 'Learn Arabic',
@@ -175,6 +176,7 @@ const translations = {
   ar: {
     // NavBar
     title: 'نَمَق',
+    arabic: 'العربية',
     home: 'الرئيسية',
     about: 'حول',
     learn: 'تعلم العربية',
@@ -185,7 +187,7 @@ const translations = {
     practice: 'تدرب',
     articles: 'المقالات',
     titles: 'الألقاب',
-    poems: 'القصائد',
+    poems: 'الشعر العربي',
     quran: 'القرآن الكريم',
     hadith: 'الحديث الشريف',
     articlesLoadError: 'تعذر تحميل المقالات.',

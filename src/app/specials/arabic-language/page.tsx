@@ -244,7 +244,7 @@ export default function Arabic() {
               <p className="text-7xl md:text-8xl font-extrabold text-blue-600 dark:text-blue-400 my-4 arabic-text">٤٢٢ مليون</p>
               <p className="text-2xl font-bold text-gray-700 dark:text-gray-200 arabic-text mt-6">شخص حول العالم</p>
             </div>
-            <Image src={"/arabic_language.png"} alt="arabic-language" className="w-1/2 h-auto object-cover rounded-lg" />
+            <Image src={"/arabic_language.png"} alt="arabic-language" className="w-1/2 h-auto object-cover rounded-lg" width={500} height={500} />
           </div>
         </header>
 

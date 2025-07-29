@@ -50,7 +50,7 @@ const BattleDetailPage: React.FC = () => {
             </div>
           )}
           {battle && (
-            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-amber-400 p-6 font-geistmono">
+            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6 font-geistmono">
               <div className="mb-6">
                 <div className="flex items-center gap-2 mb-2">
                   <FontAwesomeIcon icon={faLocationDot} className="text-amber-400 w-5 h-5" />
