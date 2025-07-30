@@ -32,6 +32,7 @@ function RelationGraphPreview({ prophet, prophetError, prophetLoading, language 
 
 export default function Home() {
   const { language } = useLanguage();
+  const t = translations[language];
   // Add ?limit=3 to the API request
   const { data: categories, error, isLoading } = useSWR<Category[]>("/api/categories?limit=3", fetcher);
   const { data: articles, error: articlesError, isLoading: articlesLoading } = useSWR<Article[]>("/api/articles?limit=3", fetcher);
@@ -70,7 +71,7 @@ export default function Home() {
         {/* Special Articles Section */}
         <div className="max-w-6xl mx-auto my-12">
           <h2 className="font-arabicDisplay text-amber-400 text-2xl sm:text-3xl font-bold mb-6 text-center">
-            {language === 'ar' ? 'مقالات مميزة' : 'Special Articles'}
+            {t.specialArticles}
           </h2>
           <p className="text-center text-gray-800 dark:text-gray-200 mb-10 text-base sm:text-lg md:text-xl font-arabic max-w-4xl mx-auto leading-relaxed">
             {language === 'ar'
@@ -93,7 +94,7 @@ export default function Home() {
                   ))
                 ) : (
                   <div className="col-span-full text-center py-4 text-gray-400 font-arabic text-base md:text-lg">
-                    {language === 'ar' ? 'لا توجد مقالات مميزة حالياً' : 'No special articles available'}
+                    {t.noArticles}
                   </div>
                 )}
               </div>
@@ -110,7 +111,7 @@ export default function Home() {
 
         <div className="max-w-6xl mx-auto my-12">
           <h2 className="font-arabicDisplay text-amber-400 text-2xl sm:text-3xl font-bold mb-6 text-center">
-            {language === 'ar' ? 'شخصيات بارزة' : 'Notable People'}
+            {t.notablePeople}
           </h2>
           <p className="text-center text-gray-800 dark:text-gray-200 mb-10 text-base sm:text-lg md:text-xl font-arabic max-w-4xl mx-auto leading-relaxed">
             {language === 'ar'
@@ -128,7 +129,7 @@ export default function Home() {
         {/* Relation Graph Feature Section */}
         <div className="max-w-8xl mx-auto my-12">
           <h2 className="font-arabicDisplay text-amber-400 text-2xl sm:text-3xl font-bold mb-6 text-center">
-            {language === 'ar' ? 'شبكة العلاقات العائلية' : 'Family Relation Graph'}
+            {t.familyRelations}
           </h2>
           <p className="text-center text-gray-800 dark:text-indigo-100 mb-10 text-base sm:text-lg md:text-xl font-arabic max-w-3xl mx-auto">
             {language === 'ar'
@@ -144,7 +145,7 @@ export default function Home() {
         {/* Ayat About People Section */}
         <div className="max-w-8xl mx-auto my-12 p-8 flex flex-col items-center">
           <h2 className="font-arabicDisplay text-amber-400 text-2xl sm:text-3xl font-bold mb-6 text-center">
-            {language === 'ar' ? 'آيات نزلت في الأشخاص' : 'Quranic Verses About People'}
+            {t.quranicVersesAboutPeople}
           </h2>
           <p className="text-center text-gray-800 dark:text-indigo-100 mb-10 text-base sm:text-lg md:text-xl font-arabic max-w-3xl mx-auto">
             {language === 'ar'
@@ -153,7 +154,7 @@ export default function Home() {
           </p>
           <div className="w-full max-w-2xl">
             <h3 className="text-lg sm:text-xl font-bold text-amber-400 mb-4 text-center">
-              {language === 'ar' ? 'نماذج من الآيات عن النبي محمد ﷺ' : 'Sample Verses About Prophet Muhammad ﷺ'}
+              {t.sampleVerses} {language === 'ar' ? 'عن النبي محمد ﷺ' : 'About Prophet Muhammad ﷺ'}
             </h3>
             <div className="flex flex-col gap-4">
               {/* Al-Ahzab 33:40 */}

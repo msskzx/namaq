@@ -28,7 +28,7 @@ export default function HadithPage() {
           
           <div className="text-center py-8">
             <div className="text-gray-400 dark:text-gray-500">
-              {language === 'ar' ? 'سيتم إضافة محتوى الحديث قريباً' : 'Hadith content will be added soon'}
+              {t.hadithComingSoon}
             </div>
           </div>
         </div>

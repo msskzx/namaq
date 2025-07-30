@@ -28,7 +28,7 @@ export default function PoemsPage() {
           
           <div className="text-center py-8">
             <div className="text-gray-400 dark:text-gray-500">
-              {language === 'ar' ? 'سيتم إضافة محتوى الشعر قريباً' : 'Poetry content will be added soon'}
+              {t.poetryComingSoon}
             </div>
           </div>
         </div>

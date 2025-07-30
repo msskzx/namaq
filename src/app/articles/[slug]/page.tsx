@@ -30,7 +30,9 @@ export default function ArticleDetailPage() {
           </div>
         ) : (
           <>
-            <h1 className="text-3xl font-bold mb-4 text-amber-400">{language === 'ar' ? article.title : article.titleEn || article.title}</h1>
+            <h1 className="text-3xl font-bold mb-4 text-amber-400">
+              {language === 'ar' ? article.title : article.titleEn || article.title}
+            </h1>
             {article.categories && article.categories.length > 0 && (
               <div className="mb-4">
                 <ul className="flex flex-wrap gap-2">

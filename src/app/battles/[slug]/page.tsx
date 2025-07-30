@@ -70,7 +70,7 @@ const BattleDetailPage: React.FC = () => {
                   <div className="p-4 bg-amber-50 dark:bg-gray-800 flex items-center gap-2">
                     <FontAwesomeIcon icon={faMapLocationDot} className="text-amber-500" />
                     <h3 className="font-semibold text-amber-800 dark:text-amber-400">
-                      {language === 'ar' ? 'موقع المعركة على الخريطة' : 'Battle Location on Map'}
+                      {t.battleLocation}
                     </h3>
                   </div>
                   <div className="h-[500px] w-full">
@@ -86,7 +86,7 @@ const BattleDetailPage: React.FC = () => {
                 </div>
               )}
               <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-200 mt-8">
-                {language === 'ar' ? 'المشاركون' : 'Participants'}
+                {t.participants}
               </h2>
               {battle.participations && battle.participations.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -96,7 +96,7 @@ const BattleDetailPage: React.FC = () => {
                 </div>
               ) : (
                 <div className="text-center text-gray-400 py-4">
-                  {language === 'ar' ? 'لا يوجد مشاركون في هذه المعركة.' : 'No participants in this battle.'}
+                  {t.noParticipants}
                 </div>
               )}
             </div>

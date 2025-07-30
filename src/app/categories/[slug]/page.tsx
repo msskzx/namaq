@@ -14,6 +14,7 @@ const fetcher = (url: string) => fetch(url).then(res => res.ok ? res.json() : nu
 
 export default function CategoryDetailPage() {
   const { language } = useLanguage();
+  const t = translations[language];
   const { slug } = useParams<{ slug: string }>();
   const { data: category, error, isLoading } = useSWR(slug ? `/api/categories/${slug}` : null, fetcher);
 
@@ -24,7 +25,7 @@ export default function CategoryDetailPage() {
           <LoadingSpinner />
         ) : error || !category ? (
           <div className="text-red-600 dark:text-red-400 text-center my-8">
-            {translations[language].categoriesLoadError}
+            {t.categoriesLoadError}
           </div>
         ) : (
           <>
@@ -33,7 +34,7 @@ export default function CategoryDetailPage() {
 
             {category.events && category.events.length > 0 && (
               <div className="mt-8">
-                <h2 className="text-xl font-bold mb-4 text-amber-400">{translations[language].events}</h2>
+                <h2 className="text-xl font-bold mb-4 text-amber-400">{t.events}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {category.events?.map((event: EventBase) => (
                     <EventCard key={event.id} event={event} />
@@ -44,7 +45,7 @@ export default function CategoryDetailPage() {
 
             {category.articles && category.articles.length > 0 && (
               <div className="mt-8">
-                <h2 className="text-xl font-bold mb-4 text-amber-400">{translations[language].articlesInCategory}</h2>
+                <h2 className="text-xl font-bold mb-4 text-amber-400">{t.articles}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
                   {category.articles.map((article: Article) => (
                     <ArticleCard key={article.id} article={article} />

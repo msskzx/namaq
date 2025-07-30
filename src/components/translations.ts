@@ -24,6 +24,59 @@ const translations = {
     events: 'Events',
     eventsLoadError: 'Failed to load events.',
     eventsNotFound: 'No events found.',
+    
+    // Common UI
+    loading: 'Loading...',
+    backToList: 'Back to list',
+    backToSurahs: 'Back to Surahs',
+    dataSource: 'Data source',
+    
+    // Battle/Event Participants
+    participants: 'Participants',
+    noParticipants: 'No participants in this battle.',
+    peopleInvolved: 'People Involved',
+    noPeopleInvolved: 'No people involved in this event.',
+    noBattleParticipations: 'No battle participations.',
+    
+    // Quran
+    theHolyQuran: 'The Holy Quran',
+    selectSurah: 'Select a surah from the list below to read its verses',
+    ayahs: 'Ayahs',
+    juz: 'Juz',
+    page: 'Page',
+    manzil: 'Manzil',
+    previous: 'Previous',
+    next: 'Next',
+    
+    // Coming Soon Messages
+    comingSoon: 'Content will be added soon',
+    poetryComingSoon: 'Poetry content will be added soon',
+    hadithComingSoon: 'Hadith content will be added soon',
+    
+    // Battle Map
+    battleLocation: 'Battle Location on Map',
+    
+    // Family Relations
+    familyRelations: 'Family Relations',
+    
+    // Articles
+    specialArticles: 'Special Articles',
+    noArticles: 'No articles found',
+    noArticlesForEvent: 'No articles for this event.',
+    
+    // Notable People
+    notablePeople: 'Notable People',
+    
+    // Quranic Verses
+    quranicVerses: 'Quranic Verses',
+    quranicVersesAboutPeople: 'Quranic Verses About People',
+    sampleVerses: 'Sample Verses',
+    
+    // Battle Status
+    martyred: 'Martyred',
+    injured: 'Injured',
+    captured: 'Captured',
+    absentExcused: 'Absent (Excused)',
     battles: {
       title: 'Battles & Expeditions',
       name: 'Name',
@@ -198,6 +251,59 @@ const translations = {
     events: 'الأحداث',
     eventsLoadError: 'فشل تحميل الأحداث.',
     eventsNotFound: 'لم يتم العثور على أحداث.',
+    
+    // Common UI
+    loading: 'جاري التحميل...',
+    backToList: 'العودة إلى القائمة',
+    backToSurahs: 'العودة إلى قائمة السور',
+    dataSource: 'مصدر البيانات',
+    
+    // Battle/Event Participants
+    participants: 'المشاركون',
+    noParticipants: 'لا يوجد مشاركون في هذه المعركة.',
+    peopleInvolved: 'الأشخاص المشاركون',
+    noPeopleInvolved: 'لا يوجد أشخاص مشاركون في هذا الحدث.',
+    noBattleParticipations: 'لا توجد مشاركات في المعارك.',
+    
+    // Quran
+    theHolyQuran: 'القرآن الكريم',
+    selectSurah: 'اختر سورة من القائمة أدناه لقراءة آياتها',
+    ayahs: 'الآيات',
+    juz: 'الجزء',
+    page: 'الصفحة',
+    manzil: 'المنزل',
+    previous: 'السابق',
+    next: 'التالي',
+    
+    // Coming Soon Messages
+    comingSoon: 'سيتم إضافة المحتوى قريباً',
+    poetryComingSoon: 'سيتم إضافة محتوى الشعر قريباً',
+    hadithComingSoon: 'سيتم إضافة محتوى الحديث قريباً',
+    
+    // Battle Map
+    battleLocation: 'موقع المعركة على الخريطة',
+    
+    // Family Relations
+    familyRelations: 'العلاقات العائلية',
+    
+    // Articles
+    specialArticles: 'مقالات مميزة',
+    noArticles: 'لا توجد مقالات',
+    noArticlesForEvent: 'لا توجد مقالات لهذا الحدث.',
+    
+    // Notable People
+    notablePeople: 'شخصيات بارزة',
+    
+    // Quranic Verses
+    quranicVerses: 'الآيات القرآنية',
+    quranicVersesAboutPeople: 'آيات نزلت في الأشخاص',
+    sampleVerses: 'نماذج من الآيات',
+    
+    // Battle Status
+    martyred: 'استشهد',
+    injured: 'أصيب',
+    captured: 'أُسر',
+    absentExcused: 'غائب بعذر',
     battles: {
       title: 'المعارك والغزوات',
       name: 'الاسم',

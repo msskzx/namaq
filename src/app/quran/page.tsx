@@ -89,13 +89,10 @@ export default function QuranPage() {
           {/* Header */}
           <div className="text-center mb-8 pb-6 border-b border-gray-200 dark:border-gray-700">
             <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-2">
-              {language === 'ar' ? 'سور القرآن الكريم' : 'The Holy Quran'}
+              {t.theHolyQuran}
             </h2>
             <p className="text-gray-600 dark:text-gray-400">
-              {language === 'ar' 
-                ? 'اختر سورة من القائمة أدناه لقراءة آياتها' 
-                : 'Select a surah from the list below to read its verses'
-              }
+              {t.selectSurah}
             </p>
           </div>
 
@@ -140,7 +137,7 @@ export default function QuranPage() {
                 {/* Additional info */}
                 <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
                   <div className="flex justify-between text-xs text-gray-500 dark:text-gray-500">
-                    <span>{language === 'ar' ? 'الآيات:' : 'Ayahs:'} {surah.numberOfAyahs}</span>
+                    <span>{t.ayahs}: {surah.numberOfAyahs}</span>
                     <span className="capitalize">{surah.revelationType}</span>
                   </div>
                 </div>

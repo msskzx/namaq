@@ -12,7 +12,14 @@ export async function GET(
       include: {
         participations: {
           include: {
-            person: true,
+            person: {
+              select: {
+                id: true,
+                name: true,
+                nameTransliterated: true,
+                slug: true,
+              },
+            },
           },
         },
       },

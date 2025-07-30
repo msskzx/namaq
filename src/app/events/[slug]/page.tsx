@@ -92,7 +92,7 @@ const EventPage: React.FC = () => {
               
               <div className="p-6 mt-10">
               <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-200 mt-8">
-                {language === 'ar' ? 'الشخصيات' : 'People Involved'}
+                {t.peopleInvolved}
               </h2>
               {event.people && event.people.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -106,14 +106,14 @@ const EventPage: React.FC = () => {
                 </div>
               ) : (
                 <div className="text-gray-400 py-4">
-                  {language === 'ar' ? 'لا يوجد مشاركون في هذه المعركة.' : 'No people involved in this event.'}
+                  {t.noPeopleInvolved}
                 </div>
               )}
               </div>
               
               <div className="p-6 mt-10">
                 <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-200 mt-8">
-                  {language === 'ar' ? 'المقالات' : 'Articles'}
+                  {t.articles}
                 </h2>
                 {event.articles && event.articles.length > 0 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -126,7 +126,7 @@ const EventPage: React.FC = () => {
                   </div>
                 ) : (
                   <div className="text-gray-400 py-4">
-                    {language === 'ar' ? 'لا يوجد مقالات لهذا الحدث.' : 'No articles for this event.'}
+                    {t.noArticlesForEvent}
                   </div>
                 )}
               </div>

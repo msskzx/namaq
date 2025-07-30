@@ -12,15 +12,16 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const CategoriesPage: React.FC = () => {
   const { language } = useLanguage();
+  const t = translations[language];
   const { data: categories, error, isLoading } = useSWR<Category[]>("/api/categories", fetcher);
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950">
       <div className="container mx-auto px-4 py-8" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-        <h1 className="text-3xl font-bold mb-6 text-amber-400 text-center">{translations[language].categories}</h1>
+        <h1 className="text-3xl font-bold mb-6 text-amber-400 text-center">{t.categories}</h1>
         {error && (
           <div className="text-red-600 dark:text-red-400 text-center mb-4">
-            {translations[language].categoriesLoadError}
+            {t.categoriesLoadError}
           </div>
         )}
         {isLoading || !categories ? (
@@ -33,7 +34,7 @@ const CategoriesPage: React.FC = () => {
               ))
             ) : (
               <div className="col-span-full text-center py-4 text-gray-500 dark:text-gray-400">
-                {translations[language].categoriesNotFound}
+                {t.categoriesNotFound}
               </div>
             )}
           </div>
