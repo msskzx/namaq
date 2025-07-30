@@ -6,12 +6,12 @@ import useSWR from "swr";
 import dynamic from 'next/dynamic';
 import { useLanguage } from "@/components/LanguageContext";
 import translations from "@/components/translations";
-import type { BattleWithParticipants } from "@/types/battle";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShieldHalved, faLocationDot, faCalendarDays, faMapLocationDot } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import PersonNameCard from '@/components/PersonNameCard';
 import { PersonBase } from "@/types/person";
+import { Battle } from "@/types/battle";
 
 // Dynamically import the BattleMap component with SSR disabled
 const BattleMap = dynamic(() => import('@/components/BattleMap'), {
@@ -27,7 +27,7 @@ const BattleDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const { language } = useLanguage();
   const t = translations[language];
-  const { data: battle, error, isLoading } = useSWR<BattleWithParticipants>(slug ? `/api/battles/${slug}` : null, fetcher);
+  const { data: battle, error, isLoading } = useSWR<Battle>(slug ? `/api/battles/${slug}` : null, fetcher);
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>

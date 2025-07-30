@@ -1,6 +1,7 @@
+import { EventBase } from "./event";
 import { PersonBase } from "./person";
 
-export interface Battle {
+export interface BattleBase {
   id: string;
   name: string;
   nameTransliterated: string | null;
@@ -8,15 +9,16 @@ export interface Battle {
   hijriYear: number | null;
   location: string | null;
   locationEn: string | null;
+}
+
+export interface Battle extends BattleBase {
   latitude?: number | null;
   longitude?: number | null;
+  participations?: { person: PersonBase }[];
+  events?: { event: EventBase }[];
 }
 
 export interface BattleParticipation {
-  battle: Battle;
+  battle: BattleBase;
   status: string[];
-}
-
-export interface BattleWithParticipants extends Battle {
-  participations?: { person: PersonBase }[];
 }
