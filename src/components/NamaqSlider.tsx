@@ -37,7 +37,7 @@ export default function NamaqSlider() {
   }, [current, language]);
 
   return (
-    <div className="w-full flex flex-col items-center mb-12">
+    <div className="w-full flex flex-col items-center mb-12 bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-lg p-6 w-full h-full">
       <div className="relative w-full max-w-xs mx-auto">
         <button
           onClick={language == 'ar' ? goLeft : goRight}

@@ -15,6 +15,7 @@ import { faMosque, faUsers, faShieldAlt, faFileAlt, faThLarge, faPenNib, faCrown
 import PersonRelationsGraph from '@/components/PersonRelationsGraph';
 import NamaqSlider from '@/components/NamaqSlider';
 import Timeline from "@/components/Timeline";
+import Image from 'next/image';
 import type { Person } from '@/types/person';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -44,26 +45,65 @@ export default function Home() {
       {/* Geometric SVG background overlay (add your SVG in public/arabesque-pattern.svg) */}
       <div className="absolute inset-0 opacity-10 pointer-events-none z-0" style={{ backgroundImage: 'url(/gemini-arabesque.png)', backgroundRepeat: 'repeat' }} />
       <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 z-10" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-        {/* Sliding Cards: Namaq Forms (Slider) */}
-        <NamaqSlider />
-        
 
-        {/* Definition Section */}
-        <div className="max-w-6xl mx-auto mb-8 sm:mb-12 flex justify-center">
-          {/* Verb Card */}
-          <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-lg border-l-4 border-rose-800 p-6 flex flex-col items-center">
-            <h4 className="font-arabicDisplay text-amber-400 text-xl md:text-2xl font-bold mb-3 text-center" dir="rtl">
-              {translations[language].verbTitle}
-            </h4>
-            <p className="font-arabic text-gray-900 dark:text-gray-200 text-base md:text-lg leading-relaxed text-center mb-3" dir="rtl">
-              {translations[language].verbDefinition}
-            </p>
-            <div className="space-y-2">
-              {translations[language].verbForms.map((form, index) => (
-                <p key={index} className="font-arabic text-gray-700 dark:text-gray-200 text-sm md:text-base text-center" dir="rtl">
-                  {form}
+        {/* Hero Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="text-gray-900 dark:text-gray-200 flex flex-col justify-center">
+            <h1 className="text-5xl text-center font-Cairo">
+              {language === 'ar' ? (
+                <>
+                  <span className="text-indigo-300">تعلَّم</span> من خلال المقالات{' '}<br></br>
+                  <span className="text-blue-300">التفاعلية</span> والاستكشافات{' '}<br></br>
+                  <span>المعتمدة على</span>{' '}
+                  <span className="text-amber-400">البيانات</span>
+                </>
+              ) : (
+                <>
+                  <span className="text-indigo-300">Learn</span> Through{' '}
+                  <br></br>
+                  <span className="text-blue-300">Interactive</span> Visual Articles{' '}
+                  <br></br>
+                  &amp; <span className="text-amber-300">Data-Driven</span> Explorations
+                </>
+              )}
+            </h1>
+            <p className="text-center text-gray-800 dark:text-gray-200 text-2xl mt-8">{t.intro}</p>
+            <div className="text-center mt-8">
+              <Link href="/articles?special=true" className="inline-flex items-center px-6 py-3 bg-amber-400 text-gray-950 font-semibold rounded-lg hover:bg-amber-300 transition-colors duration-200 shadow-lg hover:shadow-xl text-sm md:text-base">
+                {language === 'ar' ? 'المقالات المميزة' : 'Special Articles'}
+              </Link>
+            </div> 
+          </div>
+          <div className="w-full h-full min-h-[500px]">
+            <Image src="/arabic_language.png" alt="Arabic Language" className="w-full h-full rounded-2xl" width={500} height={500} />
+          </div>
+        </div>
+
+        {/* Namaq Definition Section */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-12 bg-gray-50 dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+          <div className="grid grid-cols-2 lg:grid-cols-2 gap-8">
+            {/* Namaq Slider - Takes 2/3 width on large screens, full width on mobile */}
+            <div className="col-span-1">
+              <NamaqSlider />
+            </div>
+            
+            {/* Verb Card - Takes 1/3 width on large screens, full width on mobile */}
+            <div className="col-span-1">
+              <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-lg border-l-4 border-rose-800 p-6 h-full flex flex-col">
+                <h4 className="font-arabicDisplay text-amber-400 text-xl md:text-2xl font-bold mb-3 text-center" dir="rtl">
+                  {t.verbTitle}
+                </h4>
+                <p className="font-arabic text-gray-900 dark:text-gray-200 text-base md:text-lg leading-relaxed text-center mb-4 flex-grow" dir="rtl">
+                  {t.verbDefinition}
                 </p>
-              ))}
+                <div className="space-y-2 mt-2">
+                  {t.verbForms.map((form, index) => (
+                    <p key={index} className="font-arabic text-gray-700 dark:text-gray-200 text-sm md:text-base text-center" dir="rtl">
+                      {form}
+                    </p>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>

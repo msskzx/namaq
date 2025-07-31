@@ -119,7 +119,7 @@ const NavBar = () => {
           className="text-amber-600 dark:text-amber-400 text-2xl font-bold hover:text-amber-300 transition-colors"
           onClick={() => setMenuOpen(false)}
         >
-          {translations[language].title}
+          {translations[language].appName}
         </Link>
         {/* TODO Desktop Nav */}
         <div className="hidden lg:flex space-x-4 items-center">
@@ -145,7 +145,7 @@ const NavBar = () => {
               >
                 <Link
                   href={link.href}
-                  className="text-black dark:text-amber-400 rounded-md transition-colors hover:text-gray-800 dark:hover:text-amber-300 font-medium px-3 py-2 flex items-center"
+                  className="text-black dark:text-gray-200 rounded-md transition-colors hover:text-gray-800 dark:hover:text-amber-300 font-medium px-3 py-2 flex items-center"
                   onClick={() => setMenuOpen(false)}
                 >
                   {link.label}
@@ -153,7 +153,7 @@ const NavBar = () => {
                 
                 {linkItems.length > 0 && isHovered && (
                   <div 
-                    className="absolute top-full left-0 mt-1 bg-white dark:bg-gray-900 border border-amber-400 rounded-md shadow-lg z-50 min-w-[200px] py-1"
+                    className="absolute top-full left-0 mt-1 bg-white dark:bg-gray-900 shadow-lg z-50 min-w-[200px] py-1"
                     onMouseEnter={() => {
                       if (hoverTimeoutRef.current) {
                         clearTimeout(hoverTimeoutRef.current);
@@ -170,7 +170,7 @@ const NavBar = () => {
                       <Link
                         key={item.href}
                         href={item.href}
-                        className="block px-4 py-2 text-sm text-gray-800 dark:text-amber-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                        className="block px-4 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                         onClick={() => setHoveredLink(null)}
                       >
                         {item.label}

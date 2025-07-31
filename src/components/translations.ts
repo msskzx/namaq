@@ -1,7 +1,8 @@
 const translations = {
   en: {
     // NavBar
-    title: 'Namaq',
+    appName: 'Namaq',
+    title: 'Learn Through Interactive Visual Articles & Data-Driven Explorations',
     arabic: 'Arabic Language',
     home: 'Home',
     about: 'About',
@@ -88,7 +89,7 @@ const translations = {
     },
     // Homepage
     welcome: 'Welcome to Namaq',
-    intro: 'Learn Arabic language, Islamic history, and the beautiful teachings of our Prophet Muhammad ﷺ and his noble companions',
+    intro: 'Uncover the fascinating stories of remarkable individuals who shaped the course of human civilization. Learn about many topics in an interactive manner and explore',
     definition: 'What is Namaq?',
     nounTitle: 'نَمَق (Noun)',
     nounDefinition: 'النَّمَقُ : الكِتابُ الذي يُكْتَب فيه',
@@ -228,7 +229,8 @@ const translations = {
   },
   ar: {
     // NavBar
-    title: 'نَمَق',
+    appName: 'نَمَق',
+    title: 'تعلَّم من خلال المقالات التفاعلية والاستكشافات المعتمدة على البيانات',
     arabic: 'العربية',
     home: 'الرئيسية',
     about: 'حول',
@@ -315,7 +317,7 @@ const translations = {
     },
     // Homepage
     welcome: 'مرحبًا بكم في نَمَق',
-    intro: 'تعلم اللغة العربية والتاريخ الإسلامي والتعاليم الجميلة لنبينا محمد ﷺ وأصحابه الكرام',
+    intro: 'اكتشف القصص المذهلة للشخصيات البارزة الذين شكّلوا مسار التاريخ البشري وتعلم عن العديد من الموضوعات بطريقة تفاعلية',
     definition: 'ما هو نَمَق؟',
     nounTitle: 'نَمَق (اسم)',
     nounDefinition: 'النَّمَقُ : الكِتابُ الذي يُكْتَب فيه',
