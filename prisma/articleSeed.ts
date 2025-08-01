@@ -1,4 +1,4 @@
-import { articleData } from './articlesSeedData';
+import { articleData } from './articleSeedData';
 import { prisma } from '../src/lib/prisma';
 
 async function seedArticles() {

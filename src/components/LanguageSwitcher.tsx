@@ -5,7 +5,7 @@ import { useLanguage } from './LanguageContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlobe } from '@fortawesome/free-solid-svg-icons';
 
-const LanguageSwitcher: React.FC = () => {
+function LanguageSwitcher() {
   const { language, toggleLanguage } = useLanguage();
   return (
     <button
@@ -33,6 +33,6 @@ const LanguageSwitcher: React.FC = () => {
       </div>
     </button>
   );
-};
+}
 
 export default LanguageSwitcher; 

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 
-const ConditionalAnalytics: React.FC = () => {
+function ConditionalAnalytics() {
   const [consent, setConsent] = useState<string | null>(null);
 
   useEffect(() => {

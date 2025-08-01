@@ -11,7 +11,7 @@ export interface Ayah {
 export type RelationFrom = PrismaPersonRelation & { to: PrismaPerson };
 export type RelationTo = PrismaPersonRelation & { from: PrismaPerson };
 
-export type Person = PrismaPerson & {
+export type PersonFull = PrismaPerson & {
   relationsFrom: RelationFrom[];
   relationsTo: RelationTo[];
   titles: Title[];
@@ -20,13 +20,14 @@ export type Person = PrismaPerson & {
   participations?: BattleParticipation[];
 };
 
-export type PersonWithTitles = PrismaPerson & {
-  titles: Title[];
-};
-
-export type PersonBase = {
+export interface PersonBase {
   id: string;
   slug: string;
   name: string;
+  fullName?: string;
   nameTransliterated?: string;
+}
+
+export interface PersonWithTitles extends PersonBase {
+  titles: Title[];
 }

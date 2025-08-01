@@ -11,7 +11,7 @@ interface BattleParticipationTimelineProps {
   participations: BattleParticipation[];
 }
 
-const BattleParticipationTimeline: React.FC<BattleParticipationTimelineProps> = ({ participations }) => {
+function BattleParticipationTimeline({ participations }: BattleParticipationTimelineProps) {
   const { language } = useLanguage();
 
   if (!participations || participations.length === 0) {

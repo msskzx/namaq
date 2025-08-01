@@ -10,7 +10,7 @@ interface BattleParticipationCardProps {
   url: string;
 }
 
-const BattleParticipationCard: React.FC<BattleParticipationCardProps> = ({participation, language, url }) => {
+function BattleParticipationCard({participation, language, url }: BattleParticipationCardProps) {
   return (
    <Link 
    href={url}

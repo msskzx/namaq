@@ -25,6 +25,8 @@ const translations = {
     events: 'Events',
     eventsLoadError: 'Failed to load events.',
     eventsNotFound: 'No events found.',
+    peopleNotFound: 'No people found.',
+    peopleLoadError: 'Failed to load people.',
     
     // Common UI
     loading: 'Loading...',
@@ -58,7 +60,7 @@ const translations = {
     battleLocation: 'Battle Location on Map',
     
     // Family Relations
-    familyRelations: 'Family Relations',
+    familyRelations: 'Relationships Network',
     
     // Articles
     specialArticles: 'Special Articles',
@@ -253,6 +255,8 @@ const translations = {
     events: 'الأحداث',
     eventsLoadError: 'فشل تحميل الأحداث.',
     eventsNotFound: 'لم يتم العثور على أحداث.',
+    peopleNotFound: 'لم يتم العثور على أشخاص.',
+    peopleLoadError: 'فشل تحميل الأشخاص.',
     
     // Common UI
     loading: 'جاري التحميل...',
@@ -285,8 +289,8 @@ const translations = {
     // Battle Map
     battleLocation: 'موقع المعركة على الخريطة',
     
-    // Family Relations
-    familyRelations: 'العلاقات العائلية',
+    // family Relations
+    familyRelations: 'شبكة العلاقات',
     
     // Articles
     specialArticles: 'مقالات مميزة',

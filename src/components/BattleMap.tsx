@@ -15,12 +15,12 @@ interface BattleMapProps {
 const DEFAULT_CENTER = { lat: 24.7136, lng: 46.6753 }; // Default to central Arabia
 const DEFAULT_ZOOM = 5;
 
-const BattleMap: React.FC<BattleMapProps> = ({
+function BattleMap({
   battles = [],
   defaultCenter = DEFAULT_CENTER,
   defaultZoom = DEFAULT_ZOOM,
   className = 'h-[500px] w-full rounded-lg border border-gray-200 dark:border-gray-700',
-}) => {
+}: BattleMapProps) {
   const { language } = useLanguage();
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<google.maps.Map | null>(null);

@@ -13,7 +13,7 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguage] = useState<Language>('ar');
   const [languageLoaded, setLanguageLoaded] = useState(false);
 
@@ -63,10 +63,10 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       {children}
     </LanguageContext.Provider>
   );
-};
+}
 
 export const useLanguage = () => {
   const ctx = useContext(LanguageContext);
   if (!ctx) throw new Error('useLanguage must be used within a LanguageProvider');
   return ctx;
-}; 
+} 

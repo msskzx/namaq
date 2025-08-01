@@ -13,12 +13,12 @@
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",
-    "seed:people": "tsx prisma/seedPeople.ts",
-    "seed:titles": "tsx prisma/seedTitles.ts",
-    "seed:battles": "tsx prisma/seedBattles.ts",
+    "seed:people": "tsx prisma/personSeed.ts",
+    "seed:titles": "tsx prisma/titleSeed.ts",
+    "seed:battles": "tsx prisma/battleSeed.ts",
     "seed:categories": "tsx prisma/categorySeed.ts",
     "seed:articles": "tsx prisma/articleSeed.ts",
-    "seed:events": "tsx prisma/seedEvents.ts"
+    "seed:events": "tsx prisma/eventSeed.ts"
   },
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.7.2",

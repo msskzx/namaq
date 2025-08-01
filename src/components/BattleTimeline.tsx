@@ -11,7 +11,7 @@ interface BattleTimelineProps {
   battles: Battle[];
 }
 
-const BattleTimeline: React.FC<BattleTimelineProps> = ({ battles }) => {
+function BattleTimeline({ battles }: BattleTimelineProps) {
   const { language } = useLanguage();
 
   if (!battles || battles.length === 0) {

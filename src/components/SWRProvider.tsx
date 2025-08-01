@@ -7,7 +7,7 @@ interface SWRProviderProps {
   children: React.ReactNode;
 }
 
-const SWRProvider: React.FC<SWRProviderProps> = ({ children }) => {
+function SWRProvider({ children }: SWRProviderProps) {
   return (
     <SWRConfig value={swrConfig}>
       {children}

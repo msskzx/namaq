@@ -48,7 +48,7 @@ interface TimelineProps {
   events: EventWithBattle[];
 }
 
-const Timeline: React.FC<TimelineProps> = ({ events }) => {
+function Timeline({ events }: TimelineProps) {
   const { language } = useLanguage();
 
   if (!events || events.length === 0) {
@@ -63,7 +63,7 @@ const Timeline: React.FC<TimelineProps> = ({ events }) => {
   return (
     <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-6 mb-6">
       {/* Timeline Header */}
-      <div className="font-bold text-xl mb-6 text-amber-400 flex items-center gap-2">
+      <div className="font-bold text-xl mb-6 text-gray-900 dark:text-gray-200 flex items-center gap-2">
         <FontAwesomeIcon icon={faTimeline} className="w-5 h-5" />
         {language === 'ar' ? 'الخط الزمني' : 'Timeline'}
       </div>

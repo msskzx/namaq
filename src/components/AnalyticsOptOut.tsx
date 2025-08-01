@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from './LanguageContext';
 
-const AnalyticsOptOut: React.FC = () => {
+function AnalyticsOptOut() {
   const [analyticsEnabled, setAnalyticsEnabled] = useState<boolean | null>(null);
   const { language } = useLanguage();
 

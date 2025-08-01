@@ -40,7 +40,7 @@ const getLinkGroups = (language: 'en' | 'ar') => ({
   },
 });
 
-const Footer: React.FC = () => {
+function Footer() {
   const { language } = useLanguage();
   const currentLanguage = language || 'ar';
   const isRTL = currentLanguage === 'ar';

@@ -1,4 +1,4 @@
-import { battles } from './battlesSeedData';
+import { battles } from './battleSeedData';
 import { prisma } from '../src/lib/prisma';
 
 async function seedBattles() {

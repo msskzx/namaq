@@ -46,7 +46,7 @@ const getLinkItems = (href: string, language: 'en' | 'ar'): NavLink[] => {
   }
 };
 
-const NavBar = () => {
+function NavBar() {
   const { language, languageLoaded } = useLanguage() as { language: 'en' | 'ar'; languageLoaded: boolean };
   const [menuOpen, setMenuOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);

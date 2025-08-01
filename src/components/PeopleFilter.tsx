@@ -13,14 +13,14 @@ interface PeopleFilterProps {
   language: 'en' | 'ar';
 }
 
-const PeopleFilter: React.FC<PeopleFilterProps> = ({
+function PeopleFilter({
   titles,
   selectedTitle,
   onTitleChange,
   search,
   onSearchChange,
   language,
-}) => {
+}: PeopleFilterProps) {
   const isArabic = language === 'ar';
   const inputRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = React.useState(search);

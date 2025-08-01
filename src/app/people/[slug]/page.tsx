@@ -12,7 +12,7 @@ import Badge from '@/components/Badge';
 import type { Ayah } from '@/types/person';
 import BattleParticipationTimeline from '@/components/BattleParticipationTimeline';
 import Timeline from '@/components/Timeline';
-import type { Person } from '@/types/person';
+import type { PersonFull } from '@/types/person';
 import useSWR from 'swr';
 import { useParams } from 'next/navigation';
 import { EventWithBattle } from '@/types/event';
@@ -23,7 +23,7 @@ const PersonDetailPage: React.FC = () => {
   const { language } = useLanguage();
   const t = translations[language];
   const { slug } = useParams<{ slug: string }>();
-  const { data: person, error, isLoading } = useSWR<Person>(slug ? `/api/people/${slug}` : null, fetcher);
+  const { data: person, error, isLoading } = useSWR<PersonFull>(slug ? `/api/people/${slug}` : null, fetcher);
   const [ayatText, setAyatText] = useState<Ayah[]>([]);
 
   useEffect(() => {

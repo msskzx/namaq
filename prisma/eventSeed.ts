@@ -1,4 +1,4 @@
-import { eventsData } from './eventsSeedData';
+import { eventsData } from './eventSeedData';
 import { prisma } from '../src/lib/prisma';
 import { EventType } from '../src/generated/prisma';
 

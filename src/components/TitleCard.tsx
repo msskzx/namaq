@@ -14,7 +14,7 @@ interface TitleCardProps {
   url: string;
 }
 
-const TitleCard: React.FC<TitleCardProps> = ({ title, language, url }) => {
+function TitleCard({ title, language, url }: TitleCardProps) {
   return (
     <Link href={url} className="block">
       <div className="bg-white dark:bg-gray-900 border border-amber-400 rounded-lg p-4 shadow transition-transform duration-200 hover:shadow-xl hover:scale-105 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
@@ -27,6 +27,6 @@ const TitleCard: React.FC<TitleCardProps> = ({ title, language, url }) => {
       </div>
     </Link>
   );
-};
+}
 
 export default TitleCard; 

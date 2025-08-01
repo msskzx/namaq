@@ -11,7 +11,7 @@ declare global {
   }
 }
 
-const CookieConsent: React.FC = () => {
+function CookieConsent() {
   const [showBanner, setShowBanner] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const { language } = useLanguage();

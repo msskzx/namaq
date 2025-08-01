@@ -1,0 +1,71 @@
+import { useLanguage } from '@/components/LanguageContext';
+import translations from "@/components/translations";
+import useSWR from 'swr';
+import PersonCard from '../PersonCard';
+import LoadingSpinner from '../LoadingSpinner';
+import type { PersonBase } from '@/types/person';
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
+function TheTen() {
+  const { language } = useLanguage();
+  const t = translations[language];
+
+  const sortedSlugs = [
+    'abu-bakr-as-siddiq',
+    'umar-ibn-al-khattab',
+    'uthman-ibn-affan',
+    'ali-ibn-abi-talib',
+    'talhah-ibn-ubaydullah',
+    'az-zubayr-ibn-al-awwam',
+    'saad-ibn-abi-waqqas',
+    'abdur-rahman-ibn-awf',
+    'saeed-ibn-zaid',
+    'abu-ubaydah-ibn-al-jarrah',
+  ];
+
+  // Fetch people with the 'the-ten-promised-paradise' title
+  const { data: people, error, isLoading } = useSWR(
+    `/api/people?title=the-ten-promised-paradise`,
+    fetcher
+  );
+  // sort people by slug using the sortedSlugs array
+  const sortedPeople = people?.sort((a: PersonBase, b: PersonBase) => sortedSlugs.indexOf(a.slug) - sortedSlugs.indexOf(b.slug)) || [];
+
+  if (error) {
+    return (
+      <div className="mx-auto my-12 text-center text-red-500">
+        {t.peopleLoadError}
+      </div>
+    );
+  }
+
+  return (
+    <div className="mx-auto my-12 px-4">
+      
+
+      {/* The Ten Promised Paradise */}
+      {isLoading ? (
+        <div className="flex justify-center my-12">
+          <LoadingSpinner />
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mt-8">
+          {Array.isArray(sortedPeople) && sortedPeople.length > 0 ? (
+            sortedPeople.map((person) => (
+              <div key={person.id} className="h-full">
+                <PersonCard person={person} language={language} />
+              </div>
+            ))
+          ) : (
+            <div className="col-span-full text-center text-gray-600 dark:text-gray-400 py-4">
+              {t.peopleNotFound}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default TheTen;

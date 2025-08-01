@@ -15,7 +15,7 @@ function getColorClass(color: string) {
   return '';
 }
 
-const Badge: React.FC<BadgeProps> = ({ text, href, color = 'indigo' }) => {
+function Badge({ text, href, color = 'indigo' }: BadgeProps) {
   const baseClasses = `${getColorClass(color)} text-s font-semibold border rounded px-3 py-1 text-sm text-gray-800 dark:text-gray-200 transition`;
   if (href) {
     return (

@@ -60,4 +60,15 @@ export const categoryData = [
     createdAt: new Date(),
     updatedAt: new Date(),
   },
+  {
+    name: "العلوم",
+    nameTransliterated: "Science",
+    description: "علوم واكتشافات",
+    descriptionTransliterated: "Sciences and discoveries",
+    img: null,
+    slug: "science",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+
 ]; 

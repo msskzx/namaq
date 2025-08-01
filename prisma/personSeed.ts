@@ -1,5 +1,5 @@
 import { prisma } from '../src/lib/prisma';
-import { people, peopleRelations, peopleBattleParticipations } from './peopleSeedData';
+import { people, peopleRelations, peopleBattleParticipations } from './personSeedData';
 
 async function main() {
   try {

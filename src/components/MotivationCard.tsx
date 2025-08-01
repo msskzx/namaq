@@ -10,7 +10,7 @@ interface MotivationCardProps {
   borderColor?: string;
 }
 
-const MotivationCard: React.FC<MotivationCardProps> = ({ icon, title, desc, url, color = "text-amber-400", borderColor = "border-amber-400" }) => {
+function MotivationCard({ icon, title, desc, url, color = "text-amber-400", borderColor = "border-amber-400" }: MotivationCardProps) {
   return (
     <Link href={url} className="block">
               <div className={`relative group bg-gray-50 dark:bg-gray-900 rounded-xl shadow-lg p-6 flex flex-col items-center justify-center border ${borderColor} transition-transform hover:-translate-y-1 hover:shadow-2xl cursor-pointer min-h-[140px]`}>
@@ -22,6 +22,6 @@ const MotivationCard: React.FC<MotivationCardProps> = ({ icon, title, desc, url,
       </div>
     </Link>
   );
-};
+}
 
 export default MotivationCard; 

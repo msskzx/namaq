@@ -13,7 +13,7 @@ interface BattleParticipantsProps {
   language: string;
 }
 
-const BattleParticipants: React.FC<BattleParticipantsProps> = ({ participations, language }) => {
+function BattleParticipants({ participations, language }: BattleParticipantsProps) {
   if (!participations || participations.length === 0) return null;
   return (
     <div className="mt-4">

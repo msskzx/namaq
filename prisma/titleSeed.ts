@@ -1,4 +1,4 @@
-import { titles } from './titlesSeedData';
+import { titles } from './titleSeedData';
 import { prisma } from '../src/lib/prisma';
 import { PrismaClient } from '../src/generated/prisma';
 

@@ -7,7 +7,7 @@ interface PersonNameCardProps {
   language: string;
 }
 
-const PersonNameCard: React.FC<PersonNameCardProps> = ({ person, language }) => {
+function PersonNameCard({ person, language }: PersonNameCardProps) {
   return (
     <Link href={`/people/${person.slug}`} className="block">
       <div className="bg-white dark:bg-gray-900 border border-amber-400 rounded-lg p-4 shadow hover:shadow-xl hover:scale-105 dark:hover:bg-gray-700 transition-transform duration-200 cursor-pointer text-center">
