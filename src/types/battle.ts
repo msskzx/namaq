@@ -21,4 +21,5 @@ export interface Battle extends BattleBase {
 export interface BattleParticipation {
   battle: BattleBase;
   status: string[];
+  courage: string;
 }

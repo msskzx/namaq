@@ -531,7 +531,7 @@ export const peopleBattleParticipations = [
   { personSlug: 'ali-ibn-abi-talib', battleSlug: 'uhud', isMuslim: true, status: [] },
   { personSlug: 'az-zubayr-ibn-al-awwam', battleSlug: 'uhud', isMuslim: true, status: [] },
   { personSlug: 'prophet-muhammad', battleSlug: 'uhud', isMuslim: true, status: ['INJURED'] },
-  { personSlug: 'saad-ibn-abi-waqqas', battleSlug: 'uhud', isMuslim: true, status: [] },
+  { personSlug: 'saad-ibn-abi-waqqas', battleSlug: 'uhud', isMuslim: true, status: [], courage: `ابن إسحاق : حدثني صالح بن كيسان ، عن بعض آل سعد ، عن سعد : أنه رمى يوم أحد ، قال : فلقد رأيت رسول الله - صلى الله عليه وسلم - يناولني النبل ويقول : " ارم فداك أبي وأمي " . حتى إنه ليناولني السهم ما له من نصل ، فأرمي به . [ ص: 100 ] قال ابن المسيب : كان جيد الرمي ، سمعته يقول : جمع لي رسول الله - صلى الله عليه وسلم - أبويه يوم أحد . أخرجه البخاري . وقد ساقه الحافظ ابن عساكر من بضعة عشر وجها . وساق حديث ابن أبي خالد عن قيس من سبعة عشر طريقا بألفاظها ، وبمثل هذا كبر تاريخه . وساق حديث عبد الله بن شداد عن علي : ما سمعت رسول الله - صلى الله عليه وسلم - جمع أبويه لأحد غير سعد ، من ستة عشر وجها . رواه مسعر وشعبة وسفيان ، عن سعد بن إبراهيم ، عنه .` },
   { personSlug: 'saeed-ibn-zaid', battleSlug: 'uhud', isMuslim: true, status: [] },
   { personSlug: 'talhah-ibn-ubaydullah', battleSlug: 'uhud', isMuslim: true, status: ['INJURED'] },
   { personSlug: 'umar-ibn-al-khattab', battleSlug: 'uhud', isMuslim: true, status: [] },

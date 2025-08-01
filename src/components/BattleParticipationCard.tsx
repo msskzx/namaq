@@ -45,6 +45,7 @@ const BattleParticipationCard: React.FC<BattleParticipationCardProps> = ({partic
                status === 'MARTYRED' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' :
                status === 'INJURED' ? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200' :
                status === 'CAPTURED' ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200' :
+               status === 'WAS_CAPTURED' ? 'bg-blue-100 text-yellow-800 dark:bg-blue-900 dark:text-blue-200' :
                status === 'ABSENT_EXCUSED' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' :
                'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'
              }`}
@@ -53,12 +54,14 @@ const BattleParticipationCard: React.FC<BattleParticipationCardProps> = ({partic
                status === 'MARTYRED' ? 'استشهد' :
                status === 'INJURED' ? 'جُرح' :
                status === 'CAPTURED' ? 'أُسر' :
+               status === 'WAS_CAPTURED' ? 'أُسر' :
                status === 'ABSENT_EXCUSED' ? 'غائب بعذر' :
                status
              ) : (
                status === 'MARTYRED' ? 'Martyred' :
                status === 'INJURED' ? 'Injured' :
                status === 'CAPTURED' ? 'Captured' :
+               status === 'WAS_CAPTURED' ? 'Was Captured' :
                status === 'ABSENT_EXCUSED' ? 'Absent (Excused)' :
                status
              )}
@@ -66,6 +69,12 @@ const BattleParticipationCard: React.FC<BattleParticipationCardProps> = ({partic
          ))}
        </div>
      )} 
+
+     {participation.courage && (
+       <div className="flex items-center gap-1 mt-2">
+         {participation.courage}
+       </div>
+     )}
 
    </div>
  </Link>

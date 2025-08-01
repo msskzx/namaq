@@ -60,7 +60,7 @@ async function main() {
     }
 
     // Seed battle participations
-    const battleRecords = await prisma.battle.findMany();
+    const battleRecords = await prisma.battle.findMany()
     const battleSlugToId: Record<string, string> = {};
     for (const battle of battleRecords) {
       // Use slug from nameTransliterated or name (assuming slug is not a field in Battle)
@@ -76,6 +76,7 @@ async function main() {
             battleId,
             isMuslim: participation.isMuslim,
             status: participation.status as any, // Cast string[] to ParticipationStatus[]
+            courage: participation.courage,
           },
         });
         console.log(`  [BattleParticipation] Seeded: ${person.slug} in ${participation.battleSlug}`);

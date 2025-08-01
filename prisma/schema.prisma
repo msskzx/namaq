@@ -270,6 +270,11 @@ model BattleParticipation {
   isMuslim     Boolean
   status       ParticipationStatus[]
 
+  courage      String?
+
+  createdAt    DateTime            @default(now()) // Add createdAt and updatedAt for better tracking
+  updatedAt    DateTime            @updatedAt
+
   @@unique([personId, battleId])
 }
 
