@@ -15,6 +15,7 @@ import Image from 'next/image';
 import type { PersonFull } from '@/types/person';
 import TheTen from "@/components/people/TheTen";
 import Exploration from "@/components/Exploration";
+import PersonCard from "@/components/PersonCard";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -157,6 +158,10 @@ export default function Home() {
               ? 'استكشف حياة النبي محمد ﷺ والصحابة الكرام من خلال الجداول الزمنية والرسوم المتحركة والشخصيات التوضيحية، مما يجعل من التعلم تجربة فريدة.'
               : 'Explore the lives and events of the Prophet Muhammad and his noble Companions through clear timelines, animations, and interactive figures, making learning a unique experience.'}
           </p>
+          
+          <div className="mx-auto">
+            <PersonCard person={prophet} language={language} />
+          </div>
 
           <TheTen />
         </div>

@@ -86,13 +86,13 @@ const PeoplePage = () => {
       {(isLoadingPeople || isLoadingTitles) ? (
         <LoadingSpinner />
       ) : (
-        <ul className="space-y-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 gap-6">
           {people?.map((person) => (
-            <li key={person.slug}>
+            <div key={person.slug}>
               <PersonCard person={person} language={language} />
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

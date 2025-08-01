@@ -34,23 +34,22 @@ function TheTen() {
 
   if (error) {
     return (
-      <div className="mx-auto my-12 text-center text-red-500">
+      <div className="mx-auto mt-8 text-center text-red-500">
         {t.peopleLoadError}
       </div>
     );
   }
 
   return (
-    <div className="mx-auto my-12 px-4">
+    <div className="mx-auto">
       
-
       {/* The Ten Promised Paradise */}
       {isLoading ? (
-        <div className="flex justify-center my-12">
+        <div className="flex justify-center my-8">
           <LoadingSpinner />
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mt-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 mt-8 gap-6">
           {Array.isArray(sortedPeople) && sortedPeople.length > 0 ? (
             sortedPeople.map((person) => (
               <div key={person.id} className="h-full">

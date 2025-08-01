@@ -16,7 +16,7 @@ function getColorClass(color: string) {
 }
 
 function Badge({ text, href, color = 'indigo' }: BadgeProps) {
-  const baseClasses = `${getColorClass(color)} text-s font-semibold border rounded px-3 py-1 text-sm text-gray-800 dark:text-gray-200 transition`;
+  const baseClasses = `${getColorClass(color)} text-s border rounded px-3 py-1 text-sm text-gray-800 dark:text-gray-200 transition`;
   if (href) {
     return (
       <Link href={href} className="inline-block">
