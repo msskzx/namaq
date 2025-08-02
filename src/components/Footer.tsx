@@ -78,9 +78,6 @@ function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
               <div className={`${isRTL ? 'text-right' : 'text-left'}`}>
-                <div className="text-lg font-bold mb-2 dark:text-amber-400">
-                  {translations[currentLanguage].title}
-                </div>
                 <div className="text-sm opacity-90 text-gray-700 dark:text-gray-200">
                   &copy; {new Date().getFullYear()} Namaq. {currentLanguage === 'ar' ? 'جميع الحقوق محفوظة' : 'All rights reserved'}.
                 </div>
@@ -88,11 +85,6 @@ function Footer() {
             </div>
             
             <div className="text-sm opacity-80">
-              <p className={`text-gray-700 dark:text-gray-200 ${isRTL ? 'text-right' : 'text-left'}`} dir={isRTL ? 'rtl' : 'ltr'}>
-                {currentLanguage === 'ar' 
-                  ? 'تعلم اللغة العربية والتاريخ الإسلامي وتعاليم النبي محمد ﷺ'
-                  : 'Learn Arabic language, Islamic history, and the teachings of Prophet Muhammad ﷺ'}
-              </p>
               <div className="mt-2">
                 <a 
                   href="/privacy" 

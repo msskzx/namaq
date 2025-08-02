@@ -9,26 +9,14 @@ import { Article } from '@/types/article';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import PersonRelationsGraph from '@/components/PersonRelationsGraph';
 import NamaqSlider from '@/components/NamaqSlider';
 import Image from 'next/image';
-import type { PersonFull } from '@/types/person';
 import TheTen from "@/components/people/TheTen";
 import Exploration from "@/components/Exploration";
 import PersonCard from "@/components/PersonCard";
+import GraphCanvas from "@/components/graph/GraphCanvas";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
-
-// Helper component to fetch and show Prophet Muhammad's relation graph
-function RelationGraphPreview({ prophet, prophetError, prophetLoading, language }: { prophet: PersonFull, prophetError: boolean, prophetLoading: boolean, language: string }) {
-  if (prophetError) return <div className="text-red-400 text-center text-sm md:text-base">{language === 'ar' ? 'تعذر تحميل الرسم البياني' : 'Failed to load relation graph.'}</div>;
-  if (prophetLoading || !prophet) return <div className="flex justify-center"><div className="w-12 h-12 border-4 border-amber-400 border-t-transparent rounded-full animate-spin"></div></div>;
-  return (
-    <div className="w-full overflow-x-auto">
-      <PersonRelationsGraph person={prophet} relationsFrom={prophet.relationsFrom} relationsTo={prophet.relationsTo} />
-    </div>
-  );
-}
 
 export default function Home() {
   const { language } = useLanguage();
@@ -158,11 +146,19 @@ export default function Home() {
               ? 'استكشف حياة النبي محمد ﷺ والصحابة الكرام من خلال الجداول الزمنية والرسوم المتحركة والشخصيات التوضيحية، مما يجعل من التعلم تجربة فريدة.'
               : 'Explore the lives and events of the Prophet Muhammad and his noble Companions through clear timelines, animations, and interactive figures, making learning a unique experience.'}
           </p>
+          {prophetError && (
+            <div className="text-red-600 dark:text-red-400 text-center mb-4 text-sm md:text-base">
+              {language === 'ar' ? 'حدث خطأ في تحميل بيانات النبي' : 'Error loading Prophet data'}
+            </div>
+          )}
+          {prophetLoading ? (
+            <LoadingSpinner />
+          ) : (
           
           <div className="mx-auto">
             <PersonCard person={prophet} language={language} />
           </div>
-
+          )}
           <TheTen />
         </div>
 
@@ -171,15 +167,15 @@ export default function Home() {
 
         {/* Relation Graph Feature Section */}
         <div className="mx-auto my-12">
-          <h2 className="font-arabicDisplay text-gray-900 dark:text-gray-200 text-2xl sm:text-3xl font-bold mb-6 text-center">
+          <h2 className="font-arabicDisplay text-gray-900 dark:text-gray-200 text-2xl sm:text-3xl font-bold mb-6 text-center" dir={language === 'ar' ? 'rtl' : 'ltr'}>
             {t.familyRelations}
           </h2>
-          <p className="text-center text-gray-800 dark:text-indigo-100 mb-10 text-base sm:text-lg md:text-xl font-arabic max-w-4xl mx-auto">
+          <p className="text-center text-gray-800 dark:text-indigo-100 mb-10 text-base sm:text-lg md:text-xl font-arabic max-w-4xl mx-auto" dir={language === 'ar' ? 'rtl' : 'ltr'}>
             {language === 'ar'
               ? 'استكشف العلاقات العائلية للنبي محمد ﷺ وجميع الصحابة والأنبياء من خلال رسم بياني تفاعلي يوضح الأبناء، البنات، الأزواج، الأقارب وغيرهم. هذه الميزة متوفرة لكل شخصية في الموقع.'
               : 'Explore the family and relation graph of Prophet Muhammad ﷺ and all companions and prophets through an interactive diagram showing children, d more. This feature is available for every person on the site.'}
           </p>
-          <RelationGraphPreview prophet={prophet} prophetError={prophetError} prophetLoading={prophetLoading} language={language} />
+          <GraphCanvas url="/api/graph" />
         </div>
 
         {/* Section Divider (amber-400) */}

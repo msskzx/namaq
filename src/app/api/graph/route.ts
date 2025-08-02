@@ -15,9 +15,7 @@ interface GraphNode {
   group: number;
 }
 
-export async function GET(
-) {
-  
+export async function GET() {
   const session = getSession();
 
   if (!session) {
@@ -30,7 +28,7 @@ export async function GET(
   try {
     // Query to find all relationships between people
     const result = await session.run(
-        `MATCH (p1:Person)-[r]-(p2:Person)
+        `MATCH (p1:Person)-[r]->(p2:Person)
         RETURN p1, r, p2
         LIMIT 100`,
     );
