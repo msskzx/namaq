@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
 import { useLanguage } from "@/components/LanguageContext";
@@ -18,7 +17,7 @@ import { CategoryBase } from "@/types/category";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const EventPage: React.FC = () => {
+function EventPage() {
   const { slug } = useParams<{ slug: string }>();
   const { language } = useLanguage();
   const t = translations[language];
