@@ -16,8 +16,9 @@ interface NavLink {
 
 const getLinkItems = (href: string, language: 'en' | 'ar'): NavLink[] => {
   switch (href) {
-    case '/people':
+    case '/graph':
       return [
+        { href: '/graph', label: translations[language].familyRelations },
         { href: '/people/prophet-muhammad', label: translations[language].prophet as string },
         { href: '/people?title=companion', label: translations[language].companions as string },
         { href: '/people', label: translations[language].people as string },
@@ -88,7 +89,7 @@ function NavBar() {
 
   const mainLinks = [
     { href: '/specials', label: language === 'ar' ? 'مقالات مميزة' : 'Special Articles' },
-    { href: '/people', label: translations[language].people },
+    { href: '/graph', label: translations[language].familyRelations },
     { href: '/battles', label: translations[language].battles.title },
     { href: '/arabic', label: translations[language].arabic },
   ];
@@ -98,6 +99,7 @@ function NavBar() {
     { href: '/people/prophet-muhammad', label: translations[language].prophet },
     { href: '/people?title=companion', label: translations[language].companions },
     { href: '/people', label: translations[language].people },
+    { href: '/graph', label: translations[language].familyRelations },
     { href: '/battles', label: translations[language].battles.title },
     { href: '/events', label: translations[language].events },
     { href: '/articles', label: translations[language].articles },

@@ -11,6 +11,9 @@ interface PersonCardProps {
 }
 
 function PersonCard({ person, language = 'ar' }: PersonCardProps) {
+  if (!person) {
+    return null;
+  }
   return (
     <Link href={`/people/${person.slug}`} className="block h-full">
       <div className="bg-white dark:bg-gray-900 w-full h-full flex flex-col border-l-4 border-amber-400 rounded-lg p-4 shadow transition-transform duration-200 hover:shadow-xl hover:scale-105 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">

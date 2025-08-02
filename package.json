@@ -18,7 +18,8 @@
     "seed:battles": "tsx prisma/battleSeed.ts",
     "seed:categories": "tsx prisma/categorySeed.ts",
     "seed:articles": "tsx prisma/articleSeed.ts",
-    "seed:events": "tsx prisma/eventSeed.ts"
+    "seed:events": "tsx prisma/eventSeed.ts",
+    "seed:graph": "tsx neo4j/graphSeed.ts"
   },
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
@@ -29,12 +30,15 @@
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
     "chart.js": "^4.5.0",
+    "dotenv": "^17.2.1",
     "js-cookie": "^3.0.5",
+    "neo4j-driver": "^5.28.1",
     "next": "15.3.5",
     "next-themes": "^0.4.6",
     "prisma": "^6.11.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-force-graph-2d": "^1.28.0",
     "swr": "^2.3.4"
   },
   "devDependencies": {
