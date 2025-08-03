@@ -2,8 +2,14 @@ import { NextResponse } from 'next/server';
 import { getSession } from '@/lib/neo4j';
 import { GraphLink, GraphNode } from '@/types/graph';
 
-export async function GET() {
+export async function GET(
+  _request: Request,
+  { params }: { params: Promise<{ slug: string }> }
+) {
+  const { slug } = await params;
   const session = getSession();
+
+  console.log(slug);
 
   if (!session) {
     return NextResponse.json(
@@ -15,17 +21,19 @@ export async function GET() {
   try {
     // Query to find all relationships between people
     const result = await session.run(
-        `MATCH (p1:Person)-[r]->(p2:Person)
-        RETURN p1, r, p2
+        `MATCH (p:Person {slug: $slug})-[r]-(neighbor)
+        WHERE neighbor:Person
+        RETURN p, r, neighbor
         LIMIT 100`,
+        { slug }
     );
 
     const nodes = new Map();
     const links: GraphLink[] = [];
 
     result.records.forEach(record => {
-      const p1 = record.get('p1');
-      const p2 = record.get('p2');
+      const p1 = record.get('p');
+      const p2 = record.get('neighbor');
       const rel = record.get('r');
 
       // Add nodes if they don't exist

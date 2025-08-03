@@ -1,72 +1,29 @@
 'use client';
 
-import { useEffect, useState, useCallback, useRef, RefObject } from 'react';
+import { useEffect, useCallback, useRef, RefObject } from 'react';
 import type { ForceGraphMethods, NodeObject, LinkObject } from 'react-force-graph-2d';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/components/LanguageContext';
 import ForceGraph2D from 'react-force-graph-2d';
-
-interface GraphNode {
-  id: string;
-  label: string;
-  slug: string;
-  group: number;
-  x?: number;
-  y?: number;
-  vx?: number;
-  vy?: number;
-  fx?: number
-  fy?: number;
-  __bckgDimensions?: [number, number];
-}
-
-interface GraphLink {
-  source: string | GraphNode;
-  target: string | GraphNode;
-  label: string;
-  value: number;
-}
+import { GraphNodeFull, GraphLink, GraphData } from '@/types/graph';
+import useSWR from 'swr';
 
 interface GraphCanvasProps {
     url: string;
+    targetSlug?: string;
 }
 
-export default function GraphCanvas({ url }: GraphCanvasProps) {
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
+export default function GraphCanvas({ url, targetSlug = 'prophet-muhammad' }: GraphCanvasProps) {
   const { language } = useLanguage();
   const router = useRouter();
-  const [graphData, setGraphData] = useState<{
-    nodes: GraphNode[];
-    links: GraphLink[];
-  } | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const fgRef = useRef<ForceGraphMethods<NodeObject<GraphNode>, LinkObject<GraphNode, GraphLink>>>(null) as RefObject<ForceGraphMethods<NodeObject<GraphNode>, LinkObject<GraphNode, GraphLink>>>;
 
-  // Fetch graph data
-  useEffect(() => {
-    const fetchGraphData = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error('Failed to fetch graph data');
-        }
-        const data = await response.json();
-        setGraphData(data);
-      } catch (err) {
-        console.error('Error fetching graph data:', err);
-        setError('Failed to load graph data');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchGraphData();
-  }, [url]);
+  const { data: graphData, error: graphError, isLoading: graphLoading } = useSWR<GraphData>(url, fetcher);
+  const fgRef = useRef<ForceGraphMethods<NodeObject<GraphNodeFull>, LinkObject<GraphNodeFull, GraphLink>>>(null) as RefObject<ForceGraphMethods<NodeObject<GraphNodeFull>, LinkObject<GraphNodeFull, GraphLink>>>;
 
   useEffect(() => {
     if (fgRef.current && graphData) {
-      const targetSlug = 'prophet-muhammad'; // 👈 Your target slug
       const targetNode = graphData.nodes.find(n => n.slug === targetSlug);
   
       if (targetNode) {
@@ -77,7 +34,7 @@ export default function GraphCanvas({ url }: GraphCanvasProps) {
         return () => clearTimeout(timer);
       }
     }
-  }, [graphData]);
+  }, [graphData, targetSlug]);
 
   // Get the current theme for the graph
   const getGraphTheme = () => {
@@ -93,11 +50,11 @@ export default function GraphCanvas({ url }: GraphCanvasProps) {
   };
 
   // Handle node click
-  const handleNodeClick = useCallback((node: GraphNode) => {
+  const handleNodeClick = useCallback((node: GraphNodeFull) => {
     router.push(`/people/${node.slug}`);
   }, [router]);
 
-  if (loading) {
+  if (graphLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-white dark:bg-gray-900">
         <div className="text-lg text-gray-900 dark:text-gray-100">Loading graph...</div>
@@ -105,10 +62,10 @@ export default function GraphCanvas({ url }: GraphCanvasProps) {
     );
   }
 
-  if (error) {
+  if (graphError) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="text-red-500">{error}</div>
+        <div className="text-red-500">{graphError}</div>
       </div>
     );
   }
@@ -131,7 +88,7 @@ export default function GraphCanvas({ url }: GraphCanvasProps) {
             linkDirectionalParticleColor={() => getGraphTheme().link}
             onNodeClick={handleNodeClick}
             nodeCanvasObject={(node, ctx, globalScale) => {
-              const label = (node as GraphNode).label;
+              const label = (node as GraphNodeFull).label;
               const fontSize = 12 / globalScale;
               ctx.font = `${fontSize}px Sans-Serif`;
               const textWidth = ctx.measureText(label).width;
@@ -157,11 +114,11 @@ export default function GraphCanvas({ url }: GraphCanvasProps) {
               ctx.fillStyle = theme.node.text;
               ctx.fillText(label, node.x!, node.y!);
 
-              (node as GraphNode).__bckgDimensions = bckgDimensions as [number, number];
+              (node as GraphNodeFull).__bckgDimensions = bckgDimensions as [number, number];
             }}
             nodePointerAreaPaint={(node, color, ctx) => {
               ctx.fillStyle = color;
-              const bckgDimensions = (node as GraphNode).__bckgDimensions;
+              const bckgDimensions = (node as GraphNodeFull).__bckgDimensions;
               if (bckgDimensions) {
                 ctx.fillRect(
                   node.x! - bckgDimensions[0] / 2,
