@@ -94,7 +94,7 @@ function PersonDetailPage() {
           {(person.relationsFrom.length > 0 || person.relationsTo.length > 0) && (
             <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
               <div className="font-bold text-2xl mb-2 text-amber-400">{t.relations}</div>
-              <GraphCanvas url={`/api/graph/${slug}`} targetSlug={slug} />
+              <GraphCanvas url={`/api/graph?person=${slug}`} targetSlug={slug} />
             </div>
           )}
 

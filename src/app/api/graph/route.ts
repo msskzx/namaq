@@ -2,7 +2,10 @@ import { NextResponse } from 'next/server';
 import { getSession } from '@/lib/neo4j';
 import { GraphLink, GraphNode } from '@/types/graph';
 
-export async function GET() {
+export async function GET(_request: Request) {
+  const { searchParams } = new URL(_request.url);
+  const person = searchParams.get('person');
+
   const session = getSession();
 
   if (!session) {
@@ -13,12 +16,24 @@ export async function GET() {
   }
 
   try {
-    // Query to find all relationships between people
-    const result = await session.run(
+    let result;
+    if (person) {
+      // Query to find all relationships between people
+      result = await session.run(
+        `MATCH (p1:Person {slug: $slug})-[r]-(p2:Person)
+        RETURN p1, r, p2
+        LIMIT 100`,
+        { slug: person }
+      );
+    }
+    else {
+      // Query to find all relationships between people
+      result = await session.run(
         `MATCH (p1:Person)-[r]->(p2:Person)
         RETURN p1, r, p2
         LIMIT 100`,
-    );
+      );
+    }
 
     const nodes = new Map();
     const links: GraphLink[] = [];
