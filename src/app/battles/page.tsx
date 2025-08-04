@@ -10,7 +10,7 @@ import EventTimeline from "@/components/events/EventTimeline";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const BattlesPage: React.FC = () => {
+function BattlesPage() {
   const { language } = useLanguage();
   const t = translations[language];
   const { data: battles, error, isLoading } = useSWR<Battle[]>("/api/battles", fetcher);
@@ -31,6 +31,6 @@ const BattlesPage: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 export default BattlesPage; 

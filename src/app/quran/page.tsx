@@ -86,16 +86,6 @@ export default function QuranPage() {
         </div>
         
         <div className="bg-gray-50 dark:bg-gray-950 rounded-xl shadow-lg p-6">
-          {/* Header */}
-          <div className="text-center mb-8 pb-6 border-b border-gray-200 dark:border-gray-700">
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-2">
-              {t.theHolyQuran}
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400">
-              {t.selectSurah}
-            </p>
-          </div>
-
           {/* Surahs Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {surahs.map((surah) => (
