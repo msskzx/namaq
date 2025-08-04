@@ -13,7 +13,7 @@ interface TimelineItemProps {
   language: string;
 }
 
-const TimelineItem: React.FC<TimelineItemProps> = ({ event, language }) => {
+function TimelineItem({ event, language }: TimelineItemProps) {
 
   return (
     <div className="relative flex flex-col items-center mx-8 first:ml-0 last:mr-0 min-w-[120px]"> {/* Added min-w to ensure spacing */}
@@ -41,7 +41,7 @@ const TimelineItem: React.FC<TimelineItemProps> = ({ event, language }) => {
       )}
     </div>
   );
-};
+}
 
 // --- BattleTimeline Component ---
 interface TimelineProps {
@@ -86,6 +86,6 @@ function Timeline({ events }: TimelineProps) {
       </div>
     </div>
   );
-};
+}
 
 export default Timeline;

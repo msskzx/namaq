@@ -4,7 +4,7 @@ import { useLanguage } from "@/components/LanguageContext";
 import translations from "@/components/translations";
 import useSWR from "swr";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import TitleCard from '@/components/TitleCard';
+import TitleCard from '@/components/people/TitleCard';
 import { TitleBase } from "@/types/title";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());

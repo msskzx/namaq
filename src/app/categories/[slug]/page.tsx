@@ -7,7 +7,7 @@ import { useParams } from 'next/navigation';
 import translations from '@/components/translations';
 import ArticleCard from '@/components/ArticleCard';
 import { Article } from '@/types/article';
-import EventCard from '@/components/EventCard';
+import EventCard from '@/components/events/EventCard';
 import { EventBase } from '@/types/event';
 
 const fetcher = (url: string) => fetch(url).then(res => res.ok ? res.json() : null);

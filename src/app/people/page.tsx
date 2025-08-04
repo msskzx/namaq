@@ -4,10 +4,10 @@ import React from 'react';
 import { useLanguage } from '@/components/LanguageContext';
 import { useSearchParams, useRouter } from 'next/navigation';
 import translations from '@/components/translations';
-import PeopleFilter from '@/components/PeopleFilter';
+import PeopleFilter from '@/components/people/PeopleFilter';
 import type { Title } from '@/generated/prisma';
 import LoadingSpinner from '@/components/LoadingSpinner';
-import PersonCard from '@/components/PersonCard';
+import PersonCard from '@/components/people/PersonCard';
 import { PersonWithTitles } from '@/types/person';
 import useSWR from 'swr';
 

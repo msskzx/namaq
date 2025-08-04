@@ -9,11 +9,11 @@ import { Article } from '@/types/article';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import NamaqSlider from '@/components/NamaqSlider';
+import NamaqSlider from '@/components/homepage/NamaqSlider';
 import Image from 'next/image';
 import TheTen from "@/components/people/TheTen";
-import Exploration from "@/components/Exploration";
-import PersonCard from "@/components/PersonCard";
+import Exploration from "@/components/homepage/Exploration";
+import PersonCard from "@/components/people/PersonCard";
 import GraphCanvas from "@/components/graph/GraphCanvas";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());

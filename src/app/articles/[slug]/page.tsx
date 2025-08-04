@@ -9,7 +9,7 @@ import { useParams } from "next/navigation";
 import Badge from '@/components/Badge';
 import { CategoryBase } from '@/types/category';
 import { EventBase } from '@/types/event';
-import EventCard from '@/components/EventCard';
+import EventCard from '@/components/events/EventCard';
 
 const fetcher = (url: string) => fetch(url).then(res => res.ok ? res.json() : null);
 

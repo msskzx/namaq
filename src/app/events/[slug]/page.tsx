@@ -7,7 +7,7 @@ import translations from "@/components/translations";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShieldHalved, faLocationDot, faCalendarDays } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from '@/components/LoadingSpinner';
-import PersonNameCard from '@/components/PersonNameCard';
+import PersonNameCard from '@/components/people/PersonNameCard';
 import { EventAll } from '@/types/event';
 import { PersonBase } from "@/types/person";
 import ArticleCard from "@/components/ArticleCard";

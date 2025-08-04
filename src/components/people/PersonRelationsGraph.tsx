@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback } from 'react';
 import type { Person } from '@/generated/prisma';
-import translations from './translations';
+import translations from '@/components/translations';
 import Link from 'next/link';
 import type { RelationFrom, RelationTo } from '@/types/person';
 

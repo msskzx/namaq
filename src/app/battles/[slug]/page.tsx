@@ -3,23 +3,15 @@
 import React from "react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
-import dynamic from 'next/dynamic';
 import { useLanguage } from "@/components/LanguageContext";
 import translations from "@/components/translations";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShieldHalved, faLocationDot, faCalendarDays, faMapLocationDot } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from '@/components/LoadingSpinner';
-import PersonNameCard from '@/components/PersonNameCard';
+import PersonNameCard from '@/components/people/PersonNameCard';
+import BattleMap from '@/components/battle/BattleMap';
 import { PersonBase } from "@/types/person";
 import { Battle } from "@/types/battle";
-
-// Dynamically import the BattleMap component with SSR disabled
-const BattleMap = dynamic(() => import('@/components/BattleMap'), {
-  ssr: false, // Disable server-side rendering for the map component
-  loading: () => <div className="h-[500px] w-full bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse flex items-center justify-center">
-    <span className="text-gray-500">Loading map...</span>
-  </div>
-});
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 

@@ -1,7 +1,7 @@
 import { useLanguage } from '@/components/LanguageContext';
 import translations from "@/components/translations";
 import useSWR from 'swr';
-import PersonCard from '../PersonCard';
+import PersonCard from '../people/PersonCard';
 import LoadingSpinner from '../LoadingSpinner';
 import type { PersonBase } from '@/types/person';
 

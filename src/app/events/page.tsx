@@ -2,15 +2,15 @@
 
 import React from "react";
 import useSWR from "swr";
-import EventCard from '../../components/EventCard';
-import LoadingSpinner from '../../components/LoadingSpinner';
+import LoadingSpinner from '@/components/LoadingSpinner';
 import { useLanguage } from '@/components/LanguageContext';
 import translations from '@/components/translations';
 import { EventBase } from '@/types/event';
+import EventTimeline from "@/components/events/EventTimeline";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const EventsPage: React.FC = () => {
+function EventsPage() {
   const { language } = useLanguage();
   const { data: events, error, isLoading } = useSWR<EventBase[]>("/api/events", fetcher);
 
@@ -26,21 +26,11 @@ const EventsPage: React.FC = () => {
         {isLoading || !events ? (
           <LoadingSpinner />
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Array.isArray(events) && events.length > 0 ? (
-              events.map((event) => (
-                <EventCard key={event.id} event={event} />
-              ))
-            ) : (
-              <div className="col-span-full text-center py-4 text-gray-500 dark:text-gray-400">
-                {translations[language].eventsNotFound}
-              </div>
-            )}
-          </div>
+          <EventTimeline events={events} />
         )}
       </div>
     </div>
   );
-};
+}
 
 export default EventsPage; 

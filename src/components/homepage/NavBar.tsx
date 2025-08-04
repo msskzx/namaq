@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import LanguageSwitcher from './LanguageSwitcher';
-import { useLanguage } from './LanguageContext';
+import LanguageSwitcher from '../LanguageSwitcher';
+import { useLanguage } from '../LanguageContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faXmark, faGear } from '@fortawesome/free-solid-svg-icons';
-import translations from './translations';
-import ThemeSwitcher from './ThemeSwitcher';
+import translations from '../translations';
+import ThemeSwitcher from '../ThemeSwitcher';
 
 interface NavLink {
   href: string;

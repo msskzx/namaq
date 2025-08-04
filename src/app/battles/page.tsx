@@ -6,7 +6,7 @@ import { useLanguage } from "@/components/LanguageContext";
 import translations from "@/components/translations";
 import type { Battle } from "@/types/battle";
 import LoadingSpinner from '@/components/LoadingSpinner';
-import BattleTimeline from "@/components/BattleTimeline";
+import EventTimeline from "@/components/events/EventTimeline";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -26,7 +26,7 @@ const BattlesPage: React.FC = () => {
         {isLoading || !battles ? (
           <LoadingSpinner />
         ) : (
-          <BattleTimeline battles={battles} />
+          <EventTimeline events={battles} />
         )}
       </div>
     </div>
