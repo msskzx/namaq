@@ -14,7 +14,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 export default function SurahPage() {
   const { language } = useLanguage();
   const params = useParams();
-  const surahNumber = parseInt(params.number as string);
+  const surahNumber = parseInt(params.slug as string);
   
   const { data: surah, error, isLoading } = useSWR<Surah>(`/api/surahs/${surahNumber}`, fetcher);
 
@@ -113,7 +113,7 @@ export default function SurahPage() {
                   {!(surahNumber === 1 && index === 0) && (
                     <span className="inline-block w-8 h-8 bg-amber-100 dark:bg-amber-900 rounded-full text-center leading-8 mx-2 align-middle">
                       <span className="text-amber-600 dark:text-amber-400 font-bold text-xs">
-                        {ayah.numberInSurah}
+                        {ayah.number}
                       </span>
                     </span>
                   )}

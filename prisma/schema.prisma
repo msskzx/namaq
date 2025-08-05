@@ -354,8 +354,8 @@ model Ayah {
   id String @id @default(cuid())
   surahId String
   
-  numberInSurah Int
-  globalNumber Int
+  number Int
+  globalNumber Int?
   recitation RecitationType?
   text String
   juz Int

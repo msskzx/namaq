@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma';
 export async function GET(_request: Request, { params }: { params: Promise<{ slug: string }> }) {
 try {
     const { slug } = await params;
+    console.log(slug);
     const surahNumber = parseInt(slug, 10);
     
     if (isNaN(surahNumber) || surahNumber < 1 || surahNumber > 114) {
@@ -19,7 +20,7 @@ try {
       include: {
         ayat: {
           orderBy: {
-            numberInSurah: 'asc',
+            number: 'asc',
           },
         },
       },

@@ -21,7 +21,7 @@ export interface Ayah {
   surahId: string;
   number: number;
   text: string;
-  numberInSurah: number;
+  globalNumber: number;
   juz: number;
   manzil: number;
   page: number;

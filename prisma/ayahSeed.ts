@@ -45,9 +45,9 @@ async function seedSurahs() {
           return prisma.ayah.create({
             data: {
               surahId: surahRecord?.id!,
-              number: ayah.number,
+              globalNumber: ayah.number,
               text: ayah.text,
-              numberInSurah: ayah.numberInSurah,
+              number: ayah.numberInSurah,
               juz: ayah.juz,
               manzil: ayah.manzil,
               page: ayah.page,
