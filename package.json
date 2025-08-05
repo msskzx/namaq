@@ -19,7 +19,9 @@
     "seed:categories": "tsx prisma/categorySeed.ts",
     "seed:articles": "tsx prisma/articleSeed.ts",
     "seed:events": "tsx prisma/eventSeed.ts",
-    "seed:graph": "tsx neo4j/graphSeed.ts"
+    "seed:graph": "tsx neo4j/graphSeed.ts",
+    "seed:surahs": "tsx prisma/surahSeed.ts",
+    "seed:ayat": "tsx prisma/ayahSeed.ts"
   },
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.7.2",

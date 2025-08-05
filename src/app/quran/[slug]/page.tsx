@@ -1,78 +1,24 @@
 "use client";
 
 import { useLanguage } from "@/components/LanguageContext";
-import translations from "@/components/translations";
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBook, faArrowLeft, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { useEffect, useState } from 'react';
+import { faArrowLeft, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import { Surah } from '@/types/quran';
+import useSWR from "swr";
 
-interface Ayah {
-  number: number;
-  text: string;
-  numberInSurah: number;
-  juz: number;
-  manzil: number;
-  page: number;
-  ruku: number;
-  hizbQuarter: number;
-  sajda: boolean;
-}
-
-interface Surah {
-  number: number;
-  name: string;
-  englishName: string;
-  englishNameTranslation: string;
-  revelationType: string;
-  numberOfAyahs: number;
-  ayahs: Ayah[];
-}
-
-interface QuranResponse {
-  code: number;
-  status: string;
-  data: Surah;
-}
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function SurahPage() {
   const { language } = useLanguage();
-  const t = translations[language];
   const params = useParams();
-  const surahNumber = params.slug as string;
+  const surahNumber = parseInt(params.number as string);
   
-  const [surah, setSurah] = useState<Surah | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data: surah, error, isLoading } = useSWR<Surah>(`/api/surahs/${surahNumber}`, fetcher);
 
-  useEffect(() => {
-    const fetchSurah = async () => {
-      if (!surahNumber) return;
-      
-      try {
-        setLoading(true);
-        const response = await fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}/ar.hafs`);
-        const data: QuranResponse = await response.json();
-        
-        if (data.code === 200) {
-          setSurah(data.data);
-        } else {
-          setError('Failed to fetch Quran data');
-        }
-      } catch (err) {
-        setError('Error loading Quran data');
-        console.error('Error fetching Quran:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSurah();
-  }, [surahNumber]);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-white dark:bg-gray-950 flex items-center justify-center" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <LoadingSpinner />
@@ -118,15 +64,6 @@ export default function SurahPage() {
           </Link>
         </div>
 
-        <div className="flex items-center gap-4 mb-6">
-          <div className="w-16 h-16 flex items-center justify-center rounded-full bg-gray-50 dark:bg-indigo-950">
-            <FontAwesomeIcon icon={faBook} className="text-amber-400 w-10 h-10" />
-          </div>
-          <h1 className="text-4xl font-bold text-amber-400">
-            {t.motivation.quran.title}
-          </h1>
-        </div>
-        
         <div className="bg-gray-50 dark:bg-gray-950 rounded-xl shadow-lg p-6">
           {/* Surah Header */}
           <div className="text-center mb-8 pb-6 border-b border-gray-200 dark:border-gray-700">
@@ -134,10 +71,10 @@ export default function SurahPage() {
               {surah.name}
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 mb-2">
-              {surah.englishName} - {surah.englishNameTranslation}
+              {surah.nameTransliterated} - {surah.nameTranslated}
             </p>
             <div className="flex justify-center gap-4 text-sm text-gray-500 dark:text-gray-500">
-              <span>{language === 'ar' ? 'عدد الآيات:' : 'Ayahs:'} {surah.numberOfAyahs}</span>
+              <span>{language === 'ar' ? 'عدد الآيات:' : 'Ayahs:'} {surah.numberOfAyat}</span>
               <span>•</span>
               <span>{surah.revelationType}</span>
               <span>•</span>
@@ -157,7 +94,7 @@ export default function SurahPage() {
                 <span className="text-2xl text-amber-600 dark:text-amber-400 font-bold">
                   بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
                 </span>
-                {parseInt(surahNumber) === 1 && (
+                {surahNumber === 1 && (
                   <span className="inline-block w-8 h-8 bg-amber-100 dark:bg-amber-900 rounded-full text-center leading-8 mx-2 align-middle">
                     <span className="text-amber-600 dark:text-amber-400 font-bold text-xs">
                       1
@@ -167,20 +104,20 @@ export default function SurahPage() {
               </div>
               
               {/* Ayahs */}
-              {surah.ayahs.map((ayah, index) => (
+              {surah.ayat.map((ayah, index) => (
                 <span key={ayah.number}>
                   {index === 0 
                     ? ayah.text.substring('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ'.length + 1).trim()
                     : ayah.text
                   }
-                  {!(parseInt(surahNumber) === 1 && index === 0) && (
+                  {!(surahNumber === 1 && index === 0) && (
                     <span className="inline-block w-8 h-8 bg-amber-100 dark:bg-amber-900 rounded-full text-center leading-8 mx-2 align-middle">
                       <span className="text-amber-600 dark:text-amber-400 font-bold text-xs">
                         {ayah.numberInSurah}
                       </span>
                     </span>
                   )}
-                  {index < surah.ayahs.length - 1 && ' '}
+                  {index < surah.ayat.length - 1 && ' '}
                 </span>
               ))}
             </div>
@@ -188,9 +125,9 @@ export default function SurahPage() {
             {/* Surah details */}
             <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
               <div className="text-xs text-gray-500 dark:text-gray-500 flex flex-wrap gap-4 justify-center">
-                <span>{language === 'ar' ? 'الجزء:' : 'Juz:'} {surah.ayahs[0]?.juz}</span>
-                <span>{language === 'ar' ? 'الصفحة:' : 'Page:'} {surah.ayahs[0]?.page}</span>
-                <span>{language === 'ar' ? 'المنزل:' : 'Manzil:'} {surah.ayahs[0]?.manzil}</span>
+                <span>{language === 'ar' ? 'الجزء:' : 'Juz:'} {surah.ayat[0]?.juz}</span>
+                <span>{language === 'ar' ? 'الصفحة:' : 'Page:'} {surah.ayat[0]?.page}</span>
+                <span>{language === 'ar' ? 'المنزل:' : 'Manzil:'} {surah.ayat[0]?.manzil}</span>
               </div>
             </div>
           </div>
@@ -198,9 +135,9 @@ export default function SurahPage() {
           {/* Navigation Buttons */}
           <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700 flex justify-between items-center">
             {/* Previous Surah */}
-            {parseInt(surahNumber) > 1 && (
+            {surahNumber > 1 && (
               <Link 
-                href={`/quran/${parseInt(surahNumber) - 1}`}
+                href={`/quran/${surahNumber - 1}`}
                 className="inline-flex items-center gap-2 px-4 py-2 bg-amber-100 dark:bg-amber-900 text-amber-600 dark:text-amber-400 rounded-lg hover:bg-amber-200 dark:hover:bg-amber-800 transition-colors duration-200"
               >
                 <FontAwesomeIcon icon={language === 'ar' ? faChevronRight : faChevronLeft} className="w-4 h-4" />
@@ -208,18 +145,10 @@ export default function SurahPage() {
               </Link>
             )}
             
-            {/* Data source */}
-            <div className="text-sm text-gray-500 dark:text-gray-500">
-              {language === 'ar' 
-                ? 'مصدر البيانات: Al-Quran Cloud API' 
-                : 'Data source: Al-Quran Cloud API'
-              }
-            </div>
-            
             {/* Next Surah */}
-            {parseInt(surahNumber) < 114 && (
+            {surahNumber < 114 && (
               <Link 
-                href={`/quran/${parseInt(surahNumber) + 1}`}
+                href={`/quran/${surahNumber + 1}`}
                 className="inline-flex items-center gap-2 px-4 py-2 bg-amber-100 dark:bg-amber-900 text-amber-600 dark:text-amber-400 rounded-lg hover:bg-amber-200 dark:hover:bg-amber-800 transition-colors duration-200"
               >
                 <span>{language === 'ar' ? 'السورة التالية' : 'Next Surah'}</span>

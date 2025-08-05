@@ -319,3 +319,62 @@ enum EventType {
   HIJRA_HABASHA
   OTHER
 }
+
+enum RevelationType {
+  Meccan
+  Medinan
+}
+
+enum RecitationType {
+  HAFS
+  WARSH
+}
+
+model Surah {
+  id String @id @default(cuid())
+  name String
+  number Int
+  nameTransliterated String?
+  nameTranslated String?
+  numberOfAyat Int
+  revelationType RevelationType?
+  revelationPeriod String?
+  revelationOrder Int?
+  recitation RecitationType?
+
+  ayat Ayah[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("surahs")
+}
+
+model Ayah {
+  id String @id @default(cuid())
+  surahId String
+  
+  numberInSurah Int
+  globalNumber Int
+  recitation RecitationType?
+  text String
+  juz Int
+  manzil Int
+  page Int
+  ruku Int
+  hizbQuarter Int
+  sajda Boolean
+  revelationOrder Int?
+  revelationPeriod String?
+  revelationType RevelationType?
+  sajdaRecommended Boolean?
+  sajdaObligatory Boolean?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // relations
+  surah Surah @relation(fields: [surahId], references: [id], onDelete: Cascade)
+
+  @@map("ayahs")
+}

@@ -5,55 +5,18 @@ import translations from "@/components/translations";
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { Surah } from '@/types/quran';
+import useSWR from "swr";
 
-interface Surah {
-  number: number;
-  name: string;
-  englishName: string;
-  englishNameTranslation: string;
-  revelationType: string;
-  numberOfAyahs: number;
-}
-
-interface QuranListResponse {
-  code: number;
-  status: string;
-  data: Surah[];
-}
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function QuranPage() {
   const { language } = useLanguage();
   const t = translations[language];
-  const [surahs, setSurahs] = useState<Surah[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data: surahs, error, isLoading } = useSWR<Surah[]>('/api/surahs', fetcher);
 
-  useEffect(() => {
-    const fetchSurahs = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch('https://api.alquran.cloud/v1/surah');
-        const data: QuranListResponse = await response.json();
-        
-        if (data.code === 200) {
-          setSurahs(data.data);
-        } else {
-          setError('Failed to fetch Quran data');
-        }
-      } catch (err) {
-        setError('Error loading Quran data');
-        console.error('Error fetching Quran:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSurahs();
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-white dark:bg-gray-950 flex items-center justify-center" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <LoadingSpinner />
@@ -88,7 +51,7 @@ export default function QuranPage() {
         <div className="bg-gray-50 dark:bg-gray-950 rounded-xl shadow-lg p-6">
           {/* Surahs Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {surahs.map((surah) => (
+            {surahs?.map((surah) => (
               <Link 
                 key={surah.number} 
                 href={`/quran/${surah.number}`}
@@ -109,10 +72,10 @@ export default function QuranPage() {
                         {surah.name}
                       </h3>
                       <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
-                        {surah.englishName}
+                        {surah.nameTransliterated}
                       </p>
                       <p className="text-xs text-gray-500 dark:text-gray-500">
-                        {surah.englishNameTranslation}
+                        {surah.nameTranslated}
                       </p>
                     </div>
                   </div>
@@ -127,7 +90,7 @@ export default function QuranPage() {
                 {/* Additional info */}
                 <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
                   <div className="flex justify-between text-xs text-gray-500 dark:text-gray-500">
-                    <span>{t.ayahs}: {surah.numberOfAyahs}</span>
+                    <span>{t.ayahs}: {surah.numberOfAyat}</span>
                     <span className="capitalize">{surah.revelationType}</span>
                   </div>
                 </div>
@@ -139,8 +102,8 @@ export default function QuranPage() {
           <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700 text-center">
             <p className="text-sm text-gray-500 dark:text-gray-500">
               {language === 'ar' 
-                ? 'مصدر البيانات: Al-Quran Cloud API' 
-                : 'Data source: Al-Quran Cloud API'
+                ? 'مصدر البيانات: قاعدة البيانات المحلية' 
+                : 'Data source: Local Database'
               }
             </p>
           </div>
