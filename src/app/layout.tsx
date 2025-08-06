@@ -21,8 +21,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Namaq - Learn Arabic Language & Islamic History",
-  description: "Learn Arabic language, Islamic history, grammar, and the teachings of Prophet Muhammad ﷺ and his companions through interactive educational content.",
+  title: "Namaq - Data Driven Interactive Learning",
+  description: "Data driven interactive learning platform to learn about all kinds of useful topics, starting with the family and relations of Prophet Muhammad ﷺ and his companions, historic events, battles and more.",
 };
 
 export default function RootLayout({
