@@ -16,7 +16,7 @@ export default function SurahPage() {
   const params = useParams();
   const surahNumber = parseInt(params.slug as string);
   
-  const { data: surah, error, isLoading } = useSWR<Surah>(`/api/surahs/${surahNumber}`, fetcher);
+  const { data: surah, error, isLoading } = useSWR<Surah>(`/api/quran/surahs/${surahNumber}`, fetcher);
 
   if (isLoading) {
     return (
@@ -105,7 +105,7 @@ export default function SurahPage() {
               
               {/* Ayahs */}
               {surah.ayat.map((ayah, index) => (
-                <span key={ayah.number}>
+                <span key={ayah.id}>
                   {index === 0 
                     ? ayah.text.substring('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ'.length + 1).trim()
                     : ayah.text
@@ -137,7 +137,7 @@ export default function SurahPage() {
             {/* Previous Surah */}
             {surahNumber > 1 && (
               <Link 
-                href={`/quran/${surahNumber - 1}`}
+                href={`/quran/surahs/${surahNumber - 1}`}
                 className="inline-flex items-center gap-2 px-4 py-2 bg-amber-100 dark:bg-amber-900 text-amber-600 dark:text-amber-400 rounded-lg hover:bg-amber-200 dark:hover:bg-amber-800 transition-colors duration-200"
               >
                 <FontAwesomeIcon icon={language === 'ar' ? faChevronRight : faChevronLeft} className="w-4 h-4" />
@@ -148,7 +148,7 @@ export default function SurahPage() {
             {/* Next Surah */}
             {surahNumber < 114 && (
               <Link 
-                href={`/quran/${surahNumber + 1}`}
+                href={`/quran/surahs/${surahNumber + 1}`}
                 className="inline-flex items-center gap-2 px-4 py-2 bg-amber-100 dark:bg-amber-900 text-amber-600 dark:text-amber-400 rounded-lg hover:bg-amber-200 dark:hover:bg-amber-800 transition-colors duration-200"
               >
                 <span>{language === 'ar' ? 'السورة التالية' : 'Next Surah'}</span>

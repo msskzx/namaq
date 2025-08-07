@@ -14,7 +14,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 export default function QuranPage() {
   const { language } = useLanguage();
   const t = translations[language];
-  const { data: surahs, error, isLoading } = useSWR<Surah[]>('/api/surahs', fetcher);
+  const { data: surahs, error, isLoading } = useSWR<Surah[]>('/api/quran/surahs', fetcher);
 
   if (isLoading) {
     return (
@@ -54,7 +54,7 @@ export default function QuranPage() {
             {surahs?.map((surah) => (
               <Link 
                 key={surah.number} 
-                href={`/quran/${surah.number}`}
+                href={`/quran/surahs/${surah.number}`}
                 className="group block p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-amber-400 dark:hover:border-amber-400 transition-all duration-200 hover:shadow-md"
               >
                 <div className="flex items-center justify-between">
