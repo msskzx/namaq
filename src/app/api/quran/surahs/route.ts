@@ -17,6 +17,7 @@ export async function GET() {
         revelationOrder: true,
         createdAt: true,
         updatedAt: true,
+        page: true,
       },
       orderBy: {
         number: 'asc',

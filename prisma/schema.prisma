@@ -50,15 +50,15 @@ model UserPreferences {
 
 // Categories for organizing content
 model Category {
-  id            String   @id @default(cuid())
-  name          String
+  id                        String   @id @default(cuid())
+  name                      String
   nameTransliterated        String?
-  description   String?
+  description               String?
   descriptionTransliterated String?
-  img           String?  // Image URL or path for the category
-  slug          String   @unique
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  img                       String?  // Image URL or path for the category
+  slug                      String   @unique
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @updatedAt
 
   // Relations
   articles Article[]
@@ -279,29 +279,29 @@ model BattleParticipation {
 }
 
 model Event {
-  id                      String       @id @default(cuid())
-  name                    String
-  nameTransliterated                  String?
-  slug                    String       @unique
-  type                    EventType
-  hijriYear               Int?
-  hijriPeriod             String?
-  gregorianYear           Int?
-  gregorianPeriod         String?
-  location                String?
-  locationTransliterated  String?
-  description             String?      @db.Text
+  id                        String       @id @default(cuid())
+  name                      String
+  nameTransliterated        String?
+  slug                      String       @unique
+  type                      EventType
+  hijriYear                 Int?
+  hijriPeriod               String?
+  gregorianYear             Int?
+  gregorianPeriod           String?
+  location                  String?
+  locationTransliterated    String?
+  description               String?      @db.Text
   descriptionTransliterated String?  @db.Text
-  metadata                Json?
-  createdAt               DateTime     @default(now())
-  updatedAt               DateTime     @updatedAt
+  metadata                  Json?
+  createdAt                 DateTime     @default(now())
+  updatedAt                 DateTime     @updatedAt
   
   // Relations
-  people                  Person[]
-  battleId                String?
-  battle                  Battle?      @relation(fields: [battleId], references: [id])
-  articles Article[]
-  categories Category[]
+  people                    Person[]
+  battleId                  String?
+  battle                    Battle?      @relation(fields: [battleId], references: [id])
+  articles                  Article[]
+  categories                Category[]
 
   @@map("events") // Map to 'events' table
 } 
@@ -331,50 +331,51 @@ enum RecitationType {
 }
 
 model Surah {
-  id String @id @default(cuid())
-  name String
-  number Int
-  nameTransliterated String?
-  nameTranslated String?
-  numberOfAyat Int
-  revelationType RevelationType?
-  revelationPeriod String?
-  revelationOrder Int?
-  recitation RecitationType?
+  id                  String @id @default(cuid())
+  name                String
+  number              Int
+  nameTransliterated  String?
+  nameTranslated      String?
+  numberOfAyat        Int
+  revelationType      RevelationType?
+  revelationPeriod    String?
+  revelationOrder     Int?
+  recitation          RecitationType?
+  page                Int?
 
-  ayat Ayah[]
+  ayat                Ayah[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
   @@map("surahs")
 }
 
 model Ayah {
-  id String @id @default(cuid())
-  surahId String
+  id                String @id @default(cuid())
+  surahId           String
   
-  number Int
-  globalNumber Int?
-  recitation RecitationType?
-  text String
-  juz Int
-  manzil Int
-  page Int
-  ruku Int
-  hizbQuarter Int
-  sajda Boolean
-  revelationOrder Int?
-  revelationPeriod String?
-  revelationType RevelationType?
-  sajdaRecommended Boolean?
-  sajdaObligatory Boolean?
+  number            Int
+  globalNumber      Int?
+  recitation        RecitationType?
+  text              String
+  juz               Int
+  manzil            Int
+  page              Int
+  ruku              Int
+  hizbQuarter       Int
+  sajda             Boolean
+  revelationOrder   Int?
+  revelationPeriod  String?
+  revelationType    RevelationType?
+  sajdaRecommended  Boolean?
+  sajdaObligatory   Boolean?
   
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
   // relations
-  surah Surah @relation(fields: [surahId], references: [id], onDelete: Cascade)
+  surah             Surah @relation(fields: [surahId], references: [id], onDelete: Cascade)
 
   @@map("ayahs")
 }

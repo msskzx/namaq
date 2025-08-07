@@ -11,6 +11,7 @@ export interface Surah {
   recitation: RecitationType | null;
   revelationPeriod: string | null;
   revelationOrder: number | null;
+  page: number;
   createdAt: Date;
   updatedAt: Date;
   ayat: Ayah[];
