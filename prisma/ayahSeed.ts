@@ -67,6 +67,22 @@ async function seedSurahs() {
       console.error(`Failed to fetch Surah ${i}: ${data.status}`);
     }
   }
+
+  // update surahs pages
+  const ayat = await prisma.ayah.findMany({
+      where: { number : 1},
+      select: {
+        page: true,
+        surahId: true,
+      },
+    });
+  
+    for (const ayah of ayat) {
+      await prisma.surah.update({
+        where: { id: ayah.surahId },
+        data: { page: ayah.page },
+      });
+    }
 }
 
 seedSurahs();

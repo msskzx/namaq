@@ -3,7 +3,8 @@ import translations from "@/components/translations";
 import useSWR from 'swr';
 import PersonCard from '../people/PersonCard';
 import LoadingSpinner from '../LoadingSpinner';
-import type { PersonBase } from '@/types/person';
+import type { PersonWithTitles } from '@/types/person';
+import type { Pagination } from '@/types/pagination';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -25,12 +26,18 @@ function TheTen() {
   ];
 
   // Fetch people with the 'the-ten-promised-paradise' title
-  const { data: people, error, isLoading } = useSWR(
-    `/api/people?title=the-ten-promised-paradise`,
+  const { data: response, error, isLoading } = useSWR<{
+    data: PersonWithTitles[];
+    pagination: Pagination;
+  }>(
+    `/api/people?title=the-ten-promised-paradise&limit=10`,
     fetcher
   );
-  // sort people by slug using the sortedSlugs array
-  const sortedPeople = people?.sort((a: PersonBase, b: PersonBase) => sortedSlugs.indexOf(a.slug) - sortedSlugs.indexOf(b.slug)) || [];
+  
+  // Extract people from response and sort by slug
+  const sortedPeople = response?.data?.sort((a, b) => 
+    sortedSlugs.indexOf(a.slug) - sortedSlugs.indexOf(b.slug)
+  );
 
   if (error) {
     return (

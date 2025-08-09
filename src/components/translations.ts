@@ -27,6 +27,7 @@ const translations = {
     eventsNotFound: 'No events found.',
     peopleNotFound: 'No people found.',
     peopleLoadError: 'Failed to load people.',
+    noMoreResults: 'No more results to show',
     
     // Common UI
     loading: 'Loading...',
@@ -265,8 +266,9 @@ const translations = {
     events: 'الأحداث',
     eventsLoadError: 'فشل تحميل الأحداث.',
     eventsNotFound: 'لم يتم العثور على أحداث.',
-    peopleNotFound: 'لم يتم العثور على أشخاص.',
-    peopleLoadError: 'فشل تحميل الأشخاص.',
+    peopleNotFound: 'لم يتم العثور على أشخاص',
+    peopleLoadError: 'فشل تحميل قائمة الأشخاص',
+    noMoreResults: 'لا توجد نتائج إضافية',
     
     // Common UI
     loading: 'جاري التحميل...',
