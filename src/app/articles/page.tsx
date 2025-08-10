@@ -8,7 +8,7 @@ import { useLanguage } from '@/components/language/LanguageContext';
 import translations from '@/components/language/translations';
 import { Article } from '@/types/article';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+import { fetcher } from '@/lib/swr';
 
 const ArticlesPage: React.FC = () => {
   const { language } = useLanguage();

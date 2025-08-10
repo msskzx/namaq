@@ -6,7 +6,7 @@ import ArticleCard from "@/components/articles/ArticleCard";
 import useSWR from 'swr';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+import { fetcher } from '@/lib/swr';
 
 export default function SpecialsPage() {
   const { language } = useLanguage();

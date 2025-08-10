@@ -16,7 +16,7 @@ import { useParams } from 'next/navigation';
 import { EventWithBattle } from '@/types/event';
 import GraphCanvas from '@/components/graph/GraphCanvas';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+import { fetcher } from '@/lib/swr';
 
 function PersonDetailPage() {
   const { language } = useLanguage();
@@ -68,10 +68,10 @@ function PersonDetailPage() {
           </div>
         </div>
 
-        
+
         {/* Horizontal Timeline */}
-        <Timeline events={person.events as EventWithBattle[] || [] } />
-      
+        <Timeline events={person.events as EventWithBattle[] || []} />
+
         <div className="flex flex-col gap-6 mt-10">
           {person.fullName && (
             <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">

@@ -9,7 +9,7 @@ import { Surah } from '@/types/quran';
 import useSWR from "swr";
 import SurahCard from '@/components/quran/SurahCard';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+import { fetcher } from '@/lib/swr';
 
 export default function QuranPage() {
   const { language } = useLanguage();
@@ -47,7 +47,7 @@ export default function QuranPage() {
             {t.motivation.quran.title}
           </h1>
         </div>
-        
+
         <div className="bg-gray-50 dark:bg-gray-950 rounded-xl shadow-lg p-6">
           {/* Surahs Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -59,8 +59,8 @@ export default function QuranPage() {
           {/* Footer */}
           <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700 text-center">
             <p className="text-sm text-gray-500 dark:text-gray-500">
-              {language === 'ar' 
-                ? 'مصدر البيانات: قاعدة البيانات المحلية' 
+              {language === 'ar'
+                ? 'مصدر البيانات: قاعدة البيانات المحلية'
                 : 'Data source: Local Database'
               }
             </p>

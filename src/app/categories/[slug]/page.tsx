@@ -10,7 +10,7 @@ import { Article } from '@/types/article';
 import EventCard from '@/components/events/EventCard';
 import { EventBase } from '@/types/event';
 
-const fetcher = (url: string) => fetch(url).then(res => res.ok ? res.json() : null);
+import { fetcher } from '@/lib/swr';
 
 export default function CategoryDetailPage() {
   const { language } = useLanguage();
@@ -53,7 +53,7 @@ export default function CategoryDetailPage() {
                 </div>
               </div>
             )}
-            
+
           </>
         )}
       </div>

@@ -10,7 +10,7 @@ import { faCrown } from '@fortawesome/free-solid-svg-icons';
 import PersonNameCard from '@/components/people/PersonNameCard';
 import { PersonBase } from "@/types/person";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+import { fetcher } from '@/lib/swr';
 
 export default function TitleDetailPage() {
   const { language } = useLanguage();

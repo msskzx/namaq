@@ -9,11 +9,11 @@ import { GraphNodeFull, GraphLink, GraphData } from '@/types/graph';
 import useSWR from 'swr';
 
 interface GraphCanvasProps {
-    url: string;
-    targetSlug?: string;
+  url: string;
+  targetSlug?: string;
 }
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+import { fetcher } from '@/lib/swr';
 
 export default function GraphCanvas({ url, targetSlug = 'prophet-muhammad' }: GraphCanvasProps) {
   const { language } = useLanguage();
@@ -25,7 +25,7 @@ export default function GraphCanvas({ url, targetSlug = 'prophet-muhammad' }: Gr
   useEffect(() => {
     if (fgRef.current && graphData) {
       const targetNode = graphData.nodes.find(n => n.slug === targetSlug);
-  
+
       if (targetNode) {
         const timer = setTimeout(() => {
           fgRef.current!.centerAt(targetNode.x! || 0, targetNode.y! || 0, 1000); // Pan to node over 1000ms
@@ -92,7 +92,7 @@ export default function GraphCanvas({ url, targetSlug = 'prophet-muhammad' }: Gr
               const fontSize = 12 / globalScale;
               ctx.font = `${fontSize}px Sans-Serif`;
               const textWidth = ctx.measureText(label).width;
-              const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize) ;
+              const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize);
               const theme = getGraphTheme();
 
               // Draw node background

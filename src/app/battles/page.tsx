@@ -7,8 +7,7 @@ import translations from "@/components/language/translations";
 import type { Battle } from "@/types/battle";
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import EventTimeline from "@/components/events/EventTimeline";
-
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+import { fetcher } from "@/lib/swr";
 
 function BattlesPage() {
   const { language } = useLanguage();

@@ -9,13 +9,13 @@ import { useParams } from 'next/navigation';
 import { Ayah } from '@/types/quran';
 import useSWR from "swr";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+import { fetcher } from '@/lib/swr';
 
 export default function SurahPage() {
   const { language } = useLanguage();
   const params = useParams();
   const pageNumber = parseInt(params.slug as string);
-  
+
   const { data: ayat, error, isLoading } = useSWR<Ayah[]>(`/api/quran/pages/${pageNumber}`, fetcher);
 
   if (isLoading) {
@@ -55,7 +55,7 @@ export default function SurahPage() {
       <div className="container mx-auto px-4 py-8">
         {/* Back button */}
         <div className="mb-6">
-          <Link 
+          <Link
             href="/quran"
             className="inline-flex items-center gap-2 text-amber-400 hover:text-amber-300 transition-colors duration-200"
           >
@@ -65,9 +65,9 @@ export default function SurahPage() {
         </div>
 
         <div className="mx-auto bg-gray-50 dark:bg-gray-900 rounded-xl shadow-lg p-6 max-w-3xl">
-          
+
           {/* Surah Header */}
-          
+
           {/* Ayat */}
           {ayat.map((ayah, index) => (
             <span key={ayah.id} className="mt-8">
@@ -79,15 +79,15 @@ export default function SurahPage() {
                     بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
                   </span>
                   {ayah.globalNumber === 1 && (
-                  <span className="inline-block w-8 h-8 bg-amber-100 dark:bg-amber-900 rounded-full text-center leading-8 mx-2 align-middle">
-                    <span className="text-amber-600 dark:text-amber-400 font-bold text-xs">
-                      1
+                    <span className="inline-block w-8 h-8 bg-amber-100 dark:bg-amber-900 rounded-full text-center leading-8 mx-2 align-middle">
+                      <span className="text-amber-600 dark:text-amber-400 font-bold text-xs">
+                        1
+                      </span>
                     </span>
-                  </span>
-                )}
+                  )}
                 </div>
               )}
-              
+
               <span className="text-3xl mt-10 font-arabic">
                 {ayah.number === 1 ? (
                   ayah.text.substring('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ'.length + 1).trim()
@@ -105,12 +105,12 @@ export default function SurahPage() {
               {index < ayat.length - 1 && ' '}
             </span>
           ))}
-              
+
           {/* Navigation Buttons */}
           <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700 flex justify-between items-center">
             {/* Previous Surah */}
             {pageNumber > 1 && (
-              <Link 
+              <Link
                 href={`/quran/pages/${pageNumber - 1}`}
                 className="inline-flex items-center gap-2 px-4 py-2 bg-amber-100 dark:bg-amber-900 text-amber-600 dark:text-amber-400 rounded-lg hover:bg-amber-200 dark:hover:bg-amber-800 transition-colors duration-200"
               >
@@ -118,10 +118,10 @@ export default function SurahPage() {
                 <span>{language === 'ar' ? 'الصفحة السابقة' : 'Previous Page'}</span>
               </Link>
             )}
-            
+
             {/* Next Surah */}
             {pageNumber < 604 && (
-              <Link 
+              <Link
                 href={`/quran/pages/${pageNumber + 1}`}
                 className="inline-flex items-center gap-2 px-4 py-2 bg-amber-100 dark:bg-amber-900 text-amber-600 dark:text-amber-400 rounded-lg hover:bg-amber-200 dark:hover:bg-amber-800 transition-colors duration-200"
               >

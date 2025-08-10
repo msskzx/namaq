@@ -8,7 +8,7 @@ import translations from '@/components/language/translations';
 import { EventBase } from '@/types/event';
 import EventTimeline from "@/components/events/EventTimeline";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+import { fetcher } from '@/lib/swr';
 
 function EventsPage() {
   const { language } = useLanguage();

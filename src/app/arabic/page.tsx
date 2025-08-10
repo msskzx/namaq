@@ -9,7 +9,7 @@ import translations from '@/components/language/translations';
 import ArticleCard from '@/components/articles/ArticleCard';
 import { Article } from '@/types/article';
 
-const fetcher = (url: string) => fetch(url).then(res => res.ok ? res.json() : null);
+import { fetcher } from '@/lib/swr';
 
 export default function Arabic() {
   const { data: category, error, isLoading } = useSWR('/api/categories/arabic', fetcher);

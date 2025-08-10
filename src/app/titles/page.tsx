@@ -7,7 +7,7 @@ import LoadingSpinner from "@/components/common/LoadingSpinner";
 import TitleCard from '@/components/people/TitleCard';
 import { TitleBase } from "@/types/title";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+import { fetcher } from '@/lib/swr';
 
 export default function TitlesPage() {
   const { language } = useLanguage();
