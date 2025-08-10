@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { useLanguage } from './LanguageContext';
-import AnalyticsOptOut from './AnalyticsOptOut';
+import { useLanguage } from '@/components/language/LanguageContext';
+import AnalyticsOptOut from '@/components/cookies/AnalyticsOptOut';
 
 // Extend Window interface for gtag
 declare global {

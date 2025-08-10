@@ -3,13 +3,13 @@
 import React from "react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
-import { useLanguage } from "@/components/LanguageContext";
-import translations from "@/components/translations";
+import { useLanguage } from "@/components/language/LanguageContext";
+import translations from "@/components/language/translations";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShieldHalved, faLocationDot, faCalendarDays, faMapLocationDot } from '@fortawesome/free-solid-svg-icons';
-import LoadingSpinner from '@/components/LoadingSpinner';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 import PersonNameCard from '@/components/people/PersonNameCard';
-import BattleMap from '@/components/battle/BattleMap';
+import BattleMap from '@/components/battles/BattleMap';
 import { PersonBase } from "@/types/person";
 import { Battle } from "@/types/battle";
 

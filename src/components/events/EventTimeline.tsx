@@ -3,9 +3,9 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShield } from '@fortawesome/free-solid-svg-icons';
-import { useLanguage } from '@/components/LanguageContext';
+import { useLanguage } from '@/components/language/LanguageContext';
 import type { EventBase } from '@/types/event';
-import EventCard from './EventCard';
+import EventCard from '@/components/events/EventCard';
 import type { Battle } from '@/types/battle';
 
 interface EventTimelineProps {

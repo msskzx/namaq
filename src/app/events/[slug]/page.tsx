@@ -2,17 +2,17 @@
 
 import { useParams } from "next/navigation";
 import useSWR from "swr";
-import { useLanguage } from "@/components/LanguageContext";
-import translations from "@/components/translations";
+import { useLanguage } from "@/components/language/LanguageContext";
+import translations from "@/components/language/translations";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShieldHalved, faLocationDot, faCalendarDays } from '@fortawesome/free-solid-svg-icons';
-import LoadingSpinner from '@/components/LoadingSpinner';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 import PersonNameCard from '@/components/people/PersonNameCard';
 import { EventAll } from '@/types/event';
 import { PersonBase } from "@/types/person";
-import ArticleCard from "@/components/ArticleCard";
+import ArticleCard from "@/components/articles/ArticleCard";
 import { ArticleBase } from "@/types/article";
-import Badge from '@/components/Badge';
+import Badge from '@/components/common/Badge';
 import { CategoryBase } from "@/types/category";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());

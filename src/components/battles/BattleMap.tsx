@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import { useLanguage } from '../LanguageContext';
+import { useLanguage } from '../language/LanguageContext';
 import { Battle } from '@/types/battle';
 import { Loader } from '@googlemaps/js-api-loader';
 

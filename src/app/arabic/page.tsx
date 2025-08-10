@@ -3,10 +3,10 @@
 import React from 'react';
 import Image from 'next/image';
 import useSWR from 'swr';
-import LoadingSpinner from '@/components/LoadingSpinner';
-import { useLanguage } from '@/components/LanguageContext';
-import translations from '@/components/translations';
-import ArticleCard from '@/components/ArticleCard';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
+import { useLanguage } from '@/components/language/LanguageContext';
+import translations from '@/components/language/translations';
+import ArticleCard from '@/components/articles/ArticleCard';
 import { Article } from '@/types/article';
 
 const fetcher = (url: string) => fetch(url).then(res => res.ok ? res.json() : null);

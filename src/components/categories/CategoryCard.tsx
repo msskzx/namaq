@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useLanguage } from '@/components/LanguageContext';
+import { useLanguage } from '@/components/language/LanguageContext';
 import { Category } from '@/types/category';
 
 function CategoryCard({ category }: { category: Category }) {

@@ -1,8 +1,8 @@
-import { useLanguage } from '@/components/LanguageContext';
-import translations from "@/components/translations";
+import { useLanguage } from '@/components/language/LanguageContext';
+import translations from "@/components/language/translations";
 import useSWR from 'swr';
 import PersonCard from '../people/PersonCard';
-import LoadingSpinner from '../LoadingSpinner';
+import LoadingSpinner from '../common/LoadingSpinner';
 import type { PersonWithTitles } from '@/types/person';
 import type { Pagination } from '@/types/pagination';
 

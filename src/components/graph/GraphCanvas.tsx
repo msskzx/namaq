@@ -3,7 +3,7 @@
 import { useEffect, useCallback, useRef, RefObject } from 'react';
 import type { ForceGraphMethods, NodeObject, LinkObject } from 'react-force-graph-2d';
 import { useRouter } from 'next/navigation';
-import { useLanguage } from '@/components/LanguageContext';
+import { useLanguage } from '@/components/language/LanguageContext';
 import ForceGraph2D from 'react-force-graph-2d';
 import { GraphNodeFull, GraphLink, GraphData } from '@/types/graph';
 import useSWR from 'swr';

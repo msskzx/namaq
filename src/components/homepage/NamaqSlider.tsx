@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { useLanguage } from '@/components/LanguageContext';
+import { useLanguage } from '@/components/language/LanguageContext';
 
 const words = [
   'نَمَق',

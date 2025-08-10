@@ -1,9 +1,9 @@
 "use client";
 
-import { useLanguage } from "@/components/LanguageContext";
-import translations from "@/components/translations";
+import { useLanguage } from "@/components/language/LanguageContext";
+import translations from "@/components/language/translations";
 import useSWR from "swr";
-import LoadingSpinner from "@/components/LoadingSpinner";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
 import TitleCard from '@/components/people/TitleCard';
 import { TitleBase } from "@/types/title";
 

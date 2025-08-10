@@ -1,11 +1,11 @@
 "use client";
 
-import { useLanguage } from '@/components/LanguageContext';
+import { useLanguage } from '@/components/language/LanguageContext';
 import useSWR from 'swr';
-import LoadingSpinner from '@/components/LoadingSpinner';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { useParams } from 'next/navigation';
-import translations from '@/components/translations';
-import ArticleCard from '@/components/ArticleCard';
+import translations from '@/components/language/translations';
+import ArticleCard from '@/components/articles/ArticleCard';
 import { Article } from '@/types/article';
 import EventCard from '@/components/events/EventCard';
 import { EventBase } from '@/types/event';

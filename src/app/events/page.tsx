@@ -2,9 +2,9 @@
 
 import React from "react";
 import useSWR from "swr";
-import LoadingSpinner from '@/components/LoadingSpinner';
-import { useLanguage } from '@/components/LanguageContext';
-import translations from '@/components/translations';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
+import { useLanguage } from '@/components/language/LanguageContext';
+import translations from '@/components/language/translations';
 import { EventBase } from '@/types/event';
 import EventTimeline from "@/components/events/EventTimeline";
 

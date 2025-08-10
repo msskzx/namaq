@@ -1,7 +1,7 @@
 "use client";
 
-import { useLanguage } from "@/components/LanguageContext";
-import translations from "@/components/translations";
+import { useLanguage } from "@/components/language/LanguageContext";
+import translations from "@/components/language/translations";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenNib } from '@fortawesome/free-solid-svg-icons';
 

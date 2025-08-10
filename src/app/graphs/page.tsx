@@ -1,8 +1,8 @@
 "use client";
 
 import GraphCanvas from "@/components/graph/GraphCanvas";
-import { useLanguage } from "@/components/LanguageContext";
-import translations from "@/components/translations";
+import { useLanguage } from "@/components/language/LanguageContext";
+import translations from "@/components/language/translations";
 
 export default function GraphPage() {
     const { language } = useLanguage();

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { useLanguage } from './LanguageContext';
+import { useLanguage } from '@/components/language/LanguageContext';
 
 function AnalyticsOptOut() {
   const [analyticsEnabled, setAnalyticsEnabled] = useState<boolean | null>(null);

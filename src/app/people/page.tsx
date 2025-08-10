@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { useLanguage } from '@/components/LanguageContext';
+import { useLanguage } from '@/components/language/LanguageContext';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useInView } from 'react-intersection-observer';
-import translations from '@/components/translations';
+import translations from '@/components/language/translations';
 import PeopleFilter from '@/components/people/PeopleFilter';
 import type { Title } from '@/generated/prisma';
-import LoadingSpinner from '@/components/LoadingSpinner';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 import PersonCard from '@/components/people/PersonCard';
 import { PersonWithTitles } from '@/types/person';
 import useSWR from 'swr';

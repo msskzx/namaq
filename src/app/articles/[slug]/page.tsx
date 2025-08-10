@@ -1,12 +1,12 @@
 "use client";
 
 import React from "react";
-import { useLanguage } from '@/components/LanguageContext';
-import translations from '@/components/translations';
-import LoadingSpinner from '@/components/LoadingSpinner';
+import { useLanguage } from '@/components/language/LanguageContext';
+import translations from '@/components/language/translations';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 import useSWR from 'swr';
 import { useParams } from "next/navigation";
-import Badge from '@/components/Badge';
+import Badge from '@/components/common/Badge';
 import { CategoryBase } from '@/types/category';
 import { EventBase } from '@/types/event';
 import EventCard from '@/components/events/EventCard';

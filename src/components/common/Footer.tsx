@@ -1,8 +1,8 @@
 "use client";
 
 import React from 'react';
-import { useLanguage } from '../LanguageContext';
-import translations from '../translations';
+import { useLanguage } from '../language/LanguageContext';
+import translations from '../language/translations';
 
 const getLinkGroups = (language: 'en' | 'ar') => ({
   arabic: {

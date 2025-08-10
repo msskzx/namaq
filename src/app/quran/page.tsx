@@ -1,8 +1,8 @@
 "use client";
 
-import { useLanguage } from "@/components/LanguageContext";
-import translations from "@/components/translations";
-import LoadingSpinner from '@/components/LoadingSpinner';
+import { useLanguage } from "@/components/language/LanguageContext";
+import translations from "@/components/language/translations";
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook } from '@fortawesome/free-solid-svg-icons';
 import { Surah } from '@/types/quran';

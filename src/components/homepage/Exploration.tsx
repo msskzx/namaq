@@ -1,6 +1,6 @@
 
-import { useLanguage } from "../LanguageContext";
-import translations from "../translations";
+import { useLanguage } from "../language/LanguageContext";
+import translations from "../language/translations";
 import MotivationCard from "./MotivationCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMosque, faUsers, faShieldAlt, faFileAlt, faThLarge, faPenNib, faCrown, faBook, faQuoteRight } from "@fortawesome/free-solid-svg-icons";

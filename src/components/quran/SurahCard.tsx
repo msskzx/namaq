@@ -2,8 +2,8 @@ import { Surah } from '@/types/quran';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { useLanguage } from '@/components/LanguageContext';
-import translations from '@/components/translations';
+import { useLanguage } from '@/components/language/LanguageContext';
+import translations from '@/components/language/translations';
 
 function SurahCard({ surah }: { surah: Surah }) {
   const { language } = useLanguage();

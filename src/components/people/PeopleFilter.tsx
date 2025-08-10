@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import translations from '@/components/translations';
+import translations from '@/components/language/translations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import type { Title } from '@/generated/prisma';

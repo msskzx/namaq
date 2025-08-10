@@ -3,7 +3,7 @@ import Link from 'next/link';
 import type { PersonWithTitles } from '@/types/person';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faSignature } from '@fortawesome/free-solid-svg-icons';
-import Badge from '@/components/Badge';
+import Badge from '@/components/common/Badge';
 
 interface PersonCardProps {
   person: PersonWithTitles;

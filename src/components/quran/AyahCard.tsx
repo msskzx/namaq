@@ -1,6 +1,6 @@
 import type { Ayah } from "@/types/person";
-import { useLanguage } from "@/components/LanguageContext";
-import translations from "../translations";
+import { useLanguage } from "@/components/language/LanguageContext";
+import translations from "../language/translations";
 
 function AyatGroup({ ayat }: { ayat: Ayah[] }) {
     const { language } = useLanguage();

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import type { EventBase } from '@/types/event';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt, faShieldAlt, faLocationDot } from '@fortawesome/free-solid-svg-icons';
-import { useLanguage } from '@/components/LanguageContext';
+import { useLanguage } from '@/components/language/LanguageContext';
 import type { Battle } from '@/types/battle';
 
 interface EventCardProps {

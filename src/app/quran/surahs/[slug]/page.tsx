@@ -1,7 +1,7 @@
 "use client";
 
-import { useLanguage } from "@/components/LanguageContext";
-import LoadingSpinner from '@/components/LoadingSpinner';
+import { useLanguage } from "@/components/language/LanguageContext";
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';

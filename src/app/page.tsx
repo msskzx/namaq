@@ -1,10 +1,10 @@
 "use client";
 
-import { useLanguage } from "@/components/LanguageContext";
-import translations from "@/components/translations";
-import ArticleCard from '@/components/ArticleCard';
+import { useLanguage } from "@/components/language/LanguageContext";
+import translations from "@/components/language/translations";
+import ArticleCard from '@/components/articles/ArticleCard';
 import useSWR from 'swr';
-import LoadingSpinner from '../components/LoadingSpinner';
+import LoadingSpinner from '../components/common/LoadingSpinner';
 import { Article } from '@/types/article';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -181,6 +181,14 @@ export default function Home() {
           </div>
           )}
           <TheTen />
+
+          <div className="text-center mt-8">
+
+            <Link href="/people" className="inline-flex items-center px-6 py-3 bg-amber-400 text-gray-950 font-semibold rounded-lg hover:bg-amber-300 transition-colors duration-200 shadow-lg hover:shadow-xl text-sm md:text-base">
+              {language === 'ar' ? 'عرض جميع الشخصيات' : 'View All People'}
+            </Link>
+          </div>
+
         </div>
 
         {/* Section Divider (amber-400) */}

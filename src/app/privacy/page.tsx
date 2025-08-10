@@ -1,8 +1,8 @@
 "use client";
 
 import React from 'react';
-import { useLanguage } from '@/components/LanguageContext';
-import AnalyticsOptOut from '@/components/AnalyticsOptOut';
+import { useLanguage } from '@/components/language/LanguageContext';
+import AnalyticsOptOut from '@/components/cookies/AnalyticsOptOut';
 
 
 

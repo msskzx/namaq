@@ -1,10 +1,10 @@
 "use client";
 
-import { useLanguage } from "@/components/LanguageContext";
+import { useLanguage } from "@/components/language/LanguageContext";
 import { Article } from "@/types/article";
-import ArticleCard from "@/components/ArticleCard";
+import ArticleCard from "@/components/articles/ArticleCard";
 import useSWR from 'swr';
-import LoadingSpinner from '@/components/LoadingSpinner';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 

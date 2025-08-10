@@ -2,10 +2,10 @@
 
 import React from "react";
 import useSWR from "swr";
-import CategoryCard from '../../components/CategoryCard';
-import LoadingSpinner from '../../components/LoadingSpinner';
-import { useLanguage } from '@/components/LanguageContext';
-import translations from '@/components/translations';
+import CategoryCard from '../../components/categories/CategoryCard';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
+import { useLanguage } from '@/components/language/LanguageContext';
+import translations from '@/components/language/translations';
 import { Category } from '@/types/category';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
