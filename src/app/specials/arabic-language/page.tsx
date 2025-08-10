@@ -56,7 +56,7 @@ export default function Arabic() {
       if (speakersCtx) {
         const speakersData = {
           labels: [
-            'مصر', 'الجزائر', 'السودان', 'العراق', 
+            'مصر', 'الجزائر', 'السودان', 'العراق',
             wrapLabel('المملكة العربية السعودية', 16), 'المغرب', 'اليمن', 'سوريا',
             'تونس', 'ليبيا', 'الأردن', 'لبنان', 'الكويت', 'عُمان', 'قطر',
             'البحرين', 'الإمارات', 'موريتانيا', 'جزر القمر', 'جيبوتي', 'فلسطين',
@@ -244,7 +244,7 @@ export default function Arabic() {
               <p className="text-7xl md:text-8xl font-extrabold text-blue-600 dark:text-blue-400 my-4 arabic-text">٤٢٢ مليون</p>
               <p className="text-2xl font-bold text-gray-700 dark:text-gray-200 arabic-text mt-6">شخص حول العالم</p>
             </div>
-            <Image src={"/arabic_language.png"} alt="arabic-language" className="w-1/2 h-auto object-cover rounded-lg" width={500} height={500} />
+            <Image src={"/mariam_arabic_language.png"} alt="arabic language" className="w-1/2 h-auto object-cover rounded-lg" width={500} height={500} />
           </div>
         </header>
 
@@ -256,7 +256,7 @@ export default function Arabic() {
             <canvas ref={speakersChartRef} id="speakersChart"></canvas>
           </div>
         </section>
-        
+
         {/* Number of Words in World Languages */}
         <section className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-6 md:p-8 my-12 transition-colors duration-300">
           <p className="text-5xl md:text-7xl font-extrabold text-blue-600 dark:text-blue-400 my-4 text-center">١٢٫٣ مليون كلمة</p>
@@ -287,17 +287,17 @@ export default function Arabic() {
                   <span className="text-gray-600 dark:text-gray-200">الاسبانية</span>
                   <span className="font-bold dark:text-gray-200">١٥٠ ألف</span>
                 </div>
-               
+
               </div>
             </div>
             <div className="p-4">
               <p className="text-gray-600 dark:text-gray-200 text-lg leading-relaxed arabic-text">
-                تحتل اللغة العربية مرتبة متقدمة بين لغات العالم من حيث ثراء المفردات، حيث تحتوي على أكثر من ١٢ مليون كلمة، 
-                مقارنة بنحو ٦٠٠ ألف كلمة في الإنجليزية و٣٥٠ ألف كلمة في الفرنسية. 
+                تحتل اللغة العربية مرتبة متقدمة بين لغات العالم من حيث ثراء المفردات، حيث تحتوي على أكثر من ١٢ مليون كلمة،
+                مقارنة بنحو ٦٠٠ ألف كلمة في الإنجليزية و٣٥٠ ألف كلمة في الفرنسية.
                 وتتميز العربية بقدرتها على الاشتقاق من الجذور اللغوية، حيث يمكن اشتقاق مئات الكلمات من الجذر الواحد.
-            shadow-2xl   </p>
+                shadow-2xl   </p>
               <p className="text-gray-600 dark:text-gray-200 text-lg mt-4 leading-relaxed arabic-text">
-                من المثير للاهتمام أن المعاجم العربية القديمة مثل لسان العرب لابن منظور تحتوي على أكثر من ٨٠ ألف مادة، 
+                من المثير للاهتمام أن المعاجم العربية القديمة مثل لسان العرب لابن منظور تحتوي على أكثر من ٨٠ ألف مادة،
                 بينما تحتوي أضخم معاجم اللغة الإنجليزية (أكسفورد) على حوالي ٦٠٠ ألف كلمة.
               </p>
             </div>
@@ -310,12 +310,12 @@ export default function Arabic() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div className="p-4">
               <p className="text-gray-600 dark:text-gray-200 text-lg leading-relaxed arabic-text">
-                تتميز اللغة العربية بنظام كتابة فريد يتكون من ٢٨ حرفاً، وهو عدد معتدل مقارنة بلغات أخرى. 
-                تتفاوت أبجديات اللغات بشكل كبير، فبعض اللغات مثل الخميرية (الخمير) تحتوي على ٧٤ حرفاً، 
+                تتميز اللغة العربية بنظام كتابة فريد يتكون من ٢٨ حرفاً، وهو عدد معتدل مقارنة بلغات أخرى.
+                تتفاوت أبجديات اللغات بشكل كبير، فبعض اللغات مثل الخميرية (الخمير) تحتوي على ٧٤ حرفاً،
                 بينما تحتوي لغة روتوكاس في بابوا غينيا الجديدة على ١٢ حرفاً فقط.
               </p>
               <p className="text-gray-600 dark:text-gray-200 text-lg mt-4 leading-relaxed arabic-text">
-                تتميز الأبجدية العربية بكونها نظام كتابة متصل، حيث تتغير أشكال الحروف حسب موقعها في الكلمة، 
+                تتميز الأبجدية العربية بكونها نظام كتابة متصل، حيث تتغير أشكال الحروف حسب موقعها في الكلمة،
                 مما يجعلها واحدة من أكثر أنظمة الكتابة جمالاً ومرونة في العالم.
               </p>
             </div>
@@ -496,7 +496,7 @@ export default function Arabic() {
         <section className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-6 md:p-8 my-12 transition-colors duration-300">
           <h2 className="text-3xl font-bold text-center mb-8 arabic-text text-gray-800 dark:text-gray-100">أشكال الحروف</h2>
           <p className="text-center text-gray-600 dark:text-gray-200 mb-8 max-w-3xl mx-auto arabic-text">
-            تتميز الأبجدية العربية بكونها نظام كتابة متصل، حيث تتغير أشكال الحروف حسب موقعها في الكلمة. 
+            تتميز الأبجدية العربية بكونها نظام كتابة متصل، حيث تتغير أشكال الحروف حسب موقعها في الكلمة.
             يوضح الجدول التالي أشكال الحروف في مواقعها المختلفة:
           </p>
           <div className="overflow-x-auto">
@@ -548,7 +548,7 @@ export default function Arabic() {
         <section className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-6 md:p-8 my-12 transition-colors duration-300">
           <h2 className="text-3xl font-bold text-center mb-2 arabic-text text-gray-800 dark:text-gray-100">حكاية رقمين</h2>
           <p className="text-center text-gray-600 dark:text-gray-200 mb-8 max-w-3xl mx-auto arabic-text">
-            الأرقام العربية المستخدمة في الغرب نشأت في الهند وانتقلت عبر العلماء العرب. 
+            الأرقام العربية المستخدمة في الغرب نشأت في الهند وانتقلت عبر العلماء العرب.
             الأرقام المستخدمة في العديد من الدول الناطقة بالعربية اليوم تُعرف بالأرقام العربية الشرقية.
           </p>
           <div className="overflow-x-auto">
@@ -568,7 +568,7 @@ export default function Arabic() {
             </table>
           </div>
           <p className="text-center text-gray-600 dark:text-gray-200 mt-6 max-w-3xl mx-auto arabic-text">
-            لاحظ أن اتجاه قراءة الأرقام يختلف حسب اللغة. في اللغة العربية تُقرأ من اليمين إلى اليسار، 
+            لاحظ أن اتجاه قراءة الأرقام يختلف حسب اللغة. في اللغة العربية تُقرأ من اليمين إلى اليسار،
             بينما في اللغات الأوروبية تُقرأ من اليسار إلى اليمين.
           </p>
         </section>

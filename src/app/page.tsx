@@ -9,7 +9,7 @@ import Exploration from "@/components/homepage/Exploration";
 import GraphCanvas from "@/components/graph/GraphCanvas";
 import SpecialsHighlights from "@/components/articles/SpecialsHighlights";
 import Hero from "@/components/homepage/Hero";
-import NamaqDef from "@/components/homepage/NamaqDef";
+import NamaqDefinition from "@/components/homepage/NamaqDefinition";
 
 export default function Home() {
   const { language } = useLanguage();
@@ -21,7 +21,7 @@ export default function Home() {
 
         <Hero />
 
-        <NamaqDef />
+        <NamaqDefinition />
 
         <hr className="border-t-2 border-amber-400 my-8 max-w-2xl mx-auto" />
         <SpecialsHighlights />

@@ -20,11 +20,11 @@ function Badge({ text, href, color = 'indigo' }: BadgeProps) {
   if (href) {
     return (
       <Link href={href} className="inline-block">
-        <span className={baseClasses}>{text}</span>
+        <span className={`${baseClasses} text-lg`}>{text}</span>
       </Link>
     );
   }
-  return <span className={`inline-block ${baseClasses}`}>{text}</span>;
+  return <span className={`inline-block ${baseClasses} text-lg`}>{text}</span>;
 };
 
 export default Badge; 

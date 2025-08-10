@@ -39,7 +39,7 @@ export default function NamaqSlider() {
   }, [current, language]);
 
   return (
-    <div className="w-full flex flex-col items-center mb-12 bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-lg p-6 w-full h-full">
+    <div className="w-full flex flex-col items-center mb-12 bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-lg p-6 w-full h-full border-l-4 border-r-4 border-rose-800">
       <div className="relative w-full max-w-xs mx-auto">
         <button
           onClick={language == 'ar' ? goLeft : goRight}
@@ -50,7 +50,7 @@ export default function NamaqSlider() {
           <FontAwesomeIcon icon={faChevronLeft} className="w-6 h-6" />
         </button>
         <div className="bg-transparent px-8 py-8 flex flex-col items-center justify-center min-w-[220px] min-h-[120px] transition-all duration-300">
-          <span className="text-5xl sm:text-6xl md:text-7xl font-arabicDisplay text-amber-400">
+          <span className="text-3xl sm:text-4xl md:text-5xl font-arabicDisplay text-amber-400">
             {words[current]}
           </span>
         </div>

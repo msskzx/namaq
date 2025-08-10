@@ -12,10 +12,9 @@ import PersonNameCard from '@/components/people/PersonNameCard';
 import BattleMap from '@/components/battles/BattleMap';
 import { PersonBase } from "@/types/person";
 import { Battle } from "@/types/battle";
-
 import { fetcher } from '@/lib/swr';
 
-const BattleDetailPage: React.FC = () => {
+export default function BattleDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const { language } = useLanguage();
   const t = translations[language];
@@ -98,6 +97,4 @@ const BattleDetailPage: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default BattleDetailPage; 
+}

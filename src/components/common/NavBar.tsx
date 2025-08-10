@@ -16,9 +16,9 @@ interface NavLink {
 
 const getLinkItems = (href: string, language: 'en' | 'ar'): NavLink[] => {
   switch (href) {
-    case '/graph':
+    case '/graphs':
       return [
-        { href: '/graph', label: translations[language].familyRelations },
+        { href: '/graphs', label: translations[language].familyRelations },
         { href: '/people/prophet-muhammad', label: translations[language].prophet },
         { href: '/people?title=companion', label: translations[language].companions },
         { href: '/people', label: translations[language].people },
@@ -89,14 +89,14 @@ function NavBar() {
 
   const mainLinks = [
     { href: '/specials', label: language === 'ar' ? 'مقالات مميزة' : 'Special Articles' },
-    { href: '/graph', label: translations[language].familyRelations },
+    { href: '/graphs', label: translations[language].familyRelations },
     { href: '/events', label: translations[language].events },
     { href: '/arabic', label: translations[language].arabic },
   ];
-  
+
   const allLinks = [
     { href: '/specials', label: language === 'ar' ? 'مقالات مميزة' : 'Special Articles' },
-    { href: '/graph', label: translations[language].familyRelations },
+    { href: '/graphs', label: translations[language].familyRelations },
     { href: '/people/prophet-muhammad', label: translations[language].prophet },
     { href: '/people?title=companion', label: translations[language].companions },
     { href: '/people', label: translations[language].people },
@@ -116,8 +116,8 @@ function NavBar() {
   return (
     <nav className="bg-gray-50 dark:bg-gray-950 w-full border-b-2 border-amber-400 shadow-lg">
       <div className="container mx-auto flex justify-between items-center py-4 px-4">
-        <Link 
-          href="/" 
+        <Link
+          href="/"
           className="text-amber-600 dark:text-amber-400 text-2xl font-bold hover:text-amber-300 transition-colors"
           onClick={() => setMenuOpen(false)}
         >
@@ -128,9 +128,9 @@ function NavBar() {
           {sortedMainLinks.map((link) => {
             const linkItems = getLinkItems(link.href, language);
             const isHovered = hoveredLink === link.href;
-            
+
             return (
-              <div 
+              <div
                 key={link.href}
                 className="relative"
                 onMouseEnter={() => {
@@ -152,9 +152,9 @@ function NavBar() {
                 >
                   {link.label}
                 </Link>
-                
+
                 {linkItems.length > 0 && isHovered && (
-                  <div 
+                  <div
                     className="absolute top-full left-0 mt-1 bg-white dark:bg-gray-900 shadow-lg z-50 min-w-[200px] py-1"
                     onMouseEnter={() => {
                       if (hoverTimeoutRef.current) {
@@ -184,8 +184,8 @@ function NavBar() {
             );
           })}
         </div>
-        
-         <div> 
+
+        <div>
           {/* Gear Icon for Settings */}
           <div className="relative" ref={settingsRef}>
             <button
