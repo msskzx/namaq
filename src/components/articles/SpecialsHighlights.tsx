@@ -46,7 +46,7 @@ export default function SpecialsHighlights() {
           </div>
           {Array.isArray(specialArticles) && specialArticles.length > 0 && (
             <div className="text-center">
-              <Link href="/articles?special=true" className="inline-flex items-center px-6 py-3 bg-amber-400 text-gray-950 font-semibold rounded-lg hover:bg-amber-300 transition-colors duration-200 shadow-lg hover:shadow-xl text-sm md:text-base">
+              <Link href="/specials" className="inline-flex items-center px-6 py-3 bg-amber-400 text-gray-950 font-semibold rounded-lg hover:bg-amber-300 transition-colors duration-200 shadow-lg hover:shadow-xl text-sm md:text-base">
                 {language === 'ar' ? 'عرض جميع المقالات المميزة' : 'View All Special Articles'}
               </Link>
             </div>
