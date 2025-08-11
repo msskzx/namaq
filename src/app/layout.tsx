@@ -22,7 +22,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Namaq - Data Driven Interactive Learning",
-  description: "Data driven interactive learning platform to learn about all kinds of useful topics, starting with the family and relations of Prophet Muhammad ﷺ and his companions, historic events, battles and more.",
+  description: "Data driven interactive learning platform to learn about all kinds of useful topics",
 };
 
 export default function RootLayout({

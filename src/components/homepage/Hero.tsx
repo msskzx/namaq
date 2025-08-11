@@ -34,8 +34,8 @@ export default function Hero() {
           </Link>
         </div>
       </div>
-      <div className="min-h-[500px]">
-        <Image src="/gemini_scholar.png" alt="Arabic Language" className="w-full h-full rounded-2xl" width={500} height={500} />
+      <div className="flex items-center justify-center">
+        <Image src="/gemini_scholar.png" alt="Gemini Scholar" className="w-full rounded-2xl" width={500} height={500} />
       </div>
 
 

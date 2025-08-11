@@ -14,28 +14,28 @@ interface TimelineItemProps {
 }
 
 function TimelineItem({ event, language }: TimelineItemProps) {
-
   return (
-    <div className="relative flex flex-col items-center mx-8 first:ml-0 last:mr-0 min-w-[120px]"> {/* Added min-w to ensure spacing */}
+    <div className="flex flex-col items-center mx-4 my-4">
       <Link
         href={event.type === EventType.BATTLE ? `/battles/${event.battle?.slug}` : `/events/${event.slug}`}
-        className="group mt-4 mb-8 text-center block" 
+        className="group my-8 text-center block"
       >
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-amber-500 dark:border-amber-400 px-3 py-2
-                    min-w-max transition-all duration-200 hover:shadow-md hover:border-amber-600 dark:hover:border-amber-500
-                    hover:bg-amber-100 dark:hover:bg-amber-600 cursor-pointer">
-          <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-200 transition-colors whitespace-nowrap">
+          w-full transition-all duration-200 hover:shadow-md hover:border-amber-600 dark:hover:border-amber-500
+          hover:bg-amber-100 dark:hover:bg-amber-600 cursor-pointer">
+          <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-200 whitespace-nowrap">
             {language === 'ar' ? event.name : event.nameTransliterated}
           </h3>
         </div>
       </Link>
 
-      {/* Timeline dot */}
-      <div className="absolute top-3/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-amber-600 rounded-full z-10 border-2 border-amber-400 shadow"></div>
+      {/* Dot */}
+      <div className="w-4 h-4 bg-amber-600 rounded-full border-2 border-amber-400 shadow"></div>
+      <div className="h-6 w-0.5 bg-amber-400"></div>
 
-      {/* Year below dot */}
+      {/* Year */}
       {event.hijriYear && (
-        <div className="text-xs font-medium text-amber-600 dark:text-amber-400">
+        <div className="text-xs font-medium text-amber-600 dark:text-amber-400 mt-4">
           {event.hijriPeriod}
         </div>
       )}
@@ -43,49 +43,86 @@ function TimelineItem({ event, language }: TimelineItemProps) {
   );
 }
 
-// --- BattleTimeline Component ---
 interface TimelineProps {
   events: EventWithBattle[];
 }
 
-function Timeline({ events }: TimelineProps) {
+export default function Timeline({ events }: TimelineProps) {
   const { language } = useLanguage();
 
-  if (!events || events.length === 0) {
-    return null;
-  }
+  // Determine number of items per row responsively (hooks must run before any return)
+  const [rowSize, setRowSize] = React.useState(5);
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mql = window.matchMedia('(max-width: 640px)');
+    const apply = () => setRowSize(mql.matches ? 2 : 5);
+    apply();
 
-  // Sort participations by Hijri year to ensure chronological order
+    const listener = (e: MediaQueryListEvent) => setRowSize(e.matches ? 2 : 5);
+
+    // Support both modern and legacy MediaQueryList APIs without using any
+    type LegacyMediaQueryList = MediaQueryList & {
+      addListener: (cb: (e: MediaQueryListEvent) => void) => void;
+      removeListener: (cb: (e: MediaQueryListEvent) => void) => void;
+    };
+
+    if (typeof mql.addEventListener === 'function') {
+      mql.addEventListener('change', listener);
+    } else if ('addListener' in mql) {
+      (mql as LegacyMediaQueryList).addListener(listener);
+    }
+
+    return () => {
+      if (typeof mql.removeEventListener === 'function') {
+        mql.removeEventListener('change', listener);
+      } else if ('removeListener' in mql) {
+        (mql as LegacyMediaQueryList).removeListener(listener);
+      }
+    };
+  }, []);
+
+  if (!events || events.length === 0) return null;
+
   const sortedEvents = [...events].sort(
     (a, b) => (a.hijriYear || 0) - (b.hijriYear || 0)
   );
 
+  const rows: EventWithBattle[][] = [];
+  for (let i = 0; i < sortedEvents.length; i += rowSize) {
+    rows.push(sortedEvents.slice(i, i + rowSize));
+  }
+
   return (
     <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-6 mb-6">
-      {/* Timeline Header */}
+      {/* Header */}
       <div className="font-bold text-xl mb-6 text-gray-900 dark:text-gray-200 flex items-center gap-2">
         <FontAwesomeIcon icon={faTimeline} className="w-5 h-5" />
         {language === 'ar' ? 'الخط الزمني' : 'Timeline'}
       </div>
 
-      {/* Scrollable Timeline Container */}
-      <div className="relative overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-gray-100 dark:scrollbar-track-gray-700"> {/* Added custom-scrollbar class for styling */}
-        <div className="flex items-center min-w-max px-4 h-24 relative"> {/* Increased height for better spacing */}
-          {/* Main Timeline Line */}
-          <div className="absolute top-3/4 left-0 right-0 h-0.5 bg-amber-400 transform -translate-y-1/2 z-0"></div>
-
-          {/* Render Timeline Items */}
-          {sortedEvents.map((event) => (
-            <TimelineItem
-              key={event.id}
-              event={event}
-              language={language}
-            />
-          ))}
-        </div>
+      {/* Snake Rows */}
+      <div className="flex flex-col items-stretch w-full">
+        {rows.map((row, rowIndex) => (
+          <div key={rowIndex} className="relative">
+            <div
+              className={`flex ${rowIndex % 2 === 0 ? 'flex-row' : 'flex-row-reverse'} items-center w-full justify-between py-2`}
+            >
+              <div className="absolute top-3/4 left-0 right-0 h-0.5 bg-amber-400 transform -translate-y-1/2 z-0"></div>
+              {row.map((event) => (
+                <div key={event.id} className="relative w-40 sm:w-52 md:w-60 flex justify-center">
+                  <TimelineItem event={event} language={language} />
+                </div>
+              ))}
+            </div>
+            {/* Vertical connector to next row */}
+            {rowIndex < rows.length - 1 && (
+              <div
+                className={`absolute ${rowIndex % 2 === 0 ? 'left-0' : 'right-0'} -bottom-42 h-56 w-0.5 bg-amber-400`}
+              ></div>
+            )}
+          </div>
+        ))}
       </div>
     </div>
   );
 }
-
-export default Timeline;
