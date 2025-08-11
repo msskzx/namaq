@@ -226,16 +226,17 @@ model Title {
 }
 
 model Battle {
-  id           String              @id @default(cuid())
-  name         String
-  slug         String              @unique
-  location     String?             
-  locationEn   String?             
-  hijriYear    Int?
-  hijriPeriod  String?
-  gregorianYear    Int?
-  gregorianPeriod  String?
-  nameTransliterated       String?
+  id                  String              @id @default(cuid())
+  name                String
+  slug                String              @unique
+  description         String?
+  location            String?             
+  locationEn          String?             
+  hijriYear           Int?
+  hijriPeriod         String?
+  gregorianYear       Int?
+  gregorianPeriod     String?
+  nameTransliterated  String?
 
   // New fields for Google Maps coordinates
   latitude     Float?              // Latitude coordinate (e.g., 27.6099)

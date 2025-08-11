@@ -76,6 +76,11 @@ export default function BattleDetailPage() {
                     </div>
                   </div>
                 )}
+                {battle.description && (
+                  <div className="mt-6">
+                    <p className="text-gray-800 dark:text-gray-200 text-2xl/8 text-justify ">{battle.description}</p>
+                  </div>
+                )}
                 <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-200 mt-8">
                   {t.participants}
                 </h2>

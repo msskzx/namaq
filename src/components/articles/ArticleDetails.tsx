@@ -34,7 +34,7 @@ export default function ArticleDetailPage() {
             {/* Article Header */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start mb-8">
               <div className="col-span-1 flex flex-col gap-6">
-                <h1 className="text-5xl mb-4 text-amber-400">
+                <h1 className="text-4xl mb-4 text-amber-400">
                   {language === 'ar' ? article.title : article.titleEn || article.title}
                 </h1>
                 {article.categories && article.categories.length > 0 && (
@@ -52,7 +52,7 @@ export default function ArticleDetailPage() {
                     </ul>
                   </div>
                 )}
-                <p className="mb-4 text-gray-900 dark:text-gray-200 text-2xl">{language === 'ar' ? article.summary : article.summaryEn || article.summary}</p>
+                <p className="mb-4 text-gray-900 dark:text-gray-200 text-2xl/8">{language === 'ar' ? article.summary : article.summaryEn || article.summary}</p>
               </div>
               {article.img && (
                 <div className="w-full flex flex-col gap-6">
@@ -68,15 +68,13 @@ export default function ArticleDetailPage() {
             </div>
 
             {/* Article Content */}
-            <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
-              <p className="text-gray-900 dark:text-gray-200 text-xl">{language === 'ar' ? article.content : article.contentEn || article.content}</p>
-            </div>
+            <p className="text-gray-900 dark:text-gray-200 text-2xl/12 text-justify">{language === 'ar' ? article.content : article.contentEn || article.content}</p>
 
             {/* Article Events */}
             {article.events && article.events.length > 0 && (
               <div className="mt-8">
                 <h2 className="text-2xl text-amber-400">{t.events}</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {article.events?.map((event: EventBase) => (
                     <EventCard key={event.id} event={event} />
                   ))}

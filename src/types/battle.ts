@@ -12,6 +12,7 @@ export interface BattleBase {
 }
 
 export interface Battle extends BattleBase {
+  description: string | null;
   latitude?: number | null;
   longitude?: number | null;
   participations?: { person: PersonBase }[];
