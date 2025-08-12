@@ -1,10 +1,5 @@
-import { peopleQueries, peopleRelationsQueries } from './graphSeedData';
+import { peopleQueries, peopleRelationsQueries } from './graphSeedData2';
 import { executeTransaction } from '@/lib/neo4j';
-import { Driver } from 'neo4j-driver';
-
-let neo4jDriver: Driver;
-
-
 
 async function main() {
   try {

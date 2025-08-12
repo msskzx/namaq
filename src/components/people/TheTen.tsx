@@ -63,7 +63,7 @@ export default function TheTen() {
 
           <p className="text-center text-gray-800 dark:text-gray-200 mb-10 text-base sm:text-lg md:text-xl font-arabic max-w-4xl mx-auto leading-relaxed">
             {language === 'ar'
-              ? 'استكشف حياة العديد من الشخصيات التاريخية من خلال الجداول الزمنية والرسوم المتحركة والشخصيات التوضيحية، مما يجعل من التعلم تجربة فريدة.'
+              ? 'استكشف حياة العديد من الشخصيات التاريخية من خلال الجداول الزمنية والرسوم المتحركة، مما يجعل من التعلم تجربة فريدة.'
               : 'Explore the lives and events of many historical figures through clear timelines, animations, and interactive figures, making learning a unique experience.'}
           </p>
 

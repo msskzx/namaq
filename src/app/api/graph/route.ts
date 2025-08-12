@@ -18,57 +18,98 @@ export async function GET(_request: Request) {
   try {
     let result;
     if (person) {
-      // Query to find all relationships between people
+      // Query variable-length paths up to 3 hops from the specified person
       result = await session.run(
-        `MATCH (p1:Person {slug: $slug})-[r]-(p2:Person)
-        RETURN p1, r, p2
-        LIMIT 100`,
+        `MATCH path = (p1:Person {slug: $slug})-[*1..3]-(p2:Person)
+         RETURN path`,
         { slug: person }
       );
     }
     else {
-      // Query to find all relationships between people
+      // Query direct relationships for all people (use path for unified handling)
       result = await session.run(
-        `MATCH (p1:Person)-[r]->(p2:Person)
-        RETURN p1, r, p2
-        LIMIT 100`,
+        `MATCH path = (p1:Person)-[*1..1]->(p2:Person)
+         RETURN path`,
       );
     }
 
-    const nodes = new Map();
+    const nodes = new Map<string, GraphNode>();
     const links: GraphLink[] = [];
+    const linkKeys = new Set<string>();
 
     result.records.forEach(record => {
-      const p1 = record.get('p1');
-      const p2 = record.get('p2');
-      const rel = record.get('r');
+      const path = record.get('path');
 
-      // Add nodes if they don't exist
-      if (!nodes.has(p1.identity.toString())) {
-        nodes.set(p1.identity.toString(), {
-          id: p1.identity.toString(),
-          label: p1.properties.name,
-          slug: p1.properties.slug,
-          group: 1
-        });
+      // When using RETURN path, Neo4j returns a Path object with segments
+      if (path && Array.isArray(path.segments)) {
+        for (const seg of path.segments) {
+          const start = seg.start;
+          const end = seg.end;
+          const rel = seg.relationship;
+
+          // Add start node
+          if (start && !nodes.has(start.identity.toString())) {
+            nodes.set(start.identity.toString(), {
+              id: start.identity.toString(),
+              label: start.properties.name,
+              slug: start.properties.slug,
+              group: 1,
+            });
+          }
+
+          // Add end node
+          if (end && !nodes.has(end.identity.toString())) {
+            nodes.set(end.identity.toString(), {
+              id: end.identity.toString(),
+              label: end.properties.name,
+              slug: end.properties.slug,
+              group: 2,
+            });
+          }
+
+          // Add link for this segment
+          if (start && end && rel) {
+            const source = start.identity.toString();
+            const target = end.identity.toString();
+            const label = rel.type;
+            const key = `${source}|${target}|${label}`;
+            if (!linkKeys.has(key)) {
+              links.push({ source, target, label, value: 1 });
+              linkKeys.add(key);
+            }
+          }
+        }
+      } else if (path && path.start && path.end) {
+        // Fallback: single-hop path object without segments array
+        const start = path.start;
+        const end = path.end;
+        const rel = path.relationship || path.rel || path.r;
+
+        if (!nodes.has(start.identity.toString())) {
+          nodes.set(start.identity.toString(), {
+            id: start.identity.toString(),
+            label: start.properties.name,
+            slug: start.properties.slug,
+            group: 1,
+          });
+        }
+        if (!nodes.has(end.identity.toString())) {
+          nodes.set(end.identity.toString(), {
+            id: end.identity.toString(),
+            label: end.properties.name,
+            slug: end.properties.slug,
+            group: 2,
+          });
+        }
+        const source = start.identity.toString();
+        const target = end.identity.toString();
+        const label = rel?.type || 'RELATED';
+        const key = `${source}|${target}|${label}`;
+        if (!linkKeys.has(key)) {
+          links.push({ source, target, label, value: 1 });
+          linkKeys.add(key);
+        }
       }
-
-      if (!nodes.has(p2.identity.toString())) {
-        nodes.set(p2.identity.toString(), {
-          id: p2.identity.toString(),
-          label: p2.properties.name,
-          slug: p2.properties.slug,
-          group: 2
-        });
-      }
-
-      // Add relationship
-      links.push({
-        source: p1.identity.toString(),
-        target: p2.identity.toString(),
-        label: rel.type,
-        value: 1
-      });
     });
 
     return NextResponse.json({

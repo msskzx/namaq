@@ -1,14 +1,14 @@
 import { prisma } from '../src/lib/prisma';
-import { people, peopleRelations, peopleBattleParticipations } from './personSeedData';
+import { people, peopleRelations, peopleBattleParticipations } from './personSeedData2';
 
 async function main() {
   try {
     console.log('🌱 Starting people seed...');
 
     // Clean up existing people and relations
-    await prisma.personRelation.deleteMany({});
-    await prisma.battleParticipation.deleteMany({});
-    await prisma.person.deleteMany({});
+    // await prisma.personRelation.deleteMany({});
+    // await prisma.battleParticipation.deleteMany({});
+    // await prisma.person.deleteMany({});
 
     // Seed people
     const personRecords: Record<string, any> = {};
@@ -59,6 +59,7 @@ async function main() {
       }
     }
 
+    /*
     // Seed battle participations
     const battleRecords = await prisma.battle.findMany()
     const battleSlugToId: Record<string, string> = {};
@@ -85,7 +86,7 @@ async function main() {
         console.warn(`⚠️ Could not find person or battle for participation:`, participation);
       }
     }
-
+    */
     console.log('✅ People seeded successfully!');
   } catch (e) {
     console.error('❌ Error seeding people:', e);
