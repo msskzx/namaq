@@ -5,7 +5,7 @@ import { useLanguage } from '@/components/language/LanguageContext';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useInView } from 'react-intersection-observer';
 import translations from '@/components/language/translations';
-import PeopleFilter from '@/components/people/PeopleFilter';
+import PeopleSearch from '@/components/people/PeopleSearch';
 import type { Title } from '@/generated/prisma';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import PersonCard from '@/components/people/PersonCard';
@@ -13,6 +13,7 @@ import { PersonWithTitles } from '@/types/person';
 import useSWR from 'swr';
 import useSWRInfinite from 'swr/infinite';
 import type { Pagination } from '@/types/pagination';
+import { fetcher } from '@/lib/swr';
 
 const PAGE_SIZE = 12;
 
@@ -24,19 +25,16 @@ const getKey = (
 ) => {
   // Reached the end if no more pages
   if (previousPageData && !previousPageData.pagination.hasNextPage) return null;
-  
+
   const params = new URLSearchParams({
     page: (pageIndex + 1).toString(),
     limit: PAGE_SIZE.toString(),
     ...(title ? { title } : {}),
     ...(search ? { search } : {}),
   });
-  
+
   return `/api/people?${params.toString()}`;
 };
-
-const fetcher = <T,>(url: string): Promise<T> =>
-  fetch(url).then((res) => res.json() as Promise<T>);
 
 const PeoplePage = () => {
   const { language } = useLanguage();
@@ -71,7 +69,7 @@ const PeoplePage = () => {
       revalidateFirstPage: false,
     }
   );
-  
+
   // Flatten the paginated data into a single array of people
   const allPeople = React.useMemo(() => {
     return peoplePages?.flatMap(page => page.data) || [];
@@ -85,7 +83,7 @@ const PeoplePage = () => {
   }, [peoplePages]);
 
   const { data: titles, error: titlesError, isLoading: isLoadingTitles } = useSWR<Title[]>("/api/titles", fetcher);
-  
+
   // Load more when scroll to bottom
   useEffect(() => {
     const isRisingEdge = inView && !prevInViewRef.current;
@@ -112,7 +110,7 @@ const PeoplePage = () => {
   useEffect(() => {
     prevInViewRef.current = inView;
   }, [inView]);
-  
+
   // Mark initial load completed once mounted
   useEffect(() => {
     if (isInitialLoad) setIsInitialLoad(false);
@@ -157,7 +155,7 @@ const PeoplePage = () => {
   return (
     <div className="container mx-auto px-4 py-8" dir={isArabic ? 'rtl' : 'ltr'} style={{ textAlign: isArabic ? 'right' : 'left' }}>
       <h1 className="text-3xl font-bold mb-6 text-center text-amber-400">{translations[language]?.people}</h1>
-      <PeopleFilter
+      <PeopleSearch
         titles={titles || []}
         selectedTitle={titleFilter}
         onTitleChange={handleTitleChange}
@@ -182,12 +180,12 @@ const PeoplePage = () => {
               </div>
             ))}
           </div>
-          
+
           {/* Loading spinner at the bottom when loading more */}
           <div ref={loadMoreRef} className="mt-8 flex justify-center">
             {isValidating && !isInitialLoad && <LoadingSpinner />}
           </div>
-          
+
           {/* Show end of results message */}
           {!isValidating && peoplePages && peoplePages.length > 0 && !peoplePages[peoplePages.length - 1]?.pagination.hasNextPage && (
             <p className="text-center text-gray-500 dark:text-gray-400 mt-4">

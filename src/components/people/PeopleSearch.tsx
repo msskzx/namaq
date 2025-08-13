@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import type { Title } from '@/generated/prisma';
 
-interface PeopleFilterProps {
+interface PeopleSearchProps {
   titles: Title[];
   selectedTitle: string;
   onTitleChange: (value: string) => void;
@@ -13,14 +13,14 @@ interface PeopleFilterProps {
   language: 'en' | 'ar';
 }
 
-function PeopleFilter({
+export default function PeopleSearch({
   titles,
   selectedTitle,
   onTitleChange,
   search,
   onSearchChange,
   language,
-}: PeopleFilterProps) {
+}: PeopleSearchProps) {
   const isArabic = language === 'ar';
   const inputRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = React.useState(search);
@@ -77,6 +77,4 @@ function PeopleFilter({
       </div>
     </form>
   );
-};
-
-export default PeopleFilter; 
+}

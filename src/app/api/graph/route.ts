@@ -5,6 +5,7 @@ import { GraphLink, GraphNode } from '@/types/graph';
 export async function GET(_request: Request) {
   const { searchParams } = new URL(_request.url);
   const person = searchParams.get('person');
+  const ancestorsOf = searchParams.getAll('ancestorsOf') as string[];
 
   const session = getSession();
 
@@ -17,12 +18,33 @@ export async function GET(_request: Request) {
 
   try {
     let result;
-    if (person) {
-      // Query variable-length paths up to 3 hops from the specified person
+    if (person && ancestorsOf && ancestorsOf.length > 0) {
+      // Combine both in a single query using UNION to return a unified set of paths
+      result = await session.run(
+        `MATCH path = (p1:Person {slug: $person})-[*1..3]-(p2:Person)
+         RETURN path
+         UNION
+         UNWIND $ancestors AS slug
+         MATCH path = (p1:Person {slug: slug})-[r:SON*]->(p2:Person)
+         RETURN path`,
+        { person, ancestors: ancestorsOf }
+      );
+    }
+    else if (person) {
+      // Only person provided: variable-length paths up to 3 hops
       result = await session.run(
         `MATCH path = (p1:Person {slug: $slug})-[*1..3]-(p2:Person)
          RETURN path`,
         { slug: person }
+      );
+    }
+    else if (ancestorsOf && ancestorsOf.length > 0) {
+      // Only ancestorsOf provided: unwind and return ancestor paths
+      result = await session.run(
+        `UNWIND $slugs AS slug
+         MATCH path = (p1:Person {slug: slug})-[r:SON*]->(p2:Person)
+         RETURN path`,
+        { slugs: ancestorsOf }
       );
     }
     else {

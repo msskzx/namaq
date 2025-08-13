@@ -1,25 +1,49 @@
 'use client';
 
-import { useEffect, useCallback, useRef, RefObject } from 'react';
+import { useEffect, useCallback, useRef, RefObject, useMemo } from 'react';
 import type { ForceGraphMethods, NodeObject, LinkObject } from 'react-force-graph-2d';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useLanguage } from '@/components/language/LanguageContext';
 import ForceGraph2D from 'react-force-graph-2d';
 import { GraphNodeFull, GraphLink, GraphData } from '@/types/graph';
 import useSWR from 'swr';
+import { fetcher } from '@/lib/swr';
+import GraphSearch from './GraphSearch';
 
 interface GraphCanvasProps {
-  url: string;
+  url?: string;
   targetSlug?: string;
+  showSearch?: boolean;
 }
 
-import { fetcher } from '@/lib/swr';
-
-export default function GraphCanvas({ url, targetSlug = 'prophet-muhammad' }: GraphCanvasProps) {
+export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-muhammad', showSearch = true }: GraphCanvasProps) {
   const { language } = useLanguage();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const { data: graphData, error: graphError, isLoading: graphLoading } = useSWR<GraphData>(url, fetcher);
+  // Build the fetch URL by forwarding current page search parameters
+  const fetchUrl = useMemo(() => {
+    try {
+      const base = new URL(url, typeof window !== 'undefined' ? window.location.origin : 'http://localhost');
+      const incoming = new URLSearchParams(searchParams?.toString() || '');
+
+      // Merge: append incoming params that aren't already present on base
+      // Allow multi-valued params like ancestorsOf to pass through
+      for (const k of incoming.keys()) {
+        // If base already has at least one value for k, skip adding duplicates
+        if (!base.searchParams.has(k)) {
+          // Append all values for this key from incoming
+          const allVals = incoming.getAll(k);
+          allVals.forEach(val => base.searchParams.append(k, val));
+        }
+      }
+      return base.toString();
+    } catch {
+      return url; // Fallback: use provided url as-is
+    }
+  }, [url, searchParams]);
+
+  const { data: graphData, error: graphError, isLoading: graphLoading } = useSWR<GraphData>(fetchUrl, fetcher);
   const fgRef = useRef<ForceGraphMethods<NodeObject<GraphNodeFull>, LinkObject<GraphNodeFull, GraphLink>>>(null) as RefObject<ForceGraphMethods<NodeObject<GraphNodeFull>, LinkObject<GraphNodeFull, GraphLink>>>;
 
   useEffect(() => {
@@ -29,7 +53,7 @@ export default function GraphCanvas({ url, targetSlug = 'prophet-muhammad' }: Gr
       if (targetNode) {
         const timer = setTimeout(() => {
           fgRef.current!.centerAt(targetNode.x! || 0, targetNode.y! || 0, 1000); // Pan to node over 1000ms
-          fgRef.current!.zoom(9, 1000); // Optional: zoom in
+          fgRef.current!.zoom(4, 1000); // Optional: zoom in
         }, 300);
         return () => clearTimeout(timer);
       }
@@ -72,6 +96,11 @@ export default function GraphCanvas({ url, targetSlug = 'prophet-muhammad' }: Gr
 
   return (
     <div className="container mx-auto px-4 py-8">
+      {showSearch && (
+        <div className="mb-">
+          <GraphSearch />
+        </div>
+      )}
       <div className="w-full h-full border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
         {graphData ? (
           <ForceGraph2D
