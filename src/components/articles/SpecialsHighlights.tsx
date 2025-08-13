@@ -24,6 +24,11 @@ export default function SpecialsHighlights() {
           ? 'في هذا القسم نقدم مقالات تفاعلية مصممة خصيصاً لتجربة تعلم فريدة. ستجد محتوى غني بالرسوم المتحركة، الإحصائيات، الأشكال التوضيحية، والتصاميم المبتكرة التي تساعدك على الفهم والتفاعل بشكل أفضل.'
           : 'In this section, we present custom-made articles focused on building interactive content for a unique learning experience. You will find content rich with animations, statistics, figures, and creative designs to help you understand and engage more deeply.'}
       </p>
+      <div className="text-center mb-8">
+        <Link href="/specials" className="inline-flex items-center px-6 py-3 bg-amber-400 text-gray-950 font-semibold rounded-lg hover:bg-amber-300 transition-colors duration-200 shadow-lg hover:shadow-xl text-sm md:text-base">
+          {language === 'ar' ? 'عرض جميع المقالات المميزة' : 'View All Special Articles'}
+        </Link>
+      </div>
       {specialArticlesError && (
         <div className="text-red-600 dark:text-red-400 text-center mb-4 text-sm md:text-base">
           {translations[language].articlesLoadError}
@@ -44,13 +49,6 @@ export default function SpecialsHighlights() {
               </div>
             )}
           </div>
-          {Array.isArray(specialArticles) && specialArticles.length > 0 && (
-            <div className="text-center">
-              <Link href="/specials" className="inline-flex items-center px-6 py-3 bg-amber-400 text-gray-950 font-semibold rounded-lg hover:bg-amber-300 transition-colors duration-200 shadow-lg hover:shadow-xl text-sm md:text-base">
-                {language === 'ar' ? 'عرض جميع المقالات المميزة' : 'View All Special Articles'}
-              </Link>
-            </div>
-          )}
         </>
       )}
     </div>

@@ -10,6 +10,7 @@ import GraphCanvas from "@/components/graph/GraphCanvas";
 import SpecialsHighlights from "@/components/articles/SpecialsHighlights";
 import Hero from "@/components/homepage/Hero";
 import NamaqDefinition from "@/components/homepage/NamaqDefinition";
+import Link from "next/link";
 
 export default function Home() {
   const { language } = useLanguage();
@@ -39,7 +40,13 @@ export default function Home() {
               ? 'استكشف العلاقات العائلية للنبي محمد ﷺ وجميع الصحابة والأنبياء من خلال رسم بياني تفاعلي يوضح الأبناء، البنات، الأزواج، الأقارب وغيرهم. هذه الميزة متوفرة لكل شخصية في الموقع.'
               : 'Explore the family and relation graph of Prophet Muhammad ﷺ and all companions and prophets through an interactive diagram showing children, d more. This feature is available for every person on the site.'}
           </p>
-          <GraphCanvas url="/api/graph" />
+
+          <div className="text-center mt-8">
+            <Link href="/graphs" className="inline-flex items-center px-6 py-3 bg-amber-400 text-gray-950 font-semibold rounded-lg hover:bg-amber-300 transition-colors duration-200 shadow-lg hover:shadow-xl text-sm md:text-base">
+              {t.familyRelations}
+            </Link>
+          </div>
+          <GraphCanvas showSearch={false} />
         </div>
 
         <hr className="border-t-2 border-amber-400 my-8 max-w-2xl mx-auto" />
