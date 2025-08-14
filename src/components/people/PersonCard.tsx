@@ -8,9 +8,10 @@ import Badge from '@/components/common/Badge';
 interface PersonCardProps {
   person: PersonWithTitles;
   language: string;
+  titleLimit?: number;
 }
 
-function PersonCard({ person, language = 'ar' }: PersonCardProps) {
+function PersonCard({ person, language = 'ar', titleLimit = 9 }: PersonCardProps) {
   if (!person) {
     return null;
   }
@@ -24,10 +25,13 @@ function PersonCard({ person, language = 'ar' }: PersonCardProps) {
         <div className="flex-1 flex flex-wrap gap-2 mt-2">
           {person.titles && person.titles.length > 0 && (
             <div className="flex flex-wrap gap-1 mt-auto">
-              {person.titles.map((title) => (
+              {person.titles.map((title, index) => index < titleLimit && (
                 <Badge key={title.id} text={language === 'ar' && title.name ? title.name : title.nameTransliterated || title.name} color="indigo" />
               ))}
             </div>
+          )}
+          {person.titles.length > titleLimit && (
+            <Badge text={`+${person.titles.length - titleLimit}`} color="indigo" />
           )}
         </div>
         {person.fullName && (

@@ -20,26 +20,31 @@ function TimelineItem({ event, language }: TimelineItemProps) {
         href={event.type === EventType.BATTLE ? `/battles/${event.battle?.slug}` : `/events/${event.slug}`}
         className="group my-8 text-center block"
       >
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-amber-500 dark:border-amber-400 px-3 py-2
-          w-full transition-all duration-200 hover:shadow-md hover:border-amber-600 dark:hover:border-amber-500
-          hover:bg-amber-100 dark:hover:bg-amber-600 cursor-pointer">
+        <div
+          className={`bg-white dark:bg-gray-800 rounded-lg shadow-sm border px-3 py-2 w-full transition-all duration-200 hover:shadow-md cursor-pointer ${event.type === EventType.BATTLE
+            ? 'border-sky-500 dark:border-sky-400 hover:border-sky-600 dark:hover:border-sky-500 hover:bg-sky-100 dark:hover:bg-sky-600'
+            : 'border-slate-500 dark:border-slate-400 hover:border-slate-600 dark:hover:border-slate-500 hover:bg-slate-100 dark:hover:bg-slate-600'
+            }`}
+        >
           <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-200 whitespace-nowrap">
             {language === 'ar' ? event.name : event.nameTransliterated}
           </h3>
         </div>
-      </Link>
+      </Link >
 
       {/* Dot */}
-      <div className="w-4 h-4 bg-amber-600 rounded-full border-2 border-amber-400 shadow"></div>
+      < div className="w-4 h-4 bg-amber-600 rounded-full border-2 border-amber-400 shadow" ></div >
       <div className="h-6 w-0.5 bg-amber-400"></div>
 
       {/* Year */}
-      {event.hijriYear && (
-        <div className="text-xs font-medium text-amber-600 dark:text-amber-400 mt-4">
-          {event.hijriPeriod}
-        </div>
-      )}
-    </div>
+      {
+        event.hijriYear && (
+          <div className="text-xs font-medium text-amber-600 dark:text-amber-400 mt-4">
+            {event.hijriPeriod}
+          </div>
+        )
+      }
+    </div >
   );
 }
 
@@ -95,10 +100,10 @@ export default function Timeline({ events }: TimelineProps) {
   return (
     <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-6 mb-6">
       {/* Header */}
-      <div className="font-bold text-xl mb-6 text-gray-900 dark:text-gray-200 flex items-center gap-2">
-        <FontAwesomeIcon icon={faTimeline} className="w-5 h-5" />
+      <h2 className="text-3xl mb-6 text-gray-900 dark:text-gray-200 flex items-center gap-2">
+        <FontAwesomeIcon icon={faTimeline} className="w-7 h-7 text-amber-500" />
         {language === 'ar' ? 'الخط الزمني' : 'Timeline'}
-      </div>
+      </h2>
 
       {/* Snake Rows */}
       <div className="flex flex-col items-stretch w-full">

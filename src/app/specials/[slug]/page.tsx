@@ -8,7 +8,7 @@ export default function SpecialArticleDetailPage() {
   const { language } = useLanguage();
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950">
-      <div className="container mx-auto " dir={language === 'ar' ? 'rtl' : 'ltr'}>
+      <div className="container mx-auto bg-white dark:bg-gray-950 py-8" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <ArticleDetails />
         <div className="mb-8 mt-10 bg-amber-50 dark:bg-gray-900 border border-amber-300 dark:border-amber-600 rounded-xl p-6 text-center shadow">
           <h2 className="text-2xl font-bold text-amber-600 dark:text-amber-400 mb-2">
