@@ -83,32 +83,48 @@ export default function GraphSearch() {
 
     const existingPerson = searchParams.get('person');
     const existingAncestorsList = searchParams.getAll('ancestorsOf');
+    const currentMode = existingPerson ? 'person' : existingAncestorsList.length ? 'ancestorsOf' : mode;
 
-    // Clear any existing selection
-    setSelectedPeople([]);
+    // Only update if there's a change in URL params
+    const shouldUpdate = 
+      (existingPerson && selectedPeople[0]?.slug !== existingPerson) ||
+      (existingAncestorsList.length > 0 && (
+        selectedPeople.length !== existingAncestorsList.length ||
+        !selectedPeople.every((p, i) => p.slug === existingAncestorsList[i])
+      ));
 
+    if (!shouldUpdate) return;
+
+    setMode(currentMode);
+    
     if (existingPerson) {
-      setMode('person');
-      // We'll fetch the person's details to add to selectedPeople
-      fetch(`/api/people/suggest?q=${encodeURIComponent(existingPerson)}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.data?.[0]?.slug === existingPerson) {
-            setSelectedPeople([data.data[0]]);
-          }
-        });
+      // Only fetch if we don't already have this person selected
+      if (selectedPeople[0]?.slug !== existingPerson) {
+        fetch(`/api/people/suggest?q=${encodeURIComponent(existingPerson)}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.data?.[0]?.slug === existingPerson) {
+              setSelectedPeople([data.data[0]]);
+            }
+          });
+      }
     } else if (existingAncestorsList.length > 0) {
-      setMode('ancestorsOf');
-      // Fetch all ancestors' details
-      Promise.all(
-        existingAncestorsList.map(slug =>
-          fetch(`/api/people/suggest?q=${encodeURIComponent(slug)}`)
-            .then(res => res.json())
-            .then(data => data.data?.find((p: Suggestion) => p.slug === slug))
-        )
-      ).then(people => {
-        setSelectedPeople(people.filter(Boolean));
-      });
+      // Only fetch if the lists are different
+      if (selectedPeople.length !== existingAncestorsList.length ||
+          !selectedPeople.every((p, i) => p.slug === existingAncestorsList[i])) {
+        Promise.all(
+          existingAncestorsList.map(slug =>
+            fetch(`/api/people/suggest?q=${encodeURIComponent(slug)}`)
+              .then(res => res.json())
+              .then(data => data.data?.find((p: Suggestion) => p.slug === slug))
+          )
+        ).then(people => {
+          setSelectedPeople(people.filter(Boolean));
+        });
+      }
+    } else {
+      // Clear selection if no params
+      setSelectedPeople([]);
     }
   }, [searchParams]);
 
@@ -128,32 +144,33 @@ export default function GraphSearch() {
     setSelectedPeople(prev => prev.filter(p => p.id !== id));
   };
 
-  const updateUrlParams = useCallback(() => {
-    const params = new URLSearchParams(searchParams?.toString() || '');
-
-    if (mode === 'person' && selectedPeople.length > 0) {
-      // In person mode, only use the last selected person
-      const lastPerson = selectedPeople[selectedPeople.length - 1];
-      params.set('person', lastPerson.slug);
-    } else if (mode === 'ancestorsOf' && selectedPeople.length > 0) {
-      // In ancestors mode, use all selected people
-      params.delete('ancestorsOf');
-      selectedPeople.forEach(person => {
-        params.append('ancestorsOf', person.slug);
-      });
-    } else {
-      // No selection, clear the params
-      params.delete('person');
-      params.delete('ancestorsOf');
-    }
-
-    router.push(`${pathname}?${params.toString()}`);
-  }, [selectedPeople, mode, searchParams, pathname, router]);
-
   // Update URL when selectedPeople or mode changes
   useEffect(() => {
-    updateUrlParams();
-  }, [selectedPeople, mode, updateUrlParams]);
+    if (!searchParams) return;
+    
+    const params = new URLSearchParams();
+    
+    if (mode === 'person' && selectedPeople.length > 0) {
+      const lastPerson = selectedPeople[selectedPeople.length - 1];
+      if (lastPerson?.slug) {
+        params.set('person', lastPerson.slug);
+      }
+    } else if (mode === 'ancestorsOf' && selectedPeople.length > 0) {
+      selectedPeople.forEach(person => {
+        if (person?.slug) {
+          params.append('ancestorsOf', person.slug);
+        }
+      });
+    }
+
+    const newSearch = params.toString();
+    const currentSearch = searchParams.toString();
+
+    // Only update if there's an actual change and we're not in the middle of an update
+    if (newSearch !== currentSearch) {
+      router.replace(`${pathname}${newSearch ? `?${newSearch}` : ''}`);
+    }
+  }, [selectedPeople, mode, searchParams, pathname, router]);
 
   const onSubmit = (e?: React.FormEvent | React.MouseEvent) => {
     e?.preventDefault();
