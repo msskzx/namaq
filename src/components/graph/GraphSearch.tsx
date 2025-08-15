@@ -86,7 +86,7 @@ export default function GraphSearch() {
     const currentMode = existingPerson ? 'person' : existingAncestorsList.length ? 'ancestorsOf' : mode;
 
     // Only update if there's a change in URL params
-    const shouldUpdate = 
+    const shouldUpdate =
       (existingPerson && selectedPeople[0]?.slug !== existingPerson) ||
       (existingAncestorsList.length > 0 && (
         selectedPeople.length !== existingAncestorsList.length ||
@@ -96,7 +96,7 @@ export default function GraphSearch() {
     if (!shouldUpdate) return;
 
     setMode(currentMode);
-    
+
     if (existingPerson) {
       // Only fetch if we don't already have this person selected
       if (selectedPeople[0]?.slug !== existingPerson) {
@@ -111,7 +111,7 @@ export default function GraphSearch() {
     } else if (existingAncestorsList.length > 0) {
       // Only fetch if the lists are different
       if (selectedPeople.length !== existingAncestorsList.length ||
-          !selectedPeople.every((p, i) => p.slug === existingAncestorsList[i])) {
+        !selectedPeople.every((p, i) => p.slug === existingAncestorsList[i])) {
         Promise.all(
           existingAncestorsList.map(slug =>
             fetch(`/api/people/suggest?q=${encodeURIComponent(slug)}`)
@@ -126,7 +126,7 @@ export default function GraphSearch() {
       // Clear selection if no params
       setSelectedPeople([]);
     }
-  }, [searchParams]);
+  }, [searchParams, mode, selectedPeople]);
 
   const handleSelectSuggestion = (suggestion: Suggestion) => {
     // Add to selected people if not already selected
@@ -147,9 +147,9 @@ export default function GraphSearch() {
   // Update URL when selectedPeople or mode changes
   useEffect(() => {
     if (!searchParams) return;
-    
+
     const params = new URLSearchParams();
-    
+
     if (mode === 'person' && selectedPeople.length > 0) {
       const lastPerson = selectedPeople[selectedPeople.length - 1];
       if (lastPerson?.slug) {
