@@ -7,8 +7,8 @@ async function main() {
     // await executeCypher("MATCH (n) DETACH DELETE n", 'Delete graph');
     // await executeTransaction(peopleQueries, 'Seed graph');
     const peopleRelationsQueries = [
-      'MATCH (from:Person {slug: "umar-ibn-al-khattab"}), (to:Person {slug: "prophet-muhammad"}) CREATE (from)-[:FATHER_IN_LAW]->(to);',
-      'MATCH (from:Person {slug: "hafsa-bint-umar"}), (to:Person {slug: "umar-ibn-al-khattab"}) CREATE (from)-[:DAUGHTER]->(to);',
+      'MATCH (from:Person {slug: "ali-ibn-abi-talib"}), (to:Person {slug: "abu-talib"}) CREATE (from)-[:SON]->(to);',
+      'MATCH (from:Person {slug: "abu-talib"}), (to:Person {slug: "ali-ibn-abi-talib"}) CREATE (from)-[:FATHER]->(to);',
     ];
     await executeTransaction(peopleRelationsQueries, 'Seed graph relations');
     console.log('🎉 Graph database seeded successfully!');

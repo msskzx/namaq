@@ -185,4 +185,11 @@ export const peopleRelationsQueries = [
 
   'MATCH (from:Person {slug: "abd-shams-ibn-abd-manaf"}), (to:Person {slug: "abd-manaf-ibn-qusay"}) CREATE (from)-[:SON]->(to);',
   'MATCH (from:Person {slug: "abd-manaf-ibn-qusay"}), (to:Person {slug: "abd-shams-ibn-abd-manaf"}) CREATE (from)-[:FATHER]->(to);',
+
+  // Ali ibn Abi Talib
+  'MATCH (from:Person {slug: "ali-ibn-abi-talib"}), (to:Person {slug: "abu-talib"}) CREATE (from)-[:SON]->(to);',
+  'MATCH (from:Person {slug: "abu-talib"}), (to:Person {slug: "ali-ibn-abi-talib"}) CREATE (from)-[:FATHER]->(to);',
+
+  'MATCH (from:Person {slug: "abu-talib"}), (to:Person {slug: "abd-al-muttalib-ibn-hashim"}) CREATE (from)-[:SON]->(to);',
+  'MATCH (from:Person {slug: "abd-al-muttalib-ibn-hashim"}), (to:Person {slug: "abu-talib"}) CREATE (from)-[:FATHER]->(to);',
 ];

@@ -200,6 +200,16 @@ export const people = [
     ayat: [],
   },
   {
+    name: 'عدنان',
+    fullName: 'عدنان',
+    slug: 'adnan',
+    appearance: '',
+    virtues: '',
+    picture: null,
+    titles: [],
+    ayat: [],
+  },
+  {
     name: 'عثمان بن عامر',
     fullName: 'عثمان بن عامر بن عمرو بن كعب بن سعد بن تيم بن مرة بن كعب بن لؤي القرشي التيمي',
     slug: 'uthman-ibn-amir',
