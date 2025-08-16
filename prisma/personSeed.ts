@@ -1,5 +1,5 @@
 import { prisma } from '../src/lib/prisma';
-import { people, peopleRelations, peopleBattleParticipations } from './personSeedData2';
+import { people, peopleRelations, peopleBattleParticipations } from './personSeedData';
 
 async function main() {
   try {
@@ -59,7 +59,6 @@ async function main() {
       }
     }
 
-    /*
     // Seed battle participations
     const battleRecords = await prisma.battle.findMany()
     const battleSlugToId: Record<string, string> = {};
@@ -86,7 +85,6 @@ async function main() {
         console.warn(`⚠️ Could not find person or battle for participation:`, participation);
       }
     }
-    */
     console.log('✅ People seeded successfully!');
   } catch (e) {
     console.error('❌ Error seeding people:', e);

@@ -6,7 +6,7 @@ import AnalyticsOptOut from '@/components/cookies/AnalyticsOptOut';
 
 
 
-const PrivacyPage: React.FC = () => {
+export default function PrivacyPage() {
   const { language } = useLanguage();
 
   return (
@@ -17,14 +17,14 @@ const PrivacyPage: React.FC = () => {
             <h1 className="text-3xl font-bold text-amber-400 mb-6">
               {language === 'ar' ? 'سياسة الخصوصية' : 'Privacy Policy'}
             </h1>
-            
+
             <div className="space-y-6 text-gray-700 dark:text-gray-200">
               <section>
                 <h2 className="text-xl font-semibold text-amber-400 mb-3">
                   {language === 'ar' ? 'المعلومات التي نجمعها' : 'Information We Collect'}
                 </h2>
                 <p className="mb-3">
-                  {language === 'ar' 
+                  {language === 'ar'
                     ? 'نجمع المعلومات لتقديم خدمات أفضل لمستخدمينا وتحسين منصتنا التعليمية.'
                     : 'We collect information to provide better services to our users and improve our educational platform.'
                   }
@@ -154,6 +154,4 @@ const PrivacyPage: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default PrivacyPage; 
+}

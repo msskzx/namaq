@@ -142,78 +142,19 @@ model Person {
   placeOfDeathArabic          String?
   placeOfDeathTransliterated  String?
 
-  bioTextSiyarArabic          String?              @db.Text // Full biography text from Siyar
-  bioTextSiyarSummaryEn       String?              // Optional: AI-generated or manual summary
-  siyarSourceVolume           String?              // e.g., "1", "28"
-  siyarSourcePageStart        String?              // e.g., "150"
-  siyarSourcePageEnd          String?              // e.g., "160"
-
   picture                     String?                // will contain some illustraion of the name probably
   appearance                  String?                // description of the appearance
   virtues                     String?                // description of the virtues should be fetched from a book
-  ayat                        Json?                // Array of { surah: number, ayah: number } for Quranic references
   slug                        String               @unique // Unique slug for person's page
 
-  // Relations
-  relationsFrom               PersonRelation[] @relation("FromPerson")
-  relationsTo                 PersonRelation[] @relation("ToPerson")
   titles                      Title[] @relation("PersonTitles")
   participations              BattleParticipation[]
   events                      Event[] 
+  ayat                        Ayah[]
+  books                       Book[]
+  pages                       Page[]
 
   @@map("persons")
-}
-
-model PersonRelation {
-  id     String       @id @default(cuid())
-  fromId String
-  toId   String
-  type   RelationType
-
-  from   Person       @relation("FromPerson", fields: [fromId], references: [id])
-  to     Person       @relation("ToPerson", fields: [toId], references: [id])
-}
-
-enum RelationType {
-  FATHER
-  MOTHER
-  SON
-  DAUGHTER
-  SIBLING
-  HUSBAND
-  WIFE
-  MATERNAL_COUSIN
-  PATERNAL_COUSIN
-  MATERNAL_UNCLE
-  PATERNAL_UNCLE
-  MATERNAL_AUNT
-  PATERNAL_AUNT
-  HALF_BROTHER
-  HALF_SISTER
-  MOTHER_IN_LAW
-  STEP_FATHER
-  STEP_MOTHER
-  STEP_BROTHER
-  STEP_SISTER
-  STEP_SON
-  STEP_DAUGHTER
-  FATHER_IN_LAW
-  SON_IN_LAW
-  DAUGHTER_IN_LAW
-  BROTHER_IN_LAW
-  SISTER_IN_LAW
-  GRANDFATHER
-  GRANDMOTHER
-  GRANDSON
-  GRANDDAUGHTER
-  ANCESTOR
-  DESCENDANT
-  MAWLA
-  CONCUBINE
-  MATERNAL_NEPHEW
-  MATERNAL_NIECE
-  PATERNAL_NEPHEW
-  PATERNAL_NIECE
 }
 
 model Title {
@@ -379,4 +320,31 @@ model Ayah {
   surah             Surah @relation(fields: [surahId], references: [id], onDelete: Cascade)
 
   @@map("ayahs")
+}
+
+model Book {
+  id          String @id @default(cuid())
+  slug        String  @unique
+  volume      Int
+  title       String
+  authorId    String
+  description String?
+  createdAt   DateTime @default(now())
+
+  author      Person   @relation(fields: [authorId], references: [id])
+  people      Person[]
+  pages       Page[]
+}
+
+model Page {
+  id        String @id @default(cuid())
+  bookId    String
+  page      Int
+  chapter   Int
+  text      String
+
+  people    Person[]
+  book      Book    @relation(fields: [bookId], references: [id])
+
+  @@unique([bookId, page, chapter])
 }

@@ -1,5 +1,4 @@
 "use client";
-
 import React from "react";
 import useSWR from "swr";
 import ArticleCard from '../../components/articles/ArticleCard';
@@ -10,7 +9,7 @@ import { Article } from '@/types/article';
 
 import { fetcher } from '@/lib/swr';
 
-const ArticlesPage: React.FC = () => {
+export default function ArticlesPage() {
   const { language } = useLanguage();
   const { data: articles, error, isLoading } = useSWR<Article[]>("/api/articles", fetcher);
 
@@ -41,6 +40,4 @@ const ArticlesPage: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default ArticlesPage; 
+}

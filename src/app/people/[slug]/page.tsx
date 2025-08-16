@@ -83,6 +83,14 @@ function PersonDetailPage() {
               <p className="text-gray-800 dark:text-gray-200 text-lg">{person.appearance}</p>
             </div>
           )}
+          {person.bioTextSiyarArabic && (
+            <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
+              <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
+                <FontAwesomeIcon icon={faSeedling} className="w-7 h-7 text-amber-500 ml-2" />
+                {language === 'ar' ? 'السيرة' : 'Bio'}</h2>
+              <p className="text-gray-800 dark:text-gray-200 text-lg">{person.bioTextSiyarArabic}</p>
+            </div>
+          )}
           {person.virtues && (
             <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
               <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">

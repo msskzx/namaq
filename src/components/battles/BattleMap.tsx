@@ -15,7 +15,7 @@ interface BattleMapProps {
 const DEFAULT_CENTER = { lat: 24.7136, lng: 46.6753 }; // Default to central Arabia
 const DEFAULT_ZOOM = 5;
 
-function BattleMap({
+export default function BattleMap({
   battles = [],
   defaultCenter = DEFAULT_CENTER,
   defaultZoom = DEFAULT_ZOOM,
@@ -158,6 +158,4 @@ function BattleMap({
   }, [battles, defaultCenter, defaultZoom, language]);
 
   return <div ref={mapRef} className={className} />;
-};
-
-export default BattleMap;
+}
