@@ -22,7 +22,7 @@ model User {
 
   // User preferences
   preferences UserPreferences?
-  
+
   // User progress tracking
   progress UserProgress[]
 
@@ -31,17 +31,17 @@ model User {
 
 // User preferences for analytics and settings
 model UserPreferences {
-  id                String @id @default(cuid())
-  userId            String @unique
-  user              User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   // Analytics consent
-  analyticsEnabled  Boolean @default(false)
-  cookieConsent     String? // 'accepted', 'declined', or null
-  
+  analyticsEnabled Boolean @default(false)
+  cookieConsent    String? // 'accepted', 'declined', or null
+
   // Language preferences
   preferredLanguage String @default("ar")
-  
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -55,57 +55,57 @@ model Category {
   nameTransliterated        String?
   description               String?
   descriptionTransliterated String?
-  img                       String?  // Image URL or path for the category
+  img                       String? // Image URL or path for the category
   slug                      String   @unique
   createdAt                 DateTime @default(now())
   updatedAt                 DateTime @updatedAt
 
   // Relations
   articles Article[]
-  events Event[]
+  events   Event[]
 
   @@map("categories")
 }
 
 // Articles/Content model
 model Article {
-  id            String   @id @default(cuid())
-  title         String
-  titleEn       String?
-  special       Boolean @default(false)
-  summary       String?
-  summaryEn     String?
-  content       String?
-  contentEn     String?
-  slug          String   @unique
-  img           String?  // Image URL or path for the article
-  isPublished   Boolean  @default(false)
-  publishedAt   DateTime?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id          String    @id @default(cuid())
+  title       String
+  titleEn     String?
+  special     Boolean   @default(false)
+  summary     String?
+  summaryEn   String?
+  content     String?
+  contentEn   String?
+  slug        String    @unique
+  img         String? // Image URL or path for the article
+  isPublished Boolean   @default(false)
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   // Relations
   categories Category[]
-  progress UserProgress[]
-  events Event[]
+  progress   UserProgress[]
+  events     Event[]
 
   @@map("articles")
 }
 
 // User progress tracking
 model UserProgress {
-  id        String   @id @default(cuid())
+  id        String  @id @default(cuid())
   userId    String
   articleId String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
   // Progress tracking
-  completed    Boolean  @default(false)
+  completed    Boolean   @default(false)
   completedAt  DateTime?
-  timeSpent    Int      @default(0) // in seconds
-  lastAccessed DateTime @default(now())
-  
+  timeSpent    Int       @default(0) // in seconds
+  lastAccessed DateTime  @default(now())
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -118,8 +118,8 @@ model AnalyticsEvent {
   id        String   @id @default(cuid())
   userId    String?
   sessionId String
-  eventType String   // 'page_view', 'article_view', 'language_change', etc.
-  eventData Json?    // Additional event data
+  eventType String // 'page_view', 'article_view', 'language_change', etc.
+  eventData Json? // Additional event data
   userAgent String?
   ipAddress String?
   createdAt DateTime @default(now())
@@ -129,66 +129,67 @@ model AnalyticsEvent {
 
 // Historical figures model
 model Person {
-  id                          String               @id @default(cuid())
-  name                        String
-  fullName                    String?              
-  nameTransliterated          String?              // Transliterated name for search/display
-  birthYearHijri              String?              // e.g., "53 BH", "1 AH" (store as string for flexibility)
-  birthYearGregorian          String?              // e.g., "570 CE", "622 CE"
-  deathYearHijri              String?
-  deathYearGregorian          String?
-  placeOfBirthArabic          String?
-  placeOfBirthTransliterated  String?
-  placeOfDeathArabic          String?
-  placeOfDeathTransliterated  String?
+  id                         String  @id @default(cuid())
+  name                       String
+  fullName                   String?
+  nameTransliterated         String? // Transliterated name for search/display
+  birthYearHijri             String? // e.g., "53 BH", "1 AH" (store as string for flexibility)
+  birthYearGregorian         String? // e.g., "570 CE", "622 CE"
+  deathYearHijri             String?
+  deathYearGregorian         String?
+  placeOfBirthArabic         String?
+  placeOfBirthTransliterated String?
+  placeOfDeathArabic         String?
+  placeOfDeathTransliterated String?
 
-  picture                     String?                // will contain some illustraion of the name probably
-  appearance                  String?                // description of the appearance
-  virtues                     String?                // description of the virtues should be fetched from a book
-  slug                        String               @unique // Unique slug for person's page
+  picture    String? // will contain some illustraion of the name probably
+  appearance String? // description of the appearance
+  virtues    String? // description of the virtues should be fetched from a book
+  slug       String  @unique // Unique slug for person's page
 
-  titles                      Title[] @relation("PersonTitles")
-  participations              BattleParticipation[]
-  events                      Event[] 
-  ayat                        Ayah[] @relation("PersonAyahs")
-  books                       Book[] @relation("BookAuthors")
-  pages                       Page[] @relation("PagePeople")
+  titles         Title[]               @relation("PersonTitles")
+  participations BattleParticipation[]
+  events         Event[]
+  ayat           Ayah[]                @relation("PersonAyahs")
+  bookMentions   Book[]                @relation("BookPeople")
+  authoredBooks  Book[]                @relation("BookAuthor")
+  pageMentions   Page[]                @relation("PagePeople")
 
   @@map("persons")
 }
 
 model Title {
-  id     String @id @default(cuid())
-  name   String
+  id                 String   @id @default(cuid())
+  name               String
   nameTransliterated String?
-  desc   String?
-  slug   String @unique
-  people Person[] @relation("PersonTitles")
+  desc               String?
+  slug               String   @unique
+  people             Person[] @relation("PersonTitles")
 }
 
 model Battle {
-  id                  String              @id @default(cuid())
-  name                String
-  slug                String              @unique
-  description         String?
-  location            String?             
-  locationEn          String?             
-  hijriYear           Int?
-  hijriPeriod         String?
-  gregorianYear       Int?
-  gregorianPeriod     String?
-  nameTransliterated  String?
+  id                 String  @id @default(cuid())
+  name               String
+  slug               String  @unique
+  description        String?
+  location           String?
+  locationEn         String?
+  hijriYear          Int?
+  hijriPeriod        String?
+  gregorianYear      Int?
+  gregorianPeriod    String?
+  nameTransliterated String?
 
   // New fields for Google Maps coordinates
-  latitude     Float?              // Latitude coordinate (e.g., 27.6099)
-  longitude    Float?              // Longitude coordinate (e.g., 35.7501)
+  latitude  Float? // Latitude coordinate (e.g., 27.6099)
+  longitude Float? // Longitude coordinate (e.g., 35.7501)
 
   // Relations
   participations BattleParticipation[]
   events         Event[] // Add a relation from Event to Battle if needed for a specific event type
 
-  createdAt    DateTime            @default(now()) // Add createdAt and updatedAt for better tracking
-  updatedAt    DateTime            @updatedAt
+  createdAt DateTime @default(now()) // Add createdAt and updatedAt for better tracking
+  updatedAt DateTime @updatedAt
 
   @@map("battles")
 }
@@ -203,28 +204,28 @@ enum ParticipationStatus {
 }
 
 model BattleParticipation {
-  id           String   @id @default(cuid())
-  person       Person   @relation(fields: [personId], references: [id])
-  personId     String
-  battle       Battle   @relation(fields: [battleId], references: [id])
-  battleId     String
+  id       String @id @default(cuid())
+  person   Person @relation(fields: [personId], references: [id])
+  personId String
+  battle   Battle @relation(fields: [battleId], references: [id])
+  battleId String
 
-  isMuslim     Boolean
-  status       ParticipationStatus[]
+  isMuslim Boolean
+  status   ParticipationStatus[]
 
-  courage      String?
+  courage String?
 
-  createdAt    DateTime            @default(now()) // Add createdAt and updatedAt for better tracking
-  updatedAt    DateTime            @updatedAt
+  createdAt DateTime @default(now()) // Add createdAt and updatedAt for better tracking
+  updatedAt DateTime @updatedAt
 
   @@unique([personId, battleId])
 }
 
 model Event {
-  id                        String       @id @default(cuid())
+  id                        String    @id @default(cuid())
   name                      String
   nameTransliterated        String?
-  slug                      String       @unique
+  slug                      String    @unique
   type                      EventType
   hijriYear                 Int?
   hijriPeriod               String?
@@ -232,21 +233,21 @@ model Event {
   gregorianPeriod           String?
   location                  String?
   locationTransliterated    String?
-  description               String?      @db.Text
-  descriptionTransliterated String?  @db.Text
+  description               String?   @db.Text
+  descriptionTransliterated String?   @db.Text
   metadata                  Json?
-  createdAt                 DateTime     @default(now())
-  updatedAt                 DateTime     @updatedAt
-  
+  createdAt                 DateTime  @default(now())
+  updatedAt                 DateTime  @updatedAt
+
   // Relations
-  people                    Person[]
-  battleId                  String?
-  battle                    Battle?      @relation(fields: [battleId], references: [id])
-  articles                  Article[]
-  categories                Category[]
+  people     Person[]
+  battleId   String?
+  battle     Battle?    @relation(fields: [battleId], references: [id])
+  articles   Article[]
+  categories Category[]
 
   @@map("events") // Map to 'events' table
-} 
+}
 
 enum EventType {
   BIRTH
@@ -273,83 +274,82 @@ enum RecitationType {
 }
 
 model Surah {
-  id                  String @id @default(cuid())
-  name                String
-  number              Int
-  nameTransliterated  String?
-  nameTranslated      String?
-  numberOfAyat        Int
-  revelationType      RevelationType?
-  revelationPeriod    String?
-  revelationOrder     Int?
-  recitation          RecitationType?
-  page                Int?
+  id                 String          @id @default(cuid())
+  name               String
+  number             Int
+  nameTransliterated String?
+  nameTranslated     String?
+  numberOfAyat       Int
+  revelationType     RevelationType?
+  revelationPeriod   String?
+  revelationOrder    Int?
+  recitation         RecitationType?
+  page               Int?
 
-  ayat                Ayah[]
+  ayat Ayah[]
 
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("surahs")
 }
 
 model Ayah {
-  id                String @id @default(cuid())
-  surahId           String
-  
-  number            Int
-  globalNumber      Int?
-  recitation        RecitationType?
-  text              String
-  juz               Int
-  manzil            Int
-  page              Int
-  ruku              Int
-  hizbQuarter       Int
-  sajda             Boolean
-  revelationOrder   Int?
-  revelationPeriod  String?
-  revelationType    RevelationType?
-  sajdaRecommended  Boolean?
-  sajdaObligatory   Boolean?
-  
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  id      String @id @default(cuid())
+  surahId String
+
+  number           Int
+  globalNumber     Int?
+  recitation       RecitationType?
+  text             String
+  juz              Int
+  manzil           Int
+  page             Int
+  ruku             Int
+  hizbQuarter      Int
+  sajda            Boolean
+  revelationOrder  Int?
+  revelationPeriod String?
+  revelationType   RevelationType?
+  sajdaRecommended Boolean?
+  sajdaObligatory  Boolean?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // relations
-  surah             Surah @relation(fields: [surahId], references: [id], onDelete: Cascade)
-  people            Person[] @relation("PersonAyahs")
+  surah  Surah    @relation(fields: [surahId], references: [id], onDelete: Cascade)
+  people Person[] @relation("PersonAyahs")
 
   @@map("ayahs")
 }
 
 model Book {
-  id          String @id @default(cuid())
-  slug        String  @unique
+  id          String   @id @default(cuid())
+  slug        String   @unique
   volume      Int
   title       String
   authorId    String
   description String?
   createdAt   DateTime @default(now())
 
-  author      Person   @relation("BookAuthor", fields: [authorId], references: [id])
-  people      Person[] @relation("BookPeople")
-  pages       Page[]
-  
+  author          Person   @relation("BookAuthor", fields: [authorId], references: [id]) // author of the book
+  mentionedPeople Person[] @relation("BookPeople") // people mentioned in the book
+  pages           Page[]
+
   @@map("books")
 }
 
 model Page {
-  id        String @id @default(cuid())
-  bookId    String
-  page      Int
-  chapter   Int
-  text      String
+  id      String @id @default(cuid())
+  bookId  String
+  page    Int
+  chapter Int
+  text    String
 
-  people    Person[] @relation("PagePeople")
-  book      Book    @relation(fields: [bookId], references: [id])
-  
-  @@map("pages")
+  mentionedPeople Person[] @relation("PagePeople") // people mentioned on this page
+  book            Book     @relation(fields: [bookId], references: [id]) // the book this page belongs to
 
   @@unique([bookId, page, chapter])
+  @@map("pages")
 }

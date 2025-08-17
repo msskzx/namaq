@@ -1,19 +1,9 @@
-import type { Person as PrismaPerson, PersonRelation as PrismaPersonRelation, Title } from "@/generated/prisma";
+import type { Person as PrismaPerson, Title } from "@/generated/prisma";
 import type { BattleParticipation } from "@/types/battle";
 import type { EventWithBattle } from "@/types/event";
-
-export interface Ayah {
-  surah: number;
-  ayah: number;
-  text?: string;
-}
-
-export type RelationFrom = PrismaPersonRelation & { to: PrismaPerson };
-export type RelationTo = PrismaPersonRelation & { from: PrismaPerson };
+import type { Ayah } from "@/types/quran";
 
 export type PersonFull = PrismaPerson & {
-  relationsFrom: RelationFrom[];
-  relationsTo: RelationTo[];
   titles: Title[];
   events: EventWithBattle[];
   ayat?: Ayah[];

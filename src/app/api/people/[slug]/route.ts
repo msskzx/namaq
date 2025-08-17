@@ -12,19 +12,15 @@ export async function GET(
       where: { slug },
       include: {
         titles: true,
-        relationsFrom: {
-          include: { to: true },
-        },
-        relationsTo: {
-          include: { from: true },
-        },
         participations: {
           include: { battle: true },
         },
         events: {
           include: { battle: true },
         },
-        ayat: true,
+        ayat: {
+          include: { surah: true },
+        },
       },
     });
 
