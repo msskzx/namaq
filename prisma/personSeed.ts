@@ -1,5 +1,5 @@
 import { prisma } from '../src/lib/prisma';
-import { people, peopleRelations, peopleBattleParticipations } from './personSeedData';
+import { people } from './personSeedData2';
 
 async function main() {
   try {
@@ -39,26 +39,6 @@ async function main() {
       }
     }
 
-    // Seed relations
-    for (const relation of peopleRelations) {
-      try {
-        const from = personRecords[relation.fromSlug];
-        const to = personRecords[relation.toSlug];
-        if (from && to) {
-          const rel = await prisma.personRelation.create({
-            data: {
-              fromId: from.id,
-              toId: to.id,
-              type: relation.type as any,
-            },
-          });
-          console.log(`  [Relation] Seeded: ${from.name} -> ${relation.type} -> ${to.name}`);
-        }
-      } catch (err) {
-        console.error(`❌ Error seeding relation (${relation.fromSlug} -> ${relation.type} -> ${relation.toSlug}):`, err);
-      }
-    }
-
     // Seed battle participations
     const battleRecords = await prisma.battle.findMany()
     const battleSlugToId: Record<string, string> = {};
@@ -66,6 +46,8 @@ async function main() {
       // Use slug from nameTransliterated or name (assuming slug is not a field in Battle)
       battleSlugToId[battle.slug] = battle.id;
     }
+
+    /*
     for (const participation of peopleBattleParticipations) {
       const person = personRecords[participation.personSlug];
       const battleId = battleSlugToId[participation.battleSlug];
@@ -85,6 +67,7 @@ async function main() {
         console.warn(`⚠️ Could not find person or battle for participation:`, participation);
       }
     }
+    */
     console.log('✅ People seeded successfully!');
   } catch (e) {
     console.error('❌ Error seeding people:', e);

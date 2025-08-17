@@ -449,65 +449,6 @@ export const people = [
   },
 ];
 
-export const peopleRelations = [
-  { fromSlug: 'saad-ibn-abi-waqqas', toSlug: 'prophet-muhammad', type: 'MATERNAL_UNCLE' },
-  { fromSlug: 'prophet-muhammad', toSlug: 'saad-ibn-abi-waqqas', type: 'MATERNAL_NEPHEW' },
-  { fromSlug: 'abu-bakr-as-siddiq', toSlug: 'prophet-muhammad', type: 'FATHER_IN_LAW' },
-  { fromSlug: 'umar-ibn-al-khattab', toSlug: 'prophet-muhammad', type: 'FATHER_IN_LAW' },
-  { fromSlug: 'uthman-ibn-affan', toSlug: 'prophet-muhammad', type: 'SON_IN_LAW' },
-  { fromSlug: 'ali-ibn-abi-talib', toSlug: 'prophet-muhammad', type: 'SON_IN_LAW' },
-  { fromSlug: 'az-zubayr-ibn-al-awwam', toSlug: 'prophet-muhammad', type: 'PATERNAL_COUSIN' },
-  { fromSlug: 'abdur-rahman-ibn-awf', toSlug: 'prophet-muhammad', type: 'FATHER_IN_LAW' },
-  // Prophet's Wives
-  { fromSlug: 'khadijah-bint-khuwaylid', toSlug: 'prophet-muhammad', type: 'WIFE' },
-  { fromSlug: 'aisha-bint-abi-bakr', toSlug: 'prophet-muhammad', type: 'WIFE' },
-  { fromSlug: 'hafsa-bint-umar', toSlug: 'prophet-muhammad', type: 'WIFE' },
-  { fromSlug: 'zaynab-bint-khuzaymah', toSlug: 'prophet-muhammad', type: 'WIFE' },
-  { fromSlug: 'umm-salamah', toSlug: 'prophet-muhammad', type: 'WIFE' },
-  { fromSlug: 'zaynab-bint-jahsh', toSlug: 'prophet-muhammad', type: 'WIFE' },
-  { fromSlug: 'juwayriyah-bint-al-harith', toSlug: 'prophet-muhammad', type: 'WIFE' },
-  { fromSlug: 'umm-habibah', toSlug: 'prophet-muhammad', type: 'WIFE' },
-  { fromSlug: 'safiyyah-bint-huyayy', toSlug: 'prophet-muhammad', type: 'WIFE' },
-  { fromSlug: 'maymunah-bint-al-harith', toSlug: 'prophet-muhammad', type: 'WIFE' },
-  { fromSlug: 'sawdah-bint-zamah', toSlug: 'prophet-muhammad', type: 'WIFE' },
-  // Prophet's Daughters
-  { fromSlug: 'fatimah-al-zahra', toSlug: 'prophet-muhammad', type: 'DAUGHTER' },
-  { fromSlug: 'zaynab-bint-muhammad', toSlug: 'prophet-muhammad', type: 'DAUGHTER' },
-  { fromSlug: 'ruqayyah-bint-muhammad', toSlug: 'prophet-muhammad', type: 'DAUGHTER' },
-  { fromSlug: 'umm-kulthum-bint-muhammad', toSlug: 'prophet-muhammad', type: 'DAUGHTER' },
-  // Prophet's Sons
-  { fromSlug: 'al-qasim-ibn-muhammad', toSlug: 'prophet-muhammad', type: 'SON' },
-  { fromSlug: 'abdullah-ibn-muhammad', toSlug: 'prophet-muhammad', type: 'SON' },
-  { fromSlug: 'ibrahim-ibn-muhammad', toSlug: 'prophet-muhammad', type: 'SON' },
-  // Prophet's Uncles
-  { fromSlug: 'hamzah-ibn-abd-al-muttalib', toSlug: 'prophet-muhammad', type: 'PATERNAL_UNCLE' },
-  { fromSlug: 'abu-talib', toSlug: 'prophet-muhammad', type: 'PATERNAL_UNCLE' },
-  { fromSlug: 'al-abbas-ibn-abd-al-muttalib', toSlug: 'prophet-muhammad', type: 'PATERNAL_UNCLE' },
-  // Prophet's Nephews (Children of his brother or sister, or in a broader sense, his direct descendants from his daughters)
-  { fromSlug: 'al-hasan-ibn-ali', toSlug: 'prophet-muhammad', type: 'GRANDSON' },
-  { fromSlug: 'al-husayn-ibn-ali', toSlug: 'prophet-muhammad', type: 'GRANDSON' },
-  // Prophet's Cousins
-  { fromSlug: 'ali-ibn-abi-talib', toSlug: 'prophet-muhammad', type: 'PATERNAL_COUSIN' }, // Ali is also a cousin
-  { fromSlug: 'abdullah-ibn-jaafar', toSlug: 'prophet-muhammad', type: 'PATERNAL_COUSIN' },
-  // Relations among Prophet's family
-  { fromSlug: 'fatimah-al-zahra', toSlug: 'ali-ibn-abi-talib', type: 'WIFE' },
-  { fromSlug: 'ali-ibn-abi-talib', toSlug: 'fatimah-al-zahra', type: 'HUSBAND' },
-  { fromSlug: 'al-hasan-ibn-ali', toSlug: 'fatimah-al-zahra', type: 'MOTHER' }, // From son to mother
-  { fromSlug: 'al-hasan-ibn-ali', toSlug: 'ali-ibn-abi-talib', type: 'FATHER' }, // From son to father
-  { fromSlug: 'al-husayn-ibn-ali', toSlug: 'fatimah-al-zahra', type: 'MOTHER' },
-  { fromSlug: 'al-husayn-ibn-ali', toSlug: 'ali-ibn-abi-talib', type: 'FATHER' },
-  { fromSlug: 'umm-kulthum-bint-ali', toSlug: 'fatimah-al-zahra', type: 'MOTHER' },
-  { fromSlug: 'umm-kulthum-bint-ali', toSlug: 'ali-ibn-abi-talib', type: 'FATHER' },
-  { fromSlug: 'zaynab-bint-ali', toSlug: 'fatimah-al-zahra', type: 'MOTHER' },
-  { fromSlug: 'zaynab-bint-ali', toSlug: 'ali-ibn-abi-talib', type: 'FATHER' },
-  { fromSlug: 'ruqayyah-bint-muhammad', toSlug: 'uthman-ibn-affan', type: 'WIFE' },
-  { fromSlug: 'uthman-ibn-affan', toSlug: 'ruqayyah-bint-muhammad', type: 'HUSBAND' },
-  { fromSlug: 'umm-kulthum-bint-muhammad', toSlug: 'uthman-ibn-affan', type: 'WIFE' },
-  { fromSlug: 'uthman-ibn-affan', toSlug: 'umm-kulthum-bint-muhammad', type: 'HUSBAND' },
-  { fromSlug: 'aisha-bint-abi-bakr', toSlug: 'abu-bakr-as-siddiq', type: 'FATHER' }, // From daughter to father
-  { fromSlug: 'hafsa-bint-umar', toSlug: 'umar-ibn-al-khattab', type: 'FATHER' }, // From daughter to father
-];
-
 export const peopleBattleParticipations = [
   // Battle of Badr (2 AH)
   { personSlug: 'abdur-rahman-ibn-awf', battleSlug: 'badr', isMuslim: true, status: [] },

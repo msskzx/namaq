@@ -7,7 +7,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'عبد المطلب بن هاشم',
@@ -17,7 +16,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'هاشم بن عبد مناف',
@@ -27,7 +25,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'عبد مناف بن قصي',
@@ -37,7 +34,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'قصي بن كلاب',
@@ -47,7 +43,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'كلاب بن مرة',
@@ -57,7 +52,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'مرة بن كعب',
@@ -67,7 +61,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'كعب بن لؤي',
@@ -77,7 +70,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'لؤي بن غالب',
@@ -87,7 +79,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'غالب بن فهر',
@@ -97,7 +88,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'فهر بن مالك',
@@ -107,7 +97,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'مالك بن النضر',
@@ -117,7 +106,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'النضر بن كنانة',
@@ -127,7 +115,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'كنانة بن خزيمة',
@@ -137,7 +124,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'خزيمة بن مدركة',
@@ -147,7 +133,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'مدركة بن إلياس',
@@ -157,7 +142,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'إلياس بن مضر',
@@ -167,7 +151,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'مضر بن نزار',
@@ -177,7 +160,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'نزار بن معد',
@@ -187,7 +169,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'معد بن عدنان',
@@ -197,7 +178,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'عدنان',
@@ -207,7 +187,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'عثمان بن عامر',
@@ -217,7 +196,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'عامر بن عمرو',
@@ -227,7 +205,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'عمرو بن كعب',
@@ -237,7 +214,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'كعب بن سعد',
@@ -247,7 +223,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'سعد بن تيم',
@@ -257,7 +232,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'تيم بن مرة',
@@ -267,7 +241,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'عمر بن الخطاب',
@@ -277,7 +250,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'الخطاب بن نفيل',
@@ -287,7 +259,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'نفيل بن عبد العزى',
@@ -297,7 +268,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'عبد العزى بن رياح',
@@ -307,7 +277,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'رياح بن قرط',
@@ -317,7 +286,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'قرط بن رزاح',
@@ -327,7 +295,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'رزاح بن عدي',
@@ -337,7 +304,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'عدي بن كعب',
@@ -347,7 +313,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'عفان بن أبي العاص',
@@ -357,7 +322,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'أبي العاص بن أمية',
@@ -367,7 +331,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'أمية بن عبد شمس',
@@ -377,7 +340,6 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
   {
     name: 'عبد شمس بن عبد مناف',
@@ -387,129 +349,5 @@ export const people = [
     virtues: '',
     picture: null,
     titles: [],
-    ayat: [],
   },
 ];
-
-export const peopleRelations = [
-  // Muhammad lineage present in this file (from Abd Allah up to Adnan)
-  { fromSlug: 'abdullah-ibn-abd-al-muttalib', toSlug: 'prophet-muhammad', type: 'FATHER' },
-  { fromSlug: 'prophet-muhammad', toSlug: 'abdullah-ibn-abd-al-muttalib', type: 'SON' },
-
-  { fromSlug: 'abd-al-muttalib-ibn-hashim', toSlug: 'abdullah-ibn-abd-al-muttalib', type: 'FATHER' },
-  { fromSlug: 'abdullah-ibn-abd-al-muttalib', toSlug: 'abd-al-muttalib-ibn-hashim', type: 'SON' },
-
-  { fromSlug: 'hashim-ibn-abd-manaf', toSlug: 'abd-al-muttalib-ibn-hashim', type: 'FATHER' },
-  { fromSlug: 'abd-al-muttalib-ibn-hashim', toSlug: 'hashim-ibn-abd-manaf', type: 'SON' },
-
-  { fromSlug: 'abd-manaf-ibn-qusay', toSlug: 'hashim-ibn-abd-manaf', type: 'FATHER' },
-  { fromSlug: 'hashim-ibn-abd-manaf', toSlug: 'abd-manaf-ibn-qusay', type: 'SON' },
-
-  { fromSlug: 'qusay-ibn-kilab', toSlug: 'abd-manaf-ibn-qusay', type: 'FATHER' },
-  { fromSlug: 'abd-manaf-ibn-qusay', toSlug: 'qusay-ibn-kilab', type: 'SON' },
-
-  { fromSlug: 'kilab-ibn-murra', toSlug: 'qusay-ibn-kilab', type: 'FATHER' },
-  { fromSlug: 'qusay-ibn-kilab', toSlug: 'kilab-ibn-murra', type: 'SON' },
-
-  { fromSlug: 'murra-ibn-kaab', toSlug: 'kilab-ibn-murra', type: 'FATHER' },
-  { fromSlug: 'kilab-ibn-murra', toSlug: 'murra-ibn-kaab', type: 'SON' },
-
-  { fromSlug: 'kaab-ibn-luay', toSlug: 'murra-ibn-kaab', type: 'FATHER' },
-  { fromSlug: 'murra-ibn-kaab', toSlug: 'kaab-ibn-luay', type: 'SON' },
-
-  { fromSlug: 'luay-ibn-ghalib', toSlug: 'kaab-ibn-luay', type: 'FATHER' },
-  { fromSlug: 'kaab-ibn-luay', toSlug: 'luay-ibn-ghalib', type: 'SON' },
-
-  { fromSlug: 'ghalib-ibn-fahar', toSlug: 'luay-ibn-ghalib', type: 'FATHER' },
-  { fromSlug: 'luay-ibn-ghalib', toSlug: 'ghalib-ibn-fahar', type: 'SON' },
-
-  { fromSlug: 'fahar-ibn-malik', toSlug: 'ghalib-ibn-fahar', type: 'FATHER' },
-  { fromSlug: 'ghalib-ibn-fahar', toSlug: 'fahar-ibn-malik', type: 'SON' },
-
-  { fromSlug: 'malik-ibn-an-nadr', toSlug: 'fahar-ibn-malik', type: 'FATHER' },
-  { fromSlug: 'fahar-ibn-malik', toSlug: 'malik-ibn-an-nadr', type: 'SON' },
-
-  { fromSlug: 'an-nadr-ibn-kinanah', toSlug: 'malik-ibn-an-nadr', type: 'FATHER' },
-  { fromSlug: 'malik-ibn-an-nadr', toSlug: 'an-nadr-ibn-kinanah', type: 'SON' },
-
-  { fromSlug: 'kinanah-ibn-khuzayma', toSlug: 'an-nadr-ibn-kinanah', type: 'FATHER' },
-  { fromSlug: 'an-nadr-ibn-kinanah', toSlug: 'kinanah-ibn-khuzayma', type: 'SON' },
-
-  { fromSlug: 'khuzayma-ibn-mudrika', toSlug: 'kinanah-ibn-khuzayma', type: 'FATHER' },
-  { fromSlug: 'kinanah-ibn-khuzayma', toSlug: 'khuzayma-ibn-mudrika', type: 'SON' },
-
-  { fromSlug: 'mudrika-ibn-ilias', toSlug: 'khuzayma-ibn-mudrika', type: 'FATHER' },
-  { fromSlug: 'khuzayma-ibn-mudrika', toSlug: 'mudrika-ibn-ilias', type: 'SON' },
-
-  { fromSlug: 'ilias-ibn-mudar', toSlug: 'mudrika-ibn-ilias', type: 'FATHER' },
-  { fromSlug: 'mudrika-ibn-ilias', toSlug: 'ilias-ibn-mudar', type: 'SON' },
-
-  { fromSlug: 'mudar-ibn-nizar', toSlug: 'ilias-ibn-mudar', type: 'FATHER' },
-  { fromSlug: 'ilias-ibn-mudar', toSlug: 'mudar-ibn-nizar', type: 'SON' },
-
-  { fromSlug: 'nizar-ibn-maad', toSlug: 'mudar-ibn-nizar', type: 'FATHER' },
-  { fromSlug: 'mudar-ibn-nizar', toSlug: 'nizar-ibn-maad', type: 'SON' },
-
-  { fromSlug: 'maad-ibn-adnan', toSlug: 'nizar-ibn-maad', type: 'FATHER' },
-  { fromSlug: 'nizar-ibn-maad', toSlug: 'maad-ibn-adnan', type: 'SON' },
-
-  // Taym lineage (Abu Bakr's ancestors present here)
-  { fromSlug: 'amir-ibn-amr', toSlug: 'abu-bakr-as-siddiq', type: 'FATHER' },
-  { fromSlug: 'abu-bakr-as-siddiq', toSlug: 'amir-ibn-amr', type: 'SON' },
-
-  { fromSlug: 'amir-ibn-amr', toSlug: 'uthman-ibn-amir', type: 'FATHER' },
-  { fromSlug: 'uthman-ibn-amir', toSlug: 'amir-ibn-amr', type: 'SON' },
-
-  { fromSlug: 'amr-ibn-kaab', toSlug: 'amir-ibn-amr', type: 'FATHER' },
-  { fromSlug: 'amir-ibn-amr', toSlug: 'amr-ibn-kaab', type: 'SON' },
-
-  { fromSlug: 'kaab-ibn-saad', toSlug: 'amr-ibn-kaab', type: 'FATHER' },
-  { fromSlug: 'amr-ibn-kaab', toSlug: 'kaab-ibn-saad', type: 'SON' },
-
-  { fromSlug: 'saad-ibn-taym', toSlug: 'kaab-ibn-saad', type: 'FATHER' },
-  { fromSlug: 'kaab-ibn-saad', toSlug: 'saad-ibn-taym', type: 'SON' },
-
-  { fromSlug: 'taym-ibn-murrah', toSlug: 'saad-ibn-taym', type: 'FATHER' },
-  { fromSlug: 'saad-ibn-taym', toSlug: 'taym-ibn-murrah', type: 'SON' },
-
-  // Umar lineage
-  { fromSlug: 'al-khattab-ibn-nufayl', toSlug: 'umar-ibn-al-khattab', type: 'FATHER' },
-  { fromSlug: 'umar-ibn-al-khattab', toSlug: 'al-khattab-ibn-nufayl', type: 'SON' },
-
-  { fromSlug: 'nufayl-ibn-abd-al-uzza', toSlug: 'al-khattab-ibn-nufayl', type: 'FATHER' },
-  { fromSlug: 'al-khattab-ibn-nufayl', toSlug: 'nufayl-ibn-abd-al-uzza', type: 'SON' },
-
-  { fromSlug: 'abd-al-uzza-ibn-riyah', toSlug: 'nufayl-ibn-abd-al-uzza', type: 'FATHER' },
-  { fromSlug: 'nufayl-ibn-abd-al-uzza', toSlug: 'abd-al-uzza-ibn-riyah', type: 'SON' },
-
-  { fromSlug: 'riyah-ibn-qurt', toSlug: 'abd-al-uzza-ibn-riyah', type: 'FATHER' },
-  { fromSlug: 'abd-al-uzza-ibn-riyah', toSlug: 'riyah-ibn-qurt', type: 'SON' },
-
-  { fromSlug: 'qurt-ibn-razah', toSlug: 'riyah-ibn-qurt', type: 'FATHER' },
-  { fromSlug: 'riyah-ibn-qurt', toSlug: 'qurt-ibn-razah', type: 'SON' },
-
-  { fromSlug: 'razah-ibn-adi', toSlug: 'qurt-ibn-razah', type: 'FATHER' },
-  { fromSlug: 'qurt-ibn-razah', toSlug: 'razah-ibn-adi', type: 'SON' },
-
-  { fromSlug: 'adi-ibn-kaab', toSlug: 'razah-ibn-adi', type: 'FATHER' },
-  { fromSlug: 'razah-ibn-adi', toSlug: 'adi-ibn-kaab', type: 'SON' },
-
-  // Uthman lineage (ancestors present here)
-  { fromSlug: 'affan-ibn-abi-al-as', toSlug: 'uthman-ibn-affan', type: 'FATHER' },
-  { fromSlug: 'uthman-ibn-affan', toSlug: 'affan-ibn-abi-al-as', type: 'SON' },
-
-  { fromSlug: 'abi-al-as-ibn-umayya', toSlug: 'affan-ibn-abi-al-as', type: 'FATHER' },
-  { fromSlug: 'affan-ibn-abi-al-as', toSlug: 'abi-al-as-ibn-umayya', type: 'SON' },
-
-  { fromSlug: 'umayya-ibn-abd-shams', toSlug: 'abi-al-as-ibn-umayya', type: 'FATHER' },
-  { fromSlug: 'abi-al-as-ibn-umayya', toSlug: 'umayya-ibn-abd-shams', type: 'SON' },
-
-  { fromSlug: 'abd-shams-ibn-abd-manaf', toSlug: 'umayya-ibn-abd-shams', type: 'FATHER' },
-  { fromSlug: 'umayya-ibn-abd-shams', toSlug: 'abd-shams-ibn-abd-manaf', type: 'SON' },
-
-  // Link back to shared ancestor already present
-  { fromSlug: 'abd-manaf-ibn-qusay', toSlug: 'abd-shams-ibn-abd-manaf', type: 'FATHER' },
-  { fromSlug: 'abd-shams-ibn-abd-manaf', toSlug: 'abd-manaf-ibn-qusay', type: 'SON' },
-];
-
-export const peopleBattleParticipations = [];
