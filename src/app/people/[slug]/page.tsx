@@ -17,6 +17,7 @@ import { EventWithBattle } from '@/types/event';
 import GraphCanvas from '@/components/graph/GraphCanvas';
 
 import { fetcher } from '@/lib/swr';
+import { AyatGroup } from '@/components/quran/AyahCard';
 
 function PersonDetailPage() {
   const { language } = useLanguage();
@@ -111,6 +112,9 @@ function PersonDetailPage() {
 
           {/* Battle Participation Timeline */}
           <BattleParticipationTimeline participations={person.participations || []} />
+
+          {/* Quranic References */}
+          <AyatGroup ayat={person.ayat || []} />
         </div>
       </div>
     </div>

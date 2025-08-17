@@ -150,9 +150,9 @@ model Person {
   titles                      Title[] @relation("PersonTitles")
   participations              BattleParticipation[]
   events                      Event[] 
-  ayat                        Ayah[]
-  books                       Book[]
-  pages                       Page[]
+  ayat                        Ayah[] @relation("PersonAyahs")
+  books                       Book[] @relation("BookAuthors")
+  pages                       Page[] @relation("PagePeople")
 
   @@map("persons")
 }
@@ -318,6 +318,7 @@ model Ayah {
 
   // relations
   surah             Surah @relation(fields: [surahId], references: [id], onDelete: Cascade)
+  people            Person[] @relation("PersonAyahs")
 
   @@map("ayahs")
 }
@@ -331,9 +332,11 @@ model Book {
   description String?
   createdAt   DateTime @default(now())
 
-  author      Person   @relation(fields: [authorId], references: [id])
-  people      Person[]
+  author      Person   @relation("BookAuthor", fields: [authorId], references: [id])
+  people      Person[] @relation("BookPeople")
   pages       Page[]
+  
+  @@map("books")
 }
 
 model Page {
@@ -343,8 +346,10 @@ model Page {
   chapter   Int
   text      String
 
-  people    Person[]
+  people    Person[] @relation("PagePeople")
   book      Book    @relation(fields: [bookId], references: [id])
+  
+  @@map("pages")
 
   @@unique([bookId, page, chapter])
 }

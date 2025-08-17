@@ -24,6 +24,7 @@ export async function GET(
         events: {
           include: { battle: true },
         },
+        ayat: true,
       },
     });
 
