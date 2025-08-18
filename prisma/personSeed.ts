@@ -1,5 +1,5 @@
 import { prisma } from '../src/lib/prisma';
-import { people } from './personSeedData2';
+import { people } from './personSeedData3';
 
 async function main() {
   try {
@@ -39,6 +39,7 @@ async function main() {
       }
     }
 
+    /*
     // Seed battle participations
     const battleRecords = await prisma.battle.findMany()
     const battleSlugToId: Record<string, string> = {};
@@ -47,7 +48,6 @@ async function main() {
       battleSlugToId[battle.slug] = battle.id;
     }
 
-    /*
     for (const participation of peopleBattleParticipations) {
       const person = personRecords[participation.personSlug];
       const battleId = battleSlugToId[participation.battleSlug];

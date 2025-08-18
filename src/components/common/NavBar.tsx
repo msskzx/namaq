@@ -38,6 +38,7 @@ const getLinkItems = (href: string, language: 'en' | 'ar'): NavLink[] => {
     case '/arabic':
       return [
         { href: '/arabic', label: translations[language].arabic },
+        { href: '/books', label: translations[language].books.title },
         { href: '/quran', label: translations[language].quran },
         { href: '/hadith', label: translations[language].hadith },
         { href: '/poems', label: translations[language].poems },
@@ -105,6 +106,7 @@ function NavBar() {
     { href: '/articles', label: translations[language].articles },
     { href: '/categories', label: translations[language].categories },
     { href: '/arabic', label: translations[language].arabic },
+    { href: '/books', label: translations[language].books.title },
     { href: '/quran', label: translations[language].quran },
     { href: '/hadith', label: translations[language].hadith },
     { href: '/poems', label: translations[language].poems },

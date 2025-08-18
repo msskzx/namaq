@@ -2,6 +2,15 @@ const translations = {
   en: {
     // NavBar
     appName: 'Namaq',
+    books: {
+      title: 'Books',
+      loadError: 'Failed to load books',
+      notFound: 'No books found',
+      volume: 'Volume',
+      pages: 'Pages',
+      chapter: 'Chapter',
+      description: 'Description'
+    },
     title: 'Learn Through Interactive Visual Articles & Data-Driven Explorations',
     arabic: 'Arabic Language',
     home: 'Home',
@@ -243,6 +252,15 @@ const translations = {
   ar: {
     // NavBar
     appName: 'نَمَق',
+    books: {
+      title: 'الكتب',
+      loadError: 'فشل تحميل الكتب',
+      notFound: 'لا توجد كتب',
+      volume: 'المجلد',
+      pages: 'الصفحات',
+      chapter: 'الفصل',
+      description: 'الوصف'
+    },
     title: 'تعلَّم من خلال المقالات التفاعلية والاستكشافات المعتمدة على البيانات',
     arabic: 'العربية',
     home: 'الرئيسية',
