@@ -194,6 +194,42 @@ model Battle {
   @@map("battles")
 }
 
+// Charity Category model
+model CharityCategory {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  slug        String   @unique
+  img         String?  // Optional image for the category
+  charities   Charity[] @relation("CharityCategories")
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("charity_categories")
+}
+
+// Charity organization model
+model Charity {
+  id            String   @id @default(cuid())
+  name          String
+  slug          String   @unique
+  description   String?
+  img           String?  // Main image/logo of the charity
+  city          String?
+  country       String?
+  isVerified    Boolean  @default(false)
+  links         Json?    // Array of {name, url, icon, type} objects
+  
+  // Relations
+  categories    CharityCategory[] @relation("CharityCategories")
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("charities")
+}
+
 enum ParticipationStatus {
   DIED
   INJURED

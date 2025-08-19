@@ -22,10 +22,13 @@
     "seed:graph": "tsx neo4j/graphSeed.ts",
     "seed:surahs": "tsx prisma/surahSeed.ts",
     "seed:ayat": "tsx prisma/ayahSeed.ts",
-    "seed:books": "tsx prisma/bookSeed.ts"
+    "seed:books": "tsx prisma/bookSeed.ts",
+    "seed:charities": "tsx prisma/charitySeed.ts"
   },
   "dependencies": {
-    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/fontawesome-svg-core": "^7.0.0",
+    "@fortawesome/free-brands-svg-icons": "^7.0.0",
+    "@fortawesome/free-solid-svg-icons": "^7.0.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@googlemaps/js-api-loader": "^1.16.10",
     "@neo4j-nvl/react": "^0.3.9",

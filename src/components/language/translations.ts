@@ -37,20 +37,36 @@ const translations = {
     peopleNotFound: 'No people found.',
     peopleLoadError: 'Failed to load people.',
     noMoreResults: 'No more results to show',
-    
+
+    // Charities
+    allCharities: 'Charitable Organizations',
+    charitiesFound: (count: number) => `Found ${count} organizations`,
+    noCharities: 'No charities found',
+    noCharitiesFound: 'No charities found',
+    tryAdjustingSearch: 'Try adjusting your search or filter criteria',
+    searchPlaceholder: 'Search organizations...',
+    category: 'Category',
+    allCategories: 'All Categories',
+    country: 'Country',
+    allCountries: 'All Countries',
+    verified: 'Verified',
+    verifiedOnly: 'Verified only',
+    clearAll: 'Clear all',
+    filters: 'Filters',
+
     // Common UI
     loading: 'Loading...',
     backToList: 'Back to list',
     backToSurahs: 'Back to Surahs',
     dataSource: 'Data source',
-    
+
     // Battle/Event Participants
     participants: 'Participants',
     noParticipants: 'No participants in this battle.',
     peopleInvolved: 'People Involved',
     noPeopleInvolved: 'No people involved in this event.',
     noBattleParticipations: 'No battle participations.',
-    
+
     // Quran
     theHolyQuran: 'The Holy Quran',
     selectSurah: 'Select a surah from the list below to read its verses',
@@ -60,31 +76,31 @@ const translations = {
     manzil: 'Manzil',
     previous: 'Previous',
     next: 'Next',
-    
+
     // Coming Soon Messages
     comingSoon: 'Content will be added soon',
     poetryComingSoon: 'Poetry content will be added soon',
     hadithComingSoon: 'Hadith content will be added soon',
-    
+
     // Battle Map
     battleLocation: 'Battle Location on Map',
-    
+
     // Family Relations
     familyRelations: 'Relationships Network',
-    
+
     // Articles
     specialArticles: 'Special Articles',
     noArticles: 'No articles found',
     noArticlesForEvent: 'No articles for this event.',
-    
+
     // Notable People
     notablePeople: 'Notable People',
-    
+
     // Quranic Verses
     quranicVerses: 'Quranic Verses',
     quranicVersesAboutPeople: 'Quranic Verses About People',
     sampleVerses: 'Sample Verses',
-    
+
     // Battle Status
     martyred: 'Martyred',
     injured: 'Injured',
@@ -287,20 +303,36 @@ const translations = {
     peopleNotFound: 'لم يتم العثور على أشخاص',
     peopleLoadError: 'فشل تحميل قائمة الأشخاص',
     noMoreResults: 'لا توجد نتائج إضافية',
-    
+
+    // Charities
+    allCharities: 'المنظمات الخيرية',
+    charitiesFound: (count: number) => `تم العثور على ${count} منظمة`,
+    noCharities: 'لم يتم العثور على منظمات',
+    noCharitiesFound: 'لم يتم العثور على منظمات',
+    tryAdjustingSearch: 'حاول تعديل معايير البحث أو التصفية',
+    searchPlaceholder: 'ابحث عن منظمات...',
+    category: 'الفئة',
+    allCategories: 'جميع الفئات',
+    country: 'البلد',
+    allCountries: 'جميع البلدان',
+    verified: 'موثقة',
+    verifiedOnly: 'الموثقة فقط',
+    clearAll: 'مسح الكل',
+    filters: 'المرشحات',
+
     // Common UI
     loading: 'جاري التحميل...',
     backToList: 'العودة إلى القائمة',
     backToSurahs: 'العودة إلى قائمة السور',
     dataSource: 'مصدر البيانات',
-    
+
     // Battle/Event Participants
     participants: 'المشاركون',
     noParticipants: 'لا يوجد مشاركون في هذه المعركة.',
     peopleInvolved: 'الأشخاص المشاركون',
     noPeopleInvolved: 'لا يوجد أشخاص مشاركون في هذا الحدث.',
     noBattleParticipations: 'لا توجد مشاركات في المعارك.',
-    
+
     // Quran
     theHolyQuran: 'القرآن الكريم',
     selectSurah: 'اختر سورة من القائمة أدناه لقراءة آياتها',
@@ -310,31 +342,31 @@ const translations = {
     manzil: 'المنزل',
     previous: 'السابق',
     next: 'التالي',
-    
+
     // Coming Soon Messages
     comingSoon: 'سيتم إضافة المحتوى قريباً',
     poetryComingSoon: 'سيتم إضافة محتوى الشعر قريباً',
     hadithComingSoon: 'سيتم إضافة محتوى الحديث قريباً',
-    
+
     // Battle Map
     battleLocation: 'موقع المعركة على الخريطة',
-    
+
     // family Relations
     familyRelations: 'شبكة العلاقات',
-    
+
     // Articles
     specialArticles: 'مقالات مميزة',
     noArticles: 'لا توجد مقالات',
     noArticlesForEvent: 'لا توجد مقالات لهذا الحدث.',
-    
+
     // Notable People
     notablePeople: 'شخصيات بارزة',
-    
+
     // Quranic Verses
     quranicVerses: 'الآيات القرآنية',
     quranicVersesAboutPeople: 'آيات نزلت في الأشخاص',
     sampleVerses: 'نماذج من الآيات',
-    
+
     // Battle Status
     martyred: 'استشهد',
     injured: 'أصيب',
