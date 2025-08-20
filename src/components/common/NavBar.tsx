@@ -46,7 +46,7 @@ const getLinkItems = (href: string, language: 'en' | 'ar'): NavLink[] => {
     case '/charities':
       return [
         { href: '/charities', label: translations[language].allCharities },
-        { href: '/charitiesCategories', label: translations[language].categories },
+        { href: '/charitiesCategories', label: translations[language].charitiesCategories },
       ];
     default:
       return [];

@@ -2,6 +2,8 @@ import Link from 'next/link';
 import React from 'react';
 import { Charity } from '@/types/charity';
 import Image from 'next/image';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 
 export default function CharityCard({ charity }: { charity: Charity }) {
   return (
@@ -21,16 +23,13 @@ export default function CharityCard({ charity }: { charity: Charity }) {
             />
           ) : (
             <div className='w-full h-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center'>
-              <span className='text-4xl font-bold text-white'>
-                {charity.name.charAt(0).toUpperCase()}
+              <span className='text-2xl text-white'>
+                {charity.name}
               </span>
             </div>
           )}
         </div>
         <div className='p-4 flex-1 flex flex-col'>
-          <h3 className='text-lg font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2'>
-            {charity.name}
-          </h3>
           {charity.description && (
             <p className='text-gray-600 dark:text-gray-300 text-sm line-clamp-3 mb-3'>
               {charity.description}
@@ -53,7 +52,7 @@ export default function CharityCard({ charity }: { charity: Charity }) {
               )}
             </div>
             <div className='flex items-center justify-between text-sm text-gray-500 dark:text-gray-400'>
-              <span>{charity.city || ''} {charity.city && charity.country ? ', ' : ''} {charity.country || ''}</span>
+              <span><FontAwesomeIcon icon={faLocationDot} /> {charity.city || ''} {charity.city && charity.country ? ', ' : ''} {charity.country || ''}</span>
               {charity.isVerified && (
                 <span className='inline-flex items-center text-green-600 dark:text-green-400'>
                   <svg className='h-4 w-4 mr-1' fill='currentColor' viewBox='0 0 20 20'>

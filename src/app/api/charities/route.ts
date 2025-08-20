@@ -4,9 +4,24 @@ import { prisma } from '@/lib/prisma';
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const limitParam = searchParams.get('limit');
-  const limit = limitParam ? parseInt(limitParam, 12) : undefined;
+  const categorySlug = searchParams.get('category');
+  const limit = limitParam ? parseInt(limitParam, 10) : undefined;
+
+  console.log(categorySlug);
+
   try {
+    const whereClause = categorySlug
+      ? {
+        categories: {
+          some: {
+            slug: categorySlug
+          }
+        }
+      }
+      : {};
+
     const charities = await prisma.charity.findMany({
+      where: whereClause,
       include: {
         categories: {
           select: {

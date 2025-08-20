@@ -14,7 +14,7 @@ export default function SpecialsPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 py-12" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="font-arabicDisplay text-amber-400 text-3xl sm:text-4xl font-bold mb-4 text-center">
+        <h1 className="font-arabicDisplay text-gray-900 dark:text-gray-200 text-3xl sm:text-4xl mb-4 text-center">
           {language === 'ar' ? 'مقالات مميزة' : 'Special Articles'}
         </h1>
         <p className="text-center text-black dark:text-gray-400 mb-8 text-base sm:text-lg font-arabic max-w-3xl mx-auto">
