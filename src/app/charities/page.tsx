@@ -1,7 +1,5 @@
 "use client"
 
-'use client'
-
 import { useSearchParams } from 'next/navigation'
 import { useLanguage } from '@/components/language/LanguageContext'
 import translations from '@/components/language/translations'
@@ -9,6 +7,7 @@ import useSWR from 'swr'
 import { Charity } from '@/types/charity'
 import { fetcher } from '@/lib/swr'
 import CharityCard from '@/components/charities/CharityCard'
+import CharitySlider from '@/components/charities/CharitySlider'
 
 export default function CharitiesPage() {
   const searchParams = useSearchParams()
@@ -22,12 +21,18 @@ export default function CharitiesPage() {
 
   return (
     <div className='min-h-screen bg-white dark:bg-gray-950 py-12 px-4 sm:px-6 lg:px-8'>
+      <div className="container mx-auto">
+
       <div className='max-w-7xl mx-auto'>
         <div className='text-center mb-12'>
           <h1 className='text-3xl text-gray-900 dark:text-white mb-2'>
             {category ? `${category.charAt(0).toUpperCase() + category.slice(1)} Charities` : translations[language].allCharities}
           </h1>
         </div>
+      </div>
+
+      <div className='mb-12'>
+        <CharitySlider />
       </div>
 
       {isLoading ? (
@@ -68,6 +73,7 @@ export default function CharitiesPage() {
           ))}
         </div>
       )}
+      </div>
     </div>
   )
 }

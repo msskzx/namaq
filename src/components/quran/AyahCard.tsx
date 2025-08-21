@@ -29,13 +29,13 @@ function AyatGroup({ ayat }: { ayat: Ayah[] }) {
 function AyahCard({ ayah }: { ayah: Ayah }) {
   const { language } = useLanguage();
   return (
-    <div className="border border-amber-400 rounded-lg p-4">
+    <div className="border border-amber-400 rounded-lg p-4 min-h-48 w-full flex flex-col justify-between" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div className="text-lg mb-2 text-amber-700 dark:text-amber-400">
         {language === 'ar'
-          ? `${ayah.surah?.name} آية ${ayah.number}`
+          ? `${ayah.surah?.name} - آية ${ayah.number}`
           : `Surah ${ayah.surah?.nameTransliterated}:${ayah.number}`}
       </div>
-      <div className="text-2xl text-gray-800 dark:text-gray-200 font-arabic" style={{ fontFamily: 'Amiri, serif' }}>
+      <div className="text-2xl text-gray-800 dark:text-gray-200 font-arabic flex-1 flex items-center justify-center text-center overflow-hidden" style={{ fontFamily: 'Amiri, serif' }}>
         {ayah.text}
       </div>
     </div>
