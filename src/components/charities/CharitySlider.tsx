@@ -46,11 +46,11 @@ export default function CharitySlider() {
   }
 
   if (error || !ayat) {
-    return <ErrorMessage title='لم يتم العثور علي ايات' description='اعد المحاوله'/>;
+    return <ErrorMessage title='لم يتم العثور علي ايات' description='اعد المحاوله' />;
   }
 
   return (
-    <div className="max-w-5xl mx-auto flex flex-col items-center mb-12 bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-lg p-6 w-full h-full min-h-90" dir="rtl">
+    <div className="max-w-5xl mx-auto flex flex-col items-center mb-12 rounded-2xl shadow-lg p-6 w-full h-full min-h-90" dir="rtl">
       <div className="relative w-full max-w-4xl mx-auto">
         <button
           onClick={language === 'ar' ? goLeft : goRight}

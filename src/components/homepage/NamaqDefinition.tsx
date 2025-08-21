@@ -8,7 +8,7 @@ export default function NamaqDefinition() {
   const { language } = useLanguage();
   const t = translations[language];
   return (
-    <div className="mx-auto px-4 sm:px-6 lg:px-8 my-12 bg-gray-50 dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+    <div className="bg-white dark:bg-gray-950 rounded-2xl shadow-lg mb-12">
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-8">
 
         <div className="col-span-1">

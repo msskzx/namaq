@@ -38,7 +38,6 @@ export default function Hero() {
         <Image src="/gemini_scholar.png" alt="Gemini Scholar" className="w-full rounded-2xl" width={500} height={500} />
       </div>
 
-
     </div>
   );
 }

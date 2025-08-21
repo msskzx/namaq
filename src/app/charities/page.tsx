@@ -48,7 +48,7 @@ export default function CharitiesPage() {
             {translations[language].noCharities}
           </p>
         ) : (
-          <div className='grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+          <div className='grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3'>
             {charities.map((charity) => (
               <CharityCard key={charity.id} charity={charity} />
             ))}

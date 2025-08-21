@@ -50,6 +50,6 @@ export default function RootLayout({
           </LanguageProvider>
         </CustomThemeProvider>
       </body>
-    </html>
+    </html >
   );
 }
