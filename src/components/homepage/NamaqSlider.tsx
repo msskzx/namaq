@@ -25,7 +25,6 @@ export default function NamaqSlider() {
   const goRight = () => setCurrent((prev) => (prev === 0 ? words.length - 1 : prev - 1));
   const goLeft = () => setCurrent((prev) => (prev === words.length - 1 ? 0 : prev + 1));
 
-
   // Auto-advance every few seconds
   useEffect(() => {
     const interval = setInterval(() => {
@@ -36,7 +35,7 @@ export default function NamaqSlider() {
       }
     }, 2000);
     return () => clearInterval(interval);
-  }, [current, language]);
+  });
 
   return (
     <div className="w-full flex flex-col items-center mb-12 bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-lg p-6 w-full h-full border-l-4 border-r-4 border-rose-800">
