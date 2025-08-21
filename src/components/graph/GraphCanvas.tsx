@@ -1,14 +1,14 @@
 'use client';
 
-import { useEffect, useCallback, useRef, RefObject, useMemo } from 'react';
-import type { ForceGraphMethods, NodeObject, LinkObject } from 'react-force-graph-2d';
+import React, { useCallback, useEffect, useMemo, useRef, RefObject } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useLanguage } from '@/components/language/LanguageContext';
-import ForceGraph2D from 'react-force-graph-2d';
-import { GraphNodeFull, GraphLink, GraphData } from '@/types/graph';
+import ForceGraph2D, { ForceGraphMethods, NodeObject, LinkObject } from 'react-force-graph-2d';
+import { GraphData, GraphNodeFull, GraphLink } from '@/types/graph';
 import useSWR from 'swr';
 import { fetcher } from '@/lib/swr';
 import GraphSearch from './GraphSearch';
+import ErrorMessage from '@/components/common/ErrorMessage';
+import { useLanguage } from '@/components/language/LanguageContext';
 
 interface GraphCanvasProps {
   url?: string;
@@ -89,7 +89,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   if (graphError) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="text-red-500">{graphError}</div>
+        <ErrorMessage title="Error loading graph" description={graphError.toString()} />
       </div>
     );
   }

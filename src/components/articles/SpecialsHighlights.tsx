@@ -7,6 +7,7 @@ import { Article } from "@/types/article";
 import { useLanguage } from "@/components/language/LanguageContext";
 import translations from "@/components/language/translations";
 import Link from "next/link";
+import ErrorMessage from "@/components/common/ErrorMessage";
 import { fetcher } from "@/lib/swr";
 
 export default function SpecialsHighlights() {
@@ -29,11 +30,7 @@ export default function SpecialsHighlights() {
           {language === 'ar' ? 'عرض جميع المقالات المميزة' : 'View All Special Articles'}
         </Link>
       </div>
-      {specialArticlesError && (
-        <div className="text-red-600 dark:text-red-400 text-center mb-4 text-sm md:text-base">
-          {translations[language].articlesLoadError}
-        </div>
-      )}
+      {specialArticlesError && <ErrorMessage title={translations[language].articlesLoadError} />}
       {specialArticlesLoading || !specialArticles ? (
         <LoadingSpinner />
       ) : (

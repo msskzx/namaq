@@ -6,6 +6,7 @@ import { useLanguage } from '@/components/language/LanguageContext';
 import translations from '@/components/language/translations';
 import BookCard from '@/components/books/BookCard';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
+import ErrorMessage from '@/components/common/ErrorMessage';
 import { fetcher } from '@/lib/swr';
 import { Book } from '@/types/book';
 
@@ -24,9 +25,7 @@ export default function BooksPage() {
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-red-600 dark:text-red-400">
-          {translations[language].books?.loadError || 'Failed to load books'}
-        </p>
+        <ErrorMessage title={translations[language].books?.loadError || 'Failed to load books'} />
       </div>
     );
   }

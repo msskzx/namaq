@@ -6,6 +6,7 @@ import useSWR from "swr";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import TitleCard from '@/components/people/TitleCard';
 import { TitleBase } from "@/types/title";
+import ErrorMessage from '@/components/common/ErrorMessage';
 
 import { fetcher } from '@/lib/swr';
 
@@ -18,11 +19,7 @@ export default function TitlesPage() {
         <h1 className="text-3xl font-bold mb-8 text-center text-amber-400 dark:text-amber-400">
           {translations[language].titles}
         </h1>
-        {error && (
-          <div className="text-red-600 dark:text-red-400 text-center mb-4">
-            {language === 'ar' ? 'تعذر تحميل الألقاب.' : 'Failed to load titles.'}
-          </div>
-        )}
+        {error && <ErrorMessage title={language === 'ar' ? 'تعذر تحميل الألقاب.' : 'Failed to load titles.'} />}
         {isLoading || !titles ? (
           <LoadingSpinner />
         ) : (

@@ -1,15 +1,17 @@
 "use client";
 
-import { useLanguage } from '@/components/language/LanguageContext';
-import translations from "@/components/language/translations";
-import useSWR from 'swr';
-import PersonCard from '../people/PersonCard';
-import LoadingSpinner from '../common/LoadingSpinner';
-import type { PersonWithTitles } from '@/types/person';
-import type { Pagination } from '@/types/pagination';
+import React from 'react';
 import Link from 'next/link';
-import { fetcher } from '@/lib/swr';
 import Image from 'next/image';
+import { useLanguage } from '@/components/language/LanguageContext';
+import translations from '@/components/language/translations';
+import { PersonWithTitles } from '@/types/person';
+import { Pagination } from '@/types/pagination';
+import PersonCard from './PersonCard';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
+import ErrorMessage from '@/components/common/ErrorMessage';
+import useSWR from 'swr';
+import { fetcher } from '@/lib/swr';
 
 export default function TheTen() {
   const { data: prophet, error: prophetError, isLoading: prophetLoading } = useSWR('/api/people/prophet-muhammad', fetcher);
@@ -46,8 +48,8 @@ export default function TheTen() {
 
   if (error) {
     return (
-      <div className="mx-auto mt-8 text-center text-red-500">
-        {t.peopleLoadError}
+      <div className="mx-auto mt-8">
+        <ErrorMessage title={t.peopleLoadError} />
       </div>
     );
   }
@@ -86,9 +88,7 @@ export default function TheTen() {
       </div>
 
       {prophetError && (
-        <div className="text-red-600 dark:text-red-400 text-center mb-4 text-sm md:text-base">
-          {language === 'ar' ? 'حدث خطأ في تحميل بيانات النبي' : 'Error loading Prophet data'}
-        </div>
+        <ErrorMessage title={language === 'ar' ? 'حدث خطأ في تحميل بيانات النبي' : 'Error loading Prophet data'} />
       )}
 
       {prophetLoading ? (

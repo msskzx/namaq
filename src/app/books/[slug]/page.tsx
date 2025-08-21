@@ -8,6 +8,7 @@ import translations from '@/components/language/translations';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { fetcher } from '@/lib/swr';
 import { BookFull } from '@/types/book';
+import ErrorMessage from '@/components/common/ErrorMessage';
 
 export default function BookDetailPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -25,9 +26,7 @@ export default function BookDetailPage() {
   if (error || !book) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-red-600 dark:text-red-400">
-          {typeof translations[language].books === 'string' ? 'Failed to load book' : translations[language].books.loadError}
-        </p>
+        <ErrorMessage title={typeof translations[language].books === 'string' ? 'Failed to load book' : translations[language].books.loadError} />
       </div>
     );
   }

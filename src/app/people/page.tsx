@@ -14,6 +14,7 @@ import useSWR from 'swr';
 import useSWRInfinite from 'swr/infinite';
 import type { Pagination } from '@/types/pagination';
 import { fetcher } from '@/lib/swr';
+import ErrorMessage from '@/components/common/ErrorMessage';
 
 const PAGE_SIZE = 12;
 
@@ -164,9 +165,7 @@ const PeoplePage = () => {
         language={language as 'en' | 'ar'}
       />
       {peopleError || titlesError ? (
-        <p className="text-center text-red-600">
-          {translations[language]?.personLoadError}
-        </p>
+        <ErrorMessage title={translations[language]?.personLoadError || 'Error loading people.'} />
       ) : null}
 
       {(isInitialLoad && (!peoplePages || peoplePages.length === 0)) || isLoadingTitles ? (

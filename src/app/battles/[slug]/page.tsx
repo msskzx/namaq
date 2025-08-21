@@ -13,6 +13,7 @@ import BattleMap from '@/components/battles/BattleMap';
 import { PersonBase } from "@/types/person";
 import { Battle } from "@/types/battle";
 import { fetcher } from '@/lib/swr';
+import ErrorMessage from '@/components/common/ErrorMessage';
 
 export default function BattleDetailPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -36,9 +37,7 @@ export default function BattleDetailPage() {
               </h1>
             </div>
             {error && (
-              <div className="text-red-600 dark:text-red-400 text-center mb-4">
-                {t.battles.loadError}
-              </div>
+              <ErrorMessage title={t.battles.loadError} />
             )}
             {battle && (
               <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6 font-geistmono">

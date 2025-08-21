@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { useLanguage } from '@/components/language/LanguageContext';
 import translations from '@/components/language/translations';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
+import ErrorMessage from '@/components/common/ErrorMessage';
 import Badge from '@/components/common/Badge';
 import BattleParticipationTimeline from '@/components/battles/BattleParticipationTimeline';
 import Timeline from '@/components/people/Timeline';
@@ -29,7 +30,7 @@ function PersonDetailPage() {
     return (
       <div className="min-h-screen bg-white dark:bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <div className="container mx-auto px-4 py-8">
-          <p className="text-red-600 dark:text-red-400 text-lg my-8">{error}</p>
+          <ErrorMessage title={t.personLoadError} description={String(error)} />
         </div>
       </div>
     );

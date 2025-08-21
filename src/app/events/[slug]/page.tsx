@@ -14,6 +14,7 @@ import ArticleCard from "@/components/articles/ArticleCard";
 import { ArticleBase } from "@/types/article";
 import Badge from '@/components/common/Badge';
 import { CategoryBase } from "@/types/category";
+import ErrorMessage from '@/components/common/ErrorMessage';
 
 import { fetcher } from '@/lib/swr';
 
@@ -55,9 +56,7 @@ function EventPage() {
               </div>
             )}
             {error && (
-              <div className="text-red-600 dark:text-red-400 text-center mb-4">
-                {t.battles.loadError}
-              </div>
+              <ErrorMessage title={t.battles.loadError} />
             )}
             {event && (
 

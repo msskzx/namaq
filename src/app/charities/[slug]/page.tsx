@@ -11,6 +11,7 @@ import useSWR from "swr";
 import { fetcher } from '@/lib/swr';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { useLanguage } from '@/components/language/LanguageContext';
+import ErrorMessage from '@/components/common/ErrorMessage';
 
 export default function CharityPage() {
   const { language } = useLanguage();
@@ -21,7 +22,7 @@ export default function CharityPage() {
     return (
       <div className="min-h-screen bg-white dark:bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <div className="container mx-auto px-4 py-8">
-          <p className="text-red-600 dark:text-red-400 text-lg my-8">{error}</p>
+          <ErrorMessage title={language === 'ar' ? 'حدث خطأ أثناء تحميل الجمعية' : 'Error loading charity'} description={String(error)} />
         </div>
       </div>
     );

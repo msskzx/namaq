@@ -8,8 +8,8 @@ import { faBook } from '@fortawesome/free-solid-svg-icons';
 import { Surah } from '@/types/quran';
 import useSWR from "swr";
 import SurahCard from '@/components/quran/SurahCard';
-
 import { fetcher } from '@/lib/swr';
+import ErrorMessage from '@/components/common/ErrorMessage';
 
 export default function QuranPage() {
   const { language } = useLanguage();
@@ -28,9 +28,7 @@ export default function QuranPage() {
     return (
       <div className="min-h-screen bg-white dark:bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <div className="container mx-auto px-4 py-8">
-          <div className="text-center text-red-400">
-            {error}
-          </div>
+          <ErrorMessage title={language === 'ar' ? 'تعذر تحميل السور' : 'Failed to load surahs'} description={String(error)} />
         </div>
       </div>
     );

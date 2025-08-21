@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Ayah } from '@/types/quran';
 import useSWR from "swr";
+import ErrorMessage from '@/components/common/ErrorMessage';
 
 import { fetcher } from '@/lib/swr';
 
@@ -30,9 +31,7 @@ export default function SurahPage() {
     return (
       <div className="min-h-screen bg-white dark:bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <div className="container mx-auto px-4 py-8">
-          <div className="text-center text-red-400">
-            {error}
-          </div>
+          <ErrorMessage title={language === 'ar' ? 'حدث خطأ أثناء تحميل الصفحة' : 'Error loading page'} description={String(error)} />
         </div>
       </div>
     );
@@ -42,9 +41,7 @@ export default function SurahPage() {
     return (
       <div className="min-h-screen bg-white dark:bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <div className="container mx-auto px-4 py-8">
-          <div className="text-center text-red-400">
-            {language === 'ar' ? 'السورة غير موجودة' : 'Surah not found'}
-          </div>
+          <ErrorMessage title={language === 'ar' ? 'السورة غير موجودة' : 'Surah not found'} />
         </div>
       </div>
     );

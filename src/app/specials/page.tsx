@@ -5,6 +5,7 @@ import { Article } from "@/types/article";
 import ArticleCard from "@/components/articles/ArticleCard";
 import useSWR from 'swr';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
+import ErrorMessage from '@/components/common/ErrorMessage';
 
 import { fetcher } from '@/lib/swr';
 
@@ -24,27 +25,28 @@ export default function SpecialsPage() {
         </p>
         {/* Special Articles Section */}
         <div className="mt-8">
-          {error && (
-            <div className="text-red-600 dark:text-red-400 text-center mb-4">
-              {language === 'ar' ? 'حدث خطأ في تحميل المقالات' : 'Error loading articles'}
-            </div>
-          )}
-          {isLoading || !specialArticles ? (
-            <LoadingSpinner />
+          {error ? (
+            <ErrorMessage title={language === 'ar' ? 'حدث خطأ في تحميل المقالات' : 'Error loading articles'} />
           ) : (
             <>
-              {Array.isArray(specialArticles) && specialArticles.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
-                  {specialArticles.map((article) => (
-                    <ArticleCard key={article.id} article={article} />
-                  ))}
-                </div>
+              {isLoading || !specialArticles ? (
+                <LoadingSpinner />
               ) : (
-                <div className="text-center py-8">
-                  <p className="text-gray-600 dark:text-gray-400 font-arabic">
-                    {language === 'ar' ? 'لا توجد مقالات مميزة حالياً' : 'No special articles available at the moment'}
-                  </p>
-                </div>
+                <>
+                  {Array.isArray(specialArticles) && specialArticles.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+                      {specialArticles.map((article) => (
+                        <ArticleCard key={article.id} article={article} />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8">
+                      <p className="text-gray-600 dark:text-gray-400 font-arabic">
+                        {language === 'ar' ? 'لا توجد مقالات مميزة حالياً' : 'No special articles available at the moment'}
+                      </p>
+                    </div>
+                  )}
+                </>
               )}
             </>
           )}

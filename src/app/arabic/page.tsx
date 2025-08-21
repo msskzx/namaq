@@ -8,8 +8,8 @@ import { useLanguage } from '@/components/language/LanguageContext';
 import translations from '@/components/language/translations';
 import ArticleCard from '@/components/articles/ArticleCard';
 import { Article } from '@/types/article';
-
 import { fetcher } from '@/lib/swr';
+import ErrorMessage from '@/components/common/ErrorMessage';
 
 export default function Arabic() {
   const { data: category, error, isLoading } = useSWR('/api/categories/arabic', fetcher);
@@ -18,8 +18,8 @@ export default function Arabic() {
 
   if (isLoading) return <LoadingSpinner />;
   if (error || !category) return (
-    <div className="text-red-600 dark:text-red-400 text-center my-8">
-      {t.categoriesLoadError}
+    <div className="container mx-auto p-4 md:p-8" dir="rtl">
+      <ErrorMessage title={t.categoriesLoadError} />
     </div>
   );
 

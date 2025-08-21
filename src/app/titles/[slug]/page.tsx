@@ -11,6 +11,7 @@ import PersonNameCard from '@/components/people/PersonNameCard';
 import { PersonBase } from "@/types/person";
 
 import { fetcher } from '@/lib/swr';
+import ErrorMessage from '@/components/common/ErrorMessage';
 
 export default function TitleDetailPage() {
   const { language } = useLanguage();
@@ -32,9 +33,7 @@ export default function TitleDetailPage() {
               </h1>
             </div>
             {error && (
-              <div className="text-red-600 dark:text-red-400 text-center mb-4">
-                {language === 'ar' ? 'تعذر تحميل اللقب.' : 'Failed to load title.'}
-              </div>
+              <ErrorMessage title={language === 'ar' ? 'تعذر تحميل اللقب.' : 'Failed to load title.'} />
             )}
             {title && (
               <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-amber-400 p-6 mb-4">
