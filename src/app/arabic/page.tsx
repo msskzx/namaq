@@ -17,12 +17,20 @@ export default function Arabic() {
   const { language } = useLanguage();
   const t = translations[language];
 
-  if (isLoading) return <LoadingSpinner />;
-  if (error || !category) return (
-    <div className="container mx-auto p-4 md:p-8" dir="rtl">
-      <ErrorMessage title={t.categoriesLoadError} />
-    </div>
-  );
+  if (isLoading) {
+    return (
+      <div className="container mx-auto p-4 md:p-8" dir="rtl">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+  if (error || !category) {
+    return (
+      <div className="container mx-auto p-4 md:p-8" dir="rtl">
+        <ErrorMessage title={t.loadingError} />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950">
@@ -45,7 +53,7 @@ export default function Arabic() {
               </p>
             </div>
             <Image
-              src={"/arabic_language.png"}
+              src={"/mariam_arabic_language.png"}
               alt="arabic-language"
               className="w-1/2 h-auto object-cover rounded-lg"
               width={300}

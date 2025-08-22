@@ -54,9 +54,15 @@ const translations = {
     verifiedOnly: 'Verified only',
     clearAll: 'Clear all',
     filters: 'Filters',
+    randomCharityTitle: 'Discover a Random Charity',
+    randomCharityMotivation: 'Sometimes the best way to help is to discover organizations you might not have known about. Let us introduce you to a random charitable organization that could use your support.',
+    pickRandomCharity: 'Pick Another Charity',
+    pickingCharity: 'Picking...',
+    suggestedCharity: 'Suggested for you:',
 
     // Common UI
     loading: 'Loading...',
+    loadingError: 'Failed to load content',
     backToList: 'Back to list',
     backToSurahs: 'Back to Surahs',
     dataSource: 'Data source',
@@ -321,9 +327,15 @@ const translations = {
     verifiedOnly: 'الموثقة فقط',
     clearAll: 'مسح الكل',
     filters: 'المرشحات',
+    randomCharityTitle: 'اكتشف منظمة خيرية عشوائية',
+    randomCharityMotivation: 'أحياناً أفضل طريقة للمساعدة هي اكتشاف منظمات قد لا تعرف عنها. دعنا نقدم لك منظمة خيرية عشوائية قد تحتاج إلى دعمك.',
+    pickRandomCharity: 'اختر منظمة أخرى',
+    pickingCharity: 'جاري الاختيار...',
+    suggestedCharity: 'مقترح لك:',
 
     // Common UI
     loading: 'جاري التحميل...',
+    loadingError: 'تعذر تحميل المحتوى',
     backToList: 'العودة إلى القائمة',
     backToSurahs: 'العودة إلى قائمة السور',
     dataSource: 'مصدر البيانات',

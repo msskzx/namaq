@@ -8,6 +8,7 @@ import { Charity } from '@/types/charity'
 import { fetcher } from '@/lib/swr'
 import CharityCard from '@/components/charities/CharityCard'
 import CharitySlider from '@/components/charities/CharitySlider'
+import RandomCharityPicker from '@/components/charities/RandomCharityPicker'
 import LoadingSpinner from '@/components/common/LoadingSpinner'
 import ErrorMessage from '@/components/common/ErrorMessage'
 
@@ -35,6 +36,10 @@ export default function CharitiesPage() {
 
         <div className='mb-12'>
           <CharitySlider />
+        </div>
+
+        <div className='mb-12'>
+          <RandomCharityPicker />
         </div>
 
         {isLoading ? (
