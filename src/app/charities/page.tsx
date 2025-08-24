@@ -23,12 +23,13 @@ export default function CharitiesPage() {
 
   return (
     <div className='min-h-screen bg-white dark:bg-gray-950'>
-      {/* Hero Section */}
-      <CharityHero />
-
       {/* Main Content */}
       <div className='py-12 px-4 sm:px-6 lg:px-8'>
         <div className="container mx-auto">
+
+          {/* Hero Section */}
+          <CharityHero />
+
           <div className='max-w-7xl mx-auto'>
             <div className='text-center mb-12'>
               <h1 className='text-3xl text-gray-900 dark:text-white mb-2'>
