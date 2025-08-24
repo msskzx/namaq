@@ -23,7 +23,9 @@
     "seed:surahs": "tsx prisma/surahSeed.ts",
     "seed:ayat": "tsx prisma/ayahSeed.ts",
     "seed:books": "tsx prisma/bookSeed.ts",
-    "seed:charities": "tsx prisma/charitySeed.ts"
+    "seed:charities": "tsx prisma/charitySeed.ts",
+    "gen:cypher": "tsx neo4j/genCypherFromRaw.ts",
+    "gen:cypher:example": "tsx neo4j/example.ts"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
