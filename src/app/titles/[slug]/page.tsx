@@ -28,7 +28,7 @@ export default function TitleDetailPage() {
               <div className="w-16 h-16 flex items-center justify-center rounded-full bg-indigo-100 dark:bg-indigo-950">
                 <FontAwesomeIcon icon={faCrown} className="text-amber-400 w-10 h-10" />
               </div>
-              <h1 className="text-4xl font-bold text-amber-400">
+              <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100">
                 {title ? (language === 'ar' ? title.name : title.nameTransliterated) : translations[language].motivation.titles.title}
               </h1>
             </div>

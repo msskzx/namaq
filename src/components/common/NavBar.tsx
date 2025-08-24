@@ -161,7 +161,7 @@ function NavBar() {
                 >
                   <Link
                     href={link.href}
-                    className="text-black dark:text-gray-200 rounded-md transition-colors hover:text-gray-800 dark:hover:text-amber-300 font-medium px-3 py-2 flex items-center"
+                    className="text-black dark:text-gray-100 rounded-md transition-colors hover:text-gray-800 dark:hover:text-amber-300 font-medium px-3 py-2 flex items-center"
                     onClick={() => setMenuOpen(false)}
                   >
                     {link.label}
@@ -186,7 +186,7 @@ function NavBar() {
                         <Link
                           key={item.href}
                           href={item.href}
-                          className="block px-4 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                          className="block px-4 py-2 text-sm text-gray-800 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                           onClick={() => setHoveredLink(null)}
                         >
                           {item.label}

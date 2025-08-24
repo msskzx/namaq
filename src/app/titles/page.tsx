@@ -16,7 +16,7 @@ export default function TitlesPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div className="container mx-auto px-4 py-12">
-        <h1 className="text-3xl font-bold mb-8 text-center text-amber-400 dark:text-amber-400">
+        <h1 className="text-3xl font-bold mb-8 text-center text-gray-900 dark:text-gray-200">
           {translations[language].titles}
         </h1>
         {error && <ErrorMessage title={language === 'ar' ? 'تعذر تحميل الألقاب.' : 'Failed to load titles.'} />}
@@ -29,7 +29,7 @@ export default function TitlesPage() {
                 <TitleCard key={title.slug} title={title} language={language} url={`/titles/${title.slug}`} />
               ))
             ) : (
-              <div className="col-span-full text-center py-4 text-gray-400 font-arabic">
+              <div className="col-span-full text-center py-4 text-gray-500 font-arabic">
                 {language === 'ar' ? 'لا توجد ألقاب.' : 'No titles found.'}
               </div>
             )}
