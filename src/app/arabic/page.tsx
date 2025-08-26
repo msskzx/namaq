@@ -2,6 +2,7 @@
 
 import React from 'react';
 import useSWR from 'swr';
+import Link from 'next/link';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { useLanguage } from '@/components/language/LanguageContext';
 import translations from '@/components/language/translations';
@@ -53,9 +54,9 @@ export default function Arabic() {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Quran Card */}
-            <a
+            <Link
               href="/quran"
-              className="group bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-200 dark:border-gray-700"
+              className="group bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:scale-[1.02] transform-gpu"
             >
               <div className="p-6">
                 <div className="w-16 h-16 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center mb-4 mx-auto">
@@ -70,12 +71,12 @@ export default function Arabic() {
                   اقرأ وتدبر آيات الذكر الحكيم
                 </p>
               </div>
-            </a>
+            </Link>
 
             {/* Hadith Card */}
-            <a
+            <Link
               href="/hadith"
-              className="group bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-200 dark:border-gray-700"
+              className="group bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:scale-[1.02] transform-gpu"
             >
               <div className="p-6">
                 <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mb-4 mx-auto">
@@ -90,12 +91,12 @@ export default function Arabic() {
                   أحاديث النبي ﷺ وأقواله المأثورة
                 </p>
               </div>
-            </a>
+            </Link>
 
             {/* Books Card */}
-            <a
+            <Link
               href="/books"
-              className="group bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-200 dark:border-gray-700"
+              className="group bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:scale-[1.02] transform-gpu"
             >
               <div className="p-6">
                 <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mb-4 mx-auto">
@@ -110,12 +111,12 @@ export default function Arabic() {
                   كتب ومراجع في مختلف العلوم
                 </p>
               </div>
-            </a>
+            </Link>
 
             {/* Poems Card */}
-            <a
+            <Link
               href="/poems"
-              className="group bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-200 dark:border-gray-700"
+              className="group bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:scale-[1.02] transform-gpu"
             >
               <div className="p-6">
                 <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mb-4 mx-auto">
@@ -130,7 +131,7 @@ export default function Arabic() {
                   روائع الشعر العربي عبر العصور
                 </p>
               </div>
-            </a>
+            </Link>
           </div>
         </div>
 
