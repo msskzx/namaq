@@ -4,7 +4,7 @@ import { GraphLink, GraphNode } from '@/types/graph';
 
 export async function GET(_request: Request) {
   const { searchParams } = new URL(_request.url);
-  const person = searchParams.get('person');
+  const persons = searchParams.getAll('person') as string[];
   const ancestorsOf = searchParams.getAll('ancestorsOf') as string[];
 
   const session = getSession();
@@ -18,41 +18,45 @@ export async function GET(_request: Request) {
 
   try {
     let result;
-    if (person && ancestorsOf && ancestorsOf.length > 0) {
-      // Combine both in a single query using UNION to return a unified set of paths
-      result = await session.run(
-        `MATCH path = (p1:Person {slug: $person})-[*1..3]-(p2:Person)
-         RETURN path
-         UNION
-         UNWIND $ancestors AS slug
-         MATCH path = (p1:Person {slug: slug})-[r:SON*]->(p2:Person)
-         RETURN path`,
-        { person, ancestors: ancestorsOf }
+    
+    // Build the query parts
+    const queryParts: string[] = [];
+    const params: Record<string, any> = {};
+    
+    // Add person queries
+    if (persons.length > 0) {
+      queryParts.push(
+        `UNWIND $persons AS personSlug
+         MATCH path = (p1:Person {slug: personSlug})-[*1..3]-(p2:Person)
+         RETURN path`
       );
+      params.persons = persons;
     }
-    else if (person) {
-      // Only person provided: variable-length paths up to 3 hops
-      result = await session.run(
-        `MATCH path = (p1:Person {slug: $slug})-[*1..3]-(p2:Person)
-         RETURN path`,
-        { slug: person }
+    
+    // Add ancestor queries
+    if (ancestorsOf.length > 0) {
+      queryParts.push(
+        `UNWIND $ancestors AS ancestorSlug
+         MATCH path = (p1:Person {slug: ancestorSlug})-[r:SON*]->(p2:Person)
+         RETURN path`
       );
+      params.ancestors = ancestorsOf;
     }
-    else if (ancestorsOf && ancestorsOf.length > 0) {
-      // Only ancestorsOf provided: unwind and return ancestor paths
-      result = await session.run(
-        `UNWIND $slugs AS slug
-         MATCH path = (p1:Person {slug: slug})-[r:SON*]->(p2:Person)
-         RETURN path`,
-        { slugs: ancestorsOf }
-      );
-    }
-    else {
-      // Query direct relationships for all people (use path for unified handling)
+    
+    // Determine which query to run based on available parameters
+    if (queryParts.length === 0) {
+      // No specific queries, return all direct relationships
       result = await session.run(
         `MATCH path = (p1:Person)-[*1..1]->(p2:Person)
-         RETURN path`,
+         RETURN path`
       );
+    } else if (queryParts.length === 1) {
+      // Only one query part, no need for UNION
+      result = await session.run(queryParts[0], params);
+    } else {
+      // Multiple query parts, combine with UNION
+      const query = queryParts.join(' UNION ');
+      result = await session.run(query, params);
     }
 
     const nodes = new Map<string, GraphNode>();
