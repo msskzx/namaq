@@ -16,16 +16,14 @@ interface NavLink {
 
 const getLinkItems = (href: string, language: 'en' | 'ar'): NavLink[] => {
   switch (href) {
-    case '/graphs':
+    case '/history':
       return [
+        { href: '/history', label: language === 'ar' ? 'التاريخ' : 'History' },
         { href: '/graphs', label: translations[language].familyRelations },
         { href: '/people/prophet-muhammad', label: translations[language].prophet },
         { href: '/people?title=companion', label: translations[language].companions },
         { href: '/people', label: translations[language].people },
         { href: '/titles', label: translations[language].titles },
-      ];
-    case '/events':
-      return [
         { href: '/events', label: translations[language].events as string },
         { href: '/battles', label: translations[language].battles.title },
       ];
@@ -98,13 +96,13 @@ function NavBar() {
 
   const mainLinks = [
     { href: '/specials', label: translations[language].specialArticles },
-    { href: '/graphs', label: translations[language].familyRelations },
-    { href: '/events', label: translations[language].events },
+    { href: '/history', label: language === 'ar' ? 'التاريخ' : 'History' },
     { href: '/arabic', label: translations[language].arabic },
     { href: '/charities', label: translations[language].allCharities },
   ];
 
   const allLinks = [
+    { href: '/history', label: language === 'ar' ? 'التاريخ' : 'History' },
     { href: '/specials', label: translations[language].specialArticles },
     { href: '/graphs', label: translations[language].familyRelations },
     { href: '/people/prophet-muhammad', label: translations[language].prophet },
@@ -137,7 +135,7 @@ function NavBar() {
           >
             {translations[language].appName}
           </Link>
-          {/* TODO Desktop Nav */}
+          {/* Desktop Nav */}
           <div className="hidden lg:flex space-x-4 items-center">
             {sortedMainLinks.map((link) => {
               const linkItems = getLinkItems(link.href, language);

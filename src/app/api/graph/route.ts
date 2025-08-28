@@ -18,11 +18,11 @@ export async function GET(_request: Request) {
 
   try {
     let result;
-    
+
     // Build the query parts
     const queryParts: string[] = [];
-    const params: Record<string, any> = {};
-    
+    const params: Record<string, string[]> = {};
+
     // Add person queries
     if (persons.length > 0) {
       queryParts.push(
@@ -32,7 +32,7 @@ export async function GET(_request: Request) {
       );
       params.persons = persons;
     }
-    
+
     // Add ancestor queries
     if (ancestorsOf.length > 0) {
       queryParts.push(
@@ -42,7 +42,7 @@ export async function GET(_request: Request) {
       );
       params.ancestors = ancestorsOf;
     }
-    
+
     // Determine which query to run based on available parameters
     if (queryParts.length === 0) {
       // No specific queries, return all direct relationships
