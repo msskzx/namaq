@@ -16,20 +16,28 @@ interface NavLink {
 
 const getLinkItems = (href: string, language: 'en' | 'ar'): NavLink[] => {
   switch (href) {
-    case '/history':
+    case '/graphs':
       return [
-        { href: '/history', label: language === 'ar' ? 'التاريخ' : 'History' },
         { href: '/graphs', label: translations[language].familyRelations },
+        { href: '/graphs', label: 'الانساب' },
+        { href: '/graphs', label: 'شبكه الغزوات' },
+      ];
+    case '/people':
+      return [
+        { href: '/people', label: translations[language].people },
         { href: '/people/prophet-muhammad', label: translations[language].prophet },
         { href: '/people?title=companion', label: translations[language].companions },
-        { href: '/people', label: translations[language].people },
         { href: '/titles', label: translations[language].titles },
-        { href: '/events', label: translations[language].events as string },
+      ];
+    case '/history':
+      return [
+        { href: '/history', label: translations[language].history },
+        { href: '/events', label: translations[language].events },
         { href: '/battles', label: translations[language].battles.title },
       ];
     case '/specials':
       return [
-        { href: '/specials', label: language === 'ar' ? 'مقالات مميزة' : 'Special Articles' },
+        { href: '/specials', label: translations[language].specialArticles },
         { href: '/articles', label: translations[language].articles },
         { href: '/categories', label: translations[language].categories },
       ];
@@ -95,14 +103,16 @@ function NavBar() {
   }
 
   const mainLinks = [
+    { href: '/graphs', label: translations[language].familyRelations },
+    { href: '/people', label: translations[language].people },
     { href: '/specials', label: translations[language].specialArticles },
-    { href: '/history', label: language === 'ar' ? 'التاريخ' : 'History' },
-    { href: '/arabic', label: translations[language].arabic },
+    { href: '/history', label: translations[language].history },
+    { href: '/arabic', label: 'العربيه و الكتب' },
     { href: '/charities', label: translations[language].allCharities },
   ];
 
   const allLinks = [
-    { href: '/history', label: language === 'ar' ? 'التاريخ' : 'History' },
+    { href: '/history', label: translations[language].history },
     { href: '/specials', label: translations[language].specialArticles },
     { href: '/graphs', label: translations[language].familyRelations },
     { href: '/people/prophet-muhammad', label: translations[language].prophet },
