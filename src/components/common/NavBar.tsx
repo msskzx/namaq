@@ -19,8 +19,8 @@ const getLinkItems = (href: string, language: 'en' | 'ar'): NavLink[] => {
     case '/graphs':
       return [
         { href: '/graphs', label: translations[language].familyRelations },
-        { href: '/graphs', label: 'الانساب' },
-        { href: '/graphs', label: 'شبكه الغزوات' },
+        { href: '/graphs/ancestry', label: 'الانساب' },
+        { href: '/graphs/battles', label: 'شبكه الغزوات' },
       ];
     case '/people':
       return [
@@ -59,7 +59,7 @@ const getLinkItems = (href: string, language: 'en' | 'ar'): NavLink[] => {
   }
 };
 
-function NavBar() {
+export default function NavBar() {
   const { language, languageLoaded } = useLanguage() as { language: 'en' | 'ar'; languageLoaded: boolean };
   const [menuOpen, setMenuOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -259,6 +259,4 @@ function NavBar() {
       <div className="h-[72px]" />
     </>
   );
-};
-
-export default NavBar; 
+}
