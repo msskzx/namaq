@@ -10,10 +10,6 @@ import LoadingSpinner from '@/components/common/LoadingSpinner';
 import PersonNameCard from '@/components/people/PersonNameCard';
 import { EventAll } from '@/types/event';
 import { PersonBase } from "@/types/person";
-import ArticleCard from "@/components/articles/ArticleCard";
-import { ArticleBase } from "@/types/article";
-import Badge from '@/components/common/Badge';
-import { CategoryBase } from "@/types/category";
 import ErrorMessage from '@/components/common/ErrorMessage';
 
 import { fetcher } from '@/lib/swr';
@@ -40,21 +36,6 @@ function EventPage() {
               </h1>
 
             </div>
-            {event?.categories && event.categories.length > 0 && (
-              <div className="mb-4">
-                <ul className="flex flex-wrap gap-2">
-                  {event.categories.map((cat: CategoryBase) => (
-                    <li key={cat.id}>
-                      <Badge
-                        href={`/categories/${cat.slug}`}
-                        text={language === 'ar' ? cat.name : cat.nameTransliterated || cat.name}
-                        color="blue"
-                      />
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
             {error && (
               <ErrorMessage title={t.battles.loadError} />
             )}
@@ -109,25 +90,6 @@ function EventPage() {
                   )}
                 </div>
 
-                <div className="p-6 mt-10">
-                  <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-200 mt-8">
-                    {t.articles}
-                  </h2>
-                  {event.articles && event.articles.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                      {event.articles.map((article: ArticleBase) => (
-                        <ArticleCard
-                          key={article.id}
-                          article={article}
-                        />
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-gray-400 py-4">
-                      {t.noArticlesForEvent}
-                    </div>
-                  )}
-                </div>
               </div>
             )}
           </>

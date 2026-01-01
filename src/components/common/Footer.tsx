@@ -5,15 +5,6 @@ import { useLanguage } from '../language/LanguageContext';
 import translations from '../language/translations';
 
 const getLinkGroups = (language: 'en' | 'ar') => ({
-  arabic: {
-    title: translations[language].arabic,
-    links: [
-      { href: '/arabic', label: translations[language].arabic },
-      { href: '/quran', label: translations[language].quran },
-      { href: '/hadith', label: translations[language].hadith },
-      { href: '/poems', label: translations[language].poems },
-    ]
-  },
   battles: {
     title: translations[language].battles.title,
     links: [
@@ -30,12 +21,10 @@ const getLinkGroups = (language: 'en' | 'ar') => ({
       { href: '/titles', label: translations[language].titles },
     ]
   },
-  specials: {
-    title: language === 'ar' ? 'مقالات مميزة' : 'Special Articles',
+  graph: {
+    title: translations[language].familyRelations,
     links: [
-      { href: '/specials', label: language === 'ar' ? 'مقالات مميزة' : 'Special Articles' },
-      { href: '/articles', label: translations[language].articles },
-      { href: '/categories', label: translations[language].categories },
+      { href: '/graphs', label: translations[language].familyRelations },
     ]
   },
 });
@@ -45,7 +34,7 @@ function Footer() {
   const currentLanguage = language || 'ar';
   const isRTL = currentLanguage === 'ar';
   const linkGroups = getLinkGroups(currentLanguage as 'en' | 'ar');
-  
+
   return (
     <footer className="w-full bg-gray-50 dark:bg-gray-950 text-amber-600 dark:text-amber-400 border-t-2 border-amber-400">
       <div className="container mx-auto px-4 py-8">
@@ -59,7 +48,7 @@ function Footer() {
               <ul className={`space-y-2 ${isRTL ? 'text-right' : 'text-left'}`}>
                 {group.links.map((link) => (
                   <li key={link.href}>
-                    <a 
+                    <a
                       href={link.href}
                       className="text-gray-700 dark:text-gray-200 hover:text-amber-500 dark:hover:text-amber-300 transition-colors"
                       dir={isRTL ? 'rtl' : 'ltr'}
@@ -72,7 +61,7 @@ function Footer() {
             </div>
           ))}
         </div>
-        
+
         {/* Copyright and tagline */}
         <div className="pt-6 border-t border-amber-400">
           <div className="flex flex-col md:flex-row justify-between items-center">
@@ -83,11 +72,11 @@ function Footer() {
                 </div>
               </div>
             </div>
-            
+
             <div className="text-sm opacity-80">
               <div className="mt-2">
-                <a 
-                  href="/privacy" 
+                <a
+                  href="/privacy"
                   className="text-amber-600 dark:text-amber-400 hover:text-amber-500 dark:hover:text-amber-300 transition-colors"
                   dir={isRTL ? 'rtl' : 'ltr'}
                 >

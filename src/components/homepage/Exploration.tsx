@@ -19,15 +19,6 @@ export default function Explore() {
 
   const exploreCards: ExploreCard[] = [
     {
-      id: 'special-articles',
-      title: t.specialArticles,
-      description: language === 'ar'
-        ? 'مقالات تفاعلية مصممة خصيصاً لتجربة تعلم فريدة'
-        : 'Interactive articles designed for a unique learning experience',
-      href: '/specials',
-      image: '/gemini_scholar_colored.png'
-    },
-    {
       id: 'people',
       title: t.people,
       description: language === 'ar'
@@ -55,22 +46,13 @@ export default function Explore() {
       image: '/mariam_kaaba.png'
     },
     {
-      id: 'arabic-language',
-      title: t.arabic,
+      id: 'battles',
+      title: t.battles.title,
       description: language === 'ar'
-        ? 'تعلم اللغة العربية والكتب والقرآن والحديث'
-        : 'Learn Arabic language, books, Quran, and Hadith',
-      href: '/arabic',
-      image: '/mariam_arabic_language.png'
-    },
-    {
-      id: 'charities',
-      title: t.allCharities,
-      description: language === 'ar'
-        ? 'اكتشف المنظمات الخيرية والجمعيات الإنسانية'
-        : 'Discover charitable organizations and humanitarian societies',
-      href: '/charities',
-      image: '/gemini_children.png'
+        ? 'اكتشف المعارك والغزوات في التاريخ الإسلامي'
+        : 'Discover battles and expeditions in Islamic history',
+      href: '/battles',
+      image: '/gemini_scholar_colored.png'
     }
   ];
 
