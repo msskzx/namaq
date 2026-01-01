@@ -5,26 +5,26 @@ import { useLanguage } from '../language/LanguageContext';
 import translations from '../language/translations';
 
 const getLinkGroups = (language: 'en' | 'ar') => ({
-  battles: {
-    title: translations[language].battles.title,
+  events: {
+    title: translations[language].events,
     links: [
-      { href: '/battles', label: translations[language].battles.title },
       { href: '/events', label: translations[language].events },
-    ]
-  },
-  people: {
-    title: translations[language].people,
-    links: [
-      { href: '/people/prophet-muhammad', label: translations[language].prophet },
-      { href: '/people?title=companion', label: translations[language].companions },
-      { href: '/people', label: translations[language].people },
-      { href: '/titles', label: translations[language].titles },
+      { href: '/battles', label: translations[language].battles.title },
     ]
   },
   graph: {
     title: translations[language].familyRelations,
     links: [
       { href: '/graphs', label: translations[language].familyRelations },
+      { href: '/graphs/ancestry', label: 'الانساب' },
+    ]
+  },
+  people: {
+    title: translations[language].people,
+    links: [
+      { href: '/people/prophet-muhammad', label: translations[language].prophet },
+      { href: '/people', label: translations[language].people },
+      { href: '/titles', label: translations[language].titles },
     ]
   },
 });

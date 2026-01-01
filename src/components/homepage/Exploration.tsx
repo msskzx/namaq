@@ -43,22 +43,13 @@ export default function Explore() {
         ? 'تعرف على الأحداث التاريخية والمعارك المهمة'
         : 'Learn about historical events and important battles',
       href: '/events',
-      image: '/mariam_kaaba.png'
+      image: '/gemini_books.png'
     },
-    {
-      id: 'battles',
-      title: t.battles.title,
-      description: language === 'ar'
-        ? 'اكتشف المعارك والغزوات في التاريخ الإسلامي'
-        : 'Discover battles and expeditions in Islamic history',
-      href: '/battles',
-      image: '/gemini_scholar_colored.png'
-    }
   ];
 
   return (
     <div className="container mt-12">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4">
         {exploreCards.map((card) => (
           <ExplorationCard
             key={card.id}

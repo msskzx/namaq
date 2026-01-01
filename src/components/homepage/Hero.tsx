@@ -13,17 +13,13 @@ export default function Hero() {
           {language === 'ar' ? (
             <>
               <span className="text-indigo-300">استكشف</span> التاريخ الإسلامي{' '}<br></br>
-              <span className="text-blue-300">من خلال</span> الشخصيات{' '}<br></br>
-              <span>والأحداث</span>{' '}
-              <span className="text-amber-400">والمعارك</span>
+              من خلال <span className="text-amber-400">التفاعلي التعليم</span><br></br>
             </>
           ) : (
             <>
               <span className="text-indigo-300">Explore</span> Islamic History{' '}
               <br></br>
-              <span className="text-blue-300">Through</span> People, Events{' '}
-              <br></br>
-              &amp; <span className="text-amber-300">Battles</span>
+              Through <span className="text-amber-400">interactive learning</span>
             </>
           )}
         </h1>
