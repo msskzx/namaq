@@ -12,25 +12,21 @@ export default function Hero() {
         <h1 className="text-5xl text-center font-Cairo">
           {language === 'ar' ? (
             <>
-              <span className="text-indigo-300">تعلَّم</span> من خلال المقالات{' '}<br></br>
-              <span className="text-blue-300">التفاعلية</span> والاستكشافات{' '}<br></br>
-              <span>المعتمدة على</span>{' '}
-              <span className="text-amber-400">البيانات</span>
+              <span className="text-indigo-300">استكشف</span> التاريخ الإسلامي{' '}<br></br>
+              من خلال <span className="text-amber-400">التفاعلي التعليم</span><br></br>
             </>
           ) : (
             <>
-              <span className="text-indigo-300">Learn</span> Through{' '}
+              <span className="text-indigo-300">Explore</span> Islamic History{' '}
               <br></br>
-              <span className="text-blue-300">Interactive</span> Visual Articles{' '}
-              <br></br>
-              &amp; <span className="text-amber-300">Data-Driven</span> Explorations
+              Through <span className="text-amber-400">interactive learning</span>
             </>
           )}
         </h1>
         <p className="text-center text-gray-800 dark:text-gray-200 text-2xl mt-8">{t.intro}</p>
         <div className="text-center mt-8">
-          <Link href="/specials" className="inline-flex items-center px-6 py-3 bg-amber-400 text-gray-950 font-semibold rounded-lg hover:bg-amber-300 transition-colors duration-200 shadow-lg hover:shadow-xl text-sm md:text-base">
-            {t.specialArticles}
+          <Link href="/people" className="inline-flex items-center px-6 py-3 bg-amber-400 text-gray-950 font-semibold rounded-lg hover:bg-amber-300 transition-colors duration-200 shadow-lg hover:shadow-xl text-sm md:text-base">
+            {t.people}
           </Link>
         </div>
       </div>

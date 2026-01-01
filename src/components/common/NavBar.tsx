@@ -20,39 +20,17 @@ const getLinkItems = (href: string, language: 'en' | 'ar'): NavLink[] => {
       return [
         { href: '/graphs', label: translations[language].familyRelations },
         { href: '/graphs/ancestry', label: 'الانساب' },
-        { href: '/graphs/battles', label: 'شبكه الغزوات' },
       ];
     case '/people':
       return [
         { href: '/people', label: translations[language].people },
         { href: '/people/prophet-muhammad', label: translations[language].prophet },
-        { href: '/people?title=companion', label: translations[language].companions },
         { href: '/titles', label: translations[language].titles },
       ];
-    case '/history':
+    case '/events':
       return [
-        { href: '/history', label: translations[language].history },
         { href: '/events', label: translations[language].events },
         { href: '/battles', label: translations[language].battles.title },
-      ];
-    case '/specials':
-      return [
-        { href: '/specials', label: translations[language].specialArticles },
-        { href: '/articles', label: translations[language].articles },
-        { href: '/categories', label: translations[language].categories },
-      ];
-    case '/arabic':
-      return [
-        { href: '/arabic', label: translations[language].arabic },
-        { href: '/books', label: translations[language].books.title },
-        { href: '/quran', label: translations[language].quran },
-        { href: '/hadith', label: translations[language].hadith },
-        { href: '/poems', label: translations[language].poems },
-      ];
-    case '/charities':
-      return [
-        { href: '/charities', label: translations[language].allCharities },
-        { href: '/charitiesCategories', label: translations[language].charitiesCategories },
       ];
     default:
       return [];
@@ -103,34 +81,19 @@ export default function NavBar() {
   }
 
   const mainLinks = [
-    { href: '/graphs', label: translations[language].familyRelations },
     { href: '/people', label: translations[language].people },
-    { href: '/specials', label: translations[language].specialArticles },
-    { href: '/history', label: translations[language].history },
-    { href: '/arabic', label: 'العربيه و الكتب' },
-    { href: '/charities', label: translations[language].allCharities },
+    { href: '/graphs', label: translations[language].familyRelations },
+    { href: '/events', label: translations[language].events },
   ];
 
   const allLinks = [
-    { href: '/history', label: translations[language].history },
-    { href: '/specials', label: translations[language].specialArticles },
     { href: '/graphs', label: translations[language].familyRelations },
+    { href: '/graphs/ancestry', label: 'الانساب' },
     { href: '/people/prophet-muhammad', label: translations[language].prophet },
-    { href: '/people?title=companion', label: translations[language].companions },
     { href: '/people', label: translations[language].people },
     { href: '/events', label: translations[language].events },
     { href: '/battles', label: translations[language].battles.title },
-    { href: '/articles', label: translations[language].articles },
-    { href: '/categories', label: translations[language].categories },
-    { href: '/charities', label: translations[language].allCharities },
-    { href: '/charitiesCategories', label: translations[language].categories },
-    { href: '/arabic', label: translations[language].arabic },
-    { href: '/books', label: translations[language].books.title },
-    { href: '/quran', label: translations[language].quran },
-    { href: '/hadith', label: translations[language].hadith },
-    { href: '/poems', label: translations[language].poems },
   ];
-
 
   const sortedMainLinks = language === 'ar' ? [...mainLinks].reverse() : mainLinks;
 

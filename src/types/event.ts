@@ -1,7 +1,5 @@
 import { Event as PrismaEvent, EventType, Battle } from "@/generated/prisma";
 import { PersonBase } from "./person";
-import { ArticleBase } from "./article";
-import { CategoryBase } from "./category";
 
 export type EventBase = {
   id: string,
@@ -26,6 +24,4 @@ export type EventWithBattle = EventBase & {
 export type EventAll = PrismaEvent & {
   battle: Battle,
   people: PersonBase[],
-  articles: ArticleBase[],
-  categories: CategoryBase[],
 }

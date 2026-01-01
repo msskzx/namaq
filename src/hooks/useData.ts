@@ -21,16 +21,6 @@ export const useData = <T>(url: string | null) => {
   };
 };
 
-// Hook for fetching articles
-export const useArticles = () => {
-  return useData('/api/articles');
-};
-
-// Hook for fetching categories
-export const useCategories = () => {
-  return useData('/api/categories');
-};
-
 // Hook for fetching user preferences
 export const useUserPreferences = () => {
   return useData('/api/user/preferences');
