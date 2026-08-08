@@ -1,8 +1,6 @@
 "use client";
 
 import { useLanguage } from "@/components/language/LanguageContext";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import Exploration from "@/components/homepage/Exploration";
 import Hero from "@/components/homepage/Hero";
 
