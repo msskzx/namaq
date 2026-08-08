@@ -45,10 +45,11 @@ export async function GET(_request: Request) {
 
     // Determine which query to run based on available parameters
     if (queryParts.length === 0) {
-      // No specific queries, return all direct relationships
+      // Return every person, including people without any relationships.
       result = await session.run(
-        `MATCH path = (p1:Person)-[*1..1]->(p2:Person)
-         RETURN path`
+        `MATCH (node:Person)
+         OPTIONAL MATCH (node)-[relationship]->(related:Person)
+         RETURN node, relationship, related`
       );
     } else if (queryParts.length === 1) {
       // Only one query part, no need for UNION
@@ -64,6 +65,44 @@ export async function GET(_request: Request) {
     const linkKeys = new Set<string>();
 
     result.records.forEach(record => {
+      if (record.keys.includes('node')) {
+        const node = record.get('node');
+        const related = record.get('related');
+        const relationship = record.get('relationship');
+
+        if (node && !nodes.has(node.identity.toString())) {
+          nodes.set(node.identity.toString(), {
+            id: node.identity.toString(),
+            label: node.properties.name,
+            slug: node.properties.slug,
+            group: 1,
+          });
+        }
+
+        if (related && !nodes.has(related.identity.toString())) {
+          nodes.set(related.identity.toString(), {
+            id: related.identity.toString(),
+            label: related.properties.name,
+            slug: related.properties.slug,
+            group: 2,
+          });
+        }
+
+        if (node && related && relationship) {
+          const source = node.identity.toString();
+          const target = related.identity.toString();
+          const label = relationship.type;
+          const key = `${source}|${target}|${label}`;
+
+          if (!linkKeys.has(key)) {
+            links.push({ source, target, label, value: 1 });
+            linkKeys.add(key);
+          }
+        }
+
+        return;
+      }
+
       const path = record.get('path');
 
       // When using RETURN path, Neo4j returns a Path object with segments
