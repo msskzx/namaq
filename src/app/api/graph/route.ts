@@ -6,6 +6,7 @@ export async function GET(_request: Request) {
   const { searchParams } = new URL(_request.url);
   const persons = searchParams.getAll('person') as string[];
   const ancestorsOf = searchParams.getAll('ancestorsOf') as string[];
+  const focus = searchParams.get('focus');
 
   const session = getSession();
 
@@ -43,8 +44,18 @@ export async function GET(_request: Request) {
       params.ancestors = ancestorsOf;
     }
 
+    // A focused view is deliberately limited to one hop. The overview remains
+    // available without parameters, but this keeps future, larger graphs from
+    // requiring every node to be fetched for a person-level exploration.
+    if (focus && queryParts.length === 0) {
+      result = await session.run(
+        `MATCH (node:Person {slug: $focus})
+         OPTIONAL MATCH (node)-[relationship]-(related:Person)
+         RETURN node, relationship, related`,
+        { focus }
+      );
     // Determine which query to run based on available parameters
-    if (queryParts.length === 0) {
+    } else if (queryParts.length === 0) {
       // Return every person, including people without any relationships.
       result = await session.run(
         `MATCH (node:Person)
