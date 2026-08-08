@@ -1,36 +1,135 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Namaq
 
-## Getting Started
+Namaq is an Arabic-first historical learning application for Muslims and students of Islamic knowledge. Its purpose is to make the people, relationships, and major events of early Islamic history easier to understand by exploring them visually rather than only as isolated entries in a text.
 
-First, run the development server:
+The central experience is a relationship graph: learners can search for a person, see family and other recorded relationships, and move from a graph node to that person's profile. Person profiles connect the graph to a growing historical record through names, titles, a life timeline, events, battles, and Qur'an references.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+The project is intentionally refocusing on this learning loop:
+
+```text
+Find a person → explore their relationships → open their profile → place them in events and time
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## What is implemented
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Relationship graph
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `/graphs` displays the complete Neo4j people graph, including people with no recorded relationship.
+- Graph links have typed, directed relationship labels such as `FATHER`, `SON`, `WIFE`, and `PATERNAL_UNCLE`.
+- The graph search provides autocomplete, supports relation and ancestry modes, and keeps the selected view in the URL.
+- Selecting a node takes the learner to `/people/[slug]`.
+- Person pages embed a focused graph for that person: nearby relations (up to three hops) and their recorded paternal ancestry.
+- Graph seed data is deduplicated by person slug and by source/type/target relationship; the seeder uses Cypher `MERGE` so repeat runs do not add duplicate graph entities.
 
-## Learn More
+### People and timelines
 
-To learn more about Next.js, take a look at the following resources:
+- `/people` is a searchable, paginated directory with title filtering.
+- `/people/[slug]` shows available names, titles, appearance, virtues, Qur'an references, battle participations, events, and a chronological timeline.
+- Person records use stable slugs, making graph nodes, search results, and detail pages linkable.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Events and battles
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `/events` presents major events in chronological form; individual event pages show dates, location, description, and participating people.
+- `/battles` and battle detail pages are available for battle-specific context, participants, timelines, and map data where it has been recorded.
 
-## Deploy on Vercel
+### Application experience
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Arabic and English UI support, plus light and dark themes.
+- Client-side data fetching and pagination through SWR.
+- PostgreSQL/Prisma is used for people, events, battles, titles, and supporting content; Neo4j is used for relationship traversal and graph rendering.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Architecture
+
+| Area | Implementation | Responsibility |
+| --- | --- | --- |
+| Web application | Next.js App Router, React, TypeScript, Tailwind CSS | Pages, API routes, localisation, and interaction |
+| Relationship graph | Neo4j and `react-force-graph-2d` | Person nodes, typed relationships, graph queries, and visualisation |
+| Historical content | PostgreSQL and Prisma | Person profiles, titles, events, battles, Qur'an references, and timelines |
+| Search | Prisma API routes | Person-directory filters and graph-search autocomplete |
+
+The graph API is `GET /api/graph`. With no query parameters it returns all graph nodes and links. It also accepts `person` for a local relation view and `ancestorsOf` for paternal ancestry. Graph-search suggestions come from `GET /api/people/suggest`.
+
+## Local setup
+
+### Requirements
+
+- Node.js 20 or later
+- PostgreSQL
+- Neo4j
+
+### Environment
+
+Create a `.env` file in the project root:
+
+```bash
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/namaq"
+
+NEO4J_URI="neo4j+s://YOUR-INSTANCE.databases.neo4j.io"
+NEO4J_USERNAME="neo4j"
+NEO4J_PASSWORD="YOUR_PASSWORD"
+# Optional; defaults to neo4j
+NEO4J_DATABASE="neo4j"
+```
+
+### Install and run
+
+```bash
+npm install
+npm run db:generate
+npm run db:push
+
+# Seed PostgreSQL content in dependency order.
+npm run seed:titles
+npm run seed:people
+npm run seed:battles
+npm run seed:events
+
+# Seed the relationship graph.
+npm run seed:graph
+
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000). Use `npm run build` for a production build and `npx tsc --noEmit` for a TypeScript check.
+
+Graph seed files live in `neo4j/`; the main seed entry point is `neo4j/graphSeed.ts`. The generator documentation in [`neo4j/README.md`](neo4j/README.md) describes the optional LLM-assisted genealogy-data workflow.
+
+## Current scope and limitations
+
+This is an early learning product and its historical data is incomplete. The graph and profile information should therefore be treated as a navigational aid, not as a scholarly reference or a substitute for checking primary and established secondary sources.
+
+The code review identified the following practical limitations:
+
+- **Two sources of truth for people.** Neo4j stores graph people while PostgreSQL stores profiles and powers autocomplete. They share slugs but are seeded separately, so a graph node can exist without a corresponding profile or searchable record.
+- **Graph scale will need deliberate handling.** `/graphs` currently returns all nodes and links. This is appropriate for the present dataset, but a force-directed canvas and single large response will become slow and visually crowded as coverage grows.
+- **Relationship coverage and modelling are incomplete.** Current data emphasises genealogy and a selection of family relations. It does not yet express uncertainty, competing reports, date ranges, sources, or richer historical relationships.
+- **Search is functional but narrow.** Autocomplete searches PostgreSQL `name`, `fullName`, and `slug`; it does not yet search transliterated names or guarantee graph/profile coverage matches.
+- **Quality safeguards are light.** There is no automated test suite for seed integrity, graph-query behaviour, search ranking, API contracts, or key user journeys.
+- **Historical provenance is not yet visible.** The data model and UI do not attach citations, editions, narrators, or confidence notes to claims.
+
+## Future improvements
+
+The next work should protect and deepen the main graph-and-search experience before expanding into unrelated features.
+
+1. **Establish one canonical people pipeline.** Keep a single source record per person and generate/synchronise both PostgreSQL profiles and Neo4j nodes from it. Validate that every graph slug resolves to a person page and every searchable person has the intended graph presence.
+2. **Make graph data scholarly usable.** Add sources, citations, confidence/ambiguity notes, and editorial review status to people and relationships. Begin the richer biographies with clearly attributed material, including the planned use of *Siyar A'lam al-Nubala'*, while distinguishing quoted source text from editorial summaries.
+3. **Improve graph exploration.** Add relationship-type filters, a legend, selected-node details, “expand neighbours” controls, reset/shareable views, keyboard access, and mobile-friendly navigation. For growth, load subgraphs progressively instead of drawing the entire database at once.
+4. **Strengthen search and discovery.** Search Arabic names, full names, transliterations, aliases, and common spelling variants; rank exact matches first; show relationship context in results; and offer direct navigation to a person or a focused graph view.
+5. **Model historical time more faithfully.** Support approximate and contested dates, Hijri/Gregorian conversions with uncertainty, event ordering, and links from timeline entries back to their sources.
+6. **Add data and product quality checks.** Test duplicate prevention, broken slug links, invalid relationship types, empty source fields, graph API responses, search results, and the node-to-profile navigation journey. Add a CI build and test workflow before broadening the dataset.
+7. **Curate a small, excellent core dataset first.** Prioritise the Prophet Muhammad ﷺ, the Companions most relevant to the initial learning journeys, their well-sourced relationships, and a concise set of major events and battles. Expand breadth only after those paths are accurate and pleasant to explore.
+
+## Useful commands
+
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start the local Next.js development server |
+| `npm run build` | Create a production build |
+| `npm run db:generate` | Generate the Prisma client |
+| `npm run db:push` | Apply the Prisma schema to the configured database |
+| `npm run seed:people` | Upsert PostgreSQL person records |
+| `npm run seed:titles` | Seed titles used by people |
+| `npm run seed:battles` | Seed battle records |
+| `npm run seed:events` | Seed events and connect related records |
+| `npm run seed:graph` | Seed or update the Neo4j relationship graph |
+| `npm run gen:cypher` | Generate candidate graph seed data from raw genealogy text |
