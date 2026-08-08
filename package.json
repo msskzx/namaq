@@ -17,15 +17,11 @@
     "seed:titles": "tsx prisma/titleSeed.ts",
     "seed:battles": "tsx prisma/battleSeed.ts",
     "seed:categories": "tsx prisma/categorySeed.ts",
-    "seed:articles": "tsx prisma/articleSeed.ts",
     "seed:events": "tsx prisma/eventSeed.ts",
     "seed:graph": "tsx neo4j/graphSeed.ts",
     "seed:surahs": "tsx prisma/surahSeed.ts",
     "seed:ayat": "tsx prisma/ayahSeed.ts",
-    "seed:books": "tsx prisma/bookSeed.ts",
-    "seed:charities": "tsx prisma/charitySeed.ts",
-    "gen:cypher": "tsx neo4j/genCypherFromRaw.ts",
-    "gen:cypher:example": "tsx neo4j/example.ts"
+    "gen:cypher": "tsx neo4j/genCypherFromRaw.ts"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",

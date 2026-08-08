@@ -1,16 +1,29 @@
-// import { peopleQueries, peopleRelationsQueries } from './graphSeedData2';
+import { peopleQueries, peopleRelationsQueries } from './graphSeedData';
 import { executeTransaction } from '@/lib/neo4j';
+
+const personMergeQuery = (query: string) => {
+  const properties = query.match(/CREATE \(:Person (\{.*\})\);$/)?.[1];
+  const slug = properties?.match(/slug: "([^"]+)"/)?.[1];
+
+  if (!properties || !slug) {
+    throw new Error(`Invalid person seed query: ${query}`);
+  }
+
+  return `MERGE (person:Person {slug: "${slug}"}) SET person += ${properties};`;
+};
+
+const relationMergeQuery = (query: string) => query.replace(' CREATE ', ' MERGE ');
 
 async function main() {
   try {
-    // delete
-    // await executeCypher("MATCH (n) DETACH DELETE n", 'Delete graph');
-    // await executeTransaction(peopleQueries, 'Seed graph');
-    const peopleRelationsQueries = [
-      'MATCH (from:Person {slug: "ali-ibn-abi-talib"}), (to:Person {slug: "abu-talib"}) CREATE (from)-[:SON]->(to);',
-      'MATCH (from:Person {slug: "abu-talib"}), (to:Person {slug: "ali-ibn-abi-talib"}) CREATE (from)-[:FATHER]->(to);',
-    ];
-    await executeTransaction(peopleRelationsQueries, 'Seed graph relations');
+    await executeTransaction(
+      peopleQueries.map(personMergeQuery),
+      'Seed graph',
+    );
+    await executeTransaction(
+      peopleRelationsQueries.map(relationMergeQuery),
+      'Seed graph relations',
+    );
     console.log('🎉 Graph database seeded successfully!');
   } catch (error) {
     console.error('❌ Error seeding graph database:', error);

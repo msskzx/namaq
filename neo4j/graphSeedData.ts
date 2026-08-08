@@ -1,11 +1,16 @@
+import {
+  peopleQueries as ancestryPeopleQueries,
+  peopleRelationsQueries as ancestryPeopleRelationsQueries,
+} from './graphSeedData2';
+
 /**
  * An array of Cypher queries to create all Person nodes.
  * Each item in the array is a single CREATE query.
  */
-export const peopleQueries = [
+const corePeopleQueries = [
     'CREATE (:Person { name: "محمد ﷺ", slug: "prophet-muhammad", nameTransliterated: "Muhammad (Peace be upon him)" });',
     'CREATE (:Person { name: "أبو بكر الصديق", slug: "abu-bakr-as-siddiq", nameTransliterated: "Abu Bakr al-Siddiq" });',
-    'CREATE (:Person { name: "عمر بن الخطاب", slug: "umar-ibn-al-khattab", nameTransliterated: "Umar ibn al-Khattab" });',
+    'CREATE (:Person { name: "عمر بن الخطاب", slug: "umar-ibn-al-khattab", nameTransliterated: "Umar ibn al-Khattab", fullName: "عمر بن الخطاب بن نفيل بن عبد العزى بن رياح بن قرط بن رزاح بن عدي بن كعب بن لؤي القرشي العدوي" });',
     'CREATE (:Person { name: "عثمان بن عفان", slug: "uthman-ibn-affan", nameTransliterated: "Uthman ibn Affan" });',
     'CREATE (:Person { name: "علي بن أبي طالب", slug: "ali-ibn-abi-talib", nameTransliterated: "Ali ibn Abi Talib" });',
     'CREATE (:Person { name: "الزبير بن العوام", slug: "az-zubayr-ibn-al-awwam", nameTransliterated: "Az-Zubayr ibn al-Awwam" });',
@@ -46,7 +51,7 @@ export const peopleQueries = [
  * An array of Cypher queries to create all relationships between Person nodes.
  * Each item in the array is a single MATCH...CREATE query.
  */
-export const peopleRelationsQueries = [
+const corePeopleRelationsQueries = [
     'MATCH (from:Person {slug: "saad-ibn-abi-waqqas"}), (to:Person {slug: "prophet-muhammad"}) CREATE (from)-[:MATERNAL_UNCLE]->(to);',
     'MATCH (from:Person {slug: "prophet-muhammad"}), (to:Person {slug: "saad-ibn-abi-waqqas"}) CREATE (from)-[:MATERNAL_NEPHEW]->(to);',
     'MATCH (from:Person {slug: "abu-bakr-as-siddiq"}), (to:Person {slug: "prophet-muhammad"}) CREATE (from)-[:FATHER_IN_LAW]->(to);',
@@ -96,3 +101,37 @@ export const peopleRelationsQueries = [
     'MATCH (from:Person {slug: "aisha-bint-abi-bakr"}), (to:Person {slug: "abu-bakr-as-siddiq"}) CREATE (from)-[:DAUGHTER]->(to);',
     'MATCH (from:Person {slug: "hafsa-bint-umar"}), (to:Person {slug: "umar-ibn-al-khattab"}) CREATE (from)-[:DAUGHTER]->(to);',
 ];
+
+const uniqueBy = <T>(items: T[], getKey: (item: T) => string) => {
+  const seen = new Set<string>();
+
+  return items.filter((item) => {
+    const key = getKey(item);
+    if (seen.has(key)) return false;
+
+    seen.add(key);
+    return true;
+  });
+};
+
+const nodeKey = (query: string) => query.match(/slug: "([^"]+)"/)?.[1] ?? query;
+const relationKey = (query: string) => {
+  const slugs = [...query.matchAll(/slug: "([^"]+)"/g)].map((match) => match[1]);
+  const type = query.match(/\[:([^\]]+)\]/)?.[1];
+
+  return `${slugs[0]}:${type}:${slugs[1]}`;
+};
+
+/**
+ * The complete graph seed data. Nodes are identified by slug and relationships
+ * by their source, type, and target, so adding datasets cannot create duplicates.
+ */
+export const peopleQueries = uniqueBy(
+  [...corePeopleQueries, ...ancestryPeopleQueries],
+  nodeKey,
+);
+
+export const peopleRelationsQueries = uniqueBy(
+  [...corePeopleRelationsQueries, ...ancestryPeopleRelationsQueries],
+  relationKey,
+);
