@@ -79,9 +79,22 @@ export default function GraphSearch() {
     };
   }, [inputValue, debouncedFetch]);
 
-  // Initialize from URL on component mount
+  // Latest local state, readable without making the URL-sync effect below
+  // re-run every time local state (rather than the URL) changes.
+  const selectedPeopleRef = useRef(selectedPeople);
+  selectedPeopleRef.current = selectedPeople;
+  const modeRef = useRef(mode);
+  modeRef.current = mode;
+
+  // Sync from URL whenever the URL itself changes. Must not depend on
+  // selectedPeople/mode: those are also written *to* the URL by the effect
+  // below, and depending on them here caused the two effects to fight over
+  // stale reads of each other's output, flapping the `person` param.
   React.useEffect(() => {
     if (!searchParams) return;
+
+    const selectedPeople = selectedPeopleRef.current;
+    const mode = modeRef.current;
 
     const existingPerson = searchParams.get('person');
     const existingAncestorsList = searchParams.getAll('ancestorsOf');
@@ -129,7 +142,7 @@ export default function GraphSearch() {
       // Clear selection if no params
       setSelectedPeople([]);
     }
-  }, [searchParams, mode, selectedPeople]);
+  }, [searchParams]);
 
   const handleSelectSuggestion = (suggestion: Suggestion) => {
     // Add to selected people if not already selected
