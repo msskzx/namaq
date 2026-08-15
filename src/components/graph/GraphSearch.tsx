@@ -13,6 +13,8 @@ interface Suggestion {
   slug: string;
   name: string;
   fullName: string | null;
+  nameTransliterated: string | null;
+  match: 'exact' | 'prefix' | 'contains';
 }
 
 type SearchMode = 'person' | 'ancestorsOf';
@@ -51,7 +53,7 @@ export default function GraphSearch() {
 
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/people/suggest?q=${query}`);
+      const response = await fetch(`/api/people/suggest?q=${encodeURIComponent(query)}`);
       if (response.ok) {
         const data = await response.json();
         setSuggestions(data.data || []);
@@ -144,6 +146,11 @@ export default function GraphSearch() {
     setSelectedPeople(prev => prev.filter(p => p.id !== id));
   };
 
+  const openProfile = (suggestion: Suggestion) => {
+    setShowSuggestions(false);
+    router.push(`/people/${suggestion.slug}`);
+  };
+
   // Update URL when selectedPeople or mode changes
   useEffect(() => {
     if (!searchParams) return;
@@ -177,9 +184,7 @@ export default function GraphSearch() {
     if (!inputValue.trim()) return;
 
     // If there's a matching suggestion, use it
-    const exactMatch = suggestions.find(
-      s => s.name.toLowerCase() === inputValue.trim().toLowerCase()
-    );
+    const exactMatch = suggestions.find(s => s.match === 'exact');
 
     if (exactMatch) {
       handleSelectSuggestion(exactMatch);
@@ -285,25 +290,42 @@ export default function GraphSearch() {
               {suggestions
                 .filter(suggestion => !selectedPeople.some(p => p.id === suggestion.id))
                 .map((suggestion) => (
-                  <li
-                    key={suggestion.id}
-                    className="px-4 py-2 hover:bg-amber-50 dark:hover:bg-gray-800 cursor-pointer text-gray-800 dark:text-gray-100"
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                      handleSelectSuggestion(suggestion);
-                    }}
-                  >
-                    <div className="font-medium">{suggestion.name}</div>
-                    {suggestion.fullName && (
-                      <div className="text-sm text-gray-500 dark:text-gray-300 truncate">
-                        {suggestion.fullName}
-                      </div>
-                    )}
-                    {suggestion.slug && (
-                      <div className="text-sm text-gray-500 dark:text-gray-400 truncate">
-                        {suggestion.slug}
-                      </div>
-                    )}
+                  <li key={suggestion.id} className="px-4 py-2 text-gray-800 dark:text-gray-100">
+                    <div className="flex items-start justify-between gap-3">
+                      <button
+                        type="button"
+                        className="min-w-0 flex-1 text-left hover:text-amber-700 dark:hover:text-amber-300"
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          handleSelectSuggestion(suggestion);
+                        }}
+                      >
+                        <div className="font-medium">{suggestion.name}</div>
+                        {suggestion.nameTransliterated && (
+                          <div className="text-sm text-gray-500 dark:text-gray-300 truncate">
+                            {suggestion.nameTransliterated}
+                          </div>
+                        )}
+                        {suggestion.fullName && (
+                          <div className="text-sm text-gray-500 dark:text-gray-300 truncate">
+                            {suggestion.fullName}
+                          </div>
+                        )}
+                      </button>
+                      <button
+                        type="button"
+                        className="shrink-0 rounded border border-amber-400 px-2 py-1 text-xs text-amber-700 hover:bg-amber-50 dark:text-amber-300 dark:hover:bg-gray-800"
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          openProfile(suggestion);
+                        }}
+                      >
+                        {language === 'ar' ? 'الصفحة الشخصية' : 'Profile'}
+                      </button>
+                    </div>
+                    <div className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                      {language === 'ar' ? 'اختر لعرض الرسم البياني' : 'Select to focus the graph'}
+                    </div>
                   </li>
                 ))}
             </ul>
