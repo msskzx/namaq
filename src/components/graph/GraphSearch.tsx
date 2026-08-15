@@ -93,7 +93,8 @@ export default function GraphSearch() {
       (existingAncestorsList.length > 0 && (
         selectedPeople.length !== existingAncestorsList.length ||
         !selectedPeople.every((p, i) => p.slug === existingAncestorsList[i])
-      ));
+      )) ||
+      (!existingPerson && existingAncestorsList.length === 0 && selectedPeople.length > 0);
 
     if (!shouldUpdate) return;
 
@@ -155,7 +156,11 @@ export default function GraphSearch() {
   useEffect(() => {
     if (!searchParams) return;
 
-    const params = new URLSearchParams();
+    // Keep graph-view state (selected person, relationship filters, focused
+    // neighbourhood) intact when the relation search changes.
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('person');
+    params.delete('ancestorsOf');
 
     if (mode === 'person' && selectedPeople.length > 0) {
       const lastPerson = selectedPeople[selectedPeople.length - 1];
