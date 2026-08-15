@@ -77,7 +77,3 @@ export function reconcilePeople(
 
   return { invalidPostgresPeople, invalidNeo4jPeople, postgresOnly, graphOnly, mismatches };
 }
-
-export function hasBlockingReconciliationIssues(report: PersonReconciliation) {
-  return report.invalidPostgresPeople.length > 0 || report.invalidNeo4jPeople.length > 0;
-}

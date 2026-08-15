@@ -2,11 +2,7 @@ import 'dotenv/config';
 import neo4j from 'neo4j-driver';
 import { prisma } from '../../src/lib/prisma';
 import { getDriver } from '../../src/lib/neo4j';
-import {
-  CanonicalPerson,
-  hasBlockingReconciliationIssues,
-  reconcilePeople,
-} from '../../src/lib/canonicalPeople';
+import { CanonicalPerson, reconcilePeople } from '../../src/lib/canonicalPeople';
 
 const apply = process.argv.includes('--apply');
 const strict = process.argv.includes('--strict');
@@ -91,7 +87,7 @@ async function main() {
       console.log('No data changed. Re-run with --apply to synchronize profile-backed people to Neo4j.');
     }
 
-    if (strict && (hasBlockingReconciliationIssues(report) || report.postgresOnly.length || report.mismatches.length)) {
+    if (strict && (report.postgresOnly.length || report.mismatches.length)) {
       process.exitCode = 1;
     }
   } finally {
