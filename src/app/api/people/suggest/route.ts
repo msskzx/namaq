@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { Prisma } from '@/generated/prisma';
 import { prisma } from '@/lib/prisma';
+import { filterAndRankPeople } from '@/lib/personSearch';
 
 export async function GET(request: Request) {
   try {
@@ -15,22 +15,17 @@ export async function GET(request: Request) {
       return NextResponse.json({ data: [] });
     }
 
-    const where: Prisma.PersonWhereInput = {
-      OR: [
-        { name: { contains: q, mode: 'insensitive' } },
-        { fullName: { contains: q, mode: 'insensitive' } },
-        { slug: { contains: q, mode: 'insensitive' } },
-      ],
-    };
-
+    // The directory lives in PostgreSQL. Do not fall back to Neo4j here: a
+    // graph node is not currently guaranteed to have a matching profile.
     const people = await prisma.person.findMany({
-      where,
-      orderBy: [{ name: 'asc' }],
-      take: limit,
-      select: { id: true, slug: true, name: true, fullName: true },
+      select: { id: true, slug: true, name: true, fullName: true, nameTransliterated: true },
     });
 
-    return NextResponse.json({ data: people });
+    const data = filterAndRankPeople(people, q)
+      .slice(0, limit)
+      .map(({ person, match }) => ({ ...person, match }));
+
+    return NextResponse.json({ data });
   } catch (error) {
     console.error('Error fetching people suggestions:', error);
     return NextResponse.json(

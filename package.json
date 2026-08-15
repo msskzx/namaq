@@ -8,6 +8,8 @@
     "postinstall": "prisma generate",
     "start": "next start",
     "lint": "next lint",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
@@ -19,6 +21,8 @@
     "seed:categories": "tsx prisma/categorySeed.ts",
     "seed:events": "tsx prisma/eventSeed.ts",
     "seed:graph": "tsx neo4j/graphSeed.ts",
+    "people:sync": "tsx scripts/people/syncCanonicalPeople.ts",
+    "people:validate": "tsx scripts/people/syncCanonicalPeople.ts --strict",
     "seed:surahs": "tsx prisma/surahSeed.ts",
     "seed:ayat": "tsx prisma/ayahSeed.ts",
     "gen:cypher": "tsx neo4j/genCypherFromRaw.ts"
@@ -58,6 +62,7 @@
     "eslint-config-next": "15.3.5",
     "tailwindcss": "^4",
     "tsx": "^4.20.3",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.10"
   }
 }

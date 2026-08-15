@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { Prisma } from '@/generated/prisma';
 import { prisma } from '@/lib/prisma';
+import { filterAndRankPeople } from '@/lib/personSearch';
 
 const DEFAULT_PAGE_SIZE = 12;
 
@@ -27,28 +28,39 @@ export async function GET(request: Request) {
       where.titles = { some: { slug: title } };
     }
 
-    if (search) {
-      where.OR = [
-        { name: { contains: search, mode: 'insensitive' } },
-        { fullName: { contains: search, mode: 'insensitive' } },
-      ];
+    if (!search) {
+      const total = await prisma.person.count({ where });
+      const totalPages = Math.ceil(total / limit);
+      const people = await prisma.person.findMany({
+        where,
+        include: { titles: true },
+        orderBy: { name: 'asc' },
+        take: limit,
+        skip,
+      });
+
+      return NextResponse.json({
+        data: people,
+        pagination: {
+          page,
+          limit,
+          total,
+          totalPages,
+          hasNextPage: page < totalPages,
+          hasPreviousPage: page > 1,
+        },
+      });
     }
 
-    // Get total count for pagination
-    const total = await prisma.person.count({ where });
+    // Keep this search in PostgreSQL instead of joining Neo4j. The stores are
+    // intentionally independent until the canonical-data pipeline is in place.
+    const people = await prisma.person.findMany({ where, include: { titles: true } });
+    const results = filterAndRankPeople(people, search).map(({ person }) => person);
+    const total = results.length;
     const totalPages = Math.ceil(total / limit);
 
-    // Get paginated results
-    const people = await prisma.person.findMany({
-      where,
-      include: { titles: true },
-      orderBy: { name: 'asc' },
-      take: limit,
-      skip,
-    });
-
     return NextResponse.json({
-      data: people,
+      data: results.slice(skip, skip + limit),
       pagination: {
         page,
         limit,
