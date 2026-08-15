@@ -245,8 +245,8 @@ model RelationshipClaim {
 
   source HistoricalSource @relation(fields: [sourceId], references: [id], onDelete: Restrict)
 
-  @@unique([sourcePersonSlug, targetPersonSlug, relationshipType, sourceId])
-  @@index([sourcePersonSlug, targetPersonSlug, relationshipType, reviewStatus])
+  @@unique([sourcePersonSlug, targetPersonSlug, relationshipType, sourceId], map: "relationship_claims_source_target_type_source_key")
+  @@index([sourcePersonSlug, targetPersonSlug, relationshipType, reviewStatus], map: "relationship_claims_source_target_type_review_idx")
   @@map("relationship_claims")
 }
 
