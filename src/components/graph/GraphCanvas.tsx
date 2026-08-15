@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, RefObject } from 'react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import ForceGraph2D, { ForceGraphMethods, NodeObject, LinkObject } from 'react-force-graph-2d';
 import { GraphData, GraphNodeFull, GraphLink } from '@/types/graph';
 import useSWR from 'swr';
@@ -22,6 +22,7 @@ const relationName = (value: string) => value.toLowerCase().replaceAll('_', ' ')
 export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-muhammad', showSearch = true }: GraphCanvasProps) {
   const { language } = useLanguage();
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const selectedSlug = searchParams?.get('selected') ?? null;
   const focusSlug = searchParams?.get('focus') ?? null;
@@ -70,12 +71,13 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       if (Array.isArray(value)) value.forEach(item => params.append(key, item));
       else if (value) params.set(key, value);
     });
-    router.replace(`/graphs${params.size ? `?${params.toString()}` : ''}`, { scroll: false });
-  }, [router, searchParams]);
+    router.replace(`${pathname}${params.size ? `?${params.toString()}` : ''}`, { scroll: false });
+  }, [router, pathname, searchParams]);
 
   const toggleRelation = (relation: string) => {
     const next = new Set(activeRelations);
-    next.has(relation) ? next.delete(relation) : next.add(relation);
+    if (next.has(relation)) next.delete(relation);
+    else next.add(relation);
     updateParams({ relation: [...next] });
   };
 
