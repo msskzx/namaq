@@ -10,17 +10,24 @@ import { fetcher } from '@/lib/swr';
 import GraphSearch from './GraphSearch';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import { useLanguage } from '@/components/language/LanguageContext';
+import translations from '@/components/language/translations';
+import { relationColor, sortRelationTypes } from '@/lib/relations';
 
 interface GraphCanvasProps {
   url?: string;
   targetSlug?: string;
   showSearch?: boolean;
+  // Params to seed into this page's URL on first load if not already
+  // present, e.g. { person: slug } so the profile page's graph carries its
+  // person in the address bar instead of only in the internal fetch URL.
+  initialParams?: Record<string, string | string[]>;
 }
 
 const relationName = (value: string) => value.toLowerCase().replaceAll('_', ' ');
 
-export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-muhammad', showSearch = true }: GraphCanvasProps) {
+export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-muhammad', showSearch = true, initialParams }: GraphCanvasProps) {
   const { language } = useLanguage();
+  const t = translations[language];
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -45,7 +52,8 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   const { data: graphData, error: graphError, isLoading: graphLoading } = useSWR<GraphData>(fetchUrl, fetcher);
   const fgRef = useRef<ForceGraphMethods<NodeObject<GraphNodeFull>, LinkObject<GraphNodeFull, GraphLink>>>(null) as RefObject<ForceGraphMethods<NodeObject<GraphNodeFull>, LinkObject<GraphNodeFull, GraphLink>>>;
   const selectedNode = graphData?.nodes.find(node => node.slug === selectedSlug);
-  const relationTypes = useMemo(() => [...new Set(graphData?.links.map(link => link.label) ?? [])].sort(), [graphData]);
+  const relationTypes = useMemo(() => sortRelationTypes([...new Set(graphData?.links.map(link => link.label) ?? [])]), [graphData]);
+  const relationLabel = useCallback((type: string) => (t.relationTypes as Record<string, string>)[type] ?? relationName(type), [t]);
   const visibleGraph = useMemo(() => {
     if (!graphData || activeRelations.size === 0) return graphData;
     const nodesById = new Map(graphData.nodes.map(node => [node.id, node]));
@@ -83,6 +91,18 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     router.replace(`${pathname}${params.size ? `?${params.toString()}` : ''}`, { scroll: false });
   }, [router, pathname, searchParams]);
 
+  const seededRef = useRef(false);
+  useEffect(() => {
+    if (seededRef.current || !initialParams || !searchParams) return;
+    const missing = Object.entries(initialParams).filter(([key]) => !searchParams.has(key));
+    if (missing.length === 0) return;
+    seededRef.current = true;
+    updateParams(Object.fromEntries(missing));
+    // Only seed once on mount; initialParams/updateParams identity isn't
+    // meant to re-trigger this.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+
   const toggleRelation = (relation: string) => {
     const next = new Set(activeRelations);
     if (next.has(relation)) next.delete(relation);
@@ -114,8 +134,25 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       {relationTypes.length > 0 && (
         <fieldset className="mb-4 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
           <legend className="px-1 text-sm font-medium text-gray-800 dark:text-gray-100">Relationship types</legend>
-          <div className="flex flex-wrap gap-x-4 gap-y-2">
-            {relationTypes.map(type => <label key={type} className="flex cursor-pointer items-center gap-2 text-sm text-gray-700 dark:text-gray-200"><input type="checkbox" checked={activeRelations.size === 0 || activeRelations.has(type)} onChange={() => toggleRelation(type)} aria-label={`Show ${relationName(type)} relationships`} />{relationName(type)}</label>)}
+          <div className="flex flex-wrap gap-2">
+            {relationTypes.map(type => {
+              const active = activeRelations.size === 0 || activeRelations.has(type);
+              const color = relationColor(type);
+              return (
+                <button
+                  key={type}
+                  type="button"
+                  onClick={() => toggleRelation(type)}
+                  aria-pressed={active}
+                  aria-label={`${active ? 'Hide' : 'Show'} ${relationLabel(type)} relationships`}
+                  className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition-opacity ${active ? '' : 'opacity-50 hover:opacity-80'}`}
+                  style={{ borderColor: color, backgroundColor: active ? `${color}26` : 'transparent', color }}
+                >
+                  <span className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: color }} />
+                  {relationLabel(type)}
+                </button>
+              );
+            })}
           </div>
           <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">Select one or more types to filter links. Clear all selections to show every relationship.</p>
         </fieldset>
@@ -134,7 +171,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_14rem]">
         <div className="h-[65vh] min-h-[32rem] overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700" role="region" aria-label="Interactive relationship graph">
-          {visibleGraph && <ForceGraph2D ref={fgRef} graphData={visibleGraph} nodeLabel="label" nodeAutoColorBy="group" linkLabel="label" backgroundColor={getGraphTheme().background} linkColor={() => getGraphTheme().link} linkWidth={1.5} linkDirectionalArrowLength={3.5} linkDirectionalArrowRelPos={0.9} onNodeClick={(node) => updateParams({ selected: (node as GraphNodeFull).slug })} nodeCanvasObject={(node, ctx, globalScale) => {
+          {visibleGraph && <ForceGraph2D ref={fgRef} graphData={visibleGraph} nodeLabel="label" nodeAutoColorBy="group" linkLabel={(link) => relationLabel((link as unknown as GraphLink).label)} backgroundColor={getGraphTheme().background} linkColor={(link) => relationColor((link as unknown as GraphLink).label)} linkWidth={1.5} linkDirectionalArrowLength={3.5} linkDirectionalArrowRelPos={0.9} onNodeClick={(node) => updateParams({ selected: (node as GraphNodeFull).slug })} nodeCanvasObject={(node, ctx, globalScale) => {
             const label = (node as GraphNodeFull).label; const fontSize = 12 / globalScale; ctx.font = `${fontSize}px Sans-Serif`; const textWidth = ctx.measureText(label).width; const dimensions = [textWidth, fontSize].map(value => value + fontSize) as [number, number]; const theme = getGraphTheme();
             ctx.fillStyle = (node as GraphNodeFull).slug === selectedSlug ? '#fbbf24' : theme.node.background; ctx.beginPath(); ctx.arc(node.x!, node.y!, Math.max(...dimensions) / 2, 0, 2 * Math.PI); ctx.fill(); ctx.closePath(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = theme.node.text; ctx.fillText(label, node.x!, node.y!); (node as GraphNodeFull).__bckgDimensions = dimensions;
           }} nodePointerAreaPaint={(node, color, ctx) => { const d = (node as GraphNodeFull).__bckgDimensions; if (d) { ctx.fillStyle = color; ctx.fillRect(node.x! - d[0] / 2, node.y! - d[1] / 2, d[0], d[1]); } }} />}
