@@ -5,14 +5,15 @@ import translations from '@/components/language/translations';
 // in translations.ts rather than duplicated here.
 export const RELATION_ORDER = Object.keys(translations.en.relationTypes);
 
-// Relation types are colored by family "category" rather than individually,
-// so e.g. FATHER and MOTHER share a color, all sibling variants share
-// another, etc. Direction (parent vs child, aunt/uncle vs niece/nephew)
-// still gets its own color since that's visually meaningful in the graph.
+// Relation types are grouped into a family "category" for both color and
+// filtering, so e.g. FATHER and MOTHER are one "parent" toggle/color, all
+// sibling variants are one "sibling" toggle/color, etc. Direction (parent vs
+// child, aunt/uncle vs niece/nephew) still gets its own category since
+// that's visually/semantically meaningful in the graph.
 const CATEGORY_BY_TYPE: Record<string, string> = {
   FATHER: 'parent', MOTHER: 'parent', STEP_FATHER: 'parent', STEP_MOTHER: 'parent',
   SON: 'child', DAUGHTER: 'child', STEP_SON: 'child', STEP_DAUGHTER: 'child',
-  SIBLING: 'sibling', HALF_BROTHER: 'sibling', HALF_SISTER: 'sibling', STEP_BROTHER: 'sibling', STEP_SISTER: 'sibling',
+  BROTHER: 'sibling', SISTER: 'sibling', HALF_BROTHER: 'sibling', HALF_SISTER: 'sibling', STEP_BROTHER: 'sibling', STEP_SISTER: 'sibling',
   HUSBAND: 'spouse', WIFE: 'spouse',
   GRANDFATHER: 'grandparent', GRANDMOTHER: 'grandparent',
   GRANDSON: 'grandchild', GRANDDAUGHTER: 'grandchild',
@@ -41,6 +42,14 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 const FALLBACK_PALETTE = Object.values(CATEGORY_COLORS);
 
+// Category display order, derived from each category's first appearance in
+// RELATION_ORDER so it stays in sync with translations.ts automatically.
+export const CATEGORY_ORDER = RELATION_ORDER.reduce<string[]>((order, type) => {
+  const category = CATEGORY_BY_TYPE[type];
+  if (category && !order.includes(category)) order.push(category);
+  return order;
+}, []);
+
 function hashString(value: string): number {
   let hash = 0;
   for (let i = 0; i < value.length; i++) hash = (hash * 31 + value.charCodeAt(i)) >>> 0;
@@ -48,8 +57,13 @@ function hashString(value: string): number {
 }
 
 // Types not in CATEGORY_BY_TYPE (e.g. a new relation type added to the graph
-// data before this map is updated) still get a stable, distinguishable
-// color via a hash, just not grouped with anything.
+// data before this map is updated) become their own single-type category, so
+// they still get a stable, distinguishable color/toggle, just not grouped
+// with anything.
+export function relationCategoryKey(type: string): string {
+  return CATEGORY_BY_TYPE[type] ?? type;
+}
+
 export function relationColor(type: string): string {
   const category = CATEGORY_BY_TYPE[type];
   if (category) return CATEGORY_COLORS[category];
@@ -63,6 +77,19 @@ export function sortRelationTypes(types: string[]): string[] {
   return [...types].sort((a, b) => {
     const ai = RELATION_ORDER.indexOf(a);
     const bi = RELATION_ORDER.indexOf(b);
+    if (ai === -1 && bi === -1) return a.localeCompare(b);
+    if (ai === -1) return 1;
+    if (bi === -1) return -1;
+    return ai - bi;
+  });
+}
+
+// Sorts category keys by CATEGORY_ORDER; single-type fallback categories
+// (see relationCategoryKey) sort alphabetically after all known ones.
+export function sortRelationCategories(categories: string[]): string[] {
+  return [...categories].sort((a, b) => {
+    const ai = CATEGORY_ORDER.indexOf(a);
+    const bi = CATEGORY_ORDER.indexOf(b);
     if (ai === -1 && bi === -1) return a.localeCompare(b);
     if (ai === -1) return 1;
     if (bi === -1) return -1;
