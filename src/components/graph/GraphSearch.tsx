@@ -86,12 +86,26 @@ export default function GraphSearch() {
   const modeRef = useRef(mode);
   modeRef.current = mode;
 
+  // True while the effect below is resolving a person/ancestorsOf slug from
+  // the URL into a Suggestion via an async lookup. The write-back effect
+  // must not treat "selectedPeople is still empty" as "user cleared the
+  // selection" during this window, or it strips the param the lookup is
+  // trying to resolve before the lookup ever gets a chance to finish.
+  const isHydratingRef = useRef(false);
+
   // Sync from URL whenever the URL itself changes. Must not depend on
   // selectedPeople/mode: those are also written *to* the URL by the effect
   // below, and depending on them here caused the two effects to fight over
   // stale reads of each other's output, flapping the `person` param.
   React.useEffect(() => {
     if (!searchParams) return;
+
+    // Dev-only React Strict Mode double-mounts this effect: a phantom
+    // instance kicks off its own person/ancestor lookup fetch, then the
+    // cleanup below marks it stale before its promise resolves. Without this
+    // guard, that phantom fetch would still land on the real instance's
+    // setSelectedPeople and immediately clear the just-resolved person.
+    let ignore = false;
 
     const selectedPeople = selectedPeopleRef.current;
     const mode = modeRef.current;
@@ -116,9 +130,12 @@ export default function GraphSearch() {
     if (existingPerson) {
       // Only fetch if we don't already have this person selected
       if (selectedPeople[0]?.slug !== existingPerson) {
+        isHydratingRef.current = true;
         fetch(`/api/people/suggest?q=${encodeURIComponent(existingPerson)}`)
           .then(res => res.json())
           .then(data => {
+            if (ignore) return;
+            isHydratingRef.current = false;
             if (data.data?.[0]?.slug === existingPerson) {
               setSelectedPeople([data.data[0]]);
             }
@@ -128,6 +145,7 @@ export default function GraphSearch() {
       // Only fetch if the lists are different
       if (selectedPeople.length !== existingAncestorsList.length ||
         !selectedPeople.every((p, i) => p.slug === existingAncestorsList[i])) {
+        isHydratingRef.current = true;
         Promise.all(
           existingAncestorsList.map(slug =>
             fetch(`/api/people/suggest?q=${encodeURIComponent(slug)}`)
@@ -135,6 +153,8 @@ export default function GraphSearch() {
               .then(data => data.data?.find((p: Suggestion) => p.slug === slug))
           )
         ).then(people => {
+          if (ignore) return;
+          isHydratingRef.current = false;
           setSelectedPeople(people.filter(Boolean));
         });
       }
@@ -142,6 +162,11 @@ export default function GraphSearch() {
       // Clear selection if no params
       setSelectedPeople([]);
     }
+
+    return () => {
+      ignore = true;
+      isHydratingRef.current = false;
+    };
   }, [searchParams]);
 
   const handleSelectSuggestion = (suggestion: Suggestion) => {
@@ -168,6 +193,9 @@ export default function GraphSearch() {
   // Update URL when selectedPeople or mode changes
   useEffect(() => {
     if (!searchParams) return;
+    // A URL-driven lookup is still resolving; don't strip its param out from
+    // under it just because selectedPeople hasn't caught up yet.
+    if (isHydratingRef.current) return;
 
     // Keep graph-view state (selected person, relationship filters, focused
     // neighbourhood) intact when the relation search changes.
