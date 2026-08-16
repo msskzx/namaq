@@ -94,6 +94,12 @@ Open [http://localhost:3000](http://localhost:3000). Use `npm run build` for a p
 
 Graph seed files live in `neo4j/`; the main seed entry point is `neo4j/graphSeed.ts`. The generator documentation in [`neo4j/README.md`](neo4j/README.md) describes the optional LLM-assisted genealogy-data workflow.
 
+## Removed from scope
+
+The app previously had working models, seed data, API routes, and pages for **articles, categories, charities/charity categories, and books/pages** (see git history for `feat: added articles, categories...`, `feat: added charities categories pages and routes`, `feat: added book pages, routes`). These were deliberately removed to narrow the app back down to the person → graph → profile → events learning loop described at the top of this document, so that scope doesn't drift before that core loop is solid. The Prisma models, migrations, and seed scripts for these have been deleted (`UserProgress` went with `Article`, since it only tracked per-article progress). Reintroducing any of them should go through a fresh design pass rather than restoring the old code, since the data model and product direction have moved on.
+
+Two client hooks, `useUserPreferences` and `useAnalytics` (in [`src/hooks/useData.ts`](src/hooks/useData.ts)), point at `/api/user/preferences` and `/api/analytics` routes that were never built. They also aren't called anywhere in the app. They look like agent-generated scaffolding from early on; since there are no users yet and no concrete plan for what they should do, they've been left in place rather than removed or built out. Revisit them once there's an actual user-accounts/analytics need.
+
 ## Current scope and limitations
 
 This is an early learning product and its historical data is incomplete. The graph and profile information should therefore be treated as a navigational aid, not as a scholarly reference or a substitute for checking primary and established secondary sources.
@@ -104,7 +110,7 @@ The code review identified the following practical limitations:
 - **Graph scale will need deliberate handling.** `/graphs` currently returns all nodes and links. This is appropriate for the present dataset, but a force-directed canvas and single large response will become slow and visually crowded as coverage grows.
 - **Relationship coverage and modelling are incomplete.** Current data emphasises genealogy and a selection of family relations. It does not yet express uncertainty, competing reports, date ranges, sources, or richer historical relationships.
 - **Search is functional but narrow.** Autocomplete searches PostgreSQL `name`, `fullName`, and `slug`; it does not yet search transliterated names or guarantee graph/profile coverage matches.
-- **Quality safeguards are light.** There is no automated test suite for seed integrity, graph-query behaviour, search ranking, API contracts, or key user journeys.
+- **Quality safeguards cover the graph and API routes, but not the full journey.** The graph query builder and person search/ranking have unit tests, and every Prisma-backed API route (`people`, `events`, `battles`, `titles`, `quran`) now has route-level tests covering its success, not-found, validation, and error-handling paths. There is still no automated coverage for seed integrity or key end-to-end user journeys.
 - **Historical provenance is not yet visible.** The data model and UI do not attach citations, editions, narrators, or confidence notes to claims.
 
 ## Future improvements
