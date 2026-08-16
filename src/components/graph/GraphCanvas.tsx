@@ -10,23 +10,30 @@ import { fetcher } from '@/lib/swr';
 import GraphSearch from './GraphSearch';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import { useLanguage } from '@/components/language/LanguageContext';
+import translations from '@/components/language/translations';
+import { relationCategoryKey, relationColor, sortRelationCategories } from '@/lib/relations';
 
 interface GraphCanvasProps {
   url?: string;
   targetSlug?: string;
   showSearch?: boolean;
+  // Params to seed into this page's URL on first load if not already
+  // present, e.g. { person: slug } so the profile page's graph carries its
+  // person in the address bar instead of only in the internal fetch URL.
+  initialParams?: Record<string, string | string[]>;
 }
 
 const relationName = (value: string) => value.toLowerCase().replaceAll('_', ' ');
 
-export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-muhammad', showSearch = true }: GraphCanvasProps) {
+export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-muhammad', showSearch = true, initialParams }: GraphCanvasProps) {
   const { language } = useLanguage();
+  const t = translations[language];
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const selectedSlug = searchParams?.get('selected') ?? null;
   const focusSlug = searchParams?.get('focus') ?? null;
-  const activeRelations = useMemo(() => new Set(searchParams?.getAll('relation') ?? []), [searchParams]);
+  const activeCategories = useMemo(() => new Set(searchParams?.getAll('relation') ?? []), [searchParams]);
   const searchedSlugs = useMemo(() => new Set([...(searchParams?.getAll('person') ?? []), ...(searchParams?.getAll('ancestorsOf') ?? [])]), [searchParams]);
 
   const fetchUrl = useMemo(() => {
@@ -45,9 +52,22 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   const { data: graphData, error: graphError, isLoading: graphLoading } = useSWR<GraphData>(fetchUrl, fetcher);
   const fgRef = useRef<ForceGraphMethods<NodeObject<GraphNodeFull>, LinkObject<GraphNodeFull, GraphLink>>>(null) as RefObject<ForceGraphMethods<NodeObject<GraphNodeFull>, LinkObject<GraphNodeFull, GraphLink>>>;
   const selectedNode = graphData?.nodes.find(node => node.slug === selectedSlug);
-  const relationTypes = useMemo(() => [...new Set(graphData?.links.map(link => link.label) ?? [])].sort(), [graphData]);
+  const relationLabel = useCallback((type: string) => (t.relationTypes as Record<string, string>)[type] ?? relationName(type), [t]);
+  // Relation types present in the fetched graph, grouped by family category
+  // (father/mother -> "parent", etc.) so the filter shows one toggle per
+  // category rather than one per raw relation type.
+  const relationsByCategory = useMemo(() => {
+    const map = new Map<string, string[]>();
+    for (const type of new Set(graphData?.links.map(link => link.label) ?? [])) {
+      const category = relationCategoryKey(type);
+      map.set(category, [...(map.get(category) ?? []), type]);
+    }
+    return map;
+  }, [graphData]);
+  const categories = useMemo(() => sortRelationCategories([...relationsByCategory.keys()]), [relationsByCategory]);
+  const categoryLabel = useCallback((category: string, types: string[]) => (t.relationCategories as Record<string, string>)?.[category] ?? relationLabel(types[0]), [t, relationLabel]);
   const visibleGraph = useMemo(() => {
-    if (!graphData || activeRelations.size === 0) return graphData;
+    if (!graphData || activeCategories.size === 0) return graphData;
     const nodesById = new Map(graphData.nodes.map(node => [node.id, node]));
     const slugOf = (endpoint: string | GraphNodeFull) => (typeof endpoint === 'string' ? nodesById.get(endpoint)?.slug : endpoint.slug);
     // A relation-labeled edge is only kept when it directly touches one of the
@@ -56,11 +76,11 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     // would pass the label check even though it isn't directly connected to
     // the person being searched.
     const isDirect = (link: GraphLink) => searchedSlugs.size === 0 || searchedSlugs.has(slugOf(link.source) ?? '') || searchedSlugs.has(slugOf(link.target) ?? '');
-    const links = graphData.links.filter(link => activeRelations.has(link.label) && isDirect(link));
+    const links = graphData.links.filter(link => activeCategories.has(relationCategoryKey(link.label)) && isDirect(link));
     const linkedIds = new Set(links.flatMap(link => [typeof link.source === 'string' ? link.source : link.source.id, typeof link.target === 'string' ? link.target : link.target.id]));
     if (selectedNode) linkedIds.add(selectedNode.id);
     return { nodes: graphData.nodes.filter(node => linkedIds.has(node.id)), links };
-  }, [graphData, activeRelations, selectedNode, searchedSlugs]);
+  }, [graphData, activeCategories, selectedNode, searchedSlugs]);
 
   useEffect(() => {
     if (!fgRef.current || !graphData) return;
@@ -83,10 +103,22 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     router.replace(`${pathname}${params.size ? `?${params.toString()}` : ''}`, { scroll: false });
   }, [router, pathname, searchParams]);
 
-  const toggleRelation = (relation: string) => {
-    const next = new Set(activeRelations);
-    if (next.has(relation)) next.delete(relation);
-    else next.add(relation);
+  const seededRef = useRef(false);
+  useEffect(() => {
+    if (seededRef.current || !initialParams || !searchParams) return;
+    const missing = Object.entries(initialParams).filter(([key]) => !searchParams.has(key));
+    if (missing.length === 0) return;
+    seededRef.current = true;
+    updateParams(Object.fromEntries(missing));
+    // Only seed once on mount; initialParams/updateParams identity isn't
+    // meant to re-trigger this.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+
+  const toggleCategory = (category: string) => {
+    const next = new Set(activeCategories);
+    if (next.has(category)) next.delete(category);
+    else next.add(category);
     updateParams({ relation: [...next] });
   };
 
@@ -111,11 +143,30 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
         </button>
       </div>
 
-      {relationTypes.length > 0 && (
-        <fieldset className="mb-4 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
+      {categories.length > 0 && (
+        <fieldset dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
           <legend className="px-1 text-sm font-medium text-gray-800 dark:text-gray-100">Relationship types</legend>
-          <div className="flex flex-wrap gap-x-4 gap-y-2">
-            {relationTypes.map(type => <label key={type} className="flex cursor-pointer items-center gap-2 text-sm text-gray-700 dark:text-gray-200"><input type="checkbox" checked={activeRelations.size === 0 || activeRelations.has(type)} onChange={() => toggleRelation(type)} aria-label={`Show ${relationName(type)} relationships`} />{relationName(type)}</label>)}
+          <div className="flex flex-wrap gap-2">
+            {categories.map(category => {
+              const types = relationsByCategory.get(category)!;
+              const active = activeCategories.size === 0 || activeCategories.has(category);
+              const color = relationColor(types[0]);
+              const label = categoryLabel(category, types);
+              return (
+                <button
+                  key={category}
+                  type="button"
+                  onClick={() => toggleCategory(category)}
+                  aria-pressed={active}
+                  aria-label={`${active ? 'Hide' : 'Show'} ${label} relationships`}
+                  className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition-opacity ${active ? '' : 'opacity-50 hover:opacity-80'}`}
+                  style={{ borderColor: color, backgroundColor: active ? `${color}26` : 'transparent', color }}
+                >
+                  <span className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: color }} />
+                  {label}
+                </button>
+              );
+            })}
           </div>
           <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">Select one or more types to filter links. Clear all selections to show every relationship.</p>
         </fieldset>
@@ -134,7 +185,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_14rem]">
         <div className="h-[65vh] min-h-[32rem] overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700" role="region" aria-label="Interactive relationship graph">
-          {visibleGraph && <ForceGraph2D ref={fgRef} graphData={visibleGraph} nodeLabel="label" nodeAutoColorBy="group" linkLabel="label" backgroundColor={getGraphTheme().background} linkColor={() => getGraphTheme().link} linkWidth={1.5} linkDirectionalArrowLength={3.5} linkDirectionalArrowRelPos={0.9} onNodeClick={(node) => updateParams({ selected: (node as GraphNodeFull).slug })} nodeCanvasObject={(node, ctx, globalScale) => {
+          {visibleGraph && <ForceGraph2D ref={fgRef} graphData={visibleGraph} nodeLabel="label" nodeAutoColorBy="group" linkLabel={(link) => relationLabel((link as unknown as GraphLink).label)} backgroundColor={getGraphTheme().background} linkColor={(link) => relationColor((link as unknown as GraphLink).label)} linkWidth={1.5} linkDirectionalArrowLength={3.5} linkDirectionalArrowRelPos={0.9} onNodeClick={(node) => updateParams({ selected: (node as GraphNodeFull).slug })} nodeCanvasObject={(node, ctx, globalScale) => {
             const label = (node as GraphNodeFull).label; const fontSize = 12 / globalScale; ctx.font = `${fontSize}px Sans-Serif`; const textWidth = ctx.measureText(label).width; const dimensions = [textWidth, fontSize].map(value => value + fontSize) as [number, number]; const theme = getGraphTheme();
             ctx.fillStyle = (node as GraphNodeFull).slug === selectedSlug ? '#fbbf24' : theme.node.background; ctx.beginPath(); ctx.arc(node.x!, node.y!, Math.max(...dimensions) / 2, 0, 2 * Math.PI); ctx.fill(); ctx.closePath(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = theme.node.text; ctx.fillText(label, node.x!, node.y!); (node as GraphNodeFull).__bckgDimensions = dimensions;
           }} nodePointerAreaPaint={(node, color, ctx) => { const d = (node as GraphNodeFull).__bckgDimensions; if (d) { ctx.fillStyle = color; ctx.fillRect(node.x! - d[0] / 2, node.y! - d[1] / 2, d[0], d[1]); } }} />}
