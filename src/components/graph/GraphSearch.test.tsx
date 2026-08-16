@@ -125,4 +125,30 @@ describe('GraphSearch URL sync', () => {
 
     expect(nav.getUrl()).toContain('person=prophet-muhammad');
   });
+
+  it('keeps ?person=<slug> (and unrelated params) on mount under Strict Mode double-invoked effects', async () => {
+    // Strict Mode (which Next.js dev enables by default) double-invokes
+    // effects on mount: a phantom instance kicks off its own person-lookup
+    // fetch before being torn down. isHydratingRef guards against that
+    // phantom fetch's resolution clobbering the real instance's state, and
+    // against the write-back effect stripping `person` off the URL while a
+    // lookup for it is still in flight. This test's synchronous mock nav
+    // doesn't reproduce the exact async interleaving seen against the real
+    // Next.js router (that was confirmed manually in-browser), but it does
+    // guard the Strict Mode double-invoke path this fix targets.
+    nav.reset('/graphs?relation=DAUGHTER&person=prophet-muhammad');
+
+    render(
+      <React.StrictMode>
+        <GraphSearch />
+      </React.StrictMode>
+    );
+
+    await screen.findByText('Prophet Muhammad');
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    expect(nav.getUrl()).toContain('person=prophet-muhammad');
+    expect(nav.getUrl()).toContain('relation=DAUGHTER');
+  });
 });
