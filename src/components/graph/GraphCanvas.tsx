@@ -27,6 +27,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   const selectedSlug = searchParams?.get('selected') ?? null;
   const focusSlug = searchParams?.get('focus') ?? null;
   const activeRelations = useMemo(() => new Set(searchParams?.getAll('relation') ?? []), [searchParams]);
+  const searchedSlugs = useMemo(() => new Set([...(searchParams?.getAll('person') ?? []), ...(searchParams?.getAll('ancestorsOf') ?? [])]), [searchParams]);
 
   const fetchUrl = useMemo(() => {
     try {
@@ -47,11 +48,19 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   const relationTypes = useMemo(() => [...new Set(graphData?.links.map(link => link.label) ?? [])].sort(), [graphData]);
   const visibleGraph = useMemo(() => {
     if (!graphData || activeRelations.size === 0) return graphData;
-    const links = graphData.links.filter(link => activeRelations.has(link.label));
+    const nodesById = new Map(graphData.nodes.map(node => [node.id, node]));
+    const slugOf = (endpoint: string | GraphNodeFull) => (typeof endpoint === 'string' ? nodesById.get(endpoint)?.slug : endpoint.slug);
+    // A relation-labeled edge is only kept when it directly touches one of the
+    // searched people. Without this, an edge with a matching label anywhere in
+    // the fetched 1-3 hop neighborhood (e.g. an unrelated person's daughter)
+    // would pass the label check even though it isn't directly connected to
+    // the person being searched.
+    const isDirect = (link: GraphLink) => searchedSlugs.size === 0 || searchedSlugs.has(slugOf(link.source) ?? '') || searchedSlugs.has(slugOf(link.target) ?? '');
+    const links = graphData.links.filter(link => activeRelations.has(link.label) && isDirect(link));
     const linkedIds = new Set(links.flatMap(link => [typeof link.source === 'string' ? link.source : link.source.id, typeof link.target === 'string' ? link.target : link.target.id]));
     if (selectedNode) linkedIds.add(selectedNode.id);
     return { nodes: graphData.nodes.filter(node => linkedIds.has(node.id)), links };
-  }, [graphData, activeRelations, selectedNode]);
+  }, [graphData, activeRelations, selectedNode, searchedSlugs]);
 
   useEffect(() => {
     if (!fgRef.current || !graphData) return;
