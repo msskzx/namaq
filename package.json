@@ -18,7 +18,6 @@
     "seed:people": "tsx prisma/personSeed.ts",
     "seed:titles": "tsx prisma/titleSeed.ts",
     "seed:battles": "tsx prisma/battleSeed.ts",
-    "seed:categories": "tsx prisma/categorySeed.ts",
     "seed:events": "tsx prisma/eventSeed.ts",
     "seed:graph": "tsx neo4j/graphSeed.ts",
     "people:sync": "tsx scripts/people/syncCanonicalPeople.ts",

@@ -48,7 +48,6 @@ export const eventsData = [
     location: 'من مكة إلى المدينة',
     locationTransliterated: 'From Mecca to Medina',
     personSlugs: ['prophet-muhammad', 'abu-bakr-as-siddiq'],
-    categories: ['hijra'],
   },
   {
     name: 'الهجرة الأولى إلى الحبشة',
