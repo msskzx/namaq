@@ -41,6 +41,17 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   (`scripts/people/syncCanonicalPeople.ts`, `npm run people:sync` /
   `npm run people:validate`) so both stay in sync.
 
+## Content sources
+
+- Companion (صحابي) names/biographies are being sourced from *سير أعلام
+  النبلاء* (al-Dhahabi) on islamweb:
+  - Full book text: https://www.islamweb.net/ar/library/content/60/1/سير-أعلام-النبلاء?idfrom=1&idto=6537
+  - Book's companion index/tree (list of entries, useful for enumerating
+    names without paging through the full text): https://www.islamweb.net/ar/library/maktaba/nindex.php?id=2&treeLevel=1&bookid=60&page=bookssubtree&searchtext=&showexact=
+  - Extraction proceeds in batches (currently batches of 10), following
+    the book's own ordering, and checks each name against existing
+    `prisma/personSeedData*.ts` slugs before treating it as new.
+
 ## UI
 
 - This app is Arabic-first and bilingual. New user-facing text needs both
