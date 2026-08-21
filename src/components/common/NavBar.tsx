@@ -19,7 +19,6 @@ const getLinkItems = (href: string, language: 'en' | 'ar'): NavLink[] => {
     case '/graphs':
       return [
         { href: '/graphs', label: translations[language].familyRelations },
-        { href: '/graphs/ancestry', label: 'الانساب' },
         { href: '/graphs/titles', label: translations[language].titlesGraph },
       ];
     case '/people':
