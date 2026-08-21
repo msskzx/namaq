@@ -61,44 +61,6 @@ export const createAnalyticsEvent = async (data: {
   });
 };
 
-// Progress tracking
-export const getUserProgress = async (userId: string) => {
-  return await prisma.userProgress.findMany({
-    where: { userId },
-    include: { article: true },
-  });
-};
-
-export const updateUserProgress = async (
-  userId: string,
-  articleId: string,
-  data: {
-    completed?: boolean;
-    timeSpent?: number;
-  }
-) => {
-  return await prisma.userProgress.upsert({
-    where: {
-      userId_articleId: {
-        userId,
-        articleId,
-      },
-    },
-    update: {
-      ...data,
-      lastAccessed: new Date(),
-      completedAt: data.completed ? new Date() : undefined,
-    },
-    create: {
-      userId,
-      articleId,
-      ...data,
-      lastAccessed: new Date(),
-      completedAt: data.completed ? new Date() : undefined,
-    },
-  });
-};
-
 // People operations
 export const getPeople = async () => {
   return await prisma.person.findMany({

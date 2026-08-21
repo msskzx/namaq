@@ -108,7 +108,7 @@ function PersonDetailPage() {
               <FontAwesomeIcon icon={faHexagonNodes} className="w-7 h-7 text-amber-500 ml-2" />
               {t.relations}
             </h2>
-            <GraphCanvas url={`/api/graph?person=${slug}&ancestorsOf=${slug}`} targetSlug={slug} showSearch={false} />
+            <GraphCanvas url={`/api/graph?ancestorsOf=${slug}`} targetSlug={slug} showSearch={false} initialParams={{ person: slug }} />
           </div>
 
           <ClaimEvidence

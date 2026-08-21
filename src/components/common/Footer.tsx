@@ -74,7 +74,14 @@ function Footer() {
             </div>
 
             <div className="text-sm opacity-80">
-              <div className="mt-2">
+              <div className="mt-2 flex gap-4">
+                <a
+                  href="/about"
+                  className="text-amber-600 dark:text-amber-400 hover:text-amber-500 dark:hover:text-amber-300 transition-colors"
+                  dir={isRTL ? 'rtl' : 'ltr'}
+                >
+                  {translations[currentLanguage as 'en' | 'ar'].about}
+                </a>
                 <a
                   href="/privacy"
                   className="text-amber-600 dark:text-amber-400 hover:text-amber-500 dark:hover:text-amber-300 transition-colors"
