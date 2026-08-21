@@ -21,11 +21,15 @@ interface GraphCanvasProps {
   // present, e.g. { person: slug } so the profile page's graph carries its
   // person in the address bar instead of only in the internal fetch URL.
   initialParams?: Record<string, string | string[]>;
+  // Noun used for the node count summary and the side list heading. Defaults
+  // to 'people' since most graphs are person-only; a bipartite graph (e.g.
+  // titles and people) should override this to describe what's actually listed.
+  nodesLabel?: string;
 }
 
 const relationName = (value: string) => value.toLowerCase().replaceAll('_', ' ');
 
-export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-muhammad', showSearch = true, initialParams }: GraphCanvasProps) {
+export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-muhammad', showSearch = true, initialParams, nodesLabel = 'people' }: GraphCanvasProps) {
   const { language } = useLanguage();
   const t = translations[language];
   const router = useRouter();
@@ -124,24 +128,45 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
   const getGraphTheme = () => {
     const isDark = document.documentElement.classList.contains('dark');
-    return { background: isDark ? '#1f2937' : '#f9fafb', node: { background: isDark ? 'rgba(55, 65, 81, 0.8)' : 'rgba(241, 242, 180, 0.8)', text: isDark ? '#f3f4f6' : '#374151' }, link: isDark ? '#4b5563' : '#d1d5db' };
+    return {
+      background: isDark ? '#1f2937' : '#f9fafb',
+      // Title nodes get a distinct (indigo) fill from person nodes so a
+      // bipartite titles/people graph reads as two kinds of node at a glance.
+      node: {
+        person: isDark ? 'rgba(55, 65, 81, 0.8)' : 'rgba(241, 242, 180, 0.8)',
+        title: isDark ? 'rgba(79, 70, 229, 0.85)' : 'rgba(199, 210, 254, 0.9)',
+        text: isDark ? '#f3f4f6' : '#374151',
+      },
+      link: isDark ? '#4b5563' : '#d1d5db',
+    };
   };
 
   if (graphLoading) return <div className="flex items-center justify-center min-h-screen"><div className="text-lg">Loading graph...</div></div>;
   if (graphError) return <div className="flex items-center justify-center min-h-screen"><ErrorMessage title="Error loading graph" description={graphError.toString()} /></div>;
+
+  const theme = getGraphTheme();
+  const hasTitleNodes = graphData?.nodes.some(node => node.type === 'title') ?? false;
+  const nodeFillColor = (node: GraphNodeFull) => node.slug === selectedSlug ? '#fbbf24' : node.type === 'title' ? theme.node.title : theme.node.person;
 
   return (
     <div className="container mx-auto px-4 py-8">
       {showSearch && <GraphSearch />}
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3" aria-label="Graph controls">
         <p className="text-sm text-gray-600 dark:text-gray-300" aria-live="polite">
-          {visibleGraph ? `${visibleGraph.nodes.length} people · ${visibleGraph.links.length} relationships` : 'No graph data available'}
+          {visibleGraph ? `${visibleGraph.nodes.length} ${nodesLabel} · ${visibleGraph.links.length} relationships` : 'No graph data available'}
           {focusSlug ? ' · focused neighbourhood' : ''}
         </p>
         <button type="button" onClick={() => updateParams({ selected: null, focus: null, relation: [], person: null, ancestorsOf: [] })} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
           Reset graph view
         </button>
       </div>
+
+      {hasTitleNodes && (
+        <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 flex flex-wrap items-center gap-4 text-xs text-gray-600 dark:text-gray-300">
+          <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: theme.node.person }} />{t.people}</span>
+          <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: theme.node.title }} />{t.titles}</span>
+        </div>
+      )}
 
       {categories.length > 0 && (
         <fieldset dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
@@ -177,7 +202,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           <p className="text-sm text-gray-600 dark:text-gray-300">Selected person</p>
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode.label}</h2>
           <div className="mt-3 flex flex-wrap gap-3">
-            <Link className="rounded bg-amber-400 px-3 py-1.5 text-sm text-gray-950 hover:bg-amber-300" href={`/people/${selectedNode.slug}`}>View profile</Link>
+            <Link className="rounded bg-amber-400 px-3 py-1.5 text-sm text-gray-950 hover:bg-amber-300" href={selectedNode.type === 'title' ? `/titles/${selectedNode.slug}` : `/people/${selectedNode.slug}`}>View profile</Link>
             <button type="button" onClick={() => updateParams({ focus: selectedNode.slug, person: null, ancestorsOf: [] })} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-700">Explore neighbours</button>
           </div>
         </aside>
@@ -185,14 +210,14 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_14rem]">
         <div className="h-[65vh] min-h-[32rem] overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700" role="region" aria-label="Interactive relationship graph">
-          {visibleGraph && <ForceGraph2D ref={fgRef} graphData={visibleGraph} nodeLabel="label" nodeAutoColorBy="group" linkLabel={(link) => relationLabel((link as unknown as GraphLink).label)} backgroundColor={getGraphTheme().background} linkColor={(link) => relationColor((link as unknown as GraphLink).label)} linkWidth={1.5} linkDirectionalArrowLength={3.5} linkDirectionalArrowRelPos={0.9} onNodeClick={(node) => updateParams({ selected: (node as GraphNodeFull).slug })} nodeCanvasObject={(node, ctx, globalScale) => {
-            const label = (node as GraphNodeFull).label; const fontSize = 12 / globalScale; ctx.font = `${fontSize}px Sans-Serif`; const textWidth = ctx.measureText(label).width; const dimensions = [textWidth, fontSize].map(value => value + fontSize) as [number, number]; const theme = getGraphTheme();
-            ctx.fillStyle = (node as GraphNodeFull).slug === selectedSlug ? '#fbbf24' : theme.node.background; ctx.beginPath(); ctx.arc(node.x!, node.y!, Math.max(...dimensions) / 2, 0, 2 * Math.PI); ctx.fill(); ctx.closePath(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = theme.node.text; ctx.fillText(label, node.x!, node.y!); (node as GraphNodeFull).__bckgDimensions = dimensions;
+          {visibleGraph && <ForceGraph2D ref={fgRef} graphData={visibleGraph} nodeLabel="label" nodeAutoColorBy="group" linkLabel={(link) => relationLabel((link as unknown as GraphLink).label)} backgroundColor={theme.background} linkColor={(link) => relationColor((link as unknown as GraphLink).label)} linkWidth={1.5} linkDirectionalArrowLength={3.5} linkDirectionalArrowRelPos={0.9} onNodeClick={(node) => updateParams({ selected: (node as GraphNodeFull).slug })} nodeCanvasObject={(node, ctx, globalScale) => {
+            const label = (node as GraphNodeFull).label; const fontSize = 12 / globalScale; ctx.font = `${fontSize}px Sans-Serif`; const textWidth = ctx.measureText(label).width; const dimensions = [textWidth, fontSize].map(value => value + fontSize) as [number, number];
+            ctx.fillStyle = nodeFillColor(node as GraphNodeFull); ctx.beginPath(); ctx.arc(node.x!, node.y!, Math.max(...dimensions) / 2, 0, 2 * Math.PI); ctx.fill(); ctx.closePath(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = theme.node.text; ctx.fillText(label, node.x!, node.y!); (node as GraphNodeFull).__bckgDimensions = dimensions;
           }} nodePointerAreaPaint={(node, color, ctx) => { const d = (node as GraphNodeFull).__bckgDimensions; if (d) { ctx.fillStyle = color; ctx.fillRect(node.x! - d[0] / 2, node.y! - d[1] / 2, d[0], d[1]); } }} />}
         </div>
         <div className="rounded-lg border border-gray-200 p-3 dark:border-gray-700">
-          <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">People in view</h2>
-          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Use these keyboard-accessible controls to select a person.</p>
+          <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100 capitalize">{nodesLabel} in view</h2>
+          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Use these keyboard-accessible controls to select an entry.</p>
           <ul className="mt-2 max-h-[55vh] space-y-1 overflow-auto">
             {visibleGraph?.nodes.map(node => <li key={node.id}><button type="button" onClick={() => updateParams({ selected: node.slug })} className={`w-full rounded px-2 py-1 text-left text-sm hover:bg-amber-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-500 dark:hover:bg-gray-800 ${node.slug === selectedSlug ? 'bg-amber-100 dark:bg-gray-700' : 'text-gray-700 dark:text-gray-200'}`}>{node.label}</button></li>)}
           </ul>
