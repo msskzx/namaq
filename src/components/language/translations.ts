@@ -96,7 +96,7 @@ const translations = {
     familyRelations: 'Relationships Network',
 
     // Titles Graph
-    titlesGraph: 'Titles Network',
+    titlesGraph: 'Titles',
 
     // Articles
     specialArticles: 'Special Articles',
@@ -390,7 +390,7 @@ const translations = {
     familyRelations: 'شبكة العلاقات',
 
     // Titles Graph
-    titlesGraph: 'شبكة الألقاب',
+    titlesGraph: 'الألقاب',
 
     // Articles
     specialArticles: 'مقالات مميزة',
