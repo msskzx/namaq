@@ -84,6 +84,10 @@ npm run seed:people
 npm run seed:battles
 npm run seed:events
 
+# Create Neo4j nodes for any Postgres-only profiles (e.g. newly seeded
+# companions) before seeding relations that reference them by slug.
+npm run people:sync -- --apply
+
 # Seed the relationship graph.
 npm run seed:graph
 

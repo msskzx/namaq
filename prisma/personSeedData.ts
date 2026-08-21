@@ -364,7 +364,7 @@ export const people = [
     appearance: 'كان رجلاً قوي البنية، شجاعاً، مهاباً.',
     virtues: 'عم النبي وأخوه من الرضاعة، أسد الله وسيد الشهداء، كان من أشجع فرسان قريش.',
     picture: null,
-    titles: ['uncle-of-prophet', 'sayyid-al-shuhada', 'asadu-allah'],
+    titles: ['uncle-of-prophet', 'sayyid-al-shuhada', 'asadu-allah', 'companion'],
     ayat: [
       { surah: 3, ayah: 169 }, // آل عمران: 169 - "ولا تحسبن الذين قتلوا في سبيل الله أمواتاً..." (نزلت في شهداء أحد ومنهم حمزة)
     ],

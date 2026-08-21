@@ -2,6 +2,10 @@ import {
   peopleQueries as ancestryPeopleQueries,
   peopleRelationsQueries as ancestryPeopleRelationsQueries,
 } from './graphSeedData2';
+import {
+  peopleQueries as companionAncestryPeopleQueries,
+  peopleRelationsQueries as companionAncestryPeopleRelationsQueries,
+} from './graphSeedData3';
 
 /**
  * An array of Cypher queries to create all Person nodes.
@@ -127,11 +131,15 @@ const relationKey = (query: string) => {
  * by their source, type, and target, so adding datasets cannot create duplicates.
  */
 export const peopleQueries = uniqueBy(
-  [...corePeopleQueries, ...ancestryPeopleQueries],
+  [...corePeopleQueries, ...ancestryPeopleQueries, ...companionAncestryPeopleQueries],
   nodeKey,
 );
 
 export const peopleRelationsQueries = uniqueBy(
-  [...corePeopleRelationsQueries, ...ancestryPeopleRelationsQueries],
+  [
+    ...corePeopleRelationsQueries,
+    ...ancestryPeopleRelationsQueries,
+    ...companionAncestryPeopleRelationsQueries,
+  ],
   relationKey,
 );
