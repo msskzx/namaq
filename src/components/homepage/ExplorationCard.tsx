@@ -23,8 +23,8 @@ export default function ExplorationCard({ title, desc, url, img }: ExplorationCa
           fill
           className="object-cover group-hover:scale-105 transition-transform duration-300"
         />
-        {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
+        {/* Dark overlay confined to the caption area, so most of the image stays at full brightness */}
+        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
       </div>
 
       {/* Content overlay */}
