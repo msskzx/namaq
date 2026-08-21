@@ -21,11 +21,15 @@ interface GraphCanvasProps {
   // present, e.g. { person: slug } so the profile page's graph carries its
   // person in the address bar instead of only in the internal fetch URL.
   initialParams?: Record<string, string | string[]>;
+  // Noun used for the node count summary and the side list heading. Defaults
+  // to 'people' since most graphs are person-only; a bipartite graph (e.g.
+  // titles and people) should override this to describe what's actually listed.
+  nodesLabel?: string;
 }
 
 const relationName = (value: string) => value.toLowerCase().replaceAll('_', ' ');
 
-export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-muhammad', showSearch = true, initialParams }: GraphCanvasProps) {
+export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-muhammad', showSearch = true, initialParams, nodesLabel = 'people' }: GraphCanvasProps) {
   const { language } = useLanguage();
   const t = translations[language];
   const router = useRouter();
@@ -135,7 +139,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       {showSearch && <GraphSearch />}
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3" aria-label="Graph controls">
         <p className="text-sm text-gray-600 dark:text-gray-300" aria-live="polite">
-          {visibleGraph ? `${visibleGraph.nodes.length} people · ${visibleGraph.links.length} relationships` : 'No graph data available'}
+          {visibleGraph ? `${visibleGraph.nodes.length} ${nodesLabel} · ${visibleGraph.links.length} relationships` : 'No graph data available'}
           {focusSlug ? ' · focused neighbourhood' : ''}
         </p>
         <button type="button" onClick={() => updateParams({ selected: null, focus: null, relation: [], person: null, ancestorsOf: [] })} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
@@ -177,7 +181,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           <p className="text-sm text-gray-600 dark:text-gray-300">Selected person</p>
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode.label}</h2>
           <div className="mt-3 flex flex-wrap gap-3">
-            <Link className="rounded bg-amber-400 px-3 py-1.5 text-sm text-gray-950 hover:bg-amber-300" href={`/people/${selectedNode.slug}`}>View profile</Link>
+            <Link className="rounded bg-amber-400 px-3 py-1.5 text-sm text-gray-950 hover:bg-amber-300" href={selectedNode.type === 'title' ? `/titles/${selectedNode.slug}` : `/people/${selectedNode.slug}`}>View profile</Link>
             <button type="button" onClick={() => updateParams({ focus: selectedNode.slug, person: null, ancestorsOf: [] })} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-700">Explore neighbours</button>
           </div>
         </aside>
@@ -191,8 +195,8 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           }} nodePointerAreaPaint={(node, color, ctx) => { const d = (node as GraphNodeFull).__bckgDimensions; if (d) { ctx.fillStyle = color; ctx.fillRect(node.x! - d[0] / 2, node.y! - d[1] / 2, d[0], d[1]); } }} />}
         </div>
         <div className="rounded-lg border border-gray-200 p-3 dark:border-gray-700">
-          <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">People in view</h2>
-          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Use these keyboard-accessible controls to select a person.</p>
+          <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100 capitalize">{nodesLabel} in view</h2>
+          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Use these keyboard-accessible controls to select an entry.</p>
           <ul className="mt-2 max-h-[55vh] space-y-1 overflow-auto">
             {visibleGraph?.nodes.map(node => <li key={node.id}><button type="button" onClick={() => updateParams({ selected: node.slug })} className={`w-full rounded px-2 py-1 text-left text-sm hover:bg-amber-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-500 dark:hover:bg-gray-800 ${node.slug === selectedSlug ? 'bg-amber-100 dark:bg-gray-700' : 'text-gray-700 dark:text-gray-200'}`}>{node.label}</button></li>)}
           </ul>

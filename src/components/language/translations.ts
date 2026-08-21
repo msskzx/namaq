@@ -95,6 +95,9 @@ const translations = {
     // Family Relations
     familyRelations: 'Relationships Network',
 
+    // Titles Graph
+    titlesGraph: 'Titles Network',
+
     // Articles
     specialArticles: 'Special Articles',
     noArticles: 'No articles found',
@@ -385,6 +388,9 @@ const translations = {
 
     // family Relations
     familyRelations: 'شبكة العلاقات',
+
+    // Titles Graph
+    titlesGraph: 'شبكة الألقاب',
 
     // Articles
     specialArticles: 'مقالات مميزة',
