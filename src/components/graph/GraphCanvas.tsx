@@ -128,11 +128,25 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
   const getGraphTheme = () => {
     const isDark = document.documentElement.classList.contains('dark');
-    return { background: isDark ? '#1f2937' : '#f9fafb', node: { background: isDark ? 'rgba(55, 65, 81, 0.8)' : 'rgba(241, 242, 180, 0.8)', text: isDark ? '#f3f4f6' : '#374151' }, link: isDark ? '#4b5563' : '#d1d5db' };
+    return {
+      background: isDark ? '#1f2937' : '#f9fafb',
+      // Title nodes get a distinct (indigo) fill from person nodes so a
+      // bipartite titles/people graph reads as two kinds of node at a glance.
+      node: {
+        person: isDark ? 'rgba(55, 65, 81, 0.8)' : 'rgba(241, 242, 180, 0.8)',
+        title: isDark ? 'rgba(79, 70, 229, 0.85)' : 'rgba(199, 210, 254, 0.9)',
+        text: isDark ? '#f3f4f6' : '#374151',
+      },
+      link: isDark ? '#4b5563' : '#d1d5db',
+    };
   };
 
   if (graphLoading) return <div className="flex items-center justify-center min-h-screen"><div className="text-lg">Loading graph...</div></div>;
   if (graphError) return <div className="flex items-center justify-center min-h-screen"><ErrorMessage title="Error loading graph" description={graphError.toString()} /></div>;
+
+  const theme = getGraphTheme();
+  const hasTitleNodes = graphData?.nodes.some(node => node.type === 'title') ?? false;
+  const nodeFillColor = (node: GraphNodeFull) => node.slug === selectedSlug ? '#fbbf24' : node.type === 'title' ? theme.node.title : theme.node.person;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -146,6 +160,13 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           Reset graph view
         </button>
       </div>
+
+      {hasTitleNodes && (
+        <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 flex flex-wrap items-center gap-4 text-xs text-gray-600 dark:text-gray-300">
+          <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: theme.node.person }} />{t.people}</span>
+          <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: theme.node.title }} />{t.titles}</span>
+        </div>
+      )}
 
       {categories.length > 0 && (
         <fieldset dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
@@ -189,9 +210,9 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_14rem]">
         <div className="h-[65vh] min-h-[32rem] overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700" role="region" aria-label="Interactive relationship graph">
-          {visibleGraph && <ForceGraph2D ref={fgRef} graphData={visibleGraph} nodeLabel="label" nodeAutoColorBy="group" linkLabel={(link) => relationLabel((link as unknown as GraphLink).label)} backgroundColor={getGraphTheme().background} linkColor={(link) => relationColor((link as unknown as GraphLink).label)} linkWidth={1.5} linkDirectionalArrowLength={3.5} linkDirectionalArrowRelPos={0.9} onNodeClick={(node) => updateParams({ selected: (node as GraphNodeFull).slug })} nodeCanvasObject={(node, ctx, globalScale) => {
-            const label = (node as GraphNodeFull).label; const fontSize = 12 / globalScale; ctx.font = `${fontSize}px Sans-Serif`; const textWidth = ctx.measureText(label).width; const dimensions = [textWidth, fontSize].map(value => value + fontSize) as [number, number]; const theme = getGraphTheme();
-            ctx.fillStyle = (node as GraphNodeFull).slug === selectedSlug ? '#fbbf24' : theme.node.background; ctx.beginPath(); ctx.arc(node.x!, node.y!, Math.max(...dimensions) / 2, 0, 2 * Math.PI); ctx.fill(); ctx.closePath(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = theme.node.text; ctx.fillText(label, node.x!, node.y!); (node as GraphNodeFull).__bckgDimensions = dimensions;
+          {visibleGraph && <ForceGraph2D ref={fgRef} graphData={visibleGraph} nodeLabel="label" nodeAutoColorBy="group" linkLabel={(link) => relationLabel((link as unknown as GraphLink).label)} backgroundColor={theme.background} linkColor={(link) => relationColor((link as unknown as GraphLink).label)} linkWidth={1.5} linkDirectionalArrowLength={3.5} linkDirectionalArrowRelPos={0.9} onNodeClick={(node) => updateParams({ selected: (node as GraphNodeFull).slug })} nodeCanvasObject={(node, ctx, globalScale) => {
+            const label = (node as GraphNodeFull).label; const fontSize = 12 / globalScale; ctx.font = `${fontSize}px Sans-Serif`; const textWidth = ctx.measureText(label).width; const dimensions = [textWidth, fontSize].map(value => value + fontSize) as [number, number];
+            ctx.fillStyle = nodeFillColor(node as GraphNodeFull); ctx.beginPath(); ctx.arc(node.x!, node.y!, Math.max(...dimensions) / 2, 0, 2 * Math.PI); ctx.fill(); ctx.closePath(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = theme.node.text; ctx.fillText(label, node.x!, node.y!); (node as GraphNodeFull).__bckgDimensions = dimensions;
           }} nodePointerAreaPaint={(node, color, ctx) => { const d = (node as GraphNodeFull).__bckgDimensions; if (d) { ctx.fillStyle = color; ctx.fillRect(node.x! - d[0] / 2, node.y! - d[1] / 2, d[0], d[1]); } }} />}
         </div>
         <div className="rounded-lg border border-gray-200 p-3 dark:border-gray-700">
