@@ -23,6 +23,10 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   README "Local setup"). If neither is available, say so explicitly
   instead of claiming a UI or graph change was verified live — verify
   logic/tests instead and name the gap.
+- Don't reach for browser computer-use (screenshots, clicking, typing)
+  by default. Only use it when the user asks for it, or when it's
+  necessary to verify something lint/tsc/tests can't catch — e.g. actual
+  rendered layout, force-graph physics, or other visual behavior.
 
 ## Git
 

@@ -2,12 +2,12 @@
 
 Namaq is an Arabic-first historical learning application for Muslims and students of Islamic knowledge. Its purpose is to make the people, relationships, and major events of early Islamic history easier to understand by exploring them visually rather than only as isolated entries in a text.
 
-The central experience is a relationship graph: learners can search for a person, see family and other recorded relationships, and move from a graph node to that person's profile. Person profiles connect the graph to a growing historical record through names, titles, a life timeline, events, battles, and Qur'an references.
+The central experience is a relationship graph: learners land directly on the graph, look around and filter by relationship type, and move from a graph node to that person's profile. Person profiles connect the graph to a growing historical record through names, titles, a life timeline, events, battles, and Qur'an references.
 
-The project is intentionally refocusing on this learning loop:
+The project is intentionally refocusing on this learning loop, and the homepage's job is to open straight into it:
 
 ```text
-Find a person → explore their relationships → open their profile → place them in events and time
+Open the graph → explore and filter relationships → open a person's profile → place them in events and time
 ```
 
 ## What is implemented

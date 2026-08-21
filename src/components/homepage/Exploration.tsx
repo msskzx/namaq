@@ -34,7 +34,7 @@ export default function Explore() {
         ? 'استكشف شبكات العلاقات العائلية والتاريخية'
         : 'Explore family and historical relationship networks',
       href: '/graphs',
-      image: '/gemini_halaqa.png'
+      image: '/gemini_books.png'
     },
     {
       id: 'historical-events',
@@ -43,7 +43,7 @@ export default function Explore() {
         ? 'تعرف على الأحداث التاريخية والمعارك المهمة'
         : 'Learn about historical events and important battles',
       href: '/events',
-      image: '/gemini_books.png'
+      image: '/gemini_scholar.png'
     },
   ];
 

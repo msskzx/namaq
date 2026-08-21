@@ -1,7 +1,7 @@
 import Link from "next/link";
-import Image from "next/image";
 import { useLanguage } from "../language/LanguageContext";
 import translations from "../language/translations";
+import HeroGraphPreview from "./HeroGraphPreview";
 
 export default function Hero() {
   const { language } = useLanguage();
@@ -25,13 +25,13 @@ export default function Hero() {
         </h1>
         <p className="text-center text-gray-800 dark:text-gray-200 text-2xl mt-8">{t.intro}</p>
         <div className="text-center mt-8">
-          <Link href="/people" className="inline-flex items-center px-6 py-3 bg-amber-400 text-gray-950 font-semibold rounded-lg hover:bg-amber-300 transition-colors duration-200 shadow-lg hover:shadow-xl text-sm md:text-base">
-            {t.people}
+          <Link href="/graphs" className="inline-flex items-center px-6 py-3 bg-amber-400 text-gray-950 font-semibold rounded-lg hover:bg-amber-300 transition-colors duration-200 shadow-lg hover:shadow-xl text-sm md:text-base">
+            {t.familyRelations}
           </Link>
         </div>
       </div>
       <div className="flex items-center justify-center">
-        <Image src="/gemini_scholar.png" alt="Gemini Scholar" className="w-full rounded-2xl" width={500} height={500} />
+        <HeroGraphPreview />
       </div>
 
     </div>
