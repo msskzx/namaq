@@ -17,7 +17,7 @@ describe('GET /api/people/[slug]', () => {
     findUnique.mockReset();
   });
 
-  it('returns the person with related titles, participations, events, and ayat', async () => {
+  it('returns the person with related titles, participations, events, ayat, and claims', async () => {
     const person = { id: '1', slug: 'prophet-muhammad', name: 'محمد' };
     findUnique.mockResolvedValue(person);
 
@@ -32,6 +32,11 @@ describe('GET /api/people/[slug]', () => {
         participations: { include: { battle: true } },
         events: { include: { battle: true } },
         ayat: { include: { surah: true } },
+        claims: {
+          where: { reviewStatus: 'PUBLISHED' },
+          include: { source: true },
+          orderBy: { updatedAt: 'desc' },
+        },
       },
     });
     expect(response.status).toBe(200);

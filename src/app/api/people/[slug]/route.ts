@@ -21,6 +21,11 @@ export async function GET(
         ayat: {
           include: { surah: true },
         },
+        claims: {
+          where: { reviewStatus: 'PUBLISHED' },
+          include: { source: true },
+          orderBy: { updatedAt: 'desc' },
+        },
       },
     });
 

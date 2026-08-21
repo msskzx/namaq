@@ -83,8 +83,100 @@ model Person {
   participations BattleParticipation[]
   events         Event[]
   ayat           Ayah[]                @relation("PersonAyahs")
+  claims         PersonClaim[]
 
   @@map("persons")
+}
+
+/// A bibliographic work or primary source used to support a historical claim.
+/// Source records are deliberately separate from books displayed in the product:
+/// a source may be an edition, manuscript, or modern study that is not a reader-facing book.
+model HistoricalSource {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  title         String
+  author        String?
+  editor        String?
+  publisher     String?
+  publicationYear String?
+  edition       String?
+  url           String?
+  notes         String?  @db.Text
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  personClaims       PersonClaim[]
+  relationshipClaims RelationshipClaim[]
+
+  @@map("historical_sources")
+}
+
+/// How strongly the editorial team considers a claim supported. This describes
+/// the claim, not the historical figure or source as a whole.
+enum ClaimConfidence {
+  ESTABLISHED
+  LIKELY
+  DISPUTED
+  UNASSESSED
+}
+
+/// Publication workflow for factual claims. Only PUBLISHED claims are exposed
+/// through public APIs, so draft research never appears as settled history.
+enum ClaimReviewStatus {
+  DRAFT
+  IN_REVIEW
+  REVIEWED
+  PUBLISHED
+}
+
+/// An attributed assertion about a person (for example a date, name, or biographical statement).
+/// Each claim has exactly one pinpoint citation; multiple sources are represented as multiple claims.
+model PersonClaim {
+  id           String            @id @default(cuid())
+  personId     String
+  sourceId     String
+  assertion    String            @db.Text
+  field         String?
+  volume        String?
+  pageReference String?
+  confidence   ClaimConfidence   @default(UNASSESSED)
+  reviewStatus ClaimReviewStatus @default(DRAFT)
+  reviewerNote String?           @db.Text
+  reviewedAt   DateTime?
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  person Person            @relation(fields: [personId], references: [id], onDelete: Cascade)
+  source HistoricalSource  @relation(fields: [sourceId], references: [id], onDelete: Restrict)
+
+  @@index([personId, reviewStatus])
+  @@index([sourceId])
+  @@map("person_claims")
+}
+
+/// Evidence for a directed Neo4j relationship. The three identifier fields are
+/// the stable relationship key used by the graph seed (source slug, type, target slug).
+model RelationshipClaim {
+  id               String            @id @default(cuid())
+  sourcePersonSlug String
+  targetPersonSlug String
+  relationshipType String
+  sourceId         String
+  assertion        String            @db.Text
+  volume           String?
+  pageReference    String?
+  confidence       ClaimConfidence   @default(UNASSESSED)
+  reviewStatus     ClaimReviewStatus @default(DRAFT)
+  reviewerNote     String?           @db.Text
+  reviewedAt       DateTime?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  source HistoricalSource @relation(fields: [sourceId], references: [id], onDelete: Restrict)
+
+  @@unique([sourcePersonSlug, targetPersonSlug, relationshipType, sourceId], map: "relationship_claims_source_target_type_source_key")
+  @@index([sourcePersonSlug, targetPersonSlug, relationshipType, reviewStatus], map: "relationship_claims_source_target_type_review_idx")
+  @@map("relationship_claims")
 }
 
 model Title {

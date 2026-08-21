@@ -12,7 +12,20 @@ const personMergeQuery = (query: string) => {
   return `MERGE (person:Person {slug: "${slug}"}) SET person += ${properties};`;
 };
 
-const relationMergeQuery = (query: string) => query.replace(' CREATE ', ' MERGE ');
+const relationMergeQuery = (query: string) => {
+  const relationship = query.match(/CREATE \(from\)-\[:([^\]]+)\]->\(to\);$/)?.[1];
+
+  if (!relationship) {
+    throw new Error(`Invalid relationship seed query: ${query}`);
+  }
+
+  // Do not assign invented citations to historical claims. Until a curated
+  // RelationshipClaim is published, graph edges are visibly unassessed.
+  return query.replace(
+    `CREATE (from)-[:${relationship}]->(to);`,
+    `MERGE (from)-[relation:${relationship}]->(to) ON CREATE SET relation.confidence = "UNASSESSED", relation.reviewStatus = "DRAFT";`,
+  );
+};
 
 async function main() {
   try {
