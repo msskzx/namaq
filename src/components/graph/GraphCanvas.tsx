@@ -130,11 +130,13 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     const isDark = document.documentElement.classList.contains('dark');
     return {
       background: isDark ? '#1f2937' : '#f9fafb',
-      // Title nodes get a distinct (indigo) fill from person nodes so a
-      // bipartite titles/people graph reads as two kinds of node at a glance.
+      // Non-person node kinds get a distinct fill from person nodes so a
+      // bipartite graph (titles/people, battles/people) reads as two kinds
+      // of node at a glance.
       node: {
         person: isDark ? 'rgba(55, 65, 81, 0.8)' : 'rgba(241, 242, 180, 0.8)',
         title: isDark ? 'rgba(79, 70, 229, 0.85)' : 'rgba(199, 210, 254, 0.9)',
+        battle: isDark ? 'rgba(180, 83, 9, 0.85)' : 'rgba(253, 230, 138, 0.9)',
         text: isDark ? '#f3f4f6' : '#374151',
       },
       link: isDark ? '#4b5563' : '#d1d5db',
@@ -145,8 +147,11 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   if (graphError) return <div className="flex items-center justify-center min-h-screen"><ErrorMessage title="Error loading graph" description={graphError.toString()} /></div>;
 
   const theme = getGraphTheme();
-  const hasTitleNodes = graphData?.nodes.some(node => node.type === 'title') ?? false;
-  const nodeFillColor = (node: GraphNodeFull) => node.slug === selectedSlug ? '#fbbf24' : node.type === 'title' ? theme.node.title : theme.node.person;
+  const typeLabels: Record<string, string> = { person: t.people, title: t.titles, battle: t.battles.title };
+  const profilePaths: Record<string, string> = { title: '/titles', battle: '/battles' };
+  const presentTypes = [...new Set(graphData?.nodes.map(node => node.type ?? 'person') ?? [])];
+  const isBipartite = presentTypes.length > 1;
+  const nodeFillColor = (node: GraphNodeFull) => node.slug === selectedSlug ? '#fbbf24' : theme.node[(node.type as keyof typeof theme.node) ?? 'person'] ?? theme.node.person;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -161,10 +166,14 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
         </button>
       </div>
 
-      {hasTitleNodes && (
+      {isBipartite && (
         <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 flex flex-wrap items-center gap-4 text-xs text-gray-600 dark:text-gray-300">
-          <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: theme.node.person }} />{t.people}</span>
-          <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: theme.node.title }} />{t.titles}</span>
+          {presentTypes.map(type => (
+            <span key={type} className="flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: theme.node[(type as keyof typeof theme.node)] ?? theme.node.person }} />
+              {typeLabels[type] ?? type}
+            </span>
+          ))}
         </div>
       )}
 
@@ -202,7 +211,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           <p className="text-sm text-gray-600 dark:text-gray-300">Selected person</p>
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode.label}</h2>
           <div className="mt-3 flex flex-wrap gap-3">
-            <Link className="rounded bg-amber-400 px-3 py-1.5 text-sm text-gray-950 hover:bg-amber-300" href={selectedNode.type === 'title' ? `/titles/${selectedNode.slug}` : `/people/${selectedNode.slug}`}>View profile</Link>
+            <Link className="rounded bg-amber-400 px-3 py-1.5 text-sm text-gray-950 hover:bg-amber-300" href={`${selectedNode.type ? profilePaths[selectedNode.type] ?? '/people' : '/people'}/${selectedNode.slug}`}>View profile</Link>
             <button type="button" onClick={() => updateParams({ focus: selectedNode.slug, person: null, ancestorsOf: [] })} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-700">Explore neighbours</button>
           </div>
         </aside>

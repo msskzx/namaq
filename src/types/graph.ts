@@ -3,9 +3,11 @@ export interface GraphNode {
   label: string;
   slug: string;
   group: number;
-  // Which profile route this node's slug resolves under. Defaults to
-  // 'person' when omitted, so existing person-only graphs need no changes.
-  type?: 'person' | 'title';
+  // Either the raw Neo4j node label (e.g. "Person", "Battle", set by
+  // /api/graph from node.labels) or a lowercase profile-route hint like
+  // 'person' | 'title' (set explicitly by /api/graph/titles). Optional
+  // because it was never populated back when :Person was the only label.
+  type?: string;
 }
 
 export interface GraphNodeFull extends GraphNode {
@@ -23,6 +25,9 @@ export interface GraphLink {
   target: string | GraphNode;
   label: string;
   value: number;
+  // Present on PARTICIPATED_IN links: the participant's battle outcome(s),
+  // e.g. ["INJURED"] or ["MARTYRED"].
+  status?: string[];
 }
 
 export interface GraphData {
