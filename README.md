@@ -31,7 +31,7 @@ Open the graph → explore and filter relationships → open a person's profile 
 
 - `/events` presents major events in chronological form; individual event pages show dates, location, description, and participating people.
 - `/battles` and battle detail pages are available for battle-specific context, participants, timelines, and map data where it has been recorded.
-- Battle rosters are also synced into Neo4j (`:Battle` nodes and `PARTICIPATED_IN` relationships carrying each participant's status — injured, killed, captured, etc.) via `npm run battles:sync`. Battle detail pages embed a small graph view of participants, color-coded by status.
+- Battle rosters are also synced into Neo4j (`:Battle` nodes and `PARTICIPATED_IN` relationships carrying each participant's status — injured, killed, captured, etc.) via `npm run battles:sync`. Battle detail pages embed a small graph view of participants, color-coded by status, and `/graphs/battles` shows every battle and its participants in one bipartite graph.
 
 ### Application experience
 
