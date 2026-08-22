@@ -72,7 +72,13 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     }
   }, [url, searchParams]);
 
-  const { data: graphData, error: graphError, isLoading: graphLoading } = useSWR<GraphData>(fetchUrl, fetcher);
+  // Graph structure only changes via pipeline scripts, never live user
+  // action, so there's nothing to gain from the default revalidate-on-focus
+  // behavior — and it actively hurts here: every refetch hands ForceGraph2D
+  // a new graphData reference, which restarts its cooldown/engine and
+  // snaps the camera back to fitToView, discarding wherever the user had
+  // panned/zoomed to just from switching tabs and back.
+  const { data: graphData, error: graphError, isLoading: graphLoading } = useSWR<GraphData>(fetchUrl, fetcher, { revalidateOnFocus: false });
   const fgRef = useRef<ForceGraphMethods<NodeObject<GraphNodeFull>, LinkObject<GraphNodeFull, GraphLink>>>(null) as RefObject<ForceGraphMethods<NodeObject<GraphNodeFull>, LinkObject<GraphNodeFull, GraphLink>>>;
   const selectedNode = graphData?.nodes.find(node => node.slug === selectedSlug);
   const relationLabel = useCallback((type: string) => (t.relationTypes as Record<string, string>)[type] ?? relationName(type), [t]);
@@ -102,7 +108,15 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     const links = graphData.links.filter(link => activeCategories.has(relationCategoryKey(link.label)) && isDirect(link));
     const linkedIds = new Set(links.flatMap(link => [typeof link.source === 'string' ? link.source : link.source.id, typeof link.target === 'string' ? link.target : link.target.id]));
     if (selectedNode) linkedIds.add(selectedNode.id);
-    return { nodes: graphData.nodes.filter(node => linkedIds.has(node.id)), links };
+    // Nodes pinned (fx/fy) at a precomputed full-graph position stay frozen
+    // there under filtering too, so a filtered subgraph -- which should
+    // reorganize freely like every unpinned graph view does -- instead
+    // renders its edges crossing between stale, unrelated positions. Drop
+    // the pin (keep x/y as just a starting point) once a filter is active.
+    const nodes = graphData.nodes
+      .filter(node => linkedIds.has(node.id))
+      .map(node => (node.fx != null || node.fy != null) ? { ...node, fx: undefined, fy: undefined } : node);
+    return { nodes, links };
   }, [graphData, activeCategories, selectedNode, searchedSlugs]);
   // Sorted by nasab-graph prominence for the side list only; the canvas
   // itself renders visibleGraph.nodes directly, since force-layout doesn't
