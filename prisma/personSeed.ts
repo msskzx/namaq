@@ -8,8 +8,9 @@ import { people as people9 } from './personSeedData9';
 import { people as people10 } from './personSeedData10';
 import { people as people11 } from './personSeedData11';
 import { people as people12 } from './personSeedData12';
+import { people as people13 } from './personSeedData13';
 
-const people = [...people3, ...people5, ...people6, ...people7, ...people8, ...people9, ...people10, ...people11, ...people12];
+const people = [...people3, ...people5, ...people6, ...people7, ...people8, ...people9, ...people10, ...people11, ...people12, ...people13];
 
 async function main() {
   try {
