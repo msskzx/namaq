@@ -85,10 +85,11 @@ async function main() {
   });
 
   try {
-    const [battleResult, participationResult] = await Promise.all([
-      session.run(battleGraphQuery),
-      session.run(participationGraphQuery),
-    ]);
+    // Sequential, not Promise.all: a single session can't run two queries
+    // concurrently (the driver throws "Queries cannot be run directly on a
+    // session with an open transaction").
+    const battleResult = await session.run(battleGraphQuery);
+    const participationResult = await session.run(participationGraphQuery);
     const graphBattles: CanonicalBattle[] = battleResult.records.map((record) => ({
       slug: record.get('slug') ?? '',
       name: record.get('name') ?? '',
