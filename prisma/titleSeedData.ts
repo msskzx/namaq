@@ -187,11 +187,6 @@ export const titles = [
     slug: 'granddaughter-of-prophet',
   },
   {
-    name: 'زوجة النبي',
-    nameTransliterated: 'Wife of the Prophet',
-    slug: 'wife-of-prophet',
-  },
-  {
     name: 'أول زوجات النبي',
     nameTransliterated: 'First Wife of the Prophet',
     slug: 'first-wife',

@@ -94,13 +94,16 @@ const translations = {
     battleParticipantsGraph: 'Participants Graph',
 
     // Family Relations
-    familyRelations: 'Relationships Network',
+    familyRelations: 'People Graph',
 
     // Titles Graph
-    titlesGraph: 'Titles',
+    titlesGraph: 'Titles Graph',
 
     // Battles Graph
-    battlesGraph: 'Battles',
+    battlesGraph: 'Battles Graph',
+
+    // Combined Graph
+    allGraph: 'Graph',
 
     // Articles
     specialArticles: 'Special Articles',
@@ -130,26 +133,23 @@ const translations = {
       loadError: 'Failed to load battles',
     },
     // Homepage
-    welcome: 'Welcome to Namaq',
     intro: 'Uncover the fascinating stories of remarkable individuals who shaped the course of human civilization. Learn about many topics in an interactive manner and explore',
     definition: 'What is Namaq?',
-    nounTitle: 'نَمَق (Noun)',
-    nounDefinition: 'النَّمَقُ : الكِتابُ الذي يُكْتَب فيه',
-    verbNammaq: {
-      verb: 'نَمَّقَ (Verb)',
-      definition: 'نمَّقَ ينمِّق ، تنميقًا ، فهو مُنمِّق ، والمفعول مُنمَّق',
-      forms: [
-        'نمَّق الكتابَ :جوَّد كتابتَه وحسَّنها',
-        'نمَّق جلْدًا: زخرفه ونقشَه وزيَّنه',
-        'نمَّق القولَ: نمَقه، جوّده وصاغَه بأنواعٍ من البديع، حسَّنه وزوّقه'
-      ]
-    },
     verbNamaq: {
-      verb: 'نَمَقَ (Verb)',
-      definition: 'نمَقَ يَنمُق ، نَمْقًا ، فهو نامِق ، والمفعول مَنْموق',
+      title: 'Namaq (Verb)',
+      definition: "To beautify or embellish; he beautifies, beautifying; he is a beautifier; the thing beautified.",
       forms: [
-        'نَمَقَ الكِتَابَ : كَتَبَهُ، أَحْسَنَ كِتَابَتَهُ، حَسَّنَهُ',
-        'نَمَقَ عَيْنَهُ : لَطَمَهَا',
+        "He beautified the book: improved and refined its writing.",
+        "He decorated leather: adorned and embellished it.",
+        "He beautified speech: refined it, perfected it with eloquence, improved and adorned it."
+      ]
+
+    },
+    nounNamaq: {
+      title: 'Namaq (Noun)',
+      definition: 'Namaq: The book in which one writes.',
+      forms: [
+        'Namaq: The book in which one writes.'
       ]
     },
     whyLearn: 'Why Learn with Namaq?',
@@ -392,18 +392,16 @@ const translations = {
     battleParticipantsGraph: 'شبكة المشاركين',
 
     // family Relations
-    familyRelations: 'شبكة العلاقات',
+    familyRelations: 'شبكة الأشخاص',
 
     // Titles Graph
-    titlesGraph: 'الألقاب',
+    titlesGraph: 'شبكة الألقاب',
 
     // Battles Graph
-    battlesGraph: 'المعارك',
+    battlesGraph: 'شبكة المعارك',
 
-    // Articles
-    specialArticles: 'مقالات مميزة',
-    noArticles: 'لا توجد مقالات',
-    noArticlesForEvent: 'لا توجد مقالات لهذا الحدث.',
+    // Combined Graph
+    allGraph: 'الشبكة',
 
     // Notable People
     notablePeople: 'شخصيات بارزة',
@@ -428,13 +426,9 @@ const translations = {
       loadError: 'تعذر تحميل المعارك',
     },
     // Homepage
-    welcome: 'مرحبًا بكم في نَمَق',
     intro: 'اكتشف القصص المذهلة للشخصيات البارزة الذين شكّلوا مسار التاريخ البشري وتعلم عن العديد من الموضوعات بطريقة تفاعلية',
-    definition: 'ما هو نَمَق؟',
-    nounTitle: 'نَمَق (اسم)',
-    nounDefinition: 'النَّمَقُ : الكِتابُ الذي يُكْتَب فيه',
-    verbNammaq: {
-      verb: 'نَمَّقَ (فعل)',
+    verbNamaq: {
+      title: 'نَمَّقَ (فعل)',
       definition: 'نمَّقَ ينمِّق ، تنميقًا ، فهو مُنمِّق ، والمفعول مُنمَّق',
       forms: [
         'نمَّق الكتابَ :جوَّد كتابتَه وحسَّنها',
@@ -442,12 +436,11 @@ const translations = {
         'نمَّق القولَ: جوّده وصاغَه بأنواعٍ من البديع'
       ]
     },
-    verbNamaq: {
-      verb: 'نَمَقَ (فعل)',
-      definition: 'نمَقَ يَنمُق ، نَمْقًا ، فهو نامِق ، والمفعول مَنْموق',
+    nounNamaq: {
+      title: 'نَمَق (اسم)',
+      definition: 'النَّمَقُ : الكِتابُ الذي يُكْتَب فيه',
       forms: [
-        'نَمَقَ الكِتَابَ : كَتَبَهُ، أَحْسَنَ كِتَابَتَهُ، حَسَّنَهُ',
-        'نَمَقَ عَيْنَهُ : لَطَمَهَا',
+        'النَّمَقُ : الكِتابُ الذي يُكْتَب فيه'
       ]
     },
     whyLearn: 'لماذا تتعلم مع نَمَق؟',

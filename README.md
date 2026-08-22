@@ -14,7 +14,8 @@ Open the graph → explore and filter relationships → open a person's profile 
 
 ### Relationship graph
 
-- `/graphs` displays the complete Neo4j people graph, including people with no recorded relationship.
+- `/graphs/people` displays the complete Neo4j people graph, including people with no recorded relationship.
+- `/graphs` combines people, titles, and battles into a single graph, showing every node and relationship across the site.
 - Graph links have typed, directed relationship labels such as `FATHER`, `SON`, `WIFE`, and `PATERNAL_UNCLE`.
 - The graph search provides autocomplete, supports relation and ancestry modes, and keeps the selected view in the URL.
 - Selecting a node takes the learner to `/people/[slug]`.
@@ -48,7 +49,7 @@ Open the graph → explore and filter relationships → open a person's profile 
 | Historical content | PostgreSQL and Prisma | Person profiles, titles, events, battles, Qur'an references, and timelines |
 | Search | Prisma API routes | Person-directory filters and graph-search autocomplete |
 
-The graph API is `GET /api/graph`. With no query parameters it returns all graph nodes and links. It also accepts `person` for a local relation view, `ancestorsOf` for paternal ancestry, and `battle` for a battle's participants (with each `PARTICIPATED_IN` link carrying the participant's `status`). Graph-search suggestions come from `GET /api/people/suggest`.
+The graph API is `GET /api/graph`, used by `/graphs/people`. With no query parameters it returns all graph nodes and links. It also accepts `person` for a local relation view, `ancestorsOf` for paternal ancestry, and `battle` for a battle's participants (with each `PARTICIPATED_IN` link carrying the participant's `status`). `GET /api/graph/all` merges people, titles, and battles into one combined graph for `/graphs`. Graph-search suggestions come from `GET /api/people/suggest`.
 
 ## Local setup
 
