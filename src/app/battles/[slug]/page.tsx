@@ -10,6 +10,7 @@ import { faShieldHalved, faLocationDot, faCalendarDays, faMapLocationDot } from 
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import PersonNameCard from '@/components/people/PersonNameCard';
 import BattleMap from '@/components/battles/BattleMap';
+import BattleParticipantsGraph from '@/components/battles/BattleParticipantsGraph';
 import { PersonBase } from "@/types/person";
 import { Battle } from "@/types/battle";
 import { fetcher } from '@/lib/swr';
@@ -92,6 +93,17 @@ export default function BattleDetailPage() {
                 ) : (
                   <div className="text-center text-gray-400 py-4">
                     {t.noParticipants}
+                  </div>
+                )}
+                {battle.participations && battle.participations.length > 0 && (
+                  <div className="mt-6 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+                    <div className="p-4 bg-amber-50 dark:bg-gray-800 flex items-center gap-2">
+                      <FontAwesomeIcon icon={faShieldHalved} className="text-amber-500" />
+                      <h3 className="font-semibold text-amber-800 dark:text-amber-400">
+                        {t.battleParticipantsGraph}
+                      </h3>
+                    </div>
+                    <BattleParticipantsGraph slug={battle.slug} />
                   </div>
                 )}
               </div>

@@ -9,12 +9,12 @@ import { GET } from './route';
 // Minimal stand-ins for the shapes the route reads off neo4j-driver values:
 // nodes (`.identity`/`.properties`), relationships (`.type`), records
 // (`.keys`/`.get`), and paths (`.segments`).
-function node(identity: number, slug: string, name: string) {
-  return { identity: { toString: () => String(identity) }, properties: { slug, name } };
+function node(identity: number, slug: string, name: string, labels: string[] = ['Person']) {
+  return { identity: { toString: () => String(identity) }, properties: { slug, name }, labels };
 }
 
-function rel(type: string) {
-  return { type };
+function rel(type: string, properties: Record<string, unknown> = {}) {
+  return { type, properties };
 }
 
 function record(fields: Record<string, unknown>) {
@@ -194,6 +194,42 @@ describe('GET /api/graph', () => {
     expect(query).toContain('UNWIND $ancestors AS ancestorSlug');
     expect(query).toContain('MATCH path = (p1:Person {slug: ancestorSlug})-[r:SON*]->(p2:Person)');
     expect(params).toEqual({ ancestors: ['prophet-muhammad'] });
+  });
+
+  it('fetches a battle and its participants, including status', async () => {
+    const battle = node(1, 'badr', 'غزوة بدر', ['Battle']);
+    const participant = node(2, 'ali-ibn-abi-talib', 'Ali', ['Person']);
+    const run = vi.fn().mockResolvedValue({
+      records: [record({ node: battle, relationship: rel('PARTICIPATED_IN', { status: ['MARTYRED'] }), related: participant })],
+    });
+    getSession.mockReturnValue({ run });
+
+    const response = await GET(request('?battle=badr'));
+    const body = await response.json();
+
+    expect(run).toHaveBeenCalledTimes(1);
+    const [query, params] = run.mock.calls[0];
+    expect(query).toContain('UNWIND $battles AS battleSlug');
+    expect(query).toContain('MATCH (node:Battle {slug: battleSlug})');
+    expect(query).toContain('OPTIONAL MATCH (node)<-[relationship:PARTICIPATED_IN]-(related:Person)');
+    expect(params).toEqual({ battles: ['badr'] });
+
+    expect(body.nodes).toHaveLength(2);
+    expect(body.nodes.find((n: { slug: string }) => n.slug === 'badr').type).toBe('Battle');
+    expect(body.nodes.find((n: { slug: string }) => n.slug === 'ali-ibn-abi-talib').type).toBe('Person');
+    expect(body.links).toEqual([
+      { source: '1', target: '2', label: 'PARTICIPATED_IN', value: 1, status: ['MARTYRED'] },
+    ]);
+  });
+
+  it('collects multiple requested battles into a single UNWIND query', async () => {
+    const run = vi.fn().mockResolvedValue({ records: [] });
+    getSession.mockReturnValue({ run });
+
+    await GET(request('?battle=badr&battle=uhud'));
+
+    expect(run).toHaveBeenCalledTimes(1);
+    expect(run.mock.calls[0][1]).toEqual({ battles: ['badr', 'uhud'] });
   });
 
   it('combines person and ancestorsOf queries with UNION', async () => {

@@ -20,9 +20,13 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 ## Local verification
 
 - Local dev requires a running PostgreSQL **and** Neo4j instance (see
-  README "Local setup"). If neither is available, say so explicitly
-  instead of claiming a UI or graph change was verified live — verify
-  logic/tests instead and name the gap.
+  README "Local setup"). Real credentials for both live in `.env` at the
+  repo root; each git worktree needs its own `.env` symlinked to that
+  file (`ln -s /Users/msskzx/Projects/namaq/.env .env`) — check for this
+  symlink before assuming infra is unavailable. Seed/sync commands
+  (`npm run seed:*`, `npm run people:sync`, `npm run battles:sync`)
+  should work once it's in place. Only say local verification isn't
+  possible if the symlink is present and the commands still fail.
 - Don't reach for browser computer-use (screenshots, clicking, typing)
   by default. Only use it when the user asks for it, or when it's
   necessary to verify something lint/tsc/tests can't catch — e.g. actual
