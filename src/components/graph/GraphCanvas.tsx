@@ -168,7 +168,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
         </div>
       )}
 
-      {categories.length > 0 && (
+      {categories.length > 1 && (
         <fieldset dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
           <legend className="px-1 text-sm font-medium text-gray-800 dark:text-gray-100">Relationship types</legend>
           <div className="flex flex-wrap gap-2">
@@ -223,8 +223,6 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           </ul>
         </div>
       </div>
-      <p className="mt-3 text-sm text-gray-600 dark:text-gray-300">Select a node to inspect it, then open its profile or load its immediate neighbours. Graph controls and selection are saved in this page’s URL.</p>
-      {language === 'ar' && <span className="sr-only">يمكن استخدام قائمة الأشخاص مع لوحة المفاتيح لاختيار شخصية.</span>}
     </div>
   );
 }
