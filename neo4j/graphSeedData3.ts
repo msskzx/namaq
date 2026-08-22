@@ -4,7 +4,6 @@
  * profiles but had no FATHER/SON chain in the graph:
  *   - abu-ubaydah-ibn-al-jarrah, talhah-ibn-ubaydullah, az-zubayr-ibn-al-awwam,
  *     abdur-rahman-ibn-awf, saad-ibn-abi-waqqas, saeed-ibn-zaid
- *     (raw nasab text for these six lives in neo4j/peopleRaw.ts)
  * plus the ancestor chains for batch 1 of newly added companions
  * (prisma/personSeedData4.ts): musab-ibn-umayr, abu-salamah, uthman-ibn-mazun,
  * qudamah-ibn-mazun, abdullah-ibn-mazun-al-jumahi, as-saib-ibn-uthman,
