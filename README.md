@@ -20,6 +20,7 @@ Open the graph → explore and filter relationships → open a person's profile 
 - Selecting a node takes the learner to `/people/[slug]`.
 - Person pages embed a focused graph for that person: nearby relations (up to three hops) and their recorded paternal ancestry.
 - Graph seed data is deduplicated by person slug and by source/type/target relationship; the seeder uses Cypher `MERGE` so repeat runs do not add duplicate graph entities.
+- `npm run graph:layout` computes a cross-type prominence rank (`graphRank`), a Louvain community (`clusterId`), and a precomputed 2D layout position (`layoutX`/`layoutY`) over the unified Person+Battle+Title+Event graph, and stores them on each entity's Postgres row. This is the data groundwork for rank-based node sizing and zoom-based level-of-detail on `/graphs`; the rendering side is not wired up yet.
 
 ### People and timelines
 
@@ -95,9 +96,15 @@ npm run seed:graph
 
 # Compute nasab-graph-based prominence ranks and store them on Postgres profiles.
 npm run people:rank -- --apply
-# Create Neo4j :Battle nodes and PARTICIPATED_IN relationships from the
-# PostgreSQL battle rosters.
+# Create Neo4j :Battle/:Title/:Event nodes and their relationships from the
+# PostgreSQL rosters.
 npm run battles:sync -- --apply
+npm run titles:sync -- --apply
+npm run events:sync -- --apply
+
+# Compute cross-type rank, Louvain clusters, and a precomputed layout over
+# the unified Person+Battle+Title+Event graph, and store them on Postgres.
+npm run graph:layout -- --apply
 
 npm run dev
 ```
@@ -157,3 +164,4 @@ The next work should protect and deepen the main graph-and-search experience bef
 | `npm run battles:sync` / `-- --apply` | Report (or apply) PostgreSQL → Neo4j drift for battles and participations |
 | `npm run titles:sync` / `-- --apply` | Report (or apply) PostgreSQL → Neo4j drift for titles and their holders |
 | `npm run events:sync` / `-- --apply` | Report (or apply) PostgreSQL → Neo4j drift for events, participants, and battle links |
+| `npm run graph:layout` / `-- --apply` | Report (or persist) cross-type rank, Louvain clusters, and layout positions over the unified graph |

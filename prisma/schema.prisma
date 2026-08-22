@@ -82,6 +82,12 @@ model Person {
   nasabRank           Int?      // 1 = most prominent by the nasab/family graph; null = not yet computed / no graph node
   nasabRankComputedAt DateTime? // when nasabRank was last (re)computed by scripts/people/computeNasabRanks.ts
 
+  graphRank           Int?      // 1 = most prominent over the unified Person+Battle+Title+Event graph; null = not yet computed
+  clusterId           Int?      // Louvain community id from the unified graph, for zoom-out cluster collapse
+  layoutX             Float?    // precomputed x position from the unified graph layout
+  layoutY             Float?    // precomputed y position from the unified graph layout
+  graphRankComputedAt DateTime? // when graphRank/clusterId/layoutX/layoutY were last (re)computed by scripts/graph/computeGraphLayout.ts
+
   titles         Title[]               @relation("PersonTitles")
   participations BattleParticipation[]
   events         Event[]
@@ -189,6 +195,12 @@ model Title {
   desc               String?
   slug               String   @unique
   people             Person[] @relation("PersonTitles")
+
+  graphRank           Int?      // 1 = most prominent over the unified Person+Battle+Title+Event graph; null = not yet computed
+  clusterId           Int?      // Louvain community id from the unified graph, for zoom-out cluster collapse
+  layoutX             Float?    // precomputed x position from the unified graph layout
+  layoutY             Float?    // precomputed y position from the unified graph layout
+  graphRankComputedAt DateTime? // when graphRank/clusterId/layoutX/layoutY were last (re)computed by scripts/graph/computeGraphLayout.ts
 }
 
 model Battle {
@@ -211,6 +223,12 @@ model Battle {
   // Relations
   participations BattleParticipation[]
   events         Event[] // Add a relation from Event to Battle if needed for a specific event type
+
+  graphRank           Int?      // 1 = most prominent over the unified Person+Battle+Title+Event graph; null = not yet computed
+  clusterId           Int?      // Louvain community id from the unified graph, for zoom-out cluster collapse
+  layoutX             Float?    // precomputed x position from the unified graph layout
+  layoutY             Float?    // precomputed y position from the unified graph layout
+  graphRankComputedAt DateTime? // when graphRank/clusterId/layoutX/layoutY were last (re)computed by scripts/graph/computeGraphLayout.ts
 
   createdAt DateTime @default(now()) // Add createdAt and updatedAt for better tracking
   updatedAt DateTime @updatedAt
@@ -267,6 +285,12 @@ model Event {
   people   Person[]
   battleId String?
   battle   Battle? @relation(fields: [battleId], references: [id])
+
+  graphRank           Int?      // 1 = most prominent over the unified Person+Battle+Title+Event graph; null = not yet computed
+  clusterId           Int?      // Louvain community id from the unified graph, for zoom-out cluster collapse
+  layoutX             Float?    // precomputed x position from the unified graph layout
+  layoutY             Float?    // precomputed y position from the unified graph layout
+  graphRankComputedAt DateTime? // when graphRank/clusterId/layoutX/layoutY were last (re)computed by scripts/graph/computeGraphLayout.ts
 
   @@map("events") // Map to 'events' table
 }
