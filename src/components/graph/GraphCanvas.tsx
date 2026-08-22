@@ -168,7 +168,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
         </div>
       )}
 
-      {categories.length > 0 && (
+      {categories.length > 1 && (
         <fieldset dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
           <legend className="px-1 text-sm font-medium text-gray-800 dark:text-gray-100">Relationship types</legend>
           <div className="flex flex-wrap gap-2">
