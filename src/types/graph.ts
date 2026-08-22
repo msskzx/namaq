@@ -5,7 +5,7 @@ export interface GraphNode {
   group: number;
   // Which profile route this node's slug resolves under. Defaults to
   // 'person' when omitted, so existing person-only graphs need no changes.
-  type?: 'person' | 'title' | 'battle' | 'event';
+  type?: string;
   // Nasab-graph prominence rank (1 = most prominent), read from the
   // person's PostgreSQL profile. Undefined/null for title nodes and for
   // people without a computed rank yet.
