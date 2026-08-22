@@ -171,7 +171,12 @@ async function main() {
   }
 }
 
-main().catch((error) => {
-  console.error('Canonical battles reconciliation failed:', error);
-  process.exitCode = 1;
-});
+main()
+  .catch((error) => {
+    console.error('Canonical battles reconciliation failed:', error);
+    process.exitCode = 1;
+  })
+  // The Neo4j driver's connection pool keeps the event loop alive, so the
+  // process won't exit on its own once main() resolves (see the same
+  // process.exit() pattern in neo4j/graphSeed.ts).
+  .finally(() => process.exit(process.exitCode ?? 0));
