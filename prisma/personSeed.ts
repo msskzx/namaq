@@ -6,8 +6,9 @@ import { people as people7 } from './personSeedData7';
 import { people as people8 } from './personSeedData8';
 import { people as people9 } from './personSeedData9';
 import { people as people10 } from './personSeedData10';
+import { people as people11 } from './personSeedData11';
 
-const people = [...people3, ...people5, ...people6, ...people7, ...people8, ...people9, ...people10];
+const people = [...people3, ...people5, ...people6, ...people7, ...people8, ...people9, ...people10, ...people11];
 
 async function main() {
   try {
