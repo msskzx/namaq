@@ -10,12 +10,28 @@ import {
   peopleQueries as companionAncestryPeopleQueries2,
   peopleRelationsQueries as companionAncestryPeopleRelationsQueries2,
 } from './graphSeedData4';
+import {
+  peopleQueries as companionAncestryPeopleQueries3,
+  peopleRelationsQueries as companionAncestryPeopleRelationsQueries3,
+} from './graphSeedData5';
+import {
+  peopleQueries as companionAncestryPeopleQueries4,
+  peopleRelationsQueries as companionAncestryPeopleRelationsQueries4,
+} from './graphSeedData6';
+import {
+  peopleQueries as companionAncestryPeopleQueries5,
+  peopleRelationsQueries as companionAncestryPeopleRelationsQueries5,
+} from './graphSeedData7';
+import {
+  peopleQueries as companionAncestryPeopleQueries6,
+  peopleRelationsQueries as companionAncestryPeopleRelationsQueries6,
+} from './graphSeedData8';
 
 /**
  * An array of Cypher queries to create all Person nodes.
  * Each item in the array is a single CREATE query.
  */
-const corePeopleQueries = [
+export const corePeopleQueries = [
     'CREATE (:Person { name: "محمد ﷺ", slug: "prophet-muhammad", nameTransliterated: "Muhammad (Peace be upon him)" });',
     'CREATE (:Person { name: "أبو بكر الصديق", slug: "abu-bakr-as-siddiq", nameTransliterated: "Abu Bakr al-Siddiq" });',
     'CREATE (:Person { name: "عمر بن الخطاب", slug: "umar-ibn-al-khattab", nameTransliterated: "Umar ibn al-Khattab", fullName: "عمر بن الخطاب بن نفيل بن عبد العزى بن رياح بن قرط بن رزاح بن عدي بن كعب بن لؤي القرشي العدوي" });',
@@ -140,6 +156,10 @@ export const peopleQueries = uniqueBy(
     ...ancestryPeopleQueries,
     ...companionAncestryPeopleQueries,
     ...companionAncestryPeopleQueries2,
+    ...companionAncestryPeopleQueries3,
+    ...companionAncestryPeopleQueries4,
+    ...companionAncestryPeopleQueries5,
+    ...companionAncestryPeopleQueries6,
   ],
   nodeKey,
 );
@@ -150,6 +170,10 @@ export const peopleRelationsQueries = uniqueBy(
     ...ancestryPeopleRelationsQueries,
     ...companionAncestryPeopleRelationsQueries,
     ...companionAncestryPeopleRelationsQueries2,
+    ...companionAncestryPeopleRelationsQueries3,
+    ...companionAncestryPeopleRelationsQueries4,
+    ...companionAncestryPeopleRelationsQueries5,
+    ...companionAncestryPeopleRelationsQueries6,
   ],
   relationKey,
 );

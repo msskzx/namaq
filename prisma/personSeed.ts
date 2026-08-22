@@ -2,8 +2,12 @@ import { prisma } from '../src/lib/prisma';
 import { people as people3 } from './personSeedData3';
 import { people as people4 } from './personSeedData4';
 import { people as people5 } from './personSeedData5';
+import { people as people6 } from './personSeedData6';
+import { people as people7 } from './personSeedData7';
+import { people as people8 } from './personSeedData8';
+import { people as people9 } from './personSeedData9';
 
-const people = [...people3, ...people4, ...people5];
+const people = [...people3, ...people4, ...people5, ...people6, ...people7, ...people8, ...people9];
 
 async function main() {
   try {
