@@ -32,6 +32,7 @@ Open the graph → explore and filter relationships → open a person's profile 
 - `/events` presents major events in chronological form; individual event pages show dates, location, description, and participating people.
 - `/battles` and battle detail pages are available for battle-specific context, participants, timelines, and map data where it has been recorded.
 - Battle rosters are also synced into Neo4j (`:Battle` nodes and `PARTICIPATED_IN` relationships carrying each participant's status — injured, killed, captured, etc.) via `npm run battles:sync`. Battle detail pages embed a small graph view of participants, color-coded by status, and `/graphs/battles` shows every battle and its participants in one bipartite graph.
+- Titles and events are synced into Neo4j the same way: `npm run titles:sync` creates `:Title` nodes and `HOLDS_TITLE` relationships from each title's holders, and `npm run events:sync` creates `:Event` nodes, `INVOLVED_IN` relationships from participating people, and a `PART_OF` relationship to the linked `:Battle` when an event has one. Both are one-way, PostgreSQL-authoritative, and safe to re-run (`MERGE`, never delete).
 
 ### Application experience
 
@@ -154,3 +155,5 @@ The next work should protect and deepen the main graph-and-search experience bef
 | `npm run people:rank -- --apply` | Recompute nasab-graph ranks and persist them to Postgres profiles |
 | `npm run people:sync` / `-- --apply` | Report (or apply) PostgreSQL → Neo4j drift for people |
 | `npm run battles:sync` / `-- --apply` | Report (or apply) PostgreSQL → Neo4j drift for battles and participations |
+| `npm run titles:sync` / `-- --apply` | Report (or apply) PostgreSQL → Neo4j drift for titles and their holders |
+| `npm run events:sync` / `-- --apply` | Report (or apply) PostgreSQL → Neo4j drift for events, participants, and battle links |

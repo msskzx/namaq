@@ -26,6 +26,10 @@
     "people:rank:validate": "tsx scripts/people/computeNasabRanks.ts --strict",
     "battles:sync": "tsx scripts/battles/syncCanonicalBattles.ts",
     "battles:validate": "tsx scripts/battles/syncCanonicalBattles.ts --strict",
+    "titles:sync": "tsx scripts/titles/syncCanonicalTitles.ts",
+    "titles:validate": "tsx scripts/titles/syncCanonicalTitles.ts --strict",
+    "events:sync": "tsx scripts/events/syncCanonicalEvents.ts",
+    "events:validate": "tsx scripts/events/syncCanonicalEvents.ts --strict",
     "seed:surahs": "tsx prisma/surahSeed.ts",
     "seed:ayat": "tsx prisma/ayahSeed.ts",
     "gen:cypher": "tsx neo4j/genCypherFromRaw.ts"
