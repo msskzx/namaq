@@ -22,6 +22,8 @@
     "seed:graph": "tsx neo4j/graphSeed.ts",
     "people:sync": "tsx scripts/people/syncCanonicalPeople.ts",
     "people:validate": "tsx scripts/people/syncCanonicalPeople.ts --strict",
+    "people:rank": "tsx scripts/people/computeNasabRanks.ts",
+    "people:rank:validate": "tsx scripts/people/computeNasabRanks.ts --strict",
     "seed:surahs": "tsx prisma/surahSeed.ts",
     "seed:ayat": "tsx prisma/ayahSeed.ts",
     "gen:cypher": "tsx neo4j/genCypherFromRaw.ts"

@@ -79,6 +79,9 @@ model Person {
   virtues    String? // description of the virtues should be fetched from a book
   slug       String  @unique // Unique slug for person's page
 
+  nasabRank           Int?      // 1 = most prominent by the nasab/family graph; null = not yet computed / no graph node
+  nasabRankComputedAt DateTime? // when nasabRank was last (re)computed by scripts/people/computeNasabRanks.ts
+
   titles         Title[]               @relation("PersonTitles")
   participations BattleParticipation[]
   events         Event[]

@@ -10,7 +10,15 @@ function request(query: string) {
 }
 
 function person(slug: string, name: string) {
-  return { id: slug, slug, name, fullName: null, nameTransliterated: null };
+  return {
+    id: slug,
+    slug,
+    name,
+    fullName: null,
+    nameTransliterated: null,
+    nasabRank: null,
+    _count: { titles: 0 },
+  };
 }
 
 describe('GET /api/people/suggest', () => {
@@ -33,7 +41,15 @@ describe('GET /api/people/suggest', () => {
     const body = await response.json();
 
     expect(findMany).toHaveBeenCalledWith({
-      select: { id: true, slug: true, name: true, fullName: true, nameTransliterated: true },
+      select: {
+        id: true,
+        slug: true,
+        name: true,
+        fullName: true,
+        nameTransliterated: true,
+        nasabRank: true,
+        _count: { select: { titles: true } },
+      },
     });
     expect(body.data).toHaveLength(1);
     expect(body.data[0]).toMatchObject({ slug: 'prophet-muhammad', match: 'exact' });
