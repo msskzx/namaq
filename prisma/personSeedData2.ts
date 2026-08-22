@@ -243,15 +243,6 @@ export const people = [
     titles: [],
   },
   {
-    name: 'عمر بن الخطاب',
-    fullName: 'عمر بن الخطاب بن نفيل بن عبد العزى بن رياح بن قرط بن رزاح بن عدي بن كعب بن لؤي القرشي العدوي',
-    slug: 'umar-ibn-al-khattab',
-    appearance: '',
-    virtues: '',
-    picture: null,
-    titles: [],
-  },
-  {
     name: 'الخطاب بن نفيل',
     fullName: 'الخطاب بن نفيل بن عبد العزى بن رياح بن قرط بن رزاح بن عدي بن كعب بن لؤي القرشي العدوي',
     slug: 'al-khattab-ibn-nufayl',

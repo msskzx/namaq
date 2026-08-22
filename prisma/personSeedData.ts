@@ -118,7 +118,7 @@ export const people = [
     appearance: 'كان أشعر، حسن الوجه، كريم اليد.',
     virtues: 'أحد العشرة المبشرين بالجنة، كريم، شجاع، من السابقين إلى الإسلام.',
     picture: null,
-    titles: ['the-ten-promised-paradise', 'companion', 'al-sabiqeen', 'the-six-of-the-shura'],
+    titles: ['the-ten-promised-paradise', 'companion', 'al-sabiqoon', 'the-six-of-the-shura'],
     ayat: [
       { surah: 3, ayah: 172 }, // آل عمران: 172 - مثل الزبير (في غزوة حمراء الأسد)
     ]
@@ -142,7 +142,7 @@ export const people = [
     appearance: 'كان طويلًا، أسمر اللون، خفيف اللحية.',
     virtues: 'أحد العشرة المبشرين بالجنة، من السابقين إلى الإسلام.',
     picture: null,
-    titles: ['the-ten-promised-paradise', 'companion', 'al-sabiqeen'],
+    titles: ['the-ten-promised-paradise', 'companion', 'al-sabiqoon'],
     ayat: [
       { surah: 9, ayah: 100 }, // التوبة: 100 - "والسابقون الأولون من المهاجرين..." (وهو من السابقين)
     ]
