@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getSession } from '@/lib/neo4j';
+import { prisma } from '@/lib/prisma';
 import { GraphLink, GraphNode } from '@/types/graph';
 
 export async function GET(_request: Request) {
@@ -188,8 +189,19 @@ export async function GET(_request: Request) {
       }
     });
 
+    // nasabRank lives in PostgreSQL, not Neo4j, so it's attached here as a
+    // separate lookup rather than threaded through every node-construction
+    // branch above.
+    const nodeList = Array.from(nodes.values()) as GraphNode[];
+    const ranks = await prisma.person.findMany({
+      where: { slug: { in: nodeList.map((node) => node.slug) } },
+      select: { slug: true, nasabRank: true },
+    });
+    const rankBySlug = new Map(ranks.map((person) => [person.slug, person.nasabRank]));
+    for (const node of nodeList) node.nasabRank = rankBySlug.get(node.slug) ?? null;
+
     return NextResponse.json({
-      nodes: Array.from(nodes.values()) as GraphNode[],
+      nodes: nodeList,
       links
     });
 

@@ -85,6 +85,17 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     if (selectedNode) linkedIds.add(selectedNode.id);
     return { nodes: graphData.nodes.filter(node => linkedIds.has(node.id)), links };
   }, [graphData, activeCategories, selectedNode, searchedSlugs]);
+  // Sorted by nasab-graph prominence for the side list only; the canvas
+  // itself renders visibleGraph.nodes directly, since force-layout doesn't
+  // care about array order. Title nodes (no nasabRank) sort after every
+  // ranked person, alongside any person who hasn't been ranked yet.
+  const rankedViewNodes = useMemo(() => {
+    if (!visibleGraph) return undefined;
+    return [...visibleGraph.nodes].sort((a, b) =>
+      (a.nasabRank ?? Number.MAX_SAFE_INTEGER) - (b.nasabRank ?? Number.MAX_SAFE_INTEGER) ||
+      a.label.localeCompare(b.label)
+    );
+  }, [visibleGraph]);
 
   useEffect(() => {
     if (!fgRef.current || !graphData) return;
@@ -219,7 +230,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100 capitalize">{nodesLabel} in view</h2>
           <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Use these keyboard-accessible controls to select an entry.</p>
           <ul className="mt-2 max-h-[55vh] space-y-1 overflow-auto">
-            {visibleGraph?.nodes.map(node => <li key={node.id}><button type="button" onClick={() => updateParams({ selected: node.slug })} className={`w-full rounded px-2 py-1 text-left text-sm hover:bg-amber-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-500 dark:hover:bg-gray-800 ${node.slug === selectedSlug ? 'bg-amber-100 dark:bg-gray-700' : 'text-gray-700 dark:text-gray-200'}`}>{node.label}</button></li>)}
+            {rankedViewNodes?.map(node => <li key={node.id}><button type="button" onClick={() => updateParams({ selected: node.slug })} className={`w-full rounded px-2 py-1 text-left text-sm hover:bg-amber-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-500 dark:hover:bg-gray-800 ${node.slug === selectedSlug ? 'bg-amber-100 dark:bg-gray-700' : 'text-gray-700 dark:text-gray-200'}`}>{node.label}</button></li>)}
           </ul>
         </div>
       </div>

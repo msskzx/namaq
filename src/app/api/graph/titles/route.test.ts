@@ -17,15 +17,15 @@ describe('GET /api/graph/titles', () => {
         slug: 'prophet',
         name: 'نبي',
         people: [
-          { id: 'p1', slug: 'prophet-muhammad', name: 'Muhammad' },
-          { id: 'p2', slug: 'adam', name: 'Adam' },
+          { id: 'p1', slug: 'prophet-muhammad', name: 'Muhammad', nasabRank: 1 },
+          { id: 'p2', slug: 'adam', name: 'Adam', nasabRank: null },
         ],
       },
       {
         id: 't2',
         slug: 'messenger',
         name: 'رسول',
-        people: [{ id: 'p1', slug: 'prophet-muhammad', name: 'Muhammad' }],
+        people: [{ id: 'p1', slug: 'prophet-muhammad', name: 'Muhammad', nasabRank: 1 }],
       },
     ]);
 
@@ -33,7 +33,7 @@ describe('GET /api/graph/titles', () => {
     const body = await response.json();
 
     expect(findMany).toHaveBeenCalledWith({
-      include: { people: { select: { id: true, name: true, slug: true } } },
+      include: { people: { select: { id: true, name: true, slug: true, nasabRank: true } } },
       orderBy: { name: 'asc' },
     });
     expect(response.status).toBe(200);
@@ -42,8 +42,8 @@ describe('GET /api/graph/titles', () => {
     expect(body.nodes).toEqual(expect.arrayContaining([
       { id: 'title:t1', label: 'نبي', slug: 'prophet', group: 1, type: 'title' },
       { id: 'title:t2', label: 'رسول', slug: 'messenger', group: 1, type: 'title' },
-      { id: 'person:p1', label: 'Muhammad', slug: 'prophet-muhammad', group: 2, type: 'person' },
-      { id: 'person:p2', label: 'Adam', slug: 'adam', group: 2, type: 'person' },
+      { id: 'person:p1', label: 'Muhammad', slug: 'prophet-muhammad', group: 2, type: 'person', nasabRank: 1 },
+      { id: 'person:p2', label: 'Adam', slug: 'adam', group: 2, type: 'person', nasabRank: null },
     ]));
 
     // Muhammad appears once but links to both titles; the shared person node isn't duplicated.

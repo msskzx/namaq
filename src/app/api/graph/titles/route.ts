@@ -5,7 +5,7 @@ import { GraphData, GraphLink, GraphNode } from '@/types/graph';
 export async function GET() {
   try {
     const titles = await prisma.title.findMany({
-      include: { people: { select: { id: true, name: true, slug: true } } },
+      include: { people: { select: { id: true, name: true, slug: true, nasabRank: true } } },
       orderBy: { name: 'asc' },
     });
 
@@ -19,7 +19,7 @@ export async function GET() {
       for (const person of title.people) {
         const personNodeId = `person:${person.id}`;
         if (!nodes.has(personNodeId)) {
-          nodes.set(personNodeId, { id: personNodeId, label: person.name, slug: person.slug, group: 2, type: 'person' });
+          nodes.set(personNodeId, { id: personNodeId, label: person.name, slug: person.slug, group: 2, type: 'person', nasabRank: person.nasabRank });
         }
         links.push({ source: personNodeId, target: titleNodeId, label: 'HAS_TITLE', value: 1 });
       }
