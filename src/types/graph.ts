@@ -3,6 +3,13 @@ export interface GraphNode {
   label: string;
   slug: string;
   group: number;
+  // Which profile route this node's slug resolves under. Defaults to
+  // 'person' when omitted, so existing person-only graphs need no changes.
+  type?: string;
+  // Nasab-graph prominence rank (1 = most prominent), read from the
+  // person's PostgreSQL profile. Undefined/null for title nodes and for
+  // people without a computed rank yet.
+  nasabRank?: number | null;
 }
 
 export interface GraphNodeFull extends GraphNode {
@@ -20,6 +27,9 @@ export interface GraphLink {
   target: string | GraphNode;
   label: string;
   value: number;
+  // Present on PARTICIPATED_IN links: the participant's battle outcome(s),
+  // e.g. ["INJURED"] or ["MARTYRED"].
+  status?: string[];
 }
 
 export interface GraphData {

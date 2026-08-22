@@ -1,15 +1,18 @@
 /**
  * Search helpers for the PostgreSQL-backed person directory.
  *
- * These helpers deliberately only rank fields stored on a Person record. They
- * do not use Neo4j nodes or relationships, since the two stores are currently
- * maintained independently.
+ * These helpers rank fields stored on a Person record. `nasabRank` is a
+ * graph-centrality signal computed offline from Neo4j by
+ * scripts/people/computeNasabRanks.ts and persisted to PostgreSQL; these
+ * helpers only read that stored value and never query Neo4j directly.
  */
 export interface PersonSearchCandidate {
   slug: string;
   name: string;
   fullName: string | null;
   nameTransliterated: string | null;
+  nasabRank: number | null;
+  titleCount: number;
 }
 
 export type PersonSearchMatch = 'exact' | 'prefix' | 'contains';
@@ -111,6 +114,8 @@ export function filterAndRankPeople<T extends PersonSearchCandidate>(people: T[]
     .filter((result): result is { person: T } & PersonSearchResult => result !== null)
     .sort((a, b) =>
       a.score - b.score ||
+      (a.person.nasabRank ?? Number.MAX_SAFE_INTEGER) - (b.person.nasabRank ?? Number.MAX_SAFE_INTEGER) ||
+      b.person.titleCount - a.person.titleCount ||
       a.person.name.localeCompare(b.person.name, 'ar') ||
       a.person.slug.localeCompare(b.person.slug)
     );

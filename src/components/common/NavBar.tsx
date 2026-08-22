@@ -19,7 +19,8 @@ const getLinkItems = (href: string, language: 'en' | 'ar'): NavLink[] => {
     case '/graphs':
       return [
         { href: '/graphs', label: translations[language].familyRelations },
-        { href: '/graphs/ancestry', label: 'الانساب' },
+        { href: '/graphs/titles', label: translations[language].titlesGraph },
+        { href: '/graphs/battles', label: translations[language].battlesGraph },
       ];
     case '/people':
       return [
@@ -88,7 +89,8 @@ export default function NavBar() {
 
   const allLinks = [
     { href: '/graphs', label: translations[language].familyRelations },
-    { href: '/graphs/ancestry', label: 'الانساب' },
+    { href: '/graphs/titles', label: translations[language].titlesGraph },
+    { href: '/graphs/battles', label: translations[language].battlesGraph },
     { href: '/people/prophet-muhammad', label: translations[language].prophet },
     { href: '/people', label: translations[language].people },
     { href: '/events', label: translations[language].events },

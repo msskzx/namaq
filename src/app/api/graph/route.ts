@@ -1,11 +1,13 @@
 import { NextResponse } from 'next/server';
 import { getSession } from '@/lib/neo4j';
+import { prisma } from '@/lib/prisma';
 import { GraphLink, GraphNode } from '@/types/graph';
 
 export async function GET(_request: Request) {
   const { searchParams } = new URL(_request.url);
   const persons = searchParams.getAll('person') as string[];
   const ancestorsOf = searchParams.getAll('ancestorsOf') as string[];
+  const battles = searchParams.getAll('battle') as string[];
   const focus = searchParams.get('focus');
 
   const session = getSession();
@@ -42,6 +44,18 @@ export async function GET(_request: Request) {
          RETURN path`
       );
       params.ancestors = ancestorsOf;
+    }
+
+    // A battle only ever connects to Person via PARTICIPATED_IN, so one hop
+    // is inherently sufficient here — no hop-limiting logic needed.
+    if (battles.length > 0) {
+      queryParts.push(
+        `UNWIND $battles AS battleSlug
+         MATCH (node:Battle {slug: battleSlug})
+         OPTIONAL MATCH (node)<-[relationship:PARTICIPATED_IN]-(related:Person)
+         RETURN node, relationship, related`
+      );
+      params.battles = battles;
     }
 
     // A focused view is deliberately limited to one hop. The overview remains
@@ -87,6 +101,7 @@ export async function GET(_request: Request) {
             label: node.properties.name,
             slug: node.properties.slug,
             group: 1,
+            type: node.labels?.[0],
           });
         }
 
@@ -96,6 +111,7 @@ export async function GET(_request: Request) {
             label: related.properties.name,
             slug: related.properties.slug,
             group: 2,
+            type: related.labels?.[0],
           });
         }
 
@@ -106,7 +122,7 @@ export async function GET(_request: Request) {
           const key = `${source}|${target}|${label}`;
 
           if (!linkKeys.has(key)) {
-            links.push({ source, target, label, value: 1 });
+            links.push({ source, target, label, value: 1, status: relationship.properties?.status });
             linkKeys.add(key);
           }
         }
@@ -188,8 +204,19 @@ export async function GET(_request: Request) {
       }
     });
 
+    // nasabRank lives in PostgreSQL, not Neo4j, so it's attached here as a
+    // separate lookup rather than threaded through every node-construction
+    // branch above.
+    const nodeList = Array.from(nodes.values()) as GraphNode[];
+    const ranks = await prisma.person.findMany({
+      where: { slug: { in: nodeList.map((node) => node.slug) } },
+      select: { slug: true, nasabRank: true },
+    });
+    const rankBySlug = new Map(ranks.map((person) => [person.slug, person.nasabRank]));
+    for (const node of nodeList) node.nasabRank = rankBySlug.get(node.slug) ?? null;
+
     return NextResponse.json({
-      nodes: Array.from(nodes.values()) as GraphNode[],
+      nodes: nodeList,
       links
     });
 
