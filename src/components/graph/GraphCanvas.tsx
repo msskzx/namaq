@@ -223,8 +223,6 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           </ul>
         </div>
       </div>
-      <p className="mt-3 text-sm text-gray-600 dark:text-gray-300">Select a node to inspect it, then open its profile or load its immediate neighbours. Graph controls and selection are saved in this page’s URL.</p>
-      {language === 'ar' && <span className="sr-only">يمكن استخدام قائمة الأشخاص مع لوحة المفاتيح لاختيار شخصية.</span>}
     </div>
   );
 }
