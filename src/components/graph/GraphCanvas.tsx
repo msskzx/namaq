@@ -105,8 +105,26 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     // would pass the label check even though it isn't directly connected to
     // the person being searched.
     const isDirect = (link: GraphLink) => searchedSlugs.size === 0 || searchedSlugs.has(slugOf(link.source) ?? '') || searchedSlugs.has(slugOf(link.target) ?? '');
-    const links = graphData.links.filter(link => activeCategories.has(relationCategoryKey(link.label)) && isDirect(link));
-    const linkedIds = new Set(links.flatMap(link => [typeof link.source === 'string' ? link.source : link.source.id, typeof link.target === 'string' ? link.target : link.target.id]));
+    // Once the unfiltered view has run one simulation pass, d3-force
+    // mutates each link's source/target from a plain string id into a
+    // direct reference to the node object it resolved -- in place, on the
+    // very same link objects graphData.links holds (they're never cloned).
+    // A filtered view built afterwards from those links would inherit
+    // stale references into the *unfiltered* node array, which the current
+    // (filtered, possibly node-cloned) simulation doesn't recognize, so the
+    // link fails to attach to anything -- the exact "weirdly connected,
+    // missing relations" symptom that only shows up switching filters via
+    // the UI, not on a fresh navigation where links haven't been touched
+    // yet. Converting back to a plain string id forces d3-force to
+    // re-resolve it against whichever node array is current.
+    const links = graphData.links
+      .filter(link => activeCategories.has(relationCategoryKey(link.label)) && isDirect(link))
+      .map(link => ({
+        ...link,
+        source: typeof link.source === 'string' ? link.source : link.source.id,
+        target: typeof link.target === 'string' ? link.target : link.target.id,
+      }));
+    const linkedIds = new Set(links.flatMap(link => [link.source as string, link.target as string]));
     if (selectedNode) linkedIds.add(selectedNode.id);
     // Nodes pinned (fx/fy) at a precomputed full-graph position stay frozen
     // there under filtering too, so a filtered subgraph -- which should
