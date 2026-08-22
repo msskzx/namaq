@@ -91,6 +91,7 @@ const translations = {
 
     // Battle Map
     battleLocation: 'Battle Location on Map',
+    battleParticipantsGraph: 'Participants Graph',
 
     // Family Relations
     familyRelations: 'Relationships Network',
@@ -382,6 +383,7 @@ const translations = {
 
     // Battle Map
     battleLocation: 'موقع المعركة على الخريطة',
+    battleParticipantsGraph: 'شبكة المشاركين',
 
     // family Relations
     familyRelations: 'شبكة العلاقات',

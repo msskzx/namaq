@@ -31,6 +31,7 @@ Open the graph → explore and filter relationships → open a person's profile 
 
 - `/events` presents major events in chronological form; individual event pages show dates, location, description, and participating people.
 - `/battles` and battle detail pages are available for battle-specific context, participants, timelines, and map data where it has been recorded.
+- Battle rosters are also synced into Neo4j (`:Battle` nodes and `PARTICIPATED_IN` relationships carrying each participant's status — injured, killed, captured, etc.) via `npm run battles:sync`. Battle detail pages embed a small graph view of participants, color-coded by status.
 
 ### Application experience
 
@@ -47,7 +48,7 @@ Open the graph → explore and filter relationships → open a person's profile 
 | Historical content | PostgreSQL and Prisma | Person profiles, titles, events, battles, Qur'an references, and timelines |
 | Search | Prisma API routes | Person-directory filters and graph-search autocomplete |
 
-The graph API is `GET /api/graph`. With no query parameters it returns all graph nodes and links. It also accepts `person` for a local relation view and `ancestorsOf` for paternal ancestry. Graph-search suggestions come from `GET /api/people/suggest`.
+The graph API is `GET /api/graph`. With no query parameters it returns all graph nodes and links. It also accepts `person` for a local relation view, `ancestorsOf` for paternal ancestry, and `battle` for a battle's participants (with each `PARTICIPATED_IN` link carrying the participant's `status`). Graph-search suggestions come from `GET /api/people/suggest`.
 
 ## Local setup
 
@@ -90,6 +91,10 @@ npm run people:sync -- --apply
 
 # Seed the relationship graph.
 npm run seed:graph
+
+# Create Neo4j :Battle nodes and PARTICIPATED_IN relationships from the
+# PostgreSQL battle rosters.
+npm run battles:sync -- --apply
 
 npm run dev
 ```
@@ -143,3 +148,5 @@ The next work should protect and deepen the main graph-and-search experience bef
 | `npm run seed:events` | Seed events and connect related records |
 | `npm run seed:graph` | Seed or update the Neo4j relationship graph |
 | `npm run gen:cypher` | Generate candidate graph seed data from raw genealogy text |
+| `npm run people:sync` / `-- --apply` | Report (or apply) PostgreSQL → Neo4j drift for people |
+| `npm run battles:sync` / `-- --apply` | Report (or apply) PostgreSQL → Neo4j drift for battles and participations |
