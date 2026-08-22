@@ -3,6 +3,9 @@ export interface GraphNode {
   label: string;
   slug: string;
   group: number;
+  // Which profile route this node's slug resolves under. Defaults to
+  // 'person' when omitted, so existing person-only graphs need no changes.
+  type?: 'person' | 'title';
 }
 
 export interface GraphNodeFull extends GraphNode {
