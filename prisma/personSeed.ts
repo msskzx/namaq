@@ -1,9 +1,13 @@
 import { prisma } from '../src/lib/prisma';
-import { people as people1 } from './personSeedData';
-import { people as people2 } from './personSeedData2';
 import { people as people3 } from './personSeedData3';
+import { people as people5 } from './personSeedData5';
+import { people as people6 } from './personSeedData6';
+import { people as people7 } from './personSeedData7';
+import { people as people8 } from './personSeedData8';
+import { people as people9 } from './personSeedData9';
+import { people as people10 } from './personSeedData10';
 
-const people = [...people1, ...people2, ...people3];
+const people = [...people3, ...people5, ...people6, ...people7, ...people8, ...people9, ...people10];
 
 async function main() {
   try {
