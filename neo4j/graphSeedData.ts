@@ -34,6 +34,10 @@ import {
   peopleQueries as companionAncestryPeopleQueries8,
   peopleRelationsQueries as companionAncestryPeopleRelationsQueries8,
 } from './graphSeedData10';
+import {
+  peopleQueries as companionAncestryPeopleQueries9,
+  peopleRelationsQueries as companionAncestryPeopleRelationsQueries9,
+} from './graphSeedData11';
 
 /**
  * An array of Cypher queries to create all Person nodes.
@@ -192,6 +196,7 @@ export const peopleQueries = uniqueBy(
     ...companionAncestryPeopleQueries6,
     ...companionAncestryPeopleQueries7,
     ...companionAncestryPeopleQueries8,
+    ...companionAncestryPeopleQueries9,
   ],
   nodeKey,
 );
@@ -208,6 +213,7 @@ export const peopleRelationsQueries = uniqueBy(
     ...companionAncestryPeopleRelationsQueries6,
     ...companionAncestryPeopleRelationsQueries7,
     ...companionAncestryPeopleRelationsQueries8,
+    ...companionAncestryPeopleRelationsQueries9,
   ],
   relationKey,
 );
