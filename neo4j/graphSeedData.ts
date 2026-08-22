@@ -6,13 +6,37 @@ import {
   peopleQueries as companionAncestryPeopleQueries,
   peopleRelationsQueries as companionAncestryPeopleRelationsQueries,
 } from './graphSeedData3';
+import {
+  peopleQueries as companionAncestryPeopleQueries2,
+  peopleRelationsQueries as companionAncestryPeopleRelationsQueries2,
+} from './graphSeedData4';
+import {
+  peopleQueries as companionAncestryPeopleQueries3,
+  peopleRelationsQueries as companionAncestryPeopleRelationsQueries3,
+} from './graphSeedData5';
+import {
+  peopleQueries as companionAncestryPeopleQueries4,
+  peopleRelationsQueries as companionAncestryPeopleRelationsQueries4,
+} from './graphSeedData6';
+import {
+  peopleQueries as companionAncestryPeopleQueries5,
+  peopleRelationsQueries as companionAncestryPeopleRelationsQueries5,
+} from './graphSeedData7';
+import {
+  peopleQueries as companionAncestryPeopleQueries6,
+  peopleRelationsQueries as companionAncestryPeopleRelationsQueries6,
+} from './graphSeedData8';
+import {
+  peopleQueries as companionAncestryPeopleQueries7,
+  peopleRelationsQueries as companionAncestryPeopleRelationsQueries7,
+} from './graphSeedData9';
 
 /**
  * An array of Cypher queries to create all Person nodes.
  * Each item in the array is a single CREATE query.
  */
-const corePeopleQueries = [
-    'CREATE (:Person { name: "محمد ﷺ", slug: "prophet-muhammad", nameTransliterated: "Muhammad (Peace be upon him)" });',
+export const corePeopleQueries = [
+    'CREATE (:Person { name: "محمد رسول الله ﷺ", slug: "prophet-muhammad", nameTransliterated: "Prophet Muhammad (Peace be upon him)" });',
     'CREATE (:Person { name: "أبو بكر الصديق", slug: "abu-bakr-as-siddiq", nameTransliterated: "Abu Bakr al-Siddiq" });',
     'CREATE (:Person { name: "عمر بن الخطاب", slug: "umar-ibn-al-khattab", nameTransliterated: "Umar ibn al-Khattab", fullName: "عمر بن الخطاب بن نفيل بن عبد العزى بن رياح بن قرط بن رزاح بن عدي بن كعب بن لؤي القرشي العدوي" });',
     'CREATE (:Person { name: "عثمان بن عفان", slug: "uthman-ibn-affan", nameTransliterated: "Uthman ibn Affan" });',
@@ -55,7 +79,7 @@ const corePeopleQueries = [
  * An array of Cypher queries to create all relationships between Person nodes.
  * Each item in the array is a single MATCH...CREATE query.
  */
-const corePeopleRelationsQueries = [
+export const corePeopleRelationsQueries = [
     'MATCH (from:Person {slug: "saad-ibn-abi-waqqas"}), (to:Person {slug: "prophet-muhammad"}) CREATE (from)-[:MATERNAL_UNCLE]->(to);',
     'MATCH (from:Person {slug: "prophet-muhammad"}), (to:Person {slug: "saad-ibn-abi-waqqas"}) CREATE (from)-[:MATERNAL_NEPHEW]->(to);',
     'MATCH (from:Person {slug: "abu-bakr-as-siddiq"}), (to:Person {slug: "prophet-muhammad"}) CREATE (from)-[:FATHER_IN_LAW]->(to);',
@@ -75,12 +99,19 @@ const corePeopleRelationsQueries = [
     'MATCH (from:Person {slug: "maymunah-bint-al-harith"}), (to:Person {slug: "prophet-muhammad"}) CREATE (from)-[:WIFE]->(to);',
     'MATCH (from:Person {slug: "sawdah-bint-zamah"}), (to:Person {slug: "prophet-muhammad"}) CREATE (from)-[:WIFE]->(to);',
     'MATCH (from:Person {slug: "fatimah-al-zahra"}), (to:Person {slug: "prophet-muhammad"}) CREATE (from)-[:DAUGHTER]->(to);',
+    'MATCH (from:Person {slug: "prophet-muhammad"}), (to:Person {slug: "fatimah-al-zahra"}) CREATE (from)-[:FATHER]->(to);',
     'MATCH (from:Person {slug: "zaynab-bint-muhammad"}), (to:Person {slug: "prophet-muhammad"}) CREATE (from)-[:DAUGHTER]->(to);',
+    'MATCH (from:Person {slug: "prophet-muhammad"}), (to:Person {slug: "zaynab-bint-muhammad"}) CREATE (from)-[:FATHER]->(to);',
     'MATCH (from:Person {slug: "ruqayyah-bint-muhammad"}), (to:Person {slug: "prophet-muhammad"}) CREATE (from)-[:DAUGHTER]->(to);',
+    'MATCH (from:Person {slug: "prophet-muhammad"}), (to:Person {slug: "ruqayyah-bint-muhammad"}) CREATE (from)-[:FATHER]->(to);',
     'MATCH (from:Person {slug: "umm-kulthum-bint-muhammad"}), (to:Person {slug: "prophet-muhammad"}) CREATE (from)-[:DAUGHTER]->(to);',
+    'MATCH (from:Person {slug: "prophet-muhammad"}), (to:Person {slug: "umm-kulthum-bint-muhammad"}) CREATE (from)-[:FATHER]->(to);',
     'MATCH (from:Person {slug: "al-qasim-ibn-muhammad"}), (to:Person {slug: "prophet-muhammad"}) CREATE (from)-[:SON]->(to);',
+    'MATCH (from:Person {slug: "prophet-muhammad"}), (to:Person {slug: "al-qasim-ibn-muhammad"}) CREATE (from)-[:FATHER]->(to);',
     'MATCH (from:Person {slug: "abdullah-ibn-muhammad"}), (to:Person {slug: "prophet-muhammad"}) CREATE (from)-[:SON]->(to);',
+    'MATCH (from:Person {slug: "prophet-muhammad"}), (to:Person {slug: "abdullah-ibn-muhammad"}) CREATE (from)-[:FATHER]->(to);',
     'MATCH (from:Person {slug: "ibrahim-ibn-muhammad"}), (to:Person {slug: "prophet-muhammad"}) CREATE (from)-[:SON]->(to);',
+    'MATCH (from:Person {slug: "prophet-muhammad"}), (to:Person {slug: "ibrahim-ibn-muhammad"}) CREATE (from)-[:FATHER]->(to);',
     'MATCH (from:Person {slug: "hamzah-ibn-abd-al-muttalib"}), (to:Person {slug: "prophet-muhammad"}) CREATE (from)-[:PATERNAL_UNCLE]->(to);',
     'MATCH (from:Person {slug: "abu-talib"}), (to:Person {slug: "prophet-muhammad"}) CREATE (from)-[:PATERNAL_UNCLE]->(to);',
     'MATCH (from:Person {slug: "al-abbas-ibn-abd-al-muttalib"}), (to:Person {slug: "prophet-muhammad"}) CREATE (from)-[:PATERNAL_UNCLE]->(to);',
@@ -90,14 +121,29 @@ const corePeopleRelationsQueries = [
     'MATCH (from:Person {slug: "abdullah-ibn-jaafar"}), (to:Person {slug: "prophet-muhammad"}) CREATE (from)-[:PATERNAL_COUSIN]->(to);',
     'MATCH (from:Person {slug: "fatimah-al-zahra"}), (to:Person {slug: "ali-ibn-abi-talib"}) CREATE (from)-[:WIFE]->(to);',
     'MATCH (from:Person {slug: "ali-ibn-abi-talib"}), (to:Person {slug: "fatimah-al-zahra"}) CREATE (from)-[:HUSBAND]->(to);',
-    'MATCH (from:Person {slug: "al-hasan-ibn-ali"}), (to:Person {slug: "fatimah-al-zahra"}) CREATE (from)-[:MOTHER]->(to);',
-    'MATCH (from:Person {slug: "al-hasan-ibn-ali"}), (to:Person {slug: "ali-ibn-abi-talib"}) CREATE (from)-[:FATHER]->(to);',
-    'MATCH (from:Person {slug: "al-husayn-ibn-ali"}), (to:Person {slug: "fatimah-al-zahra"}) CREATE (from)-[:MOTHER]->(to);',
-    'MATCH (from:Person {slug: "al-husayn-ibn-ali"}), (to:Person {slug: "ali-ibn-abi-talib"}) CREATE (from)-[:FATHER]->(to);',
+    // Direction fixed: was previously (child)-[:MOTHER/FATHER]->(parent),
+    // backwards relative to the rest of this codebase's convention (source
+    // IS <TYPE> of target — see e.g. FATHER/SON pairs throughout
+    // graphSeedData3-8.ts) and to the live /api/graph `ancestorsOf` query,
+    // which chains outgoing SON edges from a person to reach their
+    // ancestors — Hasan/Husayn had no outgoing SON edge to Ali at all, so
+    // they were unreachable by that traversal.
+    'MATCH (from:Person {slug: "fatimah-al-zahra"}), (to:Person {slug: "al-hasan-ibn-ali"}) CREATE (from)-[:MOTHER]->(to);',
+    'MATCH (from:Person {slug: "al-hasan-ibn-ali"}), (to:Person {slug: "fatimah-al-zahra"}) CREATE (from)-[:SON]->(to);',
+    'MATCH (from:Person {slug: "ali-ibn-abi-talib"}), (to:Person {slug: "al-hasan-ibn-ali"}) CREATE (from)-[:FATHER]->(to);',
+    'MATCH (from:Person {slug: "al-hasan-ibn-ali"}), (to:Person {slug: "ali-ibn-abi-talib"}) CREATE (from)-[:SON]->(to);',
+    'MATCH (from:Person {slug: "fatimah-al-zahra"}), (to:Person {slug: "al-husayn-ibn-ali"}) CREATE (from)-[:MOTHER]->(to);',
+    'MATCH (from:Person {slug: "al-husayn-ibn-ali"}), (to:Person {slug: "fatimah-al-zahra"}) CREATE (from)-[:SON]->(to);',
+    'MATCH (from:Person {slug: "ali-ibn-abi-talib"}), (to:Person {slug: "al-husayn-ibn-ali"}) CREATE (from)-[:FATHER]->(to);',
+    'MATCH (from:Person {slug: "al-husayn-ibn-ali"}), (to:Person {slug: "ali-ibn-abi-talib"}) CREATE (from)-[:SON]->(to);',
     'MATCH (from:Person {slug: "umm-kulthum-bint-ali"}), (to:Person {slug: "fatimah-al-zahra"}) CREATE (from)-[:DAUGHTER]->(to);',
+    'MATCH (from:Person {slug: "fatimah-al-zahra"}), (to:Person {slug: "umm-kulthum-bint-ali"}) CREATE (from)-[:MOTHER]->(to);',
     'MATCH (from:Person {slug: "umm-kulthum-bint-ali"}), (to:Person {slug: "ali-ibn-abi-talib"}) CREATE (from)-[:DAUGHTER]->(to);',
+    'MATCH (from:Person {slug: "ali-ibn-abi-talib"}), (to:Person {slug: "umm-kulthum-bint-ali"}) CREATE (from)-[:FATHER]->(to);',
     'MATCH (from:Person {slug: "zaynab-bint-ali"}), (to:Person {slug: "fatimah-al-zahra"}) CREATE (from)-[:DAUGHTER]->(to);',
+    'MATCH (from:Person {slug: "fatimah-al-zahra"}), (to:Person {slug: "zaynab-bint-ali"}) CREATE (from)-[:MOTHER]->(to);',
     'MATCH (from:Person {slug: "zaynab-bint-ali"}), (to:Person {slug: "ali-ibn-abi-talib"}) CREATE (from)-[:DAUGHTER]->(to);',
+    'MATCH (from:Person {slug: "ali-ibn-abi-talib"}), (to:Person {slug: "zaynab-bint-ali"}) CREATE (from)-[:FATHER]->(to);',
     'MATCH (from:Person {slug: "ruqayyah-bint-muhammad"}), (to:Person {slug: "uthman-ibn-affan"}) CREATE (from)-[:WIFE]->(to);',
     'MATCH (from:Person {slug: "uthman-ibn-affan"}), (to:Person {slug: "ruqayyah-bint-muhammad"}) CREATE (from)-[:HUSBAND]->(to);',
     'MATCH (from:Person {slug: "umm-kulthum-bint-muhammad"}), (to:Person {slug: "uthman-ibn-affan"}) CREATE (from)-[:WIFE]->(to);',
@@ -131,7 +177,17 @@ const relationKey = (query: string) => {
  * by their source, type, and target, so adding datasets cannot create duplicates.
  */
 export const peopleQueries = uniqueBy(
-  [...corePeopleQueries, ...ancestryPeopleQueries, ...companionAncestryPeopleQueries],
+  [
+    ...corePeopleQueries,
+    ...ancestryPeopleQueries,
+    ...companionAncestryPeopleQueries,
+    ...companionAncestryPeopleQueries2,
+    ...companionAncestryPeopleQueries3,
+    ...companionAncestryPeopleQueries4,
+    ...companionAncestryPeopleQueries5,
+    ...companionAncestryPeopleQueries6,
+    ...companionAncestryPeopleQueries7,
+  ],
   nodeKey,
 );
 
@@ -140,6 +196,12 @@ export const peopleRelationsQueries = uniqueBy(
     ...corePeopleRelationsQueries,
     ...ancestryPeopleRelationsQueries,
     ...companionAncestryPeopleRelationsQueries,
+    ...companionAncestryPeopleRelationsQueries2,
+    ...companionAncestryPeopleRelationsQueries3,
+    ...companionAncestryPeopleRelationsQueries4,
+    ...companionAncestryPeopleRelationsQueries5,
+    ...companionAncestryPeopleRelationsQueries6,
+    ...companionAncestryPeopleRelationsQueries7,
   ],
   relationKey,
 );

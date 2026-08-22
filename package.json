@@ -33,8 +33,7 @@
     "graph:layout": "tsx scripts/graph/computeGraphLayout.ts",
     "graph:layout:validate": "tsx scripts/graph/computeGraphLayout.ts --strict",
     "seed:surahs": "tsx prisma/surahSeed.ts",
-    "seed:ayat": "tsx prisma/ayahSeed.ts",
-    "gen:cypher": "tsx neo4j/genCypherFromRaw.ts"
+    "seed:ayat": "tsx prisma/ayahSeed.ts"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",

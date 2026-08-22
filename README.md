@@ -14,7 +14,8 @@ Open the graph → explore and filter relationships → open a person's profile 
 
 ### Relationship graph
 
-- `/graphs` displays the complete Neo4j people graph, including people with no recorded relationship.
+- `/graphs/people` displays the complete Neo4j people graph, including people with no recorded relationship.
+- `/graphs` combines people, titles, and battles into a single graph, showing every node and relationship across the site.
 - Graph links have typed, directed relationship labels such as `FATHER`, `SON`, `WIFE`, and `PATERNAL_UNCLE`.
 - The graph search provides autocomplete, supports relation and ancestry modes, and keeps the selected view in the URL.
 - Selecting a node takes the learner to `/people/[slug]`.
@@ -50,7 +51,7 @@ Open the graph → explore and filter relationships → open a person's profile 
 | Historical content | PostgreSQL and Prisma | Person profiles, titles, events, battles, Qur'an references, and timelines |
 | Search | Prisma API routes | Person-directory filters and graph-search autocomplete |
 
-The graph API is `GET /api/graph`. With no query parameters it returns all graph nodes and links. It also accepts `person` for a local relation view, `ancestorsOf` for paternal ancestry, and `battle` for a battle's participants (with each `PARTICIPATED_IN` link carrying the participant's `status`). Graph-search suggestions come from `GET /api/people/suggest`.
+The graph API is `GET /api/graph`, used by `/graphs/people`. With no query parameters it returns all graph nodes and links. It also accepts `person` for a local relation view, `ancestorsOf` for paternal ancestry, and `battle` for a battle's participants (with each `PARTICIPATED_IN` link carrying the participant's `status`). `GET /api/graph/all` merges people, titles, and battles into one combined graph for `/graphs`. Graph-search suggestions come from `GET /api/people/suggest`.
 
 ## Local setup
 
@@ -111,7 +112,7 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000). Use `npm run build` for a production build and `npx tsc --noEmit` for a TypeScript check.
 
-Graph seed files live in `neo4j/`; the main seed entry point is `neo4j/graphSeed.ts`. The generator documentation in [`neo4j/README.md`](neo4j/README.md) describes the optional LLM-assisted genealogy-data workflow.
+Graph seed files live in `neo4j/`; the main seed entry point is `neo4j/graphSeed.ts`.
 
 ## Removed from scope
 
@@ -157,7 +158,6 @@ The next work should protect and deepen the main graph-and-search experience bef
 | `npm run seed:battles` | Seed battle records |
 | `npm run seed:events` | Seed events and connect related records |
 | `npm run seed:graph` | Seed or update the Neo4j relationship graph |
-| `npm run gen:cypher` | Generate candidate graph seed data from raw genealogy text |
 | `npm run people:rank` | Recompute nasab-graph ranks and report them (dry run) |
 | `npm run people:rank -- --apply` | Recompute nasab-graph ranks and persist them to Postgres profiles |
 | `npm run people:sync` / `-- --apply` | Report (or apply) PostgreSQL → Neo4j drift for people |
