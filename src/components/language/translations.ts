@@ -102,6 +102,9 @@ const translations = {
     // Battles Graph
     battlesGraph: 'Battles',
 
+    // Combined Graph
+    allGraph: 'All Relations',
+
     // Articles
     specialArticles: 'Special Articles',
     noArticles: 'No articles found',
@@ -399,6 +402,9 @@ const translations = {
 
     // Battles Graph
     battlesGraph: 'المعارك',
+
+    // Combined Graph
+    allGraph: 'كل العلاقات',
 
     // Articles
     specialArticles: 'مقالات مميزة',

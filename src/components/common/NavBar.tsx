@@ -18,7 +18,8 @@ const getLinkItems = (href: string, language: 'en' | 'ar'): NavLink[] => {
   switch (href) {
     case '/graphs':
       return [
-        { href: '/graphs', label: translations[language].familyRelations },
+        { href: '/graphs', label: translations[language].allGraph },
+        { href: '/graphs/people', label: translations[language].familyRelations },
         { href: '/graphs/titles', label: translations[language].titlesGraph },
         { href: '/graphs/battles', label: translations[language].battlesGraph },
       ];
@@ -83,12 +84,13 @@ export default function NavBar() {
 
   const mainLinks = [
     { href: '/people', label: translations[language].people },
-    { href: '/graphs', label: translations[language].familyRelations },
+    { href: '/graphs', label: translations[language].allGraph },
     { href: '/events', label: translations[language].events },
   ];
 
   const allLinks = [
-    { href: '/graphs', label: translations[language].familyRelations },
+    { href: '/graphs', label: translations[language].allGraph },
+    { href: '/graphs/people', label: translations[language].familyRelations },
     { href: '/graphs/titles', label: translations[language].titlesGraph },
     { href: '/graphs/battles', label: translations[language].battlesGraph },
     { href: '/people/prophet-muhammad', label: translations[language].prophet },
