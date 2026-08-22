@@ -15,13 +15,13 @@ Open the graph → explore and filter relationships → open a person's profile 
 ### Relationship graph
 
 - `/graphs/people` displays the complete Neo4j people graph, including people with no recorded relationship.
-- `/graphs` combines people, titles, and battles into a single graph, showing every node and relationship across the site.
+- `/graphs` combines people, titles, battles, and events into a single graph, showing every node and relationship across the site.
 - Graph links have typed, directed relationship labels such as `FATHER`, `SON`, `WIFE`, and `PATERNAL_UNCLE`.
 - The graph search provides autocomplete, supports relation and ancestry modes, and keeps the selected view in the URL.
 - Selecting a node takes the learner to `/people/[slug]`.
 - Person pages embed a focused graph for that person: nearby relations (up to three hops) and their recorded paternal ancestry.
 - Graph seed data is deduplicated by person slug and by source/type/target relationship; the seeder uses Cypher `MERGE` so repeat runs do not add duplicate graph entities.
-- `npm run graph:layout` computes a cross-type prominence rank (`graphRank`), a Louvain community (`clusterId`), and a precomputed 2D layout position (`layoutX`/`layoutY`) over the unified Person+Battle+Title+Event graph, and stores them on each entity's Postgres row. This is the data groundwork for rank-based node sizing and zoom-based level-of-detail on `/graphs`; the rendering side is not wired up yet.
+- `npm run graph:layout` computes a cross-type prominence rank (`graphRank`), a Louvain community (`clusterId`), and a precomputed 2D layout position (`layoutX`/`layoutY`) over the unified Person+Battle+Title+Event graph, and stores them on each entity's Postgres row. `/graphs` pins every ranked node at its precomputed position and runs a matching collision force so nodes don't overlap regardless of graph size; zoom-based level-of-detail (thinning low-rank nodes as you zoom out) is a further follow-up.
 
 ### People and timelines
 
@@ -51,7 +51,7 @@ Open the graph → explore and filter relationships → open a person's profile 
 | Historical content | PostgreSQL and Prisma | Person profiles, titles, events, battles, Qur'an references, and timelines |
 | Search | Prisma API routes | Person-directory filters and graph-search autocomplete |
 
-The graph API is `GET /api/graph`, used by `/graphs/people`. With no query parameters it returns all graph nodes and links. It also accepts `person` for a local relation view, `ancestorsOf` for paternal ancestry, and `battle` for a battle's participants (with each `PARTICIPATED_IN` link carrying the participant's `status`). `GET /api/graph/all` merges people, titles, and battles into one combined graph for `/graphs`. Graph-search suggestions come from `GET /api/people/suggest`.
+The graph API is `GET /api/graph`, used by `/graphs/people`. With no query parameters it returns all graph nodes and links. It also accepts `person` for a local relation view, `ancestorsOf` for paternal ancestry, and `battle` for a battle's participants (with each `PARTICIPATED_IN` link carrying the participant's `status`). `GET /api/graph/all` runs one unified Neo4j query across every Person/Battle/Title/Event node and relationship (rather than a per-type query plus a disconnected Postgres-only titles lookup) and joins in each node's `graphRank`/`clusterId`/`layoutX`/`layoutY` from PostgreSQL, for `/graphs`. Graph-search suggestions come from `GET /api/people/suggest`.
 
 ## Local setup
 

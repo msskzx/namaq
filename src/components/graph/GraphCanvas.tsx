@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useMemo, useRef, RefObject } from 'react
 import Link from 'next/link';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import ForceGraph2D, { ForceGraphMethods, NodeObject, LinkObject } from 'react-force-graph-2d';
+import { forceCollide } from 'd3-force';
 import { GraphData, GraphNodeFull, GraphLink } from '@/types/graph';
 import useSWR from 'swr';
 import { fetcher } from '@/lib/swr';
@@ -28,6 +29,24 @@ interface GraphCanvasProps {
 }
 
 const relationName = (value: string) => value.toLowerCase().replaceAll('_', ' ');
+
+// A fixed reference font size the collision force below can use for a
+// stable world-space radius per node, independent of camera zoom.
+// nodeCanvasObject grows its own font size as the camera zooms out so
+// labels stay readable, but caps it at this same value — without that cap,
+// a graph zoomed far out to fit hundreds of nodes (see GraphCanvas usage in
+// /graphs) would render every node far larger than the radius the
+// collision force actually kept clear, so nodes would visually overlap
+// even though their true positions don't.
+let measureContext: CanvasRenderingContext2D | null = null;
+const NODE_BASE_FONT_SIZE = 12;
+function nodeRadius(node: GraphNodeFull): number {
+  if (!measureContext) measureContext = document.createElement('canvas').getContext('2d');
+  if (!measureContext) return NODE_BASE_FONT_SIZE;
+  measureContext.font = `${NODE_BASE_FONT_SIZE}px Sans-Serif`;
+  const textWidth = measureContext.measureText(node.label).width;
+  return Math.max(textWidth + NODE_BASE_FONT_SIZE, NODE_BASE_FONT_SIZE * 2) / 2;
+}
 
 export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-muhammad', showSearch = true, initialParams, nodesLabel = 'people' }: GraphCanvasProps) {
   const { language } = useLanguage();
@@ -107,6 +126,33 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     }, 300);
     return () => clearTimeout(timer);
   }, [graphData, selectedSlug, focusSlug, targetSlug]);
+  // react-force-graph-2d doesn't register a collision force by default, so
+  // nodes are free to settle on top of each other regardless of their
+  // starting position (including nodes seeded from a precomputed,
+  // collision-free layoutX/layoutY). forceCollide is re-applied whenever the
+  // visible node set changes; its radius accessor is called per node, so it
+  // stays correct without needing to be recreated on every simulation tick.
+  useEffect(() => {
+    if (!fgRef.current) return;
+    fgRef.current.d3Force('collide', forceCollide<GraphNodeFull>(nodeRadius));
+  }, [visibleGraph]);
+  // Nodes carrying a precomputed layout position (from graphRank/clusterId's
+  // companion layoutX/layoutY) can be spread far from the origin, so without
+  // an explicit fit the initial camera can miss the graph entirely. Only
+  // runs when nothing above is already going to center on a specific node.
+  const hasFocusTarget = Boolean(selectedSlug || focusSlug || graphData?.nodes.some(node => node.slug === targetSlug));
+  // Nodes with no PostgreSQL row (e.g. deep lineage-only ancestors) have no
+  // pinned position and are free-simulated, which for a long ancestry chain
+  // can drift them far from the rest of the graph. Fitting to every node
+  // would zoom out to include that drift and shrink the graph people
+  // actually came to look at, so when any node has a computed graphRank,
+  // fit to just those; otherwise (a graph with no rank data at all) fit to
+  // everything as before.
+  const fitToView = useCallback(() => {
+    if (hasFocusTarget || !fgRef.current) return;
+    const hasRankedNodes = graphData?.nodes.some(node => node.graphRank != null) ?? false;
+    fgRef.current.zoomToFit(400, 40, hasRankedNodes ? (node) => (node as GraphNodeFull).graphRank != null : undefined);
+  }, [hasFocusTarget, graphData]);
 
   const updateParams = useCallback((changes: Record<string, string | null | string[]>) => {
     const params = new URLSearchParams(searchParams?.toString());
@@ -148,6 +194,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
         person: isDark ? 'rgba(55, 65, 81, 0.8)' : 'rgba(241, 242, 180, 0.8)',
         title: isDark ? 'rgba(79, 70, 229, 0.85)' : 'rgba(199, 210, 254, 0.9)',
         battle: isDark ? 'rgba(180, 83, 9, 0.85)' : 'rgba(253, 230, 138, 0.9)',
+        event: isDark ? 'rgba(13, 148, 136, 0.85)' : 'rgba(153, 246, 228, 0.9)',
         text: isDark ? '#f3f4f6' : '#374151',
       },
       link: isDark ? '#4b5563' : '#d1d5db',
@@ -158,8 +205,8 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   if (graphError) return <div className="flex items-center justify-center min-h-screen"><ErrorMessage title="Error loading graph" description={graphError.toString()} /></div>;
 
   const theme = getGraphTheme();
-  const typeLabels: Record<string, string> = { person: t.people, title: t.titles, battle: t.battles.title };
-  const profilePaths: Record<string, string> = { title: '/titles', battle: '/battles' };
+  const typeLabels: Record<string, string> = { person: t.people, title: t.titles, battle: t.battles.title, event: t.events };
+  const profilePaths: Record<string, string> = { title: '/titles', battle: '/battles', event: '/events' };
   const presentTypes = [...new Set(graphData?.nodes.map(node => node.type ?? 'person') ?? [])];
   const isBipartite = presentTypes.length > 1;
   const nodeFillColor = (node: GraphNodeFull) => node.slug === selectedSlug ? '#fbbf24' : theme.node[(node.type as keyof typeof theme.node) ?? 'person'] ?? theme.node.person;
@@ -230,8 +277,8 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_14rem]">
         <div className="h-[65vh] min-h-[32rem] overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700" role="region" aria-label="Interactive relationship graph">
-          {visibleGraph && <ForceGraph2D ref={fgRef} graphData={visibleGraph} nodeLabel="label" nodeAutoColorBy="group" linkLabel={(link) => relationLabel((link as unknown as GraphLink).label)} backgroundColor={theme.background} linkColor={(link) => relationColor((link as unknown as GraphLink).label)} linkWidth={1.5} linkDirectionalArrowLength={3.5} linkDirectionalArrowRelPos={0.9} onNodeClick={(node) => updateParams({ selected: (node as GraphNodeFull).slug })} nodeCanvasObject={(node, ctx, globalScale) => {
-            const label = (node as GraphNodeFull).label; const fontSize = 12 / globalScale; ctx.font = `${fontSize}px Sans-Serif`; const textWidth = ctx.measureText(label).width; const dimensions = [textWidth, fontSize].map(value => value + fontSize) as [number, number];
+          {visibleGraph && <ForceGraph2D ref={fgRef} graphData={visibleGraph} nodeLabel="label" nodeAutoColorBy="group" linkLabel={(link) => relationLabel((link as unknown as GraphLink).label)} backgroundColor={theme.background} linkColor={(link) => relationColor((link as unknown as GraphLink).label)} linkWidth={1.5} linkDirectionalArrowLength={3.5} linkDirectionalArrowRelPos={0.9} onNodeClick={(node) => updateParams({ selected: (node as GraphNodeFull).slug })} cooldownTicks={100} onEngineStop={fitToView} nodeCanvasObject={(node, ctx, globalScale) => {
+            const label = (node as GraphNodeFull).label; const fontSize = Math.min(12 / globalScale, NODE_BASE_FONT_SIZE); ctx.font = `${fontSize}px Sans-Serif`; const textWidth = ctx.measureText(label).width; const dimensions = [textWidth, fontSize].map(value => value + fontSize) as [number, number];
             ctx.fillStyle = nodeFillColor(node as GraphNodeFull); ctx.beginPath(); ctx.arc(node.x!, node.y!, Math.max(...dimensions) / 2, 0, 2 * Math.PI); ctx.fill(); ctx.closePath(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = theme.node.text; ctx.fillText(label, node.x!, node.y!); (node as GraphNodeFull).__bckgDimensions = dimensions;
           }} nodePointerAreaPaint={(node, color, ctx) => { const d = (node as GraphNodeFull).__bckgDimensions; if (d) { ctx.fillStyle = color; ctx.fillRect(node.x! - d[0] / 2, node.y! - d[1] / 2, d[0], d[1]); } }} />}
         </div>
