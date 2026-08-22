@@ -161,7 +161,7 @@ export const peopleRelationsQueries = [
   'MATCH (from:Person {slug: "safiyyah-bint-abd-al-muttalib"}), (to:Person {slug: "abd-al-muttalib-ibn-hashim"}) CREATE (from)-[:DAUGHTER]->(to);',
   'MATCH (from:Person {slug: "abd-al-muttalib-ibn-hashim"}), (to:Person {slug: "safiyyah-bint-abd-al-muttalib"}) CREATE (from)-[:FATHER]->(to);',
   'MATCH (from:Person {slug: "safiyyah-bint-abd-al-muttalib"}), (to:Person {slug: "hamzah-ibn-abd-al-muttalib"}) CREATE (from)-[:SISTER]->(to);',
-  'MATCH (from:Person {slug: "hamzah-ibn-abd-al-muttalib"}), (to:Person {slug: "safiyyah-bint-abd-al-muttalib"}) CREATE (from)-[:SISTER]->(to);',
+  'MATCH (from:Person {slug: "hamzah-ibn-abd-al-muttalib"}), (to:Person {slug: "safiyyah-bint-abd-al-muttalib"}) CREATE (from)-[:BROTHER]->(to);',
   'MATCH (from:Person {slug: "safiyyah-bint-abd-al-muttalib"}), (to:Person {slug: "al-awwam-ibn-khuwaylid"}) CREATE (from)-[:WIFE]->(to);',
   'MATCH (from:Person {slug: "al-awwam-ibn-khuwaylid"}), (to:Person {slug: "safiyyah-bint-abd-al-muttalib"}) CREATE (from)-[:HUSBAND]->(to);',
   'MATCH (from:Person {slug: "safiyyah-bint-abd-al-muttalib"}), (to:Person {slug: "az-zubayr-ibn-al-awwam"}) CREATE (from)-[:MOTHER]->(to);',
