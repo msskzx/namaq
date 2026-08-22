@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { getSession } = vi.hoisted(() => ({ getSession: vi.fn() }));
+const { getSession, findMany } = vi.hoisted(() => ({ getSession: vi.fn(), findMany: vi.fn() }));
 vi.mock('@/lib/neo4j', () => ({ getSession }));
+vi.mock('@/lib/prisma', () => ({ prisma: { person: { findMany } } }));
 
 import { GET } from './route';
 
@@ -31,6 +32,8 @@ function request(query: string) {
 describe('GET /api/graph', () => {
   beforeEach(() => {
     getSession.mockReset();
+    findMany.mockReset();
+    findMany.mockResolvedValue([]);
   });
 
   it('returns 500 without hitting the database when config is missing', async () => {
@@ -76,6 +79,26 @@ describe('GET /api/graph', () => {
     expect(body.nodes).toHaveLength(3);
     expect(body.nodes.map((n: { slug: string }) => n.slug).sort()).toEqual(['a', 'b', 'c']);
     expect(body.links).toEqual([{ source: '1', target: '2', label: 'SON', value: 1 }]);
+  });
+
+  it('attaches nasabRank from PostgreSQL by slug, defaulting to null when unranked', async () => {
+    const a = node(1, 'a', 'Person A');
+    const b = node(2, 'b', 'Person B');
+    const run = vi.fn().mockResolvedValue({
+      records: [record({ node: a, relationship: rel('SON'), related: b })],
+    });
+    getSession.mockReturnValue({ run });
+    findMany.mockResolvedValue([{ slug: 'a', nasabRank: 3 }]);
+
+    const response = await GET(request(''));
+    const body = await response.json();
+
+    expect(findMany).toHaveBeenCalledWith({
+      where: { slug: { in: ['a', 'b'] } },
+      select: { slug: true, nasabRank: true },
+    });
+    const bySlug = Object.fromEntries(body.nodes.map((n: { slug: string; nasabRank: number | null }) => [n.slug, n.nasabRank]));
+    expect(bySlug).toEqual({ a: 3, b: null });
   });
 
   it('scopes to a single hop when focus is set', async () => {

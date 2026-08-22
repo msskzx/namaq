@@ -3,11 +3,13 @@ export interface GraphNode {
   label: string;
   slug: string;
   group: number;
-  // Either the raw Neo4j node label (e.g. "Person", "Battle", set by
-  // /api/graph from node.labels) or a lowercase profile-route hint like
-  // 'person' | 'title' (set explicitly by /api/graph/titles). Optional
-  // because it was never populated back when :Person was the only label.
+  // Which profile route this node's slug resolves under. Defaults to
+  // 'person' when omitted, so existing person-only graphs need no changes.
   type?: string;
+  // Nasab-graph prominence rank (1 = most prominent), read from the
+  // person's PostgreSQL profile. Undefined/null for title nodes and for
+  // people without a computed rank yet.
+  nasabRank?: number | null;
 }
 
 export interface GraphNodeFull extends GraphNode {

@@ -92,6 +92,8 @@ npm run people:sync -- --apply
 # Seed the relationship graph.
 npm run seed:graph
 
+# Compute nasab-graph-based prominence ranks and store them on Postgres profiles.
+npm run people:rank -- --apply
 # Create Neo4j :Battle nodes and PARTICIPATED_IN relationships from the
 # PostgreSQL battle rosters.
 npm run battles:sync -- --apply
@@ -148,5 +150,7 @@ The next work should protect and deepen the main graph-and-search experience bef
 | `npm run seed:events` | Seed events and connect related records |
 | `npm run seed:graph` | Seed or update the Neo4j relationship graph |
 | `npm run gen:cypher` | Generate candidate graph seed data from raw genealogy text |
+| `npm run people:rank` | Recompute nasab-graph ranks and report them (dry run) |
+| `npm run people:rank -- --apply` | Recompute nasab-graph ranks and persist them to Postgres profiles |
 | `npm run people:sync` / `-- --apply` | Report (or apply) PostgreSQL → Neo4j drift for people |
 | `npm run battles:sync` / `-- --apply` | Report (or apply) PostgreSQL → Neo4j drift for battles and participations |

@@ -22,6 +22,8 @@
     "seed:graph": "tsx neo4j/graphSeed.ts",
     "people:sync": "tsx scripts/people/syncCanonicalPeople.ts",
     "people:validate": "tsx scripts/people/syncCanonicalPeople.ts --strict",
+    "people:rank": "tsx scripts/people/computeNasabRanks.ts",
+    "people:rank:validate": "tsx scripts/people/computeNasabRanks.ts --strict",
     "battles:sync": "tsx scripts/battles/syncCanonicalBattles.ts",
     "battles:validate": "tsx scripts/battles/syncCanonicalBattles.ts --strict",
     "seed:surahs": "tsx prisma/surahSeed.ts",
