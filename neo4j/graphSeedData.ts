@@ -36,7 +36,7 @@ import {
  * Each item in the array is a single CREATE query.
  */
 export const corePeopleQueries = [
-    'CREATE (:Person { name: "محمد ﷺ", slug: "prophet-muhammad", nameTransliterated: "Muhammad (Peace be upon him)" });',
+    'CREATE (:Person { name: "محمد رسول الله ﷺ", slug: "prophet-muhammad", nameTransliterated: "Prophet Muhammad (Peace be upon him)" });',
     'CREATE (:Person { name: "أبو بكر الصديق", slug: "abu-bakr-as-siddiq", nameTransliterated: "Abu Bakr al-Siddiq" });',
     'CREATE (:Person { name: "عمر بن الخطاب", slug: "umar-ibn-al-khattab", nameTransliterated: "Umar ibn al-Khattab", fullName: "عمر بن الخطاب بن نفيل بن عبد العزى بن رياح بن قرط بن رزاح بن عدي بن كعب بن لؤي القرشي العدوي" });',
     'CREATE (:Person { name: "عثمان بن عفان", slug: "uthman-ibn-affan", nameTransliterated: "Uthman ibn Affan" });',
