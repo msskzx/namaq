@@ -83,8 +83,8 @@ export default function NavBar() {
   }
 
   const mainLinks = [
-    { href: '/people', label: translations[language].people },
     { href: '/graphs', label: translations[language].allGraph },
+    { href: '/people', label: translations[language].people },
     { href: '/events', label: translations[language].events },
   ];
 
