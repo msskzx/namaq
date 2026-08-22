@@ -17,6 +17,7 @@ const getLinkGroups = (language: 'en' | 'ar') => ({
     links: [
       { href: '/graphs', label: translations[language].familyRelations },
       { href: '/graphs/ancestry', label: 'الانساب' },
+      { href: '/graphs/titles', label: translations[language].titlesGraph },
     ]
   },
   people: {

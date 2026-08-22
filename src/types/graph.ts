@@ -3,8 +3,10 @@ export interface GraphNode {
   label: string;
   slug: string;
   group: number;
-  // Neo4j node label (e.g. "Person", "Battle"). Optional because it was
-  // never populated back when :Person was the only label in the graph.
+  // Either the raw Neo4j node label (e.g. "Person", "Battle", set by
+  // /api/graph from node.labels) or a lowercase profile-route hint like
+  // 'person' | 'title' (set explicitly by /api/graph/titles). Optional
+  // because it was never populated back when :Person was the only label.
   type?: string;
 }
 
