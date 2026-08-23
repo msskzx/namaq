@@ -215,8 +215,12 @@ describe('GET /api/graph', () => {
     expect(params).toEqual({ battles: ['badr'] });
 
     expect(body.nodes).toHaveLength(2);
-    expect(body.nodes.find((n: { slug: string }) => n.slug === 'badr').type).toBe('Battle');
-    expect(body.nodes.find((n: { slug: string }) => n.slug === 'ali-ibn-abi-talib').type).toBe('Person');
+    // Lowercased so it matches the 'person' | 'battle' | 'title' | 'event'
+    // node kinds every other graph route/GraphCanvas's theme.node map use --
+    // the raw Neo4j label ('Battle') would silently fail to match and fall
+    // back to the default (person) fill color.
+    expect(body.nodes.find((n: { slug: string }) => n.slug === 'badr').type).toBe('battle');
+    expect(body.nodes.find((n: { slug: string }) => n.slug === 'ali-ibn-abi-talib').type).toBe('person');
     expect(body.links).toEqual([
       { source: '1', target: '2', label: 'PARTICIPATED_IN', value: 1, status: ['MARTYRED'] },
     ]);

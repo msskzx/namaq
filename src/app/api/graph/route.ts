@@ -101,7 +101,7 @@ export async function GET(_request: Request) {
             label: node.properties.name,
             slug: node.properties.slug,
             group: 1,
-            type: node.labels?.[0],
+            type: node.labels?.[0]?.toLowerCase(),
           });
         }
 
@@ -111,7 +111,7 @@ export async function GET(_request: Request) {
             label: related.properties.name,
             slug: related.properties.slug,
             group: 2,
-            type: related.labels?.[0],
+            type: related.labels?.[0]?.toLowerCase(),
           });
         }
 
