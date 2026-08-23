@@ -14,12 +14,13 @@ import { graphNodeKey } from './graphRank';
 
 const hasNeo4jConfig = Boolean(process.env.NEO4J_URI && process.env.NEO4J_USERNAME && process.env.NEO4J_PASSWORD);
 
-// Two different real historical people who share a display name, verified
-// against the seed data's own "Same-name collisions disambiguated by
-// father" documentation and deliberately modeled as separate nodes -- not
-// an accidental duplicate. Keyed by exact node-key set (see
-// excludeKnownHomonyms) so a different, unexpected collision that happens
-// to reuse one of these slugs still surfaces.
+// Two different real historical people who share a display name -- not an
+// accidental duplicate -- verified either against the seed data's own
+// "Same-name collisions disambiguated by father" documentation or (where a
+// pair predates that documentation) directly against a primary source.
+// Keyed by exact node-key set (see excludeKnownHomonyms) so a different,
+// unexpected collision that happens to reuse one of these slugs still
+// surfaces.
 const KNOWN_HOMONYM_GROUPS: ReadonlySet<string>[] = [
   // neo4j/graphSeedData3.ts:72 vs graphSeedData2.ts:9 -- Hashim ibn Abd
   // Manaf of Banu Hashim (the Prophet's great-grandfather) vs of Banu Abd
@@ -37,6 +38,16 @@ const KNOWN_HOMONYM_GROUPS: ReadonlySet<string>[] = [
   // their own father's name in the slug itself (ibn-abd-al-muttalib vs
   // ibn-nawfal).
   new Set(['person:abdullah-ibn-al-harith-ibn-abd-al-muttalib', 'person:abdullah-ibn-al-harith-ibn-nawfal']),
+  // Not in any seed file (added outside the tracked batch pipeline), so
+  // verified directly against Siyar A'lam al-Nubala: two different
+  // companions named Rafi ibn Amr al-Ghifari, listed back-to-back by
+  // al-Dhahabi -- brother of al-Hakam (kunya Abu Jubair, Basra, the
+  // date-palm hadith, d. 50 AH) vs brother of Aidh (narrated via Amr ibn
+  // Sulaym al-Muzani). The second entry closes with the author's own
+  // note "ذكرته للتمييز" -- "I mention him for the purpose of
+  // distinguishing [him from the one before]" -- explicit confirmation
+  // these are two people, not a duplicate.
+  new Set(['person:rafi-ibn-amr-al-ghifari', 'person:rafi-ibn-amr-al-ghifari-akhu-aidh']),
 ];
 
 describe.skipIf(!hasNeo4jConfig)('unified graph connectivity (live Neo4j)', () => {
