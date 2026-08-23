@@ -241,21 +241,6 @@ const translations = {
       PATERNAL_NEPHEW: 'Paternal Nephew',
       PATERNAL_NIECE: 'Paternal Niece',
     },
-    // Relation type groupings used by the graph's relation filter toggles
-    relationCategories: {
-      parent: 'Parents',
-      spouse: 'Spouses',
-      child: 'Children',
-      sibling: 'Siblings',
-      cousin: 'Cousins',
-      auntUncle: 'Aunts & Uncles',
-      inLaw: 'In-laws',
-      grandparent: 'Grandparents',
-      grandchild: 'Grandchildren',
-      nieceNephew: 'Nieces & Nephews',
-      lineage: 'Lineage',
-      household: 'Other',
-    },
     // Graph filter/fullscreen controls
     graph: {
       relationshipTypes: 'Relationship types',
@@ -541,20 +526,6 @@ const translations = {
       MATERNAL_NIECE: 'ابنة الأخت',
       PATERNAL_NEPHEW: 'ابن الأخ',
       PATERNAL_NIECE: 'ابنة الأخ',
-    },
-    relationCategories: {
-      parent: 'الآباء',
-      spouse: 'الأزواج',
-      child: 'الأبناء',
-      sibling: 'الإخوة',
-      cousin: 'أبناء العم والخال',
-      auntUncle: 'الأعمام والأخوال',
-      inLaw: 'الأصهار',
-      grandparent: 'الأجداد',
-      grandchild: 'الأحفاد',
-      nieceNephew: 'أبناء الإخوة',
-      lineage: 'النسب',
-      household: 'أخرى',
     },
     // Graph filter/fullscreen controls
     graph: {

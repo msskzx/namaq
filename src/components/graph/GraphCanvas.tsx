@@ -126,7 +126,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       })
       .map(link => ({ ...link, source: endpointId(link.source), target: endpointId(link.target) }));
     const linkedIds = new Set(links.flatMap(link => [link.source as string, link.target as string]));
-    if (selectedNode) linkedIds.add(selectedNode.id);
+    if (selectedNode && kindAllowed(selectedNode.id)) linkedIds.add(selectedNode.id);
     // Nodes pinned (fx/fy) at a precomputed full-graph position stay frozen
     // there under filtering too, so a filtered subgraph -- which should
     // reorganize freely like every unpinned graph view does -- instead
@@ -275,7 +275,9 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   const theme = getGraphTheme();
   const typeLabels: Record<string, string> = { person: t.people, title: t.titles, battle: t.battles.title, event: t.events };
   const profilePaths: Record<string, string> = { title: '/titles', battle: '/battles', event: '/events' };
-  const nodeFillColor = (node: GraphNodeFull) => node.slug === selectedSlug ? '#fbbf24' : theme.node[(node.type as keyof typeof theme.node) ?? 'person'] ?? theme.node.person;
+  const kindColor = (kind: string) => theme.node[(kind as keyof typeof theme.node)] ?? theme.node.person;
+  const kindLabel = (kind: string) => typeLabels[kind] ?? kind;
+  const nodeFillColor = (node: GraphNodeFull) => node.slug === selectedSlug ? '#fbbf24' : kindColor(node.type ?? 'person');
 
   const filterPanel = (
     <>
@@ -324,8 +326,8 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           <div className="flex flex-wrap gap-2">
             {kindsPresent.map(kind => {
               const active = !excludedKinds.has(kind);
-              const color = theme.node[(kind as keyof typeof theme.node)] ?? theme.node.person;
-              const label = typeLabels[kind] ?? kind;
+              const color = kindColor(kind);
+              const label = kindLabel(kind);
               return (
                 <button
                   key={kind}
@@ -364,8 +366,8 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 flex flex-wrap items-center gap-4 text-xs text-gray-600 dark:text-gray-300">
       {kindsPresent.map(type => (
         <span key={type} className="flex items-center gap-1.5">
-          <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: theme.node[(type as keyof typeof theme.node)] ?? theme.node.person }} />
-          {typeLabels[type] ?? type}
+          <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: kindColor(type) }} />
+          {kindLabel(type)}
         </span>
       ))}
     </div>
