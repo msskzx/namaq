@@ -18,6 +18,8 @@ Open the graph → explore and filter relationships → open a person's profile 
 - `/graphs` combines people, titles, battles, and events into a single graph, showing every node and relationship across the site.
 - Graph links have typed, directed relationship labels such as `FATHER`, `SON`, `WIFE`, and `PATERNAL_UNCLE`.
 - The graph search provides autocomplete, supports relation and ancestry modes, and keeps the selected view in the URL.
+- Every graph view has an independent on/off toggle per raw relationship type (father, son, etc. are separate toggles, not grouped into a family category) plus an "all relations" master toggle, and — for bipartite graphs (people mixed with titles/battles/events) — an independent toggle per node kind plus an "all kinds" master toggle. Both filter states live in the URL (`relation`, `kind`) as the set of *hidden* types, so toggling one type never affects any other.
+- The graph canvas has a fullscreen mode; fullscreen shows a close button and a filter button that opens the same relation/kind toggles in a floating panel over the graph.
 - Selecting a node takes the learner to `/people/[slug]`.
 - Person pages embed a focused graph for that person: nearby relations (up to three hops) and their recorded paternal ancestry.
 - Graph seed data is deduplicated by person slug and by source/type/target relationship; the seeder uses Cypher `MERGE` so repeat runs do not add duplicate graph entities.

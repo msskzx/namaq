@@ -256,6 +256,17 @@ const translations = {
       lineage: 'Lineage',
       household: 'Other',
     },
+    // Graph filter/fullscreen controls
+    graph: {
+      relationshipTypes: 'Relationship types',
+      nodeKinds: 'Node kinds',
+      allRelations: 'All relations',
+      allKinds: 'All kinds',
+      fullscreen: 'Fullscreen',
+      closeFullscreen: 'Close fullscreen',
+      openFilters: 'Filters',
+      closeFilters: 'Close filters',
+    },
     articlesInCategory: 'Articles in this category',
     // Motivation Cards
     motivation: {
@@ -544,6 +555,17 @@ const translations = {
       nieceNephew: 'أبناء الإخوة',
       lineage: 'النسب',
       household: 'أخرى',
+    },
+    // Graph filter/fullscreen controls
+    graph: {
+      relationshipTypes: 'أنواع العلاقات',
+      nodeKinds: 'أنواع العُقد',
+      allRelations: 'كل العلاقات',
+      allKinds: 'كل الأنواع',
+      fullscreen: 'ملء الشاشة',
+      closeFullscreen: 'إغلاق ملء الشاشة',
+      openFilters: 'التصفية',
+      closeFilters: 'إغلاق التصفية',
     },
     articlesInCategory: 'المقالات في هذا التصنيف',
     // Motivation Cards
