@@ -236,7 +236,7 @@ export const people = [
   {
     name: 'تيم بن مرة',
     fullName: 'تيم بن مرة بن كعب بن لؤي القرشي التيمي',
-    slug: 'taym-ibn-murrah',
+    slug: 'taym-ibn-murra',
     appearance: '',
     virtues: '',
     picture: null,

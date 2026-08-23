@@ -59,3 +59,24 @@ export function findDuplicateLabelGroups(nodes: LabeledGraphNode[]): DuplicateNo
     .filter((group) => group.length > 1)
     .map((group) => ({ label: group[0].label, nodes: group }));
 }
+
+/**
+ * Drops groups matching a known, deliberately-disambiguated homonym --  two
+ * different real people who share a display name, correctly modeled as
+ * separate nodes (see e.g. the "Same-name collisions disambiguated by
+ * father" comments in neo4j/graphSeedData4.ts/5.ts/6.ts) -- rather than an
+ * accidental duplicate. Matched by *exact* node-key set, not by label, so a
+ * different, unexpected collision that happens to reuse one of these slugs
+ * still surfaces instead of being silently swallowed.
+ */
+export function excludeKnownHomonyms(
+  groups: DuplicateNodeGroup[],
+  knownGroups: ReadonlySet<string>[],
+): DuplicateNodeGroup[] {
+  return groups.filter((group) => {
+    const keys = new Set(group.nodes.map(graphNodeKey));
+    return !knownGroups.some(
+      (known) => known.size === keys.size && [...known].every((key) => keys.has(key)),
+    );
+  });
+}

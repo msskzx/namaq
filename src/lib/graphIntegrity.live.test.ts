@@ -7,12 +7,42 @@
  */
 
 import { afterAll, describe, expect, it } from 'vitest';
-import { findDuplicateLabelGroups, findIsolatedNodes } from './graphIntegrity';
+import { excludeKnownHomonyms, findDuplicateLabelGroups, findIsolatedNodes } from './graphIntegrity';
 import { fetchUnifiedGraph } from './fetchUnifiedGraph';
 import { getDriver } from './neo4j';
 import { graphNodeKey } from './graphRank';
 
 const hasNeo4jConfig = Boolean(process.env.NEO4J_URI && process.env.NEO4J_USERNAME && process.env.NEO4J_PASSWORD);
+
+// Two different real historical people who share a display name, verified
+// against the seed data's own "Same-name collisions disambiguated by
+// father" documentation and deliberately modeled as separate nodes -- not
+// an accidental duplicate. Keyed by exact node-key set (see
+// excludeKnownHomonyms) so a different, unexpected collision that happens
+// to reuse one of these slugs still surfaces.
+const KNOWN_HOMONYM_GROUPS: ReadonlySet<string>[] = [
+  // neo4j/graphSeedData3.ts:72 vs graphSeedData2.ts:9 -- Hashim ibn Abd
+  // Manaf of Banu Hashim (the Prophet's great-grandfather) vs of Banu Abd
+  // al-Dar ("al-Abdari").
+  new Set(['person:hashim-ibn-abd-manaf', 'person:hashim-ibn-abd-manaf-al-abdari']),
+  // neo4j/graphSeedData4.ts:18-22 -- the Quraysh ancestor Malik ibn
+  // al-Nadr vs an unrelated Ansari (Banu al-Najjar) figure of the same
+  // name, father of al-Baraa ibn Malik.
+  new Set(['person:malik-ibn-an-nadr', 'person:malik-ibn-an-nadr-al-najjari']),
+  // neo4j/graphSeedData5.ts:27-32 -- Zayd ibn Haram of Banu al-Najjar
+  // (ancestor of al-Baraa ibn Malik) vs a different Khazraji Zayd ibn
+  // Haram of Banu Salamah (father of al-Jumuh).
+  new Set(['person:zayd-ibn-haram', 'person:zayd-ibn-haram-ibn-kaab']),
+  // neo4j/graphSeedData6.ts:45-50 -- Malik ibn Imru' al-Qays, son of Imru'
+  // al-Qays ibn Malik al-Aghar (Thabit ibn Qais's ancestor) vs a
+  // different, same-name Khazraji Harithi figure (Sa'd ibn al-Rabi's
+  // ancestor).
+  new Set(['person:malik-ibn-imri-al-qays', 'person:malik-ibn-imri-al-qays-al-harithi']),
+  // Two different people named Abdullah ibn al-Harith, distinguished by
+  // their own father's name in the slug itself (ibn-abd-al-muttalib vs
+  // ibn-nawfal).
+  new Set(['person:abdullah-ibn-al-harith-ibn-abd-al-muttalib', 'person:abdullah-ibn-al-harith-ibn-nawfal']),
+];
 
 describe.skipIf(!hasNeo4jConfig)('unified graph connectivity (live Neo4j)', () => {
   afterAll(async () => {
@@ -35,7 +65,7 @@ describe.skipIf(!hasNeo4jConfig)('unified graph connectivity (live Neo4j)', () =
 
   it('has no node duplicated under a different slug (same type, same display name)', async () => {
     const { nodes } = await fetchUnifiedGraph();
-    const duplicates = findDuplicateLabelGroups(nodes);
+    const duplicates = excludeKnownHomonyms(findDuplicateLabelGroups(nodes), KNOWN_HOMONYM_GROUPS);
 
     if (duplicates.length > 0) {
       const list = duplicates

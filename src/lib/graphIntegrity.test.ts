@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { findDuplicateLabelGroups, findIsolatedNodes, normalizeGraphLabel } from './graphIntegrity';
-import type { LabeledGraphNode } from './graphIntegrity';
+import { excludeKnownHomonyms, findDuplicateLabelGroups, findIsolatedNodes, normalizeGraphLabel } from './graphIntegrity';
+import type { DuplicateNodeGroup, LabeledGraphNode } from './graphIntegrity';
 import type { GraphRankEdge, GraphRankNode } from './graphRank';
 
 describe('findIsolatedNodes', () => {
@@ -98,5 +98,43 @@ describe('findDuplicateLabelGroups', () => {
 
   it('returns nothing for an empty graph', () => {
     expect(findDuplicateLabelGroups([])).toEqual([]);
+  });
+});
+
+describe('excludeKnownHomonyms', () => {
+  const homonymGroup: DuplicateNodeGroup = {
+    label: 'مالك بن النضر',
+    nodes: [
+      { type: 'person', slug: 'malik-ibn-an-nadr', label: 'مالك بن النضر' },
+      { type: 'person', slug: 'malik-ibn-an-nadr-al-najjari', label: 'مالك بن النضر' },
+    ],
+  };
+  const knownGroups = [new Set(['person:malik-ibn-an-nadr', 'person:malik-ibn-an-nadr-al-najjari'])];
+
+  it('drops a group whose node-key set exactly matches a known homonym', () => {
+    expect(excludeKnownHomonyms([homonymGroup], knownGroups)).toEqual([]);
+  });
+
+  it('keeps a group with the same label but a different member set', () => {
+    const different: DuplicateNodeGroup = {
+      label: 'مالك بن النضر',
+      nodes: [
+        { type: 'person', slug: 'malik-ibn-an-nadr', label: 'مالك بن النضر' },
+        { type: 'person', slug: 'some-other-slug', label: 'مالك بن النضر' },
+      ],
+    };
+    expect(excludeKnownHomonyms([different], knownGroups)).toEqual([different]);
+  });
+
+  it('keeps a three-way collision even if two of its members match a known two-way pair', () => {
+    const threeWay: DuplicateNodeGroup = {
+      label: 'مالك بن النضر',
+      nodes: [...homonymGroup.nodes, { type: 'person', slug: 'a-third-one', label: 'مالك بن النضر' }],
+    };
+    expect(excludeKnownHomonyms([threeWay], knownGroups)).toEqual([threeWay]);
+  });
+
+  it('is a no-op with an empty allowlist', () => {
+    expect(excludeKnownHomonyms([homonymGroup], [])).toEqual([homonymGroup]);
   });
 });
