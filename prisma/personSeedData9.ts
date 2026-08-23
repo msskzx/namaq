@@ -38,7 +38,7 @@ export const people = [
     appearance: null,
     virtues: null,
     picture: null,
-    titles: ['companion'],
+    titles: ['companion', 'first-wife', 'mother-of-believers'],
   },
   {
     // Brand-new Neo4j Person node (fatimah-bint-asad) — mother of Ali ibn
@@ -63,7 +63,7 @@ export const people = [
     appearance: null,
     virtues: null,
     picture: null,
-    titles: ['companion'],
+    titles: ['companion', 'sayyidat-nisa-ahl-al-jannah'],
   },
   {
     // Existing Neo4j Person node (aisha-bint-abi-bakr, core, no new node
@@ -76,7 +76,7 @@ export const people = [
     appearance: null,
     virtues: null,
     picture: null,
-    titles: ['companion'],
+    titles: ['companion', 'siddiqa', 'mother-of-believers'],
   },
   {
     // Existing Neo4j Person node (umm-salamah, core, no new node created) —
@@ -91,7 +91,7 @@ export const people = [
     appearance: null,
     virtues: null,
     picture: null,
-    titles: ['companion'],
+    titles: ['companion', 'mother-of-believers'],
   },
   {
     // Existing Neo4j Person node (zaynab-bint-jahsh, core, no new node
@@ -104,7 +104,7 @@ export const people = [
     appearance: null,
     virtues: null,
     picture: null,
-    titles: ['companion'],
+    titles: ['companion', 'mother-of-believers'],
   },
   {
     // Existing Neo4j Person node (zaynab-bint-khuzaymah, core, no new node
@@ -118,7 +118,7 @@ export const people = [
     appearance: null,
     virtues: null,
     picture: null,
-    titles: ['companion'],
+    titles: ['companion', 'mother-of-believers', 'umm-al-masakeen'],
   },
   {
     // Existing Neo4j Person node (umm-habibah, core, no new node created) —
@@ -131,7 +131,7 @@ export const people = [
     appearance: null,
     virtues: null,
     picture: null,
-    titles: ['companion'],
+    titles: ['companion', 'mother-of-believers'],
   },
   {
     // Brand-new Neo4j Person node (umm-ayman) — Barakah, the Prophet's
@@ -160,7 +160,7 @@ export const people = [
     appearance: null,
     virtues: null,
     picture: null,
-    titles: ['companion'],
+    titles: ['companion', 'mother-of-believers'],
   },
   {
     // Existing Neo4j Person node (safiyyah-bint-huyayy, core, no new node
@@ -174,7 +174,7 @@ export const people = [
     appearance: null,
     virtues: null,
     picture: null,
-    titles: ['companion'],
+    titles: ['companion', 'mother-of-believers'],
   },
   {
     // Existing Neo4j Person node (maymunah-bint-al-harith, core, no new node
@@ -190,7 +190,7 @@ export const people = [
     appearance: null,
     virtues: null,
     picture: null,
-    titles: ['companion'],
+    titles: ['companion', 'mother-of-believers'],
   },
   {
     // Existing Neo4j Person node (zaynab-bint-muhammad, core, no new node
