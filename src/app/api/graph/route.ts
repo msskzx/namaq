@@ -30,7 +30,7 @@ export async function GET(_request: Request) {
     if (persons.length > 0) {
       queryParts.push(
         `UNWIND $persons AS personSlug
-         MATCH path = (p1:Person {slug: personSlug})-[*1..3]-(p2:Person)
+         MATCH path = (p1:Person {slug: personSlug})-[*1]-(p2:Person)
          RETURN path`
       );
       params.persons = persons;

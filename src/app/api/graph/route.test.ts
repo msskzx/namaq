@@ -146,7 +146,7 @@ describe('GET /api/graph', () => {
     expect(run).toHaveBeenCalledTimes(1);
     const [query, params] = run.mock.calls[0];
     expect(query).toContain('UNWIND $persons AS personSlug');
-    expect(query).toContain('MATCH path = (p1:Person {slug: personSlug})-[*1..3]-(p2:Person)');
+    expect(query).toContain('MATCH path = (p1:Person {slug: personSlug})-[*1]-(p2:Person)');
     expect(params).toEqual({ persons: ['prophet-muhammad'] });
 
     expect(body.nodes).toHaveLength(3);
@@ -241,7 +241,7 @@ describe('GET /api/graph', () => {
     expect(run).toHaveBeenCalledTimes(1);
     const [query, params] = run.mock.calls[0];
     expect(query).toContain(' UNION ');
-    expect(query).toContain('MATCH path = (p1:Person {slug: personSlug})-[*1..3]-(p2:Person)');
+    expect(query).toContain('MATCH path = (p1:Person {slug: personSlug})-[*1]-(p2:Person)');
     expect(query).toContain('MATCH path = (p1:Person {slug: ancestorSlug})-[r:SON*]->(p2:Person)');
     expect(params).toEqual({ persons: ['a'], ancestors: ['b'] });
   });
