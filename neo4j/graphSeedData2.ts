@@ -9,8 +9,8 @@ export const peopleQueries = [
   'CREATE (:Person { name: "هاشم بن عبد مناف", slug: "hashim-ibn-abd-manaf", fullName: "هاشم بن عبد مناف بن قصي بن كلاب بن مرة بن كعب بن لؤي بن غالب بن فهر بن مالك بن النضر بن كنانة بن خزيمة بن مدركة بن إلياس بن مضر بن نزار بن معد بن عدنان" });',
   'CREATE (:Person { name: "عبد مناف بن قصي", slug: "abd-manaf-ibn-qusay", fullName: "عبد مناف بن قصي بن كلاب بن مرة بن كعب بن لؤي بن غالب بن فهر بن مالك بن النضر بن كنانة بن خزيمة بن مدركة بن إلياس بن مضر بن نزار بن معد بن عدنان" });',
   'CREATE (:Person { name: "قصي بن كلاب", slug: "qusay-ibn-kilab", fullName: "قصي بن كلاب بن مرة بن كعب بن لؤي بن غالب بن فهر بن مالك بن النضر بن كنانة بن خزيمة بن مدركة بن إلياس بن مضر بن نزار بن معد بن عدنان" });',
-  'CREATE (:Person { name: "كلاب بن مرة", slug: "kilab-ibn-murra", fullName: "كلاب بن مرة بن كعب بن لؤي بن غالب بن فهر بن مالك بن النضر بن كنانة بن خزيمة بن مدركة بن إلياس بن مضر بن نزار بن معد بن عدنان" });',
-  'CREATE (:Person { name: "مرة بن كعب", slug: "murra-ibn-kaab", fullName: "مرة بن كعب بن لؤي بن غالب بن فهر بن مالك بن النضر بن كنانة بن خزيمة بن مدركة بن إلياس بن مضر بن نزار بن معد بن عدنان" });',
+  'CREATE (:Person { name: "كلاب بن مرة", slug: "kilab-ibn-murrah", fullName: "كلاب بن مرة بن كعب بن لؤي بن غالب بن فهر بن مالك بن النضر بن كنانة بن خزيمة بن مدركة بن إلياس بن مضر بن نزار بن معد بن عدنان" });',
+  'CREATE (:Person { name: "مرة بن كعب", slug: "murrah-ibn-kaab", fullName: "مرة بن كعب بن لؤي بن غالب بن فهر بن مالك بن النضر بن كنانة بن خزيمة بن مدركة بن إلياس بن مضر بن نزار بن معد بن عدنان" });',
   'CREATE (:Person { name: "كعب بن لؤي", slug: "kaab-ibn-luay", fullName: "كعب بن لؤي بن غالب بن فهر بن مالك بن النضر بن كنانة بن خزيمة بن مدركة بن إلياس بن مضر بن نزار بن معد بن عدنان" });',
   'CREATE (:Person { name: "لؤي بن غالب", slug: "luay-ibn-ghalib", fullName: "لؤي بن غالب بن فهر بن مالك بن النضر بن كنانة بن خزيمة بن مدركة بن إلياس بن مضر بن نزار بن معد بن عدنان" });',
   'CREATE (:Person { name: "غالب بن فهر", slug: "ghalib-ibn-fahar", fullName: "غالب بن فهر بن مالك بن النضر بن كنانة بن خزيمة بن مدركة بن إلياس بن مضر بن نزار بن معد بن عدنان" });',
@@ -32,7 +32,7 @@ export const peopleQueries = [
   'CREATE (:Person { name: "عمرو بن كعب", slug: "amr-ibn-kaab", fullName: "عمرو بن كعب بن سعد بن تيم بن مرة بن كعب بن لؤي القرشي التيمي" });',
   'CREATE (:Person { name: "كعب بن سعد", slug: "kaab-ibn-saad", fullName: "كعب بن سعد بن تيم بن مرة بن كعب بن لؤي القرشي التيمي" });',
   'CREATE (:Person { name: "سعد بن تيم", slug: "saad-ibn-taym", fullName: "سعد بن تيم بن مرة بن كعب بن لؤي القرشي التيمي" });',
-  'CREATE (:Person { name: "تيم بن مرة", slug: "taym-ibn-murra", fullName: "تيم بن مرة بن كعب بن لؤي القرشي التيمي" });',
+  'CREATE (:Person { name: "تيم بن مرة", slug: "taym-ibn-murrah", fullName: "تيم بن مرة بن كعب بن لؤي القرشي التيمي" });',
 
   // Omar ibn al-Khattab
   'CREATE (:Person { name: "الخطاب بن نفيل", slug: "al-khattab-ibn-nufayl", fullName: "الخطاب بن نفيل بن عبد العزى بن رياح بن قرط بن رزاح بن عدي بن كعب بن لؤي القرشي العدوي" });',
@@ -71,14 +71,14 @@ export const peopleRelationsQueries = [
   'MATCH (from:Person {slug: "abd-manaf-ibn-qusay"}), (to:Person {slug: "qusay-ibn-kilab"}) CREATE (from)-[:SON]->(to);',
   'MATCH (from:Person {slug: "qusay-ibn-kilab"}), (to:Person {slug: "abd-manaf-ibn-qusay"}) CREATE (from)-[:FATHER]->(to);',
 
-  'MATCH (from:Person {slug: "qusay-ibn-kilab"}), (to:Person {slug: "kilab-ibn-murra"}) CREATE (from)-[:SON]->(to);',
-  'MATCH (from:Person {slug: "kilab-ibn-murra"}), (to:Person {slug: "qusay-ibn-kilab"}) CREATE (from)-[:FATHER]->(to);',
+  'MATCH (from:Person {slug: "qusay-ibn-kilab"}), (to:Person {slug: "kilab-ibn-murrah"}) CREATE (from)-[:SON]->(to);',
+  'MATCH (from:Person {slug: "kilab-ibn-murrah"}), (to:Person {slug: "qusay-ibn-kilab"}) CREATE (from)-[:FATHER]->(to);',
 
-  'MATCH (from:Person {slug: "kilab-ibn-murra"}), (to:Person {slug: "murra-ibn-kaab"}) CREATE (from)-[:SON]->(to);',
-  'MATCH (from:Person {slug: "murra-ibn-kaab"}), (to:Person {slug: "kilab-ibn-murra"}) CREATE (from)-[:FATHER]->(to);',
+  'MATCH (from:Person {slug: "kilab-ibn-murrah"}), (to:Person {slug: "murrah-ibn-kaab"}) CREATE (from)-[:SON]->(to);',
+  'MATCH (from:Person {slug: "murrah-ibn-kaab"}), (to:Person {slug: "kilab-ibn-murrah"}) CREATE (from)-[:FATHER]->(to);',
 
-  'MATCH (from:Person {slug: "murra-ibn-kaab"}), (to:Person {slug: "kaab-ibn-luay"}) CREATE (from)-[:SON]->(to);',
-  'MATCH (from:Person {slug: "kaab-ibn-luay"}), (to:Person {slug: "murra-ibn-kaab"}) CREATE (from)-[:FATHER]->(to);',
+  'MATCH (from:Person {slug: "murrah-ibn-kaab"}), (to:Person {slug: "kaab-ibn-luay"}) CREATE (from)-[:SON]->(to);',
+  'MATCH (from:Person {slug: "kaab-ibn-luay"}), (to:Person {slug: "murrah-ibn-kaab"}) CREATE (from)-[:FATHER]->(to);',
 
   'MATCH (from:Person {slug: "kaab-ibn-luay"}), (to:Person {slug: "luay-ibn-ghalib"}) CREATE (from)-[:SON]->(to);',
   'MATCH (from:Person {slug: "luay-ibn-ghalib"}), (to:Person {slug: "kaab-ibn-luay"}) CREATE (from)-[:FATHER]->(to);',
@@ -135,11 +135,11 @@ export const peopleRelationsQueries = [
   'MATCH (from:Person {slug: "kaab-ibn-saad"}), (to:Person {slug: "saad-ibn-taym"}) CREATE (from)-[:SON]->(to);',
   'MATCH (from:Person {slug: "saad-ibn-taym"}), (to:Person {slug: "kaab-ibn-saad"}) CREATE (from)-[:FATHER]->(to);',
 
-  'MATCH (from:Person {slug: "saad-ibn-taym"}), (to:Person {slug: "taym-ibn-murra"}) CREATE (from)-[:SON]->(to);',
-  'MATCH (from:Person {slug: "taym-ibn-murra"}), (to:Person {slug: "saad-ibn-taym"}) CREATE (from)-[:FATHER]->(to);',
+  'MATCH (from:Person {slug: "saad-ibn-taym"}), (to:Person {slug: "taym-ibn-murrah"}) CREATE (from)-[:SON]->(to);',
+  'MATCH (from:Person {slug: "taym-ibn-murrah"}), (to:Person {slug: "saad-ibn-taym"}) CREATE (from)-[:FATHER]->(to);',
 
-  'MATCH (from:Person {slug: "taym-ibn-murra"}), (to:Person {slug: "murra-ibn-kaab"}) CREATE (from)-[:SON]->(to);',
-  'MATCH (from:Person {slug: "murra-ibn-kaab"}), (to:Person {slug: "taym-ibn-murra"}) CREATE (from)-[:FATHER]->(to);',
+  'MATCH (from:Person {slug: "taym-ibn-murrah"}), (to:Person {slug: "murrah-ibn-kaab"}) CREATE (from)-[:SON]->(to);',
+  'MATCH (from:Person {slug: "murrah-ibn-kaab"}), (to:Person {slug: "taym-ibn-murrah"}) CREATE (from)-[:FATHER]->(to);',
 
   // Umar ibn al-Khattab
   'MATCH (from:Person {slug: "umar-ibn-al-khattab"}), (to:Person {slug: "al-khattab-ibn-nufayl"}) CREATE (from)-[:SON]->(to);',
