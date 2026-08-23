@@ -15,7 +15,7 @@ export default function BattlesGraphPage() {
                     ? 'استكشف معارك السيرة النبوية من خلال رسم بياني تفاعلي يربط كل معركة بمن شارك فيها من الصحابة.'
                     : 'Explore the battles of the prophetic biography through an interactive diagram linking every battle to the companions who took part in it.'}
             </p>
-            <GraphCanvas url="/api/graph/battles" showSearch={false} targetSlug="" nodesLabel="battles & people" />
+            <GraphCanvas url="/api/graph/battles" showSearch={false} nodeSearch targetSlug="" nodesLabel="battles & people" />
         </div>
     );
 }
