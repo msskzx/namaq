@@ -33,11 +33,6 @@ const KNOWN_HOMONYM_GROUPS: ReadonlySet<string>[] = [
   // (ancestor of al-Baraa ibn Malik) vs a different Khazraji Zayd ibn
   // Haram of Banu Salamah (father of al-Jumuh).
   new Set(['person:zayd-ibn-haram', 'person:zayd-ibn-haram-ibn-kaab']),
-  // neo4j/graphSeedData6.ts:45-50 -- Malik ibn Imru' al-Qays, son of Imru'
-  // al-Qays ibn Malik al-Aghar (Thabit ibn Qais's ancestor) vs a
-  // different, same-name Khazraji Harithi figure (Sa'd ibn al-Rabi's
-  // ancestor).
-  new Set(['person:malik-ibn-imri-al-qays', 'person:malik-ibn-imri-al-qays-al-harithi']),
   // Two different people named Abdullah ibn al-Harith, distinguished by
   // their own father's name in the slug itself (ibn-abd-al-muttalib vs
   // ibn-nawfal).
