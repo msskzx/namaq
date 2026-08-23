@@ -42,26 +42,10 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 const FALLBACK_PALETTE = Object.values(CATEGORY_COLORS);
 
-// Category display order, derived from each category's first appearance in
-// RELATION_ORDER so it stays in sync with translations.ts automatically.
-export const CATEGORY_ORDER = RELATION_ORDER.reduce<string[]>((order, type) => {
-  const category = CATEGORY_BY_TYPE[type];
-  if (category && !order.includes(category)) order.push(category);
-  return order;
-}, []);
-
 function hashString(value: string): number {
   let hash = 0;
   for (let i = 0; i < value.length; i++) hash = (hash * 31 + value.charCodeAt(i)) >>> 0;
   return hash;
-}
-
-// Types not in CATEGORY_BY_TYPE (e.g. a new relation type added to the graph
-// data before this map is updated) become their own single-type category, so
-// they still get a stable, distinguishable color/toggle, just not grouped
-// with anything.
-export function relationCategoryKey(type: string): string {
-  return CATEGORY_BY_TYPE[type] ?? type;
 }
 
 export function relationColor(type: string): string {
@@ -77,19 +61,6 @@ export function sortRelationTypes(types: string[]): string[] {
   return [...types].sort((a, b) => {
     const ai = RELATION_ORDER.indexOf(a);
     const bi = RELATION_ORDER.indexOf(b);
-    if (ai === -1 && bi === -1) return a.localeCompare(b);
-    if (ai === -1) return 1;
-    if (bi === -1) return -1;
-    return ai - bi;
-  });
-}
-
-// Sorts category keys by CATEGORY_ORDER; single-type fallback categories
-// (see relationCategoryKey) sort alphabetically after all known ones.
-export function sortRelationCategories(categories: string[]): string[] {
-  return [...categories].sort((a, b) => {
-    const ai = CATEGORY_ORDER.indexOf(a);
-    const bi = CATEGORY_ORDER.indexOf(b);
     if (ai === -1 && bi === -1) return a.localeCompare(b);
     if (ai === -1) return 1;
     if (bi === -1) return -1;
