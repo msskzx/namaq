@@ -9,11 +9,11 @@ import { GraphData, GraphNodeFull, GraphLink } from '@/types/graph';
 import useSWR from 'swr';
 import { fetcher } from '@/lib/swr';
 import GraphSearch from './GraphSearch';
-import GraphNodeSearch from './GraphNodeSearch';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import { useLanguage } from '@/components/language/LanguageContext';
 import translations from '@/components/language/translations';
 import { relationColor, sortRelationTypes } from '@/lib/relations';
+import { profilePath } from '@/lib/nodeProfile';
 
 interface GraphCanvasProps {
   url?: string;
@@ -27,13 +27,6 @@ interface GraphCanvasProps {
   // to 'people' since most graphs are person-only; a bipartite graph (e.g.
   // titles and people) should override this to describe what's actually listed.
   nodesLabel?: string;
-  // Client-side "jump to node" search over whatever this graph has already
-  // loaded, for finding a title/battle/event node (or any person) by name
-  // and centering on it. Independent of showSearch -- the two can both be
-  // on at once, e.g. the consolidated /graphs page shows GraphSearch's
-  // Relations/Ancestors/Descendants person lookup alongside this generic
-  // any-node lookup rather than picking one or the other.
-  nodeSearch?: boolean;
 }
 
 const relationName = (value: string) => value.toLowerCase().replaceAll('_', ' ');
@@ -89,7 +82,7 @@ function nodeRadius(node: GraphNodeFull): number {
   return Math.max(textWidth + NODE_BASE_FONT_SIZE, NODE_BASE_FONT_SIZE * 2) / 2;
 }
 
-export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-muhammad', showSearch = true, initialParams, nodesLabel = 'people', nodeSearch = false }: GraphCanvasProps) {
+export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-muhammad', showSearch = true, initialParams, nodesLabel = 'people' }: GraphCanvasProps) {
   const { language } = useLanguage();
   const t = translations[language];
   const router = useRouter();
@@ -136,18 +129,22 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // Raw relation types present in the fetched graph, one toggle per type
   // (not grouped into families) so e.g. father and son can be shown/hidden
   // independently.
-  const relationTypesPresent = useMemo(() => sortRelationTypes([...new Set(graphData?.links.map(link => link.label) ?? [])]), [graphData]);
+  // ACCOMPANIED_BY is COMPANION_OF's inverse edge (see
+  // scripts/people/syncCompanionRelations.ts) -- always shown, but not worth
+  // a second toggle alongside COMPANION_OF for what's the same relationship
+  // viewed from the other side.
+  const relationTypesPresent = useMemo(() => sortRelationTypes([...new Set(graphData?.links.map(link => link.label) ?? [])].filter(type => type !== 'ACCOMPANIED_BY')), [graphData]);
   // Node kinds present in the fetched graph (person/title/battle/event).
   const kindsPresent = useMemo(() => [...new Set(graphData?.nodes.map(node => node.type ?? 'person') ?? [])], [graphData]);
-  // On a general-purpose page (showSearch/nodeSearch on) the kind toggle
-  // needs every possible kind on offer, not just whatever the current,
-  // possibly-narrowed fetch happens to contain -- otherwise narrowing down
-  // to `kind=person` removes the only switches that could widen back out.
-  // A scoped embed (e.g. the person profile's ancestor mini-graph, both
-  // false) is inherently single-kind anyway, so it keeps the old
-  // data-driven behavior of only offering a toggle when there's more than
-  // one kind to toggle between.
-  const kindsUniverse = (showSearch || nodeSearch) ? ALL_KINDS : kindsPresent;
+  // On a general-purpose page (showSearch on) the kind toggle needs every
+  // possible kind on offer, not just whatever the current, possibly-narrowed
+  // fetch happens to contain -- otherwise narrowing down to `kind=person`
+  // removes the only switches that could widen back out. A scoped embed
+  // (e.g. the person profile's ancestor mini-graph, showSearch off) is
+  // inherently single-kind anyway, so it keeps the old data-driven behavior
+  // of only offering a toggle when there's more than one kind to toggle
+  // between.
+  const kindsUniverse = showSearch ? ALL_KINDS : kindsPresent;
   const anyFilterActive = excludedRelations.size > 0;
   const visibleGraph = useMemo(() => {
     if (!graphData || !anyFilterActive) return graphData;
@@ -334,7 +331,6 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
   const theme = getGraphTheme();
   const typeLabels: Record<string, string> = { person: t.people, title: t.titles, battle: t.battles.title, event: t.events };
-  const profilePaths: Record<string, string> = { title: '/titles', battle: '/battles', event: '/events' };
   const kindColor = (kind: string) => theme.node[(kind as keyof typeof theme.node)] ?? theme.node.person;
   const kindLabel = (kind: string) => typeLabels[kind] ?? kind;
   const nodeFillColor = (node: GraphNodeFull) => node.slug === selectedSlug ? '#fbbf24' : kindColor(node.type ?? 'person');
@@ -421,16 +417,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {showSearch && <GraphSearch />}
-      {nodeSearch && graphData && (
-        <GraphNodeSearch
-          nodes={graphData.nodes}
-          onSelect={(node) => updateParams({ selected: node.slug })}
-          placeholder={t.search}
-          typeLabel={(type) => kindLabel(type ?? '')}
-          isArabic={language === 'ar'}
-        />
-      )}
+      {showSearch && <GraphSearch nodes={graphData?.nodes} />}
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3" aria-label="Graph controls">
         <p className="text-sm text-gray-600 dark:text-gray-300" aria-live="polite">
           {visibleGraph ? `${visibleGraph.nodes.length} ${nodesLabel} · ${visibleGraph.links.length} relationships` : 'No graph data available'}
@@ -450,10 +437,10 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
       {selectedNode && (
         <aside className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4 dark:border-amber-700 dark:bg-gray-800" aria-live="polite">
-          <p className="text-sm text-gray-600 dark:text-gray-300">Selected person</p>
+          <p className="text-sm text-gray-600 dark:text-gray-300">Selected {kindLabel(selectedNode.type ?? 'person')}</p>
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode.label}</h2>
           <div className="mt-3 flex flex-wrap gap-3">
-            <Link className="rounded bg-amber-400 px-3 py-1.5 text-sm text-gray-950 hover:bg-amber-300" href={`${selectedNode.type ? profilePaths[selectedNode.type] ?? '/people' : '/people'}/${selectedNode.slug}`}>View profile</Link>
+            <Link className="rounded bg-amber-400 px-3 py-1.5 text-sm text-gray-950 hover:bg-amber-300" href={profilePath(selectedNode.type, selectedNode.slug)}>View profile</Link>
             <button type="button" onClick={() => updateParams({ focus: selectedNode.slug, person: null, ancestorsOf: [], descendantsOf: [] })} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-700">Explore neighbours</button>
           </div>
         </aside>

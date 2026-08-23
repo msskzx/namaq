@@ -178,3 +178,37 @@ describe('GraphSearch URL sync', () => {
     expect(nav.getUrl()).toContain('relation=DAUGHTER');
   });
 });
+
+describe('GraphSearch node search (Relations mode)', () => {
+  const battleNode = { id: '1', label: 'Battle of Badr', slug: 'battle-of-badr', group: 1, type: 'battle' };
+
+  it('offers a non-person node from `nodes` alongside Postgres person matches', async () => {
+    render(<GraphSearch nodes={[battleNode]} />);
+
+    fireEvent.change(screen.getByPlaceholderText('Search'), { target: { value: 'badr' } });
+
+    expect(await screen.findByText('Battle of Badr')).toBeTruthy();
+  });
+
+  it('selecting a non-person node sets ?selected=<slug>, not ?person=', async () => {
+    render(<GraphSearch nodes={[battleNode]} />);
+
+    fireEvent.change(screen.getByPlaceholderText('Search'), { target: { value: 'badr' } });
+    const option = await screen.findByText('Battle of Badr');
+    fireEvent.mouseDown(option);
+
+    await waitFor(() => expect(nav.getUrl()).toContain('selected=battle-of-badr'));
+    expect(nav.getUrl()).not.toContain('person=');
+  });
+
+  it('does not offer non-person nodes in Ancestors mode', async () => {
+    render(<GraphSearch nodes={[battleNode]} />);
+
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'ancestorsOf' } });
+    fireEvent.change(screen.getByPlaceholderText('Search for people'), { target: { value: 'badr' } });
+
+    // Give the debounced fetch a chance to resolve before asserting absence.
+    await new Promise((resolve) => setTimeout(resolve, 400));
+    expect(screen.queryByText('Battle of Badr')).toBeNull();
+  });
+});

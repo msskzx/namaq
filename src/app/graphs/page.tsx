@@ -24,7 +24,7 @@ export default function GraphPage() {
                     ? "استكشف شبكة الموقع من خلال رسم بياني تفاعلي واحد يجمع الأشخاص والألقاب والمعارك والأحداث وكل العلاقات بينها. استخدم أدوات البحث والتصفية أدناه لعرض ما تريد بالضبط."
                     : "Explore the site's network in one interactive diagram, combining people, titles, battles, and events together with every relationship between them. Use the search and filters below to narrow it down to exactly what you want."}
             </p>
-            <GraphCanvas url="/api/graph" showSearch nodeSearch targetSlug="prophet-muhammad" nodesLabel="nodes" />
+            <GraphCanvas url="/api/graph" showSearch targetSlug="prophet-muhammad" nodesLabel="nodes" />
         </div>
     );
 }

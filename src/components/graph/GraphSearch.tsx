@@ -6,7 +6,10 @@ import { useLanguage } from '@/components/language/LanguageContext';
 import translations from '@/components/language/translations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { GraphNodeFull } from '@/types/graph';
+import { normalizePersonSearch } from '@/lib/personSearch';
+import { profilePath } from '@/lib/nodeProfile';
 
 interface Suggestion {
   id: string;
@@ -15,16 +18,84 @@ interface Suggestion {
   fullName: string | null;
   nameTransliterated: string | null;
   match: 'exact' | 'prefix' | 'contains';
+  // Node kind: 'person' (or absent, for the Postgres-backed suggestions
+  // below) selects/scopes a person the way this component always has.
+  // Any other kind (title/battle/event) comes from `nodes` instead -- a
+  // client-side match against the graph already loaded, since the
+  // Postgres-backed suggest endpoint only ever covers people. Picking one
+  // just selects/centers it (see selectNode); it can't be an ancestry root.
+  kind?: string;
 }
 
 type SearchMode = 'person' | 'ancestorsOf' | 'descendantsOf';
 
-export default function GraphSearch() {
+// A single, coarse ranking shared with person suggestions' own 'exact' /
+// 'prefix' / 'contains' match field -- fine-grained scoring doesn't matter
+// here since these only ever get sorted amongst themselves, not compared
+// numerically against the Postgres results.
+function rankNodeMatch(query: string, node: GraphNodeFull): number | null {
+  const candidates = [node.label, node.slug.replace(/-/g, ' ')]
+    .map(normalizePersonSearch)
+    .filter(Boolean);
+  let best: number | null = null;
+  for (const candidate of candidates) {
+    let score: number | null = null;
+    if (candidate === query) score = 0;
+    else if (candidate.split(' ').includes(query)) score = 1;
+    else if (candidate.startsWith(query)) score = 2;
+    else if (candidate.includes(query)) score = 3;
+    if (score !== null && (best === null || score < best)) best = score;
+  }
+  return best;
+}
+
+const MAX_NODE_MATCHES = 8;
+
+function matchGraphNodes(rawQuery: string, nodes: GraphNodeFull[]): Suggestion[] {
+  const query = normalizePersonSearch(rawQuery);
+  if (!query) return [];
+  return nodes
+    // Person nodes are excluded here, not just de-prioritized: the Postgres
+    // suggest call above already covers every person, so including them
+    // again from `nodes` would just duplicate entries under a different id
+    // shape.
+    .filter(node => (node.type ?? 'person') !== 'person')
+    .map(node => {
+      const score = rankNodeMatch(query, node);
+      return score === null ? null : { node, score };
+    })
+    .filter((result): result is { node: GraphNodeFull; score: number } => result !== null)
+    .sort((a, b) => a.score - b.score || a.node.label.localeCompare(b.node.label))
+    .slice(0, MAX_NODE_MATCHES)
+    .map(({ node, score }): Suggestion => ({
+      id: node.id,
+      slug: node.slug,
+      name: node.label,
+      fullName: null,
+      nameTransliterated: null,
+      match: score === 0 ? 'exact' : score <= 2 ? 'prefix' : 'contains',
+      kind: node.type ?? 'person',
+    }));
+}
+
+interface GraphSearchProps {
+  // Non-person nodes (title/battle/event) from the graph GraphCanvas has
+  // already fetched, so Relations-mode search can jump straight to them
+  // too -- the Postgres-backed suggest endpoint only ever covers people.
+  // Omit when there's nothing else worth searching (e.g. a person-only
+  // embed): the component still works as a person-only search either way.
+  nodes?: GraphNodeFull[];
+}
+
+export default function GraphSearch({ nodes }: GraphSearchProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { language } = useLanguage();
   const isArabic = language === 'ar';
+  const t = translations[language];
+  const kindLabels: Record<string, string> = useMemo(() => ({ title: t.titles, battle: t.battles.title, event: t.events }), [t]);
+  const kindLabel = (kind: string) => kindLabels[kind] ?? kind;
 
   const [mode, setMode] = React.useState<SearchMode>('person');
   const [inputValue, setInputValue] = useState('');
@@ -35,17 +106,12 @@ export default function GraphSearch() {
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const debouncedFetch = useCallback((value: string) => {
-    if (debounceTimeout.current) {
-      clearTimeout(debounceTimeout.current);
-    }
-    debounceTimeout.current = setTimeout(() => {
-      fetchSuggestions(value);
-      debounceTimeout.current = null;
-    }, 300);
-  }, []);
-
-  const fetchSuggestions = async (query: string) => {
+  // Depends on mode/nodes -- both feed into what a search actually matches
+  // against (see below), so this must be recreated whenever either changes,
+  // not captured once. debouncedFetch below re-derives from this same
+  // dependency, or it would keep calling a stale closure that never saw a
+  // later mode switch or a since-loaded graph.
+  const fetchSuggestions = useCallback(async (query: string) => {
     if (!query.trim()) {
       setSuggestions([]);
       return;
@@ -54,16 +120,27 @@ export default function GraphSearch() {
     setIsLoading(true);
     try {
       const response = await fetch(`/api/people/suggest?q=${encodeURIComponent(query)}`);
-      if (response.ok) {
-        const data = await response.json();
-        setSuggestions(data.data || []);
-      }
+      const personMatches: Suggestion[] = response.ok ? ((await response.json()).data ?? []) : [];
+      // Ancestors/Descendants only ever make sense rooted at a person, so
+      // only Relations mode also offers non-person nodes.
+      const nodeMatches = mode === 'person' ? matchGraphNodes(query, nodes ?? []) : [];
+      setSuggestions([...personMatches, ...nodeMatches]);
     } catch (error) {
       console.error('Error fetching suggestions:', error);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [mode, nodes]);
+
+  const debouncedFetch = useCallback((value: string) => {
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current);
+    }
+    debounceTimeout.current = setTimeout(() => {
+      fetchSuggestions(value);
+      debounceTimeout.current = null;
+    }, 300);
+  }, [fetchSuggestions]);
 
   // Fetch suggestions when input changes
   useEffect(() => {
@@ -175,7 +252,25 @@ export default function GraphSearch() {
     };
   }, [searchParams]);
 
+  // A non-person match (title/battle/event) isn't an ancestry root or a
+  // relation-search subject -- there's nothing to add a pill for or scope a
+  // fetch to. It just selects/centers that node directly, the same `selected`
+  // URL param GraphCanvas's own node clicks and side-list entries already use.
+  const selectNode = (suggestion: Suggestion) => {
+    if (!searchParams) return;
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('selected', suggestion.slug);
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    setInputValue('');
+    setShowSuggestions(false);
+    inputRef.current?.focus();
+  };
+
   const handleSelectSuggestion = (suggestion: Suggestion) => {
+    if (suggestion.kind && suggestion.kind !== 'person') {
+      selectNode(suggestion);
+      return;
+    }
     // Add to selected people if not already selected
     if (!selectedPeople.some(p => p.id === suggestion.id)) {
       // TODO why do you have to go through the whole list add a new person
@@ -193,7 +288,7 @@ export default function GraphSearch() {
 
   const openProfile = (suggestion: Suggestion) => {
     setShowSuggestions(false);
-    router.push(`/people/${suggestion.slug}`);
+    router.push(profilePath(suggestion.kind, suggestion.slug));
   };
 
   // Update URL when selectedPeople or mode changes
@@ -356,7 +451,12 @@ export default function GraphSearch() {
                           handleSelectSuggestion(suggestion);
                         }}
                       >
-                        <div className="font-medium">{suggestion.name}</div>
+                        <div className="flex items-center gap-2 font-medium">
+                          <span>{suggestion.name}</span>
+                          {suggestion.kind && suggestion.kind !== 'person' && (
+                            <span className="shrink-0 text-xs font-normal text-gray-500 dark:text-gray-400">{kindLabel(suggestion.kind)}</span>
+                          )}
+                        </div>
                         {suggestion.nameTransliterated && (
                           <div className="text-sm text-gray-500 dark:text-gray-300 truncate">
                             {suggestion.nameTransliterated}
