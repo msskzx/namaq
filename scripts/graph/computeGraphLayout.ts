@@ -1,40 +1,14 @@
 import 'dotenv/config';
-import neo4j from 'neo4j-driver';
 import { prisma } from '../../src/lib/prisma';
 import { getDriver } from '../../src/lib/neo4j';
-import { computeGraphRank, type GraphNodeRank, type GraphRankEdge, type GraphRankNode, type GraphRankNodeType } from '../../src/lib/graphRank';
+import { computeGraphRank, type GraphNodeRank, type GraphRankNodeType } from '../../src/lib/graphRank';
 import { computeGraphClusters, type GraphClusterAssignment } from '../../src/lib/graphCluster';
 import { computeGraphLayout, type GraphLayoutNode, type GraphLayoutPosition } from '../../src/lib/graphLayout';
 import { rankToTier, tierToRadius } from '../../src/lib/graphLod';
+import { fetchUnifiedGraph } from '../../src/lib/fetchUnifiedGraph';
 
 const apply = process.argv.includes('--apply');
 const strict = process.argv.includes('--strict');
-
-const KNOWN_TYPES = new Set<GraphRankNodeType>(['person', 'battle', 'title', 'event']);
-
-// A single unified query over every entity type this graph spans, rather
-// than one query per type: this is exactly what "unified graph" means for
-// rank/clustering/layout purposes, and keeps the query in sync with the
-// label set automatically as new types are added.
-const nodesQuery = `
-  MATCH (n)
-  WHERE n:Person OR n:Battle OR n:Title OR n:Event
-  RETURN labels(n) AS labels, n.slug AS slug
-`;
-
-const edgesQuery = `
-  MATCH (a)-[r]->(b)
-  WHERE (a:Person OR a:Battle OR a:Title OR a:Event) AND (b:Person OR b:Battle OR b:Title OR b:Event)
-  RETURN labels(a) AS sourceLabels, a.slug AS sourceSlug, labels(b) AS targetLabels, b.slug AS targetSlug
-`;
-
-function labelsToType(labels: string[]): GraphRankNodeType | null {
-  for (const label of labels) {
-    const type = label.toLowerCase();
-    if (KNOWN_TYPES.has(type as GraphRankNodeType)) return type as GraphRankNodeType;
-  }
-  return null;
-}
 
 async function fetchPostgresSlugsByType(): Promise<Map<GraphRankNodeType, Set<string>>> {
   const [people, battles, titles, events] = await Promise.all([
@@ -55,28 +29,8 @@ async function fetchPostgresSlugsByType(): Promise<Map<GraphRankNodeType, Set<st
 async function main() {
   const postgresSlugsByType = await fetchPostgresSlugsByType();
 
-  const session = getDriver().session({
-    database: process.env.NEO4J_DATABASE || 'neo4j',
-    defaultAccessMode: neo4j.session.READ,
-  });
-
   try {
-    const nodesResult = await session.run(nodesQuery);
-    const edgesResult = await session.run(edgesQuery);
-
-    const nodes: GraphRankNode[] = nodesResult.records
-      .map((record) => ({ type: labelsToType(record.get('labels')), slug: record.get('slug') as string }))
-      .filter((node): node is GraphRankNode => node.type !== null && Boolean(node.slug));
-
-    const edges: GraphRankEdge[] = edgesResult.records
-      .map((record) => ({
-        source: { type: labelsToType(record.get('sourceLabels')), slug: record.get('sourceSlug') as string },
-        target: { type: labelsToType(record.get('targetLabels')), slug: record.get('targetSlug') as string },
-      }))
-      .filter(
-        (edge): edge is GraphRankEdge =>
-          edge.source.type !== null && edge.target.type !== null && Boolean(edge.source.slug) && Boolean(edge.target.slug),
-      );
+    const { nodes, edges } = await fetchUnifiedGraph();
 
     console.log(`Unified graph rank/cluster/layout computation (${apply ? 'apply' : 'dry run'})`);
     console.log(`Neo4j nodes: ${nodes.length}`);
@@ -152,7 +106,6 @@ async function main() {
       process.exitCode = 1;
     }
   } finally {
-    await session.close();
     await prisma.$disconnect();
     await getDriver().close();
   }
