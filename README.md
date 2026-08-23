@@ -19,6 +19,7 @@ Open the graph → explore and filter relationships → open a person's profile 
 - Graph links have typed, directed relationship labels such as `FATHER`, `SON`, `WIFE`, and `PATERNAL_UNCLE`.
 - The `/graphs/people` search provides Postgres-backed autocomplete, supports relation and ancestry modes, and keeps the selected view in the URL.
 - `/graphs/battles`, `/graphs/titles`, and `/graphs` each have a client-side search box that jumps to a matching node already loaded in that graph (name/slug match, Arabic-normalization aware) and selects/centers it — since those graphs' API routes always return their full dataset, there is nothing a server-side suggest endpoint would add.
+- Every companion (a Person holding the `صحابي`/companion title) has a direct, non-family `COMPANION_OF`/`ACCOMPANIED_BY` edge to the Prophet in Neo4j, kept in sync from PostgreSQL by `npm run people:sync-companions` (`-- --apply` to write) — distinct from the pre-existing `HOLDS_TITLE` edge to the shared companion Title node, and from the handful of companions who are also blood/marriage relatives with their own family relation.
 - Every graph view has an independent on/off toggle per raw relationship type (father, son, etc. are separate toggles, not grouped into a family category) plus an "all relations" master toggle, and — for bipartite graphs (people mixed with titles/battles/events) — an independent toggle per node kind plus an "all kinds" master toggle. Both filter states live in the URL (`relation`, `kind`) as the set of *hidden* types, so toggling one type never affects any other.
 - The graph canvas has a fullscreen mode; fullscreen shows a close button and a filter button that opens the same relation/kind toggles in a floating panel over the graph.
 - Selecting a node takes the learner to `/people/[slug]`.
@@ -164,6 +165,7 @@ The next work should protect and deepen the main graph-and-search experience bef
 | `npm run people:rank` | Recompute nasab-graph ranks and report them (dry run) |
 | `npm run people:rank -- --apply` | Recompute nasab-graph ranks and persist them to Postgres profiles |
 | `npm run people:sync` / `-- --apply` | Report (or apply) PostgreSQL → Neo4j drift for people |
+| `npm run people:sync-companions` / `-- --apply` | Report (or create) missing `COMPANION_OF`/`ACCOMPANIED_BY` edges from every companion to the Prophet |
 | `npm run battles:sync` / `-- --apply` | Report (or apply) PostgreSQL → Neo4j drift for battles and participations |
 | `npm run titles:sync` / `-- --apply` | Report (or apply) PostgreSQL → Neo4j drift for titles and their holders |
 | `npm run events:sync` / `-- --apply` | Report (or apply) PostgreSQL → Neo4j drift for events, participants, and battle links |

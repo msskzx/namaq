@@ -24,6 +24,7 @@
     "people:validate": "tsx scripts/people/syncCanonicalPeople.ts --strict",
     "people:rank": "tsx scripts/people/computeNasabRanks.ts",
     "people:rank:validate": "tsx scripts/people/computeNasabRanks.ts --strict",
+    "people:sync-companions": "tsx scripts/people/syncCompanionRelations.ts",
     "battles:sync": "tsx scripts/battles/syncCanonicalBattles.ts",
     "battles:validate": "tsx scripts/battles/syncCanonicalBattles.ts --strict",
     "titles:sync": "tsx scripts/titles/syncCanonicalTitles.ts",
