@@ -1,14 +1,115 @@
 import { NextResponse } from 'next/server';
 import { getSession } from '@/lib/neo4j';
 import { prisma } from '@/lib/prisma';
-import { GraphLink, GraphNode } from '@/types/graph';
+import { GraphLink, GraphNodeFull } from '@/types/graph';
+
+type EntityType = 'person' | 'battle' | 'title' | 'event';
+const KNOWN_TYPES: readonly EntityType[] = ['person', 'battle', 'title', 'event'];
+
+const nodeKey = (type: string, slug: string) => `${type}:${slug}`;
+
+function labelsToType(labels: string[]): EntityType | null {
+  for (const label of labels) {
+    const type = label.toLowerCase();
+    if ((KNOWN_TYPES as readonly string[]).includes(type)) return type as EntityType;
+  }
+  return null;
+}
+
+// A single unified query over every entity type this graph spans, rather
+// than one query per type (and, for titles, a separate Postgres-only
+// lookup): this is what makes it one traversable graph instead of
+// Person/Battle from Neo4j merged with a disconnected Postgres-only titles
+// view. Mirrors the query shape in scripts/graph/computeGraphLayout.ts,
+// which computes graphRank/clusterId/layoutX/layoutY over the same
+// node/edge set. Used for the default (no scoping params) response.
+const unifiedNodesQuery = `
+  MATCH (n)
+  WHERE n:Person OR n:Battle OR n:Title OR n:Event
+  RETURN labels(n) AS labels, n.slug AS slug, n.name AS name
+`;
+
+const unifiedEdgesQuery = `
+  MATCH (a)-[r]->(b)
+  WHERE (a:Person OR a:Battle OR a:Title OR a:Event) AND (b:Person OR b:Battle OR b:Title OR b:Event)
+  RETURN labels(a) AS sourceLabels, a.slug AS sourceSlug, type(r) AS relType, r.status AS status,
+         labels(b) AS targetLabels, b.slug AS targetSlug
+`;
+
+interface RankRow {
+  slug: string;
+  nasabRank?: number | null;
+  graphRank: number | null;
+  clusterId: number | null;
+  layoutX: number | null;
+  layoutY: number | null;
+}
+
+// Joins graphRank/clusterId/layoutX/layoutY (and, for people, nasabRank)
+// from PostgreSQL onto an already-built node list, grouped by type so each
+// entity looks up against its own table. Every node kind this route can
+// return goes through this same join, not just the unified/default branch.
+async function attachPostgresRanks(nodeList: GraphNodeFull[]) {
+  const slugsByType = new Map<EntityType, string[]>();
+  for (const node of nodeList) {
+    const type = (node.type ?? 'person') as EntityType;
+    slugsByType.set(type, [...(slugsByType.get(type) ?? []), node.slug]);
+  }
+
+  const rankSelect = { slug: true, graphRank: true, clusterId: true, layoutX: true, layoutY: true } as const;
+  const [people, battles, titles, events] = await Promise.all([
+    prisma.person.findMany({ where: { slug: { in: slugsByType.get('person') ?? [] } }, select: { ...rankSelect, nasabRank: true } }),
+    prisma.battle.findMany({ where: { slug: { in: slugsByType.get('battle') ?? [] } }, select: rankSelect }),
+    prisma.title.findMany({ where: { slug: { in: slugsByType.get('title') ?? [] } }, select: rankSelect }),
+    prisma.event.findMany({ where: { slug: { in: slugsByType.get('event') ?? [] } }, select: rankSelect }),
+  ]);
+
+  const rowsByKey = new Map<string, RankRow>([
+    ...people.map((row): [string, RankRow] => [nodeKey('person', row.slug), row]),
+    ...battles.map((row): [string, RankRow] => [nodeKey('battle', row.slug), row]),
+    ...titles.map((row): [string, RankRow] => [nodeKey('title', row.slug), row]),
+    ...events.map((row): [string, RankRow] => [nodeKey('event', row.slug), row]),
+  ]);
+
+  for (const node of nodeList) {
+    const type = (node.type ?? 'person') as EntityType;
+    const row = rowsByKey.get(nodeKey(type, node.slug));
+    if (type === 'person') node.nasabRank = row?.nasabRank ?? null;
+    if (!row) continue;
+    node.graphRank = row.graphRank;
+    node.clusterId = row.clusterId;
+    if (row.layoutX != null && row.layoutY != null) {
+      // Pinned (fx/fy), not just a starting position: computeGraphLayout.ts
+      // already ran collision avoidance offline for these nodes, so letting
+      // the live force simulation move them away from that would just
+      // reintroduce the overlap it was computed to avoid. Nodes without a
+      // precomputed position (e.g. lineage-only ancestors with no
+      // PostgreSQL row) are left free to settle via live physics.
+      node.x = row.layoutX;
+      node.y = row.layoutY;
+      node.fx = row.layoutX;
+      node.fy = row.layoutY;
+    }
+  }
+}
 
 export async function GET(_request: Request) {
   const { searchParams } = new URL(_request.url);
   const persons = searchParams.getAll('person') as string[];
   const ancestorsOf = searchParams.getAll('ancestorsOf') as string[];
+  const descendantsOf = searchParams.getAll('descendantsOf') as string[];
   const battles = searchParams.getAll('battle') as string[];
   const focus = searchParams.get('focus');
+  // Which node kinds the default (unscoped) response should include.
+  // Empty/absent = every kind. This is a whitelist, not a hide-list: e.g.
+  // kind=person&kind=battle returns only those two kinds and the links
+  // directly between them -- the same shape the old dedicated
+  // /api/graph/battles bipartite view had. Only applies to the unified
+  // default query below; person/ancestorsOf/descendantsOf/battle/focus are
+  // already inherently scoped to the kinds their own semantics produce.
+  const requestedKinds = new Set(
+    searchParams.getAll('kind').filter((kind): kind is EntityType => (KNOWN_TYPES as readonly string[]).includes(kind))
+  );
 
   const session = getSession();
 
@@ -20,9 +121,6 @@ export async function GET(_request: Request) {
   }
 
   try {
-    let result;
-
-    // Build the query parts
     const queryParts: string[] = [];
     const params: Record<string, string[]> = {};
 
@@ -36,14 +134,30 @@ export async function GET(_request: Request) {
       params.persons = persons;
     }
 
-    // Add ancestor queries
+    // Add ancestor queries. SON|DAUGHTER, not SON alone: a SON/DAUGHTER edge
+    // points child -> parent (see neo4j/graphSeedData.test.ts), and which of
+    // the two labels applies depends on the child's sex -- SON-only would
+    // silently return nothing for any female ancestorSlug, since her edge to
+    // her own father is typed DAUGHTER.
     if (ancestorsOf.length > 0) {
       queryParts.push(
         `UNWIND $ancestors AS ancestorSlug
-         MATCH path = (p1:Person {slug: ancestorSlug})-[r:SON*]->(p2:Person)
+         MATCH path = (p1:Person {slug: ancestorSlug})-[r:SON|DAUGHTER*]->(p2:Person)
          RETURN path`
       );
       params.ancestors = ancestorsOf;
+    }
+
+    // Add descendant queries: the same SON/DAUGHTER chain, walked in reverse
+    // (child -> parent edges followed backward) from the root person down to
+    // every child, grandchild, etc.
+    if (descendantsOf.length > 0) {
+      queryParts.push(
+        `UNWIND $descendants AS descendantSlug
+         MATCH path = (p1:Person {slug: descendantSlug})<-[r:SON|DAUGHTER*]-(p2:Person)
+         RETURN path`
+      );
+      params.descendants = descendantsOf;
     }
 
     // A battle only ever connects to Person via PARTICIPATED_IN, so one hop
@@ -58,167 +172,197 @@ export async function GET(_request: Request) {
       params.battles = battles;
     }
 
-    // A focused view is deliberately limited to one hop. The overview remains
-    // available without parameters, but this keeps future, larger graphs from
-    // requiring every node to be fetched for a person-level exploration.
+    let result;
     if (focus && queryParts.length === 0) {
+      // A focused view is deliberately limited to one hop. The overview
+      // remains available without parameters, but this keeps future,
+      // larger graphs from requiring every node to be fetched for a
+      // person-level exploration.
       result = await session.run(
         `MATCH (node:Person {slug: $focus})
          OPTIONAL MATCH (node)-[relationship]-(related:Person)
          RETURN node, relationship, related`,
         { focus }
       );
-    // Determine which query to run based on available parameters
-    } else if (queryParts.length === 0) {
-      // Return every person, including people without any relationships.
-      result = await session.run(
-        `MATCH (node:Person)
-         OPTIONAL MATCH (node)-[relationship]->(related:Person)
-         RETURN node, relationship, related`
-      );
     } else if (queryParts.length === 1) {
-      // Only one query part, no need for UNION
       result = await session.run(queryParts[0], params);
-    } else {
-      // Multiple query parts, combine with UNION
-      const query = queryParts.join(' UNION ');
-      result = await session.run(query, params);
+    } else if (queryParts.length > 1) {
+      result = await session.run(queryParts.join(' UNION '), params);
     }
 
-    const nodes = new Map<string, GraphNode>();
-    const links: GraphLink[] = [];
-    const linkKeys = new Set<string>();
+    if (result) {
+      const nodes = new Map<string, GraphNodeFull>();
+      const links: GraphLink[] = [];
+      const linkKeys = new Set<string>();
 
-    result.records.forEach(record => {
-      if (record.keys.includes('node')) {
-        const node = record.get('node');
-        const related = record.get('related');
-        const relationship = record.get('relationship');
+      result.records.forEach(record => {
+        if (record.keys.includes('node')) {
+          const node = record.get('node');
+          const related = record.get('related');
+          const relationship = record.get('relationship');
 
-        if (node && !nodes.has(node.identity.toString())) {
-          nodes.set(node.identity.toString(), {
-            id: node.identity.toString(),
-            label: node.properties.name,
-            slug: node.properties.slug,
-            group: 1,
-            type: node.labels?.[0]?.toLowerCase(),
-          });
-        }
-
-        if (related && !nodes.has(related.identity.toString())) {
-          nodes.set(related.identity.toString(), {
-            id: related.identity.toString(),
-            label: related.properties.name,
-            slug: related.properties.slug,
-            group: 2,
-            type: related.labels?.[0]?.toLowerCase(),
-          });
-        }
-
-        if (node && related && relationship) {
-          const source = node.identity.toString();
-          const target = related.identity.toString();
-          const label = relationship.type;
-          const key = `${source}|${target}|${label}`;
-
-          if (!linkKeys.has(key)) {
-            links.push({ source, target, label, value: 1, status: relationship.properties?.status });
-            linkKeys.add(key);
+          if (node && !nodes.has(node.identity.toString())) {
+            nodes.set(node.identity.toString(), {
+              id: node.identity.toString(),
+              label: node.properties.name,
+              slug: node.properties.slug,
+              group: 1,
+              type: node.labels?.[0]?.toLowerCase(),
+            });
           }
+
+          if (related && !nodes.has(related.identity.toString())) {
+            nodes.set(related.identity.toString(), {
+              id: related.identity.toString(),
+              label: related.properties.name,
+              slug: related.properties.slug,
+              group: 2,
+              type: related.labels?.[0]?.toLowerCase(),
+            });
+          }
+
+          if (node && related && relationship) {
+            const source = node.identity.toString();
+            const target = related.identity.toString();
+            const label = relationship.type;
+            const key = `${source}|${target}|${label}`;
+
+            if (!linkKeys.has(key)) {
+              links.push({ source, target, label, value: 1, status: relationship.properties?.status });
+              linkKeys.add(key);
+            }
+          }
+
+          return;
         }
 
-        return;
-      }
+        const path = record.get('path');
 
-      const path = record.get('path');
+        // When using RETURN path, Neo4j returns a Path object with segments
+        if (path && Array.isArray(path.segments)) {
+          for (const seg of path.segments) {
+            const start = seg.start;
+            const end = seg.end;
+            const rel = seg.relationship;
 
-      // When using RETURN path, Neo4j returns a Path object with segments
-      if (path && Array.isArray(path.segments)) {
-        for (const seg of path.segments) {
-          const start = seg.start;
-          const end = seg.end;
-          const rel = seg.relationship;
+            if (start && !nodes.has(start.identity.toString())) {
+              nodes.set(start.identity.toString(), {
+                id: start.identity.toString(),
+                label: start.properties.name,
+                slug: start.properties.slug,
+                group: 1,
+                type: 'person',
+              });
+            }
 
-          // Add start node
-          if (start && !nodes.has(start.identity.toString())) {
+            if (end && !nodes.has(end.identity.toString())) {
+              nodes.set(end.identity.toString(), {
+                id: end.identity.toString(),
+                label: end.properties.name,
+                slug: end.properties.slug,
+                group: 2,
+                type: 'person',
+              });
+            }
+
+            if (start && end && rel) {
+              const source = start.identity.toString();
+              const target = end.identity.toString();
+              const label = rel.type;
+              const key = `${source}|${target}|${label}`;
+              if (!linkKeys.has(key)) {
+                links.push({ source, target, label, value: 1 });
+                linkKeys.add(key);
+              }
+            }
+          }
+        } else if (path && path.start && path.end) {
+          // Fallback: single-hop path object without segments array
+          const start = path.start;
+          const end = path.end;
+          const rel = path.relationship || path.rel || path.r;
+
+          if (!nodes.has(start.identity.toString())) {
             nodes.set(start.identity.toString(), {
               id: start.identity.toString(),
               label: start.properties.name,
               slug: start.properties.slug,
               group: 1,
+              type: 'person',
             });
           }
-
-          // Add end node
-          if (end && !nodes.has(end.identity.toString())) {
+          if (!nodes.has(end.identity.toString())) {
             nodes.set(end.identity.toString(), {
               id: end.identity.toString(),
               label: end.properties.name,
               slug: end.properties.slug,
               group: 2,
+              type: 'person',
             });
           }
-
-          // Add link for this segment
-          if (start && end && rel) {
-            const source = start.identity.toString();
-            const target = end.identity.toString();
-            const label = rel.type;
-            const key = `${source}|${target}|${label}`;
-            if (!linkKeys.has(key)) {
-              links.push({ source, target, label, value: 1 });
-              linkKeys.add(key);
-            }
+          const source = start.identity.toString();
+          const target = end.identity.toString();
+          const label = rel?.type || 'RELATED';
+          const key = `${source}|${target}|${label}`;
+          if (!linkKeys.has(key)) {
+            links.push({ source, target, label, value: 1 });
+            linkKeys.add(key);
           }
         }
-      } else if (path && path.start && path.end) {
-        // Fallback: single-hop path object without segments array
-        const start = path.start;
-        const end = path.end;
-        const rel = path.relationship || path.rel || path.r;
+      });
 
-        if (!nodes.has(start.identity.toString())) {
-          nodes.set(start.identity.toString(), {
-            id: start.identity.toString(),
-            label: start.properties.name,
-            slug: start.properties.slug,
-            group: 1,
-          });
-        }
-        if (!nodes.has(end.identity.toString())) {
-          nodes.set(end.identity.toString(), {
-            id: end.identity.toString(),
-            label: end.properties.name,
-            slug: end.properties.slug,
-            group: 2,
-          });
-        }
-        const source = start.identity.toString();
-        const target = end.identity.toString();
-        const label = rel?.type || 'RELATED';
-        const key = `${source}|${target}|${label}`;
-        if (!linkKeys.has(key)) {
-          links.push({ source, target, label, value: 1 });
-          linkKeys.add(key);
-        }
+      const nodeList = Array.from(nodes.values());
+      const ranks = await prisma.person.findMany({
+        where: { slug: { in: nodeList.map((node) => node.slug) } },
+        select: { slug: true, nasabRank: true },
+      });
+      const rankBySlug = new Map(ranks.map((person) => [person.slug, person.nasabRank]));
+      for (const node of nodeList) node.nasabRank = rankBySlug.get(node.slug) ?? null;
+
+      return NextResponse.json({ nodes: nodeList, links });
+    }
+
+    // Default: no scoping params at all. Return the full unified graph
+    // (every Person/Battle/Title/Event node and relationship), optionally
+    // narrowed to just the requested `kind`s.
+    const nodesResult = await session.run(unifiedNodesQuery);
+    const edgesResult = await session.run(unifiedEdgesQuery);
+
+    const nodes = new Map<string, GraphNodeFull>();
+    for (const record of nodesResult.records) {
+      const type = labelsToType(record.get('labels'));
+      const slug = record.get('slug');
+      if (!type || !slug) continue;
+      if (requestedKinds.size > 0 && !requestedKinds.has(type)) continue;
+      const key = nodeKey(type, slug);
+      if (!nodes.has(key)) {
+        nodes.set(key, { id: key, label: record.get('name') ?? slug, slug, group: 1, type });
       }
-    });
+    }
 
-    // nasabRank lives in PostgreSQL, not Neo4j, so it's attached here as a
-    // separate lookup rather than threaded through every node-construction
-    // branch above.
-    const nodeList = Array.from(nodes.values()) as GraphNode[];
-    const ranks = await prisma.person.findMany({
-      where: { slug: { in: nodeList.map((node) => node.slug) } },
-      select: { slug: true, nasabRank: true },
-    });
-    const rankBySlug = new Map(ranks.map((person) => [person.slug, person.nasabRank]));
-    for (const node of nodeList) node.nasabRank = rankBySlug.get(node.slug) ?? null;
+    const links: GraphLink[] = [];
+    for (const record of edgesResult.records) {
+      const sourceType = labelsToType(record.get('sourceLabels'));
+      const targetType = labelsToType(record.get('targetLabels'));
+      const sourceSlug = record.get('sourceSlug');
+      const targetSlug = record.get('targetSlug');
+      if (!sourceType || !targetType || !sourceSlug || !targetSlug) continue;
+      const sourceKey = nodeKey(sourceType, sourceSlug);
+      const targetKey = nodeKey(targetType, targetSlug);
+      if (!nodes.has(sourceKey) || !nodes.has(targetKey)) continue;
+      links.push({
+        source: sourceKey,
+        target: targetKey,
+        label: record.get('relType'),
+        value: 1,
+        status: record.get('status') ?? undefined,
+      });
+    }
 
-    return NextResponse.json({
-      nodes: nodeList,
-      links
-    });
+    const nodeList = Array.from(nodes.values());
+    await attachPostgresRanks(nodeList);
+
+    return NextResponse.json({ nodes: nodeList, links });
 
   } catch (error) {
     console.error('Database query error:', error);

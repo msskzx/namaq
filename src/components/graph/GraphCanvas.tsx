@@ -9,11 +9,11 @@ import { GraphData, GraphNodeFull, GraphLink } from '@/types/graph';
 import useSWR from 'swr';
 import { fetcher } from '@/lib/swr';
 import GraphSearch from './GraphSearch';
-import GraphNodeSearch from './GraphNodeSearch';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import { useLanguage } from '@/components/language/LanguageContext';
 import translations from '@/components/language/translations';
 import { relationColor, sortRelationTypes } from '@/lib/relations';
+import { profilePath } from '@/lib/nodeProfile';
 
 interface GraphCanvasProps {
   url?: string;
@@ -27,18 +27,17 @@ interface GraphCanvasProps {
   // to 'people' since most graphs are person-only; a bipartite graph (e.g.
   // titles and people) should override this to describe what's actually listed.
   nodesLabel?: string;
-  // Client-side "jump to node" search over whatever this graph has already
-  // loaded. Unlike GraphSearch (Postgres-backed, person/ancestorsOf query
-  // semantics for the main people graph), this suits graphs whose API route
-  // always returns its full dataset regardless of query params (battles,
-  // titles, the combined "all" graph) -- there's nothing a server-side
-  // suggest endpoint would filter that isn't already sitting in memory here.
-  // Mutually exclusive with showSearch in practice, since only the people
-  // graph supports the person/ancestorsOf params GraphSearch writes.
-  nodeSearch?: boolean;
 }
 
 const relationName = (value: string) => value.toLowerCase().replaceAll('_', ' ');
+
+// The full universe of node kinds the graph API can ever return, regardless
+// of what's actually present in the current fetch. The kind filter (see
+// `includedKinds` below) needs this fixed list, not the current graphData's
+// kinds -- once narrowed to `kind=person`, the response contains nothing
+// but person nodes, and deriving the toggle set from that response would
+// make title/battle/event impossible to switch back on.
+const ALL_KINDS = ['person', 'title', 'battle', 'event'] as const;
 
 // iOS-style slide switch. Uses justify-content (start/end, which flexbox
 // resolves relative to the ambient `dir`) to place the thumb rather than a
@@ -83,7 +82,7 @@ function nodeRadius(node: GraphNodeFull): number {
   return Math.max(textWidth + NODE_BASE_FONT_SIZE, NODE_BASE_FONT_SIZE * 2) / 2;
 }
 
-export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-muhammad', showSearch = true, initialParams, nodesLabel = 'people', nodeSearch = false }: GraphCanvasProps) {
+export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-muhammad', showSearch = true, initialParams, nodesLabel = 'people' }: GraphCanvasProps) {
   const { language } = useLanguage();
   const t = translations[language];
   const router = useRouter();
@@ -91,19 +90,25 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   const searchParams = useSearchParams();
   const selectedSlug = searchParams?.get('selected') ?? null;
   const focusSlug = searchParams?.get('focus') ?? null;
-  // Both stored as the set of EXCLUDED (hidden) values so each toggle acts
-  // independently -- default (nothing excluded) shows everything, and
-  // hiding one relation/kind never implicitly hides any other.
+  // Relation types are stored as the set of EXCLUDED (hidden) values --
+  // each toggle acts independently, and hiding one never implicitly hides
+  // another. Kinds work the opposite way: `kind` is a server-side whitelist
+  // (see /api/graph's `kind` param), so an empty set here means "the server
+  // wasn't asked to narrow anything" (= every kind), and a non-empty set is
+  // exactly what's INCLUDED, not excluded.
   const excludedRelations = useMemo(() => new Set(searchParams?.getAll('relation') ?? []), [searchParams]);
-  const excludedKinds = useMemo(() => new Set(searchParams?.getAll('kind') ?? []), [searchParams]);
-  const searchedSlugs = useMemo(() => new Set([...(searchParams?.getAll('person') ?? []), ...(searchParams?.getAll('ancestorsOf') ?? [])]), [searchParams]);
+  const includedKinds = useMemo(() => new Set(searchParams?.getAll('kind') ?? []), [searchParams]);
+  const searchedSlugs = useMemo(() => new Set([...(searchParams?.getAll('person') ?? []), ...(searchParams?.getAll('ancestorsOf') ?? []), ...(searchParams?.getAll('descendantsOf') ?? [])]), [searchParams]);
 
   const fetchUrl = useMemo(() => {
     try {
       const base = new URL(url, typeof window !== 'undefined' ? window.location.origin : 'http://localhost');
       const incoming = new URLSearchParams(searchParams?.toString() || '');
-      // These are client view options, not graph-query options.
-      ['selected', 'relation', 'kind'].forEach(key => incoming.delete(key));
+      // `selected` and `relation` are client view options with no server
+      // meaning. `kind` is the opposite: it's a real query param the API
+      // reads to decide which node kinds to return, so it's deliberately
+      // forwarded rather than stripped.
+      ['selected', 'relation'].forEach(key => incoming.delete(key));
       for (const [key, value] of incoming.entries()) base.searchParams.append(key, value);
       return base.toString();
     } catch {
@@ -124,11 +129,23 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // Raw relation types present in the fetched graph, one toggle per type
   // (not grouped into families) so e.g. father and son can be shown/hidden
   // independently.
-  const relationTypesPresent = useMemo(() => sortRelationTypes([...new Set(graphData?.links.map(link => link.label) ?? [])]), [graphData]);
+  // ACCOMPANIED_BY is COMPANION_OF's inverse edge (see
+  // scripts/people/syncCompanionRelations.ts) -- always shown, but not worth
+  // a second toggle alongside COMPANION_OF for what's the same relationship
+  // viewed from the other side.
+  const relationTypesPresent = useMemo(() => sortRelationTypes([...new Set(graphData?.links.map(link => link.label) ?? [])].filter(type => type !== 'ACCOMPANIED_BY')), [graphData]);
   // Node kinds present in the fetched graph (person/title/battle/event).
   const kindsPresent = useMemo(() => [...new Set(graphData?.nodes.map(node => node.type ?? 'person') ?? [])], [graphData]);
-  const isBipartite = kindsPresent.length > 1;
-  const anyFilterActive = excludedRelations.size > 0 || excludedKinds.size > 0;
+  // On a general-purpose page (showSearch on) the kind toggle needs every
+  // possible kind on offer, not just whatever the current, possibly-narrowed
+  // fetch happens to contain -- otherwise narrowing down to `kind=person`
+  // removes the only switches that could widen back out. A scoped embed
+  // (e.g. the person profile's ancestor mini-graph, showSearch off) is
+  // inherently single-kind anyway, so it keeps the old data-driven behavior
+  // of only offering a toggle when there's more than one kind to toggle
+  // between.
+  const kindsUniverse = showSearch ? ALL_KINDS : kindsPresent;
+  const anyFilterActive = excludedRelations.size > 0;
   const visibleGraph = useMemo(() => {
     if (!graphData || !anyFilterActive) return graphData;
     const nodesById = new Map(graphData.nodes.map(node => [node.id, node]));
@@ -140,7 +157,9 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     // would pass the label check even though it isn't directly connected to
     // the person being searched.
     const isDirect = (link: GraphLink) => searchedSlugs.size === 0 || searchedSlugs.has(slugOf(link.source) ?? '') || searchedSlugs.has(slugOf(link.target) ?? '');
-    const kindAllowed = (id: string) => !excludedKinds.has(nodesById.get(id)?.type ?? 'person');
+    // Node kinds are filtered server-side (see /api/graph's `kind` param) --
+    // graphData already contains only the requested kinds, so there's
+    // nothing left to filter out here.
     // Once the unfiltered view has run one simulation pass, d3-force
     // mutates each link's source/target from a plain string id into a
     // direct reference to the node object it resolved -- in place, on the
@@ -154,14 +173,10 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     // yet. Converting back to a plain string id forces d3-force to
     // re-resolve it against whichever node array is current.
     const links = graphData.links
-      .filter(link => {
-        const sourceId = endpointId(link.source);
-        const targetId = endpointId(link.target);
-        return !excludedRelations.has(link.label) && isDirect(link) && kindAllowed(sourceId) && kindAllowed(targetId);
-      })
+      .filter(link => !excludedRelations.has(link.label) && isDirect(link))
       .map(link => ({ ...link, source: endpointId(link.source), target: endpointId(link.target) }));
     const linkedIds = new Set(links.flatMap(link => [link.source as string, link.target as string]));
-    if (selectedNode && kindAllowed(selectedNode.id)) linkedIds.add(selectedNode.id);
+    if (selectedNode) linkedIds.add(selectedNode.id);
     // Nodes pinned (fx/fy) at a precomputed full-graph position stay frozen
     // there under filtering too, so a filtered subgraph -- which should
     // reorganize freely like every unpinned graph view does -- instead
@@ -171,7 +186,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       .filter(node => linkedIds.has(node.id))
       .map(node => (node.fx != null || node.fy != null) ? { ...node, fx: undefined, fy: undefined } : node);
     return { nodes, links };
-  }, [graphData, anyFilterActive, excludedRelations, excludedKinds, selectedNode, searchedSlugs]);
+  }, [graphData, anyFilterActive, excludedRelations, selectedNode, searchedSlugs]);
   // Sorted by nasab-graph prominence for the side list only; the canvas
   // itself renders visibleGraph.nodes directly, since force-layout doesn't
   // care about array order. Title nodes (no nasabRank) sort after every
@@ -252,12 +267,19 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   };
   const toggleAllRelations = (show: boolean) => updateParams({ relation: show ? [] : relationTypesPresent });
   const toggleKind = (kind: string) => {
-    const next = new Set(excludedKinds);
+    // An empty `includedKinds` means "every kind" -- narrowing for the
+    // first time starts from the full universe, not an empty set, or
+    // toggling one kind off would (wrongly) leave only that kind excluded
+    // while claiming every other kind is now explicitly included.
+    const base = includedKinds.size > 0 ? includedKinds : new Set<string>(ALL_KINDS);
+    const next = new Set(base);
     if (next.has(kind)) next.delete(kind);
     else next.add(kind);
-    updateParams({ kind: [...next] });
+    // Once every kind is included again, clear the param instead of
+    // spelling out all four -- `/graphs` (no kind param) is the canonical
+    // "show everything" URL.
+    updateParams({ kind: next.size >= ALL_KINDS.length ? [] : [...next] });
   };
-  const toggleAllKinds = (show: boolean) => updateParams({ kind: show ? [] : kindsPresent });
 
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showFilterPanel, setShowFilterPanel] = useState(false);
@@ -309,7 +331,6 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
   const theme = getGraphTheme();
   const typeLabels: Record<string, string> = { person: t.people, title: t.titles, battle: t.battles.title, event: t.events };
-  const profilePaths: Record<string, string> = { title: '/titles', battle: '/battles', event: '/events' };
   const kindColor = (kind: string) => theme.node[(kind as keyof typeof theme.node)] ?? theme.node.person;
   const kindLabel = (kind: string) => typeLabels[kind] ?? kind;
   const nodeFillColor = (node: GraphNodeFull) => node.slug === selectedSlug ? '#fbbf24' : kindColor(node.type ?? 'person');
@@ -335,15 +356,12 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
         </fieldset>
       )}
 
-      {isBipartite && (
+      {kindsUniverse.length > 1 && (
         <fieldset dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
           <legend className="px-1 text-sm font-medium text-gray-800 dark:text-gray-100">{t.graph.nodeKinds}</legend>
-          <div className="mb-2 border-b border-gray-100 pb-2 dark:border-gray-700">
-            <SlideSwitch checked={excludedKinds.size === 0} onChange={() => toggleAllKinds(excludedKinds.size > 0)} label={t.graph.allKinds} />
-          </div>
           <div className="flex flex-wrap gap-x-4 gap-y-2">
-            {kindsPresent.map(kind => {
-              const active = !excludedKinds.has(kind);
+            {kindsUniverse.map(kind => {
+              const active = includedKinds.size === 0 || includedKinds.has(kind);
               const color = kindColor(kind);
               const label = kindLabel(kind);
               return (
@@ -399,16 +417,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {showSearch && <GraphSearch />}
-      {nodeSearch && graphData && (
-        <GraphNodeSearch
-          nodes={graphData.nodes}
-          onSelect={(node) => updateParams({ selected: node.slug })}
-          placeholder={t.search}
-          typeLabel={(type) => kindLabel(type ?? '')}
-          isArabic={language === 'ar'}
-        />
-      )}
+      {showSearch && <GraphSearch nodes={graphData?.nodes} />}
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3" aria-label="Graph controls">
         <p className="text-sm text-gray-600 dark:text-gray-300" aria-live="polite">
           {visibleGraph ? `${visibleGraph.nodes.length} ${nodesLabel} · ${visibleGraph.links.length} relationships` : 'No graph data available'}
@@ -418,7 +427,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           <button type="button" onClick={() => setIsFullscreen(true)} aria-label={t.graph.fullscreen} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
             {t.graph.fullscreen}
           </button>
-          <button type="button" onClick={() => updateParams({ selected: null, focus: null, relation: [], kind: [], person: null, ancestorsOf: [] })} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
+          <button type="button" onClick={() => updateParams({ selected: null, focus: null, relation: [], kind: [], person: null, ancestorsOf: [], descendantsOf: [] })} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
             Reset graph view
           </button>
         </div>
@@ -428,11 +437,11 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
       {selectedNode && (
         <aside className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4 dark:border-amber-700 dark:bg-gray-800" aria-live="polite">
-          <p className="text-sm text-gray-600 dark:text-gray-300">Selected person</p>
+          <p className="text-sm text-gray-600 dark:text-gray-300">Selected {kindLabel(selectedNode.type ?? 'person')}</p>
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode.label}</h2>
           <div className="mt-3 flex flex-wrap gap-3">
-            <Link className="rounded bg-amber-400 px-3 py-1.5 text-sm text-gray-950 hover:bg-amber-300" href={`${selectedNode.type ? profilePaths[selectedNode.type] ?? '/people' : '/people'}/${selectedNode.slug}`}>View profile</Link>
-            <button type="button" onClick={() => updateParams({ focus: selectedNode.slug, person: null, ancestorsOf: [] })} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-700">Explore neighbours</button>
+            <Link className="rounded bg-amber-400 px-3 py-1.5 text-sm text-gray-950 hover:bg-amber-300" href={profilePath(selectedNode.type, selectedNode.slug)}>View profile</Link>
+            <button type="button" onClick={() => updateParams({ focus: selectedNode.slug, person: null, ancestorsOf: [], descendantsOf: [] })} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-700">Explore neighbours</button>
           </div>
         </aside>
       )}

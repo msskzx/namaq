@@ -16,9 +16,9 @@ const getLinkGroups = (language: 'en' | 'ar') => ({
     title: translations[language].allGraph,
     links: [
       { href: '/graphs', label: translations[language].allGraph },
-      { href: '/graphs/people', label: translations[language].familyRelations },
-      { href: '/graphs/titles', label: translations[language].titlesGraph },
-      { href: '/graphs/battles', label: translations[language].battlesGraph },
+      { href: '/graphs?kind=person', label: translations[language].familyRelations },
+      { href: '/graphs?kind=person&kind=title', label: translations[language].titlesGraph },
+      { href: '/graphs?kind=person&kind=battle', label: translations[language].battlesGraph },
     ]
   },
   people: {

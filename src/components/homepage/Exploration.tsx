@@ -33,7 +33,7 @@ export default function Explore() {
       description: language === 'ar'
         ? 'استكشف شبكات العلاقات العائلية والتاريخية'
         : 'Explore family and historical relationship networks',
-      href: '/graphs/people',
+      href: '/graphs?kind=person',
       image: '/gemini_books.png'
     },
     {
