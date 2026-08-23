@@ -30,6 +30,31 @@ interface GraphCanvasProps {
 
 const relationName = (value: string) => value.toLowerCase().replaceAll('_', ' ');
 
+// iOS-style slide switch. Uses justify-content (start/end, which flexbox
+// resolves relative to the ambient `dir`) to place the thumb rather than a
+// fixed translateX, so it mirrors correctly under the fieldsets' dir="rtl"
+// without needing a separate RTL variant.
+function SlideSwitch({ checked, onChange, label, color, ariaLabel }: { checked: boolean; onChange: () => void; label: string; color?: string; ariaLabel?: string }) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={checked}
+      aria-label={ariaLabel ?? label}
+      onClick={onChange}
+      className="flex items-center gap-2 rounded-full px-1 py-0.5 text-sm font-medium text-gray-700 dark:text-gray-200"
+    >
+      <span
+        className={`flex h-5 w-9 shrink-0 items-center rounded-full p-0.5 transition-colors ${checked ? 'justify-end' : 'justify-start'}`}
+        style={{ backgroundColor: checked ? (color ?? '#f59e0b') : '#9ca3af' }}
+      >
+        <span className="h-4 w-4 rounded-full bg-white shadow transition-transform" />
+      </span>
+      <span style={checked && color ? { color } : undefined}>{label}</span>
+    </button>
+  );
+}
+
 // A fixed reference font size the collision force below can use for a
 // stable world-space radius per node, independent of camera zoom.
 // nodeCanvasObject grows its own font size as the camera zooms out so
@@ -284,30 +309,16 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       {relationTypesPresent.length > 0 && (
         <fieldset dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
           <legend className="px-1 text-sm font-medium text-gray-800 dark:text-gray-100">{t.graph.relationshipTypes}</legend>
-          <div className="mb-2 flex items-center gap-2">
-            <label className="flex items-center gap-1.5 text-xs font-medium text-gray-600 dark:text-gray-300">
-              <input type="checkbox" checked={excludedRelations.size === 0} onChange={(event) => toggleAllRelations(event.target.checked)} />
-              {t.graph.allRelations}
-            </label>
+          <div className="mb-2 border-b border-gray-100 pb-2 dark:border-gray-700">
+            <SlideSwitch checked={excludedRelations.size === 0} onChange={() => toggleAllRelations(excludedRelations.size > 0)} label={t.graph.allRelations} />
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-x-4 gap-y-2">
             {relationTypesPresent.map(type => {
               const active = !excludedRelations.has(type);
               const color = relationColor(type);
               const label = relationLabel(type);
               return (
-                <button
-                  key={type}
-                  type="button"
-                  onClick={() => toggleRelation(type)}
-                  aria-pressed={active}
-                  aria-label={`${active ? 'Hide' : 'Show'} ${label} relationships`}
-                  className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition-opacity ${active ? '' : 'opacity-50 hover:opacity-80'}`}
-                  style={{ borderColor: color, backgroundColor: active ? `${color}26` : 'transparent', color }}
-                >
-                  <span className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: color }} />
-                  {label}
-                </button>
+                <SlideSwitch key={type} checked={active} onChange={() => toggleRelation(type)} label={label} color={color} ariaLabel={`${active ? 'Hide' : 'Show'} ${label} relationships`} />
               );
             })}
           </div>
@@ -317,30 +328,16 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       {isBipartite && (
         <fieldset dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
           <legend className="px-1 text-sm font-medium text-gray-800 dark:text-gray-100">{t.graph.nodeKinds}</legend>
-          <div className="mb-2 flex items-center gap-2">
-            <label className="flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-300">
-              <input type="checkbox" checked={excludedKinds.size === 0} onChange={(event) => toggleAllKinds(event.target.checked)} />
-              {t.graph.allKinds}
-            </label>
+          <div className="mb-2 border-b border-gray-100 pb-2 dark:border-gray-700">
+            <SlideSwitch checked={excludedKinds.size === 0} onChange={() => toggleAllKinds(excludedKinds.size > 0)} label={t.graph.allKinds} />
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-x-4 gap-y-2">
             {kindsPresent.map(kind => {
               const active = !excludedKinds.has(kind);
               const color = kindColor(kind);
               const label = kindLabel(kind);
               return (
-                <button
-                  key={kind}
-                  type="button"
-                  onClick={() => toggleKind(kind)}
-                  aria-pressed={active}
-                  aria-label={`${active ? 'Hide' : 'Show'} ${label}`}
-                  className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition-opacity ${active ? '' : 'opacity-50 hover:opacity-80'}`}
-                  style={{ borderColor: color, backgroundColor: active ? `${color}` : 'transparent' }}
-                >
-                  <span className="h-2 w-2 shrink-0 rounded-full border border-gray-400" style={{ backgroundColor: color }} />
-                  {label}
-                </button>
+                <SlideSwitch key={kind} checked={active} onChange={() => toggleKind(kind)} label={label} color={color} ariaLabel={`${active ? 'Hide' : 'Show'} ${label}`} />
               );
             })}
           </div>
