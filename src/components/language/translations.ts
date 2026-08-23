@@ -240,6 +240,11 @@ const translations = {
       MATERNAL_NIECE: 'Maternal Niece',
       PATERNAL_NEPHEW: 'Paternal Nephew',
       PATERNAL_NIECE: 'Paternal Niece',
+      // Non-family relation types, used by the unified Person/Battle/Title/Event graph.
+      PARTICIPATED_IN: 'Participated In',
+      HOLDS_TITLE: 'Holds Title',
+      INVOLVED_IN: 'Involved In',
+      PART_OF: 'Part Of',
     },
     // Graph filter/fullscreen controls
     graph: {
@@ -251,6 +256,10 @@ const translations = {
       closeFullscreen: 'Close fullscreen',
       openFilters: 'Filters',
       closeFilters: 'Close filters',
+      hideRelation: (label: string) => `Hide ${label} relationships`,
+      showRelation: (label: string) => `Show ${label} relationships`,
+      hideKind: (label: string) => `Hide ${label}`,
+      showKind: (label: string) => `Show ${label}`,
     },
     articlesInCategory: 'Articles in this category',
     // Motivation Cards
@@ -526,6 +535,10 @@ const translations = {
       MATERNAL_NIECE: 'ابنة الأخت',
       PATERNAL_NEPHEW: 'ابن الأخ',
       PATERNAL_NIECE: 'ابنة الأخ',
+      PARTICIPATED_IN: 'شارك في',
+      HOLDS_TITLE: 'يحمل لقب',
+      INVOLVED_IN: 'مرتبط بـ',
+      PART_OF: 'جزء من',
     },
     // Graph filter/fullscreen controls
     graph: {
@@ -537,6 +550,10 @@ const translations = {
       closeFullscreen: 'إغلاق ملء الشاشة',
       openFilters: 'التصفية',
       closeFilters: 'إغلاق التصفية',
+      hideRelation: (label: string) => `إخفاء علاقات ${label}`,
+      showRelation: (label: string) => `إظهار علاقات ${label}`,
+      hideKind: (label: string) => `إخفاء ${label}`,
+      showKind: (label: string) => `إظهار ${label}`,
     },
     articlesInCategory: 'المقالات في هذا التصنيف',
     // Motivation Cards

@@ -318,7 +318,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
               const color = relationColor(type);
               const label = relationLabel(type);
               return (
-                <SlideSwitch key={type} checked={active} onChange={() => toggleRelation(type)} label={label} color={color} ariaLabel={`${active ? 'Hide' : 'Show'} ${label} relationships`} />
+                <SlideSwitch key={type} checked={active} onChange={() => toggleRelation(type)} label={label} color={color} ariaLabel={active ? t.graph.hideRelation(label) : t.graph.showRelation(label)} />
               );
             })}
           </div>
@@ -337,7 +337,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
               const color = kindColor(kind);
               const label = kindLabel(kind);
               return (
-                <SlideSwitch key={kind} checked={active} onChange={() => toggleKind(kind)} label={label} color={color} ariaLabel={`${active ? 'Hide' : 'Show'} ${label}`} />
+                <SlideSwitch key={kind} checked={active} onChange={() => toggleKind(kind)} label={label} color={color} ariaLabel={active ? t.graph.hideKind(label) : t.graph.showKind(label)} />
               );
             })}
           </div>
@@ -359,17 +359,6 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     }} nodePointerAreaPaint={(node, color, ctx) => { const d = (node as GraphNodeFull).__bckgDimensions; if (d) { ctx.fillStyle = color; ctx.fillRect(node.x! - d[0] / 2, node.y! - d[1] / 2, d[0], d[1]); } }} />
   );
 
-  const kindLegend = isBipartite && (
-    <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 flex flex-wrap items-center gap-4 text-xs text-gray-600 dark:text-gray-300">
-      {kindsPresent.map(type => (
-        <span key={type} className="flex items-center gap-1.5">
-          <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: kindColor(type) }} />
-          {kindLabel(type)}
-        </span>
-      ))}
-    </div>
-  );
-
   if (isFullscreen) {
     return (
       <div className="fixed inset-0 z-50 bg-gray-50 dark:bg-gray-900">
@@ -388,7 +377,6 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
         </div>
         {showFilterPanel && (
           <div dir={language === 'ar' ? 'rtl' : 'ltr'} className={`absolute top-14 z-20 max-h-[70vh] w-80 overflow-auto rounded-lg border border-gray-200 bg-white p-3 shadow-lg dark:border-gray-700 dark:bg-gray-800 ${language === 'ar' ? 'left-3' : 'right-3'}`}>
-            {kindLegend}
             {filterPanel}
           </div>
         )}
@@ -417,7 +405,6 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
         </div>
       </div>
 
-      {kindLegend}
       {filterPanel}
 
       {selectedNode && (
