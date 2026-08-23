@@ -15,7 +15,7 @@ export default function TitlesGraphPage() {
                     ? 'استكشف الألقاب التي حملها الصحابة من خلال رسم بياني تفاعلي يربط كل لقب بمن حمله من الشخصيات.'
                     : 'Explore the titles held by companions through an interactive diagram linking every title to the people who carried it.'}
             </p>
-            <GraphCanvas url="/api/graph/titles" showSearch={false} targetSlug="" nodesLabel="titles & people" />
+            <GraphCanvas url="/api/graph/titles" showSearch={false} nodeSearch targetSlug="" nodesLabel="titles & people" />
         </div>
     );
 }

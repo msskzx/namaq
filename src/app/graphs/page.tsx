@@ -15,7 +15,7 @@ export default function GraphPage() {
                     ? 'استكشف الشبكة الكاملة للموقع من خلال رسم بياني تفاعلي واحد يجمع الأشخاص والألقاب والمعارك وكل العلاقات بينها.'
                     : 'Explore the whole site as one interactive diagram, combining people, titles, and battles together with every relationship between them.'}
             </p>
-            <GraphCanvas url="/api/graph/all" showSearch={false} targetSlug="" nodesLabel="nodes" />
+            <GraphCanvas url="/api/graph/all" showSearch={false} nodeSearch targetSlug="" nodesLabel="nodes" />
         </div>
     );
 }

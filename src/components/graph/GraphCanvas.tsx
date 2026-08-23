@@ -9,6 +9,7 @@ import { GraphData, GraphNodeFull, GraphLink } from '@/types/graph';
 import useSWR from 'swr';
 import { fetcher } from '@/lib/swr';
 import GraphSearch from './GraphSearch';
+import GraphNodeSearch from './GraphNodeSearch';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import { useLanguage } from '@/components/language/LanguageContext';
 import translations from '@/components/language/translations';
@@ -26,6 +27,15 @@ interface GraphCanvasProps {
   // to 'people' since most graphs are person-only; a bipartite graph (e.g.
   // titles and people) should override this to describe what's actually listed.
   nodesLabel?: string;
+  // Client-side "jump to node" search over whatever this graph has already
+  // loaded. Unlike GraphSearch (Postgres-backed, person/ancestorsOf query
+  // semantics for the main people graph), this suits graphs whose API route
+  // always returns its full dataset regardless of query params (battles,
+  // titles, the combined "all" graph) -- there's nothing a server-side
+  // suggest endpoint would filter that isn't already sitting in memory here.
+  // Mutually exclusive with showSearch in practice, since only the people
+  // graph supports the person/ancestorsOf params GraphSearch writes.
+  nodeSearch?: boolean;
 }
 
 const relationName = (value: string) => value.toLowerCase().replaceAll('_', ' ');
@@ -73,7 +83,7 @@ function nodeRadius(node: GraphNodeFull): number {
   return Math.max(textWidth + NODE_BASE_FONT_SIZE, NODE_BASE_FONT_SIZE * 2) / 2;
 }
 
-export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-muhammad', showSearch = true, initialParams, nodesLabel = 'people' }: GraphCanvasProps) {
+export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-muhammad', showSearch = true, initialParams, nodesLabel = 'people', nodeSearch = false }: GraphCanvasProps) {
   const { language } = useLanguage();
   const t = translations[language];
   const router = useRouter();
@@ -390,6 +400,15 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   return (
     <div className="container mx-auto px-4 py-8">
       {showSearch && <GraphSearch />}
+      {nodeSearch && graphData && (
+        <GraphNodeSearch
+          nodes={graphData.nodes}
+          onSelect={(node) => updateParams({ selected: node.slug })}
+          placeholder={t.search}
+          typeLabel={(type) => kindLabel(type ?? '')}
+          isArabic={language === 'ar'}
+        />
+      )}
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3" aria-label="Graph controls">
         <p className="text-sm text-gray-600 dark:text-gray-300" aria-live="polite">
           {visibleGraph ? `${visibleGraph.nodes.length} ${nodesLabel} · ${visibleGraph.links.length} relationships` : 'No graph data available'}
