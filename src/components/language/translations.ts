@@ -245,6 +245,8 @@ const translations = {
       HOLDS_TITLE: 'Holds Title',
       INVOLVED_IN: 'Involved In',
       PART_OF: 'Part Of',
+      COMPANION_OF: 'Companion Of',
+      ACCOMPANIED_BY: 'Accompanied By',
     },
     // Graph filter/fullscreen controls
     graph: {
@@ -539,6 +541,8 @@ const translations = {
       HOLDS_TITLE: 'يحمل لقب',
       INVOLVED_IN: 'مرتبط بـ',
       PART_OF: 'جزء من',
+      COMPANION_OF: 'صحابي',
+      ACCOMPANIED_BY: 'مُصاحَب',
     },
     // Graph filter/fullscreen controls
     graph: {
