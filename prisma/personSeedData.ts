@@ -283,9 +283,9 @@ export const people = [
   },
   // Daughters of the Prophet (Peace be upon him)
   {
-    name: 'فاطمة الزهراء',
+    name: 'فاطمة بنت محمد',
     fullName: 'فاطمة بنت محمد بن عبد الله الهاشمية القرشية',
-    slug: 'fatimah-al-zahra',
+    slug: 'fatimah-bint-muhammad',
     appearance: 'كانت تشبه النبي صلى الله عليه وسلم في مشيتها وكلامها.',
     virtues: 'بضعة من رسول الله، سيدة نساء أهل الجنة، زوجة علي بن أبي طالب، أم الحسنين.',
     picture: null,

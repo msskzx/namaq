@@ -142,6 +142,11 @@ export const titles = [
     slug: 'siddiqa',
   },
   {
+    name: 'ذات النطاقين',
+    nameTransliterated: 'Dhat an-Nitaqayn',
+    slug: 'dhat-an-nitaqayn',
+  },
+  {
     name: 'أسد الله',
     nameTransliterated: 'Lion of Allah',
     slug: 'asadu-allah',
@@ -165,11 +170,6 @@ export const titles = [
     name: 'شهيد',
     nameTransliterated: 'Martyr',
     slug: 'martyr',
-  },
-  {
-    name: 'ابنة النبي',
-    nameTransliterated: 'Daughter of the Prophet',
-    slug: 'daughter-of-prophet',
   },
   {
     name: 'ابن النبي',

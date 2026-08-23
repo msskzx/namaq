@@ -1,15 +1,49 @@
 import { NextResponse } from 'next/server';
 import { getSession } from '@/lib/neo4j';
 import { prisma } from '@/lib/prisma';
-import { GraphData, GraphLink, GraphNode } from '@/types/graph';
+import { GraphData, GraphLink, GraphNodeFull } from '@/types/graph';
 
-// Person nodes are reachable from all three sources below (family relations,
-// battle participation, titles), and each source only knows its own id
-// space (Neo4j identity vs. Prisma id). The slug is the one key shared by
-// all of them, so person nodes are keyed by slug here rather than by the
-// underlying database id, to avoid duplicating a person who appears in
-// more than one source.
-const personKey = (slug: string) => `person:${slug}`;
+type EntityType = 'person' | 'battle' | 'title' | 'event';
+const KNOWN_TYPES: readonly EntityType[] = ['person', 'battle', 'title', 'event'];
+
+const nodeKey = (type: string, slug: string) => `${type}:${slug}`;
+
+function labelsToType(labels: string[]): EntityType | null {
+  for (const label of labels) {
+    const type = label.toLowerCase();
+    if ((KNOWN_TYPES as readonly string[]).includes(type)) return type as EntityType;
+  }
+  return null;
+}
+
+// A single unified query over every entity type this graph spans, rather
+// than one query per type (and, for titles, a separate Postgres-only
+// lookup as before): this is what makes it one traversable graph instead
+// of Person/Battle from Neo4j merged with a disconnected Postgres-only
+// titles view. Mirrors the query shape in
+// scripts/graph/computeGraphLayout.ts, which computes graphRank/clusterId/
+// layoutX/layoutY over the same node/edge set.
+const nodesQuery = `
+  MATCH (n)
+  WHERE n:Person OR n:Battle OR n:Title OR n:Event
+  RETURN labels(n) AS labels, n.slug AS slug, n.name AS name
+`;
+
+const edgesQuery = `
+  MATCH (a)-[r]->(b)
+  WHERE (a:Person OR a:Battle OR a:Title OR a:Event) AND (b:Person OR b:Battle OR b:Title OR b:Event)
+  RETURN labels(a) AS sourceLabels, a.slug AS sourceSlug, type(r) AS relType, r.status AS status,
+         labels(b) AS targetLabels, b.slug AS targetSlug
+`;
+
+interface RankRow {
+  slug: string;
+  nasabRank?: number | null;
+  graphRank: number | null;
+  clusterId: number | null;
+  layoutX: number | null;
+  layoutY: number | null;
+}
 
 export async function GET() {
   const session = getSession();
@@ -22,94 +56,82 @@ export async function GET() {
   }
 
   try {
-    const nodes = new Map<string, GraphNode>();
-    const links: GraphLink[] = [];
-    const linkKeys = new Set<string>();
+    // Sequential, not Promise.all: a single session can't run two queries
+    // concurrently.
+    const nodesResult = await session.run(nodesQuery);
+    const edgesResult = await session.run(edgesQuery);
 
-    const addPerson = (properties: { name: string; slug: string }) => {
-      const key = personKey(properties.slug);
+    const nodes = new Map<string, GraphNodeFull>();
+    for (const record of nodesResult.records) {
+      const type = labelsToType(record.get('labels'));
+      const slug = record.get('slug');
+      if (!type || !slug) continue;
+      const key = nodeKey(type, slug);
       if (!nodes.has(key)) {
-        nodes.set(key, { id: key, label: properties.name, slug: properties.slug, group: 1, type: 'person' });
-      }
-      return key;
-    };
-
-    const addLink = (source: string, target: string, label: string, status?: string[]) => {
-      const key = `${source}|${target}|${label}`;
-      if (!linkKeys.has(key)) {
-        links.push({ source, target, label, value: 1, status });
-        linkKeys.add(key);
-      }
-    };
-
-    // Neo4j sessions run one statement at a time, so these are awaited in
-    // sequence rather than in parallel.
-    const peopleResult = await session.run(
-      `MATCH (node:Person)
-       OPTIONAL MATCH (node)-[relationship]->(related:Person)
-       RETURN node, relationship, related`
-    );
-
-    for (const record of peopleResult.records) {
-      const node = record.get('node');
-      const related = record.get('related');
-      const relationship = record.get('relationship');
-
-      if (node) addPerson({ name: node.properties.name, slug: node.properties.slug });
-      if (related) addPerson({ name: related.properties.name, slug: related.properties.slug });
-      if (node && related && relationship) {
-        addLink(personKey(node.properties.slug), personKey(related.properties.slug), relationship.type, relationship.properties?.status);
+        nodes.set(key, { id: key, label: record.get('name') ?? slug, slug, group: 1, type });
       }
     }
 
-    const battlesResult = await session.run(
-      `MATCH (battle:Battle)
-       OPTIONAL MATCH (person:Person)-[relationship:PARTICIPATED_IN]->(battle)
-       RETURN battle AS node, relationship, person AS related`
-    );
-
-    for (const record of battlesResult.records) {
-      const battle = record.get('node');
-      const person = record.get('related');
-      const relationship = record.get('relationship');
-
-      const battleKey = `battle:${battle.properties.slug}`;
-      if (!nodes.has(battleKey)) {
-        nodes.set(battleKey, { id: battleKey, label: battle.properties.name, slug: battle.properties.slug, group: 1, type: 'battle' });
-      }
-
-      if (person) {
-        const personNodeKey = addPerson({ name: person.properties.name, slug: person.properties.slug });
-        if (relationship) addLink(personNodeKey, battleKey, relationship.type, relationship.properties?.status);
-      }
+    const links: GraphLink[] = [];
+    for (const record of edgesResult.records) {
+      const sourceType = labelsToType(record.get('sourceLabels'));
+      const targetType = labelsToType(record.get('targetLabels'));
+      const sourceSlug = record.get('sourceSlug');
+      const targetSlug = record.get('targetSlug');
+      if (!sourceType || !targetType || !sourceSlug || !targetSlug) continue;
+      links.push({
+        source: nodeKey(sourceType, sourceSlug),
+        target: nodeKey(targetType, targetSlug),
+        label: record.get('relType'),
+        value: 1,
+        status: record.get('status') ?? undefined,
+      });
     }
 
-    const titles = await prisma.title.findMany({
-      include: { people: { select: { name: true, slug: true, nasabRank: true } } },
-      orderBy: { name: 'asc' },
-    });
-
-    for (const title of titles) {
-      const titleKey = `title:${title.slug}`;
-      nodes.set(titleKey, { id: titleKey, label: title.name, slug: title.slug, group: 1, type: 'title' });
-
-      for (const person of title.people) {
-        const personNodeKey = addPerson({ name: person.name, slug: person.slug });
-        addLink(personNodeKey, titleKey, 'HAS_TITLE');
-      }
-    }
-
-    // nasabRank lives in PostgreSQL, not Neo4j, so it's attached here as a
-    // separate lookup rather than threaded through every node-construction
-    // branch above.
+    // graphRank/clusterId/layoutX/layoutY (and, for people, nasabRank) live
+    // in PostgreSQL, not Neo4j, so they're joined in per type after the
+    // graph shape is built, same pattern as the previous nasabRank-only join.
     const nodeList = Array.from(nodes.values());
-    const personSlugs = nodeList.filter(node => node.type === 'person').map(node => node.slug);
-    const ranks = await prisma.person.findMany({
-      where: { slug: { in: personSlugs } },
-      select: { slug: true, nasabRank: true },
-    });
-    const rankBySlug = new Map(ranks.map(person => [person.slug, person.nasabRank]));
-    for (const node of nodeList) if (node.type === 'person') node.nasabRank = rankBySlug.get(node.slug) ?? null;
+    const slugsByType = new Map<EntityType, string[]>();
+    for (const node of nodeList) {
+      const type = (node.type ?? 'person') as EntityType;
+      slugsByType.set(type, [...(slugsByType.get(type) ?? []), node.slug]);
+    }
+
+    const rankSelect = { slug: true, graphRank: true, clusterId: true, layoutX: true, layoutY: true } as const;
+    const [people, battles, titles, events] = await Promise.all([
+      prisma.person.findMany({ where: { slug: { in: slugsByType.get('person') ?? [] } }, select: { ...rankSelect, nasabRank: true } }),
+      prisma.battle.findMany({ where: { slug: { in: slugsByType.get('battle') ?? [] } }, select: rankSelect }),
+      prisma.title.findMany({ where: { slug: { in: slugsByType.get('title') ?? [] } }, select: rankSelect }),
+      prisma.event.findMany({ where: { slug: { in: slugsByType.get('event') ?? [] } }, select: rankSelect }),
+    ]);
+
+    const rowsByKey = new Map<string, RankRow>([
+      ...people.map((row): [string, RankRow] => [nodeKey('person', row.slug), row]),
+      ...battles.map((row): [string, RankRow] => [nodeKey('battle', row.slug), row]),
+      ...titles.map((row): [string, RankRow] => [nodeKey('title', row.slug), row]),
+      ...events.map((row): [string, RankRow] => [nodeKey('event', row.slug), row]),
+    ]);
+
+    for (const node of nodeList) {
+      const row = rowsByKey.get(node.id);
+      if (!row) continue;
+      node.graphRank = row.graphRank;
+      node.clusterId = row.clusterId;
+      if (node.type === 'person') node.nasabRank = row.nasabRank ?? null;
+      if (row.layoutX != null && row.layoutY != null) {
+        // Pinned (fx/fy), not just a starting position: computeGraphLayout.ts
+        // already ran collision avoidance offline for these nodes, so
+        // letting the live force simulation move them away from that would
+        // just reintroduce the overlap it was computed to avoid. Nodes
+        // without a precomputed position (e.g. lineage-only ancestors with
+        // no PostgreSQL row) are left free to settle via live physics.
+        node.x = row.layoutX;
+        node.y = row.layoutY;
+        node.fx = row.layoutX;
+        node.fy = row.layoutY;
+      }
+    }
 
     const body: GraphData = { nodes: nodeList, links };
     return NextResponse.json(body);

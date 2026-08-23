@@ -13,7 +13,7 @@
  *
  * Chains stop as soon as they reach a slug that already exists elsewhere in
  * the graph (graphSeedData.ts / graphSeedData2.ts), e.g. qusay-ibn-kilab,
- * kilab-ibn-murra, murra-ibn-kaab, kaab-ibn-luay, fahar-ibn-malik,
+ * kilab-ibn-murrah, murrah-ibn-kaab, kaab-ibn-luay, fahar-ibn-malik,
  * kinanah-ibn-khuzayma, nufayl-ibn-abd-al-uzza, abd-shams-ibn-abd-manaf,
  * amr-ibn-kaab. Several Quraysh ancestor names repeat across branches
  * (e.g. more than one "Abd Manaf" or "Hashim"); slugs below are
@@ -174,8 +174,8 @@ export const peopleRelationsQueries = [
   'MATCH (from:Person {slug: "al-harith-ibn-zuhrah"}), (to:Person {slug: "zuhrah-ibn-kilab"}) CREATE (from)-[:SON]->(to);',
   'MATCH (from:Person {slug: "zuhrah-ibn-kilab"}), (to:Person {slug: "al-harith-ibn-zuhrah"}) CREATE (from)-[:FATHER]->(to);',
 
-  'MATCH (from:Person {slug: "zuhrah-ibn-kilab"}), (to:Person {slug: "kilab-ibn-murra"}) CREATE (from)-[:SON]->(to);',
-  'MATCH (from:Person {slug: "kilab-ibn-murra"}), (to:Person {slug: "zuhrah-ibn-kilab"}) CREATE (from)-[:FATHER]->(to);',
+  'MATCH (from:Person {slug: "zuhrah-ibn-kilab"}), (to:Person {slug: "kilab-ibn-murrah"}) CREATE (from)-[:SON]->(to);',
+  'MATCH (from:Person {slug: "kilab-ibn-murrah"}), (to:Person {slug: "zuhrah-ibn-kilab"}) CREATE (from)-[:FATHER]->(to);',
 
   // Saad ibn Abi Waqqas
   'MATCH (from:Person {slug: "saad-ibn-abi-waqqas"}), (to:Person {slug: "malik-ibn-uhayb"}) CREATE (from)-[:SON]->(to);',
@@ -235,8 +235,8 @@ export const peopleRelationsQueries = [
   'MATCH (from:Person {slug: "makhzum-ibn-yaqzah"}), (to:Person {slug: "yaqzah-ibn-murrah"}) CREATE (from)-[:SON]->(to);',
   'MATCH (from:Person {slug: "yaqzah-ibn-murrah"}), (to:Person {slug: "makhzum-ibn-yaqzah"}) CREATE (from)-[:FATHER]->(to);',
 
-  'MATCH (from:Person {slug: "yaqzah-ibn-murrah"}), (to:Person {slug: "murra-ibn-kaab"}) CREATE (from)-[:SON]->(to);',
-  'MATCH (from:Person {slug: "murra-ibn-kaab"}), (to:Person {slug: "yaqzah-ibn-murrah"}) CREATE (from)-[:FATHER]->(to);',
+  'MATCH (from:Person {slug: "yaqzah-ibn-murrah"}), (to:Person {slug: "murrah-ibn-kaab"}) CREATE (from)-[:SON]->(to);',
+  'MATCH (from:Person {slug: "murrah-ibn-kaab"}), (to:Person {slug: "yaqzah-ibn-murrah"}) CREATE (from)-[:FATHER]->(to);',
 
   // Uthman ibn Mazun, Qudamah ibn Mazun, Abdullah ibn Mazun al-Jumahi (brothers)
   'MATCH (from:Person {slug: "uthman-ibn-mazun"}), (to:Person {slug: "mazun-ibn-habib"}) CREATE (from)-[:SON]->(to);',

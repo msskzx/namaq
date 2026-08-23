@@ -259,34 +259,8 @@ export const battles = [
     latitude: 33.4000, // More precise approximate latitude for Nahrawan Canal area, Iraq
     longitude: 45.0000, // More precise approximate longitude for Nahrawan Canal area
   },
-  {
-    name: 'معركة كربلاء',
-    slug: 'karbala',
-    location: 'كربلاء',
-    hijriYear: 61,
-    nameTransliterated: 'Battle of Karbala',
-    locationEn: 'Karbala',
-    latitude: 32.6163, // Latitude for Karbala, Iraq
-    longitude: 44.0768, // Longitude for Karbala, Iraq
-  },
-  {
-    name: 'فتح الأندلس',
-    slug: 'fath-andalus',
-    location: 'الأندلس',
-    hijriYear: 92,
-    nameTransliterated: 'Conquest of Al-Andalus',
-    locationEn: 'Iberian Peninsula',
-    latitude: 39.0000, // Central Iberian Peninsula, approximate
-    longitude: -4.0000, // Central Iberian Peninsula, approximate
-  },
-  {
-    name: 'معركة بلاط الشهداء',
-    slug: 'balat-ash-shuhada', // Corrected slug from 'balatitude-ash-shuhada'
-    location: 'فرنسا',
-    hijriYear: 114,
-    nameTransliterated: 'Battle of Tours',
-    locationEn: 'France',
-    latitude: 47.3871, // Latitude for Tours, France
-    longitude: 0.6896, // Longitude for Tours, France
-  },
+  // karbala, fath-andalus, and balat-ash-shuhada were removed here (isolated
+  // -- no participants, no events -- and their layer of detail was out of
+  // scope for now). Revisit with real participant/event data before
+  // re-adding.
 ];

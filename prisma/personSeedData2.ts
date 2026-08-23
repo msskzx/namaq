@@ -47,7 +47,7 @@ export const people = [
   {
     name: 'كلاب بن مرة',
     fullName: 'كلاب بن مرة بن كعب بن لؤي بن غالب بن فهر بن مالك بن النضر بن كنانة بن خزيمة بن مدركة بن إلياس بن مضر بن نزار بن معد بن عدنان.',
-    slug: 'kilab-ibn-murra',
+    slug: 'kilab-ibn-murrah',
     appearance: '',
     virtues: '',
     picture: null,
@@ -56,7 +56,7 @@ export const people = [
   {
     name: 'مرة بن كعب',
     fullName: 'مرة بن كعب بن لؤي بن غالب بن فهر بن مالك بن النضر بن كنانة بن خزيمة بن مدركة بن إلياس بن مضر بن نزار بن معد بن عدنان.',
-    slug: 'murra-ibn-kaab',
+    slug: 'murrah-ibn-kaab',
     appearance: '',
     virtues: '',
     picture: null,

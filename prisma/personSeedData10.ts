@@ -148,7 +148,7 @@ export const people = [
     appearance: null,
     virtues: null,
     picture: null,
-    titles: ['companion'],
+    titles: ['companion', 'mother-of-believers'],
   },
   {
     // Existing Neo4j Person node (sawdah-bint-zamah, core, no new node
@@ -163,7 +163,7 @@ export const people = [
     appearance: null,
     virtues: null,
     picture: null,
-    titles: ['companion'],
+    titles: ['companion', 'mother-of-believers'],
   },
   {
     // Full sister of Hamzah ibn Abd al-Muttalib (existing core node) via a
@@ -362,7 +362,7 @@ export const people = [
     appearance: null,
     virtues: null,
     picture: null,
-    titles: ['companion'],
+    titles: ['companion', 'dhat-an-nitaqayn'],
   },
   {
     // Father named, no deeper chain given — no separate ancestor node.

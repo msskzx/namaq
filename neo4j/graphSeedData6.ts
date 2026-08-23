@@ -42,12 +42,22 @@
  *   - Within this batch, Abdullah ibn Mas'ud and his brother Utbah ibn
  *     Mas'ud al-Hudhali share the same father, modeled once and reused.
  *
- * Same-name collision disambiguated by father, following the existing
- * convention: the new "مالك بن امرئ القيس" (Sa'd ibn al-Rabi's ancestor,
- * Khazraj Harithi) would collide in plain form with the existing
- * "malik-ibn-imri-al-qays" (Thabit ibn Qais's ancestor, graphSeedData5.ts,
- * son of "Imru' al-Qays ibn Malik al-Aghar" — a different person of the same
- * name). Slugged "malik-ibn-imri-al-qays-al-harithi" to avoid the collision.
+ * Correction (verified against the primary source, Siyar A'lam al-Nubala's
+ * own entries for both companions): the new "مالك بن امرئ القيس" (Sa'd ibn
+ * al-Rabi's ancestor) was originally assumed to be a different person from
+ * the existing "malik-ibn-imri-al-qays" (Thabit ibn Qais's ancestor,
+ * graphSeedData5.ts) and slugged "malik-ibn-imri-al-qays-al-harithi" to
+ * avoid the collision. They are in fact the same man — both companions'
+ * own nasab pages give the identical chain (Malik ibn Imru' al-Qays ibn
+ * Malik ibn Thalabah ibn Ka'b ibn al-Khazraj ibn al-Harith ibn al-Khazraj)
+ * one generation past this node, diverging only at his two sons: Zuhayr
+ * (Thabit ibn Qais's line, "zuhayr-ibn-malik") and Abu Zuhayr/Amr (Sa'd ibn
+ * al-Rabi's line, "abi-zuhayr-ibn-malik") — real brothers, not the same
+ * person under two names. So this batch reuses "malik-ibn-imri-al-qays" and
+ * its existing son "imru-al-qays-ibn-malik-al-aghar" (graphSeedData5.ts)
+ * rather than creating new nodes, and attaches the deeper ancestry
+ * (Malik ibn Thalabah, Thalabah ibn Ka'b) that only this branch's source
+ * page provided onto that existing "imru-al-qays-ibn-malik-al-aghar" node.
  *
  * Very deep pre-Islamic chains with no collision and no in-batch sharing
  * (Abdullah ibn Abdullah ibn Ubayy's Khazraj line, Ammar ibn Yasir's Madhhij
@@ -87,8 +97,10 @@ export const peopleQueries = [
   'CREATE (:Person { name: "الربيع بن عمرو", slug: "al-rabi-ibn-amr", fullName: "الربيع بن عمرو بن أبي زهير بن مالك بن امرئ القيس بن مالك بن ثعلبة بن كعب بن الخزرج الأنصاري الخزرجي الحارثي" });',
   'CREATE (:Person { name: "عمرو بن أبي زهير", slug: "amr-ibn-abi-zuhayr", fullName: "عمرو بن أبي زهير بن مالك بن امرئ القيس بن مالك بن ثعلبة بن كعب بن الخزرج الأنصاري الخزرجي الحارثي" });',
   'CREATE (:Person { name: "أبو زهير بن مالك", slug: "abi-zuhayr-ibn-malik", fullName: "أبو زهير بن مالك بن امرئ القيس بن مالك بن ثعلبة بن كعب بن الخزرج الأنصاري الخزرجي الحارثي" });',
-  'CREATE (:Person { name: "مالك بن امرئ القيس", slug: "malik-ibn-imri-al-qays-al-harithi", fullName: "مالك بن امرئ القيس بن مالك بن ثعلبة بن كعب بن الخزرج الأنصاري الخزرجي الحارثي" });',
-  'CREATE (:Person { name: "امرؤ القيس بن مالك", slug: "imru-al-qays-ibn-malik", fullName: "امرؤ القيس بن مالك بن ثعلبة بن كعب بن الخزرج الأنصاري الخزرجي الحارثي" });',
+  // "مالك بن امرئ القيس" and "امرؤ القيس بن مالك" are not created here — they
+  // are the same people as "malik-ibn-imri-al-qays" and
+  // "imru-al-qays-ibn-malik-al-aghar" from graphSeedData5.ts (see the
+  // correction note above), reused instead of duplicated.
   'CREATE (:Person { name: "مالك بن ثعلبة", slug: "malik-ibn-thalabah", fullName: "مالك بن ثعلبة بن كعب بن الخزرج الأنصاري الخزرجي الحارثي" });',
   'CREATE (:Person { name: "ثعلبة بن كعب", slug: "thalabah-ibn-kaab", fullName: "ثعلبة بن كعب بن الخزرج الأنصاري الخزرجي الحارثي" });',
   'CREATE (:Person { name: "زيد بن قيس", slug: "zayd-ibn-qais", fullName: "زيد بن قيس بن زيد بن النعمان بن مالك بن ثعلبة بن كعب بن الخزرج الأنصاري الخزرجي الحارثي" });',
@@ -223,14 +235,20 @@ export const peopleRelationsQueries = [
   'MATCH (from:Person {slug: "amr-ibn-abi-zuhayr"}), (to:Person {slug: "abi-zuhayr-ibn-malik"}) CREATE (from)-[:SON]->(to);',
   'MATCH (from:Person {slug: "abi-zuhayr-ibn-malik"}), (to:Person {slug: "amr-ibn-abi-zuhayr"}) CREATE (from)-[:FATHER]->(to);',
 
-  'MATCH (from:Person {slug: "abi-zuhayr-ibn-malik"}), (to:Person {slug: "malik-ibn-imri-al-qays-al-harithi"}) CREATE (from)-[:SON]->(to);',
-  'MATCH (from:Person {slug: "malik-ibn-imri-al-qays-al-harithi"}), (to:Person {slug: "abi-zuhayr-ibn-malik"}) CREATE (from)-[:FATHER]->(to);',
+  // abi-zuhayr-ibn-malik's father is "malik-ibn-imri-al-qays"
+  // (graphSeedData5.ts) — the same person as the old
+  // "malik-ibn-imri-al-qays-al-harithi", see the correction note above.
+  // zuhayr-ibn-malik (Thabit ibn Qais's line) is already attached there as
+  // his brother, so this makes them siblings as the source confirms.
+  'MATCH (from:Person {slug: "abi-zuhayr-ibn-malik"}), (to:Person {slug: "malik-ibn-imri-al-qays"}) CREATE (from)-[:SON]->(to);',
+  'MATCH (from:Person {slug: "malik-ibn-imri-al-qays"}), (to:Person {slug: "abi-zuhayr-ibn-malik"}) CREATE (from)-[:FATHER]->(to);',
 
-  'MATCH (from:Person {slug: "malik-ibn-imri-al-qays-al-harithi"}), (to:Person {slug: "imru-al-qays-ibn-malik"}) CREATE (from)-[:SON]->(to);',
-  'MATCH (from:Person {slug: "imru-al-qays-ibn-malik"}), (to:Person {slug: "malik-ibn-imri-al-qays-al-harithi"}) CREATE (from)-[:FATHER]->(to);',
-
-  'MATCH (from:Person {slug: "imru-al-qays-ibn-malik"}), (to:Person {slug: "malik-ibn-thalabah"}) CREATE (from)-[:SON]->(to);',
-  'MATCH (from:Person {slug: "malik-ibn-thalabah"}), (to:Person {slug: "imru-al-qays-ibn-malik"}) CREATE (from)-[:FATHER]->(to);',
+  // The deeper ancestry this branch's source page gave (Malik ibn Thalabah,
+  // Thalabah ibn Ka'b) attaches to "imru-al-qays-ibn-malik-al-aghar"
+  // (graphSeedData5.ts) — again the same person as the old
+  // "imru-al-qays-ibn-malik", not a separate node.
+  'MATCH (from:Person {slug: "imru-al-qays-ibn-malik-al-aghar"}), (to:Person {slug: "malik-ibn-thalabah"}) CREATE (from)-[:SON]->(to);',
+  'MATCH (from:Person {slug: "malik-ibn-thalabah"}), (to:Person {slug: "imru-al-qays-ibn-malik-al-aghar"}) CREATE (from)-[:FATHER]->(to);',
 
   'MATCH (from:Person {slug: "malik-ibn-thalabah"}), (to:Person {slug: "thalabah-ibn-kaab"}) CREATE (from)-[:SON]->(to);',
   'MATCH (from:Person {slug: "thalabah-ibn-kaab"}), (to:Person {slug: "malik-ibn-thalabah"}) CREATE (from)-[:FATHER]->(to);',

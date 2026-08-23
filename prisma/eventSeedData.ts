@@ -30,7 +30,10 @@ export const eventsData = [
     descriptionTransliterated: 'Birth of Fatimah bint Muhammad',
     location: 'مكة المكرمة',
     locationTransliterated: 'Mecca',
-    personSlugs: ['fatimah-bint-muhammad']
+    // Was 'fatimah-bint-muhammad', a slug that doesn't exist anywhere in
+    // personSeedData -- silently matched no one, leaving this event with
+    // zero connected people. Corrected to the real slugs.
+    personSlugs: ['prophet-muhammad', 'khadijah-bint-khuwaylid', 'fatimah-bint-muhammad']
   },
 
   // Hijra Events

@@ -10,6 +10,13 @@ export interface GraphNode {
   // person's PostgreSQL profile. Undefined/null for title nodes and for
   // people without a computed rank yet.
   nasabRank?: number | null;
+  // Cross-type prominence rank (1 = most prominent) over the unified
+  // Person+Battle+Title+Event graph, from scripts/graph/computeGraphLayout.ts.
+  // Present on any node type once computed; null if not yet computed.
+  graphRank?: number | null;
+  // Louvain community id from the same unified-graph computation, for
+  // zoom-out cluster collapse.
+  clusterId?: number | null;
 }
 
 export interface GraphNodeFull extends GraphNode {
