@@ -33,7 +33,7 @@ export const eventsData = [
     // Was 'fatimah-bint-muhammad', a slug that doesn't exist anywhere in
     // personSeedData -- silently matched no one, leaving this event with
     // zero connected people. Corrected to the real slugs.
-    personSlugs: ['prophet-muhammad', 'khadijah-bint-khuwaylid', 'fatimah-al-zahra']
+    personSlugs: ['prophet-muhammad', 'khadijah-bint-khuwaylid', 'fatimah-bint-muhammad']
   },
 
   // Hijra Events

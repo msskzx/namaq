@@ -23,7 +23,7 @@
  *     "khuwaylid-ibn-asad" node (graphSeedData4.ts, Az-Zubayr ibn al-Awwam's
  *     grandfather; Khadijah is his paternal aunt). No new node — just the
  *     missing DAUGHTER/FATHER edge pair.
- *   - fatimah-al-zahra (142): no relation gap — already fully connected via
+ *   - fatimah-bint-muhammad (142, was fatimah-al-zahra): no relation gap — already fully connected via
  *     corePeopleRelationsQueries (DAUGHTER to the Prophet, WIFE/HUSBAND to
  *     Ali, MOTHER-side edges to Hasan/Husayn/Umm Kulthum bint Ali/Zaynab
  *     bint Ali).

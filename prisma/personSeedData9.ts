@@ -54,12 +54,15 @@ export const people = [
     titles: ['companion'],
   },
   {
-    // Existing Neo4j Person node (fatimah-al-zahra, core, no new node
-    // created) — no relation gap found; already fully connected.
-    name: 'فاطمة الزهراء',
+    // Existing Neo4j Person node (fatimah-bint-muhammad, core, no new node
+    // created) — no relation gap found; already fully connected. Renamed
+    // from "fatimah-al-zahra"/"فاطمة الزهراء" for consistency with her
+    // sisters' slug/name convention (zaynab-bint-muhammad,
+    // ruqayyah-bint-muhammad, umm-kulthum-bint-muhammad).
+    name: 'فاطمة بنت محمد',
     fullName: 'فاطمة بنت محمد بن عبد الله بن عبد المطلب بن هاشم القرشية الهاشمية',
-    slug: 'fatimah-al-zahra',
-    nameTransliterated: 'Fatimah al-Zahra',
+    slug: 'fatimah-bint-muhammad',
+    nameTransliterated: 'Fatimah bint Muhammad',
     appearance: null,
     virtues: null,
     picture: null,
