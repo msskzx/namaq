@@ -96,7 +96,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // hiding one relation/kind never implicitly hides any other.
   const excludedRelations = useMemo(() => new Set(searchParams?.getAll('relation') ?? []), [searchParams]);
   const excludedKinds = useMemo(() => new Set(searchParams?.getAll('kind') ?? []), [searchParams]);
-  const searchedSlugs = useMemo(() => new Set([...(searchParams?.getAll('person') ?? []), ...(searchParams?.getAll('ancestorsOf') ?? [])]), [searchParams]);
+  const searchedSlugs = useMemo(() => new Set([...(searchParams?.getAll('person') ?? []), ...(searchParams?.getAll('ancestorsOf') ?? []), ...(searchParams?.getAll('descendantsOf') ?? [])]), [searchParams]);
 
   const fetchUrl = useMemo(() => {
     try {
@@ -418,7 +418,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           <button type="button" onClick={() => setIsFullscreen(true)} aria-label={t.graph.fullscreen} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
             {t.graph.fullscreen}
           </button>
-          <button type="button" onClick={() => updateParams({ selected: null, focus: null, relation: [], kind: [], person: null, ancestorsOf: [] })} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
+          <button type="button" onClick={() => updateParams({ selected: null, focus: null, relation: [], kind: [], person: null, ancestorsOf: [], descendantsOf: [] })} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
             Reset graph view
           </button>
         </div>
@@ -432,7 +432,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode.label}</h2>
           <div className="mt-3 flex flex-wrap gap-3">
             <Link className="rounded bg-amber-400 px-3 py-1.5 text-sm text-gray-950 hover:bg-amber-300" href={`${selectedNode.type ? profilePaths[selectedNode.type] ?? '/people' : '/people'}/${selectedNode.slug}`}>View profile</Link>
-            <button type="button" onClick={() => updateParams({ focus: selectedNode.slug, person: null, ancestorsOf: [] })} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-700">Explore neighbours</button>
+            <button type="button" onClick={() => updateParams({ focus: selectedNode.slug, person: null, ancestorsOf: [], descendantsOf: [] })} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-700">Explore neighbours</button>
           </div>
         </aside>
       )}

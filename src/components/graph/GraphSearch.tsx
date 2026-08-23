@@ -17,7 +17,7 @@ interface Suggestion {
   match: 'exact' | 'prefix' | 'contains';
 }
 
-type SearchMode = 'person' | 'ancestorsOf';
+type SearchMode = 'person' | 'ancestorsOf' | 'descendantsOf';
 
 export default function GraphSearch() {
   const router = useRouter();
@@ -112,16 +112,22 @@ export default function GraphSearch() {
 
     const existingPerson = searchParams.get('person');
     const existingAncestorsList = searchParams.getAll('ancestorsOf');
-    const currentMode = existingPerson ? 'person' : existingAncestorsList.length ? 'ancestorsOf' : mode;
+    const existingDescendantsList = searchParams.getAll('descendantsOf');
+    // ancestorsOf/descendantsOf share the same "list of slugs" URL shape, so
+    // whichever one is actually present in the URL drives both the mode and
+    // which list gets compared/fetched below.
+    const existingListMode = existingAncestorsList.length ? 'ancestorsOf' : existingDescendantsList.length ? 'descendantsOf' : null;
+    const existingList = existingListMode === 'ancestorsOf' ? existingAncestorsList : existingDescendantsList;
+    const currentMode = existingPerson ? 'person' : existingListMode ?? mode;
 
     // Only update if there's a change in URL params
     const shouldUpdate =
       (existingPerson && selectedPeople[0]?.slug !== existingPerson) ||
-      (existingAncestorsList.length > 0 && (
-        selectedPeople.length !== existingAncestorsList.length ||
-        !selectedPeople.every((p, i) => p.slug === existingAncestorsList[i])
+      (existingList.length > 0 && (
+        selectedPeople.length !== existingList.length ||
+        !selectedPeople.every((p, i) => p.slug === existingList[i])
       )) ||
-      (!existingPerson && existingAncestorsList.length === 0 && selectedPeople.length > 0);
+      (!existingPerson && existingList.length === 0 && selectedPeople.length > 0);
 
     if (!shouldUpdate) return;
 
@@ -141,13 +147,13 @@ export default function GraphSearch() {
             }
           });
       }
-    } else if (existingAncestorsList.length > 0) {
+    } else if (existingList.length > 0) {
       // Only fetch if the lists are different
-      if (selectedPeople.length !== existingAncestorsList.length ||
-        !selectedPeople.every((p, i) => p.slug === existingAncestorsList[i])) {
+      if (selectedPeople.length !== existingList.length ||
+        !selectedPeople.every((p, i) => p.slug === existingList[i])) {
         isHydratingRef.current = true;
         Promise.all(
-          existingAncestorsList.map(slug =>
+          existingList.map(slug =>
             fetch(`/api/people/suggest?q=${encodeURIComponent(slug)}`)
               .then(res => res.json())
               .then(data => data.data?.find((p: Suggestion) => p.slug === slug))
@@ -202,16 +208,17 @@ export default function GraphSearch() {
     const params = new URLSearchParams(searchParams.toString());
     params.delete('person');
     params.delete('ancestorsOf');
+    params.delete('descendantsOf');
 
     if (mode === 'person' && selectedPeople.length > 0) {
       const lastPerson = selectedPeople[selectedPeople.length - 1];
       if (lastPerson?.slug) {
         params.set('person', lastPerson.slug);
       }
-    } else if (mode === 'ancestorsOf' && selectedPeople.length > 0) {
+    } else if ((mode === 'ancestorsOf' || mode === 'descendantsOf') && selectedPeople.length > 0) {
       selectedPeople.forEach(person => {
         if (person?.slug) {
-          params.append('ancestorsOf', person.slug);
+          params.append(mode, person.slug);
         }
       });
     }
@@ -256,6 +263,9 @@ export default function GraphSearch() {
           </option>
           <option value="ancestorsOf" className="text-gray-800 dark:text-gray-950">
             {isArabic ? 'نسب' : 'Ancestors'}
+          </option>
+          <option value="descendantsOf" className="text-gray-800 dark:text-gray-950">
+            {isArabic ? 'الذرية' : 'Descendants'}
           </option>
         </select>
       </div>
@@ -314,7 +324,7 @@ export default function GraphSearch() {
               }}
               placeholder={
                 selectedPeople.length === 0
-                  ? (mode === 'ancestorsOf'
+                  ? (mode !== 'person'
                     ? (language === 'ar' ? 'ابحث عن الأشخاص' : 'Search for people')
                     : translations[language]?.search)
                   : ''

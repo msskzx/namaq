@@ -1,8 +1,21 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { getSession, findMany } = vi.hoisted(() => ({ getSession: vi.fn(), findMany: vi.fn() }));
+const { getSession, findMany, findManyBattle, findManyTitle, findManyEvent } = vi.hoisted(() => ({
+  getSession: vi.fn(),
+  findMany: vi.fn(),
+  findManyBattle: vi.fn(),
+  findManyTitle: vi.fn(),
+  findManyEvent: vi.fn(),
+}));
 vi.mock('@/lib/neo4j', () => ({ getSession }));
-vi.mock('@/lib/prisma', () => ({ prisma: { person: { findMany } } }));
+vi.mock('@/lib/prisma', () => ({
+  prisma: {
+    person: { findMany },
+    battle: { findMany: findManyBattle },
+    title: { findMany: findManyTitle },
+    event: { findMany: findManyEvent },
+  },
+}));
 
 import { GET } from './route';
 
@@ -33,7 +46,13 @@ describe('GET /api/graph', () => {
   beforeEach(() => {
     getSession.mockReset();
     findMany.mockReset();
+    findManyBattle.mockReset();
+    findManyTitle.mockReset();
+    findManyEvent.mockReset();
     findMany.mockResolvedValue([]);
+    findManyBattle.mockResolvedValue([]);
+    findManyTitle.mockResolvedValue([]);
+    findManyEvent.mockResolvedValue([]);
   });
 
   it('returns 500 without hitting the database when config is missing', async () => {
@@ -55,50 +74,120 @@ describe('GET /api/graph', () => {
     expect(await response.json()).toEqual({ error: 'Failed to fetch graph data' });
   });
 
-  it('fetches every person with no query params', async () => {
-    const a = node(1, 'a', 'Person A');
-    const b = node(2, 'b', 'Person B');
-    const c = node(3, 'c', 'Person C');
-    const run = vi.fn().mockResolvedValue({
-      records: [
-        record({ node: a, relationship: rel('SON'), related: b }),
-        record({ node: c, relationship: null, related: null }),
-      ],
-    });
+  it('returns the full unified Person+Battle+Title+Event graph with no query params', async () => {
+    const run = vi.fn()
+      .mockResolvedValueOnce({
+        records: [
+          record({ labels: ['Person'], slug: 'prophet-muhammad', name: 'Muhammad' }),
+          record({ labels: ['Person'], slug: 'ali-ibn-abi-talib', name: 'Ali' }),
+          record({ labels: ['Battle'], slug: 'badr', name: 'غزوة بدر' }),
+          record({ labels: ['Title'], slug: 'commander', name: 'Commander' }),
+          record({ labels: ['Event'], slug: 'hijra', name: 'الهجرة' }),
+        ],
+      })
+      .mockResolvedValueOnce({
+        records: [
+          record({ sourceLabels: ['Person'], sourceSlug: 'prophet-muhammad', relType: 'FATHER', status: null, targetLabels: ['Person'], targetSlug: 'ali-ibn-abi-talib' }),
+          record({ sourceLabels: ['Person'], sourceSlug: 'ali-ibn-abi-talib', relType: 'PARTICIPATED_IN', status: ['MARTYRED'], targetLabels: ['Battle'], targetSlug: 'badr' }),
+          record({ sourceLabels: ['Person'], sourceSlug: 'ali-ibn-abi-talib', relType: 'HOLDS_TITLE', status: null, targetLabels: ['Title'], targetSlug: 'commander' }),
+          record({ sourceLabels: ['Person'], sourceSlug: 'prophet-muhammad', relType: 'INVOLVED_IN', status: null, targetLabels: ['Event'], targetSlug: 'hijra' }),
+        ],
+      });
     getSession.mockReturnValue({ run });
+
+    findMany.mockResolvedValue([
+      { slug: 'prophet-muhammad', nasabRank: 1, graphRank: 1, clusterId: 0, layoutX: 10, layoutY: 20 },
+      { slug: 'ali-ibn-abi-talib', nasabRank: 2, graphRank: 3, clusterId: 0, layoutX: 15, layoutY: 25 },
+    ]);
+    findManyBattle.mockResolvedValue([{ slug: 'badr', graphRank: 2, clusterId: 1, layoutX: 100, layoutY: 200 }]);
+    findManyTitle.mockResolvedValue([{ slug: 'commander', graphRank: 5, clusterId: 0, layoutX: null, layoutY: null }]);
+    findManyEvent.mockResolvedValue([{ slug: 'hijra', graphRank: 4, clusterId: 2, layoutX: -50, layoutY: -60 }]);
 
     const response = await GET(request(''));
     const body = await response.json();
 
-    expect(run).toHaveBeenCalledTimes(1);
-    const [query, params] = run.mock.calls[0];
-    expect(query).toContain('MATCH (node:Person)');
-    expect(query).toContain('OPTIONAL MATCH (node)-[relationship]->(related:Person)');
-    expect(params).toBeUndefined();
+    expect(run).toHaveBeenCalledTimes(2);
+    expect(run.mock.calls[0][0]).toContain('WHERE n:Person OR n:Battle OR n:Title OR n:Event');
+    expect(run.mock.calls[1][0]).toContain('MATCH (a)-[r]->(b)');
 
-    expect(body.nodes).toHaveLength(3);
-    expect(body.nodes.map((n: { slug: string }) => n.slug).sort()).toEqual(['a', 'b', 'c']);
-    expect(body.links).toEqual([{ source: '1', target: '2', label: 'SON', value: 1 }]);
+    expect(body.nodes).toEqual(expect.arrayContaining([
+      { id: 'person:prophet-muhammad', label: 'Muhammad', slug: 'prophet-muhammad', group: 1, type: 'person', nasabRank: 1, graphRank: 1, clusterId: 0, x: 10, y: 20, fx: 10, fy: 20 },
+      { id: 'person:ali-ibn-abi-talib', label: 'Ali', slug: 'ali-ibn-abi-talib', group: 1, type: 'person', nasabRank: 2, graphRank: 3, clusterId: 0, x: 15, y: 25, fx: 15, fy: 25 },
+      { id: 'battle:badr', label: 'غزوة بدر', slug: 'badr', group: 1, type: 'battle', graphRank: 2, clusterId: 1, x: 100, y: 200, fx: 100, fy: 200 },
+      { id: 'title:commander', label: 'Commander', slug: 'commander', group: 1, type: 'title', graphRank: 5, clusterId: 0 },
+      { id: 'event:hijra', label: 'الهجرة', slug: 'hijra', group: 1, type: 'event', graphRank: 4, clusterId: 2, x: -50, y: -60, fx: -50, fy: -60 },
+    ]));
+    expect(body.nodes).toHaveLength(5);
+
+    expect(body.links).toEqual(expect.arrayContaining([
+      { source: 'person:prophet-muhammad', target: 'person:ali-ibn-abi-talib', label: 'FATHER', value: 1 },
+      { source: 'person:ali-ibn-abi-talib', target: 'battle:badr', label: 'PARTICIPATED_IN', value: 1, status: ['MARTYRED'] },
+      { source: 'person:ali-ibn-abi-talib', target: 'title:commander', label: 'HOLDS_TITLE', value: 1 },
+      { source: 'person:prophet-muhammad', target: 'event:hijra', label: 'INVOLVED_IN', value: 1 },
+    ]));
+    expect(body.links).toHaveLength(4);
   });
 
-  it('attaches nasabRank from PostgreSQL by slug, defaulting to null when unranked', async () => {
-    const a = node(1, 'a', 'Person A');
-    const b = node(2, 'b', 'Person B');
-    const run = vi.fn().mockResolvedValue({
-      records: [record({ node: a, relationship: rel('SON'), related: b })],
-    });
+  it('drops a node whose labels do not match any known entity type', async () => {
+    const run = vi.fn()
+      .mockResolvedValueOnce({ records: [record({ labels: ['SomethingElse'], slug: 'ghost', name: 'Ghost' })] })
+      .mockResolvedValueOnce({ records: [] });
     getSession.mockReturnValue({ run });
-    findMany.mockResolvedValue([{ slug: 'a', nasabRank: 3 }]);
 
     const response = await GET(request(''));
     const body = await response.json();
 
-    expect(findMany).toHaveBeenCalledWith({
-      where: { slug: { in: ['a', 'b'] } },
-      select: { slug: true, nasabRank: true },
-    });
-    const bySlug = Object.fromEntries(body.nodes.map((n: { slug: string; nasabRank: number | null }) => [n.slug, n.nasabRank]));
-    expect(bySlug).toEqual({ a: 3, b: null });
+    expect(body.nodes).toEqual([]);
+  });
+
+  it('returns 500 when the default unified query fails', async () => {
+    const run = vi.fn().mockRejectedValue(new Error('boom'));
+    getSession.mockReturnValue({ run });
+
+    const response = await GET(request(''));
+
+    expect(response.status).toBe(500);
+    expect(await response.json()).toEqual({ error: 'Failed to fetch graph data' });
+  });
+
+  it('kind=person&kind=battle returns only those kinds and the links directly between them', async () => {
+    const run = vi.fn()
+      .mockResolvedValueOnce({
+        records: [
+          record({ labels: ['Person'], slug: 'ali-ibn-abi-talib', name: 'Ali' }),
+          record({ labels: ['Battle'], slug: 'badr', name: 'غزوة بدر' }),
+          record({ labels: ['Title'], slug: 'commander', name: 'Commander' }),
+        ],
+      })
+      .mockResolvedValueOnce({
+        records: [
+          record({ sourceLabels: ['Person'], sourceSlug: 'ali-ibn-abi-talib', relType: 'PARTICIPATED_IN', status: null, targetLabels: ['Battle'], targetSlug: 'badr' }),
+          record({ sourceLabels: ['Person'], sourceSlug: 'ali-ibn-abi-talib', relType: 'HOLDS_TITLE', status: null, targetLabels: ['Title'], targetSlug: 'commander' }),
+        ],
+      });
+    getSession.mockReturnValue({ run });
+
+    const response = await GET(request('?kind=person&kind=battle'));
+    const body = await response.json();
+
+    expect(body.nodes.map((n: { slug: string }) => n.slug).sort()).toEqual(['ali-ibn-abi-talib', 'badr']);
+    // The HOLDS_TITLE link is dropped along with the excluded title node,
+    // since a link can't reference a node the response doesn't include.
+    expect(body.links).toEqual([
+      { source: 'person:ali-ibn-abi-talib', target: 'battle:badr', label: 'PARTICIPATED_IN', value: 1 },
+    ]);
+  });
+
+  it('ignores unrecognized kind values and treats an empty kind list as "every kind"', async () => {
+    const run = vi.fn()
+      .mockResolvedValueOnce({ records: [record({ labels: ['Person'], slug: 'a', name: 'A' })] })
+      .mockResolvedValueOnce({ records: [] });
+    getSession.mockReturnValue({ run });
+
+    const response = await GET(request('?kind=not-a-real-kind'));
+    const body = await response.json();
+
+    expect(body.nodes.map((n: { slug: string }) => n.slug)).toEqual(['a']);
   });
 
   it('scopes to a single hop when focus is set', async () => {
@@ -183,7 +272,7 @@ describe('GET /api/graph', () => {
     expect(run.mock.calls[0][1]).toEqual({ persons: ['a', 'b'] });
   });
 
-  it('walks ancestor SON chains for ancestorsOf', async () => {
+  it('walks ancestor SON|DAUGHTER chains for ancestorsOf', async () => {
     const run = vi.fn().mockResolvedValue({ records: [] });
     getSession.mockReturnValue({ run });
 
@@ -192,8 +281,31 @@ describe('GET /api/graph', () => {
     expect(run).toHaveBeenCalledTimes(1);
     const [query, params] = run.mock.calls[0];
     expect(query).toContain('UNWIND $ancestors AS ancestorSlug');
-    expect(query).toContain('MATCH path = (p1:Person {slug: ancestorSlug})-[r:SON*]->(p2:Person)');
+    expect(query).toContain('MATCH path = (p1:Person {slug: ancestorSlug})-[r:SON|DAUGHTER*]->(p2:Person)');
     expect(params).toEqual({ ancestors: ['prophet-muhammad'] });
+  });
+
+  it('walks descendant SON|DAUGHTER chains, reversed, for descendantsOf', async () => {
+    const run = vi.fn().mockResolvedValue({ records: [] });
+    getSession.mockReturnValue({ run });
+
+    await GET(request('?descendantsOf=prophet-muhammad'));
+
+    expect(run).toHaveBeenCalledTimes(1);
+    const [query, params] = run.mock.calls[0];
+    expect(query).toContain('UNWIND $descendants AS descendantSlug');
+    expect(query).toContain('MATCH path = (p1:Person {slug: descendantSlug})<-[r:SON|DAUGHTER*]-(p2:Person)');
+    expect(params).toEqual({ descendants: ['prophet-muhammad'] });
+  });
+
+  it('collects multiple requested descendant roots into a single UNWIND query', async () => {
+    const run = vi.fn().mockResolvedValue({ records: [] });
+    getSession.mockReturnValue({ run });
+
+    await GET(request('?descendantsOf=a&descendantsOf=b'));
+
+    expect(run).toHaveBeenCalledTimes(1);
+    expect(run.mock.calls[0][1]).toEqual({ descendants: ['a', 'b'] });
   });
 
   it('fetches a battle and its participants, including status', async () => {
@@ -246,7 +358,21 @@ describe('GET /api/graph', () => {
     const [query, params] = run.mock.calls[0];
     expect(query).toContain(' UNION ');
     expect(query).toContain('MATCH path = (p1:Person {slug: personSlug})-[*1]-(p2:Person)');
-    expect(query).toContain('MATCH path = (p1:Person {slug: ancestorSlug})-[r:SON*]->(p2:Person)');
+    expect(query).toContain('MATCH path = (p1:Person {slug: ancestorSlug})-[r:SON|DAUGHTER*]->(p2:Person)');
     expect(params).toEqual({ persons: ['a'], ancestors: ['b'] });
+  });
+
+  it('combines ancestorsOf and descendantsOf queries with UNION', async () => {
+    const run = vi.fn().mockResolvedValue({ records: [] });
+    getSession.mockReturnValue({ run });
+
+    await GET(request('?ancestorsOf=a&descendantsOf=a'));
+
+    expect(run).toHaveBeenCalledTimes(1);
+    const [query, params] = run.mock.calls[0];
+    expect(query).toContain(' UNION ');
+    expect(query).toContain('MATCH path = (p1:Person {slug: ancestorSlug})-[r:SON|DAUGHTER*]->(p2:Person)');
+    expect(query).toContain('MATCH path = (p1:Person {slug: descendantSlug})<-[r:SON|DAUGHTER*]-(p2:Person)');
+    expect(params).toEqual({ ancestors: ['a'], descendants: ['a'] });
   });
 });

@@ -114,6 +114,32 @@ describe('GraphSearch URL sync', () => {
     expect(afterSelection.every((entry) => entry.includes('person=prophet-muhammad'))).toBe(true);
   });
 
+  it('writes ?descendantsOf=<slug> after switching to Descendants mode and picking a suggestion', async () => {
+    render(<GraphSearch />);
+
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'descendantsOf' } });
+    fireEvent.change(screen.getByPlaceholderText('Search for people'), { target: { value: 'Muhammad' } });
+
+    const option = await screen.findByText('Prophet Muhammad');
+    fireEvent.mouseDown(option);
+
+    await waitFor(() => expect(nav.getUrl()).toContain('descendantsOf=prophet-muhammad'));
+    expect(nav.getUrl()).not.toContain('ancestorsOf=');
+    expect(nav.getUrl()).not.toContain('person=');
+  });
+
+  it('loads an existing ?descendantsOf=<slug> from the URL on mount without removing it', async () => {
+    nav.reset('/graphs?descendantsOf=prophet-muhammad');
+
+    render(<GraphSearch />);
+
+    await screen.findByText('Prophet Muhammad');
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    expect(nav.getUrl()).toContain('descendantsOf=prophet-muhammad');
+  });
+
   it('loads an existing ?person=<slug> from the URL on mount without removing it', async () => {
     nav.reset('/graphs?person=prophet-muhammad');
 
