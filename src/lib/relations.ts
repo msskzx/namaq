@@ -9,8 +9,11 @@ export const RELATION_ORDER = Object.keys(translations.en.relationTypes);
 // filtering, so e.g. FATHER and MOTHER are one "parent" toggle/color, all
 // sibling variants are one "sibling" toggle/color, etc. Direction (parent vs
 // child, aunt/uncle vs niece/nephew) still gets its own category since
-// that's visually/semantically meaningful in the graph.
-const CATEGORY_BY_TYPE: Record<string, string> = {
+// that's visually/semantically meaningful in the graph. COMPANION_OF lives
+// here too (not as its own top-level relation group) since a prophet's
+// companion is, structurally, just another person-to-person relationship
+// alongside blood/marriage ties.
+export const CATEGORY_BY_TYPE: Record<string, string> = {
   FATHER: 'parent', MOTHER: 'parent', STEP_FATHER: 'parent', STEP_MOTHER: 'parent',
   SON: 'child', DAUGHTER: 'child', STEP_SON: 'child', STEP_DAUGHTER: 'child',
   BROTHER: 'sibling', SISTER: 'sibling', HALF_BROTHER: 'sibling', HALF_SISTER: 'sibling', STEP_BROTHER: 'sibling', STEP_SISTER: 'sibling',
@@ -23,6 +26,7 @@ const CATEGORY_BY_TYPE: Record<string, string> = {
   MOTHER_IN_LAW: 'inLaw', FATHER_IN_LAW: 'inLaw', SON_IN_LAW: 'inLaw', DAUGHTER_IN_LAW: 'inLaw', BROTHER_IN_LAW: 'inLaw', SISTER_IN_LAW: 'inLaw',
   ANCESTOR: 'lineage', DESCENDANT: 'lineage',
   MAWLA: 'household', CONCUBINE: 'household',
+  COMPANION_OF: 'companionship',
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -38,6 +42,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   inLaw: '#06b6d4',
   lineage: '#d946ef',
   household: '#ef4444',
+  companionship: '#0ea5e9',
 };
 
 const FALLBACK_PALETTE = Object.values(CATEGORY_COLORS);
@@ -66,4 +71,48 @@ export function sortRelationTypes(types: string[]): string[] {
     if (bi === -1) return -1;
     return ai - bi;
   });
+}
+
+// Relation types that exist as a real, separate edge type in the data but
+// are surfaced as a single toggle because showing both directions as
+// separate switches would be redundant (see
+// scripts/people/syncCompanionRelations.ts, which creates both edges
+// together). The toggle for the governing type controls visibility of both.
+const INVERSE_PAIR: Record<string, string> = { ACCOMPANIED_BY: 'COMPANION_OF' };
+
+export function governingRelationType(type: string): string {
+  return INVERSE_PAIR[type] ?? type;
+}
+
+// Top-level groups the relation filter panel organizes itself into. Family
+// covers every person-to-person relationship (blood, marriage, and
+// companionship -- see CATEGORY_BY_TYPE); the rest map 1:1 to the other
+// entity kinds a relation type connects to.
+export type RelationGroup = 'family' | 'battles' | 'titles' | 'events';
+
+const GROUP_BY_TYPE: Partial<Record<string, RelationGroup>> = {
+  PARTICIPATED_IN: 'battles',
+  HOLDS_TITLE: 'titles',
+  INVOLVED_IN: 'events',
+  PART_OF: 'events',
+};
+
+export function relationGroup(type: string): RelationGroup {
+  return GROUP_BY_TYPE[type] ?? 'family';
+}
+
+// Which relation groups are relevant to a given node-kind scope. `kinds`
+// empty = the unscoped full graph, where every group is relevant. The
+// People/Battles/Titles views (kind=person / kind=person+battle /
+// kind=person+title) each narrow to exactly one non-family group, since
+// family edges between the person nodes pulled in as incidental
+// participants/holders are noise for those views.
+export function relevantGroups(kinds: Set<string>): Set<RelationGroup> | null {
+  if (kinds.size === 0) return null;
+  const groups = new Set<RelationGroup>();
+  if (kinds.has('battle')) groups.add('battles');
+  if (kinds.has('title')) groups.add('titles');
+  if (kinds.has('event')) groups.add('events');
+  if (kinds.size === 1 && kinds.has('person')) groups.add('family');
+  return groups;
 }

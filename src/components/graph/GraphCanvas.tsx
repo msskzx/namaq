@@ -8,11 +8,15 @@ import { forceCollide } from 'd3-force';
 import { GraphData, GraphNodeFull, GraphLink } from '@/types/graph';
 import useSWR from 'swr';
 import { fetcher } from '@/lib/swr';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
 import GraphSearch from './GraphSearch';
+import SlideSwitch from './SlideSwitch';
+import RelationFilterPanel from './RelationFilterPanel';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import { useLanguage } from '@/components/language/LanguageContext';
 import translations from '@/components/language/translations';
-import { relationColor, sortRelationTypes } from '@/lib/relations';
+import { relationColor, sortRelationTypes, governingRelationType, relationGroup, relevantGroups } from '@/lib/relations';
 import { profilePath } from '@/lib/nodeProfile';
 
 interface GraphCanvasProps {
@@ -38,31 +42,6 @@ const relationName = (value: string) => value.toLowerCase().replaceAll('_', ' ')
 // but person nodes, and deriving the toggle set from that response would
 // make title/battle/event impossible to switch back on.
 const ALL_KINDS = ['person', 'title', 'battle', 'event'] as const;
-
-// iOS-style slide switch. Uses justify-content (start/end, which flexbox
-// resolves relative to the ambient `dir`) to place the thumb rather than a
-// fixed translateX, so it mirrors correctly under the fieldsets' dir="rtl"
-// without needing a separate RTL variant.
-function SlideSwitch({ checked, onChange, label, color, ariaLabel }: { checked: boolean; onChange: () => void; label: string; color?: string; ariaLabel?: string }) {
-  return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={checked}
-      aria-label={ariaLabel ?? label}
-      onClick={onChange}
-      className="flex items-center gap-2 rounded-full px-1 py-0.5 text-sm font-medium text-gray-700 dark:text-gray-200"
-    >
-      <span
-        className={`flex h-5 w-9 shrink-0 items-center rounded-full p-0.5 transition-colors ${checked ? 'justify-end' : 'justify-start'}`}
-        style={{ backgroundColor: checked ? (color ?? '#f59e0b') : '#9ca3af' }}
-      >
-        <span className="h-4 w-4 rounded-full bg-white shadow transition-transform" />
-      </span>
-      <span style={checked && color ? { color } : undefined}>{label}</span>
-    </button>
-  );
-}
 
 // A fixed reference font size the collision force below can use for a
 // stable world-space radius per node, independent of camera zoom.
@@ -126,14 +105,25 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   const fgRef = useRef<ForceGraphMethods<NodeObject<GraphNodeFull>, LinkObject<GraphNodeFull, GraphLink>>>(null) as RefObject<ForceGraphMethods<NodeObject<GraphNodeFull>, LinkObject<GraphNodeFull, GraphLink>>>;
   const selectedNode = graphData?.nodes.find(node => node.slug === selectedSlug);
   const relationLabel = useCallback((type: string) => (t.relationTypes as Record<string, string>)[type] ?? relationName(type), [t]);
+  // Which relation groups (family/battles/titles/events) the current `kind`
+  // scope allows -- null means every group (the unscoped full graph); a
+  // narrowed view like People/Battles/Titles keeps exactly the group that
+  // view is about, dropping incidental family ties between e.g. two battle
+  // participants who also happen to be related.
+  const scopeRelevantGroups = useMemo(() => relevantGroups(includedKinds), [includedKinds]);
   // Raw relation types present in the fetched graph, one toggle per type
-  // (not grouped into families) so e.g. father and son can be shown/hidden
-  // independently.
+  // within a family sub-category (not merged) so e.g. father and son can be
+  // shown/hidden independently.
   // ACCOMPANIED_BY is COMPANION_OF's inverse edge (see
-  // scripts/people/syncCompanionRelations.ts) -- always shown, but not worth
-  // a second toggle alongside COMPANION_OF for what's the same relationship
-  // viewed from the other side.
-  const relationTypesPresent = useMemo(() => sortRelationTypes([...new Set(graphData?.links.map(link => link.label) ?? [])].filter(type => type !== 'ACCOMPANIED_BY')), [graphData]);
+  // scripts/people/syncCompanionRelations.ts) -- governed by the same
+  // toggle as COMPANION_OF (see governingRelationType), so it never gets a
+  // toggle of its own.
+  const relationTypesPresent = useMemo(() => {
+    const present = [...new Set(graphData?.links.map(link => link.label) ?? [])];
+    const toggleable = present.filter(type => governingRelationType(type) === type);
+    const scoped = scopeRelevantGroups === null ? toggleable : toggleable.filter(type => scopeRelevantGroups.has(relationGroup(type)));
+    return sortRelationTypes(scoped);
+  }, [graphData, scopeRelevantGroups]);
   // Node kinds present in the fetched graph (person/title/battle/event).
   const kindsPresent = useMemo(() => [...new Set(graphData?.nodes.map(node => node.type ?? 'person') ?? [])], [graphData]);
   // On a general-purpose page (showSearch on) the kind toggle needs every
@@ -145,7 +135,11 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // of only offering a toggle when there's more than one kind to toggle
   // between.
   const kindsUniverse = showSearch ? ALL_KINDS : kindsPresent;
-  const anyFilterActive = excludedRelations.size > 0;
+  // A kind-scoped view (People/Battles/Titles) must drop irrelevant-group
+  // edges even when the user hasn't touched a single relation toggle, so
+  // filtering is "active" whenever either a manual toggle or the kind scope
+  // itself narrows anything.
+  const anyFilterActive = excludedRelations.size > 0 || scopeRelevantGroups !== null;
   const visibleGraph = useMemo(() => {
     if (!graphData || !anyFilterActive) return graphData;
     const nodesById = new Map(graphData.nodes.map(node => [node.id, node]));
@@ -172,8 +166,16 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     // the UI, not on a fresh navigation where links haven't been touched
     // yet. Converting back to a plain string id forces d3-force to
     // re-resolve it against whichever node array is current.
+    // A link is kept only when: its governing type (see
+    // governingRelationType -- ACCOMPANIED_BY resolves to COMPANION_OF)
+    // isn't manually excluded, AND its group is relevant to the current
+    // kind scope. The second check is what actually drops e.g. father/son
+    // edges from a Battles-scoped view, not just their toggle -- and it
+    // also covers ACCOMPANIED_BY edges, since they resolve to the
+    // 'family' group same as COMPANION_OF.
+    const isRelevant = (link: GraphLink) => scopeRelevantGroups === null || scopeRelevantGroups.has(relationGroup(governingRelationType(link.label)));
     const links = graphData.links
-      .filter(link => !excludedRelations.has(link.label) && isDirect(link))
+      .filter(link => !excludedRelations.has(governingRelationType(link.label)) && isRelevant(link) && isDirect(link))
       .map(link => ({ ...link, source: endpointId(link.source), target: endpointId(link.target) }));
     const linkedIds = new Set(links.flatMap(link => [link.source as string, link.target as string]));
     if (selectedNode) linkedIds.add(selectedNode.id);
@@ -186,7 +188,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       .filter(node => linkedIds.has(node.id))
       .map(node => (node.fx != null || node.fy != null) ? { ...node, fx: undefined, fy: undefined } : node);
     return { nodes, links };
-  }, [graphData, anyFilterActive, excludedRelations, selectedNode, searchedSlugs]);
+  }, [graphData, anyFilterActive, excludedRelations, scopeRelevantGroups, selectedNode, searchedSlugs]);
   // Sorted by nasab-graph prominence for the side list only; the canvas
   // itself renders visibleGraph.nodes directly, since force-layout doesn't
   // care about array order. Title nodes (no nasabRank) sort after every
@@ -337,24 +339,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
   const filterPanel = (
     <>
-      {relationTypesPresent.length > 0 && (
-        <fieldset dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
-          <legend className="px-1 text-sm font-medium text-gray-800 dark:text-gray-100">{t.graph.relationshipTypes}</legend>
-          <div className="mb-2 border-b border-gray-100 pb-2 dark:border-gray-700">
-            <SlideSwitch checked={excludedRelations.size === 0} onChange={() => toggleAllRelations(excludedRelations.size > 0)} label={t.graph.allRelations} />
-          </div>
-          <div className="flex flex-wrap gap-x-4 gap-y-2">
-            {relationTypesPresent.map(type => {
-              const active = !excludedRelations.has(type);
-              const color = relationColor(type);
-              const label = relationLabel(type);
-              return (
-                <SlideSwitch key={type} checked={active} onChange={() => toggleRelation(type)} label={label} color={color} ariaLabel={active ? t.graph.hideRelation(label) : t.graph.showRelation(label)} />
-              );
-            })}
-          </div>
-        </fieldset>
-      )}
+      <RelationFilterPanel types={relationTypesPresent} excludedRelations={excludedRelations} onToggle={toggleRelation} onToggleAll={toggleAllRelations} relationLabel={relationLabel} language={language} />
 
       {kindsUniverse.length > 1 && (
         <fieldset dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
@@ -399,7 +384,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
               {t.graph.openFilters}
             </button>
             <button type="button" onClick={() => setIsFullscreen(false)} aria-label={t.graph.closeFullscreen} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
-              ✕
+              <FontAwesomeIcon icon={faCompress} />
             </button>
           </div>
         </div>
@@ -424,9 +409,6 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           {focusSlug ? ' · focused neighbourhood' : ''}
         </p>
         <div className="flex items-center gap-2">
-          <button type="button" onClick={() => setIsFullscreen(true)} aria-label={t.graph.fullscreen} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
-            {t.graph.fullscreen}
-          </button>
           <button type="button" onClick={() => updateParams({ selected: null, focus: null, relation: [], kind: [], person: null, ancestorsOf: [], descendantsOf: [] })} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
             Reset graph view
           </button>
@@ -447,7 +429,10 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       )}
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_14rem]">
-        <div className="h-[65vh] min-h-[32rem] overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700" role="region" aria-label="Interactive relationship graph">
+        <div className="relative h-[65vh] min-h-[32rem] overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700" role="region" aria-label="Interactive relationship graph">
+          <button type="button" onClick={() => setIsFullscreen(true)} aria-label={t.graph.fullscreen} className={`absolute top-2 z-10 rounded border border-amber-400 bg-gray-50/90 px-2 py-1.5 text-gray-800 backdrop-blur hover:bg-amber-50 dark:bg-gray-900/90 dark:text-gray-100 dark:hover:bg-gray-800 ${language === 'ar' ? 'left-2' : 'right-2'}`}>
+            <FontAwesomeIcon icon={faExpand} />
+          </button>
           {graphCanvas()}
         </div>
         <div className="rounded-lg border border-gray-200 p-3 dark:border-gray-700">
