@@ -1,5 +1,5 @@
 import SlideSwitch from './SlideSwitch';
-import { relationColor, relationGroup, sortRelationTypes, CATEGORY_BY_TYPE, RelationGroup } from '@/lib/relations';
+import { relationColor, relationGroup, sortRelationTypes, RelationGroup } from '@/lib/relations';
 import translations from '@/components/language/translations';
 
 // Fixed display order for the relation-type groups; empty groups (e.g. no
@@ -14,14 +14,17 @@ interface RelationFilterPanelProps {
   excludedRelations: Set<string>;
   onToggle: (type: string) => void;
   onToggleAll: (show: boolean) => void;
+  onToggleGroup: (group: RelationGroup, show: boolean) => void;
+  showCompanionTitle: boolean;
+  onToggleCompanionTitle: () => void;
   relationLabel: (type: string) => string;
   language: 'en' | 'ar';
 }
 
-export default function RelationFilterPanel({ types, excludedRelations, onToggle, onToggleAll, relationLabel, language }: RelationFilterPanelProps) {
+export default function RelationFilterPanel({ types, excludedRelations, onToggle, onToggleAll, onToggleGroup, showCompanionTitle, onToggleCompanionTitle, relationLabel, language }: RelationFilterPanelProps) {
   const g: GraphStrings = translations[language].graph;
   const dir = language === 'ar' ? 'rtl' : 'ltr';
-  const groups = GROUP_ORDER.map(group => ({ group, types: types.filter(type => relationGroup(type) === group) })).filter(({ types }) => types.length > 0);
+  const groups = GROUP_ORDER.map(group => ({ group, types: sortRelationTypes(types.filter(type => relationGroup(type) === group)) })).filter(({ types }) => types.length > 0);
 
   if (types.length === 0) return null;
 
@@ -32,45 +35,31 @@ export default function RelationFilterPanel({ types, excludedRelations, onToggle
         <SlideSwitch checked={excludedRelations.size === 0} onChange={() => onToggleAll(excludedRelations.size > 0)} label={g.allRelations} />
       </div>
       <div className="space-y-2">
-        {groups.map(({ group, types: groupTypes }) => (
-          <details key={group} open className="rounded border border-gray-100 p-2 dark:border-gray-700">
-            <summary className="cursor-pointer select-none text-sm font-medium text-gray-800 dark:text-gray-100">
-              {g.relationGroups[group]}
-            </summary>
-            {group === 'family' ? (
-              <FamilySubcategories types={groupTypes} excludedRelations={excludedRelations} onToggle={onToggle} relationLabel={relationLabel} g={g} />
-            ) : (
+        {groups.map(({ group, types: groupTypes }) => {
+          const allVisible = groupTypes.every(type => !excludedRelations.has(type));
+          return (
+            <details key={group} open className="rounded border border-gray-100 p-2 dark:border-gray-700">
+              <summary className="cursor-pointer select-none text-sm font-medium text-gray-800 dark:text-gray-100">
+                {g.relationGroups[group]}
+              </summary>
+              {group === 'family' && (
+                <div className="mb-2 mt-2 border-b border-gray-100 pb-2 dark:border-gray-700">
+                  <SlideSwitch checked={allVisible} onChange={() => onToggleGroup(group, !allVisible)} label={g.allFamilyRelations} />
+                </div>
+              )}
               <div className="mt-2 flex flex-wrap gap-x-4 gap-y-2">
                 {groupTypes.map(type => (
                   <RelationSwitch key={type} type={type} active={!excludedRelations.has(type)} onToggle={onToggle} relationLabel={relationLabel} g={g} />
                 ))}
+                {group === 'titles' && (
+                  <SlideSwitch checked={showCompanionTitle} onChange={onToggleCompanionTitle} label={g.companionTitleLabel} ariaLabel={showCompanionTitle ? g.hideKind(g.companionTitleLabel) : g.showKind(g.companionTitleLabel)} />
+                )}
               </div>
-            )}
-          </details>
-        ))}
+            </details>
+          );
+        })}
       </div>
     </fieldset>
-  );
-}
-
-function FamilySubcategories({ types, excludedRelations, onToggle, relationLabel, g }: { types: string[]; excludedRelations: Set<string>; onToggle: (type: string) => void; relationLabel: (type: string) => string; g: GraphStrings }) {
-  const sorted = sortRelationTypes(types);
-  const categories = [...new Set(sorted.map(type => CATEGORY_BY_TYPE[type] ?? type))];
-  return (
-    <div className="mt-2 space-y-2">
-      {categories.map(category => (
-        <div key={category}>
-          <p className="mb-1 text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
-            {(g.relationCategories as Record<string, string>)[category] ?? category}
-          </p>
-          <div className="flex flex-wrap gap-x-4 gap-y-2">
-            {sorted.filter(type => (CATEGORY_BY_TYPE[type] ?? type) === category).map(type => (
-              <RelationSwitch key={type} type={type} active={!excludedRelations.has(type)} onToggle={onToggle} relationLabel={relationLabel} g={g} />
-            ))}
-          </div>
-        </div>
-      ))}
-    </div>
   );
 }
 

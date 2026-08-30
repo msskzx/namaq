@@ -13,7 +13,7 @@ export const RELATION_ORDER = Object.keys(translations.en.relationTypes);
 // here too (not as its own top-level relation group) since a prophet's
 // companion is, structurally, just another person-to-person relationship
 // alongside blood/marriage ties.
-export const CATEGORY_BY_TYPE: Record<string, string> = {
+const CATEGORY_BY_TYPE: Record<string, string> = {
   FATHER: 'parent', MOTHER: 'parent', STEP_FATHER: 'parent', STEP_MOTHER: 'parent',
   SON: 'child', DAUGHTER: 'child', STEP_SON: 'child', STEP_DAUGHTER: 'child',
   BROTHER: 'sibling', SISTER: 'sibling', HALF_BROTHER: 'sibling', HALF_SISTER: 'sibling', STEP_BROTHER: 'sibling', STEP_SISTER: 'sibling',
@@ -101,18 +101,14 @@ export function relationGroup(type: string): RelationGroup {
   return GROUP_BY_TYPE[type] ?? 'family';
 }
 
-// Which relation groups are relevant to a given node-kind scope. `kinds`
-// empty = the unscoped full graph, where every group is relevant. The
-// People/Battles/Titles views (kind=person / kind=person+battle /
-// kind=person+title) each narrow to exactly one non-family group, since
-// family edges between the person nodes pulled in as incidental
-// participants/holders are noise for those views.
-export function relevantGroups(kinds: Set<string>): Set<RelationGroup> | null {
-  if (kinds.size === 0) return null;
-  const groups = new Set<RelationGroup>();
-  if (kinds.has('battle')) groups.add('battles');
-  if (kinds.has('title')) groups.add('titles');
-  if (kinds.has('event')) groups.add('events');
-  if (kinds.size === 1 && kinds.has('person')) groups.add('family');
-  return groups;
-}
+// Which relation group a node kind's own relationships belong to, for
+// syncing the Node Kinds toggle with the relation-type toggles: turning a
+// kind off also excludes its group's relation types (there's nothing left
+// to draw those edges to/from anyway), without removing the toggle itself
+// from the panel.
+export const KIND_TO_RELATION_GROUP: Record<string, RelationGroup> = {
+  person: 'family',
+  battle: 'battles',
+  title: 'titles',
+  event: 'events',
+};
