@@ -8,11 +8,15 @@ import { forceCollide } from 'd3-force';
 import { GraphData, GraphNodeFull, GraphLink } from '@/types/graph';
 import useSWR from 'swr';
 import { fetcher } from '@/lib/swr';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
 import GraphSearch from './GraphSearch';
+import SlideSwitch from './SlideSwitch';
+import RelationFilterPanel from './RelationFilterPanel';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import { useLanguage } from '@/components/language/LanguageContext';
 import translations from '@/components/language/translations';
-import { relationColor, sortRelationTypes } from '@/lib/relations';
+import { relationColor, sortRelationTypes, governingRelationType, relationGroup, RELATION_ORDER, KIND_TO_RELATION_GROUP, RelationGroup } from '@/lib/relations';
 import { profilePath } from '@/lib/nodeProfile';
 
 interface GraphCanvasProps {
@@ -39,30 +43,21 @@ const relationName = (value: string) => value.toLowerCase().replaceAll('_', ' ')
 // make title/battle/event impossible to switch back on.
 const ALL_KINDS = ['person', 'title', 'battle', 'event'] as const;
 
-// iOS-style slide switch. Uses justify-content (start/end, which flexbox
-// resolves relative to the ambient `dir`) to place the thumb rather than a
-// fixed translateX, so it mirrors correctly under the fieldsets' dir="rtl"
-// without needing a separate RTL variant.
-function SlideSwitch({ checked, onChange, label, color, ariaLabel }: { checked: boolean; onChange: () => void; label: string; color?: string; ariaLabel?: string }) {
-  return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={checked}
-      aria-label={ariaLabel ?? label}
-      onClick={onChange}
-      className="flex items-center gap-2 rounded-full px-1 py-0.5 text-sm font-medium text-gray-700 dark:text-gray-200"
-    >
-      <span
-        className={`flex h-5 w-9 shrink-0 items-center rounded-full p-0.5 transition-colors ${checked ? 'justify-end' : 'justify-start'}`}
-        style={{ backgroundColor: checked ? (color ?? '#f59e0b') : '#9ca3af' }}
-      >
-        <span className="h-4 w-4 rounded-full bg-white shadow transition-transform" />
-      </span>
-      <span style={checked && color ? { color } : undefined}>{label}</span>
-    </button>
-  );
-}
+// The full universe of relation types the graph API can ever return,
+// regardless of what's actually present in the current (possibly
+// kind-narrowed) fetch -- same rationale as ALL_KINDS above. Once `kind` is
+// narrowed to e.g. `person`, the response contains no Title/Battle/Event
+// nodes, so their relation types (HOLDS_TITLE, PARTICIPATED_IN, ...) never
+// appear in that fetch; deriving the toggle/group set from it would make
+// those categories vanish entirely instead of just having nothing to show,
+// and re-including that kind wouldn't bring their filters back.
+const ALL_RELATION_TYPES = sortRelationTypes(RELATION_ORDER.filter(type => governingRelationType(type) === type));
+
+// The Title node every companion holds (see
+// scripts/people/syncCompanionRelations.ts's COMPANION_TITLE_SLUG) -- one
+// node with an edge to all ~250+ companions, far denser than any other
+// title, so it's filterable independently of the Titles relation type.
+const COMPANION_TITLE_SLUG = 'companion';
 
 // A fixed reference font size the collision force below can use for a
 // stable world-space radius per node, independent of camera zoom.
@@ -98,6 +93,13 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // exactly what's INCLUDED, not excluded.
   const excludedRelations = useMemo(() => new Set(searchParams?.getAll('relation') ?? []), [searchParams]);
   const includedKinds = useMemo(() => new Set(searchParams?.getAll('kind') ?? []), [searchParams]);
+  // The "Companion" title node (see COMPANION_TITLE_SLUG below) connects to
+  // every companion in the dataset, so it dwarfs every other title's node
+  // degree and crowds out the rest of the Titles view -- hidden by default,
+  // opt-in via `showCompanionTitle=1` rather than an excluded-by-default
+  // entry in `relation`, since this hides a specific NODE, not a relation
+  // type.
+  const showCompanionTitle = searchParams?.get('showCompanionTitle') === '1';
   const searchedSlugs = useMemo(() => new Set([...(searchParams?.getAll('person') ?? []), ...(searchParams?.getAll('ancestorsOf') ?? []), ...(searchParams?.getAll('descendantsOf') ?? [])]), [searchParams]);
 
   const fetchUrl = useMemo(() => {
@@ -108,7 +110,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       // meaning. `kind` is the opposite: it's a real query param the API
       // reads to decide which node kinds to return, so it's deliberately
       // forwarded rather than stripped.
-      ['selected', 'relation'].forEach(key => incoming.delete(key));
+      ['selected', 'relation', 'showCompanionTitle'].forEach(key => incoming.delete(key));
       for (const [key, value] of incoming.entries()) base.searchParams.append(key, value);
       return base.toString();
     } catch {
@@ -126,26 +128,33 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   const fgRef = useRef<ForceGraphMethods<NodeObject<GraphNodeFull>, LinkObject<GraphNodeFull, GraphLink>>>(null) as RefObject<ForceGraphMethods<NodeObject<GraphNodeFull>, LinkObject<GraphNodeFull, GraphLink>>>;
   const selectedNode = graphData?.nodes.find(node => node.slug === selectedSlug);
   const relationLabel = useCallback((type: string) => (t.relationTypes as Record<string, string>)[type] ?? relationName(type), [t]);
-  // Raw relation types present in the fetched graph, one toggle per type
-  // (not grouped into families) so e.g. father and son can be shown/hidden
-  // independently.
+  // Relation types present in the fetched graph, one toggle per type.
   // ACCOMPANIED_BY is COMPANION_OF's inverse edge (see
-  // scripts/people/syncCompanionRelations.ts) -- always shown, but not worth
-  // a second toggle alongside COMPANION_OF for what's the same relationship
-  // viewed from the other side.
-  const relationTypesPresent = useMemo(() => sortRelationTypes([...new Set(graphData?.links.map(link => link.label) ?? [])].filter(type => type !== 'ACCOMPANIED_BY')), [graphData]);
+  // scripts/people/syncCompanionRelations.ts) -- governed by the same
+  // toggle as COMPANION_OF (see governingRelationType), so it never gets a
+  // toggle of its own.
+  const relationTypesInData = useMemo(() => {
+    const present = [...new Set(graphData?.links.map(link => link.label) ?? [])];
+    return sortRelationTypes(present.filter(type => governingRelationType(type) === type));
+  }, [graphData]);
   // Node kinds present in the fetched graph (person/title/battle/event).
   const kindsPresent = useMemo(() => [...new Set(graphData?.nodes.map(node => node.type ?? 'person') ?? [])], [graphData]);
-  // On a general-purpose page (showSearch on) the kind toggle needs every
-  // possible kind on offer, not just whatever the current, possibly-narrowed
-  // fetch happens to contain -- otherwise narrowing down to `kind=person`
-  // removes the only switches that could widen back out. A scoped embed
-  // (e.g. the person profile's ancestor mini-graph, showSearch off) is
-  // inherently single-kind anyway, so it keeps the old data-driven behavior
-  // of only offering a toggle when there's more than one kind to toggle
-  // between.
+  // On a general-purpose page (showSearch on), both the kind toggle and the
+  // relation-type toggles need every possible option on offer, not just
+  // whatever the current, possibly-narrowed fetch happens to contain --
+  // otherwise narrowing `kind` down to e.g. `person` would also make every
+  // Title/Battle/Event relation category vanish from the filter panel
+  // instead of just having nothing to show, with no way to bring it back
+  // short of widening `kind` again. A scoped embed (e.g. the person
+  // profile's ancestor mini-graph, showSearch off) is inherently
+  // single-kind anyway, so it keeps the old data-driven behavior of only
+  // offering toggles for what's actually in that graph.
   const kindsUniverse = showSearch ? ALL_KINDS : kindsPresent;
-  const anyFilterActive = excludedRelations.size > 0;
+  const relationTypesPresent = showSearch ? ALL_RELATION_TYPES : relationTypesInData;
+  // The Companion title node is hidden by default (see
+  // showCompanionTitle above), so filtering must run even with zero
+  // manual relation toggles.
+  const anyFilterActive = excludedRelations.size > 0 || !showCompanionTitle;
   const visibleGraph = useMemo(() => {
     if (!graphData || !anyFilterActive) return graphData;
     const nodesById = new Map(graphData.nodes.map(node => [node.id, node]));
@@ -157,6 +166,15 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     // would pass the label check even though it isn't directly connected to
     // the person being searched.
     const isDirect = (link: GraphLink) => searchedSlugs.size === 0 || searchedSlugs.has(slugOf(link.source) ?? '') || searchedSlugs.has(slugOf(link.target) ?? '');
+    // The Companion title node connects to every companion, so hiding it
+    // (the default) means dropping any edge that touches it -- not just
+    // omitting the node itself, which would otherwise leave dangling
+    // links pointing at a node no longer in the graph.
+    const isCompanionTitleNode = (endpoint: string | GraphNodeFull) => {
+      const node = typeof endpoint === 'string' ? nodesById.get(endpoint) : endpoint;
+      return node?.type === 'title' && node?.slug === COMPANION_TITLE_SLUG;
+    };
+    const isCompanionTitleLink = (link: GraphLink) => isCompanionTitleNode(link.source) || isCompanionTitleNode(link.target);
     // Node kinds are filtered server-side (see /api/graph's `kind` param) --
     // graphData already contains only the requested kinds, so there's
     // nothing left to filter out here.
@@ -172,8 +190,13 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     // the UI, not on a fresh navigation where links haven't been touched
     // yet. Converting back to a plain string id forces d3-force to
     // re-resolve it against whichever node array is current.
+    // A link is kept only when its governing type (see
+    // governingRelationType -- ACCOMPANIED_BY resolves to COMPANION_OF)
+    // isn't manually excluded, so toggling the single Companion switch
+    // hides both edge directions together. It's also dropped when it
+    // touches the Companion title node and that node is hidden.
     const links = graphData.links
-      .filter(link => !excludedRelations.has(link.label) && isDirect(link))
+      .filter(link => !excludedRelations.has(governingRelationType(link.label)) && isDirect(link) && (showCompanionTitle || !isCompanionTitleLink(link)))
       .map(link => ({ ...link, source: endpointId(link.source), target: endpointId(link.target) }));
     const linkedIds = new Set(links.flatMap(link => [link.source as string, link.target as string]));
     if (selectedNode) linkedIds.add(selectedNode.id);
@@ -186,7 +209,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       .filter(node => linkedIds.has(node.id))
       .map(node => (node.fx != null || node.fy != null) ? { ...node, fx: undefined, fy: undefined } : node);
     return { nodes, links };
-  }, [graphData, anyFilterActive, excludedRelations, selectedNode, searchedSlugs]);
+  }, [graphData, anyFilterActive, excludedRelations, showCompanionTitle, selectedNode, searchedSlugs]);
   // Sorted by nasab-graph prominence for the side list only; the canvas
   // itself renders visibleGraph.nodes directly, since force-layout doesn't
   // care about array order. Title nodes (no nasabRank) sort after every
@@ -266,6 +289,16 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     updateParams({ relation: [...next] });
   };
   const toggleAllRelations = (show: boolean) => updateParams({ relation: show ? [] : relationTypesPresent });
+  // Toggles every relation type in one group at once (e.g. a single
+  // "all family relations" switch above the ~40 individual family
+  // toggles), independent of the panel-wide "all relations" switch.
+  const toggleGroupRelations = (group: RelationGroup, show: boolean) => {
+    const groupTypes = relationTypesPresent.filter(type => relationGroup(type) === group);
+    const next = new Set(excludedRelations);
+    groupTypes.forEach(type => (show ? next.delete(type) : next.add(type)));
+    updateParams({ relation: [...next] });
+  };
+  const toggleCompanionTitle = () => updateParams({ showCompanionTitle: showCompanionTitle ? null : '1' });
   const toggleKind = (kind: string) => {
     // An empty `includedKinds` means "every kind" -- narrowing for the
     // first time starts from the full universe, not an empty set, or
@@ -273,12 +306,22 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     // while claiming every other kind is now explicitly included.
     const base = includedKinds.size > 0 ? includedKinds : new Set<string>(ALL_KINDS);
     const next = new Set(base);
-    if (next.has(kind)) next.delete(kind);
+    const turningOff = next.has(kind);
+    if (turningOff) next.delete(kind);
     else next.add(kind);
+    // Keep the relation toggles for this kind's group (e.g. Battle ->
+    // "battles") in sync: turning the kind off also excludes its
+    // relation type(s), since there's nothing left for them to connect
+    // to, and turning it back on restores them -- without ever removing
+    // the toggle itself from the panel (see ALL_RELATION_TYPES above).
+    const group = KIND_TO_RELATION_GROUP[kind];
+    const groupTypes = group ? relationTypesPresent.filter(type => relationGroup(type) === group) : [];
+    const nextExcluded = new Set(excludedRelations);
+    groupTypes.forEach(type => (turningOff ? nextExcluded.add(type) : nextExcluded.delete(type)));
     // Once every kind is included again, clear the param instead of
     // spelling out all four -- `/graphs` (no kind param) is the canonical
     // "show everything" URL.
-    updateParams({ kind: next.size >= ALL_KINDS.length ? [] : [...next] });
+    updateParams({ kind: next.size >= ALL_KINDS.length ? [] : [...next], relation: [...nextExcluded] });
   };
 
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -295,7 +338,6 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       window.removeEventListener('keydown', onKeyDown);
     };
   }, [isFullscreen]);
-  useEffect(() => { if (!isFullscreen) setShowFilterPanel(false); }, [isFullscreen]);
 
   // Header bar height (p-3 + text line) the canvas sits below in fullscreen.
   const FULLSCREEN_HEADER_HEIGHT = 56;
@@ -337,25 +379,6 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
   const filterPanel = (
     <>
-      {relationTypesPresent.length > 0 && (
-        <fieldset dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
-          <legend className="px-1 text-sm font-medium text-gray-800 dark:text-gray-100">{t.graph.relationshipTypes}</legend>
-          <div className="mb-2 border-b border-gray-100 pb-2 dark:border-gray-700">
-            <SlideSwitch checked={excludedRelations.size === 0} onChange={() => toggleAllRelations(excludedRelations.size > 0)} label={t.graph.allRelations} />
-          </div>
-          <div className="flex flex-wrap gap-x-4 gap-y-2">
-            {relationTypesPresent.map(type => {
-              const active = !excludedRelations.has(type);
-              const color = relationColor(type);
-              const label = relationLabel(type);
-              return (
-                <SlideSwitch key={type} checked={active} onChange={() => toggleRelation(type)} label={label} color={color} ariaLabel={active ? t.graph.hideRelation(label) : t.graph.showRelation(label)} />
-              );
-            })}
-          </div>
-        </fieldset>
-      )}
-
       {kindsUniverse.length > 1 && (
         <fieldset dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
           <legend className="px-1 text-sm font-medium text-gray-800 dark:text-gray-100">{t.graph.nodeKinds}</legend>
@@ -371,6 +394,8 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           </div>
         </fieldset>
       )}
+
+      <RelationFilterPanel types={relationTypesPresent} excludedRelations={excludedRelations} onToggle={toggleRelation} onToggleAll={toggleAllRelations} onToggleGroup={toggleGroupRelations} showCompanionTitle={showCompanionTitle} onToggleCompanionTitle={toggleCompanionTitle} relationLabel={relationLabel} language={language} />
     </>
   );
 
@@ -399,7 +424,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
               {t.graph.openFilters}
             </button>
             <button type="button" onClick={() => setIsFullscreen(false)} aria-label={t.graph.closeFullscreen} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
-              ✕
+              <FontAwesomeIcon icon={faCompress} />
             </button>
           </div>
         </div>
@@ -424,16 +449,16 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           {focusSlug ? ' · focused neighbourhood' : ''}
         </p>
         <div className="flex items-center gap-2">
-          <button type="button" onClick={() => setIsFullscreen(true)} aria-label={t.graph.fullscreen} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
-            {t.graph.fullscreen}
+          <button type="button" onClick={() => setShowFilterPanel(show => !show)} aria-pressed={showFilterPanel} aria-label={showFilterPanel ? t.graph.closeFilters : t.graph.openFilters} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
+            {t.graph.openFilters}
           </button>
-          <button type="button" onClick={() => updateParams({ selected: null, focus: null, relation: [], kind: [], person: null, ancestorsOf: [], descendantsOf: [] })} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
+          <button type="button" onClick={() => updateParams({ selected: null, focus: null, relation: [], kind: [], showCompanionTitle: null, person: null, ancestorsOf: [], descendantsOf: [] })} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
             Reset graph view
           </button>
         </div>
       </div>
 
-      {filterPanel}
+      {showFilterPanel && filterPanel}
 
       {selectedNode && (
         <aside className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4 dark:border-amber-700 dark:bg-gray-800" aria-live="polite">
@@ -447,7 +472,10 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       )}
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_14rem]">
-        <div className="h-[65vh] min-h-[32rem] overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700" role="region" aria-label="Interactive relationship graph">
+        <div className="relative h-[65vh] min-h-[32rem] overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700" role="region" aria-label="Interactive relationship graph">
+          <button type="button" onClick={() => setIsFullscreen(true)} aria-label={t.graph.fullscreen} className={`absolute top-2 z-10 rounded border border-amber-400 bg-gray-50/90 px-2 py-1.5 text-gray-800 backdrop-blur hover:bg-amber-50 dark:bg-gray-900/90 dark:text-gray-100 dark:hover:bg-gray-800 ${language === 'ar' ? 'left-2' : 'right-2'}`}>
+            <FontAwesomeIcon icon={faExpand} />
+          </button>
           {graphCanvas()}
         </div>
         <div className="rounded-lg border border-gray-200 p-3 dark:border-gray-700">

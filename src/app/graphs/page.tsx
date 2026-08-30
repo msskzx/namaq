@@ -6,9 +6,7 @@ import GraphCanvas from "@/components/graph/GraphCanvas";
 // only" / "titles" / "battles" / "everything" aren't separate views or
 // routes -- they're just the node-kind filter (see GraphCanvas's Node
 // Kinds toggles) narrowed to whichever kinds you want, via `kind` in the
-// URL (e.g. ?kind=person&kind=battle). /graphs/people, /graphs/titles, and
-// /graphs/battles redirect here with the equivalent `kind` filter already
-// applied, for old links/bookmarks.
+// URL (e.g. ?kind=person&kind=battle).
 export default function GraphPage() {
     return (
         <GraphCanvas url="/api/graph" showSearch targetSlug="prophet-muhammad" nodesLabel="nodes" />

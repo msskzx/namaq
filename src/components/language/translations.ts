@@ -253,6 +253,8 @@ const translations = {
       relationshipTypes: 'Relationship types',
       nodeKinds: 'Node kinds',
       allRelations: 'All relations',
+      allFamilyRelations: 'All family relations',
+      companionTitleLabel: 'Companion title',
       allKinds: 'All kinds',
       fullscreen: 'Fullscreen',
       closeFullscreen: 'Close fullscreen',
@@ -262,6 +264,12 @@ const translations = {
       showRelation: (label: string) => `Show ${label} relationships`,
       hideKind: (label: string) => `Hide ${label}`,
       showKind: (label: string) => `Show ${label}`,
+      relationGroups: {
+        family: 'Family relations',
+        battles: 'Battles',
+        titles: 'Titles',
+        events: 'Events',
+      },
     },
     articlesInCategory: 'Articles in this category',
     // Motivation Cards
@@ -549,6 +557,8 @@ const translations = {
       relationshipTypes: 'أنواع العلاقات',
       nodeKinds: 'أنواع العُقد',
       allRelations: 'كل العلاقات',
+      allFamilyRelations: 'كل علاقات الأسرة',
+      companionTitleLabel: 'لقب الصحابي',
       allKinds: 'كل الأنواع',
       fullscreen: 'ملء الشاشة',
       closeFullscreen: 'إغلاق ملء الشاشة',
@@ -558,6 +568,12 @@ const translations = {
       showRelation: (label: string) => `إظهار علاقات ${label}`,
       hideKind: (label: string) => `إخفاء ${label}`,
       showKind: (label: string) => `إظهار ${label}`,
+      relationGroups: {
+        family: 'علاقات الأسرة',
+        battles: 'المعارك',
+        titles: 'الألقاب',
+        events: 'الأحداث',
+      },
     },
     articlesInCategory: 'المقالات في هذا التصنيف',
     // Motivation Cards
