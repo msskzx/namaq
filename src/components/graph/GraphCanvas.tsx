@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import ForceGraph2D, { ForceGraphMethods, NodeObject, LinkObject } from 'react-force-graph-2d';
 import { forceCollide } from 'd3-force';
-import { GraphData, GraphNodeFull, GraphLink } from '@/types/graph';
+import { GraphData, GraphNode, GraphNodeFull, GraphLink } from '@/types/graph';
 import useSWR from 'swr';
 import { fetcher } from '@/lib/swr';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -210,6 +210,20 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       .map(node => (node.fx != null || node.fy != null) ? { ...node, fx: undefined, fy: undefined } : node);
     return { nodes, links };
   }, [graphData, anyFilterActive, excludedRelations, showCompanionTitle, selectedNode, searchedSlugs]);
+  // Every edge is directional (e.g. FATHER points child -> parent), but a
+  // bare relation-name tooltip can't tell you which end is which. Naming
+  // both endpoints removes the ambiguity; the arrow glyph is flipped and
+  // the endpoints swapped in Arabic so it still reads source-to-target in
+  // natural (right-to-left) reading order, matching the LTR
+  // source-to-target order for English.
+  const visibleNodesById = useMemo(() => new Map((visibleGraph?.nodes ?? []).map(node => [node.id, node])), [visibleGraph]);
+  const linkTooltip = useCallback((link: GraphLink) => {
+    const resolve = (endpoint: string | GraphNode) => (typeof endpoint === 'string' ? visibleNodesById.get(endpoint) : endpoint);
+    const sourceLabel = resolve(link.source)?.label ?? '';
+    const targetLabel = resolve(link.target)?.label ?? '';
+    const relation = relationLabel(link.label);
+    return language === 'ar' ? `${targetLabel} <- ${relation} - ${sourceLabel}` : `${sourceLabel} - ${relation} -> ${targetLabel}`;
+  }, [visibleNodesById, relationLabel, language]);
   // Sorted by nasab-graph prominence for the side list only; the canvas
   // itself renders visibleGraph.nodes directly, since force-layout doesn't
   // care about array order. Title nodes (no nasabRank) sort after every
@@ -406,7 +420,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // frame after mount, so the graph would permanently lock in at 0x0.
   // Passing explicit width/height (kept in sync on resize) sidesteps that.
   const graphCanvas = (dimensions?: { width: number; height: number }) => visibleGraph && (
-    <ForceGraph2D ref={fgRef} width={dimensions?.width} height={dimensions?.height} graphData={visibleGraph} nodeLabel="label" nodeAutoColorBy="group" linkLabel={(link) => relationLabel((link as unknown as GraphLink).label)} backgroundColor={theme.background} linkColor={(link) => relationColor((link as unknown as GraphLink).label)} linkWidth={1.5} linkDirectionalArrowLength={3.5} linkDirectionalArrowRelPos={0.9} onNodeClick={(node) => updateParams({ selected: (node as GraphNodeFull).slug })} cooldownTicks={100} onEngineStop={fitToView} nodeCanvasObject={(node, ctx, globalScale) => {
+    <ForceGraph2D ref={fgRef} width={dimensions?.width} height={dimensions?.height} graphData={visibleGraph} nodeLabel="label" nodeAutoColorBy="group" linkLabel={(link) => linkTooltip(link as unknown as GraphLink)} backgroundColor={theme.background} linkColor={(link) => relationColor((link as unknown as GraphLink).label)} linkWidth={1.5} linkDirectionalArrowLength={3.5} linkDirectionalArrowRelPos={0.9} onNodeClick={(node) => updateParams({ selected: (node as GraphNodeFull).slug })} cooldownTicks={100} onEngineStop={fitToView} nodeCanvasObject={(node, ctx, globalScale) => {
       const label = (node as GraphNodeFull).label; const fontSize = Math.min(12 / globalScale, NODE_BASE_FONT_SIZE); ctx.font = `${fontSize}px Sans-Serif`; const textWidth = ctx.measureText(label).width; const dimensions = [textWidth, fontSize].map(value => value + fontSize) as [number, number];
       ctx.fillStyle = nodeFillColor(node as GraphNodeFull); ctx.beginPath(); ctx.arc(node.x!, node.y!, Math.max(...dimensions) / 2, 0, 2 * Math.PI); ctx.fill(); ctx.closePath(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = theme.node.text; ctx.fillText(label, node.x!, node.y!); (node as GraphNodeFull).__bckgDimensions = dimensions;
     }} nodePointerAreaPaint={(node, color, ctx) => { const d = (node as GraphNodeFull).__bckgDimensions; if (d) { ctx.fillStyle = color; ctx.fillRect(node.x! - d[0] / 2, node.y! - d[1] / 2, d[0], d[1]); } }} />
