@@ -211,6 +211,42 @@ describe('GET /api/graph', () => {
     expect(body.links).toEqual([{ source: '1', target: '2', label: 'WIFE', value: 1 }]);
   });
 
+  it('drops excluded relation types (and their now-unreached related nodes) from a focus response', async () => {
+    const focusNode = node(1, 'prophet-muhammad', 'Muhammad');
+    const wife = node(2, 'khadijah', 'Khadijah');
+    const companion = node(3, 'abu-bakr', 'Abu Bakr');
+    const run = vi.fn().mockResolvedValue({
+      records: [
+        record({ node: focusNode, relationship: rel('WIFE'), related: wife }),
+        record({ node: focusNode, relationship: rel('COMPANION_OF'), related: companion }),
+      ],
+    });
+    getSession.mockReturnValue({ run });
+
+    const response = await GET(request('?focus=prophet-muhammad&excludeRelation=COMPANION_OF&excludeRelation=ACCOMPANIED_BY'));
+    const body = await response.json();
+
+    // The focus node itself, and any relation not excluded, are kept; the
+    // companion relation and the companion-only related node are dropped.
+    expect(body.nodes.map((n: { slug: string }) => n.slug).sort()).toEqual(['khadijah', 'prophet-muhammad']);
+    expect(body.links).toEqual([{ source: '1', target: '2', label: 'WIFE', value: 1 }]);
+  });
+
+  it('keeps the focus node even when every one of its relations is excluded', async () => {
+    const focusNode = node(1, 'prophet-muhammad', 'Muhammad');
+    const companion = node(2, 'abu-bakr', 'Abu Bakr');
+    const run = vi.fn().mockResolvedValue({
+      records: [record({ node: focusNode, relationship: rel('COMPANION_OF'), related: companion })],
+    });
+    getSession.mockReturnValue({ run });
+
+    const response = await GET(request('?focus=prophet-muhammad&excludeRelation=COMPANION_OF'));
+    const body = await response.json();
+
+    expect(body.nodes.map((n: { slug: string }) => n.slug)).toEqual(['prophet-muhammad']);
+    expect(body.links).toEqual([]);
+  });
+
   it('walks up to 3 hops for a person search and parses every path segment', async () => {
     const muhammad = node(1, 'prophet-muhammad', 'Muhammad');
     const aisha = node(2, 'aisha', 'Aisha');

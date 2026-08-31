@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import ForceGraph2D, { ForceGraphMethods, NodeObject, LinkObject } from 'react-force-graph-2d';
 import { forceCollide } from 'd3-force';
-import { GraphData, GraphNodeFull, GraphLink } from '@/types/graph';
+import { GraphData, GraphNode, GraphNodeFull, GraphLink } from '@/types/graph';
 import useSWR from 'swr';
 import { fetcher } from '@/lib/swr';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -17,6 +17,7 @@ import ErrorMessage from '@/components/common/ErrorMessage';
 import { useLanguage } from '@/components/language/LanguageContext';
 import translations from '@/components/language/translations';
 import { relationColor, sortRelationTypes, governingRelationType, relationGroup, RELATION_ORDER, KIND_TO_RELATION_GROUP, RelationGroup } from '@/lib/relations';
+import { filterVisibleGraph } from '@/lib/graphFilter';
 import { profilePath } from '@/lib/nodeProfile';
 
 interface GraphCanvasProps {
@@ -52,12 +53,6 @@ const ALL_KINDS = ['person', 'title', 'battle', 'event'] as const;
 // those categories vanish entirely instead of just having nothing to show,
 // and re-including that kind wouldn't bring their filters back.
 const ALL_RELATION_TYPES = sortRelationTypes(RELATION_ORDER.filter(type => governingRelationType(type) === type));
-
-// The Title node every companion holds (see
-// scripts/people/syncCompanionRelations.ts's COMPANION_TITLE_SLUG) -- one
-// node with an edge to all ~250+ companions, far denser than any other
-// title, so it's filterable independently of the Titles relation type.
-const COMPANION_TITLE_SLUG = 'companion';
 
 // A fixed reference font size the collision force below can use for a
 // stable world-space radius per node, independent of camera zoom.
@@ -100,7 +95,14 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // entry in `relation`, since this hides a specific NODE, not a relation
   // type.
   const showCompanionTitle = searchParams?.get('showCompanionTitle') === '1';
-  const searchedSlugs = useMemo(() => new Set([...(searchParams?.getAll('person') ?? []), ...(searchParams?.getAll('ancestorsOf') ?? []), ...(searchParams?.getAll('descendantsOf') ?? [])]), [searchParams]);
+  // Only `person` is a 1-hop neighborhood search (see route.ts's `persons`
+  // query) where a same-labeled edge could leak in from someone two hops
+  // away who isn't actually connected to the searched person -- that's what
+  // isDirect below guards against. ancestorsOf/descendantsOf walk an
+  // unbounded SON/DAUGHTER chain instead, so every edge they return already
+  // belongs to the requested lineage; including their slugs here would
+  // wrongly prune the chain down to just its first hop.
+  const personSearchSlugs = useMemo(() => new Set(searchParams?.getAll('person') ?? []), [searchParams]);
 
   const fetchUrl = useMemo(() => {
     try {
@@ -155,61 +157,40 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // showCompanionTitle above), so filtering must run even with zero
   // manual relation toggles.
   const anyFilterActive = excludedRelations.size > 0 || !showCompanionTitle;
+  // Once the unfiltered view has run one simulation pass, d3-force mutates
+  // each link's source/target from a plain string id into a direct
+  // reference to the node object it resolved -- in place, on the very same
+  // link objects graphData.links holds (they're never cloned). A filtered
+  // view built afterwards from those links would inherit stale references
+  // into the *unfiltered* node array, which the current (filtered,
+  // possibly node-cloned) simulation doesn't recognize, so the link fails
+  // to attach to anything -- the exact "weirdly connected, missing
+  // relations" symptom that only shows up switching filters via the UI,
+  // not on a fresh navigation where links haven't been touched yet.
+  // filterVisibleGraph converts source/target back to plain string ids,
+  // forcing d3-force to re-resolve them against whichever node array is
+  // current. See src/lib/graphFilter.ts for the filtering rules themselves
+  // (and their own tests).
   const visibleGraph = useMemo(() => {
     if (!graphData || !anyFilterActive) return graphData;
-    const nodesById = new Map(graphData.nodes.map(node => [node.id, node]));
-    const slugOf = (endpoint: string | GraphNodeFull) => (typeof endpoint === 'string' ? nodesById.get(endpoint)?.slug : endpoint.slug);
-    const endpointId = (endpoint: string | GraphNodeFull) => (typeof endpoint === 'string' ? endpoint : endpoint.id);
-    // A relation-labeled edge is only kept when it directly touches one of the
-    // searched people. Without this, an edge with a matching label anywhere in
-    // the fetched 1-3 hop neighborhood (e.g. an unrelated person's daughter)
-    // would pass the label check even though it isn't directly connected to
-    // the person being searched.
-    const isDirect = (link: GraphLink) => searchedSlugs.size === 0 || searchedSlugs.has(slugOf(link.source) ?? '') || searchedSlugs.has(slugOf(link.target) ?? '');
-    // The Companion title node connects to every companion, so hiding it
-    // (the default) means dropping any edge that touches it -- not just
-    // omitting the node itself, which would otherwise leave dangling
-    // links pointing at a node no longer in the graph.
-    const isCompanionTitleNode = (endpoint: string | GraphNodeFull) => {
-      const node = typeof endpoint === 'string' ? nodesById.get(endpoint) : endpoint;
-      return node?.type === 'title' && node?.slug === COMPANION_TITLE_SLUG;
-    };
-    const isCompanionTitleLink = (link: GraphLink) => isCompanionTitleNode(link.source) || isCompanionTitleNode(link.target);
-    // Node kinds are filtered server-side (see /api/graph's `kind` param) --
-    // graphData already contains only the requested kinds, so there's
-    // nothing left to filter out here.
-    // Once the unfiltered view has run one simulation pass, d3-force
-    // mutates each link's source/target from a plain string id into a
-    // direct reference to the node object it resolved -- in place, on the
-    // very same link objects graphData.links holds (they're never cloned).
-    // A filtered view built afterwards from those links would inherit
-    // stale references into the *unfiltered* node array, which the current
-    // (filtered, possibly node-cloned) simulation doesn't recognize, so the
-    // link fails to attach to anything -- the exact "weirdly connected,
-    // missing relations" symptom that only shows up switching filters via
-    // the UI, not on a fresh navigation where links haven't been touched
-    // yet. Converting back to a plain string id forces d3-force to
-    // re-resolve it against whichever node array is current.
-    // A link is kept only when its governing type (see
-    // governingRelationType -- ACCOMPANIED_BY resolves to COMPANION_OF)
-    // isn't manually excluded, so toggling the single Companion switch
-    // hides both edge directions together. It's also dropped when it
-    // touches the Companion title node and that node is hidden.
-    const links = graphData.links
-      .filter(link => !excludedRelations.has(governingRelationType(link.label)) && isDirect(link) && (showCompanionTitle || !isCompanionTitleLink(link)))
-      .map(link => ({ ...link, source: endpointId(link.source), target: endpointId(link.target) }));
-    const linkedIds = new Set(links.flatMap(link => [link.source as string, link.target as string]));
-    if (selectedNode) linkedIds.add(selectedNode.id);
-    // Nodes pinned (fx/fy) at a precomputed full-graph position stay frozen
-    // there under filtering too, so a filtered subgraph -- which should
-    // reorganize freely like every unpinned graph view does -- instead
-    // renders its edges crossing between stale, unrelated positions. Drop
-    // the pin (keep x/y as just a starting point) once a filter is active.
-    const nodes = graphData.nodes
-      .filter(node => linkedIds.has(node.id))
-      .map(node => (node.fx != null || node.fy != null) ? { ...node, fx: undefined, fy: undefined } : node);
-    return { nodes, links };
-  }, [graphData, anyFilterActive, excludedRelations, showCompanionTitle, selectedNode, searchedSlugs]);
+    return filterVisibleGraph(graphData, { excludedRelations, showCompanionTitle, personSearchSlugs, selectedNodeId: selectedNode?.id });
+  }, [graphData, anyFilterActive, excludedRelations, showCompanionTitle, selectedNode, personSearchSlugs]);
+  // Every edge is directional (e.g. FATHER points child -> parent), but a
+  // bare relation-name tooltip can't tell you which end is which. Naming
+  // both endpoints removes the ambiguity. The string is always built
+  // source-to-target, in the same logical order regardless of language --
+  // the tooltip's container now carries dir="rtl" for Arabic (see
+  // graphCanvas below), so the browser's own bidi handling visually
+  // reverses the run and mirrors "<"/">" for us, rather than us
+  // hand-swapping the string and glyphs ourselves.
+  const visibleNodesById = useMemo(() => new Map((visibleGraph?.nodes ?? []).map(node => [node.id, node])), [visibleGraph]);
+  const linkTooltip = useCallback((link: GraphLink) => {
+    const resolve = (endpoint: string | GraphNode) => (typeof endpoint === 'string' ? visibleNodesById.get(endpoint) : endpoint);
+    const sourceLabel = resolve(link.source)?.label ?? '';
+    const targetLabel = resolve(link.target)?.label ?? '';
+    const relation = relationLabel(link.label);
+    return `${sourceLabel} - ${relation} -> ${targetLabel}`;
+  }, [visibleNodesById, relationLabel]);
   // Sorted by nasab-graph prominence for the side list only; the canvas
   // itself renders visibleGraph.nodes directly, since force-layout doesn't
   // care about array order. Title nodes (no nasabRank) sort after every
@@ -406,7 +387,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // frame after mount, so the graph would permanently lock in at 0x0.
   // Passing explicit width/height (kept in sync on resize) sidesteps that.
   const graphCanvas = (dimensions?: { width: number; height: number }) => visibleGraph && (
-    <ForceGraph2D ref={fgRef} width={dimensions?.width} height={dimensions?.height} graphData={visibleGraph} nodeLabel="label" nodeAutoColorBy="group" linkLabel={(link) => relationLabel((link as unknown as GraphLink).label)} backgroundColor={theme.background} linkColor={(link) => relationColor((link as unknown as GraphLink).label)} linkWidth={1.5} linkDirectionalArrowLength={3.5} linkDirectionalArrowRelPos={0.9} onNodeClick={(node) => updateParams({ selected: (node as GraphNodeFull).slug })} cooldownTicks={100} onEngineStop={fitToView} nodeCanvasObject={(node, ctx, globalScale) => {
+    <ForceGraph2D ref={fgRef} width={dimensions?.width} height={dimensions?.height} graphData={visibleGraph} nodeLabel="label" nodeAutoColorBy="group" linkLabel={(link) => linkTooltip(link as unknown as GraphLink)} backgroundColor={theme.background} linkColor={(link) => relationColor((link as unknown as GraphLink).label)} linkWidth={1.5} linkDirectionalArrowLength={3.5} linkDirectionalArrowRelPos={0.9} onNodeClick={(node) => updateParams({ selected: (node as GraphNodeFull).slug })} cooldownTicks={100} onEngineStop={fitToView} nodeCanvasObject={(node, ctx, globalScale) => {
       const label = (node as GraphNodeFull).label; const fontSize = Math.min(12 / globalScale, NODE_BASE_FONT_SIZE); ctx.font = `${fontSize}px Sans-Serif`; const textWidth = ctx.measureText(label).width; const dimensions = [textWidth, fontSize].map(value => value + fontSize) as [number, number];
       ctx.fillStyle = nodeFillColor(node as GraphNodeFull); ctx.beginPath(); ctx.arc(node.x!, node.y!, Math.max(...dimensions) / 2, 0, 2 * Math.PI); ctx.fill(); ctx.closePath(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = theme.node.text; ctx.fillText(label, node.x!, node.y!); (node as GraphNodeFull).__bckgDimensions = dimensions;
     }} nodePointerAreaPaint={(node, color, ctx) => { const d = (node as GraphNodeFull).__bckgDimensions; if (d) { ctx.fillStyle = color; ctx.fillRect(node.x! - d[0] / 2, node.y! - d[1] / 2, d[0], d[1]); } }} />
@@ -414,7 +395,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
   if (isFullscreen) {
     return (
-      <div className="fixed inset-0 z-50 bg-gray-50 dark:bg-gray-900">
+      <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="fixed inset-0 z-50 bg-gray-50 dark:bg-gray-900">
         <div className="absolute inset-x-0 top-0 z-10 flex items-center justify-between gap-3 bg-gray-50/90 p-3 backdrop-blur dark:bg-gray-900/90">
           <p className="text-sm text-gray-600 dark:text-gray-300" aria-live="polite">
             {visibleGraph ? `${visibleGraph.nodes.length} ${nodesLabel} · ${visibleGraph.links.length} relationships` : 'No graph data available'}
@@ -472,7 +453,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       )}
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_14rem]">
-        <div className="relative h-[65vh] min-h-[32rem] overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700" role="region" aria-label="Interactive relationship graph">
+        <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="relative h-[65vh] min-h-[32rem] overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700" role="region" aria-label="Interactive relationship graph">
           <button type="button" onClick={() => setIsFullscreen(true)} aria-label={t.graph.fullscreen} className={`absolute top-2 z-10 rounded border border-amber-400 bg-gray-50/90 px-2 py-1.5 text-gray-800 backdrop-blur hover:bg-amber-50 dark:bg-gray-900/90 dark:text-gray-100 dark:hover:bg-gray-800 ${language === 'ar' ? 'left-2' : 'right-2'}`}>
             <FontAwesomeIcon icon={faExpand} />
           </button>
