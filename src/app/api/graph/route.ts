@@ -100,6 +100,14 @@ export async function GET(_request: Request) {
   const descendantsOf = searchParams.getAll('descendantsOf') as string[];
   const battles = searchParams.getAll('battle') as string[];
   const focus = searchParams.get('focus');
+  // Relation types to drop from the response entirely (e.g. the homepage's
+  // Prophet-focused preview excludes COMPANION_OF/ACCOMPANIED_BY, since one
+  // person having ~250 companions would otherwise dwarf every other
+  // relation in that small graph). Applied post-query below rather than in
+  // Cypher so the focus/battle/person query shapes stay untouched -- this
+  // only ever narrows what gets sent to the client, never what's fetched
+  // from Neo4j.
+  const excludeRelations = new Set(searchParams.getAll('excludeRelation'));
   // Which node kinds the default (unscoped) response should include.
   // Empty/absent = every kind. This is a whitelist, not a hide-list: e.g.
   // kind=person&kind=battle returns only those two kinds and the links
@@ -201,6 +209,10 @@ export async function GET(_request: Request) {
           const related = record.get('related');
           const relationship = record.get('relationship');
 
+          // The anchor `node` is always kept, even when its only
+          // relationship(s) are excluded below -- otherwise a focus person
+          // whose entire OPTIONAL MATCH result is excluded relations would
+          // vanish from the response instead of appearing on their own.
           if (node && !nodes.has(node.identity.toString())) {
             nodes.set(node.identity.toString(), {
               id: node.identity.toString(),
@@ -210,6 +222,8 @@ export async function GET(_request: Request) {
               type: node.labels?.[0]?.toLowerCase(),
             });
           }
+
+          if (relationship && excludeRelations.has(relationship.type)) return;
 
           if (related && !nodes.has(related.identity.toString())) {
             nodes.set(related.identity.toString(), {

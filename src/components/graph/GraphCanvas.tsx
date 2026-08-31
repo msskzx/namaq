@@ -212,18 +212,20 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   }, [graphData, anyFilterActive, excludedRelations, showCompanionTitle, selectedNode, searchedSlugs]);
   // Every edge is directional (e.g. FATHER points child -> parent), but a
   // bare relation-name tooltip can't tell you which end is which. Naming
-  // both endpoints removes the ambiguity; the arrow glyph is flipped and
-  // the endpoints swapped in Arabic so it still reads source-to-target in
-  // natural (right-to-left) reading order, matching the LTR
-  // source-to-target order for English.
+  // both endpoints removes the ambiguity. The string is always built
+  // source-to-target, in the same logical order regardless of language --
+  // the tooltip's container now carries dir="rtl" for Arabic (see
+  // graphCanvas below), so the browser's own bidi handling visually
+  // reverses the run and mirrors "<"/">" for us, rather than us
+  // hand-swapping the string and glyphs ourselves.
   const visibleNodesById = useMemo(() => new Map((visibleGraph?.nodes ?? []).map(node => [node.id, node])), [visibleGraph]);
   const linkTooltip = useCallback((link: GraphLink) => {
     const resolve = (endpoint: string | GraphNode) => (typeof endpoint === 'string' ? visibleNodesById.get(endpoint) : endpoint);
     const sourceLabel = resolve(link.source)?.label ?? '';
     const targetLabel = resolve(link.target)?.label ?? '';
     const relation = relationLabel(link.label);
-    return language === 'ar' ? `${targetLabel} <- ${relation} - ${sourceLabel}` : `${sourceLabel} - ${relation} -> ${targetLabel}`;
-  }, [visibleNodesById, relationLabel, language]);
+    return `${sourceLabel} - ${relation} -> ${targetLabel}`;
+  }, [visibleNodesById, relationLabel]);
   // Sorted by nasab-graph prominence for the side list only; the canvas
   // itself renders visibleGraph.nodes directly, since force-layout doesn't
   // care about array order. Title nodes (no nasabRank) sort after every
@@ -428,7 +430,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
   if (isFullscreen) {
     return (
-      <div className="fixed inset-0 z-50 bg-gray-50 dark:bg-gray-900">
+      <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="fixed inset-0 z-50 bg-gray-50 dark:bg-gray-900">
         <div className="absolute inset-x-0 top-0 z-10 flex items-center justify-between gap-3 bg-gray-50/90 p-3 backdrop-blur dark:bg-gray-900/90">
           <p className="text-sm text-gray-600 dark:text-gray-300" aria-live="polite">
             {visibleGraph ? `${visibleGraph.nodes.length} ${nodesLabel} · ${visibleGraph.links.length} relationships` : 'No graph data available'}
@@ -486,7 +488,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       )}
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_14rem]">
-        <div className="relative h-[65vh] min-h-[32rem] overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700" role="region" aria-label="Interactive relationship graph">
+        <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="relative h-[65vh] min-h-[32rem] overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700" role="region" aria-label="Interactive relationship graph">
           <button type="button" onClick={() => setIsFullscreen(true)} aria-label={t.graph.fullscreen} className={`absolute top-2 z-10 rounded border border-amber-400 bg-gray-50/90 px-2 py-1.5 text-gray-800 backdrop-blur hover:bg-amber-50 dark:bg-gray-900/90 dark:text-gray-100 dark:hover:bg-gray-800 ${language === 'ar' ? 'left-2' : 'right-2'}`}>
             <FontAwesomeIcon icon={faExpand} />
           </button>

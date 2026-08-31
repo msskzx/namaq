@@ -10,6 +10,13 @@ import { relationColor } from '@/lib/relations';
 
 const PROPHET_SLUG = 'prophet-muhammad';
 
+// The Prophet has ~250 companions, all one hop away via COMPANION_OF --
+// far more than this small preview canvas can show alongside his actual
+// family relations, so the API is asked to drop those relations (and
+// their now-unreached companion nodes) before the response ever reaches
+// the browser. The full graph at /graphs still has them.
+const GRAPH_URL = `/api/graph?focus=${PROPHET_SLUG}&excludeRelation=COMPANION_OF&excludeRelation=ACCOMPANIED_BY`;
+
 const getGraphTheme = () => {
   const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
   return {
@@ -19,7 +26,7 @@ const getGraphTheme = () => {
 };
 
 export default function HeroGraphPreview() {
-  const { data: graphData } = useSWR<GraphData>(`/api/graph?focus=${PROPHET_SLUG}`, fetcher);
+  const { data: graphData } = useSWR<GraphData>(GRAPH_URL, fetcher);
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
   const fgRef = useRef<ForceGraphMethods | undefined>(undefined);
