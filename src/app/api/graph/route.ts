@@ -142,15 +142,18 @@ export async function GET(_request: Request) {
       params.persons = persons;
     }
 
-    // Add ancestor queries. SON|DAUGHTER, not SON alone: a SON/DAUGHTER edge
-    // points child -> parent (see neo4j/graphSeedData.test.ts), and which of
-    // the two labels applies depends on the child's sex -- SON-only would
-    // silently return nothing for any female ancestorSlug, since her edge to
-    // her own father is typed DAUGHTER.
+    // Add ancestor (nasab) queries. FATHER only, not SON|DAUGHTER: nasab
+    // (نسب) is the patrilineal line specifically, and SON|DAUGHTER would
+    // silently mix in maternal ancestors too -- see neo4j/graphSeedData.ts,
+    // where a MOTHER edge's reciprocal is still typed SON/DAUGHTER on the
+    // child's side (labeled by the child's own sex, not by which parent
+    // it's to). FATHER edges are stored father -[:FATHER]-> child, so
+    // walking them backward from ancestorSlug reaches every paternal
+    // ancestor up to the root of the recorded lineage.
     if (ancestorsOf.length > 0) {
       queryParts.push(
         `UNWIND $ancestors AS ancestorSlug
-         MATCH path = (p1:Person {slug: ancestorSlug})-[r:SON|DAUGHTER*]->(p2:Person)
+         MATCH path = (p1:Person {slug: ancestorSlug})<-[r:FATHER*]-(p2:Person)
          RETURN path`
       );
       params.ancestors = ancestorsOf;
@@ -280,8 +283,18 @@ export async function GET(_request: Request) {
             }
 
             if (start && end && rel) {
-              const source = start.identity.toString();
-              const target = end.identity.toString();
+              // rel.start/rel.end are the relationship's own true stored
+              // endpoints -- they can differ from this segment's
+              // start/end when the path was walked in the opposite
+              // direction from how the edge was created (e.g.
+              // descendantsOf's `<-[:SON|DAUGHTER*]-`, which walks from
+              // the root down while every SON/DAUGHTER edge is actually
+              // stored child -> parent). Using the segment's walk order
+              // here would render the edge backwards: e.g. a SON edge
+              // attributed to the parent as source, reading as "parent
+              // is SON of child".
+              const source = rel.start.toString();
+              const target = rel.end.toString();
               const label = rel.type;
               const key = `${source}|${target}|${label}`;
               if (!linkKeys.has(key)) {
@@ -314,8 +327,11 @@ export async function GET(_request: Request) {
               type: 'person',
             });
           }
-          const source = start.identity.toString();
-          const target = end.identity.toString();
+          // See the segments branch above for why rel.start/rel.end (the
+          // relationship's true stored direction), not path.start/end
+          // (the walk direction), must be used here too.
+          const source = rel?.start != null ? rel.start.toString() : start.identity.toString();
+          const target = rel?.end != null ? rel.end.toString() : end.identity.toString();
           const label = rel?.type || 'RELATED';
           const key = `${source}|${target}|${label}`;
           if (!linkKeys.has(key)) {
