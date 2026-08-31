@@ -26,8 +26,14 @@ function node(identity: number, slug: string, name: string, labels: string[] = [
   return { identity: { toString: () => String(identity) }, properties: { slug, name }, labels };
 }
 
-function rel(type: string, properties: Record<string, unknown> = {}) {
-  return { type, properties };
+// `direction` is the relationship's own true stored start/end identity
+// (a node's `.identity`, e.g. `hasan.identity`) -- distinct from a path
+// segment's start/end, which reflect the direction the Cypher pattern was
+// *walked* in and can differ from it (see the descendantsOf test below).
+// Only path-based (pathRecord) usages need this; the flat node/related/
+// relationship records (focus, battle) don't read rel.start/rel.end.
+function rel(type: string, properties: Record<string, unknown> = {}, direction?: { start: unknown; end: unknown }) {
+  return { type, properties, start: direction?.start, end: direction?.end };
 }
 
 function record(fields: Record<string, unknown>) {
@@ -258,8 +264,8 @@ describe('GET /api/graph', () => {
     const run = vi.fn().mockResolvedValue({
       records: [
         pathRecord([
-          { start: muhammad, end: aisha, relationship: rel('WIFE') },
-          { start: abuBakr, end: aisha, relationship: rel('DAUGHTER') },
+          { start: muhammad, end: aisha, relationship: rel('WIFE', {}, { start: muhammad.identity, end: aisha.identity }) },
+          { start: abuBakr, end: aisha, relationship: rel('DAUGHTER', {}, { start: abuBakr.identity, end: aisha.identity }) },
         ]),
       ],
     });
@@ -284,10 +290,11 @@ describe('GET /api/graph', () => {
   it('dedupes repeated links across overlapping paths', async () => {
     const a = node(1, 'a', 'A');
     const b = node(2, 'b', 'B');
+    const son = () => rel('SON', {}, { start: a.identity, end: b.identity });
     const run = vi.fn().mockResolvedValue({
       records: [
-        pathRecord([{ start: a, end: b, relationship: rel('SON') }]),
-        pathRecord([{ start: a, end: b, relationship: rel('SON') }]),
+        pathRecord([{ start: a, end: b, relationship: son() }]),
+        pathRecord([{ start: a, end: b, relationship: son() }]),
       ],
     });
     getSession.mockReturnValue({ run });
@@ -296,6 +303,32 @@ describe('GET /api/graph', () => {
     const body = await response.json();
 
     expect(body.links).toHaveLength(1);
+  });
+
+  // descendantsOf walks `(root)<-[:SON|DAUGHTER*]-(descendant)` -- backward
+  // relative to how SON/DAUGHTER edges are actually stored (child ->
+  // parent). Neo4j still reports each path segment's start/end in the
+  // direction the pattern was *walked* (root -> descendant), which is the
+  // opposite of the relationship's own true start/end (descendant ->
+  // root). Using the segment's direction for the rendered link would
+  // attribute the SON/DAUGHTER label to the root, reading as "root is SON
+  // of descendant" -- backwards.
+  it('renders a descendantsOf edge using the relationship\'s true direction, not the path-walk direction', async () => {
+    const ali = node(1, 'ali-ibn-abi-talib', 'Ali');
+    const hasan = node(2, 'al-hasan-ibn-ali', 'Hasan');
+    const run = vi.fn().mockResolvedValue({
+      records: [
+        // Segment walked root (ali) -> descendant (hasan), but the SON
+        // edge is truly stored hasan -[:SON]-> ali (hasan is Ali's son).
+        pathRecord([{ start: ali, end: hasan, relationship: rel('SON', {}, { start: hasan.identity, end: ali.identity }) }]),
+      ],
+    });
+    getSession.mockReturnValue({ run });
+
+    const response = await GET(request('?descendantsOf=ali-ibn-abi-talib'));
+    const body = await response.json();
+
+    expect(body.links).toEqual([{ source: '2', target: '1', label: 'SON', value: 1 }]);
   });
 
   it('collects multiple requested persons into a single UNWIND query', async () => {
@@ -308,7 +341,7 @@ describe('GET /api/graph', () => {
     expect(run.mock.calls[0][1]).toEqual({ persons: ['a', 'b'] });
   });
 
-  it('walks ancestor SON|DAUGHTER chains for ancestorsOf', async () => {
+  it('walks FATHER-only chains for ancestorsOf (nasab is patrilineal)', async () => {
     const run = vi.fn().mockResolvedValue({ records: [] });
     getSession.mockReturnValue({ run });
 
@@ -317,7 +350,7 @@ describe('GET /api/graph', () => {
     expect(run).toHaveBeenCalledTimes(1);
     const [query, params] = run.mock.calls[0];
     expect(query).toContain('UNWIND $ancestors AS ancestorSlug');
-    expect(query).toContain('MATCH path = (p1:Person {slug: ancestorSlug})-[r:SON|DAUGHTER*]->(p2:Person)');
+    expect(query).toContain('MATCH path = (p1:Person {slug: ancestorSlug})<-[r:FATHER*]-(p2:Person)');
     expect(params).toEqual({ ancestors: ['prophet-muhammad'] });
   });
 
@@ -394,7 +427,7 @@ describe('GET /api/graph', () => {
     const [query, params] = run.mock.calls[0];
     expect(query).toContain(' UNION ');
     expect(query).toContain('MATCH path = (p1:Person {slug: personSlug})-[*1]-(p2:Person)');
-    expect(query).toContain('MATCH path = (p1:Person {slug: ancestorSlug})-[r:SON|DAUGHTER*]->(p2:Person)');
+    expect(query).toContain('MATCH path = (p1:Person {slug: ancestorSlug})<-[r:FATHER*]-(p2:Person)');
     expect(params).toEqual({ persons: ['a'], ancestors: ['b'] });
   });
 
@@ -407,7 +440,7 @@ describe('GET /api/graph', () => {
     expect(run).toHaveBeenCalledTimes(1);
     const [query, params] = run.mock.calls[0];
     expect(query).toContain(' UNION ');
-    expect(query).toContain('MATCH path = (p1:Person {slug: ancestorSlug})-[r:SON|DAUGHTER*]->(p2:Person)');
+    expect(query).toContain('MATCH path = (p1:Person {slug: ancestorSlug})<-[r:FATHER*]-(p2:Person)');
     expect(query).toContain('MATCH path = (p1:Person {slug: descendantSlug})<-[r:SON|DAUGHTER*]-(p2:Person)');
     expect(params).toEqual({ ancestors: ['a'], descendants: ['a'] });
   });
