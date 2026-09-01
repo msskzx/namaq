@@ -44,6 +44,13 @@ const relationName = (value: string) => value.toLowerCase().replaceAll('_', ' ')
 // make title/battle/event impossible to switch back on.
 const ALL_KINDS = ['person', 'title', 'battle', 'event'] as const;
 
+// Battle and Event nodes are the least central to a first-time visit (most
+// people come here for the family tree), so on a general-purpose graph
+// (showSearch on) they start off, opt-in via the Node Kinds panel like any
+// other kind. A scoped embed (showSearch off) keeps its own naturally
+// single-kind data included by default, as before -- see `defaultKinds`.
+const DEFAULT_KINDS = ['person', 'title'];
+
 // The full universe of relation types the graph API can ever return,
 // regardless of what's actually present in the current (possibly
 // kind-narrowed) fetch -- same rationale as ALL_KINDS above. Once `kind` is
@@ -53,6 +60,29 @@ const ALL_KINDS = ['person', 'title', 'battle', 'event'] as const;
 // those categories vanish entirely instead of just having nothing to show,
 // and re-including that kind wouldn't bring their filters back.
 const ALL_RELATION_TYPES = sortRelationTypes(RELATION_ORDER.filter(type => governingRelationType(type) === type));
+
+// Battle/Event being off by default (see DEFAULT_KINDS above) needs to
+// carry over to their relation types too, the same way toggleKind's own
+// group-sync keeps them in step whenever a kind is toggled by hand --
+// otherwise the Relationship Types panel would show e.g. PARTICIPATED_IN
+// as "on" while its Battle nodes are actually hidden. COMPANION_OF connects
+// the Prophet to ~250 companions, dwarfing every other relation the same
+// way the Companion title node dwarfs the Titles view (see
+// `showCompanionTitle` below) -- hidden by default for the same reason.
+const DEFAULT_EXCLUDED_KINDS = ALL_KINDS.filter(kind => !(DEFAULT_KINDS as string[]).includes(kind));
+const DEFAULT_EXCLUDED_RELATION_GROUPS = new Set(DEFAULT_EXCLUDED_KINDS.map(kind => KIND_TO_RELATION_GROUP[kind]));
+const DEFAULT_EXCLUDED_RELATIONS = [
+  'COMPANION_OF',
+  ...ALL_RELATION_TYPES.filter(type => DEFAULT_EXCLUDED_RELATION_GROUPS.has(relationGroup(type))),
+];
+
+// Written to the `relation` param to mean "explicitly show every relation
+// type". An empty `relation` array and an absent `relation` param both
+// serialize to the same URL (no param at all -- see `updateParams`), so
+// without a sentinel there'd be no way to tell "user turned everything
+// back on" apart from "never touched this", and the latter must fall back
+// to DEFAULT_EXCLUDED_RELATIONS above.
+const NO_EXCLUDED_RELATIONS = '__none__';
 
 // A fixed reference font size the collision force below can use for a
 // stable world-space radius per node, independent of camera zoom.
@@ -82,12 +112,29 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   const focusSlug = searchParams?.get('focus') ?? null;
   // Relation types are stored as the set of EXCLUDED (hidden) values --
   // each toggle acts independently, and hiding one never implicitly hides
-  // another. Kinds work the opposite way: `kind` is a server-side whitelist
-  // (see /api/graph's `kind` param), so an empty set here means "the server
-  // wasn't asked to narrow anything" (= every kind), and a non-empty set is
-  // exactly what's INCLUDED, not excluded.
-  const excludedRelations = useMemo(() => new Set(searchParams?.getAll('relation') ?? []), [searchParams]);
-  const includedKinds = useMemo(() => new Set(searchParams?.getAll('kind') ?? []), [searchParams]);
+  // another. An absent `relation` param means "untouched", which defaults
+  // to DEFAULT_EXCLUDED_RELATIONS rather than "nothing excluded" -- see
+  // that constant and NO_EXCLUDED_RELATIONS above for why "show every
+  // relation" needs its own sentinel to stay distinguishable from that.
+  const excludedRelations = useMemo(() => {
+    const raw = searchParams?.getAll('relation') ?? [];
+    if (raw.length === 0) return new Set(DEFAULT_EXCLUDED_RELATIONS);
+    if (raw.length === 1 && raw[0] === NO_EXCLUDED_RELATIONS) return new Set<string>();
+    return new Set(raw);
+  }, [searchParams]);
+  // Kinds work the opposite way from relations: `kind` is a server-side
+  // whitelist (see /api/graph's `kind` param), so a non-empty set is
+  // exactly what's INCLUDED, not excluded. An absent `kind` param also
+  // means "untouched", defaulting to `defaultKinds` below (DEFAULT_KINDS on
+  // a general-purpose graph, every kind on a scoped embed) rather than
+  // always meaning "every kind" -- unlike relations, this needs no
+  // sentinel: toggleKind always spells out a non-default combination in
+  // full instead of ever collapsing it down to an empty array (see there).
+  const defaultKinds = useMemo(() => new Set<string>(showSearch ? DEFAULT_KINDS : ALL_KINDS), [showSearch]);
+  const includedKinds = useMemo(() => {
+    const raw = searchParams?.getAll('kind') ?? [];
+    return raw.length > 0 ? new Set(raw) : defaultKinds;
+  }, [searchParams, defaultKinds]);
   // The "Companion" title node (see COMPANION_TITLE_SLUG below) connects to
   // every companion in the dataset, so it dwarfs every other title's node
   // degree and crowds out the rest of the Titles view -- hidden by default,
@@ -111,14 +158,24 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       // `selected` and `relation` are client view options with no server
       // meaning. `kind` is the opposite: it's a real query param the API
       // reads to decide which node kinds to return, so it's deliberately
-      // forwarded rather than stripped.
-      ['selected', 'relation', 'showCompanionTitle'].forEach(key => incoming.delete(key));
+      // forwarded rather than stripped -- but re-written from `includedKinds`
+      // rather than passed through as-is, since on a general-purpose graph
+      // an absent `kind` param no longer means "every kind" to the API
+      // either (see `defaultKinds` above): without this, Battle/Event nodes
+      // would still be fetched by default even though the UI hides them.
+      incoming.delete('selected');
+      incoming.delete('relation');
+      incoming.delete('showCompanionTitle');
+      if (showSearch) {
+        incoming.delete('kind');
+        includedKinds.forEach(kind => incoming.append('kind', kind));
+      }
       for (const [key, value] of incoming.entries()) base.searchParams.append(key, value);
       return base.toString();
     } catch {
       return url;
     }
-  }, [url, searchParams]);
+  }, [url, searchParams, showSearch, includedKinds]);
 
   // Graph structure only changes via pipeline scripts, never live user
   // action, so there's nothing to gain from the default revalidate-on-focus
@@ -171,10 +228,28 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // forcing d3-force to re-resolve them against whichever node array is
   // current. See src/lib/graphFilter.ts for the filtering rules themselves
   // (and their own tests).
-  const visibleGraph = useMemo(() => {
+  const baseVisibleGraph = useMemo(() => {
     if (!graphData || !anyFilterActive) return graphData;
-    return filterVisibleGraph(graphData, { excludedRelations, showCompanionTitle, personSearchSlugs, selectedNodeId: selectedNode?.id });
-  }, [graphData, anyFilterActive, excludedRelations, showCompanionTitle, selectedNode, personSearchSlugs]);
+    return filterVisibleGraph(graphData, { excludedRelations, showCompanionTitle, personSearchSlugs });
+  }, [graphData, anyFilterActive, excludedRelations, showCompanionTitle, personSearchSlugs]);
+  // Keeps an explicitly selected node visible even when the active filters
+  // would otherwise drop it (e.g. searching straight to a Title/Battle/Event
+  // node while its kind, or the Companion title, is hidden) -- but only
+  // builds a new graph object when that's actually necessary. Every normal
+  // click (on the canvas or the side list) selects a node that's already in
+  // baseVisibleGraph, since that's the only thing rendered to click on, so
+  // this reuses the same baseVisibleGraph reference in the overwhelmingly
+  // common case instead of building a fresh one. That reference stability
+  // matters: ForceGraph2D reheats and re-lays-out its whole simulation
+  // whenever its `graphData` prop identity changes, which is what used to
+  // shove nodes around and carry the just-selected one out of the viewport
+  // on every single click -- worse on the phone's smaller canvas, where the
+  // reshuffle is more likely to land the node off-screen.
+  const visibleGraph = useMemo(() => {
+    if (!baseVisibleGraph || !selectedNode) return baseVisibleGraph;
+    if (baseVisibleGraph.nodes.some(node => node.id === selectedNode.id)) return baseVisibleGraph;
+    return { nodes: [...baseVisibleGraph.nodes, selectedNode], links: baseVisibleGraph.links };
+  }, [baseVisibleGraph, selectedNode]);
   // Every edge is directional (e.g. FATHER points child -> parent), but a
   // bare relation-name tooltip can't tell you which end is which. Naming
   // both endpoints removes the ambiguity. The string is always built
@@ -263,13 +338,19 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
+  // An excluded-relations Set that would serialize to an empty `relation`
+  // array is indistinguishable from the param being absent entirely (see
+  // NO_EXCLUDED_RELATIONS above) -- write the sentinel instead whenever
+  // that's the actual, deliberate result, so it doesn't get read back as
+  // "untouched" and fall through to DEFAULT_EXCLUDED_RELATIONS.
+  const relationParamValue = (excluded: Set<string>) => (excluded.size > 0 ? [...excluded] : [NO_EXCLUDED_RELATIONS]);
   const toggleRelation = (type: string) => {
     const next = new Set(excludedRelations);
     if (next.has(type)) next.delete(type);
     else next.add(type);
-    updateParams({ relation: [...next] });
+    updateParams({ relation: relationParamValue(next) });
   };
-  const toggleAllRelations = (show: boolean) => updateParams({ relation: show ? [] : relationTypesPresent });
+  const toggleAllRelations = (show: boolean) => updateParams({ relation: show ? relationParamValue(new Set()) : relationTypesPresent });
   // Toggles every relation type in one group at once (e.g. a single
   // "all family relations" switch above the ~40 individual family
   // toggles), independent of the panel-wide "all relations" switch.
@@ -277,16 +358,11 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     const groupTypes = relationTypesPresent.filter(type => relationGroup(type) === group);
     const next = new Set(excludedRelations);
     groupTypes.forEach(type => (show ? next.delete(type) : next.add(type)));
-    updateParams({ relation: [...next] });
+    updateParams({ relation: relationParamValue(next) });
   };
   const toggleCompanionTitle = () => updateParams({ showCompanionTitle: showCompanionTitle ? null : '1' });
   const toggleKind = (kind: string) => {
-    // An empty `includedKinds` means "every kind" -- narrowing for the
-    // first time starts from the full universe, not an empty set, or
-    // toggling one kind off would (wrongly) leave only that kind excluded
-    // while claiming every other kind is now explicitly included.
-    const base = includedKinds.size > 0 ? includedKinds : new Set<string>(ALL_KINDS);
-    const next = new Set(base);
+    const next = new Set(includedKinds);
     const turningOff = next.has(kind);
     if (turningOff) next.delete(kind);
     else next.add(kind);
@@ -299,10 +375,12 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     const groupTypes = group ? relationTypesPresent.filter(type => relationGroup(type) === group) : [];
     const nextExcluded = new Set(excludedRelations);
     groupTypes.forEach(type => (turningOff ? nextExcluded.add(type) : nextExcluded.delete(type)));
-    // Once every kind is included again, clear the param instead of
-    // spelling out all four -- `/graphs` (no kind param) is the canonical
-    // "show everything" URL.
-    updateParams({ kind: next.size >= ALL_KINDS.length ? [] : [...next], relation: [...nextExcluded] });
+    // Once `next` matches the default kind set again, clear the param
+    // instead of spelling it out -- an absent `kind` param is the canonical
+    // URL for whatever "default" means here (see `defaultKinds` above), not
+    // always "every kind".
+    const isDefault = next.size === defaultKinds.size && [...next].every(k => defaultKinds.has(k));
+    updateParams({ kind: isDefault ? [] : [...next], relation: relationParamValue(nextExcluded) });
   };
 
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -377,7 +455,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           <legend className="px-1 text-sm font-medium text-gray-800 dark:text-gray-100">{t.graph.nodeKinds}</legend>
           <div className="flex flex-wrap gap-x-4 gap-y-2">
             {kindsUniverse.map(kind => {
-              const active = includedKinds.size === 0 || includedKinds.has(kind);
+              const active = includedKinds.has(kind);
               const color = kindColor(kind);
               const label = kindLabel(kind);
               return (
