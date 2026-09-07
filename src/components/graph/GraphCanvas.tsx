@@ -19,6 +19,9 @@ import translations from '@/components/language/translations';
 import { sortRelationTypes, governingRelationType, relationGroup, RELATION_ORDER, KIND_TO_RELATION_GROUP, RelationGroup } from '@/lib/relationship/categories';
 import { filterVisibleGraph } from '@/lib/graphFilter';
 import { profilePath } from '@/lib/nodeProfile';
+import { parseExplorationInput } from '@/lib/relationship/urlState';
+import { NodeKind, subjectId } from '@/lib/relationship/types';
+import { useExplorationGraph } from './useExplorationGraph';
 
 interface GraphCanvasProps {
   url?: string;
@@ -133,6 +136,15 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // wrongly prune the chain down to just its first hop.
   const personSearchSlugs = useMemo(() => new Set(searchParams?.getAll('person') ?? []), [searchParams]);
 
+  const subjectParams = useMemo(() => searchParams?.getAll('subject') ?? [], [searchParams]);
+  const explorationInput = useMemo(
+    () => parseExplorationInput(
+      { subjects: subjectParams, expands: searchParams?.getAll('expand') ?? [], filters: searchParams?.getAll('filter') ?? [] },
+      targetSlug
+    ),
+    [searchParams, targetSlug, subjectParams]
+  );
+
   const fetchUrl = useMemo(() => {
     try {
       const base = new URL(url, typeof window !== 'undefined' ? window.location.origin : 'http://localhost');
@@ -165,7 +177,17 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // a new graphData reference, which restarts its cooldown/engine and
   // snaps the camera back to fitToView, discarding wherever the user had
   // panned/zoomed to just from switching tabs and back.
-  const { data: graphData, error: graphError, isLoading: graphLoading } = useSWR<GraphData>(fetchUrl, fetcher, { revalidateOnFocus: false });
+  const { data: legacyGraphData, error: legacyGraphError, isLoading: legacyGraphLoading } = useSWR<GraphData>(showSearch ? null : fetchUrl, fetcher, { revalidateOnFocus: false });
+  const exploration = useExplorationGraph({
+    enabled: showSearch,
+    baseUrl: url,
+    kindParams: [...includedKinds],
+    input: explorationInput,
+    selectedSlug,
+  });
+  const graphData = showSearch ? exploration.data : legacyGraphData;
+  const graphError = showSearch ? exploration.error : legacyGraphError;
+  const graphLoading = showSearch ? exploration.isLoading : legacyGraphLoading;
   const fgRef = useRef<ForceGraphMethods<NodeObject<GraphNodeFull>, LinkObject<GraphNodeFull, GraphLink>>>(null) as RefObject<ForceGraphMethods<NodeObject<GraphNodeFull>, LinkObject<GraphNodeFull, GraphLink>>>;
   const selectedNode = graphData?.nodes.find(node => node.slug === selectedSlug);
   const relationLabel = useCallback((type: string) => (t.relationTypes as Record<string, string>)[type] ?? relationName(type), [t]);
@@ -218,7 +240,8 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // would otherwise drop it (e.g. searching straight to a Title/Battle/Event
   // node while its kind, or the Companion title, is hidden) -- but only
   // builds a new graph object when that's actually necessary. Every normal
-  // click (on the canvas or the side list) selects a node that's already in
+  // click (on the
+  // canvas or the side list) selects a node that's already in
   // baseVisibleGraph, since that's the only thing rendered to click on, so
   // this reuses the same baseVisibleGraph reference in the overwhelmingly
   // common case instead of building a fresh one. That reference stability
@@ -227,11 +250,19 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // shove nodes around and carry the just-selected one out of the viewport
   // on every single click -- worse on the phone's smaller canvas, where the
   // reshuffle is more likely to land the node off-screen.
+  const alwaysVisibleNodes = useMemo(() => {
+    if (!showSearch || !graphData) return selectedNode ? [selectedNode] : [];
+    const nodesById = new Map(graphData.nodes.map(node => [node.id, node]));
+    const roots = explorationInput.roots.map(id => nodesById.get(id)).filter((node): node is GraphNodeFull => Boolean(node));
+    if (selectedNode && !roots.some(node => node.id === selectedNode.id)) roots.push(selectedNode);
+    return roots;
+  }, [showSearch, graphData, explorationInput.roots, selectedNode]);
   const visibleGraph = useMemo(() => {
-    if (!baseVisibleGraph || !selectedNode) return baseVisibleGraph;
-    if (baseVisibleGraph.nodes.some(node => node.id === selectedNode.id)) return baseVisibleGraph;
-    return { nodes: [...baseVisibleGraph.nodes, selectedNode], links: baseVisibleGraph.links };
-  }, [baseVisibleGraph, selectedNode]);
+    if (!baseVisibleGraph) return baseVisibleGraph;
+    const missing = alwaysVisibleNodes.filter(node => !baseVisibleGraph.nodes.some(existing => existing.id === node.id));
+    if (missing.length === 0) return baseVisibleGraph;
+    return { nodes: [...baseVisibleGraph.nodes, ...missing], links: baseVisibleGraph.links };
+  }, [baseVisibleGraph, alwaysVisibleNodes]);
   // Every edge is directional (e.g. FATHER points child -> parent), but a
   // bare relation-name tooltip can't tell you which end is which. Naming
   // both endpoints removes the ambiguity. The string is always built
@@ -309,6 +340,14 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     // meant to re-trigger this.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
+
+  const rootSeededRef = useRef(false);
+  useEffect(() => {
+    if (rootSeededRef.current || !showSearch || !searchParams || searchParams.has('subject')) return;
+    rootSeededRef.current = true;
+    updateParams({ subject: [subjectId('person', targetSlug)] });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams, showSearch]);
 
   // An excluded-relations Set that would serialize to an empty `relation`
   // array is indistinguishable from the param being absent entirely (see
@@ -393,7 +432,9 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   const kindColor = (kind: string) => kindFillColor(kind, isDark);
   const kindLabel = (kind: string) => typeLabels[kind] ?? kind;
 
-  const resetGraphView = () => updateParams({ selected: null, focus: null, relation: [], kind: [], showCompanionTitle: null, person: null, ancestorsOf: [], descendantsOf: [] });
+  const resetGraphView = () => (showSearch
+    ? updateParams({ selected: null, relation: [], kind: [], showCompanionTitle: null, subject: [], expand: [], filter: [] })
+    : updateParams({ selected: null, focus: null, relation: [], kind: [], showCompanionTitle: null, person: null, ancestorsOf: [], descendantsOf: [] }));
 
   const filterPanel = (
     <>
@@ -432,11 +473,12 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   const graphCanvas = (dimensions?: { width: number; height: number }) => visibleGraph && (
     <GraphSurface
       ref={fgRef}
-      url={fetchUrl}
+      {...(showSearch
+        ? { data: visibleGraph, isLoading: graphLoading, loadError: graphError }
+        : { url: fetchUrl, transform: () => visibleGraph })}
       width={dimensions?.width}
       height={dimensions?.height}
       highlightSlug={selectedSlug ?? undefined}
-      transform={() => visibleGraph}
       linkLabel={linkTooltip}
       onNodeClick={(node) => updateParams({ selected: node.slug })}
       onEngineStop={fitToView}
@@ -510,7 +552,21 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode.label}</h2>
           <div className="mt-3 flex flex-wrap gap-3">
             <Link className="rounded bg-amber-400 px-3 py-1.5 text-sm text-gray-950 hover:bg-amber-300" href={profilePath(selectedNode.type, selectedNode.slug)}>{t.graph.viewProfile}</Link>
-            <button type="button" onClick={() => updateParams({ focus: selectedNode.slug, person: null, ancestorsOf: [], descendantsOf: [] })} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-700">{t.graph.exploreNeighbours}</button>
+            <button
+              type="button"
+              onClick={() => {
+                if (!showSearch) {
+                  updateParams({ focus: selectedNode.slug, person: null, ancestorsOf: [], descendantsOf: [] });
+                  return;
+                }
+                const rootId = subjectId((selectedNode.type as NodeKind) ?? 'person', selectedNode.slug);
+                if (explorationInput.roots.includes(rootId)) return;
+                updateParams({ subject: [...explorationInput.roots, rootId] });
+              }}
+              className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-700"
+            >
+              {t.graph.exploreNeighbours}
+            </button>
           </div>
         </aside>
       )}

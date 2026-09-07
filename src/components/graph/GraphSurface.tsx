@@ -1,11 +1,11 @@
 'use client';
 
-import React, { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
 import ForceGraph2D, { ForceGraphMethods, NodeObject, LinkObject } from 'react-force-graph-2d';
 import { forceCollide } from 'd3-force';
 import useSWR from 'swr';
 import { fetcher } from '@/lib/swr';
-import { GraphData, GraphNodeFull, GraphLink } from '@/types/graph';
+import { GraphData, GraphNode, GraphNodeFull, GraphLink } from '@/types/graph';
 import { edgeColor, PARTICIPATION_STATUS_COLOR } from '@/lib/relationship/status';
 import { useLanguage } from '@/components/language/LanguageContext';
 import translations from '@/components/language/translations';
@@ -35,7 +35,10 @@ function nodeRadius(node: GraphNodeFull): number {
 }
 
 interface GraphSurfaceProps {
-  url: string;
+  url?: string;
+  data?: GraphData;
+  isLoading?: boolean;
+  loadError?: unknown;
   width?: number;
   height?: number;
   background?: string;
@@ -49,13 +52,69 @@ interface GraphSurfaceProps {
 export type GraphSurfaceMethods = ForceGraphMethods<NodeObject<GraphNodeFull>, LinkObject<GraphNodeFull, GraphLink>>;
 type Methods = GraphSurfaceMethods;
 
-// The shared rendering core every graph view builds on: fetches `url`,
-// draws nodes/edges with the same theme and physics everywhere, and colors
-// an edge by its recorded status (see edgeColor) instead of relation type
-// whenever it has one -- e.g. a battle's PARTICIPATED_IN edges show the
-// participant's outcome, no matter which page renders them.
+const endpointId = (endpoint: string | GraphNode) => (typeof endpoint === 'string' ? endpoint : endpoint.id);
+
+function reconcileNodes(pool: Map<string, GraphNodeFull>, incoming: GraphNodeFull[], links: GraphLink[]): GraphNodeFull[] {
+  const incomingIds = new Set(incoming.map((node) => node.id));
+  for (const id of pool.keys()) if (!incomingIds.has(id)) pool.delete(id);
+
+  return incoming.map((node) => {
+    const existing = pool.get(node.id);
+    if (existing) {
+      existing.label = node.label;
+      existing.slug = node.slug;
+      existing.type = node.type;
+      existing.group = node.group;
+      existing.nasabRank = node.nasabRank;
+      existing.graphRank = node.graphRank;
+      existing.clusterId = node.clusterId;
+      if (node.fx != null) existing.fx = node.fx;
+      if (node.fy != null) existing.fy = node.fy;
+      return existing;
+    }
+
+    const seeded: GraphNodeFull = { ...node };
+    if (seeded.x == null && seeded.y == null) {
+      const anchorId = links
+        .filter((link) => endpointId(link.source) === node.id || endpointId(link.target) === node.id)
+        .map((link) => (endpointId(link.source) === node.id ? endpointId(link.target) : endpointId(link.source)))
+        .find((id) => pool.has(id));
+      const anchor = anchorId ? pool.get(anchorId) : undefined;
+      if (anchor?.x != null && anchor?.y != null) {
+        seeded.x = anchor.x + (Math.random() - 0.5) * 40;
+        seeded.y = anchor.y + (Math.random() - 0.5) * 40;
+      }
+    }
+    pool.set(node.id, seeded);
+    return seeded;
+  });
+}
+
+function reconcileLinks(pool: Map<string, GraphLink>, incoming: GraphLink[]): GraphLink[] {
+  const linkKey = (link: GraphLink) => `${endpointId(link.source)}|${endpointId(link.target)}|${link.label}`;
+  const incomingKeys = new Set(incoming.map(linkKey));
+  for (const key of pool.keys()) if (!incomingKeys.has(key)) pool.delete(key);
+
+  return incoming.map((link) => {
+    const key = linkKey(link);
+    const existing = pool.get(key);
+    if (existing) {
+      existing.status = link.status;
+      existing.value = link.value;
+      return existing;
+    }
+    pool.set(key, link);
+    return link;
+  });
+}
+
+// The shared rendering core every graph view builds on: draws nodes/edges
+// with the same theme and physics everywhere, and colors an edge by its
+// recorded status (see edgeColor) instead of relation type whenever it has
+// one -- e.g. a battle's PARTICIPATED_IN edges show the participant's
+// outcome, no matter which page renders them.
 const GraphSurface = forwardRef<Methods, GraphSurfaceProps>(function GraphSurface(
-  { url, width, height, background, highlightSlug, transform, linkLabel, onNodeClick, onEngineStop },
+  { url, data: externalData, isLoading: externalLoading, loadError, width, height, background, highlightSlug, transform, linkLabel, onNodeClick, onEngineStop },
   ref
 ) {
   const { language } = useLanguage();
@@ -65,8 +124,26 @@ const GraphSurface = forwardRef<Methods, GraphSurfaceProps>(function GraphSurfac
   // behavior -- and it actively hurts here: every refetch hands
   // ForceGraph2D a new graphData reference, which restarts its
   // cooldown/engine and snaps the camera back to fitToView.
-  const { data, error, isLoading } = useSWR<GraphData>(url, fetcher, { revalidateOnFocus: false });
-  const graphData = data && transform ? transform(data) : data;
+  const useExternalData = url === undefined;
+  const { data: fetchedData, error: fetchedError, isLoading: fetchedLoading } = useSWR<GraphData>(
+    useExternalData ? null : (url ?? null),
+    fetcher,
+    { revalidateOnFocus: false }
+  );
+  const data = useExternalData ? externalData : fetchedData;
+  const isLoading = useExternalData ? Boolean(externalLoading) : fetchedLoading;
+  const error = useExternalData ? loadError : fetchedError;
+  const transformed = data && transform ? transform(data) : data;
+
+  const nodePoolRef = useRef(new Map<string, GraphNodeFull>());
+  const linkPoolRef = useRef(new Map<string, GraphLink>());
+  const graphData = useMemo(() => {
+    if (!transformed) return transformed;
+    const links = reconcileLinks(linkPoolRef.current, transformed.links);
+    const nodes = reconcileNodes(nodePoolRef.current, transformed.nodes, links);
+    return { nodes, links };
+  }, [transformed]);
+
   const localRef = useRef<Methods | undefined>(undefined);
   useImperativeHandle(ref, () => localRef.current as Methods, [graphData]);
 
