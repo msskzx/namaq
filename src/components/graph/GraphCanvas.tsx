@@ -198,6 +198,18 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   const graphLoading = showSearch ? exploration.isLoading : legacyGraphLoading;
   const fgRef = useRef<ForceGraphMethods<NodeObject<GraphNodeFull>, LinkObject<GraphNodeFull, GraphLink>>>(null) as RefObject<ForceGraphMethods<NodeObject<GraphNodeFull>, LinkObject<GraphNodeFull, GraphLink>>>;
   const selectedNode = graphData?.nodes.find(node => node.slug === selectedSlug);
+  // Full name/titles only, for the selected-subject panel -- a lighter
+  // fetch than the full /api/people/[slug] profile route (which also pulls
+  // participations/events/ayat/claims), since this reruns on every subject
+  // clicked through in the workspace. Non-person subjects (title/battle/
+  // event) and graph-only people with no Postgres profile just keep
+  // showing the graph label, per the "Learning information in the panel"
+  // decision in docs/graph-exploration-plan.md.
+  const isSelectedPerson = showSearch && (selectedNode?.type ?? 'person') === 'person';
+  const { data: selectedPreview } = useSWR<{ fullName: string | null; titles: { name: string; slug: string }[] }>(
+    isSelectedPerson && selectedNode ? `/api/people/${selectedNode.slug}/preview` : null,
+    fetcher
+  );
   const relationLabel = useCallback((type: string) => (t.relationTypes as Record<string, string>)[type] ?? relationName(type), [t]);
   const selectedSubjectId = selectedNode ? subjectId((selectedNode.type as NodeKind) ?? 'person', selectedNode.slug) : null;
   const selectedRelationCounts = useMemo(() => {
@@ -568,7 +580,10 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
   const explorationControls = showSearch && (
     <aside dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4 dark:border-amber-700 dark:bg-gray-800">
-      <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode ? selectedNode.label : t.graph.globalRelationships}</h2>
+      <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode ? (selectedPreview?.fullName ?? selectedNode.label) : t.graph.globalRelationships}</h2>
+      {isSelectedPerson && selectedPreview && selectedPreview.titles.length > 0 && (
+        <p className="text-sm text-amber-700 dark:text-amber-300">{selectedPreview.titles.map(title => title.name).join(' · ')}</p>
+      )}
       <p className="text-sm text-gray-600 dark:text-gray-300">{selectedNode ? t.graph.selectedLabel : t.graph.globalRelationshipsHint}</p>
       <div className="mt-2 flex flex-wrap gap-3">
         {selectedNode && <>

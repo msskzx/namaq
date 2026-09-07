@@ -53,6 +53,9 @@ beforeEach(() => {
   vi.clearAllMocks();
   nav.setUrl('/graphs');
   vi.stubGlobal('fetch', vi.fn(async (input: string) => {
+    if (input.includes('/api/people/')) {
+      return { ok: true, json: async () => ({ fullName: 'محمد بن عبد الله', titles: [{ name: 'رسول الله', slug: 'messenger-of-allah' }] }) };
+    }
     const subjects = new URL(input).searchParams.getAll('relationSubjects');
     const links = subjects.length ? dataset.links.filter(link => subjects.includes(String(link.source)) || subjects.includes(String(link.target))) : dataset.links;
     const ids = new Set([...subjects, ...links.flatMap(link => [link.source, link.target])]);
@@ -125,4 +128,12 @@ it('auto-expands the default subject\'s direct relations on a fresh visit', asyn
   expect(params().getAll('expand').sort()).toEqual([`person:${root}:FATHER`, `person:${root}:WIFE`]);
   expect((await screen.findByRole('button', { name: 'Wife (1)' })).getAttribute('aria-pressed')).toBe('true');
   expect(screen.getByRole('button', { name: 'Father (1)' }).getAttribute('aria-pressed')).toBe('true');
+});
+
+it('shows the fetched full name and titles once the selected person\'s preview loads', async () => {
+  nav.setUrl(`/graphs?subject=person:${root}&selected=${root}`);
+  mount();
+  await screen.findByRole('heading', { name: root });
+  await screen.findByRole('heading', { name: 'محمد بن عبد الله' });
+  expect(screen.getByText('رسول الله')).toBeTruthy();
 });
