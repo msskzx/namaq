@@ -3,8 +3,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState, RefObject } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import ForceGraph2D, { ForceGraphMethods, NodeObject, LinkObject } from 'react-force-graph-2d';
-import { forceCollide } from 'd3-force';
+import { ForceGraphMethods, NodeObject, LinkObject } from 'react-force-graph-2d';
 import { GraphData, GraphNode, GraphNodeFull, GraphLink } from '@/types/graph';
 import useSWR from 'swr';
 import { fetcher } from '@/lib/swr';
@@ -13,10 +12,11 @@ import { faExpand, faCompress, faFilter, faMagnifyingGlass } from '@fortawesome/
 import GraphSearch from './GraphSearch';
 import SlideSwitch from './SlideSwitch';
 import RelationFilterPanel from './RelationFilterPanel';
+import GraphSurface, { kindFillColor } from './GraphSurface';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import { useLanguage } from '@/components/language/LanguageContext';
 import translations from '@/components/language/translations';
-import { relationColor, sortRelationTypes, governingRelationType, relationGroup, RELATION_ORDER, KIND_TO_RELATION_GROUP, RelationGroup } from '@/lib/relationship/categories';
+import { sortRelationTypes, governingRelationType, relationGroup, RELATION_ORDER, KIND_TO_RELATION_GROUP, RelationGroup } from '@/lib/relationship/categories';
 import { filterVisibleGraph } from '@/lib/graphFilter';
 import { profilePath } from '@/lib/nodeProfile';
 
@@ -83,24 +83,6 @@ const DEFAULT_EXCLUDED_RELATIONS = [
 // back on" apart from "never touched this", and the latter must fall back
 // to DEFAULT_EXCLUDED_RELATIONS above.
 const NO_EXCLUDED_RELATIONS = '__none__';
-
-// A fixed reference font size the collision force below can use for a
-// stable world-space radius per node, independent of camera zoom.
-// nodeCanvasObject grows its own font size as the camera zooms out so
-// labels stay readable, but caps it at this same value — without that cap,
-// a graph zoomed far out to fit hundreds of nodes (see GraphCanvas usage in
-// /graphs) would render every node far larger than the radius the
-// collision force actually kept clear, so nodes would visually overlap
-// even though their true positions don't.
-let measureContext: CanvasRenderingContext2D | null = null;
-const NODE_BASE_FONT_SIZE = 12;
-function nodeRadius(node: GraphNodeFull): number {
-  if (!measureContext) measureContext = document.createElement('canvas').getContext('2d');
-  if (!measureContext) return NODE_BASE_FONT_SIZE;
-  measureContext.font = `${NODE_BASE_FONT_SIZE}px Sans-Serif`;
-  const textWidth = measureContext.measureText(node.label).width;
-  return Math.max(textWidth + NODE_BASE_FONT_SIZE, NODE_BASE_FONT_SIZE * 2) / 2;
-}
 
 export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-muhammad', showSearch = true, initialParams, nodesLabel = 'people' }: GraphCanvasProps) {
   const { language } = useLanguage();
@@ -288,16 +270,6 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     }, 300);
     return () => clearTimeout(timer);
   }, [graphData, selectedSlug, focusSlug, targetSlug]);
-  // react-force-graph-2d doesn't register a collision force by default, so
-  // nodes are free to settle on top of each other regardless of their
-  // starting position (including nodes seeded from a precomputed,
-  // collision-free layoutX/layoutY). forceCollide is re-applied whenever the
-  // visible node set changes; its radius accessor is called per node, so it
-  // stays correct without needing to be recreated on every simulation tick.
-  useEffect(() => {
-    if (!fgRef.current) return;
-    fgRef.current.d3Force('collide', forceCollide<GraphNodeFull>(nodeRadius));
-  }, [visibleGraph]);
   // Nodes carrying a precomputed layout position (from graphRank/clusterId's
   // companion layoutX/layoutY) can be spread far from the origin, so without
   // an explicit fit the initial camera can miss the graph entirely. Only
@@ -413,32 +385,13 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     return () => window.removeEventListener('resize', updateSize);
   }, [isFullscreen]);
 
-  const getGraphTheme = () => {
-    const isDark = document.documentElement.classList.contains('dark');
-    return {
-      background: isDark ? '#1f2937' : '#f9fafb',
-      // Non-person node kinds get a distinct fill from person nodes so a
-      // bipartite graph (titles/people, battles/people) reads as two kinds
-      // of node at a glance.
-      node: {
-        person: isDark ? 'rgba(55, 65, 81, 0.8)' : 'rgba(241, 242, 180, 0.8)',
-        title: isDark ? 'rgba(79, 70, 229, 0.85)' : 'rgba(199, 210, 254, 0.9)',
-        battle: isDark ? 'rgba(180, 83, 9, 0.85)' : 'rgba(253, 230, 138, 0.9)',
-        event: isDark ? 'rgba(13, 148, 136, 0.85)' : 'rgba(153, 246, 228, 0.9)',
-        text: isDark ? '#f3f4f6' : '#374151',
-      },
-      link: isDark ? '#4b5563' : '#d1d5db',
-    };
-  };
-
   if (graphLoading) return <div className="flex items-center justify-center min-h-screen"><div className="text-lg">Loading graph...</div></div>;
   if (graphError) return <div className="flex items-center justify-center min-h-screen"><ErrorMessage title="Error loading graph" description={graphError.toString()} /></div>;
 
-  const theme = getGraphTheme();
+  const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
   const typeLabels: Record<string, string> = { person: t.people, title: t.titles, battle: t.battles.title, event: t.events };
-  const kindColor = (kind: string) => theme.node[(kind as keyof typeof theme.node)] ?? theme.node.person;
+  const kindColor = (kind: string) => kindFillColor(kind, isDark);
   const kindLabel = (kind: string) => typeLabels[kind] ?? kind;
-  const nodeFillColor = (node: GraphNodeFull) => node.slug === selectedSlug ? '#fbbf24' : kindColor(node.type ?? 'person');
 
   const resetGraphView = () => updateParams({ selected: null, focus: null, relation: [], kind: [], showCompanionTitle: null, person: null, ancestorsOf: [], descendantsOf: [] });
 
@@ -477,10 +430,17 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // frame after mount, so the graph would permanently lock in at 0x0.
   // Passing explicit width/height (kept in sync on resize) sidesteps that.
   const graphCanvas = (dimensions?: { width: number; height: number }) => visibleGraph && (
-    <ForceGraph2D ref={fgRef} width={dimensions?.width} height={dimensions?.height} graphData={visibleGraph} nodeLabel="label" nodeAutoColorBy="group" linkLabel={(link) => linkTooltip(link as unknown as GraphLink)} backgroundColor={theme.background} linkColor={(link) => relationColor((link as unknown as GraphLink).label)} linkWidth={1.5} linkDirectionalArrowLength={3.5} linkDirectionalArrowRelPos={0.9} onNodeClick={(node) => updateParams({ selected: (node as GraphNodeFull).slug })} cooldownTicks={100} onEngineStop={fitToView} nodeCanvasObject={(node, ctx, globalScale) => {
-      const label = (node as GraphNodeFull).label; const fontSize = Math.min(12 / globalScale, NODE_BASE_FONT_SIZE); ctx.font = `${fontSize}px Sans-Serif`; const textWidth = ctx.measureText(label).width; const dimensions = [textWidth, fontSize].map(value => value + fontSize) as [number, number];
-      ctx.fillStyle = nodeFillColor(node as GraphNodeFull); ctx.beginPath(); ctx.arc(node.x!, node.y!, Math.max(...dimensions) / 2, 0, 2 * Math.PI); ctx.fill(); ctx.closePath(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = theme.node.text; ctx.fillText(label, node.x!, node.y!); (node as GraphNodeFull).__bckgDimensions = dimensions;
-    }} nodePointerAreaPaint={(node, color, ctx) => { const d = (node as GraphNodeFull).__bckgDimensions; if (d) { ctx.fillStyle = color; ctx.fillRect(node.x! - d[0] / 2, node.y! - d[1] / 2, d[0], d[1]); } }} />
+    <GraphSurface
+      ref={fgRef}
+      url={fetchUrl}
+      width={dimensions?.width}
+      height={dimensions?.height}
+      highlightSlug={selectedSlug ?? undefined}
+      transform={() => visibleGraph}
+      linkLabel={linkTooltip}
+      onNodeClick={(node) => updateParams({ selected: node.slug })}
+      onEngineStop={fitToView}
+    />
   );
 
   const nodesLabelText = (t.graph.nodesLabels as Record<string, string>)[nodesLabel] ?? nodesLabel;
