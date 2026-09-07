@@ -28,6 +28,7 @@ import { NodeKind, RelationType, subjectId } from '@/lib/relationship/types';
 import { ExpansionRelationId, directRelationCounts } from '@/lib/relationship/expansion';
 import { ExpansionGroup, expansionGroupForRelation } from '@/lib/relationship/expansionGroups';
 import { useExplorationGraph } from './useExplorationGraph';
+import { centerTargetForReveal, isComfortablyVisible, usableRect } from '@/lib/graphCamera';
 
 interface GraphCanvasProps {
   url?: string;
@@ -331,37 +332,42 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     );
   }, [visibleGraph]);
 
+  // Embedded (showSearch false) graphs only: the workspace has its own,
+  // separate camera effects below (Q2/Q6 in docs/graph-layout-plan.md).
+  // Priority order matters here -- selected, then focused, then default --
+  // resolved as sequential lookups rather than one `.find` with all three
+  // ORed together, which picked whichever matched first in array order
+  // regardless of which one actually mattered (see that plan's "Verified
+  // causes").
   useEffect(() => {
-    if (!fgRef.current || !graphData) return;
-    const nodeToFocus = graphData.nodes.find(node => node.slug === selectedSlug || node.slug === focusSlug || node.slug === targetSlug);
+    if (showSearch || !fgRef.current || !graphData) return;
+    const nodeToFocus = graphData.nodes.find(node => node.slug === selectedSlug)
+      ?? graphData.nodes.find(node => node.slug === focusSlug)
+      ?? graphData.nodes.find(node => node.slug === targetSlug);
     if (!nodeToFocus) return;
     const timer = setTimeout(() => {
       fgRef.current?.centerAt(nodeToFocus.x || 0, nodeToFocus.y || 0, 700);
       fgRef.current?.zoom(3, 700);
     }, 300);
     return () => clearTimeout(timer);
-  }, [graphData, selectedSlug, focusSlug, targetSlug]);
-  // Nodes carrying a precomputed layout position (from graphRank/clusterId's
-  // companion layoutX/layoutY) can be spread far from the origin, so without
-  // an explicit fit the initial camera can miss the graph entirely. Only
-  // runs when nothing above is already going to center on a specific node.
+  }, [showSearch, graphData, selectedSlug, focusSlug, targetSlug]);
+  // Only runs when nothing above is already going to center on a specific
+  // node (embedded graphs), or never automatically at all (the workspace,
+  // which only ever fits via the explicit Fit graph button or its own
+  // initial/reset framing effect below -- see onEngineStop in graphCanvas).
   const hasFocusTarget = Boolean(selectedSlug || focusSlug || graphData?.nodes.some(node => node.slug === targetSlug));
-  // Nodes with no PostgreSQL row (e.g. deep lineage-only ancestors) have no
-  // pinned position and are free-simulated, which for a long ancestry chain
-  // can drift them far from the rest of the graph. Fitting to every node
-  // would zoom out to include that drift and shrink the graph people
-  // actually came to look at, so when any node has a computed graphRank,
-  // fit to just those; otherwise (a graph with no rank data at all) fit to
-  // everything as before.
-  // `force` bypasses the hasFocusTarget guard for the explicit Fit graph
-  // button -- the guard only exists to stop the automatic post-load fit from
-  // fighting a selection/focus that already centered the camera, not to
-  // block a user who deliberately asked to re-fit.
+  // Every visible subject now has a fixed, precomputed position (see
+  // docs/adr/0005-use-a-precomputed-global-graph-map.md) -- the previous
+  // rank-based exclusion compensated for graph-only/unranked nodes that
+  // could drift arbitrarily far under live physics, which no longer
+  // happens, so Fit graph now includes everyone. `force` bypasses the
+  // hasFocusTarget guard for the explicit Fit graph button -- the guard
+  // only exists to stop an automatic fit from fighting a selection/focus
+  // that already centered the camera, not to block a deliberate re-fit.
   const fitToView = useCallback((force = false) => {
     if ((hasFocusTarget && !force) || !fgRef.current) return;
-    const hasRankedNodes = graphData?.nodes.some(node => node.graphRank != null) ?? false;
-    fgRef.current.zoomToFit(400, 40, hasRankedNodes ? (node) => (node as GraphNodeFull).graphRank != null : undefined);
-  }, [hasFocusTarget, graphData]);
+    fgRef.current.zoomToFit(400, 40);
+  }, [hasFocusTarget]);
 
   const updateParams = useCallback((changes: Record<string, string | null | string[]>, replace = false) => {
     const params = new URLSearchParams(searchParams?.toString());
@@ -548,23 +554,112 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     return () => window.removeEventListener('resize', updateSize);
   }, [showSearch]);
 
-  const previousGrowth = useRef<{ count: number; filters: string } | null>(null);
-  const [growth, setGrowth] = useState<number | null>(null);
-  const filterKey = explorationInput.globalFilters.join('|');
+  // Show additions (docs/graph-layout-plan.md Q4/Q7): tracks which subjects
+  // just became visible -- from a local expansion, a global filter, a
+  // search-added root, or Show full graph alike, unlike the narrower
+  // filter-only growth feedback this replaces -- and which already-visible
+  // subjects they connect to, so the action can frame both together.
+  // Membership is derived straight from graphData's own node ids rather
+  // than a separate count, since a pure selection change never alters that
+  // set (see the priority-ordered camera effects below, which is exactly
+  // why "kept through selection-only changes" falls out for free here).
+  const previousVisibleIdsRef = useRef<Set<string> | null>(null);
+  const [showAdditions, setShowAdditions] = useState<{ added: string[]; connecting: string[] } | null>(null);
   useEffect(() => {
-    if (!showSearch || graphLoading || exploration.visibleCount === undefined) return;
-    const previous = previousGrowth.current;
-    const count = exploration.visibleCount;
-    previousGrowth.current = { count, filters: filterKey };
-    if (!previous) return;
-    const delta = count - previous.count;
-    setGrowth(delta !== 0 && (filterKey || previous.filters) ? delta : null);
-  }, [showSearch, graphLoading, exploration.visibleCount, filterKey]);
+    if (!showSearch || !graphData) return;
+    const currentIds = new Set(graphData.nodes.map(node => node.id));
+    const previous = previousVisibleIdsRef.current;
+    if (previous) {
+      const added = [...currentIds].filter(id => !previous.has(id));
+      const removed = [...previous].filter(id => !currentIds.has(id));
+      if (added.length > 0) {
+        const addedSet = new Set(added);
+        const connecting = new Set<string>();
+        for (const link of graphData.links) {
+          const source = typeof link.source === 'string' ? link.source : link.source.id;
+          const target = typeof link.target === 'string' ? link.target : link.target.id;
+          if (addedSet.has(source) && previous.has(target)) connecting.add(target);
+          if (addedSet.has(target) && previous.has(source)) connecting.add(source);
+        }
+        setShowAdditions({ added, connecting: [...connecting] });
+      } else if (removed.length > 0) {
+        // A collapse or narrower filter with no accompanying growth leaves
+        // no subjects to show -- a stale target (from an earlier action)
+        // would otherwise keep offering to frame subjects that may no
+        // longer even be part of this exploration.
+        setShowAdditions(null);
+      }
+      // Membership unchanged (a pure selection/deselection): keep whatever
+      // target is already set, per "kept through selection-only changes".
+    }
+    previousVisibleIdsRef.current = currentIds;
+  }, [showSearch, graphData]);
+  const applyShowAdditions = useCallback(() => {
+    if (!showAdditions) return;
+    const targetIds = new Set([...showAdditions.added, ...showAdditions.connecting]);
+    fgRef.current?.zoomToFit(400, 60, (node) => targetIds.has((node as GraphNodeFull).id));
+    setShowAdditions(null);
+  }, [showAdditions]);
+
+  // Workspace camera (showSearch only; docs/graph-layout-plan.md Q2/Q6).
+  // `panelRef` measures the floating panel/sheet's actual on-screen rect
+  // (see the showSearch return below) so a selection hidden behind it
+  // still counts as needing a reveal, exactly like one that's simply
+  // off-screen -- see src/lib/graphCamera.ts for the shared geometry.
+  const panelRef = useRef<HTMLDivElement>(null);
+  const hasFramedRef = useRef(false);
+  const pendingResetRef = useRef(false);
+  const lastCameraSelectionRef = useRef<string | null>(null);
+
+  // Initial load, a shared/refreshed URL, and Start over (which sets
+  // pendingResetRef before navigating) all frame the camera the same way:
+  // center and set a readable zoom on the selection, or fit the whole
+  // exploration when nothing is selected. Ordinary selection changes during
+  // otherwise-continued use are handled by the separate effect below
+  // instead, which never touches zoom.
   useEffect(() => {
-    if (growth === null) return;
-    const timer = setTimeout(() => setGrowth(null), 5000);
+    if (!showSearch || !fgRef.current || !graphData) return;
+    if (!(!hasFramedRef.current || pendingResetRef.current)) return;
+    hasFramedRef.current = true;
+    pendingResetRef.current = false;
+    const node = selectedSlug ? graphData.nodes.find(n => n.slug === selectedSlug) : undefined;
+    const timer = setTimeout(() => {
+      if (node && node.x != null && node.y != null) {
+        fgRef.current?.centerAt(node.x, node.y, 700);
+        fgRef.current?.zoom(3, 700);
+      } else {
+        fgRef.current?.zoomToFit(400, 40);
+      }
+    }, 300);
     return () => clearTimeout(timer);
-  }, [growth]);
+  }, [showSearch, graphData, selectedSlug]);
+
+  // Ordinary selection changes (including browser Back/Forward, which never
+  // sets pendingResetRef): pan only far enough to reveal the selection when
+  // it's actually obscured by the panel or off-screen, at the current zoom.
+  // Guarded on the *selection* actually changing (not just graphData, which
+  // also changes on every expansion/filter) so those keep the camera
+  // untouched, per "preserve the camera through ... expansion, visibility
+  // changes, and Show full graph". hasFramedRef/pendingResetRef/panelRef
+  // are refs, not reactive values, so reading them here doesn't need to
+  // appear in the dependency array below.
+  useEffect(() => {
+    if (!showSearch || !fgRef.current || !graphData || !hasFramedRef.current || pendingResetRef.current) return;
+    const current = selectedSlug ?? null;
+    if (current === lastCameraSelectionRef.current) return;
+    if (!current) { lastCameraSelectionRef.current = null; return; }
+    const node = graphData.nodes.find(n => n.slug === current);
+    if (!node || node.x == null || node.y == null) return; // wait for its data to arrive, then retry
+    lastCameraSelectionRef.current = current;
+    const point = fgRef.current.graph2ScreenCoords(node.x, node.y);
+    const viewport = { x: 0, y: 0, width: viewportSize.width, height: viewportSize.height };
+    const panelRect = panelRef.current?.getBoundingClientRect() ?? null;
+    const area = usableRect(viewport, panelRect);
+    if (isComfortablyVisible(point, area)) return;
+    const zoom = fgRef.current.zoom();
+    const target = centerTargetForReveal({ x: node.x, y: node.y }, area, viewport, zoom);
+    fgRef.current.centerAt(target.x, target.y, 500);
+  }, [showSearch, graphData, selectedSlug, viewportSize]);
 
   if (graphLoading && !graphData) return <div className="flex items-center justify-center min-h-screen"><div className="text-lg">Loading graph...</div></div>;
   if (graphError) return <div className="flex items-center justify-center min-h-screen"><ErrorMessage title="Error loading graph" description={graphError.toString()} /></div>;
@@ -574,9 +669,17 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   const kindColor = (kind: string) => kindFillColor(kind, isDark);
   const kindLabel = (kind: string) => typeLabels[kind] ?? kind;
 
-  const resetGraphView = () => (showSearch
-    ? updateParams({ selected: targetSlug, relation: [], kind: [], showCompanionTitle: null, subject: [subjectId('person', targetSlug)], expand: [], filter: [], full: null })
-    : updateParams({ selected: null, focus: null, relation: [], kind: [], showCompanionTitle: null, person: null, ancestorsOf: [], descendantsOf: [] }));
+  const resetGraphView = () => {
+    if (showSearch) {
+      // Start over reframes its reset graph like an initial load would,
+      // rather than the ordinary minimal reveal-pan (see the camera
+      // effects above) -- consumed the next time they run.
+      pendingResetRef.current = true;
+      updateParams({ selected: targetSlug, relation: [], kind: [], showCompanionTitle: null, subject: [subjectId('person', targetSlug)], expand: [], filter: [], full: null });
+      return;
+    }
+    updateParams({ selected: null, focus: null, relation: [], kind: [], showCompanionTitle: null, person: null, ancestorsOf: [], descendantsOf: [] });
+  };
 
   const explorationControls = showSearch && (
     <aside dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4 dark:border-amber-700 dark:bg-gray-800">
@@ -604,7 +707,16 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
         relationLabel={relationLabel}
         g={t.graph}
       />
-      <p role="status" className="mt-2 text-sm text-gray-600 dark:text-gray-300">{growth !== null ? t.graph.filterGrowth(growth) : ''}</p>
+      {showAdditions && (
+        <div role="status" className="mt-2 flex items-center gap-2">
+          <button type="button" onClick={applyShowAdditions} className="rounded bg-amber-400 px-3 py-1.5 text-sm text-gray-950 hover:bg-amber-300">
+            {t.graph.showAdditions(showAdditions.added.length)}
+          </button>
+          <button type="button" onClick={() => setShowAdditions(null)} aria-label={t.graph.dismiss} className="rounded border border-amber-400 px-2 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
+            <FontAwesomeIcon icon={faXmark} />
+          </button>
+        </div>
+      )}
     </aside>
   );
 
@@ -653,7 +765,12 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       highlightSlug={selectedSlug ?? undefined}
       linkLabel={linkTooltip}
       onNodeClick={(node) => updateParams({ selected: node.slug })}
-      onEngineStop={() => fitToView()}
+      // The workspace never auto-fits on engine settle -- with every
+      // position fixed and no live simulation (Phase two), "settle" is
+      // immediate and carries no meaning worth reacting to; its own
+      // initial/reset framing effect above (and the explicit Fit graph
+      // button) are the only things that ever move its camera on their own.
+      onEngineStop={showSearch ? undefined : () => fitToView()}
     />
   );
 
@@ -771,6 +888,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           {graphCanvas(viewportSize)}
         </div>
         <div
+          ref={panelRef}
           className={panelExpanded
             ? 'fixed inset-x-0 bottom-0 z-[60] max-h-[75dvh] overflow-hidden rounded-t-lg border-t border-amber-400 bg-white shadow-lg lg:inset-y-0 lg:bottom-auto lg:start-0 lg:end-auto lg:h-full lg:max-h-none lg:w-80 lg:rounded-none lg:border-t-0 lg:border-e lg:shadow-none dark:border-gray-700 dark:bg-gray-800'
             : 'fixed inset-x-0 bottom-0 z-[60] rounded-t-lg border-t border-amber-400 bg-white shadow-lg lg:inset-auto lg:top-3 lg:start-3 lg:rounded-lg lg:border dark:border-gray-700 dark:bg-gray-800'

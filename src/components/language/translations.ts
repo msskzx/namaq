@@ -311,7 +311,8 @@ const translations = {
       deselectSubject: 'Deselect',
       showFullGraph: 'Show full graph',
       startOver: 'Start over',
-      filterGrowth: (count: number) => `${count > 0 ? '+' : ''}${count} subjects in the exploration`,
+      showAdditions: (count: number) => `Show ${count} new ${count === 1 ? 'subject' : 'subjects'}`,
+      dismiss: 'Dismiss',
       lineageActions: {
         ancestors: 'Ancestors',
         paternalLineage: 'Paternal lineage',
@@ -662,7 +663,8 @@ const translations = {
       deselectSubject: 'إلغاء التحديد',
       showFullGraph: 'عرض الرسم الكامل',
       startOver: 'البدء من جديد',
-      filterGrowth: (count: number) => `${count > 0 ? '+' : ''}${count} عقدة في الاستكشاف`,
+      showAdditions: (count: number) => `عرض ${count} ${count === 1 ? 'عنصر جديد' : 'عناصر جديدة'}`,
+      dismiss: 'تجاهل',
       lineageActions: {
         ancestors: 'الأسلاف',
         paternalLineage: 'النسب الأبوي',

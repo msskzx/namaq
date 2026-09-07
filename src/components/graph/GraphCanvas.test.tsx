@@ -79,10 +79,23 @@ it('starts selected, then uses the same counted controls globally without changi
   await waitFor(() => expect(graph()).toBe('father,prophet-muhammad,wife,wife-father'));
   expect(params().getAll('filter')).toEqual(['FATHER']);
   expect(params().getAll('expand')).toEqual([`person:${root}:WIFE`]);
-  expect(screen.getByRole('status').textContent).toContain('+2 subjects');
+  expect(screen.getByRole('status').textContent).toContain('Show 2 new subjects');
   fireEvent.click(screen.getByRole('button', { name: root }));
   expect(screen.getByRole('button', { name: 'Father (1)' }).getAttribute('aria-pressed')).toBe('false');
   expect(params().getAll('filter')).toEqual(['FATHER']);
+});
+
+it('offers Show additions after growth, clears it on click, and offers no stale one after a collapse with no growth', async () => {
+  nav.setUrl(`/graphs?subject=person:${root}&selected=${root}`);
+  mount();
+  fireEvent.click(await screen.findByRole('button', { name: 'Wife (1)' }));
+  await waitFor(() => expect(graph()).toContain('wife'));
+  const showButton = await screen.findByRole('button', { name: /Show \d+ new subjects?/ });
+  fireEvent.click(showButton);
+  expect(screen.queryByRole('status')).toBeNull();
+  fireEvent.click(screen.getByRole('button', { name: 'Wife (1)' }));
+  await waitFor(() => expect(graph()).toBe(root));
+  expect(screen.queryByRole('status')).toBeNull();
 });
 
 it('keeps the cap after off/on and restores filters from the URL', async () => {
