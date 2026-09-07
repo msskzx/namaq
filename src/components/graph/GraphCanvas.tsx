@@ -16,7 +16,7 @@ import RelationFilterPanel from './RelationFilterPanel';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import { useLanguage } from '@/components/language/LanguageContext';
 import translations from '@/components/language/translations';
-import { relationColor, sortRelationTypes, governingRelationType, relationGroup, RELATION_ORDER, KIND_TO_RELATION_GROUP, RelationGroup } from '@/lib/relations';
+import { relationColor, sortRelationTypes, governingRelationType, relationGroup, RELATION_ORDER, KIND_TO_RELATION_GROUP, RelationGroup } from '@/lib/relationship/categories';
 import { filterVisibleGraph } from '@/lib/graphFilter';
 import { profilePath } from '@/lib/nodeProfile';
 

@@ -200,7 +200,7 @@ describe('GET /api/graph', () => {
     const focusNode = node(1, 'prophet-muhammad', 'Muhammad');
     const related = node(2, 'khadijah', 'Khadijah');
     const run = vi.fn().mockResolvedValue({
-      records: [record({ node: focusNode, relationship: rel('WIFE'), related })],
+      records: [record({ node: focusNode, relationship: rel('WIFE', {}, { start: focusNode.identity, end: related.identity }), related })],
     });
     getSession.mockReturnValue({ run });
 
@@ -214,7 +214,31 @@ describe('GET /api/graph', () => {
     expect(params).toEqual({ focus: 'prophet-muhammad' });
 
     expect(body.nodes).toHaveLength(2);
-    expect(body.links).toEqual([{ source: '1', target: '2', label: 'WIFE', value: 1 }]);
+    expect(body.links).toEqual([{ source: 'person:prophet-muhammad', target: 'person:khadijah', label: 'WIFE', value: 1 }]);
+  });
+
+  it('renders a focus-query relationship using its true stored direction, not the anchor/neighbor query shape', async () => {
+    const battleNode = node(1, 'badr', 'غزوة بدر', ['Battle']);
+    const participant = node(2, 'ali-ibn-abi-talib', 'Ali');
+    const run = vi.fn().mockResolvedValue({
+      // The Cypher pattern is undirected (`-[relationship]-`), and `node`
+      // here is the Battle even though the relationship is truly stored
+      // Person -[:PARTICIPATED_IN]-> Battle -- the response must still
+      // reflect that true direction, not "anchor -> neighbor".
+      records: [record({
+        node: battleNode,
+        relationship: rel('PARTICIPATED_IN', {}, { start: participant.identity, end: battleNode.identity }),
+        related: participant,
+      })],
+    });
+    getSession.mockReturnValue({ run });
+
+    const response = await GET(request('?focus=badr'));
+    const body = await response.json();
+
+    expect(body.links).toEqual([
+      { source: 'person:ali-ibn-abi-talib', target: 'battle:badr', label: 'PARTICIPATED_IN', value: 1 },
+    ]);
   });
 
   it('drops excluded relation types (and their now-unreached related nodes) from a focus response', async () => {
@@ -223,7 +247,7 @@ describe('GET /api/graph', () => {
     const companion = node(3, 'abu-bakr', 'Abu Bakr');
     const run = vi.fn().mockResolvedValue({
       records: [
-        record({ node: focusNode, relationship: rel('WIFE'), related: wife }),
+        record({ node: focusNode, relationship: rel('WIFE', {}, { start: focusNode.identity, end: wife.identity }), related: wife }),
         record({ node: focusNode, relationship: rel('COMPANION_OF'), related: companion }),
       ],
     });
@@ -235,7 +259,7 @@ describe('GET /api/graph', () => {
     // The focus node itself, and any relation not excluded, are kept; the
     // companion relation and the companion-only related node are dropped.
     expect(body.nodes.map((n: { slug: string }) => n.slug).sort()).toEqual(['khadijah', 'prophet-muhammad']);
-    expect(body.links).toEqual([{ source: '1', target: '2', label: 'WIFE', value: 1 }]);
+    expect(body.links).toEqual([{ source: 'person:prophet-muhammad', target: 'person:khadijah', label: 'WIFE', value: 1 }]);
   });
 
   it('keeps the focus node even when every one of its relations is excluded', async () => {
@@ -282,8 +306,8 @@ describe('GET /api/graph', () => {
 
     expect(body.nodes).toHaveLength(3);
     expect(body.links).toEqual([
-      { source: '1', target: '2', label: 'WIFE', value: 1 },
-      { source: '3', target: '2', label: 'DAUGHTER', value: 1 },
+      { source: 'person:prophet-muhammad', target: 'person:aisha', label: 'WIFE', value: 1 },
+      { source: 'person:abu-bakr', target: 'person:aisha', label: 'DAUGHTER', value: 1 },
     ]);
   });
 
@@ -328,7 +352,9 @@ describe('GET /api/graph', () => {
     const response = await GET(request('?descendantsOf=ali-ibn-abi-talib'));
     const body = await response.json();
 
-    expect(body.links).toEqual([{ source: '2', target: '1', label: 'SON', value: 1 }]);
+    expect(body.links).toEqual([
+      { source: 'person:al-hasan-ibn-ali', target: 'person:ali-ibn-abi-talib', label: 'SON', value: 1 },
+    ]);
   });
 
   it('collects multiple requested persons into a single UNWIND query', async () => {
@@ -381,7 +407,11 @@ describe('GET /api/graph', () => {
     const battle = node(1, 'badr', 'غزوة بدر', ['Battle']);
     const participant = node(2, 'ali-ibn-abi-talib', 'Ali', ['Person']);
     const run = vi.fn().mockResolvedValue({
-      records: [record({ node: battle, relationship: rel('PARTICIPATED_IN', { status: ['MARTYRED'] }), related: participant })],
+      records: [record({
+        node: battle,
+        relationship: rel('PARTICIPATED_IN', { status: ['MARTYRED'] }, { start: participant.identity, end: battle.identity }),
+        related: participant,
+      })],
     });
     getSession.mockReturnValue({ run });
 
@@ -402,8 +432,11 @@ describe('GET /api/graph', () => {
     // back to the default (person) fill color.
     expect(body.nodes.find((n: { slug: string }) => n.slug === 'badr').type).toBe('battle');
     expect(body.nodes.find((n: { slug: string }) => n.slug === 'ali-ibn-abi-talib').type).toBe('person');
+    // True stored direction is Person -[:PARTICIPATED_IN]-> Battle, matching
+    // the Cypher pattern's own `(node)<-[relationship]-(related)` arrow --
+    // the participant is the source, the battle is the target.
     expect(body.links).toEqual([
-      { source: '1', target: '2', label: 'PARTICIPATED_IN', value: 1, status: ['MARTYRED'] },
+      { source: 'person:ali-ibn-abi-talib', target: 'battle:badr', label: 'PARTICIPATED_IN', value: 1, status: ['MARTYRED'] },
     ]);
   });
 

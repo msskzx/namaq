@@ -1,5 +1,5 @@
 import { GraphData, GraphLink, GraphNode, GraphNodeFull } from '@/types/graph';
-import { governingRelationType } from './relations';
+import { governingRelationType } from './relationship/categories';
 
 // The Title node every companion holds (see
 // scripts/people/syncCompanionRelations.ts's COMPANION_TITLE_SLUG) -- one

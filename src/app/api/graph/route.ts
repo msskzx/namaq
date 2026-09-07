@@ -212,13 +212,16 @@ export async function GET(_request: Request) {
           const related = record.get('related');
           const relationship = record.get('relationship');
 
+          const nodeIdentity = node?.identity.toString();
+          const nodeId = node ? nodeKey(node.labels?.[0]?.toLowerCase(), node.properties.slug) : undefined;
+
           // The anchor `node` is always kept, even when its only
           // relationship(s) are excluded below -- otherwise a focus person
           // whose entire OPTIONAL MATCH result is excluded relations would
           // vanish from the response instead of appearing on their own.
-          if (node && !nodes.has(node.identity.toString())) {
-            nodes.set(node.identity.toString(), {
-              id: node.identity.toString(),
+          if (node && nodeId && !nodes.has(nodeId)) {
+            nodes.set(nodeId, {
+              id: nodeId,
               label: node.properties.name,
               slug: node.properties.slug,
               group: 1,
@@ -228,9 +231,11 @@ export async function GET(_request: Request) {
 
           if (relationship && excludeRelations.has(relationship.type)) return;
 
-          if (related && !nodes.has(related.identity.toString())) {
-            nodes.set(related.identity.toString(), {
-              id: related.identity.toString(),
+          const relatedId = related ? nodeKey(related.labels?.[0]?.toLowerCase(), related.properties.slug) : undefined;
+
+          if (related && relatedId && !nodes.has(relatedId)) {
+            nodes.set(relatedId, {
+              id: relatedId,
               label: related.properties.name,
               slug: related.properties.slug,
               group: 2,
@@ -239,8 +244,16 @@ export async function GET(_request: Request) {
           }
 
           if (node && related && relationship) {
-            const source = node.identity.toString();
-            const target = related.identity.toString();
+            // relationship.start/relationship.end are the relationship's own
+            // true stored endpoints, independent of which side the Cypher
+            // pattern names `node` vs `related` -- using node/related
+            // directly as source/target here would silently reverse any
+            // relationship whose true direction runs related -> node (e.g.
+            // PARTICIPATED_IN, stored Person -> Battle, queried
+            // Battle-anchored via node<-[relationship]-related).
+            const resolveId = (identity: string) => (identity === nodeIdentity ? nodeId! : relatedId!);
+            const source = resolveId(relationship.start.toString());
+            const target = resolveId(relationship.end.toString());
             const label = relationship.type;
             const key = `${source}|${target}|${label}`;
 
@@ -262,9 +275,12 @@ export async function GET(_request: Request) {
             const end = seg.end;
             const rel = seg.relationship;
 
-            if (start && !nodes.has(start.identity.toString())) {
-              nodes.set(start.identity.toString(), {
-                id: start.identity.toString(),
+            const startId = start ? nodeKey('person', start.properties.slug) : undefined;
+            const endId = end ? nodeKey('person', end.properties.slug) : undefined;
+
+            if (start && startId && !nodes.has(startId)) {
+              nodes.set(startId, {
+                id: startId,
                 label: start.properties.name,
                 slug: start.properties.slug,
                 group: 1,
@@ -272,9 +288,9 @@ export async function GET(_request: Request) {
               });
             }
 
-            if (end && !nodes.has(end.identity.toString())) {
-              nodes.set(end.identity.toString(), {
-                id: end.identity.toString(),
+            if (end && endId && !nodes.has(endId)) {
+              nodes.set(endId, {
+                id: endId,
                 label: end.properties.name,
                 slug: end.properties.slug,
                 group: 2,
@@ -293,8 +309,9 @@ export async function GET(_request: Request) {
               // here would render the edge backwards: e.g. a SON edge
               // attributed to the parent as source, reading as "parent
               // is SON of child".
-              const source = rel.start.toString();
-              const target = rel.end.toString();
+              const resolveId = (identity: string) => (identity === start.identity.toString() ? startId! : endId!);
+              const source = resolveId(rel.start.toString());
+              const target = resolveId(rel.end.toString());
               const label = rel.type;
               const key = `${source}|${target}|${label}`;
               if (!linkKeys.has(key)) {
@@ -309,18 +326,21 @@ export async function GET(_request: Request) {
           const end = path.end;
           const rel = path.relationship || path.rel || path.r;
 
-          if (!nodes.has(start.identity.toString())) {
-            nodes.set(start.identity.toString(), {
-              id: start.identity.toString(),
+          const startId = nodeKey('person', start.properties.slug);
+          const endId = nodeKey('person', end.properties.slug);
+
+          if (!nodes.has(startId)) {
+            nodes.set(startId, {
+              id: startId,
               label: start.properties.name,
               slug: start.properties.slug,
               group: 1,
               type: 'person',
             });
           }
-          if (!nodes.has(end.identity.toString())) {
-            nodes.set(end.identity.toString(), {
-              id: end.identity.toString(),
+          if (!nodes.has(endId)) {
+            nodes.set(endId, {
+              id: endId,
               label: end.properties.name,
               slug: end.properties.slug,
               group: 2,
@@ -330,8 +350,9 @@ export async function GET(_request: Request) {
           // See the segments branch above for why rel.start/rel.end (the
           // relationship's true stored direction), not path.start/end
           // (the walk direction), must be used here too.
-          const source = rel?.start != null ? rel.start.toString() : start.identity.toString();
-          const target = rel?.end != null ? rel.end.toString() : end.identity.toString();
+          const resolveId = (identity: string) => (identity === start.identity.toString() ? startId : endId);
+          const source = rel?.start != null ? resolveId(rel.start.toString()) : startId;
+          const target = rel?.end != null ? resolveId(rel.end.toString()) : endId;
           const label = rel?.type || 'RELATED';
           const key = `${source}|${target}|${label}`;
           if (!linkKeys.has(key)) {

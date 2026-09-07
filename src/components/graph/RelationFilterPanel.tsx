@@ -1,5 +1,5 @@
 import SlideSwitch from './SlideSwitch';
-import { relationColor, relationGroup, sortRelationTypes, RelationGroup } from '@/lib/relations';
+import { relationColor, relationGroup, sortRelationTypes, RelationGroup } from '@/lib/relationship/categories';
 import translations from '@/components/language/translations';
 
 // Fixed display order for the relation-type groups; empty groups (e.g. no
