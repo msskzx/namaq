@@ -63,6 +63,10 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 
 it('starts selected, then uses the same counted controls globally without changing local expansions', async () => {
+  // A pre-existing subject in the URL opts out of the fresh-visit
+  // auto-expansion (see the dedicated test for that below), reconstructing
+  // this test's own starting point: selected, nothing expanded yet.
+  nav.setUrl(`/graphs?subject=person:${root}&selected=${root}`);
   mount();
   fireEvent.click(await screen.findByRole('button', { name: 'Wife (1)' }));
   await waitFor(() => expect(graph()).toContain('wife'));
@@ -113,4 +117,12 @@ it('unions the full graph, preserves exploration state and makes Start over undo
   act(() => nav.setUrl(beforeReset));
   await waitFor(() => expect(graph()).toContain('grandfather'));
   expect(params().getAll('filter')).toEqual(['FATHER']);
+});
+
+it('auto-expands the default subject\'s direct relations on a fresh visit', async () => {
+  mount();
+  await waitFor(() => expect(graph()).toBe(`father,${root},wife`));
+  expect(params().getAll('expand').sort()).toEqual([`person:${root}:FATHER`, `person:${root}:WIFE`]);
+  expect((await screen.findByRole('button', { name: 'Wife (1)' })).getAttribute('aria-pressed')).toBe('true');
+  expect(screen.getByRole('button', { name: 'Father (1)' }).getAttribute('aria-pressed')).toBe('true');
 });

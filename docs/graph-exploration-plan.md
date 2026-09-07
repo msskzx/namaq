@@ -196,8 +196,9 @@ to the agent in question 15 and are recorded below.
 
 ### Round four: agreed decisions
 
-14. **Fresh starting view — agreed:** Muhammad alone, selected with expansion
-    controls open and no relationships automatically expanded.
+14. **Fresh starting view — agreed, superseded by round seven:** Muhammad
+    alone, selected with expansion controls open and no relationships
+    automatically expanded.
 15. **Inverse relationship presentation — delegated and decided:** draw one
     visual connection per verified inverse pair. Keep the existing
     `{source} - {relation} -> {target}` format, with the selected subject first
@@ -292,6 +293,20 @@ Questions 14–19 are settled, including the delegated choice in question 15.
 See [the introduction-cap decision](adr/0003-cap-global-relationship-filters.md)
 and [the single-workspace decision](adr/0004-merge-overview-into-exploration.md).
 
+### Round seven: fresh visit now auto-expands the default subject
+
+29. **Fresh starting view — revised:** a brand-new /graphs visit (no subject,
+    expand, filter, or full-graph state in the URL) now auto-expands the
+    default subject's own direct relations, equivalent to clicking All direct
+    relations once, rather than showing that person alone with no
+    connections. Restoring a shared/refreshed URL that already carries its
+    own subject/expand/filter/full state is unaffected -- this only changes
+    what a completely fresh visit seeds. Reuses `expandAllDirectRelations`
+    exactly as the button does, so it is still subject to the same
+    node-kind/relation-type visibility filters (e.g. companions stay hidden
+    by default even though the underlying expansion technically includes
+    them).
+
 ### Shared relationship logic — required by question 20
 
 Use one shared module for relationship meaning across scopes. Its interface
@@ -331,7 +346,9 @@ and [the single-workspace decision](adr/0004-merge-overview-into-exploration.md)
 These are requirements for the eventual implementation and tests, not claims
 about functionality already built:
 
-- A fresh /graphs visit starts with Muhammad selected and no relations expanded.
+- A fresh /graphs visit starts with Muhammad selected and his own direct
+  relations already expanded (round seven); a URL that already carries
+  subject/expand/filter/full state restores exactly as saved instead.
 - Choosing a search result adds/selects only that subject initially. It keeps
   subjects already in the exploration and does not expand neighbors implicitly.
 - Muhammad → Wives → select Aisha → Parents preserves Muhammad and the wives
