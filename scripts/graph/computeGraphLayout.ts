@@ -23,12 +23,12 @@ const strict = process.argv.includes('--strict');
 // not pixel-perfect parity with the canvas-measured live radius.
 const LABEL_FONT_SIZE = 12;
 const AVERAGE_CHAR_WIDTH_PX = 7;
-function estimateLabelRadius(label: string): number {
+export function estimateLabelRadius(label: string): number {
   const estimatedTextWidth = label.length * AVERAGE_CHAR_WIDTH_PX;
   return Math.max(estimatedTextWidth + LABEL_FONT_SIZE, LABEL_FONT_SIZE * 2) / 2;
 }
 
-interface LayoutRow {
+export interface LayoutRow {
   type: GraphRankNodeType;
   slug: string;
   x: number;
@@ -43,7 +43,7 @@ interface LayoutRow {
 // unique within its own type), and the returned match count is verified
 // against the row count so a silently-unmatched subject (typo'd slug,
 // deleted node) surfaces as an error instead of a partially-applied map.
-async function writeLayoutToNeo4j(rows: LayoutRow[]): Promise<void> {
+export async function writeLayoutToNeo4j(rows: LayoutRow[]): Promise<void> {
   if (rows.length === 0) return;
   const session = getDriver().session({
     database: process.env.NEO4J_DATABASE || 'neo4j',
@@ -192,7 +192,11 @@ async function main() {
   }
 }
 
-main().catch((error) => {
-  console.error('Unified graph rank/cluster/layout computation failed:', error);
-  process.exitCode = 1;
-});
+// Guards against running the whole CLI (real Postgres/Neo4j writes) as a
+// side effect of importing estimateLabelRadius/writeLayoutToNeo4j for tests.
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main().catch((error) => {
+    console.error('Unified graph rank/cluster/layout computation failed:', error);
+    process.exitCode = 1;
+  });
+}

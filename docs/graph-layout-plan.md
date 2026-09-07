@@ -1,8 +1,8 @@
 # Stable graph layout
 
-Status: design decisions settled; final confirmation of shared understanding
-pending. This is the implementation plan, not a record of implemented behavior.
-Application code and database contents have not changed during this interview.
+Status: implemented (Phases one through four) and applied against the real
+dataset. This plan remains the design record; see README.md's Relationship
+graph section for the current, shipped behavior it now describes.
 
 ## Objective
 

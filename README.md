@@ -117,7 +117,10 @@ npm run titles:sync -- --apply
 npm run events:sync -- --apply
 
 # Compute cross-type rank, Louvain clusters, and a precomputed layout over
-# the unified Person+Battle+Title+Event graph, and store them on Postgres.
+# the unified Person+Battle+Title+Event graph. Rank/cluster/layout are
+# stored on Postgres; layout coordinates are also written to every Neo4j
+# subject, which is what /graphs actually renders from. Rerun this (and
+# people:rank above) after any relationship-changing data update.
 npm run graph:layout -- --apply
 
 npm run dev
