@@ -142,4 +142,20 @@ describe('filterVisibleGraph', () => {
     expect(result.nodes.map(n => n.slug)).toEqual(['abu-bakr-as-siddiq']);
     expect(result.links).toEqual([]);
   });
+
+  it('preserves a node\'s fixed global position through filtering, unlike the discarded nearby-placement model', () => {
+    const pinned: GraphNodeFull = { ...person('prophet-muhammad'), x: 10, y: 20, fx: 10, fy: 20 };
+    const graphData: GraphData = {
+      nodes: [pinned, person('khadijah'), person('abu-bakr-as-siddiq')],
+      links: [
+        link('person:prophet-muhammad', 'person:khadijah', 'WIFE'),
+        link('person:prophet-muhammad', 'person:abu-bakr-as-siddiq', 'COMPANION_OF'),
+      ],
+    };
+
+    const result = filterVisibleGraph(graphData, { ...baseOptions, excludedRelations: new Set(['COMPANION_OF']) });
+
+    const survivingMuhammad = result.nodes.find(node => node.slug === 'prophet-muhammad');
+    expect(survivingMuhammad).toEqual(pinned);
+  });
 });

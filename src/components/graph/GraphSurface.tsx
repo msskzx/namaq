@@ -1,8 +1,7 @@
 'use client';
 
-import React, { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
+import React, { forwardRef, useImperativeHandle, useMemo, useRef } from 'react';
 import ForceGraph2D, { ForceGraphMethods, NodeObject, LinkObject } from 'react-force-graph-2d';
-import { forceCollide } from 'd3-force';
 import useSWR from 'swr';
 import { fetcher } from '@/lib/swr';
 import { GraphData, GraphNode, GraphNodeFull, GraphLink } from '@/types/graph';
@@ -25,15 +24,6 @@ export function kindFillColor(kind: string, isDark: boolean): string {
 const HIGHLIGHT_COLOR = '#fbbf24';
 const NODE_BASE_FONT_SIZE = 12;
 
-let measureContext: CanvasRenderingContext2D | null = null;
-function nodeRadius(node: GraphNodeFull): number {
-  if (!measureContext) measureContext = document.createElement('canvas').getContext('2d');
-  if (!measureContext) return NODE_BASE_FONT_SIZE;
-  measureContext.font = `${NODE_BASE_FONT_SIZE}px Sans-Serif`;
-  const textWidth = measureContext.measureText(node.label).width;
-  return Math.max(textWidth + NODE_BASE_FONT_SIZE, NODE_BASE_FONT_SIZE * 2) / 2;
-}
-
 interface GraphSurfaceProps {
   url?: string;
   data?: GraphData;
@@ -54,37 +44,27 @@ type Methods = GraphSurfaceMethods;
 
 const endpointId = (endpoint: string | GraphNode) => (typeof endpoint === 'string' ? endpoint : endpoint.id);
 
-function reconcileNodes(pool: Map<string, GraphNodeFull>, incoming: GraphNodeFull[], links: GraphLink[]): GraphNodeFull[] {
+// Every node arrives from the API with its fixed, precomputed global
+// position already set (x/y/fx/fy -- see
+// docs/adr/0005-use-a-precomputed-global-graph-map.md), so there is no
+// longer a "where should a brand-new node start" question to answer here:
+// unlike the discarded nearby-placement model, a node's position never
+// depends on what else happens to already be on screen. The pool still
+// exists to hand the SAME node object back across re-fetches (matters for
+// `reconcileLinks` below, which resolves link endpoints against these
+// objects), just fully synced from the incoming (always-authoritative) data
+// rather than selectively merged.
+function reconcileNodes(pool: Map<string, GraphNodeFull>, incoming: GraphNodeFull[]): GraphNodeFull[] {
   const incomingIds = new Set(incoming.map((node) => node.id));
   for (const id of pool.keys()) if (!incomingIds.has(id)) pool.delete(id);
 
   return incoming.map((node) => {
     const existing = pool.get(node.id);
     if (existing) {
-      existing.label = node.label;
-      existing.slug = node.slug;
-      existing.type = node.type;
-      existing.group = node.group;
-      existing.nasabRank = node.nasabRank;
-      existing.graphRank = node.graphRank;
-      existing.clusterId = node.clusterId;
-      if (node.fx != null) existing.fx = node.fx;
-      if (node.fy != null) existing.fy = node.fy;
+      Object.assign(existing, node);
       return existing;
     }
-
     const seeded: GraphNodeFull = { ...node };
-    if (seeded.x == null && seeded.y == null) {
-      const anchorId = links
-        .filter((link) => endpointId(link.source) === node.id || endpointId(link.target) === node.id)
-        .map((link) => (endpointId(link.source) === node.id ? endpointId(link.target) : endpointId(link.source)))
-        .find((id) => pool.has(id));
-      const anchor = anchorId ? pool.get(anchorId) : undefined;
-      if (anchor?.x != null && anchor?.y != null) {
-        seeded.x = anchor.x + (Math.random() - 0.5) * 40;
-        seeded.y = anchor.y + (Math.random() - 0.5) * 40;
-      }
-    }
     pool.set(node.id, seeded);
     return seeded;
   });
@@ -140,17 +120,12 @@ const GraphSurface = forwardRef<Methods, GraphSurfaceProps>(function GraphSurfac
   const graphData = useMemo(() => {
     if (!transformed) return transformed;
     const links = reconcileLinks(linkPoolRef.current, transformed.links);
-    const nodes = reconcileNodes(nodePoolRef.current, transformed.nodes, links);
+    const nodes = reconcileNodes(nodePoolRef.current, transformed.nodes);
     return { nodes, links };
   }, [transformed]);
 
   const localRef = useRef<Methods | undefined>(undefined);
   useImperativeHandle(ref, () => localRef.current as Methods, [graphData]);
-
-  useEffect(() => {
-    if (!localRef.current) return;
-    localRef.current.d3Force('collide', forceCollide<GraphNodeFull>(nodeRadius));
-  }, [graphData]);
 
   if (isLoading) return <LoadingSpinner />;
   if (error) return <ErrorMessage title={t.graph.loadError} />;
@@ -175,7 +150,13 @@ const GraphSurface = forwardRef<Methods, GraphSurfaceProps>(function GraphSurfac
         linkWidth={1.5}
         linkDirectionalArrowLength={3.5}
         linkDirectionalArrowRelPos={0.9}
-        cooldownTicks={100}
+        // Every node already carries its fixed global position (x/y/fx/fy)
+        // from the API -- no live layout simulation runs at all (see
+        // docs/graph-layout-plan.md's Q5/Phase two), and dragging a node
+        // would only ever snap back to that same fixed spot regardless, so
+        // it's disabled instead of allowing a gesture with no lasting effect.
+        cooldownTicks={0}
+        enableNodeDrag={false}
         onEngineStop={onEngineStop}
         onNodeClick={(node) => onNodeClick(node as GraphNodeFull)}
         nodeCanvasObject={(node, ctx, globalScale) => {
