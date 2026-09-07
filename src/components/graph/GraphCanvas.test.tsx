@@ -130,6 +130,26 @@ it('auto-expands the default subject\'s direct relations on a fresh visit', asyn
   expect(screen.getByRole('button', { name: 'Father (1)' }).getAttribute('aria-pressed')).toBe('true');
 });
 
+it('turning off one direct relation after All direct relations leaves the rest expanded', async () => {
+  mount();
+  await waitFor(() => expect(graph()).toBe(`father,${root},wife`));
+  fireEvent.click(screen.getByRole('button', { name: 'Wife (1)' }));
+  await waitFor(() => expect(graph()).toBe(`father,${root}`));
+  expect(params().getAll('expand')).toEqual([`person:${root}:FATHER`]);
+  expect(screen.getByRole('button', { name: 'Father (1)' }).getAttribute('aria-pressed')).toBe('true');
+});
+
+it('toggling a node kind does not erase existing expansion choices', async () => {
+  nav.setUrl(`/graphs?subject=person:${root}&expand=person:${root}:WIFE&selected=${root}`);
+  mount();
+  await waitFor(() => expect(graph()).toContain('wife'));
+  fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
+  fireEvent.click(await screen.findByRole('switch', { name: 'Show Battles & Expeditions' }));
+  expect(params().getAll('expand')).toEqual([`person:${root}:WIFE`]);
+  fireEvent.click(screen.getByRole('switch', { name: 'Hide Battles & Expeditions' }));
+  expect(params().getAll('expand')).toEqual([`person:${root}:WIFE`]);
+});
+
 it('shows the fetched full name and titles once the selected person\'s preview loads', async () => {
   nav.setUrl(`/graphs?subject=person:${root}&selected=${root}`);
   mount();
