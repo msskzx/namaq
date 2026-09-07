@@ -38,17 +38,21 @@ interface RawExploration {
   edges: StoredEdge[];
 }
 
-async function runExploration(baseUrl: string, kindParams: string[], input: ExplorationInput): Promise<RawExploration> {
+async function runExploration(baseUrl: string, kindParams: string[], input: ExplorationInput, fullGraph: boolean): Promise<RawExploration> {
   const nodesById = new Map<SubjectId, GraphNodeFull>();
   const edges: StoredEdge[] = [];
   const edgeKeys = new Set<string>();
   const fetchedSubjects = new Set<SubjectId>();
 
   const mergeGraphData = (data: GraphData) => {
-    for (const node of data.nodes) if (!nodesById.has(node.id)) nodesById.set(node.id, node);
+    for (const node of data.nodes) {
+      if (kindParams.length > 0 && !kindParams.includes(node.type ?? 'person')) continue;
+      if (!nodesById.has(node.id)) nodesById.set(node.id, node);
+    }
     for (const link of data.links) {
       const source = typeof link.source === 'string' ? link.source : link.source.id;
       const target = typeof link.target === 'string' ? link.target : link.target.id;
+      if (!nodesById.has(source) || !nodesById.has(target)) continue;
       const key = `${source}|${target}|${link.label}`;
       if (edgeKeys.has(key)) continue;
       edgeKeys.add(key);
@@ -65,18 +69,30 @@ async function runExploration(baseUrl: string, kindParams: string[], input: Expl
 
   await runRound(buildRouteFetchParams(input.roots, input.expansions));
 
+  const roots = [...input.roots];
+  if (fullGraph) {
+    const data: GraphData = await fetcher(buildFetchUrl(baseUrl, kindParams, buildRouteFetchParams([], [])));
+    mergeGraphData(data);
+    roots.push(...data.nodes.map(node => node.id));
+    data.nodes.forEach(node => fetchedSubjects.add(node.id));
+  }
+
   const flattenedExpansions = flattenLineageExpansions(edges, input.expansions);
-  let exploration = buildExploration({ roots: input.roots, expansions: flattenedExpansions, globalFilters: [] }, edges);
+  let exploration = buildExploration({ roots, expansions: flattenedExpansions, globalFilters: [] }, edges);
 
   if (input.globalFilters.length > 0) {
     for (let round = 0; round < MAX_FILTER_FETCH_ROUNDS; round++) {
-      exploration = buildExploration({ roots: input.roots, expansions: flattenedExpansions, globalFilters: input.globalFilters }, edges);
+      exploration = buildExploration({ roots, expansions: flattenedExpansions, globalFilters: input.globalFilters }, edges);
       const newSubjects = Array.from(exploration.visible.keys()).filter((subject) => !fetchedSubjects.has(subject));
       if (newSubjects.length === 0) break;
       await runRound(buildRouteFetchParams(newSubjects, []));
     }
-    exploration = buildExploration({ roots: input.roots, expansions: flattenedExpansions, globalFilters: input.globalFilters }, edges);
+    exploration = buildExploration({ roots, expansions: flattenedExpansions, globalFilters: input.globalFilters }, edges);
   }
+
+  const missingNeighborhoods = Array.from(exploration.visible.keys()).filter(subject => !fetchedSubjects.has(subject));
+  await runRound(buildRouteFetchParams(missingNeighborhoods, []));
+  exploration = buildExploration({ roots, expansions: flattenedExpansions, globalFilters: input.globalFilters }, edges);
 
   return { exploration, nodesById, edges };
 }
@@ -87,6 +103,7 @@ export interface UseExplorationGraphOptions {
   kindParams: string[];
   input: ExplorationInput;
   selectedSlug: string | null;
+  fullGraph?: boolean;
 }
 
 export interface UseExplorationGraphResult {
@@ -94,14 +111,15 @@ export interface UseExplorationGraphResult {
   edges: StoredEdge[] | undefined;
   isLoading: boolean;
   error: unknown;
+  visibleCount: number | undefined;
 }
 
-export function useExplorationGraph({ enabled, baseUrl, kindParams, input, selectedSlug }: UseExplorationGraphOptions): UseExplorationGraphResult {
-  const key = enabled ? JSON.stringify({ baseUrl, kindParams, input }) : null;
+export function useExplorationGraph({ enabled, baseUrl, kindParams, input, selectedSlug, fullGraph = false }: UseExplorationGraphOptions): UseExplorationGraphResult {
+  const key = enabled ? JSON.stringify({ baseUrl, kindParams, input, fullGraph }) : null;
   const { data: raw, error, isLoading } = useSWR<RawExploration>(
     key,
-    () => runExploration(baseUrl, kindParams, input),
-    { revalidateOnFocus: false }
+    () => runExploration(baseUrl, kindParams, input, fullGraph),
+    { revalidateOnFocus: false, keepPreviousData: true }
   );
 
   const data = useMemo(() => {
@@ -110,5 +128,5 @@ export function useExplorationGraph({ enabled, baseUrl, kindParams, input, selec
     return mapExplorationToGraphData(raw.exploration, raw.nodesById, selectedNode?.id ?? null);
   }, [raw, selectedSlug]);
 
-  return { data, edges: raw?.edges, isLoading, error };
+  return { data, edges: raw?.edges, isLoading, error, visibleCount: raw?.exploration.visible.size };
 }

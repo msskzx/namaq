@@ -18,7 +18,7 @@ import ErrorMessage from '@/components/common/ErrorMessage';
 import { useLanguage } from '@/components/language/LanguageContext';
 import translations from '@/components/language/translations';
 import { sortRelationTypes, governingRelationType, relationGroup, RELATION_ORDER, KIND_TO_RELATION_GROUP, RelationGroup } from '@/lib/relationship/categories';
-import { filterVisibleGraph } from '@/lib/graphFilter';
+import { COMPANION_TITLE_SLUG, filterVisibleGraph } from '@/lib/graphFilter';
 import { profilePath } from '@/lib/nodeProfile';
 import { parseExplorationInput, formatExpandParam } from '@/lib/relationship/urlState';
 import { NodeKind, RelationType, subjectId } from '@/lib/relationship/types';
@@ -96,7 +96,8 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const selectedSlug = searchParams?.get('selected') ?? null;
+  const selectedSlug = searchParams?.get('selected') ?? (showSearch && !searchParams?.has('subject') ? targetSlug : null);
+  const fullGraph = searchParams?.get('full') === '1';
   const focusSlug = searchParams?.get('focus') ?? null;
   // Relation types are stored as the set of EXCLUDED (hidden) values --
   // each toggle acts independently, and hiding one never implicitly hides
@@ -187,6 +188,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     kindParams: [...includedKinds],
     input: explorationInput,
     selectedSlug,
+    fullGraph,
   });
   const graphData = showSearch ? exploration.data : legacyGraphData;
   const graphError = showSearch ? exploration.error : legacyGraphError;
@@ -196,19 +198,19 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   const relationLabel = useCallback((type: string) => (t.relationTypes as Record<string, string>)[type] ?? relationName(type), [t]);
   const selectedSubjectId = selectedNode ? subjectId((selectedNode.type as NodeKind) ?? 'person', selectedNode.slug) : null;
   const selectedRelationCounts = useMemo(() => {
-    if (!showSearch || !selectedSubjectId || !exploration.edges) return new Map<RelationType, number>();
-    return directRelationCounts(exploration.edges, selectedSubjectId, RELATION_ORDER) as Map<RelationType, number>;
-  }, [showSearch, selectedSubjectId, exploration.edges]);
+    if (!showSearch || !exploration.edges) return new Map<RelationType, number>();
+    return directRelationCounts(exploration.edges, selectedSubjectId ?? graphData?.nodes.map(node => node.id) ?? [], RELATION_ORDER) as Map<RelationType, number>;
+  }, [showSearch, selectedSubjectId, exploration.edges, graphData]);
   const groupedRelations = useMemo(() => {
     const groups = new Map<ExpansionGroup, RelationType[]>();
     for (const [relation, count] of selectedRelationCounts) {
-      if (count <= 0) continue;
+      if (count <= 0 && !explorationInput.globalFilters.includes(relation)) continue;
       const group = expansionGroupForRelation(relation);
       groups.set(group, [...(groups.get(group) ?? []), relation]);
     }
     for (const [group, types] of groups) groups.set(group, sortRelationTypes(types) as RelationType[]);
     return groups;
-  }, [selectedRelationCounts]);
+  }, [selectedRelationCounts, explorationInput.globalFilters]);
   const hasEligibleDirectRelations = useMemo(
     () => Array.from(selectedRelationCounts.values()).some(count => count > 0),
     [selectedRelationCounts]
@@ -274,11 +276,12 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // reshuffle is more likely to land the node off-screen.
   const alwaysVisibleNodes = useMemo(() => {
     if (!showSearch || !graphData) return selectedNode ? [selectedNode] : [];
+    if (fullGraph) return graphData.nodes.filter(node => showCompanionTitle || node.type !== 'title' || node.slug !== COMPANION_TITLE_SLUG);
     const nodesById = new Map(graphData.nodes.map(node => [node.id, node]));
     const roots = explorationInput.roots.map(id => nodesById.get(id)).filter((node): node is GraphNodeFull => Boolean(node));
     if (selectedNode && !roots.some(node => node.id === selectedNode.id)) roots.push(selectedNode);
     return roots;
-  }, [showSearch, graphData, explorationInput.roots, selectedNode]);
+  }, [showSearch, graphData, explorationInput.roots, selectedNode, fullGraph, showCompanionTitle]);
   const visibleGraph = useMemo(() => {
     if (!baseVisibleGraph) return baseVisibleGraph;
     const missing = alwaysVisibleNodes.filter(node => !baseVisibleGraph.nodes.some(existing => existing.id === node.id));
@@ -341,32 +344,40 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     fgRef.current.zoomToFit(400, 40, hasRankedNodes ? (node) => (node as GraphNodeFull).graphRank != null : undefined);
   }, [hasFocusTarget, graphData]);
 
-  const updateParams = useCallback((changes: Record<string, string | null | string[]>) => {
+  const updateParams = useCallback((changes: Record<string, string | null | string[]>, replace = false) => {
     const params = new URLSearchParams(searchParams?.toString());
     Object.entries(changes).forEach(([key, value]) => {
       params.delete(key);
       if (Array.isArray(value)) value.forEach(item => params.append(key, item));
       else if (value) params.set(key, value);
     });
-    router.replace(`${pathname}${params.size ? `?${params.toString()}` : ''}`, { scroll: false });
-  }, [router, pathname, searchParams]);
+    const navigate = showSearch && !replace ? router.push : router.replace;
+    navigate(`${pathname}${params.size ? `?${params.toString()}` : ''}`, { scroll: false });
+  }, [router, pathname, searchParams, showSearch]);
 
   const expandParams = useMemo(() => searchParams?.getAll('expand') ?? [], [searchParams]);
   const isExpansionActive = useCallback(
     (relation: ExpansionRelationId) => {
-      if (!selectedSubjectId) return false;
+      if (!selectedSubjectId) return explorationInput.globalFilters.includes(relation as RelationType);
       return expandParams.includes(formatExpandParam({ subject: selectedSubjectId, relation }));
     },
-    [expandParams, selectedSubjectId]
+    [expandParams, selectedSubjectId, explorationInput.globalFilters]
   );
   const toggleExpansion = (relation: ExpansionRelationId) => {
-    if (!selectedSubjectId) return;
+    if (!selectedSubjectId) {
+      const filters = explorationInput.globalFilters;
+      updateParams({ filter: filters.includes(relation as RelationType) ? filters.filter(item => item !== relation) : [...filters, relation] });
+      return;
+    }
     const token = formatExpandParam({ subject: selectedSubjectId, relation });
     const next = expandParams.includes(token) ? expandParams.filter(item => item !== token) : [...expandParams, token];
     updateParams({ expand: next });
   };
   const expandAllDirectRelations = () => {
-    if (!selectedSubjectId) return;
+    if (!selectedSubjectId) {
+      updateParams({ filter: Array.from(new Set([...explorationInput.globalFilters, ...RELATION_ORDER.filter(relation => (selectedRelationCounts.get(relation) ?? 0) > 0)])) });
+      return;
+    }
     const tokens = RELATION_ORDER
       .filter(relation => (selectedRelationCounts.get(relation) ?? 0) > 0)
       .map(relation => formatExpandParam({ subject: selectedSubjectId, relation }));
@@ -379,7 +390,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     const missing = Object.entries(initialParams).filter(([key]) => !searchParams.has(key));
     if (missing.length === 0) return;
     seededRef.current = true;
-    updateParams(Object.fromEntries(missing));
+    updateParams(Object.fromEntries(missing), true);
     // Only seed once on mount; initialParams/updateParams identity isn't
     // meant to re-trigger this.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -389,7 +400,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   useEffect(() => {
     if (rootSeededRef.current || !showSearch || !searchParams || searchParams.has('subject')) return;
     rootSeededRef.current = true;
-    updateParams({ subject: [subjectId('person', targetSlug)] });
+    updateParams({ subject: [subjectId('person', targetSlug)], selected: selectedSlug ?? targetSlug }, true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams, showSearch]);
 
@@ -468,7 +479,25 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     return () => window.removeEventListener('resize', updateSize);
   }, [isFullscreen]);
 
-  if (graphLoading) return <div className="flex items-center justify-center min-h-screen"><div className="text-lg">Loading graph...</div></div>;
+  const previousGrowth = useRef<{ count: number; filters: string } | null>(null);
+  const [growth, setGrowth] = useState<number | null>(null);
+  const filterKey = explorationInput.globalFilters.join('|');
+  useEffect(() => {
+    if (!showSearch || graphLoading || exploration.visibleCount === undefined) return;
+    const previous = previousGrowth.current;
+    const count = exploration.visibleCount;
+    previousGrowth.current = { count, filters: filterKey };
+    if (!previous) return;
+    const delta = count - previous.count;
+    setGrowth(delta !== 0 && (filterKey || previous.filters) ? delta : null);
+  }, [showSearch, graphLoading, exploration.visibleCount, filterKey]);
+  useEffect(() => {
+    if (growth === null) return;
+    const timer = setTimeout(() => setGrowth(null), 5000);
+    return () => clearTimeout(timer);
+  }, [growth]);
+
+  if (graphLoading && !graphData) return <div className="flex items-center justify-center min-h-screen"><div className="text-lg">Loading graph...</div></div>;
   if (graphError) return <div className="flex items-center justify-center min-h-screen"><ErrorMessage title="Error loading graph" description={graphError.toString()} /></div>;
 
   const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
@@ -477,8 +506,35 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   const kindLabel = (kind: string) => typeLabels[kind] ?? kind;
 
   const resetGraphView = () => (showSearch
-    ? updateParams({ selected: null, relation: [], kind: [], showCompanionTitle: null, subject: [], expand: [], filter: [] })
+    ? updateParams({ selected: targetSlug, relation: [], kind: [], showCompanionTitle: null, subject: [subjectId('person', targetSlug)], expand: [], filter: [], full: null })
     : updateParams({ selected: null, focus: null, relation: [], kind: [], showCompanionTitle: null, person: null, ancestorsOf: [], descendantsOf: [] }));
+
+  const explorationControls = showSearch && (
+    <aside dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4 dark:border-amber-700 dark:bg-gray-800">
+      <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode ? selectedNode.label : t.graph.globalRelationships}</h2>
+      <p className="text-sm text-gray-600 dark:text-gray-300">{selectedNode ? t.graph.selectedLabel : t.graph.globalRelationshipsHint}</p>
+      <div className="mt-2 flex flex-wrap gap-3">
+        {selectedNode && <>
+          <Link href={profilePath(selectedNode.type, selectedNode.slug)}>{t.graph.viewProfile}</Link>
+          <button type="button" onClick={() => updateParams({ selected: null })}>{t.graph.deselectSubject}</button>
+        </>}
+        <button type="button" disabled={fullGraph} onClick={() => updateParams({ full: '1' })} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 disabled:opacity-50 dark:text-gray-100">{t.graph.showFullGraph}</button>
+        <button type="button" onClick={resetGraphView} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 dark:text-gray-100">{t.graph.startOver}</button>
+      </div>
+      <ExpansionControls
+        isPerson={Boolean(selectedNode && (selectedNode.type ?? 'person') === 'person')}
+        groupedRelations={groupedRelations}
+        relationCounts={selectedRelationCounts}
+        hasEligibleDirectRelations={hasEligibleDirectRelations}
+        isActive={isExpansionActive}
+        onToggle={toggleExpansion}
+        onExpandAllDirectRelations={expandAllDirectRelations}
+        relationLabel={relationLabel}
+        g={t.graph}
+      />
+      <p role="status" className="mt-2 text-sm text-gray-600 dark:text-gray-300">{growth !== null ? t.graph.filterGrowth(growth) : ''}</p>
+    </aside>
+  );
 
   const filterPanel = (
     <>
@@ -518,7 +574,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     <GraphSurface
       ref={fgRef}
       {...(showSearch
-        ? { data: visibleGraph, isLoading: graphLoading, loadError: graphError }
+        ? { data: visibleGraph, isLoading: graphLoading && !graphData, loadError: graphError }
         : { url: fetchUrl, transform: () => visibleGraph })}
       width={dimensions?.width}
       height={dimensions?.height}
@@ -556,8 +612,9 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           </div>
         </div>
         {showSearchPanel && (
-          <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="absolute top-14 inset-x-3 z-20 rounded-lg border border-gray-200 bg-white p-3 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+          <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="absolute top-14 inset-x-3 z-20 max-h-[70vh] overflow-auto rounded-lg border border-gray-200 bg-white p-3 shadow-lg dark:border-gray-700 dark:bg-gray-800">
             <GraphSearch nodes={graphData?.nodes} />
+            {explorationControls}
           </div>
         )}
         {showFilterPanel && (
@@ -590,8 +647,10 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
       {showFilterPanel && filterPanel}
 
-      {selectedNode && (
-        <aside className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4 dark:border-amber-700 dark:bg-gray-800" aria-live="polite">
+      {explorationControls}
+
+      {selectedNode && !showSearch && (
+        <aside dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4 dark:border-amber-700 dark:bg-gray-800" aria-live="polite">
           <p className="text-sm text-gray-600 dark:text-gray-300">{t.graph.selectedLabel} {kindLabel(selectedNode.type ?? 'person')}</p>
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode.label}</h2>
           <div className="mt-3 flex flex-wrap gap-3">
@@ -606,19 +665,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
               </button>
             )}
           </div>
-          {showSearch && (
-            <ExpansionControls
-              isPerson={(selectedNode.type ?? 'person') === 'person'}
-              groupedRelations={groupedRelations}
-              relationCounts={selectedRelationCounts}
-              hasEligibleDirectRelations={hasEligibleDirectRelations}
-              isActive={isExpansionActive}
-              onToggle={toggleExpansion}
-              onExpandAllDirectRelations={expandAllDirectRelations}
-              relationLabel={relationLabel}
-              g={t.graph}
-            />
-          )}
+
         </aside>
       )}
 

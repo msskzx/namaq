@@ -14,6 +14,8 @@ Open the graph → explore and filter relationships → open a person's profile 
 
 ### Relationship graph
 
+- Exploration relationship buttons apply to the selected subject, or to the whole exploration when deselected (`filter`). Global filters introduce capped one-hop neighbors and report count changes. **Show full graph** (`full=1`) adds the enabled dataset to the current exploration; **Start over** restores Muhammad alone and default node kinds. Both preserve language/theme and support browser Back/Forward.
+
 - `/graphs` is a single page and a single dataset (`GET /api/graph`) for every kind of node — there is no separate "people graph" / "titles graph" / "battles graph" page or route to keep in sync. `/graphs/people`, `/graphs/titles`, and `/graphs/battles` still work as redirects to `/graphs` with the equivalent `kind` filter already applied (see below), for old links/bookmarks.
 - Graph links have typed, directed relationship labels such as `FATHER`, `SON`, `WIFE`, and `PATERNAL_UNCLE`.
 - A `kind` query param (repeatable: `person`/`title`/`battle`/`event`) is a server-side **whitelist** on `/api/graph` — e.g. `?kind=person&kind=battle` returns only those two kinds and the links directly between them. It's absent by default, meaning every kind. The Node Kinds toggle switches on `/graphs` always offer all four kinds regardless of what's currently loaded (not just whichever kinds happen to be in the current, possibly-narrowed response), so toggling a kind back on triggers a fresh, correctly-scoped fetch rather than trying to reveal data that was never fetched in the first place.

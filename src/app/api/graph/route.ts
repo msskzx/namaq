@@ -232,10 +232,6 @@ export async function GET(_request: Request) {
     const records: Awaited<ReturnType<typeof session.run>>['records'] = [];
     let ranScopedQuery = false;
     if (focus && pathQueryParts.length === 0 && nodeQueryParts.length === 0) {
-      // A focused view is deliberately limited to one hop. The overview
-      // remains available without parameters, but this keeps future,
-      // larger graphs from requiring every node to be fetched for a
-      // person-level exploration.
       ranScopedQuery = true;
       const result = await session.run(
         `MATCH (node:Person {slug: $focus})

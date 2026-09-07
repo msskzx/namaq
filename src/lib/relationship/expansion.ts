@@ -26,12 +26,12 @@ export function matchExpansionNeighbors(
 
 export function directRelationCounts(
   edges: StoredEdge[],
-  subject: SubjectId,
+  subject: SubjectId | SubjectId[],
   eligibleRelations: ExpansionRelationId[]
 ): Map<ExpansionRelationId, number> {
   const counts = new Map<ExpansionRelationId, number>();
   for (const relation of eligibleRelations) {
-    counts.set(relation, matchExpansionNeighbors(edges, subject, relation).length);
+    counts.set(relation, new Set((Array.isArray(subject) ? subject : [subject]).flatMap(id => matchExpansionNeighbors(edges, id, relation))).size);
   }
   return counts;
 }
