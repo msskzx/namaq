@@ -3,8 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { LanguageProvider } from "@/components/language/LanguageContext";
-import NavBar from "@/components/common/NavBar";
-import Footer from "@/components/common/Footer";
+import AppChrome from "@/components/common/AppChrome";
 import CookieConsent from "@/components/cookies/CookieConsent";
 import ConditionalAnalytics from "@/components/cookies/ConditionalAnalytics";
 import SWRProvider from "@/components/common/SWRProvider";
@@ -36,13 +35,7 @@ export default function RootLayout({
         <CustomThemeProvider>
           <LanguageProvider>
             <SWRProvider>
-              <div className="min-h-screen flex flex-col">
-                <NavBar />
-                <main className="flex-1">
-                  {children}
-                </main>
-                <Footer />
-              </div>
+              <AppChrome>{children}</AppChrome>
               <SpeedInsights />
               <ConditionalAnalytics />
               <CookieConsent />

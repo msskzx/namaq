@@ -1,9 +1,10 @@
 import translations from '@/components/language/translations';
+import { RelationType } from './types';
 
 // Canonical ordering for relation types, e.g. immediate family before
 // extended family/in-laws. Derived from the order relation keys are defined
 // in translations.ts rather than duplicated here.
-export const RELATION_ORDER = Object.keys(translations.en.relationTypes);
+export const RELATION_ORDER = Object.keys(translations.en.relationTypes) as RelationType[];
 
 // Relation types are grouped into a family "category" for both color and
 // filtering, so e.g. FATHER and MOTHER are one "parent" toggle/color, all
@@ -13,7 +14,7 @@ export const RELATION_ORDER = Object.keys(translations.en.relationTypes);
 // here too (not as its own top-level relation group) since a prophet's
 // companion is, structurally, just another person-to-person relationship
 // alongside blood/marriage ties.
-const CATEGORY_BY_TYPE: Record<string, string> = {
+const CATEGORY_BY_TYPE: Partial<Record<RelationType, string>> = {
   FATHER: 'parent', MOTHER: 'parent', STEP_FATHER: 'parent', STEP_MOTHER: 'parent',
   SON: 'child', DAUGHTER: 'child', STEP_SON: 'child', STEP_DAUGHTER: 'child',
   BROTHER: 'sibling', SISTER: 'sibling', HALF_BROTHER: 'sibling', HALF_SISTER: 'sibling', STEP_BROTHER: 'sibling', STEP_SISTER: 'sibling',
@@ -54,7 +55,7 @@ function hashString(value: string): number {
 }
 
 export function relationColor(type: string): string {
-  const category = CATEGORY_BY_TYPE[type];
+  const category = CATEGORY_BY_TYPE[type as RelationType];
   if (category) return CATEGORY_COLORS[category];
   return FALLBACK_PALETTE[hashString(type) % FALLBACK_PALETTE.length];
 }
@@ -64,8 +65,8 @@ export function relationColor(type: string): string {
 // alphabetically after all known ones.
 export function sortRelationTypes(types: string[]): string[] {
   return [...types].sort((a, b) => {
-    const ai = RELATION_ORDER.indexOf(a);
-    const bi = RELATION_ORDER.indexOf(b);
+    const ai = RELATION_ORDER.indexOf(a as RelationType);
+    const bi = RELATION_ORDER.indexOf(b as RelationType);
     if (ai === -1 && bi === -1) return a.localeCompare(b);
     if (ai === -1) return 1;
     if (bi === -1) return -1;
@@ -78,10 +79,10 @@ export function sortRelationTypes(types: string[]): string[] {
 // separate switches would be redundant (see
 // scripts/people/syncCompanionRelations.ts, which creates both edges
 // together). The toggle for the governing type controls visibility of both.
-const INVERSE_PAIR: Record<string, string> = { ACCOMPANIED_BY: 'COMPANION_OF' };
+const INVERSE_PAIR: Partial<Record<RelationType, RelationType>> = { ACCOMPANIED_BY: 'COMPANION_OF' };
 
 export function governingRelationType(type: string): string {
-  return INVERSE_PAIR[type] ?? type;
+  return INVERSE_PAIR[type as RelationType] ?? type;
 }
 
 // Top-level groups the relation filter panel organizes itself into. Family
@@ -90,7 +91,7 @@ export function governingRelationType(type: string): string {
 // entity kinds a relation type connects to.
 export type RelationGroup = 'family' | 'battles' | 'titles' | 'events';
 
-const GROUP_BY_TYPE: Partial<Record<string, RelationGroup>> = {
+const GROUP_BY_TYPE: Partial<Record<RelationType, RelationGroup>> = {
   PARTICIPATED_IN: 'battles',
   HOLDS_TITLE: 'titles',
   INVOLVED_IN: 'events',
@@ -98,7 +99,7 @@ const GROUP_BY_TYPE: Partial<Record<string, RelationGroup>> = {
 };
 
 export function relationGroup(type: string): RelationGroup {
-  return GROUP_BY_TYPE[type] ?? 'family';
+  return GROUP_BY_TYPE[type as RelationType] ?? 'family';
 }
 
 // Which relation group a node kind's own relationships belong to, for

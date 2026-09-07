@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faXmark, faGear } from '@fortawesome/free-solid-svg-icons';
 import translations from '../language/translations';
 import ThemeSwitcher from '../theme/ThemeSwitcher';
+import { getAllNavLinks } from '@/lib/siteLinks';
 
 interface NavLink {
   href: string;
@@ -81,13 +82,7 @@ export default function NavBar() {
     { href: '/events', label: translations[language].events },
   ];
 
-  const allLinks = [
-    { href: '/graphs', label: translations[language].allGraph },
-    { href: '/people/prophet-muhammad', label: translations[language].prophet },
-    { href: '/people', label: translations[language].people },
-    { href: '/events', label: translations[language].events },
-    { href: '/battles', label: translations[language].battles.title },
-  ];
+  const allLinks = getAllNavLinks(language);
 
   const sortedMainLinks = language === 'ar' ? [...mainLinks].reverse() : mainLinks;
 

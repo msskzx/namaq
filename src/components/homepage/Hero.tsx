@@ -26,7 +26,7 @@ export default function Hero() {
         <p className="text-center text-gray-800 dark:text-gray-200 text-2xl mt-8">{t.intro}</p>
         <div className="text-center mt-8">
           <Link href="/graphs" className="inline-flex items-center px-6 py-3 bg-amber-400 text-gray-950 font-semibold rounded-lg hover:bg-amber-300 transition-colors duration-200 shadow-lg hover:shadow-xl text-sm md:text-base">
-            {t.familyRelations}
+            {t.allGraph}
           </Link>
         </div>
       </div>

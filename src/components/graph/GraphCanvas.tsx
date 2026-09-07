@@ -3,22 +3,31 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState, RefObject } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import ForceGraph2D, { ForceGraphMethods, NodeObject, LinkObject } from 'react-force-graph-2d';
-import { forceCollide } from 'd3-force';
+import { ForceGraphMethods, NodeObject, LinkObject } from 'react-force-graph-2d';
 import { GraphData, GraphNode, GraphNodeFull, GraphLink } from '@/types/graph';
 import useSWR from 'swr';
 import { fetcher } from '@/lib/swr';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExpand, faCompress, faFilter, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faExpand, faCompress, faFilter, faMagnifyingGlass, faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
 import GraphSearch from './GraphSearch';
 import SlideSwitch from './SlideSwitch';
 import RelationFilterPanel from './RelationFilterPanel';
+import ExpansionControls from './ExpansionControls';
+import GraphSurface, { kindFillColor } from './GraphSurface';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import { useLanguage } from '@/components/language/LanguageContext';
 import translations from '@/components/language/translations';
-import { relationColor, sortRelationTypes, governingRelationType, relationGroup, RELATION_ORDER, KIND_TO_RELATION_GROUP, RelationGroup } from '@/lib/relations';
-import { filterVisibleGraph } from '@/lib/graphFilter';
+import LanguageSwitcher from '@/components/language/LanguageSwitcher';
+import ThemeSwitcher from '@/components/theme/ThemeSwitcher';
+import { getAllNavLinks } from '@/lib/siteLinks';
+import { sortRelationTypes, governingRelationType, relationGroup, RELATION_ORDER, KIND_TO_RELATION_GROUP, RelationGroup } from '@/lib/relationship/categories';
+import { COMPANION_TITLE_SLUG, filterVisibleGraph } from '@/lib/graphFilter';
 import { profilePath } from '@/lib/nodeProfile';
+import { parseExplorationInput, formatExpandParam } from '@/lib/relationship/urlState';
+import { NodeKind, RelationType, subjectId } from '@/lib/relationship/types';
+import { ExpansionRelationId, directRelationCounts } from '@/lib/relationship/expansion';
+import { ExpansionGroup, expansionGroupForRelation } from '@/lib/relationship/expansionGroups';
+import { useExplorationGraph } from './useExplorationGraph';
 
 interface GraphCanvasProps {
   url?: string;
@@ -84,31 +93,14 @@ const DEFAULT_EXCLUDED_RELATIONS = [
 // to DEFAULT_EXCLUDED_RELATIONS above.
 const NO_EXCLUDED_RELATIONS = '__none__';
 
-// A fixed reference font size the collision force below can use for a
-// stable world-space radius per node, independent of camera zoom.
-// nodeCanvasObject grows its own font size as the camera zooms out so
-// labels stay readable, but caps it at this same value — without that cap,
-// a graph zoomed far out to fit hundreds of nodes (see GraphCanvas usage in
-// /graphs) would render every node far larger than the radius the
-// collision force actually kept clear, so nodes would visually overlap
-// even though their true positions don't.
-let measureContext: CanvasRenderingContext2D | null = null;
-const NODE_BASE_FONT_SIZE = 12;
-function nodeRadius(node: GraphNodeFull): number {
-  if (!measureContext) measureContext = document.createElement('canvas').getContext('2d');
-  if (!measureContext) return NODE_BASE_FONT_SIZE;
-  measureContext.font = `${NODE_BASE_FONT_SIZE}px Sans-Serif`;
-  const textWidth = measureContext.measureText(node.label).width;
-  return Math.max(textWidth + NODE_BASE_FONT_SIZE, NODE_BASE_FONT_SIZE * 2) / 2;
-}
-
 export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-muhammad', showSearch = true, initialParams, nodesLabel = 'people' }: GraphCanvasProps) {
   const { language } = useLanguage();
   const t = translations[language];
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const selectedSlug = searchParams?.get('selected') ?? null;
+  const selectedSlug = searchParams?.get('selected') ?? (showSearch && !searchParams?.has('subject') ? targetSlug : null);
+  const fullGraph = searchParams?.get('full') === '1';
   const focusSlug = searchParams?.get('focus') ?? null;
   // Relation types are stored as the set of EXCLUDED (hidden) values --
   // each toggle acts independently, and hiding one never implicitly hides
@@ -151,6 +143,15 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // wrongly prune the chain down to just its first hop.
   const personSearchSlugs = useMemo(() => new Set(searchParams?.getAll('person') ?? []), [searchParams]);
 
+  const subjectParams = useMemo(() => searchParams?.getAll('subject') ?? [], [searchParams]);
+  const explorationInput = useMemo(
+    () => parseExplorationInput(
+      { subjects: subjectParams, expands: searchParams?.getAll('expand') ?? [], filters: searchParams?.getAll('filter') ?? [] },
+      targetSlug
+    ),
+    [searchParams, targetSlug, subjectParams]
+  );
+
   const fetchUrl = useMemo(() => {
     try {
       const base = new URL(url, typeof window !== 'undefined' ? window.location.origin : 'http://localhost');
@@ -183,10 +184,52 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // a new graphData reference, which restarts its cooldown/engine and
   // snaps the camera back to fitToView, discarding wherever the user had
   // panned/zoomed to just from switching tabs and back.
-  const { data: graphData, error: graphError, isLoading: graphLoading } = useSWR<GraphData>(fetchUrl, fetcher, { revalidateOnFocus: false });
+  const { data: legacyGraphData, error: legacyGraphError, isLoading: legacyGraphLoading } = useSWR<GraphData>(showSearch ? null : fetchUrl, fetcher, { revalidateOnFocus: false });
+  const exploration = useExplorationGraph({
+    enabled: showSearch,
+    baseUrl: url,
+    kindParams: [...includedKinds],
+    input: explorationInput,
+    selectedSlug,
+    fullGraph,
+  });
+  const graphData = showSearch ? exploration.data : legacyGraphData;
+  const graphError = showSearch ? exploration.error : legacyGraphError;
+  const graphLoading = showSearch ? exploration.isLoading : legacyGraphLoading;
   const fgRef = useRef<ForceGraphMethods<NodeObject<GraphNodeFull>, LinkObject<GraphNodeFull, GraphLink>>>(null) as RefObject<ForceGraphMethods<NodeObject<GraphNodeFull>, LinkObject<GraphNodeFull, GraphLink>>>;
   const selectedNode = graphData?.nodes.find(node => node.slug === selectedSlug);
+  // Full name/titles only, for the selected-subject panel -- a lighter
+  // fetch than the full /api/people/[slug] profile route (which also pulls
+  // participations/events/ayat/claims), since this reruns on every subject
+  // clicked through in the workspace. Non-person subjects (title/battle/
+  // event) and graph-only people with no Postgres profile just keep
+  // showing the graph label, per the "Learning information in the panel"
+  // decision in docs/graph-exploration-plan.md.
+  const isSelectedPerson = showSearch && (selectedNode?.type ?? 'person') === 'person';
+  const { data: selectedPreview } = useSWR<{ fullName: string | null; titles: { name: string; slug: string }[] }>(
+    isSelectedPerson && selectedNode ? `/api/people/${selectedNode.slug}/preview` : null,
+    fetcher
+  );
   const relationLabel = useCallback((type: string) => (t.relationTypes as Record<string, string>)[type] ?? relationName(type), [t]);
+  const selectedSubjectId = selectedNode ? subjectId((selectedNode.type as NodeKind) ?? 'person', selectedNode.slug) : null;
+  const selectedRelationCounts = useMemo(() => {
+    if (!showSearch || !exploration.edges) return new Map<RelationType, number>();
+    return directRelationCounts(exploration.edges, selectedSubjectId ?? graphData?.nodes.map(node => node.id) ?? [], RELATION_ORDER) as Map<RelationType, number>;
+  }, [showSearch, selectedSubjectId, exploration.edges, graphData]);
+  const groupedRelations = useMemo(() => {
+    const groups = new Map<ExpansionGroup, RelationType[]>();
+    for (const [relation, count] of selectedRelationCounts) {
+      if (count <= 0 && !explorationInput.globalFilters.includes(relation)) continue;
+      const group = expansionGroupForRelation(relation);
+      groups.set(group, [...(groups.get(group) ?? []), relation]);
+    }
+    for (const [group, types] of groups) groups.set(group, sortRelationTypes(types) as RelationType[]);
+    return groups;
+  }, [selectedRelationCounts, explorationInput.globalFilters]);
+  const hasEligibleDirectRelations = useMemo(
+    () => Array.from(selectedRelationCounts.values()).some(count => count > 0),
+    [selectedRelationCounts]
+  );
   // Relation types present in the fetched graph, one toggle per type.
   // ACCOMPANIED_BY is COMPANION_OF's inverse edge (see
   // scripts/people/syncCompanionRelations.ts) -- governed by the same
@@ -236,7 +279,8 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // would otherwise drop it (e.g. searching straight to a Title/Battle/Event
   // node while its kind, or the Companion title, is hidden) -- but only
   // builds a new graph object when that's actually necessary. Every normal
-  // click (on the canvas or the side list) selects a node that's already in
+  // click (on the
+  // canvas or the side list) selects a node that's already in
   // baseVisibleGraph, since that's the only thing rendered to click on, so
   // this reuses the same baseVisibleGraph reference in the overwhelmingly
   // common case instead of building a fresh one. That reference stability
@@ -245,11 +289,20 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // shove nodes around and carry the just-selected one out of the viewport
   // on every single click -- worse on the phone's smaller canvas, where the
   // reshuffle is more likely to land the node off-screen.
+  const alwaysVisibleNodes = useMemo(() => {
+    if (!showSearch || !graphData) return selectedNode ? [selectedNode] : [];
+    if (fullGraph) return graphData.nodes.filter(node => showCompanionTitle || node.type !== 'title' || node.slug !== COMPANION_TITLE_SLUG);
+    const nodesById = new Map(graphData.nodes.map(node => [node.id, node]));
+    const roots = explorationInput.roots.map(id => nodesById.get(id)).filter((node): node is GraphNodeFull => Boolean(node));
+    if (selectedNode && !roots.some(node => node.id === selectedNode.id)) roots.push(selectedNode);
+    return roots;
+  }, [showSearch, graphData, explorationInput.roots, selectedNode, fullGraph, showCompanionTitle]);
   const visibleGraph = useMemo(() => {
-    if (!baseVisibleGraph || !selectedNode) return baseVisibleGraph;
-    if (baseVisibleGraph.nodes.some(node => node.id === selectedNode.id)) return baseVisibleGraph;
-    return { nodes: [...baseVisibleGraph.nodes, selectedNode], links: baseVisibleGraph.links };
-  }, [baseVisibleGraph, selectedNode]);
+    if (!baseVisibleGraph) return baseVisibleGraph;
+    const missing = alwaysVisibleNodes.filter(node => !baseVisibleGraph.nodes.some(existing => existing.id === node.id));
+    if (missing.length === 0) return baseVisibleGraph;
+    return { nodes: [...baseVisibleGraph.nodes, ...missing], links: baseVisibleGraph.links };
+  }, [baseVisibleGraph, alwaysVisibleNodes]);
   // Every edge is directional (e.g. FATHER points child -> parent), but a
   // bare relation-name tooltip can't tell you which end is which. Naming
   // both endpoints removes the ambiguity. The string is always built
@@ -288,16 +341,6 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     }, 300);
     return () => clearTimeout(timer);
   }, [graphData, selectedSlug, focusSlug, targetSlug]);
-  // react-force-graph-2d doesn't register a collision force by default, so
-  // nodes are free to settle on top of each other regardless of their
-  // starting position (including nodes seeded from a precomputed,
-  // collision-free layoutX/layoutY). forceCollide is re-applied whenever the
-  // visible node set changes; its radius accessor is called per node, so it
-  // stays correct without needing to be recreated on every simulation tick.
-  useEffect(() => {
-    if (!fgRef.current) return;
-    fgRef.current.d3Force('collide', forceCollide<GraphNodeFull>(nodeRadius));
-  }, [visibleGraph]);
   // Nodes carrying a precomputed layout position (from graphRank/clusterId's
   // companion layoutX/layoutY) can be spread far from the origin, so without
   // an explicit fit the initial camera can miss the graph entirely. Only
@@ -310,21 +353,55 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // actually came to look at, so when any node has a computed graphRank,
   // fit to just those; otherwise (a graph with no rank data at all) fit to
   // everything as before.
-  const fitToView = useCallback(() => {
-    if (hasFocusTarget || !fgRef.current) return;
+  // `force` bypasses the hasFocusTarget guard for the explicit Fit graph
+  // button -- the guard only exists to stop the automatic post-load fit from
+  // fighting a selection/focus that already centered the camera, not to
+  // block a user who deliberately asked to re-fit.
+  const fitToView = useCallback((force = false) => {
+    if ((hasFocusTarget && !force) || !fgRef.current) return;
     const hasRankedNodes = graphData?.nodes.some(node => node.graphRank != null) ?? false;
     fgRef.current.zoomToFit(400, 40, hasRankedNodes ? (node) => (node as GraphNodeFull).graphRank != null : undefined);
   }, [hasFocusTarget, graphData]);
 
-  const updateParams = useCallback((changes: Record<string, string | null | string[]>) => {
+  const updateParams = useCallback((changes: Record<string, string | null | string[]>, replace = false) => {
     const params = new URLSearchParams(searchParams?.toString());
     Object.entries(changes).forEach(([key, value]) => {
       params.delete(key);
       if (Array.isArray(value)) value.forEach(item => params.append(key, item));
       else if (value) params.set(key, value);
     });
-    router.replace(`${pathname}${params.size ? `?${params.toString()}` : ''}`, { scroll: false });
-  }, [router, pathname, searchParams]);
+    const navigate = showSearch && !replace ? router.push : router.replace;
+    navigate(`${pathname}${params.size ? `?${params.toString()}` : ''}`, { scroll: false });
+  }, [router, pathname, searchParams, showSearch]);
+
+  const expandParams = useMemo(() => searchParams?.getAll('expand') ?? [], [searchParams]);
+  const isExpansionActive = useCallback(
+    (relation: ExpansionRelationId) => {
+      if (!selectedSubjectId) return explorationInput.globalFilters.includes(relation as RelationType);
+      return expandParams.includes(formatExpandParam({ subject: selectedSubjectId, relation }));
+    },
+    [expandParams, selectedSubjectId, explorationInput.globalFilters]
+  );
+  const toggleExpansion = (relation: ExpansionRelationId) => {
+    if (!selectedSubjectId) {
+      const filters = explorationInput.globalFilters;
+      updateParams({ filter: filters.includes(relation as RelationType) ? filters.filter(item => item !== relation) : [...filters, relation] });
+      return;
+    }
+    const token = formatExpandParam({ subject: selectedSubjectId, relation });
+    const next = expandParams.includes(token) ? expandParams.filter(item => item !== token) : [...expandParams, token];
+    updateParams({ expand: next });
+  };
+  const expandAllDirectRelations = () => {
+    if (!selectedSubjectId) {
+      updateParams({ filter: Array.from(new Set([...explorationInput.globalFilters, ...RELATION_ORDER.filter(relation => (selectedRelationCounts.get(relation) ?? 0) > 0)])) });
+      return;
+    }
+    const tokens = RELATION_ORDER
+      .filter(relation => (selectedRelationCounts.get(relation) ?? 0) > 0)
+      .map(relation => formatExpandParam({ subject: selectedSubjectId, relation }));
+    updateParams({ expand: Array.from(new Set([...expandParams, ...tokens])) });
+  };
 
   const seededRef = useRef(false);
   useEffect(() => {
@@ -332,11 +409,39 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     const missing = Object.entries(initialParams).filter(([key]) => !searchParams.has(key));
     if (missing.length === 0) return;
     seededRef.current = true;
-    updateParams(Object.fromEntries(missing));
+    updateParams(Object.fromEntries(missing), true);
     // Only seed once on mount; initialParams/updateParams identity isn't
     // meant to re-trigger this.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
+
+  const rootSeededRef = useRef(false);
+  useEffect(() => {
+    if (rootSeededRef.current || !showSearch || !searchParams || searchParams.has('subject')) return;
+    rootSeededRef.current = true;
+    updateParams({ subject: [subjectId('person', targetSlug)], selected: selectedSlug ?? targetSlug }, true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams, showSearch]);
+
+  // A completely fresh /graphs visit (captured once, before the seeding
+  // effect above adds subject/selected) reveals the default subject's own
+  // direct relations too, as if All direct relations had just been clicked
+  // -- otherwise the very first thing a new visitor sees is one lone node
+  // with no connections. Restoring a shared/refreshed URL that already
+  // carries its own subject/expand/filter/full state is untouched.
+  const [isFreshVisit] = useState(
+    () => showSearch && Boolean(searchParams) && !searchParams?.has('subject') && !searchParams?.has('expand') && !searchParams?.has('filter') && !searchParams?.has('full')
+  );
+  const initialExpandSeededRef = useRef(false);
+  useEffect(() => {
+    if (initialExpandSeededRef.current || !isFreshVisit || !hasEligibleDirectRelations) return;
+    initialExpandSeededRef.current = true;
+    expandAllDirectRelations();
+    // Runs once, as soon as the freshly-seeded root subject's own relation
+    // counts have loaded; expandAllDirectRelations/selectedSubjectId aren't
+    // meant to re-trigger it.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFreshVisit, hasEligibleDirectRelations]);
 
   // An excluded-relations Set that would serialize to an empty `relation`
   // array is indistinguishable from the param being absent entirely (see
@@ -390,6 +495,22 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // person to focus on vs. adjusting what's shown).
   const [showSearchPanel, setShowSearchPanel] = useState(false);
 
+  // Workspace shell (showSearch only): the collapsible panel/bottom-sheet
+  // starts open so first paint matches what used to be always-visible, and
+  // the site-nav/settings menu that replaces NavBar/Footer on this route.
+  const [panelExpanded, setPanelExpanded] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) setMenuOpen(false);
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [menuOpen]);
+  const navLinks = useMemo(() => getAllNavLinks(language), [language]);
+
   useEffect(() => {
     if (!isFullscreen) return;
     const previousOverflow = document.body.style.overflow;
@@ -413,34 +534,79 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     return () => window.removeEventListener('resize', updateSize);
   }, [isFullscreen]);
 
-  const getGraphTheme = () => {
-    const isDark = document.documentElement.classList.contains('dark');
-    return {
-      background: isDark ? '#1f2937' : '#f9fafb',
-      // Non-person node kinds get a distinct fill from person nodes so a
-      // bipartite graph (titles/people, battles/people) reads as two kinds
-      // of node at a glance.
-      node: {
-        person: isDark ? 'rgba(55, 65, 81, 0.8)' : 'rgba(241, 242, 180, 0.8)',
-        title: isDark ? 'rgba(79, 70, 229, 0.85)' : 'rgba(199, 210, 254, 0.9)',
-        battle: isDark ? 'rgba(180, 83, 9, 0.85)' : 'rgba(253, 230, 138, 0.9)',
-        event: isDark ? 'rgba(13, 148, 136, 0.85)' : 'rgba(153, 246, 228, 0.9)',
-        text: isDark ? '#f3f4f6' : '#374151',
-      },
-      link: isDark ? '#4b5563' : '#d1d5db',
-    };
-  };
+  // The workspace shell's canvas always fills the whole viewport, with the
+  // panel floating on top of it (see the showSearch return below) rather
+  // than sharing space via flex -- same reasoning as fullscreenSize above:
+  // GraphSurface/ForceGraph2D only measures its box once at mount and never
+  // re-observes, so it needs an explicit, reliably-nonzero size up front.
+  const [viewportSize, setViewportSize] = useState({ width: 0, height: 0 });
+  useEffect(() => {
+    if (!showSearch) return;
+    const updateSize = () => setViewportSize({ width: window.innerWidth, height: window.innerHeight });
+    updateSize();
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
+  }, [showSearch]);
 
-  if (graphLoading) return <div className="flex items-center justify-center min-h-screen"><div className="text-lg">Loading graph...</div></div>;
+  const previousGrowth = useRef<{ count: number; filters: string } | null>(null);
+  const [growth, setGrowth] = useState<number | null>(null);
+  const filterKey = explorationInput.globalFilters.join('|');
+  useEffect(() => {
+    if (!showSearch || graphLoading || exploration.visibleCount === undefined) return;
+    const previous = previousGrowth.current;
+    const count = exploration.visibleCount;
+    previousGrowth.current = { count, filters: filterKey };
+    if (!previous) return;
+    const delta = count - previous.count;
+    setGrowth(delta !== 0 && (filterKey || previous.filters) ? delta : null);
+  }, [showSearch, graphLoading, exploration.visibleCount, filterKey]);
+  useEffect(() => {
+    if (growth === null) return;
+    const timer = setTimeout(() => setGrowth(null), 5000);
+    return () => clearTimeout(timer);
+  }, [growth]);
+
+  if (graphLoading && !graphData) return <div className="flex items-center justify-center min-h-screen"><div className="text-lg">Loading graph...</div></div>;
   if (graphError) return <div className="flex items-center justify-center min-h-screen"><ErrorMessage title="Error loading graph" description={graphError.toString()} /></div>;
 
-  const theme = getGraphTheme();
+  const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
   const typeLabels: Record<string, string> = { person: t.people, title: t.titles, battle: t.battles.title, event: t.events };
-  const kindColor = (kind: string) => theme.node[(kind as keyof typeof theme.node)] ?? theme.node.person;
+  const kindColor = (kind: string) => kindFillColor(kind, isDark);
   const kindLabel = (kind: string) => typeLabels[kind] ?? kind;
-  const nodeFillColor = (node: GraphNodeFull) => node.slug === selectedSlug ? '#fbbf24' : kindColor(node.type ?? 'person');
 
-  const resetGraphView = () => updateParams({ selected: null, focus: null, relation: [], kind: [], showCompanionTitle: null, person: null, ancestorsOf: [], descendantsOf: [] });
+  const resetGraphView = () => (showSearch
+    ? updateParams({ selected: targetSlug, relation: [], kind: [], showCompanionTitle: null, subject: [subjectId('person', targetSlug)], expand: [], filter: [], full: null })
+    : updateParams({ selected: null, focus: null, relation: [], kind: [], showCompanionTitle: null, person: null, ancestorsOf: [], descendantsOf: [] }));
+
+  const explorationControls = showSearch && (
+    <aside dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4 dark:border-amber-700 dark:bg-gray-800">
+      <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode ? (selectedPreview?.fullName ?? selectedNode.label) : t.graph.globalRelationships}</h2>
+      {isSelectedPerson && selectedPreview && selectedPreview.titles.length > 0 && (
+        <p className="text-sm text-amber-700 dark:text-amber-300">{selectedPreview.titles.map(title => title.name).join(' · ')}</p>
+      )}
+      <p className="text-sm text-gray-600 dark:text-gray-300">{selectedNode ? t.graph.selectedLabel : t.graph.globalRelationshipsHint}</p>
+      <div className="mt-2 flex flex-wrap gap-3">
+        {selectedNode && <>
+          <Link href={profilePath(selectedNode.type, selectedNode.slug)}>{t.graph.viewProfile}</Link>
+          <button type="button" onClick={() => updateParams({ selected: null })}>{t.graph.deselectSubject}</button>
+        </>}
+        <button type="button" disabled={fullGraph} onClick={() => updateParams({ full: '1' })} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 disabled:opacity-50 dark:text-gray-100">{t.graph.showFullGraph}</button>
+        <button type="button" onClick={resetGraphView} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 dark:text-gray-100">{t.graph.startOver}</button>
+      </div>
+      <ExpansionControls
+        isPerson={Boolean(selectedNode && (selectedNode.type ?? 'person') === 'person')}
+        groupedRelations={groupedRelations}
+        relationCounts={selectedRelationCounts}
+        hasEligibleDirectRelations={hasEligibleDirectRelations}
+        isActive={isExpansionActive}
+        onToggle={toggleExpansion}
+        onExpandAllDirectRelations={expandAllDirectRelations}
+        relationLabel={relationLabel}
+        g={t.graph}
+      />
+      <p role="status" className="mt-2 text-sm text-gray-600 dark:text-gray-300">{growth !== null ? t.graph.filterGrowth(growth) : ''}</p>
+    </aside>
+  );
 
   const filterPanel = (
     <>
@@ -477,14 +643,144 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // frame after mount, so the graph would permanently lock in at 0x0.
   // Passing explicit width/height (kept in sync on resize) sidesteps that.
   const graphCanvas = (dimensions?: { width: number; height: number }) => visibleGraph && (
-    <ForceGraph2D ref={fgRef} width={dimensions?.width} height={dimensions?.height} graphData={visibleGraph} nodeLabel="label" nodeAutoColorBy="group" linkLabel={(link) => linkTooltip(link as unknown as GraphLink)} backgroundColor={theme.background} linkColor={(link) => relationColor((link as unknown as GraphLink).label)} linkWidth={1.5} linkDirectionalArrowLength={3.5} linkDirectionalArrowRelPos={0.9} onNodeClick={(node) => updateParams({ selected: (node as GraphNodeFull).slug })} cooldownTicks={100} onEngineStop={fitToView} nodeCanvasObject={(node, ctx, globalScale) => {
-      const label = (node as GraphNodeFull).label; const fontSize = Math.min(12 / globalScale, NODE_BASE_FONT_SIZE); ctx.font = `${fontSize}px Sans-Serif`; const textWidth = ctx.measureText(label).width; const dimensions = [textWidth, fontSize].map(value => value + fontSize) as [number, number];
-      ctx.fillStyle = nodeFillColor(node as GraphNodeFull); ctx.beginPath(); ctx.arc(node.x!, node.y!, Math.max(...dimensions) / 2, 0, 2 * Math.PI); ctx.fill(); ctx.closePath(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = theme.node.text; ctx.fillText(label, node.x!, node.y!); (node as GraphNodeFull).__bckgDimensions = dimensions;
-    }} nodePointerAreaPaint={(node, color, ctx) => { const d = (node as GraphNodeFull).__bckgDimensions; if (d) { ctx.fillStyle = color; ctx.fillRect(node.x! - d[0] / 2, node.y! - d[1] / 2, d[0], d[1]); } }} />
+    <GraphSurface
+      ref={fgRef}
+      {...(showSearch
+        ? { data: visibleGraph, isLoading: graphLoading && !graphData, loadError: graphError }
+        : { url: fetchUrl, transform: () => visibleGraph })}
+      width={dimensions?.width}
+      height={dimensions?.height}
+      highlightSlug={selectedSlug ?? undefined}
+      linkLabel={linkTooltip}
+      onNodeClick={(node) => updateParams({ selected: node.slug })}
+      onEngineStop={() => fitToView()}
+    />
   );
 
   const nodesLabelText = (t.graph.nodesLabels as Record<string, string>)[nodesLabel] ?? nodesLabel;
   const graphSummary = visibleGraph ? t.graph.graphSummary(visibleGraph.nodes.length, nodesLabelText, visibleGraph.links.length) : t.graph.noGraphData;
+
+  // /graphs itself: a permanent, viewport-filling workspace rather than a
+  // scrollable page -- AppChrome (src/components/common/AppChrome.tsx) omits
+  // NavBar/Footer for this route, so the Menu below is the only way back to
+  // the rest of the site. The embedded profile/battle graphs (showSearch
+  // false) never reach this branch and keep their existing inline-card +
+  // isFullscreen-toggle behavior untouched below.
+  if (showSearch) {
+    const menuButton = (
+      <div className="relative" ref={menuRef}>
+        <button
+          type="button"
+          onClick={() => setMenuOpen(open => !open)}
+          aria-pressed={menuOpen}
+          aria-label={menuOpen ? t.graph.closeMenu : t.graph.openMenu}
+          className="rounded border border-amber-400 px-2 py-1.5 text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800"
+        >
+          <FontAwesomeIcon icon={faBars} />
+        </button>
+        {menuOpen && (
+          <div dir={language === 'ar' ? 'rtl' : 'ltr'} className={`absolute top-full z-30 mt-1 min-w-[200px] rounded-lg border border-amber-400 bg-gray-50 p-3 shadow-lg dark:bg-gray-950 ${language === 'ar' ? 'right-0' : 'left-0'}`}>
+            <ul className="flex flex-col gap-1">
+              {navLinks.map(link => (
+                <li key={link.href}>
+                  <Link href={link.href} onClick={() => setMenuOpen(false)} className="block rounded px-2 py-1 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-800">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link href="/about" onClick={() => setMenuOpen(false)} className="block rounded px-2 py-1 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-800">
+                  {t.about}
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacy" onClick={() => setMenuOpen(false)} className="block rounded px-2 py-1 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-800">
+                  {language === 'ar' ? 'سياسة الخصوصية' : 'Privacy Policy'}
+                </Link>
+              </li>
+            </ul>
+            <div className="mt-3 flex flex-col gap-2 border-t border-amber-400 pt-3">
+              <LanguageSwitcher />
+              <ThemeSwitcher />
+            </div>
+          </div>
+        )}
+      </div>
+    );
+
+    const panelContent = (
+      <div className="flex h-full flex-col overflow-y-auto p-3">
+        <div className="mb-2 flex items-center gap-2">
+          {menuButton}
+          <p className="flex-1 truncate text-sm text-gray-600 dark:text-gray-300" aria-live="polite">{graphSummary}</p>
+          <button type="button" onClick={() => setPanelExpanded(false)} aria-label={t.graph.closeSearch} className="rounded border border-amber-400 px-2 py-1.5 text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
+            <FontAwesomeIcon icon={faXmark} />
+          </button>
+        </div>
+        <GraphSearch nodes={graphData?.nodes} />
+        {explorationControls}
+        <div className="mt-3">
+          <button type="button" onClick={() => setShowFilterPanel(show => !show)} aria-pressed={showFilterPanel} aria-label={showFilterPanel ? t.graph.closeFilters : t.graph.openFilters} className="flex items-center gap-2 rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
+            <FontAwesomeIcon icon={faFilter} />
+            {t.graph.openFilters}
+          </button>
+        </div>
+        {showFilterPanel && <div className="mt-3">{filterPanel}</div>}
+        <div className="mt-3 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
+          <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100 capitalize">{t.graph.nodesInView}</h2>
+          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{t.graph.selectEntryHint}</p>
+          <ul className="mt-2 space-y-1">
+            {rankedViewNodes?.map(node => (
+              <li key={node.id}>
+                <button type="button" onClick={() => updateParams({ selected: node.slug })} className={`w-full rounded px-2 py-1 text-left text-sm hover:bg-amber-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-500 dark:hover:bg-gray-800 ${node.slug === selectedSlug ? 'bg-amber-100 dark:bg-gray-700' : 'text-gray-700 dark:text-gray-200'}`}>{node.label}</button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+
+    // Collapsed state: desktop shows just Menu/Search corner icons (decision
+    // #10); phone shows the same two icons plus the selected subject's name
+    // as a compact bar (decision #19) -- one shared element for both, with
+    // the name span hidden via CSS on desktop rather than a second copy of
+    // this bar, so there is exactly one Menu/Search button in the DOM
+    // regardless of viewport (see GraphCanvas.test.tsx's bare getByRole
+    // queries, which have no notion of breakpoints).
+    const collapsedBar = (
+      <div className="flex items-center gap-2 p-2">
+        {menuButton}
+        <button type="button" onClick={() => setPanelExpanded(true)} aria-label={t.graph.openSearch} className="rounded border border-amber-400 px-2 py-1.5 text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
+          <FontAwesomeIcon icon={faMagnifyingGlass} />
+        </button>
+        <span className="truncate text-sm text-gray-700 lg:hidden dark:text-gray-200">{selectedNode ? selectedNode.label : ''}</span>
+      </div>
+    );
+
+    return (
+      <div dir={language === 'ar' ? 'rtl' : 'ltr'}>
+        <div className="fixed inset-0 z-0 bg-gray-50 dark:bg-gray-900" role="region" aria-label={t.graph.interactiveGraph}>
+          <button
+            type="button"
+            onClick={() => fitToView(true)}
+            aria-label={t.graph.fitGraph}
+            className={`absolute top-2 z-10 rounded border border-amber-400 bg-gray-50/90 px-2 py-1.5 text-gray-800 backdrop-blur hover:bg-amber-50 dark:bg-gray-900/90 dark:text-gray-100 dark:hover:bg-gray-800 ${language === 'ar' ? 'left-2' : 'right-2'}`}
+          >
+            <FontAwesomeIcon icon={faExpand} />
+          </button>
+          {graphCanvas(viewportSize)}
+        </div>
+        <div
+          className={panelExpanded
+            ? 'fixed inset-x-0 bottom-0 z-[60] max-h-[75dvh] overflow-hidden rounded-t-lg border-t border-amber-400 bg-white shadow-lg lg:inset-y-0 lg:bottom-auto lg:start-0 lg:end-auto lg:h-full lg:max-h-none lg:w-80 lg:rounded-none lg:border-t-0 lg:border-e lg:shadow-none dark:border-gray-700 dark:bg-gray-800'
+            : 'fixed inset-x-0 bottom-0 z-[60] rounded-t-lg border-t border-amber-400 bg-white shadow-lg lg:inset-auto lg:top-3 lg:start-3 lg:rounded-lg lg:border dark:border-gray-700 dark:bg-gray-800'
+          }
+        >
+          {panelExpanded ? panelContent : collapsedBar}
+        </div>
+      </div>
+    );
+  }
 
   if (isFullscreen) {
     return (
@@ -510,8 +806,9 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           </div>
         </div>
         {showSearchPanel && (
-          <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="absolute top-14 inset-x-3 z-20 rounded-lg border border-gray-200 bg-white p-3 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+          <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="absolute top-14 inset-x-3 z-20 max-h-[70vh] overflow-auto rounded-lg border border-gray-200 bg-white p-3 shadow-lg dark:border-gray-700 dark:bg-gray-800">
             <GraphSearch nodes={graphData?.nodes} />
+            {explorationControls}
           </div>
         )}
         {showFilterPanel && (
@@ -544,14 +841,25 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
       {showFilterPanel && filterPanel}
 
-      {selectedNode && (
-        <aside className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4 dark:border-amber-700 dark:bg-gray-800" aria-live="polite">
+      {explorationControls}
+
+      {selectedNode && !showSearch && (
+        <aside dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4 dark:border-amber-700 dark:bg-gray-800" aria-live="polite">
           <p className="text-sm text-gray-600 dark:text-gray-300">{t.graph.selectedLabel} {kindLabel(selectedNode.type ?? 'person')}</p>
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode.label}</h2>
           <div className="mt-3 flex flex-wrap gap-3">
             <Link className="rounded bg-amber-400 px-3 py-1.5 text-sm text-gray-950 hover:bg-amber-300" href={profilePath(selectedNode.type, selectedNode.slug)}>{t.graph.viewProfile}</Link>
-            <button type="button" onClick={() => updateParams({ focus: selectedNode.slug, person: null, ancestorsOf: [], descendantsOf: [] })} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-700">{t.graph.exploreNeighbours}</button>
+            {!showSearch && (
+              <button
+                type="button"
+                onClick={() => updateParams({ focus: selectedNode.slug, person: null, ancestorsOf: [], descendantsOf: [] })}
+                className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-700"
+              >
+                {t.graph.exploreNeighbours}
+              </button>
+            )}
           </div>
+
         </aside>
       )}
 

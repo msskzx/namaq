@@ -4,11 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import GraphSearch from './GraphSearch';
 
-// A minimal, *reactive* stand-in for next/navigation's router/searchParams.
-// It must be reactive (subscribers re-render on change) for this test to be
-// meaningful: the bug this file guards against is a feedback loop between
-// GraphSearch's "URL -> state" and "state -> URL" effects, which only shows
-// up when navigating actually changes what useSearchParams() returns.
+// A minimal stand-in for next/navigation's router/searchParams.
 const nav = vi.hoisted(() => {
   let url = '/graphs';
   const listeners = new Set<() => void>();
@@ -32,10 +28,6 @@ const nav = vi.hoisted(() => {
 });
 
 vi.mock('next/navigation', async () => {
-  // Must reuse the *same* React module instance the component tree renders
-  // with (via importActual, not require) — a second React copy breaks
-  // useSyncExternalStore's subscription and produces bogus re-render loops
-  // that look like, but are not, the bug under test.
   const ReactActual = await vi.importActual<typeof import('react')>('react');
   return {
     useRouter: () => ({
@@ -55,9 +47,6 @@ vi.mock('next/navigation', async () => {
         () => nav.getUrl().split('?')[1] ?? '',
         () => nav.getUrl().split('?')[1] ?? ''
       );
-      // Real Next.js hands back a stable object per unique search string.
-      // A fresh URLSearchParams on every call would break dependency-array
-      // comparisons in the component under test regardless of its own logic.
       return ReactActual.useMemo(() => new URLSearchParams(search), [search]);
     },
   };
@@ -91,8 +80,13 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-describe('GraphSearch URL sync', () => {
-  it('settles on ?person=<slug> after picking a suggestion, and does not bounce back to no param', async () => {
+describe('GraphSearch', () => {
+  it('has no mode dropdown', () => {
+    render(<GraphSearch />);
+    expect(screen.queryByRole('combobox')).toBeNull();
+  });
+
+  it('adds the picked person as an additional `subject` root and selects them', async () => {
     render(<GraphSearch />);
 
     fireEvent.change(screen.getByPlaceholderText('Search'), { target: { value: 'Muhammad' } });
@@ -100,86 +94,39 @@ describe('GraphSearch URL sync', () => {
     const option = await screen.findByText('Prophet Muhammad');
     fireEvent.mouseDown(option);
 
-    await waitFor(() => expect(nav.getUrl()).toContain('person=prophet-muhammad'));
-
-    // Give any further queued effects a chance to run before asserting
-    // the URL has actually settled rather than just having transiently
-    // passed through the right value.
-    await new Promise((resolve) => setTimeout(resolve, 50));
-
-    expect(nav.getUrl()).toContain('person=prophet-muhammad');
-
-    const firstPersonSet = nav.replaceCalls.findIndex((entry) => entry.includes('person=prophet-muhammad'));
-    const afterSelection = nav.replaceCalls.slice(firstPersonSet);
-    expect(afterSelection.every((entry) => entry.includes('person=prophet-muhammad'))).toBe(true);
+    await waitFor(() => expect(nav.getUrl()).toContain('subject=person%3Aprophet-muhammad'));
+    expect(nav.getUrl()).toContain('selected=prophet-muhammad');
   });
 
-  it('writes ?descendantsOf=<slug> after switching to Descendants mode and picking a suggestion', async () => {
+  it('does not duplicate an already-present root when picked again', async () => {
+    nav.reset('/graphs?subject=person%3Aprophet-muhammad');
+
     render(<GraphSearch />);
 
-    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'descendantsOf' } });
-    fireEvent.change(screen.getByPlaceholderText('Search for people'), { target: { value: 'Muhammad' } });
-
+    fireEvent.change(screen.getByPlaceholderText('Search'), { target: { value: 'Muhammad' } });
     const option = await screen.findByText('Prophet Muhammad');
     fireEvent.mouseDown(option);
 
-    await waitFor(() => expect(nav.getUrl()).toContain('descendantsOf=prophet-muhammad'));
-    expect(nav.getUrl()).not.toContain('ancestorsOf=');
-    expect(nav.getUrl()).not.toContain('person=');
+    await waitFor(() => expect(nav.getUrl()).toContain('selected=prophet-muhammad'));
+    const subjectCount = (nav.getUrl().match(/subject=/g) ?? []).length;
+    expect(subjectCount).toBe(1);
   });
 
-  it('loads an existing ?descendantsOf=<slug> from the URL on mount without removing it', async () => {
-    nav.reset('/graphs?descendantsOf=prophet-muhammad');
+  it('preserves existing exploration state (expand/filter params) when adding a root', async () => {
+    nav.reset('/graphs?expand=person%3Aprophet-muhammad%3AWIFE');
 
     render(<GraphSearch />);
 
-    await screen.findByText('Prophet Muhammad');
+    fireEvent.change(screen.getByPlaceholderText('Search'), { target: { value: 'Muhammad' } });
+    const option = await screen.findByText('Prophet Muhammad');
+    fireEvent.mouseDown(option);
 
-    await new Promise((resolve) => setTimeout(resolve, 50));
-
-    expect(nav.getUrl()).toContain('descendantsOf=prophet-muhammad');
-  });
-
-  it('loads an existing ?person=<slug> from the URL on mount without removing it', async () => {
-    nav.reset('/graphs?person=prophet-muhammad');
-
-    render(<GraphSearch />);
-
-    await screen.findByText('Prophet Muhammad');
-
-    await new Promise((resolve) => setTimeout(resolve, 50));
-
-    expect(nav.getUrl()).toContain('person=prophet-muhammad');
-  });
-
-  it('keeps ?person=<slug> (and unrelated params) on mount under Strict Mode double-invoked effects', async () => {
-    // Strict Mode (which Next.js dev enables by default) double-invokes
-    // effects on mount: a phantom instance kicks off its own person-lookup
-    // fetch before being torn down. isHydratingRef guards against that
-    // phantom fetch's resolution clobbering the real instance's state, and
-    // against the write-back effect stripping `person` off the URL while a
-    // lookup for it is still in flight. This test's synchronous mock nav
-    // doesn't reproduce the exact async interleaving seen against the real
-    // Next.js router (that was confirmed manually in-browser), but it does
-    // guard the Strict Mode double-invoke path this fix targets.
-    nav.reset('/graphs?relation=DAUGHTER&person=prophet-muhammad');
-
-    render(
-      <React.StrictMode>
-        <GraphSearch />
-      </React.StrictMode>
-    );
-
-    await screen.findByText('Prophet Muhammad');
-
-    await new Promise((resolve) => setTimeout(resolve, 50));
-
-    expect(nav.getUrl()).toContain('person=prophet-muhammad');
-    expect(nav.getUrl()).toContain('relation=DAUGHTER');
+    await waitFor(() => expect(nav.getUrl()).toContain('subject=person%3Aprophet-muhammad'));
+    expect(nav.getUrl()).toContain('expand=person%3Aprophet-muhammad%3AWIFE');
   });
 });
 
-describe('GraphSearch node search (Relations mode)', () => {
+describe('GraphSearch node search', () => {
   const battleNode = { id: '1', label: 'Battle of Badr', slug: 'battle-of-badr', group: 1, type: 'battle' };
 
   it('offers a non-person node from `nodes` alongside Postgres person matches', async () => {
@@ -190,7 +137,7 @@ describe('GraphSearch node search (Relations mode)', () => {
     expect(await screen.findByText('Battle of Badr')).toBeTruthy();
   });
 
-  it('selecting a non-person node sets ?selected=<slug>, not ?person=', async () => {
+  it('selecting a non-person node sets ?selected=<slug>, not ?subject=', async () => {
     render(<GraphSearch nodes={[battleNode]} />);
 
     fireEvent.change(screen.getByPlaceholderText('Search'), { target: { value: 'badr' } });
@@ -198,17 +145,6 @@ describe('GraphSearch node search (Relations mode)', () => {
     fireEvent.mouseDown(option);
 
     await waitFor(() => expect(nav.getUrl()).toContain('selected=battle-of-badr'));
-    expect(nav.getUrl()).not.toContain('person=');
-  });
-
-  it('does not offer non-person nodes in Ancestors mode', async () => {
-    render(<GraphSearch nodes={[battleNode]} />);
-
-    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'ancestorsOf' } });
-    fireEvent.change(screen.getByPlaceholderText('Search for people'), { target: { value: 'badr' } });
-
-    // Give the debounced fetch a chance to resolve before asserting absence.
-    await new Promise((resolve) => setTimeout(resolve, 400));
-    expect(screen.queryByText('Battle of Badr')).toBeNull();
+    expect(nav.getUrl()).not.toContain('subject=');
   });
 });
