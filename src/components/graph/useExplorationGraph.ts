@@ -35,6 +35,7 @@ function isFetchNeeded(routeParams: RouteFetchParams): boolean {
 interface RawExploration {
   exploration: ExplorationResult;
   nodesById: Map<SubjectId, GraphNodeFull>;
+  edges: StoredEdge[];
 }
 
 async function runExploration(baseUrl: string, kindParams: string[], input: ExplorationInput): Promise<RawExploration> {
@@ -77,7 +78,7 @@ async function runExploration(baseUrl: string, kindParams: string[], input: Expl
     exploration = buildExploration({ roots: input.roots, expansions: flattenedExpansions, globalFilters: input.globalFilters }, edges);
   }
 
-  return { exploration, nodesById };
+  return { exploration, nodesById, edges };
 }
 
 export interface UseExplorationGraphOptions {
@@ -90,6 +91,7 @@ export interface UseExplorationGraphOptions {
 
 export interface UseExplorationGraphResult {
   data: GraphData | undefined;
+  edges: StoredEdge[] | undefined;
   isLoading: boolean;
   error: unknown;
 }
@@ -108,5 +110,5 @@ export function useExplorationGraph({ enabled, baseUrl, kindParams, input, selec
     return mapExplorationToGraphData(raw.exploration, raw.nodesById, selectedNode?.id ?? null);
   }, [raw, selectedSlug]);
 
-  return { data, isLoading, error };
+  return { data, edges: raw?.edges, isLoading, error };
 }

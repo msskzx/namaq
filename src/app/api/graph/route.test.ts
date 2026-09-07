@@ -583,4 +583,20 @@ describe('GET /api/graph', () => {
     expect(query).toContain('MATCH path = (p1:Person {slug: ancestorSlug})<-[r:FATHER*]-(p2:Person)');
     expect(query).not.toContain('MOTHER');
   });
+
+  it('runs a path-shaped query (ancestorsOf) and a node-shaped query (relationSubjects) as separate calls instead of one mismatched UNION', async () => {
+    const run = vi.fn().mockResolvedValue({ records: [] });
+    getSession.mockReturnValue({ run });
+
+    const response = await GET(
+      request('?ancestorsOf=aisha&relationSubjects=person:aisha&relationTypes=WIFE')
+    );
+
+    expect(response.status).toBe(200);
+    expect(run).toHaveBeenCalledTimes(2);
+    const queries = run.mock.calls.map(([query]) => query as string);
+    expect(queries.some((query) => query.includes('MATCH path = (p1:Person {slug: ancestorSlug})<-[r:FATHER*]-(p2:Person)'))).toBe(true);
+    expect(queries.some((query) => query.includes('UNWIND $relationSubjects AS subject'))).toBe(true);
+    for (const query of queries) expect(query).not.toContain(' UNION ');
+  });
 });

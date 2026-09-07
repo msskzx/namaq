@@ -296,6 +296,18 @@ const translations = {
         people: 'people',
         nodes: 'nodes',
       },
+      expansionGroups: {
+        immediateFamily: 'Immediate family',
+        extendedFamily: 'Extended family',
+        marriage: 'Marriage relations',
+        other: 'Other connections',
+      },
+      allDirectRelations: 'All direct relations',
+      lineageActions: {
+        ancestors: 'Ancestors',
+        paternalLineage: 'Paternal lineage',
+        descendants: 'Descendants',
+      },
     },
     articlesInCategory: 'Articles in this category',
     // Motivation Cards
@@ -625,6 +637,18 @@ const translations = {
       nodesLabels: {
         people: 'أشخاص',
         nodes: 'عُقد',
+      },
+      expansionGroups: {
+        immediateFamily: 'الأسرة المباشرة',
+        extendedFamily: 'الأسرة الممتدة',
+        marriage: 'علاقات المصاهرة',
+        other: 'روابط أخرى',
+      },
+      allDirectRelations: 'كل الصلات المباشرة',
+      lineageActions: {
+        ancestors: 'الأسلاف',
+        paternalLineage: 'النسب الأبوي',
+        descendants: 'الأخلاف',
       },
     },
     articlesInCategory: 'المقالات في هذا التصنيف',

@@ -12,6 +12,7 @@ import { faExpand, faCompress, faFilter, faMagnifyingGlass } from '@fortawesome/
 import GraphSearch from './GraphSearch';
 import SlideSwitch from './SlideSwitch';
 import RelationFilterPanel from './RelationFilterPanel';
+import ExpansionControls from './ExpansionControls';
 import GraphSurface, { kindFillColor } from './GraphSurface';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import { useLanguage } from '@/components/language/LanguageContext';
@@ -19,8 +20,10 @@ import translations from '@/components/language/translations';
 import { sortRelationTypes, governingRelationType, relationGroup, RELATION_ORDER, KIND_TO_RELATION_GROUP, RelationGroup } from '@/lib/relationship/categories';
 import { filterVisibleGraph } from '@/lib/graphFilter';
 import { profilePath } from '@/lib/nodeProfile';
-import { parseExplorationInput } from '@/lib/relationship/urlState';
-import { NodeKind, subjectId } from '@/lib/relationship/types';
+import { parseExplorationInput, formatExpandParam } from '@/lib/relationship/urlState';
+import { NodeKind, RelationType, subjectId } from '@/lib/relationship/types';
+import { ExpansionRelationId, directRelationCounts } from '@/lib/relationship/expansion';
+import { ExpansionGroup, expansionGroupForRelation } from '@/lib/relationship/expansionGroups';
 import { useExplorationGraph } from './useExplorationGraph';
 
 interface GraphCanvasProps {
@@ -191,6 +194,25 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   const fgRef = useRef<ForceGraphMethods<NodeObject<GraphNodeFull>, LinkObject<GraphNodeFull, GraphLink>>>(null) as RefObject<ForceGraphMethods<NodeObject<GraphNodeFull>, LinkObject<GraphNodeFull, GraphLink>>>;
   const selectedNode = graphData?.nodes.find(node => node.slug === selectedSlug);
   const relationLabel = useCallback((type: string) => (t.relationTypes as Record<string, string>)[type] ?? relationName(type), [t]);
+  const selectedSubjectId = selectedNode ? subjectId((selectedNode.type as NodeKind) ?? 'person', selectedNode.slug) : null;
+  const selectedRelationCounts = useMemo(() => {
+    if (!showSearch || !selectedSubjectId || !exploration.edges) return new Map<RelationType, number>();
+    return directRelationCounts(exploration.edges, selectedSubjectId, RELATION_ORDER) as Map<RelationType, number>;
+  }, [showSearch, selectedSubjectId, exploration.edges]);
+  const groupedRelations = useMemo(() => {
+    const groups = new Map<ExpansionGroup, RelationType[]>();
+    for (const [relation, count] of selectedRelationCounts) {
+      if (count <= 0) continue;
+      const group = expansionGroupForRelation(relation);
+      groups.set(group, [...(groups.get(group) ?? []), relation]);
+    }
+    for (const [group, types] of groups) groups.set(group, sortRelationTypes(types) as RelationType[]);
+    return groups;
+  }, [selectedRelationCounts]);
+  const hasEligibleDirectRelations = useMemo(
+    () => Array.from(selectedRelationCounts.values()).some(count => count > 0),
+    [selectedRelationCounts]
+  );
   // Relation types present in the fetched graph, one toggle per type.
   // ACCOMPANIED_BY is COMPANION_OF's inverse edge (see
   // scripts/people/syncCompanionRelations.ts) -- governed by the same
@@ -328,6 +350,28 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     });
     router.replace(`${pathname}${params.size ? `?${params.toString()}` : ''}`, { scroll: false });
   }, [router, pathname, searchParams]);
+
+  const expandParams = useMemo(() => searchParams?.getAll('expand') ?? [], [searchParams]);
+  const isExpansionActive = useCallback(
+    (relation: ExpansionRelationId) => {
+      if (!selectedSubjectId) return false;
+      return expandParams.includes(formatExpandParam({ subject: selectedSubjectId, relation }));
+    },
+    [expandParams, selectedSubjectId]
+  );
+  const toggleExpansion = (relation: ExpansionRelationId) => {
+    if (!selectedSubjectId) return;
+    const token = formatExpandParam({ subject: selectedSubjectId, relation });
+    const next = expandParams.includes(token) ? expandParams.filter(item => item !== token) : [...expandParams, token];
+    updateParams({ expand: next });
+  };
+  const expandAllDirectRelations = () => {
+    if (!selectedSubjectId) return;
+    const tokens = RELATION_ORDER
+      .filter(relation => (selectedRelationCounts.get(relation) ?? 0) > 0)
+      .map(relation => formatExpandParam({ subject: selectedSubjectId, relation }));
+    updateParams({ expand: Array.from(new Set([...expandParams, ...tokens])) });
+  };
 
   const seededRef = useRef(false);
   useEffect(() => {
@@ -552,22 +596,29 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode.label}</h2>
           <div className="mt-3 flex flex-wrap gap-3">
             <Link className="rounded bg-amber-400 px-3 py-1.5 text-sm text-gray-950 hover:bg-amber-300" href={profilePath(selectedNode.type, selectedNode.slug)}>{t.graph.viewProfile}</Link>
-            <button
-              type="button"
-              onClick={() => {
-                if (!showSearch) {
-                  updateParams({ focus: selectedNode.slug, person: null, ancestorsOf: [], descendantsOf: [] });
-                  return;
-                }
-                const rootId = subjectId((selectedNode.type as NodeKind) ?? 'person', selectedNode.slug);
-                if (explorationInput.roots.includes(rootId)) return;
-                updateParams({ subject: [...explorationInput.roots, rootId] });
-              }}
-              className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-700"
-            >
-              {t.graph.exploreNeighbours}
-            </button>
+            {!showSearch && (
+              <button
+                type="button"
+                onClick={() => updateParams({ focus: selectedNode.slug, person: null, ancestorsOf: [], descendantsOf: [] })}
+                className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-700"
+              >
+                {t.graph.exploreNeighbours}
+              </button>
+            )}
           </div>
+          {showSearch && (
+            <ExpansionControls
+              isPerson={(selectedNode.type ?? 'person') === 'person'}
+              groupedRelations={groupedRelations}
+              relationCounts={selectedRelationCounts}
+              hasEligibleDirectRelations={hasEligibleDirectRelations}
+              isActive={isExpansionActive}
+              onToggle={toggleExpansion}
+              onExpandAllDirectRelations={expandAllDirectRelations}
+              relationLabel={relationLabel}
+              g={t.graph}
+            />
+          )}
         </aside>
       )}
 

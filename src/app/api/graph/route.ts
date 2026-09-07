@@ -138,12 +138,21 @@ export async function GET(_request: Request) {
   }
 
   try {
-    const queryParts: string[] = [];
+    // Split by RETURN shape (`path` vs `node, relationship, related`)
+    // rather than one shared array: Neo4j's UNION requires every combined
+    // subquery to return the same column names, so a fetch that mixes e.g.
+    // ancestorsOf with relationSubjects (both can be requested together
+    // once a lineage expansion's subject is also a relationSubject, see
+    // urlState.ts's buildRouteFetchParams) would otherwise fail with a
+    // UNION column-name syntax error. Each group still gets UNION'd
+    // together within itself; only cross-shape combination is avoided.
+    const pathQueryParts: string[] = [];
+    const nodeQueryParts: string[] = [];
     const params: Record<string, unknown> = {};
 
     // Add person queries
     if (persons.length > 0) {
-      queryParts.push(
+      pathQueryParts.push(
         `UNWIND $persons AS personSlug
          MATCH path = (p1:Person {slug: personSlug})-[*1]-(p2:Person)
          RETURN path`
@@ -160,7 +169,7 @@ export async function GET(_request: Request) {
     // walking them backward from ancestorSlug reaches every paternal
     // ancestor up to the root of the recorded lineage.
     if (ancestorsOf.length > 0) {
-      queryParts.push(
+      pathQueryParts.push(
         `UNWIND $ancestors AS ancestorSlug
          MATCH path = (p1:Person {slug: ancestorSlug})<-[r:FATHER*]-(p2:Person)
          RETURN path`
@@ -169,7 +178,7 @@ export async function GET(_request: Request) {
     }
 
     if (ancestorsOfBothParents.length > 0) {
-      queryParts.push(
+      pathQueryParts.push(
         `UNWIND $ancestorsBothParents AS ancestorSlug
          MATCH path = (p1:Person {slug: ancestorSlug})<-[r:FATHER|MOTHER*]-(p2:Person)
          RETURN path`
@@ -181,7 +190,7 @@ export async function GET(_request: Request) {
     // (child -> parent edges followed backward) from the root person down to
     // every child, grandchild, etc.
     if (descendantsOf.length > 0) {
-      queryParts.push(
+      pathQueryParts.push(
         `UNWIND $descendants AS descendantSlug
          MATCH path = (p1:Person {slug: descendantSlug})<-[r:SON|DAUGHTER*]-(p2:Person)
          RETURN path`
@@ -192,7 +201,7 @@ export async function GET(_request: Request) {
     // A battle only ever connects to Person via PARTICIPATED_IN, so one hop
     // is inherently sufficient here — no hop-limiting logic needed.
     if (battles.length > 0) {
-      queryParts.push(
+      nodeQueryParts.push(
         `UNWIND $battles AS battleSlug
          MATCH (node:Battle {slug: battleSlug})
          OPTIONAL MATCH (node)<-[relationship:PARTICIPATED_IN]-(related:Person)
@@ -207,7 +216,7 @@ export async function GET(_request: Request) {
         .filter((subject): subject is { kind: string; slug: string } => subject !== null);
 
       if (subjects.length > 0) {
-        queryParts.push(
+        nodeQueryParts.push(
           `UNWIND $relationSubjects AS subject
            MATCH (node)
            WHERE node.slug = subject.slug AND subject.kind IN [label IN labels(node) | toLower(label)]
@@ -220,30 +229,38 @@ export async function GET(_request: Request) {
       }
     }
 
-    let result;
-    if (focus && queryParts.length === 0) {
+    const records: Awaited<ReturnType<typeof session.run>>['records'] = [];
+    let ranScopedQuery = false;
+    if (focus && pathQueryParts.length === 0 && nodeQueryParts.length === 0) {
       // A focused view is deliberately limited to one hop. The overview
       // remains available without parameters, but this keeps future,
       // larger graphs from requiring every node to be fetched for a
       // person-level exploration.
-      result = await session.run(
+      ranScopedQuery = true;
+      const result = await session.run(
         `MATCH (node:Person {slug: $focus})
          OPTIONAL MATCH (node)-[relationship]-(related:Person)
          RETURN node, relationship, related`,
         { focus }
       );
-    } else if (queryParts.length === 1) {
-      result = await session.run(queryParts[0], params);
-    } else if (queryParts.length > 1) {
-      result = await session.run(queryParts.join(' UNION '), params);
+      records.push(...result.records);
+    } else if (pathQueryParts.length > 0 || nodeQueryParts.length > 0) {
+      ranScopedQuery = true;
+      for (const parts of [pathQueryParts, nodeQueryParts]) {
+        if (parts.length === 0) continue;
+        const result = parts.length === 1
+          ? await session.run(parts[0], params)
+          : await session.run(parts.join(' UNION '), params);
+        records.push(...result.records);
+      }
     }
 
-    if (result) {
+    if (ranScopedQuery) {
       const nodes = new Map<string, GraphNodeFull>();
       const links: GraphLink[] = [];
       const linkKeys = new Set<string>();
 
-      result.records.forEach(record => {
+      records.forEach(record => {
         if (record.keys.includes('node')) {
           const node = record.get('node');
           const related = record.get('related');
