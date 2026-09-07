@@ -477,4 +477,110 @@ describe('GET /api/graph', () => {
     expect(query).toContain('MATCH path = (p1:Person {slug: descendantSlug})<-[r:SON|DAUGHTER*]-(p2:Person)');
     expect(params).toEqual({ ancestors: ['a'], descendants: ['a'] });
   });
+
+  it('returns edges of the requested types touching a subject regardless of raw stored direction', async () => {
+    const muhammad = node(1, 'prophet-muhammad', 'Muhammad');
+    const khadijah = node(2, 'khadijah', 'Khadijah');
+    const aisha = node(3, 'aisha', 'Aisha');
+    const run = vi.fn().mockResolvedValue({
+      records: [
+        record({
+          node: muhammad,
+          relationship: rel('WIFE', {}, { start: muhammad.identity, end: khadijah.identity }),
+          related: khadijah,
+        }),
+        record({
+          node: muhammad,
+          relationship: rel('WIFE', {}, { start: muhammad.identity, end: aisha.identity }),
+          related: aisha,
+        }),
+      ],
+    });
+    getSession.mockReturnValue({ run });
+
+    const response = await GET(
+      request('?relationSubjects=person:prophet-muhammad&relationTypes=WIFE')
+    );
+    const body = await response.json();
+
+    expect(run).toHaveBeenCalledTimes(1);
+    const [query, params] = run.mock.calls[0];
+    expect(query).toContain('UNWIND $relationSubjects AS subject');
+    expect(query).toContain('WHERE relationship IS NULL OR type(relationship) IN $relationTypes');
+    expect(params).toEqual({
+      relationSubjects: [{ kind: 'person', slug: 'prophet-muhammad' }],
+      relationTypes: ['WIFE'],
+    });
+
+    expect(body.nodes.map((n: { slug: string }) => n.slug).sort()).toEqual([
+      'aisha',
+      'khadijah',
+      'prophet-muhammad',
+    ]);
+    expect(body.links).toEqual(expect.arrayContaining([
+      { source: 'person:prophet-muhammad', target: 'person:khadijah', label: 'WIFE', value: 1 },
+      { source: 'person:prophet-muhammad', target: 'person:aisha', label: 'WIFE', value: 1 },
+    ]));
+    expect(body.links).toHaveLength(2);
+  });
+
+  it('combines a relationSubjects/relationTypes query with another query param via UNION', async () => {
+    const run = vi.fn().mockResolvedValue({ records: [] });
+    getSession.mockReturnValue({ run });
+
+    await GET(request('?battle=badr&relationSubjects=person:prophet-muhammad&relationTypes=WIFE'));
+
+    expect(run).toHaveBeenCalledTimes(1);
+    const [query, params] = run.mock.calls[0];
+    expect(query).toContain(' UNION ');
+    expect(query).toContain('MATCH (node:Battle {slug: battleSlug})');
+    expect(query).toContain('UNWIND $relationSubjects AS subject');
+    expect(params).toEqual({
+      battles: ['badr'],
+      relationSubjects: [{ kind: 'person', slug: 'prophet-muhammad' }],
+      relationTypes: ['WIFE'],
+    });
+  });
+
+  it('walks a both-parents ancestors chain, including a grandparent reachable only through a MOTHER edge', async () => {
+    const aisha = node(1, 'aisha', 'Aisha');
+    const ummRuman = node(2, 'umm-ruman', 'Umm Ruman');
+    const ummRumansFather = node(3, 'uwaymir', 'Uwaymir');
+    const run = vi.fn().mockResolvedValue({
+      records: [
+        pathRecord([
+          { start: aisha, end: ummRuman, relationship: rel('MOTHER', {}, { start: ummRuman.identity, end: aisha.identity }) },
+          { start: ummRuman, end: ummRumansFather, relationship: rel('FATHER', {}, { start: ummRumansFather.identity, end: ummRuman.identity }) },
+        ]),
+      ],
+    });
+    getSession.mockReturnValue({ run });
+
+    const response = await GET(request('?ancestorsOfBothParents=aisha'));
+    const body = await response.json();
+
+    expect(run).toHaveBeenCalledTimes(1);
+    const [query, params] = run.mock.calls[0];
+    expect(query).toContain('UNWIND $ancestorsBothParents AS ancestorSlug');
+    expect(query).toContain('MATCH path = (p1:Person {slug: ancestorSlug})<-[r:FATHER|MOTHER*]-(p2:Person)');
+    expect(params).toEqual({ ancestorsBothParents: ['aisha'] });
+
+    expect(body.nodes.map((n: { slug: string }) => n.slug).sort()).toEqual(['aisha', 'umm-ruman', 'uwaymir']);
+    expect(body.links).toEqual(expect.arrayContaining([
+      { source: 'person:umm-ruman', target: 'person:aisha', label: 'MOTHER', value: 1 },
+      { source: 'person:uwaymir', target: 'person:umm-ruman', label: 'FATHER', value: 1 },
+    ]));
+  });
+
+  it('does not let ancestorsOf (paternal-only) include a maternal-line ancestor', async () => {
+    const run = vi.fn().mockResolvedValue({ records: [] });
+    getSession.mockReturnValue({ run });
+
+    await GET(request('?ancestorsOf=aisha'));
+
+    expect(run).toHaveBeenCalledTimes(1);
+    const [query] = run.mock.calls[0];
+    expect(query).toContain('MATCH path = (p1:Person {slug: ancestorSlug})<-[r:FATHER*]-(p2:Person)');
+    expect(query).not.toContain('MOTHER');
+  });
 });

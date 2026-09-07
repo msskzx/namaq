@@ -8,6 +8,12 @@ const KNOWN_TYPES: readonly EntityType[] = ['person', 'battle', 'title', 'event'
 
 const nodeKey = (type: string, slug: string) => `${type}:${slug}`;
 
+function parseNodeKey(key: string): { kind: string; slug: string } | null {
+  const separatorIndex = key.indexOf(':');
+  if (separatorIndex === -1) return null;
+  return { kind: key.slice(0, separatorIndex), slug: key.slice(separatorIndex + 1) };
+}
+
 function labelsToType(labels: string[]): EntityType | null {
   for (const label of labels) {
     const type = label.toLowerCase();
@@ -97,8 +103,11 @@ export async function GET(_request: Request) {
   const { searchParams } = new URL(_request.url);
   const persons = searchParams.getAll('person') as string[];
   const ancestorsOf = searchParams.getAll('ancestorsOf') as string[];
+  const ancestorsOfBothParents = searchParams.getAll('ancestorsOfBothParents') as string[];
   const descendantsOf = searchParams.getAll('descendantsOf') as string[];
   const battles = searchParams.getAll('battle') as string[];
+  const relationSubjects = searchParams.getAll('relationSubjects') as string[];
+  const relationTypes = searchParams.getAll('relationTypes') as string[];
   const focus = searchParams.get('focus');
   // Relation types to drop from the response entirely (e.g. the homepage's
   // Prophet-focused preview excludes COMPANION_OF/ACCOMPANIED_BY, since one
@@ -130,7 +139,7 @@ export async function GET(_request: Request) {
 
   try {
     const queryParts: string[] = [];
-    const params: Record<string, string[]> = {};
+    const params: Record<string, unknown> = {};
 
     // Add person queries
     if (persons.length > 0) {
@@ -159,6 +168,15 @@ export async function GET(_request: Request) {
       params.ancestors = ancestorsOf;
     }
 
+    if (ancestorsOfBothParents.length > 0) {
+      queryParts.push(
+        `UNWIND $ancestorsBothParents AS ancestorSlug
+         MATCH path = (p1:Person {slug: ancestorSlug})<-[r:FATHER|MOTHER*]-(p2:Person)
+         RETURN path`
+      );
+      params.ancestorsBothParents = ancestorsOfBothParents;
+    }
+
     // Add descendant queries: the same SON/DAUGHTER chain, walked in reverse
     // (child -> parent edges followed backward) from the root person down to
     // every child, grandchild, etc.
@@ -181,6 +199,25 @@ export async function GET(_request: Request) {
          RETURN node, relationship, related`
       );
       params.battles = battles;
+    }
+
+    if (relationSubjects.length > 0 && relationTypes.length > 0) {
+      const subjects = relationSubjects
+        .map(parseNodeKey)
+        .filter((subject): subject is { kind: string; slug: string } => subject !== null);
+
+      if (subjects.length > 0) {
+        queryParts.push(
+          `UNWIND $relationSubjects AS subject
+           MATCH (node)
+           WHERE node.slug = subject.slug AND subject.kind IN [label IN labels(node) | toLower(label)]
+           OPTIONAL MATCH (node)-[relationship]-(related)
+           WHERE relationship IS NULL OR type(relationship) IN $relationTypes
+           RETURN node, relationship, related`
+        );
+        params.relationSubjects = subjects;
+        params.relationTypes = relationTypes;
+      }
     }
 
     let result;
