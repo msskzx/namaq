@@ -178,10 +178,7 @@ describe('buildExploration', () => {
     ]);
   });
 
-  // The defect docs/graph-expansion-controls-plan.md proposes fixing: the
-  // matcher reads edges arriving at the subject, and a person is always the
-  // source of a cross-kind edge.
-  it('does not reach a battle by expanding the person who fought in it', () => {
+  it('reaches a battle by expanding the person who fought in it', () => {
     const badr = subjectId('battle', 'badr');
     const crossKindEdges = [...edges, edge(muhammad, badr, 'PARTICIPATED_IN')];
 
@@ -190,6 +187,20 @@ describe('buildExploration', () => {
       crossKindEdges,
     );
 
-    expect(visibleSubjects(result).has(badr)).toBe(false);
+    expect(visibleSubjects(result)).toEqual(new Set([muhammad, badr]));
+  });
+
+  // globalFilters runs through the same matcher as expansions, so revealing a
+  // relation type across the graph reaches cross-kind subjects too.
+  it('reveals a title through a global filter, not only through an expansion', () => {
+    const companion = subjectId('title', 'sahabi');
+    const crossKindEdges = [...edges, edge(muhammad, companion, 'HOLDS_TITLE')];
+
+    const result = buildExploration(
+      { roots: [muhammad], expansions: [], globalFilters: ['HOLDS_TITLE'] },
+      crossKindEdges,
+    );
+
+    expect(visibleSubjects(result)).toEqual(new Set([muhammad, companion]));
   });
 });
