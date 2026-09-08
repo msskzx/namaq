@@ -13,7 +13,7 @@ const { getDriver, run, executeWrite, close } = vi.hoisted(() => {
 });
 vi.mock('../../src/lib/neo4j', () => ({ getDriver }));
 
-import { estimateLabelRadius, writeLayoutToNeo4j, type LayoutRow } from './computeGraphLayout';
+import { estimateLabelRadius, writeSubjectPropertiesToNeo4j, type SubjectPropertyRow } from './computeGraphLayout';
 
 describe('estimateLabelRadius', () => {
   it('grows with label length', () => {
@@ -27,10 +27,10 @@ describe('estimateLabelRadius', () => {
   });
 });
 
-describe('writeLayoutToNeo4j', () => {
-  const rows: LayoutRow[] = [
-    { type: 'person', slug: 'prophet-muhammad', x: 1, y: 2 },
-    { type: 'person', slug: 'ali-ibn-abi-talib', x: 3, y: 4 },
+describe('writeSubjectPropertiesToNeo4j', () => {
+  const rows: SubjectPropertyRow[] = [
+    { type: 'person', slug: 'prophet-muhammad', graphRank: 0.031, layoutX: 1, layoutY: 2 },
+    { type: 'person', slug: 'ali-ibn-abi-talib', graphRank: 0.024, layoutX: 3, layoutY: 4 },
   ];
 
   beforeEach(() => {
@@ -41,20 +41,23 @@ describe('writeLayoutToNeo4j', () => {
   });
 
   it('does nothing (no session opened) for an empty row list', async () => {
-    await writeLayoutToNeo4j([]);
+    await writeSubjectPropertiesToNeo4j([]);
     expect(getDriver).not.toHaveBeenCalled();
   });
 
   it('writes via a single UNWIND+MATCH+SET statement inside a write transaction', async () => {
     run.mockResolvedValue({ records: [{ get: (key: string) => (key === 'matched' ? 2 : undefined) }] });
 
-    await writeLayoutToNeo4j(rows);
+    await writeSubjectPropertiesToNeo4j(rows);
 
     expect(executeWrite).toHaveBeenCalledTimes(1);
     expect(run).toHaveBeenCalledTimes(1);
     const [query, params] = run.mock.calls[0];
     expect(query).toContain('UNWIND $rows AS row');
-    expect(query).toContain('SET n.layoutX = row.x, n.layoutY = row.y');
+    // graphRank rides the same statement as the coordinates so a graph-only
+    // subject gets both or neither -- docs/graph-subject-search-plan.md ranks
+    // suggestions by it, and PostgreSQL has no row to read it from.
+    expect(query).toContain('SET n.graphRank = row.graphRank, n.layoutX = row.layoutX, n.layoutY = row.layoutY');
     expect(params).toEqual({ rows });
     expect(close).toHaveBeenCalledTimes(1);
   });
@@ -62,7 +65,7 @@ describe('writeLayoutToNeo4j', () => {
   it('throws when fewer subjects were matched than expected, rather than silently applying a partial map', async () => {
     run.mockResolvedValue({ records: [{ get: (key: string) => (key === 'matched' ? 1 : undefined) }] });
 
-    await expect(writeLayoutToNeo4j(rows)).rejects.toThrow('Matched 1 of 2 expected Neo4j subjects');
+    await expect(writeSubjectPropertiesToNeo4j(rows)).rejects.toThrow('Matched 1 of 2 expected Neo4j subjects');
     // Still closes the session on the error path.
     expect(close).toHaveBeenCalledTimes(1);
   });
@@ -70,7 +73,7 @@ describe('writeLayoutToNeo4j', () => {
   it('closes the session even when the write itself throws', async () => {
     run.mockRejectedValue(new Error('boom'));
 
-    await expect(writeLayoutToNeo4j(rows)).rejects.toThrow('boom');
+    await expect(writeSubjectPropertiesToNeo4j(rows)).rejects.toThrow('boom');
     expect(close).toHaveBeenCalledTimes(1);
   });
 });

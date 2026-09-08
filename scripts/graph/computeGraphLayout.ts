@@ -28,22 +28,26 @@ export function estimateLabelRadius(label: string): number {
   return Math.max(estimatedTextWidth + LABEL_FONT_SIZE, LABEL_FONT_SIZE * 2) / 2;
 }
 
-export interface LayoutRow {
+export interface SubjectPropertyRow {
   type: GraphRankNodeType;
   slug: string;
-  x: number;
-  y: number;
+  graphRank: number;
+  layoutX: number;
+  layoutY: number;
 }
 
-// Persists layoutX/layoutY on every Neo4j subject the layout was computed
-// for, not just ones with a PostgreSQL row -- see
-// docs/adr/0005-use-a-precomputed-global-graph-map.md. One UNWIND+MATCH+SET
+// Persists the offline-computed properties on every Neo4j subject they were
+// computed for, not just ones with a PostgreSQL row -- see
+// docs/adr/0006-persist-offline-computed-properties-to-neo4j.md, and
+// docs/adr/0005-use-a-precomputed-global-graph-map.md for the coordinates
+// specifically. clusterId stays PostgreSQL-only: nothing reads it back from a
+// response, only this pipeline's own next run consumes it. One UNWIND+MATCH+SET
 // statement is one Neo4j transaction (matching type by label the same way
 // /api/graph/route.ts's relationSubjects query does, since a slug is only
 // unique within its own type), and the returned match count is verified
 // against the row count so a silently-unmatched subject (typo'd slug,
 // deleted node) surfaces as an error instead of a partially-applied map.
-export async function writeLayoutToNeo4j(rows: LayoutRow[]): Promise<void> {
+export async function writeSubjectPropertiesToNeo4j(rows: SubjectPropertyRow[]): Promise<void> {
   if (rows.length === 0) return;
   const session = getDriver().session({
     database: process.env.NEO4J_DATABASE || 'neo4j',
@@ -55,14 +59,14 @@ export async function writeLayoutToNeo4j(rows: LayoutRow[]): Promise<void> {
         `UNWIND $rows AS row
          MATCH (n)
          WHERE n.slug = row.slug AND row.type IN [label IN labels(n) | toLower(label)]
-         SET n.layoutX = row.x, n.layoutY = row.y
+         SET n.graphRank = row.graphRank, n.layoutX = row.layoutX, n.layoutY = row.layoutY
          RETURN count(n) AS matched`,
         { rows },
       ),
     );
     const matched = result.records[0]?.get('matched') ?? 0;
     if (matched !== rows.length) {
-      throw new Error(`Matched ${matched} of ${rows.length} expected Neo4j subjects while writing layout positions.`);
+      throw new Error(`Matched ${matched} of ${rows.length} expected Neo4j subjects while writing computed properties.`);
     }
   } finally {
     await session.close();
@@ -152,7 +156,7 @@ async function main() {
         graphOnly.length ? ` (${graphOnly.map((row) => `${row.type}:${row.slug}`).join(', ')})` : ''
       }`,
     );
-    console.log(`Neo4j subjects to receive layoutX/layoutY: ${rows.length} (every subject above, PostgreSQL-backed or graph-only)`);
+    console.log(`Neo4j subjects to receive graphRank/layoutX/layoutY: ${rows.length} (every subject above, PostgreSQL-backed or graph-only)`);
 
     if (apply) {
       const computedAt = new Date();
@@ -176,8 +180,10 @@ async function main() {
       await prisma.$transaction(updates);
       console.log(`Wrote graphRank/clusterId/layoutX/layoutY for ${toWrite.length} PostgreSQL rows.`);
 
-      await writeLayoutToNeo4j(rows.map((row) => ({ type: row.type, slug: row.slug, x: row.layoutX, y: row.layoutY })));
-      console.log(`Wrote layoutX/layoutY for ${rows.length} Neo4j subjects.`);
+      await writeSubjectPropertiesToNeo4j(
+        rows.map(({ type, slug, graphRank, layoutX, layoutY }) => ({ type, slug, graphRank, layoutX, layoutY })),
+      );
+      console.log(`Wrote graphRank/layoutX/layoutY for ${rows.length} Neo4j subjects.`);
     } else {
       console.log('No data changed. Re-run with --apply to persist rank/cluster/layout to PostgreSQL and Neo4j.');
     }
@@ -192,8 +198,8 @@ async function main() {
   }
 }
 
-// Guards against running the whole CLI (real Postgres/Neo4j writes) as a
-// side effect of importing estimateLabelRadius/writeLayoutToNeo4j for tests.
+// Guards against running the whole CLI (real Postgres/Neo4j writes) as a side
+// effect of importing estimateLabelRadius/writeSubjectPropertiesToNeo4j for tests.
 if (import.meta.url === `file://${process.argv[1]}`) {
   main().catch((error) => {
     console.error('Unified graph rank/cluster/layout computation failed:', error);
