@@ -1,8 +1,10 @@
 # Historical subjects are searchable
 
-Status: ready for implementation. One dependency is recorded under
-[Open issues](#open-issues); it gates end-to-end verification, not the work
-itself.
+Status: implemented, phases one to six. Three operational steps remain, listed
+under [Data and operational consequences](#data-and-operational-consequences);
+until the first of them runs, `graphRank` is absent from Neo4j and subjects
+sort unranked. One dependency is recorded under [Open issues](#open-issues); it
+gates end-to-end verification of criteria 2 and 3, not the work itself.
 
 Follows on from [graph-only people are
 searchable](graph-only-people-search-plan.md), whose "Out of scope" note left
@@ -251,13 +253,25 @@ ADR 0006, and the "Relationship graph" section of `README.md`.
 
 ## Data and operational consequences
 
-- **Migration**: dropping `nasabRank` and `nasabRankComputedAt` from Person is
-  irreversible without recomputation. The pipeline that produced them is
-  deleted in the same phase.
-- **Recomputation**: `npm run graph:layout -- --apply` must run after phase two
-  or `graphRank` is absent from Neo4j and graph-only people rank last.
-- **Neo4j cleanup**: `p.nasabRank`, written to all 576 person nodes by PR #35,
-  becomes orphaned and is removed in phase three.
+Three steps an operator has to run, in this order:
+
+1. **Recomputation.** `npm run graph:layout -- --apply`. Until this runs,
+   `graphRank` is absent from Neo4j, so `/api/graph` returns it as null for
+   every subject and both the side list and the suggestion ranking fall back to
+   their name tie-breaker. Nothing errors; the ordering is simply flat.
+2. **Migration.** `npx prisma migrate deploy` applies
+   `20260908000000_drop_person_nasab_rank`. Dropping `nasabRank` and
+   `nasabRankComputedAt` is irreversible: the pipeline that produced them is
+   deleted in the same change.
+3. **Neo4j cleanup.** `p.nasabRank`, written to all 576 person nodes by PR #35,
+   is now orphaned:
+
+   ```cypher
+   MATCH (p:Person) WHERE p.nasabRank IS NOT NULL REMOVE p.nasabRank
+   ```
+
+Two consequences that need no action:
+
 - **Ordering change**: the `/people` first page changes visibly. See decision 9.
 - **No index or pagination work** at 659 subjects. See decision 13.
 
