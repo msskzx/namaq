@@ -48,6 +48,25 @@ function request(query: string) {
   return new Request(`http://localhost/api/graph${query}`);
 }
 
+// Every response shape now makes one extra `session.run` call after its
+// main query: attachNeo4jLayout's shared, batched coordinate lookup (see
+// route.ts). A plain `vi.fn().mockResolvedValueOnce(...)` per test would
+// need updating at every call site just to keep that call from blowing up
+// on an unmocked shape -- this smart base implementation (queued `Once`
+// responses still take priority for the main query/queries) answers it
+// generically instead, using whichever `type`/`slug` subjects it's asked
+// about, with a fixed (0, 0) position wherever a specific test doesn't
+// care about the actual coordinate values.
+function createRun() {
+  return vi.fn(async (query: string, params?: Record<string, unknown>) => {
+    if (typeof query === 'string' && query.includes('n.layoutX')) {
+      const subjects = (params?.subjects ?? []) as { type: string; slug: string }[];
+      return { records: subjects.map((s) => record({ type: s.type, slug: s.slug, layoutX: 0, layoutY: 0 })) };
+    }
+    return { records: [] };
+  });
+}
+
 describe('GET /api/graph', () => {
   beforeEach(() => {
     getSession.mockReset();
@@ -81,7 +100,7 @@ describe('GET /api/graph', () => {
   });
 
   it('returns the full unified Person+Battle+Title+Event graph with no query params', async () => {
-    const run = vi.fn()
+    const run = createRun()
       .mockResolvedValueOnce({
         records: [
           record({ labels: ['Person'], slug: 'prophet-muhammad', name: 'Muhammad' }),
@@ -98,29 +117,39 @@ describe('GET /api/graph', () => {
           record({ sourceLabels: ['Person'], sourceSlug: 'ali-ibn-abi-talib', relType: 'HOLDS_TITLE', status: null, targetLabels: ['Title'], targetSlug: 'commander' }),
           record({ sourceLabels: ['Person'], sourceSlug: 'prophet-muhammad', relType: 'INVOLVED_IN', status: null, targetLabels: ['Event'], targetSlug: 'hijra' }),
         ],
+      })
+      .mockResolvedValueOnce({
+        records: [
+          record({ type: 'person', slug: 'prophet-muhammad', layoutX: 10, layoutY: 20 }),
+          record({ type: 'person', slug: 'ali-ibn-abi-talib', layoutX: 15, layoutY: 25 }),
+          record({ type: 'battle', slug: 'badr', layoutX: 100, layoutY: 200 }),
+          record({ type: 'title', slug: 'commander', layoutX: 0, layoutY: 0 }),
+          record({ type: 'event', slug: 'hijra', layoutX: -50, layoutY: -60 }),
+        ],
       });
     getSession.mockReturnValue({ run });
 
     findMany.mockResolvedValue([
-      { slug: 'prophet-muhammad', nasabRank: 1, graphRank: 1, clusterId: 0, layoutX: 10, layoutY: 20 },
-      { slug: 'ali-ibn-abi-talib', nasabRank: 2, graphRank: 3, clusterId: 0, layoutX: 15, layoutY: 25 },
+      { slug: 'prophet-muhammad', nasabRank: 1, graphRank: 1, clusterId: 0 },
+      { slug: 'ali-ibn-abi-talib', nasabRank: 2, graphRank: 3, clusterId: 0 },
     ]);
-    findManyBattle.mockResolvedValue([{ slug: 'badr', graphRank: 2, clusterId: 1, layoutX: 100, layoutY: 200 }]);
-    findManyTitle.mockResolvedValue([{ slug: 'commander', graphRank: 5, clusterId: 0, layoutX: null, layoutY: null }]);
-    findManyEvent.mockResolvedValue([{ slug: 'hijra', graphRank: 4, clusterId: 2, layoutX: -50, layoutY: -60 }]);
+    findManyBattle.mockResolvedValue([{ slug: 'badr', graphRank: 2, clusterId: 1 }]);
+    findManyTitle.mockResolvedValue([{ slug: 'commander', graphRank: 5, clusterId: 0 }]);
+    findManyEvent.mockResolvedValue([{ slug: 'hijra', graphRank: 4, clusterId: 2 }]);
 
     const response = await GET(request(''));
     const body = await response.json();
 
-    expect(run).toHaveBeenCalledTimes(2);
+    expect(run).toHaveBeenCalledTimes(3);
     expect(run.mock.calls[0][0]).toContain('WHERE n:Person OR n:Battle OR n:Title OR n:Event');
     expect(run.mock.calls[1][0]).toContain('MATCH (a)-[r]->(b)');
+    expect(run.mock.calls[2][0]).toContain('n.layoutX');
 
     expect(body.nodes).toEqual(expect.arrayContaining([
       { id: 'person:prophet-muhammad', label: 'Muhammad', slug: 'prophet-muhammad', group: 1, type: 'person', nasabRank: 1, graphRank: 1, clusterId: 0, x: 10, y: 20, fx: 10, fy: 20 },
       { id: 'person:ali-ibn-abi-talib', label: 'Ali', slug: 'ali-ibn-abi-talib', group: 1, type: 'person', nasabRank: 2, graphRank: 3, clusterId: 0, x: 15, y: 25, fx: 15, fy: 25 },
       { id: 'battle:badr', label: 'غزوة بدر', slug: 'badr', group: 1, type: 'battle', graphRank: 2, clusterId: 1, x: 100, y: 200, fx: 100, fy: 200 },
-      { id: 'title:commander', label: 'Commander', slug: 'commander', group: 1, type: 'title', graphRank: 5, clusterId: 0 },
+      { id: 'title:commander', label: 'Commander', slug: 'commander', group: 1, type: 'title', graphRank: 5, clusterId: 0, x: 0, y: 0, fx: 0, fy: 0 },
       { id: 'event:hijra', label: 'الهجرة', slug: 'hijra', group: 1, type: 'event', graphRank: 4, clusterId: 2, x: -50, y: -60, fx: -50, fy: -60 },
     ]));
     expect(body.nodes).toHaveLength(5);
@@ -157,7 +186,7 @@ describe('GET /api/graph', () => {
   });
 
   it('kind=person&kind=battle returns only those kinds and the links directly between them', async () => {
-    const run = vi.fn()
+    const run = createRun()
       .mockResolvedValueOnce({
         records: [
           record({ labels: ['Person'], slug: 'ali-ibn-abi-talib', name: 'Ali' }),
@@ -185,7 +214,7 @@ describe('GET /api/graph', () => {
   });
 
   it('ignores unrecognized kind values and treats an empty kind list as "every kind"', async () => {
-    const run = vi.fn()
+    const run = createRun()
       .mockResolvedValueOnce({ records: [record({ labels: ['Person'], slug: 'a', name: 'A' })] })
       .mockResolvedValueOnce({ records: [] });
     getSession.mockReturnValue({ run });
@@ -199,7 +228,7 @@ describe('GET /api/graph', () => {
   it('scopes to a single hop when focus is set', async () => {
     const focusNode = node(1, 'prophet-muhammad', 'Muhammad');
     const related = node(2, 'khadijah', 'Khadijah');
-    const run = vi.fn().mockResolvedValue({
+    const run = createRun().mockResolvedValueOnce({
       records: [record({ node: focusNode, relationship: rel('WIFE', {}, { start: focusNode.identity, end: related.identity }), related })],
     });
     getSession.mockReturnValue({ run });
@@ -207,7 +236,7 @@ describe('GET /api/graph', () => {
     const response = await GET(request('?focus=prophet-muhammad'));
     const body = await response.json();
 
-    expect(run).toHaveBeenCalledTimes(1);
+    expect(run).toHaveBeenCalledTimes(2);
     const [query, params] = run.mock.calls[0];
     expect(query).toContain('MATCH (node:Person {slug: $focus})');
     expect(query).toContain('OPTIONAL MATCH (node)-[relationship]-(related:Person)');
@@ -220,7 +249,7 @@ describe('GET /api/graph', () => {
   it('renders a focus-query relationship using its true stored direction, not the anchor/neighbor query shape', async () => {
     const battleNode = node(1, 'badr', 'غزوة بدر', ['Battle']);
     const participant = node(2, 'ali-ibn-abi-talib', 'Ali');
-    const run = vi.fn().mockResolvedValue({
+    const run = createRun().mockResolvedValueOnce({
       // The Cypher pattern is undirected (`-[relationship]-`), and `node`
       // here is the Battle even though the relationship is truly stored
       // Person -[:PARTICIPATED_IN]-> Battle -- the response must still
@@ -245,7 +274,7 @@ describe('GET /api/graph', () => {
     const focusNode = node(1, 'prophet-muhammad', 'Muhammad');
     const wife = node(2, 'khadijah', 'Khadijah');
     const companion = node(3, 'abu-bakr', 'Abu Bakr');
-    const run = vi.fn().mockResolvedValue({
+    const run = createRun().mockResolvedValueOnce({
       records: [
         record({ node: focusNode, relationship: rel('WIFE', {}, { start: focusNode.identity, end: wife.identity }), related: wife }),
         record({ node: focusNode, relationship: rel('COMPANION_OF'), related: companion }),
@@ -265,7 +294,7 @@ describe('GET /api/graph', () => {
   it('keeps the focus node even when every one of its relations is excluded', async () => {
     const focusNode = node(1, 'prophet-muhammad', 'Muhammad');
     const companion = node(2, 'abu-bakr', 'Abu Bakr');
-    const run = vi.fn().mockResolvedValue({
+    const run = createRun().mockResolvedValueOnce({
       records: [record({ node: focusNode, relationship: rel('COMPANION_OF'), related: companion })],
     });
     getSession.mockReturnValue({ run });
@@ -285,7 +314,7 @@ describe('GET /api/graph', () => {
     // A 2-hop path: prophet-muhammad -[WIFE]-> aisha -[DAUGHTER]<- abu-bakr,
     // i.e. the exact shape that lets an unrelated person's relation leak into
     // a person-scoped fetch.
-    const run = vi.fn().mockResolvedValue({
+    const run = createRun().mockResolvedValueOnce({
       records: [
         pathRecord([
           { start: muhammad, end: aisha, relationship: rel('WIFE', {}, { start: muhammad.identity, end: aisha.identity }) },
@@ -298,7 +327,7 @@ describe('GET /api/graph', () => {
     const response = await GET(request('?person=prophet-muhammad'));
     const body = await response.json();
 
-    expect(run).toHaveBeenCalledTimes(1);
+    expect(run).toHaveBeenCalledTimes(2);
     const [query, params] = run.mock.calls[0];
     expect(query).toContain('UNWIND $persons AS personSlug');
     expect(query).toContain('MATCH path = (p1:Person {slug: personSlug})-[*1]-(p2:Person)');
@@ -315,7 +344,7 @@ describe('GET /api/graph', () => {
     const a = node(1, 'a', 'A');
     const b = node(2, 'b', 'B');
     const son = () => rel('SON', {}, { start: a.identity, end: b.identity });
-    const run = vi.fn().mockResolvedValue({
+    const run = createRun().mockResolvedValueOnce({
       records: [
         pathRecord([{ start: a, end: b, relationship: son() }]),
         pathRecord([{ start: a, end: b, relationship: son() }]),
@@ -340,7 +369,7 @@ describe('GET /api/graph', () => {
   it('renders a descendantsOf edge using the relationship\'s true direction, not the path-walk direction', async () => {
     const ali = node(1, 'ali-ibn-abi-talib', 'Ali');
     const hasan = node(2, 'al-hasan-ibn-ali', 'Hasan');
-    const run = vi.fn().mockResolvedValue({
+    const run = createRun().mockResolvedValueOnce({
       records: [
         // Segment walked root (ali) -> descendant (hasan), but the SON
         // edge is truly stored hasan -[:SON]-> ali (hasan is Ali's son).
@@ -406,7 +435,7 @@ describe('GET /api/graph', () => {
   it('fetches a battle and its participants, including status', async () => {
     const battle = node(1, 'badr', 'غزوة بدر', ['Battle']);
     const participant = node(2, 'ali-ibn-abi-talib', 'Ali', ['Person']);
-    const run = vi.fn().mockResolvedValue({
+    const run = createRun().mockResolvedValueOnce({
       records: [record({
         node: battle,
         relationship: rel('PARTICIPATED_IN', { status: ['MARTYRED'] }, { start: participant.identity, end: battle.identity }),
@@ -418,7 +447,7 @@ describe('GET /api/graph', () => {
     const response = await GET(request('?battle=badr'));
     const body = await response.json();
 
-    expect(run).toHaveBeenCalledTimes(1);
+    expect(run).toHaveBeenCalledTimes(2);
     const [query, params] = run.mock.calls[0];
     expect(query).toContain('UNWIND $battles AS battleSlug');
     expect(query).toContain('MATCH (node:Battle {slug: battleSlug})');
@@ -482,7 +511,7 @@ describe('GET /api/graph', () => {
     const muhammad = node(1, 'prophet-muhammad', 'Muhammad');
     const khadijah = node(2, 'khadijah', 'Khadijah');
     const aisha = node(3, 'aisha', 'Aisha');
-    const run = vi.fn().mockResolvedValue({
+    const run = createRun().mockResolvedValueOnce({
       records: [
         record({
           node: muhammad,
@@ -503,7 +532,7 @@ describe('GET /api/graph', () => {
     );
     const body = await response.json();
 
-    expect(run).toHaveBeenCalledTimes(1);
+    expect(run).toHaveBeenCalledTimes(2);
     const [query, params] = run.mock.calls[0];
     expect(query).toContain('UNWIND $relationSubjects AS subject');
     expect(query).toContain('WHERE relationship IS NULL OR type(relationship) IN $relationTypes');
@@ -546,7 +575,7 @@ describe('GET /api/graph', () => {
     const aisha = node(1, 'aisha', 'Aisha');
     const ummRuman = node(2, 'umm-ruman', 'Umm Ruman');
     const ummRumansFather = node(3, 'uwaymir', 'Uwaymir');
-    const run = vi.fn().mockResolvedValue({
+    const run = createRun().mockResolvedValueOnce({
       records: [
         pathRecord([
           { start: aisha, end: ummRuman, relationship: rel('MOTHER', {}, { start: ummRuman.identity, end: aisha.identity }) },
@@ -559,7 +588,7 @@ describe('GET /api/graph', () => {
     const response = await GET(request('?ancestorsOfBothParents=aisha'));
     const body = await response.json();
 
-    expect(run).toHaveBeenCalledTimes(1);
+    expect(run).toHaveBeenCalledTimes(2);
     const [query, params] = run.mock.calls[0];
     expect(query).toContain('UNWIND $ancestorsBothParents AS ancestorSlug');
     expect(query).toContain('MATCH path = (p1:Person {slug: ancestorSlug})<-[r:FATHER|MOTHER*]-(p2:Person)');
@@ -598,5 +627,68 @@ describe('GET /api/graph', () => {
     expect(queries.some((query) => query.includes('MATCH path = (p1:Person {slug: ancestorSlug})<-[r:FATHER*]-(p2:Person)'))).toBe(true);
     expect(queries.some((query) => query.includes('UNWIND $relationSubjects AS subject'))).toBe(true);
     for (const query of queries) expect(query).not.toContain(' UNION ');
+  });
+
+  it('attaches saved Neo4j coordinates to a scoped (focus) response, keyed by type and slug', async () => {
+    const focusNode = node(1, 'prophet-muhammad', 'Muhammad');
+    const related = node(2, 'khadijah', 'Khadijah');
+    const run = vi.fn()
+      .mockResolvedValueOnce({
+        records: [record({ node: focusNode, relationship: rel('WIFE', {}, { start: focusNode.identity, end: related.identity }), related })],
+      })
+      .mockResolvedValueOnce({
+        records: [
+          record({ type: 'person', slug: 'prophet-muhammad', layoutX: 1, layoutY: 2 }),
+          record({ type: 'person', slug: 'khadijah', layoutX: 3, layoutY: 4 }),
+        ],
+      });
+    getSession.mockReturnValue({ run });
+
+    const response = await GET(request('?focus=prophet-muhammad'));
+    const body = await response.json();
+
+    expect(run.mock.calls[1][0]).toContain('n.layoutX');
+    expect(run.mock.calls[1][1]).toEqual({
+      subjects: [{ type: 'person', slug: 'prophet-muhammad' }, { type: 'person', slug: 'khadijah' }],
+    });
+    expect(body.nodes).toEqual(expect.arrayContaining([
+      expect.objectContaining({ slug: 'prophet-muhammad', x: 1, y: 2, fx: 1, fy: 2 }),
+      expect.objectContaining({ slug: 'khadijah', x: 3, y: 4, fx: 3, fy: 4 }),
+    ]));
+  });
+
+  it('preserves a valid (0, 0) coordinate rather than treating it as missing', async () => {
+    const focusNode = node(1, 'a', 'A');
+    const run = vi.fn()
+      .mockResolvedValueOnce({ records: [record({ node: focusNode, relationship: null, related: null })] })
+      .mockResolvedValueOnce({ records: [record({ type: 'person', slug: 'a', layoutX: 0, layoutY: 0 })] });
+    getSession.mockReturnValue({ run });
+
+    const response = await GET(request('?focus=a'));
+    const body = await response.json();
+
+    expect(body.nodes).toEqual([expect.objectContaining({ slug: 'a', x: 0, y: 0, fx: 0, fy: 0 })]);
+  });
+
+  it('returns a recoverable error, not partial/omitted data, when a subject has no saved position', async () => {
+    const focusNode = node(1, 'a', 'A');
+    const run = vi.fn()
+      .mockResolvedValueOnce({ records: [record({ node: focusNode, relationship: null, related: null })] })
+      .mockResolvedValueOnce({ records: [] }); // no matching Neo4j row -- layout genuinely missing
+    getSession.mockReturnValue({ run });
+
+    const response = await GET(request('?focus=a'));
+
+    expect(response.status).toBe(500);
+    expect((await response.json()).error).toContain('Graph layout is incomplete');
+  });
+
+  it('does not run the coordinate lookup at all when the response has no nodes', async () => {
+    const run = vi.fn().mockResolvedValue({ records: [] });
+    getSession.mockReturnValue({ run });
+
+    await GET(request('?ancestorsOf=nobody'));
+
+    expect(run).toHaveBeenCalledTimes(1);
   });
 });

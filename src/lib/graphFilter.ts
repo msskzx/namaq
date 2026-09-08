@@ -43,13 +43,11 @@ export function filterVisibleGraph(graphData: GraphData, options: VisibleGraphOp
     .map(link => ({ ...link, source: endpointId(link.source), target: endpointId(link.target) }));
   const linkedIds = new Set(links.flatMap(link => [link.source as string, link.target as string]));
   if (selectedNodeId) linkedIds.add(selectedNodeId);
-  // Nodes pinned (fx/fy) at a precomputed full-graph position stay frozen
-  // there under filtering too, so a filtered subgraph -- which should
-  // reorganize freely like every unpinned graph view does -- instead
-  // renders its edges crossing between stale, unrelated positions. Drop
-  // the pin (keep x/y as just a starting position) once a filter is active.
-  const nodes = graphData.nodes
-    .filter(node => linkedIds.has(node.id))
-    .map(node => (node.fx != null || node.fy != null) ? { ...node, fx: undefined, fy: undefined } : node);
+  // Every subject has a fixed, precomputed global position (see
+  // docs/adr/0005-use-a-precomputed-global-graph-map.md) that must survive
+  // filtering unchanged -- a node hidden and later revealed by toggling a
+  // filter back on has to reappear exactly where it was, not wherever a
+  // fresh live simulation happens to settle it.
+  const nodes = graphData.nodes.filter(node => linkedIds.has(node.id));
   return { nodes, links };
 }

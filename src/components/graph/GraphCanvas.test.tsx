@@ -30,14 +30,36 @@ vi.mock('next/navigation', async () => {
 });
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'en' }) }));
 vi.mock('./GraphSearch', () => ({ default: () => null }));
+// A ref-forwarding stub exposing the same camera methods GraphCanvas drives
+// (centerAt/zoom/zoomToFit/graph2ScreenCoords), so the camera effects in
+// GraphCanvas.tsx (docs/graph-layout-plan.md's Phase three/four) are
+// observable directly instead of mocked away entirely -- graph2ScreenCoords
+// assumes zoom 1 and no camera offset (screen coords == world coords),
+// which is enough to distinguish "on screen" from "nowhere near it".
+const camera = vi.hoisted(() => ({
+  centerAt: vi.fn(),
+  zoom: vi.fn(() => 1),
+  zoomToFit: vi.fn(),
+  graph2ScreenCoords: vi.fn((x: number, y: number) => ({ x, y })),
+}));
 vi.mock('./GraphSurface', () => ({
-  default: ({ data }: { data: GraphData }) => <div data-testid="graph">{data.nodes.map(node => node.slug).sort().join(',')}</div>,
+  default: React.forwardRef(function GraphSurfaceStub({ data }: { data: GraphData }, ref: React.Ref<typeof camera>) {
+    React.useImperativeHandle(ref, () => camera);
+    return <div data-testid="graph">{data.nodes.map(node => node.slug).sort().join(',')}</div>;
+  }),
   kindFillColor: () => '#fff',
 }));
 
 const root = 'prophet-muhammad';
+// x/y placed well within a default jsdom viewport (~1024x768), so a
+// selection lands "comfortably visible" by default; 'grandfather' sits far
+// off-screen instead, for the one test that needs an obscured selection.
 const dataset: GraphData = {
-  nodes: [root, 'wife', 'father', 'wife-father', 'grandfather', 'isolated'].map(slug => ({ id: `person:${slug}`, slug, label: slug, group: 1, type: 'person' })),
+  nodes: [root, 'wife', 'father', 'wife-father', 'grandfather', 'isolated'].map(slug => ({
+    id: `person:${slug}`, slug, label: slug, group: 1, type: 'person',
+    x: slug === 'grandfather' ? 100000 : 400,
+    y: slug === 'grandfather' ? 100000 : 300,
+  })),
   links: [
     ['wife', root, 'WIFE'],
     ['father', root, 'FATHER'],
@@ -79,10 +101,23 @@ it('starts selected, then uses the same counted controls globally without changi
   await waitFor(() => expect(graph()).toBe('father,prophet-muhammad,wife,wife-father'));
   expect(params().getAll('filter')).toEqual(['FATHER']);
   expect(params().getAll('expand')).toEqual([`person:${root}:WIFE`]);
-  expect(screen.getByRole('status').textContent).toContain('+2 subjects');
+  expect(screen.getByRole('status').textContent).toContain('Show 2 new subjects');
   fireEvent.click(screen.getByRole('button', { name: root }));
   expect(screen.getByRole('button', { name: 'Father (1)' }).getAttribute('aria-pressed')).toBe('false');
   expect(params().getAll('filter')).toEqual(['FATHER']);
+});
+
+it('offers Show additions after growth, clears it on click, and offers no stale one after a collapse with no growth', async () => {
+  nav.setUrl(`/graphs?subject=person:${root}&selected=${root}`);
+  mount();
+  fireEvent.click(await screen.findByRole('button', { name: 'Wife (1)' }));
+  await waitFor(() => expect(graph()).toContain('wife'));
+  const showButton = await screen.findByRole('button', { name: /Show \d+ new subjects?/ });
+  fireEvent.click(showButton);
+  expect(screen.queryByRole('status')).toBeNull();
+  fireEvent.click(screen.getByRole('button', { name: 'Wife (1)' }));
+  await waitFor(() => expect(graph()).toBe(root));
+  expect(screen.queryByRole('status')).toBeNull();
 });
 
 it('keeps the cap after off/on and restores filters from the URL', async () => {
@@ -156,4 +191,66 @@ it('shows the fetched full name and titles once the selected person\'s preview l
   await screen.findByRole('heading', { name: root });
   await screen.findByRole('heading', { name: 'محمد بن عبد الله' });
   expect(screen.getByText('رسول الله')).toBeTruthy();
+});
+
+// The camera effects below settle their initial framing after a 300ms
+// timeout (see GraphCanvas.tsx) -- waiting it out and clearing the spy
+// isolates each test's own assertion from that unrelated initial call.
+const settleInitialFraming = () => new Promise(resolve => setTimeout(resolve, 350));
+
+it('keeps the camera steady when selecting an already on-screen subject', async () => {
+  nav.setUrl(`/graphs?subject=person:${root}&expand=person:${root}:WIFE&selected=${root}`);
+  mount();
+  await waitFor(() => expect(graph()).toContain('wife'));
+  await settleInitialFraming();
+  camera.centerAt.mockClear();
+
+  fireEvent.click(screen.getByRole('button', { name: 'wife' }));
+  await waitFor(() => expect(params().get('selected')).toBe('wife'));
+  expect(camera.centerAt).not.toHaveBeenCalled();
+});
+
+it('pans (without an explicit zoom change) to reveal a selected subject that is far off-screen', async () => {
+  nav.setUrl(`/graphs?subject=person:${root}&expand=person:${root}:FATHER&expand=person:father:FATHER&selected=${root}`);
+  mount();
+  await waitFor(() => expect(graph()).toContain('grandfather'));
+  await settleInitialFraming();
+  camera.centerAt.mockClear();
+  camera.zoom.mockClear();
+
+  fireEvent.click(screen.getByRole('button', { name: 'grandfather' }));
+  await waitFor(() => expect(camera.centerAt).toHaveBeenCalled());
+  // zoom() is only ever read (no args) to compute the reveal pan here, never
+  // set (2 args) -- Q2's "retaining zoom".
+  expect(camera.zoom.mock.calls.every(call => call.length === 0)).toBe(true);
+});
+
+it('Fit graph frames every currently visible subject, unranked/graph-only ones included', async () => {
+  nav.setUrl(`/graphs?subject=person:${root}&selected=${root}`);
+  mount();
+  await screen.findByRole('button', { name: 'Fit graph' });
+  camera.zoomToFit.mockClear();
+
+  fireEvent.click(screen.getByRole('button', { name: 'Fit graph' }));
+
+  expect(camera.zoomToFit).toHaveBeenCalledTimes(1);
+  const [, , nodeFilter] = camera.zoomToFit.mock.calls[0];
+  expect(nodeFilter).toBeUndefined();
+});
+
+it('Show additions frames the newly-added subjects plus what they connect to, then clears', async () => {
+  nav.setUrl(`/graphs?subject=person:${root}&selected=${root}`);
+  mount();
+  fireEvent.click(await screen.findByRole('button', { name: 'Wife (1)' }));
+  const showButton = await screen.findByRole('button', { name: /Show \d+ new subjects?/ });
+  camera.zoomToFit.mockClear();
+
+  fireEvent.click(showButton);
+
+  expect(camera.zoomToFit).toHaveBeenCalledTimes(1);
+  const [, , nodeFilter] = camera.zoomToFit.mock.calls[0];
+  expect(nodeFilter({ id: 'person:wife' })).toBe(true);
+  expect(nodeFilter({ id: `person:${root}` })).toBe(true);
+  expect(nodeFilter({ id: 'person:father' })).toBe(false);
+  expect(screen.queryByRole('button', { name: /Show \d+ new subjects?/ })).toBeNull();
 });

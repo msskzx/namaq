@@ -1,6 +1,6 @@
 import neo4j from 'neo4j-driver';
 import { getDriver } from './neo4j';
-import { GraphRankEdge, GraphRankNode, GraphRankNodeType } from './graphRank';
+import { GraphRankEdge, GraphRankNode, GraphRankNodeType, graphNodeKey } from './graphRank';
 
 const KNOWN_TYPES = new Set<GraphRankNodeType>(['person', 'battle', 'title', 'event']);
 
@@ -64,6 +64,15 @@ export async function fetchUnifiedGraph(): Promise<{ nodes: UnifiedGraphNode[]; 
         (edge): edge is GraphRankEdge =>
           edge.source.type !== null && edge.target.type !== null && Boolean(edge.source.slug) && Boolean(edge.target.slug),
       );
+
+    // Neo4j makes no ordering guarantee without `ORDER BY`, and the offline
+    // rank/cluster/layout computation is otherwise deterministic over its
+    // input -- sorting here (rather than in Cypher, so every caller of this
+    // shared fetch benefits) makes a rerun over unchanged data reproduce the
+    // same result instead of only "an" equally-valid one, which matters once
+    // computeGraphLayout.ts persists positions for review before applying.
+    nodes.sort((a, b) => graphNodeKey(a).localeCompare(graphNodeKey(b)));
+    edges.sort((a, b) => graphNodeKey(a.source).localeCompare(graphNodeKey(b.source)) || graphNodeKey(a.target).localeCompare(graphNodeKey(b.target)));
 
     return { nodes, edges };
   } finally {

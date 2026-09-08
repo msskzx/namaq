@@ -210,9 +210,11 @@ to the agent in question 15 and are recorded below.
     establish whether the child is a son or daughter. Where a specific inverse
     is unavailable, use an accurate neutral description or retain an explicit
     factually supported direction, rather than infer a role from a name.
-16. **Layout while expanding — agreed:** keep existing nodes and zoom
-    steady, placing newly revealed subjects near the expanded subject, and
-    providing an explicit Fit graph action.
+16. **Layout while expanding — agreed, placement revised by the layout
+    follow-up:** keep existing nodes and zoom steady and provide an explicit
+    Fit graph action. Newly revealed subjects use their saved global positions
+    rather than the originally agreed placement near the expanded subject;
+    see [the graph-map decision](adr/0005-use-a-precomputed-global-graph-map.md).
 17. **All direct relations and companions — agreed:** include every recorded direct
     connection allowed by enabled node types, including companions. Show
     counts on expansion buttons so large expansions are apparent in advance.
@@ -373,8 +375,9 @@ about functionality already built:
 - The default map-style page exposes search and expansion controls through a
   collapsible panel, including a way to reopen it. Arabic/English and light/dark
   support apply throughout. Embedded profile graphs retain their own layout.
-- Expansion keeps existing positions and zoom steady, places additions near
-  the expanded subject, and offers Fit graph.
+- Expansion keeps existing positions and zoom steady, reveals additions at
+  their saved global positions, and offers Fit graph. See the
+  [graph-map decision](adr/0005-use-a-precomputed-global-graph-map.md).
 - All direct relations includes companions and every other recorded direct
   relation permitted by the enabled node types. Expansion controls display
   counts. Counts represent distinct subjects, not duplicate inverse records.
@@ -425,6 +428,11 @@ were checked in a browser, with layout inspection at narrow, medium, and wide
 widths and in light/dark appearance. Application code has not been changed.
 
 ## Documentation during the interview
+
+The [stable graph layout follow-up](graph-layout-plan.md) examines movement
+during selection and filtering after PR #33's implementation. It replaces
+nearby placement with one precomputed global map; other earlier commitments
+remain the baseline until that interview explicitly revises them.
 
 Maintain `CONTEXT.md` strictly as a glossary. Record an ADR only for a settled
 decision with a meaningful

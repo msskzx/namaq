@@ -12,10 +12,19 @@ A learner's growing view of historical subjects and their recorded
 relationships, built by following connections between them.
 _Avoid_: Current graph (the panel's UI label for this same concept)
 
+**Graph map**:
+The shared arrangement of all historical subjects and their recorded
+relationships. Each exploration reveals a subset of this map, with subjects
+occupying the same positions regardless of how they are reached.
+
 **Show full graph**:
 An action within an exploration that reveals the entire historical graph
 without switching to a separate view.
 _Avoid_: Overview (the separate view this action replaced)
+
+**Show additions**:
+An action that brings subjects revealed by an expansion or global relationship
+filter into view together with their connecting subjects.
 
 **Selected person**:
 The person whose relationships the learner is currently inspecting or choosing
