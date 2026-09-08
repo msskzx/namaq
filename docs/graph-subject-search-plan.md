@@ -1,9 +1,9 @@
 # Historical subjects are searchable
 
-Status: implemented, phases one to six. Three operational steps remain, listed
-under [Data and operational consequences](#data-and-operational-consequences);
-until the first of them runs, `graphRank` is absent from Neo4j and subjects
-sort unranked. One dependency is recorded under [Open issues](#open-issues); it
+Status: implemented, phases one to six. The recomputation has run; the two
+steps that remain must wait until this is deployed, since they remove data the
+live code still reads -- see
+[Data and operational consequences](#data-and-operational-consequences). One dependency is recorded under [Open issues](#open-issues); it
 gates end-to-end verification of criteria 2 and 3, not the work itself.
 
 Follows on from [graph-only people are
@@ -253,18 +253,28 @@ ADR 0006, and the "Relationship graph" section of `README.md`.
 
 ## Data and operational consequences
 
-Three steps an operator has to run, in this order:
+Three operator steps, and **step 1 is the only one that may run before this
+work is deployed.** Steps 2 and 3 remove data the currently deployed code still
+reads -- `/api/people`'s `orderBy`, `/api/graph`'s person select, and
+`/api/people/suggest`'s Neo4j query all name `nasabRank` until this lands.
+Dropping the column under the old code makes the directory listing throw.
 
-1. **Recomputation.** `npm run graph:layout -- --apply`. Until this runs,
-   `graphRank` is absent from Neo4j, so `/api/graph` returns it as null for
-   every subject and both the side list and the suggestion ranking fall back to
-   their name tie-breaker. Nothing errors; the ordering is simply flat.
-2. **Migration.** `npx prisma migrate deploy` applies
+1. **Recomputation.** `npm run graph:layout -- --apply`. Safe at any time: it
+   only adds `graphRank` to Neo4j, which no deployed code reads yet. Until it
+   runs, `graphRank` is absent there, so `/api/graph` returns null for every
+   subject and both the side list and the suggestion ranking fall back to their
+   name tie-breaker. Nothing errors; the ordering is simply flat.
+
+   *Run 2026-09-08:* 659/659 subjects carry `graphRank` and `layoutX`/`layoutY`
+   in Neo4j (576 people, 40 titles, 26 battles, 17 events), and 383 PostgreSQL
+   rows were updated. The matched-count check passed.
+
+2. **Migration**, after deploy. `npx prisma migrate deploy` applies
    `20260908000000_drop_person_nasab_rank`. Dropping `nasabRank` and
    `nasabRankComputedAt` is irreversible: the pipeline that produced them is
    deleted in the same change.
-3. **Neo4j cleanup.** `p.nasabRank`, written to all 576 person nodes by PR #35,
-   is now orphaned:
+3. **Neo4j cleanup**, after deploy. `p.nasabRank`, written to all 576 person
+   nodes by PR #35, is orphaned:
 
    ```cypher
    MATCH (p:Person) WHERE p.nasabRank IS NOT NULL REMOVE p.nasabRank
@@ -312,7 +322,9 @@ are imported by nothing, and `scripts/graph/computeGraphLayout.ts:16` carries a
 stale comment reference to them. Deleting both fits phase three's character.
 Raised after the interview closed, so it is a proposal, not a decision.
 
-**Assumption.** Every Title, Battle and Event node carries the `name` needed
-for matching, and `nameTransliterated` where PostgreSQL has one -- verified
-against the sync scripts and confirmed by live counts (40/40 titles, 26/26
-battles, 17/17 events present in both stores).
+**Assumption, since confirmed.** Every Title, Battle and Event node carries the
+`name` needed for matching. Live counts after the recomputation: 40/40 titles,
+26/26 battles, 17/17 events and 576/576 people carry both `name` and
+`graphRank`. A spot check of `malik-ibn-thalabah`, a graph-only person, returns
+`graphRank` 38 and a full nasab string, so criteria 5 and 11 have real data
+behind them.
