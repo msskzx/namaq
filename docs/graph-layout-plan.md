@@ -160,25 +160,7 @@ Await the user's final confirmation of shared understanding before changing
 application code or database contents, as required by the invoked grilling
 skill.
 
-## Deferred: graph-only people are not searchable
+## Follow-up: graph-only people are not searchable
 
-Discovered while applying Phase one, out of scope for this plan and not yet
-decided -- revisit separately.
-
-`/api/people/suggest` deliberately queries PostgreSQL only, and
-`GraphSearch.tsx`'s client-side fallback excludes every person-type node on
-the assumption that the PostgreSQL suggest call already covers all of them.
-Neither is true for a graph-only person (no PostgreSQL row, e.g. the deep
-lineage-only ancestors this plan gives coordinates to): they cannot be found
-by typing their name, only by expanding a connected relative already visible
-in an exploration. Visiting one directly (`/people/[slug]`) also 404s, since
-that page reads the PostgreSQL-only profile route -- an existing, apparently
-deliberate limitation, not a new regression.
-
-Leaning toward making them searchable without giving them a PostgreSQL row
-(preserves the existing has-a-profile/graph-only distinction): either widen
-`GraphSearch.tsx`'s client-side fallback to stop excluding persons (only
-helps once they're already loaded in the current view), or add a
-Neo4j-backed match to the suggest path for people missing a PostgreSQL row
-(finds them from a blank exploration too). "View profile" would keep
-dead-ending for them either way, same as today.
+Discovered while applying Phase one, out of scope for this plan. Resolved in
+[the graph-only people search plan](graph-only-people-search-plan.md).
