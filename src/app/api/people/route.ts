@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { Prisma } from '@/generated/prisma';
 import { prisma } from '@/lib/prisma';
-import { filterAndRankPeople } from '@/lib/personSearch';
+import { filterAndRankSubjects } from '@/lib/subjectSearch';
 
 const DEFAULT_PAGE_SIZE = 12;
 
@@ -57,7 +57,7 @@ export async function GET(request: Request) {
     // graphRank is an exception: it's a graph-derived signal, but it's computed
     // offline and persisted here, so reading it is still a plain Postgres read.
     const people = await prisma.person.findMany({ where, include: { titles: true } });
-    const results = filterAndRankPeople(people, search).map(({ person }) => person);
+    const results = filterAndRankSubjects(people, search).map(({ subject }) => subject);
     const total = results.length;
     const totalPages = Math.ceil(total / limit);
 

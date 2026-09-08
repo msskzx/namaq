@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { filterAndRankPeople } from '@/lib/personSearch';
+import { filterAndRankSubjects } from '@/lib/subjectSearch';
 
 // The directory searches profiles, not the graph: every suggestion here opens
 // /people/<slug>, so a graph-only person -- one with a Neo4j node but no
@@ -31,9 +31,9 @@ export async function GET(request: Request) {
     });
     const candidates = people.map((person) => ({ ...person, hasProfile: true as const }));
 
-    const data = filterAndRankPeople(candidates, q)
+    const data = filterAndRankSubjects(candidates, q)
       .slice(0, limit)
-      .map(({ person, match }) => ({ ...person, match }));
+      .map(({ subject, match }) => ({ ...subject, match }));
 
     return NextResponse.json({ data });
   } catch (error) {

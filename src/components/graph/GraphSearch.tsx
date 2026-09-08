@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { GraphNodeFull } from '@/types/graph';
-import { normalizePersonSearch } from '@/lib/personSearch';
+import { normalizeSubjectSearch } from '@/lib/subjectSearch';
 import { profilePath } from '@/lib/nodeProfile';
 import { subjectId } from '@/lib/relationship/types';
 
@@ -33,7 +33,7 @@ interface Suggestion {
 // numerically against the Postgres results.
 function rankNodeMatch(query: string, node: GraphNodeFull): number | null {
   const candidates = [node.label, node.slug.replace(/-/g, ' ')]
-    .map(normalizePersonSearch)
+    .map(normalizeSubjectSearch)
     .filter(Boolean);
   let best: number | null = null;
   for (const candidate of candidates) {
@@ -50,7 +50,7 @@ function rankNodeMatch(query: string, node: GraphNodeFull): number | null {
 const MAX_NODE_MATCHES = 8;
 
 function matchGraphNodes(rawQuery: string, nodes: GraphNodeFull[]): Suggestion[] {
-  const query = normalizePersonSearch(rawQuery);
+  const query = normalizeSubjectSearch(rawQuery);
   if (!query) return [];
   return nodes
     // Person nodes are excluded here, not just de-prioritized: every person
