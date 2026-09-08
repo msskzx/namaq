@@ -47,6 +47,24 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 - PR descriptions must include a summary of what changed and why, not
   just a list of touched files.
 
+## Shared components
+
+- Every action button goes through `src/components/common/Button.tsx` rather
+  than repeating Tailwind classes inline. Pick `variant` (`primary` for the
+  filled amber call to action, `outline` for everything else), `size`
+  (`sm`/`md`/`icon`), and `active` for a control that stays pressed; pass
+  `href` to render a `next/link` that looks identical, so a link and a button
+  sitting side by side match. Reach for `className` only for layout
+  (`shrink-0`, width), never to restyle the button itself.
+- This covers controls that read as buttons. Switches (`SlideSwitch`, the
+  analytics pill), the icon switchers for theme and language, and the cookie
+  banner are deliberately separate: they are different controls with their own
+  semantics and design language, and folding them in would change how they look
+  and what they announce.
+- Titles and other short labelled chips use `src/components/common/Badge.tsx`
+  (`size="sm"` inside dense panels), so a title looks the same on a profile
+  page and in the graph panel.
+
 ## Data model
 
 - Person data has two sources of truth: PostgreSQL (profiles, search) and

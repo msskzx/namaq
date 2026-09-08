@@ -67,6 +67,44 @@ describe('GET /api/graph', () => {
     expect(await response.json()).toEqual({ error: 'Database configuration is missing' });
   });
 
+  it.each(['?person=root&', '?'])('applies the filter include set to scoped and full responses (%s)', async (query) => {
+    const root = node(1, 'root', 'Root');
+    const father = node(2, 'father', 'Father');
+    const wife = node(3, 'wife', 'Wife');
+    const run = createRun();
+    if (query.includes('person')) {
+      run.mockResolvedValueOnce({ records: [pathRecord([
+        { start: father, end: root, relationship: rel('FATHER', {}, { start: 2, end: 1 }) },
+        { start: wife, end: root, relationship: rel('WIFE', {}, { start: 3, end: 1 }) },
+      ])] });
+    } else {
+      run.mockResolvedValueOnce({ records: [root, father, wife].map(n => record({ labels: ['Person'], slug: n.properties.slug, name: n.properties.name })) })
+        .mockResolvedValueOnce({ records: [
+          record({ sourceLabels: ['Person'], sourceSlug: 'father', relType: 'FATHER', targetLabels: ['Person'], targetSlug: 'root' }),
+          record({ sourceLabels: ['Person'], sourceSlug: 'wife', relType: 'WIFE', targetLabels: ['Person'], targetSlug: 'root' }),
+        ] });
+    }
+    getSession.mockReturnValue({ run });
+    const response = await GET(request(`${query}filter=FATHER`));
+    expect(response.status).toBe(200);
+    const data = await response.json();
+    expect(data.links.map((link: { label: string }) => link.label)).toEqual(['FATHER']);
+  });
+
+  it.each(['', 'COMPANION_OF'])('handles empty and paired filters on embedded graphs (%s)', async (filter) => {
+    const root = node(1, 'root', 'Root');
+    const companion = node(2, 'companion', 'Companion');
+    const run = createRun().mockResolvedValueOnce({ records: [pathRecord([
+      { start: companion, end: root, relationship: rel('COMPANION_OF', {}, { start: 2, end: 1 }) },
+      { start: root, end: companion, relationship: rel('ACCOMPANIED_BY', {}, { start: 1, end: 2 }) },
+    ])] });
+    getSession.mockReturnValue({ run });
+    const response = await GET(request(`?person=root&filter=${filter}`));
+    expect(response.status).toBe(200);
+    const data = await response.json();
+    expect(data.links.map((link: { label: string }) => link.label)).toEqual(filter ? ['COMPANION_OF', 'ACCOMPANIED_BY'] : []);
+  });
+
   it('returns 500 when the query fails', async () => {
     const run = vi.fn().mockRejectedValue(new Error('boom'));
     getSession.mockReturnValue({ run });

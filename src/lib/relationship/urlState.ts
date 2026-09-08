@@ -1,17 +1,19 @@
-import { RELATION_ORDER } from './categories';
+import { governingRelationType, RELATION_ORDER } from './categories';
 import { ExpansionAction } from './exploration';
 import { ExpansionRelationId } from './expansion';
-import { NodeKind, RelationType, SubjectId, parseSubjectId, subjectId } from './types';
+import { NodeKind, SubjectId, parseSubjectId, subjectId } from './types';
 import { ExplorationInput } from './exploration';
 
 const KNOWN_KINDS: ReadonlySet<string> = new Set(['person', 'title', 'battle', 'event']);
 const LINEAGE_RELATION_IDS: ReadonlySet<string> = new Set(['ANCESTORS', 'PATERNAL_LINEAGE', 'DESCENDANTS']);
 const KNOWN_RELATION_TYPES: ReadonlySet<string> = new Set(RELATION_ORDER);
 
+const DEFAULT_FILTERS = RELATION_ORDER.filter(type => !['COMPANION_OF', 'PARTICIPATED_IN', 'INVOLVED_IN', 'PART_OF'].includes(governingRelationType(type)));
+
 export interface ExplorationUrlState {
   subjects: string[];
   expands: string[];
-  filters: string[];
+  filters?: string[];
 }
 
 function parseSubjectParam(raw: string): SubjectId | null {
@@ -40,9 +42,8 @@ export function parseExplorationInput(state: ExplorationUrlState, targetSlug: st
   const expansions = state.expands
     .map(parseExpandParam)
     .filter((action): action is ExpansionAction => action !== null);
-  const globalFilters = Array.from(
-    new Set(state.filters.filter((type): type is RelationType => KNOWN_RELATION_TYPES.has(type)))
-  );
+  const governingFilters = new Set((state.filters ?? DEFAULT_FILTERS).map(governingRelationType));
+  const globalFilters = RELATION_ORDER.filter(type => governingFilters.has(governingRelationType(type)));
   return { roots, expansions, globalFilters };
 }
 

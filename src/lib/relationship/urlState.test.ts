@@ -35,6 +35,24 @@ describe('parseExplorationInput', () => {
     ]);
   });
 
+  it('defaults to family and title filters when the parameter is absent', () => {
+    const { globalFilters } = parseExplorationInput({ subjects: [], expands: [] }, 'prophet-muhammad');
+    expect(globalFilters).toEqual(expect.arrayContaining(['FATHER', 'SON', 'WIFE', 'HOLDS_TITLE']));
+    for (const type of ['COMPANION_OF', 'ACCOMPANIED_BY', 'PARTICIPATED_IN', 'INVOLVED_IN', 'PART_OF']) {
+      expect(globalFilters).not.toContain(type);
+    }
+  });
+
+  it('preserves an explicit empty filter instead of restoring defaults', () => {
+    const { globalFilters } = parseExplorationInput({ subjects: [], expands: [], filters: [''] }, 'prophet-muhammad');
+    expect(globalFilters).toEqual([]);
+  });
+
+  it('lets the companionship switch enable both stored directions', () => {
+    const { globalFilters } = parseExplorationInput({ subjects: [], expands: [], filters: ['COMPANION_OF'] }, 'prophet-muhammad');
+    expect(globalFilters).toEqual(['COMPANION_OF', 'ACCOMPANIED_BY']);
+  });
+
   it('parses `filter` entries as global filters, dropping unknown relation types', () => {
     const input = parseExplorationInput({ subjects: [], expands: [], filters: ['FATHER', 'NOT_A_RELATION', 'FATHER'] }, 'prophet-muhammad');
     expect(input.globalFilters).toEqual(['FATHER']);

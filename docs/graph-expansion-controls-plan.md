@@ -1,8 +1,8 @@
 # Expansion controls
 
-Status: designed, no open questions. Ready for implementation on its own branch
-off `main` after [#37](https://github.com/msskzx/namaq/pull/37) merges. Part of
-the data fix has already been applied to production; see
+Status: implemented, phases one to five. Phases one and two shipped in
+[#38](https://github.com/msskzx/namaq/pull/38); phases three to five are on the
+continuation branch. The seed corrections are deployed; see
 [Data fixes](#data-fixes).
 
 Sibling of [historical subjects are searchable](graph-subject-search-plan.md),
@@ -127,8 +127,19 @@ the same way as expanding.
    tier is gone there is no reason a user should distinguish "revealed but
    hidden" from "not revealed".
 
-   The cost is accepted deliberately: hiding a relation now unfetches it, so
-   switching it back on costs a round trip where it used to be instant.
+   Switching off a filter removes its contribution to discovery. It does not
+   hide recorded links between retained subjects or override independently
+   expanded branches -- **except companionship**, which is hidden with its
+   switch. Both stored directions hang off the Prophet in bulk (253
+   `COMPANION_OF` and 253 `ACCOMPANIED_BY`), so on a default visit 37 of them
+   were still drawn between people held up by family relations, against a
+   switch reading off. `ACCOMPANIED_BY` follows `COMPANION_OF` here as it
+   already does everywhere else, through `governingRelationType`. Both endpoints of an independent expansion remain
+   while they have a matching connection; unsupported nodes disappear.
+   Searched roots remain visible on their own, including after Start over.
+   This follows the earlier [connection-visibility decision](adr/0001-separate-expansion-from-connection-visibility.md)
+   and the user's clarification during phase three. Switching a filter back
+   on may require fetching neighborhoods again.
 
 9. **Old `?relation=` links are not translated.** Nothing in the repo generates
    them -- every one in existence came from a user clicking a toggle. A
@@ -212,15 +223,41 @@ arithmetic and `toggleKind`'s group-sync, all of which invert. Note that
 `DEFAULT_EXCLUDED_RELATIONS` becomes a default *include* set: every relation
 type except `COMPANION_OF`, `PARTICIPATED_IN`, `INVOLVED_IN` and `PART_OF`.
 
+Implemented with these URL and integration details:
+
+- Absent `filter` uses defaults; `filter=` means explicitly no global filters.
+  Start over first wrote the empty value to preserve its single-root behavior;
+  see the phase-five revision, which clears the parameter instead.
+- Default filters now reveal the initial graph, so the separate fresh-visit
+  local-expansion seed is removed. Global filters retain their existing cap.
+- The companionship switch includes both `COMPANION_OF` and `ACCOMPANIED_BY`.
+- Embedded profile graphs pass the include set to `/api/graph`; their
+  switches remain available when the response no longer contains that type.
+- A connected independent expansion retains its source as well as its
+  neighbors after the filter that first revealed that source is removed.
+
+Neighborhood requests still read the full relation vocabulary for expansion
+counts and automatic connections between visible subjects. Disabled filters
+prevent discovery and follow-up neighborhood fetches for their unsupported
+subjects; they do not promise that the initial response contains no edge of
+that type.
+
 ### Phase four: the live drift check
 
 `src/lib/graphIntegrity.live.test.ts` gains the both-directions comparison from
 decision 10. It needs credentials, so it skips without them, as the rest of
 that file does.
 
-**This check fails after phase two until `npm run seed:graph` is re-run** --
-the eleven `HUSBAND` edges will be declared but not yet deployed. That is the
-check working: re-running the seed is the operator step it is asking for.
+Implemented as a read-only person-to-person query compared with the active
+seed export. The static seed tests share its strict query parser; malformed
+seed queries fail rather than silently disappearing from the comparison.
+Pure tests cover missing inverses, the four previously deleted reversed
+parent edges, and the sync-owned exclusions.
+
+Verified against the live graph: zero missing and zero unexpected edges.
+The phase-two seed run had already deployed the 23 missing inverses. The
+check reports any future undeployed seed changes as missing edges; it does
+not write to the database.
 
 ### Phase five: four buttons
 
@@ -230,6 +267,34 @@ blocks in both language files. `directRelationCounts` stays --
 `hasEligibleDirectRelations` still needs it to decide whether to show the All
 direct relations button. `expandAllDirectRelations` reads the active filter set
 rather than all of `RELATION_ORDER`.
+
+`LINEAGE_ACTIONS` and `LineageActionId` moved to
+`src/lib/relationship/expansion.ts` rather than dying with their file; that
+module already spelled the same three ids twice, in `ExpansionRelationId` and
+`LINEAGE_RELATION_IDS`, so the move left one list where there had been three.
+
+**Consequence worth stating.** Every remaining control is scoped to a
+selection. The middle tier was the only thing the panel rendered for an
+*unselected* graph, where its buttons wrote `filter` rather than `expand`, so
+with it gone the panel renders nothing until a subject is selected -- the
+Filters panel is where global relation control lives now. `isExpansionActive`
+and `toggleExpansion` lost their no-selection branches as unreachable.
+
+**Start over stops writing the empty filter set.** Intersecting with the active
+filters stranded Start over, which wrote `filter=`: the button disappeared and
+the user was left with one root and three lineage actions. Found by clicking it.
+
+The empty value was carrying two meanings at once -- "reveal nothing globally",
+which is how Start over produced a single root, and "no relation type is
+enabled", which is what the Filters panel renders. That conflation is what made
+the panel read as all-off while expansion still returned relations.
+
+Start over now clears the parameter rather than emptying it, so it restores a
+fresh visit: the defaults are back on, the panel agrees with the graph, and
+expansion follows the panel exactly. It no longer returns a lone root, which is
+the price. `filter=` survives as what the All relations switch writes, and in
+that state All direct relations correctly disappears -- nothing is enabled, so
+there is nothing to expand.
 
 ## Acceptance criteria
 
@@ -243,10 +308,15 @@ rather than all of `RELATION_ORDER`.
    and passes after; expanding any wife of the Prophet by Husband reaches him,
    and `INVERSE_PAIR` is unchanged, so the Filters panel still lists `FATHER`
    and `SON` separately.
-5. A fresh `/graphs` visit does not fetch `COMPANION_OF`.
+5. A fresh `/graphs` visit does not fetch `COMPANION_OF`. **Phase-three
+   qualification:** no subjects supported only by companionship are discovered
+   or fetched as follow-up neighborhoods, but the initial neighborhood
+   response still includes these edges for counts. Excluding those raw edges
+   requires a separate fetch/count change.
 6. Switching `COMPANION_OF` on in the Filters panel fetches and renders the
    companions.
-7. `relation` and `NO_EXCLUDED_RELATIONS` appear nowhere in `src/`.
+7. Production UI code no longer reads or writes the `relation` parameter,
+   and `NO_EXCLUDED_RELATIONS` is deleted.
 8. `ExpansionControls` renders four buttons for a person, one for a non-person
    subject, and `expansionGroups.ts` no longer exists.
 9. The live check reports zero drift in both directions once the seed is

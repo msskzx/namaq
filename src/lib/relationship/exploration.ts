@@ -1,3 +1,4 @@
+import { governingRelationType } from './categories';
 import { buildLogicalConnections, LogicalConnection } from './connections';
 import { ExpansionRelationId, matchExpansionNeighbors } from './expansion';
 import { RelationType, StoredEdge, SubjectId } from './types';
@@ -53,7 +54,10 @@ export function buildExploration(input: ExplorationInput, edges: StoredEdge[]): 
   }
 
   for (const action of input.expansions) {
-    for (const neighbor of matchExpansionNeighbors(edges, action.subject, action.relation)) {
+    const neighbors = matchExpansionNeighbors(edges, action.subject, action.relation);
+    // Keep both ends of an independently expanded branch when another control collapses.
+    if (neighbors.length > 0) addProvenance(visible, action.subject, { kind: 'expansion', subject: action.subject, relation: action.relation });
+    for (const neighbor of neighbors) {
       addProvenance(visible, neighbor, { kind: 'expansion', subject: action.subject, relation: action.relation });
     }
   }
@@ -83,8 +87,19 @@ export function buildExploration(input: ExplorationInput, edges: StoredEdge[]): 
   }
 
   const visibleSubjects = new Set(visible.keys());
+  // Every other relation keeps its recorded links between retained subjects
+  // when its filter goes off (decision 8 in
+  // docs/graph-expansion-controls-plan.md). Companionship is the exception:
+  // both stored directions hang off the Prophet in bulk, so leaving them drawn
+  // buries the graph the user asked for. Both directions follow the one
+  // COMPANION_OF switch, which is what governingRelationType already pairs
+  // them under.
+  const companionshipHidden = !input.globalFilters.includes('COMPANION_OF');
   const relevantEdges = edges.filter(
-    (edge) => visibleSubjects.has(edge.source) && visibleSubjects.has(edge.target)
+    (edge) =>
+      visibleSubjects.has(edge.source) &&
+      visibleSubjects.has(edge.target) &&
+      !(companionshipHidden && governingRelationType(edge.type) === 'COMPANION_OF')
   );
 
   return { visible, connections: buildLogicalConnections(relevantEdges) };

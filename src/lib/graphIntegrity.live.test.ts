@@ -7,6 +7,9 @@
  */
 
 import { afterAll, describe, expect, it } from 'vitest';
+import neo4j from 'neo4j-driver';
+import { peopleRelationsQueries } from '../../neo4j/graphSeedData';
+import { findSeedRelationDrift, parseSeedRelations } from '../../neo4j/seedRelations';
 import { excludeKnownHomonyms, findDuplicateLabelGroups, findIsolatedNodes } from './graphIntegrity';
 import { fetchUnifiedGraph } from './fetchUnifiedGraph';
 import { getDriver } from './neo4j';
@@ -54,6 +57,28 @@ describe.skipIf(!hasNeo4jConfig)('unified graph connectivity (live Neo4j)', () =
   afterAll(async () => {
     await getDriver().close();
   });
+
+  it('matches seeded person relationships in both directions, excluding sync-owned types', async () => {
+    const session = getDriver().session({
+      database: process.env.NEO4J_DATABASE || 'neo4j',
+      defaultAccessMode: neo4j.session.READ,
+    });
+    try {
+      const result = await session.run(`
+        MATCH (source:Person)-[relation]->(target:Person)
+        RETURN source.slug AS source, target.slug AS target, type(relation) AS type
+      `);
+      const deployed = result.records.map(record => ({
+        from: record.get('source') as string,
+        to: record.get('target') as string,
+        type: record.get('type') as string,
+      }));
+      const drift = findSeedRelationDrift(parseSeedRelations(peopleRelationsQueries), deployed);
+      expect(drift).toEqual({ missing: [], unexpected: [] });
+    } finally {
+      await session.close();
+    }
+  }, 30000);
 
   it('has no Person/Battle/Title/Event node with zero relationships', async () => {
     const { nodes, edges } = await fetchUnifiedGraph();
