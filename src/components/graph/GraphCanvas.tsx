@@ -207,10 +207,14 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // showing the graph label, per the "Learning information in the panel"
   // decision in docs/graph-exploration-plan.md.
   const isSelectedPerson = showSearch && (selectedNode?.type ?? 'person') === 'person';
-  const { data: selectedPreview } = useSWR<{ fullName: string | null; titles: { name: string; slug: string }[] }>(
+  const { data: selectedPreview, error: selectedPreviewError } = useSWR<{ fullName: string | null; titles: { name: string; slug: string }[] }>(
     isSelectedPerson && selectedNode ? `/api/people/${selectedNode.slug}/preview` : null,
     fetcher
   );
+  // This fetch 404s for a graph-only person (docs/graph-only-people-search-plan.md);
+  // optimistic (true) until then, so the link doesn't stay hidden for the
+  // common case while the fetch is still in flight.
+  const selectedPersonHasProfile = !isSelectedPerson || !selectedPreviewError;
   const relationLabel = useCallback((type: string) => (t.relationTypes as Record<string, string>)[type] ?? relationName(type), [t]);
   const selectedSubjectId = selectedNode ? subjectId((selectedNode.type as NodeKind) ?? 'person', selectedNode.slug) : null;
   const selectedRelationCounts = useMemo(() => {
@@ -690,7 +694,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       <p className="text-sm text-gray-600 dark:text-gray-300">{selectedNode ? t.graph.selectedLabel : t.graph.globalRelationshipsHint}</p>
       <div className="mt-2 flex flex-wrap gap-3">
         {selectedNode && <>
-          <Link href={profilePath(selectedNode.type, selectedNode.slug)}>{t.graph.viewProfile}</Link>
+          {selectedPersonHasProfile && <Link href={profilePath(selectedNode.type, selectedNode.slug)}>{t.graph.viewProfile}</Link>}
           <button type="button" onClick={() => updateParams({ selected: null })}>{t.graph.deselectSubject}</button>
         </>}
         <button type="button" disabled={fullGraph} onClick={() => updateParams({ full: '1' })} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 disabled:opacity-50 dark:text-gray-100">{t.graph.showFullGraph}</button>

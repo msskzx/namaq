@@ -107,3 +107,13 @@ _Avoid_: Ancestors (when only the father-to-father chain is meant)
 **Descendants**:
 A person's children and the later generations reached through their children's
 recorded parentage.
+
+### People and search
+
+**Graph-only person**:
+A person present in the relationship graph with no PostgreSQL profile row --
+findable by name and explorable like any other person, but with no profile
+page to view, since there is no profile content recorded for them. Deep
+lineage-only ancestors are the common case.
+_Avoid_: Profile-less person, unverified person (both imply something is
+missing or wrong, rather than simply not yet recorded)

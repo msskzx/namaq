@@ -75,6 +75,11 @@ beforeEach(() => {
   vi.clearAllMocks();
   nav.setUrl('/graphs');
   vi.stubGlobal('fetch', vi.fn(async (input: string) => {
+    // 'grandfather' stands in for a graph-only person: no PostgreSQL row, so
+    // this preview fetch 404s, same as the real route.
+    if (input.includes('/api/people/grandfather/')) {
+      return { ok: false, status: 404, json: async () => ({ error: 'Not found' }) };
+    }
     if (input.includes('/api/people/')) {
       return { ok: true, json: async () => ({ fullName: 'محمد بن عبد الله', titles: [{ name: 'رسول الله', slug: 'messenger-of-allah' }] }) };
     }
@@ -191,6 +196,14 @@ it('shows the fetched full name and titles once the selected person\'s preview l
   await screen.findByRole('heading', { name: root });
   await screen.findByRole('heading', { name: 'محمد بن عبد الله' });
   expect(screen.getByText('رسول الله')).toBeTruthy();
+});
+
+it('omits View profile for a graph-only selected person, once its preview 404s', async () => {
+  nav.setUrl(`/graphs?subject=person:${root}&expand=person:${root}:FATHER&expand=person:father:FATHER&selected=grandfather`);
+  mount();
+  await screen.findByRole('button', { name: 'Deselect' });
+  await waitFor(() => expect(screen.queryByRole('link', { name: 'View profile' })).toBeNull());
+  expect(screen.getByRole('button', { name: 'Deselect' })).toBeTruthy();
 });
 
 // The camera effects below settle their initial framing after a 300ms

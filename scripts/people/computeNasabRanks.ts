@@ -20,6 +20,35 @@ function printRankTable(label: string, ranked: PersonRank[]) {
   }
 }
 
+// Every Neo4j person gets nasabRank, not just PostgreSQL-backed ones -- see
+// docs/graph-only-people-search-plan.md. Mirrors computeGraphLayout.ts's
+// writeLayoutToNeo4j: one UNWIND+MATCH+SET write transaction, matched count
+// verified against the row count.
+export async function writeNasabRankToNeo4j(ranks: { slug: string; rank: number }[]): Promise<void> {
+  if (ranks.length === 0) return;
+  const session = getDriver().session({
+    database: process.env.NEO4J_DATABASE || 'neo4j',
+    defaultAccessMode: neo4j.session.WRITE,
+  });
+  try {
+    const result = await session.executeWrite((tx) =>
+      tx.run(
+        `UNWIND $ranks AS row
+         MATCH (p:Person {slug: row.slug})
+         SET p.nasabRank = row.rank
+         RETURN count(p) AS matched`,
+        { ranks },
+      ),
+    );
+    const matched = result.records[0]?.get('matched') ?? 0;
+    if (matched !== ranks.length) {
+      throw new Error(`Matched ${matched} of ${ranks.length} expected Neo4j people while writing nasabRank.`);
+    }
+  } finally {
+    await session.close();
+  }
+}
+
 async function main() {
   const postgresSlugs = new Set(
     (await prisma.person.findMany({ select: { slug: true } })).map((person) => person.slug)
@@ -78,8 +107,11 @@ async function main() {
         )
       );
       console.log(`\nWrote nasabRank for ${toWrite.length} PostgreSQL profiles.`);
+
+      await writeNasabRankToNeo4j(final.map(({ slug, rank }) => ({ slug, rank })));
+      console.log(`Wrote nasabRank for ${final.length} Neo4j people.`);
     } else {
-      console.log('\nNo data changed. Re-run with --apply to persist these ranks to PostgreSQL.');
+      console.log('\nNo data changed. Re-run with --apply to persist these ranks to PostgreSQL and Neo4j.');
     }
 
     if (strict && toWrite.length === 0) {
@@ -93,7 +125,9 @@ async function main() {
   }
 }
 
-main().catch((error) => {
-  console.error('Nasab rank computation failed:', error);
-  process.exitCode = 1;
-});
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main().catch((error) => {
+    console.error('Nasab rank computation failed:', error);
+    process.exitCode = 1;
+  });
+}

@@ -1,7 +1,12 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getSession } from '@/lib/neo4j';
 import { filterAndRankPeople } from '@/lib/personSearch';
 
+// People are searchable whether or not they have a PostgreSQL profile row;
+// see docs/graph-only-people-search-plan.md for why both sources rank
+// together instead of PostgreSQL always winning. `hasProfile: false` tells
+// the client there's no profile page to link a graph-only match to.
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -15,10 +20,6 @@ export async function GET(request: Request) {
       return NextResponse.json({ data: [] });
     }
 
-    // The directory lives in PostgreSQL. Do not fall back to Neo4j here: a
-    // graph node is not currently guaranteed to have a matching profile.
-    // nasabRank is an exception: it's a graph-derived signal, but it's computed
-    // offline and persisted here, so reading it is still a plain Postgres read.
     const people = await prisma.person.findMany({
       select: {
         id: true,
@@ -30,8 +31,20 @@ export async function GET(request: Request) {
         _count: { select: { titles: true } },
       },
     });
-    const candidates = people.map(({ _count, ...person }) => ({ ...person, titleCount: _count.titles }));
+    const postgresCandidates = people.map(({ _count, ...person }) => ({ ...person, titleCount: _count.titles, hasProfile: true as const }));
+    const postgresSlugs = new Set(postgresCandidates.map((person) => person.slug));
 
+    // Best-effort augmentation: a missing/unreachable Neo4j session degrades
+    // to PostgreSQL-only results instead of failing the request.
+    const session = getSession();
+    const graphOnlyCandidates = session
+      ? (await session.run('MATCH (p:Person) RETURN p.slug AS slug, p.name AS name, p.nasabRank AS nasabRank')).records
+        .map((record) => ({ slug: record.get('slug') as string, name: record.get('name') as string, nasabRank: (record.get('nasabRank') as number | null) ?? null }))
+        .filter((person) => person.slug && person.name && !postgresSlugs.has(person.slug))
+        .map((person) => ({ ...person, id: person.slug, fullName: null, nameTransliterated: null, titleCount: 0, hasProfile: false as const }))
+      : [];
+
+    const candidates = [...postgresCandidates, ...graphOnlyCandidates];
     const data = filterAndRankPeople(candidates, q)
       .slice(0, limit)
       .map(({ person, match }) => ({ ...person, match }));

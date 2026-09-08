@@ -20,6 +20,11 @@ interface Suggestion {
   nameTransliterated: string | null;
   match: 'exact' | 'prefix' | 'contains';
   kind?: string;
+  // Absent (not just true) for non-person kinds, whose profile pages always
+  // exist -- only a person suggestion from /api/people/suggest ever sets
+  // this explicitly, to false for a graph-only person (see
+  // docs/graph-only-people-search-plan.md).
+  hasProfile?: boolean;
 }
 
 // A single, coarse ranking shared with person suggestions' own 'exact' /
@@ -48,10 +53,11 @@ function matchGraphNodes(rawQuery: string, nodes: GraphNodeFull[]): Suggestion[]
   const query = normalizePersonSearch(rawQuery);
   if (!query) return [];
   return nodes
-    // Person nodes are excluded here, not just de-prioritized: the Postgres
-    // suggest call above already covers every person, so including them
-    // again from `nodes` would just duplicate entries under a different id
-    // shape.
+    // Person nodes are excluded here, not just de-prioritized: every person
+    // is already covered by /api/people/suggest above, PostgreSQL-backed or
+    // graph-only alike (see docs/graph-only-people-search-plan.md), so
+    // including them again from `nodes` would only ever duplicate an
+    // already-loaded person under a different id shape.
     .filter(node => (node.type ?? 'person') !== 'person')
     .map(node => {
       const score = rankNodeMatch(query, node);
@@ -256,16 +262,18 @@ export default function GraphSearch({ nodes }: GraphSearchProps) {
                         </div>
                       )}
                     </button>
-                    <button
-                      type="button"
-                      className="shrink-0 rounded border border-amber-400 px-2 py-1 text-xs text-amber-700 hover:bg-amber-50 dark:text-amber-300 dark:hover:bg-gray-800"
-                      onMouseDown={(e) => {
-                        e.preventDefault();
-                        openProfile(suggestion);
-                      }}
-                    >
-                      {language === 'ar' ? 'الصفحة الشخصية' : 'Profile'}
-                    </button>
+                    {suggestion.hasProfile !== false && (
+                      <button
+                        type="button"
+                        className="shrink-0 rounded border border-amber-400 px-2 py-1 text-xs text-amber-700 hover:bg-amber-50 dark:text-amber-300 dark:hover:bg-gray-800"
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          openProfile(suggestion);
+                        }}
+                      >
+                        {language === 'ar' ? 'الصفحة الشخصية' : 'Profile'}
+                      </button>
+                    )}
                   </div>
                   <div className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                     {language === 'ar' ? 'اختر لعرض الرسم البياني' : 'Select to focus the graph'}
