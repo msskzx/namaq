@@ -1,9 +1,9 @@
 # Expansion controls
 
-Status: designed, ready for implementation on its own branch off `main` after
-[#37](https://github.com/msskzx/namaq/pull/37) merges. One open issue is
-recorded at the end. Part of the data fix has already been applied to
-production; see [Data fixes](#data-fixes).
+Status: designed, no open questions. Ready for implementation on its own branch
+off `main` after [#37](https://github.com/msskzx/namaq/pull/37) merges. Part of
+the data fix has already been applied to production; see
+[Data fixes](#data-fixes).
 
 Sibling of [historical subjects are searchable](graph-subject-search-plan.md),
 whose "Out of scope" note raised this.
@@ -129,6 +129,16 @@ the same way as expanding.
    `DEFAULT_EXCLUDED_RELATIONS` rather than "nothing hidden". Old links fall
    back to defaults.
 
+10. **The live graph is checked, not only the seed.** The static test guards
+    what the seed declares; nothing guarded what the graph actually contains,
+    which is why four wrong edges survived. A live check reports drift in both
+    directions -- person-to-person edges the graph holds that the seed never
+    declared, and edges the seed declares that the graph lacks -- excluding the
+    relation types the sync scripts legitimately own (`COMPANION_OF`,
+    `ACCOMPANIED_BY`, `HOLDS_TITLE`, `PARTICIPATED_IN`, `INVOLVED_IN`,
+    `PART_OF`). The two checks catch different failures: one guards what is
+    declared, the other what is deployed.
+
 ## Data fixes
 
 Two defects, found while diagnosing the above, with different causes.
@@ -181,7 +191,17 @@ arithmetic and `toggleKind`'s group-sync, all of which invert. Note that
 `DEFAULT_EXCLUDED_RELATIONS` becomes a default *include* set: every relation
 type except `COMPANION_OF`, `PARTICIPATED_IN`, `INVOLVED_IN` and `PART_OF`.
 
-### Phase four: four buttons
+### Phase four: the live drift check
+
+`src/lib/graphIntegrity.live.test.ts` gains the both-directions comparison from
+decision 10. It needs credentials, so it skips without them, as the rest of
+that file does.
+
+**This check fails after phase two until `npm run seed:graph` is re-run** --
+the eleven `HUSBAND` edges will be declared but not yet deployed. That is the
+check working: re-running the seed is the operator step it is asking for.
+
+### Phase five: four buttons
 
 Delete the middle tier from `ExpansionControls`, plus
 `src/lib/relationship/expansionGroups.ts`, its test, and the `expansionGroups`
@@ -207,6 +227,8 @@ rather than all of `RELATION_ORDER`.
 7. `relation` and `NO_EXCLUDED_RELATIONS` appear nowhere in `src/`.
 8. `ExpansionControls` renders four buttons for a person, one for a non-person
    subject, and `expansionGroups.ts` no longer exists.
+9. The live check reports zero drift in both directions once the seed is
+   re-run, and would have failed on the four deleted edges.
 
 ## Out of scope
 
@@ -214,12 +236,7 @@ The graph UI on mobile, still undesigned -- search, filter and navbar are
 unscrollable on a phone. Includes a loading indicator while nodes are fetched,
 and `GraphSearch.tsx`'s TODO about the spinner belonging in the dropdown.
 
-## Open issues
+## Operator steps
 
-**Undecided.** Whether a live drift guard is in scope. The static seed test
-guards what the seed declares; nothing guards what the live graph actually
-contains, which is why the four inverted edges survived. A check in
-`src/lib/graphIntegrity.live.test.ts` that the graph declares nothing the seed
-does not would have caught them, and would have to tolerate the edges the sync
-scripts legitimately add (`COMPANION_OF`/`ACCOMPANIED_BY`, `HOLDS_TITLE`,
-`PARTICIPATED_IN`, `INVOLVED_IN`, `PART_OF`).
+`npm run seed:graph` after phase two, to deploy the eleven `HUSBAND` edges.
+Phase four's check fails until it runs.
