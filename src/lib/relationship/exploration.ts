@@ -53,7 +53,10 @@ export function buildExploration(input: ExplorationInput, edges: StoredEdge[]): 
   }
 
   for (const action of input.expansions) {
-    for (const neighbor of matchExpansionNeighbors(edges, action.subject, action.relation)) {
+    const neighbors = matchExpansionNeighbors(edges, action.subject, action.relation);
+    // Keep both ends of an independently expanded branch when another control collapses.
+    if (neighbors.length > 0) addProvenance(visible, action.subject, { kind: 'expansion', subject: action.subject, relation: action.relation });
+    for (const neighbor of neighbors) {
       addProvenance(visible, neighbor, { kind: 'expansion', subject: action.subject, relation: action.relation });
     }
   }

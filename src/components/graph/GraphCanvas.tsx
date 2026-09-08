@@ -46,44 +46,8 @@ interface GraphCanvasProps {
 
 const relationName = (value: string) => value.toLowerCase().replaceAll('_', ' ');
 
-// The full universe of node kinds the graph API can ever return, regardless
-// of what's actually present in the current fetch. The kind filter (see
-// `includedKinds` below) needs this fixed list, not the current graphData's
-// kinds -- once narrowed to `kind=person`, the response contains nothing
-// but person nodes, and deriving the toggle set from that response would
-// make title/battle/event impossible to switch back on.
-// The full universe of relation types the graph API can ever return,
-// regardless of what's actually present in the current (possibly
-// kind-narrowed) fetch -- same rationale as ALL_KINDS above. Once `kind` is
-// narrowed to e.g. `person`, the response contains no Title/Battle/Event
-// nodes, so their relation types (HOLDS_TITLE, PARTICIPATED_IN, ...) never
-// appear in that fetch; deriving the toggle/group set from it would make
-// those categories vanish entirely instead of just having nothing to show,
-// and re-including that kind wouldn't bring their filters back.
+// Keep disabled kinds and relations available even when absent from the response.
 const ALL_RELATION_TYPES = sortRelationTypes(RELATION_ORDER.filter(type => governingRelationType(type) === type));
-
-// Battle/Event being off by default (see DEFAULT_KINDS) needs to
-// carry over to their relation types too, the same way toggleKind's own
-// group-sync keeps them in step whenever a kind is toggled by hand --
-// otherwise the Relationship Types panel would show e.g. PARTICIPATED_IN
-// as "on" while its Battle nodes are actually hidden. COMPANION_OF connects
-// the Prophet to ~250 companions, dwarfing every other relation the same
-// way the Companion title node dwarfs the Titles view (see
-// `showCompanionTitle` below) -- hidden by default for the same reason.
-const DEFAULT_EXCLUDED_KINDS = ALL_KINDS.filter(kind => !(DEFAULT_KINDS as string[]).includes(kind));
-const DEFAULT_EXCLUDED_RELATION_GROUPS = new Set(DEFAULT_EXCLUDED_KINDS.map(kind => KIND_TO_RELATION_GROUP[kind]));
-const DEFAULT_EXCLUDED_RELATIONS = [
-  'COMPANION_OF',
-  ...ALL_RELATION_TYPES.filter(type => DEFAULT_EXCLUDED_RELATION_GROUPS.has(relationGroup(type))),
-];
-
-// Written to the `relation` param to mean "explicitly show every relation
-// type". An empty `relation` array and an absent `relation` param both
-// serialize to the same URL (no param at all -- see `updateParams`), so
-// without a sentinel there'd be no way to tell "user turned everything
-// back on" apart from "never touched this", and the latter must fall back
-// to DEFAULT_EXCLUDED_RELATIONS above.
-const NO_EXCLUDED_RELATIONS = '__none__';
 
 export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-muhammad', showSearch = true, initialParams, nodesLabel = 'people' }: GraphCanvasProps) {
   const { language } = useLanguage();
@@ -94,26 +58,6 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   const selectedSlug = searchParams?.get('selected') ?? (showSearch && !searchParams?.has('subject') ? targetSlug : null);
   const fullGraph = searchParams?.get('full') === '1';
   const focusSlug = searchParams?.get('focus') ?? null;
-  // Relation types are stored as the set of EXCLUDED (hidden) values --
-  // each toggle acts independently, and hiding one never implicitly hides
-  // another. An absent `relation` param means "untouched", which defaults
-  // to DEFAULT_EXCLUDED_RELATIONS rather than "nothing excluded" -- see
-  // that constant and NO_EXCLUDED_RELATIONS above for why "show every
-  // relation" needs its own sentinel to stay distinguishable from that.
-  const excludedRelations = useMemo(() => {
-    const raw = searchParams?.getAll('relation') ?? [];
-    if (raw.length === 0) return new Set(DEFAULT_EXCLUDED_RELATIONS);
-    if (raw.length === 1 && raw[0] === NO_EXCLUDED_RELATIONS) return new Set<string>();
-    return new Set(raw);
-  }, [searchParams]);
-  // Kinds work the opposite way from relations: `kind` is a server-side
-  // whitelist (see /api/graph's `kind` param), so a non-empty set is
-  // exactly what's INCLUDED, not excluded. An absent `kind` param also
-  // means "untouched", defaulting to `defaultKinds` below (DEFAULT_KINDS on
-  // a general-purpose graph, every kind on a scoped embed) rather than
-  // always meaning "every kind" -- unlike relations, this needs no
-  // sentinel: toggleKind always spells out a non-default combination in
-  // full instead of ever collapsing it down to an empty array (see there).
   const defaultKinds = useMemo(() => new Set<string>(showSearch ? DEFAULT_KINDS : ALL_KINDS), [showSearch]);
   const includedKinds = useMemo(() => {
     const raw = searchParams?.getAll('kind') ?? [];
@@ -123,8 +67,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // every companion in the dataset, so it dwarfs every other title's node
   // degree and crowds out the rest of the Titles view -- hidden by default,
   // opt-in via `showCompanionTitle=1` rather than an excluded-by-default
-  // entry in `relation`, since this hides a specific NODE, not a relation
-  // type.
+  // relation type, since this hides a specific node.
   const showCompanionTitle = searchParams?.get('showCompanionTitle') === '1';
   // Only `person` is a 1-hop neighborhood search (see route.ts's `persons`
   // query) where a same-labeled edge could leak in from someone two hops
@@ -138,17 +81,19 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   const subjectParams = useMemo(() => searchParams?.getAll('subject') ?? [], [searchParams]);
   const explorationInput = useMemo(
     () => parseExplorationInput(
-      { subjects: subjectParams, expands: searchParams?.getAll('expand') ?? [], filters: searchParams?.getAll('filter') ?? [] },
+      { subjects: subjectParams, expands: searchParams?.getAll('expand') ?? [], filters: searchParams?.has('filter') ? searchParams.getAll('filter') : undefined },
       targetSlug
     ),
     [searchParams, targetSlug, subjectParams]
   );
 
+  const includedRelations = useMemo(() => new Set(explorationInput.globalFilters.map(governingRelationType)), [explorationInput.globalFilters]);
+
   const fetchUrl = useMemo(() => {
     try {
       const base = new URL(url, typeof window !== 'undefined' ? window.location.origin : 'http://localhost');
       const incoming = new URLSearchParams(searchParams?.toString() || '');
-      // `selected` and `relation` are client view options with no server
+      // `selected` is a client view option with no server
       // meaning. `kind` is the opposite: it's a real query param the API
       // reads to decide which node kinds to return, so it's deliberately
       // forwarded rather than stripped -- but re-written from `includedKinds`
@@ -157,8 +102,10 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       // either (see `defaultKinds` above): without this, Battle/Event nodes
       // would still be fetched by default even though the UI hides them.
       incoming.delete('selected');
-      incoming.delete('relation');
       incoming.delete('showCompanionTitle');
+      incoming.delete('filter');
+      explorationInput.globalFilters.forEach(type => incoming.append('filter', type));
+      if (explorationInput.globalFilters.length === 0) incoming.set('filter', '');
       if (showSearch) {
         incoming.delete('kind');
         includedKinds.forEach(kind => incoming.append('kind', kind));
@@ -168,7 +115,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     } catch {
       return url;
     }
-  }, [url, searchParams, showSearch, includedKinds]);
+  }, [url, searchParams, showSearch, includedKinds, explorationInput.globalFilters]);
 
   // Graph structure only changes via pipeline scripts, never live user
   // action, so there's nothing to gain from the default revalidate-on-focus
@@ -226,33 +173,11 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     () => Array.from(selectedRelationCounts.values()).some(count => count > 0),
     [selectedRelationCounts]
   );
-  // Relation types present in the fetched graph, one toggle per type.
-  // ACCOMPANIED_BY is COMPANION_OF's inverse edge (see
-  // scripts/people/syncCompanionRelations.ts) -- governed by the same
-  // toggle as COMPANION_OF (see governingRelationType), so it never gets a
-  // toggle of its own.
-  const relationTypesInData = useMemo(() => {
-    const present = [...new Set(graphData?.links.map(link => link.label) ?? [])];
-    return sortRelationTypes(present.filter(type => governingRelationType(type) === type));
-  }, [graphData]);
   // Node kinds present in the fetched graph (person/title/battle/event).
   const kindsPresent = useMemo(() => [...new Set(graphData?.nodes.map(node => node.type ?? 'person') ?? [])], [graphData]);
-  // On a general-purpose page (showSearch on), both the kind toggle and the
-  // relation-type toggles need every possible option on offer, not just
-  // whatever the current, possibly-narrowed fetch happens to contain --
-  // otherwise narrowing `kind` down to e.g. `person` would also make every
-  // Title/Battle/Event relation category vanish from the filter panel
-  // instead of just having nothing to show, with no way to bring it back
-  // short of widening `kind` again. A scoped embed (e.g. the person
-  // profile's ancestor mini-graph, showSearch off) is inherently
-  // single-kind anyway, so it keeps the old data-driven behavior of only
-  // offering toggles for what's actually in that graph.
+  // Relation switches must remain available after a filter removes their edges.
   const kindsUniverse = showSearch ? ALL_KINDS : kindsPresent;
-  const relationTypesPresent = showSearch ? ALL_RELATION_TYPES : relationTypesInData;
-  // The Companion title node is hidden by default (see
-  // showCompanionTitle above), so filtering must run even with zero
-  // manual relation toggles.
-  const anyFilterActive = excludedRelations.size > 0 || !showCompanionTitle;
+  const relationTypesPresent = ALL_RELATION_TYPES;
   // Once the unfiltered view has run one simulation pass, d3-force mutates
   // each link's source/target from a plain string id into a direct
   // reference to the node object it resolved -- in place, on the very same
@@ -268,9 +193,9 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // current. See src/lib/graphFilter.ts for the filtering rules themselves
   // (and their own tests).
   const baseVisibleGraph = useMemo(() => {
-    if (!graphData || !anyFilterActive) return graphData;
-    return filterVisibleGraph(graphData, { excludedRelations, showCompanionTitle, personSearchSlugs });
-  }, [graphData, anyFilterActive, excludedRelations, showCompanionTitle, personSearchSlugs]);
+    if (!graphData) return graphData;
+    return filterVisibleGraph(graphData, { showCompanionTitle, personSearchSlugs });
+  }, [graphData, showCompanionTitle, personSearchSlugs]);
   // Keeps an explicitly selected node visible even when the active filters
   // would otherwise drop it (e.g. searching straight to a Title/Battle/Event
   // node while its kind, or the Companion title, is hidden) -- but only
@@ -368,8 +293,11 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     const params = new URLSearchParams(searchParams?.toString());
     Object.entries(changes).forEach(([key, value]) => {
       params.delete(key);
-      if (Array.isArray(value)) value.forEach(item => params.append(key, item));
-      else if (value) params.set(key, value);
+      if (Array.isArray(value)) {
+        // An empty include set must survive refresh instead of restoring defaults.
+        if (key === 'filter' && value.length === 0) params.set(key, '');
+        else value.forEach(item => params.append(key, item));
+      } else if (value) params.set(key, value);
     });
     const navigate = showSearch && !replace ? router.push : router.replace;
     navigate(`${pathname}${params.size ? `?${params.toString()}` : ''}`, { scroll: false });
@@ -385,8 +313,9 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   );
   const toggleExpansion = (relation: ExpansionRelationId) => {
     if (!selectedSubjectId) {
-      const filters = explorationInput.globalFilters;
-      updateParams({ filter: filters.includes(relation as RelationType) ? filters.filter(item => item !== relation) : [...filters, relation] });
+      const type = governingRelationType(relation);
+      const filters = [...includedRelations];
+      updateParams({ filter: includedRelations.has(type) ? filters.filter(item => item !== type) : [...filters, type] });
       return;
     }
     const token = formatExpandParam({ subject: selectedSubjectId, relation });
@@ -424,47 +353,21 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams, showSearch]);
 
-  // A completely fresh /graphs visit (captured once, before the seeding
-  // effect above adds subject/selected) reveals the default subject's own
-  // direct relations too, as if All direct relations had just been clicked
-  // -- otherwise the very first thing a new visitor sees is one lone node
-  // with no connections. Restoring a shared/refreshed URL that already
-  // carries its own subject/expand/filter/full state is untouched.
-  const [isFreshVisit] = useState(
-    () => showSearch && Boolean(searchParams) && !searchParams?.has('subject') && !searchParams?.has('expand') && !searchParams?.has('filter') && !searchParams?.has('full')
-  );
-  const initialExpandSeededRef = useRef(false);
-  useEffect(() => {
-    if (initialExpandSeededRef.current || !isFreshVisit || !hasEligibleDirectRelations) return;
-    initialExpandSeededRef.current = true;
-    expandAllDirectRelations();
-    // Runs once, as soon as the freshly-seeded root subject's own relation
-    // counts have loaded; expandAllDirectRelations/selectedSubjectId aren't
-    // meant to re-trigger it.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFreshVisit, hasEligibleDirectRelations]);
-
-  // An excluded-relations Set that would serialize to an empty `relation`
-  // array is indistinguishable from the param being absent entirely (see
-  // NO_EXCLUDED_RELATIONS above) -- write the sentinel instead whenever
-  // that's the actual, deliberate result, so it doesn't get read back as
-  // "untouched" and fall through to DEFAULT_EXCLUDED_RELATIONS.
-  const relationParamValue = (excluded: Set<string>) => (excluded.size > 0 ? [...excluded] : [NO_EXCLUDED_RELATIONS]);
   const toggleRelation = (type: string) => {
-    const next = new Set(excludedRelations);
+    const next = new Set(includedRelations);
     if (next.has(type)) next.delete(type);
     else next.add(type);
-    updateParams({ relation: relationParamValue(next) });
+    updateParams({ filter: [...next] });
   };
-  const toggleAllRelations = (show: boolean) => updateParams({ relation: show ? relationParamValue(new Set()) : relationTypesPresent });
+  const toggleAllRelations = (show: boolean) => updateParams({ filter: show ? relationTypesPresent : [] });
   // Toggles every relation type in one group at once (e.g. a single
   // "all family relations" switch above the ~40 individual family
   // toggles), independent of the panel-wide "all relations" switch.
   const toggleGroupRelations = (group: RelationGroup, show: boolean) => {
     const groupTypes = relationTypesPresent.filter(type => relationGroup(type) === group);
-    const next = new Set(excludedRelations);
-    groupTypes.forEach(type => (show ? next.delete(type) : next.add(type)));
-    updateParams({ relation: relationParamValue(next) });
+    const next = new Set(includedRelations);
+    groupTypes.forEach(type => (show ? next.add(type) : next.delete(type)));
+    updateParams({ filter: [...next] });
   };
   const toggleCompanionTitle = () => updateParams({ showCompanionTitle: showCompanionTitle ? null : '1' });
   const toggleKind = (kind: string) => {
@@ -473,20 +376,20 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     if (turningOff) next.delete(kind);
     else next.add(kind);
     // Keep the relation toggles for this kind's group (e.g. Battle ->
-    // "battles") in sync: turning the kind off also excludes its
+    // "battles") in sync: turning the kind off also disables its
     // relation type(s), since there's nothing left for them to connect
     // to, and turning it back on restores them -- without ever removing
     // the toggle itself from the panel (see ALL_RELATION_TYPES above).
     const group = KIND_TO_RELATION_GROUP[kind];
     const groupTypes = group ? relationTypesPresent.filter(type => relationGroup(type) === group) : [];
-    const nextExcluded = new Set(excludedRelations);
-    groupTypes.forEach(type => (turningOff ? nextExcluded.add(type) : nextExcluded.delete(type)));
+    const nextFilters = new Set(includedRelations);
+    groupTypes.forEach(type => (turningOff ? nextFilters.delete(type) : nextFilters.add(type)));
     // Once `next` matches the default kind set again, clear the param
     // instead of spelling it out -- an absent `kind` param is the canonical
     // URL for whatever "default" means here (see `defaultKinds` above), not
     // always "every kind".
     const isDefault = next.size === defaultKinds.size && [...next].every(k => defaultKinds.has(k));
-    updateParams({ kind: isDefault ? [] : [...next], relation: relationParamValue(nextExcluded) });
+    updateParams({ kind: isDefault ? [] : [...next], filter: [...nextFilters] });
   };
 
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -670,10 +573,10 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       // rather than the ordinary minimal reveal-pan (see the camera
       // effects above) -- consumed the next time they run.
       pendingResetRef.current = true;
-      updateParams({ selected: targetSlug, relation: [], kind: [], showCompanionTitle: null, subject: [subjectId('person', targetSlug)], expand: [], filter: [], full: null });
+      updateParams({ selected: targetSlug, kind: [], showCompanionTitle: null, subject: [subjectId('person', targetSlug)], expand: [], filter: [], full: null });
       return;
     }
-    updateParams({ selected: null, focus: null, relation: [], kind: [], showCompanionTitle: null, person: null, ancestorsOf: [], descendantsOf: [] });
+    updateParams({ selected: null, focus: null, filter: null, kind: [], showCompanionTitle: null, person: null, ancestorsOf: [], descendantsOf: [] });
   };
 
   const explorationControls = showSearch && (
@@ -739,7 +642,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
         </fieldset>
       )}
 
-      <RelationFilterPanel types={relationTypesPresent} excludedRelations={excludedRelations} onToggle={toggleRelation} onToggleAll={toggleAllRelations} onToggleGroup={toggleGroupRelations} showCompanionTitle={showCompanionTitle} onToggleCompanionTitle={toggleCompanionTitle} relationLabel={relationLabel} language={language} />
+      <RelationFilterPanel types={relationTypesPresent} includedRelations={includedRelations} onToggle={toggleRelation} onToggleAll={toggleAllRelations} onToggleGroup={toggleGroupRelations} showCompanionTitle={showCompanionTitle} onToggleCompanionTitle={toggleCompanionTitle} relationLabel={relationLabel} language={language} />
     </>
   );
 

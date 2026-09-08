@@ -15,7 +15,6 @@ function link(source: string, target: string, label: string): GraphLink {
 }
 
 const baseOptions = {
-  excludedRelations: new Set<string>(),
   showCompanionTitle: true,
   personSearchSlugs: new Set<string>(),
 };
@@ -112,30 +111,15 @@ describe('filterVisibleGraph', () => {
     expect(result.nodes.map(n => n.slug).sort()).toEqual(['abu-bakr-as-siddiq', COMPANION_TITLE_SLUG]);
   });
 
-  it('drops edges of a manually excluded relation type, and any node left with no remaining edge', () => {
-    const graphData: GraphData = {
-      nodes: [person('prophet-muhammad'), person('khadijah'), person('abu-bakr-as-siddiq')],
-      links: [
-        link('person:prophet-muhammad', 'person:khadijah', 'WIFE'),
-        link('person:prophet-muhammad', 'person:abu-bakr-as-siddiq', 'COMPANION_OF'),
-      ],
-    };
-
-    const result = filterVisibleGraph(graphData, { ...baseOptions, excludedRelations: new Set(['COMPANION_OF']) });
-
-    expect(result.nodes.map(n => n.slug).sort()).toEqual(['khadijah', 'prophet-muhammad']);
-    expect(result.links).toEqual([link('person:prophet-muhammad', 'person:khadijah', 'WIFE')]);
-  });
-
   it('keeps the selected node even when every one of its edges is filtered out', () => {
     const graphData: GraphData = {
-      nodes: [person('prophet-muhammad'), person('abu-bakr-as-siddiq')],
-      links: [link('person:prophet-muhammad', 'person:abu-bakr-as-siddiq', 'COMPANION_OF')],
+      nodes: [title(COMPANION_TITLE_SLUG), person('abu-bakr-as-siddiq')],
+      links: [link('person:abu-bakr-as-siddiq', `title:${COMPANION_TITLE_SLUG}`, 'HOLDS_TITLE')],
     };
 
     const result = filterVisibleGraph(graphData, {
       ...baseOptions,
-      excludedRelations: new Set(['COMPANION_OF']),
+      showCompanionTitle: false,
       selectedNodeId: 'person:abu-bakr-as-siddiq',
     });
 
@@ -153,7 +137,7 @@ describe('filterVisibleGraph', () => {
       ],
     };
 
-    const result = filterVisibleGraph(graphData, { ...baseOptions, excludedRelations: new Set(['COMPANION_OF']) });
+    const result = filterVisibleGraph(graphData, { ...baseOptions, personSearchSlugs: new Set(['khadijah']) });
 
     const survivingMuhammad = result.nodes.find(node => node.slug === 'prophet-muhammad');
     expect(survivingMuhammad).toEqual(pinned);

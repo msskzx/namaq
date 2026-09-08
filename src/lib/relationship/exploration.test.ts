@@ -51,7 +51,7 @@ describe('buildExploration', () => {
 
   it('collapsing the Wives expansion preserves Aisha and her parents when Aisha has her own independent Parents expansion, and drops unsupported wives', () => {
     const input: ExplorationInput = {
-      roots: [muhammad, aisha],
+      roots: [muhammad],
       expansions: [{ subject: aisha, relation: 'FATHER' }],
       globalFilters: [],
     };
@@ -62,6 +62,11 @@ describe('buildExploration', () => {
     expect(visible).toEqual(new Set([muhammad, aisha, abuBakr]));
     expect(visible.has(khadijah)).toBe(false);
     expect(visible.has(hafsa)).toBe(false);
+  });
+
+  it('does not retain an expansion subject when it has no matching neighbor', () => {
+    const result = buildExploration({ roots: [muhammad], expansions: [{ subject: aisha, relation: 'MOTHER' }], globalFilters: [] }, edges);
+    expect(visibleSubjects(result)).toEqual(new Set([muhammad]));
   });
 
   it('activating a global Father filter with Muhammad and his wives visible reveals each visible subject\'s father but not their fathers in turn', () => {
@@ -118,7 +123,7 @@ describe('buildExploration', () => {
     const visible = visibleSubjects(result);
 
     expect(visible.has(abuBakr)).toBe(true);
-    expect(result.visible.get(abuBakr)).toEqual([{ kind: 'filter', relationType: 'FATHER' }]);
+    expect(result.visible.get(abuBakr)).toEqual([{ kind: 'expansion', subject: abuBakr, relation: 'FATHER' }]);
     expect(visible.has(uthmanIbnAmir)).toBe(true);
     expect(result.visible.get(uthmanIbnAmir)).toEqual([
       { kind: 'expansion', subject: abuBakr, relation: 'FATHER' },

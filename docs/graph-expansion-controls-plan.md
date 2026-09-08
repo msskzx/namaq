@@ -1,9 +1,9 @@
 # Expansion controls
 
-Status: designed, no open questions. Ready for implementation on its own branch
-off `main` after [#37](https://github.com/msskzx/namaq/pull/37) merges. Part of
-the data fix has already been applied to production; see
-[Data fixes](#data-fixes).
+Status: phases one and two are implemented in
+[#38](https://github.com/msskzx/namaq/pull/38); phase three is implemented on
+the continuation branch. Phases four and five remain. The seed corrections
+are deployed; see [Data fixes](#data-fixes).
 
 Sibling of [historical subjects are searchable](graph-subject-search-plan.md),
 whose "Out of scope" note raised this.
@@ -127,8 +127,14 @@ the same way as expanding.
    tier is gone there is no reason a user should distinguish "revealed but
    hidden" from "not revealed".
 
-   The cost is accepted deliberately: hiding a relation now unfetches it, so
-   switching it back on costs a round trip where it used to be instant.
+   Switching off a filter removes its contribution to discovery. It does not
+   hide recorded links between retained subjects or override independently
+   expanded branches. Both endpoints of an independent expansion remain
+   while they have a matching connection; unsupported nodes disappear.
+   Searched roots remain visible on their own, including after Start over.
+   This follows the earlier [connection-visibility decision](adr/0001-separate-expansion-from-connection-visibility.md)
+   and the user's clarification during phase three. Switching a filter back
+   on may require fetching neighborhoods again.
 
 9. **Old `?relation=` links are not translated.** Nothing in the repo generates
    them -- every one in existence came from a user clicking a toggle. A
@@ -212,6 +218,24 @@ arithmetic and `toggleKind`'s group-sync, all of which invert. Note that
 `DEFAULT_EXCLUDED_RELATIONS` becomes a default *include* set: every relation
 type except `COMPANION_OF`, `PARTICIPATED_IN`, `INVOLVED_IN` and `PART_OF`.
 
+Implemented with these URL and integration details:
+
+- Absent `filter` uses defaults; `filter=` means explicitly no global filters.
+  Start over writes the empty value, preserving its single-root behavior.
+- Default filters now reveal the initial graph, so the separate fresh-visit
+  local-expansion seed is removed. Global filters retain their existing cap.
+- The companionship switch includes both `COMPANION_OF` and `ACCOMPANIED_BY`.
+- Embedded profile graphs pass the include set to `/api/graph`; their
+  switches remain available when the response no longer contains that type.
+- A connected independent expansion retains its source as well as its
+  neighbors after the filter that first revealed that source is removed.
+
+Neighborhood requests still read the full relation vocabulary for expansion
+counts and automatic connections between visible subjects. Disabled filters
+prevent discovery and follow-up neighborhood fetches for their unsupported
+subjects; they do not promise that the initial response contains no edge of
+that type.
+
 ### Phase four: the live drift check
 
 `src/lib/graphIntegrity.live.test.ts` gains the both-directions comparison from
@@ -243,10 +267,15 @@ rather than all of `RELATION_ORDER`.
    and passes after; expanding any wife of the Prophet by Husband reaches him,
    and `INVERSE_PAIR` is unchanged, so the Filters panel still lists `FATHER`
    and `SON` separately.
-5. A fresh `/graphs` visit does not fetch `COMPANION_OF`.
+5. A fresh `/graphs` visit does not fetch `COMPANION_OF`. **Phase-three
+   qualification:** no subjects supported only by companionship are discovered
+   or fetched as follow-up neighborhoods, but the initial neighborhood
+   response still includes these edges for counts. Excluding those raw edges
+   requires a separate fetch/count change.
 6. Switching `COMPANION_OF` on in the Filters panel fetches and renders the
    companions.
-7. `relation` and `NO_EXCLUDED_RELATIONS` appear nowhere in `src/`.
+7. Production UI code no longer reads or writes the `relation` parameter,
+   and `NO_EXCLUDED_RELATIONS` is deleted.
 8. `ExpansionControls` renders four buttons for a person, one for a non-person
    subject, and `expansionGroups.ts` no longer exists.
 9. The live check reports zero drift in both directions once the seed is

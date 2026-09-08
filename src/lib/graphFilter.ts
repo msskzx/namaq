@@ -1,5 +1,4 @@
 import { GraphData, GraphLink, GraphNode, GraphNodeFull } from '@/types/graph';
-import { governingRelationType } from './relationship/categories';
 
 // The Title node every companion holds (see
 // scripts/people/syncCompanionRelations.ts's COMPANION_TITLE_SLUG) -- one
@@ -8,7 +7,6 @@ import { governingRelationType } from './relationship/categories';
 export const COMPANION_TITLE_SLUG = 'companion';
 
 export interface VisibleGraphOptions {
-  excludedRelations: Set<string>;
   showCompanionTitle: boolean;
   // Slugs from a 1-hop `person` neighborhood search (see route.ts's
   // `persons` query). Edges must directly touch one of these to survive --
@@ -20,13 +18,10 @@ export interface VisibleGraphOptions {
   selectedNodeId?: string;
 }
 
-// Mirrors GraphCanvas's `visibleGraph` computation: drops edges that are
-// manually excluded, don't directly touch a `person`-searched slug (when
-// that mode is active), or touch the hidden Companion title node -- then
-// drops any node no remaining edge touches (except the explicitly selected
-// one, which stays visible regardless).
+// Keep person searches to one hop and optionally hide the Companion title.
+// Preserve a selected node even when no surviving edge touches it.
 export function filterVisibleGraph(graphData: GraphData, options: VisibleGraphOptions): GraphData {
-  const { excludedRelations, showCompanionTitle, personSearchSlugs, selectedNodeId } = options;
+  const { showCompanionTitle, personSearchSlugs, selectedNodeId } = options;
   const nodesById = new Map<string, GraphNodeFull>(graphData.nodes.map(node => [node.id, node]));
   const slugOf = (endpoint: string | GraphNode) => (typeof endpoint === 'string' ? nodesById.get(endpoint)?.slug : endpoint.slug);
   const endpointId = (endpoint: string | GraphNode) => (typeof endpoint === 'string' ? endpoint : endpoint.id);
@@ -39,7 +34,7 @@ export function filterVisibleGraph(graphData: GraphData, options: VisibleGraphOp
   const isCompanionTitleLink = (link: GraphLink) => isCompanionTitleNode(link.source) || isCompanionTitleNode(link.target);
 
   const links = graphData.links
-    .filter(link => !excludedRelations.has(governingRelationType(link.label)) && isDirect(link) && (showCompanionTitle || !isCompanionTitleLink(link)))
+    .filter(link => isDirect(link) && (showCompanionTitle || !isCompanionTitleLink(link)))
     .map(link => ({ ...link, source: endpointId(link.source), target: endpointId(link.target) }));
   const linkedIds = new Set(links.flatMap(link => [link.source as string, link.target as string]));
   if (selectedNodeId) linkedIds.add(selectedNodeId);
