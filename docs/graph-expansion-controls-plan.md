@@ -82,12 +82,20 @@ the same way as expanding.
    toggle each, to avoid one branch in one function.
 
 4. **Reciprocity becomes a checked property for the relations that should have
-   it.** `INVERSE_PAIR` in `src/lib/relationship/categories.ts` currently holds
-   one entry, `ACCOMPANIED_BY: 'COMPANION_OF'`. It grows into a full map, and
-   the static test at `neo4j/graphSeedData.test.ts:86` -- which today covers
-   only `FATHER`/`MOTHER`/`SON`/`DAUGHTER` -- extends to the rest. Inverses are
-   not written automatically: a `FATHER` edge's inverse is `SON` or `DAUGHTER`
-   depending on the child, which a script cannot always know.
+   it.** The static test at `neo4j/graphSeedData.test.ts` -- which covered only
+   `FATHER`/`MOTHER`/`SON`/`DAUGHTER` -- extends to every reciprocal type.
+
+   **Amended during implementation.** The plan said to grow `INVERSE_PAIR` into
+   that map. Doing so would have been a silent UI regression: `INVERSE_PAIR`
+   feeds `governingRelationType`, and `GraphCanvas`'s `ALL_RELATION_TYPES`
+   keeps only types that govern themselves, so every type added as a key
+   disappears from the Filters panel -- `FATHER` and `SON` would collapse into
+   one switch. The reciprocity map is therefore a separate export,
+   `RECIPROCAL_INVERSES`, and `INVERSE_PAIR` is untouched.
+
+   Inverses are not written automatically: a `FATHER` edge's inverse is `SON`
+   or `DAUGHTER` depending on the child, which the query text does not encode.
+   The test accepts any listed inverse for that reason.
 
 5. **The middle tier of expansion controls is deleted.** `ExpansionControls`
    renders three tiers today: All direct relations, one button per relation
@@ -158,11 +166,24 @@ exactly those four. Person-to-person edges went from 1017 to 1013. What wrote
 them is unknown -- provenance properties do not settle it, since only 563 of
 1707 non-title edges carry `reviewStatus` at all.
 
-**Eleven missing inverses, in the seed -- not yet fixed.** Every wife of the
-Prophet has `WIFE -> prophet-muhammad` with no `HUSBAND` back, so from any wife
-the Husband expansion cannot reach him. These are declared in the seed; the
-existing pairing test simply does not cover `HUSBAND`/`WIFE`. Decision 4's test
-extension will fail until the eleven inverse queries are added.
+**Twenty-three missing inverses, in the seed.** First measured as eleven, which
+counted only the eight relation types the first pass looked at. Checked against
+every reciprocal type, the seed was missing 23 -- 11 `WIFE`, 3
+`PATERNAL_UNCLE`, 3 `PATERNAL_COUSIN`, 2 `FATHER_IN_LAW`, 2 `SON_IN_LAW` and 2
+`GRANDSON`.
+
+**Every one of them points at `prophet-muhammad`.** This is not scattered
+data-entry drift: relations were authored pointing *at* him and the reciprocal
+from him was never written. The effect is that expanding *toward* the Prophet
+works while expanding *from* his relations back to him does not -- from
+Khadijah, Husband reaches nobody; from al-Hasan, Grandfather reaches nobody;
+from Abu Bakr, Son-in-law reaches nobody.
+
+All 23 inverses resolve unambiguously. There is no sex field on Person, so the
+gendered choice was derived from the relation types each person already appears
+as the source of, which left nothing unresolved. The queries sit immediately
+after their forward edge in `neo4j/graphSeedData.ts` so the pairing is visible
+in review.
 
 ## Implementation sequence
 
@@ -178,9 +199,9 @@ directions.
 
 ### Phase two: seed reciprocity
 
-Extend `INVERSE_PAIR` to a full map, extend `neo4j/graphSeedData.test.ts:86` to
-every reciprocal type, and add the eleven `HUSBAND` queries the extended test
-then demands.
+Add `RECIPROCAL_INVERSES` to `src/lib/relationship/categories.ts`, extend
+`neo4j/graphSeedData.test.ts` to every reciprocal type, and add the 23 inverse
+queries the extended test then demands.
 
 ### Phase three: one relation param
 
@@ -218,9 +239,10 @@ rather than all of `RELATION_ORDER`.
    `PARTICIPATED_IN` and an Event by `INVOLVED_IN` and `PART_OF`.
 3. Expanding a person by Father still returns only their father --
    `expansion.test.ts:39` unchanged and passing.
-4. `neo4j/graphSeedData.test.ts` fails before the eleven `HUSBAND` queries are
-   added and passes after; expanding any wife of the Prophet by Husband reaches
-   him.
+4. `neo4j/graphSeedData.test.ts` fails before the 23 inverse queries are added
+   and passes after; expanding any wife of the Prophet by Husband reaches him,
+   and `INVERSE_PAIR` is unchanged, so the Filters panel still lists `FATHER`
+   and `SON` separately.
 5. A fresh `/graphs` visit does not fetch `COMPANION_OF`.
 6. Switching `COMPANION_OF` on in the Filters panel fetches and renders the
    companions.
@@ -238,5 +260,7 @@ and `GraphSearch.tsx`'s TODO about the spinner belonging in the dropdown.
 
 ## Operator steps
 
-`npm run seed:graph` after phase two, to deploy the eleven `HUSBAND` edges.
-Phase four's check fails until it runs.
+`npm run seed:graph` after phase two, to deploy the 23 inverse edges. Phase
+four's check fails until it runs. `graphRank` and the layout need no
+recomputation: every new edge joins a pair that was already adjacent, and
+`buildGraphAdjacency` dedups with a Set.
