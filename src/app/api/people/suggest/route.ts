@@ -3,14 +3,10 @@ import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/neo4j';
 import { filterAndRankPeople } from '@/lib/personSearch';
 
-// People are searchable whether or not they have a PostgreSQL profile row
-// -- see docs/graph-only-people-search-plan.md. A graph-only person (no
-// PostgreSQL row) has no id/fullName/nameTransliterated/titles to offer,
-// and `hasProfile: false` tells the client there's no profile page to link
-// to. Both sources rank together through the same filterAndRankPeople, so a
-// well-known profiled person and an obscure lineage-only one compete on the
-// same match-quality/nasabRank scale rather than one always beating the
-// other by construction.
+// People are searchable whether or not they have a PostgreSQL profile row;
+// see docs/graph-only-people-search-plan.md for why both sources rank
+// together instead of PostgreSQL always winning. `hasProfile: false` tells
+// the client there's no profile page to link a graph-only match to.
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -38,9 +34,8 @@ export async function GET(request: Request) {
     const postgresCandidates = people.map(({ _count, ...person }) => ({ ...person, titleCount: _count.titles, hasProfile: true as const }));
     const postgresSlugs = new Set(postgresCandidates.map((person) => person.slug));
 
-    // Best-effort: a search augmentation, not the primary data source, so a
-    // missing/unreachable Neo4j session degrades to PostgreSQL-only results
-    // rather than failing the whole request.
+    // Best-effort augmentation: a missing/unreachable Neo4j session degrades
+    // to PostgreSQL-only results instead of failing the request.
     const session = getSession();
     const graphOnlyCandidates = session
       ? (await session.run('MATCH (p:Person) RETURN p.slug AS slug, p.name AS name, p.nasabRank AS nasabRank')).records

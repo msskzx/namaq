@@ -211,10 +211,9 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     isSelectedPerson && selectedNode ? `/api/people/${selectedNode.slug}/preview` : null,
     fetcher
   );
-  // A person 404s from this same fetch when they're a graph-only person (see
-  // docs/graph-only-people-search-plan.md) -- optimistic (true) until then,
-  // since most people do have one and a link that disappears once we find
-  // out is preferable to one that never shows while the fetch is in flight.
+  // This fetch 404s for a graph-only person (docs/graph-only-people-search-plan.md);
+  // optimistic (true) until then, so the link doesn't stay hidden for the
+  // common case while the fetch is still in flight.
   const selectedPersonHasProfile = !isSelectedPerson || !selectedPreviewError;
   const relationLabel = useCallback((type: string) => (t.relationTypes as Record<string, string>)[type] ?? relationName(type), [t]);
   const selectedSubjectId = selectedNode ? subjectId((selectedNode.type as NodeKind) ?? 'person', selectedNode.slug) : null;

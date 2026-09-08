@@ -1,9 +1,8 @@
 # Graph-only people are searchable
 
-Status: agreed, not yet implemented. Follows up on
-[the stable graph layout plan](graph-layout-plan.md)'s "Deferred: graph-only
-people are not searchable" note, discovered while applying that plan's
-Phase one.
+Status: implemented. Follows up on [the stable graph layout
+plan](graph-layout-plan.md)'s "Deferred: graph-only people are not
+searchable" note, discovered while applying that plan's Phase one.
 
 ## Problem
 
