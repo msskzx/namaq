@@ -109,20 +109,19 @@ it('expands the selection within the active filters, then reveals globally witho
   expect(params().getAll('expand')).toEqual([`person:${root}:WIFE`]);
 });
 
-it('still offers All direct relations after Start over, when no filter is active', async () => {
-  nav.setUrl(`/graphs?subject=person:${root}&filter=&selected=${root}`);
+it('leaves the default filters on after Start over, so All direct relations matches the panel', async () => {
+  nav.setUrl(`/graphs?subject=person:${root}&filter=COMPANION_OF&selected=${root}`);
   mount();
-  await waitFor(() => expect(graph()).toBe(root));
-  fireEvent.click(await screen.findByRole('button', { name: 'All direct relations' }));
-  await waitFor(() => expect(graph()).toContain('wife'));
-  expect(params().getAll('expand')).toEqual(expect.arrayContaining([
-    `person:${root}:WIFE`,
-    `person:${root}:FATHER`,
-  ]));
-  // Falls back to the defaults, not to every relation, so the opt-in types
-  // stay out.
+  await waitFor(() => expect(graph()).toContain('companion'));
+  fireEvent.click(screen.getByRole('button', { name: 'Start over' }));
+  await waitFor(() => expect(graph()).toBe(`father,${root},wife,wife-father`));
+  fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
+  expect(screen.getByRole('switch', { name: 'Hide Father relationships' }).getAttribute('aria-checked')).toBe('true');
+  expect(screen.getByRole('switch', { name: 'Show Companion Of relationships' }).getAttribute('aria-checked')).toBe('false');
+  fireEvent.click(screen.getByRole('button', { name: 'All direct relations' }));
+  await waitFor(() => expect(params().getAll('expand')).toContain(`person:${root}:FATHER`));
+  // Expansion follows the panel, so the switched-off type stays out.
   expect(params().getAll('expand')).not.toContain(`person:${root}:COMPANION_OF`);
-  expect(graph()).not.toContain('companion');
 });
 
 it('offers Show additions after growth, clears it on click, and offers no stale one after a collapse with no growth', async () => {
@@ -152,6 +151,23 @@ it('keeps the cap after off/on and restores filters from the URL', async () => {
   await waitFor(() => expect(graph()).not.toContain('grandfather'));
 });
 
+it('hides and restores the Nodes in view list', async () => {
+  mount();
+  await waitFor(() => expect(graph()).toContain('wife'));
+  expect(screen.getByRole('button', { name: 'wife' })).toBeTruthy();
+  fireEvent.click(screen.getByRole('button', { name: 'Hide nodes in view' }));
+  expect(screen.queryByRole('button', { name: 'wife' })).toBeNull();
+  fireEvent.click(screen.getByRole('button', { name: 'Show nodes in view' }));
+  expect(screen.getByRole('button', { name: 'wife' })).toBeTruthy();
+});
+
+it('renders the selected person\'s titles as badges linking to the title filter', async () => {
+  nav.setUrl(`/graphs?subject=person:${root}&selected=${root}`);
+  mount();
+  const title = await screen.findByText('رسول الله');
+  expect(title.closest('a')?.getAttribute('href')).toBe('/people?title=messenger-of-allah');
+});
+
 it('unions the full graph, preserves exploration state and makes Start over undoable', async () => {
   nav.setUrl(`/graphs?subject=person:${root}&expand=person:${root}:WIFE&filter=FATHER&selected=wife`);
   mount();
@@ -164,8 +180,8 @@ it('unions the full graph, preserves exploration state and makes Start over undo
   expect(params().getAll('expand')).toEqual([`person:${root}:WIFE`]);
   const beforeReset = nav.getUrl();
   fireEvent.click(screen.getByRole('button', { name: 'Start over' }));
-  await waitFor(() => expect(graph()).toBe(root));
-  expect(params().getAll('filter')).toEqual(['']);
+  await waitFor(() => expect(graph()).toBe(`father,${root},wife,wife-father`));
+  expect(params().has('filter')).toBe(false);
   expect(params().has('expand')).toBe(false);
   expect(params().has('full')).toBe(false);
   expect(params().has('kind')).toBe(false);

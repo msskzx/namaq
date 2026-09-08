@@ -13,6 +13,8 @@ import GraphSearch from './GraphSearch';
 import SlideSwitch from './SlideSwitch';
 import RelationFilterPanel from './RelationFilterPanel';
 import ExpansionControls from './ExpansionControls';
+import Button from '@/components/common/Button';
+import Badge from '@/components/common/Badge';
 import GraphSurface, { kindFillColor } from './GraphSurface';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import { useLanguage } from '@/components/language/LanguageContext';
@@ -23,7 +25,7 @@ import { getAllNavLinks } from '@/lib/siteLinks';
 import { sortRelationTypes, governingRelationType, relationGroup, RELATION_ORDER, KIND_TO_RELATION_GROUP, RelationGroup } from '@/lib/relationship/categories';
 import { COMPANION_TITLE_SLUG, filterVisibleGraph } from '@/lib/graphFilter';
 import { profilePath } from '@/lib/nodeProfile';
-import { parseExplorationInput, formatExpandParam, DEFAULT_FILTERS } from '@/lib/relationship/urlState';
+import { parseExplorationInput, formatExpandParam } from '@/lib/relationship/urlState';
 import { ALL_KINDS, DEFAULT_KINDS, NodeKind, RelationType, subjectId } from '@/lib/relationship/types';
 import { ExpansionRelationId, directRelationCounts } from '@/lib/relationship/expansion';
 import { useExplorationGraph } from './useExplorationGraph';
@@ -158,18 +160,12 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     if (!showSearch || !exploration.edges) return new Map<RelationType, number>();
     return directRelationCounts(exploration.edges, selectedSubjectId ?? graphData?.nodes.map(node => node.id) ?? [], RELATION_ORDER) as Map<RelationType, number>;
   }, [showSearch, selectedSubjectId, exploration.edges, graphData]);
-  // Expanding "all" must not pull in a type the filters exclude (decision 6 in
-  // docs/graph-expansion-controls-plan.md). Restricting to an empty filter set
-  // would strand Start over -- which writes `filter=` -- with a root and no way
-  // to expand it, so that case falls back to the defaults rather than to every
-  // relation, which would bury the root under its companions.
-  const expandableRelations = useMemo(
-    () => (explorationInput.globalFilters.length > 0 ? explorationInput.globalFilters : DEFAULT_FILTERS),
-    [explorationInput.globalFilters]
-  );
+  // Expanding "all" must not pull in a type the filters exclude, so the button
+  // follows the Filters panel exactly and disappears once everything is off --
+  // see decision 6 in docs/graph-expansion-controls-plan.md.
   const hasEligibleDirectRelations = useMemo(
-    () => Boolean(selectedSubjectId) && expandableRelations.some(relation => (selectedRelationCounts.get(relation) ?? 0) > 0),
-    [selectedSubjectId, selectedRelationCounts, expandableRelations]
+    () => Boolean(selectedSubjectId) && explorationInput.globalFilters.some(relation => (selectedRelationCounts.get(relation) ?? 0) > 0),
+    [selectedSubjectId, selectedRelationCounts, explorationInput.globalFilters]
   );
   // Node kinds present in the fetched graph (person/title/battle/event).
   const kindsPresent = useMemo(() => [...new Set(graphData?.nodes.map(node => node.type ?? 'person') ?? [])], [graphData]);
@@ -315,7 +311,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   };
   const expandAllDirectRelations = () => {
     if (!selectedSubjectId) return;
-    const tokens = expandableRelations
+    const tokens = explorationInput.globalFilters
       .filter(relation => (selectedRelationCounts.get(relation) ?? 0) > 0)
       .map(relation => formatExpandParam({ subject: selectedSubjectId, relation }));
     updateParams({ expand: Array.from(new Set([...expandParams, ...tokens])) });
@@ -382,6 +378,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showFilterPanel, setShowFilterPanel] = useState(false);
+  const [showNodesPanel, setShowNodesPanel] = useState(true);
   // Fullscreen only: search gets its own toggle/overlay, separate from the
   // filter overlay, since it's a different kind of action (finding a
   // person to focus on vs. adjusting what's shown).
@@ -561,7 +558,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       // rather than the ordinary minimal reveal-pan (see the camera
       // effects above) -- consumed the next time they run.
       pendingResetRef.current = true;
-      updateParams({ selected: targetSlug, kind: [], showCompanionTitle: null, subject: [subjectId('person', targetSlug)], expand: [], filter: [], full: null });
+      updateParams({ selected: targetSlug, kind: [], showCompanionTitle: null, subject: [subjectId('person', targetSlug)], expand: [], filter: null, full: null });
       return;
     }
     updateParams({ selected: null, focus: null, filter: null, kind: [], showCompanionTitle: null, person: null, ancestorsOf: [], descendantsOf: [] });
@@ -571,16 +568,20 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     <aside dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4 dark:border-amber-700 dark:bg-gray-800">
       <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode ? (selectedPreview?.fullName ?? selectedNode.label) : t.graph.globalRelationships}</h2>
       {isSelectedPerson && selectedPreview && selectedPreview.titles.length > 0 && (
-        <p className="text-sm text-amber-700 dark:text-amber-300">{selectedPreview.titles.map(title => title.name).join(' · ')}</p>
+        <div className="mt-1 flex flex-wrap gap-2">
+          {selectedPreview.titles.map(title => (
+            <Badge key={title.slug} href={`/people?title=${title.slug}`} text={title.name} color="indigo" size="sm" />
+          ))}
+        </div>
       )}
       <p className="text-sm text-gray-600 dark:text-gray-300">{selectedNode ? t.graph.selectedLabel : t.graph.globalRelationshipsHint}</p>
       <div className="mt-2 flex flex-wrap gap-3">
         {selectedNode && <>
-          {selectedPersonHasProfile && <Link href={profilePath(selectedNode.type, selectedNode.slug)}>{t.graph.viewProfile}</Link>}
-          <button type="button" onClick={() => updateParams({ selected: null })}>{t.graph.deselectSubject}</button>
+          {selectedPersonHasProfile && <Button href={profilePath(selectedNode.type, selectedNode.slug)}>{t.graph.viewProfile}</Button>}
+          <Button onClick={() => updateParams({ selected: null })}>{t.graph.deselectSubject}</Button>
         </>}
-        <button type="button" disabled={fullGraph} onClick={() => updateParams({ full: '1' })} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 disabled:opacity-50 dark:text-gray-100">{t.graph.showFullGraph}</button>
-        <button type="button" onClick={resetGraphView} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 dark:text-gray-100">{t.graph.startOver}</button>
+        <Button disabled={fullGraph} onClick={() => updateParams({ full: '1' })}>{t.graph.showFullGraph}</Button>
+        <Button onClick={resetGraphView}>{t.graph.startOver}</Button>
       </div>
       <ExpansionControls
         isPerson={Boolean(selectedNode && (selectedNode.type ?? 'person') === 'person')}
@@ -592,12 +593,12 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       />
       {showAdditions && (
         <div role="status" className="mt-2 flex items-center gap-2">
-          <button type="button" onClick={applyShowAdditions} className="rounded bg-amber-400 px-3 py-1.5 text-sm text-gray-950 hover:bg-amber-300">
+          <Button variant="primary" onClick={applyShowAdditions}>
             {t.graph.showAdditions(showAdditions.added.length)}
-          </button>
-          <button type="button" onClick={() => setShowAdditions(null)} aria-label={t.graph.dismiss} className="rounded border border-amber-400 px-2 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
+          </Button>
+          <Button size="icon" onClick={() => setShowAdditions(null)} aria-label={t.graph.dismiss}>
             <FontAwesomeIcon icon={faXmark} />
-          </button>
+          </Button>
         </div>
       )}
     </aside>
@@ -713,20 +714,29 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
         <div className="mb-2 flex items-center gap-2">
           {menuButton}
           <p className="flex-1 truncate text-sm text-gray-600 dark:text-gray-300" aria-live="polite">{graphSummary}</p>
-          <button type="button" onClick={() => setPanelExpanded(false)} aria-label={t.graph.closeSearch} className="rounded border border-amber-400 px-2 py-1.5 text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
+          <Button size="icon" onClick={() => setPanelExpanded(false)} aria-label={t.graph.closeSearch}>
             <FontAwesomeIcon icon={faXmark} />
-          </button>
+          </Button>
         </div>
         <GraphSearch />
         {explorationControls}
         <div className="mt-3">
-          <button type="button" onClick={() => setShowFilterPanel(show => !show)} aria-pressed={showFilterPanel} aria-label={showFilterPanel ? t.graph.closeFilters : t.graph.openFilters} className="flex items-center gap-2 rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
+          <Button onClick={() => setShowFilterPanel(show => !show)} aria-pressed={showFilterPanel} aria-label={showFilterPanel ? t.graph.closeFilters : t.graph.openFilters}>
             <FontAwesomeIcon icon={faFilter} />
             {t.graph.openFilters}
-          </button>
+          </Button>
         </div>
         {showFilterPanel && <div className="mt-3">{filterPanel}</div>}
-        <div className="mt-3 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
+        <div className="mt-3">
+          <Button
+            className="mb-2"
+            onClick={() => setShowNodesPanel(show => !show)}
+            aria-expanded={showNodesPanel}
+          >
+            {showNodesPanel ? t.graph.hideNodesInView : t.graph.showNodesInView}
+          </Button>
+        </div>
+        {showNodesPanel && <div className="mt-3 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
           <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100 capitalize">{t.graph.nodesInView}</h2>
           <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{t.graph.selectEntryHint}</p>
           <ul className="mt-2 space-y-1">
@@ -736,7 +746,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
               </li>
             ))}
           </ul>
-        </div>
+        </div>}
       </div>
     );
 
@@ -833,10 +843,10 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           {focusSlug ? ` · ${t.graph.focusedNeighbourhood}` : ''}
         </p>
         <div className="flex items-center gap-2">
-          <button type="button" onClick={() => setShowFilterPanel(show => !show)} aria-pressed={showFilterPanel} aria-label={showFilterPanel ? t.graph.closeFilters : t.graph.openFilters} className="flex items-center gap-2 rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
+          <Button onClick={() => setShowFilterPanel(show => !show)} aria-pressed={showFilterPanel} aria-label={showFilterPanel ? t.graph.closeFilters : t.graph.openFilters}>
             <FontAwesomeIcon icon={faFilter} />
             {t.graph.openFilters}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -849,15 +859,11 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           <p className="text-sm text-gray-600 dark:text-gray-300">{t.graph.selectedLabel} {kindLabel(selectedNode.type ?? 'person')}</p>
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode.label}</h2>
           <div className="mt-3 flex flex-wrap gap-3">
-            <Link className="rounded bg-amber-400 px-3 py-1.5 text-sm text-gray-950 hover:bg-amber-300" href={profilePath(selectedNode.type, selectedNode.slug)}>{t.graph.viewProfile}</Link>
+            <Button variant="primary" href={profilePath(selectedNode.type, selectedNode.slug)}>{t.graph.viewProfile}</Button>
             {!showSearch && (
-              <button
-                type="button"
-                onClick={() => updateParams({ focus: selectedNode.slug, person: null, ancestorsOf: [], descendantsOf: [] })}
-                className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-700"
-              >
+              <Button onClick={() => updateParams({ focus: selectedNode.slug, person: null, ancestorsOf: [], descendantsOf: [] })}>
                 {t.graph.exploreNeighbours}
-              </button>
+              </Button>
             )}
           </div>
 
@@ -871,12 +877,21 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           </button>
           {graphCanvas()}
         </div>
-        <div className="rounded-lg border border-gray-200 p-3 dark:border-gray-700">
+        <div>
+          <Button
+            className="mb-2"
+            onClick={() => setShowNodesPanel(show => !show)}
+            aria-expanded={showNodesPanel}
+          >
+            {showNodesPanel ? t.graph.hideNodesInView : t.graph.showNodesInView}
+          </Button>
+          {showNodesPanel && <div className="rounded-lg border border-gray-200 p-3 dark:border-gray-700">
           <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100 capitalize">{t.graph.nodesInView}</h2>
           <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{t.graph.selectEntryHint}</p>
           <ul className="mt-2 max-h-[55vh] space-y-1 overflow-auto">
             {rankedViewNodes?.map(node => <li key={node.id}><button type="button" onClick={() => updateParams({ selected: node.slug })} className={`w-full rounded px-2 py-1 text-left text-sm hover:bg-amber-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-500 dark:hover:bg-gray-800 ${node.slug === selectedSlug ? 'bg-amber-100 dark:bg-gray-700' : 'text-gray-700 dark:text-gray-200'}`}>{node.label}</button></li>)}
           </ul>
+          </div>}
         </div>
       </div>
     </div>

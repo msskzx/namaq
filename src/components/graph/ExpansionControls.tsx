@@ -1,5 +1,6 @@
 import { ExpansionRelationId, LINEAGE_ACTIONS, LineageActionId } from '@/lib/relationship/expansion';
 import translations from '@/components/language/translations';
+import Button from '@/components/common/Button';
 
 type GraphStrings = (typeof translations)[keyof typeof translations]['graph'];
 
@@ -29,30 +30,19 @@ export default function ExpansionControls({
   return (
     <div className="mt-3 space-y-3">
       {hasEligibleDirectRelations && (
-        <button type="button" onClick={onExpandAllDirectRelations} className="rounded bg-amber-400 px-3 py-1.5 text-sm text-gray-950 hover:bg-amber-300">
+        <Button variant="primary" onClick={onExpandAllDirectRelations}>
           {g.allDirectRelations}
-        </button>
+        </Button>
       )}
       {isPerson && (
         <div className="flex flex-wrap gap-2 border-t border-amber-200 pt-3 dark:border-amber-800">
           {LINEAGE_ACTIONS.map(action => (
-            <ExpansionButton key={action} active={isActive(action)} label={g.lineageActions[LINEAGE_LABEL_KEY[action]]} onClick={() => onToggle(action)} />
+            <Button key={action} size="sm" active={isActive(action)} aria-pressed={isActive(action)} onClick={() => onToggle(action)}>
+              {g.lineageActions[LINEAGE_LABEL_KEY[action]]}
+            </Button>
           ))}
         </div>
       )}
     </div>
-  );
-}
-
-function ExpansionButton({ active, label, onClick }: { active: boolean; label: string; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      aria-pressed={active}
-      onClick={onClick}
-      className={`rounded border border-amber-400 px-2.5 py-1 text-xs ${active ? 'bg-amber-400 text-gray-950 hover:bg-amber-300' : 'text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-700'}`}
-    >
-      {label}
-    </button>
   );
 }

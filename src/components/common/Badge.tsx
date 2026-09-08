@@ -5,6 +5,7 @@ interface BadgeProps {
   text: string;
   href?: string;
   color?: string; // Tailwind color, e.g., 'bg-indigo-900'
+  size?: 'sm' | 'lg';
 }
 
 function getColorClass(color: string) {
@@ -15,16 +16,17 @@ function getColorClass(color: string) {
   return '';
 }
 
-function Badge({ text, href, color = 'indigo' }: BadgeProps) {
-  const baseClasses = `${getColorClass(color)} border rounded px-3 py-1 text-sm text-gray-800 dark:text-gray-200 transition`;
+function Badge({ text, href, color = 'indigo', size = 'lg' }: BadgeProps) {
+  const sizeClasses = size === 'sm' ? 'px-2 py-0.5 text-sm' : 'px-3 py-1 text-lg';
+  const baseClasses = `${getColorClass(color)} border rounded text-gray-800 dark:text-gray-200 transition ${sizeClasses}`;
   if (href) {
     return (
       <Link href={href} className="inline-block">
-        <span className={`${baseClasses} text-lg`}>{text}</span>
+        <span className={baseClasses}>{text}</span>
       </Link>
     );
   }
-  return <span className={`inline-block ${baseClasses} text-lg`}>{text}</span>;
+  return <span className={`inline-block ${baseClasses}`}>{text}</span>;
 };
 
 export default Badge; 

@@ -221,7 +221,8 @@ type except `COMPANION_OF`, `PARTICIPATED_IN`, `INVOLVED_IN` and `PART_OF`.
 Implemented with these URL and integration details:
 
 - Absent `filter` uses defaults; `filter=` means explicitly no global filters.
-  Start over writes the empty value, preserving its single-root behavior.
+  Start over first wrote the empty value to preserve its single-root behavior;
+  see the phase-five revision, which clears the parameter instead.
 - Default filters now reveal the initial graph, so the separate fresh-visit
   local-expansion seed is removed. Global filters retain their existing cap.
 - The companionship switch includes both `COMPANION_OF` and `ACCOMPANIED_BY`.
@@ -274,15 +275,21 @@ with it gone the panel renders nothing until a subject is selected -- the
 Filters panel is where global relation control lives now. `isExpansionActive`
 and `toggleExpansion` lost their no-selection branches as unreachable.
 
-**The empty filter set falls back to the defaults.** Intersecting with the
-active filters strands Start over, which writes `filter=`: the button
-disappears and the user is left with one root and three lineage actions. Found
-by clicking it, not by reasoning about it. Falling back to every relation
-instead buries the root -- expanding the Prophet that way returns 273 subjects
-and 375 edges, most of them companions, which is the result decision 6 exists to
-prevent. So an empty set falls back to `DEFAULT_FILTERS`, the same family and
-title relations a fresh visit enables: 44 subjects and 78 edges, with
-`COMPANION_OF` still opt-in through the Filters panel.
+**Start over stops writing the empty filter set.** Intersecting with the active
+filters stranded Start over, which wrote `filter=`: the button disappeared and
+the user was left with one root and three lineage actions. Found by clicking it.
+
+The empty value was carrying two meanings at once -- "reveal nothing globally",
+which is how Start over produced a single root, and "no relation type is
+enabled", which is what the Filters panel renders. That conflation is what made
+the panel read as all-off while expansion still returned relations.
+
+Start over now clears the parameter rather than emptying it, so it restores a
+fresh visit: the defaults are back on, the panel agrees with the graph, and
+expansion follows the panel exactly. It no longer returns a lone root, which is
+the price. `filter=` survives as what the All relations switch writes, and in
+that state All direct relations correctly disappears -- nothing is enabled, so
+there is nothing to expand.
 
 ## Acceptance criteria
 

@@ -10,6 +10,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { COMPANION_TITLE_SLUG } from '@/lib/graphFilter';
 import { profilePath } from '@/lib/nodeProfile';
 import { DEFAULT_KINDS, NodeKind, subjectId } from '@/lib/relationship/types';
+import Button from '@/components/common/Button';
 
 interface Suggestion {
   id: string;
@@ -204,16 +205,16 @@ export default function GraphSearch() {
                       )}
                     </button>
                     {suggestion.hasProfile && (
-                      <button
-                        type="button"
-                        className="shrink-0 rounded border border-amber-400 px-2 py-1 text-xs text-amber-700 hover:bg-amber-50 dark:text-amber-300 dark:hover:bg-gray-800"
+                      <Button
+                        size="sm"
+                        className="shrink-0"
                         onMouseDown={(e) => {
                           e.preventDefault();
                           openProfile(suggestion);
                         }}
                       >
                         {language === 'ar' ? 'الصفحة الشخصية' : 'Profile'}
-                      </button>
+                      </Button>
                     )}
                   </div>
                   <div className="mt-1 text-xs text-gray-500 dark:text-gray-400">
@@ -224,13 +225,14 @@ export default function GraphSearch() {
             </ul>
           )}
         </div>
-        <button
+        <Button
+          variant="primary"
           type="submit"
-          className="bg-amber-400 hover:bg-amber-300 text-gray-950 rounded flex items-center justify-center h-10 w-full sm:w-10 border border-amber-400 transition-colors"
+          className="h-10 w-full justify-center sm:w-10"
           aria-label={translations[language]?.search}
         >
           <FontAwesomeIcon icon={faMagnifyingGlass} />
-        </button>
+        </Button>
       </div>
     </form>
   );
