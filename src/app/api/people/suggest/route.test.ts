@@ -17,20 +17,14 @@ function person(slug: string, name: string) {
     name,
     fullName: null,
     nameTransliterated: null,
-    nasabRank: null,
-    _count: { titles: 0 },
+    graphRank: null,
   };
-}
-
-function record(fields: Record<string, unknown>) {
-  return { get: (key: string) => fields[key] };
 }
 
 describe('GET /api/people/suggest', () => {
   beforeEach(() => {
     findMany.mockReset();
     getSession.mockReset();
-    getSession.mockReturnValue(null); // no Neo4j session unless a test opts in
   });
 
   it('returns an empty list without querying the database when q is blank', async () => {
@@ -54,8 +48,7 @@ describe('GET /api/people/suggest', () => {
         name: true,
         fullName: true,
         nameTransliterated: true,
-        nasabRank: true,
-        _count: { select: { titles: true } },
+        graphRank: true,
       },
     });
     expect(body.data).toHaveLength(1);
@@ -81,42 +74,14 @@ describe('GET /api/people/suggest', () => {
     expect(await response.json()).toEqual({ error: 'Failed to fetch people suggestions' });
   });
 
-  it('merges in a graph-only person (no PostgreSQL row) with hasProfile: false', async () => {
+  it('never consults Neo4j, so graph-only people cannot appear', async () => {
     findMany.mockResolvedValue([person('prophet-muhammad', 'محمد')]);
-    const run = vi.fn().mockResolvedValue({
-      records: [record({ slug: 'malik-ibn-thalabah', name: 'Malik ibn Thalabah', nasabRank: null })],
-    });
-    getSession.mockReturnValue({ run });
-
-    const response = await GET(request('?q=malik'));
-    const body = await response.json();
-
-    expect(body.data).toEqual([
-      expect.objectContaining({ slug: 'malik-ibn-thalabah', id: 'malik-ibn-thalabah', fullName: null, hasProfile: false, match: 'exact' }),
-    ]);
-  });
-
-  it('does not duplicate a person who has both a PostgreSQL row and a Neo4j node', async () => {
-    findMany.mockResolvedValue([person('prophet-muhammad', 'محمد')]);
-    const run = vi.fn().mockResolvedValue({
-      records: [record({ slug: 'prophet-muhammad', name: 'محمد', nasabRank: 1 })],
-    });
-    getSession.mockReturnValue({ run });
 
     const response = await GET(request('?q=محمد'));
     const body = await response.json();
 
+    expect(getSession).not.toHaveBeenCalled();
     expect(body.data).toHaveLength(1);
-    expect(body.data[0]).toMatchObject({ slug: 'prophet-muhammad', hasProfile: true });
-  });
-
-  it('degrades to PostgreSQL-only results when there is no Neo4j session', async () => {
-    findMany.mockResolvedValue([person('prophet-muhammad', 'محمد')]);
-    getSession.mockReturnValue(null);
-
-    const response = await GET(request('?q=محمد'));
-
-    expect(response.status).toBe(200);
-    expect((await response.json()).data).toHaveLength(1);
+    expect(body.data.every((entry: { hasProfile: boolean }) => entry.hasProfile)).toBe(true);
   });
 });

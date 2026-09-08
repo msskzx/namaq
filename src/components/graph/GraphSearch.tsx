@@ -7,81 +7,22 @@ import translations from '@/components/language/translations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { GraphNodeFull } from '@/types/graph';
-import { normalizePersonSearch } from '@/lib/personSearch';
+import { COMPANION_TITLE_SLUG } from '@/lib/graphFilter';
 import { profilePath } from '@/lib/nodeProfile';
-import { subjectId } from '@/lib/relationship/types';
+import { DEFAULT_KINDS, NodeKind, subjectId } from '@/lib/relationship/types';
 
 interface Suggestion {
   id: string;
+  kind: NodeKind;
   slug: string;
   name: string;
   fullName: string | null;
   nameTransliterated: string | null;
+  hasProfile: boolean;
   match: 'exact' | 'prefix' | 'contains';
-  kind?: string;
-  // Absent (not just true) for non-person kinds, whose profile pages always
-  // exist -- only a person suggestion from /api/people/suggest ever sets
-  // this explicitly, to false for a graph-only person (see
-  // docs/graph-only-people-search-plan.md).
-  hasProfile?: boolean;
 }
 
-// A single, coarse ranking shared with person suggestions' own 'exact' /
-// 'prefix' / 'contains' match field -- fine-grained scoring doesn't matter
-// here since these only ever get sorted amongst themselves, not compared
-// numerically against the Postgres results.
-function rankNodeMatch(query: string, node: GraphNodeFull): number | null {
-  const candidates = [node.label, node.slug.replace(/-/g, ' ')]
-    .map(normalizePersonSearch)
-    .filter(Boolean);
-  let best: number | null = null;
-  for (const candidate of candidates) {
-    let score: number | null = null;
-    if (candidate === query) score = 0;
-    else if (candidate.split(' ').includes(query)) score = 1;
-    else if (candidate.startsWith(query)) score = 2;
-    else if (candidate.includes(query)) score = 3;
-    if (score !== null && (best === null || score < best)) best = score;
-  }
-  return best;
-}
-
-const MAX_NODE_MATCHES = 8;
-
-function matchGraphNodes(rawQuery: string, nodes: GraphNodeFull[]): Suggestion[] {
-  const query = normalizePersonSearch(rawQuery);
-  if (!query) return [];
-  return nodes
-    // Person nodes are excluded here, not just de-prioritized: every person
-    // is already covered by /api/people/suggest above, PostgreSQL-backed or
-    // graph-only alike (see docs/graph-only-people-search-plan.md), so
-    // including them again from `nodes` would only ever duplicate an
-    // already-loaded person under a different id shape.
-    .filter(node => (node.type ?? 'person') !== 'person')
-    .map(node => {
-      const score = rankNodeMatch(query, node);
-      return score === null ? null : { node, score };
-    })
-    .filter((result): result is { node: GraphNodeFull; score: number } => result !== null)
-    .sort((a, b) => a.score - b.score || a.node.label.localeCompare(b.node.label))
-    .slice(0, MAX_NODE_MATCHES)
-    .map(({ node, score }): Suggestion => ({
-      id: node.id,
-      slug: node.slug,
-      name: node.label,
-      fullName: null,
-      nameTransliterated: null,
-      match: score === 0 ? 'exact' : score <= 2 ? 'prefix' : 'contains',
-      kind: node.type ?? 'person',
-    }));
-}
-
-interface GraphSearchProps {
-  nodes?: GraphNodeFull[];
-}
-
-export default function GraphSearch({ nodes }: GraphSearchProps) {
+export default function GraphSearch() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -106,16 +47,14 @@ export default function GraphSearch({ nodes }: GraphSearchProps) {
 
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/people/suggest?q=${encodeURIComponent(query)}`);
-      const personMatches: Suggestion[] = response.ok ? ((await response.json()).data ?? []) : [];
-      const nodeMatches = matchGraphNodes(query, nodes ?? []);
-      setSuggestions([...personMatches, ...nodeMatches]);
+      const response = await fetch(`/api/graph/suggest?q=${encodeURIComponent(query)}`);
+      setSuggestions(response.ok ? ((await response.json()).data ?? []) : []);
     } catch (error) {
       console.error('Error fetching suggestions:', error);
     } finally {
       setIsLoading(false);
     }
-  }, [nodes]);
+  }, []);
 
   const debouncedFetch = useCallback((value: string) => {
     if (debounceTimeout.current) {
@@ -141,35 +80,37 @@ export default function GraphSearch({ nodes }: GraphSearchProps) {
     };
   }, [inputValue, debouncedFetch]);
 
-  const selectNode = (suggestion: Suggestion) => {
+  // Every kind becomes an exploration root the same way; the exploration
+  // model already routes any subject into relationSubjects.
+  const selectSubject = (suggestion: Suggestion) => {
     if (!searchParams) return;
     const params = new URLSearchParams(searchParams.toString());
-    params.set('selected', suggestion.slug);
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-    setInputValue('');
-    setShowSuggestions(false);
-    inputRef.current?.focus();
-  };
 
-  const addPersonRoot = (suggestion: Suggestion) => {
-    if (!searchParams) return;
-    const params = new URLSearchParams(searchParams.toString());
-    const rootId = subjectId('person', suggestion.slug);
-    const existingRoots = params.getAll('subject');
-    if (!existingRoots.includes(rootId)) params.append('subject', rootId);
+    const rootId = subjectId(suggestion.kind, suggestion.slug);
+    if (!params.getAll('subject').includes(rootId)) params.append('subject', rootId);
     params.set('selected', suggestion.slug);
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-    setInputValue('');
-    setShowSuggestions(false);
-    inputRef.current?.focus();
-  };
 
-  const handleSelectSuggestion = (suggestion: Suggestion) => {
-    if (suggestion.kind && suggestion.kind !== 'person') {
-      selectNode(suggestion);
-      return;
+    // Without this, useExplorationGraph drops the fetched root for being of
+    // an inactive kind and the selection silently does nothing. An absent
+    // `kind` param means the defaults rather than every kind, so those have to
+    // be spelled out alongside the one being added.
+    const activeKinds = params.getAll('kind');
+    const kinds = activeKinds.length > 0 ? activeKinds : [...DEFAULT_KINDS];
+    if (!kinds.includes(suggestion.kind)) {
+      params.delete('kind');
+      [...kinds, suggestion.kind].forEach((kind) => params.append('kind', kind));
     }
-    addPersonRoot(suggestion);
+
+    // The same rule for the one node with its own visibility flag, hidden by
+    // default because it connects to every companion (see graphFilter.ts).
+    if (suggestion.kind === 'title' && suggestion.slug === COMPANION_TITLE_SLUG) {
+      params.set('showCompanionTitle', '1');
+    }
+
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    setInputValue('');
+    setShowSuggestions(false);
+    inputRef.current?.focus();
   };
 
   const openProfile = (suggestion: Suggestion) => {
@@ -185,7 +126,7 @@ export default function GraphSearch({ nodes }: GraphSearchProps) {
     const exactMatch = suggestions.find(s => s.match === 'exact');
 
     if (exactMatch) {
-      handleSelectSuggestion(exactMatch);
+      selectSubject(exactMatch);
       return;
     }
   };
@@ -242,12 +183,12 @@ export default function GraphSearch({ nodes }: GraphSearchProps) {
                       className="min-w-0 flex-1 text-left hover:text-amber-700 dark:hover:text-amber-300"
                       onMouseDown={(e) => {
                         e.preventDefault();
-                        handleSelectSuggestion(suggestion);
+                        selectSubject(suggestion);
                       }}
                     >
                       <div className="flex items-center gap-2 font-medium">
                         <span>{suggestion.name}</span>
-                        {suggestion.kind && suggestion.kind !== 'person' && (
+                        {suggestion.kind !== 'person' && (
                           <span className="shrink-0 text-xs font-normal text-gray-500 dark:text-gray-400">{kindLabel(suggestion.kind)}</span>
                         )}
                       </div>
@@ -262,7 +203,7 @@ export default function GraphSearch({ nodes }: GraphSearchProps) {
                         </div>
                       )}
                     </button>
-                    {suggestion.hasProfile !== false && (
+                    {suggestion.hasProfile && (
                       <button
                         type="button"
                         className="shrink-0 rounded border border-amber-400 px-2 py-1 text-xs text-amber-700 hover:bg-amber-50 dark:text-amber-300 dark:hover:bg-gray-800"

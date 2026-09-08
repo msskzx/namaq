@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { Session } from 'neo4j-driver';
 import { getSession } from '@/lib/neo4j';
-import { prisma } from '@/lib/prisma';
 import { GraphLink, GraphNodeFull } from '@/types/graph';
 
 type EntityType = 'person' | 'battle' | 'title' | 'event';
@@ -43,100 +42,62 @@ const unifiedEdgesQuery = `
          labels(b) AS targetLabels, b.slug AS targetSlug
 `;
 
-interface RankRow {
-  slug: string;
-  nasabRank?: number | null;
-  graphRank: number | null;
-  clusterId: number | null;
-}
-
-// Joins graphRank/clusterId (and, for people, nasabRank) from PostgreSQL
-// onto an already-built node list, grouped by type so each entity looks up
-// against its own table. Every node kind this route can return goes through
-// this same join, not just the unified/default branch. Coordinates are a
-// separate concern now (see attachNeo4jLayout below) -- PostgreSQL keeps its
-// own layoutX/layoutY columns updated (scripts/graph/computeGraphLayout.ts)
-// for operator inspection, but the API never reads them, so a rank
-// enrichment can never disagree with Neo4j's coordinate (see
-// docs/graph-layout-plan.md, "Keep PostgreSQL rank enrichment from
-// overriding Neo4j coordinates").
-async function attachPostgresRanks(nodeList: GraphNodeFull[]) {
-  const slugsByType = new Map<EntityType, string[]>();
-  for (const node of nodeList) {
-    const type = (node.type ?? 'person') as EntityType;
-    slugsByType.set(type, [...(slugsByType.get(type) ?? []), node.slug]);
-  }
-
-  const rankSelect = { slug: true, graphRank: true, clusterId: true } as const;
-  const [people, battles, titles, events] = await Promise.all([
-    prisma.person.findMany({ where: { slug: { in: slugsByType.get('person') ?? [] } }, select: { ...rankSelect, nasabRank: true } }),
-    prisma.battle.findMany({ where: { slug: { in: slugsByType.get('battle') ?? [] } }, select: rankSelect }),
-    prisma.title.findMany({ where: { slug: { in: slugsByType.get('title') ?? [] } }, select: rankSelect }),
-    prisma.event.findMany({ where: { slug: { in: slugsByType.get('event') ?? [] } }, select: rankSelect }),
-  ]);
-
-  const rowsByKey = new Map<string, RankRow>([
-    ...people.map((row): [string, RankRow] => [nodeKey('person', row.slug), row]),
-    ...battles.map((row): [string, RankRow] => [nodeKey('battle', row.slug), row]),
-    ...titles.map((row): [string, RankRow] => [nodeKey('title', row.slug), row]),
-    ...events.map((row): [string, RankRow] => [nodeKey('event', row.slug), row]),
-  ]);
-
-  for (const node of nodeList) {
-    const type = (node.type ?? 'person') as EntityType;
-    const row = rowsByKey.get(nodeKey(type, node.slug));
-    if (type === 'person') node.nasabRank = row?.nasabRank ?? null;
-    if (!row) continue;
-    node.graphRank = row.graphRank;
-    node.clusterId = row.clusterId;
-  }
-}
-
 class MissingLayoutError extends Error {}
 
-// The one coordinate source for every response shape this route can
-// produce (scoped and unified alike) -- see
-// docs/adr/0005-use-a-precomputed-global-graph-map.md. A single batched
-// Neo4j lookup, called once per response after its node list is already
-// built, rather than adding layoutX/layoutY to each of the distinct RETURN
-// clauses above (unified/node-relationship/path) and threading it through
-// every record-parsing branch. Matches by (type, slug) the same way
+// The one source of every offline-computed property this route serves,
+// coordinates and graphRank alike -- see
+// docs/adr/0006-persist-offline-computed-properties-to-neo4j.md and
+// docs/adr/0005-use-a-precomputed-global-graph-map.md. Reading rank here
+// rather than from PostgreSQL is what gives a graph-only subject a rank at
+// all: it has no row to join against.
+//
+// A single batched lookup, called once per response after its node list is
+// already built, rather than adding these fields to each of the distinct
+// RETURN clauses above (unified/node-relationship/path) and threading them
+// through every record-parsing branch. Matches by (type, slug) the same way
 // relationSubjects above does, since a slug is only unique within its type.
 //
 // A subject missing a saved position throws rather than falling back to
 // silent omission, an invented origin coordinate, or live physics -- an
 // incomplete map is a data problem (rerun scripts/graph/computeGraphLayout.ts)
 // to surface immediately, not something to paper over per-request. A valid
-// (0, 0) is preserved: the checks below are `!= null`, not truthiness.
-async function attachNeo4jLayout(session: Session, nodeList: GraphNodeFull[]): Promise<void> {
+// (0, 0) is preserved: the checks below are `!= null`, not truthiness. A
+// missing graphRank only weakens an ordering, so it is not fatal.
+async function attachNeo4jSubjectProperties(session: Session, nodeList: GraphNodeFull[]): Promise<void> {
   if (nodeList.length === 0) return;
   const subjects = nodeList.map((node) => ({ type: node.type ?? 'person', slug: node.slug }));
   const result = await session.run(
     `UNWIND $subjects AS subject
      MATCH (n)
      WHERE n.slug = subject.slug AND subject.type IN [label IN labels(n) | toLower(label)]
-     RETURN subject.type AS type, subject.slug AS slug, n.layoutX AS layoutX, n.layoutY AS layoutY`,
+     RETURN subject.type AS type, subject.slug AS slug,
+            n.layoutX AS layoutX, n.layoutY AS layoutY, n.graphRank AS graphRank`,
     { subjects },
   );
-  const layoutByKey = new Map(
+  const propertiesByKey = new Map(
     result.records.map((record) => [
       nodeKey(record.get('type'), record.get('slug')),
-      { x: record.get('layoutX') as number | null, y: record.get('layoutY') as number | null },
+      {
+        x: record.get('layoutX') as number | null,
+        y: record.get('layoutY') as number | null,
+        graphRank: record.get('graphRank') as number | null,
+      },
     ]),
   );
 
   const missing: string[] = [];
   for (const node of nodeList) {
     const key = nodeKey(node.type ?? 'person', node.slug);
-    const layout = layoutByKey.get(key);
-    if (!layout || layout.x == null || layout.y == null || !Number.isFinite(layout.x) || !Number.isFinite(layout.y)) {
+    const properties = propertiesByKey.get(key);
+    node.graphRank = properties?.graphRank ?? null;
+    if (!properties || properties.x == null || properties.y == null || !Number.isFinite(properties.x) || !Number.isFinite(properties.y)) {
       missing.push(key);
       continue;
     }
-    node.x = layout.x;
-    node.y = layout.y;
-    node.fx = layout.x;
-    node.fy = layout.y;
+    node.x = properties.x;
+    node.y = properties.y;
+    node.fx = properties.x;
+    node.fy = properties.y;
   }
   if (missing.length > 0) {
     throw new MissingLayoutError(`${missing.length} subject(s) missing a saved layout position: ${missing.join(', ')}`);
@@ -457,13 +418,7 @@ export async function GET(_request: Request) {
       });
 
       const nodeList = Array.from(nodes.values());
-      const ranks = await prisma.person.findMany({
-        where: { slug: { in: nodeList.map((node) => node.slug) } },
-        select: { slug: true, nasabRank: true },
-      });
-      const rankBySlug = new Map(ranks.map((person) => [person.slug, person.nasabRank]));
-      for (const node of nodeList) node.nasabRank = rankBySlug.get(node.slug) ?? null;
-      await attachNeo4jLayout(session, nodeList);
+      await attachNeo4jSubjectProperties(session, nodeList);
 
       return NextResponse.json({ nodes: nodeList, links });
     }
@@ -506,8 +461,7 @@ export async function GET(_request: Request) {
     }
 
     const nodeList = Array.from(nodes.values());
-    await attachPostgresRanks(nodeList);
-    await attachNeo4jLayout(session, nodeList);
+    await attachNeo4jSubjectProperties(session, nodeList);
 
     return NextResponse.json({ nodes: nodeList, links });
 

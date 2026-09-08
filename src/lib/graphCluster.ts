@@ -2,7 +2,7 @@
  * Community detection for the unified graph, used to collapse dense regions
  * into a single aggregate node until the viewer zooms in (the "Google Maps"
  * level-of-detail effect). Wraps graphology-communities-louvain rather than
- * hand-rolling Louvain: unlike nasabRank.ts's PageRank, modularity
+ * hand-rolling Louvain: unlike pageRank.ts's PageRank, modularity
  * optimization isn't simple enough to safely reimplement, and graphology is
  * already a dependency for the sigma.js renderer.
  *

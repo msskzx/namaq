@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { Prisma } from '@/generated/prisma';
 import { prisma } from '@/lib/prisma';
-import { filterAndRankPeople } from '@/lib/personSearch';
+import { filterAndRankSubjects } from '@/lib/subjectSearch';
 
 const DEFAULT_PAGE_SIZE = 12;
 
@@ -34,7 +34,7 @@ export async function GET(request: Request) {
       const people = await prisma.person.findMany({
         where,
         include: { titles: true },
-        orderBy: [{ nasabRank: { sort: 'asc', nulls: 'last' } }, { titles: { _count: 'desc' } }, { name: 'asc' }],
+        orderBy: [{ graphRank: { sort: 'asc', nulls: 'last' } }, { name: 'asc' }],
         take: limit,
         skip,
       });
@@ -54,11 +54,10 @@ export async function GET(request: Request) {
 
     // Keep this search in PostgreSQL instead of joining Neo4j. The stores are
     // intentionally independent until the canonical-data pipeline is in place.
-    // nasabRank is an exception: it's a graph-derived signal, but it's computed
+    // graphRank is an exception: it's a graph-derived signal, but it's computed
     // offline and persisted here, so reading it is still a plain Postgres read.
     const people = await prisma.person.findMany({ where, include: { titles: true } });
-    const candidates = people.map((person) => ({ ...person, titleCount: person.titles.length }));
-    const results = filterAndRankPeople(candidates, search).map(({ person }) => person);
+    const results = filterAndRankSubjects(people, search).map(({ subject }) => subject);
     const total = results.length;
     const totalPages = Math.ceil(total / limit);
 

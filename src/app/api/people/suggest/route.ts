@@ -1,12 +1,10 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { getSession } from '@/lib/neo4j';
-import { filterAndRankPeople } from '@/lib/personSearch';
+import { filterAndRankSubjects } from '@/lib/subjectSearch';
 
-// People are searchable whether or not they have a PostgreSQL profile row;
-// see docs/graph-only-people-search-plan.md for why both sources rank
-// together instead of PostgreSQL always winning. `hasProfile: false` tells
-// the client there's no profile page to link a graph-only match to.
+// The directory searches profiles: every suggestion here opens /people/<slug>,
+// so a graph-only person (Neo4j node, no PostgreSQL row) must not appear.
+// Searching the whole graph is /api/graph/suggest's job.
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -27,27 +25,14 @@ export async function GET(request: Request) {
         name: true,
         fullName: true,
         nameTransliterated: true,
-        nasabRank: true,
-        _count: { select: { titles: true } },
+        graphRank: true,
       },
     });
-    const postgresCandidates = people.map(({ _count, ...person }) => ({ ...person, titleCount: _count.titles, hasProfile: true as const }));
-    const postgresSlugs = new Set(postgresCandidates.map((person) => person.slug));
+    const candidates = people.map((person) => ({ ...person, hasProfile: true as const }));
 
-    // Best-effort augmentation: a missing/unreachable Neo4j session degrades
-    // to PostgreSQL-only results instead of failing the request.
-    const session = getSession();
-    const graphOnlyCandidates = session
-      ? (await session.run('MATCH (p:Person) RETURN p.slug AS slug, p.name AS name, p.nasabRank AS nasabRank')).records
-        .map((record) => ({ slug: record.get('slug') as string, name: record.get('name') as string, nasabRank: (record.get('nasabRank') as number | null) ?? null }))
-        .filter((person) => person.slug && person.name && !postgresSlugs.has(person.slug))
-        .map((person) => ({ ...person, id: person.slug, fullName: null, nameTransliterated: null, titleCount: 0, hasProfile: false as const }))
-      : [];
-
-    const candidates = [...postgresCandidates, ...graphOnlyCandidates];
-    const data = filterAndRankPeople(candidates, q)
+    const data = filterAndRankSubjects(candidates, q)
       .slice(0, limit)
-      .map(({ person, match }) => ({ ...person, match }));
+      .map(({ subject, match }) => ({ ...subject, match }));
 
     return NextResponse.json({ data });
   } catch (error) {

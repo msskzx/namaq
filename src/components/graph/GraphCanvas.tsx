@@ -24,7 +24,7 @@ import { sortRelationTypes, governingRelationType, relationGroup, RELATION_ORDER
 import { COMPANION_TITLE_SLUG, filterVisibleGraph } from '@/lib/graphFilter';
 import { profilePath } from '@/lib/nodeProfile';
 import { parseExplorationInput, formatExpandParam } from '@/lib/relationship/urlState';
-import { NodeKind, RelationType, subjectId } from '@/lib/relationship/types';
+import { ALL_KINDS, DEFAULT_KINDS, NodeKind, RelationType, subjectId } from '@/lib/relationship/types';
 import { ExpansionRelationId, directRelationCounts } from '@/lib/relationship/expansion';
 import { ExpansionGroup, expansionGroupForRelation } from '@/lib/relationship/expansionGroups';
 import { useExplorationGraph } from './useExplorationGraph';
@@ -52,15 +52,6 @@ const relationName = (value: string) => value.toLowerCase().replaceAll('_', ' ')
 // kinds -- once narrowed to `kind=person`, the response contains nothing
 // but person nodes, and deriving the toggle set from that response would
 // make title/battle/event impossible to switch back on.
-const ALL_KINDS = ['person', 'title', 'battle', 'event'] as const;
-
-// Battle and Event nodes are the least central to a first-time visit (most
-// people come here for the family tree), so on a general-purpose graph
-// (showSearch on) they start off, opt-in via the Node Kinds panel like any
-// other kind. A scoped embed (showSearch off) keeps its own naturally
-// single-kind data included by default, as before -- see `defaultKinds`.
-const DEFAULT_KINDS = ['person', 'title'];
-
 // The full universe of relation types the graph API can ever return,
 // regardless of what's actually present in the current (possibly
 // kind-narrowed) fetch -- same rationale as ALL_KINDS above. Once `kind` is
@@ -71,7 +62,7 @@ const DEFAULT_KINDS = ['person', 'title'];
 // and re-including that kind wouldn't bring their filters back.
 const ALL_RELATION_TYPES = sortRelationTypes(RELATION_ORDER.filter(type => governingRelationType(type) === type));
 
-// Battle/Event being off by default (see DEFAULT_KINDS above) needs to
+// Battle/Event being off by default (see DEFAULT_KINDS) needs to
 // carry over to their relation types too, the same way toggleKind's own
 // group-sync keeps them in step whenever a kind is toggled by hand --
 // otherwise the Relationship Types panel would show e.g. PARTICIPATED_IN
@@ -324,14 +315,14 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     const relation = relationLabel(link.label);
     return `${sourceLabel} - ${relation} -> ${targetLabel}`;
   }, [visibleNodesById, relationLabel]);
-  // Sorted by nasab-graph prominence for the side list only; the canvas
-  // itself renders visibleGraph.nodes directly, since force-layout doesn't
-  // care about array order. Title nodes (no nasabRank) sort after every
-  // ranked person, alongside any person who hasn't been ranked yet.
+  // Sorted for the side list only; the canvas renders visibleGraph.nodes
+  // directly, since force-layout doesn't care about array order. graphRank
+  // spans every kind, so a battle or title takes its place among the people
+  // instead of being dumped at the end.
   const rankedViewNodes = useMemo(() => {
     if (!visibleGraph) return undefined;
     return [...visibleGraph.nodes].sort((a, b) =>
-      (a.nasabRank ?? Number.MAX_SAFE_INTEGER) - (b.nasabRank ?? Number.MAX_SAFE_INTEGER) ||
+      (a.graphRank ?? Number.MAX_SAFE_INTEGER) - (b.graphRank ?? Number.MAX_SAFE_INTEGER) ||
       a.label.localeCompare(b.label)
     );
   }, [visibleGraph]);
@@ -838,7 +829,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
             <FontAwesomeIcon icon={faXmark} />
           </button>
         </div>
-        <GraphSearch nodes={graphData?.nodes} />
+        <GraphSearch />
         {explorationControls}
         <div className="mt-3">
           <button type="button" onClick={() => setShowFilterPanel(show => !show)} aria-pressed={showFilterPanel} aria-label={showFilterPanel ? t.graph.closeFilters : t.graph.openFilters} className="flex items-center gap-2 rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
@@ -929,7 +920,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
         </div>
         {showSearchPanel && (
           <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="absolute top-14 inset-x-3 z-20 max-h-[70vh] overflow-auto rounded-lg border border-gray-200 bg-white p-3 shadow-lg dark:border-gray-700 dark:bg-gray-800">
-            <GraphSearch nodes={graphData?.nodes} />
+            <GraphSearch />
             {explorationControls}
           </div>
         )}
@@ -947,7 +938,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {showSearch && <GraphSearch nodes={graphData?.nodes} />}
+      {showSearch && <GraphSearch />}
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3" aria-label={t.graph.graphControls}>
         <p className="text-sm text-gray-600 dark:text-gray-300" aria-live="polite">
           {graphSummary}

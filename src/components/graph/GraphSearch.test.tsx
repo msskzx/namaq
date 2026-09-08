@@ -56,21 +56,35 @@ vi.mock('@/components/language/LanguageContext', () => ({
   useLanguage: () => ({ language: 'en' }),
 }));
 
-const suggestion = {
-  id: '1',
-  slug: 'prophet-muhammad',
-  name: 'Prophet Muhammad',
-  fullName: null,
-  nameTransliterated: null,
-  match: 'exact' as const,
-};
+function graphSuggestion(kind: 'person' | 'title' | 'battle' | 'event', slug: string, name: string, hasProfile = true) {
+  return {
+    id: `${kind}:${slug}`,
+    kind,
+    slug,
+    name,
+    fullName: null,
+    nameTransliterated: null,
+    hasProfile,
+    match: 'exact' as const,
+  };
+}
+
+const suggestion = graphSuggestion('person', 'prophet-muhammad', 'Prophet Muhammad');
+const badr = graphSuggestion('battle', 'badr', 'Battle of Badr');
+const companionTitle = graphSuggestion('title', 'companion', 'Companion');
+
+// The component calls one endpoint now, so the stub answers from one pool.
+const POOL = [suggestion, badr, companionTitle];
 
 beforeEach(() => {
   nav.reset('/graphs');
   global.fetch = vi.fn(async (input: RequestInfo | URL) => {
     const href = typeof input === 'string' ? input : input.toString();
-    const query = new URL(href, 'http://localhost').searchParams.get('q') ?? '';
-    const data = query.toLowerCase().includes('muhammad') || query === suggestion.slug ? [suggestion] : [];
+    const url = new URL(href, 'http://localhost');
+    const query = (url.searchParams.get('q') ?? '').toLowerCase();
+    const data = url.pathname === '/api/graph/suggest' && query
+      ? POOL.filter((entry) => entry.name.toLowerCase().includes(query) || entry.slug === query)
+      : [];
     return { ok: true, json: async () => ({ data }) } as Response;
   }) as unknown as typeof fetch;
 });
@@ -126,25 +140,84 @@ describe('GraphSearch', () => {
   });
 });
 
-describe('GraphSearch node search', () => {
-  const battleNode = { id: '1', label: 'Battle of Badr', slug: 'battle-of-badr', group: 1, type: 'battle' };
+describe('GraphSearch across kinds', () => {
+  async function pick(typed: string, label: string) {
+    fireEvent.change(screen.getByPlaceholderText('Search'), { target: { value: typed } });
+    const option = await screen.findByText(label);
+    fireEvent.mouseDown(option);
+  }
 
-  it('offers a non-person node from `nodes` alongside Postgres person matches', async () => {
-    render(<GraphSearch nodes={[battleNode]} />);
+  it('offers a battle that is not in the current exploration at all', async () => {
+    render(<GraphSearch />);
 
     fireEvent.change(screen.getByPlaceholderText('Search'), { target: { value: 'badr' } });
 
     expect(await screen.findByText('Battle of Badr')).toBeTruthy();
   });
 
-  it('selecting a non-person node sets ?selected=<slug>, not ?subject=', async () => {
-    render(<GraphSearch nodes={[battleNode]} />);
+  it('makes a non-person subject an exploration root, not just a selection', async () => {
+    render(<GraphSearch />);
+
+    await pick('badr', 'Battle of Badr');
+
+    await waitFor(() => expect(nav.getUrl()).toContain('subject=battle%3Abadr'));
+    expect(nav.getUrl()).toContain('selected=badr');
+  });
+
+  it('switches on a kind that was not active, keeping the previously active ones', async () => {
+    render(<GraphSearch />);
+
+    await pick('badr', 'Battle of Badr');
+
+    await waitFor(() => expect(nav.getUrl()).toContain('kind=battle'));
+    expect(nav.getUrl()).toContain('kind=person');
+    expect(nav.getUrl()).toContain('kind=title');
+  });
+
+  it('leaves the kind params alone when the picked kind is already active', async () => {
+    nav.reset('/graphs?kind=person&kind=battle');
+
+    render(<GraphSearch />);
+    await pick('badr', 'Battle of Badr');
+
+    await waitFor(() => expect(nav.getUrl()).toContain('subject=battle%3Abadr'));
+    expect(nav.getUrl().match(/kind=/g)).toHaveLength(2);
+    expect(nav.getUrl()).not.toContain('kind=title');
+  });
+
+  it('reveals the Companion title, which has its own visibility flag rather than a kind', async () => {
+    render(<GraphSearch />);
+
+    await pick('companion', 'Companion');
+
+    await waitFor(() => expect(nav.getUrl()).toContain('showCompanionTitle=1'));
+    expect(nav.getUrl()).toContain('subject=title%3Acompanion');
+    expect(nav.getUrl()).toContain('selected=companion');
+  });
+
+  it('does not set the Companion flag for any other title', async () => {
+    render(<GraphSearch />);
 
     fireEvent.change(screen.getByPlaceholderText('Search'), { target: { value: 'badr' } });
     const option = await screen.findByText('Battle of Badr');
     fireEvent.mouseDown(option);
 
-    await waitFor(() => expect(nav.getUrl()).toContain('selected=battle-of-badr'));
-    expect(nav.getUrl()).not.toContain('subject=');
+    await waitFor(() => expect(nav.getUrl()).toContain('subject=battle%3Abadr'));
+    expect(nav.getUrl()).not.toContain('showCompanionTitle');
+  });
+
+  it('omits the Profile button for a graph-only person', async () => {
+    const graphOnly = graphSuggestion('person', 'malik-ibn-thalabah', 'Malik ibn Thalabah', false);
+    POOL.push(graphOnly);
+    try {
+      render(<GraphSearch />);
+
+      fireEvent.change(screen.getByPlaceholderText('Search'), { target: { value: 'malik' } });
+      await screen.findByText('Malik ibn Thalabah');
+
+      expect(screen.queryByText('Profile')).toBeNull();
+    } finally {
+      POOL.pop();
+    }
   });
 });

@@ -2,12 +2,18 @@
 
 Rules for any agent (Claude Code or otherwise) making changes in this repo.
 
+## Writing
+
+- Invoke the `write-comments` skill before writing or editing code comments,
+  and `unslop` before writing prose — docs, commit messages, PR descriptions.
+  Both apply to every change, not just documentation work.
+
 ## Testing
 
 - New functionality must be covered by automated tests. **Search and graph
   features are the highest priority**
 - Colocate tests next to the code they cover, named `<file>.test.ts(x)`
-  (see `src/lib/personSearch.test.ts`, `src/lib/canonicalPeople.test.ts`).
+  (see `src/lib/subjectSearch.test.ts`, `src/lib/canonicalPeople.test.ts`).
   Run with `npm test` (Vitest).
 - Component tests that touch `next/navigation` need a reactive mock —
   `useSearchParams()` must return a stable reference per unique search
@@ -48,14 +54,13 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   without the other — go through the canonical people pipeline
   (`scripts/people/syncCanonicalPeople.ts`, `npm run people:sync` /
   `npm run people:validate`) so both stay in sync.
-- `npm run people:rank -- --apply` (nasabRank) and `npm run graph:layout
-  -- --apply` (graphRank/clusterId/layoutX/layoutY) both compute centrality
-  over **every** Person-Person / unified-graph edge, regardless of
-  relationship type (`src/lib/nasabRank.ts`'s `buildFamilyGraph`,
-  `src/lib/fetchUnifiedGraph.ts`'s `MATCH (a)-[r]->(b)`, both untyped). Any
+- `npm run graph:layout -- --apply` (graphRank/clusterId/layoutX/layoutY)
+  computes centrality over **every** unified-graph edge, regardless of
+  relationship type (`src/lib/fetchUnifiedGraph.ts`'s `MATCH (a)-[r]->(b)`,
+  untyped). Any
   change to graph structure — new people, new relations, or especially a
   new relation *type* connecting many nodes (e.g. the COMPANION_OF edges
-  added 2026-08-23) — shifts these ranks and the unified layout. Re-run both
+  added 2026-08-23) — shifts the ranks and the unified layout. Re-run it
   (dry run first, review the diff, then `--apply`) after seeding any such
   change; skipping this leaves ranks/layout stale relative to the graph
   they're supposed to describe.
