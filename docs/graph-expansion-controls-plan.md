@@ -260,7 +260,11 @@ and `GraphSearch.tsx`'s TODO about the spinner belonging in the dropdown.
 
 ## Operator steps
 
-`npm run seed:graph` after phase two, to deploy the 23 inverse edges. Phase
-four's check fails until it runs. `graphRank` and the layout need no
-recomputation: every new edge joins a pair that was already adjacent, and
-`buildGraphAdjacency` dedups with a Set.
+`npm run seed:graph` after phase two, to deploy the 23 inverse edges.
+`graphRank` and the layout need no recomputation: every new edge joins a pair
+that was already adjacent, and `buildGraphAdjacency` dedups with a Set.
+
+*Run 2026-09-08:* applied. The live graph holds 1570 reciprocal person-to-person
+edges with **zero** one-sided among them, and the expansions the gaps had
+killed now resolve -- Khadijah by Husband, al-Hasan by Grandfather, Abu Bakr by
+Son-in-law and Ali by Paternal cousin all reach the Prophet.
