@@ -65,8 +65,7 @@ describe('rankPersonSearch', () => {
     name: 'أبو بكر الصديق',
     fullName: 'عبد الله بن أبي قحافة',
     nameTransliterated: 'Abu Bakr as-Siddiq',
-    nasabRank: null,
-    titleCount: 0,
+    graphRank: null,
   };
 
   it('returns null when the query is empty', () => {
@@ -114,8 +113,7 @@ describe('rankPersonSearch', () => {
       name: 'محمد بن عبد الله',
       fullName: null,
       nameTransliterated: 'Muhammad ibn Abdullah',
-      nasabRank: null,
-      titleCount: 0,
+      graphRank: null,
     };
     expect(rankPersonSearch('Mohammed', withMuhammad)?.match).toBe('exact');
     expect(rankPersonSearch('Mohamed bin Abdullah', withMuhammad)).toEqual({ score: 0, match: 'exact' });
@@ -128,8 +126,7 @@ describe('rankPersonSearch', () => {
       name: 'كنية أبو بكر',
       fullName: 'قصة عن أبو بكر الصديق',
       nameTransliterated: 'Abu Bakr',
-      nasabRank: null,
-      titleCount: 0,
+      graphRank: null,
     };
     // exact match on nameTransliterated (score 0) should win over the "contains"/"exact-word"
     // matches on the other fields.
@@ -142,8 +139,7 @@ describe('rankPersonSearch', () => {
       name: 'Test Person',
       fullName: null,
       nameTransliterated: null,
-      nasabRank: null,
-      titleCount: 0,
+      graphRank: null,
     };
     // "Test" is a whole word within "Test Person" -> counts as an exact word match
     expect(rankPersonSearch('Test', noFullName)).toEqual({ score: 1, match: 'exact' });
@@ -159,32 +155,28 @@ describe('filterAndRankPeople', () => {
       name: 'أبو بكر الصديق',
       fullName: 'عبد الله بن أبي قحافة',
       nameTransliterated: 'Abu Bakr as-Siddiq',
-      nasabRank: null,
-      titleCount: 0,
+      graphRank: null,
     },
     {
       slug: 'umar-ibn-al-khattab',
       name: 'عمر بن الخطاب',
       fullName: null,
       nameTransliterated: 'Umar ibn al-Khattab',
-      nasabRank: null,
-      titleCount: 0,
+      graphRank: null,
     },
     {
       slug: 'muhammad-ibn-abdullah',
       name: 'محمد بن عبد الله',
       fullName: null,
       nameTransliterated: 'Muhammad ibn Abdullah',
-      nasabRank: null,
-      titleCount: 0,
+      graphRank: null,
     },
     {
       slug: 'aishah-bint-abi-bakr',
       name: 'عائشة بنت أبي بكر',
       fullName: null,
       nameTransliterated: 'Aishah bint Abi Bakr',
-      nasabRank: null,
-      titleCount: 0,
+      graphRank: null,
     },
   ];
 
@@ -201,16 +193,14 @@ describe('filterAndRankPeople', () => {
         name: 'Person One',
         fullName: 'Student of Abu Bakr',
         nameTransliterated: null,
-        nasabRank: null,
-        titleCount: 0,
+        graphRank: null,
       },
       {
         slug: 'p2',
         name: 'Person Two',
         fullName: null,
         nameTransliterated: 'Abu Bakr as-Siddiq',
-        nasabRank: null,
-        titleCount: 0,
+        graphRank: null,
       },
     ];
     const results = filterAndRankPeople(candidates, 'Abu Bakr');
@@ -237,42 +227,40 @@ describe('filterAndRankPeople', () => {
     expect(filterAndRankPeople(people, '')).toEqual([]);
   });
 
-  it('breaks ties between equal text-match scores using nasabRank (lower/more prominent first)', () => {
+  it('breaks ties between equal text-match scores using graphRank (lower/more prominent first)', () => {
     const candidates: PersonSearchCandidate[] = [
-      { slug: 'p-low-rank', name: 'Ahmad', fullName: null, nameTransliterated: null, nasabRank: 50, titleCount: 0 },
-      { slug: 'p-high-rank', name: 'Ahmad', fullName: null, nameTransliterated: null, nasabRank: 3, titleCount: 0 },
-      { slug: 'p-no-rank', name: 'Ahmad', fullName: null, nameTransliterated: null, nasabRank: null, titleCount: 0 },
+      { slug: 'p-low-rank', name: 'Ahmad', fullName: null, nameTransliterated: null, graphRank: 50 },
+      { slug: 'p-high-rank', name: 'Ahmad', fullName: null, nameTransliterated: null, graphRank: 3 },
+      { slug: 'p-no-rank', name: 'Ahmad', fullName: null, nameTransliterated: null, graphRank: null },
     ];
     const results = filterAndRankPeople(candidates, 'Ahmad');
     expect(results.map((r) => r.person.slug)).toEqual(['p-high-rank', 'p-low-rank', 'p-no-rank']);
   });
 
-  it('breaks ties by titleCount (more titles first) when nasabRank also ties', () => {
+  it('falls through to name, then slug, when graphRank also ties', () => {
     const candidates: PersonSearchCandidate[] = [
-      { slug: 'p-few-titles', name: 'Ahmad', fullName: null, nameTransliterated: null, nasabRank: 5, titleCount: 1 },
-      { slug: 'p-many-titles', name: 'Ahmad', fullName: null, nameTransliterated: null, nasabRank: 5, titleCount: 4 },
+      { slug: 'ahmad-b', name: 'Ahmad', fullName: null, nameTransliterated: null, graphRank: 5 },
+      { slug: 'ahmad-a', name: 'Ahmad', fullName: null, nameTransliterated: null, graphRank: 5 },
     ];
     const results = filterAndRankPeople(candidates, 'Ahmad');
-    expect(results.map((r) => r.person.slug)).toEqual(['p-many-titles', 'p-few-titles']);
+    expect(results.map((r) => r.person.slug)).toEqual(['ahmad-a', 'ahmad-b']);
   });
 
-  it('never lets nasabRank or titleCount override text-match quality', () => {
+  it('never lets graphRank override text-match quality', () => {
     const candidates: PersonSearchCandidate[] = [
       {
         slug: 'exact-but-unranked',
         name: 'Ahmad',
         fullName: null,
         nameTransliterated: null,
-        nasabRank: null,
-        titleCount: 0,
+        graphRank: null,
       },
       {
         slug: 'prefix-but-prominent',
         name: 'Ahmad ibn Sa\'d',
         fullName: null,
         nameTransliterated: null,
-        nasabRank: 1,
-        titleCount: 10,
+        graphRank: 1,
       },
     ];
     const results = filterAndRankPeople(candidates, 'Ahmad');

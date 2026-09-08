@@ -17,8 +17,7 @@ function person(slug: string, name: string) {
     name,
     fullName: null,
     nameTransliterated: null,
-    nasabRank: null,
-    _count: { titles: 0 },
+    graphRank: null,
   };
 }
 
@@ -49,8 +48,7 @@ describe('GET /api/people/suggest', () => {
         name: true,
         fullName: true,
         nameTransliterated: true,
-        nasabRank: true,
-        _count: { select: { titles: true } },
+        graphRank: true,
       },
     });
     expect(body.data).toHaveLength(1);

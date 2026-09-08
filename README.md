@@ -108,9 +108,6 @@ npm run people:sync -- --apply
 
 # Seed the relationship graph.
 npm run seed:graph
-
-# Compute nasab-graph-based prominence ranks and store them on Postgres profiles.
-npm run people:rank -- --apply
 # Create Neo4j :Battle/:Title/:Event nodes and their relationships from the
 # PostgreSQL rosters.
 npm run battles:sync -- --apply
@@ -118,10 +115,10 @@ npm run titles:sync -- --apply
 npm run events:sync -- --apply
 
 # Compute cross-type rank, Louvain clusters, and a precomputed layout over
-# the unified Person+Battle+Title+Event graph. Rank/cluster/layout are
-# stored on Postgres; layout coordinates are also written to every Neo4j
-# subject, which is what /graphs actually renders from. Rerun this (and
-# people:rank above) after any relationship-changing data update.
+# the unified Person+Battle+Title+Event graph. All four are stored on
+# Postgres; graphRank and the layout coordinates are also written to every
+# Neo4j subject, which is what /graphs actually reads. Rerun after any
+# relationship-changing data update.
 npm run graph:layout -- --apply
 
 npm run dev
@@ -175,8 +172,6 @@ The next work should protect and deepen the main graph-and-search experience bef
 | `npm run seed:battles` | Seed battle records |
 | `npm run seed:events` | Seed events and connect related records |
 | `npm run seed:graph` | Seed or update the Neo4j relationship graph |
-| `npm run people:rank` | Recompute nasab-graph ranks and report them (dry run) |
-| `npm run people:rank -- --apply` | Recompute nasab-graph ranks and persist them to Postgres profiles and every matching Neo4j person |
 | `npm run people:sync` / `-- --apply` | Report (or apply) PostgreSQL → Neo4j drift for people |
 | `npm run people:sync-companions` / `-- --apply` | Report (or create) missing `COMPANION_OF`/`ACCOMPANIED_BY` edges from every companion to the Prophet |
 | `npm run battles:sync` / `-- --apply` | Report (or apply) PostgreSQL → Neo4j drift for battles and participations |

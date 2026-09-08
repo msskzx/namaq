@@ -1,21 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { getSession, findMany, findManyBattle, findManyTitle, findManyEvent } = vi.hoisted(() => ({
-  getSession: vi.fn(),
-  findMany: vi.fn(),
-  findManyBattle: vi.fn(),
-  findManyTitle: vi.fn(),
-  findManyEvent: vi.fn(),
-}));
+const { getSession } = vi.hoisted(() => ({ getSession: vi.fn() }));
 vi.mock('@/lib/neo4j', () => ({ getSession }));
-vi.mock('@/lib/prisma', () => ({
-  prisma: {
-    person: { findMany },
-    battle: { findMany: findManyBattle },
-    title: { findMany: findManyTitle },
-    event: { findMany: findManyEvent },
-  },
-}));
 
 import { GET } from './route';
 
@@ -70,14 +56,6 @@ function createRun() {
 describe('GET /api/graph', () => {
   beforeEach(() => {
     getSession.mockReset();
-    findMany.mockReset();
-    findManyBattle.mockReset();
-    findManyTitle.mockReset();
-    findManyEvent.mockReset();
-    findMany.mockResolvedValue([]);
-    findManyBattle.mockResolvedValue([]);
-    findManyTitle.mockResolvedValue([]);
-    findManyEvent.mockResolvedValue([]);
   });
 
   it('returns 500 without hitting the database when config is missing', async () => {
@@ -120,22 +98,14 @@ describe('GET /api/graph', () => {
       })
       .mockResolvedValueOnce({
         records: [
-          record({ type: 'person', slug: 'prophet-muhammad', layoutX: 10, layoutY: 20 }),
-          record({ type: 'person', slug: 'ali-ibn-abi-talib', layoutX: 15, layoutY: 25 }),
-          record({ type: 'battle', slug: 'badr', layoutX: 100, layoutY: 200 }),
-          record({ type: 'title', slug: 'commander', layoutX: 0, layoutY: 0 }),
-          record({ type: 'event', slug: 'hijra', layoutX: -50, layoutY: -60 }),
+          record({ type: 'person', slug: 'prophet-muhammad', layoutX: 10, layoutY: 20, graphRank: 1 }),
+          record({ type: 'person', slug: 'ali-ibn-abi-talib', layoutX: 15, layoutY: 25, graphRank: 3 }),
+          record({ type: 'battle', slug: 'badr', layoutX: 100, layoutY: 200, graphRank: 2 }),
+          record({ type: 'title', slug: 'commander', layoutX: 0, layoutY: 0, graphRank: 5 }),
+          record({ type: 'event', slug: 'hijra', layoutX: -50, layoutY: -60, graphRank: 4 }),
         ],
       });
     getSession.mockReturnValue({ run });
-
-    findMany.mockResolvedValue([
-      { slug: 'prophet-muhammad', nasabRank: 1, graphRank: 1, clusterId: 0 },
-      { slug: 'ali-ibn-abi-talib', nasabRank: 2, graphRank: 3, clusterId: 0 },
-    ]);
-    findManyBattle.mockResolvedValue([{ slug: 'badr', graphRank: 2, clusterId: 1 }]);
-    findManyTitle.mockResolvedValue([{ slug: 'commander', graphRank: 5, clusterId: 0 }]);
-    findManyEvent.mockResolvedValue([{ slug: 'hijra', graphRank: 4, clusterId: 2 }]);
 
     const response = await GET(request(''));
     const body = await response.json();
@@ -144,13 +114,14 @@ describe('GET /api/graph', () => {
     expect(run.mock.calls[0][0]).toContain('WHERE n:Person OR n:Battle OR n:Title OR n:Event');
     expect(run.mock.calls[1][0]).toContain('MATCH (a)-[r]->(b)');
     expect(run.mock.calls[2][0]).toContain('n.layoutX');
+    expect(run.mock.calls[2][0]).toContain('n.graphRank');
 
     expect(body.nodes).toEqual(expect.arrayContaining([
-      { id: 'person:prophet-muhammad', label: 'Muhammad', slug: 'prophet-muhammad', group: 1, type: 'person', nasabRank: 1, graphRank: 1, clusterId: 0, x: 10, y: 20, fx: 10, fy: 20 },
-      { id: 'person:ali-ibn-abi-talib', label: 'Ali', slug: 'ali-ibn-abi-talib', group: 1, type: 'person', nasabRank: 2, graphRank: 3, clusterId: 0, x: 15, y: 25, fx: 15, fy: 25 },
-      { id: 'battle:badr', label: 'غزوة بدر', slug: 'badr', group: 1, type: 'battle', graphRank: 2, clusterId: 1, x: 100, y: 200, fx: 100, fy: 200 },
-      { id: 'title:commander', label: 'Commander', slug: 'commander', group: 1, type: 'title', graphRank: 5, clusterId: 0, x: 0, y: 0, fx: 0, fy: 0 },
-      { id: 'event:hijra', label: 'الهجرة', slug: 'hijra', group: 1, type: 'event', graphRank: 4, clusterId: 2, x: -50, y: -60, fx: -50, fy: -60 },
+      { id: 'person:prophet-muhammad', label: 'Muhammad', slug: 'prophet-muhammad', group: 1, type: 'person', graphRank: 1, x: 10, y: 20, fx: 10, fy: 20 },
+      { id: 'person:ali-ibn-abi-talib', label: 'Ali', slug: 'ali-ibn-abi-talib', group: 1, type: 'person', graphRank: 3, x: 15, y: 25, fx: 15, fy: 25 },
+      { id: 'battle:badr', label: 'غزوة بدر', slug: 'badr', group: 1, type: 'battle', graphRank: 2, x: 100, y: 200, fx: 100, fy: 200 },
+      { id: 'title:commander', label: 'Commander', slug: 'commander', group: 1, type: 'title', graphRank: 5, x: 0, y: 0, fx: 0, fy: 0 },
+      { id: 'event:hijra', label: 'الهجرة', slug: 'hijra', group: 1, type: 'event', graphRank: 4, x: -50, y: -60, fx: -50, fy: -60 },
     ]));
     expect(body.nodes).toHaveLength(5);
 
@@ -655,6 +626,32 @@ describe('GET /api/graph', () => {
       expect.objectContaining({ slug: 'prophet-muhammad', x: 1, y: 2, fx: 1, fy: 2 }),
       expect.objectContaining({ slug: 'khadijah', x: 3, y: 4, fx: 3, fy: 4 }),
     ]));
+  });
+
+  // Rank now travels with the coordinates from Neo4j, so a graph-only person
+  // -- one with no PostgreSQL row for a join to find -- is ranked like any
+  // other subject instead of sorting last behind everyone who has a profile.
+  it('serves graphRank from Neo4j and no longer returns clusterId', async () => {
+    const focusNode = node(1, 'prophet-muhammad', 'Muhammad');
+    const graphOnly = node(2, 'malik-ibn-thalabah', 'Malik ibn Thalabah');
+    const run = vi.fn()
+      .mockResolvedValueOnce({
+        records: [record({ node: focusNode, relationship: rel('FATHER', {}, { start: graphOnly.identity, end: focusNode.identity }), related: graphOnly })],
+      })
+      .mockResolvedValueOnce({
+        records: [
+          record({ type: 'person', slug: 'prophet-muhammad', layoutX: 1, layoutY: 2, graphRank: 1 }),
+          record({ type: 'person', slug: 'malik-ibn-thalabah', layoutX: 3, layoutY: 4, graphRank: 42 }),
+        ],
+      });
+    getSession.mockReturnValue({ run });
+
+    const response = await GET(request('?focus=prophet-muhammad'));
+    const body = await response.json();
+
+    const nodes = body.nodes as { slug: string; graphRank?: number | null }[];
+    expect(nodes.find((entry) => entry.slug === 'malik-ibn-thalabah')?.graphRank).toBe(42);
+    expect(nodes.every((entry) => !('clusterId' in entry))).toBe(true);
   });
 
   it('preserves a valid (0, 0) coordinate rather than treating it as missing', async () => {

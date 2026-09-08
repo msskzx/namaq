@@ -26,15 +26,10 @@ export async function GET(request: Request) {
         name: true,
         fullName: true,
         nameTransliterated: true,
-        nasabRank: true,
-        _count: { select: { titles: true } },
+        graphRank: true,
       },
     });
-    const candidates = people.map(({ _count, ...person }) => ({
-      ...person,
-      titleCount: _count.titles,
-      hasProfile: true as const,
-    }));
+    const candidates = people.map((person) => ({ ...person, hasProfile: true as const }));
 
     const data = filterAndRankPeople(candidates, q)
       .slice(0, limit)

@@ -324,14 +324,15 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     const relation = relationLabel(link.label);
     return `${sourceLabel} - ${relation} -> ${targetLabel}`;
   }, [visibleNodesById, relationLabel]);
-  // Sorted by nasab-graph prominence for the side list only; the canvas
+  // Sorted by unified-graph prominence for the side list only; the canvas
   // itself renders visibleGraph.nodes directly, since force-layout doesn't
-  // care about array order. Title nodes (no nasabRank) sort after every
-  // ranked person, alongside any person who hasn't been ranked yet.
+  // care about array order. graphRank spans every kind, so a battle or title
+  // takes its place among the people rather than being dumped at the end;
+  // only a subject the layout pipeline has not ranked yet sorts last.
   const rankedViewNodes = useMemo(() => {
     if (!visibleGraph) return undefined;
     return [...visibleGraph.nodes].sort((a, b) =>
-      (a.nasabRank ?? Number.MAX_SAFE_INTEGER) - (b.nasabRank ?? Number.MAX_SAFE_INTEGER) ||
+      (a.graphRank ?? Number.MAX_SAFE_INTEGER) - (b.graphRank ?? Number.MAX_SAFE_INTEGER) ||
       a.label.localeCompare(b.label)
     );
   }, [visibleGraph]);

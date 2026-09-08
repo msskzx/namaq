@@ -1,17 +1,15 @@
 /**
- * Cross-type prominence rank for the unified graph (Person, Battle, Title,
- * Event together), as opposed to nasabRank.ts's family-only PageRank used
- * for the sidebar sort. Reuses computePageRank/rankByScore from
- * nasabRank.ts unchanged — that math is already generic over string keys,
- * so there's nothing person-specific to duplicate here. Nodes are keyed by
- * `type:slug` (not slug alone) since slugs are only guaranteed unique
- * within one entity type.
+ * The one prominence signal defined across every kind of historical subject
+ * (Person, Battle, Title, Event together) -- see
+ * docs/graph-subject-search-plan.md, which retired the family-only rank this
+ * used to sit beside. Nodes are keyed by `type:slug` (not slug alone) since
+ * slugs are only guaranteed unique within one entity type.
  *
  * No I/O: callers (scripts/graph/computeGraphLayout.ts) fetch nodes/edges
- * from Neo4j and write the result back to PostgreSQL.
+ * from Neo4j and write the result back to PostgreSQL and Neo4j.
  */
 
-import { CentralityAlgorithm, computePageRank, rankByScore } from './nasabRank';
+import { CentralityAlgorithm, computePageRank, rankByScore } from './pageRank';
 
 export type GraphRankNodeType = 'person' | 'battle' | 'title' | 'event';
 
@@ -32,7 +30,13 @@ export interface GraphNodeRank extends GraphRankNode {
 
 export const graphNodeKey = (node: GraphRankNode) => `${node.type}:${node.slug}`;
 
-/** Same undirected, dedup-by-Set construction as buildFamilyGraph, keyed by type:slug. */
+/**
+ * Undirected adjacency keyed by type:slug. Set-based rather than a
+ * multigraph, so a reciprocal pair the seed data stores as two edges (FATHER
+ * one way, SON the other) collapses into one connection instead of counting
+ * twice. Every node gets an entry, even an empty one, so an isolated subject
+ * never breaks the ranking.
+ */
 export function buildGraphAdjacency(nodes: GraphRankNode[], edges: GraphRankEdge[]): Map<string, Set<string>> {
   const adjacency = new Map<string, Set<string>>();
   for (const node of nodes) adjacency.set(graphNodeKey(node), new Set());
@@ -61,7 +65,7 @@ export function computeGraphRank(
 
   const nodesByKey = new Map(nodes.map((node) => [graphNodeKey(node), node]));
   return ranked.map((entry) => {
-    const node = nodesByKey.get(entry.slug)!;
+    const node = nodesByKey.get(entry.key)!;
     return { type: node.type, slug: node.slug, rank: entry.rank, score: entry.score };
   });
 }

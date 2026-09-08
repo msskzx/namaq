@@ -13,7 +13,7 @@ function request(query: string) {
 }
 
 function person(slug: string, name: string) {
-  return { id: slug, slug, name, fullName: null, nameTransliterated: null, nasabRank: null, titles: [] };
+  return { id: slug, slug, name, fullName: null, nameTransliterated: null, graphRank: null, titles: [] };
 }
 
 describe('GET /api/people', () => {
@@ -48,7 +48,7 @@ describe('GET /api/people', () => {
     expect(findMany).toHaveBeenCalledWith({
       where: {},
       include: { titles: true },
-      orderBy: [{ nasabRank: { sort: 'asc', nulls: 'last' } }, { titles: { _count: 'desc' } }, { name: 'asc' }],
+      orderBy: [{ graphRank: { sort: 'asc', nulls: 'last' } }, { name: 'asc' }],
       take: 12,
       skip: 0,
     });

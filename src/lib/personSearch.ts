@@ -1,18 +1,18 @@
 /**
  * Search helpers for the PostgreSQL-backed person directory.
  *
- * These helpers rank fields stored on a Person record. `nasabRank` is a
- * graph-centrality signal computed offline from Neo4j by
- * scripts/people/computeNasabRanks.ts and persisted to PostgreSQL; these
- * helpers only read that stored value and never query Neo4j directly.
+ * `graphRank` (1 = most prominent) is computed offline over the unified graph
+ * by scripts/graph/computeGraphLayout.ts and persisted; these helpers only
+ * read the stored value and never query Neo4j themselves. It is the sole
+ * prominence tie-breaker -- see docs/graph-subject-search-plan.md for why a
+ * separate title count was a second vote for the same edges.
  */
 export interface PersonSearchCandidate {
   slug: string;
   name: string;
   fullName: string | null;
   nameTransliterated: string | null;
-  nasabRank: number | null;
-  titleCount: number;
+  graphRank: number | null;
 }
 
 export type PersonSearchMatch = 'exact' | 'prefix' | 'contains';
@@ -114,8 +114,7 @@ export function filterAndRankPeople<T extends PersonSearchCandidate>(people: T[]
     .filter((result): result is { person: T } & PersonSearchResult => result !== null)
     .sort((a, b) =>
       a.score - b.score ||
-      (a.person.nasabRank ?? Number.MAX_SAFE_INTEGER) - (b.person.nasabRank ?? Number.MAX_SAFE_INTEGER) ||
-      b.person.titleCount - a.person.titleCount ||
+      (a.person.graphRank ?? Number.MAX_SAFE_INTEGER) - (b.person.graphRank ?? Number.MAX_SAFE_INTEGER) ||
       a.person.name.localeCompare(b.person.name, 'ar') ||
       a.person.slug.localeCompare(b.person.slug)
     );
