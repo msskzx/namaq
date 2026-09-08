@@ -274,12 +274,15 @@ with it gone the panel renders nothing until a subject is selected -- the
 Filters panel is where global relation control lives now. `isExpansionActive`
 and `toggleExpansion` lost their no-selection branches as unreachable.
 
-**A dead end this opens.** Because All direct relations now intersects with the
-active filters, it disappears when no filter is on -- which is exactly the state
-Start over writes (`filter=`). A user who lands there sees one root and only the
-three lineage actions. That is coherent (nothing is enabled, so there is nothing
-to expand) and recoverable through the Filters panel, but it is a worse landing
-than before and worth revisiting if it bites.
+**The empty filter set falls back to the defaults.** Intersecting with the
+active filters strands Start over, which writes `filter=`: the button
+disappears and the user is left with one root and three lineage actions. Found
+by clicking it, not by reasoning about it. Falling back to every relation
+instead buries the root -- expanding the Prophet that way returns 273 subjects
+and 375 edges, most of them companions, which is the result decision 6 exists to
+prevent. So an empty set falls back to `DEFAULT_FILTERS`, the same family and
+title relations a fresh visit enables: 44 subjects and 78 edges, with
+`COMPANION_OF` still opt-in through the Filters panel.
 
 ## Acceptance criteria
 

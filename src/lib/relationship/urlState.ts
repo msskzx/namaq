@@ -8,7 +8,7 @@ const KNOWN_KINDS: ReadonlySet<string> = new Set(['person', 'title', 'battle', '
 const LINEAGE_RELATION_IDS: ReadonlySet<string> = new Set(['ANCESTORS', 'PATERNAL_LINEAGE', 'DESCENDANTS']);
 const KNOWN_RELATION_TYPES: ReadonlySet<string> = new Set(RELATION_ORDER);
 
-const DEFAULT_FILTERS = RELATION_ORDER.filter(type => !['COMPANION_OF', 'PARTICIPATED_IN', 'INVOLVED_IN', 'PART_OF'].includes(governingRelationType(type)));
+export const DEFAULT_FILTERS = RELATION_ORDER.filter(type => !['COMPANION_OF', 'PARTICIPATED_IN', 'INVOLVED_IN', 'PART_OF'].includes(governingRelationType(type)));
 
 export interface ExplorationUrlState {
   subjects: string[];

@@ -23,7 +23,7 @@ import { getAllNavLinks } from '@/lib/siteLinks';
 import { sortRelationTypes, governingRelationType, relationGroup, RELATION_ORDER, KIND_TO_RELATION_GROUP, RelationGroup } from '@/lib/relationship/categories';
 import { COMPANION_TITLE_SLUG, filterVisibleGraph } from '@/lib/graphFilter';
 import { profilePath } from '@/lib/nodeProfile';
-import { parseExplorationInput, formatExpandParam } from '@/lib/relationship/urlState';
+import { parseExplorationInput, formatExpandParam, DEFAULT_FILTERS } from '@/lib/relationship/urlState';
 import { ALL_KINDS, DEFAULT_KINDS, NodeKind, RelationType, subjectId } from '@/lib/relationship/types';
 import { ExpansionRelationId, directRelationCounts } from '@/lib/relationship/expansion';
 import { useExplorationGraph } from './useExplorationGraph';
@@ -158,9 +158,18 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     if (!showSearch || !exploration.edges) return new Map<RelationType, number>();
     return directRelationCounts(exploration.edges, selectedSubjectId ?? graphData?.nodes.map(node => node.id) ?? [], RELATION_ORDER) as Map<RelationType, number>;
   }, [showSearch, selectedSubjectId, exploration.edges, graphData]);
+  // Expanding "all" must not pull in a type the filters exclude (decision 6 in
+  // docs/graph-expansion-controls-plan.md). Restricting to an empty filter set
+  // would strand Start over -- which writes `filter=` -- with a root and no way
+  // to expand it, so that case falls back to the defaults rather than to every
+  // relation, which would bury the root under its companions.
+  const expandableRelations = useMemo(
+    () => (explorationInput.globalFilters.length > 0 ? explorationInput.globalFilters : DEFAULT_FILTERS),
+    [explorationInput.globalFilters]
+  );
   const hasEligibleDirectRelations = useMemo(
-    () => Boolean(selectedSubjectId) && explorationInput.globalFilters.some(relation => (selectedRelationCounts.get(relation) ?? 0) > 0),
-    [selectedSubjectId, selectedRelationCounts, explorationInput.globalFilters]
+    () => Boolean(selectedSubjectId) && expandableRelations.some(relation => (selectedRelationCounts.get(relation) ?? 0) > 0),
+    [selectedSubjectId, selectedRelationCounts, expandableRelations]
   );
   // Node kinds present in the fetched graph (person/title/battle/event).
   const kindsPresent = useMemo(() => [...new Set(graphData?.nodes.map(node => node.type ?? 'person') ?? [])], [graphData]);
@@ -306,10 +315,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   };
   const expandAllDirectRelations = () => {
     if (!selectedSubjectId) return;
-    // Only the relations the filters already admit, so expanding "all" cannot
-    // fetch a type the user switched off -- see decision 6 in
-    // docs/graph-expansion-controls-plan.md.
-    const tokens = explorationInput.globalFilters
+    const tokens = expandableRelations
       .filter(relation => (selectedRelationCounts.get(relation) ?? 0) > 0)
       .map(relation => formatExpandParam({ subject: selectedSubjectId, relation }));
     updateParams({ expand: Array.from(new Set([...expandParams, ...tokens])) });
