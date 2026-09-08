@@ -290,13 +290,9 @@ Two consequences that need no action:
 Two sibling plans, neither yet designed. Both were raised in the interview that
 produced this plan and are recorded here so the observations are not lost.
 
-**Expansion controls.** Reduce to four buttons -- All direct relations,
-Ancestors, Paternal lineage, Descendants -- dropping Companion Of as an
-expansion. "All direct relations" should respect the active relation filters
-rather than overriding them. Includes the bug where titles are returned by the
-API but not rendered; the observation to start from is that with the title kind
-enabled in both cases, "Show full graph" renders titles and "All direct
-relations" does not.
+**Expansion controls**, now designed in
+[its own plan](graph-expansion-controls-plan.md). The titles bug is diagnosed
+there and turns out to affect battles and events too.
 
 **Graph UI on mobile.** Search, filter and navbar are unscrollable on a phone,
 making the workspace unusable there. Includes a loading indicator while nodes
@@ -311,11 +307,16 @@ Siyar A'lam an-Nubala.
 
 ## Open issues
 
-**Dependency, not a blocker.** Criteria 2 and 3 cannot be verified end to end
-while an already-included kind fails to render (the titles bug above). The
-expansion-controls plan should land first. If its cause turns out to sit in the
-`kind` pipeline rather than the `relation` pipeline, decision 5's implementation
-may need more than adding the kind, though no decision here would change.
+**Dependency, since narrowed.** Criteria 2 and 3 were recorded as unverifiable
+until the titles bug was fixed. Diagnosing that bug -- see
+[expansion controls](graph-expansion-controls-plan.md) -- showed the two paths
+are separate. A subject picked from search becomes a *root*, and
+`buildExploration` marks every root visible without consulting
+`matchExpansionNeighbors`, which is where the bug lives. Both criteria are now
+covered at that layer by `src/lib/relationship/exploration.test.ts`; only
+browser verification is still outstanding. What remains genuinely blocked is
+expanding *from* a non-person subject once it is on screen. Decision 5 is
+unaffected either way.
 
 **Nonblocking, recommended but not agreed.** `src/lib/graphLod.ts` and its test
 are imported by nothing, and `scripts/graph/computeGraphLayout.ts:16` carries a
