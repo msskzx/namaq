@@ -125,7 +125,7 @@ const GraphSurface = forwardRef<Methods, GraphSurfaceProps>(function GraphSurfac
   }, [transformed]);
 
   const localRef = useRef<Methods | undefined>(undefined);
-  useImperativeHandle(ref, () => localRef.current as Methods, [graphData]);
+  useImperativeHandle(ref, () => localRef.current as Methods);
 
   if (isLoading) return <LoadingSpinner />;
   if (error) return <ErrorMessage title={t.graph.loadError} />;

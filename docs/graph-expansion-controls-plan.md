@@ -2,7 +2,7 @@
 
 Status: phases one and two are implemented in
 [#38](https://github.com/msskzx/namaq/pull/38); phase three is implemented on
-the continuation branch. Phases four and five remain. The seed corrections
+the continuation branch. Phase four is also implemented; phase five remains. The seed corrections
 are deployed; see [Data fixes](#data-fixes).
 
 Sibling of [historical subjects are searchable](graph-subject-search-plan.md),
@@ -242,9 +242,16 @@ that type.
 decision 10. It needs credentials, so it skips without them, as the rest of
 that file does.
 
-**This check fails after phase two until `npm run seed:graph` is re-run** --
-the eleven `HUSBAND` edges will be declared but not yet deployed. That is the
-check working: re-running the seed is the operator step it is asking for.
+Implemented as a read-only person-to-person query compared with the active
+seed export. The static seed tests share its strict query parser; malformed
+seed queries fail rather than silently disappearing from the comparison.
+Pure tests cover missing inverses, the four previously deleted reversed
+parent edges, and the sync-owned exclusions.
+
+Verified against the live graph: zero missing and zero unexpected edges.
+The phase-two seed run had already deployed the 23 missing inverses. The
+check reports any future undeployed seed changes as missing edges; it does
+not write to the database.
 
 ### Phase five: four buttons
 
