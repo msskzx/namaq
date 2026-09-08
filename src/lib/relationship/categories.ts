@@ -81,6 +81,56 @@ export function sortRelationTypes(types: string[]): string[] {
 // together). The toggle for the governing type controls visibility of both.
 const INVERSE_PAIR: Partial<Record<RelationType, RelationType>> = { ACCOMPANIED_BY: 'COMPANION_OF' };
 
+// Person-to-person relations the seed stores in both directions, and the
+// types that may serve as an inverse -- more than one where the answer turns
+// on a person's sex, which the query text does not encode (a FATHER edge
+// pairs with SON or DAUGHTER depending on the child).
+//
+// Deliberately separate from INVERSE_PAIR above, which decides which relation
+// governs a shared filter toggle. An entry there removes a type from the
+// Filters panel, so merging the two maps would silently collapse FATHER and
+// SON into one switch. See docs/graph-expansion-controls-plan.md.
+export const RECIPROCAL_INVERSES: Partial<Record<RelationType, readonly RelationType[]>> = {
+  FATHER: ['SON', 'DAUGHTER'],
+  MOTHER: ['SON', 'DAUGHTER'],
+  SON: ['FATHER', 'MOTHER'],
+  DAUGHTER: ['FATHER', 'MOTHER'],
+  STEP_FATHER: ['STEP_SON', 'STEP_DAUGHTER'],
+  STEP_MOTHER: ['STEP_SON', 'STEP_DAUGHTER'],
+  STEP_SON: ['STEP_FATHER', 'STEP_MOTHER'],
+  STEP_DAUGHTER: ['STEP_FATHER', 'STEP_MOTHER'],
+  HUSBAND: ['WIFE'],
+  WIFE: ['HUSBAND'],
+  BROTHER: ['BROTHER', 'SISTER'],
+  SISTER: ['BROTHER', 'SISTER'],
+  HALF_BROTHER: ['HALF_BROTHER', 'HALF_SISTER'],
+  HALF_SISTER: ['HALF_BROTHER', 'HALF_SISTER'],
+  STEP_BROTHER: ['STEP_BROTHER', 'STEP_SISTER'],
+  STEP_SISTER: ['STEP_BROTHER', 'STEP_SISTER'],
+  GRANDFATHER: ['GRANDSON', 'GRANDDAUGHTER'],
+  GRANDMOTHER: ['GRANDSON', 'GRANDDAUGHTER'],
+  GRANDSON: ['GRANDFATHER', 'GRANDMOTHER'],
+  GRANDDAUGHTER: ['GRANDFATHER', 'GRANDMOTHER'],
+  PATERNAL_UNCLE: ['PATERNAL_NEPHEW', 'PATERNAL_NIECE'],
+  PATERNAL_AUNT: ['PATERNAL_NEPHEW', 'PATERNAL_NIECE'],
+  MATERNAL_UNCLE: ['MATERNAL_NEPHEW', 'MATERNAL_NIECE'],
+  MATERNAL_AUNT: ['MATERNAL_NEPHEW', 'MATERNAL_NIECE'],
+  PATERNAL_NEPHEW: ['PATERNAL_UNCLE', 'PATERNAL_AUNT'],
+  PATERNAL_NIECE: ['PATERNAL_UNCLE', 'PATERNAL_AUNT'],
+  MATERNAL_NEPHEW: ['MATERNAL_UNCLE', 'MATERNAL_AUNT'],
+  MATERNAL_NIECE: ['MATERNAL_UNCLE', 'MATERNAL_AUNT'],
+  PATERNAL_COUSIN: ['PATERNAL_COUSIN', 'MATERNAL_COUSIN'],
+  MATERNAL_COUSIN: ['PATERNAL_COUSIN', 'MATERNAL_COUSIN'],
+  FATHER_IN_LAW: ['SON_IN_LAW', 'DAUGHTER_IN_LAW'],
+  MOTHER_IN_LAW: ['SON_IN_LAW', 'DAUGHTER_IN_LAW'],
+  SON_IN_LAW: ['FATHER_IN_LAW', 'MOTHER_IN_LAW'],
+  DAUGHTER_IN_LAW: ['FATHER_IN_LAW', 'MOTHER_IN_LAW'],
+  BROTHER_IN_LAW: ['BROTHER_IN_LAW', 'SISTER_IN_LAW'],
+  SISTER_IN_LAW: ['BROTHER_IN_LAW', 'SISTER_IN_LAW'],
+  COMPANION_OF: ['ACCOMPANIED_BY'],
+  ACCOMPANIED_BY: ['COMPANION_OF'],
+};
+
 export function governingRelationType(type: string): string {
   return INVERSE_PAIR[type as RelationType] ?? type;
 }

@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { getActiveSeedPeople, getRawGraphQueries } from '../scripts/people/activeSeedData';
+import { RECIPROCAL_INVERSES } from '../src/lib/relationship/categories';
+import type { RelationType } from '../src/lib/relationship/types';
 
 const CREATE_RE = /^CREATE \(:Person \{[^}]*slug: "([a-z][a-z0-9-]*)"[^}]*\}\);$/;
 const RELATION_RE =
@@ -83,29 +85,20 @@ describe('graph seed data integrity', () => {
     expect(orphans).toEqual([]);
   });
 
-  it('pairs every FATHER/MOTHER/SON/DAUGHTER relationship with its inverse', async () => {
-    // A SON/DAUGHTER edge (child -> parent) can pair with either FATHER or
-    // MOTHER depending on which parent it points at — the query text alone
-    // doesn't encode the parent's sex, so both are accepted; a FATHER or
-    // MOTHER edge (parent -> child) must pair with SON or DAUGHTER
-    // depending on the child's sex, same reasoning in reverse.
+  it('pairs every reciprocal relationship with its inverse', async () => {
+    // Which inverse is correct often turns on a person's sex, which the query
+    // text does not encode -- a FATHER edge pairs with SON or DAUGHTER
+    // depending on the child -- so any listed inverse is accepted.
     const { peopleRelationsQueries } = await getRawGraphQueries();
     const relations = parseRelations(peopleRelationsQueries);
-    const has = (from: string, to: string, type: string) =>
-      relations.some((r) => r.from === from && r.to === to && r.type === type);
+    const present = new Set(relations.map((r) => `${r.from}|${r.type}|${r.to}`));
 
-    const missing: string[] = [];
-    for (const r of relations) {
-      if (r.type === 'FATHER' || r.type === 'MOTHER') {
-        if (!has(r.to, r.from, 'SON') && !has(r.to, r.from, 'DAUGHTER')) {
-          missing.push(`expected ${r.to} -[:SON or DAUGHTER]-> ${r.from} (inverse of ${r.type} ${r.from}->${r.to})`);
-        }
-      } else if (r.type === 'SON' || r.type === 'DAUGHTER') {
-        if (!has(r.to, r.from, 'FATHER') && !has(r.to, r.from, 'MOTHER')) {
-          missing.push(`expected ${r.to} -[:FATHER or MOTHER]-> ${r.from} (inverse of ${r.type} ${r.from}->${r.to})`);
-        }
-      }
-    }
+    const missing = relations.flatMap((r) => {
+      const inverses = RECIPROCAL_INVERSES[r.type as RelationType];
+      if (!inverses) return [];
+      if (inverses.some((inverse) => present.has(`${r.to}|${inverse}|${r.from}`))) return [];
+      return [`expected ${r.to} -[:${inverses.join(' or ')}]-> ${r.from} (inverse of ${r.type} ${r.from}->${r.to})`];
+    });
     expect(missing).toEqual([]);
   });
 });

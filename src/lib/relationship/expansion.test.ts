@@ -56,11 +56,62 @@ describe('matchExpansionNeighbors', () => {
   });
 });
 
+describe('one-way relations', () => {
+  const badr = subjectId('battle', 'badr');
+  const companion = subjectId('title', 'sahabi');
+  const hijra = subjectId('event', 'hijra');
+  // Every cross-kind edge is stored Person -> other kind; nothing points back.
+  const crossKind: StoredEdge[] = [
+    { source: muhammad, target: badr, type: 'PARTICIPATED_IN' },
+    { source: muhammad, target: companion, type: 'HOLDS_TITLE' },
+    { source: khadijah, target: companion, type: 'HOLDS_TITLE' },
+    { source: muhammad, target: hijra, type: 'INVOLVED_IN' },
+    { source: hijra, target: badr, type: 'PART_OF' },
+  ];
+
+  it('reaches the title from the person who holds it', () => {
+    expect(matchExpansionNeighbors(crossKind, muhammad, 'HOLDS_TITLE')).toEqual([companion]);
+  });
+
+  it('reaches every holder from the title', () => {
+    expect(matchExpansionNeighbors(crossKind, companion, 'HOLDS_TITLE')).toEqual([muhammad, khadijah]);
+  });
+
+  it('reaches the battle from the participant and the participant from the battle', () => {
+    expect(matchExpansionNeighbors(crossKind, muhammad, 'PARTICIPATED_IN')).toEqual([badr]);
+    expect(matchExpansionNeighbors(crossKind, badr, 'PARTICIPATED_IN')).toEqual([muhammad]);
+  });
+
+  it('reads PART_OF from either end, since an event and its battle both matter', () => {
+    expect(matchExpansionNeighbors(crossKind, hijra, 'PART_OF')).toEqual([badr]);
+    expect(matchExpansionNeighbors(crossKind, badr, 'PART_OF')).toEqual([hijra]);
+  });
+
+  it('still reads reciprocal relations one way, so a FATHER request never returns a child', () => {
+    // muhammad -FATHER-> fatimah means muhammad is her father; asking muhammad
+    // for his own FATHER must not answer with her.
+    const fatimah = subjectId('person', 'fatimah-bint-muhammad');
+    const family: StoredEdge[] = [
+      { source: muhammad, target: fatimah, type: 'FATHER' },
+      { source: fatimah, target: muhammad, type: 'DAUGHTER' },
+    ];
+    expect(matchExpansionNeighbors(family, muhammad, 'FATHER')).toEqual([]);
+    expect(matchExpansionNeighbors(family, fatimah, 'FATHER')).toEqual([muhammad]);
+  });
+});
+
 describe('directRelationCounts', () => {
   it('counts distinct subjects per eligible relation', () => {
     const counts = directRelationCounts(edges, muhammad, ['WIFE', 'FATHER']);
     expect(counts.get('WIFE')).toBe(3);
     expect(counts.get('FATHER')).toBe(0);
+  });
+
+  it('counts a one-way relation from either end', () => {
+    const badr = subjectId('battle', 'badr');
+    const crossKind: StoredEdge[] = [{ source: muhammad, target: badr, type: 'PARTICIPATED_IN' }];
+    expect(directRelationCounts(crossKind, muhammad, ['PARTICIPATED_IN']).get('PARTICIPATED_IN')).toBe(1);
+    expect(directRelationCounts(crossKind, badr, ['PARTICIPATED_IN']).get('PARTICIPATED_IN')).toBe(1);
   });
 
   it('counts zero for lineage relation ids', () => {

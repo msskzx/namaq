@@ -160,4 +160,47 @@ describe('buildExploration', () => {
       ])
     );
   });
+
+  // Covers criteria 2 and 3 of docs/graph-subject-search-plan.md at this
+  // layer: a subject picked from search becomes a root, and roots are visible
+  // without any expansion. That path does not touch matchExpansionNeighbors,
+  // so it is unaffected by the one-way-edge bug in
+  // docs/graph-expansion-controls-plan.md.
+  it('makes a non-person root visible with no expansion, and renders its one-way edge', () => {
+    const badr = subjectId('battle', 'badr');
+    const crossKindEdges = [...edges, edge(muhammad, badr, 'PARTICIPATED_IN')];
+
+    const result = buildExploration({ roots: [muhammad, badr], expansions: [], globalFilters: [] }, crossKindEdges);
+
+    expect(visibleSubjects(result)).toEqual(new Set([muhammad, badr]));
+    expect(result.connections).toEqual([
+      { primary: edge(muhammad, badr, 'PARTICIPATED_IN'), reciprocal: undefined },
+    ]);
+  });
+
+  it('reaches a battle by expanding the person who fought in it', () => {
+    const badr = subjectId('battle', 'badr');
+    const crossKindEdges = [...edges, edge(muhammad, badr, 'PARTICIPATED_IN')];
+
+    const result = buildExploration(
+      { roots: [muhammad], expansions: [{ subject: muhammad, relation: 'PARTICIPATED_IN' }], globalFilters: [] },
+      crossKindEdges,
+    );
+
+    expect(visibleSubjects(result)).toEqual(new Set([muhammad, badr]));
+  });
+
+  // globalFilters runs through the same matcher as expansions, so revealing a
+  // relation type across the graph reaches cross-kind subjects too.
+  it('reveals a title through a global filter, not only through an expansion', () => {
+    const companion = subjectId('title', 'sahabi');
+    const crossKindEdges = [...edges, edge(muhammad, companion, 'HOLDS_TITLE')];
+
+    const result = buildExploration(
+      { roots: [muhammad], expansions: [], globalFilters: ['HOLDS_TITLE'] },
+      crossKindEdges,
+    );
+
+    expect(visibleSubjects(result)).toEqual(new Set([muhammad, companion]));
+  });
 });
