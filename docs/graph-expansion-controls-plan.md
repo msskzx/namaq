@@ -129,7 +129,12 @@ the same way as expanding.
 
    Switching off a filter removes its contribution to discovery. It does not
    hide recorded links between retained subjects or override independently
-   expanded branches. Both endpoints of an independent expansion remain
+   expanded branches -- **except companionship**, which is hidden with its
+   switch. Both stored directions hang off the Prophet in bulk (253
+   `COMPANION_OF` and 253 `ACCOMPANIED_BY`), so on a default visit 37 of them
+   were still drawn between people held up by family relations, against a
+   switch reading off. `ACCOMPANIED_BY` follows `COMPANION_OF` here as it
+   already does everywhere else, through `governingRelationType`. Both endpoints of an independent expansion remain
    while they have a matching connection; unsupported nodes disappear.
    Searched roots remain visible on their own, including after Start over.
    This follows the earlier [connection-visibility decision](adr/0001-separate-expansion-from-connection-visibility.md)
