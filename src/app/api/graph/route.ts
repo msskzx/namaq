@@ -44,13 +44,12 @@ const unifiedEdgesQuery = `
 
 class MissingLayoutError extends Error {}
 
-// The one source of every offline-computed property this route serves --
-// coordinates and graphRank alike, for every response shape (scoped and
-// unified) -- see docs/adr/0006-persist-offline-computed-properties-to-neo4j.md
-// and docs/adr/0005-use-a-precomputed-global-graph-map.md. Reading rank from
-// Neo4j rather than PostgreSQL is what gives a graph-only subject a rank at
-// all: it has no PostgreSQL row to join against. One source also means a rank
-// lookup can no longer disagree with the coordinate it arrives beside.
+// The one source of every offline-computed property this route serves,
+// coordinates and graphRank alike -- see
+// docs/adr/0006-persist-offline-computed-properties-to-neo4j.md and
+// docs/adr/0005-use-a-precomputed-global-graph-map.md. Reading rank here
+// rather than from PostgreSQL is what gives a graph-only subject a rank at
+// all: it has no row to join against.
 //
 // A single batched lookup, called once per response after its node list is
 // already built, rather than adding these fields to each of the distinct
@@ -63,7 +62,7 @@ class MissingLayoutError extends Error {}
 // incomplete map is a data problem (rerun scripts/graph/computeGraphLayout.ts)
 // to surface immediately, not something to paper over per-request. A valid
 // (0, 0) is preserved: the checks below are `!= null`, not truthiness. A
-// missing graphRank is not fatal in the same way: it only weakens an ordering.
+// missing graphRank only weakens an ordering, so it is not fatal.
 async function attachNeo4jSubjectProperties(session: Session, nodeList: GraphNodeFull[]): Promise<void> {
   if (nodeList.length === 0) return;
   const subjects = nodeList.map((node) => ({ type: node.type ?? 'person', slug: node.slug }));

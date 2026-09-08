@@ -35,8 +35,6 @@ describe('computePageRank', () => {
     expect(scores.get('b')).toBeCloseTo(scores.get('d')!, 10);
   });
 
-  // Every key dangling is the case where the mass redistribution above has to
-  // carry the whole iteration; without it the scores would decay to zero.
   it('does not crash and still produces conserved mass for a fully isolated graph', () => {
     const keys = ['a', 'b', 'c'];
     const scores = computePageRank(adjacencyOf(keys, []), keys);

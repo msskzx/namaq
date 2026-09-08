@@ -54,9 +54,7 @@ describe('writeSubjectPropertiesToNeo4j', () => {
     expect(run).toHaveBeenCalledTimes(1);
     const [query, params] = run.mock.calls[0];
     expect(query).toContain('UNWIND $rows AS row');
-    // graphRank rides the same statement as the coordinates so a graph-only
-    // subject gets both or neither -- docs/graph-subject-search-plan.md ranks
-    // suggestions by it, and PostgreSQL has no row to read it from.
+    // One statement, so a graph-only subject gets rank and position or neither.
     expect(query).toContain('SET n.graphRank = row.graphRank, n.layoutX = row.layoutX, n.layoutY = row.layoutY');
     expect(params).toEqual({ rows });
     expect(close).toHaveBeenCalledTimes(1);

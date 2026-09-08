@@ -75,8 +75,6 @@ describe('GET /api/graph/suggest', () => {
     }
   });
 
-  // Only people can be graph-only; a title, battle or event in the graph was
-  // synced from a PostgreSQL row, so it always has a profile page.
   it('marks a person with no PostgreSQL row hasProfile: false, and a non-person true', async () => {
     sessionReturning([
       subject(['Person'], 'malik-ibn-thalabah', 'Malik ibn Thalabah'),

@@ -3,11 +3,8 @@ import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/neo4j';
 import { filterAndRankSubjects, type SubjectKind } from '@/lib/subjectSearch';
 
-// The workspace searches the graph, not the profile tables -- the counterpart
-// to /api/people/suggest, which searches profiles. See
-// docs/graph-subject-search-plan.md for why these stayed two endpoints over
-// one widened endpoint: they answer different questions and neither result
-// set is a subset of the other.
+// The workspace searches the graph; /api/people/suggest searches profiles.
+// See docs/graph-subject-search-plan.md for why these stayed two endpoints.
 const KIND_BY_LABEL: Record<string, SubjectKind> = {
   Person: 'person',
   Title: 'title',
@@ -15,10 +12,9 @@ const KIND_BY_LABEL: Record<string, SubjectKind> = {
   Event: 'event',
 };
 
-// Neo4j is the candidate source for every kind, because it is the only store
-// with complete coverage: a graph-only person has no PostgreSQL row. All 659
-// subjects are loaded and ranked in memory rather than through a search index
-// -- a considered choice at this size, not an omission.
+// Neo4j is the candidate source for every kind: it is the only store with
+// complete coverage, since a graph-only person has no PostgreSQL row. All 659
+// subjects are ranked in memory -- a considered choice at this size.
 const candidatesQuery = `
   MATCH (n)
   WHERE n:Person OR n:Title OR n:Battle OR n:Event
@@ -48,8 +44,8 @@ export async function GET(request: Request) {
       return NextResponse.json({ data: [] });
     }
 
-    // An unreachable Neo4j leaves nothing to search, so the dropdown comes up
-    // empty rather than the whole workspace erroring on a keystroke.
+    // Nothing to search, so the dropdown comes up empty rather than the
+    // workspace erroring on a keystroke.
     const session = getSession();
     if (!session) {
       console.error('Graph suggestions unavailable: no Neo4j session.');
@@ -70,10 +66,8 @@ export async function GET(request: Request) {
         subject.kind !== null && !!subject.slug && !!subject.name
       );
 
-    // Only people can be graph-only, so only people need looking up: every
-    // title, battle and event in the graph was synced from a PostgreSQL row
-    // and has a profile page. Kept explicit on the result rather than left to
-    // an "absent means true" convention the client would have to know.
+    // Only people can be graph-only: every title, battle and event in the
+    // graph was synced from a PostgreSQL row and has a profile page.
     const personSlugs = subjects.filter((subject) => subject.kind === 'person').map((subject) => subject.slug);
     const profiled = new Set(
       (await prisma.person.findMany({ where: { slug: { in: personSlugs } }, select: { slug: true } }))

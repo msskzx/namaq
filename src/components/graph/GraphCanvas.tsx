@@ -62,8 +62,7 @@ const relationName = (value: string) => value.toLowerCase().replaceAll('_', ' ')
 // and re-including that kind wouldn't bring their filters back.
 const ALL_RELATION_TYPES = sortRelationTypes(RELATION_ORDER.filter(type => governingRelationType(type) === type));
 
-// Battle/Event being off by default (see DEFAULT_KINDS in
-// src/lib/relationship/types.ts) needs to
+// Battle/Event being off by default (see DEFAULT_KINDS) needs to
 // carry over to their relation types too, the same way toggleKind's own
 // group-sync keeps them in step whenever a kind is toggled by hand --
 // otherwise the Relationship Types panel would show e.g. PARTICIPATED_IN
@@ -316,11 +315,10 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     const relation = relationLabel(link.label);
     return `${sourceLabel} - ${relation} -> ${targetLabel}`;
   }, [visibleNodesById, relationLabel]);
-  // Sorted by unified-graph prominence for the side list only; the canvas
-  // itself renders visibleGraph.nodes directly, since force-layout doesn't
-  // care about array order. graphRank spans every kind, so a battle or title
-  // takes its place among the people rather than being dumped at the end;
-  // only a subject the layout pipeline has not ranked yet sorts last.
+  // Sorted for the side list only; the canvas renders visibleGraph.nodes
+  // directly, since force-layout doesn't care about array order. graphRank
+  // spans every kind, so a battle or title takes its place among the people
+  // instead of being dumped at the end.
   const rankedViewNodes = useMemo(() => {
     if (!visibleGraph) return undefined;
     return [...visibleGraph.nodes].sort((a, b) =>

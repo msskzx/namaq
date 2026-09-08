@@ -11,8 +11,6 @@ import { COMPANION_TITLE_SLUG } from '@/lib/graphFilter';
 import { profilePath } from '@/lib/nodeProfile';
 import { DEFAULT_KINDS, NodeKind, subjectId } from '@/lib/relationship/types';
 
-// /api/graph/suggest states kind and hasProfile on every result, for every
-// kind, rather than leaving either to be inferred from absence.
 interface Suggestion {
   id: string;
   kind: NodeKind;
@@ -82,10 +80,8 @@ export default function GraphSearch() {
     };
   }, [inputValue, debouncedFetch]);
 
-  // Every kind becomes an exploration root the same way. The exploration
-  // model already allows it: parseSubjectParam accepts every kind,
-  // buildRouteFetchParams routes any subject into relationSubjects, and the
-  // graph route matches by kind and slug across labels.
+  // Every kind becomes an exploration root the same way; the exploration
+  // model already routes any subject into relationSubjects.
   const selectSubject = (suggestion: Suggestion) => {
     if (!searchParams) return;
     const params = new URLSearchParams(searchParams.toString());
@@ -94,11 +90,10 @@ export default function GraphSearch() {
     if (!params.getAll('subject').includes(rootId)) params.append('subject', rootId);
     params.set('selected', suggestion.slug);
 
-    // Searching a battle by name is statement enough that you want to see it.
-    // Without this, useExplorationGraph would drop the fetched root for being
-    // of an inactive kind and the selection would silently do nothing. An
-    // absent `kind` param means the defaults, not "every kind", so those have
-    // to be spelled out alongside the one being added.
+    // Without this, useExplorationGraph drops the fetched root for being of
+    // an inactive kind and the selection silently does nothing. An absent
+    // `kind` param means the defaults rather than every kind, so those have to
+    // be spelled out alongside the one being added.
     const activeKinds = params.getAll('kind');
     const kinds = activeKinds.length > 0 ? activeKinds : [...DEFAULT_KINDS];
     if (!kinds.includes(suggestion.kind)) {
@@ -106,9 +101,8 @@ export default function GraphSearch() {
       [...kinds, suggestion.kind].forEach((kind) => params.append('kind', kind));
     }
 
-    // The same rule for the one node carrying its own visibility flag: the
-    // Companion title is hidden by default because it connects to every
-    // companion in the dataset (see graphFilter.ts).
+    // The same rule for the one node with its own visibility flag, hidden by
+    // default because it connects to every companion (see graphFilter.ts).
     if (suggestion.kind === 'title' && suggestion.slug === COMPANION_TITLE_SLUG) {
       params.set('showCompanionTitle', '1');
     }

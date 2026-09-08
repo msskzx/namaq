@@ -1,9 +1,7 @@
 /**
- * PageRank over an undirected graph of opaque string keys.
- *
- * Nothing here is domain-specific and nothing does I/O: graphRank.ts supplies
- * `type:slug` keys and turns the ranking back into subjects, and
- * scripts/graph/computeGraphLayout.ts is what persists it.
+ * PageRank over an undirected graph of opaque string keys. No I/O and nothing
+ * domain-specific: graphRank.ts supplies `type:slug` keys and turns the
+ * ranking back into subjects.
  */
 
 export interface RankedKey {

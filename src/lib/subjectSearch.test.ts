@@ -269,8 +269,7 @@ describe('filterAndRankSubjects', () => {
 });
 
 describe('ranking across kinds', () => {
-  // Non-person kinds carry no nasab, so fullName is simply absent on them
-  // rather than being carried as a null placeholder.
+  // Non-person kinds carry no nasab, so fullName is absent rather than null.
   const badr = { slug: 'badr', name: 'غزوة بدر', nameTransliterated: 'Ghazwat Badr', graphRank: 12 };
   const hijra = { slug: 'hijra', name: 'الهجرة', nameTransliterated: 'Al-Hijra', graphRank: 30 };
   const companion = { slug: 'sahabi', name: 'صحابي', nameTransliterated: 'Sahabi', graphRank: 8 };

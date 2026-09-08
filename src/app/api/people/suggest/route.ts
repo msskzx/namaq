@@ -2,10 +2,9 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { filterAndRankSubjects } from '@/lib/subjectSearch';
 
-// The directory searches profiles, not the graph: every suggestion here opens
-// /people/<slug>, so a graph-only person -- one with a Neo4j node but no
-// PostgreSQL row -- must not appear. Searching the whole graph is the
-// workspace's job; see docs/graph-subject-search-plan.md.
+// The directory searches profiles: every suggestion here opens /people/<slug>,
+// so a graph-only person (Neo4j node, no PostgreSQL row) must not appear.
+// Searching the whole graph is /api/graph/suggest's job.
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);

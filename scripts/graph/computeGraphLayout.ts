@@ -36,12 +36,10 @@ export interface SubjectPropertyRow {
   layoutY: number;
 }
 
-// Persists the offline-computed properties on every Neo4j subject they were
-// computed for, not just ones with a PostgreSQL row -- see
-// docs/adr/0006-persist-offline-computed-properties-to-neo4j.md, and
-// docs/adr/0005-use-a-precomputed-global-graph-map.md for the coordinates
-// specifically. clusterId stays PostgreSQL-only: nothing reads it back from a
-// response, only this pipeline's own next run consumes it. One UNWIND+MATCH+SET
+// Persists the offline-computed properties on every Neo4j subject, not just
+// ones with a PostgreSQL row -- see
+// docs/adr/0006-persist-offline-computed-properties-to-neo4j.md, which also
+// covers why clusterId stays PostgreSQL-only. One UNWIND+MATCH+SET
 // statement is one Neo4j transaction (matching type by label the same way
 // /api/graph/route.ts's relationSubjects query does, since a slug is only
 // unique within its own type), and the returned match count is verified

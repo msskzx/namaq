@@ -74,8 +74,6 @@ describe('GET /api/people/suggest', () => {
     expect(await response.json()).toEqual({ error: 'Failed to fetch people suggestions' });
   });
 
-  // Graph-only people have no PostgreSQL row, so leaving Neo4j unqueried is
-  // what keeps them out of a list whose every entry links to /people/<slug>.
   it('never consults Neo4j, so graph-only people cannot appear', async () => {
     findMany.mockResolvedValue([person('prophet-muhammad', 'محمد')]);
 

@@ -73,8 +73,7 @@ const suggestion = graphSuggestion('person', 'prophet-muhammad', 'Prophet Muhamm
 const badr = graphSuggestion('battle', 'badr', 'Battle of Badr');
 const companionTitle = graphSuggestion('title', 'companion', 'Companion');
 
-// /api/graph/suggest is now the only endpoint the component calls, so the
-// stub answers from one pool covering every kind.
+// The component calls one endpoint now, so the stub answers from one pool.
 const POOL = [suggestion, badr, companionTitle];
 
 beforeEach(() => {
@@ -156,8 +155,6 @@ describe('GraphSearch across kinds', () => {
     expect(await screen.findByText('Battle of Badr')).toBeTruthy();
   });
 
-  // Replaces the old behavior, where a non-person node could only ever be
-  // selected among nodes already on screen and so set `selected` alone.
   it('makes a non-person subject an exploration root, not just a selection', async () => {
     render(<GraphSearch />);
 

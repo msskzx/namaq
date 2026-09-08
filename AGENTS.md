@@ -2,12 +2,18 @@
 
 Rules for any agent (Claude Code or otherwise) making changes in this repo.
 
+## Writing
+
+- Invoke the `write-comments` skill before writing or editing code comments,
+  and `unslop` before writing prose — docs, commit messages, PR descriptions.
+  Both apply to every change, not just documentation work.
+
 ## Testing
 
 - New functionality must be covered by automated tests. **Search and graph
   features are the highest priority**
 - Colocate tests next to the code they cover, named `<file>.test.ts(x)`
-  (see `src/lib/personSearch.test.ts`, `src/lib/canonicalPeople.test.ts`).
+  (see `src/lib/subjectSearch.test.ts`, `src/lib/canonicalPeople.test.ts`).
   Run with `npm test` (Vitest).
 - Component tests that touch `next/navigation` need a reactive mock —
   `useSearchParams()` must return a stable reference per unique search

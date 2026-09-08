@@ -1,9 +1,7 @@
 /**
  * The one prominence signal defined across every kind of historical subject
- * (Person, Battle, Title, Event together) -- see
- * docs/graph-subject-search-plan.md, which retired the family-only rank this
- * used to sit beside. Nodes are keyed by `type:slug` (not slug alone) since
- * slugs are only guaranteed unique within one entity type.
+ * -- see docs/graph-subject-search-plan.md. Nodes are keyed by `type:slug`,
+ * since slugs are only unique within one type.
  *
  * No I/O: callers (scripts/graph/computeGraphLayout.ts) fetch nodes/edges
  * from Neo4j and write the result back to PostgreSQL and Neo4j.
@@ -31,11 +29,9 @@ export interface GraphNodeRank extends GraphRankNode {
 export const graphNodeKey = (node: GraphRankNode) => `${node.type}:${node.slug}`;
 
 /**
- * Undirected adjacency keyed by type:slug. Set-based rather than a
- * multigraph, so a reciprocal pair the seed data stores as two edges (FATHER
- * one way, SON the other) collapses into one connection instead of counting
- * twice. Every node gets an entry, even an empty one, so an isolated subject
- * never breaks the ranking.
+ * Set-based rather than a multigraph, so a reciprocal pair stored as two edges
+ * (FATHER one way, SON the other) counts once. Every node gets an entry, even
+ * an empty one, so an isolated subject never breaks the ranking.
  */
 export function buildGraphAdjacency(nodes: GraphRankNode[], edges: GraphRankEdge[]): Map<string, Set<string>> {
   const adjacency = new Map<string, Set<string>>();

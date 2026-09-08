@@ -1,26 +1,20 @@
 /**
  * Ranks historical subjects -- person, title, battle or event (see CONTEXT.md)
- * -- against a search query.
+ * -- against a search query. One normalizer serves every kind, Latin
+ * spelling-equivalence table included: those spellings appear inside battle
+ * and event names too.
  *
- * One normalizer serves every kind, its Latin spelling-equivalence table
- * included: those same spellings appear inside battle and event names, which
- * are usually named for a place or a person.
- *
- * `graphRank` (1 = most prominent) is computed offline over the unified graph
- * by scripts/graph/computeGraphLayout.ts and persisted; these helpers only
- * read the stored value and never query Neo4j themselves. It is the sole
- * prominence tie-breaker -- see docs/graph-subject-search-plan.md for why a
- * separate title count was a second vote for the same edges.
- *
- * `kind` is deliberately absent: nothing here ranks by it, and leaving it out
- * lets a caller with only one kind in hand pass its rows straight through.
+ * `graphRank` (1 = most prominent) is only read here, never computed;
+ * scripts/graph/computeGraphLayout.ts produces it. See
+ * docs/graph-subject-search-plan.md for why it is the sole prominence signal.
+ * `kind` is absent from the candidate because nothing here ranks by it.
  */
 export type SubjectKind = 'person' | 'title' | 'battle' | 'event';
 
 export interface SubjectSearchCandidate {
   slug: string;
   name: string;
-  /** The full nasab string. People only; other kinds leave it null or unset. */
+  /** The full nasab string. People only. */
   fullName?: string | null;
   nameTransliterated: string | null;
   graphRank: number | null;
@@ -117,10 +111,8 @@ export function rankSubjectSearch(
 }
 
 /**
- * Match quality first, then graphRank, then name. Because text-match quality
- * sorts first, prominence only ever separates subjects the query already
- * matched -- an exact battle-name match outranks a contains-match on the most
- * prominent person alive.
+ * Match quality first, then graphRank, then name. Ranking match quality first
+ * means prominence only ever separates subjects the query already matched.
  */
 export function filterAndRankSubjects<T extends SubjectSearchCandidate>(subjects: T[], query: string) {
   return subjects

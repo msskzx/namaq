@@ -6,11 +6,9 @@ export type SubjectId = string;
 export const ALL_KINDS = ['person', 'title', 'battle', 'event'] as const;
 
 // Battle and Event nodes are the least central to a first-time visit (most
-// people come here for the family tree), so on a general-purpose graph
-// (GraphCanvas's showSearch on) they start off, opt-in via the Node Kinds
-// panel -- or by searching one by name, which GraphSearch treats as intent
-// enough to switch its kind on. A scoped embed keeps its own naturally
-// single-kind data included by default.
+// people come here for the family tree), so a general-purpose graph starts
+// them off, opt-in via the Node Kinds panel or by searching one by name. A
+// scoped embed keeps its own naturally single-kind data included by default.
 export const DEFAULT_KINDS: readonly NodeKind[] = ['person', 'title'];
 
 export function subjectId(kind: NodeKind, slug: string): SubjectId {
