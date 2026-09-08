@@ -31,9 +31,17 @@ The person whose relationships the learner is currently inspecting or choosing
 to expand.
 _Avoid_: Starting person (the selection can change during an exploration)
 
+**Historical subject**:
+A person, title, battle, or event recorded in the relationship graph, whether
+or not any exploration has revealed it. This is the set that search looks
+through.
+_Avoid_: Node, entity (both name the storage representation rather than the
+thing recorded)
+
 **Exploration subject**:
-A person, battle, title, or event whose recorded connections the learner can
-inspect and expand. A selected person is a person chosen as the current subject.
+A historical subject an exploration has revealed, whose recorded connections
+the learner can inspect and expand. A selected person is a person chosen as
+the current subject.
 
 **Expansion**:
 The revelation of subjects through a selected subject's chosen relationships.
