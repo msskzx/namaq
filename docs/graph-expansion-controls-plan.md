@@ -1,9 +1,9 @@
 # Expansion controls
 
-Status: phases one and two are implemented in
-[#38](https://github.com/msskzx/namaq/pull/38); phase three is implemented on
-the continuation branch. Phase four is also implemented; phase five remains. The seed corrections
-are deployed; see [Data fixes](#data-fixes).
+Status: implemented, phases one to five. Phases one and two shipped in
+[#38](https://github.com/msskzx/namaq/pull/38); phases three to five are on the
+continuation branch. The seed corrections are deployed; see
+[Data fixes](#data-fixes).
 
 Sibling of [historical subjects are searchable](graph-subject-search-plan.md),
 whose "Out of scope" note raised this.
@@ -261,6 +261,25 @@ blocks in both language files. `directRelationCounts` stays --
 `hasEligibleDirectRelations` still needs it to decide whether to show the All
 direct relations button. `expandAllDirectRelations` reads the active filter set
 rather than all of `RELATION_ORDER`.
+
+`LINEAGE_ACTIONS` and `LineageActionId` moved to
+`src/lib/relationship/expansion.ts` rather than dying with their file; that
+module already spelled the same three ids twice, in `ExpansionRelationId` and
+`LINEAGE_RELATION_IDS`, so the move left one list where there had been three.
+
+**Consequence worth stating.** Every remaining control is scoped to a
+selection. The middle tier was the only thing the panel rendered for an
+*unselected* graph, where its buttons wrote `filter` rather than `expand`, so
+with it gone the panel renders nothing until a subject is selected -- the
+Filters panel is where global relation control lives now. `isExpansionActive`
+and `toggleExpansion` lost their no-selection branches as unreachable.
+
+**A dead end this opens.** Because All direct relations now intersects with the
+active filters, it disappears when no filter is on -- which is exactly the state
+Start over writes (`filter=`). A user who lands there sees one root and only the
+three lineage actions. That is coherent (nothing is enabled, so there is nothing
+to expand) and recoverable through the Filters panel, but it is a worse landing
+than before and worth revisiting if it bites.
 
 ## Acceptance criteria
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { directRelationCounts, matchExpansionNeighbors } from './expansion';
+import { LINEAGE_ACTIONS, directRelationCounts, matchExpansionNeighbors } from './expansion';
 import { StoredEdge, subjectId } from './types';
 
 const muhammad = subjectId('person', 'prophet-muhammad');
@@ -117,5 +117,11 @@ describe('directRelationCounts', () => {
   it('counts zero for lineage relation ids', () => {
     const counts = directRelationCounts(edges, muhammad, ['ANCESTORS']);
     expect(counts.get('ANCESTORS')).toBe(0);
+  });
+});
+
+describe('LINEAGE_ACTIONS', () => {
+  it('lists the three lineage actions in display order', () => {
+    expect(LINEAGE_ACTIONS).toEqual(['ANCESTORS', 'PATERNAL_LINEAGE', 'DESCENDANTS']);
   });
 });

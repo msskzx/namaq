@@ -299,12 +299,6 @@ const translations = {
         people: 'people',
         nodes: 'nodes',
       },
-      expansionGroups: {
-        immediateFamily: 'Immediate family',
-        extendedFamily: 'Extended family',
-        marriage: 'Marriage relations',
-        other: 'Other connections',
-      },
       allDirectRelations: 'All direct relations',
       globalRelationships: 'Global relationships',
       globalRelationshipsHint: 'Reveal matching connections across the current exploration.',
@@ -650,12 +644,6 @@ const translations = {
       nodesLabels: {
         people: 'أشخاص',
         nodes: 'عُقد',
-      },
-      expansionGroups: {
-        immediateFamily: 'الأسرة المباشرة',
-        extendedFamily: 'الأسرة الممتدة',
-        marriage: 'علاقات المصاهرة',
-        other: 'روابط أخرى',
       },
       allDirectRelations: 'كل الصلات المباشرة',
       globalRelationships: 'العلاقات في الرسم كله',

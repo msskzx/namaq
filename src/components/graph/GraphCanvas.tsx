@@ -26,7 +26,6 @@ import { profilePath } from '@/lib/nodeProfile';
 import { parseExplorationInput, formatExpandParam } from '@/lib/relationship/urlState';
 import { ALL_KINDS, DEFAULT_KINDS, NodeKind, RelationType, subjectId } from '@/lib/relationship/types';
 import { ExpansionRelationId, directRelationCounts } from '@/lib/relationship/expansion';
-import { ExpansionGroup, expansionGroupForRelation } from '@/lib/relationship/expansionGroups';
 import { useExplorationGraph } from './useExplorationGraph';
 import { centerTargetForReveal, isComfortablyVisible, usableRect } from '@/lib/graphCamera';
 
@@ -159,19 +158,9 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     if (!showSearch || !exploration.edges) return new Map<RelationType, number>();
     return directRelationCounts(exploration.edges, selectedSubjectId ?? graphData?.nodes.map(node => node.id) ?? [], RELATION_ORDER) as Map<RelationType, number>;
   }, [showSearch, selectedSubjectId, exploration.edges, graphData]);
-  const groupedRelations = useMemo(() => {
-    const groups = new Map<ExpansionGroup, RelationType[]>();
-    for (const [relation, count] of selectedRelationCounts) {
-      if (count <= 0 && !explorationInput.globalFilters.includes(relation)) continue;
-      const group = expansionGroupForRelation(relation);
-      groups.set(group, [...(groups.get(group) ?? []), relation]);
-    }
-    for (const [group, types] of groups) groups.set(group, sortRelationTypes(types) as RelationType[]);
-    return groups;
-  }, [selectedRelationCounts, explorationInput.globalFilters]);
   const hasEligibleDirectRelations = useMemo(
-    () => Array.from(selectedRelationCounts.values()).some(count => count > 0),
-    [selectedRelationCounts]
+    () => Boolean(selectedSubjectId) && explorationInput.globalFilters.some(relation => (selectedRelationCounts.get(relation) ?? 0) > 0),
+    [selectedSubjectId, selectedRelationCounts, explorationInput.globalFilters]
   );
   // Node kinds present in the fetched graph (person/title/battle/event).
   const kindsPresent = useMemo(() => [...new Set(graphData?.nodes.map(node => node.type ?? 'person') ?? [])], [graphData]);
@@ -305,29 +294,22 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
   const expandParams = useMemo(() => searchParams?.getAll('expand') ?? [], [searchParams]);
   const isExpansionActive = useCallback(
-    (relation: ExpansionRelationId) => {
-      if (!selectedSubjectId) return explorationInput.globalFilters.includes(relation as RelationType);
-      return expandParams.includes(formatExpandParam({ subject: selectedSubjectId, relation }));
-    },
-    [expandParams, selectedSubjectId, explorationInput.globalFilters]
+    (relation: ExpansionRelationId) =>
+      Boolean(selectedSubjectId) && expandParams.includes(formatExpandParam({ subject: selectedSubjectId!, relation })),
+    [expandParams, selectedSubjectId]
   );
   const toggleExpansion = (relation: ExpansionRelationId) => {
-    if (!selectedSubjectId) {
-      const type = governingRelationType(relation);
-      const filters = [...includedRelations];
-      updateParams({ filter: includedRelations.has(type) ? filters.filter(item => item !== type) : [...filters, type] });
-      return;
-    }
+    if (!selectedSubjectId) return;
     const token = formatExpandParam({ subject: selectedSubjectId, relation });
     const next = expandParams.includes(token) ? expandParams.filter(item => item !== token) : [...expandParams, token];
     updateParams({ expand: next });
   };
   const expandAllDirectRelations = () => {
-    if (!selectedSubjectId) {
-      updateParams({ filter: Array.from(new Set([...explorationInput.globalFilters, ...RELATION_ORDER.filter(relation => (selectedRelationCounts.get(relation) ?? 0) > 0)])) });
-      return;
-    }
-    const tokens = RELATION_ORDER
+    if (!selectedSubjectId) return;
+    // Only the relations the filters already admit, so expanding "all" cannot
+    // fetch a type the user switched off -- see decision 6 in
+    // docs/graph-expansion-controls-plan.md.
+    const tokens = explorationInput.globalFilters
       .filter(relation => (selectedRelationCounts.get(relation) ?? 0) > 0)
       .map(relation => formatExpandParam({ subject: selectedSubjectId, relation }));
     updateParams({ expand: Array.from(new Set([...expandParams, ...tokens])) });
@@ -596,13 +578,10 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       </div>
       <ExpansionControls
         isPerson={Boolean(selectedNode && (selectedNode.type ?? 'person') === 'person')}
-        groupedRelations={groupedRelations}
-        relationCounts={selectedRelationCounts}
         hasEligibleDirectRelations={hasEligibleDirectRelations}
         isActive={isExpansionActive}
         onToggle={toggleExpansion}
         onExpandAllDirectRelations={expandAllDirectRelations}
-        relationLabel={relationLabel}
         g={t.graph}
       />
       {showAdditions && (

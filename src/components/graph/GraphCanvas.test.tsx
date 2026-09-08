@@ -96,32 +96,28 @@ beforeEach(() => {
 });
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 
-it('starts selected, then uses the same counted controls globally without changing local expansions', async () => {
-  nav.setUrl(`/graphs?filter=&subject=person:${root}&selected=${root}`);
+it('expands the selection within the active filters, then reveals globally without changing local expansions', async () => {
+  nav.setUrl(`/graphs?filter=WIFE&subject=person:${root}&selected=${root}`);
   mount();
-  fireEvent.click(await screen.findByRole('button', { name: 'Wife (1)' }));
-  await waitFor(() => expect(graph()).toContain('wife'));
-  expect(params().getAll('expand')).toEqual([`person:${root}:WIFE`]);
+  fireEvent.click(await screen.findByRole('button', { name: 'All direct relations' }));
+  await waitFor(() => expect(params().getAll('expand')).toEqual([`person:${root}:WIFE`]));
   fireEvent.click(screen.getByRole('button', { name: 'Deselect' }));
-  fireEvent.click(await screen.findByRole('button', { name: 'Father (2)' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
+  fireEvent.click(screen.getByRole('switch', { name: 'Show Father relationships' }));
   await waitFor(() => expect(graph()).toBe('father,prophet-muhammad,wife,wife-father'));
-  expect(params().getAll('filter')).toEqual(['FATHER']);
+  expect(params().getAll('filter')).toEqual(['WIFE', 'FATHER']);
   expect(params().getAll('expand')).toEqual([`person:${root}:WIFE`]);
-  expect(screen.getByRole('status').textContent).toContain('Show 2 new subjects');
-  fireEvent.click(screen.getByRole('button', { name: root }));
-  expect(screen.getByRole('button', { name: 'Father (1)' }).getAttribute('aria-pressed')).toBe('false');
-  expect(params().getAll('filter')).toEqual(['FATHER']);
 });
 
 it('offers Show additions after growth, clears it on click, and offers no stale one after a collapse with no growth', async () => {
   nav.setUrl(`/graphs?filter=&subject=person:${root}&selected=${root}`);
   mount();
-  fireEvent.click(await screen.findByRole('button', { name: 'Wife (1)' }));
-  await waitFor(() => expect(graph()).toContain('wife'));
+  fireEvent.click(await screen.findByRole('button', { name: 'Ancestors' }));
+  await waitFor(() => expect(graph()).toContain('father'));
   const showButton = await screen.findByRole('button', { name: /Show \d+ new subjects?/ });
   fireEvent.click(showButton);
   expect(screen.queryByRole('status')).toBeNull();
-  fireEvent.click(screen.getByRole('button', { name: 'Wife (1)' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Ancestors' }));
   await waitFor(() => expect(graph()).toBe(root));
   expect(screen.queryByRole('status')).toBeNull();
 });
@@ -130,9 +126,10 @@ it('keeps the cap after off/on and restores filters from the URL', async () => {
   nav.setUrl(`/graphs?subject=person:${root}&expand=person:${root}:WIFE&filter=FATHER`);
   const view = mount();
   await waitFor(() => expect(graph()).toBe('father,prophet-muhammad,wife,wife-father'));
-  fireEvent.click(screen.getByRole('button', { name: 'Father (3)' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
+  fireEvent.click(screen.getByRole('switch', { name: 'Hide Father relationships' }));
   await waitFor(() => expect(graph()).toBe('prophet-muhammad,wife'));
-  fireEvent.click(screen.getByRole('button', { name: 'Father (2)' }));
+  fireEvent.click(screen.getByRole('switch', { name: 'Show Father relationships' }));
   await waitFor(() => expect(graph()).toBe('father,prophet-muhammad,wife,wife-father'));
   view.unmount();
   mount();
@@ -247,7 +244,7 @@ it('Fit graph frames every currently visible subject, unranked/graph-only ones i
 it('Show additions frames the newly-added subjects plus what they connect to, then clears', async () => {
   nav.setUrl(`/graphs?filter=&subject=person:${root}&selected=${root}`);
   mount();
-  fireEvent.click(await screen.findByRole('button', { name: 'Wife (1)' }));
+  fireEvent.click(await screen.findByRole('button', { name: 'Ancestors' }));
   const showButton = await screen.findByRole('button', { name: /Show \d+ new subjects?/ });
   camera.zoomToFit.mockClear();
 
@@ -255,9 +252,9 @@ it('Show additions frames the newly-added subjects plus what they connect to, th
 
   expect(camera.zoomToFit).toHaveBeenCalledTimes(1);
   const [, , nodeFilter] = camera.zoomToFit.mock.calls[0];
-  expect(nodeFilter({ id: 'person:wife' })).toBe(true);
+  expect(nodeFilter({ id: 'person:father' })).toBe(true);
   expect(nodeFilter({ id: `person:${root}` })).toBe(true);
-  expect(nodeFilter({ id: 'person:father' })).toBe(false);
+  expect(nodeFilter({ id: 'person:wife' })).toBe(false);
   expect(screen.queryByRole('button', { name: /Show \d+ new subjects?/ })).toBeNull();
 });
 
@@ -342,11 +339,12 @@ it('keeps embedded profile switches usable after filtering every edge out', asyn
   expect(params().getAll('filter')).toEqual(['FATHER']);
 });
 
-it('turns off both companionship directions through the global expansion control', async () => {
+it('turns off both companionship directions through one Filters switch', async () => {
   nav.setUrl(`/graphs?subject=person:${root}&filter=COMPANION_OF`);
   mount();
   await waitFor(() => expect(graph()).toContain('companion'));
-  fireEvent.click(screen.getByRole('button', { name: 'Companion Of (1)' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
+  fireEvent.click(screen.getByRole('switch', { name: 'Hide Companion Of relationships' }));
   await waitFor(() => expect(graph()).toBe(root));
   expect(params().getAll('filter')).toEqual(['']);
 });

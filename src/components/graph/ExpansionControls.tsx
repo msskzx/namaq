@@ -1,6 +1,4 @@
-import { ExpansionRelationId } from '@/lib/relationship/expansion';
-import { EXPANSION_GROUP_ORDER, ExpansionGroup, LINEAGE_ACTIONS, LineageActionId } from '@/lib/relationship/expansionGroups';
-import { RelationType } from '@/lib/relationship/types';
+import { ExpansionRelationId, LINEAGE_ACTIONS, LineageActionId } from '@/lib/relationship/expansion';
 import translations from '@/components/language/translations';
 
 type GraphStrings = (typeof translations)[keyof typeof translations]['graph'];
@@ -13,25 +11,19 @@ const LINEAGE_LABEL_KEY: Record<LineageActionId, 'ancestors' | 'paternalLineage'
 
 interface ExpansionControlsProps {
   isPerson: boolean;
-  groupedRelations: Map<ExpansionGroup, RelationType[]>;
-  relationCounts: Map<RelationType, number>;
   hasEligibleDirectRelations: boolean;
   isActive: (relation: ExpansionRelationId) => boolean;
   onToggle: (relation: ExpansionRelationId) => void;
   onExpandAllDirectRelations: () => void;
-  relationLabel: (type: string) => string;
   g: GraphStrings;
 }
 
 export default function ExpansionControls({
   isPerson,
-  groupedRelations,
-  relationCounts,
   hasEligibleDirectRelations,
   isActive,
   onToggle,
   onExpandAllDirectRelations,
-  relationLabel,
   g,
 }: ExpansionControlsProps) {
   return (
@@ -41,20 +33,6 @@ export default function ExpansionControls({
           {g.allDirectRelations}
         </button>
       )}
-      {EXPANSION_GROUP_ORDER.map(group => {
-        const relations = groupedRelations.get(group) ?? [];
-        if (relations.length === 0) return null;
-        return (
-          <div key={group}>
-            <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">{g.expansionGroups[group]}</h3>
-            <div className="mt-1 flex flex-wrap gap-2">
-              {relations.map(type => (
-                <ExpansionButton key={type} active={isActive(type)} label={`${relationLabel(type)} (${relationCounts.get(type) ?? 0})`} onClick={() => onToggle(type)} />
-              ))}
-            </div>
-          </div>
-        );
-      })}
       {isPerson && (
         <div className="flex flex-wrap gap-2 border-t border-amber-200 pt-3 dark:border-amber-800">
           {LINEAGE_ACTIONS.map(action => (
