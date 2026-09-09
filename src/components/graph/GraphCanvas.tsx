@@ -18,6 +18,7 @@ import RelationFilterPanel, { ControlScope } from './RelationFilterPanel';
 import ExpansionControls from './ExpansionControls';
 import Button from '@/components/common/Button';
 import Badge from '@/components/common/Badge';
+import SubjectEvidenceAccess from '@/components/graph/SubjectEvidenceAccess';
 import GraphSurface, { kindFillColor } from './GraphSurface';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import { useLanguage } from '@/components/language/LanguageContext';
@@ -172,7 +173,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // showing the graph label, per the "Learning information in the panel"
   // decision in docs/graph-exploration-plan.md.
   const isSelectedPerson = showSearch && (selectedNode?.type ?? 'person') === 'person';
-  const { data: selectedPreview, error: selectedPreviewError } = useSWR<{ fullName: string | null; titles: { name: string; slug: string }[] }>(
+  const { data: selectedPreview, error: selectedPreviewError } = useSWR<{ fullName: string | null; titles: { name: string; slug: string }[]; evidenceCount?: number }>(
     isSelectedPerson && selectedNode ? `/api/people/${selectedNode.slug}/preview` : null,
     fetcher
   );
@@ -719,6 +720,15 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
             <Badge key={title.slug} href={`/people?title=${title.slug}`} text={title.name} color="indigo" size="sm" />
           ))}
         </div>
+      )}
+      {selectedNode && (
+        <SubjectEvidenceAccess
+          kind={(selectedNode.type ?? 'person') as string}
+          slug={selectedNode.slug}
+          hasProfile={selectedPersonHasProfile}
+          profileHref={profilePath(selectedNode.type, selectedNode.slug)}
+          evidenceCount={selectedPreview?.evidenceCount}
+        />
       )}
       {!selectedNode && <p className="text-sm text-gray-600 dark:text-gray-300">{t.graph.globalRelationshipsHint}</p>}
       {/* Four groups, divided: where the subject leads, what it reveals, what

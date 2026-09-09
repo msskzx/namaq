@@ -1,7 +1,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { JSDOM } from 'jsdom';
-import { extractShamelaPage, pageMarkdown, sliceEntry } from '../../src/lib/history/shamelaEntry';
+import { bodyMarkdown, extractShamelaPage, notesMarkdown, sliceEntry } from '../../src/lib/history/shamelaEntry';
 import type { AccountRecord, HistoryBatch, PageRecord, SubjectKind } from '../../src/lib/history/batchSchema';
 import { batchDefinitionFile } from '../../src/lib/history/loadBatch';
 
@@ -58,12 +58,17 @@ async function main() {
 
     const target = join(batchDir, bodyFile);
     mkdirSync(dirname(target), { recursive: true });
-    writeFileSync(target, pageMarkdown(page));
+    writeFileSync(target, bodyMarkdown(page));
+
+    const notes = notesMarkdown(page);
+    const notesFile = notes ? bodyFile.replace(/\.md$/, '.notes.md') : undefined;
+    if (notes && notesFile) writeFileSync(join(batchDir, notesFile), notes);
 
     pages.push({
       sequence,
       printedPage: page.printedPage ?? undefined,
       bodyFile,
+      notesFile,
       extractionUrl: url,
       passages: page.body.map((paragraph) => ({
         anchor: `${page.printedPage ?? sequence}-${paragraph.anchor}`,

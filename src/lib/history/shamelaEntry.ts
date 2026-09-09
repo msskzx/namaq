@@ -75,9 +75,12 @@ export function sliceEntry(page: ExtractedPage, bounds: EntryBounds = {}): Extra
   return { ...page, body: page.body.slice(start, end + 1), notes };
 }
 
-/** Renders a page as Markdown: the work's text, then the edition's notes. */
-export function pageMarkdown(page: ExtractedPage): string {
-  const body = page.body.map((paragraph) => paragraph.text).join('\n\n');
-  if (page.notes.length === 0) return `${body}\n`;
-  return `${body}\n\n---\n\n${page.notes.join('\n\n')}\n`;
+/** The work's own text for this page, one paragraph per block. */
+export function bodyMarkdown(page: ExtractedPage): string {
+  return `${page.body.map((paragraph) => paragraph.text).join('\n\n')}\n`;
+}
+
+/** The edition's footnotes, kept in their own file so their author stays clear. */
+export function notesMarkdown(page: ExtractedPage): string | null {
+  return page.notes.length === 0 ? null : `${page.notes.join('\n\n')}\n`;
 }

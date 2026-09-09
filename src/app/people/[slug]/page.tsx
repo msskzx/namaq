@@ -20,6 +20,7 @@ import GraphCanvas from '@/components/graph/GraphCanvas';
 import { fetcher } from '@/lib/swr';
 import { AyatGroup } from '@/components/quran/AyahCard';
 import ClaimEvidence from '@/components/common/ClaimEvidence';
+import SourceAccountReader from '@/components/people/SourceAccountReader';
 import type { ClaimWithCitations } from '@/types/provenance';
 
 function PersonDetailPage() {
@@ -102,6 +103,8 @@ function PersonDetailPage() {
           )}
 
           <ClaimEvidence title={language === 'ar' ? 'المصادر والملاحظات التاريخية' : 'Sources & historical notes'} claims={person.claims || []} />
+
+          <SourceAccountReader slug={slug} />
 
           <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
             <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">

@@ -1,6 +1,6 @@
 import { JSDOM } from 'jsdom';
 import { describe, expect, it } from 'vitest';
-import { extractShamelaPage, pageMarkdown, sliceEntry } from './shamelaEntry';
+import { bodyMarkdown, extractShamelaPage, notesMarkdown, sliceEntry } from './shamelaEntry';
 
 function pageDocument(inner: string, title = 'ج1 - ص5 - سير أعلام النبلاء') {
   return new JSDOM(`<!doctype html><title>${title}</title><div class="nass">${inner}</div>`).window.document;
@@ -69,16 +69,18 @@ describe('sliceEntry', () => {
   });
 });
 
-describe('pageMarkdown', () => {
-  it('puts the notes below a rule so their author stays clear', () => {
+describe('bodyMarkdown and notesMarkdown', () => {
+  it('keeps the work text and the edition notes in separate documents', () => {
     const page = extractShamelaPage(pageDocument(samplePage));
 
-    expect(pageMarkdown(page)).toContain('\n\n---\n\n(*) مسند أحمد');
+    expect(bodyMarkdown(page)).not.toContain('مسند أحمد');
+    expect(notesMarkdown(page)).toBe('(*) مسند أحمد: ١ / ١٩٥\n');
   });
 
-  it('omits the rule when the page has no notes', () => {
+  it('reports no notes as absent rather than as an empty document', () => {
     const page = extractShamelaPage(pageDocument('<p><span id="p1" class="anchor"></span>نص</p>'));
 
-    expect(pageMarkdown(page)).toBe('نص\n');
+    expect(bodyMarkdown(page)).toBe('نص\n');
+    expect(notesMarkdown(page)).toBeNull();
   });
 });
