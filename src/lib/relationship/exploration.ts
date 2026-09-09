@@ -101,8 +101,10 @@ export function buildExploration(input: ExplorationInput, edges: StoredEdge[]): 
     if (removed.has(action.subject)) continue;
     const origin = action.origin ?? action;
     const tag: ProvenanceTag = { kind: 'expansion', subject: origin.subject, relation: origin.relation };
-    addProvenance(visible, action.subject, tag);
-    for (const edge of matchExpansionEdges(eligibleEdges, action.subject, action.relation)) {
+    const matched = matchExpansionEdges(eligibleEdges, action.subject, action.relation);
+    // Keep both ends of an independently expanded branch when another control collapses.
+    if (matched.length > 0) addProvenance(visible, action.subject, tag);
+    for (const edge of matched) {
       const neighbor = edge.source === action.subject ? edge.target : edge.source;
       if (removed.has(neighbor)) continue;
       contributedEdges.add(edgeKey(edge));

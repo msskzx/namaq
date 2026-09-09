@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { Session } from 'neo4j-driver';
 import { getSession } from '@/lib/neo4j';
 import { GraphLink, GraphNodeFull } from '@/types/graph';
+import { governingRelationType } from '@/lib/relationship/categories';
 
 type EntityType = 'person' | 'battle' | 'title' | 'event';
 const KNOWN_TYPES: readonly EntityType[] = ['person', 'battle', 'title', 'event'];
@@ -114,6 +115,8 @@ export async function GET(_request: Request) {
   const relationSubjects = searchParams.getAll('relationSubjects') as string[];
   const relationTypes = searchParams.getAll('relationTypes') as string[];
   const focus = searchParams.get('focus');
+  const includedRelations = searchParams.has('filter') ? new Set(searchParams.getAll('filter').map(governingRelationType)) : null;
+  const includeLink = (link: GraphLink) => includedRelations === null || includedRelations.has(governingRelationType(link.label));
   // Relation types to drop from the response entirely (e.g. the homepage's
   // Prophet-focused preview excludes COMPANION_OF/ACCOMPANIED_BY, since one
   // person having ~250 companions would otherwise dwarf every other
@@ -420,7 +423,7 @@ export async function GET(_request: Request) {
       const nodeList = Array.from(nodes.values());
       await attachNeo4jSubjectProperties(session, nodeList);
 
-      return NextResponse.json({ nodes: nodeList, links });
+      return NextResponse.json({ nodes: nodeList, links: links.filter(includeLink) });
     }
 
     // Default: no scoping params at all. Return the full unified graph
@@ -463,7 +466,7 @@ export async function GET(_request: Request) {
     const nodeList = Array.from(nodes.values());
     await attachNeo4jSubjectProperties(session, nodeList);
 
-    return NextResponse.json({ nodes: nodeList, links });
+    return NextResponse.json({ nodes: nodeList, links: links.filter(includeLink) });
 
   } catch (error) {
     if (error instanceof MissingLayoutError) {

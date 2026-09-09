@@ -1,12 +1,12 @@
 import { RelationType, StoredEdge, SubjectId } from './types';
 
-export type ExpansionRelationId = RelationType | 'ANCESTORS' | 'PATERNAL_LINEAGE' | 'DESCENDANTS';
+export type LineageActionId = 'ANCESTORS' | 'PATERNAL_LINEAGE' | 'DESCENDANTS';
 
-const LINEAGE_RELATION_IDS: ReadonlySet<ExpansionRelationId> = new Set([
-  'ANCESTORS',
-  'PATERNAL_LINEAGE',
-  'DESCENDANTS',
-]);
+export const LINEAGE_ACTIONS: readonly LineageActionId[] = ['ANCESTORS', 'PATERNAL_LINEAGE', 'DESCENDANTS'];
+
+export type ExpansionRelationId = RelationType | LineageActionId;
+
+const LINEAGE_RELATION_IDS: ReadonlySet<ExpansionRelationId> = new Set(LINEAGE_ACTIONS);
 
 // Relations the graph stores in one direction only, with no reciprocal edge:
 // a person is always the source of HOLDS_TITLE, never its target. Every

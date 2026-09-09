@@ -284,6 +284,8 @@ const translations = {
         events: 'Events',
       },
       nodesInView: 'Nodes in view',
+      showNodesInView: 'Show nodes in view',
+      hideNodesInView: 'Hide nodes in view',
       selectEntryHint: 'Use these keyboard-accessible controls to select an entry.',
       graphSummary: (nodes: number, nodesLabel: string, relationships: number) => `${nodes} ${nodesLabel} · ${relationships} relationships`,
       noGraphData: 'No graph data available',
@@ -298,12 +300,6 @@ const translations = {
       nodesLabels: {
         people: 'people',
         nodes: 'nodes',
-      },
-      expansionGroups: {
-        immediateFamily: 'Immediate family',
-        extendedFamily: 'Extended family',
-        marriage: 'Marriage relations',
-        other: 'Other connections',
       },
       allDirectRelations: 'All direct relations',
       globalRelationships: 'Global relationships',
@@ -636,6 +632,8 @@ const translations = {
         events: 'الأحداث',
       },
       nodesInView: 'العُقد المعروضة',
+      showNodesInView: 'إظهار العُقد المعروضة',
+      hideNodesInView: 'إخفاء العُقد المعروضة',
       selectEntryHint: 'استخدم عناصر التحكم هذه القابلة للوصول عبر لوحة المفاتيح لاختيار عنصر.',
       graphSummary: (nodes: number, nodesLabel: string, relationships: number) => `${nodes} ${nodesLabel} · ${relationships} علاقة`,
       noGraphData: 'لا تتوفر بيانات للرسم البياني',
@@ -650,12 +648,6 @@ const translations = {
       nodesLabels: {
         people: 'أشخاص',
         nodes: 'عُقد',
-      },
-      expansionGroups: {
-        immediateFamily: 'الأسرة المباشرة',
-        extendedFamily: 'الأسرة الممتدة',
-        marriage: 'علاقات المصاهرة',
-        other: 'روابط أخرى',
       },
       allDirectRelations: 'كل الصلات المباشرة',
       globalRelationships: 'العلاقات في الرسم كله',

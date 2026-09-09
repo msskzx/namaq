@@ -1,26 +1,15 @@
 import { describe, expect, it } from 'vitest';
+import { parseSeedRelations } from './seedRelations';
 import { getActiveSeedPeople, getRawGraphQueries } from '../scripts/people/activeSeedData';
 import { RECIPROCAL_INVERSES } from '../src/lib/relationship/categories';
 import type { RelationType } from '../src/lib/relationship/types';
 
 const CREATE_RE = /^CREATE \(:Person \{[^}]*slug: "([a-z][a-z0-9-]*)"[^}]*\}\);$/;
-const RELATION_RE =
-  /^MATCH \(from:Person \{slug: "([a-z][a-z0-9-]*)"\}\), \(to:Person \{slug: "([a-z][a-z0-9-]*)"\}\) CREATE \(from\)-\[:([A-Z_]+)\]->\(to\);$/;
-
 function parseCreatedSlugs(peopleQueries: string[]): string[] {
   return peopleQueries.map((query) => {
     const match = query.match(CREATE_RE);
     expect(match, `unparseable CREATE query: ${query}`).not.toBeNull();
     return match![1];
-  });
-}
-
-function parseRelations(peopleRelationsQueries: string[]) {
-  return peopleRelationsQueries.map((query) => {
-    const match = query.match(RELATION_RE);
-    expect(match, `unparseable relation query: ${query}`).not.toBeNull();
-    const [, from, to, type] = match!;
-    return { from, to, type };
   });
 }
 
@@ -47,7 +36,7 @@ describe('graph seed data integrity', () => {
     const { peopleRelationsQueries } = await getRawGraphQueries();
     const seen = new Map<string, string[]>();
     for (const query of peopleRelationsQueries) {
-      const [{ from, to, type }] = parseRelations([query]);
+      const [{ from, to, type }] = parseSeedRelations([query]);
       const key = `${from}:${type}:${to}`;
       seen.set(key, [...(seen.get(key) ?? []), query]);
     }
@@ -62,7 +51,7 @@ describe('graph seed data integrity', () => {
     const knownSlugs = new Set([...graphSlugs, ...profileSlugs]);
 
     const dangling = new Set<string>();
-    for (const { from, to } of parseRelations(peopleRelationsQueries)) {
+    for (const { from, to } of parseSeedRelations(peopleRelationsQueries)) {
       if (!knownSlugs.has(from)) dangling.add(from);
       if (!knownSlugs.has(to)) dangling.add(to);
     }
@@ -77,7 +66,7 @@ describe('graph seed data integrity', () => {
     const { peopleQueries, peopleRelationsQueries } = await getRawGraphQueries();
     const graphSlugs = parseCreatedSlugs(peopleQueries);
     const referenced = new Set<string>();
-    for (const { from, to } of parseRelations(peopleRelationsQueries)) {
+    for (const { from, to } of parseSeedRelations(peopleRelationsQueries)) {
       referenced.add(from);
       referenced.add(to);
     }
@@ -90,7 +79,7 @@ describe('graph seed data integrity', () => {
     // text does not encode -- a FATHER edge pairs with SON or DAUGHTER
     // depending on the child -- so any listed inverse is accepted.
     const { peopleRelationsQueries } = await getRawGraphQueries();
-    const relations = parseRelations(peopleRelationsQueries);
+    const relations = parseSeedRelations(peopleRelationsQueries);
     const present = new Set(relations.map((r) => `${r.from}|${r.type}|${r.to}`));
 
     const missing = relations.flatMap((r) => {

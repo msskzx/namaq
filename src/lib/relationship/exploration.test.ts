@@ -51,7 +51,7 @@ describe('buildExploration', () => {
 
   it('collapsing the Wives expansion preserves Aisha and her parents when Aisha has her own independent Parents expansion, and drops unsupported wives', () => {
     const input: ExplorationInput = {
-      roots: [muhammad, aisha],
+      roots: [muhammad],
       expansions: [{ subject: aisha, relation: 'FATHER' }],
       globalFilters: [],
     };
@@ -62,6 +62,11 @@ describe('buildExploration', () => {
     expect(visible).toEqual(new Set([muhammad, aisha, abuBakr]));
     expect(visible.has(khadijah)).toBe(false);
     expect(visible.has(hafsa)).toBe(false);
+  });
+
+  it('does not retain an expansion subject when it has no matching neighbor', () => {
+    const result = buildExploration({ roots: [muhammad], expansions: [{ subject: aisha, relation: 'MOTHER' }], globalFilters: [] }, edges);
+    expect(visibleSubjects(result)).toEqual(new Set([muhammad]));
   });
 
   it('activating a global Father filter with Muhammad and his wives visible reveals each visible subject\'s father but not their fathers in turn', () => {
@@ -409,3 +414,40 @@ describe('buildExploration', () => {
     expect(visibleSubjects(result)).toEqual(new Set([muhammad, companion]));
   });
 });
+
+describe('companionship edges', () => {
+  // Both stored directions between two people who are visible for other
+  // reasons -- Abu Bakr is Aisha's father, not a discovered companion.
+  const companionship: StoredEdge[] = [
+    ...edges,
+    edge(muhammad, abuBakr, 'ACCOMPANIED_BY'),
+    edge(abuBakr, muhammad, 'COMPANION_OF'),
+  ];
+  const input = (globalFilters: ExplorationInput['globalFilters']): ExplorationInput => ({
+    roots: [muhammad],
+    expansions: [],
+    globalFilters,
+  });
+  const types = (result: ReturnType<typeof buildExploration>) =>
+    result.connections.flatMap(connection => [connection.primary.type, connection.reciprocal?.type]).filter(Boolean);
+
+  it('drops both directions when the COMPANION_OF switch is off', () => {
+    const result = buildExploration(input(['WIFE', 'FATHER']), companionship);
+    expect(types(result)).not.toContain('COMPANION_OF');
+    expect(types(result)).not.toContain('ACCOMPANIED_BY');
+    // The subjects themselves stay, held up by the family relations.
+    expect(visibleSubjects(result).has(abuBakr)).toBe(true);
+  });
+
+  it('keeps both directions when the switch is on', () => {
+    const result = buildExploration(input(['WIFE', 'FATHER', 'COMPANION_OF', 'ACCOMPANIED_BY']), companionship);
+    expect(types(result)).toContain('COMPANION_OF');
+  });
+
+  it('keeps other relations drawn between retained subjects when their filter is off', () => {
+    const result = buildExploration(input(['WIFE']), companionship);
+    expect(visibleSubjects(result).has(aisha)).toBe(true);
+    expect(types(result)).toContain('WIFE');
+  });
+});
+

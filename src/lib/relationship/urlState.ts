@@ -1,4 +1,4 @@
-import { RELATION_ORDER } from './categories';
+import { governingRelationType, RELATION_ORDER } from './categories';
 import { capKey, ExpansionAction, ExplorationCap, ExplorationInput } from './exploration';
 import { PARTICIPATION_STATUS_CHOICES } from './status';
 import { ExpansionRelationId } from './expansion';
@@ -11,7 +11,7 @@ const KNOWN_RELATION_TYPES: ReadonlySet<string> = new Set(RELATION_ORDER);
 export interface ExplorationUrlState {
   subjects: string[];
   expands: string[];
-  filters: string[];
+  filters?: string[];
   caps?: string[];
   removed?: string[];
   statuses?: string[];
@@ -57,9 +57,8 @@ export function parseExplorationInput(state: ExplorationUrlState, targetSlug: st
   const expansions = state.expands
     .map(parseExpandParam)
     .filter((action): action is ExpansionAction => action !== null);
-  const globalFilters = Array.from(
-    new Set(state.filters.filter((type): type is RelationType => KNOWN_RELATION_TYPES.has(type)))
-  );
+  const governingFilters = new Set((state.filters ?? []).filter((type) => KNOWN_RELATION_TYPES.has(type)).map(governingRelationType));
+  const globalFilters = RELATION_ORDER.filter((type) => governingFilters.has(governingRelationType(type)));
   const caps = dedupeBy(
     (state.caps ?? []).map(parseCapParam).filter((cap): cap is ExplorationCap => cap !== null),
     capKey
