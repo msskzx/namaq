@@ -1,202 +1,251 @@
-# Exploration implementation plan and handover
+# Exploration implementation plan
 
-Status: planned, not implemented. The user confirmed the
-[exploration rules](graph-exploration-review-plan.md) and requested a compliance
-audit and implementation plan. The final instruction was to wrap up, commit,
-and push this documentation for handover. No application code was changed.
+Status: planned, not implemented. The [exploration rules](graph-exploration-review-plan.md)
+are confirmed; this document turns them into a build order. No application code
+has changed yet.
 
-## Resume here
+## Before starting
 
-- Worktree: `/Users/msskzx/Projects/namaq/.codex/worktrees/exploration-rules-review`.
-- Branch: `codex/exploration-rules-review`.
-- Audited application commit: `53baccd584469655c6e581e6723383e7a2c16eb0`.
-- Read `AGENTS.md` and the confirmed review plan before implementing. That plan
-  supersedes conflicting older exploration, search, and reset descriptions.
-- `.env` is verified as a symlink to the main checkout's file. Dependencies
-  were installed with `npm ci`; Prisma Client was generated. No database writes
-  or seed/layout commands were run.
-- The original desktop task remains attached to the old worktree at
-  `/Users/msskzx/.codex/worktrees/ba94/namaq`. Use the repository-local worktree
-  above for all work. The desktop Worktree root setting was not changed.
+- Read `AGENTS.md` and the confirmed review plan. That plan supersedes conflicting
+  descriptions in the older exploration, search, and reset documents.
+- Audited application commit: `53baccd`. The audit table below quotes line numbers
+  from that commit.
+- Each worktree needs its own `.env` symlink to the main checkout's file, and
+  `npx prisma generate` before `npm test` passes; without either, the live graph
+  integrity test and the layout script test fail for setup reasons, not code ones.
 - Apply `unslop` to prose, `ponytail` to implementation choices, and
-  `write-comments` before code comments. Reuse existing modules and Font Awesome.
+  `write-comments` before writing code comments. Reuse existing modules and the
+  installed Font Awesome icons.
+
+## Verified baseline
+
+Measured on this branch after linking `.env` and generating the Prisma client:
+
+| Check | Result |
+| --- | --- |
+| `npm test` | 46 files, 343 tests, all passing |
+| `npx tsc --noEmit` | clean |
+| `npm run lint` | one existing warning, GraphSurface.tsx:128 unnecessary `graphData` dependency |
+
+Passing tests do not show compliance with the confirmed rules. Several existing
+tests encode the older model and will need rewriting rather than extending.
 
 ## Audit findings
 
-Line references describe the audited application commit, not future edits.
-
 | Confirmed requirement | Current evidence | Required change |
 | --- | --- | --- |
-| Explicit local/global scope, local by default | `src/components/graph/GraphCanvas.tsx:378–404` infers expansion scope from selection; `:453–468` separately mutates whole-view edge exclusions. | One explicit scope control; disable local controls without selection. Scope stays attached to the action. |
-| Local contributions control their own connections; extra cross-connections need a global filter | `src/lib/relationship/exploration.ts:85–90` includes every edge between visible subjects; `src/lib/graphFilter.ts:41–51` then applies global raw-label exclusions. | Derive eligible nodes and logical connections from scoped contributions before rendering. Global off must not suppress an independently supported local connection. |
-| Lifetime caps and restoration | `exploration.ts:15–19` stores roots, expansions, global filters only; `:61–82` rebuilds introduction provenance from the current snapshot. | Persist per-relation cap history. Searching a previously introduced node must not let it trigger the same global filter again. |
-| Independent branch retention and collapse | `exploration.ts:55–59` adds expansion neighbors but not the anchor; `exploration.test.ts:52–64` supplies Aisha as a search root, masking anchor retention. | Give active contributions anchor support and branch ownership; preserve independent supports when collapsing. |
-| Lineage/direct overlap | `src/lib/relationship/lineageExpansion.ts:17–48` flattens lineage into ordinary hops and loses the originating action identity. | Preserve the lineage contribution identity while reusing traversal. |
-| Remove and Keep only selected | No removal/exclusion/branch fields in `ExplorationInput` or `urlState.ts:11–15`. `useExplorationGraph.ts:73–77` adds all full-graph subjects as roots. | Add explicit removal state and branch actions; full graph must respect removals. Keep only resets global filters to off and discards other contributions. |
-| Minimal initial/reset family | `GraphCanvas.tsx:434–440` expands all direct relations on a fresh visit; `:667–673` resets to Muhammad alone. | Use the same explicit starting family for fresh visit and Start over: WIFE, SON, DAUGHTER, GRANDSON, GRANDDAUGHTER. Do not infer grandchildren. |
-| Manual-only companion choice | `GraphCanvas.tsx:396–404` includes every counted relation; `:459–468` bulk/group toggles include companionship. | Bulk/group operations preserve companionship in either state. All direct respects the dedicated toggle; Start over resets it off. |
-| Companion toggle covers both directions | `categories.ts:82` pairs ACCOMPANIED_BY with COMPANION_OF for visibility, but `expansion.ts:33–47` matches reciprocal labels incoming only. | Reuse the pairing for companion expansion/counts in both directions; do not make family matching indiscriminately undirected. |
-| Disabled-kind search needs manual enablement | `GraphSearch.tsx:97–107` automatically enables a searched kind and companion title; `:110` uses router.replace. | Explain disabled results and require manual enablement before adding; use navigable history for exploration changes. |
-| Battle-status filtering | `prisma/schema.prisma:237–255` stores status arrays; `relationship/status.ts` colors them; filter panel has no status choices. | OR filtering on participation records, including an explicit unrecorded option; retain independently supported people. |
-| Failure preserves graph, retry available | `useExplorationGraph.ts:119–123` keeps previous SWR data, but `GraphSurface.tsx:129–131` replaces the canvas on error. Hook exposes no retry/completeness outcome and limits global fetch rounds to six. | Retain last successful graph, show nonblocking error/retry, and establish completion rather than silently stop at a round limit. |
-| Hidden hover targets disappear | `GraphSurface.tsx:57–89` prunes node/link pools, but pointer painting at `:175–181` has no membership guard; fixed renderer uses cooldownTicks=0. | Reproduce before choosing a fix. Stale hit-test canvas is a hypothesis, not a verified cause. |
-| Shared button with optional icon | No exported shared Button was found under src; ExpansionControls has a private ExpansionButton. GraphCanvas already uses installed Font Awesome. | Add a small shared Button in `src/components/common/Button.tsx` (proposed new file), with optional icon and native button props. |
+| Explicit local/global scope, local by default | `GraphCanvas.tsx:378–404` infers scope from whether a subject is selected; `:453–468` mutates a separate whole-view edge exclusion set. | One explicit scope control. Local controls disabled without a selection. Scope is fixed when the action is taken. |
+| Local contributions own their connections; extra cross-connections need a global filter | `exploration.ts:85–90` keeps every edge between visible subjects; `graphFilter.ts:41–51` then subtracts globally excluded raw labels. | Derive allowed connections from the contributions themselves. A global filter being off must not hide a connection a local contribution revealed. |
+| Lifetime caps and restoration | `exploration.ts:15–19` stores only roots, expansions, and global filters; `:61–82` recomputes provenance from the current snapshot each time. | Persist cap history in state and the URL. Searching a previously introduced subject must not let it trigger the same filter again. |
+| Independent branch retention and collapse | `exploration.ts:55–59` adds expansion neighbors but never the anchor; `exploration.test.ts:52–64` passes Aisha in as a search root, which hides that gap. | An active contribution supports its own anchor. Collapse removes a branch's contributions while preserving independently supported subjects. |
+| Lineage and direct overlap | `lineageExpansion.ts:17–48` flattens a lineage action into ordinary per-hop actions and loses which action produced them. | Keep the originating contribution identity while reusing the traversal. |
+| Remove and Keep only selected | Neither `ExplorationInput` nor `urlState.ts:11–15` has removal or branch fields; `useExplorationGraph.ts:73–77` promotes every full-graph node to a root. | Add removal state and branch actions. Show full graph must respect removals. |
+| Minimal initial and reset family | `GraphCanvas.tsx:434–440` expands all direct relations on a fresh visit; `:667–673` resets to Muhammad alone. | Share one initializer between fresh visit and Start over: WIFE, SON, DAUGHTER, GRANDSON, GRANDDAUGHTER as local contributions on the target subject. Do not infer grandchildren from two parent hops. |
+| Companionship stays manual | `GraphCanvas.tsx:396–404` expands every counted relation; `:459–468` includes companionship in bulk and group toggles. | Bulk and group operations leave companionship in whatever state it is in. All direct relations respects the dedicated toggle. Start over resets it off. |
+| Companion toggle covers both directions | `categories.ts:82` pairs ACCOMPANIED_BY with COMPANION_OF for visibility, but `expansion.ts:33–47` treats both as reciprocal and reads them incoming only. | Reuse the pairing for companion expansion and counts. Do not make family matching undirected as a side effect. |
+| Disabled-kind search needs manual enablement | `GraphSearch.tsx:97–107` silently enables the searched kind and the companion title; `:110` uses `router.replace`. | Explain the disabled kind and require the user to enable it. Use history-pushing navigation for exploration changes. |
+| Battle status filtering | `prisma/schema.prisma:239` defines the status enum, `relationship/status.ts` colors it, and no filter panel offers status choices. | OR filtering over participation records with an explicit unrecorded option, keeping independently supported people. |
+| Failure preserves the graph | `useExplorationGraph.ts:119–123` keeps previous SWR data, but `GraphSurface.tsx:131` swaps the whole canvas for an error message. Six fetch rounds is the only stopping condition. | Keep the last successful graph, show a non-blocking error with retry, and replace the round limit with a real completion condition. |
+| Hidden hover targets disappear | `GraphSurface.tsx:57–89` prunes the node and link pools, `:180–186` paints pointer areas with no membership guard, and `cooldownTicks={0}` means no simulation frames run after a data change. | Reproduce before fixing. A stale hit-test canvas is a hypothesis, not a diagnosis. |
+| Shared button with optional icon | There is no exported shared button under `src`; `ExpansionControls.tsx:69` defines a private one. `src/components/common/` holds Badge, ErrorMessage, FactCard, and similar. | Add `src/components/common/Button.tsx` with optional icon and native button props, and adopt it for graph actions. |
 
-Verified data and reusable behavior:
+Verified data and behavior worth preserving:
 
-- `neo4j/graphSeedData.ts:157–160` records direct GRANDSON/GRANDFATHER pairs
-  between Muhammad and al-Hasan/al-Husayn. Production database coverage was not
-  checked; no new genealogy is required by the plan.
-- Actual status values are DIED, INJURED, CAPTURED, WAS_CAPTURED, ABSENT_EXCUSED,
-  and MARTYRED. Do not replace these with an invented KILLED value. Preserve
-  existing translated labels; empty status arrays mean status not recorded.
-- Existing matchers distinguish reciprocal family roles from one-way cross-kind
-  relations. Preserve that behavior and verified inverse descriptions.
+- `neo4j/graphSeedData.ts:157–160` records direct GRANDSON and GRANDFATHER pairs
+  between Muhammad and al-Hasan and al-Husayn, so rule 11 needs no new genealogy.
+  Production database coverage was not checked.
+- The recorded statuses are DIED, INJURED, CAPTURED, WAS_CAPTURED, ABSENT_EXCUSED,
+  and MARTYRED. There is no KILLED value. An empty status array means status not
+  recorded.
+- `connections.ts:18–60` collapses reciprocal role pairs into one logical
+  connection, including ACCOMPANIED_BY with COMPANION_OF. Reuse it rather than
+  re-deriving inverses.
+- `filterVisibleGraph` has exactly one caller, `GraphCanvas.tsx:272`, on the
+  embedded (non-search) path. Replacing the exclusion layer is contained, but it
+  still changes what profile-page graphs render.
 - Existing lineage traversal handles full depth and cycles. Fixed node positions,
-  camera actions, bilingual strings, and theme support are existing foundations.
+  camera actions, bilingual strings, and theme support are already in place.
+
+## Target state model
+
+```mermaid
+flowchart TD
+    URL["URL params: subject, expand, filter, status, cap, removed"]
+    STATE["ExplorationInput"]
+    SUPPORT["Node support: which contributions justify each subject"]
+    ALLOWED["Allowed connections: which logical connections a contribution or global filter permits"]
+    FETCH["useExplorationGraph: fetch rounds until closure"]
+    RENDER["mapExplorationToGraphData"]
+    SURFACE["GraphSurface: one eligible graph for drawing and hit testing"]
+
+    URL --> STATE
+    STATE --> SUPPORT
+    STATE --> ALLOWED
+    SUPPORT --> FETCH
+    FETCH --> SUPPORT
+    SUPPORT --> RENDER
+    ALLOWED --> RENDER
+    RENDER --> SURFACE
+```
+
+Today membership and connections are computed in two places that disagree:
+`buildExploration` admits every edge between visible subjects, and
+`filterVisibleGraph` later subtracts excluded labels. The plan collapses them
+into one derivation, so a hidden connection is one that no contribution allows
+rather than one a second pass removed.
+
+Proposed shape, extending the existing interface rather than replacing it:
+
+```ts
+export interface ExplorationInput {
+  roots: SubjectId[];
+  expansions: ExpansionAction[];
+  globalFilters: RelationType[];
+  statuses: ParticipationStatus[] | null;
+  caps: Array<{ subject: SubjectId; relation: RelationType }>;
+  removed: SubjectId[];
+}
+```
+
+`statuses` distinguishes absent (all statuses, the default on first enablement)
+from an explicitly empty selection. `caps` is history, so it only grows within an
+exploration and is cleared by Start over. `removed` is a veto that search or a
+local expansion can lift without touching `caps`.
 
 ## Implementation sequence
 
 ### 1. Extend exploration state and its URL codec
 
-Work in `src/lib/relationship/exploration.ts`, `urlState.ts`, and their colocated
- tests. Keep state serializable and transitions pure. Represent local choices,
-explicit control scope, global choices, participation-status choices, cap history,
-explicit removals, and contribution ownership. Use kind+slug identity throughout.
+Files: `src/lib/relationship/exploration.ts`, `urlState.ts`, and their colocated
+tests.
 
-Retain an originating contribution identity for lineage and branch expansion.
-Record enough support to distinguish dependent descendants from independently
-searched or expanded branches. Avoid a generic event-sourcing framework: extend
-the existing state and helpers. An active local contribution supports its anchor.
+- Add the fields above, keeping transitions pure and state serializable.
+- Give every active contribution support for its own anchor, so collapsing one
+  branch cannot delete a subject another branch supports.
+- Record a cap only for an actual global introduction. Being the source of an
+  introduction does not cap the source.
+- Add transitions for search-root removal, collapse branch, explicit removal,
+  Keep only selected, and Start over. Keep only resets global filters to off,
+  keeps the selected subject's local choices, discards other branches, and
+  preserves caps. Start over clears caps and removals and installs the default
+  family.
+- Round-trip every field through the URL for refresh, sharing, and Back/Forward.
+  Keep the legacy `relation` parameter readable, and document any restoration it
+  cannot express instead of claiming an exact round trip.
 
-Persist cap history only for actual successful global introductions. Being a
-source does not cap a subject; being introduced by filter F caps it for F.
-Search/removal/reintroduction never erase that history. Explicit removal is a
-separate veto: search/local expansion can clear that veto without clearing caps.
-
-Implement transitions for search-root removal, branch collapse, explicit removal,
-Keep only selected, and Start over. Keep only resets global choices to defaults,
-retains selected-local choices, discards other branches, and preserves lifetime
-caps. Start over clears caps/removals and installs the minimal default family.
-
-Round-trip all state needed for refresh, links, and Back/Forward. Keep absent
-(default) and explicitly empty choices distinct. Handle existing subject/expand/
-filter URLs in the codec; document any legacy relation hide-list limitation
-rather than silently claiming identical restoration. Do not add server storage.
+Tests: cap persistence across search, toggle off and on, removal and
+reintroduction; anchor retention on collapse; Keep only discarding contributions;
+codec round trips including absent versus empty status choices.
 
 ### 2. Derive membership and connections from contributions
 
-Update `exploration.ts`, `expansion.ts`, `lineageExpansion.ts`,
-`renderExploration.ts`, and `status.ts`. Reuse `connections.ts` for inverse facts.
+Files: `exploration.ts`, `expansion.ts`, `lineageExpansion.ts`,
+`renderExploration.ts`, `status.ts`.
 
-Compute node support and allowed connections together. A local action reveals
-its subject's eligible relations; global filters permit matching cross-connections
-and capped one-hop introductions. Preserve all independent supports, including
-when multiple global filters reach the same subject. Companion matching must
-cover both recorded directions without changing family role interpretation.
+- Compute node support and allowed connections in one pass. A local action
+  reveals its subject's matching relations; a global filter permits matching
+  connections between existing subjects and one capped hop of introductions.
+- Decide connection eligibility on logical connections from `connections.ts`, so
+  a reciprocal pair is allowed when either side's role was contributed. Companion
+  matching must cover both recorded directions without making family roles
+  undirected.
+- Preserve the originating contribution on lineage expansions rather than
+  flattening them into anonymous hops.
+- Apply kind and participation-status eligibility before a subject is introduced.
+  Status matching is OR across the enabled statuses for that participation, with
+  a separate unrecorded choice. Dropping a non-matching participation edge must
+  not drop a person another branch supports.
+- Apply removals on every path, including Show full graph.
+- Stop automatic traversal on a finite set of visited subject and filter pairs,
+  so repeated toggling cannot advance a cap.
 
-Apply kind and participation-status eligibility before introducing nodes. Status
-matching is OR across enabled statuses for that battle participation, with a
-separate unrecorded choice. Removing a nonmatching edge must not delete a person
-supported by another branch. Apply explicit removals to every path, including
-full graph. Use finite visited subject/filter pairs to stop automatic traversal;
-a repeated filter toggle cannot advance a cap.
+Tests: the wife and father-in-law scenario with global Father off and on; a
+person in two battles with different statuses; direct and lineage overlap
+collapsed in both orders; removal under an active global filter.
 
-### 3. Integrate fetching, restoration, and failures
+### 3. Integrate fetching, restoration, and failure
 
-Update `src/components/graph/useExplorationGraph.ts` and tests. Reuse the existing
-`src/app/api/graph/route.ts` neighborhood/lineage responses and status data;
-change API queries only if a regression proves missing evidence or completeness.
+Files: `src/components/graph/useExplorationGraph.ts` and its test.
 
-Carry contribution and cap state through successful fetch completion without
-creating navigation loops. Ignore obsolete responses after state changes. Replace
-the unexplained six-round stopping condition with verified completion or an
-explicit recoverable failure. Expose retry and empty/loading outcomes while
-retaining the previous successful graph. Full graph uses the same eligibility
-rules, including explicit removals.
+- Reuse the existing `/api/graph` neighborhood and lineage responses. Change API
+  queries only if a regression proves evidence is missing.
+- Replace `MAX_FILTER_FETCH_ROUNDS` with a real closure condition: keep fetching
+  while newly supported subjects appear, and report an explicit recoverable
+  failure otherwise. Six rounds silently truncating is the current behavior.
+- Ignore responses that arrive after the state has moved on.
+- Expose retry, loading, and empty outcomes while keeping the last successful
+  graph on screen. `GraphSurface.tsx:131` must stop replacing the canvas on error.
+
+Tests: pending, empty, failed, retried, and stale-response cases, plus full-depth
+completion without truncation.
 
 ### 4. Wire controls and initial behavior
 
-Update `GraphCanvas.tsx`, `ExpansionControls.tsx`, `RelationFilterPanel.tsx`,
-`GraphSearch.tsx`, and `src/components/language/translations.ts`.
+Files: `GraphCanvas.tsx`, `ExpansionControls.tsx`, `RelationFilterPanel.tsx`,
+`GraphSearch.tsx`, `src/components/language/translations.ts`.
 
-- Explicit Selected subject / Entire exploration control; local default and
-  disabled local controls without selection. Selecting another subject never
-  changes existing contributions.
-- One state model for scoped relationship choices, replacing the workspace's
-  separate raw-label hide layer. Preserve embedded view behavior while sharing
-  relationship semantics; audit every `filterVisibleGraph` caller before edits.
-- Bulk/group state and handlers exclude companionship, including their computed
-  all-on/all-off indicators. Its dedicated switch controls both directions.
-- Add status controls when battles are enabled. Initialize all statuses on;
-  subsequent kind toggles preserve user status choices until Start over.
-- Search results for disabled kinds explain why adding is unavailable; no implicit
-  kind or companion-title enablement.
-- Add Collapse branch, Remove from exploration, and Keep only selected actions.
-  Fresh view and Start over share the minimal family initializer.
-- Add the shared optional-icon button and use it for appropriate graph actions.
-  Reuse Font Awesome, retain labels/accessibility, RTL, and light/dark support.
+- Add the explicit Selected subject and Entire exploration switch, local by
+  default, with local controls disabled when nothing is selected.
+- Replace the separate excluded-label layer with the one scoped model, keeping
+  the embedded profile graph working through the same semantics.
+- Exclude companionship from bulk and group toggles, including their all-on and
+  all-off indicators, and let its dedicated switch drive both directions.
+- Add status controls when battles are enabled, initialized to all statuses and
+  preserved across later kind toggles until Start over.
+- Explain disabled kinds in search results instead of enabling them silently.
+- Add Collapse branch, Remove from exploration, and Keep only selected. Fresh
+  visit and Start over share the default family initializer.
+- Add the shared button and use it for graph actions, with Arabic and English
+  labels, light and dark themes, RTL direction, and accessible names.
 
-### 5. Diagnose hover and validate the complete journey
+Tests: follow the reactive `next/navigation` mock pattern in
+`GraphSearch.test.tsx` for anything reading search params.
 
-Reproduce the reported hover issue with the actual renderer: hover a subject or
-edge, hide it, then move over its former location. Repeat for filter changes,
-collapse, remove, Keep only, and status changes. Inspect data membership, object
-pools, current tooltip state, and hit-test canvas invalidation before fixing.
-Use the same eligible graph for drawing and pointer interaction; preserve camera
-and fixed positions. Do not remount the whole graph as an unverified workaround.
+### 5. Diagnose hover, then validate the journey
 
-Add `src/components/graph/GraphSurface.test.tsx` (proposed new file) for membership
-changes and stale-hover callbacks. Follow with browser verification; a mocked
-renderer cannot prove that its real hit-test canvas was cleared.
+Reproduce the reported hover behavior with the real renderer: hover a subject or
+an edge, hide it, then move the pointer back over its former position. Repeat
+after filter changes, collapse, removal, Keep only selected, and status changes.
+Inspect data membership, the node and link pools, the current tooltip state, and
+hit-test canvas invalidation before choosing a fix. Note that `cooldownTicks={0}`
+means no simulation frames run after a data change, so the pointer-area canvas
+may never be repainted; confirm that before acting on it. Do not remount the
+graph as a workaround.
+
+Add `src/components/graph/GraphSurface.test.tsx` for membership changes and
+stale-hover callbacks, then verify in a browser. A mocked renderer cannot prove
+the real hit-test canvas was cleared.
 
 ## Acceptance and validation
 
-The full acceptance matrix is in the confirmed review plan. Each implementation
-phase must cover its rows before proceeding. Prioritize these regressions:
+The full acceptance matrix is in the confirmed review plan; each phase covers its
+own rows before the next one starts. Priority regressions:
 
-1. Muhammad local Wives/Father-in-law reveals neighbors without wife–father edges;
-   global Father reveals those edges and capped missing fathers. Independent
-   local Father still works while global Father is off.
-2. A searched A introduces B globally; B remains capped after search, off/on,
-   removal/reintroduction, refresh, and sharing. Manual B→C remains allowed;
-   still-active global Father may introduce D from previously uncapped C.
-3. Collapse and remove nested branches with shared nodes, cycles, multiple
-   supports, and direct/lineage overlap in both collapse orders. Explicit removal
-   blocks globals/full graph until manual restoration.
-4. Fresh/Start over family defaults, companion bulk exceptions in both states,
-   disabled battle search, status OR/unrecorded cases, Keep only global reset,
-   and Back/Forward restoration. Use the reactive next/navigation mock pattern
-   from `GraphSearch.test.tsx`.
-5. Loading, empty response, failed fetch, retry, stale response, and full-depth
-   completion. Keep the existing graph usable during failures.
-6. Browser checks for hidden hover targets, camera stability, desktop/phone,
-   Arabic/English, and light/dark. Verify the shared buttons by keyboard too.
+1. Muhammad with local Wives and Father-in-law shows the neighbors without
+   wife-to-father edges. Global Father adds those edges and one capped hop of
+   missing fathers. An independent local Father still works with global Father off.
+2. A searched A introduces B globally. B stays capped across search, toggling,
+   removal and reintroduction, refresh, and sharing. Manual B to C still works,
+   and a still-active global Father may introduce D from uncapped C.
+3. Collapse and removal across nested branches, shared nodes, cycles, and
+   direct/lineage overlap in both orders. Explicit removal blocks global filters
+   and Show full graph until manual restoration.
+4. Fresh visit and Start over family defaults, companionship surviving bulk
+   toggles in both states, battle search while battles are off, status OR and
+   unrecorded cases, Keep only resetting global filters, and Back/Forward.
+5. Loading, empty, failed, retried, and stale responses, with the existing graph
+   still usable during a failure.
+6. Browser checks for hidden hover targets, camera stability, phone and desktop,
+   Arabic and English, light and dark, and keyboard use of the shared buttons.
 
-Required checks after implementation: `npm run lint`, `npx tsc --noEmit`, and
-`npm test`. Tests belong beside the code. Update README's implemented section
-only once the new behavior is verified.
+Required before calling any phase finished: `npm run lint`, `npx tsc --noEmit`,
+`npm test`. Tests live beside the code. Update the README's implemented section
+only after the behavior is verified.
 
-Baseline audit checks on the unchanged application:
+## Data and rollout
 
-- Lint passed with an existing warning at GraphSurface.tsx:128: unnecessary
-  graphData dependency in useImperativeHandle.
-- TypeScript passed.
-- Vitest: 46 files, 343 tests passed. Passing existing tests does not establish
-  compliance with newly confirmed behavior; several encode the older model.
-- Hover reproduction and live database validation were not performed.
-
-## Data, rollout, and remaining limits
-
-No schema migration or historical data changes are expected. Preserve existing
-PostgreSQL/Neo4j synchronization and fixed positions. If actual missing records
-require data changes, use the canonical pipelines. Any graph structure changes
-require layout dry run, review, then apply per AGENTS.md, even where older plans
-claim an exception for inverse edges. Never seed or recompute merely to implement
-client exploration state.
-
-No product questions block implementation. Concrete state representation and
-legacy URL adaptation are implementation details to validate in phase 1. Hover
-root cause remains an investigation task, not a confirmed diagnosis. Review the
-current branch against any newer main changes before implementation; this audit
-is pinned to the commit above. No PR was created during this handover.
+No schema migration or historical data change is expected. Preserve the existing
+PostgreSQL and Neo4j synchronization and the fixed node positions. If missing
+records turn up, use the canonical pipelines. Any graph structure change needs a
+layout dry run, review, then `--apply`, per `AGENTS.md`. Never seed or recompute
+layout merely to implement client exploration state.

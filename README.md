@@ -2,8 +2,8 @@
 
 Current design review: [Exploration rules review](docs/graph-exploration-review-plan.md) supersedes conflicting
 local/global scope, filter, search-enablement, reset, and removal behavior below.
-These revised requirements await final confirmation and code verification;
-older implementation descriptions are not evidence of compliance.
+The rules are confirmed but not yet implemented; older implementation
+descriptions are not evidence of compliance.
 
 Namaq is an Arabic-first historical learning application for Muslims and students of Islamic knowledge. Its purpose is to make the people, relationships, and major events of early Islamic history easier to understand by exploring them visually rather than only as isolated entries in a text.
 

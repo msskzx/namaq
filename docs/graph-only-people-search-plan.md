@@ -2,8 +2,8 @@
 
 Current design review: [Exploration rules review](graph-exploration-review-plan.md) supersedes conflicting
 local/global scope, filter, search-enablement, reset, and removal behavior below.
-These revised requirements await final confirmation and code verification;
-older implementation descriptions are not evidence of compliance.
+The rules are confirmed but not yet implemented; older implementation
+descriptions are not evidence of compliance.
 
 Status: implemented. Follows up on [the stable graph layout
 plan](graph-layout-plan.md)'s "Deferred: graph-only people are not
