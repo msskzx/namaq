@@ -1,8 +1,15 @@
 # Exploration implementation plan
 
-Status: planned, not implemented. The [exploration rules](graph-exploration-review-plan.md)
-are confirmed; this document turns them into a build order. No application code
-has changed yet.
+Status: implemented in five phases, one commit each, on top of the audited
+commit and a merge with main. The [exploration rules](graph-exploration-review-plan.md)
+are confirmed; this document records the audit they were built from, the build
+order, and what still needs a live check.
+
+Two decisions were settled during the work. Main had shipped global relation
+filters that default on; the confirmed rules win, so filters start off and the
+opening family comes from the root's own expansions. Main's blanket hiding of
+companionship edges is gone, since a connection no contribution revealed is
+already hidden.
 
 ## Before starting
 
@@ -17,18 +24,18 @@ has changed yet.
   `write-comments` before writing code comments. Reuse existing modules and the
   installed Font Awesome icons.
 
-## Verified baseline
+## Baseline and result
 
-Measured on this branch after linking `.env` and generating the Prisma client:
+Measured on this branch after linking `.env` and generating the Prisma client.
 
-| Check | Result |
-| --- | --- |
-| `npm test` | 46 files, 343 tests, all passing |
-| `npx tsc --noEmit` | clean |
-| `npm run lint` | one existing warning, GraphSurface.tsx:128 unnecessary `graphData` dependency |
+| Check | At the audit | After phase five |
+| --- | --- | --- |
+| `npm test` | 46 files, 343 tests | 50 files, 421 tests |
+| `npx tsc --noEmit` | clean | clean |
+| `npm run lint` | one warning at GraphSurface.tsx:128 | clean |
 
-Passing tests do not show compliance with the confirmed rules. Several existing
-tests encode the older model and will need rewriting rather than extending.
+Passing tests at the audit did not show compliance: several encoded the older
+model and were rewritten rather than extended.
 
 ## Audit findings
 
@@ -201,20 +208,33 @@ Files: `GraphCanvas.tsx`, `ExpansionControls.tsx`, `RelationFilterPanel.tsx`,
 Tests: follow the reactive `next/navigation` mock pattern in
 `GraphSearch.test.tsx` for anything reading search params.
 
-### 5. Diagnose hover, then validate the journey
+### 5. Hidden hover targets
 
-Reproduce the reported hover behavior with the real renderer: hover a subject or
-an edge, hide it, then move the pointer back over its former position. Repeat
-after filter changes, collapse, removal, Keep only selected, and status changes.
-Inspect data membership, the node and link pools, the current tooltip state, and
-hit-test canvas invalidation before choosing a fix. Note that `cooldownTicks={0}`
-means no simulation frames run after a data change, so the pointer-area canvas
-may never be repainted; confirm that before acting on it. Do not remount the
-graph as a workaround.
+What the code shows, without a live reproduction:
 
-Add `src/components/graph/GraphSurface.test.tsx` for membership changes and
-stale-hover callbacks, then verify in a browser. A mocked renderer cannot prove
-the real hit-test canvas was cleared.
+- Hidden subjects and connections never reach the renderer. `GraphCanvas`
+  passes only the derived membership, and `GraphSurface`'s node and link pools
+  delete anything the incoming data dropped, so a hidden object is not in the
+  data force-graph hit-tests against.
+- force-graph paints its pointer-area canvas before the visible canvas in the
+  same frame, and only on a frame where `needsRedraw` was set. The hit area
+  used to be drawn from dimensions the visible pass wrote on the node object,
+  so on the first frame after a data change it painted from whatever the
+  previous frame left, and a node revealed by that change had no hit area at
+  all. `nodeBox` now measures the node in both passes, which removes that
+  dependency.
+- `cooldownTicks={0}` means the engine never runs, so with force-graph's
+  `autoPauseRedraw` the shadow canvas refreshes only on those `needsRedraw`
+  frames, throttled to 800ms. That is the remaining suspect for a hit area
+  outliving the object it belonged to.
+
+What is not established: whether the reported behavior is this ordering
+problem, the throttled shadow refresh, or a stale tooltip that force-graph
+clears only on the next pointer move. Reproduce it in a browser before
+choosing any further fix: hover a subject or edge, hide it, then move the
+pointer back over where it was, and repeat after filter changes, collapse,
+removal, Keep only selected, and status changes. A mocked renderer cannot
+prove the real hit-test canvas was cleared.
 
 ## Acceptance and validation
 
