@@ -39,6 +39,9 @@ Open the graph → explore and filter relationships → open a person's profile 
 
 - `/people` is a searchable, paginated directory with title filtering.
 - `/people/[slug]` shows available names, titles, appearance, virtues, Qur'an references, battle participations, events, and a chronological timeline.
+- Profiles show the evidence behind what they state: each claim with its citations, review status and a short Arabic excerpt, and the complete entry from the source work, one printed page at a time with the edition's footnotes kept apart from the author's text. The book and page are in the URL, so a citation links to the page it cites. Review status is shown to the reader and never decides what is served, so a Not reviewed claim is visible and labelled.
+- Evidence attaches to a subject's kind and slug rather than to a profile row, so titles, battles, events and graph-only people can carry citations. `GET /api/subjects/[kind]/[slug]/references` serves them; in the graph workspace a subject with a profile links to its profile's references, a subject without one expands a compact list in the panel, and a subject with no evidence says so.
+- Historical data is authored as files under `data/history/batches/`: source editions, the source account's Markdown pages with anchored paragraphs, and claims with their citations. `npm run history:validate` checks that every citation names a declared source, carries a working extraction link and an Arabic excerpt, and points at a passage some page declares. `npm run history:import` refuses to write unless the files match the revision that was approved, and upserts so a retry cannot duplicate anything. `npm run history:extract` pulls an entry from Shamela into that shape.
 - Person records use stable slugs, making graph nodes, search results, and detail pages linkable.
 
 ### Events and battles
@@ -148,7 +151,7 @@ The code review identified the following practical limitations:
 - **Relationship coverage and modelling are incomplete.** Current data emphasises genealogy and a selection of family relations. It does not yet express uncertainty, competing reports, date ranges, sources, or richer historical relationships.
 - **Search is functional but narrow.** Autocomplete searches PostgreSQL `name`, `fullName`, and `slug`; it does not yet search transliterated names or guarantee graph/profile coverage matches.
 - **Quality safeguards cover the graph and API routes, but not the full journey.** The graph query builder and person search/ranking have unit tests, and every Prisma-backed API route (`people`, `events`, `battles`, `titles`, `quran`) now has route-level tests covering its success, not-found, validation, and error-handling paths. Seed integrity has static checks and a live drift check; key end-to-end user journeys still need coverage.
-- **Historical provenance is not yet visible.** The data model and UI do not attach citations, editions, narrators, or confidence notes to claims.
+- **Historical evidence has been built but barely gathered.** Claims, citations, editions and complete source accounts are modelled and displayed, and the first batch covers one Companion. Almost every person on record still carries no evidence at all, and their profiles say so.
 
 ## Future improvements
 

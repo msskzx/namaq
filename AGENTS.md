@@ -101,6 +101,28 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   change; skipping this leaves ranks/layout stale relative to the graph
   they're supposed to describe.
 
+## Historical evidence data
+
+- Curated historical records live in `data/history/batches/<batch>/`, separate
+  from application code: `batch.json` holds source editions, source accounts and
+  claims with their citations; `accounts/<subject>/NNN.md` holds one printed page
+  of the work's text, with `NNN.notes.md` beside it for that page's editorial
+  footnotes. `summary.md` is the review summary.
+- **Do not read a whole account to answer a question.** Open `batch.json` for the
+  structure and the claims, then only the pages a citation names. Each page's
+  paragraphs carry anchors like `9-p7` that citations point at.
+- Files are the source of truth; the database holds a copy. Change the files and
+  re-import, never edit the database directly. `npm run history:validate --
+  <batch dir>` before proposing a batch, and `npm run history:import -- <batch
+  dir>` for a dry run. Import applies only the revision recorded as approved in
+  `batch.json`, so any edit after approval needs approving again.
+- Record data at whatever review status is honest and let it be visible; review
+  status never hides data (`docs/adr/0008-separate-review-from-visibility.md`).
+  Leave an unknown structured value unset rather than inventing one, and keep
+  competing accounts as separate attributed claims.
+- Transmission chains stay in the source text. A person mentioned only as a
+  narrator does not become a graph node or an edge.
+
 ## Content sources
 
 - Companion (صحابي) names/biographies are being sourced from *سير أعلام
