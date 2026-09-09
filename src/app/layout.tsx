@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Amiri, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { LanguageProvider } from "@/components/language/LanguageContext";
@@ -9,9 +9,14 @@ import ConditionalAnalytics from "@/components/cookies/ConditionalAnalytics";
 import SWRProvider from "@/components/common/SWRProvider";
 import CustomThemeProvider from "@/components/theme/CustomThemeProvider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+// Amiri is a naskh revival drawn for vocalized classical Arabic, which is what
+// the source accounts are. Its Latin comes along for the interface, so one
+// family covers both scripts.
+const amiri = Amiri({
+  variable: "--font-amiri",
+  weight: ["400", "700"],
+  subsets: ["arabic", "latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
@@ -31,7 +36,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${amiri.variable} ${geistMono.variable} antialiased`}>
         <CustomThemeProvider>
           <LanguageProvider>
             <SWRProvider>

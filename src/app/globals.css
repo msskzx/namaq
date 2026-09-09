@@ -1,5 +1,27 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: var(--font-amiri), ui-serif, Georgia, serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+/*
+ * next/font defines --font-amiri on the body element, not on :root, so the body
+ * names it directly rather than going through the theme token.
+ */
+body {
+  font-family: var(--font-amiri), ui-serif, Georgia, serif;
+}
+
+/*
+ * Vocalized Arabic needs room above the line or the tashkeel collides with the
+ * descenders of the line above; the printed editions and Shamela both set
+ * roughly double leading.
+ */
+.arabic-source {
+  line-height: 2;
+}
+
 @keyframes fade-in-down {
   from {
     opacity: 0;

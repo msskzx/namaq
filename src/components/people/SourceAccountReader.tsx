@@ -125,7 +125,7 @@ export default function SourceAccountReader({ slug }: SourceAccountReaderProps) 
         {language === 'ar' ? `ص ${printed}` : `p. ${printed}`}
       </p>
 
-      <article dir="rtl" lang="ar" className="space-y-3 text-lg leading-relaxed text-gray-800 dark:text-gray-200">
+      <article dir="rtl" lang="ar" className="arabic-source space-y-4 text-xl text-gray-800 dark:text-gray-200">
         {paragraphs(current.bodyMarkdown).map((text, index) => (
           <p key={index}>{text}</p>
         ))}
@@ -136,7 +136,7 @@ export default function SourceAccountReader({ slug }: SourceAccountReaderProps) 
           <h3 className="mb-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
             {language === 'ar' ? 'حواشي المحقق' : "The editor's notes"}
           </h3>
-          <div dir="rtl" lang="ar" className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+          <div dir="rtl" lang="ar" className="arabic-source space-y-2 text-sm text-gray-600 dark:text-gray-400">
             {paragraphs(current.notesMarkdown).map((text, index) => (
               <p key={index}>{text}</p>
             ))}
