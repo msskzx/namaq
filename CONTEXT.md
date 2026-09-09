@@ -124,6 +124,36 @@ _Avoid_: Ancestors (when only the father-to-father chain is meant)
 A person's children and the later generations reached through their children's
 recorded parentage.
 
+### Historical evidence
+
+**Historical source**:
+A historical work used as evidence for information about a historical subject,
+including the edition consulted.
+
+**Digital host**:
+A website that makes a historical source available to read, such as Islamweb.
+
+**Historical claim**:
+An assertion about a historical subject or a recorded relationship that can be
+supported or challenged by evidence.
+
+**Citation**:
+A reference connecting a historical claim or biographical passage to the exact
+source location used, including its extraction link when read online.
+
+**Source account**:
+The complete entry about a historical subject in a particular work and edition,
+with its accompanying notes kept attributable to their authors. Different works
+can provide separate source accounts of the same subject.
+
+**Review batch**:
+A group of proposed historical data changes and their evidence submitted together
+for the user's approval before synchronization to the databases.
+
+**Review status**:
+The stage of editorial checking recorded for historical information, shown to
+readers independently of whether that information is publicly available.
+
 ### People and search
 
 **Graph-only person**:
