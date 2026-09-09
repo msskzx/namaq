@@ -8,7 +8,11 @@ import { GraphData, GraphNode, GraphNodeFull, GraphLink } from '@/types/graph';
 import useSWR from 'swr';
 import { fetcher } from '@/lib/swr';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExpand, faCompress, faFilter, faMagnifyingGlass, faBars, faRotateLeft, faXmark } from '@fortawesome/free-solid-svg-icons';
+import {
+  faArrowsRotate, faBars, faCircleXmark, faCompress, faCropSimple, faDiagramProject, faExpand, faEyeSlash,
+  faFilter, faListUl, faLocationCrosshairs, faMagnifyingGlass, faRotateLeft, faScissors, faShareNodes,
+  faUser, faXmark,
+} from '@fortawesome/free-solid-svg-icons';
 import GraphSearch from './GraphSearch';
 import SlideSwitch from './SlideSwitch';
 import RelationFilterPanel, { ControlScope } from './RelationFilterPanel';
@@ -705,14 +709,37 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       <p className="text-sm text-gray-600 dark:text-gray-300">{selectedNode ? t.graph.selectedLabel : t.graph.globalRelationshipsHint}</p>
       <div className="mt-2 flex flex-wrap gap-3">
         {selectedNode && <>
-          {selectedPersonHasProfile && <Button href={profilePath(selectedNode.type, selectedNode.slug)}>{t.graph.viewProfile}</Button>}
-          <Button onClick={() => updateParams({ selected: null })}>{t.graph.deselectSubject}</Button>
-          <Button onClick={collapseSelectedBranch}>{t.graph.collapseBranch}</Button>
-          <Button onClick={removeSelectedSubject}>{t.graph.removeSubject}</Button>
-          <Button onClick={keepOnlySelectedSubject}>{t.graph.keepOnlySelected}</Button>
+          {selectedPersonHasProfile && (
+            <Button href={profilePath(selectedNode.type, selectedNode.slug)}>
+              <FontAwesomeIcon icon={faUser} />
+              {t.graph.viewProfile}
+            </Button>
+          )}
+          <Button onClick={() => updateParams({ selected: null })}>
+            <FontAwesomeIcon icon={faCircleXmark} />
+            {t.graph.deselectSubject}
+          </Button>
+          <Button onClick={collapseSelectedBranch}>
+            <FontAwesomeIcon icon={faScissors} />
+            {t.graph.collapseBranch}
+          </Button>
+          <Button onClick={removeSelectedSubject}>
+            <FontAwesomeIcon icon={faEyeSlash} />
+            {t.graph.removeSubject}
+          </Button>
+          <Button onClick={keepOnlySelectedSubject}>
+            <FontAwesomeIcon icon={faCropSimple} />
+            {t.graph.keepOnlySelected}
+          </Button>
         </>}
-        <Button disabled={fullGraph} onClick={() => updateParams({ full: '1' })}>{t.graph.showFullGraph}</Button>
-        <Button onClick={resetGraphView}>{t.graph.startOver}</Button>
+        <Button disabled={fullGraph} onClick={() => updateParams({ full: '1' })}>
+          <FontAwesomeIcon icon={faDiagramProject} />
+          {t.graph.showFullGraph}
+        </Button>
+        <Button onClick={resetGraphView}>
+          <FontAwesomeIcon icon={faRotateLeft} />
+          {t.graph.startOver}
+        </Button>
       </div>
       <ExpansionControls
         isPerson={Boolean(selectedNode && (selectedNode.type ?? 'person') === 'person')}
@@ -725,12 +752,16 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       {graphError && (
         <div role="alert" className="mt-2 flex items-center gap-2 text-sm text-red-700 dark:text-red-300">
           <span>{t.graph.loadError}</span>
-          <Button size="sm" onClick={exploration.retry}>{t.graph.retry}</Button>
+          <Button size="sm" onClick={exploration.retry}>
+            <FontAwesomeIcon icon={faArrowsRotate} />
+            {t.graph.retry}
+          </Button>
         </div>
       )}
       {showAdditions && (
         <div role="status" className="mt-2 flex items-center gap-2">
           <Button variant="primary" onClick={applyShowAdditions}>
+            <FontAwesomeIcon icon={faLocationCrosshairs} />
             {t.graph.showAdditions(showAdditions.added.length)}
           </Button>
           <Button size="icon" onClick={() => setShowAdditions(null)} aria-label={t.graph.dismiss}>
@@ -906,6 +937,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
             onClick={() => setShowNodesPanel(show => !show)}
             aria-expanded={showNodesPanel}
           >
+            <FontAwesomeIcon icon={faListUl} />
             {showNodesPanel ? t.graph.hideNodesInView : t.graph.showNodesInView}
           </Button>
         </div>
@@ -1032,9 +1064,13 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           <p className="text-sm text-gray-600 dark:text-gray-300">{t.graph.selectedLabel} {kindLabel(selectedNode.type ?? 'person')}</p>
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode.label}</h2>
           <div className="mt-3 flex flex-wrap gap-3">
-            <Button variant="primary" href={profilePath(selectedNode.type, selectedNode.slug)}>{t.graph.viewProfile}</Button>
+            <Button variant="primary" href={profilePath(selectedNode.type, selectedNode.slug)}>
+              <FontAwesomeIcon icon={faUser} />
+              {t.graph.viewProfile}
+            </Button>
             {!showSearch && (
               <Button onClick={() => updateParams({ focus: selectedNode.slug, person: null, ancestorsOf: [], descendantsOf: [] })}>
+                <FontAwesomeIcon icon={faShareNodes} />
                 {t.graph.exploreNeighbours}
               </Button>
             )}
@@ -1056,6 +1092,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
             onClick={() => setShowNodesPanel(show => !show)}
             aria-expanded={showNodesPanel}
           >
+            <FontAwesomeIcon icon={faListUl} />
             {showNodesPanel ? t.graph.hideNodesInView : t.graph.showNodesInView}
           </Button>
           {showNodesPanel && <div className="rounded-lg border border-gray-200 p-3 dark:border-gray-700">

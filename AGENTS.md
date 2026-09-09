@@ -66,6 +66,11 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 - Rows in a suggestion or node list are buttons for the keyboard, not controls
   that read as buttons: they stack multiple lines, fill their row, and carry no
   border. Leave them as plain `button` elements.
+- Every button carries an icon beside its label, from Font Awesome's free solid
+  set. Pick one that names the action rather than decorating it, and reuse the
+  icon an action already has elsewhere (Start over and Reset share the rotate
+  arrow, View profile shares the person). Vertical arrows are safe under both
+  writing directions; a horizontal one is not.
 - Titles and other short labelled chips use `src/components/common/Badge.tsx`
   (`size="sm"` inside dense panels), so a title looks the same on a profile
   page and in the graph panel.

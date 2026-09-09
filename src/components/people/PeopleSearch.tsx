@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import translations from '@/components/language/translations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faSpinner, faUser } from '@fortawesome/free-solid-svg-icons';
 import type { Title } from '@/generated/prisma';
 import Button from '@/components/common/Button';
 
@@ -179,6 +179,7 @@ export default function PeopleSearch({
                         openProfile(suggestion);
                       }}
                     >
+                      <FontAwesomeIcon icon={faUser} />
                       {translations[language]?.viewProfile}
                     </Button>
                   </div>

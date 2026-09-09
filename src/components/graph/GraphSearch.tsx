@@ -5,7 +5,7 @@ import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useLanguage } from '@/components/language/LanguageContext';
 import translations from '@/components/language/translations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faSpinner, faUser } from '@fortawesome/free-solid-svg-icons';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { COMPANION_TITLE_SLUG } from '@/lib/graphFilter';
 import { profilePath } from '@/lib/nodeProfile';
@@ -215,6 +215,7 @@ export default function GraphSearch() {
                           openProfile(suggestion);
                         }}
                       >
+                        <FontAwesomeIcon icon={faUser} />
                         {language === 'ar' ? 'الصفحة الشخصية' : 'Profile'}
                       </Button>
                     )}
