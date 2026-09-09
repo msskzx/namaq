@@ -144,11 +144,6 @@ export default function SourceAccountReader({ slug }: SourceAccountReaderProps) 
         onChange={(next) => setSelection(account.id, next)}
         showSelect
         selectLabel={language === 'ar' ? 'الصفحة المطبوعة' : 'Printed page'}
-        summary={
-          language === 'ar'
-            ? `ص ${printed} · ${current.sequence} من ${account.pageCount}`
-            : `p. ${printed} · ${current.sequence} of ${account.pageCount}`
-        }
       />
 
       {current.extractionUrl && (

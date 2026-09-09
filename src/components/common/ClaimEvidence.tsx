@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import Pagination from '@/components/common/Pagination';
 import { useLanguage } from '@/components/language/LanguageContext';
 import {
-  confidenceLabel,
   reviewStatusLabel,
   type CitationWithSource,
   type ClaimWithCitations,
@@ -74,9 +73,6 @@ export default function ClaimEvidence({
               <p>{claim.assertion}</p>
               <div className="mt-2 flex flex-wrap items-center gap-2">
                 <Badge size="sm" color="gray" text={reviewStatusLabel[claim.reviewStatus][language === 'ar' ? 'ar' : 'en']} />
-                <span className="text-sm text-gray-600 dark:text-gray-400">
-                  {confidenceLabel[claim.confidence][language === 'ar' ? 'ar' : 'en']}
-                </span>
               </div>
               {claim.citations.length === 0 ? (
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">

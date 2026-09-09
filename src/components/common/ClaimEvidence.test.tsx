@@ -64,13 +64,18 @@ describe('ClaimEvidence', () => {
     expect(screen.getByText('عامر بن عبد الله بن الجراح')).toBeTruthy();
   });
 
-  it('translates review status and confidence into Arabic', () => {
+  it('translates review status into Arabic', () => {
     language.current = 'ar';
 
     render(<ClaimEvidence title="المصادر" claims={[claim()]} />);
 
     expect(screen.getByText('لم تُراجع')).toBeTruthy();
-    expect(screen.getByText('ثابت')).toBeTruthy();
+  });
+
+  it('keeps confidence out of the page, since the source never states it', () => {
+    render(<ClaimEvidence title="Sources" claims={[claim()]} />);
+
+    expect(screen.queryByText('Well attested')).toBeNull();
   });
 
   it('says so for a claim with no citation rather than showing nothing', () => {
