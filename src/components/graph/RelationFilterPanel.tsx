@@ -1,7 +1,6 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBullseye, faCircleNodes } from '@fortawesome/free-solid-svg-icons';
+import ScopeToggle from './ScopeToggle';
 import SlideSwitch from './SlideSwitch';
-import Button from '@/components/common/Button';
 import { governingRelationType, relationColor, relationGroup, sortRelationTypes, RelationGroup } from '@/lib/relationship/categories';
 import translations from '@/components/language/translations';
 
@@ -27,9 +26,27 @@ interface RelationFilterPanelProps {
   scope?: ControlScope;
   onScopeChange?: (scope: ControlScope) => void;
   disabled?: boolean;
+  // Node kinds share this pane but not its scope: they are a server-side
+  // whitelist for the whole view, so they sit above the scope toggle.
+  kindFilters?: {
+    kinds: readonly string[];
+    included: Set<string>;
+    label: (kind: string) => string;
+    color: (kind: string) => string;
+    onToggle: (kind: string) => void;
+  };
+  // Participation statuses belong to the one relation type they qualify, so
+  // they live under the battles group rather than in a panel of their own.
+  statusFilters?: {
+    choices: readonly string[];
+    active: string[];
+    label: (status: string) => string;
+    color: (status: string) => string | undefined;
+    onToggle: (status: string) => void;
+  };
 }
 
-export default function RelationFilterPanel({ types, includedRelations, onToggle, onToggleAll, onToggleGroup, showCompanionTitle, onToggleCompanionTitle, relationLabel, language, scope, onScopeChange, disabled = false }: RelationFilterPanelProps) {
+export default function RelationFilterPanel({ types, includedRelations, onToggle, onToggleAll, onToggleGroup, showCompanionTitle, onToggleCompanionTitle, relationLabel, language, scope, onScopeChange, disabled = false, statusFilters, kindFilters }: RelationFilterPanelProps) {
   const g: GraphStrings = translations[language].graph;
   const dir = language === 'ar' ? 'rtl' : 'ltr';
   const groups = GROUP_ORDER.map(group => ({ group, types: sortRelationTypes(types.filter(type => relationGroup(type) === group)) })).filter(({ types }) => types.length > 0);
@@ -42,17 +59,44 @@ export default function RelationFilterPanel({ types, includedRelations, onToggle
 
   return (
     <fieldset dir={dir} className="mb-4 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
-      <legend className="px-1 text-sm font-medium text-gray-800 dark:text-gray-100">{g.relationshipTypes}</legend>
+      <legend className="px-1 text-sm font-medium text-gray-800 dark:text-gray-100">{g.filters}</legend>
+      {kindFilters && kindFilters.kinds.length > 1 && (
+        <div className="mb-3 border-b border-gray-100 pb-3 dark:border-gray-700">
+          <p className="mb-2 text-sm font-medium text-gray-800 dark:text-gray-100">{g.nodeKinds}</p>
+          <div className="flex flex-wrap gap-x-4 gap-y-2">
+            {kindFilters.kinds.map(kind => {
+              const active = kindFilters.included.has(kind);
+              const label = kindFilters.label(kind);
+              return (
+                <SlideSwitch
+                  key={kind}
+                  checked={active}
+                  onChange={() => kindFilters.onToggle(kind)}
+                  label={label}
+                  color={kindFilters.color(kind)}
+                  ariaLabel={active ? g.hideKind(label) : g.showKind(label)}
+                />
+              );
+            })}
+          </div>
+        </div>
+      )}
+      <p className="mb-2 text-sm font-medium text-gray-800 dark:text-gray-100">{g.relationshipTypes}</p>
       {scope && onScopeChange && (
-        <div className="mb-2 flex flex-wrap gap-2" role="group" aria-label={g.controlScope}>
-          <Button size="sm" active={scope === 'selected'} aria-pressed={scope === 'selected'} onClick={() => onScopeChange('selected')}>
-            <FontAwesomeIcon icon={faBullseye} />
-            {g.selectedSubjectScope}
-          </Button>
-          <Button size="sm" active={scope === 'exploration'} aria-pressed={scope === 'exploration'} onClick={() => onScopeChange('exploration')}>
-            <FontAwesomeIcon icon={faCircleNodes} />
-            {g.explorationScope}
-          </Button>
+        // One slider carrying both scopes, in the shape of the theme and
+        // language switchers. The sentence around it says the highlighted name
+        // is the current state.
+        <div className="mb-2 flex flex-wrap items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+          {g.controlScope}
+          <ScopeToggle
+            value={scope}
+            onChange={onScopeChange}
+            ariaLabel={g.switchScopeTo(scope === 'selected' ? g.explorationScope : g.selectedSubjectScope)}
+            options={[
+              { value: 'selected', label: g.selectedSubjectScope, icon: faBullseye },
+              { value: 'exploration', label: g.explorationScope, icon: faCircleNodes },
+            ]}
+          />
         </div>
       )}
       {disabled && <p className="mb-2 text-sm text-gray-600 dark:text-gray-300">{g.selectSubjectForLocalControls}</p>}
@@ -79,6 +123,27 @@ export default function RelationFilterPanel({ types, includedRelations, onToggle
                 ))}
                 {group === 'titles' && (
                   <SlideSwitch checked={showCompanionTitle} onChange={onToggleCompanionTitle} label={g.companionTitleLabel} ariaLabel={showCompanionTitle ? g.hideKind(g.companionTitleLabel) : g.showKind(g.companionTitleLabel)} />
+                )}
+                {group === 'battles' && statusFilters && (
+                  <div className="w-full border-t border-gray-100 pt-2 dark:border-gray-700">
+                    <p className="mb-2 text-xs font-medium text-gray-700 dark:text-gray-200">{g.participationStatuses}</p>
+                    <div className="flex flex-wrap gap-x-4 gap-y-2">
+                      {statusFilters.choices.map(status => {
+                        const label = statusFilters.label(status);
+                        const active = statusFilters.active.includes(status);
+                        return (
+                          <SlideSwitch
+                            key={status}
+                            checked={active}
+                            onChange={() => statusFilters.onToggle(status)}
+                            label={label}
+                            color={statusFilters.color(status)}
+                            ariaLabel={active ? g.hideKind(label) : g.showKind(label)}
+                          />
+                        );
+                      })}
+                    </div>
+                  </div>
                 )}
               </div>
             </details>
