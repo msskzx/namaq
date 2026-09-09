@@ -28,7 +28,14 @@ export async function GET(
         { status: 404 }
       );
     }
-    return NextResponse.json(person);
+
+    // The pane links to the profile's references rather than listing citations
+    // itself, so it needs to know whether there are any, not what they say.
+    const evidenceCount = await prisma.historicalClaim.count({
+      where: { subjectKind: 'PERSON', subjectSlug: slug },
+    });
+
+    return NextResponse.json({ ...person, hasProfile: true, evidenceCount });
   } catch (error) {
     console.error('API Error:', error);
     return NextResponse.json(
