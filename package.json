@@ -34,7 +34,8 @@
     "seed:surahs": "tsx prisma/surahSeed.ts",
     "seed:ayat": "tsx prisma/ayahSeed.ts",
     "history:validate": "tsx scripts/history/validateBatch.ts",
-    "history:import": "tsx scripts/history/importBatch.ts"
+    "history:import": "tsx scripts/history/importBatch.ts",
+    "history:extract": "tsx scripts/history/extractShamelaEntry.ts"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
@@ -70,6 +71,7 @@
     "@testing-library/react": "^16.3.2",
     "@types/d3-force": "^3.0.10",
     "@types/google.maps": "^3.58.1",
+    "@types/jsdom": "^30.0.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
