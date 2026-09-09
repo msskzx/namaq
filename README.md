@@ -1,5 +1,10 @@
 # Namaq
 
+Current design review: [Exploration rules review](docs/graph-exploration-review-plan.md) supersedes conflicting
+local/global scope, filter, search-enablement, reset, and removal behavior below.
+These revised requirements await final confirmation and code verification;
+older implementation descriptions are not evidence of compliance.
+
 Namaq is an Arabic-first historical learning application for Muslims and students of Islamic knowledge. Its purpose is to make the people, relationships, and major events of early Islamic history easier to understand by exploring them visually rather than only as isolated entries in a text.
 
 The central experience is a relationship graph: learners land directly on the graph, look around and filter by relationship type, and move from a graph node to that person's profile. Person profiles connect the graph to a growing historical record through names, titles, a life timeline, events, battles, and Qur'an references.

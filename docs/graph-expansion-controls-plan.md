@@ -1,5 +1,11 @@
 # Expansion controls
 
+Review update: the [exploration rules review](graph-exploration-review-plan.md)
+supersedes decisions 5–8 wherever they remove individual subject-scoped choices,
+force choices into global scope, or hide connections between retained subjects.
+The corresponding implementation phases and acceptance criteria are historical
+where they conflict. Current implementation compliance has not been checked.
+
 Status: designed, no open questions. Ready for implementation on its own branch
 off `main` after [#37](https://github.com/msskzx/namaq/pull/37) merges. Part of
 the data fix has already been applied to production; see
