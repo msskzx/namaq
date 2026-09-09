@@ -202,12 +202,12 @@ it('collapses the selected branch while keeping the subject and anything else su
   expect(params().getAll('expand')).toEqual([]);
 });
 
-it('removes the selected subject, blocks a global filter from reintroducing it, and undoes on Back', async () => {
+it('hides the selected node, blocks a global filter from reintroducing it, and undoes on Back', async () => {
   nav.setUrl(`/graphs?subject=person:${root}&expand=person:${root}:WIFE&selected=wife`);
   mount();
   await waitFor(() => expect(graph()).toBe(`${root},wife`));
   const beforeRemoval = nav.getUrl();
-  fireEvent.click(screen.getByRole('button', { name: 'Remove from exploration' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Hide node' }));
   await waitFor(() => expect(graph()).toBe(root));
   expect(params().getAll('removed')).toEqual(['person:wife']);
   fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
@@ -219,11 +219,11 @@ it('removes the selected subject, blocks a global filter from reintroducing it, 
   await waitFor(() => expect(graph()).toBe(`${root},wife`));
 });
 
-it('keeps only the selected subject and its own choices, resetting the global filters', async () => {
+it('keeps only the selected node and its own choices, resetting the global filters', async () => {
   nav.setUrl(`/graphs?subject=person:${root}&expand=person:${root}:WIFE&expand=person:wife:FATHER&filter=FATHER&selected=wife`);
   mount();
   await waitFor(() => expect(graph()).toContain('wife-father'));
-  fireEvent.click(screen.getByRole('button', { name: 'Keep only this subject' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Keep only this node' }));
   await waitFor(() => expect(graph()).toBe('wife,wife-father'));
   expect(params().has('filter')).toBe(false);
   expect(params().getAll('expand')).toEqual(['person:wife:FATHER']);
@@ -264,14 +264,19 @@ it('opens the site menu from the collapsed panel', async () => {
   expect(screen.getByRole('link', { name: 'About' })).toBeTruthy();
 });
 
-it('hides and restores the Nodes in view list', async () => {
+it('opens and closes the node list, which starts collapsed', async () => {
   mount();
   await waitFor(() => expect(graph()).toContain('wife'));
-  expect(screen.getByRole('button', { name: 'wife' })).toBeTruthy();
-  fireEvent.click(screen.getByRole('button', { name: 'Hide nodes in view' }));
+  const list = () => screen.getByRole('button', { name: 'List of Nodes' });
   expect(screen.queryByRole('button', { name: 'wife' })).toBeNull();
-  fireEvent.click(screen.getByRole('button', { name: 'Show nodes in view' }));
+  expect(list().getAttribute('aria-expanded')).toBe('false');
+
+  fireEvent.click(list());
   expect(screen.getByRole('button', { name: 'wife' })).toBeTruthy();
+  expect(list().getAttribute('aria-expanded')).toBe('true');
+
+  fireEvent.click(list());
+  expect(screen.queryByRole('button', { name: 'wife' })).toBeNull();
 });
 
 it('renders the selected person\'s titles as badges linking to the title filter', async () => {
@@ -371,6 +376,7 @@ it('keeps the camera steady when selecting an already on-screen subject', async 
   await settleInitialFraming();
   camera.centerAt.mockClear();
 
+  fireEvent.click(screen.getByRole('button', { name: 'List of Nodes' }));
   fireEvent.click(screen.getByRole('button', { name: 'wife' }));
   await waitFor(() => expect(params().get('selected')).toBe('wife'));
   expect(camera.centerAt).not.toHaveBeenCalled();
@@ -384,6 +390,7 @@ it('pans (without an explicit zoom change) to reveal a selected subject that is 
   camera.centerAt.mockClear();
   camera.zoom.mockClear();
 
+  fireEvent.click(screen.getByRole('button', { name: 'List of Nodes' }));
   fireEvent.click(screen.getByRole('button', { name: 'grandfather' }));
   await waitFor(() => expect(camera.centerAt).toHaveBeenCalled());
   // zoom() is only ever read (no args) to compute the reveal pan here, never

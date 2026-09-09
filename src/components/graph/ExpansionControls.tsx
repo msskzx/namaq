@@ -42,7 +42,7 @@ export default function ExpansionControls({
   g,
 }: ExpansionControlsProps) {
   return (
-    <div className="mt-3 space-y-3">
+    <div className="mt-3 flex flex-wrap gap-3 border-t border-amber-200 pt-3 dark:border-amber-800">
       {hasEligibleDirectRelations && (
         <Button variant="primary" onClick={onExpandAllDirectRelations}>
           <FontAwesomeIcon icon={faShareNodes} />
@@ -50,14 +50,14 @@ export default function ExpansionControls({
         </Button>
       )}
       {isPerson && (
-        <div className="flex flex-wrap gap-2 border-t border-amber-200 pt-3 dark:border-amber-800">
+        <>
           {LINEAGE_BUTTONS.map(action => (
-            <Button key={action} size="sm" active={isActive(action)} aria-pressed={isActive(action)} onClick={() => onToggle(action)}>
+            <Button key={action} active={isActive(action)} aria-pressed={isActive(action)} onClick={() => onToggle(action)}>
               <FontAwesomeIcon icon={LINEAGE_ICON[action]!} />
               {g.lineageActions[LINEAGE_LABEL_KEY[action]]}
             </Button>
           ))}
-        </div>
+        </>
       )}
     </div>
   );

@@ -105,6 +105,9 @@ Later revisions: [ADR 0007](adr/0007-filters-choose-the-relationship-vocabulary.
 settles what Explore (previously All direct relations) applies and what Show
 full graph turns on. The Paternal lineage button is withdrawn from the panel
 while its future is decided; the action itself still restores from a saved URL.
+Two actions are renamed in the interface, with their behavior unchanged: rule
+9's Remove from exploration is Hide node, and rule 10's Keep only selected is
+Keep only this node.
 
 Rule 1 revises the scope model in [ADR 0004](adr/0004-merge-overview-into-exploration.md).
 Rule 2 revises [ADR 0001](adr/0001-separate-expansion-from-connection-visibility.md)'s
