@@ -9,7 +9,7 @@ import useSWR from 'swr';
 import { fetcher } from '@/lib/swr';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faArrowsRotate, faBars, faCircleXmark, faCompress, faCropSimple, faDiagramProject, faExpand, faEyeSlash,
+  faArrowsRotate, faBars, faCircleXmark, faCompress, faCropSimple, faExpand, faEyeSlash, faHexagonNodes,
   faFilter, faListUl, faLocationCrosshairs, faMagnifyingGlass, faRotateLeft, faScissors, faShareNodes,
   faUser, faXmark,
 } from '@fortawesome/free-solid-svg-icons';
@@ -53,6 +53,11 @@ interface GraphCanvasProps {
 }
 
 const relationName = (value: string) => value.toLowerCase().replaceAll('_', ' ');
+
+// Companionship keeps whatever state its own switch left it in: it connects
+// hundreds of people at once, so a bulk action that swept it along would bury
+// the exploration (rule 3 of docs/graph-exploration-review-plan.md).
+const isBulkRelation = (type: string) => governingRelationType(type) !== 'COMPANION_OF';
 
 // Placement only: a control sitting on the canvas needs its own ground to stay
 // legible against whatever the graph draws behind it.
@@ -178,17 +183,14 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     if (!showSearch || !exploration.edges) return new Map<RelationType, number>();
     return directRelationCounts(exploration.edges, selectedSubjectId ?? graphData?.nodes.map(node => node.id) ?? [], RELATION_ORDER) as Map<RelationType, number>;
   }, [showSearch, selectedSubjectId, exploration.edges, graphData]);
-  // Local choices are independent of the global filters (rule 1 of
-  // docs/graph-exploration-review-plan.md), so "all" covers every recorded
-  // relation. Companionship is the one exception: it joins only once its own
-  // switch is on, and this action never changes that switch.
+  // Explore applies the enabled relationship types to the selected subject,
+  // rather than everything on record: the filter switches are the vocabulary
+  // both it and Show full graph work from (see
+  // docs/adr/0007-filters-choose-the-relationship-vocabulary.md). Companionship
+  // therefore joins only once its own switch is on, and Explore never changes
+  // that switch.
   const directRelationsToExpand = useMemo(
-    () =>
-      RELATION_ORDER.filter(
-        relation =>
-          (selectedRelationCounts.get(relation) ?? 0) > 0 &&
-          (governingRelationType(relation) !== 'COMPANION_OF' || includedRelations.has('COMPANION_OF'))
-      ),
+    () => ALL_RELATION_TYPES.filter(relation => includedRelations.has(relation) && (selectedRelationCounts.get(relation as RelationType) ?? 0) > 0),
     [selectedRelationCounts, includedRelations]
   );
   const hasEligibleDirectRelations = Boolean(selectedSubjectId) && directRelationsToExpand.length > 0;
@@ -358,6 +360,13 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       ...extra,
     });
   };
+  // Show full graph reveals the whole dataset, so it turns the relationship
+  // vocabulary on with it -- otherwise the subjects arrive with none of their
+  // connections drawn. Companionship stays where its own switch left it.
+  const showFullGraph = () => {
+    const companionship = includedRelations.has('COMPANION_OF') ? ['COMPANION_OF'] : [];
+    updateParams({ full: '1', filter: [...ALL_RELATION_TYPES.filter(isBulkRelation), ...companionship] });
+  };
   const collapseSelectedBranch = () => {
     if (!selectedSubjectId || !exploration.edges) return;
     applyExploration(collapseBranch(explorationInput, selectedSubjectId, exploration.edges));
@@ -373,7 +382,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
   const expandAllDirectRelations = () => {
     if (!selectedSubjectId) return;
-    const tokens = directRelationsToExpand.map(relation => formatExpandParam({ subject: selectedSubjectId, relation }));
+    const tokens = directRelationsToExpand.map(relation => formatExpandParam({ subject: selectedSubjectId, relation: relation as RelationType }));
     updateParams({ expand: Array.from(new Set([...expandParams, ...tokens])) });
   };
 
@@ -438,10 +447,6 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     else next.add(type);
     updateParams({ filter: [...next] });
   };
-  // Companionship keeps whatever state its own switch left it in: it connects
-  // hundreds of people at once, so a bulk action that swept it along would
-  // bury the exploration (rule 3 of docs/graph-exploration-review-plan.md).
-  const isBulkRelation = (type: string) => governingRelationType(type) !== 'COMPANION_OF';
   const setRelationsInScope = (types: string[], show: boolean) => {
     if (activeScope === 'selected') {
       if (!selectedSubjectId) return;
@@ -732,8 +737,8 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
             {t.graph.keepOnlySelected}
           </Button>
         </>}
-        <Button disabled={fullGraph} onClick={() => updateParams({ full: '1' })}>
-          <FontAwesomeIcon icon={faDiagramProject} />
+        <Button disabled={fullGraph} onClick={showFullGraph}>
+          <FontAwesomeIcon icon={faHexagonNodes} />
           {t.graph.showFullGraph}
         </Button>
         <Button onClick={resetGraphView}>

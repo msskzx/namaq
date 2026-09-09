@@ -105,20 +105,21 @@ beforeEach(() => {
 });
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 
-it('expands every recorded relation of the selection, then reveals globally without changing those expansions', async () => {
+it('explores the selection along the enabled relations only, then reveals globally without changing those expansions', async () => {
   nav.setUrl(`/graphs?filter=WIFE&subject=person:${root}&selected=${root}`);
   mount();
-  fireEvent.click(await screen.findByRole('button', { name: 'All direct relations' }));
-  await waitFor(() => expect(params().getAll('expand')).toEqual([`person:${root}:FATHER`, `person:${root}:WIFE`]));
+  fireEvent.click(await screen.findByRole('button', { name: 'Explore' }));
+  // Father is switched off, so Explore leaves the Prophet's father out.
+  await waitFor(() => expect(params().getAll('expand')).toEqual([`person:${root}:WIFE`]));
   fireEvent.click(screen.getByRole('button', { name: 'Deselect' }));
   fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
   fireEvent.click(screen.getByRole('button', { name: 'Entire exploration' }));
   fireEvent.click(screen.getByRole('switch', { name: 'Show Father relationships' }));
-  // Grandfather comes with it: the manually revealed father has no Father cap,
-  // so the still-active filter takes one hop from him (ADR 0003).
-  await waitFor(() => expect(graph()).toBe('father,grandfather,prophet-muhammad,wife,wife-father'));
+  // The father arrives through the filter itself, which caps him, so the chain
+  // stops before the grandfather (ADR 0003).
+  await waitFor(() => expect(graph()).toBe('father,prophet-muhammad,wife,wife-father'));
   expect(params().getAll('filter')).toEqual(['WIFE', 'FATHER']);
-  expect(params().getAll('expand')).toEqual([`person:${root}:FATHER`, `person:${root}:WIFE`]);
+  expect(params().getAll('expand')).toEqual([`person:${root}:WIFE`]);
 });
 
 it('installs the recorded family and turns every global filter off on Start over', async () => {
@@ -132,10 +133,9 @@ it('installs the recorded family and turns every global filter off on Start over
   fireEvent.click(screen.getByRole('button', { name: 'Entire exploration' }));
   expect(screen.getByRole('switch', { name: 'Show Father relationships' }).getAttribute('aria-checked')).toBe('false');
   expect(screen.getByRole('switch', { name: 'Show Companion Of relationships' }).getAttribute('aria-checked')).toBe('false');
-  fireEvent.click(screen.getByRole('button', { name: 'All direct relations' }));
-  await waitFor(() => expect(params().getAll('expand')).toContain(`person:${root}:FATHER`));
-  // Expansion follows the panel, so the switched-off type stays out.
-  expect(params().getAll('expand')).not.toContain(`person:${root}:COMPANION_OF`);
+  // Every global filter is off after Start over, so Explore has nothing to
+  // apply and does not offer itself.
+  expect(screen.queryByRole('button', { name: 'Explore' })).toBeNull();
 });
 
 it('offers Show additions after growth, clears it on click, and offers no stale one after a collapse with no growth', async () => {
@@ -291,6 +291,10 @@ it('unions the full graph, preserves exploration state and makes Start over undo
   expect(params().get('full')).toBe('1');
   expect(params().get('selected')).toBe('wife');
   expect(params().getAll('expand')).toEqual([`person:${root}:WIFE`]);
+  // The whole dataset arrives with its relationship vocabulary switched on,
+  // companionship excepted.
+  expect(params().getAll('filter')).toContain('FATHER');
+  expect(params().getAll('filter')).not.toContain('COMPANION_OF');
   const beforeReset = nav.getUrl();
   fireEvent.click(screen.getByRole('button', { name: 'Start over' }));
   await waitFor(() => expect(graph()).toBe(`${root},wife`));
@@ -302,7 +306,18 @@ it('unions the full graph, preserves exploration state and makes Start over undo
   expect(nav.push).toHaveBeenLastCalledWith(nav.getUrl(), { scroll: false });
   act(() => nav.setUrl(beforeReset));
   await waitFor(() => expect(graph()).toContain('grandfather'));
-  expect(params().getAll('filter')).toEqual(['FATHER']);
+  expect(params().getAll('filter')).toContain('FATHER');
+});
+
+it('leaves companionship to its own switch when Show full graph turns the vocabulary on', async () => {
+  nav.setUrl(`/graphs?subject=person:${root}&filter=COMPANION_OF&selected=${root}`);
+  mount();
+  await waitFor(() => expect(graph()).toContain('companion'));
+  fireEvent.click(screen.getByRole('button', { name: 'Show full graph' }));
+  await waitFor(() => expect(params().get('full')).toBe('1'));
+
+  expect(params().getAll('filter')).toContain('FATHER');
+  expect(params().getAll('filter')).toContain('COMPANION_OF');
 });
 
 it('opens a fresh visit on the root\'s recorded family, with every global filter off', async () => {

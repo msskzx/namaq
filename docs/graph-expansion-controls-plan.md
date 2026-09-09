@@ -1,5 +1,8 @@
 # Expansion controls
 
+Decision 6 stands, under the name Explore; see
+[ADR 0007](adr/0007-filters-choose-the-relationship-vocabulary.md).
+
 Review update: the [exploration rules review](graph-exploration-review-plan.md)
 supersedes decisions 5-8 wherever they remove individual subject-scoped choices,
 force choices into global scope, or hide connections between retained subjects.

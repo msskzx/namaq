@@ -15,23 +15,22 @@ const props = {
 };
 
 describe('ExpansionControls', () => {
-  it('renders All direct relations and the three lineage actions for a person', () => {
+  it('renders Explore and the two lineage directions for a person', () => {
     render(<ExpansionControls {...props} isPerson />);
     expect(screen.getAllByRole('button').map(button => button.textContent)).toEqual([
-      'All direct relations',
+      'Explore',
       'Ancestors',
-      'Paternal lineage',
       'Descendants',
     ]);
   });
 
-  it('renders only All direct relations for a non-person subject', () => {
+  it('renders only Explore for a non-person subject', () => {
     render(<ExpansionControls {...props} isPerson={false} />);
-    expect(screen.getAllByRole('button').map(button => button.textContent)).toEqual(['All direct relations']);
+    expect(screen.getAllByRole('button').map(button => button.textContent)).toEqual(['Explore']);
   });
 
-  it('omits All direct relations when no relation is eligible', () => {
+  it('omits Explore when no enabled relation has neighbors', () => {
     render(<ExpansionControls {...props} isPerson hasEligibleDirectRelations={false} />);
-    expect(screen.queryByText('All direct relations')).toBeNull();
+    expect(screen.queryByText('Explore')).toBeNull();
   });
 });

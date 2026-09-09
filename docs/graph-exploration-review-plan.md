@@ -27,13 +27,13 @@ the current review; it makes no claims about implementation compliance.
 3. Companionship starts off. One manual toggle handles both recorded directions
    (`COMPANION_OF` and `ACCOMPANIED_BY`). When off, searches and other actions
    respect that exclusion; when on, companion relationships are eligible to
-   appear. All direct relations, ordinary reset actions, and group or bulk relationship
+   appear. Explore, ordinary reset actions, and group or bulk relationship
    on/off toggles do not change this toggle. Bulk actions exclude companionship
    in both directions, preserving its current state whether on or off.
    Start over restores all filter defaults, including companionship off,
-   while clearing exploration contributions and cap history. All direct
-   relations includes companions when their filter has been manually enabled
-   and excludes them when it is off; the action never changes filter state.
+   while clearing exploration contributions and cap history. Explore includes
+   companions when their filter has been manually enabled and excludes them
+   when it is off; the action never changes filter state.
 4. A subject introduced by global filter F retains its cap for F throughout
    that exploration, including later independent search/revelation, removal
    and reintroduction, and filter off/on. Manual subject expansions remain
@@ -101,6 +101,11 @@ the current review; it makes no claims about implementation compliance.
 16. Direct and lineage contributions are independent. Collapsing one preserves
     subjects supported by the other, consistent with the retention rules.
 
+Later revisions: [ADR 0007](adr/0007-filters-choose-the-relationship-vocabulary.md)
+settles what Explore (previously All direct relations) applies and what Show
+full graph turns on. The Paternal lineage button is withdrawn from the panel
+while its future is decided; the action itself still restores from a saved URL.
+
 Rule 1 revises the scope model in [ADR 0004](adr/0004-merge-overview-into-exploration.md).
 Rule 2 revises [ADR 0001](adr/0001-separate-expansion-from-connection-visibility.md)'s
 unconditional connection visibility. Terms remain in [CONTEXT.md](../CONTEXT.md).
@@ -115,10 +120,10 @@ search-auto-enablement rules in the exploration and search plans. The current re
 | Global scope | Global filters start off. Enabling global Father permits father connections between existing subjects. It also introduces missing fathers with the previously agreed per-relation one-hop cap; toggling does not advance the cap. | Inspect scope state and test cross-connections independently from local contributions. |
 | Contribution removal | Collapse Muhammad's Wives contribution while Aisha has an independent Parents expansion: retain Aisha and her parents. | Check provenance and overlapping-contribution tests. |
 | Connection visibility | Connections between retained subjects appear only when allowed by current filters. | Check subgraph construction and rendering filters, including inverse-pair presentation. |
-| Filter preservation | Search, All direct relations, and ordinary resets preserve on/off filter choices; companionship starts off. Start over restores defaults. | Test each action with filters on/off and with default versus restored state. |
+| Filter preservation | Search, Explore, and ordinary resets preserve on/off filter choices; companionship starts off. Start over restores defaults. | Test each action with filters on/off and with default versus restored state. |
 | Start over | After companionship is manually enabled and other filters changed, Start over restores every filter default, including companionship off, clears previous contributions and cap history, and reveals Muhammad with his recorded direct wives, sons, daughters, and grandchildren. | Test reset from nondefault filter states and browser Back restoration. |
 | Bulk and group toggles | With companionship off, group/all-on leaves it off; with companionship on, group/all-off leaves it on. Both recorded directions retain the same state. | Test group and master toggles in both directions with companionship initially on and off. |
-| Companion expansion | All direct relations includes companions only when their filter is enabled, without changing that state. | Test direct expansion with companionship on and off. |
+| Companion expansion | Explore includes companions only when their filter is enabled, without changing that state. | Test direct expansion with companionship on and off. |
 | Companion directions | The dedicated toggle handles both COMPANION_OF and ACCOMPANIED_BY under the chosen subject/global scope. | Test from the Prophet and a companion, including inverse-record deduplication. |
 | Persistent cap | Searching or removing/reintroducing a Father-introduced subject does not make it trigger global Father; manual expansion still works. Start over clears history. | Check provenance lifecycle, restoration, and cap regressions. |
 | Search contribution removal | Removing a searched subject preserves it if another contribution supports it, including its own active expansion. | Test isolated roots and overlap with local/global contributions. |

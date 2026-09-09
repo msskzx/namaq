@@ -5,6 +5,14 @@ commit and a merge with main. The [exploration rules](graph-exploration-review-p
 are confirmed; this document records the audit they were built from, the build
 order, and what still needs a live check.
 
+Three later decisions are recorded in
+[ADR 0007](adr/0007-filters-choose-the-relationship-vocabulary.md) and here:
+Explore (renamed from All direct relations) applies the enabled relationship
+types to the selected subject; Show full graph turns that same set on as it
+reveals the dataset, companionship excepted; and the Paternal lineage button is
+withdrawn from the panel while its future is decided. The action keeps working
+from a saved URL, so restoring the button is a one-line change.
+
 Two decisions were settled during the work. Main had shipped global relation
 filters that default on; the confirmed rules win, so filters start off and the
 opening family comes from the root's own expansions. Main's blanket hiding of
@@ -48,7 +56,7 @@ model and were rewritten rather than extended.
 | Lineage and direct overlap | `lineageExpansion.ts:17–48` flattens a lineage action into ordinary per-hop actions and loses which action produced them. | Keep the originating contribution identity while reusing the traversal. |
 | Remove and Keep only selected | Neither `ExplorationInput` nor `urlState.ts:11–15` has removal or branch fields; `useExplorationGraph.ts:73–77` promotes every full-graph node to a root. | Add removal state and branch actions. Show full graph must respect removals. |
 | Minimal initial and reset family | `GraphCanvas.tsx:434–440` expands all direct relations on a fresh visit; `:667–673` resets to Muhammad alone. | Share one initializer between fresh visit and Start over: WIFE, SON, DAUGHTER, GRANDSON, GRANDDAUGHTER as local contributions on the target subject. Do not infer grandchildren from two parent hops. |
-| Companionship stays manual | `GraphCanvas.tsx:396–404` expands every counted relation; `:459–468` includes companionship in bulk and group toggles. | Bulk and group operations leave companionship in whatever state it is in. All direct relations respects the dedicated toggle. Start over resets it off. |
+| Companionship stays manual | `GraphCanvas.tsx:396–404` expands every counted relation; `:459–468` includes companionship in bulk and group toggles. | Bulk and group operations leave companionship in whatever state it is in. Explore respects the dedicated toggle. Start over resets it off. |
 | Companion toggle covers both directions | `categories.ts:82` pairs ACCOMPANIED_BY with COMPANION_OF for visibility, but `expansion.ts:33–47` treats both as reciprocal and reads them incoming only. | Reuse the pairing for companion expansion and counts. Do not make family matching undirected as a side effect. |
 | Disabled-kind search needs manual enablement | `GraphSearch.tsx:97–107` silently enables the searched kind and the companion title; `:110` uses `router.replace`. | Explain the disabled kind and require the user to enable it. Use history-pushing navigation for exploration changes. |
 | Battle status filtering | `prisma/schema.prisma:239` defines the status enum, `relationship/status.ts` colors it, and no filter panel offers status choices. | OR filtering over participation records with an explicit unrecorded option, keeping independently supported people. |
