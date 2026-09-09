@@ -1,7 +1,7 @@
 # Data quality and references
 
-Status: planning; blocked on the open decisions below. No implementation or data
-publication is authorized by this document.
+Status: editorial decisions settled; awaiting final shared-understanding
+confirmation. No implementation or data publication is authorized by this document.
 
 ## Agreed scope
 
@@ -51,7 +51,8 @@ source text are versioned in files and imported into PostgreSQL; files are the
 authoring source and database copies are not edited independently. Use Markdown
 for source pages and structured files for metadata, facts and citation targets,
 with one authoritative file copy of the full text. Proposed directory: `data/history/`.
-The mechanism binding approval to the reviewed revision remains open. A separate data repository
+Approval is explicit in the review conversation and recorded against the fixed
+batch revision in its summary. Edits after approval require reapproval. A separate data repository
 is deferred until independent contributors, permissions or releases justify it.
 
 Support citations for every historical subject type, including graph-only people,
@@ -68,6 +69,13 @@ One explicit passage in an eligible historical work is sufficient for an ordinar
 claim. Ambiguous identity, inferred relationships and conflicting accounts need
 further checking. Present competing evidence for the user's decision; repeated
 reports across books do not automatically count as independent corroboration.
+
+Preserve competing dates, identities and interpretations as attributed claims.
+Leave unknown structured values unset rather than manufacture certainty. Selecting
+or changing a preferred profile value requires explicit batch review. Preserve
+complete transmission chains in source accounts, but do not automatically create
+graph nodes or relationships for people mentioned only as narrators. Structured
+connections in this phase cover biographical relationships and events.
 
 New citations record work/edition, exact extraction URL, entry or section
 identifier, available volume/page, a short supporting Arabic excerpt and access
@@ -144,6 +152,8 @@ array cannot distinguish absent evidence from evidence excluded by the API filte
 | Import approval | Only the exact user-approved batch revision is applied, independently of claim review status | Reject unapproved and changed-after-approval revisions; accept approved unreviewed claims |
 | All subject types | Evidence can be attached to people, titles, battles and events, including subjects without profiles | Attachment and retrieval tests for each subject type and graph-only people |
 | Evidence threshold | Ordinary claims have explicit support; ambiguity and conflicts are flagged for review | Human source comparison and batch validation of required evidence |
+| Ambiguous values | Competing claims retain attribution; unknown values stay unset; preferred-value changes are reviewed explicitly | Import tests for conflicting dates/identities and human review of canonical changes |
+| Transmission chains | Complete chains remain in source text without automatically creating narrator graph nodes or edges | Pilot source comparison and import test proving narrator-only mentions leave graph structure unchanged |
 | Repository authoring | Data and import code are separate; Markdown summaries link to the reviewed files | Validate migrated batch discovery, references and repeatable imports |
 | Complete entry preservation | Pilot preserves all entry pages and notes, with edition and exact source locations, alongside extracted facts | Compare page sequence and note markers against the source; test storage and citation links |
 | Separate book accounts | Additional source accounts can coexist for the same subject without overwriting text or attribution | Import and retrieval tests with two accounts for one subject |
@@ -246,16 +256,10 @@ after retry. Any new graph structure requires layout dry run, diff review and
 application; source-account imports alone do not. Deploy additive schema changes
 before code that reads them; preserve old evidence until migration is verified.
 
-## Open decisions
+## Open issues and deferred work
 
-Editorial blockers awaiting user decisions:
-
-- Exact approval recording: explicit approval of a batch's fixed revision, with
-  reapproval after edits, or another user-selected mechanism.
-- Whether ambiguous dates and source interpretations remain attributed claims
-  until resolution instead of becoming a single canonical value.
-- Whether structured graph expansion excludes people mentioned only as narrators
-  in transmission chains while preserving those chains in the complete account.
+No editorial blockers remain. Obtain final shared-understanding confirmation
+before implementation. Per-batch approval remains required before imports.
 
 Nonblocking implementation assumptions: proposed paths and schema names may be
 adjusted to existing conventions; page selection defaults to the account's first
@@ -269,3 +273,9 @@ are agent research/integration work, not questions for the user to look up.
 
 Deferred: separate data repository, translations of complete accounts, broader
 historical expansion beyond this enrichment pass, and a separate editorial app.
+
+After people data is stable, consider ayat revealed about particular people before
+hadith narrator relationships. This is a preferred future sequence, not committed
+implementation scope. For hadith work, the user suggested al-Nawawi's Forty Hadith
+or Sahih al-Bukhari as possible starting collections; neither has been selected.
+Preserved transmission chains do not authorize adding that graph feature now.
