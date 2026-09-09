@@ -187,15 +187,19 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     if (!showSearch || !exploration.edges) return new Map<RelationType, number>();
     return directRelationCounts(exploration.edges, selectedSubjectId ?? graphData?.nodes.map(node => node.id) ?? [], RELATION_ORDER) as Map<RelationType, number>;
   }, [showSearch, selectedSubjectId, exploration.edges, graphData]);
-  // Explore applies the enabled relationship types to the selected subject,
-  // rather than everything on record: the filter switches are the vocabulary
-  // both it and Show full graph work from (see
-  // docs/adr/0007-filters-choose-the-relationship-vocabulary.md). Companionship
-  // therefore joins only once its own switch is on, and Explore never changes
-  // that switch.
+  // Explore applies the enabled relationship types to the selected subject
+  // rather than everything on record, since the filter switches are the
+  // vocabulary both it and Show full graph work from (see
+  // docs/adr/0007-filters-choose-the-relationship-vocabulary.md). With nothing
+  // switched on there is nothing to narrow, so it covers every type except
+  // companionship, which joins only when its own switch says so.
+  const exploreVocabulary = useMemo(
+    () => (includedRelations.size > 0 ? ALL_RELATION_TYPES.filter(type => includedRelations.has(type)) : ALL_RELATION_TYPES.filter(isBulkRelation)),
+    [includedRelations]
+  );
   const directRelationsToExpand = useMemo(
-    () => ALL_RELATION_TYPES.filter(relation => includedRelations.has(relation) && (selectedRelationCounts.get(relation as RelationType) ?? 0) > 0),
-    [selectedRelationCounts, includedRelations]
+    () => exploreVocabulary.filter(relation => (selectedRelationCounts.get(relation as RelationType) ?? 0) > 0),
+    [selectedRelationCounts, exploreVocabulary]
   );
   const hasEligibleDirectRelations = Boolean(selectedSubjectId) && directRelationsToExpand.length > 0;
   // Node kinds present in the fetched graph (person/title/battle/event).

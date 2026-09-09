@@ -13,8 +13,13 @@ now read them that way: **Explore** and **Show full graph**.
 
 **Explore** expands the selected subject along the enabled types only. Turning
 on Wives and nothing else and pressing Explore on the Prophet reveals his wives,
-not his father, his uncles, and every battle he fought. With every type switched
-off there is nothing for it to apply, so the button does not offer itself.
+not his father, his uncles, and every battle he fought.
+
+An empty switch set is not a restriction. Global filters start off, so treating
+"none enabled" as "nothing to explore" would hide the panel's main action on
+arrival and leave a reader with no way in. With nothing switched on, Explore
+covers every type except companionship, and each switch the reader turns on
+narrows it from there.
 
 **Show full graph** turns the enabled set on as it reveals the dataset. Without
 that, the whole graph arrives as subjects with no connections drawn between
@@ -23,7 +28,7 @@ matching global filter.
 
 ```mermaid
 flowchart LR
-    SWITCHES["Relation switches: the enabled types"]
+    SWITCHES["Relation switches: the enabled types, or every type when none are on"]
     EXPLORE["Explore: apply them to the selected subject"]
     FULL["Show full graph: apply them to the whole dataset"]
     COMPANION["Companionship: its own switch, untouched by either"]
