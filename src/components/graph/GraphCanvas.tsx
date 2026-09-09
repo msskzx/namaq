@@ -847,7 +847,11 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           <FontAwesomeIcon icon={faBars} />
         </button>
         {menuOpen && (
-          <div dir={language === 'ar' ? 'rtl' : 'ltr'} className={`absolute top-full z-30 mt-1 min-w-[200px] rounded-lg border border-amber-400 bg-gray-50 p-3 shadow-lg dark:bg-gray-950 ${language === 'ar' ? 'right-0' : 'left-0'}`}>
+          // Anchored to the viewport, not to the button: the panel around it
+          // scrolls and hides its overflow, and it sits at the bottom of the
+          // screen when collapsed, so a dropdown opening downwards from the
+          // button lands outside the screen with no way to reach it.
+          <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="fixed inset-x-3 bottom-3 z-[70] max-h-[70dvh] overflow-y-auto rounded-lg border border-amber-400 bg-gray-50 p-3 shadow-lg lg:inset-x-auto lg:bottom-auto lg:top-14 lg:start-3 lg:w-64 lg:max-h-[80dvh] dark:bg-gray-950">
             <ul className="flex flex-col gap-1">
               {navLinks.map(link => (
                 <li key={link.href}>

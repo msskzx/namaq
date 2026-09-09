@@ -253,6 +253,17 @@ it('filters battle participation by status, keeping people their family still su
   await waitFor(() => expect(graph()).not.toContain('badr'));
 });
 
+// The menu's placement is layout, which jsdom cannot judge; this covers the
+// half it can, that the links exist while the panel is collapsed.
+it('opens the site menu from the collapsed panel', async () => {
+  mount();
+  await waitFor(() => expect(graph()).toContain('wife'));
+  fireEvent.click(screen.getByRole('button', { name: 'Close search' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Menu' }));
+
+  expect(screen.getByRole('link', { name: 'About' })).toBeTruthy();
+});
+
 it('hides and restores the Nodes in view list', async () => {
   mount();
   await waitFor(() => expect(graph()).toContain('wife'));
