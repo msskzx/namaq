@@ -156,6 +156,7 @@ describe('GraphSearch across kinds', () => {
   });
 
   it('makes a non-person subject an exploration root, not just a selection', async () => {
+    nav.reset('/graphs?kind=person&kind=battle');
     render(<GraphSearch />);
 
     await pick('badr', 'Battle of Badr');
@@ -164,14 +165,16 @@ describe('GraphSearch across kinds', () => {
     expect(nav.getUrl()).toContain('selected=badr');
   });
 
-  it('switches on a kind that was not active, keeping the previously active ones', async () => {
+  it('explains a result whose kind is switched off instead of adding it', async () => {
     render(<GraphSearch />);
 
-    await pick('badr', 'Battle of Badr');
+    fireEvent.change(screen.getByPlaceholderText('Search'), { target: { value: 'badr' } });
+    const option = await screen.findByText('Battle of Badr');
+    expect(await screen.findByText('Turn on Battles & Expeditions in the filters to add this result.')).toBeTruthy();
+    fireEvent.mouseDown(option);
 
-    await waitFor(() => expect(nav.getUrl()).toContain('kind=battle'));
-    expect(nav.getUrl()).toContain('kind=person');
-    expect(nav.getUrl()).toContain('kind=title');
+    await waitFor(() => expect(nav.getUrl()).toBe('/graphs'));
+    expect(nav.getUrl()).not.toContain('kind=battle');
   });
 
   it('leaves the kind params alone when the picked kind is already active', async () => {
@@ -185,25 +188,25 @@ describe('GraphSearch across kinds', () => {
     expect(nav.getUrl()).not.toContain('kind=title');
   });
 
-  it('reveals the Companion title, which has its own visibility flag rather than a kind', async () => {
+  it('adds the Companion title once its own switch is on, and never sets that switch itself', async () => {
+    nav.reset('/graphs?showCompanionTitle=1');
     render(<GraphSearch />);
 
     await pick('companion', 'Companion');
 
-    await waitFor(() => expect(nav.getUrl()).toContain('showCompanionTitle=1'));
-    expect(nav.getUrl()).toContain('subject=title%3Acompanion');
+    await waitFor(() => expect(nav.getUrl()).toContain('subject=title%3Acompanion'));
     expect(nav.getUrl()).toContain('selected=companion');
   });
 
-  it('does not set the Companion flag for any other title', async () => {
+  it('lifts an explicit removal when the subject is searched again', async () => {
+    nav.reset('/graphs?removed=person%3Aprophet-muhammad&removed=person%3Aumar');
     render(<GraphSearch />);
 
-    fireEvent.change(screen.getByPlaceholderText('Search'), { target: { value: 'badr' } });
-    const option = await screen.findByText('Battle of Badr');
-    fireEvent.mouseDown(option);
+    await pick('prophet', 'Prophet Muhammad');
 
-    await waitFor(() => expect(nav.getUrl()).toContain('subject=battle%3Abadr'));
-    expect(nav.getUrl()).not.toContain('showCompanionTitle');
+    await waitFor(() => expect(nav.getUrl()).toContain('subject=person%3Aprophet-muhammad'));
+    expect(nav.getUrl()).not.toContain('removed=person%3Aprophet-muhammad');
+    expect(nav.getUrl()).toContain('removed=person%3Aumar');
   });
 
   it('omits the Profile button for a graph-only person', async () => {

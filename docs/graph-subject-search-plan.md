@@ -1,5 +1,10 @@
 # Historical subjects are searchable
 
+Current design review: [Exploration rules review](graph-exploration-review-plan.md) supersedes conflicting
+local/global scope, filter, search-enablement, reset, and removal behavior below.
+The rules are confirmed but not yet implemented; older implementation
+descriptions are not evidence of compliance.
+
 Status: implemented, phases one to six. The recomputation has run; the two
 steps that remain must wait until this is deployed, since they remove data the
 live code still reads -- see

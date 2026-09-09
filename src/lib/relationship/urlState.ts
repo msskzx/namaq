@@ -1,20 +1,26 @@
 import { governingRelationType, RELATION_ORDER } from './categories';
-import { ExpansionAction } from './exploration';
+import { capKey, ExpansionAction, ExplorationCap, ExplorationInput } from './exploration';
+import { PARTICIPATION_STATUS_CHOICES } from './status';
 import { ExpansionRelationId } from './expansion';
-import { NodeKind, SubjectId, parseSubjectId, subjectId } from './types';
-import { ExplorationInput } from './exploration';
+import { NodeKind, RelationType, SubjectId, parseSubjectId, subjectId } from './types';
 
 const KNOWN_KINDS: ReadonlySet<string> = new Set(['person', 'title', 'battle', 'event']);
 const LINEAGE_RELATION_IDS: ReadonlySet<string> = new Set(['ANCESTORS', 'PATERNAL_LINEAGE', 'DESCENDANTS']);
 const KNOWN_RELATION_TYPES: ReadonlySet<string> = new Set(RELATION_ORDER);
 
-const DEFAULT_FILTERS = RELATION_ORDER.filter(type => !['COMPANION_OF', 'PARTICIPATED_IN', 'INVOLVED_IN', 'PART_OF'].includes(governingRelationType(type)));
-
 export interface ExplorationUrlState {
   subjects: string[];
   expands: string[];
   filters?: string[];
+  caps?: string[];
+  removed?: string[];
+  statuses?: string[];
 }
+
+// An empty status choice and an absent `status` param serialize the same way,
+// so "the user turned every status off" needs its own value to stay
+// distinguishable from "the user has not chosen yet".
+export const NO_STATUSES = '__none__';
 
 function parseSubjectParam(raw: string): SubjectId | null {
   const separatorIndex = raw.indexOf(':');
@@ -34,6 +40,15 @@ function parseExpandParam(raw: string): ExpansionAction | null {
   return { subject: subjectId(kind as NodeKind, slug), relation: relation as ExpansionRelationId };
 }
 
+function parseCapParam(raw: string): ExplorationCap | null {
+  const separatorIndex = raw.lastIndexOf(':');
+  if (separatorIndex === -1) return null;
+  const subject = parseSubjectParam(raw.slice(0, separatorIndex));
+  const relation = raw.slice(separatorIndex + 1);
+  if (!subject || !KNOWN_RELATION_TYPES.has(relation)) return null;
+  return { subject, relation: relation as RelationType };
+}
+
 export function parseExplorationInput(state: ExplorationUrlState, targetSlug: string): ExplorationInput {
   const parsedRoots = Array.from(
     new Set(state.subjects.map(parseSubjectParam).filter((id): id is SubjectId => id !== null))
@@ -42,9 +57,38 @@ export function parseExplorationInput(state: ExplorationUrlState, targetSlug: st
   const expansions = state.expands
     .map(parseExpandParam)
     .filter((action): action is ExpansionAction => action !== null);
-  const governingFilters = new Set((state.filters ?? DEFAULT_FILTERS).map(governingRelationType));
-  const globalFilters = RELATION_ORDER.filter(type => governingFilters.has(governingRelationType(type)));
-  return { roots, expansions, globalFilters };
+  const governingFilters = new Set((state.filters ?? []).filter((type) => KNOWN_RELATION_TYPES.has(type)).map(governingRelationType));
+  const globalFilters = RELATION_ORDER.filter((type) => governingFilters.has(governingRelationType(type)));
+  const caps = dedupeBy(
+    (state.caps ?? []).map(parseCapParam).filter((cap): cap is ExplorationCap => cap !== null),
+    capKey
+  );
+  const removed = Array.from(
+    new Set((state.removed ?? []).map(parseSubjectParam).filter((id): id is SubjectId => id !== null))
+  );
+  return { roots, expansions, globalFilters, caps, removed, statuses: parseStatuses(state.statuses) };
+}
+
+function parseStatuses(raw: string[] | undefined): string[] | undefined {
+  if (!raw || raw.length === 0) return undefined;
+  if (raw.length === 1 && raw[0] === NO_STATUSES) return [];
+  const chosen = raw.filter((status) => PARTICIPATION_STATUS_CHOICES.includes(status));
+  return chosen.length > 0 ? Array.from(new Set(chosen)) : undefined;
+}
+
+export function formatStatusParams(statuses: string[] | undefined): string[] {
+  if (!statuses) return [];
+  return statuses.length > 0 ? statuses : [NO_STATUSES];
+}
+
+function dedupeBy<T>(items: T[], key: (item: T) => string): T[] {
+  const seen = new Set<string>();
+  return items.filter((item) => {
+    const itemKey = key(item);
+    if (seen.has(itemKey)) return false;
+    seen.add(itemKey);
+    return true;
+  });
 }
 
 export function formatSubjectParam(id: SubjectId): string {
@@ -53,6 +97,10 @@ export function formatSubjectParam(id: SubjectId): string {
 
 export function formatExpandParam(action: ExpansionAction): string {
   return `${action.subject}:${action.relation}`;
+}
+
+export function formatCapParam(cap: ExplorationCap): string {
+  return `${cap.subject}:${cap.relation}`;
 }
 
 export interface RouteFetchParams {

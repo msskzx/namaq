@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExpand, faCompress, faFilter, faMagnifyingGlass, faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
 import GraphSearch from './GraphSearch';
 import SlideSwitch from './SlideSwitch';
-import RelationFilterPanel from './RelationFilterPanel';
+import RelationFilterPanel, { ControlScope } from './RelationFilterPanel';
 import ExpansionControls from './ExpansionControls';
 import Button from '@/components/common/Button';
 import Badge from '@/components/common/Badge';
@@ -25,7 +25,10 @@ import { getAllNavLinks } from '@/lib/siteLinks';
 import { sortRelationTypes, governingRelationType, relationGroup, RELATION_ORDER, KIND_TO_RELATION_GROUP, RelationGroup } from '@/lib/relationship/categories';
 import { COMPANION_TITLE_SLUG, filterVisibleGraph } from '@/lib/graphFilter';
 import { profilePath } from '@/lib/nodeProfile';
-import { parseExplorationInput, formatExpandParam } from '@/lib/relationship/urlState';
+import { parseExplorationInput, formatCapParam, formatExpandParam, formatStatusParams, formatSubjectParam } from '@/lib/relationship/urlState';
+import { collapseBranch, defaultExplorationInput, keepOnlySelected, removeSubject } from '@/lib/relationship/transitions';
+import { ExplorationInput } from '@/lib/relationship/exploration';
+import { PARTICIPATION_STATUS_CHOICES, PARTICIPATION_STATUS_COLOR } from '@/lib/relationship/status';
 import { ALL_KINDS, DEFAULT_KINDS, NodeKind, RelationType, subjectId } from '@/lib/relationship/types';
 import { ExpansionRelationId, directRelationCounts } from '@/lib/relationship/expansion';
 import { useExplorationGraph } from './useExplorationGraph';
@@ -82,7 +85,14 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   const subjectParams = useMemo(() => searchParams?.getAll('subject') ?? [], [searchParams]);
   const explorationInput = useMemo(
     () => parseExplorationInput(
-      { subjects: subjectParams, expands: searchParams?.getAll('expand') ?? [], filters: searchParams?.has('filter') ? searchParams.getAll('filter') : undefined },
+      {
+        subjects: subjectParams,
+        expands: searchParams?.getAll('expand') ?? [],
+        filters: searchParams?.getAll('filter') ?? [],
+        caps: searchParams?.getAll('cap') ?? [],
+        removed: searchParams?.getAll('removed') ?? [],
+        statuses: searchParams?.has('status') ? searchParams.getAll('status') : undefined,
+      },
       targetSlug
     ),
     [searchParams, targetSlug, subjectParams]
@@ -160,13 +170,20 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     if (!showSearch || !exploration.edges) return new Map<RelationType, number>();
     return directRelationCounts(exploration.edges, selectedSubjectId ?? graphData?.nodes.map(node => node.id) ?? [], RELATION_ORDER) as Map<RelationType, number>;
   }, [showSearch, selectedSubjectId, exploration.edges, graphData]);
-  // Expanding "all" must not pull in a type the filters exclude, so the button
-  // follows the Filters panel exactly and disappears once everything is off --
-  // see decision 6 in docs/graph-expansion-controls-plan.md.
-  const hasEligibleDirectRelations = useMemo(
-    () => Boolean(selectedSubjectId) && explorationInput.globalFilters.some(relation => (selectedRelationCounts.get(relation) ?? 0) > 0),
-    [selectedSubjectId, selectedRelationCounts, explorationInput.globalFilters]
+  // Local choices are independent of the global filters (rule 1 of
+  // docs/graph-exploration-review-plan.md), so "all" covers every recorded
+  // relation. Companionship is the one exception: it joins only once its own
+  // switch is on, and this action never changes that switch.
+  const directRelationsToExpand = useMemo(
+    () =>
+      RELATION_ORDER.filter(
+        relation =>
+          (selectedRelationCounts.get(relation) ?? 0) > 0 &&
+          (governingRelationType(relation) !== 'COMPANION_OF' || includedRelations.has('COMPANION_OF'))
+      ),
+    [selectedRelationCounts, includedRelations]
   );
+  const hasEligibleDirectRelations = Boolean(selectedSubjectId) && directRelationsToExpand.length > 0;
   // Node kinds present in the fetched graph (person/title/battle/event).
   const kindsPresent = useMemo(() => [...new Set(graphData?.nodes.map(node => node.type ?? 'person') ?? [])], [graphData]);
   // Relation switches must remain available after a filter removes their edges.
@@ -287,17 +304,27 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     const params = new URLSearchParams(searchParams?.toString());
     Object.entries(changes).forEach(([key, value]) => {
       params.delete(key);
-      if (Array.isArray(value)) {
-        // An empty include set must survive refresh instead of restoring defaults.
-        if (key === 'filter' && value.length === 0) params.set(key, '');
-        else value.forEach(item => params.append(key, item));
-      } else if (value) params.set(key, value);
+      if (Array.isArray(value)) value.forEach(item => params.append(key, item));
+      else if (value) params.set(key, value);
     });
     const navigate = showSearch && !replace ? router.push : router.replace;
     navigate(`${pathname}${params.size ? `?${params.toString()}` : ''}`, { scroll: false });
   }, [router, pathname, searchParams, showSearch]);
 
   const expandParams = useMemo(() => searchParams?.getAll('expand') ?? [], [searchParams]);
+  // Relationship choices apply to the selected subject by default; the panel's
+  // own switch moves them to the whole exploration (rule 1 of
+  // docs/graph-exploration-review-plan.md). Nothing changes scope on its own.
+  const [scope, setScope] = useState<ControlScope>('selected');
+  // The embedded profile graph has no selection model of its own, so its
+  // switches stay whole-view.
+  const activeScope: ControlScope = showSearch ? scope : 'exploration';
+  const localRelations = useMemo(() => {
+    if (!selectedSubjectId) return new Set<string>();
+    return new Set(
+      ALL_RELATION_TYPES.filter(type => expandParams.includes(formatExpandParam({ subject: selectedSubjectId, relation: type as RelationType })))
+    );
+  }, [expandParams, selectedSubjectId]);
   const isExpansionActive = useCallback(
     (relation: ExpansionRelationId) =>
       Boolean(selectedSubjectId) && expandParams.includes(formatExpandParam({ subject: selectedSubjectId!, relation })),
@@ -309,11 +336,36 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     const next = expandParams.includes(token) ? expandParams.filter(item => item !== token) : [...expandParams, token];
     updateParams({ expand: next });
   };
+  // Every branch action rewrites the whole exploration, so each one goes
+  // through the transitions in src/lib/relationship/transitions.ts and is
+  // serialized back in one navigation the browser can undo.
+  const applyExploration = (next: ExplorationInput, extra: Record<string, string | null | string[]> = {}) => {
+    updateParams({
+      subject: next.roots.map(formatSubjectParam),
+      expand: next.expansions.map(formatExpandParam),
+      filter: next.globalFilters,
+      cap: (next.caps ?? []).map(formatCapParam),
+      removed: (next.removed ?? []).map(formatSubjectParam),
+      status: formatStatusParams(next.statuses),
+      ...extra,
+    });
+  };
+  const collapseSelectedBranch = () => {
+    if (!selectedSubjectId || !exploration.edges) return;
+    applyExploration(collapseBranch(explorationInput, selectedSubjectId, exploration.edges));
+  };
+  const removeSelectedSubject = () => {
+    if (!selectedSubjectId || !exploration.edges) return;
+    applyExploration(removeSubject(explorationInput, selectedSubjectId, exploration.edges), { selected: null });
+  };
+  const keepOnlySelectedSubject = () => {
+    if (!selectedSubjectId) return;
+    applyExploration(keepOnlySelected(explorationInput, selectedSubjectId));
+  };
+
   const expandAllDirectRelations = () => {
     if (!selectedSubjectId) return;
-    const tokens = explorationInput.globalFilters
-      .filter(relation => (selectedRelationCounts.get(relation) ?? 0) > 0)
-      .map(relation => formatExpandParam({ subject: selectedSubjectId, relation }));
+    const tokens = directRelationsToExpand.map(relation => formatExpandParam({ subject: selectedSubjectId, relation }));
     updateParams({ expand: Array.from(new Set([...expandParams, ...tokens])) });
   };
 
@@ -329,31 +381,89 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
+  // A fresh visit opens on the same family Start over installs (rule 11 of
+  // docs/graph-exploration-review-plan.md), seeded as the root's own choices
+  // so no global filter has to be on. A shared or refreshed URL brings its
+  // own contributions and is left alone.
   const rootSeededRef = useRef(false);
   useEffect(() => {
     if (rootSeededRef.current || !showSearch || !searchParams || searchParams.has('subject')) return;
     rootSeededRef.current = true;
-    updateParams({ subject: [subjectId('person', targetSlug)], selected: selectedSlug ?? targetSlug }, true);
+    const fresh = defaultExplorationInput(targetSlug);
+    const carriesOwnState = searchParams.has('expand') || searchParams.has('filter') || searchParams.has('full');
+    updateParams(
+      {
+        subject: fresh.roots.map(formatSubjectParam),
+        selected: selectedSlug ?? targetSlug,
+        ...(carriesOwnState ? {} : { expand: fresh.expansions.map(formatExpandParam) }),
+      },
+      true
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams, showSearch]);
 
+  // A cap belongs to the exploration, not to one render of it, so every
+  // introduction a fetch just made is written back to the URL (see
+  // docs/adr/0003-cap-global-relationship-filters.md). Writing only the new
+  // ones keeps this from renavigating in a loop.
+  useEffect(() => {
+    if (!showSearch || !searchParams || !exploration.caps) return;
+    const existing = searchParams.getAll('cap');
+    const seen = new Set(existing);
+    const added = exploration.caps.map(formatCapParam).filter(param => !seen.has(param));
+    if (added.length === 0) return;
+    updateParams({ cap: [...existing, ...added] }, true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [exploration.caps, searchParams, showSearch]);
+
+  const toggleRelationInScope = (type: string) => {
+    if (activeScope !== 'selected') {
+      toggleRelation(type);
+      return;
+    }
+    if (!selectedSubjectId) return;
+    toggleExpansion(type as RelationType);
+  };
   const toggleRelation = (type: string) => {
     const next = new Set(includedRelations);
     if (next.has(type)) next.delete(type);
     else next.add(type);
     updateParams({ filter: [...next] });
   };
-  const toggleAllRelations = (show: boolean) => updateParams({ filter: show ? relationTypesPresent : [] });
+  // Companionship keeps whatever state its own switch left it in: it connects
+  // hundreds of people at once, so a bulk action that swept it along would
+  // bury the exploration (rule 3 of docs/graph-exploration-review-plan.md).
+  const isBulkRelation = (type: string) => governingRelationType(type) !== 'COMPANION_OF';
+  const setRelationsInScope = (types: string[], show: boolean) => {
+    if (activeScope === 'selected') {
+      if (!selectedSubjectId) return;
+      const tokens = types.map(type => formatExpandParam({ subject: selectedSubjectId, relation: type as RelationType }));
+      const next = show
+        ? Array.from(new Set([...expandParams, ...tokens]))
+        : expandParams.filter(param => !tokens.includes(param));
+      updateParams({ expand: next });
+      return;
+    }
+    const next = new Set(includedRelations);
+    types.forEach(type => (show ? next.add(type) : next.delete(type)));
+    updateParams({ filter: [...next] });
+  };
+  const toggleAllRelations = (show: boolean) => setRelationsInScope(relationTypesPresent.filter(isBulkRelation), show);
   // Toggles every relation type in one group at once (e.g. a single
   // "all family relations" switch above the ~40 individual family
   // toggles), independent of the panel-wide "all relations" switch.
   const toggleGroupRelations = (group: RelationGroup, show: boolean) => {
-    const groupTypes = relationTypesPresent.filter(type => relationGroup(type) === group);
-    const next = new Set(includedRelations);
-    groupTypes.forEach(type => (show ? next.add(type) : next.delete(type)));
-    updateParams({ filter: [...next] });
+    setRelationsInScope(relationTypesPresent.filter(type => relationGroup(type) === group && isBulkRelation(type)), show);
   };
   const toggleCompanionTitle = () => updateParams({ showCompanionTitle: showCompanionTitle ? null : '1' });
+  // Absent status choices mean every status, so the panel opens fully on the
+  // first time battles are enabled and keeps the user's later choices until
+  // Start over (rule 6 of docs/graph-exploration-review-plan.md).
+  const activeStatuses = explorationInput.statuses ?? [...PARTICIPATION_STATUS_CHOICES];
+  const toggleStatus = (status: string) => {
+    const next = activeStatuses.includes(status) ? activeStatuses.filter(item => item !== status) : [...activeStatuses, status];
+    updateParams({ status: formatStatusParams(next) });
+  };
   const toggleKind = (kind: string) => {
     const next = new Set(includedKinds);
     const turningOff = next.has(kind);
@@ -545,7 +655,9 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   }, [showSearch, graphData, selectedSlug, viewportSize]);
 
   if (graphLoading && !graphData) return <div className="flex items-center justify-center min-h-screen"><div className="text-lg">Loading graph...</div></div>;
-  if (graphError) return <div className="flex items-center justify-center min-h-screen"><ErrorMessage title="Error loading graph" description={graphError.toString()} /></div>;
+  // A failed fetch leaves the exploration on screen and offers a retry beside
+  // it; only a failure with nothing to show takes over the page.
+  if (graphError && !graphData) return <div className="flex items-center justify-center min-h-screen"><ErrorMessage title={t.graph.loadError} description={String(graphError)} /></div>;
 
   const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
   const typeLabels: Record<string, string> = { person: t.people, title: t.titles, battle: t.battles.title, event: t.events };
@@ -558,7 +670,19 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       // rather than the ordinary minimal reveal-pan (see the camera
       // effects above) -- consumed the next time they run.
       pendingResetRef.current = true;
-      updateParams({ selected: targetSlug, kind: [], showCompanionTitle: null, subject: [subjectId('person', targetSlug)], expand: [], filter: null, full: null });
+      const fresh = defaultExplorationInput(targetSlug);
+      updateParams({
+        selected: targetSlug,
+        kind: [],
+        showCompanionTitle: null,
+        subject: fresh.roots.map(formatSubjectParam),
+        expand: fresh.expansions.map(formatExpandParam),
+        filter: [],
+        cap: [],
+        removed: [],
+        status: [],
+        full: null,
+      });
       return;
     }
     updateParams({ selected: null, focus: null, filter: null, kind: [], showCompanionTitle: null, person: null, ancestorsOf: [], descendantsOf: [] });
@@ -579,6 +703,9 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
         {selectedNode && <>
           {selectedPersonHasProfile && <Button href={profilePath(selectedNode.type, selectedNode.slug)}>{t.graph.viewProfile}</Button>}
           <Button onClick={() => updateParams({ selected: null })}>{t.graph.deselectSubject}</Button>
+          <Button onClick={collapseSelectedBranch}>{t.graph.collapseBranch}</Button>
+          <Button onClick={removeSelectedSubject}>{t.graph.removeSubject}</Button>
+          <Button onClick={keepOnlySelectedSubject}>{t.graph.keepOnlySelected}</Button>
         </>}
         <Button disabled={fullGraph} onClick={() => updateParams({ full: '1' })}>{t.graph.showFullGraph}</Button>
         <Button onClick={resetGraphView}>{t.graph.startOver}</Button>
@@ -591,6 +718,12 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
         onExpandAllDirectRelations={expandAllDirectRelations}
         g={t.graph}
       />
+      {graphError && (
+        <div role="alert" className="mt-2 flex items-center gap-2 text-sm text-red-700 dark:text-red-300">
+          <span>{t.graph.loadError}</span>
+          <Button size="sm" onClick={exploration.retry}>{t.graph.retry}</Button>
+        </div>
+      )}
       {showAdditions && (
         <div role="status" className="mt-2 flex items-center gap-2">
           <Button variant="primary" onClick={applyShowAdditions}>
@@ -628,7 +761,41 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
         </fieldset>
       )}
 
-      <RelationFilterPanel types={relationTypesPresent} includedRelations={includedRelations} onToggle={toggleRelation} onToggleAll={toggleAllRelations} onToggleGroup={toggleGroupRelations} showCompanionTitle={showCompanionTitle} onToggleCompanionTitle={toggleCompanionTitle} relationLabel={relationLabel} language={language} />
+      {showSearch && includedKinds.has('battle') && (
+        <fieldset dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
+          <legend className="px-1 text-sm font-medium text-gray-800 dark:text-gray-100">{t.graph.participationStatuses}</legend>
+          <div className="flex flex-wrap gap-x-4 gap-y-2">
+            {PARTICIPATION_STATUS_CHOICES.map(status => {
+              const label = (t.battles.participationStatus as Record<string, string>)[status] ?? status;
+              const active = activeStatuses.includes(status);
+              return (
+                <SlideSwitch
+                  key={status}
+                  checked={active}
+                  onChange={() => toggleStatus(status)}
+                  label={label}
+                  color={PARTICIPATION_STATUS_COLOR[status]}
+                  ariaLabel={active ? t.graph.hideKind(label) : t.graph.showKind(label)}
+                />
+              );
+            })}
+          </div>
+        </fieldset>
+      )}
+      <RelationFilterPanel
+        types={relationTypesPresent}
+        includedRelations={activeScope === 'selected' ? localRelations : includedRelations}
+        onToggle={toggleRelationInScope}
+        onToggleAll={toggleAllRelations}
+        onToggleGroup={toggleGroupRelations}
+        showCompanionTitle={showCompanionTitle}
+        onToggleCompanionTitle={toggleCompanionTitle}
+        relationLabel={relationLabel}
+        language={language}
+        scope={showSearch ? scope : undefined}
+        onScopeChange={setScope}
+        disabled={activeScope === 'selected' && !selectedSubjectId}
+      />
     </>
   );
 

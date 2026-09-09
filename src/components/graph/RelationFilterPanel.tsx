@@ -1,6 +1,9 @@
 import SlideSwitch from './SlideSwitch';
-import { relationColor, relationGroup, sortRelationTypes, RelationGroup } from '@/lib/relationship/categories';
+import Button from '@/components/common/Button';
+import { governingRelationType, relationColor, relationGroup, sortRelationTypes, RelationGroup } from '@/lib/relationship/categories';
 import translations from '@/components/language/translations';
+
+export type ControlScope = 'selected' | 'exploration';
 
 // Fixed display order for the relation-type groups; empty groups (e.g. no
 // Battle relations present because the current view/kind scope excludes
@@ -19,25 +22,43 @@ interface RelationFilterPanelProps {
   onToggleCompanionTitle: () => void;
   relationLabel: (type: string) => string;
   language: 'en' | 'ar';
+  scope?: ControlScope;
+  onScopeChange?: (scope: ControlScope) => void;
+  disabled?: boolean;
 }
 
-export default function RelationFilterPanel({ types, includedRelations, onToggle, onToggleAll, onToggleGroup, showCompanionTitle, onToggleCompanionTitle, relationLabel, language }: RelationFilterPanelProps) {
+export default function RelationFilterPanel({ types, includedRelations, onToggle, onToggleAll, onToggleGroup, showCompanionTitle, onToggleCompanionTitle, relationLabel, language, scope, onScopeChange, disabled = false }: RelationFilterPanelProps) {
   const g: GraphStrings = translations[language].graph;
   const dir = language === 'ar' ? 'rtl' : 'ltr';
   const groups = GROUP_ORDER.map(group => ({ group, types: sortRelationTypes(types.filter(type => relationGroup(type) === group)) })).filter(({ types }) => types.length > 0);
 
   if (types.length === 0) return null;
-  const allVisible = types.every(type => includedRelations.has(type));
+  // Companionship sits outside the bulk switches, so it neither turns them on
+  // nor holds them off (rule 3 of docs/graph-exploration-review-plan.md).
+  const inBulk = (type: string) => governingRelationType(type) !== 'COMPANION_OF';
+  const allVisible = types.filter(inBulk).every(type => includedRelations.has(type));
 
   return (
     <fieldset dir={dir} className="mb-4 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
       <legend className="px-1 text-sm font-medium text-gray-800 dark:text-gray-100">{g.relationshipTypes}</legend>
+      {scope && onScopeChange && (
+        <div className="mb-2 flex flex-wrap gap-2" role="group" aria-label={g.controlScope}>
+          <Button size="sm" active={scope === 'selected'} aria-pressed={scope === 'selected'} onClick={() => onScopeChange('selected')}>
+            {g.selectedSubjectScope}
+          </Button>
+          <Button size="sm" active={scope === 'exploration'} aria-pressed={scope === 'exploration'} onClick={() => onScopeChange('exploration')}>
+            {g.explorationScope}
+          </Button>
+        </div>
+      )}
+      {disabled && <p className="mb-2 text-sm text-gray-600 dark:text-gray-300">{g.selectSubjectForLocalControls}</p>}
+      <div className={disabled ? 'pointer-events-none opacity-50' : undefined} aria-disabled={disabled || undefined}>
       <div className="mb-2 border-b border-gray-100 pb-2 dark:border-gray-700">
         <SlideSwitch checked={allVisible} onChange={() => onToggleAll(!allVisible)} label={g.allRelations} />
       </div>
       <div className="space-y-2">
         {groups.map(({ group, types: groupTypes }) => {
-          const allVisible = groupTypes.every(type => includedRelations.has(type));
+          const allVisible = groupTypes.filter(inBulk).every(type => includedRelations.has(type));
           return (
             <details key={group} open className="rounded border border-gray-100 p-2 dark:border-gray-700">
               <summary className="cursor-pointer select-none text-sm font-medium text-gray-800 dark:text-gray-100">
@@ -59,6 +80,7 @@ export default function RelationFilterPanel({ types, includedRelations, onToggle
             </details>
           );
         })}
+      </div>
       </div>
     </fieldset>
   );

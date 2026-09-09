@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { LINEAGE_ACTIONS, directRelationCounts, matchExpansionNeighbors } from './expansion';
+import { LINEAGE_ACTIONS, directRelationCounts, matchExpansionEdges, matchExpansionNeighbors } from './expansion';
 import { StoredEdge, subjectId } from './types';
 
 const muhammad = subjectId('person', 'prophet-muhammad');
@@ -97,6 +97,33 @@ describe('one-way relations', () => {
     ];
     expect(matchExpansionNeighbors(family, muhammad, 'FATHER')).toEqual([]);
     expect(matchExpansionNeighbors(family, fatimah, 'FATHER')).toEqual([muhammad]);
+  });
+});
+
+describe('companion matching', () => {
+  const salman = subjectId('person', 'salman-al-farisi');
+  const bilal = subjectId('person', 'bilal-ibn-rabah');
+  const companionEdges: StoredEdge[] = [
+    { source: salman, target: muhammad, type: 'COMPANION_OF' },
+    { source: muhammad, target: bilal, type: 'ACCOMPANIED_BY' },
+  ];
+
+  it('answers one companion toggle from both recorded directions', () => {
+    expect(new Set(matchExpansionNeighbors(companionEdges, muhammad, 'COMPANION_OF'))).toEqual(new Set([salman, bilal]));
+    expect(new Set(matchExpansionNeighbors(companionEdges, muhammad, 'ACCOMPANIED_BY'))).toEqual(new Set([salman, bilal]));
+  });
+
+  it('leaves family roles directional', () => {
+    const family: StoredEdge[] = [{ source: muhammad, target: salman, type: 'FATHER' }];
+    expect(matchExpansionNeighbors(family, muhammad, 'FATHER')).toEqual([]);
+  });
+});
+
+describe('matchExpansionEdges', () => {
+  it('returns the edges the neighbors were read from, for deciding which connections a contribution revealed', () => {
+    const wifeEdge = edges.find((edge) => edge.type === 'WIFE');
+    expect(matchExpansionEdges(edges, muhammad, 'WIFE')).toContainEqual(wifeEdge);
+    expect(matchExpansionEdges(edges, muhammad, 'ANCESTORS')).toEqual([]);
   });
 });
 

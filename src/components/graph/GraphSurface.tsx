@@ -88,6 +88,17 @@ function reconcileLinks(pool: Map<string, GraphLink>, incoming: GraphLink[]): Gr
   });
 }
 
+// force-graph paints the pointer-area canvas before the visible one in the
+// same frame, so the hit area has to measure the node itself rather than read
+// what the visible pass last wrote.
+// Sets ctx.font as a side effect, so the label the visible pass draws next
+// uses the size this measured.
+function nodeBox(node: GraphNodeFull, ctx: CanvasRenderingContext2D, globalScale: number): [number, number] {
+  const fontSize = Math.min(12 / globalScale, NODE_BASE_FONT_SIZE);
+  ctx.font = `${fontSize}px Sans-Serif`;
+  return [ctx.measureText(node.label).width + fontSize, fontSize * 2];
+}
+
 // The shared rendering core every graph view builds on: draws nodes/edges
 // with the same theme and physics everywhere, and colors an edge by its
 // recorded status (see edgeColor) instead of relation type whenever it has
@@ -128,7 +139,9 @@ const GraphSurface = forwardRef<Methods, GraphSurfaceProps>(function GraphSurfac
   useImperativeHandle(ref, () => localRef.current as Methods);
 
   if (isLoading) return <LoadingSpinner />;
-  if (error) return <ErrorMessage title={t.graph.loadError} />;
+  // A failed refetch keeps the graph the reader already has; the caller shows
+  // the error and its retry beside it.
+  if (error && !graphData) return <ErrorMessage title={t.graph.loadError} />;
   if (!graphData) return null;
 
   const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
@@ -161,11 +174,7 @@ const GraphSurface = forwardRef<Methods, GraphSurfaceProps>(function GraphSurfac
         onNodeClick={(node) => onNodeClick(node as GraphNodeFull)}
         nodeCanvasObject={(node, ctx, globalScale) => {
           const n = node as GraphNodeFull;
-          const fontSize = Math.min(12 / globalScale, NODE_BASE_FONT_SIZE);
-          ctx.font = `${fontSize}px Sans-Serif`;
-          const textWidth = ctx.measureText(n.label).width;
-          const dimensions: [number, number] = [textWidth + fontSize, fontSize * 2];
-          n.__bckgDimensions = dimensions;
+          const dimensions = nodeBox(n, ctx, globalScale);
 
           ctx.fillStyle = n.slug === highlightSlug ? HIGHLIGHT_COLOR : kindColor(n.type ?? 'person');
           ctx.beginPath();
@@ -177,11 +186,10 @@ const GraphSurface = forwardRef<Methods, GraphSurfaceProps>(function GraphSurfac
           ctx.fillStyle = n.slug === highlightSlug ? '#1f2937' : textColor;
           ctx.fillText(n.label, node.x!, node.y!);
         }}
-        nodePointerAreaPaint={(node, color, ctx) => {
-          const d = (node as GraphNodeFull).__bckgDimensions;
-          if (!d) return;
+        nodePointerAreaPaint={(node, color, ctx, globalScale) => {
+          const dimensions = nodeBox(node as GraphNodeFull, ctx, globalScale);
           ctx.fillStyle = color;
-          ctx.fillRect(node.x! - d[0] / 2, node.y! - d[1] / 2, d[0], d[1]);
+          ctx.fillRect(node.x! - dimensions[0] / 2, node.y! - dimensions[1] / 2, dimensions[0], dimensions[1]);
         }}
       />
       {statuses.length > 0 && (

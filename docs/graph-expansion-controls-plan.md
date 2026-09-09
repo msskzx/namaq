@@ -1,5 +1,11 @@
 # Expansion controls
 
+Review update: the [exploration rules review](graph-exploration-review-plan.md)
+supersedes decisions 5-8 wherever they remove individual subject-scoped choices,
+force choices into global scope, or hide connections between retained subjects.
+The corresponding implementation phases and acceptance criteria are historical
+where they conflict.
+
 Status: implemented, phases one to five. Phases one and two shipped in
 [#38](https://github.com/msskzx/namaq/pull/38); phases three to five are on the
 continuation branch. The seed corrections are deployed; see

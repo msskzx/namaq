@@ -24,6 +24,7 @@ export function flattenLineageExpansions(edges: StoredEdge[], expansions: Expans
     }
 
     const hopTypes = LINEAGE_HOPS[action.relation];
+    const origin = { subject: action.subject, relation: action.relation };
     const visited = new Set<SubjectId>([action.subject]);
     let frontier: SubjectId[] = [action.subject];
 
@@ -33,7 +34,7 @@ export function flattenLineageExpansions(edges: StoredEdge[], expansions: Expans
         for (const hopType of hopTypes) {
           const neighbors = matchExpansionNeighbors(edges, subject, hopType);
           if (neighbors.length === 0) continue;
-          flattened.push({ subject, relation: hopType });
+          flattened.push({ subject, relation: hopType, origin });
           for (const neighbor of neighbors) {
             if (visited.has(neighbor)) continue;
             visited.add(neighbor);

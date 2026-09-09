@@ -77,7 +77,9 @@ selection, or an expansion.
 The rule that a filter-introduced subject can never itself trigger the
 same global relationship filter's automatic introduction again. Applies
 per relationship type, not across all filters, and does not restrict
-manually selecting and expanding a capped subject.
+manually selecting and expanding a capped subject. The cap lasts for the
+exploration, even if the subject is independently revealed or removed and
+reintroduced; Start over begins a new exploration.
 
 **Connection description**:
 A statement of the first subject's relationship to the second subject. With

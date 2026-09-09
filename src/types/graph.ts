@@ -20,7 +20,6 @@ export interface GraphNodeFull extends GraphNode {
   vy?: number;
   fx?: number
   fy?: number;
-  __bckgDimensions?: [number, number];
 }
 
 export interface GraphLink {

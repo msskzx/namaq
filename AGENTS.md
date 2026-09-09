@@ -40,6 +40,8 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 
 ## Git
 
+- Create worktrees under `/Users/msskzx/Projects/namaq/.codex/worktrees/<branch-name>` and use `codex/<branch-name>` for Codex branches. Use this repository-local root for future work; `~/.codex/worktrees` is not the project default. For desktop-created worktrees, configure Settings > Worktrees > Worktree root to `/Users/msskzx/Projects/namaq/.codex/worktrees`; this instruction does not change the app setting automatically.
+- In every new worktree, create and verify the `.env` symlink described under Local verification before running project commands. Reuse the main checkout's file; preserve an existing file instead of overwriting it.
 - Branch names should not contain numbers.
 - Commit messages follow Conventional Commits: `type(scope): summary`
   (e.g. `fix(graph): ...`, `feat(search): ...`, `test(pipeline): ...`),
@@ -102,6 +104,10 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   `language === 'ar' ? ... : ...` pattern used inline.
 - New UI should support both light and dark themes (Tailwind `dark:`
   variants), matching the rest of the app.
+- Use a shared button component with optional icon support; extend the existing
+  component, or add one if none exists. Add recognizable icons when they clarify
+  an action at a glance. Keep text labels for clarity, give icon-only buttons
+  accessible names, and follow the app's existing icon style and RTL direction.
 
 ## Documentation
 

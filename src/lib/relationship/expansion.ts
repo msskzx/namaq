@@ -20,8 +20,14 @@ const ONE_WAY_RELATIONS: ReadonlySet<ExpansionRelationId> = new Set([
   'PART_OF',
 ]);
 
+// The two recorded directions of companionship, which share one toggle (see
+// governingRelationType in categories.ts). Rule 3 of
+// docs/graph-exploration-review-plan.md makes that toggle answer for both,
+// so unlike a family role neither direction names an answer of its own.
+const COMPANION_RELATIONS: ReadonlySet<ExpansionRelationId> = new Set(['COMPANION_OF', 'ACCOMPANIED_BY']);
+
 /**
- * Neighbors revealed by expanding `subject` along `relation`.
+ * Edges that answer expanding `subject` along `relation`.
  *
  * A reciprocal relation is read incoming only, because its type names the
  * source's role toward the target: `X -FATHER-> subject` is the father, while
@@ -30,20 +36,35 @@ const ONE_WAY_RELATIONS: ReadonlySet<ExpansionRelationId> = new Set([
  * and either end is a meaningful answer -- a person's titles, a title's
  * holders. That cannot double-count: there is no reverse edge to also match.
  */
+export function matchExpansionEdges(
+  edges: StoredEdge[],
+  subject: SubjectId,
+  relation: ExpansionRelationId
+): StoredEdge[] {
+  if (LINEAGE_RELATION_IDS.has(relation)) return [];
+
+  if (COMPANION_RELATIONS.has(relation)) {
+    return edges.filter(
+      (edge) => COMPANION_RELATIONS.has(edge.type) && (edge.source === subject || edge.target === subject)
+    );
+  }
+
+  const readsBothWays = ONE_WAY_RELATIONS.has(relation);
+  return edges.filter(
+    (edge) => edge.type === relation && (edge.target === subject || (readsBothWays && edge.source === subject))
+  );
+}
+
 export function matchExpansionNeighbors(
   edges: StoredEdge[],
   subject: SubjectId,
   relation: ExpansionRelationId
 ): SubjectId[] {
-  if (LINEAGE_RELATION_IDS.has(relation)) return [];
-
-  const readsBothWays = ONE_WAY_RELATIONS.has(relation);
   const neighbors = new Set<SubjectId>();
-  for (const edge of edges) {
-    if (edge.type !== relation) continue;
-    if (edge.target === subject) neighbors.add(edge.source);
-    else if (readsBothWays && edge.source === subject) neighbors.add(edge.target);
+  for (const edge of matchExpansionEdges(edges, subject, relation)) {
+    neighbors.add(edge.source === subject ? edge.target : edge.source);
   }
+  neighbors.delete(subject);
   return Array.from(neighbors);
 }
 

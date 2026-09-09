@@ -1,6 +1,7 @@
 import { governingRelationType } from './categories';
 import { buildLogicalConnections, LogicalConnection } from './connections';
-import { ExpansionRelationId, matchExpansionNeighbors } from './expansion';
+import { ExpansionRelationId, matchExpansionEdges, matchExpansionNeighbors } from './expansion';
+import { participationMatchesStatuses } from './status';
 import { RelationType, StoredEdge, SubjectId } from './types';
 
 export type ProvenanceTag =
@@ -11,17 +12,34 @@ export type ProvenanceTag =
 export interface ExpansionAction {
   subject: SubjectId;
   relation: ExpansionRelationId;
+  // The action a lineage traversal expanded into these hops, so every subject
+  // it reaches belongs to that one branch (see flattenLineageExpansions).
+  origin?: { subject: SubjectId; relation: ExpansionRelationId };
+}
+
+export interface ExplorationCap {
+  subject: SubjectId;
+  relation: RelationType;
 }
 
 export interface ExplorationInput {
   roots: SubjectId[];
   expansions: ExpansionAction[];
   globalFilters: RelationType[];
+  // Subjects a global filter has already introduced, per relation type. See
+  // docs/adr/0003-cap-global-relationship-filters.md: the cap outlives search,
+  // toggling, and removal, so it is carried in state rather than rederived.
+  caps?: ExplorationCap[];
+  removed?: SubjectId[];
+  // Absent until the user chooses; an empty array is a deliberate choice that
+  // matches no participation at all.
+  statuses?: string[];
 }
 
 export interface ExplorationResult {
   visible: Map<SubjectId, ProvenanceTag[]>;
   connections: LogicalConnection[];
+  caps: ExplorationCap[];
 }
 
 function provenanceKey(tag: ProvenanceTag): string {
@@ -35,6 +53,10 @@ function provenanceKey(tag: ProvenanceTag): string {
   }
 }
 
+export function capKey(cap: ExplorationCap): string {
+  return `${cap.subject}:${cap.relation}`;
+}
+
 function addProvenance(visible: Map<SubjectId, ProvenanceTag[]>, subject: SubjectId, tag: ProvenanceTag): void {
   const existing = visible.get(subject);
   if (!existing) {
@@ -46,61 +68,87 @@ function addProvenance(visible: Map<SubjectId, ProvenanceTag[]>, subject: Subjec
   existing.push(tag);
 }
 
+/**
+ * Whether `subject` is held in the exploration by anything other than its own
+ * expansion choices -- the question collapse and removal ask before deciding
+ * that an anchor has lost its last independent support.
+ */
+export function hasSupportBeyondOwnExpansions(tags: ProvenanceTag[] | undefined, subject: SubjectId): boolean {
+  return (tags ?? []).some((tag) => !(tag.kind === 'expansion' && tag.subject === subject));
+}
+
+function edgeKey(edge: StoredEdge): string {
+  return `${edge.source}|${edge.target}|${edge.type}`;
+}
+
 export function buildExploration(input: ExplorationInput, edges: StoredEdge[]): ExplorationResult {
   const visible = new Map<SubjectId, ProvenanceTag[]>();
+  const removed = new Set(input.removed ?? []);
+  const capped = new Set((input.caps ?? []).map(capKey));
+  const caps = [...(input.caps ?? [])];
+  const eligibleEdges = edges.filter((edge) => participationMatchesStatuses(edge, input.statuses));
+  // Connections a contribution actually revealed. A global filter answers for
+  // its whole relation type instead, so it needs no per-edge record.
+  const contributedEdges = new Set<string>();
+  const filteredTypes = new Set(input.globalFilters.map(governingRelationType));
 
   for (const root of input.roots) {
+    if (removed.has(root)) continue;
     addProvenance(visible, root, { kind: 'search' });
   }
 
   for (const action of input.expansions) {
-    const neighbors = matchExpansionNeighbors(edges, action.subject, action.relation);
+    if (removed.has(action.subject)) continue;
+    const origin = action.origin ?? action;
+    const tag: ProvenanceTag = { kind: 'expansion', subject: origin.subject, relation: origin.relation };
+    const matched = matchExpansionEdges(eligibleEdges, action.subject, action.relation);
     // Keep both ends of an independently expanded branch when another control collapses.
-    if (neighbors.length > 0) addProvenance(visible, action.subject, { kind: 'expansion', subject: action.subject, relation: action.relation });
-    for (const neighbor of neighbors) {
-      addProvenance(visible, neighbor, { kind: 'expansion', subject: action.subject, relation: action.relation });
+    if (matched.length > 0) addProvenance(visible, action.subject, tag);
+    for (const edge of matched) {
+      const neighbor = edge.source === action.subject ? edge.target : edge.source;
+      if (removed.has(neighbor)) continue;
+      contributedEdges.add(edgeKey(edge));
+      addProvenance(visible, neighbor, tag);
     }
   }
 
-  const preFilterSources = Array.from(visible.keys());
-  const directNeighborsByFilter = new Map<RelationType, SubjectId[]>();
-
-  for (const relationType of input.globalFilters) {
-    const neighbors = preFilterSources.flatMap((source) => matchExpansionNeighbors(edges, source, relationType));
-    directNeighborsByFilter.set(relationType, neighbors);
-    for (const neighbor of neighbors) {
-      if (visible.has(neighbor)) continue;
-      addProvenance(visible, neighbor, { kind: 'filter', relationType });
-    }
-  }
-
-  for (const relationType of input.globalFilters) {
-    const crossSources = input.globalFilters
-      .filter((other) => other !== relationType)
-      .flatMap((other) => directNeighborsByFilter.get(other) ?? []);
-    for (const source of crossSources) {
-      for (const neighbor of matchExpansionNeighbors(edges, source, relationType)) {
-        if (visible.has(neighbor)) continue;
-        addProvenance(visible, neighbor, { kind: 'filter', relationType });
+  // Runs to a fixed point rather than a fixed number of passes: each
+  // introduction caps its own subject for that relation type, so a filter
+  // cannot walk the same chain twice, while a subject introduced by one
+  // filter stays eligible to trigger a different one.
+  for (let introduced = true; introduced; ) {
+    introduced = false;
+    for (const relationType of input.globalFilters) {
+      for (const source of Array.from(visible.keys())) {
+        if (capped.has(capKey({ subject: source, relation: relationType }))) continue;
+        for (const neighbor of matchExpansionNeighbors(eligibleEdges, source, relationType)) {
+          if (removed.has(neighbor)) continue;
+          // A filter supports every matching neighbor, but only caps the ones
+          // it actually introduces: a subject already revealed some other way
+          // keeps its own eligibility.
+          if (!visible.has(neighbor)) {
+            const cap = { subject: neighbor, relation: relationType };
+            capped.add(capKey(cap));
+            caps.push(cap);
+            introduced = true;
+          }
+          addProvenance(visible, neighbor, { kind: 'filter', relationType });
+        }
       }
     }
   }
 
   const visibleSubjects = new Set(visible.keys());
-  // Every other relation keeps its recorded links between retained subjects
-  // when its filter goes off (decision 8 in
-  // docs/graph-expansion-controls-plan.md). Companionship is the exception:
-  // both stored directions hang off the Prophet in bulk, so leaving them drawn
-  // buries the graph the user asked for. Both directions follow the one
-  // COMPANION_OF switch, which is what governingRelationType already pairs
-  // them under.
-  const companionshipHidden = !input.globalFilters.includes('COMPANION_OF');
-  const relevantEdges = edges.filter(
-    (edge) =>
-      visibleSubjects.has(edge.source) &&
-      visibleSubjects.has(edge.target) &&
-      !(companionshipHidden && governingRelationType(edge.type) === 'COMPANION_OF')
+  const relevantEdges = eligibleEdges.filter(
+    (edge) => visibleSubjects.has(edge.source) && visibleSubjects.has(edge.target)
+  );
+  const isAllowed = (edge: StoredEdge) =>
+    contributedEdges.has(edgeKey(edge)) || filteredTypes.has(governingRelationType(edge.type));
+  // Both directions of one relationship travel together, so a connection
+  // survives on either side's permission and keeps its reciprocal wording.
+  const connections = buildLogicalConnections(relevantEdges).filter(
+    (connection) => isAllowed(connection.primary) || (connection.reciprocal !== undefined && isAllowed(connection.reciprocal))
   );
 
-  return { visible, connections: buildLogicalConnections(relevantEdges) };
+  return { visible, connections, caps };
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildRouteFetchParams, formatExpandParam, formatSubjectParam, parseExplorationInput } from './urlState';
+import { buildRouteFetchParams, formatCapParam, formatExpandParam, formatSubjectParam, parseExplorationInput } from './urlState';
 import { subjectId } from './types';
 
 const muhammad = subjectId('person', 'prophet-muhammad');
@@ -35,16 +35,8 @@ describe('parseExplorationInput', () => {
     ]);
   });
 
-  it('defaults to family and title filters when the parameter is absent', () => {
+  it('starts every global filter off when the parameter is absent', () => {
     const { globalFilters } = parseExplorationInput({ subjects: [], expands: [] }, 'prophet-muhammad');
-    expect(globalFilters).toEqual(expect.arrayContaining(['FATHER', 'SON', 'WIFE', 'HOLDS_TITLE']));
-    for (const type of ['COMPANION_OF', 'ACCOMPANIED_BY', 'PARTICIPATED_IN', 'INVOLVED_IN', 'PART_OF']) {
-      expect(globalFilters).not.toContain(type);
-    }
-  });
-
-  it('preserves an explicit empty filter instead of restoring defaults', () => {
-    const { globalFilters } = parseExplorationInput({ subjects: [], expands: [], filters: [''] }, 'prophet-muhammad');
     expect(globalFilters).toEqual([]);
   });
 
@@ -57,15 +49,48 @@ describe('parseExplorationInput', () => {
     const input = parseExplorationInput({ subjects: [], expands: [], filters: ['FATHER', 'NOT_A_RELATION', 'FATHER'] }, 'prophet-muhammad');
     expect(input.globalFilters).toEqual(['FATHER']);
   });
+
+  it('parses `cap` entries into subject/relation pairs, deduplicated, dropping malformed ones', () => {
+    const input = parseExplorationInput(
+      {
+        subjects: [],
+        expands: [],
+        filters: [],
+        caps: ['person:aisha-bint-abi-bakr:WIFE', 'person:aisha-bint-abi-bakr:WIFE', 'person:x:ANCESTORS', 'garbage'],
+      },
+      'prophet-muhammad'
+    );
+    expect(input.caps).toEqual([{ subject: aisha, relation: 'WIFE' }]);
+  });
+
+  it('parses `removed` entries as subjects, deduplicated', () => {
+    const input = parseExplorationInput(
+      { subjects: [], expands: [], filters: [], removed: ['person:aisha-bint-abi-bakr', 'person:aisha-bint-abi-bakr', 'nope'] },
+      'prophet-muhammad'
+    );
+    expect(input.removed).toEqual([aisha]);
+  });
+
+  it('reads absent cap and removed params as empty history rather than undefined state', () => {
+    const input = parseExplorationInput({ subjects: [], expands: [], filters: [] }, 'prophet-muhammad');
+    expect(input.caps).toEqual([]);
+    expect(input.removed).toEqual([]);
+  });
 });
 
-describe('formatSubjectParam / formatExpandParam', () => {
+describe('formatSubjectParam / formatExpandParam / formatCapParam', () => {
   it('round-trips through parseExplorationInput', () => {
     const subjectParam = formatSubjectParam(muhammad);
     const expandParam = formatExpandParam({ subject: aisha, relation: 'FATHER' });
-    const input = parseExplorationInput({ subjects: [subjectParam], expands: [expandParam], filters: [] }, 'prophet-muhammad');
+    const capParam = formatCapParam({ subject: aisha, relation: 'WIFE' });
+    const input = parseExplorationInput(
+      { subjects: [subjectParam], expands: [expandParam], filters: [], caps: [capParam], removed: [formatSubjectParam(muhammad)] },
+      'prophet-muhammad'
+    );
     expect(input.roots).toEqual([muhammad]);
     expect(input.expansions).toEqual([{ subject: aisha, relation: 'FATHER' }]);
+    expect(input.caps).toEqual([{ subject: aisha, relation: 'WIFE' }]);
+    expect(input.removed).toEqual([muhammad]);
   });
 });
 

@@ -81,34 +81,35 @@ export default function GraphSearch() {
     };
   }, [inputValue, debouncedFetch]);
 
+  const activeKinds = useMemo(() => {
+    const chosen = searchParams?.getAll('kind') ?? [];
+    return new Set(chosen.length > 0 ? chosen : DEFAULT_KINDS);
+  }, [searchParams]);
+  // A result of a switched-off kind is shown and explained rather than added:
+  // adding it would silently turn that kind on (rule 14 of
+  // docs/graph-exploration-review-plan.md). The Companion title node has its
+  // own switch and is treated the same way.
+  const isAddable = (suggestion: Suggestion) =>
+    activeKinds.has(suggestion.kind) &&
+    !(suggestion.kind === 'title' && suggestion.slug === COMPANION_TITLE_SLUG && searchParams?.get('showCompanionTitle') !== '1');
+
   // Every kind becomes an exploration root the same way; the exploration
   // model already routes any subject into relationSubjects.
   const selectSubject = (suggestion: Suggestion) => {
-    if (!searchParams) return;
+    if (!searchParams || !isAddable(suggestion)) return;
     const params = new URLSearchParams(searchParams.toString());
 
     const rootId = subjectId(suggestion.kind, suggestion.slug);
     if (!params.getAll('subject').includes(rootId)) params.append('subject', rootId);
     params.set('selected', suggestion.slug);
+    // Searching a subject lifts an earlier explicit removal, without touching
+    // the caps it never wrote.
+    const removed = params.getAll('removed').filter((entry) => entry !== rootId);
+    params.delete('removed');
+    removed.forEach((entry) => params.append('removed', entry));
 
-    // Without this, useExplorationGraph drops the fetched root for being of
-    // an inactive kind and the selection silently does nothing. An absent
-    // `kind` param means the defaults rather than every kind, so those have to
-    // be spelled out alongside the one being added.
-    const activeKinds = params.getAll('kind');
-    const kinds = activeKinds.length > 0 ? activeKinds : [...DEFAULT_KINDS];
-    if (!kinds.includes(suggestion.kind)) {
-      params.delete('kind');
-      [...kinds, suggestion.kind].forEach((kind) => params.append('kind', kind));
-    }
-
-    // The same rule for the one node with its own visibility flag, hidden by
-    // default because it connects to every companion (see graphFilter.ts).
-    if (suggestion.kind === 'title' && suggestion.slug === COMPANION_TITLE_SLUG) {
-      params.set('showCompanionTitle', '1');
-    }
-
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    // Exploration changes are navigable, so Back undoes an added subject.
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
     setInputValue('');
     setShowSuggestions(false);
     inputRef.current?.focus();
@@ -182,6 +183,7 @@ export default function GraphSearch() {
                     <button
                       type="button"
                       className="min-w-0 flex-1 text-left hover:text-amber-700 dark:hover:text-amber-300"
+                      disabled={!isAddable(suggestion)}
                       onMouseDown={(e) => {
                         e.preventDefault();
                         selectSubject(suggestion);
@@ -218,7 +220,9 @@ export default function GraphSearch() {
                     )}
                   </div>
                   <div className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                    {language === 'ar' ? 'اختر لعرض الرسم البياني' : 'Select to focus the graph'}
+                    {isAddable(suggestion)
+                      ? (language === 'ar' ? 'اختر لعرض الرسم البياني' : 'Select to focus the graph')
+                      : translations[language].graph.disabledKindResult(kindLabel(suggestion.kind))}
                   </div>
                 </li>
               ))}

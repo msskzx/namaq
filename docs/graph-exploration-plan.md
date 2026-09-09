@@ -1,5 +1,9 @@
 # Graph exploration design
 
+Current review: [Exploration rules review](graph-exploration-review-plan.md)
+records the confirmed rules and remaining questions from the docs-only review.
+Its confirmed decisions take precedence over conflicting historical proposals.
+
 Status: discovery interview in progress. This document records the requested
 outcomes, verified current behavior, and open decisions. Recommendations are
 proposals until the user answers them; this is not an approved implementation

@@ -1,16 +1,14 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import useSWR from 'swr';
 import { fetcher } from '@/lib/swr';
 import { GraphData, GraphNodeFull } from '@/types/graph';
-import { buildExploration, ExplorationInput, ExplorationResult } from '@/lib/relationship/exploration';
+import { buildExploration, ExplorationCap, ExplorationInput, ExplorationResult } from '@/lib/relationship/exploration';
 import { flattenLineageExpansions } from '@/lib/relationship/lineageExpansion';
 import { buildRouteFetchParams, RouteFetchParams } from '@/lib/relationship/urlState';
 import { mapExplorationToGraphData } from '@/lib/relationship/renderExploration';
 import { RelationType, StoredEdge, SubjectId } from '@/lib/relationship/types';
-
-const MAX_FILTER_FETCH_ROUNDS = 6;
 
 function buildFetchUrl(baseUrl: string, kindParams: string[], routeParams: RouteFetchParams): string {
   const url = new URL(baseUrl, typeof window !== 'undefined' ? window.location.origin : 'http://localhost');
@@ -77,22 +75,18 @@ async function runExploration(baseUrl: string, kindParams: string[], input: Expl
     data.nodes.forEach(node => fetchedSubjects.add(node.id));
   }
 
-  const flattenedExpansions = flattenLineageExpansions(edges, input.expansions);
-  let exploration = buildExploration({ roots, expansions: flattenedExpansions, globalFilters: [] }, edges);
-
-  if (input.globalFilters.length > 0) {
-    for (let round = 0; round < MAX_FILTER_FETCH_ROUNDS; round++) {
-      exploration = buildExploration({ roots, expansions: flattenedExpansions, globalFilters: input.globalFilters }, edges);
-      const newSubjects = Array.from(exploration.visible.keys()).filter((subject) => !fetchedSubjects.has(subject));
-      if (newSubjects.length === 0) break;
-      await runRound(buildRouteFetchParams(newSubjects, []));
-    }
-    exploration = buildExploration({ roots, expansions: flattenedExpansions, globalFilters: input.globalFilters }, edges);
+  // Fetches until the exploration stops growing rather than stopping after a
+  // set number of rounds: the per-relation caps bound how far a filter can
+  // reach, so closure is reachable and a truncated graph never looks complete.
+  let exploration = buildExploration({ ...input, roots, expansions: flattenLineageExpansions(edges, input.expansions) }, edges);
+  for (;;) {
+    const newSubjects = Array.from(exploration.visible.keys()).filter((subject) => !fetchedSubjects.has(subject));
+    if (newSubjects.length === 0) break;
+    const fetchedBefore = fetchedSubjects.size;
+    await runRound(buildRouteFetchParams(newSubjects, []));
+    if (fetchedSubjects.size === fetchedBefore) break;
+    exploration = buildExploration({ ...input, roots, expansions: flattenLineageExpansions(edges, input.expansions) }, edges);
   }
-
-  const missingNeighborhoods = Array.from(exploration.visible.keys()).filter(subject => !fetchedSubjects.has(subject));
-  await runRound(buildRouteFetchParams(missingNeighborhoods, []));
-  exploration = buildExploration({ roots, expansions: flattenedExpansions, globalFilters: input.globalFilters }, edges);
 
   return { exploration, nodesById, edges };
 }
@@ -112,11 +106,13 @@ export interface UseExplorationGraphResult {
   isLoading: boolean;
   error: unknown;
   visibleCount: number | undefined;
+  caps: ExplorationCap[] | undefined;
+  retry: () => void;
 }
 
 export function useExplorationGraph({ enabled, baseUrl, kindParams, input, selectedSlug, fullGraph = false }: UseExplorationGraphOptions): UseExplorationGraphResult {
   const key = enabled ? JSON.stringify({ baseUrl, kindParams, input, fullGraph }) : null;
-  const { data: raw, error, isLoading } = useSWR<RawExploration>(
+  const { data: raw, error, isLoading, isValidating, mutate } = useSWR<RawExploration>(
     key,
     () => runExploration(baseUrl, kindParams, input, fullGraph),
     { revalidateOnFocus: false, keepPreviousData: true }
@@ -128,5 +124,18 @@ export function useExplorationGraph({ enabled, baseUrl, kindParams, input, selec
     return mapExplorationToGraphData(raw.exploration, raw.nodesById, selectedNode?.id ?? null);
   }, [raw, selectedSlug]);
 
-  return { data, edges: raw?.edges, isLoading, error, visibleCount: raw?.exploration.visible.size };
+  const retry = useCallback(() => { void mutate(); }, [mutate]);
+
+  return {
+    data,
+    edges: raw?.edges,
+    isLoading,
+    error,
+    visibleCount: raw?.exploration.visible.size,
+    // Withheld while a fetch is in flight: with keepPreviousData the previous
+    // exploration's caps are still here, and persisting those would write back
+    // history the new state just cleared.
+    caps: isValidating ? undefined : raw?.exploration.caps,
+    retry,
+  };
 }
