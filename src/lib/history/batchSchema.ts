@@ -84,6 +84,12 @@ export interface BatchApproval {
   revision: string;
   approvedAt: string;
   approvedBy: string;
+  /**
+   * Why this batch may be written. Approval permits publication; it is not a
+   * statement that the content was checked, which is what each claim's review
+   * status records — see docs/adr/0008-separate-review-from-visibility.md.
+   */
+  note?: string;
 }
 
 export interface HistoryBatch {

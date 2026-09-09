@@ -15,15 +15,15 @@ interface ClaimEvidenceProps {
   relationshipClaims?: boolean;
 }
 
-function citationText(citation: CitationWithSource) {
+function citationText(citation: CitationWithSource, language: string) {
   const { source } = citation;
   const publication = [source.publisher, source.publicationYear].filter(Boolean).join(', ');
   const pinpoint = [
-    citation.volume && `vol. ${citation.volume}`,
-    citation.pageReference && `p. ${citation.pageReference}`,
+    citation.volume && (language === 'ar' ? `ج${citation.volume}` : `vol. ${citation.volume}`),
+    citation.pageReference && (language === 'ar' ? `ص${citation.pageReference}` : `p. ${citation.pageReference}`),
   ]
     .filter(Boolean)
-    .join(', ');
+    .join('، ');
   return [source.author, source.title, source.edition, publication, pinpoint].filter(Boolean).join('. ');
 }
 
@@ -52,7 +52,9 @@ export default function ClaimEvidence({ title, claims, relationshipClaims = fals
               <p>{claim.assertion}</p>
               <div className="mt-2 flex flex-wrap items-center gap-2">
                 <Badge size="sm" color="gray" text={reviewStatusLabel[claim.reviewStatus][language === 'ar' ? 'ar' : 'en']} />
-                <span className="text-sm text-gray-600 dark:text-gray-400">{confidenceLabel[claim.confidence]}</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400">
+                  {confidenceLabel[claim.confidence][language === 'ar' ? 'ar' : 'en']}
+                </span>
               </div>
               {claim.citations.length === 0 ? (
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
@@ -63,7 +65,7 @@ export default function ClaimEvidence({ title, claims, relationshipClaims = fals
                   {claim.citations.map((citation) => (
                     <li key={citation.id}>
                       <a className="underline" href={citation.extractionUrl} target="_blank" rel="noreferrer">
-                        {citationText(citation)}
+                        {citationText(citation, language)}
                       </a>
                       {citation.excerptArabic && (
                         <span className="block mt-1" dir="rtl" lang="ar">

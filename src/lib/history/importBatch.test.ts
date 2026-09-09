@@ -18,9 +18,6 @@ function fakePrisma() {
     accountUpserts: [] as Record<string, unknown>[],
   };
 
-  let pageCount = 0;
-  let passageCount = 0;
-
   const tx = {
     reviewBatch: { upsert: vi.fn(async () => ({ id: 'batch-1' })) },
     historicalSource: { upsert: vi.fn(async ({ where }: never) => ({ id: `source-${(where as { slug: string }).slug}` })) },
@@ -35,18 +32,22 @@ function fakePrisma() {
         calls.accountDeletes.push(args);
         return { count: 0 };
       }),
-      create: vi.fn(async ({ data }: { data: Record<string, unknown> }) => {
-        calls.pages.push(data);
-        pageCount += 1;
-        return { id: `page-${pageCount}` };
+      createMany: vi.fn(async ({ data }: { data: Record<string, unknown>[] }) => {
+        data.forEach((row) => calls.pages.push(row));
+        return { count: data.length };
       }),
+      findMany: vi.fn(async () =>
+        calls.pages.map((page, index) => ({ id: `page-${index + 1}`, sequence: page.sequence as number })),
+      ),
     },
     sourcePassage: {
-      create: vi.fn(async ({ data }: { data: Record<string, unknown> }) => {
-        calls.passages.push(data);
-        passageCount += 1;
-        return { id: `passage-${passageCount}` };
+      createMany: vi.fn(async ({ data }: { data: Record<string, unknown>[] }) => {
+        data.forEach((row) => calls.passages.push(row));
+        return { count: data.length };
       }),
+      findMany: vi.fn(async () =>
+        calls.passages.map((passage, index) => ({ id: `passage-${index + 1}`, anchor: passage.anchor as string })),
+      ),
     },
     historicalClaim: {
       upsert: vi.fn(async (args: Record<string, unknown>) => {
@@ -59,18 +60,22 @@ function fakePrisma() {
         calls.citationDeletes.push(args);
         return { count: 0 };
       }),
-      create: vi.fn(async ({ data }: { data: Record<string, unknown> }) => {
-        calls.citations.push(data);
-        return { id: 'citation-1' };
+      createMany: vi.fn(async ({ data }: { data: Record<string, unknown>[] }) => {
+        data.forEach((row) => calls.citations.push(row));
+        return { count: data.length };
       }),
     },
   };
 
+  const transactionOptions: unknown[] = [];
   const prisma = {
-    $transaction: (run: (client: typeof tx) => Promise<unknown>) => run(tx),
+    $transaction: (run: (client: typeof tx) => Promise<unknown>, options?: unknown) => {
+      transactionOptions.push(options);
+      return run(tx);
+    },
   } as unknown as PrismaClient;
 
-  return { prisma, calls, tx };
+  return { prisma, calls, tx, transactionOptions };
 }
 
 const files: BatchFiles = {
@@ -164,7 +169,47 @@ describe('importBatch', () => {
     await importBatch(prisma, batch(), files);
 
     expect(calls.accountDeletes).toEqual([{ where: { accountId: 'account-1' } }]);
-    expect(calls.citationDeletes).toEqual([{ where: { claimId: 'claim-1' } }]);
+    expect(calls.citationDeletes).toEqual([{ where: { claimId: { in: ['claim-1'] } } }]);
+  });
+
+  it('records the batch under its slug and revision together', async () => {
+    const { prisma, tx } = fakePrisma();
+
+    await importBatch(prisma, batch(), files);
+
+    expect(tx.reviewBatch.upsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { slug_revision: { slug: 'abu-ubaydah-pilot', revision: expect.any(String) } },
+      }),
+    );
+  });
+
+  it('carries the approval into the recorded batch', async () => {
+    const { prisma, tx } = fakePrisma();
+    const approved = batch();
+    approved.approval = { revision: 'r1', approvedAt: '2026-09-09', approvedBy: 'msskzx' };
+
+    await importBatch(prisma, approved, files);
+
+    expect(tx.reviewBatch.upsert).toHaveBeenCalledWith(
+      expect.objectContaining({ create: expect.objectContaining({ approvedBy: 'msskzx' }) }),
+    );
+  });
+
+  it('imports claims at the review status the files give them', async () => {
+    const { prisma, calls } = fakePrisma();
+
+    await importBatch(prisma, batch(), files);
+
+    expect(calls.claimUpserts[0]).toMatchObject({ create: { reviewStatus: 'NOT_REVIEWED' } });
+  });
+
+  it('gives the transaction long enough for a whole account', async () => {
+    const { prisma, transactionOptions } = fakePrisma();
+
+    await importBatch(prisma, batch(), files);
+
+    expect(transactionOptions[0]).toMatchObject({ timeout: 120_000 });
   });
 
   it('records a narrator-only mention as no graph relationship', async () => {

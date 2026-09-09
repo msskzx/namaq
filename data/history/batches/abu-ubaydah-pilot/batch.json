@@ -1621,5 +1621,11 @@
       "relatedSubjectKind": "PERSON",
       "relatedSubjectSlug": "prophet-muhammad"
     }
-  ]
+  ],
+  "approval": {
+    "revision": "9481bec6579f9861",
+    "approvedAt": "2026-09-09",
+    "approvedBy": "msskzx",
+    "note": "Approved for publication only. The content was not read; all claims stay Not reviewed."
+  }
 }

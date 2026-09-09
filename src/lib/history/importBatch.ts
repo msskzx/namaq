@@ -1,5 +1,5 @@
 import type { PrismaClient } from '@/generated/prisma';
-import type { AccountRecord, BatchFiles, ClaimRecord, HistoryBatch } from './batchSchema';
+import type { BatchFiles, ClaimRecord, HistoryBatch } from './batchSchema';
 import { batchRevision } from './batchSchema';
 
 export interface ImportResult {
@@ -13,73 +13,14 @@ export interface ImportResult {
 /** Prisma's transaction client: the same API minus the connection-level calls. */
 type Tx = Omit<PrismaClient, '$connect' | '$disconnect' | '$on' | '$transaction' | '$use' | '$extends'>;
 
-function pageText(files: BatchFiles, path: string | undefined) {
-  return path === undefined ? null : (files[path] ?? null);
-}
+/**
+ * A batch is dozens of pages and hundreds of passages, and the default five
+ * seconds is not enough for that many round trips against a hosted database.
+ */
+const transactionOptions = { timeout: 120_000, maxWait: 20_000 };
 
-async function writeAccount(tx: Tx, account: AccountRecord, files: BatchFiles, sourceId: string, batchId: string) {
-  const identity = {
-    sourceId,
-    subjectKind: account.subjectKind,
-    subjectSlug: account.subjectSlug,
-  };
-  const fields = {
-    entryIdentifier: account.entryIdentifier ?? null,
-    titleArabic: account.titleArabic ?? null,
-    volume: account.volume ?? null,
-    extractionUrl: account.extractionUrl,
-    accessedAt: new Date(account.accessedAt),
-    batchId,
-  };
-
-  const row = await tx.sourceAccount.upsert({
-    where: { sourceId_subjectKind_subjectSlug: identity },
-    create: { ...identity, ...fields },
-    update: fields,
-  });
-
-  // Pages carry no authoring key of their own, so a re-import replaces the
-  // account's text wholesale rather than trying to match pages one by one.
-  await tx.sourceAccountPage.deleteMany({ where: { accountId: row.id } });
-
-  const anchors = new Map<string, string>();
-  for (const page of account.pages) {
-    const pageRow = await tx.sourceAccountPage.create({
-      data: {
-        accountId: row.id,
-        sequence: page.sequence,
-        printedPage: page.printedPage ?? null,
-        bodyMarkdown: pageText(files, page.bodyFile) ?? '',
-        notesMarkdown: pageText(files, page.notesFile),
-        extractionUrl: page.extractionUrl ?? null,
-      },
-    });
-
-    for (const passage of page.passages ?? []) {
-      const passageRow = await tx.sourcePassage.create({
-        data: {
-          pageId: pageRow.id,
-          anchor: passage.anchor,
-          kind: passage.kind ?? 'BODY',
-          excerpt: passage.excerpt,
-        },
-      });
-      anchors.set(passage.anchor, passageRow.id);
-    }
-  }
-
-  return { accountId: row.id, pages: account.pages.length, anchors };
-}
-
-async function writeClaim(
-  tx: Tx,
-  claim: ClaimRecord,
-  sourceIds: Map<string, string>,
-  accountIds: Map<string, string>,
-  anchors: Map<string, string>,
-  batchId: string,
-) {
-  const fields = {
+function claimFields(claim: ClaimRecord, batchId: string) {
+  return {
     subjectKind: claim.subjectKind,
     subjectSlug: claim.subjectSlug,
     field: claim.field ?? null,
@@ -93,36 +34,75 @@ async function writeClaim(
     disputed: claim.disputed ?? false,
     batchId,
   };
+}
 
-  const row = await tx.historicalClaim.upsert({
-    where: { authoringKey: claim.key },
-    create: { authoringKey: claim.key, ...fields },
-    update: fields,
-  });
+async function writeAccounts(tx: Tx, batch: HistoryBatch, files: BatchFiles, sourceIds: Map<string, string>, batchId: string) {
+  const accountIds = new Map<string, string>();
+  const passageIds = new Map<string, string>();
+  let pages = 0;
 
-  await tx.citation.deleteMany({ where: { claimId: row.id } });
+  for (const account of batch.accounts) {
+    const identity = {
+      sourceId: sourceIds.get(account.sourceSlug)!,
+      subjectKind: account.subjectKind,
+      subjectSlug: account.subjectSlug,
+    };
+    const fields = {
+      entryIdentifier: account.entryIdentifier ?? null,
+      titleArabic: account.titleArabic ?? null,
+      volume: account.volume ?? null,
+      extractionUrl: account.extractionUrl,
+      accessedAt: new Date(account.accessedAt),
+      batchId,
+    };
 
-  for (const citation of claim.citations) {
-    await tx.citation.create({
-      data: {
-        claimId: row.id,
-        subjectKind: claim.subjectKind,
-        subjectSlug: claim.subjectSlug,
-        sourceId: sourceIds.get(citation.sourceSlug)!,
-        accountId: accountIds.get(`${citation.sourceSlug}:${claim.subjectSlug}`) ?? null,
-        passageId: citation.passageAnchor ? (anchors.get(citation.passageAnchor) ?? null) : null,
-        paragraphKey: citation.paragraphKey ?? null,
-        footnoteNumber: citation.footnoteNumber ?? null,
-        volume: citation.volume ?? null,
-        pageReference: citation.pageReference ?? null,
-        extractionUrl: citation.extractionUrl,
-        excerptArabic: citation.excerptArabic,
-        accessedAt: new Date(citation.accessedAt),
-      },
+    const row = await tx.sourceAccount.upsert({
+      where: { sourceId_subjectKind_subjectSlug: identity },
+      create: { ...identity, ...fields },
+      update: fields,
     });
+    accountIds.set(`${account.sourceSlug}:${account.subjectSlug}`, row.id);
+
+    // Pages carry no authoring key of their own, so a re-import replaces the
+    // account's text wholesale rather than matching pages one by one.
+    await tx.sourceAccountPage.deleteMany({ where: { accountId: row.id } });
+    await tx.sourceAccountPage.createMany({
+      data: account.pages.map((page) => ({
+        accountId: row.id,
+        sequence: page.sequence,
+        printedPage: page.printedPage ?? null,
+        bodyMarkdown: files[page.bodyFile] ?? '',
+        notesMarkdown: page.notesFile ? (files[page.notesFile] ?? null) : null,
+        extractionUrl: page.extractionUrl ?? null,
+      })),
+    });
+    pages += account.pages.length;
+
+    const written = await tx.sourceAccountPage.findMany({
+      where: { accountId: row.id },
+      select: { id: true, sequence: true },
+    });
+    const pageIdBySequence = new Map(written.map((page) => [page.sequence, page.id]));
+
+    const passages = account.pages.flatMap((page) =>
+      (page.passages ?? []).map((passage) => ({
+        pageId: pageIdBySequence.get(page.sequence)!,
+        anchor: passage.anchor,
+        kind: passage.kind ?? 'BODY',
+        excerpt: passage.excerpt,
+      })),
+    );
+    if (passages.length > 0) {
+      await tx.sourcePassage.createMany({ data: passages });
+      const stored = await tx.sourcePassage.findMany({
+        where: { pageId: { in: [...pageIdBySequence.values()] } },
+        select: { id: true, anchor: true },
+      });
+      stored.forEach((passage) => passageIds.set(passage.anchor, passage.id));
+    }
   }
 
-  return claim.citations.length;
+  return { accountIds, passageIds, pages };
 }
 
 /**
@@ -162,27 +142,46 @@ export async function importBatch(
       sourceIds.set(slug, row.id);
     }
 
-    const accountIds = new Map<string, string>();
-    const anchors = new Map<string, string>();
-    let pages = 0;
-    for (const account of batch.accounts) {
-      const written = await writeAccount(tx, account, files, sourceIds.get(account.sourceSlug)!, batchRow.id);
-      accountIds.set(`${account.sourceSlug}:${account.subjectSlug}`, written.accountId);
-      written.anchors.forEach((id, anchor) => anchors.set(anchor, id));
-      pages += written.pages;
+    const { accountIds, passageIds, pages } = await writeAccounts(tx, batch, files, sourceIds, batchRow.id);
+
+    const claimIds = new Map<string, string>();
+    for (const claim of batch.claims) {
+      const fields = claimFields(claim, batchRow.id);
+      const row = await tx.historicalClaim.upsert({
+        where: { authoringKey: claim.key },
+        create: { authoringKey: claim.key, ...fields },
+        update: fields,
+      });
+      claimIds.set(claim.key, row.id);
     }
 
-    let citations = 0;
-    for (const claim of batch.claims) {
-      citations += await writeClaim(tx, claim, sourceIds, accountIds, anchors, batchRow.id);
-    }
+    await tx.citation.deleteMany({ where: { claimId: { in: [...claimIds.values()] } } });
+
+    const citations = batch.claims.flatMap((claim) =>
+      claim.citations.map((citation) => ({
+        claimId: claimIds.get(claim.key)!,
+        subjectKind: claim.subjectKind,
+        subjectSlug: claim.subjectSlug,
+        sourceId: sourceIds.get(citation.sourceSlug)!,
+        accountId: accountIds.get(`${citation.sourceSlug}:${claim.subjectSlug}`) ?? null,
+        passageId: citation.passageAnchor ? (passageIds.get(citation.passageAnchor) ?? null) : null,
+        paragraphKey: citation.paragraphKey ?? null,
+        footnoteNumber: citation.footnoteNumber ?? null,
+        volume: citation.volume ?? null,
+        pageReference: citation.pageReference ?? null,
+        extractionUrl: citation.extractionUrl,
+        excerptArabic: citation.excerptArabic,
+        accessedAt: new Date(citation.accessedAt),
+      })),
+    );
+    if (citations.length > 0) await tx.citation.createMany({ data: citations });
 
     return {
       sources: batch.sources.length,
       accounts: batch.accounts.length,
       pages,
       claims: batch.claims.length,
-      citations,
+      citations: citations.length,
     };
-  });
+  }, transactionOptions);
 }

@@ -162,7 +162,9 @@ enum PassageKind {
 /// need reapproval.
 model ReviewBatch {
   id          String    @id @default(cuid())
-  slug        String    @unique
+  /// A batch is identified by slug and revision together: the same batch is
+  /// approved and imported again whenever its files change.
+  slug        String
   revision    String
   summaryPath String
   approvedAt  DateTime?

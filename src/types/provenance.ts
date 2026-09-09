@@ -39,11 +39,11 @@ export type SubjectReferences = {
   citations: CitationWithSource[];
 };
 
-export const confidenceLabel: Record<ClaimConfidence, string> = {
-  ESTABLISHED: 'Well attested',
-  LIKELY: 'Likely',
-  DISPUTED: 'Disputed',
-  UNASSESSED: 'Assessment pending',
+export const confidenceLabel: Record<ClaimConfidence, { en: string; ar: string }> = {
+  ESTABLISHED: { en: 'Well attested', ar: 'ثابت' },
+  LIKELY: { en: 'Likely', ar: 'مرجَّح' },
+  DISPUTED: { en: 'Disputed', ar: 'مختلف فيه' },
+  UNASSESSED: { en: 'Assessment pending', ar: 'لم يُقيَّم' },
 };
 
 export const reviewStatusLabel: Record<ClaimReviewStatus, { en: string; ar: string }> = {

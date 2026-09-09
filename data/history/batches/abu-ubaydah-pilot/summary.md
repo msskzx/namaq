@@ -74,7 +74,14 @@ a person or an edge.
 
 ## To approve
 
-Read the findings above and the pages you want to check, then tell me. I record your
-approval in `batch.json` against the revision `npm run history:validate` prints
-for this directory. Any later edit to the files changes that revision and needs
-approving again.
+Approval permits publication. It does not say the content was checked: every
+claim here stays Not reviewed, and readers see that status beside it. Approving
+an unreviewed batch is the expected case, since evidence has to be visible
+before anyone can review it.
+
+Approval is recorded in `batch.json` against the revision
+`npm run history:validate` prints for this directory. Any later edit to the
+files changes that revision and needs approving again.
+
+This batch was approved for publication on 2026-09-09 with all 25 claims Not
+reviewed. The findings above remain open decisions.
