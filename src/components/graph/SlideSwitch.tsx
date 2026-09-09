@@ -10,7 +10,9 @@ export default function SlideSwitch({ checked, onChange, label, color, ariaLabel
       aria-checked={checked}
       aria-label={ariaLabel ?? label}
       onClick={onChange}
-      className="flex items-center gap-2 rounded-full px-1 py-0.5 text-sm font-medium text-gray-700 dark:text-gray-200"
+      // Tall enough to hit with a thumb on a phone; the switch itself is only
+      // 20px, which is well under a comfortable touch target.
+      className="flex min-h-11 items-center gap-2 rounded-full px-1 py-0.5 text-sm font-medium text-gray-700 sm:min-h-0 dark:text-gray-200"
     >
       <span
         className={`flex h-5 w-9 shrink-0 items-center rounded-full p-0.5 transition-colors ${checked ? 'justify-end' : 'justify-start'}`}

@@ -97,10 +97,14 @@ The kind of historical subject represented in the graph: person, title, battle,
 or event.
 _Avoid_: Relationship type (which describes a connection between subjects)
 
-**All direct relations**:
-The selected subject's recorded immediate connections, without following those
-neighbors onward through further generations or other subjects.
-_Avoid_: Ancestors, descendants (both continue across generations)
+**Explore**:
+Reveals the selected subject's immediate connections of the relationship types
+currently enabled, without following those neighbors onward through further
+generations or other subjects. See
+[ADR 0007](docs/adr/0007-filters-choose-the-relationship-vocabulary.md).
+_Avoid_: All direct relations (the former name, which promised every recorded
+type regardless of the switches); ancestors, descendants (both continue across
+generations)
 
 ### Lineage
 
@@ -112,6 +116,8 @@ _Avoid_: Paternal lineage (when both sides are meant)
 **Paternal lineage**:
 The chain consisting of a person's father, their father's father, and so on.
 This is the specific meaning intended by the Nasab option in graph exploration.
+The action still restores from a saved URL, but has no button while its future
+is undecided.
 _Avoid_: Ancestors (when only the father-to-father chain is meant)
 
 **Descendants**:

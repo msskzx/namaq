@@ -8,7 +8,11 @@ import { GraphData, GraphNode, GraphNodeFull, GraphLink } from '@/types/graph';
 import useSWR from 'swr';
 import { fetcher } from '@/lib/swr';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExpand, faCompress, faFilter, faMagnifyingGlass, faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
+import {
+  faArrowsRotate, faBars, faCircleXmark, faCompress, faCropSimple, faExpand, faEyeSlash, faHexagonNodes,
+  faFilter, faListUl, faLocationCrosshairs, faMagnifyingGlass, faRotateLeft, faScissors, faShareNodes,
+  faUser, faXmark,
+} from '@fortawesome/free-solid-svg-icons';
 import GraphSearch from './GraphSearch';
 import SlideSwitch from './SlideSwitch';
 import RelationFilterPanel, { ControlScope } from './RelationFilterPanel';
@@ -49,6 +53,19 @@ interface GraphCanvasProps {
 }
 
 const relationName = (value: string) => value.toLowerCase().replaceAll('_', ' ');
+
+// Companionship keeps whatever state its own switch left it in: it connects
+// hundreds of people at once, so a bulk action that swept it along would bury
+// the exploration (rule 3 of docs/graph-exploration-review-plan.md).
+const isBulkRelation = (type: string) => governingRelationType(type) !== 'COMPANION_OF';
+
+// One row of buttons per group in the selected-subject panel, each divided
+// from the last.
+const GROUP_ROW = 'mt-3 flex flex-wrap gap-3 border-t border-amber-200 pt-3 dark:border-amber-800';
+
+// Placement only: a control sitting on the canvas needs its own ground to stay
+// legible against whatever the graph draws behind it.
+const FLOATING_OVER_CANVAS = 'absolute top-2 z-10 bg-gray-50/90 backdrop-blur dark:bg-gray-900/90';
 
 // Keep disabled kinds and relations available even when absent from the response.
 const ALL_RELATION_TYPES = sortRelationTypes(RELATION_ORDER.filter(type => governingRelationType(type) === type));
@@ -170,18 +187,19 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     if (!showSearch || !exploration.edges) return new Map<RelationType, number>();
     return directRelationCounts(exploration.edges, selectedSubjectId ?? graphData?.nodes.map(node => node.id) ?? [], RELATION_ORDER) as Map<RelationType, number>;
   }, [showSearch, selectedSubjectId, exploration.edges, graphData]);
-  // Local choices are independent of the global filters (rule 1 of
-  // docs/graph-exploration-review-plan.md), so "all" covers every recorded
-  // relation. Companionship is the one exception: it joins only once its own
-  // switch is on, and this action never changes that switch.
+  // Explore applies the enabled relationship types to the selected subject
+  // rather than everything on record, since the filter switches are the
+  // vocabulary both it and Show full graph work from (see
+  // docs/adr/0007-filters-choose-the-relationship-vocabulary.md). With nothing
+  // switched on there is nothing to narrow, so it covers every type except
+  // companionship, which joins only when its own switch says so.
+  const exploreVocabulary = useMemo(
+    () => (includedRelations.size > 0 ? ALL_RELATION_TYPES.filter(type => includedRelations.has(type)) : ALL_RELATION_TYPES.filter(isBulkRelation)),
+    [includedRelations]
+  );
   const directRelationsToExpand = useMemo(
-    () =>
-      RELATION_ORDER.filter(
-        relation =>
-          (selectedRelationCounts.get(relation) ?? 0) > 0 &&
-          (governingRelationType(relation) !== 'COMPANION_OF' || includedRelations.has('COMPANION_OF'))
-      ),
-    [selectedRelationCounts, includedRelations]
+    () => exploreVocabulary.filter(relation => (selectedRelationCounts.get(relation as RelationType) ?? 0) > 0),
+    [selectedRelationCounts, exploreVocabulary]
   );
   const hasEligibleDirectRelations = Boolean(selectedSubjectId) && directRelationsToExpand.length > 0;
   // Node kinds present in the fetched graph (person/title/battle/event).
@@ -350,6 +368,13 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       ...extra,
     });
   };
+  // Show full graph reveals the whole dataset, so it turns the relationship
+  // vocabulary on with it -- otherwise the subjects arrive with none of their
+  // connections drawn. Companionship stays where its own switch left it.
+  const showFullGraph = () => {
+    const companionship = includedRelations.has('COMPANION_OF') ? ['COMPANION_OF'] : [];
+    updateParams({ full: '1', filter: [...ALL_RELATION_TYPES.filter(isBulkRelation), ...companionship] });
+  };
   const collapseSelectedBranch = () => {
     if (!selectedSubjectId || !exploration.edges) return;
     applyExploration(collapseBranch(explorationInput, selectedSubjectId, exploration.edges));
@@ -365,7 +390,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
   const expandAllDirectRelations = () => {
     if (!selectedSubjectId) return;
-    const tokens = directRelationsToExpand.map(relation => formatExpandParam({ subject: selectedSubjectId, relation }));
+    const tokens = directRelationsToExpand.map(relation => formatExpandParam({ subject: selectedSubjectId, relation: relation as RelationType }));
     updateParams({ expand: Array.from(new Set([...expandParams, ...tokens])) });
   };
 
@@ -430,10 +455,6 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     else next.add(type);
     updateParams({ filter: [...next] });
   };
-  // Companionship keeps whatever state its own switch left it in: it connects
-  // hundreds of people at once, so a bulk action that swept it along would
-  // bury the exploration (rule 3 of docs/graph-exploration-review-plan.md).
-  const isBulkRelation = (type: string) => governingRelationType(type) !== 'COMPANION_OF';
   const setRelationsInScope = (types: string[], show: boolean) => {
     if (activeScope === 'selected') {
       if (!selectedSubjectId) return;
@@ -488,7 +509,9 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showFilterPanel, setShowFilterPanel] = useState(false);
-  const [showNodesPanel, setShowNodesPanel] = useState(true);
+  // Collapsed on arrival: the list repeats what the canvas already shows, and
+  // on a phone it pushes the controls above it out of reach.
+  const [showNodesPanel, setShowNodesPanel] = useState(false);
   // Fullscreen only: search gets its own toggle/overlay, separate from the
   // filter overlay, since it's a different kind of action (finding a
   // person to focus on vs. adjusting what's shown).
@@ -698,18 +721,17 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           ))}
         </div>
       )}
-      <p className="text-sm text-gray-600 dark:text-gray-300">{selectedNode ? t.graph.selectedLabel : t.graph.globalRelationshipsHint}</p>
-      <div className="mt-2 flex flex-wrap gap-3">
-        {selectedNode && <>
-          {selectedPersonHasProfile && <Button href={profilePath(selectedNode.type, selectedNode.slug)}>{t.graph.viewProfile}</Button>}
-          <Button onClick={() => updateParams({ selected: null })}>{t.graph.deselectSubject}</Button>
-          <Button onClick={collapseSelectedBranch}>{t.graph.collapseBranch}</Button>
-          <Button onClick={removeSelectedSubject}>{t.graph.removeSubject}</Button>
-          <Button onClick={keepOnlySelectedSubject}>{t.graph.keepOnlySelected}</Button>
-        </>}
-        <Button disabled={fullGraph} onClick={() => updateParams({ full: '1' })}>{t.graph.showFullGraph}</Button>
-        <Button onClick={resetGraphView}>{t.graph.startOver}</Button>
-      </div>
+      {!selectedNode && <p className="text-sm text-gray-600 dark:text-gray-300">{t.graph.globalRelationshipsHint}</p>}
+      {/* Four groups, divided: where the subject leads, what it reveals, what
+          it removes, and what acts on the whole exploration. */}
+      {selectedNode && selectedPersonHasProfile && (
+        <div className={GROUP_ROW}>
+          <Button href={profilePath(selectedNode.type, selectedNode.slug)}>
+            <FontAwesomeIcon icon={faUser} />
+            {t.graph.viewProfile}
+          </Button>
+        </div>
+      )}
       <ExpansionControls
         isPerson={Boolean(selectedNode && (selectedNode.type ?? 'person') === 'person')}
         hasEligibleDirectRelations={hasEligibleDirectRelations}
@@ -718,15 +740,49 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
         onExpandAllDirectRelations={expandAllDirectRelations}
         g={t.graph}
       />
+      {selectedNode && (
+        <div className={GROUP_ROW}>
+          <Button onClick={collapseSelectedBranch}>
+            <FontAwesomeIcon icon={faScissors} />
+            {t.graph.collapseBranch}
+          </Button>
+          <Button onClick={removeSelectedSubject}>
+            <FontAwesomeIcon icon={faEyeSlash} />
+            {t.graph.removeSubject}
+          </Button>
+          <Button onClick={keepOnlySelectedSubject}>
+            <FontAwesomeIcon icon={faCropSimple} />
+            {t.graph.keepOnlySelected}
+          </Button>
+          <Button onClick={() => updateParams({ selected: null })}>
+            <FontAwesomeIcon icon={faCircleXmark} />
+            {t.graph.deselectSubject}
+          </Button>
+        </div>
+      )}
+      <div className={GROUP_ROW}>
+        <Button disabled={fullGraph} onClick={showFullGraph}>
+          <FontAwesomeIcon icon={faHexagonNodes} />
+          {t.graph.showFullGraph}
+        </Button>
+        <Button onClick={resetGraphView}>
+          <FontAwesomeIcon icon={faRotateLeft} />
+          {t.graph.startOver}
+        </Button>
+      </div>
       {graphError && (
         <div role="alert" className="mt-2 flex items-center gap-2 text-sm text-red-700 dark:text-red-300">
           <span>{t.graph.loadError}</span>
-          <Button size="sm" onClick={exploration.retry}>{t.graph.retry}</Button>
+          <Button size="sm" onClick={exploration.retry}>
+            <FontAwesomeIcon icon={faArrowsRotate} />
+            {t.graph.retry}
+          </Button>
         </div>
       )}
       {showAdditions && (
         <div role="status" className="mt-2 flex items-center gap-2">
           <Button variant="primary" onClick={applyShowAdditions}>
+            <FontAwesomeIcon icon={faLocationCrosshairs} />
             {t.graph.showAdditions(showAdditions.added.length)}
           </Button>
           <Button size="icon" onClick={() => setShowAdditions(null)} aria-label={t.graph.dismiss}>
@@ -740,9 +796,10 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   const filterPanel = (
     <>
       <div className="mb-4 flex justify-end">
-        <button type="button" onClick={resetGraphView} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
+        <Button onClick={resetGraphView}>
+          <FontAwesomeIcon icon={faRotateLeft} />
           {t.graph.resetGraphView}
-        </button>
+        </Button>
       </div>
 
       {kindsUniverse.length > 1 && (
@@ -837,17 +894,15 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   if (showSearch) {
     const menuButton = (
       <div className="relative" ref={menuRef}>
-        <button
-          type="button"
-          onClick={() => setMenuOpen(open => !open)}
-          aria-pressed={menuOpen}
-          aria-label={menuOpen ? t.graph.closeMenu : t.graph.openMenu}
-          className="rounded border border-amber-400 px-2 py-1.5 text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800"
-        >
+        <Button size="icon" onClick={() => setMenuOpen(open => !open)} aria-pressed={menuOpen} aria-label={menuOpen ? t.graph.closeMenu : t.graph.openMenu}>
           <FontAwesomeIcon icon={faBars} />
-        </button>
+        </Button>
         {menuOpen && (
-          <div dir={language === 'ar' ? 'rtl' : 'ltr'} className={`absolute top-full z-30 mt-1 min-w-[200px] rounded-lg border border-amber-400 bg-gray-50 p-3 shadow-lg dark:bg-gray-950 ${language === 'ar' ? 'right-0' : 'left-0'}`}>
+          // Anchored to the viewport, not to the button: the panel around it
+          // scrolls and hides its overflow, and it sits at the bottom of the
+          // screen when collapsed, so a dropdown opening downwards from the
+          // button lands outside the screen with no way to reach it.
+          <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="fixed inset-x-3 bottom-3 z-[70] max-h-[70dvh] overflow-y-auto rounded-lg border border-amber-400 bg-gray-50 p-3 shadow-lg lg:inset-x-auto lg:bottom-auto lg:top-14 lg:start-3 lg:w-64 lg:max-h-[80dvh] dark:bg-gray-950">
             <ul className="flex flex-col gap-1">
               {navLinks.map(link => (
                 <li key={link.href}>
@@ -877,7 +932,10 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     );
 
     const panelContent = (
-      <div className="flex h-full flex-col overflow-y-auto p-3">
+      // min-h-0 lets this shrink inside the sheet's flex column, which is what
+      // makes it the scrolling element. Without it the content keeps its full
+      // height and the sheet's max-height simply clips whatever does not fit.
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto p-3">
         <div className="mb-2 flex items-center gap-2">
           {menuButton}
           <p className="flex-1 truncate text-sm text-gray-600 dark:text-gray-300" aria-live="polite">{graphSummary}</p>
@@ -898,9 +956,11 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           <Button
             className="mb-2"
             onClick={() => setShowNodesPanel(show => !show)}
+            active={showNodesPanel}
             aria-expanded={showNodesPanel}
           >
-            {showNodesPanel ? t.graph.hideNodesInView : t.graph.showNodesInView}
+            <FontAwesomeIcon icon={faListUl} />
+            {t.graph.nodesList}
           </Button>
         </div>
         {showNodesPanel && <div className="mt-3 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
@@ -927,9 +987,9 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     const collapsedBar = (
       <div className="flex items-center gap-2 p-2">
         {menuButton}
-        <button type="button" onClick={() => setPanelExpanded(true)} aria-label={t.graph.openSearch} className="rounded border border-amber-400 px-2 py-1.5 text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
+        <Button size="icon" onClick={() => setPanelExpanded(true)} aria-label={t.graph.openSearch}>
           <FontAwesomeIcon icon={faMagnifyingGlass} />
-        </button>
+        </Button>
         <span className="truncate text-sm text-gray-700 lg:hidden dark:text-gray-200">{selectedNode ? selectedNode.label : ''}</span>
       </div>
     );
@@ -937,21 +997,21 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     return (
       <div dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <div className="fixed inset-0 z-0 bg-gray-50 dark:bg-gray-900" role="region" aria-label={t.graph.interactiveGraph}>
-          <button
-            type="button"
+          <Button
+            size="icon"
             onClick={() => fitToView(true)}
             aria-label={t.graph.fitGraph}
-            className={`absolute top-2 z-10 rounded border border-amber-400 bg-gray-50/90 px-2 py-1.5 text-gray-800 backdrop-blur hover:bg-amber-50 dark:bg-gray-900/90 dark:text-gray-100 dark:hover:bg-gray-800 ${language === 'ar' ? 'left-2' : 'right-2'}`}
+            className={`${FLOATING_OVER_CANVAS} ${language === 'ar' ? 'left-2' : 'right-2'}`}
           >
             <FontAwesomeIcon icon={faExpand} />
-          </button>
+          </Button>
           {graphCanvas(viewportSize)}
         </div>
         <div
           ref={panelRef}
           className={panelExpanded
-            ? 'fixed inset-x-0 bottom-0 z-[60] max-h-[75dvh] overflow-hidden rounded-t-lg border-t border-amber-400 bg-white shadow-lg lg:inset-y-0 lg:bottom-auto lg:start-0 lg:end-auto lg:h-full lg:max-h-none lg:w-80 lg:rounded-none lg:border-t-0 lg:border-e lg:shadow-none dark:border-gray-700 dark:bg-gray-800'
-            : 'fixed inset-x-0 bottom-0 z-[60] rounded-t-lg border-t border-amber-400 bg-white shadow-lg lg:inset-auto lg:top-3 lg:start-3 lg:rounded-lg lg:border dark:border-gray-700 dark:bg-gray-800'
+            ? 'fixed inset-x-0 bottom-0 z-[60] flex max-h-[75dvh] flex-col overflow-hidden rounded-t-lg border-t border-amber-400 bg-white pb-[env(safe-area-inset-bottom)] shadow-lg lg:inset-y-0 lg:pb-0 lg:bottom-auto lg:start-0 lg:end-auto lg:h-full lg:max-h-none lg:w-80 lg:rounded-none lg:border-t-0 lg:border-e lg:shadow-none dark:border-gray-700 dark:bg-gray-800'
+            : 'fixed inset-x-0 bottom-0 z-[60] rounded-t-lg border-t border-amber-400 bg-white pb-[env(safe-area-inset-bottom)] shadow-lg lg:inset-auto lg:top-3 lg:start-3 lg:rounded-lg lg:border lg:pb-0 dark:border-gray-700 dark:bg-gray-800'
           }
         >
           {panelExpanded ? panelContent : collapsedBar}
@@ -969,28 +1029,28 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           </p>
           <div className="flex items-center gap-2">
             {showSearch && (
-              <button type="button" onClick={() => setShowSearchPanel(show => !show)} aria-pressed={showSearchPanel} aria-label={showSearchPanel ? t.graph.closeSearch : t.graph.openSearch} className="flex items-center gap-2 rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
+              <Button onClick={() => setShowSearchPanel(show => !show)} aria-pressed={showSearchPanel} aria-label={showSearchPanel ? t.graph.closeSearch : t.graph.openSearch}>
                 <FontAwesomeIcon icon={faMagnifyingGlass} />
                 {t.graph.openSearch}
-              </button>
+              </Button>
             )}
-            <button type="button" onClick={() => setShowFilterPanel(show => !show)} aria-pressed={showFilterPanel} aria-label={showFilterPanel ? t.graph.closeFilters : t.graph.openFilters} className="flex items-center gap-2 rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
+            <Button onClick={() => setShowFilterPanel(show => !show)} aria-pressed={showFilterPanel} aria-label={showFilterPanel ? t.graph.closeFilters : t.graph.openFilters}>
               <FontAwesomeIcon icon={faFilter} />
               {t.graph.openFilters}
-            </button>
-            <button type="button" onClick={() => setIsFullscreen(false)} aria-label={t.graph.closeFullscreen} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
+            </Button>
+            <Button size="icon" onClick={() => setIsFullscreen(false)} aria-label={t.graph.closeFullscreen}>
               <FontAwesomeIcon icon={faCompress} />
-            </button>
+            </Button>
           </div>
         </div>
         {showSearchPanel && (
-          <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="absolute top-14 inset-x-3 z-20 max-h-[70vh] overflow-auto rounded-lg border border-gray-200 bg-white p-3 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+          <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="absolute top-14 inset-x-3 z-20 max-h-[70dvh] overflow-auto rounded-lg border border-gray-200 bg-white p-3 shadow-lg dark:border-gray-700 dark:bg-gray-800">
             <GraphSearch />
             {explorationControls}
           </div>
         )}
         {showFilterPanel && (
-          <div dir={language === 'ar' ? 'rtl' : 'ltr'} className={`absolute top-14 z-20 max-h-[70vh] w-80 overflow-auto rounded-lg border border-gray-200 bg-white p-3 shadow-lg dark:border-gray-700 dark:bg-gray-800 ${language === 'ar' ? 'left-3' : 'right-3'}`}>
+          <div dir={language === 'ar' ? 'rtl' : 'ltr'} className={`absolute inset-x-3 top-14 z-20 max-h-[70dvh] overflow-auto rounded-lg border border-gray-200 bg-white p-3 shadow-lg sm:inset-x-auto sm:w-80 dark:border-gray-700 dark:bg-gray-800 ${language === 'ar' ? 'sm:left-3' : 'sm:right-3'}`}>
             {filterPanel}
           </div>
         )}
@@ -1023,12 +1083,16 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
       {selectedNode && !showSearch && (
         <aside dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4 dark:border-amber-700 dark:bg-gray-800" aria-live="polite">
-          <p className="text-sm text-gray-600 dark:text-gray-300">{t.graph.selectedLabel} {kindLabel(selectedNode.type ?? 'person')}</p>
+          <p className="text-sm text-gray-600 dark:text-gray-300">{kindLabel(selectedNode.type ?? 'person')}</p>
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode.label}</h2>
           <div className="mt-3 flex flex-wrap gap-3">
-            <Button variant="primary" href={profilePath(selectedNode.type, selectedNode.slug)}>{t.graph.viewProfile}</Button>
+            <Button variant="primary" href={profilePath(selectedNode.type, selectedNode.slug)}>
+              <FontAwesomeIcon icon={faUser} />
+              {t.graph.viewProfile}
+            </Button>
             {!showSearch && (
               <Button onClick={() => updateParams({ focus: selectedNode.slug, person: null, ancestorsOf: [], descendantsOf: [] })}>
+                <FontAwesomeIcon icon={faShareNodes} />
                 {t.graph.exploreNeighbours}
               </Button>
             )}
@@ -1039,18 +1103,20 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_14rem]">
         <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="relative h-[65vh] min-h-[32rem] overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700" role="region" aria-label={t.graph.interactiveGraph}>
-          <button type="button" onClick={() => setIsFullscreen(true)} aria-label={t.graph.fullscreen} className={`absolute top-2 z-10 rounded border border-amber-400 bg-gray-50/90 px-2 py-1.5 text-gray-800 backdrop-blur hover:bg-amber-50 dark:bg-gray-900/90 dark:text-gray-100 dark:hover:bg-gray-800 ${language === 'ar' ? 'left-2' : 'right-2'}`}>
+          <Button size="icon" onClick={() => setIsFullscreen(true)} aria-label={t.graph.fullscreen} className={`${FLOATING_OVER_CANVAS} ${language === 'ar' ? 'left-2' : 'right-2'}`}>
             <FontAwesomeIcon icon={faExpand} />
-          </button>
+          </Button>
           {graphCanvas()}
         </div>
         <div>
           <Button
             className="mb-2"
             onClick={() => setShowNodesPanel(show => !show)}
+            active={showNodesPanel}
             aria-expanded={showNodesPanel}
           >
-            {showNodesPanel ? t.graph.hideNodesInView : t.graph.showNodesInView}
+            <FontAwesomeIcon icon={faListUl} />
+            {t.graph.nodesList}
           </Button>
           {showNodesPanel && <div className="rounded-lg border border-gray-200 p-3 dark:border-gray-700">
           <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100 capitalize">{t.graph.nodesInView}</h2>

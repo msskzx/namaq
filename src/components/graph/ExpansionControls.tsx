@@ -1,6 +1,8 @@
-import { ExpansionRelationId, LINEAGE_ACTIONS, LineageActionId } from '@/lib/relationship/expansion';
+import { ExpansionRelationId, LineageActionId } from '@/lib/relationship/expansion';
 import translations from '@/components/language/translations';
 import Button from '@/components/common/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDownLong, faShareNodes, faUpLong } from '@fortawesome/free-solid-svg-icons';
 
 type GraphStrings = (typeof translations)[keyof typeof translations]['graph'];
 
@@ -9,6 +11,18 @@ const LINEAGE_LABEL_KEY: Record<LineageActionId, 'ancestors' | 'paternalLineage'
   PATERNAL_LINEAGE: 'paternalLineage',
   DESCENDANTS: 'descendants',
 };
+
+// Vertical arrows for the two directions of a lineage, which read the same way
+// under both writing directions.
+const LINEAGE_ICON: Partial<Record<LineageActionId, typeof faUpLong>> = {
+  ANCESTORS: faUpLong,
+  DESCENDANTS: faDownLong,
+};
+
+// Paternal lineage keeps working from a saved URL; only its button is gone
+// while the action's future is undecided. See
+// docs/graph-exploration-implementation-plan.md.
+const LINEAGE_BUTTONS: readonly LineageActionId[] = ['ANCESTORS', 'DESCENDANTS'];
 
 interface ExpansionControlsProps {
   isPerson: boolean;
@@ -28,20 +42,22 @@ export default function ExpansionControls({
   g,
 }: ExpansionControlsProps) {
   return (
-    <div className="mt-3 space-y-3">
+    <div className="mt-3 flex flex-wrap gap-3 border-t border-amber-200 pt-3 dark:border-amber-800">
       {hasEligibleDirectRelations && (
         <Button variant="primary" onClick={onExpandAllDirectRelations}>
-          {g.allDirectRelations}
+          <FontAwesomeIcon icon={faShareNodes} />
+          {g.exploreSubject}
         </Button>
       )}
       {isPerson && (
-        <div className="flex flex-wrap gap-2 border-t border-amber-200 pt-3 dark:border-amber-800">
-          {LINEAGE_ACTIONS.map(action => (
-            <Button key={action} size="sm" active={isActive(action)} aria-pressed={isActive(action)} onClick={() => onToggle(action)}>
+        <>
+          {LINEAGE_BUTTONS.map(action => (
+            <Button key={action} active={isActive(action)} aria-pressed={isActive(action)} onClick={() => onToggle(action)}>
+              <FontAwesomeIcon icon={LINEAGE_ICON[action]!} />
               {g.lineageActions[LINEAGE_LABEL_KEY[action]]}
             </Button>
           ))}
-        </div>
+        </>
       )}
     </div>
   );

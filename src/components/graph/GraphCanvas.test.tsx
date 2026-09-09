@@ -105,20 +105,21 @@ beforeEach(() => {
 });
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 
-it('expands every recorded relation of the selection, then reveals globally without changing those expansions', async () => {
+it('explores the selection along the enabled relations only, then reveals globally without changing those expansions', async () => {
   nav.setUrl(`/graphs?filter=WIFE&subject=person:${root}&selected=${root}`);
   mount();
-  fireEvent.click(await screen.findByRole('button', { name: 'All direct relations' }));
-  await waitFor(() => expect(params().getAll('expand')).toEqual([`person:${root}:FATHER`, `person:${root}:WIFE`]));
+  fireEvent.click(await screen.findByRole('button', { name: 'Explore' }));
+  // Father is switched off, so Explore leaves the Prophet's father out.
+  await waitFor(() => expect(params().getAll('expand')).toEqual([`person:${root}:WIFE`]));
   fireEvent.click(screen.getByRole('button', { name: 'Deselect' }));
   fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
   fireEvent.click(screen.getByRole('button', { name: 'Entire exploration' }));
   fireEvent.click(screen.getByRole('switch', { name: 'Show Father relationships' }));
-  // Grandfather comes with it: the manually revealed father has no Father cap,
-  // so the still-active filter takes one hop from him (ADR 0003).
-  await waitFor(() => expect(graph()).toBe('father,grandfather,prophet-muhammad,wife,wife-father'));
+  // The father arrives through the filter itself, which caps him, so the chain
+  // stops before the grandfather (ADR 0003).
+  await waitFor(() => expect(graph()).toBe('father,prophet-muhammad,wife,wife-father'));
   expect(params().getAll('filter')).toEqual(['WIFE', 'FATHER']);
-  expect(params().getAll('expand')).toEqual([`person:${root}:FATHER`, `person:${root}:WIFE`]);
+  expect(params().getAll('expand')).toEqual([`person:${root}:WIFE`]);
 });
 
 it('installs the recorded family and turns every global filter off on Start over', async () => {
@@ -132,9 +133,10 @@ it('installs the recorded family and turns every global filter off on Start over
   fireEvent.click(screen.getByRole('button', { name: 'Entire exploration' }));
   expect(screen.getByRole('switch', { name: 'Show Father relationships' }).getAttribute('aria-checked')).toBe('false');
   expect(screen.getByRole('switch', { name: 'Show Companion Of relationships' }).getAttribute('aria-checked')).toBe('false');
-  fireEvent.click(screen.getByRole('button', { name: 'All direct relations' }));
+  // With every filter off there is nothing to narrow, so Explore covers every
+  // type except companionship.
+  fireEvent.click(screen.getByRole('button', { name: 'Explore' }));
   await waitFor(() => expect(params().getAll('expand')).toContain(`person:${root}:FATHER`));
-  // Expansion follows the panel, so the switched-off type stays out.
   expect(params().getAll('expand')).not.toContain(`person:${root}:COMPANION_OF`);
 });
 
@@ -202,12 +204,12 @@ it('collapses the selected branch while keeping the subject and anything else su
   expect(params().getAll('expand')).toEqual([]);
 });
 
-it('removes the selected subject, blocks a global filter from reintroducing it, and undoes on Back', async () => {
+it('hides the selected node, blocks a global filter from reintroducing it, and undoes on Back', async () => {
   nav.setUrl(`/graphs?subject=person:${root}&expand=person:${root}:WIFE&selected=wife`);
   mount();
   await waitFor(() => expect(graph()).toBe(`${root},wife`));
   const beforeRemoval = nav.getUrl();
-  fireEvent.click(screen.getByRole('button', { name: 'Remove from exploration' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Hide node' }));
   await waitFor(() => expect(graph()).toBe(root));
   expect(params().getAll('removed')).toEqual(['person:wife']);
   fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
@@ -219,11 +221,11 @@ it('removes the selected subject, blocks a global filter from reintroducing it, 
   await waitFor(() => expect(graph()).toBe(`${root},wife`));
 });
 
-it('keeps only the selected subject and its own choices, resetting the global filters', async () => {
+it('keeps only the selected node and its own choices, resetting the global filters', async () => {
   nav.setUrl(`/graphs?subject=person:${root}&expand=person:${root}:WIFE&expand=person:wife:FATHER&filter=FATHER&selected=wife`);
   mount();
   await waitFor(() => expect(graph()).toContain('wife-father'));
-  fireEvent.click(screen.getByRole('button', { name: 'Keep only this subject' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Keep only this node' }));
   await waitFor(() => expect(graph()).toBe('wife,wife-father'));
   expect(params().has('filter')).toBe(false);
   expect(params().getAll('expand')).toEqual(['person:wife:FATHER']);
@@ -253,14 +255,30 @@ it('filters battle participation by status, keeping people their family still su
   await waitFor(() => expect(graph()).not.toContain('badr'));
 });
 
-it('hides and restores the Nodes in view list', async () => {
+// The menu's placement is layout, which jsdom cannot judge; this covers the
+// half it can, that the links exist while the panel is collapsed.
+it('opens the site menu from the collapsed panel', async () => {
   mount();
   await waitFor(() => expect(graph()).toContain('wife'));
-  expect(screen.getByRole('button', { name: 'wife' })).toBeTruthy();
-  fireEvent.click(screen.getByRole('button', { name: 'Hide nodes in view' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Close search' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Menu' }));
+
+  expect(screen.getByRole('link', { name: 'About' })).toBeTruthy();
+});
+
+it('opens and closes the node list, which starts collapsed', async () => {
+  mount();
+  await waitFor(() => expect(graph()).toContain('wife'));
+  const list = () => screen.getByRole('button', { name: 'List of Nodes' });
   expect(screen.queryByRole('button', { name: 'wife' })).toBeNull();
-  fireEvent.click(screen.getByRole('button', { name: 'Show nodes in view' }));
+  expect(list().getAttribute('aria-expanded')).toBe('false');
+
+  fireEvent.click(list());
   expect(screen.getByRole('button', { name: 'wife' })).toBeTruthy();
+  expect(list().getAttribute('aria-expanded')).toBe('true');
+
+  fireEvent.click(list());
+  expect(screen.queryByRole('button', { name: 'wife' })).toBeNull();
 });
 
 it('renders the selected person\'s titles as badges linking to the title filter', async () => {
@@ -280,6 +298,10 @@ it('unions the full graph, preserves exploration state and makes Start over undo
   expect(params().get('full')).toBe('1');
   expect(params().get('selected')).toBe('wife');
   expect(params().getAll('expand')).toEqual([`person:${root}:WIFE`]);
+  // The whole dataset arrives with its relationship vocabulary switched on,
+  // companionship excepted.
+  expect(params().getAll('filter')).toContain('FATHER');
+  expect(params().getAll('filter')).not.toContain('COMPANION_OF');
   const beforeReset = nav.getUrl();
   fireEvent.click(screen.getByRole('button', { name: 'Start over' }));
   await waitFor(() => expect(graph()).toBe(`${root},wife`));
@@ -291,7 +313,31 @@ it('unions the full graph, preserves exploration state and makes Start over undo
   expect(nav.push).toHaveBeenLastCalledWith(nav.getUrl(), { scroll: false });
   act(() => nav.setUrl(beforeReset));
   await waitFor(() => expect(graph()).toContain('grandfather'));
-  expect(params().getAll('filter')).toEqual(['FATHER']);
+  expect(params().getAll('filter')).toContain('FATHER');
+});
+
+it('offers Explore with every filter off, covering all but companionship', async () => {
+  nav.setUrl(`/graphs?subject=person:${root}&selected=${root}`);
+  mount();
+  await waitFor(() => expect(graph()).toBe(root));
+
+  fireEvent.click(screen.getByRole('button', { name: 'Explore' }));
+
+  await waitFor(() => expect(graph()).toContain('father'));
+  expect(graph()).toContain('wife');
+  expect(graph()).not.toContain('companion');
+  expect(params().has('filter')).toBe(false);
+});
+
+it('leaves companionship to its own switch when Show full graph turns the vocabulary on', async () => {
+  nav.setUrl(`/graphs?subject=person:${root}&filter=COMPANION_OF&selected=${root}`);
+  mount();
+  await waitFor(() => expect(graph()).toContain('companion'));
+  fireEvent.click(screen.getByRole('button', { name: 'Show full graph' }));
+  await waitFor(() => expect(params().get('full')).toBe('1'));
+
+  expect(params().getAll('filter')).toContain('FATHER');
+  expect(params().getAll('filter')).toContain('COMPANION_OF');
 });
 
 it('opens a fresh visit on the root\'s recorded family, with every global filter off', async () => {
@@ -345,6 +391,7 @@ it('keeps the camera steady when selecting an already on-screen subject', async 
   await settleInitialFraming();
   camera.centerAt.mockClear();
 
+  fireEvent.click(screen.getByRole('button', { name: 'List of Nodes' }));
   fireEvent.click(screen.getByRole('button', { name: 'wife' }));
   await waitFor(() => expect(params().get('selected')).toBe('wife'));
   expect(camera.centerAt).not.toHaveBeenCalled();
@@ -358,6 +405,7 @@ it('pans (without an explicit zoom change) to reveal a selected subject that is 
   camera.centerAt.mockClear();
   camera.zoom.mockClear();
 
+  fireEvent.click(screen.getByRole('button', { name: 'List of Nodes' }));
   fireEvent.click(screen.getByRole('button', { name: 'grandfather' }));
   await waitFor(() => expect(camera.centerAt).toHaveBeenCalled());
   // zoom() is only ever read (no args) to compute the reveal pan here, never
