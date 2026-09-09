@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faXmark, faGear } from '@fortawesome/free-solid-svg-icons';
 import translations from '../language/translations';
 import ThemeSwitcher from '../theme/ThemeSwitcher';
+import Button from './Button';
 import { getAllNavLinks } from '@/lib/siteLinks';
 
 interface NavLink {
@@ -162,13 +163,9 @@ export default function NavBar() {
           <div>
             {/* Gear Icon for Settings */}
             <div className="relative" ref={settingsRef}>
-              <button
-                onClick={() => setSettingsOpen((open) => !open)}
-                className="text-black dark:text-amber-400 rounded-full p-2 hover:bg-gray-200 dark:hover:bg-indigo-950 dark:hover:text-amber-300 transition-colors focus:outline-none focus:ring-2 focus:ring-amber-300 ml-2"
-                aria-label="Settings"
-              >
-                <FontAwesomeIcon icon={faGear} className="w-6 h-6" />
-              </button>
+              <Button size="icon" onClick={() => setSettingsOpen((open) => !open)} aria-expanded={settingsOpen} aria-label="Settings" className="ms-2">
+                <FontAwesomeIcon icon={faGear} className="w-5 h-5" />
+              </Button>
               {settingsOpen && (
                 <div className="absolute top-full right-0 mt-2 bg-gray-50 dark:bg-gray-950 border border-amber-400 rounded-md shadow-lg z-50 p-4 flex flex-col gap-4">
                   <div>
@@ -182,13 +179,15 @@ export default function NavBar() {
             </div>
           </div>
           {/* Hamburger Icon for Mobile */}
-          <button
-            className="lg:hidden text-black dark:text-amber-400 hover:text-gray-800 dark:hover:text-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-300 p-2"
+          <Button
+            size="icon"
+            className="lg:hidden"
             onClick={() => setMenuOpen((open) => !open)}
+            aria-expanded={menuOpen}
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
           >
-            <FontAwesomeIcon icon={menuOpen ? faXmark : faBars} className="w-6 h-6" />
-          </button>
+            <FontAwesomeIcon icon={menuOpen ? faXmark : faBars} className="w-5 h-5" />
+          </Button>
         </div>
         {/* Mobile Dropdown Menu */}
         {menuOpen && (

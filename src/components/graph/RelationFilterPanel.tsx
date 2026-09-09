@@ -1,3 +1,5 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBullseye, faCircleNodes } from '@fortawesome/free-solid-svg-icons';
 import SlideSwitch from './SlideSwitch';
 import Button from '@/components/common/Button';
 import { governingRelationType, relationColor, relationGroup, sortRelationTypes, RelationGroup } from '@/lib/relationship/categories';
@@ -44,9 +46,11 @@ export default function RelationFilterPanel({ types, includedRelations, onToggle
       {scope && onScopeChange && (
         <div className="mb-2 flex flex-wrap gap-2" role="group" aria-label={g.controlScope}>
           <Button size="sm" active={scope === 'selected'} aria-pressed={scope === 'selected'} onClick={() => onScopeChange('selected')}>
+            <FontAwesomeIcon icon={faBullseye} />
             {g.selectedSubjectScope}
           </Button>
           <Button size="sm" active={scope === 'exploration'} aria-pressed={scope === 'exploration'} onClick={() => onScopeChange('exploration')}>
+            <FontAwesomeIcon icon={faCircleNodes} />
             {g.explorationScope}
           </Button>
         </div>

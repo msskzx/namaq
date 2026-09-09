@@ -8,7 +8,7 @@ import { GraphData, GraphNode, GraphNodeFull, GraphLink } from '@/types/graph';
 import useSWR from 'swr';
 import { fetcher } from '@/lib/swr';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExpand, faCompress, faFilter, faMagnifyingGlass, faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faExpand, faCompress, faFilter, faMagnifyingGlass, faBars, faRotateLeft, faXmark } from '@fortawesome/free-solid-svg-icons';
 import GraphSearch from './GraphSearch';
 import SlideSwitch from './SlideSwitch';
 import RelationFilterPanel, { ControlScope } from './RelationFilterPanel';
@@ -49,6 +49,10 @@ interface GraphCanvasProps {
 }
 
 const relationName = (value: string) => value.toLowerCase().replaceAll('_', ' ');
+
+// Placement only: a control sitting on the canvas needs its own ground to stay
+// legible against whatever the graph draws behind it.
+const FLOATING_OVER_CANVAS = 'absolute top-2 z-10 bg-gray-50/90 backdrop-blur dark:bg-gray-900/90';
 
 // Keep disabled kinds and relations available even when absent from the response.
 const ALL_RELATION_TYPES = sortRelationTypes(RELATION_ORDER.filter(type => governingRelationType(type) === type));
@@ -740,9 +744,10 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   const filterPanel = (
     <>
       <div className="mb-4 flex justify-end">
-        <button type="button" onClick={resetGraphView} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
+        <Button onClick={resetGraphView}>
+          <FontAwesomeIcon icon={faRotateLeft} />
           {t.graph.resetGraphView}
-        </button>
+        </Button>
       </div>
 
       {kindsUniverse.length > 1 && (
@@ -837,15 +842,9 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   if (showSearch) {
     const menuButton = (
       <div className="relative" ref={menuRef}>
-        <button
-          type="button"
-          onClick={() => setMenuOpen(open => !open)}
-          aria-pressed={menuOpen}
-          aria-label={menuOpen ? t.graph.closeMenu : t.graph.openMenu}
-          className="rounded border border-amber-400 px-2 py-1.5 text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800"
-        >
+        <Button size="icon" onClick={() => setMenuOpen(open => !open)} aria-pressed={menuOpen} aria-label={menuOpen ? t.graph.closeMenu : t.graph.openMenu}>
           <FontAwesomeIcon icon={faBars} />
-        </button>
+        </Button>
         {menuOpen && (
           // Anchored to the viewport, not to the button: the panel around it
           // scrolls and hides its overflow, and it sits at the bottom of the
@@ -934,9 +933,9 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     const collapsedBar = (
       <div className="flex items-center gap-2 p-2">
         {menuButton}
-        <button type="button" onClick={() => setPanelExpanded(true)} aria-label={t.graph.openSearch} className="rounded border border-amber-400 px-2 py-1.5 text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
+        <Button size="icon" onClick={() => setPanelExpanded(true)} aria-label={t.graph.openSearch}>
           <FontAwesomeIcon icon={faMagnifyingGlass} />
-        </button>
+        </Button>
         <span className="truncate text-sm text-gray-700 lg:hidden dark:text-gray-200">{selectedNode ? selectedNode.label : ''}</span>
       </div>
     );
@@ -944,14 +943,14 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     return (
       <div dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <div className="fixed inset-0 z-0 bg-gray-50 dark:bg-gray-900" role="region" aria-label={t.graph.interactiveGraph}>
-          <button
-            type="button"
+          <Button
+            size="icon"
             onClick={() => fitToView(true)}
             aria-label={t.graph.fitGraph}
-            className={`absolute top-2 z-10 rounded border border-amber-400 bg-gray-50/90 px-2 py-1.5 text-gray-800 backdrop-blur hover:bg-amber-50 dark:bg-gray-900/90 dark:text-gray-100 dark:hover:bg-gray-800 ${language === 'ar' ? 'left-2' : 'right-2'}`}
+            className={`${FLOATING_OVER_CANVAS} ${language === 'ar' ? 'left-2' : 'right-2'}`}
           >
             <FontAwesomeIcon icon={faExpand} />
-          </button>
+          </Button>
           {graphCanvas(viewportSize)}
         </div>
         <div
@@ -976,18 +975,18 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           </p>
           <div className="flex items-center gap-2">
             {showSearch && (
-              <button type="button" onClick={() => setShowSearchPanel(show => !show)} aria-pressed={showSearchPanel} aria-label={showSearchPanel ? t.graph.closeSearch : t.graph.openSearch} className="flex items-center gap-2 rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
+              <Button onClick={() => setShowSearchPanel(show => !show)} aria-pressed={showSearchPanel} aria-label={showSearchPanel ? t.graph.closeSearch : t.graph.openSearch}>
                 <FontAwesomeIcon icon={faMagnifyingGlass} />
                 {t.graph.openSearch}
-              </button>
+              </Button>
             )}
-            <button type="button" onClick={() => setShowFilterPanel(show => !show)} aria-pressed={showFilterPanel} aria-label={showFilterPanel ? t.graph.closeFilters : t.graph.openFilters} className="flex items-center gap-2 rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
+            <Button onClick={() => setShowFilterPanel(show => !show)} aria-pressed={showFilterPanel} aria-label={showFilterPanel ? t.graph.closeFilters : t.graph.openFilters}>
               <FontAwesomeIcon icon={faFilter} />
               {t.graph.openFilters}
-            </button>
-            <button type="button" onClick={() => setIsFullscreen(false)} aria-label={t.graph.closeFullscreen} className="rounded border border-amber-400 px-3 py-1.5 text-sm text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800">
+            </Button>
+            <Button size="icon" onClick={() => setIsFullscreen(false)} aria-label={t.graph.closeFullscreen}>
               <FontAwesomeIcon icon={faCompress} />
-            </button>
+            </Button>
           </div>
         </div>
         {showSearchPanel && (
@@ -1046,9 +1045,9 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_14rem]">
         <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="relative h-[65vh] min-h-[32rem] overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700" role="region" aria-label={t.graph.interactiveGraph}>
-          <button type="button" onClick={() => setIsFullscreen(true)} aria-label={t.graph.fullscreen} className={`absolute top-2 z-10 rounded border border-amber-400 bg-gray-50/90 px-2 py-1.5 text-gray-800 backdrop-blur hover:bg-amber-50 dark:bg-gray-900/90 dark:text-gray-100 dark:hover:bg-gray-800 ${language === 'ar' ? 'left-2' : 'right-2'}`}>
+          <Button size="icon" onClick={() => setIsFullscreen(true)} aria-label={t.graph.fullscreen} className={`${FLOATING_OVER_CANVAS} ${language === 'ar' ? 'left-2' : 'right-2'}`}>
             <FontAwesomeIcon icon={faExpand} />
-          </button>
+          </Button>
           {graphCanvas()}
         </div>
         <div>
