@@ -12,7 +12,9 @@ const nav = vi.hoisted(() => {
   let url = '/people/abu-ubaydah-ibn-al-jarrah';
   const listeners = new Set<() => void>();
   const replaceCalls: string[] = [];
+  const replaceOptions: unknown[] = [];
   return {
+    replaceOptions,
     getUrl: () => url,
     setUrl: (next: string) => {
       url = next;
@@ -26,6 +28,7 @@ const nav = vi.hoisted(() => {
     reset: (initial: string) => {
       url = initial;
       replaceCalls.length = 0;
+      replaceOptions.length = 0;
     },
   };
 });
@@ -34,8 +37,9 @@ vi.mock('next/navigation', async () => {
   const ReactActual = await vi.importActual<typeof import('react')>('react');
   return {
     useRouter: () => ({
-      replace: (next: string) => {
+      replace: (next: string, options?: unknown) => {
         nav.replaceCalls.push(next);
+        nav.replaceOptions.push(options);
         nav.setUrl(next);
       },
       push: (next: string) => {
@@ -134,6 +138,23 @@ describe('SourceAccountReader', () => {
     renderReader();
 
     await waitFor(() => expect(fetchJson).toHaveBeenCalledWith(expect.stringContaining('page=7')));
+  });
+
+  it('brings the reader back into view when the page changes', async () => {
+    const scrollIntoView = vi.fn();
+    Element.prototype.scrollIntoView = scrollIntoView;
+
+    renderReader();
+    fireEvent.click(await screen.findByText('Next'));
+
+    await waitFor(() => expect(scrollIntoView).toHaveBeenCalled());
+  });
+
+  it('leaves the browser to keep its own scroll position', async () => {
+    renderReader();
+    fireEvent.click(await screen.findByText('Next'));
+
+    await waitFor(() => expect(nav.replaceOptions.at(-1)).toEqual({ scroll: false }));
   });
 
   it('puts the page it moves to in the URL', async () => {

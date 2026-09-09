@@ -75,6 +75,13 @@ describe('Pagination', () => {
     expect(onChange).toHaveBeenCalledWith(7);
   });
 
+  it('names the jump control even with no visible label', () => {
+    const { container } = render(<Pagination page={1} pageCount={19} onChange={vi.fn()} showSelect />);
+
+    expect(container.querySelector('select')?.getAttribute('aria-label')).toBe('Go to page');
+    expect(container.querySelector('label')?.firstElementChild?.tagName).toBe('SELECT');
+  });
+
   it('offers no selector unless asked', () => {
     const { container } = render(<Pagination page={1} pageCount={19} onChange={vi.fn()} />);
 

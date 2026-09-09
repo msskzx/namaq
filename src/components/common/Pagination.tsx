@@ -14,6 +14,7 @@ interface PaginationProps {
   showSelect?: boolean;
   /** What is on screen, such as a range of items. Replaces the default page count. */
   summary?: string;
+  /** Visible text beside the jump control. Without it the control is still named, just not labelled on screen. */
   selectLabel?: string;
 }
 
@@ -57,8 +58,9 @@ export default function Pagination({
 
       {showSelect ? (
         <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-          {selectLabel ?? (rightToLeft ? 'انتقل إلى' : 'Go to')}
+          {selectLabel}
           <select
+            aria-label={selectLabel ?? (rightToLeft ? 'انتقل إلى صفحة' : 'Go to page')}
             className="rounded border border-amber-400 bg-white px-2 py-1 text-sm text-gray-800 dark:bg-gray-950 dark:text-gray-100"
             value={page}
             onChange={(changed) => onChange(Number(changed.target.value))}

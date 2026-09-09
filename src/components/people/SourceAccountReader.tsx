@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useRef } from 'react';
 import useSWR from 'swr';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -63,12 +63,18 @@ export default function SourceAccountReader({ slug }: SourceAccountReaderProps) 
     fetcher,
   );
 
+  // The reader sits well down the profile, so moving to another page brings it
+  // back into view instead of leaving the reader looking at whatever they had
+  // scrolled to.
+  const section = useRef<HTMLElement>(null);
+
   const setSelection = (nextBook: string | null, nextPage: number) => {
     const next = new URLSearchParams(searchParams.toString());
     if (nextBook) next.set('book', nextBook);
     else next.delete('book');
     next.set('page', String(nextPage));
-    router.replace(`${pathname}?${next.toString()}`);
+    router.replace(`${pathname}?${next.toString()}`, { scroll: false });
+    section.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   if (error) {
@@ -88,7 +94,7 @@ export default function SourceAccountReader({ slug }: SourceAccountReaderProps) 
   const printed = current.printedPage ?? String(current.sequence);
 
   return (
-    <section className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
+    <section ref={section} className="scroll-mt-4 bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
       <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
         <FontAwesomeIcon icon={faBookOpen} className="w-7 h-7 text-amber-500 ml-2" />
         {language === 'ar' ? 'نص المصدر' : 'Source text'}
@@ -143,7 +149,6 @@ export default function SourceAccountReader({ slug }: SourceAccountReaderProps) 
         pageCount={account.pageCount}
         onChange={(next) => setSelection(account.id, next)}
         showSelect
-        selectLabel={language === 'ar' ? 'الصفحة المطبوعة' : 'Printed page'}
       />
 
       {current.extractionUrl && (
