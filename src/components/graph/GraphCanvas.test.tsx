@@ -237,11 +237,12 @@ it('flips the relationship scope through one toggle', async () => {
   mount();
   await waitFor(() => expect(graph()).toBe(`${root},wife`));
   fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
+  // The label names what a press does, so it reads as the scope not in force.
   const toggle = () => screen.getByRole('button', { name: /^Apply them to the/ });
-  expect(toggle().textContent).toContain('Selected subject');
+  expect(toggle().getAttribute('aria-label')).toContain('entire exploration');
 
   fireEvent.click(toggle());
-  expect(toggle().textContent).toContain('Entire exploration');
+  expect(toggle().getAttribute('aria-label')).toContain('selected subject');
 
   // The switches now write global filters rather than the wife's expansions.
   fireEvent.click(screen.getByRole('switch', { name: 'Show Father relationships' }));
@@ -497,9 +498,9 @@ it('disables the local controls with nothing selected, rather than switching to 
   mount();
   await waitFor(() => expect(graph()).toBe(root));
   fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
-  // The scope toggle names the scope in force, and the panel says why its
-  // switches are inert.
-  expect(screen.getByRole('button', { name: 'Apply them to the entire exploration instead' }).textContent).toContain('Selected subject');
+  // The scope toggle carries both scopes, and the panel says why its switches
+  // are inert.
+  expect(screen.getByRole('button', { name: 'Apply them to the entire exploration instead' }).textContent).toContain('Entire exploration');
   expect(screen.getByText('Select a subject to use these controls, or switch to the entire exploration.')).toBeTruthy();
 });
 

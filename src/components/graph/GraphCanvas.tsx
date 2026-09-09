@@ -14,7 +14,6 @@ import {
   faUser, faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import GraphSearch from './GraphSearch';
-import SlideSwitch from './SlideSwitch';
 import RelationFilterPanel, { ControlScope } from './RelationFilterPanel';
 import ExpansionControls from './ExpansionControls';
 import Button from '@/components/common/Button';
@@ -802,22 +801,6 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
         </Button>
       </div>
 
-      {kindsUniverse.length > 1 && (
-        <fieldset dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
-          <legend className="px-1 text-sm font-medium text-gray-800 dark:text-gray-100">{t.graph.nodeKinds}</legend>
-          <div className="flex flex-wrap gap-x-4 gap-y-2">
-            {kindsUniverse.map(kind => {
-              const active = includedKinds.has(kind);
-              const color = kindColor(kind);
-              const label = kindLabel(kind);
-              return (
-                <SlideSwitch key={kind} checked={active} onChange={() => toggleKind(kind)} label={label} color={color} ariaLabel={active ? t.graph.hideKind(label) : t.graph.showKind(label)} />
-              );
-            })}
-          </div>
-        </fieldset>
-      )}
-
       <RelationFilterPanel
         types={relationTypesPresent}
         includedRelations={activeScope === 'selected' ? localRelations : includedRelations}
@@ -831,6 +814,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
         scope={showSearch ? scope : undefined}
         onScopeChange={setScope}
         disabled={activeScope === 'selected' && !selectedSubjectId}
+        kindFilters={{ kinds: kindsUniverse, included: includedKinds, label: kindLabel, color: kindColor, onToggle: toggleKind }}
         statusFilters={showSearch && includedKinds.has('battle') ? {
           choices: PARTICIPATION_STATUS_CHOICES,
           active: activeStatuses,

@@ -107,9 +107,10 @@ full graph turns on. The Paternal lineage button is withdrawn from the panel
 while its future is decided; the action itself still restores from a saved URL.
 Two actions are renamed in the interface, with their behavior unchanged: rule
 9's Remove from exploration is Hide node, and rule 10's Keep only selected is
-Keep only this node. Rule 1's scope choice is one toggle naming the scope in
-force rather than two buttons, and rule 6's status choices sit inside the
-battles group, under the participation relation they qualify.
+Keep only this node. Rule 1's scope choice is one slider carrying both
+scopes rather than two buttons, and rule 6's status choices sit inside the
+battles group, under the participation relation they qualify. Node kinds join
+the same panel, above the slider, since they are not a scoped choice.
 
 Rule 1 revises the scope model in [ADR 0004](adr/0004-merge-overview-into-exploration.md).
 Rule 2 revises [ADR 0001](adr/0001-separate-expansion-from-connection-visibility.md)'s

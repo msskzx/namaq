@@ -1,7 +1,6 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBullseye, faCircleNodes } from '@fortawesome/free-solid-svg-icons';
+import ScopeToggle from './ScopeToggle';
 import SlideSwitch from './SlideSwitch';
-import Button from '@/components/common/Button';
 import { governingRelationType, relationColor, relationGroup, sortRelationTypes, RelationGroup } from '@/lib/relationship/categories';
 import translations from '@/components/language/translations';
 
@@ -27,6 +26,15 @@ interface RelationFilterPanelProps {
   scope?: ControlScope;
   onScopeChange?: (scope: ControlScope) => void;
   disabled?: boolean;
+  // Node kinds share this pane but not its scope: they are a server-side
+  // whitelist for the whole view, so they sit above the scope toggle.
+  kindFilters?: {
+    kinds: readonly string[];
+    included: Set<string>;
+    label: (kind: string) => string;
+    color: (kind: string) => string;
+    onToggle: (kind: string) => void;
+  };
   // Participation statuses belong to the one relation type they qualify, so
   // they live under the battles group rather than in a panel of their own.
   statusFilters?: {
@@ -38,7 +46,7 @@ interface RelationFilterPanelProps {
   };
 }
 
-export default function RelationFilterPanel({ types, includedRelations, onToggle, onToggleAll, onToggleGroup, showCompanionTitle, onToggleCompanionTitle, relationLabel, language, scope, onScopeChange, disabled = false, statusFilters }: RelationFilterPanelProps) {
+export default function RelationFilterPanel({ types, includedRelations, onToggle, onToggleAll, onToggleGroup, showCompanionTitle, onToggleCompanionTitle, relationLabel, language, scope, onScopeChange, disabled = false, statusFilters, kindFilters }: RelationFilterPanelProps) {
   const g: GraphStrings = translations[language].graph;
   const dir = language === 'ar' ? 'rtl' : 'ltr';
   const groups = GROUP_ORDER.map(group => ({ group, types: sortRelationTypes(types.filter(type => relationGroup(type) === group)) })).filter(({ types }) => types.length > 0);
@@ -51,23 +59,45 @@ export default function RelationFilterPanel({ types, includedRelations, onToggle
 
   return (
     <fieldset dir={dir} className="mb-4 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
-      <legend className="px-1 text-sm font-medium text-gray-800 dark:text-gray-100">{g.relationshipTypes}</legend>
+      <legend className="px-1 text-sm font-medium text-gray-800 dark:text-gray-100">{g.filters}</legend>
+      {kindFilters && kindFilters.kinds.length > 1 && (
+        <div className="mb-3 border-b border-gray-100 pb-3 dark:border-gray-700">
+          <p className="mb-2 text-sm font-medium text-gray-800 dark:text-gray-100">{g.nodeKinds}</p>
+          <div className="flex flex-wrap gap-x-4 gap-y-2">
+            {kindFilters.kinds.map(kind => {
+              const active = kindFilters.included.has(kind);
+              const label = kindFilters.label(kind);
+              return (
+                <SlideSwitch
+                  key={kind}
+                  checked={active}
+                  onChange={() => kindFilters.onToggle(kind)}
+                  label={label}
+                  color={kindFilters.color(kind)}
+                  ariaLabel={active ? g.hideKind(label) : g.showKind(label)}
+                />
+              );
+            })}
+          </div>
+        </div>
+      )}
+      <p className="mb-2 text-sm font-medium text-gray-800 dark:text-gray-100">{g.relationshipTypes}</p>
       {scope && onScopeChange && (
-        // One control naming the scope in force, rather than two buttons where
-        // only the pressed look told them apart. The sentence around it says
-        // the name is the current state; the label says what a press does.
-        <p className="mb-2 flex flex-wrap items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+        // One slider carrying both scopes, in the shape of the theme and
+        // language switchers. The sentence around it says the highlighted name
+        // is the current state.
+        <div className="mb-2 flex flex-wrap items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
           {g.controlScope}
-          <Button
-            size="sm"
-            active
-            onClick={() => onScopeChange(scope === 'selected' ? 'exploration' : 'selected')}
-            aria-label={g.switchScopeTo(scope === 'selected' ? g.explorationScope : g.selectedSubjectScope)}
-          >
-            <FontAwesomeIcon icon={scope === 'selected' ? faBullseye : faCircleNodes} />
-            {scope === 'selected' ? g.selectedSubjectScope : g.explorationScope}
-          </Button>
-        </p>
+          <ScopeToggle
+            value={scope}
+            onChange={onScopeChange}
+            ariaLabel={g.switchScopeTo(scope === 'selected' ? g.explorationScope : g.selectedSubjectScope)}
+            options={[
+              { value: 'selected', label: g.selectedSubjectScope, icon: faBullseye },
+              { value: 'exploration', label: g.explorationScope, icon: faCircleNodes },
+            ]}
+          />
+        </div>
       )}
       {disabled && <p className="mb-2 text-sm text-gray-600 dark:text-gray-300">{g.selectSubjectForLocalControls}</p>}
       <div className={disabled ? 'pointer-events-none opacity-50' : undefined} aria-disabled={disabled || undefined}>
