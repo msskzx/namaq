@@ -877,7 +877,10 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     );
 
     const panelContent = (
-      <div className="flex h-full flex-col overflow-y-auto p-3">
+      // min-h-0 lets this shrink inside the sheet's flex column, which is what
+      // makes it the scrolling element. Without it the content keeps its full
+      // height and the sheet's max-height simply clips whatever does not fit.
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto p-3">
         <div className="mb-2 flex items-center gap-2">
           {menuButton}
           <p className="flex-1 truncate text-sm text-gray-600 dark:text-gray-300" aria-live="polite">{graphSummary}</p>
@@ -950,8 +953,8 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
         <div
           ref={panelRef}
           className={panelExpanded
-            ? 'fixed inset-x-0 bottom-0 z-[60] max-h-[75dvh] overflow-hidden rounded-t-lg border-t border-amber-400 bg-white shadow-lg lg:inset-y-0 lg:bottom-auto lg:start-0 lg:end-auto lg:h-full lg:max-h-none lg:w-80 lg:rounded-none lg:border-t-0 lg:border-e lg:shadow-none dark:border-gray-700 dark:bg-gray-800'
-            : 'fixed inset-x-0 bottom-0 z-[60] rounded-t-lg border-t border-amber-400 bg-white shadow-lg lg:inset-auto lg:top-3 lg:start-3 lg:rounded-lg lg:border dark:border-gray-700 dark:bg-gray-800'
+            ? 'fixed inset-x-0 bottom-0 z-[60] flex max-h-[75dvh] flex-col overflow-hidden rounded-t-lg border-t border-amber-400 bg-white pb-[env(safe-area-inset-bottom)] shadow-lg lg:inset-y-0 lg:pb-0 lg:bottom-auto lg:start-0 lg:end-auto lg:h-full lg:max-h-none lg:w-80 lg:rounded-none lg:border-t-0 lg:border-e lg:shadow-none dark:border-gray-700 dark:bg-gray-800'
+            : 'fixed inset-x-0 bottom-0 z-[60] rounded-t-lg border-t border-amber-400 bg-white pb-[env(safe-area-inset-bottom)] shadow-lg lg:inset-auto lg:top-3 lg:start-3 lg:rounded-lg lg:border lg:pb-0 dark:border-gray-700 dark:bg-gray-800'
           }
         >
           {panelExpanded ? panelContent : collapsedBar}
@@ -984,13 +987,13 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           </div>
         </div>
         {showSearchPanel && (
-          <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="absolute top-14 inset-x-3 z-20 max-h-[70vh] overflow-auto rounded-lg border border-gray-200 bg-white p-3 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+          <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="absolute top-14 inset-x-3 z-20 max-h-[70dvh] overflow-auto rounded-lg border border-gray-200 bg-white p-3 shadow-lg dark:border-gray-700 dark:bg-gray-800">
             <GraphSearch />
             {explorationControls}
           </div>
         )}
         {showFilterPanel && (
-          <div dir={language === 'ar' ? 'rtl' : 'ltr'} className={`absolute top-14 z-20 max-h-[70vh] w-80 overflow-auto rounded-lg border border-gray-200 bg-white p-3 shadow-lg dark:border-gray-700 dark:bg-gray-800 ${language === 'ar' ? 'left-3' : 'right-3'}`}>
+          <div dir={language === 'ar' ? 'rtl' : 'ltr'} className={`absolute inset-x-3 top-14 z-20 max-h-[70dvh] overflow-auto rounded-lg border border-gray-200 bg-white p-3 shadow-lg sm:inset-x-auto sm:w-80 dark:border-gray-700 dark:bg-gray-800 ${language === 'ar' ? 'sm:left-3' : 'sm:right-3'}`}>
             {filterPanel}
           </div>
         )}
