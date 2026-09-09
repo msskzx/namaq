@@ -154,6 +154,32 @@ it('keeps the cap after off/on and restores filters from the URL', async () => {
   await waitFor(() => expect(graph()).not.toContain('grandfather'));
 });
 
+it('writes each global introduction into the cap history, and keeps it after the filter goes off', async () => {
+  nav.setUrl(`/graphs?subject=person:${root}&expand=person:${root}:WIFE&filter=FATHER`);
+  mount();
+  await waitFor(() => expect(params().getAll('cap')).toContain('person:father:FATHER'));
+  expect(params().getAll('cap')).toContain('person:wife-father:FATHER');
+  fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
+  fireEvent.click(screen.getByRole('switch', { name: 'Hide Father relationships' }));
+  await waitFor(() => expect(graph()).toBe(`${root},wife`));
+  expect(params().getAll('cap')).toContain('person:father:FATHER');
+});
+
+it('keeps the exploration on screen when a fetch fails, and reloads it on Retry', async () => {
+  nav.setUrl(`/graphs?subject=person:${root}&expand=person:${root}:WIFE&selected=${root}`);
+  mount();
+  await waitFor(() => expect(graph()).toBe(`${root},wife`));
+  const working = vi.mocked(fetch).getMockImplementation()!;
+  vi.mocked(fetch).mockRejectedValue(new Error('network down'));
+  fireEvent.click(screen.getByRole('button', { name: 'Show full graph' }));
+  const retry = await screen.findByRole('button', { name: 'Retry' });
+  expect(graph()).toContain(root);
+  expect(screen.getByRole('alert').textContent).toContain('Failed to load the graph');
+  vi.mocked(fetch).mockImplementation(working);
+  fireEvent.click(retry);
+  await waitFor(() => expect(screen.queryByRole('alert')).toBeNull());
+});
+
 it('hides and restores the Nodes in view list', async () => {
   mount();
   await waitFor(() => expect(graph()).toContain('wife'));

@@ -307,6 +307,7 @@ const translations = {
       deselectSubject: 'Deselect',
       showFullGraph: 'Show full graph',
       startOver: 'Start over',
+      retry: 'Retry',
       showAdditions: (count: number) => `Show ${count} new ${count === 1 ? 'subject' : 'subjects'}`,
       dismiss: 'Dismiss',
       lineageActions: {
@@ -655,6 +656,7 @@ const translations = {
       deselectSubject: 'إلغاء التحديد',
       showFullGraph: 'عرض الرسم الكامل',
       startOver: 'البدء من جديد',
+      retry: 'إعادة المحاولة',
       showAdditions: (count: number) => `عرض ${count} ${count === 1 ? 'عنصر جديد' : 'عناصر جديدة'}`,
       dismiss: 'تجاهل',
       lineageActions: {

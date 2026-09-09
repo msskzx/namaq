@@ -128,7 +128,9 @@ const GraphSurface = forwardRef<Methods, GraphSurfaceProps>(function GraphSurfac
   useImperativeHandle(ref, () => localRef.current as Methods);
 
   if (isLoading) return <LoadingSpinner />;
-  if (error) return <ErrorMessage title={t.graph.loadError} />;
+  // A failed refetch keeps the graph the reader already has; the caller shows
+  // the error and its retry beside it.
+  if (error && !graphData) return <ErrorMessage title={t.graph.loadError} />;
   if (!graphData) return null;
 
   const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');

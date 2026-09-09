@@ -25,7 +25,7 @@ import { getAllNavLinks } from '@/lib/siteLinks';
 import { sortRelationTypes, governingRelationType, relationGroup, RELATION_ORDER, KIND_TO_RELATION_GROUP, RelationGroup } from '@/lib/relationship/categories';
 import { COMPANION_TITLE_SLUG, filterVisibleGraph } from '@/lib/graphFilter';
 import { profilePath } from '@/lib/nodeProfile';
-import { parseExplorationInput, formatExpandParam, formatSubjectParam } from '@/lib/relationship/urlState';
+import { parseExplorationInput, formatCapParam, formatExpandParam, formatSubjectParam } from '@/lib/relationship/urlState';
 import { defaultExplorationInput } from '@/lib/relationship/transitions';
 import { ALL_KINDS, DEFAULT_KINDS, NodeKind, RelationType, subjectId } from '@/lib/relationship/types';
 import { ExpansionRelationId, directRelationCounts } from '@/lib/relationship/expansion';
@@ -360,6 +360,20 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams, showSearch]);
 
+  // A cap belongs to the exploration, not to one render of it, so every
+  // introduction a fetch just made is written back to the URL (see
+  // docs/adr/0003-cap-global-relationship-filters.md). Writing only the new
+  // ones keeps this from renavigating in a loop.
+  useEffect(() => {
+    if (!showSearch || !searchParams || !exploration.caps) return;
+    const existing = searchParams.getAll('cap');
+    const seen = new Set(existing);
+    const added = exploration.caps.map(formatCapParam).filter(param => !seen.has(param));
+    if (added.length === 0) return;
+    updateParams({ cap: [...existing, ...added] }, true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [exploration.caps, searchParams, showSearch]);
+
   const toggleRelation = (type: string) => {
     const next = new Set(includedRelations);
     if (next.has(type)) next.delete(type);
@@ -568,7 +582,9 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   }, [showSearch, graphData, selectedSlug, viewportSize]);
 
   if (graphLoading && !graphData) return <div className="flex items-center justify-center min-h-screen"><div className="text-lg">Loading graph...</div></div>;
-  if (graphError) return <div className="flex items-center justify-center min-h-screen"><ErrorMessage title="Error loading graph" description={graphError.toString()} /></div>;
+  // A failed fetch leaves the exploration on screen and offers a retry beside
+  // it; only a failure with nothing to show takes over the page.
+  if (graphError && !graphData) return <div className="flex items-center justify-center min-h-screen"><ErrorMessage title={t.graph.loadError} description={String(graphError)} /></div>;
 
   const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
   const typeLabels: Record<string, string> = { person: t.people, title: t.titles, battle: t.battles.title, event: t.events };
@@ -626,6 +642,12 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
         onExpandAllDirectRelations={expandAllDirectRelations}
         g={t.graph}
       />
+      {graphError && (
+        <div role="alert" className="mt-2 flex items-center gap-2 text-sm text-red-700 dark:text-red-300">
+          <span>{t.graph.loadError}</span>
+          <Button size="sm" onClick={exploration.retry}>{t.graph.retry}</Button>
+        </div>
+      )}
       {showAdditions && (
         <div role="status" className="mt-2 flex items-center gap-2">
           <Button variant="primary" onClick={applyShowAdditions}>
