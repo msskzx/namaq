@@ -1,5 +1,6 @@
 import { RELATION_ORDER } from './categories';
 import { capKey, ExpansionAction, ExplorationCap, ExplorationInput } from './exploration';
+import { PARTICIPATION_STATUS_CHOICES } from './status';
 import { ExpansionRelationId } from './expansion';
 import { NodeKind, RelationType, SubjectId, parseSubjectId, subjectId } from './types';
 
@@ -13,7 +14,13 @@ export interface ExplorationUrlState {
   filters: string[];
   caps?: string[];
   removed?: string[];
+  statuses?: string[];
 }
+
+// An empty status choice and an absent `status` param serialize the same way,
+// so "the user turned every status off" needs its own value to stay
+// distinguishable from "the user has not chosen yet".
+export const NO_STATUSES = '__none__';
 
 function parseSubjectParam(raw: string): SubjectId | null {
   const separatorIndex = raw.indexOf(':');
@@ -60,7 +67,19 @@ export function parseExplorationInput(state: ExplorationUrlState, targetSlug: st
   const removed = Array.from(
     new Set((state.removed ?? []).map(parseSubjectParam).filter((id): id is SubjectId => id !== null))
   );
-  return { roots, expansions, globalFilters, caps, removed };
+  return { roots, expansions, globalFilters, caps, removed, statuses: parseStatuses(state.statuses) };
+}
+
+function parseStatuses(raw: string[] | undefined): string[] | undefined {
+  if (!raw || raw.length === 0) return undefined;
+  if (raw.length === 1 && raw[0] === NO_STATUSES) return [];
+  const chosen = raw.filter((status) => PARTICIPATION_STATUS_CHOICES.includes(status));
+  return chosen.length > 0 ? Array.from(new Set(chosen)) : undefined;
+}
+
+export function formatStatusParams(statuses: string[] | undefined): string[] {
+  if (!statuses) return [];
+  return statuses.length > 0 ? statuses : [NO_STATUSES];
 }
 
 function dedupeBy<T>(items: T[], key: (item: T) => string): T[] {
