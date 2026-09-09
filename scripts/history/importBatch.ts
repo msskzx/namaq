@@ -21,9 +21,6 @@ async function main() {
   }
 
   const approval = checkApproval(batch, files);
-  if (!approval.approved) {
-    throw new Error(`${batch.slug} is not approved for import: ${approval.reason}`);
-  }
 
   const plan = {
     sources: batch.sources.length,
@@ -34,10 +31,17 @@ async function main() {
   };
   console.log(`Batch ${batch.slug} revision ${approval.revision}`);
   console.log(`  ${JSON.stringify(plan)}`);
+  console.log(approval.approved ? '  approval: current' : `  approval: none — ${approval.reason}`);
 
+  // A dry run is how a batch is reviewed, so it runs unapproved. Only the write
+  // requires the files to match the revision the user approved.
   if (!apply) {
-    console.log('  dry run — pass --apply to write');
+    console.log('  dry run — nothing written; pass --apply once approved');
     return;
+  }
+
+  if (!approval.approved) {
+    throw new Error(`${batch.slug} is not approved for import: ${approval.reason}`);
   }
 
   const result = await importBatch(prisma, batch, files);
