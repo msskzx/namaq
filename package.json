@@ -32,7 +32,9 @@
     "graph:layout": "tsx scripts/graph/computeGraphLayout.ts",
     "graph:layout:validate": "tsx scripts/graph/computeGraphLayout.ts --strict",
     "seed:surahs": "tsx prisma/surahSeed.ts",
-    "seed:ayat": "tsx prisma/ayahSeed.ts"
+    "seed:ayat": "tsx prisma/ayahSeed.ts",
+    "history:validate": "tsx scripts/history/validateBatch.ts",
+    "history:import": "tsx scripts/history/importBatch.ts"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",

@@ -183,6 +183,9 @@ model ReviewBatch {
 /// Relationship identity mirrors Neo4j: subject slug, type, related slug.
 model HistoricalClaim {
   id                 String            @id @default(cuid())
+  /// The claim's key in its authoring file. Files are the source of truth, so
+  /// re-importing a batch updates the same row instead of duplicating it.
+  authoringKey       String            @unique
   subjectKind        SubjectKind
   subjectSlug        String
   /// The profile field this claim speaks to, such as `fullName`. Null for a
