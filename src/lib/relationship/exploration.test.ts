@@ -118,11 +118,79 @@ describe('buildExploration', () => {
     const visible = visibleSubjects(result);
 
     expect(visible.has(abuBakr)).toBe(true);
-    expect(result.visible.get(abuBakr)).toEqual([{ kind: 'filter', relationType: 'FATHER' }]);
     expect(visible.has(uthmanIbnAmir)).toBe(true);
-    expect(result.visible.get(uthmanIbnAmir)).toEqual([
-      { kind: 'expansion', subject: abuBakr, relation: 'FATHER' },
-    ]);
+    expect(result.visible.get(uthmanIbnAmir)).toContainEqual({ kind: 'expansion', subject: abuBakr, relation: 'FATHER' });
+    expect(result.caps.map((cap) => cap.subject)).not.toContain(uthmanIbnAmir);
+  });
+
+  it('holds an expansion anchor through its own contribution, so a filter that finds it already visible records no cap', () => {
+    const result = buildExploration(
+      { roots: [], expansions: [{ subject: abuBakr, relation: 'FATHER' }], globalFilters: ['FATHER'] },
+      edges
+    );
+
+    expect(result.visible.get(abuBakr)).toEqual([{ kind: 'expansion', subject: abuBakr, relation: 'FATHER' }]);
+    expect(result.caps).toEqual([]);
+  });
+
+  it('caps each subject a global filter introduces, and reports the caps for the caller to persist', () => {
+    const result = buildExploration(
+      { roots: [muhammad], expansions: [{ subject: muhammad, relation: 'WIFE' }], globalFilters: ['FATHER'] },
+      edges
+    );
+
+    expect(result.caps).toEqual(
+      expect.arrayContaining([
+        { subject: abuBakr, relation: 'FATHER' },
+        { subject: umar, relation: 'FATHER' },
+      ])
+    );
+    expect(result.caps).toHaveLength(2);
+  });
+
+  it('does not let a carried cap be cleared by searching the capped subject again', () => {
+    const result = buildExploration(
+      {
+        roots: [muhammad, abuBakr],
+        expansions: [{ subject: muhammad, relation: 'WIFE' }],
+        globalFilters: ['FATHER'],
+        caps: [{ subject: abuBakr, relation: 'FATHER' }],
+      },
+      edges
+    );
+
+    expect(visibleSubjects(result).has(uthmanIbnAmir)).toBe(false);
+  });
+
+  it('leaves a subject capped for one relation type eligible to trigger another', () => {
+    const result = buildExploration(
+      {
+        roots: [muhammad],
+        expansions: [],
+        globalFilters: ['WIFE', 'FATHER'],
+        caps: [{ subject: aisha, relation: 'WIFE' }],
+      },
+      edges
+    );
+
+    expect(visibleSubjects(result).has(abuBakr)).toBe(true);
+  });
+
+  it('keeps an explicitly removed subject out of roots, expansions, and filter introductions', () => {
+    const result = buildExploration(
+      {
+        roots: [muhammad, aisha],
+        expansions: [{ subject: muhammad, relation: 'WIFE' }],
+        globalFilters: ['FATHER'],
+        removed: [aisha],
+      },
+      edges
+    );
+
+    const visible = visibleSubjects(result);
+    expect(visible.has(aisha)).toBe(false);
+    expect(visible.has(abuBakr)).toBe(false);
+    expect(visible.has(hafsa)).toBe(true);
   });
 
   it('produces identical output when called twice with identical input, confirming statelessness', () => {
