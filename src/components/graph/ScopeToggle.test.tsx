@@ -8,16 +8,16 @@ afterEach(cleanup);
 
 const options = [
   { value: 'selected' as const, label: 'Selected subject', icon: faBullseye },
-  { value: 'exploration' as const, label: 'Entire exploration', icon: faCircleNodes },
+  { value: 'exploration' as const, label: 'Entire graph', icon: faCircleNodes },
 ] as const;
 
 it('shows both options and flips to the other one on press', () => {
   const onChange = vi.fn();
-  render(<ScopeToggle value="selected" options={options} onChange={onChange} ariaLabel="Apply them to the entire exploration instead" />);
+  render(<ScopeToggle value="selected" options={options} onChange={onChange} ariaLabel="Apply them to the entire graph instead" />);
 
   const toggle = screen.getByRole('button');
   expect(toggle.textContent).toContain('Selected subject');
-  expect(toggle.textContent).toContain('Entire exploration');
+  expect(toggle.textContent).toContain('Entire graph');
 
   fireEvent.click(toggle);
   expect(onChange).toHaveBeenCalledWith('exploration');

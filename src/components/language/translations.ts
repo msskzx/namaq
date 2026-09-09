@@ -316,8 +316,8 @@ const translations = {
       controlScope: 'Relationship controls apply to',
       switchScopeTo: (scope: string) => `Apply them to the ${scope.toLowerCase()} instead`,
       selectedSubjectScope: 'Selected subject',
-      explorationScope: 'Entire exploration',
-      selectSubjectForLocalControls: 'Select a subject to use these controls, or switch to the entire exploration.',
+      explorationScope: 'Entire graph',
+      selectSubjectForLocalControls: 'Select a subject to use these controls, or switch to the entire graph.',
       showAdditions: (count: number) => `Show ${count} new ${count === 1 ? 'subject' : 'subjects'}`,
       dismiss: 'Dismiss',
       lineageActions: {
@@ -675,8 +675,8 @@ const translations = {
       controlScope: 'نطاق أدوات العلاقات',
       switchScopeTo: (scope: string) => `تطبيقها على ${scope} بدلاً من ذلك`,
       selectedSubjectScope: 'العنصر المحدد',
-      explorationScope: 'الاستكشاف كله',
-      selectSubjectForLocalControls: 'اختر عنصرًا لاستخدام هذه الأدوات، أو انتقل إلى الاستكشاف كله.',
+      explorationScope: 'الرسم كله',
+      selectSubjectForLocalControls: 'اختر عنصرًا لاستخدام هذه الأدوات، أو انتقل إلى الرسم كله.',
       showAdditions: (count: number) => `عرض ${count} ${count === 1 ? 'عنصر جديد' : 'عناصر جديدة'}`,
       dismiss: 'تجاهل',
       lineageActions: {

@@ -113,7 +113,7 @@ it('explores the selection along the enabled relations only, then reveals global
   await waitFor(() => expect(params().getAll('expand')).toEqual([`person:${root}:WIFE`]));
   fireEvent.click(screen.getByRole('button', { name: 'Deselect' }));
   fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
-  fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire exploration instead' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire graph instead' }));
   fireEvent.click(screen.getByRole('switch', { name: 'Show Father relationships' }));
   // The father arrives through the filter itself, which caps him, so the chain
   // stops before the grandfather (ADR 0003).
@@ -130,7 +130,7 @@ it('installs the recorded family and turns every global filter off on Start over
   await waitFor(() => expect(graph()).toBe(`${root},wife`));
   expect(params().getAll('expand')).toContain(`person:${root}:WIFE`);
   fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
-  fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire exploration instead' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire graph instead' }));
   expect(screen.getByRole('switch', { name: 'Show Father relationships' }).getAttribute('aria-checked')).toBe('false');
   expect(screen.getByRole('switch', { name: 'Show Companion Of relationships' }).getAttribute('aria-checked')).toBe('false');
   // With every filter off there is nothing to narrow, so Explore covers every
@@ -158,7 +158,7 @@ it('keeps the cap after off/on and restores filters from the URL', async () => {
   const view = mount();
   await waitFor(() => expect(graph()).toBe('father,prophet-muhammad,wife,wife-father'));
   fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
-  fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire exploration instead' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire graph instead' }));
   fireEvent.click(screen.getByRole('switch', { name: 'Hide Father relationships' }));
   await waitFor(() => expect(graph()).toBe('prophet-muhammad,wife'));
   fireEvent.click(screen.getByRole('switch', { name: 'Show Father relationships' }));
@@ -174,7 +174,7 @@ it('writes each global introduction into the cap history, and keeps it after the
   await waitFor(() => expect(params().getAll('cap')).toContain('person:father:FATHER'));
   expect(params().getAll('cap')).toContain('person:wife-father:FATHER');
   fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
-  fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire exploration instead' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire graph instead' }));
   fireEvent.click(screen.getByRole('switch', { name: 'Hide Father relationships' }));
   await waitFor(() => expect(graph()).toBe(`${root},wife`));
   expect(params().getAll('cap')).toContain('person:father:FATHER');
@@ -213,7 +213,7 @@ it('hides the selected node, blocks a global filter from reintroducing it, and u
   await waitFor(() => expect(graph()).toBe(root));
   expect(params().getAll('removed')).toEqual(['person:wife']);
   fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
-  fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire exploration instead' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire graph instead' }));
   fireEvent.click(screen.getByRole('switch', { name: 'Show Wife relationships' }));
   await waitFor(() => expect(params().getAll('filter')).toContain('WIFE'));
   expect(graph()).toBe(root);
@@ -239,7 +239,7 @@ it('flips the relationship scope through one toggle', async () => {
   fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
   // The label names what a press does, so it reads as the scope not in force.
   const toggle = () => screen.getByRole('button', { name: /^Apply them to the/ });
-  expect(toggle().getAttribute('aria-label')).toContain('entire exploration');
+  expect(toggle().getAttribute('aria-label')).toContain('entire graph');
 
   fireEvent.click(toggle());
   expect(toggle().getAttribute('aria-label')).toContain('selected subject');
@@ -364,7 +364,7 @@ it('opens a fresh visit on the root\'s recorded family, with every global filter
   expect(params().getAll('expand')).toContain(`person:${root}:WIFE`);
   expect(params().has('filter')).toBe(false);
   fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
-  fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire exploration instead' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire graph instead' }));
   expect(screen.getByRole('switch', { name: 'Show Father relationships' }).getAttribute('aria-checked')).toBe('false');
   expect(screen.getByRole('switch', { name: 'Show Companion Of relationships' }).getAttribute('aria-checked')).toBe('false');
 });
@@ -374,7 +374,7 @@ it('toggling a node kind does not erase existing expansion choices', async () =>
   mount();
   await waitFor(() => expect(graph()).toContain('wife'));
   fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
-  fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire exploration instead' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire graph instead' }));
   fireEvent.click(await screen.findByRole('switch', { name: 'Show Battles & Expeditions' }));
   expect(params().getAll('expand')).toEqual([`person:${root}:WIFE`]);
   fireEvent.click(screen.getByRole('switch', { name: 'Hide Battles & Expeditions' }));
@@ -468,7 +468,7 @@ it('fetches companions from Filters, removes them on off, and restores them with
     .map(([input]) => new URL(String(input), 'http://localhost').searchParams.getAll('relationSubjects')).flat();
   expect(neighborhoods()).not.toContain('person:companion');
   fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
-  fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire exploration instead' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire graph instead' }));
   fireEvent.click(screen.getByRole('switch', { name: 'Show Companion Of relationships' }));
   await waitFor(() => expect(graph()).toContain('companion'));
   expect(neighborhoods()).toContain('person:companion');
@@ -500,15 +500,15 @@ it('disables the local controls with nothing selected, rather than switching to 
   fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
   // The scope toggle carries both scopes, and the panel says why its switches
   // are inert.
-  expect(screen.getByRole('button', { name: 'Apply them to the entire exploration instead' }).textContent).toContain('Entire exploration');
-  expect(screen.getByText('Select a subject to use these controls, or switch to the entire exploration.')).toBeTruthy();
+  expect(screen.getByRole('button', { name: 'Apply them to the entire graph instead' }).textContent).toContain('Entire graph');
+  expect(screen.getByText('Select a subject to use these controls, or switch to the entire graph.')).toBeTruthy();
 });
 
 it('turns every relation on and off in bulk, leaving companionship to its own switch', async () => {
   mount();
   await waitFor(() => expect(graph()).toContain('wife'));
   fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
-  fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire exploration instead' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire graph instead' }));
   fireEvent.click(screen.getByRole('switch', { name: 'All relations' }));
   await waitFor(() => expect(graph()).toContain('father'));
   expect(graph()).not.toContain('companion');
@@ -527,7 +527,7 @@ it('toggles the family group without removing title filters', async () => {
   mount();
   await waitFor(() => expect(graph()).toContain('father'));
   fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
-  fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire exploration instead' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire graph instead' }));
   fireEvent.click(screen.getByRole('switch', { name: 'All family relations' }));
   expect(params().getAll('filter')).toEqual(expect.arrayContaining(['FATHER', 'SON', 'WIFE', 'HOLDS_TITLE']));
   expect(params().getAll('filter')).not.toContain('COMPANION_OF');
@@ -544,7 +544,7 @@ it('opens an old exclusion link on its subject alone, with filters off', async (
   mount();
   await waitFor(() => expect(graph()).toBe(root));
   fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
-  fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire exploration instead' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire graph instead' }));
   expect(screen.getByRole('switch', { name: 'Show Father relationships' }).getAttribute('aria-checked')).toBe('false');
 });
 
@@ -553,7 +553,7 @@ it('keeps a connected local branch when the global filter that revealed its subj
   mount();
   await waitFor(() => expect(graph()).toBe(`${root},wife,wife-father`));
   fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
-  fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire exploration instead' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire graph instead' }));
   fireEvent.click(screen.getByRole('switch', { name: 'Hide Wife relationships' }));
   await waitFor(() => expect(params().has('filter')).toBe(false));
   expect(graph()).toBe(`${root},wife,wife-father`);
@@ -578,7 +578,7 @@ it('turns off both companionship directions through one Filters switch', async (
   mount();
   await waitFor(() => expect(graph()).toContain('companion'));
   fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
-  fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire exploration instead' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire graph instead' }));
   fireEvent.click(screen.getByRole('switch', { name: 'Hide Companion Of relationships' }));
   await waitFor(() => expect(graph()).toBe(root));
   expect(params().has('filter')).toBe(false);

@@ -12,7 +12,7 @@ the current review; it makes no claims about implementation compliance.
    between existing subjects require the matching global filter, unless already
    supported by an active local contribution. Changing selection does not move
    or reinterpret earlier contributions. Local controls are the default in
-   exploration. An explicit Selected subject / Entire exploration switch chooses
+   exploration. An explicit Selected subject / Entire graph switch chooses
    scope. With no subject selected, local controls are disabled; the UI never
    silently switches to global.
 2. Filter state governs which nodes and relationships are shown. Search,
