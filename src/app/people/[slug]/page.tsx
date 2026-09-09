@@ -102,8 +102,6 @@ function PersonDetailPage() {
             </div>
           )}
 
-          <ClaimEvidence title={language === 'ar' ? 'المصادر والملاحظات التاريخية' : 'Sources & historical notes'} claims={person.claims || []} />
-
           <SourceAccountReader slug={slug} />
 
           <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
@@ -123,6 +121,8 @@ function PersonDetailPage() {
           <AyatGroup ayat={person.ayat || []} />
 
           <BattleParticipationTimeline participations={person.participations || []} />
+
+          <ClaimEvidence title={language === 'ar' ? 'المصادر والملاحظات التاريخية' : 'Sources & historical notes'} claims={person.claims || []} />
 
         </div>
       </div>

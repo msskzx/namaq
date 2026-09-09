@@ -1,5 +1,7 @@
 'use client';
 
+import React, { useEffect, useState } from 'react';
+import Pagination from '@/components/common/Pagination';
 import { useLanguage } from '@/components/language/LanguageContext';
 import {
   confidenceLabel,
@@ -13,6 +15,7 @@ interface ClaimEvidenceProps {
   title: string;
   claims: ClaimWithCitations[];
   relationshipClaims?: boolean;
+  pageSize?: number;
 }
 
 function citationText(citation: CitationWithSource, language: string) {
@@ -31,16 +34,35 @@ function citationText(citation: CitationWithSource, language: string) {
  * Shows every recorded claim with its review status rather than hiding
  * unreviewed work — see docs/adr/0008-separate-review-from-visibility.md.
  */
-export default function ClaimEvidence({ title, claims, relationshipClaims = false }: ClaimEvidenceProps) {
+export default function ClaimEvidence({
+  title,
+  claims,
+  relationshipClaims = false,
+  pageSize = 5,
+}: ClaimEvidenceProps) {
   const { language } = useLanguage();
+  const [page, setPage] = useState(1);
+  const pageCount = Math.max(1, Math.ceil(claims.length / pageSize));
+
+  // A shorter list can leave the reader on a page that no longer exists, for
+  // instance when the profile's claims arrive after an empty first render.
+  useEffect(() => {
+    setPage((current) => Math.min(current, Math.max(1, Math.ceil(claims.length / pageSize))));
+  }, [claims.length, pageSize]);
 
   if (claims.length === 0) return null;
+
+  const first = (page - 1) * pageSize;
+  const shown = claims.slice(first, first + pageSize);
+  const range = language === 'ar'
+    ? `${first + 1}–${first + shown.length} من ${claims.length}`
+    : `${first + 1}–${first + shown.length} of ${claims.length}`;
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
       <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">{title}</h2>
       <ul className="space-y-4">
-        {claims.map((claim) => {
+        {shown.map((claim) => {
           const relationship =
             relationshipClaims && claim.relationshipType
               ? `${claim.subjectSlug} — ${claim.relationshipType.replaceAll('_', ' ').toLowerCase()} → ${claim.relatedSubjectSlug ?? ''}`
@@ -80,6 +102,8 @@ export default function ClaimEvidence({ title, claims, relationshipClaims = fals
           );
         })}
       </ul>
+
+      <Pagination page={page} pageCount={pageCount} onChange={setPage} summary={range} />
     </section>
   );
 }

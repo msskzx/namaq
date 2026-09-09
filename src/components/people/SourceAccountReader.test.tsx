@@ -124,7 +124,7 @@ describe('SourceAccountReader', () => {
     await screen.findByText('الفقرة الأولى');
 
     expect(container.querySelector('article')?.getAttribute('dir')).toBe('rtl');
-    expect(screen.getByText('Previous page')).toBeTruthy();
+    expect(screen.getByText('Previous')).toBeTruthy();
   });
 
   it('asks for the page named in the URL', async () => {
@@ -138,7 +138,7 @@ describe('SourceAccountReader', () => {
 
   it('puts the page it moves to in the URL', async () => {
     renderReader();
-    fireEvent.click(await screen.findByText('Next page'));
+    fireEvent.click(await screen.findByText('Next'));
 
     await waitFor(() => expect(nav.replaceCalls.at(-1)).toContain('page=2'));
   });
@@ -146,14 +146,14 @@ describe('SourceAccountReader', () => {
   it('cannot page back from the first page or on past the last', async () => {
     renderReader();
 
-    const previous = (await screen.findByText('Previous page')).closest('button');
+    const previous = (await screen.findByText('Previous')).closest('button');
     expect(previous?.hasAttribute('disabled')).toBe(true);
 
     cleanup();
     respondWith({ accounts: [account()], account: account(), page: page({ sequence: 19 }) });
     renderReader();
 
-    const next = (await screen.findByText('Next page')).closest('button');
+    const next = (await screen.findByText('Next')).closest('button');
     expect(next?.hasAttribute('disabled')).toBe(true);
   });
 
@@ -162,6 +162,7 @@ describe('SourceAccountReader', () => {
 
     await screen.findByText('الفقرة الأولى');
 
+    // Only the printed-page jump remains.
     expect(container.querySelectorAll('select')).toHaveLength(1);
   });
 

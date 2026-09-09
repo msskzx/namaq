@@ -4,9 +4,9 @@ import React from 'react';
 import useSWR from 'swr';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDown, faArrowUp, faBookOpen } from '@fortawesome/free-solid-svg-icons';
-import Button from '@/components/common/Button';
+import { faBookOpen } from '@fortawesome/free-solid-svg-icons';
 import ErrorMessage from '@/components/common/ErrorMessage';
+import Pagination from '@/components/common/Pagination';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { fetcher } from '@/lib/swr';
@@ -94,7 +94,7 @@ export default function SourceAccountReader({ slug }: SourceAccountReaderProps) 
         {language === 'ar' ? 'نص المصدر' : 'Source text'}
       </h2>
 
-      <div className="flex flex-wrap items-center gap-3 mb-4">
+      <div className={accounts.length > 1 ? 'flex flex-wrap items-center gap-3 mb-4' : 'hidden'}>
         {accounts.length > 1 && (
           <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
             {language === 'ar' ? 'الكتاب' : 'Book'}
@@ -111,42 +111,6 @@ export default function SourceAccountReader({ slug }: SourceAccountReaderProps) 
             </select>
           </label>
         )}
-
-        <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-          {language === 'ar' ? 'الصفحة المطبوعة' : 'Printed page'}
-          <select
-            className="rounded border border-amber-400 bg-white dark:bg-gray-950 px-2 py-1 text-sm text-gray-800 dark:text-gray-100"
-            value={current.sequence}
-            onChange={(changed) => setSelection(account.id, Number(changed.target.value))}
-          >
-            {Array.from({ length: account.pageCount }, (_, index) => index + 1).map((sequence) => (
-              <option key={sequence} value={sequence}>
-                {sequence}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <Button
-          variant="outline"
-          size="sm"
-          className="shrink-0"
-          disabled={current.sequence <= 1}
-          onClick={() => setSelection(account.id, current.sequence - 1)}
-        >
-          <FontAwesomeIcon icon={faArrowUp} className="w-3 h-3" />
-          {language === 'ar' ? 'الصفحة السابقة' : 'Previous page'}
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          className="shrink-0"
-          disabled={current.sequence >= account.pageCount}
-          onClick={() => setSelection(account.id, current.sequence + 1)}
-        >
-          <FontAwesomeIcon icon={faArrowDown} className="w-3 h-3" />
-          {language === 'ar' ? 'الصفحة التالية' : 'Next page'}
-        </Button>
       </div>
 
       <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">
@@ -173,6 +137,19 @@ export default function SourceAccountReader({ slug }: SourceAccountReaderProps) 
           </div>
         </aside>
       )}
+
+      <Pagination
+        page={current.sequence}
+        pageCount={account.pageCount}
+        onChange={(next) => setSelection(account.id, next)}
+        showSelect
+        selectLabel={language === 'ar' ? 'الصفحة المطبوعة' : 'Printed page'}
+        summary={
+          language === 'ar'
+            ? `ص ${printed} · ${current.sequence} من ${account.pageCount}`
+            : `p. ${printed} · ${current.sequence} of ${account.pageCount}`
+        }
+      />
 
       {current.extractionUrl && (
         <a

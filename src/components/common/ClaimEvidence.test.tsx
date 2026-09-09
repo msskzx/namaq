@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import ClaimEvidence from './ClaimEvidence';
 import type { ClaimWithCitations } from '@/types/provenance';
 
@@ -102,6 +102,55 @@ describe('ClaimEvidence', () => {
     expect(screen.getByText(/abu-ubaydah-ibn-al-jarrah/)).toBeTruthy();
     expect(screen.getByText(/prophet-muhammad/)).toBeTruthy();
     expect(screen.getByText(/companion of/)).toBeTruthy();
+  });
+
+  it('shows one page of claims at a time with the range it is showing', () => {
+    const many = Array.from({ length: 25 }, (_, index) =>
+      claim({ id: `claim-${index}`, assertion: `دعوى ${index}` } as Partial<ClaimWithCitations>),
+    );
+
+    render(<ClaimEvidence title="Sources" claims={many} />);
+
+    expect(screen.getByText('دعوى 0')).toBeTruthy();
+    expect(screen.queryByText('دعوى 5')).toBeNull();
+    expect(screen.getByText('1–5 of 25')).toBeTruthy();
+  });
+
+  it('pages forward and back through the claims', () => {
+    const many = Array.from({ length: 25 }, (_, index) =>
+      claim({ id: `claim-${index}`, assertion: `دعوى ${index}` } as Partial<ClaimWithCitations>),
+    );
+
+    render(<ClaimEvidence title="Sources" claims={many} />);
+    fireEvent.click(screen.getByText('Next'));
+
+    expect(screen.getByText('دعوى 5')).toBeTruthy();
+    expect(screen.queryByText('دعوى 0')).toBeNull();
+
+    fireEvent.click(screen.getByText('Previous'));
+
+    expect(screen.getByText('دعوى 0')).toBeTruthy();
+  });
+
+  it('stops at both ends', () => {
+    const many = Array.from({ length: 7 }, (_, index) =>
+      claim({ id: `claim-${index}`, assertion: `دعوى ${index}` } as Partial<ClaimWithCitations>),
+    );
+
+    render(<ClaimEvidence title="Sources" claims={many} />);
+
+    expect(screen.getByText('Previous').closest('button')?.hasAttribute('disabled')).toBe(true);
+
+    fireEvent.click(screen.getByText('Next'));
+
+    expect(screen.getByText('6–7 of 7')).toBeTruthy();
+    expect(screen.getByText('Next').closest('button')?.hasAttribute('disabled')).toBe(true);
+  });
+
+  it('offers no pagination when everything fits on one page', () => {
+    render(<ClaimEvidence title="Sources" claims={[claim()]} />);
+
+    expect(screen.queryByText('Next')).toBeNull();
   });
 
   it('links a citation to the page it was read from', () => {
