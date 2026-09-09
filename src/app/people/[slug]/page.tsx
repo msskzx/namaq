@@ -20,14 +20,14 @@ import GraphCanvas from '@/components/graph/GraphCanvas';
 import { fetcher } from '@/lib/swr';
 import { AyatGroup } from '@/components/quran/AyahCard';
 import ClaimEvidence from '@/components/common/ClaimEvidence';
-import type { RelationshipClaimWithSource } from '@/types/provenance';
+import type { ClaimWithCitations } from '@/types/provenance';
 
 function PersonDetailPage() {
   const { language } = useLanguage();
   const t = translations[language];
   const { slug } = useParams<{ slug: string }>();
   const { data: person, error, isLoading } = useSWR<PersonFull>(slug ? `/api/people/${slug}` : null, fetcher);
-  const { data: relationshipClaims } = useSWR<RelationshipClaimWithSource[]>(
+  const { data: relationshipClaims } = useSWR<ClaimWithCitations[]>(
     slug ? `/api/relationship-claims?person=${encodeURIComponent(slug)}` : null,
     fetcher,
   );

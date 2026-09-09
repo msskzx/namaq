@@ -28,8 +28,9 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 - Local dev requires a running PostgreSQL **and** Neo4j instance (see
   README "Local setup"). Real credentials for both live in `.env` at the
   repo root; each git worktree needs its own `.env` symlinked to that
-  file (`ln -s /Users/msskzx/Projects/namaq/.env .env`) — check for this
-  symlink before assuming infra is unavailable. Seed/sync commands
+  file (`ln -s <main-checkout>/.env .env`, where `<main-checkout>` is the
+  absolute path of the primary clone) — check for this symlink before
+  assuming infra is unavailable. Seed/sync commands
   (`npm run seed:*`, `npm run people:sync`, `npm run battles:sync`)
   should work once it's in place. Only say local verification isn't
   possible if the symlink is present and the commands still fail.
@@ -40,7 +41,14 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 
 ## Git
 
-- Create worktrees under `/Users/msskzx/Projects/namaq/.codex/worktrees/<branch-name>` and use `codex/<branch-name>` for Codex branches. Use this repository-local root for future work; `~/.codex/worktrees` is not the project default. For desktop-created worktrees, configure Settings > Worktrees > Worktree root to `/Users/msskzx/Projects/namaq/.codex/worktrees`; this instruction does not change the app setting automatically.
+- Keep worktrees inside the main checkout, under a root named for the agent that
+  creates them: Codex uses `.codex/worktrees/<branch-name>` with
+  `codex/<branch-name>` branches, Claude Code uses `.claude/worktrees/<branch-name>`
+  with `claude/<branch-name>` branches. Any other agent follows the same shape
+  under its own dot-directory. Home-directory roots such as `~/.codex/worktrees` are not
+  the project default. For desktop-created worktrees, set Settings > Worktrees >
+  Worktree root to the matching repository-local path; this file does not change
+  the app setting automatically.
 - In every new worktree, create and verify the `.env` symlink described under Local verification before running project commands. Reuse the main checkout's file; preserve an existing file instead of overwriting it.
 - Branch names should not contain numbers.
 - Commit messages follow Conventional Commits: `type(scope): summary`

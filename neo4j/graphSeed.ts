@@ -19,11 +19,11 @@ const relationMergeQuery = (query: string) => {
     throw new Error(`Invalid relationship seed query: ${query}`);
   }
 
-  // Do not assign invented citations to historical claims. Until a curated
-  // RelationshipClaim is published, graph edges are visibly unassessed.
+  // Do not assign invented citations to historical claims. Until a reviewed
+  // relationship claim exists, graph edges are visibly unassessed.
   return query.replace(
     `CREATE (from)-[:${relationship}]->(to);`,
-    `MERGE (from)-[relation:${relationship}]->(to) ON CREATE SET relation.confidence = "UNASSESSED", relation.reviewStatus = "DRAFT";`,
+    `MERGE (from)-[relation:${relationship}]->(to) ON CREATE SET relation.confidence = "UNASSESSED", relation.reviewStatus = "NOT_REVIEWED";`,
   );
 };
 

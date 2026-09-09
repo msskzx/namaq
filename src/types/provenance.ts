@@ -1,10 +1,53 @@
-import type { ClaimConfidence, HistoricalSource, RelationshipClaim } from '@/generated/prisma';
+import type {
+  Citation,
+  ClaimConfidence,
+  ClaimReviewStatus,
+  HistoricalClaim,
+  HistoricalSource,
+  SourceAccount,
+  SourceAccountPage,
+  SourcePassage,
+  SubjectKind,
+} from '@/generated/prisma';
 
-export type RelationshipClaimWithSource = RelationshipClaim & { source: HistoricalSource };
+export type CitationWithSource = Citation & {
+  source: HistoricalSource;
+  passage?: (SourcePassage & { page: SourceAccountPage }) | null;
+};
+
+export type ClaimWithCitations = HistoricalClaim & { citations: CitationWithSource[] };
+
+/** One printed page of a source account, as served to the profile reader. */
+export type AccountPage = Pick<
+  SourceAccountPage,
+  'sequence' | 'printedPage' | 'bodyMarkdown' | 'notesMarkdown' | 'extractionUrl'
+>;
+
+/** An account's identity without its text, for the profile's book selector. */
+export type AccountSummary = Pick<
+  SourceAccount,
+  'id' | 'subjectKind' | 'subjectSlug' | 'entryIdentifier' | 'titleArabic' | 'volume' | 'extractionUrl'
+> & {
+  source: HistoricalSource;
+  pageCount: number;
+};
+
+export type SubjectReferences = {
+  subjectKind: SubjectKind;
+  subjectSlug: string;
+  claims: ClaimWithCitations[];
+  citations: CitationWithSource[];
+};
 
 export const confidenceLabel: Record<ClaimConfidence, string> = {
   ESTABLISHED: 'Well attested',
   LIKELY: 'Likely',
   DISPUTED: 'Disputed',
   UNASSESSED: 'Assessment pending',
+};
+
+export const reviewStatusLabel: Record<ClaimReviewStatus, { en: string; ar: string }> = {
+  NOT_REVIEWED: { en: 'Not reviewed', ar: 'لم تُراجع' },
+  IN_REVIEW: { en: 'In review', ar: 'قيد المراجعة' },
+  REVIEWED: { en: 'Reviewed', ar: 'مُراجَعة' },
 };

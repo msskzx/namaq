@@ -21,11 +21,6 @@ export async function GET(
         ayat: {
           include: { surah: true },
         },
-        claims: {
-          where: { reviewStatus: 'PUBLISHED' },
-          include: { source: true },
-          orderBy: { updatedAt: 'desc' },
-        },
       },
     });
 
@@ -35,7 +30,13 @@ export async function GET(
         { status: 404 }
       );
     }
-    return NextResponse.json(person);
+    const claims = await prisma.historicalClaim.findMany({
+      where: { subjectKind: 'PERSON', subjectSlug: slug },
+      include: { citations: { include: { source: true } } },
+      orderBy: { updatedAt: 'desc' },
+    });
+
+    return NextResponse.json({ ...person, claims });
   } catch (error) {
     console.error('API Error:', error);
     return NextResponse.json(

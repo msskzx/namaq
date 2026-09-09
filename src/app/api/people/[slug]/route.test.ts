@@ -1,7 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { findUnique } = vi.hoisted(() => ({ findUnique: vi.fn() }));
-vi.mock('@/lib/prisma', () => ({ prisma: { person: { findUnique } } }));
+const { findUnique, findMany } = vi.hoisted(() => ({ findUnique: vi.fn(), findMany: vi.fn() }));
+vi.mock('@/lib/prisma', () => ({
+  prisma: { person: { findUnique }, historicalClaim: { findMany } },
+}));
 
 import { GET } from './route';
 
@@ -15,11 +17,15 @@ function request(slug: string) {
 describe('GET /api/people/[slug]', () => {
   beforeEach(() => {
     findUnique.mockReset();
+    findMany.mockReset();
+    findMany.mockResolvedValue([]);
   });
 
   it('returns the person with related titles, participations, events, ayat, and claims', async () => {
     const person = { id: '1', slug: 'prophet-muhammad', name: 'محمد' };
+    const claims = [{ id: 'c1', subjectSlug: 'prophet-muhammad', citations: [] }];
     findUnique.mockResolvedValue(person);
+    findMany.mockResolvedValue(claims);
 
     const { _request, params } = request('prophet-muhammad');
     const response = await GET(_request, { params });
@@ -32,15 +38,15 @@ describe('GET /api/people/[slug]', () => {
         participations: { include: { battle: true } },
         events: { include: { battle: true } },
         ayat: { include: { surah: true } },
-        claims: {
-          where: { reviewStatus: 'PUBLISHED' },
-          include: { source: true },
-          orderBy: { updatedAt: 'desc' },
-        },
       },
     });
+    expect(findMany).toHaveBeenCalledWith({
+      where: { subjectKind: 'PERSON', subjectSlug: 'prophet-muhammad' },
+      include: { citations: { include: { source: true } } },
+      orderBy: { updatedAt: 'desc' },
+    });
     expect(response.status).toBe(200);
-    expect(body).toEqual(person);
+    expect(body).toEqual({ ...person, claims });
   });
 
   it('returns 404 when no person matches the slug', async () => {
