@@ -978,13 +978,6 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
       role="region"
       aria-label={t.graph.interactiveGraph}
     >
-      {/* AppChrome (src/components/common/AppChrome.tsx) omits NavBar/Footer on
-          /graphs, so out of fullscreen that route would otherwise offer no way
-          back to the site at all. A page that has its own navigation does not
-          need this. */}
-      {pathname === '/graphs' && (
-        <div className={`${FLOATING_OVER_CANVAS} ${language === 'ar' ? 'right-2' : 'left-2'}`}>{menuButton}</div>
-      )}
       {/* Fit graph travels with the view control in both scopes: it is how a
           reader who has panned or zoomed away gets everything back on screen. */}
       <div className={`${FLOATING_OVER_CANVAS} flex items-center gap-2 ${language === 'ar' ? 'left-2' : 'right-2'}`}>
