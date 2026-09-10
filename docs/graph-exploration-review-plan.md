@@ -76,19 +76,20 @@ the current review; it makes no claims about implementation compliance.
     defaults (all off), rather than temporarily suspending them. Preserve the
     selected subject's local choices. Discard other exploration contributions
     so they cannot restore subjects outside this direct neighborhood.
-11. Opening a graph shows its subject with that subject's ancestors and
-    descendants, as the subject's own expansions. One rule covers both scopes:
-    a fresh visit and Start over on the workspace open on Prophet Muhammad,
-    and a person's profile opens on that person. Neither line is capped, so a
-    subject with many recorded descendants arrives with all of them. Other
-    local relationship choices, companionship, battles, and global
-    relationship filters start off. Restored URLs continue to represent saved
-    exploration state.
+11. Opening a graph installs, for its subject and without the reader pressing
+    anything, what Explore, Ancestors and Descendants install between them:
+    every direct relation the subject has, and its line in both directions.
+    One rule covers both scopes. A fresh visit and Start over on the workspace
+    open on Prophet Muhammad; a person's profile opens on that person. Neither
+    line is capped, so a subject with many recorded descendants arrives with
+    all of them. Companionship stays off, as its own switch governs it
+    (ADR 0007). Battles and every global relationship filter start off too, and
+    restored URLs continue to represent saved exploration state.
 
-    This supersedes the earlier rule, which opened on the recorded wives,
-    sons, daughters, and grandchildren. Those are single recorded hops rather
-    than a line, so they left a profile graph with no rule of its own and made
-    the two scopes behave differently.
+    This supersedes the earlier rule, which opened on the recorded wives, sons,
+    daughters, and grandchildren. Naming a handful of relations left a profile
+    graph with no rule of its own and made the two scopes behave differently.
+
 12. Hidden nodes and relationships must not respond to hover or display hover
     content. The user reports that they currently do; this is a reported bug,
     not yet reproduced or diagnosed under the docs-only review boundary.
@@ -133,7 +134,7 @@ search-auto-enablement rules in the exploration and search plans. The current re
 | Contribution removal | Collapse Muhammad's Wives contribution while Aisha has an independent Parents expansion: retain Aisha and her parents. | Check provenance and overlapping-contribution tests. |
 | Connection visibility | Connections between retained subjects appear only when allowed by current filters. | Check subgraph construction and rendering filters, including inverse-pair presentation. |
 | Filter preservation | Search, Explore, and ordinary resets preserve on/off filter choices; companionship starts off. Start over restores defaults. | Test each action with filters on/off and with default versus restored state. |
-| Start over | After companionship is manually enabled and other filters changed, Start over restores every filter default, including companionship off, clears previous contributions and cap history, and reveals Muhammad with his recorded direct wives, sons, daughters, and grandchildren. | Test reset from nondefault filter states and browser Back restoration. |
+| Start over | After companionship is manually enabled and other filters changed, Start over restores every filter default, including companionship off, clears previous contributions and cap history, and reveals Muhammad with every direct relation he has and his line in both directions. | Test reset from nondefault filter states and browser Back restoration. |
 | Bulk and group toggles | With companionship off, group/all-on leaves it off; with companionship on, group/all-off leaves it on. Both recorded directions retain the same state. | Test group and master toggles in both directions with companionship initially on and off. |
 | Companion expansion | Explore includes companions only when their filter is enabled, without changing that state. | Test direct expansion with companionship on and off. |
 | Companion directions | The dedicated toggle handles both COMPANION_OF and ACCOMPANIED_BY under the chosen subject/global scope. | Test from the Prophet and a companion, including inverse-record deduplication. |
@@ -145,7 +146,7 @@ search-auto-enablement rules in the exploration and search plans. The current re
 | Remove from exploration | Removing Aisha hides her and all incident connections, collapses her branch, retains independently supported descendants, and blocks immediate global-filter reintroduction. Explicit search can restore her. | Test removal under active global filters, shared support, explicit search restoration, and browser Back. |
 | Local connections versus global connections | With Muhammad selected and local Father, Father-in-law, and Wives enabled, reveal the matching direct subjects and his connections to them. Wife–father connections stay hidden while the matching global filter is off, unless independently revealed locally. | Test the recorded wife/father example with global Father off/on and an independent local Father contribution. |
 | Keep only selected | Retain the selected subject and its eligible direct neighbors; reset global filters to defaults (off), preserve selected-local choices, and discard other subjects and contributions. | Test a multi-branch exploration, filter exclusions, and absence of old contributions restoring discarded nodes. |
-| Fresh view | Show Muhammad with recorded direct wives, sons, daughters, and grandchildren; other local choices, companionship, battles, and global relationship filters off. Do not infer grandchildren through two-step parentage. | Test fresh initial state separately from restored URLs and Start over, including no further generations. |
+| Fresh view | Show the subject with every direct relation it has and its ancestors and descendants, seeded as its own expansions; companionship, battles, and global relationship filters off. The workspace's subject is Muhammad, a profile's is that profile's person. | Test fresh initial state separately from restored URLs and Start over, in both scopes. |
 | Hidden hover targets | After filtering, collapsing, removal, or Keep only selected, hidden nodes and edges produce no hover highlight or tooltip. | Verify rendered and hit-test membership; visually reproduce by moving over former node/edge positions, including a previously hovered item. |
 | Default control scope | Exploration opens with local controls; global controls are entered deliberately rather than used by default. | Test initial control state and scope changes without changing earlier contributions. |
 | Button icons | The shared button supports text-only and icon-with-text use; icons clarify appropriate actions and icon-only controls have accessible names. | Inspect the existing component/icon system; verify representative buttons in Arabic/English, light/dark themes, and keyboard use. |

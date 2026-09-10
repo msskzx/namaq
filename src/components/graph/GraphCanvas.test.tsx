@@ -122,12 +122,12 @@ it('explores the selection along the enabled relations only, then reveals global
   expect(params().getAll('expand')).toEqual([`person:${root}:WIFE`]);
 });
 
-it('installs the recorded family and turns every global filter off on Start over', async () => {
+it('installs the subject\'s relations and line, and turns every global filter off on Start over', async () => {
   nav.setUrl(`/graphs?subject=person:${root}&filter=COMPANION_OF&selected=${root}`);
   mount();
   await waitFor(() => expect(graph()).toContain('companion'));
   fireEvent.click(screen.getByRole('button', { name: 'Start over' }));
-  await waitFor(() => expect(graph()).toBe(`father,grandfather,${root}`));
+  await waitFor(() => expect(graph()).toBe(`father,grandfather,${root},wife`));
   expect(params().getAll('expand')).toContain(`person:${root}:ANCESTORS`);
   fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
   fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire graph instead' }));
@@ -322,7 +322,7 @@ it('unions the full graph, preserves exploration state and makes Start over undo
   expect(params().getAll('filter')).not.toContain('COMPANION_OF');
   const beforeReset = nav.getUrl();
   fireEvent.click(screen.getByRole('button', { name: 'Start over' }));
-  await waitFor(() => expect(graph()).toBe(`father,grandfather,${root}`));
+  await waitFor(() => expect(graph()).toBe(`father,grandfather,${root},wife`));
   expect(params().has('filter')).toBe(false);
   expect(params().getAll('expand')).toContain(`person:${root}:ANCESTORS`);
   expect(params().has('full')).toBe(false);
@@ -360,8 +360,11 @@ it('leaves companionship to its own switch when Show full graph turns the vocabu
 
 it('opens a fresh visit on the root\'s line, with every global filter off', async () => {
   mount();
-  await waitFor(() => expect(graph()).toBe(`father,grandfather,${root}`));
-  expect(params().getAll('expand')).toEqual([`person:${root}:ANCESTORS`, `person:${root}:DESCENDANTS`]);
+  await waitFor(() => expect(graph()).toBe(`father,grandfather,${root},wife`));
+  expect(params().getAll('expand')).toContain(`person:${root}:WIFE`);
+  expect(params().getAll('expand')).toContain(`person:${root}:ANCESTORS`);
+  expect(params().getAll('expand')).toContain(`person:${root}:DESCENDANTS`);
+  expect(params().getAll('expand')).not.toContain(`person:${root}:COMPANION_OF`);
   expect(params().has('filter')).toBe(false);
   fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
   fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire graph instead' }));
@@ -463,7 +466,7 @@ it('Show additions frames the newly-added subjects plus what they connect to, th
 
 it('fetches companions from Filters, removes them on off, and restores them with browser Back', async () => {
   mount();
-  await waitFor(() => expect(graph()).toBe(`father,grandfather,${root}`));
+  await waitFor(() => expect(graph()).toBe(`father,grandfather,${root},wife`));
   const neighborhoods = () => vi.mocked(fetch).mock.calls
     .map(([input]) => new URL(String(input), 'http://localhost').searchParams.getAll('relationSubjects')).flat();
   expect(neighborhoods()).not.toContain('person:companion');
@@ -509,18 +512,21 @@ it('turns every relation on and off in bulk, leaving companionship to its own sw
   await waitFor(() => expect(graph()).toContain('father'));
   fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
   fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire graph instead' }));
+  // Node names overlap as substrings ("wife-father" contains both), so this
+  // test compares the rendered list rather than searching the joined string.
+  const nodes = () => (graph() ?? '').split(',');
   fireEvent.click(screen.getByRole('switch', { name: 'All relations' }));
-  await waitFor(() => expect(graph()).toContain('wife'));
-  expect(graph()).not.toContain('companion');
+  await waitFor(() => expect(nodes()).toContain('wife-father'));
+  expect(nodes()).not.toContain('companion');
   expect(params().getAll('filter')).not.toContain('COMPANION_OF');
   fireEvent.click(screen.getByRole('switch', { name: 'Show Companion Of relationships' }));
-  await waitFor(() => expect(graph()).toContain('companion'));
+  await waitFor(() => expect(nodes()).toContain('companion'));
   fireEvent.click(screen.getByRole('switch', { name: 'All relations' }));
-  // The wife is drawn by the global filter alone, so bulk off removes her. The
-  // root's own line stays: it is a local expansion, which ADR 0001 keeps
-  // independent of the filters.
-  await waitFor(() => expect(graph()).not.toContain('wife'));
-  expect(graph()).toContain('father');
+  // The wife's father is drawn by the global filter alone, so bulk off removes
+  // him. Everything the root expands stays, since a local expansion is
+  // independent of the filters (ADR 0001).
+  await waitFor(() => expect(nodes()).not.toContain('wife-father'));
+  expect(nodes()).toEqual(expect.arrayContaining(['wife', 'father', 'grandfather']));
   // Bulk off leaves companionship on, exactly as bulk on left it off.
   expect(graph()).toContain('companion');
   expect(params().getAll('filter')).toContain('COMPANION_OF');

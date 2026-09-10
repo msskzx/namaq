@@ -45,6 +45,12 @@ Explore only when its own switch is already on, and Show full graph leaves that
 switch wherever the reader put it. One companion edge per pair times several
 hundred companions would otherwise bury whatever the reader was looking at.
 
+Opening a graph installs Explore's set for its subject without the reader
+pressing it, alongside both lineage actions (rule 11 of
+[the exploration rules](../graph-exploration-review-plan.md)). The switches
+still govern what Explore covers when the reader presses it later, and
+companionship stays outside the seeded set exactly as it stays outside Explore.
+
 Neither action changes a switch. Explore writes local expansions for the
 selected subject; Show full graph writes the filters the reader can already see
 in the panel. Both remain undoable with browser Back.
