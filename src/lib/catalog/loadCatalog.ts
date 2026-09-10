@@ -28,8 +28,8 @@ async function loadKind<T>(root: string, kind: string): Promise<T[]> {
   const dir = join(root, kind);
   const loaded: T[] = [];
   for (const file of moduleFiles(dir)) {
-    const module = (await import(resolve(dir, file))) as { default: T };
-    loaded.push(module.default);
+    const loadedModule = (await import(resolve(dir, file))) as { default: T };
+    loaded.push(loadedModule.default);
   }
   return loaded;
 }

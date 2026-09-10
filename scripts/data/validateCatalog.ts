@@ -30,8 +30,8 @@ async function seedSlugs(): Promise<Pick<KnownSlugs, 'people' | 'titles' | 'batt
 
   const people = new Set<string>();
   for (const file of readdirSync('prisma').filter((name) => /^personSeedData\d*\.ts$/.test(name))) {
-    const module = (await import(join(process.cwd(), 'prisma', file))) as { people?: { slug: string }[] };
-    module.people?.forEach((person) => people.add(person.slug));
+    const seedModule = (await import(join(process.cwd(), 'prisma', file))) as { people?: { slug: string }[] };
+    seedModule.people?.forEach((person) => people.add(person.slug));
   }
 
   // Graph-only people exist as Cypher in neo4j/, never as a Prisma row, so a
