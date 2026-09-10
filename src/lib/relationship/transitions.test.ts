@@ -2,13 +2,14 @@ import { describe, expect, it } from 'vitest';
 import { buildExploration, ExplorationInput } from './exploration';
 import {
   collapseBranch,
-  DEFAULT_FAMILY_RELATIONS,
+  DEFAULT_LINEAGE_ACTIONS,
   defaultExplorationInput,
   keepOnlySelected,
   removeSearchRoot,
   removeSubject,
   restoreSubject,
 } from './transitions';
+import { flattenLineageExpansions } from './lineageExpansion';
 import { StoredEdge, subjectId } from './types';
 
 const muhammad = subjectId('person', 'prophet-muhammad');
@@ -133,17 +134,36 @@ describe('keepOnlySelected', () => {
 });
 
 describe('defaultExplorationInput', () => {
-  it('opens on the target subject with the recorded family relations and nothing else on', () => {
+  it('opens on the target subject with its line in both directions and nothing else on', () => {
     const input = defaultExplorationInput('prophet-muhammad');
 
     expect(input.roots).toEqual([muhammad]);
-    expect(input.expansions.map((action) => action.relation)).toEqual([...DEFAULT_FAMILY_RELATIONS]);
+    expect(input.expansions.map((action) => action.relation)).toEqual([...DEFAULT_LINEAGE_ACTIONS]);
     expect(input.globalFilters).toEqual([]);
     expect(input.caps).toEqual([]);
     expect(input.removed).toEqual([]);
   });
 
-  it('reveals wives without reaching their fathers', () => {
-    expect(visible(defaultExplorationInput('prophet-muhammad'))).toEqual(new Set([muhammad, aisha, hafsa]));
+  it('walks the whole line in both directions, and leaves a wife out of it', () => {
+    const abdullah = subjectId('person', 'abdullah-ibn-abd-al-muttalib');
+    const abdAlMuttalib = subjectId('person', 'abd-al-muttalib-ibn-hashim');
+    const fatimah = subjectId('person', 'fatimah-bint-muhammad');
+    const hasan = subjectId('person', 'al-hasan-ibn-ali');
+    const lineage: StoredEdge[] = [
+      edge(abdullah, muhammad, 'FATHER'),
+      edge(abdAlMuttalib, abdullah, 'FATHER'),
+      edge(fatimah, muhammad, 'DAUGHTER'),
+      edge(hasan, fatimah, 'SON'),
+      edge(aisha, muhammad, 'WIFE'),
+    ];
+
+    // A lineage action stands for an unbounded walk, which the graph hook
+    // flattens into per-hop expansions before building (see
+    // src/components/graph/useExplorationGraph.ts).
+    const input = defaultExplorationInput('prophet-muhammad');
+    const walked = { ...input, expansions: flattenLineageExpansions(lineage, input.expansions) };
+    const shown = new Set(buildExploration(walked, lineage).visible.keys());
+
+    expect(shown).toEqual(new Set([muhammad, abdullah, abdAlMuttalib, fatimah, hasan]));
   });
 });

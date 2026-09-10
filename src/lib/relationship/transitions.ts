@@ -1,10 +1,13 @@
 import { buildExploration, ExplorationInput, hasSupportBeyondOwnExpansions } from './exploration';
-import { RelationType, StoredEdge, SubjectId, subjectId } from './types';
+import type { ExpansionRelationId } from './expansion';
+import { StoredEdge, SubjectId, subjectId } from './types';
 
-// The family a fresh visit and Start over both open with (rule 11 of
-// docs/graph-exploration-review-plan.md). GRANDSON/GRANDDAUGHTER are recorded
-// relations, not two parent hops, so no lineage action belongs here.
-export const DEFAULT_FAMILY_RELATIONS: readonly RelationType[] = ['WIFE', 'SON', 'DAUGHTER', 'GRANDSON', 'GRANDDAUGHTER'];
+// What a fresh visit and Start over open with, and what a profile's graph
+// opens with too: the subject's line in both directions (rule 11 of
+// docs/graph-exploration-review-plan.md). One rule serves both scopes, per
+// docs/adr/0002-share-relationship-semantics-across-scopes.md. Companionship
+// stays off, as its own switch governs it.
+export const DEFAULT_LINEAGE_ACTIONS: readonly ExpansionRelationId[] = ['ANCESTORS', 'DESCENDANTS'];
 
 function withoutExpansionsOf(input: ExplorationInput, subject: SubjectId): ExplorationInput {
   return { ...input, expansions: input.expansions.filter((action) => action.subject !== subject) };
@@ -75,7 +78,7 @@ export function keepOnlySelected(input: ExplorationInput, subject: SubjectId): E
 export function startOver(target: SubjectId): ExplorationInput {
   return {
     roots: [target],
-    expansions: DEFAULT_FAMILY_RELATIONS.map((relation) => ({ subject: target, relation })),
+    expansions: DEFAULT_LINEAGE_ACTIONS.map((relation) => ({ subject: target, relation })),
     globalFilters: [],
     caps: [],
     removed: [],

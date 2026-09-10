@@ -76,13 +76,19 @@ the current review; it makes no claims about implementation compliance.
     defaults (all off), rather than temporarily suspending them. Preserve the
     selected subject's local choices. Discard other exploration contributions
     so they cannot restore subjects outside this direct neighborhood.
-11. A fresh initial view and Start over show Prophet Muhammad with his
-    recorded direct wives, sons, daughters, and grandchildren. Grandchildren
-    means explicit direct relationships, not inferred two-step parentage;
-    the user's examples are Alhassan and Alhussain. Their records remain to be
-    checked during the code/data audit. Other local relationship choices,
-    companionship, battles, and global relationship filters start off.
-    Restored URLs continue to represent saved exploration state.
+11. Opening a graph shows its subject with that subject's ancestors and
+    descendants, as the subject's own expansions. One rule covers both scopes:
+    a fresh visit and Start over on the workspace open on Prophet Muhammad,
+    and a person's profile opens on that person. Neither line is capped, so a
+    subject with many recorded descendants arrives with all of them. Other
+    local relationship choices, companionship, battles, and global
+    relationship filters start off. Restored URLs continue to represent saved
+    exploration state.
+
+    This supersedes the earlier rule, which opened on the recorded wives,
+    sons, daughters, and grandchildren. Those are single recorded hops rather
+    than a line, so they left a profile graph with no rule of its own and made
+    the two scopes behave differently.
 12. Hidden nodes and relationships must not respond to hover or display hover
     content. The user reports that they currently do; this is a reported bug,
     not yet reproduced or diagnosed under the docs-only review boundary.

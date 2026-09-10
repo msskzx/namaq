@@ -127,8 +127,8 @@ it('installs the recorded family and turns every global filter off on Start over
   mount();
   await waitFor(() => expect(graph()).toContain('companion'));
   fireEvent.click(screen.getByRole('button', { name: 'Start over' }));
-  await waitFor(() => expect(graph()).toBe(`${root},wife`));
-  expect(params().getAll('expand')).toContain(`person:${root}:WIFE`);
+  await waitFor(() => expect(graph()).toBe(`father,grandfather,${root}`));
+  expect(params().getAll('expand')).toContain(`person:${root}:ANCESTORS`);
   fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
   fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire graph instead' }));
   expect(screen.getByRole('switch', { name: 'Show Father relationships' }).getAttribute('aria-checked')).toBe('false');
@@ -277,7 +277,7 @@ it('filters battle participation by status, keeping people their family still su
 // half it can, that the links exist while the panel is collapsed.
 it('opens the site menu from the collapsed panel', async () => {
   mount();
-  await waitFor(() => expect(graph()).toContain('wife'));
+  await waitFor(() => expect(graph()).toContain('father'));
   fireEvent.click(screen.getByRole('button', { name: 'Close search' }));
   fireEvent.click(screen.getByRole('button', { name: 'Menu' }));
 
@@ -286,17 +286,17 @@ it('opens the site menu from the collapsed panel', async () => {
 
 it('opens and closes the node list, which starts collapsed', async () => {
   mount();
-  await waitFor(() => expect(graph()).toContain('wife'));
+  await waitFor(() => expect(graph()).toContain('father'));
   const list = () => screen.getByRole('button', { name: 'List of Nodes' });
-  expect(screen.queryByRole('button', { name: 'wife' })).toBeNull();
+  expect(screen.queryByRole('button', { name: 'father' })).toBeNull();
   expect(list().getAttribute('aria-expanded')).toBe('false');
 
   fireEvent.click(list());
-  expect(screen.getByRole('button', { name: 'wife' })).toBeTruthy();
+  expect(screen.getByRole('button', { name: 'father' })).toBeTruthy();
   expect(list().getAttribute('aria-expanded')).toBe('true');
 
   fireEvent.click(list());
-  expect(screen.queryByRole('button', { name: 'wife' })).toBeNull();
+  expect(screen.queryByRole('button', { name: 'father' })).toBeNull();
 });
 
 it('renders the selected person\'s titles as badges linking to the title filter', async () => {
@@ -322,9 +322,9 @@ it('unions the full graph, preserves exploration state and makes Start over undo
   expect(params().getAll('filter')).not.toContain('COMPANION_OF');
   const beforeReset = nav.getUrl();
   fireEvent.click(screen.getByRole('button', { name: 'Start over' }));
-  await waitFor(() => expect(graph()).toBe(`${root},wife`));
+  await waitFor(() => expect(graph()).toBe(`father,grandfather,${root}`));
   expect(params().has('filter')).toBe(false);
-  expect(params().getAll('expand')).toContain(`person:${root}:WIFE`);
+  expect(params().getAll('expand')).toContain(`person:${root}:ANCESTORS`);
   expect(params().has('full')).toBe(false);
   expect(params().has('kind')).toBe(false);
   expect(params().get('selected')).toBe(root);
@@ -358,10 +358,10 @@ it('leaves companionship to its own switch when Show full graph turns the vocabu
   expect(params().getAll('filter')).toContain('COMPANION_OF');
 });
 
-it('opens a fresh visit on the root\'s recorded family, with every global filter off', async () => {
+it('opens a fresh visit on the root\'s line, with every global filter off', async () => {
   mount();
-  await waitFor(() => expect(graph()).toBe(`${root},wife`));
-  expect(params().getAll('expand')).toContain(`person:${root}:WIFE`);
+  await waitFor(() => expect(graph()).toBe(`father,grandfather,${root}`));
+  expect(params().getAll('expand')).toEqual([`person:${root}:ANCESTORS`, `person:${root}:DESCENDANTS`]);
   expect(params().has('filter')).toBe(false);
   fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
   fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire graph instead' }));
@@ -463,7 +463,7 @@ it('Show additions frames the newly-added subjects plus what they connect to, th
 
 it('fetches companions from Filters, removes them on off, and restores them with browser Back', async () => {
   mount();
-  await waitFor(() => expect(graph()).toBe(`${root},wife`));
+  await waitFor(() => expect(graph()).toBe(`father,grandfather,${root}`));
   const neighborhoods = () => vi.mocked(fetch).mock.calls
     .map(([input]) => new URL(String(input), 'http://localhost').searchParams.getAll('relationSubjects')).flat();
   expect(neighborhoods()).not.toContain('person:companion');
@@ -506,17 +506,21 @@ it('disables the local controls with nothing selected, rather than switching to 
 
 it('turns every relation on and off in bulk, leaving companionship to its own switch', async () => {
   mount();
-  await waitFor(() => expect(graph()).toContain('wife'));
+  await waitFor(() => expect(graph()).toContain('father'));
   fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
   fireEvent.click(screen.getByRole('button', { name: 'Apply them to the entire graph instead' }));
   fireEvent.click(screen.getByRole('switch', { name: 'All relations' }));
-  await waitFor(() => expect(graph()).toContain('father'));
+  await waitFor(() => expect(graph()).toContain('wife'));
   expect(graph()).not.toContain('companion');
   expect(params().getAll('filter')).not.toContain('COMPANION_OF');
   fireEvent.click(screen.getByRole('switch', { name: 'Show Companion Of relationships' }));
   await waitFor(() => expect(graph()).toContain('companion'));
   fireEvent.click(screen.getByRole('switch', { name: 'All relations' }));
-  await waitFor(() => expect(graph()).not.toContain('father'));
+  // The wife is drawn by the global filter alone, so bulk off removes her. The
+  // root's own line stays: it is a local expansion, which ADR 0001 keeps
+  // independent of the filters.
+  await waitFor(() => expect(graph()).not.toContain('wife'));
+  expect(graph()).toContain('father');
   // Bulk off leaves companionship on, exactly as bulk on left it off.
   expect(graph()).toContain('companion');
   expect(params().getAll('filter')).toContain('COMPANION_OF');
