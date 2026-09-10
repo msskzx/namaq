@@ -109,7 +109,7 @@ function PersonDetailPage() {
               <FontAwesomeIcon icon={faHexagonNodes} className="w-7 h-7 text-amber-500 ml-2" />
               {t.relations}
             </h2>
-            <GraphCanvas chrome="embedded" targetSlug={slug} />
+            <GraphCanvas targetSlug={slug} />
           </div>
 
           <AyatGroup ayat={person.ayat || []} />

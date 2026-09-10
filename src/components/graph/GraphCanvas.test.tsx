@@ -80,7 +80,7 @@ const battleDataset: GraphData = {
 };
 const params = () => new URL(nav.getUrl(), 'http://localhost').searchParams;
 const graph = () => screen.getByTestId('graph').textContent;
-const mount = (props: React.ComponentProps<typeof GraphCanvas> = {}) => render(<SWRConfig value={{ provider: () => new Map(), dedupingInterval: 0, shouldRetryOnError: false }}><GraphCanvas {...props} /></SWRConfig>);
+const mount = (props: React.ComponentProps<typeof GraphCanvas> = {}) => render(<SWRConfig value={{ provider: () => new Map(), dedupingInterval: 0, shouldRetryOnError: false }}><GraphCanvas defaultFullscreen {...props} /></SWRConfig>);
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -572,26 +572,24 @@ it('keeps a connected local branch when the global filter that revealed its subj
 
 it('opens an embedded graph on its subject, the way the workspace opens on its own', async () => {
   nav.setUrl(`/people/${root}`);
-  mount({ chrome: 'embedded' });
+  mount({ defaultFullscreen: false });
 
   await waitFor(() => expect(graph()).toBe(`father,grandfather,${root},wife`));
 });
 
-it('keeps an embedded exploration out of the page URL', async () => {
+it('seeds its exploration into the page URL in either scope', async () => {
   nav.setUrl(`/people/${root}`);
-  mount({ chrome: 'embedded' });
-  await waitFor(() => expect(graph()).toContain('father'));
+  mount({ defaultFullscreen: false });
 
-  // A profile link carries the person and nothing else; the workspace is the
-  // scope whose exploration is shareable.
-  expect(nav.getUrl()).toBe(`/people/${root}`);
-  expect(params().has('subject')).toBe(false);
-  expect(params().has('expand')).toBe(false);
+  // One component, one behaviour: a profile's graph is as shareable and as
+  // undoable as the workspace's.
+  await waitFor(() => expect(params().getAll('subject')).toEqual([`person:${root}`]));
+  expect(params().getAll('expand')).toContain(`person:${root}:ANCESTORS`);
 });
 
 it('gives an embedded graph the workspace controls when it fills the screen', async () => {
   nav.setUrl(`/people/${root}`);
-  mount({ chrome: 'embedded' });
+  mount({ defaultFullscreen: false });
   await waitFor(() => expect(graph()).toContain('father'));
   expect(screen.queryByRole('button', { name: 'Start over' })).toBeNull();
 
@@ -604,7 +602,7 @@ it('gives an embedded graph the workspace controls when it fills the screen', as
 
 it('leaves global search to the workspace, since it navigates the page URL', async () => {
   nav.setUrl(`/people/${root}`);
-  mount({ chrome: 'embedded' });
+  mount({ defaultFullscreen: false });
   await waitFor(() => expect(graph()).toContain('father'));
 
   fireEvent.click(screen.getByRole('button', { name: 'Fullscreen' }));
@@ -616,7 +614,7 @@ it('leaves global search to the workspace, since it navigates the page URL', asy
 
 it('shows nothing but the canvas until an embedded graph is opened fullscreen', async () => {
   nav.setUrl(`/people/${root}`);
-  mount({ chrome: 'embedded' });
+  mount({ defaultFullscreen: false });
   await waitFor(() => expect(graph()).toContain('father'));
 
   expect(screen.queryByRole('button', { name: 'Filters' })).toBeNull();
@@ -625,9 +623,9 @@ it('shows nothing but the canvas until an embedded graph is opened fullscreen', 
   expect(screen.getByRole('button', { name: 'Fullscreen' })).toBeTruthy();
 });
 
-it('still explores from an embedded graph, without writing to the page URL', async () => {
+it('reaches the controls from a graph that did not start fullscreen', async () => {
   nav.setUrl(`/people/${root}`);
-  mount({ chrome: 'embedded' });
+  mount({ defaultFullscreen: false });
   await waitFor(() => expect(graph()).toContain('father'));
 
   fireEvent.click(screen.getByRole('button', { name: 'Fullscreen' }));
@@ -635,7 +633,17 @@ it('still explores from an embedded graph, without writing to the page URL', asy
   fireEvent.click(screen.getByRole('switch', { name: 'Show Companion Of relationships' }));
 
   await waitFor(() => expect(graph()).toContain('companion'));
-  expect(nav.getUrl()).toBe(`/people/${root}`);
+});
+
+it('leaves fullscreen again', async () => {
+  nav.setUrl('/graphs');
+  mount();
+  await screen.findByRole('button', { name: 'Start over' });
+
+  fireEvent.click(screen.getByRole('button', { name: 'Close fullscreen' }));
+
+  await waitFor(() => expect(screen.queryByRole('button', { name: 'Start over' })).toBeNull());
+  expect(screen.getByRole('button', { name: 'Fullscreen' })).toBeTruthy();
 });
 
 it('turns off both companionship directions through one Filters switch', async () => {
