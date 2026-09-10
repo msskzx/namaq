@@ -679,7 +679,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
       {isSelectedPerson && selectedPreview && selectedPreview.titles.length > 0 && (
         <div className="mt-1 flex flex-wrap gap-2">
           {selectedPreview.titles.map(title => (
-            <span key={title.slug} className="mt-1">
+            <span key={title.slug} className="mt-2">
               <Badge href={`/people?title=${title.slug}`} text={title.name} color="indigo" size="sm" />
             </span>
           ))}
