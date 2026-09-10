@@ -15,7 +15,15 @@ export type CitationWithSource = Citation & {
   passage?: (SourcePassage & { page: SourceAccountPage }) | null;
 };
 
-export type ClaimWithCitations = HistoricalClaim & { citations: CitationWithSource[] };
+export type ClaimWithCitations = HistoricalClaim & {
+  citations: CitationWithSource[];
+  /**
+   * The related subject's own name, resolved from its slug by the route that
+   * serves the claim. Absent when that subject has no profile row, which is
+   * why a reader may still see a slug.
+   */
+  relatedSubjectName?: string | null;
+};
 
 /** One printed page of a source account, as served to the profile reader. */
 export type AccountPage = Pick<
