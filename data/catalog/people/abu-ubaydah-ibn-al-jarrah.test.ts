@@ -4,8 +4,7 @@ import { RECIPROCAL_INVERSES } from '@/lib/relationship/categories';
 import { legacyUnreviewed, type Cited, type Provenance } from '@/lib/catalog/types';
 import person from './abu-ubaydah-ibn-al-jarrah';
 
-// The catalog states values; the batch states the evidence. These tests hold
-// the two together, so editing one without the other fails rather than drifts.
+// Read rather than fixtured, so editing the module or the batch alone fails.
 const batch = JSON.parse(
   readFileSync('data/history/batches/abu-ubaydah-pilot/batch.json', 'utf8'),
 ) as {
@@ -34,10 +33,8 @@ describe('Abu Ubaydah ibn al-Jarrah in the catalog', () => {
   });
 
   it('points a single-claim field at a claim about that same field', () => {
-    // A value stitched from several passages may cite claims filed under other
-    // fields: the virtues text draws on the passage the amin-al-ummah claim
-    // cites. A value resting on one claim has no such excuse, so that claim
-    // must name this field or name none.
+    // Single-claim only: a value stitched from several passages legitimately
+    // cites claims filed elsewhere, as virtues does through amin-al-ummah.
     const mismatched = citedFields.flatMap(([name, cited]) => {
       if (cited.claims === legacyUnreviewed || cited.claims.length !== 1) return [];
       const claim = claimByKey.get(cited.claims[0]);
@@ -53,8 +50,6 @@ describe('Abu Ubaydah ibn al-Jarrah in the catalog', () => {
   });
 
   it('declares only relationships the reciprocal map can invert', () => {
-    // The projector derives the opposite edge rather than having it declared,
-    // so a type with no inverse would reach Neo4j one-directional.
     const uninvertible = person.relations.filter((relation) => !(relation.type in RECIPROCAL_INVERSES));
 
     expect(uninvertible).toEqual([]);

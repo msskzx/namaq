@@ -1,30 +1,19 @@
 import type { RelationType } from '@/lib/relationship/types';
 
-/**
- * The marker for a value migrated before evidence was recorded. Only the
- * one-time migration may write it; nothing else in the catalog may.
- */
+/** Writable only by the one-time migration, never by an authored module. */
 export const legacyUnreviewed = 'legacy-unreviewed';
 
-/**
- * What stands behind a historical value: claim keys from an approved batch, or
- * the baseline marker. There is no third option, so a value cannot enter the
- * catalog with nothing behind it
- * (docs/authoritative-data-workflow-plan.md).
- */
+/** Claim keys from an approved batch (docs/authoritative-data-workflow-plan.md). */
 export type Provenance = readonly [string, ...string[]] | typeof legacyUnreviewed;
 
-/** A historical value together with what supports it. */
 export interface Cited<T> {
   readonly value: T;
   readonly claims: Provenance;
 }
 
 /**
- * The person fields that state something about history, mirroring the
- * historical columns of Prisma's `Person`. Identity (slug, name,
- * transliteration) and derived graph properties are not here: they carry
- * migration metadata rather than citations.
+ * Mirrors the historical columns of Prisma's `Person`. Identity and computed
+ * graph properties are absent because a citation cannot speak to them.
  */
 export interface CatalogPersonFields {
   readonly fullName?: Cited<string>;
@@ -40,16 +29,16 @@ export interface CatalogPersonFields {
   readonly placeOfDeathTransliterated?: Cited<string>;
 }
 
-/** A title this person holds, named by the title's own slug. */
 export interface CatalogTitleAssignment {
+  /** The title's slug, not its display name. */
   readonly title: string;
   readonly claims: Provenance;
 }
 
 /**
- * A relationship written from this person's side. The projector normalizes it
- * through RECIPROCAL_INVERSES, so declaring it from either end describes the
- * same edge pair.
+ * Written from this person's side. Both directed edges are derived through
+ * RECIPROCAL_INVERSES in src/lib/relationship/categories.ts, so declaring the
+ * inverse from the other endpoint would duplicate this, not add to it.
  */
 export interface CatalogRelation {
   readonly type: RelationType;
@@ -58,9 +47,8 @@ export interface CatalogRelation {
 }
 
 /**
- * One person, profile-backed or graph-only. Both share this type and differ
- * only in `hasProfile`, so promoting a graph-only person keeps their slug and
- * relationships intact.
+ * Profile-backed and graph-only people differ only in `hasProfile`, so
+ * promotion changes that flag and leaves slug and relationships untouched.
  */
 export interface CatalogPerson {
   readonly kind: 'PERSON';
