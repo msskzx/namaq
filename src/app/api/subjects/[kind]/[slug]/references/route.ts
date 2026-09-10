@@ -6,7 +6,7 @@ import type { SubjectKind } from '@/generated/prisma';
 /**
  * Evidence for any historical subject, addressed by kind and slug. Subjects
  * without a profile row are reachable here too — see
- * docs/adr/0007-citations-independent-of-profiles.md. Review status is returned
+ * docs/adr/0009-citations-independent-of-profiles.md. Review status is returned
  * with each claim rather than filtering what is served.
  */
 export async function GET(

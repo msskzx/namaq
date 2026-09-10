@@ -123,7 +123,7 @@ correct selection directly. Do not add book-reading controls or extra biography
 content to the selected graph pane.
 
 Terminology: [CONTEXT.md](../CONTEXT.md#historical-evidence).
-Rationale: [citations independent of profiles](adr/0007-citations-independent-of-profiles.md)
+Rationale: [citations independent of profiles](adr/0009-citations-independent-of-profiles.md)
 and [review independent of visibility](adr/0008-separate-review-from-visibility.md).
 
 ## Implementation status

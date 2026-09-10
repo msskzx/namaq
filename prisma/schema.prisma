@@ -141,7 +141,7 @@ enum ClaimReviewStatus {
 /// The historical subject types evidence can be attached to. Subjects are
 /// addressed by kind and slug so graph-only people and other subjects without
 /// a profile row can carry citations — see
-/// docs/adr/0007-citations-independent-of-profiles.md.
+/// docs/adr/0009-citations-independent-of-profiles.md.
 enum SubjectKind {
   PERSON
   TITLE
