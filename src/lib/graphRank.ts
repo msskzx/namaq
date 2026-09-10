@@ -1,6 +1,6 @@
 /**
  * The one prominence signal defined across every kind of historical subject
- * -- see docs/graph-subject-search-plan.md. Nodes are keyed by `type:slug`,
+ * -- see docs/graph-subject-search.md. Nodes are keyed by `type:slug`,
  * since slugs are only unique within one type.
  *
  * No I/O: callers (scripts/graph/computeGraphLayout.ts) fetch nodes/edges

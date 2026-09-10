@@ -1,6 +1,6 @@
 /**
  * Pure geometry for the graph workspace's camera behavior (see
- * docs/graph-layout-plan.md, Q2/Q6, Phase three): deciding whether a
+ * docs/graph-layout.md, Q2/Q6, Phase three): deciding whether a
  * selected subject is comfortably visible given the floating panel/sheet
  * that overlays the canvas (src/components/graph/GraphCanvas.tsx), and how
  * far to pan -- without changing zoom -- to reveal it when it isn't.

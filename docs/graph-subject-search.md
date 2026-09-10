@@ -1,6 +1,6 @@
 # Historical subjects are searchable
 
-Current design review: [Exploration rules review](graph-exploration-review-plan.md) supersedes conflicting
+Current design review: [Exploration rules review](graph-exploration-review.md) supersedes conflicting
 local/global scope, filter, search-enablement, reset, and removal behavior below.
 The rules are confirmed but not yet implemented; older implementation
 descriptions are not evidence of compliance.
@@ -12,7 +12,7 @@ live code still reads -- see
 gates end-to-end verification of criteria 2 and 3, not the work itself.
 
 Follows on from [graph-only people are
-searchable](graph-only-people-search-plan.md), whose "Out of scope" note left
+searchable](graph-only-people-search.md), whose "Out of scope" note left
 non-person kinds findable only if the current exploration had already loaded
 them.
 
@@ -296,7 +296,7 @@ Two sibling plans, neither yet designed. Both were raised in the interview that
 produced this plan and are recorded here so the observations are not lost.
 
 **Expansion controls**, now designed in
-[its own plan](graph-expansion-controls-plan.md). The titles bug is diagnosed
+[their own document](graph-expansion-controls.md). The titles bug is diagnosed
 there and turns out to affect battles and events too.
 
 **Graph UI on mobile.** Search, filter and navbar are unscrollable on a phone,
@@ -314,7 +314,7 @@ Siyar A'lam an-Nubala.
 
 **Dependency, since narrowed.** Criteria 2 and 3 were recorded as unverifiable
 until the titles bug was fixed. Diagnosing that bug -- see
-[expansion controls](graph-expansion-controls-plan.md) -- showed the two paths
+[expansion controls](graph-expansion-controls.md) -- showed the two paths
 are separate. A subject picked from search becomes a *root*, and
 `buildExploration` marks every root visible without consulting
 `matchExpansionNeighbors`, which is where the bug lives. Both criteria are now

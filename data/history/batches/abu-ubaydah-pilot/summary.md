@@ -1,6 +1,6 @@
 # Batch: Abu Ubaydah ibn al-Jarrah, Siyar entry 1
 
-The pilot batch for [the data quality plan](../../../docs/data-quality-references-plan.md).
+The pilot batch for [data quality and references](../../../../docs/data-quality-references.md).
 It preserves al-Dhahabi's complete entry on Abu Ubaydah ibn al-Jarrah and extracts
 25 claims from it. Nothing here is imported until you approve this revision.
 

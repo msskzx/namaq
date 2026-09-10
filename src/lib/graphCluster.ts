@@ -23,7 +23,7 @@ export interface GraphClusterAssignment extends GraphRankNode {
 // into a different number of communities from one run to the next even with
 // identical, stably-ordered input -- observed directly (33 vs 34 communities
 // on two consecutive dry runs of the same data) while building
-// docs/graph-layout-plan.md's reproducibility requirement. A fixed-seed PRNG
+// docs/graph-layout.md's reproducibility requirement. A fixed-seed PRNG
 // keeps the random walk's benefits (escaping local optima) while making
 // "unchanged data" actually reproduce "the same result" rather than merely
 // "an equally-valid one" -- mulberry32 rather than a library dependency

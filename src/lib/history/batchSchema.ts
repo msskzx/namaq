@@ -208,7 +208,7 @@ function checkAccount(
 }
 
 /**
- * Checks a batch against the rules in docs/data-quality-references-plan.md:
+ * Checks a batch against the rules in docs/data-quality-references.md:
  * known sources, resolvable citation targets, required provenance, and page
  * integrity. Returns every issue found rather than throwing on the first.
  */

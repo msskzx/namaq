@@ -31,7 +31,7 @@ const identityFields = new Set(['name', 'fullName', 'titles']);
  * Evidence access for the selected subject, in the three cases the plan
  * distinguishes: a profile-backed subject links to its profile's references, a
  * subject with no profile gets a compact list here, and a subject with no
- * evidence is told so — see docs/data-quality-references-plan.md.
+ * evidence is told so — see docs/data-quality-references.md.
  */
 export default function SubjectEvidenceAccess({
   kind,
