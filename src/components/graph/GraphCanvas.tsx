@@ -80,6 +80,11 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', chrome = 
   const router = useRouter();
   const pathname = usePathname();
   const showSearch = chrome === 'workspace';
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  // An embedded graph borrows the workspace's controls when it fills the
+  // screen. Global search stays behind, since it navigates the page URL and an
+  // embedded exploration lives in component state.
+  const workspaceLayout = showSearch || isFullscreen;
   const urlParams = useSearchParams();
   // An embedded graph explores in component state rather than the address bar,
   // so a profile link carries the person and nothing else.
@@ -321,7 +326,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', chrome = 
   const [scope, setScope] = useState<ControlScope>('selected');
   // The embedded profile graph has no selection model of its own, so its
   // switches stay whole-view.
-  const activeScope: ControlScope = showSearch ? scope : 'exploration';
+  const activeScope: ControlScope = workspaceLayout ? scope : 'exploration';
   const localRelations = useMemo(() => {
     if (!selectedSubjectId) return new Set<string>();
     return new Set(
@@ -480,7 +485,6 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', chrome = 
     updateParams({ kind: isDefault ? [] : [...next], filter: [...nextFilters] });
   };
 
-  const [isFullscreen, setIsFullscreen] = useState(false);
   const [showFilterPanel, setShowFilterPanel] = useState(false);
   // Collapsed on arrival: the list repeats what the canvas already shows, and
   // on a phone it pushes the controls above it out of reach.
@@ -684,7 +688,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', chrome = 
     updateParams({ selected: null, focus: null, filter: null, kind: [], showCompanionTitle: null, person: null, ancestorsOf: [], descendantsOf: [] });
   };
 
-  const explorationControls = showSearch && (
+  const explorationControls = workspaceLayout && (
     <aside dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4 dark:border-amber-700 dark:bg-gray-800">
       <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode ? (selectedPreview?.fullName ?? selectedNode.label) : t.graph.globalRelationships}</h2>
       {isSelectedPerson && selectedPreview && selectedPreview.titles.length > 0 && (
@@ -1004,6 +1008,10 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', chrome = 
         )}
         {showFilterPanel && (
           <div dir={language === 'ar' ? 'rtl' : 'ltr'} className={`absolute inset-x-3 top-14 z-20 max-h-[70dvh] overflow-auto rounded-lg border border-gray-200 bg-white p-3 shadow-lg sm:inset-x-auto sm:w-80 dark:border-gray-700 dark:bg-gray-800 ${language === 'ar' ? 'sm:left-3' : 'sm:right-3'}`}>
+            {/* The workspace reaches these through its search panel, which an
+                embedded graph does not open; here they ride along with the
+                filters, behind the one button it does have. */}
+            {!showSearch && explorationControls}
             {filterPanel}
           </div>
         )}

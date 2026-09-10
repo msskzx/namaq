@@ -589,6 +589,31 @@ it('keeps an embedded exploration out of the page URL', async () => {
   expect(params().has('expand')).toBe(false);
 });
 
+it('gives an embedded graph the workspace controls when it fills the screen', async () => {
+  nav.setUrl(`/people/${root}`);
+  mount({ chrome: 'embedded' });
+  await waitFor(() => expect(graph()).toContain('father'));
+  expect(screen.queryByRole('button', { name: 'Start over' })).toBeNull();
+
+  fireEvent.click(screen.getByRole('button', { name: 'Fullscreen' }));
+  fireEvent.click(await screen.findByRole('button', { name: 'Filters' }));
+
+  expect(await screen.findByRole('button', { name: 'Start over' })).toBeTruthy();
+  expect(screen.getByRole('button', { name: 'Show full graph' })).toBeTruthy();
+});
+
+it('leaves global search to the workspace, since it navigates the page URL', async () => {
+  nav.setUrl(`/people/${root}`);
+  mount({ chrome: 'embedded' });
+  await waitFor(() => expect(graph()).toContain('father'));
+
+  fireEvent.click(screen.getByRole('button', { name: 'Fullscreen' }));
+  fireEvent.click(await screen.findByRole('button', { name: 'Filters' }));
+
+  await screen.findByRole('button', { name: 'Start over' });
+  expect(screen.queryByRole('button', { name: 'Open search' })).toBeNull();
+});
+
 it('still explores from an embedded graph, without writing to the page URL', async () => {
   nav.setUrl(`/people/${root}`);
   mount({ chrome: 'embedded' });
