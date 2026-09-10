@@ -60,3 +60,48 @@ export interface CatalogPerson {
   readonly titles: readonly CatalogTitleAssignment[];
   readonly relations: readonly CatalogRelation[];
 }
+
+export type ParticipationStatus = 'DIED' | 'INJURED' | 'CAPTURED' | 'WAS_CAPTURED' | 'ABSENT_EXCUSED' | 'MARTYRED';
+
+export interface CatalogParticipation {
+  readonly person: string;
+  readonly isMuslim: boolean;
+  readonly status?: readonly ParticipationStatus[];
+  readonly claims: Provenance;
+}
+
+/**
+ * Carries only the participants a batch's focal subject brought with it, so a
+ * module here names far fewer people than fought. Projection upserts and never
+ * prunes, matching the existing syncs, so a partial roster adds rather than
+ * replaces.
+ */
+export interface CatalogBattle {
+  readonly kind: 'BATTLE';
+  readonly slug: string;
+  readonly participants: readonly CatalogParticipation[];
+}
+
+export type EventType =
+  | 'BIRTH' | 'DEATH' | 'MARRIAGE' | 'BATTLE' | 'GAVE_BIRTH'
+  | 'LIBERATED' | 'MET' | 'TRAVEL' | 'HIJRA' | 'HIJRA_HABASHA' | 'OTHER';
+
+/**
+ * Fields are optional because the entry that occasions an event rarely states
+ * all of them, and the version-one policy leaves an unknown value unset rather
+ * than filling it from elsewhere (docs/authoritative-data-workflow-plan.md).
+ */
+export interface CatalogEvent {
+  readonly kind: 'EVENT';
+  readonly slug: string;
+  readonly name: string;
+  readonly nameTransliterated?: string;
+  readonly type: EventType;
+  readonly fields: {
+    readonly hijriYear?: Cited<number>;
+    readonly location?: Cited<string>;
+    readonly description?: Cited<string>;
+  };
+  readonly people: readonly { readonly person: string; readonly claims: Provenance }[];
+  readonly battle?: string;
+}
