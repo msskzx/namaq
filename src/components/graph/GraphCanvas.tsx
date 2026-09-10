@@ -270,7 +270,16 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
       ?? graphData.nodes.find(node => node.slug === focusSlug)
       ?? graphData.nodes.find(node => node.slug === targetSlug);
     if (!nodeToFocus) return;
+    // Framing the opening view fits it, here as in fullscreen: its subject's
+    // line runs far past what a fixed zoom shows, and cropping to the subject
+    // alone leaves a graph that looks like it holds one node (Q6 of
+    // docs/graph-layout-plan.md).
+    const framesOpeningView = !focusSlug && (!selectedSlug || selectedSlug === targetSlug);
     const timer = setTimeout(() => {
+      if (framesOpeningView) {
+        fgRef.current?.zoomToFit(400, 40);
+        return;
+      }
       fgRef.current?.centerAt(nodeToFocus.x || 0, nodeToFocus.y || 0, 700);
       fgRef.current?.zoom(3, 700);
     }, 300);
