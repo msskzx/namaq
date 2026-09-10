@@ -103,6 +103,16 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   change; skipping this leaves ranks/layout stale relative to the graph
   they're supposed to describe.
 
+## Data pipelines
+
+- [docs/data-pipelines.md](docs/data-pipelines.md) describes how data reaches
+  the app: the three hand-authored paths (seed files under `prisma/`, history
+  batches under `data/history/`, graph seeds under `neo4j/`), which of them
+  write to PostgreSQL and which write straight to Neo4j, and which syncs are
+  one-way. Read it before authoring or applying a canonical change. Two of the
+  seed paths look live and are not: `prisma/personSeedData.ts` is no longer
+  imported, and battle participations are not seeded at all.
+
 ## Historical evidence data
 
 - Curated historical records live in `data/history/batches/<batch>/`, separate

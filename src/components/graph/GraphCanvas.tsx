@@ -677,9 +677,11 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
     <aside dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4 dark:border-amber-700 dark:bg-gray-800">
       <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode ? (selectedPreview?.fullName ?? selectedNode.label) : t.graph.globalRelationships}</h2>
       {isSelectedPerson && selectedPreview && selectedPreview.titles.length > 0 && (
-        <div className="my-2 flex flex-wrap gap-2">
+        <div className="mt-1 flex flex-wrap gap-2">
           {selectedPreview.titles.map(title => (
-            <Badge key={title.slug} href={`/people?title=${title.slug}`} text={title.name} color="indigo" size="sm" />
+            <span key={title.slug} className="mt-2">
+              <Badge href={`/people?title=${title.slug}`} text={title.name} color="indigo" size="sm" />
+            </span>
           ))}
         </div>
       )}
@@ -974,17 +976,10 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
   return (
     <div
       dir={language === 'ar' ? 'rtl' : 'ltr'}
-      className="relative h-[65vh] min-h-[32rem] overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700"
+      className="relative h-[85vh] min-h-[40rem] overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700"
       role="region"
       aria-label={t.graph.interactiveGraph}
     >
-      {/* AppChrome (src/components/common/AppChrome.tsx) omits NavBar/Footer on
-          /graphs, so out of fullscreen that route would otherwise offer no way
-          back to the site at all. A page that has its own navigation does not
-          need this. */}
-      {pathname === '/graphs' && (
-        <div className={`${FLOATING_OVER_CANVAS} ${language === 'ar' ? 'right-2' : 'left-2'}`}>{menuButton}</div>
-      )}
       {/* Fit graph travels with the view control in both scopes: it is how a
           reader who has panned or zoomed away gets everything back on screen. */}
       <div className={`${FLOATING_OVER_CANVAS} flex items-center gap-2 ${language === 'ar' ? 'left-2' : 'right-2'}`}>
