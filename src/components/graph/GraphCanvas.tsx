@@ -10,6 +10,7 @@ import { fetcher } from '@/lib/swr';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowsRotate, faBars, faCircleXmark, faCompress, faCropSimple, faExpand, faEyeSlash, faHexagonNodes,
+  faMagnifyingGlassMinus,
   faFilter, faListUl, faLocationCrosshairs, faMagnifyingGlass, faRotateLeft, faScissors, faShareNodes,
   faUser, faXmark,
 } from '@fortawesome/free-solid-svg-icons';
@@ -983,7 +984,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
             aria-label={t.graph.fitGraph}
             className={`${FLOATING_OVER_CANVAS} ${language === 'ar' ? 'left-2' : 'right-2'}`}
           >
-            <FontAwesomeIcon icon={faExpand} />
+            <FontAwesomeIcon icon={faMagnifyingGlassMinus} />
           </Button>
           {graphCanvas(viewportSize)}
         </div>
