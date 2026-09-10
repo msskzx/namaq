@@ -26,7 +26,7 @@ flowchart TB
   neo -->|"graphRank, layoutX, layoutY"| neo
 
   pg --> app["Profiles, search, evidence"]
-  neo --> graph["Graph workspace"]
+  neo --> workspace["Graph workspace"]
 ```
 
 ## Seed files to PostgreSQL
