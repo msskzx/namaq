@@ -570,17 +570,35 @@ it('keeps a connected local branch when the global filter that revealed its subj
   expect(params().getAll('expand')).toEqual(['person:wife:FATHER']);
 });
 
-it('keeps embedded profile switches usable after filtering every edge out', async () => {
-  nav.setUrl(`/people/${root}?filter=FATHER`);
-  mount({ showSearch: false, url: `/api/graph?ancestorsOf=${root}` });
+it('opens an embedded graph on its subject, the way the workspace opens on its own', async () => {
+  nav.setUrl(`/people/${root}`);
+  mount({ chrome: 'embedded' });
+
+  await waitFor(() => expect(graph()).toBe(`father,grandfather,${root},wife`));
+});
+
+it('keeps an embedded exploration out of the page URL', async () => {
+  nav.setUrl(`/people/${root}`);
+  mount({ chrome: 'embedded' });
   await waitFor(() => expect(graph()).toContain('father'));
+
+  // A profile link carries the person and nothing else; the workspace is the
+  // scope whose exploration is shareable.
+  expect(nav.getUrl()).toBe(`/people/${root}`);
+  expect(params().has('subject')).toBe(false);
+  expect(params().has('expand')).toBe(false);
+});
+
+it('still explores from an embedded graph, without writing to the page URL', async () => {
+  nav.setUrl(`/people/${root}`);
+  mount({ chrome: 'embedded' });
+  await waitFor(() => expect(graph()).toContain('father'));
+
   fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
-  fireEvent.click(screen.getByRole('switch', { name: 'Hide Father relationships' }));
-  await waitFor(() => expect(graph()).toBe(''));
-  expect(params().has('filter')).toBe(false);
-  fireEvent.click(screen.getByRole('switch', { name: 'Show Father relationships' }));
-  await waitFor(() => expect(graph()).toContain('father'));
-  expect(params().getAll('filter')).toEqual(['FATHER']);
+  fireEvent.click(screen.getByRole('switch', { name: 'Show Companion Of relationships' }));
+
+  await waitFor(() => expect(graph()).toContain('companion'));
+  expect(nav.getUrl()).toBe(`/people/${root}`);
 });
 
 it('turns off both companionship directions through one Filters switch', async () => {

@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState, RefObject } f
 import Link from 'next/link';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { ForceGraphMethods, NodeObject, LinkObject } from 'react-force-graph-2d';
-import { GraphData, GraphNode, GraphNodeFull, GraphLink } from '@/types/graph';
+import { GraphNode, GraphNodeFull, GraphLink } from '@/types/graph';
 import useSWR from 'swr';
 import { fetcher } from '@/lib/swr';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -40,13 +40,16 @@ import { useExplorationGraph } from './useExplorationGraph';
 import { centerTargetForReveal, isComfortablyVisible, usableRect } from '@/lib/graphCamera';
 
 interface GraphCanvasProps {
-  url?: string;
   targetSlug?: string;
-  showSearch?: boolean;
-  // Params to seed into this page's URL on first load if not already
-  // present, e.g. { person: slug } so the profile page's graph carries its
-  // person in the address bar instead of only in the internal fetch URL.
-  initialParams?: Record<string, string | string[]>;
+  /**
+   * `workspace` is the /graphs layout -- panel, search, filters, node list --
+   * with the exploration in the page URL, so it is shareable and undoable with
+   * browser Back. `embedded` is the compact canvas a profile shows: the same
+   * engine and the same opening view, but its exploration is kept in the
+   * component so a profile link stays clean. Its fullscreen button raises the
+   * workspace layout over the page.
+   */
+  chrome?: 'workspace' | 'embedded';
   // Noun used for the node count summary and the side list heading. Defaults
   // to 'people' since most graphs are person-only; a bipartite graph (e.g.
   // titles and people) should override this to describe what's actually listed.
@@ -71,13 +74,18 @@ const FLOATING_OVER_CANVAS = 'absolute top-2 z-10 bg-gray-50/90 backdrop-blur da
 // Keep disabled kinds and relations available even when absent from the response.
 const ALL_RELATION_TYPES = sortRelationTypes(RELATION_ORDER.filter(type => governingRelationType(type) === type));
 
-export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-muhammad', showSearch = true, initialParams, nodesLabel = 'people' }: GraphCanvasProps) {
+export default function GraphCanvas({ targetSlug = 'prophet-muhammad', chrome = 'workspace', nodesLabel = 'people' }: GraphCanvasProps) {
   const { language } = useLanguage();
   const t = translations[language];
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const selectedSlug = searchParams?.get('selected') ?? (showSearch && !searchParams?.has('subject') ? targetSlug : null);
+  const showSearch = chrome === 'workspace';
+  const urlParams = useSearchParams();
+  // An embedded graph explores in component state rather than the address bar,
+  // so a profile link carries the person and nothing else.
+  const [embeddedParams, setEmbeddedParams] = useState(() => new URLSearchParams());
+  const searchParams = showSearch ? urlParams : embeddedParams;
+  const selectedSlug = searchParams?.get('selected') ?? (searchParams?.has('subject') ? null : targetSlug);
   const fullGraph = searchParams?.get('full') === '1';
   const focusSlug = searchParams?.get('focus') ?? null;
   const defaultKinds = useMemo(() => new Set<string>(showSearch ? DEFAULT_KINDS : ALL_KINDS), [showSearch]);
@@ -118,52 +126,24 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
   const includedRelations = useMemo(() => new Set(explorationInput.globalFilters.map(governingRelationType)), [explorationInput.globalFilters]);
 
-  const fetchUrl = useMemo(() => {
-    try {
-      const base = new URL(url, typeof window !== 'undefined' ? window.location.origin : 'http://localhost');
-      const incoming = new URLSearchParams(searchParams?.toString() || '');
-      // `selected` is a client view option with no server
-      // meaning. `kind` is the opposite: it's a real query param the API
-      // reads to decide which node kinds to return, so it's deliberately
-      // forwarded rather than stripped -- but re-written from `includedKinds`
-      // rather than passed through as-is, since on a general-purpose graph
-      // an absent `kind` param no longer means "every kind" to the API
-      // either (see `defaultKinds` above): without this, Battle/Event nodes
-      // would still be fetched by default even though the UI hides them.
-      incoming.delete('selected');
-      incoming.delete('showCompanionTitle');
-      incoming.delete('filter');
-      explorationInput.globalFilters.forEach(type => incoming.append('filter', type));
-      if (explorationInput.globalFilters.length === 0) incoming.set('filter', '');
-      if (showSearch) {
-        incoming.delete('kind');
-        includedKinds.forEach(kind => incoming.append('kind', kind));
-      }
-      for (const [key, value] of incoming.entries()) base.searchParams.append(key, value);
-      return base.toString();
-    } catch {
-      return url;
-    }
-  }, [url, searchParams, showSearch, includedKinds, explorationInput.globalFilters]);
-
   // Graph structure only changes via pipeline scripts, never live user
   // action, so there's nothing to gain from the default revalidate-on-focus
   // behavior — and it actively hurts here: every refetch hands ForceGraph2D
   // a new graphData reference, which restarts its cooldown/engine and
   // snaps the camera back to fitToView, discarding wherever the user had
   // panned/zoomed to just from switching tabs and back.
-  const { data: legacyGraphData, error: legacyGraphError, isLoading: legacyGraphLoading } = useSWR<GraphData>(showSearch ? null : fetchUrl, fetcher, { revalidateOnFocus: false });
   const exploration = useExplorationGraph({
-    enabled: showSearch,
-    baseUrl: url,
+    enabled: true,
+    baseUrl: '/api/graph',
     kindParams: [...includedKinds],
     input: explorationInput,
     selectedSlug,
     fullGraph,
   });
-  const graphData = showSearch ? exploration.data : legacyGraphData;
-  const graphError = showSearch ? exploration.error : legacyGraphError;
-  const graphLoading = showSearch ? exploration.isLoading : legacyGraphLoading;
+  const graphData = exploration.data;
+  const graphError = exploration.error;
+  const hasGraphError = Boolean(graphError);
+  const graphLoading = exploration.isLoading;
   const fgRef = useRef<ForceGraphMethods<NodeObject<GraphNodeFull>, LinkObject<GraphNodeFull, GraphLink>>>(null) as RefObject<ForceGraphMethods<NodeObject<GraphNodeFull>, LinkObject<GraphNodeFull, GraphLink>>>;
   const selectedNode = graphData?.nodes.find(node => node.slug === selectedSlug);
   // Full name/titles only, for the selected-subject panel -- a lighter
@@ -326,7 +306,11 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       if (Array.isArray(value)) value.forEach(item => params.append(key, item));
       else if (value) params.set(key, value);
     });
-    const navigate = showSearch && !replace ? router.push : router.replace;
+    if (!showSearch) {
+      setEmbeddedParams(params);
+      return;
+    }
+    const navigate = replace ? router.replace : router.push;
     navigate(`${pathname}${params.size ? `?${params.toString()}` : ''}`, { scroll: false });
   }, [router, pathname, searchParams, showSearch]);
 
@@ -395,25 +379,13 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     updateParams({ expand: Array.from(new Set([...expandParams, ...tokens])) });
   };
 
-  const seededRef = useRef(false);
-  useEffect(() => {
-    if (seededRef.current || !initialParams || !searchParams) return;
-    const missing = Object.entries(initialParams).filter(([key]) => !searchParams.has(key));
-    if (missing.length === 0) return;
-    seededRef.current = true;
-    updateParams(Object.fromEntries(missing), true);
-    // Only seed once on mount; initialParams/updateParams identity isn't
-    // meant to re-trigger this.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
-
   // A fresh visit opens on the same family Start over installs (rule 11 of
   // docs/graph-exploration-review-plan.md), seeded as the root's own choices
   // so no global filter has to be on. A shared or refreshed URL brings its
   // own contributions and is left alone.
   const rootSeededRef = useRef(false);
   useEffect(() => {
-    if (rootSeededRef.current || !showSearch || !searchParams || searchParams.has('subject')) return;
+    if (rootSeededRef.current || !searchParams || searchParams.has('subject')) return;
     rootSeededRef.current = true;
     const fresh = defaultExplorationInput(targetSlug);
     const carriesOwnState = searchParams.has('expand') || searchParams.has('filter') || searchParams.has('full');
@@ -426,7 +398,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       true
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams, showSearch]);
+  }, [searchParams]);
 
   // A cap belongs to the exploration, not to one render of it, so every
   // introduction a fetch just made is written back to the URL (see
@@ -681,7 +653,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   if (graphLoading && !graphData) return <div className="flex items-center justify-center min-h-screen"><div className="text-lg">Loading graph...</div></div>;
   // A failed fetch leaves the exploration on screen and offers a retry beside
   // it; only a failure with nothing to show takes over the page.
-  if (graphError && !graphData) return <div className="flex items-center justify-center min-h-screen"><ErrorMessage title={t.graph.loadError} description={String(graphError)} /></div>;
+  if (hasGraphError && !graphData) return <div className="flex items-center justify-center min-h-screen"><ErrorMessage title={t.graph.loadError} description={String(graphError)} /></div>;
 
   const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
   const typeLabels: Record<string, string> = { person: t.people, title: t.titles, battle: t.battles.title, event: t.events };
@@ -780,7 +752,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           {t.graph.startOver}
         </Button>
       </div>
-      {graphError && (
+      {hasGraphError && (
         <div role="alert" className="mt-2 flex items-center gap-2 text-sm text-red-700 dark:text-red-300">
           <span>{t.graph.loadError}</span>
           <Button size="sm" onClick={exploration.retry}>
@@ -846,9 +818,9 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   const graphCanvas = (dimensions?: { width: number; height: number }) => visibleGraph && (
     <GraphSurface
       ref={fgRef}
-      {...(showSearch
-        ? { data: visibleGraph, isLoading: graphLoading && !graphData, loadError: graphError }
-        : { url: fetchUrl, transform: () => visibleGraph })}
+      data={visibleGraph}
+      isLoading={graphLoading && !graphData}
+      loadError={graphError}
       width={dimensions?.width}
       height={dimensions?.height}
       highlightSlug={selectedSlug ?? undefined}
