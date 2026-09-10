@@ -974,7 +974,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
   return (
     <div
       dir={language === 'ar' ? 'rtl' : 'ltr'}
-      className="relative h-[65vh] min-h-[32rem] overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700"
+      className="relative h-[85vh] min-h-[40rem] overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700"
       role="region"
       aria-label={t.graph.interactiveGraph}
     >
