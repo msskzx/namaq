@@ -614,12 +614,24 @@ it('leaves global search to the workspace, since it navigates the page URL', asy
   expect(screen.queryByRole('button', { name: 'Open search' })).toBeNull();
 });
 
+it('shows nothing but the canvas until an embedded graph is opened fullscreen', async () => {
+  nav.setUrl(`/people/${root}`);
+  mount({ chrome: 'embedded' });
+  await waitFor(() => expect(graph()).toContain('father'));
+
+  expect(screen.queryByRole('button', { name: 'Filters' })).toBeNull();
+  expect(screen.queryByRole('button', { name: 'List of Nodes' })).toBeNull();
+  expect(screen.queryByRole('button', { name: 'Start over' })).toBeNull();
+  expect(screen.getByRole('button', { name: 'Fullscreen' })).toBeTruthy();
+});
+
 it('still explores from an embedded graph, without writing to the page URL', async () => {
   nav.setUrl(`/people/${root}`);
   mount({ chrome: 'embedded' });
   await waitFor(() => expect(graph()).toContain('father'));
 
-  fireEvent.click(screen.getByRole('button', { name: 'Filters' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Fullscreen' }));
+  fireEvent.click(await screen.findByRole('button', { name: 'Filters' }));
   fireEvent.click(screen.getByRole('switch', { name: 'Show Companion Of relationships' }));
 
   await waitFor(() => expect(graph()).toContain('companion'));

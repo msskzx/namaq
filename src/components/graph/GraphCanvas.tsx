@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowsRotate, faBars, faCircleXmark, faCompress, faCropSimple, faExpand, faEyeSlash, faHexagonNodes,
   faMagnifyingGlassMinus,
-  faFilter, faListUl, faLocationCrosshairs, faMagnifyingGlass, faRotateLeft, faScissors, faShareNodes,
+  faFilter, faListUl, faLocationCrosshairs, faMagnifyingGlass, faRotateLeft, faScissors,
   faUser, faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import GraphSearch from './GraphSearch';
@@ -1022,72 +1022,25 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', chrome = 
     );
   }
 
+  // An embedded graph is the canvas and nothing else. Every control -- the
+  // filters, the selected-subject actions, the node list -- lives in
+  // fullscreen, reached by the one button here.
   return (
-    <div className="container mx-auto px-4 py-8">
-      {showSearch && <GraphSearch />}
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3" aria-label={t.graph.graphControls}>
-        <p className="text-sm text-gray-600 dark:text-gray-300" aria-live="polite">
-          {graphSummary}
-          {focusSlug ? ` · ${t.graph.focusedNeighbourhood}` : ''}
-        </p>
-        <div className="flex items-center gap-2">
-          <Button onClick={() => setShowFilterPanel(show => !show)} aria-pressed={showFilterPanel} aria-label={showFilterPanel ? t.graph.closeFilters : t.graph.openFilters}>
-            <FontAwesomeIcon icon={faFilter} />
-            {t.graph.openFilters}
-          </Button>
-        </div>
-      </div>
-
-      {showFilterPanel && filterPanel}
-
-      {explorationControls}
-
-      {selectedNode && !showSearch && (
-        <aside dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4 dark:border-amber-700 dark:bg-gray-800" aria-live="polite">
-          <p className="text-sm text-gray-600 dark:text-gray-300">{kindLabel(selectedNode.type ?? 'person')}</p>
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode.label}</h2>
-          <div className="mt-3 flex flex-wrap gap-3">
-            <Button variant="primary" href={profilePath(selectedNode.type, selectedNode.slug)}>
-              <FontAwesomeIcon icon={faUser} />
-              {t.graph.viewProfile}
-            </Button>
-            {!showSearch && (
-              <Button onClick={() => updateParams({ focus: selectedNode.slug, person: null, ancestorsOf: [], descendantsOf: [] })}>
-                <FontAwesomeIcon icon={faShareNodes} />
-                {t.graph.exploreNeighbours}
-              </Button>
-            )}
-          </div>
-
-        </aside>
-      )}
-
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_14rem]">
-        <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="relative h-[65vh] min-h-[32rem] overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700" role="region" aria-label={t.graph.interactiveGraph}>
-          <Button size="icon" onClick={() => setIsFullscreen(true)} aria-label={t.graph.fullscreen} className={`${FLOATING_OVER_CANVAS} ${language === 'ar' ? 'left-2' : 'right-2'}`}>
-            <FontAwesomeIcon icon={faExpand} />
-          </Button>
-          {graphCanvas()}
-        </div>
-        <div>
-          <Button
-            className="mb-2"
-            onClick={() => setShowNodesPanel(show => !show)}
-            active={showNodesPanel}
-            aria-expanded={showNodesPanel}
-          >
-            <FontAwesomeIcon icon={faListUl} />
-            {t.graph.nodesList}
-          </Button>
-          {showNodesPanel && <div className="rounded-lg border border-gray-200 p-3 dark:border-gray-700">
-          <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100 capitalize">{t.graph.nodesInView}</h2>
-          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{t.graph.selectEntryHint}</p>
-          <ul className="mt-2 max-h-[55vh] space-y-1 overflow-auto">
-            {rankedViewNodes?.map(node => <li key={node.id}><button type="button" onClick={() => updateParams({ selected: node.slug })} className={`w-full rounded px-2 py-1 text-left text-sm hover:bg-amber-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-500 dark:hover:bg-gray-800 ${node.slug === selectedSlug ? 'bg-amber-100 dark:bg-gray-700' : 'text-gray-700 dark:text-gray-200'}`}>{node.label}</button></li>)}
-          </ul>
-          </div>}
-        </div>
-      </div>
+    <div
+      dir={language === 'ar' ? 'rtl' : 'ltr'}
+      className="relative h-[65vh] min-h-[32rem] overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700"
+      role="region"
+      aria-label={t.graph.interactiveGraph}
+    >
+      <Button
+        size="icon"
+        onClick={() => setIsFullscreen(true)}
+        aria-label={t.graph.fullscreen}
+        className={`${FLOATING_OVER_CANVAS} ${language === 'ar' ? 'left-2' : 'right-2'}`}
+      >
+        <FontAwesomeIcon icon={faExpand} />
+      </Button>
+      {graphCanvas()}
     </div>
   );
 }
