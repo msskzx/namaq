@@ -1,10 +1,23 @@
 import { buildExploration, ExplorationInput, hasSupportBeyondOwnExpansions } from './exploration';
+import { governingRelationType, RELATION_ORDER } from './categories';
+import type { ExpansionRelationId } from './expansion';
 import { RelationType, StoredEdge, SubjectId, subjectId } from './types';
 
-// The family a fresh visit and Start over both open with (rule 11 of
-// docs/graph-exploration-review-plan.md). GRANDSON/GRANDDAUGHTER are recorded
-// relations, not two parent hops, so no lineage action belongs here.
-export const DEFAULT_FAMILY_RELATIONS: readonly RelationType[] = ['WIFE', 'SON', 'DAUGHTER', 'GRANDSON', 'GRANDDAUGHTER'];
+// What opening any graph installs, workspace or profile: the subject's direct
+// relations plus its line in both directions -- Explore, Ancestors and
+// Descendants, without the reader pressing them (rule 11 of
+// docs/graph-exploration-review-plan.md). One rule serves both scopes, per
+// docs/adr/0002-share-relationship-semantics-across-scopes.md.
+//
+// Companionship is left out, as its own switch governs it
+// (docs/adr/0007-filters-choose-the-relationship-vocabulary.md). Relations the
+// subject has none of reveal nothing, so seeding the whole vocabulary costs a
+// longer URL and nothing else.
+const DIRECT_RELATIONS: readonly RelationType[] = RELATION_ORDER.filter(
+  (type) => governingRelationType(type) === type && governingRelationType(type) !== 'COMPANION_OF'
+);
+
+export const DEFAULT_EXPANSIONS: readonly ExpansionRelationId[] = [...DIRECT_RELATIONS, 'ANCESTORS', 'DESCENDANTS'];
 
 function withoutExpansionsOf(input: ExplorationInput, subject: SubjectId): ExplorationInput {
   return { ...input, expansions: input.expansions.filter((action) => action.subject !== subject) };
@@ -75,7 +88,7 @@ export function keepOnlySelected(input: ExplorationInput, subject: SubjectId): E
 export function startOver(target: SubjectId): ExplorationInput {
   return {
     roots: [target],
-    expansions: DEFAULT_FAMILY_RELATIONS.map((relation) => ({ subject: target, relation })),
+    expansions: DEFAULT_EXPANSIONS.map((relation) => ({ subject: target, relation })),
     globalFilters: [],
     caps: [],
     removed: [],

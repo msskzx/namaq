@@ -1,7 +1,24 @@
 # Data quality and references
 
-Status: editorial decisions settled; awaiting final shared-understanding
-confirmation. No implementation or data publication is authorized by this document.
+Status: implemented, awaiting batch approval. The schema, authoring format,
+validator, importer, APIs and UI are built; the Abu Ubaydah pilot batch is
+extracted and validated but not imported. See "Implementation status" below.
+
+```mermaid
+flowchart TB
+  subgraph authoring["data/history/batches/<batch>"]
+    pages["accounts/<subject>/NNN.md<br/>NNN.notes.md"]
+    definition["batch.json<br/>sources, accounts, claims, citations"]
+    summary["summary.md"]
+  end
+  authoring --> validate["history:validate"]
+  validate --> approval["approval recorded<br/>against a revision"]
+  approval --> importer["history:import --apply"]
+  importer --> pg[("PostgreSQL<br/>source_accounts, source_account_pages,<br/>source_passages, historical_claims, citations")]
+  pg --> profile["profile: claims, citations,<br/>paged source reader"]
+  pg --> refs["/api/subjects/[kind]/[slug]/references"]
+  refs --> pane["graph pane evidence access"]
+```
 
 ## Agreed scope
 
@@ -106,8 +123,24 @@ correct selection directly. Do not add book-reading controls or extra biography
 content to the selected graph pane.
 
 Terminology: [CONTEXT.md](../CONTEXT.md#historical-evidence).
-Rationale: [citations independent of profiles](adr/0007-citations-independent-of-profiles.md)
+Rationale: [citations independent of profiles](adr/0009-citations-independent-of-profiles.md)
 and [review independent of visibility](adr/0008-separate-review-from-visibility.md).
+
+## Implementation status
+
+| Step | State |
+| --- | --- |
+| Evidence schema and migration | Applied. `HistoricalClaim`, `Citation`, `SourceAccount`, `SourceAccountPage`, `SourcePassage`, `ReviewBatch`; `ClaimReviewStatus` is now Not reviewed / In review / Reviewed |
+| File authoring and validation | `data/history/batches/`, `src/lib/history/`, `npm run history:validate` / `history:import` / `history:extract` |
+| Pilot import | Extracted and validated, **not imported**: the batch carries no approval |
+| Evidence and account APIs | `/api/subjects/[kind]/[slug]/references`, `/api/people/[slug]/accounts`; review-status filtering removed |
+| Profile reading and graph access | `SourceAccountReader`, `ClaimEvidence`, `SubjectEvidenceAccess` |
+| Tests and documentation | Colocated tests throughout; README and `AGENTS.md` updated |
+
+The database held no claim, source or citation row before this work, so the
+legacy tables were replaced rather than migrated, and no review history was lost.
+`PersonClaim` and `RelationshipClaim` are gone; relationship evidence is a
+`HistoricalClaim` carrying a relationship type and a related subject.
 
 ## Inspected baseline
 

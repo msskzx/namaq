@@ -28,8 +28,9 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 - Local dev requires a running PostgreSQL **and** Neo4j instance (see
   README "Local setup"). Real credentials for both live in `.env` at the
   repo root; each git worktree needs its own `.env` symlinked to that
-  file (`ln -s /Users/msskzx/Projects/namaq/.env .env`) — check for this
-  symlink before assuming infra is unavailable. Seed/sync commands
+  file (`ln -s <main-checkout>/.env .env`, where `<main-checkout>` is the
+  absolute path of the primary clone) — check for this symlink before
+  assuming infra is unavailable. Seed/sync commands
   (`npm run seed:*`, `npm run people:sync`, `npm run battles:sync`)
   should work once it's in place. Only say local verification isn't
   possible if the symlink is present and the commands still fail.
@@ -40,7 +41,14 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 
 ## Git
 
-- Create worktrees under `/Users/msskzx/Projects/namaq/.codex/worktrees/<branch-name>` and use `codex/<branch-name>` for Codex branches. Use this repository-local root for future work; `~/.codex/worktrees` is not the project default. For desktop-created worktrees, configure Settings > Worktrees > Worktree root to `/Users/msskzx/Projects/namaq/.codex/worktrees`; this instruction does not change the app setting automatically.
+- Keep worktrees inside the main checkout, under a root named for the agent that
+  creates them: Codex uses `.codex/worktrees/<branch-name>` with
+  `codex/<branch-name>` branches, Claude Code uses `.claude/worktrees/<branch-name>`
+  with `claude/<branch-name>` branches. Any other agent follows the same shape
+  under its own dot-directory. Home-directory roots such as `~/.codex/worktrees` are not
+  the project default. For desktop-created worktrees, set Settings > Worktrees >
+  Worktree root to the matching repository-local path; this file does not change
+  the app setting automatically.
 - In every new worktree, create and verify the `.env` symlink described under Local verification before running project commands. Reuse the main checkout's file; preserve an existing file instead of overwriting it.
 - Branch names should not contain numbers.
 - Commit messages follow Conventional Commits: `type(scope): summary`
@@ -69,8 +77,10 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 - Every button carries an icon beside its label, from Font Awesome's free solid
   set. Pick one that names the action rather than decorating it, and reuse the
   icon an action already has elsewhere (Start over and Reset share the rotate
-  arrow, View profile shares the person). Vertical arrows are safe under both
-  writing directions; a horizontal one is not.
+  arrow, View profile shares the person). A horizontal arrow has to be mirrored
+  by writing direction, so that back points the way the reader came in Arabic as
+  well as English (see `src/components/common/Pagination.tsx`); a vertical arrow
+  needs no such care.
 - Titles and other short labelled chips use `src/components/common/Badge.tsx`
   (`size="sm"` inside dense panels), so a title looks the same on a profile
   page and in the graph panel.
@@ -92,6 +102,28 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   (dry run first, review the diff, then `--apply`) after seeding any such
   change; skipping this leaves ranks/layout stale relative to the graph
   they're supposed to describe.
+
+## Historical evidence data
+
+- Curated historical records live in `data/history/batches/<batch>/`, separate
+  from application code: `batch.json` holds source editions, source accounts and
+  claims with their citations; `accounts/<subject>/NNN.md` holds one printed page
+  of the work's text, with `NNN.notes.md` beside it for that page's editorial
+  footnotes. `summary.md` is the review summary.
+- **Do not read a whole account to answer a question.** Open `batch.json` for the
+  structure and the claims, then only the pages a citation names. Each page's
+  paragraphs carry anchors like `9-p7` that citations point at.
+- Files are the source of truth; the database holds a copy. Change the files and
+  re-import, never edit the database directly. `npm run history:validate --
+  <batch dir>` before proposing a batch, and `npm run history:import -- <batch
+  dir>` for a dry run. Import applies only the revision recorded as approved in
+  `batch.json`, so any edit after approval needs approving again.
+- Record data at whatever review status is honest and let it be visible; review
+  status never hides data (`docs/adr/0008-separate-review-from-visibility.md`).
+  Leave an unknown structured value unset rather than inventing one, and keep
+  competing accounts as separate attributed claims.
+- Transmission chains stay in the source text. A person mentioned only as a
+  narrator does not become a graph node or an edge.
 
 ## Content sources
 

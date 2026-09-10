@@ -1,4 +1,5 @@
-import type { HistoricalSource, Person as PrismaPerson, PersonClaim, Title } from "@/generated/prisma";
+import type { Person as PrismaPerson, Title } from "@/generated/prisma";
+import type { ClaimWithCitations } from "@/types/provenance";
 import type { BattleParticipation } from "@/types/battle";
 import type { EventWithBattle } from "@/types/event";
 import type { Ayah } from "@/types/quran";
@@ -8,7 +9,7 @@ export type PersonFull = PrismaPerson & {
   events: EventWithBattle[];
   ayat?: Ayah[];
   participations?: BattleParticipation[];
-  claims?: Array<PersonClaim & { source: HistoricalSource }>;
+  claims?: ClaimWithCitations[];
 };
 
 export interface PersonBase {

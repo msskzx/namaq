@@ -1,16 +1,18 @@
 'use client';
 
 import React, { useCallback, useEffect, useMemo, useRef, useState, RefObject } from 'react';
+import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { ForceGraphMethods, NodeObject, LinkObject } from 'react-force-graph-2d';
-import { GraphData, GraphNode, GraphNodeFull, GraphLink } from '@/types/graph';
+import { GraphNode, GraphNodeFull, GraphLink } from '@/types/graph';
 import useSWR from 'swr';
 import { fetcher } from '@/lib/swr';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowsRotate, faBars, faCircleXmark, faCompress, faCropSimple, faExpand, faEyeSlash, faHexagonNodes,
-  faFilter, faListUl, faLocationCrosshairs, faMagnifyingGlass, faRotateLeft, faScissors, faShareNodes,
+  faMagnifyingGlassMinus,
+  faFilter, faListUl, faLocationCrosshairs, faMagnifyingGlass, faRotateLeft, faScissors,
   faUser, faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import GraphSearch from './GraphSearch';
@@ -18,6 +20,7 @@ import RelationFilterPanel, { ControlScope } from './RelationFilterPanel';
 import ExpansionControls from './ExpansionControls';
 import Button from '@/components/common/Button';
 import Badge from '@/components/common/Badge';
+import SubjectEvidenceAccess from '@/components/graph/SubjectEvidenceAccess';
 import GraphSurface, { kindFillColor } from './GraphSurface';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import { useLanguage } from '@/components/language/LanguageContext';
@@ -38,13 +41,13 @@ import { useExplorationGraph } from './useExplorationGraph';
 import { centerTargetForReveal, isComfortablyVisible, usableRect } from '@/lib/graphCamera';
 
 interface GraphCanvasProps {
-  url?: string;
   targetSlug?: string;
-  showSearch?: boolean;
-  // Params to seed into this page's URL on first load if not already
-  // present, e.g. { person: slug } so the profile page's graph carries its
-  // person in the address bar instead of only in the internal fetch URL.
-  initialParams?: Record<string, string | string[]>;
+  /**
+   * Whether the graph opens filling the screen. /graphs does, being nothing
+   * else; a profile does not, its graph being one section of a page. It is the
+   * only thing that differs between the two, alongside the subject.
+   */
+  defaultFullscreen?: boolean;
   // Noun used for the node count summary and the side list heading. Defaults
   // to 'people' since most graphs are person-only; a bipartite graph (e.g.
   // titles and people) should override this to describe what's actually listed.
@@ -69,16 +72,20 @@ const FLOATING_OVER_CANVAS = 'absolute top-2 z-10 bg-gray-50/90 backdrop-blur da
 // Keep disabled kinds and relations available even when absent from the response.
 const ALL_RELATION_TYPES = sortRelationTypes(RELATION_ORDER.filter(type => governingRelationType(type) === type));
 
-export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-muhammad', showSearch = true, initialParams, nodesLabel = 'people' }: GraphCanvasProps) {
+export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFullscreen = false, nodesLabel = 'people' }: GraphCanvasProps) {
   const { language } = useLanguage();
   const t = translations[language];
   const router = useRouter();
   const pathname = usePathname();
+  // Filling the screen is what brings the controls with it: search, the
+  // selected-subject actions, the filters and the node list. Out of it, a graph
+  // is its canvas and the button back in.
+  const [isFullscreen, setIsFullscreen] = useState(defaultFullscreen);
   const searchParams = useSearchParams();
-  const selectedSlug = searchParams?.get('selected') ?? (showSearch && !searchParams?.has('subject') ? targetSlug : null);
+  const selectedSlug = searchParams?.get('selected') ?? (searchParams?.has('subject') ? null : targetSlug);
   const fullGraph = searchParams?.get('full') === '1';
   const focusSlug = searchParams?.get('focus') ?? null;
-  const defaultKinds = useMemo(() => new Set<string>(showSearch ? DEFAULT_KINDS : ALL_KINDS), [showSearch]);
+  const defaultKinds = useMemo(() => new Set<string>(DEFAULT_KINDS), []);
   const includedKinds = useMemo(() => {
     const raw = searchParams?.getAll('kind') ?? [];
     return raw.length > 0 ? new Set(raw) : defaultKinds;
@@ -116,52 +123,24 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
   const includedRelations = useMemo(() => new Set(explorationInput.globalFilters.map(governingRelationType)), [explorationInput.globalFilters]);
 
-  const fetchUrl = useMemo(() => {
-    try {
-      const base = new URL(url, typeof window !== 'undefined' ? window.location.origin : 'http://localhost');
-      const incoming = new URLSearchParams(searchParams?.toString() || '');
-      // `selected` is a client view option with no server
-      // meaning. `kind` is the opposite: it's a real query param the API
-      // reads to decide which node kinds to return, so it's deliberately
-      // forwarded rather than stripped -- but re-written from `includedKinds`
-      // rather than passed through as-is, since on a general-purpose graph
-      // an absent `kind` param no longer means "every kind" to the API
-      // either (see `defaultKinds` above): without this, Battle/Event nodes
-      // would still be fetched by default even though the UI hides them.
-      incoming.delete('selected');
-      incoming.delete('showCompanionTitle');
-      incoming.delete('filter');
-      explorationInput.globalFilters.forEach(type => incoming.append('filter', type));
-      if (explorationInput.globalFilters.length === 0) incoming.set('filter', '');
-      if (showSearch) {
-        incoming.delete('kind');
-        includedKinds.forEach(kind => incoming.append('kind', kind));
-      }
-      for (const [key, value] of incoming.entries()) base.searchParams.append(key, value);
-      return base.toString();
-    } catch {
-      return url;
-    }
-  }, [url, searchParams, showSearch, includedKinds, explorationInput.globalFilters]);
-
   // Graph structure only changes via pipeline scripts, never live user
   // action, so there's nothing to gain from the default revalidate-on-focus
   // behavior — and it actively hurts here: every refetch hands ForceGraph2D
   // a new graphData reference, which restarts its cooldown/engine and
   // snaps the camera back to fitToView, discarding wherever the user had
   // panned/zoomed to just from switching tabs and back.
-  const { data: legacyGraphData, error: legacyGraphError, isLoading: legacyGraphLoading } = useSWR<GraphData>(showSearch ? null : fetchUrl, fetcher, { revalidateOnFocus: false });
   const exploration = useExplorationGraph({
-    enabled: showSearch,
-    baseUrl: url,
+    enabled: true,
+    baseUrl: '/api/graph',
     kindParams: [...includedKinds],
     input: explorationInput,
     selectedSlug,
     fullGraph,
   });
-  const graphData = showSearch ? exploration.data : legacyGraphData;
-  const graphError = showSearch ? exploration.error : legacyGraphError;
-  const graphLoading = showSearch ? exploration.isLoading : legacyGraphLoading;
+  const graphData = exploration.data;
+  const graphError = exploration.error;
+  const hasGraphError = Boolean(graphError);
+  const graphLoading = exploration.isLoading;
   const fgRef = useRef<ForceGraphMethods<NodeObject<GraphNodeFull>, LinkObject<GraphNodeFull, GraphLink>>>(null) as RefObject<ForceGraphMethods<NodeObject<GraphNodeFull>, LinkObject<GraphNodeFull, GraphLink>>>;
   const selectedNode = graphData?.nodes.find(node => node.slug === selectedSlug);
   // Full name/titles only, for the selected-subject panel -- a lighter
@@ -171,8 +150,8 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // event) and graph-only people with no Postgres profile just keep
   // showing the graph label, per the "Learning information in the panel"
   // decision in docs/graph-exploration-plan.md.
-  const isSelectedPerson = showSearch && (selectedNode?.type ?? 'person') === 'person';
-  const { data: selectedPreview, error: selectedPreviewError } = useSWR<{ fullName: string | null; titles: { name: string; slug: string }[] }>(
+  const isSelectedPerson = (selectedNode?.type ?? 'person') === 'person';
+  const { data: selectedPreview, error: selectedPreviewError } = useSWR<{ fullName: string | null; titles: { name: string; slug: string }[]; evidenceCount?: number }>(
     isSelectedPerson && selectedNode ? `/api/people/${selectedNode.slug}/preview` : null,
     fetcher
   );
@@ -183,9 +162,9 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   const relationLabel = useCallback((type: string) => (t.relationTypes as Record<string, string>)[type] ?? relationName(type), [t]);
   const selectedSubjectId = selectedNode ? subjectId((selectedNode.type as NodeKind) ?? 'person', selectedNode.slug) : null;
   const selectedRelationCounts = useMemo(() => {
-    if (!showSearch || !exploration.edges) return new Map<RelationType, number>();
+    if (!exploration.edges) return new Map<RelationType, number>();
     return directRelationCounts(exploration.edges, selectedSubjectId ?? graphData?.nodes.map(node => node.id) ?? [], RELATION_ORDER) as Map<RelationType, number>;
-  }, [showSearch, selectedSubjectId, exploration.edges, graphData]);
+  }, [selectedSubjectId, exploration.edges, graphData]);
   // Explore applies the enabled relationship types to the selected subject
   // rather than everything on record, since the filter switches are the
   // vocabulary both it and Show full graph work from (see
@@ -201,10 +180,8 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     [selectedRelationCounts, exploreVocabulary]
   );
   const hasEligibleDirectRelations = Boolean(selectedSubjectId) && directRelationsToExpand.length > 0;
-  // Node kinds present in the fetched graph (person/title/battle/event).
-  const kindsPresent = useMemo(() => [...new Set(graphData?.nodes.map(node => node.type ?? 'person') ?? [])], [graphData]);
   // Relation switches must remain available after a filter removes their edges.
-  const kindsUniverse = showSearch ? ALL_KINDS : kindsPresent;
+  const kindsUniverse = ALL_KINDS;
   const relationTypesPresent = ALL_RELATION_TYPES;
   // Once the unfiltered view has run one simulation pass, d3-force mutates
   // each link's source/target from a plain string id into a direct
@@ -239,13 +216,13 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // on every single click -- worse on the phone's smaller canvas, where the
   // reshuffle is more likely to land the node off-screen.
   const alwaysVisibleNodes = useMemo(() => {
-    if (!showSearch || !graphData) return selectedNode ? [selectedNode] : [];
+    if (!graphData) return selectedNode ? [selectedNode] : [];
     if (fullGraph) return graphData.nodes.filter(node => showCompanionTitle || node.type !== 'title' || node.slug !== COMPANION_TITLE_SLUG);
     const nodesById = new Map(graphData.nodes.map(node => [node.id, node]));
     const roots = explorationInput.roots.map(id => nodesById.get(id)).filter((node): node is GraphNodeFull => Boolean(node));
     if (selectedNode && !roots.some(node => node.id === selectedNode.id)) roots.push(selectedNode);
     return roots;
-  }, [showSearch, graphData, explorationInput.roots, selectedNode, fullGraph, showCompanionTitle]);
+  }, [graphData, explorationInput.roots, selectedNode, fullGraph, showCompanionTitle]);
   const visibleGraph = useMemo(() => {
     if (!baseVisibleGraph) return baseVisibleGraph;
     const missing = alwaysVisibleNodes.filter(node => !baseVisibleGraph.nodes.some(existing => existing.id === node.id));
@@ -280,29 +257,38 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     );
   }, [visibleGraph]);
 
-  // Embedded (showSearch false) graphs only: the workspace has its own,
-  // separate camera effects below (Q2/Q6 in docs/graph-layout-plan.md).
+  // Out of fullscreen only: filling the screen has its own, separate camera
+  // effects below (Q2/Q6 in docs/graph-layout-plan.md).
   // Priority order matters here -- selected, then focused, then default --
   // resolved as sequential lookups rather than one `.find` with all three
   // ORed together, which picked whichever matched first in array order
   // regardless of which one actually mattered (see that plan's "Verified
   // causes").
   useEffect(() => {
-    if (showSearch || !fgRef.current || !graphData) return;
+    if (isFullscreen || !fgRef.current || !graphData) return;
     const nodeToFocus = graphData.nodes.find(node => node.slug === selectedSlug)
       ?? graphData.nodes.find(node => node.slug === focusSlug)
       ?? graphData.nodes.find(node => node.slug === targetSlug);
     if (!nodeToFocus) return;
+    // Framing the opening view fits it, here as in fullscreen: its subject's
+    // line runs far past what a fixed zoom shows, and cropping to the subject
+    // alone leaves a graph that looks like it holds one node (Q6 of
+    // docs/graph-layout-plan.md).
+    const framesOpeningView = !focusSlug && (!selectedSlug || selectedSlug === targetSlug);
     const timer = setTimeout(() => {
+      if (framesOpeningView) {
+        fgRef.current?.zoomToFit(400, 40);
+        return;
+      }
       fgRef.current?.centerAt(nodeToFocus.x || 0, nodeToFocus.y || 0, 700);
       fgRef.current?.zoom(3, 700);
     }, 300);
     return () => clearTimeout(timer);
-  }, [showSearch, graphData, selectedSlug, focusSlug, targetSlug]);
+  }, [isFullscreen, graphData, selectedSlug, focusSlug, targetSlug]);
   // Only runs when nothing above is already going to center on a specific
-  // node (embedded graphs), or never automatically at all (the workspace,
-  // which only ever fits via the explicit Fit graph button or its own
-  // initial/reset framing effect below -- see onEngineStop in graphCanvas).
+  // node, or never automatically at all in fullscreen, which only ever fits
+  // via the explicit Fit graph button or its own initial/reset framing effect
+  // below -- see onEngineStop in graphCanvas.
   const hasFocusTarget = Boolean(selectedSlug || focusSlug || graphData?.nodes.some(node => node.slug === targetSlug));
   // Every visible subject now has a fixed, precomputed position (see
   // docs/adr/0005-use-a-precomputed-global-graph-map.md) -- the previous
@@ -324,18 +310,15 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       if (Array.isArray(value)) value.forEach(item => params.append(key, item));
       else if (value) params.set(key, value);
     });
-    const navigate = showSearch && !replace ? router.push : router.replace;
+    const navigate = replace ? router.replace : router.push;
     navigate(`${pathname}${params.size ? `?${params.toString()}` : ''}`, { scroll: false });
-  }, [router, pathname, searchParams, showSearch]);
+  }, [router, pathname, searchParams]);
 
   const expandParams = useMemo(() => searchParams?.getAll('expand') ?? [], [searchParams]);
   // Relationship choices apply to the selected subject by default; the panel's
   // own switch moves them to the whole exploration (rule 1 of
   // docs/graph-exploration-review-plan.md). Nothing changes scope on its own.
   const [scope, setScope] = useState<ControlScope>('selected');
-  // The embedded profile graph has no selection model of its own, so its
-  // switches stay whole-view.
-  const activeScope: ControlScope = showSearch ? scope : 'exploration';
   const localRelations = useMemo(() => {
     if (!selectedSubjectId) return new Set<string>();
     return new Set(
@@ -393,25 +376,13 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     updateParams({ expand: Array.from(new Set([...expandParams, ...tokens])) });
   };
 
-  const seededRef = useRef(false);
-  useEffect(() => {
-    if (seededRef.current || !initialParams || !searchParams) return;
-    const missing = Object.entries(initialParams).filter(([key]) => !searchParams.has(key));
-    if (missing.length === 0) return;
-    seededRef.current = true;
-    updateParams(Object.fromEntries(missing), true);
-    // Only seed once on mount; initialParams/updateParams identity isn't
-    // meant to re-trigger this.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
-
   // A fresh visit opens on the same family Start over installs (rule 11 of
   // docs/graph-exploration-review-plan.md), seeded as the root's own choices
   // so no global filter has to be on. A shared or refreshed URL brings its
   // own contributions and is left alone.
   const rootSeededRef = useRef(false);
   useEffect(() => {
-    if (rootSeededRef.current || !showSearch || !searchParams || searchParams.has('subject')) return;
+    if (rootSeededRef.current || !searchParams || searchParams.has('subject')) return;
     rootSeededRef.current = true;
     const fresh = defaultExplorationInput(targetSlug);
     const carriesOwnState = searchParams.has('expand') || searchParams.has('filter') || searchParams.has('full');
@@ -424,24 +395,24 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       true
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams, showSearch]);
+  }, [searchParams]);
 
   // A cap belongs to the exploration, not to one render of it, so every
   // introduction a fetch just made is written back to the URL (see
   // docs/adr/0003-cap-global-relationship-filters.md). Writing only the new
   // ones keeps this from renavigating in a loop.
   useEffect(() => {
-    if (!showSearch || !searchParams || !exploration.caps) return;
+    if (!searchParams || !exploration.caps) return;
     const existing = searchParams.getAll('cap');
     const seen = new Set(existing);
     const added = exploration.caps.map(formatCapParam).filter(param => !seen.has(param));
     if (added.length === 0) return;
     updateParams({ cap: [...existing, ...added] }, true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [exploration.caps, searchParams, showSearch]);
+  }, [exploration.caps, searchParams]);
 
   const toggleRelationInScope = (type: string) => {
-    if (activeScope !== 'selected') {
+    if (scope !== 'selected') {
       toggleRelation(type);
       return;
     }
@@ -455,7 +426,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     updateParams({ filter: [...next] });
   };
   const setRelationsInScope = (types: string[], show: boolean) => {
-    if (activeScope === 'selected') {
+    if (scope === 'selected') {
       if (!selectedSubjectId) return;
       const tokens = types.map(type => formatExpandParam({ subject: selectedSubjectId, relation: type as RelationType }));
       const next = show
@@ -506,17 +477,13 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     updateParams({ kind: isDefault ? [] : [...next], filter: [...nextFilters] });
   };
 
-  const [isFullscreen, setIsFullscreen] = useState(false);
   const [showFilterPanel, setShowFilterPanel] = useState(false);
   // Collapsed on arrival: the list repeats what the canvas already shows, and
   // on a phone it pushes the controls above it out of reach.
   const [showNodesPanel, setShowNodesPanel] = useState(false);
   // Fullscreen only: search gets its own toggle/overlay, separate from the
-  // filter overlay, since it's a different kind of action (finding a
-  // person to focus on vs. adjusting what's shown).
-  const [showSearchPanel, setShowSearchPanel] = useState(false);
 
-  // Workspace shell (showSearch only): the collapsible panel/bottom-sheet
+  // Workspace shell (isFullscreen only): the collapsible panel/bottom-sheet
   // starts open so first paint matches what used to be always-visible, and
   // the site-nav/settings menu that replaces NavBar/Footer on this route.
   const [panelExpanded, setPanelExpanded] = useState(true);
@@ -545,29 +512,20 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   }, [isFullscreen]);
 
   // Header bar height (p-3 + text line) the canvas sits below in fullscreen.
-  const FULLSCREEN_HEADER_HEIGHT = 56;
-  const [fullscreenSize, setFullscreenSize] = useState({ width: 0, height: 0 });
-  useEffect(() => {
-    if (!isFullscreen) return;
-    const updateSize = () => setFullscreenSize({ width: window.innerWidth, height: window.innerHeight - FULLSCREEN_HEADER_HEIGHT });
-    updateSize();
-    window.addEventListener('resize', updateSize);
-    return () => window.removeEventListener('resize', updateSize);
-  }, [isFullscreen]);
 
-  // The workspace shell's canvas always fills the whole viewport, with the
-  // panel floating on top of it (see the showSearch return below) rather
+  // The fullscreen canvas always fills the whole viewport, with the
+  // panel floating on top of it (see the isFullscreen return below) rather
   // than sharing space via flex -- same reasoning as fullscreenSize above:
   // GraphSurface/ForceGraph2D only measures its box once at mount and never
   // re-observes, so it needs an explicit, reliably-nonzero size up front.
   const [viewportSize, setViewportSize] = useState({ width: 0, height: 0 });
   useEffect(() => {
-    if (!showSearch) return;
+    if (!isFullscreen) return;
     const updateSize = () => setViewportSize({ width: window.innerWidth, height: window.innerHeight });
     updateSize();
     window.addEventListener('resize', updateSize);
     return () => window.removeEventListener('resize', updateSize);
-  }, [showSearch]);
+  }, [isFullscreen]);
 
   // Show additions (docs/graph-layout-plan.md Q4/Q7): tracks which subjects
   // just became visible -- from a local expansion, a global filter, a
@@ -581,7 +539,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   const previousVisibleIdsRef = useRef<Set<string> | null>(null);
   const [showAdditions, setShowAdditions] = useState<{ added: string[]; connecting: string[] } | null>(null);
   useEffect(() => {
-    if (!showSearch || !graphData) return;
+    if (!isFullscreen || !graphData) return;
     const currentIds = new Set(graphData.nodes.map(node => node.id));
     const previous = previousVisibleIdsRef.current;
     if (previous) {
@@ -608,7 +566,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       // target is already set, per "kept through selection-only changes".
     }
     previousVisibleIdsRef.current = currentIds;
-  }, [showSearch, graphData]);
+  }, [isFullscreen, graphData]);
   const applyShowAdditions = useCallback(() => {
     if (!showAdditions) return;
     const targetIds = new Set([...showAdditions.added, ...showAdditions.connecting]);
@@ -616,9 +574,9 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     setShowAdditions(null);
   }, [showAdditions]);
 
-  // Workspace camera (showSearch only; docs/graph-layout-plan.md Q2/Q6).
+  // Workspace camera (isFullscreen only; docs/graph-layout-plan.md Q2/Q6).
   // `panelRef` measures the floating panel/sheet's actual on-screen rect
-  // (see the showSearch return below) so a selection hidden behind it
+  // (see the isFullscreen return below) so a selection hidden behind it
   // still counts as needing a reveal, exactly like one that's simply
   // off-screen -- see src/lib/graphCamera.ts for the shared geometry.
   const panelRef = useRef<HTMLDivElement>(null);
@@ -633,13 +591,18 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // otherwise-continued use are handled by the separate effect below
   // instead, which never touches zoom.
   useEffect(() => {
-    if (!showSearch || !fgRef.current || !graphData) return;
+    if (!isFullscreen || !fgRef.current || !graphData) return;
     if (!(!hasFramedRef.current || pendingResetRef.current)) return;
     hasFramedRef.current = true;
     pendingResetRef.current = false;
+    // A reader who followed a link to a particular subject gets it centred at a
+    // readable zoom. The opening view is different: its selection is the graph's
+    // own subject, and what it is there to show is that subject's whole line,
+    // which no fixed zoom frames -- see Q6 of docs/graph-layout-plan.md.
+    const framesOpeningView = !selectedSlug || selectedSlug === targetSlug;
     const node = selectedSlug ? graphData.nodes.find(n => n.slug === selectedSlug) : undefined;
     const timer = setTimeout(() => {
-      if (node && node.x != null && node.y != null) {
+      if (!framesOpeningView && node && node.x != null && node.y != null) {
         fgRef.current?.centerAt(node.x, node.y, 700);
         fgRef.current?.zoom(3, 700);
       } else {
@@ -647,7 +610,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       }
     }, 300);
     return () => clearTimeout(timer);
-  }, [showSearch, graphData, selectedSlug]);
+  }, [isFullscreen, graphData, selectedSlug, targetSlug]);
 
   // Ordinary selection changes (including browser Back/Forward, which never
   // sets pendingResetRef): pan only far enough to reveal the selection when
@@ -659,7 +622,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   // are refs, not reactive values, so reading them here doesn't need to
   // appear in the dependency array below.
   useEffect(() => {
-    if (!showSearch || !fgRef.current || !graphData || !hasFramedRef.current || pendingResetRef.current) return;
+    if (!isFullscreen || !fgRef.current || !graphData || !hasFramedRef.current || pendingResetRef.current) return;
     const current = selectedSlug ?? null;
     if (current === lastCameraSelectionRef.current) return;
     if (!current) { lastCameraSelectionRef.current = null; return; }
@@ -674,12 +637,12 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     const zoom = fgRef.current.zoom();
     const target = centerTargetForReveal({ x: node.x, y: node.y }, area, viewport, zoom);
     fgRef.current.centerAt(target.x, target.y, 500);
-  }, [showSearch, graphData, selectedSlug, viewportSize]);
+  }, [isFullscreen, graphData, selectedSlug, viewportSize]);
 
   if (graphLoading && !graphData) return <div className="flex items-center justify-center min-h-screen"><div className="text-lg">Loading graph...</div></div>;
   // A failed fetch leaves the exploration on screen and offers a retry beside
   // it; only a failure with nothing to show takes over the page.
-  if (graphError && !graphData) return <div className="flex items-center justify-center min-h-screen"><ErrorMessage title={t.graph.loadError} description={String(graphError)} /></div>;
+  if (hasGraphError && !graphData) return <div className="flex items-center justify-center min-h-screen"><ErrorMessage title={t.graph.loadError} description={String(graphError)} /></div>;
 
   const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
   const typeLabels: Record<string, string> = { person: t.people, title: t.titles, battle: t.battles.title, event: t.events };
@@ -687,7 +650,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   const kindLabel = (kind: string) => typeLabels[kind] ?? kind;
 
   const resetGraphView = () => {
-    if (showSearch) {
+    if (isFullscreen) {
       // Start over reframes its reset graph like an initial load would,
       // rather than the ordinary minimal reveal-pan (see the camera
       // effects above) -- consumed the next time they run.
@@ -710,15 +673,24 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
     updateParams({ selected: null, focus: null, filter: null, kind: [], showCompanionTitle: null, person: null, ancestorsOf: [], descendantsOf: [] });
   };
 
-  const explorationControls = showSearch && (
+  const explorationControls = (
     <aside dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4 dark:border-amber-700 dark:bg-gray-800">
       <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode ? (selectedPreview?.fullName ?? selectedNode.label) : t.graph.globalRelationships}</h2>
       {isSelectedPerson && selectedPreview && selectedPreview.titles.length > 0 && (
-        <div className="mt-1 flex flex-wrap gap-2">
+        <div className="my-2 flex flex-wrap gap-2">
           {selectedPreview.titles.map(title => (
             <Badge key={title.slug} href={`/people?title=${title.slug}`} text={title.name} color="indigo" size="sm" />
           ))}
         </div>
+      )}
+      {selectedNode && (
+        <SubjectEvidenceAccess
+          kind={(selectedNode.type ?? 'person') as string}
+          slug={selectedNode.slug}
+          hasProfile={selectedPersonHasProfile}
+          profileHref={profilePath(selectedNode.type, selectedNode.slug)}
+          evidenceCount={selectedPreview?.evidenceCount}
+        />
       )}
       {!selectedNode && <p className="text-sm text-gray-600 dark:text-gray-300">{t.graph.globalRelationshipsHint}</p>}
       {/* Four groups, divided: where the subject leads, what it reveals, what
@@ -769,7 +741,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
           {t.graph.startOver}
         </Button>
       </div>
-      {graphError && (
+      {hasGraphError && (
         <div role="alert" className="mt-2 flex items-center gap-2 text-sm text-red-700 dark:text-red-300">
           <span>{t.graph.loadError}</span>
           <Button size="sm" onClick={exploration.retry}>
@@ -803,7 +775,7 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
 
       <RelationFilterPanel
         types={relationTypesPresent}
-        includedRelations={activeScope === 'selected' ? localRelations : includedRelations}
+        includedRelations={scope === 'selected' ? localRelations : includedRelations}
         onToggle={toggleRelationInScope}
         onToggleAll={toggleAllRelations}
         onToggleGroup={toggleGroupRelations}
@@ -811,11 +783,11 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
         onToggleCompanionTitle={toggleCompanionTitle}
         relationLabel={relationLabel}
         language={language}
-        scope={showSearch ? scope : undefined}
+        scope={scope}
         onScopeChange={setScope}
-        disabled={activeScope === 'selected' && !selectedSubjectId}
+        disabled={scope === 'selected' && !selectedSubjectId}
         kindFilters={{ kinds: kindsUniverse, included: includedKinds, label: kindLabel, color: kindColor, onToggle: toggleKind }}
-        statusFilters={showSearch && includedKinds.has('battle') ? {
+        statusFilters={isFullscreen && includedKinds.has('battle') ? {
           choices: PARTICIPATION_STATUS_CHOICES,
           active: activeStatuses,
           label: (status) => (t.battles.participationStatus as Record<string, string>)[status] ?? status,
@@ -835,72 +807,70 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
   const graphCanvas = (dimensions?: { width: number; height: number }) => visibleGraph && (
     <GraphSurface
       ref={fgRef}
-      {...(showSearch
-        ? { data: visibleGraph, isLoading: graphLoading && !graphData, loadError: graphError }
-        : { url: fetchUrl, transform: () => visibleGraph })}
+      data={visibleGraph}
+      isLoading={graphLoading && !graphData}
+      loadError={graphError}
       width={dimensions?.width}
       height={dimensions?.height}
       highlightSlug={selectedSlug ?? undefined}
       linkLabel={linkTooltip}
       onNodeClick={(node) => updateParams({ selected: node.slug })}
-      // The workspace never auto-fits on engine settle -- with every
+      // Fullscreen never auto-fits on engine settle -- with every
       // position fixed and no live simulation (Phase two), "settle" is
       // immediate and carries no meaning worth reacting to; its own
       // initial/reset framing effect above (and the explicit Fit graph
       // button) are the only things that ever move its camera on their own.
-      onEngineStop={showSearch ? undefined : () => fitToView()}
+      onEngineStop={isFullscreen ? undefined : () => fitToView()}
     />
   );
 
   const nodesLabelText = (t.graph.nodesLabels as Record<string, string>)[nodesLabel] ?? nodesLabel;
   const graphSummary = visibleGraph ? t.graph.graphSummary(visibleGraph.nodes.length, nodesLabelText, visibleGraph.links.length) : t.graph.noGraphData;
 
-  // /graphs itself: a permanent, viewport-filling workspace rather than a
-  // scrollable page -- AppChrome (src/components/common/AppChrome.tsx) omits
-  // NavBar/Footer for this route, so the Menu below is the only way back to
-  // the rest of the site. The embedded profile/battle graphs (showSearch
-  // false) never reach this branch and keep their existing inline-card +
-  // isFullscreen-toggle behavior untouched below.
-  if (showSearch) {
-    const menuButton = (
-      <div className="relative" ref={menuRef}>
-        <Button size="icon" onClick={() => setMenuOpen(open => !open)} aria-pressed={menuOpen} aria-label={menuOpen ? t.graph.closeMenu : t.graph.openMenu}>
-          <FontAwesomeIcon icon={faBars} />
-        </Button>
-        {menuOpen && (
-          // Anchored to the viewport, not to the button: the panel around it
-          // scrolls and hides its overflow, and it sits at the bottom of the
-          // screen when collapsed, so a dropdown opening downwards from the
-          // button lands outside the screen with no way to reach it.
-          <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="fixed inset-x-3 bottom-3 z-[70] max-h-[70dvh] overflow-y-auto rounded-lg border border-amber-400 bg-gray-50 p-3 shadow-lg lg:inset-x-auto lg:bottom-auto lg:top-14 lg:start-3 lg:w-64 lg:max-h-[80dvh] dark:bg-gray-950">
-            <ul className="flex flex-col gap-1">
-              {navLinks.map(link => (
-                <li key={link.href}>
-                  <Link href={link.href} onClick={() => setMenuOpen(false)} className="block rounded px-2 py-1 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-800">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-              <li>
-                <Link href="/about" onClick={() => setMenuOpen(false)} className="block rounded px-2 py-1 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-800">
-                  {t.about}
+  const menuButton = (
+    <div className="relative" ref={menuRef}>
+      <Button size="icon" onClick={() => setMenuOpen(open => !open)} aria-pressed={menuOpen} aria-label={menuOpen ? t.graph.closeMenu : t.graph.openMenu}>
+        <FontAwesomeIcon icon={faBars} />
+      </Button>
+      {menuOpen && (
+        // Anchored to the viewport, not to the button: the panel around it
+        // scrolls and hides its overflow, and it sits at the bottom of the
+        // screen when collapsed, so a dropdown opening downwards from the
+        // button lands outside the screen with no way to reach it.
+        <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="fixed inset-x-3 bottom-3 z-[70] max-h-[70dvh] overflow-y-auto rounded-lg border border-amber-400 bg-gray-50 p-3 shadow-lg lg:inset-x-auto lg:bottom-auto lg:top-14 lg:start-3 lg:w-64 lg:max-h-[80dvh] dark:bg-gray-950">
+          <ul className="flex flex-col gap-1">
+            {navLinks.map(link => (
+              <li key={link.href}>
+                <Link href={link.href} onClick={() => setMenuOpen(false)} className="block rounded px-2 py-1 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-800">
+                  {link.label}
                 </Link>
               </li>
-              <li>
-                <Link href="/privacy" onClick={() => setMenuOpen(false)} className="block rounded px-2 py-1 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-800">
-                  {language === 'ar' ? 'سياسة الخصوصية' : 'Privacy Policy'}
-                </Link>
-              </li>
-            </ul>
-            <div className="mt-3 flex flex-col gap-2 border-t border-amber-400 pt-3">
-              <LanguageSwitcher />
-              <ThemeSwitcher />
-            </div>
+            ))}
+            <li>
+              <Link href="/about" onClick={() => setMenuOpen(false)} className="block rounded px-2 py-1 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-800">
+                {t.about}
+              </Link>
+            </li>
+            <li>
+              <Link href="/privacy" onClick={() => setMenuOpen(false)} className="block rounded px-2 py-1 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-800">
+                {language === 'ar' ? 'سياسة الخصوصية' : 'Privacy Policy'}
+              </Link>
+            </li>
+          </ul>
+          <div className="mt-3 flex flex-col gap-2 border-t border-amber-400 pt-3">
+            <LanguageSwitcher />
+            <ThemeSwitcher />
           </div>
-        )}
-      </div>
-    );
+        </div>
+      )}
+    </div>
+  );
 
+  // Filling the viewport rather than sitting in a scrollable page. On /graphs,
+  // which opens this way, AppChrome (src/components/common/AppChrome.tsx) omits
+  // NavBar/Footer for the route, so the Menu below is the only way back to the
+  // rest of the site.
+  if (isFullscreen) {
     const panelContent = (
       // min-h-0 lets this shrink inside the sheet's flex column, which is what
       // makes it the scrolling element. Without it the content keeps its full
@@ -964,17 +934,20 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
       </div>
     );
 
-    return (
-      <div dir={language === 'ar' ? 'rtl' : 'ltr'}>
+    const fullscreenView = (
+      // The stacking context that lifts the whole view above the page belongs
+      // here, on the wrapper. Putting it on the canvas layer instead buried the
+      // panel, which sits lower so the graph can fill the screen behind it.
+      <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="relative z-[100]">
         <div className="fixed inset-0 z-0 bg-gray-50 dark:bg-gray-900" role="region" aria-label={t.graph.interactiveGraph}>
-          <Button
-            size="icon"
-            onClick={() => fitToView(true)}
-            aria-label={t.graph.fitGraph}
-            className={`${FLOATING_OVER_CANVAS} ${language === 'ar' ? 'left-2' : 'right-2'}`}
-          >
-            <FontAwesomeIcon icon={faExpand} />
-          </Button>
+          <div className={`${FLOATING_OVER_CANVAS} flex items-center gap-2 ${language === 'ar' ? 'left-2' : 'right-2'}`}>
+            <Button size="icon" onClick={() => fitToView(true)} aria-label={t.graph.fitGraph}>
+              <FontAwesomeIcon icon={faMagnifyingGlassMinus} />
+            </Button>
+            <Button size="icon" onClick={() => setIsFullscreen(false)} aria-label={t.graph.closeFullscreen}>
+              <FontAwesomeIcon icon={faCompress} />
+            </Button>
+          </div>
           {graphCanvas(viewportSize)}
         </div>
         <div
@@ -988,115 +961,41 @@ export default function GraphCanvas({ url = '/api/graph', targetSlug = 'prophet-
         </div>
       </div>
     );
+
+    // Rendered into the body rather than in place: a profile section around it
+    // can open a stacking context, and then no z-index on this layer is enough
+    // to keep the page's own cards from painting over the graph.
+    return typeof document === 'undefined' ? fullscreenView : createPortal(fullscreenView, document.body);
   }
 
-  if (isFullscreen) {
-    return (
-      <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="fixed inset-0 z-50 bg-gray-50 dark:bg-gray-900">
-        <div className="absolute inset-x-0 top-0 z-10 flex items-center justify-between gap-3 bg-gray-50/90 p-3 backdrop-blur dark:bg-gray-900/90">
-          <p className="text-sm text-gray-600 dark:text-gray-300" aria-live="polite">
-            {graphSummary}
-          </p>
-          <div className="flex items-center gap-2">
-            {showSearch && (
-              <Button onClick={() => setShowSearchPanel(show => !show)} aria-pressed={showSearchPanel} aria-label={showSearchPanel ? t.graph.closeSearch : t.graph.openSearch}>
-                <FontAwesomeIcon icon={faMagnifyingGlass} />
-                {t.graph.openSearch}
-              </Button>
-            )}
-            <Button onClick={() => setShowFilterPanel(show => !show)} aria-pressed={showFilterPanel} aria-label={showFilterPanel ? t.graph.closeFilters : t.graph.openFilters}>
-              <FontAwesomeIcon icon={faFilter} />
-              {t.graph.openFilters}
-            </Button>
-            <Button size="icon" onClick={() => setIsFullscreen(false)} aria-label={t.graph.closeFullscreen}>
-              <FontAwesomeIcon icon={faCompress} />
-            </Button>
-          </div>
-        </div>
-        {showSearchPanel && (
-          <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="absolute top-14 inset-x-3 z-20 max-h-[70dvh] overflow-auto rounded-lg border border-gray-200 bg-white p-3 shadow-lg dark:border-gray-700 dark:bg-gray-800">
-            <GraphSearch />
-            {explorationControls}
-          </div>
-        )}
-        {showFilterPanel && (
-          <div dir={language === 'ar' ? 'rtl' : 'ltr'} className={`absolute inset-x-3 top-14 z-20 max-h-[70dvh] overflow-auto rounded-lg border border-gray-200 bg-white p-3 shadow-lg sm:inset-x-auto sm:w-80 dark:border-gray-700 dark:bg-gray-800 ${language === 'ar' ? 'sm:left-3' : 'sm:right-3'}`}>
-            {filterPanel}
-          </div>
-        )}
-        <div style={{ paddingTop: FULLSCREEN_HEADER_HEIGHT }}>
-          {graphCanvas(fullscreenSize)}
-        </div>
-      </div>
-    );
-  }
-
+  // Out of fullscreen a graph is its canvas and nothing else. Every control --
+  // search, the filters, the selected-subject actions, the node list -- lives
+  // in fullscreen, reached by the one button here.
   return (
-    <div className="container mx-auto px-4 py-8">
-      {showSearch && <GraphSearch />}
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3" aria-label={t.graph.graphControls}>
-        <p className="text-sm text-gray-600 dark:text-gray-300" aria-live="polite">
-          {graphSummary}
-          {focusSlug ? ` · ${t.graph.focusedNeighbourhood}` : ''}
-        </p>
-        <div className="flex items-center gap-2">
-          <Button onClick={() => setShowFilterPanel(show => !show)} aria-pressed={showFilterPanel} aria-label={showFilterPanel ? t.graph.closeFilters : t.graph.openFilters}>
-            <FontAwesomeIcon icon={faFilter} />
-            {t.graph.openFilters}
-          </Button>
-        </div>
-      </div>
-
-      {showFilterPanel && filterPanel}
-
-      {explorationControls}
-
-      {selectedNode && !showSearch && (
-        <aside dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4 dark:border-amber-700 dark:bg-gray-800" aria-live="polite">
-          <p className="text-sm text-gray-600 dark:text-gray-300">{kindLabel(selectedNode.type ?? 'person')}</p>
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode.label}</h2>
-          <div className="mt-3 flex flex-wrap gap-3">
-            <Button variant="primary" href={profilePath(selectedNode.type, selectedNode.slug)}>
-              <FontAwesomeIcon icon={faUser} />
-              {t.graph.viewProfile}
-            </Button>
-            {!showSearch && (
-              <Button onClick={() => updateParams({ focus: selectedNode.slug, person: null, ancestorsOf: [], descendantsOf: [] })}>
-                <FontAwesomeIcon icon={faShareNodes} />
-                {t.graph.exploreNeighbours}
-              </Button>
-            )}
-          </div>
-
-        </aside>
+    <div
+      dir={language === 'ar' ? 'rtl' : 'ltr'}
+      className="relative h-[65vh] min-h-[32rem] overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700"
+      role="region"
+      aria-label={t.graph.interactiveGraph}
+    >
+      {/* AppChrome (src/components/common/AppChrome.tsx) omits NavBar/Footer on
+          /graphs, so out of fullscreen that route would otherwise offer no way
+          back to the site at all. A page that has its own navigation does not
+          need this. */}
+      {pathname === '/graphs' && (
+        <div className={`${FLOATING_OVER_CANVAS} ${language === 'ar' ? 'right-2' : 'left-2'}`}>{menuButton}</div>
       )}
-
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_14rem]">
-        <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="relative h-[65vh] min-h-[32rem] overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700" role="region" aria-label={t.graph.interactiveGraph}>
-          <Button size="icon" onClick={() => setIsFullscreen(true)} aria-label={t.graph.fullscreen} className={`${FLOATING_OVER_CANVAS} ${language === 'ar' ? 'left-2' : 'right-2'}`}>
-            <FontAwesomeIcon icon={faExpand} />
-          </Button>
-          {graphCanvas()}
-        </div>
-        <div>
-          <Button
-            className="mb-2"
-            onClick={() => setShowNodesPanel(show => !show)}
-            active={showNodesPanel}
-            aria-expanded={showNodesPanel}
-          >
-            <FontAwesomeIcon icon={faListUl} />
-            {t.graph.nodesList}
-          </Button>
-          {showNodesPanel && <div className="rounded-lg border border-gray-200 p-3 dark:border-gray-700">
-          <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100 capitalize">{t.graph.nodesInView}</h2>
-          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{t.graph.selectEntryHint}</p>
-          <ul className="mt-2 max-h-[55vh] space-y-1 overflow-auto">
-            {rankedViewNodes?.map(node => <li key={node.id}><button type="button" onClick={() => updateParams({ selected: node.slug })} className={`w-full rounded px-2 py-1 text-left text-sm hover:bg-amber-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-500 dark:hover:bg-gray-800 ${node.slug === selectedSlug ? 'bg-amber-100 dark:bg-gray-700' : 'text-gray-700 dark:text-gray-200'}`}>{node.label}</button></li>)}
-          </ul>
-          </div>}
-        </div>
+      {/* Fit graph travels with the view control in both scopes: it is how a
+          reader who has panned or zoomed away gets everything back on screen. */}
+      <div className={`${FLOATING_OVER_CANVAS} flex items-center gap-2 ${language === 'ar' ? 'left-2' : 'right-2'}`}>
+        <Button size="icon" onClick={() => fitToView(true)} aria-label={t.graph.fitGraph}>
+          <FontAwesomeIcon icon={faMagnifyingGlassMinus} />
+        </Button>
+        <Button size="icon" onClick={() => setIsFullscreen(true)} aria-label={t.graph.fullscreen}>
+          <FontAwesomeIcon icon={faExpand} />
+        </Button>
       </div>
+      {graphCanvas()}
     </div>
   );
 }

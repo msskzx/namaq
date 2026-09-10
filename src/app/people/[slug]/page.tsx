@@ -20,14 +20,15 @@ import GraphCanvas from '@/components/graph/GraphCanvas';
 import { fetcher } from '@/lib/swr';
 import { AyatGroup } from '@/components/quran/AyahCard';
 import ClaimEvidence from '@/components/common/ClaimEvidence';
-import type { RelationshipClaimWithSource } from '@/types/provenance';
+import SourceAccountReader from '@/components/people/SourceAccountReader';
+import type { ClaimWithCitations } from '@/types/provenance';
 
 function PersonDetailPage() {
   const { language } = useLanguage();
   const t = translations[language];
   const { slug } = useParams<{ slug: string }>();
   const { data: person, error, isLoading } = useSWR<PersonFull>(slug ? `/api/people/${slug}` : null, fetcher);
-  const { data: relationshipClaims } = useSWR<RelationshipClaimWithSource[]>(
+  const { data: relationshipClaims } = useSWR<ClaimWithCitations[]>(
     slug ? `/api/relationship-claims?person=${encodeURIComponent(slug)}` : null,
     fetcher,
   );
@@ -101,25 +102,27 @@ function PersonDetailPage() {
             </div>
           )}
 
-          <ClaimEvidence title={language === 'ar' ? 'المصادر والملاحظات التاريخية' : 'Sources & historical notes'} claims={person.claims || []} />
+          <SourceAccountReader slug={slug} />
 
           <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
             <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
               <FontAwesomeIcon icon={faHexagonNodes} className="w-7 h-7 text-amber-500 ml-2" />
               {t.relations}
             </h2>
-            <GraphCanvas url={`/api/graph?ancestorsOf=${slug}`} targetSlug={slug} showSearch={false} initialParams={{ person: slug }} />
+            <GraphCanvas targetSlug={slug} />
           </div>
+
+          <AyatGroup ayat={person.ayat || []} />
+
+          <BattleParticipationTimeline participations={person.participations || []} />
+
+          <ClaimEvidence title={language === 'ar' ? 'المصادر والملاحظات التاريخية' : 'Sources & historical notes'} claims={person.claims || []} />
 
           <ClaimEvidence
             title={language === 'ar' ? 'أدلة العلاقات' : 'Relationship evidence'}
             claims={relationshipClaims || []}
             relationshipClaims
           />
-
-          <AyatGroup ayat={person.ayat || []} />
-
-          <BattleParticipationTimeline participations={person.participations || []} />
 
         </div>
       </div>

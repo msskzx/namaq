@@ -79,41 +79,43 @@ model Person {
   virtues    String? // description of the virtues should be fetched from a book
   slug       String  @unique // Unique slug for person's page
 
-
-  graphRank           Int?      // 1 = most prominent over the unified Person+Battle+Title+Event graph; null = not yet computed
-  clusterId           Int?      // Louvain community id from the unified graph, for zoom-out cluster collapse
-  layoutX             Float?    // precomputed x position from the unified graph layout
-  layoutY             Float?    // precomputed y position from the unified graph layout
+  graphRank           Int? // 1 = most prominent over the unified Person+Battle+Title+Event graph; null = not yet computed
+  clusterId           Int? // Louvain community id from the unified graph, for zoom-out cluster collapse
+  layoutX             Float? // precomputed x position from the unified graph layout
+  layoutY             Float? // precomputed y position from the unified graph layout
   graphRankComputedAt DateTime? // when graphRank/clusterId/layoutX/layoutY were last (re)computed by scripts/graph/computeGraphLayout.ts
 
   titles         Title[]               @relation("PersonTitles")
   participations BattleParticipation[]
   events         Event[]
   ayat           Ayah[]                @relation("PersonAyahs")
-  claims         PersonClaim[]
 
   @@map("persons")
 }
 
-/// A bibliographic work or primary source used to support a historical claim.
-/// Source records are deliberately separate from books displayed in the product:
-/// a source may be an edition, manuscript, or modern study that is not a reader-facing book.
+/// A historical work in one specific consulted edition. Bibliographic details
+/// that differ (editor, publisher, year) belong to separate rows, because a
+/// source account's identity includes its edition — see
+/// docs/data-quality-references-plan.md.
 model HistoricalSource {
-  id            String   @id @default(cuid())
-  slug          String   @unique
-  title         String
-  author        String?
-  editor        String?
-  publisher     String?
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  title           String
+  author          String?
+  editor          String?
+  publisher       String?
   publicationYear String?
-  edition       String?
-  url           String?
-  notes         String?  @db.Text
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  edition         String?
+  /// The website the edition was read on, such as Shamela or Islamweb. Kept
+  /// apart from the work itself: a host is not a publisher.
+  digitalHost     String?
+  url             String?
+  notes           String?  @db.Text
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
-  personClaims       PersonClaim[]
-  relationshipClaims RelationshipClaim[]
+  accounts  SourceAccount[]
+  citations Citation[]
 
   @@map("historical_sources")
 }
@@ -127,63 +129,190 @@ enum ClaimConfidence {
   UNASSESSED
 }
 
-/// Publication workflow for factual claims. Only PUBLISHED claims are exposed
-/// through public APIs, so draft research never appears as settled history.
+/// Progress of editorial checking, shown to readers rather than used to hide
+/// data: recorded information is public at any status, and importing a batch
+/// stays a separate approval — see docs/adr/0008-separate-review-from-visibility.md.
 enum ClaimReviewStatus {
-  DRAFT
+  NOT_REVIEWED
   IN_REVIEW
   REVIEWED
-  PUBLISHED
 }
 
-/// An attributed assertion about a person (for example a date, name, or biographical statement).
-/// Each claim has exactly one pinpoint citation; multiple sources are represented as multiple claims.
-model PersonClaim {
-  id           String            @id @default(cuid())
-  personId     String
-  sourceId     String
-  assertion    String            @db.Text
-  field         String?
-  volume        String?
-  pageReference String?
-  confidence   ClaimConfidence   @default(UNASSESSED)
-  reviewStatus ClaimReviewStatus @default(DRAFT)
-  reviewerNote String?           @db.Text
-  reviewedAt   DateTime?
-  createdAt    DateTime          @default(now())
-  updatedAt    DateTime          @updatedAt
-
-  person Person            @relation(fields: [personId], references: [id], onDelete: Cascade)
-  source HistoricalSource  @relation(fields: [sourceId], references: [id], onDelete: Restrict)
-
-  @@index([personId, reviewStatus])
-  @@index([sourceId])
-  @@map("person_claims")
+/// The historical subject types evidence can be attached to. Subjects are
+/// addressed by kind and slug so graph-only people and other subjects without
+/// a profile row can carry citations — see
+/// docs/adr/0009-citations-independent-of-profiles.md.
+enum SubjectKind {
+  PERSON
+  TITLE
+  BATTLE
+  EVENT
 }
 
-/// Evidence for a directed Neo4j relationship. The three identifier fields are
-/// the stable relationship key used by the graph seed (source slug, type, target slug).
-model RelationshipClaim {
-  id               String            @id @default(cuid())
-  sourcePersonSlug String
-  targetPersonSlug String
-  relationshipType String
-  sourceId         String
-  assertion        String            @db.Text
-  volume           String?
-  pageReference    String?
-  confidence       ClaimConfidence   @default(UNASSESSED)
-  reviewStatus     ClaimReviewStatus @default(DRAFT)
-  reviewerNote     String?           @db.Text
-  reviewedAt       DateTime?
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
+/// Whether a passage belongs to the historical author's text or to the
+/// edition's editorial apparatus. The two stay attributable to different
+/// authors even on the same printed page.
+enum PassageKind {
+  BODY
+  NOTE
+}
 
-  source HistoricalSource @relation(fields: [sourceId], references: [id], onDelete: Restrict)
+/// A group of proposed historical records submitted together for the user's
+/// approval. Approval is recorded against `revision`, so edits after approval
+/// need reapproval.
+model ReviewBatch {
+  id          String    @id @default(cuid())
+  /// A batch is identified by slug and revision together: the same batch is
+  /// approved and imported again whenever its files change.
+  slug        String
+  revision    String
+  summaryPath String
+  approvedAt  DateTime?
+  approvedBy  String?
+  importedAt  DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
-  @@unique([sourcePersonSlug, targetPersonSlug, relationshipType, sourceId], map: "relationship_claims_source_target_type_source_key")
-  @@index([sourcePersonSlug, targetPersonSlug, relationshipType, reviewStatus], map: "relationship_claims_source_target_type_review_idx")
-  @@map("relationship_claims")
+  claims   HistoricalClaim[]
+  accounts SourceAccount[]
+
+  @@unique([slug, revision])
+  @@map("review_batches")
+}
+
+/// An attributed assertion about a historical subject, or about a directed
+/// relationship between two subjects when the related fields are set.
+/// Relationship identity mirrors Neo4j: subject slug, type, related slug.
+model HistoricalClaim {
+  id                 String            @id @default(cuid())
+  /// The claim's key in its authoring file. Files are the source of truth, so
+  /// re-importing a batch updates the same row instead of duplicating it.
+  authoringKey       String            @unique
+  subjectKind        SubjectKind
+  subjectSlug        String
+  /// The profile field this claim speaks to, such as `fullName`. Null for a
+  /// biographical statement that maps to no single field.
+  field              String?
+  assertion          String            @db.Text
+  relationshipType   String?
+  relatedSubjectKind SubjectKind?
+  relatedSubjectSlug String?
+  confidence         ClaimConfidence   @default(UNASSESSED)
+  reviewStatus       ClaimReviewStatus @default(NOT_REVIEWED)
+  reviewerNote       String?           @db.Text
+  reviewedAt         DateTime?
+  /// Set when accounts conflict. Independent of review status: a fully
+  /// reviewed claim can still be disputed.
+  disputed           Boolean           @default(false)
+  batchId            String?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  batch     ReviewBatch? @relation(fields: [batchId], references: [id], onDelete: SetNull)
+  citations Citation[]
+
+  @@index([subjectKind, subjectSlug])
+  @@index([subjectSlug, relationshipType, relatedSubjectSlug])
+  @@map("historical_claims")
+}
+
+/// The complete entry about one subject in one work and edition, stored page by
+/// page so profiles can page through it as printed.
+model SourceAccount {
+  id              String      @id @default(cuid())
+  sourceId        String
+  subjectKind     SubjectKind
+  subjectSlug     String
+  /// The work's own entry or section number, when it numbers entries.
+  entryIdentifier String?
+  titleArabic     String?
+  volume          String?
+  extractionUrl   String
+  accessedAt      DateTime
+  batchId         String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  source    HistoricalSource    @relation(fields: [sourceId], references: [id], onDelete: Restrict)
+  batch     ReviewBatch?        @relation(fields: [batchId], references: [id], onDelete: SetNull)
+  pages     SourceAccountPage[]
+  citations Citation[]
+
+  @@unique([sourceId, subjectKind, subjectSlug])
+  @@index([subjectKind, subjectSlug])
+  @@map("source_accounts")
+}
+
+/// One printed page of an account. `printedPage` is the page as printed and
+/// `sequence` is its position within this account, because an account can begin
+/// mid-page and printed numbering is not always contiguous.
+model SourceAccountPage {
+  id            String  @id @default(cuid())
+  accountId     String
+  sequence      Int
+  printedPage   String?
+  bodyMarkdown  String  @db.Text
+  notesMarkdown String? @db.Text
+  extractionUrl String?
+
+  account  SourceAccount   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  passages SourcePassage[]
+
+  @@unique([accountId, sequence])
+  @@index([accountId, printedPage])
+  @@map("source_account_pages")
+}
+
+/// A citable span within a page. `anchor` is authored in the data files and
+/// stays stable across re-extraction, so citation links keep landing on the
+/// cited text.
+model SourcePassage {
+  id      String      @id @default(cuid())
+  pageId  String
+  anchor  String
+  kind    PassageKind @default(BODY)
+  excerpt String      @db.Text
+
+  page      SourceAccountPage @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  citations Citation[]
+
+  @@unique([pageId, anchor])
+  @@map("source_passages")
+}
+
+/// A pinpoint reference from a claim or a biography paragraph to the exact place
+/// in a source it came from. A claim may carry several; a citation with no claim
+/// supports the paragraph named by `paragraphKey`, or the subject's reference
+/// list alone.
+model Citation {
+  id             String      @id @default(cuid())
+  claimId        String?
+  subjectKind    SubjectKind
+  subjectSlug    String
+  sourceId       String
+  accountId      String?
+  passageId      String?
+  paragraphKey   String?
+  footnoteNumber Int?
+  volume         String?
+  /// The page as printed. Absent when the digital source provides none.
+  pageReference  String?
+  /// The exact page the passage was read from. Required: a citation without a
+  /// working link cannot be rechecked.
+  extractionUrl  String
+  excerptArabic  String      @db.Text
+  accessedAt     DateTime
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  claim   HistoricalClaim? @relation(fields: [claimId], references: [id], onDelete: Cascade)
+  source  HistoricalSource @relation(fields: [sourceId], references: [id], onDelete: Restrict)
+  account SourceAccount?   @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  passage SourcePassage?   @relation(fields: [passageId], references: [id], onDelete: SetNull)
+
+  @@index([subjectKind, subjectSlug])
+  @@index([claimId])
+  @@map("citations")
 }
 
 model Title {
@@ -194,10 +323,10 @@ model Title {
   slug               String   @unique
   people             Person[] @relation("PersonTitles")
 
-  graphRank           Int?      // 1 = most prominent over the unified Person+Battle+Title+Event graph; null = not yet computed
-  clusterId           Int?      // Louvain community id from the unified graph, for zoom-out cluster collapse
-  layoutX             Float?    // precomputed x position from the unified graph layout
-  layoutY             Float?    // precomputed y position from the unified graph layout
+  graphRank           Int? // 1 = most prominent over the unified Person+Battle+Title+Event graph; null = not yet computed
+  clusterId           Int? // Louvain community id from the unified graph, for zoom-out cluster collapse
+  layoutX             Float? // precomputed x position from the unified graph layout
+  layoutY             Float? // precomputed y position from the unified graph layout
   graphRankComputedAt DateTime? // when graphRank/clusterId/layoutX/layoutY were last (re)computed by scripts/graph/computeGraphLayout.ts
 }
 
@@ -222,10 +351,10 @@ model Battle {
   participations BattleParticipation[]
   events         Event[] // Add a relation from Event to Battle if needed for a specific event type
 
-  graphRank           Int?      // 1 = most prominent over the unified Person+Battle+Title+Event graph; null = not yet computed
-  clusterId           Int?      // Louvain community id from the unified graph, for zoom-out cluster collapse
-  layoutX             Float?    // precomputed x position from the unified graph layout
-  layoutY             Float?    // precomputed y position from the unified graph layout
+  graphRank           Int? // 1 = most prominent over the unified Person+Battle+Title+Event graph; null = not yet computed
+  clusterId           Int? // Louvain community id from the unified graph, for zoom-out cluster collapse
+  layoutX             Float? // precomputed x position from the unified graph layout
+  layoutY             Float? // precomputed y position from the unified graph layout
   graphRankComputedAt DateTime? // when graphRank/clusterId/layoutX/layoutY were last (re)computed by scripts/graph/computeGraphLayout.ts
 
   createdAt DateTime @default(now()) // Add createdAt and updatedAt for better tracking
@@ -282,12 +411,12 @@ model Event {
   // Relations
   people   Person[]
   battleId String?
-  battle   Battle? @relation(fields: [battleId], references: [id])
+  battle   Battle?  @relation(fields: [battleId], references: [id])
 
-  graphRank           Int?      // 1 = most prominent over the unified Person+Battle+Title+Event graph; null = not yet computed
-  clusterId           Int?      // Louvain community id from the unified graph, for zoom-out cluster collapse
-  layoutX             Float?    // precomputed x position from the unified graph layout
-  layoutY             Float?    // precomputed y position from the unified graph layout
+  graphRank           Int? // 1 = most prominent over the unified Person+Battle+Title+Event graph; null = not yet computed
+  clusterId           Int? // Louvain community id from the unified graph, for zoom-out cluster collapse
+  layoutX             Float? // precomputed x position from the unified graph layout
+  layoutY             Float? // precomputed y position from the unified graph layout
   graphRankComputedAt DateTime? // when graphRank/clusterId/layoutX/layoutY were last (re)computed by scripts/graph/computeGraphLayout.ts
 
   @@map("events") // Map to 'events' table

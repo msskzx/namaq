@@ -9,6 +9,6 @@ import GraphCanvas from "@/components/graph/GraphCanvas";
 // URL (e.g. ?kind=person&kind=battle).
 export default function GraphPage() {
     return (
-        <GraphCanvas url="/api/graph" showSearch targetSlug="prophet-muhammad" nodesLabel="nodes" />
+        <GraphCanvas defaultFullscreen targetSlug="prophet-muhammad" nodesLabel="nodes" />
     );
 }

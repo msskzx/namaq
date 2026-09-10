@@ -149,12 +149,19 @@ export const people = [
   },
   {
     name: 'أبو عبيدة بن الجراح',
-    fullName: 'عامر بن عبد الله بن الجراح الفهري القرشي',
+    // Verbatim from al-Dhahabi's entry, extracted in
+    // data/history/batches/abu-ubaydah-pilot: the name from passages 5-p3 and
+    // 5-p4, the virtues from 5-p5 and 6-p3, the appearance from 7-p9 and 23-p6.
+    // Sentences that run across a page break are joined; nothing is reworded.
+    fullName: 'عَامِرُ بنُ عَبْدِ اللهِ بنِ الجَرَّاحِ بنِ هِلاَلِ بنِ أُهَيْبِ بنِ ضَبَّةَ بنِ الحَارِثِ بنِ فِهْرِ بنِ مَالِكِ بنِ النَّضْرِ بنِ كِنَانَةَ بنِ خُزَيْمَةَ بنِ مُدْرِكَةَ بنِ إِلْيَاسَ بنِ مُضَرَ بنِ نِزَارِ بنِ مَعَدِّ بنِ عَدْنَانَ القُرَشِيُّ، الفِهْرِيُّ، المَكِّيُّ.',
     slug: 'abu-ubaydah-ibn-al-jarrah',
-    appearance: 'كان نحيفًا، طويل القامة، خفيف اللحية.',
-    virtues: 'أمين الأمة، أحد العشرة المبشرين بالجنة، قائد عسكري بارز.',
+    appearance: 'كَانَ رَجُلاً نَحِيْفاً، مَعْرُوْقَ الوَجْهِ، خَفِيْفَ اللِّحْيَةِ، طُوَالاً، أَحْنَى، أَثْرَمَ الثَّنِيَّتَيْنِ. وَكَانَ يَخْضِبُ بِالحِنَّاءِ وَالكَتَمِ، وَكَانَ لَهُ عَقِيْصَتَانِ.',
+    virtues: 'أَحَدُ السَّابِقِيْنَ الأَوَّلِيْنَ، وَمَنْ عَزَمَ الصِّدِّيْقُ عَلَى تَوْلِيَتِهِ الخِلاَفَةَ، وَأَشَارَ بِهِ يَوْمَ السَّقِيْفَةِ؛ لِكَمَالِ أَهْلِيَّتِهِ عِنْدَ أَبِي بَكْرٍ. شَهِدَ لَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِالجَنَّةِ، وَسَمَّاهُ: أَمِيْنَ الأُمَّةِ، وَمَنَاقِبُهُ شَهِيْرَةٌ جَمَّةٌ.',
     picture: null,
-    titles: ['the-ten-promised-paradise', 'companion', 'amin-al-ummah'],
+    // al-sabiqoon from the entry's own "أَحَدُ السَّابِقِيْنَ الأَوَّلِيْنَ".
+    // the-ten-promised-paradise rests on the entry's "شَهِدَ لَهُ النَّبِيُّ بِالجَنَّةِ";
+    // it never uses the phrase العشرة, so that title still wants its own source.
+    titles: ['the-ten-promised-paradise', 'companion', 'amin-al-ummah', 'al-sabiqoon'],
     ayat: [
       { surah: 9, ayah: 100 }, // التوبة: 100 - "والسابقون الأولون من المهاجرين..." (وهو من السابقين)
     ]

@@ -2,8 +2,9 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
 /**
- * Public, reviewed evidence for graph edges touching a person. Relationship
- * identity mirrors Neo4j: source person slug + relationship type + target slug.
+ * Evidence for graph edges touching a person, at any review status
+ * (docs/adr/0008-separate-review-from-visibility.md). Relationship identity
+ * mirrors Neo4j: subject slug + relationship type + related slug.
  */
 export async function GET(request: Request) {
   const person = new URL(request.url).searchParams.get('person');
@@ -13,15 +14,15 @@ export async function GET(request: Request) {
   }
 
   try {
-    const claims = await prisma.relationshipClaim.findMany({
+    const claims = await prisma.historicalClaim.findMany({
       where: {
-        reviewStatus: 'PUBLISHED',
+        relationshipType: { not: null },
         OR: [
-          { sourcePersonSlug: person },
-          { targetPersonSlug: person },
+          { subjectSlug: person },
+          { relatedSubjectSlug: person },
         ],
       },
-      include: { source: true },
+      include: { citations: { include: { source: true } } },
       orderBy: { updatedAt: 'desc' },
     });
 

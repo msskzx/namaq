@@ -1,5 +1,44 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: var(--font-amiri), ui-serif, Georgia, serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  /*
+   * Amiri's letters occupy less of the em than a UI sans does, so it reads a
+   * size smaller than the number suggests. The whole type scale moves up about
+   * an eighth to compensate. Spacing tokens are left alone: this is a type
+   * correction, not a larger layout.
+   */
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-base: 1.125rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.4375rem;
+  --text-2xl: 1.6875rem;
+  --text-3xl: 2.125rem;
+  --text-4xl: 2.5rem;
+  --text-5xl: 3.375rem;
+  --text-6xl: 4.25rem;
+}
+
+/*
+ * next/font defines --font-amiri on the body element, not on :root, so the body
+ * names it directly rather than going through the theme token.
+ */
+body {
+  font-family: var(--font-amiri), ui-serif, Georgia, serif;
+}
+
+/*
+ * Vocalized Arabic needs room above the line or the tashkeel collides with the
+ * descenders of the line above; the printed editions and Shamela both set
+ * roughly double leading.
+ */
+.arabic-source {
+  line-height: 2;
+}
+
 @keyframes fade-in-down {
   from {
     opacity: 0;
