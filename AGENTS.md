@@ -103,6 +103,13 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   change; skipping this leaves ranks/layout stale relative to the graph
   they're supposed to describe.
 
+## Data pipelines
+
+- [docs/data-pipelines.md](docs/data-pipelines.md) describes how data reaches
+  the app: which seed files are wired in, which are dormant, how history
+  batches import, and which syncs are one-way. Read it before authoring or
+  applying a canonical change; two paths that look live are not.
+
 ## Historical evidence data
 
 - Curated historical records live in `data/history/batches/<batch>/`, separate
