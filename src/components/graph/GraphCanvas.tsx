@@ -985,14 +985,16 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
       {pathname === '/graphs' && (
         <div className={`${FLOATING_OVER_CANVAS} ${language === 'ar' ? 'right-2' : 'left-2'}`}>{menuButton}</div>
       )}
-      <Button
-        size="icon"
-        onClick={() => setIsFullscreen(true)}
-        aria-label={t.graph.fullscreen}
-        className={`${FLOATING_OVER_CANVAS} ${language === 'ar' ? 'left-2' : 'right-2'}`}
-      >
-        <FontAwesomeIcon icon={faExpand} />
-      </Button>
+      {/* Fit graph travels with the view control in both scopes: it is how a
+          reader who has panned or zoomed away gets everything back on screen. */}
+      <div className={`${FLOATING_OVER_CANVAS} flex items-center gap-2 ${language === 'ar' ? 'left-2' : 'right-2'}`}>
+        <Button size="icon" onClick={() => fitToView(true)} aria-label={t.graph.fitGraph}>
+          <FontAwesomeIcon icon={faMagnifyingGlassMinus} />
+        </Button>
+        <Button size="icon" onClick={() => setIsFullscreen(true)} aria-label={t.graph.fullscreen}>
+          <FontAwesomeIcon icon={faExpand} />
+        </Button>
+      </div>
       {graphCanvas()}
     </div>
   );

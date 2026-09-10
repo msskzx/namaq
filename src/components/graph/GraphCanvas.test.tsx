@@ -587,6 +587,14 @@ it('seeds its exploration into the page URL in either scope', async () => {
   expect(params().getAll('expand')).toContain(`person:${root}:ANCESTORS`);
 });
 
+it.each([true, false])('offers Fit graph whether or not it fills the screen (%s)', async (defaultFullscreen) => {
+  nav.setUrl(`/people/${root}`);
+  mount({ defaultFullscreen });
+  await waitFor(() => expect(graph()).toContain('father'));
+
+  expect(screen.getByRole('button', { name: 'Fit graph' })).toBeTruthy();
+});
+
 it('gives an embedded graph the workspace controls when it fills the screen', async () => {
   nav.setUrl(`/people/${root}`);
   mount({ defaultFullscreen: false });
