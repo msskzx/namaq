@@ -112,17 +112,17 @@ function PersonDetailPage() {
             <GraphCanvas chrome="embedded" targetSlug={slug} />
           </div>
 
-          <ClaimEvidence
-            title={language === 'ar' ? 'أدلة العلاقات' : 'Relationship evidence'}
-            claims={relationshipClaims || []}
-            relationshipClaims
-          />
-
           <AyatGroup ayat={person.ayat || []} />
 
           <BattleParticipationTimeline participations={person.participations || []} />
 
           <ClaimEvidence title={language === 'ar' ? 'المصادر والملاحظات التاريخية' : 'Sources & historical notes'} claims={person.claims || []} />
+
+          <ClaimEvidence
+            title={language === 'ar' ? 'أدلة العلاقات' : 'Relationship evidence'}
+            claims={relationshipClaims || []}
+            relationshipClaims
+          />
 
         </div>
       </div>
