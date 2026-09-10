@@ -677,7 +677,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
     <aside dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4 dark:border-amber-700 dark:bg-gray-800">
       <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode ? (selectedPreview?.fullName ?? selectedNode.label) : t.graph.globalRelationships}</h2>
       {isSelectedPerson && selectedPreview && selectedPreview.titles.length > 0 && (
-        <div className="my-2 flex flex-wrap gap-2">
+        <div className="my-4 flex flex-wrap gap-2">
           {selectedPreview.titles.map(title => (
             <Badge key={title.slug} href={`/people?title=${title.slug}`} text={title.name} color="indigo" size="sm" />
           ))}
