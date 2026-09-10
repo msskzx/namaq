@@ -668,7 +668,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
     <aside dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4 dark:border-amber-700 dark:bg-gray-800">
       <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode ? (selectedPreview?.fullName ?? selectedNode.label) : t.graph.globalRelationships}</h2>
       {isSelectedPerson && selectedPreview && selectedPreview.titles.length > 0 && (
-        <div className="mt-1 flex flex-wrap gap-2">
+        <div className="my-2 flex flex-wrap gap-2">
           {selectedPreview.titles.map(title => (
             <Badge key={title.slug} href={`/people?title=${title.slug}`} text={title.name} color="indigo" size="sm" />
           ))}
@@ -869,9 +869,6 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto p-3">
         <div className="mb-2 flex items-center gap-2">
           {menuButton}
-          <Button size="icon" onClick={() => setIsFullscreen(false)} aria-label={t.graph.closeFullscreen}>
-            <FontAwesomeIcon icon={faCompress} />
-          </Button>
           <p className="flex-1 truncate text-sm text-gray-600 dark:text-gray-300" aria-live="polite">{graphSummary}</p>
           <Button size="icon" onClick={() => setPanelExpanded(false)} aria-label={t.graph.closeSearch}>
             <FontAwesomeIcon icon={faXmark} />
@@ -934,14 +931,14 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
       // panel, which sits lower so the graph can fill the screen behind it.
       <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="relative z-[100]">
         <div className="fixed inset-0 z-0 bg-gray-50 dark:bg-gray-900" role="region" aria-label={t.graph.interactiveGraph}>
-          <Button
-            size="icon"
-            onClick={() => fitToView(true)}
-            aria-label={t.graph.fitGraph}
-            className={`${FLOATING_OVER_CANVAS} ${language === 'ar' ? 'left-2' : 'right-2'}`}
-          >
-            <FontAwesomeIcon icon={faMagnifyingGlassMinus} />
-          </Button>
+          <div className={`${FLOATING_OVER_CANVAS} flex items-center gap-2 ${language === 'ar' ? 'left-2' : 'right-2'}`}>
+            <Button size="icon" onClick={() => fitToView(true)} aria-label={t.graph.fitGraph}>
+              <FontAwesomeIcon icon={faMagnifyingGlassMinus} />
+            </Button>
+            <Button size="icon" onClick={() => setIsFullscreen(false)} aria-label={t.graph.closeFullscreen}>
+              <FontAwesomeIcon icon={faCompress} />
+            </Button>
+          </div>
           {graphCanvas(viewportSize)}
         </div>
         <div
