@@ -257,8 +257,8 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
     );
   }, [visibleGraph]);
 
-  // Embedded (isFullscreen false) graphs only: the workspace has its own,
-  // separate camera effects below (Q2/Q6 in docs/graph-layout-plan.md).
+  // Out of fullscreen only: filling the screen has its own, separate camera
+  // effects below (Q2/Q6 in docs/graph-layout-plan.md).
   // Priority order matters here -- selected, then focused, then default --
   // resolved as sequential lookups rather than one `.find` with all three
   // ORed together, which picked whichever matched first in array order
@@ -277,9 +277,9 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
     return () => clearTimeout(timer);
   }, [isFullscreen, graphData, selectedSlug, focusSlug, targetSlug]);
   // Only runs when nothing above is already going to center on a specific
-  // node (embedded graphs), or never automatically at all (the workspace,
-  // which only ever fits via the explicit Fit graph button or its own
-  // initial/reset framing effect below -- see onEngineStop in graphCanvas).
+  // node, or never automatically at all in fullscreen, which only ever fits
+  // via the explicit Fit graph button or its own initial/reset framing effect
+  // below -- see onEngineStop in graphCanvas.
   const hasFocusTarget = Boolean(selectedSlug || focusSlug || graphData?.nodes.some(node => node.slug === targetSlug));
   // Every visible subject now has a fixed, precomputed position (see
   // docs/adr/0005-use-a-precomputed-global-graph-map.md) -- the previous
@@ -310,9 +310,6 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
   // own switch moves them to the whole exploration (rule 1 of
   // docs/graph-exploration-review-plan.md). Nothing changes scope on its own.
   const [scope, setScope] = useState<ControlScope>('selected');
-  // The embedded profile graph has no selection model of its own, so its
-  // switches stay whole-view.
-  const activeScope: ControlScope = scope;
   const localRelations = useMemo(() => {
     if (!selectedSubjectId) return new Set<string>();
     return new Set(
@@ -406,7 +403,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
   }, [exploration.caps, searchParams]);
 
   const toggleRelationInScope = (type: string) => {
-    if (activeScope !== 'selected') {
+    if (scope !== 'selected') {
       toggleRelation(type);
       return;
     }
@@ -420,7 +417,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
     updateParams({ filter: [...next] });
   };
   const setRelationsInScope = (types: string[], show: boolean) => {
-    if (activeScope === 'selected') {
+    if (scope === 'selected') {
       if (!selectedSubjectId) return;
       const tokens = types.map(type => formatExpandParam({ subject: selectedSubjectId, relation: type as RelationType }));
       const next = show
@@ -507,7 +504,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
 
   // Header bar height (p-3 + text line) the canvas sits below in fullscreen.
 
-  // The workspace shell's canvas always fills the whole viewport, with the
+  // The fullscreen canvas always fills the whole viewport, with the
   // panel floating on top of it (see the isFullscreen return below) rather
   // than sharing space via flex -- same reasoning as fullscreenSize above:
   // GraphSurface/ForceGraph2D only measures its box once at mount and never
@@ -764,7 +761,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
 
       <RelationFilterPanel
         types={relationTypesPresent}
-        includedRelations={activeScope === 'selected' ? localRelations : includedRelations}
+        includedRelations={scope === 'selected' ? localRelations : includedRelations}
         onToggle={toggleRelationInScope}
         onToggleAll={toggleAllRelations}
         onToggleGroup={toggleGroupRelations}
@@ -774,7 +771,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
         language={language}
         scope={scope}
         onScopeChange={setScope}
-        disabled={activeScope === 'selected' && !selectedSubjectId}
+        disabled={scope === 'selected' && !selectedSubjectId}
         kindFilters={{ kinds: kindsUniverse, included: includedKinds, label: kindLabel, color: kindColor, onToggle: toggleKind }}
         statusFilters={isFullscreen && includedKinds.has('battle') ? {
           choices: PARTICIPATION_STATUS_CHOICES,
@@ -804,7 +801,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
       highlightSlug={selectedSlug ?? undefined}
       linkLabel={linkTooltip}
       onNodeClick={(node) => updateParams({ selected: node.slug })}
-      // The workspace never auto-fits on engine settle -- with every
+      // Fullscreen never auto-fits on engine settle -- with every
       // position fixed and no live simulation (Phase two), "settle" is
       // immediate and carries no meaning worth reacting to; its own
       // initial/reset framing effect above (and the explicit Fit graph
@@ -816,52 +813,50 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
   const nodesLabelText = (t.graph.nodesLabels as Record<string, string>)[nodesLabel] ?? nodesLabel;
   const graphSummary = visibleGraph ? t.graph.graphSummary(visibleGraph.nodes.length, nodesLabelText, visibleGraph.links.length) : t.graph.noGraphData;
 
-  // /graphs itself: a permanent, viewport-filling workspace rather than a
-  // scrollable page -- AppChrome (src/components/common/AppChrome.tsx) omits
-  // NavBar/Footer for this route, so the Menu below is the only way back to
-  // the rest of the site. The embedded profile/battle graphs (isFullscreen
-  // false) never reach this branch and keep their existing inline-card +
-  // isFullscreen-toggle behavior untouched below.
-  if (isFullscreen) {
-    const menuButton = (
-      <div className="relative" ref={menuRef}>
-        <Button size="icon" onClick={() => setMenuOpen(open => !open)} aria-pressed={menuOpen} aria-label={menuOpen ? t.graph.closeMenu : t.graph.openMenu}>
-          <FontAwesomeIcon icon={faBars} />
-        </Button>
-        {menuOpen && (
-          // Anchored to the viewport, not to the button: the panel around it
-          // scrolls and hides its overflow, and it sits at the bottom of the
-          // screen when collapsed, so a dropdown opening downwards from the
-          // button lands outside the screen with no way to reach it.
-          <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="fixed inset-x-3 bottom-3 z-[70] max-h-[70dvh] overflow-y-auto rounded-lg border border-amber-400 bg-gray-50 p-3 shadow-lg lg:inset-x-auto lg:bottom-auto lg:top-14 lg:start-3 lg:w-64 lg:max-h-[80dvh] dark:bg-gray-950">
-            <ul className="flex flex-col gap-1">
-              {navLinks.map(link => (
-                <li key={link.href}>
-                  <Link href={link.href} onClick={() => setMenuOpen(false)} className="block rounded px-2 py-1 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-800">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-              <li>
-                <Link href="/about" onClick={() => setMenuOpen(false)} className="block rounded px-2 py-1 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-800">
-                  {t.about}
+  const menuButton = (
+    <div className="relative" ref={menuRef}>
+      <Button size="icon" onClick={() => setMenuOpen(open => !open)} aria-pressed={menuOpen} aria-label={menuOpen ? t.graph.closeMenu : t.graph.openMenu}>
+        <FontAwesomeIcon icon={faBars} />
+      </Button>
+      {menuOpen && (
+        // Anchored to the viewport, not to the button: the panel around it
+        // scrolls and hides its overflow, and it sits at the bottom of the
+        // screen when collapsed, so a dropdown opening downwards from the
+        // button lands outside the screen with no way to reach it.
+        <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="fixed inset-x-3 bottom-3 z-[70] max-h-[70dvh] overflow-y-auto rounded-lg border border-amber-400 bg-gray-50 p-3 shadow-lg lg:inset-x-auto lg:bottom-auto lg:top-14 lg:start-3 lg:w-64 lg:max-h-[80dvh] dark:bg-gray-950">
+          <ul className="flex flex-col gap-1">
+            {navLinks.map(link => (
+              <li key={link.href}>
+                <Link href={link.href} onClick={() => setMenuOpen(false)} className="block rounded px-2 py-1 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-800">
+                  {link.label}
                 </Link>
               </li>
-              <li>
-                <Link href="/privacy" onClick={() => setMenuOpen(false)} className="block rounded px-2 py-1 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-800">
-                  {language === 'ar' ? 'سياسة الخصوصية' : 'Privacy Policy'}
-                </Link>
-              </li>
-            </ul>
-            <div className="mt-3 flex flex-col gap-2 border-t border-amber-400 pt-3">
-              <LanguageSwitcher />
-              <ThemeSwitcher />
-            </div>
+            ))}
+            <li>
+              <Link href="/about" onClick={() => setMenuOpen(false)} className="block rounded px-2 py-1 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-800">
+                {t.about}
+              </Link>
+            </li>
+            <li>
+              <Link href="/privacy" onClick={() => setMenuOpen(false)} className="block rounded px-2 py-1 text-sm text-gray-800 hover:bg-amber-100 dark:text-gray-100 dark:hover:bg-gray-800">
+                {language === 'ar' ? 'سياسة الخصوصية' : 'Privacy Policy'}
+              </Link>
+            </li>
+          </ul>
+          <div className="mt-3 flex flex-col gap-2 border-t border-amber-400 pt-3">
+            <LanguageSwitcher />
+            <ThemeSwitcher />
           </div>
-        )}
-      </div>
-    );
+        </div>
+      )}
+    </div>
+  );
 
+  // Filling the viewport rather than sitting in a scrollable page. On /graphs,
+  // which opens this way, AppChrome (src/components/common/AppChrome.tsx) omits
+  // NavBar/Footer for the route, so the Menu below is the only way back to the
+  // rest of the site.
+  if (isFullscreen) {
     const panelContent = (
       // min-h-0 lets this shrink inside the sheet's flex column, which is what
       // makes it the scrolling element. Without it the content keeps its full
@@ -969,6 +964,13 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
       role="region"
       aria-label={t.graph.interactiveGraph}
     >
+      {/* AppChrome (src/components/common/AppChrome.tsx) omits NavBar/Footer on
+          /graphs, so out of fullscreen that route would otherwise offer no way
+          back to the site at all. A page that has its own navigation does not
+          need this. */}
+      {pathname === '/graphs' && (
+        <div className={`${FLOATING_OVER_CANVAS} ${language === 'ar' ? 'right-2' : 'left-2'}`}>{menuButton}</div>
+      )}
       <Button
         size="icon"
         onClick={() => setIsFullscreen(true)}

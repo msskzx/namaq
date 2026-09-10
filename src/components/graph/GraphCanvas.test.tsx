@@ -635,6 +635,18 @@ it('reaches the controls from a graph that did not start fullscreen', async () =
   await waitFor(() => expect(graph()).toContain('companion'));
 });
 
+it('keeps a way back to the site after leaving fullscreen on /graphs', async () => {
+  nav.setUrl('/graphs');
+  mount();
+  await screen.findByRole('button', { name: 'Start over' });
+
+  fireEvent.click(screen.getByRole('button', { name: 'Close fullscreen' }));
+
+  // The route has no NavBar of its own, so the Menu has to survive the exit.
+  fireEvent.click(await screen.findByRole('button', { name: 'Menu' }));
+  expect(screen.getByRole('link', { name: 'About' })).toBeTruthy();
+});
+
 it('leaves fullscreen again', async () => {
   nav.setUrl('/graphs');
   mount();
