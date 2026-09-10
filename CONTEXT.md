@@ -146,13 +146,40 @@ The complete entry about a historical subject in a particular work and edition,
 with its accompanying notes kept attributable to their authors. Different works
 can provide separate source accounts of the same subject.
 
+**Focal subject**:
+The historical subject whose source account defines the scope of a review batch.
+Supporting subjects and relationships may be included when its account requires
+them.
+
 **Review batch**:
-A group of proposed historical data changes and their evidence submitted together
-for the user's approval before synchronization to the databases.
+A group of proposed historical data changes and their evidence centered on one
+focal subject. It may include supporting subjects and relationships needed to
+make that subject's change coherent.
 
 **Review status**:
 The stage of editorial checking recorded for historical information, shown to
 readers independently of whether that information is publicly available.
+
+**Canonical historical record**:
+The subject value or relationship Namaq currently selects for presentation.
+New selections trace to historical claims even when other claims disagree.
+_Avoid_: Historical truth, source text
+
+**Legacy historical record**:
+Structured historical information retained from before source-backed authoring,
+with no recorded evidence and no claim of review until it is researched later.
+_Avoid_: Canonical evidence, verified data
+
+**Source-backed change**:
+An addition or change to a canonical historical record that identifies the
+historical claims and citations supporting it.
+_Avoid_: Sourced file, database edit
+
+**Evidence role**:
+How a cited passage bears on a historical claim: direct evidence, a transmitted
+report, a synthesis, or editorial analysis. It describes the passage, not the
+digital host or the work as a whole.
+_Avoid_: Source quality, website type
 
 ### People and search
 
