@@ -57,11 +57,14 @@ export default function Pagination({
       </Button>
 
       {showSelect ? (
-        <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+        <label className="flex items-center gap-2 text-xs text-gray-700 dark:text-gray-300">
           {selectLabel}
+          {/* Matches the outline button beside it: same border, padding and type
+              size, with the platform's own control chrome removed so the three
+              sit at one height. */}
           <select
             aria-label={selectLabel ?? (rightToLeft ? 'انتقل إلى صفحة' : 'Go to page')}
-            className="rounded border border-amber-400 bg-white px-2 py-1 text-sm text-gray-800 dark:bg-gray-950 dark:text-gray-100"
+            className="cursor-pointer appearance-none rounded border border-amber-400 bg-transparent px-2.5 py-1 text-center text-xs text-gray-800 transition hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800"
             value={page}
             onChange={(changed) => onChange(Number(changed.target.value))}
           >
