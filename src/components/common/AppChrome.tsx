@@ -1,19 +1,14 @@
 "use client";
 
 import React from 'react';
-import { usePathname } from 'next/navigation';
 import NavBar from './NavBar';
 import Footer from './Footer';
 
-// The graph workspace (/graphs) is a viewport-filling map-style page: it
-// carries its own Menu control for site navigation/settings, so it opts out
-// of the standard NavBar+Footer chrome entirely rather than squeezing a full
-// page layout under a fixed 72px navbar. Every other route keeps the normal
-// shell. Person-profile pages and battle pages embed their own graph views
-// separately and are unaffected -- this only matches the top-level page.
+// Every route keeps the same shell. /graphs used to opt out, being a
+// viewport-filling workspace with a Menu of its own, but a graph fills the
+// screen through a portal now (see GraphCanvas), so it covers this chrome
+// while it is open and leaves a normal page underneath when it is not.
 export default function AppChrome({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-  if (pathname === '/graphs') return <>{children}</>;
   return (
     <div className="min-h-screen flex flex-col">
       <NavBar />

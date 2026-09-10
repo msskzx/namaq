@@ -643,16 +643,19 @@ it('reaches the controls from a graph that did not start fullscreen', async () =
   await waitFor(() => expect(graph()).toContain('companion'));
 });
 
-it('keeps a way back to the site after leaving fullscreen on /graphs', async () => {
+it('carries its own Menu only while it covers the page chrome', async () => {
   nav.setUrl('/graphs');
   mount();
-  await screen.findByRole('button', { name: 'Start over' });
+
+  // Filling the screen hides the NavBar, so the graph offers navigation of its
+  // own; leaving it uncovers the page's, and a second Menu would just duplicate
+  // that (see src/components/common/AppChrome.tsx).
+  fireEvent.click(await screen.findByRole('button', { name: 'Menu' }));
+  expect(screen.getByRole('link', { name: 'About' })).toBeTruthy();
 
   fireEvent.click(screen.getByRole('button', { name: 'Close fullscreen' }));
 
-  // The route has no NavBar of its own, so the Menu has to survive the exit.
-  fireEvent.click(await screen.findByRole('button', { name: 'Menu' }));
-  expect(screen.getByRole('link', { name: 'About' })).toBeTruthy();
+  await waitFor(() => expect(screen.queryByRole('button', { name: 'Menu' })).toBeNull());
 });
 
 it('leaves fullscreen again', async () => {
