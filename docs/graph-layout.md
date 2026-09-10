@@ -162,5 +162,5 @@ skill.
 
 ## Follow-up: graph-only people are not searchable
 
-Discovered while applying Phase one, out of scope for this plan. Resolved in
-[the graph-only people search plan](graph-only-people-search-plan.md).
+Discovered while applying Phase one, out of scope here. Resolved in
+[graph-only people search](graph-only-people-search.md).

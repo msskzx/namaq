@@ -165,7 +165,7 @@ const GraphSurface = forwardRef<Methods, GraphSurfaceProps>(function GraphSurfac
         linkDirectionalArrowRelPos={0.9}
         // Every node already carries its fixed global position (x/y/fx/fy)
         // from the API -- no live layout simulation runs at all (see
-        // docs/graph-layout-plan.md's Q5/Phase two), and dragging a node
+        // docs/graph-layout.md's Q5/Phase two), and dragging a node
         // would only ever snap back to that same fixed spot regardless, so
         // it's disabled instead of allowing a gesture with no lasting effect.
         cooldownTicks={0}

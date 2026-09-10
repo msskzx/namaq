@@ -43,7 +43,7 @@ function accountLabel(account: AccountSummary) {
  * The complete account of a person in one work, one printed page at a time.
  * Book and page live in the URL so a citation can link straight to the passage
  * it cites and Back/Forward move through the reading, per
- * docs/data-quality-references-plan.md.
+ * docs/data-quality-references.md.
  */
 export default function SourceAccountReader({ slug }: SourceAccountReaderProps) {
   const { language } = useLanguage();

@@ -1,7 +1,7 @@
 # Exploration rules review
 
 Status: confirmed by the user. Initial code audit completed; see
-[implementation plan and handover](graph-exploration-implementation-plan.md). This document records decisions from
+[implementation plan and handover](graph-exploration-implementation.md). This document records decisions from
 the current review; it makes no claims about implementation compliance.
 
 ## Confirmed rules

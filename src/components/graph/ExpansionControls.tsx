@@ -21,7 +21,7 @@ const LINEAGE_ICON: Partial<Record<LineageActionId, typeof faUpLong>> = {
 
 // Paternal lineage keeps working from a saved URL; only its button is gone
 // while the action's future is undecided. See
-// docs/graph-exploration-implementation-plan.md.
+// docs/graph-exploration-implementation.md.
 const LINEAGE_BUTTONS: readonly LineageActionId[] = ['ANCESTORS', 'DESCENDANTS'];
 
 interface ExpansionControlsProps {

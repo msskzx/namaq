@@ -6,7 +6,7 @@
  *
  * `graphRank` (1 = most prominent) is only read here, never computed;
  * scripts/graph/computeGraphLayout.ts produces it. See
- * docs/graph-subject-search-plan.md for why it is the sole prominence signal.
+ * docs/graph-subject-search.md for why it is the sole prominence signal.
  * `kind` is absent from the candidate because nothing here ranks by it.
  */
 export type SubjectKind = 'person' | 'title' | 'battle' | 'event';

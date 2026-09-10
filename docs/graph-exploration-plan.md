@@ -1,6 +1,6 @@
 # Graph exploration design
 
-Current review: [Exploration rules review](graph-exploration-review-plan.md)
+Current review: [Exploration rules review](graph-exploration-review.md)
 records the confirmed rules and remaining questions from the docs-only review.
 Its confirmed decisions take precedence over conflicting historical proposals.
 
@@ -433,7 +433,7 @@ widths and in light/dark appearance. Application code has not been changed.
 
 ## Documentation during the interview
 
-The [stable graph layout follow-up](graph-layout-plan.md) examines movement
+The [stable graph layout follow-up](graph-layout.md) examines movement
 during selection and filtering after PR #33's implementation. It replaces
 nearby placement with one precomputed global map; other earlier commitments
 remain the baseline until that interview explicitly revises them.

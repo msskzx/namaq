@@ -304,11 +304,11 @@ describe('buildExploration', () => {
     );
   });
 
-  // Covers criteria 2 and 3 of docs/graph-subject-search-plan.md at this
+  // Covers criteria 2 and 3 of docs/graph-subject-search.md at this
   // layer: a subject picked from search becomes a root, and roots are visible
   // without any expansion. That path does not touch matchExpansionNeighbors,
   // so it is unaffected by the one-way-edge bug in
-  // docs/graph-expansion-controls-plan.md.
+  // docs/graph-expansion-controls.md.
   it('makes a non-person root visible with no expansion, and leaves its connection to the other root for a contribution to reveal', () => {
     const badr = subjectId('battle', 'badr');
     const crossKindEdges = [...edges, edge(muhammad, badr, 'PARTICIPATED_IN')];

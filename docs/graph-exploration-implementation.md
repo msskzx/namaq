@@ -1,7 +1,7 @@
 # Exploration implementation plan
 
 Status: implemented in five phases, one commit each, on top of the audited
-commit and a merge with main. The [exploration rules](graph-exploration-review-plan.md)
+commit and a merge with main. The [exploration rules](graph-exploration-review.md)
 are confirmed; this document records the audit they were built from, the build
 order, and what still needs a live check.
 

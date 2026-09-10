@@ -96,7 +96,7 @@ model Person {
 /// A historical work in one specific consulted edition. Bibliographic details
 /// that differ (editor, publisher, year) belong to separate rows, because a
 /// source account's identity includes its edition — see
-/// docs/data-quality-references-plan.md.
+/// docs/data-quality-references.md.
 model HistoricalSource {
   id              String   @id @default(cuid())
   slug            String   @unique

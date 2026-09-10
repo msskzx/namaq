@@ -20,7 +20,7 @@ Persist coordinates on every Neo4j subject, including subjects without a
 PostgreSQL row. Graph responses use Neo4j as their consistent coordinate source;
 retain the existing PostgreSQL metadata updates. This covers the complete graph
 without creating profile records solely for layout storage. Detailed camera
-and update behavior is recorded in the [layout plan](../graph-layout-plan.md).
+and update behavior is recorded in [graph layout](../graph-layout.md).
 
 Historical data updates are infrequent, so ordinary loads and refetches receive
 the latest saved positions. Special coordination with open explorations,

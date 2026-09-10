@@ -6,7 +6,7 @@ Historical data currently has three hand-authored paths.
 battles, events, and the Qur'an tables. **History batches** under
 `data/history/` hold the evidence about those subjects: source editions, the
 complete source accounts, claims and their citations
-([the plan](data-quality-references-plan.md)). **Graph seed files** under
+([data quality and references](data-quality-references.md)). **Graph seed files** under
 `neo4j/` hold graph-only people and person-to-person relationships.
 
 The first two write into PostgreSQL. Most shared graph data is then derived from
@@ -68,14 +68,94 @@ disagree without anything noticing.
 
 ## History batches to PostgreSQL
 
-A batch is a directory: `batch.json` for sources, accounts and claims, Markdown
-files for the source pages, and `summary.md` for review. `npm run history:extract`
-pulls an entry from a digital library into that shape.
+A batch lives in `data/history/batches/<batch>/`:
 
-`npm run history:validate` checks it. `npm run history:import` dry-runs, and
-`-- --apply` writes, but only when the files still hash to the revision recorded
-as approved. Writes upsert on an authoring key, so a partly failed import can be
-retried without duplicating anything.
+| Path | Holds |
+| --- | --- |
+| `batch.json` | Sources, accounts and claims |
+| `accounts/<subject>/NNN.md` | One printed page of the work's own text |
+| `accounts/<subject>/NNN.notes.md` | That page's editorial footnotes |
+| `summary.md` | The review summary, linking to the files above |
+
+The page files carry the author's text and the editor's notes separately so each
+stays attributable to whoever wrote it. Together with `batch.json` they hash to a
+revision, which is what approval is recorded against.
+
+### What batch.json holds
+
+Six record types, defined in `src/lib/history/batchSchema.ts`. Rows below name
+the required fields; every record also accepts optional bibliographic and
+locator fields.
+
+| Record | Identifies | Required fields |
+| --- | --- | --- |
+| Source | One edition of one work | `slug`, `title` |
+| Account | One subject's entry in one source | `sourceSlug`, `subjectKind`, `subjectSlug`, `extractionUrl`, `accessedAt`, `pages` |
+| Page | One printed page of an account | `sequence`, `bodyFile` |
+| Passage | One paragraph a citation can target | `anchor`, `excerpt` |
+| Claim | One assertion about a subject | `key`, `subjectKind`, `subjectSlug`, `assertion`, `citations` |
+| Citation | Where a claim is supported | `sourceSlug`, `extractionUrl`, `excerptArabic`, `accessedAt` |
+
+A source is the work and edition, not the site hosting it, so two editions of the
+same book are two sources. A claim carries `field` when it supports a recorded
+profile value, or `relationshipType` with a related subject when it supports an
+edge; a claim with neither is a biographical statement. A citation's
+`passageAnchor` must name a passage some page in the batch declares, which is
+what makes a citation link land on the cited text.
+
+### Extraction
+
+`npm run history:extract` reads Shamela's reading pages and writes one account
+into an existing batch. It takes `--book`, `--from`, `--to`, `--out`,
+`--subject-slug` and `--source-slug`, and optionally `--subject-kind`,
+`--start-anchor`, `--end-anchor`, `--notes-end-marker` and `--accessed-at`.
+
+From each page it takes the work's text out of the `.nass` element as anchored
+paragraphs, splits at the horizontal rule so the edition's footnotes land in the
+notes file, and reads the printed page number from the document title. The first
+and last pages of an entry are the only ones shared with a neighbouring entry, so
+the anchor options trim the body at either end and `--notes-end-marker` trims the
+notes, which run together in one block and cannot be cut by anchor.
+
+The extractor stops at the account. Sources, claims, citations, confidence and
+review status are authored by hand, and the batch must already exist with a
+source whose slug matches, so extraction cannot start a batch from nothing.
+
+```mermaid
+flowchart TB
+  shamela["Shamela reading pages"]
+  subgraph extracted["Written by history:extract"]
+    md["accounts/&lt;subject&gt;/NNN.md<br/>NNN.notes.md"]
+    accounts["batch.json: accounts<br/>pages and passages"]
+  end
+  subgraph byhand["Written by hand"]
+    sources["batch.json: sources"]
+    claims["batch.json: claims<br/>with their citations"]
+    summary["summary.md"]
+  end
+
+  shamela --> extracted
+  extracted --> validate["npm run history:validate"]
+  byhand --> validate
+  validate --> approval["approval recorded<br/>against the revision hash"]
+  approval -->|"npm run history:import -- --apply"| pg[("PostgreSQL")]
+```
+
+### Validate, approve, import
+
+`npm run history:validate` checks that every citation names a declared source,
+carries a working extraction link and an Arabic excerpt, and points at a passage
+some page declares. It reports every problem it finds rather than stopping at the
+first.
+
+`npm run history:import` dry-runs, and `-- --apply` writes, but only when the
+files still hash to the revision recorded as approved. Any edit after approval
+changes the hash and needs approving again. Approval permits publication and says
+nothing about whether the content was checked, which is what each claim's review
+status records ([review independent of visibility](adr/0008-separate-review-from-visibility.md)).
+
+Writes upsert on an authoring key, so a partly failed import can be retried
+without duplicating anything.
 
 Files are the source of truth here. The database holds a copy: change the files
 and re-import, never edit the evidence tables directly.

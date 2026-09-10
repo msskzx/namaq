@@ -4,7 +4,7 @@ status: accepted
 
 # Separate person expansion from connection visibility
 
-Review amendment: the [current exploration review](../graph-exploration-review-plan.md)
+Review amendment: the [current exploration review](../graph-exploration-review.md)
 revises unconditional connection visibility below. Nodes and relationships must
 respect the current filter state; searches and ordinary resets preserve those
 choices. Start over restores all filter defaults, including companionship off.

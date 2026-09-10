@@ -3,7 +3,7 @@
 Decision 6 stands, under the name Explore; see
 [ADR 0007](adr/0007-filters-choose-the-relationship-vocabulary.md).
 
-Review update: the [exploration rules review](graph-exploration-review-plan.md)
+Review update: the [exploration rules review](graph-exploration-review.md)
 supersedes decisions 5-8 wherever they remove individual subject-scoped choices,
 force choices into global scope, or hide connections between retained subjects.
 The corresponding implementation phases and acceptance criteria are historical
@@ -14,7 +14,7 @@ Status: implemented, phases one to five. Phases one and two shipped in
 continuation branch. The seed corrections are deployed; see
 [Data fixes](#data-fixes).
 
-Sibling of [historical subjects are searchable](graph-subject-search-plan.md),
+Sibling of [historical subjects are searchable](graph-subject-search.md),
 whose "Out of scope" note raised this.
 
 ## Objective

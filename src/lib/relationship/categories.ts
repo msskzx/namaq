@@ -89,7 +89,7 @@ const INVERSE_PAIR: Partial<Record<RelationType, RelationType>> = { ACCOMPANIED_
 // Deliberately separate from INVERSE_PAIR above, which decides which relation
 // governs a shared filter toggle. An entry there removes a type from the
 // Filters panel, so merging the two maps would silently collapse FATHER and
-// SON into one switch. See docs/graph-expansion-controls-plan.md.
+// SON into one switch. See docs/graph-expansion-controls.md.
 export const RECIPROCAL_INVERSES: Partial<Record<RelationType, readonly RelationType[]>> = {
   FATHER: ['SON', 'DAUGHTER'],
   MOTHER: ['SON', 'DAUGHTER'],

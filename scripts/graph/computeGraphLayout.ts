@@ -19,7 +19,7 @@ const strict = process.argv.includes('--strict');
 // approximates: a fixed average px-per-character at the same 12px font
 // size the live renderer uses. Some crossing edges and distant related
 // subjects from this approximation are an accepted trade-off (see
-// docs/graph-layout-plan.md) -- the goal is "accounts for label length",
+// docs/graph-layout.md) -- the goal is "accounts for label length",
 // not pixel-perfect parity with the canvas-measured live radius.
 const LABEL_FONT_SIZE = 12;
 const AVERAGE_CHAR_WIDTH_PX = 7;
@@ -133,7 +133,7 @@ async function main() {
       };
     });
 
-    // Every subject needs a usable position -- see docs/graph-layout-plan.md
+    // Every subject needs a usable position -- see docs/graph-layout.md
     // ("Validate complete, finite coordinates before writing"). A NaN/Infinity
     // here would mean a bug in the layout math, not a data gap, so it aborts
     // the whole run (dry run included) rather than writing a partial map.
@@ -172,7 +172,7 @@ async function main() {
         }
       });
       // PostgreSQL and Neo4j writes are separate systems/transactions (see
-      // docs/graph-layout-plan.md): either can fail independently, and a
+      // docs/graph-layout.md): either can fail independently, and a
       // rerun of this same command is how you retry -- there is no combined
       // rollback across the two databases.
       await prisma.$transaction(updates);

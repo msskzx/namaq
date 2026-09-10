@@ -4,7 +4,7 @@ import { getSession } from '@/lib/neo4j';
 import { filterAndRankSubjects, type SubjectKind } from '@/lib/subjectSearch';
 
 // The workspace searches the graph; /api/people/suggest searches profiles.
-// See docs/graph-subject-search-plan.md for why these stayed two endpoints.
+// See docs/graph-subject-search.md for why these stayed two endpoints.
 const KIND_BY_LABEL: Record<string, SubjectKind> = {
   Person: 'person',
   Title: 'title',

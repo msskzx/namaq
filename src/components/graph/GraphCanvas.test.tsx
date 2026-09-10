@@ -32,7 +32,7 @@ vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ 
 vi.mock('./GraphSearch', () => ({ default: () => null }));
 // A ref-forwarding stub exposing the same camera methods GraphCanvas drives
 // (centerAt/zoom/zoomToFit/graph2ScreenCoords), so the camera effects in
-// GraphCanvas.tsx (docs/graph-layout-plan.md's Phase three/four) are
+// GraphCanvas.tsx (docs/graph-layout.md's Phase three/four) are
 // observable directly instead of mocked away entirely -- graph2ScreenCoords
 // assumes zoom 1 and no camera offset (screen coords == world coords),
 // which is enough to distinguish "on screen" from "nowhere near it".
@@ -548,7 +548,7 @@ it('toggles the family group without removing title filters', async () => {
 
 // The retired `relation` hide-list cannot be re-read as contributions, so an
 // old link opens its subject with nothing on. See the legacy limitation in
-// docs/graph-exploration-implementation-plan.md.
+// docs/graph-exploration-implementation.md.
 it('opens an old exclusion link on its subject alone, with filters off', async () => {
   nav.setUrl(`/graphs?subject=person:${root}&relation=FATHER`);
   mount();

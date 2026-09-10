@@ -58,7 +58,7 @@ const relationName = (value: string) => value.toLowerCase().replaceAll('_', ' ')
 
 // Companionship keeps whatever state its own switch left it in: it connects
 // hundreds of people at once, so a bulk action that swept it along would bury
-// the exploration (rule 3 of docs/graph-exploration-review-plan.md).
+// the exploration (rule 3 of docs/graph-exploration-review.md).
 const isBulkRelation = (type: string) => governingRelationType(type) !== 'COMPANION_OF';
 
 // One row of buttons per group in the selected-subject panel, each divided
@@ -155,7 +155,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
     isSelectedPerson && selectedNode ? `/api/people/${selectedNode.slug}/preview` : null,
     fetcher
   );
-  // This fetch 404s for a graph-only person (docs/graph-only-people-search-plan.md);
+  // This fetch 404s for a graph-only person (docs/graph-only-people-search.md);
   // optimistic (true) until then, so the link doesn't stay hidden for the
   // common case while the fetch is still in flight.
   const selectedPersonHasProfile = !isSelectedPerson || !selectedPreviewError;
@@ -258,7 +258,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
   }, [visibleGraph]);
 
   // Out of fullscreen only: filling the screen has its own, separate camera
-  // effects below (Q2/Q6 in docs/graph-layout-plan.md).
+  // effects below (Q2/Q6 in docs/graph-layout.md).
   // Priority order matters here -- selected, then focused, then default --
   // resolved as sequential lookups rather than one `.find` with all three
   // ORed together, which picked whichever matched first in array order
@@ -273,7 +273,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
     // Framing the opening view fits it, here as in fullscreen: its subject's
     // line runs far past what a fixed zoom shows, and cropping to the subject
     // alone leaves a graph that looks like it holds one node (Q6 of
-    // docs/graph-layout-plan.md).
+    // docs/graph-layout.md).
     const framesOpeningView = !focusSlug && (!selectedSlug || selectedSlug === targetSlug);
     const timer = setTimeout(() => {
       if (framesOpeningView) {
@@ -317,7 +317,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
   const expandParams = useMemo(() => searchParams?.getAll('expand') ?? [], [searchParams]);
   // Relationship choices apply to the selected subject by default; the panel's
   // own switch moves them to the whole exploration (rule 1 of
-  // docs/graph-exploration-review-plan.md). Nothing changes scope on its own.
+  // docs/graph-exploration-review.md). Nothing changes scope on its own.
   const [scope, setScope] = useState<ControlScope>('selected');
   const localRelations = useMemo(() => {
     if (!selectedSubjectId) return new Set<string>();
@@ -377,7 +377,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
   };
 
   // A fresh visit opens on the same family Start over installs (rule 11 of
-  // docs/graph-exploration-review-plan.md), seeded as the root's own choices
+  // docs/graph-exploration-review.md), seeded as the root's own choices
   // so no global filter has to be on. A shared or refreshed URL brings its
   // own contributions and is left alone.
   const rootSeededRef = useRef(false);
@@ -449,7 +449,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
   const toggleCompanionTitle = () => updateParams({ showCompanionTitle: showCompanionTitle ? null : '1' });
   // Absent status choices mean every status, so the panel opens fully on the
   // first time battles are enabled and keeps the user's later choices until
-  // Start over (rule 6 of docs/graph-exploration-review-plan.md).
+  // Start over (rule 6 of docs/graph-exploration-review.md).
   const activeStatuses = explorationInput.statuses ?? [...PARTICIPATION_STATUS_CHOICES];
   const toggleStatus = (status: string) => {
     const next = activeStatuses.includes(status) ? activeStatuses.filter(item => item !== status) : [...activeStatuses, status];
@@ -527,7 +527,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
     return () => window.removeEventListener('resize', updateSize);
   }, [isFullscreen]);
 
-  // Show additions (docs/graph-layout-plan.md Q4/Q7): tracks which subjects
+  // Show additions (docs/graph-layout.md Q4/Q7): tracks which subjects
   // just became visible -- from a local expansion, a global filter, a
   // search-added root, or Show full graph alike, unlike the narrower
   // filter-only growth feedback this replaces -- and which already-visible
@@ -574,7 +574,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
     setShowAdditions(null);
   }, [showAdditions]);
 
-  // Workspace camera (isFullscreen only; docs/graph-layout-plan.md Q2/Q6).
+  // Workspace camera (isFullscreen only; docs/graph-layout.md Q2/Q6).
   // `panelRef` measures the floating panel/sheet's actual on-screen rect
   // (see the isFullscreen return below) so a selection hidden behind it
   // still counts as needing a reveal, exactly like one that's simply
@@ -598,7 +598,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
     // A reader who followed a link to a particular subject gets it centred at a
     // readable zoom. The opening view is different: its selection is the graph's
     // own subject, and what it is there to show is that subject's whole line,
-    // which no fixed zoom frames -- see Q6 of docs/graph-layout-plan.md.
+    // which no fixed zoom frames -- see Q6 of docs/graph-layout.md.
     const framesOpeningView = !selectedSlug || selectedSlug === targetSlug;
     const node = selectedSlug ? graphData.nodes.find(n => n.slug === selectedSlug) : undefined;
     const timer = setTimeout(() => {

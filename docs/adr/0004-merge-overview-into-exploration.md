@@ -4,7 +4,7 @@ status: accepted
 
 # Merge Overview into a single exploration workspace
 
-Current design review: [Exploration rules review](../graph-exploration-review-plan.md) supersedes conflicting
+Current design review: [Exploration rules review](../graph-exploration-review.md) supersedes conflicting
 local/global scope, filter, search-enablement, reset, and removal behavior below.
 The rules are confirmed but not yet implemented; older implementation
 descriptions are not evidence of compliance.

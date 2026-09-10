@@ -53,7 +53,7 @@ export default function RelationFilterPanel({ types, includedRelations, onToggle
 
   if (types.length === 0) return null;
   // Companionship sits outside the bulk switches, so it neither turns them on
-  // nor holds them off (rule 3 of docs/graph-exploration-review-plan.md).
+  // nor holds them off (rule 3 of docs/graph-exploration-review.md).
   const inBulk = (type: string) => governingRelationType(type) !== 'COMPANION_OF';
   const allVisible = types.filter(inBulk).every(type => includedRelations.has(type));
 

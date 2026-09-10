@@ -6,7 +6,7 @@ import { RelationType, StoredEdge, SubjectId, subjectId } from './types';
 // What opening any graph installs, workspace or profile: the subject's direct
 // relations plus its line in both directions -- Explore, Ancestors and
 // Descendants, without the reader pressing them (rule 11 of
-// docs/graph-exploration-review-plan.md). One rule serves both scopes, per
+// docs/graph-exploration-review.md). One rule serves both scopes, per
 // docs/adr/0002-share-relationship-semantics-across-scopes.md.
 //
 // Companionship is left out, as its own switch governs it
@@ -44,7 +44,7 @@ function pruneOrphanedBranches(input: ExplorationInput, edges: StoredEdge[]): Ex
 
 /**
  * Drops the search contribution alone. Rule 5 of
- * docs/graph-exploration-review-plan.md keeps the subject's own expansions
+ * docs/graph-exploration-review.md keeps the subject's own expansions
  * active until they are explicitly collapsed, so nothing is pruned here.
  */
 export function removeSearchRoot(input: ExplorationInput, subject: SubjectId): ExplorationInput {

@@ -73,4 +73,4 @@ is no next-global-hop button; use local expansion or lineage actions to go
 further deliberately.
 
 These are agreed design rules. Implementation compliance is still pending the
-[docs-first exploration review](../graph-exploration-review-plan.md).
+[docs-first exploration review](../graph-exploration-review.md).

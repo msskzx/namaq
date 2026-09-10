@@ -87,7 +87,7 @@ export default function GraphSearch() {
   }, [searchParams]);
   // A result of a switched-off kind is shown and explained rather than added:
   // adding it would silently turn that kind on (rule 14 of
-  // docs/graph-exploration-review-plan.md). The Companion title node has its
+  // docs/graph-exploration-review.md). The Companion title node has its
   // own switch and is treated the same way.
   const isAddable = (suggestion: Suggestion) =>
     activeKinds.has(suggestion.kind) &&
