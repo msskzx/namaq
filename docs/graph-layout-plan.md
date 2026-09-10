@@ -25,7 +25,7 @@ and the single-workspace model remain the baseline.
 | Q3: data changes | Recalculate after historical data updates, reviewing the result before applying it. Positions may change through these updates and remain fixed between them. |
 | Q4: additions | Expansion and global filtering preserve the camera. An explicit Show additions action frames the additions and their connecting subjects. Fit graph frames the entire visible exploration. |
 | Q5: dragging | Disable individual node dragging; keep graph pan and zoom. |
-| Q6: navigation | Initial loads, shared links, and refreshes frame the selection at a readable zoom, or fit the exploration when nothing is selected. Start over reframes its reset graph. Back/Forward retains the camera, with Q2's minimal pan for an obscured restored selection. |
+| Q6: navigation | A link naming a subject other than the graph's own frames that selection at a readable zoom. The opening view is fitted instead, as is any load with nothing selected: its selection is the graph's own subject and what it exists to show is that subject's whole line, which no fixed zoom frames. Start over reframes its reset graph. Back/Forward retains the camera, with Q2's minimal pan for an obscured restored selection. |
 | Q7: feedback lifetime | Show additions targets the latest completed action's additions. Keep it available until used, dismissed, or the visible subjects change again. It does not expire after five seconds. |
 | Q8: update handling | Historical data changes infrequently. Use ordinary loading/refetching to receive saved coordinates; add no special handling for recalculation during an open exploration. |
 

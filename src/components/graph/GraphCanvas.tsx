@@ -586,9 +586,14 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
     if (!(!hasFramedRef.current || pendingResetRef.current)) return;
     hasFramedRef.current = true;
     pendingResetRef.current = false;
+    // A reader who followed a link to a particular subject gets it centred at a
+    // readable zoom. The opening view is different: its selection is the graph's
+    // own subject, and what it is there to show is that subject's whole line,
+    // which no fixed zoom frames -- see Q6 of docs/graph-layout-plan.md.
+    const framesOpeningView = !selectedSlug || selectedSlug === targetSlug;
     const node = selectedSlug ? graphData.nodes.find(n => n.slug === selectedSlug) : undefined;
     const timer = setTimeout(() => {
-      if (node && node.x != null && node.y != null) {
+      if (!framesOpeningView && node && node.x != null && node.y != null) {
         fgRef.current?.centerAt(node.x, node.y, 700);
         fgRef.current?.zoom(3, 700);
       } else {
@@ -596,7 +601,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
       }
     }, 300);
     return () => clearTimeout(timer);
-  }, [isFullscreen, graphData, selectedSlug]);
+  }, [isFullscreen, graphData, selectedSlug, targetSlug]);
 
   // Ordinary selection changes (including browser Back/Forward, which never
   // sets pendingResetRef): pan only far enough to reveal the selection when
@@ -924,8 +929,11 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
     );
 
     const fullscreenView = (
-      <div dir={language === 'ar' ? 'rtl' : 'ltr'}>
-        <div className="fixed inset-0 z-[100] bg-gray-50 dark:bg-gray-900" role="region" aria-label={t.graph.interactiveGraph}>
+      // The stacking context that lifts the whole view above the page belongs
+      // here, on the wrapper. Putting it on the canvas layer instead buried the
+      // panel, which sits lower so the graph can fill the screen behind it.
+      <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="relative z-[100]">
+        <div className="fixed inset-0 z-0 bg-gray-50 dark:bg-gray-900" role="region" aria-label={t.graph.interactiveGraph}>
           <Button
             size="icon"
             onClick={() => fitToView(true)}
