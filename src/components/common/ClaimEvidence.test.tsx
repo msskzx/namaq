@@ -191,7 +191,7 @@ describe('ClaimEvidence', () => {
     expect(screen.queryByText(/^Supports:/)).toBeNull();
   });
 
-  it('links a citation to the page in our own reader, keeping the host as a check', () => {
+  it('links a citation to the page in our own reader without repeating the host link', () => {
     const cited = claim();
     cited.citations[0].passage = { page: { accountId: 'acct-1', sequence: 7 } } as never;
 
@@ -199,8 +199,7 @@ describe('ClaimEvidence', () => {
 
     expect(screen.getByText(/سير أعلام النبلاء/).closest('a')?.getAttribute('href'))
       .toBe('/people/abu-ubaydah-ibn-al-jarrah?book=acct-1&page=7');
-    // The host link is how a reader checks we transcribed the passage faithfully.
-    expect(screen.getByText('shamela').getAttribute('href')).toBe('https://shamela.ws/book/10906/1431');
+    expect(screen.queryByText('shamela')).toBeNull();
   });
 
   it('leaves the reference unlinked when no passage says which page it came from', () => {

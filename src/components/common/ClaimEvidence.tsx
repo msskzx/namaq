@@ -135,9 +135,6 @@ export default function ClaimEvidence({
                           ) : (
                             <span>{citationText(citation, language)}</span>
                           )}
-                          <a className="underline" href={citation.extractionUrl} target="_blank" rel="noreferrer">
-                            {citation.source.digitalHost ?? (language === 'ar' ? 'المصدر الرقمي' : 'Digital host')}
-                          </a>
                         </span>
                       </li>
                     ))}

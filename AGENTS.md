@@ -151,10 +151,12 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   **Approving for publication** records the current revision in `batch.json`'s
   approval block, which is what lets `npm run history:import -- --apply` write.
   It says the batch may be published and says nothing about anyone having read
-  it. **Marking reviewed** sets a claim's `reviewStatus`, one claim at a time,
-  after someone compares the assertion against the passage. A batch approved
-  for publication whose claims are all Not reviewed is a normal and honest
-  state, and the approval note should say so.
+  it. **Marking reviewed** sets every claim's `reviewStatus` after someone
+  compares the batch against its source. Only the user's explicit instruction
+  to “mark this batch as reviewed” authorizes `npm run history:review -- <batch
+  dir> --apply`; saying it was read or discussing corrections does not. A batch
+  approved for publication whose claims are all Not reviewed is a normal and
+  honest state, and the approval note should say so.
 - Record data at whatever review status is honest and let it be visible; review
   status never hides data (`docs/adr/0008-separate-review-from-visibility.md`).
   Leave an unknown structured value unset rather than inventing one.
@@ -167,6 +169,18 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   relation. A claim that names neither a field nor a relationship is rejected by
   `npm run history:validate`. The entry is already preserved page by page, so
   such a claim is a second copy of text rather than evidence.
+- One citation record holds one meaningful selection from one source account.
+  Page turns, extracted paragraph boundaries, and footnote placement do not
+  create citations: join fragments that belong to the same selection and use a
+  page range when it crosses printed pages. Mark omitted intervening text with
+  an ellipsis. Keep separate records only for genuinely distinct evidence, such
+  as competing reports; omit fragments that repeat support without adding
+  information. Prefer the shortest complete sentence or self-contained clause
+  that proves the value; never stop mid-word or mid-phrase. Include enough text
+  to make the support intelligible, but no material unrelated to the value.
+- Profile citations link to Namaq's source reader. Do not repeat a digital-host
+  link beside every citation; each reader page links to its corresponding host
+  page after the editor's footnotes.
 - Competing accounts are kept as separate attributed claims **only where the
   model holds the value they compete over**, such as two death years. A
   disagreement about something the app does not record stays in the source

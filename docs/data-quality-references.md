@@ -1,9 +1,8 @@
 # Data quality and references
 
 Status: implemented. The schema, authoring format, validator, importer, APIs
-and UI are built, and the Abu Ubaydah pilot is imported and serving. Its
-approval is stale against the current files and is awaiting re-approval. See
-"Implementation status" below.
+and UI are built. The corrected Abu Ubaydah revision is published with 14
+Reviewed claims and 27 citations. See "Implementation status" below.
 
 ```mermaid
 flowchart TB
@@ -101,6 +100,19 @@ page with anchored paragraphs, so a claim that backs nothing is a second copy of
 text rather than something a reader can check a recorded value against. A
 statement the model has no shape for stays in the pages until the model grows one.
 
+One citation record represents one meaningful selection from one source account,
+not one page or extracted paragraph. Join sentence fragments split by pagination,
+layout or footnotes, and use a page range when the selection crosses printed
+pages. Use an ellipsis when a selection joins non-contiguous passages. Include
+enough context for the support to be intelligible, preferring the shortest
+complete sentence or self-contained clause. Never stop mid-word or mid-phrase,
+and omit repetition or material that adds no support for the modeled value.
+Separate citations remain appropriate for independent or competing evidence.
+
+Profile citations link to the corresponding page in Namaq's source reader. The
+reader page links to the digital host after its editor's footnotes, so repeating
+the host link beside every citation adds no verification path.
+
 Competing accounts are kept as separate attributed claims only where the model
 holds the value they compete over, such as two reported years of death. A
 disagreement about something the app does not record stays in the source pages.
@@ -109,6 +121,12 @@ Each claim has a review status: Not reviewed, In review or Reviewed. Disagreemen
 is independent of review status. Legacy information without review records starts
 as Not reviewed. Subject summaries may aggregate claim review counts without
 implying that review establishes historical certainty.
+
+Review status changes only on an explicit instruction to “mark this batch as
+reviewed.” `npm run history:review -- <batch dir>` previews the change and
+`--apply` marks every claim in that named batch Reviewed. Reading the batch,
+discussing corrections, approving publication and importing it do not imply that
+instruction.
 
 One explicit passage in an eligible historical work is sufficient for an ordinary
 claim. Ambiguous identity, inferred relationships and conflicting accounts need
@@ -186,7 +204,7 @@ subject a future batch should cover to clear the most.
 | --- | --- |
 | Evidence schema and migration | Applied. `HistoricalClaim`, `Citation`, `SourceAccount`, `SourceAccountPage`, `SourcePassage`, `ReviewBatch`; `ClaimReviewStatus` is now Not reviewed / In review / Reviewed |
 | File authoring and validation | `data/history/batches/`, `src/lib/history/`, `npm run history:validate` / `history:import` / `history:extract` |
-| Pilot import | Imported and serving: 17 claims, 32 citations. Approval is stale against the current files |
+| Pilot import | Corrected revision published with 14 Reviewed claims and 27 citations |
 | Evidence and account APIs | `/api/subjects/[kind]/[slug]/references`, `/api/people/[slug]/accounts`; review-status filtering removed |
 | Profile reading and graph access | `SourceAccountReader`, `ClaimEvidence`, `SubjectEvidenceAccess` |
 | Tests and documentation | Colocated tests throughout; README and `AGENTS.md` updated |

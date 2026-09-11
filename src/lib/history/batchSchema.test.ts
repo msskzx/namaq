@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   batchRevision,
   checkApproval,
+  markBatchReviewed,
   validateBatch,
   type BatchFiles,
   type HistoryBatch,
@@ -59,6 +60,16 @@ function batch(overrides: Partial<HistoryBatch> = {}): HistoryBatch {
     ...overrides,
   };
 }
+
+describe('markBatchReviewed', () => {
+  it('marks every claim in the batch and reports how many changed', () => {
+    const b = batch();
+    b.claims.push({ ...b.claims[0], key: 'abu-ubaydah/titles', reviewStatus: 'REVIEWED' });
+
+    expect(markBatchReviewed(b)).toBe(1);
+    expect(b.claims.map((claim) => claim.reviewStatus)).toEqual(['REVIEWED', 'REVIEWED']);
+  });
+});
 
 describe('validateBatch', () => {
   it('accepts a well-formed batch', () => {

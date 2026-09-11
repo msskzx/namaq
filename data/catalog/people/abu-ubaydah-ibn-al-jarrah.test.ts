@@ -46,7 +46,7 @@ describe('Abu Ubaydah ibn al-Jarrah in the catalog', () => {
 
   it('cites one disputed claim carrying both reported death years', () => {
     expect(person.fields.deathYearHijri?.claims).toEqual(['abu-ubaydah/death-year']);
-    expect(claimByKey.get('abu-ubaydah/death-year')?.citations).toHaveLength(3);
+    expect(claimByKey.get('abu-ubaydah/death-year')?.citations).toHaveLength(2);
   });
 
   it('declares only relationships the reciprocal map can invert', () => {

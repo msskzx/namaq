@@ -101,6 +101,16 @@ export interface HistoryBatch {
   approval?: BatchApproval;
 }
 
+export function markBatchReviewed(batch: HistoryBatch) {
+  let changed = 0;
+  for (const claim of batch.claims) {
+    if (claim.reviewStatus === 'REVIEWED') continue;
+    claim.reviewStatus = 'REVIEWED';
+    changed += 1;
+  }
+  return changed;
+}
+
 /** Markdown for every page file the batch references, keyed by its relative path. */
 export type BatchFiles = Record<string, string>;
 
