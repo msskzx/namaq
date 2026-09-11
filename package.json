@@ -37,7 +37,8 @@
     "history:import": "tsx scripts/history/importBatch.ts",
     "history:extract": "tsx scripts/history/extractShamelaEntry.ts",
     "catalog:validate": "tsx scripts/data/validateCatalog.ts",
-    "catalog:project": "tsx scripts/data/projectCatalog.ts"
+    "catalog:project": "tsx scripts/data/projectCatalog.ts",
+    "catalog:ledger": "tsx scripts/data/catalogLedger.ts"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",

@@ -140,8 +140,13 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   than dropping the value or inventing a citation.
 - **A batch covering a subject must visit every legacy value on it** and do one
   of three things with each: promote it to a cited claim, leave it legacy
-  because the entry says nothing, or flag a contradiction. Two extractions from
-  one book disagreeing means one misread, so do not silently overwrite.
+  because the entry says nothing, or flag a contradiction in the batch's
+  `summary.md`. Two extractions from one book disagreeing means one misread, so
+  do not silently overwrite.
+- `npm run catalog:ledger` lists every value whose evidence is owed;
+  `-- --batch <dir>` narrows it to the subjects that batch speaks about,
+  including the ones its claims point at. Run the scoped form before approving,
+  since what it prints is what the batch walked past.
 - Two separate actions gate a batch, and neither implies the other.
   **Approving for publication** records the current revision in `batch.json`'s
   approval block, which is what lets `npm run history:import -- --apply` write.
