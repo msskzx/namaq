@@ -66,8 +66,6 @@ function PersonDetailPage() {
           </div>
         </div>
 
-        <Timeline events={person.events || []} participations={person.participations || []} death={person} />
-
         <div className="flex flex-col gap-6 mt-10">
           {person.fullName && (
             <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
@@ -95,7 +93,7 @@ function PersonDetailPage() {
             </div>
           )}
 
-          <SourceAccountReader slug={slug} />
+          <Timeline events={person.events || []} participations={person.participations || []} death={person} />
 
           <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
             <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
@@ -104,6 +102,8 @@ function PersonDetailPage() {
             </h2>
             <GraphCanvas targetSlug={slug} />
           </div>
+
+          <SourceAccountReader slug={slug} />
 
           <AyatGroup ayat={person.ayat || []} />
 

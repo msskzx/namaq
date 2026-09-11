@@ -184,3 +184,4 @@ The next work should protect and deepen the main graph-and-search experience bef
 | `npm run titles:sync` / `-- --apply` | Report (or apply) PostgreSQL → Neo4j drift for titles and their holders |
 | `npm run events:sync` / `-- --apply` | Report (or apply) PostgreSQL → Neo4j drift for events, participants, and battle links |
 | `npm run graph:layout` / `-- --apply` | Report (or persist) cross-type rank, Louvain clusters, and layout positions over the unified graph |
+| `npm run history:review -- <batch dir>` / `-- --apply` | Preview or mark every claim in a batch as Reviewed |

@@ -541,7 +541,7 @@ const translations = {
     people: 'الشخصيات',
     fullName: 'الاسم الكامل',
     appearance: 'الهيئة',
-    virtues: 'الفضائل',
+    virtues: 'المناقب',
     relations: 'العلاقات',
     personLoadError: 'تعذر تحميل بيانات الشخصية',
     personGenericError: 'حدث خطأ أثناء تحميل البيانات',
@@ -728,4 +728,4 @@ const translations = {
   },
 };
 
-export default translations; 
+export default translations;

@@ -47,8 +47,8 @@ function citationText(citation: CitationWithSource, language: string) {
 }
 
 /**
- * Shows every recorded claim with its review status rather than hiding
- * unreviewed work — see docs/adr/0008-separate-review-from-visibility.md.
+ * Shows every recorded claim and keeps unresolved review statuses visible —
+ * see docs/adr/0008-separate-review-from-visibility.md.
  */
 export default function ClaimEvidence({
   title,
@@ -97,12 +97,16 @@ export default function ClaimEvidence({
               {/* The assertion is dropped deliberately: it restates the passages
                   shown below it, so printing it makes the same words a third
                   time after the heading and the evidence. */}
-              <div className="mt-2 flex flex-wrap items-center gap-2">
-                <Badge size="sm" color="gray" text={reviewStatusLabel[claim.reviewStatus][language === 'ar' ? 'ar' : 'en']} />
-                {claim.disputed && (
-                  <Badge size="sm" color="amber" text={language === 'ar' ? 'روايات متعارضة' : 'Accounts conflict'} />
-                )}
-              </div>
+              {(claim.reviewStatus !== 'REVIEWED' || claim.disputed) && (
+                <div className="mt-2 flex flex-wrap items-center gap-2">
+                  {claim.reviewStatus !== 'REVIEWED' && (
+                    <Badge size="sm" color="gray" text={reviewStatusLabel[claim.reviewStatus][language === 'ar' ? 'ar' : 'en']} />
+                  )}
+                  {claim.disputed && (
+                    <Badge size="sm" color="amber" text={language === 'ar' ? 'روايات متعارضة' : 'Accounts conflict'} />
+                  )}
+                </div>
+              )}
               {claim.citations.length === 0 ? (
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
                   {language === 'ar' ? 'لم تُضف المراجع بعد' : 'References not yet added'}
@@ -135,9 +139,6 @@ export default function ClaimEvidence({
                           ) : (
                             <span>{citationText(citation, language)}</span>
                           )}
-                          <a className="underline" href={citation.extractionUrl} target="_blank" rel="noreferrer">
-                            {citation.source.digitalHost ?? (language === 'ar' ? 'المصدر الرقمي' : 'Digital host')}
-                          </a>
                         </span>
                       </li>
                     ))}

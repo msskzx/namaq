@@ -948,7 +948,7 @@
       "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
       "assertion": "عامر بن عبد الله بن الجراح بن هلال بن أهيب بن ضبة بن الحارث بن فهر بن مالك بن النضر بن كنانة بن خزيمة بن مدركة بن إلياس بن مضر بن نزار بن معد بن عدنان، القرشي الفهري المكي.",
       "confidence": "ESTABLISHED",
-      "reviewStatus": "NOT_REVIEWED",
+      "reviewStatus": "REVIEWED",
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
@@ -956,21 +956,11 @@
           "volume": "1",
           "pageReference": "5",
           "extractionUrl": "https://shamela.ws/book/10906/1431",
-          "excerptArabic": "١ - أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ عَامِرُ بنُ عَبْدِ اللهِ * (م، ق) .",
-          "accessedAt": "2026-09-09"
-        },
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "5-p4",
-          "volume": "1",
-          "pageReference": "5",
-          "extractionUrl": "https://shamela.ws/book/10906/1431",
-          "excerptArabic": "ابْنِ الجَرَّاحِ بنِ هِلاَلِ بنِ أُهَيْبِ بنِ ضَبَّةَ بنِ الحَارِثِ بنِ فِهْرِ بنِ مَالِكِ بنِ النَّضْرِ بنِ كِنَانَةَ بنِ خُزَيْمَةَ بنِ مُدْرِكَةَ بنِ إِلْيَاسَ بنِ مُضَرَ بنِ نِزَارِ بنِ مَعَدِّ بنِ عَدْنَانَ القُرَشِ",
+          "excerptArabic": "١ - أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ عَامِرُ بنُ عَبْدِ اللهِ * (م، ق) . ابْنِ الجَرَّاحِ بنِ هِلاَلِ بنِ أُهَيْبِ بنِ ضَبَّةَ بنِ الحَارِثِ بنِ فِهْرِ بنِ مَالِكِ بنِ النَّضْرِ بنِ كِنَانَةَ بنِ خُزَيْمَةَ بنِ مُدْرِكَةَ بنِ إِلْيَاسَ بنِ مُضَرَ بنِ نِزَارِ بنِ مَعَدِّ بنِ عَدْنَانَ القُرَشِيُّ، الفِهْرِيُّ، المَكِّيُّ.",
           "accessedAt": "2026-09-09"
         }
       ],
-      "field": "fullName",
-      "reviewerNote": "نسب أطول مما في بيانات التطبيق الحالية، وفيها \"المكي\" غير مذكورة؛ تغيير القيمة المعتمدة يحتاج مراجعة صريحة."
+      "field": "fullName"
     },
     {
       "key": "abu-ubaydah/titles",
@@ -979,7 +969,7 @@
       "field": "titles",
       "assertion": "أحد السابقين الأولين، وشهد له النبي صلى الله عليه وسلم بالجنة، وسماه أمين هذه الأمة.",
       "confidence": "ESTABLISHED",
-      "reviewStatus": "NOT_REVIEWED",
+      "reviewStatus": "REVIEWED",
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
@@ -1012,9 +1002,9 @@
           "sourceSlug": "siyar-alam-al-nubala-risalah",
           "passageAnchor": "5-p5",
           "volume": "1",
-          "pageReference": "5",
+          "pageReference": "5–6",
           "extractionUrl": "https://shamela.ws/book/10906/1431",
-          "excerptArabic": "أَحَدُ السَّابِقِيْنَ الأَوَّلِيْنَ، وَمَنْ عَزَمَ الصِّدِّيْقُ عَلَى تَوْلِيَتِهِ الخِلاَفَةَ، وَأَشَارَ بِهِ يَوْمَ",
+          "excerptArabic": "أَحَدُ السَّابِقِيْنَ الأَوَّلِيْنَ، وَمَنْ عَزَمَ الصِّدِّيْقُ عَلَى تَوْلِيَتِهِ الخِلاَفَةَ، وَأَشَارَ بِهِ يَوْمَ السَّقِيْفَةِ؛ لِكَمَالِ أَهْلِيَّتِهِ عِنْدَ أَبِي بَكْرٍ (١) .",
           "accessedAt": "2026-09-09"
         },
         {
@@ -1034,7 +1024,7 @@
       "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
       "assertion": "كان رجلاً نحيفاً، معروق الوجه، خفيف اللحية، طوالاً، أحنى، أثرم الثنيتين، وكان يخضب بالحناء والكتم، وكان له عقيصتان.",
       "confidence": "LIKELY",
-      "reviewStatus": "NOT_REVIEWED",
+      "reviewStatus": "REVIEWED",
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
@@ -1063,7 +1053,7 @@
       "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
       "assertion": "شهد بدراً، فقتل يومئذ أباه.",
       "confidence": "ESTABLISHED",
-      "reviewStatus": "NOT_REVIEWED",
+      "reviewStatus": "REVIEWED",
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
@@ -1071,7 +1061,7 @@
           "volume": "1",
           "pageReference": "8",
           "extractionUrl": "https://shamela.ws/book/10906/1434",
-          "excerptArabic": "وَقَدْ شَهِدَ أَبُو عُبَيْدَةَ بَدْراً، فَقَتَلَ يَوْمَئِذٍ أَبَاهُ، وَأَبْلَى يَوْمَ أُحُدٍ بَلاَءً حَسَناً، وَنَزَعَ يَوْمَئِذٍ الحَلْقَتَيْنِ اللَّتَيْنِ دَخَلَتَا مِنَ المِغْفَرِ فِي وَجْنَةِ رَسُوْلِ اللهِ -صَلَّى ا",
+          "excerptArabic": "وَقَدْ شَهِدَ أَبُو عُبَيْدَةَ بَدْراً، فَقَتَلَ يَوْمَئِذٍ أَبَاهُ، وَأَبْلَى يَوْمَ أُحُدٍ بَلاَءً حَسَناً، وَنَزَعَ يَوْمَئِذٍ الحَلْقَتَيْنِ اللَّتَيْنِ دَخَلَتَا مِنَ المِغْفَرِ فِي وَجْنَةِ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مِنْ ضَرْبَةٍ أَصَابَتْهُ، فَانْقَلَعَتْ ثَنِيَّتَاهُ، فَحَسُنَ ثَغْرُهُ بِذَهَابِهِمَا، حَتَّى قِيْلَ: مَا رُئِيَ هَتْمٌ قَطُّ أَحْسَنُ مِنْ هَتْمِ أَبِي عُبَيْدَةَ (١) .",
           "accessedAt": "2026-09-09"
         }
       ],
@@ -1085,7 +1075,7 @@
       "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
       "assertion": "أبلى يوم أحد بلاءً حسناً، ونزع الحلقتين اللتين دخلتا من المغفر في وجنة رسول الله صلى الله عليه وسلم، فانقلعت ثنيتاه.",
       "confidence": "ESTABLISHED",
-      "reviewStatus": "NOT_REVIEWED",
+      "reviewStatus": "REVIEWED",
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
@@ -1093,7 +1083,7 @@
           "volume": "1",
           "pageReference": "8",
           "extractionUrl": "https://shamela.ws/book/10906/1434",
-          "excerptArabic": "وَقَدْ شَهِدَ أَبُو عُبَيْدَةَ بَدْراً، فَقَتَلَ يَوْمَئِذٍ أَبَاهُ، وَأَبْلَى يَوْمَ أُحُدٍ بَلاَءً حَسَناً، وَنَزَعَ يَوْمَئِذٍ الحَلْقَتَيْنِ اللَّتَيْنِ دَخَلَتَا مِنَ المِغْفَرِ فِي وَجْنَةِ رَسُوْلِ اللهِ -صَلَّى ا",
+          "excerptArabic": "وَقَدْ شَهِدَ أَبُو عُبَيْدَةَ بَدْراً، فَقَتَلَ يَوْمَئِذٍ أَبَاهُ، وَأَبْلَى يَوْمَ أُحُدٍ بَلاَءً حَسَناً، وَنَزَعَ يَوْمَئِذٍ الحَلْقَتَيْنِ اللَّتَيْنِ دَخَلَتَا مِنَ المِغْفَرِ فِي وَجْنَةِ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مِنْ ضَرْبَةٍ أَصَابَتْهُ، فَانْقَلَعَتْ ثَنِيَّتَاهُ، فَحَسُنَ ثَغْرُهُ بِذَهَابِهِمَا، حَتَّى قِيْلَ: مَا رُئِيَ هَتْمٌ قَطُّ أَحْسَنُ مِنْ هَتْمِ أَبِي عُبَيْدَةَ (١) .",
           "accessedAt": "2026-09-09"
         }
       ],
@@ -1107,33 +1097,15 @@
       "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
       "assertion": "أمّره النبي صلى الله عليه وسلم على سرية من المهاجرين فيهم أبو بكر وعمر، أُمدّ بها عمرو بن العاص في غزوة ذات السلاسل، فسلّم الإمارة لعمرو.",
       "confidence": "LIKELY",
-      "reviewStatus": "NOT_REVIEWED",
+      "reviewStatus": "REVIEWED",
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
           "passageAnchor": "8-p9",
           "volume": "1",
-          "pageReference": "8",
+          "pageReference": "8–9",
           "extractionUrl": "https://shamela.ws/book/10906/1434",
-          "excerptArabic": "قَالَ مُوْسَى بنُ عُقْبَةَ فِي (مَغَازِيْهِ) : غَزْوَةُ عَمْرِو بنِ العَاصِ هِيَ غَزْوَةُ ذَاتِ السَّلاَسِلِ (٤) ، مِنْ مَشَارِفِ الشَّامِ، فَخَافَ عَمْرٌو مِنْ جَانِبِهِ ذَلِكَ، فَاسْتَمَدَّ رَسُوْلَ",
-          "accessedAt": "2026-09-09"
-        },
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "9-p1",
-          "volume": "1",
-          "pageReference": "9",
-          "extractionUrl": "https://shamela.ws/book/10906/1435",
-          "excerptArabic": "اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فَانْتَدَبَ أَبَا بَكْرٍ وَعُمَرَ فِي سَرَاةٍ مِنَ المُهَاجِرِيْنَ، فَأَمَّرَ نَبِيُّ اللهِ عَلَيْهِم أَبَا عُبَيْدَةَ.",
-          "accessedAt": "2026-09-09"
-        },
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "9-p5",
-          "volume": "1",
-          "pageReference": "9",
-          "extractionUrl": "https://shamela.ws/book/10906/1435",
-          "excerptArabic": "فَلَمَّا رَأَى ذَلِكَ أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ، وَكَانَ رَجُلاً حَسَنَ الخُلُقِ، لَيِّنَ الشِّيْمَةِ، مُتَّبِعاً لأَمْرِ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَعَهْدِهِ، فَسَلَّمَ الإِمَارَةَ لِعَمْر",
+          "excerptArabic": "قَالَ مُوْسَى بنُ عُقْبَةَ فِي (مَغَازِيْهِ) : غَزْوَةُ عَمْرِو بنِ العَاصِ هِيَ غَزْوَةُ ذَاتِ السَّلاَسِلِ (٤) ، مِنْ مَشَارِفِ الشَّامِ، فَخَافَ عَمْرٌو مِنْ جَانِبِهِ ذَلِكَ، فَاسْتَمَدَّ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فَانْتَدَبَ أَبَا بَكْرٍ وَعُمَرَ فِي سَرَاةٍ مِنَ المُهَاجِرِيْنَ، فَأَمَّرَ نَبِيُّ اللهِ عَلَيْهِم أَبَا عُبَيْدَةَ. … فَلَمَّا رَأَى ذَلِكَ أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ، وَكَانَ رَجُلاً حَسَنَ الخُلُقِ، لَيِّنَ الشِّيْمَةِ، مُتَّبِعاً لِأَمْرِ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَعَهْدِهِ، فَسَلَّمَ الإِمَارَةَ لِعَمْرٍو.",
           "accessedAt": "2026-09-09"
         }
       ],
@@ -1147,7 +1119,7 @@
       "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
       "assertion": "رشّحه أبو بكر الصديق يوم سقيفة بني ساعدة، فقال: قد رضيت لكم أحد هذين الرجلين: عمر وأبا عبيدة.",
       "confidence": "ESTABLISHED",
-      "reviewStatus": "NOT_REVIEWED",
+      "reviewStatus": "REVIEWED",
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
@@ -1155,16 +1127,7 @@
           "volume": "1",
           "pageReference": "8",
           "extractionUrl": "https://shamela.ws/book/10906/1434",
-          "excerptArabic": "وَقَالَ أَبُو بَكْرٍ الصِّدِّيْقُ وَقْتَ وَفَاةِ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِسَقِيْفَةِ بَنِي سَاعِدَةَ:",
-          "accessedAt": "2026-09-09"
-        },
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "8-p4",
-          "volume": "1",
-          "pageReference": "8",
-          "extractionUrl": "https://shamela.ws/book/10906/1434",
-          "excerptArabic": "قَدْ رَضِيْتُ لَكُم أَحَدَ هَذَيْنِ الرَّجُلَيْنِ: عُمَرَ، وَأَبَا عُبَيْدَةَ.",
+          "excerptArabic": "وَقَالَ أَبُو بَكْرٍ الصِّدِّيْقُ وَقْتَ وَفَاةِ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِسَقِيْفَةِ بَنِي سَاعِدَةَ: قَدْ رَضِيْتُ لَكُم أَحَدَ هَذَيْنِ الرَّجُلَيْنِ: عُمَرَ، وَأَبَا عُبَيْدَةَ.",
           "accessedAt": "2026-09-09"
         }
       ],
@@ -1178,33 +1141,15 @@
       "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
       "assertion": "كان فتح دمشق على يده، وأمضى لأهلها الصلح بعد أن افتتح خالد البلد عنوة من الباب الشرقي.",
       "confidence": "LIKELY",
-      "reviewStatus": "NOT_REVIEWED",
+      "reviewStatus": "REVIEWED",
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
           "passageAnchor": "21-p4",
           "volume": "1",
-          "pageReference": "21",
+          "pageReference": "21–22",
           "extractionUrl": "https://shamela.ws/book/10906/1447",
-          "excerptArabic": "فَبَادَرَ عُمَرُ بِعَزْلِ خَالِدٍ، وَاسْتَعْمَلَ عَلَى الكُلِّ أَبَا عُبَيْدَةَ، فَجَاءهُ التَّقْلِيْدُ، فَكَتَمَهُ مُدَّةً، وَكُلُّ هَذَا مِنْ دِيْنِهِ وِلِيْنِهِ وَحِلْمِهِ، فَكَانَ فَتْحُ دِمَشْقَ (٥) عَلَى يَدِهِ، فَ",
-          "accessedAt": "2026-09-09"
-        },
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "22-p1",
-          "volume": "1",
-          "pageReference": "22",
-          "extractionUrl": "https://shamela.ws/book/10906/1448",
-          "excerptArabic": "الصُّلْحَ لِلرُّوْمِ، فَفَتَحُوا لَهُ بَابَ الجَابِيَةِ صُلْحاً، وَإِذَا بِخَالِدٍ قَدِ افْتَتَحَ البَلَدَ عَنْوَةً مِنَ البَابِ الشَّرْقِيِّ، فَأَمْضَى لَهُم أَبُو عُبَيْدَةَ الصُّلْحَ.",
-          "accessedAt": "2026-09-09"
-        },
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "22-p2",
-          "volume": "1",
-          "pageReference": "22",
-          "extractionUrl": "https://shamela.ws/book/10906/1448",
-          "excerptArabic": "فَعَنِ المُغِيْرَةِ: أَنَّ أَبَا عُبَيْدَةَ صَالَحَهُم عَلَى أَنْصَافِ كَنَائِسِهِم وَمَنَازِلَهِم، ثُمَّ كَانَ أَبُو عُبَيْدَةَ رَأْسَ الإِسْلاَمِ يَوْمَ وَقْعَةِ اليَرْمُوْكِ؛ الَّتِي اسْتَأْصَلَ اللهُ فِيْهَا جُيُوْشَ",
+          "excerptArabic": "فَبَادَرَ عُمَرُ بِعَزْلِ خَالِدٍ، وَاسْتَعْمَلَ عَلَى الكُلِّ أَبَا عُبَيْدَةَ، فَجَاءهُ التَّقْلِيْدُ، فَكَتَمَهُ مُدَّةً، وَكُلُّ هَذَا مِنْ دِيْنِهِ وِلِيْنِهِ وَحِلْمِهِ، فَكَانَ فَتْحُ دِمَشْقَ (٥) عَلَى يَدِهِ، فَعِنْدَ ذَلِكَ أَظْهَرَ التَّقْلِيْدَ، لِيَعْقِدَ الصُّلْحَ لِلرُّوْمِ، فَفَتَحُوا لَهُ بَابَ الجَابِيَةِ صُلْحاً، وَإِذَا بِخَالِدٍ قَدِ افْتَتَحَ البَلَدَ عَنْوَةً مِنَ البَابِ الشَّرْقِيِّ، فَأَمْضَى لَهُم أَبُو عُبَيْدَةَ الصُّلْحَ.",
           "accessedAt": "2026-09-09"
         }
       ],
@@ -1218,7 +1163,7 @@
       "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
       "assertion": "كان رأس الإسلام يوم وقعة اليرموك التي استأصل الله فيها جيوش الروم.",
       "confidence": "ESTABLISHED",
-      "reviewStatus": "NOT_REVIEWED",
+      "reviewStatus": "REVIEWED",
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
@@ -1226,7 +1171,7 @@
           "volume": "1",
           "pageReference": "22",
           "extractionUrl": "https://shamela.ws/book/10906/1448",
-          "excerptArabic": "فَعَنِ المُغِيْرَةِ: أَنَّ أَبَا عُبَيْدَةَ صَالَحَهُم عَلَى أَنْصَافِ كَنَائِسِهِم وَمَنَازِلَهِم، ثُمَّ كَانَ أَبُو عُبَيْدَةَ رَأْسَ الإِسْلاَمِ يَوْمَ وَقْعَةِ اليَرْمُوْكِ؛ الَّتِي اسْتَأْصَلَ اللهُ فِيْهَا جُيُوْشَ",
+          "excerptArabic": "فَعَنِ المُغِيْرَةِ: أَنَّ أَبَا عُبَيْدَةَ صَالَحَهُم عَلَى أَنْصَافِ كَنَائِسِهِم وَمَنَازِلَهِم، ثُمَّ كَانَ أَبُو عُبَيْدَةَ رَأْسَ الإِسْلاَمِ يَوْمَ وَقْعَةِ اليَرْمُوْكِ؛ الَّتِي اسْتَأْصَلَ اللهُ فِيْهَا جُيُوْشَ الرُّوْمِ، وَقُتِلَ مِنْهُم خَلْقٌ عَظِيْمٌ.",
           "accessedAt": "2026-09-09"
         }
       ],
@@ -1240,33 +1185,15 @@
       "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
       "assertion": "توفي في طاعون عمواس بعد أن أبى أن يفارق جنده، والطاعون منسوب إلى قرية عمواس بين الرملة وبيت المقدس.",
       "confidence": "ESTABLISHED",
-      "reviewStatus": "NOT_REVIEWED",
+      "reviewStatus": "REVIEWED",
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "19-p1",
+          "passageAnchor": "18-p10",
           "volume": "1",
-          "pageReference": "19",
-          "extractionUrl": "https://shamela.ws/book/10906/1445",
-          "excerptArabic": "مِنْ أَجْنَادِ المُسْلِمِيْنَ، لاَ أَرْغَبُ بِنَفْسِي عَنْهُم.",
-          "accessedAt": "2026-09-09"
-        },
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "19-p4",
-          "volume": "1",
-          "pageReference": "19",
-          "extractionUrl": "https://shamela.ws/book/10906/1445",
-          "excerptArabic": "قَالَ: فَتُوُفِّيَ أَبُو عُبَيْدَةَ، وَانْكَشَفَ الطَّاعُوْنُ.",
-          "accessedAt": "2026-09-09"
-        },
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "23-p4",
-          "volume": "1",
-          "pageReference": "23",
-          "extractionUrl": "https://shamela.ws/book/10906/1449",
-          "excerptArabic": "طَاعُوْنُ عَمَوَاسَ: مَنْسُوْبٌ إِلَى قَرْيَةِ عَمَوَاسَ، وَهِيَ بَيْنَ الرَّمْلَةِ وَبَيْنَ بَيْتِ المَقْدِسِ.",
+          "pageReference": "18–19, 23",
+          "extractionUrl": "https://shamela.ws/book/10906/1444",
+          "excerptArabic": "أَنَّ عُمَرَ كَتَبَ إِلَى أَبِي عُبَيْدَةَ فِي الطَّاعُوْنِ: إِنَّهُ قَدْ عَرَضَتْ لِي حَاجَةٌ، وَلاَ غِنَى بِي عَنْكَ فِيْهَا، فَعَجِّلْ إِلَيَّ. فَلَمَّا قَرَأَ الكِتَابَ، قَالَ: عَرَفْتُ حَاجَةَ أَمِيْرِ المُؤْمِنِيْنَ، إِنَّهُ يُرِيْدُ أَنْ يَسْتَبْقِيَ مَنْ لَيْسَ بِبَاقٍ. فَكَتَبَ: إِنِّي قَدْ عَرَفْتُ حَاجَتَكَ، فَحَلِّلْنِي مِنْ عَزِيْمَتك، فَإِنِّي فِي جُنْدٍ مِنْ أَجْنَادِ المُسْلِمِيْنَ، لاَ أَرْغَبُ بِنَفْسِي عَنْهُم. … قَالَ: فَتُوُفِّيَ أَبُو عُبَيْدَةَ، وَانْكَشَفَ الطَّاعُوْنُ. … طَاعُوْنُ عَمَوَاسَ: مَنْسُوْبٌ إِلَى قَرْيَةِ عَمَوَاسَ، وَهِيَ بَيْنَ الرَّمْلَةِ وَبَيْنَ بَيْتِ المَقْدِسِ.",
           "accessedAt": "2026-09-09"
         }
       ],
@@ -1280,7 +1207,7 @@
       "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
       "assertion": "أدركه أجله بفحل، فتوفي بها بقرب بيسان.",
       "confidence": "LIKELY",
-      "reviewStatus": "NOT_REVIEWED",
+      "reviewStatus": "REVIEWED",
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
@@ -1299,9 +1226,9 @@
       "subjectKind": "PERSON",
       "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
       "field": "deathYearHijri",
-      "assertion": "قال أبو حفص الفلاس: توفي أبو عبيدة سنة ثمان عشرة وله ثمان وخمسون سنة، وقال كذلك في وفاته جماعة. وانفرد ابن عائذ عن أبي مسهر أنه قرأ في كتاب يزيد بن عبيدة أن أبا عبيدة توفي سنة سبع عشرة.",
+      "assertion": "قال أبو حفص الفلاس: توفي أبو عبيدة سنة ثمان عشرة وله ثمان وخمسون سنة. وانفرد ابن عائذ عن أبي مسهر أنه قرأ في كتاب يزيد بن عبيدة أن أبا عبيدة توفي سنة سبع عشرة.",
       "confidence": "LIKELY",
-      "reviewStatus": "NOT_REVIEWED",
+      "reviewStatus": "REVIEWED",
       "disputed": true,
       "citations": [
         {
@@ -1311,15 +1238,6 @@
           "pageReference": "23",
           "extractionUrl": "https://shamela.ws/book/10906/1449",
           "excerptArabic": "قَالَ أَبُو حَفْصٍ الفَلاَّسُ: تُوُفِّيَ أَبُو عُبَيْدَةَ فِي سَنَةِ ثَمَانِ عَشْرَةَ، وَلَهُ ثَمَانٌ وَخَمْسُوْنَ سَنَةً، وَكَانَ يَخْضِبُ بِالحِنَّاءِ وَالكَتَمِ (٤) ، وَكَانَ لَهُ عَقِيْصَتَانِ.",
-          "accessedAt": "2026-09-09"
-        },
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "23-p7",
-          "volume": "1",
-          "pageReference": "23",
-          "extractionUrl": "https://shamela.ws/book/10906/1449",
-          "excerptArabic": "وَقَالَ كَذَلِكَ فِي وَفَاتِهِ جَمَاعَةٌ.",
           "accessedAt": "2026-09-09"
         },
         {
@@ -1339,7 +1257,7 @@
       "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
       "assertion": "صحب النبي صلى الله عليه وسلم وسمع منه، وسماه أمين هذه الأمة.",
       "confidence": "ESTABLISHED",
-      "reviewStatus": "NOT_REVIEWED",
+      "reviewStatus": "REVIEWED",
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
@@ -1356,16 +1274,7 @@
           "volume": "1",
           "pageReference": "11",
           "extractionUrl": "https://shamela.ws/book/10906/1437",
-          "excerptArabic": "أَنَّ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَالَ: (إِنِّي أَبْعَثُ إِلَيْكُم رَجُلاً أَمِيْناً) .",
-          "accessedAt": "2026-09-09"
-        },
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "11-p3",
-          "volume": "1",
-          "pageReference": "11",
-          "extractionUrl": "https://shamela.ws/book/10906/1437",
-          "excerptArabic": "فَاسْتَشْرَفَ لَهَا أَصْحَابُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فَبَعَثَ أَبَا عُبَيْدَةَ بنَ الجَرَّاحِ (٣) .",
+          "excerptArabic": "أَنَّ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَالَ: (إِنِّي أَبْعَثُ إِلَيْكُم رَجُلاً أَمِيْناً) . فَاسْتَشْرَفَ لَهَا أَصْحَابُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فَبَعَثَ أَبَا عُبَيْدَةَ بنَ الجَرَّاحِ (٣) .",
           "accessedAt": "2026-09-09"
         }
       ],
@@ -1380,7 +1289,7 @@
       "field": "virtues",
       "assertion": "أحد السابقين الأولين، ومن عزم الصديق على توليته الخلافة، وأشار به يوم السقيفة؛ لكمال أهليته عند أبي بكر. شهد له النبي صلى الله عليه وسلم بالجنة، وسماه أمين الأمة.",
       "confidence": "ESTABLISHED",
-      "reviewStatus": "NOT_REVIEWED",
+      "reviewStatus": "REVIEWED",
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
@@ -1413,9 +1322,9 @@
           "sourceSlug": "siyar-alam-al-nubala-risalah",
           "passageAnchor": "5-p5",
           "volume": "1",
-          "pageReference": "5",
+          "pageReference": "5–6",
           "extractionUrl": "https://shamela.ws/book/10906/1431",
-          "excerptArabic": "أَحَدُ السَّابِقِيْنَ الأَوَّلِيْنَ، وَمَنْ عَزَمَ الصِّدِّيْقُ عَلَى تَوْلِيَتِهِ الخِلاَفَةَ، وَأَشَارَ بِهِ يَوْمَ",
+          "excerptArabic": "أَحَدُ السَّابِقِيْنَ الأَوَّلِيْنَ، وَمَنْ عَزَمَ الصِّدِّيْقُ عَلَى تَوْلِيَتِهِ الخِلاَفَةَ، وَأَشَارَ بِهِ يَوْمَ السَّقِيْفَةِ؛ لِكَمَالِ أَهْلِيَّتِهِ عِنْدَ أَبِي بَكْرٍ (١) .",
           "accessedAt": "2026-09-09"
         },
         {
@@ -1449,9 +1358,9 @@
     }
   ],
   "approval": {
-    "revision": "c5d4ea48edf2f1db",
+    "revision": "b16db73c6c1c7cde",
     "approvedAt": "2026-09-11",
     "approvedBy": "msskzx",
-    "note": "Approved for publication on the user’s instruction in conversation. The content was not read; all claims stay Not reviewed. Ten claims name a supporting field or relationship inferred by the agent from the cited passages; the appearance claim cites 23-p6 for the dyeing that passage records beside the death year; and the death year is one disputed claim carrying both reported years. Those are the ones most worth reading when review happens."
+    "note": "Approved for publication after the user’s explicit instruction to mark all 14 claims in this batch as reviewed."
   }
 }

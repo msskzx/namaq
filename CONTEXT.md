@@ -138,8 +138,9 @@ An assertion about a historical subject or a recorded relationship that can be
 supported or challenged by evidence.
 
 **Citation**:
-A reference connecting a historical claim or biographical passage to the exact
-source location used, including its extraction link when read online.
+A meaningful selection from one source account connecting a historical claim to
+the exact source location used. Formatting boundaries such as a page turn do not
+make separate citations, while genuinely distinct or competing evidence does.
 
 **Source account**:
 The complete entry about a historical subject in a particular work and edition,
