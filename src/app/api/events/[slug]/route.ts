@@ -28,16 +28,6 @@ export async function GET(
           },
           orderBy: { name: 'asc' },
         },
-        battle: {
-          select: {
-            id: true,
-            name: true,
-            slug: true,
-            hijriYear: true,
-            gregorianYear: true,
-            location: true,
-          },
-        },
       },
     });
 

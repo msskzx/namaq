@@ -1,4 +1,4 @@
-import { Event as PrismaEvent, EventType, Battle } from "@/generated/prisma";
+import { Event as PrismaEvent, EventType } from "@/generated/prisma";
 import { PersonBase } from "./person";
 
 export type EventBase = {
@@ -17,11 +17,6 @@ export type EventBase = {
   descriptionTransliterated?: string,
 }
 
-export type EventWithBattle = EventBase & {
-  battle: Battle | null,
-}
-
 export type EventAll = PrismaEvent & {
-  battle: Battle,
   people: PersonBase[],
 }

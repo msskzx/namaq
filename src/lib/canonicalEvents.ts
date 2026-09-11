@@ -1,10 +1,7 @@
 /**
  * The properties shared by an event in PostgreSQL and its node in Neo4j, and
  * by a Person-Event membership and its INVOLVED_IN relationship. Slugs are
- * the stable cross-database identifiers, same as canonicalBattles.ts. An
- * event's optional battle link (Event.battleId in Prisma) travels with the
- * event itself, mirroring the schema's scalar foreign key rather than a
- * separate relation list.
+ * the stable cross-database identifiers, same as canonicalBattles.ts.
  */
 export type CanonicalEvent = {
   slug: string;
@@ -13,7 +10,6 @@ export type CanonicalEvent = {
   type: string;
   hijriYear: number | null;
   location: string | null;
-  battleSlug: string | null;
 };
 
 export type CanonicalEventParticipant = {
@@ -108,7 +104,7 @@ export function reconcileEvents(
     const graphEvent = graphEventsBySlug.get(slug);
     if (!graphEvent) continue;
 
-    for (const field of ['name', 'nameTransliterated', 'type', 'location', 'battleSlug'] as const) {
+    for (const field of ['name', 'nameTransliterated', 'type', 'location'] as const) {
       if (comparableString(postgresEvent[field]) !== comparableString(graphEvent[field])) {
         eventMismatches.push({ slug, field, postgres: postgresEvent[field], neo4j: graphEvent[field] });
       }

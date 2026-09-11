@@ -80,7 +80,6 @@ export interface CatalogEvent {
   readonly type: EventType;
   readonly fields: CatalogEventFields;
   readonly people: readonly { readonly person: string; readonly claims: Provenance }[];
-  readonly battle?: string;
 }
 
 export interface Catalog {

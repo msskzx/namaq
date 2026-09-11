@@ -76,7 +76,7 @@ describe('validateCatalog', () => {
   it('checks battle and event references the same way', () => {
     const subject = catalog({
       battles: [{ kind: 'BATTLE', slug: 'not-a-battle', participants: [{ person: 'prophet-muhammad', isMuslim: true, claims: ['pilot/one'] }] }],
-      events: [{ kind: 'EVENT', slug: 'somewhere', name: 'حدث', type: 'OTHER', fields: {}, people: [{ person: 'ghost', claims: ['pilot/one'] }], battle: 'badr' }],
+      events: [{ kind: 'EVENT', slug: 'somewhere', name: 'حدث', type: 'OTHER', fields: {}, people: [{ person: 'ghost', claims: ['pilot/one'] }] }],
     });
 
     expect(validateCatalog(subject, known)).toEqual([

@@ -9,14 +9,12 @@ const strict = process.argv.includes('--strict');
 
 const eventGraphQuery = `
   MATCH (event:Event)
-  OPTIONAL MATCH (event)-[:PART_OF]->(battle:Battle)
   RETURN event.slug AS slug,
          event.name AS name,
          event.nameTransliterated AS nameTransliterated,
          event.type AS type,
          event.hijriYear AS hijriYear,
-         event.location AS location,
-         battle.slug AS battleSlug
+         event.location AS location
 `;
 
 const participantGraphQuery = `
@@ -37,21 +35,13 @@ const eventUpsertQuery = `
     SET node.location = event.location)
 `;
 
-// MATCH (not MERGE) on person/event and event/battle: this only links nodes
-// that already have a synced counterpart. A link whose person, event, or
-// battle node is missing is silently skipped here and stays reported as
-// postgresOnly until that node exists (via people:sync, events:sync, or
-// battles:sync).
+// MATCH (not MERGE) on person and event: this only links nodes that already
+// have a synced counterpart. A link whose person or event node is missing is
+// silently skipped and stays reported as postgresOnly until that node exists.
 const participantUpsertQuery = `
   UNWIND $participants AS p
   MATCH (person:Person {slug: p.personSlug}), (event:Event {slug: p.eventSlug})
   MERGE (person)-[:INVOLVED_IN]->(event)
-`;
-
-const eventBattleLinkUpsertQuery = `
-  UNWIND $links AS link
-  MATCH (event:Event {slug: link.eventSlug}), (battle:Battle {slug: link.battleSlug})
-  MERGE (event)-[:PART_OF]->(battle)
 `;
 
 function printList(label: string, items: string[]) {
@@ -67,7 +57,6 @@ async function main() {
       type: true,
       hijriYear: true,
       location: true,
-      battle: { select: { slug: true } },
     },
     orderBy: { slug: 'asc' },
   });
@@ -78,7 +67,6 @@ async function main() {
     type: row.type,
     hijriYear: row.hijriYear,
     location: row.location,
-    battleSlug: row.battle?.slug ?? null,
   }));
   const eventsWithParticipants = await prisma.event.findMany({
     select: { slug: true, people: { select: { slug: true } } },
@@ -105,7 +93,6 @@ async function main() {
       type: record.get('type') ?? '',
       hijriYear: record.get('hijriYear') ?? null,
       location: record.get('location') ?? null,
-      battleSlug: record.get('battleSlug') ?? null,
     }));
     const graphParticipants: CanonicalEventParticipant[] = participantResult.records.map((record) => ({
       personSlug: record.get('personSlug') ?? '',
@@ -144,10 +131,6 @@ async function main() {
       || report.participantsPostgresOnly.length;
 
     if (apply) {
-      const eventBattleLinks = postgresEvents
-        .filter((event): event is CanonicalEvent & { battleSlug: string } => event.battleSlug !== null)
-        .map((event) => ({ eventSlug: event.slug, battleSlug: event.battleSlug }));
-
       const writeSession = getDriver().session({
         database: process.env.NEO4J_DATABASE || 'neo4j',
         defaultAccessMode: neo4j.session.WRITE,
@@ -160,7 +143,6 @@ async function main() {
         await writeSession.executeWrite(async (transaction) => {
           await transaction.run(eventUpsertQuery, { events: postgresEvents });
           await transaction.run(participantUpsertQuery, { participants: postgresParticipants });
-          await transaction.run(eventBattleLinkUpsertQuery, { links: eventBattleLinks });
         });
         console.log(`Synchronized ${postgresEvents.length} events and ${postgresParticipants.length} participants to Neo4j.`);
       } finally {

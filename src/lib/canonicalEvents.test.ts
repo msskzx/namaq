@@ -6,17 +6,17 @@ import {
 } from './canonicalEvents';
 
 const postgresEvents = [
-  { slug: 'hijra', name: 'الهجرة', nameTransliterated: 'The Hijra', type: 'HIJRA', hijriYear: 1, location: 'المدينة', battleSlug: null },
-  { slug: 'badr-battle-event', name: 'غزوة بدر', nameTransliterated: 'Battle of Badr', type: 'BATTLE', hijriYear: 2, location: 'بدر', battleSlug: 'badr' },
+  { slug: 'hijra', name: 'الهجرة', nameTransliterated: 'The Hijra', type: 'HIJRA', hijriYear: 1, location: 'المدينة' },
+  { slug: 'saqifah-bani-saidah', name: 'سقيفة بني ساعدة', nameTransliterated: 'Saqifah Bani Saidah', type: 'OTHER', hijriYear: null, location: null },
 ];
 const graphEvents = [
-  { slug: 'hijra', name: ' الهجرة ', nameTransliterated: 'The Hijra', type: 'HIJRA', hijriYear: 1, location: 'المدينة', battleSlug: null },
-  { slug: 'khaybar-liberation', name: 'فتح خيبر', nameTransliterated: 'Liberation of Khaybar', type: 'LIBERATED', hijriYear: 7, location: 'خيبر', battleSlug: null },
+  { slug: 'hijra', name: ' الهجرة ', nameTransliterated: 'The Hijra', type: 'HIJRA', hijriYear: 1, location: 'المدينة' },
+  { slug: 'khaybar-liberation', name: 'فتح خيبر', nameTransliterated: 'Liberation of Khaybar', type: 'LIBERATED', hijriYear: 7, location: 'خيبر' },
 ];
 
 const postgresParticipants = [
   { personSlug: 'prophet-muhammad', eventSlug: 'hijra' },
-  { personSlug: 'ali-ibn-abi-talib', eventSlug: 'badr-battle-event' },
+  { personSlug: 'abu-ubaydah-ibn-al-jarrah', eventSlug: 'saqifah-bani-saidah' },
 ];
 const graphParticipants = [
   { personSlug: 'prophet-muhammad', eventSlug: 'hijra' },
@@ -26,7 +26,7 @@ const graphParticipants = [
 describe('reconcileEvents', () => {
   it('separates postgres-only and graph-only event slugs', () => {
     const report = reconcileEvents(postgresEvents, graphEvents, [], []);
-    expect(report.eventsPostgresOnly).toEqual(['badr-battle-event']);
+    expect(report.eventsPostgresOnly).toEqual(['saqifah-bani-saidah']);
     expect(report.eventsGraphOnly).toEqual(['khaybar-liberation']);
   });
 
@@ -47,21 +47,9 @@ describe('reconcileEvents', () => {
     ]);
   });
 
-  it('reports a mismatch when the linked battle slug differs', () => {
-    const report = reconcileEvents(
-      [postgresEvents[1]],
-      [{ ...postgresEvents[1], battleSlug: 'uhud' }],
-      [],
-      [],
-    );
-    expect(report.eventMismatches).toEqual([
-      { slug: 'badr-battle-event', field: 'battleSlug', postgres: 'badr', neo4j: 'uhud' },
-    ]);
-  });
-
   it('separates postgres-only and graph-only participants by person+event key', () => {
     const report = reconcileEvents([], [], postgresParticipants, graphParticipants);
-    expect(report.participantsPostgresOnly).toEqual(['ali-ibn-abi-talib|badr-battle-event']);
+    expect(report.participantsPostgresOnly).toEqual(['abu-ubaydah-ibn-al-jarrah|saqifah-bani-saidah']);
     expect(report.participantsGraphOnly).toEqual(['abu-bakr|khaybar-liberation']);
   });
 });

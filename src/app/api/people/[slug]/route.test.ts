@@ -42,7 +42,7 @@ describe('GET /api/people/[slug]', () => {
       include: {
         titles: true,
         participations: { include: { battle: true } },
-        events: { include: { battle: true } },
+        events: true,
         ayat: { include: { surah: true } },
       },
     });

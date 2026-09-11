@@ -67,68 +67,6 @@ export const eventsData = [
     locationTransliterated: 'From Mecca to Abyssinia',
     personSlugs: ['jaafar-ibn-abi-talib', 'usman-ibn-affan', 'ruqayyah-bint-muhammad']
   },
-
-  // Battle Events
-  {
-    name: 'غزوة بدر',
-    nameTransliterated: 'Battle of Badr',
-    slug: 'battle-of-badr',
-    type: EventType.BATTLE,
-    battleSlug: 'badr',
-    hijriYear: 2,
-    hijriPeriod: '2 هـ',
-    gregorianYear: 624,
-    gregorianPeriod: '624 م',
-    description: 'غزوة بدر - أول معركة كبرى في التاريخ الإسلامي',
-    descriptionTransliterated: 'Battle of Badr - First major battle in Islamic history',
-    location: 'بدر',
-    locationTransliterated: 'Badr',
-    personSlugs: ['prophet-muhammad', 'ali-ibn-abi-talib', 'hamzah-ibn-abdul-muttalib', 'abu-bakr-as-siddiq', 'umar-ibn-al-khattab'],
-    metadata: {
-      significance: 'نصر حاسم للمسلمين، تأسيس المجتمع الإسلامي المبكر',
-      participants: '313 مسلماً مقابل 1000 من قريش'
-    }
-  },
-  {
-    name: 'غزوة أحد',
-    nameTransliterated: 'Battle of Uhud',
-    slug: 'battle-of-uhud',
-    type: EventType.BATTLE,
-    battleSlug: 'uhud',
-    hijriYear: 3,
-    hijriPeriod: '3 هـ',
-    gregorianYear: 625,
-    gregorianPeriod: '625 م',
-    description: 'غزوة أحد - اختبار صعب للمسلمين',
-    descriptionTransliterated: 'Battle of Uhud - A challenging battle for Muslims',
-    location: 'جبل أحد',
-    locationTransliterated: 'Mount Uhud',
-    personSlugs: ['prophet-muhammad', 'ali-ibn-abi-talib', 'hamzah-ibn-abdul-muttalib', 'abu-bakr-as-siddiq', 'umar-ibn-al-khattab'],
-    metadata: {
-      significance: 'واجه المسلمون صعوبات لكنهم تعلموا دروساً مهة',
-      participants: '700 مسلم مقابل 3000 من قريش'
-    }
-  },
-  {
-    name: 'غزوة الخندق',
-    nameTransliterated: 'Battle of the Trench',
-    slug: 'battle-of-the-trench',
-    type: EventType.BATTLE,
-    battleSlug: 'khandaq',
-    hijriYear: 5,
-    hijriPeriod: '5 هـ',
-    gregorianYear: 627,
-    gregorianPeriod: '627 م',
-    description: 'غزوة الخندق - دفاع عن المدينة المنورة',
-    descriptionTransliterated: 'Battle of the Trench (Khandaq) - Defense of Medina',
-    location: 'المدينة المنورة',
-    locationTransliterated: 'Medina',
-    personSlugs: ['prophet-muhammad', 'ali-ibn-abi-talib', 'salman-al-farsi', 'abu-bakr-as-siddiq', 'umar-ibn-al-khattab'],
-    metadata: {
-      significance: 'دفاع ناجح عن المدينة، نهاية التهديد المكي',
-      participants: '3000 مسلم مقابل أكثر من 10000 من الأحزاب'
-    }
-  },
   // Death Events
   {
     name: 'وفاة النبي محمد ﷺ',
@@ -183,26 +121,6 @@ export const eventsData = [
   },
   // add the following events for these battles with slugs:
   // slug: 'banu-qurayzah',
-  {
-    name: 'غزوة بني قريظة',
-    nameTransliterated: 'Battle of Banu Qurayzah',
-    slug: 'battle-of-bani-qurayzah',
-    type: EventType.BATTLE,
-    battleSlug: 'banu-qurayzah',
-    hijriYear: 5,
-    hijriPeriod: '5 هـ',
-    gregorianYear: 625,
-    gregorianPeriod: '625 م',
-    description: 'غزوة بني قريظة',
-    descriptionTransliterated: 'Battle of Banu Qurayzah',
-    location: 'بني قريظة',
-    locationTransliterated: 'Banu Qurayzah',
-    personSlugs: ['prophet-muhammad', 'abu-bakr-as-siddiq', 'umar-ibn-al-khattab'],
-    metadata: {
-      significance: 'انتصار المسلمون على قريظة، انتهاء الحرب المكية',
-      participants: '3000 مسلم مقابل أكثر من 10000 من الأحزاب'
-    }
-  },
   // slug: 'hudaybiyyah',
   {
     name: 'صلح الحديبية',
@@ -224,108 +142,8 @@ export const eventsData = [
     }
   },
   // slug: 'khaybar',
-  {
-    name: 'غزوة خيبر',
-    nameTransliterated: 'Battle of Khaybar',
-    slug: 'battle-of-khaybar',
-    type: EventType.BATTLE,
-    battleSlug: 'khaybar',
-    hijriYear: 7,
-    hijriPeriod: '7 هـ',
-    gregorianYear: 628,
-    gregorianPeriod: '628 م',
-    description: 'غزوة خيبر',
-    descriptionTransliterated: 'Battle of Khaybar',
-    location: 'خيبر',
-    locationTransliterated: 'Khaybar',
-    personSlugs: ['prophet-muhammad', 'abu-bakr-as-siddiq', 'umar-ibn-al-khattab'],
-    metadata: {
-      significance: 'انتصار المسلمون على قريظة، انتهاء الحرب المكية',
-      participants: '3000 مسلم مقابل أكثر من 10000 من الأحزاب'
-    }
-  },
   // slug: 'fath-makkah',
-  {
-    name: 'فتح مكة',
-    nameTransliterated: 'Conquest of Mecca',
-    slug: 'conquest-of-mecca',
-    type: EventType.BATTLE,
-    battleSlug: 'fath-makkah',
-    hijriYear: 8,
-    hijriPeriod: '8 هـ',
-    gregorianYear: 628,
-    gregorianPeriod: '628 م',
-    description: 'فتح مكة',
-    descriptionTransliterated: 'Conquest of Mecca',
-    location: 'مكة',
-    locationTransliterated: 'Mecca',
-    personSlugs: ['prophet-muhammad', 'abu-bakr-as-siddiq', 'umar-ibn-al-khattab'],
-    metadata: {
-      significance: 'انتصار المسلمون على قريظة، انتهاء الحرب المكية',
-      participants: '3000 مسلم مقابل أكثر من 10000 من الأحزاب'
-    }
-  },
   // slug: 'hunayn',
-  {
-    name: 'غزوة حنين',
-    nameTransliterated: 'Battle of Hunayn',
-    slug: 'battle-of-hunayn',
-    type: EventType.BATTLE,
-    battleSlug: 'hunayn',
-    hijriYear: 8,
-    hijriPeriod: '8 هـ',
-    gregorianYear: 628,
-    gregorianPeriod: '628 م',
-    description: 'غزوة حنين',
-    descriptionTransliterated: 'Battle of Hunayn',
-    location: 'حنين',
-    locationTransliterated: 'Hunayn',
-    personSlugs: ['prophet-muhammad', 'abu-bakr-as-siddiq', 'umar-ibn-al-khattab'],
-    metadata: {
-      significance: 'انتصار المسلمون على قريظة، انتهاء الحرب المكية',
-      participants: '3000 مسلم مقابل أكثر من 10000 من الأحزاب'
-    }
-  },
   // slug: 'taif',
-  {
-    name: 'غزوة الطائف',
-    nameTransliterated: 'Battle of Taif',
-    slug: 'battle-of-taif',
-    type: EventType.BATTLE,
-    battleSlug: 'taif',
-    hijriYear: 8,
-    hijriPeriod: '8 هـ',
-    gregorianYear: 628,
-    gregorianPeriod: '628 م',
-    description: 'غزوة الطائف',
-    descriptionTransliterated: 'Battle of Taif',
-    location: 'الطائف',
-    locationTransliterated: 'Taif',
-    personSlugs: ['prophet-muhammad', 'abu-bakr-as-siddiq', 'umar-ibn-al-khattab'],
-    metadata: {
-      significance: 'انتصار المسلمون على قريظة، انتهاء الحرب المكية',
-      participants: '3000 مسلم مقابل أكثر من 10000 من الأحزاب'
-    }
-  },
   // slug: 'tabuk',
-  {
-    name: 'غزوة تبوك',
-    nameTransliterated: 'Battle of Tabuk',
-    slug: 'battle-of-tabuk',
-    type: EventType.BATTLE,
-    battleSlug: 'tabuk',
-    hijriYear: 9,
-    hijriPeriod: '9 هـ',
-    gregorianYear: 628,
-    gregorianPeriod: '628 م',
-    description: 'غزوة تبوك',
-    descriptionTransliterated: 'Battle of Tabuk',
-    location: 'تبوك',
-    locationTransliterated: 'Tabuk',
-    personSlugs: ['prophet-muhammad', 'abu-bakr-as-siddiq', 'umar-ibn-al-khattab'],
-    metadata: {
-      significance: 'انتصار المسلمون على قريظة، انتهاء الحرب المكية',
-      participants: '3000 مسلم مقابل أكثر من 10000 من الأحزاب'
-    }
-  },
 ];

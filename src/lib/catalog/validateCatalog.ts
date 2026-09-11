@@ -66,9 +66,6 @@ export function validateCatalog(catalog: Catalog, known: KnownSlugs): CatalogIss
       checkProvenance(entry.claims, known, `${at}.${entry.person}`, issues);
       if (!person(entry.person)) issues.push({ path: at, message: `unknown person ${entry.person}` });
     });
-    if (event.battle && !known.battles.has(event.battle)) {
-      issues.push({ path: at, message: `unknown battle ${event.battle}` });
-    }
   });
 
   return issues;
