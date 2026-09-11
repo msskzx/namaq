@@ -56,45 +56,54 @@ export default function ClaimEvidence({
   const { language } = useLanguage();
   const t = translations[language];
   const [page, setPage] = useState(1);
-  const pageCount = Math.max(1, Math.ceil(claims.length / pageSize));
+
+  const supportLabel = (claim: ClaimWithCitations) => {
+    const relationName = claim.relationshipType
+      ? (t.relationTypes as Record<string, string>)[claim.relationshipType] ?? claim.relationshipType
+      : null;
+    // Same shape as the graph's link tooltip (src/components/graph/GraphCanvas.tsx):
+    // naming both ends is what makes the direction readable in either script.
+    if (relationName) {
+      const other = claim.relatedSubjectName ?? claim.relatedSubjectSlug ?? '';
+      return [subjectName ?? claim.subjectSlug, '-', relationName, '->', other].join(' ');
+    }
+    return claim.field ? fieldLabel[claim.field]?.[language === 'ar' ? 'ar' : 'en'] ?? claim.field : '';
+  };
+
+  // Claims are grouped by what they support so competing accounts of one value
+  // sit together; two claims about the year of death are a disagreement, and a
+  // flat list presents them as unrelated facts.
+  const groups = new Map<string, ClaimWithCitations[]>();
+  claims.forEach((claim) => {
+    const label = supportLabel(claim);
+    groups.set(label, [...(groups.get(label) ?? []), claim]);
+  });
+  const grouped = [...groups];
+  const pageCount = Math.max(1, Math.ceil(grouped.length / pageSize));
 
   // A shorter list can leave the reader on a page that no longer exists, for
   // instance when the profile's claims arrive after an empty first render.
   useEffect(() => {
-    setPage((current) => Math.min(current, Math.max(1, Math.ceil(claims.length / pageSize))));
-  }, [claims.length, pageSize]);
+    setPage((current) => Math.min(current, pageCount));
+  }, [pageCount]);
 
   if (claims.length === 0) return null;
 
+  // Paged by group, so a disagreement is never split across a page break.
   const first = (page - 1) * pageSize;
-  const shown = claims.slice(first, first + pageSize);
+  const shown = grouped.slice(first, first + pageSize);
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
       <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">{title}</h2>
-      <ul className="space-y-4">
-        {shown.map((claim) => {
-          const relationName = claim.relationshipType
-            ? (t.relationTypes as Record<string, string>)[claim.relationshipType] ?? claim.relationshipType
-            : null;
-          const other = claim.relatedSubjectName ?? claim.relatedSubjectSlug ?? '';
-          // Same shape as the graph's link tooltip (src/components/graph/GraphCanvas.tsx):
-          // naming both ends is what makes the direction readable in either script.
-          const relation = relationName
-            ? [subjectName ?? claim.subjectSlug, '-', relationName, '->', other].join(' ')
-            : null;
-          // What the profile would change if this claim were acted on, so a
-          // reader can tell evidence for a recorded value from background.
-          const supports = relation ?? (claim.field ? fieldLabel[claim.field]?.[language === 'ar' ? 'ar' : 'en'] ?? claim.field : null);
-
-          return (
+      <ul className="space-y-6">
+        {shown.map(([label, members]) => (
+          <li key={label}>
+            <h3 className="mb-2 font-semibold text-gray-900 dark:text-gray-100">{label}</h3>
+            <ul className="space-y-4">
+              {members.map((claim) => (
             <li key={claim.id} className="border-s-4 border-amber-500 ps-3 text-gray-800 dark:text-gray-200">
               <p>{claim.assertion}</p>
-              {supports && (
-                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                  {language === 'ar' ? `تدعم: ${supports}` : `Supports: ${supports}`}
-                </p>
-              )}
               <div className="mt-2 flex flex-wrap items-center gap-2">
                 <Badge size="sm" color="gray" text={reviewStatusLabel[claim.reviewStatus][language === 'ar' ? 'ar' : 'en']} />
               </div>
@@ -133,8 +142,10 @@ export default function ClaimEvidence({
                 </div>
               )}
             </li>
-          );
-        })}
+              ))}
+            </ul>
+          </li>
+        ))}
       </ul>
 
       <Pagination page={page} pageCount={pageCount} onChange={setPage} showSelect />

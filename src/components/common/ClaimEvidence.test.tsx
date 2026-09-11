@@ -106,12 +106,12 @@ describe('ClaimEvidence', () => {
 
     // Same shape as the graph's link tooltip: naming both ends is what makes
     // the direction readable in either script.
-    expect(screen.getByText('Supports: أبو عبيدة - Companion Of -> prophet-muhammad')).toBeTruthy();
+    expect(screen.getByText('أبو عبيدة - Companion Of -> prophet-muhammad')).toBeTruthy();
   });
 
   it('shows one page of claims at a time, with a jump to any of them', () => {
     const many = Array.from({ length: 25 }, (_, index) =>
-      claim({ id: `claim-${index}`, assertion: `دعوى ${index}` } as Partial<ClaimWithCitations>),
+      claim({ id: `claim-${index}`, assertion: `دعوى ${index}`, field: `field${index}` } as Partial<ClaimWithCitations>),
     );
 
     const { container } = render(<ClaimEvidence title="Sources" claims={many} />);
@@ -124,7 +124,7 @@ describe('ClaimEvidence', () => {
 
   it('pages forward and back through the claims', () => {
     const many = Array.from({ length: 25 }, (_, index) =>
-      claim({ id: `claim-${index}`, assertion: `دعوى ${index}` } as Partial<ClaimWithCitations>),
+      claim({ id: `claim-${index}`, assertion: `دعوى ${index}`, field: `field${index}` } as Partial<ClaimWithCitations>),
     );
 
     render(<ClaimEvidence title="Sources" claims={many} />);
@@ -140,7 +140,7 @@ describe('ClaimEvidence', () => {
 
   it('stops at both ends', () => {
     const many = Array.from({ length: 7 }, (_, index) =>
-      claim({ id: `claim-${index}`, assertion: `دعوى ${index}` } as Partial<ClaimWithCitations>),
+      claim({ id: `claim-${index}`, assertion: `دعوى ${index}`, field: `field${index}` } as Partial<ClaimWithCitations>),
     );
 
     render(<ClaimEvidence title="Sources" claims={many} />);
@@ -179,7 +179,7 @@ describe('ClaimEvidence', () => {
   it('says which profile field a claim supports', () => {
     render(<ClaimEvidence title="Sources" claims={[claim({ field: 'deathYearHijri' } as Partial<ClaimWithCitations>)]} />);
 
-    expect(screen.getByText('Supports: Year of death')).toBeTruthy();
+    expect(screen.getByText('Year of death')).toBeTruthy();
   });
 
   // A claim backing nothing cannot reach the interface: validateBatch rejects it
@@ -188,6 +188,20 @@ describe('ClaimEvidence', () => {
     render(<ClaimEvidence title="Sources" claims={[claim({ field: null } as Partial<ClaimWithCitations>)]} />);
 
     expect(screen.queryByText(/^Supports:/)).toBeNull();
+  });
+
+  it('gathers competing accounts of one value under a single heading', () => {
+    const years = [
+      claim({ id: 'c-18', field: 'deathYearHijri', assertion: 'سنة ثمان عشرة' } as Partial<ClaimWithCitations>),
+      claim({ id: 'c-17', field: 'deathYearHijri', assertion: 'سنة سبع عشرة' } as Partial<ClaimWithCitations>),
+    ];
+
+    render(<ClaimEvidence title="Sources" claims={years} />);
+
+    // One heading, both assertions under it: the disagreement reads as one.
+    expect(screen.getAllByText('Year of death')).toHaveLength(1);
+    expect(screen.getByText('سنة ثمان عشرة')).toBeTruthy();
+    expect(screen.getByText('سنة سبع عشرة')).toBeTruthy();
   });
 
   it('links a citation to the page it was read from', () => {
