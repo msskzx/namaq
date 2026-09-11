@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import Pagination from '@/components/common/Pagination';
 import { useLanguage } from '@/components/language/LanguageContext';
 import translations from '@/components/language/translations';
@@ -12,9 +13,12 @@ import {
 import Badge from '@/components/common/Badge';
 
 interface ClaimEvidenceProps {
+  /** The profile's own subject, so a relation names both of its ends. */
+  subjectName?: string;
+  /** The profile's slug, so a citation can link to the page it was read from. */
+  subjectSlug?: string;
   title: string;
   claims: ClaimWithCitations[];
-  relationshipClaims?: boolean;
   pageSize?: number;
 }
 
@@ -49,19 +53,34 @@ function citationText(citation: CitationWithSource, language: string) {
 export default function ClaimEvidence({
   title,
   claims,
-  relationshipClaims = false,
   pageSize = 5,
+  subjectName,
+  subjectSlug,
 }: ClaimEvidenceProps) {
   const { language } = useLanguage();
   const t = translations[language];
   const [page, setPage] = useState(1);
+
+  const supportLabel = (claim: ClaimWithCitations) => {
+    const relationName = claim.relationshipType
+      ? (t.relationTypes as Record<string, string>)[claim.relationshipType] ?? claim.relationshipType
+      : null;
+    // Same shape as the graph's link tooltip (src/components/graph/GraphCanvas.tsx):
+    // naming both ends is what makes the direction readable in either script.
+    if (relationName) {
+      const other = claim.relatedSubjectName ?? claim.relatedSubjectSlug ?? '';
+      return [subjectName ?? claim.subjectSlug, '-', relationName, '->', other].join(' ');
+    }
+    return claim.field ? fieldLabel[claim.field]?.[language === 'ar' ? 'ar' : 'en'] ?? claim.field : '';
+  };
+
   const pageCount = Math.max(1, Math.ceil(claims.length / pageSize));
 
   // A shorter list can leave the reader on a page that no longer exists, for
   // instance when the profile's claims arrive after an empty first render.
   useEffect(() => {
-    setPage((current) => Math.min(current, Math.max(1, Math.ceil(claims.length / pageSize))));
-  }, [claims.length, pageSize]);
+    setPage((current) => Math.min(current, pageCount));
+  }, [pageCount]);
 
   if (claims.length === 0) return null;
 
@@ -72,33 +91,17 @@ export default function ClaimEvidence({
     <section className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
       <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">{title}</h2>
       <ul className="space-y-4">
-        {shown.map((claim) => {
-          const relationship =
-            relationshipClaims && claim.relationshipType
-              ? `${claim.relationshipType.replaceAll('_', ' ').toLowerCase()} → ${claim.relatedSubjectName ?? claim.relatedSubjectSlug ?? ''}`
-              : null;
-          // What the profile would change if this claim were acted on, so a
-          // reader can tell evidence for a recorded value from background.
-          const relationName = claim.relationshipType
-            ? (t.relationTypes as Record<string, string>)[claim.relationshipType] ?? claim.relationshipType
-            : null;
-          const supports = relationName
-            ? `${relationName} → ${claim.relatedSubjectName ?? claim.relatedSubjectSlug ?? ''}`
-            : claim.field
-              ? fieldLabel[claim.field]?.[language === 'ar' ? 'ar' : 'en'] ?? claim.field
-              : null;
-
-          return (
+        {shown.map((claim) => (
             <li key={claim.id} className="border-s-4 border-amber-500 ps-3 text-gray-800 dark:text-gray-200">
-              {relationship && <p className="mb-1 text-sm font-semibold uppercase tracking-wide">{relationship}</p>}
-              <p>{claim.assertion}</p>
-              {supports && (
-                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                  {language === 'ar' ? `تدعم: ${supports}` : `Supports: ${supports}`}
-                </p>
-              )}
+              <h3 className="mb-1 font-semibold text-gray-900 dark:text-gray-100">{supportLabel(claim)}</h3>
+              {/* The assertion is dropped deliberately: it restates the passages
+                  shown below it, so printing it makes the same words a third
+                  time after the heading and the evidence. */}
               <div className="mt-2 flex flex-wrap items-center gap-2">
                 <Badge size="sm" color="gray" text={reviewStatusLabel[claim.reviewStatus][language === 'ar' ? 'ar' : 'en']} />
+                {claim.disputed && (
+                  <Badge size="sm" color="amber" text={language === 'ar' ? 'روايات متعارضة' : 'Accounts conflict'} />
+                )}
               </div>
               {claim.citations.length === 0 ? (
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
@@ -121,22 +124,28 @@ export default function ClaimEvidence({
                             {citation.excerptArabic}
                           </p>
                         )}
-                        <a
-                          className="mt-1 inline-block text-xs text-gray-600 underline dark:text-gray-400"
-                          href={citation.extractionUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          {citationText(citation, language)}
-                        </a>
+                        <span className="mt-1 flex flex-wrap items-baseline gap-x-2 text-xs text-gray-600 dark:text-gray-400">
+                          {citation.passage?.page && subjectSlug ? (
+                            <Link
+                              className="underline"
+                              href={`/people/${subjectSlug}?book=${citation.passage.page.accountId}&page=${citation.passage.page.sequence}`}
+                            >
+                              {citationText(citation, language)}
+                            </Link>
+                          ) : (
+                            <span>{citationText(citation, language)}</span>
+                          )}
+                          <a className="underline" href={citation.extractionUrl} target="_blank" rel="noreferrer">
+                            {citation.source.digitalHost ?? (language === 'ar' ? 'المصدر الرقمي' : 'Digital host')}
+                          </a>
+                        </span>
                       </li>
                     ))}
                   </ul>
                 </div>
               )}
             </li>
-          );
-        })}
+        ))}
       </ul>
 
       <Pagination page={page} pageCount={pageCount} onChange={setPage} showSelect />

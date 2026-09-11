@@ -242,6 +242,14 @@ export function validateBatch(batch: HistoryBatch, files: BatchFiles): Validatio
     if (!claim.assertion.trim()) issues.push({ path, message: 'assertion is required' });
     if (!claim.subjectSlug.trim()) issues.push({ path, message: 'subjectSlug is required' });
 
+    // A claim exists to make one recorded value checkable. The source pages
+    // already hold everything the entry says, so a claim backing nothing is a
+    // second copy of text rather than evidence -- see AGENTS.md, "Historical
+    // evidence data".
+    if (!claim.field && !claim.relationshipType) {
+      issues.push({ path, message: 'a claim must name the field or relationship it supports' });
+    }
+
     const relationshipParts = [claim.relationshipType, claim.relatedSubjectKind, claim.relatedSubjectSlug];
     const present = relationshipParts.filter(Boolean).length;
     if (present > 0 && present < relationshipParts.length) {
@@ -260,15 +268,17 @@ export function validateBatch(batch: HistoryBatch, files: BatchFiles): Validatio
 }
 
 /**
- * Content hash of the batch and its Markdown. Approval is recorded against this
- * value, so any edit after approval produces a different revision and has to be
- * approved again.
+ * Content hash of the batch and the source pages, so any edit after approval
+ * has to be approved again. summary.md is outside it: the summary is written
+ * for the reviewer and changing its wording invalidates nothing about the
+ * evidence.
  */
 export function batchRevision(batch: HistoryBatch, files: BatchFiles): string {
   const content = { ...batch, approval: undefined };
   const hash = createHash('sha256');
   hash.update(JSON.stringify(content));
   Object.keys(files)
+    .filter((path) => path !== batch.summaryFile)
     .sort()
     .forEach((path) => {
       hash.update(path);

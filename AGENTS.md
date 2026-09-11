@@ -128,10 +128,49 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   <batch dir>` before proposing a batch, and `npm run history:import -- <batch
   dir>` for a dry run. Import applies only the revision recorded as approved in
   `batch.json`, so any edit after approval needs approving again.
+- **Seed files are a checklist, never a source.** The people, battle and event
+  seeds under `prisma/` and `neo4j/` were extracted from Siyar A'lam al-Nubala'
+  by an earlier agent without citations, so their values are mostly right and
+  stand on nothing. Read them to learn which subjects exist and which fields a
+  subject is claimed to have, then look for each in the source. Never carry a
+  value into the catalog because a seed file has it.
+- A carried value that no batch supports yet is marked `legacy-unreviewed`.
+  That is a real state, not a failure: it says the value is in use and its
+  evidence is still owed. Where the source is silent, leave the marker rather
+  than dropping the value or inventing a citation.
+- **A batch covering a subject must visit every legacy value on it** and do one
+  of three things with each: promote it to a cited claim, leave it legacy
+  because the entry says nothing, or flag a contradiction in the batch's
+  `summary.md`. Two extractions from one book disagreeing means one misread, so
+  do not silently overwrite.
+- `npm run catalog:ledger` lists every value whose evidence is owed;
+  `-- --batch <dir>` narrows it to the subjects that batch speaks about,
+  including the ones its claims point at. Run the scoped form before approving,
+  since what it prints is what the batch walked past.
+- Two separate actions gate a batch, and neither implies the other.
+  **Approving for publication** records the current revision in `batch.json`'s
+  approval block, which is what lets `npm run history:import -- --apply` write.
+  It says the batch may be published and says nothing about anyone having read
+  it. **Marking reviewed** sets a claim's `reviewStatus`, one claim at a time,
+  after someone compares the assertion against the passage. A batch approved
+  for publication whose claims are all Not reviewed is a normal and honest
+  state, and the approval note should say so.
 - Record data at whatever review status is honest and let it be visible; review
   status never hides data (`docs/adr/0008-separate-review-from-visibility.md`).
-  Leave an unknown structured value unset rather than inventing one, and keep
-  competing accounts as separate attributed claims.
+  Leave an unknown structured value unset rather than inventing one.
+- **The source text is the book; the app structures a selection from it.** The
+  account pages are authoritative and are never edited or removed to reflect a
+  change in what the app models. Removing a claim removes a selection, never the
+  passage it selected from.
+- **Author a claim only when it backs a value the model holds today**: a profile
+  field, a title assignment, a participation, an event link, or a person
+  relation. A claim that names neither a field nor a relationship is rejected by
+  `npm run history:validate`. The entry is already preserved page by page, so
+  such a claim is a second copy of text rather than evidence.
+- Competing accounts are kept as separate attributed claims **only where the
+  model holds the value they compete over**, such as two death years. A
+  disagreement about something the app does not record stays in the source
+  pages, where it already is.
 - Transmission chains stay in the source text. A person mentioned only as a
   narrator does not become a graph node or an edge.
 

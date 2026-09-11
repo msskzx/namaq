@@ -58,10 +58,17 @@ export interface CatalogParticipation {
   readonly claims: Provenance;
 }
 
+/** Keys are Prisma `Battle` column names. */
+export interface CatalogBattleFields {
+  readonly hijriYear?: Cited<number>;
+  readonly location?: Cited<string>;
+}
+
 /** Names only the participants its batch's focal subject brought, never the full roster. */
 export interface CatalogBattle {
   readonly kind: 'BATTLE';
   readonly slug: string;
+  readonly fields?: CatalogBattleFields;
   readonly participants: readonly CatalogParticipation[];
 }
 

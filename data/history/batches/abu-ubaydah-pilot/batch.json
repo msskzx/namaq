@@ -973,29 +973,11 @@
       "reviewerNote": "نسب أطول مما في بيانات التطبيق الحالية، وفيها \"المكي\" غير مذكورة؛ تغيير القيمة المعتمدة يحتاج مراجعة صريحة."
     },
     {
-      "key": "abu-ubaydah/kinship-with-prophet",
+      "key": "abu-ubaydah/titles",
       "subjectKind": "PERSON",
       "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
-      "assertion": "يجتمع في النسب هو والنبي صلى الله عليه وسلم في فهر.",
-      "confidence": "ESTABLISHED",
-      "reviewStatus": "NOT_REVIEWED",
-      "citations": [
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "6-p2",
-          "volume": "1",
-          "pageReference": "6",
-          "extractionUrl": "https://shamela.ws/book/10906/1432",
-          "excerptArabic": "يَجْتَمِعُ فِي النَّسَبِ هُوَ وَالنَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فِي فِهْرٍ.",
-          "accessedAt": "2026-09-09"
-        }
-      ]
-    },
-    {
-      "key": "abu-ubaydah/title-amin-al-ummah",
-      "subjectKind": "PERSON",
-      "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
-      "assertion": "سماه النبي صلى الله عليه وسلم أمين الأمة، وقال: إن لكل أمة أميناً، وأمين هذه الأمة أبو عبيدة بن الجراح.",
+      "field": "titles",
+      "assertion": "أحد السابقين الأولين، وشهد له النبي صلى الله عليه وسلم بالجنة، وسماه أمين هذه الأمة.",
       "confidence": "ESTABLISHED",
       "reviewStatus": "NOT_REVIEWED",
       "citations": [
@@ -1025,38 +1007,7 @@
           "extractionUrl": "https://shamela.ws/book/10906/1437",
           "excerptArabic": "أَنَّ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَالَ: (لِكُلِّ أُمَّةٍ أَمِيْنٌ، وَأَمِيْنُ هَذِهِ الأُمَّةِ: أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ (٤)) .",
           "accessedAt": "2026-09-09"
-        }
-      ],
-      "field": "titles"
-    },
-    {
-      "key": "abu-ubaydah/testified-paradise",
-      "subjectKind": "PERSON",
-      "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
-      "assertion": "شهد له النبي صلى الله عليه وسلم بالجنة.",
-      "confidence": "ESTABLISHED",
-      "reviewStatus": "NOT_REVIEWED",
-      "citations": [
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "6-p3",
-          "volume": "1",
-          "pageReference": "6",
-          "extractionUrl": "https://shamela.ws/book/10906/1432",
-          "excerptArabic": "شَهِدَ لَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِالجَنَّةِ، وَسَمَّاهُ: أَمِيْنَ الأُمَّةِ، وَمَنَاقِبُهُ شَهِيْرَةٌ جَمَّةٌ.",
-          "accessedAt": "2026-09-09"
-        }
-      ],
-      "reviewerNote": "لا يرد في هذه الترجمة لفظ \"العشرة المبشرين بالجنة\" الذي يحمله لقبه في التطبيق؛ يلزم دليل آخر لذلك اللقب."
-    },
-    {
-      "key": "abu-ubaydah/early-islam",
-      "subjectKind": "PERSON",
-      "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
-      "assertion": "أحد السابقين الأولين، أسلم مع نفر في ساعة واحدة قبل دخول النبي صلى الله عليه وسلم دار الأرقم.",
-      "confidence": "LIKELY",
-      "reviewStatus": "NOT_REVIEWED",
-      "citations": [
+        },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
           "passageAnchor": "5-p5",
@@ -1081,7 +1032,7 @@
       "key": "abu-ubaydah/appearance",
       "subjectKind": "PERSON",
       "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
-      "assertion": "كان رجلاً نحيفاً، معروق الوجه، خفيف اللحية، طوالاً، أحنى، أثرم الثنيتين.",
+      "assertion": "كان رجلاً نحيفاً، معروق الوجه، خفيف اللحية، طوالاً، أحنى، أثرم الثنيتين، وكان يخضب بالحناء والكتم، وكان له عقيصتان.",
       "confidence": "LIKELY",
       "reviewStatus": "NOT_REVIEWED",
       "citations": [
@@ -1092,6 +1043,15 @@
           "pageReference": "7",
           "extractionUrl": "https://shamela.ws/book/10906/1433",
           "excerptArabic": "أَنَّهُ وَصَفَ أَبَا عُبَيْدَةَ، فَقَالَ: كَانَ رَجُلاً نَحِيْفاً، مَعْرُوْقَ الوَجْهِ، خَفِيْفَ اللِّحْيَةِ، طُوَالاً، أَحْنَى (٢) ، أَثْرَمَ (٣) الثَّنِيَّتَيْنِ (٤) .",
+          "accessedAt": "2026-09-09"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "23-p6",
+          "volume": "1",
+          "pageReference": "23",
+          "extractionUrl": "https://shamela.ws/book/10906/1449",
+          "excerptArabic": "قَالَ أَبُو حَفْصٍ الفَلاَّسُ: تُوُفِّيَ أَبُو عُبَيْدَةَ فِي سَنَةِ ثَمَانِ عَشْرَةَ، وَلَهُ ثَمَانٌ وَخَمْسُوْنَ سَنَةً، وَكَانَ يَخْضِبُ بِالحِنَّاءِ وَالكَتَمِ (٤) ، وَكَانَ لَهُ عَقِيْصَتَانِ.",
           "accessedAt": "2026-09-09"
         }
       ],
@@ -1114,7 +1074,10 @@
           "excerptArabic": "وَقَدْ شَهِدَ أَبُو عُبَيْدَةَ بَدْراً، فَقَتَلَ يَوْمَئِذٍ أَبَاهُ، وَأَبْلَى يَوْمَ أُحُدٍ بَلاَءً حَسَناً، وَنَزَعَ يَوْمَئِذٍ الحَلْقَتَيْنِ اللَّتَيْنِ دَخَلَتَا مِنَ المِغْفَرِ فِي وَجْنَةِ رَسُوْلِ اللهِ -صَلَّى ا",
           "accessedAt": "2026-09-09"
         }
-      ]
+      ],
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr"
     },
     {
       "key": "abu-ubaydah/uhud",
@@ -1133,64 +1096,10 @@
           "excerptArabic": "وَقَدْ شَهِدَ أَبُو عُبَيْدَةَ بَدْراً، فَقَتَلَ يَوْمَئِذٍ أَبَاهُ، وَأَبْلَى يَوْمَ أُحُدٍ بَلاَءً حَسَناً، وَنَزَعَ يَوْمَئِذٍ الحَلْقَتَيْنِ اللَّتَيْنِ دَخَلَتَا مِنَ المِغْفَرِ فِي وَجْنَةِ رَسُوْلِ اللهِ -صَلَّى ا",
           "accessedAt": "2026-09-09"
         }
-      ]
-    },
-    {
-      "key": "abu-ubaydah/quran-collection",
-      "subjectKind": "PERSON",
-      "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
-      "assertion": "كان معدوداً فيمن جمع القرآن العظيم.",
-      "confidence": "LIKELY",
-      "reviewStatus": "NOT_REVIEWED",
-      "citations": [
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "8-p8",
-          "volume": "1",
-          "pageReference": "8",
-          "extractionUrl": "https://shamela.ws/book/10906/1434",
-          "excerptArabic": "وَكَانَ أَبُو عُبَيْدَةَ مَعْدُوْداً فِيْمَنْ جَمَعَ القُرْآنَ العَظِيْمَ.",
-          "accessedAt": "2026-09-09"
-        }
-      ]
-    },
-    {
-      "key": "abu-ubaydah/abyssinia-migration",
-      "subjectKind": "PERSON",
-      "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
-      "assertion": "ذكر ابن إسحاق والواقدي أنه كان ممن هاجر إلى أرض الحبشة، وتعقبه الذهبي بأنه إن كان هاجر إليها فإنه لم يطل بها اللبث.",
-      "confidence": "DISPUTED",
-      "reviewStatus": "NOT_REVIEWED",
-      "citations": [
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "8-p5",
-          "volume": "1",
-          "pageReference": "8",
-          "extractionUrl": "https://shamela.ws/book/10906/1434",
-          "excerptArabic": "قَالَ الزُّبَيْرُ بنُ بَكَّارٍ: قَدِ انْقَرَضَ نَسْلُ أَبِي عُبَيْدَةَ، وَوَلَدُ إِخْوَتِهِ جَمِيْعاً، وَكَانَ مِمَّنْ هَاجَرَ إِلَى أَرْضِ الحَبَشَةِ.",
-          "accessedAt": "2026-09-09"
-        },
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "8-p6",
-          "volume": "1",
-          "pageReference": "8",
-          "extractionUrl": "https://shamela.ws/book/10906/1434",
-          "excerptArabic": "قَالَهُ: ابْنُ إِسْحَاقَ، وَالوَاقِدِيُّ (٢) .",
-          "accessedAt": "2026-09-09"
-        },
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "8-p7",
-          "volume": "1",
-          "pageReference": "8",
-          "extractionUrl": "https://shamela.ws/book/10906/1434",
-          "excerptArabic": "قُلْتُ: إِنْ كَانَ هَاجَرَ إِلَيْهَا، فَإِنَّهُ لَمْ يُطِلْ بِهَا (٣) اللَّبْثَ.",
-          "accessedAt": "2026-09-09"
-        }
       ],
-      "disputed": true
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud"
     },
     {
       "key": "abu-ubaydah/dhat-al-salasil-command",
@@ -1227,7 +1136,10 @@
           "excerptArabic": "فَلَمَّا رَأَى ذَلِكَ أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ، وَكَانَ رَجُلاً حَسَنَ الخُلُقِ، لَيِّنَ الشِّيْمَةِ، مُتَّبِعاً لأَمْرِ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَعَهْدِهِ، فَسَلَّمَ الإِمَارَةَ لِعَمْر",
           "accessedAt": "2026-09-09"
         }
-      ]
+      ],
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "zat-as-salasil"
     },
     {
       "key": "abu-ubaydah/saqifah-nomination",
@@ -1255,91 +1167,10 @@
           "excerptArabic": "قَدْ رَضِيْتُ لَكُم أَحَدَ هَذَيْنِ الرَّجُلَيْنِ: عُمَرَ، وَأَبَا عُبَيْدَةَ.",
           "accessedAt": "2026-09-09"
         }
-      ]
-    },
-    {
-      "key": "abu-ubaydah/umar-succession-wish",
-      "subjectKind": "PERSON",
-      "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
-      "assertion": "قال عمر بن الخطاب: إن أدركني أجلي وأبو عبيدة حي استخلفته.",
-      "confidence": "LIKELY",
-      "reviewStatus": "NOT_REVIEWED",
-      "citations": [
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "10-p1",
-          "volume": "1",
-          "pageReference": "10",
-          "extractionUrl": "https://shamela.ws/book/10906/1436",
-          "excerptArabic": "أَجَلِي، وَأَبُو عُبَيْدَةَ حَيٌّ، اسْتَخْلَفْتُهُ، فَإِنْ سَأَلَنِي اللهُ -عَزَّ وَجَلَّ-: لِمَ اسْتَخْلَفْتَهُ عَلَى أُمَّةِ مُحَمَّدٍ؟",
-          "accessedAt": "2026-09-09"
-        },
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "10-p2",
-          "volume": "1",
-          "pageReference": "10",
-          "extractionUrl": "https://shamela.ws/book/10906/1436",
-          "excerptArabic": "قُلْتُ: إِنِّي سَمِعْتُ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَقُوْلُ: (إِنَّ لِكُلِّ أُمَّةٍ أَمِيْناً، وَأَمِيْنُ هَذِهِ الأُمَّةِ: أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ) .",
-          "accessedAt": "2026-09-09"
-        }
-      ]
-    },
-    {
-      "key": "abu-ubaydah/bayt-al-mal",
-      "subjectKind": "PERSON",
-      "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
-      "assertion": "ولّاه أبو بكر بيت المال، أي أموال المسلمين.",
-      "confidence": "LIKELY",
-      "reviewStatus": "NOT_REVIEWED",
-      "citations": [
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "15-p2",
-          "volume": "1",
-          "pageReference": "15",
-          "extractionUrl": "https://shamela.ws/book/10906/1441",
-          "excerptArabic": "قَالَ خَلِيْفَةُ بنُ خَيَّاطٍ: وَقَدْ كَانَ أَبُو بَكْرٍ وَلَّى أَبَا عُبَيْدَةَ بَيْتَ المَالِ (٢) .",
-          "accessedAt": "2026-09-09"
-        },
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "15-p3",
-          "volume": "1",
-          "pageReference": "15",
-          "extractionUrl": "https://shamela.ws/book/10906/1441",
-          "excerptArabic": "قُلْتُ: يَعْنِي: أَمْوَالَ المُسْلِمِيْنَ، فَلَمْ يَكُنْ بَعْدُ عُمِلَ بَيْتُ مَالٍ، فَأَوَّلُ مِنِ اتَّخَذَهُ عُمَرُ.",
-          "accessedAt": "2026-09-09"
-        }
-      ]
-    },
-    {
-      "key": "abu-ubaydah/syria-command",
-      "subjectKind": "PERSON",
-      "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
-      "assertion": "وجّهه أبو بكر إلى الشام أميراً سنة ثلاث عشرة، ثم استُخلف عمر فعزل خالد بن الوليد وولّى أبا عبيدة على الأمراء كلهم.",
-      "confidence": "ESTABLISHED",
-      "reviewStatus": "NOT_REVIEWED",
-      "citations": [
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "15-p4",
-          "volume": "1",
-          "pageReference": "15",
-          "extractionUrl": "https://shamela.ws/book/10906/1441",
-          "excerptArabic": "قَالَ خَلِيْفَةُ: ثُمَّ وَجَّهَهُ أَبُو بَكْرٍ إِلَى الشَّامِ سَنَةَ ثَلاَثَ عَشْرَةَ أَمِيْراً، وَفِيْهَا استُخْلِفَ عُمَرُ، فَعَزَلَ خَالِدَ بنَ الوَلِيْدِ، وَوَلَّى أَبَا عُبَيْدَةَ (٣) .",
-          "accessedAt": "2026-09-09"
-        },
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "21-p4",
-          "volume": "1",
-          "pageReference": "21",
-          "extractionUrl": "https://shamela.ws/book/10906/1447",
-          "excerptArabic": "فَبَادَرَ عُمَرُ بِعَزْلِ خَالِدٍ، وَاسْتَعْمَلَ عَلَى الكُلِّ أَبَا عُبَيْدَةَ، فَجَاءهُ التَّقْلِيْدُ، فَكَتَمَهُ مُدَّةً، وَكُلُّ هَذَا مِنْ دِيْنِهِ وِلِيْنِهِ وَحِلْمِهِ، فَكَانَ فَتْحُ دِمَشْقَ (٥) عَلَى يَدِهِ، فَ",
-          "accessedAt": "2026-09-09"
-        }
-      ]
+      ],
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "saqifah-bani-saidah"
     },
     {
       "key": "abu-ubaydah/damascus-conquest",
@@ -1376,7 +1207,10 @@
           "excerptArabic": "فَعَنِ المُغِيْرَةِ: أَنَّ أَبَا عُبَيْدَةَ صَالَحَهُم عَلَى أَنْصَافِ كَنَائِسِهِم وَمَنَازِلَهِم، ثُمَّ كَانَ أَبُو عُبَيْدَةَ رَأْسَ الإِسْلاَمِ يَوْمَ وَقْعَةِ اليَرْمُوْكِ؛ الَّتِي اسْتَأْصَلَ اللهُ فِيْهَا جُيُوْشَ",
           "accessedAt": "2026-09-09"
         }
-      ]
+      ],
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "fath-damascus"
     },
     {
       "key": "abu-ubaydah/yarmuk",
@@ -1395,35 +1229,10 @@
           "excerptArabic": "فَعَنِ المُغِيْرَةِ: أَنَّ أَبَا عُبَيْدَةَ صَالَحَهُم عَلَى أَنْصَافِ كَنَائِسِهِم وَمَنَازِلَهِم، ثُمَّ كَانَ أَبُو عُبَيْدَةَ رَأْسَ الإِسْلاَمِ يَوْمَ وَقْعَةِ اليَرْمُوْكِ؛ الَّتِي اسْتَأْصَلَ اللهُ فِيْهَا جُيُوْشَ",
           "accessedAt": "2026-09-09"
         }
-      ]
-    },
-    {
-      "key": "abu-ubaydah/zuhd",
-      "subjectKind": "PERSON",
-      "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
-      "assertion": "كان موصوفاً بحسن الخلق والحلم الزائد والتواضع، ولم يوجد في بيته حين زاره عمر بالشام إلا سيفه وترسه ورحله.",
-      "confidence": "LIKELY",
-      "reviewStatus": "NOT_REVIEWED",
-      "citations": [
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "13-p9",
-          "volume": "1",
-          "pageReference": "13",
-          "extractionUrl": "https://shamela.ws/book/10906/1439",
-          "excerptArabic": "وَكَانَ أَبُو عُبَيْدَةَ مَوْصُوْفاً بِحُسْنِ الخُلُقِ، وَبِالحِلْمِ الزَائِدِ، وَالتَّوَاضُعِ.",
-          "accessedAt": "2026-09-09"
-        },
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "16-p12",
-          "volume": "1",
-          "pageReference": "16",
-          "extractionUrl": "https://shamela.ws/book/10906/1442",
-          "excerptArabic": "فَسَارَ مَعَهُ حَتَّى أَتَى مَنْزِلَهُ، فَنَزَلَ عَلَيْهِ، فَلَمْ يَرَ فِي بَيْتِهِ إِلاَّ سَيْفَهُ وَتُرْسَهُ وَرَحْلَهُ.",
-          "accessedAt": "2026-09-09"
-        }
-      ]
+      ],
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "yarmuk"
     },
     {
       "key": "abu-ubaydah/plague-of-amwas",
@@ -1460,7 +1269,10 @@
           "excerptArabic": "طَاعُوْنُ عَمَوَاسَ: مَنْسُوْبٌ إِلَى قَرْيَةِ عَمَوَاسَ، وَهِيَ بَيْنَ الرَّمْلَةِ وَبَيْنَ بَيْتِ المَقْدِسِ.",
           "accessedAt": "2026-09-09"
         }
-      ]
+      ],
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "plague-of-amwas"
     },
     {
       "key": "abu-ubaydah/death-place",
@@ -1483,12 +1295,14 @@
       "field": "placeOfDeathArabic"
     },
     {
-      "key": "abu-ubaydah/death-year-18",
+      "key": "abu-ubaydah/death-year",
       "subjectKind": "PERSON",
       "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
-      "assertion": "قال أبو حفص الفلاس: توفي أبو عبيدة سنة ثمان عشرة وله ثمان وخمسون سنة، وقال كذلك في وفاته جماعة.",
+      "field": "deathYearHijri",
+      "assertion": "قال أبو حفص الفلاس: توفي أبو عبيدة سنة ثمان عشرة وله ثمان وخمسون سنة، وقال كذلك في وفاته جماعة. وانفرد ابن عائذ عن أبي مسهر أنه قرأ في كتاب يزيد بن عبيدة أن أبا عبيدة توفي سنة سبع عشرة.",
       "confidence": "LIKELY",
       "reviewStatus": "NOT_REVIEWED",
+      "disputed": true,
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
@@ -1507,20 +1321,7 @@
           "extractionUrl": "https://shamela.ws/book/10906/1449",
           "excerptArabic": "وَقَالَ كَذَلِكَ فِي وَفَاتِهِ جَمَاعَةٌ.",
           "accessedAt": "2026-09-09"
-        }
-      ],
-      "field": "deathYearHijri",
-      "disputed": true,
-      "reviewerNote": "رواية منافسة للسنة ١٧؛ تُترك قيمة سنة الوفاة في الملف الشخصي غير محددة حتى تُراجع."
-    },
-    {
-      "key": "abu-ubaydah/death-year-17",
-      "subjectKind": "PERSON",
-      "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
-      "assertion": "وانفرد ابن عائذ عن أبي مسهر أنه قرأ في كتاب يزيد بن عبيدة أن أبا عبيدة توفي سنة سبع عشرة.",
-      "confidence": "DISPUTED",
-      "reviewStatus": "NOT_REVIEWED",
-      "citations": [
+        },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
           "passageAnchor": "23-p8",
@@ -1528,55 +1329,6 @@
           "pageReference": "23",
           "extractionUrl": "https://shamela.ws/book/10906/1449",
           "excerptArabic": "وَانْفَرَدَ ابْنُ عَائِذٍ، عَنْ أَبِي مُسْهِرٍ، أَنَّهُ قَرَأَ فِي كِتَابِ يَزِيْدَ بنِ عُبَيْدَةَ: أَنَّ أَبَا عُبَيْدَةَ تُوُفِّيَ سَنَةَ سَبْعَ عَشْرَةَ.",
-          "accessedAt": "2026-09-09"
-        }
-      ],
-      "field": "deathYearHijri",
-      "disputed": true
-    },
-    {
-      "key": "abu-ubaydah/successor-muadh",
-      "subjectKind": "PERSON",
-      "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
-      "assertion": "انطلق من الجابية إلى بيت المقدس للصلاة، فاستخلف على الناس معاذ بن جبل.",
-      "confidence": "LIKELY",
-      "reviewStatus": "NOT_REVIEWED",
-      "citations": [
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "22-p12",
-          "volume": "1",
-          "pageReference": "22",
-          "extractionUrl": "https://shamela.ws/book/10906/1448",
-          "excerptArabic": "انْطَلَقَ أَبُو عُبَيْدَةَ مِنَ الجَابِيَةِ إِلَى بَيْتَ المَقْدِسِ لِلصَّلاَةِ،",
-          "accessedAt": "2026-09-09"
-        },
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "23-p1",
-          "volume": "1",
-          "pageReference": "23",
-          "extractionUrl": "https://shamela.ws/book/10906/1449",
-          "excerptArabic": "فَاسْتَخْلَفَ عَلَى النَّاسِ مُعَاذَ بنَ جَبَلٍ (١) .",
-          "accessedAt": "2026-09-09"
-        }
-      ]
-    },
-    {
-      "key": "abu-ubaydah/no-surviving-line",
-      "subjectKind": "PERSON",
-      "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
-      "assertion": "قال الزبير بن بكار: قد انقرض نسل أبي عبيدة وولد إخوته جميعاً.",
-      "confidence": "LIKELY",
-      "reviewStatus": "NOT_REVIEWED",
-      "citations": [
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "8-p5",
-          "volume": "1",
-          "pageReference": "8",
-          "extractionUrl": "https://shamela.ws/book/10906/1434",
-          "excerptArabic": "قَالَ الزُّبَيْرُ بنُ بَكَّارٍ: قَدِ انْقَرَضَ نَسْلُ أَبِي عُبَيْدَةَ، وَوَلَدُ إِخْوَتِهِ جَمِيْعاً، وَكَانَ مِمَّنْ هَاجَرَ إِلَى أَرْضِ الحَبَشَةِ.",
           "accessedAt": "2026-09-09"
         }
       ]
@@ -1620,12 +1372,86 @@
       "relationshipType": "COMPANION_OF",
       "relatedSubjectKind": "PERSON",
       "relatedSubjectSlug": "prophet-muhammad"
+    },
+    {
+      "key": "abu-ubaydah/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
+      "field": "virtues",
+      "assertion": "أحد السابقين الأولين، ومن عزم الصديق على توليته الخلافة، وأشار به يوم السقيفة؛ لكمال أهليته عند أبي بكر. شهد له النبي صلى الله عليه وسلم بالجنة، وسماه أمين الأمة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "6-p3",
+          "volume": "1",
+          "pageReference": "6",
+          "extractionUrl": "https://shamela.ws/book/10906/1432",
+          "excerptArabic": "شَهِدَ لَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِالجَنَّةِ، وَسَمَّاهُ: أَمِيْنَ الأُمَّةِ، وَمَنَاقِبُهُ شَهِيْرَةٌ جَمَّةٌ.",
+          "accessedAt": "2026-09-09"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "9-p7",
+          "volume": "1",
+          "pageReference": "9",
+          "extractionUrl": "https://shamela.ws/book/10906/1435",
+          "excerptArabic": "أَنَّ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَالَ: (إِنَّ لِكُلِّ أُمَّةٍ أَمِيْناً، وَأَمِيْنُ هَذِهِ الأُمَّةِ: أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ (١)) .",
+          "accessedAt": "2026-09-09"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "11-p6",
+          "volume": "1",
+          "pageReference": "11",
+          "extractionUrl": "https://shamela.ws/book/10906/1437",
+          "excerptArabic": "أَنَّ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَالَ: (لِكُلِّ أُمَّةٍ أَمِيْنٌ، وَأَمِيْنُ هَذِهِ الأُمَّةِ: أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ (٤)) .",
+          "accessedAt": "2026-09-09"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5-p5",
+          "volume": "1",
+          "pageReference": "5",
+          "extractionUrl": "https://shamela.ws/book/10906/1431",
+          "excerptArabic": "أَحَدُ السَّابِقِيْنَ الأَوَّلِيْنَ، وَمَنْ عَزَمَ الصِّدِّيْقُ عَلَى تَوْلِيَتِهِ الخِلاَفَةَ، وَأَشَارَ بِهِ يَوْمَ",
+          "accessedAt": "2026-09-09"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "8-p1",
+          "volume": "1",
+          "pageReference": "8",
+          "extractionUrl": "https://shamela.ws/book/10906/1434",
+          "excerptArabic": "بنُ عَبْدِ الأَسَدِ، وَأَبُو عُبَيْدَةَ بنُ الجَرَّاحِ حَتَّى أَتَوْا رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فَعَرَضَ عَلَيْهِمُ الإِسْلاَمَ، وَأَنْبَأَهُمْ بِشَرَائِعِهِ، فَأَسْلَمُوا فِي سَاعَةٍ وَاحِدَةٍ، ",
+          "accessedAt": "2026-09-09"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "13-p9",
+          "volume": "1",
+          "pageReference": "13",
+          "extractionUrl": "https://shamela.ws/book/10906/1439",
+          "excerptArabic": "وَكَانَ أَبُو عُبَيْدَةَ مَوْصُوْفاً بِحُسْنِ الخُلُقِ، وَبِالحِلْمِ الزَائِدِ، وَالتَّوَاضُعِ.",
+          "accessedAt": "2026-09-09"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "16-p12",
+          "volume": "1",
+          "pageReference": "16",
+          "extractionUrl": "https://shamela.ws/book/10906/1442",
+          "excerptArabic": "فَسَارَ مَعَهُ حَتَّى أَتَى مَنْزِلَهُ، فَنَزَلَ عَلَيْهِ، فَلَمْ يَرَ فِي بَيْتِهِ إِلاَّ سَيْفَهُ وَتُرْسَهُ وَرَحْلَهُ.",
+          "accessedAt": "2026-09-09"
+        }
+      ]
     }
   ],
   "approval": {
-    "revision": "9481bec6579f9861",
-    "approvedAt": "2026-09-09",
+    "revision": "c5d4ea48edf2f1db",
+    "approvedAt": "2026-09-11",
     "approvedBy": "msskzx",
-    "note": "Approved for publication only. The content was not read; all claims stay Not reviewed."
+    "note": "Approved for publication on the user’s instruction in conversation. The content was not read; all claims stay Not reviewed. Ten claims name a supporting field or relationship inferred by the agent from the cited passages; the appearance claim cites 23-p6 for the dyeing that passage records beside the death year; and the death year is one disputed claim carrying both reported years. Those are the ones most worth reading when review happens."
   }
 }

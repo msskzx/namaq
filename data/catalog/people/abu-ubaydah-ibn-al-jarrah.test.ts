@@ -8,7 +8,7 @@ import person from './abu-ubaydah-ibn-al-jarrah';
 const batch = JSON.parse(
   readFileSync('data/history/batches/abu-ubaydah-pilot/batch.json', 'utf8'),
 ) as {
-  claims: { key: string; field?: string; relationshipType?: string; relatedSubjectSlug?: string }[];
+  claims: { key: string; field?: string; relationshipType?: string; relatedSubjectSlug?: string; citations: unknown[] }[];
 };
 const claimByKey = new Map(batch.claims.map((claim) => [claim.key, claim]));
 
@@ -44,9 +44,9 @@ describe('Abu Ubaydah ibn al-Jarrah in the catalog', () => {
     expect(mismatched).toEqual([]);
   });
 
-  it('takes the death year al-Dhahabi prefers and leaves the other in the batch', () => {
-    expect(person.fields.deathYearHijri?.claims).toEqual(['abu-ubaydah/death-year-18']);
-    expect(claimByKey.has('abu-ubaydah/death-year-17')).toBe(true);
+  it('cites one disputed claim carrying both reported death years', () => {
+    expect(person.fields.deathYearHijri?.claims).toEqual(['abu-ubaydah/death-year']);
+    expect(claimByKey.get('abu-ubaydah/death-year')?.citations).toHaveLength(3);
   });
 
   it('declares only relationships the reciprocal map can invert', () => {

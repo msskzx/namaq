@@ -1,6 +1,5 @@
 import type { CatalogEvent } from '@/lib/catalog/types';
 
-// No year: the entry states none, and the policy leaves an unknown value unset.
 const saqifahBaniSaidah = {
   kind: 'EVENT',
   slug: 'saqifah-bani-saidah',
@@ -8,6 +7,9 @@ const saqifahBaniSaidah = {
   nameTransliterated: 'Saqifah Bani Saidah',
   type: 'OTHER',
   fields: {
+    // The passage places it at the Prophet's death, which
+    // prisma/eventSeedData.ts records as 11 AH; the entry states no year itself.
+    hijriYear: { value: 11, claims: ['abu-ubaydah/saqifah-nomination'] },
     description: {
       value: 'رشّح أبو بكر الصديق عمر بن الخطاب وأبا عبيدة بن الجراح للأمر يوم سقيفة بني ساعدة.',
       claims: ['abu-ubaydah/saqifah-nomination'],

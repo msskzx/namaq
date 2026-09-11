@@ -29,6 +29,7 @@ function claim(overrides: Partial<ClaimWithCitations> = {}) {
         source: {
           author: 'شمس الدين الذهبي',
           title: 'سير أعلام النبلاء',
+          digitalHost: 'shamela',
           edition: 'الطبعة الثالثة',
           publisher: 'مؤسسة الرسالة',
           publicationYear: '1405/1985',
@@ -48,7 +49,7 @@ describe('ClaimEvidence', () => {
   it('shows a claim with its citation and excerpt', () => {
     render(<ClaimEvidence title="Sources" claims={[claim()]} />);
 
-    expect(screen.getByText('عامر بن عبد الله بن الجراح')).toBeTruthy();
+    expect(screen.getByText(/أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ/)).toBeTruthy();
     expect(screen.getByText(/سير أعلام النبلاء/)).toBeTruthy();
     expect(screen.getByText('أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ')).toBeTruthy();
   });
@@ -61,7 +62,7 @@ describe('ClaimEvidence', () => {
     render(<ClaimEvidence title="Sources" claims={[claim({ reviewStatus } as Partial<ClaimWithCitations>)]} />);
 
     expect(screen.getByText(label)).toBeTruthy();
-    expect(screen.getByText('عامر بن عبد الله بن الجراح')).toBeTruthy();
+    expect(screen.getByText(/أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ/)).toBeTruthy();
   });
 
   it('translates review status into Arabic', () => {
@@ -94,7 +95,7 @@ describe('ClaimEvidence', () => {
     render(
       <ClaimEvidence
         title="Relationship evidence"
-        relationshipClaims
+        subjectName="أبو عبيدة"
         claims={[
           claim({
             relationshipType: 'COMPANION_OF',
@@ -104,44 +105,43 @@ describe('ClaimEvidence', () => {
       />,
     );
 
-    // The subject is the profile the reader is already on, so the line names
-    // the relation and the other end only.
-    expect(screen.getByText(/companion of → prophet-muhammad/)).toBeTruthy();
-    expect(screen.queryByText(/abu-ubaydah-ibn-al-jarrah/)).toBeNull();
+    // Same shape as the graph's link tooltip: naming both ends is what makes
+    // the direction readable in either script.
+    expect(screen.getByText('أبو عبيدة - Companion Of -> prophet-muhammad')).toBeTruthy();
   });
 
   it('shows one page of claims at a time, with a jump to any of them', () => {
     const many = Array.from({ length: 25 }, (_, index) =>
-      claim({ id: `claim-${index}`, assertion: `دعوى ${index}` } as Partial<ClaimWithCitations>),
+      claim({ id: `claim-${index}`, assertion: `دعوى ${index}`, field: `field${index}` } as Partial<ClaimWithCitations>),
     );
 
     const { container } = render(<ClaimEvidence title="Sources" claims={many} />);
 
-    expect(screen.getByText('دعوى 0')).toBeTruthy();
-    expect(screen.queryByText('دعوى 5')).toBeNull();
+    expect(screen.getByText('field0')).toBeTruthy();
+    expect(screen.queryByText('field5')).toBeNull();
     // The same control the source reader uses: previous, a page selector, next.
     expect(container.querySelectorAll('select option')).toHaveLength(5);
   });
 
   it('pages forward and back through the claims', () => {
     const many = Array.from({ length: 25 }, (_, index) =>
-      claim({ id: `claim-${index}`, assertion: `دعوى ${index}` } as Partial<ClaimWithCitations>),
+      claim({ id: `claim-${index}`, assertion: `دعوى ${index}`, field: `field${index}` } as Partial<ClaimWithCitations>),
     );
 
     render(<ClaimEvidence title="Sources" claims={many} />);
     fireEvent.click(screen.getByText('Next'));
 
-    expect(screen.getByText('دعوى 5')).toBeTruthy();
-    expect(screen.queryByText('دعوى 0')).toBeNull();
+    expect(screen.getByText('field5')).toBeTruthy();
+    expect(screen.queryByText('field0')).toBeNull();
 
     fireEvent.click(screen.getByText('Previous'));
 
-    expect(screen.getByText('دعوى 0')).toBeTruthy();
+    expect(screen.getByText('field0')).toBeTruthy();
   });
 
   it('stops at both ends', () => {
     const many = Array.from({ length: 7 }, (_, index) =>
-      claim({ id: `claim-${index}`, assertion: `دعوى ${index}` } as Partial<ClaimWithCitations>),
+      claim({ id: `claim-${index}`, assertion: `دعوى ${index}`, field: `field${index}` } as Partial<ClaimWithCitations>),
     );
 
     render(<ClaimEvidence title="Sources" claims={many} />);
@@ -150,7 +150,7 @@ describe('ClaimEvidence', () => {
 
     fireEvent.click(screen.getByText('Next'));
 
-    expect(screen.getByText('دعوى 6')).toBeTruthy();
+    expect(screen.getByText('field6')).toBeTruthy();
     expect(screen.getByText('Next').closest('button')?.hasAttribute('disabled')).toBe(true);
   });
 
@@ -180,19 +180,32 @@ describe('ClaimEvidence', () => {
   it('says which profile field a claim supports', () => {
     render(<ClaimEvidence title="Sources" claims={[claim({ field: 'deathYearHijri' } as Partial<ClaimWithCitations>)]} />);
 
-    expect(screen.getByText('Supports: Year of death')).toBeTruthy();
+    expect(screen.getByText('Year of death')).toBeTruthy();
   });
 
-  it('says nothing about support for a claim that backs no recorded value', () => {
+  // A claim backing nothing cannot reach the interface: validateBatch rejects it
+  // (src/lib/history/batchSchema.ts).
+  it('says nothing about support for a legacy row that names no field', () => {
     render(<ClaimEvidence title="Sources" claims={[claim({ field: null } as Partial<ClaimWithCitations>)]} />);
 
     expect(screen.queryByText(/^Supports:/)).toBeNull();
   });
 
-  it('links a citation to the page it was read from', () => {
-    render(<ClaimEvidence title="Sources" claims={[claim()]} />);
+  it('links a citation to the page in our own reader, keeping the host as a check', () => {
+    const cited = claim();
+    cited.citations[0].passage = { page: { accountId: 'acct-1', sequence: 7 } } as never;
 
-    const link = screen.getByText(/سير أعلام النبلاء/).closest('a');
-    expect(link?.getAttribute('href')).toBe('https://shamela.ws/book/10906/1431');
+    render(<ClaimEvidence title="Sources" claims={[cited]} subjectSlug="abu-ubaydah-ibn-al-jarrah" />);
+
+    expect(screen.getByText(/سير أعلام النبلاء/).closest('a')?.getAttribute('href'))
+      .toBe('/people/abu-ubaydah-ibn-al-jarrah?book=acct-1&page=7');
+    // The host link is how a reader checks we transcribed the passage faithfully.
+    expect(screen.getByText('shamela').getAttribute('href')).toBe('https://shamela.ws/book/10906/1431');
+  });
+
+  it('leaves the reference unlinked when no passage says which page it came from', () => {
+    render(<ClaimEvidence title="Sources" claims={[claim()]} subjectSlug="abu-ubaydah-ibn-al-jarrah" />);
+
+    expect(screen.getByText(/سير أعلام النبلاء/).closest('a')).toBeNull();
   });
 });

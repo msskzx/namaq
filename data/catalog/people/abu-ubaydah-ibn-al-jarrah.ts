@@ -18,10 +18,11 @@ const abuUbaydahIbnAlJarrah = {
         'عَامِرُ بنُ عَبْدِ اللهِ بنِ الجَرَّاحِ بنِ هِلاَلِ بنِ أُهَيْبِ بنِ ضَبَّةَ بنِ الحَارِثِ بنِ فِهْرِ بنِ مَالِكِ بنِ النَّضْرِ بنِ كِنَانَةَ بنِ خُزَيْمَةَ بنِ مُدْرِكَةَ بنِ إِلْيَاسَ بنِ مُضَرَ بنِ نِزَارِ بنِ مَعَدِّ بنِ عَدْنَانَ القُرَشِيُّ، الفِهْرِيُّ، المَكِّيُّ.',
       claims: ['abu-ubaydah/full-name'],
     },
-    // Shorter than prisma/personSeedData.ts: 23-p6 has no appearance claim yet.
+    // Composed from 7-p9 and 23-p6; the latter gives the death year and the
+    // dyeing in one sentence, so it backs two fields.
     appearance: {
       value:
-        'كَانَ رَجُلاً نَحِيْفاً، مَعْرُوْقَ الوَجْهِ، خَفِيْفَ اللِّحْيَةِ، طُوَالاً، أَحْنَى، أَثْرَمَ الثَّنِيَّتَيْنِ.',
+        'كَانَ رَجُلاً نَحِيْفاً، مَعْرُوْقَ الوَجْهِ، خَفِيْفَ اللِّحْيَةِ، طُوَالاً، أَحْنَى، أَثْرَمَ الثَّنِيَّتَيْنِ. وَكَانَ يَخْضِبُ بِالحِنَّاءِ وَالكَتَمِ، وَكَانَ لَهُ عَقِيْصَتَانِ.',
       claims: ['abu-ubaydah/appearance'],
     },
     // No claim names this field, so these cite the passages it composes. It runs
@@ -29,22 +30,22 @@ const abuUbaydahIbnAlJarrah = {
     virtues: {
       value:
         'أَحَدُ السَّابِقِيْنَ الأَوَّلِيْنَ، وَمَنْ عَزَمَ الصِّدِّيْقُ عَلَى تَوْلِيَتِهِ الخِلاَفَةَ، وَأَشَارَ بِهِ يَوْمَ السَّقِيْفَةِ؛ لِكَمَالِ أَهْلِيَّتِهِ عِنْدَ أَبِي بَكْرٍ. شَهِدَ لَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِالجَنَّةِ، وَسَمَّاهُ: أَمِيْنَ الأُمَّةِ، وَمَنَاقِبُهُ شَهِيْرَةٌ جَمَّةٌ.',
-      claims: ['abu-ubaydah/early-islam', 'abu-ubaydah/testified-paradise', 'abu-ubaydah/title-amin-al-ummah'],
+      claims: ['abu-ubaydah/virtues'],
     },
-    // Two years given; 17 is marked Ibn Aidh alone (انفرد), so author preference
-    // picks 18 (docs/authoritative-data-workflow-plan.md).
-    deathYearHijri: { value: '18 AH', claims: ['abu-ubaydah/death-year-18'] },
+    // The claim is disputed and carries both accounts; 17 is marked Ibn Aidh
+    // alone (انفرد), so author preference picks 18.
+    deathYearHijri: { value: '18 AH', claims: ['abu-ubaydah/death-year'] },
     // Not a conflict with plague-of-amwas: that names the epidemic, this the place.
     placeOfDeathArabic: { value: 'فِحْل', claims: ['abu-ubaydah/death-place'] },
   },
 
   titles: [
-    { title: 'amin-al-ummah', claims: ['abu-ubaydah/title-amin-al-ummah'] },
+    { title: 'amin-al-ummah', claims: ['abu-ubaydah/titles'] },
     { title: 'companion', claims: ['abu-ubaydah/companion-of-prophet'] },
-    { title: 'al-sabiqoon', claims: ['abu-ubaydah/early-islam'] },
+    { title: 'al-sabiqoon', claims: ['abu-ubaydah/titles'] },
     // Rests on the testimony of paradise; this entry never enumerates the ten.
     // Sa'id ibn Zayd's entry carries the listing hadith, to be added with it.
-    { title: 'the-ten-promised-paradise', claims: ['abu-ubaydah/testified-paradise'] },
+    { title: 'the-ten-promised-paradise', claims: ['abu-ubaydah/titles'] },
   ],
 
   relations: [

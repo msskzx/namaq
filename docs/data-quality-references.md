@@ -1,8 +1,9 @@
 # Data quality and references
 
-Status: implemented, awaiting batch approval. The schema, authoring format,
-validator, importer, APIs and UI are built; the Abu Ubaydah pilot batch is
-extracted and validated but not imported. See "Implementation status" below.
+Status: implemented. The schema, authoring format, validator, importer, APIs
+and UI are built, and the Abu Ubaydah pilot is imported and serving. Its
+approval is stale against the current files and is awaiting re-approval. See
+"Implementation status" below.
 
 ```mermaid
 flowchart TB
@@ -68,14 +69,41 @@ source text are versioned in files and imported into PostgreSQL; files are the
 authoring source and database copies are not edited independently. Use Markdown
 for source pages and structured files for metadata, facts and citation targets,
 with one authoritative file copy of the full text. Proposed directory: `data/history/`.
+Publishing and reviewing are two separate actions and neither implies the other.
+Approving for publication records the current revision in the batch's approval
+block and is what permits the import; it asserts that the batch may be published,
+not that anyone has read it. Marking reviewed sets a claim's review status, one
+claim at a time, after comparing the assertion against the passage it cites. A
+published batch whose claims are all Not reviewed is an honest state, and the
+approval note says which of the two happened.
+
 Approval is explicit in the review conversation and recorded against the fixed
-batch revision in its summary. Edits after approval require reapproval. A separate data repository
+batch revision. The revision covers `batch.json` and the account pages and notes,
+not `summary.md`: the summary is written for the reviewer, and rewording it
+invalidates nothing about the evidence. Edits after approval require reapproval. A separate data repository
 is deferred until independent contributors, permissions or releases justify it.
 
 Support citations for every historical subject type, including graph-only people,
 titles, battles and events. Research remains limited to the agreed scope.
 Subjects without profiles receive citations attached directly to their identities;
 profiles may be added later and reuse the same evidence.
+
+The source text is the book, and the app structures a selection from it. Account
+pages are authoritative: they are never edited or removed to reflect a change in
+what the app models, and removing a claim removes a selection, never the passage
+it selected from.
+
+A claim is authored only when it backs a value the model holds today, meaning a
+profile field, a title assignment, a participation, an event link or a person
+relation. `npm run history:validate` rejects a claim naming neither a field nor a
+relationship. The reasoning is that the complete entry is already stored page by
+page with anchored paragraphs, so a claim that backs nothing is a second copy of
+text rather than something a reader can check a recorded value against. A
+statement the model has no shape for stays in the pages until the model grows one.
+
+Competing accounts are kept as separate attributed claims only where the model
+holds the value they compete over, such as two reported years of death. A
+disagreement about something the app does not record stays in the source pages.
 
 Each claim has a review status: Not reviewed, In review or Reviewed. Disagreement
 is independent of review status. Legacy information without review records starts
@@ -126,13 +154,39 @@ Terminology: [CONTEXT.md](../CONTEXT.md#historical-evidence).
 Rationale: [citations independent of profiles](adr/0009-citations-independent-of-profiles.md)
 and [review independent of visibility](adr/0008-separate-review-from-visibility.md).
 
+## Where the existing seed data stands
+
+The people, battle and event seeds under `prisma/` and `neo4j/` were extracted
+from Siyar A'lam al-Nubala' by an earlier agent, without citations, passage
+anchors or edition metadata. They are therefore mostly correct and evidentially
+worthless: the values are probably what the book says, and nothing in the
+repository shows where.
+
+That makes them a checklist rather than a source. An agent authoring a catalog
+entry reads the seed to learn which subjects exist and which fields a subject is
+claimed to have, then looks for each of them in the source. The seed says where
+to look; the source says what is true.
+
+A value carried into the catalog that no batch supports yet is marked
+`legacy-unreviewed`. It is in use and its evidence is owed, which is a normal
+state and not a defect. A batch covering a subject visits every legacy value on
+it and resolves each one of three ways: promoted to a cited claim, left legacy
+because the entry is silent, or flagged as a contradiction. A contradiction
+between a seed value and the entry means one of the two extractions misread the
+same book, so it is reported rather than silently overwritten.
+
+Because provenance sits on every catalog value, the set of values awaiting
+evidence is directly countable. Reporting it after each batch turns the backlog
+into a measurable thing: what has been resolved, what is still owed, and which
+subject a future batch should cover to clear the most.
+
 ## Implementation status
 
 | Step | State |
 | --- | --- |
 | Evidence schema and migration | Applied. `HistoricalClaim`, `Citation`, `SourceAccount`, `SourceAccountPage`, `SourcePassage`, `ReviewBatch`; `ClaimReviewStatus` is now Not reviewed / In review / Reviewed |
 | File authoring and validation | `data/history/batches/`, `src/lib/history/`, `npm run history:validate` / `history:import` / `history:extract` |
-| Pilot import | Extracted and validated, **not imported**: the batch carries no approval |
+| Pilot import | Imported and serving: 17 claims, 32 citations. Approval is stale against the current files |
 | Evidence and account APIs | `/api/subjects/[kind]/[slug]/references`, `/api/people/[slug]/accounts`; review-status filtering removed |
 | Profile reading and graph access | `SourceAccountReader`, `ClaimEvidence`, `SubjectEvidenceAccess` |
 | Tests and documentation | Colocated tests throughout; README and `AGENTS.md` updated |

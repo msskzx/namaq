@@ -9,7 +9,6 @@ import translations from '@/components/language/translations';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import Badge from '@/components/common/Badge';
-import BattleParticipationTimeline from '@/components/battles/BattleParticipationTimeline';
 import Timeline from '@/components/people/Timeline';
 import type { PersonFull } from '@/types/person';
 import useSWR from 'swr';
@@ -20,17 +19,12 @@ import { fetcher } from '@/lib/swr';
 import { AyatGroup } from '@/components/quran/AyahCard';
 import ClaimEvidence from '@/components/common/ClaimEvidence';
 import SourceAccountReader from '@/components/people/SourceAccountReader';
-import type { ClaimWithCitations } from '@/types/provenance';
 
 function PersonDetailPage() {
   const { language } = useLanguage();
   const t = translations[language];
   const { slug } = useParams<{ slug: string }>();
   const { data: person, error, isLoading } = useSWR<PersonFull>(slug ? `/api/people/${slug}` : null, fetcher);
-  const { data: relationshipClaims } = useSWR<ClaimWithCitations[]>(
-    slug ? `/api/relationship-claims?person=${encodeURIComponent(slug)}` : null,
-    fetcher,
-  );
 
   if (error) {
     return (
@@ -72,7 +66,7 @@ function PersonDetailPage() {
           </div>
         </div>
 
-        <Timeline events={person.events || []} participations={person.participations || []} />
+        <Timeline events={person.events || []} participations={person.participations || []} death={person} />
 
         <div className="flex flex-col gap-6 mt-10">
           {person.fullName && (
@@ -113,15 +107,8 @@ function PersonDetailPage() {
 
           <AyatGroup ayat={person.ayat || []} />
 
-          <BattleParticipationTimeline participations={person.participations || []} />
+          <ClaimEvidence title={language === 'ar' ? 'المصادر والملاحظات التاريخية' : 'Sources & historical notes'} claims={person.claims || []} subjectName={person.name} subjectSlug={slug} />
 
-          <ClaimEvidence title={language === 'ar' ? 'المصادر والملاحظات التاريخية' : 'Sources & historical notes'} claims={person.claims || []} />
-
-          <ClaimEvidence
-            title={language === 'ar' ? 'أدلة العلاقات' : 'Relationship evidence'}
-            claims={relationshipClaims || []}
-            relationshipClaims
-          />
 
         </div>
       </div>
