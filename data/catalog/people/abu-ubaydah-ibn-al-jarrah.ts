@@ -30,7 +30,7 @@ const abuUbaydahIbnAlJarrah = {
     virtues: {
       value:
         'أَحَدُ السَّابِقِيْنَ الأَوَّلِيْنَ، وَمَنْ عَزَمَ الصِّدِّيْقُ عَلَى تَوْلِيَتِهِ الخِلاَفَةَ، وَأَشَارَ بِهِ يَوْمَ السَّقِيْفَةِ؛ لِكَمَالِ أَهْلِيَّتِهِ عِنْدَ أَبِي بَكْرٍ. شَهِدَ لَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِالجَنَّةِ، وَسَمَّاهُ: أَمِيْنَ الأُمَّةِ، وَمَنَاقِبُهُ شَهِيْرَةٌ جَمَّةٌ.',
-      claims: ['abu-ubaydah/early-islam', 'abu-ubaydah/testified-paradise', 'abu-ubaydah/title-amin-al-ummah'],
+      claims: ['abu-ubaydah/virtues'],
     },
     // The claim is disputed and carries both accounts; 17 is marked Ibn Aidh
     // alone (انفرد), so author preference picks 18.
@@ -40,12 +40,12 @@ const abuUbaydahIbnAlJarrah = {
   },
 
   titles: [
-    { title: 'amin-al-ummah', claims: ['abu-ubaydah/title-amin-al-ummah'] },
+    { title: 'amin-al-ummah', claims: ['abu-ubaydah/titles'] },
     { title: 'companion', claims: ['abu-ubaydah/companion-of-prophet'] },
-    { title: 'al-sabiqoon', claims: ['abu-ubaydah/early-islam'] },
+    { title: 'al-sabiqoon', claims: ['abu-ubaydah/titles'] },
     // Rests on the testimony of paradise; this entry never enumerates the ten.
     // Sa'id ibn Zayd's entry carries the listing hadith, to be added with it.
-    { title: 'the-ten-promised-paradise', claims: ['abu-ubaydah/testified-paradise'] },
+    { title: 'the-ten-promised-paradise', claims: ['abu-ubaydah/titles'] },
   ],
 
   relations: [

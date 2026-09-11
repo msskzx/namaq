@@ -19,17 +19,12 @@ import { fetcher } from '@/lib/swr';
 import { AyatGroup } from '@/components/quran/AyahCard';
 import ClaimEvidence from '@/components/common/ClaimEvidence';
 import SourceAccountReader from '@/components/people/SourceAccountReader';
-import type { ClaimWithCitations } from '@/types/provenance';
 
 function PersonDetailPage() {
   const { language } = useLanguage();
   const t = translations[language];
   const { slug } = useParams<{ slug: string }>();
   const { data: person, error, isLoading } = useSWR<PersonFull>(slug ? `/api/people/${slug}` : null, fetcher);
-  const { data: relationshipClaims } = useSWR<ClaimWithCitations[]>(
-    slug ? `/api/relationship-claims?person=${encodeURIComponent(slug)}` : null,
-    fetcher,
-  );
 
   if (error) {
     return (
@@ -114,12 +109,6 @@ function PersonDetailPage() {
 
           <ClaimEvidence title={language === 'ar' ? 'المصادر والملاحظات التاريخية' : 'Sources & historical notes'} claims={person.claims || []} subjectName={person.name} subjectSlug={slug} />
 
-          <ClaimEvidence
-            title={language === 'ar' ? 'أدلة العلاقات' : 'Relationship evidence'}
-            claims={relationshipClaims || []}
-            subjectName={person.name}
-            subjectSlug={slug}
-          />
 
         </div>
       </div>

@@ -973,10 +973,11 @@
       "reviewerNote": "نسب أطول مما في بيانات التطبيق الحالية، وفيها \"المكي\" غير مذكورة؛ تغيير القيمة المعتمدة يحتاج مراجعة صريحة."
     },
     {
-      "key": "abu-ubaydah/title-amin-al-ummah",
+      "key": "abu-ubaydah/titles",
       "subjectKind": "PERSON",
       "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
-      "assertion": "سماه النبي صلى الله عليه وسلم أمين الأمة، وقال: إن لكل أمة أميناً، وأمين هذه الأمة أبو عبيدة بن الجراح.",
+      "field": "titles",
+      "assertion": "أحد السابقين الأولين، وشهد له النبي صلى الله عليه وسلم بالجنة، وسماه أمين هذه الأمة.",
       "confidence": "ESTABLISHED",
       "reviewStatus": "NOT_REVIEWED",
       "citations": [
@@ -1006,39 +1007,7 @@
           "extractionUrl": "https://shamela.ws/book/10906/1437",
           "excerptArabic": "أَنَّ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَالَ: (لِكُلِّ أُمَّةٍ أَمِيْنٌ، وَأَمِيْنُ هَذِهِ الأُمَّةِ: أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ (٤)) .",
           "accessedAt": "2026-09-09"
-        }
-      ],
-      "field": "titles"
-    },
-    {
-      "key": "abu-ubaydah/testified-paradise",
-      "subjectKind": "PERSON",
-      "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
-      "assertion": "شهد له النبي صلى الله عليه وسلم بالجنة.",
-      "confidence": "ESTABLISHED",
-      "reviewStatus": "NOT_REVIEWED",
-      "citations": [
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "6-p3",
-          "volume": "1",
-          "pageReference": "6",
-          "extractionUrl": "https://shamela.ws/book/10906/1432",
-          "excerptArabic": "شَهِدَ لَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِالجَنَّةِ، وَسَمَّاهُ: أَمِيْنَ الأُمَّةِ، وَمَنَاقِبُهُ شَهِيْرَةٌ جَمَّةٌ.",
-          "accessedAt": "2026-09-09"
-        }
-      ],
-      "reviewerNote": "لا يرد في هذه الترجمة لفظ \"العشرة المبشرين بالجنة\" الذي يحمله لقبه في التطبيق؛ يلزم دليل آخر لذلك اللقب.",
-      "field": "titles"
-    },
-    {
-      "key": "abu-ubaydah/early-islam",
-      "subjectKind": "PERSON",
-      "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
-      "assertion": "أحد السابقين الأولين، أسلم مع نفر في ساعة واحدة قبل دخول النبي صلى الله عليه وسلم دار الأرقم.",
-      "confidence": "LIKELY",
-      "reviewStatus": "NOT_REVIEWED",
-      "citations": [
+        },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
           "passageAnchor": "5-p5",
@@ -1057,8 +1026,7 @@
           "excerptArabic": "بنُ عَبْدِ الأَسَدِ، وَأَبُو عُبَيْدَةَ بنُ الجَرَّاحِ حَتَّى أَتَوْا رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فَعَرَضَ عَلَيْهِمُ الإِسْلاَمَ، وَأَنْبَأَهُمْ بِشَرَائِعِهِ، فَأَسْلَمُوا فِي سَاعَةٍ وَاحِدَةٍ، ",
           "accessedAt": "2026-09-09"
         }
-      ],
-      "field": "titles"
+      ]
     },
     {
       "key": "abu-ubaydah/appearance",
@@ -1267,35 +1235,6 @@
       "relatedSubjectSlug": "yarmuk"
     },
     {
-      "key": "abu-ubaydah/zuhd",
-      "subjectKind": "PERSON",
-      "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
-      "assertion": "كان موصوفاً بحسن الخلق والحلم الزائد والتواضع، ولم يوجد في بيته حين زاره عمر بالشام إلا سيفه وترسه ورحله.",
-      "confidence": "LIKELY",
-      "reviewStatus": "NOT_REVIEWED",
-      "citations": [
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "13-p9",
-          "volume": "1",
-          "pageReference": "13",
-          "extractionUrl": "https://shamela.ws/book/10906/1439",
-          "excerptArabic": "وَكَانَ أَبُو عُبَيْدَةَ مَوْصُوْفاً بِحُسْنِ الخُلُقِ، وَبِالحِلْمِ الزَائِدِ، وَالتَّوَاضُعِ.",
-          "accessedAt": "2026-09-09"
-        },
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "16-p12",
-          "volume": "1",
-          "pageReference": "16",
-          "extractionUrl": "https://shamela.ws/book/10906/1442",
-          "excerptArabic": "فَسَارَ مَعَهُ حَتَّى أَتَى مَنْزِلَهُ، فَنَزَلَ عَلَيْهِ، فَلَمْ يَرَ فِي بَيْتِهِ إِلاَّ سَيْفَهُ وَتُرْسَهُ وَرَحْلَهُ.",
-          "accessedAt": "2026-09-09"
-        }
-      ],
-      "field": "virtues"
-    },
-    {
       "key": "abu-ubaydah/plague-of-amwas",
       "subjectKind": "PERSON",
       "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
@@ -1433,10 +1372,84 @@
       "relationshipType": "COMPANION_OF",
       "relatedSubjectKind": "PERSON",
       "relatedSubjectSlug": "prophet-muhammad"
+    },
+    {
+      "key": "abu-ubaydah/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
+      "field": "virtues",
+      "assertion": "أحد السابقين الأولين، ومن عزم الصديق على توليته الخلافة، وأشار به يوم السقيفة؛ لكمال أهليته عند أبي بكر. شهد له النبي صلى الله عليه وسلم بالجنة، وسماه أمين الأمة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "6-p3",
+          "volume": "1",
+          "pageReference": "6",
+          "extractionUrl": "https://shamela.ws/book/10906/1432",
+          "excerptArabic": "شَهِدَ لَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِالجَنَّةِ، وَسَمَّاهُ: أَمِيْنَ الأُمَّةِ، وَمَنَاقِبُهُ شَهِيْرَةٌ جَمَّةٌ.",
+          "accessedAt": "2026-09-09"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "9-p7",
+          "volume": "1",
+          "pageReference": "9",
+          "extractionUrl": "https://shamela.ws/book/10906/1435",
+          "excerptArabic": "أَنَّ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَالَ: (إِنَّ لِكُلِّ أُمَّةٍ أَمِيْناً، وَأَمِيْنُ هَذِهِ الأُمَّةِ: أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ (١)) .",
+          "accessedAt": "2026-09-09"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "11-p6",
+          "volume": "1",
+          "pageReference": "11",
+          "extractionUrl": "https://shamela.ws/book/10906/1437",
+          "excerptArabic": "أَنَّ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَالَ: (لِكُلِّ أُمَّةٍ أَمِيْنٌ، وَأَمِيْنُ هَذِهِ الأُمَّةِ: أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ (٤)) .",
+          "accessedAt": "2026-09-09"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5-p5",
+          "volume": "1",
+          "pageReference": "5",
+          "extractionUrl": "https://shamela.ws/book/10906/1431",
+          "excerptArabic": "أَحَدُ السَّابِقِيْنَ الأَوَّلِيْنَ، وَمَنْ عَزَمَ الصِّدِّيْقُ عَلَى تَوْلِيَتِهِ الخِلاَفَةَ، وَأَشَارَ بِهِ يَوْمَ",
+          "accessedAt": "2026-09-09"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "8-p1",
+          "volume": "1",
+          "pageReference": "8",
+          "extractionUrl": "https://shamela.ws/book/10906/1434",
+          "excerptArabic": "بنُ عَبْدِ الأَسَدِ، وَأَبُو عُبَيْدَةَ بنُ الجَرَّاحِ حَتَّى أَتَوْا رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فَعَرَضَ عَلَيْهِمُ الإِسْلاَمَ، وَأَنْبَأَهُمْ بِشَرَائِعِهِ، فَأَسْلَمُوا فِي سَاعَةٍ وَاحِدَةٍ، ",
+          "accessedAt": "2026-09-09"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "13-p9",
+          "volume": "1",
+          "pageReference": "13",
+          "extractionUrl": "https://shamela.ws/book/10906/1439",
+          "excerptArabic": "وَكَانَ أَبُو عُبَيْدَةَ مَوْصُوْفاً بِحُسْنِ الخُلُقِ، وَبِالحِلْمِ الزَائِدِ، وَالتَّوَاضُعِ.",
+          "accessedAt": "2026-09-09"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "16-p12",
+          "volume": "1",
+          "pageReference": "16",
+          "extractionUrl": "https://shamela.ws/book/10906/1442",
+          "excerptArabic": "فَسَارَ مَعَهُ حَتَّى أَتَى مَنْزِلَهُ، فَنَزَلَ عَلَيْهِ، فَلَمْ يَرَ فِي بَيْتِهِ إِلاَّ سَيْفَهُ وَتُرْسَهُ وَرَحْلَهُ.",
+          "accessedAt": "2026-09-09"
+        }
+      ]
     }
   ],
   "approval": {
-    "revision": "7d1c651b77fa52a2",
+    "revision": "c5d4ea48edf2f1db",
     "approvedAt": "2026-09-11",
     "approvedBy": "msskzx",
     "note": "Approved for publication on the user’s instruction in conversation. The content was not read; all claims stay Not reviewed. Ten claims name a supporting field or relationship inferred by the agent from the cited passages; the appearance claim cites 23-p6 for the dyeing that passage records beside the death year; and the death year is one disputed claim carrying both reported years. Those are the ones most worth reading when review happens."
