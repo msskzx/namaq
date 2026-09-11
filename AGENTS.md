@@ -130,8 +130,20 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   `batch.json`, so any edit after approval needs approving again.
 - Record data at whatever review status is honest and let it be visible; review
   status never hides data (`docs/adr/0008-separate-review-from-visibility.md`).
-  Leave an unknown structured value unset rather than inventing one, and keep
-  competing accounts as separate attributed claims.
+  Leave an unknown structured value unset rather than inventing one.
+- **The source text is the book; the app structures a selection from it.** The
+  account pages are authoritative and are never edited or removed to reflect a
+  change in what the app models. Removing a claim removes a selection, never the
+  passage it selected from.
+- **Author a claim only when it backs a value the model holds today**: a profile
+  field, a title assignment, a participation, an event link, or a person
+  relation. A claim that names neither a field nor a relationship is rejected by
+  `npm run history:validate`. The entry is already preserved page by page, so
+  such a claim is a second copy of text rather than evidence.
+- Competing accounts are kept as separate attributed claims **only where the
+  model holds the value they compete over**, such as two death years. A
+  disagreement about something the app does not record stays in the source
+  pages, where it already is.
 - Transmission chains stay in the source text. A person mentioned only as a
   narrator does not become a graph node or an edge.
 

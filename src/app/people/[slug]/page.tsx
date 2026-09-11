@@ -9,7 +9,6 @@ import translations from '@/components/language/translations';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import Badge from '@/components/common/Badge';
-import BattleParticipationTimeline from '@/components/battles/BattleParticipationTimeline';
 import Timeline from '@/components/people/Timeline';
 import type { PersonFull } from '@/types/person';
 import useSWR from 'swr';
@@ -72,7 +71,7 @@ function PersonDetailPage() {
           </div>
         </div>
 
-        <Timeline events={person.events || []} participations={person.participations || []} />
+        <Timeline events={person.events || []} participations={person.participations || []} death={person} />
 
         <div className="flex flex-col gap-6 mt-10">
           {person.fullName && (
@@ -113,13 +112,12 @@ function PersonDetailPage() {
 
           <AyatGroup ayat={person.ayat || []} />
 
-          <BattleParticipationTimeline participations={person.participations || []} />
-
-          <ClaimEvidence title={language === 'ar' ? 'المصادر والملاحظات التاريخية' : 'Sources & historical notes'} claims={person.claims || []} />
+          <ClaimEvidence title={language === 'ar' ? 'المصادر والملاحظات التاريخية' : 'Sources & historical notes'} claims={person.claims || []} subjectName={person.name} />
 
           <ClaimEvidence
             title={language === 'ar' ? 'أدلة العلاقات' : 'Relationship evidence'}
             claims={relationshipClaims || []}
+            subjectName={person.name}
             relationshipClaims
           />
 

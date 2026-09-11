@@ -95,6 +95,7 @@ describe('ClaimEvidence', () => {
       <ClaimEvidence
         title="Relationship evidence"
         relationshipClaims
+        subjectName="أبو عبيدة"
         claims={[
           claim({
             relationshipType: 'COMPANION_OF',
@@ -104,10 +105,9 @@ describe('ClaimEvidence', () => {
       />,
     );
 
-    // The subject is the profile the reader is already on, so the line names
-    // the relation and the other end only.
-    expect(screen.getByText(/companion of → prophet-muhammad/)).toBeTruthy();
-    expect(screen.queryByText(/abu-ubaydah-ibn-al-jarrah/)).toBeNull();
+    // Same shape as the graph's link tooltip: naming both ends is what makes
+    // the direction readable in either script.
+    expect(screen.getByText(/أبو عبيدة - Companion Of -> prophet-muhammad/)).toBeTruthy();
   });
 
   it('shows one page of claims at a time, with a jump to any of them', () => {
@@ -183,7 +183,9 @@ describe('ClaimEvidence', () => {
     expect(screen.getByText('Supports: Year of death')).toBeTruthy();
   });
 
-  it('says nothing about support for a claim that backs no recorded value', () => {
+  // A claim backing nothing cannot reach the interface: validateBatch rejects it
+  // (src/lib/history/batchSchema.ts).
+  it('says nothing about support for a legacy row that names no field', () => {
     render(<ClaimEvidence title="Sources" claims={[claim({ field: null } as Partial<ClaimWithCitations>)]} />);
 
     expect(screen.queryByText(/^Supports:/)).toBeNull();

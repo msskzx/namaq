@@ -15,8 +15,32 @@ type TimelineEntry = {
   nameTransliterated: string | null;
   hijriYear: number | null;
   hijriPeriod: string | null;
-  href: string;
+  href: string | null;
   isBattle: boolean;
+};
+
+/** deathYearHijri is free text such as "18 AH", so the year is read off the front. */
+function deathEntry(death: PersonDeath, language: string): TimelineEntry | null {
+  const year = Number(death.deathYearHijri?.match(/\d+/)?.[0] ?? NaN);
+  if (Number.isNaN(year)) return null;
+
+  const where = language === 'ar' ? death.placeOfDeathArabic : death.placeOfDeathTransliterated ?? death.placeOfDeathArabic;
+  const label = language === 'ar' ? 'الوفاة' : 'Death';
+  return {
+    key: 'death',
+    name: where ? `${label} — ${where}` : label,
+    nameTransliterated: null,
+    hijriYear: year,
+    hijriPeriod: null,
+    href: null,
+    isBattle: false,
+  };
+}
+
+export type PersonDeath = {
+  deathYearHijri: string | null;
+  placeOfDeathArabic: string | null;
+  placeOfDeathTransliterated: string | null;
 };
 
 function toEntries(events: EventBase[], participations: BattleParticipation[]): TimelineEntry[] {
@@ -42,10 +66,23 @@ function toEntries(events: EventBase[], participations: BattleParticipation[]): 
   ];
 }
 
+/** hijriPeriod is a display string few rows carry; the year is the data. */
+function hijriLabel(entry: TimelineEntry, language: string) {
+  if (entry.hijriPeriod) return entry.hijriPeriod;
+  if (entry.hijriYear === null) return null;
+  return language === 'ar' ? `${entry.hijriYear} هـ` : `${entry.hijriYear} AH`;
+}
+
+function Wrapper({ href, children }: { href: string | null; children: React.ReactNode }) {
+  if (!href) return <div className="my-8 text-center block">{children}</div>;
+  return <Link href={href} className="group my-8 text-center block">{children}</Link>;
+}
+
 function TimelineItem({ entry, language }: { entry: TimelineEntry; language: string }) {
+  const period = hijriLabel(entry, language);
   return (
     <div className="flex flex-col items-center mx-4 my-4">
-      <Link href={entry.href} className="group my-8 text-center block">
+      <Wrapper href={entry.href}>
         <div
           className={`bg-white dark:bg-gray-800 rounded-lg shadow-sm border px-3 py-2 w-full transition-all duration-200 hover:shadow-md cursor-pointer ${entry.isBattle
             ? 'border-sky-500 dark:border-sky-400 hover:border-sky-600 dark:hover:border-sky-500 hover:bg-sky-100 dark:hover:bg-sky-600'
@@ -56,7 +93,7 @@ function TimelineItem({ entry, language }: { entry: TimelineEntry; language: str
             {language === 'ar' ? entry.name : entry.nameTransliterated ?? entry.name}
           </h3>
         </div>
-      </Link >
+      </Wrapper >
 
       {/* Dot */}
       < div className="w-4 h-4 bg-amber-600 rounded-full border-2 border-amber-400 shadow" ></div >
@@ -64,9 +101,9 @@ function TimelineItem({ entry, language }: { entry: TimelineEntry; language: str
 
       {/* Year */}
       {
-        entry.hijriPeriod && (
+        period && (
           <div className="text-xs font-medium text-amber-600 dark:text-amber-400 mt-4">
-            {entry.hijriPeriod}
+            {period}
           </div>
         )
       }
@@ -77,9 +114,10 @@ function TimelineItem({ entry, language }: { entry: TimelineEntry; language: str
 interface TimelineProps {
   events: EventBase[];
   participations?: BattleParticipation[];
+  death?: PersonDeath;
 }
 
-export default function Timeline({ events, participations = [] }: TimelineProps) {
+export default function Timeline({ events, participations = [], death }: TimelineProps) {
   const { language } = useLanguage();
 
   // Determine number of items per row responsively (hooks must run before any return)
@@ -113,7 +151,8 @@ export default function Timeline({ events, participations = [] }: TimelineProps)
     };
   }, []);
 
-  const entries = toEntries(events ?? [], participations).sort(
+  const fromDeath = death ? deathEntry(death, language) : null;
+  const entries = [...toEntries(events ?? [], participations), ...(fromDeath ? [fromDeath] : [])].sort(
     (a, b) => (a.hijriYear || 0) - (b.hijriYear || 0)
   );
   if (entries.length === 0) return null;

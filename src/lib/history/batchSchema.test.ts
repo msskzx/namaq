@@ -112,6 +112,17 @@ describe('validateBatch', () => {
     });
   });
 
+  it('rejects a claim that backs no recorded value, since the pages already hold the text', () => {
+    const b = batch();
+    b.claims[0].field = undefined;
+    b.claims[0].relationshipType = undefined;
+
+    expect(validateBatch(b, files())).toContainEqual({
+      path: 'claims[0]',
+      message: 'a claim must name the field or relationship it supports',
+    });
+  });
+
   it('rejects a half-specified relationship claim', () => {
     const b = batch();
     b.claims[0].relationshipType = 'COMPANION_OF';

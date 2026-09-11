@@ -1,8 +1,9 @@
 # Data quality and references
 
-Status: implemented, awaiting batch approval. The schema, authoring format,
-validator, importer, APIs and UI are built; the Abu Ubaydah pilot batch is
-extracted and validated but not imported. See "Implementation status" below.
+Status: implemented. The schema, authoring format, validator, importer, APIs
+and UI are built, and the Abu Ubaydah pilot is imported and serving. Its
+approval is stale against the current files and is awaiting re-approval. See
+"Implementation status" below.
 
 ```mermaid
 flowchart TB
@@ -69,13 +70,32 @@ authoring source and database copies are not edited independently. Use Markdown
 for source pages and structured files for metadata, facts and citation targets,
 with one authoritative file copy of the full text. Proposed directory: `data/history/`.
 Approval is explicit in the review conversation and recorded against the fixed
-batch revision in its summary. Edits after approval require reapproval. A separate data repository
+batch revision. The revision covers `batch.json` and the account pages and notes,
+not `summary.md`: the summary is written for the reviewer, and rewording it
+invalidates nothing about the evidence. Edits after approval require reapproval. A separate data repository
 is deferred until independent contributors, permissions or releases justify it.
 
 Support citations for every historical subject type, including graph-only people,
 titles, battles and events. Research remains limited to the agreed scope.
 Subjects without profiles receive citations attached directly to their identities;
 profiles may be added later and reuse the same evidence.
+
+The source text is the book, and the app structures a selection from it. Account
+pages are authoritative: they are never edited or removed to reflect a change in
+what the app models, and removing a claim removes a selection, never the passage
+it selected from.
+
+A claim is authored only when it backs a value the model holds today, meaning a
+profile field, a title assignment, a participation, an event link or a person
+relation. `npm run history:validate` rejects a claim naming neither a field nor a
+relationship. The reasoning is that the complete entry is already stored page by
+page with anchored paragraphs, so a claim that backs nothing is a second copy of
+text rather than something a reader can check a recorded value against. A
+statement the model has no shape for stays in the pages until the model grows one.
+
+Competing accounts are kept as separate attributed claims only where the model
+holds the value they compete over, such as two reported years of death. A
+disagreement about something the app does not record stays in the source pages.
 
 Each claim has a review status: Not reviewed, In review or Reviewed. Disagreement
 is independent of review status. Legacy information without review records starts
@@ -132,7 +152,7 @@ and [review independent of visibility](adr/0008-separate-review-from-visibility.
 | --- | --- |
 | Evidence schema and migration | Applied. `HistoricalClaim`, `Citation`, `SourceAccount`, `SourceAccountPage`, `SourcePassage`, `ReviewBatch`; `ClaimReviewStatus` is now Not reviewed / In review / Reviewed |
 | File authoring and validation | `data/history/batches/`, `src/lib/history/`, `npm run history:validate` / `history:import` / `history:extract` |
-| Pilot import | Extracted and validated, **not imported**: the batch carries no approval |
+| Pilot import | Imported and serving: 17 claims, 32 citations. Approval is stale against the current files |
 | Evidence and account APIs | `/api/subjects/[kind]/[slug]/references`, `/api/people/[slug]/accounts`; review-status filtering removed |
 | Profile reading and graph access | `SourceAccountReader`, `ClaimEvidence`, `SubjectEvidenceAccess` |
 | Tests and documentation | Colocated tests throughout; README and `AGENTS.md` updated |

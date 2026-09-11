@@ -6,19 +6,41 @@ import { prisma } from '@/lib/prisma';
  * (docs/adr/0008-separate-review-from-visibility.md). Relationship identity
  * mirrors Neo4j: subject slug + relationship type + related slug.
  */
+type RelatedSubject = { relatedSubjectSlug: string | null; relatedSubjectKind: string | null };
+
 /**
  * Resolves each claim's related subject to the name it is recorded under, so a
- * reader sees a person rather than a slug. One query for the whole set.
+ * reader sees a subject rather than a slug. One query per kind in play.
  */
-async function withRelatedSubjectNames<T extends { relatedSubjectSlug: string | null }>(claims: T[]) {
-  const slugs = [...new Set(claims.map((claim) => claim.relatedSubjectSlug).filter((slug): slug is string => Boolean(slug)))];
-  if (slugs.length === 0) return claims.map((claim) => ({ ...claim, relatedSubjectName: null }));
+async function withRelatedSubjectNames<T extends RelatedSubject>(claims: T[]) {
+  const byKind = new Map<string, Set<string>>();
+  for (const claim of claims) {
+    if (!claim.relatedSubjectSlug) continue;
+    const kind = claim.relatedSubjectKind ?? 'PERSON';
+    if (!byKind.has(kind)) byKind.set(kind, new Set());
+    byKind.get(kind)!.add(claim.relatedSubjectSlug);
+  }
+  if (byKind.size === 0) return claims.map((claim) => ({ ...claim, relatedSubjectName: null }));
 
-  const people = await prisma.person.findMany({ where: { slug: { in: slugs } }, select: { slug: true, name: true } });
-  const nameBySlug = new Map(people.map((person) => [person.slug, person.name]));
+  const names = new Map<string, string>();
+  const select = { slug: true, name: true } as const;
+  await Promise.all(
+    [...byKind].map(async ([kind, set]) => {
+      const where = { slug: { in: [...set] } };
+      const rows =
+        kind === 'BATTLE' ? await prisma.battle.findMany({ where, select })
+        : kind === 'EVENT' ? await prisma.event.findMany({ where, select })
+        : kind === 'TITLE' ? await prisma.title.findMany({ where, select })
+        : await prisma.person.findMany({ where, select });
+      rows.forEach((row) => names.set(`${kind}:${row.slug}`, row.name));
+    }),
+  );
+
   return claims.map((claim) => ({
     ...claim,
-    relatedSubjectName: claim.relatedSubjectSlug ? nameBySlug.get(claim.relatedSubjectSlug) ?? null : null,
+    relatedSubjectName: claim.relatedSubjectSlug
+      ? names.get(`${claim.relatedSubjectKind ?? 'PERSON'}:${claim.relatedSubjectSlug}`) ?? null
+      : null,
   }));
 }
 

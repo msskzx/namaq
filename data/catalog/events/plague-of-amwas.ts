@@ -11,7 +11,7 @@ const plagueOfAmwas = {
     hijriYear: { value: 18, claims: ['abu-ubaydah/death-year-18'] },
     location: { value: 'عمواس، بين الرملة وبيت المقدس', claims: ['abu-ubaydah/plague-of-amwas'] },
     description: {
-      value: 'توفي أبو عبيدة بن الجراح في طاعون عمواس بعد أن أبى أن يفارق جنده.',
+      value: 'طاعون عمواس، منسوب إلى قرية عمواس بين الرملة وبيت المقدس، وفيه توفي عدد من الصحابة.',
       claims: ['abu-ubaydah/plague-of-amwas'],
     },
   },

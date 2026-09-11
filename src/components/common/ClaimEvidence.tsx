@@ -12,6 +12,8 @@ import {
 import Badge from '@/components/common/Badge';
 
 interface ClaimEvidenceProps {
+  /** The profile's own subject, so a relation names both of its ends. */
+  subjectName?: string;
   title: string;
   claims: ClaimWithCitations[];
   relationshipClaims?: boolean;
@@ -51,6 +53,7 @@ export default function ClaimEvidence({
   claims,
   relationshipClaims = false,
   pageSize = 5,
+  subjectName,
 }: ClaimEvidenceProps) {
   const { language } = useLanguage();
   const t = translations[language];
@@ -73,20 +76,22 @@ export default function ClaimEvidence({
       <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">{title}</h2>
       <ul className="space-y-4">
         {shown.map((claim) => {
-          const relationship =
-            relationshipClaims && claim.relationshipType
-              ? `${claim.relationshipType.replaceAll('_', ' ').toLowerCase()} → ${claim.relatedSubjectName ?? claim.relatedSubjectSlug ?? ''}`
-              : null;
-          // What the profile would change if this claim were acted on, so a
-          // reader can tell evidence for a recorded value from background.
           const relationName = claim.relationshipType
             ? (t.relationTypes as Record<string, string>)[claim.relationshipType] ?? claim.relationshipType
             : null;
-          const supports = relationName
-            ? `${relationName} → ${claim.relatedSubjectName ?? claim.relatedSubjectSlug ?? ''}`
-            : claim.field
-              ? fieldLabel[claim.field]?.[language === 'ar' ? 'ar' : 'en'] ?? claim.field
-              : null;
+          const other = claim.relatedSubjectName ?? claim.relatedSubjectSlug ?? '';
+          // Same shape as the graph's link tooltip (src/components/graph/GraphCanvas.tsx):
+          // naming both ends is what makes the direction readable in either script.
+          const relation = relationName
+            ? [subjectName ?? claim.subjectSlug, '-', relationName, '->', other].join(' ')
+            : null;
+          const relationship = relationshipClaims ? relation : null;
+          // What the profile would change if this claim were acted on, so a
+          // reader can tell evidence for a recorded value from background. The
+          // heading already carries it on a relationship list.
+          const supports = relationship
+            ? null
+            : relation ?? (claim.field ? fieldLabel[claim.field]?.[language === 'ar' ? 'ar' : 'en'] ?? claim.field : null);
 
           return (
             <li key={claim.id} className="border-s-4 border-amber-500 ps-3 text-gray-800 dark:text-gray-200">
