@@ -1440,9 +1440,9 @@
     }
   ],
   "approval": {
-    "revision": "9481bec6579f9861",
-    "approvedAt": "2026-09-09",
+    "revision": "c2afd3b49cb81730",
+    "approvedAt": "2026-09-11",
     "approvedBy": "msskzx",
-    "note": "Approved for publication only. The content was not read; all claims stay Not reviewed."
+    "note": "Approved for publication on the user’s instruction in conversation. The content was not read; all claims stay Not reviewed. Ten claims name a supporting field or relationship inferred by the agent from the cited passages and are the ones most worth reading when review happens."
   }
 }

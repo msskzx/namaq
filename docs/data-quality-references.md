@@ -69,6 +69,14 @@ source text are versioned in files and imported into PostgreSQL; files are the
 authoring source and database copies are not edited independently. Use Markdown
 for source pages and structured files for metadata, facts and citation targets,
 with one authoritative file copy of the full text. Proposed directory: `data/history/`.
+Publishing and reviewing are two separate actions and neither implies the other.
+Approving for publication records the current revision in the batch's approval
+block and is what permits the import; it asserts that the batch may be published,
+not that anyone has read it. Marking reviewed sets a claim's review status, one
+claim at a time, after comparing the assertion against the passage it cites. A
+published batch whose claims are all Not reviewed is an honest state, and the
+approval note says which of the two happened.
+
 Approval is explicit in the review conversation and recorded against the fixed
 batch revision. The revision covers `batch.json` and the account pages and notes,
 not `summary.md`: the summary is written for the reviewer, and rewording it

@@ -128,6 +128,14 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   <batch dir>` before proposing a batch, and `npm run history:import -- <batch
   dir>` for a dry run. Import applies only the revision recorded as approved in
   `batch.json`, so any edit after approval needs approving again.
+- Two separate actions gate a batch, and neither implies the other.
+  **Approving for publication** records the current revision in `batch.json`'s
+  approval block, which is what lets `npm run history:import -- --apply` write.
+  It says the batch may be published and says nothing about anyone having read
+  it. **Marking reviewed** sets a claim's `reviewStatus`, one claim at a time,
+  after someone compares the assertion against the passage. A batch approved
+  for publication whose claims are all Not reviewed is a normal and honest
+  state, and the approval note should say so.
 - Record data at whatever review status is honest and let it be visible; review
   status never hides data (`docs/adr/0008-separate-review-from-visibility.md`).
   Leave an unknown structured value unset rather than inventing one.
