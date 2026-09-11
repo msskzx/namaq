@@ -154,6 +154,32 @@ Terminology: [CONTEXT.md](../CONTEXT.md#historical-evidence).
 Rationale: [citations independent of profiles](adr/0009-citations-independent-of-profiles.md)
 and [review independent of visibility](adr/0008-separate-review-from-visibility.md).
 
+## Where the existing seed data stands
+
+The people, battle and event seeds under `prisma/` and `neo4j/` were extracted
+from Siyar A'lam al-Nubala' by an earlier agent, without citations, passage
+anchors or edition metadata. They are therefore mostly correct and evidentially
+worthless: the values are probably what the book says, and nothing in the
+repository shows where.
+
+That makes them a checklist rather than a source. An agent authoring a catalog
+entry reads the seed to learn which subjects exist and which fields a subject is
+claimed to have, then looks for each of them in the source. The seed says where
+to look; the source says what is true.
+
+A value carried into the catalog that no batch supports yet is marked
+`legacy-unreviewed`. It is in use and its evidence is owed, which is a normal
+state and not a defect. A batch covering a subject visits every legacy value on
+it and resolves each one of three ways: promoted to a cited claim, left legacy
+because the entry is silent, or flagged as a contradiction. A contradiction
+between a seed value and the entry means one of the two extractions misread the
+same book, so it is reported rather than silently overwritten.
+
+Because provenance sits on every catalog value, the set of values awaiting
+evidence is directly countable. Reporting it after each batch turns the backlog
+into a measurable thing: what has been resolved, what is still owed, and which
+subject a future batch should cover to clear the most.
+
 ## Implementation status
 
 | Step | State |
