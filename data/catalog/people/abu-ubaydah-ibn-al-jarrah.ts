@@ -18,10 +18,11 @@ const abuUbaydahIbnAlJarrah = {
         'عَامِرُ بنُ عَبْدِ اللهِ بنِ الجَرَّاحِ بنِ هِلاَلِ بنِ أُهَيْبِ بنِ ضَبَّةَ بنِ الحَارِثِ بنِ فِهْرِ بنِ مَالِكِ بنِ النَّضْرِ بنِ كِنَانَةَ بنِ خُزَيْمَةَ بنِ مُدْرِكَةَ بنِ إِلْيَاسَ بنِ مُضَرَ بنِ نِزَارِ بنِ مَعَدِّ بنِ عَدْنَانَ القُرَشِيُّ، الفِهْرِيُّ، المَكِّيُّ.',
       claims: ['abu-ubaydah/full-name'],
     },
-    // Shorter than prisma/personSeedData.ts: 23-p6 has no appearance claim yet.
+    // Composed from 7-p9 and 23-p6; the latter gives the death year and the
+    // dyeing in one sentence, so it backs two fields.
     appearance: {
       value:
-        'كَانَ رَجُلاً نَحِيْفاً، مَعْرُوْقَ الوَجْهِ، خَفِيْفَ اللِّحْيَةِ، طُوَالاً، أَحْنَى، أَثْرَمَ الثَّنِيَّتَيْنِ.',
+        'كَانَ رَجُلاً نَحِيْفاً، مَعْرُوْقَ الوَجْهِ، خَفِيْفَ اللِّحْيَةِ، طُوَالاً، أَحْنَى، أَثْرَمَ الثَّنِيَّتَيْنِ. وَكَانَ يَخْضِبُ بِالحِنَّاءِ وَالكَتَمِ، وَكَانَ لَهُ عَقِيْصَتَانِ.',
       claims: ['abu-ubaydah/appearance'],
     },
     // No claim names this field, so these cite the passages it composes. It runs

@@ -1064,7 +1064,7 @@
       "key": "abu-ubaydah/appearance",
       "subjectKind": "PERSON",
       "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
-      "assertion": "كان رجلاً نحيفاً، معروق الوجه، خفيف اللحية، طوالاً، أحنى، أثرم الثنيتين.",
+      "assertion": "كان رجلاً نحيفاً، معروق الوجه، خفيف اللحية، طوالاً، أحنى، أثرم الثنيتين، وكان يخضب بالحناء والكتم، وكان له عقيصتان.",
       "confidence": "LIKELY",
       "reviewStatus": "NOT_REVIEWED",
       "citations": [
@@ -1075,6 +1075,15 @@
           "pageReference": "7",
           "extractionUrl": "https://shamela.ws/book/10906/1433",
           "excerptArabic": "أَنَّهُ وَصَفَ أَبَا عُبَيْدَةَ، فَقَالَ: كَانَ رَجُلاً نَحِيْفاً، مَعْرُوْقَ الوَجْهِ، خَفِيْفَ اللِّحْيَةِ، طُوَالاً، أَحْنَى (٢) ، أَثْرَمَ (٣) الثَّنِيَّتَيْنِ (٤) .",
+          "accessedAt": "2026-09-09"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "23-p6",
+          "volume": "1",
+          "pageReference": "23",
+          "extractionUrl": "https://shamela.ws/book/10906/1449",
+          "excerptArabic": "قَالَ أَبُو حَفْصٍ الفَلاَّسُ: تُوُفِّيَ أَبُو عُبَيْدَةَ فِي سَنَةِ ثَمَانِ عَشْرَةَ، وَلَهُ ثَمَانٌ وَخَمْسُوْنَ سَنَةً، وَكَانَ يَخْضِبُ بِالحِنَّاءِ وَالكَتَمِ (٤) ، وَكَانَ لَهُ عَقِيْصَتَانِ.",
           "accessedAt": "2026-09-09"
         }
       ],
@@ -1440,9 +1449,9 @@
     }
   ],
   "approval": {
-    "revision": "c2afd3b49cb81730",
+    "revision": "8b7b54390895f0a3",
     "approvedAt": "2026-09-11",
     "approvedBy": "msskzx",
-    "note": "Approved for publication on the user’s instruction in conversation. The content was not read; all claims stay Not reviewed. Ten claims name a supporting field or relationship inferred by the agent from the cited passages and are the ones most worth reading when review happens."
+    "note": "Approved for publication on the user’s instruction in conversation. The content was not read; all claims stay Not reviewed. Ten claims name a supporting field or relationship inferred by the agent from the cited passages, and the appearance claim cites 23-p6 for the dyeing that same passage records alongside the death year. Those are the ones most worth reading when review happens."
   }
 }
