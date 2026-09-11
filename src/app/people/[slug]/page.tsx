@@ -112,12 +112,13 @@ function PersonDetailPage() {
 
           <AyatGroup ayat={person.ayat || []} />
 
-          <ClaimEvidence title={language === 'ar' ? 'المصادر والملاحظات التاريخية' : 'Sources & historical notes'} claims={person.claims || []} subjectName={person.name} />
+          <ClaimEvidence title={language === 'ar' ? 'المصادر والملاحظات التاريخية' : 'Sources & historical notes'} claims={person.claims || []} subjectName={person.name} subjectSlug={slug} />
 
           <ClaimEvidence
             title={language === 'ar' ? 'أدلة العلاقات' : 'Relationship evidence'}
             claims={relationshipClaims || []}
             subjectName={person.name}
+            subjectSlug={slug}
           />
 
         </div>

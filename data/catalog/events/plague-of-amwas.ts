@@ -8,7 +8,7 @@ const plagueOfAmwas = {
   nameTransliterated: 'Plague of Amwas',
   type: 'DEATH',
   fields: {
-    hijriYear: { value: 18, claims: ['abu-ubaydah/death-year-18'] },
+    hijriYear: { value: 18, claims: ['abu-ubaydah/death-year'] },
     location: { value: 'عمواس، بين الرملة وبيت المقدس', claims: ['abu-ubaydah/plague-of-amwas'] },
     description: {
       value: 'طاعون عمواس، منسوب إلى قرية عمواس بين الرملة وبيت المقدس، وفيه توفي عدد من الصحابة.',

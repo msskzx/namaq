@@ -29,6 +29,7 @@ function claim(overrides: Partial<ClaimWithCitations> = {}) {
         source: {
           author: 'شمس الدين الذهبي',
           title: 'سير أعلام النبلاء',
+          digitalHost: 'shamela',
           edition: 'الطبعة الثالثة',
           publisher: 'مؤسسة الرسالة',
           publicationYear: '1405/1985',
@@ -190,24 +191,21 @@ describe('ClaimEvidence', () => {
     expect(screen.queryByText(/^Supports:/)).toBeNull();
   });
 
-  it('gathers competing accounts of one value under a single heading', () => {
-    const years = [
-      claim({ id: 'c-18', field: 'deathYearHijri', assertion: 'سنة ثمان عشرة' } as Partial<ClaimWithCitations>),
-      claim({ id: 'c-17', field: 'deathYearHijri', assertion: 'سنة سبع عشرة' } as Partial<ClaimWithCitations>),
-    ];
+  it('links a citation to the page in our own reader, keeping the host as a check', () => {
+    const cited = claim();
+    cited.citations[0].passage = { page: { accountId: 'acct-1', sequence: 7 } } as never;
 
-    render(<ClaimEvidence title="Sources" claims={years} />);
+    render(<ClaimEvidence title="Sources" claims={[cited]} subjectSlug="abu-ubaydah-ibn-al-jarrah" />);
 
-    // One heading, both assertions under it: the disagreement reads as one.
-    expect(screen.getAllByText('Year of death')).toHaveLength(1);
-    expect(screen.getByText('سنة ثمان عشرة')).toBeTruthy();
-    expect(screen.getByText('سنة سبع عشرة')).toBeTruthy();
+    expect(screen.getByText(/سير أعلام النبلاء/).closest('a')?.getAttribute('href'))
+      .toBe('/people/abu-ubaydah-ibn-al-jarrah?book=acct-1&page=7');
+    // The host link is how a reader checks we transcribed the passage faithfully.
+    expect(screen.getByText('shamela').getAttribute('href')).toBe('https://shamela.ws/book/10906/1431');
   });
 
-  it('links a citation to the page it was read from', () => {
-    render(<ClaimEvidence title="Sources" claims={[claim()]} />);
+  it('leaves the reference unlinked when no passage says which page it came from', () => {
+    render(<ClaimEvidence title="Sources" claims={[claim()]} subjectSlug="abu-ubaydah-ibn-al-jarrah" />);
 
-    const link = screen.getByText(/سير أعلام النبلاء/).closest('a');
-    expect(link?.getAttribute('href')).toBe('https://shamela.ws/book/10906/1431');
+    expect(screen.getByText(/سير أعلام النبلاء/).closest('a')).toBeNull();
   });
 });

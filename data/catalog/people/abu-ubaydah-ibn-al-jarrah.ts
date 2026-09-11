@@ -32,9 +32,9 @@ const abuUbaydahIbnAlJarrah = {
         'أَحَدُ السَّابِقِيْنَ الأَوَّلِيْنَ، وَمَنْ عَزَمَ الصِّدِّيْقُ عَلَى تَوْلِيَتِهِ الخِلاَفَةَ، وَأَشَارَ بِهِ يَوْمَ السَّقِيْفَةِ؛ لِكَمَالِ أَهْلِيَّتِهِ عِنْدَ أَبِي بَكْرٍ. شَهِدَ لَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِالجَنَّةِ، وَسَمَّاهُ: أَمِيْنَ الأُمَّةِ، وَمَنَاقِبُهُ شَهِيْرَةٌ جَمَّةٌ.',
       claims: ['abu-ubaydah/early-islam', 'abu-ubaydah/testified-paradise', 'abu-ubaydah/title-amin-al-ummah'],
     },
-    // Two years given; 17 is marked Ibn Aidh alone (انفرد), so author preference
-    // picks 18 (docs/authoritative-data-workflow-plan.md).
-    deathYearHijri: { value: '18 AH', claims: ['abu-ubaydah/death-year-18'] },
+    // The claim is disputed and carries both accounts; 17 is marked Ibn Aidh
+    // alone (انفرد), so author preference picks 18.
+    deathYearHijri: { value: '18 AH', claims: ['abu-ubaydah/death-year'] },
     // Not a conflict with plague-of-amwas: that names the epidemic, this the place.
     placeOfDeathArabic: { value: 'فِحْل', claims: ['abu-ubaydah/death-place'] },
   },

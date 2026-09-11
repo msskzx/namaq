@@ -1356,12 +1356,14 @@
       "field": "placeOfDeathArabic"
     },
     {
-      "key": "abu-ubaydah/death-year-18",
+      "key": "abu-ubaydah/death-year",
       "subjectKind": "PERSON",
       "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
-      "assertion": "قال أبو حفص الفلاس: توفي أبو عبيدة سنة ثمان عشرة وله ثمان وخمسون سنة، وقال كذلك في وفاته جماعة.",
+      "field": "deathYearHijri",
+      "assertion": "قال أبو حفص الفلاس: توفي أبو عبيدة سنة ثمان عشرة وله ثمان وخمسون سنة، وقال كذلك في وفاته جماعة. وانفرد ابن عائذ عن أبي مسهر أنه قرأ في كتاب يزيد بن عبيدة أن أبا عبيدة توفي سنة سبع عشرة.",
       "confidence": "LIKELY",
       "reviewStatus": "NOT_REVIEWED",
+      "disputed": true,
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
@@ -1380,20 +1382,7 @@
           "extractionUrl": "https://shamela.ws/book/10906/1449",
           "excerptArabic": "وَقَالَ كَذَلِكَ فِي وَفَاتِهِ جَمَاعَةٌ.",
           "accessedAt": "2026-09-09"
-        }
-      ],
-      "field": "deathYearHijri",
-      "disputed": true,
-      "reviewerNote": "رواية منافسة للسنة ١٧؛ تُترك قيمة سنة الوفاة في الملف الشخصي غير محددة حتى تُراجع."
-    },
-    {
-      "key": "abu-ubaydah/death-year-17",
-      "subjectKind": "PERSON",
-      "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
-      "assertion": "وانفرد ابن عائذ عن أبي مسهر أنه قرأ في كتاب يزيد بن عبيدة أن أبا عبيدة توفي سنة سبع عشرة.",
-      "confidence": "DISPUTED",
-      "reviewStatus": "NOT_REVIEWED",
-      "citations": [
+        },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
           "passageAnchor": "23-p8",
@@ -1403,9 +1392,7 @@
           "excerptArabic": "وَانْفَرَدَ ابْنُ عَائِذٍ، عَنْ أَبِي مُسْهِرٍ، أَنَّهُ قَرَأَ فِي كِتَابِ يَزِيْدَ بنِ عُبَيْدَةَ: أَنَّ أَبَا عُبَيْدَةَ تُوُفِّيَ سَنَةَ سَبْعَ عَشْرَةَ.",
           "accessedAt": "2026-09-09"
         }
-      ],
-      "field": "deathYearHijri",
-      "disputed": true
+      ]
     },
     {
       "key": "abu-ubaydah/companion-of-prophet",
@@ -1449,9 +1436,9 @@
     }
   ],
   "approval": {
-    "revision": "8b7b54390895f0a3",
+    "revision": "7d1c651b77fa52a2",
     "approvedAt": "2026-09-11",
     "approvedBy": "msskzx",
-    "note": "Approved for publication on the user’s instruction in conversation. The content was not read; all claims stay Not reviewed. Ten claims name a supporting field or relationship inferred by the agent from the cited passages, and the appearance claim cites 23-p6 for the dyeing that same passage records alongside the death year. Those are the ones most worth reading when review happens."
+    "note": "Approved for publication on the user’s instruction in conversation. The content was not read; all claims stay Not reviewed. Ten claims name a supporting field or relationship inferred by the agent from the cited passages; the appearance claim cites 23-p6 for the dyeing that passage records beside the death year; and the death year is one disputed claim carrying both reported years. Those are the ones most worth reading when review happens."
   }
 }

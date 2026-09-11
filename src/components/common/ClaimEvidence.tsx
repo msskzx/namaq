@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import Pagination from '@/components/common/Pagination';
 import { useLanguage } from '@/components/language/LanguageContext';
 import translations from '@/components/language/translations';
@@ -14,6 +15,8 @@ import Badge from '@/components/common/Badge';
 interface ClaimEvidenceProps {
   /** The profile's own subject, so a relation names both of its ends. */
   subjectName?: string;
+  /** The profile's slug, so a citation can link to the page it was read from. */
+  subjectSlug?: string;
   title: string;
   claims: ClaimWithCitations[];
   pageSize?: number;
@@ -52,6 +55,7 @@ export default function ClaimEvidence({
   claims,
   pageSize = 5,
   subjectName,
+  subjectSlug,
 }: ClaimEvidenceProps) {
   const { language } = useLanguage();
   const t = translations[language];
@@ -70,16 +74,7 @@ export default function ClaimEvidence({
     return claim.field ? fieldLabel[claim.field]?.[language === 'ar' ? 'ar' : 'en'] ?? claim.field : '';
   };
 
-  // Claims are grouped by what they support so competing accounts of one value
-  // sit together; two claims about the year of death are a disagreement, and a
-  // flat list presents them as unrelated facts.
-  const groups = new Map<string, ClaimWithCitations[]>();
-  claims.forEach((claim) => {
-    const label = supportLabel(claim);
-    groups.set(label, [...(groups.get(label) ?? []), claim]);
-  });
-  const grouped = [...groups];
-  const pageCount = Math.max(1, Math.ceil(grouped.length / pageSize));
+  const pageCount = Math.max(1, Math.ceil(claims.length / pageSize));
 
   // A shorter list can leave the reader on a page that no longer exists, for
   // instance when the profile's claims arrive after an empty first render.
@@ -89,23 +84,22 @@ export default function ClaimEvidence({
 
   if (claims.length === 0) return null;
 
-  // Paged by group, so a disagreement is never split across a page break.
   const first = (page - 1) * pageSize;
-  const shown = grouped.slice(first, first + pageSize);
+  const shown = claims.slice(first, first + pageSize);
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
       <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">{title}</h2>
-      <ul className="space-y-6">
-        {shown.map(([label, members]) => (
-          <li key={label}>
-            <h3 className="mb-2 font-semibold text-gray-900 dark:text-gray-100">{label}</h3>
-            <ul className="space-y-4">
-              {members.map((claim) => (
+      <ul className="space-y-4">
+        {shown.map((claim) => (
             <li key={claim.id} className="border-s-4 border-amber-500 ps-3 text-gray-800 dark:text-gray-200">
+              <h3 className="mb-1 font-semibold text-gray-900 dark:text-gray-100">{supportLabel(claim)}</h3>
               <p>{claim.assertion}</p>
               <div className="mt-2 flex flex-wrap items-center gap-2">
                 <Badge size="sm" color="gray" text={reviewStatusLabel[claim.reviewStatus][language === 'ar' ? 'ar' : 'en']} />
+                {claim.disputed && (
+                  <Badge size="sm" color="amber" text={language === 'ar' ? 'روايات متعارضة' : 'Accounts conflict'} />
+                )}
               </div>
               {claim.citations.length === 0 ? (
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
@@ -128,23 +122,27 @@ export default function ClaimEvidence({
                             {citation.excerptArabic}
                           </p>
                         )}
-                        <a
-                          className="mt-1 inline-block text-xs text-gray-600 underline dark:text-gray-400"
-                          href={citation.extractionUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          {citationText(citation, language)}
-                        </a>
+                        <span className="mt-1 flex flex-wrap items-baseline gap-x-2 text-xs text-gray-600 dark:text-gray-400">
+                          {citation.passage?.page && subjectSlug ? (
+                            <Link
+                              className="underline"
+                              href={`/people/${subjectSlug}?book=${citation.passage.page.accountId}&page=${citation.passage.page.sequence}`}
+                            >
+                              {citationText(citation, language)}
+                            </Link>
+                          ) : (
+                            <span>{citationText(citation, language)}</span>
+                          )}
+                          <a className="underline" href={citation.extractionUrl} target="_blank" rel="noreferrer">
+                            {citation.source.digitalHost ?? (language === 'ar' ? 'المصدر الرقمي' : 'Digital host')}
+                          </a>
+                        </span>
                       </li>
                     ))}
                   </ul>
                 </div>
               )}
             </li>
-              ))}
-            </ul>
-          </li>
         ))}
       </ul>
 

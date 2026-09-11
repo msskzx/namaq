@@ -60,7 +60,7 @@ export async function GET(request: Request) {
           { relatedSubjectSlug: person },
         ],
       },
-      include: { citations: { include: { source: true } } },
+      include: { citations: { include: { source: true, passage: { include: { page: true } } } } },
       orderBy: { updatedAt: 'desc' },
     });
 

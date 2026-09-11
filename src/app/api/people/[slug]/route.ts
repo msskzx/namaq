@@ -68,7 +68,7 @@ export async function GET(
     }
     const claims = await prisma.historicalClaim.findMany({
       where: { subjectKind: 'PERSON', subjectSlug: slug },
-      include: { citations: { include: { source: true } } },
+      include: { citations: { include: { source: true, passage: { include: { page: true } } } } },
       orderBy: { updatedAt: 'desc' },
     });
 
