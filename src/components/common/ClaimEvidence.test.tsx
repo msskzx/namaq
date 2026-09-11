@@ -49,7 +49,7 @@ describe('ClaimEvidence', () => {
   it('shows a claim with its citation and excerpt', () => {
     render(<ClaimEvidence title="Sources" claims={[claim()]} />);
 
-    expect(screen.getByText('عامر بن عبد الله بن الجراح')).toBeTruthy();
+    expect(screen.getByText(/أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ/)).toBeTruthy();
     expect(screen.getByText(/سير أعلام النبلاء/)).toBeTruthy();
     expect(screen.getByText('أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ')).toBeTruthy();
   });
@@ -62,7 +62,7 @@ describe('ClaimEvidence', () => {
     render(<ClaimEvidence title="Sources" claims={[claim({ reviewStatus } as Partial<ClaimWithCitations>)]} />);
 
     expect(screen.getByText(label)).toBeTruthy();
-    expect(screen.getByText('عامر بن عبد الله بن الجراح')).toBeTruthy();
+    expect(screen.getByText(/أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ/)).toBeTruthy();
   });
 
   it('translates review status into Arabic', () => {
@@ -117,8 +117,8 @@ describe('ClaimEvidence', () => {
 
     const { container } = render(<ClaimEvidence title="Sources" claims={many} />);
 
-    expect(screen.getByText('دعوى 0')).toBeTruthy();
-    expect(screen.queryByText('دعوى 5')).toBeNull();
+    expect(screen.getByText('field0')).toBeTruthy();
+    expect(screen.queryByText('field5')).toBeNull();
     // The same control the source reader uses: previous, a page selector, next.
     expect(container.querySelectorAll('select option')).toHaveLength(5);
   });
@@ -131,12 +131,12 @@ describe('ClaimEvidence', () => {
     render(<ClaimEvidence title="Sources" claims={many} />);
     fireEvent.click(screen.getByText('Next'));
 
-    expect(screen.getByText('دعوى 5')).toBeTruthy();
-    expect(screen.queryByText('دعوى 0')).toBeNull();
+    expect(screen.getByText('field5')).toBeTruthy();
+    expect(screen.queryByText('field0')).toBeNull();
 
     fireEvent.click(screen.getByText('Previous'));
 
-    expect(screen.getByText('دعوى 0')).toBeTruthy();
+    expect(screen.getByText('field0')).toBeTruthy();
   });
 
   it('stops at both ends', () => {
@@ -150,7 +150,7 @@ describe('ClaimEvidence', () => {
 
     fireEvent.click(screen.getByText('Next'));
 
-    expect(screen.getByText('دعوى 6')).toBeTruthy();
+    expect(screen.getByText('field6')).toBeTruthy();
     expect(screen.getByText('Next').closest('button')?.hasAttribute('disabled')).toBe(true);
   });
 

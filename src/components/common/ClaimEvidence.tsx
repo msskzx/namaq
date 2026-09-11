@@ -94,9 +94,9 @@ export default function ClaimEvidence({
         {shown.map((claim) => (
             <li key={claim.id} className="border-s-4 border-amber-500 ps-3 text-gray-800 dark:text-gray-200">
               <h3 className="mb-1 font-semibold text-gray-900 dark:text-gray-100">{supportLabel(claim)}</h3>
-              {/* A relationship heading already states the claim; repeating the
-                  assertion under it says the same thing twice. */}
-              {!claim.relationshipType && <p>{claim.assertion}</p>}
+              {/* The assertion is dropped deliberately: it restates the passages
+                  shown below it, so printing it makes the same words a third
+                  time after the heading and the evidence. */}
               <div className="mt-2 flex flex-wrap items-center gap-2">
                 <Badge size="sm" color="gray" text={reviewStatusLabel[claim.reviewStatus][language === 'ar' ? 'ar' : 'en']} />
                 {claim.disputed && (
