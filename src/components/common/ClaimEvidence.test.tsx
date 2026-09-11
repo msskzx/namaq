@@ -57,11 +57,17 @@ describe('ClaimEvidence', () => {
   it.each([
     ['NOT_REVIEWED', 'Not reviewed'],
     ['IN_REVIEW', 'In review'],
-    ['REVIEWED', 'Reviewed'],
   ])('shows %s rather than hiding the claim', (reviewStatus, label) => {
     render(<ClaimEvidence title="Sources" claims={[claim({ reviewStatus } as Partial<ClaimWithCitations>)]} />);
 
     expect(screen.getByText(label)).toBeTruthy();
+    expect(screen.getByText(/أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ/)).toBeTruthy();
+  });
+
+  it('shows a reviewed claim without a status badge', () => {
+    render(<ClaimEvidence title="Sources" claims={[claim({ reviewStatus: 'REVIEWED' })]} />);
+
+    expect(screen.queryByText('Reviewed')).toBeNull();
     expect(screen.getByText(/أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ/)).toBeTruthy();
   });
 
