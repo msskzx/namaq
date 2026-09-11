@@ -7,14 +7,6 @@ async function main() {
   await prisma.event.deleteMany();
 
   console.log('🌱 Seeding events...');
-  // Get all battles to map slugs to IDs
-  const battles = await prisma.battle.findMany({
-    select: {
-      id: true,
-      slug: true,
-    },
-  });
-
   // Get all people to map slugs to IDs
   const people = await prisma.person.findMany({
     select: {
@@ -23,7 +15,6 @@ async function main() {
     },
   });
 
-  const battleSlugToId = new Map(battles.map((battle: { id: string; slug: string }) => [battle.slug, battle.id]));
   const personSlugToId = new Map(
     people
       .filter((person): person is { id: string; slug: string } => person.slug !== null)
@@ -32,20 +23,13 @@ async function main() {
 
   // Create events
   for (const eventData of eventsData) {
-    const { battleSlug, personSlugs, ...eventInput } = eventData;
+    const { personSlugs, ...eventInput } = eventData;
     
     // Prepare the data for create/update
     const eventDataForUpsert: any = {
       ...eventInput,
       metadata: eventInput.metadata ? JSON.stringify(eventInput.metadata) : null,
     };
-
-    // Only add battle connection if battleSlug exists
-    if (battleSlug && battleSlugToId.has(battleSlug)) {
-      eventDataForUpsert.battle = {
-        connect: { id: battleSlugToId.get(battleSlug) }
-      };
-    }
 
     try {
       // Try to find existing event by type and description

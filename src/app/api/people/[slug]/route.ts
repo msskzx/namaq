@@ -31,9 +31,7 @@ export async function GET(
         participations: {
           include: { battle: true },
         },
-        events: {
-          include: { battle: true },
-        },
+        events: true,
         ayat: {
           include: { surah: true },
         },

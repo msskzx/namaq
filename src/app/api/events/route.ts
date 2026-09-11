@@ -52,13 +52,6 @@ export async function GET(request: Request) {
             slug: true,
           },
         },
-        battle: {
-          select: {
-            id: true,
-            name: true,
-            slug: true,
-          },
-        },
       },
       orderBy: [
         { hijriYear: 'asc' },

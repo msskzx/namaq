@@ -22,18 +22,17 @@ describe('GET /api/events/[slug]', () => {
     expect(findUnique).not.toHaveBeenCalled();
   });
 
-  it('returns the event with its people and battle', async () => {
-    const event = { id: '1', slug: 'battle-of-badr' };
+  it('returns the event with its people', async () => {
+    const event = { id: '1', slug: 'saqifah-bani-saidah' };
     findUnique.mockResolvedValue(event);
 
-    const response = await call('battle-of-badr');
+    const response = await call('saqifah-bani-saidah');
     const body = await response.json();
 
     expect(findUnique).toHaveBeenCalledWith({
-      where: { slug: 'battle-of-badr' },
+      where: { slug: 'saqifah-bani-saidah' },
       include: expect.objectContaining({
         people: expect.any(Object),
-        battle: expect.any(Object),
       }),
     });
     expect(response.status).toBe(200);
@@ -52,7 +51,7 @@ describe('GET /api/events/[slug]', () => {
   it('returns 500 when the database call fails', async () => {
     findUnique.mockRejectedValue(new Error('boom'));
 
-    const response = await call('battle-of-badr');
+    const response = await call('saqifah-bani-saidah');
 
     expect(response.status).toBe(500);
     expect(await response.json()).toEqual({ error: 'Failed to fetch event' });

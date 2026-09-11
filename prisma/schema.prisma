@@ -349,7 +349,6 @@ model Battle {
 
   // Relations
   participations BattleParticipation[]
-  events         Event[] // Add a relation from Event to Battle if needed for a specific event type
 
   graphRank           Int? // 1 = most prominent over the unified Person+Battle+Title+Event graph; null = not yet computed
   clusterId           Int? // Louvain community id from the unified graph, for zoom-out cluster collapse
@@ -409,9 +408,7 @@ model Event {
   updatedAt                 DateTime  @updatedAt
 
   // Relations
-  people   Person[]
-  battleId String?
-  battle   Battle?  @relation(fields: [battleId], references: [id])
+  people Person[]
 
   graphRank           Int? // 1 = most prominent over the unified Person+Battle+Title+Event graph; null = not yet computed
   clusterId           Int? // Louvain community id from the unified graph, for zoom-out cluster collapse
@@ -426,7 +423,6 @@ enum EventType {
   BIRTH
   DEATH
   MARRIAGE
-  BATTLE
   GAVE_BIRTH
   LIBERATED
   MET

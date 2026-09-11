@@ -35,7 +35,9 @@
     "seed:ayat": "tsx prisma/ayahSeed.ts",
     "history:validate": "tsx scripts/history/validateBatch.ts",
     "history:import": "tsx scripts/history/importBatch.ts",
-    "history:extract": "tsx scripts/history/extractShamelaEntry.ts"
+    "history:extract": "tsx scripts/history/extractShamelaEntry.ts",
+    "catalog:validate": "tsx scripts/data/validateCatalog.ts",
+    "catalog:project": "tsx scripts/data/projectCatalog.ts"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",

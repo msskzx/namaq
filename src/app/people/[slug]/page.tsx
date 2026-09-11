@@ -14,7 +14,6 @@ import Timeline from '@/components/people/Timeline';
 import type { PersonFull } from '@/types/person';
 import useSWR from 'swr';
 import { useParams } from 'next/navigation';
-import { EventWithBattle } from '@/types/event';
 import GraphCanvas from '@/components/graph/GraphCanvas';
 
 import { fetcher } from '@/lib/swr';
@@ -73,7 +72,7 @@ function PersonDetailPage() {
           </div>
         </div>
 
-        <Timeline events={person.events as EventWithBattle[] || []} />
+        <Timeline events={person.events || []} participations={person.participations || []} />
 
         <div className="flex flex-col gap-6 mt-10">
           {person.fullName && (

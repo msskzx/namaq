@@ -11,7 +11,7 @@ interface PersonCardProps {
   titleLimit?: number;
 }
 
-function PersonCard({ person, language = 'ar', titleLimit = 9 }: PersonCardProps) {
+function PersonCard({ person, language = 'ar', titleLimit = 7 }: PersonCardProps) {
   if (!person) {
     return null;
   }
@@ -24,14 +24,16 @@ function PersonCard({ person, language = 'ar', titleLimit = 9 }: PersonCardProps
         </div>
         <div className="flex-1 flex flex-wrap gap-2 mt-2">
           {person.titles && person.titles.length > 0 && (
+            // The overflow count sits inside this row so it flows with the
+            // badges it counts rather than wrapping onto a line of its own.
             <div className="flex flex-wrap gap-1 mt-auto">
-              {person.titles.map((title, index) => index < titleLimit && (
+              {person.titles.slice(0, titleLimit).map((title) => (
                 <Badge key={title.id} text={language === 'ar' && title.name ? title.name : title.nameTransliterated || title.name} color="indigo" />
               ))}
+              {person.titles.length > titleLimit && (
+                <Badge text={`+${person.titles.length - titleLimit}`} color="indigo" />
+              )}
             </div>
-          )}
-          {person.titles.length > titleLimit && (
-            <Badge text={`+${person.titles.length - titleLimit}`} color="indigo" />
           )}
         </div>
         {person.fullName && (

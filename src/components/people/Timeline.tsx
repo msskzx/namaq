@@ -4,30 +4,56 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimeline } from '@fortawesome/free-solid-svg-icons';
 import { useLanguage } from '@/components/language/LanguageContext';
-import type { EventWithBattle } from '@/types/event';
-import { EventType } from '@/generated/prisma';
+import type { EventBase } from '@/types/event';
+import type { BattleParticipation } from '@/types/battle';
 import Link from 'next/link';
 
-interface TimelineItemProps {
-  event: EventWithBattle;
-  language: string;
+/** One dated thing that happened to this person, from either source. */
+type TimelineEntry = {
+  key: string;
+  name: string;
+  nameTransliterated: string | null;
+  hijriYear: number | null;
+  hijriPeriod: string | null;
+  href: string;
+  isBattle: boolean;
+};
+
+function toEntries(events: EventBase[], participations: BattleParticipation[]): TimelineEntry[] {
+  return [
+    ...events.map((event) => ({
+      key: `event:${event.slug}`,
+      name: event.name,
+      nameTransliterated: event.nameTransliterated ?? null,
+      hijriYear: event.hijriYear ?? null,
+      hijriPeriod: event.hijriPeriod ?? null,
+      href: `/events/${event.slug}`,
+      isBattle: false,
+    })),
+    ...participations.map(({ battle }) => ({
+      key: `battle:${battle.slug}`,
+      name: battle.name,
+      nameTransliterated: battle.nameTransliterated,
+      hijriYear: battle.hijriYear,
+      hijriPeriod: battle.hijriPeriod,
+      href: `/battles/${battle.slug}`,
+      isBattle: true,
+    })),
+  ];
 }
 
-function TimelineItem({ event, language }: TimelineItemProps) {
+function TimelineItem({ entry, language }: { entry: TimelineEntry; language: string }) {
   return (
     <div className="flex flex-col items-center mx-4 my-4">
-      <Link
-        href={event.type === EventType.BATTLE ? `/battles/${event.battle?.slug}` : `/events/${event.slug}`}
-        className="group my-8 text-center block"
-      >
+      <Link href={entry.href} className="group my-8 text-center block">
         <div
-          className={`bg-white dark:bg-gray-800 rounded-lg shadow-sm border px-3 py-2 w-full transition-all duration-200 hover:shadow-md cursor-pointer ${event.type === EventType.BATTLE
+          className={`bg-white dark:bg-gray-800 rounded-lg shadow-sm border px-3 py-2 w-full transition-all duration-200 hover:shadow-md cursor-pointer ${entry.isBattle
             ? 'border-sky-500 dark:border-sky-400 hover:border-sky-600 dark:hover:border-sky-500 hover:bg-sky-100 dark:hover:bg-sky-600'
             : 'border-slate-500 dark:border-slate-400 hover:border-slate-600 dark:hover:border-slate-500 hover:bg-slate-100 dark:hover:bg-slate-600'
             }`}
         >
           <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-200 whitespace-nowrap">
-            {language === 'ar' ? event.name : event.nameTransliterated}
+            {language === 'ar' ? entry.name : entry.nameTransliterated ?? entry.name}
           </h3>
         </div>
       </Link >
@@ -38,9 +64,9 @@ function TimelineItem({ event, language }: TimelineItemProps) {
 
       {/* Year */}
       {
-        event.hijriYear && (
+        entry.hijriPeriod && (
           <div className="text-xs font-medium text-amber-600 dark:text-amber-400 mt-4">
-            {event.hijriPeriod}
+            {entry.hijriPeriod}
           </div>
         )
       }
@@ -49,10 +75,11 @@ function TimelineItem({ event, language }: TimelineItemProps) {
 }
 
 interface TimelineProps {
-  events: EventWithBattle[];
+  events: EventBase[];
+  participations?: BattleParticipation[];
 }
 
-export default function Timeline({ events }: TimelineProps) {
+export default function Timeline({ events, participations = [] }: TimelineProps) {
   const { language } = useLanguage();
 
   // Determine number of items per row responsively (hooks must run before any return)
@@ -86,15 +113,14 @@ export default function Timeline({ events }: TimelineProps) {
     };
   }, []);
 
-  if (!events || events.length === 0) return null;
-
-  const sortedEvents = [...events].sort(
+  const entries = toEntries(events ?? [], participations).sort(
     (a, b) => (a.hijriYear || 0) - (b.hijriYear || 0)
   );
+  if (entries.length === 0) return null;
 
-  const rows: EventWithBattle[][] = [];
-  for (let i = 0; i < sortedEvents.length; i += rowSize) {
-    rows.push(sortedEvents.slice(i, i + rowSize));
+  const rows: TimelineEntry[][] = [];
+  for (let i = 0; i < entries.length; i += rowSize) {
+    rows.push(entries.slice(i, i + rowSize));
   }
 
   return (
@@ -113,9 +139,9 @@ export default function Timeline({ events }: TimelineProps) {
               className={`flex ${rowIndex % 2 === 0 ? 'flex-row' : 'flex-row-reverse'} items-center w-full justify-between py-2`}
             >
               <div className="absolute top-3/4 left-0 right-0 h-0.5 bg-amber-400 transform -translate-y-1/2 z-0"></div>
-              {row.map((event) => (
-                <div key={event.id} className="relative w-40 sm:w-52 md:w-60 flex justify-center">
-                  <TimelineItem event={event} language={language} />
+              {row.map((entry) => (
+                <div key={entry.key} className="relative w-40 sm:w-52 md:w-60 flex justify-center">
+                  <TimelineItem entry={entry} language={language} />
                 </div>
               ))}
             </div>
