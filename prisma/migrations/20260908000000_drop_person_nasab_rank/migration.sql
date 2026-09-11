@@ -7,7 +7,7 @@
   graphRank, computed over the unified graph, subsumes this family-only rank
   and covers every kind of subject. The pipeline that produced these columns
   is deleted in the same change, so the values are not recomputable -- see
-  docs/graph-subject-search.md.
+  docs/graph-subject-search-plan.md.
 */
 -- AlterTable
 ALTER TABLE "persons" DROP COLUMN "nasabRank",
