@@ -16,7 +16,6 @@ interface ClaimEvidenceProps {
   subjectName?: string;
   title: string;
   claims: ClaimWithCitations[];
-  relationshipClaims?: boolean;
   pageSize?: number;
 }
 
@@ -51,7 +50,6 @@ function citationText(citation: CitationWithSource, language: string) {
 export default function ClaimEvidence({
   title,
   claims,
-  relationshipClaims = false,
   pageSize = 5,
   subjectName,
 }: ClaimEvidenceProps) {
@@ -85,17 +83,12 @@ export default function ClaimEvidence({
           const relation = relationName
             ? [subjectName ?? claim.subjectSlug, '-', relationName, '->', other].join(' ')
             : null;
-          const relationship = relationshipClaims ? relation : null;
           // What the profile would change if this claim were acted on, so a
-          // reader can tell evidence for a recorded value from background. The
-          // heading already carries it on a relationship list.
-          const supports = relationship
-            ? null
-            : relation ?? (claim.field ? fieldLabel[claim.field]?.[language === 'ar' ? 'ar' : 'en'] ?? claim.field : null);
+          // reader can tell evidence for a recorded value from background.
+          const supports = relation ?? (claim.field ? fieldLabel[claim.field]?.[language === 'ar' ? 'ar' : 'en'] ?? claim.field : null);
 
           return (
             <li key={claim.id} className="border-s-4 border-amber-500 ps-3 text-gray-800 dark:text-gray-200">
-              {relationship && <p className="mb-1 text-sm font-semibold uppercase tracking-wide">{relationship}</p>}
               <p>{claim.assertion}</p>
               {supports && (
                 <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">

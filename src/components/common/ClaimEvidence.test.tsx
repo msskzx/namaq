@@ -94,7 +94,6 @@ describe('ClaimEvidence', () => {
     render(
       <ClaimEvidence
         title="Relationship evidence"
-        relationshipClaims
         subjectName="أبو عبيدة"
         claims={[
           claim({
@@ -107,7 +106,7 @@ describe('ClaimEvidence', () => {
 
     // Same shape as the graph's link tooltip: naming both ends is what makes
     // the direction readable in either script.
-    expect(screen.getByText(/أبو عبيدة - Companion Of -> prophet-muhammad/)).toBeTruthy();
+    expect(screen.getByText('Supports: أبو عبيدة - Companion Of -> prophet-muhammad')).toBeTruthy();
   });
 
   it('shows one page of claims at a time, with a jump to any of them', () => {

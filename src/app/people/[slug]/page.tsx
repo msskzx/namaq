@@ -118,7 +118,6 @@ function PersonDetailPage() {
             title={language === 'ar' ? 'أدلة العلاقات' : 'Relationship evidence'}
             claims={relationshipClaims || []}
             subjectName={person.name}
-            relationshipClaims
           />
 
         </div>
