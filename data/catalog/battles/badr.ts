@@ -1,10 +1,6 @@
 import type { CatalogBattle } from '@/lib/catalog/types';
 
-/**
- * The entry adds that he killed his own father here, which is why the SON
- * relation in data/catalog/people/abu-ubaydah-ibn-al-jarrah.ts and this
- * participation are not in tension.
- */
+// He killed his own father here, so the SON relation is not in tension with this.
 const badr = {
   kind: 'BATTLE',
   slug: 'badr',

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { legacyUnreviewed, type Catalog, type CatalogPerson } from './index';
+import { legacyUnreviewed, type Catalog, type CatalogPerson } from './types';
 import { validateCatalog, type KnownSlugs } from './validateCatalog';
 
 const known: KnownSlugs = {

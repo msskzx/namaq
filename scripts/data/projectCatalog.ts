@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { PrismaClient } from '../../src/generated/prisma';
 import { loadCatalog } from '../../src/lib/catalog/loadCatalog';
-import type { Cited } from '../../src/lib/catalog/types';
+import type { Catalog, CatalogEventFields, CatalogPersonFields, Cited } from '../../src/lib/catalog/types';
 
 const apply = process.argv.includes('--apply');
 const prisma = new PrismaClient();
@@ -9,13 +9,14 @@ const prisma = new PrismaClient();
 const planned: string[] = [];
 const conflicts: string[] = [];
 
+type Column = string | number | null;
+
 /**
- * Fills a column the database leaves empty and reports a disagreement instead
- * of overwriting one. The existing syncs are non-destructive for the same
- * reason: a live value may carry work no batch has caught up with yet, and
- * losing it silently is worse than carrying the difference as drift.
+ * Fills an empty column and reports a disagreement rather than overwriting one.
+ * A live value may carry work no batch has caught up with, and losing it
+ * silently is worse than carrying the difference as drift.
  */
-function settle(where: string, live: string | number | null, cited: Cited<string | number> | undefined) {
+function settle(where: string, live: Column, cited: Cited<string | number> | undefined) {
   if (!cited) return undefined;
   if (live === null || live === undefined) {
     planned.push(`${where}: set to ${JSON.stringify(cited.value)}`);
@@ -27,7 +28,17 @@ function settle(where: string, live: string | number | null, cited: Cited<string
   return undefined;
 }
 
-async function projectPeople(people: Awaited<ReturnType<typeof loadCatalog>>['people']) {
+/** Field keys are column names, so an added catalog field projects without editing this. */
+function settleFields(at: string, live: Record<string, unknown>, fields: CatalogPersonFields | CatalogEventFields) {
+  const set: Record<string, string | number> = {};
+  for (const [column, cited] of Object.entries(fields) as [string, Cited<string | number> | undefined][]) {
+    const value = settle(`${at}.${column}`, live[column] as Column, cited);
+    if (value !== undefined) set[column] = value;
+  }
+  return set;
+}
+
+async function projectPeople(people: Catalog['people']) {
   for (const subject of people) {
     const live = await prisma.person.findUnique({ where: { slug: subject.slug } });
     if (!live) {
@@ -35,36 +46,41 @@ async function projectPeople(people: Awaited<ReturnType<typeof loadCatalog>>['pe
       continue;
     }
 
-    const at = `people/${subject.slug}`;
-    const data = {
-      fullName: settle(`${at}.fullName`, live.fullName, subject.fields.fullName),
-      appearance: settle(`${at}.appearance`, live.appearance, subject.fields.appearance),
-      virtues: settle(`${at}.virtues`, live.virtues, subject.fields.virtues),
-      deathYearHijri: settle(`${at}.deathYearHijri`, live.deathYearHijri, subject.fields.deathYearHijri),
-      placeOfDeathArabic: settle(`${at}.placeOfDeathArabic`, live.placeOfDeathArabic, subject.fields.placeOfDeathArabic),
-    };
-    const set = Object.fromEntries(Object.entries(data).filter(([, value]) => value !== undefined));
-    if (apply && Object.keys(set).length > 0) await prisma.person.update({ where: { slug: subject.slug }, data: set });
+    const set = settleFields(`people/${subject.slug}`, live, subject.fields);
+    if (apply && Object.keys(set).length > 0) {
+      await prisma.person.update({ where: { slug: subject.slug }, data: set });
+    }
   }
 }
 
-async function projectBattles(battles: Awaited<ReturnType<typeof loadCatalog>>['battles']) {
+async function projectBattles(battles: Catalog['battles']) {
   for (const battle of battles) {
     const row = await prisma.battle.findUnique({ where: { slug: battle.slug } });
     if (!row) {
       conflicts.push(`battles/${battle.slug}: no row`);
       continue;
     }
+
     for (const entry of battle.participants) {
-      const person = await prisma.person.findUnique({ where: { slug: entry.person } });
+      const at = `battles/${battle.slug}.${entry.person}`;
+      const person = await prisma.person.findUnique({ where: { slug: entry.person }, select: { id: true } });
       if (!person) {
-        conflicts.push(`battles/${battle.slug}: ${entry.person} has no row`);
+        conflicts.push(`${at}: no row for this person`);
         continue;
       }
-      const existing = await prisma.battleParticipation.findFirst({
-        where: { personId: person.id, battleId: row.id },
-      });
-      if (existing) continue;
+
+      const existing = await prisma.battleParticipation.findFirst({ where: { personId: person.id, battleId: row.id } });
+      if (existing) {
+        const status = [...(entry.status ?? [])];
+        if (existing.isMuslim !== entry.isMuslim) {
+          conflicts.push(`${at}: database has isMuslim ${existing.isMuslim}, catalog has ${entry.isMuslim}`);
+        }
+        if (existing.status.join() !== status.join()) {
+          conflicts.push(`${at}: database has status [${existing.status}], catalog has [${status}]`);
+        }
+        continue;
+      }
+
       planned.push(`battles/${battle.slug}: add ${entry.person}`);
       if (apply) {
         await prisma.battleParticipation.create({
@@ -75,33 +91,46 @@ async function projectBattles(battles: Awaited<ReturnType<typeof loadCatalog>>['
   }
 }
 
-async function projectEvents(events: Awaited<ReturnType<typeof loadCatalog>>['events']) {
+async function projectEvents(events: Catalog['events']) {
   for (const event of events) {
+    const at = `events/${event.slug}`;
     const live = await prisma.event.findUnique({ where: { slug: event.slug }, include: { people: true } });
-    const fields = {
-      hijriYear: event.fields.hijriYear?.value,
-      location: event.fields.location?.value,
-      description: event.fields.description?.value,
-    };
-
-    if (!live) planned.push(`events/${event.slug}: create`);
-    const people = event.people.map((entry) => ({ slug: entry.person }));
     const missing = event.people.filter((entry) => !live?.people.some((row) => row.slug === entry.person));
-    missing.forEach((entry) => planned.push(`events/${event.slug}: link ${entry.person}`));
+    missing.forEach((entry) => planned.push(`${at}: link ${entry.person}`));
+
+    if (!live) {
+      planned.push(`${at}: create`);
+      Object.entries(event.fields).forEach(([column, cited]) => {
+        if (cited) planned.push(`${at}.${column}: set to ${JSON.stringify(cited.value)}`);
+      });
+      if (apply) {
+        await prisma.event.create({
+          data: {
+            slug: event.slug,
+            name: event.name,
+            nameTransliterated: event.nameTransliterated,
+            type: event.type,
+            hijriYear: event.fields.hijriYear?.value,
+            location: event.fields.location?.value,
+            description: event.fields.description?.value,
+            people: { connect: event.people.map((entry) => ({ slug: entry.person })) },
+          },
+        });
+      }
+      continue;
+    }
+
+    if (live.name !== event.name) conflicts.push(`${at}.name: database has ${JSON.stringify(live.name)}, catalog has ${JSON.stringify(event.name)}`);
+    if (live.type !== event.type) conflicts.push(`${at}.type: database has ${live.type}, catalog has ${event.type}`);
+    const set = settleFields(at, live, event.fields);
 
     if (!apply) continue;
-    await prisma.event.upsert({
-      where: { slug: event.slug },
-      create: {
-        slug: event.slug,
-        name: event.name,
-        nameTransliterated: event.nameTransliterated,
-        type: event.type,
-        ...fields,
-        people: { connect: people },
-      },
-      update: { people: { connect: people } },
-    });
+    if (Object.keys(set).length > 0 || missing.length > 0) {
+      await prisma.event.update({
+        where: { slug: event.slug },
+        data: { ...set, people: { connect: missing.map((entry) => ({ slug: entry.person })) } },
+      });
+    }
   }
 }
 

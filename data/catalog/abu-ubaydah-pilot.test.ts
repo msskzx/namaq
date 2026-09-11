@@ -3,8 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { legacyUnreviewed, type Provenance } from '@/lib/catalog/types';
 
-// Every module authored from the pilot batch, checked against that batch
-// rather than a fixture, so editing one alone fails.
+// Checked against the batch itself, so editing either side alone fails.
 const batch = JSON.parse(
   readFileSync('data/history/batches/abu-ubaydah-pilot/batch.json', 'utf8'),
 ) as { claims: { key: string }[] };

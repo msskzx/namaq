@@ -1,10 +1,6 @@
 import type { CatalogEvent } from '@/lib/catalog/types';
 
-/**
- * New to the catalog. The year comes from the death-year claim the person
- * module also follows, so the two cannot drift apart without one of them
- * failing its test.
- */
+// Shares the death-year claim with the person module; a test holds them together.
 const plagueOfAmwas = {
   kind: 'EVENT',
   slug: 'plague-of-amwas',

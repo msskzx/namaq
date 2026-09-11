@@ -1,10 +1,6 @@
 import type { CatalogEvent } from '@/lib/catalog/types';
 
-/**
- * New to the catalog: prisma/eventSeedData.ts has no record of the Saqifah.
- * The entry reaches it through Abu Ubaydah's nomination and states no date, so
- * the year stays unset rather than being taken from elsewhere.
- */
+// No year: the entry states none, and the policy leaves an unknown value unset.
 const saqifahBaniSaidah = {
   kind: 'EVENT',
   slug: 'saqifah-bani-saidah',

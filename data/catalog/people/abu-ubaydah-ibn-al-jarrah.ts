@@ -3,7 +3,7 @@ import type { CatalogPerson } from '@/lib/catalog/types';
 /**
  * Authored from data/history/batches/abu-ubaydah-pilot. Arabic is verbatim and
  * vowelled as that edition prints it, joined where a sentence crosses a page
- * break; rewording it would part the value from the passage behind it.
+ * break. Rewording parts a value from the passage behind it.
  */
 const abuUbaydahIbnAlJarrah = {
   kind: 'PERSON',
@@ -18,29 +18,23 @@ const abuUbaydahIbnAlJarrah = {
         'عَامِرُ بنُ عَبْدِ اللهِ بنِ الجَرَّاحِ بنِ هِلاَلِ بنِ أُهَيْبِ بنِ ضَبَّةَ بنِ الحَارِثِ بنِ فِهْرِ بنِ مَالِكِ بنِ النَّضْرِ بنِ كِنَانَةَ بنِ خُزَيْمَةَ بنِ مُدْرِكَةَ بنِ إِلْيَاسَ بنِ مُضَرَ بنِ نِزَارِ بنِ مَعَدِّ بنِ عَدْنَانَ القُرَشِيُّ، الفِهْرِيُّ، المَكِّيُّ.',
       claims: ['abu-ubaydah/full-name'],
     },
-    // Shorter than prisma/personSeedData.ts's text, which also drew on 23-p6.
-    // The batch cites that passage under the death year, so the dyeing and
-    // braids await an appearance claim.
+    // Shorter than prisma/personSeedData.ts: 23-p6 has no appearance claim yet.
     appearance: {
       value:
         'كَانَ رَجُلاً نَحِيْفاً، مَعْرُوْقَ الوَجْهِ، خَفِيْفَ اللِّحْيَةِ، طُوَالاً، أَحْنَى، أَثْرَمَ الثَّنِيَّتَيْنِ.',
       claims: ['abu-ubaydah/appearance'],
     },
-    // No claim is filed under this field, so these are the claims citing the
-    // passages the text composes. It runs one passage further than they do:
-    // 6-p1 finishes the sentence 5-p5 breaks off mid-clause and no claim cites
-    // it, so it wants one of its own.
+    // No claim names this field, so these cite the passages it composes. It runs
+    // one passage further: 6-p1 finishes the sentence 5-p5 breaks off, uncited.
     virtues: {
       value:
         'أَحَدُ السَّابِقِيْنَ الأَوَّلِيْنَ، وَمَنْ عَزَمَ الصِّدِّيْقُ عَلَى تَوْلِيَتِهِ الخِلاَفَةَ، وَأَشَارَ بِهِ يَوْمَ السَّقِيْفَةِ؛ لِكَمَالِ أَهْلِيَّتِهِ عِنْدَ أَبِي بَكْرٍ. شَهِدَ لَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِالجَنَّةِ، وَسَمَّاهُ: أَمِيْنَ الأُمَّةِ، وَمَنَاقِبُهُ شَهِيْرَةٌ جَمَّةٌ.',
       claims: ['abu-ubaydah/early-islam', 'abu-ubaydah/testified-paradise', 'abu-ubaydah/title-amin-al-ummah'],
     },
-    // The entry gives two years and marks 17 as Ibn Aidh alone (انفرد), which
-    // is the author preference the version-one policy follows
-    // (docs/authoritative-data-workflow-plan.md). Claim death-year-17 stays.
+    // Two years given; 17 is marked Ibn Aidh alone (انفرد), so author preference
+    // picks 18 (docs/authoritative-data-workflow-plan.md).
     deathYearHijri: { value: '18 AH', claims: ['abu-ubaydah/death-year-18'] },
-    // Not a conflict with the plague-of-amwas claim: that names the epidemic,
-    // this the only place the entry states.
+    // Not a conflict with plague-of-amwas: that names the epidemic, this the place.
     placeOfDeathArabic: { value: 'فِحْل', claims: ['abu-ubaydah/death-place'] },
   },
 
@@ -49,8 +43,7 @@ const abuUbaydahIbnAlJarrah = {
     { title: 'companion', claims: ['abu-ubaydah/companion-of-prophet'] },
     { title: 'al-sabiqoon', claims: ['abu-ubaydah/early-islam'] },
     // Rests on the testimony of paradise; this entry never enumerates the ten.
-    // Sa'id ibn Zayd's entry carries the listing hadith, and its claim joins
-    // this one once extracted.
+    // Sa'id ibn Zayd's entry carries the listing hadith, to be added with it.
     { title: 'the-ten-promised-paradise', claims: ['abu-ubaydah/testified-paradise'] },
   ],
 

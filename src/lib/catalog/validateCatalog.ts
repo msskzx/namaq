@@ -1,5 +1,5 @@
 import { RECIPROCAL_INVERSES } from '@/lib/relationship/categories';
-import { legacyUnreviewed, type Catalog, type Provenance } from './index';
+import { legacyUnreviewed, type Catalog, type Provenance } from './types';
 
 export interface CatalogIssue {
   readonly path: string;
@@ -23,10 +23,7 @@ function checkProvenance(claims: Provenance, known: KnownSlugs, path: string, is
     .forEach((key) => issues.push({ path, message: `no batch declares claim ${key}` }));
 }
 
-/**
- * Reports every problem rather than throwing on the first, so one run tells an
- * author everything to fix. An empty result means the catalog is projectable.
- */
+/** Reports every problem in one pass; an empty result means the catalog is projectable. */
 export function validateCatalog(catalog: Catalog, known: KnownSlugs): CatalogIssue[] {
   const issues: CatalogIssue[] = [];
   const authored = new Set(catalog.people.map((person) => person.slug));
@@ -45,8 +42,6 @@ export function validateCatalog(catalog: Catalog, known: KnownSlugs): CatalogIss
       const to = `${at}.relations.${relation.type}`;
       checkProvenance(relation.claims, known, to, issues);
       if (!person(relation.to)) issues.push({ path: to, message: `unknown person ${relation.to}` });
-      // The opposite edge is derived, so a type with no inverse would reach the
-      // graph one-directional (src/lib/relationship/categories.ts).
       if (!(relation.type in RECIPROCAL_INVERSES)) {
         issues.push({ path: to, message: `${relation.type} has no reciprocal` });
       }

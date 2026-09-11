@@ -7,12 +7,7 @@ import type { HistoryBatch } from '../../src/lib/history/batchSchema';
 
 const batchesRoot = 'data/history/batches';
 
-/**
- * Claim keys a catalog value may cite. Only an approved batch qualifies: an
- * unapproved one may still change, and citing it would let a value rest on
- * evidence nobody has released
- * (docs/authoritative-data-workflow-plan.md).
- */
+/** Only an approved batch qualifies: an unapproved one may still change. */
 function approvedClaimKeys() {
   const keys = new Set<string>();
   const unapproved: string[] = [];
@@ -34,10 +29,8 @@ async function seedSlugs(): Promise<Pick<KnownSlugs, 'people' | 'titles' | 'batt
     seedModule.people?.forEach((person) => people.add(person.slug));
   }
 
-  // Graph-only people exist as Cypher in neo4j/, never as a Prisma row, so a
-  // relation to one is valid even though no seed record names them. Reading
-  // the slug out of the statement is the only way to see them until the
-  // catalog owns these people outright.
+  // Graph-only people exist only as Cypher in neo4j/, never as a Prisma row, so
+  // their slugs have to be read out of the CREATE statements.
   for (const file of readdirSync('neo4j').filter((name) => /^graphSeedData\d*\.ts$/.test(name))) {
     const source = readFileSync(join('neo4j', file), 'utf8');
     for (const match of source.matchAll(/CREATE \(:Person \{[^}]*?slug: "([a-z0-9-]+)"/g)) {
