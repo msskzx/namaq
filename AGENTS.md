@@ -92,6 +92,13 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   without the other — go through the canonical people pipeline
   (`scripts/people/syncCanonicalPeople.ts`, `npm run people:sync` /
   `npm run people:validate`) so both stay in sync.
+- A battle participation splits two questions. Whether the person was there is
+  the relation (`PARTICIPATED_IN` or `ABSENT_FROM`); what happened to them there
+  is the status, and each relation admits only its own statuses, which
+  `npm run catalog:validate` enforces. Record an absence only where a source
+  remarks on it. A participation's `summary` carries what the person did in the
+  source's own wording, cited like any other value
+  ([ADR 0013](docs/adr/0013-separate-attendance-from-outcome.md)).
 - `npm run graph:layout -- --apply` (graphRank/clusterId/layoutX/layoutY)
   computes centrality over **every** unified-graph edge, regardless of
   relationship type (`src/lib/fetchUnifiedGraph.ts`'s `MATCH (a)-[r]->(b)`,

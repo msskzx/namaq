@@ -371,6 +371,14 @@ enum ParticipationStatus {
   MARTYRED
 }
 
+/// Whether the person was at the battle. What happened to them there is
+/// status's job, and each relation admits its own statuses -- see
+/// docs/adr/0013-separate-attendance-from-outcome.md.
+enum ParticipationRelation {
+  PARTICIPATED_IN
+  ABSENT_FROM
+}
+
 model BattleParticipation {
   id       String @id @default(cuid())
   person   Person @relation(fields: [personId], references: [id])
@@ -379,9 +387,11 @@ model BattleParticipation {
   battleId String
 
   isMuslim Boolean
+  relation ParticipationRelation @default(PARTICIPATED_IN)
   status   ParticipationStatus[]
 
-  courage String?
+  /// What the person did at the battle, in the source's own wording.
+  summary String?
 
   createdAt DateTime @default(now()) // Add createdAt and updatedAt for better tracking
   updatedAt DateTime @updatedAt

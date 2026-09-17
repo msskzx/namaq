@@ -27,9 +27,12 @@ export interface GraphLink {
   target: string | GraphNode;
   label: string;
   value: number;
-  // Present on PARTICIPATED_IN links: the participant's battle outcome(s),
-  // e.g. ["INJURED"] or ["MARTYRED"].
+  // Present on roster links: the participant's battle outcome(s), e.g.
+  // ["INJURED"] or ["MARTYRED"], or ["ABSENT_EXCUSED"] on an absence.
   status?: string[];
+  // What the person did there, in the source's own wording. Shown when the
+  // relation is selected, which the graph cannot do yet (ADR 0013).
+  summary?: string;
 }
 
 export interface GraphData {

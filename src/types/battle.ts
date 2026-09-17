@@ -20,6 +20,9 @@ export interface Battle extends BattleBase {
 
 export interface BattleParticipation {
   battle: BattleBase;
+  /** PARTICIPATED_IN or ABSENT_FROM: see docs/battle-participation-model.md. */
+  relation: string;
   status: string[];
-  courage: string;
+  /** What the person did there, in the source's own wording. */
+  summary: string | null;
 }

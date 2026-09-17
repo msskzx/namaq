@@ -206,13 +206,13 @@ export async function GET(_request: Request) {
       params.descendants = descendantsOf;
     }
 
-    // A battle only ever connects to Person via PARTICIPATED_IN, so one hop
-    // is inherently sufficient here — no hop-limiting logic needed.
+    // A battle only ever connects to Person via its roster relations, so one
+    // hop is inherently sufficient here — no hop-limiting logic needed.
     if (battles.length > 0) {
       nodeQueryParts.push(
         `UNWIND $battles AS battleSlug
          MATCH (node:Battle {slug: battleSlug})
-         OPTIONAL MATCH (node)<-[relationship:PARTICIPATED_IN]-(related:Person)
+         OPTIONAL MATCH (node)<-[relationship:PARTICIPATED_IN|ABSENT_FROM]-(related:Person)
          RETURN node, relationship, related`
       );
       params.battles = battles;
@@ -316,7 +316,14 @@ export async function GET(_request: Request) {
             const key = `${source}|${target}|${label}`;
 
             if (!linkKeys.has(key)) {
-              links.push({ source, target, label, value: 1, status: relationship.properties?.status });
+              links.push({
+                source,
+                target,
+                label,
+                value: 1,
+                status: relationship.properties?.status,
+                summary: relationship.properties?.summary,
+              });
               linkKeys.add(key);
             }
           }

@@ -1,5 +1,5 @@
 import { RECIPROCAL_INVERSES } from '@/lib/relationship/categories';
-import { legacyUnreviewed, type Catalog, type Provenance } from './types';
+import { legacyUnreviewed, STATUSES_BY_RELATION, type Catalog, type Provenance } from './types';
 
 export interface CatalogIssue {
   readonly path: string;
@@ -52,8 +52,18 @@ export function validateCatalog(catalog: Catalog, known: KnownSlugs): CatalogIss
     const at = `battles/${battle.slug}`;
     if (!known.battles.has(battle.slug)) issues.push({ path: at, message: 'unknown battle' });
     battle.participants.forEach((entry) => {
-      checkProvenance(entry.claims, known, `${at}.${entry.person}`, issues);
+      const where = `${at}.${entry.person}`;
+      checkProvenance(entry.claims, known, where, issues);
+      if (entry.summary) checkProvenance(entry.summary.claims, known, `${where}.summary`, issues);
       if (!person(entry.person)) issues.push({ path: at, message: `unknown person ${entry.person}` });
+
+      // A row claiming both attendance and absence is what this model exists to
+      // prevent, and Postgres cannot reject it: status is an array.
+      const relation = entry.relation ?? 'PARTICIPATED_IN';
+      const allowed = STATUSES_BY_RELATION[relation];
+      (entry.status ?? [])
+        .filter((status) => !allowed.includes(status))
+        .forEach((status) => issues.push({ path: where, message: `${relation} cannot carry status ${status}` }));
     });
   });
 

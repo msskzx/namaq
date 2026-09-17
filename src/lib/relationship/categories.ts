@@ -143,6 +143,7 @@ export type RelationGroup = 'family' | 'battles' | 'titles' | 'events';
 
 const GROUP_BY_TYPE: Partial<Record<RelationType, RelationGroup>> = {
   PARTICIPATED_IN: 'battles',
+  ABSENT_FROM: 'battles',
   HOLDS_TITLE: 'titles',
   INVOLVED_IN: 'events',
   PART_OF: 'events',

@@ -70,6 +70,7 @@ async function projectBattles(battles: Catalog['battles']) {
       }
 
       const existing = await prisma.battleParticipation.findFirst({ where: { personId: person.id, battleId: row.id } });
+      const relation = entry.relation ?? 'PARTICIPATED_IN';
       if (existing) {
         const status = [...(entry.status ?? [])];
         if (existing.isMuslim !== entry.isMuslim) {
@@ -78,13 +79,29 @@ async function projectBattles(battles: Catalog['battles']) {
         if (existing.status.join() !== status.join()) {
           conflicts.push(`${at}: database has status [${existing.status}], catalog has [${status}]`);
         }
+        // Attendance is the one thing a seeded row is most likely to have
+        // wrong, since the old shape made presence the unmarked default.
+        if (existing.relation !== relation) {
+          conflicts.push(`${at}: database has ${existing.relation}, catalog has ${relation}`);
+        }
+        const summary = settle(`${at}.summary`, existing.summary, entry.summary);
+        if (apply && summary !== undefined) {
+          await prisma.battleParticipation.update({ where: { id: existing.id }, data: { summary: String(summary) } });
+        }
         continue;
       }
 
-      planned.push(`battles/${battle.slug}: add ${entry.person}`);
+      planned.push(`battles/${battle.slug}: add ${entry.person} as ${relation}`);
       if (apply) {
         await prisma.battleParticipation.create({
-          data: { personId: person.id, battleId: row.id, isMuslim: entry.isMuslim, status: [...(entry.status ?? [])] },
+          data: {
+            personId: person.id,
+            battleId: row.id,
+            isMuslim: entry.isMuslim,
+            relation,
+            status: [...(entry.status ?? [])],
+            summary: entry.summary?.value,
+          },
         });
       }
     }

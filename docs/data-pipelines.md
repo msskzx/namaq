@@ -169,8 +169,9 @@ graph-only property. Each runs as a report first and writes only with `--apply`.
 - `npm run people:sync` — shared person identity fields
   ([details](canonical-people-pipeline.md))
 - `npm run titles:sync` — `:Title` nodes and `HOLDS_TITLE`
-- `npm run battles:sync` — `:Battle` nodes and `PARTICIPATED_IN`, carrying each
-  participant's status
+- `npm run battles:sync` — `:Battle` nodes and the roster relations
+  `PARTICIPATED_IN` and `ABSENT_FROM`, carrying each participant's status and
+  summary ([the model](battle-participation-model.md))
 - `npm run events:sync` — `:Event` nodes, `INVOLVED_IN`, and `PART_OF` to a
   linked battle
 - `npm run people:sync-companions` — `COMPANION_OF` edges to the Prophet

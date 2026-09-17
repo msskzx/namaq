@@ -33,6 +33,40 @@ describe('validateCatalog', () => {
     expect(validateCatalog(catalog({ people: [subject] }), known)).toEqual([]);
   });
 
+  // The partition ADR 0013 draws: attendance is the relation's, outcome the
+  // status's, and Postgres cannot reject a crossing because status is an array.
+  it('rejects a status the relation cannot carry', () => {
+    const battle = {
+      kind: 'BATTLE',
+      slug: 'badr',
+      participants: [{ person: 'prophet-muhammad', isMuslim: true, status: ['ABSENT_EXCUSED'], claims: ['pilot/one'] }],
+    } as const;
+
+    expect(validateCatalog(catalog({ battles: [battle] }), known)).toEqual([
+      { path: 'battles/badr.prophet-muhammad', message: 'PARTICIPATED_IN cannot carry status ABSENT_EXCUSED' },
+    ]);
+  });
+
+  it('accepts an outcome on a participation and an excuse on an absence', () => {
+    const badr = {
+      kind: 'BATTLE',
+      slug: 'badr',
+      participants: [
+        { person: 'prophet-muhammad', isMuslim: true, status: ['INJURED'], claims: ['pilot/one'] },
+        {
+          person: 'someone',
+          isMuslim: true,
+          relation: 'ABSENT_FROM',
+          status: ['ABSENT_EXCUSED'],
+          summary: { value: 'كان في تجارة له بالشام', claims: ['pilot/one'] },
+          claims: ['pilot/one'],
+        },
+      ],
+    } as const;
+
+    expect(validateCatalog(catalog({ people: [person()], battles: [badr] }), known)).toEqual([]);
+  });
+
   it('rejects a claim key no approved batch declares', () => {
     const subject = person({ fields: { virtues: { value: 'مناقب', claims: ['pilot/absent'] } } });
 

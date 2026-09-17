@@ -35,8 +35,9 @@ interface RelationFilterPanelProps {
     color: (kind: string) => string;
     onToggle: (kind: string) => void;
   };
-  // Participation statuses belong to the one relation type they qualify, so
-  // they live under the battles group rather than in a panel of their own.
+  // Roster statuses belong to the relation they qualify -- outcomes to
+  // PARTICIPATED_IN, the excuse to ABSENT_FROM -- so they live under the
+  // battles group rather than in a panel of their own.
   statusFilters?: {
     choices: readonly string[];
     active: string[];

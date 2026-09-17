@@ -8,7 +8,13 @@ const jamal = {
   // evidence data"). Both say 36; neither says where the other got it.
   fields: { hijriYear: { value: 36, claims: legacyUnreviewed } },
   participants: [
-    { person: 'talhah-ibn-ubaydullah', isMuslim: true, status: ['MARTYRED'], claims: ['talhah/jamal'] },
+    {
+      person: 'talhah-ibn-ubaydullah',
+      isMuslim: true,
+      status: ['MARTYRED'],
+      summary: { value: 'وَكَانَ طَلْحَةُ مِنْ أَوَّلِ قَتِيْلٍ.', claims: ['talhah/jamal'] },
+      claims: ['talhah/jamal'],
+    },
   ],
 } satisfies CatalogBattle;
 

@@ -460,7 +460,8 @@ describe('GET /api/graph', () => {
     const [query, params] = run.mock.calls[0];
     expect(query).toContain('UNWIND $battles AS battleSlug');
     expect(query).toContain('MATCH (node:Battle {slug: battleSlug})');
-    expect(query).toContain('OPTIONAL MATCH (node)<-[relationship:PARTICIPATED_IN]-(related:Person)');
+    // Both roster relations: a battle's own view loses its absentees otherwise.
+    expect(query).toContain('OPTIONAL MATCH (node)<-[relationship:PARTICIPATED_IN|ABSENT_FROM]-(related:Person)');
     expect(params).toEqual({ battles: ['badr'] });
 
     expect(body.nodes).toHaveLength(2);

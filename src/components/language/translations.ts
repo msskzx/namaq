@@ -251,6 +251,7 @@ const translations = {
       PATERNAL_NIECE: 'Paternal Niece',
       // Non-family relation types, used by the unified Person/Battle/Title/Event graph.
       PARTICIPATED_IN: 'Participated In',
+      ABSENT_FROM: 'Absent From',
       HOLDS_TITLE: 'Holds Title',
       INVOLVED_IN: 'Involved In',
       PART_OF: 'Part Of',
@@ -610,6 +611,7 @@ const translations = {
       PATERNAL_NEPHEW: 'ابن الأخ',
       PATERNAL_NIECE: 'ابنة الأخ',
       PARTICIPATED_IN: 'شارك في',
+      ABSENT_FROM: 'غاب عن',
       HOLDS_TITLE: 'يحمل لقب',
       INVOLVED_IN: 'مرتبط بـ',
       PART_OF: 'جزء من',

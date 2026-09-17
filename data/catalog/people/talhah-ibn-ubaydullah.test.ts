@@ -54,14 +54,31 @@ describe('Talhah ibn Ubaydullah in the catalog', () => {
   });
 
   // The old seed had him at Badr with no status. The entry says he was away
-  // trading in Syria, so the participation stays and the status carries why.
-  it('marks him absent from Badr and injured at Uhud, from this batch', () => {
-    const at = (battle: { participants: readonly { person: string; status?: readonly string[]; claims: Provenance }[] }) =>
-      battle.participants.find((participant) => participant.person === person.slug);
+  // trading in Syria, so the link stays as an absence rather than disappearing.
+  it('links him to Badr as an absence, and to Uhud and Jamal as a participant', () => {
+    const at = (battle: {
+      participants: readonly { person: string; relation?: string; status?: readonly string[]; claims: Provenance }[];
+    }) => battle.participants.find((participant) => participant.person === person.slug);
 
+    expect(at(badr)?.relation).toBe('ABSENT_FROM');
     expect(at(badr)?.status).toEqual(['ABSENT_EXCUSED']);
     expect(at(badr)?.claims).toEqual(['talhah/badr']);
+
+    expect(at(uhud)?.relation).toBeUndefined();
     expect(at(uhud)?.status).toEqual(['INJURED']);
     expect(at(jamal)?.status).toEqual(['MARTYRED']);
+  });
+
+  // The book's wording, not ours, and cited like any other value.
+  it('carries each participation summary from the entry, with its claim', () => {
+    const summaries = [badr, uhud, jamal].map(
+      (battle) => battle.participants.find((participant) => participant.person === person.slug)?.summary,
+    );
+
+    summaries.forEach((summary) => {
+      expect(summary?.value).toBeTruthy();
+      expect(summary?.claims).not.toBe(legacyUnreviewed);
+    });
+    expect(summaries[0]?.value).toContain('بِسَهْمِهِ');
   });
 });

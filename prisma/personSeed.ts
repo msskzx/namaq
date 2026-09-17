@@ -71,7 +71,7 @@ async function main() {
             battleId,
             isMuslim: participation.isMuslim,
             status: participation.status as any, // Cast string[] to ParticipationStatus[]
-            courage: participation.courage,
+            summary: participation.summary,
           },
         });
         console.log(`  [BattleParticipation] Seeded: ${person.slug} in ${participation.battleSlug}`);

@@ -15,12 +15,12 @@ const graphBattles = [
 ];
 
 const postgresParticipations = [
-  { personSlug: 'ali-ibn-abi-talib', battleSlug: 'badr', status: [], isMuslim: true, courage: null },
-  { personSlug: 'uthman-ibn-affan', battleSlug: 'badr', status: ['ABSENT_EXCUSED'], isMuslim: true, courage: null },
+  { personSlug: 'ali-ibn-abi-talib', battleSlug: 'badr', relation: 'PARTICIPATED_IN', status: [], isMuslim: true, summary: null },
+  { personSlug: 'uthman-ibn-affan', battleSlug: 'badr', relation: 'ABSENT_FROM', status: ['ABSENT_EXCUSED'], isMuslim: true, summary: null },
 ];
 const graphParticipations = [
-  { personSlug: 'ali-ibn-abi-talib', battleSlug: 'badr', status: [], isMuslim: true, courage: null },
-  { personSlug: 'hamzah-ibn-abd-al-muttalib', battleSlug: 'badr', status: ['MARTYRED'], isMuslim: true, courage: null },
+  { personSlug: 'ali-ibn-abi-talib', battleSlug: 'badr', relation: 'PARTICIPATED_IN', status: [], isMuslim: true, summary: null },
+  { personSlug: 'hamzah-ibn-abd-al-muttalib', battleSlug: 'badr', relation: 'PARTICIPATED_IN', status: ['MARTYRED'], isMuslim: true, summary: null },
 ];
 
 describe('reconcileBattles', () => {
@@ -57,18 +57,33 @@ describe('reconcileBattles', () => {
     const report = reconcileBattles(
       [],
       [],
-      [{ personSlug: 'a', battleSlug: 'badr', status: ['INJURED', 'CAPTURED'], isMuslim: true, courage: null }],
-      [{ personSlug: 'a', battleSlug: 'badr', status: ['CAPTURED', 'INJURED'], isMuslim: true, courage: null }],
+      [{ personSlug: 'a', battleSlug: 'badr', relation: 'PARTICIPATED_IN', status: ['INJURED', 'CAPTURED'], isMuslim: true, summary: null }],
+      [{ personSlug: 'a', battleSlug: 'badr', relation: 'PARTICIPATED_IN', status: ['CAPTURED', 'INJURED'], isMuslim: true, summary: null }],
     );
     expect(report.participationMismatches).toHaveLength(0);
+  });
+
+  // battles:sync only MERGEs, so a row that moved between the roster relations
+  // keeps its old edge until someone removes it. This is how that surfaces.
+  it('reports a mismatch when attendance differs between the stores', () => {
+    const report = reconcileBattles(
+      [],
+      [],
+      [{ personSlug: 'a', battleSlug: 'badr', relation: 'ABSENT_FROM', status: ['ABSENT_EXCUSED'], isMuslim: true, summary: null }],
+      [{ personSlug: 'a', battleSlug: 'badr', relation: 'PARTICIPATED_IN', status: ['ABSENT_EXCUSED'], isMuslim: true, summary: null }],
+    );
+
+    expect(report.participationMismatches).toEqual([
+      { key: 'a|badr', field: 'relation', postgres: 'ABSENT_FROM', neo4j: 'PARTICIPATED_IN' },
+    ]);
   });
 
   it('reports a mismatch for differing isMuslim values', () => {
     const report = reconcileBattles(
       [],
       [],
-      [{ personSlug: 'a', battleSlug: 'badr', status: [], isMuslim: true, courage: null }],
-      [{ personSlug: 'a', battleSlug: 'badr', status: [], isMuslim: false, courage: null }],
+      [{ personSlug: 'a', battleSlug: 'badr', relation: 'PARTICIPATED_IN', status: [], isMuslim: true, summary: null }],
+      [{ personSlug: 'a', battleSlug: 'badr', relation: 'PARTICIPATED_IN', status: [], isMuslim: false, summary: null }],
     );
     expect(report.participationMismatches).toEqual([
       { key: 'a|badr', field: 'isMuslim', postgres: true, neo4j: false },

@@ -1,4 +1,4 @@
-import type { EventType, ParticipationStatus } from '@/generated/prisma';
+import type { EventType, ParticipationRelation, ParticipationStatus } from '@/generated/prisma';
 import type { RelationType } from '@/lib/relationship/types';
 
 /** Writable only by the one-time migration, never by an authored module. */
@@ -51,10 +51,24 @@ export interface CatalogPerson {
   readonly relations: readonly CatalogRelation[];
 }
 
+/**
+ * Statuses a relation may carry. Attendance is the relation's job and outcome
+ * the status's, so the two sets are disjoint and validateCatalog rejects a
+ * crossing -- see docs/adr/0013-separate-attendance-from-outcome.md.
+ */
+export const STATUSES_BY_RELATION: Record<ParticipationRelation, readonly ParticipationStatus[]> = {
+  PARTICIPATED_IN: ['MARTYRED', 'DIED', 'INJURED', 'CAPTURED', 'WAS_CAPTURED'],
+  ABSENT_FROM: ['ABSENT_EXCUSED'],
+};
+
 export interface CatalogParticipation {
   readonly person: string;
   readonly isMuslim: boolean;
+  /** Omitted means PARTICIPATED_IN: an absence is always stated outright. */
+  readonly relation?: ParticipationRelation;
   readonly status?: readonly ParticipationStatus[];
+  /** What the person did there, in the source's own wording. */
+  readonly summary?: Cited<string>;
   readonly claims: Provenance;
 }
 
