@@ -10,6 +10,9 @@ const badr = {
   fields: { hijriYear: { value: 2, claims: legacyUnreviewed } },
   participants: [
     { person: 'abu-ubaydah-ibn-al-jarrah', isMuslim: true, claims: ['abu-ubaydah/badr'] },
+    // Away trading in Syria, and given the share and the reward all the same.
+    // The old seed had him present here with no status at all.
+    { person: 'talhah-ibn-ubaydullah', isMuslim: true, status: ['ABSENT_EXCUSED'], claims: ['talhah/badr'] },
   ],
 } satisfies CatalogBattle;
 

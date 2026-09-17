@@ -9,6 +9,7 @@ const uhud = {
   fields: { hijriYear: { value: 3, claims: legacyUnreviewed } },
   participants: [
     { person: 'abu-ubaydah-ibn-al-jarrah', isMuslim: true, claims: ['abu-ubaydah/uhud'] },
+    { person: 'talhah-ibn-ubaydullah', isMuslim: true, status: ['INJURED'], claims: ['talhah/uhud'] },
   ],
 } satisfies CatalogBattle;
 
