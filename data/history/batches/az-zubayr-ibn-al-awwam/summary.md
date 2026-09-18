@@ -1,7 +1,7 @@
 # Batch: al-Zubayr ibn al-Awwam, Siyar entry 3
 
 This batch preserves al-Dhahabi's complete entry on al-Zubayr ibn al-Awwam and
-will support the canonical records selected from it. It follows the
+supports the canonical records selected from it. It follows the
 [data quality and references workflow](../../../../docs/data-quality-references.md).
 
 - Batch definition: [batch.json](batch.json)
@@ -12,10 +12,51 @@ will support the canonical records selected from it. It follows the
 Entry 3 of *Siyar A'lam al-Nubala'*, Risalah third edition (1405/1985), volume
 1, edited by Hussein Asad under Shuayb al-Arnaut. The account spans printed
 pages 41-67. Unlike the first two entries it shares no page with a neighbour:
-it opens at the top of page 41 and the next entry opens at the top of page 68,
-so no page needed slicing at either end.
+it opens at the top of page 41 and entry 4 opens at the top of page 68, so
+neither end needed slicing.
+
+## What the entry supports
+
+Nineteen claims and twenty-six citations. His profile carries nothing on the
+legacy marker: the entry speaks to his full name, kunya, appearance, virtues,
+year of death and place of death, and to all five of his titles.
+
+**The seed's four titles become five.** It gave him the ten promised paradise,
+companion, hawari al-ummah and the six of the Shura, all of which the entry
+supports. It adds السابقون الأولون in al-Dhahabi's own voice, counting the four
+killed among them (`62-p4`).
+
+**The Qur'an link the seed guessed at is now cited.** It carried Al Imran 172
+for him with nothing behind it; Aisha names him and Abu Bakr as two of those
+the verse describes (`47-p6`), which is that verse's occasion at Hamra al-Asad.
+
+**Two parents, and the reciprocal each takes.** His father al-Awwam comes from
+the naming line, his mother Safiyyah bint Abd al-Muttalib from the same
+sentence that makes him the Prophet's cousin. `SON` answers to `FATHER` for one
+and `MOTHER` for the other, which is why each declares its own.
+
+## Battles
+
+Five of the six the seed gave him are cited: Badr, Khandaq, Banu Qurayzah, Fath
+Makkah and Jamal. Two now carry a status the seed did not: Urwah counts three
+sword wounds on him, two at Badr and one at Yarmuk, so both are `INJURED`.
+
+**Yarmuk is new.** The seed never placed him there; the wound does.
+
+**Uhud is not claimed.** The entry has him among the seventy who went out after
+Uhud, at Hamra al-Asad, which is the occasion of the verse above — but it never
+says he fought at Uhud itself, so the seed's participation stays uncited rather
+than borrowing the pursuit as evidence for the battle.
+
+## What the model has no shape for yet
+
+Three of his four wives are named in the same sentence as Asma (`64-p6`), and
+his flight to Abyssinia, his thousand slaves whose kharaj he gave away, and the
+debt his son spent four seasons discharging are all in the entry with no field
+to hold them. The pages keep them.
 
 ## Review
 
-Claims are not authored yet. The pages are extracted and nothing has been
-compared against them, so this batch states no claim and carries no approval.
+Nothing is reviewed. The claims are authored but nobody has compared them
+against the stored pages, so every claim is Not reviewed and the batch carries
+no approval.

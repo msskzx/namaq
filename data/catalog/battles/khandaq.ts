@@ -9,6 +9,16 @@ const khandaq = {
   participants: [
     { person: 'talhah-ibn-ubaydullah', isMuslim: true, claims: legacyUnreviewed },
     { person: 'abu-ubaydah-ibn-al-jarrah', isMuslim: true, claims: legacyUnreviewed },
+    {
+      person: 'az-zubayr-ibn-al-awwam',
+      isMuslim: true,
+      summary: {
+        value:
+          'ضَرَبَ الزُّبَيْرُ يَوْمَ الخَنْدَقِ عُثْمَانَ بنَ عَبْدِ اللهِ بنِ المُغِيْرَةِ بِالسَّيْفِ عَلَى مِغْفَرِهِ، فَقَطَعَهُ إِلَى القَرَبُوسِ.',
+        claims: ['zubayr/khandaq'],
+      },
+      claims: ['zubayr/khandaq'],
+    },
   ],
 } satisfies CatalogBattle;
 

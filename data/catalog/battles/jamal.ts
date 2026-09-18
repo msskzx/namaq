@@ -17,6 +17,16 @@ const jamal = {
       summary: { value: 'وَكَانَ طَلْحَةُ مِنْ أَوَّلِ قَتِيْلٍ.', claims: ['talhah/jamal'] },
       claims: ['talhah/jamal'],
     },
+    {
+      person: 'az-zubayr-ibn-al-awwam',
+      isMuslim: true,
+      status: ['MARTYRED'],
+      summary: {
+        value: 'انْصَرَفَ يَوْمَ الجَمَلِ، فَطَعَنَهُ ابْنُ جُرْمُوْزٍ، فَوَقَعَ، وَدُفِنَ بِوَادِي السِّبَاعِ.',
+        claims: ['zubayr/jamal'],
+      },
+      claims: ['zubayr/jamal'],
+    },
   ],
 } satisfies CatalogBattle;
 

@@ -9,6 +9,13 @@ const yarmuk = {
   fields: { hijriYear: { value: 15, claims: legacyUnreviewed } },
   participants: [
     { person: 'abu-ubaydah-ibn-al-jarrah', isMuslim: true, claims: ['abu-ubaydah/yarmuk'] },
+    {
+      person: 'az-zubayr-ibn-al-awwam',
+      isMuslim: true,
+      status: ['INJURED'],
+      summary: { value: 'ضُرِبَ ضَرْبَةً بِالسَّيْفِ يَوْمَ اليَرْمُوْكِ.', claims: ['zubayr/yarmuk'] },
+      claims: ['zubayr/yarmuk'],
+    },
   ],
 } satisfies CatalogBattle;
 

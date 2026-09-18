@@ -24,6 +24,17 @@ const badr = {
       },
       claims: ['talhah/badr'],
     },
+    {
+      person: 'az-zubayr-ibn-al-awwam',
+      isMuslim: true,
+      status: ['INJURED'],
+      summary: {
+        value:
+          'كَانَ يَوْمَ بَدْرٍ مَعَ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فَارِسَانِ: الزُّبَيْرُ عَلَى فَرَسٍ، عَلَى المَيْمَنَةِ، وَالمِقْدَادُ بنُ الأَسْوَدِ عَلَى فَرَسٍ، عَلَى المَيْسَرَةِ.',
+        claims: ['zubayr/badr'],
+      },
+      claims: ['zubayr/badr'],
+    },
   ],
 } satisfies CatalogBattle;
 

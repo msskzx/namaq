@@ -1151,5 +1151,489 @@
       ]
     }
   ],
-  "claims": []
+  "claims": [
+    {
+      "key": "zubayr/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "الزبير بن العوام بن خويلد بن أسد بن عبد العزى بن قصي بن كلاب بن مرة بن كعب بن لؤي بن غالب، القرشي الأسدي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "41-p1",
+          "volume": "1",
+          "pageReference": "41",
+          "extractionUrl": "https://shamela.ws/book/10906/1467",
+          "excerptArabic": "٣ - الزُّبَيْرُ بنُ العَوَّامِ بنِ خُوَيْلِدِ بنِ أَسَدِ بنِ عَبْدِ العُزَّى * (ع) ابْنِ قُصَيِّ بنِ كِلاَبِ بنِ مُرَّةَ بنِ كَعْبِ بنِ لُؤَيِّ بنِ غَالِبٍ.",
+          "accessedAt": "2026-09-18"
+        }
+      ],
+      "field": "fullName"
+    },
+    {
+      "key": "zubayr/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "كنيته أبو عبد الله.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "41-p3",
+          "volume": "1",
+          "pageReference": "41",
+          "extractionUrl": "https://shamela.ws/book/10906/1467",
+          "excerptArabic": "وَأَوَّلُ مَنْ سَلَّ سَيْفَهُ فِي سَبِيْلِ اللهِ، أَبُو عَبْدِ اللهِ",
+          "accessedAt": "2026-09-18"
+        }
+      ],
+      "field": "kunya"
+    },
+    {
+      "key": "zubayr/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "حواري رسول الله صلى الله عليه وسلم، وأحد العشرة المشهود لهم بالجنة، وأحد الستة أهل الشورى، ومن السابقين الأولين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "41-p3",
+          "volume": "1",
+          "pageReference": "41",
+          "extractionUrl": "https://shamela.ws/book/10906/1467",
+          "excerptArabic": "حَوَارِيُّ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَابْنُ عَمَّتِهِ صَفِيَّةَ بِنْتِ عَبْدِ المُطَّلِبِ، وَأَحَدُ العَشرَةِ المَشْهُوْدِ لَهُم بِالجَنَّةِ، وَأَحَدُ (١) السِّتَّةِ أَهْلِ الشُّوْرَى",
+          "accessedAt": "2026-09-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "48-p4",
+          "volume": "1",
+          "pageReference": "48",
+          "extractionUrl": "https://shamela.ws/book/10906/1474",
+          "excerptArabic": "فَقَالَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-: (لِكُلِّ نَبِيٍّ حَوَارِيٌّ، وَحَوَارِيَّ الزُّبَيْرُ (١)) .",
+          "accessedAt": "2026-09-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "62-p4",
+          "volume": "1",
+          "pageReference": "62",
+          "extractionUrl": "https://shamela.ws/book/10906/1488",
+          "excerptArabic": "لأَنَّهُم مِنَ العَشْرَةِ المَشْهُوْدِ لَهُم بِالجَنَّةِ، وَمِنَ البَدْرِيِّيْنَ، وَمِنْ أَهْلِ بَيْعَةِ الرِّضْوَانِ، وَمِنَ السَّابِقِيْنَ الأَوَّلِيْنَ",
+          "accessedAt": "2026-09-18"
+        }
+      ],
+      "field": "titles"
+    },
+    {
+      "key": "zubayr/appearance",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "كان طويلاً تخط رجلاه الأرض إذا ركب، خفيف اللحية والعارضين، أشعر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "42-p3",
+          "volume": "1",
+          "pageReference": "42",
+          "extractionUrl": "https://shamela.ws/book/10906/1468",
+          "excerptArabic": "وَقَدْ وَرَدَ أَنَّ الزُّبَيْرَ كَانَ رَجُلاً طَوِيْلاً (٢) ، إِذَا رَكِبَ خَطَّتْ رِجْلاهُ الأَرْضَ، وَكَانَ خَفِيْفَ اللِّحْيَةِ وَالعَارِضَيْنِ.",
+          "accessedAt": "2026-09-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "45-p5",
+          "volume": "1",
+          "pageReference": "45",
+          "extractionUrl": "https://shamela.ws/book/10906/1471",
+          "excerptArabic": "وَرَوَى: هِشَامٌ، عَنْ أَبِيْهِ عُرْوَةَ: أَنَّ الزُّبَيْرَ كَانَ طَوِيْلاً تَخُطُّ رِجْلاَهُ الأَرْضَ إِذَا رَكِبَ الدَّابَّةَ، أَشْعَرَ.",
+          "accessedAt": "2026-09-18"
+        }
+      ],
+      "field": "appearance"
+    },
+    {
+      "key": "zubayr/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "قُتل في رجب سنة ست وثلاثين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "64-p2",
+          "volume": "1",
+          "pageReference": "64",
+          "extractionUrl": "https://shamela.ws/book/10906/1490",
+          "excerptArabic": "قَالَ البُخَارِيُّ، وَغَيْرُهُ: قُتِلَ فِي رَجَبٍ، سَنَةَ سِتٍّ وَثَلاَثِيْنَ.",
+          "accessedAt": "2026-09-18"
+        }
+      ],
+      "field": "deathYearHijri"
+    },
+    {
+      "key": "zubayr/death-place",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "قُتل ودُفن بوادي السباع، على سبعة فراسخ من البصرة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "61-p6",
+          "volume": "1",
+          "pageReference": "61",
+          "extractionUrl": "https://shamela.ws/book/10906/1487",
+          "excerptArabic": "فَطَعَنَهُ ابْنُ جُرْمُوْزٍ ثَانِياً، فَأَثْبَتَهُ، فَوَقَعَ، وَدُفِنَ بِوَادِي السِّبَاعِ، وَجَلَسَ عَلِيٌّ -رَضِيَ اللهُ عَنْهُ- يَبْكِي عَلَيْهِ هُوَ وَأَصْحَابُهُ (٥) .",
+          "accessedAt": "2026-09-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "64-p3",
+          "volume": "1",
+          "pageReference": "64",
+          "extractionUrl": "https://shamela.ws/book/10906/1490",
+          "excerptArabic": "وَادِي السِّبَاعِ: عَلَى سَبْعَةِ فَرَاسِخَ مِنَ البَصْرَةِ.",
+          "accessedAt": "2026-09-18"
+        }
+      ],
+      "field": "placeOfDeathArabic"
+    },
+    {
+      "key": "zubayr/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "حواري رسول الله صلى الله عليه وسلم وابن عمته، وأول من سلّ سيفه في سبيل الله، جمع له النبي أبويه يوم الخندق.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "41-p3",
+          "volume": "1",
+          "pageReference": "41",
+          "extractionUrl": "https://shamela.ws/book/10906/1467",
+          "excerptArabic": "حَوَارِيُّ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَابْنُ عَمَّتِهِ صَفِيَّةَ بِنْتِ عَبْدِ المُطَّلِبِ، وَأَحَدُ العَشرَةِ المَشْهُوْدِ لَهُم بِالجَنَّةِ، وَأَحَدُ (١) السِّتَّةِ أَهْلِ الشُّوْرَى، وَأَوَّلُ مَنْ سَلَّ سَيْفَهُ فِي سَبِيْلِ اللهِ",
+          "accessedAt": "2026-09-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "48-p9",
+          "volume": "1",
+          "pageReference": "48",
+          "extractionUrl": "https://shamela.ws/book/10906/1474",
+          "excerptArabic": "قَالَ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-: (الزُّبَيْرُ ابْنُ عَمَّتِي، وَحَوَارِيَّ مِنْ أُمَّتِي (٣)) .",
+          "accessedAt": "2026-09-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "50-p6",
+          "volume": "1",
+          "pageReference": "50",
+          "extractionUrl": "https://shamela.ws/book/10906/1476",
+          "excerptArabic": "قَالَ: فَإِنَّ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَوْمَئِذٍ لَيَجْمَعُ لأَبِيْكَ أَبَوَيْهِ، يَقُوْلُ: (ارْمِ، فِدَاكَ أَبِي وَأُمِّي (٤)) .",
+          "accessedAt": "2026-09-18"
+        }
+      ],
+      "field": "virtues"
+    },
+    {
+      "key": "zubayr/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "أبوه العوام بن خويلد بن أسد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "41-p1",
+          "volume": "1",
+          "pageReference": "41",
+          "extractionUrl": "https://shamela.ws/book/10906/1467",
+          "excerptArabic": "٣ - الزُّبَيْرُ بنُ العَوَّامِ بنِ خُوَيْلِدِ بنِ أَسَدِ بنِ عَبْدِ العُزَّى",
+          "accessedAt": "2026-09-18"
+        }
+      ],
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "al-awwam-ibn-khuwaylid"
+    },
+    {
+      "key": "zubayr/mother",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "أمه صفية بنت عبد المطلب، عمة رسول الله صلى الله عليه وسلم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "41-p3",
+          "volume": "1",
+          "pageReference": "41",
+          "extractionUrl": "https://shamela.ws/book/10906/1467",
+          "excerptArabic": "حَوَارِيُّ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَابْنُ عَمَّتِهِ صَفِيَّةَ بِنْتِ عَبْدِ المُطَّلِبِ",
+          "accessedAt": "2026-09-18"
+        }
+      ],
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "safiyyah-bint-abd-al-muttalib"
+    },
+    {
+      "key": "zubayr/cousin-of-prophet",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "هو ابن عمة رسول الله صلى الله عليه وسلم صفية بنت عبد المطلب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "48-p9",
+          "volume": "1",
+          "pageReference": "48",
+          "extractionUrl": "https://shamela.ws/book/10906/1474",
+          "excerptArabic": "قَالَ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-: (الزُّبَيْرُ ابْنُ عَمَّتِي، وَحَوَارِيَّ مِنْ أُمَّتِي (٣)) .",
+          "accessedAt": "2026-09-18"
+        }
+      ],
+      "relationshipType": "PATERNAL_COUSIN",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "prophet-muhammad"
+    },
+    {
+      "key": "zubayr/companion-of-prophet",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "لم يفارق النبي صلى الله عليه وسلم منذ أسلم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "43-p3",
+          "volume": "1",
+          "pageReference": "43",
+          "extractionUrl": "https://shamela.ws/book/10906/1469",
+          "excerptArabic": "قَالَ: مَا فَارَقْتُهُ مُنْذُ أَسْلَمْتُ، وَلَكِنْ سَمِعْتُ مِنْهُ كَلِمَةً:",
+          "accessedAt": "2026-09-18"
+        }
+      ],
+      "relationshipType": "COMPANION_OF",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "prophet-muhammad"
+    },
+    {
+      "key": "zubayr/wife-asma",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "كانت تحته أسماء بنت أبي بكر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "64-p6",
+          "volume": "1",
+          "pageReference": "64",
+          "extractionUrl": "https://shamela.ws/book/10906/1490",
+          "excerptArabic": "قَالَ القَحْذَمِيُّ: كَانَتْ تَحْتَهُ أَسْمَاءُ بِنْتُ أَبِي بَكْرٍ",
+          "accessedAt": "2026-09-18"
+        }
+      ],
+      "relationshipType": "HUSBAND",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "asma-bint-abi-bakr"
+    },
+    {
+      "key": "zubayr/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "كان يوم بدر أحد فارسي رسول الله صلى الله عليه وسلم، على الميمنة، وأصابته ضربتان بالسيف يومئذ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "46-p3",
+          "volume": "1",
+          "pageReference": "46",
+          "extractionUrl": "https://shamela.ws/book/10906/1472",
+          "excerptArabic": "كَانَ يَوْمَ بَدْرٍ مَعَ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فَارِسَانِ: الزُّبَيْرُ عَلَى فَرَسٍ، عَلَى المَيْمَنَةِ، وَالمِقْدَادُ بنُ الأَسْوَدِ عَلَى فَرَسٍ، عَلَى المَيْسَرَةِ (٢) .",
+          "accessedAt": "2026-09-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "52-p7",
+          "volume": "1",
+          "pageReference": "52",
+          "extractionUrl": "https://shamela.ws/book/10906/1478",
+          "excerptArabic": "كَانَ فِي الزُّبَيْرِ ثَلاَثُ ضَرَبَاتٍ بِالسَّيْفِ: إِحْدَاهُنَّ فِي عَاتِقِهِ، إِنْ كُنْتُ لأُدْخِلُ أَصَابِعِي فِيْهَا، ضُرِب ثِنْتَيْنِ يَوْمَ بَدْرٍ، وَوَاحِدَةً يَوْمَ اليَرْمُوْكِ.",
+          "accessedAt": "2026-09-18"
+        }
+      ],
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr"
+    },
+    {
+      "key": "zubayr/khandaq",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "شهد الخندق، وضرب عثمان بن عبد الله بن المغيرة بالسيف على مغفره فقطعه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "47-p11",
+          "volume": "1",
+          "pageReference": "47",
+          "extractionUrl": "https://shamela.ws/book/10906/1473",
+          "excerptArabic": "قَالَ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَوْمَ الخَنْدَقِ: (مَنْ يَأْتِيْنَا بِخَبَرِ بَنِي قُرَيْظَةَ؟) .",
+          "accessedAt": "2026-09-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "51-p2",
+          "volume": "1",
+          "pageReference": "51",
+          "extractionUrl": "https://shamela.ws/book/10906/1477",
+          "excerptArabic": "ضَرَبَ الزُّبَيْرُ يَوْمَ الخَنْدَقِ عُثْمَانَ بنَ عَبْدِ اللهِ بنِ المُغِيْرَةِ بِالسَّيْفِ عَلَى مِغْفَرِهِ، فَقَطَعَهُ إِلَى القَرَبُوسِ (١) .",
+          "accessedAt": "2026-09-18"
+        }
+      ],
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "khandaq"
+    },
+    {
+      "key": "zubayr/banu-qurayzah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "كان يمرّ إلى بني قريظة فيقاتلهم، ورآه ابنه من أطم حسان.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "50-p8",
+          "volume": "1",
+          "pageReference": "50",
+          "extractionUrl": "https://shamela.ws/book/10906/1476",
+          "excerptArabic": "لَمَّا كَانَ يَوْمُ الخَنْدَقِ كُنْتُ أَنَا وَعُمَرُ بنُ أَبِي سَلَمَةَ فِي الأُطُمِ الَّذِي فِيْهِ نِسَاءُ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أُطُمِ حَسَّان، فَكَانَ عُمَرُ يَرْفَعُنِي وَأَرْفَعُهُ، فَإِذَا رَفَعَنِي عَرَفْتُ أَبِي حِيْنَ يَمُرُّ إِلَى بَنِي قُرَيْظَةَ، فَيُقَاتِلُهُمْ (٥) .",
+          "accessedAt": "2026-09-18"
+        }
+      ],
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "banu-qurayzah"
+    },
+    {
+      "key": "zubayr/fath-makkah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "أعطاه النبي صلى الله عليه وسلم يوم فتح مكة لواء سعد بن عبادة، فدخل مكة بلواءين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "51-p5",
+          "volume": "1",
+          "pageReference": "51",
+          "extractionUrl": "https://shamela.ws/book/10906/1477",
+          "excerptArabic": "أَنَّ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَعْطَاهُ يَوْمَ فَتْحِ مَكَّةَ لِوَاءِ سَعْدِ بنِ عُبَادَةَ، فَدَخَلَ الزُّبَيْرُ مَكَّةَ بِلِوَاءَيْنِ (٢) .",
+          "accessedAt": "2026-09-18"
+        }
+      ],
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "fath-makkah"
+    },
+    {
+      "key": "zubayr/yarmuk",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "أصابته ضربة بالسيف يوم اليرموك.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "52-p7",
+          "volume": "1",
+          "pageReference": "52",
+          "extractionUrl": "https://shamela.ws/book/10906/1478",
+          "excerptArabic": "كَانَ فِي الزُّبَيْرِ ثَلاَثُ ضَرَبَاتٍ بِالسَّيْفِ: إِحْدَاهُنَّ فِي عَاتِقِهِ، إِنْ كُنْتُ لأُدْخِلُ أَصَابِعِي فِيْهَا، ضُرِب ثِنْتَيْنِ يَوْمَ بَدْرٍ، وَوَاحِدَةً يَوْمَ اليَرْمُوْكِ.",
+          "accessedAt": "2026-09-18"
+        }
+      ],
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "yarmuk"
+    },
+    {
+      "key": "zubayr/jamal",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "انصرف يوم الجمل عن القتال، فتبعه ابن جرموز فقتله.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "61-p6",
+          "volume": "1",
+          "pageReference": "61",
+          "extractionUrl": "https://shamela.ws/book/10906/1487",
+          "excerptArabic": "فَطَعَنَهُ ابْنُ جُرْمُوْزٍ ثَانِياً، فَأَثْبَتَهُ، فَوَقَعَ، وَدُفِنَ بِوَادِي السِّبَاعِ، وَجَلَسَ عَلِيٌّ -رَضِيَ اللهُ عَنْهُ- يَبْكِي عَلَيْهِ هُوَ وَأَصْحَابُهُ (٥) .",
+          "accessedAt": "2026-09-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "60-p4",
+          "volume": "1",
+          "pageReference": "60",
+          "extractionUrl": "https://shamela.ws/book/10906/1486",
+          "excerptArabic": "قَدْ عَلِمَ النَّاسُ أَنِّي لَسْتُ بِجَبَانٍ، وَلَكِنْ ذَكَّرَنِي عَلِيٌّ شَيْئاً سَمِعْتُهُ مِنْ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فَحَلَفْتُ أَنْ لاَ أُقَاتِلَهُ، ثُمَّ قَالَ:",
+          "accessedAt": "2026-09-18"
+        }
+      ],
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "jamal"
+    },
+    {
+      "key": "zubayr/ayah-al-imran",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "قالت عائشة إن الزبير وأبا بكر من الذين استجابوا لله والرسول من بعد ما أصابهم القرح.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "47-p6",
+          "volume": "1",
+          "pageReference": "47",
+          "extractionUrl": "https://shamela.ws/book/10906/1473",
+          "excerptArabic": "أَبُو مُعَاوِيَةَ: عَنْ هِشَامٍ، عَنْ أَبِيْهِ، قَالَتْ عَائِشَةُ: يَا ابْنَ أُخْتِي (٢) ! كَانَ أَبُوَاكَ -يَعْنِي: الزُّبَيْرَ، وَأَبَا بَكْرٍ - مِن: {الَّذِيْنَ اسْتَجَابُوا لِلِّهِ وَالرَّسُوْلِ مِنْ بَعْدِ مَا أَصَابَهُمُ القَرْحُ} [آلُ عِمْرَانَ: ١٧٢] .",
+          "accessedAt": "2026-09-18"
+        }
+      ],
+      "field": "ayat"
+    }
+  ]
 }
