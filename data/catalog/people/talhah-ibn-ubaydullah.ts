@@ -21,6 +21,9 @@ const talhahIbnUbaydullah = {
         'طَلْحَةُ بنُ عُبَيْدِ اللهِ بنِ عُثْمَانَ بنِ عَمْرٍو التَّيْمِيُّ ابْنِ كَعْبِ بنِ سَعْدِ بنِ تَيْمِ بنِ مُرَّةَ بنِ كَعْبِ بنِ لُؤَيِّ بنِ غَالِبِ بنِ فِهْرِ بنِ مَالِكِ بنِ النَّضْرِ بنِ كِنَانَةَ القُرَشِيُّ، التَّيْمِيُّ، المَكِّيُّ، أَبُو مُحَمَّدٍ.',
       claims: ['talhah/full-name'],
     },
+    // A name, not a title: the entry prints it in the naming line and the
+    // people in it address him by it (ADR 0014).
+    kunya: { value: 'أَبُو مُحَمَّدٍ', claims: ['talhah/kunya'] },
     // Two descriptions that disagree over his complexion, carried on one
     // disputed claim. Ibn Mandah comes first in the entry and the author
     // prefers neither, so the value follows source order and keeps both.

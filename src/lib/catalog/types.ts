@@ -15,6 +15,7 @@ export interface Cited<T> {
 /** Keys are Prisma `Person` column names; scripts/data/projectCatalog.ts writes them by key. */
 export interface CatalogPersonFields {
   readonly fullName?: Cited<string>;
+  readonly kunya?: Cited<string>;
   readonly appearance?: Cited<string>;
   readonly virtues?: Cited<string>;
   readonly birthYearHijri?: Cited<string>;

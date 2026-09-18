@@ -69,6 +69,14 @@ describe('Talhah ibn Ubaydullah in the catalog', () => {
     expect(at(jamal)?.status).toEqual(['MARTYRED']);
   });
 
+  // A name, not a title (ADR 0014): it is in the entry's naming line, and the
+  // titles list has no business carrying it.
+  it('records the kunya as a field rather than a title', () => {
+    expect(person.fields.kunya?.value).toBe('أَبُو مُحَمَّدٍ');
+    expect(claimByKey.get('talhah/kunya')?.field).toBe('kunya');
+    expect(person.titles.map((title) => title.title)).not.toContain('abu-muhammad');
+  });
+
   // The entry dates the killing, not the battle. Jamal is dated through it,
   // the way the pilot dates the plague through the death it caused.
   it('dates Jamal from the killing it caused, on the same claims', () => {

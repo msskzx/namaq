@@ -786,6 +786,26 @@
       "field": "fullName"
     },
     {
+      "key": "talhah/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "talhah-ibn-ubaydullah",
+      "field": "kunya",
+      "assertion": "كنيته أبو محمد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "23-p10",
+          "volume": "1",
+          "pageReference": "23",
+          "extractionUrl": "https://shamela.ws/book/10906/1449",
+          "excerptArabic": "القُرَشِيُّ، التَّيْمِيُّ، المَكِّيُّ، أَبُو مُحَمَّدٍ.",
+          "accessedAt": "2026-09-17"
+        }
+      ]
+    },
+    {
       "key": "talhah/titles",
       "subjectKind": "PERSON",
       "subjectSlug": "talhah-ibn-ubaydullah",

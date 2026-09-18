@@ -18,9 +18,14 @@ notes at the `(*)` bibliography, leaving the four notes above with entry 1.
 
 ## What the entry supports
 
-Ten claims and sixteen citations, covering his full name, appearance, virtues,
-year of death, his three title assignments, his father, his companionship of
-the Prophet, and three battles.
+Eleven claims and seventeen citations, covering his full name, his kunya,
+appearance, virtues, year of death, his three title assignments, his father,
+his companionship of the Prophet, and three battles.
+
+The kunya is a field rather than a title assignment: the entry prints أبو محمد
+in its naming line and the people in it address him by it, and a title would
+make it a graph node joining everyone whose eldest son was called Muhammad
+([ADR 0014](../../../../docs/adr/0014-a-kunya-is-a-name.md)).
 
 ## What the entry contradicts
 

@@ -64,6 +64,9 @@ model Person {
   id                         String  @id @default(cuid())
   name                       String
   fullName                   String?
+  /// The teknonym a person is addressed by, e.g. أبو محمد. A name, not a title:
+  /// see docs/adr/0014-a-kunya-is-a-name.md.
+  kunya                      String?
   nameTransliterated         String? // Transliterated name for search/display
   birthYearHijri             String? // e.g., "53 BH", "1 AH" (store as string for flexibility)
   birthYearGregorian         String? // e.g., "570 CE", "622 CE"

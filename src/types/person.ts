@@ -17,6 +17,7 @@ export interface PersonBase {
   slug: string;
   name: string;
   fullName?: string;
+  kunya?: string;
   nameTransliterated?: string;
 }
 
