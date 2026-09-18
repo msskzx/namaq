@@ -33,7 +33,7 @@ function batch(overrides: Partial<HistoryBatch> = {}): HistoryBatch {
             sequence: 1,
             printedPage: '5',
             bodyFile: 'accounts/abu-ubaydah/001.md',
-            passages: [{ anchor: 'p5-opening', excerpt: 'أبو عبيدة بن الجراح' }],
+            passages: [{ anchor: 'p5-opening' }],
           },
         ],
       },

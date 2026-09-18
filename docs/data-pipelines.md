@@ -92,7 +92,7 @@ locator fields.
 | Source | One edition of one work | `slug`, `title` |
 | Account | One subject's entry in one source | `sourceSlug`, `subjectKind`, `subjectSlug`, `extractionUrl`, `accessedAt`, `pages` |
 | Page | One printed page of an account | `sequence`, `bodyFile` |
-| Passage | One paragraph a citation can target | `anchor`, `excerpt` |
+| Passage | One paragraph a citation can target | `anchor` |
 | Claim | One assertion about a subject | `key`, `subjectKind`, `subjectSlug`, `assertion`, `citations` |
 | Citation | Where a claim is supported | `sourceSlug`, `extractionUrl`, `excerptArabic`, `accessedAt` |
 
@@ -103,19 +103,30 @@ edge; a claim with neither is a biographical statement. A citation's
 `passageAnchor` must name a passage some page in the batch declares, which is
 what makes a citation link land on the cited text.
 
+A passage carries no text of its own. The page file is the one copy of the
+work's text, and a page's anchors are listed in its order, so the nth anchor
+names the nth paragraph. Anchors are the reading page's own paragraph ids, which
+is why they are declared rather than derived: an entry starting mid-page starts
+at whatever id it starts at, `23-p9` in Talhah's case. Validation rejects a page
+whose anchor count and paragraph count disagree, since positional pairing is
+only as good as that invariant.
+
 ### Extraction
 
 `npm run history:extract` reads Shamela's reading pages and writes one account
 into an existing batch. It takes `--book`, `--from`, `--to`, `--out`,
 `--subject-slug` and `--source-slug`, and optionally `--subject-kind`,
-`--start-anchor`, `--end-anchor`, `--notes-end-marker` and `--accessed-at`.
+`--start-anchor`, `--end-anchor`, `--notes-start-marker`, `--notes-end-marker`
+and `--accessed-at`.
 
 From each page it takes the work's text out of the `.nass` element as anchored
 paragraphs, splits at the horizontal rule so the edition's footnotes land in the
 notes file, and reads the printed page number from the document title. The first
 and last pages of an entry are the only ones shared with a neighbouring entry, so
-the anchor options trim the body at either end and `--notes-end-marker` trims the
-notes, which run together in one block and cannot be cut by anchor.
+the anchor options trim the body at either end and the notes markers trim the
+notes, which run together in one block and cannot be cut by anchor:
+`--notes-start-marker` drops a preceding entry's notes, `--notes-end-marker` a
+following one's.
 
 The extractor stops at the account. Sources, claims, citations, confidence and
 review status are authored by hand, and the batch must already exist with a

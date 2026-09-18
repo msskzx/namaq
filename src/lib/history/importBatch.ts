@@ -1,6 +1,6 @@
 import type { PrismaClient } from '@/generated/prisma';
 import type { BatchFiles, ClaimRecord, HistoryBatch } from './batchSchema';
-import { batchRevision } from './batchSchema';
+import { batchRevision, passageExcerpts } from './batchSchema';
 
 export interface ImportResult {
   sources: number;
@@ -84,14 +84,17 @@ async function writeAccounts(tx: Tx, batch: HistoryBatch, files: BatchFiles, sou
     });
     const pageIdBySequence = new Map(written.map((page) => [page.sequence, page.id]));
 
-    const passages = account.pages.flatMap((page) =>
-      (page.passages ?? []).map((passage) => ({
+    // The page file is the one copy of the text; a passage is an anchor into
+    // it, so its excerpt is read back out here rather than stored twice.
+    const passages = account.pages.flatMap((page) => {
+      const excerpts = passageExcerpts(page, files);
+      return (page.passages ?? []).map((passage) => ({
         pageId: pageIdBySequence.get(page.sequence)!,
         anchor: passage.anchor,
         kind: passage.kind ?? 'BODY',
-        excerpt: passage.excerpt,
-      })),
-    );
+        excerpt: excerpts.get(passage.anchor) ?? '',
+      }));
+    });
     if (passages.length > 0) {
       await tx.sourcePassage.createMany({ data: passages });
       const stored = await tx.sourcePassage.findMany({

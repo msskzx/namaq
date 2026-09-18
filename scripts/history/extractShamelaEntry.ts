@@ -72,9 +72,10 @@ async function main() {
       bodyFile,
       notesFile,
       extractionUrl: url,
+      // Anchors only: the paragraph text goes to the page file, and a passage
+      // is read back out of it by position (batchSchema.passageExcerpts).
       passages: page.body.map((paragraph) => ({
         anchor: `${page.printedPage ?? sequence}-${paragraph.anchor}`,
-        excerpt: paragraph.text,
       })),
     });
 
