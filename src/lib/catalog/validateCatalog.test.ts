@@ -33,6 +33,40 @@ describe('validateCatalog', () => {
     expect(validateCatalog(catalog({ people: [subject] }), known)).toEqual([]);
   });
 
+  // The partition ADR 0013 draws: attendance is the relation's, outcome the
+  // status's, and Postgres cannot reject a crossing because status is an array.
+  it('rejects a status the relation cannot carry', () => {
+    const battle = {
+      kind: 'BATTLE',
+      slug: 'badr',
+      participants: [{ person: 'prophet-muhammad', isMuslim: true, status: ['ABSENT_EXCUSED'], claims: ['pilot/one'] }],
+    } as const;
+
+    expect(validateCatalog(catalog({ battles: [battle] }), known)).toEqual([
+      { path: 'battles/badr.prophet-muhammad', message: 'PARTICIPATED_IN cannot carry status ABSENT_EXCUSED' },
+    ]);
+  });
+
+  it('accepts an outcome on a participation and an excuse on an absence', () => {
+    const badr = {
+      kind: 'BATTLE',
+      slug: 'badr',
+      participants: [
+        { person: 'prophet-muhammad', isMuslim: true, status: ['INJURED'], claims: ['pilot/one'] },
+        {
+          person: 'someone',
+          isMuslim: true,
+          relation: 'ABSENT_FROM',
+          status: ['ABSENT_EXCUSED'],
+          summary: { value: 'كان في تجارة له بالشام', claims: ['pilot/one'] },
+          claims: ['pilot/one'],
+        },
+      ],
+    } as const;
+
+    expect(validateCatalog(catalog({ people: [person()], battles: [badr] }), known)).toEqual([]);
+  });
+
   it('rejects a claim key no approved batch declares', () => {
     const subject = person({ fields: { virtues: { value: 'مناقب', claims: ['pilot/absent'] } } });
 
@@ -59,7 +93,10 @@ describe('validateCatalog', () => {
   });
 
   it('resolves a relationship to a person the catalog itself authors', () => {
-    const pair = [person({ slug: 'one', relations: [{ type: 'SON', to: 'two', claims: ['pilot/one'] }] }), person({ slug: 'two' })];
+    const pair = [
+      person({ slug: 'one', relations: [{ type: 'SON', inverse: 'FATHER', to: 'two', claims: ['pilot/one'] }] }),
+      person({ slug: 'two' }),
+    ];
 
     expect(validateCatalog(catalog({ people: pair }), known)).toEqual([]);
   });
@@ -67,10 +104,43 @@ describe('validateCatalog', () => {
   it('reports every problem in one pass rather than stopping at the first', () => {
     const subject = person({
       titles: [{ title: 'unheard-of', claims: ['pilot/absent'] }],
-      relations: [{ type: 'SON', to: 'nobody', claims: ['pilot/one'] }],
+      relations: [{ type: 'SON', inverse: 'FATHER', to: 'nobody', claims: ['pilot/one'] }],
     });
 
     expect(validateCatalog(catalog({ people: [subject] }), known)).toHaveLength(3);
+  });
+
+  // The projector writes both directions, and SON's reciprocal is FATHER or
+  // MOTHER depending on a parent's sex, which nothing here records.
+  it('asks for the reciprocal when the relation has more than one', () => {
+    const subject = person({ relations: [{ type: 'SON', to: 'prophet-muhammad', claims: ['pilot/one'] }] });
+
+    expect(validateCatalog(catalog({ people: [subject] }), known)).toEqual([
+      { path: 'people/someone.relations.SON', message: 'SON needs inverse: one of FATHER, MOTHER' },
+    ]);
+  });
+
+  it('takes the only reciprocal without being told', () => {
+    const subject = person({ relations: [{ type: 'COMPANION_OF', to: 'prophet-muhammad', claims: ['pilot/one'] }] });
+
+    expect(validateCatalog(catalog({ people: [subject] }), known)).toEqual([]);
+  });
+
+  it('refuses a reciprocal that is not one', () => {
+    const subject = person({ relations: [{ type: 'SON', inverse: 'WIFE', to: 'prophet-muhammad', claims: ['pilot/one'] }] });
+
+    expect(validateCatalog(catalog({ people: [subject] }), known)).toEqual([
+      { path: 'people/someone.relations.SON', message: 'WIFE is not a reciprocal of SON' },
+    ]);
+  });
+
+  it('checks an ayah reference for a surah and ayah that exist', () => {
+    const subject = person({ ayat: [{ surah: 115, ayah: 0, claims: ['pilot/one'] }] });
+
+    expect(validateCatalog(catalog({ people: [subject] }), known)).toEqual([
+      { path: 'people/someone.ayat.115:0', message: 'no surah 115' },
+      { path: 'people/someone.ayat.115:0', message: 'no ayah 0' },
+    ]);
   });
 
   it('checks battle and event references the same way', () => {

@@ -26,7 +26,6 @@ export interface SourceRecord {
 export interface PassageRecord {
   anchor: string;
   kind?: PassageKind;
-  excerpt: string;
 }
 
 export interface PageRecord {
@@ -203,6 +202,7 @@ function checkAccount(
       issues.push({ path: pagePath, message: `missing notes file "${page.notesFile}"` });
     }
 
+    const excerpts = passageExcerpts(page, files);
     page.passages?.forEach((passage, passageIndex) => {
       const key = `${account.sourceSlug}:${account.subjectSlug}:${passage.anchor}`;
       if (anchors.has(key)) {
@@ -210,11 +210,39 @@ function checkAccount(
       }
       anchors.add(key);
       anchors.add(passage.anchor);
-      if (!passage.excerpt.trim()) {
-        issues.push({ path: `${pagePath}.passages[${passageIndex}]`, message: 'excerpt is required' });
+      // An anchor whose paragraph is missing means the list and the page file
+      // have drifted apart, which is what pairing them by position risks.
+      if (!excerpts.get(passage.anchor)) {
+        issues.push({
+          path: `${pagePath}.passages[${passageIndex}]`,
+          message: `anchor "${passage.anchor}" has no paragraph in "${page.bodyFile}"`,
+        });
       }
     });
+
+    const declared = page.passages?.length ?? 0;
+    const paragraphs = (files[page.bodyFile] ?? '').split(/\n{2,}/).filter((text) => text.trim()).length;
+    if (declared > 0 && declared !== paragraphs) {
+      issues.push({
+        path: pagePath,
+        message: `declares ${declared} passage(s) but "${page.bodyFile}" has ${paragraphs} paragraph(s)`,
+      });
+    }
   });
+}
+
+/**
+ * The text each declared anchor stands for, read from the page's Markdown.
+ *
+ * The page file is the one copy of the work's text, so an anchor carries no
+ * excerpt of its own; it is paired with the paragraph in the same position.
+ * Anchors are the reading page's own paragraph ids, so they need not start at
+ * p1 -- an entry beginning mid-page starts wherever it starts -- which is why
+ * they are declared in order rather than derived from the file.
+ */
+export function passageExcerpts(page: PageRecord, files: BatchFiles): Map<string, string> {
+  const paragraphs = (files[page.bodyFile] ?? '').split(/\n{2,}/).map((text) => text.trim()).filter(Boolean);
+  return new Map((page.passages ?? []).map((passage, index) => [passage.anchor, paragraphs[index] ?? '']));
 }
 
 /**

@@ -47,6 +47,8 @@ export function extractShamelaPage(document: Document): ExtractedPage {
 export interface EntryBounds {
   startAnchor?: string;
   endAnchor?: string;
+  /** Text that begins this entry's notes; everything before it is dropped. */
+  notesStartMarker?: string;
   /** Text that begins the next entry's notes; everything from it is dropped. */
   notesEndMarker?: string;
 }
@@ -59,20 +61,30 @@ export interface EntryBounds {
  * rather than by anchor.
  */
 export function sliceEntry(page: ExtractedPage, bounds: EntryBounds = {}): ExtractedPage {
-  const { startAnchor, endAnchor, notesEndMarker } = bounds;
+  const { startAnchor, endAnchor, notesStartMarker, notesEndMarker } = bounds;
   const start = startAnchor ? page.body.findIndex((p) => p.anchor === startAnchor) : 0;
   const end = endAnchor ? page.body.findIndex((p) => p.anchor === endAnchor) : page.body.length - 1;
 
   if (start < 0) throw new Error(`start anchor "${startAnchor}" is not on this page`);
   if (end < 0) throw new Error(`end anchor "${endAnchor}" is not on this page`);
 
-  const notes = notesEndMarker
-    ? page.notes
-        .map((note) => (note.includes(notesEndMarker) ? note.slice(0, note.indexOf(notesEndMarker)).trim() : note))
-        .filter(Boolean)
-    : page.notes;
+  const notes = trimNotes(trimNotes(page.notes, notesStartMarker, 'before'), notesEndMarker, 'from');
 
   return { ...page, body: page.body.slice(start, end + 1), notes };
+}
+
+/** Both ends of a shared block are cut the same way, from opposite sides of the marker. */
+function trimNotes(notes: string[], marker: string | undefined, side: 'before' | 'from') {
+  if (!marker) return notes;
+  const carrying = notes.findIndex((note) => note.includes(marker));
+  if (carrying < 0) return notes;
+
+  const note = notes[carrying];
+  const at = note.indexOf(marker);
+  const kept = side === 'before' ? note.slice(at).trim() : note.slice(0, at).trim();
+  const rest = side === 'before' ? notes.slice(carrying + 1) : notes.slice(0, carrying);
+
+  return (side === 'before' ? [kept, ...rest] : [...rest, kept]).filter(Boolean);
 }
 
 /** The work's own text for this page, one paragraph per block. */

@@ -1,0 +1,85 @@
+# Batch: Talhah ibn Ubaydullah, Siyar entry 2
+
+This batch preserves al-Dhahabi's complete entry on Talhah ibn Ubaydullah and
+supports the canonical records selected from it. It follows the
+[data quality and references workflow](../../../../docs/data-quality-references.md)
+and the [Abu Ubaydah pilot](../abu-ubaydah-pilot/summary.md).
+
+- Batch definition: [batch.json](batch.json)
+- Source pages: [accounts/talhah-ibn-ubaydullah/](accounts/talhah-ibn-ubaydullah/)
+
+## Source account
+
+Entry 2 of *Siyar A'lam al-Nubala'*, Risalah third edition (1405/1985), volume
+1, edited by Hussein Asad under Shuayb al-Arnaut. The account spans printed
+pages 23-40. It opens partway down page 23, where Abu Ubaydah's entry ends, so
+that page carries both entries: its text starts at the entry heading and its
+notes at the `(*)` bibliography, leaving the four notes above with entry 1.
+
+## What the entry supports
+
+Twelve claims and nineteen citations, covering his full name, his kunya,
+appearance, virtues, year of death, his three title assignments, his father,
+his companionship of the Prophet, three battles, and one Qur'an link.
+
+The Qur'an link is al-Ahzab 23: the Prophet names him among من قضى نحبه, which
+is that verse's phrase. The entry does not say the verse was revealed about
+him, and the claim asserts only what it does. His other link, Al Imran 172,
+came from the retired seed and the entry never quotes it, so it keeps the
+legacy marker. Ali's use of al-Hijr 47 for himself and Talhah is an
+application, not a revelation, and is not recorded; note that the edition
+prints its reference as [الحجر: ١٥] while the verse it quotes is 47.
+
+The kunya is a field rather than a title assignment: the entry prints أبو محمد
+in its naming line and the people in it address him by it, and a title would
+make it a graph node joining everyone whose eldest son was called Muhammad
+([ADR 0014](../../../../docs/adr/0014-a-kunya-is-a-name.md)).
+
+## What the entry contradicts
+
+**The old seed has him present at Badr.** The entry says the opposite, in
+al-Dhahabi's own voice: he was away on a trading journey in Syria, grieved at
+missing it, and the Prophet assigned him its share and its reward (`25-p3`).
+The participation is kept, because a share was assigned, and it now carries the
+status `ABSENT_EXCUSED` and the passage that says so. Nothing was overwritten
+silently.
+
+**Two accounts of his complexion.** Ibn Mandah describes him as آدم, dark; his
+son Musa describes him as أبيض يضرب إلى الحمرة, fair with a reddish cast. The
+author prefers neither, so the profile follows source order and takes Ibn
+Mandah's, and the claim is marked disputed and carries both.
+
+The seed's own wording, كان أشعر، حسن الوجه، كريم اليد, is a loose paraphrase
+of Ibn Mandah plus his generosity rather than a third account. It is replaced
+by the cited text.
+
+## What the entry is silent about
+
+- **The six of the Shura**: the entry never seats him among them, though the
+  next entry says it of al-Zubayr. The title keeps its `legacy-unreviewed`
+  marker.
+- **Khandaq**: the seed's participation stands uncited, in a new module that
+  exists to carry it rather than leave it unrecorded.
+- **The years of Badr and Uhud**: the entry never dates a battle. Those two
+  years stay owed. Jamal is the exception: the entry puts his killing in 36 AH
+  and puts that killing at Jamal, so the battle's year rests on those two
+  claims, the way the pilot dates the plague of Amwas through the death it
+  caused. A later entry may date the battle outright -- al-Zubayr was killed
+  there too -- and would then cite it directly rather than through him.
+
+## What the model has no shape for yet
+
+The entry names three titles the Prophet gave him, طلحة الفياض, طلحة الخير and
+طلحة الجود, and the last two rest on an isnad al-Dhahabi himself calls weak
+(`30-p5`). The catalog has no module kind for titles, so none of the three is
+recorded; the passages keep them. His wife Umm Kulthum bint Abi Bakr and his
+children are named in the entry and are not in the graph; adding them is a
+later batch's work, not this one's.
+
+## Review
+
+Nothing is reviewed. The ten claims are extracted and authored but no one has
+compared them against the stored pages, so every claim is Not reviewed and the
+batch carries no approval. `npm run catalog:validate` therefore reports each
+cited value as unusable until the batch is approved, which is the gate working
+rather than a defect.

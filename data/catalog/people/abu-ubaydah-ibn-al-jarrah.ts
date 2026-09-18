@@ -1,4 +1,4 @@
-import type { CatalogPerson } from '@/lib/catalog/types';
+import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
 /**
  * Authored from data/history/batches/abu-ubaydah-pilot. Arabic is verbatim and
@@ -18,6 +18,9 @@ const abuUbaydahIbnAlJarrah = {
         'عَامِرُ بنُ عَبْدِ اللهِ بنِ الجَرَّاحِ بنِ هِلاَلِ بنِ أُهَيْبِ بنِ ضَبَّةَ بنِ الحَارِثِ بنِ فِهْرِ بنِ مَالِكِ بنِ النَّضْرِ بنِ كِنَانَةَ بنِ خُزَيْمَةَ بنِ مُدْرِكَةَ بنِ إِلْيَاسَ بنِ مُضَرَ بنِ نِزَارِ بنِ مَعَدِّ بنِ عَدْنَانَ القُرَشِيُّ، الفِهْرِيُّ، المَكِّيُّ.',
       claims: ['abu-ubaydah/full-name'],
     },
+    // The name he is known by, which is why `name` holds it and عامر survives
+    // only inside the full name. A name, not a title (ADR 0014).
+    kunya: { value: 'أَبُو عُبَيْدَةَ', claims: ['abu-ubaydah/kunya'] },
     // Composed from 7-p9 and 23-p6; the latter gives the death year and the
     // dyeing in one sentence, so it backs two fields.
     appearance: {
@@ -48,8 +51,15 @@ const abuUbaydahIbnAlJarrah = {
     { title: 'the-ten-promised-paradise', claims: ['abu-ubaydah/titles'] },
   ],
 
+  ayat: [
+    // Carried from the retired seed. The entry quotes the Qur'an twice -- Al
+    // Imran 200 in Umar's letter to him and al-Hadid 20 in his reply -- but
+    // says of no verse that it was revealed about him, this one included.
+    { surah: 9, ayah: 100, claims: legacyUnreviewed },
+  ],
+
   relations: [
-    { type: 'SON', to: 'abdullah-ibn-al-jarrah', claims: ['abu-ubaydah/full-name'] },
+    { type: 'SON', inverse: 'FATHER', to: 'abdullah-ibn-al-jarrah', claims: ['abu-ubaydah/full-name'] },
     { type: 'COMPANION_OF', to: 'prophet-muhammad', claims: ['abu-ubaydah/companion-of-prophet'] },
   ],
 } satisfies CatalogPerson;

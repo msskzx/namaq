@@ -19,7 +19,7 @@ export function parseSeedRelations(queries: string[]): SeedRelation[] {
 // These relationships are maintained by canonical sync scripts, not the graph seed.
 const SYNC_OWNED_RELATIONS = new Set([
   'COMPANION_OF', 'ACCOMPANIED_BY', 'HOLDS_TITLE',
-  'PARTICIPATED_IN', 'INVOLVED_IN', 'PART_OF',
+  'PARTICIPATED_IN', 'ABSENT_FROM', 'INVOLVED_IN', 'PART_OF',
 ]);
 
 export function findSeedRelationDrift(expected: SeedRelation[], deployed: SeedRelation[]) {

@@ -2,18 +2,23 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { loadCatalog } from '../../src/lib/catalog/loadCatalog';
 import { validateCatalog, type KnownSlugs } from '../../src/lib/catalog/validateCatalog';
-import { batchDefinitionFile } from '../../src/lib/history/loadBatch';
-import type { HistoryBatch } from '../../src/lib/history/batchSchema';
+import { loadBatch } from '../../src/lib/history/loadBatch';
+import { checkApproval } from '../../src/lib/history/batchSchema';
 
 const batchesRoot = 'data/history/batches';
 
-/** Only an approved batch qualifies: an unapproved one may still change. */
+/**
+ * Only an approved batch qualifies: an unapproved one may still change, and so
+ * may one whose files moved since approval. An approval covers a revision, not
+ * a directory, so it is checked the same way the importer checks it.
+ */
 function approvedClaimKeys() {
   const keys = new Set<string>();
   const unapproved: string[] = [];
   for (const dir of readdirSync(batchesRoot)) {
-    const batch = JSON.parse(readFileSync(join(batchesRoot, dir, batchDefinitionFile), 'utf8')) as HistoryBatch;
-    if (!batch.approval) unapproved.push(dir);
+    const { batch, files } = loadBatch(join(batchesRoot, dir));
+    const approval = checkApproval(batch, files);
+    if (!approval.approved) unapproved.push(`${dir} (${approval.reason})`);
     else batch.claims.forEach((claim) => keys.add(claim.key));
   }
   return { keys, unapproved };
@@ -53,7 +58,9 @@ async function main() {
   console.log(
     `catalog: ${catalog.people.length} people, ${catalog.battles.length} battles, ${catalog.events.length} events`,
   );
-  if (unapproved.length > 0) console.log(`batches without approval, claims unusable: ${unapproved.join(', ')}`);
+  if (unapproved.length > 0) {
+    console.log(`batches not approved at their current revision, claims unusable: ${unapproved.join(', ')}`);
+  }
 
   if (issues.length === 0) {
     console.log('no issues');

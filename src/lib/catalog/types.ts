@@ -1,4 +1,4 @@
-import type { EventType, ParticipationStatus } from '@/generated/prisma';
+import type { EventType, ParticipationRelation, ParticipationStatus } from '@/generated/prisma';
 import type { RelationType } from '@/lib/relationship/types';
 
 /** Writable only by the one-time migration, never by an authored module. */
@@ -15,6 +15,7 @@ export interface Cited<T> {
 /** Keys are Prisma `Person` column names; scripts/data/projectCatalog.ts writes them by key. */
 export interface CatalogPersonFields {
   readonly fullName?: Cited<string>;
+  readonly kunya?: Cited<string>;
   readonly appearance?: Cited<string>;
   readonly virtues?: Cited<string>;
   readonly birthYearHijri?: Cited<string>;
@@ -32,10 +33,23 @@ export interface CatalogTitleAssignment {
   readonly claims: Provenance;
 }
 
-/** Declared from one side only; the inverse is RECIPROCAL_INVERSES' job, not an author's. */
+/**
+ * Declared from one side only. The graph stores both, so the projector adds the
+ * reciprocal: RECIPROCAL_INVERSES names it, and `inverse` picks which when that
+ * list offers more than one, since SON's reciprocal is FATHER or MOTHER
+ * depending on a parent's sex, which nothing here records.
+ */
 export interface CatalogRelation {
   readonly type: RelationType;
   readonly to: string;
+  readonly inverse?: RelationType;
+  readonly claims: Provenance;
+}
+
+/** A Qur'an verse the source ties to this person, by surah and ayah number. */
+export interface CatalogAyah {
+  readonly surah: number;
+  readonly ayah: number;
   readonly claims: Provenance;
 }
 
@@ -49,12 +63,27 @@ export interface CatalogPerson {
   readonly fields: CatalogPersonFields;
   readonly titles: readonly CatalogTitleAssignment[];
   readonly relations: readonly CatalogRelation[];
+  readonly ayat?: readonly CatalogAyah[];
 }
+
+/**
+ * Statuses a relation may carry. Attendance is the relation's job and outcome
+ * the status's, so the two sets are disjoint and validateCatalog rejects a
+ * crossing -- see docs/adr/0013-separate-attendance-from-outcome.md.
+ */
+export const STATUSES_BY_RELATION: Record<ParticipationRelation, readonly ParticipationStatus[]> = {
+  PARTICIPATED_IN: ['MARTYRED', 'DIED', 'INJURED', 'CAPTURED', 'WAS_CAPTURED'],
+  ABSENT_FROM: ['ABSENT_EXCUSED'],
+};
 
 export interface CatalogParticipation {
   readonly person: string;
   readonly isMuslim: boolean;
+  /** Omitted means PARTICIPATED_IN: an absence is always stated outright. */
+  readonly relation?: ParticipationRelation;
   readonly status?: readonly ParticipationStatus[];
+  /** What the person did there, in the source's own wording. */
+  readonly summary?: Cited<string>;
   readonly claims: Provenance;
 }
 

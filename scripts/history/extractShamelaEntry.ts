@@ -37,6 +37,7 @@ async function main() {
   const subjectKind = (option('subject-kind') ?? 'PERSON') as SubjectKind;
   const startAnchor = option('start-anchor');
   const endAnchor = option('end-anchor');
+  const notesStartMarker = option('notes-start-marker');
   const notesEndMarker = option('notes-end-marker');
   const accessedAt = option('accessed-at') ?? new Date().toISOString().slice(0, 10);
 
@@ -51,6 +52,7 @@ async function main() {
     const page = sliceEntry(raw, {
       startAnchor: pageId === from ? startAnchor : undefined,
       endAnchor: pageId === to ? endAnchor : undefined,
+      notesStartMarker: pageId === from ? notesStartMarker : undefined,
       notesEndMarker: pageId === to ? notesEndMarker : undefined,
     });
     const sequence = pageId - from + 1;
@@ -70,9 +72,10 @@ async function main() {
       bodyFile,
       notesFile,
       extractionUrl: url,
+      // Anchors only: the paragraph text goes to the page file, and a passage
+      // is read back out of it by position (batchSchema.passageExcerpts).
       passages: page.body.map((paragraph) => ({
         anchor: `${page.printedPage ?? sequence}-${paragraph.anchor}`,
-        excerpt: paragraph.text,
       })),
     });
 

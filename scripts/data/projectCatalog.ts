@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import { PrismaClient } from '../../src/generated/prisma';
 import { loadCatalog } from '../../src/lib/catalog/loadCatalog';
+import { seedAuthoredPeople } from './seedAuthored';
 import type { Catalog, CatalogEventFields, CatalogPersonFields, Cited } from '../../src/lib/catalog/types';
 
 const apply = process.argv.includes('--apply');
@@ -9,12 +10,22 @@ const prisma = new PrismaClient();
 const planned: string[] = [];
 const conflicts: string[] = [];
 
+/**
+ * A person no seed file declares is the catalog's alone, so the database is
+ * made to match: values are written, and a title, Qur'an link or participation
+ * it holds that the catalog does not is removed. While a seed file still
+ * describes someone, the catalog only adds to them and reports the difference.
+ */
+let seedAuthored = new Set<string>();
+const ownedByCatalog = (slug: string) => !seedAuthored.has(slug);
+
 type Column = string | number | null;
 
 /**
- * Fills an empty column and reports a disagreement rather than overwriting one.
- * A live value may carry work no batch has caught up with, and losing it
- * silently is worse than carrying the difference as drift.
+ * Writes the catalog's value, whatever the column holds. The files are the
+ * authority and a row is a copy of them (ADR 0010), so a database value that
+ * disagrees is stale, not evidence. An overwrite is printed rather than done
+ * quietly, because it is the one thing here that loses something.
  */
 function settle(where: string, live: Column, cited: Cited<string | number> | undefined) {
   if (!cited) return undefined;
@@ -22,10 +33,10 @@ function settle(where: string, live: Column, cited: Cited<string | number> | und
     planned.push(`${where}: set to ${JSON.stringify(cited.value)}`);
     return cited.value;
   }
-  if (String(live) !== String(cited.value)) {
-    conflicts.push(`${where}: database has ${JSON.stringify(live)}, catalog has ${JSON.stringify(cited.value)}`);
-  }
-  return undefined;
+  if (String(live) === String(cited.value)) return undefined;
+
+  planned.push(`${where}: overwrite ${JSON.stringify(live)} with ${JSON.stringify(cited.value)}`);
+  return cited.value;
 }
 
 /** Field keys are column names, so an added catalog field projects without editing this. */
@@ -40,9 +51,18 @@ function settleFields(at: string, live: Record<string, unknown>, fields: Catalog
 
 async function projectPeople(people: Catalog['people']) {
   for (const subject of people) {
-    const live = await prisma.person.findUnique({ where: { slug: subject.slug } });
+    let live = await prisma.person.findUnique({ where: { slug: subject.slug } });
+
+    if (!live && subject.hasProfile && ownedByCatalog(subject.slug)) {
+      planned.push(`people/${subject.slug}: create`);
+      if (apply) {
+        live = await prisma.person.create({
+          data: { slug: subject.slug, name: subject.name, nameTransliterated: subject.nameTransliterated },
+        });
+      }
+    }
     if (!live) {
-      conflicts.push(`people/${subject.slug}: no row; creating people is not in this pass`);
+      conflicts.push(`people/${subject.slug}: no row, and a seed file still authors them`);
       continue;
     }
 
@@ -50,6 +70,121 @@ async function projectPeople(people: Catalog['people']) {
     if (apply && Object.keys(set).length > 0) {
       await prisma.person.update({ where: { slug: subject.slug }, data: set });
     }
+
+    await projectTitles(subject);
+    await projectAyat(subject);
+  }
+}
+
+/**
+ * Additive like the titles, and keyed by surah and ayah number rather than by
+ * row id, since the Qur'an tables are seeded separately and own their ids.
+ */
+async function projectAyat(subject: Catalog['people'][number]) {
+  const declared = subject.ayat ?? [];
+  if (declared.length === 0) return;
+
+  const live = await prisma.person.findUnique({
+    where: { slug: subject.slug },
+    select: { id: true, ayat: { select: { number: true, surah: { select: { number: true } } } } },
+  });
+  if (!live) return;
+
+  const held = new Set(live.ayat.map((ayah) => `${ayah.surah.number}:${ayah.number}`));
+  const wanted = new Set(declared.map((entry) => `${entry.surah}:${entry.ayah}`));
+  const ids: { id: string }[] = [];
+
+  for (const entry of declared) {
+    const at = `people/${subject.slug}.ayat.${entry.surah}:${entry.ayah}`;
+    const row = await prisma.ayah.findFirst({
+      where: { number: entry.ayah, surah: { number: entry.surah } },
+      select: { id: true },
+    });
+    if (!row) {
+      conflicts.push(`${at}: no ayah row; run npm run seed:surahs and seed:ayat first`);
+      continue;
+    }
+    if (!held.has(`${entry.surah}:${entry.ayah}`)) planned.push(`${at}: link`);
+    ids.push(row);
+  }
+
+  const extra = [...held].filter((key) => !wanted.has(key));
+  if (extra.length > 0) {
+    const owned = ownedByCatalog(subject.slug);
+    (owned ? planned : conflicts).push(
+      owned
+        ? `people/${subject.slug}: unlink ${extra.join(', ')}`
+        : `people/${subject.slug}.ayat: database holds ${extra.join(', ')}, catalog does not`,
+    );
+  }
+
+  if (apply && ids.length > 0) {
+    const ayat = ownedByCatalog(subject.slug) ? { set: ids } : { connect: ids };
+    await prisma.person.update({ where: { id: live.id }, data: { ayat } });
+  }
+}
+
+/**
+ * A participation the database holds for a catalog-owned person, in a battle
+ * no catalog module puts them in, is a leftover of the seed rows they replaced.
+ */
+async function retireStaleParticipations(catalog: Catalog) {
+  for (const subject of catalog.people) {
+    if (!ownedByCatalog(subject.slug)) continue;
+
+    const declared = new Set(
+      catalog.battles.filter((battle) => battle.participants.some((entry) => entry.person === subject.slug))
+        .map((battle) => battle.slug),
+    );
+    const live = await prisma.battleParticipation.findMany({
+      where: { person: { slug: subject.slug } },
+      select: { id: true, battle: { select: { slug: true } } },
+    });
+
+    const stale = live.filter((row) => !declared.has(row.battle.slug));
+    if (stale.length === 0) continue;
+
+    planned.push(`people/${subject.slug}: drop participation in ${stale.map((row) => row.battle.slug).join(', ')}`);
+    if (apply) {
+      await prisma.battleParticipation.deleteMany({ where: { id: { in: stale.map((row) => row.id) } } });
+    }
+  }
+}
+
+/**
+ * Title assignments are additive, like every other value here: a title the
+ * catalog declares is connected, and one the database holds that the catalog
+ * does not is reported rather than disconnected. Dropping an assignment is a
+ * deletion, and this pass does not delete.
+ */
+async function projectTitles(subject: Catalog['people'][number]) {
+  const live = await prisma.person.findUnique({
+    where: { slug: subject.slug },
+    select: { id: true, titles: { select: { slug: true } } },
+  });
+  if (!live) return;
+
+  const held = new Set(live.titles.map((title) => title.slug));
+  const declared = subject.titles.map((title) => title.title);
+  const added = declared.filter((slug) => !held.has(slug));
+  const extra = [...held].filter((slug) => !declared.includes(slug));
+
+  if (added.length > 0) planned.push(`people/${subject.slug}: hold ${added.join(', ')}`);
+  if (extra.length > 0) {
+    const owned = ownedByCatalog(subject.slug);
+    (owned ? planned : conflicts).push(
+      owned
+        ? `people/${subject.slug}: drop ${extra.join(', ')}`
+        : `people/${subject.slug}.titles: database holds ${extra.join(', ')}, catalog does not`,
+    );
+  }
+  if (added.length === 0 && (extra.length === 0 || !ownedByCatalog(subject.slug))) return;
+
+  if (apply) {
+    const titles = ownedByCatalog(subject.slug)
+      ? { set: declared.map((slug) => ({ slug })) }
+      : { connect: added.map((slug) => ({ slug })) };
+    await prisma.person.update({ where: { id: live.id }, data: { titles } });
   }
 }
 
@@ -70,6 +205,7 @@ async function projectBattles(battles: Catalog['battles']) {
       }
 
       const existing = await prisma.battleParticipation.findFirst({ where: { personId: person.id, battleId: row.id } });
+      const relation = entry.relation ?? 'PARTICIPATED_IN';
       if (existing) {
         const status = [...(entry.status ?? [])];
         if (existing.isMuslim !== entry.isMuslim) {
@@ -78,13 +214,29 @@ async function projectBattles(battles: Catalog['battles']) {
         if (existing.status.join() !== status.join()) {
           conflicts.push(`${at}: database has status [${existing.status}], catalog has [${status}]`);
         }
+        // Attendance is the one thing a seeded row is most likely to have
+        // wrong, since the old shape made presence the unmarked default.
+        if (existing.relation !== relation) {
+          conflicts.push(`${at}: database has ${existing.relation}, catalog has ${relation}`);
+        }
+        const summary = settle(`${at}.summary`, existing.summary, entry.summary);
+        if (apply && summary !== undefined) {
+          await prisma.battleParticipation.update({ where: { id: existing.id }, data: { summary: String(summary) } });
+        }
         continue;
       }
 
-      planned.push(`battles/${battle.slug}: add ${entry.person}`);
+      planned.push(`battles/${battle.slug}: add ${entry.person} as ${relation}`);
       if (apply) {
         await prisma.battleParticipation.create({
-          data: { personId: person.id, battleId: row.id, isMuslim: entry.isMuslim, status: [...(entry.status ?? [])] },
+          data: {
+            personId: person.id,
+            battleId: row.id,
+            isMuslim: entry.isMuslim,
+            relation,
+            status: [...(entry.status ?? [])],
+            summary: entry.summary?.value,
+          },
         });
       }
     }
@@ -136,9 +288,11 @@ async function projectEvents(events: Catalog['events']) {
 
 async function main() {
   const catalog = await loadCatalog();
+  seedAuthored = seedAuthoredPeople();
   await projectPeople(catalog.people);
   await projectBattles(catalog.battles);
   await projectEvents(catalog.events);
+  await retireStaleParticipations(catalog);
 
   console.log(apply ? 'APPLYING' : 'DRY RUN (pass --apply to write)');
   console.log(`\n${planned.length} change(s):`);

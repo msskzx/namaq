@@ -16,6 +16,7 @@ const LINEAGE_RELATION_IDS: ReadonlySet<ExpansionRelationId> = new Set(LINEAGE_A
 const ONE_WAY_RELATIONS: ReadonlySet<ExpansionRelationId> = new Set([
   'HOLDS_TITLE',
   'PARTICIPATED_IN',
+  'ABSENT_FROM',
   'INVOLVED_IN',
   'PART_OF',
 ]);

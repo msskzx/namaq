@@ -62,6 +62,22 @@ describe('sliceEntry', () => {
     expect(sliced.notes).toEqual(['(٤) الكتم: نبت.']);
   });
 
+  it("drops the previous entry's notes from a shared page", () => {
+    const page = extractShamelaPage(
+      pageDocument(`${samplePage.replace('(*) مسند أحمد: ١ / ١٩٥', '(٤) الكتم: نبت.(*) مسند أحمد: ١ / ١٦٠')}`),
+    );
+
+    const sliced = sliceEntry(page, { startAnchor: 'p3', notesStartMarker: '(*)' });
+
+    expect(sliced.notes).toEqual(['(*) مسند أحمد: ١ / ١٦٠']);
+  });
+
+  it('keeps the notes whole when the marker is not on the page', () => {
+    const page = extractShamelaPage(pageDocument(samplePage));
+
+    expect(sliceEntry(page, { notesStartMarker: '(١)' }).notes).toEqual(['(*) مسند أحمد: ١ / ١٩٥']);
+  });
+
   it('refuses an anchor that is not on the page', () => {
     const page = extractShamelaPage(pageDocument(samplePage));
 

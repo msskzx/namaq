@@ -1,7 +1,7 @@
 /**
  * The properties shared by a battle in PostgreSQL and its node in Neo4j, and
- * by a BattleParticipation row and its PARTICIPATED_IN relationship. Slugs
- * are the stable cross-database identifiers, same as canonicalPeople.ts.
+ * by a BattleParticipation row and the relationship it becomes. Slugs are the
+ * stable cross-database identifiers, same as canonicalPeople.ts.
  */
 export type CanonicalBattle = {
   slug: string;
@@ -15,9 +15,11 @@ export type CanonicalBattle = {
 export type CanonicalParticipation = {
   personSlug: string;
   battleSlug: string;
+  /** The relationship type the row becomes: PARTICIPATED_IN or ABSENT_FROM. */
+  relation: string;
   status: string[];
   isMuslim: boolean;
-  courage: string | null;
+  summary: string | null;
 };
 
 export type BattleMismatch = {
@@ -158,12 +160,22 @@ export function reconcileBattles(
         neo4j: graphParticipation.isMuslim,
       });
     }
-    if (comparableString(postgresParticipation.courage) !== comparableString(graphParticipation.courage)) {
+    if (comparableString(postgresParticipation.summary) !== comparableString(graphParticipation.summary)) {
       participationMismatches.push({
         key,
-        field: 'courage',
-        postgres: postgresParticipation.courage,
-        neo4j: graphParticipation.courage,
+        field: 'summary',
+        postgres: postgresParticipation.summary,
+        neo4j: graphParticipation.summary,
+      });
+    }
+    // A row that changed attendance leaves its old edge behind, since the sync
+    // only ever MERGEs. Reporting it is how that shows up.
+    if (postgresParticipation.relation !== graphParticipation.relation) {
+      participationMismatches.push({
+        key,
+        field: 'relation',
+        postgres: postgresParticipation.relation,
+        neo4j: graphParticipation.relation,
       });
     }
   }

@@ -18,12 +18,13 @@ const battleGraphQuery = `
 `;
 
 const participationGraphQuery = `
-  MATCH (person:Person)-[rel:PARTICIPATED_IN]->(battle:Battle)
+  MATCH (person:Person)-[rel:PARTICIPATED_IN|ABSENT_FROM]->(battle:Battle)
   RETURN person.slug AS personSlug,
          battle.slug AS battleSlug,
+         type(rel) AS relation,
          rel.status AS status,
          rel.isMuslim AS isMuslim,
-         rel.courage AS courage
+         rel.summary AS summary
 `;
 
 const battleUpsertQuery = `
@@ -44,13 +45,18 @@ const battleUpsertQuery = `
 // already have a synced node. A participation whose person or battle node is
 // missing is silently skipped here and stays reported as postgresOnly until
 // that node exists (via people:sync or a battles:sync re-run).
-const participationUpsertQuery = `
+//
+// One query per relationship type, because Cypher cannot parameterize one. This
+// still only ever MERGEs: a row that moved between the two types leaves its old
+// edge in place, reported as a relation mismatch and removed by hand (see
+// docs/battle-participation-model.md).
+const participationUpsertQuery = (relation: string) => `
   UNWIND $participations AS p
   MATCH (person:Person {slug: p.personSlug}), (battle:Battle {slug: p.battleSlug})
-  MERGE (person)-[rel:PARTICIPATED_IN]->(battle)
+  MERGE (person)-[rel:${relation}]->(battle)
   SET rel.status = p.status, rel.isMuslim = p.isMuslim
-  FOREACH (_ IN CASE WHEN p.courage IS NULL THEN [] ELSE [1] END |
-    SET rel.courage = p.courage)
+  FOREACH (_ IN CASE WHEN p.summary IS NULL THEN [] ELSE [1] END |
+    SET rel.summary = p.summary)
 `;
 
 function printList(label: string, items: string[]) {
@@ -64,9 +70,10 @@ async function main() {
   });
   const postgresParticipationRows = await prisma.battleParticipation.findMany({
     select: {
+      relation: true,
       status: true,
       isMuslim: true,
-      courage: true,
+      summary: true,
       person: { select: { slug: true } },
       battle: { select: { slug: true } },
     },
@@ -74,9 +81,10 @@ async function main() {
   const postgresParticipations: CanonicalParticipation[] = postgresParticipationRows.map((row) => ({
     personSlug: row.person.slug,
     battleSlug: row.battle.slug,
+    relation: row.relation,
     status: row.status,
     isMuslim: row.isMuslim,
-    courage: row.courage,
+    summary: row.summary,
   }));
 
   const session = getDriver().session({
@@ -101,9 +109,10 @@ async function main() {
     const graphParticipations: CanonicalParticipation[] = participationResult.records.map((record) => ({
       personSlug: record.get('personSlug') ?? '',
       battleSlug: record.get('battleSlug') ?? '',
+      relation: record.get('relation') ?? 'PARTICIPATED_IN',
       status: record.get('status') ?? [],
       isMuslim: record.get('isMuslim') ?? false,
-      courage: record.get('courage') ?? null,
+      summary: record.get('summary') ?? null,
     }));
 
     const report = reconcileBattles(postgresBattles, graphBattles, postgresParticipations, graphParticipations);
@@ -152,7 +161,10 @@ async function main() {
         // they never delete nodes, relationships, or Neo4j-only properties.
         await writeSession.executeWrite(async (transaction) => {
           await transaction.run(battleUpsertQuery, { battles: postgresBattles });
-          await transaction.run(participationUpsertQuery, { participations: postgresParticipations });
+          for (const relation of ['PARTICIPATED_IN', 'ABSENT_FROM']) {
+            const participations = postgresParticipations.filter((p) => p.relation === relation);
+            if (participations.length) await transaction.run(participationUpsertQuery(relation), { participations });
+          }
         });
         console.log(`Synchronized ${postgresBattles.length} battles and ${postgresParticipations.length} participations to Neo4j.`);
       } finally {

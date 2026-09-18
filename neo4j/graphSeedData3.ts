@@ -2,8 +2,11 @@
  * Ancestor chains sourced from "سير أعلام النبلاء" (al-Dhahabi), filling in
  * the missing parent nodes for companions that already exist as Person
  * profiles but had no FATHER/SON chain in the graph:
- *   - abu-ubaydah-ibn-al-jarrah, talhah-ibn-ubaydullah, az-zubayr-ibn-al-awwam,
- *     abdur-rahman-ibn-awf, saad-ibn-abi-waqqas, saeed-ibn-zaid
+ *   - az-zubayr-ibn-al-awwam, abdur-rahman-ibn-awf, saad-ibn-abi-waqqas,
+ *     saeed-ibn-zaid
+ * The chains for abu-ubaydah-ibn-al-jarrah and talhah-ibn-ubaydullah start
+ * here too, but their own edge to their father is the catalog's now, authored
+ * with its citation and written by npm run catalog:project-graph.
  * plus the ancestor chains for batch 1 of newly added companions
  * (prisma/personSeedData4.ts): musab-ibn-umayr, abu-salamah, uthman-ibn-mazun,
  * qudamah-ibn-mazun, abdullah-ibn-mazun-al-jumahi, as-saib-ibn-uthman,
@@ -111,8 +114,6 @@ export const peopleQueries = [
  */
 export const peopleRelationsQueries = [
   // Abu Ubaydah ibn al-Jarrah
-  'MATCH (from:Person {slug: "abu-ubaydah-ibn-al-jarrah"}), (to:Person {slug: "abdullah-ibn-al-jarrah"}) CREATE (from)-[:SON]->(to);',
-  'MATCH (from:Person {slug: "abdullah-ibn-al-jarrah"}), (to:Person {slug: "abu-ubaydah-ibn-al-jarrah"}) CREATE (from)-[:FATHER]->(to);',
 
   'MATCH (from:Person {slug: "abdullah-ibn-al-jarrah"}), (to:Person {slug: "al-jarrah-ibn-hilal"}) CREATE (from)-[:SON]->(to);',
   'MATCH (from:Person {slug: "al-jarrah-ibn-hilal"}), (to:Person {slug: "abdullah-ibn-al-jarrah"}) CREATE (from)-[:FATHER]->(to);',
@@ -133,8 +134,6 @@ export const peopleRelationsQueries = [
   'MATCH (from:Person {slug: "fahar-ibn-malik"}), (to:Person {slug: "al-harith-ibn-fahr"}) CREATE (from)-[:FATHER]->(to);',
 
   // Talhah ibn Ubaydullah
-  'MATCH (from:Person {slug: "talhah-ibn-ubaydullah"}), (to:Person {slug: "ubaydullah-ibn-uthman"}) CREATE (from)-[:SON]->(to);',
-  'MATCH (from:Person {slug: "ubaydullah-ibn-uthman"}), (to:Person {slug: "talhah-ibn-ubaydullah"}) CREATE (from)-[:FATHER]->(to);',
 
   'MATCH (from:Person {slug: "ubaydullah-ibn-uthman"}), (to:Person {slug: "uthman-ibn-amr"}) CREATE (from)-[:SON]->(to);',
   'MATCH (from:Person {slug: "uthman-ibn-amr"}), (to:Person {slug: "ubaydullah-ibn-uthman"}) CREATE (from)-[:FATHER]->(to);',

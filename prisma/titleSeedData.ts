@@ -97,11 +97,6 @@ export const titles = [
     slug: 'amin-al-ummah',
   },
   {
-    name: 'أبو الحسن',
-    nameTransliterated: 'Abu al-Hasan',
-    slug: 'abu-al-hasan',
-  },
-  {
     name: 'السابقون',
     nameTransliterated: 'Al-Sabiqoon',
     slug: 'al-sabiqoon',
