@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import { PrismaClient } from '../../src/generated/prisma';
 import { loadCatalog } from '../../src/lib/catalog/loadCatalog';
+import { seedAuthoredPeople } from './seedAuthored';
 import type { Catalog, CatalogEventFields, CatalogPersonFields, Cited } from '../../src/lib/catalog/types';
 
 const apply = process.argv.includes('--apply');
@@ -8,6 +9,15 @@ const prisma = new PrismaClient();
 
 const planned: string[] = [];
 const conflicts: string[] = [];
+
+/**
+ * A person no seed file declares is the catalog's alone, so the database is
+ * made to match: values are written, and a title, Qur'an link or participation
+ * it holds that the catalog does not is removed. While a seed file still
+ * describes someone, the catalog only adds to them and reports the difference.
+ */
+let seedAuthored = new Set<string>();
+const ownedByCatalog = (slug: string) => !seedAuthored.has(slug);
 
 type Column = string | number | null;
 
@@ -41,9 +51,18 @@ function settleFields(at: string, live: Record<string, unknown>, fields: Catalog
 
 async function projectPeople(people: Catalog['people']) {
   for (const subject of people) {
-    const live = await prisma.person.findUnique({ where: { slug: subject.slug } });
+    let live = await prisma.person.findUnique({ where: { slug: subject.slug } });
+
+    if (!live && subject.hasProfile && ownedByCatalog(subject.slug)) {
+      planned.push(`people/${subject.slug}: create`);
+      if (apply) {
+        live = await prisma.person.create({
+          data: { slug: subject.slug, name: subject.name, nameTransliterated: subject.nameTransliterated },
+        });
+      }
+    }
     if (!live) {
-      conflicts.push(`people/${subject.slug}: no row; creating people is not in this pass`);
+      conflicts.push(`people/${subject.slug}: no row, and a seed file still authors them`);
       continue;
     }
 
@@ -72,12 +91,11 @@ async function projectAyat(subject: Catalog['people'][number]) {
   if (!live) return;
 
   const held = new Set(live.ayat.map((ayah) => `${ayah.surah.number}:${ayah.number}`));
-  const connect: { id: string }[] = [];
+  const wanted = new Set(declared.map((entry) => `${entry.surah}:${entry.ayah}`));
+  const ids: { id: string }[] = [];
 
   for (const entry of declared) {
     const at = `people/${subject.slug}.ayat.${entry.surah}:${entry.ayah}`;
-    if (held.has(`${entry.surah}:${entry.ayah}`)) continue;
-
     const row = await prisma.ayah.findFirst({
       where: { number: entry.ayah, surah: { number: entry.surah } },
       select: { id: true },
@@ -86,12 +104,50 @@ async function projectAyat(subject: Catalog['people'][number]) {
       conflicts.push(`${at}: no ayah row; run npm run seed:surahs and seed:ayat first`);
       continue;
     }
-    planned.push(`${at}: link`);
-    connect.push({ id: row.id });
+    if (!held.has(`${entry.surah}:${entry.ayah}`)) planned.push(`${at}: link`);
+    ids.push(row);
   }
 
-  if (apply && connect.length > 0) {
-    await prisma.person.update({ where: { id: live.id }, data: { ayat: { connect } } });
+  const extra = [...held].filter((key) => !wanted.has(key));
+  if (extra.length > 0) {
+    const owned = ownedByCatalog(subject.slug);
+    (owned ? planned : conflicts).push(
+      owned
+        ? `people/${subject.slug}: unlink ${extra.join(', ')}`
+        : `people/${subject.slug}.ayat: database holds ${extra.join(', ')}, catalog does not`,
+    );
+  }
+
+  if (apply && ids.length > 0) {
+    const ayat = ownedByCatalog(subject.slug) ? { set: ids } : { connect: ids };
+    await prisma.person.update({ where: { id: live.id }, data: { ayat } });
+  }
+}
+
+/**
+ * A participation the database holds for a catalog-owned person, in a battle
+ * no catalog module puts them in, is a leftover of the seed rows they replaced.
+ */
+async function retireStaleParticipations(catalog: Catalog) {
+  for (const subject of catalog.people) {
+    if (!ownedByCatalog(subject.slug)) continue;
+
+    const declared = new Set(
+      catalog.battles.filter((battle) => battle.participants.some((entry) => entry.person === subject.slug))
+        .map((battle) => battle.slug),
+    );
+    const live = await prisma.battleParticipation.findMany({
+      where: { person: { slug: subject.slug } },
+      select: { id: true, battle: { select: { slug: true } } },
+    });
+
+    const stale = live.filter((row) => !declared.has(row.battle.slug));
+    if (stale.length === 0) continue;
+
+    planned.push(`people/${subject.slug}: drop participation in ${stale.map((row) => row.battle.slug).join(', ')}`);
+    if (apply) {
+      await prisma.battleParticipation.deleteMany({ where: { id: { in: stale.map((row) => row.id) } } });
+    }
   }
 }
 
@@ -102,8 +158,6 @@ async function projectAyat(subject: Catalog['people'][number]) {
  * deletion, and this pass does not delete.
  */
 async function projectTitles(subject: Catalog['people'][number]) {
-  if (subject.titles.length === 0) return;
-
   const live = await prisma.person.findUnique({
     where: { slug: subject.slug },
     select: { id: true, titles: { select: { slug: true } } },
@@ -111,17 +165,26 @@ async function projectTitles(subject: Catalog['people'][number]) {
   if (!live) return;
 
   const held = new Set(live.titles.map((title) => title.slug));
-  const declared = new Set(subject.titles.map((title) => title.title));
-  const connect = subject.titles.filter((title) => !held.has(title.title)).map((title) => ({ slug: title.title }));
+  const declared = subject.titles.map((title) => title.title);
+  const added = declared.filter((slug) => !held.has(slug));
+  const extra = [...held].filter((slug) => !declared.includes(slug));
 
-  [...held].filter((slug) => !declared.has(slug)).forEach((slug) => {
-    conflicts.push(`people/${subject.slug}.titles: database holds ${slug}, catalog does not`);
-  });
+  if (added.length > 0) planned.push(`people/${subject.slug}: hold ${added.join(', ')}`);
+  if (extra.length > 0) {
+    const owned = ownedByCatalog(subject.slug);
+    (owned ? planned : conflicts).push(
+      owned
+        ? `people/${subject.slug}: drop ${extra.join(', ')}`
+        : `people/${subject.slug}.titles: database holds ${extra.join(', ')}, catalog does not`,
+    );
+  }
+  if (added.length === 0 && (extra.length === 0 || !ownedByCatalog(subject.slug))) return;
 
-  if (connect.length === 0) return;
-  planned.push(`people/${subject.slug}: hold ${connect.map((title) => title.slug).join(', ')}`);
   if (apply) {
-    await prisma.person.update({ where: { id: live.id }, data: { titles: { connect } } });
+    const titles = ownedByCatalog(subject.slug)
+      ? { set: declared.map((slug) => ({ slug })) }
+      : { connect: added.map((slug) => ({ slug })) };
+    await prisma.person.update({ where: { id: live.id }, data: { titles } });
   }
 }
 
@@ -225,9 +288,11 @@ async function projectEvents(events: Catalog['events']) {
 
 async function main() {
   const catalog = await loadCatalog();
+  seedAuthored = seedAuthoredPeople();
   await projectPeople(catalog.people);
   await projectBattles(catalog.battles);
   await projectEvents(catalog.events);
+  await retireStaleParticipations(catalog);
 
   console.log(apply ? 'APPLYING' : 'DRY RUN (pass --apply to write)');
   console.log(`\n${planned.length} change(s):`);

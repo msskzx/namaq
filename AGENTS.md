@@ -139,10 +139,15 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   fields, titles, participations, Qur'an links and their one cited relation, and
   `npm run catalog:project` / `catalog:project-graph` write them. Everyone else
   still comes from the seeds, so both paths are live at once.
-- The catalog wins over a database row. `catalog:project` overwrites a column
-  that disagrees and prints what it replaced, because `data/` is the authority
-  and a row is a copy of it (ADR 0010). It still never removes a record: a title
-  or participation the database holds and the catalog does not is reported.
+- The catalog wins over a database row, always. `data/` is the authority and a
+  row is a copy of it (ADR 0010), so nothing a store holds is evidence of
+  anything. For a person no seed file declares, `catalog:project` and
+  `catalog:project-graph` make the stores match the files outright: values are
+  overwritten, and a title, Qur'an link, participation or person relation the
+  store holds and the catalog does not is removed. While a seed file still
+  describes someone, the catalog only adds to them and reports the difference,
+  since the seed is that subject's author until its entry is deleted. Every
+  change is printed, and `--apply` is what writes.
 - **Seed files are a checklist, never a source.** The people, battle and event
   seeds under `prisma/` and `neo4j/` were extracted from Siyar A'lam al-Nubala'
   by an earlier agent without citations, so their values are mostly right and

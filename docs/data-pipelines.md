@@ -66,6 +66,16 @@ Neither is a bug to fix in passing. Both mean a canonical edit to an affected
 subject needs a deliberate writer, and that the file and the database can
 disagree without anything noticing.
 
+### The files decide, subject by subject
+
+`catalog:project` and `catalog:project-graph` make the stores match the catalog
+for any person no seed file declares: values are overwritten, and a title,
+Qur'an link, participation or relation a store holds and the catalog does not is
+removed. For a person a seed file still describes, the catalog only adds and the
+difference is reported, because the seed is that subject's author until its
+entry goes. Deleting someone's seed entry is therefore what hands the catalog
+authority over them; nothing else has to be declared or remembered.
+
 ### Two subjects have left the seeds
 
 Abu Ubaydah ibn al-Jarrah and Talhah ibn Ubaydullah are authored in the catalog
