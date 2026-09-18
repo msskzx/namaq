@@ -69,8 +69,8 @@ disagree without anything noticing.
 ### Two subjects have left the seeds
 
 Abu Ubaydah ibn al-Jarrah and Talhah ibn Ubaydullah are authored in the catalog
-instead. Their seed entries keep only their Qur'an links, which the catalog has
-no shape for, and their rows in `neo4j/graphSeedData*.ts` are gone: their nodes
+instead. Their seed entries are gone, Qur'an links included, and so are their
+rows in `neo4j/graphSeedData*.ts`: their nodes
 come from PostgreSQL through `people:sync`, and their edge to their father is
 cited in the catalog and written by `catalog:project-graph`. The ancestors above
 those fathers are still the graph seeds' own.

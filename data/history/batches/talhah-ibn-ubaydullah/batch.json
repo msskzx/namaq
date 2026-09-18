@@ -1085,6 +1085,35 @@
         }
       ],
       "field": "virtues"
+    },
+    {
+      "key": "talhah/qada-nahbahu",
+      "subjectKind": "PERSON",
+      "subjectSlug": "talhah-ibn-ubaydullah",
+      "field": "ayat",
+      "assertion": "سمّاه النبي صلى الله عليه وسلم ممن قضى نحبه، وهي عبارة آية الأحزاب: {فمنهم من قضى نحبه}.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "28-p9",
+          "volume": "1",
+          "pageReference": "28",
+          "extractionUrl": "https://shamela.ws/book/10906/1454",
+          "excerptArabic": "قَالَ: (هَذَا مِمَّنْ قَضَى نَحْبَهُ (٢)) .",
+          "accessedAt": "2026-09-17"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "28-p11",
+          "volume": "1",
+          "pageReference": "28",
+          "extractionUrl": "https://shamela.ws/book/10906/1454",
+          "excerptArabic": "قَالَ: سَمِعْتُ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَقُوْلُ: (طَلْحَةُ مِمَّنْ قَضَى نَحْبَهُ) (٣) .",
+          "accessedAt": "2026-09-17"
+        }
+      ]
     }
   ]
 }

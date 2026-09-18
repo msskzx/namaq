@@ -18,9 +18,17 @@ notes at the `(*)` bibliography, leaving the four notes above with entry 1.
 
 ## What the entry supports
 
-Eleven claims and seventeen citations, covering his full name, his kunya,
+Twelve claims and nineteen citations, covering his full name, his kunya,
 appearance, virtues, year of death, his three title assignments, his father,
-his companionship of the Prophet, and three battles.
+his companionship of the Prophet, three battles, and one Qur'an link.
+
+The Qur'an link is al-Ahzab 23: the Prophet names him among من قضى نحبه, which
+is that verse's phrase. The entry does not say the verse was revealed about
+him, and the claim asserts only what it does. His other link, Al Imran 172,
+came from the retired seed and the entry never quotes it, so it keeps the
+legacy marker. Ali's use of al-Hijr 47 for himself and Talhah is an
+application, not a revelation, and is not recorded; note that the edition
+prints its reference as [الحجر: ١٥] while the verse it quotes is 47.
 
 The kunya is a field rather than a title assignment: the entry prints أبو محمد
 in its naming line and the people in it address him by it, and a title would

@@ -38,6 +38,12 @@ export function validateCatalog(catalog: Catalog, known: KnownSlugs): CatalogIss
       checkProvenance(title.claims, known, `${at}.titles.${title.title}`, issues);
       if (!known.titles.has(title.title)) issues.push({ path: at, message: `unknown title ${title.title}` });
     });
+    (subject.ayat ?? []).forEach((ayah) => {
+      const at_ = `${at}.ayat.${ayah.surah}:${ayah.ayah}`;
+      checkProvenance(ayah.claims, known, at_, issues);
+      if (ayah.surah < 1 || ayah.surah > 114) issues.push({ path: at_, message: `no surah ${ayah.surah}` });
+      if (ayah.ayah < 1) issues.push({ path: at_, message: `no ayah ${ayah.ayah}` });
+    });
     subject.relations.forEach((relation) => {
       const to = `${at}.relations.${relation.type}`;
       checkProvenance(relation.claims, known, to, issues);

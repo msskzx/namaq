@@ -51,6 +51,16 @@ const talhahIbnUbaydullah = {
     { title: 'the-six-of-the-shura', claims: legacyUnreviewed },
   ],
 
+  ayat: [
+    // The Prophet names him among من قضى نحبه, the phrase of al-Ahzab 23. The
+    // entry never says the verse was revealed about him, and the claim's
+    // assertion says only what it does.
+    { surah: 33, ayah: 23, claims: ['talhah/qada-nahbahu'] },
+    // Carried from the retired seed, which read this verse as his. The entry
+    // never quotes it, so its evidence is owed.
+    { surah: 3, ayah: 172, claims: legacyUnreviewed },
+  ],
+
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'ubaydullah-ibn-uthman', claims: ['talhah/father'] },
     { type: 'COMPANION_OF', to: 'prophet-muhammad', claims: ['talhah/companion-of-prophet'] },

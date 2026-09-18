@@ -1,4 +1,9 @@
-// Arabic seed data for people and their relations
+// Arabic seed data for people and their relations.
+//
+// Abu Ubaydah ibn al-Jarrah and Talhah ibn Ubaydullah are not here: they are
+// authored in data/catalog/people/, from the source, with their citations, and
+// written by npm run catalog:project and catalog:project-graph. Their Qur'an
+// links moved with them.
 
 export const people = [
   {
@@ -111,17 +116,7 @@ export const people = [
       { surah: 3, ayah: 172 }, // آل عمران: 172 - "الذين استجابوا لله والرسول..." (بعد أحد – والزبير منهم)
     ]
   },
-  {
-    // Everything else lives in data/catalog/people/talhah-ibn-ubaydullah.ts, authored
-    // from the source with its citations. The Qur'an links stay here because
-    // the catalog has no shape for them: they are outside its scope by design.
-    name: 'طلحة بن عبيد الله',
-    slug: 'talhah-ibn-ubaydullah',
-    ayat: [
-      { surah: 3, ayah: 172 }, // آل عمران: 172 - مثل الزبير (في غزوة حمراء الأسد)
-    ]
-  },
-  {
+    {
     name: 'عبد الرحمن بن عوف',
     fullName: 'عبد الرحمن بن عوف بن عبد عوف الزهري القرشي',
     slug: 'abdur-rahman-ibn-awf',
@@ -145,17 +140,7 @@ export const people = [
       { surah: 9, ayah: 100 }, // التوبة: 100 - "والسابقون الأولون من المهاجرين..." (وهو من السابقين)
     ]
   },
-  {
-    // Everything else lives in data/catalog/people/abu-ubaydah-ibn-al-jarrah.ts, authored
-    // from the source with its citations. The Qur'an links stay here because
-    // the catalog has no shape for them: they are outside its scope by design.
-    name: 'أبو عبيدة بن الجراح',
-    slug: 'abu-ubaydah-ibn-al-jarrah',
-    ayat: [
-      { surah: 9, ayah: 100 }, // التوبة: 100 - "والسابقون الأولون من المهاجرين..." (وهو من السابقين)
-    ]
-  },
-  // Wives of the Prophet (Peace be upon him)
+    // Wives of the Prophet (Peace be upon him)
   {
     name: 'خديجة بنت خويلد',
     fullName: 'خديجة بنت خويلد بن أسد بن عبد العزى بن قصي القرشية الأسدية',

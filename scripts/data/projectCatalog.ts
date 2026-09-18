@@ -12,9 +12,10 @@ const conflicts: string[] = [];
 type Column = string | number | null;
 
 /**
- * Fills an empty column and reports a disagreement rather than overwriting one.
- * A live value may carry work no batch has caught up with, and losing it
- * silently is worse than carrying the difference as drift.
+ * Writes the catalog's value, whatever the column holds. The files are the
+ * authority and a row is a copy of them (ADR 0010), so a database value that
+ * disagrees is stale, not evidence. An overwrite is printed rather than done
+ * quietly, because it is the one thing here that loses something.
  */
 function settle(where: string, live: Column, cited: Cited<string | number> | undefined) {
   if (!cited) return undefined;
@@ -22,10 +23,10 @@ function settle(where: string, live: Column, cited: Cited<string | number> | und
     planned.push(`${where}: set to ${JSON.stringify(cited.value)}`);
     return cited.value;
   }
-  if (String(live) !== String(cited.value)) {
-    conflicts.push(`${where}: database has ${JSON.stringify(live)}, catalog has ${JSON.stringify(cited.value)}`);
-  }
-  return undefined;
+  if (String(live) === String(cited.value)) return undefined;
+
+  planned.push(`${where}: overwrite ${JSON.stringify(live)} with ${JSON.stringify(cited.value)}`);
+  return cited.value;
 }
 
 /** Field keys are column names, so an added catalog field projects without editing this. */
@@ -52,6 +53,45 @@ async function projectPeople(people: Catalog['people']) {
     }
 
     await projectTitles(subject);
+    await projectAyat(subject);
+  }
+}
+
+/**
+ * Additive like the titles, and keyed by surah and ayah number rather than by
+ * row id, since the Qur'an tables are seeded separately and own their ids.
+ */
+async function projectAyat(subject: Catalog['people'][number]) {
+  const declared = subject.ayat ?? [];
+  if (declared.length === 0) return;
+
+  const live = await prisma.person.findUnique({
+    where: { slug: subject.slug },
+    select: { id: true, ayat: { select: { number: true, surah: { select: { number: true } } } } },
+  });
+  if (!live) return;
+
+  const held = new Set(live.ayat.map((ayah) => `${ayah.surah.number}:${ayah.number}`));
+  const connect: { id: string }[] = [];
+
+  for (const entry of declared) {
+    const at = `people/${subject.slug}.ayat.${entry.surah}:${entry.ayah}`;
+    if (held.has(`${entry.surah}:${entry.ayah}`)) continue;
+
+    const row = await prisma.ayah.findFirst({
+      where: { number: entry.ayah, surah: { number: entry.surah } },
+      select: { id: true },
+    });
+    if (!row) {
+      conflicts.push(`${at}: no ayah row; run npm run seed:surahs and seed:ayat first`);
+      continue;
+    }
+    planned.push(`${at}: link`);
+    connect.push({ id: row.id });
+  }
+
+  if (apply && connect.length > 0) {
+    await prisma.person.update({ where: { id: live.id }, data: { ayat: { connect } } });
   }
 }
 

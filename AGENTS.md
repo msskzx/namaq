@@ -135,10 +135,14 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   <batch dir>` before proposing a batch, and `npm run history:import -- <batch
   dir>` for a dry run. Import applies only the revision recorded as approved in
   `batch.json`, so any edit after approval needs approving again.
-- Abu Ubaydah and Talhah no longer have seed entries beyond their Qur'an links:
-  the catalog holds their fields, titles, participations and their one cited
-  relation, and `npm run catalog:project` / `catalog:project-graph` write them.
-  Everyone else still comes from the seeds, so both paths are live at once.
+- Abu Ubaydah and Talhah have no seed entries at all: the catalog holds their
+  fields, titles, participations, Qur'an links and their one cited relation, and
+  `npm run catalog:project` / `catalog:project-graph` write them. Everyone else
+  still comes from the seeds, so both paths are live at once.
+- The catalog wins over a database row. `catalog:project` overwrites a column
+  that disagrees and prints what it replaced, because `data/` is the authority
+  and a row is a copy of it (ADR 0010). It still never removes a record: a title
+  or participation the database holds and the catalog does not is reported.
 - **Seed files are a checklist, never a source.** The people, battle and event
   seeds under `prisma/` and `neo4j/` were extracted from Siyar A'lam al-Nubala'
   by an earlier agent without citations, so their values are mostly right and

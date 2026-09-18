@@ -46,6 +46,13 @@ export interface CatalogRelation {
   readonly claims: Provenance;
 }
 
+/** A Qur'an verse the source ties to this person, by surah and ayah number. */
+export interface CatalogAyah {
+  readonly surah: number;
+  readonly ayah: number;
+  readonly claims: Provenance;
+}
+
 export interface CatalogPerson {
   readonly kind: 'PERSON';
   readonly slug: string;
@@ -56,6 +63,7 @@ export interface CatalogPerson {
   readonly fields: CatalogPersonFields;
   readonly titles: readonly CatalogTitleAssignment[];
   readonly relations: readonly CatalogRelation[];
+  readonly ayat?: readonly CatalogAyah[];
 }
 
 /**

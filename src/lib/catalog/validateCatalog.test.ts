@@ -134,6 +134,15 @@ describe('validateCatalog', () => {
     ]);
   });
 
+  it('checks an ayah reference for a surah and ayah that exist', () => {
+    const subject = person({ ayat: [{ surah: 115, ayah: 0, claims: ['pilot/one'] }] });
+
+    expect(validateCatalog(catalog({ people: [subject] }), known)).toEqual([
+      { path: 'people/someone.ayat.115:0', message: 'no surah 115' },
+      { path: 'people/someone.ayat.115:0', message: 'no ayah 0' },
+    ]);
+  });
+
   it('checks battle and event references the same way', () => {
     const subject = catalog({
       battles: [{ kind: 'BATTLE', slug: 'not-a-battle', participants: [{ person: 'prophet-muhammad', isMuslim: true, claims: ['pilot/one'] }] }],

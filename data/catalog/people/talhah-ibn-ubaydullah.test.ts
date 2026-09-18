@@ -85,6 +85,16 @@ describe('Talhah ibn Ubaydullah in the catalog', () => {
     expect(jamal.fields?.hijriYear?.value).toBe(36);
   });
 
+  // The Qur'an links are authored here too, now that his seed entry is gone:
+  // one the entry supports, one carried from that entry with its evidence owed.
+  it('carries both Qur\'an links, only one of them cited', () => {
+    expect(person.ayat).toEqual([
+      { surah: 33, ayah: 23, claims: ['talhah/qada-nahbahu'] },
+      { surah: 3, ayah: 172, claims: legacyUnreviewed },
+    ]);
+    expect(claimByKey.get('talhah/qada-nahbahu')?.field).toBe('ayat');
+  });
+
   // The book's wording, not ours, and cited like any other value.
   it('carries each participation summary from the entry, with its claim', () => {
     const summaries = [badr, uhud, jamal].map(

@@ -28,6 +28,7 @@ const fieldLabel: Record<string, { en: string; ar: string }> = {
   name: { en: 'Name', ar: 'الاسم' },
   fullName: { en: 'Full name', ar: 'الاسم الكامل' },
   kunya: { en: 'Kunya', ar: 'الكنية' },
+  ayat: { en: "Qur'an references", ar: 'الآيات' },
   titles: { en: 'Titles', ar: 'الألقاب' },
   appearance: { en: 'Appearance', ar: 'الهيئة' },
   virtues: { en: 'Virtues', ar: 'المناقب' },

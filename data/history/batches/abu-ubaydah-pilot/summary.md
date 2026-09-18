@@ -26,6 +26,11 @@ became a field rather than a title ([ADR 0014](../../../../docs/adr/0014-a-kunya
 It is Not reviewed: the other fourteen were read against the source and it was
 not.
 
+The entry quotes the Qur'an twice, both inside letters between Umar and him --
+Al Imran 200 in Umar's and al-Hadid 20 in his reply -- and says of no verse
+that it was revealed about him. His one Qur'an link, al-Tawbah 100, came from
+the retired seed and keeps the legacy marker.
+
 The year of death remains disputed within one claim: Abu Hafs al-Fallas reports
 18 AH, while Ibn Aidh alone reports 17 AH. The canonical profile uses 18 AH and
 keeps both reports visible.

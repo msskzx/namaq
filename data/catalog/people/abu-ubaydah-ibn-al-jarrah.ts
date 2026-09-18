@@ -1,4 +1,4 @@
-import type { CatalogPerson } from '@/lib/catalog/types';
+import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
 /**
  * Authored from data/history/batches/abu-ubaydah-pilot. Arabic is verbatim and
@@ -49,6 +49,13 @@ const abuUbaydahIbnAlJarrah = {
     // Rests on the testimony of paradise; this entry never enumerates the ten.
     // Sa'id ibn Zayd's entry carries the listing hadith, to be added with it.
     { title: 'the-ten-promised-paradise', claims: ['abu-ubaydah/titles'] },
+  ],
+
+  ayat: [
+    // Carried from the retired seed. The entry quotes the Qur'an twice -- Al
+    // Imran 200 in Umar's letter to him and al-Hadid 20 in his reply -- but
+    // says of no verse that it was revealed about him, this one included.
+    { surah: 9, ayah: 100, claims: legacyUnreviewed },
   ],
 
   relations: [
