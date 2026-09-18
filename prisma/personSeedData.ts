@@ -94,6 +94,9 @@ export const people = [
   {
     name: 'علي بن أبي طالب',
     fullName: 'علي بن أبي طالب بن عبد المطلب الهاشمي القرشي',
+    // Was the title abu-al-hasan until ADR 0014 made a kunya a name. It sits
+    // here, uncited like the rest of this file, until a batch reads his entry.
+    kunya: 'أبو الحسن',
     slug: 'ali-ibn-abi-talib',
     appearance: 'كان ربعة، عريض المنكبين، قوي البنية، كث اللحية.',
     virtues: 'رابع الخلفاء الراشدين، أبو الحسن، أحد العشرة المبشرين بالجنة، شجاع وعالم.',
