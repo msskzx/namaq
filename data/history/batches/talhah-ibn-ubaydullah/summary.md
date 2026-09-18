@@ -47,8 +47,12 @@ by the cited text.
   marker.
 - **Khandaq**: the seed's participation stands uncited, in a new module that
   exists to carry it rather than leave it unrecorded.
-- **The years of Badr, Uhud and Jamal**: the entry dates his death to 36 AH but
-  never dates a battle. Those three years stay owed.
+- **The years of Badr and Uhud**: the entry never dates a battle. Those two
+  years stay owed. Jamal is the exception: the entry puts his killing in 36 AH
+  and puts that killing at Jamal, so the battle's year rests on those two
+  claims, the way the pilot dates the plague of Amwas through the death it
+  caused. A later entry may date the battle outright -- al-Zubayr was killed
+  there too -- and would then cite it directly rather than through him.
 
 ## What the model has no shape for yet
 

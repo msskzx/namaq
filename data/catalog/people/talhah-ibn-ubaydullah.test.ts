@@ -69,6 +69,14 @@ describe('Talhah ibn Ubaydullah in the catalog', () => {
     expect(at(jamal)?.status).toEqual(['MARTYRED']);
   });
 
+  // The entry dates the killing, not the battle. Jamal is dated through it,
+  // the way the pilot dates the plague through the death it caused.
+  it('dates Jamal from the killing it caused, on the same claims', () => {
+    expect(jamal.fields?.hijriYear?.claims).toContain('talhah/death-year');
+    expect(person.fields.deathYearHijri?.claims).toEqual(['talhah/death-year']);
+    expect(jamal.fields?.hijriYear?.value).toBe(36);
+  });
+
   // The book's wording, not ours, and cited like any other value.
   it('carries each participation summary from the entry, with its claim', () => {
     const summaries = [badr, uhud, jamal].map(
