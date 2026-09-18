@@ -50,6 +50,38 @@ async function projectPeople(people: Catalog['people']) {
     if (apply && Object.keys(set).length > 0) {
       await prisma.person.update({ where: { slug: subject.slug }, data: set });
     }
+
+    await projectTitles(subject);
+  }
+}
+
+/**
+ * Title assignments are additive, like every other value here: a title the
+ * catalog declares is connected, and one the database holds that the catalog
+ * does not is reported rather than disconnected. Dropping an assignment is a
+ * deletion, and this pass does not delete.
+ */
+async function projectTitles(subject: Catalog['people'][number]) {
+  if (subject.titles.length === 0) return;
+
+  const live = await prisma.person.findUnique({
+    where: { slug: subject.slug },
+    select: { id: true, titles: { select: { slug: true } } },
+  });
+  if (!live) return;
+
+  const held = new Set(live.titles.map((title) => title.slug));
+  const declared = new Set(subject.titles.map((title) => title.title));
+  const connect = subject.titles.filter((title) => !held.has(title.title)).map((title) => ({ slug: title.title }));
+
+  [...held].filter((slug) => !declared.has(slug)).forEach((slug) => {
+    conflicts.push(`people/${subject.slug}.titles: database holds ${slug}, catalog does not`);
+  });
+
+  if (connect.length === 0) return;
+  planned.push(`people/${subject.slug}: hold ${connect.map((title) => title.slug).join(', ')}`);
+  if (apply) {
+    await prisma.person.update({ where: { id: live.id }, data: { titles: { connect } } });
   }
 }
 

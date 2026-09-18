@@ -52,7 +52,7 @@ const talhahIbnUbaydullah = {
   ],
 
   relations: [
-    { type: 'SON', to: 'ubaydullah-ibn-uthman', claims: ['talhah/father'] },
+    { type: 'SON', inverse: 'FATHER', to: 'ubaydullah-ibn-uthman', claims: ['talhah/father'] },
     { type: 'COMPANION_OF', to: 'prophet-muhammad', claims: ['talhah/companion-of-prophet'] },
   ],
 } satisfies CatalogPerson;

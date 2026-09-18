@@ -33,10 +33,16 @@ export interface CatalogTitleAssignment {
   readonly claims: Provenance;
 }
 
-/** Declared from one side only; the inverse is RECIPROCAL_INVERSES' job, not an author's. */
+/**
+ * Declared from one side only. The graph stores both, so the projector adds the
+ * reciprocal: RECIPROCAL_INVERSES names it, and `inverse` picks which when that
+ * list offers more than one, since SON's reciprocal is FATHER or MOTHER
+ * depending on a parent's sex, which nothing here records.
+ */
 export interface CatalogRelation {
   readonly type: RelationType;
   readonly to: string;
+  readonly inverse?: RelationType;
   readonly claims: Provenance;
 }
 

@@ -10,6 +10,8 @@ import { afterAll, describe, expect, it } from 'vitest';
 import neo4j from 'neo4j-driver';
 import { peopleRelationsQueries } from '../../neo4j/graphSeedData';
 import { findSeedRelationDrift, parseSeedRelations } from '../../neo4j/seedRelations';
+import { loadCatalog } from './catalog/loadCatalog';
+import { catalogRelations } from './catalog/relations';
 import { excludeKnownHomonyms, findDuplicateLabelGroups, findIsolatedNodes } from './graphIntegrity';
 import { fetchUnifiedGraph } from './fetchUnifiedGraph';
 import { getDriver } from './neo4j';
@@ -73,7 +75,10 @@ describe.skipIf(!hasNeo4jConfig)('unified graph connectivity (live Neo4j)', () =
         to: record.get('target') as string,
         type: record.get('type') as string,
       }));
-      const drift = findSeedRelationDrift(parseSeedRelations(peopleRelationsQueries), deployed);
+      // Person relations have two authors while the migration is unfinished:
+      // the graph seeds, and the catalog for subjects a batch has covered.
+      const expected = [...parseSeedRelations(peopleRelationsQueries), ...catalogRelations(await loadCatalog())];
+      const drift = findSeedRelationDrift(expected, deployed);
       expect(drift).toEqual({ missing: [], unexpected: [] });
     } finally {
       await session.close();

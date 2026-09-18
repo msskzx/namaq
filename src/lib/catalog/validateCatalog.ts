@@ -42,8 +42,15 @@ export function validateCatalog(catalog: Catalog, known: KnownSlugs): CatalogIss
       const to = `${at}.relations.${relation.type}`;
       checkProvenance(relation.claims, known, to, issues);
       if (!person(relation.to)) issues.push({ path: to, message: `unknown person ${relation.to}` });
-      if (!(relation.type in RECIPROCAL_INVERSES)) {
+      const reciprocals = RECIPROCAL_INVERSES[relation.type];
+      if (!reciprocals) {
         issues.push({ path: to, message: `${relation.type} has no reciprocal` });
+      } else if (relation.inverse && !reciprocals.includes(relation.inverse)) {
+        issues.push({ path: to, message: `${relation.inverse} is not a reciprocal of ${relation.type}` });
+      } else if (!relation.inverse && reciprocals.length > 1) {
+        // The projector writes both directions, so an ambiguous reciprocal has
+        // to be chosen by whoever read the source, not guessed here.
+        issues.push({ path: to, message: `${relation.type} needs inverse: one of ${reciprocals.join(', ')}` });
       }
     });
   });

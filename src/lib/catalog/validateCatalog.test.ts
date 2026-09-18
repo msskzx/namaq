@@ -93,7 +93,10 @@ describe('validateCatalog', () => {
   });
 
   it('resolves a relationship to a person the catalog itself authors', () => {
-    const pair = [person({ slug: 'one', relations: [{ type: 'SON', to: 'two', claims: ['pilot/one'] }] }), person({ slug: 'two' })];
+    const pair = [
+      person({ slug: 'one', relations: [{ type: 'SON', inverse: 'FATHER', to: 'two', claims: ['pilot/one'] }] }),
+      person({ slug: 'two' }),
+    ];
 
     expect(validateCatalog(catalog({ people: pair }), known)).toEqual([]);
   });
@@ -101,10 +104,34 @@ describe('validateCatalog', () => {
   it('reports every problem in one pass rather than stopping at the first', () => {
     const subject = person({
       titles: [{ title: 'unheard-of', claims: ['pilot/absent'] }],
-      relations: [{ type: 'SON', to: 'nobody', claims: ['pilot/one'] }],
+      relations: [{ type: 'SON', inverse: 'FATHER', to: 'nobody', claims: ['pilot/one'] }],
     });
 
     expect(validateCatalog(catalog({ people: [subject] }), known)).toHaveLength(3);
+  });
+
+  // The projector writes both directions, and SON's reciprocal is FATHER or
+  // MOTHER depending on a parent's sex, which nothing here records.
+  it('asks for the reciprocal when the relation has more than one', () => {
+    const subject = person({ relations: [{ type: 'SON', to: 'prophet-muhammad', claims: ['pilot/one'] }] });
+
+    expect(validateCatalog(catalog({ people: [subject] }), known)).toEqual([
+      { path: 'people/someone.relations.SON', message: 'SON needs inverse: one of FATHER, MOTHER' },
+    ]);
+  });
+
+  it('takes the only reciprocal without being told', () => {
+    const subject = person({ relations: [{ type: 'COMPANION_OF', to: 'prophet-muhammad', claims: ['pilot/one'] }] });
+
+    expect(validateCatalog(catalog({ people: [subject] }), known)).toEqual([]);
+  });
+
+  it('refuses a reciprocal that is not one', () => {
+    const subject = person({ relations: [{ type: 'SON', inverse: 'WIFE', to: 'prophet-muhammad', claims: ['pilot/one'] }] });
+
+    expect(validateCatalog(catalog({ people: [subject] }), known)).toEqual([
+      { path: 'people/someone.relations.SON', message: 'WIFE is not a reciprocal of SON' },
+    ]);
   });
 
   it('checks battle and event references the same way', () => {

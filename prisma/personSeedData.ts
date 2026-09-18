@@ -112,13 +112,11 @@ export const people = [
     ]
   },
   {
+    // Everything else lives in data/catalog/people/talhah-ibn-ubaydullah.ts, authored
+    // from the source with its citations. The Qur'an links stay here because
+    // the catalog has no shape for them: they are outside its scope by design.
     name: 'طلحة بن عبيد الله',
-    fullName: 'طلحة بن عبيد الله بن عثمان التيمي القرشي',
     slug: 'talhah-ibn-ubaydullah',
-    appearance: 'كان أشعر، حسن الوجه، كريم اليد.',
-    virtues: 'أحد العشرة المبشرين بالجنة، كريم، شجاع، من السابقين إلى الإسلام.',
-    picture: null,
-    titles: ['the-ten-promised-paradise', 'companion', 'al-sabiqoon', 'the-six-of-the-shura'],
     ayat: [
       { surah: 3, ayah: 172 }, // آل عمران: 172 - مثل الزبير (في غزوة حمراء الأسد)
     ]
@@ -148,20 +146,11 @@ export const people = [
     ]
   },
   {
+    // Everything else lives in data/catalog/people/abu-ubaydah-ibn-al-jarrah.ts, authored
+    // from the source with its citations. The Qur'an links stay here because
+    // the catalog has no shape for them: they are outside its scope by design.
     name: 'أبو عبيدة بن الجراح',
-    // Verbatim from al-Dhahabi's entry, extracted in
-    // data/history/batches/abu-ubaydah-pilot: the name from passages 5-p3 and
-    // 5-p4, the virtues from 5-p5 and 6-p3, the appearance from 7-p9 and 23-p6.
-    // Sentences that run across a page break are joined; nothing is reworded.
-    fullName: 'عَامِرُ بنُ عَبْدِ اللهِ بنِ الجَرَّاحِ بنِ هِلاَلِ بنِ أُهَيْبِ بنِ ضَبَّةَ بنِ الحَارِثِ بنِ فِهْرِ بنِ مَالِكِ بنِ النَّضْرِ بنِ كِنَانَةَ بنِ خُزَيْمَةَ بنِ مُدْرِكَةَ بنِ إِلْيَاسَ بنِ مُضَرَ بنِ نِزَارِ بنِ مَعَدِّ بنِ عَدْنَانَ القُرَشِيُّ، الفِهْرِيُّ، المَكِّيُّ.',
     slug: 'abu-ubaydah-ibn-al-jarrah',
-    appearance: 'كَانَ رَجُلاً نَحِيْفاً، مَعْرُوْقَ الوَجْهِ، خَفِيْفَ اللِّحْيَةِ، طُوَالاً، أَحْنَى، أَثْرَمَ الثَّنِيَّتَيْنِ. وَكَانَ يَخْضِبُ بِالحِنَّاءِ وَالكَتَمِ، وَكَانَ لَهُ عَقِيْصَتَانِ.',
-    virtues: 'أَحَدُ السَّابِقِيْنَ الأَوَّلِيْنَ، وَمَنْ عَزَمَ الصِّدِّيْقُ عَلَى تَوْلِيَتِهِ الخِلاَفَةَ، وَأَشَارَ بِهِ يَوْمَ السَّقِيْفَةِ؛ لِكَمَالِ أَهْلِيَّتِهِ عِنْدَ أَبِي بَكْرٍ. شَهِدَ لَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِالجَنَّةِ، وَسَمَّاهُ: أَمِيْنَ الأُمَّةِ، وَمَنَاقِبُهُ شَهِيْرَةٌ جَمَّةٌ.',
-    picture: null,
-    // al-sabiqoon from the entry's own "أَحَدُ السَّابِقِيْنَ الأَوَّلِيْنَ".
-    // the-ten-promised-paradise rests on the entry's "شَهِدَ لَهُ النَّبِيُّ بِالجَنَّةِ";
-    // it never uses the phrase العشرة, so that title still wants its own source.
-    titles: ['the-ten-promised-paradise', 'companion', 'amin-al-ummah', 'al-sabiqoon'],
     ayat: [
       { surah: 9, ayah: 100 }, // التوبة: 100 - "والسابقون الأولون من المهاجرين..." (وهو من السابقين)
     ]
@@ -460,13 +449,11 @@ export const peopleBattleParticipations = [
   // Battle of Badr (2 AH)
   { personSlug: 'abdur-rahman-ibn-awf', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'badr', isMuslim: true, status: [] },
-  { personSlug: 'abu-ubaydah-ibn-al-jarrah', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'ali-ibn-abi-talib', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'az-zubayr-ibn-al-awwam', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'prophet-muhammad', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'saad-ibn-abi-waqqas', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'saeed-ibn-zaid', battleSlug: 'badr', isMuslim: true, status: [] },
-  { personSlug: 'talhah-ibn-ubaydullah', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'umar-ibn-al-khattab', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'uthman-ibn-affan', battleSlug: 'badr', isMuslim: true, status: ['ABSENT_EXCUSED'] },
   { personSlug: 'hamzah-ibn-abd-al-muttalib', battleSlug: 'badr', isMuslim: true, status: [] }, // Added
@@ -475,13 +462,11 @@ export const peopleBattleParticipations = [
   // Battle of Uhud (3 AH)
   { personSlug: 'abdur-rahman-ibn-awf', battleSlug: 'uhud', isMuslim: true, status: [] },
   { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'uhud', isMuslim: true, status: [] },
-  { personSlug: 'abu-ubaydah-ibn-al-jarrah', battleSlug: 'uhud', isMuslim: true, status: [] },
   { personSlug: 'ali-ibn-abi-talib', battleSlug: 'uhud', isMuslim: true, status: [] },
   { personSlug: 'az-zubayr-ibn-al-awwam', battleSlug: 'uhud', isMuslim: true, status: [] },
   { personSlug: 'prophet-muhammad', battleSlug: 'uhud', isMuslim: true, status: ['INJURED'] },
   { personSlug: 'saad-ibn-abi-waqqas', battleSlug: 'uhud', isMuslim: true, status: [], summary: `ابن إسحاق : حدثني صالح بن كيسان ، عن بعض آل سعد ، عن سعد : أنه رمى يوم أحد ، قال : فلقد رأيت رسول الله - صلى الله عليه وسلم - يناولني النبل ويقول : " ارم فداك أبي وأمي " . حتى إنه ليناولني السهم ما له من نصل ، فأرمي به . [ ص: 100 ] قال ابن المسيب : كان جيد الرمي ، سمعته يقول : جمع لي رسول الله - صلى الله عليه وسلم - أبويه يوم أحد . أخرجه البخاري . وقد ساقه الحافظ ابن عساكر من بضعة عشر وجها . وساق حديث ابن أبي خالد عن قيس من سبعة عشر طريقا بألفاظها ، وبمثل هذا كبر تاريخه . وساق حديث عبد الله بن شداد عن علي : ما سمعت رسول الله - صلى الله عليه وسلم - جمع أبويه لأحد غير سعد ، من ستة عشر وجها . رواه مسعر وشعبة وسفيان ، عن سعد بن إبراهيم ، عنه .` },
   { personSlug: 'saeed-ibn-zaid', battleSlug: 'uhud', isMuslim: true, status: [] },
-  { personSlug: 'talhah-ibn-ubaydullah', battleSlug: 'uhud', isMuslim: true, status: ['INJURED'] },
   { personSlug: 'umar-ibn-al-khattab', battleSlug: 'uhud', isMuslim: true, status: [] },
   { personSlug: 'uthman-ibn-affan', battleSlug: 'uhud', isMuslim: true, status: [] },
   { personSlug: 'hamzah-ibn-abd-al-muttalib', battleSlug: 'uhud', isMuslim: true, status: ['MARTYRED'] }, // Added
@@ -490,13 +475,11 @@ export const peopleBattleParticipations = [
   // Battle of the Trench (Khandaq) (5 AH)
   { personSlug: 'abdur-rahman-ibn-awf', battleSlug: 'khandaq', isMuslim: true, status: [] },
   { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'khandaq', isMuslim: true, status: [] },
-  { personSlug: 'abu-ubaydah-ibn-al-jarrah', battleSlug: 'khandaq', isMuslim: true, status: [] },
   { personSlug: 'ali-ibn-abi-talib', battleSlug: 'khandaq', isMuslim: true, status: [] },
   { personSlug: 'az-zubayr-ibn-al-awwam', battleSlug: 'khandaq', isMuslim: true, status: [] },
   { personSlug: 'prophet-muhammad', battleSlug: 'khandaq', isMuslim: true, status: [] },
   { personSlug: 'saad-ibn-abi-waqqas', battleSlug: 'khandaq', isMuslim: true, status: [] },
   { personSlug: 'saeed-ibn-zaid', battleSlug: 'khandaq', isMuslim: true, status: [] },
-  { personSlug: 'talhah-ibn-ubaydullah', battleSlug: 'khandaq', isMuslim: true, status: [] },
   { personSlug: 'umar-ibn-al-khattab', battleSlug: 'khandaq', isMuslim: true, status: [] },
   { personSlug: 'uthman-ibn-affan', battleSlug: 'khandaq', isMuslim: true, status: [] },
   { personSlug: 'al-abbas-ibn-abd-al-muttalib', battleSlug: 'khandaq', isMuslim: true, status: [] }, // Added (became Muslim after Badr/Uhud)
@@ -536,7 +519,6 @@ export const peopleBattleParticipations = [
 
   // Battle of Hunayn (8 AH)
   { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'hunayn', isMuslim: true, status: [] },
-  { personSlug: 'abu-ubaydah-ibn-al-jarrah', battleSlug: 'hunayn', isMuslim: true, status: [] },
   { personSlug: 'ali-ibn-abi-talib', battleSlug: 'hunayn', isMuslim: true, status: [] },
   { personSlug: 'prophet-muhammad', battleSlug: 'hunayn', isMuslim: true, status: [] },
   { personSlug: 'umar-ibn-al-khattab', battleSlug: 'hunayn', isMuslim: true, status: [] },
@@ -561,19 +543,15 @@ export const peopleBattleParticipations = [
 
   // Battle of Ajnadayn (13 AH)
   { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'ajnadayn', isMuslim: true, status: [] },
-  { personSlug: 'abu-ubaydah-ibn-al-jarrah', battleSlug: 'ajnadayn', isMuslim: true, status: [] },
   { personSlug: 'umar-ibn-al-khattab', battleSlug: 'ajnadayn', isMuslim: true, status: [] },
 
   // Battle of Fihl (13 AH)
-  { personSlug: 'abu-ubaydah-ibn-al-jarrah', battleSlug: 'fihl', isMuslim: true, status: [] },
   { personSlug: 'umar-ibn-al-khattab', battleSlug: 'fihl', isMuslim: true, status: [] },
 
   // Conquest of Damascus (14 AH)
-  { personSlug: 'abu-ubaydah-ibn-al-jarrah', battleSlug: 'fath-damascus', isMuslim: true, status: [] },
   { personSlug: 'umar-ibn-al-khattab', battleSlug: 'fath-damascus', isMuslim: true, status: [] },
 
   // Battle of Yarmuk (15 AH)
-  { personSlug: 'abu-ubaydah-ibn-al-jarrah', battleSlug: 'yarmuk', isMuslim: true, status: [] },
   { personSlug: 'umar-ibn-al-khattab', battleSlug: 'yarmuk', isMuslim: true, status: [] },
 
   // Battle of al-Qadisiyyah (15 AH)
@@ -585,7 +563,6 @@ export const peopleBattleParticipations = [
   { personSlug: 'umar-ibn-al-khattab', battleSlug: 'fath-ctesiphon', isMuslim: true, status: [] },
 
   // Conquest of Jerusalem (16 AH)
-  { personSlug: 'abu-ubaydah-ibn-al-jarrah', battleSlug: 'fath-jerusalem', isMuslim: true, status: [] },
   { personSlug: 'umar-ibn-al-khattab', battleSlug: 'fath-jerusalem', isMuslim: true, status: [] },
 
   // Conquest of Alexandria (20 AH)
@@ -603,7 +580,6 @@ export const peopleBattleParticipations = [
   // Battle of the Camel (36 AH)
   { personSlug: 'ali-ibn-abi-talib', battleSlug: 'jamal', isMuslim: true, status: [] },
   { personSlug: 'az-zubayr-ibn-al-awwam', battleSlug: 'jamal', isMuslim: true, status: ['MARTYRED'] },
-  { personSlug: 'talhah-ibn-ubaydullah', battleSlug: 'jamal', isMuslim: true, status: ['MARTYRED'] },
   { personSlug: 'aisha-bint-abi-bakr', battleSlug: 'jamal', isMuslim: true, status: [] }, // Added
 
   // Battle of Siffin (37 AH)

@@ -52,7 +52,7 @@ const abuUbaydahIbnAlJarrah = {
   ],
 
   relations: [
-    { type: 'SON', to: 'abdullah-ibn-al-jarrah', claims: ['abu-ubaydah/full-name'] },
+    { type: 'SON', inverse: 'FATHER', to: 'abdullah-ibn-al-jarrah', claims: ['abu-ubaydah/full-name'] },
     { type: 'COMPANION_OF', to: 'prophet-muhammad', claims: ['abu-ubaydah/companion-of-prophet'] },
   ],
 } satisfies CatalogPerson;
