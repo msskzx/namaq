@@ -135,7 +135,7 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   <batch dir>` before proposing a batch, and `npm run history:import -- <batch
   dir>` for a dry run. Import applies only the revision recorded as approved in
   `batch.json`, so any edit after approval needs approving again.
-- Abu Ubaydah and Talhah have no seed entries at all: the catalog holds their
+- Abu Ubaydah, Talhah and al-Zubayr have no seed entries at all: the catalog holds their
   fields, titles, participations, Qur'an links and their one cited relation, and
   `npm run catalog:project` / `catalog:project-graph` write them. Everyone else
   still comes from the seeds, so both paths are live at once.

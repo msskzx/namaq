@@ -164,8 +164,6 @@ export const peopleRelationsQueries = [
   'MATCH (from:Person {slug: "hamzah-ibn-abd-al-muttalib"}), (to:Person {slug: "safiyyah-bint-abd-al-muttalib"}) CREATE (from)-[:BROTHER]->(to);',
   'MATCH (from:Person {slug: "safiyyah-bint-abd-al-muttalib"}), (to:Person {slug: "al-awwam-ibn-khuwaylid"}) CREATE (from)-[:WIFE]->(to);',
   'MATCH (from:Person {slug: "al-awwam-ibn-khuwaylid"}), (to:Person {slug: "safiyyah-bint-abd-al-muttalib"}) CREATE (from)-[:HUSBAND]->(to);',
-  'MATCH (from:Person {slug: "safiyyah-bint-abd-al-muttalib"}), (to:Person {slug: "az-zubayr-ibn-al-awwam"}) CREATE (from)-[:MOTHER]->(to);',
-  'MATCH (from:Person {slug: "az-zubayr-ibn-al-awwam"}), (to:Person {slug: "safiyyah-bint-abd-al-muttalib"}) CREATE (from)-[:SON]->(to);',
 
   // Arwa bint Abd al-Muttalib — fullName follows the sibling-grouping
   // inference rule (see personSeedData10.ts's comment on this entry)
@@ -269,8 +267,6 @@ export const peopleRelationsQueries = [
   // of the existing Az-Zubayr ibn al-Awwam
   'MATCH (from:Person {slug: "asma-bint-abi-bakr"}), (to:Person {slug: "abu-bakr-as-siddiq"}) CREATE (from)-[:DAUGHTER]->(to);',
   'MATCH (from:Person {slug: "abu-bakr-as-siddiq"}), (to:Person {slug: "asma-bint-abi-bakr"}) CREATE (from)-[:FATHER]->(to);',
-  'MATCH (from:Person {slug: "asma-bint-abi-bakr"}), (to:Person {slug: "az-zubayr-ibn-al-awwam"}) CREATE (from)-[:WIFE]->(to);',
-  'MATCH (from:Person {slug: "az-zubayr-ibn-al-awwam"}), (to:Person {slug: "asma-bint-abi-bakr"}) CREATE (from)-[:HUSBAND]->(to);',
 
   // Asma bint Yazid ibn al-Sakn — cousin of the existing Muadh ibn Jabal
   'MATCH (from:Person {slug: "asma-bint-yazid-ibn-al-sakn"}), (to:Person {slug: "muadh-ibn-jabal"}) CREATE (from)-[:PATERNAL_COUSIN]->(to);',

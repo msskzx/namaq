@@ -6,14 +6,15 @@ import { seedAuthoredPeople } from './seedAuthored';
 describe('seedAuthoredPeople', () => {
   const seeded = seedAuthoredPeople();
 
-  it('leaves the two migrated subjects to the catalog', () => {
+  it('leaves the migrated subjects to the catalog', () => {
     expect(seeded.has('talhah-ibn-ubaydullah')).toBe(false);
     expect(seeded.has('abu-ubaydah-ibn-al-jarrah')).toBe(false);
+    expect(seeded.has('az-zubayr-ibn-al-awwam')).toBe(false);
   });
 
-  // Ali's module carries only his kunya. If he read as catalog-owned, a project
-  // run would take his titles away for no better reason than that his module
-  // does not repeat them.
+  // Someone the seeds describe and the catalog says little or nothing about
+  // must stay theirs: reading them as catalog-owned would have a project run
+  // take away every value the catalog does not repeat.
   it('keeps a subject the seeds still describe, however little the catalog says', () => {
     expect(seeded.has('ali-ibn-abi-talib')).toBe(true);
     expect(seeded.has('prophet-muhammad')).toBe(true);

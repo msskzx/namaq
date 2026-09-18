@@ -4,6 +4,7 @@ import { legacyUnreviewed, type Cited, type Provenance } from '@/lib/catalog/typ
 import person from './az-zubayr-ibn-al-awwam';
 import badr from '../battles/badr';
 import yarmuk from '../battles/yarmuk';
+import uhud from '../battles/uhud';
 import jamal from '../battles/jamal';
 
 // Read rather than fixtured, so editing the module or the batch alone fails.
@@ -31,9 +32,14 @@ describe('al-Zubayr ibn al-Awwam in the catalog', () => {
     expect(unknown).toEqual([]);
   });
 
-  // Nothing on his profile was carried uncited: his entry speaks to all of it.
-  it('carries no value on the legacy marker', () => {
-    expect(everyProvenance.filter(([, claims]) => claims === legacyUnreviewed)).toEqual([]);
+  // His entry speaks to every value on the profile itself. The one carried
+  // value is a relation the graph seeds held before his rows there were
+  // retired, and the entry never states it.
+  it('carries nothing uncited but the cousin the seeds held', () => {
+    const carried = everyProvenance.filter(([, claims]) => claims === legacyUnreviewed);
+
+    expect(carried.map(([where]) => where)).toEqual(['relation PATERNAL_COUSIN']);
+    expect(person.relations.find((relation) => relation.claims === legacyUnreviewed)?.to).toBe('hakim-ibn-hizam');
   });
 
   it('points a single-claim field at a claim about that same field', () => {
@@ -62,6 +68,15 @@ describe('al-Zubayr ibn al-Awwam in the catalog', () => {
       ['al-awwam-ibn-khuwaylid', 'FATHER'],
       ['safiyyah-bint-abd-al-muttalib', 'MOTHER'],
     ]);
+  });
+
+  // Uhud is his one participation the entry does not support, carried from the
+  // seed rows it replaced rather than dropped with them.
+  it('keeps Uhud uncited, where the entry places him only in its aftermath', () => {
+    const at = uhud.participants.find((participant) => participant.person === person.slug);
+
+    expect(at?.claims).toBe(legacyUnreviewed);
+    expect(at?.status).toBeUndefined();
   });
 
   it('records the wounds the entry counts, at Badr and at Yarmuk', () => {

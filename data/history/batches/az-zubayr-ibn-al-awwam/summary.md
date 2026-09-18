@@ -55,6 +55,16 @@ his flight to Abyssinia, his thousand slaves whose kharaj he gave away, and the
 debt his son spent four seasons discharging are all in the entry with no field
 to hold them. The pages keep them.
 
+## Leaving the seeds
+
+His seed entry and his rows in the graph seeds are retired with this batch, as
+Abu Ubaydah's and Talhah's were: the catalog is his only author now, and
+`catalog:project` and `catalog:project-graph` write him. Two values the entry
+does not support were carried rather than dropped with the rows that held them
+-- his Uhud participation, and the cousin tie to Hakim ibn Hizam, whom the entry
+has calling his son ابن أخي without stating the relation. Both sit on the legacy
+marker and the ledger counts them.
+
 ## Review
 
 Nothing is reviewed. The claims are authored but nobody has compared them

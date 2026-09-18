@@ -147,8 +147,6 @@ export const peopleRelationsQueries = [
   'MATCH (from:Person {slug: "al-awwam-ibn-khuwaylid"}), (to:Person {slug: "hizam-ibn-khuwaylid"}) CREATE (from)-[:BROTHER]->(to);',
   'MATCH (from:Person {slug: "hakim-ibn-hizam"}), (to:Person {slug: "hizam-ibn-khuwaylid"}) CREATE (from)-[:SON]->(to);',
   'MATCH (from:Person {slug: "hizam-ibn-khuwaylid"}), (to:Person {slug: "hakim-ibn-hizam"}) CREATE (from)-[:FATHER]->(to);',
-  'MATCH (from:Person {slug: "hakim-ibn-hizam"}), (to:Person {slug: "az-zubayr-ibn-al-awwam"}) CREATE (from)-[:PATERNAL_COUSIN]->(to);',
-  'MATCH (from:Person {slug: "az-zubayr-ibn-al-awwam"}), (to:Person {slug: "hakim-ibn-hizam"}) CREATE (from)-[:PATERNAL_COUSIN]->(to);',
   'MATCH (from:Person {slug: "hisham-ibn-hakim"}), (to:Person {slug: "hakim-ibn-hizam"}) CREATE (from)-[:SON]->(to);',
   'MATCH (from:Person {slug: "hakim-ibn-hizam"}), (to:Person {slug: "hisham-ibn-hakim"}) CREATE (from)-[:FATHER]->(to);',
 

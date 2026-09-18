@@ -1,4 +1,4 @@
-import { type CatalogPerson } from '@/lib/catalog/types';
+import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
 /**
  * Authored from data/history/batches/az-zubayr-ibn-al-awwam. Arabic is verbatim
@@ -68,6 +68,14 @@ const azZubayrIbnAlAwwam = {
       claims: ['zubayr/cousin-of-prophet'],
     },
     { type: 'COMPANION_OF', to: 'prophet-muhammad', claims: ['zubayr/companion-of-prophet'] },
+    // Carried from the graph seeds when his rows there were retired. The entry
+    // has Hakim call his son ابن أخي, which is not the same as stating the tie.
+    {
+      type: 'PATERNAL_COUSIN',
+      inverse: 'PATERNAL_COUSIN',
+      to: 'hakim-ibn-hizam',
+      claims: legacyUnreviewed,
+    },
   ],
 } satisfies CatalogPerson;
 
