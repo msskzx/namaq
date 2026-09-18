@@ -21,6 +21,11 @@ requested citation corrections, then explicitly marked the complete batch
 reviewed. The batch contains 27 citations after consolidating source selections
 that pagination or extraction had split into separate records.
 
+A fifteenth claim, `abu-ubaydah/kunya`, was added on 2026-09-18 once a kunya
+became a field rather than a title ([ADR 0014](../../../../docs/adr/0014-a-kunya-is-a-name.md)).
+It is Not reviewed: the other fourteen were read against the source and it was
+not.
+
 The year of death remains disputed within one claim: Abu Hafs al-Fallas reports
 18 AH, while Ibn Aidh alone reports 17 AH. The canonical profile uses 18 AH and
 keeps both reports visible.
@@ -30,7 +35,11 @@ keeps both reports visible.
 The reviewed revision was published on 2026-09-11. Re-running `npm run history:import --
 data/history/batches/abu-ubaydah-pilot --apply` safely upserts the same revision.
 
-Re-approved on 2026-09-18 at revision `9e89cb0c3f3c3540`. Passages no longer
+Approved on 2026-09-18 at revision `9e89cb0c3f3c3540`, and stale again since:
+adding the kunya claim moved the batch to `e7db2904d7be7e92`, so publishing it
+needs approving once more.
+
+The earlier re-approval read as follows. Passages no longer
 carry a copy of the text the page files already hold, so `batch.json` changed
 while what the batch asserts did not: no claim, citation or page changed, and
 all 186 passages resolve to the same text they carried before. Approval covers a

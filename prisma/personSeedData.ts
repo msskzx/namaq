@@ -93,7 +93,7 @@ export const people = [
     appearance: 'كان ربعة، عريض المنكبين، قوي البنية، كث اللحية.',
     virtues: 'رابع الخلفاء الراشدين، أبو الحسن، أحد العشرة المبشرين بالجنة، شجاع وعالم.',
     picture: null,
-    titles: ['the-ten-promised-paradise', 'caliph', 'companion', 'abu-al-hasan', 'the-six-of-the-shura'],
+    titles: ['the-ten-promised-paradise', 'caliph', 'companion', 'the-six-of-the-shura'],
     ayat: [
       { surah: 2, ayah: 207 }, // البقرة: 207 - "ومن الناس من يشري نفسه..." (نزلت فيه ليلة المبيت في فراش النبي)
       { surah: 76, ayah: 8 }, // الإنسان: 8 - "ويطعمون الطعام..." (هو وفاطمة والحسن والحسين)

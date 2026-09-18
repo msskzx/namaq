@@ -777,6 +777,26 @@
       "field": "fullName"
     },
     {
+      "key": "abu-ubaydah/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
+      "field": "kunya",
+      "assertion": "كنيته أبو عبيدة، وهي الاسم الذي يُعرف به، واسمه عامر بن عبد الله.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5-p3",
+          "volume": "1",
+          "pageReference": "5",
+          "extractionUrl": "https://shamela.ws/book/10906/1431",
+          "excerptArabic": "١ - أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ عَامِرُ بنُ عَبْدِ اللهِ * (م، ق) .",
+          "accessedAt": "2026-09-09"
+        }
+      ]
+    },
+    {
       "key": "abu-ubaydah/titles",
       "subjectKind": "PERSON",
       "subjectSlug": "abu-ubaydah-ibn-al-jarrah",

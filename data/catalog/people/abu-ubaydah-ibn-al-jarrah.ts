@@ -18,6 +18,9 @@ const abuUbaydahIbnAlJarrah = {
         'عَامِرُ بنُ عَبْدِ اللهِ بنِ الجَرَّاحِ بنِ هِلاَلِ بنِ أُهَيْبِ بنِ ضَبَّةَ بنِ الحَارِثِ بنِ فِهْرِ بنِ مَالِكِ بنِ النَّضْرِ بنِ كِنَانَةَ بنِ خُزَيْمَةَ بنِ مُدْرِكَةَ بنِ إِلْيَاسَ بنِ مُضَرَ بنِ نِزَارِ بنِ مَعَدِّ بنِ عَدْنَانَ القُرَشِيُّ، الفِهْرِيُّ، المَكِّيُّ.',
       claims: ['abu-ubaydah/full-name'],
     },
+    // The name he is known by, which is why `name` holds it and عامر survives
+    // only inside the full name. A name, not a title (ADR 0014).
+    kunya: { value: 'أَبُو عُبَيْدَةَ', claims: ['abu-ubaydah/kunya'] },
     // Composed from 7-p9 and 23-p6; the latter gives the death year and the
     // dyeing in one sentence, so it backs two fields.
     appearance: {
