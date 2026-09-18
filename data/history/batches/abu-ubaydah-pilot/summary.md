@@ -30,12 +30,12 @@ keeps both reports visible.
 The reviewed revision was published on 2026-09-11. Re-running `npm run history:import --
 data/history/batches/abu-ubaydah-pilot --apply` safely upserts the same revision.
 
-**The recorded approval is stale.** Passages no longer carry a copy of the text
-the page files already hold, so `batch.json` changed and the revision moved from
-`b16db73c6c1c7cde` to `9e89cb0c3f3c3540`. No claim, citation or page changed —
-all 186 passages resolve to the same text they carried before — but approval
-covers a revision, so publishing again needs approving again. The claims stay
-Reviewed: what was read against the source did not change.
+Re-approved on 2026-09-18 at revision `9e89cb0c3f3c3540`. Passages no longer
+carry a copy of the text the page files already hold, so `batch.json` changed
+while what the batch asserts did not: no claim, citation or page changed, and
+all 186 passages resolve to the same text they carried before. Approval covers a
+revision, so the move needed approving again. The claims stay Reviewed, since
+what was read against the source did not change.
 
 Importing this batch updates PostgreSQL evidence records only. It does not
 change graph structure, so no Neo4j synchronization or graph-layout run is
