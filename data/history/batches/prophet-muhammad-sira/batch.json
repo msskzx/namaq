@@ -23669,5 +23669,851 @@
       "volume": "السيرة ١-٢"
     }
   ],
-  "claims": []
+  "claims": [
+    {
+      "key": "prophet/lineage",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "محمد بن عبد الله بن عبد المطلب بن هاشم بن عبد مناف بن قصي، ونسبه متصل إلى عدنان بإجماع الناس.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/29-p7",
+          "volume": "السيرة 1",
+          "pageReference": "29",
+          "extractionUrl": "https://shamela.ws/book/10906/167",
+          "excerptArabic": "هو محمد بن عبد الله بن عبد المطلب واسم عبد المطلب شيبة, ابن هاشم واسمه عمرو, ابن عبد مناف واسمه المغيرة، ابن قصي واسمه زيد بن كلاب بن مرة بن كعب بن لؤي بن غالب بن فهر بن مالك بن النضر بن كنانة بن خزيمة ابن مدركة، واسمه عامر بن إلياس بن مضر بن نزار بن معد بن عدنان، وعدنان من ولد إسماعيل بن إبراهيم -صلى الله عليهما وعلى نبينا وسلم- بإجماع الناس.",
+          "accessedAt": "2026-09-19"
+        }
+      ],
+      "field": "fullName"
+    },
+    {
+      "key": "prophet/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "تواتر أن كنيته أبو القاسم، ونهى أن يجمع أحد بين اسمه وكنيته.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/40-p7",
+          "volume": "السيرة 1",
+          "pageReference": "40",
+          "extractionUrl": "https://shamela.ws/book/10906/178",
+          "excerptArabic": "وقد تواتر أن كنيته أبو القاسم.",
+          "accessedAt": "2026-09-19"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/40-p8",
+          "volume": "السيرة 1",
+          "pageReference": "40",
+          "extractionUrl": "https://shamela.ws/book/10906/178",
+          "excerptArabic": "قال ابن سيرين، عن أبي هريرة، قال: قال أبو القاسم صلى الله عليه وسلم: \"تسموا باسمي، ولا تكتنوا بكنيتي\". متفق عليه.",
+          "accessedAt": "2026-09-19"
+        }
+      ],
+      "field": "kunya"
+    },
+    {
+      "key": "prophet/names",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "عد النبي صلى الله عليه وسلم أسماءه: محمد وأحمد والماحي والحاشر والعاقب والخاتم والمقفى ونبي الرحمة ونبي التوبة ونبي الملحمة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/38-p2",
+          "volume": "السيرة 1",
+          "pageReference": "38",
+          "extractionUrl": "https://shamela.ws/book/10906/176",
+          "excerptArabic": "الزهري, عن محمد بن جبير بن مطعم, عن أبيه قال: سمعت النبي صلى الله عليه وسلم يقول: \"إن لي أسماء: أنا محمد، وأنا أحمد، وأنا الماحي الذي يمحو الله بي الكفر، وأنا الحاشر الذي يحشر الناس على قدمي، وأنا العاقب\". قال الزهري: والعاقب: الذي ليس بعده نبي.",
+          "accessedAt": "2026-09-19"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/38-p4",
+          "volume": "السيرة 1",
+          "pageReference": "38",
+          "extractionUrl": "https://shamela.ws/book/10906/176",
+          "excerptArabic": "وقال حماد بن سلمة، عن جعفر بن أبي وحشية، عن نافع بن جبير بن مطعم عن أبيه قال: سمعت رسول الله صلى الله عليه وسلم يقول: \"أنا محمد، وأنا أحمد، وأنا الحاشر، وأنا الماحي، والخاتم، والعاقب\". وهذا إسناد قوي حسن.",
+          "accessedAt": "2026-09-19"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/38-p5",
+          "volume": "السيرة 1",
+          "pageReference": "38-39",
+          "extractionUrl": "https://shamela.ws/book/10906/176",
+          "excerptArabic": "وجاء بلفظ آخر، قال: \"أنا أحمد، ومحمد، والمقفى، والحاشر، ونبي الرحمة، ونبي الملحمة\". وأحمد، والحاشر، والمقفى، ونبي التوبة، والملحمة\" رواه مسلم.",
+          "accessedAt": "2026-09-19"
+        }
+      ],
+      "field": "titles"
+    },
+    {
+      "key": "prophet/al-amin",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "كانت قريش تدعوه الأمين قبل نبوته، وحكموه في وضع الحجر الأسود فقالوا: هذا الأمين رضينا به.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/40-p2",
+          "volume": "السيرة 1",
+          "pageReference": "40",
+          "extractionUrl": "https://shamela.ws/book/10906/178",
+          "excerptArabic": "ومن أسمائه: الأمين. وكانت قريش تدعوه به قبل نبوته.",
+          "accessedAt": "2026-09-19"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/65-p1",
+          "volume": "السيرة 1",
+          "pageReference": "65",
+          "extractionUrl": "https://shamela.ws/book/10906/203",
+          "excerptArabic": "ثم طفق لا يزداد على السن إلا رضا حتى دعوه الأمين، قبل أن ينزل عليه وحي، وطفقوا لا ينحرون جزورا إلا التمسوه فيدعو لهم فيها.",
+          "accessedAt": "2026-09-19"
+        }
+      ],
+      "field": "titles"
+    },
+    {
+      "key": "prophet/istifa",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "قال صلى الله عليه وسلم: إن الله اصطفى كنانة من ولد إسماعيل، واصطفى قريشا من كنانة، واصطفى هاشما من قريش، واصطفاني من بني هاشم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/32-p5",
+          "volume": "السيرة 1",
+          "pageReference": "32",
+          "extractionUrl": "https://shamela.ws/book/10906/170",
+          "excerptArabic": "قال الأوزاعي: حدثني شداد أبو عمار، قال: حدثني واثلة بن الأسقع، قال: قال رسول الله صلى الله عليه وسلم: \"إن الله اصطفى كنانة من ولد إسماعيل، واصطفى قريشا من كنانة، واصطفى هاشما من قريش، واصطفاني من بني هاشم\" رواه مسلم.",
+          "accessedAt": "2026-09-19"
+        }
+      ],
+      "field": "titles"
+    },
+    {
+      "key": "prophet/described-in-quran",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "وصفه الله في كتابه رسولا ونبيا أميا وشاهدا ومبشرا ونذيرا وسراجا منيرا، وهو موصوف في التوراة بمثل صفته في القرآن.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/39-p9",
+          "volume": "السيرة 1",
+          "pageReference": "39",
+          "extractionUrl": "https://shamela.ws/book/10906/177",
+          "excerptArabic": "وقد وصفه الله تعالى في كتابه فقال: رسولا، ونبيا أميا وشاهدا ومبشرا ونذيرا، وداعيا إلى الله بإذنه، وسراجا منيرا، ورءوفا رحيما، ومذكرا، ومدثرا ومزملا وهاديا، إلى غير ذلك.",
+          "accessedAt": "2026-09-19"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/81-p1",
+          "volume": "السيرة 1",
+          "pageReference": "81",
+          "extractionUrl": "https://shamela.ws/book/10906/219",
+          "excerptArabic": "قال: لقيت عبد الله بن عمرو بن العاص, فقلت: أخبرني عن صفة رسول الله صلى الله عليه وسلم في التوراة فقال: أجل، والله إنه لموصوف في التوراة بصفته في القرآن {يَا أَيُّهَا النَّبِيُّ إِنَّا أَرْسَلْنَاكَ شَاهِدًا وَمُبَشِّرًا وَنَذِيرًا} [الأحزاب: ٤٥] ، وحرزا للأميين",
+          "accessedAt": "2026-09-19"
+        }
+      ],
+      "field": "titles"
+    },
+    {
+      "key": "prophet/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "خاتم النبيين وسيد المرسلين، اصطفاه الله من بني هاشم، وهو دعوة إبراهيم وبشرى عيسى، وقال: إنما أنا رحمة مهداة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/47-p2",
+          "volume": "السيرة 1",
+          "pageReference": "47",
+          "extractionUrl": "https://shamela.ws/book/10906/185",
+          "excerptArabic": "وروينا بإسناد حسن -إن شاء الله- عن العرباض بن سارية أنه سمع النبي صلى الله عليه وسلم يقول: \"إني عبد الله وخاتم النبيين، وإن آدم لمنجدل في طينته، وسأخبركم عن ذلك: دعوة أبي إبراهيم وبشارة عيسى لي، ورؤيا أمي التي رأت\". وإن أم رسول الله صلى الله عليه وسلم رأت حين وضعته نورا أضاءت منه قصور الشام.",
+          "accessedAt": "2026-09-19"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/39-p2",
+          "volume": "السيرة 1",
+          "pageReference": "39",
+          "extractionUrl": "https://shamela.ws/book/10906/177",
+          "excerptArabic": "وقال وكيع، عن الأعمش، عن أبي صالح, عن النبي صلى الله عليه وسلم مرسلا، قال: \"أيها الناس إنما أنا رحمة مهداة\".",
+          "accessedAt": "2026-09-19"
+        }
+      ],
+      "field": "virtues"
+    },
+    {
+      "key": "prophet/ayah-al-alaq",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "أول ما أنزل عليه: اقرأ باسم ربك الذي خلق، في غار حراء.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/108-p4",
+          "volume": "السيرة 1",
+          "pageReference": "108",
+          "extractionUrl": "https://shamela.ws/book/10906/246",
+          "excerptArabic": "وقال أبو صالح: حدثنا الليث، عن عقيل، عن ابن شهاب، قال: أخبرني محمد بن عباد بن جعفر المخزومي أنه سمع بعض علمائهم يقول: كان أول ما أنزل الله على نبيه: {اقْرَأْ بِاسْمِ رَبِّكَ} إلى قوله: {مَا لَمْ يَعْلَمْ} [العلق: ١-٥] ، فقالوا: هذا صدرها الذي أنزل على رسول الله صلى الله عليه وسلم يوم حراء، ثم أنزل آخرها بعد بما شاء الله.",
+          "accessedAt": "2026-09-19"
+        }
+      ],
+      "field": "ayat"
+    },
+    {
+      "key": "prophet/ayah-al-muddaththir",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "نزلت يا أيها المدثر بعد فترة الوحي، فكان الوحي الأول للنبوة والثاني للرسالة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/101-p4",
+          "volume": "السيرة 1",
+          "pageReference": "101",
+          "extractionUrl": "https://shamela.ws/book/10906/239",
+          "excerptArabic": "وقال الزهري، عن أبي سلمة، عن جابر: سمعت رسول الله صلى الله عليه وسلم يحدث عن فترة الوحي، قال: \"بينا أنا أمشي إذ سمعت صوتا من السماء، فرفعت رأسي، فإذا الملك الذي جاءني بحراء جالس على كرسي بين السماء والأرض، فجئثت منه رعبا، فرجعت، فقلت: زملوني فدثروني، ونزلت: {يَا أَيُّهَا الْمُدَّثِّرُ} إلى قوله: {وَالرُّجْزَ فَاهْجُرْ} \". [المدثر: ١-٥] ، وهي الأوثان. متفق عليه. وهو نص في {يَا أَيُّهَا الْمُدَّثِّرُ} نزلت بعد فترة الوحي الأول، {اقْرَأْ بِاسْمِ رَبِّكَ} فكان الوحي الأول للنبوة والثاني للرسالة.",
+          "accessedAt": "2026-09-19"
+        }
+      ],
+      "field": "ayat"
+    },
+    {
+      "key": "prophet/ayah-al-anbiya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "قال الله تعالى: وما أرسلناك إلا رحمة للعالمين، وقال: إنما أنا رحمة مهداة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/39-p4",
+          "volume": "السيرة 1",
+          "pageReference": "39",
+          "extractionUrl": "https://shamela.ws/book/10906/177",
+          "excerptArabic": "وقد قال الله تعالى: {وَمَا أَرْسَلْنَاكَ إِلَّا رَحْمَةً لِلْعَالَمِينَ} [الأنبياء: ١٠٧] .",
+          "accessedAt": "2026-09-19"
+        }
+      ],
+      "field": "ayat"
+    },
+    {
+      "key": "prophet/ayah-al-ahzab",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "صفته في التوراة كصفته في القرآن: يا أيها النبي إنا أرسلناك شاهدا ومبشرا ونذيرا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/81-p1",
+          "volume": "السيرة 1",
+          "pageReference": "81",
+          "extractionUrl": "https://shamela.ws/book/10906/219",
+          "excerptArabic": "قال: لقيت عبد الله بن عمرو بن العاص, فقلت: أخبرني عن صفة رسول الله صلى الله عليه وسلم في التوراة فقال: أجل، والله إنه لموصوف في التوراة بصفته في القرآن {يَا أَيُّهَا النَّبِيُّ إِنَّا أَرْسَلْنَاكَ شَاهِدًا وَمُبَشِّرًا وَنَذِيرًا} [الأحزاب: ٤٥] ، وحرزا للأميين",
+          "accessedAt": "2026-09-19"
+        }
+      ],
+      "field": "ayat"
+    },
+    {
+      "key": "prophet/ayah-al-saff",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "بشارة عيسى به: ومبشرا برسول يأتي من بعدي اسمه أحمد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/47-p6",
+          "volume": "السيرة 1",
+          "pageReference": "47",
+          "extractionUrl": "https://shamela.ws/book/10906/185",
+          "excerptArabic": "وبشارة عيسى قوله: {وَمُبَشِّرًا بِرَسُولٍ يَأْتِي مِنْ بَعْدِي اسْمُهُ أَحْمَدْ} [الصف: ٦]",
+          "accessedAt": "2026-09-19"
+        }
+      ],
+      "field": "ayat"
+    },
+    {
+      "key": "prophet/ayah-al-baqarah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "دعوة إبراهيم فيه: ربنا وابعث فيهم رسولا منهم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/47-p6",
+          "volume": "السيرة 1",
+          "pageReference": "47",
+          "extractionUrl": "https://shamela.ws/book/10906/185",
+          "excerptArabic": "وأما دعوة إبراهيم فقوله: {رَبَّنَا وَابْعَثْ فِيهِمْ رَسُولًا مِنْهُمْ} [البقرة: ١٢٩]",
+          "accessedAt": "2026-09-19"
+        }
+      ],
+      "field": "ayat"
+    },
+    {
+      "key": "prophet/ayah-al-maarij",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "قيل في قوله تعالى: وفصيلته التي تؤويه، إن فصيلة النبي صلى الله عليه وسلم بنو عبد المطلب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/32-p4",
+          "volume": "السيرة 1",
+          "pageReference": "32",
+          "extractionUrl": "https://shamela.ws/book/10906/170",
+          "excerptArabic": "وقد قيل في قوله تعالى: {وَفَصِيلَتِهِ الَّتِي تُؤْوِيهِ} [المعارج: ١٣] ، فصيلة النبي صلى الله عليه وسلم بنو عبد المطلب أعمامه وبنو أعمامه، وأما فخذه فبنو هاشم. قال: وبنو عبد مناف بطنه، وقريش عمارته، وبنو كنانة قبيلته، ومضر شعبته.",
+          "accessedAt": "2026-09-19"
+        }
+      ],
+      "field": "ayat"
+    },
+    {
+      "key": "prophet/ayah-al-shuara",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "لما نزلت: وأنذر عشيرتك الأقربين، دعا النبي صلى الله عليه وسلم قريشا فعم وخص.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/116-p2",
+          "volume": "السيرة 1",
+          "pageReference": "116",
+          "extractionUrl": "https://shamela.ws/book/10906/254",
+          "excerptArabic": "لما نزلت: {وَأَنْذِرْ عَشِيرَتَكَ الْأَقْرَبِينَ} [الشعراء: ٢١٤] ، دعا النبي صلى الله عليه وسلم قريشا، فاجتمعوا فعم وخص",
+          "accessedAt": "2026-09-19"
+        }
+      ],
+      "field": "ayat"
+    },
+    {
+      "key": "prophet/ayah-al-maidah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "كان يحرس حتى نزلت: والله يعصمك من الناس، فقال: أيها الناس انصرفوا فقد عصمني الله.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/121-p8",
+          "volume": "السيرة 1",
+          "pageReference": "121",
+          "extractionUrl": "https://shamela.ws/book/10906/259",
+          "excerptArabic": "وقال الحارث بن عبيد: حدثنا الجريري، عن عبد الله بن شقيق، عن عائشة، قالت: كان رسول الله صلى الله عليه وسلم يحرس حتى نزلت: {وَاللَّهُ يَعْصِمُكَ مِنَ النَّاسِ} [المائدة: ٦٧] ، فأخرج رأسه من القبة فقال لهم: \"أيها الناس انصرفوا فقد عصمني الله\".",
+          "accessedAt": "2026-09-19"
+        }
+      ],
+      "field": "ayat"
+    },
+    {
+      "key": "prophet/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "أبوه عبد الله بن عبد المطلب، توفي والنبي صلى الله عليه وسلم حمل أو ابن ثمانية وعشرين شهرا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/53-p5",
+          "volume": "السيرة 1",
+          "pageReference": "53",
+          "extractionUrl": "https://shamela.ws/book/10906/191",
+          "excerptArabic": "وتوفي \"عبد الله\" أبوه، وللنبي صلى الله عليه وسلم ثمانية وعشرون شهرا. وقيل: أقل من ذلك.",
+          "accessedAt": "2026-09-19"
+        }
+      ],
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "abdullah-ibn-abd-al-muttalib"
+    },
+    {
+      "key": "prophet/grandfather",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "كفله جده عبد المطلب بعد وفاة أمه، حتى توفي جده وللنبي صلى الله عليه وسلم ثمان سنين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/54-p3",
+          "volume": "السيرة 1",
+          "pageReference": "54",
+          "extractionUrl": "https://shamela.ws/book/10906/192",
+          "excerptArabic": "فلما مات ودفنت، حملته أم أيمن مولاته إلى مكة إلى جده، فكان في كفالته إلى أن توفي جده، وللنبي صلى الله عليه وسلم ثمان سنين، فأوصى به إلى عمه أبي طالب.",
+          "accessedAt": "2026-09-19"
+        }
+      ],
+      "relationshipType": "GRANDSON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "abd-al-muttalib-ibn-hashim"
+    },
+    {
+      "key": "prophet/uncle-abu-talib",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "أوصى به جده إلى عمه أبي طالب، فمنعه وقام دونه، وقال: والله لا أسلمك أبدا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/54-p3",
+          "volume": "السيرة 1",
+          "pageReference": "54",
+          "extractionUrl": "https://shamela.ws/book/10906/192",
+          "excerptArabic": "فأوصى به إلى عمه أبي طالب.",
+          "accessedAt": "2026-09-19"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/121-p1",
+          "volume": "السيرة 1",
+          "pageReference": "121",
+          "extractionUrl": "https://shamela.ws/book/10906/259",
+          "excerptArabic": "فلما ولى ناداه أبو طالب، فقال: أقبل يابن أخي. فأقبل إليه فقال: اذهب فقل ما أحببت فوالله لا أسلمك أبدا.",
+          "accessedAt": "2026-09-19"
+        }
+      ],
+      "relationshipType": "PATERNAL_NEPHEW",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "abu-talib"
+    },
+    {
+      "key": "prophet/wife-khadijah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "تزوج خديجة بنت خويلد وعمره خمس وعشرون سنة، وأصدقها عشرين بكرة، ولم يتزوج عليها حتى ماتت.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/63-p1",
+          "volume": "السيرة 1",
+          "pageReference": "63",
+          "extractionUrl": "https://shamela.ws/book/10906/201",
+          "excerptArabic": "دخل على خويلد فخطبها منه، وأصدقها النبي صلى الله عليه وسلم عشرين بكرة، فلم يتزوج عليها حتى ماتت، وتزوجها وعمره خمس وعشرون سنة.",
+          "accessedAt": "2026-09-19"
+        }
+      ],
+      "relationshipType": "HUSBAND",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "khadijah-bint-khuwaylid"
+    },
+    {
+      "key": "prophet/mawla-zayd",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "وهبت خديجة زيد بن حارثة للنبي صلى الله عليه وسلم فأعتقه وتبناه قبل الوحي، وكان يدعى زيد بن محمد حتى نزلت: ادعوهم لآبائهم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/111-p3",
+          "volume": "السيرة 1",
+          "pageReference": "111",
+          "extractionUrl": "https://shamela.ws/book/10906/249",
+          "excerptArabic": "وكان حكيم بن حزام قدم من الشام برقيق، فدخلت عليه خديجة بنت خويلد فقال: اختاري أي هؤلاء الغلماء شئت فهو لك، فاختارت زيدا، فأخذته، فرآه النبي صلى الله عليه وسلم فاستوهبه، فوهبته له، فأعتقه وتبناه قبل الوحي، ثم قدم أبوه حارثة لموجدته عليه وجزعه فقال النبي صلى الله عليه وسلم: \"إن شئت فأقم عندي، وإن شئت فانطلق مع أبيك\". قال: بل أقيم عندك، وكان يدعى زيد بن محمد، فلما نزلت {ادْعُوهُمْ لِآبَائِهِمْ} [الأحزاب: ٥] ، قال: أنا زيد بن حارثة.",
+          "accessedAt": "2026-09-19"
+        }
+      ],
+      "relationshipType": "MAWLA",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "zaid-ibn-harithah"
+    },
+    {
+      "key": "prophet/son-al-qasim",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "أولاده كلهم من خديجة سوى إبراهيم: القاسم والطيب والطاهر ورقية وزينب وأم كلثوم وفاطمة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/63-p4",
+          "volume": "السيرة 1",
+          "pageReference": "63",
+          "extractionUrl": "https://shamela.ws/book/10906/201",
+          "excerptArabic": "وأولاده كلهم من خديجة سوى إبراهيم، وهم: القاسم، والطيب, والطاهر، وماتوا صغارا رضعا قبل المبعث، ورقية، وزينب، وأم كلثوم, وفاطمة -رضي الله عنهم- فرقية، وأم كلثوم زوجتا عثمان بن عفان، وزينب زوجة أبي العاص بن الربيع بن عبد شمس، وفاطمة زوجة علي، رضي الله عنهم أجمعين.",
+          "accessedAt": "2026-09-19"
+        }
+      ],
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "al-qasim-ibn-muhammad"
+    },
+    {
+      "key": "prophet/daughter-ruqayyah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "أولاده كلهم من خديجة سوى إبراهيم: القاسم والطيب والطاهر ورقية وزينب وأم كلثوم وفاطمة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/63-p4",
+          "volume": "السيرة 1",
+          "pageReference": "63",
+          "extractionUrl": "https://shamela.ws/book/10906/201",
+          "excerptArabic": "وأولاده كلهم من خديجة سوى إبراهيم، وهم: القاسم، والطيب, والطاهر، وماتوا صغارا رضعا قبل المبعث، ورقية، وزينب، وأم كلثوم, وفاطمة -رضي الله عنهم- فرقية، وأم كلثوم زوجتا عثمان بن عفان، وزينب زوجة أبي العاص بن الربيع بن عبد شمس، وفاطمة زوجة علي، رضي الله عنهم أجمعين.",
+          "accessedAt": "2026-09-19"
+        }
+      ],
+      "relationshipType": "DAUGHTER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "ruqayyah-bint-muhammad"
+    },
+    {
+      "key": "prophet/daughter-zaynab",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "أولاده كلهم من خديجة سوى إبراهيم: القاسم والطيب والطاهر ورقية وزينب وأم كلثوم وفاطمة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/63-p4",
+          "volume": "السيرة 1",
+          "pageReference": "63",
+          "extractionUrl": "https://shamela.ws/book/10906/201",
+          "excerptArabic": "وأولاده كلهم من خديجة سوى إبراهيم، وهم: القاسم، والطيب, والطاهر، وماتوا صغارا رضعا قبل المبعث، ورقية، وزينب، وأم كلثوم, وفاطمة -رضي الله عنهم- فرقية، وأم كلثوم زوجتا عثمان بن عفان، وزينب زوجة أبي العاص بن الربيع بن عبد شمس، وفاطمة زوجة علي، رضي الله عنهم أجمعين.",
+          "accessedAt": "2026-09-19"
+        }
+      ],
+      "relationshipType": "DAUGHTER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "zaynab-bint-muhammad"
+    },
+    {
+      "key": "prophet/daughter-umm-kulthum",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "أولاده كلهم من خديجة سوى إبراهيم: القاسم والطيب والطاهر ورقية وزينب وأم كلثوم وفاطمة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/63-p4",
+          "volume": "السيرة 1",
+          "pageReference": "63",
+          "extractionUrl": "https://shamela.ws/book/10906/201",
+          "excerptArabic": "وأولاده كلهم من خديجة سوى إبراهيم، وهم: القاسم، والطيب, والطاهر، وماتوا صغارا رضعا قبل المبعث، ورقية، وزينب، وأم كلثوم, وفاطمة -رضي الله عنهم- فرقية، وأم كلثوم زوجتا عثمان بن عفان، وزينب زوجة أبي العاص بن الربيع بن عبد شمس، وفاطمة زوجة علي، رضي الله عنهم أجمعين.",
+          "accessedAt": "2026-09-19"
+        }
+      ],
+      "relationshipType": "DAUGHTER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "umm-kulthum-bint-muhammad"
+    },
+    {
+      "key": "prophet/daughter-fatimah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "أولاده كلهم من خديجة سوى إبراهيم: القاسم والطيب والطاهر ورقية وزينب وأم كلثوم وفاطمة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/63-p4",
+          "volume": "السيرة 1",
+          "pageReference": "63",
+          "extractionUrl": "https://shamela.ws/book/10906/201",
+          "excerptArabic": "وأولاده كلهم من خديجة سوى إبراهيم، وهم: القاسم، والطيب, والطاهر، وماتوا صغارا رضعا قبل المبعث، ورقية، وزينب، وأم كلثوم, وفاطمة -رضي الله عنهم- فرقية، وأم كلثوم زوجتا عثمان بن عفان، وزينب زوجة أبي العاص بن الربيع بن عبد شمس، وفاطمة زوجة علي، رضي الله عنهم أجمعين.",
+          "accessedAt": "2026-09-19"
+        }
+      ],
+      "relationshipType": "DAUGHTER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "fatimah-bint-muhammad"
+    },
+    {
+      "key": "prophet/son-ibrahim",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "أولاده كلهم من خديجة سوى إبراهيم: القاسم والطيب والطاهر ورقية وزينب وأم كلثوم وفاطمة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/63-p4",
+          "volume": "السيرة 1",
+          "pageReference": "63",
+          "extractionUrl": "https://shamela.ws/book/10906/201",
+          "excerptArabic": "وأولاده كلهم من خديجة سوى إبراهيم، وهم: القاسم، والطيب, والطاهر، وماتوا صغارا رضعا قبل المبعث، ورقية، وزينب، وأم كلثوم, وفاطمة -رضي الله عنهم- فرقية، وأم كلثوم زوجتا عثمان بن عفان، وزينب زوجة أبي العاص بن الربيع بن عبد شمس، وفاطمة زوجة علي، رضي الله عنهم أجمعين.",
+          "accessedAt": "2026-09-19"
+        }
+      ],
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "ibrahim-ibn-muhammad"
+    },
+    {
+      "key": "prophet/birth-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "ولد رسول الله صلى الله عليه وسلم عام الفيل، وهو المجمع عليه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "birth-prophet-muhammad",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/33-p2",
+          "volume": "السيرة 1",
+          "pageReference": "33",
+          "extractionUrl": "https://shamela.ws/book/10906/171",
+          "excerptArabic": "أخبرنا أبو المعالي أحمد بن إسحاق، قال: أخبرنا أحمد بن أبي الفتح، والفتح بن عبد الله، قالا: أخبرنا محمد بن عمر الفقيه، قال: أخبرنا أبو الحسين أحمد بن محمد ابن النقور، قال: أخبرنا علي بن عمر الحربي، قال: حدثنا أحمد بن الحسن الصوفي، قال: حدثنا يحيى ابن معين، قال: حدثنا حجاج بن محمد، قال: حدثنا يونس بن أبي إسحاق، عن أبيه، عن سعيد بن جبير، عن ابن عباس: \"أن النبي صلى الله عليه وسلم ولد عام الفيل\". صحيح.",
+          "accessedAt": "2026-09-19"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/35-p1",
+          "volume": "السيرة 1",
+          "pageReference": "35",
+          "extractionUrl": "https://shamela.ws/book/10906/173",
+          "excerptArabic": "ط: المجمع عليه أنه ولد عام الفيل.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "prophet/birth-day",
+      "subjectKind": "EVENT",
+      "subjectSlug": "birth-prophet-muhammad",
+      "assertion": "ولد يوم الإثنين لاثنتي عشرة ليلة مضت من ربيع الأول.",
+      "field": "description",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/35-p2",
+          "volume": "السيرة 1",
+          "pageReference": "35",
+          "extractionUrl": "https://shamela.ws/book/10906/173",
+          "excerptArabic": "ولد لاثنتي عشرة ليلة مضت من ربيع الأول، وقيل: من رمضان يوم الإثنين حين طلع الفجر.",
+          "accessedAt": "2026-09-19"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/35-p3",
+          "volume": "السيرة 1",
+          "pageReference": "35",
+          "extractionUrl": "https://shamela.ws/book/10906/173",
+          "excerptArabic": "وقال أبو قتادة الأنصاري: سأل أعرابي رسول الله صلى الله عليه وسلم فقال: ما تقول في صوم يوم الإثنين؟ قال: \"ذاك يوم ولدت فيه وفيه أوحي إليّ\". أخرجه مسلم.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "prophet/birth-day-alt",
+      "subjectKind": "EVENT",
+      "subjectSlug": "birth-prophet-muhammad",
+      "assertion": "وقال أبو جعفر محمد بن علي: ولد لعشر ليال خلون من ربيع الأول، وصححه الدمياطي.",
+      "field": "description",
+      "confidence": "DISPUTED",
+      "disputed": true,
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/36-p2",
+          "volume": "السيرة 1",
+          "pageReference": "36",
+          "extractionUrl": "https://shamela.ws/book/10906/174",
+          "excerptArabic": "وقال شيخنا أبو محمد الدمياطي في \"السيرة\" من تأليفه، عن أبي جعفر محمد بن علي، قال: ولد رسول الله صلى الله عليه وسلم يوم الإثنين لعشر ليال خلون من ربيع الأول، وكان قدوم أصحاب الفيل قبل ذلك في النصف من المحرم.",
+          "accessedAt": "2026-09-19"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/36-p4",
+          "volume": "السيرة 1",
+          "pageReference": "36",
+          "extractionUrl": "https://shamela.ws/book/10906/174",
+          "excerptArabic": "قال الدمياطي: والصحيح قول أبي جعفر، قال: ويقال: إنه ولد في العشرين من نيسان.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "prophet/first-revelation",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "أول ما بدئ به من الوحي الرؤيا الصالحة، ثم جاءه الملك بغار حراء فقال: اقرأ باسم ربك الذي خلق.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "first-revelation-of-the-quran",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/95-p2",
+          "volume": "السيرة 1",
+          "pageReference": "95",
+          "extractionUrl": "https://shamela.ws/book/10906/233",
+          "excerptArabic": "أول ما بدئ به النبي صلى الله عليه وسلم من الوحي الرؤيا الصالحة ثم حبب إليه الخلاء، فكان يأتي حراء فيتحنث فيه، أي: يتعبد الليالي ذوات العدد ويتزود لذلك، ثم يرجع إلى خديجة فيتزود لمثلها، حتى فجأه الحق وهو في غار حراء، فجاءه الملك فقال: اقرأ، قال: \"فقلت: ما أنا بقارئ فأخذني فغطني حتى بلغ مني الجهد، ثم أرسلني، فقال: اقرأ، فقلت: ما أنا بقارئ. فأخذني الثانية فغطني حتى بلغ مني الجهد، ثم أرسلني، فقال: اقرأ. فقلت: ما أنا بقارئ. فأخذني فغطني الثالثة حتى بلغ مني الجهد، ثم أرسلني فقال: {اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ} \". حتى بلغ إلى قوله: {مَا لَمْ يَعْلَمْ} [العلق: ١-٥]",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "prophet/first-revelation-ramadan",
+      "subjectKind": "EVENT",
+      "subjectSlug": "first-revelation-of-the-quran",
+      "field": "description",
+      "assertion": "كان يجاور بحراء من كل سنة شهرا، وكان الشهر الذي أراد الله كرامته فيه رمضان.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/105-p4",
+          "volume": "السيرة 1",
+          "pageReference": "105",
+          "extractionUrl": "https://shamela.ws/book/10906/243",
+          "excerptArabic": "فكان يجاور ذلك في كل سنة، يطعم من جاءه من المساكين، فإذا قضى جواره من شهره، كان أول ما يبدأ به الكعبة، فيطوف ثم يرجع إلى بيته، حتى إذا كان الشهر الذي أراد الله كرامته، وذلك الشهر رمضان، خرج صلى الله عليه وسلم إلى حراء ومعه أهله، حتى إذا كانت الليلة التي أكرمه الله فيها برسالته، جاءه جبريل بأمر الله تعالى.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "salman/islam",
+      "subjectKind": "PERSON",
+      "subjectSlug": "salman-al-farisi",
+      "assertion": "أسلم سلمان بالمدينة بعد الهجرة، حين رأى خاتم النبوة بين كتفي رسول الله صلى الله عليه وسلم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "islam-of-salman-al-farisi",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/90-p3",
+          "volume": "السيرة 1",
+          "pageReference": "90",
+          "extractionUrl": "https://shamela.ws/book/10906/228",
+          "excerptArabic": "فنظرت فرأيت بين كتفيه خاتم النبوة مثل بيضة الحمامة، فأسلمت.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "salman/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "salman-al-farisi",
+      "assertion": "حبسه الرق عن بدر ففاتته.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "ABSENT_FROM",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/86-p2",
+          "volume": "السيرة 1",
+          "pageReference": "86",
+          "extractionUrl": "https://shamela.ws/book/10906/224",
+          "excerptArabic": "وحبسني الرق حتى فاتتني بدر وأحد، ثم شهدت الخندق، ثم لم يفتني معه مشهد.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "salman/uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "salman-al-farisi",
+      "assertion": "حبسه الرق عن أحد ففاتته.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "ABSENT_FROM",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/86-p2",
+          "volume": "السيرة 1",
+          "pageReference": "86",
+          "extractionUrl": "https://shamela.ws/book/10906/224",
+          "excerptArabic": "وحبسني الرق حتى فاتتني بدر وأحد، ثم شهدت الخندق، ثم لم يفتني معه مشهد.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "salman/khandaq",
+      "subjectKind": "PERSON",
+      "subjectSlug": "salman-al-farisi",
+      "assertion": "شهد الخندق، وهي أول مشاهده، ثم لم يفته مع رسول الله صلى الله عليه وسلم مشهد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "khandaq",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/86-p2",
+          "volume": "السيرة 1",
+          "pageReference": "86",
+          "extractionUrl": "https://shamela.ws/book/10906/224",
+          "excerptArabic": "وحبسني الرق حتى فاتتني بدر وأحد، ثم شهدت الخندق، ثم لم يفتني معه مشهد.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    }
+  ]
 }
