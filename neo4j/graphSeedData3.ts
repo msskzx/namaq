@@ -2,9 +2,10 @@
  * Ancestor chains sourced from "سير أعلام النبلاء" (al-Dhahabi), filling in
  * the missing parent nodes for companions that already exist as Person
  * profiles but had no FATHER/SON chain in the graph:
- *   - saad-ibn-abi-waqqas, saeed-ibn-zaid
+ *   - saeed-ibn-zaid
  * The chains for abu-ubaydah-ibn-al-jarrah, talhah-ibn-ubaydullah,
- * az-zubayr-ibn-al-awwam and abdur-rahman-ibn-awf start here too, but each
+ * az-zubayr-ibn-al-awwam, abdur-rahman-ibn-awf and saad-ibn-abi-waqqas start
+ * here too, but each
  * one's own edge to his father is the catalog's now, authored with its
  * citation and written by npm run catalog:project-graph.
  * plus the ancestor chains for batch 1 of newly added companions
@@ -173,8 +174,6 @@ export const peopleRelationsQueries = [
   'MATCH (from:Person {slug: "kilab-ibn-murrah"}), (to:Person {slug: "zuhrah-ibn-kilab"}) CREATE (from)-[:FATHER]->(to);',
 
   // Saad ibn Abi Waqqas
-  'MATCH (from:Person {slug: "saad-ibn-abi-waqqas"}), (to:Person {slug: "malik-ibn-uhayb"}) CREATE (from)-[:SON]->(to);',
-  'MATCH (from:Person {slug: "malik-ibn-uhayb"}), (to:Person {slug: "saad-ibn-abi-waqqas"}) CREATE (from)-[:FATHER]->(to);',
 
   'MATCH (from:Person {slug: "malik-ibn-uhayb"}), (to:Person {slug: "uhayb-ibn-abd-manaf"}) CREATE (from)-[:SON]->(to);',
   'MATCH (from:Person {slug: "uhayb-ibn-abd-manaf"}), (to:Person {slug: "malik-ibn-uhayb"}) CREATE (from)-[:FATHER]->(to);',

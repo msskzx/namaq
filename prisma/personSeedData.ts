@@ -37,18 +37,6 @@ export const people = [
     ],
   },
   {
-    name: 'سعد بن أبي وقاص',
-    fullName: 'سعد بن مالك بن وهيب بن عبد مناف بن زهرة القرشي الزهري، أبو إسحاق',
-    slug: 'saad-ibn-abi-waqqas',
-    appearance: 'كان جميل الوجه، طويل القامة، قوي البنية، اشتهر بمهارته في الرماية.',
-    virtues: 'أحد العشرة المبشرين بالجنة، أحد الستة أصحاب الشورى، أول من رمى بسهم في سبيل الله، خال النبي صلى الله عليه وسلم، مستجاب الدعوة، شجاع، قائد في فتح العراق وفارس.',
-    picture: null,
-    titles: ['the-ten-promised-paradise', 'the-six-of-the-shura', 'companion', 'awwal-rami'],
-    ayat: [
-      { surah: 6, ayah: 124 }
-    ],
-  },
-  {
     name: 'أبو بكر الصديق',
     fullName: 'عبد الله بن أبي قحافة عثمان بن عامر بن عمرو بن كعب بن سعد بن تيم بن مرة بن كعب بن لؤي القرشي التيمي',
     slug: 'abu-bakr-as-siddiq',
@@ -414,7 +402,6 @@ export const peopleBattleParticipations = [
   { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'ali-ibn-abi-talib', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'prophet-muhammad', battleSlug: 'badr', isMuslim: true, status: [] },
-  { personSlug: 'saad-ibn-abi-waqqas', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'saeed-ibn-zaid', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'umar-ibn-al-khattab', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'uthman-ibn-affan', battleSlug: 'badr', isMuslim: true, status: ['ABSENT_EXCUSED'] },
@@ -425,7 +412,6 @@ export const peopleBattleParticipations = [
   { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'uhud', isMuslim: true, status: [] },
   { personSlug: 'ali-ibn-abi-talib', battleSlug: 'uhud', isMuslim: true, status: [] },
   { personSlug: 'prophet-muhammad', battleSlug: 'uhud', isMuslim: true, status: ['INJURED'] },
-  { personSlug: 'saad-ibn-abi-waqqas', battleSlug: 'uhud', isMuslim: true, status: [], summary: `ابن إسحاق : حدثني صالح بن كيسان ، عن بعض آل سعد ، عن سعد : أنه رمى يوم أحد ، قال : فلقد رأيت رسول الله - صلى الله عليه وسلم - يناولني النبل ويقول : " ارم فداك أبي وأمي " . حتى إنه ليناولني السهم ما له من نصل ، فأرمي به . [ ص: 100 ] قال ابن المسيب : كان جيد الرمي ، سمعته يقول : جمع لي رسول الله - صلى الله عليه وسلم - أبويه يوم أحد . أخرجه البخاري . وقد ساقه الحافظ ابن عساكر من بضعة عشر وجها . وساق حديث ابن أبي خالد عن قيس من سبعة عشر طريقا بألفاظها ، وبمثل هذا كبر تاريخه . وساق حديث عبد الله بن شداد عن علي : ما سمعت رسول الله - صلى الله عليه وسلم - جمع أبويه لأحد غير سعد ، من ستة عشر وجها . رواه مسعر وشعبة وسفيان ، عن سعد بن إبراهيم ، عنه .` },
   { personSlug: 'saeed-ibn-zaid', battleSlug: 'uhud', isMuslim: true, status: [] },
   { personSlug: 'umar-ibn-al-khattab', battleSlug: 'uhud', isMuslim: true, status: [] },
   { personSlug: 'uthman-ibn-affan', battleSlug: 'uhud', isMuslim: true, status: [] },
@@ -436,7 +422,6 @@ export const peopleBattleParticipations = [
   { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'khandaq', isMuslim: true, status: [] },
   { personSlug: 'ali-ibn-abi-talib', battleSlug: 'khandaq', isMuslim: true, status: [] },
   { personSlug: 'prophet-muhammad', battleSlug: 'khandaq', isMuslim: true, status: [] },
-  { personSlug: 'saad-ibn-abi-waqqas', battleSlug: 'khandaq', isMuslim: true, status: [] },
   { personSlug: 'saeed-ibn-zaid', battleSlug: 'khandaq', isMuslim: true, status: [] },
   { personSlug: 'umar-ibn-al-khattab', battleSlug: 'khandaq', isMuslim: true, status: [] },
   { personSlug: 'uthman-ibn-affan', battleSlug: 'khandaq', isMuslim: true, status: [] },
@@ -511,11 +496,9 @@ export const peopleBattleParticipations = [
   { personSlug: 'umar-ibn-al-khattab', battleSlug: 'yarmuk', isMuslim: true, status: [] },
 
   // Battle of al-Qadisiyyah (15 AH)
-  { personSlug: 'saad-ibn-abi-waqqas', battleSlug: 'qadisiyyah', isMuslim: true, status: [] },
   { personSlug: 'umar-ibn-al-khattab', battleSlug: 'qadisiyyah', isMuslim: true, status: [] },
 
   // Conquest of Ctesiphon (16 AH)
-  { personSlug: 'saad-ibn-abi-waqqas', battleSlug: 'fath-ctesiphon', isMuslim: true, status: [] },
   { personSlug: 'umar-ibn-al-khattab', battleSlug: 'fath-ctesiphon', isMuslim: true, status: [] },
 
   // Conquest of Jerusalem (16 AH)
