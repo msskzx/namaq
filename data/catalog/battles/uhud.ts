@@ -9,6 +9,16 @@ const uhud = {
   fields: { hijriYear: { value: 3, claims: legacyUnreviewed } },
   participants: [
     {
+      person: 'saad-ibn-abi-waqqas',
+      isMuslim: true,
+      summary: {
+        value:
+          'أَنَّهُ رَمَى يَوْمَ أُحُدٍ، قَالَ: فَلَقَدْ رَأَيْتُ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يُنَاوِلُنِي النَّبْلَ وَيَقُوْلُ: (ارْمِ فِدَاكَ أَبِي وَأُمِّي) ، حَتَّى إِنَّهُ لَيُنَاوِلُنِي السَّهْمَ مَا لَهُ مِنْ نَصْلٍ، فَأَرْمِي بِهِ.',
+        claims: ['saad/uhud'],
+      },
+      claims: ['saad/uhud'],
+    },
+    {
       person: 'abdur-rahman-ibn-awf',
       isMuslim: true,
       status: ['INJURED'],

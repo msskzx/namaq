@@ -11,6 +11,16 @@ const jamal = {
   fields: { hijriYear: { value: 36, claims: ['talhah/death-year', 'talhah/jamal'] } },
   participants: [
     {
+      person: 'saad-ibn-abi-waqqas',
+      isMuslim: true,
+      relation: 'ABSENT_FROM',
+      summary: {
+        value: 'اعْتَزَلَ سَعْدٌ الفِتْنَةَ، فَلاَ حَضَرَ الجَمَلَ، وَلاَ صِفِّيْنَ، وَلاَ التَّحْكِيْمَ.',
+        claims: ['saad/jamal'],
+      },
+      claims: ['saad/jamal'],
+    },
+    {
       person: 'talhah-ibn-ubaydullah',
       isMuslim: true,
       status: ['MARTYRED'],

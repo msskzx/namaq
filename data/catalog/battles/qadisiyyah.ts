@@ -1,0 +1,23 @@
+import type { CatalogBattle } from '@/lib/catalog/types';
+
+// Khalifah ibn Khayyat dates the battle outright, so the year is cited rather
+// than carried the way the seeded battles' years are.
+const qadisiyyah = {
+  kind: 'BATTLE',
+  slug: 'qadisiyyah',
+  fields: { hijriYear: { value: 15, claims: ['saad/qadisiyyah'] } },
+  participants: [
+    {
+      person: 'saad-ibn-abi-waqqas',
+      isMuslim: true,
+      summary: {
+        value:
+          'وَمِنْ مَنَاقِبِ سَعْدٍ أَنَّ فَتْحَ العِرَاقِ كَانَ عَلَى يَدَيْ سَعْدٍ، وَهُوَ كَانَ مُقَدَّمَ الجُيُوْشِ يَوْمَ وَقْعَةِ القَادِسِيَّةِ، وَنَصَرَ اللهُ دِيْنَهُ.',
+        claims: ['saad/qadisiyyah'],
+      },
+      claims: ['saad/qadisiyyah'],
+    },
+  ],
+} satisfies CatalogBattle;
+
+export default qadisiyyah;

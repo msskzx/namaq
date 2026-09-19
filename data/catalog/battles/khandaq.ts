@@ -7,6 +7,16 @@ const khandaq = {
   slug: 'khandaq',
   fields: { hijriYear: { value: 5, claims: legacyUnreviewed } },
   participants: [
+    {
+      person: 'saad-ibn-abi-waqqas',
+      isMuslim: true,
+      summary: {
+        value:
+          'لَقَدْ رَأَيْتُ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- ضَحِكَ يوْمَ الخَنْدَقِ حَتَّى بَدَتْ نَوَاجِذُهُ. كَانَ رَجُلٌ مَعَهُ تُرْسٌ، وَكَانَ سَعْدٌ رَامِياً، فَنَزَعَ لَهُ سَعْدٌ بِسَهْمٍ، فَلَمَّا رَفَعَ رَأْسَهُ رَمَاهُ، فَلَمْ يُخْطِ جَبْهَتَهُ.',
+        claims: ['saad/khandaq'],
+      },
+      claims: ['saad/khandaq'],
+    },
     { person: 'talhah-ibn-ubaydullah', isMuslim: true, claims: legacyUnreviewed },
     { person: 'abdur-rahman-ibn-awf', isMuslim: true, claims: legacyUnreviewed },
     { person: 'abu-ubaydah-ibn-al-jarrah', isMuslim: true, claims: legacyUnreviewed },
