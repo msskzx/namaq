@@ -1687,6 +1687,81 @@
           "accessedAt": "2026-09-18"
         }
       ]
+    },
+    {
+      "key": "zubayr/islam",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "أسلم وهو حدث، على يد أبي بكر الصديق.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "islam-of-az-zubayr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "41-p3",
+          "volume": "1",
+          "pageReference": "41",
+          "extractionUrl": "https://shamela.ws/book/10906/1467",
+          "excerptArabic": "أَسْلَمَ وَهُوَ حَدَثٌ",
+          "accessedAt": "2026-09-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "45-p14",
+          "volume": "1",
+          "pageReference": "45",
+          "extractionUrl": "https://shamela.ws/book/10906/1471",
+          "excerptArabic": "قَالَ ابْنُ إِسْحَاقَ: وَأَسْلَمَ - عَلَى مَا بَلَغَنِي - عَلَى يَدِ أَبِي بَكْرٍ: الزُّبَيْرُ، وَعُثْمَانُ، وَطَلْحَةُ، وَعَبْدُ الرَّحْمَنِ، وَسَعْدٌ.",
+          "accessedAt": "2026-09-18"
+        }
+      ]
+    },
+    {
+      "key": "zubayr/hijra-madinah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "هاجر وهو ابن ثمان عشرة سنة، ولم يسمّ الخبر وجه هجرته.",
+      "confidence": "LIKELY",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "hijra-to-medina",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "44-p11",
+          "volume": "1",
+          "pageReference": "44",
+          "extractionUrl": "https://shamela.ws/book/10906/1470",
+          "excerptArabic": "هَاجَرَ الزُّبَيْرُ، وَهُوَ ابْنُ ثَمَانِ عَشْرَةَ سَنَةٍ",
+          "accessedAt": "2026-09-18"
+        }
+      ]
+    },
+    {
+      "key": "zubayr/campaign-egypt",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "خرج غازياً نحو مصر، فدخلها وبها الطاعون، فلقي طعنة في جبهته.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "campaign-of-az-zubayr-to-egypt",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "55-p4",
+          "volume": "1",
+          "pageReference": "55",
+          "extractionUrl": "https://shamela.ws/book/10906/1481",
+          "excerptArabic": "أَنَّ الزُّبَيْرَ خَرَجَ غَازِياً نَحْوَ مِصْرَ، فَكَتَبَ إِلَيْهِ أَمِيْرُ مِصْرَ: إِنَّ الأَرْضَ قَدْ وَقَعَ بِهَا الطَّاعُوْنُ، فَلاَ تَدْخُلْهَا. فَقَالَ: إِنَّمَا خَرَجْتُ لِلطَّعْنِ وَالطَّاعُوْنِ، فَدَخَلَهَا فَلَقِيَ طَعْنَةً فِي جَبْهَتِهِ، فَأَفْرَقَ (٢) .",
+          "accessedAt": "2026-09-18"
+        }
+      ]
     }
   ]
 }

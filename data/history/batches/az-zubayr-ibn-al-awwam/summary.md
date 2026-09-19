@@ -17,7 +17,7 @@ neither end needed slicing.
 
 ## What the entry supports
 
-Twenty-one claims and twenty-nine citations. His profile carries nothing on the
+Twenty-four claims and thirty-five citations. His profile carries nothing on the
 legacy marker: the entry speaks to his full name, kunya, appearance, virtues,
 year of death and place of death, and to all five of his titles.
 
@@ -37,18 +37,33 @@ and `MOTHER` for the other, which is why each declares its own.
 
 ## Events
 
-He is linked to the first hijra to Abyssinia, which the entry states outright
-and attributes to Musa ibn Uqbah and Ibn Ishaq, adding that he did not stay long
-(`47-p5`). The event already exists with its year and location; this batch only
-adds him to it.
+Four moments outside the battles put him on a timeline.
 
-**A second hijra is left open.** Urwah's ward reports `هَاجَرَ الزُّبَيْرُ،
-وَهُوَ ابْنُ ثَمَانِ عَشْرَةَ سَنَةٍ` with no destination (`44-p11`). Tarajim
-usage is that an unqualified هاجر means the hijra to Medina, and this entry
-follows it, naming the destination when it means Abyssinia. Against that, its
-own heading has him accepting Islam at sixteen, which would make him about
-twenty-nine at the Medina hijra, not eighteen. Two readings and nothing in the
-entry to settle them, so no event link is authored from it.
+**His Islam.** The entry opens by saying he accepted it `أَسْلَمَ وَهُوَ
+حَدَثٌ` (`41-p3`), and Ibn Ishaq names him first among the five who did so
+at Abu Bakr's hands (`45-p14`). The event carries no year. The entry dates it
+only by his age and gives two ages for it -- sixteen in the naming line, eight
+on Urwah's authority a paragraph later (`41-p5`) -- and an age the model does
+not hold is not a disagreement it can record, so both stay on the page.
+
+**The first hijra to Abyssinia**, which the entry states outright and attributes
+to Musa ibn Uqbah and Ibn Ishaq, adding that he did not stay long (`47-p5`). The
+event already exists with its year and location; this batch only adds him.
+
+**The hijra to Medina, read but not settled.** Urwah's ward reports `هَاجَرَ
+الزُّبَيْرُ، وَهُوَ ابْنُ ثَمَانِ عَشْرَةَ سَنَةٍ` with no destination (`44-p11`).
+Tarajim usage is that an unqualified هاجر means the hijra to Medina, and this
+entry follows it, naming the destination when it means Abyssinia. Against that,
+its own heading has him accepting Islam at sixteen, which would make him about
+twenty-nine at the Medina hijra, not eighteen. The link is authored on the usage
+and the claim's confidence is `LIKELY`, not `ESTABLISHED`: the reading is the
+better one, and the entry does not close it.
+
+**The campaign toward Egypt**, a new event. Hisham ibn Urwah from his father has
+him ride out `غَازِياً نَحْوَ مِصْرَ`, its governor write warning him of the plague
+there, and him answer that the spear and the plague are what he came for, taking
+a wound to the forehead and recovering (`55-p4` to `55-p5`). It carries a
+location and no year: the report places it against nothing datable.
 
 ## Battles
 
@@ -73,19 +88,19 @@ Yarmuk, and gives Uhud none.
 ## What the model has no shape for yet
 
 Three of his four wives are named in the same sentence as Asma (`64-p6`), and
-his flight to Abyssinia, his thousand slaves whose kharaj he gave away, and the
-debt his son spent four seasons discharging are all in the entry with no field
-to hold them. The pages keep them.
+his thousand slaves whose kharaj he gave away, and the debt his son spent four
+seasons discharging, are in the entry with no field to hold them. The pages keep
+them.
 
 ## Leaving the seeds
 
 His seed entry and his rows in the graph seeds are retired with this batch, as
 Abu Ubaydah's and Talhah's were: the catalog is his only author now, and
-`catalog:project` and `catalog:project-graph` write him. Two values the entry
-does not support were carried rather than dropped with the rows that held them
--- his Uhud participation, and the cousin tie to Hakim ibn Hizam, whom the entry
-has calling his son ابن أخي without stating the relation. Both sit on the legacy
-marker and the ledger counts them.
+`catalog:project` and `catalog:project-graph` write him. One value the entry
+does not support was carried rather than dropped with the rows that held it --
+the cousin tie to Hakim ibn Hizam, whom the entry has calling his son ابن أخي
+without stating the relation. It sits on the legacy marker and the ledger counts
+it.
 
 ## Review
 

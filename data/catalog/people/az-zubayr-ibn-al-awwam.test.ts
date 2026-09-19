@@ -6,13 +6,23 @@ import badr from '../battles/badr';
 import yarmuk from '../battles/yarmuk';
 import uhud from '../battles/uhud';
 import abyssinia from '../events/first-hijra-to-abyssinia';
+import medina from '../events/hijra-to-medina';
+import islam from '../events/islam-of-az-zubayr';
+import egypt from '../events/campaign-of-az-zubayr-to-egypt';
 import jamal from '../battles/jamal';
 
 // Read rather than fixtured, so editing the module or the batch alone fails.
 const batch = JSON.parse(
   readFileSync('data/history/batches/az-zubayr-ibn-al-awwam/batch.json', 'utf8'),
 ) as {
-  claims: { key: string; field?: string; relationshipType?: string; relatedSubjectSlug?: string; citations: unknown[] }[];
+  claims: {
+    key: string;
+    field?: string;
+    confidence?: string;
+    relationshipType?: string;
+    relatedSubjectSlug?: string;
+    citations: unknown[];
+  }[];
 };
 const claimByKey = new Map(batch.claims.map((claim) => [claim.key, claim]));
 
@@ -90,14 +100,34 @@ describe('al-Zubayr ibn al-Awwam in the catalog', () => {
     expect(at(jamal)?.status).toEqual(['MARTYRED']);
   });
 
-  // Events are what put a person on the profile timeline, and the entry states
-  // this one outright. The unqualified هاجر at 44-p11 names no destination, so
-  // no second hijra is authored from it.
-  it('links him to the hijra to Abyssinia the entry states', () => {
-    const at = abyssinia.people.find((entry) => entry.person === person.slug);
+  // Events are what put a person on the profile timeline. Every moment the
+  // entry narrates outside a battle is one, and each rests on its own claim.
+  it('puts every moment the entry narrates on his timeline', () => {
+    const linked = [islam, abyssinia, medina, egypt].map((event) => [
+      event.slug,
+      event.people.find((entry) => entry.person === person.slug)?.claims,
+    ]);
 
-    expect(at?.claims).toEqual(['zubayr/hijra-habasha']);
-    expect(claimByKey.get('zubayr/hijra-habasha')?.relatedSubjectSlug).toBe('first-hijra-to-abyssinia');
+    expect(linked).toEqual([
+      ['islam-of-az-zubayr', ['zubayr/islam']],
+      ['first-hijra-to-abyssinia', ['zubayr/hijra-habasha']],
+      ['hijra-to-medina', ['zubayr/hijra-madinah']],
+      ['campaign-of-az-zubayr-to-egypt', ['zubayr/campaign-egypt']],
+    ]);
+    expect(linked.every(([, claims]) => claimByKey.has((claims as string[])[0]))).toBe(true);
+  });
+
+  // A date the entry never gives is left unset rather than guessed: his Islam
+  // is dated only by two disagreeing ages, and the Egypt campaign by nothing.
+  it('leaves the two events it authors outright undated', () => {
+    expect(Object.keys(islam.fields)).not.toContain('hijriYear');
+    expect(Object.keys(egypt.fields)).not.toContain('hijriYear');
+  });
+
+  // هاجر at 44-p11 names no destination. Unqualified it reads as Medina, but
+  // the age beside it pulls the other way, so the claim is LIKELY, not settled.
+  it('reads the unqualified hijra as Medina without settling it', () => {
+    expect(claimByKey.get('zubayr/hijra-madinah')?.confidence).toBe('LIKELY');
   });
 
   // The verse the old seed guessed at, now resting on Aisha naming him in it.
