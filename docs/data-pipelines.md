@@ -76,10 +76,10 @@ difference is reported, because the seed is that subject's author until its
 entry goes. Deleting someone's seed entry is therefore what hands the catalog
 authority over them; nothing else has to be declared or remembered.
 
-### Two subjects have left the seeds
+### Three subjects have left the seeds
 
-Abu Ubaydah ibn al-Jarrah and Talhah ibn Ubaydullah are authored in the catalog
-instead. Their seed entries are gone, Qur'an links included, and so are their
+Abu Ubaydah ibn al-Jarrah, Talhah ibn Ubaydullah and al-Zubayr ibn al-Awwam are
+authored in the catalog instead. Their seed entries are gone, Qur'an links included, and so are their
 rows in `neo4j/graphSeedData*.ts`: their nodes
 come from PostgreSQL through `people:sync`, and their edge to their father is
 cited in the catalog and written by `catalog:project-graph`. The ancestors above

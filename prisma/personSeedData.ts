@@ -1,9 +1,9 @@
 // Arabic seed data for people and their relations.
 //
-// Abu Ubaydah ibn al-Jarrah and Talhah ibn Ubaydullah are not here: they are
-// authored in data/catalog/people/, from the source, with their citations, and
-// written by npm run catalog:project and catalog:project-graph. Their Qur'an
-// links moved with them.
+// Abu Ubaydah ibn al-Jarrah, Talhah ibn Ubaydullah and al-Zubayr ibn al-Awwam
+// are not here: they are authored in data/catalog/people/, from the source,
+// with their citations, and written by npm run catalog:project and
+// catalog:project-graph. Their Qur'an links moved with them.
 
 export const people = [
   {
@@ -107,19 +107,7 @@ export const people = [
       { surah: 76, ayah: 8 }, // الإنسان: 8 - "ويطعمون الطعام..." (هو وفاطمة والحسن والحسين)
     ]
   },
-  {
-    name: 'الزبير بن العوام',
-    fullName: 'الزبير بن العوام بن خويلد الأسدي القرشي',
-    slug: 'az-zubayr-ibn-al-awwam',
-    appearance: 'كان طويلًا، نحيفًا، خفيف اللحية.',
-    virtues: 'حَوَارِيّ النبي، أحد العشرة المبشرين بالجنة، شجاع ومقدام.',
-    picture: null,
-    titles: ['the-ten-promised-paradise', 'companion', 'hawari-al-ummah', 'the-six-of-the-shura'],
-    ayat: [
-      { surah: 3, ayah: 172 }, // آل عمران: 172 - "الذين استجابوا لله والرسول..." (بعد أحد – والزبير منهم)
-    ]
-  },
-    {
+      {
     name: 'عبد الرحمن بن عوف',
     fullName: 'عبد الرحمن بن عوف بن عبد عوف الزهري القرشي',
     slug: 'abdur-rahman-ibn-awf',
@@ -438,7 +426,6 @@ export const peopleBattleParticipations = [
   { personSlug: 'abdur-rahman-ibn-awf', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'ali-ibn-abi-talib', battleSlug: 'badr', isMuslim: true, status: [] },
-  { personSlug: 'az-zubayr-ibn-al-awwam', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'prophet-muhammad', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'saad-ibn-abi-waqqas', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'saeed-ibn-zaid', battleSlug: 'badr', isMuslim: true, status: [] },
@@ -451,7 +438,6 @@ export const peopleBattleParticipations = [
   { personSlug: 'abdur-rahman-ibn-awf', battleSlug: 'uhud', isMuslim: true, status: [] },
   { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'uhud', isMuslim: true, status: [] },
   { personSlug: 'ali-ibn-abi-talib', battleSlug: 'uhud', isMuslim: true, status: [] },
-  { personSlug: 'az-zubayr-ibn-al-awwam', battleSlug: 'uhud', isMuslim: true, status: [] },
   { personSlug: 'prophet-muhammad', battleSlug: 'uhud', isMuslim: true, status: ['INJURED'] },
   { personSlug: 'saad-ibn-abi-waqqas', battleSlug: 'uhud', isMuslim: true, status: [], summary: `ابن إسحاق : حدثني صالح بن كيسان ، عن بعض آل سعد ، عن سعد : أنه رمى يوم أحد ، قال : فلقد رأيت رسول الله - صلى الله عليه وسلم - يناولني النبل ويقول : " ارم فداك أبي وأمي " . حتى إنه ليناولني السهم ما له من نصل ، فأرمي به . [ ص: 100 ] قال ابن المسيب : كان جيد الرمي ، سمعته يقول : جمع لي رسول الله - صلى الله عليه وسلم - أبويه يوم أحد . أخرجه البخاري . وقد ساقه الحافظ ابن عساكر من بضعة عشر وجها . وساق حديث ابن أبي خالد عن قيس من سبعة عشر طريقا بألفاظها ، وبمثل هذا كبر تاريخه . وساق حديث عبد الله بن شداد عن علي : ما سمعت رسول الله - صلى الله عليه وسلم - جمع أبويه لأحد غير سعد ، من ستة عشر وجها . رواه مسعر وشعبة وسفيان ، عن سعد بن إبراهيم ، عنه .` },
   { personSlug: 'saeed-ibn-zaid', battleSlug: 'uhud', isMuslim: true, status: [] },
@@ -464,7 +450,6 @@ export const peopleBattleParticipations = [
   { personSlug: 'abdur-rahman-ibn-awf', battleSlug: 'khandaq', isMuslim: true, status: [] },
   { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'khandaq', isMuslim: true, status: [] },
   { personSlug: 'ali-ibn-abi-talib', battleSlug: 'khandaq', isMuslim: true, status: [] },
-  { personSlug: 'az-zubayr-ibn-al-awwam', battleSlug: 'khandaq', isMuslim: true, status: [] },
   { personSlug: 'prophet-muhammad', battleSlug: 'khandaq', isMuslim: true, status: [] },
   { personSlug: 'saad-ibn-abi-waqqas', battleSlug: 'khandaq', isMuslim: true, status: [] },
   { personSlug: 'saeed-ibn-zaid', battleSlug: 'khandaq', isMuslim: true, status: [] },
@@ -474,7 +459,6 @@ export const peopleBattleParticipations = [
 
   // Siege of Banu Qurayzah (5 AH)
   { personSlug: 'ali-ibn-abi-talib', battleSlug: 'banu-qurayzah', isMuslim: true, status: [] },
-  { personSlug: 'az-zubayr-ibn-al-awwam', battleSlug: 'banu-qurayzah', isMuslim: true, status: [] },
   { personSlug: 'prophet-muhammad', battleSlug: 'banu-qurayzah', isMuslim: true, status: [] },
   { personSlug: 'al-abbas-ibn-abd-al-muttalib', battleSlug: 'banu-qurayzah', isMuslim: true, status: [] }, // Added
 
@@ -503,7 +487,6 @@ export const peopleBattleParticipations = [
   { personSlug: 'umar-ibn-al-khattab', battleSlug: 'fath-makkah', isMuslim: true, status: [] },
   { personSlug: 'uthman-ibn-affan', battleSlug: 'fath-makkah', isMuslim: true, status: [] },
   { personSlug: 'al-abbas-ibn-abd-al-muttalib', battleSlug: 'fath-makkah', isMuslim: true, status: [] }, // Added
-  { personSlug: 'az-zubayr-ibn-al-awwam', battleSlug: 'fath-makkah', isMuslim: true, status: [] }, // Included already but good to check
 
   // Battle of Hunayn (8 AH)
   { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'hunayn', isMuslim: true, status: [] },
@@ -567,7 +550,6 @@ export const peopleBattleParticipations = [
 
   // Battle of the Camel (36 AH)
   { personSlug: 'ali-ibn-abi-talib', battleSlug: 'jamal', isMuslim: true, status: [] },
-  { personSlug: 'az-zubayr-ibn-al-awwam', battleSlug: 'jamal', isMuslim: true, status: ['MARTYRED'] },
   { personSlug: 'aisha-bint-abi-bakr', battleSlug: 'jamal', isMuslim: true, status: [] }, // Added
 
   // Battle of Siffin (37 AH)

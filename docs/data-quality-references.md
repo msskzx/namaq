@@ -40,8 +40,19 @@ section's earlier extraction; that does not establish complete evidence coverage
 Use historical works as evidence, including the user's named works: البداية
 والنهاية, الكامل في التاريخ, المنتظم في تاريخ الملوك والأمم, تاريخ الخلفاء,
 تهذيب الكمال في أسماء الرجال, حلية الأولياء وطبقات الأصفياء, and سير أعلام
-النبلاء. Distinguish the work and consulted edition from the website hosting it.
-These are eligible sources, not a requirement to consult all seven for every fact.
+النبلاء. For Companions, four more are eligible: the three صحابة dictionaries
+الإصابة في تمييز الصحابة, الاستيعاب في معرفة الأصحاب and أسد الغابة في معرفة
+الصحابة, and the early الطبقات الكبرى لابن سعد. The Risalah editors cite all four
+throughout their footnotes, which is the practical way into them: where a note
+sends you, that book has something the Siyar left out. Distinguish the work and
+consulted edition from the website hosting it.
+
+Eligible is not in use. No fact needs all eleven, and every batch today draws on
+سير أعلام النبلاء alone. A second book enters by becoming a source account
+with its own extracted pages, anchors and citations, never by being consulted
+behind a Siyar citation. None is to be added until the Companion pass below and
+the app work it serves are done; a book added then may also bring subjects the
+Siyar gave no entry to.
 
 Citations must support individual facts, relationships, and biography paragraphs,
 with a collected reference list for each subject. Preserve exact extraction URLs
@@ -167,6 +178,62 @@ printed page. Previous/next controls and a page selector navigate within the
 account. Preserve selected book and page in the URL; citation links open the
 correct selection directly. Do not add book-reading controls or extra biography
 content to the selected graph pane.
+
+### Generation scope
+
+الصحابة are the whole subject population for now. التابعون and the generations
+after them are wanted eventually, but not before the app carries what the
+Companions already give it: the data model, graph usage, profile, search, the
+timeline, battle visualisation, and whatever further interactive views follow.
+Breadth waits on those, because every generation added multiplies whatever the
+model still gets wrong.
+
+This boundary is Ibn Hajar's, not al-Dhahabi's. In تقريب التهذيب الصحابة are
+tabaqa 1 and كبار التابعين tabaqa 2, cut by whom a narrator actually met. The
+Siyar's الطبقة الأولى is a death cohort instead, so it runs through the
+Companions and on into the senior Tabi'un while still calling itself the first
+tabaqa. Following the book's own order therefore walks out of scope twice, and
+the Companion entries are not one contiguous run:
+
+| Shamela page | section | entries | in scope |
+| --- | --- | --- | --- |
+| 1431 | الطبقة الأولى — الصحابة (v1) | 97 | yes |
+| 1985 | تابع: الصحابة (v2) | 61 | yes |
+| 2300 | فصل في بقية كبراء الصحابة | 65 | yes |
+| 2614 | تابع: الصحابة (v3) | 38 | yes |
+| 2806 | ومن بقايا صغار الصحابة | 6 | yes |
+| 2849 | ومن صغار الصحابة | 54 | yes |
+| 3084 | كبار التابعين | 45 | mostly — see below |
+| 3158 | تابع: الطبقة الأولى - الصحابة (v4) | 35 | yes |
+| 3263 | بقية الطبقة الأولى من كبراء التابعين | 71 | no |
+
+About 356 entries in scope and 116 outside it before contested cases are taken
+in; الطبقة الثانية opens at page 3440 and ends the first tabaqa.
+
+**The skip is by person, not by block, and a contested صحبة is taken in rather
+than left out** -- نزداد خيراً بمعرفة الرجال. The two costs are not equal.
+Including someone another work places outside the Companions costs a subject
+whose status is recorded honestly, which the batch's `summary.md` states along
+with who holds what. Excluding a real Companion costs a hole, and a hole is
+silent: nothing downstream points at a subject that was never authored.
+
+The 3084 run is where this bites, and al-Dhahabi supplies part of the signal
+himself. He heads a stretch of it وممن أدرك زمان النبوة at page 3112, and
+several entries on both sides of that heading are counted صحابة elsewhere --
+محمود بن لبيد before it, ربيعة بن عباد, أبو أمامة بن سهل بن حنيف,
+محمود بن الربيع and يوسف بن عبد الله بن سلام after it. How far the heading
+governs is not something the table of contents settles; the pages have to be
+read. The rest of that run -- كعب الأحبار, زياد بن أبيه, المختار,
+عبيد الله بن زياد -- is nobody's contested Companion and stays out.
+
+Settling a contest properly wants الإصابة, which sorts its entries by exactly
+this question and is why تمييز الصحابة is in its title. It is not extracted, so
+until it is, record the contest rather than resolve it.
+
+Which generation a person belongs to is a fact about the person, not about the
+section that supplied their entry, so it does not belong in the extraction order
+where it currently sits. Modelling it as a cited value, the way تقريب التهذيب
+carries a tabaqa per narrator, is open and not decided.
 
 Terminology: [CONTEXT.md](../CONTEXT.md#historical-evidence).
 Rationale: [citations independent of profiles](adr/0009-citations-independent-of-profiles.md)

@@ -4,9 +4,14 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 
 ## Writing
 
-- Invoke the `write-comments` skill before writing or editing code comments,
-  and `unslop` before writing prose — docs, commit messages, PR descriptions.
-  Both apply to every change, not just documentation work.
+- Invoke the `unslop` skill before writing prose: docs, commit messages, PR
+  descriptions. It lives in `.claude/skills/unslop/`, so it is in the repo and
+  needs no install, and it applies to every change rather than to documentation
+  work alone.
+- Code comments point at the docs, they do not restate them. Name the ADR or
+  the document that holds the rule and say what this code does about it. A
+  comment that copies a paragraph out of `docs/` goes stale the moment the
+  document changes, and nothing catches it.
 
 ## Testing
 
@@ -135,7 +140,7 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   <batch dir>` before proposing a batch, and `npm run history:import -- <batch
   dir>` for a dry run. Import applies only the revision recorded as approved in
   `batch.json`, so any edit after approval needs approving again.
-- Abu Ubaydah and Talhah have no seed entries at all: the catalog holds their
+- Abu Ubaydah, Talhah and al-Zubayr have no seed entries at all: the catalog holds their
   fields, titles, participations, Qur'an links and their one cited relation, and
   `npm run catalog:project` / `catalog:project-graph` write them. Everyone else
   still comes from the seeds, so both paths are live at once.
@@ -218,6 +223,13 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   - Extraction proceeds in batches (currently batches of 10), following
     the book's own ordering, and checks each name against existing
     `prisma/personSeedData*.ts` slugs before treating it as new.
+- الصحابة are the only subjects in scope. The Siyar's الطبقة الأولى is a death
+  cohort rather than a category, so following the book's ordering runs past them
+  into كبار التابعين twice. Skip those two runs, except a subject whose صحبة
+  another work holds: a contested Companion is taken in and the contest recorded,
+  never dropped for being contested. The table in
+  [docs/data-quality-references.md](docs/data-quality-references.md) gives the
+  pages and says what waits on what.
 
 ## UI
 

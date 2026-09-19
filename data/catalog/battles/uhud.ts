@@ -19,6 +19,16 @@ const uhud = {
       },
       claims: ['talhah/uhud'],
     },
+    {
+      person: 'az-zubayr-ibn-al-awwam',
+      isMuslim: true,
+      summary: {
+        value:
+          'فَانْتُدِبَ أَبُو بَكْرٍ وَالزُّبَيْرُ فِي سَبْعِيْنَ، فَخَرَجُوا فِي آثَارِ المُشْرِكِيْنَ، فَسَمِعُوا بِهِم، فَانْصَرَفُوا.',
+        claims: ['zubayr/uhud'],
+      },
+      claims: ['zubayr/uhud'],
+    },
   ],
 } satisfies CatalogBattle;
 
