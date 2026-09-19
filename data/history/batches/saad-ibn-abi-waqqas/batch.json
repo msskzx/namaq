@@ -1880,5 +1880,11 @@
       "relatedSubjectKind": "BATTLE",
       "relatedSubjectSlug": "jamal"
     }
-  ]
+  ],
+  "approval": {
+    "revision": "8f2347a548784560",
+    "approvedAt": "2026-09-19",
+    "approvedBy": "msskzx",
+    "note": "Approved for publication. All nineteen claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+  }
 }

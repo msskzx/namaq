@@ -24515,5 +24515,11 @@
         }
       ]
     }
-  ]
+  ],
+  "approval": {
+    "revision": "37d909a4561318c2",
+    "approvedAt": "2026-09-19",
+    "approvedBy": "msskzx",
+    "note": "Approved for publication of chapter one. All thirty-six claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
+  }
 }
