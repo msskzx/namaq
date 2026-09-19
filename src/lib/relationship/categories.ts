@@ -28,6 +28,7 @@ const CATEGORY_BY_TYPE: Partial<Record<RelationType, string>> = {
   ANCESTOR: 'lineage', DESCENDANT: 'lineage',
   MAWLA: 'household', CONCUBINE: 'household',
   COMPANION_OF: 'companionship',
+  PACT_BROTHER: 'companionship',
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -129,6 +130,7 @@ export const RECIPROCAL_INVERSES: Partial<Record<RelationType, readonly Relation
   SISTER_IN_LAW: ['BROTHER_IN_LAW', 'SISTER_IN_LAW'],
   COMPANION_OF: ['ACCOMPANIED_BY'],
   ACCOMPANIED_BY: ['COMPANION_OF'],
+  PACT_BROTHER: ['PACT_BROTHER'],
 };
 
 export function governingRelationType(type: string): string {

@@ -67,6 +67,13 @@ const abdurRahmanIbnAwf = {
     { type: 'SON', inverse: 'FATHER', to: 'awf-ibn-abd-awf', claims: ['awf/father'] },
     { type: 'HUSBAND', to: 'umm-kulthum-bint-uqbah', claims: ['awf/wife-umm-kulthum'] },
     { type: 'COMPANION_OF', to: 'prophet-muhammad', claims: ['awf/companion-of-prophet'] },
+    // The مؤاخاة, which the entry reports twice and does not reconcile. Anas
+    // pairs him with Uthman and al-Dhahabi answers كَذَا هَذَا, which reads as
+    // his own doubt; the later account naming Sa'd ibn al-Rabi carries no such
+    // mark. Both are held, because the app now records the tie they disagree
+    // over, and the Uthman claim is DISPUTED.
+    { type: 'PACT_BROTHER', inverse: 'PACT_BROTHER', to: 'saad-ibn-al-rabi', claims: ['awf/muakhat-saad'] },
+    { type: 'PACT_BROTHER', inverse: 'PACT_BROTHER', to: 'uthman-ibn-affan', claims: ['awf/muakhat-uthman'] },
   ],
 } satisfies CatalogPerson;
 

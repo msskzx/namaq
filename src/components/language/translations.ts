@@ -258,6 +258,7 @@ const translations = {
       PART_OF: 'Part Of',
       COMPANION_OF: 'Companion Of',
       ACCOMPANIED_BY: 'Accompanied By',
+      PACT_BROTHER: 'Pact Brother',
     },
     // Graph filter/fullscreen controls
     graph: {
@@ -619,6 +620,7 @@ const translations = {
       PART_OF: 'جزء من',
       COMPANION_OF: 'صحابي',
       ACCOMPANIED_BY: 'مُصاحَب',
+      PACT_BROTHER: 'أخ في المؤاخاة',
     },
     // Graph filter/fullscreen controls
     graph: {

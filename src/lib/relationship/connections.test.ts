@@ -62,6 +62,16 @@ describe('buildLogicalConnections', () => {
 
     expect(connections).toEqual([{ primary: aToB, reciprocal: bToA }]);
   });
+  // The مؤاخاة is symmetric: each man is the other's pact brother, so two
+  // PACT_BROTHER edges between the same pair are one connection, not two.
+  it('collapses the pact brotherhood, which is its own reciprocal', () => {
+    const outward = edge(abuBakr, muhammad, 'PACT_BROTHER');
+    const inward = edge(muhammad, abuBakr, 'PACT_BROTHER');
+
+    const connections = buildLogicalConnections([outward, inward]);
+
+    expect(connections).toEqual([{ primary: outward, reciprocal: inward }]);
+  });
 });
 
 describe('describeConnection', () => {

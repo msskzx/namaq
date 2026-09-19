@@ -21,7 +21,7 @@ body stops at `92-p7` and the notes stop before Sa'd's `(*)` list.
 
 ## What the entry supports
 
-Eighteen claims and twenty-six citations. His profile carries nothing on the
+Twenty claims and twenty-eight citations. His profile carries nothing on the
 legacy marker: the entry speaks to his full name, kunya, appearance, virtues,
 year of death and place of burial, and to all four of his titles.
 
@@ -81,6 +81,20 @@ so `hijriYear` is left unset. Only Abd al-Rahman is linked to it: the entry
 names the other five, but names them as the body he chose from, and this batch
 read his entry alone.
 
+## The مؤاخاة, and both reports of it
+
+The entry names his pact brother twice and does not reconcile the two. Anas has
+the Prophet pair him with Uthman and al-Dhahabi answers كَذَا هَذَا (`76-p2`),
+which reads as his own doubt. Twenty pages later the account of his arrival in
+Medina pairs him with سَعْد بن الرَّبِيْع أَحَد النُّقَبَاء and carries no such
+mark (`91-p5`).
+
+`PACT_BROTHER` is added for this, its own reciprocal the way `PATERNAL_COUSIN`
+is, and grouped with `COMPANION_OF` rather than with the blood ties. `BROTHER`
+would have said something the source does not. Both reports are authored, since
+the app now records the tie they disagree over: Sa'd's is `ESTABLISHED`,
+Uthman's is `DISPUTED` and flagged `disputed`.
+
 ## What the model has no shape for yet
 
 **His birth.** al-Mada'ini dates it بَعْدَ عَامِ الفِيْلِ بِعَشْرِ سِنِيْنَ
@@ -92,12 +106,6 @@ arithmetic rather than the book's statement, so both fields stay unset.
 al-Hakim names صَفِيَّة بِنْت عَبْدِ مَنَافٍ (`74-p6` to `74-p9`). Neither woman
 has a subject in the app, so there is nothing for the competing claims to
 compete over, and the disagreement stays on the page.
-
-**The مؤاخاة.** The Prophet paired him with Sa'd ibn al-Rabi on his arrival in
-Medina (`91-p5`). An earlier page in the entry pairs him with Uthman instead and
-al-Dhahabi marks it كَذَا هَذَا (`76-p2`), which reads as his own doubt. The
-model has no relation type for the pact, and `BROTHER` would say something else,
-so neither report is authored.
 
 **The name he was born with.** He was عَبْد عَمْرٍو, and the Prophet named him
 عَبْد الرَّحْمَن when he accepted Islam (`69-p3`, `74-p11`). There is no field

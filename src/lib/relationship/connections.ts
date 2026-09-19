@@ -57,6 +57,7 @@ export const RECIPROCAL_ROLE_PAIRS: ReadonlyArray<readonly [RelationType, Relati
   ['SISTER_IN_LAW', 'SISTER_IN_LAW'],
   ['ANCESTOR', 'DESCENDANT'],
   ['ACCOMPANIED_BY', 'COMPANION_OF'],
+  ['PACT_BROTHER', 'PACT_BROTHER'],
 ];
 
 function isReciprocalPair(a: RelationType, b: RelationType): boolean {

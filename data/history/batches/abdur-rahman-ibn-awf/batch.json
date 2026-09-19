@@ -1448,6 +1448,51 @@
       "relationshipType": "INVOLVED_IN",
       "relatedSubjectKind": "EVENT",
       "relatedSubjectSlug": "shura-after-umar"
+    },
+    {
+      "key": "awf/muakhat-saad",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdur-rahman-ibn-awf",
+      "assertion": "آخى رسول الله صلى الله عليه وسلم بينه وبين سعد بن الربيع أحد النقباء حين هاجر إلى المدينة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PACT_BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "saad-ibn-al-rabi",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "91-p5",
+          "volume": "1",
+          "pageReference": "91",
+          "extractionUrl": "https://shamela.ws/book/10906/1517",
+          "excerptArabic": "فَآخَى رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بَيْنَهُ وَبَيْنَ سَعْدِ بنِ الرَّبِيْعِ، أَحَدِ النُّقَبَاءِ",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "awf/muakhat-uthman",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdur-rahman-ibn-awf",
+      "assertion": "رواية أنس أن المؤاخاة كانت بينه وبين عثمان، وعقّب عليها الذهبي بقوله: كذا هذا.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PACT_BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "uthman-ibn-affan",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "76-p2",
+          "volume": "1",
+          "pageReference": "76",
+          "extractionUrl": "https://shamela.ws/book/10906/1502",
+          "excerptArabic": "أَنَّ عَبْدَ الرَّحْمَنِ بنَ عَوْفٍ لَمَّا هَاجَرَ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- آخَى بَيْنَهُ وَبَيْنَ عُثْمَانَ، كَذَا هَذَا.",
+          "accessedAt": "2026-09-19"
+        }
+      ],
+      "disputed": true
     }
   ]
 }

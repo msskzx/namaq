@@ -14,7 +14,14 @@ import shura from '../events/shura-after-umar';
 const batch = JSON.parse(
   readFileSync('data/history/batches/abdur-rahman-ibn-awf/batch.json', 'utf8'),
 ) as {
-  claims: { key: string; field?: string; relationshipType?: string; relatedSubjectSlug?: string; citations: unknown[] }[];
+  claims: {
+    key: string;
+    field?: string;
+    confidence?: string;
+    relationshipType?: string;
+    relatedSubjectSlug?: string;
+    citations: unknown[];
+  }[];
 };
 const claimByKey = new Map(batch.claims.map((claim) => [claim.key, claim]));
 
@@ -51,6 +58,17 @@ describe('Abd al-Rahman ibn Awf in the catalog', () => {
     });
 
     expect(mismatched).toEqual([]);
+  });
+
+  // Both reports of the مؤاخاة are held, because PACT_BROTHER now records the
+  // tie they disagree over. Uthman's is the one al-Dhahabi marks كذا هذا.
+  it('holds both pact brothers, and marks the doubted one disputed', () => {
+    const pacts = person.relations.filter((relation) => relation.type === 'PACT_BROTHER');
+
+    expect(pacts.map((relation) => relation.to)).toEqual(['saad-ibn-al-rabi', 'uthman-ibn-affan']);
+    expect(pacts.every((relation) => relation.inverse === 'PACT_BROTHER')).toBe(true);
+    expect(claimByKey.get('awf/muakhat-saad')?.confidence).toBe('ESTABLISHED');
+    expect(claimByKey.get('awf/muakhat-uthman')?.confidence).toBe('DISPUTED');
   });
 
   // The seed gave him three titles; the naming line counts him among
