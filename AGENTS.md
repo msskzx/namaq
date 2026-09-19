@@ -218,6 +218,11 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   - Extraction proceeds in batches (currently batches of 10), following
     the book's own ordering, and checks each name against existing
     `prisma/personSeedData*.ts` slugs before treating it as new.
+- الصحابة are the only subjects in scope. The Siyar's الطبقة الأولى is a death
+  cohort rather than a category, so following the book's ordering runs past them
+  into كبار التابعين twice. Skip those two runs; the table in
+  [docs/data-quality-references.md](docs/data-quality-references.md) gives the
+  pages and says what waits on what.
 
 ## UI
 

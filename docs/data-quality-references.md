@@ -50,9 +50,9 @@ consulted edition from the website hosting it.
 Eligible is not in use. No fact needs all eleven, and every batch today draws on
 سير أعلام النبلاء alone. A second book enters by becoming a source account
 with its own extracted pages, anchors and citations, never by being consulted
-behind a Siyar citation. None is to be added until the first pass over the first
-tabaqa is done; a book added then may also bring subjects the Siyar gave no
-entry to.
+behind a Siyar citation. None is to be added until the Companion pass below and
+the app work it serves are done; a book added then may also bring subjects the
+Siyar gave no entry to.
 
 Citations must support individual facts, relationships, and biography paragraphs,
 with a collected reference list for each subject. Preserve exact extraction URLs
@@ -178,6 +178,45 @@ printed page. Previous/next controls and a page selector navigate within the
 account. Preserve selected book and page in the URL; citation links open the
 correct selection directly. Do not add book-reading controls or extra biography
 content to the selected graph pane.
+
+### Generation scope
+
+الصحابة are the whole subject population for now. التابعون and the generations
+after them are wanted eventually, but not before the app carries what the
+Companions already give it: the data model, graph usage, profile, search, the
+timeline, battle visualisation, and whatever further interactive views follow.
+Breadth waits on those, because every generation added multiplies whatever the
+model still gets wrong.
+
+This boundary is Ibn Hajar's, not al-Dhahabi's. In تقريب التهذيب الصحابة are
+tabaqa 1 and كبار التابعين tabaqa 2, cut by whom a narrator actually met. The
+Siyar's الطبقة الأولى is a death cohort instead, so it runs through the
+Companions and on into the senior Tabi'un while still calling itself the first
+tabaqa. Following the book's own order therefore walks out of scope twice, and
+the Companion entries are not one contiguous run:
+
+| Shamela page | section | entries | in scope |
+| --- | --- | --- | --- |
+| 1431 | الطبقة الأولى — الصحابة (v1) | 97 | yes |
+| 1985 | تابع: الصحابة (v2) | 61 | yes |
+| 2300 | فصل في بقية كبراء الصحابة | 65 | yes |
+| 2614 | تابع: الصحابة (v3) | 38 | yes |
+| 2806 | ومن بقايا صغار الصحابة | 6 | yes |
+| 2849 | ومن صغار الصحابة | 54 | yes |
+| 3084 | كبار التابعين | 45 | no |
+| 3158 | تابع: الطبقة الأولى - الصحابة (v4) | 35 | yes |
+| 3263 | بقية الطبقة الأولى من كبراء التابعين | 71 | no |
+
+About 356 entries in scope against 116 skipped; الطبقة الثانية opens at page 3440
+and ends the first tabaqa. The skipped runs are not a clean line either: several
+of the 45 are counted صحابة in other works, and al-Dhahabi heads part of that
+block وممن أدرك زمان النبوة. Where a subject is contested, say so in the
+batch's `summary.md` rather than letting a section heading decide it.
+
+Which generation a person belongs to is a fact about the person, not about the
+section that supplied their entry, so it does not belong in the extraction order
+where it currently sits. Modelling it as a cited value, the way تقريب التهذيب
+carries a tabaqa per narrator, is open and not decided.
 
 Terminology: [CONTEXT.md](../CONTEXT.md#historical-evidence).
 Rationale: [citations independent of profiles](adr/0009-citations-independent-of-profiles.md)
