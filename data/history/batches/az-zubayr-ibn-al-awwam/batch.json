@@ -1457,6 +1457,37 @@
       "relatedSubjectSlug": "asma-bint-abi-bakr"
     },
     {
+      "key": "zubayr/uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "شهد أحداً: انتُدب مع أبي بكر في السبعين الذين خرجوا في آثار المشركين بعده، وهم الذين استجابوا لله والرسول من بعد ما أصابهم القرح.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "47-p6",
+          "volume": "1",
+          "pageReference": "47",
+          "extractionUrl": "https://shamela.ws/book/10906/1473",
+          "excerptArabic": "أَبُو مُعَاوِيَةَ: عَنْ هِشَامٍ، عَنْ أَبِيْهِ، قَالَتْ عَائِشَةُ: يَا ابْنَ أُخْتِي (٢) ! كَانَ أَبُوَاكَ -يَعْنِي: الزُّبَيْرَ، وَأَبَا بَكْرٍ - مِن: {الَّذِيْنَ اسْتَجَابُوا لِلِّهِ وَالرَّسُوْلِ مِنْ بَعْدِ مَا أَصَابَهُمُ القَرْحُ} [آلُ عِمْرَانَ: ١٧٢] .",
+          "accessedAt": "2026-09-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "47-p7",
+          "volume": "1",
+          "pageReference": "47",
+          "extractionUrl": "https://shamela.ws/book/10906/1473",
+          "excerptArabic": "لَمَّا انْصَرَفَ المُشْرِكُوْنَ مِنْ أُحُدٍ، وَأَصَابَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَأَصْحَابَهُ مَا أَصَابَهُمْ، خَافَ أَنْ يَرْجِعُوا، فَقَالَ: (مَنْ يُنْتَدَبُ لِهَؤُلاَءِ فِي آثَارِهِمْ حَتَّى يَعْلَمُوا أَنَّ بِنَا قُوَّةً؟) . فَانْتُدِبَ أَبُو بَكْرٍ وَالزُّبَيْرُ فِي سَبْعِيْنَ، فَخَرَجُوا فِي آثَارِ المُشْرِكِيْنَ، فَسَمِعُوا بِهِم، فَانْصَرَفُوا.",
+          "accessedAt": "2026-09-18"
+        }
+      ]
+    },
+    {
       "key": "zubayr/badr",
       "subjectKind": "PERSON",
       "subjectSlug": "az-zubayr-ibn-al-awwam",

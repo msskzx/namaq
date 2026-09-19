@@ -17,7 +17,7 @@ neither end needed slicing.
 
 ## What the entry supports
 
-Nineteen claims and twenty-six citations. His profile carries nothing on the
+Twenty claims and twenty-eight citations. His profile carries nothing on the
 legacy marker: the entry speaks to his full name, kunya, appearance, virtues,
 year of death and place of death, and to all five of his titles.
 
@@ -43,10 +43,17 @@ sword wounds on him, two at Badr and one at Yarmuk, so both are `INJURED`.
 
 **Yarmuk is new.** The seed never placed him there; the wound does.
 
-**Uhud is not claimed.** The entry has him among the seventy who went out after
-Uhud, at Hamra al-Asad, which is the occasion of the verse above — but it never
-says he fought at Uhud itself, so the seed's participation stays uncited rather
-than borrowing the pursuit as evidence for the battle.
+**Uhud is claimed through the pursuit that followed it.** The entry never says
+outright that he fought the battle: it has Aisha place him among those Al Imran
+172 describes, and then the seventy who rode out on the idolaters' tracks
+afterwards (`47-p6` to `47-p8`). The verse is what joins them — it describes
+those who answered `مِنْ بَعْدِ مَا أَصَابَهُمُ القَرْحُ`, attributing the wound
+to the respondents themselves, so being among them is being among the wounded of
+Uhud. Two cited statements reaching a third, the same step by which Jamal takes
+its year from his killing.
+
+No status: the entry counts three sword wounds on him, two at Badr and one at
+Yarmuk, and gives Uhud none.
 
 ## What the model has no shape for yet
 

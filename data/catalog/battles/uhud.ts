@@ -19,9 +19,16 @@ const uhud = {
       },
       claims: ['talhah/uhud'],
     },
-    // Carried from his retired seed rows. The entry has him among the seventy
-    // who went out after Uhud, which is not evidence that he fought it.
-    { person: 'az-zubayr-ibn-al-awwam', isMuslim: true, claims: legacyUnreviewed },
+    {
+      person: 'az-zubayr-ibn-al-awwam',
+      isMuslim: true,
+      summary: {
+        value:
+          'فَانْتُدِبَ أَبُو بَكْرٍ وَالزُّبَيْرُ فِي سَبْعِيْنَ، فَخَرَجُوا فِي آثَارِ المُشْرِكِيْنَ، فَسَمِعُوا بِهِم، فَانْصَرَفُوا.',
+        claims: ['zubayr/uhud'],
+      },
+      claims: ['zubayr/uhud'],
+    },
   ],
 } satisfies CatalogBattle;
 

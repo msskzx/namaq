@@ -70,12 +70,13 @@ describe('al-Zubayr ibn al-Awwam in the catalog', () => {
     ]);
   });
 
-  // Uhud is his one participation the entry does not support, carried from the
-  // seed rows it replaced rather than dropped with them.
-  it('keeps Uhud uncited, where the entry places him only in its aftermath', () => {
+  // The verse Aisha applies to him says the wound struck the respondents
+  // themselves, so the pursuit places him at the battle it followed.
+  it('cites Uhud through the seventy who rode out after it', () => {
     const at = uhud.participants.find((participant) => participant.person === person.slug);
 
-    expect(at?.claims).toBe(legacyUnreviewed);
+    expect(at?.claims).toEqual(['zubayr/uhud']);
+    expect(claimByKey.get('zubayr/uhud')?.citations).toHaveLength(2);
     expect(at?.status).toBeUndefined();
   });
 
