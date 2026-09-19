@@ -1192,9 +1192,9 @@
     }
   ],
   "approval": {
-    "revision": "9e89cb0c3f3c3540",
-    "approvedAt": "2026-09-18",
+    "revision": "e7db2904d7be7e92",
+    "approvedAt": "2026-09-19",
     "approvedBy": "msskzx",
-    "note": "Re-approved at the revision the passage refactor produced. Passages no longer store a copy of the text their page files hold, so the files changed while what the batch asserts did not: all 186 passages resolve to the text they carried before, and the 14 claims keep the Reviewed status the user set on 2026-09-11."
+    "note": "Re-approved at the revision the kunya claim produced. Fourteen claims keep the Reviewed status set on 2026-09-11. The kunya claim added afterwards is Not reviewed, so this approval says the batch may be published and says nothing about that one claim having been read."
   }
 }

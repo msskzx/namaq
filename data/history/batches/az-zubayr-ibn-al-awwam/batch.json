@@ -1763,5 +1763,11 @@
         }
       ]
     }
-  ]
+  ],
+  "approval": {
+    "revision": "6b4a4bf8bac7b675",
+    "approvedAt": "2026-09-19",
+    "approvedBy": "msskzx",
+    "note": "Approved for publication. All twenty-four claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+  }
 }
