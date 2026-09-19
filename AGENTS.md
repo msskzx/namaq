@@ -4,9 +4,14 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 
 ## Writing
 
-- Invoke the `write-comments` skill before writing or editing code comments,
-  and `unslop` before writing prose — docs, commit messages, PR descriptions.
-  Both apply to every change, not just documentation work.
+- Invoke the `unslop` skill before writing prose: docs, commit messages, PR
+  descriptions. It lives in `.claude/skills/unslop/`, so it is in the repo and
+  needs no install, and it applies to every change rather than to documentation
+  work alone.
+- Code comments point at the docs, they do not restate them. Name the ADR or
+  the document that holds the rule and say what this code does about it. A
+  comment that copies a paragraph out of `docs/` goes stale the moment the
+  document changes, and nothing catches it.
 
 ## Testing
 
