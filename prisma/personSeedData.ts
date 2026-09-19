@@ -107,18 +107,6 @@ export const people = [
       { surah: 76, ayah: 8 }, // الإنسان: 8 - "ويطعمون الطعام..." (هو وفاطمة والحسن والحسين)
     ]
   },
-      {
-    name: 'عبد الرحمن بن عوف',
-    fullName: 'عبد الرحمن بن عوف بن عبد عوف الزهري القرشي',
-    slug: 'abdur-rahman-ibn-awf',
-    appearance: 'كان طويلًا، أسمر اللون، كث اللحية.',
-    virtues: 'أحد العشرة المبشرين بالجنة، تاجر غني، كريم وسخي.',
-    picture: null,
-    titles: ['the-ten-promised-paradise', 'companion', 'the-six-of-the-shura'],
-    ayat: [
-      { surah: 9, ayah: 100 }, // التوبة: 100 - "والسابقون الأولون من المهاجرين..." (وهو من السابقين)
-    ]
-  },
   {
     name: 'سعيد بن زيد',
     fullName: 'سعيد بن زيد بن عمرو العدوي القرشي',
@@ -423,7 +411,6 @@ export const people = [
 
 export const peopleBattleParticipations = [
   // Battle of Badr (2 AH)
-  { personSlug: 'abdur-rahman-ibn-awf', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'ali-ibn-abi-talib', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'prophet-muhammad', battleSlug: 'badr', isMuslim: true, status: [] },
@@ -435,7 +422,6 @@ export const peopleBattleParticipations = [
   // { personSlug: 'al-abbas-ibn-abd-al-muttalib', battleSlug: 'badr', isMuslim: false, status: ['CAPTURED'] }, // Added (was not Muslim at Badr)
 
   // Battle of Uhud (3 AH)
-  { personSlug: 'abdur-rahman-ibn-awf', battleSlug: 'uhud', isMuslim: true, status: [] },
   { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'uhud', isMuslim: true, status: [] },
   { personSlug: 'ali-ibn-abi-talib', battleSlug: 'uhud', isMuslim: true, status: [] },
   { personSlug: 'prophet-muhammad', battleSlug: 'uhud', isMuslim: true, status: ['INJURED'] },
@@ -447,7 +433,6 @@ export const peopleBattleParticipations = [
   // { personSlug: 'al-abbas-ibn-abd-al-muttalib', battleSlug: 'uhud', isMuslim: false, status: [] }, // Added (still not Muslim publicly)
 
   // Battle of the Trench (Khandaq) (5 AH)
-  { personSlug: 'abdur-rahman-ibn-awf', battleSlug: 'khandaq', isMuslim: true, status: [] },
   { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'khandaq', isMuslim: true, status: [] },
   { personSlug: 'ali-ibn-abi-talib', battleSlug: 'khandaq', isMuslim: true, status: [] },
   { personSlug: 'prophet-muhammad', battleSlug: 'khandaq', isMuslim: true, status: [] },

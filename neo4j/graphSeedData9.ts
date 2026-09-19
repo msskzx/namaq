@@ -236,8 +236,6 @@ export const peopleRelationsQueries = [
   'MATCH (from:Person {slug: "uqba-ibn-abi-muayt"}), (to:Person {slug: "umm-kulthum-bint-uqbah"}) CREATE (from)-[:FATHER]->(to);',
   'MATCH (from:Person {slug: "umm-kulthum-bint-uqbah"}), (to:Person {slug: "zaid-ibn-harithah"}) CREATE (from)-[:WIFE]->(to);',
   'MATCH (from:Person {slug: "zaid-ibn-harithah"}), (to:Person {slug: "umm-kulthum-bint-uqbah"}) CREATE (from)-[:HUSBAND]->(to);',
-  'MATCH (from:Person {slug: "umm-kulthum-bint-uqbah"}), (to:Person {slug: "abdur-rahman-ibn-awf"}) CREATE (from)-[:WIFE]->(to);',
-  'MATCH (from:Person {slug: "abdur-rahman-ibn-awf"}), (to:Person {slug: "umm-kulthum-bint-uqbah"}) CREATE (from)-[:HUSBAND]->(to);',
 
   // Umm Umarah (Nusaybah bint Kaab)
   'MATCH (from:Person {slug: "umm-umarah"}), (to:Person {slug: "kaab-ibn-amr-ibn-awf"}) CREATE (from)-[:DAUGHTER]->(to);',
