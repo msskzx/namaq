@@ -10,8 +10,8 @@ import { RelationType, StoredEdge, SubjectId } from './types';
 // buildLogicalConnections must collapse a pair whenever both sides do exist
 // regardless of how rare that currently is, rather than only pairing types
 // already seeded together. Only relation types with no defined reciprocal
-// term in the vocabulary at all are excluded: MAWLA and CONCUBINE (no
-// separate term for the other side of that relationship), and the four
+// term in the vocabulary at all are excluded: CONCUBINE (no separate term
+// for the other side of that relationship), and the four
 // non-person relation types (PARTICIPATED_IN, HOLDS_TITLE, INVOLVED_IN,
 // PART_OF), which connect Person to Battle/Title/Event and have no
 // reciprocal edge type recorded in either direction.
@@ -58,6 +58,10 @@ export const RECIPROCAL_ROLE_PAIRS: ReadonlyArray<readonly [RelationType, Relati
   ['ANCESTOR', 'DESCENDANT'],
   ['ACCOMPANIED_BY', 'COMPANION_OF'],
   ['PACT_BROTHER', 'PACT_BROTHER'],
+  // MAWLA points from the freedman to the man who freed him, the way
+  // salim-mawla-abi-hudhayfah's name reads, and PATRON points back. See
+  // data/history/batches/prophet-muhammad-sira/summary.md, "Family".
+  ['MAWLA', 'PATRON'],
 ];
 
 function isReciprocalPair(a: RelationType, b: RelationType): boolean {

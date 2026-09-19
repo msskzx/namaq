@@ -26,7 +26,7 @@ const CATEGORY_BY_TYPE: Partial<Record<RelationType, string>> = {
   MATERNAL_NEPHEW: 'nieceNephew', MATERNAL_NIECE: 'nieceNephew', PATERNAL_NEPHEW: 'nieceNephew', PATERNAL_NIECE: 'nieceNephew',
   MOTHER_IN_LAW: 'inLaw', FATHER_IN_LAW: 'inLaw', SON_IN_LAW: 'inLaw', DAUGHTER_IN_LAW: 'inLaw', BROTHER_IN_LAW: 'inLaw', SISTER_IN_LAW: 'inLaw',
   ANCESTOR: 'lineage', DESCENDANT: 'lineage',
-  MAWLA: 'household', CONCUBINE: 'household',
+  MAWLA: 'household', PATRON: 'household', CONCUBINE: 'household',
   COMPANION_OF: 'companionship',
   PACT_BROTHER: 'companionship',
 };
@@ -131,6 +131,8 @@ export const RECIPROCAL_INVERSES: Partial<Record<RelationType, readonly Relation
   COMPANION_OF: ['ACCOMPANIED_BY'],
   ACCOMPANIED_BY: ['COMPANION_OF'],
   PACT_BROTHER: ['PACT_BROTHER'],
+  MAWLA: ['PATRON'],
+  PATRON: ['MAWLA'],
 };
 
 export function governingRelationType(type: string): string {
