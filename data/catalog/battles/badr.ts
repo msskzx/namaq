@@ -56,6 +56,19 @@ const badr = {
       },
       claims: ['zubayr/badr'],
     },
+    // One sentence of his own account settles all three: the enslavement that
+    // kept him from Badr and Uhud, and the Khandaq he did reach.
+    {
+      person: 'salman-al-farisi',
+      isMuslim: true,
+      relation: 'ABSENT_FROM',
+      status: ['ABSENT_EXCUSED'],
+      summary: {
+        value: 'وحبسني الرق حتى فاتتني بدر وأحد.',
+        claims: ['salman/badr'],
+      },
+      claims: ['salman/badr'],
+    },
   ],
 } satisfies CatalogBattle;
 
