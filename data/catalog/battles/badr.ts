@@ -10,6 +10,17 @@ const badr = {
   fields: { hijriYear: { value: 2, claims: legacyUnreviewed } },
   participants: [
     {
+      person: 'saad-ibn-abi-waqqas',
+      isMuslim: true,
+      status: ['CAPTURED'],
+      summary: {
+        value:
+          'لَقَدْ رَأَيْتُ سَعْداً يُقَاتِلُ يَوْمَ بَدْرٍ قِتَالَ الفَارِسِ فِي الرِّجَالِ. اشْتَرَكْتُ أَنَا، وَسَعْدٌ، وَعَمَّارٌ، يَوْمَ بَدْرٍ فِيْمَا أَصَبْنَا مِنَ الغَنِيْمَةِ، فَجَاءَ سَعْدٌ بِأَسِيْرَيْنِ، وَلَمْ أَجِئْ أَنَا وَعَمَّارٌ بِشَيْءٍ.',
+        claims: ['saad/badr'],
+      },
+      claims: ['saad/badr'],
+    },
+    {
       person: 'abdur-rahman-ibn-awf',
       isMuslim: true,
       summary: {
