@@ -1,6 +1,6 @@
 import { JSDOM } from 'jsdom';
 import { describe, expect, it } from 'vitest';
-import { bodyMarkdown, extractShamelaPage, notesMarkdown, sliceEntry } from './shamelaEntry';
+import { bodyMarkdown, extractShamelaPage, notesMarkdown, passageAnchor, sliceEntry } from './shamelaEntry';
 
 function pageDocument(inner: string, title = 'ج1 - ص5 - سير أعلام النبلاء') {
   return new JSDOM(`<!doctype html><title>${title}</title><div class="nass">${inner}</div>`).window.document;
@@ -98,5 +98,20 @@ describe('bodyMarkdown and notesMarkdown', () => {
 
     expect(bodyMarkdown(page)).toBe('نص\n');
     expect(notesMarkdown(page)).toBeNull();
+  });
+});
+
+describe('passageAnchor', () => {
+  // A single-volume account keeps the plain anchor every existing batch uses.
+  it('leaves the anchor alone when no volume is given', () => {
+    expect(passageAnchor(undefined, '41', 'p3')).toBe('41-p3');
+  });
+
+  // The Prophet's sira crosses from volume 1 to volume 2 and printed numbering
+  // restarts at 5, so printed page alone stops identifying a passage.
+  it('qualifies the anchor with the volume when the account spans two', () => {
+    expect(passageAnchor(1, '527', 'p9')).toBe('1/527-p9');
+    expect(passageAnchor(2, '5', 'p1')).toBe('2/5-p1');
+    expect(passageAnchor(1, '5', 'p1')).not.toBe(passageAnchor(2, '5', 'p1'));
   });
 });

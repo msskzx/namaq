@@ -1,7 +1,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { JSDOM } from 'jsdom';
-import { bodyMarkdown, extractShamelaPage, notesMarkdown, sliceEntry } from '../../src/lib/history/shamelaEntry';
+import { bodyMarkdown, extractShamelaPage, notesMarkdown, passageAnchor, sliceEntry } from '../../src/lib/history/shamelaEntry';
 import type { AccountRecord, HistoryBatch, PageRecord, SubjectKind } from '../../src/lib/history/batchSchema';
 import { batchDefinitionFile } from '../../src/lib/history/loadBatch';
 
@@ -40,9 +40,15 @@ async function main() {
   const notesStartMarker = option('notes-start-marker');
   const notesEndMarker = option('notes-end-marker');
   const accessedAt = option('accessed-at') ?? new Date().toISOString().slice(0, 10);
+  // An account that crosses a volume sees printed numbering restart, and
+  // printed page alone stops identifying a passage. --volume turns anchors into
+  // <volume>/<printed>-<paragraph> and bumps the volume on each restart.
+  const startVolume = option('volume');
 
   const pages: PageRecord[] = [];
   let firstUrl = '';
+  let volume = startVolume ? Number(startVolume) : undefined;
+  let previousPrinted: number | undefined;
 
   for (let pageId = from; pageId <= to; pageId += 1) {
     const { url, document } = await fetchPage(bookId, pageId);
@@ -55,6 +61,10 @@ async function main() {
       notesStartMarker: pageId === from ? notesStartMarker : undefined,
       notesEndMarker: pageId === to ? notesEndMarker : undefined,
     });
+    const printed = Number(page.printedPage);
+    if (volume !== undefined && previousPrinted !== undefined && printed < previousPrinted) volume += 1;
+    if (!Number.isNaN(printed)) previousPrinted = printed;
+
     const sequence = pageId - from + 1;
     const bodyFile = `accounts/${subjectSlug}/${String(sequence).padStart(3, '0')}.md`;
 
@@ -75,11 +85,14 @@ async function main() {
       // Anchors only: the paragraph text goes to the page file, and a passage
       // is read back out of it by position (batchSchema.passageExcerpts).
       passages: page.body.map((paragraph) => ({
-        anchor: `${page.printedPage ?? sequence}-${paragraph.anchor}`,
+        anchor: passageAnchor(volume, page.printedPage ?? String(sequence), paragraph.anchor),
       })),
     });
 
-    console.log(`  page ${page.printedPage ?? sequence}: ${page.body.length} paragraphs, ${raw.notes.length} note block(s)`);
+    console.log(
+      `  ${volume === undefined ? '' : `vol ${volume} `}page ${page.printedPage ?? sequence}: ` +
+        `${page.body.length} paragraphs, ${raw.notes.length} note block(s)`,
+    );
   }
 
   const account: AccountRecord = {

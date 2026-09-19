@@ -96,3 +96,13 @@ export function bodyMarkdown(page: ExtractedPage): string {
 export function notesMarkdown(page: ExtractedPage): string | null {
   return page.notes.length === 0 ? null : `${page.notes.join('\n\n')}\n`;
 }
+
+/**
+ * Where a passage sits, as citations name it. Printed page alone identifies a
+ * passage only while an account stays inside one volume; the Prophet's sira
+ * crosses from volume 1 to volume 2 and its printed numbering restarts at 5,
+ * so a volume-spanning account qualifies the anchor with the volume.
+ */
+export function passageAnchor(volume: number | undefined, printedPage: string, paragraph: string): string {
+  return volume === undefined ? `${printedPage}-${paragraph}` : `${volume}/${printedPage}-${paragraph}`;
+}
