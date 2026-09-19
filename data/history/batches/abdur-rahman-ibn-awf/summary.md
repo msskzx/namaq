@@ -25,9 +25,12 @@ Twenty claims and twenty-eight citations. His profile carries nothing on the
 legacy marker: the entry speaks to his full name, kunya, appearance, virtues,
 year of death and place of burial, and to all four of his titles.
 
-**A fourth title.** The seed gave him the ten promised paradise, companion and
-the six of the Shura. The naming line counts him among السابقين البدريين as
-well (`68-p3`), so `al-sabiqoon` is added.
+**A fourth title for him, not a new title.** The seed gave him the ten promised
+paradise, companion and the six of the Shura, and `al-sabiqoon` already existed
+for others. The naming line calls him أَحَدُ السَّابِقِيْنَ البَدْرِيِّيْنَ
+(`68-p3`), which splits in two: السابقين earns him that existing title, and
+البدريين is his Badr participation, which the model holds as a relation and
+which `awf/badr` already records.
 
 **His appearance contradicts the seed, and the entry wins.** The seed had him
 أسمر اللون. Three reports here describe him and none of them does: Sahla bint

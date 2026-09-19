@@ -71,10 +71,12 @@ describe('Abd al-Rahman ibn Awf in the catalog', () => {
     expect(claimByKey.get('awf/muakhat-uthman')?.confidence).toBe('DISPUTED');
   });
 
-  // The seed gave him three titles; the naming line counts him among
-  // السابقين البدريين, which the seed never did.
-  it('adds al-sabiqoon, which the seed never gave him', () => {
+  // The title is not new, only new to him. البدريين in the same phrase is his
+  // Badr participation, which stays a relation rather than becoming a title.
+  it('adds al-sabiqoon to him, and leaves Badr as a relation', () => {
     expect(person.titles.map((title) => title.title)).toContain('al-sabiqoon');
+    expect(person.titles.map((title) => title.title)).not.toContain('badr');
+    expect(badr.participants.some((p) => p.person === person.slug)).toBe(true);
   });
 
   // Uhud is what made him أهتم and أعرج, so the wounds are both his appearance

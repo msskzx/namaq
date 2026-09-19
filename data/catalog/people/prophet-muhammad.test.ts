@@ -1,0 +1,94 @@
+import { readFileSync } from 'node:fs';
+import { describe, expect, it } from 'vitest';
+import { legacyUnreviewed, type Cited, type Provenance } from '@/lib/catalog/types';
+import person from './prophet-muhammad';
+import birth from '../events/birth-prophet-muhammad';
+import revelation from '../events/first-revelation-of-the-quran';
+
+// Read rather than fixtured, so editing the module or the batch alone fails.
+const batch = JSON.parse(readFileSync('data/history/batches/prophet-muhammad-sira/batch.json', 'utf8')) as {
+  claims: {
+    key: string;
+    field?: string;
+    confidence?: string;
+    disputed?: boolean;
+    citations: { passageAnchor: string }[];
+  }[];
+};
+const claimByKey = new Map(batch.claims.map((claim) => [claim.key, claim]));
+
+const citedFields = Object.entries(person.fields) as [string, Cited<string>][];
+const everyProvenance: [string, Provenance][] = [
+  ...citedFields.map(([name, cited]): [string, Provenance] => [name, cited.claims]),
+  ...person.titles.map((title): [string, Provenance] => [`title ${title.title}`, title.claims]),
+  ...person.relations.map((relation): [string, Provenance] => [`relation ${relation.type} ${relation.to}`, relation.claims]),
+  ...(person.ayat ?? []).map((ayah): [string, Provenance] => [`ayah ${ayah.surah}:${ayah.ayah}`, ayah.claims]),
+];
+
+describe('the Prophet in the catalog', () => {
+  it('supports every value with a claim the batch actually declares', () => {
+    const unknown = everyProvenance.flatMap(([where, claims]) =>
+      claims === legacyUnreviewed ? [] : claims.filter((key) => !claimByKey.has(key)).map((key) => `${where}: ${key}`),
+    );
+
+    expect(unknown).toEqual([]);
+  });
+
+  // He is still seed-authored, so the catalog only adds to him and the legacy
+  // marker has nothing to mark. See the module's own note.
+  it('carries nothing on the legacy marker', () => {
+    expect(everyProvenance.filter(([, claims]) => claims === legacyUnreviewed)).toEqual([]);
+  });
+
+  it('points a single-claim field at a claim about that same field', () => {
+    const mismatched = citedFields.flatMap(([name, cited]) => {
+      if (cited.claims === legacyUnreviewed || cited.claims.length !== 1) return [];
+      const claim = claimByKey.get(cited.claims[0]);
+      return claim?.field && claim.field !== name ? [`${name}: ${claim.key} states ${claim.field}`] : [];
+    });
+
+    expect(mismatched).toEqual([]);
+  });
+
+  // Chapter one is the first of thirteen, so every citation has to come from
+  // volume 1. A later chapter's anchor here would mean a page was read out of
+  // order and its claim authored ahead of the pass.
+  it('cites volume one only, the chapter this instalment read', () => {
+    const anchors = [...claimByKey.values()]
+      .filter((claim) => claim.key.startsWith('prophet/'))
+      .flatMap((claim) => claim.citations.map((citation) => citation.passageAnchor));
+
+    expect(anchors.every((anchor) => anchor.startsWith('1/'))).toBe(true);
+  });
+
+  // ADR 0014: a kunya is a name, so أبو القاسم is a column and not a Title.
+  it('keeps the kunya out of the titles', () => {
+    expect(person.fields.kunya.value).toBe('أبو القاسم');
+    expect(person.titles.map((title) => title.title)).not.toContain('abu-al-qasim');
+  });
+
+  // MAWLA had no other side until this batch needed one; PATRON is his.
+  it('records Zayd as a manumission in both directions', () => {
+    const zayd = person.relations.find((relation) => relation.to === 'zaid-ibn-harithah');
+
+    expect(zayd?.type).toBe('PATRON');
+    expect(zayd?.inverse).toBe('MAWLA');
+  });
+
+  // The day of the birth is disputed and a description is one value, so the
+  // description names both readings and carries both claims.
+  it('holds both readings of the birth day', () => {
+    expect(birth.fields.description.claims).toContain('prophet/birth-day');
+    expect(birth.fields.description.claims).toContain('prophet/birth-day-alt');
+    expect(claimByKey.get('prophet/birth-day')?.confidence).toBe('ESTABLISHED');
+    expect(claimByKey.get('prophet/birth-day-alt')?.confidence).toBe('DISPUTED');
+    expect(claimByKey.get('prophet/birth-day-alt')?.disputed).toBe(true);
+  });
+
+  // The chapter dates neither by a hijri year: عام الفيل is not one, and the
+  // revelation is dated by his age. Both years stay the seeds'.
+  it('leaves both events undated', () => {
+    expect(Object.keys(birth.fields)).toEqual(['description']);
+    expect(Object.keys(revelation.fields)).toEqual(['description']);
+  });
+});

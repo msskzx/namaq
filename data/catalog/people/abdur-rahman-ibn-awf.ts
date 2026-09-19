@@ -47,8 +47,9 @@ const abdurRahmanIbnAwf = {
     { title: 'the-ten-promised-paradise', claims: ['awf/titles'] },
     { title: 'companion', claims: ['awf/companion-of-prophet'] },
     { title: 'the-six-of-the-shura', claims: ['awf/titles'] },
-    // Not in the old seed's list for him: the naming line counts him one of
-    // السابقين البدريين.
+    // السابقين البدريين splits: السابقين is this title, which the seed held
+    // but never gave him, and البدريين is his Badr participation, recorded
+    // as a relation rather than repeated here.
     { title: 'al-sabiqoon', claims: ['awf/titles'] },
   ],
 

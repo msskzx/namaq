@@ -30,6 +30,15 @@ const khandaq = {
       },
       claims: ['zubayr/khandaq'],
     },
+    {
+      person: 'salman-al-farisi',
+      isMuslim: true,
+      summary: {
+        value: 'ثم شهدت الخندق، ثم لم يفتني معه مشهد.',
+        claims: ['salman/khandaq'],
+      },
+      claims: ['salman/khandaq'],
+    },
   ],
 } satisfies CatalogBattle;
 
