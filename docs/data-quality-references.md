@@ -203,15 +203,32 @@ the Companion entries are not one contiguous run:
 | 2614 | تابع: الصحابة (v3) | 38 | yes |
 | 2806 | ومن بقايا صغار الصحابة | 6 | yes |
 | 2849 | ومن صغار الصحابة | 54 | yes |
-| 3084 | كبار التابعين | 45 | no |
+| 3084 | كبار التابعين | 45 | mostly — see below |
 | 3158 | تابع: الطبقة الأولى - الصحابة (v4) | 35 | yes |
 | 3263 | بقية الطبقة الأولى من كبراء التابعين | 71 | no |
 
-About 356 entries in scope against 116 skipped; الطبقة الثانية opens at page 3440
-and ends the first tabaqa. The skipped runs are not a clean line either: several
-of the 45 are counted صحابة in other works, and al-Dhahabi heads part of that
-block وممن أدرك زمان النبوة. Where a subject is contested, say so in the
-batch's `summary.md` rather than letting a section heading decide it.
+About 356 entries in scope and 116 outside it before contested cases are taken
+in; الطبقة الثانية opens at page 3440 and ends the first tabaqa.
+
+**The skip is by person, not by block, and a contested صحبة is taken in rather
+than left out** -- نزداد خيراً بمعرفة الرجال. The two costs are not equal.
+Including someone another work places outside the Companions costs a subject
+whose status is recorded honestly, which the batch's `summary.md` states along
+with who holds what. Excluding a real Companion costs a hole, and a hole is
+silent: nothing downstream points at a subject that was never authored.
+
+The 3084 run is where this bites, and al-Dhahabi supplies part of the signal
+himself. He heads a stretch of it وممن أدرك زمان النبوة at page 3112, and
+several entries on both sides of that heading are counted صحابة elsewhere --
+محمود بن لبيد before it, ربيعة بن عباد, أبو أمامة بن سهل بن حنيف,
+محمود بن الربيع and يوسف بن عبد الله بن سلام after it. How far the heading
+governs is not something the table of contents settles; the pages have to be
+read. The rest of that run -- كعب الأحبار, زياد بن أبيه, المختار,
+عبيد الله بن زياد -- is nobody's contested Companion and stays out.
+
+Settling a contest properly wants الإصابة, which sorts its entries by exactly
+this question and is why تمييز الصحابة is in its title. It is not extracted, so
+until it is, record the contest rather than resolve it.
 
 Which generation a person belongs to is a fact about the person, not about the
 section that supplied their entry, so it does not belong in the extraction order
