@@ -17,7 +17,7 @@ neither end needed slicing.
 
 ## What the entry supports
 
-Twenty claims and twenty-eight citations. His profile carries nothing on the
+Twenty-one claims and twenty-nine citations. His profile carries nothing on the
 legacy marker: the entry speaks to his full name, kunya, appearance, virtues,
 year of death and place of death, and to all five of his titles.
 
@@ -34,6 +34,21 @@ the verse describes (`47-p6`), which is that verse's occasion at Hamra al-Asad.
 the naming line, his mother Safiyyah bint Abd al-Muttalib from the same
 sentence that makes him the Prophet's cousin. `SON` answers to `FATHER` for one
 and `MOTHER` for the other, which is why each declares its own.
+
+## Events
+
+He is linked to the first hijra to Abyssinia, which the entry states outright
+and attributes to Musa ibn Uqbah and Ibn Ishaq, adding that he did not stay long
+(`47-p5`). The event already exists with its year and location; this batch only
+adds him to it.
+
+**A second hijra is left open.** Urwah's ward reports `هَاجَرَ الزُّبَيْرُ،
+وَهُوَ ابْنُ ثَمَانِ عَشْرَةَ سَنَةٍ` with no destination (`44-p11`). Tarajim
+usage is that an unqualified هاجر means the hijra to Medina, and this entry
+follows it, naming the destination when it means Abyssinia. Against that, its
+own heading has him accepting Islam at sixteen, which would make him about
+twenty-nine at the Medina hijra, not eighteen. Two readings and nothing in the
+entry to settle them, so no event link is authored from it.
 
 ## Battles
 

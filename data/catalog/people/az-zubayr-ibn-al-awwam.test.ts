@@ -5,6 +5,7 @@ import person from './az-zubayr-ibn-al-awwam';
 import badr from '../battles/badr';
 import yarmuk from '../battles/yarmuk';
 import uhud from '../battles/uhud';
+import abyssinia from '../events/first-hijra-to-abyssinia';
 import jamal from '../battles/jamal';
 
 // Read rather than fixtured, so editing the module or the batch alone fails.
@@ -87,6 +88,16 @@ describe('al-Zubayr ibn al-Awwam in the catalog', () => {
     expect(at(badr)?.status).toEqual(['INJURED']);
     expect(at(yarmuk)?.status).toEqual(['INJURED']);
     expect(at(jamal)?.status).toEqual(['MARTYRED']);
+  });
+
+  // Events are what put a person on the profile timeline, and the entry states
+  // this one outright. The unqualified هاجر at 44-p11 names no destination, so
+  // no second hijra is authored from it.
+  it('links him to the hijra to Abyssinia the entry states', () => {
+    const at = abyssinia.people.find((entry) => entry.person === person.slug);
+
+    expect(at?.claims).toEqual(['zubayr/hijra-habasha']);
+    expect(claimByKey.get('zubayr/hijra-habasha')?.relatedSubjectSlug).toBe('first-hijra-to-abyssinia');
   });
 
   // The verse the old seed guessed at, now resting on Aisha naming him in it.

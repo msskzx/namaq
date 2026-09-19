@@ -1665,6 +1665,28 @@
         }
       ],
       "field": "ayat"
+    },
+    {
+      "key": "zubayr/hijra-habasha",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "هاجر إلى الحبشة، ولم يطل الإقامة بها.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "first-hijra-to-abyssinia",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "47-p5",
+          "volume": "1",
+          "pageReference": "47",
+          "extractionUrl": "https://shamela.ws/book/10906/1473",
+          "excerptArabic": "وَهُوَ مِمَّنْ هَاجَرَ إِلَى الحَبَشَةِ، فِيْمَا نَقَلَهُ مُوْسَى بنُ عُقْبَةَ، وَابْنُ إِسْحَاقَ (١) ، وَلَمْ يُطَوِّلِ الإِقَامَةَ بِهَا.",
+          "accessedAt": "2026-09-18"
+        }
+      ]
     }
   ]
 }
