@@ -40,8 +40,19 @@ section's earlier extraction; that does not establish complete evidence coverage
 Use historical works as evidence, including the user's named works: البداية
 والنهاية, الكامل في التاريخ, المنتظم في تاريخ الملوك والأمم, تاريخ الخلفاء,
 تهذيب الكمال في أسماء الرجال, حلية الأولياء وطبقات الأصفياء, and سير أعلام
-النبلاء. Distinguish the work and consulted edition from the website hosting it.
-These are eligible sources, not a requirement to consult all seven for every fact.
+النبلاء. For Companions, four more are eligible: the three صحابة dictionaries
+الإصابة في تمييز الصحابة, الاستيعاب في معرفة الأصحاب and أسد الغابة في معرفة
+الصحابة, and the early الطبقات الكبرى لابن سعد. The Risalah editors cite all four
+throughout their footnotes, which is the practical way into them: where a note
+sends you, that book has something the Siyar left out. Distinguish the work and
+consulted edition from the website hosting it.
+
+Eligible is not in use. No fact needs all eleven, and every batch today draws on
+سير أعلام النبلاء alone. A second book enters by becoming a source account
+with its own extracted pages, anchors and citations, never by being consulted
+behind a Siyar citation. None is to be added until the first pass over the first
+tabaqa is done; a book added then may also bring subjects the Siyar gave no
+entry to.
 
 Citations must support individual facts, relationships, and biography paragraphs,
 with a collected reference list for each subject. Preserve exact extraction URLs
