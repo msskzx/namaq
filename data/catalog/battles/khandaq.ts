@@ -8,6 +8,7 @@ const khandaq = {
   fields: { hijriYear: { value: 5, claims: legacyUnreviewed } },
   participants: [
     { person: 'talhah-ibn-ubaydullah', isMuslim: true, claims: legacyUnreviewed },
+    { person: 'abdur-rahman-ibn-awf', isMuslim: true, claims: legacyUnreviewed },
     { person: 'abu-ubaydah-ibn-al-jarrah', isMuslim: true, claims: legacyUnreviewed },
     {
       person: 'az-zubayr-ibn-al-awwam',

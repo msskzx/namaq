@@ -17,7 +17,10 @@ const hijraToMedina = {
   nameTransliterated: 'Hijra to Medina',
   type: 'HIJRA',
   fields: {},
-  people: [{ person: 'az-zubayr-ibn-al-awwam', claims: ['zubayr/hijra-madinah'] }],
+  people: [
+    { person: 'az-zubayr-ibn-al-awwam', claims: ['zubayr/hijra-madinah'] },
+    { person: 'abdur-rahman-ibn-awf', claims: ['awf/hijra-madinah'] },
+  ],
 } satisfies CatalogEvent;
 
 export default hijraToMedina;

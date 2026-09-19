@@ -9,6 +9,16 @@ const badr = {
   // still owed (AGENTS.md, "Historical evidence data").
   fields: { hijriYear: { value: 2, claims: legacyUnreviewed } },
   participants: [
+    {
+      person: 'abdur-rahman-ibn-awf',
+      isMuslim: true,
+      summary: {
+        value:
+          'وَمِنْ مَنَاقِبِهِ: أَنَّ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- شَهِدَ لَهُ بِالجَنَّةِ، وَأَنَّهُ مِنْ أَهْلِ بَدْرٍ الَّذِيْنَ قِيْلَ لَهُم: (اعْمَلُوا مَا شِئْتُم) .',
+        claims: ['awf/badr'],
+      },
+      claims: ['awf/badr'],
+    },
     { person: 'abu-ubaydah-ibn-al-jarrah', isMuslim: true, claims: ['abu-ubaydah/badr'] },
     // The old seed had him present here with no status at all. He was away
     // trading in Syria, and given the share and the reward all the same.

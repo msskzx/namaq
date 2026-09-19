@@ -12,7 +12,10 @@ const firstHijraToAbyssinia = {
   nameTransliterated: 'First Hijra to Abyssinia',
   type: 'HIJRA_HABASHA',
   fields: {},
-  people: [{ person: 'az-zubayr-ibn-al-awwam', claims: ['zubayr/hijra-habasha'] }],
+  people: [
+    { person: 'az-zubayr-ibn-al-awwam', claims: ['zubayr/hijra-habasha'] },
+    { person: 'abdur-rahman-ibn-awf', claims: ['awf/hijra-habasha'] },
+  ],
 } satisfies CatalogEvent;
 
 export default firstHijraToAbyssinia;
