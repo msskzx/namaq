@@ -34,6 +34,14 @@ describe('relationGroup', () => {
     expect(relationGroup('FATHER')).toBe('family');
     expect(relationGroup('COMPANION_OF')).toBe('family');
   });
+
+  // PACT_BROTHER shares COMPANION_OF's colour rather than the sibling one, so
+  // the graph does not read a مؤاخاة as a blood tie.
+  it('colours the pact brotherhood as companionship, not as a sibling tie', () => {
+    expect(relationColor('PACT_BROTHER')).toBe(relationColor('COMPANION_OF'));
+    expect(relationColor('PACT_BROTHER')).not.toBe(relationColor('BROTHER'));
+    expect(relationGroup('PACT_BROTHER')).toBe('family');
+  });
 });
 
 describe('sortRelationTypes', () => {

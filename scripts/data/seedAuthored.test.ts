@@ -10,6 +10,7 @@ describe('seedAuthoredPeople', () => {
     expect(seeded.has('talhah-ibn-ubaydullah')).toBe(false);
     expect(seeded.has('abu-ubaydah-ibn-al-jarrah')).toBe(false);
     expect(seeded.has('az-zubayr-ibn-al-awwam')).toBe(false);
+    expect(seeded.has('abdur-rahman-ibn-awf')).toBe(false);
   });
 
   // Someone the seeds describe and the catalog says little or nothing about

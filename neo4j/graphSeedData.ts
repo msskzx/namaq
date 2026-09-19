@@ -61,7 +61,6 @@ export const corePeopleQueries = [
     'CREATE (:Person { name: "عمر بن الخطاب", slug: "umar-ibn-al-khattab", nameTransliterated: "Umar ibn al-Khattab", fullName: "عمر بن الخطاب بن نفيل بن عبد العزى بن رياح بن قرط بن رزاح بن عدي بن كعب بن لؤي القرشي العدوي" });',
     'CREATE (:Person { name: "عثمان بن عفان", slug: "uthman-ibn-affan", nameTransliterated: "Uthman ibn Affan" });',
     'CREATE (:Person { name: "علي بن أبي طالب", slug: "ali-ibn-abi-talib", nameTransliterated: "Ali ibn Abi Talib" });',
-    'CREATE (:Person { name: "عبد الرحمن بن عوف", slug: "abdur-rahman-ibn-awf", nameTransliterated: "Abdur Rahman ibn Awf" });',
     'CREATE (:Person { name: "سعد بن أبي وقاص", slug: "saad-ibn-abi-waqqas", nameTransliterated: "Saad ibn Abi Waqqas" });',
     'CREATE (:Person { name: "سعيد بن زيد", slug: "saeed-ibn-zaid", nameTransliterated: "Saeed ibn Zaid" });',
     'CREATE (:Person { name: "خديجة بنت خويلد", slug: "khadijah-bint-khuwaylid", nameTransliterated: "Khadijah bint Khuwaylid" });',

@@ -8,6 +8,17 @@ const uhud = {
   // still owed (AGENTS.md, "Historical evidence data").
   fields: { hijriYear: { value: 3, claims: legacyUnreviewed } },
   participants: [
+    {
+      person: 'abdur-rahman-ibn-awf',
+      isMuslim: true,
+      status: ['INJURED'],
+      summary: {
+        value:
+          'كَانَ أُصِيْبَ يَوْمَ أُحُدٍ فُهُتِمَ، وَجُرِحَ عِشْرِيْنَ جِرَاحَةً، بَعْضُهَا فِي رِجْلِهِ فَعَرَجَ.',
+        claims: ['awf/uhud'],
+      },
+      claims: ['awf/uhud'],
+    },
     { person: 'abu-ubaydah-ibn-al-jarrah', isMuslim: true, claims: ['abu-ubaydah/uhud'] },
     {
       person: 'talhah-ibn-ubaydullah',
