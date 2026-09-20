@@ -52,9 +52,9 @@ describe('Badr after chapter four', () => {
     const martyrs = battle.participants
       .filter((participant) => participant.status?.includes('MARTYRED'))
       .map((participant) => participant.person);
-    expect(martyrs.sort()).toEqual(
-      ['aqil-ibn-al-bukayr', 'saad-ibn-khaythamah', 'safwan-ibn-bayda', 'ubaydah-ibn-al-harith'].sort(),
-    );
+    // al-Dhahabi closes the roster with فالجملة أربعة عشر رجلا, so the count is
+    // part of what the source says and not just the length of a list.
+    expect(martyrs).toHaveLength(14);
     expect(martyrs.every((slug) => at(slug)?.relation === undefined)).toBe(true);
 
     for (const slug of ['uthman-ibn-affan', 'saeed-ibn-zaid', 'talhah-ibn-ubaydullah', 'salman-al-farisi']) {

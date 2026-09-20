@@ -23,7 +23,7 @@ builds and `extractShamelaEntry.ts --volume` sets.
 ## What this instalment reads
 
 Chapters one to four, printed pages ١/٢٩ to ١/٣٧٤, Shamela page ids 167 to
-511. 141 claims and 219 citations. Nine chapters remain, ending at ٢/٤٩٦.
+511. 172 claims and 276 citations. Nine chapters remain, ending at ٢/٤٩٦.
 
 Chapter one covers his lineage, his names, his birth, the deaths of his parents
 and grandfather, Abu Talib's guardianship, his marriage to Khadijah, his
@@ -393,10 +393,11 @@ replaced with a stick that became a sword; Bilal, who called out رأس الكف
 بن خلف; and Ubadah ibn al-Samit, who narrates that al-Anfal came down about them
 over the spoils.
 
-**The fourteen martyrs are named** (`1/313-p6`, `1/314-p2`, `1/314-p3`), and
-al-Dhahabi closes the list with فالجملة أربعة عشر رجلا. Only four of them have
-subjects in the app: Ubaydah, Aqil ibn al-Bukayr, Safwan ibn Bayda and Sa'd ibn
-Khaythamah. The other ten wait for subjects of their own.
+**All fourteen martyrs are recorded** (`1/313-p6`, `1/314-p2`, `1/314-p3`), and
+al-Dhahabi closes the list with فالجملة أربعة عشر رجلا, so the count is part of
+what the source says and a test holds the record to it. Four were already
+declared under `prisma/`; the other ten had no subject anywhere, and the catalog
+now creates them. See **The martyrs, and a sex column** below.
 
 **Two excused absences**, both with the Prophet's ruling attached. Uthman stayed
 to nurse Ruqayyah and was given his share and his reward (`1/360-p6`,
@@ -462,6 +463,42 @@ Prophet gave him at العشيرة when he woke him out of the dust (`1/299-p1`)
 in the `kunya` column as [ADR 0014](../../../../docs/adr/0014-a-kunya-is-a-name.md)
 requires. Sa'd ibn Abi Waqqas loosed أول سهم رمي في سبيل الله at بعث عبيدة
 (`1/298-p1`).
+
+# The martyrs, and a sex column
+
+Ten of the fourteen dead of Badr had no subject in the app, so the roster could
+only be recorded four deep. They are authored now, and since nothing under
+`prisma/` declares them, these modules are their only author: `catalog:project`
+creates the rows and `people:sync` gives them graph nodes.
+
+Two of the ten the chapter narrates rather than lists. **مهجع مولى عمر** was shot
+and is أول قتيل في سبيل الله, and **حارثة بن سراقة** was shot drinking at the
+cistern (`1/307-p4`). **عمير بن الحمام** heard قوموا إلى جنة عرضها السموات
+والأرض, said بخ بخ, threw away the dates he was eating rather than live long
+enough to finish them, and fought until he was killed (`1/334-p4`, `1/335-p2`).
+**معوذ بن عفراء** struck Abu Jahl down, and the Prophet called the two sons of
+Afra partners in killing فرعون هذه الأمة (`1/310-p8`, `1/340-p3`).
+
+## Sex is a value like any other
+
+`Person.sex` is added, `MALE` or `FEMALE`, a string with its vocabulary in
+`SEXES` and `catalog:validate` enforcing it. What it buys is in the graph: a
+`FATHER` relation reverses to `SON` or `DAUGHTER` depending on the sex of whoever
+the inverse edge points at, and `relations.ts` had no way to know, so every such
+relation had to state its `inverse` by hand.
+
+**It is cited, not inferred.** The martyrs take it from the roster's own count
+of the fourteen as رجالا, not from their names being masculine Arabic. Everyone
+else takes it from a passage that says it outright: بن, بنت, أبو, or Uthman's
+زوجته. Where no passage says it, the column is left unset rather than marked
+owed, because `legacyUnreviewed` belongs to the one-time migration and not to an
+authored module.
+
+That discipline was enforced by a test already in the repo rather than by me.
+The first pass backed each `sex` with whatever claim was nearest, and
+`prophet-muhammad.test.ts`'s rule that a single-claim field must cite a claim
+about that same field rejected it: `prophet/lineage` is about `fullName`. Each
+person now has a claim whose own field is `sex`.
 
 # Review
 

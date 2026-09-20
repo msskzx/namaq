@@ -13,6 +13,7 @@ const khadijahBintKhuwaylid = {
   nameTransliterated: 'Khadijah bint Khuwaylid',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: ['khadijah/sex'] },
     virtues: {
       value:
         'قال صلى الله عليه وسلم: (والله لقد آمنت بي إذ كفر بي الناس، وآوتني إذ رفضني الناس، وصدقتني إذ كذبني الناس، ورزقت منها الولد) .',

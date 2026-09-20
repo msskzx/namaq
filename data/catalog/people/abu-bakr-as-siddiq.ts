@@ -12,7 +12,9 @@ const abuBakrAsSiddiq = {
   name: 'أبو بكر الصديق',
   nameTransliterated: 'Abu Bakr as-Siddiq',
   hasProfile: true,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: ['abu-bakr/sex'] },
+  },
 
   // The title is not new, only newly cited for him. The chapter gives the
   // naming outright: he affirmed the Isra' when others turned back, فلذلك سمي

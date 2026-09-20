@@ -9,6 +9,7 @@ const abdullahIbnSalam = {
   nameTransliterated: 'Abdullah ibn Salam',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: ['ibn-salam/sex'] },
     virtues: {
       value: 'قال: لقد علمت يهود أني سيدهم وابن سيدهم، وأعلمهم وابن أعلمهم.',
       claims: ['ibn-salam/virtues'],

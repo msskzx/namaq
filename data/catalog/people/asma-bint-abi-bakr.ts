@@ -8,7 +8,9 @@ const asmaBintAbiBakr = {
   name: 'أسماء بنت أبي بكر',
   nameTransliterated: 'Asma bint Abi Bakr',
   hasProfile: true,
-  fields: {},
+  fields: {
+    sex: { value: 'FEMALE', claims: ['asma/sex'] },
+  },
   titles: [{ title: 'dhat-an-nitaqayn', claims: ['asma/dhat-an-nitaqayn'] }],
   relations: [],
 } satisfies CatalogPerson;
