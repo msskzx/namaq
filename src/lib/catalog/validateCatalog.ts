@@ -1,5 +1,5 @@
 import { RECIPROCAL_INVERSES } from '@/lib/relationship/categories';
-import { legacyUnreviewed, STATUSES_BY_RELATION, type Catalog, type Provenance } from './types';
+import { legacyUnreviewed, STATUSES_BY_RELATION, type Catalog, type Provenance, ENGAGEMENTS } from './types';
 
 export interface CatalogIssue {
   readonly path: string;
@@ -63,7 +63,14 @@ export function validateCatalog(catalog: Catalog, known: KnownSlugs): CatalogIss
 
   catalog.battles.forEach((battle) => {
     const at = `battles/${battle.slug}`;
-    if (!known.battles.has(battle.slug)) issues.push({ path: at, message: 'unknown battle' });
+    // No unknown-slug check, unlike titles and people. The catalog creates a
+    // Battle row when none exists, the way it already creates Events, so a slug
+    // the seed does not know is a new record rather than a typo. What catches a
+    // typo is the projector's dry run, which prints every create before writing.
+    if (battle.fields?.engagement && !ENGAGEMENTS.includes(battle.fields.engagement.value)) {
+      issues.push({ path: `${at}.engagement`, message: `unknown engagement ${battle.fields.engagement.value}` });
+    }
+    if (battle.fields?.engagement) checkProvenance(battle.fields.engagement.claims, known, `${at}.engagement`, issues);
     battle.participants.forEach((entry) => {
       const where = `${at}.${entry.person}`;
       checkProvenance(entry.claims, known, where, issues);

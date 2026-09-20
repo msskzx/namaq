@@ -190,17 +190,46 @@ async function projectTitles(subject: Catalog['people'][number]) {
 
 async function projectBattles(battles: Catalog['battles']) {
   for (const battle of battles) {
-    const row = await prisma.battle.findUnique({ where: { slug: battle.slug } });
+    const at = `battles/${battle.slug}`;
+    let row = await prisma.battle.findUnique({ where: { slug: battle.slug } });
+
+    // Expeditions reach the app this way: the sira names a سرية the old seed
+    // never had, so the catalog creates the row rather than reporting it
+    // missing, the way projectEvents already does.
     if (!row) {
-      conflicts.push(`battles/${battle.slug}: no row`);
-      continue;
+      planned.push(`${at}: create`);
+      Object.entries(battle.fields ?? {}).forEach(([column, cited]) => {
+        if (cited) planned.push(`${at}.${column}: set to ${JSON.stringify(cited.value)}`);
+      });
+      if (apply) {
+        row = await prisma.battle.create({
+          data: {
+            slug: battle.slug,
+            name: battle.name,
+            nameTransliterated: battle.nameTransliterated,
+            hijriYear: battle.fields?.hijriYear?.value,
+            location: battle.fields?.location?.value,
+            engagement: battle.fields?.engagement?.value,
+          },
+        });
+      } else {
+        continue;
+      }
+    } else {
+      if (row.name !== battle.name) {
+        conflicts.push(`${at}.name: database has ${JSON.stringify(row.name)}, catalog has ${JSON.stringify(battle.name)}`);
+      }
+      const set = settleFields(at, row, battle.fields ?? {});
+      if (apply && Object.keys(set).length > 0) {
+        await prisma.battle.update({ where: { slug: battle.slug }, data: set });
+      }
     }
 
     for (const entry of battle.participants) {
-      const at = `battles/${battle.slug}.${entry.person}`;
+      const where = `${at}.${entry.person}`;
       const person = await prisma.person.findUnique({ where: { slug: entry.person }, select: { id: true } });
       if (!person) {
-        conflicts.push(`${at}: no row for this person`);
+        conflicts.push(`${where}: no row for this person`);
         continue;
       }
 
@@ -209,24 +238,24 @@ async function projectBattles(battles: Catalog['battles']) {
       if (existing) {
         const status = [...(entry.status ?? [])];
         if (existing.isMuslim !== entry.isMuslim) {
-          conflicts.push(`${at}: database has isMuslim ${existing.isMuslim}, catalog has ${entry.isMuslim}`);
+          conflicts.push(`${where}: database has isMuslim ${existing.isMuslim}, catalog has ${entry.isMuslim}`);
         }
         if (existing.status.join() !== status.join()) {
-          conflicts.push(`${at}: database has status [${existing.status}], catalog has [${status}]`);
+          conflicts.push(`${where}: database has status [${existing.status}], catalog has [${status}]`);
         }
         // Attendance is the one thing a seeded row is most likely to have
         // wrong, since the old shape made presence the unmarked default.
         if (existing.relation !== relation) {
-          conflicts.push(`${at}: database has ${existing.relation}, catalog has ${relation}`);
+          conflicts.push(`${where}: database has ${existing.relation}, catalog has ${relation}`);
         }
-        const summary = settle(`${at}.summary`, existing.summary, entry.summary);
+        const summary = settle(`${where}.summary`, existing.summary, entry.summary);
         if (apply && summary !== undefined) {
           await prisma.battleParticipation.update({ where: { id: existing.id }, data: { summary: String(summary) } });
         }
         continue;
       }
 
-      planned.push(`battles/${battle.slug}: add ${entry.person} as ${relation}`);
+      planned.push(`${at}: add ${entry.person} as ${relation}`);
       if (apply) {
         await prisma.battleParticipation.create({
           data: {

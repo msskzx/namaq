@@ -87,16 +87,30 @@ export interface CatalogParticipation {
   readonly claims: Provenance;
 }
 
+/**
+ * What kind of engagement a Battle row records. GHAZWAH and SARIYYAH are the
+ * sira's own two words: al-Dhahabi writes غزوة when the Prophet went out
+ * himself and بعث or سرية when he sent a detachment without going, so the value
+ * is cited from the heading rather than assigned. BATTLE is everything outside
+ * his campaigns, which the book calls معركة or فتح.
+ */
+export const ENGAGEMENTS = ['GHAZWAH', 'SARIYYAH', 'BATTLE'] as const;
+export type Engagement = (typeof ENGAGEMENTS)[number];
+
 /** Keys are Prisma `Battle` column names. */
 export interface CatalogBattleFields {
   readonly hijriYear?: Cited<number>;
   readonly location?: Cited<string>;
+  readonly engagement?: Cited<Engagement>;
 }
 
 /** Names only the participants its batch's focal subject brought, never the full roster. */
 export interface CatalogBattle {
   readonly kind: 'BATTLE';
   readonly slug: string;
+  /** Required because the projector creates the row when none exists. */
+  readonly name: string;
+  readonly nameTransliterated?: string;
   readonly fields?: CatalogBattleFields;
   readonly participants: readonly CatalogParticipation[];
 }

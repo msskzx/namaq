@@ -346,6 +346,12 @@ model Battle {
   gregorianPeriod    String?
   nameTransliterated String?
 
+  // GHAZWAH, SARIYYAH or BATTLE. A string rather than an enum so a new kind of
+  // engagement does not need a migration; the vocabulary that constrains it
+  // lives in src/lib/catalog/types.ts and validateCatalog enforces it.
+  // See README, "What is implemented".
+  engagement String?
+
   // New fields for Google Maps coordinates
   latitude  Float? // Latitude coordinate (e.g., 27.6099)
   longitude Float? // Longitude coordinate (e.g., 35.7501)

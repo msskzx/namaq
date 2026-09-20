@@ -131,6 +131,11 @@ const translations = {
       nameTransliterated: 'Name (EN)',
       locationEn: 'Location (EN)',
       loadError: 'Failed to load battles',
+      engagement: {
+        GHAZWAH: 'Expedition (led in person)',
+        SARIYYAH: 'Expedition (detachment sent)',
+        BATTLE: 'Battle',
+      },
       participationStatus: {
         MARTYRED: 'Martyred',
         DIED: 'Died',
@@ -498,6 +503,11 @@ const translations = {
       nameTransliterated: 'الاسم بالإنجليزية',
       locationEn: 'الموقع بالإنجليزية',
       loadError: 'تعذر تحميل المعارك',
+      engagement: {
+        GHAZWAH: 'غزوة',
+        SARIYYAH: 'سرية',
+        BATTLE: 'معركة',
+      },
       participationStatus: {
         MARTYRED: 'استشهد',
         DIED: 'توفي',
