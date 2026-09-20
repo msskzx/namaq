@@ -1,5 +1,5 @@
 import { RECIPROCAL_INVERSES } from '@/lib/relationship/categories';
-import { legacyUnreviewed, STATUSES_BY_RELATION, type Catalog, type Provenance, ENGAGEMENTS } from './types';
+import { legacyUnreviewed, STATUSES_BY_RELATION, type Catalog, type Provenance, ENGAGEMENTS, SEXES } from './types';
 
 export interface CatalogIssue {
   readonly path: string;
@@ -34,6 +34,9 @@ export function validateCatalog(catalog: Catalog, known: KnownSlugs): CatalogIss
     Object.entries(subject.fields).forEach(([field, cited]) => {
       if (cited) checkProvenance(cited.claims, known, `${at}.${field}`, issues);
     });
+    if (subject.fields.sex && !SEXES.includes(subject.fields.sex.value)) {
+      issues.push({ path: `${at}.sex`, message: `unknown sex ${subject.fields.sex.value}` });
+    }
     subject.titles.forEach((title) => {
       checkProvenance(title.claims, known, `${at}.titles.${title.title}`, issues);
       if (!known.titles.has(title.title)) issues.push({ path: at, message: `unknown title ${title.title}` });

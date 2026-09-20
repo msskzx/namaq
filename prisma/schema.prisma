@@ -68,6 +68,12 @@ model Person {
   /// see docs/adr/0014-a-kunya-is-a-name.md.
   kunya                      String?
   nameTransliterated         String? // Transliterated name for search/display
+
+  // MALE or FEMALE. A string rather than an enum, matching Battle.engagement,
+  // so the vocabulary lives in src/lib/catalog/types.ts where validateCatalog
+  // can enforce it. It is what lets an ambiguous reciprocal be resolved without
+  // the author stating it -- see src/lib/catalog/relations.ts.
+  sex                        String?
   birthYearHijri             String? // e.g., "53 BH", "1 AH" (store as string for flexibility)
   birthYearGregorian         String? // e.g., "570 CE", "622 CE"
   deathYearHijri             String?

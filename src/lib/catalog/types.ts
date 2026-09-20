@@ -13,7 +13,17 @@ export interface Cited<T> {
 }
 
 /** Keys are Prisma `Person` column names; scripts/data/projectCatalog.ts writes them by key. */
+/**
+ * A person's sex, which the sources state plainly (رجل, امرأة, a martyr roster
+ * counted as أربعة عشر رجلا) and which the graph needs: SON pairs with FATHER
+ * or MOTHER and FATHER with SON or DAUGHTER, and nothing in a relation's text
+ * says which. See src/lib/catalog/relations.ts.
+ */
+export const SEXES = ['MALE', 'FEMALE'] as const;
+export type Sex = (typeof SEXES)[number];
+
 export interface CatalogPersonFields {
+  readonly sex?: Cited<Sex>;
   readonly fullName?: Cited<string>;
   readonly kunya?: Cited<string>;
   readonly appearance?: Cited<string>;
