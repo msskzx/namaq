@@ -22,9 +22,8 @@ builds and `extractShamelaEntry.ts --volume` sets.
 
 ## What this instalment reads
 
-Chapters one to three, printed pages ١/٢٩ to ١/٢٩٥, Shamela page ids 167 to
-433. Ninety-eight claims and 142 citations. Ten chapters remain, ending at
-٢/٤٩٦.
+Chapters one to four, printed pages ١/٢٩ to ١/٣٧٤, Shamela page ids 167 to
+511. 124 claims and 189 citations. Nine chapters remain, ending at ٢/٤٩٦.
 
 Chapter one covers his lineage, his names, his birth, the deaths of his parents
 and grandfather, Abu Talib's guardianship, his marriage to Khadijah, his
@@ -282,11 +281,6 @@ such year.
 men and one woman, Ibn Ishaq seventy and two (`1/250-p3`). There is no
 headcount field, so the disagreement stays where it is.
 
-## Review
-
-Nothing is reviewed. The claims are authored but nobody has compared them
-against the stored pages, so every claim is Not reviewed.
-
 # Chapter three
 
 Printed ١/٢٨٣ to ١/٢٩٥, ids 421 to 433. Thirteen pages, fourteen claims and
@@ -361,3 +355,91 @@ the same breath.
 **Three deaths on kufr** at Mecca and Ta'if (`1/293-p6`, `1/293-p7`), and
 أبو قيس بن الأسلت, who nearly accepted Islam and swore off it for a year and
 died inside the year (`1/294-p6` to `1/295-p3`). None has a subject in the app.
+
+# Chapter four
+
+Printed ١/٢٩٧ to ١/٣٧٤, ids 434 to 511. Seventy-eight pages, twenty-six claims
+and forty-seven citations. This is Badr.
+
+## A legacy value retired
+
+`battles/badr` carried `hijriYear: 2` on the legacy marker, extracted by an
+earlier agent from this same work without a citation. This chapter is headed
+سنة اثنتين من الهجرة (`1/297-p1`) and al-Dhahabi dates the battle itself to
+Friday morning, the seventeenth of Ramadan (`1/307-p1`, `1/307-p2`). `sira/badr`
+cites both, so the value moves off the marker to a cited claim. It is the first
+carried value this pass has been able to promote.
+
+Zayd ibn Thabit's reading is recorded in the same breath, that he would honour
+the seventeenth as Laylat al-Qadr because it was Badr. Ibn Mas'ud put it at the
+eleventh from the end instead, and al-Dhahabi says المشهور ما قبله. The model
+holds no night of Qadr, so that disagreement stays on the page.
+
+## Badr's roster
+
+Seventeen participations, on a battle that previously held five.
+
+**In the عريش:** the Prophet and Abu Bakr, ليس معهما غيرهما. Sa'd ibn Mu'adh
+proposed building it and then stood at its door with a sword (`1/327-p1`,
+`1/308-p3`).
+
+**The three who fought the duel:** Hamzah, Ali and Ubaydah ibn al-Harith, and
+al-Dhahabi records that هذان خصمان اختصموا في ربهم was revealed about them and
+their three opponents (`1/334-p2`, `1/335-p5`). Ubaydah is `MARTYRED`: Utbah
+took his leg and he died two days later at as-Safra (`1/336-p3`, `1/314-p1`).
+
+Also al-Miqdad, whose words made the Prophet's face light up and who was the
+only horseman by al-Bara's account; Ibn Mas'ud, who finished Abu Jahl and
+brought his head; Mus'ab, who carried the لواء; Ukkashah, whose broken sword was
+replaced with a stick that became a sword; Bilal, who called out رأس الكفر أمية
+بن خلف; and Ubadah ibn al-Samit, who narrates that al-Anfal came down about them
+over the spoils.
+
+**The fourteen martyrs are named** (`1/313-p6`, `1/314-p2`, `1/314-p3`), and
+al-Dhahabi closes the list with فالجملة أربعة عشر رجلا. Only four of them have
+subjects in the app: Ubaydah, Aqil ibn al-Bukayr, Safwan ibn Bayda and Sa'd ibn
+Khaythamah. The other ten wait for subjects of their own.
+
+**Two excused absences**, both with the Prophet's ruling attached. Uthman stayed
+to nurse Ruqayyah and was given his share and his reward (`1/360-p6`,
+`1/361-p1`). Sa'id ibn Zayd was in Syria and was given a share on his return
+(`1/361-p2`). The same sentence covers Talhah, whose absence his own batch had
+already recorded, so the two extractions agree.
+
+## Five events of year two
+
+The **change of the qiblah** in Rajab (`1/301-p2`), the **obligation of fasting
+Ramadan** with Ashura's obligation abrogated and the fitrah at its end
+(`1/362-p5`), the **marriage of Ali and Fatimah** with the درع حطمية as her
+dower (`1/372-p7`, `1/373-p1`), the **death of Ruqayyah** during Badr itself
+(`1/361-p1`), and the **death of Uthman ibn Mazun** shortly after it
+(`1/363-p2`, `1/363-p3`).
+
+Three relations come with them: Ali to Fatimah, and Uthman to both Ruqayyah and
+Umm Kulthum, which is what دو النورين rests on.
+
+## What chapter four does not author
+
+**Nine expeditions**, the same call as chapter three. الأبواء, بعث حمزة, بعث
+عبيدة, بواط, العشيرة, بدر الأولى, سرية سعد, نخلة, بني سليم and السويق. The
+model has no record shape for a سرية, and two of them still compete over which
+banner was first. This is now the second chapter to accumulate them.
+
+**The Muslim headcount at Badr.** The chapter gives 313 (`1/325-p2`), 314,
+315 (`1/325-p3`) and 319 (`1/330-p2`), and al-Bara's ثلاثمائة وبضعة عشر over
+them all. There is no count field, so none is recorded.
+
+**The casualty figures**, which disagree the same way: Musa ibn Uqbah and Urwah
+say six Muhajirun and eight Ansar dead and forty-nine mushrikin killed; Ibn
+Ishaq says four and seven, and forty-odd; al-Zuhri says over seventy killed and
+as many captured (`1/351-p5` to `1/351-p8`).
+
+**The ransom accounts and the captives' roster**, which al-Dhahabi himself
+abridges with تركتهم خوفا من التطويل.
+
+# Review
+
+Nothing in this batch is reviewed, across all four chapters. The claims are
+authored but nobody has compared them against the stored pages, so every one of
+the 124 is Not reviewed. The batch's approval permits publication and says
+nothing about review.

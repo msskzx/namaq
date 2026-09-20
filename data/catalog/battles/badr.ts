@@ -1,13 +1,19 @@
-import { legacyUnreviewed, type CatalogBattle } from '@/lib/catalog/types';
+import type { CatalogBattle } from '@/lib/catalog/types';
 
-// He killed his own father here, so the SON relation is not in tension with this.
+/**
+ * He killed his own father here, so the SON relation is not in tension with
+ * this.
+ *
+ * The year is no longer owed. It was carried from the old seed with no
+ * citation until the sira's chapter four was read: that chapter is headed
+ * سنة اثنتين من الهجرة, and al-Dhahabi dates the battle itself to the Friday
+ * morning of the seventeenth of Ramadan. `sira/badr` cites both, so the value
+ * moves off the legacy marker to a cited claim.
+ */
 const badr = {
   kind: 'BATTLE',
   slug: 'badr',
-  // Carried from the old seed, which an earlier agent extracted from this same
-  // work without citations. The entry does not date it, so the evidence is
-  // still owed (AGENTS.md, "Historical evidence data").
-  fields: { hijriYear: { value: 2, claims: legacyUnreviewed } },
+  fields: { hijriYear: { value: 2, claims: ['sira/badr'] } },
   participants: [
     {
       person: 'saad-ibn-abi-waqqas',
@@ -68,6 +74,103 @@ const badr = {
         claims: ['salman/badr'],
       },
       claims: ['salman/badr'],
+    },
+    { person: 'prophet-muhammad', isMuslim: true, claims: ['sira/badr'] },
+    {
+      person: 'abu-bakr-as-siddiq',
+      isMuslim: true,
+      summary: { value: 'كان في العريش ومعه رسول الله صلى الله عليه وسلم، ليس معهما غيرهما.', claims: ['abu-bakr/badr'] },
+      claims: ['abu-bakr/badr'],
+    },
+    {
+      person: 'saad-ibn-muadh',
+      isMuslim: true,
+      summary: {
+        value: 'هو الذي أشار ببناء العريش، وقام على بابه بالسيف في نفر من الأنصار يخافون على رسول الله صلى الله عليه وسلم كرة العدو.',
+        claims: ['saad-muadh/badr'],
+      },
+      claims: ['saad-muadh/badr'],
+    },
+    {
+      person: 'hamzah-ibn-abd-al-muttalib',
+      isMuslim: true,
+      summary: { value: 'قتل الأسود بن عبد الأسد عند الحوض، وكان أحد الثلاثة الذين برزوا.', claims: ['hamzah/badr'] },
+      claims: ['hamzah/badr'],
+    },
+    {
+      person: 'ali-ibn-abi-talib',
+      isMuslim: true,
+      summary: { value: 'أحد الثلاثة الذين برزوا يوم بدر، وفيهم نزلت: {هَذَانِ خَصْمَانِ اخْتَصَمُوا فِي رَبِّهِمْ} .', claims: ['ali/badr'] },
+      claims: ['ali/badr'],
+    },
+    // He is the one martyr of the fourteen whose death the chapter narrates
+    // rather than only listing: Utbah took his leg and he died two days later.
+    {
+      person: 'ubaydah-ibn-al-harith',
+      isMuslim: true,
+      status: ['MARTYRED'],
+      summary: { value: 'بارز عتبة بن ربيعة فاختلفا ضربتين، وقطع عتبة رجله، فمات بعد يومين بالصفراء.', claims: ['ubaydah/badr'] },
+      claims: ['ubaydah/badr'],
+    },
+    {
+      person: 'al-miqdad-ibn-amr',
+      isMuslim: true,
+      summary: {
+        value: 'قال: لا نقول لك كما قال قوم موسى لموسى، ولكن نقاتل عن يمينك وعن شمالك، فأشرق لذلك وجه رسول الله صلى الله عليه وسلم. ولم يكن يومئذ فارس غيره.',
+        claims: ['miqdad/badr'],
+      },
+      claims: ['miqdad/badr'],
+    },
+    {
+      person: 'abdullah-ibn-masud',
+      isMuslim: true,
+      summary: { value: 'أجهز على أبي جهل واحتز رأسه، فقال صلى الله عليه وسلم: هذا فرعون هذه الأمة.', claims: ['ibn-masud/badr'] },
+      claims: ['ibn-masud/badr'],
+    },
+    {
+      person: 'musab-ibn-umayr',
+      isMuslim: true,
+      summary: { value: 'دفع إليه رسول الله صلى الله عليه وسلم اللواء يوم بدر.', claims: ['musab/badr'] },
+      claims: ['musab/badr'],
+    },
+    {
+      person: 'ukkashah-ibn-mihsan',
+      isMuslim: true,
+      summary: { value: 'انقطع سيفه فأعطاه رسول الله صلى الله عليه وسلم عودا فعاد سيفا في يده، فقاتل به.', claims: ['ukkashah/badr'] },
+      claims: ['ukkashah/badr'],
+    },
+    {
+      person: 'bilal-ibn-rabah',
+      isMuslim: true,
+      summary: { value: 'صرخ: يا أنصار الله، رأس الكفر أمية بن خلف، لا نجوت إن نجا.', claims: ['bilal/badr'] },
+      claims: ['bilal/badr'],
+    },
+    {
+      person: 'ubadah-ibn-al-samit',
+      isMuslim: true,
+      summary: { value: 'قال: فينا أهل بدر نزلت الأنفال حين تنازعنا في الغنيمة، فقسمه صلى الله عليه وسلم بين المسلمين على السواء.', claims: ['ubadah/badr'] },
+      claims: ['ubadah/badr'],
+    },
+    // Three of the fourteen the chapter names. The rest have no subject here.
+    { person: 'aqil-ibn-al-bukayr', isMuslim: true, status: ['MARTYRED'], claims: ['aqil-bukayr/badr'] },
+    { person: 'safwan-ibn-bayda', isMuslim: true, status: ['MARTYRED'], claims: ['safwan-bayda/badr'] },
+    { person: 'saad-ibn-khaythamah', isMuslim: true, status: ['MARTYRED'], claims: ['saad-khaythamah/badr'] },
+    // Two absences the source remarks on, and gives the Prophet's ruling for.
+    {
+      person: 'uthman-ibn-affan',
+      isMuslim: true,
+      relation: 'ABSENT_FROM',
+      status: ['ABSENT_EXCUSED'],
+      summary: { value: 'تخلف يمرض زوجته رقية بنت رسول الله صلى الله عليه وسلم، فضرب له النبي صلى الله عليه وسلم بسهمه وأجره.', claims: ['uthman/badr-absent'] },
+      claims: ['uthman/badr-absent'],
+    },
+    {
+      person: 'saeed-ibn-zaid',
+      isMuslim: true,
+      relation: 'ABSENT_FROM',
+      status: ['ABSENT_EXCUSED'],
+      summary: { value: 'كان بالشام فقدم بعد بدر، فأسهم له النبي صلى الله عليه وسلم.', claims: ['saeed-ibn-zaid/badr-absent'] },
+      claims: ['saeed-ibn-zaid/badr-absent'],
     },
   ],
 } satisfies CatalogBattle;

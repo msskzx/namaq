@@ -26163,12 +26163,773 @@
           "accessedAt": "2026-09-20"
         }
       ]
+    },
+    {
+      "key": "sira/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "كانت وقعة بدر في السنة الثانية من الهجرة، يوم الجمعة صبيحة سبع عشرة من رمضان، وكان صلى الله عليه وسلم في العريش ومعه أبو بكر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/297-p1",
+          "volume": "السيرة 1",
+          "pageReference": "297",
+          "extractionUrl": "https://shamela.ws/book/10906/434",
+          "excerptArabic": "[سنة اثنتين من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/307-p1",
+          "volume": "السيرة 1",
+          "pageReference": "307",
+          "extractionUrl": "https://shamela.ws/book/10906/444",
+          "excerptArabic": "وهو صلى الله عليه وسلم في العريش، ومعه أبو بكر، وذلك يوم الجمعة صبيحة سبع عشرة رمضان.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/307-p2",
+          "volume": "السيرة 1",
+          "pageReference": "307",
+          "extractionUrl": "https://shamela.ws/book/10906/444",
+          "excerptArabic": "إن وقعة بدر صبيحة يوم الجمعة سابع عشر رمضان. وقال قرة بن خالد: سألت عبد الرحمن بن القاسم عن ليلة القدر، فقال: كان زيد بن ثابت يعظم سابع عشرة ويقول: هي وقعة بدر. وكذلك قال إسماعيل السدي وغيره في تاريخ يوم بدر، وقاله عروة بن الزبير، ورواه خالد بن عبد الله الواسطي عن عمرو بن يحيى عن عامر بن عبد الله بن الزبير عن أبيه عن عامر بن ربيعة قال: كانت صبيحة بدر سبع عشرة من رمضان؛ لكن روى قتيبة عن جرير عن الأعمش عن إبراهيم عن الأسود عن ابن مسعود في ليلة القدر قال: تحروها لإحدى عشرة بقين، صبيحتها يوم بدر، كذا قال ابن مسعود والمشهور ما قبله.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "abu-bakr/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-bakr-as-siddiq",
+      "assertion": "كان مع رسول الله صلى الله عليه وسلم في العريش يوم بدر، ليس معهما غيرهما.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/327-p1",
+          "volume": "السيرة 1",
+          "pageReference": "327",
+          "extractionUrl": "https://shamela.ws/book/10906/464",
+          "excerptArabic": "ألا نبني لك عريشا، فتكون فيه، وننيخ لك ركائبك ونلقى عدونا، فإن أظهرنا الله عليهم فذاك، وإن تكن الأخرى فتجلس على ركائبك وتلحق بمن وراءنا من قومنا، فقد تخلف عنك أقوام ما نحن بأشد لك حبا منهم، ولو علموا أنك تلقى حربا ما تخلفوا عنك، ويوادونك وينصرونك. فأثنى عليه رسول الله صلى الله عليه وسلم خيرا ودعا له. فبني لرسول الله صلى الله عليه وسلم عريش، فكان فيه وأبو بكر ما معهما غيرهما.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/307-p1",
+          "volume": "السيرة 1",
+          "pageReference": "307",
+          "extractionUrl": "https://shamela.ws/book/10906/444",
+          "excerptArabic": "وهو صلى الله عليه وسلم في العريش، ومعه أبو بكر، وذلك يوم الجمعة صبيحة سبع عشرة رمضان.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "saad-muadh/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-muadh",
+      "assertion": "هو الذي أشار ببناء العريش لرسول الله صلى الله عليه وسلم يوم بدر، وقام على بابه بالسيف في نفر من الأنصار.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/327-p1",
+          "volume": "السيرة 1",
+          "pageReference": "327",
+          "extractionUrl": "https://shamela.ws/book/10906/464",
+          "excerptArabic": "ألا نبني لك عريشا، فتكون فيه، وننيخ لك ركائبك ونلقى عدونا، فإن أظهرنا الله عليهم فذاك، وإن تكن الأخرى فتجلس على ركائبك وتلحق بمن وراءنا من قومنا، فقد تخلف عنك أقوام ما نحن بأشد لك حبا منهم، ولو علموا أنك تلقى حربا ما تخلفوا عنك، ويوادونك وينصرونك. فأثنى عليه رسول الله صلى الله عليه وسلم خيرا ودعا له. فبني لرسول الله صلى الله عليه وسلم عريش، فكان فيه وأبو بكر ما معهما غيرهما.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/308-p3",
+          "volume": "السيرة 1",
+          "pageReference": "308",
+          "extractionUrl": "https://shamela.ws/book/10906/445",
+          "excerptArabic": "وقام سعد بن معاذ على الباب بالسيف في نفر من الأنصار، يخافون على رسول الله صلى الله عليه وسلم كرة العدو.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "hamzah/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hamzah-ibn-abd-al-muttalib",
+      "assertion": "قتل الأسود بن عبد الأسد عند الحوض، وكان أحد الثلاثة الذين برزوا يوم بدر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/306-p2",
+          "volume": "السيرة 1",
+          "pageReference": "306",
+          "extractionUrl": "https://shamela.ws/book/10906/443",
+          "excerptArabic": "فخرج إليه حمزة بن عبد المطلب -رضي الله عنه- فالتقيا فضربه حمزة فقطع ساقه، وهو دون الحوض، فوقع على ظهره تشخب رجله دما. ثم جاء إلى الحوض حتى اقتحم فيه ليبر يمينه، واتبعه حمزة فقتله في الحوض.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/334-p2",
+          "volume": "السيرة 1",
+          "pageReference": "334",
+          "extractionUrl": "https://shamela.ws/book/10906/471",
+          "excerptArabic": "فقال رسول الله صلى الله عليه وسلم: \"قم يا علي، قم يا حمزة، قم يا عبيدة بن الحارث\". فقتل الله عتبة، وشيبة ابني ربيعة، والوليد بن عتبة، وجرح عبيدة. فقتلنا منهم سبعين وأسرنا سبعين، فجاء رجل من الأنصار قصير برجل من بني هاشم أسيرا فقال الرجل: إن هذا والله ما أسرني، ولقد أسرني رجل أجلح من أحسن الناس وجها على فرس أبلق, ما أراه في القوم. فقال الأنصاري: أنا أسرته يا رسول الله فقال: \"اسكت، فقد أيدك الله بملك كريم\". قال: فأسر من بني عبد المطلب: العباس، وعقيل، ونوفل بن الحارث.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ali/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ali-ibn-abi-talib",
+      "assertion": "كان أحد الثلاثة الذين برزوا يوم بدر، وفيهم نزلت: هذان خصمان اختصموا في ربهم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/334-p2",
+          "volume": "السيرة 1",
+          "pageReference": "334",
+          "extractionUrl": "https://shamela.ws/book/10906/471",
+          "excerptArabic": "فقال رسول الله صلى الله عليه وسلم: \"قم يا علي، قم يا حمزة، قم يا عبيدة بن الحارث\". فقتل الله عتبة، وشيبة ابني ربيعة، والوليد بن عتبة، وجرح عبيدة. فقتلنا منهم سبعين وأسرنا سبعين، فجاء رجل من الأنصار قصير برجل من بني هاشم أسيرا فقال الرجل: إن هذا والله ما أسرني، ولقد أسرني رجل أجلح من أحسن الناس وجها على فرس أبلق, ما أراه في القوم. فقال الأنصاري: أنا أسرته يا رسول الله فقال: \"اسكت، فقد أيدك الله بملك كريم\". قال: فأسر من بني عبد المطلب: العباس، وعقيل، ونوفل بن الحارث.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/335-p5",
+          "volume": "السيرة 1",
+          "pageReference": "335",
+          "extractionUrl": "https://shamela.ws/book/10906/472",
+          "excerptArabic": "أنها نزلت في الذين برزوا يوم بدر: حمزة، وعلي، وعبيدة بن الحارث -رضي الله عنهم- وعتبة، وشيبة ابنا ربيعة، والوليد بن عتبة.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ubaydah/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ubaydah-ibn-al-harith",
+      "assertion": "بارز عتبة بن ربيعة يوم بدر فاختلفا ضربتين، وقطعت رجله، فمات بعد يومين بالصفراء.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/336-p3",
+          "volume": "السيرة 1",
+          "pageReference": "336",
+          "extractionUrl": "https://shamela.ws/book/10906/473",
+          "excerptArabic": "وهو الذي بارز عتبة بن ربيعة، فاختلفا ضربتين، كلاهما أثبت صاحبه، كما تقدم. وقد جهزه النبي صلى الله عليه وسلم في ستين راكبا من المهاجرين أمره عليهم؛ فكان أول لواء عقده النبي صلى الله عليه وسلم لواء عبيدة، فالتقى بقريش وعليهم أبو سفيان عند ثنية المرة، فكان أول قتال في الإسلام. قاله محمد بن إسحاق.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p1",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "الحارث بن المطلب بن عبد مناف المطلبي الذي قطع رجله عتبة، مات بعد يومين بالصفراء. وهؤلاء من المهاجرين.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "miqdad/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-miqdad-ibn-amr",
+      "assertion": "قال يوم بدر: لا نقول لك كما قال قوم موسى لموسى، ولكن نقاتل عن يمينك وعن شمالك، فأشرق لذلك وجه رسول الله صلى الله عليه وسلم. ولم يكن يومئذ فارس غيره.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/327-p2",
+          "volume": "السيرة 1",
+          "pageReference": "327",
+          "extractionUrl": "https://shamela.ws/book/10906/464",
+          "excerptArabic": "أتى النبي صلى الله عليه وسلم، وهو يدعو على المشركين فقال: لا نقول لك كما قال قوم موسى لموسى: {فَاذْهَبْ أَنْتَ وَرَبُّكَ فَقَاتِلا إِنَّا هَاهُنَا قَاعِدُونَ} [المائدة: ٢٤] ، ولكن نقاتل عن يمينك وعن شمالك ومن بين يديك ومن خلفك، قال: فرأيت رسول الله صلى الله عليه وسلم أشرق لذلك، وسره.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/325-p4",
+          "volume": "السيرة 1",
+          "pageReference": "325",
+          "extractionUrl": "https://shamela.ws/book/10906/462",
+          "excerptArabic": "لم يكن يوم بدر فارس غير المقداد.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ibn-masud/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-masud",
+      "assertion": "أجهز على أبي جهل يوم بدر واحتز رأسه، فقال النبي صلى الله عليه وسلم: هذا فرعون هذه الأمة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/339-p4",
+          "volume": "السيرة 1",
+          "pageReference": "339",
+          "extractionUrl": "https://shamela.ws/book/10906/476",
+          "excerptArabic": "انتهيت إلى أبي جهل وهو صريع، وعليه بيضة, ومعه سيف جيد، ومعي سيف رث.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/340-p1",
+          "volume": "السيرة 1",
+          "pageReference": "340",
+          "extractionUrl": "https://shamela.ws/book/10906/477",
+          "excerptArabic": "وقال: \"الله أكبر، الحمد لله الذي صدق وعده, ونصر عبده، وهزم الأحزاب وحده، انطلق فأرنيه\". فانطلقت فأريته. فقال: \"هذا فرعون هذه الأمة\".",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "musab/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "musab-ibn-umayr",
+      "assertion": "دفع إليه رسول الله صلى الله عليه وسلم اللواء يوم بدر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/301-p4",
+          "volume": "السيرة 1",
+          "pageReference": "301",
+          "extractionUrl": "https://shamela.ws/book/10906/438",
+          "excerptArabic": "ثم رد أبا لبابة من الروحاء واستعمله على المدينة ودفع اللواء إلى مصعب بن عمير. وكان أمام رسول الله صلى الله عليه وسلم رايتان سوداوان؛ إحداهما مع علي، والأخرى مع رجل أنصاري. وكانت راية الأنصار مع سعد بن معاذ.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ukkashah/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ukkashah-ibn-mihsan",
+      "assertion": "انقطع سيفه يوم بدر فأعطاه رسول الله صلى الله عليه وسلم عودا فعاد سيفا في يده، فقاتل به.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/343-p5",
+          "volume": "السيرة 1",
+          "pageReference": "343",
+          "extractionUrl": "https://shamela.ws/book/10906/480",
+          "excerptArabic": "انقطع سيفي يوم بدر، فأعطاني رسول الله صلى الله عليه وسلم عودا، فإذا هو سيف أبيض طويل. فقاتلت به.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "bilal/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "bilal-ibn-rabah",
+      "assertion": "صرخ ببدر: رأس الكفر أمية بن خلف، لا نجوت إن نجا. فقتل أمية وابنه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/309-p5",
+          "volume": "السيرة 1",
+          "pageReference": "309",
+          "extractionUrl": "https://shamela.ws/book/10906/446",
+          "excerptArabic": "ثم صرخ بلال بأعلى صوته: يا أنصار الله، رأس الكفر أمية بن خلف، لا نجوت إن نجا. قال: فأحاطوا بنا، وأنا أذب عنه. فأخلف رجل السيف، فضرب رجل ابنه فوقع، فصاح أمية صيحة عظيمة، فقلت: انج بنفسك، ولا نجاء، فوالله ما أغني عنك شيئا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ubadah/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ubadah-ibn-al-samit",
+      "assertion": "قال: فينا أهل بدر نزلت الأنفال حين تنازعنا في الغنيمة، فقسمه رسول الله صلى الله عليه وسلم بين المسلمين على السواء.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/312-p6",
+          "volume": "السيرة 1",
+          "pageReference": "312",
+          "extractionUrl": "https://shamela.ws/book/10906/449",
+          "excerptArabic": "فينا أهل بدر نزلت الأنفال حين تنازعنا في الغنيمة وساءت فيها أخلاقنا، فنزعه الله من أيدينا وجعله إلى رسوله، فقسمه بين المسلمين على السواء. ثم بعث النبي صلى الله عليه وسلم عبد الله بن رواحة، وزيد بن حارثة، بشيرين إلى",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "aqil-bukayr/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aqil-ibn-al-bukayr",
+      "assertion": "استشهد عاقل بن البكير يوم بدر، وهو في الأربعة عشر الذين سماهم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/313-p6",
+          "volume": "السيرة 1",
+          "pageReference": "313",
+          "extractionUrl": "https://shamela.ws/book/10906/450",
+          "excerptArabic": "مهجع وذو الشمالين عمير بن عبد عمرو الخزاعي، وعاقل بن البكير، وصفوان بن بيضاء، وعمير بن أبي وقاص أخو سعد، وعبيدة بن",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p3",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "فالجملة أربعة عشر رجلا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "safwan-bayda/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "safwan-ibn-bayda",
+      "assertion": "استشهد صفوان بن بيضاء يوم بدر، وهو في الأربعة عشر الذين سماهم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/313-p6",
+          "volume": "السيرة 1",
+          "pageReference": "313",
+          "extractionUrl": "https://shamela.ws/book/10906/450",
+          "excerptArabic": "مهجع وذو الشمالين عمير بن عبد عمرو الخزاعي، وعاقل بن البكير، وصفوان بن بيضاء، وعمير بن أبي وقاص أخو سعد، وعبيدة بن",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p3",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "فالجملة أربعة عشر رجلا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "saad-khaythamah/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-khaythamah",
+      "assertion": "استشهد سعد بن خيثمة يوم بدر، وهو في الأربعة عشر الذين سماهم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p2",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "وعمير بن الحمام، وابنا عفراء، وحارثة بن سراقة، ويزيد بن الحارث فُسحُم، ورافع بن المعلى الزرقي، وسعد بن خيثمة الأوسي، ومبشر بن عبد المنذر أخو أبي لبابة.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p3",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "فالجملة أربعة عشر رجلا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "uthman/badr-absent",
+      "subjectKind": "PERSON",
+      "subjectSlug": "uthman-ibn-affan",
+      "assertion": "تخلف عن بدر يمرض زوجته رقية بنت رسول الله صلى الله عليه وسلم، فضرب له النبي صلى الله عليه وسلم بسهمه وأجره.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "ABSENT_FROM",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/360-p6",
+          "volume": "السيرة 1",
+          "pageReference": "360",
+          "extractionUrl": "https://shamela.ws/book/10906/497",
+          "excerptArabic": "واحتبس عنها عثمان يمرض زوجته رقية",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/361-p1",
+          "volume": "السيرة 1",
+          "pageReference": "361",
+          "extractionUrl": "https://shamela.ws/book/10906/498",
+          "excerptArabic": "بنت النبي صلى الله عليه وسلم فتوفيت في العشر الأخير من رمضان يوم قدوم المسلمين المدينة من بدر، وضرب له النبي صلى الله عليه وسلم بسهمه وأجره.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "saeed-ibn-zaid/badr-absent",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saeed-ibn-zaid",
+      "assertion": "كان بالشام فقدم بعد بدر، فأسهم له النبي صلى الله عليه وسلم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "ABSENT_FROM",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/361-p2",
+          "volume": "السيرة 1",
+          "pageReference": "361",
+          "extractionUrl": "https://shamela.ws/book/10906/498",
+          "excerptArabic": "وأما سعيد بن زيد، وطلحة بن عبيد الله فكانا بالشام فقدما بعد بدر وأسهم لهما النبي صلى الله عليه وسلم.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/qiblah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "صرفت القبلة في رجب من السنة الثانية.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "change-of-the-qiblah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/301-p2",
+          "volume": "السيرة 1",
+          "pageReference": "301",
+          "extractionUrl": "https://shamela.ws/book/10906/438",
+          "excerptArabic": "وصرفت القبلة في رجب، أو قريبا منه، والله أعلم.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/297-p1",
+          "volume": "السيرة 1",
+          "pageReference": "297",
+          "extractionUrl": "https://shamela.ws/book/10906/434",
+          "excerptArabic": "[سنة اثنتين من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/fasting-ramadan",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "فرض الله صوم رمضان في السنة الثانية، ونسخ فرضية يوم عاشوراء، وفرضت الفطرة في آخره.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "obligation-of-fasting-ramadan",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/362-p5",
+          "volume": "السيرة 1",
+          "pageReference": "362",
+          "extractionUrl": "https://shamela.ws/book/10906/499",
+          "excerptArabic": "وفي رمضان: فرض الله صوم رمضان, ونسخ فرضية يوم عاشوراء. وفي آخره: فرضت الفطرة.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/297-p1",
+          "volume": "السيرة 1",
+          "pageReference": "297",
+          "extractionUrl": "https://shamela.ws/book/10906/434",
+          "excerptArabic": "[سنة اثنتين من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ali/marriage-fatimah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ali-ibn-abi-talib",
+      "assertion": "تزوج علي فاطمة الزهراء في السنة الثانية، وكان صداقها درعه الحطمية.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "marriage-of-ali-and-fatimah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/372-p7",
+          "volume": "السيرة 1",
+          "pageReference": "372",
+          "extractionUrl": "https://shamela.ws/book/10906/509",
+          "excerptArabic": "وفيها تزوج علي -رضي الله عنه- بفاطمة الزهراء، رضي الله عنها.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/373-p1",
+          "volume": "السيرة 1",
+          "pageReference": "373",
+          "extractionUrl": "https://shamela.ws/book/10906/510",
+          "excerptArabic": "فقال: \"ما فعلت درع سلحتكها\"؟. فوالذي نفس علي بيده إنها لحطيمة ما ثمنها أربعة دراهم, فقلت: عندي. فقال: \"قد زوجتكها, فابعث إليَّ بها\". فإن كانت لصداق فاطمة، رضي الله عنها.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/297-p1",
+          "volume": "السيرة 1",
+          "pageReference": "297",
+          "extractionUrl": "https://shamela.ws/book/10906/434",
+          "excerptArabic": "[سنة اثنتين من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "fatimah/marriage-ali",
+      "subjectKind": "PERSON",
+      "subjectSlug": "fatimah-bint-muhammad",
+      "assertion": "تزوجها علي بن أبي طالب في السنة الثانية من الهجرة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "marriage-of-ali-and-fatimah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/372-p7",
+          "volume": "السيرة 1",
+          "pageReference": "372",
+          "extractionUrl": "https://shamela.ws/book/10906/509",
+          "excerptArabic": "وفيها تزوج علي -رضي الله عنه- بفاطمة الزهراء، رضي الله عنها.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/297-p1",
+          "volume": "السيرة 1",
+          "pageReference": "297",
+          "extractionUrl": "https://shamela.ws/book/10906/434",
+          "excerptArabic": "[سنة اثنتين من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ali/husband-fatimah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ali-ibn-abi-talib",
+      "assertion": "تزوج فاطمة بنت رسول الله صلى الله عليه وسلم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "HUSBAND",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "fatimah-bint-muhammad",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/373-p1",
+          "volume": "السيرة 1",
+          "pageReference": "373",
+          "extractionUrl": "https://shamela.ws/book/10906/510",
+          "excerptArabic": "خطبت فاطمة إلى رسول الله صلى الله عليه وسلم، فقالت لي مولاة لي: علمت أن فاطمة خطبت إلى رسول الله صلى الله عليه وسلم؟ قلت: لا. قالت: فما يمنعك أن تأته فيزوجك؟ فقلت: وعندي شيء أتزوج به؟ قالت: إنك إن جئته زوجك. قال: فوالله ما زالت ترجيني، حتى دخلت على رسول الله صلى الله عليه وسلم، وكان لرسول الله صلى الله عليه وسلم جلالة وهيبة, فأفحمت، فوالله ما استطعت أن أتكلم. فقال: \"ما حاجتك، ألك حاجة\"؟. فسكت. ثم قال: \"لعلك جئت تخطب فاطمة\"؟. قلت: نعم. قال: \"وهل عندك من شيء تستحلها به\"؟. فقلت: لا والله فقال: \"ما فعلت درع سلحتكها\"؟. فوالذي نفس علي بيده إنها لحطيمة ما ثمنها أربعة دراهم, فقلت: عندي. فقال: \"قد زوجتكها, فابعث إليَّ بها\".",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "uthman/husband-ruqayyah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "uthman-ibn-affan",
+      "assertion": "كانت رقية بنت رسول الله صلى الله عليه وسلم زوجه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "HUSBAND",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "ruqayyah-bint-muhammad",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/360-p6",
+          "volume": "السيرة 1",
+          "pageReference": "360",
+          "extractionUrl": "https://shamela.ws/book/10906/497",
+          "excerptArabic": "واحتبس عنها عثمان يمرض زوجته رقية",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "uthman/husband-umm-kulthum",
+      "subjectKind": "PERSON",
+      "subjectSlug": "uthman-ibn-affan",
+      "assertion": "تزوج أم كلثوم بنت رسول الله صلى الله عليه وسلم في السنة الثانية.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "HUSBAND",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "umm-kulthum-bint-muhammad",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/372-p6",
+          "volume": "السيرة 1",
+          "pageReference": "372",
+          "extractionUrl": "https://shamela.ws/book/10906/509",
+          "excerptArabic": "وفي هذه السنة: تزوج عثمان بأم كلثوم، رضي الله عنهما.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/death-ruqayyah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ruqayyah-bint-muhammad",
+      "assertion": "توفيت رقية بنت رسول الله صلى الله عليه وسلم في العشر الأخير من رمضان، يوم قدوم المسلمين المدينة من بدر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "death-of-ruqayyah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/361-p1",
+          "volume": "السيرة 1",
+          "pageReference": "361",
+          "extractionUrl": "https://shamela.ws/book/10906/498",
+          "excerptArabic": "بنت النبي صلى الله عليه وسلم فتوفيت في العشر الأخير من رمضان يوم قدوم المسلمين المدينة من بدر، وضرب له النبي صلى الله عليه وسلم بسهمه وأجره.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/297-p1",
+          "volume": "السيرة 1",
+          "pageReference": "297",
+          "extractionUrl": "https://shamela.ws/book/10906/434",
+          "excerptArabic": "[سنة اثنتين من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ibn-mazun/death",
+      "subjectKind": "PERSON",
+      "subjectSlug": "uthman-ibn-mazun",
+      "assertion": "توفي عثمان بن مظعون بعد بدر بيسير، وكان أحد السابقين، أسلم بعد ثلاثة عشر رجلا، وكان صواما قواما.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "death-of-uthman-ibn-mazun",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/363-p2",
+          "volume": "السيرة 1",
+          "pageReference": "363",
+          "extractionUrl": "https://shamela.ws/book/10906/500",
+          "excerptArabic": "وفيها توفي أبو السائب عثمان بن مظعون -رضي الله عنه- ابن حبيب بن وهب بن حذافة بن جمح الجمحي، بعد بدر بيسير. وقد شهدها هو وأخواه: قدامة، وعبد الله.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/363-p3",
+          "volume": "السيرة 1",
+          "pageReference": "363",
+          "extractionUrl": "https://shamela.ws/book/10906/500",
+          "excerptArabic": "وعثمان هذا أحد السابقين، أسلم بعد ثلاثة عشر رجلا، وهاجر إلى الحبشة الهجرة الأولى، ولما قدم أجاره الوليد بن المغيرة أياما. ثم رد على الوليد جواره. وكان صواما قواما قانتا لله.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/297-p1",
+          "volume": "السيرة 1",
+          "pageReference": "297",
+          "extractionUrl": "https://shamela.ws/book/10906/434",
+          "excerptArabic": "[سنة اثنتين من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
     }
   ],
   "approval": {
-    "revision": "054111ce4a5a2ef3",
+    "revision": "65df37ae2ee0ec27",
     "approvedAt": "2026-09-20",
     "approvedBy": "msskzx",
-    "note": "Approved for publication of chapters one to three. All ninety-eight claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
+    "note": "Approved for publication of chapters one to four. All 124 claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
   }
 }

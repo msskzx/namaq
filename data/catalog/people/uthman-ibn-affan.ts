@@ -16,7 +16,12 @@ const uthmanIbnAffan = {
     },
   },
   titles: [],
-  relations: [],
+  // Both daughters, in the order the sira gives them: Ruqayyah to Abyssinia
+  // and dying during Badr, then Umm Kulthum in the same year.
+  relations: [
+    { type: 'HUSBAND', inverse: 'WIFE', to: 'ruqayyah-bint-muhammad', claims: ['uthman/husband-ruqayyah'] },
+    { type: 'HUSBAND', inverse: 'WIFE', to: 'umm-kulthum-bint-muhammad', claims: ['uthman/husband-umm-kulthum'] },
+  ],
 } satisfies CatalogPerson;
 
 export default uthmanIbnAffan;
