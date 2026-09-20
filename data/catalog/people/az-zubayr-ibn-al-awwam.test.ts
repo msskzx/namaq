@@ -12,6 +12,9 @@ import egypt from '../events/campaign-of-az-zubayr-to-egypt';
 import jamal from '../battles/jamal';
 
 // Read rather than fixtured, so editing the module or the batch alone fails.
+// Every batch, not just his own. His entry gave him hawari-al-ummah; chapter
+// five of the sira gives where the title came from, so that one assignment now
+// cites two batches and reading one would call the other's claim unknown.
 const batch = JSON.parse(
   readFileSync('data/history/batches/az-zubayr-ibn-al-awwam/batch.json', 'utf8'),
 ) as {
@@ -24,7 +27,8 @@ const batch = JSON.parse(
     citations: unknown[];
   }[];
 };
-const claimByKey = new Map(batch.claims.map((claim) => [claim.key, claim]));
+const sira = JSON.parse(readFileSync('data/history/batches/prophet-muhammad-sira/batch.json', 'utf8')) as typeof batch;
+const claimByKey = new Map([...batch.claims, ...sira.claims].map((claim) => [claim.key, claim]));
 
 const citedFields = Object.entries(person.fields) as [string, Cited<string>][];
 const everyProvenance: [string, Provenance][] = [

@@ -5,10 +5,14 @@ const uhud = {
   slug: 'uhud',
   name: 'غزوة أحد',
   nameTransliterated: 'Battle of Uhud',
-  // Carried from the old seed, which an earlier agent extracted from this same
-  // work without citations. The entry does not date it, so the evidence is
-  // still owed (AGENTS.md, "Historical evidence data").
-  fields: { engagement: { value: 'GHAZWAH', claims: legacyUnreviewed }, hijriYear: { value: 3, claims: legacyUnreviewed } },
+  /*
+   * Both values came off the legacy marker when chapter five was read. The
+   * chapter is headed سنة ثلاث من الهجرة and غزوة أحد: وكانت في شوال, and
+   * Qatadah dates the fighting to Saturday the eleventh of Shawwal. Ibn Ishaq
+   * says للنصف من شوال instead; the model holds no day, so that disagreement
+   * is `sira/uhud-date-alt`, DISPUTED, and stays in the description.
+   */
+  fields: { engagement: { value: 'GHAZWAH', claims: ['sira/uhud'] }, hijriYear: { value: 3, claims: ['sira/uhud'] } },
   participants: [
     {
       person: 'saad-ibn-abi-waqqas',
@@ -64,6 +68,127 @@ const uhud = {
         claims: ['salman/uhud'],
       },
       claims: ['salman/uhud'],
+    },
+    {
+      person: 'prophet-muhammad',
+      isMuslim: true,
+      status: ['INJURED'],
+      summary: {
+        value: 'جرح وجهه وكسرت رباعيته وهشمت البيضة على رأسه، فكانت فاطمة تغسل الدم وعلي يسكب الماء.',
+        claims: ['sira/uhud-wounds'],
+      },
+      claims: ['sira/uhud'],
+    },
+    {
+      person: 'hamzah-ibn-abd-al-muttalib',
+      isMuslim: true,
+      status: ['MARTYRED'],
+      summary: { value: 'قاتل بسيفين يقول: أنا أسد الله، فقتله وحشي بحربته ومثل به.', claims: ['hamzah/uhud'] },
+      claims: ['hamzah/uhud'],
+    },
+    {
+      person: 'musab-ibn-umayr',
+      isMuslim: true,
+      status: ['MARTYRED'],
+      summary: {
+        value: 'قاتل دون رسول الله صلى الله عليه وسلم حتى قتل، قتله ابن قميئة وهو يظنه رسول الله صلى الله عليه وسلم.',
+        claims: ['musab/uhud'],
+      },
+      claims: ['musab/uhud'],
+    },
+    {
+      person: 'abu-dujanah-al-ansari',
+      isMuslim: true,
+      summary: {
+        value: 'أخذ سيف رسول الله صلى الله عليه وسلم بحقه، ثم ترس دونه بنفسه حتى كثر النبل في ظهره.',
+        claims: ['abu-dujanah/uhud'],
+      },
+      claims: ['abu-dujanah/uhud'],
+    },
+    {
+      person: 'abdullah-ibn-jubayr',
+      isMuslim: true,
+      status: ['MARTYRED'],
+      summary: { value: 'أمير الرماة الخمسين، أمرهم أن لا يبرحوا فثبت مكانه حتى قتل.', claims: ['ibn-jubayr/uhud'] },
+      claims: ['ibn-jubayr/uhud'],
+    },
+    {
+      person: 'hanzalah-ibn-abi-amir',
+      isMuslim: true,
+      status: ['MARTYRED'],
+      summary: { value: 'خرج جنبا حين سمع الهيعة فقتل، فقال صلى الله عليه وسلم: إن صاحبكم لتغسله الملائكة.', claims: ['hanzalah/uhud'] },
+      claims: ['hanzalah/uhud'],
+    },
+    {
+      person: 'anas-ibn-an-nadr',
+      isMuslim: true,
+      status: ['MARTYRED'],
+      summary: {
+        value: 'قال: إني لأجد ريح الجنة دون أحد، فقاتل حتى قتل، ووجد به بضع وثمانون جراحة فعرفته أخته ببنانه.',
+        claims: ['anas-nadr/uhud'],
+      },
+      claims: ['anas-nadr/uhud'],
+    },
+    {
+      person: 'saad-ibn-al-rabi',
+      isMuslim: true,
+      status: ['MARTYRED'],
+      summary: { value: 'وجد وبه سبعون ضربة، فقال: أجد ريح الجنة، وأوصى الأنصار.', claims: ['saad-rabi/uhud'] },
+      claims: ['saad-rabi/uhud'],
+    },
+    {
+      person: 'amr-ibn-al-jumuh',
+      isMuslim: true,
+      status: ['MARTYRED'],
+      summary: { value: 'كان أعرج فسأل أيمشي برجله صحيحة في الجنة فقيل له: نعم، فقتل.', claims: ['amr-jumuh/uhud'] },
+      claims: ['amr-jumuh/uhud'],
+    },
+    {
+      person: 'abdullah-ibn-amr-ibn-haram',
+      isMuslim: true,
+      status: ['MARTYRED'],
+      summary: { value: 'دفن مع عمرو بن الجموح في قبر واحد، فإنهما كانا متصافيين في الدنيا.', claims: ['ibn-haram/uhud'] },
+      claims: ['ibn-haram/uhud'],
+    },
+    {
+      person: 'qatadah-ibn-al-numan',
+      isMuslim: true,
+      status: ['INJURED'],
+      summary: { value: 'أصيبت عينه حتى وقعت على وجنته، فردها رسول الله صلى الله عليه وسلم بيده.', claims: ['qatadah/uhud'] },
+      claims: ['qatadah/uhud'],
+    },
+    {
+      person: 'abu-ubaydah-ibn-al-jarrah',
+      isMuslim: true,
+      summary: {
+        value: 'نزع حلقتي المغفر من وجه النبي صلى الله عليه وسلم بفيه فسقطت ثنيتاه، فكان من أحسن الناس هتما.',
+        claims: ['abu-ubaydah/uhud-rings'],
+      },
+      claims: ['abu-ubaydah/uhud-rings'],
+    },
+    {
+      person: 'ali-ibn-abi-talib',
+      isMuslim: true,
+      summary: { value: 'دفع إليه اللواء بعد مقتل مصعب بن عمير.', claims: ['ali/uhud'] },
+      claims: ['ali/uhud'],
+    },
+    {
+      person: 'kaab-ibn-malik',
+      isMuslim: true,
+      summary: { value: 'أول من عرف رسول الله صلى الله عليه وسلم بعد الهزيمة، عرف عينيه من تحت المغفر.', claims: ['kaab-malik/uhud'] },
+      claims: ['kaab-malik/uhud'],
+    },
+    {
+      person: 'hudhayfah-ibn-al-yaman',
+      isMuslim: true,
+      summary: { value: 'قتل المسلمون أباه اليمان وهم لا يعرفونه، فتصدق بدمه عليهم.', claims: ['hudhayfah/uhud'] },
+      claims: ['hudhayfah/uhud'],
+    },
+    {
+      person: 'umm-sulaym-al-ghumaysa',
+      isMuslim: true,
+      summary: { value: 'كانت تنقل القرب على متنها وتفرغها في أفواه القوم.', claims: ['umm-sulaym/uhud'] },
+      claims: ['umm-sulaym/uhud'],
     },
   ],
 } satisfies CatalogBattle;
