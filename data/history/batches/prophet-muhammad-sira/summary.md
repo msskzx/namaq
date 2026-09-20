@@ -1,4 +1,4 @@
-# Batch: the Prophet's sira, chapter one
+# Batch: the Prophet's sira
 
 This batch preserves al-Dhahabi's السيرة النبوية from *Siyar A'lam al-Nubala'*
 and supports the canonical records selected from it. It follows the
@@ -22,14 +22,19 @@ builds and `extractShamelaEntry.ts --volume` sets.
 
 ## What this instalment reads
 
-Chapter one only, printed pages ١/٢٩ to ١/١٤٥, Shamela page ids 167 to 283. It
-covers his lineage, his names, his birth, the deaths of his parents and
-grandfather, Abu Talib's guardianship, his marriage to Khadijah, his children,
-the rebuilding of the Kaaba, the first revelation, and the first conversions.
-Twelve chapters remain, ending at ٢/٤٩٦.
+Chapters one and two, printed pages ١/٢٩ to ١/٢٧٦, Shamela page ids 167 to 420.
+Eighty-two claims and 113 citations. Eleven chapters remain, ending at
+٢/٤٩٦.
 
-Thirty-six claims and forty-two citations. The Prophet has no legacy values
-yet, because his seed entry still stands and nothing has been moved across.
+Chapter one covers his lineage, his names, his birth, the deaths of his parents
+and grandfather, Abu Talib's guardianship, his marriage to Khadijah, his
+children, the rebuilding of the Kaaba, the first revelation, and the first
+conversions. Chapter two runs from the first emigration to Abyssinia to the
+arrival at Medina.
+
+The Prophet has no legacy values yet, because his seed entry still stands and
+nothing has been moved across. The same holds for every other subject this
+batch touches.
 
 ## He stays seed-authored
 
@@ -157,6 +162,110 @@ annotates itself inline instead, in al-Dhahabi's own voice: إسناده منق�
 هذا منكر, الكلبي متروك. No claim in this batch cites a note, so nothing is lost.
 `notesFile` is optional per page and can be filled in later without touching an
 anchor.
+
+# Chapter two
+
+Printed ١/١٤٦ to ١/٢٧٦, ids 284 to 420. Forty-six claims and sixty-seven citations.
+Nine new events, two existing ones extended, two titles, two of his wives, and
+six people who gain a cited field.
+
+## The two emigrations to Abyssinia
+
+Ibn Ishaq names the first party outright, so the existing
+`first-hijra-to-abyssinia` gains nine more people (`1/147-p3`, `1/147-p4`). Only
+those with subjects in the app are linked; he counts eighty-three in all.
+
+Uthman is the one the chapter singles out. Anas has the Prophet say of him and
+Ruqayyah صحبهما الله، إن عثمان أول من هاجر بأهله بعد لوط (`1/146-p2`), which is
+both his link to the event and his `virtues`.
+
+**The second is a new event, and undated.** al-Waqidi puts it سنة خمس من المبعث
+(`1/152-p3`), counted from the calling and not from the hijra, so it is not a
+value `hijriYear` can hold. Ja'far leads it and speaks for them before the
+Najashi (`1/154-p1`), who answers إن هذا والذي جاء به موسى ليخرج من مشكاة واحدة
+and refuses to hand them over (`1/154-p2`). al-Zubayr swam the Nile on an
+inflated waterskin to watch the battle for the Najashi's throne and bring the
+news back (`1/155-p1`), which links him to this event as well as the first.
+
+## Six more new events
+
+**انشقاق القمر**, at Mecca, قبل مخرج النبي to Medina (`1/169-p2`, `1/169-p4`).
+
+**The boycott in the شعب**, three years of it, ending when the صحيفة was found
+eaten by the أرضة (`1/179-p2`, `1/179-p3`, `1/180-p2`). Abu Talib is linked to
+it: he gathered his father's sons and put the Prophet inside their quarter.
+
+**الإسراء والمعراج**, dated only against the hijra. al-Zuhri says قبل الهجرة
+بسنة (`1/197-p2`), al-Waqidi قبل الهجرة بثمانية عشر شهرا, and Ibn Sa'd's
+collective account moves it from Ramadan to Rabi al-Awwal. None is a hijri year,
+so the field is unset. al-Waqidi also splits the Isra' from the Mi'raj and dates
+them separately; the model has one event, and the description says both legs
+share it.
+
+**The two pledges at Aqaba.** The first is twelve men on بيعة النساء, before
+fighting was made an obligation, which Ubadah ibn al-Samit narrates in his own
+words (`1/241-p1`, `1/240-p4`). The second is seventy, with twelve نقباء named
+(`1/247-p2`, `1/252-p1`). Only the six naqibs with subjects in the app are
+linked.
+
+**The deaths of Khadijah and Abu Talib**, in one year the chapter never numbers
+(`1/194-p3`). Their order is disputed: al-Waqidi has her die thirty-five days
+before him (`1/194-p5`), al-Hakim three days after (`1/194-p6`). A description
+is one value, so it names both and the second claim is `DISPUTED`.
+
+**الطائف**, where Thaqif turned him away and the angel of the mountains offered
+to close the two hills on them (`1/231-p4`, `1/233-p1`).
+
+## The hijra to Medina
+
+The existing event gains the Prophet's own hijra: three nights in غار ثور with
+Abu Bakr (`1/267-p1`), and the arrival on Monday the twelfth of Rabi al-Awwal
+(`1/280-p3`). A day and a month are not a `hijriYear`, so the seed's date
+stands.
+
+Abu Salamah is linked too, but for the opposite reason: Ibn Ishaq makes him the
+first of all of them, a year before the greater Aqaba (`1/258-p3`), not one of
+the party that left with the Prophet. Abu Ayyub is linked because the camel
+knelt at his door (`1/279-p2`).
+
+## Two titles, both earned in this chapter
+
+Neither is a new title. **`siddiq-al-ummah`** is Abu Bakr's, and the chapter
+gives the naming outright: he affirmed the Isra' when others turned back,
+فلذلك سمي أبو بكر الصديق (`1/202-p4`). **`dhat-an-nitaqayn`** is Asma's, from
+the waistband she cut to tie the provisions for the hijra (`1/267-p1`).
+
+## Wives, and what the model cannot hold of them
+
+Aisha and Sawdah become `HUSBAND` relations, both married after Khadijah died
+and both before the hijra (`1/229-p2`, `1/230-p1`).
+
+Khadijah's own entry gives a great deal the model has no shape for: الطاهرة as
+her name in the jahiliyyah, her two husbands before him, her age at marriage and
+at death, and the house of قصب she was promised. Only the virtues land, in the
+Prophet's own words, آمنت بي إذ كفر بي الناس (`1/195-p5`).
+
+## What chapter two does not author
+
+**The غرانيق report.** Musa ibn Uqbah carries it (`1/148-p13`, `1/149-p1`), and
+it names no value the model holds. It stays on the page.
+
+**سواد بن قارب.** al-Dhahabi calls the long version حديث منكر بالمرة with two
+unknown narrators and a suspicion of forgery, and the shorter chains منقطع with
+a narrator متفق على تركه (`1/166-p10`, `1/167-p3`). He allows that أصل الحديث
+مشهور, which is not enough to rest a claim on.
+
+**يوم بعاث** (`1/237`, `1/238`). It is a fight between Aws and Khazraj before
+Islam, not a Muslim battle, and the app's battle model is for the latter.
+
+**The wager on the Romans** (`1/186`, `1/187`). Abu Bakr staked five قلائص
+against Ubayy ibn Khalaf before gambling was forbidden, and the reports
+disagree over five years or seven or nine. The model records no wager and no
+such year.
+
+**Three ages at the calling, and the headcount at Aqaba.** Urwah counts seventy
+men and one woman, Ibn Ishaq seventy and two (`1/250-p3`). There is no
+headcount field, so the disagreement stays where it is.
 
 ## Review
 
