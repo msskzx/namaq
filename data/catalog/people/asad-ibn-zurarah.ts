@@ -9,6 +9,7 @@ const asadIbnZurarah = {
   nameTransliterated: 'Asad ibn Zurarah',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: ['asad/sex'] },
     virtues: {
       value:
         'كان من سادة الأنصار ومن نقبائهم الأبرار، ولم يجعل النبي صلى الله عليه وسلم على بني النجار بعده نقيبا وقال: (أنا نقيبكم) ، فكانوا يفخرون بذلك.',

@@ -153,10 +153,45 @@ const badr = {
       summary: { value: 'قال: فينا أهل بدر نزلت الأنفال حين تنازعنا في الغنيمة، فقسمه صلى الله عليه وسلم بين المسلمين على السواء.', claims: ['ubadah/badr'] },
       claims: ['ubadah/badr'],
     },
-    // Three of the fourteen the chapter names. The rest have no subject here.
+    // All fourteen the chapter names. Ten of them had no subject in the app
+    // until this batch reached the roster, and the catalog now creates them.
     { person: 'aqil-ibn-al-bukayr', isMuslim: true, status: ['MARTYRED'], claims: ['aqil-bukayr/badr'] },
     { person: 'safwan-ibn-bayda', isMuslim: true, status: ['MARTYRED'], claims: ['safwan-bayda/badr'] },
     { person: 'saad-ibn-khaythamah', isMuslim: true, status: ['MARTYRED'], claims: ['saad-khaythamah/badr'] },
+    {
+      person: 'mihja-mawla-umar',
+      isMuslim: true,
+      status: ['MARTYRED'],
+      summary: { value: 'رمي بسهم فكان أول قتيل في سبيل الله.', claims: ['mihja/badr'] },
+      claims: ['mihja/badr'],
+    },
+    {
+      person: 'harithah-ibn-suraqah',
+      isMuslim: true,
+      status: ['MARTYRED'],
+      summary: { value: 'رمي بسهم وهو يشرب من الحوض فقتل.', claims: ['harithah/badr'] },
+      claims: ['harithah/badr'],
+    },
+    {
+      person: 'umayr-ibn-al-humam',
+      isMuslim: true,
+      status: ['MARTYRED'],
+      summary: { value: 'قال: بخ بخ! ثم ألقى تمرات كانت معه وقاتل حتى قتل.', claims: ['umayr-humam/badr'] },
+      claims: ['umayr-humam/badr'],
+    },
+    { person: 'awf-ibn-afra', isMuslim: true, status: ['MARTYRED'], claims: ['awf-afra/badr'] },
+    {
+      person: 'muawwidh-ibn-afra',
+      isMuslim: true,
+      status: ['MARTYRED'],
+      summary: { value: 'ضرب أبا جهل حتى أثبته ثم قاتل حتى قتل.', claims: ['muawwidh-afra/badr'] },
+      claims: ['muawwidh-afra/badr'],
+    },
+    { person: 'dhu-ash-shimalayn', isMuslim: true, status: ['MARTYRED'], claims: ['dhu-ash-shimalayn/badr'] },
+    { person: 'umayr-ibn-abi-waqqas', isMuslim: true, status: ['MARTYRED'], claims: ['umayr-waqqas/badr'] },
+    { person: 'yazid-ibn-al-harith', isMuslim: true, status: ['MARTYRED'], claims: ['yazid-harith/badr'] },
+    { person: 'rafi-ibn-al-mualla', isMuslim: true, status: ['MARTYRED'], claims: ['rafi-mualla/badr'] },
+    { person: 'mubashshir-ibn-abd-al-mundhir', isMuslim: true, status: ['MARTYRED'], claims: ['mubashshir/badr'] },
     // Two absences the source remarks on, and gives the Prophet's ruling for.
     {
       person: 'uthman-ibn-affan',

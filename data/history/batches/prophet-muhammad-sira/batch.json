@@ -27410,12 +27410,886 @@
           "accessedAt": "2026-09-20"
         }
       ]
+    },
+    {
+      "key": "mihja/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "mihja-mawla-umar",
+      "assertion": "مهجع مولى عمر، رمي بسهم يوم بدر فكان أول قتيل في سبيل الله.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/307-p4",
+          "volume": "السيرة 1",
+          "pageReference": "307",
+          "extractionUrl": "https://shamela.ws/book/10906/444",
+          "excerptArabic": "فرمي مهجع -مولى عمر- بسهم، فكان أول قتيل في سبيل الله. ثم رمي حارثة بن سراقة النجاري بسهم وهو يشرب من الحوض، فقتل.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/313-p6",
+          "volume": "السيرة 1",
+          "pageReference": "313",
+          "extractionUrl": "https://shamela.ws/book/10906/450",
+          "excerptArabic": "مهجع وذو الشمالين عمير بن عبد عمرو الخزاعي، وعاقل بن البكير، وصفوان بن بيضاء، وعمير بن أبي وقاص أخو سعد، وعبيدة بن",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p3",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "فالجملة أربعة عشر رجلا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "harithah/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "harithah-ibn-suraqah",
+      "assertion": "رمي بسهم وهو يشرب من الحوض يوم بدر فقتل.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/307-p4",
+          "volume": "السيرة 1",
+          "pageReference": "307",
+          "extractionUrl": "https://shamela.ws/book/10906/444",
+          "excerptArabic": "فرمي مهجع -مولى عمر- بسهم، فكان أول قتيل في سبيل الله. ثم رمي حارثة بن سراقة النجاري بسهم وهو يشرب من الحوض، فقتل.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p2",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "وعمير بن الحمام، وابنا عفراء، وحارثة بن سراقة، ويزيد بن الحارث فُسحُم، ورافع بن المعلى الزرقي، وسعد بن خيثمة الأوسي، ومبشر بن عبد المنذر أخو أبي لبابة.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p3",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "فالجملة أربعة عشر رجلا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "umayr-humam/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umayr-ibn-al-humam",
+      "assertion": "قال حين سمع: قوموا إلى جنة عرضها السموات والأرض: بخ بخ، ثم ألقى تمرات كانت معه وقاتل حتى قتل.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/334-p4",
+          "volume": "السيرة 1",
+          "pageReference": "334",
+          "extractionUrl": "https://shamela.ws/book/10906/471",
+          "excerptArabic": "يقول عمير بن الحمام الأنصاري: يا رسول الله عرضها السموات والأرض؟ فقال: \"نعم\". قال: بخ بخ! قال: \"ما يحملك على قولك: بخ بخ\"؟. قال: لا والله يا رسول الله إلا رجاء أن أكون من أهلها. قال: \"فإنك من أهلها\".",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/335-p2",
+          "volume": "السيرة 1",
+          "pageReference": "335",
+          "extractionUrl": "https://shamela.ws/book/10906/472",
+          "excerptArabic": "ثم قال: لئن أنا حييت حتى آكل تمراتي هذه إنها لحياة طويلة فرمى بهن، ثم قاتل حتى قتل. أخرجه مسلم.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p2",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "وعمير بن الحمام، وابنا عفراء، وحارثة بن سراقة، ويزيد بن الحارث فُسحُم، ورافع بن المعلى الزرقي، وسعد بن خيثمة الأوسي، ومبشر بن عبد المنذر أخو أبي لبابة.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p3",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "فالجملة أربعة عشر رجلا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "awf-afra/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "awf-ibn-afra",
+      "assertion": "استشهد يوم بدر قبل أخيه معوذ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/310-p8",
+          "volume": "السيرة 1",
+          "pageReference": "310",
+          "extractionUrl": "https://shamela.ws/book/10906/447",
+          "excerptArabic": "ثم مر بأبي جهل معوذ ابن عفراء، فضربه حتى أثبته, وتركه وبه رمق، وقاتل معوذ حتى قتل، وقتل أخوه عوف قبله، واسم أبيهما: الحارث بن رفاعة بن الحارث الزرقي.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p2",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "وعمير بن الحمام، وابنا عفراء، وحارثة بن سراقة، ويزيد بن الحارث فُسحُم، ورافع بن المعلى الزرقي، وسعد بن خيثمة الأوسي، ومبشر بن عبد المنذر أخو أبي لبابة.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p3",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "فالجملة أربعة عشر رجلا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "muawwidh-afra/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "muawwidh-ibn-afra",
+      "assertion": "ضرب أبا جهل حتى أثبته ثم قاتل حتى قتل، وقال صلى الله عليه وسلم في ابني عفراء: هما شركاء في قتل فرعون هذه الأمة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/310-p8",
+          "volume": "السيرة 1",
+          "pageReference": "310",
+          "extractionUrl": "https://shamela.ws/book/10906/447",
+          "excerptArabic": "ثم مر بأبي جهل معوذ ابن عفراء، فضربه حتى أثبته, وتركه وبه رمق، وقاتل معوذ حتى قتل، وقتل أخوه عوف قبله، واسم أبيهما: الحارث بن رفاعة بن الحارث الزرقي.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/340-p3",
+          "volume": "السيرة 1",
+          "pageReference": "340",
+          "extractionUrl": "https://shamela.ws/book/10906/477",
+          "excerptArabic": "وقف رسول الله صلى الله عليه وسلم على مصرع ابني عفراء فقال: \"يرحم الله ابني عفراء، فهما شركاء في قتل فرعون هذه الأمة ورأس أئمة الكفر\". فقيل: يا رسول الله، ومن قتله معهما؟ قال: \"الملائكة، وابن مسعود قد شرك في قتله\".",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p3",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "فالجملة أربعة عشر رجلا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "dhu-ash-shimalayn/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "dhu-ash-shimalayn",
+      "assertion": "ذو الشمالين عمير بن عبد عمرو الخزاعي، استشهد يوم بدر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/313-p6",
+          "volume": "السيرة 1",
+          "pageReference": "313",
+          "extractionUrl": "https://shamela.ws/book/10906/450",
+          "excerptArabic": "مهجع وذو الشمالين عمير بن عبد عمرو الخزاعي، وعاقل بن البكير، وصفوان بن بيضاء، وعمير بن أبي وقاص أخو سعد، وعبيدة بن",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p3",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "فالجملة أربعة عشر رجلا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "umayr-waqqas/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umayr-ibn-abi-waqqas",
+      "assertion": "عمير بن أبي وقاص أخو سعد، استشهد يوم بدر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/313-p6",
+          "volume": "السيرة 1",
+          "pageReference": "313",
+          "extractionUrl": "https://shamela.ws/book/10906/450",
+          "excerptArabic": "مهجع وذو الشمالين عمير بن عبد عمرو الخزاعي، وعاقل بن البكير، وصفوان بن بيضاء، وعمير بن أبي وقاص أخو سعد، وعبيدة بن",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p3",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "فالجملة أربعة عشر رجلا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "yazid-harith/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "yazid-ibn-al-harith",
+      "assertion": "يزيد بن الحارث، المعروف بفسحم، استشهد يوم بدر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p2",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "وعمير بن الحمام، وابنا عفراء، وحارثة بن سراقة، ويزيد بن الحارث فُسحُم، ورافع بن المعلى الزرقي، وسعد بن خيثمة الأوسي، ومبشر بن عبد المنذر أخو أبي لبابة.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p3",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "فالجملة أربعة عشر رجلا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "rafi-mualla/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "rafi-ibn-al-mualla",
+      "assertion": "رافع بن المعلى الزرقي، استشهد يوم بدر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p2",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "وعمير بن الحمام، وابنا عفراء، وحارثة بن سراقة، ويزيد بن الحارث فُسحُم، ورافع بن المعلى الزرقي، وسعد بن خيثمة الأوسي، ومبشر بن عبد المنذر أخو أبي لبابة.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p3",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "فالجملة أربعة عشر رجلا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "mubashshir/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "mubashshir-ibn-abd-al-mundhir",
+      "assertion": "مبشر بن عبد المنذر أخو أبي لبابة، استشهد يوم بدر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p2",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "وعمير بن الحمام، وابنا عفراء، وحارثة بن سراقة، ويزيد بن الحارث فُسحُم، ورافع بن المعلى الزرقي، وسعد بن خيثمة الأوسي، ومبشر بن عبد المنذر أخو أبي لبابة.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p3",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "فالجملة أربعة عشر رجلا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "khadijah/nasab",
+      "subjectKind": "PERSON",
+      "subjectSlug": "khadijah-bint-khuwaylid",
+      "assertion": "هي خديجة بنت خويلد بن أسد بن عبد العزى بن قصي الأسدية.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "fullName",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/194-p7",
+          "volume": "السيرة 1",
+          "pageReference": "194",
+          "extractionUrl": "https://shamela.ws/book/10906/332",
+          "excerptArabic": "وهي خديجة بنت خويلد بن أسد بن عبد العزى بن قصي الأسدية.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "mihja/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "mihja-mawla-umar",
+      "assertion": "عده الذهبي في شهداء بدر، وختم أسماءهم بقوله: فالجملة أربعة عشر رجلا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/313-p6",
+          "volume": "السيرة 1",
+          "pageReference": "313",
+          "extractionUrl": "https://shamela.ws/book/10906/450",
+          "excerptArabic": "مهجع وذو الشمالين عمير بن عبد عمرو الخزاعي، وعاقل بن البكير، وصفوان بن بيضاء، وعمير بن أبي وقاص أخو سعد، وعبيدة بن",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p3",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "فالجملة أربعة عشر رجلا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "dhu-ash-shimalayn/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "dhu-ash-shimalayn",
+      "assertion": "عده الذهبي في شهداء بدر، وختم أسماءهم بقوله: فالجملة أربعة عشر رجلا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/313-p6",
+          "volume": "السيرة 1",
+          "pageReference": "313",
+          "extractionUrl": "https://shamela.ws/book/10906/450",
+          "excerptArabic": "مهجع وذو الشمالين عمير بن عبد عمرو الخزاعي، وعاقل بن البكير، وصفوان بن بيضاء، وعمير بن أبي وقاص أخو سعد، وعبيدة بن",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p3",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "فالجملة أربعة عشر رجلا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "umayr-waqqas/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umayr-ibn-abi-waqqas",
+      "assertion": "عده الذهبي في شهداء بدر، وختم أسماءهم بقوله: فالجملة أربعة عشر رجلا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/313-p6",
+          "volume": "السيرة 1",
+          "pageReference": "313",
+          "extractionUrl": "https://shamela.ws/book/10906/450",
+          "excerptArabic": "مهجع وذو الشمالين عمير بن عبد عمرو الخزاعي، وعاقل بن البكير، وصفوان بن بيضاء، وعمير بن أبي وقاص أخو سعد، وعبيدة بن",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p3",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "فالجملة أربعة عشر رجلا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "umayr-humam/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umayr-ibn-al-humam",
+      "assertion": "عده الذهبي في شهداء بدر، وختم أسماءهم بقوله: فالجملة أربعة عشر رجلا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p2",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "وعمير بن الحمام، وابنا عفراء، وحارثة بن سراقة، ويزيد بن الحارث فُسحُم، ورافع بن المعلى الزرقي، وسعد بن خيثمة الأوسي، ومبشر بن عبد المنذر أخو أبي لبابة.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p3",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "فالجملة أربعة عشر رجلا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "awf-afra/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "awf-ibn-afra",
+      "assertion": "عده الذهبي في شهداء بدر، وختم أسماءهم بقوله: فالجملة أربعة عشر رجلا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p2",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "وعمير بن الحمام، وابنا عفراء، وحارثة بن سراقة، ويزيد بن الحارث فُسحُم، ورافع بن المعلى الزرقي، وسعد بن خيثمة الأوسي، ومبشر بن عبد المنذر أخو أبي لبابة.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p3",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "فالجملة أربعة عشر رجلا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "muawwidh-afra/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "muawwidh-ibn-afra",
+      "assertion": "عده الذهبي في شهداء بدر، وختم أسماءهم بقوله: فالجملة أربعة عشر رجلا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p2",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "وعمير بن الحمام، وابنا عفراء، وحارثة بن سراقة، ويزيد بن الحارث فُسحُم، ورافع بن المعلى الزرقي، وسعد بن خيثمة الأوسي، ومبشر بن عبد المنذر أخو أبي لبابة.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p3",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "فالجملة أربعة عشر رجلا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "harithah/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "harithah-ibn-suraqah",
+      "assertion": "عده الذهبي في شهداء بدر، وختم أسماءهم بقوله: فالجملة أربعة عشر رجلا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p2",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "وعمير بن الحمام، وابنا عفراء، وحارثة بن سراقة، ويزيد بن الحارث فُسحُم، ورافع بن المعلى الزرقي، وسعد بن خيثمة الأوسي، ومبشر بن عبد المنذر أخو أبي لبابة.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p3",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "فالجملة أربعة عشر رجلا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "yazid-harith/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "yazid-ibn-al-harith",
+      "assertion": "عده الذهبي في شهداء بدر، وختم أسماءهم بقوله: فالجملة أربعة عشر رجلا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p2",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "وعمير بن الحمام، وابنا عفراء، وحارثة بن سراقة، ويزيد بن الحارث فُسحُم، ورافع بن المعلى الزرقي، وسعد بن خيثمة الأوسي، ومبشر بن عبد المنذر أخو أبي لبابة.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p3",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "فالجملة أربعة عشر رجلا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "rafi-mualla/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "rafi-ibn-al-mualla",
+      "assertion": "عده الذهبي في شهداء بدر، وختم أسماءهم بقوله: فالجملة أربعة عشر رجلا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p2",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "وعمير بن الحمام، وابنا عفراء، وحارثة بن سراقة، ويزيد بن الحارث فُسحُم، ورافع بن المعلى الزرقي، وسعد بن خيثمة الأوسي، ومبشر بن عبد المنذر أخو أبي لبابة.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p3",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "فالجملة أربعة عشر رجلا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "mubashshir/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "mubashshir-ibn-abd-al-mundhir",
+      "assertion": "عده الذهبي في شهداء بدر، وختم أسماءهم بقوله: فالجملة أربعة عشر رجلا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p2",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "وعمير بن الحمام، وابنا عفراء، وحارثة بن سراقة، ويزيد بن الحارث فُسحُم، ورافع بن المعلى الزرقي، وسعد بن خيثمة الأوسي، ومبشر بن عبد المنذر أخو أبي لبابة.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/314-p3",
+          "volume": "السيرة 1",
+          "pageReference": "314",
+          "extractionUrl": "https://shamela.ws/book/10906/451",
+          "excerptArabic": "فالجملة أربعة عشر رجلا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "prophet/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "هو محمد بن عبد الله بن عبد المطلب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/29-p7",
+          "volume": "السيرة 1",
+          "pageReference": "29",
+          "extractionUrl": "https://shamela.ws/book/10906/167",
+          "excerptArabic": "هو محمد بن عبد الله بن عبد المطلب واسم عبد المطلب شيبة, ابن هاشم واسمه عمرو, ابن عبد مناف واسمه المغيرة، ابن قصي واسمه زيد بن كلاب بن مرة بن كعب بن لؤي بن غالب بن فهر بن مالك بن النضر بن كنانة بن خزيمة ابن مدركة، واسمه عامر بن إلياس بن مضر بن نزار بن معد بن عدنان، وعدنان من ولد إسماعيل بن إبراهيم -صلى الله عليهما وعلى نبينا وسلم- بإجماع الناس.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ali/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ali-ibn-abi-talib",
+      "assertion": "علي بن أبي طالب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/298-p8",
+          "volume": "السيرة 1",
+          "pageReference": "298",
+          "extractionUrl": "https://shamela.ws/book/10906/435",
+          "excerptArabic": "كنت أنا وعلي بن أبي طالب رفيقين في غزوة العشيرة من بطن ينبع. فلما نزلها رسول الله صلى الله عليه وسلم أقام بها شهرا، فصالح",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "al-baraa/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-baraa-ibn-marur",
+      "assertion": "البراء بن معرور السلمي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/293-p3",
+          "volume": "السيرة 1",
+          "pageReference": "293",
+          "extractionUrl": "https://shamela.ws/book/10906/431",
+          "excerptArabic": "ومات فيها: البراء بن معرور السلمي أحد نقباء العقبة -رضي الله عنه- وهو أول من بايع النبي صلى الله عليه وسلم ليلة العقبة، وكان كبير الشأن.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "asad/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "asad-ibn-zurarah",
+      "assertion": "أبو أمامة أسعد بن زرارة الأنصاري.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/286-p2",
+          "volume": "السيرة 1",
+          "pageReference": "286",
+          "extractionUrl": "https://shamela.ws/book/10906/424",
+          "excerptArabic": "فمات أبو أمامة أسعد بن زرارة الأنصاري تلك الأيام بالذبحة. وكان من سادة الأنصار ومن نقبائهم الأبرار. ووجد النبي صلى الله عليه وسلم وجدا لموته، وكان قد كواه. ولم يجعل على بني النجار بعده نقيبا وقال: أنا نقيبكم. فكانوا يفخرون بذلك.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ibn-salam/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-salam",
+      "assertion": "عبد الله بن سلام.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/288-p2",
+          "volume": "السيرة 1",
+          "pageReference": "288",
+          "extractionUrl": "https://shamela.ws/book/10906/426",
+          "excerptArabic": "جاء عبد الله بن سلام فقال: أشهد أنك رسول الله حقا. ولقد علمت يهود أني سيدهم وابن سيدهم، وأعلمهم وابن أعلمهم، فادعهم فسلهم عني قبل أن يعلموا أني قد أسلمت. فأرسل إليهم فأتوا، فقال لهم: \"يا معشر يهود، ويلكم اتقوا الله، فوالذي لا إله إلا هو إنكم لتعلمون أني رسول الله فأسلموا\". قالوا: ما نعلمه، فأعاد ذلك عليهم ثلاثا. ثم قال: \"فأي رجل فيكم عبد الله بن سلام\"؟ قالوا: ذلك سيدنا وابن سيدنا، وأعلمنا وابن أعلمنا. قال: \"أفرأيتم إن أسلم\"؟ قالوا: حاش لله، ما كان ليسلم. قال: \"يابن سلام اخرج عليهم\". فخرج عليهم، فقال: ويلكم اتقوا الله، فوالذي لا إله إلا هو إنكم لتعلمون أنه رسول الله حقا، قالوا: كذبت. فأخرجهم رسول الله صلى الله عليه وسلم. أخرجه البخاري بأطول منه.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "musab/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "musab-ibn-umayr",
+      "assertion": "مصعب بن عمير.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/301-p4",
+          "volume": "السيرة 1",
+          "pageReference": "301",
+          "extractionUrl": "https://shamela.ws/book/10906/438",
+          "excerptArabic": "ودفع اللواء إلى مصعب بن عمير. وكان أمام رسول الله صلى الله عليه وسلم رايتان سوداوان؛ إحداهما مع علي، والأخرى مع رجل أنصاري. وكانت راية الأنصار مع سعد بن معاذ.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "abu-bakr/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-bakr-as-siddiq",
+      "assertion": "أبو بكر، وهي كنية رجل.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/202-p4",
+          "volume": "السيرة 1",
+          "pageReference": "202",
+          "extractionUrl": "https://shamela.ws/book/10906/340",
+          "excerptArabic": "فلذلك سمي أبو بكر الصديق.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "uthman/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "uthman-ibn-affan",
+      "assertion": "عثمان، وله زوجة هي رقية بنت رسول الله صلى الله عليه وسلم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/360-p6",
+          "volume": "السيرة 1",
+          "pageReference": "360",
+          "extractionUrl": "https://shamela.ws/book/10906/497",
+          "excerptArabic": "واحتبس عنها عثمان يمرض زوجته رقية",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "asma/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "asma-bint-abi-bakr",
+      "assertion": "أسماء بنت أبي بكر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/267-p1",
+          "volume": "السيرة 1",
+          "pageReference": "267",
+          "extractionUrl": "https://shamela.ws/book/10906/405",
+          "excerptArabic": "فقطعت أسماء بنت أبي بكر قطعة من نطاقها فأوكت به الجراب، فبذلك كانت تسمى \"ذات النطاقين\"، ثم لحق رسول الله صلى الله عليه وسلم وأبو بكر بغار في جبل يقال له ثور، فمكثا فيه ثلاث ليال، يبيت عندهما عبد الله بن أبي بكر، وهو غلام شاب لقن ثقف، فيدلج من عندهما بسحر، فيصبح في قريش بمكة كبائت، فلا يسمع أمرا يكيدون به إلا وعاه، حتى يأتيهما بخبر ذلك حين يختلط الظلام، ويرعى عليهما عامر بن فهيرة مولى أبي بكر منحة، ويريح عليهما حين تذهب ساعة من الليل، فيبيتان في رسل منحتهما حتى ينعق بهما عامر بن فهيرة بغلس، يفعل ذلك كل ليلة من الليالي الثلاث. واستأجر رسول الله صلى الله عليه وسلم وأبو بكر رجلا من بني الديل هاديا خريتا، قد غمس يمين حلف في آل العاص بن وائل، وهو على جاهليته، فدفعا إليه راحلتيهما ووعداه غار ثور، فأتاهما براحلتيهما صبيحة ثلاث، فارتحلا، وانطلق عامر بن فهيرة والدليل الديلي، فأخذ بهما في طريق الساحل. أخرجه البخاري.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "khadijah/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "khadijah-bint-khuwaylid",
+      "assertion": "هي خديجة بنت خويلد بن أسد بن عبد العزى بن قصي الأسدية.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/194-p7",
+          "volume": "السيرة 1",
+          "pageReference": "194",
+          "extractionUrl": "https://shamela.ws/book/10906/332",
+          "excerptArabic": "وهي خديجة بنت خويلد بن أسد بن عبد العزى بن قصي الأسدية.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
     }
   ],
   "approval": {
-    "revision": "632134d08162e42f",
+    "revision": "02e6ec4ef0e62820",
     "approvedAt": "2026-09-20",
     "approvedBy": "msskzx",
-    "note": "Approved for publication of chapters one to four, including the expeditions. All 141 claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
+    "note": "Approved for publication of chapters one to four, including the expeditions and the Badr martyr roster. All 172 claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
   }
 }

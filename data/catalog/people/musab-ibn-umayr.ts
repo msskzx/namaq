@@ -9,6 +9,7 @@ const musabIbnUmayr = {
   nameTransliterated: 'Musab ibn Umayr',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: ['musab/sex'] },
     virtues: {
       value:
         'بعثه رسول الله صلى الله عليه وسلم إلى المدينة يقرئهم ويفقههم في الدين، فكان يسمى بها المقرئ، وكان أول من جمع الجمعة بالمدينة.',

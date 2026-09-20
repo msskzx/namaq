@@ -9,6 +9,7 @@ const alBaraaIbnMarur = {
   nameTransliterated: 'Al-Baraa ibn Marur',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: ['al-baraa/sex'] },
     virtues: {
       value: 'أحد نقباء العقبة، وهو أول من بايع النبي صلى الله عليه وسلم ليلة العقبة، وكان كبير الشأن.',
       claims: ['al-baraa/first-to-pledge'],

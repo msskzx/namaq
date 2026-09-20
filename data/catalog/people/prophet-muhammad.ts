@@ -24,6 +24,7 @@ const prophetMuhammad = {
   hasProfile: true,
 
   fields: {
+    sex: { value: 'MALE', claims: ['prophet/sex'] },
     // The naming line unpacks the names behind the bynames: عبد المطلب is
     // Shaybah, هاشم is Amr, عبد مناف is al-Mughirah, قصي is Zayd. It stops at
     // عدنان, which is where al-Dhahabi says the agreement stops; four counts of

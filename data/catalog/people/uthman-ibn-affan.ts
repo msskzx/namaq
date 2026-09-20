@@ -9,6 +9,7 @@ const uthmanIbnAffan = {
   nameTransliterated: 'Uthman ibn Affan',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: ['uthman/sex'] },
     virtues: {
       value:
         'خرج بامرأته رقية بنت رسول الله صلى الله عليه وسلم إلى الحبشة، فقال صلى الله عليه وسلم: (صحبهما الله، إن عثمان أول من هاجر بأهله بعد لوط) .',

@@ -9,6 +9,7 @@ const aliIbnAbiTalib = {
   nameTransliterated: 'Ali ibn Abi Talib',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: ['ali/sex'] },
     virtues: {
       value: 'عمد علي فرقد على فراش رسول الله صلى الله عليه وسلم ليلة خروجه مهاجرا، يواري عنه العيون.',
       claims: ['ali/hijra-bed'],
