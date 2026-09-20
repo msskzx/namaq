@@ -22,15 +22,15 @@ builds and `extractShamelaEntry.ts --volume` sets.
 
 ## What this instalment reads
 
-Chapters one and two, printed pages ١/٢٩ to ١/٢٧٦, Shamela page ids 167 to 420.
-Eighty-four claims and 117 citations. Eleven chapters remain, ending at
+Chapters one to three, printed pages ١/٢٩ to ١/٢٩٥, Shamela page ids 167 to
+433. Ninety-eight claims and 142 citations. Ten chapters remain, ending at
 ٢/٤٩٦.
 
 Chapter one covers his lineage, his names, his birth, the deaths of his parents
 and grandfather, Abu Talib's guardianship, his marriage to Khadijah, his
 children, the rebuilding of the Kaaba, the first revelation, and the first
 conversions. Chapter two runs from the first emigration to Abyssinia to the
-arrival at Medina.
+arrival at Medina. Chapter three is the first year after it.
 
 The Prophet has no legacy values yet, because his seed entry still stands and
 nothing has been moved across. The same holds for every other subject this
@@ -286,3 +286,78 @@ headcount field, so the disagreement stays where it is.
 
 Nothing is reviewed. The claims are authored but nobody has compared them
 against the stored pages, so every claim is Not reviewed.
+
+# Chapter three
+
+Printed ١/٢٨٣ to ١/٢٩٥, ids 421 to 433. Thirteen pages, fourteen claims and
+twenty-five citations, seven new events and four people who gain a cited
+field.
+
+## The first chapter that can be dated
+
+Chapters one and two dated everything against the calling or against the
+hijra, and neither is a value the model holds, so every event they authored
+left `hijriYear` unset. This chapter is headed السنة الأولى من الهجرة
+(`1/283-p1`), which dates what sits under it. Every event here carries
+`hijriYear: 1`, and every claim backing one cites that heading alongside its
+own passage, so the dating is visible rather than assumed.
+
+## The mosque
+
+The camel knelt on a مربد belonging to two orphans of Banu al-Najjar, who
+refused payment: لا نطلب ثمنه إلا إلى الله. The graves of the mushrikin were
+dug up, the ruins levelled, the palms cut, and the pillars made of palm trunks
+with a roof of fronds (`1/290-p2`, `1/286-p1`). Abu Ayyub is linked because the
+Prophet stayed in his house until it was finished.
+
+**Ammar carried two bricks to everyone else's one**, and the word came then:
+ويح عمار، تقتله الفئة الباغية (`1/292-p2`, `1/292-p3`). al-Dhahabi notes the
+addition is absent from al-Bukhari's wording and calls its isnad ثابتة, so it
+is authored as it stands.
+
+**مسجد قباء** is its own event, founded during the stay with Banu Amr ibn Awf
+before he moved on (`1/285-p4`).
+
+## The المؤاخاة
+
+The act itself, which `PACT_BROTHER` records pair by pair. The chapter states
+it and its legal effect, that they inherited from one another until al-Anfal 75
+ended it (`1/294-p3`, `1/294-p4`), and names nobody, so only the Prophet is
+linked. The pairs come from the companions' own entries.
+
+## The adhan, and a name the source does not finish
+
+عبد الله بن زيد and Umar were both shown it (`1/293-p8`). The chapter gives no
+patronymic for the first, and two subjects in the app carry that name,
+`abdullah-ibn-zayd-ibn-abd-rabbih` and `abdullah-ibn-zayd-al-najjari`. Choosing
+between them would take knowledge this source does not supply, so only Umar is
+linked and the description keeps both names as the book gives them.
+
+## Two deaths and one Islam
+
+**أسعد بن زرارة** died of الذبحة while the mosque was going up, and the Prophet
+left his naqib place unfilled, saying أنا نقيبكم (`1/286-p2`). **البراء بن
+معرور**, one of the twelve naqibs and the first hand to take the Prophet's at
+the second Aqaba, died in the same year (`1/293-p3`).
+
+**عبد الله بن سلام** came the day the Prophet arrived (`1/288-p2`, `1/289-p3`).
+His own words about himself are his `virtues`, and the first thing he heard is
+in the event's description.
+
+## What chapter three does not author
+
+**The expeditions.** Hamzah's banner in Ramadan, called أول لواء عقد في الإسلام
+(`1/293-p9`), Sa'd's in Dhu al-Qadah (`1/293-p11`), and Ubaydah ibn al-Harith's,
+which Urwah calls أول راية عقدها (`1/294-p2`). Two of those compete over which
+was first, and the model holds no ordering to compete in. The expeditions
+themselves have no records: every slug under `data/catalog/battles/` is a battle,
+and a سرية that met no fighting does not fit that shape. Adding them is a
+modelling decision, not an extraction one.
+
+**The list of munafiqun** (`1/292-p4` to `1/293-p2`), some thirty names. The
+model has no field for it, and several of those named are noted as disputed in
+the same breath.
+
+**Three deaths on kufr** at Mecca and Ta'if (`1/293-p6`, `1/293-p7`), and
+أبو قيس بن الأسلت, who nearly accepted Islam and swore off it for a year and
+died inside the year (`1/294-p6` to `1/295-p3`). None has a subject in the app.

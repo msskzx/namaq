@@ -25764,12 +25764,411 @@
           "accessedAt": "2026-09-20"
         }
       ]
+    },
+    {
+      "key": "sira/masjid-an-nabawi",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "بنى مسجده بالمدينة في مربد ليتيمين من بني النجار، فنبشت قبور المشركين وسويت الخرب، وجعل سواريه من جذوع النخل وسقفه بالجريد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "building-of-the-prophets-mosque",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/290-p2",
+          "volume": "السيرة 1",
+          "pageReference": "290",
+          "extractionUrl": "https://shamela.ws/book/10906/428",
+          "excerptArabic": "يا بني النجار، ثامنوني بحائطكم هذا\". قالوا: لا والله، لا نطلب ثمنه إلا إلى الله. فكان فيه ما أقول لكم: كان فيه قبور المشركين، وكان فيه خرب ونخل. فأمر رسول الله صلى الله عليه وسلم بقبور المشركين فنبشت، وبالخرب فسويت، وبالنخل فقطع.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/286-p1",
+          "volume": "السيرة 1",
+          "pageReference": "286",
+          "extractionUrl": "https://shamela.ws/book/10906/424",
+          "excerptArabic": "فلم يزل ساكنا عند أبي أيوب حتى بنى مسجده وحُجَرَه في المربد. وكان قد طلب شراءه فأبت بنو النجار من بيعه، وبذلوه لله وعوضوا اليتيمين. فأمر بالقبور فنبشت، وبالخرب فسويت. وبنى عضادتيه بالحجارة، وجعل سواريه من جذوع النخل، وسقفه بالجريد, وعمل فيه المسلمون حسبة.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/283-p1",
+          "volume": "السيرة 1",
+          "pageReference": "283",
+          "extractionUrl": "https://shamela.ws/book/10906/421",
+          "excerptArabic": "[السنة الأولى من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "abu-ayyub/hosts-the-prophet",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-ayyub-al-ansari",
+      "assertion": "نزل عنده رسول الله صلى الله عليه وسلم فلم يزل ساكنا عنده حتى بنى مسجده وحجره.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "building-of-the-prophets-mosque",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/286-p1",
+          "volume": "السيرة 1",
+          "pageReference": "286",
+          "extractionUrl": "https://shamela.ws/book/10906/424",
+          "excerptArabic": "فلم يزل ساكنا عند أبي أيوب حتى بنى مسجده وحُجَرَه في المربد. وكان قد طلب شراءه فأبت بنو النجار من بيعه، وبذلوه لله وعوضوا اليتيمين. فأمر بالقبور فنبشت، وبالخرب فسويت. وبنى عضادتيه بالحجارة، وجعل سواريه من جذوع النخل، وسقفه بالجريد, وعمل فيه المسلمون حسبة.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ammar/mosque-two-bricks",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ammar-ibn-yasir",
+      "assertion": "كان يحمل في بناء المسجد لبنتين لبنتين، فقال صلى الله عليه وسلم: ويح عمار، تقتله الفئة الباغية.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "building-of-the-prophets-mosque",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/292-p2",
+          "volume": "السيرة 1",
+          "pageReference": "292",
+          "extractionUrl": "https://shamela.ws/book/10906/430",
+          "excerptArabic": "كنا نحمل لبنة لبنة، وعمار يحمل لبنتين لبنتين؛ يعني في بناء المسجد،",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/292-p3",
+          "volume": "السيرة 1",
+          "pageReference": "292",
+          "extractionUrl": "https://shamela.ws/book/10906/430",
+          "excerptArabic": "فجعل ينفض عنه التراب ويقول: \"ويح عمار، تقتله الفئة الباغية، يدعوهم إلى الجنة ويدعونه إلى النار\". أخرجه البخاري دون قوله: \"تقتله الفئة الباغية\"، وهي زيادة ثابتة الإسناد.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ammar/fiah-baghiyah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ammar-ibn-yasir",
+      "assertion": "قال صلى الله عليه وسلم: ويح عمار، تقتله الفئة الباغية، يدعوهم إلى الجنة ويدعونه إلى النار.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/292-p3",
+          "volume": "السيرة 1",
+          "pageReference": "292",
+          "extractionUrl": "https://shamela.ws/book/10906/430",
+          "excerptArabic": "فجعل ينفض عنه التراب ويقول: \"ويح عمار، تقتله الفئة الباغية، يدعوهم إلى الجنة ويدعونه إلى النار\". أخرجه البخاري دون قوله: \"تقتله الفئة الباغية\"، وهي زيادة ثابتة الإسناد.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/masjid-quba",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "أسس مسجد قباء في إقامته ببني عمرو بن عوف، ثم صلى الجمعة في بني سالم في بطن الوادي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "founding-of-masjid-quba",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/285-p4",
+          "volume": "السيرة 1",
+          "pageReference": "285",
+          "extractionUrl": "https://shamela.ws/book/10906/423",
+          "excerptArabic": "وأسس رسول الله صلى الله عليه وسلم في إقامته ببني عمرو بن عوف مسجد قباء. وصلى الجمعة في بني سالم في بطن الوادي. فخرج معه رجال منهم، وهم: العباس بن عبادة، وعتبان بن مالك، فسألوه أن ينزل عندهم ويقيم فيهم، فقال: \"خلوا الناقة فإنها مأمورة\". وسار والأنصار حوله حتى أتى بني بياضة، فتلقاه زياد بن لبيد، وفروة بن عمرو، فدعوه إلى النزول فيهم، فقال: \"دعوها فإنها مأمورة\". فأتى دور بني عدي بن النجار؛ وهم أخوال عبد المطلب؛ فتلقاه سليط بن قيس، ورجال من بني عدي، فدعوه إلى النزول والبقاء عندهم، فقال: \"دعوها فإنها مأمورة\". ومشى حتى أتى دور بني مالك بن النجار، فبركت الناقة في موضع المسجد، وهو مربد تمر لغلامين يتيمين. وكان فيه نخل وخرب، وقبور للمشركين. فلم ينزل عن ظهرها، فقامت ومشت قليلا، وهو صلى الله عليه وسلم لا يهيجها، ثم التفت فكرت إلى مكانها وبركت فيه، فنزل عنها فأخذ أبو",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/283-p1",
+          "volume": "السيرة 1",
+          "pageReference": "283",
+          "extractionUrl": "https://shamela.ws/book/10906/421",
+          "excerptArabic": "[السنة الأولى من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/muakhah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "آخى بين المهاجرين والأنصار على المواساة والحق، وورث بعضهم من بعض حتى نزلت: وأولو الأرحام بعضهم أولى ببعض.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "brotherhood-of-muhajirun-and-ansar",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/294-p3",
+          "volume": "السيرة 1",
+          "pageReference": "294",
+          "extractionUrl": "https://shamela.ws/book/10906/432",
+          "excerptArabic": "وفيها: آخى النبي صلى الله عليه وسلم بين المهاجرين والأنصار، على المواساة والحق.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/294-p4",
+          "volume": "السيرة 1",
+          "pageReference": "294",
+          "extractionUrl": "https://shamela.ws/book/10906/432",
+          "excerptArabic": "آخى رسول الله صلى الله عليه وسلم بين المهاجرين والأنصار، وورث بعضهم من بعض، حتى نزلت: {وَأُولُوا الْأَرْحَامِ بَعْضُهُمْ أَوْلَى بِبَعْضٍ} [الأنفال: ٧٥] .",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/283-p1",
+          "volume": "السيرة 1",
+          "pageReference": "283",
+          "extractionUrl": "https://shamela.ws/book/10906/421",
+          "excerptArabic": "[السنة الأولى من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/adhan",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "أري الأذان في هذه السنة فشرع على ما رئي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "legislation-of-the-adhan",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/293-p8",
+          "volume": "السيرة 1",
+          "pageReference": "293",
+          "extractionUrl": "https://shamela.ws/book/10906/431",
+          "excerptArabic": "وفيها: أرِيَ الأذان عبد الله بن زيد، وعمر بن الخطاب، فشرع الأذان على ما رأيا.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/283-p1",
+          "volume": "السيرة 1",
+          "pageReference": "283",
+          "extractionUrl": "https://shamela.ws/book/10906/421",
+          "excerptArabic": "[السنة الأولى من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "umar/adhan",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umar-ibn-al-khattab",
+      "assertion": "كان ممن أري الأذان، فشرع الأذان على ما رأى.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "legislation-of-the-adhan",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/293-p8",
+          "volume": "السيرة 1",
+          "pageReference": "293",
+          "extractionUrl": "https://shamela.ws/book/10906/431",
+          "excerptArabic": "وفيها: أرِيَ الأذان عبد الله بن زيد، وعمر بن الخطاب، فشرع الأذان على ما رأيا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ibn-salam/islam",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-salam",
+      "assertion": "أسلم عبد الله بن سلام حين قدم رسول الله صلى الله عليه وسلم المدينة، وقال: أشهد أنك رسول الله حقا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "islam-of-abdullah-ibn-salam",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/288-p2",
+          "volume": "السيرة 1",
+          "pageReference": "288",
+          "extractionUrl": "https://shamela.ws/book/10906/426",
+          "excerptArabic": "جاء عبد الله بن سلام فقال: أشهد أنك رسول الله حقا. ولقد علمت يهود أني سيدهم وابن سيدهم، وأعلمهم وابن أعلمهم، فادعهم فسلهم عني قبل أن يعلموا أني قد أسلمت. فأرسل إليهم فأتوا، فقال لهم: \"يا معشر يهود، ويلكم اتقوا الله، فوالذي لا إله إلا هو إنكم لتعلمون أني رسول الله فأسلموا\". قالوا: ما نعلمه، فأعاد ذلك عليهم ثلاثا. ثم قال: \"فأي رجل فيكم عبد الله بن سلام\"؟ قالوا: ذلك سيدنا وابن سيدنا، وأعلمنا وابن أعلمنا. قال: \"أفرأيتم إن أسلم\"؟ قالوا: حاش لله، ما كان ليسلم. قال: \"يابن سلام اخرج عليهم\". فخرج عليهم، فقال: ويلكم اتقوا الله، فوالذي لا إله إلا هو إنكم لتعلمون أنه رسول الله حقا، قالوا: كذبت. فأخرجهم رسول الله صلى الله عليه وسلم. أخرجه البخاري بأطول منه.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/289-p3",
+          "volume": "السيرة 1",
+          "pageReference": "289",
+          "extractionUrl": "https://shamela.ws/book/10906/427",
+          "excerptArabic": "فلما رأيته عرفت أن وجهه ليس بوجه كذاب. فكان أول شيء سمعته منه أن قال: \"أيها الناس، أطعموا الطعام، وأفشوا السلام، وصلوا الأرحام، وصلوا بالليل والناس نيام، تدخلوا الجنة بسلام\". صحيح.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/283-p1",
+          "volume": "السيرة 1",
+          "pageReference": "283",
+          "extractionUrl": "https://shamela.ws/book/10906/421",
+          "excerptArabic": "[السنة الأولى من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ibn-salam/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-salam",
+      "assertion": "قال: لقد علمت يهود أني سيدهم وابن سيدهم، وأعلمهم وابن أعلمهم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/288-p2",
+          "volume": "السيرة 1",
+          "pageReference": "288",
+          "extractionUrl": "https://shamela.ws/book/10906/426",
+          "excerptArabic": "جاء عبد الله بن سلام فقال: أشهد أنك رسول الله حقا. ولقد علمت يهود أني سيدهم وابن سيدهم، وأعلمهم وابن أعلمهم، فادعهم فسلهم عني قبل أن يعلموا أني قد أسلمت. فأرسل إليهم فأتوا، فقال لهم: \"يا معشر يهود، ويلكم اتقوا الله، فوالذي لا إله إلا هو إنكم لتعلمون أني رسول الله فأسلموا\". قالوا: ما نعلمه، فأعاد ذلك عليهم ثلاثا. ثم قال: \"فأي رجل فيكم عبد الله بن سلام\"؟ قالوا: ذلك سيدنا وابن سيدنا، وأعلمنا وابن أعلمنا. قال: \"أفرأيتم إن أسلم\"؟ قالوا: حاش لله، ما كان ليسلم. قال: \"يابن سلام اخرج عليهم\". فخرج عليهم، فقال: ويلكم اتقوا الله، فوالذي لا إله إلا هو إنكم لتعلمون أنه رسول الله حقا، قالوا: كذبت. فأخرجهم رسول الله صلى الله عليه وسلم. أخرجه البخاري بأطول منه.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "asad/death",
+      "subjectKind": "PERSON",
+      "subjectSlug": "asad-ibn-zurarah",
+      "assertion": "مات أبو أمامة أسعد بن زرارة أيام بناء المسجد بالذبحة، فوجد النبي صلى الله عليه وسلم لموته.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "death-of-asad-ibn-zurarah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/286-p2",
+          "volume": "السيرة 1",
+          "pageReference": "286",
+          "extractionUrl": "https://shamela.ws/book/10906/424",
+          "excerptArabic": "فمات أبو أمامة أسعد بن زرارة الأنصاري تلك الأيام بالذبحة. وكان من سادة الأنصار ومن نقبائهم الأبرار. ووجد النبي صلى الله عليه وسلم وجدا لموته، وكان قد كواه. ولم يجعل على بني النجار بعده نقيبا وقال: أنا نقيبكم. فكانوا يفخرون بذلك.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/283-p1",
+          "volume": "السيرة 1",
+          "pageReference": "283",
+          "extractionUrl": "https://shamela.ws/book/10906/421",
+          "excerptArabic": "[السنة الأولى من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "asad/naqib",
+      "subjectKind": "PERSON",
+      "subjectSlug": "asad-ibn-zurarah",
+      "assertion": "كان من سادة الأنصار ومن نقبائهم، ولم يجعل النبي صلى الله عليه وسلم على بني النجار بعده نقيبا وقال: أنا نقيبكم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/286-p2",
+          "volume": "السيرة 1",
+          "pageReference": "286",
+          "extractionUrl": "https://shamela.ws/book/10906/424",
+          "excerptArabic": "فمات أبو أمامة أسعد بن زرارة الأنصاري تلك الأيام بالذبحة. وكان من سادة الأنصار ومن نقبائهم الأبرار. ووجد النبي صلى الله عليه وسلم وجدا لموته، وكان قد كواه. ولم يجعل على بني النجار بعده نقيبا وقال: أنا نقيبكم. فكانوا يفخرون بذلك.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "al-baraa/death",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-baraa-ibn-marur",
+      "assertion": "مات البراء بن معرور في السنة الأولى من الهجرة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "death-of-al-baraa-ibn-marur",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/293-p3",
+          "volume": "السيرة 1",
+          "pageReference": "293",
+          "extractionUrl": "https://shamela.ws/book/10906/431",
+          "excerptArabic": "ومات فيها: البراء بن معرور السلمي أحد نقباء العقبة -رضي الله عنه- وهو أول من بايع النبي صلى الله عليه وسلم ليلة العقبة، وكان كبير الشأن.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/283-p1",
+          "volume": "السيرة 1",
+          "pageReference": "283",
+          "extractionUrl": "https://shamela.ws/book/10906/421",
+          "excerptArabic": "[السنة الأولى من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "al-baraa/first-to-pledge",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-baraa-ibn-marur",
+      "assertion": "أحد نقباء العقبة، وهو أول من بايع النبي صلى الله عليه وسلم ليلة العقبة، وكان كبير الشأن.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/293-p3",
+          "volume": "السيرة 1",
+          "pageReference": "293",
+          "extractionUrl": "https://shamela.ws/book/10906/431",
+          "excerptArabic": "ومات فيها: البراء بن معرور السلمي أحد نقباء العقبة -رضي الله عنه- وهو أول من بايع النبي صلى الله عليه وسلم ليلة العقبة، وكان كبير الشأن.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
     }
   ],
   "approval": {
-    "revision": "73b3ef421c6128bb",
+    "revision": "054111ce4a5a2ef3",
     "approvedAt": "2026-09-20",
     "approvedBy": "msskzx",
-    "note": "Approved for publication of chapters one and two. All eighty-four claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
+    "note": "Approved for publication of chapters one to three. All ninety-eight claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
   }
 }
