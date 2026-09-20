@@ -15,7 +15,9 @@ const aliIbnAbiTalib = {
     },
   },
   titles: [],
-  relations: [],
+  relations: [
+    { type: 'HUSBAND', inverse: 'WIFE', to: 'fatimah-bint-muhammad', claims: ['ali/husband-fatimah'] },
+  ],
 } satisfies CatalogPerson;
 
 export default aliIbnAbiTalib;
