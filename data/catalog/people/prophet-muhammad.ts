@@ -1,10 +1,10 @@
 import type { CatalogPerson } from '@/lib/catalog/types';
 
 /**
- * Authored from data/history/batches/prophet-muhammad-sira, chapter one only:
- * printed pages السيرة ١/٢٩ to ١/١٤٥, his lineage through the early
- * conversions. The sira runs to ١/٤٩٦ over thirteen chapters, so this is the
- * first instalment of a subject still being read.
+ * Authored from data/history/batches/prophet-muhammad-sira, chapters one and
+ * two: printed pages السيرة ١/٢٩ to ١/٢٧٦, his lineage through the hijra to
+ * Medina. The sira runs to ٢/٤٩٦ over thirteen chapters, so this is a subject
+ * still being read.
  *
  * He stays declared in prisma/personSeedData.ts, which keeps the catalog
  * additive for him: catalog:project connects what is here and leaves every
@@ -73,6 +73,10 @@ const prophetMuhammad = {
     { type: 'GRANDSON', inverse: 'GRANDFATHER', to: 'abd-al-muttalib-ibn-hashim', claims: ['prophet/grandfather'] },
     { type: 'PATERNAL_NEPHEW', inverse: 'PATERNAL_UNCLE', to: 'abu-talib', claims: ['prophet/uncle-abu-talib'] },
     { type: 'HUSBAND', inverse: 'WIFE', to: 'khadijah-bint-khuwaylid', claims: ['prophet/wife-khadijah'] },
+    // Both after Khadijah died and both before the hijra, which is where
+    // chapter two puts them. Khawlah bint Hakim named the two to him together.
+    { type: 'HUSBAND', inverse: 'WIFE', to: 'aisha-bint-abi-bakr', claims: ['prophet/wife-aishah'] },
+    { type: 'HUSBAND', inverse: 'WIFE', to: 'sawdah-bint-zamah', claims: ['prophet/wife-sawdah'] },
     // He freed Zayd and adopted him before the revelation; الأحزاب 5 ended the
     // adoption, and the manumission is what remained. PATRON is his side of it.
     { type: 'PATRON', inverse: 'MAWLA', to: 'zaid-ibn-harithah', claims: ['prophet/mawla-zayd'] },

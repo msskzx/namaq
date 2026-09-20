@@ -24514,12 +24514,1200 @@
           "accessedAt": "2026-09-19"
         }
       ]
+    },
+    {
+      "key": "uthman/hijra-habasha-first",
+      "subjectKind": "PERSON",
+      "subjectSlug": "uthman-ibn-affan",
+      "assertion": "كان من أول من هاجر إلى أرض الحبشة، في الرهط الذين سماهم ابن إسحاق.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "first-hijra-to-abyssinia",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/147-p3",
+          "volume": "السيرة 1",
+          "pageReference": "147",
+          "extractionUrl": "https://shamela.ws/book/10906/285",
+          "excerptArabic": "فخرج عثمان بزوجته، وأبو حذيفة ولد عتبة بن ربيعة بن عبد شمس بزوجته سهلة بنت سهيل بن عمرو فولدت له بالحبشة محمدا، والزبير بن العوام، ومصعب بن عمير العبدري، وعبد الرحمن بن عوف، وأبو سلمة بن عبد الأسد المخزومي، وزوجته أم سلمة أم المؤمنين، وعثمان بن مظعون الجمحي، وعامر بن ربيعة حليف آل الخطاب",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/147-p4",
+          "volume": "السيرة 1",
+          "pageReference": "147",
+          "extractionUrl": "https://shamela.ws/book/10906/285",
+          "excerptArabic": "أبي حثمة العدوية، وأبو سبرة بن أبي رهم بن عبد العزى العامري، وسهيل بن بيضاء، وهو سهيل بن وهب الحارثين, فكانوا أول من هاجر إلى الحبشة.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "abu-hudhayfah/hijra-habasha-first",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-hudhayfah",
+      "assertion": "كان من أول من هاجر إلى أرض الحبشة، في الرهط الذين سماهم ابن إسحاق.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "first-hijra-to-abyssinia",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/147-p3",
+          "volume": "السيرة 1",
+          "pageReference": "147",
+          "extractionUrl": "https://shamela.ws/book/10906/285",
+          "excerptArabic": "فخرج عثمان بزوجته، وأبو حذيفة ولد عتبة بن ربيعة بن عبد شمس بزوجته سهلة بنت سهيل بن عمرو فولدت له بالحبشة محمدا، والزبير بن العوام، ومصعب بن عمير العبدري، وعبد الرحمن بن عوف، وأبو سلمة بن عبد الأسد المخزومي، وزوجته أم سلمة أم المؤمنين، وعثمان بن مظعون الجمحي، وعامر بن ربيعة حليف آل الخطاب",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/147-p4",
+          "volume": "السيرة 1",
+          "pageReference": "147",
+          "extractionUrl": "https://shamela.ws/book/10906/285",
+          "excerptArabic": "أبي حثمة العدوية، وأبو سبرة بن أبي رهم بن عبد العزى العامري، وسهيل بن بيضاء، وهو سهيل بن وهب الحارثين, فكانوا أول من هاجر إلى الحبشة.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "musab/hijra-habasha-first",
+      "subjectKind": "PERSON",
+      "subjectSlug": "musab-ibn-umayr",
+      "assertion": "كان من أول من هاجر إلى أرض الحبشة، في الرهط الذين سماهم ابن إسحاق.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "first-hijra-to-abyssinia",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/147-p3",
+          "volume": "السيرة 1",
+          "pageReference": "147",
+          "extractionUrl": "https://shamela.ws/book/10906/285",
+          "excerptArabic": "فخرج عثمان بزوجته، وأبو حذيفة ولد عتبة بن ربيعة بن عبد شمس بزوجته سهلة بنت سهيل بن عمرو فولدت له بالحبشة محمدا، والزبير بن العوام، ومصعب بن عمير العبدري، وعبد الرحمن بن عوف، وأبو سلمة بن عبد الأسد المخزومي، وزوجته أم سلمة أم المؤمنين، وعثمان بن مظعون الجمحي، وعامر بن ربيعة حليف آل الخطاب",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/147-p4",
+          "volume": "السيرة 1",
+          "pageReference": "147",
+          "extractionUrl": "https://shamela.ws/book/10906/285",
+          "excerptArabic": "أبي حثمة العدوية، وأبو سبرة بن أبي رهم بن عبد العزى العامري، وسهيل بن بيضاء، وهو سهيل بن وهب الحارثين, فكانوا أول من هاجر إلى الحبشة.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "abu-salamah/hijra-habasha-first",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-salamah",
+      "assertion": "كان من أول من هاجر إلى أرض الحبشة، في الرهط الذين سماهم ابن إسحاق.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "first-hijra-to-abyssinia",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/147-p3",
+          "volume": "السيرة 1",
+          "pageReference": "147",
+          "extractionUrl": "https://shamela.ws/book/10906/285",
+          "excerptArabic": "فخرج عثمان بزوجته، وأبو حذيفة ولد عتبة بن ربيعة بن عبد شمس بزوجته سهلة بنت سهيل بن عمرو فولدت له بالحبشة محمدا، والزبير بن العوام، ومصعب بن عمير العبدري، وعبد الرحمن بن عوف، وأبو سلمة بن عبد الأسد المخزومي، وزوجته أم سلمة أم المؤمنين، وعثمان بن مظعون الجمحي، وعامر بن ربيعة حليف آل الخطاب",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/147-p4",
+          "volume": "السيرة 1",
+          "pageReference": "147",
+          "extractionUrl": "https://shamela.ws/book/10906/285",
+          "excerptArabic": "أبي حثمة العدوية، وأبو سبرة بن أبي رهم بن عبد العزى العامري، وسهيل بن بيضاء، وهو سهيل بن وهب الحارثين, فكانوا أول من هاجر إلى الحبشة.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "umm-salamah/hijra-habasha-first",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umm-salamah",
+      "assertion": "كان من أول من هاجر إلى أرض الحبشة، في الرهط الذين سماهم ابن إسحاق.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "first-hijra-to-abyssinia",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/147-p3",
+          "volume": "السيرة 1",
+          "pageReference": "147",
+          "extractionUrl": "https://shamela.ws/book/10906/285",
+          "excerptArabic": "فخرج عثمان بزوجته، وأبو حذيفة ولد عتبة بن ربيعة بن عبد شمس بزوجته سهلة بنت سهيل بن عمرو فولدت له بالحبشة محمدا، والزبير بن العوام، ومصعب بن عمير العبدري، وعبد الرحمن بن عوف، وأبو سلمة بن عبد الأسد المخزومي، وزوجته أم سلمة أم المؤمنين، وعثمان بن مظعون الجمحي، وعامر بن ربيعة حليف آل الخطاب",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/147-p4",
+          "volume": "السيرة 1",
+          "pageReference": "147",
+          "extractionUrl": "https://shamela.ws/book/10906/285",
+          "excerptArabic": "أبي حثمة العدوية، وأبو سبرة بن أبي رهم بن عبد العزى العامري، وسهيل بن بيضاء، وهو سهيل بن وهب الحارثين, فكانوا أول من هاجر إلى الحبشة.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ibn-mazun/hijra-habasha-first",
+      "subjectKind": "PERSON",
+      "subjectSlug": "uthman-ibn-mazun",
+      "assertion": "كان من أول من هاجر إلى أرض الحبشة، في الرهط الذين سماهم ابن إسحاق.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "first-hijra-to-abyssinia",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/147-p3",
+          "volume": "السيرة 1",
+          "pageReference": "147",
+          "extractionUrl": "https://shamela.ws/book/10906/285",
+          "excerptArabic": "فخرج عثمان بزوجته، وأبو حذيفة ولد عتبة بن ربيعة بن عبد شمس بزوجته سهلة بنت سهيل بن عمرو فولدت له بالحبشة محمدا، والزبير بن العوام، ومصعب بن عمير العبدري، وعبد الرحمن بن عوف، وأبو سلمة بن عبد الأسد المخزومي، وزوجته أم سلمة أم المؤمنين، وعثمان بن مظعون الجمحي، وعامر بن ربيعة حليف آل الخطاب",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/147-p4",
+          "volume": "السيرة 1",
+          "pageReference": "147",
+          "extractionUrl": "https://shamela.ws/book/10906/285",
+          "excerptArabic": "أبي حثمة العدوية، وأبو سبرة بن أبي رهم بن عبد العزى العامري، وسهيل بن بيضاء، وهو سهيل بن وهب الحارثين, فكانوا أول من هاجر إلى الحبشة.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "amir-ibn-rabiah/hijra-habasha-first",
+      "subjectKind": "PERSON",
+      "subjectSlug": "amir-ibn-rabiah",
+      "assertion": "كان من أول من هاجر إلى أرض الحبشة، في الرهط الذين سماهم ابن إسحاق.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "first-hijra-to-abyssinia",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/147-p3",
+          "volume": "السيرة 1",
+          "pageReference": "147",
+          "extractionUrl": "https://shamela.ws/book/10906/285",
+          "excerptArabic": "فخرج عثمان بزوجته، وأبو حذيفة ولد عتبة بن ربيعة بن عبد شمس بزوجته سهلة بنت سهيل بن عمرو فولدت له بالحبشة محمدا، والزبير بن العوام، ومصعب بن عمير العبدري، وعبد الرحمن بن عوف، وأبو سلمة بن عبد الأسد المخزومي، وزوجته أم سلمة أم المؤمنين، وعثمان بن مظعون الجمحي، وعامر بن ربيعة حليف آل الخطاب",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/147-p4",
+          "volume": "السيرة 1",
+          "pageReference": "147",
+          "extractionUrl": "https://shamela.ws/book/10906/285",
+          "excerptArabic": "أبي حثمة العدوية، وأبو سبرة بن أبي رهم بن عبد العزى العامري، وسهيل بن بيضاء، وهو سهيل بن وهب الحارثين, فكانوا أول من هاجر إلى الحبشة.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "suhail/hijra-habasha-first",
+      "subjectKind": "PERSON",
+      "subjectSlug": "suhail-ibn-bayda",
+      "assertion": "كان من أول من هاجر إلى أرض الحبشة، في الرهط الذين سماهم ابن إسحاق.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "first-hijra-to-abyssinia",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/147-p4",
+          "volume": "السيرة 1",
+          "pageReference": "147",
+          "extractionUrl": "https://shamela.ws/book/10906/285",
+          "excerptArabic": "أبي حثمة العدوية، وأبو سبرة بن أبي رهم بن عبد العزى العامري، وسهيل بن بيضاء، وهو سهيل بن وهب الحارثين, فكانوا أول من هاجر إلى الحبشة.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ruqayyah/hijra-habasha-first",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ruqayyah-bint-muhammad",
+      "assertion": "خرج بها زوجها عثمان بن عفان إلى أرض الحبشة، فكانا أول من هاجر بأهله بعد لوط.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "first-hijra-to-abyssinia",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/146-p2",
+          "volume": "السيرة 1",
+          "pageReference": "146",
+          "extractionUrl": "https://shamela.ws/book/10906/284",
+          "excerptArabic": "خرج عثمان برقية بنت رسول الله صلى الله عليه وسلم إلى الحبشة، فأبطأ خبرهم، فقدمت امرأة من قريش, فقالت: يا محمد قد رأيت ختنك ومعه امرأته، فقال: \"على أي حال رأيتهما؟ \" قالت: رأيته حمل امرأته على حمار من هذه الدبابة، وهو يسوقها، فقال رسول الله صلى الله عليه وسلم: \"صحبهما الله، إن عثمان أول من هاجر بأهله بعد لوط\".",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "uthman/hijra-habasha-bi-ahlihi",
+      "subjectKind": "PERSON",
+      "subjectSlug": "uthman-ibn-affan",
+      "assertion": "قال صلى الله عليه وسلم: إن عثمان أول من هاجر بأهله بعد لوط، خرج برقية إلى الحبشة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/146-p2",
+          "volume": "السيرة 1",
+          "pageReference": "146",
+          "extractionUrl": "https://shamela.ws/book/10906/284",
+          "excerptArabic": "خرج عثمان برقية بنت رسول الله صلى الله عليه وسلم إلى الحبشة، فأبطأ خبرهم، فقدمت امرأة من قريش, فقالت: يا محمد قد رأيت ختنك ومعه امرأته، فقال: \"على أي حال رأيتهما؟ \" قالت: رأيته حمل امرأته على حمار من هذه الدبابة، وهو يسوقها، فقال رسول الله صلى الله عليه وسلم: \"صحبهما الله، إن عثمان أول من هاجر بأهله بعد لوط\".",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "jaafar/hijra-habasha-second",
+      "subjectKind": "PERSON",
+      "subjectSlug": "jaafar-ibn-abi-talib",
+      "assertion": "خرج جعفر بن أبي طالب إلى الحبشة، وكان خطيب المسلمين بين يدي النجاشي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "second-hijra-to-abyssinia",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/147-p5",
+          "volume": "السيرة 1",
+          "pageReference": "147",
+          "extractionUrl": "https://shamela.ws/book/10906/285",
+          "excerptArabic": "قال: ثم خرج جعفر بن أبي طالب، وتتابع المسلمون إلى الحبشة. ثم سمى ابن إسحاق جماعتهم، وقال: فكان جميع من لحق بأرض الحبشة، أو ولد بها، ثلاثة وثمانين رجلا، فعبدوا الله وحمدوا جوار النجاشي, فقال عبد الله بن الحارث بن قيس السهمي:",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/154-p1",
+          "volume": "السيرة 1",
+          "pageReference": "154",
+          "extractionUrl": "https://shamela.ws/book/10906/292",
+          "excerptArabic": "أيها الملك، كنا قوما أهل جاهلية نعبد الأصنام، ونأكل الميتة، ونأتي الفواحش، ونقطع الأرحام، ونسيء الجوار، ويأكل القوي منا الضعيف، فكنا على ذلك, حتى بعث الله إلينا رسولا منا نعرف نسبه، وصدقه، وأمانته، وعفافه",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/hijra-habasha-second",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "الهجرة الثانية إلى الحبشة، وفيها ردَّ النجاشي رسولَي قريش ولم يسلم المسلمين إليهما.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "second-hijra-to-abyssinia",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/154-p2",
+          "volume": "السيرة 1",
+          "pageReference": "154",
+          "extractionUrl": "https://shamela.ws/book/10906/292",
+          "excerptArabic": "إن هذا، والذي جاء به موسى ليخرج من مشكاة واحدة، انطلقا، فلا والله لا أسلمهم إليكما ولا يكاد.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/152-p3",
+          "volume": "السيرة 1",
+          "pageReference": "152",
+          "extractionUrl": "https://shamela.ws/book/10906/290",
+          "excerptArabic": "وذكر الواقدي أن الهجرة الثانية كانت سنة خمسة من المبعث.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "zubayr/nile-habasha",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "لما نازع النجاشيَّ رجلٌ في ملكه، انتدب الزبير فسبح على قربة حتى حضر الوقعة وجاء الصحابة بالخبر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "second-hijra-to-abyssinia",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/155-p1",
+          "volume": "السيرة 1",
+          "pageReference": "155",
+          "extractionUrl": "https://shamela.ws/book/10906/293",
+          "excerptArabic": "فقال أصحاب رسول الله صلى الله عليه وسلم: من رجل يخرج حتى يحضر الوقعة، ثم يأتينا بالخبر؟ فقال الزبير: أنا، فنفخوا له قربة، فجعلها في صدره، ثم سبح عليها حتى خرج إلى ناحية النيل التي بها يلتقي القوم، ثم انطلق حتى حضرهم، ودعونا الله تعالى للنجاشي، فإنا لعلى ذلك، إذ طلع الزبير يسعى فلمع بثوبه، وهو يقول: ألا أبشروا، فقد ظهر النجاشي، وقد أهلك الله عدوه، ومكن له في بلاده.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/splitting-moon",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "سأل أهل مكة آية فانشق القمر فرقتين، وقال صلى الله عليه وسلم: اشهدوا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "splitting-of-the-moon",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/169-p2",
+          "volume": "السيرة 1",
+          "pageReference": "169",
+          "extractionUrl": "https://shamela.ws/book/10906/307",
+          "excerptArabic": "إن أهل مكة سألوا نبي الله صلى الله عليه وسلم أن يريهم آية، فأراهم انشقاق القمر مرتين. أخرجاه من حديث شيبان، لكن لم يقل البخاري مرتين.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/169-p4",
+          "volume": "السيرة 1",
+          "pageReference": "169",
+          "extractionUrl": "https://shamela.ws/book/10906/307",
+          "excerptArabic": "رأيت القمر منشقا شقتين بمكة، قبل مخرج النبي صلى الله عليه وسلم شقة على أبي قبيس، وشقة على السويداء، فقالوا: سحر القمر.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/shib-abi-talib",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "حصرت قريش بني هاشم في الشعب ثلاث سنين بصحيفة تعاهدوا فيها، حتى بعث الله على الصحيفة الأرضة فلحستها.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "boycott-of-banu-hashim",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/179-p2",
+          "volume": "السيرة 1",
+          "pageReference": "179",
+          "extractionUrl": "https://shamela.ws/book/10906/317",
+          "excerptArabic": "فلما رأى أبو طالب عملهم جمع بني أبيه وأمرهم أن يدخلوا رسول الله صلى الله عليه وسلم شعبهم ويمنعوه ممن أراد قتله، فاجتمعوا على ذلك مسلمهم وكافرهم، فمنهم من فعله حمية، ومنهم من فعله إيمانا، فلما عرفت قريش أن القوم قد منعوه أجمعوا أمرهم أن لا يجالسوهم ولا يبايعوهم، حتى يسلموا رسول الله صلى الله عليه وسلم للقتل، وكتبوا في مكرهم صحيفة وعهودا ومواثيق، لا يقبلوا من بني هاشم أبدا صلحا، ولا تأخذهم بهم رأفة حتى يسلموه للقتل.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/179-p3",
+          "volume": "السيرة 1",
+          "pageReference": "179",
+          "extractionUrl": "https://shamela.ws/book/10906/317",
+          "excerptArabic": "فلبث بنو هاشم في شعبهم، يعني ثلاث سنين، واشتد عليهم البلاء، وقطعوا عنهم الأسواق، وكان أبو طالب إذا نام الناس أمر رسول الله صلى الله عليه وسلم فاضطجع على فراشه، حتى يرى ذلك من أراد مكرا به واغتياله، فإذا نام الناس أمر أحد بنيه أو إخوته فاضطجع على فراش رسول الله صلى الله عليه وسلم. ويأتي رسول الله صلى الله عليه وسلم فراش ذلك فينام عليه. فلما كان رأس ثلاث سنين، تلاوم رجال من بني عبد مناف، ومن بني قصي، ورجال أمهاتهم",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/180-p2",
+          "volume": "السيرة 1",
+          "pageReference": "180",
+          "extractionUrl": "https://shamela.ws/book/10906/318",
+          "excerptArabic": "وبعث الله على صحيفتهم الأرضة، فلحست كل ما كان فيها من عهد وميثاق، ويقال: كانت معلقة في سقف البيت، فلم تترك اسما لله إلا لحسته، وبقي ما كان فيها من شرك أو ظلم، فأطلع الله رسوله على ذلك، فأخبر به أبا طالب، فقال أبو طالب: لا والثواقب ما كذبني. فانطلق يمشي بعصابة من بني عبد المطلب، حتى أتى المسجد وهو حافل من قريش، فأنكروا ذلك، فقال أبو طالب: قد حدثت أمور بينكم لم نذكرها لكم، فائتوا بصحيفتكم التي تعاهدتم عليها، فلعله أن يكون بيننا وبينكم صلح. فأتوا بها وقالوا: قد آن لكم أن تقبلوا وترجعوا إلى أمر يجمع قومكم، فإنما قطع بيننا وبينكم رجل واحد، جعلتموه خطرا للهلكة.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "abu-talib/shib",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-talib",
+      "assertion": "جمع أبو طالب بني أبيه فأدخلوا رسول الله صلى الله عليه وسلم شعبهم ومنعوه ممن أراد قتله.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "boycott-of-banu-hashim",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/179-p2",
+          "volume": "السيرة 1",
+          "pageReference": "179",
+          "extractionUrl": "https://shamela.ws/book/10906/317",
+          "excerptArabic": "فلما رأى أبو طالب عملهم جمع بني أبيه وأمرهم أن يدخلوا رسول الله صلى الله عليه وسلم شعبهم ويمنعوه ممن أراد قتله، فاجتمعوا على ذلك مسلمهم وكافرهم، فمنهم من فعله حمية، ومنهم من فعله إيمانا، فلما عرفت قريش أن القوم قد منعوه أجمعوا أمرهم أن لا يجالسوهم ولا يبايعوهم، حتى يسلموا رسول الله صلى الله عليه وسلم للقتل، وكتبوا في مكرهم صحيفة وعهودا ومواثيق، لا يقبلوا من بني هاشم أبدا صلحا، ولا تأخذهم بهم رأفة حتى يسلموه للقتل.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/isra",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "أسري به من المسجد الحرام إلى بيت المقدس على البراق قبل الهجرة بسنة، فصلى بالأنبياء.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "al-isra-wal-miraj",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/197-p2",
+          "volume": "السيرة 1",
+          "pageReference": "197",
+          "extractionUrl": "https://shamela.ws/book/10906/335",
+          "excerptArabic": "أسري برسول الله صلى الله عليه وسلم إلى بيت المقدس قبل الهجرة بسنة.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/217-p3",
+          "volume": "السيرة 1",
+          "pageReference": "217",
+          "extractionUrl": "https://shamela.ws/book/10906/355",
+          "excerptArabic": "أتيت بالبراق، وهو دابة أبيض، فركبته حتى أتينا ببيت المقدس، فربطته بالحلقة التي تربط بها الأنبياء، ثم دخلت",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/miraj-salah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "عرج به إلى السموات، وفرضت الصلوات خمسين ثم خففت إلى خمس بمراجعة موسى عليه السلام.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "description",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/212-p2",
+          "volume": "السيرة 1",
+          "pageReference": "212",
+          "extractionUrl": "https://shamela.ws/book/10906/350",
+          "excerptArabic": "ففرض الله -عز وجل- على أمتي خمسين صلاة، قال: فرجعت بذلك حتى أمر بموسى، فقال: ماذا فرض ربك على أمتك؟ قلت: فرض عليهم خمسين صلاة. قال موسى: فراجع ربك فإن أمتك لا تطيق ذلك. قال: فراجعت ربي، فوضع عني شطرها، فرجعت إلى موسى فأخبرته، قال: فراجع ربك، فإن أمتك لا تطيق ذلك. فراجعت ربي فقال: هي خمس وهي خمسون لا يبدل القول لدي. فرجعت إلى موسى فقال: ارجع إلى ربك.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "abu-bakr/siddiq",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-bakr-as-siddiq",
+      "assertion": "لما أسري بالنبي صلى الله عليه وسلم وكذبه الناس صدقه أبو بكر، فلذلك سمي الصديق.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "HOLDS_TITLE",
+      "relatedSubjectKind": "TITLE",
+      "relatedSubjectSlug": "siddiq-al-ummah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/202-p4",
+          "volume": "السيرة 1",
+          "pageReference": "202",
+          "extractionUrl": "https://shamela.ws/book/10906/340",
+          "excerptArabic": "قال: أوقال ذلك؟ قالوا: نعم. قال: لئن قال ذلك لقد صدق. قالوا: وتصدقه! قال: نعم إني لأصدقه بما هو أبعد من ذلك، أصدقه بخبر السماء في غدوة أو روحة. فلذلك سمي أبو بكر الصديق.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/death-khadijah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "khadijah-bint-khuwaylid",
+      "assertion": "توفيت خديجة وأبو طالب في عام واحد، فتتابعت على رسول الله صلى الله عليه وسلم المصائب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "death-of-khadijah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/194-p3",
+          "volume": "السيرة 1",
+          "pageReference": "194",
+          "extractionUrl": "https://shamela.ws/book/10906/332",
+          "excerptArabic": "ثم إن خديجة بنت خويلد رضي الله عنها وأبا طالب ماتا في عام واحد فتتابعت على رسول الله صلى الله عليه وسلم المصائب بهلاكهما.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/194-p5",
+          "volume": "السيرة 1",
+          "pageReference": "194",
+          "extractionUrl": "https://shamela.ws/book/10906/332",
+          "excerptArabic": "وذكر الواقدي أنهم خرجوا من الشعب قبل الهجرة بثلاث سنين، وأنهما توفيا في ذلك العام، وتوفيت خديجة قبل أبي طالب بخمسة وثلاثين يوما.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/death-khadijah-order-alt",
+      "subjectKind": "PERSON",
+      "subjectSlug": "khadijah-bint-khuwaylid",
+      "assertion": "وقيل: كان موتها بعد موت أبي طالب بثلاثة أيام، لا قبله بخمسة وثلاثين يوما.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "description",
+      "disputed": true,
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/194-p6",
+          "volume": "السيرة 1",
+          "pageReference": "194",
+          "extractionUrl": "https://shamela.ws/book/10906/332",
+          "excerptArabic": "وذكر أبو عبد الله الحاكم أن موتها كان بعد موت أبي طالب بثلاثة أيام، وكذا قال غيره.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/death-abu-talib",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-talib",
+      "assertion": "مات أبو طالب على ملة عبد المطلب بعد أن عرض عليه النبي صلى الله عليه وسلم كلمة التوحيد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "death-of-abu-talib",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/189-p5",
+          "volume": "السيرة 1",
+          "pageReference": "189",
+          "extractionUrl": "https://shamela.ws/book/10906/327",
+          "excerptArabic": "لما حضرت أبا طالب الوفاة دخل عليه النبي صلى الله عليه وسلم فوجد عنده أبا جهل، وعبد الله بن أبي أمية بن المغيرة، فقال له النبي صلى الله عليه وسلم: \"يا عم قل: لا إله إلا الله أحاج لك بها عند الله\". فقالا: أي أبا طالب! أترغب عن ملة عبد المطلب! قال: فكان آخر كلمة أن قال: على ملة عبد المطلب",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/194-p3",
+          "volume": "السيرة 1",
+          "pageReference": "194",
+          "extractionUrl": "https://shamela.ws/book/10906/332",
+          "excerptArabic": "ثم إن خديجة بنت خويلد رضي الله عنها وأبا طالب ماتا في عام واحد فتتابعت على رسول الله صلى الله عليه وسلم المصائب بهلاكهما.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "khadijah/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "khadijah-bint-khuwaylid",
+      "assertion": "قال صلى الله عليه وسلم: آمنت بي إذ كفر بي الناس، وآوتني إذ رفضني الناس، وصدقتني إذ كذبني الناس، ورزقت منها الولد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/195-p5",
+          "volume": "السيرة 1",
+          "pageReference": "195",
+          "extractionUrl": "https://shamela.ws/book/10906/333",
+          "excerptArabic": "والله لقد آمنت بي إذ كفر بي الناس، وآوتني إذ رفضني الناس، وصدقتني إذ كذبني الناس، ورزقت منها الولد، وحرمتموه مني\". قالت: فغدا وراح عليَّ بها شهرا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "prophet/wife-aishah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "تزوج عائشة بنت أبي بكر بعد وفاة خديجة وقبل الهجرة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "HUSBAND",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "aisha-bint-abi-bakr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/229-p2",
+          "volume": "السيرة 1",
+          "pageReference": "229",
+          "extractionUrl": "https://shamela.ws/book/10906/367",
+          "excerptArabic": "تزوجني رسول الله صلى الله عليه وسلم متوفى خديجة، قبل الهجرة، وأنا ابنة ست، وأدخلت عليه وأنا ابنة تسع سنين جاءني نسوة وأنا ألعب على أرجوحة، وأنا مجممة، فهيأنني وصنعنني، ثم أتين بي إليه. قال عروة: ومكثت عنده تسع سنين. وهذا حديث صحيح.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "prophet/wife-sawdah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "تزوج سودة بنت زمعة بعد وفاة خديجة، وهي الثيب التي ذكرتها له خولة بنت حكيم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "HUSBAND",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "sawdah-bint-zamah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/230-p1",
+          "volume": "السيرة 1",
+          "pageReference": "230",
+          "extractionUrl": "https://shamela.ws/book/10906/368",
+          "excerptArabic": "أما البكر فعائشة ابنة أحب خلق الله إليك. وأما الثيب فسودة بنت زمعة، قد آمنت بك واتبعتك. قال: \"اذكريهما علي\". قالت: فأتيت أم رومان فقلت: يا أم رومان ماذا أدخل الله عليكم من الخير والبركة! قالت: ماذا؟ قالت: رسول الله صلى الله عليه وسلم يذكر عائشة. قالت: انتظري فإن أبا بكر آت. فجاء أبو بكر فذكرت ذلك له. فقال: أوتصلح له وهي ابنة أخيه؟ فقال رسول الله صلى الله عليه وسلم: \"أنا أخوه وهو أخي وابنته تصلح لي\". قالت: وقام أبو بكر، فقالت لي أم رومان: إن المطعم بن عدي قد كان ذكرها على ابنه، ووالله ما أخلف وعدا قط، تعني أبا بكر. قالت: فأتى أبو بكر المطعم فقال: ما تقول في أمر هذه الجارية. قالت:",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/taif",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "عمد إلى ثقيف بالطائف يرجو أن يؤووه فردوه، فعرض عليه ملك الجبال أن يطبق عليهم الأخشبين فأبى.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "journey-to-taif",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/231-p4",
+          "volume": "السيرة 1",
+          "pageReference": "231",
+          "extractionUrl": "https://shamela.ws/book/10906/369",
+          "excerptArabic": "فعمد لثقيف بالطائف، رجاء أن يؤوه، فوجد ثلاثة نفر منهم، هم سادة ثقيف: عبد ياليل، وحبيب، ومسعود بنو عمرو، فعرض عليهم نفسه، وشكا إليهم البلاء، وما انتهك منه قومه. فقال أحدهم: أنا أسرق أستار الكعبة إن كان الله بعثك قط. وقال الآخر: أعجز على الله أن يرسل غيرك. وقال الآخر: والله لا أكلمك بعد مجلسك هذا، والله لئن كنت رسول الله",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/233-p1",
+          "volume": "السيرة 1",
+          "pageReference": "233",
+          "extractionUrl": "https://shamela.ws/book/10906/371",
+          "excerptArabic": "إن الله قد سمع قول قومك لك وما ردوا عليك، وقد بعث إليك ملك الجبال لتأمره بما شئت فيهم. ثم ناداني ملك الجبال فسلم علي، ثم قال: يا محمد إن الله قد سمع قومك، وأنا ملك الجبال، قد بعثني إليك ربك لتأمرني بما شئت، إن شئت يطبق عليهم الأخشبين\". فقال له رسول الله صلى الله عليه وسلم: \"بل أرجو أن يخرج الله من أسرارهم -أو قال: من أصلابهم- من يعبد الله لا يشرك به شيئا\".",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/aqaba-first",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "بايعه اثنا عشر رجلا من الأنصار ليلة العقبة الأولى بيعة النساء، قبل أن تفترض الحرب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "first-pledge-of-aqaba",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/241-p1",
+          "volume": "السيرة 1",
+          "pageReference": "241",
+          "extractionUrl": "https://shamela.ws/book/10906/379",
+          "excerptArabic": "بايعنا رسول الله صلى الله عليه وسلم ليلة العقبة الأولى، ونحن اثنا عشر رجلا، فبايعناه بيعة النساء على أن لا نشرك بالله شيئا، ولا نسرق، ولا نزني، ولا نقتل أولادنا، ولا نأتي ببهتان نفتريه بين أيدينا وأرجلنا، ولا نعصيه في معروف، وذلك قبل أن تفترض الحرب",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/240-p4",
+          "volume": "السيرة 1",
+          "pageReference": "240",
+          "extractionUrl": "https://shamela.ws/book/10906/378",
+          "excerptArabic": "وافى الموسم من الأنصار اثنا عشر رجلا، فلقوا رسول الله صلى الله عليه وسلم بالعقبة، وهي \"العقبة الأولى\"، فبايعوا رسول الله صلى الله عليه وسلم على بيعة النساء، وذلك قبل أن تفترض عليهم الحرب، وهم أسعد بن زرارة، وعوف، ومعوذ ابنا الحارث وهما ابن عفراء، وذكوان بن عبد قيس، ورافع بن مالك، وعبادة بن الصامت، ويزيد بن ثعلبة البلوي، وعباس بن عبادة بن نضلة، وقطبة بن عامر، وعقبة بن عامر، وهم من الخزرج، وأبو الهيثم ابن التيهان، وعويم بن ساعدة، وهما من الأوس.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ubadah/aqaba-first",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ubadah-ibn-al-samit",
+      "assertion": "شهد العقبة الأولى، وهو راوي حديثها: بايعنا رسول الله ونحن اثنا عشر رجلا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "first-pledge-of-aqaba",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/241-p1",
+          "volume": "السيرة 1",
+          "pageReference": "241",
+          "extractionUrl": "https://shamela.ws/book/10906/379",
+          "excerptArabic": "بايعنا رسول الله صلى الله عليه وسلم ليلة العقبة الأولى، ونحن اثنا عشر رجلا، فبايعناه بيعة النساء على أن لا نشرك بالله شيئا، ولا نسرق، ولا نزني، ولا نقتل أولادنا، ولا نأتي ببهتان نفتريه بين أيدينا وأرجلنا، ولا نعصيه في معروف، وذلك قبل أن تفترض الحرب",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "asad/aqaba-first",
+      "subjectKind": "PERSON",
+      "subjectSlug": "asad-ibn-zurarah",
+      "assertion": "شهد العقبة الأولى في الاثني عشر الذين سماهم ابن إسحاق.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "first-pledge-of-aqaba",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/240-p4",
+          "volume": "السيرة 1",
+          "pageReference": "240",
+          "extractionUrl": "https://shamela.ws/book/10906/378",
+          "excerptArabic": "وافى الموسم من الأنصار اثنا عشر رجلا، فلقوا رسول الله صلى الله عليه وسلم بالعقبة، وهي \"العقبة الأولى\"، فبايعوا رسول الله صلى الله عليه وسلم على بيعة النساء، وذلك قبل أن تفترض عليهم الحرب، وهم أسعد بن زرارة، وعوف، ومعوذ ابنا الحارث وهما ابن عفراء، وذكوان بن عبد قيس، ورافع بن مالك، وعبادة بن الصامت، ويزيد بن ثعلبة البلوي، وعباس بن عبادة بن نضلة، وقطبة بن عامر، وعقبة بن عامر، وهم من الخزرج، وأبو الهيثم ابن التيهان، وعويم بن ساعدة، وهما من الأوس.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "uwaym/aqaba-first",
+      "subjectKind": "PERSON",
+      "subjectSlug": "uwaym-ibn-saidah",
+      "assertion": "شهد العقبة الأولى في الاثني عشر الذين سماهم ابن إسحاق.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "first-pledge-of-aqaba",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/240-p4",
+          "volume": "السيرة 1",
+          "pageReference": "240",
+          "extractionUrl": "https://shamela.ws/book/10906/378",
+          "excerptArabic": "وافى الموسم من الأنصار اثنا عشر رجلا، فلقوا رسول الله صلى الله عليه وسلم بالعقبة، وهي \"العقبة الأولى\"، فبايعوا رسول الله صلى الله عليه وسلم على بيعة النساء، وذلك قبل أن تفترض عليهم الحرب، وهم أسعد بن زرارة، وعوف، ومعوذ ابنا الحارث وهما ابن عفراء، وذكوان بن عبد قيس، ورافع بن مالك، وعبادة بن الصامت، ويزيد بن ثعلبة البلوي، وعباس بن عبادة بن نضلة، وقطبة بن عامر، وعقبة بن عامر، وهم من الخزرج، وأبو الهيثم ابن التيهان، وعويم بن ساعدة، وهما من الأوس.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "abu-al-haytham/aqaba-first",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-al-haytham-ibn-at-tayyihan",
+      "assertion": "شهد العقبة الأولى في الاثني عشر الذين سماهم ابن إسحاق.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "first-pledge-of-aqaba",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/240-p4",
+          "volume": "السيرة 1",
+          "pageReference": "240",
+          "extractionUrl": "https://shamela.ws/book/10906/378",
+          "excerptArabic": "وافى الموسم من الأنصار اثنا عشر رجلا، فلقوا رسول الله صلى الله عليه وسلم بالعقبة، وهي \"العقبة الأولى\"، فبايعوا رسول الله صلى الله عليه وسلم على بيعة النساء، وذلك قبل أن تفترض عليهم الحرب، وهم أسعد بن زرارة، وعوف، ومعوذ ابنا الحارث وهما ابن عفراء، وذكوان بن عبد قيس، ورافع بن مالك، وعبادة بن الصامت، ويزيد بن ثعلبة البلوي، وعباس بن عبادة بن نضلة، وقطبة بن عامر، وعقبة بن عامر، وهم من الخزرج، وأبو الهيثم ابن التيهان، وعويم بن ساعدة، وهما من الأوس.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/aqaba-second",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "بايعه سبعون من الأنصار ليلة العقبة الثانية على النصرة والمنع، وأخرج منهم اثني عشر نقيبا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "second-pledge-of-aqaba",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/247-p2",
+          "volume": "السيرة 1",
+          "pageReference": "247",
+          "extractionUrl": "https://shamela.ws/book/10906/385",
+          "excerptArabic": "ثم ائتمرنا واجتمعنا سبعين رجلا منا، فقلنا: حتى متى نذر رسول الله صلى الله عليه وسلم يطوف في جبال مكة ويخاف. فرحلنا حتى قدمنا عليه في الموسم، فواعدنا شعب العقبة، فاجتمعنا فيه من رجل ورجلين، حتى توافينا عنده، فقلنا: يا رسول الله علام نبايعك؟ قال: \"على السمع والطاعة في النشاط والكسل، وعلى النفقة في العسر واليسر، وعلى الأمر بالمعروف والنهي عن المنكر، وعلى أن تقولوا في الله، لا تأخذكم فيه لومة لائم، وعلى أن تنصروني إذا قدمت عليكم يثرب، تمنعوني مما تمنعون منه أنفسكم وأزواجكم وأبناءكم، ولكم الجنة\".",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/252-p1",
+          "volume": "السيرة 1",
+          "pageReference": "252",
+          "extractionUrl": "https://shamela.ws/book/10906/390",
+          "excerptArabic": "أخرجوا إلي منكم اثني عشر نقيبا\". فأخرجوهم له، فكان نقيب بني النجار: أسعد بن زرارة، ونقيب بني سلمة: البراء بن معرور، وعبد الله بن عمرو بن حرام، ونقيب بني ساعدة: سعد بن عبادة، والمنذر ابن عمرو، ونقيب بني زريق: رافع بن مالك، ونقيب بني الحارث بن الخزرج: عبد الله بن رواحة، وسعد بن الربيع، ونقيب بني عوف بن الخزرج: عبادة بن الصامت -وبعضهم جعل بدل عبادة بن الصامت خارجة بن زيد- ونقيب بني عمرو بن عوف: سعد بن خيثمة، ونقيب بني عبد الأشهل -وهم من الأوس- أسيد بن حضير، وأبو الهيثم بن التيهان",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "asad/aqaba-second",
+      "subjectKind": "PERSON",
+      "subjectSlug": "asad-ibn-zurarah",
+      "assertion": "كان أحد النقباء الاثني عشر الذين أخرجهم الأنصار ليلة العقبة الثانية.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "second-pledge-of-aqaba",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/252-p1",
+          "volume": "السيرة 1",
+          "pageReference": "252",
+          "extractionUrl": "https://shamela.ws/book/10906/390",
+          "excerptArabic": "أخرجوا إلي منكم اثني عشر نقيبا\". فأخرجوهم له، فكان نقيب بني النجار: أسعد بن زرارة، ونقيب بني سلمة: البراء بن معرور، وعبد الله بن عمرو بن حرام، ونقيب بني ساعدة: سعد بن عبادة، والمنذر ابن عمرو، ونقيب بني زريق: رافع بن مالك، ونقيب بني الحارث بن الخزرج: عبد الله بن رواحة، وسعد بن الربيع، ونقيب بني عوف بن الخزرج: عبادة بن الصامت -وبعضهم جعل بدل عبادة بن الصامت خارجة بن زيد- ونقيب بني عمرو بن عوف: سعد بن خيثمة، ونقيب بني عبد الأشهل -وهم من الأوس- أسيد بن حضير، وأبو الهيثم بن التيهان",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "al-baraa/aqaba-second",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-baraa-ibn-marur",
+      "assertion": "كان أحد النقباء الاثني عشر الذين أخرجهم الأنصار ليلة العقبة الثانية.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "second-pledge-of-aqaba",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/252-p1",
+          "volume": "السيرة 1",
+          "pageReference": "252",
+          "extractionUrl": "https://shamela.ws/book/10906/390",
+          "excerptArabic": "أخرجوا إلي منكم اثني عشر نقيبا\". فأخرجوهم له، فكان نقيب بني النجار: أسعد بن زرارة، ونقيب بني سلمة: البراء بن معرور، وعبد الله بن عمرو بن حرام، ونقيب بني ساعدة: سعد بن عبادة، والمنذر ابن عمرو، ونقيب بني زريق: رافع بن مالك، ونقيب بني الحارث بن الخزرج: عبد الله بن رواحة، وسعد بن الربيع، ونقيب بني عوف بن الخزرج: عبادة بن الصامت -وبعضهم جعل بدل عبادة بن الصامت خارجة بن زيد- ونقيب بني عمرو بن عوف: سعد بن خيثمة، ونقيب بني عبد الأشهل -وهم من الأوس- أسيد بن حضير، وأبو الهيثم بن التيهان",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "saad-ubadah/aqaba-second",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-ubadah",
+      "assertion": "كان أحد النقباء الاثني عشر الذين أخرجهم الأنصار ليلة العقبة الثانية.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "second-pledge-of-aqaba",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/252-p1",
+          "volume": "السيرة 1",
+          "pageReference": "252",
+          "extractionUrl": "https://shamela.ws/book/10906/390",
+          "excerptArabic": "أخرجوا إلي منكم اثني عشر نقيبا\". فأخرجوهم له، فكان نقيب بني النجار: أسعد بن زرارة، ونقيب بني سلمة: البراء بن معرور، وعبد الله بن عمرو بن حرام، ونقيب بني ساعدة: سعد بن عبادة، والمنذر ابن عمرو، ونقيب بني زريق: رافع بن مالك، ونقيب بني الحارث بن الخزرج: عبد الله بن رواحة، وسعد بن الربيع، ونقيب بني عوف بن الخزرج: عبادة بن الصامت -وبعضهم جعل بدل عبادة بن الصامت خارجة بن زيد- ونقيب بني عمرو بن عوف: سعد بن خيثمة، ونقيب بني عبد الأشهل -وهم من الأوس- أسيد بن حضير، وأبو الهيثم بن التيهان",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ubadah/aqaba-second",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ubadah-ibn-al-samit",
+      "assertion": "كان أحد النقباء الاثني عشر الذين أخرجهم الأنصار ليلة العقبة الثانية.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "second-pledge-of-aqaba",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/252-p1",
+          "volume": "السيرة 1",
+          "pageReference": "252",
+          "extractionUrl": "https://shamela.ws/book/10906/390",
+          "excerptArabic": "أخرجوا إلي منكم اثني عشر نقيبا\". فأخرجوهم له، فكان نقيب بني النجار: أسعد بن زرارة، ونقيب بني سلمة: البراء بن معرور، وعبد الله بن عمرو بن حرام، ونقيب بني ساعدة: سعد بن عبادة، والمنذر ابن عمرو، ونقيب بني زريق: رافع بن مالك، ونقيب بني الحارث بن الخزرج: عبد الله بن رواحة، وسعد بن الربيع، ونقيب بني عوف بن الخزرج: عبادة بن الصامت -وبعضهم جعل بدل عبادة بن الصامت خارجة بن زيد- ونقيب بني عمرو بن عوف: سعد بن خيثمة، ونقيب بني عبد الأشهل -وهم من الأوس- أسيد بن حضير، وأبو الهيثم بن التيهان",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "usayd/aqaba-second",
+      "subjectKind": "PERSON",
+      "subjectSlug": "usayd-ibn-al-hudayr",
+      "assertion": "كان أحد النقباء الاثني عشر الذين أخرجهم الأنصار ليلة العقبة الثانية.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "second-pledge-of-aqaba",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/252-p1",
+          "volume": "السيرة 1",
+          "pageReference": "252",
+          "extractionUrl": "https://shamela.ws/book/10906/390",
+          "excerptArabic": "أخرجوا إلي منكم اثني عشر نقيبا\". فأخرجوهم له، فكان نقيب بني النجار: أسعد بن زرارة، ونقيب بني سلمة: البراء بن معرور، وعبد الله بن عمرو بن حرام، ونقيب بني ساعدة: سعد بن عبادة، والمنذر ابن عمرو، ونقيب بني زريق: رافع بن مالك، ونقيب بني الحارث بن الخزرج: عبد الله بن رواحة، وسعد بن الربيع، ونقيب بني عوف بن الخزرج: عبادة بن الصامت -وبعضهم جعل بدل عبادة بن الصامت خارجة بن زيد- ونقيب بني عمرو بن عوف: سعد بن خيثمة، ونقيب بني عبد الأشهل -وهم من الأوس- أسيد بن حضير، وأبو الهيثم بن التيهان",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "abu-al-haytham/aqaba-second",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-al-haytham-ibn-at-tayyihan",
+      "assertion": "كان أحد النقباء الاثني عشر الذين أخرجهم الأنصار ليلة العقبة الثانية.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "second-pledge-of-aqaba",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/252-p1",
+          "volume": "السيرة 1",
+          "pageReference": "252",
+          "extractionUrl": "https://shamela.ws/book/10906/390",
+          "excerptArabic": "أخرجوا إلي منكم اثني عشر نقيبا\". فأخرجوهم له، فكان نقيب بني النجار: أسعد بن زرارة، ونقيب بني سلمة: البراء بن معرور، وعبد الله بن عمرو بن حرام، ونقيب بني ساعدة: سعد بن عبادة، والمنذر ابن عمرو، ونقيب بني زريق: رافع بن مالك، ونقيب بني الحارث بن الخزرج: عبد الله بن رواحة، وسعد بن الربيع، ونقيب بني عوف بن الخزرج: عبادة بن الصامت -وبعضهم جعل بدل عبادة بن الصامت خارجة بن زيد- ونقيب بني عمرو بن عوف: سعد بن خيثمة، ونقيب بني عبد الأشهل -وهم من الأوس- أسيد بن حضير، وأبو الهيثم بن التيهان",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "musab/madinah-muqri",
+      "subjectKind": "PERSON",
+      "subjectSlug": "musab-ibn-umayr",
+      "assertion": "بعثه رسول الله صلى الله عليه وسلم إلى المدينة يقرئهم ويفقههم، وكان يسمى بها المقرئ، وهو أول من جمع الجمعة بها.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/242-p2",
+          "volume": "السيرة 1",
+          "pageReference": "242",
+          "extractionUrl": "https://shamela.ws/book/10906/380",
+          "excerptArabic": "فلما انصرف القوم, بعث رسول الله صلى الله عليه وسلم مصعب بن",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/244-p1",
+          "volume": "السيرة 1",
+          "pageReference": "244",
+          "extractionUrl": "https://shamela.ws/book/10906/382",
+          "excerptArabic": "وكان مصعب أول من جمع الجمعة بالمدينة، ثم رجع إلى رسول الله صلى الله عليه وسلم. هكذا قال ابن شهاب: إن مصعبا أول من جمع بالمدينة.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "saad-muadh/islam",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-muadh",
+      "assertion": "أسلم سعد بن معاذ على يد مصعب بن عمير، فأسلمت بنو عبد الأشهل بإسلامه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/245-p2",
+          "volume": "السيرة 1",
+          "pageReference": "245",
+          "extractionUrl": "https://shamela.ws/book/10906/383",
+          "excerptArabic": "ثم فعل كما عمل أسيد، وأسلم، وأخذ حربته، وأقبل عامدا إلى نادي قومه، ومعه أسيد, فلما رآه قومه، قالوا: نحلف بالله لقد رجع سعد إليكم بغير الوجه الذي ذهب به من عندكم، قال: يا بني عبد الأشهل كيف تعرفون أمري فيكم؟ قالوا: سيدنا وأفضلنا رأيا وأيمننا نقيبة. قال: فإن كلام رجالكم ونسائكم علي حرام حتى تؤمنوا. فوالله ما أمسى في دار بني عبد الأشهل رجل ولا امرأة إلا مسلما ومسلمة",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/hijra-madinah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "خرج مهاجرا ومعه أبو بكر، فمكثا في غار ثور ثلاث ليال، وقدم المدينة يوم الإثنين لاثنتي عشرة ليلة خلت من ربيع الأول.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "hijra-to-medina",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/267-p1",
+          "volume": "السيرة 1",
+          "pageReference": "267",
+          "extractionUrl": "https://shamela.ws/book/10906/405",
+          "excerptArabic": "ثم لحق رسول الله صلى الله عليه وسلم وأبو بكر بغار في جبل يقال له ثور، فمكثا فيه ثلاث ليال، يبيت عندهما عبد الله بن أبي بكر، وهو غلام شاب لقن ثقف، فيدلج من عندهما بسحر، فيصبح في قريش بمكة كبائت، فلا يسمع أمرا يكيدون به إلا وعاه، حتى يأتيهما بخبر ذلك حين يختلط الظلام، ويرعى عليهما عامر بن فهيرة مولى أبي بكر منحة، ويريح عليهما حين تذهب ساعة من الليل، فيبيتان في رسل منحتهما حتى ينعق بهما عامر بن فهيرة بغلس، يفعل ذلك كل ليلة من الليالي الثلاث. واستأجر رسول الله صلى الله عليه وسلم وأبو بكر رجلا من بني الديل هاديا خريتا، قد غمس يمين حلف في آل العاص بن وائل، وهو على جاهليته، فدفعا إليه راحلتيهما ووعداه غار ثور، فأتاهما براحلتيهما صبيحة ثلاث، فارتحلا، وانطلق عامر بن فهيرة والدليل الديلي، فأخذ بهما في طريق الساحل. أخرجه البخاري.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/280-p3",
+          "volume": "السيرة 1",
+          "pageReference": "280",
+          "extractionUrl": "https://shamela.ws/book/10906/418",
+          "excerptArabic": "قدم رسول الله صلى الله عليه وسلم المدينة يوم الإثنين، لاثنتي عشرة ليلة خلت من ربيع الأول، فأقام بالمدينة عشر سنين.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "abu-bakr/hijra-cave",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-bakr-as-siddiq",
+      "assertion": "صحب رسول الله صلى الله عليه وسلم في الغار، وفيه قال له: ما ظنك باثنين الله ثالثهما.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "hijra-to-medina",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/267-p1",
+          "volume": "السيرة 1",
+          "pageReference": "267",
+          "extractionUrl": "https://shamela.ws/book/10906/405",
+          "excerptArabic": "ثم لحق رسول الله صلى الله عليه وسلم وأبو بكر بغار في جبل يقال له ثور، فمكثا فيه ثلاث ليال، يبيت عندهما عبد الله بن أبي بكر، وهو غلام شاب لقن ثقف، فيدلج من عندهما بسحر، فيصبح في قريش بمكة كبائت، فلا يسمع أمرا يكيدون به إلا وعاه، حتى يأتيهما بخبر ذلك حين يختلط الظلام، ويرعى عليهما عامر بن فهيرة مولى أبي بكر منحة، ويريح عليهما حين تذهب ساعة من الليل، فيبيتان في رسل منحتهما حتى ينعق بهما عامر بن فهيرة بغلس، يفعل ذلك كل ليلة من الليالي الثلاث. واستأجر رسول الله صلى الله عليه وسلم وأبو بكر رجلا من بني الديل هاديا خريتا، قد غمس يمين حلف في آل العاص بن وائل، وهو على جاهليته، فدفعا إليه راحلتيهما ووعداه غار ثور، فأتاهما براحلتيهما صبيحة ثلاث، فارتحلا، وانطلق عامر بن فهيرة والدليل الديلي، فأخذ بهما في طريق الساحل. أخرجه البخاري.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/268-p6",
+          "volume": "السيرة 1",
+          "pageReference": "268",
+          "extractionUrl": "https://shamela.ws/book/10906/406",
+          "excerptArabic": "كنت مع رسول الله صلى الله عليه وسلم في الغار، فقلت: يا رسول الله لو أن أحدهم ينظر إلى تحت قدميه لأبصرنا، فقال النبي صلى الله عليه وسلم: \"يا أبا بكر ما ظنك باثنين الله ثالثهما\". متفق عليه.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ali/hijra-bed",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ali-ibn-abi-talib",
+      "assertion": "رقد على فراش رسول الله صلى الله عليه وسلم ليلة خروجه يواري عنه العيون.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/262-p1",
+          "volume": "السيرة 1",
+          "pageReference": "262",
+          "extractionUrl": "https://shamela.ws/book/10906/400",
+          "excerptArabic": "فخرج رسول الله صلى الله عليه وسلم وأبو بكر تحت الليل قِبَل الغار بثور، وعمد عليٌّ فرقد على فراش رسول الله صلى الله عليه وسلم يواري عنه العيون.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "asma/dhat-an-nitaqayn",
+      "subjectKind": "PERSON",
+      "subjectSlug": "asma-bint-abi-bakr",
+      "assertion": "قطعت من نطاقها فأوكت به جراب سفرة الهجرة، فسميت ذات النطاقين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "HOLDS_TITLE",
+      "relatedSubjectKind": "TITLE",
+      "relatedSubjectSlug": "dhat-an-nitaqayn",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/267-p1",
+          "volume": "السيرة 1",
+          "pageReference": "267",
+          "extractionUrl": "https://shamela.ws/book/10906/405",
+          "excerptArabic": "فقطعت أسماء بنت أبي بكر قطعة من نطاقها فأوكت به الجراب، فبذلك كانت تسمى \"ذات النطاقين\"، ثم لحق رسول الله صلى الله عليه وسلم وأبو بكر بغار في جبل يقال له ثور، فمكثا فيه ثلاث ليال، يبيت عندهما عبد الله بن أبي بكر، وهو غلام شاب لقن ثقف، فيدلج من عندهما بسحر، فيصبح في قريش بمكة كبائت، فلا يسمع أمرا يكيدون به إلا وعاه، حتى يأتيهما بخبر ذلك حين يختلط الظلام، ويرعى عليهما عامر بن فهيرة مولى أبي بكر منحة، ويريح عليهما حين تذهب ساعة من الليل، فيبيتان في رسل منحتهما حتى ينعق بهما عامر بن فهيرة بغلس، يفعل ذلك كل ليلة من الليالي الثلاث. واستأجر رسول الله صلى الله عليه وسلم وأبو بكر رجلا من بني الديل هاديا خريتا، قد غمس يمين حلف في آل العاص بن وائل، وهو على جاهليته، فدفعا إليه راحلتيهما ووعداه غار ثور، فأتاهما براحلتيهما صبيحة ثلاث، فارتحلا، وانطلق عامر بن فهيرة والدليل الديلي، فأخذ بهما في طريق الساحل. أخرجه البخاري.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "abu-salamah/hijra-madinah-first",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-salamah",
+      "assertion": "كان أول من هاجر إلى المدينة، هاجر قبل العقبة الكبرى بسنة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "hijra-to-medina",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/258-p3",
+          "volume": "السيرة 1",
+          "pageReference": "258",
+          "extractionUrl": "https://shamela.ws/book/10906/396",
+          "excerptArabic": "فكان أول من هاجر أبو سلمة بن عبد الأسد إلى المدينة، هاجر إليها قبل العقبة الكبرى بسنة، وقد كان قدم من الحبشة مكة، فآذته قريش، وبلغه أن جماعة من الأنصار قد أسلموا، فهاجر إلى المدينة.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "abu-ayyub/hijra-host",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-ayyub-al-ansari",
+      "assertion": "بركت ناقة رسول الله صلى الله عليه وسلم عند بيت أبي أيوب، فنزل عليه حتى ابتنى مسجده ومسكنه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "hijra-to-medina",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/279-p2",
+          "volume": "السيرة 1",
+          "pageReference": "279",
+          "extractionUrl": "https://shamela.ws/book/10906/417",
+          "excerptArabic": "فكأني أنظر إلى رسول الله صلى الله عليه وسلم وأبو بكر ردفه، وملأ بني النجار حوله، حتى ألقى بفناء أبي أيوب. متفق عليه.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
     }
   ],
   "approval": {
-    "revision": "37d909a4561318c2",
-    "approvedAt": "2026-09-19",
+    "revision": "ec893141369ff749",
+    "approvedAt": "2026-09-20",
     "approvedBy": "msskzx",
-    "note": "Approved for publication of chapter one. All thirty-six claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
+    "note": "Approved for publication of chapters one and two. All eighty-two claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
   }
 }
