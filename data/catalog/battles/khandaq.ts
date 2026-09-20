@@ -5,7 +5,9 @@ import { legacyUnreviewed, type CatalogBattle } from '@/lib/catalog/types';
 const khandaq = {
   kind: 'BATTLE',
   slug: 'khandaq',
-  fields: { hijriYear: { value: 5, claims: legacyUnreviewed } },
+  name: 'غزوة الخندق',
+  nameTransliterated: 'Battle of the Trench',
+  fields: { engagement: { value: 'GHAZWAH', claims: legacyUnreviewed }, hijriYear: { value: 5, claims: legacyUnreviewed } },
   participants: [
     {
       person: 'saad-ibn-abi-waqqas',

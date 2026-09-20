@@ -32,7 +32,7 @@ describe('catalogProvenance', () => {
 
   it('reaches battle participants and event people too', () => {
     const subject = catalog({
-      battles: [{ kind: 'BATTLE', slug: 'badr', participants: [{ person: 'someone', isMuslim: true, claims: legacyUnreviewed }] }],
+      battles: [{ kind: 'BATTLE', slug: 'badr', name: 'اسم', participants: [{ person: 'someone', isMuslim: true, claims: legacyUnreviewed }] }],
       events: [{ kind: 'EVENT', slug: 'saqifah', name: 'حدث', type: 'OTHER', fields: { hijriYear: { value: 11, claims: ['pilot/one'] } }, people: [] }],
     });
 

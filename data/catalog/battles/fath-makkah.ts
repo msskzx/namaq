@@ -5,7 +5,9 @@ import { legacyUnreviewed, type CatalogBattle } from '@/lib/catalog/types';
 const fathMakkah = {
   kind: 'BATTLE',
   slug: 'fath-makkah',
-  fields: { hijriYear: { value: 8, claims: legacyUnreviewed } },
+  name: 'فتح مكة',
+  nameTransliterated: 'Conquest of Mecca',
+  fields: { engagement: { value: 'GHAZWAH', claims: legacyUnreviewed }, hijriYear: { value: 8, claims: legacyUnreviewed } },
   participants: [
     {
       person: 'az-zubayr-ibn-al-awwam',

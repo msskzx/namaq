@@ -5,7 +5,9 @@ import { legacyUnreviewed, type CatalogBattle } from '@/lib/catalog/types';
 const hunayn = {
   kind: 'BATTLE',
   slug: 'hunayn',
-  fields: { hijriYear: { value: 8, claims: legacyUnreviewed } },
+  name: 'غزوة حنين',
+  nameTransliterated: 'Battle of Hunayn',
+  fields: { engagement: { value: 'GHAZWAH', claims: legacyUnreviewed }, hijriYear: { value: 8, claims: legacyUnreviewed } },
   participants: [{ person: 'abu-ubaydah-ibn-al-jarrah', isMuslim: true, claims: legacyUnreviewed }],
 } satisfies CatalogBattle;
 

@@ -23,7 +23,7 @@ builds and `extractShamelaEntry.ts --volume` sets.
 ## What this instalment reads
 
 Chapters one to four, printed pages ١/٢٩ to ١/٣٧٤, Shamela page ids 167 to
-511. 124 claims and 189 citations. Nine chapters remain, ending at ٢/٤٩٦.
+511. 141 claims and 219 citations. Nine chapters remain, ending at ٢/٤٩٦.
 
 Chapter one covers his lineage, his names, his birth, the deaths of his parents
 and grandfather, Abu Talib's guardianship, his marriage to Khadijah, his
@@ -340,13 +340,11 @@ in the event's description.
 
 ## What chapter three does not author
 
-**The expeditions.** Hamzah's banner in Ramadan, called أول لواء عقد في الإسلام
-(`1/293-p9`), Sa'd's in Dhu al-Qadah (`1/293-p11`), and Ubaydah ibn al-Harith's,
-which Urwah calls أول راية عقدها (`1/294-p2`). Two of those compete over which
-was first, and the model holds no ordering to compete in. The expeditions
-themselves have no records: every slug under `data/catalog/battles/` is a battle,
-and a سرية that met no fighting does not fit that shape. Adding them is a
-modelling decision, not an extraction one.
+**Which banner was first.** Hamzah's in Ramadan, called أول لواء عقد في الإسلام
+(`1/293-p9`), against Ubaydah ibn al-Harith's, which Urwah calls أول راية عقدها
+(`1/294-p2`). The model holds no ordering for them to compete in, so the
+question stays on the page. The expeditions themselves are now recorded; see
+**The expeditions** below.
 
 **The list of munafiqun** (`1/292-p4` to `1/293-p2`), some thirty names. The
 model has no field for it, and several of those named are noted as disputed in
@@ -420,11 +418,6 @@ Umm Kulthum, which is what دو النورين rests on.
 
 ## What chapter four does not author
 
-**Nine expeditions**, the same call as chapter three. الأبواء, بعث حمزة, بعث
-عبيدة, بواط, العشيرة, بدر الأولى, سرية سعد, نخلة, بني سليم and السويق. The
-model has no record shape for a سرية, and two of them still compete over which
-banner was first. This is now the second chapter to accumulate them.
-
 **The Muslim headcount at Badr.** The chapter gives 313 (`1/325-p2`), 314,
 315 (`1/325-p3`) and 319 (`1/330-p2`), and al-Bara's ثلاثمائة وبضعة عشر over
 them all. There is no count field, so none is recorded.
@@ -436,6 +429,39 @@ as many captured (`1/351-p5` to `1/351-p8`).
 
 **The ransom accounts and the captives' roster**, which al-Dhahabi himself
 abridges with تركتهم خوفا من التطويل.
+
+# The expeditions
+
+Chapters three and four name twelve movements the app had no shape for, because
+every record under `data/catalog/battles/` was a battle and a سرية that met no
+fighting is not one. `Battle.engagement` is added for it, and ten of them are
+now records.
+
+The value is read off the source, not assigned. al-Dhahabi heads his own
+sections غزوة when the Prophet went out himself and بعث or سرية when he sent a
+detachment, so each expedition's `engagement` cites the passage that names it.
+`GHAZWAH` covers الأبواء, بواط, العشيرة, بدر الأولى, بني سليم and السويق, and
+Badr itself, which `1/301-p3` heads غزوة بدر الكبرى. `SARIYYAH` covers بعث حمزة,
+بعث عبيدة, سرية سعد and سرية نخلة. Everything outside his campaigns is `BATTLE`
+and stays on the legacy marker, since this pass has not reached those pages.
+
+**Two of the twelve are left out.** سرية عمير بن عدي against عصماء بنت مروان
+(`1/370-p5`) and سرية سالم بن عمير against أبو عفك (`1/371-p2`) both rest on
+الواقدي alone, with no isnad given, where every other expedition here comes
+through ابن إسحاق, موسى بن عقبة or عروة. Neither leader has a subject in the app
+either.
+
+**One expedition is dated two ways.** Chapter four puts بعث حمزة in one of the
+two Rabi's of year two (`1/297-p5`); chapter three puts his banner in Ramadan of
+year one and calls it the first in Islam (`1/293-p9`). The record takes year
+two, where the narrative sits, and `hamzah/sariyyah-year-alt` carries the other
+reading as `DISPUTED`.
+
+**What the expeditions gave beyond themselves.** Ali's kunya أبو تراب, which the
+Prophet gave him at العشيرة when he woke him out of the dust (`1/299-p1`), goes
+in the `kunya` column as [ADR 0014](../../../../docs/adr/0014-a-kunya-is-a-name.md)
+requires. Sa'd ibn Abi Waqqas loosed أول سهم رمي في سبيل الله at بعث عبيدة
+(`1/298-p1`).
 
 # Review
 

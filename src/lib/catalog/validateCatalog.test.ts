@@ -38,7 +38,7 @@ describe('validateCatalog', () => {
   it('rejects a status the relation cannot carry', () => {
     const battle = {
       kind: 'BATTLE',
-      slug: 'badr',
+      slug: 'badr', name: 'اسم',
       participants: [{ person: 'prophet-muhammad', isMuslim: true, status: ['ABSENT_EXCUSED'], claims: ['pilot/one'] }],
     } as const;
 
@@ -50,7 +50,7 @@ describe('validateCatalog', () => {
   it('accepts an outcome on a participation and an excuse on an absence', () => {
     const badr = {
       kind: 'BATTLE',
-      slug: 'badr',
+      slug: 'badr', name: 'اسم',
       participants: [
         { person: 'prophet-muhammad', isMuslim: true, status: ['INJURED'], claims: ['pilot/one'] },
         {
@@ -143,15 +143,46 @@ describe('validateCatalog', () => {
     ]);
   });
 
-  it('checks battle and event references the same way', () => {
+  // A battle slug the seed does not know is a record the projector will create,
+  // the way it creates events, so it is not an error. An unknown person still
+  // is, in either.
+  it('accepts a battle slug the seed does not know, and still checks its people', () => {
     const subject = catalog({
-      battles: [{ kind: 'BATTLE', slug: 'not-a-battle', participants: [{ person: 'prophet-muhammad', isMuslim: true, claims: ['pilot/one'] }] }],
+      battles: [{ kind: 'BATTLE', slug: 'sariyyah-nakhlah', name: 'سرية نخلة', participants: [{ person: 'prophet-muhammad', isMuslim: true, claims: ['pilot/one'] }] }],
       events: [{ kind: 'EVENT', slug: 'somewhere', name: 'حدث', type: 'OTHER', fields: {}, people: [{ person: 'ghost', claims: ['pilot/one'] }] }],
     });
 
-    expect(validateCatalog(subject, known)).toEqual([
-      { path: 'battles/not-a-battle', message: 'unknown battle' },
-      { path: 'events/somewhere', message: 'unknown person ghost' },
+    expect(validateCatalog(subject, known)).toEqual([{ path: 'events/somewhere', message: 'unknown person ghost' }]);
+  });
+
+  // The column is a string so a new kind needs no migration, which puts the
+  // whole burden of keeping it disciplined here.
+  it('rejects an engagement outside the vocabulary', () => {
+    const battle = (value: string) => ({
+      kind: 'BATTLE' as const,
+      slug: 'badr',
+      name: 'غزوة بدر',
+      fields: { engagement: { value: value as 'GHAZWAH', claims: ['pilot/one'] as const } },
+      participants: [{ person: 'prophet-muhammad', isMuslim: true, claims: ['pilot/one'] as const }],
+    });
+
+    expect(validateCatalog(catalog({ battles: [battle('SARIYYAH')] }), known)).toEqual([]);
+    expect(validateCatalog(catalog({ battles: [battle('SKIRMISH')] }), known)).toEqual([
+      { path: 'battles/badr.engagement', message: 'unknown engagement SKIRMISH' },
+    ]);
+  });
+
+  it('checks the provenance of an engagement like any other value', () => {
+    const battle = {
+      kind: 'BATTLE' as const,
+      slug: 'badr',
+      name: 'غزوة بدر',
+      fields: { engagement: { value: 'GHAZWAH' as const, claims: ['pilot/nope'] as const } },
+      participants: [],
+    };
+
+    expect(validateCatalog(catalog({ battles: [battle] }), known)).toEqual([
+      { path: 'battles/badr.engagement', message: 'no batch declares claim pilot/nope' },
     ]);
   });
 });

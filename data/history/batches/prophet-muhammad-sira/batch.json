@@ -26924,12 +26924,498 @@
           "accessedAt": "2026-09-20"
         }
       ]
+    },
+    {
+      "key": "sira/badr-ghazwah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "بدر الكبرى غزوة خرج فيها رسول الله صلى الله عليه وسلم بنفسه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/301-p3",
+          "volume": "السيرة 1",
+          "pageReference": "301",
+          "extractionUrl": "https://shamela.ws/book/10906/438",
+          "excerptArabic": "[غزوة بدر الكبرى: من السيرة لابن إسحاق، رواية البكائي]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/abwa",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "في صفر من السنة الثانية غزوة الأبواء، خرج فيها بنفسه واستعمل على المدينة سعد بن عبادة، ووادع بني ضمرة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "ghazwah-al-abwa",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/297-p3",
+          "volume": "السيرة 1",
+          "pageReference": "297",
+          "extractionUrl": "https://shamela.ws/book/10906/434",
+          "excerptArabic": "في صفرها غزوة الأبواء، فخرج النبي صلى الله عليه وسلم من المدينة غازيا، واستعمل على المدينة سعد بن عبادة حتى بلغ ودان يريد قريشا وبني ضمرة، فوادع بني ضمرة بن عبد مناة بن كنانة، وعقد ذلك معه سيدهم مخشي بن عمرو، ثم رجع إلى المدينة.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/297-p1",
+          "volume": "السيرة 1",
+          "pageReference": "297",
+          "extractionUrl": "https://shamela.ws/book/10906/434",
+          "excerptArabic": "[سنة اثنتين من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "hamzah/sariyyah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hamzah-ibn-abd-al-muttalib",
+      "assertion": "بعثه رسول الله صلى الله عليه وسلم في ثلاثين راكبا من المهاجرين إلى سيف البحر، فلقي أبا جهل فحجز بينهم مجدي بن عمرو الجهني.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "sariyyah-hamzah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/297-p5",
+          "volume": "السيرة 1",
+          "pageReference": "297",
+          "extractionUrl": "https://shamela.ws/book/10906/434",
+          "excerptArabic": "ثم في أحد الربيعين بعث عمه حمزة في ثلاثين راكبا من المهاجرين إلى سيف البحر من ناحية العيص، فلقي أبا جهل في ثلاث مائة. وقال الزهري: في مائة وثلاثين راكبا. وكان مجدي بن عمرو الجهني وقومه حلفاء الفريقين جميعا، فحجز بينهم مجدي بن عمرو الجهني.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/297-p1",
+          "volume": "السيرة 1",
+          "pageReference": "297",
+          "extractionUrl": "https://shamela.ws/book/10906/434",
+          "excerptArabic": "[سنة اثنتين من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "hamzah/sariyyah-year-alt",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hamzah-ibn-abd-al-muttalib",
+      "assertion": "وذكر في السنة الأولى أن لواء حمزة عقد في رمضان منها، وأنه أول لواء عقد في الإسلام.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "description",
+      "disputed": true,
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/293-p9",
+          "volume": "السيرة 1",
+          "pageReference": "293",
+          "extractionUrl": "https://shamela.ws/book/10906/431",
+          "excerptArabic": "وفي شهر رمضان عقد النبي صلى الله عليه وسلم لواء لحمزة بن عبد المطلب يعترض عيرا لقريش. وهو أول لواء عقد في الإسلام.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/283-p1",
+          "volume": "السيرة 1",
+          "pageReference": "283",
+          "extractionUrl": "https://shamela.ws/book/10906/421",
+          "excerptArabic": "[السنة الأولى من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ubaydah/sariyyah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ubaydah-ibn-al-harith",
+      "assertion": "بعثه في ستين راكبا من المهاجرين إلى ثنية المرة، فلقي جمعا من قريش ولم يكن بينهم قتال.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "sariyyah-ubaydah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/297-p7",
+          "volume": "السيرة 1",
+          "pageReference": "297",
+          "extractionUrl": "https://shamela.ws/book/10906/434",
+          "excerptArabic": "وبعث في هذه المدة عبيدة بن الحارث بن المطلب بن عبد مناف، في ستين راكبا أو نحوهم من المهاجرين، فنهض حتى بلغ ماء بالحجاز بأسفل ثنية المرة، فلقي بها جمعا من قريش، عليهم عكرمة بن أبي جهل، وقيل مكرز بن حفص، فلم يكن بينهم قتال.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/297-p1",
+          "volume": "السيرة 1",
+          "pageReference": "297",
+          "extractionUrl": "https://shamela.ws/book/10906/434",
+          "excerptArabic": "[سنة اثنتين من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "saad/first-arrow",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-abi-waqqas",
+      "assertion": "رمى بسهم في بعث عبيدة بن الحارث، فكان أول سهم رمي في سبيل الله.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/298-p1",
+          "volume": "السيرة 1",
+          "pageReference": "298",
+          "extractionUrl": "https://shamela.ws/book/10906/435",
+          "excerptArabic": "وقاص كان في ذلك البعث، فرمى بسهم، فكان أول سهم رمي في سبيل الله.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "saad/sariyyah-ubaydah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-abi-waqqas",
+      "assertion": "كان في بعث عبيدة بن الحارث، ورمى فيه أول سهم رمي في سبيل الله.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "sariyyah-ubaydah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/298-p1",
+          "volume": "السيرة 1",
+          "pageReference": "298",
+          "extractionUrl": "https://shamela.ws/book/10906/435",
+          "excerptArabic": "وقاص كان في ذلك البعث، فرمى بسهم، فكان أول سهم رمي في سبيل الله.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/buwat",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "خرج في ربيع الأول غازيا حتى بلغ بواط من ناحية رضوى، ثم رجع ولم يلق حربا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "ghazwah-buwat",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/298-p5",
+          "volume": "السيرة 1",
+          "pageReference": "298",
+          "extractionUrl": "https://shamela.ws/book/10906/435",
+          "excerptArabic": "وخرج النبي صلى الله عليه وسلم في ربيع الأول غازيا، فاستعمل على المدينة السائب أخا عثمان بن مظعون، حتى بلغ بواط من ناحية رضوى ثم رجع ولم يلق حربا.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/297-p1",
+          "volume": "السيرة 1",
+          "pageReference": "297",
+          "extractionUrl": "https://shamela.ws/book/10906/434",
+          "excerptArabic": "[سنة اثنتين من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/ushayrah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "خرج في جمادى الأولى واستخلف أبا سلمة على المدينة حتى بلغ العشيرة، فأقام أياما ووادع بني مدلج.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "ghazwah-al-ushayrah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/298-p7",
+          "volume": "السيرة 1",
+          "pageReference": "298",
+          "extractionUrl": "https://shamela.ws/book/10906/435",
+          "excerptArabic": "وخرج غازيا في جمادى الأولى, واستخلف على المدينة أبا سلمة بن عبد الأسد، حتى بلغ العشيرة، فأقام هناك أياما، ووادع بني مدلج. ثم رجع فأقام بالمدينة أياما. والعشيرة من بطن ينبع.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/297-p1",
+          "volume": "السيرة 1",
+          "pageReference": "297",
+          "extractionUrl": "https://shamela.ws/book/10906/434",
+          "excerptArabic": "[سنة اثنتين من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ali/kunya-abu-turab",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ali-ibn-abi-talib",
+      "assertion": "كناه رسول الله صلى الله عليه وسلم أبا تراب في غزوة العشيرة، لما عليه من التراب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "kunya",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/299-p1",
+          "volume": "السيرة 1",
+          "pageReference": "299",
+          "extractionUrl": "https://shamela.ws/book/10906/436",
+          "excerptArabic": "فوالله ما أهبنا إلا رسول الله صلى الله عليه وسلم بقدمه، فجلسنا، فيومئذ قال لعلي: \"يا أبا تراب\". لما عليه من التراب.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ali/ushayrah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ali-ibn-abi-talib",
+      "assertion": "كان رفيق عمار بن ياسر في غزوة العشيرة، وفيها كناه النبي صلى الله عليه وسلم أبا تراب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "ghazwah-al-ushayrah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/298-p8",
+          "volume": "السيرة 1",
+          "pageReference": "298",
+          "extractionUrl": "https://shamela.ws/book/10906/435",
+          "excerptArabic": "كنت أنا وعلي بن أبي طالب رفيقين في غزوة العشيرة من بطن ينبع. فلما نزلها رسول الله صلى الله عليه وسلم أقام بها شهرا، فصالح",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ammar/ushayrah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ammar-ibn-yasir",
+      "assertion": "كان رفيق علي بن أبي طالب في غزوة العشيرة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "ghazwah-al-ushayrah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/298-p8",
+          "volume": "السيرة 1",
+          "pageReference": "298",
+          "extractionUrl": "https://shamela.ws/book/10906/435",
+          "excerptArabic": "كنت أنا وعلي بن أبي طالب رفيقين في غزوة العشيرة من بطن ينبع. فلما نزلها رسول الله صلى الله عليه وسلم أقام بها شهرا، فصالح",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/badr-ula",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "خرج في جمادى الآخرة في طلب كرز بن جابر الفهري حتى بلغ وادي سفوان من ناحية بدر، فلم يلق حربا، وسميت بدرا الأولى.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr-al-ula",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/299-p3",
+          "volume": "السيرة 1",
+          "pageReference": "299",
+          "extractionUrl": "https://shamela.ws/book/10906/436",
+          "excerptArabic": "وخرج في جمادى الآخرة في طلب كرز بن جابر الفهري، وكان قد أغار على سرح المدينة، فبلغ صلى الله عليه وسلم وادي سَفَوان من ناحية بدر، فلم يلق حربا، وسميت بدرا الأولى، ولم يدرك كُرْزا.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/297-p1",
+          "volume": "السيرة 1",
+          "pageReference": "297",
+          "extractionUrl": "https://shamela.ws/book/10906/434",
+          "excerptArabic": "[سنة اثنتين من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "saad/sariyyah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-abi-waqqas",
+      "assertion": "بعثه رسول الله صلى الله عليه وسلم في ثمانية من المهاجرين فبلغ الخوار ثم رجع.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "sariyyah-saad-ibn-abi-waqqas",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/299-p5",
+          "volume": "السيرة 1",
+          "pageReference": "299",
+          "extractionUrl": "https://shamela.ws/book/10906/436",
+          "excerptArabic": "وبعث سعد بن أبي وقاص في ثمانية من المهاجرين، فبلغ الخوار، ثم رجع إلى المدينة.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/297-p1",
+          "volume": "السيرة 1",
+          "pageReference": "297",
+          "extractionUrl": "https://shamela.ws/book/10906/434",
+          "excerptArabic": "[سنة اثنتين من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/nakhlah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "بعث عبد الله بن جحش في رجب في ثمانية، وكتب له كتابا أمره أن لا ينظر فيه حتى يسير يومين، فنزل بنخلة فقتلوا ابن الحضرمي في الشهر الحرام، فأنكر النبي صلى الله عليه وسلم قتله ونزلت: يسألونك عن الشهر الحرام قتال فيه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "sariyyah-nakhlah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/299-p7",
+          "volume": "السيرة 1",
+          "pageReference": "299",
+          "extractionUrl": "https://shamela.ws/book/10906/436",
+          "excerptArabic": "ثم بعث النبي صلى الله عليه وسلم -في رجب- عبد الله بن جحش الأسدي، ومعه ثمانية، وكتب معه كتابا، وأمره أن لا ينظر فيه حتى يسير يومين. فلما قرأ الكتاب وجده: إذا نظرت في كتابي هذا فامض حتى تنزل بين نخلة والطائف، فترصد لنا قريشا، وتعلم لنا من أخبارهم. فلما نظر عبد الله في الكتاب قال لأصحابه: قد أمرني رسول الله صلى الله عليه وسلم أن",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/300-p4",
+          "volume": "السيرة 1",
+          "pageReference": "300",
+          "extractionUrl": "https://shamela.ws/book/10906/437",
+          "excerptArabic": "وأنكر النبي صلى الله عليه وسلم قتل ابن الحضرمي، فنزلت: {يَسْأَلونَكَ عَنِ الشَّهْرِ الْحَرَامِ قِتَالٍ فِيهِ قُلْ قِتَالٌ فِيهِ كَبِيرٌ} [البقرة: ٢١٧] ، وقبل النبي صلى الله عليه وسلم الفداء في الأسيرين فأما",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/297-p1",
+          "volume": "السيرة 1",
+          "pageReference": "297",
+          "extractionUrl": "https://shamela.ws/book/10906/434",
+          "excerptArabic": "[سنة اثنتين من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/bani-sulaym",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "لم يقم بعد بدر إلا سبعة أيام ثم خرج يريد بني سليم حتى بلغ الكدر، فأقام ثلاثا ثم انصرف ولم يلق أحدا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "ghazwah-bani-sulaym",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/370-p7",
+          "volume": "السيرة 1",
+          "pageReference": "370",
+          "extractionUrl": "https://shamela.ws/book/10906/507",
+          "excerptArabic": "لم يقم رسول الله صلى الله عليه وسلم، منصرفه عن بدر بالمدينة، إلا سبعة أيام. ثم خرج بنفسه يريد بني سليم, واستخلف على المدينة سباع عرفطة الغفاري, وقيل: ابن أم مكتوم. فبلغ ماء يقال له: الكدر، فأقام عليه ثلاثا, ثم انصرف, ولم يلق أحدا.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/297-p1",
+          "volume": "السيرة 1",
+          "pageReference": "297",
+          "extractionUrl": "https://shamela.ws/book/10906/434",
+          "excerptArabic": "[سنة اثنتين من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/sawiq",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "نذر أبو سفيان أن لا يمس رأسه ماء حتى يغزو، فخرج فأحرق نخلا بالعريض، فخرج النبي صلى الله عليه وسلم في طلبه حتى بلغ قرقرة الكدر ففاته، وطرح المشركون أزوادهم من السويق فسميت غزوة السويق.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "ghazwah-as-sawiq",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/371-p4",
+          "volume": "السيرة 1",
+          "pageReference": "371",
+          "extractionUrl": "https://shamela.ws/book/10906/508",
+          "excerptArabic": "كان أبو سفيان بن حرب، حين بلغه وقعة بدر، نذر أن لا يمس رأسه دهن ولا غسل، ولا يقرب أهله، حتى يغزو محمدا ويحرق في طوائف المدينة فخرج من مكة سرا خائفا، في ثلاثين فارسا, ليحل يمينه. حتى نزل بجبل من جبال المدينة يقال له: نبت فبعث رجلا أو رجلين من أصحابه، وأمرهما أن يحرقا أدنى نخل يأتيانه من نخل المدينة فوجدا صورا من صيران نخل العريض. فأحرقا فيها وانطلقا، وانطلق أبو سفيان مسرعا.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/372-p2",
+          "volume": "السيرة 1",
+          "pageReference": "372",
+          "extractionUrl": "https://shamela.ws/book/10906/509",
+          "excerptArabic": "وركب المسلمون في آثارهم، فأعجزوهم وتركوا أزوادهم، فسميت غزوة أبي سفيان: غزوة السويق.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/297-p1",
+          "volume": "السيرة 1",
+          "pageReference": "297",
+          "extractionUrl": "https://shamela.ws/book/10906/434",
+          "excerptArabic": "[سنة اثنتين من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
     }
   ],
   "approval": {
-    "revision": "65df37ae2ee0ec27",
+    "revision": "632134d08162e42f",
     "approvedAt": "2026-09-20",
     "approvedBy": "msskzx",
-    "note": "Approved for publication of chapters one to four. All 124 claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
+    "note": "Approved for publication of chapters one to four, including the expeditions. All 141 claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
   }
 }

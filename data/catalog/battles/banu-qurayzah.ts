@@ -5,7 +5,9 @@ import { legacyUnreviewed, type CatalogBattle } from '@/lib/catalog/types';
 const banuQurayzah = {
   kind: 'BATTLE',
   slug: 'banu-qurayzah',
-  fields: { hijriYear: { value: 5, claims: legacyUnreviewed } },
+  name: 'غزوة بني قريظة',
+  nameTransliterated: 'Siege of Banu Qurayzah',
+  fields: { engagement: { value: 'GHAZWAH', claims: legacyUnreviewed }, hijriYear: { value: 5, claims: legacyUnreviewed } },
   participants: [
     {
       person: 'az-zubayr-ibn-al-awwam',

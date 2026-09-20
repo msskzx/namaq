@@ -13,7 +13,9 @@ import type { CatalogBattle } from '@/lib/catalog/types';
 const badr = {
   kind: 'BATTLE',
   slug: 'badr',
-  fields: { hijriYear: { value: 2, claims: ['sira/badr'] } },
+  name: 'غزوة بدر',
+  nameTransliterated: 'Battle of Badr',
+  fields: { engagement: { value: 'GHAZWAH', claims: ['sira/badr-ghazwah'] }, hijriYear: { value: 2, claims: ['sira/badr'] } },
   participants: [
     {
       person: 'saad-ibn-abi-waqqas',
