@@ -4,6 +4,7 @@ import { legacyUnreviewed, type Cited, type Provenance } from '@/lib/catalog/typ
 import person from './prophet-muhammad';
 import birth from '../events/birth-prophet-muhammad';
 import revelation from '../events/first-revelation-of-the-quran';
+import istisqa from '../events/istisqa-by-abu-talib';
 
 // Read rather than fixtured, so editing the module or the batch alone fails.
 const batch = JSON.parse(readFileSync('data/history/batches/prophet-muhammad-sira/batch.json', 'utf8')) as {
@@ -83,6 +84,16 @@ describe('the Prophet in the catalog', () => {
     expect(claimByKey.get('prophet/birth-day')?.confidence).toBe('ESTABLISHED');
     expect(claimByKey.get('prophet/birth-day-alt')?.confidence).toBe('DISPUTED');
     expect(claimByKey.get('prophet/birth-day-alt')?.disputed).toBe(true);
+  });
+
+  // al-Dhahabi reports the istisqa on one chain and grades it neither way,
+  // while calling Bahira منكر جدا and the next report ضعيف. LIKELY is what
+  // that leaves, so the confidence is load-bearing and pinned here.
+  it('records seeking rain through him as LIKELY, not ESTABLISHED', () => {
+    expect(istisqa.people.map((entry) => entry.person)).toEqual(['prophet-muhammad', 'abu-talib']);
+    expect(claimByKey.get('sira/istisqa-bi-an-nabi')?.confidence).toBe('LIKELY');
+    expect(claimByKey.get('abu-talib/istisqa')?.confidence).toBe('LIKELY');
+    expect(Object.keys(istisqa.fields)).not.toContain('hijriYear');
   });
 
   // The chapter dates neither by a hijri year: عام الفيل is not one, and the

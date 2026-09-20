@@ -23,7 +23,7 @@ builds and `extractShamelaEntry.ts --volume` sets.
 ## What this instalment reads
 
 Chapters one and two, printed pages ١/٢٩ to ١/٢٧٦, Shamela page ids 167 to 420.
-Eighty-two claims and 113 citations. Eleven chapters remain, ending at
+Eighty-four claims and 117 citations. Eleven chapters remain, ending at
 ٢/٤٩٦.
 
 Chapter one covers his lineage, his names, his birth, the deaths of his parents
@@ -47,6 +47,21 @@ everything the chapter did not reach, for no gain.
 
 The chapter's Arabic is unvowelled where the companion entries are vowelled, so
 every excerpt here matches its own pages rather than theirs.
+
+## Seeking rain through him, and Abu Talib's verses
+
+Quraysh were in drought and came to Abu Talib, who brought out the boy, put his
+back to the Kaaba and let him hold his finger; the clouds came and the valley
+ran (`1/55-p1`, `1/56-p1`). Abu Talib's three verses follow it as his own words
+about the day, and the description keeps the one the poem is known by,
+وأبيض يستسقى الغمام بوجهه ... ربيع اليتامى عصمة للأرامل (`1/56-p2`).
+
+**Recorded LIKELY, and that is the finding.** al-Dhahabi reports it on a single
+chain and grades it neither way, while grading what sits on either side: the
+Bahira report is حديث منكر جدا with four reasons, and the very next report he
+marks عبد الله بن شبيب وهو ضعيف. Letting this one stand is weaker than
+authenticating it and stronger than the treatment a rejected report gets, so the
+claim is neither ESTABLISHED nor dropped.
 
 ## Names and titles
 

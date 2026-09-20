@@ -25702,12 +25702,74 @@
           "accessedAt": "2026-09-20"
         }
       ]
+    },
+    {
+      "key": "sira/istisqa-bi-an-nabi",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "استسقت به قريش وهو غلام، فألصق أبو طالب ظهره بالكعبة فأقبل السحاب وانفجر الوادي.",
+      "confidence": "LIKELY",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "istisqa-by-abu-talib",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/55-p1",
+          "volume": "السيرة 1",
+          "pageReference": "55",
+          "extractionUrl": "https://shamela.ws/book/10906/193",
+          "excerptArabic": "فثاروا إليه فقالوا: يا أبا طالب أقحط الوادي، وأجدب العباد فهلم فاستسق؛ فقال: رويدكم زوال الشمس وهبوب الريح؛ فلما زاغت الشمس أو كادت، خرج أبو طالب معه غلام كأنه شمس دجن تجلت عنه سحابة قتماء، وحوله أغيلمة؛ فأخذه أبو طالب فألصق ظهره بالكعبة، ولاذ بأصبعه الغلام، وبصبصت الأغيلمة حوله وما في السماء قزعة",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/56-p1",
+          "volume": "السيرة 1",
+          "pageReference": "55-56",
+          "extractionUrl": "https://shamela.ws/book/10906/194",
+          "excerptArabic": "وههنا وأغدق واغدودق وانفجر له الوادي، وأخصب النادي والبادي، وفي ذلك يقول أبو طالب:",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "abu-talib/istisqa",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-talib",
+      "assertion": "خرج أبو طالب بالنبي صلى الله عليه وسلم غلاما فاستسقى به، وقال فيه: وأبيض يستسقى الغمام بوجهه.",
+      "confidence": "LIKELY",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "istisqa-by-abu-talib",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/55-p1",
+          "volume": "السيرة 1",
+          "pageReference": "55",
+          "extractionUrl": "https://shamela.ws/book/10906/193",
+          "excerptArabic": "فثاروا إليه فقالوا: يا أبا طالب أقحط الوادي، وأجدب العباد فهلم فاستسق؛ فقال: رويدكم زوال الشمس وهبوب الريح؛ فلما زاغت الشمس أو كادت، خرج أبو طالب معه غلام كأنه شمس دجن تجلت عنه سحابة قتماء، وحوله أغيلمة؛ فأخذه أبو طالب فألصق ظهره بالكعبة، ولاذ بأصبعه الغلام، وبصبصت الأغيلمة حوله وما في السماء قزعة",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/56-p2",
+          "volume": "السيرة 1",
+          "pageReference": "56",
+          "extractionUrl": "https://shamela.ws/book/10906/194",
+          "excerptArabic": "وأبيض يستسقى الغمام بوجهه ... ربيع اليتامى عصمة للأرامل",
+          "accessedAt": "2026-09-20"
+        }
+      ]
     }
   ],
   "approval": {
-    "revision": "ec893141369ff749",
+    "revision": "73b3ef421c6128bb",
     "approvedAt": "2026-09-20",
     "approvedBy": "msskzx",
-    "note": "Approved for publication of chapters one and two. All eighty-two claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
+    "note": "Approved for publication of chapters one and two. All eighty-four claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
   }
 }
