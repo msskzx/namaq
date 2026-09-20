@@ -6,7 +6,9 @@ import { legacyUnreviewed, type CatalogBattle } from '@/lib/catalog/types';
 const fathCtesiphon = {
   kind: 'BATTLE',
   slug: 'fath-ctesiphon',
-  fields: {},
+  name: 'فتح المدائن',
+  nameTransliterated: 'Conquest of Ctesiphon',
+  fields: { engagement: { value: 'BATTLE', claims: legacyUnreviewed },},
   participants: [
     { person: 'saad-ibn-abi-waqqas', isMuslim: true, claims: legacyUnreviewed },
   ],

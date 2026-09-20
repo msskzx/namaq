@@ -1,11 +1,13 @@
-import type { CatalogBattle } from '@/lib/catalog/types';
+import { legacyUnreviewed, type CatalogBattle } from '@/lib/catalog/types';
 
 // Khalifah ibn Khayyat dates the battle outright, so the year is cited rather
 // than carried the way the seeded battles' years are.
 const qadisiyyah = {
   kind: 'BATTLE',
   slug: 'qadisiyyah',
-  fields: { hijriYear: { value: 15, claims: ['saad/qadisiyyah'] } },
+  name: 'معركة القادسية',
+  nameTransliterated: 'Battle of al-Qadisiyyah',
+  fields: { engagement: { value: 'BATTLE', claims: legacyUnreviewed }, hijriYear: { value: 15, claims: ['saad/qadisiyyah'] } },
   participants: [
     {
       person: 'saad-ibn-abi-waqqas',

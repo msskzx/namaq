@@ -5,7 +5,9 @@ import { legacyUnreviewed, type CatalogBattle } from '@/lib/catalog/types';
 const fihl = {
   kind: 'BATTLE',
   slug: 'fihl',
-  fields: { hijriYear: { value: 13, claims: legacyUnreviewed } },
+  name: 'معركة فحل',
+  nameTransliterated: 'Battle of Fihl',
+  fields: { engagement: { value: 'BATTLE', claims: legacyUnreviewed }, hijriYear: { value: 13, claims: legacyUnreviewed } },
   participants: [{ person: 'abu-ubaydah-ibn-al-jarrah', isMuslim: true, claims: legacyUnreviewed }],
 } satisfies CatalogBattle;
 

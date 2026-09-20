@@ -5,7 +5,9 @@ import { legacyUnreviewed, type CatalogBattle } from '@/lib/catalog/types';
 const fathJerusalem = {
   kind: 'BATTLE',
   slug: 'fath-jerusalem',
-  fields: { hijriYear: { value: 16, claims: legacyUnreviewed } },
+  name: 'فتح بيت المقدس',
+  nameTransliterated: 'Conquest of Jerusalem',
+  fields: { engagement: { value: 'BATTLE', claims: legacyUnreviewed }, hijriYear: { value: 16, claims: legacyUnreviewed } },
   participants: [{ person: 'abu-ubaydah-ibn-al-jarrah', isMuslim: true, claims: legacyUnreviewed }],
 } satisfies CatalogBattle;
 

@@ -1,14 +1,16 @@
-import type { CatalogBattle } from '@/lib/catalog/types';
+import { legacyUnreviewed, type CatalogBattle } from '@/lib/catalog/types';
 
 const jamal = {
   kind: 'BATTLE',
   slug: 'jamal',
+  name: 'معركة الجمل',
+  nameTransliterated: 'Battle of the Camel',
   // The entry dates the killing, not the battle: he was killed at Jamal and
   // his killing was in 36, so the battle was. Same move as plague-of-amwas,
   // which takes its year from the death it killed him in. A later entry may
   // date the battle outright -- al-Zubayr died there too -- and would then
   // cite it directly instead of through him.
-  fields: { hijriYear: { value: 36, claims: ['talhah/death-year', 'talhah/jamal'] } },
+  fields: { engagement: { value: 'BATTLE', claims: legacyUnreviewed }, hijriYear: { value: 36, claims: ['talhah/death-year', 'talhah/jamal'] } },
   participants: [
     {
       person: 'saad-ibn-abi-waqqas',
