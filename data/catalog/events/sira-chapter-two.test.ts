@@ -68,10 +68,12 @@ describe('chapter two of the sira in the catalog', () => {
   });
 
   // Both married after Khadijah died and before the hijra.
+  // Later chapters add more wives, so this asserts the three chapter two knows
+  // about and their order, not the whole list.
   it('adds Aisha and Sawdah as wives without disturbing Khadijah', () => {
     const wives = prophet.relations.filter((r) => r.type === 'HUSBAND').map((r) => r.to);
 
-    expect(wives).toEqual(['khadijah-bint-khuwaylid', 'aisha-bint-abi-bakr', 'sawdah-bint-zamah']);
+    expect(wives.slice(0, 3)).toEqual(['khadijah-bint-khuwaylid', 'aisha-bint-abi-bakr', 'sawdah-bint-zamah']);
   });
 
   // A description is one value, so it names both orders and holds both claims.

@@ -28284,12 +28284,790 @@
           "accessedAt": "2026-09-20"
         }
       ]
+    },
+    {
+      "key": "sira/uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "كانت غزوة أحد في شوال من السنة الثالثة، يوم السبت لإحدى عشرة ليلة مضت منه، والمسلمون سبعمائة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/375-p1",
+          "volume": "السيرة 1",
+          "pageReference": "375",
+          "extractionUrl": "https://shamela.ws/book/10906/512",
+          "excerptArabic": "[ثم دخلت سنة ثلاث من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/391-p1",
+          "volume": "السيرة 1",
+          "pageReference": "391",
+          "extractionUrl": "https://shamela.ws/book/10906/528",
+          "excerptArabic": "[غزوة أحد: وكانت في شوال]",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/391-p2",
+          "volume": "السيرة 1",
+          "pageReference": "391",
+          "extractionUrl": "https://shamela.ws/book/10906/528",
+          "excerptArabic": "واقَعَ نبي الله صلى الله عليه وسلم يوم أحد من العام المقبل بعد بدر في شوال، يوم السبت لإحدى عشرة ليلة مضت من شوال وكان أصحابه يومئذ سبعمائة والمشركون ألفين أو ما شاء الله من ذلك.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/uhud-date-alt",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "وقال ابن إسحاق: كانت للنصف من شوال.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "description",
+      "disputed": true,
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/391-p3",
+          "volume": "السيرة 1",
+          "pageReference": "391",
+          "extractionUrl": "https://shamela.ws/book/10906/528",
+          "excerptArabic": "وقال ابن إسحاق: للنصف من شوال.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/uhud-wounds",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "جرح وجهه وكسرت رباعيته وهشمت البيضة على رأسه، فكانت فاطمة تغسل الدم وعلي يسكب الماء.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/412-p2",
+          "volume": "السيرة 1",
+          "pageReference": "412",
+          "extractionUrl": "https://shamela.ws/book/10906/549",
+          "excerptArabic": "جرح رسول الله صلى الله عليه وسلم، وكسرت رباعيته، وهشمت البيضة على رأسه, فكانت فاطمة بنت رسول الله صلى الله عليه وسلم تغسل الدم، وعليٌّ يسكب الماء عليه بالمجن. فلما رأت فاطمة أن الماء لا يزيد الدم إلا كثرة، أخذت قطعة حصير أحرقته، حتى إذا صار رمادا ألصقته بالجرح، فاستمسك الدم. أخرجاه.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "hamzah/uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hamzah-ibn-abd-al-muttalib",
+      "assertion": "قاتل يوم أحد بسيفين يقول: أنا أسد الله، فقتله وحشي بحربته، ومثل به فبقر بطنه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/404-p7",
+          "volume": "السيرة 1",
+          "pageReference": "404",
+          "extractionUrl": "https://shamela.ws/book/10906/541",
+          "excerptArabic": "كان حمزة يقاتل يوم أحد بين يدي رسول الله صلى الله عليه وسلم بسيفين، ويقول: أنا أسد الله رواه يونس بن بكير، عن ابن عون عن عمير مرسلا وزاد: فعثر فصرع مستلقيا وانكشفت الدرع عن بطنه، فزرقه الحبشي",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/410-p2",
+          "volume": "السيرة 1",
+          "pageReference": "410",
+          "extractionUrl": "https://shamela.ws/book/10906/547",
+          "excerptArabic": "ووجدوا حمزة بن عبد المطلب قد بُقِرَ بطنه وحُمِلَت كبده، احتملها وحشي وهو الذي قتله، فذهب بكبده إلى هند بنت عتبة في نذر نذرته حين قتل أباها يوم بدر. فدفن في نمرة كانت عليه، إذا رفعت إلى رأسه بدت قدماه، فغطوا قدمية بشيء من الشجر.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "musab/uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "musab-ibn-umayr",
+      "assertion": "قاتل دون رسول الله صلى الله عليه وسلم حتى قتل، قتله ابن قميئة وهو يظنه رسول الله صلى الله عليه وسلم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/401-p3",
+          "volume": "السيرة 1",
+          "pageReference": "401",
+          "extractionUrl": "https://shamela.ws/book/10906/538",
+          "excerptArabic": "وقاتل مصعب بن عمير دون رسول الله صلى الله عليه وسلم حتى قتل، قتله ابن قميئة الليثي، وهو يظنه رسول الله صلى الله عليه وسلم. فرجع إلى قريش فقال: قتلت محمدا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "abu-dujanah/uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-dujanah-al-ansari",
+      "assertion": "أخذ سيف رسول الله صلى الله عليه وسلم بحقه يوم أحد، ثم ترس دونه بنفسه حتى كثر النبل في ظهره.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/395-p4",
+          "volume": "السيرة 1",
+          "pageReference": "395",
+          "extractionUrl": "https://shamela.ws/book/10906/532",
+          "excerptArabic": "فقال له أبو دجانة سماك: أنا آخذه بحقه. قال: فأخذه ففلق به هام المشركين. أخرجه مسلم.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/399-p2",
+          "volume": "السيرة 1",
+          "pageReference": "399",
+          "extractionUrl": "https://shamela.ws/book/10906/536",
+          "excerptArabic": "وترَّسَ دون رسول الله صلى الله عليه وسلم أبو دجانة بنفسه، يقع النبل في ظهره, وهو منحنٍ على رسول الله صلى الله عليه وسلم حتى كثرت فيه النبل.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "zubayr/uhud-hawari",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "بارز رجلا من المشركين على بعيره فذبحه، فأجلسه النبي صلى الله عليه وسلم على فخذه وقال: إن لكل نبي حواريا والزبير حواريي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/397-p3",
+          "volume": "السيرة 1",
+          "pageReference": "397",
+          "extractionUrl": "https://shamela.ws/book/10906/534",
+          "excerptArabic": "فقام إليه الزبير فوثب حتى استوى معه على بعيره, ثم عانقه فاقتتلا فوق البعير جميعا، فقال رسول الله صلى الله عليه وسلم: \"الذي يلي حضيض الأرض مقتول\". فوقع المشرك ووقع عليه الزبير فذبحه. ثم إن النبي صلى الله عليه وسلم قرب الزبير فأجلسه على فخذه وقال: \"إن لكل نبي حواريا والزبير حواريي\".",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "talhah/uhud-hand",
+      "subjectKind": "PERSON",
+      "subjectSlug": "talhah-ibn-ubaydullah",
+      "assertion": "وقى النبي صلى الله عليه وسلم بيده يوم أحد فشلت، وأجلسه تحته حتى استوى على الصخرة فقال: أوجب طلحة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/399-p5",
+          "volume": "السيرة 1",
+          "pageReference": "399",
+          "extractionUrl": "https://shamela.ws/book/10906/536",
+          "excerptArabic": "رأيت يد طلحة شلاء وقى بها النبي صلى الله عليه وسلم، يعني يوم أحد. أخرجه البخاري.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/407-p1",
+          "volume": "السيرة 1",
+          "pageReference": "407",
+          "extractionUrl": "https://shamela.ws/book/10906/544",
+          "excerptArabic": "فجلس تحته طلحة بن عبيد الله فنهض رسول الله صلى الله عليه وسلم حتى استوى عليها. فقال رسول الله صلى الله عليه وسلم: \"أوجب طلحة\".",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "abu-ubaydah/uhud-rings",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
+      "assertion": "نزع حلقتي المغفر من وجه النبي صلى الله عليه وسلم بفيه فسقطت ثنيتاه، فكان من أحسن الناس هتما.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/413-p3",
+          "volume": "السيرة 1",
+          "pageReference": "413",
+          "extractionUrl": "https://shamela.ws/book/10906/550",
+          "excerptArabic": "فأزم عليهما بفيه، فاستخرج إحدى الحلقتين. ووقعت ثنيته مع الحلقة وذهبت لأصنع ما صنع، فقال: أقسمت عليك بحقي لما تركتني. ففعل ما فعل في المرة الأولى، فوقعت ثنيته الأخرى مع الحلقة فكان أبو عبيدة من أحسن الناس هتمًا",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "qatadah/uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "qatadah-ibn-al-numan",
+      "assertion": "أصيبت عينه يوم أحد حتى وقعت على وجنته، فردها رسول الله صلى الله عليه وسلم بيده فكانت أحسن عينيه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/415-p2",
+          "volume": "السيرة 1",
+          "pageReference": "415",
+          "extractionUrl": "https://shamela.ws/book/10906/552",
+          "excerptArabic": "وأصيبت يومئذ عين قتادة، حتى وقعت على وجنته فحدثني عاصم بن عمر أن رسول الله صلى الله عليه وسلم ردها بيده، وكانت أحسن عينيه وأحدهما.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "saad-rabi/uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-al-rabi",
+      "assertion": "وجده زيد بن ثابت في آخر رمق وبه سبعون ضربة، فقال: أجد ريح الجنة، وقل لقومي الأنصار: لا عذر لكم عند الله إن خلص إلى رسول الله وفيكم شفر يطرف.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/409-p2",
+          "volume": "السيرة 1",
+          "pageReference": "409",
+          "extractionUrl": "https://shamela.ws/book/10906/546",
+          "excerptArabic": "فأصبته وهو في آخر رمق وبه سبعون ضربة, فقلت: إن رسول الله صلى الله عليه وسلم يقرأ عليك السلام ويقول لك: \"خبرني كيف تجدك\"؟. قال: على رسول الله السلام وعليك، قل له: يا رسول الله! أجد ريح الجنة، وقل لقومي الأنصار: لا عذر لكم عند الله إن خلص إلى رسول الله صلى الله عليه وسلم وفيكم شفر يطرف. قال: وفاضت نفسه.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "amr-jumuh/uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "amr-ibn-al-jumuh",
+      "assertion": "كان أعرج فسأل النبي صلى الله عليه وسلم أيمشي برجله صحيحة في الجنة فقال: نعم، فقتل يوم أحد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/408-p3",
+          "volume": "السيرة 1",
+          "pageReference": "408",
+          "extractionUrl": "https://shamela.ws/book/10906/545",
+          "excerptArabic": "أتى عمرو بن الجموح إلى رسول الله صلى الله عليه وسلم فقال: يا رسول الله، أرأيت إن قاتلت في سبيل الله حتى أقتل، أمشي برجلي هذه صحيحة في الجنة وكان أعرج، فقال رسول الله صلى الله عليه وسلم: \"نعم\". فقتل يوم أحد هو وابن أخيه ومولى لهم، فمر رسول الله صلى الله عليه وسلم, فقال: \"كأني أراك تمشي برجلك هذه صحيحة في الجنة\". وأمر بهما وبمولاهما فجعلوا في قبر واحد.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ibn-haram/uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-amr-ibn-haram",
+      "assertion": "استشهد يوم أحد، ودفن مع عمرو بن الجموح في قبر واحد لأنهما كانا متصافيين في الدنيا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/423-p5",
+          "volume": "السيرة 1",
+          "pageReference": "423",
+          "extractionUrl": "https://shamela.ws/book/10906/560",
+          "excerptArabic": "ومن بني سلمة: عبد الله بن عمرو بن حرام، وعمرو بن الجموح بن زيد بن حرام، وكانا متواخيين وصهرين، فدفنا في قبر واحد، وخلاد بن عمرو بن الجموح، ومولاه أسير، أبو أيمن، مولى عمرو.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/429-p4",
+          "volume": "السيرة 1",
+          "pageReference": "429",
+          "extractionUrl": "https://shamela.ws/book/10906/566",
+          "excerptArabic": "\"اجمعوا بينهما، فإنهما كانا متصافيين في الدنيا\". قال أبي: فحدثني أشياخ من الأنصار قالوا: لما ضرب معاوية عينه التي مرت على قبور الشهداء استصرخنا عليهم وقد انفجرت عليهما في قبرهما, فأخرجناهما وعليهما بردتان قد غطي بهما وجوههما، وعلى أقدامهما",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "kaab-malik/uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "kaab-ibn-malik",
+      "assertion": "كان أول من عرف رسول الله صلى الله عليه وسلم بعد الهزيمة، عرف عينيه تزهران من تحت المغفر فنادى: هذا رسول الله.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/406-p3",
+          "volume": "السيرة 1",
+          "pageReference": "406",
+          "extractionUrl": "https://shamela.ws/book/10906/543",
+          "excerptArabic": "كعبُ بن مالك, قال: عرفت عينيه تزهران من تحت المغفر، فناديت: يا معشر المسلمين! أبشروا هذا رسول الله صلى الله عليه وسلم فأشار إليَّ: أن انصت. ومعه جماعة فلما أسند في الشعب أدركه أبي بن خلف وهو يقول: يا محمد! لا نجوتُ إن نجوتَ ... الحديث.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "hudhayfah/uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hudhayfah-ibn-al-yaman",
+      "assertion": "قتل المسلمون أباه اليمان يوم أحد وهم لا يعرفونه، فتصدق بدمه عليهم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/404-p6",
+          "volume": "السيرة 1",
+          "pageReference": "404",
+          "extractionUrl": "https://shamela.ws/book/10906/541",
+          "excerptArabic": "بأبيه اليمان، فقال: أبي، أبي. فوالله ما نحجزوا عنه حتى قتلوه. فقال حذيفة: غفر الله لكم. قال عروة: فوالله ما زالت في حذيفة بقية خير حتى لقي الله. أخرجه البخاري.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "umm-sulaym/uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umm-sulaym-al-ghumaysa",
+      "assertion": "كانت تنقل القرب على متنها يوم أحد وتفرغها في أفواه القوم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/400-p2",
+          "volume": "السيرة 1",
+          "pageReference": "400",
+          "extractionUrl": "https://shamela.ws/book/10906/537",
+          "excerptArabic": "ولقد رأيت عائشة بنت أبي بكر، وأم سليم وإنهما",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ali/uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ali-ibn-abi-talib",
+      "assertion": "دفع إليه رسول الله صلى الله عليه وسلم اللواء بعد مقتل مصعب بن عمير.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/401-p4",
+          "volume": "السيرة 1",
+          "pageReference": "401",
+          "extractionUrl": "https://shamela.ws/book/10906/538",
+          "excerptArabic": "ولما قتل مصعب أعطى رسول الله صلى الله عليه وسلم اللواء علي بن أبي طالب ورجالا من المسلمين.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "hanzalah/uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hanzalah-ibn-abi-amir",
+      "assertion": "قتل يوم أحد وقد خرج جنبا حين سمع الهيعة، فقال صلى الله عليه وسلم: إن صاحبكم لتغسله الملائكة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/411-p4",
+          "volume": "السيرة 1",
+          "pageReference": "411",
+          "extractionUrl": "https://shamela.ws/book/10906/548",
+          "excerptArabic": "أن رسول الله صلى الله عليه وسلم قال: \"إن صاحبكم لتغسله الملائكة\". يعني حنظلة، فسألوا أهله: ما شأنه؟ فسئلت صاحبته قالت: خرج وهو جنب حين سمع الهيعة. فقال النبي صلى الله عليه وسلم: \"لذلك غسلته الملائكة\".",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "hanzalah/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hanzalah-ibn-abi-amir",
+      "assertion": "حنظلة بن أبي عامر الراهب، غسيل الملائكة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/422-p1",
+          "volume": "السيرة 1",
+          "pageReference": "422",
+          "extractionUrl": "https://shamela.ws/book/10906/559",
+          "excerptArabic": "وغسيل الملائكة حنظلة بن أبي عامر الراهب، ومالك بن أمية؛ وعوف بن عمرو، وأبو حية بن عمرو بن ثابت, وعبد الله بن جبير بن النعمان أمير الرماة، وأنس بن قتادة وخيثمة والد سعد بن خيثمة وحليفه: عبد الله بن سلمة العجلاني، وسبيع بن حاطب بن الحارث، وحليفه: مالك بن أوس، وعمير بن عدي الخطمي. وكلهم من الأوس.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ibn-jubayr/uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-jubayr",
+      "assertion": "أمره رسول الله صلى الله عليه وسلم على الرماة يوم أحد وهم خمسون، وأمرهم أن لا يبرحوا، فثبت واستشهد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/395-p1",
+          "volume": "السيرة 1",
+          "pageReference": "395",
+          "extractionUrl": "https://shamela.ws/book/10906/532",
+          "excerptArabic": "وأمَّر على الرماة عبد الله بن جبير وهم خمسون رجلا، فقال: \"انضحوا عنا الخيل بالنبل، لا يأتونا من خلفنا، إن كانت لنا أو علينا، فاثبت مكانك لا نؤتين من قبلك\". وظاهر رسول الله صلى الله عليه وسلم بين درعين، ودفع اللواء إلى مصعب بن عمير. وتعبأت قريش وهم ثلاثة آلاف معهم مائتا فرس قد جنبوها فجعلوا على الميمنة خالدا، وعلى الميسرة عكرمة.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/422-p1",
+          "volume": "السيرة 1",
+          "pageReference": "422",
+          "extractionUrl": "https://shamela.ws/book/10906/559",
+          "excerptArabic": "وعبد الله بن جبير بن النعمان أمير الرماة، وأنس بن قتادة وخيثمة والد سعد بن خيثمة وحليفه: عبد الله بن سلمة العجلاني، وسبيع بن حاطب بن الحارث، وحليفه: مالك بن أوس، وعمير بن عدي الخطمي. وكلهم من الأوس.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ibn-jubayr/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-jubayr",
+      "assertion": "عبد الله بن جبير بن النعمان، أمير الرماة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/422-p1",
+          "volume": "السيرة 1",
+          "pageReference": "422",
+          "extractionUrl": "https://shamela.ws/book/10906/559",
+          "excerptArabic": "وعبد الله بن جبير بن النعمان أمير الرماة، وأنس بن قتادة وخيثمة والد سعد بن خيثمة وحليفه: عبد الله بن سلمة العجلاني، وسبيع بن حاطب بن الحارث، وحليفه: مالك بن أوس، وعمير بن عدي الخطمي. وكلهم من الأوس.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "anas-nadr/uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "anas-ibn-an-nadr",
+      "assertion": "قال: إني لأجد ريح الجنة دون أحد، فقاتل حتى قتل، ووجد به بضع وثمانون جراحة فما عرفوه حتى عرفته أخته ببنانه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/407-p2",
+          "volume": "السيرة 1",
+          "pageReference": "407",
+          "extractionUrl": "https://shamela.ws/book/10906/544",
+          "excerptArabic": "فقال: اللهم إني أبرأ إليك مما جاء به هؤلاء يعني المشركين وأعتذر إليك مما صنع هؤلاء يعني المسلمين من الهزيمة فمشى بسيفه فلقيه سعد بن معاذ فقال: أي سعد إني لأجد ريح الجنة دون أحد واهًا لريح الجنة! فقال سعد: يا رسول الله! فما استطعت أن أصنع كما صنع. قال أنس بن مالك: فوجدناه بين القتلى، به بضع وثمانون جراحة من ضربة بسيف وطعنة برمح ورمية بسهم، فما عرفناه، حتى عرفته أخته ببنانه",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "anas-nadr/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "anas-ibn-an-nadr",
+      "assertion": "أنس بن النضر، عم أنس بن مالك.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/407-p2",
+          "volume": "السيرة 1",
+          "pageReference": "407",
+          "extractionUrl": "https://shamela.ws/book/10906/544",
+          "excerptArabic": "غاب أنس بن النضر، عم أنس بن مالك عن قتال بدر فقال: غبت عن أول قتال رسول الله صلى الله عليه وسلم المشركين، لئن الله أشهدني قتالا ليرين الله ما أصنع, فلما كان يوم أحد انكشف المسلمون فقال: اللهم إني أبرأ إليك مما جاء به هؤلاء يعني المشركين وأعتذر إليك مما صنع هؤلاء يعني المسلمين من الهزيمة فمشى بسيفه فلقيه سعد بن معاذ فقال: أي سعد إني لأجد ريح الجنة دون أحد واهًا لريح الجنة! فقال سعد: يا رسول الله! فما استطعت أن أصنع كما صنع. قال أنس بن مالك: فوجدناه بين القتلى، به بضع وثمانون جراحة من ضربة بسيف وطعنة برمح ورمية بسهم، فما عرفناه، حتى عرفته أخته ببنانه، فكنا نتحدث أن هذه الآية: {مِنَ الْمُؤْمِنِينَ رِجَالٌ صَدَقُوا مَا عَاهَدُوا اللَّهَ عَلَيْهِ} [الأحزاب: ٢٣] ، نزلت فيه وفي أصحابه. متفق عليه, لكن مسلم من حديث ثابت البناني، عن أنس.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/kaab-ibn-al-ashraf",
+      "subjectKind": "PERSON",
+      "subjectSlug": "muhammad-ibn-maslamah",
+      "assertion": "انتدب محمد بن مسلمة لقتل كعب بن الأشرف حين آذى النبي صلى الله عليه وسلم بالشعر وقوى المشركين عليه، فقتله.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "killing-of-kaab-ibn-al-ashraf",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/387-p4",
+          "volume": "السيرة 1",
+          "pageReference": "387",
+          "extractionUrl": "https://shamela.ws/book/10906/524",
+          "excerptArabic": "فقال النبي صلى الله عليه وسلم يوما: \"من لكعب بن الأشرف؟ فقد آذانا بالشعر وقوى المشركين علينا\". فقال محمد بن مسلمة: أنا يا رسول الله. قال: \"فأنت\". فقام فمشى ثم رجع فقال: إني قائل. فقال: قل فأنت في حل. فخرج محمد، بعد يوم أو يومين، حتى أتى كعبا وهو في حائط فقال: يا كعب، جئت لحاجة، الحديث.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/388-p1",
+          "volume": "السيرة 1",
+          "pageReference": "388",
+          "extractionUrl": "https://shamela.ws/book/10906/525",
+          "excerptArabic": "فلما استمكن منه قال: دونكم. فضربوه فقتلوه وأتوا النبي صلى الله عليه وسلم فأخبروه. أخرجه البخاري.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/375-p1",
+          "volume": "السيرة 1",
+          "pageReference": "375",
+          "extractionUrl": "https://shamela.ws/book/10906/512",
+          "excerptArabic": "[ثم دخلت سنة ثلاث من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/banu-nadir",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "حاصر بني النضير حتى نزلوا على الجلاء، ولهم ما أقلت الإبل إلا السلاح، وكان إجلاؤهم في المحرم سنة ثلاث.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "expulsion-of-banu-nadir",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/378-p4",
+          "volume": "السيرة 1",
+          "pageReference": "378",
+          "extractionUrl": "https://shamela.ws/book/10906/515",
+          "excerptArabic": "كانت غزوة بني النضير، وهم طائفة من اليهود، على رأس ستة أشهر من وقعة بدر وكانت منازلهم ونخلهم بناحية المدينة، فحاصرهم رسول الله صلى الله عليه وسلم حتى نزلوا على الجلاء، وعلى أن لهم ما أقلت الإبل إلا السلاح",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/382-p2",
+          "volume": "السيرة 1",
+          "pageReference": "382",
+          "extractionUrl": "https://shamela.ws/book/10906/519",
+          "excerptArabic": "وكان إجلاء بني النضير في المحرم سنة ثلاث.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/375-p1",
+          "volume": "السيرة 1",
+          "pageReference": "375",
+          "extractionUrl": "https://shamela.ws/book/10906/512",
+          "excerptArabic": "[ثم دخلت سنة ثلاث من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/banu-nadir-after-uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "وذهب موسى بن عقبة وابن إسحاق إلى أن غزوة بني النضير كانت بعد أحد.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "description",
+      "disputed": true,
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/380-p5",
+          "volume": "السيرة 1",
+          "pageReference": "380",
+          "extractionUrl": "https://shamela.ws/book/10906/517",
+          "excerptArabic": "وذهب موسى بن عقبة، وابن إسحاق إلى أن غزوة بني النضير كانت بعد أحد، وكذلك قال غيرهما. ورواه ابن لهيعة، عن أبي الأسود، عن عروة. وهذا حديث موسى وحديث عروة: إن رسول الله صلى الله عليه وسلم خرج إلى بني النضير يستعينهم في عقل الكلابيين. وكانوا -يزعمون- قد دسوا إلى قريش حين نزلوا بأحد لقتال رسول الله صلى الله عليه وسلم، فحضوهم على القتال ودلوهم على العورة. فلما كلمهم رسول الله صلى الله عليه وسلم في عقل الكلابيين,",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "hasan/birth",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-hasan-ibn-ali",
+      "assertion": "ولد الحسن بن علي في رمضان من السنة الثالثة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "birth-of-al-hasan",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/390-p3",
+          "volume": "السيرة 1",
+          "pageReference": "390",
+          "extractionUrl": "https://shamela.ws/book/10906/527",
+          "excerptArabic": "وفي رمضان: وُلِدَ السيد أبو محمد الحسن بن علي، رضي الله عنهما.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/375-p1",
+          "volume": "السيرة 1",
+          "pageReference": "375",
+          "extractionUrl": "https://shamela.ws/book/10906/512",
+          "excerptArabic": "[ثم دخلت سنة ثلاث من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "prophet/wife-hafsah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "تزوج حفصة بنت عمر في السنة الثالثة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "HUSBAND",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "hafsa-bint-umar",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/390-p4",
+          "volume": "السيرة 1",
+          "pageReference": "390",
+          "extractionUrl": "https://shamela.ws/book/10906/527",
+          "excerptArabic": "وتزوج النبي صلى الله عليه وسلم بحفصة بنت عمر.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/375-p1",
+          "volume": "السيرة 1",
+          "pageReference": "375",
+          "extractionUrl": "https://shamela.ws/book/10906/512",
+          "excerptArabic": "[ثم دخلت سنة ثلاث من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "prophet/wife-zaynab-khuzaymah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "تزوج زينب بنت خزيمة من بني عامر بن صعصعة، وهي أم المساكين، فلم تلبث عنده إلا أشهرا وتوفيت.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "HUSBAND",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "zaynab-bint-khuzaymah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/390-p5",
+          "volume": "السيرة 1",
+          "pageReference": "390",
+          "extractionUrl": "https://shamela.ws/book/10906/527",
+          "excerptArabic": "وفي هذه السنة: تزوج أيضا بزينب بنت خزيمة، من بني عامر بن صعصعة، وهي أم المساكين، فعاشت عنده شهرين أو ثلاثة، وتوفيت وقيل: أقامت عنده ثمانية أشهر، فالله أعلم.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/375-p1",
+          "volume": "السيرة 1",
+          "pageReference": "375",
+          "extractionUrl": "https://shamela.ws/book/10906/512",
+          "excerptArabic": "[ثم دخلت سنة ثلاث من الهجرة:]",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "zaynab-khuzaymah/umm-al-masakeen",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaynab-bint-khuzaymah",
+      "assertion": "هي أم المساكين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "HOLDS_TITLE",
+      "relatedSubjectKind": "TITLE",
+      "relatedSubjectSlug": "umm-al-masakeen",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/390-p5",
+          "volume": "السيرة 1",
+          "pageReference": "390",
+          "extractionUrl": "https://shamela.ws/book/10906/527",
+          "excerptArabic": "وفي هذه السنة: تزوج أيضا بزينب بنت خزيمة، من بني عامر بن صعصعة، وهي أم المساكين، فعاشت عنده شهرين أو ثلاثة، وتوفيت وقيل: أقامت عنده ثمانية أشهر، فالله أعلم.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
     }
   ],
   "approval": {
-    "revision": "02e6ec4ef0e62820",
+    "revision": "8bc41d01c74c87da",
     "approvedAt": "2026-09-20",
     "approvedBy": "msskzx",
-    "note": "Approved for publication of chapters one to four, including the expeditions and the Badr martyr roster. All 172 claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
+    "note": "Approved for publication of chapters one to five. All 202 claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
   }
 }

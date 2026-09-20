@@ -78,6 +78,9 @@ const prophetMuhammad = {
     // chapter two puts them. Khawlah bint Hakim named the two to him together.
     { type: 'HUSBAND', inverse: 'WIFE', to: 'aisha-bint-abi-bakr', claims: ['prophet/wife-aishah'] },
     { type: 'HUSBAND', inverse: 'WIFE', to: 'sawdah-bint-zamah', claims: ['prophet/wife-sawdah'] },
+    // Both in year three, chapter five. Zaynab lived only months after it.
+    { type: 'HUSBAND', inverse: 'WIFE', to: 'hafsa-bint-umar', claims: ['prophet/wife-hafsah'] },
+    { type: 'HUSBAND', inverse: 'WIFE', to: 'zaynab-bint-khuzaymah', claims: ['prophet/wife-zaynab-khuzaymah'] },
     // He freed Zayd and adopted him before the revelation; الأحزاب 5 ended the
     // adoption, and the manumission is what remained. PATRON is his side of it.
     { type: 'PATRON', inverse: 'MAWLA', to: 'zaid-ibn-harithah', claims: ['prophet/mawla-zayd'] },

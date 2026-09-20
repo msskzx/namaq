@@ -44,7 +44,9 @@ const azZubayrIbnAlAwwam = {
   titles: [
     { title: 'the-ten-promised-paradise', claims: ['zubayr/titles'] },
     { title: 'companion', claims: ['zubayr/companion-of-prophet'] },
-    { title: 'hawari-al-ummah', claims: ['zubayr/titles'] },
+    // His own entry lists the title; chapter five of the sira gives where it
+    // came from, the duel at Uhud and إن لكل نبي حواريا والزبير حواريي.
+    { title: 'hawari-al-ummah', claims: ['zubayr/titles', 'zubayr/uhud-hawari'] },
     { title: 'the-six-of-the-shura', claims: ['zubayr/titles'] },
     // Not in the old seed's list for him: the entry adds it in al-Dhahabi's
     // own voice, counting the four among السابقين الأولين.

@@ -22,8 +22,8 @@ builds and `extractShamelaEntry.ts --volume` sets.
 
 ## What this instalment reads
 
-Chapters one to four, printed pages ١/٢٩ to ١/٣٧٤, Shamela page ids 167 to
-511. 172 claims and 276 citations. Nine chapters remain, ending at ٢/٤٩٦.
+Chapters one to five, printed pages ١/٢٩ to ١/٤٣٢, Shamela page ids 167 to
+578. 202 claims and 320 citations. Eight chapters remain, ending at ٢/٤٩٦.
 
 Chapter one covers his lineage, his names, his birth, the deaths of his parents
 and grandfather, Abu Talib's guardianship, his marriage to Khadijah, his
@@ -499,6 +499,94 @@ The first pass backed each `sex` with whatever claim was nearest, and
 `prophet-muhammad.test.ts`'s rule that a single-claim field must cite a claim
 about that same field rejected it: `prophet/lineage` is about `fullName`. Each
 person now has a claim whose own field is `sex`.
+
+# Chapter five
+
+Printed ١/٣٧٥ to ١/٤٣٢, ids 512 to 578. Thirty claims and forty-four citations.
+This is Uhud.
+
+## A second legacy value retired
+
+`battles/uhud` carried both `hijriYear: 3` and its `engagement` on the legacy
+marker. The chapter is headed سنة ثلاث من الهجرة and غزوة أحد: وكانت في شوال,
+and Qatadah dates the fighting to Saturday the eleventh of Shawwal
+(`1/375-p1`, `1/391-p1`, `1/391-p2`). `sira/uhud` cites all three, so the year
+and the fact that he led it in person both move onto evidence.
+
+Ibn Ishaq says للنصف من شوال instead (`1/391-p3`). The model holds no day, so
+that is `sira/uhud-date-alt`, DISPUTED, and stays in prose.
+
+## Uhud's roster
+
+Six participations became twenty-two.
+
+**The Prophet is INJURED and present**, which is the distinction ADR 0013
+exists for: his face was cut, a front tooth broken and the helmet driven into
+his cheek, and Fatimah washed the blood while Ali poured (`1/412-p2`).
+
+**Six of the dead.** Hamzah, fighting with two swords saying أنا أسد الله,
+killed by Wahshi's javelin and then mutilated (`1/404-p7`, `1/410-p2`). Mus'ab,
+killed carrying the لواء by Ibn Qami'ah, who thought he was the Prophet
+(`1/401-p3`). Abdullah ibn Jubayr, who commanded the fifty archers and was the
+one who held the hill (`1/395-p1`). Hanzalah, غسيل الملائكة (`1/411-p4`). Anas
+ibn an-Nadr, found with eighty-odd wounds and known only by his sister from his
+fingertips (`1/407-p2`). Sa'd ibn al-Rabi, with seventy blows in him
+(`1/409-p2`). Amr ibn al-Jamuh, lame, who asked whether he would walk into the
+Garden on that leg sound, and Abdullah ibn Amr ibn Haram, buried with him in one
+grave because they were متصافيين (`1/408-p3`, `1/429-p4`).
+
+**And the living.** Abu Dujanah, who took the sword بحقه and then shielded the
+Prophet with his own back until it filled with arrows (`1/395-p4`, `1/399-p2`).
+Talhah, whose hand was crippled shielding him and who was told أوجب طلحة
+(`1/399-p5`, `1/407-p1`). Abu Ubaydah, who drew the helmet rings out of the
+Prophet's face with his teeth and lost two of his own (`1/413-p3`). Qatadah ibn
+al-Nu'man, whose eye fell onto his cheek and was put back (`1/415-p2`). Ka'b ibn
+Malik, the first to recognise him after the rout (`1/406-p3`). Hudhayfah, whose
+father the Muslims killed by mistake and whose blood he gave away (`1/404-p6`).
+Umm Sulaym, carrying waterskins on her back (`1/400-p2`).
+
+**Three had no subject in the app**: Hanzalah, Abdullah ibn Jubayr and Anas ibn
+an-Nadr. The catalog creates them, as it did the ten of Badr.
+
+**al-Zubayr's title gets its origin.** His own entry listed `hawari-al-ummah`;
+this chapter gives where it came from, the duel on camelback and إن لكل نبي
+حواريا والزبير حواريي (`1/397-p3`). The assignment now cites both batches.
+
+## The rest of year three
+
+**قتل كعب بن الأشرف** (`1/387-p4`, `1/388-p1`), a new event: he satirised the
+Prophet and roused Quraysh after Badr, and Muhammad ibn Maslamah volunteered.
+
+**إجلاء بني النضير**, and the chapter dates it two ways itself. al-Zuhri on
+Urwah puts it على رأس ستة أشهر من وقعة بدر, which the same chapter makes المحرم
+سنة ثلاث (`1/378-p4`, `1/382-p2`). Musa ibn Uqbah and Ibn Ishaq put it after
+Uhud (`1/380-p5`), which would be year four. The event takes the dated reading
+and `sira/banu-nadir-after-uhud` carries the other as DISPUTED.
+
+**The birth of al-Hasan** in Ramadan (`1/390-p3`), and two marriages: Hafsah
+bint Umar, and Zaynab bint Khuzaymah, who is أم المساكين and lived only months
+(`1/390-p4`, `1/390-p5`). The title is not new; this is where it is cited for
+her.
+
+## What chapter five does not author
+
+**The casualty count**, which the chapter argues with itself about: seventy by
+al-Bara and Ibn Abbas, forty-nine by Musa ibn Uqbah, forty-seven, sixty-five by
+Ibn Ishaq, sixty-four Ansar and six Muhajirun by Ubayy. al-Dhahabi settles it,
+قول من قال سبعين أصح, explaining the smaller numbers as counts of the named
+(`1/420-p4` to `1/421-p4`). The model holds no count, so none is recorded.
+
+**Four more expeditions**: ذي أمر, بحران, قرقرة الكدر and سرية زيد إلى القردة.
+They fit `engagement` now, and are left for the next pass rather than widening
+this one.
+
+**بنو قينقاع**, which the chapter treats before Uhud (`1/377-p2`). It has no
+battle record and is a siege rather than a غزوة the book heads as one; adding
+it is the same shape of decision the expeditions were, and it can travel with
+them.
+
+**The long roster of the Uhud dead by clan** (`1/421-p5` to `1/423-p7`), where
+almost none has a subject in the app.
 
 # Review
 
