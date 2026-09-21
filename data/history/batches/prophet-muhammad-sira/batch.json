@@ -33280,12 +33280,76 @@
           "accessedAt": "2026-09-19"
         }
       ]
+    },
+    {
+      "key": "hajjat-al-wada/description",
+      "subjectKind": "EVENT",
+      "subjectSlug": "hajjat-al-wada",
+      "assertion": "أذن رسول الله صلى الله عليه وسلم في الناس بالحج، فاجتمع في المدينة بشر كثير، وخرج لخمس بقين من ذي القعدة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "description",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/289-p2",
+          "volume": "السيرة 2",
+          "pageReference": "289",
+          "extractionUrl": "https://shamela.ws/book/10906/948",
+          "excerptArabic": "أذن رسول الله صلى الله عليه وسلم في الناس بالحج، فاجتمع في المدينة بشر كثير. فخرج رسول الله صلى الله عليه وسلم لخمس بقين من ذي القعدة، أو لأربع.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "prophet/hajjat-al-wada",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "أذن في الناس بالحج، وخرج إليه لخمس بقين من ذي القعدة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "hajjat-al-wada",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/289-p2",
+          "volume": "السيرة 2",
+          "pageReference": "289",
+          "extractionUrl": "https://shamela.ws/book/10906/948",
+          "excerptArabic": "أذن رسول الله صلى الله عليه وسلم في الناس بالحج، فاجتمع في المدينة بشر كثير. فخرج رسول الله صلى الله عليه وسلم لخمس بقين من ذي القعدة، أو لأربع.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "asma-umays/hajjat-al-wada",
+      "subjectKind": "PERSON",
+      "subjectSlug": "asma-bint-umays",
+      "assertion": "ولدت محمد بن أبي بكر الصديق بذي الحليفة في حجة الوداع، فأمرها النبي صلى الله عليه وسلم أن تغتسل وتستثفر بثوب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "hajjat-al-wada",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/289-p2",
+          "volume": "السيرة 2",
+          "pageReference": "289",
+          "extractionUrl": "https://shamela.ws/book/10906/948",
+          "excerptArabic": "فلما كان بذي الحليفة ولدت أسماء بنت عميس محمد بن أبي بكر الصديق، فأرسلت إلى رسول الله صلى الله عليه وسلم: كيف أصنع؟ فقال: \"اغتسلي واستثفري بثوب\".",
+          "accessedAt": "2026-09-19"
+        }
+      ]
     }
   ],
   "approval": {
-    "revision": "8c19fea424469047",
+    "revision": "18036412e0ac0f6a",
     "approvedAt": "2026-09-22",
     "approvedBy": "msskzx",
-    "note": "Approved for publication of chapters one to eleven. Chapter eleven is the ninth year of the hijra and reads Tabuk: the engagement and the Prophet's own part in it come off the legacy marker, and so does Ali's absence, which the chapter states outright — خلف رسول الله عليا في غزوة تبوك. That row had been carried on the seeds' word and had a contradictory PARTICIPATED_IN edge beside it in the graph until it was deleted by hand; it is now a cited absence. Tabuk's year stays on the marker: the chapter is headed السنة التاسعة but never dates the march, and a heading two pages up is not what a value cites. All 387 claims are Not reviewed, chapter eleven included. Approval permits the import and asserts nothing about review."
+    "note": "Approved for publication of chapters one to twelve. Chapter twelve is the tenth year of the hijra and its three claims are حجة الوداع, an event the old seed never had, so the catalog creates the row. The Prophet's part in it and Asma bint Umays's are both cited: she bore محمد بن أبي بكر at ذو الحليفة on the way out and asked him what to do. Her son has no subject, so the birth is not a second event but what she did at this one. All 390 claims are Not reviewed, chapter twelve included. Approval permits the import and asserts nothing about review. One chapter remains, the eleventh year."
   }
 }
