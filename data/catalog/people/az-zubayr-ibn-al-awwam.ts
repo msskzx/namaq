@@ -42,6 +42,7 @@ const azZubayrIbnAlAwwam = {
   },
 
   titles: [
+    { title: 'al-sabiqoon', claims: ['zubayr/al-sabiqoon-eight'] },
     { title: 'the-ten-promised-paradise', claims: ['zubayr/titles'] },
     { title: 'companion', claims: ['zubayr/companion-of-prophet'] },
     // His own entry lists the title; chapter five of the sira gives where it

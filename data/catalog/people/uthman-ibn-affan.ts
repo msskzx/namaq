@@ -16,7 +16,9 @@ const uthmanIbnAffan = {
       claims: ['uthman/hijra-habasha-bi-ahlihi'],
     },
   },
-  titles: [],
+  titles: [
+    { title: 'al-sabiqoon', claims: ['uthman/al-sabiqoon-eight'] },
+  ],
   // Both daughters, in the order the sira gives them: Ruqayyah to Abyssinia
   // and dying during Badr, then Umm Kulthum in the same year.
   relations: [

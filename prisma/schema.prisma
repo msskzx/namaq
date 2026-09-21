@@ -74,6 +74,12 @@ model Person {
   // can enforce it. It is what lets an ambiguous reciprocal be resolved without
   // the author stating it -- see src/lib/catalog/relations.ts.
   sex                        String?
+
+  /// How the source places the person among the clans: النمري, الفهري,
+  /// حليف بني زهرة. A name rather than a relationship, the way a kunya is
+  /// (docs/adr/0014-a-kunya-is-a-name.md), so it is text here and the app
+  /// grows no Tribe node. See README, "What is implemented".
+  tribalAffiliation          String?
   birthYearHijri             String? // e.g., "53 BH", "1 AH" (store as string for flexibility)
   birthYearGregorian         String? // e.g., "570 CE", "622 CE"
   deathYearHijri             String?

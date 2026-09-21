@@ -11,6 +11,9 @@ import hajj from '../events/hajj-of-thirteen';
 import shura from '../events/shura-after-umar';
 
 // Read rather than fixtured, so editing the module or the batch alone fails.
+// Every batch, not just his own. His own entry gave him these; the sira's السابقون
+// section adds the title and the call he answered, so the module now cites two
+// batches and reading one would call the other's claim unknown.
 const batch = JSON.parse(
   readFileSync('data/history/batches/abdur-rahman-ibn-awf/batch.json', 'utf8'),
 ) as {
@@ -23,7 +26,8 @@ const batch = JSON.parse(
     citations: unknown[];
   }[];
 };
-const claimByKey = new Map(batch.claims.map((claim) => [claim.key, claim]));
+const sira = JSON.parse(readFileSync('data/history/batches/prophet-muhammad-sira/batch.json', 'utf8')) as typeof batch;
+const claimByKey = new Map([...batch.claims, ...sira.claims].map((claim) => [claim.key, claim]));
 
 const citedFields = Object.entries(person.fields) as [string, Cited<string>][];
 const everyProvenance: [string, Provenance][] = [

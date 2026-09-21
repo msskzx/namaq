@@ -34,8 +34,8 @@ const talhahIbnUbaydullah = {
     },
     virtues: {
       value:
-        'أَحَدُ العَشَرَةِ المَشْهُوْدِ لَهُم بِالجَنَّةِ، وَمِمَّنْ سَبَقَ إِلَى الإِسْلاَمِ. وَقَى النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِيَدِهِ يَوْمَ أُحُدٍ حَتَّى شُلَّتْ، وَقَالَ فِيْهِ: (مَنْ أَرَادَ أَنْ يَنْظُرَ إِلَى شَهِيْدٍ يَمْشِي عَلَى رِجْلَيْهِ، فَلْيَنْظُرْ إِلَى طَلْحَةَ بنِ عُبَيْدِ اللهِ) ، وَسَمَّاهُ: طَلْحَةَ الفَيَّاضَ.',
-      claims: ['talhah/virtues'],
+        'أَحَدُ العَشَرَةِ المَشْهُوْدِ لَهُم بِالجَنَّةِ، وَمِمَّنْ سَبَقَ إِلَى الإِسْلاَمِ. وَقَى النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِيَدِهِ يَوْمَ أُحُدٍ حَتَّى شُلَّتْ، وَقَالَ فِيْهِ: (مَنْ أَرَادَ أَنْ يَنْظُرَ إِلَى شَهِيْدٍ يَمْشِي عَلَى رِجْلَيْهِ، فَلْيَنْظُرْ إِلَى طَلْحَةَ بنِ عُبَيْدِ اللهِ) ، وَسَمَّاهُ: طَلْحَةَ الفَيَّاضَ. وحضر سوق بصرى فأخبره راهب بخروج أحمد وقال: فإياك أن تسبق إليه، فأسرع إلى مكة فأسلم على يد أبي بكر.',
+      claims: ['talhah/virtues', 'talhah/islam-rahib-busra'],
     },
     // The month is disputed between Jumada al-Akhirah and Rajab; the year is
     // not, and the year is what the model holds.
@@ -43,6 +43,9 @@ const talhahIbnUbaydullah = {
   },
 
   titles: [
+    { title: 'al-sabiqoon', claims: ['talhah/al-sabiqoon-eight'] },
+    // Shared with Abu Bakr: one rope, one name.
+    { title: 'al-qarinayn', claims: ['talhah/al-qarinayn'] },
     { title: 'the-ten-promised-paradise', claims: ['talhah/titles'] },
     { title: 'companion', claims: ['talhah/companion-of-prophet'] },
     { title: 'al-sabiqoon', claims: ['talhah/titles'] },

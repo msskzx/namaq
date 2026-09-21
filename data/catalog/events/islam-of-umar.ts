@@ -21,6 +21,9 @@ const islamOfUmar = {
   people: [
     { person: 'umar-ibn-al-khattab', claims: ['umar/islam'] },
     { person: 'prophet-muhammad', claims: ['umar/islam'] },
+    // On it for what came before it: Umar had him and his own sister bound
+    // over Islam, which al-Bukhari gives in Sa'id's own words.
+    { person: 'saeed-ibn-zaid', claims: ['saeed-ibn-zaid/before-umar'] },
   ],
 } satisfies CatalogEvent;
 

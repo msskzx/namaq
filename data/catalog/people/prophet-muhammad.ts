@@ -45,6 +45,7 @@ const prophetMuhammad = {
   // Ten of the seed's twelve. الشفيع and سيد ولد آدم are not in this chapter,
   // so they stay the seed's until a later one reaches the passages naming them.
   titles: [
+    { title: 'al-sabiqoon', claims: ['sira/al-sabiqoon-eight'] },
     { title: 'prophet', claims: ['prophet/described-in-quran'] },
     { title: 'messenger', claims: ['prophet/described-in-quran'] },
     { title: 'the-chosen-one', claims: ['prophet/istifa'] },

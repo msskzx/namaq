@@ -911,6 +911,59 @@ descends from Asad, as Khadijah bint Khuwaylid **ibn Asad** does.
 
 From chapter six the verse is captured as it is read.
 
+# إسلام السابقين الأولين
+
+The heading sweep passed this section: one anchor in its span was cited
+(`1/111-p3`, the Zayd manumission), and the check asks whether a section
+produced anything, not whether it was mined. Sixteen passages, one citation.
+That is the same shape of miss as زيد بن عمرو, whose section was cited for the
+Prophet and not for him, and it is the limit of what a coverage check can catch.
+
+**Abu Bakr brought five in** (`1/112-p1`). He was مألف لقومه, أنسب قريش لقريش,
+and فأسلم بدعائه عثمان والزبير وعبد الرحمن بن عوف وطلحة وسعد بن أبي وقاص، فجاء
+بهم إلى رسول الله. The graph had no way to say that, so
+`CALLED_TO_ISLAM`/`ANSWERED_CALL_OF` is new. The direction is Ibn Ishaq's own:
+reversed, the graph would say the five brought Abu Bakr in.
+
+**The eight** of that same sentence, فكان هؤلاء النفر الثمانية أول من سبق
+بالإسلام وصلوا وصدقوا, now hold `al-sabiqoon`. The title already existed; this
+is where it is cited.
+
+**القرينان** (`1/113-p2`). Nawfal ibn Khuwaylid, who was called أسد قريش, tied
+Abu Bakr and Talhah in one rope after they became Muslims, ولم تمنعهما بنو تيم,
+فلذلك سمي أبو بكر وطلحة القرينين. A new title, and one neither of them holds
+alone, so both modules carry it. Talhah's Busra monk comes from the same
+passage: the monk asked after أحمد and told him فإياك أن تسبق إليه.
+
+**The rest of the section**: Sa'd's لقد مكثت سبعة أيام وإني لثلث الإسلام
+(`1/114-p4`), Sa'id ibn Zayd bound by Umar over Islam before Umar's own
+(`1/114-p6`, now on the islam-of-umar event), and Ibn Mas'ud herding sheep for
+Uqbah ibn Abi Mu'ayt, ending with إنك غلام معلم and فأخذت من فيه سبعين سورة
+(`1/115-p1`).
+
+Ibn Ishaq's ordering of the first men, ثم أسلم زيد... فكان أول ذكر أسلم، وصلى
+بعد علي (`1/111-p2`), is the same report `sira/first-man-to-believe` already
+holds as DISPUTED, so it joins that claim as a second citation rather than
+becoming a record of its own.
+
+## حليف بني كذا
+
+The roster names six men by their حلف: خباب حليف بني زهرة, عامر بن ربيعة حليف
+آل الخطاب, واقد حليف بني عدي, بنو البكير حلفاء بني عدي, عمار حليف بني مخزوم,
+صهيب النمري حليف بني تميم.
+
+It is recorded as `tribalAffiliation`, a text column on the person, and
+**deliberately not as a relationship**. Ibn Ishaq uses a حلف the way he uses a
+nisba, to tell forty names apart in one list, which makes it a name -- the same
+call [ADR 0014](../../../docs/adr/0014-a-kunya-is-a-name.md) made for a kunya.
+
+A relationship would need something on the far end, and that something is a
+tribe. Once tribes are nodes, every person in the app needs an edge to one,
+because every one of them has a nasab; and `npm run graph:layout` computes
+centrality over every edge regardless of type, so قريش and بنو هاشم would
+outrank the people the graph exists to show. Four of the six have subjects and
+carry the value; the other two do not, and the roster keeps them.
+
 # Review
 
 Nothing in this batch is reviewed, across any of its chapters. The claims are

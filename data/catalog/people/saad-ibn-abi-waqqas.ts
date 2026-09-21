@@ -32,8 +32,8 @@ const saadIbnAbiWaqqas = {
     },
     virtues: {
       value:
-        'جَمَعَ لَهُ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَبَوَيْهِ يَوْمَ أُحُدٍ، وَقَالَ فِيْهِ: (هَذَا خَالِي، فَلْيُرِنِي امْرُؤٌ خَالَهُ) ، وَدَعَا لَهُ: (اللَّهُمَّ اسْتَجِبْ لِسَعْدٍ إِذَا دَعَاكَ) ، وَكَانَ فَتْحُ العِرَاقِ عَلَى يَدَيْهِ، وَهُوَ مُقَدَّمُ الجُيُوْشِ يَوْمَ وَقْعَةِ القَادِسِيَّةِ.',
-      claims: ['saad/virtues'],
+        'جَمَعَ لَهُ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَبَوَيْهِ يَوْمَ أُحُدٍ، وَقَالَ فِيْهِ: (هَذَا خَالِي، فَلْيُرِنِي امْرُؤٌ خَالَهُ) ، وَدَعَا لَهُ: (اللَّهُمَّ اسْتَجِبْ لِسَعْدٍ إِذَا دَعَاكَ) ، وَكَانَ فَتْحُ العِرَاقِ عَلَى يَدَيْهِ، وَهُوَ مُقَدَّمُ الجُيُوْشِ يَوْمَ وَقْعَةِ القَادِسِيَّةِ. وقال: لقد مكثت سبعة أيام وإني لثلث الإسلام.',
+      claims: ['saad/virtues', 'saad/thulth-al-islam'],
     },
     // Four years are reported. 55 is what al-Mada'ini, Abu Ubaydah and a group
     // give, and the burial account agrees, so the field takes it; 56, 57 and 58
@@ -43,6 +43,7 @@ const saadIbnAbiWaqqas = {
   },
 
   titles: [
+    { title: 'al-sabiqoon', claims: ['saad/al-sabiqoon-eight'] },
     { title: 'the-ten-promised-paradise', claims: ['saad/titles'] },
     { title: 'companion', claims: ['saad/companion-of-prophet'] },
     { title: 'the-six-of-the-shura', claims: ['saad/titles'] },

@@ -26,6 +26,12 @@ export interface CatalogPersonFields {
   readonly sex?: Cited<Sex>;
   readonly fullName?: Cited<string>;
   readonly kunya?: Cited<string>;
+  /**
+   * How the source places the person among the clans, in its own words:
+   * النمري, الفهري, حليف بني زهرة. A name rather than a relationship, so the
+   * graph grows no Tribe node -- see README, "What is implemented".
+   */
+  readonly tribalAffiliation?: Cited<string>;
   readonly appearance?: Cited<string>;
   readonly virtues?: Cited<string>;
   readonly birthYearHijri?: Cited<string>;

@@ -102,6 +102,11 @@ export const titles = [
     slug: 'al-sabiqoon',
   },
   {
+    name: 'القرينان',
+    nameTransliterated: 'Al-Qarinayn',
+    slug: 'al-qarinayn',
+  },
+  {
     name: 'حواري الأمة',
     nameTransliterated: 'Hawari al-Ummah',
     slug: 'hawari-al-ummah',

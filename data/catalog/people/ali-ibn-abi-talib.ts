@@ -15,7 +15,9 @@ const aliIbnAbiTalib = {
       claims: ['ali/hijra-bed'],
     },
   },
-  titles: [],
+  titles: [
+    { title: 'al-sabiqoon', claims: ['ali/al-sabiqoon-eight'] },
+  ],
   relations: [
     { type: 'HUSBAND', inverse: 'WIFE', to: 'fatimah-bint-muhammad', claims: ['ali/husband-fatimah'] },
   ],

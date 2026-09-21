@@ -29265,6 +29265,15 @@
           "extractionUrl": "https://shamela.ws/book/10906/240",
           "excerptArabic": "وقال ابن إسحاق: أول ذكر آمن بالله علي -رضي الله عنه- وهو ابن عشر سنين، ثم أسلم زيد مولى النبي صلى الله عليه وسلم، ثم أسلم أبو بكر.",
           "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/111-p2",
+          "volume": "السيرة 1",
+          "pageReference": "111",
+          "extractionUrl": "https://shamela.ws/book/10906/249",
+          "excerptArabic": "ثم أسلم زيد بن حارثة مولى رسول الله صلى الله عليه وسلم، فكان أول ذكر أسلم، وصلى بعد علي، رضي الله عنهما.",
+          "accessedAt": "2026-09-20"
         }
       ]
     },
@@ -31462,12 +31471,504 @@
           "accessedAt": "2026-09-20"
         }
       ]
+    },
+    {
+      "key": "abu-bakr/called-to-islam",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-bakr-as-siddiq",
+      "assertion": "كان مألفا لقومه أنسب قريش لقريش، فجعل لما أسلم يدعو من وثق به، فأسلم بدعائه عثمان والزبير وعبد الرحمن بن عوف وطلحة وسعد بن أبي وقاص، فجاء بهم إلى رسول الله صلى الله عليه وسلم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/112-p1",
+          "volume": "السيرة 1",
+          "pageReference": "112",
+          "extractionUrl": "https://shamela.ws/book/10906/250",
+          "excerptArabic": "وكان أبو بكر رجلا مألفا لقومه محببا سهلا، وكان أنسب قريش لقريش، وكان تاجرا ذا خلق ومعروف، فجعل لما أسلم يدعو إلى الله وإلى الإسلام من وثق به من قومه، ممن يغشاه، ويجلس إليه، فأسلم بدعائه: عثمان، والزبير، وعبد الرحمن بن عوف، وطلحة بن عبيد الله، وسعد بن أبي وقاص، فجاء بهم إلى رسول الله صلى الله عليه وسلم حين أسلموا وصلوا، فكان هؤلاء النفر الثمانية أول من سبق بالإسلام وصلوا وصدقوا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "uthman/answered-abu-bakr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "uthman-ibn-affan",
+      "assertion": "أسلم بدعاء أبي بكر، فجاء به إلى رسول الله صلى الله عليه وسلم حين أسلم وصلى.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "ANSWERED_CALL_OF",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "abu-bakr-as-siddiq",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/112-p1",
+          "volume": "السيرة 1",
+          "pageReference": "112",
+          "extractionUrl": "https://shamela.ws/book/10906/250",
+          "excerptArabic": "وكان أبو بكر رجلا مألفا لقومه محببا سهلا، وكان أنسب قريش لقريش، وكان تاجرا ذا خلق ومعروف، فجعل لما أسلم يدعو إلى الله وإلى الإسلام من وثق به من قومه، ممن يغشاه، ويجلس إليه، فأسلم بدعائه: عثمان، والزبير، وعبد الرحمن بن عوف، وطلحة بن عبيد الله، وسعد بن أبي وقاص، فجاء بهم إلى رسول الله صلى الله عليه وسلم حين أسلموا وصلوا، فكان هؤلاء النفر الثمانية أول من سبق بالإسلام وصلوا وصدقوا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "zubayr/answered-abu-bakr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "أسلم بدعاء أبي بكر، فجاء به إلى رسول الله صلى الله عليه وسلم حين أسلم وصلى.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "ANSWERED_CALL_OF",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "abu-bakr-as-siddiq",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/112-p1",
+          "volume": "السيرة 1",
+          "pageReference": "112",
+          "extractionUrl": "https://shamela.ws/book/10906/250",
+          "excerptArabic": "وكان أبو بكر رجلا مألفا لقومه محببا سهلا، وكان أنسب قريش لقريش، وكان تاجرا ذا خلق ومعروف، فجعل لما أسلم يدعو إلى الله وإلى الإسلام من وثق به من قومه، ممن يغشاه، ويجلس إليه، فأسلم بدعائه: عثمان، والزبير، وعبد الرحمن بن عوف، وطلحة بن عبيد الله، وسعد بن أبي وقاص، فجاء بهم إلى رسول الله صلى الله عليه وسلم حين أسلموا وصلوا، فكان هؤلاء النفر الثمانية أول من سبق بالإسلام وصلوا وصدقوا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "awf/answered-abu-bakr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdur-rahman-ibn-awf",
+      "assertion": "أسلم بدعاء أبي بكر، فجاء به إلى رسول الله صلى الله عليه وسلم حين أسلم وصلى.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "ANSWERED_CALL_OF",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "abu-bakr-as-siddiq",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/112-p1",
+          "volume": "السيرة 1",
+          "pageReference": "112",
+          "extractionUrl": "https://shamela.ws/book/10906/250",
+          "excerptArabic": "وكان أبو بكر رجلا مألفا لقومه محببا سهلا، وكان أنسب قريش لقريش، وكان تاجرا ذا خلق ومعروف، فجعل لما أسلم يدعو إلى الله وإلى الإسلام من وثق به من قومه، ممن يغشاه، ويجلس إليه، فأسلم بدعائه: عثمان، والزبير، وعبد الرحمن بن عوف، وطلحة بن عبيد الله، وسعد بن أبي وقاص، فجاء بهم إلى رسول الله صلى الله عليه وسلم حين أسلموا وصلوا، فكان هؤلاء النفر الثمانية أول من سبق بالإسلام وصلوا وصدقوا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "talhah/answered-abu-bakr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "talhah-ibn-ubaydullah",
+      "assertion": "أسلم بدعاء أبي بكر، فجاء به إلى رسول الله صلى الله عليه وسلم حين أسلم وصلى.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "ANSWERED_CALL_OF",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "abu-bakr-as-siddiq",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/112-p1",
+          "volume": "السيرة 1",
+          "pageReference": "112",
+          "extractionUrl": "https://shamela.ws/book/10906/250",
+          "excerptArabic": "وكان أبو بكر رجلا مألفا لقومه محببا سهلا، وكان أنسب قريش لقريش، وكان تاجرا ذا خلق ومعروف، فجعل لما أسلم يدعو إلى الله وإلى الإسلام من وثق به من قومه، ممن يغشاه، ويجلس إليه، فأسلم بدعائه: عثمان، والزبير، وعبد الرحمن بن عوف، وطلحة بن عبيد الله، وسعد بن أبي وقاص، فجاء بهم إلى رسول الله صلى الله عليه وسلم حين أسلموا وصلوا، فكان هؤلاء النفر الثمانية أول من سبق بالإسلام وصلوا وصدقوا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "saad/answered-abu-bakr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-abi-waqqas",
+      "assertion": "أسلم بدعاء أبي بكر، فجاء به إلى رسول الله صلى الله عليه وسلم حين أسلم وصلى.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "ANSWERED_CALL_OF",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "abu-bakr-as-siddiq",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/112-p1",
+          "volume": "السيرة 1",
+          "pageReference": "112",
+          "extractionUrl": "https://shamela.ws/book/10906/250",
+          "excerptArabic": "وكان أبو بكر رجلا مألفا لقومه محببا سهلا، وكان أنسب قريش لقريش، وكان تاجرا ذا خلق ومعروف، فجعل لما أسلم يدعو إلى الله وإلى الإسلام من وثق به من قومه، ممن يغشاه، ويجلس إليه، فأسلم بدعائه: عثمان، والزبير، وعبد الرحمن بن عوف، وطلحة بن عبيد الله، وسعد بن أبي وقاص، فجاء بهم إلى رسول الله صلى الله عليه وسلم حين أسلموا وصلوا، فكان هؤلاء النفر الثمانية أول من سبق بالإسلام وصلوا وصدقوا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/al-sabiqoon-eight",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "كان من النفر الثمانية الذين سبقوا بالإسلام فصلوا وصدقوا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "titles",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/112-p1",
+          "volume": "السيرة 1",
+          "pageReference": "112",
+          "extractionUrl": "https://shamela.ws/book/10906/250",
+          "excerptArabic": "وكان أبو بكر رجلا مألفا لقومه محببا سهلا، وكان أنسب قريش لقريش، وكان تاجرا ذا خلق ومعروف، فجعل لما أسلم يدعو إلى الله وإلى الإسلام من وثق به من قومه، ممن يغشاه، ويجلس إليه، فأسلم بدعائه: عثمان، والزبير، وعبد الرحمن بن عوف، وطلحة بن عبيد الله، وسعد بن أبي وقاص، فجاء بهم إلى رسول الله صلى الله عليه وسلم حين أسلموا وصلوا، فكان هؤلاء النفر الثمانية أول من سبق بالإسلام وصلوا وصدقوا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "abu-bakr/al-sabiqoon-eight",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-bakr-as-siddiq",
+      "assertion": "كان من النفر الثمانية الذين سبقوا بالإسلام فصلوا وصدقوا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "titles",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/112-p1",
+          "volume": "السيرة 1",
+          "pageReference": "112",
+          "extractionUrl": "https://shamela.ws/book/10906/250",
+          "excerptArabic": "وكان أبو بكر رجلا مألفا لقومه محببا سهلا، وكان أنسب قريش لقريش، وكان تاجرا ذا خلق ومعروف، فجعل لما أسلم يدعو إلى الله وإلى الإسلام من وثق به من قومه، ممن يغشاه، ويجلس إليه، فأسلم بدعائه: عثمان، والزبير، وعبد الرحمن بن عوف، وطلحة بن عبيد الله، وسعد بن أبي وقاص، فجاء بهم إلى رسول الله صلى الله عليه وسلم حين أسلموا وصلوا، فكان هؤلاء النفر الثمانية أول من سبق بالإسلام وصلوا وصدقوا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ali/al-sabiqoon-eight",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ali-ibn-abi-talib",
+      "assertion": "كان من النفر الثمانية الذين سبقوا بالإسلام فصلوا وصدقوا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "titles",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/112-p1",
+          "volume": "السيرة 1",
+          "pageReference": "112",
+          "extractionUrl": "https://shamela.ws/book/10906/250",
+          "excerptArabic": "وكان أبو بكر رجلا مألفا لقومه محببا سهلا، وكان أنسب قريش لقريش، وكان تاجرا ذا خلق ومعروف، فجعل لما أسلم يدعو إلى الله وإلى الإسلام من وثق به من قومه، ممن يغشاه، ويجلس إليه، فأسلم بدعائه: عثمان، والزبير، وعبد الرحمن بن عوف، وطلحة بن عبيد الله، وسعد بن أبي وقاص، فجاء بهم إلى رسول الله صلى الله عليه وسلم حين أسلموا وصلوا، فكان هؤلاء النفر الثمانية أول من سبق بالإسلام وصلوا وصدقوا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "uthman/al-sabiqoon-eight",
+      "subjectKind": "PERSON",
+      "subjectSlug": "uthman-ibn-affan",
+      "assertion": "كان من النفر الثمانية الذين سبقوا بالإسلام فصلوا وصدقوا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "titles",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/112-p1",
+          "volume": "السيرة 1",
+          "pageReference": "112",
+          "extractionUrl": "https://shamela.ws/book/10906/250",
+          "excerptArabic": "وكان أبو بكر رجلا مألفا لقومه محببا سهلا، وكان أنسب قريش لقريش، وكان تاجرا ذا خلق ومعروف، فجعل لما أسلم يدعو إلى الله وإلى الإسلام من وثق به من قومه، ممن يغشاه، ويجلس إليه، فأسلم بدعائه: عثمان، والزبير، وعبد الرحمن بن عوف، وطلحة بن عبيد الله، وسعد بن أبي وقاص، فجاء بهم إلى رسول الله صلى الله عليه وسلم حين أسلموا وصلوا، فكان هؤلاء النفر الثمانية أول من سبق بالإسلام وصلوا وصدقوا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "zubayr/al-sabiqoon-eight",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "كان من النفر الثمانية الذين سبقوا بالإسلام فصلوا وصدقوا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "titles",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/112-p1",
+          "volume": "السيرة 1",
+          "pageReference": "112",
+          "extractionUrl": "https://shamela.ws/book/10906/250",
+          "excerptArabic": "وكان أبو بكر رجلا مألفا لقومه محببا سهلا، وكان أنسب قريش لقريش، وكان تاجرا ذا خلق ومعروف، فجعل لما أسلم يدعو إلى الله وإلى الإسلام من وثق به من قومه، ممن يغشاه، ويجلس إليه، فأسلم بدعائه: عثمان، والزبير، وعبد الرحمن بن عوف، وطلحة بن عبيد الله، وسعد بن أبي وقاص، فجاء بهم إلى رسول الله صلى الله عليه وسلم حين أسلموا وصلوا، فكان هؤلاء النفر الثمانية أول من سبق بالإسلام وصلوا وصدقوا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "awf/al-sabiqoon-eight",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdur-rahman-ibn-awf",
+      "assertion": "كان من النفر الثمانية الذين سبقوا بالإسلام فصلوا وصدقوا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "titles",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/112-p1",
+          "volume": "السيرة 1",
+          "pageReference": "112",
+          "extractionUrl": "https://shamela.ws/book/10906/250",
+          "excerptArabic": "وكان أبو بكر رجلا مألفا لقومه محببا سهلا، وكان أنسب قريش لقريش، وكان تاجرا ذا خلق ومعروف، فجعل لما أسلم يدعو إلى الله وإلى الإسلام من وثق به من قومه، ممن يغشاه، ويجلس إليه، فأسلم بدعائه: عثمان، والزبير، وعبد الرحمن بن عوف، وطلحة بن عبيد الله، وسعد بن أبي وقاص، فجاء بهم إلى رسول الله صلى الله عليه وسلم حين أسلموا وصلوا، فكان هؤلاء النفر الثمانية أول من سبق بالإسلام وصلوا وصدقوا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "talhah/al-sabiqoon-eight",
+      "subjectKind": "PERSON",
+      "subjectSlug": "talhah-ibn-ubaydullah",
+      "assertion": "كان من النفر الثمانية الذين سبقوا بالإسلام فصلوا وصدقوا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "titles",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/112-p1",
+          "volume": "السيرة 1",
+          "pageReference": "112",
+          "extractionUrl": "https://shamela.ws/book/10906/250",
+          "excerptArabic": "وكان أبو بكر رجلا مألفا لقومه محببا سهلا، وكان أنسب قريش لقريش، وكان تاجرا ذا خلق ومعروف، فجعل لما أسلم يدعو إلى الله وإلى الإسلام من وثق به من قومه، ممن يغشاه، ويجلس إليه، فأسلم بدعائه: عثمان، والزبير، وعبد الرحمن بن عوف، وطلحة بن عبيد الله، وسعد بن أبي وقاص، فجاء بهم إلى رسول الله صلى الله عليه وسلم حين أسلموا وصلوا، فكان هؤلاء النفر الثمانية أول من سبق بالإسلام وصلوا وصدقوا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "saad/al-sabiqoon-eight",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-abi-waqqas",
+      "assertion": "كان من النفر الثمانية الذين سبقوا بالإسلام فصلوا وصدقوا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "titles",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/112-p1",
+          "volume": "السيرة 1",
+          "pageReference": "112",
+          "extractionUrl": "https://shamela.ws/book/10906/250",
+          "excerptArabic": "وكان أبو بكر رجلا مألفا لقومه محببا سهلا، وكان أنسب قريش لقريش، وكان تاجرا ذا خلق ومعروف، فجعل لما أسلم يدعو إلى الله وإلى الإسلام من وثق به من قومه، ممن يغشاه، ويجلس إليه، فأسلم بدعائه: عثمان، والزبير، وعبد الرحمن بن عوف، وطلحة بن عبيد الله، وسعد بن أبي وقاص، فجاء بهم إلى رسول الله صلى الله عليه وسلم حين أسلموا وصلوا، فكان هؤلاء النفر الثمانية أول من سبق بالإسلام وصلوا وصدقوا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "abu-bakr/al-qarinayn",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-bakr-as-siddiq",
+      "assertion": "لما أسلم هو وطلحة أخذهما نوفل بن خويلد فشدهما في حبل واحد، فلذلك سميا القرينين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "titles",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/113-p2",
+          "volume": "السيرة 1",
+          "pageReference": "113",
+          "extractionUrl": "https://shamela.ws/book/10906/251",
+          "excerptArabic": "فلما أسلم أبو بكر وطلحة أخذهما نوفل بن خويلد بن العدوية فشدهما في حبل واحد، ولم تمنعهما بنو تيم، وكان نوفل يدعى \"أسد قريش\"، فلذلك سمي أبو بكر وطلحة: القرينين.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "talhah/al-qarinayn",
+      "subjectKind": "PERSON",
+      "subjectSlug": "talhah-ibn-ubaydullah",
+      "assertion": "لما أسلم هو وأبو بكر أخذهما نوفل بن خويلد فشدهما في حبل واحد، فلذلك سميا القرينين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "titles",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/113-p2",
+          "volume": "السيرة 1",
+          "pageReference": "113",
+          "extractionUrl": "https://shamela.ws/book/10906/251",
+          "excerptArabic": "فلما أسلم أبو بكر وطلحة أخذهما نوفل بن خويلد بن العدوية فشدهما في حبل واحد، ولم تمنعهما بنو تيم، وكان نوفل يدعى \"أسد قريش\"، فلذلك سمي أبو بكر وطلحة: القرينين.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "talhah/islam-rahib-busra",
+      "subjectKind": "PERSON",
+      "subjectSlug": "talhah-ibn-ubaydullah",
+      "assertion": "حضر سوق بصرى فأخبره راهب بخروج أحمد وقال: فإياك أن تسبق إليه، فأسرع إلى مكة فأسلم على يد أبي بكر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/113-p2",
+          "volume": "السيرة 1",
+          "pageReference": "113",
+          "extractionUrl": "https://shamela.ws/book/10906/251",
+          "excerptArabic": "قال طلحة بن عبيد الله: حضرت سوق بصرى، فإذا راهب في صومعته يقول: سلوا أهل الموسم، أفيهم أحد من أهل الحرم؟ قال طلحة: قلت: نعم أنا. فقال: هل ظهر أحمد بعد؟ قلت: ومن أحمد؟ قال: ابن عبد الله بن عبد المطلب، هذا شهره الذي يخرج فيه، وهو آخر الأنبياء، مخرجه من الحرم ومهاجره إلى نخل وحرة وسباخ، فإياك أن تسبق إليه. قال طلحة: فوقع في قلبي، فأسرعت إلى مكة، فقلت: هل من حدث؟ قالوا: نعم، محمد بن عبد الله الأمين تنبأ، وقد تبعه ابن أبي قحافة، فدخلت عليه فقلت: اتبعت هذا الرجل؟ قال: نعم، فانطلق فاتبعه. فأخبره طلحة بما قال الراهب، فخرج به حتى دخلا على رسول الله صلى الله عليه وسلم فأسلم طلحة",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "khabbab/hilf",
+      "subjectKind": "PERSON",
+      "subjectSlug": "khabbab-ibn-al-aratt",
+      "assertion": "خباب بن الأرت حليف بني زهرة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "tribalAffiliation",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/112-p2",
+          "volume": "السيرة 1",
+          "pageReference": "112",
+          "extractionUrl": "https://shamela.ws/book/10906/250",
+          "excerptArabic": "وخباب بن الأرت حليف بني زهرة، وعمير بن أبي وقاص أخو سعد، وعبد الله بن مسعود، وسليط بن عمرو بن عبد شمس العامري، وأخوه حاطب، وعياش بن أبي ربيعة بن المغيرة المخزومي، وامرأته أسماء, وخنيس بن حذافة السهمي، وعامر",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ammar/hilf",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ammar-ibn-yasir",
+      "assertion": "عمار بن ياسر حليف بني مخزوم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "tribalAffiliation",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/113-p1",
+          "volume": "السيرة 1",
+          "pageReference": "113",
+          "extractionUrl": "https://shamela.ws/book/10906/251",
+          "excerptArabic": "وواقد بن عبد الله حليف بني عدي، وخالد، وعامر، وعاقل، وإياس بنو البكير حلفاء بني عدي، وعمار بن ياسر حليف بني مخزوم، وصهيب بن سنان النمري حليف بني تميم.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "suhayb/hilf",
+      "subjectKind": "PERSON",
+      "subjectSlug": "suhaib-ibn-sinan",
+      "assertion": "صهيب بن سنان النمري حليف بني تميم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "tribalAffiliation",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/113-p1",
+          "volume": "السيرة 1",
+          "pageReference": "113",
+          "extractionUrl": "https://shamela.ws/book/10906/251",
+          "excerptArabic": "وواقد بن عبد الله حليف بني عدي، وخالد، وعامر، وعاقل، وإياس بنو البكير حلفاء بني عدي، وعمار بن ياسر حليف بني مخزوم، وصهيب بن سنان النمري حليف بني تميم.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "amir-ibn-rabiah/hilf",
+      "subjectKind": "PERSON",
+      "subjectSlug": "amir-ibn-rabiah",
+      "assertion": "عامر بن ربيعة حليف آل الخطاب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "tribalAffiliation",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/112-p3",
+          "volume": "السيرة 1",
+          "pageReference": "112",
+          "extractionUrl": "https://shamela.ws/book/10906/250",
+          "excerptArabic": "ابن ربيعة حليف آل الخطاب، وعبد الله وأبو أحمد ابنا جحش بن رئاب الأسدي، وجعفر بن أبي طالب، وامرأته أسماء بنت عميس، وحاطب بن الحارث الجمحي، وامرأته فاطمة بنت المجلل، وأخوه خطاب، وامرأته فكيهة بنت يسار، ومعمر بن الحارث أخوهما، والسائب بن عثمان بن مظعون، والمطلب بن أزهر بن عبد عوف العدوي الزهري، وامرأته رملة بنت أبي عوف، والنحام وهو نعيم بن عبد الله بن أسد العدوي، وعامر بن فهيرة مولى أبي بكر، وخالد بن",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "saad/thulth-al-islam",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-abi-waqqas",
+      "assertion": "قال: لقد مكثت سبعة أيام وإني لثلث الإسلام. أخرجه البخاري.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/114-p4",
+          "volume": "السيرة 1",
+          "pageReference": "114",
+          "extractionUrl": "https://shamela.ws/book/10906/252",
+          "excerptArabic": "أنه سمع سعد بن أبي وقاص يقول: لقد مكثت سبعة أيام، وإني لثلث الإسلام. أخرجه البخاري.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "saeed-ibn-zaid/before-umar",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saeed-ibn-zaid",
+      "assertion": "قال: والله لقد رأيتني وإن عمر لموثقي وأخته على الإسلام، قبل أن يسلم عمر. أخرجه البخاري.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "islam-of-umar",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/114-p6",
+          "volume": "السيرة 1",
+          "pageReference": "114",
+          "extractionUrl": "https://shamela.ws/book/10906/252",
+          "excerptArabic": "قال: والله لقد رأيتني وإن عمر لموثقي وأخته على الإسلام، قبل أن يسلم عمر, ولو أن أحدا ارفض للذي صنعتم بعثمان لكان. أخرجه البخاري.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ibn-masud/ghanam",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-masud",
+      "assertion": "كان يرعى غنما لعقبة بن أبي معيط فمر به النبي صلى الله عليه وسلم وأبو بكر فحلب لهما من جذعة لم ينز عليها الفحل، فقال له: إنك غلام معلم. قال: فأخذت من فيه سبعين سورة ما ينازعني فيها أحد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/115-p1",
+          "volume": "السيرة 1",
+          "pageReference": "115",
+          "extractionUrl": "https://shamela.ws/book/10906/253",
+          "excerptArabic": "قال: كنت يافعا أرعى غنما لعقبة بن أبي معيط بمكة فأتى عليَّ رسول الله صلى الله عليه وسلم وأبو بكر، وقد فرا من المشركين فقالا: \"يا غلام هل عندك لبن تسقينا\"؟ قلت: إني مؤتمن ولست بساقيكما. فقالا: \"هل عندك من جذعة لم ينز عليها الفحل\". قلت: نعم، فأتيتهما بها، فاعتقلها أبو بكر، وأخذ النبي صلى الله عليه وسلم الضرع فدعا، فحفل الضرع، وأتاه أبو بكر بصخرة منقعرة، فحلب فيها، ثم شربا وسقياني، ثم قال للضرع: \"اقلص\". فقلص فلما كان بعد، أتيت رسول الله صلى الله عليه وسلم فقلت: علمني من هذا القول الطيب، يعني القرآن فقال: \"إنك غلام معلم\". فأخذت من فيه سبعين سورة ما ينازعني فيها أحد.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
     }
   ],
   "approval": {
-    "revision": "9f627cec84636ab0",
+    "revision": "578302f68ffac9ff",
     "approvedAt": "2026-09-21",
     "approvedBy": "msskzx",
-    "note": "Approved for publication of chapters one to five, including the heading sweep that went back over them and the sections it turned up. All 303 claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
+    "note": "Approved for publication of chapters one to five, including the heading sweep that went back over them and the sections it turned up. All 327 claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
   }
 }
