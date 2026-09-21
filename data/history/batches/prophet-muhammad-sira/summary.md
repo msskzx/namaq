@@ -808,9 +808,47 @@ than the back-fill:
   لها with أخرجه مسلم (`1/135-p1`). One is a verdict and the other a takhrij,
   and the column holds both because it holds whatever the source wrote.
 
-The remaining 40 verse runs in chapters one to five are a back-fill pass, not
-lost: the pages hold them and the count is here. From chapter six the verse is
-captured as it is read.
+## Chapter one's verse
+
+Chapter one is now swept, the way its headings were. The editor prints a
+hemistich break as ` ... `, which finds a line of verse without knowing any
+metre, and consecutive lines are one poem. That gives 17 runs before `1/146`,
+one of which is prose abbreviating a hadith it had already quoted. The other 16
+are all recorded.
+
+Eleven are new here, on top of the five the structure arrived with:
+
+- **أبو طالب** four more times. وشق له من اسمه ليجله (`1/40-p4`), quoted for
+  what the Arabs said of it rather than for what it says. ألا قل لعمرو والوليد
+  ومطعم (`1/123-p3`), after Quraysh offered him Umarah ibn al-Walid for his
+  nephew. And the لامية (`1/130-p3` to `1/131-p7`), which the chapter prints in
+  two runs with its own break between them: the citation keeps that break as an
+  ellipsis rather than joining them into a poem the source did not print. Two of
+  its lines are the istisqa quotation from seventy pages earlier with different
+  wording, ثمال اليتامى against ربيع اليتامى, so they stay two records.
+- **العباس** (`1/48-p4`), after asking leave to praise him and being answered
+  لا يفضض الله فاك, and **عبد المطلب** circling the House when the boy he had
+  sent after his camels was late back (`1/54-p5`).
+- **ورقة بن نوفل** twice (`1/100-p3`, `1/107-p5`). He has no subject in the
+  app, so his name is text; that is a statement about the catalog and not about
+  him.
+- **عبد المسيح بن بقيلة** twice, from the Satih story (`1/43-p2`, `1/44-p1`).
+  al-Dhahabi closes it with هذا حديث منكر غريب, and both carry that as their
+  grading. A rejected report can be recorded because the grading is what keeps
+  it from reading as an accepted one.
+- **أم جميل بنت حرب**'s مذمما أبينا (`1/119-p1`), which is verse against him
+  rather than for him. The occasion says who said it and why, and the chapter
+  gives his answer in the same passage.
+- **أبو قيس بن الأسلت** (`1/131-p9`), an Awsi calling Quraysh to the hanifi
+  religion and reminding them of the Elephant.
+
+`poetrySweep.test.ts` runs the check, with `UNSWEPT_FROM` at `1/146-p1` and a
+`DECLINED` entry for the one prose run. It moves forward as chapters are swept,
+never to make a failure go away.
+
+The remaining verse of chapters two to five is the next back-fill: the pages
+hold it and the test names it the moment the boundary moves. From chapter six
+the verse is captured as it is read.
 
 # Review
 

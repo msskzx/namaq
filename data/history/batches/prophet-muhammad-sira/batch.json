@@ -30654,12 +30654,259 @@
           "accessedAt": "2026-09-20"
         }
       ]
+    },
+    {
+      "key": "abu-talib/verses-wa-shuqqa",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-talib",
+      "assertion": "قال أبو طالب في النبي صلى الله عليه وسلم: وشق له من اسمه ليجله، فذو العرش محمود وهذا محمد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/40-p3",
+          "volume": "السيرة 1",
+          "pageReference": "40",
+          "extractionUrl": "https://shamela.ws/book/10906/178",
+          "excerptArabic": "تذاكروا أحسن بيت قالته العرب، فقالوا: قول أبي طالب في النبي صلى الله عليه وسلم:\nوشق له من اسمه ليجله ... فذو العرش محمود وهذا محمد",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/verses-abd-al-masih-asamm",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "أنشأ عبد المسيح يقول لسطيح: أصم أم يسمع غطريف اليمن. قال الذهبي: هذا حديث منكر غريب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/43-p1",
+          "volume": "السيرة 1",
+          "pageReference": "43",
+          "extractionUrl": "https://shamela.ws/book/10906/181",
+          "excerptArabic": "فركب حتى أتى على سطيح وقد أشفى على الموت، فسلم عليه وحياه فلم يحر سطيح جوابا، فأنشأ عبد المسيح يقول:\nأصم أم يسمع غطريف اليمن ... أم فاد فازلم به شأو العنن\nيا فاصل الخطة أعيت من ومن ... أتاك شيخ الحي من آل سنن\nوأمه من آل ذئب بن حجن ... أزرق بهم الناب صرار الأذن\nأبيض فضفاض الرداء والبدن ... رسول قيل العجم يسرى للوسن\nيجوب في الأرض علنداة شجن ... ترفعني وجن وتهوي بي وجن\nلا يرهب الرعد ولا ريب الزمن ... كأنما حثحث من حضنى ثكن\nحتى أتى عاري الحآجي والقطن ... تلفه في الريح بوغاء الدمن",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/44-p8",
+          "volume": "السيرة 1",
+          "pageReference": "44",
+          "extractionUrl": "https://shamela.ws/book/10906/182",
+          "excerptArabic": "هذا حديث منكر غريب.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/verses-abd-al-masih-shammir",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "وسار عبد المسيح إلى رحله وهو يقول: شمر فإنك ماضي الهم شمير. قال الذهبي: هذا حديث منكر غريب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/43-p9",
+          "volume": "السيرة 1",
+          "pageReference": "43-44",
+          "extractionUrl": "https://shamela.ws/book/10906/181",
+          "excerptArabic": "ثم قضى سطيح مكانه، وسار عبد المسيح إلى رحله، وهو يقول:\nشمر فإنك ماضي الهم شمير ... لا يفزعنك تفريق وتغيير\nإن يمس ملك بني ساسان أفرطهم ... فإن ذا الدهر أطوار دهارير\nفربما ربما أضحضوا بمنزلة ... تهاب صولهم الأسد المهاصير\nمنهم أخو الصرح بهرام وإخوته ... والهرمزان وسابور وسابور\nوالناس أولاد علات فمن علموا ... أن قد أقل فمحقور ومهجور\nوهم بنو الأم إما إن رأوا نشبا ... فذاك بالغيب محفوظ ومنصور\nوالخير والشر مصفودان في قرن ... فالخير متبع والشر محذور",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/44-p8",
+          "volume": "السيرة 1",
+          "pageReference": "44",
+          "extractionUrl": "https://shamela.ws/book/10906/182",
+          "excerptArabic": "هذا حديث منكر غريب.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "abbas/verses-madh",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-abbas-ibn-abd-al-muttalib",
+      "assertion": "استأذن العباس النبي صلى الله عليه وسلم أن يمتدحه فقال: لا يفضض الله فاك. فقال: من قبلها طبت في الظلال.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/48-p3",
+          "volume": "السيرة 1",
+          "pageReference": "48",
+          "extractionUrl": "https://shamela.ws/book/10906/186",
+          "excerptArabic": "فسمعت العباس، يقول: يا رسول الله إني أريد أن أمتدحك فقال: \"لا يفضض الله فاك\". فقال:\nمن قبلها طبت في الظلال وفي ... مستودع حيث يخصف الورق\nثم هبطت البلاد لا بشر ... أنت ولا مضغة ولا علق\nبل نطفة تركب السفين وقد ... ألجم نسرا وأهله الغرق\nتنقل من صالب إلى رحم ... إذا مضى عالم بدا طبق\nحتى احتوى بيتك المهيمن من ... خندف علياء تحتها النطق\nوأنت لما ولدت أشرقت الـ ... ـأرض وضاءت بنورك الأفق\nفنحن في ذلك الضياء وفي النْـ ... ـنُور وسبل الرشاد نخترق",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "abd-al-muttalib/verses-rajaz",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abd-al-muttalib-ibn-hashim",
+      "assertion": "كان يطوف بالبيت ويرتجز: رب رد إليّ راكبي محمدا، يا رب رده واصطنع عندي يدا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/54-p4",
+          "volume": "السيرة 1",
+          "pageReference": "54",
+          "extractionUrl": "https://shamela.ws/book/10906/192",
+          "excerptArabic": "حججت في الجاهلية، فإذا رجل يطوف بالبيت ويرتجز يقول:\nرب رد إليّ راكبي محمدا ... يا رب رده واصطنع عندي يدا",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/verses-waraqah-lajajtu",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "قال ورقة بن نوفل لما حدثته خديجة بقول الراهب: لججت وكنت في الذكرى لجوجا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/100-p2",
+          "volume": "السيرة 1",
+          "pageReference": "100-101",
+          "extractionUrl": "https://shamela.ws/book/10906/238",
+          "excerptArabic": "قال: وجعل ورقة يستبطئ الأمر ويقول: حتى متى؟ وقال:\nلججت وكنت في الذكرى لجوجا ... لهم طالما بعث النشيجا\nووصف من خديجة بعد وصف ... فقد طال انتظاري يا خديجا\nببطن المكتين على رجائي ... حديثك أن أرى منه خروجا\nبما خبرتا من قول قس ... من الرهبان أكره أن يعوجا\nبأن محمدا سيسود قوما ... ويخصم من يكون له حجيجا\nويظهر في البلاد ضياء نور ... يقيم به البرية أن تموجا\nفيلقى من يحاربه خسارا ... ويلقى من يسالمه فلوجا\nفيا ليتني إذا ما كنت ذاكم ... شهدت فكنت أولهم ولوجا\nفإن يبقوا وأبق تكن أمور ... يضج الكافرون لا ضجيجا",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/verses-waraqah-in-yaku",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "أنشد ورقة: إن يك حقا يا خديجة فاعلمي حديثك إيانا فأحمد مرسل.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/107-p4",
+          "volume": "السيرة 1",
+          "pageReference": "107-108",
+          "extractionUrl": "https://shamela.ws/book/10906/245",
+          "excerptArabic": "وقال ابن بكير عن ابن إسحاق، فأنشد ورقة:\nإن يك حقا يا خديجة فاعلمي ... حديثك إيانا فأحمد مرسل\nوجبريل يأتيه وميكال معهما ... من الله وحي يشرح الصدر منزل\nيفوز به من فاز فيها بتوبة ... ويشقى به العاني الغوي المظلل\nفسبحان من تهوى الرياح بأمره ... ومن هو في الأيام ما شاء يفعل\nومن عرشه فوق السماوات كلها ... وأقضاؤه في خلقه لا تبدل",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/verses-umm-jamil",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "أقبلت أم جميل بنت حرب وفي يدها فهر وهي تقول: مذمما أبينا ودينه قلينا وأمره عصينا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/118-p5",
+          "volume": "السيرة 1",
+          "pageReference": "118-119",
+          "extractionUrl": "https://shamela.ws/book/10906/256",
+          "excerptArabic": "أقبلت العوراء أم جميل بنت حرب، ولها ولولة، وفي يدها فهر وهي تقول:\nمذمما أبينا ... ودينه قلينا\nوأمره عصينا",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "abu-talib/verses-ala-qul",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-talib",
+      "assertion": "قال أبو طالب حين عرضت عليه قريش عمارة بن الوليد: ألا قل لعمرو والوليد ومطعم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/123-p2",
+          "volume": "السيرة 1",
+          "pageReference": "123",
+          "extractionUrl": "https://shamela.ws/book/10906/261",
+          "excerptArabic": "فقال: والله ما أنصفوني ولكنك قد أجمعت خذلاني ومظاهرة القوم عليّ، فاصنع ما بدا لك. فحقب الأمر، وحميت الحرب، وتنابذ القوم، فقال أبو طالب:\nألا قل لعمرو والوليد ومطعم ... ألا ليت حظي من حياطتكم بكر\nمن الخور حبحاب كثير رغاؤه ... يرش على الساقين من بوله قطر\nأرى أخوينا من أبينا وأمنا ... إذا سئلا قالا إلى غيرنا الأمر\nأخص خصوصا عبد شمس ونوفلا ... هما نبذانا مثلما ينبذ الجمر",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "abu-talib/verses-lamiyyah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-talib",
+      "assertion": "قال أبو طالب قصيدته اللامية لما خشي دهماء العرب: ولما رأيت القوم لا ود فيهم، وفيها كذبتم وبيت الله نبزى محمدا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/130-p2",
+          "volume": "السيرة 1",
+          "pageReference": "130",
+          "extractionUrl": "https://shamela.ws/book/10906/268",
+          "excerptArabic": "ثم إنه لما خشي دهماء العرب أن يركبوه مع قومه، لما انتشر ذكره قال قصيدته التي منها:\nولما رأيت القوم لا ود فيهم ... وقد قطعوا كل العرى والوسائل\nوقد صارحونا بالعداوة والأذى ... وقد طاوعوا أمر العدو المزايل\nصبرت لهم نفسي بسمراء سمحة ... وأبيض عضب من تراث المقاول\nوأحضرت عند البيت رهطي وإخوتي ... وأمسكت من أثوابه بالوصائل\nأعوذ برب الناس من كل طاعن ... علينا بسوء أو ملح بباطل",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/130-p8",
+          "volume": "السيرة 1",
+          "pageReference": "130-131",
+          "extractionUrl": "https://shamela.ws/book/10906/268",
+          "excerptArabic": "وفيها يقول:\nكذبتم وبيت الله نبزى محمدا ... ولما نطاعن دونه ونناضل\nونسلمه حتى نصرع حوله ... ونذهل عن أبنائنا والحلائل\nوينهض قوم نحوكم غير عزل ... ببيض حديث عهدها بالصياقل\nوأبيض يستسقى الغمام بوجهه ... ثمال اليتامى عصمة للأرامل\nيلوذ به الهلاك من آل هاشم ... فهم عنده في رحمة وفواضل\nلعمري لقد كلفت وجدا بأحمد ... وإخوته دأب المحب المواصل\nفمن مثله في الناس أي مؤمل ... إذا قاسه الحكام عند التفاضل\nحليم رشيد عادل غير طائش ... يوالي إلها ليس عنه بغافل\nفوالله لولا أن أجيء بسبة ... تجر على أشياخنا في المحافل\nلكنا اتبعناه على كل حالة ... من الدهر جدا غير قول التهازل\nلقد علموا أن ابننا لا مكذب ... لدينا ولا يعنى بقول الأباطل\nفأصبح فينا أحمد ذو أرومة ... يقصر عنها سورة المتطاول\nحدبت بنفسي دونه وحميته ... ودافعت عنه بالذرى والكلاكل\nجزى الله عنا عبد شمس ونوفلا ... عقوبة شر عاجلا غير آجل",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/verses-abu-qays",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "قال أبو قيس بن الأسلت يدعو قريشا إلى الدين الحنيف: أيا راكبا إما عرضت فبلغن مغلغلة عني لؤي بن غالب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/131-p8",
+          "volume": "السيرة 1",
+          "pageReference": "131",
+          "extractionUrl": "https://shamela.ws/book/10906/269",
+          "excerptArabic": "وكان أبو قيس بن الأسلت يحب قريشا, وكان لهم صهرا، وعنده أرنب ابنة أسد بن عبد العزى, وكان يقيم بمكة السنين بزوجته، فقال:\nأيا راكبا إما عرضت فبلغن ... مغلغلة عني لؤي بن غالب\nرسول امرئ قد راعه ذات بينكم ... على النأي محزون بذلك ناصب\nأعيذكم بالله من شر صنعكم ... وشر تباغيكم ودس العقارب\nمتى تبعثوها تبعثوها ذميمة ... هي الغول للأقصين أو للأقارب\nأقيموا لنا دينا حنيفا فأنتم ... لنا غاية قد نهتدي بالذوائب\nفقوموا فصلوا ربكم وتمسحوا ... بأركان هذا البيت بين الأخاشب\nفعندكم منه بلاء مصدق ... غداة أبي يكسوم هادي الكتائب\nفلما أتاكم نصر ذي العرش ردهم ... جنود المليك بين ساف وحاصب\nفولوا سراعا هاربين ولم يؤب ... إلى أهله ملجيش غير عصائب",
+          "accessedAt": "2026-09-20"
+        }
+      ]
     }
   ],
   "approval": {
-    "revision": "d35a5d21735b0880",
+    "revision": "4531f0b43af62f89",
     "approvedAt": "2026-09-21",
     "approvedBy": "msskzx",
-    "note": "Approved for publication of chapters one to five, including the heading sweep that went back over them and the sections it turned up. All 266 claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
+    "note": "Approved for publication of chapters one to five, including the heading sweep that went back over them and the sections it turned up. All 277 claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
   }
 }

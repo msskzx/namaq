@@ -4,7 +4,7 @@ import { loadCatalog } from '@/lib/catalog/loadCatalog';
 import { validateCatalog } from '@/lib/catalog/validateCatalog';
 import { legacyUnreviewed, UTTERANCE_KINDS, type CatalogUtterance, type Provenance } from '@/lib/catalog/types';
 
-type Claim = { key: string; field?: string };
+type Claim = { key: string; field?: string; citations: { excerptArabic: string }[] };
 const BATCHES = 'data/history/batches';
 const claimByKey = new Map(
   readdirSync(BATCHES)
@@ -77,11 +77,20 @@ describe('the utterance catalog', () => {
     expect(only({ ...base, battle: 'no-such-battle' })[0].message).toBe('unknown battle no-such-battle');
   });
 
-  // The grading is a quotation, so it has to read as one: a word the source
-  // wrote, not a verdict the app reached.
-  it('carries a grading only as the source words it', () => {
+  // The grading is a quotation, so it has to be one: every grading has to turn
+  // up verbatim in an excerpt of a claim behind it. That is what keeps the
+  // column from becoming somewhere the app states a verdict of its own.
+  it('carries a grading only in words the source itself printed', () => {
     const graded = utterances.filter((utterance) => utterance.fields.grading);
-    expect(graded.map((utterance) => utterance.fields.grading?.value)).toEqual(['أخرجه مسلم', 'إسناده حسن']);
+    expect(graded.length).toBeGreaterThan(0);
+
+    for (const utterance of graded) {
+      const grading = utterance.fields.grading!;
+      const excerpts = keysOf(grading.claims).flatMap(
+        (key) => claimByKey.get(key)?.citations.map((citation) => citation.excerptArabic) ?? [],
+      );
+      expect(excerpts.some((excerpt) => excerpt.includes(grading.value))).toBe(true);
+    }
   });
 
   // A poet with no subject is the common case in the sira's verse, and keeping
