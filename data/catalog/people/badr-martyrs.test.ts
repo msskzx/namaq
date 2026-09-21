@@ -28,16 +28,18 @@ describe('the fourteen dead of Badr', () => {
     expect(martyrs).toHaveLength(14);
   });
 
-  // Four were already declared under prisma/, so the catalog only adds to them
-  // and writes no module. The other ten had no subject anywhere until this
-  // batch reached the roster, and these modules are their only author.
-  it('creates a subject for each of the ten who had none', () => {
+  // Ten had no subject anywhere until this batch reached the roster, and their
+  // modules are their only author. Ubaydah ibn al-Harith joined them from
+  // chapter six, which names him Zaynab bint Khuzaymah's second husband and so
+  // gives the catalog a cited value to author him for. The three left have
+  // nothing cited about them yet and keep their seed entries.
+  it('creates a subject for each of the eleven the batch has reached', () => {
     const authored = martyrs.filter((slug) => bySlug.has(slug));
-    expect(authored).toHaveLength(10);
+    expect(authored).toHaveLength(11);
 
     const seedDeclared = martyrs.filter((slug) => !bySlug.has(slug));
     expect(seedDeclared.sort()).toEqual(
-      ['aqil-ibn-al-bukayr', 'saad-ibn-khaythamah', 'safwan-ibn-bayda', 'ubaydah-ibn-al-harith'].sort(),
+      ['aqil-ibn-al-bukayr', 'saad-ibn-khaythamah', 'safwan-ibn-bayda'].sort(),
     );
   });
 

@@ -32107,12 +32107,472 @@
           "accessedAt": "2026-09-20"
         }
       ]
+    },
+    {
+      "key": "zaynab-khuzaymah/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaynab-bint-khuzaymah",
+      "assertion": "زينب بنت خزيمة بن الحارث بن عبد الله بن عمرو بن عبد مناف بن هلال بن عامر بن صعصعة القيسية الهوازنية العامرية الهلالية.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "fullName",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/465-p6",
+          "volume": "السيرة 1",
+          "pageReference": "465",
+          "extractionUrl": "https://shamela.ws/book/10906/601",
+          "excerptArabic": "وفيها توفيت أم المؤمنين زينب بنت خزيمة بن الحارث بن عبد الله بن عمرو بن عبد مناف بن هلال بن عامر بن صعصعة القيسية الهوازنية العامرية الهلالية، وكانت تسمى أم المساكين لإحسانها إليهم.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "zaynab-khuzaymah/umm-al-mumineen",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaynab-bint-khuzaymah",
+      "assertion": "هي أم المؤمنين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "titles",
+      "relationshipType": "HOLDS_TITLE",
+      "relatedSubjectKind": "TITLE",
+      "relatedSubjectSlug": "mother-of-believers",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/465-p6",
+          "volume": "السيرة 1",
+          "pageReference": "465",
+          "extractionUrl": "https://shamela.ws/book/10906/601",
+          "excerptArabic": "وفيها توفيت أم المؤمنين زينب بنت خزيمة بن الحارث بن عبد الله بن عمرو بن عبد مناف بن هلال بن عامر بن صعصعة القيسية الهوازنية العامرية الهلالية، وكانت تسمى أم المساكين لإحسانها إليهم.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "zaynab-khuzaymah/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaynab-bint-khuzaymah",
+      "assertion": "توفيت في السنة الرابعة من الهجرة، في آخر ربيع الآخر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "deathYearHijri",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/465-p6",
+          "volume": "السيرة 1",
+          "pageReference": "465",
+          "extractionUrl": "https://shamela.ws/book/10906/601",
+          "excerptArabic": "وقيل: كانت وفاتها في آخر ربيع الآخر، وصلى عليها النبي صلى الله عليه وسلم ودفنها بالبقيع، ولها نحو ثلاثين سنة.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "zaynab-khuzaymah/burial-baqi",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaynab-bint-khuzaymah",
+      "assertion": "صلى عليها النبي صلى الله عليه وسلم ودفنها بالبقيع.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "placeOfDeathArabic",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/465-p6",
+          "volume": "السيرة 1",
+          "pageReference": "465",
+          "extractionUrl": "https://shamela.ws/book/10906/601",
+          "excerptArabic": "وقيل: كانت وفاتها في آخر ربيع الآخر، وصلى عليها النبي صلى الله عليه وسلم ودفنها بالبقيع، ولها نحو ثلاثين سنة.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "zaynab-khuzaymah/wife-prophet",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaynab-bint-khuzaymah",
+      "assertion": "تزوجها رسول الله صلى الله عليه وسلم في رمضان سنة ثلاث.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "WIFE",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "prophet-muhammad",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/465-p6",
+          "volume": "السيرة 1",
+          "pageReference": "465",
+          "extractionUrl": "https://shamela.ws/book/10906/601",
+          "excerptArabic": "تزوجت أولا بالطفيل بن الحارث بن المطلب بن عبد مناف ثم طلقها فتزوجها أخوه عبيدة بن الحارث فاستشهد يوم بدر، ثم تزوجها رسول الله صلى الله عليه وسلم في رمضان سنة ثلاثة.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "zaynab-khuzaymah/wife-ubaydah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaynab-bint-khuzaymah",
+      "assertion": "تزوجها عبيدة بن الحارث بعد أخيه الطفيل، فاستشهد يوم بدر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "WIFE",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "ubaydah-ibn-al-harith",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/465-p6",
+          "volume": "السيرة 1",
+          "pageReference": "465",
+          "extractionUrl": "https://shamela.ws/book/10906/601",
+          "excerptArabic": "تزوجت أولا بالطفيل بن الحارث بن المطلب بن عبد مناف ثم طلقها فتزوجها أخوه عبيدة بن الحارث فاستشهد يوم بدر، ثم تزوجها رسول الله صلى الله عليه وسلم في رمضان سنة ثلاثة.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "abu-salamah/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-salamah",
+      "assertion": "عبد الله بن عبد الأسد بن هلال بن عبد الله بن عمر بن مخزوم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "fullName",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/465-p7",
+          "volume": "السيرة 1",
+          "pageReference": "465",
+          "extractionUrl": "https://shamela.ws/book/10906/601",
+          "excerptArabic": "وفيها تزوج النبي صلى الله عليه وسلم أم سلمة أم المؤمنين هند بنت أبي أمية ... ابن المغيرة بن عبد الله بن عمر بن مخزوم القرشية المخزومية، وكانت قبله عند ابن عمة النبي صلى الله عليه وسلم أبي سلمة عبد الله بن عبد الأسد بن هلال بن عبد الله بن عمر بن مخزوم، وأمه برة بنت عبد المطلب.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "abu-salamah/mother-barrah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-salamah",
+      "assertion": "أمه برة بنت عبد المطلب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "barrah-bint-abd-al-muttalib",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/465-p7",
+          "volume": "السيرة 1",
+          "pageReference": "465",
+          "extractionUrl": "https://shamela.ws/book/10906/601",
+          "excerptArabic": "وفيها تزوج النبي صلى الله عليه وسلم أم سلمة أم المؤمنين هند بنت أبي أمية ... ابن المغيرة بن عبد الله بن عمر بن مخزوم القرشية المخزومية، وكانت قبله عند ابن عمة النبي صلى الله عليه وسلم أبي سلمة عبد الله بن عبد الأسد بن هلال بن عبد الله بن عمر بن مخزوم، وأمه برة بنت عبد المطلب.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "abu-salamah/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-salamah",
+      "assertion": "جرح بأحد فانتقض جرحه، فمات منه في جمادى الآخرة سنة أربع.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "deathYearHijri",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/466-p1",
+          "volume": "السيرة 1",
+          "pageReference": "466",
+          "extractionUrl": "https://shamela.ws/book/10906/602",
+          "excerptArabic": "وكان قد جرح بأحد جرحا، ثم انتقض عليه، فمات منه في جمادى الآخرة سنة أربع. فلما توفي تزوجها النبي صلى الله عليه وسلم، حين حلت في شوال.",
+          "accessedAt": "2026-09-19"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/444-p1",
+          "volume": "السيرة 1",
+          "pageReference": "444",
+          "extractionUrl": "https://shamela.ws/book/10906/580",
+          "excerptArabic": "دخل أبو سلمة المدينة انتقض جرحه، فمات لثلاث بقين من جمادى الآخرة.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "abu-salamah/husband-umm-salamah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-salamah",
+      "assertion": "كانت أم سلمة عنده قبل النبي صلى الله عليه وسلم، وهاجر بها إلى الحبشة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "HUSBAND",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "umm-salamah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/465-p7",
+          "volume": "السيرة 1",
+          "pageReference": "465",
+          "extractionUrl": "https://shamela.ws/book/10906/601",
+          "excerptArabic": "وفيها تزوج النبي صلى الله عليه وسلم أم سلمة أم المؤمنين هند بنت أبي أمية ... ابن المغيرة بن عبد الله بن عمر بن مخزوم القرشية المخزومية، وكانت قبله عند ابن عمة النبي صلى الله عليه وسلم أبي سلمة عبد الله بن عبد الأسد بن هلال بن عبد الله بن عمر بن مخزوم، وأمه برة بنت عبد المطلب.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "abu-salamah/sariyyah-qatan",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-salamah",
+      "assertion": "استعمله رسول الله صلى الله عليه وسلم على السرية إلى قطن وعقد له لواء، ومعه خمسون ومائة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "sariyyah-abi-salamah-qatan",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/443-p3",
+          "volume": "السيرة 1",
+          "pageReference": "443",
+          "extractionUrl": "https://shamela.ws/book/10906/579",
+          "excerptArabic": "شهد أبو سلمة أحدا ... فجرح بأحد ... فلما كان هلال المحرم دعاه رسول الله صلى الله عليه وسلم وقال: \"اخرج في هذه السرية فقد استعملتك عليها\". وعقد له لواء وقال: \"سر حتى تأتي أرض بني أسد فأغر عليهم\". وكان معه خمسون ومائة.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "umm-salamah/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umm-salamah",
+      "assertion": "هند بنت أبي أمية بن المغيرة بن عبد الله بن عمر بن مخزوم القرشية المخزومية.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "fullName",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/465-p7",
+          "volume": "السيرة 1",
+          "pageReference": "465",
+          "extractionUrl": "https://shamela.ws/book/10906/601",
+          "excerptArabic": "وفيها تزوج النبي صلى الله عليه وسلم أم سلمة أم المؤمنين هند بنت أبي أمية ... ابن المغيرة بن عبد الله بن عمر بن مخزوم القرشية المخزومية، وكانت قبله عند ابن عمة النبي صلى الله عليه وسلم أبي سلمة عبد الله بن عبد الأسد بن هلال بن عبد الله بن عمر بن مخزوم، وأمه برة بنت عبد المطلب.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "umm-salamah/umm-al-mumineen",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umm-salamah",
+      "assertion": "هي أم المؤمنين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "titles",
+      "relationshipType": "HOLDS_TITLE",
+      "relatedSubjectKind": "TITLE",
+      "relatedSubjectSlug": "mother-of-believers",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/465-p7",
+          "volume": "السيرة 1",
+          "pageReference": "465",
+          "extractionUrl": "https://shamela.ws/book/10906/601",
+          "excerptArabic": "وفيها تزوج النبي صلى الله عليه وسلم أم سلمة أم المؤمنين هند بنت أبي أمية ... ابن المغيرة بن عبد الله بن عمر بن مخزوم القرشية المخزومية، وكانت قبله عند ابن عمة النبي صلى الله عليه وسلم أبي سلمة عبد الله بن عبد الأسد بن هلال بن عبد الله بن عمر بن مخزوم، وأمه برة بنت عبد المطلب.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "umm-salamah/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umm-salamah",
+      "assertion": "امرأة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/465-p7",
+          "volume": "السيرة 1",
+          "pageReference": "465",
+          "extractionUrl": "https://shamela.ws/book/10906/601",
+          "excerptArabic": "وفيها تزوج النبي صلى الله عليه وسلم أم سلمة أم المؤمنين هند بنت أبي أمية ... ابن المغيرة بن عبد الله بن عمر بن مخزوم القرشية المخزومية، وكانت قبله عند ابن عمة النبي صلى الله عليه وسلم أبي سلمة عبد الله بن عبد الأسد بن هلال بن عبد الله بن عمر بن مخزوم، وأمه برة بنت عبد المطلب.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "prophet/wife-umm-salamah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "تزوج أم سلمة هند بنت أبي أمية حين حلت في شوال سنة أربع، بعد وفاة أبي سلمة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "HUSBAND",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "umm-salamah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/465-p7",
+          "volume": "السيرة 1",
+          "pageReference": "465",
+          "extractionUrl": "https://shamela.ws/book/10906/601",
+          "excerptArabic": "وفيها تزوج النبي صلى الله عليه وسلم أم سلمة أم المؤمنين هند بنت أبي أمية ... ابن المغيرة بن عبد الله بن عمر بن مخزوم القرشية المخزومية، وكانت قبله عند ابن عمة النبي صلى الله عليه وسلم أبي سلمة عبد الله بن عبد الأسد بن هلال بن عبد الله بن عمر بن مخزوم، وأمه برة بنت عبد المطلب.",
+          "accessedAt": "2026-09-19"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/466-p1",
+          "volume": "السيرة 1",
+          "pageReference": "466",
+          "extractionUrl": "https://shamela.ws/book/10906/602",
+          "excerptArabic": "وكان قد جرح بأحد جرحا، ثم انتقض عليه، فمات منه في جمادى الآخرة سنة أربع. فلما توفي تزوجها النبي صلى الله عليه وسلم، حين حلت في شوال.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "zaynab-jahsh/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaynab-bint-jahsh",
+      "assertion": "زينب بنت جحش بن رئاب الأسدي، وكان اسمها برة فسماها النبي صلى الله عليه وسلم زينب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "fullName",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/466-p2",
+          "volume": "السيرة 1",
+          "pageReference": "466",
+          "extractionUrl": "https://shamela.ws/book/10906/602",
+          "excerptArabic": "ثم تزوج بعدها بأيام يسيرة، بنت عمته أم الحكم؛ زينب بنت جحش بن رئاب الأسدي، وكان اسمها برة فسماها زينب ... وأمهم أميمة بنت عبد المطلب، وهي التي نزلت هذه الآية فيها: {فَلَمَّا قَضَى زَيْدٌ مِنْهَا وَطَرًا زَوَّجْنَاكَهَا}.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "zaynab-jahsh/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaynab-bint-jahsh",
+      "assertion": "امرأة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/466-p2",
+          "volume": "السيرة 1",
+          "pageReference": "466",
+          "extractionUrl": "https://shamela.ws/book/10906/602",
+          "excerptArabic": "ثم تزوج بعدها بأيام يسيرة، بنت عمته أم الحكم؛ زينب بنت جحش بن رئاب الأسدي، وكان اسمها برة فسماها زينب ... وأمهم أميمة بنت عبد المطلب، وهي التي نزلت هذه الآية فيها: {فَلَمَّا قَضَى زَيْدٌ مِنْهَا وَطَرًا زَوَّجْنَاكَهَا}.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "zaynab-jahsh/mother-umaymah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaynab-bint-jahsh",
+      "assertion": "أمها أميمة بنت عبد المطلب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "DAUGHTER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "umaymah-bint-abd-al-muttalib",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/466-p2",
+          "volume": "السيرة 1",
+          "pageReference": "466",
+          "extractionUrl": "https://shamela.ws/book/10906/602",
+          "excerptArabic": "ثم تزوج بعدها بأيام يسيرة، بنت عمته أم الحكم؛ زينب بنت جحش بن رئاب الأسدي، وكان اسمها برة فسماها زينب ... وأمهم أميمة بنت عبد المطلب، وهي التي نزلت هذه الآية فيها: {فَلَمَّا قَضَى زَيْدٌ مِنْهَا وَطَرًا زَوَّجْنَاكَهَا}.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "zaynab-jahsh/ayah-al-ahzab",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaynab-bint-jahsh",
+      "assertion": "نزلت فيها {فَلَمَّا قَضَى زَيْدٌ مِنْهَا وَطَرًا زَوَّجْنَاكَهَا}.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "ayat",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/466-p2",
+          "volume": "السيرة 1",
+          "pageReference": "466",
+          "extractionUrl": "https://shamela.ws/book/10906/602",
+          "excerptArabic": "ثم تزوج بعدها بأيام يسيرة، بنت عمته أم الحكم؛ زينب بنت جحش بن رئاب الأسدي، وكان اسمها برة فسماها زينب ... وأمهم أميمة بنت عبد المطلب، وهي التي نزلت هذه الآية فيها: {فَلَمَّا قَضَى زَيْدٌ مِنْهَا وَطَرًا زَوَّجْنَاكَهَا}.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "prophet/wife-zaynab-jahsh",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "تزوج زينب بنت جحش بعد أم سلمة بأيام يسيرة، وهي بنت عمته أميمة بنت عبد المطلب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "HUSBAND",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "zaynab-bint-jahsh",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/466-p2",
+          "volume": "السيرة 1",
+          "pageReference": "466",
+          "extractionUrl": "https://shamela.ws/book/10906/602",
+          "excerptArabic": "ثم تزوج بعدها بأيام يسيرة، بنت عمته أم الحكم؛ زينب بنت جحش بن رئاب الأسدي، وكان اسمها برة فسماها زينب ... وأمهم أميمة بنت عبد المطلب، وهي التي نزلت هذه الآية فيها: {فَلَمَّا قَضَى زَيْدٌ مِنْهَا وَطَرًا زَوَّجْنَاكَهَا}.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "husayn/birth-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-husayn-ibn-ali",
+      "assertion": "ولد في شعبان سنة أربع.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "birthYearHijri",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/462-p5",
+          "volume": "السيرة 1",
+          "pageReference": "462",
+          "extractionUrl": "https://shamela.ws/book/10906/598",
+          "excerptArabic": "وفيها: في شعبان ولد الحسين بن علي رضي الله عنهما.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
     }
   ],
   "approval": {
-    "revision": "e4dc2f150b78f6bf",
+    "revision": "7c81a5725bd8c560",
     "approvedAt": "2026-09-21",
     "approvedBy": "msskzx",
-    "note": "Approved for publication of chapters one to five, including the heading sweep that went back over them and the sections it turned up. All 333 claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
+    "note": "Approved for publication of chapters one to six. Chapter six is the fourth year of the hijra, and the 21 claims it adds are its marriages and deaths: Zaynab bint Khuzaymah's obituary, Abu Salamah's expedition to Qatan and his death from the Uhud wound, the marriages to Umm Salamah and Zaynab bint Jahsh, and al-Husayn's birth. Six of them give evidence to values that were carried on the legacy marker when the seeds were retired. All 354 claims are Not reviewed, chapter six included: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
   }
 }

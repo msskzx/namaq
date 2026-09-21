@@ -22,14 +22,15 @@ builds and `extractShamelaEntry.ts --volume` sets.
 
 ## What this instalment reads
 
-Chapters one to five, printed pages ١/٢٩ to ١/٤٣٢, Shamela page ids 167 to
-578. 204 claims and 324 citations. Eight chapters remain, ending at ٢/٤٩٦.
+Chapters one to six, printed pages ١/٢٩ to ١/٤٦٦, Shamela page ids 167 to
+602. 354 claims and 513 citations. Seven chapters remain, ending at ٢/٤٩٦.
 
 Chapter one covers his lineage, his names, his birth, the deaths of his parents
 and grandfather, Abu Talib's guardianship, his marriage to Khadijah, his
 children, the rebuilding of the Kaaba, the first revelation, and the first
 conversions. Chapter two runs from the first emigration to Abyssinia to the
-arrival at Medina. Chapter three is the first year after it.
+arrival at Medina. Chapter three is the first year after it, and the chapters
+run a year each from there: chapter six is the fourth.
 
 The Prophet has no legacy values yet, because his seed entry still stands and
 nothing has been moved across. The same holds for every other subject this
@@ -991,9 +992,91 @@ The title already existed in the vocabulary.
 **لكن حمزة لا بواكي له** (`1/410-p6`), which he said hearing Medina weep for
 the Ansari dead, joins his virtues.
 
+# Chapter six
+
+The fourth year of the hijra, printed pages ١/٤٤٣ to ١/٤٦٦. The year's events
+are mostly its losses — الرجيع, بئر معونة, the seventy القراء — and almost none
+of the people they killed have subjects in the app. عاصم بن ثابت, حرام بن
+ملحان, المنذر بن عمرو and عامر بن فهيرة are named, given nasab, and given the
+words they died saying, and not one of them is a person this model holds. So
+the chapter's claims are not where its weight is. They are where its weight
+meets something the app can carry, which in this year is its marriages and its
+deaths.
+
+## Six claims that pay off the legacy marker
+
+Retiring the seeds put 214 values on `legacyUnreviewed`, and a chapter that
+says nothing about them only adds to the debt. This one says something about
+six.
+
+Zaynab bint Khuzaymah's obituary at `1/465-p6` is the single densest paragraph
+in the chapter and it carries four of them: her nasab, أم المؤمنين, her
+marriage to the Prophet, and the fuller reading of her name. The nasab the
+seed carried ended at بن عبد الله الهلالية; the obituary runs it through عمرو
+بن عبد مناف بن هلال بن عامر بن صعصعة and adds القيسية الهوازنية العامرية. The
+carried value is replaced rather than merely cited, because the source's is the
+longer of the two and the shorter was nobody's reading in particular.
+
+Abu Salamah's mother, برة بنت عبد المطلب, is the fifth: the edge came off the
+graph seed with its evidence owed, and `1/465-p7` names her in the same
+sentence that gives his nasab. The Prophet's marriages to Umm Salamah and
+Zaynab bint Jahsh are the sixth and seventh, both carried from the graph seed
+in the hand-off and both cited here.
+
+`companion` stays on the marker for every one of them. The chapter calls these
+women أم المؤمنين and never صحابية, and letting one title stand in for the
+other would be the seed's assignment wearing a citation it did not earn.
+
+## Two deaths and a wound that reopened
+
+Abu Salamah is the year's shape in one man. It opens with the سرية he led to
+قطن in المحرم, a لواء and a hundred and fifty men, and it closes with him dead
+of the Uhud wound that reopened when he got home. The expedition is a battle
+row the old seed never had, so the catalog creates it, the way the sira's other
+سرايا reach the app. It is a سرية by the book's own heading and because the
+Prophet sent him rather than going, which is the distinction the vocabulary
+draws.
+
+His death takes two citations for one value. `1/466-p1` dates it to جمادى
+الآخرة سنة أربع, and `1/444-p1`, on the expedition's own page, gives the day
+within the month — لثلاث بقين. Neither states the year and the day together,
+so the value is not supported by either alone.
+
+Zaynab bint Khuzaymah's death is the other, and it is the first time this batch
+records where someone is buried: البقيع, in the same sentence that has the
+Prophet praying over her.
+
+## The wives, and what the model would not hold
+
+Umm Salamah married in شوال once her عدة had run, and Zaynab bint Jahsh بأيام
+يسيرة after her. Both needed modules, and a module makes a subject
+catalog-owned, so what their rows already held — `companion`,
+`mother-of-believers`, the edge to each father — is carried on the marker
+beside what the chapter cites.
+
+Zaynab bint Jahsh brings the chapter's one Qur'an link, and the book gives it
+outright rather than by inference: وهي التي نزلت هذه الآية فيها, الأحزاب ٣٧.
+Her name was برة before the Prophet changed it. Nothing here holds a former
+name on its own, so it stays inside `fullName` where the source puts it, and
+آية الحجاب stays in the page: the model has no value for which verse a person
+occasioned beyond the link itself.
+
+عبيدة بن الحارث reaches the catalog sideways, through her obituary naming him
+her second husband. That is the whole of what this chapter adds to him, and it
+is enough to make him the eleventh of Badr's fourteen dead to have a module.
+الطفيل, the first husband who divorced her, gets no edge: he has no subject,
+and a relation needs something on the far end.
+
+## One birth
+
+وفيها في شعبان ولد الحسين بن علي. One line, one claim, and a module that exists
+mostly to hold it — everything else al-Husayn's rows had is carried on the
+marker. شعبان is the month; the year is the chapter's own heading, and the
+model holds the year.
+
 # Review
 
 Nothing in this batch is reviewed, across any of its chapters. The claims are
 authored but nobody has compared them against the stored pages, so every one of
-the 240 is Not reviewed. The batch's approval permits publication and says
+the 354 is Not reviewed. The batch's approval permits publication and says
 nothing about review.

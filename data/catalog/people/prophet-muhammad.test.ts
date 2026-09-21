@@ -47,7 +47,14 @@ describe('the Prophet in the catalog', () => {
     expect(marked).toContain('appearance');
     expect(marked).toContain('title master-of-children-of-adam');
     expect(marked).toContain('ayah 48:29');
-    expect(marked).toContain('relation HUSBAND umm-salamah');
+    expect(marked).toContain('relation HUSBAND safiyyah-bint-huyayy');
+
+    // The marker is meant to come off as chapters reach the values. Two of the
+    // marriages carried with the rest were cited by chapter six, so they are
+    // no longer marked, and asserting that is what keeps this test honest
+    // about which direction the debt moves.
+    expect(marked).not.toContain('relation HUSBAND umm-salamah');
+    expect(marked).not.toContain('relation HUSBAND zaynab-bint-jahsh');
   });
 
   it('points a single-claim field at a claim about that same field', () => {
