@@ -22,8 +22,8 @@ builds and `extractShamelaEntry.ts --volume` sets.
 
 ## What this instalment reads
 
-Chapters one to eight, printed pages ١/٢٩ to ٢/٦٠, Shamela page ids 167 to
-719. 371 claims and 532 citations. Five chapters remain, ending at ٢/٤٩٦.
+Chapters one to nine, printed pages ١/٢٩ to ٢/١١٢, Shamela page ids 167 to
+771. 379 claims and 541 citations. Four chapters remain, ending at ٢/٤٩٦.
 
 Chapter one covers his lineage, his names, his birth, the deaths of his parents
 and grandfather, Abu Talib's guardianship, his marriage to Khadijah, his
@@ -1179,9 +1179,57 @@ pledged, collectively. `ayat` links a verse to a person, and there is no person
 here to link it to. أم رومان dies in ذو الحجة and has no subject. سلمة بن
 الأكوع carries غزوة ذي قرد almost single-handed and has none either.
 
+# Chapter nine
+
+The seventh year of the hijra, printed pages ٢/٦١ to ٢/١١٢. Eight claims, and
+every one of them takes a value off the legacy marker rather than adding a new
+one. The ledger moves 713 cited to 720 and 252 awaiting evidence to 248, which
+is the first chapter in this batch to reduce the debt without adding to it.
+
+## Khaybar, and a reading the book rejects
+
+Its module was another of the eleven made when the seeds were retired. Chapter
+nine reads it: the year, the engagement and the location all come off the
+marker, along with the Prophet's own participation.
+
+The year has a competing reading, and this one is worth keeping for a reason
+the earlier ones were not. al-Zuhri puts the fighting in سنة ست, and al-Dhahabi
+does not merely prefer another date — he marks the report شذ and says outright
+وهذا لا يصح. Recording it as DISPUTED keeps the rejection visible. Dropping it
+would hide both the reading and the fact that the book threw it out, and the
+second is the more useful of the two.
+
+The three companions on the module stay where they are, as they did at
+al-Hudaybiyyah. The chapter has the Prophet taking the forts حصنا حصنا and
+names neither Abu Bakr nor Umar nor Uthman among the men who did it.
+
+## Two wives, and a dower the model cannot hold
+
+صفية بنت حيي enters as a captive of Khaybar and leaves the chapter married, and
+the book puts the whole of it in one sentence: فصارت صفية لدحية الكلبي، ثم صارت
+لرسول الله، ثم تزوجها وجعل صداقها عتقها.
+
+عتقها as her صداق is the detail that matters and the one the model has no field
+for. There is no value here for what a dower was, so it stays in the page and
+the marriage edge is what the catalog takes. Her module is new, so what her rows
+already held — `companion`, `mother-of-believers` — is carried on the marker
+beside it.
+
+أم حبيبة is married at a distance: the Prophet writes to النجاشي to marry him
+to her while she is still in Abyssinia, and عمرو بن أمية الضمري carries the
+letter. Both marriages had been sitting on the graph seed's word since the
+hand-off, and both are now cited.
+
+## A chapter that only pays
+
+Six chapters have added values and this one adds none. That is not a thin
+chapter; it is what a batch looks like when the reading catches up with what
+the seeds asserted. Every claim here points at something the app already
+showed and had no reason to believe.
+
 # Review
 
 Nothing in this batch is reviewed, across any of its chapters. The claims are
 authored but nobody has compared them against the stored pages, so every one of
-the 371 is Not reviewed. The batch's approval permits publication and says
+the 379 is Not reviewed. The batch's approval permits publication and says
 nothing about review.

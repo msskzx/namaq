@@ -32934,12 +32934,190 @@
           "accessedAt": "2026-09-19"
         }
       ]
+    },
+    {
+      "key": "khaybar/year",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "khaybar",
+      "assertion": "كان افتتاح خيبر في عقب المحرم سنة سبع، وخرج إليها النبي صلى الله عليه وسلم في أولها.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "hijriYear",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/61-p3",
+          "volume": "السيرة 2",
+          "pageReference": "61",
+          "extractionUrl": "https://shamela.ws/book/10906/720",
+          "excerptArabic": "كان افتتاح خيبر في عقب المحرم، وقدم رسول الله صلى الله عليه وسلم في آخر صفر.",
+          "accessedAt": "2026-09-19"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/61-p5",
+          "volume": "السيرة 2",
+          "pageReference": "61",
+          "extractionUrl": "https://shamela.ws/book/10906/720",
+          "excerptArabic": "وذكر الواقدي، عن شيوخه، في خروج النبي صلى الله عليه وسلم إلى خيبر: في أول سنة سبع.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "khaybar/year-alt",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "khaybar",
+      "assertion": "وشذ الزهري فجعل قتال خيبر من سنة ست، قال المصنف: وهذا لا يصح.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "disputed": true,
+      "field": "hijriYear",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/61-p6",
+          "volume": "السيرة 2",
+          "pageReference": "61",
+          "extractionUrl": "https://shamela.ws/book/10906/720",
+          "excerptArabic": "وشذ الزهري فقال ... ثم قاتل رسول الله صلى الله عليه وسلم يوم خيبر من سنة ست. وهذا لا يصح.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "khaybar/engagement",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "khaybar",
+      "assertion": "خرج إليها رسول الله صلى الله عليه وسلم بنفسه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "engagement",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/61-p5",
+          "volume": "السيرة 2",
+          "pageReference": "61",
+          "extractionUrl": "https://shamela.ws/book/10906/720",
+          "excerptArabic": "وذكر الواقدي، عن شيوخه، في خروج النبي صلى الله عليه وسلم إلى خيبر: في أول سنة سبع.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "khaybar/location",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "khaybar",
+      "assertion": "خيبر بليدة على ثمانية برد من المدينة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "location",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/61-p7",
+          "volume": "السيرة 2",
+          "pageReference": "61",
+          "extractionUrl": "https://shamela.ws/book/10906/720",
+          "excerptArabic": "وخيبر: بليدة على ثمانية برد من المدينة.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "prophet/khaybar",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "خرج إلى خيبر في أول سنة سبع، وافتتحها حصنا حصنا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "khaybar",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/61-p5",
+          "volume": "السيرة 2",
+          "pageReference": "61",
+          "extractionUrl": "https://shamela.ws/book/10906/720",
+          "excerptArabic": "وذكر الواقدي، عن شيوخه، في خروج النبي صلى الله عليه وسلم إلى خيبر: في أول سنة سبع.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "prophet/wife-safiyyah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "صارت صفية بنت حيي في سبي خيبر، ثم تزوجها وجعل صداقها عتقها.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "HUSBAND",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "safiyyah-bint-huyayy",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/75-p2",
+          "volume": "السيرة 2",
+          "pageReference": "75",
+          "extractionUrl": "https://shamela.ws/book/10906/734",
+          "excerptArabic": "لما ظهر على أهل خيبر قتل المقاتلة وسبى الذراري، فصارت صفية لدحية الكلبي، ثم صارت لرسول الله صلى الله عليه وسلم، ثم تزوجها وجعل صداقها عتقها.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "safiyyah/freedom-as-dower",
+      "subjectKind": "PERSON",
+      "subjectSlug": "safiyyah-bint-huyayy",
+      "assertion": "تزوجها رسول الله صلى الله عليه وسلم وجعل صداقها عتقها.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "WIFE",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "prophet-muhammad",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/75-p2",
+          "volume": "السيرة 2",
+          "pageReference": "75",
+          "extractionUrl": "https://shamela.ws/book/10906/734",
+          "excerptArabic": "لما ظهر على أهل خيبر قتل المقاتلة وسبى الذراري، فصارت صفية لدحية الكلبي، ثم صارت لرسول الله صلى الله عليه وسلم، ثم تزوجها وجعل صداقها عتقها.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "prophet/wife-umm-habibah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "كتب إلى النجاشي ليزوجه بأم حبيبة بنت أبي سفيان وهي بأرض الحبشة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "HUSBAND",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "umm-habibah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/112-p3",
+          "volume": "السيرة 2",
+          "pageReference": "112",
+          "extractionUrl": "https://shamela.ws/book/10906/771",
+          "excerptArabic": "إذ جاء عمرو بن أمية الضمري بكتاب النبي صلى الله عليه وسلم إلى النجاشي ليزوجه بأم حبيبة بنت أبي سفيان.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
     }
   ],
   "approval": {
-    "revision": "87492f96236c1401",
+    "revision": "a68e4749c22ed1c9",
     "approvedAt": "2026-09-21",
     "approvedBy": "msskzx",
-    "note": "Approved for publication of chapters one to eight. Chapter eight is the sixth year of the hijra and the batch's first citations from volume two. Eight claims: al-Hudaybiyyah, whose module was carried whole when the seeds were retired and whose three fields now come off the legacy marker, and Banu al-Mustaliq, a battle row the old seed never had. The Mustaliq year is the one place so far where two readings compete over a value the model holds, so Ibn Ishaq's سنة ست is recorded as a DISPUTED claim beside the سنة خمس the book calls الصحيح. All 371 claims are Not reviewed, chapter eight included. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
+    "note": "Approved for publication of chapters one to nine. Chapter nine is the seventh year of the hijra: Khaybar, whose module was carried whole when the seeds were retired and whose three fields now come off the legacy marker, and the two marriages the year brings in, to Safiyyah bint Huyayy and Umm Habibah, both of which were carried from the graph seed and are now cited. al-Zuhri's سنة ست for Khaybar is recorded as DISPUTED: the book marks it شذ and says لا يصح, and a reading the book rejects is still a reading. All 379 claims are Not reviewed, chapter nine included. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
   }
 }

@@ -47,7 +47,7 @@ describe('the Prophet in the catalog', () => {
     expect(marked).toContain('appearance');
     expect(marked).toContain('title master-of-children-of-adam');
     expect(marked).toContain('ayah 48:29');
-    expect(marked).toContain('relation HUSBAND safiyyah-bint-huyayy');
+    expect(marked).toContain('relation HUSBAND maymunah-bint-al-harith');
 
     // The marker is meant to come off as chapters reach the values. Two of the
     // marriages carried with the rest were cited by chapter six, so they are
@@ -55,6 +55,8 @@ describe('the Prophet in the catalog', () => {
     // about which direction the debt moves.
     expect(marked).not.toContain('relation HUSBAND umm-salamah');
     expect(marked).not.toContain('relation HUSBAND zaynab-bint-jahsh');
+    expect(marked).not.toContain('relation HUSBAND safiyyah-bint-huyayy');
+    expect(marked).not.toContain('relation HUSBAND umm-habibah');
   });
 
   it('points a single-claim field at a claim about that same field', () => {
@@ -69,10 +71,10 @@ describe('the Prophet in the catalog', () => {
 
   // The chapters are read in order, so no citation may point past the furthest
   // page the pass has reached -- an anchor beyond it would mean a page was read
-  // out of order and its claim authored ahead of the pass. Chapter eight is the
-  // first to cross into volume 2, and it stops at ٢/٢٨. Move this frontier when
-  // a chapter reads further, and not before.
-  const FRONTIER = { volume: 2, page: 28 };
+  // out of order and its claim authored ahead of the pass. Chapter eight was the
+  // first to cross into volume 2; chapter nine reads to ٢/١١٢. Move this
+  // frontier when a chapter reads further, and not before.
+  const FRONTIER = { volume: 2, page: 112 };
 
   it('cites no page past the frontier the chapters have reached', () => {
     const anchors = [...claimByKey.values()]
