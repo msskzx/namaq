@@ -5,6 +5,7 @@ import person from './prophet-muhammad';
 import birth from '../events/birth-prophet-muhammad';
 import revelation from '../events/first-revelation-of-the-quran';
 import istisqa from '../events/istisqa-by-abu-talib';
+import kaaba from '../events/rebuilding-of-the-kaaba';
 
 // Read rather than fixtured, so editing the module or the batch alone fails.
 const batch = JSON.parse(readFileSync('data/history/batches/prophet-muhammad-sira/batch.json', 'utf8')) as {
@@ -60,6 +61,25 @@ describe('the Prophet in the catalog', () => {
       .flatMap((claim) => claim.citations.map((citation) => citation.passageAnchor));
 
     expect(anchors.every((anchor) => anchor.startsWith('1/'))).toBe(true);
+  });
+
+  // The title الأمين and the event it was earned in come from one passage, so
+  // the two records have to rest on the same page: chapter one authored the
+  // title and left the event out until it was asked for.
+  it('ties al-Amin to the arbitration it was earned in', () => {
+    expect(person.titles.map((title) => title.title)).toContain('truthful-trustworthy');
+
+    const titleAnchors = claimByKey.get('prophet/al-amin')?.citations.map((c) => c.passageAnchor) ?? [];
+    const eventAnchors = claimByKey.get('sira/kaaba-rebuilding')?.citations.map((c) => c.passageAnchor) ?? [];
+    expect(titleAnchors).toContain('1/65-p1');
+    expect(eventAnchors).toContain('1/64-p2');
+    expect(kaaba.people.map((entry) => entry.person)).toEqual(['prophet-muhammad']);
+  });
+
+  // Urwah and Mujahid date it قبل المبعث بخمس عشرة سنة, counted from the
+  // calling, which hijriYear cannot hold.
+  it('leaves the rebuilding undated', () => {
+    expect(Object.keys(kaaba.fields)).not.toContain('hijriYear');
   });
 
   // ADR 0014: a kunya is a name, so أبو القاسم is a column and not a Title.

@@ -23,7 +23,7 @@ builds and `extractShamelaEntry.ts --volume` sets.
 ## What this instalment reads
 
 Chapters one to five, printed pages ١/٢٩ to ١/٤٣٢, Shamela page ids 167 to
-578. 202 claims and 320 citations. Eight chapters remain, ending at ٢/٤٩٦.
+578. 204 claims and 324 citations. Eight chapters remain, ending at ٢/٤٩٦.
 
 Chapter one covers his lineage, his names, his birth, the deaths of his parents
 and grandfather, Abu Talib's guardianship, his marriage to Khadijah, his
@@ -61,6 +61,26 @@ Bahira report is حديث منكر جدا with four reasons, and the very next r
 marks عبد الله بن شبيب وهو ضعيف. Letting this one stand is weaker than
 authenticating it and stronger than the treatment a rejected report gets, so the
 claim is neither ESTABLISHED nor dropped.
+
+## Rebuilding the Kaaba
+
+Quraysh pulled the Kaaba down to Ibrahim's foundation and rebuilt it, and when
+the building reached the place of the Black Stone they quarrelled four nights
+over who would set it. Abu Umayyah, the oldest of them, said to take the first
+man through the gate as judge; it was him, and they said هذا الأمين رضينا به. He
+laid it in a cloth, had each tribe take a corner, and set it himself
+(`1/64-p2`).
+
+**The title came first and the event second.** `prophet/al-amin` was authored
+from this passage in the first pass, and the rebuilding it was earned in was
+left out. A test now holds the two to the same pages.
+
+Undated. Urwah and Mujahid put the building قبل المبعث بخمس عشرة سنة
+(`1/65-p2`), counted from the calling, which is not a value `hijriYear` holds,
+so it is unset the way the birth's and the Isra's are.
+
+The description also carries the call that came while he was carrying stones
+with them, عورتك, فما رؤيت له عورة بعد (`1/65-p3`, `1/66-p4`).
 
 ## Names and titles
 
