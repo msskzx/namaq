@@ -33216,12 +33216,76 @@
           "accessedAt": "2026-09-19"
         }
       ]
+    },
+    {
+      "key": "tabuk/engagement",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "tabuk",
+      "assertion": "سار إليها رسول الله صلى الله عليه وسلم بنفسه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "engagement",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/236-p4",
+          "volume": "السيرة 2",
+          "pageReference": "236",
+          "extractionUrl": "https://shamela.ws/book/10906/895",
+          "excerptArabic": "لما سار رسول الله صلى الله عليه وسلم إلى تبوك، جعل لا يزال يتخلف الرجل.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "prophet/tabuk",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "سار إلى تبوك.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "tabuk",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/236-p4",
+          "volume": "السيرة 2",
+          "pageReference": "236",
+          "extractionUrl": "https://shamela.ws/book/10906/895",
+          "excerptArabic": "لما سار رسول الله صلى الله عليه وسلم إلى تبوك، جعل لا يزال يتخلف الرجل.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "ali/tabuk-absence",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ali-ibn-abi-talib",
+      "assertion": "خلفه رسول الله صلى الله عليه وسلم في غزوة تبوك على المدينة، وقال له: أما ترضى أن تكون مني بمنزلة هارون من موسى.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "ABSENT_FROM",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "tabuk",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/236-p2",
+          "volume": "السيرة 2",
+          "pageReference": "236",
+          "extractionUrl": "https://shamela.ws/book/10906/895",
+          "excerptArabic": "خلف رسول الله صلى الله عليه وسلم عليا في غزوة تبوك، فقال: يا رسول الله، أتخلفني في النساء والصبيان؟ قال: \"أما ترضى أن تكون مني بمنزلة هارون من موسى، غير أنه لا نبي بعدي\".",
+          "accessedAt": "2026-09-19"
+        }
+      ]
     }
   ],
   "approval": {
-    "revision": "32e3e6f0bd6a49f5",
-    "approvedAt": "2026-09-21",
+    "revision": "8c19fea424469047",
+    "approvedAt": "2026-09-22",
     "approvedBy": "msskzx",
-    "note": "Approved for publication of chapters one to ten. Chapter ten is the eighth year of the hijra, and its five claims settle a contradiction the catalog has been carrying in the open since the seeds were retired. The retired seed named Mu'tah a غزوة and recorded the Prophet as a participant, which the engagement vocabulary cannot hold at once; the chapter says بعث إلى مؤتة وأمر على الناس زيد بن حارثة, so he sent and did not go. The engagement is cited as a سرية, Zayd's command is recorded, and the Prophet's participation is dropped rather than moved to the legacy marker, because it has evidence against it and not merely evidence owed. Hunayn's engagement and the Prophet's part in it are cited too; its year stays on the marker, the chapter never dating it. All 384 claims are Not reviewed, chapter ten included. Approval permits the import and asserts nothing about review."
+    "note": "Approved for publication of chapters one to eleven. Chapter eleven is the ninth year of the hijra and reads Tabuk: the engagement and the Prophet's own part in it come off the legacy marker, and so does Ali's absence, which the chapter states outright — خلف رسول الله عليا في غزوة تبوك. That row had been carried on the seeds' word and had a contradictory PARTICIPATED_IN edge beside it in the graph until it was deleted by hand; it is now a cited absence. Tabuk's year stays on the marker: the chapter is headed السنة التاسعة but never dates the march, and a heading two pages up is not what a value cites. All 387 claims are Not reviewed, chapter eleven included. Approval permits the import and asserts nothing about review."
   }
 }
