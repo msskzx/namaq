@@ -15,6 +15,15 @@ export interface KnownSlugs {
   readonly claims: ReadonlySet<string>;
 }
 
+/**
+ * There is no year zero: -1 is the year before the hijra, which the sira writes
+ * قبل الهجرة بسنة. See src/lib/hijriYear.ts, which is where the convention
+ * turns into what a reader sees.
+ */
+function checkHijriYear(cited: { value: number } | undefined, path: string, issues: CatalogIssue[]) {
+  if (cited && cited.value === 0) issues.push({ path, message: 'there is no hijri year zero' });
+}
+
 function checkProvenance(claims: Provenance, known: KnownSlugs, path: string, issues: CatalogIssue[]) {
   if (claims === legacyUnreviewed) return;
   if (claims.length === 0) issues.push({ path, message: 'no claim behind this value' });
@@ -74,6 +83,7 @@ export function validateCatalog(catalog: Catalog, known: KnownSlugs): CatalogIss
       issues.push({ path: `${at}.engagement`, message: `unknown engagement ${battle.fields.engagement.value}` });
     }
     if (battle.fields?.engagement) checkProvenance(battle.fields.engagement.claims, known, `${at}.engagement`, issues);
+    checkHijriYear(battle.fields?.hijriYear, `${at}.hijriYear`, issues);
     battle.participants.forEach((entry) => {
       const where = `${at}.${entry.person}`;
       checkProvenance(entry.claims, known, where, issues);
@@ -95,6 +105,7 @@ export function validateCatalog(catalog: Catalog, known: KnownSlugs): CatalogIss
     Object.entries(event.fields).forEach(([field, cited]) => {
       if (cited) checkProvenance(cited.claims, known, `${at}.${field}`, issues);
     });
+    checkHijriYear(event.fields.hijriYear, `${at}.hijriYear`, issues);
     event.people.forEach((entry) => {
       checkProvenance(entry.claims, known, `${at}.${entry.person}`, issues);
       if (!person(entry.person)) issues.push({ path: at, message: `unknown person ${entry.person}` });

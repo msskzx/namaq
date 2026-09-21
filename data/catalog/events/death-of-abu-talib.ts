@@ -1,7 +1,9 @@
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
- * Undated, like Khadijah's. al-Dhahabi rejects the report that he said the
+ * Year -3, from al-Waqidi's قبل الهجرة بثلاث سنين for the exit from the
+ * shi'b: he and Khadijah both died in that year, which the chapter says in the
+ * same sentence. al-Dhahabi rejects the report that he said the
  * كلمة at the end: al-Abbas was still on his jahiliyyah when he claimed to have
  * heard it, the Prophet answered لم أسمع, and Ali called him الشيخ الضال after
  * he died. The description keeps what the sound reports say.
@@ -13,6 +15,7 @@ const deathOfAbuTalib = {
   nameTransliterated: 'The Death of Abu Talib',
   type: 'DEATH',
   fields: {
+    hijriYear: { value: -3, claims: ['sira/shib-exit-year'] },
     description: {
       value:
         'لما حضرته الوفاة دخل عليه النبي صلى الله عليه وسلم وعنده أبو جهل وعبد الله بن أبي أمية، فقال: يا عم قل لا إله إلا الله أحاج لك بها عند الله، فكان آخر كلمة أن قال: على ملة عبد المطلب. ومات هو وخديجة في عام واحد.',

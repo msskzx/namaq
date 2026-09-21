@@ -4,6 +4,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShield } from '@fortawesome/free-solid-svg-icons';
 import { useLanguage } from '@/components/language/LanguageContext';
+import { compareHijriYear } from '@/lib/hijriYear';
 import type { EventBase } from '@/types/event';
 import EventCard from '@/components/events/EventCard';
 import type { Battle } from '@/types/battle';
@@ -30,7 +31,7 @@ function EventTimeline({ events }: EventTimelineProps) {
         <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-amber-400"></div>
 
         {events
-          .sort((a, b) => (a.hijriYear || 0) - (b.hijriYear || 0))
+          .sort((a, b) => compareHijriYear(a.hijriYear, b.hijriYear))
           .map((event) => (
             <div key={event.id} className="relative flex items-start mb-8 last:mb-0">
               {/* Timeline dot */}

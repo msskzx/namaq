@@ -84,10 +84,20 @@ describe('chapter two of the sira in the catalog', () => {
     expect(claimByKey.get('sira/death-khadijah-order-alt')?.disputed).toBe(true);
   });
 
-  // al-Waqidi dates the second hijra from the calling, not the hijra, and the
-  // pledges and the Isra' are dated only against it. None is a hijriYear.
-  it('leaves every new event of this chapter undated', () => {
-    for (const event of chapterTwo) {
+  // Dated against the hijra, which a negative year holds: the Isra' at -1, and
+  // the exit from the shi'b with the two deaths at -3.
+  it('dates the four events the chapter counts back to the hijra', () => {
+    expect(isra.fields.hijriYear?.value).toBe(-1);
+    expect(boycott.fields.hijriYear?.value).toBe(-3);
+    expect(deathKhadijah.fields.hijriYear?.value).toBe(-3);
+    expect(deathAbuTalib.fields.hijriYear?.value).toBe(-3);
+  });
+
+  // al-Waqidi dates the second hijra from the calling and the pledges are
+  // dated from it too. A year from the mission is a different era, not a
+  // negative hijri year, so those stay undated.
+  it('leaves every event the chapter counts from the mission undated', () => {
+    for (const event of [habashaSecond, aqabaFirst, aqabaSecond, moon, taif]) {
       expect(Object.keys(event.fields)).not.toContain('hijriYear');
     }
   });

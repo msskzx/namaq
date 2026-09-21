@@ -3,6 +3,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useLanguage } from '../language/LanguageContext';
 import { Battle } from '@/types/battle';
+import { formatHijriYear } from '@/lib/hijriYear';
 import { Loader } from '@googlemaps/js-api-loader';
 
 interface BattleMapProps {
@@ -121,7 +122,7 @@ export default function BattleMap({
               </h3>
               ${battle.hijriYear ? `
                 <p class="text-sm text-gray-600 dark:text-gray-300">
-                  ${battle.hijriYear} ${language === 'ar' ? 'هـ' : 'AH'}
+                  ${formatHijriYear(battle.hijriYear, language)}
                 </p>
               ` : ''}
               <p class="text-sm text-gray-700 dark:text-gray-200 mt-1">

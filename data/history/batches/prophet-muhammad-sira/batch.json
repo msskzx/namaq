@@ -30393,12 +30393,73 @@
           "accessedAt": "2026-09-20"
         }
       ]
+    },
+    {
+      "key": "sira/isra-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "أسري به قبل الهجرة بسنة، فالسنة الأولى قبل الهجرة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "hijriYear",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/197-p2",
+          "volume": "السيرة 1",
+          "pageReference": "197",
+          "extractionUrl": "https://shamela.ws/book/10906/335",
+          "excerptArabic": "قال موسى بن عقبة، عن الزهري: أسري برسول الله صلى الله عليه وسلم إلى بيت المقدس قبل الهجرة بسنة.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/isra-year-alt",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "وقال ابن سعد: كان المعراج قبل الهجرة بثمانية عشر شهرا، ليلة السبت لسبع عشرة خلت من رمضان.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "hijriYear",
+      "disputed": true,
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/221-p2",
+          "volume": "السيرة 1",
+          "pageReference": "221",
+          "extractionUrl": "https://shamela.ws/book/10906/359",
+          "excerptArabic": "فلما كان ليلة السبت لسبع عشرة خلت من رمضان، قبل الهجرة بثمانية عشر شهرا، ورسول الله صلى الله عليه وسلم نائم في بيته أتاه جبريل بالمعراج، فإذا هو أحسن شيء منظرا، فعرج به إلى السموات سماء سماء، فلقي فيها الأنبياء، وانتهى إلى سدرة المنتهى.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/shib-exit-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "قال الواقدي: خرجوا من الشعب قبل الهجرة بثلاث سنين، وتوفي أبو طالب وخديجة في ذلك العام.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "hijriYear",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/194-p5",
+          "volume": "السيرة 1",
+          "pageReference": "194",
+          "extractionUrl": "https://shamela.ws/book/10906/332",
+          "excerptArabic": "وذكر الواقدي أنهم خرجوا من الشعب قبل الهجرة بثلاث سنين، وأنهما توفيا في ذلك العام، وتوفيت خديجة قبل أبي طالب بخمسة وثلاثين يوما.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
     }
   ],
   "approval": {
-    "revision": "b4997b17484161af",
+    "revision": "42bfb19868c0e47d",
     "approvedAt": "2026-09-21",
     "approvedBy": "msskzx",
-    "note": "Approved for publication of chapters one to five, including the heading sweep that went back over them and the sections it turned up. All 253 claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
+    "note": "Approved for publication of chapters one to five, including the heading sweep that went back over them and the sections it turned up. All 256 claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
   }
 }
