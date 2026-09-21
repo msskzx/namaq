@@ -10,6 +10,7 @@ vi.mock('@/lib/prisma', () => ({
 }));
 
 import { GET } from './route';
+import { utteranceSelect } from '@/lib/utteranceSelect';
 
 function request(slug: string) {
   return {
@@ -44,6 +45,8 @@ describe('GET /api/people/[slug]', () => {
         participations: { include: { battle: true } },
         events: true,
         ayat: { include: { surah: true } },
+        said: { select: utteranceSelect, orderBy: { slug: 'asc' } },
+        spokenAbout: { select: utteranceSelect, orderBy: { slug: 'asc' } },
       },
     });
     expect(findMany).toHaveBeenCalledWith({

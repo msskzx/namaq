@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { utteranceSelect } from '@/lib/utteranceSelect';
 
 export async function GET(
   _request: Request,
@@ -28,6 +29,7 @@ export async function GET(
           },
           orderBy: { name: 'asc' },
         },
+        utterances: { select: utteranceSelect, orderBy: { slug: 'asc' } },
       },
     });
 

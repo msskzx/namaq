@@ -12,6 +12,9 @@ import PersonNameCard from '@/components/people/PersonNameCard';
 import BattleMap from '@/components/battles/BattleMap';
 import { formatHijriYear } from '@/lib/hijriYear';
 import BattleParticipantsGraph from '@/components/battles/BattleParticipantsGraph';
+import BattleCounts from '@/components/battles/BattleCounts';
+import UtteranceGroup from '@/components/utterances/UtteranceGroup';
+import Badge from '@/components/common/Badge';
 import { PersonBase } from "@/types/person";
 import { Battle } from "@/types/battle";
 import { fetcher } from '@/lib/swr';
@@ -37,6 +40,15 @@ export default function BattleDetailPage() {
               <h1 className="text-4xl font-bold text-amber-400">
                 {battle ? (language === 'ar' ? battle.name : battle.nameTransliterated || battle.name) : t.battles.title}
               </h1>
+              {/* A غزوة the Prophet led, a سرية he sent, or a battle outside his
+                  campaigns; the value is cited rather than assigned. */}
+              {battle?.engagement && battle.engagement in t.battles.engagement && (
+                <Badge
+                  size="sm"
+                  color="amber"
+                  text={t.battles.engagement[battle.engagement as keyof typeof t.battles.engagement]}
+                />
+              )}
             </div>
             {error && (
               <ErrorMessage title={t.battles.loadError} />
@@ -57,6 +69,7 @@ export default function BattleDetailPage() {
                     <span className="text-gray-800 dark:text-gray-300">{formatHijriYear(battle.hijriYear, language)}</span>
                   </div>
                 )}
+                <BattleCounts battle={battle} />
                 {battle.latitude && battle.longitude && (
                   <div className="mt-4 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
                     <div className="p-4 bg-amber-50 dark:bg-gray-800 flex items-center gap-2">
@@ -107,6 +120,9 @@ export default function BattleDetailPage() {
                     <BattleParticipantsGraph slug={battle.slug} />
                   </div>
                 )}
+                <div className="mt-6">
+                  <UtteranceGroup utterances={battle.utterances} variant="here" />
+                </div>
               </div>
             )}
           </>

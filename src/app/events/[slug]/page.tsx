@@ -11,6 +11,7 @@ import PersonNameCard from '@/components/people/PersonNameCard';
 import { EventAll } from '@/types/event';
 import { PersonBase } from "@/types/person";
 import ErrorMessage from '@/components/common/ErrorMessage';
+import UtteranceGroup from '@/components/utterances/UtteranceGroup';
 
 import { fetcher } from '@/lib/swr';
 
@@ -88,6 +89,9 @@ function EventPage() {
                       {t.noPeopleInvolved}
                     </div>
                   )}
+                  <div className="mt-6">
+                    <UtteranceGroup utterances={event.utterances} variant="here" />
+                  </div>
                 </div>
 
               </div>

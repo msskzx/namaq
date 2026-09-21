@@ -115,6 +115,16 @@ const translations = {
 
     // Quranic Verses
     quranicVerses: 'Quranic Verses',
+    utterances: {
+      kind: { POETRY: 'Poetry', SAYING: 'Saying' },
+      /** The source's own verdict on its own report; the app grades nothing. */
+      grading: 'The source says',
+      headings: {
+        said: 'Poetry and sayings',
+        about: 'Said about them',
+        here: 'Poetry and sayings',
+      },
+    },
     quranicVersesAboutPeople: 'Quranic Verses About People',
     sampleVerses: 'Sample Verses',
 
@@ -135,6 +145,13 @@ const translations = {
         GHAZWAH: 'Expedition (led in person)',
         SARIYYAH: 'Expedition (detachment sent)',
         BATTLE: 'Battle',
+      },
+      counts: {
+        title: 'Numbers',
+        muslimForceCount: 'Muslims in the field',
+        nonMuslimForceCount: 'Against them',
+        muslimDeathCount: 'Muslims killed',
+        nonMuslimDeathCount: 'Killed among them',
       },
       participationStatus: {
         MARTYRED: 'Martyred',
@@ -489,6 +506,15 @@ const translations = {
 
     // Quranic Verses
     quranicVerses: 'الآيات القرآنية',
+    utterances: {
+      kind: { POETRY: 'شعر', SAYING: 'قول' },
+      grading: 'قال المصدر',
+      headings: {
+        said: { MALE: 'ما رُوي عنه من شعر وقول', FEMALE: 'ما رُوي عنها من شعر وقول' },
+        about: { MALE: 'ما قيل فيه', FEMALE: 'ما قيل فيها' },
+        here: 'الشعر والأقوال',
+      },
+    },
     quranicVersesAboutPeople: 'آيات نزلت في الأشخاص',
     sampleVerses: 'نماذج من الآيات',
 
@@ -509,6 +535,13 @@ const translations = {
         GHAZWAH: 'غزوة',
         SARIYYAH: 'سرية',
         BATTLE: 'معركة',
+      },
+      counts: {
+        title: 'الأعداد',
+        muslimForceCount: 'عدد المسلمين',
+        nonMuslimForceCount: 'عدد من قابلهم',
+        muslimDeathCount: 'من قتل من المسلمين',
+        nonMuslimDeathCount: 'من قتل منهم',
       },
       participationStatus: {
         MARTYRED: 'استشهد',

@@ -1,5 +1,6 @@
 import { Event as PrismaEvent, EventType } from "@/generated/prisma";
 import { PersonBase } from "./person";
+import type { Utterance } from "./utterance";
 
 export type EventBase = {
   id: string,
@@ -19,4 +20,5 @@ export type EventBase = {
 
 export type EventAll = PrismaEvent & {
   people: PersonBase[],
+  utterances?: Utterance[],
 }

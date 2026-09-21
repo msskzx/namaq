@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { utteranceSelect } from '@/lib/utteranceSelect';
 
 type RelatedSubject = { relatedSubjectSlug: string | null; relatedSubjectKind: string | null };
 
@@ -57,6 +58,10 @@ export async function GET(
         ayat: {
           include: { surah: true },
         },
+        // What this person said, and what was said about them: two sides of
+        // the same record -- see docs/adr/0015-one-record-for-what-someone-said.md.
+        said: { select: utteranceSelect, orderBy: { slug: 'asc' } },
+        spokenAbout: { select: utteranceSelect, orderBy: { slug: 'asc' } },
       },
     });
 
