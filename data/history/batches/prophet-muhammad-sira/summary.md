@@ -22,8 +22,8 @@ builds and `extractShamelaEntry.ts --volume` sets.
 
 ## What this instalment reads
 
-Chapters one to ten, printed pages ١/٢٩ to ٢/١٩٢, Shamela page ids 167 to
-851. 384 claims and 546 citations. Three chapters remain, ending at ٢/٤٩٦.
+Chapters one to eleven, printed pages ١/٢٩ to ٢/٢٣٦, Shamela page ids 167 to
+895. 387 claims and 549 citations. Two chapters remain, ending at ٢/٤٩٦.
 
 Chapter one covers his lineage, his names, his birth, the deaths of his parents
 and grandfather, Abu Talib's guardianship, his marriage to Khadijah, his
@@ -1268,9 +1268,39 @@ The year stays on it. The chapter places Hunayn after the فتح without dating
 either, and taking a year from the sections around it would be inference
 wearing a citation.
 
+# Chapter eleven
+
+The ninth year of the hijra, printed pages ٢/١٩٣ to ٢/٢٣٦. Three claims, all
+of them Tabuk, and all three take values off the legacy marker.
+
+## An absence that stopped being a guess
+
+Ali's row is the one worth following, because it has been through every state
+this pipeline has.
+
+The seed put him at Tabuk. The catalog, when it took him over, carried an
+`ABSENT_FROM` with `ABSENT_EXCUSED` on the marker, which was the seed's own
+later correction and cited nothing. The graph then held both edges at once,
+PARTICIPATED_IN beside ABSENT_FROM, because `battles:sync` only ever adds and
+cannot retract an attendance that flipped; the stale one had to be deleted by
+hand before the sync would run at all.
+
+Chapter eleven says what happened: خلف رسول الله صلى الله عليه وسلم عليا في
+غزوة تبوك, and Ali asks أتخلفني في النساء والصبيان. He was left behind, and
+left in charge. That is an absence the source remarks on rather than a gap in
+a roster, which is the distinction ADR 0013 exists for, and it is now cited
+instead of asserted.
+
+## What stayed on the marker
+
+The year. The chapter is headed السنة التاسعة and the battle sits inside it,
+but the section never dates the march. A heading two pages up is not what the
+value cites, and the difference between reading a date and inferring one from
+where a section falls is the difference this batch is built on.
+
 # Review
 
 Nothing in this batch is reviewed, across any of its chapters. The claims are
 authored but nobody has compared them against the stored pages, so every one of
-the 384 is Not reviewed. The batch's approval permits publication and says
+the 387 is Not reviewed. The batch's approval permits publication and says
 nothing about review.
