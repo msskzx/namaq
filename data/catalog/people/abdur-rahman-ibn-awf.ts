@@ -44,6 +44,7 @@ const abdurRahmanIbnAwf = {
   },
 
   titles: [
+    { title: 'al-sabiqoon', claims: ['awf/al-sabiqoon-eight'] },
     { title: 'the-ten-promised-paradise', claims: ['awf/titles'] },
     { title: 'companion', claims: ['awf/companion-of-prophet'] },
     { title: 'the-six-of-the-shura', claims: ['awf/titles'] },

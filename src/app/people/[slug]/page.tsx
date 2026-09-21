@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHexagonNodes, faSeedling, faSignature, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faHexagonNodes, faPeopleGroup, faSeedling, faSignature, faUser } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
 import { useLanguage } from '@/components/language/LanguageContext';
 import translations from '@/components/language/translations';
@@ -82,6 +82,16 @@ function PersonDetailPage() {
                 <FontAwesomeIcon icon={faSignature} className="w-7 h-7 text-amber-500 ml-2" />
                 {t.kunya}</h2>
               <p className="text-gray-800 dark:text-gray-200 text-lg">{person.kunya}</p>
+            </div>
+          )}
+          {/* A حلف is a name here, not a relationship -- see README. It sits
+              with the kunya for that reason. */}
+          {person.tribalAffiliation && (
+            <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
+              <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
+                <FontAwesomeIcon icon={faPeopleGroup} className="w-7 h-7 text-amber-500 ml-2" />
+                {t.tribalAffiliation}</h2>
+              <p className="text-gray-800 dark:text-gray-200 text-lg">{person.tribalAffiliation}</p>
             </div>
           )}
           {person.appearance && (

@@ -61,9 +61,11 @@ describe('chapter two of the sira in the catalog', () => {
     expect(anchors.every((anchor) => anchor.startsWith('1/'))).toBe(true);
   });
 
-  // Neither is a new title; both are newly cited for their holder.
+  // Neither is a new title; both are newly cited for their holder. Later
+  // chapters add more to Abu Bakr, so this asserts that his is present rather
+  // than that it is all he has.
   it('gives Abu Bakr as-siddiq and Asma dhat-an-nitaqayn', () => {
-    expect(abuBakr.titles.map((t) => t.title)).toEqual(['siddiq-al-ummah']);
+    expect(abuBakr.titles.map((t) => t.title)).toContain('siddiq-al-ummah');
     expect(asma.titles.map((t) => t.title)).toEqual(['dhat-an-nitaqayn']);
   });
 

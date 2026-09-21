@@ -62,6 +62,9 @@ export const RECIPROCAL_ROLE_PAIRS: ReadonlyArray<readonly [RelationType, Relati
   // salim-mawla-abi-hudhayfah's name reads, and PATRON points back. See
   // data/history/batches/prophet-muhammad-sira/summary.md, "Family".
   ['MAWLA', 'PATRON'],
+  // CALLED_TO_ISLAM points from the man who called to the man who answered,
+  // which is the direction Ibn Ishaq writes it: فأسلم بدعائه فلان وفلان.
+  ['CALLED_TO_ISLAM', 'ANSWERED_CALL_OF'],
 ];
 
 function isReciprocalPair(a: RelationType, b: RelationType): boolean {
