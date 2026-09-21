@@ -10,6 +10,7 @@ import { faShieldHalved, faLocationDot, faCalendarDays, faMapLocationDot } from 
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import PersonNameCard from '@/components/people/PersonNameCard';
 import BattleMap from '@/components/battles/BattleMap';
+import { formatHijriYear } from '@/lib/hijriYear';
 import BattleParticipantsGraph from '@/components/battles/BattleParticipantsGraph';
 import { PersonBase } from "@/types/person";
 import { Battle } from "@/types/battle";
@@ -53,7 +54,7 @@ export default function BattleDetailPage() {
                   <div className="mb-2 flex items-center gap-2">
                     <FontAwesomeIcon icon={faCalendarDays} className="text-amber-400 w-5 h-5" />
                     <span className="font-semibold text-gray-800 dark:text-gray-300">{t.battles.hijriYear}:</span>
-                    <span className="text-gray-800 dark:text-gray-300">{battle.hijriYear}</span>
+                    <span className="text-gray-800 dark:text-gray-300">{formatHijriYear(battle.hijriYear, language)}</span>
                   </div>
                 )}
                 {battle.latitude && battle.longitude && (

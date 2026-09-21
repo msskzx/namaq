@@ -4,6 +4,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimeline } from '@fortawesome/free-solid-svg-icons';
 import { useLanguage } from '@/components/language/LanguageContext';
+import { compareHijriYear, formatHijriYear } from '@/lib/hijriYear';
 import type { EventBase } from '@/types/event';
 import type { BattleParticipation } from '@/types/battle';
 import Link from 'next/link';
@@ -70,7 +71,7 @@ function toEntries(events: EventBase[], participations: BattleParticipation[]): 
 function hijriLabel(entry: TimelineEntry, language: string) {
   if (entry.hijriPeriod) return entry.hijriPeriod;
   if (entry.hijriYear === null) return null;
-  return language === 'ar' ? `${entry.hijriYear} هـ` : `${entry.hijriYear} AH`;
+  return formatHijriYear(entry.hijriYear, language);
 }
 
 function Wrapper({ href, children }: { href: string | null; children: React.ReactNode }) {
@@ -153,7 +154,7 @@ export default function Timeline({ events, participations = [], death }: Timelin
 
   const fromDeath = death ? deathEntry(death, language) : null;
   const entries = [...toEntries(events ?? [], participations), ...(fromDeath ? [fromDeath] : [])].sort(
-    (a, b) => (a.hijriYear || 0) - (b.hijriYear || 0)
+    (a, b) => compareHijriYear(a.hijriYear, b.hijriYear)
   );
   if (entries.length === 0) return null;
 

@@ -4,6 +4,7 @@ import type { EventBase } from '@/types/event';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt, faShieldAlt, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { useLanguage } from '@/components/language/LanguageContext';
+import { formatHijriYear } from '@/lib/hijriYear';
 import type { Battle } from '@/types/battle';
 
 interface EventCardProps {
@@ -26,7 +27,7 @@ function EventCard({ event }: EventCardProps) {
        {event.hijriYear && (
          <div className="flex items-center gap-1 text-amber-600 dark:text-amber-400 font-medium">
            <FontAwesomeIcon icon={faCalendarAlt} className="w-4 h-4" />
-           <span>{event.hijriYear} {language === 'ar' ? 'هـ' : 'AH'}</span>
+           <span>{formatHijriYear(event.hijriYear, language)}</span>
          </div>
        )}
      </div>

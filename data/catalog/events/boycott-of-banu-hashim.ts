@@ -1,7 +1,12 @@
 import type { CatalogEvent } from '@/lib/catalog/types';
 
-// Three years in the شعب, ending when the صحيفة was found eaten. The account
-// gives the length but no year, so hijriYear stays unset.
+/**
+ * Three years in the شعب, ending when the صحيفة was found eaten. The year is
+ * -3, and it is the year they came out: al-Waqidi dates that and nothing else
+ * here, so an event covering three years takes the one point the chapter puts
+ * a number on. The description carries the ثلاث سنين, which is what says the
+ * year is an end rather than a whole.
+ */
 const boycottOfBanuHashim = {
   kind: 'EVENT',
   slug: 'boycott-of-banu-hashim',
@@ -9,6 +14,7 @@ const boycottOfBanuHashim = {
   nameTransliterated: 'The Boycott of Banu Hashim',
   type: 'OTHER',
   fields: {
+    hijriYear: { value: -3, claims: ['sira/shib-exit-year'] },
     location: { value: 'شعب أبي طالب بمكة', claims: ['sira/shib-abi-talib'] },
     description: {
       value:

@@ -740,6 +740,36 @@ column the taken figure cites. `counts.test.ts` checks that: a competing figure
 that no column took must be DISPUTED, and a column must cite a claim about that
 same column.
 
+# Years before the hijra
+
+Four events said the same thing in their module comments: the chapter dates
+this only against the hijra, so the field stays unset. `hijriYear` is a plain
+`Int` and always could have held a negative, so the gap was a convention nobody
+had written down.
+
+It is written down now. A year before the hijra is negative, there is no year
+zero, and `-1` is the year the sira writes قبل الهجرة بسنة, the one the hijra
+came at the end of. `npm run catalog:validate` rejects a zero. `formatHijriYear`
+is the one place the sign becomes something a reader sees, `1 ق.هـ` or `1 BH`
+beside `3 هـ` and `3 AH`, and `compareHijriYear` orders a timeline with them.
+The old `(a ?? 0) - (b ?? 0)` put an undated entry at zero, which was before
+everything only while every year was positive.
+
+**الإسراء والمعراج** at -1, from al-Zuhri through Musa ibn Uqbah: قبل الهجرة
+بسنة (`1/197-p2`). Ibn Sa'd's قبل الهجرة بثمانية عشر شهرا (`1/221-p2`) reaches
+back into the year before that, so it is DISPUTED rather than a second value.
+
+**وفاة أبي طالب**, **وفاة خديجة** and **الخروج من الشعب**, all at -3 and all
+from one sentence of al-Waqidi's: خرجوا من الشعب قبل الهجرة بثلاث سنين، وأنهما
+توفيا في ذلك العام (`1/194-p5`). The boycott's year is the year it ended, which
+is the only point the chapter numbers; its description carries the ثلاث سنين
+that says so.
+
+What still has no year is anything the chapter counts from the mission rather
+than the hijra: the two emigrations to Abyssinia at سنة خمس من المبعث, the
+pledges at العقبة, the rebuilding of the Kaaba at قبل المبعث بخمس عشرة سنة.
+A year from the mission is a different era, not a negative hijri year.
+
 # Review
 
 Nothing in this batch is reviewed, across any of its chapters. The claims are
