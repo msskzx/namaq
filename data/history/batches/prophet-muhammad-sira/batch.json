@@ -30454,12 +30454,212 @@
           "accessedAt": "2026-09-20"
         }
       ]
+    },
+    {
+      "key": "abu-talib/verses-istisqa",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-talib",
+      "assertion": "قال أبو طالب في الاستسقاء بوجهه صلى الله عليه وسلم: وأبيض يستسقى الغمام بوجهه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/56-p1",
+          "volume": "السيرة 1",
+          "pageReference": "56",
+          "extractionUrl": "https://shamela.ws/book/10906/194",
+          "excerptArabic": "وفي ذلك يقول أبو طالب:\nوأبيض يستسقى الغمام بوجهه ... ربيع اليتامى عصمة للأرامل\nيطيف به الهلاك من آل هاشم ... فهم عنده في نعمة وفضائل\nوميزان عدل لا يخيس شعيرة ... ووزان صدق وزنه غير عائل",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "abu-talib/verses-lan-yasilu",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-talib",
+      "assertion": "قال أبو طالب: والله لن يصلوا إليك بجمعهم حتى أوسد في التراب دفينا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/121-p2",
+          "volume": "السيرة 1",
+          "pageReference": "121",
+          "extractionUrl": "https://shamela.ws/book/10906/259",
+          "excerptArabic": "قال ابن إسحاق فيما رواه عنه يونس: ثم قال أبو طالب في ذلك شعرا.\nوالله لن يصلوا إليك بجمعهم ... حتى أوسد في التراب دفينا\nفامض لأمرك ما عليك غضاضة ... أبشر وقر بذاك منك عيونا\nودعوتني وزعمت أنك ناصحي ... فلقد صدقت وكنت قدما أمينا\nوعرضت دينا قد عرفت بأنه ... من خير أديان البرية دينا\nلولا الملامة أو حذاري سبة ... لوجدتني سمحا بذاك مبينا",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "zayd-amr/verses-udhtu",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zayd-ibn-amr-ibn-nufayl",
+      "assertion": "كان يقول: عذت بما عاذ به إبراهيم، مستقبل القبلة وهو قائم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/78-p2",
+          "volume": "السيرة 1",
+          "pageReference": "78",
+          "extractionUrl": "https://shamela.ws/book/10906/216",
+          "excerptArabic": "عذت بما عاذ به إبراهيم ... مستقبل القبلة وهو قائم\nأنفي لك اللهم عان راغم ... مهما تجشمني فإني جاشم",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "zayd-amr/verses-arabban",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zayd-ibn-amr-ibn-nufayl",
+      "assertion": "قال في فراق دين قومه: أربا واحدا أم ألف رب، عزلت اللات والعزى جميعا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/80-p2",
+          "volume": "السيرة 1",
+          "pageReference": "80",
+          "extractionUrl": "https://shamela.ws/book/10906/218",
+          "excerptArabic": "قال ابن إسحاق: فقال زيد في فراق دين قومه:\nأربا واحدا أم ألف رب ... أدين إذا تقسمت الأمور\nعزلت اللات والعزى جميعا ... كذلك يفعل الجلد الصبور",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/verses-maabad",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "قال معبد الخزاعي أبياتا ثنت أبا سفيان عن الرجعة بعد أحد، وهو يومئذ مشرك.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/439-p2",
+          "volume": "السيرة 1",
+          "pageReference": "439-440",
+          "extractionUrl": "https://shamela.ws/book/10906/576",
+          "excerptArabic": "أن معبدا الخزاعي مر برسول الله صلى الله عليه وسلم وهو بحمراء الأسد وكانت خزاعة مسلمهم ومشركهم عيبة نصح لرسول الله صلى الله عليه وسلم، صفوهم معه لا يخفون عليه شيئا كان بها، ومعبد يومئذ مشرك فقال: يا محمد، والله لقد عز علينا ما أصابك في أصحابك ولوددنا أن الله عافاك فيهم ثم خرج حتى لقي أبا سفيان ومن معه بالروحاء، وقد أجمعوا الرجعة وقالوا: أصبنا حد أصحاب محمد وقادتهم, ثم نرجع قبل أن نستأصلهم! لنكون على بقيتهم فلنفرغن منهم فلما رأى أبو سفيان معبدا قال: ما وراءك؟ قال: محمد قد خرج في طلبكم في جمع لم أر مثله قط، يتحرقون عليكم تحرقا، قد اجتمع معه من كان تخلف عنه في يومكم، وندموا على ما صنعوا، فيهم من الحنق عليكم شيء لم أر مثله قط. قال: ويلك ما تقول؟ قال: والله ما أرى أن ترتحل حتى ترى نواصي الخيل. قال: فوالله لقد أجمعنا الكرة عليهم لنستأصلهم. قال: فإني أنهاك ذاك، والله لقد حملني ما رأيت على أن قلت فيهم أبياتا. قال: وما قلت؟ قال:\nكادت تهدمن الأصوات راحلتي ... إذ سالت الأرض بالجرد الأبابيل\nتردي بأسد كرام لا تنابلة ... عند اللقاء ولا ميل معازيل\nفظلت عدوا أظن الأرض مائلة ... لما سموا برئيس غير مخذول\nفقلت ويل ابن حرب من لقائكم ... إذا تغطمطت البطحاء بالجيل\nإني نذرت لأهل البسل ضاحية ... لكل ذي إربة منهم ومعقول\nمن جيش أحد لا وخش تنابلة ... وليس يوصف ما أنذرت بالقيل",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/verses-banat-tariq",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "قالت امرأة من نسوة قريش يوم أحد: نحن بنات طارق، نمشي على النمارق.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/396-p2",
+          "volume": "السيرة 1",
+          "pageReference": "396",
+          "extractionUrl": "https://shamela.ws/book/10906/533",
+          "excerptArabic": "حتى انتهى إلى نسوة في سفح جبل معهن دفوف لهن، فيهن امرأة وهي تقول:\nنحن بنات طارق ... نمشي على النمارق\nإن تقبلوا نعانق ... أو تدبروا نفارق\nفراق غير وامق",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/verses-jazaynakum",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "صرخت هند بنت عتبة يوم أحد: نحن جزيناكم بيوم بدر، والحرب بعد الحرب ذات سعر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/425-p1",
+          "volume": "السيرة 1",
+          "pageReference": "425",
+          "extractionUrl": "https://shamela.ws/book/10906/562",
+          "excerptArabic": "ثم علت على صخرة مشرفة، فصرخت بأعلى صوتها:\nنحن جزيناكم بيوم بدر ... والحرب بعد الحرب ذات سعر\nما كان عن عتبة لي من صبر ... ولا أخي وعمه وبكري",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "prophet/rajaz-al-himal",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "كان ينقل اللبن مع أصحابه في بناء المسجد ويقول: هذا الحمال لا حمال خيبر، هذا أبر ربنا وأطهر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/290-p5",
+          "volume": "السيرة 1",
+          "pageReference": "290",
+          "extractionUrl": "https://shamela.ws/book/10906/428",
+          "excerptArabic": "وقال موسى بن عقبة, عن ابن شهاب، في قصة بناء المسجد: فطفق هو وأصحابه ينقلون اللبن، ويقول وهو ينقل اللبن معهم:\nهذا الحمال لا حمال خيبر ... هذا أبر ربنا وأطهر",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "prophet/saying-ummah-wahdah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "قال في زيد بن عمرو بن نفيل: إنه يبعث يوم القيامة أمة وحده. قال الذهبي: إسناده حسن.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/77-p3",
+          "volume": "السيرة 1",
+          "pageReference": "77",
+          "extractionUrl": "https://shamela.ws/book/10906/215",
+          "excerptArabic": "أن زيد بن عمرو بن نفيل مات، ثم أنزل على النبي صلى الله عليه وسلم، فقال النبي صلى الله عليه وسلم: \"إنه يبعث يوم القيامة أمة وحده\". إسناده حسن.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "prophet/saying-ghifar",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "قال لما أسلمت غفار وأسلم: غفار غفر الله لها، وأسلم سالمها الله.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/135-p1",
+          "volume": "السيرة 1",
+          "pageReference": "135",
+          "extractionUrl": "https://shamela.ws/book/10906/273",
+          "excerptArabic": "وجاءت أسلم فقالوا: يا رسول الله إخواننا، نسلم على الذي أسلموا عليه، فأسلموا فقال: \"غفار غفر الله لها، وأسلم سالمها الله\". أخرجه مسلم عن هدبة، عن سليمان.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
     }
   ],
   "approval": {
-    "revision": "42bfb19868c0e47d",
+    "revision": "d35a5d21735b0880",
     "approvedAt": "2026-09-21",
     "approvedBy": "msskzx",
-    "note": "Approved for publication of chapters one to five, including the heading sweep that went back over them and the sections it turned up. All 256 claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
+    "note": "Approved for publication of chapters one to five, including the heading sweep that went back over them and the sections it turned up. All 266 claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
   }
 }

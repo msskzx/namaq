@@ -23,6 +23,7 @@ export function catalogProvenance(catalog: Catalog): ValueProvenance[] {
     ...catalog.people.map((subject) => [`people/${subject.slug}`, subject] as const),
     ...catalog.battles.map((subject) => [`battles/${subject.slug}`, subject] as const),
     ...catalog.events.map((subject) => [`events/${subject.slug}`, subject] as const),
+    ...catalog.utterances.map((subject) => [`utterances/${subject.slug}`, subject] as const),
   ];
 
   return modules.flatMap(([subject, module]) =>

@@ -46,7 +46,7 @@ describe('events the sira dates against the hijra', () => {
 
   it('rejects a year zero, which the era does not have', () => {
     const issues = validateCatalog(
-      { people: [], battles: [], events: [{ ...isra, people: [], fields: { hijriYear: { value: 0, claims: ['sira/isra-year'] } } }] },
+      { people: [], battles: [], utterances: [], events: [{ ...isra, people: [], fields: { hijriYear: { value: 0, claims: ['sira/isra-year'] } } }] },
       { people: new Set(), titles: new Set(), battles: new Set(), claims: new Set(['sira/isra-year']) },
     );
 

@@ -20,7 +20,7 @@ const person = (over: Partial<CatalogPerson> = {}): CatalogPerson => ({
   ...over,
 });
 
-const catalog = (over: Partial<Catalog> = {}): Catalog => ({ people: [], battles: [], events: [], ...over });
+const catalog = (over: Partial<Catalog> = {}): Catalog => ({ people: [], battles: [], events: [], utterances: [], ...over });
 
 describe('validateCatalog', () => {
   it('passes a catalog whose every reference resolves', () => {

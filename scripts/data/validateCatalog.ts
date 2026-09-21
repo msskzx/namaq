@@ -56,7 +56,8 @@ async function main() {
   const issues = validateCatalog(catalog, { ...(await seedSlugs()), claims: keys });
 
   console.log(
-    `catalog: ${catalog.people.length} people, ${catalog.battles.length} battles, ${catalog.events.length} events`,
+    `catalog: ${catalog.people.length} people, ${catalog.battles.length} battles, ${catalog.events.length} events, ` +
+      `${catalog.utterances.length} utterances`,
   );
   if (unapproved.length > 0) {
     console.log(`batches not approved at their current revision, claims unusable: ${unapproved.join(', ')}`);

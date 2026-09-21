@@ -1,6 +1,6 @@
 import { readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import type { Catalog, CatalogBattle, CatalogEvent, CatalogPerson } from './types';
+import type { Catalog, CatalogBattle, CatalogEvent, CatalogPerson, CatalogUtterance } from './types';
 
 export const catalogRoot = 'data/catalog';
 
@@ -28,10 +28,11 @@ async function loadKind<T>(root: string, kind: string): Promise<T[]> {
 
 /** `root` is resolved against the working directory, so run these commands from the repo root. */
 export async function loadCatalog(root = catalogRoot): Promise<Catalog> {
-  const [people, battles, events] = await Promise.all([
+  const [people, battles, events, utterances] = await Promise.all([
     loadKind<CatalogPerson>(root, 'people'),
     loadKind<CatalogBattle>(root, 'battles'),
     loadKind<CatalogEvent>(root, 'events'),
+    loadKind<CatalogUtterance>(root, 'utterances'),
   ]);
-  return { people, battles, events };
+  return { people, battles, events, utterances };
 }

@@ -152,8 +152,45 @@ export interface CatalogEvent {
   readonly people: readonly { readonly person: string; readonly claims: Provenance }[];
 }
 
+/**
+ * Verse or prose. The sira quotes both and treats them the same way, as
+ * somebody's words reported with an isnad, so one record holds both and the
+ * kind says which. See docs/adr/0015-one-record-for-what-someone-said.md.
+ */
+export const UTTERANCE_KINDS = ['POETRY', 'SAYING'] as const;
+export type UtteranceKind = (typeof UTTERANCE_KINDS)[number];
+
+/** Keys are Prisma `Utterance` column names, apart from the two slug links. */
+export interface CatalogUtteranceFields {
+  /**
+   * The poet or speaker the app has no subject for, which is the common case
+   * in the sira's verse. Naming him here does not make him a node.
+   */
+  readonly speakerName?: Cited<string>;
+  /** What the source says about how sound the report is, in its own words. */
+  readonly grading?: Cited<string>;
+  /** What the source says the occasion was, in its own wording. */
+  readonly occasion?: Cited<string>;
+}
+
+export interface CatalogUtterance {
+  readonly kind: 'UTTERANCE';
+  readonly slug: string;
+  readonly utteranceKind: UtteranceKind;
+  /** The words as the source prints them; verse keeps its line breaks. */
+  readonly textArabic: Cited<string>;
+  /** Whose words these are, when the app has a subject for them. */
+  readonly speaker?: string;
+  /** Who they are about, where the source says so and the app has them. */
+  readonly subject?: string;
+  readonly event?: string;
+  readonly battle?: string;
+  readonly fields: CatalogUtteranceFields;
+}
+
 export interface Catalog {
   readonly people: readonly CatalogPerson[];
   readonly battles: readonly CatalogBattle[];
   readonly events: readonly CatalogEvent[];
+  readonly utterances: readonly CatalogUtterance[];
 }

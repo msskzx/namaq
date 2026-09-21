@@ -13,7 +13,7 @@ const person = (over: Partial<CatalogPerson> = {}): CatalogPerson => ({
   ...over,
 });
 
-const catalog = (people: CatalogPerson[]): Catalog => ({ people, battles: [], events: [] });
+const catalog = (people: CatalogPerson[]): Catalog => ({ people, battles: [], events: [], utterances: [] });
 
 describe('catalogRelations', () => {
   it('writes both directions of a declared relation', () => {

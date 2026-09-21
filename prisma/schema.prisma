@@ -61,13 +61,13 @@ model AnalyticsEvent {
 
 // Historical figures model
 model Person {
-  id                         String  @id @default(cuid())
-  name                       String
-  fullName                   String?
+  id                 String  @id @default(cuid())
+  name               String
+  fullName           String?
   /// The teknonym a person is addressed by, e.g. أبو محمد. A name, not a title:
   /// see docs/adr/0014-a-kunya-is-a-name.md.
-  kunya                      String?
-  nameTransliterated         String? // Transliterated name for search/display
+  kunya              String?
+  nameTransliterated String? // Transliterated name for search/display
 
   // MALE or FEMALE. A string rather than an enum, matching Battle.engagement,
   // so the vocabulary lives in src/lib/catalog/types.ts where validateCatalog
@@ -98,6 +98,8 @@ model Person {
   participations BattleParticipation[]
   events         Event[]
   ayat           Ayah[]                @relation("PersonAyahs")
+  said           Utterance[]           @relation("UtteranceSpeaker")
+  spokenAbout    Utterance[]           @relation("UtteranceSubject")
 
   @@map("persons")
 }
@@ -373,6 +375,7 @@ model Battle {
 
   // Relations
   participations BattleParticipation[]
+  utterances     Utterance[]
 
   graphRank           Int? // 1 = most prominent over the unified Person+Battle+Title+Event graph; null = not yet computed
   clusterId           Int? // Louvain community id from the unified graph, for zoom-out cluster collapse
@@ -442,7 +445,8 @@ model Event {
   updatedAt                 DateTime  @updatedAt
 
   // Relations
-  people Person[]
+  people     Person[]
+  utterances Utterance[]
 
   graphRank           Int? // 1 = most prominent over the unified Person+Battle+Title+Event graph; null = not yet computed
   clusterId           Int? // Louvain community id from the unified graph, for zoom-out cluster collapse
@@ -451,6 +455,52 @@ model Event {
   graphRankComputedAt DateTime? // when graphRank/clusterId/layoutX/layoutY were last (re)computed by scripts/graph/computeGraphLayout.ts
 
   @@map("events") // Map to 'events' table
+}
+
+/// Something someone said, in verse or in prose, kept as its own record rather
+/// than folded into a profile field. See
+/// docs/adr/0015-one-record-for-what-someone-said.md.
+model Utterance {
+  id   String @id @default(cuid())
+  slug String @unique
+
+  /// POETRY or SAYING. A string rather than an enum, matching Battle.engagement
+  /// and Person.sex, so the vocabulary lives in src/lib/catalog/types.ts where
+  /// validateCatalog can enforce it.
+  kind String
+
+  /// The words themselves, as the source prints them. Verse keeps its line
+  /// breaks; a hemistich separator is the source's own.
+  textArabic String @db.Text
+
+  /// Whose words these are. speakerName carries a poet the app has no subject
+  /// for, which is the common case in the sira's verse: naming him here does
+  /// not make him a node.
+  speaker     Person? @relation("UtteranceSpeaker", fields: [speakerId], references: [id])
+  speakerId   String?
+  speakerName String?
+
+  /// Who the words are about, where the source says so and the app has them.
+  subject   Person? @relation("UtteranceSubject", fields: [subjectId], references: [id])
+  subjectId String?
+
+  /// Where it was said, when the source ties it to one of these.
+  event    Event?  @relation(fields: [eventId], references: [id])
+  eventId  String?
+  battle   Battle? @relation(fields: [battleId], references: [id])
+  battleId String?
+
+  /// What the source says about how sound the report is, in the source's own
+  /// words: أخرجه البخاري, إسناده حسن, حديث منكر. The app grades nothing.
+  grading String?
+
+  /// What the source says the occasion was, in its own wording.
+  occasion String? @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("utterances")
 }
 
 enum EventType {

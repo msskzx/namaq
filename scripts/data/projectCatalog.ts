@@ -319,12 +319,67 @@ async function projectEvents(events: Catalog['events']) {
   }
 }
 
+/**
+ * No seed file writes an utterance, so the catalog is its only author and the
+ * row is made to match outright, the way a person no seed declares is.
+ */
+async function projectUtterances(utterances: Catalog['utterances']) {
+  for (const utterance of utterances) {
+    const at = `utterances/${utterance.slug}`;
+
+    const link = async (slug: string | undefined, what: string) => {
+      if (!slug) return null;
+      const row = await prisma.person.findUnique({ where: { slug }, select: { id: true } });
+      if (!row) conflicts.push(`${at}: no row for ${what} ${slug}`);
+      return row?.id ?? null;
+    };
+
+    const speakerId = await link(utterance.speaker, 'speaker');
+    const subjectId = await link(utterance.subject, 'subject');
+
+    const event = utterance.event
+      ? await prisma.event.findUnique({ where: { slug: utterance.event }, select: { id: true } })
+      : null;
+    if (utterance.event && !event) conflicts.push(`${at}: no row for event ${utterance.event}`);
+    const battle = utterance.battle
+      ? await prisma.battle.findUnique({ where: { slug: utterance.battle }, select: { id: true } })
+      : null;
+    if (utterance.battle && !battle) conflicts.push(`${at}: no row for battle ${utterance.battle}`);
+
+    const columns = {
+      kind: utterance.utteranceKind,
+      textArabic: utterance.textArabic.value,
+      speakerId,
+      speakerName: utterance.fields.speakerName?.value ?? null,
+      subjectId,
+      eventId: event?.id ?? null,
+      battleId: battle?.id ?? null,
+      grading: utterance.fields.grading?.value ?? null,
+      occasion: utterance.fields.occasion?.value ?? null,
+    };
+
+    const live = await prisma.utterance.findUnique({ where: { slug: utterance.slug } });
+    if (!live) {
+      planned.push(`${at}: create ${utterance.utteranceKind}`);
+      if (apply) await prisma.utterance.create({ data: { slug: utterance.slug, ...columns } });
+      continue;
+    }
+
+    const changed = Object.entries(columns).filter(([column, value]) => (live as Record<string, unknown>)[column] !== value);
+    changed.forEach(([column, value]) => planned.push(`${at}.${column}: set to ${JSON.stringify(value)}`));
+    if (apply && changed.length > 0) {
+      await prisma.utterance.update({ where: { slug: utterance.slug }, data: columns });
+    }
+  }
+}
+
 async function main() {
   const catalog = await loadCatalog();
   seedAuthored = seedAuthoredPeople();
   await projectPeople(catalog.people);
   await projectBattles(catalog.battles);
   await projectEvents(catalog.events);
+  await projectUtterances(catalog.utterances);
   await retireStaleParticipations(catalog);
 
   console.log(apply ? 'APPLYING' : 'DRY RUN (pass --apply to write)');
