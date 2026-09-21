@@ -22,8 +22,8 @@ builds and `extractShamelaEntry.ts --volume` sets.
 
 ## What this instalment reads
 
-Chapters one to six, printed pages ١/٢٩ to ١/٤٦٦, Shamela page ids 167 to
-602. 354 claims and 513 citations. Seven chapters remain, ending at ٢/٤٩٦.
+Chapters one to seven, printed pages ١/٢٩ to ١/٥٢٧, Shamela page ids 167 to
+663. 363 claims and 523 citations. Six chapters remain, ending at ٢/٤٩٦.
 
 Chapter one covers his lineage, his names, his birth, the deaths of his parents
 and grandfather, Abu Talib's guardianship, his marriage to Khadijah, his
@@ -1074,9 +1074,65 @@ mostly to hold it — everything else al-Husayn's rows had is carried on the
 marker. شعبان is the month; the year is the chapter's own heading, and the
 model holds the year.
 
+# Chapter seven
+
+The fifth year of the hijra, printed pages ١/٤٦٧ to ١/٥٢٧. Nine claims, which
+is fewer than the year deserves and as many as the model can hold: the year is
+the Khandaq and Banu Qurayzah, and both already had modules carrying the seeds'
+assertions with their evidence owed. Five of the nine take those off the
+marker.
+
+## The first battle this batch can count
+
+Chapter seven is the first text here to describe the Khandaq rather than
+mention it, and it gives both hosts as figures in one sentence: فكان جميع
+الأحزاب عشرة آلاف ... وكان المسلمون في ثلاثة آلاف. Badr and Uhud have had
+counts since the columns existed; the Khandaq is the third battle to get them,
+and the first whose numbers came from a chapter written about it.
+
+Quraysh's own four thousand and their three hundred horses are in the page and
+not in the record. The column holds one figure for a side, the sentence above
+gives it, and a claim for the sub-contingent would name no value this model
+holds. `npm run history:validate` rejects such a claim outright, which is how
+four of this chapter's drafts came to be dropped rather than kept.
+
+## A month with nowhere to live
+
+al-Waqidi dates the battle to ذو القعدة and Ibn Ishaq to شوال, and chapter six
+already carried a third reading putting the whole thing in سنة أربع against Ibn
+Ishaq's سنة خمس. Three readings, and the model holds a year.
+
+So the year is cited and the months are not. Competing readings become DISPUTED
+claims **where the model holds the value they compete over**, and a month is
+not a value here. Both disagreements stay in the pages, which is where a reader
+who cares about them will find them anyway.
+
+## Saad ibn Muadh, who is two battles and one wound
+
+The year wounds him at the first and kills him at the second, and the sequence
+is why his death is not a standalone fact. حبان بن العرقة hit him in the أكحل
+at the Khandaq, the Prophet pitched him a tent in the mosque to visit him
+nearby, بنو قريظة came down to his judgement, and the vein reopened once he had
+given it. Two participations carry it — INJURED at the one, MARTYRED at the
+other — and `deathYearHijri` takes the ذو الحجة سنة خمس the book states
+outright.
+
+His `virtues` take what the book says after the death rather than the death
+again: إن هذا الذي تحرك له العرش, and the seventy thousand angels at the
+funeral. The value already held his Islam from chapter four, so it now carries
+two claims and reads as one life.
+
+## What the year has and the app has not
+
+The chapter is full of people this model cannot hold. The الرجيع and بئر معونة
+dead of chapter six were the same, and the pattern is worth naming: the sira's
+years are mostly made of names, and a name without a subject is not a claim
+waiting to be written. It is the source doing what the source does, and the
+pages keep it.
+
 # Review
 
 Nothing in this batch is reviewed, across any of its chapters. The claims are
 authored but nobody has compared them against the stored pages, so every one of
-the 354 is Not reviewed. The batch's approval permits publication and says
+the 363 is Not reviewed. The batch's approval permits publication and says
 nothing about review.
