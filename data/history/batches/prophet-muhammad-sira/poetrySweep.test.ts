@@ -12,16 +12,18 @@ import { describe, expect, it } from 'vitest';
  */
 const BATCH = 'data/history/batches/prophet-muhammad-sira';
 
-/** Where chapter two begins: the poetry back-fill has reached this far. */
-const UNSWEPT_FROM = '1/146-p1';
+/** Where chapter six begins: the poetry back-fill has reached this far. */
+const UNSWEPT_FROM = '1/443-p1';
 
 /**
- * Runs the separator finds that are not verse, with the reason. Prose uses the
- * same three dots to abbreviate a hadith it has quoted before.
+ * Prose borrows the same three dots to abbreviate a hadith it has quoted
+ * before, and marks it by what follows: ... الحديث. That is the editor's own
+ * sign and not a hemistich, so it is not verse and never needs declining.
  */
-const DECLINED: Record<string, string> = {
-  '1/60-p4': 'prose: the ellipsis abbreviates the Bahira hadith, ببحيرا ... الحديث',
-};
+const ABBREVIATED_HADITH = / \.\.\. الحديث/;
+
+/** Runs the separator finds that are not verse, with the reason for each. */
+const DECLINED: Record<string, string> = {};
 
 type Batch = {
   accounts: { pages: { bodyFile: string; passages: { anchor: string }[] }[] }[];
@@ -50,7 +52,7 @@ const swept = passages.findIndex((passage) => passage.anchor === UNSWEPT_FROM);
 const runs: { anchor: string; text: string; span: string[] }[] = [];
 let open: { anchor: string; text: string; span: string[] } | null = null;
 passages.slice(0, swept).forEach((passage, index) => {
-  if (!passage.text.includes(' ... ')) {
+  if (!passage.text.includes(' ... ') || ABBREVIATED_HADITH.test(passage.text)) {
     open = null;
     return;
   }
