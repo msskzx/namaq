@@ -20,6 +20,15 @@ const abuBakrAsSiddiq = {
   // naming outright: he affirmed the Isra' when others turned back, فلذلك سمي
   // أبو بكر الصديق.
   titles: [{ title: 'siddiq-al-ummah', claims: ['abu-bakr/siddiq'] }],
+
+  // Three verses for one occasion: the chapter quotes الروم ٢-٤ whole as what
+  // came down over the wager he made, so the link is recorded verse by verse
+  // rather than collapsed to the one that carries بضع سنين.
+  ayat: [
+    { surah: 30, ayah: 2, claims: ['abu-bakr/ayah-ar-rum'] },
+    { surah: 30, ayah: 3, claims: ['abu-bakr/ayah-ar-rum'] },
+    { surah: 30, ayah: 4, claims: ['abu-bakr/ayah-ar-rum'] },
+  ],
   relations: [],
 } satisfies CatalogPerson;
 
