@@ -37,6 +37,11 @@ const prophetMuhammad = {
         'محمد بن عبد الله بن عبد المطلب واسم عبد المطلب شيبة, ابن هاشم واسمه عمرو, ابن عبد مناف واسمه المغيرة، ابن قصي واسمه زيد بن كلاب بن مرة بن كعب بن لؤي بن غالب بن فهر بن مالك بن النضر بن كنانة بن خزيمة ابن مدركة، واسمه عامر بن إلياس بن مضر بن نزار بن معد بن عدنان.',
       claims: ['prophet/lineage'],
     },
+    // The batch's last chapter fills the one field its central subject never
+    // had. al-Waqidi dates it outright; the day competes between لهلال and
+    // لليلتين خلتا, which is a day and not a year, so both readings stay in
+    // the page.
+    deathYearHijri: { value: '11 AH', claims: ['prophet/death-year'] },
     kunya: { value: 'أبو القاسم', claims: ['prophet/kunya'] },
     virtues: {
       value:

@@ -33344,12 +33344,103 @@
           "accessedAt": "2026-09-19"
         }
       ]
+    },
+    {
+      "key": "prophet/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "توفي يوم الاثنين لليلتين خلتا من ربيع الأول سنة إحدى عشرة، بعد ثلاثة عشر يوما من مرضه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "deathYearHijri",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/471-p8",
+          "volume": "السيرة 2",
+          "pageReference": "471",
+          "extractionUrl": "https://shamela.ws/book/10906/1129",
+          "excerptArabic": "قال الواقدي: حدثنا أبو معشر، عن محمد بن قيس قال: اشتكى النبي صلى الله عليه وسلم ثلاثة عشر يوما وتوفي يوم الاثنين لليلتين خلا من ربيع الأول سنة إحدى عشرة.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "usamah/sariyyah-command",
+      "subjectKind": "PERSON",
+      "subjectSlug": "usamah-ibn-zaid",
+      "assertion": "دعاه النبي صلى الله عليه وسلم فولاه الجيش إلى موضع مقتل أبيه، وعقد له لواء بيده.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "sariyyah-usamah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/299-p4",
+          "volume": "السيرة 2",
+          "pageReference": "299",
+          "extractionUrl": "https://shamela.ws/book/10906/957",
+          "excerptArabic": "أمر النبي صلى الله عليه وسلم بالتهيؤ لغزو الروم، ودعا أسامة بن زيد، فقال: سر إلى موضع مقتل أبيك، فأوطئهم الخيل، فقد وليتك هذا الجيش.",
+          "accessedAt": "2026-09-19"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/299-p5",
+          "volume": "السيرة 2",
+          "pageReference": "299",
+          "extractionUrl": "https://shamela.ws/book/10906/957",
+          "excerptArabic": "فلما أصبح يوم الخميس، عقد لأسامة لواء بيده ... وعسكر بالجرف. فلم يبق أحد من وجوه المهاجرين والأنصار إلا انتدب في تلك الغزوة؛ فيهم أبو بكر، وعمر، وأبو عبيدة.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "sariyyah-usamah/engagement",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "sariyyah-usamah",
+      "assertion": "ولى النبي صلى الله عليه وسلم أسامة بن زيد الجيش وعقد له لواء بيده، ولم يخرج بنفسه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "engagement",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/299-p4",
+          "volume": "السيرة 2",
+          "pageReference": "299",
+          "extractionUrl": "https://shamela.ws/book/10906/957",
+          "excerptArabic": "أمر النبي صلى الله عليه وسلم بالتهيؤ لغزو الروم، ودعا أسامة بن زيد، فقال: سر إلى موضع مقتل أبيك، فأوطئهم الخيل، فقد وليتك هذا الجيش.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "sariyyah-usamah/year",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "sariyyah-usamah",
+      "assertion": "كانت في صفر سنة إحدى عشرة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "hijriYear",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/299-p3",
+          "volume": "السيرة 2",
+          "pageReference": "299",
+          "extractionUrl": "https://shamela.ws/book/10906/957",
+          "excerptArabic": "في يوم الاثنين لأربع بقين من صفر.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
     }
   ],
   "approval": {
-    "revision": "18036412e0ac0f6a",
+    "revision": "c308cdfc95a476e4",
     "approvedAt": "2026-09-22",
     "approvedBy": "msskzx",
-    "note": "Approved for publication of chapters one to twelve. Chapter twelve is the tenth year of the hijra and its three claims are حجة الوداع, an event the old seed never had, so the catalog creates the row. The Prophet's part in it and Asma bint Umays's are both cited: she bore محمد بن أبي بكر at ذو الحليفة on the way out and asked him what to do. Her son has no subject, so the birth is not a second event but what she did at this one. All 390 claims are Not reviewed, chapter twelve included. Approval permits the import and asserts nothing about review. One chapter remains, the eleventh year."
+    "note": "Approved for publication of all thirteen chapters. Chapter thirteen is the eleventh year and the last: it fills deathYearHijri on the Prophet, which was null through every chapter before it, and creates سرية أسامة, the last thing he ordered. Abu Bakr, Umar and Abu Ubaydah are named as having answered its muster but are not on the roster: the chapter says انتدب, and the expedition had not left when he died. All 394 claims are Not reviewed, the whole batch included. Approval permits the import and asserts nothing about review. The account is now read end to end, ١/٢٩ to ٢/٤٧١."
   }
 }
