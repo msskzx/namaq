@@ -22,8 +22,8 @@ builds and `extractShamelaEntry.ts --volume` sets.
 
 ## What this instalment reads
 
-Chapters one to twelve, printed pages ١/٢٩ to ٢/٢٨٩, Shamela page ids 167 to
-948. 390 claims and 552 citations. One chapter remains, ending at ٢/٤٩٦.
+All thirteen chapters, printed pages ١/٢٩ to ٢/٤٧١, Shamela page ids 167 to
+1129. 394 claims and 557 citations. The account is read end to end.
 
 Chapter one covers his lineage, his names, his birth, the deaths of his parents
 and grandfather, Abu Talib's guardianship, his marriage to Khadijah, his
@@ -1328,9 +1328,53 @@ This is the shape the whole batch has taken. A chapter gives dozens of names
 and the model holds the few it already knows; the rest stay in the pages, which
 is where they were always going to be.
 
+# Chapter thirteen
+
+The eleventh year, printed pages ٢/٢٩٠ to ٢/٤٧١, and the last. Four claims, one
+of which fills the field this whole batch had left empty in the middle of its
+own subject.
+
+## The Prophet had no death year
+
+Twelve chapters, 390 claims, and `deathYearHijri` on prophet-muhammad was null
+the entire time. Not on the legacy marker, where a value in use waits for its
+evidence — simply absent. The seeds never carried it and no chapter before this
+one reached the page that states it.
+
+al-Waqidi does state it: توفي يوم الاثنين لليلتين خلا من ربيع الأول سنة إحدى
+عشرة, after thirteen days of illness. So the value is set and cited, in the
+last chapter of the pass, on the subject the app is built around.
+
+The day competes — موسى بن عقبة has لهلال ربيع الأول and سليمان التيمي لليلتين
+خلتا — and a day is not a year, so both stay in the page. That test has now
+been applied in every chapter since seven and it has never once let a month in.
+
+## سرية أسامة, and the difference between enlisting and going
+
+The last thing he ordered. He called Usamah, gave him the army, tied the لواء
+with his own hand, and fell ill on the Wednesday; the army was still camped at
+الجرف when he died. A سرية by the same test that settled مؤتة in chapter ten.
+
+Abu Bakr, Umar and Abu Ubaydah are named in the section and are not on the
+roster. The chapter says انتدب — they answered the muster — and the expedition
+did not leave in his lifetime. A roster records who was at a battle. An
+enlistment for a march that had not happened is not an attendance, and the
+distinction is the same one ADR 0013 draws between being somewhere and what
+became of you there.
+
+## What the pass leaves behind
+
+394 claims across thirteen chapters, 735 values cited and 241 still owed. The
+241 are not a backlog this batch failed to clear; most of them are values the
+seeds asserted about people and battles the Siyar's own entries have not been
+read for yet, and they belong to the companion batches rather than this one.
+
+What this batch can say it did: the account is read end to end, and nothing in
+it was recorded that the pages do not state.
+
 # Review
 
 Nothing in this batch is reviewed, across any of its chapters. The claims are
 authored but nobody has compared them against the stored pages, so every one of
-the 390 is Not reviewed. The batch's approval permits publication and says
+the 394 is Not reviewed. The batch's approval permits publication and says
 nothing about review.

@@ -72,9 +72,9 @@ describe('the Prophet in the catalog', () => {
   // The chapters are read in order, so no citation may point past the furthest
   // page the pass has reached -- an anchor beyond it would mean a page was read
   // out of order and its claim authored ahead of the pass. Chapter eight was the
-  // first to cross into volume 2; chapter twelve reads to ٢/٢٨٩. Move this
-  // frontier when a chapter reads further, and not before.
-  const FRONTIER = { volume: 2, page: 289 };
+  // first to cross into volume 2; chapter thirteen, the last, reads to ٢/٤٧١.
+  // The account is read end to end, so this frontier should not move again.
+  const FRONTIER = { volume: 2, page: 471 };
 
   it('cites no page past the frontier the chapters have reached', () => {
     const anchors = [...claimByKey.values()]
