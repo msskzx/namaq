@@ -67,15 +67,24 @@ describe('the Prophet in the catalog', () => {
     expect(mismatched).toEqual([]);
   });
 
-  // Chapter one is the first of thirteen, so every citation has to come from
-  // volume 1. A later chapter's anchor here would mean a page was read out of
-  // order and its claim authored ahead of the pass.
-  it('cites volume one only, the chapter this instalment read', () => {
+  // The chapters are read in order, so no citation may point past the furthest
+  // page the pass has reached -- an anchor beyond it would mean a page was read
+  // out of order and its claim authored ahead of the pass. Chapter eight is the
+  // first to cross into volume 2, and it stops at ٢/٢٨. Move this frontier when
+  // a chapter reads further, and not before.
+  const FRONTIER = { volume: 2, page: 28 };
+
+  it('cites no page past the frontier the chapters have reached', () => {
     const anchors = [...claimByKey.values()]
       .filter((claim) => claim.key.startsWith('prophet/'))
       .flatMap((claim) => claim.citations.map((citation) => citation.passageAnchor));
 
-    expect(anchors.every((anchor) => anchor.startsWith('1/'))).toBe(true);
+    const past = anchors.filter((anchor) => {
+      const [volume, page] = anchor.split('-')[0].split('/').map(Number);
+      return volume > FRONTIER.volume || (volume === FRONTIER.volume && page > FRONTIER.page);
+    });
+
+    expect(past).toEqual([]);
   });
 
   // The title الأمين and the event it was earned in come from one passage, so
