@@ -4,6 +4,7 @@ import { legacyUnreviewed, type CatalogBattle, type Provenance } from '@/lib/cat
 import badrModule from './badr';
 import uhudModule from './uhud';
 import bahranModule from './ghazwah-bahran';
+import khandaqModule from './khandaq';
 
 type Claim = { key: string; confidence: string; field?: string };
 const BATCHES = 'data/history/batches';
@@ -17,6 +18,7 @@ const keysOf = (provenance: Provenance | undefined): readonly string[] =>
 const badr: CatalogBattle = badrModule;
 const uhud: CatalogBattle = uhudModule;
 const bahran: CatalogBattle = bahranModule;
+const khandaq: CatalogBattle = khandaqModule;
 
 const COUNTS = ['muslimForceCount', 'nonMuslimForceCount', 'muslimDeathCount', 'nonMuslimDeathCount'] as const;
 
@@ -50,7 +52,7 @@ describe('the four counts a battle can carry', () => {
   });
 
   it('cites each count with a claim about that same column', () => {
-    for (const battle of [badr, uhud, bahran]) {
+    for (const battle of [badr, uhud, bahran, khandaq]) {
       for (const column of COUNTS) {
         const cited = battle.fields?.[column];
         if (!cited) continue;
@@ -60,10 +62,13 @@ describe('the four counts a battle can carry', () => {
   });
 
   // A competing figure is evidence, not noise: it must stay in the batch and
-  // it must not be what a column took.
+  // it must not be what a column took. Every battle whose columns hold a count
+  // belongs in the list above, or the claims it cites read as competing
+  // figures nobody took — which is what chapter seven's Khandaq counts did
+  // until it was added.
   it('keeps every competing figure as a DISPUTED claim no column cites', () => {
     const taken = new Set(
-      [badr, uhud, bahran].flatMap((battle) => COUNTS.flatMap((column) => keysOf(battle.fields?.[column]?.claims))),
+      [badr, uhud, bahran, khandaq].flatMap((battle) => COUNTS.flatMap((column) => keysOf(battle.fields?.[column]?.claims))),
     );
     const competing = claims.filter((claim) => claim.field && COUNTS.includes(claim.field as never) && !taken.has(claim.key));
 

@@ -1,14 +1,28 @@
 import { legacyUnreviewed, type CatalogBattle } from '@/lib/catalog/types';
 
-// Neither entry mentions Khandaq, so nothing here is cited. The module exists
-// to carry what the retired seed rows held rather than lose it.
+/**
+ * Chapter seven is the first text in this batch to describe the battle rather
+ * than mention it, and it gives the two counts outright: عشرة آلاف against
+ * ثلاثة آلاف. The year and the engagement come off the legacy marker with it.
+ *
+ * The month does not. al-Waqidi puts it in ذو القعدة and Ibn Ishaq in شوال,
+ * and chapter six carried a third reading dating the whole battle to سنة أربع.
+ * The model holds a year and not a month, so the disagreement stays in the
+ * pages rather than becoming DISPUTED claims with no value to compete over.
+ */
 const khandaq = {
   kind: 'BATTLE',
   slug: 'khandaq',
   name: 'غزوة الخندق',
   nameTransliterated: 'Battle of the Trench',
-  fields: { engagement: { value: 'GHAZWAH', claims: legacyUnreviewed }, hijriYear: { value: 5, claims: legacyUnreviewed } },
+  fields: {
+    engagement: { value: 'GHAZWAH', claims: ['khandaq/engagement'] },
+    hijriYear: { value: 5, claims: ['khandaq/year'] },
+    muslimForceCount: { value: 3000, claims: ['khandaq/muslim-force'] },
+    nonMuslimForceCount: { value: 10000, claims: ['khandaq/confederate-force'] },
+  },
   participants: [
+    { person: 'saad-ibn-muadh', isMuslim: true, status: ['INJURED'], claims: ['saad-muadh/khandaq-wound'] },
     // Carried from the old seed when these people left it; no batch places
     // them here yet.
     { person: 'abu-bakr-as-siddiq', isMuslim: true, claims: legacyUnreviewed },

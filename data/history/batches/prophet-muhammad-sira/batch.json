@@ -32567,12 +32567,205 @@
           "accessedAt": "2026-09-19"
         }
       ]
+    },
+    {
+      "key": "khandaq/muslim-force",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "khandaq",
+      "assertion": "كان المسلمون في ثلاثة آلاف.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "muslimForceCount",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/487-p1",
+          "volume": "السيرة 1",
+          "pageReference": "487",
+          "extractionUrl": "https://shamela.ws/book/10906/623",
+          "excerptArabic": "فكان جميع الأحزاب عشرة آلاف وأمر الكل إلى أبي سفيان وكان المسلمون في ثلاثة آلاف. هذا كلام الواقدي.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "khandaq/confederate-force",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "khandaq",
+      "assertion": "كان جميع الأحزاب عشرة آلاف، وأمر الكل إلى أبي سفيان.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "nonMuslimForceCount",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/487-p1",
+          "volume": "السيرة 1",
+          "pageReference": "487",
+          "extractionUrl": "https://shamela.ws/book/10906/623",
+          "excerptArabic": "فكان جميع الأحزاب عشرة آلاف وأمر الكل إلى أبي سفيان وكان المسلمون في ثلاثة آلاف. هذا كلام الواقدي.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "khandaq/year",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "khandaq",
+      "assertion": "كانت غزوة الخندق في السنة الخامسة من الهجرة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "hijriYear",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/486-p13",
+          "volume": "السيرة 1",
+          "pageReference": "486",
+          "extractionUrl": "https://shamela.ws/book/10906/622",
+          "excerptArabic": "قال الواقدي: وهي غزوة الأحزاب، وكانت في ذي القعدة.",
+          "accessedAt": "2026-09-19"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/487-p2",
+          "volume": "السيرة 1",
+          "pageReference": "487",
+          "extractionUrl": "https://shamela.ws/book/10906/623",
+          "excerptArabic": "وأما ابن إسحاق فقال: كانت غزوة الخندق في شوال.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "khandaq/engagement",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "khandaq",
+      "assertion": "غزوة خرج فيها رسول الله صلى الله عليه وسلم بنفسه، وتسمى غزوة الأحزاب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "engagement",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/486-p13",
+          "volume": "السيرة 1",
+          "pageReference": "486",
+          "extractionUrl": "https://shamela.ws/book/10906/622",
+          "excerptArabic": "قال الواقدي: وهي غزوة الأحزاب، وكانت في ذي القعدة.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "qurayzah/engagement",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "banu-qurayzah",
+      "assertion": "خرج إليهم رسول الله صلى الله عليه وسلم حين رجع من الخندق.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "engagement",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/506-p6",
+          "volume": "السيرة 1",
+          "pageReference": "506",
+          "extractionUrl": "https://shamela.ws/book/10906/642",
+          "excerptArabic": "نادى فينا رسول الله صلى الله عليه وسلم يوم انصرف من الأحزاب أن: \"لا يصلين أحد العصر إلا في بني قريظة\".",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "saad-muadh/khandaq-wound",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-muadh",
+      "assertion": "أصيب يوم الخندق، رماه حبان بن العرقة في الأكحل، فضرب عليه النبي صلى الله عليه وسلم خيمة في المسجد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "khandaq",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/516-p3",
+          "volume": "السيرة 1",
+          "pageReference": "516",
+          "extractionUrl": "https://shamela.ws/book/10906/652",
+          "excerptArabic": "أصيب سعد يوم الخندق، رماه رجل من قريش يقال له: حبان بن العرقة، رماه في الأكحل، فضرب عليه رسول الله صلى الله عليه وسلم خيمة في المسجد ليعوده من قريب.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "saad-muadh/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-muadh",
+      "assertion": "توفي في ذي الحجة سنة خمس.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "deathYearHijri",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/516-p2",
+          "volume": "السيرة 1",
+          "pageReference": "516",
+          "extractionUrl": "https://shamela.ws/book/10906/652",
+          "excerptArabic": "وفي ذي الحجة: وفاة سعد بن معاذ من سنة خمس.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "saad-muadh/qurayzah-judgement",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-muadh",
+      "assertion": "نزلت بنو قريظة على حكمه، فحكم أن تقتل رجالهم وتسبى نساؤهم وذراريهم، فلما فرغ من قتلهم انفتق عرقه فمات.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "banu-qurayzah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/517-p1",
+          "volume": "السيرة 1",
+          "pageReference": "517",
+          "extractionUrl": "https://shamela.ws/book/10906/653",
+          "excerptArabic": "حتى نزلوا على حكم سعد، فأرسل إليه رسول الله صلى الله عليه وسلم، فحكم أن تقتل رجالهم وتسبى نساؤهم وذراريهم ... فلما فرغ من قتلهم، انفتق عرقه فمات.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "saad-muadh/arsh",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-muadh",
+      "assertion": "قال النبي صلى الله عليه وسلم: إن هذا الذي تحرك له العرش، وشيع جنازته سبعون ألف ملك.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/517-p3",
+          "volume": "السيرة 1",
+          "pageReference": "517",
+          "extractionUrl": "https://shamela.ws/book/10906/653",
+          "excerptArabic": "قال رسول الله صلى الله عليه وسلم: \"إن هذا الذي تحرك له العرش -يعني سعد بن معاذ- وشيع جنازته سبعون ألف ملك\".",
+          "accessedAt": "2026-09-19"
+        }
+      ]
     }
   ],
   "approval": {
-    "revision": "7c81a5725bd8c560",
+    "revision": "894ecff9fb0f299e",
     "approvedAt": "2026-09-21",
     "approvedBy": "msskzx",
-    "note": "Approved for publication of chapters one to six. Chapter six is the fourth year of the hijra, and the 21 claims it adds are its marriages and deaths: Zaynab bint Khuzaymah's obituary, Abu Salamah's expedition to Qatan and his death from the Uhud wound, the marriages to Umm Salamah and Zaynab bint Jahsh, and al-Husayn's birth. Six of them give evidence to values that were carried on the legacy marker when the seeds were retired. All 354 claims are Not reviewed, chapter six included: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
+    "note": "Approved for publication of chapters one to seven. Chapter seven is the fifth year of the hijra: the Khandaq, where the book gives both hosts as figures for the first time, and Banu Qurayzah, whose siege killed Saad ibn Muadh by reopening the wound he took at the first. Five of its nine claims take values off the legacy marker that the retired seeds had asserted without evidence. Four drafted claims were dropped rather than kept: the competing months for the Khandaq and Quraysh's own contingent name no value this model holds, and history:validate rejects a claim that backs nothing. All 363 claims are Not reviewed, chapter seven included. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
   }
 }
