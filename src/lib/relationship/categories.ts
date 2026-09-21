@@ -17,6 +17,7 @@ export const RELATION_ORDER = Object.keys(translations.en.relationTypes) as Rela
 const CATEGORY_BY_TYPE: Partial<Record<RelationType, string>> = {
   FATHER: 'parent', MOTHER: 'parent', STEP_FATHER: 'parent', STEP_MOTHER: 'parent',
   SON: 'child', DAUGHTER: 'child', STEP_SON: 'child', STEP_DAUGHTER: 'child',
+  MILK_BROTHER: 'sibling', MILK_SISTER: 'sibling',
   BROTHER: 'sibling', SISTER: 'sibling', HALF_BROTHER: 'sibling', HALF_SISTER: 'sibling', STEP_BROTHER: 'sibling', STEP_SISTER: 'sibling',
   HUSBAND: 'spouse', WIFE: 'spouse',
   GRANDFATHER: 'grandparent', GRANDMOTHER: 'grandparent',
@@ -135,6 +136,10 @@ export const RECIPROCAL_INVERSES: Partial<Record<RelationType, readonly Relation
   PACT_BROTHER: ['PACT_BROTHER'],
   MAWLA: ['PATRON'],
   PATRON: ['MAWLA'],
+  // Whose milk mother is shared, not whose parents: its reciprocal is the
+  // other milk sibling, and which one depends on that person's sex.
+  MILK_BROTHER: ['MILK_BROTHER', 'MILK_SISTER'],
+  MILK_SISTER: ['MILK_BROTHER', 'MILK_SISTER'],
   CALLED_TO_ISLAM: ['ANSWERED_CALL_OF'],
   ANSWERED_CALL_OF: ['CALLED_TO_ISLAM'],
 };
