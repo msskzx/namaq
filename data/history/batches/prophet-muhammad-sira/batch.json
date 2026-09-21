@@ -33112,12 +33112,116 @@
           "accessedAt": "2026-09-19"
         }
       ]
+    },
+    {
+      "key": "mutah/engagement",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "mutah",
+      "assertion": "بعث رسول الله صلى الله عليه وسلم إلى مؤتة وأمر على الناس زيد بن حارثة، ولم يخرج بنفسه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "engagement",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/119-p3",
+          "volume": "السيرة 2",
+          "pageReference": "119",
+          "extractionUrl": "https://shamela.ws/book/10906/778",
+          "excerptArabic": "قدم رسول الله صلى الله عليه وسلم من عمرة القضاء في ذي الحجة، فأقام بالمدينة حتى بعث إلى مؤتة في جمادى من سنة ثمان، وأمر على الناس زيد بن حارثة. وقال إن أصيب فجعفر، فإن أصيب جعفر فعبد الله بن رواحة.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "mutah/year",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "mutah",
+      "assertion": "بعث إلى مؤتة في جمادى من سنة ثمان.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "hijriYear",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/119-p3",
+          "volume": "السيرة 2",
+          "pageReference": "119",
+          "extractionUrl": "https://shamela.ws/book/10906/778",
+          "excerptArabic": "قدم رسول الله صلى الله عليه وسلم من عمرة القضاء في ذي الحجة، فأقام بالمدينة حتى بعث إلى مؤتة في جمادى من سنة ثمان، وأمر على الناس زيد بن حارثة. وقال إن أصيب فجعفر، فإن أصيب جعفر فعبد الله بن رواحة.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "mutah/zayd-command",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "mutah",
+      "assertion": "أمر على الناس زيد بن حارثة، وقال: إن أصيب فجعفر، فإن أصيب جعفر فعبد الله بن رواحة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "zaid-ibn-harithah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/119-p3",
+          "volume": "السيرة 2",
+          "pageReference": "119",
+          "extractionUrl": "https://shamela.ws/book/10906/778",
+          "excerptArabic": "قدم رسول الله صلى الله عليه وسلم من عمرة القضاء في ذي الحجة، فأقام بالمدينة حتى بعث إلى مؤتة في جمادى من سنة ثمان، وأمر على الناس زيد بن حارثة. وقال إن أصيب فجعفر، فإن أصيب جعفر فعبد الله بن رواحة.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "hunayn/engagement",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "hunayn",
+      "assertion": "سار إليهم رسول الله صلى الله عليه وسلم بنفسه، وساروا إليه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "engagement",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/192-p2",
+          "volume": "السيرة 2",
+          "pageReference": "192",
+          "extractionUrl": "https://shamela.ws/book/10906/851",
+          "excerptArabic": "حديث حنين، حين سار إليهم رسول الله صلى الله عليه وسلم، وساروا إليه.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "prophet/hunayn",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "سار إلى حنين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "hunayn",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/192-p2",
+          "volume": "السيرة 2",
+          "pageReference": "192",
+          "extractionUrl": "https://shamela.ws/book/10906/851",
+          "excerptArabic": "حديث حنين، حين سار إليهم رسول الله صلى الله عليه وسلم، وساروا إليه.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
     }
   ],
   "approval": {
-    "revision": "a68e4749c22ed1c9",
+    "revision": "32e3e6f0bd6a49f5",
     "approvedAt": "2026-09-21",
     "approvedBy": "msskzx",
-    "note": "Approved for publication of chapters one to nine. Chapter nine is the seventh year of the hijra: Khaybar, whose module was carried whole when the seeds were retired and whose three fields now come off the legacy marker, and the two marriages the year brings in, to Safiyyah bint Huyayy and Umm Habibah, both of which were carried from the graph seed and are now cited. al-Zuhri's سنة ست for Khaybar is recorded as DISPUTED: the book marks it شذ and says لا يصح, and a reading the book rejects is still a reading. All 379 claims are Not reviewed, chapter nine included. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
+    "note": "Approved for publication of chapters one to ten. Chapter ten is the eighth year of the hijra, and its five claims settle a contradiction the catalog has been carrying in the open since the seeds were retired. The retired seed named Mu'tah a غزوة and recorded the Prophet as a participant, which the engagement vocabulary cannot hold at once; the chapter says بعث إلى مؤتة وأمر على الناس زيد بن حارثة, so he sent and did not go. The engagement is cited as a سرية, Zayd's command is recorded, and the Prophet's participation is dropped rather than moved to the legacy marker, because it has evidence against it and not merely evidence owed. Hunayn's engagement and the Prophet's part in it are cited too; its year stays on the marker, the chapter never dating it. All 384 claims are Not reviewed, chapter ten included. Approval permits the import and asserts nothing about review."
   }
 }

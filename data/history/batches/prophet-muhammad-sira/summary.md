@@ -22,8 +22,8 @@ builds and `extractShamelaEntry.ts --volume` sets.
 
 ## What this instalment reads
 
-Chapters one to nine, printed pages ١/٢٩ to ٢/١١٢, Shamela page ids 167 to
-771. 379 claims and 541 citations. Four chapters remain, ending at ٢/٤٩٦.
+Chapters one to ten, printed pages ١/٢٩ to ٢/١٩٢, Shamela page ids 167 to
+851. 384 claims and 546 citations. Three chapters remain, ending at ٢/٤٩٦.
 
 Chapter one covers his lineage, his names, his birth, the deaths of his parents
 and grandfather, Abu Talib's guardianship, his marriage to Khadijah, his
@@ -1227,9 +1227,50 @@ chapter; it is what a batch looks like when the reading catches up with what
 the seeds asserted. Every claim here points at something the app already
 showed and had no reason to believe.
 
+# Chapter ten
+
+The eighth year of the hijra, printed pages ٢/١١٣ to ٢/١٩٢. Five claims, and
+the point of them is one correction.
+
+## مؤتة, and a value with evidence against it
+
+When the seeds were retired, Mu'tah got a module built out of what the old rows
+held, and the module was written down contradicting itself on purpose. The seed
+named the battle غزوة مؤتة and recorded the Prophet as a participant, and the
+vocabulary cannot hold both: a غزوة is one he went out for. The note in the
+module said so and left both values standing, because nothing had been read
+that could settle it.
+
+Chapter ten settles it. بعث إلى مؤتة في جمادى من سنة ثمان، وأمر على الناس زيد
+بن حارثة — he sent, and he named the man who went. So the engagement is a
+سرية, the year is eight, Zayd's command is recorded, and the Prophet's
+participation is **dropped**.
+
+Dropped, and not moved to the legacy marker. That distinction is the whole of
+what this chapter is for. The marker means a value is in use and its evidence
+is owed; it does not mean a value is doubtful. A value the source contradicts
+has evidence against it, which is a different state and the only one here that
+warrants deleting a row. PostgreSQL lost it on the projection and Neo4j kept it
+— the syncs never delete — so the edge was removed by hand, the way the stale
+title in chapter six's session was.
+
+جعفر and ابن رواحة, named in the same breath as the succession if Zayd fell,
+are not recorded. The model holds who was at a battle, not the order in which
+command would pass.
+
+## حنين
+
+سار إليهم رسول الله صلى الله عليه وسلم is the whole of what the engagement
+needs: he went, so it is a غزوة and he is a participant, and both come off the
+marker.
+
+The year stays on it. The chapter places Hunayn after the فتح without dating
+either, and taking a year from the sections around it would be inference
+wearing a citation.
+
 # Review
 
 Nothing in this batch is reviewed, across any of its chapters. The claims are
 authored but nobody has compared them against the stored pages, so every one of
-the 379 is Not reviewed. The batch's approval permits publication and says
+the 384 is Not reviewed. The batch's approval permits publication and says
 nothing about review.

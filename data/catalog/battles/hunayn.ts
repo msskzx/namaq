@@ -14,7 +14,7 @@ const hunayn = {
     // them here yet.
     { person: 'abu-bakr-as-siddiq', isMuslim: true, claims: legacyUnreviewed },
     { person: 'ali-ibn-abi-talib', isMuslim: true, claims: legacyUnreviewed },
-    { person: 'prophet-muhammad', isMuslim: true, claims: legacyUnreviewed },
+    { person: 'prophet-muhammad', isMuslim: true, claims: ['prophet/hunayn'] },
     { person: 'umar-ibn-al-khattab', isMuslim: true, claims: legacyUnreviewed },
   ],
 } satisfies CatalogBattle;
