@@ -4,6 +4,7 @@ const { findUnique } = vi.hoisted(() => ({ findUnique: vi.fn() }));
 vi.mock('@/lib/prisma', () => ({ prisma: { battle: { findUnique } } }));
 
 import { GET } from './route';
+import { utteranceSelect } from '@/lib/utteranceSelect';
 
 function call(slug: string) {
   return GET(new Request(`http://localhost/api/battles/${slug}`), { params: Promise.resolve({ slug }) });
@@ -29,6 +30,7 @@ describe('GET /api/battles/[slug]', () => {
             person: { select: { id: true, name: true, nameTransliterated: true, slug: true } },
           },
         },
+        utterances: { select: utteranceSelect, orderBy: { slug: 'asc' } },
       },
     });
     expect(response.status).toBe(200);

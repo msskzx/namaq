@@ -17,6 +17,7 @@ import GraphCanvas from '@/components/graph/GraphCanvas';
 
 import { fetcher } from '@/lib/swr';
 import { AyatGroup } from '@/components/quran/AyahCard';
+import UtteranceGroup from '@/components/utterances/UtteranceGroup';
 import ClaimEvidence from '@/components/common/ClaimEvidence';
 import SourceAccountReader from '@/components/people/SourceAccountReader';
 
@@ -114,6 +115,11 @@ function PersonDetailPage() {
           <SourceAccountReader slug={slug} />
 
           <AyatGroup ayat={person.ayat || []} />
+
+          {/* Arabic has no neutral pronoun, so the heading takes the sex the
+              catalog cites; English does not need it. */}
+          <UtteranceGroup utterances={person.said} variant="said" sex={person.sex} />
+          <UtteranceGroup utterances={person.spokenAbout} variant="about" sex={person.sex} />
 
           <ClaimEvidence title={language === 'ar' ? 'المصادر والملاحظات التاريخية' : 'Sources & historical notes'} claims={person.claims || []} subjectName={person.name} subjectSlug={slug} />
 

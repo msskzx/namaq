@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { utteranceSelect } from '@/lib/utteranceSelect';
 
 export async function GET(
   _request: Request,
@@ -22,6 +23,7 @@ export async function GET(
             },
           },
         },
+        utterances: { select: utteranceSelect, orderBy: { slug: 'asc' } },
       },
     });
     if (!battle) {
