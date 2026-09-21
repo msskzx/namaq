@@ -6,95 +6,21 @@
 // catalog:project-graph. Their Qur'an links moved with them.
 
 export const people = [
-  {
-    name: 'محمد ﷺ',
-    fullName: 'محمد بن عبد الله بن عبد المطلب بن هاشم بن عبد مناف بن قصي بن كلاب بن مرة بن كعب بن لؤي بن غالب بن فهر بن مالك بن النضر بن كنانة بن خزيمة بن مدركة بن إلياس بن مضر بن نزار بن معد بن عدنان.',
-    slug: 'prophet-muhammad',
-    appearance: 'كان متوسط القامة، عريض المنكبين، كث اللحية، مشرق الوجه، يوصف بأنه أجمل الناس.',
-    virtues: 'خاتم الأنبياء، رحمة للعالمين، صاحب الخلق العظيم، قائد، معلم، رجل دولة.',
-    picture: null,
-    titles: ['prophet', 'messenger', 'the-chosen-one', 'ahmad', 'the-intercessor', 'the-gatherer', 'the-last', 'prophet-of-mercy', 'prophet-of-repentance', 'truthful-trustworthy', 'master-of-children-of-adam', 'seal-of-the-prophets'], // keep for lookup, but do not pass to Prisma
-    ayat: [
-      { surah: 33, ayah: 40 }, // الأحزاب: 40 (محمد رسول الله)
-      { surah: 21, ayah: 107 }, // الأنبياء: 107 (رحمة للعالمين)
-      { surah: 68, ayah: 4 }, // القلم: 4 (وإنك لعلى خلق عظيم)
-      { surah: 48, ayah: 29 }, // الفتح: 29 (محمد رسول الله والذين معه...)
-      { surah: 7, ayah: 157 }, // الأعراف: 157 (الذين يتبعون الرسول النبي الأمي...)
-      { surah: 3, ayah: 144 }, // آل عمران: 144 (وما محمد إلا رسول...)
-      { surah: 33, ayah: 21 }, // الأحزاب: 21 (لقد كان لكم في رسول الله أسوة حسنة)
-      { surah: 9, ayah: 128 }, // التوبة: 128 (لقد جاءكم رسول من أنفسكم...)
-      { surah: 53, ayah: 3 }, // النجم: 3 (وما ينطق عن الهوى)
-      { surah: 48, ayah: 8 }, // الفتح: 8 (إنا أرسلناك شاهداً ومبشراً ونذيراً)
-      { surah: 33, ayah: 45 }, // الأحزاب: 45 (يا أيها النبي إنا أرسلناك شاهداً ومبشراً ونذيراً)
-      { surah: 5, ayah: 15 }, // المائدة: 15 (قد جاءكم من الله نور وكتاب مبين)
-      { surah: 61, ayah: 6 }, // الصف: 6 (ومبشراً برسول يأتي من بعدي اسمه أحمد)
-      { surah: 2, ayah: 151 }, // البقرة: 151 (كما أرسلنا فيكم رسولاً منكم)
-      { surah: 62, ayah: 2 }, // الجمعة: 2 (هو الذي بعث في الأميين رسولاً منهم)
-      { surah: 3, ayah: 164 }, // آل عمران: 164 (لقد من الله على المؤمنين إذ بعث فيهم رسولاً من أنفسهم)
-      { surah: 7, ayah: 158 }, // الأعراف: 158 (فآمنوا بالله ورسوله النبي الأمي)
-      { surah: 48, ayah: 26 }, // الفتح: 26 (وجعل كلمة الذين كفروا السفلى وكلمة الله هي العليا)
-      { surah: 33, ayah: 56 } // الأحزاب: 56 (إن الله وملائكته يصلون على النبي)
-    ],
-  },
-  {
-    name: 'أبو بكر الصديق',
-    fullName: 'عبد الله بن أبي قحافة عثمان بن عامر بن عمرو بن كعب بن سعد بن تيم بن مرة بن كعب بن لؤي القرشي التيمي',
-    slug: 'abu-bakr-as-siddiq',
-    appearance: 'كان أبيض نحيفًا خفيف العارضين معروق الوجه.',
-    virtues: 'أول الخلفاء الراشدين، صديق الأمة، أحد العشرة المبشرين بالجنة، رفيق النبي في الهجرة.',
-    picture: null,
-    titles: ['the-ten-promised-paradise', 'caliph', 'companion', 'siddiq-al-ummah'],
-    ayat: [
-      { surah: 9, ayah: 40 }, // التوبة: 40 - "إذ يقول لصاحبه لا تحزن"
-      { surah: 92, ayah: 17 }, // الليل: 17 - "وسيجنبها الأتقى"
-    ]
-  },
-  {
-    name: 'عمر بن الخطاب',
-    fullName: 'عمر بن الخطاب بن نفيل بن عبد العزى بن رياح بن قرط بن رزاح بن عدي بن كعب بن لؤي القرشي العدوي',
-    slug: 'umar-ibn-al-khattab',
-    appearance: 'كان طويلًا، أصلع، شديد البياض، قوي البنية.',
-    virtues: 'ثاني الخلفاء الراشدين، الفاروق، أحد العشرة المبشرين بالجنة، شديد في الحق.',
-    picture: null,
-    titles: ['the-ten-promised-paradise', 'caliph', 'companion', 'al-farouq'],
-    ayat: [
-      { surah: 66, ayah: 4 }, // التحريم: 4 - "إن تتوبا إلى الله..."
-      { surah: 2, ayah: 125 }, // البقرة: 125 - في قصة اتخاذ مقام إبراهيم مصلى، موافقة لرأي عمر.
-      { surah: 9, ayah: 84 },
-      { surah: 8, ayah: 67 },
-      { surah: 5, ayah: 91 },
-      { surah: 24, ayah: 58 }
-    ]
-  },
-  {
-    name: 'عثمان بن عفان',
-    fullName: 'عثمان بن عفان بن أبي العاص بن أمية بن عبد شمس القرشي الأموي',
-    slug: 'uthman-ibn-affan',
-    appearance: 'كان حسن الوجه، كث اللحية، طويل القامة.',
-    virtues: 'ثالث الخلفاء الراشدين، ذو النورين، أحد العشرة المبشرين بالجنة، كريم وسخي.',
-    picture: null,
-    titles: ['the-ten-promised-paradise', 'caliph', 'companion', 'dhu-al-nurayn', 'the-six-of-the-shura'],
-    ayat: [
-      { surah: 24, ayah: 36 }, // النور: 36 - "في بيوت أذن الله أن ترفع..." (ورد أنها تشمل بيت عثمان)
-      { surah: 9, ayah: 99 }, // التوبة: 99 - فيمن أنفقوا في سبيل الله (عثمان من أكثر المنفقين في العسرة)
-    ]
-  },
-  {
-    name: 'علي بن أبي طالب',
-    fullName: 'علي بن أبي طالب بن عبد المطلب الهاشمي القرشي',
-    // Was the title abu-al-hasan until ADR 0014 made a kunya a name. It sits
-    // here, uncited like the rest of this file, until a batch reads his entry.
-    kunya: 'أبو الحسن',
-    slug: 'ali-ibn-abi-talib',
-    appearance: 'كان ربعة، عريض المنكبين، قوي البنية، كث اللحية.',
-    virtues: 'رابع الخلفاء الراشدين، أبو الحسن، أحد العشرة المبشرين بالجنة، شجاع وعالم.',
-    picture: null,
-    titles: ['the-ten-promised-paradise', 'caliph', 'companion', 'the-six-of-the-shura'],
-    ayat: [
-      { surah: 2, ayah: 207 }, // البقرة: 207 - "ومن الناس من يشري نفسه..." (نزلت فيه ليلة المبيت في فراش النبي)
-      { surah: 76, ayah: 8 }, // الإنسان: 8 - "ويطعمون الطعام..." (هو وفاطمة والحسن والحسين)
-    ]
-  },
+  // prophet-muhammad is authored in
+  // data/catalog/people/prophet-muhammad.ts; this entry is retired
+  // and what it held is carried there.
+  // abu-bakr-as-siddiq is authored in
+  // data/catalog/people/abu-bakr-as-siddiq.ts; this entry is retired
+  // and what it held is carried there.
+  // umar-ibn-al-khattab is authored in
+  // data/catalog/people/umar-ibn-al-khattab.ts; this entry is retired
+  // and what it held is carried there.
+  // uthman-ibn-affan is authored in
+  // data/catalog/people/uthman-ibn-affan.ts; this entry is retired
+  // and what it held is carried there.
+  // ali-ibn-abi-talib is authored in
+  // data/catalog/people/ali-ibn-abi-talib.ts; this entry is retired
+  // and what it held is carried there.
   {
     name: 'سعيد بن زيد',
     fullName: 'سعيد بن زيد بن عمرو العدوي القرشي',
@@ -108,18 +34,9 @@ export const people = [
     ]
   },
     // Wives of the Prophet (Peace be upon him)
-  {
-    name: 'خديجة بنت خويلد',
-    fullName: 'خديجة بنت خويلد بن أسد بن عبد العزى بن قصي القرشية الأسدية',
-    slug: 'khadijah-bint-khuwaylid',
-    appearance: 'وصفت بأنها كانت ذات جمال وحسب ونسب.',
-    virtues: 'أولى زوجات النبي، أول من آمن به، أم المؤمنين، سند وعون للنبي صلى الله عليه وسلم، سيدة نساء العالمين في زمانها.',
-    picture: null,
-    titles: ['mother-of-believers', 'first-wife'],
-    ayat: [
-      { surah: 93, ayah: 6 }, // الضحى: 6 - "ألم يجدك يتيماً فآوى" (وآواه الله في خديجة)
-    ],
-  },
+  // khadijah-bint-khuwaylid is authored in
+  // data/catalog/people/khadijah-bint-khuwaylid.ts; this entry is retired
+  // and what it held is carried there.
   {
     name: 'عائشة بنت أبي بكر',
     fullName: 'عائشة بنت أبي بكر الصديق عبد الله بن أبي قحافة التيمية القرشية',
@@ -145,16 +62,9 @@ export const people = [
       { surah: 66, ayah: 5 }, // التحريم: 5 - "عسى ربه إن طلقكن أن يبدله أزواجاً خيراً منكن"
     ],
   },
-  {
-    name: 'زينب بنت خزيمة',
-    fullName: 'زينب بنت خزيمة بن الحارث الهلالية',
-    slug: 'zaynab-bint-khuzaymah',
-    appearance: null,
-    virtues: 'أم المؤمنين، لقبت بأم المساكين لكثرة إطعامها لهم وكرمها الشديد.',
-    picture: null,
-    titles: ['mother-of-believers', 'umm-al-masakeen'],
-    ayat: [],
-  },
+  // zaynab-bint-khuzaymah is authored in
+  // data/catalog/people/zaynab-bint-khuzaymah.ts; this entry is retired
+  // and what it held is carried there.
   {
     name: 'أم سلمة',
     fullName: 'هند بنت أبي أمية حذيفة بن المغيرة المخزومية القرشية',
@@ -305,18 +215,9 @@ export const people = [
     ayat: [],
   },
   // Uncles of the Prophet (Peace be upon him)
-  {
-    name: 'حمزة بن عبد المطلب',
-    fullName: 'حمزة بن عبد المطلب بن هاشم القرشي الهاشمي',
-    slug: 'hamzah-ibn-abd-al-muttalib',
-    appearance: 'كان رجلاً قوي البنية، شجاعاً، مهاباً.',
-    virtues: 'عم النبي وأخوه من الرضاعة، أسد الله وسيد الشهداء، كان من أشجع فرسان قريش.',
-    picture: null,
-    titles: ['uncle-of-prophet', 'sayyid-al-shuhada', 'asadu-allah', 'companion'],
-    ayat: [
-      { surah: 3, ayah: 169 }, // آل عمران: 169 - "ولا تحسبن الذين قتلوا في سبيل الله أمواتاً..." (نزلت في شهداء أحد ومنهم حمزة)
-    ],
-  },
+  // hamzah-ibn-abd-al-muttalib is authored in
+  // data/catalog/people/hamzah-ibn-abd-al-muttalib.ts; this entry is retired
+  // and what it held is carried there.
   {
     name: 'أبو طالب بن عبد المطلب',
     fullName: 'عبد مناف بن عبد المطلب بن هاشم القرشي الهاشمي (أبو طالب)',

@@ -36,18 +36,9 @@ export const people = [
     picture: null,
     titles: ['companion'],
   },
-  {
-    // Originally named al-Husayn; renamed Abdullah by the Prophet, per Ibn
-    // Sa'd on his own page.
-    name: 'عبد الله بن سلام',
-    fullName: 'عبد الله بن سلام بن الحارث الإسرائيلي',
-    slug: 'abdullah-ibn-salam',
-    nameTransliterated: 'Abdullah ibn Salam',
-    appearance: null,
-    virtues: null,
-    picture: null,
-    titles: ['companion'],
-  },
+  // abdullah-ibn-salam is authored in
+  // data/catalog/people/abdullah-ibn-salam.ts; this entry is retired
+  // and what it held is carried there.
   {
     // Father Thabit ibn al-Dahhak, and the rest of the chain down to the
     // existing ghanm-ibn-malik node, given a new graph-only ancestor chain

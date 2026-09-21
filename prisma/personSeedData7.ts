@@ -196,18 +196,9 @@ export const people = [
     picture: null,
     titles: ['companion'],
   },
-  {
-    // Freed mawla; no recorded nasab beyond his father's name (matches
-    // salim-mawla-abi-hudhayfah precedent — no ancestor chain in the graph).
-    name: 'بلال بن رباح',
-    fullName: 'بلال بن رباح',
-    slug: 'bilal-ibn-rabah',
-    nameTransliterated: 'Bilal ibn Rabah',
-    appearance: null,
-    virtues: null,
-    picture: null,
-    titles: ['companion'],
-  },
+  // bilal-ibn-rabah is authored in
+  // data/catalog/people/bilal-ibn-rabah.ts; this entry is retired
+  // and what it held is carried there.
   {
     // Naming disagreement on the page: Medinans say "Abdullah ibn Qais ibn
     // Zaidah"; Iraqis say "Amr". The more commonly cited Medinan attribution
@@ -283,17 +274,9 @@ export const people = [
     picture: null,
     titles: ['companion'],
   },
-  {
-    // Mawla (freed client) of Banu Makhzum, not a blood member of the tribe.
-    name: 'عمار بن ياسر',
-    fullName: 'عمار بن ياسر بن عامر بن مالك بن كنانة بن قيس بن الوذيم مولى بني مخزوم العنسي',
-    slug: 'ammar-ibn-yasir',
-    nameTransliterated: 'Ammar ibn Yasir',
-    appearance: null,
-    virtues: null,
-    picture: null,
-    titles: ['companion'],
-  },
+  // ammar-ibn-yasir is authored in
+  // data/catalog/people/ammar-ibn-yasir.ts; this entry is retired
+  // and what it held is carried there.
   {
     // See header note above: unusual companion-adjacent case, foreign king,
     // never met the Prophet in person; al-Dhahabi's own framing is "تابعي
@@ -317,16 +300,9 @@ export const people = [
     picture: null,
     titles: ['companion'],
   },
-  {
-    name: 'عبد الله بن مسعود',
-    fullName: 'عبد الله بن مسعود بن غافل بن حبيب بن شمخ بن فار بن مخزوم بن صاهلة بن كاهل بن الحارث بن تميم بن سعد بن هذيل الهذلي',
-    slug: 'abdullah-ibn-masud',
-    nameTransliterated: 'Abdullah ibn Masud',
-    appearance: null,
-    virtues: null,
-    picture: null,
-    titles: ['companion'],
-  },
+  // abdullah-ibn-masud is authored in
+  // data/catalog/people/abdullah-ibn-masud.ts; this entry is retired
+  // and what it held is carried there.
   {
     // Brother of Abdullah ibn Masud (previous entry, shared father).
     name: 'عتبة بن مسعود الهذلي',

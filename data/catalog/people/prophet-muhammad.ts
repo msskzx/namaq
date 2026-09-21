@@ -1,4 +1,4 @@
-import type { CatalogPerson } from '@/lib/catalog/types';
+import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
 /**
  * Authored from data/history/batches/prophet-muhammad-sira, chapters one and
@@ -24,6 +24,9 @@ const prophetMuhammad = {
   hasProfile: true,
 
   fields: {
+    // Carried from the retired seed entry, which took it from the Siyar
+    // without citing it.
+    appearance: { value: 'كان متوسط القامة، عريض المنكبين، كث اللحية، مشرق الوجه، يوصف بأنه أجمل الناس.', claims: legacyUnreviewed },
     sex: { value: 'MALE', claims: ['prophet/sex'] },
     // The naming line unpacks the names behind the bynames: عبد المطلب is
     // Shaybah, هاشم is Amr, عبد مناف is al-Mughirah, قصي is Zayd. It stops at
@@ -45,6 +48,9 @@ const prophetMuhammad = {
   // Ten of the seed's twelve. الشفيع and سيد ولد آدم are not in this chapter,
   // so they stay the seed's until a later one reaches the passages naming them.
   titles: [
+    // Carried from the retired seed entry; no batch cites these yet.
+    { title: 'master-of-children-of-adam', claims: legacyUnreviewed },
+    { title: 'the-intercessor', claims: legacyUnreviewed },
     { title: 'al-sabiqoon', claims: ['sira/al-sabiqoon-eight'] },
     { title: 'prophet', claims: ['prophet/described-in-quran'] },
     { title: 'messenger', claims: ['prophet/described-in-quran'] },
@@ -59,6 +65,8 @@ const prophetMuhammad = {
   ],
 
   ayat: [
+    // Carried from the retired seed entry, which read this verse as his.
+    { surah: 48, ayah: 29, claims: legacyUnreviewed },
     { surah: 2, ayah: 129, claims: ['prophet/ayah-al-baqarah'] },
     { surah: 5, ayah: 67, claims: ['prophet/ayah-al-maidah'] },
     { surah: 15, ayah: 95, claims: ['prophet/ayah-al-hijr-mustahziin'] },
@@ -94,6 +102,26 @@ const prophetMuhammad = {
     { type: 'FATHER', inverse: 'DAUGHTER', to: 'zaynab-bint-muhammad', claims: ['prophet/daughter-zaynab'] },
     { type: 'FATHER', inverse: 'DAUGHTER', to: 'umm-kulthum-bint-muhammad', claims: ['prophet/daughter-umm-kulthum'] },
     { type: 'FATHER', inverse: 'DAUGHTER', to: 'fatimah-bint-muhammad', claims: ['prophet/daughter-fatimah'] },
+    // Carried from neo4j/graphSeedData.ts, whose node declaration is retired
+    // with the rest. The catalog owns this subject's edges now, so they live
+    // here or not at all.
+    { type: 'SON_IN_LAW', inverse: 'FATHER_IN_LAW', to: 'abu-bakr-as-siddiq', claims: legacyUnreviewed },
+    { type: 'SON_IN_LAW', inverse: 'FATHER_IN_LAW', to: 'umar-ibn-al-khattab', claims: legacyUnreviewed },
+    { type: 'FATHER_IN_LAW', inverse: 'SON_IN_LAW', to: 'uthman-ibn-affan', claims: legacyUnreviewed },
+    { type: 'FATHER_IN_LAW', inverse: 'SON_IN_LAW', to: 'ali-ibn-abi-talib', claims: legacyUnreviewed },
+    { type: 'HUSBAND', inverse: 'WIFE', to: 'umm-salamah', claims: legacyUnreviewed },
+    { type: 'HUSBAND', inverse: 'WIFE', to: 'zaynab-bint-jahsh', claims: legacyUnreviewed },
+    { type: 'HUSBAND', inverse: 'WIFE', to: 'juwayriyah-bint-al-harith', claims: legacyUnreviewed },
+    { type: 'HUSBAND', inverse: 'WIFE', to: 'umm-habibah', claims: legacyUnreviewed },
+    { type: 'HUSBAND', inverse: 'WIFE', to: 'safiyyah-bint-huyayy', claims: legacyUnreviewed },
+    { type: 'HUSBAND', inverse: 'WIFE', to: 'maymunah-bint-al-harith', claims: legacyUnreviewed },
+    { type: 'FATHER', inverse: 'SON', to: 'abdullah-ibn-muhammad', claims: legacyUnreviewed },
+    { type: 'PATERNAL_NEPHEW', inverse: 'PATERNAL_UNCLE', to: 'hamzah-ibn-abd-al-muttalib', claims: legacyUnreviewed },
+    { type: 'PATERNAL_NEPHEW', inverse: 'PATERNAL_UNCLE', to: 'al-abbas-ibn-abd-al-muttalib', claims: legacyUnreviewed },
+    { type: 'GRANDFATHER', inverse: 'GRANDSON', to: 'al-hasan-ibn-ali', claims: legacyUnreviewed },
+    { type: 'GRANDFATHER', inverse: 'GRANDSON', to: 'al-husayn-ibn-ali', claims: legacyUnreviewed },
+    { type: 'PATERNAL_COUSIN', inverse: 'PATERNAL_COUSIN', to: 'ali-ibn-abi-talib', claims: legacyUnreviewed },
+    { type: 'PATERNAL_COUSIN', inverse: 'PATERNAL_COUSIN', to: 'abdullah-ibn-jaafar', claims: legacyUnreviewed },
   ],
 } satisfies CatalogPerson;
 

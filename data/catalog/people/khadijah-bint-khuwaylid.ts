@@ -1,4 +1,4 @@
-import type { CatalogPerson } from '@/lib/catalog/types';
+import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
 /**
  * Seed-declared, so the catalog only adds. The chapter gives a great deal the
@@ -13,6 +13,9 @@ const khadijahBintKhuwaylid = {
   nameTransliterated: 'Khadijah bint Khuwaylid',
   hasProfile: true,
   fields: {
+    // Carried from the retired seed entry, which took it from the Siyar
+    // without citing it.
+    fullName: { value: 'خديجة بنت خويلد بن أسد بن عبد العزى بن قصي القرشية الأسدية', claims: legacyUnreviewed },
     sex: { value: 'FEMALE', claims: ['khadijah/sex'] },
     virtues: {
       value:
@@ -20,8 +23,20 @@ const khadijahBintKhuwaylid = {
       claims: ['khadijah/virtues'],
     },
   },
-  titles: [],
-  relations: [],
+  titles: [
+    // Carried from the retired seed entry; no batch cites these yet.
+    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'mother-of-believers', claims: legacyUnreviewed },
+    { title: 'first-wife', claims: legacyUnreviewed },
+  ],
+  relations: [
+    // Carried from neo4j/graphSeedData.ts, whose node declaration is retired
+    // with the rest. The catalog owns this subject's edges now, so they live
+    // here or not at all.
+    { type: 'DAUGHTER', inverse: 'FATHER', to: 'khuwaylid-ibn-asad', claims: legacyUnreviewed },
+    { type: 'SISTER', inverse: 'BROTHER', to: 'hizam-ibn-khuwaylid', claims: legacyUnreviewed },
+    { type: 'WIFE', inverse: 'HUSBAND', to: 'prophet-muhammad', claims: legacyUnreviewed },
+  ],
 } satisfies CatalogPerson;
 
 export default khadijahBintKhuwaylid;

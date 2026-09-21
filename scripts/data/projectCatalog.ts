@@ -241,20 +241,43 @@ async function projectBattles(battles: Catalog['battles']) {
       const relation = entry.relation ?? 'PARTICIPATED_IN';
       if (existing) {
         const status = [...(entry.status ?? [])];
+        // A participation is a fact about the person, so the person's authority
+        // governs it: retireStaleParticipations already deletes these for a
+        // catalog-owned subject, and a row it may delete is one it may correct.
+        const owned = ownedByCatalog(entry.person);
+        const differs: Record<string, string | boolean | string[]> = {};
+
         if (existing.isMuslim !== entry.isMuslim) {
-          conflicts.push(`${where}: database has isMuslim ${existing.isMuslim}, catalog has ${entry.isMuslim}`);
+          (owned ? planned : conflicts).push(
+            owned
+              ? `${where}.isMuslim: overwrite ${existing.isMuslim} with ${entry.isMuslim}`
+              : `${where}: database has isMuslim ${existing.isMuslim}, catalog has ${entry.isMuslim}`,
+          );
+          if (owned) differs.isMuslim = entry.isMuslim;
         }
         if (existing.status.join() !== status.join()) {
-          conflicts.push(`${where}: database has status [${existing.status}], catalog has [${status}]`);
+          (owned ? planned : conflicts).push(
+            owned
+              ? `${where}.status: overwrite [${existing.status}] with [${status}]`
+              : `${where}: database has status [${existing.status}], catalog has [${status}]`,
+          );
+          if (owned) differs.status = status;
         }
         // Attendance is the one thing a seeded row is most likely to have
         // wrong, since the old shape made presence the unmarked default.
         if (existing.relation !== relation) {
-          conflicts.push(`${where}: database has ${existing.relation}, catalog has ${relation}`);
+          (owned ? planned : conflicts).push(
+            owned
+              ? `${where}.relation: overwrite ${existing.relation} with ${relation}`
+              : `${where}: database has ${existing.relation}, catalog has ${relation}`,
+          );
+          if (owned) differs.relation = relation;
         }
+
         const summary = settle(`${where}.summary`, existing.summary, entry.summary);
-        if (apply && summary !== undefined) {
-          await prisma.battleParticipation.update({ where: { id: existing.id }, data: { summary: String(summary) } });
+        if (summary !== undefined) differs.summary = String(summary);
+        if (apply && Object.keys(differs).length > 0) {
+          await prisma.battleParticipation.update({ where: { id: existing.id }, data: differs });
         }
         continue;
       }

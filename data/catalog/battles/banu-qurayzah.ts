@@ -9,6 +9,10 @@ const banuQurayzah = {
   nameTransliterated: 'Siege of Banu Qurayzah',
   fields: { engagement: { value: 'GHAZWAH', claims: legacyUnreviewed }, hijriYear: { value: 5, claims: legacyUnreviewed } },
   participants: [
+    // Carried from the old seed when these people left it; no batch places
+    // them here yet.
+    { person: 'ali-ibn-abi-talib', isMuslim: true, claims: legacyUnreviewed },
+    { person: 'prophet-muhammad', isMuslim: true, claims: legacyUnreviewed },
     {
       person: 'az-zubayr-ibn-al-awwam',
       isMuslim: true,

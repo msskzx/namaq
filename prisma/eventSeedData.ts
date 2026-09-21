@@ -101,24 +101,10 @@ export const eventsData = [
       significance: 'بداية النبوة ونزول الوحي بالقرآن الكريم'
     }
   },
-  {
-    name: 'الإسراء والمعراج',
-    nameTransliterated: 'Night Journey and Ascension (Isra and Mi\'raj)',
-    slug: 'night-journey-and-ascension-isra-and-miraaj',
-    type: EventType.TRAVEL,
-    hijriYear: -10,
-    hijriPeriod: '10 قبل الهجرة',
-    gregorianYear: 620,
-    gregorianPeriod: '620 م',
-    description: 'الإسراء والمعراج',
-    descriptionTransliterated: 'Night Journey and Ascension (Isra and Mi\'raj)',
-    location: 'من مكة إلى القدس ثم السماوات العلى',
-    locationTransliterated: 'From Mecca to Jerusalem then through the heavens',
-    personSlugs: ['prophet-muhammad'],
-    metadata: {
-      significance: 'رحلة من مكة إلى القدس ثم العروج إلى السماوات'
-    }
-  },
+  // الإسراء والمعراج is authored in data/catalog/events/al-isra-wal-miraj.ts.
+  // This entry slugged it night-journey-and-ascension-isra-and-miraaj and the
+  // catalog al-isra-wal-miraj, which made two events out of one; the catalog
+  // dates it -1 against this entry's -10, and cites al-Zuhri for it.
   // add the following events for these battles with slugs:
   // slug: 'banu-qurayzah',
   // slug: 'hudaybiyyah',

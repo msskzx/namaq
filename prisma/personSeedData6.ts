@@ -213,18 +213,9 @@ export const people = [
     picture: null,
     titles: ['companion'],
   },
-  {
-    // See marginal-timing note above the array: died shortly before the
-    // Prophet's arrival in Medina, after pledging at al-Aqabah in Mecca.
-    name: 'البراء بن معرور',
-    fullName: 'البراء بن معرور بن صخر بن خنساء بن سنان الأنصاري الخزرجي السلمي',
-    slug: 'al-baraa-ibn-marur',
-    nameTransliterated: 'Al-Baraa ibn Marur',
-    appearance: null,
-    virtues: null,
-    picture: null,
-    titles: ['companion'],
-  },
+  // al-baraa-ibn-marur is authored in
+  // data/catalog/people/al-baraa-ibn-marur.ts; this entry is retired
+  // and what it held is carried there.
   {
     name: 'بشر بن البراء',
     fullName: 'بشر بن البراء بن معرور بن صخر بن خنساء بن سنان الأنصاري الخزرجي السلمي',
@@ -245,16 +236,9 @@ export const people = [
     picture: null,
     titles: ['companion'],
   },
-  {
-    name: 'سعد بن معاذ',
-    fullName: 'سعد بن معاذ بن النعمان بن امرئ القيس بن زيد بن عبد الأشهل الأنصاري الأوسي',
-    slug: 'saad-ibn-muadh',
-    nameTransliterated: 'Saad ibn Muadh',
-    appearance: null,
-    virtues: null,
-    picture: null,
-    titles: ['companion'],
-  },
+  // saad-ibn-muadh is authored in
+  // data/catalog/people/saad-ibn-muadh.ts; this entry is retired
+  // and what it held is carried there.
   {
     // Full brother of Umar ibn al-Khattab (same father and grandfather).
     name: 'زيد بن الخطاب',
@@ -266,16 +250,9 @@ export const people = [
     picture: null,
     titles: ['companion'],
   },
-  {
-    name: 'أسعد بن زرارة',
-    fullName: 'أسعد بن زرارة بن عدس بن عبيد بن ثعلبة بن غنم بن مالك بن النجار الأنصاري الخزرجي النجاري',
-    slug: 'asad-ibn-zurarah',
-    nameTransliterated: 'Asad ibn Zurarah',
-    appearance: null,
-    virtues: null,
-    picture: null,
-    titles: ['companion'],
-  },
+  // asad-ibn-zurarah is authored in
+  // data/catalog/people/asad-ibn-zurarah.ts; this entry is retired
+  // and what it held is carried there.
   {
     name: 'عتبة بن غزوان',
     fullName: 'عتبة بن غزوان بن جابر بن وهيب المازني حليف بني عبد شمس',
