@@ -29062,12 +29062,72 @@
           "accessedAt": "2026-09-20"
         }
       ]
+    },
+    {
+      "key": "sira/kaaba-rebuilding",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "هدمت قريش الكعبة وبنتها حتى بلغوا موضع الحجر الأسود فاختصموا فيمن يضعه، فحكموا أول داخل فكان رسول الله صلى الله عليه وسلم، فوضعه في ثوب وأمر كل قبيلة أن تأخذ بناحية منه، ثم وضعه بيده.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "rebuilding-of-the-kaaba",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/64-p2",
+          "volume": "السيرة 1",
+          "pageReference": "64",
+          "extractionUrl": "https://shamela.ws/book/10906/202",
+          "excerptArabic": "فلما بلغ البنيان موضع الركن، يعني الحجر الأسود، اختصموا فيمن يضعه، وحرصت كل قبيلة على ذلك حتى تحاربوا ومكثوا أربع ليال. ثم إنهم اجتمعوا في المسجد وتناصفوا فزعموا أن أبا أمية بن المغيرة, وكان أسن قريش، قال: اجعلوا بينكم فيما تختلفون أول من يدخل من باب المسجد، ففعلوا، فكان أول من دخل عليهم رسول الله صلى الله عليه وسلم، فلما رأوه قالوا: هذا الأمين رضينا به، فلما انتهى إليهم أخبروه الخبر فقال: \"هاتوا لي ثوبا\". فأتوا به، فأخذ الركن بيده فوضعه في الثوب، ثم قال: \"لتأخذ كل قبيلة بناحية من الثوب، ثم ارفعوه جميعا\". ففعلوا، حتى إذا بلغوا به موضعه وضعه هو صلى الله عليه وسلم بيده وبنى عليه.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/65-p2",
+          "volume": "السيرة 1",
+          "pageReference": "65",
+          "extractionUrl": "https://shamela.ws/book/10906/203",
+          "excerptArabic": "ويروى عن عروة ومجاهد وغيرهما: أن البيت بني قبل المبعث بخمس عشرة سنة.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/kaaba-awrah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "كان ينقل الحجارة مع قريش، فلما وضع إزاره على عاتقه نودي: عورتك، فما رؤيت له عورة بعد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "description",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/65-p3",
+          "volume": "السيرة 1",
+          "pageReference": "65",
+          "extractionUrl": "https://shamela.ws/book/10906/203",
+          "excerptArabic": "فبينا رسول الله صلى الله عليه وسلم ينقل إذ انكشفت نمرته فنودي: يا محمد عورتك، فذلك أول ما نودي، والله أعلم. فما رؤيت له عورة بعد.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/66-p4",
+          "volume": "السيرة 1",
+          "pageReference": "66",
+          "extractionUrl": "https://shamela.ws/book/10906/204",
+          "excerptArabic": "إن رسول الله صلى الله عليه وسلم كان ينقل الحجارة للكعبة مع قريش وعليه إزار، فقال له عمه العباس: يابن أخي لو حللت إزارك فجعلته على منكب دون الحجارة، ففعل ذلك، فسقط مغشيا عليه، فما رؤي بعد ذلك اليوم عريانا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
     }
   ],
   "approval": {
-    "revision": "8bc41d01c74c87da",
+    "revision": "4b45761bbedabd6d",
     "approvedAt": "2026-09-20",
     "approvedBy": "msskzx",
-    "note": "Approved for publication of chapters one to five. All 202 claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
+    "note": "Approved for publication of chapters one to five. All 204 claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
   }
 }
