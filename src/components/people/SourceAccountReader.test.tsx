@@ -216,6 +216,33 @@ describe('SourceAccountReader', () => {
     expect(screen.getByText('(١) انظر الطبقات')).toBeTruthy();
   });
 
+  it("shows the section the reader is on, not a generic placeholder", async () => {
+    fetchJson.mockImplementation(async (url: string) => {
+      if (url.includes('/sections')) {
+        return {
+          sections: [
+            { sequence: 1, printedPage: '5', heading: 'الباب الأول' },
+            { sequence: 3, printedPage: '9', heading: 'الباب الثاني' },
+          ],
+        };
+      }
+      return { accounts: [account()], account: account(), page: page({ sequence: 4, printedPage: '10' }) };
+    });
+
+    const { container } = renderReader();
+
+    await screen.findByText('الفقرة الأولى');
+    const indexSelect = await waitFor(() => {
+      const select = container.querySelectorAll('select')[0] as HTMLSelectElement;
+      expect(select.options.length).toBe(2);
+      return select;
+    });
+
+    // Page 4 is past both headings, so the second one is the one open.
+    expect(indexSelect.value).toBe('1');
+    expect(screen.getByText('الباب الثاني').closest('option')?.selected).toBe(true);
+  });
+
   it('renders nothing when the person has no source account', async () => {
     respondWith({ accounts: [], account: null, page: null });
 

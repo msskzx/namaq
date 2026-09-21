@@ -40,6 +40,17 @@ export type AccountSummary = Pick<
   pageCount: number;
 };
 
+/**
+ * One section heading an account declares, and the page it opens on. Lets
+ * the reader jump straight into نص المصدر by section instead of only by
+ * printed page.
+ */
+export interface AccountSection {
+  sequence: number;
+  printedPage: string | null;
+  heading: string;
+}
+
 export type SubjectReferences = {
   subjectKind: SubjectKind;
   subjectSlug: string;
