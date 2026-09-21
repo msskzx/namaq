@@ -112,6 +112,16 @@ export interface CatalogBattleFields {
   readonly hijriYear?: Cited<number>;
   readonly location?: Cited<string>;
   readonly engagement?: Cited<Engagement>;
+  /**
+   * One figure each, and only where a source states it. The sources count the
+   * two sides separately and disagree often enough that a single combined
+   * number would be a choice nobody made; where they compete, the module takes
+   * one reading and the others stay as DISPUTED claims in the batch.
+   */
+  readonly muslimForceCount?: Cited<number>;
+  readonly nonMuslimForceCount?: Cited<number>;
+  readonly muslimDeathCount?: Cited<number>;
+  readonly nonMuslimDeathCount?: Cited<number>;
 }
 
 /** Names only the participants its batch's focal subject brought, never the full roster. */

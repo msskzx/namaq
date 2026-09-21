@@ -15,6 +15,7 @@ const ghazwahBahran = {
     engagement: { value: 'GHAZWAH', claims: ['sira/bahran'] },
     hijriYear: { value: 3, claims: ['sira/bahran'] },
     location: { value: 'بحران، معدن بالحجاز من ناحية الفرع', claims: ['sira/bahran'] },
+    muslimForceCount: { value: 300, claims: ['sira/bahran-force'] },
   },
   participants: [{ person: 'prophet-muhammad', isMuslim: true, claims: ['sira/bahran'] }],
 } satisfies CatalogBattle;

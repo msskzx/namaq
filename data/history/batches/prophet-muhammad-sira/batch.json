@@ -30056,12 +30056,349 @@
           "accessedAt": "2026-09-20"
         }
       ]
+    },
+    {
+      "key": "sira/badr-muslim-force",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "خرج يوم بدر في ثلاثمائة وثلاثة عشر رجلا، عدة أصحاب طالوت.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "muslimForceCount",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/325-p2",
+          "volume": "السيرة 1",
+          "pageReference": "325",
+          "extractionUrl": "https://shamela.ws/book/10906/462",
+          "excerptArabic": "فلما سرنا يوما أو يومين أمرنا أن نتعاد، ففعلنا، فإذا نحن ثلاثمائة وثلاثة عشر رجلا، فأخبرناه بعدتنا، فسر بذلك وحمد الله، وقال: \"عدة أصحاب طالوت\".",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/345-p7",
+          "volume": "السيرة 1",
+          "pageReference": "345",
+          "extractionUrl": "https://shamela.ws/book/10906/482",
+          "excerptArabic": "ورجع حين رجع من ثنية الوداع، فنفر في ثلاثمائة وثلاثة عشر",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/324-p5",
+          "volume": "السيرة 1",
+          "pageReference": "324",
+          "extractionUrl": "https://shamela.ws/book/10906/461",
+          "excerptArabic": "وكنا -أصحاب محمد- نتحدث أن عدة أهل بدر ثلاثمائة وبضعة عشر، كعدة أصحاب طالوت الذين جازوا معه النهر، وما جازه إلا مؤمن. أخرجه البخاري.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/badr-muslim-force-other",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "وقيل كانوا ثلاثمائة وتسعة عشر، وقيل ثلاثمائة وخمسة عشر.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "muslimForceCount",
+      "disputed": true,
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/330-p2",
+          "volume": "السيرة 1",
+          "pageReference": "330",
+          "extractionUrl": "https://shamela.ws/book/10906/467",
+          "excerptArabic": "لما كان يوم بدر نظر رسول الله صلى الله عليه وسلم إلى المشركين وهم ألف, وأصحابه ثلاثمائة وتسعة عشر رجلا. فاستقبل القبلة ثم مد يديه فجعل يهتف بربه مادا يديه مستقبل القبلة حتى سقط رداؤه، فأتاه أبو بكر فأخذ رداءه فألقاه على منكبيه، ثم التزمه من ورائه فقال: يا نبي الله كفاك مناشدتك ربك فإنه سينجز لك ما وعدك فأنزل الله: {إِذْ تَسْتَغِيثُونَ رَبَّكُمْ فَاسْتَجَابَ لَكُمْ أَنِّي مُمِدُّكُمْ بِأَلْفٍ مِنَ الْمَلائِكَةِ مُرْدِفِينَ} [الأنفال: ٩] ، فأمده الله بالملائكة فحدثني ابن",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/325-p3",
+          "volume": "السيرة 1",
+          "pageReference": "325",
+          "extractionUrl": "https://shamela.ws/book/10906/462",
+          "excerptArabic": "أن رسول الله صلى الله عليه وسلم خرج يوم بدر بثلاثمائة وخمسة عشر من المقاتلة كما خرج طالوت فدعا لهم رسول الله صلى الله عليه وسلم حين خرج فقال: \"اللهم إنهم حفاة فاحملهم، اللهم إنهم عراة فاكسهم، اللهم إنهم جياع فأشبعهم\". ففتح الله لهم، فانقلبوا وما منهم رجل إلا وقد رجع بجمل أو جملين، واكتسوا وشبعوا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/badr-quraysh-force",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "خرجت قريش إلى بدر بخمسين وتسعمائة مقاتل، وساقوا مائة فرس.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "nonMuslimForceCount",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/345-p5",
+          "volume": "السيرة 1",
+          "pageReference": "345",
+          "extractionUrl": "https://shamela.ws/book/10906/482",
+          "excerptArabic": "فخرجوا بخمسين وتسعمائة مقاتل، وساقوا مائة فرس, ولم يتركوا كارها للخروج. فأشخصوا العباس بن عبد المطلب، ونوفل بن الحارث، وطالب بن أبي طالب، وأخاه عقيلا، إلى أن نزلوا الجحفة.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/badr-quraysh-force-other",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "وقيل كانوا ألفا، وعلى ذلك دل قول النبي صلى الله عليه وسلم لما أخبر أنهم ينحرون عشرا كل يوم: القوم ألف.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "nonMuslimForceCount",
+      "disputed": true,
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/330-p2",
+          "volume": "السيرة 1",
+          "pageReference": "330",
+          "extractionUrl": "https://shamela.ws/book/10906/467",
+          "excerptArabic": "لما كان يوم بدر نظر رسول الله صلى الله عليه وسلم إلى المشركين وهم ألف, وأصحابه ثلاثمائة وتسعة عشر رجلا. فاستقبل القبلة ثم مد يديه فجعل يهتف بربه مادا يديه مستقبل القبلة حتى سقط رداؤه، فأتاه أبو بكر فأخذ رداءه فألقاه على منكبيه، ثم التزمه من ورائه فقال: يا نبي الله كفاك مناشدتك ربك فإنه سينجز لك ما وعدك فأنزل الله: {إِذْ تَسْتَغِيثُونَ رَبَّكُمْ فَاسْتَجَابَ لَكُمْ أَنِّي مُمِدُّكُمْ بِأَلْفٍ مِنَ الْمَلائِكَةِ مُرْدِفِينَ} [الأنفال: ٩] ، فأمده الله بالملائكة فحدثني ابن",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/badr-quraysh-dead",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "قتل من المشركين يوم بدر سبعون وأسر سبعون.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "nonMuslimDeathCount",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/352-p1",
+          "volume": "السيرة 1",
+          "pageReference": "352",
+          "extractionUrl": "https://shamela.ws/book/10906/489",
+          "excerptArabic": "أصاب النبي صلى الله عليه وسلم وأصحابه من المشركين يوم بدر أربعين ومائة؛ سبعين أسيرا وسبعين قتيلا، وأصابوا منا يوم أحد سبعين.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/330-p3",
+          "volume": "السيرة 1",
+          "pageReference": "330",
+          "extractionUrl": "https://shamela.ws/book/10906/467",
+          "excerptArabic": "فقتلوا يومئذ سبعين، وأسروا سبعين. أخرجه مسلم.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/badr-quraysh-dead-other",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "وقال ابن إسحاق: قتل من المشركين بضعة وأربعون، وكانت الأسارى أربعة وأربعين أسيرا.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "nonMuslimDeathCount",
+      "disputed": true,
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/351-p7",
+          "volume": "السيرة 1",
+          "pageReference": "351",
+          "extractionUrl": "https://shamela.ws/book/10906/488",
+          "excerptArabic": "وقال ابن إسحاق: استشهد أربعة من قريش وسبعة من الأنصار. وقتل من المشركين بضعة وأربعون، وكانت الأسارى أربعة وأربعين أسيرا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/badr-muslim-dead",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "قتل من المسلمين يوم بدر أربعة عشر: ستة من قريش وثمانية من الأنصار.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "muslimDeathCount",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/351-p5",
+          "volume": "السيرة 1",
+          "pageReference": "351",
+          "extractionUrl": "https://shamela.ws/book/10906/488",
+          "excerptArabic": "وقال هو وابن عقبة: إن عدد من قتل من المسلمين ستة من قريش، وثمانية من الأنصار.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/badr-muslim-dead-other",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "وقال ابن إسحاق: استشهد أربعة من قريش وسبعة من الأنصار.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "muslimDeathCount",
+      "disputed": true,
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/351-p7",
+          "volume": "السيرة 1",
+          "pageReference": "351",
+          "extractionUrl": "https://shamela.ws/book/10906/488",
+          "excerptArabic": "وقال ابن إسحاق: استشهد أربعة من قريش وسبعة من الأنصار. وقتل من المشركين بضعة وأربعون، وكانت الأسارى أربعة وأربعين أسيرا.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/uhud-muslim-force",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "كان أصحابه يوم أحد سبعمائة، خرجوا ألفا ثم رجع عبد الله بن أبي بثلاثمائة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "muslimForceCount",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/391-p2",
+          "volume": "السيرة 1",
+          "pageReference": "391",
+          "extractionUrl": "https://shamela.ws/book/10906/528",
+          "excerptArabic": "وكان أصحابه يومئذ سبعمائة والمشركون ألفين أو ما شاء الله من ذلك.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/392-p2",
+          "volume": "السيرة 1",
+          "pageReference": "392",
+          "extractionUrl": "https://shamela.ws/book/10906/529",
+          "excerptArabic": "انخزل عبد الله بن أبي بقريب من ثل الجيش ومضى النبي صلى الله عليه وسلم وأصحابه وهم في سبعمائة وتعبأت قريش وهم ثلاثة آلاف، ومعهم مائتا فرس قد جنبوها، وجعلوا على ميمنة الخيل خالد بن الوليد، وعلى ميسرتها عكرمة بن أبي جهل.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/392-p3",
+          "volume": "السيرة 1",
+          "pageReference": "392",
+          "extractionUrl": "https://shamela.ws/book/10906/529",
+          "excerptArabic": "فخرج رسول الله صلى الله عليه وسلم والمسلمون وهم ألف، والمشركون ثلاثة آلاف. فنزل رسول الله صلى الله عليه وسلم أحدا، ورجع عنه عبد الله بن أبي في ثلاثمائة، فسقط في أيدي الطائفتين, وهمتا أن تفشلا، والطائفتان: بنو سلمة وبنو حارثة.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/uhud-quraysh-force",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "كان المشركون يوم أحد ثلاثة آلاف، ومعهم مائتا فرس.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "nonMuslimForceCount",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/392-p2",
+          "volume": "السيرة 1",
+          "pageReference": "392",
+          "extractionUrl": "https://shamela.ws/book/10906/529",
+          "excerptArabic": "وتعبأت قريش وهم ثلاثة آلاف، ومعهم مائتا فرس قد جنبوها، وجعلوا على ميمنة الخيل خالد بن الوليد، وعلى ميسرتها عكرمة بن أبي جهل.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/392-p3",
+          "volume": "السيرة 1",
+          "pageReference": "392",
+          "extractionUrl": "https://shamela.ws/book/10906/529",
+          "excerptArabic": "فخرج رسول الله صلى الله عليه وسلم والمسلمون وهم ألف، والمشركون ثلاثة آلاف. فنزل رسول الله صلى الله عليه وسلم أحدا، ورجع عنه عبد الله بن أبي في ثلاثمائة، فسقط في أيدي الطائفتين, وهمتا أن تفشلا، والطائفتان: بنو سلمة وبنو حارثة.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/uhud-quraysh-force-other",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "وقال قتادة: كان المشركون ألفين أو ما شاء الله من ذلك.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "nonMuslimForceCount",
+      "disputed": true,
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/391-p2",
+          "volume": "السيرة 1",
+          "pageReference": "391",
+          "extractionUrl": "https://shamela.ws/book/10906/528",
+          "excerptArabic": "وكان أصحابه يومئذ سبعمائة والمشركون ألفين أو ما شاء الله من ذلك.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/uhud-muslim-dead",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "أصاب المشركون من المسلمين يوم أحد سبعين. قال الذهبي: قول من قال سبعين أصح، ويحمل قول أصحاب المغازي على عدد من عرف اسمه من الشهداء.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "muslimDeathCount",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/420-p4",
+          "volume": "السيرة 1",
+          "pageReference": "420",
+          "extractionUrl": "https://shamela.ws/book/10906/557",
+          "excerptArabic": "قد مر أن البخاري أخرج من حديث البراء، أن المشركين أصابوا منا سبعين.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/421-p4",
+          "volume": "السيرة 1",
+          "pageReference": "421",
+          "extractionUrl": "https://shamela.ws/book/10906/558",
+          "excerptArabic": "قلت: قول من قال سبعين أصح ويحمل قول أصحاب المغازي هذا على عدد من عرف اسمه من الشهداء، فإنهم عدوا أسماء الشهداء بأنسابهم.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/bahran-force",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "قال الواقدي: خرج إلى بحران في ثلاثمائة، واستخلف ابن أم مكتوم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "muslimForceCount",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/376-p1",
+          "volume": "السيرة 1",
+          "pageReference": "376",
+          "extractionUrl": "https://shamela.ws/book/10906/513",
+          "excerptArabic": "وقال الواقدي: غزا النبي صلى الله عليه وسلم بني سليم ببحران، لست خلون من جمادى الأولى. وبحران من ناحية الفرع بينها وبين المدينة ثمانية برد. فغاب عشر ليال. وكان بلغه أن بها جمعا من بني سليم، فخرج في ثلاثمائة، واستخلف ابن أم مكتوم.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
     }
   ],
   "approval": {
-    "revision": "46878d3cf2fdbcc6",
+    "revision": "b4997b17484161af",
     "approvedAt": "2026-09-21",
     "approvedBy": "msskzx",
-    "note": "Approved for publication of chapters one to five, including the heading sweep that went back over them and the sections it turned up. All 240 claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
+    "note": "Approved for publication of chapters one to five, including the heading sweep that went back over them and the sections it turned up. All 253 claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
   }
 }

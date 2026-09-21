@@ -358,6 +358,15 @@ model Battle {
   // See README, "What is implemented".
   engagement String?
 
+  // How many each side put in the field, and how many of each side died. Four
+  // separate columns because the sources count the two sides separately and
+  // often disagree; the catalog takes one figure per column and the competing
+  // ones stay as DISPUTED claims. See README, "What is implemented".
+  muslimForceCount    Int?
+  nonMuslimForceCount Int?
+  muslimDeathCount    Int?
+  nonMuslimDeathCount Int?
+
   // New fields for Google Maps coordinates
   latitude  Float? // Latitude coordinate (e.g., 27.6099)
   longitude Float? // Longitude coordinate (e.g., 35.7501)
