@@ -596,21 +596,114 @@ Ibn Ishaq, sixty-four Ansar and six Muhajirun by Ubayy. al-Dhahabi settles it,
 قول من قال سبعين أصح, explaining the smaller numbers as counts of the named
 (`1/420-p4` to `1/421-p4`). The model holds no count, so none is recorded.
 
-**Four more expeditions**: ذي أمر, بحران, قرقرة الكدر and سرية زيد إلى القردة.
-They fit `engagement` now, and are left for the next pass rather than widening
-this one.
-
-**بنو قينقاع**, which the chapter treats before Uhud (`1/377-p2`). It has no
-battle record and is a siege rather than a غزوة the book heads as one; adding
-it is the same shape of decision the expeditions were, and it can travel with
-them.
+**Four more expeditions** and **بنو قينقاع** were left here for the next pass.
+The heading sweep below took them.
 
 **The long roster of the Uhud dead by clan** (`1/421-p5` to `1/423-p7`), where
 almost none has a subject in the app.
 
+# The heading sweep
+
+Five chapters in, the same question kept coming back. The claims are authored
+from what the reader noticed, and nothing says what the reader walked past. So
+this pass went back over chapters one to five with the book's own table of
+contents as the checklist.
+
+al-Dhahabi's editor brackets every section heading, which makes them
+extractable. Of the 53 headings before السنة الرابعة, 17 sections had produced
+no citation at all. Four of those are headings over other headings or the title
+of the book. The other 13 were misses, and this pass authored every one.
+
+The check catches a section nothing cites, not a section cited for the wrong
+thing. زيد بن عمرو بن نفيل is the example: his section was already cited, but
+for the Prophet, and nothing in it was about him. He came out of reading the
+section rather than out of the check, and so did بنو قينقاع, which sits inside
+بحران's section rather than under a heading of its own.
+
+`headingSweep.test.ts` now runs the check on every `npm test`. A section that
+cites nothing fails the suite unless `DECLINED` names it and says why, and a
+decline that no longer matches an empty section fails too, so the list cannot
+rot. `UNSWEPT_FROM` marks where the authored chapters stop and moves forward as
+chapters land.
+
+## People the app did not have
+
+**زيد بن عمرو بن نفيل** (`1/76-p1` to `1/78`), who has a section of his own in
+chapter one. He is not a Companion, since he died before the mission, and Sa'id
+ibn Zayd, who is one, is his son. The chapter has him standing against the
+Kaaba saying ما منكم أحد على دين إبراهيم غيري, refusing what was slaughtered
+for idols at the foot of Baldah, and saving buried daughters. Two events come
+with him, the meeting (MET) and the death (DEATH), with إنه يبعث يوم القيامة
+أمة وحده, of which al-Dhahabi says إسناده حسن.
+
+**سمية بنت خياط** (`1/176-p5`), أول شهيد في الإسلام. Her relation to Ammar is
+not recorded: the chapter calls her أم عمار, which is how it identifies her
+rather than a statement about parentage, and it says nothing else about the
+family.
+
+**ضماد الأزدي** (`1/158-p2`), who came to Mecca to treat what he had heard
+called madness, heard خطبة الحاجة instead, and gave his hand on Islam and on
+his people's.
+
+## Sections that had produced nothing
+
+**فأول من آمن به خديجة** (`1/102`). Ibn al-Athir's خديجة أول خلق الله أسلم
+بإجماع المسلمين is one claim; the disagreement over أول الرجال, Abu Bakr
+against Ali against Ibn Ishaq's ordering, is a second, marked DISPUTED. Both
+back the same event description, which is where the model holds the value they
+compete over.
+
+**إسلام أبي ذر** (`1/133` to `1/136`), **إسلام حمزة** (`1/137`) and **إسلام
+عمر** (`1/138`), one event each. Abu Dharr's two narrations disagree on who led
+him in, Ali at Zamzam or the Prophet himself, and the description keeps what
+both give, the concealment he refused.
+
+**ذكر أذية المشركين** (`1/174` to `1/178`), the seven who first declared Islam.
+Five of them already had subjects, and the roster now cites them: Abu Bakr,
+Ammar, Suhayb, Bilal with أحد أحد, and the Prophet. Sumayyah's killing sits in
+this event rather than a death of its own, because that is how the chapter
+gives it.
+
+**Three Qur'an links** the sections exist for: ويسألونك عن الروح (17:85),
+إنا كفيناك المستهزئين (15:95), and إسلام الجن (46:29), all on the Prophet.
+ذكر الروم gives a fourth, and it belongs to Abu Bakr, who made the wager: the
+chapter quotes الروم ٢-٤ whole, so the link is recorded verse by verse.
+
+## The year-three engagements
+
+The four the chapter-five summary left for later, plus one the sweep turned up.
+
+**غزوة ذي أمر** (`1/375-p4`), Muharram of year three against Ghatafan at Najd,
+with Uthman over Medina. **غزوة بحران** (`1/375-p7` to `1/376-p1`), where Ibn
+Ishaq has him set out for Quraysh and al-Waqidi for Banu Sulaym. The model
+records neither target, so the disagreement stays on the page. Both are
+undated in the section beyond the year, and both ended رجع ولم يلق كيدا.
+
+**غزوة بني قينقاع** (`1/377-p2` to `1/378-p2`), first of the Jews to break the
+covenant, besieged until they came down on his judgment and exiled to
+Adhri'at. The section dates it only فيما بين بدر وأحد, which is a span rather
+than a year, so `hijriYear` stays unset.
+
+**غزوة حمراء الأسد** (`1/437-p7` to `1/438-p3`), the morning after Uhud and open
+only to those who had fought there. Aishah names her father and al-Zubayr among
+the seventy. Nobody carries a status: لم يلقوا عدوا.
+
+قرقرة الكدر and سرية زيد إلى القردة turn out to be cited already, inside
+sections the sweep found covered.
+
+## What the sweep declines
+
+Four headings, all structural, all listed in `DECLINED` with the reason:
+the book's title, the title of the part holding these chapters, and the two
+headings that stand over غزوة بواط and غزوة العشيرة, and over غزوة ذي أمر and
+غزوة بحران. Their sections carry the citations.
+
+The ledger moved from 443 cited values to 516. The 37 awaiting evidence did not
+change.
+
 # Review
 
-Nothing in this batch is reviewed, across all four chapters. The claims are
+Nothing in this batch is reviewed, across any of its chapters. The claims are
 authored but nobody has compared them against the stored pages, so every one of
-the 124 is Not reviewed. The batch's approval permits publication and says
+the 240 is Not reviewed. The batch's approval permits publication and says
 nothing about review.

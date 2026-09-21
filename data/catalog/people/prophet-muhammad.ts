@@ -60,9 +60,12 @@ const prophetMuhammad = {
   ayat: [
     { surah: 2, ayah: 129, claims: ['prophet/ayah-al-baqarah'] },
     { surah: 5, ayah: 67, claims: ['prophet/ayah-al-maidah'] },
+    { surah: 15, ayah: 95, claims: ['prophet/ayah-al-hijr-mustahziin'] },
+    { surah: 17, ayah: 85, claims: ['prophet/ayah-al-isra-ruh'] },
     { surah: 21, ayah: 107, claims: ['prophet/ayah-al-anbiya'] },
     { surah: 26, ayah: 214, claims: ['prophet/ayah-al-shuara'] },
     { surah: 33, ayah: 45, claims: ['prophet/ayah-al-ahzab'] },
+    { surah: 46, ayah: 29, claims: ['prophet/ayah-al-ahqaf-jinn'] },
     { surah: 61, ayah: 6, claims: ['prophet/ayah-al-saff'] },
     { surah: 70, ayah: 13, claims: ['prophet/ayah-al-maarij'] },
     { surah: 74, ayah: 1, claims: ['prophet/ayah-al-muddaththir'] },
