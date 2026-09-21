@@ -32760,12 +32760,186 @@
           "accessedAt": "2026-09-19"
         }
       ]
+    },
+    {
+      "key": "hudaybiyyah/year",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "hudaybiyyah",
+      "assertion": "خرج إليها رسول الله صلى الله عليه وسلم في ذي القعدة سنة ست.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "hijriYear",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/28-p4",
+          "volume": "السيرة 2",
+          "pageReference": "28",
+          "extractionUrl": "https://shamela.ws/book/10906/687",
+          "excerptArabic": "خرج إليها رسول الله صلى الله عليه وسلم في ذي القعدة سنة ست. قاله نافع، وقتادة، والزهري، وابن إسحاق، وغيرهم، وعروة في مغازيه.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "hudaybiyyah/engagement",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "hudaybiyyah",
+      "assertion": "خرج إليها رسول الله صلى الله عليه وسلم بنفسه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "engagement",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/28-p4",
+          "volume": "السيرة 2",
+          "pageReference": "28",
+          "extractionUrl": "https://shamela.ws/book/10906/687",
+          "excerptArabic": "خرج إليها رسول الله صلى الله عليه وسلم في ذي القعدة سنة ست. قاله نافع، وقتادة، والزهري، وابن إسحاق، وغيرهم، وعروة في مغازيه.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "hudaybiyyah/location",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "hudaybiyyah",
+      "assertion": "الحديبية على تسعة أميال من مكة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "location",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/28-p3",
+          "volume": "السيرة 2",
+          "pageReference": "28",
+          "extractionUrl": "https://shamela.ws/book/10906/687",
+          "excerptArabic": "قصة غزوة الحديبية وهي على تسعة أميال من مكة.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "prophet/hudaybiyyah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "خرج إلى الحديبية في ذي القعدة سنة ست.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "hudaybiyyah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/28-p4",
+          "volume": "السيرة 2",
+          "pageReference": "28",
+          "extractionUrl": "https://shamela.ws/book/10906/687",
+          "excerptArabic": "خرج إليها رسول الله صلى الله عليه وسلم في ذي القعدة سنة ست. قاله نافع، وقتادة، والزهري، وابن إسحاق، وغيرهم، وعروة في مغازيه.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "mustaliq/year",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "banu-al-mustaliq",
+      "assertion": "كانت في شعبان سنة خمس، قاله ابن شهاب وعروة وقتادة، وهو الصحيح عند المصنف.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "hijriYear",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/18-p3",
+          "volume": "السيرة 2",
+          "pageReference": "18",
+          "extractionUrl": "https://shamela.ws/book/10906/677",
+          "excerptArabic": "وقال ابن شهاب وعروة: هي في شعبان سنة خمس. وكذلك يروى عن قتادة.",
+          "accessedAt": "2026-09-19"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/18-p6",
+          "volume": "السيرة 2",
+          "pageReference": "18",
+          "extractionUrl": "https://shamela.ws/book/10906/677",
+          "excerptArabic": "قلت: وفيها حديث الإفك، وقد تقدم ذلك في سنة خمس. وهو الصحيح.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "mustaliq/year-alt",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "banu-al-mustaliq",
+      "assertion": "قال ابن إسحاق: غزاهم في شعبان سنة ست.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "disputed": true,
+      "field": "hijriYear",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/18-p2",
+          "volume": "السيرة 2",
+          "pageReference": "18",
+          "extractionUrl": "https://shamela.ws/book/10906/677",
+          "excerptArabic": "قال ابن إسحاق: غزا رسول الله صلى الله عليه وسلم بني المصطلق من خزاعة، في شعبان سنة ست. كذا قال ابن إسحاق.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "mustaliq/engagement",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "banu-al-mustaliq",
+      "assertion": "غزا رسول الله صلى الله عليه وسلم بني المصطلق من خزاعة بنفسه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "engagement",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/18-p2",
+          "volume": "السيرة 2",
+          "pageReference": "18",
+          "extractionUrl": "https://shamela.ws/book/10906/677",
+          "excerptArabic": "قال ابن إسحاق: غزا رسول الله صلى الله عليه وسلم بني المصطلق من خزاعة، في شعبان سنة ست. كذا قال ابن إسحاق.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "prophet/mustaliq",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "غزا بني المصطلق من خزاعة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "banu-al-mustaliq",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/18-p2",
+          "volume": "السيرة 2",
+          "pageReference": "18",
+          "extractionUrl": "https://shamela.ws/book/10906/677",
+          "excerptArabic": "قال ابن إسحاق: غزا رسول الله صلى الله عليه وسلم بني المصطلق من خزاعة، في شعبان سنة ست. كذا قال ابن إسحاق.",
+          "accessedAt": "2026-09-19"
+        }
+      ]
     }
   ],
   "approval": {
-    "revision": "894ecff9fb0f299e",
+    "revision": "87492f96236c1401",
     "approvedAt": "2026-09-21",
     "approvedBy": "msskzx",
-    "note": "Approved for publication of chapters one to seven. Chapter seven is the fifth year of the hijra: the Khandaq, where the book gives both hosts as figures for the first time, and Banu Qurayzah, whose siege killed Saad ibn Muadh by reopening the wound he took at the first. Five of its nine claims take values off the legacy marker that the retired seeds had asserted without evidence. Four drafted claims were dropped rather than kept: the competing months for the Khandaq and Quraysh's own contingent name no value this model holds, and history:validate rejects a claim that backs nothing. All 363 claims are Not reviewed, chapter seven included. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
+    "note": "Approved for publication of chapters one to eight. Chapter eight is the sixth year of the hijra and the batch's first citations from volume two. Eight claims: al-Hudaybiyyah, whose module was carried whole when the seeds were retired and whose three fields now come off the legacy marker, and Banu al-Mustaliq, a battle row the old seed never had. The Mustaliq year is the one place so far where two readings compete over a value the model holds, so Ibn Ishaq's سنة ست is recorded as a DISPUTED claim beside the سنة خمس the book calls الصحيح. All 371 claims are Not reviewed, chapter eight included. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
   }
 }

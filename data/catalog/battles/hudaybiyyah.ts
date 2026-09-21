@@ -1,21 +1,31 @@
 import { legacyUnreviewed, type CatalogBattle } from '@/lib/catalog/types';
 
-// Carried from the old seed when the rows of the people who fought here were
-// retired. No batch has read this battle, so every value below is in use with
-// its evidence owed.
+/**
+ * Chapter eight reads it, so the three fields carried when the seeds were
+ * retired come off the marker. نافع, قتادة, الزهري, ابن إسحاق and عروة all
+ * give ذو القعدة سنة ست, which is as many chains as this batch has behind any
+ * one date.
+ *
+ * علي بن مسهر's رمضان is left where it is. The chapter marks it تفرد, a single
+ * narrator against those five, and it competes over a month the model does not
+ * hold; the year the two readings share is what is recorded.
+ *
+ * The three companions stay on the marker. The chapter has the Prophet going
+ * and says nothing that puts any of them there by name.
+ */
 const hudaybiyyah = {
   kind: 'BATTLE',
   slug: 'hudaybiyyah',
   name: 'صلح الحديبية',
   nameTransliterated: 'Treaty of Hudaybiyyah',
   fields: {
-    engagement: { value: 'GHAZWAH', claims: legacyUnreviewed },
-    hijriYear: { value: 6, claims: legacyUnreviewed },
-    location: { value: 'الحديبية', claims: legacyUnreviewed },
+    engagement: { value: 'GHAZWAH', claims: ['hudaybiyyah/engagement'] },
+    hijriYear: { value: 6, claims: ['hudaybiyyah/year'] },
+    location: { value: 'الحديبية', claims: ['hudaybiyyah/location'] },
   },
   participants: [
     { person: 'abu-bakr-as-siddiq', isMuslim: true, claims: legacyUnreviewed },
-    { person: 'prophet-muhammad', isMuslim: true, claims: legacyUnreviewed },
+    { person: 'prophet-muhammad', isMuslim: true, claims: ['prophet/hudaybiyyah'] },
     { person: 'umar-ibn-al-khattab', isMuslim: true, claims: legacyUnreviewed },
     { person: 'uthman-ibn-affan', isMuslim: true, claims: legacyUnreviewed },
   ],

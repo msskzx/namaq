@@ -22,8 +22,8 @@ builds and `extractShamelaEntry.ts --volume` sets.
 
 ## What this instalment reads
 
-Chapters one to seven, printed pages ١/٢٩ to ١/٥٢٧, Shamela page ids 167 to
-663. 363 claims and 523 citations. Six chapters remain, ending at ٢/٤٩٦.
+Chapters one to eight, printed pages ١/٢٩ to ٢/٦٠, Shamela page ids 167 to
+719. 371 claims and 532 citations. Five chapters remain, ending at ٢/٤٩٦.
 
 Chapter one covers his lineage, his names, his birth, the deaths of his parents
 and grandfather, Abu Talib's guardianship, his marriage to Khadijah, his
@@ -1130,9 +1130,58 @@ years are mostly made of names, and a name without a subject is not a claim
 waiting to be written. It is the source doing what the source does, and the
 pages keep it.
 
+# Chapter eight
+
+The sixth year of the hijra, printed pages ٢/٥ to ٢/٦٠, and the first citations
+this batch takes from volume two. Eight claims, and the year's two set pieces
+are the whole of them.
+
+## al-Hudaybiyyah, read at last
+
+Its module was one of the eleven created when the seeds were retired: a battle
+nobody had read, carrying a year, an engagement and a location that the seed
+had asserted and nothing supported. Chapter eight reads it, and all three come
+off the marker at once, along with the Prophet's own participation.
+
+The date has more chains behind it than any other in this batch — نافع, قتادة,
+الزهري, ابن إسحاق, عروة, all giving ذو القعدة سنة ست. علي بن مسهر's رمضان is
+marked تفرد by the book itself and competes over a month, so it stays where it
+is, like the Khandaq's two months in chapter seven.
+
+The three companions on that module stay on the marker. The chapter has the
+Prophet going and says nothing that puts any of them there by name, and a
+roster is not something to infer from a treaty everyone remembers.
+
+## Banu al-Mustaliq, and the first year worth disputing
+
+Chapter seven had to throw away four drafted claims because the readings
+competed over months. This chapter has the opposite case and it is worth
+naming, because it is the first in this batch.
+
+Ibn Ishaq dates the غزوة to شعبان سنة ست. Ibn Shihab, Urwah and Qatadah date it
+to سنة خمس, al-Waqidi gives the day within that year, and al-Dhahabi closes the
+passage وهو الصحيح. Two readings, and they compete over `hijriYear`, which the
+model holds.
+
+So the column takes five and Ibn Ishaq's six is recorded as a DISPUTED claim
+beside it. Neither is dropped and neither is averaged. That is the difference a
+column makes: the same kind of disagreement, one year apart in the same book,
+is evidence when there is a value to attach it to and a page-note when there is
+not.
+
+The battle row itself is new — the old seed never had it, so the catalog
+creates it, as it did for Abu Salamah's سرية in chapter six.
+
+## What the year holds and the model does not
+
+بيعة الرضوان is cited to الفتح ١٨, and the verse is about the believers who
+pledged, collectively. `ayat` links a verse to a person, and there is no person
+here to link it to. أم رومان dies in ذو الحجة and has no subject. سلمة بن
+الأكوع carries غزوة ذي قرد almost single-handed and has none either.
+
 # Review
 
 Nothing in this batch is reviewed, across any of its chapters. The claims are
 authored but nobody has compared them against the stored pages, so every one of
-the 363 is Not reviewed. The batch's approval permits publication and says
+the 371 is Not reviewed. The batch's approval permits publication and says
 nothing about review.
