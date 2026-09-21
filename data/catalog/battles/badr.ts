@@ -1,4 +1,4 @@
-import type { CatalogBattle } from '@/lib/catalog/types';
+import { legacyUnreviewed, type CatalogBattle } from '@/lib/catalog/types';
 
 /**
  * He killed his own father here, so the SON relation is not in tension with
@@ -43,6 +43,9 @@ const badr = {
     nonMuslimDeathCount: { value: 70, claims: ['sira/badr-quraysh-dead'] },
   },
   participants: [
+    // Carried from the old seed when these people left it; no batch places
+    // them here yet.
+    { person: 'umar-ibn-al-khattab', isMuslim: true, claims: legacyUnreviewed },
     {
       person: 'saad-ibn-abi-waqqas',
       isMuslim: true,

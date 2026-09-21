@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { parseSeedRelations } from './seedRelations';
 import { getActiveSeedPeople, getRawGraphQueries } from '../scripts/people/activeSeedData';
+import { loadCatalog } from '../src/lib/catalog/loadCatalog';
 import { RECIPROCAL_INVERSES } from '../src/lib/relationship/categories';
 import type { RelationType } from '../src/lib/relationship/types';
 
@@ -48,7 +49,14 @@ describe('graph seed data integrity', () => {
     const { peopleQueries, peopleRelationsQueries } = await getRawGraphQueries();
     const graphSlugs = new Set(parseCreatedSlugs(peopleQueries));
     const profileSlugs = new Set((await getActiveSeedPeople()).map((p) => p.slug));
-    const knownSlugs = new Set([...graphSlugs, ...profileSlugs]);
+    // The catalog is the third node source: for a person it declares with a
+    // profile, catalog:project writes the PostgreSQL row and people:sync
+    // merges the node, so a seed relation may point at someone whose seed
+    // entry has been retired in the catalog's favour.
+    const catalogSlugs = new Set(
+      (await loadCatalog()).people.filter((person) => person.hasProfile).map((person) => person.slug),
+    );
+    const knownSlugs = new Set([...graphSlugs, ...profileSlugs, ...catalogSlugs]);
 
     const dangling = new Set<string>();
     for (const { from, to } of parseSeedRelations(peopleRelationsQueries)) {

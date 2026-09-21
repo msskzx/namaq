@@ -1,7 +1,9 @@
-import type { CatalogPerson } from '@/lib/catalog/types';
+import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
 /**
- * Seed-declared, so additive. The heading sweep gave him his Islam and left him
+ * The seed entry and its graph node are retired, so this module is
+ * the author; what they held and no batch cites is carried below with its
+ * evidence owed. The heading sweep gave him his Islam and left him
  * with one field; this is the rest of what these chapters say about him, and
  * most of it is kinship the graph had no way to hold.
  *
@@ -16,6 +18,10 @@ const hamzahIbnAbdAlMuttalib = {
   nameTransliterated: 'Hamzah ibn Abd al-Muttalib',
   hasProfile: true,
   fields: {
+    // Carried from the retired seed entry, which took it from the Siyar
+    // without citing it.
+    fullName: { value: 'حمزة بن عبد المطلب بن هاشم القرشي الهاشمي', claims: legacyUnreviewed },
+    appearance: { value: 'كان رجلاً قوي البنية، شجاعاً، مهاباً.', claims: legacyUnreviewed },
     sex: { value: 'MALE', claims: ['hamzah/sex'] },
     virtues: {
       value:
@@ -26,9 +32,19 @@ const hamzahIbnAbdAlMuttalib = {
 
   // Not a title the book assigns him: it is what he called himself, fighting
   // with two swords in front of the Prophet at Uhud.
-  titles: [{ title: 'asadu-allah', claims: ['hamzah/asadu-allah'] }],
+  titles: [
+    { title: 'asadu-allah', claims: ['hamzah/asadu-allah'] },
+    // Carried from the retired seed entry; no batch cites these yet.
+    { title: 'uncle-of-prophet', claims: legacyUnreviewed },
+    { title: 'sayyid-al-shuhada', claims: legacyUnreviewed },
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
 
   relations: [
+    // Carried from neo4j/graphSeedData.ts, whose node declaration is retired
+    // with the rest. The catalog owns this subject's edges now, so they live
+    // here or not at all.
+    { type: 'BROTHER', inverse: 'SISTER', to: 'safiyyah-bint-abd-al-muttalib', claims: legacyUnreviewed },
     { type: 'PATERNAL_UNCLE', inverse: 'PATERNAL_NEPHEW', to: 'prophet-muhammad', claims: ['hamzah/uncle-prophet'] },
     // The reciprocal is whichever milk sibling the far end is, so it is stated
     // here the way every sex-dependent reciprocal in the catalog is.

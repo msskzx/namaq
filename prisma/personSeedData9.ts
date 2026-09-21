@@ -27,19 +27,9 @@
  * enrichment batch, matching the convention used since batch 1.
  */
 export const people = [
-  {
-    // Existing Neo4j Person node (khadijah-bint-khuwaylid, core, no new node
-    // created) — new DAUGHTER/FATHER edges to the existing khuwaylid-ibn-asad
-    // node added in graphSeedData8.ts.
-    name: 'خديجة بنت خويلد',
-    fullName: 'خديجة بنت خويلد بن أسد بن عبد العزى بن قصي القرشية الأسدية',
-    slug: 'khadijah-bint-khuwaylid',
-    nameTransliterated: 'Khadijah bint Khuwaylid',
-    appearance: null,
-    virtues: null,
-    picture: null,
-    titles: ['companion', 'first-wife', 'mother-of-believers'],
-  },
+  // khadijah-bint-khuwaylid is authored in
+  // data/catalog/people/khadijah-bint-khuwaylid.ts; this entry is retired
+  // and what it held is carried there.
   {
     // Brand-new Neo4j Person node (fatimah-bint-asad) — mother of Ali ibn
     // Abi Talib, NOT the same person as Fatimah al-Zahra below. See
@@ -109,20 +99,9 @@ export const people = [
     picture: null,
     titles: ['companion', 'mother-of-believers'],
   },
-  {
-    // Existing Neo4j Person node (zaynab-bint-khuzaymah, core, no new node
-    // created) — see disambiguation note above. Known as "Umm al-Masakin"
-    // ("Mother of the Poor") for her abundant charity, per her own page.
-    // Profile only.
-    name: 'زينب بنت خزيمة',
-    fullName: 'زينب بنت خزيمة بن الحارث بن عبد الله الهلالية',
-    slug: 'zaynab-bint-khuzaymah',
-    nameTransliterated: 'Zaynab bint Khuzaymah',
-    appearance: null,
-    virtues: null,
-    picture: null,
-    titles: ['companion', 'mother-of-believers', 'umm-al-masakeen'],
-  },
+  // zaynab-bint-khuzaymah is authored in
+  // data/catalog/people/zaynab-bint-khuzaymah.ts; this entry is retired
+  // and what it held is carried there.
   {
     // Existing Neo4j Person node (umm-habibah, core, no new node created) —
     // her father-link to abu-sufyan-ibn-harb was already added in batch 4

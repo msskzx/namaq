@@ -8,7 +8,12 @@ const fihl = {
   name: 'معركة فحل',
   nameTransliterated: 'Battle of Fihl',
   fields: { engagement: { value: 'BATTLE', claims: legacyUnreviewed }, hijriYear: { value: 13, claims: legacyUnreviewed } },
-  participants: [{ person: 'abu-ubaydah-ibn-al-jarrah', isMuslim: true, claims: legacyUnreviewed }],
+  participants: [
+    { person: 'abu-ubaydah-ibn-al-jarrah', isMuslim: true, claims: legacyUnreviewed },
+    // Carried from the old seed when these people left it; no batch places
+    // them here yet.
+    { person: 'umar-ibn-al-khattab', isMuslim: true, claims: legacyUnreviewed },
+  ],
 } satisfies CatalogBattle;
 
 export default fihl;

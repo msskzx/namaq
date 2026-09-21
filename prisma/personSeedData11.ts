@@ -42,16 +42,9 @@ export const people = [
     picture: null,
     titles: ['companion'],
   },
-  {
-    name: 'خباب بن الأرت',
-    fullName: 'خباب بن الأرت بن جندلة بن سعد بن خزيمة بن كعب بن سعد بن زيد مناة التميمي',
-    slug: 'khabbab-ibn-al-aratt',
-    nameTransliterated: 'Khabbab ibn al-Aratt',
-    appearance: null,
-    virtues: null,
-    picture: null,
-    titles: ['companion'],
-  },
+  // khabbab-ibn-al-aratt is authored in
+  // data/catalog/people/khabbab-ibn-al-aratt.ts; this entry is retired
+  // and what it held is carried there.
   {
     // Brother of Uthman ibn Hunayf above; the Prophet paired him in
     // brotherhood with Ali (not modelled — no such relation type in this
@@ -76,20 +69,10 @@ export const people = [
     picture: null,
     titles: ['companion'],
   },
-  {
-    // Brother of Khawwat ibn Jubair above — his own page gives no nasab at
-    // all, so fullName is filled in via the sibling-grouping inference rule
-    // from Khawwat's fuller chain. Commander of the archers at Uhud,
-    // martyred and mutilated there by Ikrimah ibn Abi Jahl.
-    name: 'عبد الله بن جبير',
-    fullName: 'عبد الله بن جبير بن النعمان بن أمية بن البرك الأنصاري الأوسي',
-    slug: 'abdullah-ibn-jubair',
-    nameTransliterated: 'Abdullah ibn Jubair',
-    appearance: null,
-    virtues: null,
-    picture: null,
-    titles: ['companion'],
-  },
+  // Abdullah ibn Jubayr, brother of Khawwat ibn Jubair above, is authored in
+  // data/catalog/people/abdullah-ibn-jubayr.ts. His entry here spelled him
+  // abdullah-ibn-jubair and the catalog abdullah-ibn-jubayr, which was enough
+  // to make two people out of one; the catalog carries what this entry held.
   {
     // Maternal brother of Abu Said al-Khudri, not yet in this pipeline — no
     // relation modelled. Famous for his eye being restored by the Prophet's
@@ -103,19 +86,9 @@ export const people = [
     picture: null,
     titles: ['companion'],
   },
-  {
-    // Adopted by al-Khattab (Umar's father) per the book — not modelled as a
-    // family tie (adoption, not blood/marriage). Son Abdullah ibn Amir ibn
-    // Rabiah (a transmitter from him) not yet in this pipeline.
-    name: 'عامر بن ربيعة',
-    fullName: 'عامر بن ربيعة بن كعب العنزي',
-    slug: 'amir-ibn-rabiah',
-    nameTransliterated: 'Amir ibn Rabiah',
-    appearance: null,
-    virtues: null,
-    picture: null,
-    titles: ['companion'],
-  },
+  // amir-ibn-rabiah is authored in
+  // data/catalog/people/amir-ibn-rabiah.ts; this entry is retired
+  // and what it held is carried there.
   {
     // Kunya used as the primary name, per the book's own heading; fullName
     // uses Ibn Abi Hatim's fullest reported chain (several shorter variants

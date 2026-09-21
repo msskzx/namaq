@@ -11,6 +11,9 @@ const zatAsSalasil = {
   // still owed (AGENTS.md, "Historical evidence data").
   fields: { engagement: { value: 'BATTLE', claims: legacyUnreviewed }, hijriYear: { value: 12, claims: legacyUnreviewed } },
   participants: [
+    // Carried from the old seed when these people left it; no batch places
+    // them here yet.
+    { person: 'abu-bakr-as-siddiq', isMuslim: true, claims: legacyUnreviewed },
     { person: 'abu-ubaydah-ibn-al-jarrah', isMuslim: true, claims: ['abu-ubaydah/dhat-al-salasil-command'] },
   ],
 } satisfies CatalogBattle;

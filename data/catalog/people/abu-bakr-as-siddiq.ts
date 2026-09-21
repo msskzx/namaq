@@ -1,4 +1,4 @@
-import type { CatalogPerson } from '@/lib/catalog/types';
+import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
 /**
  * Authored from chapter two of data/history/batches/prophet-muhammad-sira. He
@@ -13,6 +13,10 @@ const abuBakrAsSiddiq = {
   nameTransliterated: 'Abu Bakr as-Siddiq',
   hasProfile: true,
   fields: {
+    // Carried from the retired seed entry, which took it from the Siyar
+    // without citing it.
+    fullName: { value: 'عبد الله بن أبي قحافة عثمان بن عامر التيمي القرشي', claims: legacyUnreviewed },
+    appearance: { value: 'كان أبيض نحيفًا خفيف العارضين معروق الوجه.', claims: legacyUnreviewed },
     sex: { value: 'MALE', claims: ['abu-bakr/sex'] },
     virtues: {
       value:
@@ -25,6 +29,10 @@ const abuBakrAsSiddiq = {
   // naming outright: he affirmed the Isra' when others turned back, فلذلك سمي
   // أبو بكر الصديق.
   titles: [
+    // Carried from the retired seed entry; no batch cites these yet.
+    { title: 'the-ten-promised-paradise', claims: legacyUnreviewed },
+    { title: 'caliph', claims: legacyUnreviewed },
+    { title: 'companion', claims: legacyUnreviewed },
     { title: 'siddiq-al-ummah', claims: ['abu-bakr/siddiq'] },
     { title: 'al-sabiqoon', claims: ['abu-bakr/al-sabiqoon-eight'] },
     // Not a title he holds alone: Nawfal tied him and Talhah in one rope, and
@@ -45,6 +53,15 @@ const abuBakrAsSiddiq = {
    * so Abu Bakr calls and they answer, and the projector writes the inverse.
    */
   relations: [
+    // Carried from neo4j/graphSeedData.ts, whose node declaration is retired
+    // with the rest. The catalog owns this subject's edges now, so they live
+    // here or not at all.
+    { type: 'SON', inverse: 'FATHER', to: 'uthman-ibn-amir', claims: legacyUnreviewed },
+    { type: 'FATHER', inverse: 'DAUGHTER', to: 'aisha-bint-abi-bakr', claims: legacyUnreviewed },
+    { type: 'HUSBAND', inverse: 'WIFE', to: 'asma-bint-umays', claims: legacyUnreviewed },
+    { type: 'FATHER', inverse: 'DAUGHTER', to: 'asma-bint-abi-bakr', claims: legacyUnreviewed },
+    { type: 'FATHER', inverse: 'SON', to: 'abd-al-rahman-ibn-abi-bakr', claims: legacyUnreviewed },
+    { type: 'FATHER_IN_LAW', inverse: 'SON_IN_LAW', to: 'prophet-muhammad', claims: legacyUnreviewed },
     { type: 'CALLED_TO_ISLAM', inverse: 'ANSWERED_CALL_OF', to: 'uthman-ibn-affan', claims: ['uthman/answered-abu-bakr'] },
     { type: 'CALLED_TO_ISLAM', inverse: 'ANSWERED_CALL_OF', to: 'az-zubayr-ibn-al-awwam', claims: ['zubayr/answered-abu-bakr'] },
     { type: 'CALLED_TO_ISLAM', inverse: 'ANSWERED_CALL_OF', to: 'abdur-rahman-ibn-awf', claims: ['awf/answered-abu-bakr'] },

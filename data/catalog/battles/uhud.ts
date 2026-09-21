@@ -35,6 +35,11 @@ const uhud = {
     muslimDeathCount: { value: 70, claims: ['sira/uhud-muslim-dead'] },
   },
   participants: [
+    // Carried from the old seed when these people left it; no batch places
+    // them here yet.
+    { person: 'abu-bakr-as-siddiq', isMuslim: true, claims: legacyUnreviewed },
+    { person: 'umar-ibn-al-khattab', isMuslim: true, claims: legacyUnreviewed },
+    { person: 'uthman-ibn-affan', isMuslim: true, claims: legacyUnreviewed },
     {
       person: 'saad-ibn-abi-waqqas',
       isMuslim: true,

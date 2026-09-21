@@ -99,16 +99,9 @@ export const people = [
     picture: null,
     titles: ['companion'],
   },
-  {
-    name: 'صهيب بن سنان',
-    fullName: 'صهيب بن سنان بن مالك بن عبد عمرو بن عقيل بن عامر النمري',
-    slug: 'suhaib-ibn-sinan',
-    nameTransliterated: 'Suhaib ibn Sinan',
-    appearance: null,
-    virtues: null,
-    picture: null,
-    titles: ['companion'],
-  },
+  // suhaib-ibn-sinan is authored in
+  // data/catalog/people/suhaib-ibn-sinan.ts; this entry is retired
+  // and what it held is carried there.
   {
     name: 'أبو طلحة الأنصاري',
     fullName: 'زيد بن سهل بن الأسود بن حرام بن عمرو بن زيد مناة بن عدي بن عمرو بن مالك بن النجار الأنصاري الخزرجي النجاري',
@@ -167,19 +160,9 @@ export const people = [
     picture: null,
     titles: ['companion'],
   },
-  {
-    // See header note above: name/slug given the "-al-ghifari" nisbah even
-    // though the page's own title is the bare kunya. His own page gives no
-    // ancestor beyond his immediate father (no grandfather named).
-    name: 'أبو ذر الغفاري',
-    fullName: 'جندب بن جنادة الغفاري',
-    slug: 'abu-dharr-al-ghifari',
-    nameTransliterated: 'Abu Dharr al-Ghifari',
-    appearance: null,
-    virtues: null,
-    picture: null,
-    titles: ['companion'],
-  },
+  // abu-dharr-al-ghifari is authored in
+  // data/catalog/people/abu-dharr-al-ghifari.ts; this entry is retired
+  // and what it held is carried there.
   {
     // Existing Neo4j Person node (al-abbas-ibn-abd-al-muttalib, core, no new
     // node created) — see header note above.

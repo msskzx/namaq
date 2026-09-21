@@ -12,6 +12,9 @@ const jamal = {
   // cite it directly instead of through him.
   fields: { engagement: { value: 'BATTLE', claims: legacyUnreviewed }, hijriYear: { value: 36, claims: ['talhah/death-year', 'talhah/jamal'] } },
   participants: [
+    // Carried from the old seed when these people left it; no batch places
+    // them here yet.
+    { person: 'ali-ibn-abi-talib', isMuslim: true, claims: legacyUnreviewed },
     {
       person: 'saad-ibn-abi-waqqas',
       isMuslim: true,

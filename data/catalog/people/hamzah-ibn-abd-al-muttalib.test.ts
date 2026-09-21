@@ -48,9 +48,11 @@ describe('Hamzah ibn Abd al-Muttalib in the catalog', () => {
     expect(milk).toContainEqual({ from: 'prophet-muhammad', to: 'hamzah-ibn-abd-al-muttalib', type: 'MILK_BROTHER' });
   });
 
-  // He called himself this at Uhud; the book does not assign it to him.
+  // He called himself this at Uhud; the book does not assign it to him. The
+  // three titles carried from his retired seed entry sit beside it, so this
+  // asserts asadu-allah is there rather than that it is all he holds.
   it('gives him asadu-allah from his own words', () => {
-    expect(hamzah.titles.map((title) => title.title)).toEqual(['asadu-allah']);
+    expect(hamzah.titles.map((title) => title.title)).toContain('asadu-allah');
     expect(claimByKey.get('hamzah/asadu-allah')?.field).toBe('titles');
   });
 

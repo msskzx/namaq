@@ -1,7 +1,9 @@
-import type { CatalogPerson } from '@/lib/catalog/types';
+import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
-// Seed-declared, so additive. Sent to Medina after the first Aqaba to teach
-// the Qur'an, which is how Sa'd ibn Mu'adh and his whole clan came to Islam.
+// The seed entry is retired, so this module is the author; what it held and
+// no batch cites is carried below with its evidence owed. Sent to Medina
+// after the first Aqaba to teach the Qur'an, which is how Sa'd ibn Mu'adh
+// and his whole clan came to Islam.
 const musabIbnUmayr = {
   kind: 'PERSON',
   slug: 'musab-ibn-umayr',
@@ -16,8 +18,23 @@ const musabIbnUmayr = {
       claims: ['musab/madinah-muqri'],
     },
   },
-  titles: [],
-  relations: [],
+  titles: [
+    // Carried from the retired seed entry. The seeds gave every صحابي this
+    // title without citing it.
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
+  relations: [
+    // Carried from neo4j/graphSeedData*.ts, which stated these ties without
+    // citing them. The catalog owns this subject's edges now, so they live
+    // here or not at all.
+    { type: 'SON', inverse: 'FATHER', to: 'umayr-ibn-hashim', claims: legacyUnreviewed },
+    {
+      type: 'MATERNAL_UNCLE',
+      inverse: 'MATERNAL_NEPHEW',
+      to: 'shaybah-ibn-uthman',
+      claims: legacyUnreviewed,
+    },
+  ],
 } satisfies CatalogPerson;
 
 export default musabIbnUmayr;

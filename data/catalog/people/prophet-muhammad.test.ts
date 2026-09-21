@@ -36,10 +36,18 @@ describe('the Prophet in the catalog', () => {
     expect(unknown).toEqual([]);
   });
 
-  // He is still seed-authored, so the catalog only adds to him and the legacy
-  // marker has nothing to mark. See the module's own note.
-  it('carries nothing on the legacy marker', () => {
-    expect(everyProvenance.filter(([, claims]) => claims === legacyUnreviewed)).toEqual([]);
+  // His seed entry and graph node are retired, so the catalog is his only
+  // author and the legacy marker is what carries the values they held. What
+  // must not happen is a carried value borrowing a claim it has no right to,
+  // so every marked value stays marked and every cited one names a real claim,
+  // which the test above checks.
+  it('marks a carried value rather than citing the batch for it', () => {
+    const marked = everyProvenance.filter(([, claims]) => claims === legacyUnreviewed).map(([where]) => where);
+
+    expect(marked).toContain('appearance');
+    expect(marked).toContain('title master-of-children-of-adam');
+    expect(marked).toContain('ayah 48:29');
+    expect(marked).toContain('relation HUSBAND umm-salamah');
   });
 
   it('points a single-claim field at a claim about that same field', () => {

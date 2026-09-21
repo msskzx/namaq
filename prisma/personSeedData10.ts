@@ -346,24 +346,9 @@ export const people = [
     picture: null,
     titles: ['companion'],
   },
-  {
-    // Full sister to Aisha bint Abi Bakr is stated by some sources, but the
-    // maternal-lineage claim on her own page (via a mother "Qutaylah bint
-    // Abd al-Uzza") is not independently corroborated here against Aisha's
-    // separately-known mother (Umm Ruman) — left unmodelled pending
-    // verification, rather than asserted. What IS solidly confirmed: her
-    // father Abu Bakr as-Siddiq (existing core node) and her husband
-    // Az-Zubayr ibn al-Awwam (existing core node) — she is also the mother
-    // of Caliph Abdullah ibn al-Zubayr (not yet in this pipeline).
-    name: 'أسماء بنت أبي بكر',
-    fullName: 'أسماء بنت أبي بكر عبد الله بن أبي قحافة عثمان بن عامر القرشية التيمية',
-    slug: 'asma-bint-abi-bakr',
-    nameTransliterated: 'Asma bint Abi Bakr',
-    appearance: null,
-    virtues: null,
-    picture: null,
-    titles: ['companion', 'dhat-an-nitaqayn'],
-  },
+  // asma-bint-abi-bakr is authored in
+  // data/catalog/people/asma-bint-abi-bakr.ts; this entry is retired
+  // and what it held is carried there.
   {
     // Father named, no deeper chain given — no separate ancestor node.
     // Cousin of the companion Muadh ibn Jabal (existing node, batch 4) —

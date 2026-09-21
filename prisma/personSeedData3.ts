@@ -5,26 +5,12 @@
  * appearance/virtues/fullName are left for a later enrichment batch.
  */
 export const people = [
-  {
-    name: 'مصعب بن عمير',
-    fullName: null,
-    slug: 'musab-ibn-umayr',
-    nameTransliterated: 'Musab ibn Umayr',
-    appearance: null,
-    virtues: null,
-    picture: null,
-    titles: ['companion'],
-  },
-  {
-    name: 'أبو سلمة',
-    fullName: null,
-    slug: 'abu-salamah',
-    nameTransliterated: 'Abu Salamah',
-    appearance: null,
-    virtues: null,
-    picture: null,
-    titles: ['companion'],
-  },
+  // musab-ibn-umayr is authored in
+  // data/catalog/people/musab-ibn-umayr.ts; this entry is retired
+  // and what it held is carried there.
+  // abu-salamah is authored in
+  // data/catalog/people/abu-salamah.ts; this entry is retired
+  // and what it held is carried there.
   {
     name: 'عثمان بن مظعون',
     fullName: null,

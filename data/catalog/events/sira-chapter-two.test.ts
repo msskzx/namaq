@@ -62,11 +62,12 @@ describe('chapter two of the sira in the catalog', () => {
   });
 
   // Neither is a new title; both are newly cited for their holder. Later
-  // chapters add more to Abu Bakr, so this asserts that his is present rather
-  // than that it is all he has.
+  // chapters add more to Abu Bakr, and Asma carries a legacy companion from
+  // her retired seed entry, so each asserts its title is present rather than
+  // that it is all the holder has.
   it('gives Abu Bakr as-siddiq and Asma dhat-an-nitaqayn', () => {
     expect(abuBakr.titles.map((t) => t.title)).toContain('siddiq-al-ummah');
-    expect(asma.titles.map((t) => t.title)).toEqual(['dhat-an-nitaqayn']);
+    expect(asma.titles.map((t) => t.title)).toContain('dhat-an-nitaqayn');
   });
 
   // Both married after Khadijah died and before the hijra.

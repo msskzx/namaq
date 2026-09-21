@@ -2,7 +2,7 @@
  * Ancestor chains and family relations sourced from "سير أعلام النبلاء"
  * (al-Dhahabi) for batch 8 of newly added companions (prisma/personSeedData11.ts):
  * uthman-ibn-hunayf, khabbab-ibn-al-aratt, sahl-ibn-hunayf, khawwat-ibn-jubair,
- * abdullah-ibn-jubair, qatadah-ibn-al-numan, amir-ibn-rabiah, abu-al-darda,
+ * abdullah-ibn-jubayr, qatadah-ibn-al-numan, amir-ibn-rabiah, abu-al-darda,
  * iyad-ibn-ghanm, salamah-ibn-salamah, muadh-ibn-al-harith,
  * muawwidh-ibn-al-harith, awf-ibn-al-harith, hudhayfah-ibn-al-yaman,
  * muhammad-ibn-maslamah, uthman-ibn-abi-al-as, abdullah-ibn-zayd-ibn-abd-rabbih,
@@ -60,9 +60,10 @@ export const peopleRelationsQueries = [
   'MATCH (from:Person {slug: "uthman-ibn-hunayf"}), (to:Person {slug: "sahl-ibn-hunayf"}) CREATE (from)-[:BROTHER]->(to);',
   'MATCH (from:Person {slug: "sahl-ibn-hunayf"}), (to:Person {slug: "uthman-ibn-hunayf"}) CREATE (from)-[:BROTHER]->(to);',
 
-  // Khawwat ibn Jubair / Abdullah ibn Jubair — brothers
-  'MATCH (from:Person {slug: "khawwat-ibn-jubair"}), (to:Person {slug: "abdullah-ibn-jubair"}) CREATE (from)-[:BROTHER]->(to);',
-  'MATCH (from:Person {slug: "abdullah-ibn-jubair"}), (to:Person {slug: "khawwat-ibn-jubair"}) CREATE (from)-[:BROTHER]->(to);',
+  // Khawwat ibn Jubair / Abdullah ibn Jubayr — brothers. Abdullah is authored
+  // in data/catalog/people/abdullah-ibn-jubayr.ts, which spells him -jubayr.
+  'MATCH (from:Person {slug: "khawwat-ibn-jubair"}), (to:Person {slug: "abdullah-ibn-jubayr"}) CREATE (from)-[:BROTHER]->(to);',
+  'MATCH (from:Person {slug: "abdullah-ibn-jubayr"}), (to:Person {slug: "khawwat-ibn-jubair"}) CREATE (from)-[:BROTHER]->(to);',
 
   // Muadh, Muawwidh, and Awf ibn al-Harith — sons of al-Harith ibn Rifaah
   // and Afra bint Ubayd, and brothers of each other

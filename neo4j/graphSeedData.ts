@@ -56,16 +56,9 @@ import {
  * Each item in the array is a single CREATE query.
  */
 export const corePeopleQueries = [
-    'CREATE (:Person { name: "محمد رسول الله ﷺ", slug: "prophet-muhammad", nameTransliterated: "Prophet Muhammad (Peace be upon him)" });',
-    'CREATE (:Person { name: "أبو بكر الصديق", slug: "abu-bakr-as-siddiq", nameTransliterated: "Abu Bakr al-Siddiq" });',
-    'CREATE (:Person { name: "عمر بن الخطاب", slug: "umar-ibn-al-khattab", nameTransliterated: "Umar ibn al-Khattab", fullName: "عمر بن الخطاب بن نفيل بن عبد العزى بن رياح بن قرط بن رزاح بن عدي بن كعب بن لؤي القرشي العدوي" });',
-    'CREATE (:Person { name: "عثمان بن عفان", slug: "uthman-ibn-affan", nameTransliterated: "Uthman ibn Affan" });',
-    'CREATE (:Person { name: "علي بن أبي طالب", slug: "ali-ibn-abi-talib", nameTransliterated: "Ali ibn Abi Talib" });',
     'CREATE (:Person { name: "سعيد بن زيد", slug: "saeed-ibn-zaid", nameTransliterated: "Saeed ibn Zaid" });',
-    'CREATE (:Person { name: "خديجة بنت خويلد", slug: "khadijah-bint-khuwaylid", nameTransliterated: "Khadijah bint Khuwaylid" });',
     'CREATE (:Person { name: "عائشة بنت أبي بكر", slug: "aisha-bint-abi-bakr", nameTransliterated: "Aisha bint Abi Bakr" });',
     'CREATE (:Person { name: "حفصة بنت عمر", slug: "hafsa-bint-umar", nameTransliterated: "Hafsa bint Umar" });',
-    'CREATE (:Person { name: "زينب بنت خزيمة", slug: "zaynab-bint-khuzaymah", nameTransliterated: "Zaynab bint Khuzaymah" });',
     'CREATE (:Person { name: "أم سلمة", slug: "umm-salamah", nameTransliterated: "Umm Salamah" });',
     'CREATE (:Person { name: "زينب بنت جحش", slug: "zaynab-bint-jahsh", nameTransliterated: "Zaynab bint Jahsh" });',
     'CREATE (:Person { name: "جويرية بنت الحارث", slug: "juwayriyah-bint-al-harith", nameTransliterated: "Juwayriyah bint al-Harith" });',
@@ -80,7 +73,6 @@ export const corePeopleQueries = [
     'CREATE (:Person { name: "القاسم بن محمد", slug: "al-qasim-ibn-muhammad", nameTransliterated: "Al-Qasim ibn Muhammad" });',
     'CREATE (:Person { name: "عبد الله بن محمد", slug: "abdullah-ibn-muhammad", nameTransliterated: "Abdullah ibn Muhammad" });',
     'CREATE (:Person { name: "إبراهيم بن محمد", slug: "ibrahim-ibn-muhammad", nameTransliterated: "Ibrahim ibn Muhammad" });',
-    'CREATE (:Person { name: "حمزة بن عبد المطلب", slug: "hamzah-ibn-abd-al-muttalib", nameTransliterated: "Hamzah ibn Abd al-Muttalib" });',
     'CREATE (:Person { name: "أبو طالب", slug: "abu-talib", nameTransliterated: "Abu Talib" });',
     'CREATE (:Person { name: "العباس بن عبد المطلب", slug: "al-abbas-ibn-abd-al-muttalib", nameTransliterated: "Al-Abbas ibn Abd al-Muttalib" });',
     'CREATE (:Person { name: "الحسن بن علي", slug: "al-hasan-ibn-ali", nameTransliterated: "Al-Hasan ibn Ali" });',
