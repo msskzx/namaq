@@ -19,8 +19,6 @@ export interface KnownSlugs {
   readonly people: ReadonlySet<string>;
   readonly titles: ReadonlySet<string>;
   readonly battles: ReadonlySet<string>;
-  /** Event slugs the catalog does not author. Empty today: every Event is the catalog's. */
-  readonly events?: ReadonlySet<string>;
   /** Claim keys from every approved batch. */
   readonly claims: ReadonlySet<string>;
 }
