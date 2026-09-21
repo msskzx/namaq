@@ -770,6 +770,48 @@ than the hijra: the two emigrations to Abyssinia at سنة خمس من المب�
 pledges at العقبة, the rebuilding of the Kaaba at قبل المبعث بخمس عشرة سنة.
 A year from the mission is a different era, not a negative hijri year.
 
+# What someone said
+
+A profile field holds what is said about a person. `virtues` is the sira's own
+wording for why the subject matters, and a hadith in praise of someone lands
+there as part of that. Nothing held what a person said, and the sira is full of
+it: 50 runs of verse in chapters one to five alone, before counting prose.
+
+`Utterance` is one record for both, `POETRY` or `SAYING`, with the text as the
+source prints it, a speaker, who the words are about, the occasion in the
+source's wording, an optional event or battle, and a `grading` that is the
+source's own verdict and nothing else. The reasoning is
+[ADR 0015](../../../docs/adr/0015-one-record-for-what-someone-said.md), which
+also says why this is not a hadith model and will not become one.
+
+Ten to start with, which is what the structure needed to be exercised rather
+than the back-fill:
+
+- **أبو طالب** twice: the istisqa لامية, وأبيض يستسقى الغمام بوجهه (`1/56-p2`
+  to `1/56-p4`), which the istisqa event had the occasion for and no place for
+  the verse; and والله لن يصلوا إليك بجمعهم (`1/121-p3` to `1/121-p7`), whose
+  last line says what kept him from the دين he calls the best of them.
+- **زيد بن عمرو بن نفيل** twice: عذت بما عاذ به إبراهيم (`1/78-p2`) and أربا
+  واحدا أم ألف رب (`1/80-p3`). The heading sweep gave him a subject a few
+  sections ago; these are his own words, which had nowhere to go.
+- **معبد الخزاعي** at Hamra al-Asad (`1/439-p3` to `1/440-p4`), six lines that
+  turned Abu Sufyan back. He was a mushrik that day and has no subject, so his
+  name is text.
+- **نحن بنات طارق** (`1/396-p3`), sung by a woman the chapter never names, and
+  **هند بنت عتبة**'s نحن جزيناكم بيوم بدر from the rock (`1/425-p2`). Both are
+  names rather than subjects, for the same reason.
+- **The Prophet's rajaz** at the mosque, هذا الحمال لا حمال خيبر (`1/290-p6`).
+  POETRY rather than SAYING: the kind is about what the words are, not who said
+  them.
+- **Two sayings**, which is where `grading` earns its place: إنه يبعث يوم
+  القيامة أمة وحده with al-Dhahabi's إسناده حسن (`1/77-p3`), and غفار غفر الله
+  لها with أخرجه مسلم (`1/135-p1`). One is a verdict and the other a takhrij,
+  and the column holds both because it holds whatever the source wrote.
+
+The remaining 40 verse runs in chapters one to five are a back-fill pass, not
+lost: the pages hold them and the count is here. From chapter six the verse is
+captured as it is read.
+
 # Review
 
 Nothing in this batch is reviewed, across any of its chapters. The claims are

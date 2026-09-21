@@ -20,7 +20,7 @@ function modules(kind: string) {
     .map((file) => `${kind}/${file}`);
 }
 
-const paths = [...modules('people'), ...modules('battles'), ...modules('events')];
+const paths = [...modules('people'), ...modules('battles'), ...modules('events'), ...modules('utterances')];
 
 /** Every `claims` array anywhere in a module, however deeply nested. */
 function provenances(node: unknown, where: string): [string, Provenance][] {

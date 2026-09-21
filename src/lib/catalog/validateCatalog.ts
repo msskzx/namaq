@@ -1,5 +1,13 @@
 import { RECIPROCAL_INVERSES } from '@/lib/relationship/categories';
-import { legacyUnreviewed, STATUSES_BY_RELATION, type Catalog, type Provenance, ENGAGEMENTS, SEXES } from './types';
+import {
+  legacyUnreviewed,
+  STATUSES_BY_RELATION,
+  type Catalog,
+  type Provenance,
+  ENGAGEMENTS,
+  SEXES,
+  UTTERANCE_KINDS,
+} from './types';
 
 export interface CatalogIssue {
   readonly path: string;
@@ -11,6 +19,8 @@ export interface KnownSlugs {
   readonly people: ReadonlySet<string>;
   readonly titles: ReadonlySet<string>;
   readonly battles: ReadonlySet<string>;
+  /** Event slugs the catalog does not author. Empty today: every Event is the catalog's. */
+  readonly events?: ReadonlySet<string>;
   /** Claim keys from every approved batch. */
   readonly claims: ReadonlySet<string>;
 }
@@ -110,6 +120,43 @@ export function validateCatalog(catalog: Catalog, known: KnownSlugs): CatalogIss
       checkProvenance(entry.claims, known, `${at}.${entry.person}`, issues);
       if (!person(entry.person)) issues.push({ path: at, message: `unknown person ${entry.person}` });
     });
+  });
+
+  const events = new Set(catalog.events.map((event) => event.slug));
+  const battles = new Set(catalog.battles.map((battle) => battle.slug));
+
+  catalog.utterances.forEach((utterance) => {
+    const at = `utterances/${utterance.slug}`;
+    checkProvenance(utterance.textArabic.claims, known, `${at}.textArabic`, issues);
+    Object.entries(utterance.fields).forEach(([field, cited]) => {
+      if (cited) checkProvenance(cited.claims, known, `${at}.${field}`, issues);
+    });
+
+    if (!UTTERANCE_KINDS.includes(utterance.utteranceKind)) {
+      issues.push({ path: at, message: `unknown utterance kind ${utterance.utteranceKind}` });
+    }
+
+    // A speaker the app has no subject for goes in speakerName, which is text
+    // and not a link, so that a poet the sira names once stays out of the graph.
+    if (utterance.speaker && !person(utterance.speaker)) {
+      issues.push({ path: at, message: `unknown person ${utterance.speaker}` });
+    }
+    if (utterance.subject && !person(utterance.subject)) {
+      issues.push({ path: at, message: `unknown person ${utterance.subject}` });
+    }
+    if (!utterance.speaker && !utterance.fields.speakerName) {
+      issues.push({ path: at, message: 'no speaker: name a subject or record the name as text' });
+    }
+    if (utterance.speaker && utterance.fields.speakerName) {
+      issues.push({ path: at, message: 'two speakers: a subject and a name' });
+    }
+
+    if (utterance.event && !events.has(utterance.event)) {
+      issues.push({ path: at, message: `unknown event ${utterance.event}` });
+    }
+    if (utterance.battle && !battles.has(utterance.battle) && !known.battles.has(utterance.battle)) {
+      issues.push({ path: at, message: `unknown battle ${utterance.battle}` });
+    }
   });
 
   return issues;

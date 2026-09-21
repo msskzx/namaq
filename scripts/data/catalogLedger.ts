@@ -38,7 +38,8 @@ async function main() {
     console.log(`${batchDir} covers ${[...subjects].join(', ')}`);
   } else {
     console.log(
-      `catalog: ${catalog.people.length} people, ${catalog.battles.length} battles, ${catalog.events.length} events`,
+      `catalog: ${catalog.people.length} people, ${catalog.battles.length} battles, ${catalog.events.length} events, ` +
+      `${catalog.utterances.length} utterances`,
     );
   }
 

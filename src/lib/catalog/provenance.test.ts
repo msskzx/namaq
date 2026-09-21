@@ -13,7 +13,7 @@ const person = (over: Partial<CatalogPerson> = {}): CatalogPerson => ({
   ...over,
 });
 
-const catalog = (over: Partial<Catalog> = {}): Catalog => ({ people: [], battles: [], events: [], ...over });
+const catalog = (over: Partial<Catalog> = {}): Catalog => ({ people: [], battles: [], events: [], utterances: [], ...over });
 
 describe('catalogProvenance', () => {
   it('finds a value however deeply it is nested', () => {
