@@ -701,6 +701,45 @@ headings that stand over غزوة بواط and غزوة العشيرة, and over
 The ledger moved from 443 cited values to 516. The 37 awaiting evidence did not
 change.
 
+# Four counts on a battle
+
+Chapter five had to leave an argument on the page. The chapter counts the Uhud
+dead five different ways and al-Dhahabi settles it himself, قول من قال سبعين
+أصح, explaining the smaller figures as counts of the named. The model held no
+count, so none of that was recorded.
+
+`Battle` now carries four: `muslimForceCount`, `nonMuslimForceCount`,
+`muslimDeathCount` and `nonMuslimDeathCount`. Four rather than two because the
+sources count the two sides separately, and a battle where one side was counted
+and the other was not is the ordinary case, not the exception.
+
+**Badr**: 313 against 950, with 14 Muslim dead and 70 Meccan. The Muslim figure
+is Abu Ayyub's own count (`1/325-p2`), which al-Dhahabi's telling repeats
+(`1/345-p7`) and al-Bara's ثلاثمائة وبضعة عشر agrees with (`1/324-p5`). Umar's
+319 and Ibn Amr's 315 are DISPUTED claims. Quraysh's 950 is Musa ibn Uqbah's
+(`1/345-p5`), from the maghazi this chapter introduces as فإنها من أصح
+المغازي; the round ألف that Umar gives (`1/330-p2`) is DISPUTED. The dead are
+the Sahihayn's seventy killed and seventy captured (`1/352-p1`, `1/330-p3`)
+against Ibn Ishaq's بضعة وأربعون (`1/351-p7`), and fourteen Muslims, six of
+Quraysh and eight of the Ansar (`1/351-p5`), against his eleven. Chapter four's
+roster names fourteen, which is what settles that one.
+
+**Uhud**: 700 against 3000, with 70 Muslim dead. The seven hundred is not a
+choice between readings. Urwah's ألف counts before Abd Allah ibn Ubayy turned
+back with three hundred, and the same sentence says so (`1/392-p3`), so Qatadah
+(`1/391-p2`), al-Zuhri (`1/392-p2`) and Urwah all land on seven hundred in the
+field. Three thousand is al-Zuhri's and Urwah's; Qatadah's ألفين, which he
+hedges with أو ما شاء الله من ذلك, is DISPUTED. Nobody counted the Meccan dead,
+so that column stays unset.
+
+**بحران**: 300, al-Waqidi's count of the force he took out (`1/376-p1`). The
+other side is not counted, and the column is empty rather than zero.
+
+Every competing figure is a claim of its own, marked DISPUTED, citing the same
+column the taken figure cites. `counts.test.ts` checks that: a competing figure
+that no column took must be DISPUTED, and a column must cite a claim about that
+same column.
+
 # Review
 
 Nothing in this batch is reviewed, across any of its chapters. The claims are

@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { PrismaClient } from '../../src/generated/prisma';
 import { loadCatalog } from '../../src/lib/catalog/loadCatalog';
 import { seedAuthoredPeople } from './seedAuthored';
-import type { Catalog, CatalogEventFields, CatalogPersonFields, Cited } from '../../src/lib/catalog/types';
+import type { Catalog, CatalogBattleFields, CatalogEventFields, CatalogPersonFields, Cited } from '../../src/lib/catalog/types';
 
 const apply = process.argv.includes('--apply');
 const prisma = new PrismaClient();
@@ -40,7 +40,11 @@ function settle(where: string, live: Column, cited: Cited<string | number> | und
 }
 
 /** Field keys are column names, so an added catalog field projects without editing this. */
-function settleFields(at: string, live: Record<string, unknown>, fields: CatalogPersonFields | CatalogEventFields) {
+function settleFields(
+  at: string,
+  live: Record<string, unknown>,
+  fields: CatalogBattleFields | CatalogPersonFields | CatalogEventFields,
+) {
   const set: Record<string, string | number> = {};
   for (const [column, cited] of Object.entries(fields) as [string, Cited<string | number> | undefined][]) {
     const value = settle(`${at}.${column}`, live[column] as Column, cited);
@@ -202,15 +206,15 @@ async function projectBattles(battles: Catalog['battles']) {
         if (cited) planned.push(`${at}.${column}: set to ${JSON.stringify(cited.value)}`);
       });
       if (apply) {
+        // Columns come from the fields themselves, so a new one added to
+        // CatalogBattleFields reaches a created row without being listed here.
+        const columns = Object.fromEntries(
+          Object.entries(battle.fields ?? {})
+            .filter(([, cited]) => cited)
+            .map(([column, cited]) => [column, cited!.value]),
+        );
         row = await prisma.battle.create({
-          data: {
-            slug: battle.slug,
-            name: battle.name,
-            nameTransliterated: battle.nameTransliterated,
-            hijriYear: battle.fields?.hijriYear?.value,
-            location: battle.fields?.location?.value,
-            engagement: battle.fields?.engagement?.value,
-          },
+          data: { slug: battle.slug, name: battle.name, nameTransliterated: battle.nameTransliterated, ...columns },
         });
       } else {
         continue;

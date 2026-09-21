@@ -15,7 +15,33 @@ const badr = {
   slug: 'badr',
   name: 'غزوة بدر',
   nameTransliterated: 'Battle of Badr',
-  fields: { engagement: { value: 'GHAZWAH', claims: ['sira/badr-ghazwah'] }, hijriYear: { value: 2, claims: ['sira/badr'] } },
+  fields: {
+    engagement: { value: 'GHAZWAH', claims: ['sira/badr-ghazwah'] },
+    hijriYear: { value: 2, claims: ['sira/badr'] },
+
+    /*
+     * Four counts, and the chapter competes with itself over all four.
+     *
+     * The Muslim force is 313 here because that is the figure the chapter
+     * narrates twice, once as Abu Ayyub's own count and once in al-Dhahabi's
+     * telling, and al-Bara's ثلاثمائة وبضعة عشر agrees with it. Umar's 319 and
+     * Ibn Amr's 315 are `sira/badr-muslim-force-other`, DISPUTED.
+     *
+     * Quraysh's 950 comes from Musa ibn Uqbah's maghazi, which this chapter
+     * introduces as فإنها من أصح المغازي and which counts the horses too. The
+     * round ألف that Umar gives, and that the Prophet inferred from ten camels
+     * slaughtered a day, is `sira/badr-quraysh-force-other`.
+     *
+     * The dead are the Sahihayn's seventy killed and seventy captured against
+     * Ibn Ishaq's بضعة وأربعون, and fourteen Muslims (al-Waqidi and Ibn Uqbah)
+     * against his eleven. Chapter four's roster names fourteen, which is what
+     * settles it here.
+     */
+    muslimForceCount: { value: 313, claims: ['sira/badr-muslim-force'] },
+    nonMuslimForceCount: { value: 950, claims: ['sira/badr-quraysh-force'] },
+    muslimDeathCount: { value: 14, claims: ['sira/badr-muslim-dead'] },
+    nonMuslimDeathCount: { value: 70, claims: ['sira/badr-quraysh-dead'] },
+  },
   participants: [
     {
       person: 'saad-ibn-abi-waqqas',

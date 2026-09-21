@@ -12,7 +12,28 @@ const uhud = {
    * says للنصف من شوال instead; the model holds no day, so that disagreement
    * is `sira/uhud-date-alt`, DISPUTED, and stays in the description.
    */
-  fields: { engagement: { value: 'GHAZWAH', claims: ['sira/uhud'] }, hijriYear: { value: 3, claims: ['sira/uhud'] } },
+  fields: {
+    engagement: { value: 'GHAZWAH', claims: ['sira/uhud'] },
+    hijriYear: { value: 3, claims: ['sira/uhud'] },
+
+    /*
+     * The Muslim seven hundred is not a choice between readings: Urwah's ألف
+     * counts before Abd Allah ibn Ubayy turned back with three hundred, and
+     * the chapter says so in the same sentence, so Qatadah, al-Zuhri and Urwah
+     * all land on seven hundred in the field.
+     *
+     * The Meccan three thousand is al-Zuhri's and Urwah's; Qatadah's ألفين,
+     * which he hedges with أو ما شاء الله من ذلك, is
+     * `sira/uhud-quraysh-force-other`, DISPUTED.
+     *
+     * Seventy dead is where chapter five left an argument on the page for want
+     * of a column. al-Dhahabi settles it himself: قول من قال سبعين أصح, and the
+     * smaller counts of the maghazi writers are counts of the named.
+     */
+    muslimForceCount: { value: 700, claims: ['sira/uhud-muslim-force'] },
+    nonMuslimForceCount: { value: 3000, claims: ['sira/uhud-quraysh-force'] },
+    muslimDeathCount: { value: 70, claims: ['sira/uhud-muslim-dead'] },
+  },
   participants: [
     {
       person: 'saad-ibn-abi-waqqas',
