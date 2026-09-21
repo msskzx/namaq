@@ -22,8 +22,8 @@ builds and `extractShamelaEntry.ts --volume` sets.
 
 ## What this instalment reads
 
-Chapters one to eleven, printed pages ١/٢٩ to ٢/٢٣٦, Shamela page ids 167 to
-895. 387 claims and 549 citations. Two chapters remain, ending at ٢/٤٩٦.
+Chapters one to twelve, printed pages ١/٢٩ to ٢/٢٨٩, Shamela page ids 167 to
+948. 390 claims and 552 citations. One chapter remains, ending at ٢/٤٩٦.
 
 Chapter one covers his lineage, his names, his birth, the deaths of his parents
 and grandfather, Abu Talib's guardianship, his marriage to Khadijah, his
@@ -1298,9 +1298,39 @@ but the section never dates the march. A heading two pages up is not what the
 value cites, and the difference between reading a date and inferring one from
 where a section falls is the difference this batch is built on.
 
+# Chapter twelve
+
+The tenth year of the hijra, printed pages ٢/٢٣٧ to ٢/٢٨٩. Three claims, and
+for the first time since chapter six the chapter makes a subject rather than
+citing one.
+
+## حجة الوداع
+
+The old seed never had it. Fourteen battles and forty-five events came through
+the hand-off and the pilgrimage that closes the sira was not among them, so the
+catalog creates the row, the way it does for a سرية the seeds never held.
+
+The year is cited here, which is worth setting beside chapter eleven, where it
+was not. Tabuk sits inside a section headed السنة التاسعة and the section never
+dates the march; the year stayed owed. The pilgrimage sits inside السنة
+العاشرة **and** the section dates the departure within it — لخمس بقين من ذي
+القعدة. A month inside a stated year is a date the section gives. A heading two
+pages up standing in for a date the section never gives is not.
+
+## Asma bint Umays, who is here because the chapter puts her here
+
+She bore محمد بن أبي بكر at ذو الحليفة on the way out, and sent to ask the
+Prophet what to do; he told her to wash and bind herself with a cloth. Her son
+has no subject in the app, so the birth is not a second event. It is what she
+did at this one, and the link records that she was there.
+
+This is the shape the whole batch has taken. A chapter gives dozens of names
+and the model holds the few it already knows; the rest stay in the pages, which
+is where they were always going to be.
+
 # Review
 
 Nothing in this batch is reviewed, across any of its chapters. The claims are
 authored but nobody has compared them against the stored pages, so every one of
-the 387 is Not reviewed. The batch's approval permits publication and says
+the 390 is Not reviewed. The batch's approval permits publication and says
 nothing about review.
