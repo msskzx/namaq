@@ -31963,12 +31963,156 @@
           "accessedAt": "2026-09-20"
         }
       ]
+    },
+    {
+      "key": "hamzah/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hamzah-ibn-abd-al-muttalib",
+      "assertion": "حمزة بن عبد المطلب، عم رسول الله صلى الله عليه وسلم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/49-p4",
+          "volume": "السيرة 1",
+          "pageReference": "49",
+          "extractionUrl": "https://shamela.ws/book/10906/187",
+          "excerptArabic": "وأرضعته ثويبة جارية أبي لهب عمه، مع عمه حمزة، ومع أبي سلمة بن عبد الأسد المخزومي، رضي الله عنهما.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "hamzah/uncle-prophet",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hamzah-ibn-abd-al-muttalib",
+      "assertion": "حمزة عم رسول الله صلى الله عليه وسلم، يسميه الكتاب عمه في غير موضع.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PATERNAL_UNCLE",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "prophet-muhammad",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/49-p4",
+          "volume": "السيرة 1",
+          "pageReference": "49",
+          "extractionUrl": "https://shamela.ws/book/10906/187",
+          "excerptArabic": "وأرضعته ثويبة جارية أبي لهب عمه، مع عمه حمزة، ومع أبي سلمة بن عبد الأسد المخزومي، رضي الله عنهما.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/297-p5",
+          "volume": "السيرة 1",
+          "pageReference": "297",
+          "extractionUrl": "https://shamela.ws/book/10906/434",
+          "excerptArabic": "ثم في أحد الربيعين بعث عمه حمزة في ثلاثين راكبا من المهاجرين إلى سيف البحر من ناحية العيص، فلقي أبا جهل في ثلاث مائة. وقال الزهري: في مائة وثلاثين راكبا. وكان مجدي بن عمرو الجهني وقومه حلفاء الفريقين جميعا، فحجز بينهم مجدي بن عمرو الجهني.",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/410-p6",
+          "volume": "السيرة 1",
+          "pageReference": "410",
+          "extractionUrl": "https://shamela.ws/book/10906/547",
+          "excerptArabic": "وقال لما سمع البكاء: \"لكن حمزة لا بواكي له\". واستغفر له، فسمع ذلك سعد بن معاذ وابن رواحة وغيرهما، فجمعوا كل نائحة وباكية بالمدينة، فقالوا: والله لا تبكين قتلى الأنصار حتى تبكين عم رسول الله",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "hamzah/rida-thuwaybah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hamzah-ibn-abd-al-muttalib",
+      "assertion": "أرضعت ثويبة جارية أبي لهب النبي صلى الله عليه وسلم مع عمه حمزة ومع أبي سلمة بن عبد الأسد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "MILK_BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "prophet-muhammad",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/49-p4",
+          "volume": "السيرة 1",
+          "pageReference": "49",
+          "extractionUrl": "https://shamela.ws/book/10906/187",
+          "excerptArabic": "وأرضعته ثويبة جارية أبي لهب عمه، مع عمه حمزة، ومع أبي سلمة بن عبد الأسد المخزومي، رضي الله عنهما.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "abu-salamah/rida-thuwaybah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-salamah",
+      "assertion": "أرضعت ثويبة جارية أبي لهب النبي صلى الله عليه وسلم مع عمه حمزة ومع أبي سلمة بن عبد الأسد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "MILK_BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "prophet-muhammad",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/49-p4",
+          "volume": "السيرة 1",
+          "pageReference": "49",
+          "extractionUrl": "https://shamela.ws/book/10906/187",
+          "excerptArabic": "وأرضعته ثويبة جارية أبي لهب عمه، مع عمه حمزة، ومع أبي سلمة بن عبد الأسد المخزومي، رضي الله عنهما.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "hamzah/asadu-allah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hamzah-ibn-abd-al-muttalib",
+      "assertion": "كان يقاتل يوم أحد بين يدي رسول الله صلى الله عليه وسلم بسيفين ويقول: أنا أسد الله.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "titles",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/404-p7",
+          "volume": "السيرة 1",
+          "pageReference": "404",
+          "extractionUrl": "https://shamela.ws/book/10906/541",
+          "excerptArabic": "قال: كان حمزة يقاتل يوم أحد بين يدي رسول الله صلى الله عليه وسلم بسيفين، ويقول: أنا أسد الله رواه يونس بن بكير، عن ابن عون عن عمير مرسلا وزاد: فعثر فصرع مستلقيا وانكشفت الدرع عن بطنه، فزرقه الحبشي",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "hamzah/la-bawakiya-lah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hamzah-ibn-abd-al-muttalib",
+      "assertion": "قال النبي صلى الله عليه وسلم لما سمع البكاء على قتلى الأنصار: لكن حمزة لا بواكي له. واستغفر له.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/410-p6",
+          "volume": "السيرة 1",
+          "pageReference": "410",
+          "extractionUrl": "https://shamela.ws/book/10906/547",
+          "excerptArabic": "وقال لما سمع البكاء: \"لكن حمزة لا بواكي له\". واستغفر له، فسمع ذلك سعد بن معاذ وابن رواحة وغيرهما، فجمعوا كل نائحة وباكية بالمدينة، فقالوا: والله لا تبكين قتلى الأنصار حتى تبكين عم رسول الله",
+          "accessedAt": "2026-09-20"
+        }
+      ]
     }
   ],
   "approval": {
-    "revision": "578302f68ffac9ff",
+    "revision": "e4dc2f150b78f6bf",
     "approvedAt": "2026-09-21",
     "approvedBy": "msskzx",
-    "note": "Approved for publication of chapters one to five, including the heading sweep that went back over them and the sections it turned up. All 327 claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
+    "note": "Approved for publication of chapters one to five, including the heading sweep that went back over them and the sections it turned up. All 333 claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
   }
 }

@@ -64,6 +64,9 @@ export const RECIPROCAL_ROLE_PAIRS: ReadonlyArray<readonly [RelationType, Relati
   ['MAWLA', 'PATRON'],
   // CALLED_TO_ISLAM points from the man who called to the man who answered,
   // which is the direction Ibn Ishaq writes it: فأسلم بدعائه فلان وفلان.
+  ['MILK_BROTHER', 'MILK_BROTHER'],
+  ['MILK_BROTHER', 'MILK_SISTER'],
+  ['MILK_SISTER', 'MILK_SISTER'],
   ['CALLED_TO_ISLAM', 'ANSWERED_CALL_OF'],
 ];
 

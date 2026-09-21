@@ -964,6 +964,33 @@ centrality over every edge regardless of type, so قريش and بنو هاشم w
 outrank the people the graph exists to show. Four of the six have subjects and
 carry the value; the other two do not, and the roster keeps them.
 
+# حمزة, and what a module can miss
+
+He had a module from the heading sweep and one field on it. The battles had
+him: Badr, the سرية to سيف البحر, Uhud with a MARTYRED status and وحشي in the
+summary. What nothing held was that he is the Prophet's uncle.
+
+The book says it three times and never makes a section of it, which is how it
+got past both sweeps: مع عمه حمزة at `1/49-p4`, بعث عمه حمزة at `1/297-p5`,
+and عم رسول الله at `1/410-p6`. A heading check finds a section nobody mined; a
+verse check finds a poem nobody recorded. Neither finds a fact the book states
+in passing, in three different chapters, as something the reader already knows.
+
+**PATERNAL_UNCLE** to the Prophet, and **MILK_BROTHER** besides. The same
+sentence at `1/49-p4` says Thuwaybah, Abu Lahab's slave woman, nursed the
+Prophet together with Hamzah and with Abu Salamah. رضاع is kinship in its own
+right and the vocabulary had nothing for it, so `MILK_BROTHER`/`MILK_SISTER`
+are new. They are each other's reciprocal, resolved by the far end's sex the
+way FATHER and SON are, and they sit in the sibling colour. Thuwaybah herself
+needs no subject: the tie is between the nurslings.
+
+**أسد الله** is his by his own words rather than by the book's assignment:
+كان يقاتل يوم أحد بين يدي رسول الله بسيفين ويقول: أنا أسد الله (`1/404-p7`).
+The title already existed in the vocabulary.
+
+**لكن حمزة لا بواكي له** (`1/410-p6`), which he said hearing Medina weep for
+the Ansari dead, joins his virtues.
+
 # Review
 
 Nothing in this batch is reviewed, across any of its chapters. The claims are
