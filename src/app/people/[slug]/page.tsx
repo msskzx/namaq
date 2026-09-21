@@ -29,7 +29,7 @@ function PersonDetailPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+      <div className="min-h-screen bg-black" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <div className="container mx-auto px-4 py-8">
           <ErrorMessage title={t.personLoadError} description={String(error)} />
         </div>
@@ -39,7 +39,7 @@ function PersonDetailPage() {
 
   if (isLoading || !person) {
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+      <div className="min-h-screen bg-black" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <div className="container mx-auto px-4 py-8">
           <LoadingSpinner />
         </div>
@@ -48,7 +48,7 @@ function PersonDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-black" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col items-center justify-center mb-4 gap-4">
           {person.picture && (
@@ -69,7 +69,7 @@ function PersonDetailPage() {
 
         <div className="flex flex-col gap-6 mt-10">
           {person.fullName && (
-            <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
+            <div className="bg-black border border-white/10 rounded-lg p-4">
               <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
                 <FontAwesomeIcon icon={faSignature} className="w-7 h-7 text-amber-500 ml-2" />
                 {t.fullName}</h2>
@@ -77,7 +77,7 @@ function PersonDetailPage() {
             </div>
           )}
           {person.kunya && (
-            <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
+            <div className="bg-black border border-white/10 rounded-lg p-4">
               <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
                 <FontAwesomeIcon icon={faSignature} className="w-7 h-7 text-amber-500 ml-2" />
                 {t.kunya}</h2>
@@ -87,7 +87,7 @@ function PersonDetailPage() {
           {/* A حلف is a name here, not a relationship -- see README. It sits
               with the kunya for that reason. */}
           {person.tribalAffiliation && (
-            <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
+            <div className="bg-black border border-white/10 rounded-lg p-4">
               <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
                 <FontAwesomeIcon icon={faPeopleGroup} className="w-7 h-7 text-amber-500 ml-2" />
                 {t.tribalAffiliation}</h2>
@@ -95,7 +95,7 @@ function PersonDetailPage() {
             </div>
           )}
           {person.appearance && (
-            <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
+            <div className="bg-black border border-white/10 rounded-lg p-4">
               <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
                 <FontAwesomeIcon icon={faUser} className="w-7 h-7 text-amber-500 ml-2" />
                 {t.appearance}</h2>
@@ -104,7 +104,7 @@ function PersonDetailPage() {
           )}
 
           {person.virtues && (
-            <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
+            <div className="bg-black border border-white/10 rounded-lg p-4">
               <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
                 <FontAwesomeIcon icon={faSeedling} className="w-7 h-7 text-amber-500 ml-2" />
                 {t.virtues}</h2>
@@ -114,7 +114,7 @@ function PersonDetailPage() {
 
           <Timeline events={person.events || []} participations={person.participations || []} death={person} />
 
-          <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
+          <div className="bg-black border border-white/10 rounded-lg p-4">
             <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
               <FontAwesomeIcon icon={faHexagonNodes} className="w-7 h-7 text-amber-500 ml-2" />
               {t.relations}

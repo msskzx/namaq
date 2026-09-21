@@ -90,7 +90,7 @@ export default function ClaimEvidence({
   const shown = claims.slice(first, first + pageSize);
 
   return (
-    <section className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-4">
+    <section className="bg-black border border-white/10 rounded-lg p-4">
       <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">{title}</h2>
       <ul className="space-y-4">
         {shown.map((claim) => (

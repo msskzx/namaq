@@ -164,7 +164,7 @@ export default function Timeline({ events, participations = [], death }: Timelin
   }
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow p-6 mb-6">
+    <div className="bg-black border border-white/10 rounded-lg p-6 mb-6">
       {/* Header */}
       <h2 className="text-3xl mb-6 text-gray-900 dark:text-gray-200 flex items-center gap-2">
         <FontAwesomeIcon icon={faTimeline} className="w-7 h-7 text-amber-500" />

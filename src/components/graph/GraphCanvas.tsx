@@ -67,7 +67,7 @@ const GROUP_ROW = 'mt-3 flex flex-wrap gap-3 border-t border-amber-200 pt-3 dark
 
 // Placement only: a control sitting on the canvas needs its own ground to stay
 // legible against whatever the graph draws behind it.
-const FLOATING_OVER_CANVAS = 'absolute top-2 z-10 bg-gray-50/90 backdrop-blur dark:bg-gray-900/90';
+const FLOATING_OVER_CANVAS = 'absolute top-2 z-10 bg-black/90 backdrop-blur border border-white/10';
 
 // Keep disabled kinds and relations available even when absent from the response.
 const ALL_RELATION_TYPES = sortRelationTypes(RELATION_ORDER.filter(type => governingRelationType(type) === type));
@@ -839,7 +839,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
         // scrolls and hides its overflow, and it sits at the bottom of the
         // screen when collapsed, so a dropdown opening downwards from the
         // button lands outside the screen with no way to reach it.
-        <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="fixed inset-x-3 bottom-3 z-[70] max-h-[70dvh] overflow-y-auto rounded-lg border border-amber-400 bg-gray-50 p-3 shadow-lg lg:inset-x-auto lg:bottom-auto lg:top-14 lg:start-3 lg:w-64 lg:max-h-[80dvh] dark:bg-gray-950">
+        <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="fixed inset-x-3 bottom-3 z-[70] max-h-[70dvh] overflow-y-auto rounded-lg border border-amber-400 bg-black p-3 lg:inset-x-auto lg:bottom-auto lg:top-14 lg:start-3 lg:w-64 lg:max-h-[80dvh]">
           <ul className="flex flex-col gap-1">
             {navLinks.map(link => (
               <li key={link.href}>
@@ -905,7 +905,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
             {t.graph.nodesList}
           </Button>
         </div>
-        {showNodesPanel && <div className="mt-3 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
+        {showNodesPanel && <div className="mt-3 rounded-lg border border-white/10 p-3">
           <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100 capitalize">{t.graph.nodesInView}</h2>
           <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{t.graph.selectEntryHint}</p>
           <ul className="mt-2 space-y-1">
@@ -941,7 +941,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
       // here, on the wrapper. Putting it on the canvas layer instead buried the
       // panel, which sits lower so the graph can fill the screen behind it.
       <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="relative z-[100]">
-        <div className="fixed inset-0 z-0 bg-gray-50 dark:bg-gray-900" role="region" aria-label={t.graph.interactiveGraph}>
+        <div className="fixed inset-0 z-0 bg-black" role="region" aria-label={t.graph.interactiveGraph}>
           <div className={`${FLOATING_OVER_CANVAS} flex items-center gap-2 ${language === 'ar' ? 'left-2' : 'right-2'}`}>
             <Button size="icon" onClick={() => fitToView(true)} aria-label={t.graph.fitGraph}>
               <FontAwesomeIcon icon={faMagnifyingGlassMinus} />
@@ -955,8 +955,8 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
         <div
           ref={panelRef}
           className={panelExpanded
-            ? 'fixed inset-x-0 bottom-0 z-[60] flex max-h-[75dvh] flex-col overflow-hidden rounded-t-lg border-t border-amber-400 bg-white pb-[env(safe-area-inset-bottom)] shadow-lg lg:inset-y-0 lg:pb-0 lg:bottom-auto lg:start-0 lg:end-auto lg:h-full lg:max-h-none lg:w-80 lg:rounded-none lg:border-t-0 lg:border-e lg:shadow-none dark:border-gray-700 dark:bg-gray-800'
-            : 'fixed inset-x-0 bottom-0 z-[60] rounded-t-lg border-t border-amber-400 bg-white pb-[env(safe-area-inset-bottom)] shadow-lg lg:inset-auto lg:top-3 lg:start-3 lg:rounded-lg lg:border lg:pb-0 dark:border-gray-700 dark:bg-gray-800'
+            ? 'fixed inset-x-0 bottom-0 z-[60] flex max-h-[75dvh] flex-col overflow-hidden rounded-t-lg border-t border-amber-400 bg-black pb-[env(safe-area-inset-bottom)] lg:inset-y-0 lg:pb-0 lg:bottom-auto lg:start-0 lg:end-auto lg:h-full lg:max-h-none lg:w-80 lg:rounded-none lg:border-t-0 lg:border-e'
+            : 'fixed inset-x-0 bottom-0 z-[60] rounded-t-lg border-t border-amber-400 bg-black pb-[env(safe-area-inset-bottom)] lg:inset-auto lg:top-3 lg:start-3 lg:rounded-lg lg:border lg:pb-0'
           }
         >
           {panelExpanded ? panelContent : collapsedBar}
@@ -976,7 +976,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
   return (
     <div
       dir={language === 'ar' ? 'rtl' : 'ltr'}
-      className="relative h-[85vh] min-h-[40rem] overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700"
+      className="relative h-[85vh] min-h-[40rem] overflow-hidden rounded-lg border border-white/10"
       role="region"
       aria-label={t.graph.interactiveGraph}
     >

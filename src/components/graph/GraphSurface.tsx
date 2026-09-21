@@ -158,7 +158,7 @@ const GraphSurface = forwardRef<Methods, GraphSurfaceProps>(function GraphSurfac
         graphData={graphData}
         nodeLabel="label"
         linkLabel={linkLabel ? (link) => linkLabel!(link as unknown as GraphLink) : undefined}
-        backgroundColor={background ?? (isDark ? '#1f2937' : '#f9fafb')}
+        backgroundColor={background ?? '#000000'}
         linkColor={(link) => edgeColor(link as unknown as GraphLink)}
         linkWidth={1.5}
         linkDirectionalArrowLength={3.5}
@@ -193,7 +193,7 @@ const GraphSurface = forwardRef<Methods, GraphSurfaceProps>(function GraphSurfac
         }}
       />
       {statuses.length > 0 && (
-        <div className="absolute bottom-2 left-2 z-10 flex flex-wrap gap-2 rounded bg-gray-50/90 px-2 py-1 backdrop-blur dark:bg-gray-900/90">
+        <div className="absolute bottom-2 left-2 z-10 flex flex-wrap gap-2 rounded border border-white/10 bg-black/90 px-2 py-1 backdrop-blur">
           {statuses.map((status) => (
             <span key={status} className="flex items-center gap-1.5 text-xs text-gray-700 dark:text-gray-300">
               <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PARTICIPATION_STATUS_COLOR[status] }} />

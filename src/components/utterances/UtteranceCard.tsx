@@ -45,7 +45,7 @@ export default function UtteranceCard({ utterance }: { utterance: Utterance }) {
   const wherePath = utterance.event ? 'events' : 'battles';
 
   return (
-    <article className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-lg p-4">
+    <article className="bg-black border border-white/10 rounded-lg p-4">
       <div className="flex flex-wrap items-center gap-2 mb-3">
         <FontAwesomeIcon
           icon={utterance.kind === 'POETRY' ? faFeatherPointed : faQuoteLeft}

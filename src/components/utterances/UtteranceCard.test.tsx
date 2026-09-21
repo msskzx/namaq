@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import UtteranceCard from './UtteranceCard';
 import UtteranceGroup from './UtteranceGroup';
 import type { Utterance } from '@/types/utterance';
@@ -112,5 +112,33 @@ describe('UtteranceGroup', () => {
   it('needs no sex in English', () => {
     render(<UtteranceGroup utterances={[utterance()]} variant="about" />);
     expect(screen.getByText('Said about them')).toBeTruthy();
+  });
+
+  // Uses the app's own Pagination component (src/components/common/Pagination.tsx)
+  // rather than a bespoke control, same as ClaimEvidence and SourceAccountReader.
+  it('pages forward and back through the utterances', () => {
+    const many = Array.from({ length: 12 }, (_, index) =>
+      utterance({ id: `u-${index}`, textArabic: `قول رقم ${index}` }),
+    );
+
+    render(<UtteranceGroup utterances={many} variant="said" pageSize={5} />);
+
+    expect(screen.getByText('قول رقم 0')).toBeTruthy();
+    expect(screen.queryByText('قول رقم 5')).toBeNull();
+
+    fireEvent.click(screen.getByText('Next'));
+
+    expect(screen.getByText('قول رقم 5')).toBeTruthy();
+    expect(screen.queryByText('قول رقم 0')).toBeNull();
+
+    fireEvent.click(screen.getByText('Previous'));
+
+    expect(screen.getByText('قول رقم 0')).toBeTruthy();
+  });
+
+  it('offers no pagination when everything fits on one page', () => {
+    render(<UtteranceGroup utterances={[utterance()]} variant="said" />);
+
+    expect(screen.queryByText('Next')).toBeNull();
   });
 });
