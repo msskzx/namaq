@@ -30612,6 +30612,15 @@
           "extractionUrl": "https://shamela.ws/book/10906/428",
           "excerptArabic": "وقال موسى بن عقبة, عن ابن شهاب، في قصة بناء المسجد: فطفق هو وأصحابه ينقلون اللبن، ويقول وهو ينقل اللبن معهم:\nهذا الحمال لا حمال خيبر ... هذا أبر ربنا وأطهر",
           "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/284-p1",
+          "volume": "السيرة 1",
+          "pageReference": "284",
+          "extractionUrl": "https://shamela.ws/book/10906/422",
+          "excerptArabic": "ثم بناه مسجدا، وكان ينقل اللبن معهم ويقول:\nهذا الحمال لا حمال خيبر ... هذا أبر ربنا وأطهر",
+          "accessedAt": "2026-09-20"
         }
       ]
     },
@@ -30899,14 +30908,566 @@
           "extractionUrl": "https://shamela.ws/book/10906/269",
           "excerptArabic": "وكان أبو قيس بن الأسلت يحب قريشا, وكان لهم صهرا، وعنده أرنب ابنة أسد بن عبد العزى, وكان يقيم بمكة السنين بزوجته، فقال:\nأيا راكبا إما عرضت فبلغن ... مغلغلة عني لؤي بن غالب\nرسول امرئ قد راعه ذات بينكم ... على النأي محزون بذلك ناصب\nأعيذكم بالله من شر صنعكم ... وشر تباغيكم ودس العقارب\nمتى تبعثوها تبعثوها ذميمة ... هي الغول للأقصين أو للأقارب\nأقيموا لنا دينا حنيفا فأنتم ... لنا غاية قد نهتدي بالذوائب\nفقوموا فصلوا ربكم وتمسحوا ... بأركان هذا البيت بين الأخاشب\nفعندكم منه بلاء مصدق ... غداة أبي يكسوم هادي الكتائب\nفلما أتاكم نصر ذي العرش ردهم ... جنود المليك بين ساف وحاصب\nفولوا سراعا هاربين ولم يؤب ... إلى أهله ملجيش غير عصائب",
           "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/294-p6",
+          "volume": "السيرة 1",
+          "pageReference": "294-295",
+          "extractionUrl": "https://shamela.ws/book/10906/432",
+          "excerptArabic": "وكان يحض الأوس على الإسلام، وكان قبل الهجرة يتأله ويدعي الحنيفية، ويحض قريشا على الإسلام، فقال قصيدته المشهورة التي أولها:\nأيا راكبا إما عرضت فبلغن ... مغلغلة عني لؤي بن غالب\nأقيموا لنا دينا حنيفا فأنتمو ... لنا قادة قد يقتدى بالذوائب",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/verses-ibn-al-harith-habashah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "قال عبد الله بن الحارث بن قيس السهمي في الهجرة إلى الحبشة: يا راكبا بلغن عني مغلغلة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/147-p5",
+          "volume": "السيرة 1",
+          "pageReference": "147-148",
+          "extractionUrl": "https://shamela.ws/book/10906/285",
+          "excerptArabic": "فكان جميع من لحق بأرض الحبشة، أو ولد بها، ثلاثة وثمانين رجلا، فعبدوا الله وحمدوا جوار النجاشي, فقال عبد الله بن الحارث بن قيس السهمي:\nيا راكبا بلغن عني مغلغلة ... من كان يرجو بلاغ الله والدين\nكل امرئ من عباد الله مضطهد ... ببطن مكة مقهور ومفتون\nأنا وجدنا بلاد الله واسعة ... تنجي من الذل والمخزاة والهون\nفلا تقيموا على ذل الحياة وخز ... ي في الممات وعيب غير مأمون\nإنا تبعنا نبي الله واطرحوا ... قول النبي وعالوا في الموازين\nفاجعل عذابك في القوم الذي بغوا ... وعائذ بك أن يعلوا فيطغوني",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "ibn-mazun/verses-umayyah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "uthman-ibn-mazun",
+      "assertion": "عاتب عثمان بن مظعون أمية بن خلف ابن عمه وكان يؤذيه: أتيم بن عوف والذي جاء بغضة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/148-p7",
+          "volume": "السيرة 1",
+          "pageReference": "148",
+          "extractionUrl": "https://shamela.ws/book/10906/286",
+          "excerptArabic": "وقال عثمان بن مظعون يعاتب أمية بن خلف ابن عمه، وكان يؤذيه:\nأتيم بن عوف والذي جاء بغضة ... ومن دونه الشرمان والبرك أكتع\nأأخرجتني من بطن مكة أيمنا ... وأسكنتني في سرح بيضاء نقذع\nتريش نبالا لا يواتيك ريشها ... وتبري نبالا ريشها لك أجمع\nوحاربت أقواما كراما أعزة ... وأهلكت أقواما بهم كنت تفزع\nستعلم إن نابتك يوما ملمة ... وأسلمك الأرياش ما كنت تصنع",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/verses-jinniyyat-al-kahin",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "أنشدت جنية كاهن من كهان الجاهلية: ألم تر الجن وإبلاسها.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/163-p2",
+          "volume": "السيرة 1",
+          "pageReference": "163",
+          "extractionUrl": "https://shamela.ws/book/10906/301",
+          "excerptArabic": "قال: بينا أنا جالس جاءتني أعرف فيها الفزع قالت:\nألم تر الجن وإبلاسها ... ويأسها بعد وإبلاسها\nولحوقها بالقلاص وأحلاسها ... وإياسها من أنساكها",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/verses-rai-sawad-ula",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "قال رئي سواد بن قارب في الليلة الأولى: عجبت للجن وأنجاسها.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/165-p1",
+          "volume": "السيرة 1",
+          "pageReference": "165",
+          "extractionUrl": "https://shamela.ws/book/10906/303",
+          "excerptArabic": "قال: قم فافهم واعقل إن كنت تعقل، قد بعث رسول من لؤي بن غالب, ثم أنشأ يقول:\nعجبت للجن وأنجاسها ... وشدها العيس بأحلاسا\nتهوي إلى مكة تبغي الهدى ... ما مؤمنوها مثل أرجاسها\nفانهض إلى الصفوة من هاشم ... وآسم بعينيك إلى راسها",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/verses-rai-sawad-thaniyah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "قال رئي سواد بن قارب في الليلة الثانية: عجبت للجن وتطلابها.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/165-p5",
+          "volume": "السيرة 1",
+          "pageReference": "165",
+          "extractionUrl": "https://shamela.ws/book/10906/303",
+          "excerptArabic": "فلما كان من الليلة الثانية أتاني فأنبهني، ثم قال:\nعجبت للجن وتطلابها ... وشدها العيس بأقتابها\nتهوي إلى مكة تبغي الهدى ... ليس قداماها كأذنابها\nفانهض إلى الصفوة من هاشم ... واسم بعينيك إلى نابها",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/verses-rai-sawad-thalithah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "قال رئي سواد بن قارب في الليلة الثالثة: عجبت للجن وتخبارها.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/165-p9",
+          "volume": "السيرة 1",
+          "pageReference": "165",
+          "extractionUrl": "https://shamela.ws/book/10906/303",
+          "excerptArabic": "فلما كانت الليلة الثالثة أتاني فأنبهني، ثم قال:\nعجبت للجن وتخبارها ... وشدها العيس بأكوارها\nتهوي إلى مكة تبغي الهدى ... ليس ذوو الشر كأخيارها\nفانهض إلى الصفوة من هاشم ... ما مؤمنو الجن ككفارها",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/verses-sawad-ibn-qarib",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "أنشد سواد بن قارب النبي صلى الله عليه وسلم: أتاني رئي بعد ليل وهجعة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/166-p1",
+          "volume": "السيرة 1",
+          "pageReference": "166",
+          "extractionUrl": "https://shamela.ws/book/10906/304",
+          "excerptArabic": "قلت شعرا فاسمعه مني:\nأتاني رئي بعد ليل وهجعة ... ولم يك فيما قد بلوت بكاذب\nثلاث ليال قوله كل ليلة ... أتاك نبي من لؤي بن غالب\nفشمرت عن ساقي الإزار ووسطت ... بي الذغلب الوجناء عند السباسب\nفأشهد أن الله لا شيء غيره ... وأنك مأمون على كل غائب\nوأنك أدنى المرسلين شفاعة ... إلى الله يابن الأكرمين الأطايب\nفمرنا بما يأتيك يا خير من مشى ... وإن كان فيما جاء شيب الذوائب\nفكن لي شفيعا يوم لا ذو شفاعة ... سواك بمغن عن سواد بن قارب",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/verses-hisham-ibn-al-walid",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "قال هشام بن الوليد يحذر قومه من قتل أخيه: ألا لا تقتلن أخي عييش.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/178-p1",
+          "volume": "السيرة 1",
+          "pageReference": "178",
+          "extractionUrl": "https://shamela.ws/book/10906/316",
+          "excerptArabic": "قال: هذا فعليكم به فعاتبوه، يعني أخاه الوليد، ثم إياكم ونفسه، وقال:\nألا لا تقتلن أخي عييش ... فيبقى بيننا أبدا تلاحي",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/verses-suwayd-ibn-as-samit",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "قال سويد بن الصامت، وهو الذي عرض على النبي صلى الله عليه وسلم مجلة لقمان: ألا رب من تدعو صديقا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/235-p3",
+          "volume": "السيرة 1",
+          "pageReference": "235-236",
+          "extractionUrl": "https://shamela.ws/book/10906/373",
+          "excerptArabic": "وقال البكائي، عن ابن إسحاق، قال: وسويد الذي يقول:\nألا رب من تدعو صديقا ولو ترى ... مقالته بالغيب ساءك ما يفرى\nمقالته كالشهد ما كان شاهدا ... وبالغيب مأثور على ثغرة النحر\nيسرك باديه وتحت أديمه ... تميمة غش تبترى عقب الظهر\nتبين لك العينان ما هو كاتم ... من الغل والبغضاء بالنظر الشزر\nفرشني بخير طالما قد بريتني ... وخير الموالي من يريش ولا يبري",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/verses-hatif-as-sadan",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "سمعت قريش هاتفا على أبي قبيس يقول: فإن يسلم السعدان يصبح محمد بمكة لا يخشى خلاف المخالف.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/239-p2",
+          "volume": "السيرة 1",
+          "pageReference": "239",
+          "extractionUrl": "https://shamela.ws/book/10906/377",
+          "excerptArabic": "سمعت قريش قائلا يقول في الليل على أبي قبيس:\nفإن يسلم السعدان يصبح محمد ... بمكة لا يخشى خلاف المخالف",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/verses-hatif-saad-al-aws",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "ثم سمعوا الهاتف في الليلة الثانية: أيا سعد الأوس كن أنت ناصرا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/239-p4",
+          "volume": "السيرة 1",
+          "pageReference": "239",
+          "extractionUrl": "https://shamela.ws/book/10906/377",
+          "excerptArabic": "فلما كان في الليلة الثانية سمعوا الهاتف يقول:\nأيا سعد الأوس كن أنت ناصرا ... ويا سعد سعد الخزرجين الغطارف\nأجيبا إلى داعي الهدى وتمنيا ... على الله في الفردوس منية عارف\nفإن ثواب الله للطالب الهدى ... جنان من الفردوس ذات رفارف",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/verses-amr-ibn-al-jamuh",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "قال عمرو بن الجموح لصنمه حين وجده في البئر: تالله لو كنت إلها لم تكن أنت وكلب وسط بئر في قرن.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/257-p3",
+          "volume": "السيرة 1",
+          "pageReference": "257",
+          "extractionUrl": "https://shamela.ws/book/10906/395",
+          "excerptArabic": "وقال:\nتالله لو كنت إلها لم تكن ... أنت وكلب وسط بئر في قرن\nأف لمصرعك إلا مستدن ... الآن فتشناك عن سوء الغبن\nالحمد لله العلي ذي المنن ... الواهب الرزق وديان الدين\nهو الذي أنقذني من قبل أن ... أكون في ظلمة قبر مرتهن",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "prophet/verses-isba-damiyat",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "قال لأبي بكر في الغار وقد أصاب يده حجر: إن أنت إلا إصبع دميت، وفي سبيل الله ما لقيت.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/268-p3",
+          "volume": "السيرة 1",
+          "pageReference": "268",
+          "extractionUrl": "https://shamela.ws/book/10906/406",
+          "excerptArabic": "قال: كان أبو بكر مع رسول الله صلى الله عليه وسلم في الغار، فأصاب يده حجر فقال:\nإن أنت إلا إصبع دميت ... وفي سبيل الله ما لقيت",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/verses-hatif-umm-mabad",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "سمع أهل مكة هاتفا يتغنى: جزى الله رب الناس خير جزائه رفيقين حلا خيمتي أم معبد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/274-p1",
+          "volume": "السيرة 1",
+          "pageReference": "274",
+          "extractionUrl": "https://shamela.ws/book/10906/412",
+          "excerptArabic": "يتغنى بأبيات من شعر غناء العرب، وإن الناس ليتبعونه، ويسمعون صوته، حتى خرج من أعلى مكة، وهو يقول:\nجزى الله رب الناس خير جزائه ... رفيقين حلا خيمتي أم معبد\nهما نزلا بالبر ثم تروحا ... فأفلح من أمسى رفيق محمد\nليهن بني كعب مكان فتاتهم ... ومقعدها للمؤمنين بمرصد",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/verses-sirmah-ibn-qays",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "كان ابن عباس يختلف إلى صرمة بن قيس الأنصاري ليروي أبياته: ثوى في قريش بضع عشرة حجة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/281-p2",
+          "volume": "السيرة 1",
+          "pageReference": "281",
+          "extractionUrl": "https://shamela.ws/book/10906/419",
+          "excerptArabic": "رأيت ابن عباس يختلف إلى صرمة بن قيس الأنصاري, كان يروي هذه الأبيات:\nثوى في قريش بضع عشرة حجة ... يذكر لو ألفى صديقا مواتبا\nويعرض في أهل المواسم نفسه ... فلم ير من يؤوي ولم ير داعيا\nفلما أتانا واطمأنت به النوى ... وأصبح مسرورا بطيبة راضيا\nوأصبح ما يخشى ظلامه ظالم ... بعيد ولا يخشى من الناس راعيا\nبذلنا له الأموال من جل مالنا ... وأنفسنا عند الوغي والتآسيا\nنعادي الذي عادى من الناس كلهم ... جميعا وإن كان الحبيب المواسيا\nونعلم أن الله لا شيء غيره ... وأن كتاب الله أصبح هاديا",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "prophet/rajaz-al-akhirah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "كان يرتجز في بناء المسجد: اللهم لا خير إلا خير الآخره، فارحم الأنصار والمهاجره.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/290-p7",
+          "volume": "السيرة 1",
+          "pageReference": "290",
+          "extractionUrl": "https://shamela.ws/book/10906/428",
+          "excerptArabic": "ويقول:\nاللهم لا خير إلا خير الآخره ... فارحم الأنصار والمهاجره",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/284-p3",
+          "volume": "السيرة 1",
+          "pageReference": "284",
+          "extractionUrl": "https://shamela.ws/book/10906/422",
+          "excerptArabic": "ويقول:\nاللهم إن الأجر أجر الآخره ... فارحم الأنصار والمهاجره",
+          "accessedAt": "2026-09-20"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/290-p2",
+          "volume": "السيرة 1",
+          "pageReference": "290",
+          "extractionUrl": "https://shamela.ws/book/10906/428",
+          "excerptArabic": "وجعلوا ينقلون الصخر، وهم يرتجزون، ورسول الله صلى الله عليه وسلم معهم، ويقولون:\nاللهم لا خير إلا خير الآخره ... فانصر الأنصار والمهاجره",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "umm-salamah/verses-al-walid",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umm-salamah",
+      "assertion": "بكت أم سلمة ابن عمها الوليد بن الوليد بن المغيرة: يا عين فابكي للوليد بن الوليد بن المغيره.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/319-p1",
+          "volume": "السيرة 1",
+          "pageReference": "319",
+          "extractionUrl": "https://shamela.ws/book/10906/456",
+          "excerptArabic": "فبكته أم سلمة، وهي بنت عمه:\nيا عين فابكي للوليـ ... ـد بن الوليد بن المغيره\nقد كان عيثا في السنيـ ... ـن ورحمة فينا وميره\nضخم الدسيعة ماجدا ... يسمو إلى طلب الوتيره\nمثل الوليد بن الوليد ... أبي الوليد كفى العشيره",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "atikah/verses-badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "atikah-bint-abd-al-muttalib",
+      "assertion": "قالت عاتكة بعد بدر، وقد كذبوا رؤياها: ألم تكن الرؤيا بحق وجاءكم بتصديقها فل من القوم هارب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/324-p2",
+          "volume": "السيرة 1",
+          "pageReference": "324",
+          "extractionUrl": "https://shamela.ws/book/10906/461",
+          "excerptArabic": "فأصاب قريشا ما أصابهم يوم بدر، فقالت عاتكة:\nألم تكن الرؤيا بحق وجاءكم ... بتصديقها فل من القوم هارب\nفقلتم ولم أكذب كذبت وإنما ... يكذبنا بالصدق من هو كاذب",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "hassan/verses-al-buwayrah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hassan-ibn-thabit",
+      "assertion": "قال حسان في تحريق نخل بني النضير: وهان على سراة بني لؤي حريق بالبويرة مستطير.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/383-p1",
+          "volume": "السيرة 1",
+          "pageReference": "383",
+          "extractionUrl": "https://shamela.ws/book/10906/520",
+          "excerptArabic": "قطع نخل بني النضير وحرق، ولها يقول حسان بن ثابت:\nوهان على سراة بني لؤي ... حريق بالبويرة مستطير",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/verses-kaab-ibn-al-ashraf",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "أول ما خرج من كعب بن الأشرف حين أعلن معاداة النبي صلى الله عليه وسلم وهجاءه: أذاهب أنت لم تحلل بمنقبة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/386-p3",
+          "volume": "السيرة 1",
+          "pageReference": "386",
+          "extractionUrl": "https://shamela.ws/book/10906/523",
+          "excerptArabic": "ولحق كعب بن الأشرف بمكة إلى أن قدم المدينة معلنا بمعاداة النبي صلى الله عليه وسلم وهجائه، فكان أول ما خرج منه قوله:\nأذاهب أنت لم تحلل بمنقبة ... وتارك أنت أم الفضل بالحرم\nصفراء رادعة لو تعصر انعصرت ... من ذي البوارير والحناء والكتم\nإحدى بني عامر هام الفؤاد بها ... ولو تشاء شفت كعبا من السقم\n. . . لم أر شمسا قبل طلع ... حتى تبدت لنا في ليلة الظلم",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "sira/verses-abu-azzah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "خرج أبو عزة يسير في تهامة يدعو بني كنانة قبل أحد: إيها بني عبد مناة الرزام.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/394-p3",
+          "volume": "السيرة 1",
+          "pageReference": "394",
+          "extractionUrl": "https://shamela.ws/book/10906/531",
+          "excerptArabic": "فخرج أبو عزة يسير في تهامة ويدعو بني كنانة، ويقول:\nإيهًا بني عبد مناة الرزام ... أنتم حماة وأبوكم حام\nلا تعدوني نصركم بعد العام ... لا تسلموني لا يحل إسلام",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "hassan/verses-utaybah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hassan-ibn-thabit",
+      "assertion": "قال حسان فيمن أدمى فم النبي صلى الله عليه وسلم يوم أحد: إذا الله جازى معشرا بفعالهم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "utterance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/414-p7",
+          "volume": "السيرة 1",
+          "pageReference": "414",
+          "extractionUrl": "https://shamela.ws/book/10906/551",
+          "excerptArabic": "قال ابن إسحاق قال حسان بن ثابت:\nإذا الله جازى معشرا بفعالهم ... ونصرهم الرحمن رب المشارق\nفأخزاك ربي يا عتيب بن مالك ... ولقاك قبل الموت إحدى الصواعق\nبسطت يمينا للنبي تعمدا ... فأدميت فاه قطعت بالبوارق\nفهلا ذكرت الله والمنزل الذي ... تصير إليه عند إحدى البوائق",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "waraqah/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "waraqah-ibn-nawfal",
+      "assertion": "ورقة بن نوفل، تنصر وقرأ الكتب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/106-p2",
+          "volume": "السيرة 1",
+          "pageReference": "106",
+          "extractionUrl": "https://shamela.ws/book/10906/244",
+          "excerptArabic": "ثم انطلقت إلى ورقة بن نوفل، وهو ابن عمها، وكان قد تنصر وقرأ الكتب، فأخبرته بما رأى وسمع، فقال ورقة: قدوس، والذي نفسي بيده لئن كنت",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "waraqah/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "waraqah-ibn-nawfal",
+      "assertion": "تنصر وقرأ الكتب، وقال للنبي صلى الله عليه وسلم: هذا الناموس الذي أنزل على موسى، يا ليتني فيها جذعا حين يخرجك قومك.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/96-p1",
+          "volume": "السيرة 1",
+          "pageReference": "96",
+          "extractionUrl": "https://shamela.ws/book/10906/234",
+          "excerptArabic": "فقال ورقة: هذا الناموس الذي أنزل على موسى، يا ليتني فيها جذعا حين يخرجك قومك، قال: \"أومخرجي هم\"؟. قال: نعم، إنه لم يأت أحد بما جئت به إلا عودي وأوذي، وإن يدركني يومك أنصرك نصرا مؤزرا. ثم لم ينشب ورقة أن توفي.",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "waraqah/cousin-khadijah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "waraqah-ibn-nawfal",
+      "assertion": "ورقة بن نوفل ابن عم خديجة بنت خويلد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PATERNAL_COUSIN",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "khadijah-bint-khuwaylid",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/106-p2",
+          "volume": "السيرة 1",
+          "pageReference": "106",
+          "extractionUrl": "https://shamela.ws/book/10906/244",
+          "excerptArabic": "ثم انطلقت إلى ورقة بن نوفل، وهو ابن عمها، وكان قد تنصر وقرأ الكتب، فأخبرته بما رأى وسمع، فقال ورقة: قدوس، والذي نفسي بيده لئن كنت",
+          "accessedAt": "2026-09-20"
+        }
+      ]
+    },
+    {
+      "key": "waraqah/uncle-khadijah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "waraqah-ibn-nawfal",
+      "assertion": "وقال ابن إسحاق: هو عمها، لا ابن عمها.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PATERNAL_UNCLE",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "khadijah-bint-khuwaylid",
+      "disputed": true,
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/100-p2",
+          "volume": "السيرة 1",
+          "pageReference": "100",
+          "extractionUrl": "https://shamela.ws/book/10906/238",
+          "excerptArabic": "وبه، قال ابن إسحاق: وكانت خديجة قد ذكرت لعمها ورقة بن نوفل، وكان قد قرأ الكتب وتنصر، ما حدثها ميسرة من قول الراهب وإظلال الملكين، فقال: لئن كان هذا حقا يا خديجة إن محمدا لنبي هذه الأمة، وقد عرفت أن لهذه الأمة نبيا ينتظر زمانه، قال: وجعل ورقة يستبطئ الأمر ويقول: حتى متى؟ وقال:",
+          "accessedAt": "2026-09-20"
         }
       ]
     }
   ],
   "approval": {
-    "revision": "4531f0b43af62f89",
+    "revision": "9f627cec84636ab0",
     "approvedAt": "2026-09-21",
     "approvedBy": "msskzx",
-    "note": "Approved for publication of chapters one to five, including the heading sweep that went back over them and the sections it turned up. All 277 claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
+    "note": "Approved for publication of chapters one to five, including the heading sweep that went back over them and the sections it turned up. All 303 claims are Not reviewed: the pages are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review. Every later chapter changes the revision and needs approving again."
   }
 }

@@ -6,6 +6,7 @@ const waraqahInYakuHaqqan = {
   kind: 'UTTERANCE',
   slug: 'waraqah-in-yaku-haqqan',
   utteranceKind: 'POETRY',
+  speaker: 'waraqah-ibn-nawfal',
   subject: 'prophet-muhammad',
   textArabic: {
     value: [
@@ -17,9 +18,7 @@ const waraqahInYakuHaqqan = {
     ].join('\n'),
     claims: ['sira/verses-waraqah-in-yaku'],
   },
-  fields: {
-    speakerName: { value: 'ورقة بن نوفل', claims: ['sira/verses-waraqah-in-yaku'] },
-  },
+  fields: {},
 } satisfies CatalogUtterance;
 
 export default waraqahInYakuHaqqan;

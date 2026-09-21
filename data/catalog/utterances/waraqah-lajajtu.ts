@@ -1,14 +1,14 @@
 import type { CatalogUtterance } from '@/lib/catalog/types';
 
 /**
- * Waraqah ibn Nawfal has no subject in the app yet, so his name is text here.
- * That is a statement about the catalog and not about him: he is all through
- * this chapter, and an entry of his own would move both his poems onto a link.
+ * Waraqah has a subject now, so the speaker is a link rather than a name. He
+ * had been text here only because nothing in the catalog held him.
  */
 const waraqahLajajtu = {
   kind: 'UTTERANCE',
   slug: 'waraqah-lajajtu',
   utteranceKind: 'POETRY',
+  speaker: 'waraqah-ibn-nawfal',
   subject: 'prophet-muhammad',
   textArabic: {
     value: [
@@ -25,7 +25,6 @@ const waraqahLajajtu = {
     claims: ['sira/verses-waraqah-lajajtu'],
   },
   fields: {
-    speakerName: { value: 'ورقة بن نوفل', claims: ['sira/verses-waraqah-lajajtu'] },
     occasion: {
       value: 'قالها وهو يستبطئ الأمر بعد أن حدثته خديجة بقول الراهب وإظلال الملكين.',
       claims: ['sira/verses-waraqah-lajajtu'],

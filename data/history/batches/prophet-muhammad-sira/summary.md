@@ -846,9 +846,70 @@ Eleven are new here, on top of the five the structure arrived with:
 `DECLINED` entry for the one prose run. It moves forward as chapters are swept,
 never to make a failure go away.
 
-The remaining verse of chapters two to five is the next back-fill: the pages
-hold it and the test names it the moment the boundary moves. From chapter six
-the verse is captured as it is read.
+## Chapters two to five's verse
+
+The boundary moved to `1/443-p1`, which puts the whole authored run under the
+check. **46 poems in chapters one to five, all recorded.**
+
+The detector got one thing right that a decline had been papering over. Prose
+borrows the same three dots to abbreviate a hadith it has already quoted, and
+marks it by what follows: `... الحديث`. That is the editor's own sign, not a
+hemistich, so the sweep skips it outright and `DECLINED` is empty. Four runs
+that would have needed declining are simply not verse.
+
+Twenty-two new poems. The ones worth naming:
+
+- **Two Abyssinia poems** (`1/148-p1`, `1/148-p8`). Abd Allah ibn al-Harith's
+  is tied to neither crossing, so it carries no event; Uthman ibn Mazun's is
+  reproach of his own cousin Umayyah ibn Khalaf, and he has a subject, so it is
+  a link.
+- **Four from the jinn sections** (`1/163-p3`, `1/165-p2`, `1/165-p6`,
+  `1/165-p10`) and **Sawad ibn Qarib's own answer** (`1/166-p2`). The three
+  nights are three records: the chapter prints them with the same opening and a
+  different rhyme each time, and joining them would invent a poem it never
+  printed.
+- **Two hawatif on Abu Qubays** (`1/239-p3`, `1/239-p5`). The first names no
+  Sa'd and Abu Sufyan spends the morning guessing; the second answers him.
+- **عمرو بن الجموح** to his own idol, found in a pit tied to a dead dog
+  (`1/257-p4`), and **the Prophet in the cave** to Abu Bakr, whose hand a stone
+  had cut (`1/268-p4`).
+- **The hatif of Umm Ma'bad** (`1/274-p2`), sung through upper Mecca by a voice
+  nobody could see, which is how the chapter has Mecca learn where he had gone.
+- **أم سلمة** for al-Walid ibn al-Walid (`1/319-p2`), the one poem in these
+  chapters by a Mother of the Believers, and **عاتكة** after Badr (`1/324-p3`),
+  answering the men who had called her dream a lie.
+- **حسان** twice (`1/383-p2`, `1/414-p8`), **كعب بن الأشرف**'s first open
+  hija (`1/386-p4`) and **أبو عزة** calling Kinanah out for Uhud after Badr let
+  him go on a promise (`1/394-p4`).
+
+Two quotations became citations rather than records. هذا الحمال لا حمال خيبر is
+printed twice in the same words (`1/284-p2`, `1/290-p6`), and أبو قيس's qasida
+is quoted a second time as قصيدته المشهورة التي أولها (`1/294-p7`) with one
+line's wording changed. Both join the claim that already holds them: one poem,
+one record, two citations. That is the opposite call from the لامية and the
+istisqa quotation, and for the opposite reason -- there the chapter frames two
+separate quotations, here it points back at one poem.
+
+The mosque's اللهم rajaz is one record with three citations for the same
+reason. `1/284-p4`, `1/290-p3` and `1/290-p8` differ over a word each way
+(إن الأجر أجر الآخره against لا خير إلا خير الآخره, فارحم against فانصر), which
+is three isnads on one rajaz rather than three poems.
+
+## ورقة بن نوفل
+
+He had been carrying two poems as `speakerName` for want of a subject. He has
+one now: no seed file declares him, so the catalog is his only author. He is not
+a Companion -- he died before the message spread, and the chapter says so in the
+same breath as his word to the Prophet -- but chapter one keeps returning to him.
+
+The chapter disagrees with itself about how he is related to Khadijah. Ibn Ishaq
+has عمها (`1/100-p2`), al-Zuhri's account ابن عمها (`1/106-p2`). The relation
+takes the cousin reading, which the chapter's own lineages support: Uthman ibn
+al-Huwayrith **ibn Asad** is called ابن عم ورقة at `1/79-p3`, so Waraqah
+descends from Asad, as Khadijah bint Khuwaylid **ibn Asad** does.
+`waraqah/uncle-khadijah` carries the other as DISPUTED.
+
+From chapter six the verse is captured as it is read.
 
 # Review
 
