@@ -36,7 +36,14 @@ function claimFields(claim: ClaimRecord, batchId: string) {
   };
 }
 
-async function writeAccounts(tx: Tx, batch: HistoryBatch, files: BatchFiles, sourceIds: Map<string, string>, batchId: string) {
+async function writeAccounts(
+  tx: Tx,
+  batch: HistoryBatch,
+  files: BatchFiles,
+  sourceIds: Map<string, string>,
+  batchId: string,
+  volumeIds: Map<string, Map<number, string>>,
+) {
   const accountIds = new Map<string, string>();
   const passageIds = new Map<string, string>();
   let pages = 0;
@@ -66,6 +73,13 @@ async function writeAccounts(tx: Tx, batch: HistoryBatch, files: BatchFiles, sou
     // Pages carry no authoring key of their own, so a re-import replaces the
     // account's text wholesale rather than matching pages one by one.
     await tx.sourceAccountPage.deleteMany({ where: { accountId: row.id } });
+    // A page names its own volume only where its entry crosses a binding;
+    // otherwise it is bound in the volume the entry opens in.
+    const volumes = volumeIds.get(account.sourceSlug);
+    const volumeOf = (page: (typeof account.pages)[number]) => {
+      const number = page.volumeNumber ?? account.volumeNumber;
+      return number === undefined ? null : (volumes?.get(number) ?? null);
+    };
     await tx.sourceAccountPage.createMany({
       data: account.pages.map((page) => ({
         accountId: row.id,
@@ -74,6 +88,7 @@ async function writeAccounts(tx: Tx, batch: HistoryBatch, files: BatchFiles, sou
         bodyMarkdown: files[page.bodyFile] ?? '',
         notesMarkdown: page.notesFile ? (files[page.notesFile] ?? null) : null,
         extractionUrl: page.extractionUrl ?? null,
+        volumeId: volumeOf(page),
       })),
     });
     pages += account.pages.length;
@@ -135,17 +150,40 @@ export async function importBatch(
     });
 
     const sourceIds = new Map<string, string>();
+    // Volume number -> row id, per source, for the accounts to link against.
+    const volumeIds = new Map<string, Map<number, string>>();
     for (const source of batch.sources) {
-      const { slug, ...fields } = source;
+      const { slug, volumes, ...fields } = source;
       const row = await tx.historicalSource.upsert({
         where: { slug },
         create: { slug, ...fields },
         update: fields,
       });
       sourceIds.set(slug, row.id);
+
+      // Volumes are added and updated, never cleared. A batch declares the
+      // volumes it knows about, and a batch that knows of none should not
+      // retract what another already recorded.
+      const bySource = new Map<number, string>();
+      for (const volume of volumes ?? []) {
+        const written = await tx.sourceVolume.upsert({
+          where: { sourceId_number: { sourceId: row.id, number: volume.number } },
+          create: { sourceId: row.id, number: volume.number, name: volume.name ?? null },
+          update: { name: volume.name ?? null },
+        });
+        bySource.set(volume.number, written.id);
+      }
+      // An account may name a volume another batch declared, so the map is
+      // filled from the table rather than from this batch alone.
+      const existing = await tx.sourceVolume.findMany({
+        where: { sourceId: row.id },
+        select: { id: true, number: true },
+      });
+      existing.forEach((volume) => bySource.set(volume.number, volume.id));
+      volumeIds.set(slug, bySource);
     }
 
-    const { accountIds, passageIds, pages } = await writeAccounts(tx, batch, files, sourceIds, batchRow.id);
+    const { accountIds, passageIds, pages } = await writeAccounts(tx, batch, files, sourceIds, batchRow.id, volumeIds);
 
     const claimIds = new Map<string, string>();
     for (const claim of batch.claims) {

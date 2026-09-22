@@ -76,6 +76,29 @@ describe('validateBatch', () => {
     expect(validateBatch(batch(), files())).toEqual([]);
   });
 
+  // A volume number is only meaningful against the volumes its own source
+  // declares, so a typo fails here rather than importing an unbound page.
+  it('rejects a page bound in a volume its source does not declare', () => {
+    const b = batch();
+    b.sources[0].volumes = [{ number: 1 }];
+    b.accounts[0].pages[0].volumeNumber = 2;
+
+    expect(validateBatch(b, files())).toContainEqual({
+      path: 'accounts[0].pages[0]',
+      message: `volumeNumber 2 is not a volume "${b.accounts[0].sourceSlug}" declares`,
+    });
+  });
+
+  it('rejects the same volume declared twice', () => {
+    const b = batch();
+    b.sources[0].volumes = [{ number: 1 }, { number: 1 }];
+
+    expect(validateBatch(b, files())).toContainEqual({
+      path: 'sources[0].volumes[1]',
+      message: 'volume 1 is declared twice',
+    });
+  });
+
   it('rejects a citation whose source is not declared', () => {
     const b = batch();
     b.claims[0].citations[0].sourceSlug = 'unknown-book';

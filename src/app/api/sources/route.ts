@@ -22,6 +22,7 @@ export async function GET() {
         url: true,
         notes: true,
         accounts: { select: { _count: { select: { pages: true } } } },
+        volumes: { select: { number: true, name: true }, orderBy: { number: 'asc' } },
       },
     });
 

@@ -133,8 +133,33 @@ model HistoricalSource {
 
   accounts  SourceAccount[]
   citations Citation[]
+  volumes   SourceVolume[]
 
   @@map("historical_sources")
+}
+
+/// One volume of one edition. A work is bound in volumes and the edition
+/// decides how many, so a volume belongs to the source rather than standing on
+/// its own: two editions of the same work divide it differently.
+///
+/// Declared whether or not anything has been read from it, which is the point
+/// of recording them at all -- a reader can see that a work runs to twenty-five
+/// volumes and that two of them have been read.
+model SourceVolume {
+  id       String  @id @default(cuid())
+  sourceId String
+  /// Position in the edition's own reading order, which is not always the
+  /// number printed on the spine: this edition opens with two appended sira
+  /// volumes before the numbered series begins.
+  number   Int
+  /// What the volume is called, where it is called anything.
+  name     String?
+
+  source   HistoricalSource    @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  pages    SourceAccountPage[]
+
+  @@unique([sourceId, number])
+  @@map("source_volumes")
 }
 
 /// How strongly the editorial team considers a claim supported. This describes
@@ -243,6 +268,8 @@ model SourceAccount {
   /// The work's own entry or section number, when it numbers entries.
   entryIdentifier String?
   titleArabic     String?
+  /// What the batch wrote about the volume, such as "السيرة ١-٢". Free text;
+  /// the volume each page is bound in is recorded on the page itself.
   volume          String?
   extractionUrl   String
   accessedAt      DateTime
@@ -271,12 +298,18 @@ model SourceAccountPage {
   bodyMarkdown  String  @db.Text
   notesMarkdown String? @db.Text
   extractionUrl String?
+  /// The volume this page is bound in. On the page rather than the account
+  /// because an account is a run of pages and a run can cross a binding: the
+  /// sira is 497 pages of one volume and 491 of the next.
+  volumeId      String?
 
   account  SourceAccount   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  volume   SourceVolume?   @relation(fields: [volumeId], references: [id], onDelete: SetNull)
   passages SourcePassage[]
 
   @@unique([accountId, sequence])
   @@index([accountId, printedPage])
+  @@index([volumeId])
   @@map("source_account_pages")
 }
 

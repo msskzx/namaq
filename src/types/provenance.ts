@@ -37,6 +37,18 @@ export type AccountSummary = Pick<
   'id' | 'subjectKind' | 'subjectSlug' | 'entryIdentifier' | 'titleArabic' | 'volume' | 'extractionUrl'
 > & {
   source: HistoricalSource;
+  /**
+   * The volumes this entry's pages are bound in, each with the run of pages
+   * that falls in it. Usually one; two where the entry crosses a binding.
+   */
+  volumes?: {
+    number: number;
+    name: string | null;
+    firstSequence: number;
+    firstPrintedPage: string | null;
+    lastSequence: number;
+    pageCount: number;
+  }[];
   pageCount: number;
   /** The subject's own name, when it has a profile row; a slug is not a name. */
   subjectName?: string | null;
@@ -92,6 +104,8 @@ export type SourceShelfEntry = Pick<
   | 'url'
   | 'notes'
 > & {
+  /** The edition's volumes, declared whether or not anything is read from one. */
+  volumes: { number: number; name: string | null }[];
   /** Entries read from this work, one per subject. */
   entryCount: number;
   /** Printed pages held across those entries. */

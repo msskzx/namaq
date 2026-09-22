@@ -21,6 +21,23 @@ export interface SourceRecord {
   digitalHost?: string;
   url?: string;
   notes?: string;
+  /**
+   * The edition's volumes, whether or not this batch reads from them. A work
+   * is bound in volumes and the edition decides how many, so recording them on
+   * the source is what lets a reader see the shape of the whole book rather
+   * than only the parts some entry happens to sit in.
+   */
+  volumes?: VolumeRecord[];
+}
+
+export interface VolumeRecord {
+  /**
+   * Position in the edition's own reading order, which is not always the
+   * number on the spine: this edition opens with appended sira volumes before
+   * its numbered series begins.
+   */
+  number: number;
+  name?: string;
 }
 
 export interface PassageRecord {
@@ -35,6 +52,12 @@ export interface PageRecord {
   bodyFile: string;
   notesFile?: string;
   extractionUrl?: string;
+  /**
+   * The volume this page is bound in, by the source's `number`. Omitted, the
+   * page takes its account's `volumeNumber`, so only the pages of an entry that
+   * crosses a binding need to say anything.
+   */
+  volumeNumber?: number;
   passages?: PassageRecord[];
 }
 
@@ -44,6 +67,12 @@ export interface AccountRecord {
   subjectSlug: string;
   entryIdentifier?: string;
   titleArabic?: string;
+  /**
+   * The volume this entry opens in, by the source's `number`, and so the volume
+   * of every page that does not name its own.
+   */
+  volumeNumber?: number;
+  /** What the batch wrote, such as "السيرة ١-٢" for an entry spanning two. */
   volume?: string;
   extractionUrl: string;
   accessedAt: string;
@@ -160,6 +189,7 @@ function checkAccount(
   account: AccountRecord,
   index: number,
   sourceSlugs: Set<string>,
+  volumeNumbers: Map<string, Set<number>>,
   files: BatchFiles,
   anchors: Set<string>,
   issues: ValidationIssue[],
@@ -169,6 +199,23 @@ function checkAccount(
   if (!sourceSlugs.has(account.sourceSlug)) {
     issues.push({ path, message: `unknown source "${account.sourceSlug}"` });
   }
+  // An entry may only sit in a volume its own source declares, so a typo in
+  // the number fails here rather than quietly importing an unlinked account.
+  const declared = volumeNumbers.get(account.sourceSlug);
+  if (account.volumeNumber !== undefined && !declared?.has(account.volumeNumber)) {
+    issues.push({
+      path,
+      message: `volumeNumber ${account.volumeNumber} is not a volume "${account.sourceSlug}" declares`,
+    });
+  }
+  account.pages.forEach((page, position) => {
+    if (page.volumeNumber !== undefined && !declared?.has(page.volumeNumber)) {
+      issues.push({
+        path: `${path}.pages[${position}]`,
+        message: `volumeNumber ${page.volumeNumber} is not a volume "${account.sourceSlug}" declares`,
+      });
+    }
+  });
   if (!isHttpUrl(account.extractionUrl)) {
     issues.push({ path, message: 'extractionUrl must be an http(s) URL' });
   }
@@ -259,16 +306,32 @@ export function validateBatch(batch: HistoryBatch, files: BatchFiles): Validatio
   }
 
   const sourceSlugs = new Set<string>();
+  const volumeNumbers = new Map<string, Set<number>>();
   batch.sources.forEach((source, index) => {
     if (sourceSlugs.has(source.slug)) {
       issues.push({ path: `sources[${index}]`, message: `duplicate source slug "${source.slug}"` });
     }
     sourceSlugs.add(source.slug);
     if (!source.title.trim()) issues.push({ path: `sources[${index}]`, message: 'title is required' });
+
+    const numbers = new Set<number>();
+    (source.volumes ?? []).forEach((volume, position) => {
+      const where = `sources[${index}].volumes[${position}]`;
+      if (!Number.isInteger(volume.number) || volume.number < 1) {
+        issues.push({ path: where, message: 'number must be a whole number from 1' });
+      } else if (numbers.has(volume.number)) {
+        issues.push({ path: where, message: `volume ${volume.number} is declared twice` });
+      } else {
+        numbers.add(volume.number);
+      }
+    });
+    volumeNumbers.set(source.slug, numbers);
   });
 
   const anchors = new Set<string>();
-  batch.accounts.forEach((account, index) => checkAccount(account, index, sourceSlugs, files, anchors, issues));
+  batch.accounts.forEach((account, index) =>
+    checkAccount(account, index, sourceSlugs, volumeNumbers, files, anchors, issues),
+  );
 
   const keys = new Set<string>();
   batch.claims.forEach((claim, index) => {
