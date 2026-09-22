@@ -22,6 +22,22 @@ const accountSummary = {
   _count: { select: { pages: true } },
 } as const;
 
+/**
+ * Where an entry begins in its work, taken from the host's page id for its
+ * first page.
+ *
+ * A SourceAccount records no position of its own, so `createdAt` is the only
+ * order the table has, and that is the order batches were imported rather than
+ * the order the work reads in: the pilot batch lands first and the sira, which
+ * opens the book, lands last. The host numbers its pages in the work's own
+ * sequence, so the first page's id stands in until an account carries its
+ * place itself. An entry with no id sorts last rather than jumping the queue.
+ */
+function openingPage(url: string | null | undefined) {
+  const id = url?.match(/(\d+)\s*$/)?.[1];
+  return id ? Number(id) : Number.MAX_SAFE_INTEGER;
+}
+
 export async function listAccounts(where: Prisma.SourceAccountWhereInput) {
   const rows = await prisma.sourceAccount.findMany({
     where,
@@ -39,11 +55,21 @@ export async function listAccounts(where: Prisma.SourceAccountWhereInput) {
     : [];
   const nameBySlug = new Map(people.map((person) => [person.slug, person.name]));
 
-  return rows.map(({ _count, ...account }) => ({
-    ...account,
-    pageCount: _count.pages,
-    subjectName: nameBySlug.get(account.subjectSlug) ?? null,
-  }));
+  const openings = rows.length
+    ? await prisma.sourceAccountPage.findMany({
+        where: { accountId: { in: rows.map((row) => row.id) }, sequence: 1 },
+        select: { accountId: true, extractionUrl: true },
+      })
+    : [];
+  const openingByAccount = new Map(openings.map((page) => [page.accountId, openingPage(page.extractionUrl)]));
+
+  return rows
+    .map(({ _count, ...account }) => ({
+      ...account,
+      pageCount: _count.pages,
+      subjectName: nameBySlug.get(account.subjectSlug) ?? null,
+    }))
+    .sort((a, b) => (openingByAccount.get(a.id) ?? 0) - (openingByAccount.get(b.id) ?? 0));
 }
 
 export async function readPage(accountId: string, sequence: number) {

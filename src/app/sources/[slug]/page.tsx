@@ -9,6 +9,7 @@ import { faArrowLeft, faArrowRight, faBookOpen } from '@fortawesome/free-solid-s
 import ErrorMessage from '@/components/common/ErrorMessage';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import SourceAccountReader from '@/components/people/SourceAccountReader';
+import SourceContents from '@/components/sources/SourceContents';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { fetcher } from '@/lib/swr';
 import type { AccountPage, AccountSummary, SourceShelfEntry } from '@/types/provenance';
@@ -168,25 +169,7 @@ export default function SourcePage({ params }: { params: Promise<{ slug: string 
                   {language === 'ar' ? 'محتويات الكتاب' : 'Contents'}
                 </h2>
 
-                <ul className="divide-y divide-gray-200 dark:divide-white/10 rounded-lg border border-gray-200 dark:border-white/10">
-                  {contents.accounts.map((account) => (
-                    <li key={account.id}>
-                      <Link
-                        href={`/sources/${slug}?book=${account.id}&page=1`}
-                        className="flex flex-wrap items-baseline justify-between gap-2 p-4 transition hover:bg-amber-50 dark:hover:bg-white/5"
-                      >
-                        <span dir="rtl" lang="ar" className="text-xl text-gray-900 dark:text-gray-100">
-                          {entryLabel(account)}
-                        </span>
-                        <span className="text-sm text-gray-600 dark:text-gray-400">
-                          {language === 'ar'
-                            ? `الصفحات: ${account.pageCount}`
-                            : `${account.pageCount} pages`}
-                        </span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+                <SourceContents slug={slug} accounts={contents.accounts} label={entryLabel} />
               </section>
             )}
           </>

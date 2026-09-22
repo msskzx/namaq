@@ -1,16 +1,19 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { findMany, findUnique, findPeople } = vi.hoisted(() => ({
+const { findMany, findUnique, findPeople, findOpenings } = vi.hoisted(() => ({
   findMany: vi.fn(),
   findUnique: vi.fn(),
   // listAccounts resolves each PERSON subject's own name so a reader that does
   // not already know whose entry it is can label it with something but a slug.
   findPeople: vi.fn(async () => []),
+  // ...and reads each account's first page to order them by where they open in
+  // the work rather than by when they were imported.
+  findOpenings: vi.fn(async () => []),
 }));
 vi.mock('@/lib/prisma', () => ({
   prisma: {
     sourceAccount: { findMany },
-    sourceAccountPage: { findUnique },
+    sourceAccountPage: { findUnique, findMany: findOpenings },
     person: { findMany: findPeople },
   },
 }));
