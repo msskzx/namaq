@@ -2,30 +2,51 @@
 
 import React, { use } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import useSWR from 'swr';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faArrowRight, faBookOpen } from '@fortawesome/free-solid-svg-icons';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import SourceAccountReader from '@/components/people/SourceAccountReader';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { fetcher } from '@/lib/swr';
-import type { AccountSummary, SourceShelfEntry } from '@/types/provenance';
+import type { AccountPage, AccountSummary, SourceShelfEntry } from '@/types/provenance';
 
 interface ShelfResponse {
   sources: SourceShelfEntry[];
 }
 
+interface AccountsResponse {
+  accounts: AccountSummary[];
+  account: AccountSummary | null;
+  page: AccountPage | null;
+}
+
 /**
- * One work, opened. The reader is the same component the profile uses: the
- * difference is only which accounts it may page through, and that the entries
- * here are named by whose they are rather than by the work, since within one
- * book the work is the thing they share.
+ * One work, opened at its contents. A book is not opened partway into whichever
+ * entry happens to be stored first, so the entries are listed until the reader
+ * picks one; `book` in the query is that choice, and it is the same parameter
+ * SourceAccountReader already writes when its own selector is used.
+ *
+ * The reader itself is the component the profile uses. The difference is only
+ * which accounts it may page through, and that the entries here are named by
+ * whose they are rather than by the work, since within one book the work is
+ * the thing they share.
  */
 export default function SourcePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
   const { language } = useLanguage();
+  const searchParams = useSearchParams();
+  const openEntry = searchParams.get('book');
+
   const { data, error, isLoading } = useSWR<ShelfResponse>('/api/sources', fetcher);
+  // Only the contents view needs the entry list up front; once one is open the
+  // reader fetches what it shows.
+  const { data: contents } = useSWR<AccountsResponse>(
+    openEntry ? null : `/api/sources/${slug}/accounts`,
+    fetcher,
+  );
 
   const source = data?.sources.find((candidate) => candidate.slug === slug);
 
@@ -118,12 +139,56 @@ export default function SourcePage({ params }: { params: Promise<{ slug: string 
               )}
             </header>
 
-            <SourceAccountReader
-              basePath={`/api/sources/${slug}`}
-              heading={language === 'ar' ? 'القراءة' : 'Reading'}
-              labelAccount={entryLabel}
-              selectorLabel={{ ar: 'الترجمة', en: 'Entry' }}
-            />
+            {openEntry ? (
+              <>
+                <Link
+                  href={`/sources/${slug}`}
+                  className="mb-4 inline-flex items-center gap-2 text-sm text-gray-600 underline dark:text-gray-400"
+                >
+                  <FontAwesomeIcon icon={language === 'ar' ? faArrowRight : faArrowLeft} className="w-3 h-3" />
+                  {/* Not الفهرس: the reader's own section selector already
+                      carries that name, and the two pick different things --
+                      this returns to the book's entries, that jumps within one. */}
+                  {language === 'ar' ? 'محتويات الكتاب' : 'Book contents'}
+                </Link>
+
+                <SourceAccountReader
+                  basePath={`/api/sources/${slug}`}
+                  heading={language === 'ar' ? 'القراءة' : 'Reading'}
+                  labelAccount={entryLabel}
+                  selectorLabel={{ ar: 'الترجمة', en: 'Entry' }}
+                />
+              </>
+            ) : !contents ? (
+              <LoadingSpinner />
+            ) : (
+              <section>
+                <h2 className="mb-4 text-3xl text-gray-900 dark:text-gray-200">
+                  <FontAwesomeIcon icon={faBookOpen} className="w-7 h-7 text-amber-500 mx-2" />
+                  {language === 'ar' ? 'محتويات الكتاب' : 'Contents'}
+                </h2>
+
+                <ul className="divide-y divide-gray-200 dark:divide-white/10 rounded-lg border border-gray-200 dark:border-white/10">
+                  {contents.accounts.map((account) => (
+                    <li key={account.id}>
+                      <Link
+                        href={`/sources/${slug}?book=${account.id}&page=1`}
+                        className="flex flex-wrap items-baseline justify-between gap-2 p-4 transition hover:bg-amber-50 dark:hover:bg-white/5"
+                      >
+                        <span dir="rtl" lang="ar" className="text-xl text-gray-900 dark:text-gray-100">
+                          {entryLabel(account)}
+                        </span>
+                        <span className="text-sm text-gray-600 dark:text-gray-400">
+                          {language === 'ar'
+                            ? `الصفحات: ${account.pageCount}`
+                            : `${account.pageCount} pages`}
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
           </>
         )}
       </div>
