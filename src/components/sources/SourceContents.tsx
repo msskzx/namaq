@@ -90,53 +90,72 @@ function VolumeEntry({
  */
 export default function SourceContents({
   slug,
+  volumes,
   accounts,
   label,
 }: {
   slug: string;
+  volumes: { number: number; name: string | null }[];
   accounts: AccountSummary[];
   label: (account: AccountSummary) => string;
 }) {
   const { language } = useLanguage();
-  const [openVolume, setOpenVolume] = useState<number | null>(0);
+  const [openVolume, setOpenVolume] = useState<number | null>(null);
 
-  const groups = accounts.reduce<{ volume: string | null; accounts: AccountSummary[] }[]>(
-    (built, account) => {
-      const volume = account.volume ?? null;
-      const last = built[built.length - 1];
-      if (last && last.volume === volume) last.accounts.push(account);
-      else built.push({ volume, accounts: [account] });
-      return built;
-    },
-    [],
-  );
+  // Every volume the edition has, not only the ones something was read from:
+  // a reader should be able to see that a work runs to twenty-eight volumes
+  // and that two of them have been read.
+  const groups = volumes.map((volume) => ({
+    ...volume,
+    accounts: accounts.filter((account) => account.sourceVolume?.number === volume.number),
+  }));
+
+  // An entry read before its edition's volumes were recorded belongs nowhere
+  // above, and is shown rather than dropped.
+  const unplaced = accounts.filter((account) => !account.sourceVolume);
 
   return (
     <div className="space-y-3">
-      {groups.map((group, index) => {
-        const open = openVolume === index;
-        const title = group.volume ?? (language === 'ar' ? 'تراجم من الكتاب' : 'Entries from the work');
+      {groups.map((group) => {
+        const open = openVolume === group.number;
+        const read = group.accounts.length > 0;
         const pages = group.accounts.reduce((total, account) => total + account.pageCount, 0);
 
         return (
-          <section key={index} className="rounded-lg border border-gray-200 dark:border-white/10">
+          <section
+            key={group.number}
+            className={`rounded-lg border ${read ? 'border-gray-200 dark:border-white/10' : 'border-dashed border-gray-200/70 dark:border-white/5'}`}
+          >
             <button
               type="button"
-              onClick={() => setOpenVolume(open ? null : index)}
-              aria-expanded={open}
-              className="flex w-full flex-wrap items-baseline justify-between gap-2 p-4 text-start transition hover:bg-amber-50 dark:hover:bg-white/5"
+              onClick={() => read && setOpenVolume(open ? null : group.number)}
+              aria-expanded={read ? open : undefined}
+              disabled={!read}
+              className={`flex w-full flex-wrap items-baseline justify-between gap-2 p-4 text-start ${
+                read ? 'transition hover:bg-amber-50 dark:hover:bg-white/5' : 'cursor-default'
+              }`}
             >
-              <span dir="rtl" lang="ar" className="text-xl text-amber-600 dark:text-amber-500">
-                <FontAwesomeIcon
-                  icon={open ? faChevronDown : language === 'ar' ? faChevronLeft : faChevronRight}
-                  className="w-3 h-3 mx-2"
-                />
-                {title}
+              <span
+                dir="rtl"
+                lang="ar"
+                className={`text-xl ${read ? 'text-amber-600 dark:text-amber-500' : 'text-gray-400 dark:text-gray-600'}`}
+              >
+                {read && (
+                  <FontAwesomeIcon
+                    icon={open ? faChevronDown : language === 'ar' ? faChevronLeft : faChevronRight}
+                    className="w-3 h-3 mx-2"
+                  />
+                )}
+                {group.name ?? (language === 'ar' ? `الجزء ${group.number}` : `Volume ${group.number}`)}
               </span>
-              <span className="text-sm text-gray-600 dark:text-gray-400">
-                {language === 'ar'
-                  ? `التراجم: ${group.accounts.length} · الصفحات: ${pages}`
-                  : `${group.accounts.length} entries · ${pages} pages`}
+              <span className={`text-sm ${read ? 'text-gray-600 dark:text-gray-400' : 'text-gray-400 dark:text-gray-600'}`}>
+                {read
+                  ? language === 'ar'
+                    ? `التراجم: ${group.accounts.length} · الصفحات: ${pages}`
+                    : `${group.accounts.length} entries · ${pages} pages`
+                  : language === 'ar'
+                    ? 'لم يُقرأ بعد'
+                    : 'Not read yet'}
               </span>
             </button>
 
@@ -150,6 +169,19 @@ export default function SourceContents({
           </section>
         );
       })}
+
+      {unplaced.length > 0 && (
+        <section className="rounded-lg border border-gray-200 dark:border-white/10">
+          <h3 dir="rtl" lang="ar" className="p-4 text-xl text-amber-600 dark:text-amber-500">
+            {language === 'ar' ? 'تراجم لم يُحدَّد جزؤها' : 'Entries with no volume recorded'}
+          </h3>
+          <ul className="divide-y divide-gray-200 border-t border-gray-200 dark:divide-white/10 dark:border-white/10">
+            {unplaced.map((account) => (
+              <VolumeEntry key={account.id} slug={slug} account={account} label={label(account)} />
+            ))}
+          </ul>
+        </section>
+      )}
     </div>
   );
 }

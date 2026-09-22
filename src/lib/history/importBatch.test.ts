@@ -16,11 +16,23 @@ function fakePrisma() {
     citations: [] as Record<string, unknown>[],
     claimUpserts: [] as Record<string, unknown>[],
     accountUpserts: [] as Record<string, unknown>[],
+    volumeUpserts: [] as { id: string; number: number }[],
   };
 
   const tx = {
     reviewBatch: { upsert: vi.fn(async () => ({ id: 'batch-1' })) },
     historicalSource: { upsert: vi.fn(async ({ where }: never) => ({ id: `source-${(where as { slug: string }).slug}` })) },
+    // Volumes are upserted per source and then read back, so an account can
+    // link to one another batch declared as well as one this batch did.
+    sourceVolume: {
+      upsert: vi.fn(async ({ where }: never) => {
+        const key = (where as { sourceId_number: { sourceId: string; number: number } }).sourceId_number;
+        const row = { id: `volume-${key.sourceId}-${key.number}`, number: key.number };
+        calls.volumeUpserts.push(row);
+        return row;
+      }),
+      findMany: vi.fn(async () => calls.volumeUpserts),
+    },
     sourceAccount: {
       upsert: vi.fn(async (args: Record<string, unknown>) => {
         calls.accountUpserts.push(args);

@@ -17,6 +17,7 @@ const accountSummary = {
   entryIdentifier: true,
   titleArabic: true,
   volume: true,
+  sourceVolume: { select: { number: true, name: true } },
   extractionUrl: true,
   source: true,
   _count: { select: { pages: true } },
