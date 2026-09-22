@@ -32,7 +32,7 @@ function VolumeEntry({
   account: AccountSummary;
   label: string;
   /** This entry's run of pages within the volume being shown; absent for an entry no volume holds. */
-  span?: { firstSequence: number; lastSequence: number; pageCount: number };
+  span?: { firstSequence: number; firstPrintedPage: string | null; lastSequence: number; pageCount: number };
 }) {
   const { language } = useLanguage();
   const { data, isLoading } = useSWR<SectionsResponse>(
@@ -46,7 +46,9 @@ function VolumeEntry({
     (section) => !span || (section.sequence >= span.firstSequence && section.sequence <= span.lastSequence),
   );
   const firstPage = span?.firstSequence ?? 1;
-  const pageCount = span?.pageCount ?? account.pageCount;
+  // A contents list says where a thing begins, as the printed book numbers it.
+  const startsOn = span?.firstPrintedPage ?? String(firstPage);
+  const pageLabel = (page: string) => (language === 'ar' ? `ص ${page}` : `p. ${page}`);
 
   return (
     <li className="p-4">
@@ -59,9 +61,7 @@ function VolumeEntry({
         >
           {label}
         </Link>
-        <span className="text-sm text-gray-600 dark:text-gray-400">
-          {language === 'ar' ? `الصفحات: ${pageCount}` : `${pageCount} pages`}
-        </span>
+        <span className="text-sm text-gray-600 dark:text-gray-400">{pageLabel(startsOn)}</span>
       </div>
 
       {isLoading && <LoadingSpinner />}
@@ -76,7 +76,7 @@ function VolumeEntry({
               >
                 <span>{section.heading}</span>
                 <span className="shrink-0 text-xs text-gray-500">
-                  {section.printedPage ?? section.sequence}
+                  {pageLabel(section.printedPage ?? String(section.sequence))}
                 </span>
               </Link>
             </li>

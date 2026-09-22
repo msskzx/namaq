@@ -63,6 +63,14 @@ async function volumeSpans(accountIds: string[]) {
     : [];
   const volumeById = new Map(volumes.map((volume) => [volume.id, volume]));
 
+  // The printed page each run opens on, which is what a reader looks for in a
+  // contents list; the sequence only says where it falls in our own paging.
+  const openings = await prisma.sourceAccountPage.findMany({
+    where: { OR: groups.map((group) => ({ accountId: group.accountId, sequence: group._min.sequence! })) },
+    select: { accountId: true, sequence: true, printedPage: true },
+  });
+  const printedAt = new Map(openings.map((page) => [`${page.accountId}:${page.sequence}`, page.printedPage]));
+
   const spans = new Map<string, VolumeSpan[]>();
   for (const group of groups) {
     const volume = volumeById.get(group.volumeId!);
@@ -72,6 +80,7 @@ async function volumeSpans(accountIds: string[]) {
       number: volume.number,
       name: volume.name,
       firstSequence: group._min.sequence!,
+      firstPrintedPage: printedAt.get(`${group.accountId}:${group._min.sequence}`) ?? null,
       lastSequence: group._max.sequence!,
       pageCount: group._count._all,
     });
@@ -86,6 +95,8 @@ export interface VolumeSpan {
   name: string | null;
   /** The account's first and last page in this volume, by `sequence`. */
   firstSequence: number;
+  /** The first page's number as printed, when the edition prints one. */
+  firstPrintedPage: string | null;
   lastSequence: number;
   pageCount: number;
 }

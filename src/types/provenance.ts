@@ -45,6 +45,7 @@ export type AccountSummary = Pick<
     number: number;
     name: string | null;
     firstSequence: number;
+    firstPrintedPage: string | null;
     lastSequence: number;
     pageCount: number;
   }[];
