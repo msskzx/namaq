@@ -14,4 +14,5 @@ export const getAllNavLinks = (language: 'en' | 'ar'): SiteLink[] => [
   { href: '/people', label: translations[language].people },
   { href: '/events', label: translations[language].events },
   { href: '/battles', label: translations[language].battles.title },
+  { href: '/sources', label: translations[language].sources },
 ];

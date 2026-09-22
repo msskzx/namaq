@@ -122,7 +122,7 @@ function PersonDetailPage() {
             <GraphCanvas targetSlug={slug} />
           </div>
 
-          <SourceAccountReader slug={slug} />
+          <SourceAccountReader basePath={`/api/people/${slug}`} />
 
           <AyatGroup ayat={person.ayat || []} />
 

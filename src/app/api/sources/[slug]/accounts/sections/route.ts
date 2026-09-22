@@ -2,12 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { sectionIndex } from '@/lib/history/sourceAccounts';
 
-/**
- * An account's own section index, so the reader can jump straight to a section
- * of نص المصدر instead of only paging through it. Separate from the
- * page-serving route because building it reads every page's body, which a
- * single-page view has no reason to pay for.
- */
+/** The section index of one entry in one work, for the bookshelf's reader. */
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ slug: string }> },
@@ -21,17 +16,17 @@ export async function GET(
 
   try {
     const account = await prisma.sourceAccount.findFirst({
-      where: { id: accountId, subjectKind: 'PERSON', subjectSlug: slug },
+      where: { id: accountId, source: { slug } },
       select: { id: true },
     });
 
     if (!account) {
-      return NextResponse.json({ error: 'Unknown account for this person' }, { status: 404 });
+      return NextResponse.json({ error: 'Unknown account in this source' }, { status: 404 });
     }
 
     return NextResponse.json({ sections: await sectionIndex(accountId) });
   } catch (error) {
-    console.error('Source account sections API error:', error);
+    console.error('Source sections API error:', error);
     return NextResponse.json({ error: 'Failed to fetch the section index' }, { status: 500 });
   }
 }
