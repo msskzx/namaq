@@ -159,6 +159,38 @@ describe('importBatch', () => {
     expect(calls.pages[0]).toMatchObject({ printedPage: '5', bodyMarkdown: 'نص الصفحة', sequence: 1 });
   });
 
+  // An entry is a run of pages and a run can cross a binding, so the volume is
+  // written per page: each takes its entry's volume unless it names its own.
+  it('binds each page in its own volume, defaulting to the one its entry opens in', async () => {
+    const { prisma, calls } = fakePrisma();
+    const crossing = batch();
+    crossing.sources[0].volumes = [
+      { number: 1, name: 'السيرة النبوية ج١' },
+      { number: 2, name: 'السيرة النبوية ج٢' },
+    ];
+    crossing.accounts[0].volumeNumber = 1;
+    crossing.accounts[0].pages = [
+      { sequence: 1, printedPage: '527', bodyFile: 'accounts/abu-ubaydah/001.md' },
+      { sequence: 2, printedPage: '5', bodyFile: 'accounts/abu-ubaydah/001.md', volumeNumber: 2 },
+    ];
+    crossing.claims = [];
+
+    await importBatch(prisma, crossing, files);
+
+    expect(calls.pages.map((page) => page.volumeId)).toEqual([
+      'volume-source-siyar-risalah-1',
+      'volume-source-siyar-risalah-2',
+    ]);
+  });
+
+  it('leaves a page unbound when neither it nor its entry names a volume', async () => {
+    const { prisma, calls } = fakePrisma();
+
+    await importBatch(prisma, batch(), files);
+
+    expect(calls.pages[0].volumeId).toBeNull();
+  });
+
   it('links a citation to the passage its anchor names', async () => {
     const { prisma, calls } = fakePrisma();
 

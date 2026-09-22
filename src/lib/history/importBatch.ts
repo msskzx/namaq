@@ -57,10 +57,6 @@ async function writeAccounts(
     const fields = {
       entryIdentifier: account.entryIdentifier ?? null,
       titleArabic: account.titleArabic ?? null,
-      volumeId:
-        account.volumeNumber === undefined
-          ? null
-          : (volumeIds.get(account.sourceSlug)?.get(account.volumeNumber) ?? null),
       volume: account.volume ?? null,
       extractionUrl: account.extractionUrl,
       accessedAt: new Date(account.accessedAt),
@@ -77,6 +73,13 @@ async function writeAccounts(
     // Pages carry no authoring key of their own, so a re-import replaces the
     // account's text wholesale rather than matching pages one by one.
     await tx.sourceAccountPage.deleteMany({ where: { accountId: row.id } });
+    // A page names its own volume only where its entry crosses a binding;
+    // otherwise it is bound in the volume the entry opens in.
+    const volumes = volumeIds.get(account.sourceSlug);
+    const volumeOf = (page: (typeof account.pages)[number]) => {
+      const number = page.volumeNumber ?? account.volumeNumber;
+      return number === undefined ? null : (volumes?.get(number) ?? null);
+    };
     await tx.sourceAccountPage.createMany({
       data: account.pages.map((page) => ({
         accountId: row.id,
@@ -85,6 +88,7 @@ async function writeAccounts(
         bodyMarkdown: files[page.bodyFile] ?? '',
         notesMarkdown: page.notesFile ? (files[page.notesFile] ?? null) : null,
         extractionUrl: page.extractionUrl ?? null,
+        volumeId: volumeOf(page),
       })),
     });
     pages += account.pages.length;

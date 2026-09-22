@@ -17,7 +17,6 @@ const accountSummary = {
   entryIdentifier: true,
   titleArabic: true,
   volume: true,
-  sourceVolume: { select: { number: true, name: true } },
   extractionUrl: true,
   source: true,
   _count: { select: { pages: true } },
@@ -37,6 +36,58 @@ const accountSummary = {
 function openingPage(url: string | null | undefined) {
   const id = url?.match(/(\d+)\s*$/)?.[1];
   return id ? Number(id) : Number.MAX_SAFE_INTEGER;
+}
+
+/**
+ * Which volumes each account's pages are bound in, and the run of pages in
+ * each. An entry is a run of pages and a run can cross a binding, so one entry
+ * may sit in two volumes -- the sira is 497 pages of one and 491 of the next --
+ * and the contents list it under both, each with only its own pages.
+ */
+async function volumeSpans(accountIds: string[]) {
+  if (accountIds.length === 0) return new Map<string, VolumeSpan[]>();
+
+  const groups = await prisma.sourceAccountPage.groupBy({
+    by: ['accountId', 'volumeId'],
+    where: { accountId: { in: accountIds }, volumeId: { not: null } },
+    _min: { sequence: true },
+    _max: { sequence: true },
+    _count: { _all: true },
+  });
+  const volumeIds = [...new Set(groups.map((group) => group.volumeId!))];
+  const volumes = volumeIds.length
+    ? await prisma.sourceVolume.findMany({
+        where: { id: { in: volumeIds } },
+        select: { id: true, number: true, name: true },
+      })
+    : [];
+  const volumeById = new Map(volumes.map((volume) => [volume.id, volume]));
+
+  const spans = new Map<string, VolumeSpan[]>();
+  for (const group of groups) {
+    const volume = volumeById.get(group.volumeId!);
+    if (!volume) continue;
+    const list = spans.get(group.accountId) ?? [];
+    list.push({
+      number: volume.number,
+      name: volume.name,
+      firstSequence: group._min.sequence!,
+      lastSequence: group._max.sequence!,
+      pageCount: group._count._all,
+    });
+    spans.set(group.accountId, list);
+  }
+  spans.forEach((list) => list.sort((a, b) => a.number - b.number));
+  return spans;
+}
+
+export interface VolumeSpan {
+  number: number;
+  name: string | null;
+  /** The account's first and last page in this volume, by `sequence`. */
+  firstSequence: number;
+  lastSequence: number;
+  pageCount: number;
 }
 
 export async function listAccounts(where: Prisma.SourceAccountWhereInput) {
@@ -64,11 +115,14 @@ export async function listAccounts(where: Prisma.SourceAccountWhereInput) {
     : [];
   const openingByAccount = new Map(openings.map((page) => [page.accountId, openingPage(page.extractionUrl)]));
 
+  const spans = await volumeSpans(rows.map((row) => row.id));
+
   return rows
     .map(({ _count, ...account }) => ({
       ...account,
       pageCount: _count.pages,
       subjectName: nameBySlug.get(account.subjectSlug) ?? null,
+      volumes: spans.get(account.id) ?? [],
     }))
     .sort((a, b) => (openingByAccount.get(a.id) ?? 0) - (openingByAccount.get(b.id) ?? 0));
 }

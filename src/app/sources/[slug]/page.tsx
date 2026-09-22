@@ -173,7 +173,7 @@ export default function SourcePage({ params }: { params: Promise<{ slug: string 
                   slug={slug}
                   volumes={source.volumes}
                   accounts={contents.accounts}
-                  label={entryLabel}
+                  label={(account) => account.titleArabic || account.subjectName || account.subjectSlug}
                 />
               </section>
             )}

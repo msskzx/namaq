@@ -37,8 +37,17 @@ export type AccountSummary = Pick<
   'id' | 'subjectKind' | 'subjectSlug' | 'entryIdentifier' | 'titleArabic' | 'volume' | 'extractionUrl'
 > & {
   source: HistoricalSource;
-  /** The volume this entry opens in, once its edition's volumes are recorded. */
-  sourceVolume?: { number: number; name: string | null } | null;
+  /**
+   * The volumes this entry's pages are bound in, each with the run of pages
+   * that falls in it. Usually one; two where the entry crosses a binding.
+   */
+  volumes?: {
+    number: number;
+    name: string | null;
+    firstSequence: number;
+    lastSequence: number;
+    pageCount: number;
+  }[];
   pageCount: number;
   /** The subject's own name, when it has a profile row; a slug is not a name. */
   subjectName?: string | null;

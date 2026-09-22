@@ -26,23 +26,33 @@ function VolumeEntry({
   slug,
   account,
   label,
+  span,
 }: {
   slug: string;
   account: AccountSummary;
   label: string;
+  /** This entry's run of pages within the volume being shown; absent for an entry no volume holds. */
+  span?: { firstSequence: number; lastSequence: number; pageCount: number };
 }) {
   const { language } = useLanguage();
   const { data, isLoading } = useSWR<SectionsResponse>(
     `/api/sources/${slug}/accounts/sections?account=${account.id}`,
     fetcher,
   );
-  const sections = data?.sections ?? [];
+  // An entry that crosses a binding shows under each volume with only the
+  // chapters that begin in it, so the sira's chapters divide between its two
+  // volumes the way its pages do.
+  const sections = (data?.sections ?? []).filter(
+    (section) => !span || (section.sequence >= span.firstSequence && section.sequence <= span.lastSequence),
+  );
+  const firstPage = span?.firstSequence ?? 1;
+  const pageCount = span?.pageCount ?? account.pageCount;
 
   return (
     <li className="p-4">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <Link
-          href={`/sources/${slug}?book=${account.id}&page=1`}
+          href={`/sources/${slug}?book=${account.id}&page=${firstPage}`}
           dir="rtl"
           lang="ar"
           className="text-xl text-gray-900 hover:underline dark:text-gray-100"
@@ -50,7 +60,7 @@ function VolumeEntry({
           {label}
         </Link>
         <span className="text-sm text-gray-600 dark:text-gray-400">
-          {language === 'ar' ? `الصفحات: ${account.pageCount}` : `${account.pageCount} pages`}
+          {language === 'ar' ? `الصفحات: ${pageCount}` : `${pageCount} pages`}
         </span>
       </div>
 
@@ -107,19 +117,22 @@ export default function SourceContents({
   // and that two of them have been read.
   const groups = volumes.map((volume) => ({
     ...volume,
-    accounts: accounts.filter((account) => account.sourceVolume?.number === volume.number),
+    entries: accounts.flatMap((account) => {
+      const span = account.volumes?.find((candidate) => candidate.number === volume.number);
+      return span ? [{ account, span }] : [];
+    }),
   }));
 
-  // An entry read before its edition's volumes were recorded belongs nowhere
+  // An entry whose pages are bound in no recorded volume belongs nowhere
   // above, and is shown rather than dropped.
-  const unplaced = accounts.filter((account) => !account.sourceVolume);
+  const unplaced = accounts.filter((account) => !account.volumes?.length);
 
   return (
     <div className="space-y-3">
       {groups.map((group) => {
         const open = openVolume === group.number;
-        const read = group.accounts.length > 0;
-        const pages = group.accounts.reduce((total, account) => total + account.pageCount, 0);
+        const read = group.entries.length > 0;
+        const pages = group.entries.reduce((total, entry) => total + entry.span.pageCount, 0);
 
         return (
           <section
@@ -151,8 +164,8 @@ export default function SourceContents({
               <span className={`text-sm ${read ? 'text-gray-600 dark:text-gray-400' : 'text-gray-400 dark:text-gray-600'}`}>
                 {read
                   ? language === 'ar'
-                    ? `التراجم: ${group.accounts.length} · الصفحات: ${pages}`
-                    : `${group.accounts.length} entries · ${pages} pages`
+                    ? `التراجم: ${group.entries.length} · الصفحات: ${pages}`
+                    : `${group.entries.length} entries · ${pages} pages`
                   : language === 'ar'
                     ? 'لم يُقرأ بعد'
                     : 'Not read yet'}
@@ -161,8 +174,8 @@ export default function SourceContents({
 
             {open && (
               <ul className="divide-y divide-gray-200 border-t border-gray-200 dark:divide-white/10 dark:border-white/10">
-                {group.accounts.map((account) => (
-                  <VolumeEntry key={account.id} slug={slug} account={account} label={label(account)} />
+                {group.entries.map(({ account, span }) => (
+                  <VolumeEntry key={account.id} slug={slug} account={account} label={label(account)} span={span} />
                 ))}
               </ul>
             )}

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { findMany, findUnique, findPeople, findOpenings } = vi.hoisted(() => ({
+const { findMany, findUnique, findPeople, findOpenings, groupSpans } = vi.hoisted(() => ({
   findMany: vi.fn(),
   findUnique: vi.fn(),
   // listAccounts resolves each PERSON subject's own name so a reader that does
@@ -9,11 +9,15 @@ const { findMany, findUnique, findPeople, findOpenings } = vi.hoisted(() => ({
   // ...and reads each account's first page to order them by where they open in
   // the work rather than by when they were imported.
   findOpenings: vi.fn(async () => []),
+  // ...and groups each account's pages by the volume they are bound in, since
+  // an entry that crosses a binding sits in two.
+  groupSpans: vi.fn(async () => []),
 }));
 vi.mock('@/lib/prisma', () => ({
   prisma: {
     sourceAccount: { findMany },
-    sourceAccountPage: { findUnique, findMany: findOpenings },
+    sourceAccountPage: { findUnique, findMany: findOpenings, groupBy: groupSpans },
+    sourceVolume: { findMany: vi.fn(async () => []) },
     person: { findMany: findPeople },
   },
 }));

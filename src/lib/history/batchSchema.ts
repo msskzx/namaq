@@ -52,6 +52,12 @@ export interface PageRecord {
   bodyFile: string;
   notesFile?: string;
   extractionUrl?: string;
+  /**
+   * The volume this page is bound in, by the source's `number`. Omitted, the
+   * page takes its account's `volumeNumber`, so only the pages of an entry that
+   * crosses a binding need to say anything.
+   */
+  volumeNumber?: number;
   passages?: PassageRecord[];
 }
 
@@ -61,7 +67,10 @@ export interface AccountRecord {
   subjectSlug: string;
   entryIdentifier?: string;
   titleArabic?: string;
-  /** Which of the source's volumes this entry opens in, by `number`. */
+  /**
+   * The volume this entry opens in, by the source's `number`, and so the volume
+   * of every page that does not name its own.
+   */
   volumeNumber?: number;
   /** What the batch wrote, such as "السيرة ١-٢" for an entry spanning two. */
   volume?: string;
@@ -192,12 +201,21 @@ function checkAccount(
   }
   // An entry may only sit in a volume its own source declares, so a typo in
   // the number fails here rather than quietly importing an unlinked account.
-  if (account.volumeNumber !== undefined && !volumeNumbers.get(account.sourceSlug)?.has(account.volumeNumber)) {
+  const declared = volumeNumbers.get(account.sourceSlug);
+  if (account.volumeNumber !== undefined && !declared?.has(account.volumeNumber)) {
     issues.push({
       path,
       message: `volumeNumber ${account.volumeNumber} is not a volume "${account.sourceSlug}" declares`,
     });
   }
+  account.pages.forEach((page, position) => {
+    if (page.volumeNumber !== undefined && !declared?.has(page.volumeNumber)) {
+      issues.push({
+        path: `${path}.pages[${position}]`,
+        message: `volumeNumber ${page.volumeNumber} is not a volume "${account.sourceSlug}" declares`,
+      });
+    }
+  });
   if (!isHttpUrl(account.extractionUrl)) {
     issues.push({ path, message: 'extractionUrl must be an http(s) URL' });
   }
