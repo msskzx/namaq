@@ -2,9 +2,8 @@ import { NextResponse } from 'next/server';
 import { accountsPayload } from '@/lib/history/sourceAccounts';
 
 /**
- * Source accounts for a person, and one requested page of one of them. The
- * reading itself is shared with the bookshelf's route; only the `where`
- * differs (src/lib/history/sourceAccounts.ts).
+ * The same reading the profile gets, scoped to a work rather than a person:
+ * every entry this source holds, and one page of the one asked for.
  */
 export async function GET(
   request: Request,
@@ -20,14 +19,14 @@ export async function GET(
 
   try {
     const { status, body } = await accountsPayload(
-      { subjectKind: 'PERSON', subjectSlug: slug },
+      { source: { slug } },
       query.get('account'),
       requestedPage,
-      'Unknown account for this person',
+      'Unknown account in this source',
     );
     return NextResponse.json(body, { status });
   } catch (error) {
-    console.error('Source account API error:', error);
-    return NextResponse.json({ error: 'Failed to fetch source accounts' }, { status: 500 });
+    console.error('Source accounts API error:', error);
+    return NextResponse.json({ error: 'Failed to fetch this source' }, { status: 500 });
   }
 }

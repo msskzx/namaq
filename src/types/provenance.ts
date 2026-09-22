@@ -38,6 +38,8 @@ export type AccountSummary = Pick<
 > & {
   source: HistoricalSource;
   pageCount: number;
+  /** The subject's own name, when it has a profile row; a slug is not a name. */
+  subjectName?: string | null;
 };
 
 /**
@@ -74,4 +76,24 @@ export const reviewStatusLabel: Record<ClaimReviewStatus, { en: string; ar: stri
   NOT_REVIEWED: { en: 'Not reviewed', ar: 'لم تُراجع' },
   IN_REVIEW: { en: 'In review', ar: 'قيد المراجعة' },
   REVIEWED: { en: 'Reviewed', ar: 'مُراجَعة' },
+};
+
+/** One work on the shelf, with how much of it has been read. */
+export type SourceShelfEntry = Pick<
+  HistoricalSource,
+  | 'slug'
+  | 'title'
+  | 'author'
+  | 'editor'
+  | 'publisher'
+  | 'publicationYear'
+  | 'edition'
+  | 'digitalHost'
+  | 'url'
+  | 'notes'
+> & {
+  /** Entries read from this work, one per subject. */
+  entryCount: number;
+  /** Printed pages held across those entries. */
+  pageCount: number;
 };

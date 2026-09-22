@@ -81,6 +81,7 @@ export default function NavBar() {
     { href: '/graphs', label: translations[language].allGraph },
     { href: '/people', label: translations[language].people },
     { href: '/events', label: translations[language].events },
+    { href: '/sources', label: translations[language].sources },
   ];
 
   const allLinks = getAllNavLinks(language);

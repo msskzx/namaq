@@ -23,7 +23,21 @@ interface SectionsResponse {
 }
 
 interface SourceAccountReaderProps {
-  slug: string;
+  /**
+   * Where the accounts live. A profile passes its person, the bookshelf passes
+   * its work, and the reader does not care which: both serve the same shape
+   * from src/lib/history/sourceAccounts.ts.
+   */
+  basePath: string;
+  /** What the reader is reading, when the page has not already said so. */
+  heading?: string;
+  /** Labels each entry in the book selector. Defaults to naming the work. */
+  labelAccount?: (account: AccountSummary) => string;
+  /**
+   * What the selector is choosing between. On a profile that is the book, since
+   * the subject is fixed; inside one book it is the entry, since the work is.
+   */
+  selectorLabel?: { ar: string; en: string };
 }
 
 /**
@@ -49,7 +63,12 @@ function accountLabel(account: AccountSummary) {
  * it cites and Back/Forward move through the reading, per
  * docs/data-quality-references.md.
  */
-export default function SourceAccountReader({ slug }: SourceAccountReaderProps) {
+export default function SourceAccountReader({
+  basePath,
+  heading,
+  labelAccount = accountLabel,
+  selectorLabel = { ar: 'الكتاب', en: 'Book' },
+}: SourceAccountReaderProps) {
   const { language } = useLanguage();
   const router = useRouter();
   const pathname = usePathname();
@@ -63,7 +82,7 @@ export default function SourceAccountReader({ slug }: SourceAccountReaderProps) 
   if (book) query.set('account', book);
 
   const { data, error, isLoading } = useSWR<AccountsResponse>(
-    slug ? `/api/people/${slug}/accounts?${query.toString()}` : null,
+    basePath ? `${basePath}/accounts?${query.toString()}` : null,
     fetcher,
   );
 
@@ -72,7 +91,7 @@ export default function SourceAccountReader({ slug }: SourceAccountReaderProps) 
   // account, not just the one on screen, and only the readers who open it
   // need to pay for scanning the whole account's text.
   const { data: sectionsData } = useSWR<SectionsResponse>(
-    slug && accountId ? `/api/people/${slug}/accounts/sections?account=${accountId}` : null,
+    basePath && accountId ? `${basePath}/accounts/sections?account=${accountId}` : null,
     fetcher,
   );
   const sections = sectionsData?.sections ?? [];
@@ -117,16 +136,16 @@ export default function SourceAccountReader({ slug }: SourceAccountReaderProps) 
   });
 
   return (
-    <section ref={section} className="scroll-mt-4 bg-black border border-white/10 rounded-lg p-4">
+    <section ref={section} className="scroll-mt-4 bg-white dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4">
       <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
         <FontAwesomeIcon icon={faBookOpen} className="w-7 h-7 text-amber-500 ml-2" />
-        {language === 'ar' ? 'نص المصدر' : 'Source text'}
+        {heading ?? (language === 'ar' ? 'نص المصدر' : 'Source text')}
       </h2>
 
       <div className={accounts.length > 1 || sections.length > 0 ? 'flex flex-wrap items-center gap-3 mb-4' : 'hidden'}>
         {accounts.length > 1 && (
           <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-            {language === 'ar' ? 'الكتاب' : 'Book'}
+            {language === 'ar' ? selectorLabel.ar : selectorLabel.en}
             <select
               className="rounded border border-amber-400 bg-white dark:bg-gray-950 px-2 py-1 text-sm text-gray-800 dark:text-gray-100"
               value={account.id}
@@ -134,7 +153,7 @@ export default function SourceAccountReader({ slug }: SourceAccountReaderProps) 
             >
               {accounts.map((option) => (
                 <option key={option.id} value={option.id}>
-                  {accountLabel(option)}
+                  {labelAccount(option)}
                 </option>
               ))}
             </select>
@@ -169,7 +188,7 @@ export default function SourceAccountReader({ slug }: SourceAccountReaderProps) 
       </div>
 
       <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">
-        {accountLabel(account)}
+        {labelAccount(account)}
         {' · '}
         {language === 'ar' ? `ص ${printed}` : `p. ${printed}`}
       </p>

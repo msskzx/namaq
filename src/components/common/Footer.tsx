@@ -29,6 +29,12 @@ const getLinkGroups = (language: 'en' | 'ar') => ({
       { href: '/titles', label: translations[language].titles },
     ]
   },
+  sources: {
+    title: translations[language].sources,
+    links: [
+      { href: '/sources', label: translations[language].sources },
+    ]
+  },
 });
 
 function Footer() {

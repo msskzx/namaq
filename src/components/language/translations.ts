@@ -104,6 +104,7 @@ const translations = {
 
     // Combined Graph
     allGraph: 'Graph',
+    sources: 'Source material',
 
     // Articles
     specialArticles: 'Special Articles',
@@ -505,6 +506,7 @@ const translations = {
 
     // Combined Graph
     allGraph: 'الشبكة',
+    sources: 'المصادر',
 
     // Notable People
     notablePeople: 'شخصيات بارزة',

@@ -101,7 +101,7 @@ function respondWith(body: unknown) {
 function renderReader(slug = 'abu-ubaydah-ibn-al-jarrah') {
   return render(
     <SWRConfig value={{ provider: () => new Map(), dedupingInterval: 0 }}>
-      <SourceAccountReader slug={slug} />
+      <SourceAccountReader basePath={`/api/people/${slug}`} />
     </SWRConfig>,
   );
 }
