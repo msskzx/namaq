@@ -23,6 +23,7 @@ const hamzahIbnAbdAlMuttalib = {
     fullName: { value: 'حمزة بن عبد المطلب بن هاشم القرشي الهاشمي', claims: legacyUnreviewed },
     appearance: { value: 'كان رجلاً قوي البنية، شجاعاً، مهاباً.', claims: legacyUnreviewed },
     sex: { value: 'MALE', claims: ['hamzah/sex'] },
+    kunya: { value: 'أبو عمارة، وأبو يعلى', claims: ['hamzah-siyar15/kunya'] },
     virtues: {
       value:
         'كان أعز فتى في قريش وأشده شكيمة، فلما أسلم عرفت قريش أن رسول الله صلى الله عليه وسلم قد عز وامتنع. وقال فيه يوم أحد لما سمع البكاء على قتلى الأنصار: (لكن حمزة لا بواكي له) ، واستغفر له.',
@@ -36,7 +37,9 @@ const hamzahIbnAbdAlMuttalib = {
     { title: 'asadu-allah', claims: ['hamzah/asadu-allah'] },
     // Carried from the retired seed entry; no batch cites these yet.
     { title: 'uncle-of-prophet', claims: legacyUnreviewed },
-    { title: 'sayyid-al-shuhada', claims: legacyUnreviewed },
+    // Two chains, each marked weak by al-Dhahabi himself: see
+    // hamzah-ibn-abd-al-muttalib-siyar15/batch.json's reviewerNote.
+    { title: 'sayyid-al-shuhada', claims: ['hamzah-siyar15/sayyid-al-shuhada'] },
     { title: 'companion', claims: legacyUnreviewed },
   ],
 
