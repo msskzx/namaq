@@ -1,0 +1,352 @@
+{
+  "slug": "abu-salamah-ibn-abd-al-asad",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-salamah-ibn-abd-al-asad",
+      "extractionUrl": "https://shamela.ws/book/10906/1576",
+      "accessedAt": "2026-09-24",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "150",
+          "bodyFile": "accounts/abu-salamah-ibn-abd-al-asad/001.md",
+          "notesFile": "accounts/abu-salamah-ibn-abd-al-asad/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1576",
+          "passages": [
+            {
+              "anchor": "150-p2"
+            },
+            {
+              "anchor": "150-p3"
+            },
+            {
+              "anchor": "150-p4"
+            },
+            {
+              "anchor": "150-p5"
+            },
+            {
+              "anchor": "150-p6"
+            },
+            {
+              "anchor": "150-p7"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "151",
+          "bodyFile": "accounts/abu-salamah-ibn-abd-al-asad/002.md",
+          "notesFile": "accounts/abu-salamah-ibn-abd-al-asad/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1577",
+          "passages": [
+            {
+              "anchor": "151-p1"
+            },
+            {
+              "anchor": "151-p2"
+            },
+            {
+              "anchor": "151-p3"
+            },
+            {
+              "anchor": "151-p4"
+            },
+            {
+              "anchor": "151-p5"
+            },
+            {
+              "anchor": "151-p6"
+            },
+            {
+              "anchor": "151-p7"
+            },
+            {
+              "anchor": "151-p8"
+            },
+            {
+              "anchor": "151-p9"
+            },
+            {
+              "anchor": "151-p10"
+            },
+            {
+              "anchor": "151-p11"
+            },
+            {
+              "anchor": "151-p12"
+            },
+            {
+              "anchor": "151-p13"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "printedPage": "152",
+          "bodyFile": "accounts/abu-salamah-ibn-abd-al-asad/003.md",
+          "notesFile": "accounts/abu-salamah-ibn-abd-al-asad/003.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1578",
+          "passages": [
+            {
+              "anchor": "152-p1"
+            },
+            {
+              "anchor": "152-p2"
+            },
+            {
+              "anchor": "152-p3"
+            },
+            {
+              "anchor": "152-p4"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "printedPage": "153",
+          "bodyFile": "accounts/abu-salamah-ibn-abd-al-asad/004.md",
+          "notesFile": "accounts/abu-salamah-ibn-abd-al-asad/004.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1579",
+          "passages": [
+            {
+              "anchor": "153-p1"
+            },
+            {
+              "anchor": "153-p2"
+            },
+            {
+              "anchor": "153-p3"
+            },
+            {
+              "anchor": "153-p4"
+            },
+            {
+              "anchor": "153-p5"
+            },
+            {
+              "anchor": "153-p6"
+            },
+            {
+              "anchor": "153-p7"
+            },
+            {
+              "anchor": "153-p8"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "abu-salamah-siyar8/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-salamah",
+      "assertion": "أبو سلمة بن عبد الأسد بن هلال.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "150-p2",
+          "volume": "1",
+          "pageReference": "150",
+          "extractionUrl": "https://shamela.ws/book/10906/1576",
+          "excerptArabic": "أَبُو سَلَمَةَ بنُ عَبْدِ الأَسَدِ بنِ هِلاَلِ",
+          "accessedAt": "2026-09-24"
+        }
+      ],
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "abd-al-asad-ibn-hilal"
+    },
+    {
+      "key": "abu-salamah-siyar8/title-sabiqoon",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-salamah",
+      "assertion": "وأحد السابقين الأولين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "titles",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "150-p5",
+          "volume": "1",
+          "pageReference": "150",
+          "extractionUrl": "https://shamela.ws/book/10906/1576",
+          "excerptArabic": "وَأَحَدُ السَّابِقِيْنَ الأَوَّلِيْنَ",
+          "accessedAt": "2026-09-24"
+        }
+      ]
+    },
+    {
+      "key": "abu-salamah-siyar8/death-year-disputed",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-salamah",
+      "assertion": "روايتان تجعلان وفاته سنة ثلاث من الهجرة، بخلاف الرواية الراجحة التي يثبتها الحقل بسنة أربع.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "deathYearHijri",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "151-p1",
+          "volume": "1",
+          "pageReference": "151",
+          "extractionUrl": "https://shamela.ws/book/10906/1577",
+          "excerptArabic": "مَاتَ كَهْلاً، فِي سَنَةِ ثَلاَثٍ مِنَ الهِجْرَةِ",
+          "accessedAt": "2026-09-24"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "153-p8",
+          "volume": "1",
+          "pageReference": "153",
+          "extractionUrl": "https://shamela.ws/book/10906/1579",
+          "excerptArabic": "وَقِيْلَ: مَاتَ أَبُو سَلَمَةَ سَنَةَ ثَلاَثٍ",
+          "accessedAt": "2026-09-24"
+        }
+      ],
+      "disputed": true
+    }
+  ],
+  "approval": {
+    "revision": "a9c3329b6fec4a12",
+    "approvedAt": "2026-09-24",
+    "approvedBy": "msskzx",
+    "note": "Approved for publication. All three claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+  }
+}
