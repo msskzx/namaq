@@ -29,11 +29,10 @@ const abuSalamah = {
     // Carried from the retired seed entry. The seeds gave every صحابي this
     // title without citing it.
     { title: 'companion', claims: legacyUnreviewed },
+    { title: 'al-sabiqoon', claims: ['abu-salamah-siyar8/title-sabiqoon'] },
   ],
   relations: [
-    // Carried from neo4j/graphSeedData*.ts, which stated the tie without
-    // citing it. The catalog owns this subject's edges now.
-    { type: 'SON', inverse: 'FATHER', to: 'abd-al-asad-ibn-hilal', claims: legacyUnreviewed },
+    { type: 'SON', inverse: 'FATHER', to: 'abd-al-asad-ibn-hilal', claims: ['abu-salamah-siyar8/father'] },
     { type: 'SON', inverse: 'MOTHER', to: 'barrah-bint-abd-al-muttalib', claims: ['abu-salamah/mother-barrah'] },
     {
       type: 'MILK_BROTHER',
