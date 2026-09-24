@@ -1,0 +1,283 @@
+{
+  "slug": "as-saib-ibn-uthman",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "as-saib-ibn-uthman",
+      "extractionUrl": "https://shamela.ws/book/10906/1589",
+      "accessedAt": "2026-09-24",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "163",
+          "bodyFile": "accounts/as-saib-ibn-uthman/001.md",
+          "notesFile": "accounts/as-saib-ibn-uthman/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1589",
+          "passages": [
+            {
+              "anchor": "163-p5"
+            },
+            {
+              "anchor": "163-p6"
+            },
+            {
+              "anchor": "163-p7"
+            },
+            {
+              "anchor": "163-p8"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "164",
+          "bodyFile": "accounts/as-saib-ibn-uthman/002.md",
+          "notesFile": "accounts/as-saib-ibn-uthman/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1590",
+          "passages": [
+            {
+              "anchor": "164-p1"
+            },
+            {
+              "anchor": "164-p2"
+            },
+            {
+              "anchor": "164-p3"
+            },
+            {
+              "anchor": "164-p4"
+            },
+            {
+              "anchor": "164-p5"
+            },
+            {
+              "anchor": "164-p6"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "saib-uthman-siyar12/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "as-saib-ibn-uthman",
+      "assertion": "هو السائب بن عثمان بن مظعون.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "uthman-ibn-mazun",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "163-p5",
+          "volume": "1",
+          "pageReference": "163",
+          "extractionUrl": "https://shamela.ws/book/10906/1589",
+          "excerptArabic": "السَّائِبُ بنُ عُثْمَانَ بنِ مَظْعُوْنٍ الجُمَحِيُّ",
+          "accessedAt": "2026-09-24"
+        }
+      ]
+    },
+    {
+      "key": "saib-uthman-siyar12/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "as-saib-ibn-uthman",
+      "field": "virtues",
+      "assertion": "كان من الرماة المذكورين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "163-p8",
+          "volume": "1",
+          "pageReference": "163",
+          "extractionUrl": "https://shamela.ws/book/10906/1589",
+          "excerptArabic": "وَكَانَ مِنَ الرُّمَاةِ المَذْكُوْرِيْنَ",
+          "accessedAt": "2026-09-24"
+        }
+      ]
+    },
+    {
+      "key": "saib-uthman-siyar12/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "as-saib-ibn-uthman",
+      "assertion": "شهد بدرا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "164-p1",
+          "volume": "1",
+          "pageReference": "164",
+          "extractionUrl": "https://shamela.ws/book/10906/1590",
+          "excerptArabic": "وَشَهِدَ السَّائِبُ بنُ عُثْمَانَ بَدْراً فِي رِوَايَةِ ابْنِ إِسْحَاقَ، وَأَبِي مَعْشَرٍ، وَالوَاقِدِيِّ",
+          "accessedAt": "2026-09-24"
+        }
+      ]
+    },
+    {
+      "key": "saib-uthman-siyar12/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "as-saib-ibn-uthman",
+      "field": "deathYearHijri",
+      "assertion": "أصابه سهم يوم اليمامة سنة اثنتي عشرة، فمات منه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "164-p5",
+          "volume": "1",
+          "pageReference": "164",
+          "extractionUrl": "https://shamela.ws/book/10906/1590",
+          "excerptArabic": "وَأَصَابَهُ سَهْمٌ يَوْمَ اليَمَامَةِ سَنَةَ اثْنَتَيْ عَشْرَةَ",
+          "accessedAt": "2026-09-24"
+        }
+      ]
+    }
+  ],
+  "approval": {
+    "revision": "34b7d512e4b2612d",
+    "approvedAt": "2026-09-24",
+    "approvedBy": "msskzx",
+    "note": "Approved for publication. All four claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+  }
+}
