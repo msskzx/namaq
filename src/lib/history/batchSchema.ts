@@ -13,6 +13,7 @@ export type PassageKind = (typeof passageKinds)[number];
 export interface SourceRecord {
   slug: string;
   title: string;
+  language?: string;
   author?: string;
   editor?: string;
   publisher?: string;

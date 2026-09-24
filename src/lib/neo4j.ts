@@ -132,12 +132,11 @@ export { getDriver, getSession, testConnection, executeCypher, executeTransactio
 
 // Test the connection when this module is imported
 // This is optional and can be removed if not needed
-if (process.env.NODE_ENV === 'test') {
+if (process.env.NODE_ENV === 'test' && neo4jConfig.uri && neo4jConfig.username && neo4jConfig.password) {
   testConnection().then(success => {
     if (success) {
       console.log('Successfully connected to Neo4j AuraDB');
     }
   });
 }
-
 

@@ -76,7 +76,7 @@ function account(overrides: Record<string, unknown> = {}) {
     volume: '1',
     extractionUrl: 'https://shamela.ws/book/10906/1431',
     pageCount: 19,
-    source: { title: 'سير أعلام النبلاء', edition: 'الطبعة الثالثة' },
+    source: { title: 'سير أعلام النبلاء', edition: 'الطبعة الثالثة', language: 'ar' },
     ...overrides,
   };
 }
@@ -110,6 +110,7 @@ describe('SourceAccountReader', () => {
   beforeEach(() => {
     nav.reset('/people/abu-ubaydah-ibn-al-jarrah');
     fetchJson.mockReset();
+    localStorage.clear();
     respondWith({ accounts: [account()], account: account(), page: page() });
   });
 
@@ -120,6 +121,18 @@ describe('SourceAccountReader', () => {
 
     expect(await screen.findByText('الفقرة الأولى')).toBeTruthy();
     expect(screen.getByText('الفقرة الثانية')).toBeTruthy();
+  });
+
+  it('renders bracketed source headings without their brackets', async () => {
+    respondWith({
+      accounts: [account()], account: account(),
+      page: page({ bodyMarkdown: '[إسلام ضماد:]\n\nنص الخبر.' }),
+    });
+
+    renderReader();
+
+    expect(await screen.findByRole('heading', { name: 'إسلام ضماد' })).toBeTruthy();
+    expect(screen.queryByText('[إسلام ضماد:]')).toBeNull();
   });
 
   it('keeps the source text right-to-left while the interface is English', async () => {
@@ -188,13 +201,15 @@ describe('SourceAccountReader', () => {
   });
 
   it('switches book and returns to that account\'s first page', async () => {
-    const hilya = account({ id: 'account-hilya', pageCount: 3, source: { title: 'حلية الأولياء', edition: null } });
+    const hilya = account({ id: 'account-hilya', pageCount: 3, source: { title: 'حلية الأولياء', edition: null, language: 'ar' } });
     respondWith({ accounts: [account(), hilya], account: account(), page: page() });
 
-    const { container } = renderReader();
+    renderReader();
 
     await screen.findByText('الفقرة الأولى');
-    const bookSelect = container.querySelectorAll('select')[0];
+    fireEvent.click(screen.getByRole('button', { name: 'Read fullscreen' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Open index' }));
+    const bookSelect = await screen.findByLabelText('Book');
     fireEvent.change(bookSelect, { target: { value: 'account-hilya' } });
 
     await waitFor(() => {
@@ -229,18 +244,54 @@ describe('SourceAccountReader', () => {
       return { accounts: [account()], account: account(), page: page({ sequence: 4, printedPage: '10' }) };
     });
 
-    const { container } = renderReader();
+    renderReader();
 
     await screen.findByText('الفقرة الأولى');
-    const indexSelect = await waitFor(() => {
-      const select = container.querySelectorAll('select')[0] as HTMLSelectElement;
-      expect(select.options.length).toBe(2);
-      return select;
-    });
+    fireEvent.click(screen.getByRole('button', { name: 'Read fullscreen' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Open index' }));
+    const indexSelect = await screen.findByLabelText('Sections') as HTMLSelectElement;
+    await waitFor(() => expect(indexSelect.options.length).toBe(2));
 
     // Page 4 is past both headings, so the second one is the one open.
     expect(indexSelect.value).toBe('1');
     expect(screen.getByText('الباب الثاني').closest('option')?.selected).toBe(true);
+  });
+
+  it('keeps fullscreen in the URL and turns an Arabic page with the left arrow', async () => {
+    renderReader();
+    fireEvent.click(await screen.findByRole('button', { name: 'Read fullscreen' }));
+
+    await waitFor(() => expect(nav.replaceCalls.at(-1)).toContain('fullscreen=1'));
+    fireEvent.keyDown(window, { key: 'ArrowLeft' });
+
+    await waitFor(() => expect(nav.replaceCalls.at(-1)).toContain('page=2'));
+  });
+
+  it('uses the source language for left-to-right pages and keyboard turns', async () => {
+    const englishAccount = account({ source: { title: 'A source', edition: null, language: 'en' } });
+    respondWith({ accounts: [englishAccount], account: englishAccount, page: page() });
+    const { container } = renderReader();
+
+    await screen.findByText('الفقرة الأولى');
+    expect(container.querySelector('article')?.getAttribute('dir')).toBe('ltr');
+    expect(container.querySelector('article')?.getAttribute('lang')).toBe('en');
+    fireEvent.click(await screen.findByRole('button', { name: 'Read fullscreen' }));
+    fireEvent.keyDown(window, { key: 'ArrowRight' });
+
+    await waitFor(() => expect(nav.replaceCalls.at(-1)).toContain('page=2'));
+  });
+
+  it('saves reader font, size, and background on this device', async () => {
+    renderReader();
+    fireEvent.click(await screen.findByRole('button', { name: 'Read fullscreen' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Open reading settings' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Sans' }));
+    fireEvent.click(screen.getByRole('button', { name: 'XL' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Sepia' }));
+
+    expect(JSON.parse(localStorage.getItem('namaq-reader-settings') ?? '{}')).toEqual({
+      font: 'sans', size: 'xl', background: 'sepia',
+    });
   });
 
   it('renders nothing when the person has no source account', async () => {

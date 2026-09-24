@@ -118,6 +118,7 @@ model HistoricalSource {
   id              String   @id @default(cuid())
   slug            String   @unique
   title           String
+  language        String   @default("ar")
   author          String?
   editor          String?
   publisher       String?
