@@ -13,6 +13,11 @@ export interface SectionHeading {
   text: string;
 }
 
+export interface PageParagraph {
+  text: string;
+  heading: boolean;
+}
+
 /** A whole paragraph the editor bracketed, and nothing else. */
 function isHeadingParagraph(paragraph: string) {
   return paragraph.startsWith('[') && paragraph.endsWith(']');
@@ -24,12 +29,16 @@ function stripBrackets(paragraph: string) {
 
 /** Every section heading a page's body declares, in reading order. */
 export function pageHeadings(bodyMarkdown: string): SectionHeading[] {
+  return pageParagraphs(bodyMarkdown)
+    .flatMap(({ text, heading }, paragraphIndex) => heading && text.length > 0 ? [{ paragraphIndex, text }] : []);
+}
+
+/** Paragraphs ready for the reader, with the batch heading convention identified. */
+export function pageParagraphs(bodyMarkdown: string): PageParagraph[] {
   return bodyMarkdown
     .split(/\n{2,}/)
     .map((block) => block.trim())
     .filter(Boolean)
-    .map((text, paragraphIndex) => ({ paragraphIndex, text }))
-    .filter(({ text }) => isHeadingParagraph(text))
-    .map(({ paragraphIndex, text }) => ({ paragraphIndex, text: stripBrackets(text) }))
+    .map((text) => ({ text: isHeadingParagraph(text) ? stripBrackets(text) : text, heading: isHeadingParagraph(text) }))
     .filter(({ text }) => text.length > 0);
 }

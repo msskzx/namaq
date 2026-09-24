@@ -13,6 +13,7 @@ export async function GET() {
       select: {
         slug: true,
         title: true,
+        language: true,
         author: true,
         editor: true,
         publisher: true,

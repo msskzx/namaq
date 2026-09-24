@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { pageHeadings } from './sectionHeadings';
+import { pageHeadings, pageParagraphs } from './sectionHeadings';
 
 describe('pageHeadings', () => {
   it('reads a bracketed paragraph as a heading, brackets stripped', () => {
@@ -28,5 +28,12 @@ describe('pageHeadings', () => {
 
   it('returns nothing for a page with no headings', () => {
     expect(pageHeadings('نص عادي بلا عناوين.')).toEqual([]);
+  });
+
+  it('marks headings for the reader and removes their brackets', () => {
+    expect(pageParagraphs('[إسلام ضماد:]\n\nنص الخبر.')).toEqual([
+      { text: 'إسلام ضماد', heading: true },
+      { text: 'نص الخبر.', heading: false },
+    ]);
   });
 });

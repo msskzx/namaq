@@ -95,6 +95,7 @@ export type SourceShelfEntry = Pick<
   HistoricalSource,
   | 'slug'
   | 'title'
+  | 'language'
   | 'author'
   | 'editor'
   | 'publisher'
