@@ -73,6 +73,10 @@ const badr = {
     // al-Kalbi's rival account naming a different man, "as-Saib ibn Maz'un,"
     // as a mistake -- see data/history/batches/as-saib-ibn-uthman/summary.md.
     { person: 'as-saib-ibn-uthman', isMuslim: true, claims: ['saib-uthman-siyar12/badr'] },
+    // His own entry names him البدري outright, then has him challenge his
+    // father, Utbah ibn Rabiah, to single combat there (see
+    // data/history/batches/abu-hudhayfah).
+    { person: 'abu-hudhayfah', isMuslim: true, claims: ['abu-hudhayfah-siyar13/badr'] },
     // The old seed had him present here with no status at all. He was away
     // trading in Syria, and given the share and the reward all the same.
     {
