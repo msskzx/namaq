@@ -1,0 +1,371 @@
+{
+  "slug": "musab-ibn-umayr",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "musab-ibn-umayr",
+      "extractionUrl": "https://shamela.ws/book/10906/1571",
+      "accessedAt": "2026-09-24",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "145",
+          "bodyFile": "accounts/musab-ibn-umayr/001.md",
+          "notesFile": "accounts/musab-ibn-umayr/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1571",
+          "passages": [
+            {
+              "anchor": "145-p4"
+            },
+            {
+              "anchor": "145-p5"
+            },
+            {
+              "anchor": "145-p6"
+            },
+            {
+              "anchor": "145-p7"
+            },
+            {
+              "anchor": "145-p8"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "146",
+          "bodyFile": "accounts/musab-ibn-umayr/002.md",
+          "notesFile": "accounts/musab-ibn-umayr/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1572",
+          "passages": [
+            {
+              "anchor": "146-p1"
+            },
+            {
+              "anchor": "146-p2"
+            },
+            {
+              "anchor": "146-p3"
+            },
+            {
+              "anchor": "146-p4"
+            },
+            {
+              "anchor": "146-p5"
+            },
+            {
+              "anchor": "146-p6"
+            },
+            {
+              "anchor": "146-p7"
+            },
+            {
+              "anchor": "146-p8"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "printedPage": "147",
+          "bodyFile": "accounts/musab-ibn-umayr/003.md",
+          "notesFile": "accounts/musab-ibn-umayr/003.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1573",
+          "passages": [
+            {
+              "anchor": "147-p1"
+            },
+            {
+              "anchor": "147-p2"
+            },
+            {
+              "anchor": "147-p3"
+            },
+            {
+              "anchor": "147-p4"
+            },
+            {
+              "anchor": "147-p5"
+            },
+            {
+              "anchor": "147-p6"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "printedPage": "148",
+          "bodyFile": "accounts/musab-ibn-umayr/004.md",
+          "notesFile": "accounts/musab-ibn-umayr/004.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1574",
+          "passages": [
+            {
+              "anchor": "148-p1"
+            },
+            {
+              "anchor": "148-p2"
+            },
+            {
+              "anchor": "148-p3"
+            },
+            {
+              "anchor": "148-p4"
+            },
+            {
+              "anchor": "148-p5"
+            },
+            {
+              "anchor": "148-p6"
+            },
+            {
+              "anchor": "148-p7"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "printedPage": "149",
+          "bodyFile": "accounts/musab-ibn-umayr/005.md",
+          "notesFile": "accounts/musab-ibn-umayr/005.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1575",
+          "passages": [
+            {
+              "anchor": "149-p1"
+            },
+            {
+              "anchor": "149-p2"
+            },
+            {
+              "anchor": "149-p3"
+            },
+            {
+              "anchor": "149-p4"
+            },
+            {
+              "anchor": "149-p5"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "printedPage": "150",
+          "bodyFile": "accounts/musab-ibn-umayr/006.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1576",
+          "passages": [
+            {
+              "anchor": "150-p1"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "musab/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "musab-ibn-umayr",
+      "assertion": "مصعب بن عمير بن هاشم بن عبد مناف بن عبد الدار بن قصي بن كلاب، القرشي، العبدري.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "fullName",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "145-p4",
+          "volume": "1",
+          "pageReference": "145",
+          "extractionUrl": "https://shamela.ws/book/10906/1571",
+          "excerptArabic": "مُصْعَبُ بنُ عُمَيْرِ * بنِ هَاشِمِ بنِ عَبْدِ مَنَافٍ البَدْرِيُّ",
+          "accessedAt": "2026-09-24"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "145-p5",
+          "volume": "1",
+          "pageReference": "145",
+          "extractionUrl": "https://shamela.ws/book/10906/1571",
+          "excerptArabic": "ابْنِ عَبْدِ الدَّارِ بنِ قُصَيِّ بنِ كِلاَبٍ، السَّيِّدُ، الشَّهِيْدُ، السَّابِقُ (٣) ، البَدْرِيُّ، القُرَشِيُّ، العَبْدَرِيُّ.",
+          "accessedAt": "2026-09-24"
+        }
+      ]
+    },
+    {
+      "key": "musab/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "musab-ibn-umayr",
+      "assertion": "مصعب بن عمير بن هاشم بن عبد مناف.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "145-p4",
+          "volume": "1",
+          "pageReference": "145",
+          "extractionUrl": "https://shamela.ws/book/10906/1571",
+          "excerptArabic": "مُصْعَبُ بنُ عُمَيْرِ * بنِ هَاشِمِ بنِ عَبْدِ مَنَافٍ البَدْرِيُّ",
+          "accessedAt": "2026-09-24"
+        }
+      ],
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "umayr-ibn-hashim"
+    },
+    {
+      "key": "musab/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "musab-ibn-umayr",
+      "assertion": "السيد، الشهيد، السابق، البدري، القرشي، العبدري.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "145-p5",
+          "volume": "1",
+          "pageReference": "145",
+          "extractionUrl": "https://shamela.ws/book/10906/1571",
+          "excerptArabic": "السَّيِّدُ، الشَّهِيْدُ، السَّابِقُ (٣) ، البَدْرِيُّ، القُرَشِيُّ، العَبْدَرِيُّ.",
+          "accessedAt": "2026-09-24"
+        }
+      ],
+      "field": "titles"
+    }
+  ],
+  "approval": {
+    "revision": "bb67c416149a4013",
+    "approvedAt": "2026-09-24",
+    "approvedBy": "msskzx",
+    "note": "Approved for publication. All three claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+  }
+}
