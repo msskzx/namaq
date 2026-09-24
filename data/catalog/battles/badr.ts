@@ -83,6 +83,7 @@ const badr = {
       claims: ['talhah/badr'],
     },
     { person: 'qudamah-ibn-mazun', isMuslim: true, claims: ['qudamah-mazun-siyar10/badr'] },
+    { person: 'abdullah-ibn-mazun-al-jumahi', isMuslim: true, claims: ['abdullah-mazun-siyar11/badr'] },
     {
       person: 'az-zubayr-ibn-al-awwam',
       isMuslim: true,

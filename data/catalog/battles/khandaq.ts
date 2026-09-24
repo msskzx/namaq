@@ -23,6 +23,7 @@ const khandaq = {
   },
   participants: [
     { person: 'saad-ibn-muadh', isMuslim: true, status: ['INJURED'], claims: ['saad-muadh/khandaq-wound'] },
+    { person: 'abdullah-ibn-mazun-al-jumahi', isMuslim: true, claims: ['abdullah-mazun-siyar11/khandaq'] },
     // Carried from the old seed when these people left it; no batch places
     // them here yet.
     { person: 'abu-bakr-as-siddiq', isMuslim: true, claims: legacyUnreviewed },
