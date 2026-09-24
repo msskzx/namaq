@@ -1,0 +1,1244 @@
+{
+  "slug": "saeed-ibn-zaid",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saeed-ibn-zaid",
+      "extractionUrl": "https://shamela.ws/book/10906/1550",
+      "accessedAt": "2026-09-24",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "124",
+          "bodyFile": "accounts/saeed-ibn-zaid/001.md",
+          "notesFile": "accounts/saeed-ibn-zaid/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1550",
+          "passages": [
+            {
+              "anchor": "124-p6"
+            },
+            {
+              "anchor": "124-p7"
+            },
+            {
+              "anchor": "124-p8"
+            },
+            {
+              "anchor": "124-p9"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "125",
+          "bodyFile": "accounts/saeed-ibn-zaid/002.md",
+          "notesFile": "accounts/saeed-ibn-zaid/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1551",
+          "passages": [
+            {
+              "anchor": "125-p1"
+            },
+            {
+              "anchor": "125-p2"
+            },
+            {
+              "anchor": "125-p3"
+            },
+            {
+              "anchor": "125-p4"
+            },
+            {
+              "anchor": "125-p5"
+            },
+            {
+              "anchor": "125-p6"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "printedPage": "126",
+          "bodyFile": "accounts/saeed-ibn-zaid/003.md",
+          "notesFile": "accounts/saeed-ibn-zaid/003.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1552",
+          "passages": [
+            {
+              "anchor": "126-p1"
+            },
+            {
+              "anchor": "126-p2"
+            },
+            {
+              "anchor": "126-p3"
+            },
+            {
+              "anchor": "126-p4"
+            },
+            {
+              "anchor": "126-p5"
+            },
+            {
+              "anchor": "126-p6"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "printedPage": "127",
+          "bodyFile": "accounts/saeed-ibn-zaid/004.md",
+          "notesFile": "accounts/saeed-ibn-zaid/004.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1553",
+          "passages": [
+            {
+              "anchor": "127-p1"
+            },
+            {
+              "anchor": "127-p2"
+            },
+            {
+              "anchor": "127-p3"
+            },
+            {
+              "anchor": "127-p4"
+            },
+            {
+              "anchor": "127-p5"
+            },
+            {
+              "anchor": "127-p6"
+            },
+            {
+              "anchor": "127-p7"
+            },
+            {
+              "anchor": "127-p8"
+            },
+            {
+              "anchor": "127-p9"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "printedPage": "128",
+          "bodyFile": "accounts/saeed-ibn-zaid/005.md",
+          "notesFile": "accounts/saeed-ibn-zaid/005.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1554",
+          "passages": [
+            {
+              "anchor": "128-p1"
+            },
+            {
+              "anchor": "128-p2"
+            },
+            {
+              "anchor": "128-p3"
+            },
+            {
+              "anchor": "128-p4"
+            },
+            {
+              "anchor": "128-p5"
+            },
+            {
+              "anchor": "128-p6"
+            },
+            {
+              "anchor": "128-p7"
+            },
+            {
+              "anchor": "128-p8"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "printedPage": "129",
+          "bodyFile": "accounts/saeed-ibn-zaid/006.md",
+          "notesFile": "accounts/saeed-ibn-zaid/006.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1555",
+          "passages": [
+            {
+              "anchor": "129-p1"
+            },
+            {
+              "anchor": "129-p2"
+            },
+            {
+              "anchor": "129-p3"
+            },
+            {
+              "anchor": "129-p4"
+            },
+            {
+              "anchor": "129-p5"
+            },
+            {
+              "anchor": "129-p6"
+            },
+            {
+              "anchor": "129-p7"
+            },
+            {
+              "anchor": "129-p8"
+            },
+            {
+              "anchor": "129-p9"
+            },
+            {
+              "anchor": "129-p10"
+            },
+            {
+              "anchor": "129-p11"
+            },
+            {
+              "anchor": "129-p12"
+            },
+            {
+              "anchor": "129-p13"
+            },
+            {
+              "anchor": "129-p14"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "printedPage": "130",
+          "bodyFile": "accounts/saeed-ibn-zaid/007.md",
+          "notesFile": "accounts/saeed-ibn-zaid/007.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1556",
+          "passages": [
+            {
+              "anchor": "130-p1"
+            },
+            {
+              "anchor": "130-p2"
+            },
+            {
+              "anchor": "130-p3"
+            },
+            {
+              "anchor": "130-p4"
+            },
+            {
+              "anchor": "130-p5"
+            },
+            {
+              "anchor": "130-p6"
+            },
+            {
+              "anchor": "130-p7"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "printedPage": "131",
+          "bodyFile": "accounts/saeed-ibn-zaid/008.md",
+          "notesFile": "accounts/saeed-ibn-zaid/008.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1557",
+          "passages": [
+            {
+              "anchor": "131-p1"
+            },
+            {
+              "anchor": "131-p2"
+            },
+            {
+              "anchor": "131-p3"
+            },
+            {
+              "anchor": "131-p4"
+            },
+            {
+              "anchor": "131-p5"
+            },
+            {
+              "anchor": "131-p6"
+            },
+            {
+              "anchor": "131-p7"
+            },
+            {
+              "anchor": "131-p8"
+            },
+            {
+              "anchor": "131-p9"
+            }
+          ]
+        },
+        {
+          "sequence": 9,
+          "printedPage": "132",
+          "bodyFile": "accounts/saeed-ibn-zaid/009.md",
+          "notesFile": "accounts/saeed-ibn-zaid/009.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1558",
+          "passages": [
+            {
+              "anchor": "132-p1"
+            },
+            {
+              "anchor": "132-p2"
+            },
+            {
+              "anchor": "132-p3"
+            },
+            {
+              "anchor": "132-p4"
+            },
+            {
+              "anchor": "132-p5"
+            },
+            {
+              "anchor": "132-p6"
+            },
+            {
+              "anchor": "132-p7"
+            },
+            {
+              "anchor": "132-p8"
+            },
+            {
+              "anchor": "132-p9"
+            },
+            {
+              "anchor": "132-p10"
+            }
+          ]
+        },
+        {
+          "sequence": 10,
+          "printedPage": "133",
+          "bodyFile": "accounts/saeed-ibn-zaid/010.md",
+          "notesFile": "accounts/saeed-ibn-zaid/010.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1559",
+          "passages": [
+            {
+              "anchor": "133-p1"
+            },
+            {
+              "anchor": "133-p2"
+            },
+            {
+              "anchor": "133-p3"
+            },
+            {
+              "anchor": "133-p4"
+            },
+            {
+              "anchor": "133-p5"
+            },
+            {
+              "anchor": "133-p6"
+            },
+            {
+              "anchor": "133-p7"
+            },
+            {
+              "anchor": "133-p8"
+            }
+          ]
+        },
+        {
+          "sequence": 11,
+          "printedPage": "134",
+          "bodyFile": "accounts/saeed-ibn-zaid/011.md",
+          "notesFile": "accounts/saeed-ibn-zaid/011.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1560",
+          "passages": [
+            {
+              "anchor": "134-p1"
+            },
+            {
+              "anchor": "134-p2"
+            },
+            {
+              "anchor": "134-p3"
+            },
+            {
+              "anchor": "134-p4"
+            },
+            {
+              "anchor": "134-p5"
+            },
+            {
+              "anchor": "134-p6"
+            },
+            {
+              "anchor": "134-p7"
+            },
+            {
+              "anchor": "134-p8"
+            },
+            {
+              "anchor": "134-p9"
+            },
+            {
+              "anchor": "134-p10"
+            },
+            {
+              "anchor": "134-p11"
+            },
+            {
+              "anchor": "134-p12"
+            },
+            {
+              "anchor": "134-p13"
+            }
+          ]
+        },
+        {
+          "sequence": 12,
+          "printedPage": "135",
+          "bodyFile": "accounts/saeed-ibn-zaid/012.md",
+          "notesFile": "accounts/saeed-ibn-zaid/012.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1561",
+          "passages": [
+            {
+              "anchor": "135-p1"
+            },
+            {
+              "anchor": "135-p2"
+            },
+            {
+              "anchor": "135-p3"
+            },
+            {
+              "anchor": "135-p4"
+            },
+            {
+              "anchor": "135-p5"
+            },
+            {
+              "anchor": "135-p6"
+            },
+            {
+              "anchor": "135-p7"
+            },
+            {
+              "anchor": "135-p8"
+            },
+            {
+              "anchor": "135-p9"
+            },
+            {
+              "anchor": "135-p10"
+            },
+            {
+              "anchor": "135-p11"
+            },
+            {
+              "anchor": "135-p12"
+            },
+            {
+              "anchor": "135-p13"
+            }
+          ]
+        },
+        {
+          "sequence": 13,
+          "printedPage": "136",
+          "bodyFile": "accounts/saeed-ibn-zaid/013.md",
+          "notesFile": "accounts/saeed-ibn-zaid/013.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1562",
+          "passages": [
+            {
+              "anchor": "136-p1"
+            },
+            {
+              "anchor": "136-p2"
+            },
+            {
+              "anchor": "136-p3"
+            },
+            {
+              "anchor": "136-p4"
+            },
+            {
+              "anchor": "136-p5"
+            },
+            {
+              "anchor": "136-p6"
+            },
+            {
+              "anchor": "136-p7"
+            },
+            {
+              "anchor": "136-p8"
+            },
+            {
+              "anchor": "136-p9"
+            }
+          ]
+        },
+        {
+          "sequence": 14,
+          "printedPage": "137",
+          "bodyFile": "accounts/saeed-ibn-zaid/014.md",
+          "notesFile": "accounts/saeed-ibn-zaid/014.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1563",
+          "passages": [
+            {
+              "anchor": "137-p1"
+            },
+            {
+              "anchor": "137-p2"
+            },
+            {
+              "anchor": "137-p3"
+            },
+            {
+              "anchor": "137-p4"
+            },
+            {
+              "anchor": "137-p5"
+            },
+            {
+              "anchor": "137-p6"
+            },
+            {
+              "anchor": "137-p7"
+            },
+            {
+              "anchor": "137-p8"
+            },
+            {
+              "anchor": "137-p9"
+            },
+            {
+              "anchor": "137-p10"
+            },
+            {
+              "anchor": "137-p11"
+            },
+            {
+              "anchor": "137-p12"
+            },
+            {
+              "anchor": "137-p13"
+            },
+            {
+              "anchor": "137-p14"
+            }
+          ]
+        },
+        {
+          "sequence": 15,
+          "printedPage": "138",
+          "bodyFile": "accounts/saeed-ibn-zaid/015.md",
+          "notesFile": "accounts/saeed-ibn-zaid/015.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1564",
+          "passages": [
+            {
+              "anchor": "138-p1"
+            },
+            {
+              "anchor": "138-p2"
+            },
+            {
+              "anchor": "138-p3"
+            },
+            {
+              "anchor": "138-p4"
+            },
+            {
+              "anchor": "138-p5"
+            },
+            {
+              "anchor": "138-p6"
+            },
+            {
+              "anchor": "138-p7"
+            }
+          ]
+        },
+        {
+          "sequence": 16,
+          "printedPage": "139",
+          "bodyFile": "accounts/saeed-ibn-zaid/016.md",
+          "notesFile": "accounts/saeed-ibn-zaid/016.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1565",
+          "passages": [
+            {
+              "anchor": "139-p1"
+            },
+            {
+              "anchor": "139-p2"
+            },
+            {
+              "anchor": "139-p3"
+            },
+            {
+              "anchor": "139-p4"
+            },
+            {
+              "anchor": "139-p5"
+            },
+            {
+              "anchor": "139-p6"
+            },
+            {
+              "anchor": "139-p7"
+            },
+            {
+              "anchor": "139-p8"
+            },
+            {
+              "anchor": "139-p9"
+            },
+            {
+              "anchor": "139-p10"
+            },
+            {
+              "anchor": "139-p11"
+            },
+            {
+              "anchor": "139-p12"
+            }
+          ]
+        },
+        {
+          "sequence": 17,
+          "printedPage": "140",
+          "bodyFile": "accounts/saeed-ibn-zaid/017.md",
+          "notesFile": "accounts/saeed-ibn-zaid/017.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1566",
+          "passages": [
+            {
+              "anchor": "140-p1"
+            },
+            {
+              "anchor": "140-p2"
+            },
+            {
+              "anchor": "140-p3"
+            },
+            {
+              "anchor": "140-p4"
+            },
+            {
+              "anchor": "140-p5"
+            },
+            {
+              "anchor": "140-p6"
+            },
+            {
+              "anchor": "140-p7"
+            },
+            {
+              "anchor": "140-p8"
+            },
+            {
+              "anchor": "140-p9"
+            },
+            {
+              "anchor": "140-p10"
+            },
+            {
+              "anchor": "140-p11"
+            },
+            {
+              "anchor": "140-p12"
+            },
+            {
+              "anchor": "140-p13"
+            },
+            {
+              "anchor": "140-p14"
+            },
+            {
+              "anchor": "140-p15"
+            }
+          ]
+        },
+        {
+          "sequence": 18,
+          "printedPage": "141",
+          "bodyFile": "accounts/saeed-ibn-zaid/018.md",
+          "notesFile": "accounts/saeed-ibn-zaid/018.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1567",
+          "passages": [
+            {
+              "anchor": "141-p1"
+            },
+            {
+              "anchor": "141-p2"
+            },
+            {
+              "anchor": "141-p3"
+            },
+            {
+              "anchor": "141-p4"
+            },
+            {
+              "anchor": "141-p5"
+            },
+            {
+              "anchor": "141-p6"
+            },
+            {
+              "anchor": "141-p7"
+            },
+            {
+              "anchor": "141-p8"
+            },
+            {
+              "anchor": "141-p9"
+            },
+            {
+              "anchor": "141-p10"
+            },
+            {
+              "anchor": "141-p11"
+            },
+            {
+              "anchor": "141-p12"
+            },
+            {
+              "anchor": "141-p13"
+            },
+            {
+              "anchor": "141-p14"
+            }
+          ]
+        },
+        {
+          "sequence": 19,
+          "printedPage": "142",
+          "bodyFile": "accounts/saeed-ibn-zaid/019.md",
+          "notesFile": "accounts/saeed-ibn-zaid/019.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1568",
+          "passages": [
+            {
+              "anchor": "142-p1"
+            },
+            {
+              "anchor": "142-p2"
+            },
+            {
+              "anchor": "142-p3"
+            },
+            {
+              "anchor": "142-p4"
+            },
+            {
+              "anchor": "142-p5"
+            },
+            {
+              "anchor": "142-p6"
+            },
+            {
+              "anchor": "142-p7"
+            },
+            {
+              "anchor": "142-p8"
+            },
+            {
+              "anchor": "142-p9"
+            },
+            {
+              "anchor": "142-p10"
+            },
+            {
+              "anchor": "142-p11"
+            },
+            {
+              "anchor": "142-p12"
+            },
+            {
+              "anchor": "142-p13"
+            },
+            {
+              "anchor": "142-p14"
+            },
+            {
+              "anchor": "142-p15"
+            }
+          ]
+        },
+        {
+          "sequence": 20,
+          "printedPage": "143",
+          "bodyFile": "accounts/saeed-ibn-zaid/020.md",
+          "notesFile": "accounts/saeed-ibn-zaid/020.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1569",
+          "passages": [
+            {
+              "anchor": "143-p1"
+            },
+            {
+              "anchor": "143-p2"
+            },
+            {
+              "anchor": "143-p3"
+            },
+            {
+              "anchor": "143-p4"
+            },
+            {
+              "anchor": "143-p5"
+            },
+            {
+              "anchor": "143-p6"
+            },
+            {
+              "anchor": "143-p7"
+            },
+            {
+              "anchor": "143-p8"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "saeed/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saeed-ibn-zaid",
+      "assertion": "سعيد بن زيد بن عمرو بن نفيل بن عبد العزى بن رياح بن قرط بن رزاح بن عدي بن كعب بن لؤي بن غالب، أبو الأعور، القرشي، العدوي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "124-p6",
+          "volume": "1",
+          "pageReference": "124",
+          "extractionUrl": "https://shamela.ws/book/10906/1550",
+          "excerptArabic": "٦ - سَعِيْدُ بنُ زَيْدِ بنِ عَمْرِو بنِ نُفَيْلٍ العَدَوِيُّ",
+          "accessedAt": "2026-09-24"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "124-p7",
+          "volume": "1",
+          "pageReference": "124",
+          "extractionUrl": "https://shamela.ws/book/10906/1550",
+          "excerptArabic": "ابْنِ عَبْدِ العُزَّى بنِ رِيَاحِ بنِ قُرْطِ بنِ رَزَاحِ بنِ عَدِيِّ بنِ كَعْبِ بنِ لُؤَيِّ بنِ غَالِبٍ، أَبُو الأَعْوَرِ، القُرَشِيُّ، العَدَوِيُّ.",
+          "accessedAt": "2026-09-24"
+        }
+      ],
+      "field": "fullName"
+    },
+    {
+      "key": "saeed/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saeed-ibn-zaid",
+      "assertion": "كنيته أبو الأعور.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "124-p7",
+          "volume": "1",
+          "pageReference": "124",
+          "extractionUrl": "https://shamela.ws/book/10906/1550",
+          "excerptArabic": "أَبُو الأَعْوَرِ",
+          "accessedAt": "2026-09-24"
+        }
+      ],
+      "field": "kunya"
+    },
+    {
+      "key": "saeed/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saeed-ibn-zaid",
+      "assertion": "أحد العشرة المشهود لهم بالجنة، ومن السابقين الأولين البدريين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "124-p8",
+          "volume": "1",
+          "pageReference": "124",
+          "extractionUrl": "https://shamela.ws/book/10906/1550",
+          "excerptArabic": "أَحَدُ العَشَرَةِ المَشْهُوْدِ لَهُم بِالجَنَّةِ، وَمِنَ السَّابِقِيْنَ الأَوَّلِيْنَ البَدْرِيِّيْنَ",
+          "accessedAt": "2026-09-24"
+        }
+      ],
+      "field": "titles"
+    },
+    {
+      "key": "saeed/companion-of-prophet",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saeed-ibn-zaid",
+      "assertion": "شهد المشاهد مع رسول الله صلى الله عليه وسلم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "124-p9",
+          "volume": "1",
+          "pageReference": "124",
+          "extractionUrl": "https://shamela.ws/book/10906/1550",
+          "excerptArabic": "شَهِدَ المَشَاهِدَ مَعَ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-",
+          "accessedAt": "2026-09-24"
+        }
+      ],
+      "relationshipType": "COMPANION_OF",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "prophet-muhammad"
+    },
+    {
+      "key": "saeed/appearance",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saeed-ibn-zaid",
+      "assertion": "قال الواقدي: كان سعيد رجلاً آدم، طويلاً، أشعر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "140-p10",
+          "volume": "1",
+          "pageReference": "140",
+          "extractionUrl": "https://shamela.ws/book/10906/1566",
+          "excerptArabic": "قَالَ الوَاقِدِيُّ: كَانَ سَعِيْدٌ رَجُلاً آدَمَ، طَوِيْلاً، أَشْعَرَ.",
+          "accessedAt": "2026-09-24"
+        }
+      ],
+      "field": "appearance"
+    },
+    {
+      "key": "saeed/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saeed-ibn-zaid",
+      "assertion": "قال الواقدي: توفي سعيد بن زيد سنة إحدى وخمسين، وهو ابن بضع وسبعين سنة، وقبر بالمدينة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "140-p8",
+          "volume": "1",
+          "pageReference": "140",
+          "extractionUrl": "https://shamela.ws/book/10906/1566",
+          "excerptArabic": "قَالَ الوَاقِدِيُّ: تُوُفِّيَ سَعِيْدُ بنُ زَيْدٍ سَنَةَ إِحْدَى وَخَمْسِيْنَ، وَهُوَ ابْنُ بِضْعٍ وَسَبْعِيْنَ سَنَةً، وَقُبرِ بِالمَدِيْنَةِ، نَزَلَ فِي قَبْرِهِ سَعْدٌ وَابْنُ عُمَرَ.",
+          "accessedAt": "2026-09-24"
+        }
+      ],
+      "field": "deathYearHijri"
+    },
+    {
+      "key": "saeed/death-year-alt",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saeed-ibn-zaid",
+      "assertion": "وقال عبيد الله بن سعد الزهري: مات سنة اثنتين وخمسين.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "140-p12",
+          "volume": "1",
+          "pageReference": "140",
+          "extractionUrl": "https://shamela.ws/book/10906/1566",
+          "excerptArabic": "وَقَالَ عُبَيْدُ اللهِ بنُ سَعْدٍ الزُّهْرِيُّ: مَاتَ سَنَةَ اثْنَتَيْنِ وَخَمْسِيْنَ",
+          "accessedAt": "2026-09-24"
+        }
+      ],
+      "field": "deathYearHijri",
+      "disputed": true
+    },
+    {
+      "key": "saeed/death-place",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saeed-ibn-zaid",
+      "assertion": "مات سعيد بن زيد بالعقيق، فغسله سعد بن أبي وقاص وكفنه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "140-p5",
+          "volume": "1",
+          "pageReference": "140",
+          "extractionUrl": "https://shamela.ws/book/10906/1566",
+          "excerptArabic": "مَاتَ سَعِيْدُ بنُ زَيْدٍ بِالعَقِيْقِ، فَغَسَّلَهُ سَعْدُ بنُ أَبِي وَقَّاصٍ وَكَفَّنَهُ، وَخَرَجَ مَعَهُ",
+          "accessedAt": "2026-09-24"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "140-p7",
+          "volume": "1",
+          "pageReference": "140",
+          "extractionUrl": "https://shamela.ws/book/10906/1566",
+          "excerptArabic": "مَاتَ سَعِيْدُ بنُ زَيْدٍ، وَسَعْدُ بنُ أَبِي وَقَّاصٍ بِالعَقِيْقِ.",
+          "accessedAt": "2026-09-24"
+        }
+      ],
+      "field": "placeOfDeathArabic"
+    },
+    {
+      "key": "saeed/death-place-alt",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saeed-ibn-zaid",
+      "assertion": "وقد شذ الهيثم بن عدي فقال: مات بالكوفة.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "140-p11",
+          "volume": "1",
+          "pageReference": "140",
+          "extractionUrl": "https://shamela.ws/book/10906/1566",
+          "excerptArabic": "وَقَدْ شَذَّ الهَيْثَمُ بنُ عَدِيٍّ فَقَالَ: مَاتَ بِالكُوْفَةِ.",
+          "accessedAt": "2026-09-24"
+        }
+      ],
+      "field": "placeOfDeathArabic",
+      "disputed": true
+    },
+    {
+      "key": "saeed/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saeed-ibn-zaid",
+      "assertion": "كان والده زيد بن عمرو ممن فر إلى الله من عبادة الأصنام.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "126-p6",
+          "volume": "1",
+          "pageReference": "126",
+          "extractionUrl": "https://shamela.ws/book/10906/1552",
+          "excerptArabic": "كَانَ وَالِدُهُ زَيْدُ بنُ عَمْرٍو مِمَّنْ فَرَّ إِلَى اللهِ مِنْ عِبَادَةِ الأَصْنَامِ",
+          "accessedAt": "2026-09-24"
+        }
+      ],
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "zayd-ibn-amr-ibn-nufayl"
+    },
+    {
+      "key": "saeed/mashahid",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saeed-ibn-zaid",
+      "assertion": "شهد سعيد أحداً، والخندق، والحديبية، والمشاهد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "137-p3",
+          "volume": "1",
+          "pageReference": "137",
+          "extractionUrl": "https://shamela.ws/book/10906/1563",
+          "excerptArabic": "وَشَهِدَ سَعِيْدٌ أُحُداً، وَالخَنْدَقَ، وَالحُدَيْبِيَةَ، وَالمَشَاهِدَ",
+          "accessedAt": "2026-09-24"
+        }
+      ],
+      "field": "virtues"
+    },
+    {
+      "key": "saeed/uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saeed-ibn-zaid",
+      "assertion": "شهد سعيد أحداً.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "137-p3",
+          "volume": "1",
+          "pageReference": "137",
+          "extractionUrl": "https://shamela.ws/book/10906/1563",
+          "excerptArabic": "وَشَهِدَ سَعِيْدٌ أُحُداً، وَالخَنْدَقَ، وَالحُدَيْبِيَةَ، وَالمَشَاهِدَ",
+          "accessedAt": "2026-09-24"
+        }
+      ],
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud"
+    },
+    {
+      "key": "saeed/khandaq",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saeed-ibn-zaid",
+      "assertion": "شهد سعيد الخندق.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "137-p3",
+          "volume": "1",
+          "pageReference": "137",
+          "extractionUrl": "https://shamela.ws/book/10906/1563",
+          "excerptArabic": "وَشَهِدَ سَعِيْدٌ أُحُداً، وَالخَنْدَقَ، وَالحُدَيْبِيَةَ، وَالمَشَاهِدَ",
+          "accessedAt": "2026-09-24"
+        }
+      ],
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "khandaq"
+    },
+    {
+      "key": "saeed/hudaybiyyah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saeed-ibn-zaid",
+      "assertion": "شهد سعيد الحديبية.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "137-p3",
+          "volume": "1",
+          "pageReference": "137",
+          "extractionUrl": "https://shamela.ws/book/10906/1563",
+          "excerptArabic": "وَشَهِدَ سَعِيْدٌ أُحُداً، وَالخَنْدَقَ، وَالحُدَيْبِيَةَ، وَالمَشَاهِدَ",
+          "accessedAt": "2026-09-24"
+        }
+      ],
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "hudaybiyyah"
+    }
+  ],
+  "approval": {
+    "revision": "d1c5cc2641ebe28b",
+    "approvedAt": "2026-09-24",
+    "approvedBy": "msskzx",
+    "note": "Approved for publication. All fourteen claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+  }
+}
