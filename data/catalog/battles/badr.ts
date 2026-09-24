@@ -77,6 +77,9 @@ const badr = {
     // father, Utbah ibn Rabiah, to single combat there (see
     // data/history/batches/abu-hudhayfah).
     { person: 'abu-hudhayfah', isMuslim: true, claims: ['abu-hudhayfah-siyar13/badr'] },
+    // His own entry names him البدري outright too (see
+    // data/history/batches/salim-mawla-abi-hudhayfah).
+    { person: 'salim-mawla-abi-hudhayfah', isMuslim: true, claims: ['salim-siyar14/badr'] },
     // The old seed had him present here with no status at all. He was away
     // trading in Syria, and given the share and the reward all the same.
     {

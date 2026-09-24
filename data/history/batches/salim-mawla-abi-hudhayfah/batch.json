@@ -1,0 +1,513 @@
+{
+  "slug": "salim-mawla-abi-hudhayfah",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "salim-mawla-abi-hudhayfah",
+      "extractionUrl": "https://shamela.ws/book/10906/1593",
+      "accessedAt": "2026-09-24",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "167",
+          "bodyFile": "accounts/salim-mawla-abi-hudhayfah/001.md",
+          "notesFile": "accounts/salim-mawla-abi-hudhayfah/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1593",
+          "passages": [
+            {
+              "anchor": "167-p3"
+            },
+            {
+              "anchor": "167-p4"
+            },
+            {
+              "anchor": "167-p5"
+            },
+            {
+              "anchor": "167-p6"
+            },
+            {
+              "anchor": "167-p7"
+            },
+            {
+              "anchor": "167-p8"
+            },
+            {
+              "anchor": "167-p9"
+            },
+            {
+              "anchor": "167-p10"
+            },
+            {
+              "anchor": "167-p11"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "168",
+          "bodyFile": "accounts/salim-mawla-abi-hudhayfah/002.md",
+          "notesFile": "accounts/salim-mawla-abi-hudhayfah/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1594",
+          "passages": [
+            {
+              "anchor": "168-p1"
+            },
+            {
+              "anchor": "168-p2"
+            },
+            {
+              "anchor": "168-p3"
+            },
+            {
+              "anchor": "168-p4"
+            },
+            {
+              "anchor": "168-p5"
+            },
+            {
+              "anchor": "168-p6"
+            },
+            {
+              "anchor": "168-p7"
+            },
+            {
+              "anchor": "168-p8"
+            },
+            {
+              "anchor": "168-p9"
+            },
+            {
+              "anchor": "168-p10"
+            },
+            {
+              "anchor": "168-p11"
+            },
+            {
+              "anchor": "168-p12"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "printedPage": "169",
+          "bodyFile": "accounts/salim-mawla-abi-hudhayfah/003.md",
+          "notesFile": "accounts/salim-mawla-abi-hudhayfah/003.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1595",
+          "passages": [
+            {
+              "anchor": "169-p1"
+            },
+            {
+              "anchor": "169-p2"
+            },
+            {
+              "anchor": "169-p3"
+            },
+            {
+              "anchor": "169-p4"
+            },
+            {
+              "anchor": "169-p5"
+            },
+            {
+              "anchor": "169-p6"
+            },
+            {
+              "anchor": "169-p7"
+            },
+            {
+              "anchor": "169-p8"
+            },
+            {
+              "anchor": "169-p9"
+            },
+            {
+              "anchor": "169-p10"
+            },
+            {
+              "anchor": "169-p11"
+            },
+            {
+              "anchor": "169-p12"
+            },
+            {
+              "anchor": "169-p13"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "printedPage": "170",
+          "bodyFile": "accounts/salim-mawla-abi-hudhayfah/004.md",
+          "notesFile": "accounts/salim-mawla-abi-hudhayfah/004.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1596",
+          "passages": [
+            {
+              "anchor": "170-p1"
+            },
+            {
+              "anchor": "170-p2"
+            },
+            {
+              "anchor": "170-p3"
+            },
+            {
+              "anchor": "170-p4"
+            },
+            {
+              "anchor": "170-p5"
+            },
+            {
+              "anchor": "170-p6"
+            },
+            {
+              "anchor": "170-p7"
+            },
+            {
+              "anchor": "170-p8"
+            },
+            {
+              "anchor": "170-p9"
+            },
+            {
+              "anchor": "170-p10"
+            },
+            {
+              "anchor": "170-p11"
+            },
+            {
+              "anchor": "170-p12"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "printedPage": "171",
+          "bodyFile": "accounts/salim-mawla-abi-hudhayfah/005.md",
+          "notesFile": "accounts/salim-mawla-abi-hudhayfah/005.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1597",
+          "passages": [
+            {
+              "anchor": "171-p1"
+            },
+            {
+              "anchor": "171-p2"
+            },
+            {
+              "anchor": "171-p3"
+            },
+            {
+              "anchor": "171-p4"
+            },
+            {
+              "anchor": "171-p5"
+            },
+            {
+              "anchor": "171-p6"
+            },
+            {
+              "anchor": "171-p7"
+            },
+            {
+              "anchor": "171-p8"
+            },
+            {
+              "anchor": "171-p9"
+            },
+            {
+              "anchor": "171-p10"
+            },
+            {
+              "anchor": "171-p11"
+            },
+            {
+              "anchor": "171-p12"
+            },
+            {
+              "anchor": "171-p13"
+            },
+            {
+              "anchor": "171-p14"
+            },
+            {
+              "anchor": "171-p15"
+            },
+            {
+              "anchor": "171-p16"
+            },
+            {
+              "anchor": "171-p17"
+            },
+            {
+              "anchor": "171-p18"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "salim-siyar14/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "salim-mawla-abi-hudhayfah",
+      "field": "virtues",
+      "assertion": "من السابقين الأولين البدريين، أم المهاجرين بقباء لأنه كان أقرأهم، وأثنى عليه النبي صلى الله عليه وسلم لحسن قراءته.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "167-p4",
+          "volume": "1",
+          "pageReference": "167",
+          "extractionUrl": "https://shamela.ws/book/10906/1593",
+          "excerptArabic": "مِنَ السَّابِقِيْنَ الأَوَّلِيْنَ، البَدْرِيِّيْنَ، المُقَرَّبِيْنَ، العَالِمِيْنَ",
+          "accessedAt": "2026-09-24"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "168-p2",
+          "volume": "1",
+          "pageReference": "168",
+          "extractionUrl": "https://shamela.ws/book/10906/1594",
+          "excerptArabic": "كَانَ سَالِمٌ مَوْلَى أَبِي حُذَيْفَةَ يَؤُمُّ المُهَاجِرِيْنَ الَّذِيْنَ قَدِمُوا مِنْ مَكَّةَ حِيْنَ قَدِمَ المَدِيْنَةَ، لأَنَّهُ كَانَ أَقْرَأَهُم",
+          "accessedAt": "2026-09-24"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "168-p9",
+          "volume": "1",
+          "pageReference": "168",
+          "extractionUrl": "https://shamela.ws/book/10906/1594",
+          "excerptArabic": "الحَمْدُ لِلِّهِ الَّذِي جَعَلَ فِي أُمَّتِي مِثْلَكَ",
+          "accessedAt": "2026-09-24"
+        }
+      ]
+    },
+    {
+      "key": "salim-siyar14/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "salim-mawla-abi-hudhayfah",
+      "field": "fullName",
+      "assertion": "سالم بن معقل.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "167-p5",
+          "volume": "1",
+          "pageReference": "167",
+          "extractionUrl": "https://shamela.ws/book/10906/1593",
+          "excerptArabic": "هُوَ سَالِمُ بنُ مَعْقِلٍ",
+          "accessedAt": "2026-09-24"
+        }
+      ]
+    },
+    {
+      "key": "salim-siyar14/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "salim-mawla-abi-hudhayfah",
+      "assertion": "شهد بدرا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "167-p4",
+          "volume": "1",
+          "pageReference": "167",
+          "extractionUrl": "https://shamela.ws/book/10906/1593",
+          "excerptArabic": "البَدْرِيِّيْنَ",
+          "accessedAt": "2026-09-24"
+        }
+      ]
+    },
+    {
+      "key": "salim-siyar14/mawla",
+      "subjectKind": "PERSON",
+      "subjectSlug": "salim-mawla-abi-hudhayfah",
+      "assertion": "والى أبا حذيفة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "MAWLA",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "abu-hudhayfah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "167-p5",
+          "volume": "1",
+          "pageReference": "167",
+          "extractionUrl": "https://shamela.ws/book/10906/1593",
+          "excerptArabic": "وَالَى أَبَا حُذَيْفَةَ",
+          "accessedAt": "2026-09-24"
+        }
+      ]
+    },
+    {
+      "key": "salim-siyar14/pact-brother-abu-ubaydah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "salim-mawla-abi-hudhayfah",
+      "assertion": "آخى النبي صلى الله عليه وسلم بينه وبين أبي عبيدة بن الجراح، بسند منقطع.",
+      "confidence": "UNASSESSED",
+      "reviewStatus": "NOT_REVIEWED",
+      "reviewerNote": "Muhammad ibn Ibrahim al-Taymi's own chain is marked منقطع immediately after this line, so the pairing rests on a broken chain rather than a competing report.",
+      "relationshipType": "PACT_BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "abu-ubaydah-ibn-al-jarrah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "169-p5",
+          "volume": "1",
+          "pageReference": "169",
+          "extractionUrl": "https://shamela.ws/book/10906/1595",
+          "excerptArabic": "وَآخَى النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بَيْنَ سَالِمٍ مَوْلَى أَبِي حُذَيْفَةَ، وَبَيْنَ أَبِي عُبَيْدَةَ بنِ الجَرَّاحِ",
+          "accessedAt": "2026-09-24"
+        }
+      ]
+    }
+  ],
+  "approval": {
+    "revision": "f9dab38ae7ac8b60",
+    "approvedAt": "2026-09-24",
+    "approvedBy": "msskzx",
+    "note": "Approved for publication. All five claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+  }
+}
