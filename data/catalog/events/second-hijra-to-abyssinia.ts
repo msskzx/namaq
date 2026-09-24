@@ -24,6 +24,7 @@ const secondHijraToAbyssinia = {
     // Najashi's throne and carried the news back.
     { person: 'az-zubayr-ibn-al-awwam', claims: ['zubayr/nile-habasha'] },
     { person: 'qudamah-ibn-mazun', claims: ['qudamah-mazun-siyar10/hijra-habasha-second'] },
+    { person: 'abdullah-ibn-mazun-al-jumahi', claims: ['abdullah-mazun-siyar11/hijra-habasha-second'] },
   ],
 } satisfies CatalogEvent;
 
