@@ -1,0 +1,636 @@
+{
+  "slug": "uthman-ibn-mazun",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "uthman-ibn-mazun",
+      "extractionUrl": "https://shamela.ws/book/10906/1579",
+      "accessedAt": "2026-09-24",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "153",
+          "bodyFile": "accounts/uthman-ibn-mazun/001.md",
+          "notesFile": "accounts/uthman-ibn-mazun/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1579",
+          "passages": [
+            {
+              "anchor": "153-p9"
+            },
+            {
+              "anchor": "153-p10"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "154",
+          "bodyFile": "accounts/uthman-ibn-mazun/002.md",
+          "notesFile": "accounts/uthman-ibn-mazun/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1580",
+          "passages": [
+            {
+              "anchor": "154-p1"
+            },
+            {
+              "anchor": "154-p2"
+            },
+            {
+              "anchor": "154-p3"
+            },
+            {
+              "anchor": "154-p4"
+            },
+            {
+              "anchor": "154-p5"
+            },
+            {
+              "anchor": "154-p6"
+            },
+            {
+              "anchor": "154-p7"
+            },
+            {
+              "anchor": "154-p8"
+            },
+            {
+              "anchor": "154-p9"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "printedPage": "155",
+          "bodyFile": "accounts/uthman-ibn-mazun/003.md",
+          "notesFile": "accounts/uthman-ibn-mazun/003.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1581",
+          "passages": [
+            {
+              "anchor": "155-p1"
+            },
+            {
+              "anchor": "155-p2"
+            },
+            {
+              "anchor": "155-p3"
+            },
+            {
+              "anchor": "155-p4"
+            },
+            {
+              "anchor": "155-p5"
+            },
+            {
+              "anchor": "155-p6"
+            },
+            {
+              "anchor": "155-p7"
+            },
+            {
+              "anchor": "155-p8"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "printedPage": "156",
+          "bodyFile": "accounts/uthman-ibn-mazun/004.md",
+          "notesFile": "accounts/uthman-ibn-mazun/004.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1582",
+          "passages": [
+            {
+              "anchor": "156-p1"
+            },
+            {
+              "anchor": "156-p2"
+            },
+            {
+              "anchor": "156-p3"
+            },
+            {
+              "anchor": "156-p4"
+            },
+            {
+              "anchor": "156-p5"
+            },
+            {
+              "anchor": "156-p6"
+            },
+            {
+              "anchor": "156-p7"
+            },
+            {
+              "anchor": "156-p8"
+            },
+            {
+              "anchor": "156-p9"
+            },
+            {
+              "anchor": "156-p10"
+            },
+            {
+              "anchor": "156-p11"
+            },
+            {
+              "anchor": "156-p12"
+            },
+            {
+              "anchor": "156-p13"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "printedPage": "157",
+          "bodyFile": "accounts/uthman-ibn-mazun/005.md",
+          "notesFile": "accounts/uthman-ibn-mazun/005.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1583",
+          "passages": [
+            {
+              "anchor": "157-p1"
+            },
+            {
+              "anchor": "157-p2"
+            },
+            {
+              "anchor": "157-p3"
+            },
+            {
+              "anchor": "157-p4"
+            },
+            {
+              "anchor": "157-p5"
+            },
+            {
+              "anchor": "157-p6"
+            },
+            {
+              "anchor": "157-p7"
+            },
+            {
+              "anchor": "157-p8"
+            },
+            {
+              "anchor": "157-p9"
+            },
+            {
+              "anchor": "157-p10"
+            },
+            {
+              "anchor": "157-p11"
+            },
+            {
+              "anchor": "157-p12"
+            },
+            {
+              "anchor": "157-p13"
+            },
+            {
+              "anchor": "157-p14"
+            },
+            {
+              "anchor": "157-p15"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "printedPage": "158",
+          "bodyFile": "accounts/uthman-ibn-mazun/006.md",
+          "notesFile": "accounts/uthman-ibn-mazun/006.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1584",
+          "passages": [
+            {
+              "anchor": "158-p1"
+            },
+            {
+              "anchor": "158-p2"
+            },
+            {
+              "anchor": "158-p3"
+            },
+            {
+              "anchor": "158-p4"
+            },
+            {
+              "anchor": "158-p5"
+            },
+            {
+              "anchor": "158-p6"
+            },
+            {
+              "anchor": "158-p7"
+            },
+            {
+              "anchor": "158-p8"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "printedPage": "159",
+          "bodyFile": "accounts/uthman-ibn-mazun/007.md",
+          "notesFile": "accounts/uthman-ibn-mazun/007.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1585",
+          "passages": [
+            {
+              "anchor": "159-p1"
+            },
+            {
+              "anchor": "159-p2"
+            },
+            {
+              "anchor": "159-p3"
+            },
+            {
+              "anchor": "159-p4"
+            },
+            {
+              "anchor": "159-p5"
+            },
+            {
+              "anchor": "159-p6"
+            },
+            {
+              "anchor": "159-p7"
+            },
+            {
+              "anchor": "159-p8"
+            },
+            {
+              "anchor": "159-p9"
+            },
+            {
+              "anchor": "159-p10"
+            },
+            {
+              "anchor": "159-p11"
+            },
+            {
+              "anchor": "159-p12"
+            },
+            {
+              "anchor": "159-p13"
+            },
+            {
+              "anchor": "159-p14"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "printedPage": "160",
+          "bodyFile": "accounts/uthman-ibn-mazun/008.md",
+          "notesFile": "accounts/uthman-ibn-mazun/008.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1586",
+          "passages": [
+            {
+              "anchor": "160-p1"
+            },
+            {
+              "anchor": "160-p2"
+            },
+            {
+              "anchor": "160-p3"
+            },
+            {
+              "anchor": "160-p4"
+            },
+            {
+              "anchor": "160-p5"
+            },
+            {
+              "anchor": "160-p6"
+            },
+            {
+              "anchor": "160-p7"
+            },
+            {
+              "anchor": "160-p8"
+            },
+            {
+              "anchor": "160-p9"
+            },
+            {
+              "anchor": "160-p10"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "uthman-mazun-siyar9/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "uthman-ibn-mazun",
+      "assertion": "عثمان بن مظعون بن حبيب بن وهب الجمحي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "153-p9",
+          "volume": "1",
+          "pageReference": "153",
+          "extractionUrl": "https://shamela.ws/book/10906/1579",
+          "excerptArabic": "عُثْمَانُ بنُ مَظْعُوْنِ بنِ حَبِيْبِ بنِ وَهْبٍ الجُمَحِيُّ",
+          "accessedAt": "2026-09-24"
+        }
+      ],
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "mazun-ibn-habib"
+    },
+    {
+      "key": "uthman-mazun-siyar9/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "uthman-ibn-mazun",
+      "field": "fullName",
+      "assertion": "عثمان بن مظعون بن حبيب بن وهب بن حذافة بن جمح بن عمرو بن هصيص بن كعب الجمحي، أبو السائب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "153-p9",
+          "volume": "1",
+          "pageReference": "153",
+          "extractionUrl": "https://shamela.ws/book/10906/1579",
+          "excerptArabic": "عُثْمَانُ بنُ مَظْعُوْنِ بنِ حَبِيْبِ بنِ وَهْبٍ الجُمَحِيُّ",
+          "accessedAt": "2026-09-24"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "153-p10",
+          "volume": "1",
+          "pageReference": "153",
+          "extractionUrl": "https://shamela.ws/book/10906/1579",
+          "excerptArabic": "ابْنِ حُذَافَةَ بنِ جُمَح بنِ عَمْرِو بنِ هُصَيْصِ بنِ كَعْبٍ الجُمَحِيُّ، أَبُو السَّائِبِ",
+          "accessedAt": "2026-09-24"
+        }
+      ]
+    },
+    {
+      "key": "uthman-mazun-siyar9/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "uthman-ibn-mazun",
+      "field": "kunya",
+      "assertion": "أبو السائب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "153-p10",
+          "volume": "1",
+          "pageReference": "153",
+          "extractionUrl": "https://shamela.ws/book/10906/1579",
+          "excerptArabic": "أَبُو السَّائِبِ",
+          "accessedAt": "2026-09-24"
+        }
+      ]
+    },
+    {
+      "key": "uthman-mazun-siyar9/appearance",
+      "subjectKind": "PERSON",
+      "subjectSlug": "uthman-ibn-mazun",
+      "field": "appearance",
+      "assertion": "كان شديد الأدمة، كبير اللحية.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "160-p10",
+          "volume": "1",
+          "pageReference": "160",
+          "extractionUrl": "https://shamela.ws/book/10906/1586",
+          "excerptArabic": "كَانَ عُثْمَانُ شَدِيْدَ الأُدْمَة، كَبِيْرَ اللِّحْيَة",
+          "accessedAt": "2026-09-24"
+        }
+      ]
+    },
+    {
+      "key": "uthman-mazun-siyar9/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "uthman-ibn-mazun",
+      "field": "virtues",
+      "assertion": "وصفته امرأته: أما ليله فقائم، وأما نهاره فصائم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "157-p14",
+          "volume": "1",
+          "pageReference": "157",
+          "extractionUrl": "https://shamela.ws/book/10906/1583",
+          "excerptArabic": "أَمَّا لَيْلُهُ فَقَائِمٌ، وَأَمَّا نَهَارُهُ فَصَائِمٌ",
+          "accessedAt": "2026-09-24"
+        }
+      ]
+    },
+    {
+      "key": "uthman-mazun-siyar9/brother-qudamah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "uthman-ibn-mazun",
+      "assertion": "نزل عثمان وقدامة وعبد الله بنو مظعون، حين هاجروا، على عبد الله بن سلمة العجلاني.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "158-p6",
+          "volume": "1",
+          "pageReference": "158",
+          "extractionUrl": "https://shamela.ws/book/10906/1584",
+          "excerptArabic": "نَزَلَ عُثْمَانُ، وَقُدَامَةُ، وَعَبْدُ اللهِ بَنُو مَظْعُوْنٍ",
+          "accessedAt": "2026-09-24"
+        }
+      ],
+      "relationshipType": "BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "qudamah-ibn-mazun"
+    },
+    {
+      "key": "uthman-mazun-siyar9/brother-abdullah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "uthman-ibn-mazun",
+      "assertion": "نزل عثمان وقدامة وعبد الله بنو مظعون، حين هاجروا، على عبد الله بن سلمة العجلاني.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "158-p6",
+          "volume": "1",
+          "pageReference": "158",
+          "extractionUrl": "https://shamela.ws/book/10906/1584",
+          "excerptArabic": "نَزَلَ عُثْمَانُ، وَقُدَامَةُ، وَعَبْدُ اللهِ بَنُو مَظْعُوْنٍ",
+          "accessedAt": "2026-09-24"
+        }
+      ],
+      "relationshipType": "BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "abdullah-ibn-mazun-al-jumahi"
+    },
+    {
+      "key": "uthman-mazun-siyar9/death-year-disputed",
+      "subjectKind": "EVENT",
+      "subjectSlug": "death-of-uthman-ibn-mazun",
+      "field": "hijriYear",
+      "assertion": "رواية تجعل وفاته في شعبان سنة ثلاث من الهجرة، بخلاف الرواية الراجحة التي يثبتها الحقل بسنة اثنتين، بعد بدر بيسير.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "159-p1",
+          "volume": "1",
+          "pageReference": "159",
+          "extractionUrl": "https://shamela.ws/book/10906/1585",
+          "excerptArabic": "وَمَاتَ: فِي شَعْبَانَ، سَنَةَ ثَلاَثٍ",
+          "accessedAt": "2026-09-24"
+        }
+      ],
+      "disputed": true
+    }
+  ],
+  "approval": {
+    "revision": "f4f2f6dc1f904850",
+    "approvedAt": "2026-09-24",
+    "approvedBy": "msskzx",
+    "note": "Approved for publication. All eight claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+  }
+}
