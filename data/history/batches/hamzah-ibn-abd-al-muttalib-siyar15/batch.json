@@ -1,0 +1,754 @@
+{
+  "slug": "hamzah-ibn-abd-al-muttalib-siyar15",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hamzah-ibn-abd-al-muttalib",
+      "extractionUrl": "https://shamela.ws/book/10906/1597",
+      "accessedAt": "2026-09-24",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "171",
+          "bodyFile": "accounts/hamzah-ibn-abd-al-muttalib/001.md",
+          "notesFile": "accounts/hamzah-ibn-abd-al-muttalib/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1597",
+          "passages": [
+            {
+              "anchor": "171-p19"
+            },
+            {
+              "anchor": "171-p20"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "172",
+          "bodyFile": "accounts/hamzah-ibn-abd-al-muttalib/002.md",
+          "notesFile": "accounts/hamzah-ibn-abd-al-muttalib/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1598",
+          "passages": [
+            {
+              "anchor": "172-p1"
+            },
+            {
+              "anchor": "172-p2"
+            },
+            {
+              "anchor": "172-p3"
+            },
+            {
+              "anchor": "172-p4"
+            },
+            {
+              "anchor": "172-p5"
+            },
+            {
+              "anchor": "172-p6"
+            },
+            {
+              "anchor": "172-p7"
+            },
+            {
+              "anchor": "172-p8"
+            },
+            {
+              "anchor": "172-p9"
+            },
+            {
+              "anchor": "172-p10"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "printedPage": "173",
+          "bodyFile": "accounts/hamzah-ibn-abd-al-muttalib/003.md",
+          "notesFile": "accounts/hamzah-ibn-abd-al-muttalib/003.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1599",
+          "passages": [
+            {
+              "anchor": "173-p1"
+            },
+            {
+              "anchor": "173-p2"
+            },
+            {
+              "anchor": "173-p3"
+            },
+            {
+              "anchor": "173-p4"
+            },
+            {
+              "anchor": "173-p5"
+            },
+            {
+              "anchor": "173-p6"
+            },
+            {
+              "anchor": "173-p7"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "printedPage": "174",
+          "bodyFile": "accounts/hamzah-ibn-abd-al-muttalib/004.md",
+          "notesFile": "accounts/hamzah-ibn-abd-al-muttalib/004.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1600",
+          "passages": [
+            {
+              "anchor": "174-p1"
+            },
+            {
+              "anchor": "174-p2"
+            },
+            {
+              "anchor": "174-p3"
+            },
+            {
+              "anchor": "174-p4"
+            },
+            {
+              "anchor": "174-p5"
+            },
+            {
+              "anchor": "174-p6"
+            },
+            {
+              "anchor": "174-p7"
+            },
+            {
+              "anchor": "174-p8"
+            },
+            {
+              "anchor": "174-p9"
+            },
+            {
+              "anchor": "174-p10"
+            },
+            {
+              "anchor": "174-p11"
+            },
+            {
+              "anchor": "174-p12"
+            },
+            {
+              "anchor": "174-p13"
+            },
+            {
+              "anchor": "174-p14"
+            },
+            {
+              "anchor": "174-p15"
+            },
+            {
+              "anchor": "174-p16"
+            },
+            {
+              "anchor": "174-p17"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "printedPage": "175",
+          "bodyFile": "accounts/hamzah-ibn-abd-al-muttalib/005.md",
+          "notesFile": "accounts/hamzah-ibn-abd-al-muttalib/005.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1601",
+          "passages": [
+            {
+              "anchor": "175-p1"
+            },
+            {
+              "anchor": "175-p2"
+            },
+            {
+              "anchor": "175-p3"
+            },
+            {
+              "anchor": "175-p4"
+            },
+            {
+              "anchor": "175-p5"
+            },
+            {
+              "anchor": "175-p6"
+            },
+            {
+              "anchor": "175-p7"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "printedPage": "176",
+          "bodyFile": "accounts/hamzah-ibn-abd-al-muttalib/006.md",
+          "notesFile": "accounts/hamzah-ibn-abd-al-muttalib/006.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1602",
+          "passages": [
+            {
+              "anchor": "176-p1"
+            },
+            {
+              "anchor": "176-p2"
+            },
+            {
+              "anchor": "176-p3"
+            },
+            {
+              "anchor": "176-p4"
+            },
+            {
+              "anchor": "176-p5"
+            },
+            {
+              "anchor": "176-p6"
+            },
+            {
+              "anchor": "176-p7"
+            },
+            {
+              "anchor": "176-p8"
+            },
+            {
+              "anchor": "176-p9"
+            },
+            {
+              "anchor": "176-p10"
+            },
+            {
+              "anchor": "176-p11"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "printedPage": "177",
+          "bodyFile": "accounts/hamzah-ibn-abd-al-muttalib/007.md",
+          "notesFile": "accounts/hamzah-ibn-abd-al-muttalib/007.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1603",
+          "passages": [
+            {
+              "anchor": "177-p1"
+            },
+            {
+              "anchor": "177-p2"
+            },
+            {
+              "anchor": "177-p3"
+            },
+            {
+              "anchor": "177-p4"
+            },
+            {
+              "anchor": "177-p5"
+            },
+            {
+              "anchor": "177-p6"
+            },
+            {
+              "anchor": "177-p7"
+            },
+            {
+              "anchor": "177-p8"
+            },
+            {
+              "anchor": "177-p9"
+            },
+            {
+              "anchor": "177-p10"
+            },
+            {
+              "anchor": "177-p11"
+            },
+            {
+              "anchor": "177-p12"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "printedPage": "178",
+          "bodyFile": "accounts/hamzah-ibn-abd-al-muttalib/008.md",
+          "notesFile": "accounts/hamzah-ibn-abd-al-muttalib/008.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1604",
+          "passages": [
+            {
+              "anchor": "178-p1"
+            },
+            {
+              "anchor": "178-p2"
+            },
+            {
+              "anchor": "178-p3"
+            },
+            {
+              "anchor": "178-p4"
+            },
+            {
+              "anchor": "178-p5"
+            },
+            {
+              "anchor": "178-p6"
+            },
+            {
+              "anchor": "178-p7"
+            },
+            {
+              "anchor": "178-p8"
+            },
+            {
+              "anchor": "178-p9"
+            },
+            {
+              "anchor": "178-p10"
+            },
+            {
+              "anchor": "178-p11"
+            },
+            {
+              "anchor": "178-p12"
+            },
+            {
+              "anchor": "178-p13"
+            },
+            {
+              "anchor": "178-p14"
+            },
+            {
+              "anchor": "178-p15"
+            },
+            {
+              "anchor": "178-p16"
+            },
+            {
+              "anchor": "178-p17"
+            },
+            {
+              "anchor": "178-p18"
+            }
+          ]
+        },
+        {
+          "sequence": 9,
+          "printedPage": "179",
+          "bodyFile": "accounts/hamzah-ibn-abd-al-muttalib/009.md",
+          "notesFile": "accounts/hamzah-ibn-abd-al-muttalib/009.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1605",
+          "passages": [
+            {
+              "anchor": "179-p1"
+            },
+            {
+              "anchor": "179-p2"
+            },
+            {
+              "anchor": "179-p3"
+            },
+            {
+              "anchor": "179-p4"
+            },
+            {
+              "anchor": "179-p5"
+            },
+            {
+              "anchor": "179-p6"
+            },
+            {
+              "anchor": "179-p7"
+            },
+            {
+              "anchor": "179-p8"
+            },
+            {
+              "anchor": "179-p9"
+            },
+            {
+              "anchor": "179-p10"
+            },
+            {
+              "anchor": "179-p11"
+            },
+            {
+              "anchor": "179-p12"
+            },
+            {
+              "anchor": "179-p13"
+            }
+          ]
+        },
+        {
+          "sequence": 10,
+          "printedPage": "180",
+          "bodyFile": "accounts/hamzah-ibn-abd-al-muttalib/010.md",
+          "notesFile": "accounts/hamzah-ibn-abd-al-muttalib/010.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1606",
+          "passages": [
+            {
+              "anchor": "180-p1"
+            },
+            {
+              "anchor": "180-p2"
+            },
+            {
+              "anchor": "180-p3"
+            },
+            {
+              "anchor": "180-p4"
+            },
+            {
+              "anchor": "180-p5"
+            },
+            {
+              "anchor": "180-p6"
+            },
+            {
+              "anchor": "180-p7"
+            },
+            {
+              "anchor": "180-p8"
+            },
+            {
+              "anchor": "180-p9"
+            },
+            {
+              "anchor": "180-p10"
+            }
+          ]
+        },
+        {
+          "sequence": 11,
+          "printedPage": "181",
+          "bodyFile": "accounts/hamzah-ibn-abd-al-muttalib/011.md",
+          "notesFile": "accounts/hamzah-ibn-abd-al-muttalib/011.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1607",
+          "passages": [
+            {
+              "anchor": "181-p1"
+            },
+            {
+              "anchor": "181-p2"
+            },
+            {
+              "anchor": "181-p3"
+            },
+            {
+              "anchor": "181-p4"
+            }
+          ]
+        },
+        {
+          "sequence": 12,
+          "printedPage": "182",
+          "bodyFile": "accounts/hamzah-ibn-abd-al-muttalib/012.md",
+          "notesFile": "accounts/hamzah-ibn-abd-al-muttalib/012.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1608",
+          "passages": [
+            {
+              "anchor": "182-p1"
+            },
+            {
+              "anchor": "182-p2"
+            },
+            {
+              "anchor": "182-p3"
+            },
+            {
+              "anchor": "182-p4"
+            },
+            {
+              "anchor": "182-p5"
+            },
+            {
+              "anchor": "182-p6"
+            },
+            {
+              "anchor": "182-p7"
+            },
+            {
+              "anchor": "182-p8"
+            }
+          ]
+        },
+        {
+          "sequence": 13,
+          "printedPage": "183",
+          "bodyFile": "accounts/hamzah-ibn-abd-al-muttalib/013.md",
+          "notesFile": "accounts/hamzah-ibn-abd-al-muttalib/013.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1609",
+          "passages": [
+            {
+              "anchor": "183-p1"
+            },
+            {
+              "anchor": "183-p2"
+            },
+            {
+              "anchor": "183-p3"
+            },
+            {
+              "anchor": "183-p4"
+            },
+            {
+              "anchor": "183-p5"
+            },
+            {
+              "anchor": "183-p6"
+            },
+            {
+              "anchor": "183-p7"
+            },
+            {
+              "anchor": "183-p8"
+            },
+            {
+              "anchor": "183-p9"
+            },
+            {
+              "anchor": "183-p10"
+            }
+          ]
+        },
+        {
+          "sequence": 14,
+          "printedPage": "184",
+          "bodyFile": "accounts/hamzah-ibn-abd-al-muttalib/014.md",
+          "notesFile": "accounts/hamzah-ibn-abd-al-muttalib/014.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1610",
+          "passages": [
+            {
+              "anchor": "184-p1"
+            },
+            {
+              "anchor": "184-p2"
+            },
+            {
+              "anchor": "184-p3"
+            },
+            {
+              "anchor": "184-p4"
+            },
+            {
+              "anchor": "184-p5"
+            },
+            {
+              "anchor": "184-p6"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "hamzah-siyar15/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hamzah-ibn-abd-al-muttalib",
+      "field": "kunya",
+      "assertion": "أَبُو عُمَارَةَ، وَأَبُو يَعْلَى.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "172-p1",
+          "volume": "1",
+          "pageReference": "172",
+          "extractionUrl": "https://shamela.ws/book/10906/1598",
+          "excerptArabic": "أَبُو عُمَارَةَ، وَأَبُو يَعْلَى",
+          "accessedAt": "2026-09-24"
+        }
+      ]
+    },
+    {
+      "key": "hamzah-siyar15/badr-duel-utbah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hamzah-ibn-abd-al-muttalib",
+      "assertion": "بارز يوم بدر عتبة بن ربيعة، فقتله.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "172-p7",
+          "volume": "1",
+          "pageReference": "172",
+          "extractionUrl": "https://shamela.ws/book/10906/1598",
+          "excerptArabic": "فَبَارَزَ يَوْمَئِذٍ حَمْزَةُ عُتْبَةَ، فَقَتَلَهُ",
+          "accessedAt": "2026-09-24"
+        }
+      ]
+    },
+    {
+      "key": "hamzah-siyar15/sayyid-al-shuhada",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hamzah-ibn-abd-al-muttalib",
+      "field": "titles",
+      "assertion": "سيد الشهداء حمزة بن عبد المطلب.",
+      "confidence": "UNASSESSED",
+      "reviewStatus": "NOT_REVIEWED",
+      "reviewerNote": "Both chains for this wording are marked weak by al-Dhahabi himself: the Hakim/Jabir chain \"سنده ضعيف\" and the Daghuli/Jabir chain \"هذا غريب\", so the title is cited without ESTABLISHED confidence.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "173-p3",
+          "volume": "1",
+          "pageReference": "173",
+          "extractionUrl": "https://shamela.ws/book/10906/1599",
+          "excerptArabic": "سَيِّدُ الشُّهَدَاءِ: حَمْزَةُ",
+          "accessedAt": "2026-09-24"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "173-p6",
+          "volume": "1",
+          "pageReference": "173",
+          "extractionUrl": "https://shamela.ws/book/10906/1599",
+          "excerptArabic": "سَيِّدُ الشُّهَدَاءِ حَمْزَةُ بنُ عَبْدِ المُطَّلِبِ",
+          "accessedAt": "2026-09-24"
+        }
+      ]
+    }
+  ],
+  "approval": {
+    "revision": "74e35cc68b7b1338",
+    "approvedAt": "2026-09-24",
+    "approvedBy": "msskzx",
+    "note": "Approved for publication. All three claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+  }
+}
