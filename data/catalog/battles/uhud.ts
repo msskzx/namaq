@@ -73,6 +73,7 @@ const uhud = {
       },
       claims: ['talhah/uhud'],
     },
+    { person: 'qudamah-ibn-mazun', isMuslim: true, claims: ['qudamah-mazun-siyar10/uhud'] },
     {
       person: 'az-zubayr-ibn-al-awwam',
       isMuslim: true,

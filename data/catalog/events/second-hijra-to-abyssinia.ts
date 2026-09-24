@@ -23,6 +23,7 @@ const secondHijraToAbyssinia = {
     // He swam the Nile on an inflated waterskin to watch the battle for the
     // Najashi's throne and carried the news back.
     { person: 'az-zubayr-ibn-al-awwam', claims: ['zubayr/nile-habasha'] },
+    { person: 'qudamah-ibn-mazun', claims: ['qudamah-mazun-siyar10/hijra-habasha-second'] },
   ],
 } satisfies CatalogEvent;
 

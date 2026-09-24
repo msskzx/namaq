@@ -18,14 +18,18 @@ import deathAbuTalib from './death-of-abu-talib';
 
 type Claim = { key: string; confidence?: string; disputed?: boolean; citations: { passageAnchor: string }[] };
 
-// Two of these events are shared: al-Zubayr and Abd al-Rahman reached them from
-// their own entries, so their claims live in their own batches. Read every
-// batch, the way validateCatalog does, or a shared event looks unbacked.
+// Some of these events are shared: al-Zubayr, Abd al-Rahman and Qudamah ibn
+// Maz'un reached them from their own entries, so their claims live in their
+// own batches. Read every batch, the way validateCatalog does, or a shared
+// event looks unbacked.
 const BATCHES = 'data/history/batches';
-const everyClaim = readdirSync(BATCHES).flatMap(
-  (dir) => (JSON.parse(readFileSync(`${BATCHES}/${dir}/batch.json`, 'utf8')) as { claims: Claim[] }).claims,
+const claimsByBatch = new Map(
+  readdirSync(BATCHES).map(
+    (dir) => [dir, (JSON.parse(readFileSync(`${BATCHES}/${dir}/batch.json`, 'utf8')) as { claims: Claim[] }).claims] as const,
+  ),
 );
-const claimByKey = new Map(everyClaim.map((claim) => [claim.key, claim]));
+const claimByKey = new Map([...claimsByBatch.values()].flat().map((claim) => [claim.key, claim]));
+const siraClaimKeys = new Set(claimsByBatch.get('prophet-muhammad-sira')?.map((claim) => claim.key));
 
 /** Nothing in this chapter carries the marker, but Provenance allows it. */
 const keysOf = (claims: Provenance): readonly string[] => (claims === legacyUnreviewed ? [] : claims);
@@ -48,12 +52,17 @@ describe('chapter two of the sira in the catalog', () => {
     expect(unknown).toEqual([]);
   });
 
-  // Chapter two is printed 1/146 to 1/276, so every citation it authored has to
-  // sit in volume one. A 2/ anchor would mean a later chapter was read ahead.
+  // Chapter two is printed 1/146 to 1/276, so every citation the sira batch
+  // authored for it has to sit in volume one. A 2/ anchor would mean a later
+  // chapter was read ahead. Other batches cite these events too, from entries
+  // that use their own book's plain, unprefixed anchors, so this checks only
+  // the sira batch's own claims.
   it('cites volume one only', () => {
     const anchors = chapterTwo.flatMap((event) =>
       event.people.flatMap((entry) =>
-        keysOf(entry.claims).flatMap((key) => claimByKey.get(key)?.citations.map((c) => c.passageAnchor) ?? []),
+        keysOf(entry.claims)
+          .filter((key) => siraClaimKeys.has(key))
+          .flatMap((key) => claimByKey.get(key)?.citations.map((c) => c.passageAnchor) ?? []),
       ),
     );
 
