@@ -2,7 +2,7 @@
 
 @theme {
   --font-sans: var(--font-amiri), ui-serif, Georgia, serif;
-  --font-reader-naskh: "Noto Naskh Arabic", "Noto Sans Arabic", Tahoma, sans-serif;
+  --font-reader-sans: system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
   /*

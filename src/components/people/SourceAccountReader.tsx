@@ -35,7 +35,7 @@ interface SourceAccountReaderProps {
   selectorLabel?: { ar: string; en: string };
 }
 
-type ReaderFont = 'amiri' | 'naskh';
+type ReaderFont = 'amiri' | 'sans';
 type ReaderSize = 's' | 'm' | 'l' | 'xl';
 type ReaderBackground = 'light' | 'dark' | 'sepia';
 
@@ -98,7 +98,7 @@ export default function SourceAccountReader({
       const stored = localStorage.getItem('namaq-reader-settings');
       if (!stored) return;
       const value = JSON.parse(stored) as Partial<{ font: ReaderFont; size: ReaderSize; background: ReaderBackground }>;
-      if (value.font === 'amiri' || value.font === 'naskh') setFont(value.font);
+      if (value.font === 'amiri' || value.font === 'sans') setFont(value.font);
       if (value.size && value.size in fontSizes) setSize(value.size);
       if (value.background && value.background in backgroundStyles) setBackground(value.background);
     } catch {
@@ -180,7 +180,7 @@ export default function SourceAccountReader({
   const pageContentStyle = {
     ...backgroundStyles[background],
     fontSize: fontSizes[size],
-    fontFamily: font === 'amiri' ? 'var(--font-amiri), ui-serif, Georgia, serif' : 'var(--font-reader-naskh)',
+    fontFamily: font === 'amiri' ? 'var(--font-amiri), ui-serif, Georgia, serif' : 'var(--font-reader-sans)',
   };
 
   return (
@@ -240,7 +240,7 @@ export default function SourceAccountReader({
           {settingsOpen && (
             <div className="grid gap-4 sm:grid-cols-3">
               <fieldset className="flex flex-wrap gap-2"><legend className="mb-2 w-full text-sm font-semibold">{t ? 'الخط' : 'Font'}</legend>
-                <Button size="sm" active={font === 'amiri'} onClick={() => writeSettings({ font: 'amiri' })}><FontAwesomeIcon icon={faFont} />{t ? 'أميري' : 'Amiri'}</Button><Button size="sm" active={font === 'naskh'} onClick={() => writeSettings({ font: 'naskh' })}><FontAwesomeIcon icon={faFont} />{t ? 'نسخ' : 'Naskh'}</Button>
+                <Button size="sm" active={font === 'amiri'} onClick={() => writeSettings({ font: 'amiri' })}><FontAwesomeIcon icon={faFont} />{t ? 'أميري' : 'Amiri'}</Button><Button size="sm" active={font === 'sans'} onClick={() => writeSettings({ font: 'sans' })}><FontAwesomeIcon icon={faFont} />{t ? 'خط النظام' : 'Sans'}</Button>
               </fieldset>
               <fieldset className="flex flex-wrap gap-2"><legend className="mb-2 w-full text-sm font-semibold">{t ? 'حجم الخط' : 'Text size'}</legend>
                 {(['s', 'm', 'l', 'xl'] as const).map((value) => <Button key={value} size="sm" active={size === value} onClick={() => writeSettings({ size: value })}><FontAwesomeIcon icon={faTextHeight} />{value.toUpperCase()}</Button>)}

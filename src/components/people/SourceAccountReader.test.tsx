@@ -267,16 +267,30 @@ describe('SourceAccountReader', () => {
     await waitFor(() => expect(nav.replaceCalls.at(-1)).toContain('page=2'));
   });
 
+  it('uses the source language for left-to-right pages and keyboard turns', async () => {
+    const englishAccount = account({ source: { title: 'A source', edition: null, language: 'en' } });
+    respondWith({ accounts: [englishAccount], account: englishAccount, page: page() });
+    const { container } = renderReader();
+
+    await screen.findByText('الفقرة الأولى');
+    expect(container.querySelector('article')?.getAttribute('dir')).toBe('ltr');
+    expect(container.querySelector('article')?.getAttribute('lang')).toBe('en');
+    fireEvent.click(await screen.findByRole('button', { name: 'Read fullscreen' }));
+    fireEvent.keyDown(window, { key: 'ArrowRight' });
+
+    await waitFor(() => expect(nav.replaceCalls.at(-1)).toContain('page=2'));
+  });
+
   it('saves reader font, size, and background on this device', async () => {
     renderReader();
     fireEvent.click(await screen.findByRole('button', { name: 'Read fullscreen' }));
     fireEvent.click(screen.getByRole('button', { name: 'Open reading settings' }));
-    fireEvent.click(screen.getByRole('button', { name: 'Naskh' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Sans' }));
     fireEvent.click(screen.getByRole('button', { name: 'XL' }));
     fireEvent.click(screen.getByRole('button', { name: 'Sepia' }));
 
     expect(JSON.parse(localStorage.getItem('namaq-reader-settings') ?? '{}')).toEqual({
-      font: 'naskh', size: 'xl', background: 'sepia',
+      font: 'sans', size: 'xl', background: 'sepia',
     });
   });
 
