@@ -68,6 +68,11 @@ const badr = {
       claims: ['awf/badr'],
     },
     { person: 'abu-ubaydah-ibn-al-jarrah', isMuslim: true, claims: ['abu-ubaydah/badr'] },
+    // Ibn Sa'd names three narrators for this (Ibn Ishaq, Abu Ma'shar,
+    // al-Waqidi) against Ibn Uqbah's silence, and rejects Hisham ibn
+    // al-Kalbi's rival account naming a different man, "as-Saib ibn Maz'un,"
+    // as a mistake -- see data/history/batches/as-saib-ibn-uthman/summary.md.
+    { person: 'as-saib-ibn-uthman', isMuslim: true, claims: ['saib-uthman-siyar12/badr'] },
     // The old seed had him present here with no status at all. He was away
     // trading in Syria, and given the share and the reward all the same.
     {

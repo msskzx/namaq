@@ -39,9 +39,9 @@ const uthmanIbnMazun = {
       to: 'abdullah-ibn-mazun-al-jumahi',
       claims: ['uthman-mazun-siyar9/brother-abdullah'],
     },
-    // The seed's neo4j graph already carries this SON edge (his son, named
-    // for his own kunya) but this entry never states it outright.
-    { type: 'FATHER', inverse: 'SON', to: 'as-saib-ibn-uthman', claims: legacyUnreviewed },
+    // as-Saib's own entry (data/history/batches/as-saib-ibn-uthman) opens
+    // with his nasab back to Uthman, promoting this off the legacy marker.
+    { type: 'FATHER', inverse: 'SON', to: 'as-saib-ibn-uthman', claims: ['saib-uthman-siyar12/father'] },
   ],
 } satisfies CatalogPerson;
 
