@@ -28,6 +28,7 @@ const hudaybiyyah = {
     { person: 'prophet-muhammad', isMuslim: true, claims: ['prophet/hudaybiyyah'] },
     { person: 'umar-ibn-al-khattab', isMuslim: true, claims: legacyUnreviewed },
     { person: 'uthman-ibn-affan', isMuslim: true, claims: legacyUnreviewed },
+    { person: 'saeed-ibn-zaid', isMuslim: true, claims: ['saeed/hudaybiyyah'] },
   ],
 } satisfies CatalogBattle;
 

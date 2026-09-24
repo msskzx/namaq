@@ -12,6 +12,12 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   the document that holds the rule and say what this code does about it. A
   comment that copies a paragraph out of `docs/` goes stale the moment the
   document changes, and nothing catches it.
+- Invoke the `ponytail` skill before writing or reviewing code: reuse what the
+  codebase already has, reach for stdlib and native platform features before a
+  dependency, and stop at the shortest diff that works. It is not vendored
+  here (https://github.com/dietrichgebert/ponytail); fetch it if a session
+  doesn't already have it loaded. Its `ponytail:` shortcut-marker comments
+  don't apply here — this repo's no-comment rule above still governs.
 
 ## Testing
 

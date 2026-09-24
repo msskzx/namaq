@@ -40,6 +40,7 @@ const uhud = {
     { person: 'abu-bakr-as-siddiq', isMuslim: true, claims: legacyUnreviewed },
     { person: 'umar-ibn-al-khattab', isMuslim: true, claims: legacyUnreviewed },
     { person: 'uthman-ibn-affan', isMuslim: true, claims: legacyUnreviewed },
+    { person: 'saeed-ibn-zaid', isMuslim: true, claims: ['saeed/uhud'] },
     {
       person: 'saad-ibn-abi-waqqas',
       isMuslim: true,

@@ -21,18 +21,9 @@ export const people = [
   // ali-ibn-abi-talib is authored in
   // data/catalog/people/ali-ibn-abi-talib.ts; this entry is retired
   // and what it held is carried there.
-  {
-    name: 'سعيد بن زيد',
-    fullName: 'سعيد بن زيد بن عمرو العدوي القرشي',
-    slug: 'saeed-ibn-zaid',
-    appearance: 'كان طويلًا، أسمر اللون، خفيف اللحية.',
-    virtues: 'أحد العشرة المبشرين بالجنة، من السابقين إلى الإسلام.',
-    picture: null,
-    titles: ['the-ten-promised-paradise', 'companion', 'al-sabiqoon'],
-    ayat: [
-      { surah: 9, ayah: 100 }, // التوبة: 100 - "والسابقون الأولون من المهاجرين..." (وهو من السابقين)
-    ]
-  },
+  // saeed-ibn-zaid is authored in
+  // data/catalog/people/saeed-ibn-zaid.ts; this entry is retired
+  // and what it held is carried there.
     // Wives of the Prophet (Peace be upon him)
   // khadijah-bint-khuwaylid is authored in
   // data/catalog/people/khadijah-bint-khuwaylid.ts; this entry is retired
@@ -303,7 +294,6 @@ export const peopleBattleParticipations = [
   { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'ali-ibn-abi-talib', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'prophet-muhammad', battleSlug: 'badr', isMuslim: true, status: [] },
-  { personSlug: 'saeed-ibn-zaid', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'umar-ibn-al-khattab', battleSlug: 'badr', isMuslim: true, status: [] },
   { personSlug: 'uthman-ibn-affan', battleSlug: 'badr', isMuslim: true, status: ['ABSENT_EXCUSED'] },
   { personSlug: 'hamzah-ibn-abd-al-muttalib', battleSlug: 'badr', isMuslim: true, status: [] }, // Added
@@ -313,7 +303,6 @@ export const peopleBattleParticipations = [
   { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'uhud', isMuslim: true, status: [] },
   { personSlug: 'ali-ibn-abi-talib', battleSlug: 'uhud', isMuslim: true, status: [] },
   { personSlug: 'prophet-muhammad', battleSlug: 'uhud', isMuslim: true, status: ['INJURED'] },
-  { personSlug: 'saeed-ibn-zaid', battleSlug: 'uhud', isMuslim: true, status: [] },
   { personSlug: 'umar-ibn-al-khattab', battleSlug: 'uhud', isMuslim: true, status: [] },
   { personSlug: 'uthman-ibn-affan', battleSlug: 'uhud', isMuslim: true, status: [] },
   { personSlug: 'hamzah-ibn-abd-al-muttalib', battleSlug: 'uhud', isMuslim: true, status: ['MARTYRED'] }, // Added
@@ -323,7 +312,6 @@ export const peopleBattleParticipations = [
   { personSlug: 'abu-bakr-as-siddiq', battleSlug: 'khandaq', isMuslim: true, status: [] },
   { personSlug: 'ali-ibn-abi-talib', battleSlug: 'khandaq', isMuslim: true, status: [] },
   { personSlug: 'prophet-muhammad', battleSlug: 'khandaq', isMuslim: true, status: [] },
-  { personSlug: 'saeed-ibn-zaid', battleSlug: 'khandaq', isMuslim: true, status: [] },
   { personSlug: 'umar-ibn-al-khattab', battleSlug: 'khandaq', isMuslim: true, status: [] },
   { personSlug: 'uthman-ibn-affan', battleSlug: 'khandaq', isMuslim: true, status: [] },
   { personSlug: 'al-abbas-ibn-abd-al-muttalib', battleSlug: 'khandaq', isMuslim: true, status: [] }, // Added (became Muslim after Badr/Uhud)

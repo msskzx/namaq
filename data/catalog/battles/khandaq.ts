@@ -30,6 +30,7 @@ const khandaq = {
     { person: 'prophet-muhammad', isMuslim: true, claims: legacyUnreviewed },
     { person: 'umar-ibn-al-khattab', isMuslim: true, claims: legacyUnreviewed },
     { person: 'uthman-ibn-affan', isMuslim: true, claims: legacyUnreviewed },
+    { person: 'saeed-ibn-zaid', isMuslim: true, claims: ['saeed/khandaq'] },
     {
       person: 'saad-ibn-abi-waqqas',
       isMuslim: true,
