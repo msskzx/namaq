@@ -11,16 +11,9 @@ export const people = [
   // abu-salamah is authored in
   // data/catalog/people/abu-salamah.ts; this entry is retired
   // and what it held is carried there.
-  {
-    name: 'عثمان بن مظعون',
-    fullName: null,
-    slug: 'uthman-ibn-mazun',
-    nameTransliterated: 'Uthman ibn Mazun',
-    appearance: null,
-    virtues: null,
-    picture: null,
-    titles: ['companion'],
-  },
+  // uthman-ibn-mazun is authored in
+  // data/catalog/people/uthman-ibn-mazun.ts; this entry is retired
+  // and what it held is carried there.
   {
     name: 'قدامة بن مظعون',
     fullName: null,
