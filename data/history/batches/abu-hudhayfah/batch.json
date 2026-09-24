@@ -1,0 +1,406 @@
+{
+  "slug": "abu-hudhayfah",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-hudhayfah",
+      "extractionUrl": "https://shamela.ws/book/10906/1590",
+      "accessedAt": "2026-09-24",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "164",
+          "bodyFile": "accounts/abu-hudhayfah/001.md",
+          "notesFile": "accounts/abu-hudhayfah/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1590",
+          "passages": [
+            {
+              "anchor": "164-p7"
+            },
+            {
+              "anchor": "164-p8"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "165",
+          "bodyFile": "accounts/abu-hudhayfah/002.md",
+          "notesFile": "accounts/abu-hudhayfah/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1591",
+          "passages": [
+            {
+              "anchor": "165-p1"
+            },
+            {
+              "anchor": "165-p2"
+            },
+            {
+              "anchor": "165-p3"
+            },
+            {
+              "anchor": "165-p4"
+            },
+            {
+              "anchor": "165-p5"
+            },
+            {
+              "anchor": "165-p6"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "printedPage": "166",
+          "bodyFile": "accounts/abu-hudhayfah/003.md",
+          "notesFile": "accounts/abu-hudhayfah/003.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1592",
+          "passages": [
+            {
+              "anchor": "166-p1"
+            },
+            {
+              "anchor": "166-p2"
+            },
+            {
+              "anchor": "166-p3"
+            },
+            {
+              "anchor": "166-p4"
+            },
+            {
+              "anchor": "166-p5"
+            },
+            {
+              "anchor": "166-p6"
+            },
+            {
+              "anchor": "166-p7"
+            },
+            {
+              "anchor": "166-p8"
+            },
+            {
+              "anchor": "166-p9"
+            },
+            {
+              "anchor": "166-p10"
+            },
+            {
+              "anchor": "166-p11"
+            },
+            {
+              "anchor": "166-p12"
+            },
+            {
+              "anchor": "166-p13"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "printedPage": "167",
+          "bodyFile": "accounts/abu-hudhayfah/004.md",
+          "notesFile": "accounts/abu-hudhayfah/004.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1593",
+          "passages": [
+            {
+              "anchor": "167-p1"
+            },
+            {
+              "anchor": "167-p2"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "abu-hudhayfah-siyar13/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-hudhayfah",
+      "assertion": "أبو حذيفة ابن عتبة بن ربيعة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "utbah-ibn-rabiah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "164-p8",
+          "volume": "1",
+          "pageReference": "164",
+          "extractionUrl": "https://shamela.ws/book/10906/1590",
+          "excerptArabic": "أَبُو حُذَيْفَةَ ابْنُ شَيْخِ الجَاهِلِيَّةِ: عُتْبَةَ بنِ رَبِيْعَةَ بنِ عَبْدِ شَمْسٍ بنِ عَبْدِ مَنَافٍ بنِ قُصَيِّ بنِ كِلاَبٍ",
+          "accessedAt": "2026-09-24"
+        }
+      ]
+    },
+    {
+      "key": "abu-hudhayfah-siyar13/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-hudhayfah",
+      "field": "virtues",
+      "assertion": "كان سيدا كبيرا، من السابقين إلى الإسلام.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "164-p8",
+          "volume": "1",
+          "pageReference": "164",
+          "extractionUrl": "https://shamela.ws/book/10906/1590",
+          "excerptArabic": "السَّيِّدُ الكَبِيْرُ، الشَّهِيْدُ",
+          "accessedAt": "2026-09-24"
+        }
+      ]
+    },
+    {
+      "key": "abu-hudhayfah-siyar13/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-hudhayfah",
+      "assertion": "شهد بدرا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "164-p8",
+          "volume": "1",
+          "pageReference": "164",
+          "extractionUrl": "https://shamela.ws/book/10906/1590",
+          "excerptArabic": "البَدْرِيُّ",
+          "accessedAt": "2026-09-24"
+        }
+      ]
+    },
+    {
+      "key": "abu-hudhayfah-siyar13/hijra-first",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-hudhayfah",
+      "assertion": "هاجر إلى الحبشة مرتين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "first-hijra-to-abyssinia",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "165-p3",
+          "volume": "1",
+          "pageReference": "165",
+          "extractionUrl": "https://shamela.ws/book/10906/1591",
+          "excerptArabic": "وَهَاجَرَ إِلَى الحَبَشَةِ مَرَّتَيْنِ",
+          "accessedAt": "2026-09-24"
+        }
+      ]
+    },
+    {
+      "key": "abu-hudhayfah-siyar13/hijra-second",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-hudhayfah",
+      "assertion": "هاجر إلى الحبشة مرتين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "second-hijra-to-abyssinia",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "165-p3",
+          "volume": "1",
+          "pageReference": "165",
+          "extractionUrl": "https://shamela.ws/book/10906/1591",
+          "excerptArabic": "وَهَاجَرَ إِلَى الحَبَشَةِ مَرَّتَيْنِ",
+          "accessedAt": "2026-09-24"
+        }
+      ]
+    },
+    {
+      "key": "abu-hudhayfah-siyar13/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-hudhayfah",
+      "field": "deathYearHijri",
+      "assertion": "استشهد يوم اليمامة سنة اثنتي عشرة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "166-p4",
+          "volume": "1",
+          "pageReference": "166",
+          "extractionUrl": "https://shamela.ws/book/10906/1592",
+          "excerptArabic": "اسْتُشْهِدَ أَبُو حُذَيْفَةَ -رَضِيَ اللهُ عَنْهُ- يَوْمَ اليَمَامَةِ، سَنَةَ اثْنَتَيْ عَشْرَةَ",
+          "accessedAt": "2026-09-24"
+        }
+      ]
+    },
+    {
+      "key": "abu-hudhayfah-siyar13/brother-musab",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-hudhayfah",
+      "assertion": "هو أخو مصعب بن عمير لأمه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "musab-ibn-umayr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "166-p7",
+          "volume": "1",
+          "pageReference": "166",
+          "extractionUrl": "https://shamela.ws/book/10906/1592",
+          "excerptArabic": "وَهُوَ أَخُو الشَّهِيْدِ مُصْعَبُ بنُ عُمَيْرٍ لأُمِّهِ",
+          "accessedAt": "2026-09-24"
+        }
+      ]
+    }
+  ],
+  "approval": {
+    "revision": "6f3d66111cf92e1a",
+    "approvedAt": "2026-09-24",
+    "approvedBy": "msskzx",
+    "note": "Approved for publication. All seven claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+  }
+}

@@ -21,7 +21,9 @@ const firstHijraToAbyssinia = {
     { person: 'abdur-rahman-ibn-awf', claims: ['awf/hijra-habasha'] },
     { person: 'uthman-ibn-affan', claims: ['uthman/hijra-habasha-first'] },
     { person: 'ruqayyah-bint-muhammad', claims: ['ruqayyah/hijra-habasha-first'] },
-    { person: 'abu-hudhayfah', claims: ['abu-hudhayfah/hijra-habasha-first'] },
+    // prophet-muhammad-sira already names him among Ibn Ishaq's first party;
+    // his own Siyar entry corroborates a migration without naming which.
+    { person: 'abu-hudhayfah', claims: ['abu-hudhayfah/hijra-habasha-first', 'abu-hudhayfah-siyar13/hijra-first'] },
     { person: 'musab-ibn-umayr', claims: ['musab/hijra-habasha-first'] },
     { person: 'abu-salamah', claims: ['abu-salamah/hijra-habasha-first'] },
     { person: 'umm-salamah', claims: ['umm-salamah/hijra-habasha-first'] },

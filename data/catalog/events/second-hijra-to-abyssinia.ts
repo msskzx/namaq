@@ -25,6 +25,9 @@ const secondHijraToAbyssinia = {
     { person: 'az-zubayr-ibn-al-awwam', claims: ['zubayr/nile-habasha'] },
     { person: 'qudamah-ibn-mazun', claims: ['qudamah-mazun-siyar10/hijra-habasha-second'] },
     { person: 'abdullah-ibn-mazun-al-jumahi', claims: ['abdullah-mazun-siyar11/hijra-habasha-second'] },
+    // His entry gives the count (مرتين) without distinguishing the two
+    // trips; the same claim backs his entry in first-hijra-to-abyssinia.
+    { person: 'abu-hudhayfah', claims: ['abu-hudhayfah-siyar13/hijra-second'] },
   ],
 } satisfies CatalogEvent;
 
