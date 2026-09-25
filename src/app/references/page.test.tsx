@@ -16,5 +16,8 @@ describe('ReferencesPage', () => {
     expect(screen.getByRole('heading', { name: 'سير أعلام النبلاء' })).toBeTruthy();
     expect(screen.getByText('شمس الدين الذهبي')).toBeTruthy();
     expect(screen.getByRole('link', { name: 'Shamela Library' }).getAttribute('href')).toBe('https://shamela.ws/index.php/book/10906');
+    expect(screen.getByRole('link', { name: 'Archive.org, third edition, 1405/1985' }).getAttribute('href')).toBe('https://archive.org/details/sanbz');
+    expect(screen.getByRole('link', { name: 'Prophet’s Sira, volume 1' }).getAttribute('href')).toBe('https://archive.org/download/sanbz/sansera1_djvu.txt');
+    expect(screen.getByRole('link', { name: 'Prophet’s Sira, volume 2' }).getAttribute('href')).toBe('https://archive.org/download/sanbz/sansera2_djvu.txt');
   });
 });

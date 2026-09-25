@@ -34,6 +34,31 @@ export default function ReferencesPage() {
                 </a>
               </dd>
             </div>
+            <div>
+              <dt className="inline font-medium">{language === 'ar' ? 'النسخة المصورة: ' : 'Scanned edition: '}</dt>
+              <dd className="inline">
+                <a className="underline" href="https://archive.org/details/sanbz" target="_blank" rel="noreferrer">
+                  {language === 'ar' ? 'Archive.org، الطبعة الثالثة، ١٤٠٥/١٩٨٥' : 'Archive.org, third edition, 1405/1985'}
+                </a>
+              </dd>
+            </div>
+            <div>
+              <dt className="inline font-medium">{language === 'ar' ? 'نص OCR للبحث: ' : 'Searchable OCR text: '}</dt>
+              <dd className="inline">
+                <a className="underline" href="https://archive.org/download/sanbz/sansera1_djvu.txt" target="_blank" rel="noreferrer">
+                  {language === 'ar' ? 'السيرة النبوية، المجلد الأول' : 'Prophet’s Sira, volume 1'}
+                </a>
+                {' · '}
+                <a className="underline" href="https://archive.org/download/sanbz/sansera2_djvu.txt" target="_blank" rel="noreferrer">
+                  {language === 'ar' ? 'السيرة النبوية، المجلد الثاني' : 'Prophet’s Sira, volume 2'}
+                </a>
+              </dd>
+            </div>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              {language === 'ar'
+                ? 'ملفات النص ناتجة عن التعرف الضوئي على الحروف، وهي للبحث والمقارنة. تُراجع الحواشي على صفحات النسخة المصورة.'
+                : 'The text files are OCR aids for searching and comparison. Check footnotes against the scanned pages.'}
+            </p>
           </dl>
         </section>
       </main>
