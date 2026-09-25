@@ -136,6 +136,9 @@
       "subjectSlug": "prophet-muhammad",
       "extractionUrl": "https://shamela.ws/book/10906/167",
       "accessedAt": "2026-09-19",
+      "notInSource": [
+        "siblings"
+      ],
       "pages": [
         {
           "sequence": 1,
@@ -34057,9 +34060,9 @@
     }
   ],
   "approval": {
-    "revision": "74422b62c0ee8f99",
-    "approvedAt": "2026-09-22",
+    "revision": "27519384ffe4d472",
+    "approvedAt": "2026-09-25",
     "approvedBy": "msskzx",
-    "note": "Re-recorded for publication after the volume moved from the account to the page. The sira crosses a binding -- 497 pages of السيرة النبوية ج١ and 491 of ج٢ -- and a volume on the account could only name the first, so its 491 volume-two pages now say so individually, taken from the 2/ prefix the extractor gave their anchors. No claim, citation or page text changed; every claim remains Not reviewed. Previously: Re-recorded for publication after the edition's volumes were authored onto its source record and this entry was linked to the volume it opens in. No claim, citation or page changed: the revision moved because batch.json now says which of the twenty-eight volumes this reading came from. Review status is untouched and every claim remains Not reviewed; this permits the import and asserts nothing about anyone having read it. Previously: Approved for publication of all thirteen chapters. Chapter thirteen is the eleventh year and the last: it fills deathYearHijri on the Prophet, which was null through every chapter before it, and creates سرية أسامة, the last thing he ordered. Abu Bakr, Umar and Abu Ubaydah are named as having answered its muster but are not on the roster: the chapter says انتدب, and the expedition had not left when he died. All 394 claims are Not reviewed, the whole batch included. Approval permits the import and asserts nothing about review. The account is now read end to end, ١/٢٩ to ٢/٤٧١."
+    "note": "Re-approved for publication after adding editorial notes for printed pages 30–43 and Archive.org OCR references. The checklist confirms no full or paternal half-sibling relations in the source; it mentions foster brothers only, which are not modeled as siblings. All 394 claims remain Not reviewed. Previously: Re-recorded for publication after the volume moved from the account to the page. The sira crosses a binding -- 497 pages of السيرة النبوية ج١ and 491 of ج٢ -- and a volume on the account could only name the first, so its 491 volume-two pages now say so individually, taken from the 2/ prefix the extractor gave their anchors. No claim, citation or page text changed; every claim remains Not reviewed. Previously: Re-recorded for publication after the edition's volumes were authored onto its source record and this entry was linked to the volume it opens in. No claim, citation or page changed: the revision moved because batch.json now says which of the twenty-eight volumes this reading came from. Review status is untouched and every claim remains Not reviewed; this permits the import and asserts nothing about anyone having read it. Previously: Approved for publication of all thirteen chapters. Chapter thirteen is the eleventh year and the last: it fills deathYearHijri on the Prophet, which was null through every chapter before it, and creates سرية أسامة, the last thing he ordered. Abu Bakr, Umar and Abu Ubaydah are named as having answered its muster but are not on the roster: the chapter says انتدب, and the expedition had not left when he died. All 394 claims are Not reviewed, the whole batch included. Approval permits the import and asserts nothing about review. The account is now read end to end, ١/٢٩ to ٢/٤٧١."
   }
 }
