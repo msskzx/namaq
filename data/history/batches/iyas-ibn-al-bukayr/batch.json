@@ -1,0 +1,280 @@
+{
+  "slug": "iyas-ibn-al-bukayr",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "iyas-ibn-al-bukayr",
+      "extractionUrl": "https://shamela.ws/book/10906/1612",
+      "accessedAt": "2026-09-25",
+      "volumeNumber": 4,
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "186",
+          "bodyFile": "accounts/iyas-ibn-al-bukayr/001.md",
+          "notesFile": "accounts/iyas-ibn-al-bukayr/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1612",
+          "passages": [
+            {
+              "anchor": "186-p9"
+            },
+            {
+              "anchor": "186-p10"
+            },
+            {
+              "anchor": "186-p11"
+            },
+            {
+              "anchor": "186-p12"
+            },
+            {
+              "anchor": "186-p13"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "iyas-bukayr-siyar18/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "iyas-ibn-al-bukayr",
+      "field": "fullName",
+      "assertion": "إياس بن أبي البكير بن عبد يا ليل الليثي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "186-p10",
+          "volume": "1",
+          "pageReference": "186",
+          "extractionUrl": "https://shamela.ws/book/10906/1612",
+          "excerptArabic": "إِيَاسُ بنُ أَبِي البُكَيْرِ بنِ عَبْدِ يَا لَيْلَ اللَّيْثِيُّ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "iyas-bukayr-siyar18/pact-brother-harith",
+      "subjectKind": "PERSON",
+      "subjectSlug": "iyas-ibn-al-bukayr",
+      "assertion": "آخى النبي صلى الله عليه وسلم بينه وبين الحارث بن خزمة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PACT_BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "al-harith-ibn-khazamah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "186-p11",
+          "volume": "1",
+          "pageReference": "186",
+          "extractionUrl": "https://shamela.ws/book/10906/1612",
+          "excerptArabic": "آخَى رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بَيْنَهُ وَبَيْنَ الحَارِثِ بنِ خَزَمَةَ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "al-harith-khazamah-siyar18/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-harith-ibn-khazamah",
+      "field": "sex",
+      "assertion": "آخى النبي صلى الله عليه وسلم بينه وبين إياس بن أبي البكير.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "186-p11",
+          "volume": "1",
+          "pageReference": "186",
+          "extractionUrl": "https://shamela.ws/book/10906/1612",
+          "excerptArabic": "آخَى رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بَيْنَهُ وَبَيْنَ الحَارِثِ بنِ خَزَمَةَ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "iyas-bukayr-siyar18/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "iyas-ibn-al-bukayr",
+      "assertion": "شهد إياس بن أبي البكير بدرا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "186-p11",
+          "volume": "1",
+          "pageReference": "186",
+          "extractionUrl": "https://shamela.ws/book/10906/1612",
+          "excerptArabic": "وَشَهِدَ بَدْراً",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "iyas-bukayr-siyar18/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "iyas-ibn-al-bukayr",
+      "field": "deathYearHijri",
+      "assertion": "توفي سنة أربع وثلاثين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "186-p13",
+          "volume": "1",
+          "pageReference": "186",
+          "extractionUrl": "https://shamela.ws/book/10906/1612",
+          "excerptArabic": "تُوُفِّيَ سَنَةَ أَرْبَعٍ وَثَلاَثِيْنَ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    }
+  ],
+  "approval": {
+    "revision": "2c1baf27476ebf83",
+    "approvedAt": "2026-09-25",
+    "approvedBy": "msskzx",
+    "note": "Approved for publication. All five claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+  }
+}

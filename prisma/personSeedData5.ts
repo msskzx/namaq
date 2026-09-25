@@ -19,23 +19,9 @@
  */
 export const people = [
   {
-    // fullName inferred, not page-sourced: his own page gives no nasab chain
-    // (just brotherhood-pairing + battles + death year). Attributed to
-    // al-bukayr-ibn-abd-yalil because the book places him right after
-    // Aqil/Khalid ibn al-Bukayr (batch 1) as a sibling group and expects the
-    // father already given there to carry over, its usual convention for
-    // sibling entries — same basis as the graph FATHER/SON link below.
-    name: 'إياس بن أبي البكير',
-    fullName: 'إياس بن أبي البكير بن عبد ياليل بن ناشب بن غيرة بن سعد بن ليث الليثي الكناني',
-    slug: 'iyas-ibn-al-bukayr',
-    nameTransliterated: 'Iyas ibn Abi al-Bukayr',
-    appearance: null,
-    virtues: null,
-    picture: null,
-    titles: ['companion'],
-  },
-  {
-    // fullName inferred, not page-sourced — see iyas-ibn-al-bukayr above.
+    // fullName inferred, not page-sourced — the fuller ancestor chain
+    // amir-ibn-al-bukayr shares with his now-retired brother
+    // iyas-ibn-al-bukayr (see data/catalog/people/iyas-ibn-al-bukayr.ts).
     name: 'عامر بن أبي البكير',
     fullName: 'عامر بن أبي البكير بن عبد ياليل بن ناشب بن غيرة بن سعد بن ليث الليثي الكناني',
     slug: 'amir-ibn-al-bukayr',
