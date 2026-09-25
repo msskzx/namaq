@@ -28,19 +28,19 @@ describe('the fourteen dead of Badr', () => {
     expect(martyrs).toHaveLength(14);
   });
 
-  // Ten had no subject anywhere until this batch reached the roster, and their
-  // modules are their only author. Ubaydah ibn al-Harith joined them from
-  // chapter six, which names him Zaynab bint Khuzaymah's second husband and so
-  // gives the catalog a cited value to author him for. The three left have
-  // nothing cited about them yet and keep their seed entries.
-  it('creates a subject for each of the eleven the batch has reached', () => {
+  // Ten had no subject anywhere until the badr-martyrs batch reached the
+  // roster, and their modules are their only author. Ubaydah ibn al-Harith
+  // joined them from chapter six, which names him Zaynab bint Khuzaymah's
+  // second husband and so gives the catalog a cited value to author him for.
+  // Aqil ibn al-Bukayr joined them from his own Siyar entry (entry 16), which
+  // retired his seed row the same way. The two left have nothing cited about
+  // them yet and keep their seed entries.
+  it('creates a subject for each of the twelve reached so far', () => {
     const authored = martyrs.filter((slug) => bySlug.has(slug));
-    expect(authored).toHaveLength(11);
+    expect(authored).toHaveLength(12);
 
     const seedDeclared = martyrs.filter((slug) => !bySlug.has(slug));
-    expect(seedDeclared.sort()).toEqual(
-      ['aqil-ibn-al-bukayr', 'saad-ibn-khaythamah', 'safwan-ibn-bayda'].sort(),
-    );
+    expect(seedDeclared.sort()).toEqual(['saad-ibn-khaythamah', 'safwan-ibn-bayda'].sort());
   });
 
   // The roster's own word رجالا is what states this, so one claim carries it
