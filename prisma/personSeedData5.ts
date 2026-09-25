@@ -19,16 +19,6 @@
  */
 export const people = [
   {
-    name: 'عبد الله بن سهيل',
-    fullName: 'عبد الله بن سهيل بن عمرو بن عبد شمس بن عبد ود بن نصر بن حسل بن عامر بن لؤي بن غالب بن فهر القرشي العامري',
-    slug: 'abdullah-ibn-suhail',
-    nameTransliterated: 'Abdullah ibn Suhail',
-    appearance: null,
-    virtues: null,
-    picture: null,
-    titles: ['companion'],
-  },
-  {
     name: 'سهيل بن عمرو',
     fullName: 'سهيل بن عمرو بن عبد شمس بن عبد ود بن نصر بن حسل بن عامر بن لؤي بن غالب بن فهر القرشي العامري',
     slug: 'suhail-ibn-amr',

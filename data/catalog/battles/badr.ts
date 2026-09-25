@@ -250,6 +250,17 @@ const badr = {
     { person: 'mistah-ibn-uthathah', isMuslim: true, claims: ['mistah-siyar20/badr'] },
     { person: 'abu-abs', isMuslim: true, claims: ['abu-abs-siyar21/badr'] },
     { person: 'abu-al-haytham-ibn-at-tayyihan', isMuslim: true, claims: ['abu-al-haytham-siyar22/badr'] },
+    // Entry 24, Abu Jandal's half-brother; went out with his father Suhail
+    // ibn Amr concealing his faith, then switched sides once the armies met.
+    {
+      person: 'abdullah-ibn-suhail',
+      isMuslim: true,
+      summary: {
+        value: 'خرج مع أبيه إلى بدر يكتم إيمانه، فلما التقى الجمعان، تحول إلى المسلمين، وقاتل، وعد بدريا.',
+        claims: ['abdullah-ibn-suhail-siyar24/badr'],
+      },
+      claims: ['abdullah-ibn-suhail-siyar24/badr'],
+    },
     // Two absences the source remarks on, and gives the Prophet's ruling for.
     {
       person: 'uthman-ibn-affan',
