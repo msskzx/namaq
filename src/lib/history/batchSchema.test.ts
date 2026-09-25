@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   batchRevision,
   checkApproval,
+  checklistReminders,
   markBatchReviewed,
   validateBatch,
   type BatchFiles,
@@ -226,6 +227,30 @@ describe('validateBatch', () => {
       path: 'claims[1]',
       message: 'duplicate claim key "abu-ubaydah/full-name"',
     });
+  });
+});
+
+describe('checklistReminders', () => {
+  it('reminds when a PERSON account declares no notInSource items', () => {
+    const b = batch();
+
+    expect(checklistReminders(b)).toEqual([
+      'abu-ubaydah-ibn-al-jarrah: no notInSource items declared — run npm run catalog:checklist -- abu-ubaydah-ibn-al-jarrah before approving',
+    ]);
+  });
+
+  it('stays quiet once at least one item is marked notInSource', () => {
+    const b = batch();
+    b.accounts[0].notInSource = ['wives'];
+
+    expect(checklistReminders(b)).toEqual([]);
+  });
+
+  it('ignores non-PERSON accounts', () => {
+    const b = batch();
+    b.accounts[0].subjectKind = 'BATTLE';
+
+    expect(checklistReminders(b)).toEqual([]);
   });
 });
 

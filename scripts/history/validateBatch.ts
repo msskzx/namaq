@@ -1,5 +1,5 @@
 import { loadBatch } from '../../src/lib/history/loadBatch';
-import { batchRevision, checkApproval, validateBatch } from '../../src/lib/history/batchSchema';
+import { batchRevision, checkApproval, checklistReminders, validateBatch } from '../../src/lib/history/batchSchema';
 
 const dir = process.argv[2];
 
@@ -11,10 +11,13 @@ if (!dir) {
 const { batch, files } = loadBatch(dir);
 const issues = validateBatch(batch, files);
 const approval = checkApproval(batch, files);
+const reminders = checklistReminders(batch);
 
 console.log(`Batch ${batch.slug} at revision ${batchRevision(batch, files)}`);
 console.log(`  sources ${batch.sources.length}, accounts ${batch.accounts.length}, claims ${batch.claims.length}`);
 console.log(approval.approved ? '  approval: current' : `  approval: none — ${approval.reason}`);
+
+for (const reminder of reminders) console.log(`  reminder: ${reminder}`);
 
 if (issues.length === 0) {
   console.log('  no issues');

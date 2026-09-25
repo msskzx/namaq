@@ -51,6 +51,16 @@ the text nine separate times. The order below is the order these things
 typically appear in a سير أعلام النبلاء-style entry; a different source may
 order them differently, but the same seven things are worth watching for.
 
+Most entries are terse, so most of the seven items usually come back
+absent — that's a normal outcome, not a failure, but confirming it by
+close-reading four wives-sized haystacks a batch turns out empty is slow.
+Before the close read, grep the account's pages for each item's own
+trigger words (`تزوج`, `امرأة`, `زوج` for wives; `أخو`, `أخت`, `شقيق` for
+siblings; a physical-description phrase pattern like `كان طويلا`/`أسمر`
+for appearance) — a clean miss across every page is enough to mark
+`notInSource` without re-reading line by line, and a hit is where the
+close read earns its time.
+
 Two of the nine things a batch is responsible for are not "may or may not
 be in the source" — they always apply to whatever *was* extracted, so they
 have no absent state:
@@ -214,6 +224,11 @@ full, so this document doesn't drift out of sync with the actual schema:
 - `volumeNumber` (when declared) not matching a volume the source declares
   — `history:validate`. (Declaring one at all is this checklist's job, not
   the validator's — see item 7 above.)
+- `history:validate` also prints a non-blocking reminder line for any
+  PERSON account with zero `notInSource` items — it can't know whether
+  `catalog:checklist` was actually run, only that nothing was marked
+  absent, so it nudges rather than fails. A genuinely thorough entry
+  quiets it the normal way: by marking whatever really is absent.
 - Relation reciprocity (`RECIPROCAL_INVERSES`), an ambiguous `inverse` left
   unset when more than one reciprocal exists, a relation target that isn't
   a known person — `catalog:validate` (`src/lib/catalog/validateCatalog.ts`
