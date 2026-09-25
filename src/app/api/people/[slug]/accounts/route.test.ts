@@ -8,7 +8,13 @@ const { findMany, findUnique, findPeople, findOpenings, groupSpans } = vi.hoiste
   findPeople: vi.fn(async () => []),
   // ...and reads each account's first page to order them by where they open in
   // the work rather than by when they were imported.
-  findOpenings: vi.fn(async () => []),
+  findOpenings: vi.fn(async () => [] as {
+    accountId?: string;
+    sequence?: number;
+    printedPage?: string | null;
+    extractionUrl?: string | null;
+    volume?: { number: number } | null;
+  }[]),
   // ...and groups each account's pages by the volume they are bound in, since
   // an entry that crosses a binding sits in two.
   groupSpans: vi.fn(async () => []),
@@ -50,6 +56,7 @@ describe('GET /api/people/[slug]/accounts', () => {
   beforeEach(() => {
     findMany.mockReset();
     findUnique.mockReset();
+    findOpenings.mockReset().mockResolvedValue([]);
     findMany.mockResolvedValue([siyar]);
     findUnique.mockResolvedValue(page);
   });
@@ -85,6 +92,17 @@ describe('GET /api/people/[slug]/accounts', () => {
         where: { accountId_sequence: { accountId: 'account-hilya', sequence: 3 } },
       }),
     );
+  });
+
+  it('returns printed page labels with their volume for reader navigation', async () => {
+    findOpenings
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([{ sequence: 1, printedPage: '29', volume: { number: 1 } }]);
+
+    const body = await (await call('abu-ubaydah-ibn-al-jarrah')).json();
+
+    expect(body.pageNumbers).toEqual([{ sequence: 1, printedPage: '29', volume: { number: 1 } }]);
   });
 
   it('reports no accounts as an empty result, not an error', async () => {

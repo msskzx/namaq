@@ -193,7 +193,14 @@ export async function accountsPayload(
 
   if (!selected) return { status: 404 as const, body: { error: unknownAccount } };
 
-  const page = await readPage(selected.id, requestedPage);
+  const [page, pageNumbers] = await Promise.all([
+    readPage(selected.id, requestedPage),
+    prisma.sourceAccountPage.findMany({
+      where: { accountId: selected.id },
+      select: { sequence: true, printedPage: true, volume: { select: { number: true } } },
+      orderBy: { sequence: 'asc' },
+    }),
+  ]);
   if (!page) {
     return {
       status: 404 as const,
@@ -201,5 +208,5 @@ export async function accountsPayload(
     };
   }
 
-  return { status: 200 as const, body: { accounts, account: selected, page } };
+  return { status: 200 as const, body: { accounts, account: selected, page, pageNumbers } };
 }

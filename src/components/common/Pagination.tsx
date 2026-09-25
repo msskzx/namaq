@@ -16,6 +16,7 @@ interface PaginationProps {
   summary?: string;
   /** Visible text beside the jump control. Without it the control is still named, just not labelled on screen. */
   selectLabel?: string;
+  pageLabels?: string[];
 }
 
 /**
@@ -30,6 +31,7 @@ export default function Pagination({
   showSelect = false,
   summary,
   selectLabel,
+  pageLabels,
 }: PaginationProps) {
   const { language } = useLanguage();
 
@@ -70,7 +72,7 @@ export default function Pagination({
           >
             {Array.from({ length: pageCount }, (_, index) => index + 1).map((option) => (
               <option key={option} value={option}>
-                {option}
+                {pageLabels?.[option - 1] ?? option}
               </option>
             ))}
           </select>

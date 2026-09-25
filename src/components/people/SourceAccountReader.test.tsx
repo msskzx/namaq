@@ -168,6 +168,28 @@ describe('SourceAccountReader', () => {
     await waitFor(() => expect(fetchJson).toHaveBeenCalledWith(expect.stringContaining('page=7')));
   });
 
+  it('shows the book page number in the page selector', async () => {
+    Element.prototype.scrollIntoView = vi.fn();
+    const selected = account({ pageCount: 2 });
+    respondWith({
+      accounts: [selected], account: selected,
+      page: page({ sequence: 1, printedPage: '158' }),
+      pageNumbers: [
+        { sequence: 1, printedPage: '158', volume: { number: 1 } },
+        { sequence: 2, printedPage: '158', volume: { number: 2 } },
+      ],
+    });
+
+    const { container } = renderReader();
+    await screen.findByText('الفقرة الأولى');
+
+    const select = container.querySelector('select[aria-label="Go to page"]') as HTMLSelectElement;
+    expect(select.selectedOptions[0].textContent).toBe('158 · vol. 1');
+    expect(select.options[1].textContent).toBe('158 · vol. 2');
+    fireEvent.change(select, { target: { value: '2' } });
+    expect(nav.replaceCalls.at(-1)).toContain('page=2');
+  });
+
   it('brings the reader back into view when the page changes', async () => {
     const scrollIntoView = vi.fn();
     Element.prototype.scrollIntoView = scrollIntoView;

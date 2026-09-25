@@ -22,6 +22,7 @@ interface AccountsResponse {
   accounts: AccountSummary[];
   account: AccountSummary | null;
   page: AccountPage | null;
+  pageNumbers?: { sequence: number; printedPage: string | null; volume: { number: number } | null }[];
 }
 
 interface SectionsResponse {
@@ -177,6 +178,16 @@ export default function SourceAccountReader({
   let currentSectionIndex = -1;
   sections.forEach((candidate, index) => { if (candidate.sequence <= current.sequence) currentSectionIndex = index; });
   const t = language === 'ar';
+  const printedPageCounts = new Map<string, number>();
+  data.pageNumbers?.forEach(({ printedPage }) => {
+    if (printedPage) printedPageCounts.set(printedPage, (printedPageCounts.get(printedPage) ?? 0) + 1);
+  });
+  const pageLabels = data.pageNumbers?.map(({ sequence, printedPage, volume }) => {
+    if (!printedPage) return String(sequence);
+    if ((printedPageCounts.get(printedPage) ?? 0) < 2) return printedPage;
+    const volumeLabel = volume ? (t ? `ج${volume.number}` : `vol. ${volume.number}`) : `#${sequence}`;
+    return `${printedPage} · ${volumeLabel}`;
+  });
   const pageContentStyle = {
     ...backgroundStyles[background],
     fontSize: fontSizes[size],
@@ -295,7 +306,13 @@ export default function SourceAccountReader({
           <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">{t ? `ص ${printed}` : `p. ${printed}`}</p>
         </div>
         <div className="shrink-0 pt-2">
-          <Pagination page={current.sequence} pageCount={account.pageCount} onChange={(next) => setSelection(account.id, next)} showSelect />
+          <Pagination
+            page={current.sequence}
+            pageCount={account.pageCount}
+            onChange={(next) => setSelection(account.id, next)}
+            showSelect
+            pageLabels={pageLabels}
+          />
         </div>
       </div>
     </section>
