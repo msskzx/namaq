@@ -1,0 +1,325 @@
+{
+  "slug": "aqil-ibn-al-bukayr",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aqil-ibn-al-bukayr",
+      "extractionUrl": "https://shamela.ws/book/10906/1611",
+      "accessedAt": "2026-09-25",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "185",
+          "bodyFile": "accounts/aqil-ibn-al-bukayr/001.md",
+          "notesFile": "accounts/aqil-ibn-al-bukayr/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1611",
+          "passages": [
+            {
+              "anchor": "185-p1"
+            },
+            {
+              "anchor": "185-p2"
+            },
+            {
+              "anchor": "185-p3"
+            },
+            {
+              "anchor": "185-p4"
+            },
+            {
+              "anchor": "185-p5"
+            },
+            {
+              "anchor": "185-p6"
+            },
+            {
+              "anchor": "185-p7"
+            },
+            {
+              "anchor": "185-p8"
+            },
+            {
+              "anchor": "185-p9"
+            },
+            {
+              "anchor": "185-p10"
+            },
+            {
+              "anchor": "185-p11"
+            },
+            {
+              "anchor": "185-p12"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "186",
+          "bodyFile": "accounts/aqil-ibn-al-bukayr/002.md",
+          "notesFile": "accounts/aqil-ibn-al-bukayr/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1612",
+          "passages": [
+            {
+              "anchor": "186-p1"
+            },
+            {
+              "anchor": "186-p2"
+            },
+            {
+              "anchor": "186-p3"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "aqil-bukayr-siyar16/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aqil-ibn-al-bukayr",
+      "field": "fullName",
+      "assertion": "عاقل بن البكير بن عبد يا ليل بن ناشب الليثي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "185-p1",
+          "volume": "1",
+          "pageReference": "185",
+          "extractionUrl": "https://shamela.ws/book/10906/1611",
+          "excerptArabic": "عَاقِلُ بنُ البُكَيْرِ بنِ عَبْدِ يَا لَيْلَ بنِ نَاشِبٍ اللَّيْثِيُّ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "aqil-bukayr-siyar16/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aqil-ibn-al-bukayr",
+      "field": "virtues",
+      "assertion": "كان اسمه غافلا فسماه رسول الله صلى الله عليه وسلم عاقلا. أسلم هو وإخوته جميعا، وهم أول من بايع في دار الأرقم، وخرجوا مهاجرين رجالا ونساء حتى غلقت أبوابهم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "185-p3",
+          "volume": "1",
+          "pageReference": "185",
+          "extractionUrl": "https://shamela.ws/book/10906/1611",
+          "excerptArabic": "كَانَ اسْمُهُ غَافِلاً، فَسَمَّاهُ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- عَاقِلاً",
+          "accessedAt": "2026-09-25"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "185-p7",
+          "volume": "1",
+          "pageReference": "185",
+          "extractionUrl": "https://shamela.ws/book/10906/1611",
+          "excerptArabic": "أَسْلَمَ غَافِلٌ، وَعَامِرٌ، وَإِيَاسٌ، وَخَالِدٌ بَنُو أَبِي البُكَيْرِ جَمِيْعاً، وَهُمْ أَوَّلُ مَنْ بَايَعَ فِي دَارِ الأَرْقَمِ",
+          "accessedAt": "2026-09-25"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "185-p9",
+          "volume": "1",
+          "pageReference": "185",
+          "extractionUrl": "https://shamela.ws/book/10906/1611",
+          "excerptArabic": "خَرَجَ بَنُو أَبِي البُكَيْرِ مُهَاجِرِيْنَ فَأَوْعَبُوا، رِجَالُهُم وَنِسَاؤُهُمْ، حَتَّى غُلِّقَتْ أَبْوَابُهُم",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "aqil-bukayr-siyar16/pact-brother-mubashshir",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aqil-ibn-al-bukayr",
+      "assertion": "آخى النبي صلى الله عليه وسلم بينه وبين مبشر بن عبد المنذر، فقتلا معا ببدر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PACT_BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "mubashshir-ibn-abd-al-mundhir",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "185-p12",
+          "volume": "1",
+          "pageReference": "185",
+          "extractionUrl": "https://shamela.ws/book/10906/1611",
+          "excerptArabic": "وَآخَى رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بَيْنَ عَاقِلٍ وَبَيْنَ مُبَشّرِ بنِ عَبْدِ المُنْذِرِ، فَقُتِلاَ مَعاً بِبَدْرٍ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "aqil-bukayr-siyar16/badr-summary",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aqil-ibn-al-bukayr",
+      "assertion": "استشهد يوم بدر وهو ابن أربع وثلاثين سنة، قتله مالك بن زهير الجشمي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "186-p2",
+          "volume": "1",
+          "pageReference": "186",
+          "extractionUrl": "https://shamela.ws/book/10906/1612",
+          "excerptArabic": "اسْتُشْهِدَ عَاقِلٌ يَوْمَ بَدْرٍ شَهِيْداً، وَهُوَ ابْنُ أَرْبَعٍ وَثَلاَثِيْنَ سَنَةً",
+          "accessedAt": "2026-09-25"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "186-p3",
+          "volume": "1",
+          "pageReference": "186",
+          "extractionUrl": "https://shamela.ws/book/10906/1612",
+          "excerptArabic": "قَتَلَهُ مَالِكُ بنُ زُهَيْرٍ الجُشَمِيُّ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    }
+  ],
+  "approval": {
+    "revision": "7894671ba43aa8eb",
+    "approvedAt": "2026-09-25",
+    "approvedBy": "msskzx",
+    "note": "Approved for publication. All four claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+  }
+}

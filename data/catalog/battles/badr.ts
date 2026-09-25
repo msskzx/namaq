@@ -198,7 +198,13 @@ const badr = {
     },
     // All fourteen the chapter names. Ten of them had no subject in the app
     // until this batch reached the roster, and the catalog now creates them.
-    { person: 'aqil-ibn-al-bukayr', isMuslim: true, status: ['MARTYRED'], claims: ['aqil-bukayr/badr'] },
+    {
+      person: 'aqil-ibn-al-bukayr',
+      isMuslim: true,
+      status: ['MARTYRED'],
+      summary: { value: 'قَتَلَهُ مَالِكُ بنُ زُهَيْرٍ الجُشَمِيُّ.', claims: ['aqil-bukayr-siyar16/badr-summary'] },
+      claims: ['aqil-bukayr/badr', 'aqil-bukayr-siyar16/badr-summary'],
+    },
     { person: 'safwan-ibn-bayda', isMuslim: true, status: ['MARTYRED'], claims: ['safwan-bayda/badr'] },
     { person: 'saad-ibn-khaythamah', isMuslim: true, status: ['MARTYRED'], claims: ['saad-khaythamah/badr'] },
     {
