@@ -247,6 +247,7 @@ const badr = {
     { person: 'iyas-ibn-al-bukayr', isMuslim: true, claims: ['iyas-bukayr-siyar18/badr'] },
     // Fourth and last of the al-Bukayr brothers; survived Badr, martyred later at Yamama.
     { person: 'amir-ibn-al-bukayr', isMuslim: true, claims: ['amir-bukayr-siyar19/badr'] },
+    { person: 'mistah-ibn-uthathah', isMuslim: true, claims: ['mistah-siyar20/badr'] },
     // Two absences the source remarks on, and gives the Prophet's ruling for.
     {
       person: 'uthman-ibn-affan',
