@@ -137,6 +137,7 @@
       "extractionUrl": "https://shamela.ws/book/10906/1597",
       "accessedAt": "2026-09-24",
       "volumeNumber": 4,
+      "notInSource": ["wives"],
       "pages": [
         {
           "sequence": 1,
@@ -747,9 +748,9 @@
     }
   ],
   "approval": {
-    "revision": "928da9730e0cd965",
+    "revision": "d481c22b66964ce7",
     "approvedAt": "2026-09-25",
     "approvedBy": "msskzx",
-    "note": "Re-recorded for publication after the account was given volumeNumber 4: its printed pages continue straight on from where the last-read entry in سير أعلام النبلاء ج١ leaves off, but the entry was published without naming that volume, so the reader listed it under entries with no volume instead of the book's contents. No claim, citation or page text changed. Previously: Approved for publication. All three claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+    "note": "Re-recorded after running the account against docs/extraction-checklist.md: read the full fourteen-page entry again for a wife, found none, and marked notInSource: [\"wives\"] rather than leaving it an unchecked gap. No claim, citation or page text changed. Previously: re-recorded for publication after the account was given volumeNumber 4, before which it was approved for publication with all three claims Not reviewed."
   }
 }
