@@ -12,7 +12,7 @@
       "edition": "الطبعة الثالثة",
       "digitalHost": "المكتبة الشاملة",
       "url": "https://shamela.ws/index.php/book/10906",
-      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده. تقابل النصوص والحواشي عند الحاجة نسخة Archive.org المصورة للطبعة الثالثة (https://archive.org/details/sanbz) ونصي التعرف الضوئي للجزأين، مع مراجعة الصورة عند النقل (https://archive.org/download/sanbz/sansera1_djvu.txt؛ https://archive.org/download/sanbz/sansera2_djvu.txt).",
       "volumes": [
         {
           "number": 1,
@@ -179,6 +179,7 @@
           "sequence": 2,
           "printedPage": "30",
           "bodyFile": "accounts/prophet-muhammad/002.md",
+          "notesFile": "accounts/prophet-muhammad/002.notes.md",
           "extractionUrl": "https://shamela.ws/book/10906/168",
           "passages": [
             {
@@ -205,6 +206,7 @@
           "sequence": 3,
           "printedPage": "31",
           "bodyFile": "accounts/prophet-muhammad/003.md",
+          "notesFile": "accounts/prophet-muhammad/003.notes.md",
           "extractionUrl": "https://shamela.ws/book/10906/169",
           "passages": [
             {
@@ -231,6 +233,7 @@
           "sequence": 4,
           "printedPage": "32",
           "bodyFile": "accounts/prophet-muhammad/004.md",
+          "notesFile": "accounts/prophet-muhammad/004.notes.md",
           "extractionUrl": "https://shamela.ws/book/10906/170",
           "passages": [
             {
@@ -257,6 +260,7 @@
           "sequence": 5,
           "printedPage": "33",
           "bodyFile": "accounts/prophet-muhammad/005.md",
+          "notesFile": "accounts/prophet-muhammad/005.notes.md",
           "extractionUrl": "https://shamela.ws/book/10906/171",
           "passages": [
             {
@@ -280,6 +284,7 @@
           "sequence": 6,
           "printedPage": "34",
           "bodyFile": "accounts/prophet-muhammad/006.md",
+          "notesFile": "accounts/prophet-muhammad/006.notes.md",
           "extractionUrl": "https://shamela.ws/book/10906/172",
           "passages": [
             {
@@ -309,6 +314,7 @@
           "sequence": 7,
           "printedPage": "35",
           "bodyFile": "accounts/prophet-muhammad/007.md",
+          "notesFile": "accounts/prophet-muhammad/007.notes.md",
           "extractionUrl": "https://shamela.ws/book/10906/173",
           "passages": [
             {
@@ -338,6 +344,7 @@
           "sequence": 8,
           "printedPage": "36",
           "bodyFile": "accounts/prophet-muhammad/008.md",
+          "notesFile": "accounts/prophet-muhammad/008.notes.md",
           "extractionUrl": "https://shamela.ws/book/10906/174",
           "passages": [
             {
@@ -387,6 +394,7 @@
           "sequence": 10,
           "printedPage": "38",
           "bodyFile": "accounts/prophet-muhammad/010.md",
+          "notesFile": "accounts/prophet-muhammad/010.notes.md",
           "extractionUrl": "https://shamela.ws/book/10906/176",
           "passages": [
             {
@@ -419,6 +427,7 @@
           "sequence": 11,
           "printedPage": "39",
           "bodyFile": "accounts/prophet-muhammad/011.md",
+          "notesFile": "accounts/prophet-muhammad/011.notes.md",
           "extractionUrl": "https://shamela.ws/book/10906/177",
           "passages": [
             {
@@ -460,6 +469,7 @@
           "sequence": 12,
           "printedPage": "40",
           "bodyFile": "accounts/prophet-muhammad/012.md",
+          "notesFile": "accounts/prophet-muhammad/012.notes.md",
           "extractionUrl": "https://shamela.ws/book/10906/178",
           "passages": [
             {
@@ -498,6 +508,7 @@
           "sequence": 13,
           "printedPage": "41",
           "bodyFile": "accounts/prophet-muhammad/013.md",
+          "notesFile": "accounts/prophet-muhammad/013.notes.md",
           "extractionUrl": "https://shamela.ws/book/10906/179",
           "passages": [
             {
@@ -509,6 +520,7 @@
           "sequence": 14,
           "printedPage": "42",
           "bodyFile": "accounts/prophet-muhammad/014.md",
+          "notesFile": "accounts/prophet-muhammad/014.notes.md",
           "extractionUrl": "https://shamela.ws/book/10906/180",
           "passages": [
             {
@@ -523,6 +535,7 @@
           "sequence": 15,
           "printedPage": "43",
           "bodyFile": "accounts/prophet-muhammad/015.md",
+          "notesFile": "accounts/prophet-muhammad/015.notes.md",
           "extractionUrl": "https://shamela.ws/book/10906/181",
           "passages": [
             {
