@@ -22,6 +22,16 @@ const fathMakkah = {
       summary: { value: 'أَعْطَاهُ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَوْمَ فَتْحِ مَكَّةَ لِوَاءَ سَعْدِ بنِ عُبَادَةَ، فَدَخَلَ الزُّبَيْرُ مَكَّةَ بِلِوَاءَيْنِ.', claims: ['zubayr/fath-makkah'] },
       claims: ['zubayr/fath-makkah'],
     },
+    // His own entry gives the conquest as the point his conversion is dated to.
+    {
+      person: 'suhail-ibn-amr',
+      isMuslim: true,
+      summary: {
+        value: 'تَأَخَّرَ إِسْلاَمُهُ إِلَى يَوْمِ الفَتْحِ، ثُمَّ حَسُنَ إِسْلاَمُهُ.',
+        claims: ['suhail-ibn-amr-siyar25/fath-makkah'],
+      },
+      claims: ['suhail-ibn-amr-siyar25/fath-makkah'],
+    },
   ],
 } satisfies CatalogBattle;
 

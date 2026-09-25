@@ -1,0 +1,482 @@
+{
+  "slug": "suhail-ibn-amr",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "suhail-ibn-amr",
+      "extractionUrl": "https://shamela.ws/book/10906/1620",
+      "accessedAt": "2026-09-25",
+      "volumeNumber": 4,
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "194",
+          "bodyFile": "accounts/suhail-ibn-amr/001.md",
+          "notesFile": "accounts/suhail-ibn-amr/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1620",
+          "passages": [
+            {
+              "anchor": "194-p2"
+            },
+            {
+              "anchor": "194-p3"
+            },
+            {
+              "anchor": "194-p4"
+            },
+            {
+              "anchor": "194-p5"
+            },
+            {
+              "anchor": "194-p6"
+            },
+            {
+              "anchor": "194-p7"
+            },
+            {
+              "anchor": "194-p8"
+            },
+            {
+              "anchor": "194-p9"
+            },
+            {
+              "anchor": "194-p10"
+            },
+            {
+              "anchor": "194-p11"
+            },
+            {
+              "anchor": "194-p12"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "195",
+          "bodyFile": "accounts/suhail-ibn-amr/002.md",
+          "notesFile": "accounts/suhail-ibn-amr/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1621",
+          "passages": [
+            {
+              "anchor": "195-p1"
+            },
+            {
+              "anchor": "195-p2"
+            },
+            {
+              "anchor": "195-p3"
+            },
+            {
+              "anchor": "195-p4"
+            },
+            {
+              "anchor": "195-p5"
+            },
+            {
+              "anchor": "195-p6"
+            }
+          ]
+        }
+      ],
+      "notInSource": [
+        "appearance",
+        "wives",
+        "siblings"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "suhail-ibn-amr-siyar25/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "suhail-ibn-amr",
+      "field": "fullName",
+      "assertion": "سهيل بن عمرو: أبوهما (أبو أبي جندل وعبد الله بن سهيل).",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "194-p3",
+          "volume": "4",
+          "pageReference": "194",
+          "extractionUrl": "https://shamela.ws/book/10906/1620",
+          "excerptArabic": "سُهَيْلُ بنُ عَمْرٍو",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "suhail-ibn-amr-siyar25/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "suhail-ibn-amr",
+      "assertion": "سهيل بن عمرو، أي ابن عمرو بن عبد شمس (عمرو بن عبد شمس: أبوه، عقدة موجودة في الرسم البياني).",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "amr-ibn-abd-shams",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "194-p3",
+          "volume": "4",
+          "pageReference": "194",
+          "extractionUrl": "https://shamela.ws/book/10906/1620",
+          "excerptArabic": "سُهَيْلُ بنُ عَمْرٍو",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "suhail-ibn-amr-siyar25/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "suhail-ibn-amr",
+      "field": "kunya",
+      "assertion": "يكنى: أبا يزيد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "194-p4",
+          "volume": "4",
+          "pageReference": "194",
+          "extractionUrl": "https://shamela.ws/book/10906/1620",
+          "excerptArabic": "يُكْنَى: أَبَا يَزِيْدَ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "suhail-ibn-amr-siyar25/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "suhail-ibn-amr",
+      "field": "virtues",
+      "assertion": "كان خطيب قريش وفصيحهم ومن أشرافهم، سمحا جوادا مفوها، قام بمكة خطيبا عند وفاة رسول الله صلى الله عليه وسلم فسكنهم وعظم الإسلام، وكان بعد ذلك كثير الصلاة والصوم والصدقة، كثير البكاء إذا سمع القرآن.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "194-p5",
+          "volume": "4",
+          "pageReference": "194",
+          "extractionUrl": "https://shamela.ws/book/10906/1620",
+          "excerptArabic": "وَكَانَ خَطِيْبَ قُرَيْشٍ، وَفَصِيْحَهُم، وَمِنْ أَشْرَافِهِم",
+          "accessedAt": "2026-09-25"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "194-p11",
+          "volume": "4",
+          "pageReference": "194",
+          "extractionUrl": "https://shamela.ws/book/10906/1620",
+          "excerptArabic": "وَكَانَ سَمْحاً، جَوَاداً، مُفَوَّهاً",
+          "accessedAt": "2026-09-25"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "194-p12",
+          "volume": "4",
+          "pageReference": "194",
+          "extractionUrl": "https://shamela.ws/book/10906/1620",
+          "excerptArabic": "وَقَدْ قَامَ بِمَكَّةَ خَطِيْباً عِنْدَ وَفَاةِ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِنَحْوٍ مِنْ خُطْبَةِ الصِّدِّيْقِ بِالمَدِيْنَةِ، فَسَكَّنَهُم، وَعَظَّمَ الإِسْلاَمَ",
+          "accessedAt": "2026-09-25"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "195-p1",
+          "volume": "4",
+          "pageReference": "195",
+          "extractionUrl": "https://shamela.ws/book/10906/1621",
+          "excerptArabic": "كَانَ سُهَيْلُ بَعْدُ كَثِيْرَ الصَّلاَةِ وَالصَّوْمِ وَالصَّدَقَةِ",
+          "accessedAt": "2026-09-25"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "195-p2",
+          "volume": "4",
+          "pageReference": "195",
+          "extractionUrl": "https://shamela.ws/book/10906/1621",
+          "excerptArabic": "وَكَانَ كَثِيْرَ البُكَاءِ إِذَا سَمِعَ القُرْآنَ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "suhail-ibn-amr-siyar25/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "suhail-ibn-amr",
+      "assertion": "وكان قد أسر يوم بدر، وتخلص.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "194-p9",
+          "volume": "4",
+          "pageReference": "194",
+          "extractionUrl": "https://shamela.ws/book/10906/1620",
+          "excerptArabic": "وَكَانَ قَدْ أُسِرَ يَوْم بَدْرٍ، وَتَخَلَّصَ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "suhail-ibn-amr-siyar25/hudaybiyyah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "suhail-ibn-amr",
+      "assertion": "لما أقبل في شأن الصلح، قال النبي صلى الله عليه وسلم: سهل أمركم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "hudaybiyyah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "194-p6",
+          "volume": "4",
+          "pageReference": "194",
+          "extractionUrl": "https://shamela.ws/book/10906/1620",
+          "excerptArabic": "لَمَّا أَقْبَلَ فِي شَأْنِ الصُّلْحِ",
+          "accessedAt": "2026-09-25"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "194-p7",
+          "volume": "4",
+          "pageReference": "194",
+          "extractionUrl": "https://shamela.ws/book/10906/1620",
+          "excerptArabic": "قَالَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-: (سَهُلَ أَمْرُكُم",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "suhail-ibn-amr-siyar25/fath-makkah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "suhail-ibn-amr",
+      "assertion": "تأخر إسلامه إلى يوم الفتح، ثم حسن إسلامه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "fath-makkah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "194-p8",
+          "volume": "4",
+          "pageReference": "194",
+          "extractionUrl": "https://shamela.ws/book/10906/1620",
+          "excerptArabic": "تَأَخَّرَ إِسْلاَمُهُ إِلَى يَوْمِ الفَتْحِ، ثُمَّ حَسُنَ إِسْلاَمُهُ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "suhail-ibn-amr-siyar25/yarmuk",
+      "subjectKind": "PERSON",
+      "subjectSlug": "suhail-ibn-amr",
+      "assertion": "وكان أميرا على كردوس يوم اليرموك.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "yarmuk",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "195-p3",
+          "volume": "4",
+          "pageReference": "195",
+          "extractionUrl": "https://shamela.ws/book/10906/1621",
+          "excerptArabic": "وَكَانَ أَمِيْراً عَلَى كُرْدُوْسٍ يَوْم اليَرْمُوْكِ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "suhail-ibn-amr-siyar25/death-place",
+      "subjectKind": "PERSON",
+      "subjectSlug": "suhail-ibn-amr",
+      "field": "placeOfDeathArabic",
+      "assertion": "وقال الشافعي، والواقدي: مات في طاعون عمواس.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "195-p5",
+          "volume": "4",
+          "pageReference": "195",
+          "extractionUrl": "https://shamela.ws/book/10906/1621",
+          "excerptArabic": "وَقَالَ الشَّافِعِيُّ، وَالوَاقِدِيُّ: مَاتَ فِي طَاعُوْنِ عَمَوَاسَ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "suhail-ibn-amr-siyar25/death-place-alt",
+      "subjectKind": "PERSON",
+      "subjectSlug": "suhail-ibn-amr",
+      "field": "placeOfDeathArabic",
+      "assertion": "قال المدائني، وغيره: استشهد يوم اليرموك (يعارض رواية طاعون عمواس).",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "disputed": true,
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "195-p4",
+          "volume": "4",
+          "pageReference": "195",
+          "extractionUrl": "https://shamela.ws/book/10906/1621",
+          "excerptArabic": "قَالَ المَدَائِنِيُّ، وَغَيْرُهُ: اسْتُشْهِدَ يَوْمَ اليَرْمُوْكِ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    }
+  ],
+  "approval": {
+    "revision": "b6842ca3539eb984",
+    "approvedAt": "2026-09-25",
+    "approvedBy": "msskzx",
+    "note": "Approved for publication. All ten claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+  }
+}
