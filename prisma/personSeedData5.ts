@@ -19,16 +19,6 @@
  */
 export const people = [
   {
-    name: 'مسطح بن أثاثة',
-    fullName: 'مسطح بن أثاثة بن عباد بن المطلب بن عبد مناف بن قصي المطلبي',
-    slug: 'mistah-ibn-uthathah',
-    nameTransliterated: 'Mistah ibn Uthathah',
-    appearance: null,
-    virtues: null,
-    picture: null,
-    titles: ['companion'],
-  },
-  {
     name: 'أبو عبس',
     fullName: 'عبد الرحمن بن جبر بن عمرو بن زيد بن جشم بن حارثة بن الحارث الأنصاري الأوسي',
     slug: 'abu-abs',
