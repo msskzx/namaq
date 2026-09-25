@@ -19,16 +19,6 @@
  */
 export const people = [
   {
-    name: 'أبو عبس',
-    fullName: 'عبد الرحمن بن جبر بن عمرو بن زيد بن جشم بن حارثة بن الحارث الأنصاري الأوسي',
-    slug: 'abu-abs',
-    nameTransliterated: 'Abu Abs',
-    appearance: null,
-    virtues: null,
-    picture: null,
-    titles: ['companion'],
-  },
-  {
     name: 'أبو الهيثم بن التيهان',
     fullName: 'مالك بن التيهان بن بلي بن عمرو بن الحاف بن قضاعة الأنصاري',
     slug: 'abu-al-haytham-ibn-at-tayyihan',
