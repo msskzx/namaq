@@ -294,7 +294,7 @@ export default function SourceAccountReader({
         >
           <article dir={rtl ? 'rtl' : 'ltr'} lang={account.source.language} className="arabic-source space-y-4 text-justify">
             {pageParagraphs(current.bodyMarkdown).map(({ text, heading: isHeading }, index) => isHeading
-              ? <h2 key={index} className="my-6 border-b border-amber-400 pb-2 text-center text-[1.15em] font-bold">{text}</h2>
+              ? <h2 key={index} className="my-6 border-b border-amber-400 pb-2 text-center text-[1.5em] font-bold">{text}</h2>
               : <p key={index}>{text}</p>)}
           </article>
           {current.notesMarkdown && (

@@ -23,6 +23,11 @@ function isHeadingParagraph(paragraph: string) {
   return paragraph.startsWith('[') && paragraph.endsWith(']');
 }
 
+/** Numbered entries in Shamela start with a standalone numbered name line. */
+function isNumberedEntryTitle(paragraph: string) {
+  return /^[٠-٩۰-۹\d]+\s*[-–—]\s*\S/.test(paragraph);
+}
+
 function stripBrackets(paragraph: string) {
   return paragraph.replace(/^\[+/, '').replace(/\]+$/, '').replace(/:\s*$/, '').trim();
 }
@@ -35,10 +40,15 @@ export function pageHeadings(bodyMarkdown: string): SectionHeading[] {
 
 /** Paragraphs ready for the reader, with the batch heading convention identified. */
 export function pageParagraphs(bodyMarkdown: string): PageParagraph[] {
-  return bodyMarkdown
+  const paragraphs = bodyMarkdown
     .split(/\n{2,}/)
     .map((block) => block.trim())
-    .filter(Boolean)
-    .map((text) => ({ text: isHeadingParagraph(text) ? stripBrackets(text) : text, heading: isHeadingParagraph(text) }))
+    .filter(Boolean);
+
+  return paragraphs
+    .map((text, index) => {
+      const heading = isHeadingParagraph(text) || (index === 0 && isNumberedEntryTitle(text));
+      return { text: isHeadingParagraph(text) ? stripBrackets(text) : text, heading };
+    })
     .filter(({ text }) => text.length > 0);
 }
