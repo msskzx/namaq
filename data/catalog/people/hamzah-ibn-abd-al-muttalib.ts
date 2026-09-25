@@ -45,6 +45,12 @@ const hamzahIbnAbdAlMuttalib = {
     // Carried from neo4j/graphSeedData.ts, whose node declaration is retired
     // with the rest. The catalog owns this subject's edges now, so they live
     // here or not at all.
+    //
+    // Unlike his brothers Abu Talib, Al-Harith and Al-Abbas, the seed never
+    // gave Hamzah a direct SON/FATHER edge to his own father
+    // abd-al-muttalib-ibn-hashim (see graphSeedData7.ts's note on the same
+    // gap for Al-Abbas). No new node needed, just the missing edge.
+    { type: 'SON', inverse: 'FATHER', to: 'abd-al-muttalib-ibn-hashim', claims: legacyUnreviewed },
     { type: 'BROTHER', inverse: 'SISTER', to: 'safiyyah-bint-abd-al-muttalib', claims: legacyUnreviewed },
     { type: 'PATERNAL_UNCLE', inverse: 'PATERNAL_NEPHEW', to: 'prophet-muhammad', claims: ['hamzah/uncle-prophet'] },
     // The reciprocal is whichever milk sibling the far end is, so it is stated
