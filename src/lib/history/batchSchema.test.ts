@@ -89,6 +89,26 @@ describe('validateBatch', () => {
     });
   });
 
+  // docs/extraction-checklist.md: an account may declare a content item
+  // absent from its source, but only from the fixed checklist vocabulary, so
+  // a typo doesn't silently pass as "checked".
+  it('accepts a valid notInSource item', () => {
+    const b = batch();
+    b.accounts[0].notInSource = ['wives', 'siblings'];
+
+    expect(validateBatch(b, files())).toEqual([]);
+  });
+
+  it('rejects a notInSource item outside the checklist vocabulary', () => {
+    const b = batch();
+    b.accounts[0].notInSource = ['spouse' as never];
+
+    expect(validateBatch(b, files())).toContainEqual({
+      path: 'accounts[0].notInSource[0]',
+      message: expect.stringContaining('"spouse" is not a checklist content item'),
+    });
+  });
+
   it('rejects the same volume declared twice', () => {
     const b = batch();
     b.sources[0].volumes = [{ number: 1 }, { number: 1 }];

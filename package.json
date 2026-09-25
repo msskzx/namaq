@@ -40,7 +40,8 @@
     "catalog:validate": "tsx scripts/data/validateCatalog.ts",
     "catalog:project": "tsx scripts/data/projectCatalog.ts",
     "catalog:project-graph": "tsx scripts/data/projectCatalogGraph.ts",
-    "catalog:ledger": "tsx scripts/data/catalogLedger.ts"
+    "catalog:ledger": "tsx scripts/data/catalogLedger.ts",
+    "catalog:checklist": "tsx scripts/data/catalogChecklist.ts"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
