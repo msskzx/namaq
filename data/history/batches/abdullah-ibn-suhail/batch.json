@@ -1,0 +1,344 @@
+{
+  "slug": "abdullah-ibn-suhail",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-suhail",
+      "extractionUrl": "https://shamela.ws/book/10906/1619",
+      "accessedAt": "2026-09-25",
+      "volumeNumber": 4,
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "193",
+          "bodyFile": "accounts/abdullah-ibn-suhail/001.md",
+          "notesFile": "accounts/abdullah-ibn-suhail/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1619",
+          "passages": [
+            {
+              "anchor": "193-p3"
+            },
+            {
+              "anchor": "193-p4"
+            },
+            {
+              "anchor": "193-p5"
+            },
+            {
+              "anchor": "193-p6"
+            },
+            {
+              "anchor": "193-p7"
+            },
+            {
+              "anchor": "193-p8"
+            },
+            {
+              "anchor": "193-p9"
+            },
+            {
+              "anchor": "193-p10"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "194",
+          "bodyFile": "accounts/abdullah-ibn-suhail/002.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1620",
+          "passages": [
+            {
+              "anchor": "194-p1"
+            }
+          ]
+        }
+      ],
+      "notInSource": [
+        "kunya",
+        "appearance",
+        "wives",
+        "siblings"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "abdullah-ibn-suhail-siyar24/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-suhail",
+      "field": "fullName",
+      "assertion": "عبد الله بن سهيل بن عمرو العامري.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "193-p3",
+          "volume": "4",
+          "pageReference": "193",
+          "extractionUrl": "https://shamela.ws/book/10906/1619",
+          "excerptArabic": "عَبْدُ اللهِ بنُ سُهَيْلِ بنِ عَمْرٍو العَامِرِيُّ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "abdullah-ibn-suhail-siyar24/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-suhail",
+      "assertion": "سهيل بن عمرو: أبوه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "suhail-ibn-amr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "193-p3",
+          "volume": "4",
+          "pageReference": "193",
+          "extractionUrl": "https://shamela.ws/book/10906/1619",
+          "excerptArabic": "عَبْدُ اللهِ بنُ سُهَيْلِ بنِ عَمْرٍو العَامِرِيُّ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "abdullah-ibn-suhail-siyar24/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-suhail",
+      "field": "virtues",
+      "assertion": "وله غزوات ومواقف. وقيل: بل هو من السابقين الأولين، وإنه هاجر إلى الحبشة الهجرة الأولى.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "193-p5",
+          "volume": "4",
+          "pageReference": "193",
+          "extractionUrl": "https://shamela.ws/book/10906/1619",
+          "excerptArabic": "وَلَهُ غَزَوَاتٌ وَمَوَاقِفُ",
+          "accessedAt": "2026-09-25"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "193-p6",
+          "volume": "4",
+          "pageReference": "193",
+          "extractionUrl": "https://shamela.ws/book/10906/1619",
+          "excerptArabic": "وَقِيْلَ: بَلْ هُوَ مِنَ السَّابِقِيْنَ الأَوَّلِيْنَ، وَإِنَّهُ هَاجَرَ إِلَى الحَبَشَةِ الهِجْرَةَ الأُوْلَى",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "abdullah-ibn-suhail-siyar24/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-suhail",
+      "assertion": "خرج مع أبيه إلى بدر يكتم إيمانه، فلما التقى الجمعان، تحول إلى المسلمين، وقاتل، وعد بدريا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "193-p4",
+          "volume": "4",
+          "pageReference": "193",
+          "extractionUrl": "https://shamela.ws/book/10906/1619",
+          "excerptArabic": "خَرَجَ مَعَ أَبِيْهِ إِلَى بَدْرٍ يَكْتُمُ إِيْمَانَهُ، فَلَمَّا الْتَقَى الجَمْعَانِ، تَحَوَّلَ إِلَى المُسْلِمِيْنَ، وَقَاتَلَ، وَعُدَّ بَدْرِيّاً",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "abdullah-ibn-suhail-siyar24/death",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-suhail",
+      "field": "deathYearHijri",
+      "assertion": "واستشهد يوم اليمامة... لما استشهد سنة اثنتي عشرة باليمامة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "193-p5",
+          "volume": "4",
+          "pageReference": "193",
+          "extractionUrl": "https://shamela.ws/book/10906/1619",
+          "excerptArabic": "وَاسْتُشْهِدَ يَوْمَ اليَمَامَةِ",
+          "accessedAt": "2026-09-25"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "194-p1",
+          "volume": "4",
+          "pageReference": "194",
+          "extractionUrl": "https://shamela.ws/book/10906/1620",
+          "excerptArabic": "لَمَّا اسْتُشْهِدَ سَنَةَ اثْنَتَيْ عَشْرَةَ بِاليَمَامَةِ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "abdullah-ibn-suhail-siyar24/death-place",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-suhail",
+      "field": "placeOfDeathArabic",
+      "assertion": "استشهد يوم اليمامة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "193-p5",
+          "volume": "4",
+          "pageReference": "193",
+          "extractionUrl": "https://shamela.ws/book/10906/1619",
+          "excerptArabic": "اسْتُشْهِدَ يَوْمَ اليَمَامَةِ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    }
+  ],
+  "approval": {
+    "revision": "dbfab64a8e9681a8",
+    "approvedAt": "2026-09-25",
+    "approvedBy": "msskzx",
+    "note": "Approved for publication. All six claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+  }
+}
