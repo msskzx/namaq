@@ -5,7 +5,7 @@ import Link from 'next/link';
 import useSWR from 'swr';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookOpen, faBars, faCompress, faExpand, faList, faGear, faXmark, faFont, faSun, faMoon, faPalette } from '@fortawesome/free-solid-svg-icons';
+import { faBookOpen, faBars, faCompress, faExpand, faList, faGear, faXmark, faFont, faSun, faMoon, faPalette, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import Button from '@/components/common/Button';
@@ -179,6 +179,8 @@ export default function SourceAccountReader({
   let currentSectionIndex = -1;
   sections.forEach((candidate, index) => { if (candidate.sequence <= current.sequence) currentSectionIndex = index; });
   const t = language === 'ar';
+  const backIcon = t ? faArrowRight : faArrowLeft;
+  const forwardIcon = t ? faArrowLeft : faArrowRight;
   const pageContentStyle = {
     ...backgroundStyles[background],
     fontSize: fontSizes[size],
@@ -216,6 +218,10 @@ export default function SourceAccountReader({
             )}
           </div>
           <p className="min-w-0 flex-1 truncate text-sm text-gray-700 dark:text-gray-200">{labelAccount(account)}</p>
+          <div className="flex shrink-0 items-center gap-1">
+            <Button variant="outline" size="icon" disabled={current.sequence <= 1} onClick={() => turnPage(-1)} aria-label={t ? 'الصفحة السابقة' : 'Previous page'}><FontAwesomeIcon icon={backIcon} /></Button>
+            <Button variant="outline" size="icon" disabled={current.sequence >= account.pageCount} onClick={() => turnPage(1)} aria-label={t ? 'الصفحة التالية' : 'Next page'}><FontAwesomeIcon icon={forwardIcon} /></Button>
+          </div>
           <Button size="icon" active={indexOpen} onClick={() => { setIndexOpen((open) => !open); setSettingsOpen(false); }} aria-label={t ? 'فتح الفهرس' : 'Open index'} aria-pressed={indexOpen}><FontAwesomeIcon icon={indexOpen ? faXmark : faList} /></Button>
           <Button size="icon" active={settingsOpen} onClick={() => { setSettingsOpen((open) => !open); setIndexOpen(false); }} aria-label={t ? 'فتح إعدادات القراءة' : 'Open reading settings'} aria-pressed={settingsOpen}><FontAwesomeIcon icon={settingsOpen ? faXmark : faGear} /></Button>
         </header>
