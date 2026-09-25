@@ -133,15 +133,15 @@
     {
       "sourceSlug": "siyar-alam-al-nubala-risalah",
       "subjectKind": "PERSON",
-      "subjectSlug": "abu-salamah-ibn-abd-al-asad",
+      "subjectSlug": "abu-salamah",
       "extractionUrl": "https://shamela.ws/book/10906/1576",
       "accessedAt": "2026-09-24",
       "pages": [
         {
           "sequence": 1,
           "printedPage": "150",
-          "bodyFile": "accounts/abu-salamah-ibn-abd-al-asad/001.md",
-          "notesFile": "accounts/abu-salamah-ibn-abd-al-asad/001.notes.md",
+          "bodyFile": "accounts/abu-salamah/001.md",
+          "notesFile": "accounts/abu-salamah/001.notes.md",
           "extractionUrl": "https://shamela.ws/book/10906/1576",
           "passages": [
             {
@@ -167,8 +167,8 @@
         {
           "sequence": 2,
           "printedPage": "151",
-          "bodyFile": "accounts/abu-salamah-ibn-abd-al-asad/002.md",
-          "notesFile": "accounts/abu-salamah-ibn-abd-al-asad/002.notes.md",
+          "bodyFile": "accounts/abu-salamah/002.md",
+          "notesFile": "accounts/abu-salamah/002.notes.md",
           "extractionUrl": "https://shamela.ws/book/10906/1577",
           "passages": [
             {
@@ -215,8 +215,8 @@
         {
           "sequence": 3,
           "printedPage": "152",
-          "bodyFile": "accounts/abu-salamah-ibn-abd-al-asad/003.md",
-          "notesFile": "accounts/abu-salamah-ibn-abd-al-asad/003.notes.md",
+          "bodyFile": "accounts/abu-salamah/003.md",
+          "notesFile": "accounts/abu-salamah/003.notes.md",
           "extractionUrl": "https://shamela.ws/book/10906/1578",
           "passages": [
             {
@@ -236,8 +236,8 @@
         {
           "sequence": 4,
           "printedPage": "153",
-          "bodyFile": "accounts/abu-salamah-ibn-abd-al-asad/004.md",
-          "notesFile": "accounts/abu-salamah-ibn-abd-al-asad/004.notes.md",
+          "bodyFile": "accounts/abu-salamah/004.md",
+          "notesFile": "accounts/abu-salamah/004.notes.md",
           "extractionUrl": "https://shamela.ws/book/10906/1579",
           "passages": [
             {
@@ -344,9 +344,9 @@
     }
   ],
   "approval": {
-    "revision": "a9c3329b6fec4a12",
-    "approvedAt": "2026-09-24",
+    "revision": "f8a484c312600377",
+    "approvedAt": "2026-09-25",
     "approvedBy": "msskzx",
-    "note": "Approved for publication. All three claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+    "note": "Re-approved after renaming the account subjectSlug from abu-salamah-ibn-abd-al-asad to abu-salamah, matching the catalog module (data/catalog/people/abu-salamah.ts) the claims already cited under that slug. No claim content changed. All three claims are Not reviewed."
   }
 }
