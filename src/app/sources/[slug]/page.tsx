@@ -122,22 +122,6 @@ export default function SourcePage({ params }: { params: Promise<{ slug: string 
                   : `${source.entryCount} entries · ${source.pageCount} pages`}
               </p>
 
-              {source.url && (
-                <a
-                  className="mt-2 inline-block text-sm underline text-gray-600 dark:text-gray-400"
-                  href={source.url}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {source.digitalHost
-                    ? language === 'ar'
-                      ? `الكتاب على ${source.digitalHost}`
-                      : `This work on ${source.digitalHost}`
-                    : language === 'ar'
-                      ? 'الكتاب على الموقع الناشر'
-                      : 'This work on the host site'}
-                </a>
-              )}
             </header>
 
             {openEntry ? (
