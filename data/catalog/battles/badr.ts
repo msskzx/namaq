@@ -243,6 +243,8 @@ const badr = {
     { person: 'mubashshir-ibn-abd-al-mundhir', isMuslim: true, status: ['MARTYRED'], claims: ['mubashshir/badr'] },
     // Aqil's brother; survived Badr, unlike Aqil.
     { person: 'khalid-ibn-al-bukayr', isMuslim: true, claims: ['khalid-bukayr-siyar17/badr'] },
+    // Third of the four al-Bukayr brothers; also survived Badr.
+    { person: 'iyas-ibn-al-bukayr', isMuslim: true, claims: ['iyas-bukayr-siyar18/badr'] },
     // Two absences the source remarks on, and gives the Prophet's ruling for.
     {
       person: 'uthman-ibn-affan',
