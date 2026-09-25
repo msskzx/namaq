@@ -1,0 +1,471 @@
+{
+  "slug": "abu-al-haytham-ibn-at-tayyihan",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-al-haytham-ibn-at-tayyihan",
+      "extractionUrl": "https://shamela.ws/book/10906/1615",
+      "accessedAt": "2026-09-25",
+      "volumeNumber": 4,
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "189",
+          "bodyFile": "accounts/abu-al-haytham-ibn-at-tayyihan/001.md",
+          "notesFile": "accounts/abu-al-haytham-ibn-at-tayyihan/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1615",
+          "passages": [
+            {
+              "anchor": "189-p8"
+            },
+            {
+              "anchor": "189-p9"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "190",
+          "bodyFile": "accounts/abu-al-haytham-ibn-at-tayyihan/002.md",
+          "notesFile": "accounts/abu-al-haytham-ibn-at-tayyihan/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1616",
+          "passages": [
+            {
+              "anchor": "190-p1"
+            },
+            {
+              "anchor": "190-p2"
+            },
+            {
+              "anchor": "190-p3"
+            },
+            {
+              "anchor": "190-p4"
+            },
+            {
+              "anchor": "190-p5"
+            },
+            {
+              "anchor": "190-p6"
+            },
+            {
+              "anchor": "190-p7"
+            },
+            {
+              "anchor": "190-p8"
+            },
+            {
+              "anchor": "190-p9"
+            },
+            {
+              "anchor": "190-p10"
+            },
+            {
+              "anchor": "190-p11"
+            },
+            {
+              "anchor": "190-p12"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "printedPage": "191",
+          "bodyFile": "accounts/abu-al-haytham-ibn-at-tayyihan/003.md",
+          "notesFile": "accounts/abu-al-haytham-ibn-at-tayyihan/003.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1617",
+          "passages": [
+            {
+              "anchor": "191-p1"
+            },
+            {
+              "anchor": "191-p2"
+            },
+            {
+              "anchor": "191-p3"
+            },
+            {
+              "anchor": "191-p4"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "abu-al-haytham-siyar22/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-al-haytham-ibn-at-tayyihan",
+      "field": "kunya",
+      "assertion": "أبو الهيثم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "189-p8",
+          "volume": "4",
+          "pageReference": "189",
+          "extractionUrl": "https://shamela.ws/book/10906/1615",
+          "excerptArabic": "أَبُو الهَيْثَمِ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "abu-al-haytham-siyar22/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-al-haytham-ibn-at-tayyihan",
+      "field": "fullName",
+      "assertion": "مالك بن التيهان الأنصاري، ابن بلي بن عمرو بن الحاف بن قضاعة الأنصاري.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "189-p8",
+          "volume": "4",
+          "pageReference": "189",
+          "extractionUrl": "https://shamela.ws/book/10906/1615",
+          "excerptArabic": "مَالِكُ بنُ التَّيِّهَانِ الأَنْصَارِيُّ",
+          "accessedAt": "2026-09-25"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "189-p9",
+          "volume": "4",
+          "pageReference": "189",
+          "extractionUrl": "https://shamela.ws/book/10906/1615",
+          "excerptArabic": "ابْنِ بَلِيِّ بنِ عَمْرِو بنِ الحَافِ بنِ قُضَاعَةَ الأَنْصَارِيُّ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "abu-al-haytham-siyar22/tribal-affiliation",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-al-haytham-ibn-at-tayyihan",
+      "field": "tribalAffiliation",
+      "assertion": "حليف بني عبد الأشهل.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "189-p9",
+          "volume": "4",
+          "pageReference": "189",
+          "extractionUrl": "https://shamela.ws/book/10906/1615",
+          "excerptArabic": "حَلِيْفُ بَنِي عَبْدِ الأَشْهَلِ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "abu-al-haytham-siyar22/full-name-alt",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-al-haytham-ibn-at-tayyihan",
+      "field": "fullName",
+      "assertion": "وقال عبد الله بن محمد بن عمارة الأنصاري: هو ابن التيهان بن مالك بن عمرو بن زيد بن عمرو بن جشم بن الحارث بن الخزرج بن عمرو بن مالك بن الأوس.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "disputed": true,
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "190-p2",
+          "volume": "4",
+          "pageReference": "190",
+          "extractionUrl": "https://shamela.ws/book/10906/1616",
+          "excerptArabic": "هُوَ ابْنُ التَّيِّهَانِ بنِ مَالِكِ بنِ عَمْرِو بنِ زَيْدِ بنِ عَمْرِو بنِ جُشَمَ بنِ الحَارِثِ بنِ الخَزْرَجِ بنِ عَمْرِو بنِ مَالِكِ بنِ الأَوْسِ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "abu-al-haytham-siyar22/tribal-affiliation-alt",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-al-haytham-ibn-at-tayyihan",
+      "field": "tribalAffiliation",
+      "assertion": "وقال عبد الله بن محمد بن عمارة الأنصاري: هو من الأوس، من أنفسهم.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "disputed": true,
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "190-p1",
+          "volume": "4",
+          "pageReference": "190",
+          "extractionUrl": "https://shamela.ws/book/10906/1616",
+          "excerptArabic": "هُوَ مِنَ الأَوْسِ، مِنْ أَنْفُسِهِم",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "abu-al-haytham-siyar22/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-al-haytham-ibn-at-tayyihan",
+      "assertion": "مالك بن التيهان: ابنه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "at-tayyihan-ibn-bali",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "189-p8",
+          "volume": "4",
+          "pageReference": "189",
+          "extractionUrl": "https://shamela.ws/book/10906/1615",
+          "excerptArabic": "مَالِكُ بنُ التَّيِّهَانِ الأَنْصَارِيُّ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "abu-al-haytham-siyar22/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-al-haytham-ibn-at-tayyihan",
+      "field": "virtues",
+      "assertion": "قال الواقدي: كان أبو الهيثم يكره الأصنام في الجاهلية، ويؤفف بها، ويقول بالتوحيد هو وأسعد بن زرارة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "190-p4",
+          "volume": "4",
+          "pageReference": "190",
+          "extractionUrl": "https://shamela.ws/book/10906/1616",
+          "excerptArabic": "كَانَ أَبُو الهَيْثَمِ يَكْرَهُ الأَصْنَامَ فِي الجَاهِلِيَّةِ، وَيُؤَفِّفُ بِهَا، وَيَقُوْلُ بِالتَّوْحِيْدِ هُوَ وَأَسَعْدُ بنُ زُرَارَةَ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "abu-al-haytham-siyar22/pact-brother-uthman",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-al-haytham-ibn-at-tayyihan",
+      "assertion": "آخى رسول الله صلى الله عليه وسلم بينه وبين عثمان بن مظعون.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PACT_BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "uthman-ibn-mazun",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "190-p7",
+          "volume": "4",
+          "pageReference": "190",
+          "extractionUrl": "https://shamela.ws/book/10906/1616",
+          "excerptArabic": "آخَى رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بَيْنَهُ وَبَيْنَ عُثْمَانَ بنِ مَظْعُوْنٍ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "abu-al-haytham-siyar22/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-al-haytham-ibn-at-tayyihan",
+      "assertion": "شهد بدرا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "190-p8",
+          "volume": "4",
+          "pageReference": "190",
+          "extractionUrl": "https://shamela.ws/book/10906/1616",
+          "excerptArabic": "شَهِدَ بَدْراً",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "abu-al-haytham-siyar22/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-al-haytham-ibn-at-tayyihan",
+      "field": "deathYearHijri",
+      "assertion": "وقال غيره: توفي سنة عشرين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "191-p1",
+          "volume": "4",
+          "pageReference": "191",
+          "extractionUrl": "https://shamela.ws/book/10906/1617",
+          "excerptArabic": "تُوُفِّيَ سَنَةَ عِشْرِيْنَ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "abu-al-haytham-siyar22/death-place-alt",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-al-haytham-ibn-at-tayyihan",
+      "field": "placeOfDeathArabic",
+      "assertion": "قال الواقدي: هذا أثبت عندنا ممن روى أنه قتل بصفين مع علي.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "disputed": true,
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "191-p2",
+          "volume": "4",
+          "pageReference": "191",
+          "extractionUrl": "https://shamela.ws/book/10906/1617",
+          "excerptArabic": "قُتِلَ بِصِفِّيْنَ مَعَ عَلِيٍّ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    }
+  ],
+  "approval": {
+    "revision": "719762d3c1cffb5f",
+    "approvedAt": "2026-09-25",
+    "approvedBy": "msskzx",
+    "note": "Approved for publication. All eleven claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+  }
+}

@@ -249,6 +249,7 @@ const badr = {
     { person: 'amir-ibn-al-bukayr', isMuslim: true, claims: ['amir-bukayr-siyar19/badr'] },
     { person: 'mistah-ibn-uthathah', isMuslim: true, claims: ['mistah-siyar20/badr'] },
     { person: 'abu-abs', isMuslim: true, claims: ['abu-abs-siyar21/badr'] },
+    { person: 'abu-al-haytham-ibn-at-tayyihan', isMuslim: true, claims: ['abu-al-haytham-siyar22/badr'] },
     // Two absences the source remarks on, and gives the Prophet's ruling for.
     {
       person: 'uthman-ibn-affan',

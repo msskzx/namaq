@@ -19,16 +19,6 @@
  */
 export const people = [
   {
-    name: 'أبو الهيثم بن التيهان',
-    fullName: 'مالك بن التيهان بن بلي بن عمرو بن الحاف بن قضاعة الأنصاري',
-    slug: 'abu-al-haytham-ibn-at-tayyihan',
-    nameTransliterated: 'Abu al-Haytham ibn at-Tayyihan',
-    appearance: null,
-    virtues: null,
-    picture: null,
-    titles: ['companion'],
-  },
-  {
     name: 'أبو جندل',
     fullName: 'العاص بن سهيل بن عمرو بن عبد شمس بن عبد ود بن نصر بن حسل بن عامر بن لؤي بن غالب بن فهر القرشي العامري',
     slug: 'abu-jandal',
