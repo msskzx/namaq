@@ -165,6 +165,16 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   stand on nothing. Read them to learn which subjects exist and which fields a
   subject is claimed to have, then look for each in the source. Never carry a
   value into the catalog because a seed file has it.
+- **A multi-volume source needs `volumeNumber` on the account (or `volumeNumber`
+  on a page, if the entry itself crosses a binding), or the entry is imported
+  with no volume at all.** `importBatch.ts` only links a page to a volume
+  through that declared number; it never infers one from where the printed
+  page falls inside a volume's range. An account missing the field still
+  imports cleanly — `history:validate` raises no issue — but the reader then
+  files it under "entries with no assigned volume" instead of the book's own
+  contents, which is easy to miss on a long source page. Check the new
+  entry's `extractionUrl`/printed page against the source's declared volumes
+  in `batch.json` and set the field before approving.
 - A carried value that no batch supports yet is marked `legacy-unreviewed`.
   That is a real state, not a failure: it says the value is in use and its
   evidence is still owed. Where the source is silent, leave the marker rather
