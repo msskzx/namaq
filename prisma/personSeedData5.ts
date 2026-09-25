@@ -19,16 +19,6 @@
  */
 export const people = [
   {
-    name: 'أبو جندل',
-    fullName: 'العاص بن سهيل بن عمرو بن عبد شمس بن عبد ود بن نصر بن حسل بن عامر بن لؤي بن غالب بن فهر القرشي العامري',
-    slug: 'abu-jandal',
-    nameTransliterated: 'Abu Jandal',
-    appearance: null,
-    virtues: null,
-    picture: null,
-    titles: ['companion'],
-  },
-  {
     name: 'عبد الله بن سهيل',
     fullName: 'عبد الله بن سهيل بن عمرو بن عبد شمس بن عبد ود بن نصر بن حسل بن عامر بن لؤي بن غالب بن فهر القرشي العامري',
     slug: 'abdullah-ibn-suhail',

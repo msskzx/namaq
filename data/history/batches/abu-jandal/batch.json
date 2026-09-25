@@ -1,0 +1,406 @@
+{
+  "slug": "abu-jandal",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-jandal",
+      "extractionUrl": "https://shamela.ws/book/10906/1618",
+      "accessedAt": "2026-09-25",
+      "volumeNumber": 4,
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "192",
+          "bodyFile": "accounts/abu-jandal/001.md",
+          "notesFile": "accounts/abu-jandal/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1618",
+          "passages": [
+            {
+              "anchor": "192-p1"
+            },
+            {
+              "anchor": "192-p2"
+            },
+            {
+              "anchor": "192-p3"
+            },
+            {
+              "anchor": "192-p4"
+            },
+            {
+              "anchor": "192-p5"
+            },
+            {
+              "anchor": "192-p6"
+            },
+            {
+              "anchor": "192-p7"
+            },
+            {
+              "anchor": "192-p8"
+            },
+            {
+              "anchor": "192-p9"
+            },
+            {
+              "anchor": "192-p10"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "193",
+          "bodyFile": "accounts/abu-jandal/002.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1619",
+          "passages": [
+            {
+              "anchor": "193-p1"
+            },
+            {
+              "anchor": "193-p2"
+            },
+            {
+              "anchor": "193-p3"
+            }
+          ]
+        }
+      ],
+      "notInSource": [
+        "appearance",
+        "wives"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "abu-jandal-siyar23/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-jandal",
+      "field": "kunya",
+      "assertion": "أبو جندل.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "192-p1",
+          "volume": "4",
+          "pageReference": "192",
+          "extractionUrl": "https://shamela.ws/book/10906/1618",
+          "excerptArabic": "أَبُو جَنْدَلٍ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "abu-jandal-siyar23/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-jandal",
+      "field": "fullName",
+      "assertion": "العاص بن سهيل بن عمرو بن عبد شمس بن عبد ود بن نصر بن حسل بن عامر بن لؤي بن غالب بن فهر العامري القرشي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "192-p1",
+          "volume": "4",
+          "pageReference": "192",
+          "extractionUrl": "https://shamela.ws/book/10906/1618",
+          "excerptArabic": "العَاصُ بنُ سُهَيْلِ بنِ عَمْرٍو العَامِرِيُّ",
+          "accessedAt": "2026-09-25"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "192-p2",
+          "volume": "4",
+          "pageReference": "192",
+          "extractionUrl": "https://shamela.ws/book/10906/1618",
+          "excerptArabic": "ابْنِ عَبْدِ شَمْسٍ بنِ عَبْدِ وُدٍّ بنِ نَصْرِ بنِ حِسْلِ بنِ عَامِرِ بنِ لُؤَيِّ بنِ غَالِبِ بنِ فِهْرٍ العَامِرِيُّ، القُرَشِيّ",
+          "accessedAt": "2026-09-25"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "192-p3",
+          "volume": "4",
+          "pageReference": "192",
+          "extractionUrl": "https://shamela.ws/book/10906/1618",
+          "excerptArabic": "وَاسْمُهُ: العَاصُ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "abu-jandal-siyar23/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-jandal",
+      "assertion": "سهيل بن عمرو: أبوه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "suhail-ibn-amr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "192-p1",
+          "volume": "4",
+          "pageReference": "192",
+          "extractionUrl": "https://shamela.ws/book/10906/1618",
+          "excerptArabic": "العَاصُ بنُ سُهَيْلِ بنِ عَمْرٍو العَامِرِيُّ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "abu-jandal-siyar23/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-jandal",
+      "field": "virtues",
+      "assertion": "كان من خيار الصحابة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "192-p4",
+          "volume": "4",
+          "pageReference": "192",
+          "extractionUrl": "https://shamela.ws/book/10906/1618",
+          "excerptArabic": "كَانَ مِنْ خِيَارِ الصَّحَابَةِ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "abu-jandal-siyar23/hudaybiyyah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-jandal",
+      "assertion": "فلما كان يوم صلح الحديبية هرب يحجل في قيوده، وأبوه حاضر بين يدي النبي صلى الله عليه وسلم لكتاب الصلح.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "hudaybiyyah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "192-p4",
+          "volume": "4",
+          "pageReference": "192",
+          "extractionUrl": "https://shamela.ws/book/10906/1618",
+          "excerptArabic": "فَلَمَّا كَانَ يَوْمُ صُلْحِ الحُدَيْبِيَةِ هَرَبَ يَحْجِلُ فِي قُيُوْدِهِ، وَأَبُوْهُ حَاضِرٌ بَيْنَ يَدَيْ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- لِكتَابِ الصُّلْحِ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "abu-jandal-siyar23/death",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-jandal",
+      "field": "deathYearHijri",
+      "assertion": "ثم انتقل إلى جهاد الشام، فتوفي شهيدا في طاعون عمواس بالأردن سنة ثماني عشرة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "193-p1",
+          "volume": "4",
+          "pageReference": "193",
+          "extractionUrl": "https://shamela.ws/book/10906/1619",
+          "excerptArabic": "ثُمَّ انْتَقَلَ إِلَى جِهَادِ الشَّامِ، فَتُوُفِّيَ شَهِيْداً فِي طَاعُوْنِ عَمَوَاسَ بِالأُرْدُنِّ سَنَةَ ثَمَانِيَ عَشْرَةَ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "abu-jandal-siyar23/death-place",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-jandal",
+      "field": "placeOfDeathArabic",
+      "assertion": "توفي شهيدا في طاعون عمواس بالأردن.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "193-p1",
+          "volume": "4",
+          "pageReference": "193",
+          "extractionUrl": "https://shamela.ws/book/10906/1619",
+          "excerptArabic": "فَتُوُفِّيَ شَهِيْداً فِي طَاعُوْنِ عَمَوَاسَ بِالأُرْدُنِّ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "abu-jandal-siyar23/half-brother-abdullah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-jandal",
+      "assertion": "وأخوه: عبد الله بن سهيل بن عمرو العامري (يشتركان في الأب سهيل بن عمرو؛ لا يذكر النص أما مشتركة).",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "disputed": true,
+      "relationshipType": "HALF_BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "abdullah-ibn-suhail",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "193-p2",
+          "volume": "4",
+          "pageReference": "193",
+          "extractionUrl": "https://shamela.ws/book/10906/1619",
+          "excerptArabic": "وَأَخُوْهُ",
+          "accessedAt": "2026-09-25"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "193-p3",
+          "volume": "4",
+          "pageReference": "193",
+          "extractionUrl": "https://shamela.ws/book/10906/1619",
+          "excerptArabic": "عَبْدُ اللهِ بنُ سُهَيْلِ بنِ عَمْرٍو العَامِرِيُّ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    }
+  ],
+  "approval": {
+    "revision": "424707d8ea818cc7",
+    "approvedAt": "2026-09-25",
+    "approvedBy": "msskzx",
+    "note": "Approved for publication. All eight claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+  }
+}
