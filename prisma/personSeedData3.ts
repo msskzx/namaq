@@ -64,14 +64,4 @@ export const people = [
     picture: null,
     titles: ['companion'],
   },
-  {
-    name: 'خالد بن البكير',
-    fullName: null,
-    slug: 'khalid-ibn-al-bukayr',
-    nameTransliterated: 'Khalid ibn al-Bukayr',
-    appearance: null,
-    virtues: null,
-    picture: null,
-    titles: ['companion'],
-  },
 ];
