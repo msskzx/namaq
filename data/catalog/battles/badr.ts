@@ -278,6 +278,15 @@ const badr = {
       summary: { value: 'كان بالشام فقدم بعد بدر، فأسهم له النبي صلى الله عليه وسلم.', claims: ['saeed-ibn-zaid/badr-absent'] },
       claims: ['saeed-ibn-zaid/badr-absent'],
     },
+    // Abdullah ibn Suhail's father, on the Quraysh side; still not Muslim at
+    // Badr (see hudaybiyyah.ts and fath-makkah.ts below).
+    {
+      person: 'suhail-ibn-amr',
+      isMuslim: false,
+      status: ['WAS_CAPTURED'],
+      summary: { value: 'وَكَانَ قَدْ أُسِرَ يَوْم بَدْرٍ، وَتَخَلَّصَ.', claims: ['suhail-ibn-amr-siyar25/badr'] },
+      claims: ['suhail-ibn-amr-siyar25/badr'],
+    },
   ],
 } satisfies CatalogBattle;
 

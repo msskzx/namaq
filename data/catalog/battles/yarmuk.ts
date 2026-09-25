@@ -21,6 +21,17 @@ const yarmuk = {
       summary: { value: 'ضُرِبَ ضَرْبَةً بِالسَّيْفِ يَوْمَ اليَرْمُوْكِ.', claims: ['zubayr/yarmuk'] },
       claims: ['zubayr/yarmuk'],
     },
+    // Commanded a division here. His own entry disagrees with itself on
+    // whether he died here or later, in the Amwas plague (see
+    // data/catalog/people/suhail-ibn-amr.ts and
+    // suhail-ibn-amr-siyar25/death-place-alt); status is left unset rather
+    // than asserting the disputed reading.
+    {
+      person: 'suhail-ibn-amr',
+      isMuslim: true,
+      summary: { value: 'وَكَانَ أَمِيْراً عَلَى كُرْدُوْسٍ يَوْم اليَرْمُوْكِ.', claims: ['suhail-ibn-amr-siyar25/yarmuk'] },
+      claims: ['suhail-ibn-amr-siyar25/yarmuk'],
+    },
   ],
 } satisfies CatalogBattle;
 

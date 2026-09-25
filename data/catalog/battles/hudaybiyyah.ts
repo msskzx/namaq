@@ -30,6 +30,16 @@ const hudaybiyyah = {
     { person: 'uthman-ibn-affan', isMuslim: true, claims: legacyUnreviewed },
     { person: 'saeed-ibn-zaid', isMuslim: true, claims: ['saeed/hudaybiyyah'] },
     { person: 'abu-jandal', isMuslim: true, claims: ['abu-jandal-siyar23/hudaybiyyah'] },
+    // Quraysh's own negotiator; still not Muslim here (see fath-makkah.ts).
+    {
+      person: 'suhail-ibn-amr',
+      isMuslim: false,
+      summary: {
+        value: 'لَمَّا أَقْبَلَ فِي شَأْنِ الصُّلْحِ: قَالَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-: (سَهُلَ أَمْرُكُم) .',
+        claims: ['suhail-ibn-amr-siyar25/hudaybiyyah'],
+      },
+      claims: ['suhail-ibn-amr-siyar25/hudaybiyyah'],
+    },
   ],
 } satisfies CatalogBattle;
 
