@@ -64,6 +64,9 @@ export const peopleQueries = [
   'CREATE (:Person { name: "عامر بن لؤي", slug: "amir-ibn-luay", fullName: "عامر بن لؤي بن غالب القرشي" });',
 
   // Al-Baraa ibn Malik (brother of Anas ibn Malik)
+  // Anas ibn Malik has no profile of his own yet (data/history/batches/al-baraa-ibn-malik):
+  // his own entry names him only as al-Baraa's brother, a stub node so that tie can be modelled.
+  'CREATE (:Person { name: "أنس بن مالك", slug: "anas-ibn-malik", nameTransliterated: "Anas ibn Malik" });',
   'CREATE (:Person { name: "مالك بن النضر", slug: "malik-ibn-an-nadr-al-najjari", fullName: "مالك بن النضر بن ضمضم بن زيد بن حرام بن جندب بن عامر بن غنم بن عدي بن النجار الأنصاري النجاري" });',
   'CREATE (:Person { name: "النضر بن ضمضم", slug: "an-nadr-ibn-damdam", fullName: "النضر بن ضمضم بن زيد بن حرام بن جندب بن عامر بن غنم بن عدي بن النجار الأنصاري النجاري" });',
   'CREATE (:Person { name: "ضمضم بن زيد", slug: "damdam-ibn-zayd", fullName: "ضمضم بن زيد بن حرام بن جندب بن عامر بن غنم بن عدي بن النجار الأنصاري النجاري" });',
@@ -185,6 +188,10 @@ export const peopleRelationsQueries = [
   // Al-Baraa ibn Malik
   'MATCH (from:Person {slug: "al-baraa-ibn-malik"}), (to:Person {slug: "malik-ibn-an-nadr-al-najjari"}) CREATE (from)-[:SON]->(to);',
   'MATCH (from:Person {slug: "malik-ibn-an-nadr-al-najjari"}), (to:Person {slug: "al-baraa-ibn-malik"}) CREATE (from)-[:FATHER]->(to);',
+
+  // His own entry names Anas as his brother by name only (no shared mother stated)
+  'MATCH (from:Person {slug: "al-baraa-ibn-malik"}), (to:Person {slug: "anas-ibn-malik"}) CREATE (from)-[:HALF_BROTHER]->(to);',
+  'MATCH (from:Person {slug: "anas-ibn-malik"}), (to:Person {slug: "al-baraa-ibn-malik"}) CREATE (from)-[:HALF_BROTHER]->(to);',
 
   'MATCH (from:Person {slug: "malik-ibn-an-nadr-al-najjari"}), (to:Person {slug: "an-nadr-ibn-damdam"}) CREATE (from)-[:SON]->(to);',
   'MATCH (from:Person {slug: "an-nadr-ibn-damdam"}), (to:Person {slug: "malik-ibn-an-nadr-al-najjari"}) CREATE (from)-[:FATHER]->(to);',

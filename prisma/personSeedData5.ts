@@ -19,16 +19,6 @@
  */
 export const people = [
   {
-    name: 'البراء بن مالك',
-    fullName: 'البراء بن مالك بن النضر بن ضمضم بن زيد بن حرام بن جندب بن عامر بن غنم بن عدي بن النجار الأنصاري النجاري',
-    slug: 'al-baraa-ibn-malik',
-    nameTransliterated: 'Al-Baraa ibn Malik',
-    appearance: null,
-    virtues: null,
-    picture: null,
-    titles: ['companion'],
-  },
-  {
     name: 'نوفل بن الحارث',
     fullName: 'نوفل بن الحارث بن عبد المطلب بن هاشم القرشي الهاشمي',
     slug: 'nawfal-ibn-al-harith',

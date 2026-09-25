@@ -220,6 +220,7 @@ const uhud = {
       summary: { value: 'كانت تنقل القرب على متنها وتفرغها في أفواه القوم.', claims: ['umm-sulaym/uhud'] },
       claims: ['umm-sulaym/uhud'],
     },
+    { person: 'al-baraa-ibn-malik', isMuslim: true, claims: ['al-baraa-ibn-malik-siyar26/uhud'] },
   ],
 } satisfies CatalogBattle;
 

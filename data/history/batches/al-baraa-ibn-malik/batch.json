@@ -1,0 +1,511 @@
+{
+  "slug": "al-baraa-ibn-malik",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-baraa-ibn-malik",
+      "extractionUrl": "https://shamela.ws/book/10906/1621",
+      "accessedAt": "2026-09-25",
+      "volumeNumber": 4,
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "195",
+          "bodyFile": "accounts/al-baraa-ibn-malik/001.md",
+          "notesFile": "accounts/al-baraa-ibn-malik/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1621",
+          "passages": [
+            {
+              "anchor": "195-p7"
+            },
+            {
+              "anchor": "195-p8"
+            },
+            {
+              "anchor": "195-p9"
+            },
+            {
+              "anchor": "195-p10"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "196",
+          "bodyFile": "accounts/al-baraa-ibn-malik/002.md",
+          "notesFile": "accounts/al-baraa-ibn-malik/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1622",
+          "passages": [
+            {
+              "anchor": "196-p1"
+            },
+            {
+              "anchor": "196-p2"
+            },
+            {
+              "anchor": "196-p3"
+            },
+            {
+              "anchor": "196-p4"
+            },
+            {
+              "anchor": "196-p5"
+            },
+            {
+              "anchor": "196-p6"
+            },
+            {
+              "anchor": "196-p7"
+            },
+            {
+              "anchor": "196-p8"
+            },
+            {
+              "anchor": "196-p9"
+            },
+            {
+              "anchor": "196-p10"
+            },
+            {
+              "anchor": "196-p11"
+            },
+            {
+              "anchor": "196-p12"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "printedPage": "197",
+          "bodyFile": "accounts/al-baraa-ibn-malik/003.md",
+          "notesFile": "accounts/al-baraa-ibn-malik/003.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1623",
+          "passages": [
+            {
+              "anchor": "197-p1"
+            },
+            {
+              "anchor": "197-p2"
+            },
+            {
+              "anchor": "197-p3"
+            },
+            {
+              "anchor": "197-p4"
+            },
+            {
+              "anchor": "197-p5"
+            },
+            {
+              "anchor": "197-p6"
+            },
+            {
+              "anchor": "197-p7"
+            },
+            {
+              "anchor": "197-p8"
+            },
+            {
+              "anchor": "197-p9"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "printedPage": "198",
+          "bodyFile": "accounts/al-baraa-ibn-malik/004.md",
+          "notesFile": "accounts/al-baraa-ibn-malik/004.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1624",
+          "passages": [
+            {
+              "anchor": "198-p1"
+            },
+            {
+              "anchor": "198-p2"
+            },
+            {
+              "anchor": "198-p3"
+            },
+            {
+              "anchor": "198-p4"
+            },
+            {
+              "anchor": "198-p5"
+            },
+            {
+              "anchor": "198-p6"
+            },
+            {
+              "anchor": "198-p7"
+            },
+            {
+              "anchor": "198-p8"
+            },
+            {
+              "anchor": "198-p9"
+            },
+            {
+              "anchor": "198-p10"
+            }
+          ]
+        }
+      ],
+      "notInSource": [
+        "kunya",
+        "appearance",
+        "wives"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "al-baraa-ibn-malik-siyar26/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-baraa-ibn-malik",
+      "field": "fullName",
+      "assertion": "البراء بن مالك بن النضر بن ضمضم الأنصاري، ابن زيد بن حرام بن جندب بن عامر بن غنم بن عدي بن النجار، الأنصاري النجاري المدني.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "195-p7",
+          "volume": "4",
+          "pageReference": "195",
+          "extractionUrl": "https://shamela.ws/book/10906/1621",
+          "excerptArabic": "البَرَاءُ بنُ مَالِكِ بنِ النَّضْرِ بنِ ضَمْضَمٍ الأَنْصَارِيُّ",
+          "accessedAt": "2026-09-25"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "195-p8",
+          "volume": "4",
+          "pageReference": "195",
+          "extractionUrl": "https://shamela.ws/book/10906/1621",
+          "excerptArabic": "ابْنِ زَيْدِ بنِ حَرَامِ بنِ جُنْدَبِ بنِ عَامِرِ بنِ غَنْمِ بنِ عَدِيِّ بنِ النَّجَّارِ الأَنْصَارِيُّ، النَّجَّارِيُّ، المَدَنِيُّ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "al-baraa-ibn-malik-siyar26/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-baraa-ibn-malik",
+      "assertion": "البراء بن مالك، أي ابن مالك بن النضر بن ضمضم... (مالك بن النضر: أبوه، عقدة موجودة في الرسم البياني باسم malik-ibn-an-nadr-al-najjari).",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "malik-ibn-an-nadr-al-najjari",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "195-p7",
+          "volume": "4",
+          "pageReference": "195",
+          "extractionUrl": "https://shamela.ws/book/10906/1621",
+          "excerptArabic": "البَرَاءُ بنُ مَالِكِ بنِ النَّضْرِ بنِ ضَمْضَمٍ الأَنْصَارِيُّ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "al-baraa-ibn-malik-siyar26/half-brother",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-baraa-ibn-malik",
+      "assertion": "وأخو خادم النبي صلى الله عليه وسلم أنس بن مالك (الأب مالك مشترك عبر الاسمين؛ الأم غير مذكورة هنا، فالعلاقة أخ لأب).",
+      "confidence": "LIKELY",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "HALF_BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "anas-ibn-malik",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "195-p9",
+          "volume": "4",
+          "pageReference": "195",
+          "extractionUrl": "https://shamela.ws/book/10906/1621",
+          "excerptArabic": "وَأَخُوْ خَادِمِ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَنَسِ بنِ مَالِكٍ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "al-baraa-ibn-malik-siyar26/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-baraa-ibn-malik",
+      "field": "virtues",
+      "assertion": "البطل الكرار، صاحب رسول الله؛ حذر عمر أمراء الجيش من تأميره؛ اشتهر بقتل مائة رجل مبارزة؛ مدحه النبي بحديث (لو أقسم على الله لأبره)؛ وأخبر عن يقينه بالشهادة بعد قتله تسعة وتسعين مشركا مبارزة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "195-p9",
+          "volume": "4",
+          "pageReference": "195",
+          "extractionUrl": "https://shamela.ws/book/10906/1621",
+          "excerptArabic": "البَطَلُ الكَرَّارُ، صَاحِبُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَأَخُوْ خَادِمِ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَنَسِ بنِ مَالِكٍ",
+          "accessedAt": "2026-09-25"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "196-p2",
+          "volume": "4",
+          "pageReference": "196",
+          "extractionUrl": "https://shamela.ws/book/10906/1622",
+          "excerptArabic": "لاَ تَسْتَعْمِلُوا البَرَاءَ عَلَى جَيْشٍ، فَإِنَّهُ مَهْلَكَةٌ مِنَ المَهَالِكِ يَقْدَمُ بِهِم",
+          "accessedAt": "2026-09-25"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "196-p6",
+          "volume": "4",
+          "pageReference": "196",
+          "extractionUrl": "https://shamela.ws/book/10906/1622",
+          "excerptArabic": "وَقَدِ اشْتُهِرَ أَنَّ البَرَاءَ قَتَلَ فِي حُرُوْبِهِ مَائَةَ نَفْسٍ مِنَ الشُّجْعَانِ مُبَارَزَةً",
+          "accessedAt": "2026-09-25"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "197-p5",
+          "volume": "4",
+          "pageReference": "197",
+          "extractionUrl": "https://shamela.ws/book/10906/1623",
+          "excerptArabic": "كَمْ مِنْ ضَعِيْفٍ مُتَضَعِّفٍ ذِي طِمْرَيْنِ، لَوْ أَقْسَمَ عَلَى اللهِ لأَبَرَّهُ، مِنْهُم: البَرَاءُ بنُ مَالِكٍ",
+          "accessedAt": "2026-09-25"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "198-p3",
+          "volume": "4",
+          "pageReference": "198",
+          "extractionUrl": "https://shamela.ws/book/10906/1624",
+          "excerptArabic": "أَتَخْشَى عَلَيَّ أَنْ أَمُوْتَ عَلَى فِرَاشِي وَقَدْ قَتَلْتُ تِسْعَةً وَتِسْعِيْنَ نَفَساً مِنَ المُشْرِكِيْنَ مُبَارَزَةً، سِوَى مَا شَارَكْتُ فِيْهِ المُسْلِمِيْنَ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "al-baraa-ibn-malik-siyar26/uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-baraa-ibn-malik",
+      "assertion": "شهد أحدا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "195-p10",
+          "volume": "4",
+          "pageReference": "195",
+          "extractionUrl": "https://shamela.ws/book/10906/1621",
+          "excerptArabic": "شَهِدَ أُحُداً",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "al-baraa-ibn-malik-siyar26/hudaybiyyah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-baraa-ibn-malik",
+      "assertion": "وبايع تحت الشجرة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "hudaybiyyah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "195-p10",
+          "volume": "4",
+          "pageReference": "195",
+          "extractionUrl": "https://shamela.ws/book/10906/1621",
+          "excerptArabic": "وَبَايَعَ تَحْتَ الشَّجَرَةِ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "al-baraa-ibn-malik-siyar26/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-baraa-ibn-malik",
+      "field": "deathYearHijri",
+      "assertion": "استشهد يوم فتح تستر، سنة عشرين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "198-p10",
+          "volume": "4",
+          "pageReference": "198",
+          "extractionUrl": "https://shamela.ws/book/10906/1624",
+          "excerptArabic": "اسْتُشْهِدَ يَوْمَ فَتْحِ تُسْتَرَ، سَنَةَ عِشْرِيْنَ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "al-baraa-ibn-malik-siyar26/death-place",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-baraa-ibn-malik",
+      "field": "placeOfDeathArabic",
+      "assertion": "استشهد يوم فتح تستر، سنة عشرين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "198-p10",
+          "volume": "4",
+          "pageReference": "198",
+          "extractionUrl": "https://shamela.ws/book/10906/1624",
+          "excerptArabic": "اسْتُشْهِدَ يَوْمَ فَتْحِ تُسْتَرَ، سَنَةَ عِشْرِيْنَ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    }
+  ],
+  "approval": {
+    "revision": "f8e485994b1e4aa6",
+    "approvedAt": "2026-09-25",
+    "approvedBy": "msskzx",
+    "note": "Approved for publication. All eight claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+  }
+}
