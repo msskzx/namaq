@@ -136,6 +136,7 @@
       "subjectSlug": "qudamah-ibn-mazun",
       "extractionUrl": "https://shamela.ws/book/10906/1587",
       "accessedAt": "2026-09-24",
+      "volumeNumber": 4,
       "pages": [
         {
           "sequence": 1,
@@ -311,9 +312,9 @@
     }
   ],
   "approval": {
-    "revision": "06ee708678b4b965",
-    "approvedAt": "2026-09-24",
+    "revision": "8e94df3e6bca9544",
+    "approvedAt": "2026-09-25",
     "approvedBy": "msskzx",
-    "note": "Approved for publication. All six claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+    "note": "Re-recorded for publication after the account was given volumeNumber 4: its printed pages continue straight on from where the last-read entry in سير أعلام النبلاء ج١ leaves off, but the entry was published without naming that volume, so the reader listed it under entries with no volume instead of the book's contents. No claim, citation or page text changed. Previously: Approved for publication. All six claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
   }
 }
