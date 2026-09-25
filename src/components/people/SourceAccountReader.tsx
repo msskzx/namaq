@@ -5,7 +5,7 @@ import Link from 'next/link';
 import useSWR from 'swr';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookOpen, faBars, faCompress, faExpand, faList, faGear, faXmark, faFont, faTextHeight, faSun, faMoon, faPalette } from '@fortawesome/free-solid-svg-icons';
+import { faBookOpen, faBars, faCompress, faExpand, faList, faGear, faXmark, faFont, faSun, faMoon, faPalette } from '@fortawesome/free-solid-svg-icons';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import Pagination from '@/components/common/Pagination';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
@@ -22,6 +22,7 @@ interface AccountsResponse {
   accounts: AccountSummary[];
   account: AccountSummary | null;
   page: AccountPage | null;
+  pageNumbers?: { sequence: number; printedPage: string | null; volume: { number: number } | null }[];
 }
 
 interface SectionsResponse {
@@ -42,7 +43,7 @@ type ReaderBackground = 'light' | 'dark' | 'sepia';
 const fontSizes: Record<ReaderSize, string> = { s: '1.125rem', m: '1.375rem', l: '1.625rem', xl: '1.875rem' };
 const backgroundStyles: Record<ReaderBackground, React.CSSProperties> = {
   light: { backgroundColor: '#fffdf8', color: '#292524' },
-  dark: { backgroundColor: '#171717', color: '#e5e5e5' },
+  dark: { backgroundColor: '#000000', color: '#f3f4f6' },
   sepia: { backgroundColor: '#f1e8d5', color: '#43362b' },
 };
 
@@ -177,6 +178,16 @@ export default function SourceAccountReader({
   let currentSectionIndex = -1;
   sections.forEach((candidate, index) => { if (candidate.sequence <= current.sequence) currentSectionIndex = index; });
   const t = language === 'ar';
+  const printedPageCounts = new Map<string, number>();
+  data.pageNumbers?.forEach(({ printedPage }) => {
+    if (printedPage) printedPageCounts.set(printedPage, (printedPageCounts.get(printedPage) ?? 0) + 1);
+  });
+  const pageLabels = data.pageNumbers?.map(({ sequence, printedPage, volume }) => {
+    if (!printedPage) return String(sequence);
+    if ((printedPageCounts.get(printedPage) ?? 0) < 2) return printedPage;
+    const volumeLabel = volume ? (t ? `ج${volume.number}` : `vol. ${volume.number}`) : `#${sequence}`;
+    return `${printedPage} · ${volumeLabel}`;
+  });
   const pageContentStyle = {
     ...backgroundStyles[background],
     fontSize: fontSizes[size],
@@ -206,6 +217,7 @@ export default function SourceAccountReader({
                 <ul className="flex flex-col gap-1">
                   {getAllNavLinks(language).map((link) => <li key={link.href}><Link href={link.href} onClick={() => setMenuOpen(false)} className="block rounded px-2 py-2 text-sm hover:bg-amber-50 dark:hover:bg-gray-800">{link.label}</Link></li>)}
                   <li><Link href="/about" onClick={() => setMenuOpen(false)} className="block rounded px-2 py-2 text-sm hover:bg-amber-50 dark:hover:bg-gray-800">{t ? 'عن الموقع' : 'About'}</Link></li>
+                  <li><Link href="/references" onClick={() => setMenuOpen(false)} className="block rounded px-2 py-2 text-sm hover:bg-amber-50 dark:hover:bg-gray-800">{t ? 'المراجع' : 'References'}</Link></li>
                 </ul>
                 <div className="mt-3 flex flex-col gap-3 border-t border-amber-400 pt-3"><LanguageSwitcher /><ThemeSwitcher /></div>
               </div>
@@ -243,7 +255,20 @@ export default function SourceAccountReader({
                 <Button size="sm" active={font === 'amiri'} onClick={() => writeSettings({ font: 'amiri' })}><FontAwesomeIcon icon={faFont} />{t ? 'أميري' : 'Amiri'}</Button><Button size="sm" active={font === 'sans'} onClick={() => writeSettings({ font: 'sans' })}><FontAwesomeIcon icon={faFont} />{t ? 'خط النظام' : 'Sans'}</Button>
               </fieldset>
               <fieldset className="flex flex-wrap gap-2"><legend className="mb-2 w-full text-sm font-semibold">{t ? 'حجم الخط' : 'Text size'}</legend>
-                {(['s', 'm', 'l', 'xl'] as const).map((value) => <Button key={value} size="sm" active={size === value} onClick={() => writeSettings({ size: value })}><FontAwesomeIcon icon={faTextHeight} />{value.toUpperCase()}</Button>)}
+                <label className="flex w-full items-center gap-3 text-sm">
+                  <span>{t ? 'صغير' : 'Small'}</span>
+                  <input
+                    aria-label={t ? 'حجم الخط' : 'Text size'}
+                    type="range"
+                    min="0"
+                    max="3"
+                    step="1"
+                    value={(['s', 'm', 'l', 'xl'] as const).indexOf(size)}
+                    onChange={(event) => writeSettings({ size: (['s', 'm', 'l', 'xl'] as const)[Number(event.target.value)] })}
+                    className="w-full accent-amber-500"
+                  />
+                  <span>{t ? 'كبير' : 'Large'}</span>
+                </label>
               </fieldset>
               <fieldset className="flex flex-wrap gap-2"><legend className="mb-2 w-full text-sm font-semibold">{t ? 'الخلفية' : 'Background'}</legend>
                 {(['light', 'dark', 'sepia'] as const).map((value) => <Button key={value} size="sm" active={background === value} onClick={() => writeSettings({ background: value })}><FontAwesomeIcon icon={({ light: faSun, dark: faMoon, sepia: faPalette } as const)[value]} />{t ? ({ light: 'فاتح', dark: 'داكن', sepia: 'بني' } as const)[value] : ({ light: 'Light', dark: 'Dark', sepia: 'Sepia' } as const)[value]}</Button>)}
@@ -255,7 +280,6 @@ export default function SourceAccountReader({
       )}
 
       <div className={fullscreen ? 'flex min-h-0 flex-1 flex-col px-3 pb-2 pt-3 sm:px-6' : 'flex flex-col'}>
-        <p className="mb-2 shrink-0 text-sm text-gray-600 dark:text-gray-400">{labelAccount(account)}{' · '}{t ? `ص ${printed}` : `p. ${printed}`}</p>
         <div
           className={fullscreen ? 'min-h-0 flex-1 overflow-y-auto rounded-lg border border-black/10 px-4 py-3 dark:border-white/10 sm:px-8' : 'max-h-[65vh] overflow-y-auto rounded-lg border border-gray-200 px-4 py-3 dark:border-white/10'}
           style={pageContentStyle}
@@ -270,7 +294,7 @@ export default function SourceAccountReader({
         >
           <article dir={rtl ? 'rtl' : 'ltr'} lang={account.source.language} className="arabic-source space-y-4 text-justify">
             {pageParagraphs(current.bodyMarkdown).map(({ text, heading: isHeading }, index) => isHeading
-              ? <h2 key={index} className="my-6 border-b border-amber-400 pb-2 text-[1.15em] font-bold">{text}</h2>
+              ? <h2 key={index} className="my-6 border-b border-amber-400 pb-2 text-center text-[1.15em] font-bold">{text}</h2>
               : <p key={index}>{text}</p>)}
           </article>
           {current.notesMarkdown && (
@@ -279,10 +303,16 @@ export default function SourceAccountReader({
               <div dir={rtl ? 'rtl' : 'ltr'} lang={account.source.language} className="arabic-source space-y-2 text-justify">{pageParagraphs(current.notesMarkdown).map(({ text }, index) => <p key={index}>{text}</p>)}</div>
             </aside>
           )}
+          <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">{t ? `ص ${printed}` : `p. ${printed}`}</p>
         </div>
         <div className="shrink-0 pt-2">
-          <Pagination page={current.sequence} pageCount={account.pageCount} onChange={(next) => setSelection(account.id, next)} showSelect />
-          {current.extractionUrl && <a className="mt-2 inline-block text-sm underline opacity-75" href={current.extractionUrl} target="_blank" rel="noreferrer">{t ? 'الصفحة على الموقع الناشر' : 'This page on the host site'}</a>}
+          <Pagination
+            page={current.sequence}
+            pageCount={account.pageCount}
+            onChange={(next) => setSelection(account.id, next)}
+            showSelect
+            pageLabels={pageLabels}
+          />
         </div>
       </div>
     </section>

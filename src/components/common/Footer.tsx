@@ -33,6 +33,7 @@ const getLinkGroups = (language: 'en' | 'ar') => ({
     title: translations[language].sources,
     links: [
       { href: '/sources', label: translations[language].sources },
+      { href: '/references', label: language === 'ar' ? 'المراجع' : 'References' },
     ]
   },
 });
@@ -91,6 +92,13 @@ function Footer() {
                   {translations[currentLanguage as 'en' | 'ar'].about}
                 </a>
                 <a
+                  href="/references"
+                  className="text-amber-600 dark:text-amber-400 hover:text-amber-500 dark:hover:text-amber-300 transition-colors"
+                  dir={isRTL ? 'rtl' : 'ltr'}
+                >
+                  {currentLanguage === 'ar' ? 'المراجع' : 'References'}
+                </a>
+                <a
                   href="/privacy"
                   className="text-amber-600 dark:text-amber-400 hover:text-amber-500 dark:hover:text-amber-300 transition-colors"
                   dir={isRTL ? 'rtl' : 'ltr'}
@@ -106,4 +114,4 @@ function Footer() {
   );
 };
 
-export default Footer; 
+export default Footer;

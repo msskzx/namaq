@@ -75,6 +75,18 @@ describe('Pagination', () => {
     expect(onChange).toHaveBeenCalledWith(7);
   });
 
+  it('can show printed page labels while keeping sequence values for navigation', () => {
+    const onChange = vi.fn();
+    render(<Pagination page={2} pageCount={3} onChange={onChange} showSelect pageLabels={['29', '30', '31']} />);
+
+    const select = screen.getByLabelText('Go to page') as HTMLSelectElement;
+    expect(select.value).toBe('2');
+    expect(select.selectedOptions[0].textContent).toBe('30');
+    fireEvent.change(select, { target: { value: '3' } });
+
+    expect(onChange).toHaveBeenCalledWith(3);
+  });
+
   it('names the jump control even with no visible label', () => {
     const { container } = render(<Pagination page={1} pageCount={19} onChange={vi.fn()} showSelect />);
 

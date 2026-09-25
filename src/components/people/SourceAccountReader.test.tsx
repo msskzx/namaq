@@ -133,6 +133,21 @@ describe('SourceAccountReader', () => {
 
     expect(await screen.findByRole('heading', { name: 'إسلام ضماد' })).toBeTruthy();
     expect(screen.queryByText('[إسلام ضماد:]')).toBeNull();
+    expect(screen.getByRole('heading', { name: 'إسلام ضماد' }).className).toContain('text-center');
+  });
+
+  it('shows the entry title once and leaves only the page number after the text', async () => {
+    const entry = account({ titleArabic: 'السائب بن عثمان' });
+    respondWith({
+      accounts: [entry], account: entry,
+      page: page({ bodyMarkdown: '[السائب بن عثمان]' }),
+    });
+
+    renderReader();
+
+    expect(await screen.findByRole('heading', { name: 'السائب بن عثمان' })).toBeTruthy();
+    expect(screen.getAllByText('السائب بن عثمان')).toHaveLength(1);
+    expect(screen.getByText('p. 5').parentElement?.className).toContain('overflow-y-auto');
   });
 
   it('keeps the source text right-to-left while the interface is English', async () => {
@@ -151,6 +166,28 @@ describe('SourceAccountReader', () => {
     renderReader();
 
     await waitFor(() => expect(fetchJson).toHaveBeenCalledWith(expect.stringContaining('page=7')));
+  });
+
+  it('shows the book page number in the page selector', async () => {
+    Element.prototype.scrollIntoView = vi.fn();
+    const selected = account({ pageCount: 2 });
+    respondWith({
+      accounts: [selected], account: selected,
+      page: page({ sequence: 1, printedPage: '158' }),
+      pageNumbers: [
+        { sequence: 1, printedPage: '158', volume: { number: 1 } },
+        { sequence: 2, printedPage: '158', volume: { number: 2 } },
+      ],
+    });
+
+    const { container } = renderReader();
+    await screen.findByText('الفقرة الأولى');
+
+    const select = container.querySelector('select[aria-label="Go to page"]') as HTMLSelectElement;
+    expect(select.selectedOptions[0].textContent).toBe('158 · vol. 1');
+    expect(select.options[1].textContent).toBe('158 · vol. 2');
+    fireEvent.change(select, { target: { value: '2' } });
+    expect(nav.replaceCalls.at(-1)).toContain('page=2');
   });
 
   it('brings the reader back into view when the page changes', async () => {
@@ -229,6 +266,8 @@ describe('SourceAccountReader', () => {
 
     expect(await screen.findByText("The editor's notes")).toBeTruthy();
     expect(screen.getByText('(١) انظر الطبقات')).toBeTruthy();
+    const notes = screen.getByText('(١) انظر الطبقات').closest('aside');
+    expect(notes?.parentElement?.lastElementChild?.textContent).toBe('p. 5');
   });
 
   it("shows the section the reader is on, not a generic placeholder", async () => {
@@ -286,12 +325,24 @@ describe('SourceAccountReader', () => {
     fireEvent.click(await screen.findByRole('button', { name: 'Read fullscreen' }));
     fireEvent.click(screen.getByRole('button', { name: 'Open reading settings' }));
     fireEvent.click(screen.getByRole('button', { name: 'Sans' }));
-    fireEvent.click(screen.getByRole('button', { name: 'XL' }));
-    fireEvent.click(screen.getByRole('button', { name: 'Sepia' }));
+    const size = screen.getByRole('slider', { name: 'Text size' });
+    expect(size.getAttribute('min')).toBe('0');
+    expect(size.getAttribute('max')).toBe('3');
+    fireEvent.change(size, { target: { value: '3' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Dark' }));
 
     expect(JSON.parse(localStorage.getItem('namaq-reader-settings') ?? '{}')).toEqual({
-      font: 'sans', size: 'xl', background: 'sepia',
+      font: 'sans', size: 'xl', background: 'dark',
     });
+    expect((screen.getByText('الفقرة الأولى').closest('div[style]') as HTMLDivElement)?.style.backgroundColor).toBe('rgb(0, 0, 0)');
+  });
+
+  it('does not show the source host link below the page', async () => {
+    renderReader();
+
+    await screen.findByText('الفقرة الأولى');
+    expect(screen.queryByText('This page on the host site')).toBeNull();
+    expect(screen.queryByText('الصفحة على الموقع الناشر')).toBeNull();
   });
 
   it('renders nothing when the person has no source account', async () => {
