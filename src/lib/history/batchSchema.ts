@@ -4,6 +4,24 @@ export const subjectKinds = ['PERSON', 'TITLE', 'BATTLE', 'EVENT'] as const;
 export const reviewStatuses = ['NOT_REVIEWED', 'IN_REVIEW', 'REVIEWED'] as const;
 export const confidences = ['ESTABLISHED', 'LIKELY', 'DISPUTED', 'UNASSESSED'] as const;
 export const passageKinds = ['BODY', 'NOTE'] as const;
+/**
+ * The extraction checklist's content items (docs/extraction-checklist.md): the
+ * only things an account may declare absent from its source, since these are
+ * the ones a source can legitimately be silent on. Source-text detail and
+ * claims themselves are not on this list — an account always has both, so
+ * there is no "absent" state for them to declare.
+ */
+export const checklistContentItems = [
+  'fullName',
+  'kunya',
+  'appearance',
+  'manaqeb',
+  'nasab',
+  'wives',
+  'siblings',
+] as const;
+
+export type ChecklistContentItem = (typeof checklistContentItems)[number];
 
 export type SubjectKind = (typeof subjectKinds)[number];
 export type ReviewStatus = (typeof reviewStatuses)[number];
@@ -78,6 +96,13 @@ export interface AccountRecord {
   extractionUrl: string;
   accessedAt: string;
   pages: PageRecord[];
+  /**
+   * Extraction-checklist items (docs/extraction-checklist.md) the agent
+   * looked for in this account and confirmed the source does not state.
+   * Distinguishes "checked, genuinely absent" from "nobody checked yet" —
+   * `catalog:checklist` treats an item here as settled rather than a warning.
+   */
+  notInSource?: ChecklistContentItem[];
 }
 
 export interface CitationRecord {
@@ -226,6 +251,15 @@ function checkAccount(
   if (account.pages.length === 0) {
     issues.push({ path, message: 'an account needs at least one page' });
   }
+  const notInSourceSet = new Set<string>(checklistContentItems);
+  account.notInSource?.forEach((item, itemIndex) => {
+    if (!notInSourceSet.has(item)) {
+      issues.push({
+        path: `${path}.notInSource[${itemIndex}]`,
+        message: `"${item}" is not a checklist content item (${checklistContentItems.join(', ')})`,
+      });
+    }
+  });
 
   const seen = new Set<number>();
   account.pages.forEach((page, pageIndex) => {

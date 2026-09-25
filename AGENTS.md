@@ -133,6 +133,18 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 
 ## Historical evidence data
 
+- **[docs/extraction-checklist.md](docs/extraction-checklist.md) is required
+  reading before authoring or extending any batch, and every batch must run
+  `npm run catalog:checklist -- <person-slug>` clean before approval is
+  requested.** It walks the reading order for what a source entry typically
+  states (nasab, kunya, appearance, manaqeb, wives, siblings, source-text
+  detail), where each thing is recorded, and how to mark an item confirmed
+  absent (`notInSource`) versus simply unchecked. Two real gaps shipped
+  before this existed — a `volumeNumber` silently missing on ten batches,
+  and Hamzah ibn Abd al-Muttalib's nasab edge never carried into the catalog
+  — both were schema-valid and both were wrong; this is what closes that
+  class of gap going forward. Existing batches published before this
+  checklist are not swept retroactively without being told to.
 - Curated historical records live in `data/history/batches/<batch>/`, separate
   from application code: `batch.json` holds source editions, source accounts and
   claims with their citations; `accounts/<subject>/NNN.md` holds one printed page
