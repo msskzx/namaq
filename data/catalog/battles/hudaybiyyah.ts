@@ -40,6 +40,12 @@ const hudaybiyyah = {
       },
       claims: ['suhail-ibn-amr-siyar25/hudaybiyyah'],
     },
+    {
+      person: 'al-baraa-ibn-malik',
+      isMuslim: true,
+      summary: { value: 'وَبَايَعَ تَحْتَ الشَّجَرَةِ.', claims: ['al-baraa-ibn-malik-siyar26/hudaybiyyah'] },
+      claims: ['al-baraa-ibn-malik-siyar26/hudaybiyyah'],
+    },
   ],
 } satisfies CatalogBattle;
 
