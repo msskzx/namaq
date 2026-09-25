@@ -7,7 +7,6 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookOpen, faBars, faCompress, faExpand, faList, faGear, faXmark, faFont, faSun, faMoon, faPalette } from '@fortawesome/free-solid-svg-icons';
 import ErrorMessage from '@/components/common/ErrorMessage';
-import Pagination from '@/components/common/Pagination';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import Button from '@/components/common/Button';
 import LanguageSwitcher from '@/components/language/LanguageSwitcher';
@@ -22,7 +21,6 @@ interface AccountsResponse {
   accounts: AccountSummary[];
   account: AccountSummary | null;
   page: AccountPage | null;
-  pageNumbers?: { sequence: number; printedPage: string | null; volume: { number: number } | null }[];
 }
 
 interface SectionsResponse {
@@ -77,7 +75,9 @@ export default function SourceAccountReader({
   const [font, setFont] = useState<ReaderFont>('amiri');
   const [size, setSize] = useState<ReaderSize>('m');
   const [background, setBackground] = useState<ReaderBackground>('light');
+  const [headerHidden, setHeaderHidden] = useState(false);
   const section = useRef<HTMLElement>(null);
+  const contentScrollTop = useRef(0);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -141,6 +141,7 @@ export default function SourceAccountReader({
   }, [fullscreen, pathname, router, searchParams]);
 
   const setFullscreen = useCallback((value: boolean) => {
+    setHeaderHidden(false);
     const next = new URLSearchParams(searchParams.toString());
     if (value) next.set('fullscreen', '1');
     else next.delete('fullscreen');
@@ -178,16 +179,6 @@ export default function SourceAccountReader({
   let currentSectionIndex = -1;
   sections.forEach((candidate, index) => { if (candidate.sequence <= current.sequence) currentSectionIndex = index; });
   const t = language === 'ar';
-  const printedPageCounts = new Map<string, number>();
-  data.pageNumbers?.forEach(({ printedPage }) => {
-    if (printedPage) printedPageCounts.set(printedPage, (printedPageCounts.get(printedPage) ?? 0) + 1);
-  });
-  const pageLabels = data.pageNumbers?.map(({ sequence, printedPage, volume }) => {
-    if (!printedPage) return String(sequence);
-    if ((printedPageCounts.get(printedPage) ?? 0) < 2) return printedPage;
-    const volumeLabel = volume ? (t ? `ج${volume.number}` : `vol. ${volume.number}`) : `#${sequence}`;
-    return `${printedPage} · ${volumeLabel}`;
-  });
   const pageContentStyle = {
     ...backgroundStyles[background],
     fontSize: fontSizes[size],
@@ -208,6 +199,7 @@ export default function SourceAccountReader({
       )}
 
       {fullscreen && (
+        <div className={`shrink-0 overflow-hidden transition-[max-height,opacity] duration-200 ${headerHidden ? 'max-h-0 opacity-0' : 'max-h-[40rem] opacity-100'}`}>
         <header className="relative z-10 flex shrink-0 items-center gap-2 border-b border-amber-400 bg-gray-50 px-3 py-2 dark:bg-gray-950">
           <div className="relative" ref={menuRef}>
             <Button size="icon" onClick={() => setMenuOpen((open) => !open)} aria-label={menuOpen ? (t ? 'إغلاق القائمة' : 'Close menu') : (t ? 'فتح القائمة' : 'Open menu')} aria-pressed={menuOpen}><FontAwesomeIcon icon={menuOpen ? faXmark : faBars} /></Button>
@@ -227,8 +219,6 @@ export default function SourceAccountReader({
           <Button size="icon" active={indexOpen} onClick={() => { setIndexOpen((open) => !open); setSettingsOpen(false); }} aria-label={t ? 'فتح الفهرس' : 'Open index'} aria-pressed={indexOpen}><FontAwesomeIcon icon={indexOpen ? faXmark : faList} /></Button>
           <Button size="icon" active={settingsOpen} onClick={() => { setSettingsOpen((open) => !open); setIndexOpen(false); }} aria-label={t ? 'فتح إعدادات القراءة' : 'Open reading settings'} aria-pressed={settingsOpen}><FontAwesomeIcon icon={settingsOpen ? faXmark : faGear} /></Button>
         </header>
-      )}
-
       {(indexOpen || settingsOpen) && (
         <div className="z-[5] shrink-0 border-b border-amber-300 bg-amber-50 p-3 dark:border-amber-800 dark:bg-gray-900">
           {indexOpen && (
@@ -278,11 +268,22 @@ export default function SourceAccountReader({
           <Button className="mt-3" size="sm" onClick={() => { setIndexOpen(false); setSettingsOpen(false); }}><FontAwesomeIcon icon={faXmark} />{t ? 'إغلاق' : 'Close'}</Button>
         </div>
       )}
+        </div>
+      )}
 
       <div className={fullscreen ? 'flex min-h-0 flex-1 flex-col px-3 pb-2 pt-3 sm:px-6' : 'flex flex-col'}>
         <div
           className={fullscreen ? 'min-h-0 flex-1 overflow-y-auto rounded-lg border border-black/10 px-4 py-3 dark:border-white/10 sm:px-8' : 'max-h-[65vh] overflow-y-auto rounded-lg border border-gray-200 px-4 py-3 dark:border-white/10'}
           style={pageContentStyle}
+          onScroll={(event) => {
+            const top = event.currentTarget.scrollTop;
+            if (fullscreen) {
+              if (top <= 0) setHeaderHidden(false);
+              else if (top > contentScrollTop.current + 4) setHeaderHidden(true);
+              else if (top < contentScrollTop.current - 4) setHeaderHidden(false);
+            }
+            contentScrollTop.current = top;
+          }}
           onTouchStart={(event) => { const touch = event.touches[0]; touchStart.current = { x: touch.clientX, y: touch.clientY }; }}
           onTouchEnd={(event) => {
             const start = touchStart.current; touchStart.current = null;
@@ -304,15 +305,6 @@ export default function SourceAccountReader({
             </aside>
           )}
           <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">{t ? `ص ${printed}` : `p. ${printed}`}</p>
-        </div>
-        <div className="shrink-0 pt-2">
-          <Pagination
-            page={current.sequence}
-            pageCount={account.pageCount}
-            onChange={(next) => setSelection(account.id, next)}
-            showSelect
-            pageLabels={pageLabels}
-          />
         </div>
       </div>
     </section>
