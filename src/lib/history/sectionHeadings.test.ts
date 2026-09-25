@@ -37,6 +37,12 @@ describe('pageHeadings', () => {
     ]);
   });
 
+  it('leaves an ordinary numbered paragraph as body text', () => {
+    expect(pageParagraphs('١ - ثم ساروا إلى المدينة.')).toEqual([
+      { text: '١ - ثم ساروا إلى المدينة.', heading: false },
+    ]);
+  });
+
   it('marks a numbered entry title at the start of a page as a heading', () => {
     const body = ['١ - أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ عَامِرُ بنِ عَبْدِ اللهِ * (م، ق) .', 'ابْنِ الجَرَّاحِ بنِ هِلاَلِ بنِ أُهَيْبِ بنِ ضَبَّةَ.'].join('\n\n');
 
