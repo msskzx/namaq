@@ -35,8 +35,6 @@ const hamzahIbnAbdAlMuttalib = {
   // with two swords in front of the Prophet at Uhud.
   titles: [
     { title: 'asadu-allah', claims: ['hamzah/asadu-allah'] },
-    // Carried from the retired seed entry; no batch cites these yet.
-    { title: 'uncle-of-prophet', claims: legacyUnreviewed },
     // Two chains, each marked weak by al-Dhahabi himself: see
     // hamzah-ibn-abd-al-muttalib-siyar15/batch.json's reviewerNote.
     { title: 'sayyid-al-shuhada', claims: ['hamzah-siyar15/sayyid-al-shuhada'] },
