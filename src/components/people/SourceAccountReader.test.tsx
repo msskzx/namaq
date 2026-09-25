@@ -147,7 +147,7 @@ describe('SourceAccountReader', () => {
 
     expect(await screen.findByRole('heading', { name: 'السائب بن عثمان' })).toBeTruthy();
     expect(screen.getAllByText('السائب بن عثمان')).toHaveLength(1);
-    expect(screen.getByText('p. 5')).toBeTruthy();
+    expect(screen.getByText('p. 5').parentElement?.className).toContain('overflow-y-auto');
   });
 
   it('keeps the source text right-to-left while the interface is English', async () => {
@@ -245,7 +245,7 @@ describe('SourceAccountReader', () => {
     expect(await screen.findByText("The editor's notes")).toBeTruthy();
     expect(screen.getByText('(١) انظر الطبقات')).toBeTruthy();
     const notes = screen.getByText('(١) انظر الطبقات').closest('aside');
-    expect(notes?.parentElement?.nextElementSibling?.textContent).toContain('p. 5');
+    expect(notes?.parentElement?.lastElementChild?.textContent).toBe('p. 5');
   });
 
   it("shows the section the reader is on, not a generic placeholder", async () => {

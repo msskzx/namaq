@@ -292,9 +292,9 @@ export default function SourceAccountReader({
               <div dir={rtl ? 'rtl' : 'ltr'} lang={account.source.language} className="arabic-source space-y-2 text-justify">{pageParagraphs(current.notesMarkdown).map(({ text }, index) => <p key={index}>{text}</p>)}</div>
             </aside>
           )}
+          <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">{t ? `ص ${printed}` : `p. ${printed}`}</p>
         </div>
         <div className="shrink-0 pt-2">
-          <p className="mb-2 text-center text-sm text-gray-600 dark:text-gray-400">{t ? `ص ${printed}` : `p. ${printed}`}</p>
           <Pagination page={current.sequence} pageCount={account.pageCount} onChange={(next) => setSelection(account.id, next)} showSelect />
         </div>
       </div>
