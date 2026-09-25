@@ -404,6 +404,24 @@ export function validateBatch(batch: HistoryBatch, files: BatchFiles): Validatio
 }
 
 /**
+ * Non-blocking nudge, not a validation issue: a PERSON account that declares
+ * no `notInSource` at all is either a genuinely thorough entry or one nobody
+ * ran docs/extraction-checklist.md's walkthrough against — `history:validate`
+ * can't tell which, since that requires reading the source pages a human (or
+ * agent) already read. Surfacing it here means the reminder shows up on every
+ * validate run rather than only when someone remembers to run
+ * `catalog:checklist` separately.
+ */
+export function checklistReminders(batch: HistoryBatch): string[] {
+  return batch.accounts
+    .filter((account) => account.subjectKind === 'PERSON' && !account.notInSource?.length)
+    .map(
+      (account) =>
+        `${account.subjectSlug}: no notInSource items declared — run npm run catalog:checklist -- ${account.subjectSlug} before approving`,
+    );
+}
+
+/**
  * Content hash of the batch and the source pages, so any edit after approval
  * has to be approved again. summary.md is outside it: the summary is written
  * for the reviewer and changing its wording invalidates nothing about the
