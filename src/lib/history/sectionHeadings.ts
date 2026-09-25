@@ -25,7 +25,7 @@ function isHeadingParagraph(paragraph: string) {
 
 /** Numbered entries in Shamela start with a standalone numbered name line. */
 function isNumberedEntryTitle(paragraph: string) {
-  return /^[٠-٩۰-۹\d]+\s*[-–—]\s*\S.*\*\s*\([^)]*\)\s*\.?$/.test(paragraph);
+  return /^[٠-٩۰-۹\d]+\s*[-–—]\s*\S.*\*{1,2}(?:\s*\([^)]*\))?\s*\.?$/.test(paragraph);
 }
 
 function stripBrackets(paragraph: string) {

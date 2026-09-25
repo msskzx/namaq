@@ -43,6 +43,12 @@ describe('pageHeadings', () => {
     ]);
   });
 
+  it('recognizes numbered entry titles ending with an asterisk marker', () => {
+    expect(pageParagraphs('٢ - حَمْزَةُ بنُ عَبْدِ المُطَّلِبِ **')).toEqual([
+      { text: '٢ - حَمْزَةُ بنُ عَبْدِ المُطَّلِبِ **', heading: true },
+    ]);
+  });
+
   it('marks a numbered entry title at the start of a page as a heading', () => {
     const body = ['١ - أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ عَامِرُ بنِ عَبْدِ اللهِ * (م، ق) .', 'ابْنِ الجَرَّاحِ بنِ هِلاَلِ بنِ أُهَيْبِ بنِ ضَبَّةَ.'].join('\n\n');
 
