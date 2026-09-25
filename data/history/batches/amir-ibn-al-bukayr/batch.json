@@ -1,0 +1,280 @@
+{
+  "slug": "amir-ibn-al-bukayr",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "amir-ibn-al-bukayr",
+      "extractionUrl": "https://shamela.ws/book/10906/1613",
+      "accessedAt": "2026-09-25",
+      "volumeNumber": 4,
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "187",
+          "bodyFile": "accounts/amir-ibn-al-bukayr/001.md",
+          "notesFile": "accounts/amir-ibn-al-bukayr/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1613",
+          "passages": [
+            {
+              "anchor": "187-p2"
+            },
+            {
+              "anchor": "187-p3"
+            },
+            {
+              "anchor": "187-p4"
+            },
+            {
+              "anchor": "187-p5"
+            },
+            {
+              "anchor": "187-p6"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "amir-bukayr-siyar19/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "amir-ibn-al-bukayr",
+      "field": "fullName",
+      "assertion": "عامر بن أبي البكير الليثي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "187-p2",
+          "volume": "4",
+          "pageReference": "187",
+          "extractionUrl": "https://shamela.ws/book/10906/1613",
+          "excerptArabic": "عَامِرُ بنُ أَبِي البُكَيْرِ اللَّيْثِيُّ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "amir-bukayr-siyar19/pact-brother-thabit",
+      "subjectKind": "PERSON",
+      "subjectSlug": "amir-ibn-al-bukayr",
+      "assertion": "آخى النبي صلى الله عليه وسلم بينه وبين ثابت بن قيس بن شماس.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PACT_BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "thabit-ibn-qais",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "187-p3",
+          "volume": "4",
+          "pageReference": "187",
+          "extractionUrl": "https://shamela.ws/book/10906/1613",
+          "excerptArabic": "آخَى رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بَيْنَهُ وَبَيْنَ ثَابِتِ بنِ قَيْسِ بنِ شَمَّاسٍ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "amir-bukayr-siyar19/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "amir-ibn-al-bukayr",
+      "assertion": "شهد عامر بن أبي البكير بدرا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "187-p4",
+          "volume": "4",
+          "pageReference": "187",
+          "extractionUrl": "https://shamela.ws/book/10906/1613",
+          "excerptArabic": "شَهِدَ بَدْراً",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "amir-bukayr-siyar19/death-place",
+      "subjectKind": "PERSON",
+      "subjectSlug": "amir-ibn-al-bukayr",
+      "field": "placeOfDeathArabic",
+      "assertion": "استشهد عامر يوم اليمامة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "187-p6",
+          "volume": "4",
+          "pageReference": "187",
+          "extractionUrl": "https://shamela.ws/book/10906/1613",
+          "excerptArabic": "وَاسْتُشْهِدَ عَامِرٌ يَوْمَ اليَمَامَةِ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "key": "amir-bukayr-siyar19/martyr-title",
+      "subjectKind": "PERSON",
+      "subjectSlug": "amir-ibn-al-bukayr",
+      "field": "titles",
+      "assertion": "استشهد عامر يوم اليمامة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "187-p6",
+          "volume": "4",
+          "pageReference": "187",
+          "extractionUrl": "https://shamela.ws/book/10906/1613",
+          "excerptArabic": "وَاسْتُشْهِدَ عَامِرٌ يَوْمَ اليَمَامَةِ",
+          "accessedAt": "2026-09-25"
+        }
+      ]
+    }
+  ],
+  "approval": {
+    "revision": "c04ac39b7cbefd5c",
+    "approvedAt": "2026-09-25",
+    "approvedBy": "msskzx",
+    "note": "Approved for publication. All five claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+  }
+}

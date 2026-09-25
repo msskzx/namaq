@@ -19,19 +19,6 @@
  */
 export const people = [
   {
-    // fullName inferred, not page-sourced — the fuller ancestor chain
-    // amir-ibn-al-bukayr shares with his now-retired brother
-    // iyas-ibn-al-bukayr (see data/catalog/people/iyas-ibn-al-bukayr.ts).
-    name: 'عامر بن أبي البكير',
-    fullName: 'عامر بن أبي البكير بن عبد ياليل بن ناشب بن غيرة بن سعد بن ليث الليثي الكناني',
-    slug: 'amir-ibn-al-bukayr',
-    nameTransliterated: 'Amir ibn Abi al-Bukayr',
-    appearance: null,
-    virtues: null,
-    picture: null,
-    titles: ['companion'],
-  },
-  {
     name: 'مسطح بن أثاثة',
     fullName: 'مسطح بن أثاثة بن عباد بن المطلب بن عبد مناف بن قصي المطلبي',
     slug: 'mistah-ibn-uthathah',
