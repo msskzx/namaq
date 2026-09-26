@@ -5,34 +5,25 @@ import { useLanguage } from '../language/LanguageContext';
 import translations from '../language/translations';
 
 const getLinkGroups = (language: 'en' | 'ar') => ({
-  events: {
-    title: translations[language].events,
-    links: [
-      { href: '/events', label: translations[language].events },
-    ]
-  },
   graph: {
     title: translations[language].allGraph,
     links: [
       { href: '/graphs', label: translations[language].allGraph },
-      { href: '/graphs?kind=person', label: translations[language].familyRelations },
-      { href: '/graphs?kind=person&kind=title', label: translations[language].titlesGraph },
-      { href: '/graphs?kind=person&kind=battle', label: translations[language].battlesGraph },
     ]
   },
   people: {
     title: translations[language].people,
     links: [
-      { href: '/people/prophet-muhammad', label: translations[language].prophet },
       { href: '/people', label: translations[language].people },
+      { href: '/people/prophet-muhammad', label: translations[language].prophet },
       { href: '/titles', label: translations[language].titles },
+      { href: '/events', label: translations[language].events },
     ]
   },
   sources: {
     title: translations[language].sources,
     links: [
       { href: '/sources', label: translations[language].sources },
-      { href: '/references', label: language === 'ar' ? 'المراجع' : 'References' },
     ]
   },
 });
@@ -46,8 +37,8 @@ function Footer() {
   return (
     <footer className="w-full bg-gray-50 dark:bg-gray-950 text-amber-600 dark:text-amber-400 border-t-2 border-amber-400">
       <div className="container mx-auto px-4 py-8">
-        {/* Main content with 4 columns */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+        {/* Main content with 3 columns */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
           {Object.entries(linkGroups).map(([key, group]) => (
             <div key={key} className="space-y-3">
               <h3 className={`text-lg font-semibold mb-3 dark:text-amber-300 ${isRTL ? 'text-right' : 'text-left'}`}>
@@ -89,13 +80,6 @@ function Footer() {
                   dir={isRTL ? 'rtl' : 'ltr'}
                 >
                   {translations[currentLanguage as 'en' | 'ar'].about}
-                </a>
-                <a
-                  href="/references"
-                  className="text-amber-600 dark:text-amber-400 hover:text-amber-500 dark:hover:text-amber-300 transition-colors"
-                  dir={isRTL ? 'rtl' : 'ltr'}
-                >
-                  {currentLanguage === 'ar' ? 'المراجع' : 'References'}
                 </a>
                 <a
                   href="/privacy"
