@@ -674,9 +674,17 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
     updateParams({ selected: null, focus: null, filter: null, kind: [], showCompanionTitle: null, person: null, ancestorsOf: [], descendantsOf: [] });
   };
 
+  const updatingNotice = exploration.isFetching && (
+    <div role="status" className="mt-1 flex items-center gap-2 text-xs text-gray-700 dark:text-gray-300">
+      <LoadingSpinner size="sm" />
+      {t.graph.updating}
+    </div>
+  );
+
   const explorationControls = (
     <aside dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4 dark:border-amber-700 dark:bg-gray-800">
       <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode ? (selectedPreview?.fullName ?? selectedNode.label) : t.graph.globalRelationships}</h2>
+      {updatingNotice}
       {isSelectedPerson && selectedPreview && selectedPreview.titles.length > 0 && (
         <div className="mt-1 flex flex-wrap gap-2">
           {selectedPreview.titles.map(title => (
@@ -691,7 +699,6 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
           kind={(selectedNode.type ?? 'person') as string}
           slug={selectedNode.slug}
           hasProfile={selectedPersonHasProfile}
-          profileHref={profilePath(selectedNode.type, selectedNode.slug)}
           evidenceCount={selectedPreview?.evidenceCount}
         />
       )}
@@ -765,13 +772,6 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
         </div>
       )}
     </aside>
-  );
-
-  const updatingNotice = exploration.isFetching && (
-    <div role="status" className="flex items-center gap-2 border-b border-amber-400/30 px-3 py-2 text-xs text-gray-700 dark:text-gray-300">
-      <LoadingSpinner size="sm" />
-      {t.graph.updating}
-    </div>
   );
 
   const filterPanel = (
@@ -901,7 +901,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
             {t.graph.openFilters}
           </Button>
         </div>
-        {showFilterPanel && <div className="mt-3">{updatingNotice}{filterPanel}</div>}
+        {showFilterPanel && <div className="mt-3">{filterPanel}</div>}
         <div className="mt-3">
           <Button
             className="mb-2"
@@ -967,7 +967,6 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
             : 'fixed inset-x-0 bottom-0 z-[60] rounded-t-lg border-t border-amber-400 bg-black pb-[env(safe-area-inset-bottom)] lg:inset-auto lg:top-3 lg:start-3 lg:rounded-lg lg:border lg:pb-0'
           }
         >
-          {updatingNotice}
           {panelExpanded ? panelContent : collapsedBar}
         </div>
       </div>
