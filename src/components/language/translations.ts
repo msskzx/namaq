@@ -24,7 +24,7 @@ const translations = {
     eventsLoadError: 'Failed to load events.',
     peopleNotFound: 'No people found.',
     peopleLoadError: 'Failed to load people.',
-    noMoreResults: 'No more results to show',
+    noResults: 'No results found',
 
     // Charities
     category: 'Category',
@@ -49,7 +49,6 @@ const translations = {
 
 
     battleParticipantsGraph: 'Participants Graph',
-    notablePeople: 'Notable People',
     allGraph: 'Graph',
     sources: 'Source material',
 
@@ -323,7 +322,7 @@ const translations = {
     eventsLoadError: 'فشل تحميل الأحداث.',
     peopleNotFound: 'لم يتم العثور على أشخاص',
     peopleLoadError: 'فشل تحميل قائمة الأشخاص',
-    noMoreResults: 'لا توجد نتائج إضافية',
+    noResults: 'لا توجد نتائج',
 
     // Charities
     category: 'الفئة',
@@ -349,7 +348,6 @@ const translations = {
     // Coming Soon Messages
 
     battleParticipantsGraph: 'شبكة المشاركين',
-    notablePeople: 'شخصيات بارزة',
     allGraph: 'الشبكة',
     sources: 'المصادر',
 

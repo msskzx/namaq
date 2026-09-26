@@ -46,7 +46,7 @@ export default function SourcesPage() {
         )}
 
         {isLoading || !data ? (
-          <LoadingSpinner className="min-h-[60vh]" />
+          <LoadingSpinner fill />
         ) : data.sources.length === 0 ? (
           <p className="text-gray-600 dark:text-gray-400">
             {language === 'ar' ? 'لا توجد مصادر بعد.' : 'No sources yet.'}

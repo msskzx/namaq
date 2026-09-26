@@ -15,7 +15,7 @@ function EventCard({ event }: EventCardProps) {
   return (
    <Link 
       href={event.kind === 'event' ? `/events/${event.slug}` : `/battles/${event.slug}`}
-      className="ml-16 w-full block group"
+      className="ms-16 w-full block group"
     >
    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-4 w-full transition-all duration-200 hover:shadow-lg hover:border-amber-300 dark:hover:border-amber-500 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
      <div className="flex items-center justify-between mb-2">

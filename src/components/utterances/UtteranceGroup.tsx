@@ -43,9 +43,9 @@ export default function UtteranceGroup({ utterances, variant, sex, pageSize = 5 
   const shown = utterances.slice(first, first + pageSize);
 
   return (
-    <div className="bg-black border border-white/10 rounded-lg p-4">
+    <div className="bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4">
       <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
-        <FontAwesomeIcon icon={faFeatherPointed} className="w-7 h-7 text-amber-500 ml-2" />
+        <FontAwesomeIcon icon={faFeatherPointed} className="w-7 h-7 text-amber-500 me-2" />
         {title}
       </h2>
       <div className="space-y-4">

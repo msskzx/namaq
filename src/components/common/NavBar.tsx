@@ -126,7 +126,7 @@ export default function NavBar() {
 
                   {linkItems.length > 0 && isHovered && (
                     <div
-                      className="absolute top-full left-0 mt-1 bg-white dark:bg-gray-900 shadow-lg z-50 min-w-[200px] py-1"
+                      className="absolute top-full start-0 mt-1 bg-white dark:bg-gray-900 shadow-lg z-50 min-w-[200px] py-1"
                       onMouseEnter={() => {
                         if (hoverTimeoutRef.current) {
                           clearTimeout(hoverTimeoutRef.current);
@@ -163,7 +163,7 @@ export default function NavBar() {
                 <FontAwesomeIcon icon={faGear} className="w-5 h-5" />
               </Button>
               {settingsOpen && (
-                <div className="absolute top-full right-0 mt-2 bg-gray-50 dark:bg-gray-950 border border-amber-400 rounded-md shadow-lg z-50 p-4 flex flex-col gap-4">
+                <div className="absolute top-full end-0 mt-2 bg-gray-50 dark:bg-gray-950 border border-amber-400 rounded-md shadow-lg z-50 p-4 flex flex-col gap-4">
                   <div>
                     <LanguageSwitcher />
                   </div>

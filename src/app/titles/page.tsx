@@ -4,7 +4,6 @@ import { useLanguage } from "@/components/language/LanguageContext";
 import useSWR from "swr";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import TitleCard from '@/components/people/TitleCard';
-import TitleHero from '@/components/titles/TitleHero';
 import { TitleBase } from "@/types/title";
 import ErrorMessage from '@/components/common/ErrorMessage';
 
@@ -16,12 +15,10 @@ export default function TitlesPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div className="container mx-auto px-4 py-8">
-        <TitleHero />
-
-        <div className="mt-16">
+        <div>
           {error && <ErrorMessage title={language === 'ar' ? 'تعذر تحميل الألقاب.' : 'Failed to load titles.'} />}
           {isLoading || !titles ? (
-            <LoadingSpinner />
+            <LoadingSpinner fill />
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {Array.isArray(titles) && titles.length > 0 ? (

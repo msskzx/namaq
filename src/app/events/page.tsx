@@ -80,7 +80,7 @@ function EventsPage() {
         <div className="mt-8">
           {error && <ErrorMessage title={t.eventsLoadError} />}
           {isLoading || !items ? (
-            <LoadingSpinner className="min-h-[60vh]" />
+            <LoadingSpinner fill />
           ) : shown.length === 0 ? (
             <p className="text-center text-gray-600 dark:text-gray-400">{ar ? "لا توجد نتائج مطابقة." : "Nothing matches."}</p>
           ) : (
