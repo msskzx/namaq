@@ -31,6 +31,7 @@ const aliIbnAbiTalib = {
     { title: 'the-ten-promised-paradise', claims: legacyUnreviewed },
     { title: 'the-six-of-the-shura', claims: legacyUnreviewed },
     { title: 'caliph', claims: legacyUnreviewed },
+    { title: 'al-khulafa-al-rashidun', claims: legacyUnreviewed },
     { title: 'companion', claims: legacyUnreviewed },
     { title: 'al-sabiqoon', claims: ['ali/al-sabiqoon-eight'] },
   ],

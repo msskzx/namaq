@@ -32,6 +32,7 @@ const abuBakrAsSiddiq = {
     // Carried from the retired seed entry; no batch cites these yet.
     { title: 'the-ten-promised-paradise', claims: legacyUnreviewed },
     { title: 'caliph', claims: legacyUnreviewed },
+    { title: 'al-khulafa-al-rashidun', claims: legacyUnreviewed },
     { title: 'companion', claims: legacyUnreviewed },
     { title: 'siddiq-al-ummah', claims: ['abu-bakr/siddiq'] },
     { title: 'al-sabiqoon', claims: ['abu-bakr/al-sabiqoon-eight'] },

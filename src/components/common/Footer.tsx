@@ -9,7 +9,6 @@ const getLinkGroups = (language: 'en' | 'ar') => ({
     title: translations[language].events,
     links: [
       { href: '/events', label: translations[language].events },
-      { href: '/battles', label: translations[language].battles.title },
     ]
   },
   graph: {

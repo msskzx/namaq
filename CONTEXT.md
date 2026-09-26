@@ -191,3 +191,13 @@ page to view, since there is no profile content recorded for them. Deep
 lineage-only ancestors are the common case.
 _Avoid_: Profile-less person, unverified person (both imply something is
 missing or wrong, rather than simply not yet recorded)
+
+### Events and expeditions
+
+**Engagement**:
+What kind of military undertaking a battle row records: a ghazwah (one the
+Prophet joined in person), a sariyyah (a detachment he sent without going
+himself), or a battle proper. The events page filters on it alongside plain
+events.
+_Avoid_: Node type or subject kind (those say whether something is a battle or an
+event at all, not which sort of battle it was)

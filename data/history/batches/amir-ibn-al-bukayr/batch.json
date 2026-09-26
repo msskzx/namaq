@@ -249,32 +249,12 @@
           "accessedAt": "2026-09-25"
         }
       ]
-    },
-    {
-      "key": "amir-bukayr-siyar19/martyr-title",
-      "subjectKind": "PERSON",
-      "subjectSlug": "amir-ibn-al-bukayr",
-      "field": "titles",
-      "assertion": "استشهد عامر يوم اليمامة.",
-      "confidence": "ESTABLISHED",
-      "reviewStatus": "NOT_REVIEWED",
-      "citations": [
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "187-p6",
-          "volume": "4",
-          "pageReference": "187",
-          "extractionUrl": "https://shamela.ws/book/10906/1613",
-          "excerptArabic": "وَاسْتُشْهِدَ عَامِرٌ يَوْمَ اليَمَامَةِ",
-          "accessedAt": "2026-09-25"
-        }
-      ]
     }
   ],
   "approval": {
-    "revision": "c04ac39b7cbefd5c",
-    "approvedAt": "2026-09-25",
+    "revision": "a73ec203f78f00b1",
+    "approvedAt": "2026-09-26",
     "approvedBy": "msskzx",
-    "note": "Approved for publication. All five claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+    "note": "Re-recorded for publication after the claim amir-bukayr-siyar19/martyr-title was removed along with the Martyr title it backed. No page text changed; his death at Yamamah stays in the pages and in his place-of-death claim. Remaining claims are Not reviewed."
   }
 }

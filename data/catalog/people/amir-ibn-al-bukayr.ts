@@ -17,7 +17,6 @@ const amirIbnAlBukayr = {
   titles: [
     // Carried from the retired seed entry; this entry never calls him صحابي outright.
     { title: 'companion', claims: legacyUnreviewed },
-    { title: 'martyr', claims: ['amir-bukayr-siyar19/martyr-title'] },
   ],
   relations: [
     // Thabit still has only a seed row (personSeedData6.ts), not a catalog

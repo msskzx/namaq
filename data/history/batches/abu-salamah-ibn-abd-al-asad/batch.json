@@ -292,6 +292,26 @@
       ]
     },
     {
+      "key": "abu-salamah-siyar8/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-salamah",
+      "assertion": "السيد الكبير، أخو رسول الله صلى الله عليه وسلم من الرضاعة، وابن عمته: برة بنت عبد المطلب. وأحد السابقين الأولين، هاجر إلى الحبشة، ثم هاجر إلى المدينة، وشهد بدرا، ومات بعدها بأشهر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "150-p4",
+          "volume": "1",
+          "pageReference": "150",
+          "extractionUrl": "https://shamela.ws/book/10906/1576",
+          "excerptArabic": "السَّيِّدُ الكَبِيْرُ، أَخُو رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مِنَ الرَّضَاعَةِ، وَابْنُ عَمَّتِهِ: بَرَّةَ بِنْتِ عَبْدِ المُطَّلِبِ. وَأَحَدُ السَّابِقِيْنَ الأَوَّلِيْنَ، هَاجَرَ إِلَى الحَبَشَةِ، ثُمَّ هَاجَرَ إِلَى المَدِيْنَةِ، وَشَهِدَ بَدْراً، وَمَاتَ بَعْدَهَا بِأَشْهُرٍ",
+          "accessedAt": "2026-09-24"
+        }
+      ]
+    },
+    {
       "key": "abu-salamah-siyar8/father",
       "subjectKind": "PERSON",
       "subjectSlug": "abu-salamah",
@@ -365,9 +385,9 @@
     }
   ],
   "approval": {
-    "revision": "5337e15cf82b9bdd",
+    "revision": "8a9286de8a8485ed",
     "approvedAt": "2026-09-26",
     "approvedBy": "msskzx",
-    "note": "Re-recorded for publication after the catalog's fullName was restored from page 150 with tashkeel: one claim, abu-salamah-siyar8/full-name, was added and no page text changed. All four claims are Not reviewed."
+    "note": "Re-recorded for publication after the name, fullName and manaqib were restored from page 150 with tashkeel: the virtues claim abu-salamah-siyar8/virtues was added and the full-name claim's excerpt extended. No page text changed. All five claims are Not reviewed."
   }
 }

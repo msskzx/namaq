@@ -1,21 +1,20 @@
 import React from 'react';
 import Link from 'next/link';
-import type { EventBase } from '@/types/event';
+import type { TimelineItem } from '@/lib/timeline';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt, faShieldAlt, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { formatHijriYear } from '@/lib/hijriYear';
-import type { Battle } from '@/types/battle';
 
 interface EventCardProps {
-  event: EventBase | Battle;
+  event: TimelineItem;
 }
 
 function EventCard({ event }: EventCardProps) {
   const { language } = useLanguage();
   return (
    <Link 
-      href={'type' in event ? `/events/${event.slug}` : `/battles/${event.slug}`}
+      href={event.kind === 'event' ? `/events/${event.slug}` : `/battles/${event.slug}`}
       className="ml-16 w-full block group"
     >
    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-4 w-full transition-all duration-200 hover:shadow-lg hover:border-amber-300 dark:hover:border-amber-500 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
