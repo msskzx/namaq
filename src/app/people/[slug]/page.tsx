@@ -9,6 +9,7 @@ import translations from '@/components/language/translations';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import Badge from '@/components/common/Badge';
+import { titleName } from '@/lib/titleName';
 import Timeline from '@/components/people/Timeline';
 import type { PersonFull } from '@/types/person';
 import useSWR from 'swr';
@@ -60,7 +61,7 @@ function PersonDetailPage() {
               <Badge
                 key={title.id}
                 href={`/people?title=${title.slug}`}
-                text={language === 'ar' && title.name ? title.name : title.nameTransliterated || title.name}
+                text={titleName(title, person.sex, language)}
                 color="indigo"
               />
             ))}
