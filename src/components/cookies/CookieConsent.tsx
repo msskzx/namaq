@@ -93,14 +93,14 @@ function CookieConsent() {
                 {language === 'ar' ? (
                   <>
                     نستخدم ملفات تعريف الارتباط لتحسين تجربتك وتحليل حركة المرور. 
-                    <a href="/privacy" className="text-indigo-600 dark:text-indigo-400 hover:underline ml-1">
+                    <a href="/privacy" className="text-indigo-600 dark:text-indigo-400 hover:underline ms-1">
                       سياسة الخصوصية
                     </a>
                   </>
                 ) : (
                   <>
                     We use cookies to improve your experience and analyze traffic. 
-                    <a href="/privacy" className="text-indigo-600 dark:text-indigo-400 hover:underline ml-1">
+                    <a href="/privacy" className="text-indigo-600 dark:text-indigo-400 hover:underline ms-1">
                       Privacy Policy
                     </a>
                   </>

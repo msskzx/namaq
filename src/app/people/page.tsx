@@ -168,7 +168,7 @@ const PeoplePage = () => {
       ) : null}
 
       {(isInitialLoad && (!peoplePages || peoplePages.length === 0)) || isLoadingTitles ? (
-        <LoadingSpinner className="min-h-[60vh]" />
+        <LoadingSpinner fill />
       ) : (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6">
@@ -184,10 +184,9 @@ const PeoplePage = () => {
             {isValidating && !isInitialLoad && <LoadingSpinner />}
           </div>
 
-          {/* Show end of results message */}
-          {!isValidating && peoplePages && peoplePages.length > 0 && !peoplePages[peoplePages.length - 1]?.pagination.hasNextPage && (
+          {!isValidating && peoplePages && allPeople.length === 0 && (
             <p className="text-center text-gray-500 dark:text-gray-400 mt-4">
-              {translations[language]?.noMoreResults || 'No more results'}
+              {translations[language]?.noResults || 'No results found'}
             </p>
           )}
         </>

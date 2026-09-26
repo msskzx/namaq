@@ -30,9 +30,9 @@ function PersonDetailPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-black" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+      <div className="min-h-screen bg-white dark:bg-black" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <div className="container mx-auto px-4 py-8">
-          <ErrorMessage title={t.personLoadError} description={String(error)} />
+          <ErrorMessage title={t.personLoadError} />
         </div>
       </div>
     );
@@ -40,16 +40,16 @@ function PersonDetailPage() {
 
   if (isLoading || !person) {
     return (
-      <div className="min-h-screen bg-black" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-        <div className="container mx-auto flex min-h-screen items-center justify-center px-4 py-8">
-          <LoadingSpinner />
+      <div className="min-h-screen bg-white dark:bg-black" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+        <div className="container mx-auto px-4 py-8">
+          <LoadingSpinner fill />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-black" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-white dark:bg-black" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col items-center justify-center mb-4 gap-4">
           {person.picture && (
@@ -70,17 +70,17 @@ function PersonDetailPage() {
 
         <div className="flex flex-col gap-6 mt-10">
           {person.fullName && (
-            <div className="bg-black border border-white/10 rounded-lg p-4">
+            <div className="bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4">
               <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
-                <FontAwesomeIcon icon={faSignature} className="w-7 h-7 text-amber-500 ml-2" />
+                <FontAwesomeIcon icon={faSignature} className="w-7 h-7 text-amber-500 me-2" />
                 {t.fullName}</h2>
               <p className="text-gray-800 dark:text-gray-200 text-lg">{person.fullName}</p>
             </div>
           )}
           {person.kunya && (
-            <div className="bg-black border border-white/10 rounded-lg p-4">
+            <div className="bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4">
               <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
-                <FontAwesomeIcon icon={faSignature} className="w-7 h-7 text-amber-500 ml-2" />
+                <FontAwesomeIcon icon={faSignature} className="w-7 h-7 text-amber-500 me-2" />
                 {t.kunya}</h2>
               <p className="text-gray-800 dark:text-gray-200 text-lg">{person.kunya}</p>
             </div>
@@ -88,26 +88,26 @@ function PersonDetailPage() {
           {/* A حلف is a name here, not a relationship -- see README. It sits
               with the kunya for that reason. */}
           {person.tribalAffiliation && (
-            <div className="bg-black border border-white/10 rounded-lg p-4">
+            <div className="bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4">
               <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
-                <FontAwesomeIcon icon={faPeopleGroup} className="w-7 h-7 text-amber-500 ml-2" />
+                <FontAwesomeIcon icon={faPeopleGroup} className="w-7 h-7 text-amber-500 me-2" />
                 {t.tribalAffiliation}</h2>
               <p className="text-gray-800 dark:text-gray-200 text-lg">{person.tribalAffiliation}</p>
             </div>
           )}
           {person.appearance && (
-            <div className="bg-black border border-white/10 rounded-lg p-4">
+            <div className="bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4">
               <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
-                <FontAwesomeIcon icon={faUser} className="w-7 h-7 text-amber-500 ml-2" />
+                <FontAwesomeIcon icon={faUser} className="w-7 h-7 text-amber-500 me-2" />
                 {t.appearance}</h2>
               <p className="text-gray-800 dark:text-gray-200 text-lg">{person.appearance}</p>
             </div>
           )}
 
           {person.virtues && (
-            <div className="bg-black border border-white/10 rounded-lg p-4">
+            <div className="bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4">
               <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
-                <FontAwesomeIcon icon={faSeedling} className="w-7 h-7 text-amber-500 ml-2" />
+                <FontAwesomeIcon icon={faSeedling} className="w-7 h-7 text-amber-500 me-2" />
                 {t.virtues}</h2>
               <p className="text-gray-800 dark:text-gray-200 text-lg">{person.virtues}</p>
             </div>
@@ -115,9 +115,9 @@ function PersonDetailPage() {
 
           <Timeline events={person.events || []} participations={person.participations || []} death={person} />
 
-          <div className="bg-black border border-white/10 rounded-lg p-4">
+          <div className="bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4">
             <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
-              <FontAwesomeIcon icon={faHexagonNodes} className="w-7 h-7 text-amber-500 ml-2" />
+              <FontAwesomeIcon icon={faHexagonNodes} className="w-7 h-7 text-amber-500 me-2" />
               {t.relations}
             </h2>
             <GraphCanvas targetSlug={slug} />

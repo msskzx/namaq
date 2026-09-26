@@ -180,6 +180,18 @@ The next work should protect and deepen the main graph-and-search experience bef
 6. **Add data and product quality checks.** Test duplicate prevention, broken slug links, invalid relationship types, empty source fields, graph API responses, search results, and the node-to-profile navigation journey. Add a CI build and test workflow before broadening the dataset.
 7. **Curate a small, excellent core dataset first.** Prioritise the Prophet Muhammad ﷺ, the Companions most relevant to the initial learning journeys, their well-sourced relationships, and a concise set of major events and battles. Expand breadth only after those paths are accurate and pleasant to explore.
 
+## License
+
+The code is released under the [MIT license](LICENSE). That covers this
+repository's files, including the structured data under `data/`.
+
+The source texts are separate. Entries are taken from *Siyar A'lam al-Nubala'*
+by al-Dhahabi, read from published digital editions and a scanned printed
+edition (see the References section on the About page). The MIT license does not
+grant rights in an editor's or publisher's own work on those editions, such as
+footnotes, typography or scans. Check the terms of an edition before
+republishing its pages.
+
 ## Useful commands
 
 | Command | Purpose |

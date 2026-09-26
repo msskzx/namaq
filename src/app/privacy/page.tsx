@@ -10,9 +10,9 @@ export default function PrivacyPage() {
   const { language } = useLanguage();
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950">
-      <div className="container mx-auto px-4 py-8 bg-white dark:bg-gray-950">
-        <div className="mx-auto bg-white dark:bg-gray-950">
+    <div className="min-h-screen bg-white dark:bg-black">
+      <div className="container mx-auto px-4 py-8 bg-white dark:bg-black">
+        <div className="mx-auto bg-white dark:bg-black">
           <div className={`rounded-lg shadow-lg p-8 ${language === 'ar' ? 'text-right' : 'text-left'}`} dir={language === 'ar' ? 'rtl' : 'ltr'}>
             <h1 className="text-3xl font-bold text-amber-400 mb-6">
               {language === 'ar' ? 'سياسة الخصوصية' : 'Privacy Policy'}
@@ -118,8 +118,8 @@ export default function PrivacyPage() {
                 </h2>
                 <p>
                   {language === 'ar'
-                    ? 'إذا كان لديك أي أسئلة حول سياسة الخصوصية هذه، يرجى الاتصال بنا على privacy@namaq.com'
-                    : 'If you have any questions about this privacy policy, please contact us at privacy@namaq.com'
+                    ? 'إذا كان لديك أي أسئلة حول سياسة الخصوصية هذه، يرجى الاتصال بنا على msskzx@gmail.com'
+                    : 'If you have any questions about this privacy policy, please contact us at msskzx@gmail.com'
                   }
                 </p>
               </section>

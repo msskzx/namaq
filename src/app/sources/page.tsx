@@ -4,8 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookOpen, faBookmark } from '@fortawesome/free-solid-svg-icons';
-import Button from '@/components/common/Button';
+import { faBookOpen } from '@fortawesome/free-solid-svg-icons';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { useLanguage } from '@/components/language/LanguageContext';
@@ -27,17 +26,12 @@ export default function SourcesPage() {
   const { data, error, isLoading } = useSWR<ShelfResponse>('/api/sources', fetcher);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950">
+    <div className="min-h-screen bg-white dark:bg-black">
       <div className="container mx-auto px-4 py-8" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <h1 className="text-4xl mb-2 text-gray-900 dark:text-gray-100">
           <FontAwesomeIcon icon={faBookOpen} className="w-8 h-8 text-amber-500 mx-2" />
           {language === 'ar' ? 'المصادر' : 'Source material'}
         </h1>
-
-        <Button href="/references" variant="outline" size="sm" className="mb-6">
-          <FontAwesomeIcon icon={faBookmark} />
-          {language === 'ar' ? 'المراجع' : 'References'}
-        </Button>
 
         {error && (
           <ErrorMessage
@@ -46,7 +40,7 @@ export default function SourcesPage() {
         )}
 
         {isLoading || !data ? (
-          <LoadingSpinner className="min-h-[60vh]" />
+          <LoadingSpinner fill />
         ) : data.sources.length === 0 ? (
           <p className="text-gray-600 dark:text-gray-400">
             {language === 'ar' ? 'لا توجد مصادر بعد.' : 'No sources yet.'}
@@ -82,6 +76,7 @@ export default function SourcesPage() {
             ))}
           </ul>
         )}
+
       </div>
     </div>
   );

@@ -59,7 +59,7 @@ export default function SourcePage({ params }: { params: Promise<{ slug: string 
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950">
+    <div className="min-h-screen bg-white dark:bg-black">
       <div className="container mx-auto px-4 py-8" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <Link
           href="/sources"
@@ -76,7 +76,7 @@ export default function SourcePage({ params }: { params: Promise<{ slug: string 
         )}
 
         {isLoading || !data ? (
-          <LoadingSpinner />
+          <LoadingSpinner fill />
         ) : !source ? (
           <ErrorMessage
             title={language === 'ar' ? 'لا يوجد مصدر بهذا الاسم' : 'No source by that name'}
@@ -145,7 +145,7 @@ export default function SourcePage({ params }: { params: Promise<{ slug: string 
                 />
               </>
             ) : !contents ? (
-              <LoadingSpinner />
+              <LoadingSpinner fill />
             ) : (
               <section>
                 <h2 className="mb-4 text-3xl text-gray-900 dark:text-gray-200">

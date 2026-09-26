@@ -142,7 +142,7 @@ export default function GraphSearch() {
       <div className="flex flex-col sm:flex-row w-full sm:flex-1 gap-3 sm:gap-2">
         <div className="relative w-full">
           <div
-            className={`relative min-h-[2.5rem] flex flex-wrap items-center gap-2 p-1.5 border border-amber-400 rounded bg-gray-50 dark:bg-gray-950 ${showSuggestions ? 'ring-2 ring-amber-200 dark:ring-amber-600' : ''}`}
+            className={`relative min-h-[2.5rem] flex flex-wrap items-center gap-2 p-1.5 border border-amber-400 rounded bg-gray-50 dark:bg-black ${showSuggestions ? 'ring-2 ring-amber-200 dark:ring-amber-600' : ''}`}
             onClick={() => inputRef.current?.focus()}
           >
             {/* Search Input */}

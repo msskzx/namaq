@@ -15,7 +15,7 @@ export function AyahCard({ ayah }: AyahCardProps) {
   const t = translations[language];
 
   return (
-    <div className="bg-black border border-white/10 rounded-lg p-4 mb-4">
+    <div className="bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4 mb-4">
       <div className="flex items-start gap-4">
         <div className="flex-shrink-0">
           <div className="w-12 h-12 rounded-full bg-amber-400 text-gray-950 flex items-center justify-center font-bold">
@@ -62,7 +62,7 @@ export function AyatGroup({ ayat, pageSize = 5 }: AyatGroupProps) {
   const shown = ayat.slice(first, first + pageSize);
 
   return (
-    <div className="bg-black border border-white/10 rounded-lg p-4">
+    <div className="bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4">
       <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
         {t.quranicVersesAboutPeople}
       </h2>

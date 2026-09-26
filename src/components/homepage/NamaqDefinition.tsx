@@ -8,11 +8,11 @@ export default function NamaqDefinition() {
   const { language } = useLanguage();
   const t = translations[language];
   return (
-    <div className="bg-white dark:bg-gray-950 rounded-2xl shadow-lg mb-12">
+    <div className="bg-white dark:bg-black rounded-2xl shadow-lg mb-12">
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-8">
 
         <div className="col-span-1">
-          <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-lg border-l-4 border-rose-800 p-6 h-full flex flex-col">
+          <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-lg border-s-4 border-rose-800 p-6 h-full flex flex-col">
             <h4 className="font-arabicDisplay text-amber-400 text-xl md:text-2xl font-bold mb-3 text-center" dir="rtl">
               {t.verbNamaq.title}
             </h4>
@@ -34,7 +34,7 @@ export default function NamaqDefinition() {
         </div>
 
         <div className="col-span-1">
-          <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-lg border-l-4 border-rose-800 p-6 h-full flex flex-col">
+          <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-lg border-s-4 border-rose-800 p-6 h-full flex flex-col">
             <h4 className="font-arabicDisplay text-amber-400 text-xl md:text-2xl font-bold mb-3 text-center" dir="rtl">
               {t.nounNamaq.title}
             </h4>

@@ -243,12 +243,12 @@ export default function SourceAccountReader({
     >
       {(
         <div ref={section} className={`shrink-0 scroll-mt-[88px] overflow-hidden transition-[max-height,opacity] duration-200 ${fullscreen && headerHidden ? 'max-h-0 opacity-0' : 'max-h-[40rem] opacity-100'} ${fullscreen ? '' : 'mb-3 rounded-lg border border-amber-400'}`}>
-        <header className="relative z-10 flex shrink-0 items-center gap-2 border-b border-amber-400 bg-gray-50 px-3 py-2 dark:bg-gray-950">
+        <header className="relative z-10 flex shrink-0 items-center gap-2 border-b border-amber-400 bg-gray-50 px-3 py-2 dark:bg-black">
           {fullscreen && (
           <div className="relative" ref={menuRef}>
             <Button size="icon" onClick={() => setMenuOpen((open) => !open)} aria-label={menuOpen ? (t ? 'إغلاق القائمة' : 'Close menu') : (t ? 'فتح القائمة' : 'Open menu')} aria-pressed={menuOpen}><FontAwesomeIcon icon={menuOpen ? faXmark : faBars} /></Button>
             {menuOpen && (
-              <div className="fixed inset-x-3 top-14 z-[70] max-h-[75dvh] overflow-y-auto rounded-lg border border-amber-400 bg-white p-3 shadow-xl dark:bg-gray-950 lg:inset-x-auto lg:start-3 lg:w-64">
+              <div className="fixed inset-x-3 top-14 z-[70] max-h-[75dvh] overflow-y-auto rounded-lg border border-amber-400 bg-white p-3 shadow-xl dark:bg-black lg:inset-x-auto lg:start-3 lg:w-64">
                 <ul className="flex flex-col gap-1">
                   {getAllNavLinks(language).map((link) => <li key={link.href}><Link href={link.href} onClick={() => setMenuOpen(false)} className="block rounded px-2 py-2 text-sm hover:bg-amber-50 dark:hover:bg-gray-800">{link.label}</Link></li>)}
                   <li><Link href="/about" onClick={() => setMenuOpen(false)} className="block rounded px-2 py-2 text-sm hover:bg-amber-50 dark:hover:bg-gray-800">{t ? 'عن الموقع' : 'About'}</Link></li>
@@ -280,12 +280,12 @@ export default function SourceAccountReader({
           {indexOpen && (
             <div className="grid gap-3 sm:grid-cols-2">
               <label className="flex flex-col gap-1 text-sm text-gray-700 dark:text-gray-200">{t ? selectorLabel.ar : selectorLabel.en}
-                <select className="rounded border border-amber-400 bg-white px-2 py-2 dark:bg-gray-950" value={account.id} onChange={(event) => setSelection(event.target.value, 1)}>
+                <select className="rounded border border-amber-400 bg-white px-2 py-2 dark:bg-black" value={account.id} onChange={(event) => setSelection(event.target.value, 1)}>
                   {accounts.map((option) => <option key={option.id} value={option.id}>{labelAccount(option)}</option>)}
                 </select>
               </label>
               <label className="flex flex-col gap-1 text-sm text-gray-700 dark:text-gray-200">{t ? 'الأبواب' : 'Sections'}
-                <select className="max-w-full rounded border border-amber-400 bg-white px-2 py-2 dark:bg-gray-950" dir="rtl" value={currentSectionIndex} onChange={(event) => {
+                <select className="max-w-full rounded border border-amber-400 bg-white px-2 py-2 dark:bg-black" dir="rtl" value={currentSectionIndex} onChange={(event) => {
                   const target = sections[Number(event.target.value)];
                   if (target) setSelection(account.id, target.sequence);
                 }}>

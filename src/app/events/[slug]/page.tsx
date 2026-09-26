@@ -22,10 +22,10 @@ function EventPage() {
   const { data: event, error, isLoading } = useSWR<EventAll>(slug ? `/api/events/${slug}` : null, fetcher);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-white dark:bg-black" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div className="container mx-auto px-4 py-8">
         {isLoading ? (
-          <LoadingSpinner className="min-h-[70vh]" />
+          <LoadingSpinner fill />
         ) : (
           <>
             <div className="flex items-center gap-4 mb-6">
@@ -33,16 +33,16 @@ function EventPage() {
                 <FontAwesomeIcon icon={faShieldHalved} className="text-amber-400 w-10 h-10" />
               </div>
               <h1 className="text-4xl font-bold text-amber-400">
-                {event ? (language === 'ar' ? event.name : event.nameTransliterated || event.name) : t.battles.title}
+                {event ? (language === 'ar' ? event.name : event.nameTransliterated || event.name) : t.events}
               </h1>
 
             </div>
             {error && (
-              <ErrorMessage title={t.battles.loadError} />
+              <ErrorMessage title={t.eventsLoadError} />
             )}
             {event && (
 
-              <div className="bg-white dark:bg-gray-950 p-6 font-geistmono">
+              <div className="bg-white dark:bg-black p-6 font-geistmono">
                 <div className="bg-gray-50 dark:bg-gray-900 mb-2 rounded-xl shadow-lg p-6">
                   <div className="flex flex-wrap gap-4 mb-6">
                     {/* Location */}

@@ -1,5 +1,6 @@
 'use client';
 
+import { useTheme } from 'next-themes';
 import React, { forwardRef, useImperativeHandle, useMemo, useRef } from 'react';
 import ForceGraph2D, { ForceGraphMethods, NodeObject, LinkObject } from 'react-force-graph-2d';
 import useSWR from 'swr';
@@ -109,6 +110,7 @@ const GraphSurface = forwardRef<Methods, GraphSurfaceProps>(function GraphSurfac
   ref
 ) {
   const { language } = useLanguage();
+  const isDark = useTheme().resolvedTheme === 'dark';
   const t = translations[language];
   // Graph structure only changes via pipeline scripts, never live user
   // action, so there's nothing to gain from the default revalidate-on-focus
@@ -150,7 +152,6 @@ const GraphSurface = forwardRef<Methods, GraphSurfaceProps>(function GraphSurfac
   if (error && !graphData) return <ErrorMessage title={t.graph.loadError} />;
   if (!graphData) return null;
 
-  const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
   const kindColor = (kind: string) => kindFillColor(kind, isDark);
   const textColor = isDark ? '#f3f4f6' : '#374151';
   const statuses = [...new Set(graphData.links.flatMap((link) => link.status ?? []))].filter((status) => status in PARTICIPATION_STATUS_COLOR);
@@ -164,7 +165,7 @@ const GraphSurface = forwardRef<Methods, GraphSurfaceProps>(function GraphSurfac
         graphData={graphData}
         nodeLabel="label"
         linkLabel={linkLabel ? (link) => linkLabel!(link as unknown as GraphLink) : undefined}
-        backgroundColor={background ?? '#000000'}
+        backgroundColor={background ?? (isDark ? '#000000' : '#ffffff')}
         linkColor={(link) => edgeColor(link as unknown as GraphLink)}
         linkWidth={1.5}
         linkDirectionalArrowLength={3.5}
@@ -199,7 +200,7 @@ const GraphSurface = forwardRef<Methods, GraphSurfaceProps>(function GraphSurfac
         }}
       />
       {statuses.length > 0 && (
-        <div className="absolute bottom-2 left-2 z-10 flex flex-wrap gap-2 rounded border border-white/10 bg-black/90 px-2 py-1 backdrop-blur">
+        <div className="absolute bottom-2 left-2 z-10 flex flex-wrap gap-2 rounded border border-gray-200 bg-white/90 px-2 dark:border-white/10 dark:bg-black/90 py-1 backdrop-blur">
           {statuses.map((status) => (
             <span key={status} className="flex items-center gap-1.5 text-xs text-gray-700 dark:text-gray-300">
               <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PARTICIPATION_STATUS_COLOR[status] }} />

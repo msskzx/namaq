@@ -26,6 +26,13 @@ const getLinkGroups = (language: 'en' | 'ar') => ({
       { href: '/sources', label: translations[language].sources },
     ]
   },
+  about: {
+    title: translations[language].appName,
+    links: [
+      { href: '/about', label: translations[language].about },
+      { href: '/privacy', label: language === 'ar' ? 'سياسة الخصوصية' : 'Privacy Policy' },
+    ]
+  },
 });
 
 function Footer() {
@@ -35,10 +42,10 @@ function Footer() {
   const linkGroups = getLinkGroups(currentLanguage as 'en' | 'ar');
 
   return (
-    <footer className="w-full bg-gray-50 dark:bg-gray-950 text-amber-600 dark:text-amber-400 border-t-2 border-amber-400">
+    <footer className="w-full bg-gray-50 dark:bg-black text-amber-600 dark:text-amber-400 border-t-2 border-amber-400">
       <div className="container mx-auto px-4 py-8">
-        {/* Main content with 3 columns */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+        {/* Main content with 4 columns */}
+        <div dir={isRTL ? 'rtl' : 'ltr'} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {Object.entries(linkGroups).map(([key, group]) => (
             <div key={key} className="space-y-3">
               <h3 className={`text-lg font-semibold mb-3 dark:text-amber-300 ${isRTL ? 'text-right' : 'text-left'}`}>
@@ -67,27 +74,8 @@ function Footer() {
             <div className="mb-4 md:mb-0">
               <div className={`${isRTL ? 'text-right' : 'text-left'}`}>
                 <div className="text-sm opacity-90 text-gray-700 dark:text-gray-200">
-                  &copy; {new Date().getFullYear()} {translations[currentLanguage as 'en' | 'ar'].appName}. {currentLanguage === 'ar' ? 'جميع الحقوق محفوظة' : 'All rights reserved'}.
+                  &copy; {new Date().getFullYear()} {translations[currentLanguage as 'en' | 'ar'].appName}
                 </div>
-              </div>
-            </div>
-
-            <div className="text-sm opacity-80">
-              <div className="mt-2 flex gap-4">
-                <a
-                  href="/about"
-                  className="text-amber-600 dark:text-amber-400 hover:text-amber-500 dark:hover:text-amber-300 transition-colors"
-                  dir={isRTL ? 'rtl' : 'ltr'}
-                >
-                  {translations[currentLanguage as 'en' | 'ar'].about}
-                </a>
-                <a
-                  href="/privacy"
-                  className="text-amber-600 dark:text-amber-400 hover:text-amber-500 dark:hover:text-amber-300 transition-colors"
-                  dir={isRTL ? 'rtl' : 'ltr'}
-                >
-                  {currentLanguage === 'ar' ? 'سياسة الخصوصية' : 'Privacy Policy'}
-                </a>
               </div>
             </div>
           </div>

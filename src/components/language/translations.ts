@@ -24,7 +24,7 @@ const translations = {
     eventsLoadError: 'Failed to load events.',
     peopleNotFound: 'No people found.',
     peopleLoadError: 'Failed to load people.',
-    noMoreResults: 'No more results to show',
+    noResults: 'No results found',
 
     // Charities
     category: 'Category',
@@ -49,7 +49,6 @@ const translations = {
 
 
     battleParticipantsGraph: 'Participants Graph',
-    notablePeople: 'Notable People',
     allGraph: 'Graph',
     sources: 'Source material',
 
@@ -122,6 +121,7 @@ const translations = {
     viewProfile: 'Profile',
     selectToSearch: 'Select to search',
     people: 'People',
+    peopleCount: (count: number) => (count === 1 ? '1 person' : `${count} people`),
     fullName: 'Full Name',
     kunya: 'Kunya',
     sex: 'Sex',
@@ -323,7 +323,7 @@ const translations = {
     eventsLoadError: 'فشل تحميل الأحداث.',
     peopleNotFound: 'لم يتم العثور على أشخاص',
     peopleLoadError: 'فشل تحميل قائمة الأشخاص',
-    noMoreResults: 'لا توجد نتائج إضافية',
+    noResults: 'لا توجد نتائج',
 
     // Charities
     category: 'الفئة',
@@ -349,7 +349,6 @@ const translations = {
     // Coming Soon Messages
 
     battleParticipantsGraph: 'شبكة المشاركين',
-    notablePeople: 'شخصيات بارزة',
     allGraph: 'الشبكة',
     sources: 'المصادر',
 
@@ -421,6 +420,11 @@ const translations = {
     viewProfile: 'الصفحة الشخصية',
     selectToSearch: 'اختر للبحث',
     people: 'الشخصيات',
+    peopleCount: (count: number) => {
+      if (count === 1) return 'شخص واحد';
+      if (count === 2) return 'شخصان';
+      return count >= 3 && count <= 10 ? `${count} أشخاص` : `${count} شخصًا`;
+    },
     fullName: 'الاسم الكامل',
     kunya: 'الكنية',
     sex: 'الجنس',

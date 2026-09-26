@@ -36,7 +36,7 @@ export default function StatsCard({ icon, value, suffix, label, desc, dir = 'ltr
   const animatedValue = useCountUp(value, 1200);
   const textAlign = dir === 'rtl' ? 'text-start' : 'text-end';
   return (
-    <div className={`flex flex-col bg-gray-50 dark:bg-gray-900 border-l-4 border-amber-400 rounded-2xl p-6 shadow-lg text-indigo-900 dark:text-indigo-100 min-h-[170px]`} dir={dir}>
+    <div className={`flex flex-col bg-gray-50 dark:bg-gray-900 border-s-4 border-amber-400 rounded-2xl p-6 shadow-lg text-indigo-900 dark:text-indigo-100 min-h-[170px]`} dir={dir}>
       <div className="flex flex-row items-center justify-between gap-4 mb-2">
         <div className="text-4xl text-amber-400">
           <FontAwesomeIcon icon={icon} />

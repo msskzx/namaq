@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import translations from '@/components/language/translations';
 
 interface TitleCardProps {
   title: {
@@ -7,6 +8,7 @@ interface TitleCardProps {
     name: string;
     nameTransliterated: string | null;
     slug: string;
+    peopleCount?: number;
   };
   language: string;
   url: string;
@@ -21,6 +23,9 @@ function TitleCard({ title, language, url }: TitleCardProps) {
             {language === 'ar' ? title.name : title.nameTransliterated || title.name}
           </h3>
         </div>
+        {title.peopleCount !== undefined && (
+          <p className="text-sm text-gray-600 dark:text-gray-400">{translations[language as 'en' | 'ar'].peopleCount(title.peopleCount)}</p>
+        )}
       </div>
     </Link>
   );
