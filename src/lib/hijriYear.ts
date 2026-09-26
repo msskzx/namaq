@@ -13,12 +13,12 @@ export function formatHijriYear(year: number, language: string): string {
 }
 
 /**
- * Orders a timeline, putting undated entries first. A plain `(a ?? 0) - (b ?? 0)`
- * did that only while every year was positive; with years before the hijra it
- * would drop an undated entry into the middle of them.
+ * Orders a timeline, putting undated entries last. A plain `(a ?? 0) - (b ?? 0)`
+ * put them first only while every year was positive; with years before the
+ * hijra it would drop an undated entry into the middle of them.
  */
 export function compareHijriYear(a: number | null | undefined, b: number | null | undefined): number {
-  if (a === null || a === undefined) return b === null || b === undefined ? 0 : -1;
-  if (b === null || b === undefined) return 1;
+  if (a === null || a === undefined) return b === null || b === undefined ? 0 : 1;
+  if (b === null || b === undefined) return -1;
   return a - b;
 }

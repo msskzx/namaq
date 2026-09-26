@@ -104,6 +104,7 @@ export interface UseExplorationGraphResult {
   data: GraphData | undefined;
   edges: StoredEdge[] | undefined;
   isLoading: boolean;
+  isFetching: boolean;
   error: unknown;
   visibleCount: number | undefined;
   caps: ExplorationCap[] | undefined;
@@ -130,6 +131,7 @@ export function useExplorationGraph({ enabled, baseUrl, kindParams, input, selec
     data,
     edges: raw?.edges,
     isLoading,
+    isFetching: isValidating,
     error,
     visibleCount: raw?.exploration.visible.size,
     // Withheld while a fetch is in flight: with keepPreviousData the previous

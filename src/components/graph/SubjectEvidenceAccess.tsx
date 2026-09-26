@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import useSWR from 'swr';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookOpen, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import Badge from '@/components/common/Badge';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
@@ -14,9 +14,6 @@ interface SubjectEvidenceAccessProps {
   kind: string;
   slug: string;
   hasProfile: boolean;
-  profileHref: string;
-  /** Claim count from the profile preview; unknown until that fetch lands. */
-  evidenceCount?: number;
 }
 
 interface ReferencesResponse {
@@ -27,18 +24,11 @@ interface ReferencesResponse {
 // behind the name it is displaying rather than everything on record.
 const identityFields = new Set(['name', 'fullName', 'titles']);
 
-/**
- * Evidence access for the selected subject, in the three cases the plan
- * distinguishes: a profile-backed subject links to its profile's references, a
- * subject with no profile gets a compact list here, and a subject with no
- * evidence is told so — see docs/data-quality-references.md.
- */
+// docs/data-quality-references.md, on what the graph pane shows.
 export default function SubjectEvidenceAccess({
   kind,
   slug,
   hasProfile,
-  profileHref,
-  evidenceCount,
 }: SubjectEvidenceAccessProps) {
   const { language } = useLanguage();
   const [expanded, setExpanded] = useState(false);
@@ -50,21 +40,7 @@ export default function SubjectEvidenceAccess({
 
   const noEvidence = language === 'ar' ? 'لم تُضف المراجع بعد' : 'References not yet added';
 
-  if (hasProfile) {
-    if (evidenceCount === 0) {
-      return <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">{noEvidence}</p>;
-    }
-    if (evidenceCount === undefined) return null;
-
-    return (
-      <div className="mt-2">
-        <Button href={profileHref} variant="outline" size="sm">
-          <FontAwesomeIcon icon={faBookOpen} />
-          {language === 'ar' ? 'المراجع في الصفحة الشخصية' : 'References on the profile'}
-        </Button>
-      </div>
-    );
-  }
+  if (hasProfile) return null;
 
   const claims = (data?.claims ?? []).filter((claim) => !claim.field || identityFields.has(claim.field));
 

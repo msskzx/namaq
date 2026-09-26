@@ -58,8 +58,8 @@ Citations must support individual facts, relationships, and biography paragraphs
 with a collected reference list for each subject. Preserve exact extraction URLs
 and available locators. Profiles contain the complete evidence display: citations beside facts, numbered
 paragraph footnotes, and a collected reference list. For subjects with profiles,
-the graph pane does not list citations; it may direct readers to the profile's
-references only when evidence exists. Subjects without profiles show a compact,
+the graph pane shows no evidence control at all, neither a button, a badge nor
+a note; the profile holds the evidence. Subjects without profiles show a compact,
 expandable References section for name, full name and titles where applicable,
 including review status. Subjects without evidence show References not yet added.
 No book reader is added to the graph pane.
@@ -442,6 +442,11 @@ with the printed page number retained. Validate these choices with the pilot.
 Verification prerequisites: establish the full pilot entry boundary, check scan
 agreement where uncertain, and inspect database evidence before migration. These
 are agent research/integration work, not questions for the user to look up.
+
+Deferred: a subject without a profile could link to the references on the
+profile of a person whose claims mention it, such as a father's entry that
+names his son, when that person has a profile. Not built; the graph pane shows
+only the compact list above until it is.
 
 Deferred: separate data repository, translations of complete accounts, broader
 historical expansion beyond this enrichment pass, and a separate editorial app.

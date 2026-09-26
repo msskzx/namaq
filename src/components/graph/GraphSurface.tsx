@@ -138,7 +138,13 @@ const GraphSurface = forwardRef<Methods, GraphSurfaceProps>(function GraphSurfac
   const localRef = useRef<Methods | undefined>(undefined);
   useImperativeHandle(ref, () => localRef.current as Methods);
 
-  if (isLoading) return <LoadingSpinner />;
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center" style={{ width: width ?? '100%', height: height ?? '100%' }}>
+        <LoadingSpinner />
+      </div>
+    );
+  }
   // A failed refetch keeps the graph the reader already has; the caller shows
   // the error and its retry beside it.
   if (error && !graphData) return <ErrorMessage title={t.graph.loadError} />;

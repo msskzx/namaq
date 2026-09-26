@@ -168,7 +168,7 @@ const PeoplePage = () => {
       ) : null}
 
       {(isInitialLoad && (!peoplePages || peoplePages.length === 0)) || isLoadingTitles ? (
-        <LoadingSpinner />
+        <LoadingSpinner className="min-h-[60vh]" />
       ) : (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6">

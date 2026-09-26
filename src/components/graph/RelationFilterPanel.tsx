@@ -1,4 +1,6 @@
-import { faBullseye, faCircleNodes } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBullseye, faCircleNodes, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
+import Button from '@/components/common/Button';
 import ScopeToggle from './ScopeToggle';
 import SlideSwitch from './SlideSwitch';
 import { governingRelationType, relationColor, relationGroup, sortRelationTypes, RelationGroup } from '@/lib/relationship/categories';
@@ -26,6 +28,7 @@ interface RelationFilterPanelProps {
   scope?: ControlScope;
   onScopeChange?: (scope: ControlScope) => void;
   disabled?: boolean;
+  onReset?: () => void;
   // Node kinds share this pane but not its scope: they are a server-side
   // whitelist for the whole view, so they sit above the scope toggle.
   kindFilters?: {
@@ -47,7 +50,7 @@ interface RelationFilterPanelProps {
   };
 }
 
-export default function RelationFilterPanel({ types, includedRelations, onToggle, onToggleAll, onToggleGroup, showCompanionTitle, onToggleCompanionTitle, relationLabel, language, scope, onScopeChange, disabled = false, statusFilters, kindFilters }: RelationFilterPanelProps) {
+export default function RelationFilterPanel({ types, includedRelations, onToggle, onToggleAll, onToggleGroup, showCompanionTitle, onToggleCompanionTitle, relationLabel, language, scope, onScopeChange, disabled = false, onReset, statusFilters, kindFilters }: RelationFilterPanelProps) {
   const g: GraphStrings = translations[language].graph;
   const dir = language === 'ar' ? 'rtl' : 'ltr';
   const groups = GROUP_ORDER.map(group => ({ group, types: sortRelationTypes(types.filter(type => relationGroup(type) === group)) })).filter(({ types }) => types.length > 0);
@@ -60,7 +63,14 @@ export default function RelationFilterPanel({ types, includedRelations, onToggle
 
   return (
     <fieldset dir={dir} className="mb-4 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
-      <legend className="px-1 text-sm font-medium text-gray-800 dark:text-gray-100">{g.filters}</legend>
+      {onReset && (
+        <div className="mb-3 flex justify-end">
+          <Button size="sm" onClick={onReset}>
+            <FontAwesomeIcon icon={faRotateLeft} />
+            {g.resetGraphView}
+          </Button>
+        </div>
+      )}
       {kindFilters && kindFilters.kinds.length > 1 && (
         <div className="mb-3 border-b border-gray-100 pb-3 dark:border-gray-700">
           <p className="mb-2 text-sm font-medium text-gray-800 dark:text-gray-100">{g.nodeKinds}</p>

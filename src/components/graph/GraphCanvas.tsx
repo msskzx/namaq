@@ -23,6 +23,7 @@ import Badge from '@/components/common/Badge';
 import SubjectEvidenceAccess from '@/components/graph/SubjectEvidenceAccess';
 import GraphSurface, { kindFillColor } from './GraphSurface';
 import ErrorMessage from '@/components/common/ErrorMessage';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { useLanguage } from '@/components/language/LanguageContext';
 import translations from '@/components/language/translations';
 import LanguageSwitcher from '@/components/language/LanguageSwitcher';
@@ -151,7 +152,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
   // showing the graph label, per the "Learning information in the panel"
   // decision in docs/graph-exploration-plan.md.
   const isSelectedPerson = (selectedNode?.type ?? 'person') === 'person';
-  const { data: selectedPreview, error: selectedPreviewError } = useSWR<{ fullName: string | null; titles: { name: string; slug: string }[]; evidenceCount?: number }>(
+  const { data: selectedPreview, error: selectedPreviewError } = useSWR<{ fullName: string | null; titles: { name: string; slug: string }[] }>(
     isSelectedPerson && selectedNode ? `/api/people/${selectedNode.slug}/preview` : null,
     fetcher
   );
@@ -639,7 +640,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
     fgRef.current.centerAt(target.x, target.y, 500);
   }, [isFullscreen, graphData, selectedSlug, viewportSize]);
 
-  if (graphLoading && !graphData) return <div className="flex items-center justify-center min-h-screen"><div className="text-lg">Loading graph...</div></div>;
+  if (graphLoading && !graphData) return <div className="flex items-center justify-center min-h-screen"><LoadingSpinner size="lg" /></div>;
   // A failed fetch leaves the exploration on screen and offers a retry beside
   // it; only a failure with nothing to show takes over the page.
   if (hasGraphError && !graphData) return <div className="flex items-center justify-center min-h-screen"><ErrorMessage title={t.graph.loadError} description={String(graphError)} /></div>;
@@ -673,9 +674,23 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
     updateParams({ selected: null, focus: null, filter: null, kind: [], showCompanionTitle: null, person: null, ancestorsOf: [], descendantsOf: [] });
   };
 
+  const updatingNotice = exploration.isFetching && (
+    <div role="status" className="mt-3 flex items-center gap-2 text-xs text-gray-300">
+      <LoadingSpinner size="sm" />
+    </div>
+  );
+
   const explorationControls = (
-    <aside dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4 dark:border-amber-700 dark:bg-gray-800">
-      <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode ? (selectedPreview?.fullName ?? selectedNode.label) : t.graph.globalRelationships}</h2>
+    <aside dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-amber-700 bg-black p-4">
+      {selectedNode && selectedPersonHasProfile && (
+        <div className="mb-3">
+          <Button href={profilePath(selectedNode.type, selectedNode.slug)}>
+            <FontAwesomeIcon icon={faUser} />
+            {t.graph.viewProfile}
+          </Button>
+        </div>
+      )}
+      <h2 className="text-lg font-semibold text-gray-100">{selectedNode ? (selectedPreview?.fullName ?? selectedNode.label) : t.graph.globalRelationships}</h2>
       {isSelectedPerson && selectedPreview && selectedPreview.titles.length > 0 && (
         <div className="mt-1 flex flex-wrap gap-2">
           {selectedPreview.titles.map(title => (
@@ -690,21 +705,12 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
           kind={(selectedNode.type ?? 'person') as string}
           slug={selectedNode.slug}
           hasProfile={selectedPersonHasProfile}
-          profileHref={profilePath(selectedNode.type, selectedNode.slug)}
-          evidenceCount={selectedPreview?.evidenceCount}
         />
       )}
-      {!selectedNode && <p className="text-sm text-gray-600 dark:text-gray-300">{t.graph.globalRelationshipsHint}</p>}
+      {!selectedNode && <p className="text-sm text-gray-300">{t.graph.globalRelationshipsHint}</p>}
       {/* Four groups, divided: where the subject leads, what it reveals, what
           it removes, and what acts on the whole exploration. */}
-      {selectedNode && selectedPersonHasProfile && (
-        <div className={GROUP_ROW}>
-          <Button href={profilePath(selectedNode.type, selectedNode.slug)}>
-            <FontAwesomeIcon icon={faUser} />
-            {t.graph.viewProfile}
-          </Button>
-        </div>
-      )}
+      {updatingNotice}
       <ExpansionControls
         isPerson={Boolean(selectedNode && (selectedNode.type ?? 'person') === 'person')}
         hasEligibleDirectRelations={hasEligibleDirectRelations}
@@ -768,13 +774,6 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
 
   const filterPanel = (
     <>
-      <div className="mb-4 flex justify-end">
-        <Button onClick={resetGraphView}>
-          <FontAwesomeIcon icon={faRotateLeft} />
-          {t.graph.resetGraphView}
-        </Button>
-      </div>
-
       <RelationFilterPanel
         types={relationTypesPresent}
         includedRelations={scope === 'selected' ? localRelations : includedRelations}
@@ -788,6 +787,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
         scope={scope}
         onScopeChange={setScope}
         disabled={scope === 'selected' && !selectedSubjectId}
+        onReset={resetGraphView}
         kindFilters={{ kinds: kindsUniverse, included: includedKinds, label: kindLabel, color: kindColor, onToggle: toggleKind }}
         statusFilters={isFullscreen && includedKinds.has('battle') ? {
           choices: PARTICIPATION_STATUS_CHOICES,
@@ -906,8 +906,6 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
           </Button>
         </div>
         {showNodesPanel && <div className="mt-3 rounded-lg border border-white/10 p-3">
-          <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100 capitalize">{t.graph.nodesInView}</h2>
-          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{t.graph.selectEntryHint}</p>
           <ul className="mt-2 space-y-1">
             {rankedViewNodes?.map(node => (
               <li key={node.id}>
