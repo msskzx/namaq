@@ -8,10 +8,11 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   descriptions. It lives in `.claude/skills/unslop/`, so it is in the repo and
   needs no install, and it applies to every change rather than to documentation
   work alone.
-- Code comments point at the docs, they do not restate them. Name the ADR or
-  the document that holds the rule and say what this code does about it. A
-  comment that copies a paragraph out of `docs/` goes stale the moment the
-  document changes, and nothing catches it.
+- Code carries no comments except a reference to the document that holds the
+  rule: name the ADR or the file under `docs/` and stop there. Explanation
+  belongs in the document, since a comment that explains goes stale the moment
+  the document changes, and nothing catches it. When you touch a comment that
+  explains, replace it with the reference, or delete it if the code says enough.
 - Invoke the `ponytail` skill before writing or reviewing code: reuse what the
   codebase already has, reach for stdlib and native platform features before a
   dependency, and stop at the shortest diff that works. It is not vendored

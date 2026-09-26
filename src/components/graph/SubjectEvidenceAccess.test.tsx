@@ -37,7 +37,6 @@ function renderAccess(props: Partial<React.ComponentProps<typeof SubjectEvidence
         kind="person"
         slug="abu-ubaydah-ibn-al-jarrah"
         hasProfile
-        evidenceCount={25}
         {...props}
       />
     </SWRConfig>,
@@ -52,7 +51,7 @@ describe('SubjectEvidenceAccess', () => {
 
   afterEach(cleanup);
 
-  it('shows nothing for a profile-backed subject that has evidence, and lists no citations', () => {
+  it('shows nothing for a profile-backed subject and lists no citations', () => {
     renderAccess();
 
     expect(screen.queryByText('References on the profile')).toBeNull();
@@ -63,12 +62,6 @@ describe('SubjectEvidenceAccess', () => {
     renderAccess();
 
     expect(fetchJson).not.toHaveBeenCalled();
-  });
-
-  it('says so when a profile-backed subject has no evidence', () => {
-    renderAccess({ evidenceCount: 0 });
-
-    expect(screen.getByText('References not yet added')).toBeTruthy();
   });
 
   it('lists compact references for a subject with no profile', async () => {

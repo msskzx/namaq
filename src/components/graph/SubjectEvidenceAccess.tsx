@@ -14,8 +14,6 @@ interface SubjectEvidenceAccessProps {
   kind: string;
   slug: string;
   hasProfile: boolean;
-  /** Claim count from the profile preview; unknown until that fetch lands. */
-  evidenceCount?: number;
 }
 
 interface ReferencesResponse {
@@ -26,17 +24,11 @@ interface ReferencesResponse {
 // behind the name it is displaying rather than everything on record.
 const identityFields = new Set(['name', 'fullName', 'titles']);
 
-/**
- * Evidence access for the selected subject, in the three cases the plan
- * distinguishes: a profile-backed subject shows nothing here, a
- * subject with no profile gets a compact list here, and a subject with no
- * evidence is told so — see docs/data-quality-references.md.
- */
+// docs/data-quality-references.md, on what the graph pane shows.
 export default function SubjectEvidenceAccess({
   kind,
   slug,
   hasProfile,
-  evidenceCount,
 }: SubjectEvidenceAccessProps) {
   const { language } = useLanguage();
   const [expanded, setExpanded] = useState(false);
@@ -48,12 +40,7 @@ export default function SubjectEvidenceAccess({
 
   const noEvidence = language === 'ar' ? 'لم تُضف المراجع بعد' : 'References not yet added';
 
-  if (hasProfile) {
-    if (evidenceCount === 0) {
-      return <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">{noEvidence}</p>;
-    }
-    return null;
-  }
+  if (hasProfile) return null;
 
   const claims = (data?.claims ?? []).filter((claim) => !claim.field || identityFields.has(claim.field));
 

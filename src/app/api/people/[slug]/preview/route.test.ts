@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { findUnique, count } = vi.hoisted(() => ({ findUnique: vi.fn(), count: vi.fn() }));
+const { findUnique } = vi.hoisted(() => ({ findUnique: vi.fn() }));
 vi.mock('@/lib/prisma', () => ({
-  prisma: { person: { findUnique }, historicalClaim: { count } },
+  prisma: { person: { findUnique } },
 }));
 
 import { GET } from './route';
@@ -17,8 +17,6 @@ function request(slug: string) {
 describe('GET /api/people/[slug]/preview', () => {
   beforeEach(() => {
     findUnique.mockReset();
-    count.mockReset();
-    count.mockResolvedValue(0);
   });
 
   it('returns only the full name and titles', async () => {
@@ -34,20 +32,7 @@ describe('GET /api/people/[slug]/preview', () => {
       select: { fullName: true, titles: { select: { name: true, slug: true } } },
     });
     expect(response.status).toBe(200);
-    expect(body).toEqual({ ...preview, hasProfile: true, evidenceCount: 0 });
-  });
-
-  it('tells the pane how much evidence the profile has', async () => {
-    findUnique.mockResolvedValue({ fullName: 'عامر بن عبد الله', titles: [] });
-    count.mockResolvedValue(25);
-
-    const { _request, params } = request('abu-ubaydah-ibn-al-jarrah');
-    const body = await (await GET(_request, { params })).json();
-
-    expect(body.evidenceCount).toBe(25);
-    expect(count).toHaveBeenCalledWith({
-      where: { subjectKind: 'PERSON', subjectSlug: 'abu-ubaydah-ibn-al-jarrah' },
-    });
+    expect(body).toEqual({ ...preview, hasProfile: true });
   });
 
   it('returns 404 when no person matches the slug', async () => {

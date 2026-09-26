@@ -152,7 +152,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
   // showing the graph label, per the "Learning information in the panel"
   // decision in docs/graph-exploration-plan.md.
   const isSelectedPerson = (selectedNode?.type ?? 'person') === 'person';
-  const { data: selectedPreview, error: selectedPreviewError } = useSWR<{ fullName: string | null; titles: { name: string; slug: string }[]; evidenceCount?: number }>(
+  const { data: selectedPreview, error: selectedPreviewError } = useSWR<{ fullName: string | null; titles: { name: string; slug: string }[] }>(
     isSelectedPerson && selectedNode ? `/api/people/${selectedNode.slug}/preview` : null,
     fetcher
   );
@@ -699,7 +699,6 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
           kind={(selectedNode.type ?? 'person') as string}
           slug={selectedNode.slug}
           hasProfile={selectedPersonHasProfile}
-          evidenceCount={selectedPreview?.evidenceCount}
         />
       )}
       {!selectedNode && <p className="text-sm text-gray-600 dark:text-gray-300">{t.graph.globalRelationshipsHint}</p>}
