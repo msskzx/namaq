@@ -12,7 +12,7 @@ Vocabulary: [Engagement](../../CONTEXT.md). Related: [reader plan](reader-prefet
 4. A type filter offers four options: **Event**, **Battle**, **Ghazwah**, **Sariyyah**. "Event" is every `Event` row whatever its `type`; "Battle", "Ghazwah" and "Sariyyah" are `Battle` rows by `engagement`. Options are multi-select and combine as a union; none selected means everything.
 5. A search box matches Arabic name, transliterated name and location, using `normalizeSubjectSearch` (`src/lib/subjectSearch.ts`), which strips diacritics. Search and filter run in the browser over the loaded list.
 6. Filter and search live in the URL: `?type=ghazwah,sariyyah&q=...`, so a filtered view can be linked. Values: `event`, `battle`, `ghazwah`, `sariyyah`.
-7. `/api/events` returns events and battles together, each carrying a `kind` (`event`, `battle`, `ghazwah` or `sariyyah`). `/api/battles` stays; its only current consumer was the deleted list page (the detail page uses `/api/battles/[slug]`).
+7. `/api/timeline` returns events and battles together, each carrying a `kind` (`event`, `battle`, `ghazwah` or `sariyyah`). The `/api/battles` list route is deleted, since its only consumer was the deleted list page; the detail route `/api/battles/[slug]` stays.
 
 Excluded: any model or migration change, filtering by `EventType` (27 of 46 events are `OTHER`), a redirect from `/battles`, server-side search.
 
@@ -58,4 +58,4 @@ Blockers: none.
 
 Nonblocking assumptions: whether the `/api/events` response shape can change without breaking other callers (check when implementing, and add a separate combined path if it can't); the exact Arabic labels for the four filter options.
 
-Deferred: filtering events by `EventType`, deleting `/api/battles`.
+Deferred: filtering events by `EventType`.
