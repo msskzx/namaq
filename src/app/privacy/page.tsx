@@ -118,8 +118,8 @@ export default function PrivacyPage() {
                 </h2>
                 <p>
                   {language === 'ar'
-                    ? 'إذا كان لديك أي أسئلة حول سياسة الخصوصية هذه، يرجى الاتصال بنا على privacy@namaq.com'
-                    : 'If you have any questions about this privacy policy, please contact us at privacy@namaq.com'
+                    ? 'إذا كان لديك أي أسئلة حول سياسة الخصوصية هذه، يرجى الاتصال بنا على msskzx@gmail.com'
+                    : 'If you have any questions about this privacy policy, please contact us at msskzx@gmail.com'
                   }
                 </p>
               </section>
