@@ -74,7 +74,9 @@ function Footer() {
             <div className="mb-4 md:mb-0">
               <div className={`${isRTL ? 'text-right' : 'text-left'}`}>
                 <div className="text-sm opacity-90 text-gray-700 dark:text-gray-200">
-                  &copy; {new Date().getFullYear()} {translations[currentLanguage as 'en' | 'ar'].appName}. {currentLanguage === 'ar' ? 'جميع الحقوق محفوظة' : 'All rights reserved'}.
+                  &copy; {new Date().getFullYear()} {translations[currentLanguage as 'en' | 'ar'].appName}. {currentLanguage === 'ar' ? 'الشيفرة البرمجية مرخّصة برخصة' : 'The code is released under the'}{' '}
+                  <a className="underline" href="https://github.com/msskzx/namaq/blob/main/LICENSE" target="_blank" rel="noreferrer">MIT</a>
+                  {currentLanguage === 'ar' ? '.' : ' license.'}
                 </div>
               </div>
             </div>
