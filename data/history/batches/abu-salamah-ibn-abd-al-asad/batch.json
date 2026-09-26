@@ -272,6 +272,26 @@
   ],
   "claims": [
     {
+      "key": "abu-salamah-siyar8/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-salamah",
+      "assertion": "أبو سلمة بن عبد الأسد بن هلال، ابن عبد الله بن عمر بن مخزوم بن يقظة بن مرة بن كعب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "fullName",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "150-p2",
+          "volume": "1",
+          "pageReference": "150",
+          "extractionUrl": "https://shamela.ws/book/10906/1576",
+          "excerptArabic": "أَبُو سَلَمَةَ بنُ عَبْدِ الأَسَدِ بنِ هِلاَلِ ... ابْنِ عَبْدِ اللهِ بنِ عُمَرَ بنِ مَخْزُوْمِ بنِ يَقَظَةَ بنِ مُرَّةَ بنِ كَعْبٍ",
+          "accessedAt": "2026-09-24"
+        }
+      ]
+    },
+    {
       "key": "abu-salamah-siyar8/father",
       "subjectKind": "PERSON",
       "subjectSlug": "abu-salamah",
@@ -345,9 +365,9 @@
     }
   ],
   "approval": {
-    "revision": "a1b5484fb840696a",
-    "approvedAt": "2026-09-25",
+    "revision": "5337e15cf82b9bdd",
+    "approvedAt": "2026-09-26",
     "approvedBy": "msskzx",
-    "note": "Re-recorded for publication after the account was given volumeNumber 4: its printed pages continue straight on from where the last-read entry in سير أعلام النبلاء ج١ leaves off, but the entry was published without naming that volume, so the reader listed it under entries with no volume instead of the book's contents. No claim, citation or page text changed. Previously: Re-approved after renaming the account subjectSlug from abu-salamah-ibn-abd-al-asad to abu-salamah, matching the catalog module (data/catalog/people/abu-salamah.ts) the claims already cited under that slug. No claim content changed. All three claims are Not reviewed."
+    "note": "Re-recorded for publication after the catalog's fullName was restored from page 150 with tashkeel: one claim, abu-salamah-siyar8/full-name, was added and no page text changed. All four claims are Not reviewed."
   }
 }

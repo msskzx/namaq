@@ -27,14 +27,6 @@ export default function TitleHero() {
             </>
           )}
         </h1>
-
-        <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-3xl mx-auto">
-          {language === 'ar' ? (
-            'اكتشف الألقاب والكنى التي أُطلقت على الشخصيات الإسلامية البارزة عبر التاريخ، وتعرف على معانيها وأصولها.'
-          ) : (
-            'Explore the titles and nicknames given to prominent Islamic figures throughout history, and learn about their meanings and origins.'
-          )}
-        </p>
       </div>
     </div>
   );
