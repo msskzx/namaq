@@ -6,10 +6,9 @@ import useSWR from "swr";
 import { useLanguage } from "@/components/language/LanguageContext";
 import translations from "@/components/language/translations";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShieldHalved, faLocationDot, faCalendarDays, faMapLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { faShieldHalved, faLocationDot, faCalendarDays } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import PersonNameCard from '@/components/people/PersonNameCard';
-import BattleMap from '@/components/battles/BattleMap';
 import { formatHijriYear } from '@/lib/hijriYear';
 import BattleParticipantsGraph from '@/components/battles/BattleParticipantsGraph';
 import BattleCounts from '@/components/battles/BattleCounts';
@@ -70,26 +69,6 @@ export default function BattleDetailPage() {
                   </div>
                 )}
                 <BattleCounts battle={battle} />
-                {battle.latitude && battle.longitude && (
-                  <div className="mt-4 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
-                    <div className="p-4 bg-amber-50 dark:bg-gray-800 flex items-center gap-2">
-                      <FontAwesomeIcon icon={faMapLocationDot} className="text-amber-500" />
-                      <h3 className="font-semibold text-amber-800 dark:text-amber-400">
-                        {t.battleLocation}
-                      </h3>
-                    </div>
-                    <div className="h-[500px] w-full">
-                      <BattleMap
-                        battles={[battle]}
-                        defaultCenter={{
-                          lat: battle.latitude,
-                          lng: battle.longitude
-                        }}
-                        defaultZoom={12}
-                      />
-                    </div>
-                  </div>
-                )}
                 {battle.description && (
                   <div className="mt-6">
                     <p className="text-gray-800 dark:text-gray-200 text-2xl/8 text-justify ">{battle.description}</p>

@@ -90,7 +90,6 @@ const translations = {
     hadithComingSoon: 'Hadith content will be added soon',
 
     // Battle Map
-    battleLocation: 'Battle Location on Map',
     battleParticipantsGraph: 'Participants Graph',
 
     // Family Relations
@@ -492,7 +491,6 @@ const translations = {
     hadithComingSoon: 'سيتم إضافة محتوى الحديث قريباً',
 
     // Battle Map
-    battleLocation: 'موقع المعركة على الخريطة',
     battleParticipantsGraph: 'شبكة المشاركين',
 
     // family Relations

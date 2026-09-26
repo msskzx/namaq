@@ -1,9 +1,6 @@
 'use client';
 
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShield } from '@fortawesome/free-solid-svg-icons';
-import { useLanguage } from '@/components/language/LanguageContext';
 import { compareHijriYear } from '@/lib/hijriYear';
 import type { TimelineItem } from '@/lib/timeline';
 import EventCard from '@/components/events/EventCard';
@@ -13,18 +10,12 @@ interface EventTimelineProps {
 }
 
 function EventTimeline({ events }: EventTimelineProps) {
-  const { language } = useLanguage();
-
   if (!events || events.length === 0) {
     return null;
   }
 
   return (
     <div className="bg-gray-100 dark:bg-gray-900 rounded-lg shadow p-6">
-      <div className="text-2xl mb-6 text-gray-800 dark:text-gray-200 flex items-center gap-2">
-        <FontAwesomeIcon icon={faShield} className="w-6 h-6 text-amber-400" />
-        {language === 'ar' ? 'الأحداث' : 'Events'}
-      </div>
       <div className="relative">
         {/* Timeline line */}
         <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-amber-400"></div>
