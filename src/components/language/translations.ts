@@ -121,6 +121,7 @@ const translations = {
     viewProfile: 'Profile',
     selectToSearch: 'Select to search',
     people: 'People',
+    peopleCount: (count: number) => (count === 1 ? '1 person' : `${count} people`),
     fullName: 'Full Name',
     kunya: 'Kunya',
     sex: 'Sex',
@@ -419,6 +420,11 @@ const translations = {
     viewProfile: 'الصفحة الشخصية',
     selectToSearch: 'اختر للبحث',
     people: 'الشخصيات',
+    peopleCount: (count: number) => {
+      if (count === 1) return 'شخص واحد';
+      if (count === 2) return 'شخصان';
+      return count >= 3 && count <= 10 ? `${count} أشخاص` : `${count} شخصًا`;
+    },
     fullName: 'الاسم الكامل',
     kunya: 'الكنية',
     sex: 'الجنس',

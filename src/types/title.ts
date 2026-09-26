@@ -3,4 +3,5 @@ export type TitleBase = {
     name: string;
     nameTransliterated: string;
     slug: string;
+    peopleCount?: number;
 }

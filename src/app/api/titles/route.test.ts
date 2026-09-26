@@ -11,18 +11,17 @@ describe('GET /api/titles', () => {
   });
 
   it('lists titles ordered by name', async () => {
-    const titles = [{ id: '1', slug: 'sahabi', name: 'صحابي' }];
-    findMany.mockResolvedValue(titles);
+    findMany.mockResolvedValue([{ id: '1', slug: 'sahabi', name: 'صحابي', _count: { people: 3 } }]);
 
     const response = await GET();
     const body = await response.json();
 
     expect(findMany).toHaveBeenCalledWith({
-      select: { id: true, name: true, nameTransliterated: true, slug: true },
+      select: { id: true, name: true, nameTransliterated: true, slug: true, _count: { select: { people: true } } },
       orderBy: { name: 'asc' },
     });
     expect(response.status).toBe(200);
-    expect(body).toEqual(titles);
+    expect(body).toEqual([{ id: '1', slug: 'sahabi', name: 'صحابي', peopleCount: 3 }]);
   });
 
   it('returns 500 when the database call fails', async () => {
