@@ -35,7 +35,7 @@ function Footer() {
   const linkGroups = getLinkGroups(currentLanguage as 'en' | 'ar');
 
   return (
-    <footer className="w-full bg-gray-50 dark:bg-gray-950 text-amber-600 dark:text-amber-400 border-t-2 border-amber-400">
+    <footer className="w-full bg-gray-50 dark:bg-black text-amber-600 dark:text-amber-400 border-t-2 border-amber-400">
       <div className="container mx-auto px-4 py-8">
         {/* Main content with 3 columns */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">

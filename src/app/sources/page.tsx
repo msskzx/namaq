@@ -27,7 +27,7 @@ export default function SourcesPage() {
   const { data, error, isLoading } = useSWR<ShelfResponse>('/api/sources', fetcher);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950">
+    <div className="min-h-screen bg-white dark:bg-black">
       <div className="container mx-auto px-4 py-8" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <h1 className="text-4xl mb-2 text-gray-900 dark:text-gray-100">
           <FontAwesomeIcon icon={faBookOpen} className="w-8 h-8 text-amber-500 mx-2" />

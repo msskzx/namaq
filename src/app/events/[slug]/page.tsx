@@ -22,7 +22,7 @@ function EventPage() {
   const { data: event, error, isLoading } = useSWR<EventAll>(slug ? `/api/events/${slug}` : null, fetcher);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-white dark:bg-black" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div className="container mx-auto px-4 py-8">
         {isLoading ? (
           <LoadingSpinner fill />
@@ -42,7 +42,7 @@ function EventPage() {
             )}
             {event && (
 
-              <div className="bg-white dark:bg-gray-950 p-6 font-geistmono">
+              <div className="bg-white dark:bg-black p-6 font-geistmono">
                 <div className="bg-gray-50 dark:bg-gray-900 mb-2 rounded-xl shadow-lg p-6">
                   <div className="flex flex-wrap gap-4 mb-6">
                     {/* Location */}

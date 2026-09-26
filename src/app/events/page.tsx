@@ -53,7 +53,7 @@ function EventsPage() {
     update({ type: kinds.includes(kind) ? kinds.filter((value) => value !== kind) : [...kinds, kind] });
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950">
+    <div className="min-h-screen bg-white dark:bg-black">
       <div className="container mx-auto px-4 py-8" dir={ar ? "rtl" : "ltr"}>
         <div className="flex flex-col gap-3">
           <label className="relative block">

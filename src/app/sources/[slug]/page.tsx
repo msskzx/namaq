@@ -59,7 +59,7 @@ export default function SourcePage({ params }: { params: Promise<{ slug: string 
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950">
+    <div className="min-h-screen bg-white dark:bg-black">
       <div className="container mx-auto px-4 py-8" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <Link
           href="/sources"

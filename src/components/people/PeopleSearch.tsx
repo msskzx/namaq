@@ -114,7 +114,7 @@ export default function PeopleSearch({
     >
       <div className="w-full sm:w-auto">
         <select
-          className="border border-amber-400 rounded px-3 h-10 text-base w-full min-w-[140px] bg-gray-50 dark:bg-gray-950 text-gray-800 dark:text-amber-400 focus:border-amber-400 focus:ring-amber-400 focus-visible:outline-amber-400 dark:focus-visible:outline-amber-400"
+          className="border border-amber-400 rounded px-3 h-10 text-base w-full min-w-[140px] bg-gray-50 dark:bg-black text-gray-800 dark:text-amber-400 focus:border-amber-400 focus:ring-amber-400 focus-visible:outline-amber-400 dark:focus-visible:outline-amber-400"
           value={selectedTitle}
           onChange={e => onTitleChange(e.target.value)}
         >
@@ -132,7 +132,7 @@ export default function PeopleSearch({
           <input
             ref={inputRef}
             type="text"
-            className="border border-amber-400 rounded px-3 h-10 text-base w-full bg-gray-50 dark:bg-gray-950 text-gray-800 dark:text-amber-400 focus:border-amber-400 focus:ring-amber-400 dark:focus:border-amber-400 dark:focus:ring-amber-400 placeholder:text-gray-500 dark:placeholder-amber-200 focus-visible:outline-amber-400 dark:focus-visible:outline-amber-400"
+            className="border border-amber-400 rounded px-3 h-10 text-base w-full bg-gray-50 dark:bg-black text-gray-800 dark:text-amber-400 focus:border-amber-400 focus:ring-amber-400 dark:focus:border-amber-400 dark:focus:ring-amber-400 placeholder:text-gray-500 dark:placeholder-amber-200 focus-visible:outline-amber-400 dark:focus-visible:outline-amber-400"
             placeholder={translations[language]?.search}
             value={inputValue}
             onChange={handleInputChange}

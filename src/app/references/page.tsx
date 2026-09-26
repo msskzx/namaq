@@ -6,7 +6,7 @@ export default function ReferencesPage() {
   const { language } = useLanguage();
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950">
+    <div className="min-h-screen bg-white dark:bg-black">
       <main className="container mx-auto px-4 py-8 sm:px-6 lg:px-8" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <h1 className="mb-4 text-center text-3xl font-bold text-amber-400">
           {language === 'ar' ? 'المراجع' : 'References'}

@@ -59,7 +59,7 @@ export default function NavBar() {
     // Render placeholder with real title (invisible) to prevent hydration mismatch
     return (
       <>
-        <nav className="bg-gray-50 dark:bg-gray-950 w-full border-b-2 border-amber-400 shadow-lg min-h-[72px] fixed top-0 left-0 right-0 z-50">
+        <nav className="bg-gray-50 dark:bg-black w-full border-b-2 border-amber-400 shadow-lg min-h-[72px] fixed top-0 left-0 right-0 z-50">
           <div className="container mx-auto flex justify-between items-center py-4 px-4 min-h-[72px]">
             <span className="text-black dark:text-amber-400 text-2xl font-bold opacity-0">{translations[language]?.title || 'Namaq'}</span>
             <div className="hidden lg:flex space-x-4 items-center opacity-0">
@@ -85,7 +85,7 @@ export default function NavBar() {
 
   return (
     <>
-      <nav className="bg-gray-50 dark:bg-gray-950 w-full border-b-2 border-amber-400 shadow-lg fixed top-0 left-0 right-0 z-50 min-h-[72px]">
+      <nav className="bg-gray-50 dark:bg-black w-full border-b-2 border-amber-400 shadow-lg fixed top-0 left-0 right-0 z-50 min-h-[72px]">
         <div className="container mx-auto flex justify-between items-center py-4 px-4 min-h-[72px]">
           <Link
             href="/"
@@ -163,7 +163,7 @@ export default function NavBar() {
                 <FontAwesomeIcon icon={faGear} className="w-5 h-5" />
               </Button>
               {settingsOpen && (
-                <div className="absolute top-full end-0 mt-2 bg-gray-50 dark:bg-gray-950 border border-amber-400 rounded-md shadow-lg z-50 p-4 flex flex-col gap-4">
+                <div className="absolute top-full end-0 mt-2 bg-gray-50 dark:bg-black border border-amber-400 rounded-md shadow-lg z-50 p-4 flex flex-col gap-4">
                   <div>
                     <LanguageSwitcher />
                   </div>
@@ -187,7 +187,7 @@ export default function NavBar() {
         </div>
         {/* Mobile Dropdown Menu */}
         {menuOpen && (
-          <div className="lg:hidden fixed top-[72px] left-0 right-0 bg-gray-950 border-t-2 border-amber-400 px-4 pb-4 animate-fade-in-down z-40">
+          <div className="lg:hidden fixed top-[72px] left-0 right-0 bg-black border-t-2 border-amber-400 px-4 pb-4 animate-fade-in-down z-40">
             <div className="flex flex-col gap-3 mt-2">
               {allLinks.map((link) => (
                 <Link
