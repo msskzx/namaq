@@ -41,7 +41,7 @@ function PersonDetailPage() {
   if (isLoading || !person) {
     return (
       <div className="min-h-screen bg-black" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto flex min-h-screen items-center justify-center px-4 py-8">
           <LoadingSpinner />
         </div>
       </div>

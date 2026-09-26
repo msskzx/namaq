@@ -23,6 +23,7 @@ import Badge from '@/components/common/Badge';
 import SubjectEvidenceAccess from '@/components/graph/SubjectEvidenceAccess';
 import GraphSurface, { kindFillColor } from './GraphSurface';
 import ErrorMessage from '@/components/common/ErrorMessage';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { useLanguage } from '@/components/language/LanguageContext';
 import translations from '@/components/language/translations';
 import LanguageSwitcher from '@/components/language/LanguageSwitcher';
@@ -639,7 +640,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
     fgRef.current.centerAt(target.x, target.y, 500);
   }, [isFullscreen, graphData, selectedSlug, viewportSize]);
 
-  if (graphLoading && !graphData) return <div className="flex items-center justify-center min-h-screen"><div className="text-lg">Loading graph...</div></div>;
+  if (graphLoading && !graphData) return <div className="flex items-center justify-center min-h-screen"><LoadingSpinner size="lg" /></div>;
   // A failed fetch leaves the exploration on screen and offers a retry beside
   // it; only a failure with nothing to show takes over the page.
   if (hasGraphError && !graphData) return <div className="flex items-center justify-center min-h-screen"><ErrorMessage title={t.graph.loadError} description={String(graphError)} /></div>;
