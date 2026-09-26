@@ -5,12 +5,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShield } from '@fortawesome/free-solid-svg-icons';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { compareHijriYear } from '@/lib/hijriYear';
-import type { EventBase } from '@/types/event';
+import type { TimelineItem } from '@/lib/timeline';
 import EventCard from '@/components/events/EventCard';
-import type { Battle } from '@/types/battle';
 
 interface EventTimelineProps {
-  events: (EventBase | Battle)[];
+  events: TimelineItem[];
 }
 
 function EventTimeline({ events }: EventTimelineProps) {
@@ -30,7 +29,7 @@ function EventTimeline({ events }: EventTimelineProps) {
         {/* Timeline line */}
         <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-amber-400"></div>
 
-        {events
+        {[...events]
           .sort((a, b) => compareHijriYear(a.hijriYear, b.hijriYear))
           .map((event) => (
             <div key={event.id} className="relative flex items-start mb-8 last:mb-0">

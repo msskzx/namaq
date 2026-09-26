@@ -27,7 +27,6 @@ const getLinkItems = (href: string, language: 'en' | 'ar'): NavLink[] => {
     case '/events':
       return [
         { href: '/events', label: translations[language].events },
-        { href: '/battles', label: translations[language].battles.title },
       ];
     default:
       return [];
