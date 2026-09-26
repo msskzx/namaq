@@ -5,116 +5,58 @@ const translations = {
     books: {
       title: 'Books',
       loadError: 'Failed to load books',
-      notFound: 'No books found',
       volume: 'Volume',
       pages: 'Pages',
-      chapter: 'Chapter',
       description: 'Description'
     },
     title: 'Learn Through Interactive Visual Articles & Data-Driven Explorations',
     arabic: 'Arabic Language',
-    home: 'Home',
     about: 'About',
     learn: 'Learn Arabic',
-    grammar: 'Grammar',
     history: 'History',
     prophet: 'Prophet Muhammad ﷺ',
     companions: 'Companions',
-    practice: 'Practice',
-    articles: 'Articles',
     titles: 'Titles',
-    poems: 'Poems',
     quran: 'Quran',
     hadith: 'Hadith',
-    articlesLoadError: 'Failed to load articles.',
-    articlesNotFound: 'No articles found.',
     categories: 'Categories',
-    categoriesLoadError: 'Failed to load categories.',
-    categoriesNotFound: 'No categories found.',
     events: 'Events',
     eventsLoadError: 'Failed to load events.',
-    eventsNotFound: 'No events found.',
     peopleNotFound: 'No people found.',
     peopleLoadError: 'Failed to load people.',
     noMoreResults: 'No more results to show',
 
     // Charities
-    allCharities: 'Charitable Organizations',
-    charitiesFound: (count: number) => `Found ${count} organizations`,
-    noCharities: 'No charities found',
-    noCharitiesFound: 'No charities found',
-    charitiesCategories: 'Charities Categories',
-    tryAdjustingSearch: 'Try adjusting your search or filter criteria',
-    searchPlaceholder: 'Search organizations...',
     category: 'Category',
-    allCategories: 'All Categories',
     country: 'Country',
-    allCountries: 'All Countries',
     verified: 'Verified',
-    verifiedOnly: 'Verified only',
-    clearAll: 'Clear all',
     filters: 'Filters',
-    randomCharityTitle: 'Discover a Random Charity',
-    randomCharityMotivation: 'Sometimes the best way to help is to discover organizations you might not have known about. Let us introduce you to a random charitable organization that could use your support.',
-    pickRandomCharity: 'Pick Another Charity',
-    pickingCharity: 'Picking...',
-    suggestedCharity: 'Suggested for you:',
 
     // Common UI
     loading: 'Loading...',
-    loadingError: 'Failed to load content',
-    backToList: 'Back to list',
-    backToSurahs: 'Back to Surahs',
-    dataSource: 'Data source',
 
     // Battle/Event Participants
     participants: 'Participants',
     noParticipants: 'No participants in this battle.',
     peopleInvolved: 'People Involved',
     noPeopleInvolved: 'No people involved in this event.',
-    noBattleParticipations: 'No battle participations.',
 
     // Quran
-    theHolyQuran: 'The Holy Quran',
-    selectSurah: 'Select a surah from the list below to read its verses',
     ayahs: 'Ayahs',
-    juz: 'Juz',
     page: 'Page',
-    manzil: 'Manzil',
     previous: 'Previous',
     next: 'Next',
 
-    // Coming Soon Messages
-    comingSoon: 'Content will be added soon',
-    poetryComingSoon: 'Poetry content will be added soon',
-    hadithComingSoon: 'Hadith content will be added soon',
 
-    // Battle Map
     battleParticipantsGraph: 'Participants Graph',
-
-    // Family Relations
     familyRelations: 'People Graph',
-
-    // Titles Graph
     titlesGraph: 'Titles Graph',
-
-    // Battles Graph
     battlesGraph: 'Battles Graph',
-
-    // Combined Graph
+    notablePeople: 'Notable People',
     allGraph: 'Graph',
     sources: 'Source material',
 
-    // Articles
-    specialArticles: 'Special Articles',
-    noArticles: 'No articles found',
-    noArticlesForEvent: 'No articles for this event.',
-
-    // Notable People
-    notablePeople: 'Notable People',
-
     // Quranic Verses
-    quranicVerses: 'Quranic Verses',
     utterances: {
       kind: { POETRY: 'Poetry', SAYING: 'Saying' },
       /** The source's own verdict on its own report; the app grades nothing. */
@@ -126,13 +68,9 @@ const translations = {
       },
     },
     quranicVersesAboutPeople: 'Quranic Verses About People',
-    sampleVerses: 'Sample Verses',
 
     // Battle Status
-    martyred: 'Martyred',
     injured: 'Injured',
-    captured: 'Captured',
-    absentExcused: 'Absent (Excused)',
     battles: {
       title: 'Battles & Expeditions',
       name: 'Name',
@@ -183,19 +121,6 @@ const translations = {
         'Namaq: The book in which one writes.'
       ]
     },
-    whyLearn: 'Why Learn with Namaq?',
-    arabicLanguage: 'Arabic Language',
-    arabicLanguageDesc: 'Master the beautiful Arabic language through interactive lessons, grammar rules, and authentic Islamic texts',
-    islamicHistory: 'Islamic History',
-    islamicHistoryDesc: 'Discover the rich history of Islam, the life of Prophet Muhammad ﷺ, and the stories of his noble companions',
-    grammarMastery: 'Grammar & Structure',
-    grammarMasteryDesc: 'Learn Arabic grammar systematically with clear explanations and practical examples from Quran and Hadith',
-    culturalHeritage: 'Cultural Heritage',
-    culturalHeritageDesc: 'Connect with centuries of Arabic literary tradition and Islamic cultural heritage',
-    spiritualGrowth: 'Spiritual Growth',
-    spiritualGrowthDesc: 'Deepen your faith through learning the language of the Quran and understanding Islamic teachings',
-    interactiveLearning: 'Interactive Learning',
-    interactiveLearningDesc: 'Engage with animated lessons, quizzes, and interactive exercises designed for effective learning',
     search: 'Search',
     viewProfile: 'Profile',
     selectToSearch: 'Select to search',
@@ -209,8 +134,6 @@ const translations = {
     tribalAffiliation: 'Clan and alliance',
     relations: 'Relations',
     personLoadError: 'Failed to load person data',
-    personGenericError: 'An error occurred while loading data',
-    ayatReferences: 'Verses revealed about',
     // Battle participation statuses
     battleStatus: {
       MARTYRED: 'Martyred',
@@ -218,21 +141,7 @@ const translations = {
       CAPTURED: 'Captured',
       ABSENT_EXCUSED: 'Absent (Excused)',
     },
-    battlesAndExpeditions: 'Battles & Expeditions',
     // Event Types
-    eventTypes: {
-      BIRTH: 'Birth',
-      DEATH: 'Death',
-      MARRIAGE: 'Marriage',
-      BATTLE: 'Battle',
-      GAVE_BIRTH: 'Gave Birth',
-      LIBERATED: 'Liberated',
-      MET: 'Met',
-      TRAVEL: 'Travel',
-      HIJRA: 'Hijra',
-      HIJRA_HABASHA: 'Hijra to Abyssinia',
-      OTHER: 'Other',
-    },
     // Categories
     relationTypes: {
       FATHER: 'Father',
@@ -297,7 +206,6 @@ const translations = {
       allRelations: 'All relations',
       allFamilyRelations: 'All family relations',
       companionTitleLabel: 'Companion title',
-      allKinds: 'All kinds',
       fullscreen: 'Fullscreen',
       closeFullscreen: 'Close fullscreen',
       openFilters: 'Filters',
@@ -323,11 +231,8 @@ const translations = {
       graphSummary: (nodes: number, nodesLabel: string, relationships: number) => `${nodes} ${nodesLabel} · ${relationships} relationships`,
       noGraphData: 'No graph data available',
       loadError: 'Failed to load the graph',
-      focusedNeighbourhood: 'focused neighbourhood',
       resetGraphView: 'Reset',
       viewProfile: 'View profile',
-      exploreNeighbours: 'Explore neighbours',
-      graphControls: 'Graph controls',
       interactiveGraph: 'Interactive relationship graph',
       nodesLabels: {
         people: 'people',
@@ -359,7 +264,6 @@ const translations = {
         descendants: 'Descendants',
       },
     },
-    articlesInCategory: 'Articles in this category',
     // Motivation Cards
     motivation: {
       prophet: {
@@ -406,111 +310,61 @@ const translations = {
     books: {
       title: 'الكتب',
       loadError: 'فشل تحميل الكتب',
-      notFound: 'لا توجد كتب',
       volume: 'المجلد',
       pages: 'الصفحات',
-      chapter: 'الفصل',
       description: 'الوصف'
     },
     title: 'تعلَّم من خلال المقالات التفاعلية والاستكشافات المعتمدة على البيانات',
     arabic: 'العربية',
-    home: 'الرئيسية',
     about: 'حول',
     learn: 'تعلم العربية',
-    grammar: 'النحو',
     history: 'التاريخ',
     prophet: 'النبي محمد ﷺ',
     companions: 'الصحابة',
-    practice: 'تدرب',
-    articles: 'المقالات',
     titles: 'الألقاب',
-    poems: 'الشعر العربي',
     quran: 'القرآن الكريم',
     hadith: 'الحديث الشريف',
-    articlesLoadError: 'تعذر تحميل المقالات.',
-    articlesNotFound: 'لا توجد مقالات.',
     categories: 'التصنيفات',
-    categoriesLoadError: 'تعذر تحميل التصنيفات.',
-    categoriesNotFound: 'لم يتم العثور على تصنيفات.',
     events: 'الأحداث',
     eventsLoadError: 'فشل تحميل الأحداث.',
-    eventsNotFound: 'لم يتم العثور على أحداث.',
     peopleNotFound: 'لم يتم العثور على أشخاص',
     peopleLoadError: 'فشل تحميل قائمة الأشخاص',
     noMoreResults: 'لا توجد نتائج إضافية',
 
     // Charities
-    allCharities: 'المنظمات الخيرية',
-    charitiesFound: (count: number) => `تم العثور على ${count} منظمة`,
-    noCharities: 'لم يتم العثور على منظمات',
-    noCharitiesFound: 'لم يتم العثور على منظمات',
-    charitiesCategories: 'فئات المنظمات الخيرية',
-    tryAdjustingSearch: 'حاول تعديل معايير البحث أو التصفية',
-    searchPlaceholder: 'ابحث عن منظمات...',
     category: 'الفئة',
-    allCategories: 'جميع الفئات',
     country: 'البلد',
-    allCountries: 'جميع البلدان',
     verified: 'موثقة',
-    verifiedOnly: 'الموثقة فقط',
-    clearAll: 'مسح الكل',
     filters: 'المرشحات',
-    randomCharityTitle: 'اكتشف منظمة خيرية عشوائية',
-    randomCharityMotivation: 'أحياناً أفضل طريقة للمساعدة هي اكتشاف منظمات قد لا تعرف عنها. دعنا نقدم لك منظمة خيرية عشوائية قد تحتاج إلى دعمك.',
-    pickRandomCharity: 'اختر منظمة أخرى',
-    pickingCharity: 'جاري الاختيار...',
-    suggestedCharity: 'مقترح لك:',
 
     // Common UI
     loading: 'جاري التحميل...',
-    loadingError: 'تعذر تحميل المحتوى',
-    backToList: 'العودة إلى القائمة',
-    backToSurahs: 'العودة إلى قائمة السور',
-    dataSource: 'مصدر البيانات',
 
     // Battle/Event Participants
     participants: 'المشاركون',
     noParticipants: 'لا يوجد مشاركون في هذه المعركة.',
     peopleInvolved: 'الأشخاص المشاركون',
     noPeopleInvolved: 'لا يوجد أشخاص مشاركون في هذا الحدث.',
-    noBattleParticipations: 'لا توجد مشاركات في المعارك.',
 
     // Quran
-    theHolyQuran: 'القرآن الكريم',
-    selectSurah: 'اختر سورة من القائمة أدناه لقراءة آياتها',
     ayahs: 'الآيات',
-    juz: 'الجزء',
     page: 'الصفحة',
-    manzil: 'المنزل',
     previous: 'السابق',
     next: 'التالي',
 
     // Coming Soon Messages
-    comingSoon: 'سيتم إضافة المحتوى قريباً',
-    poetryComingSoon: 'سيتم إضافة محتوى الشعر قريباً',
-    hadithComingSoon: 'سيتم إضافة محتوى الحديث قريباً',
 
-    // Battle Map
     battleParticipantsGraph: 'شبكة المشاركين',
-
-    // family Relations
     familyRelations: 'شبكة الأشخاص',
-
-    // Titles Graph
     titlesGraph: 'شبكة الألقاب',
-
-    // Battles Graph
     battlesGraph: 'شبكة المعارك',
-
-    // Combined Graph
+    notablePeople: 'شخصيات بارزة',
     allGraph: 'الشبكة',
     sources: 'المصادر',
 
     // Notable People
-    notablePeople: 'شخصيات بارزة',
 
     // Quranic Verses
-    quranicVerses: 'الآيات القرآنية',
     utterances: {
       kind: { POETRY: 'شعر', SAYING: 'قول' },
       grading: 'قال المصدر',
@@ -521,13 +375,9 @@ const translations = {
       },
     },
     quranicVersesAboutPeople: 'آيات نزلت في الأشخاص',
-    sampleVerses: 'نماذج من الآيات',
 
     // Battle Status
-    martyred: 'استشهد',
     injured: 'أصيب',
-    captured: 'أُسر',
-    absentExcused: 'غائب بعذر',
     battles: {
       title: 'المعارك والغزوات',
       name: 'الاسم',
@@ -576,19 +426,6 @@ const translations = {
         'النَّمَقُ : الكِتابُ الذي يُكْتَب فيه'
       ]
     },
-    whyLearn: 'لماذا تتعلم مع نَمَق؟',
-    arabicLanguage: 'اللغة العربية',
-    arabicLanguageDesc: 'أتقن اللغة العربية الجميلة من خلال الدروس التفاعلية وقواعد النحو والنصوص الإسلامية الأصيلة',
-    islamicHistory: 'التاريخ الإسلامي',
-    islamicHistoryDesc: 'اكتشف التاريخ الغني للإسلام وحياة النبي محمد ﷺ وقصص أصحابه الكرام',
-    grammarMastery: 'النحو والتركيب',
-    grammarMasteryDesc: 'تعلم نحو العربية بشكل منهجي مع شرح واضح وأمثلة عملية من القرآن والحديث',
-    culturalHeritage: 'التراث الثقافي',
-    culturalHeritageDesc: 'تواصل مع قرون من التقاليد الأدبية العربية والتراث الثقافي الإسلامي',
-    spiritualGrowth: 'النمو الروحي',
-    spiritualGrowthDesc: 'عمق إيمانك من خلال تعلم لغة القرآن وفهم التعاليم الإسلامية',
-    interactiveLearning: 'التعلم التفاعلي',
-    interactiveLearningDesc: 'تفاعل مع الدروس المتحركة والاختبارات والتمارين التفاعلية المصممة للتعلم الفعال',
     search: 'بحث',
     viewProfile: 'الصفحة الشخصية',
     selectToSearch: 'اختر للبحث',
@@ -602,8 +439,6 @@ const translations = {
     tribalAffiliation: 'النسب والحلف',
     relations: 'العلاقات',
     personLoadError: 'تعذر تحميل بيانات الشخصية',
-    personGenericError: 'حدث خطأ أثناء تحميل البيانات',
-    ayatReferences: 'آيات نزلت في',
     // Battle participation statuses
     battleStatus: {
       MARTYRED: 'استشهد',
@@ -611,21 +446,7 @@ const translations = {
       CAPTURED: 'أُسر',
       ABSENT_EXCUSED: 'غائب بعذر',
     },
-    battlesAndExpeditions: 'المعارك والغزوات',
     // أنواع الأحداث
-    eventTypes: {
-      BIRTH: 'ولادة',
-      DEATH: 'وفاة',
-      MARRIAGE: 'زواج',
-      BATTLE: 'معركة',
-      GAVE_BIRTH: 'ولادة',
-      LIBERATED: 'تحرير',
-      MET: 'لقاء',
-      TRAVEL: 'سفر',
-      HIJRA: 'هجرة',
-      HIJRA_HABASHA: 'هجرة الحبشة',
-      OTHER: 'أخرى',
-    },
     relationTypes: {
       FATHER: 'أب',
       MOTHER: 'أم',
@@ -688,7 +509,6 @@ const translations = {
       allRelations: 'كل العلاقات',
       allFamilyRelations: 'كل علاقات الأسرة',
       companionTitleLabel: 'لقب الصحابي',
-      allKinds: 'كل الأنواع',
       fullscreen: 'ملء الشاشة',
       closeFullscreen: 'إغلاق ملء الشاشة',
       openFilters: 'التصفية',
@@ -714,11 +534,8 @@ const translations = {
       graphSummary: (nodes: number, nodesLabel: string, relationships: number) => `${nodes} ${nodesLabel} · ${relationships} علاقة`,
       noGraphData: 'لا تتوفر بيانات للرسم البياني',
       loadError: 'تعذر تحميل الرسم البياني',
-      focusedNeighbourhood: 'الجوار المركّز عليه',
       resetGraphView: 'تصفير',
       viewProfile: 'عرض الصفحة الشخصية',
-      exploreNeighbours: 'استكشاف الصلات',
-      graphControls: 'أدوات التحكم بالرسم البياني',
       interactiveGraph: 'رسم بياني تفاعلي للعلاقات',
       nodesLabels: {
         people: 'أشخاص',
@@ -750,7 +567,6 @@ const translations = {
         descendants: 'الأخلاف',
       },
     },
-    articlesInCategory: 'المقالات في هذا التصنيف',
     // Motivation Cards
     motivation: {
       prophet: {

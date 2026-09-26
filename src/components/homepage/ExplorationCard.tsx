@@ -1,42 +1,22 @@
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 
 interface ExplorationCardProps {
   title: string;
   desc: string;
   url: string;
-  img: string;
 }
 
-export default function ExplorationCard({ title, desc, url, img }: ExplorationCardProps) {
+export default function ExplorationCard({ title, desc, url }: ExplorationCardProps) {
   return (
     <Link
       href={url}
-      className="group block bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 relative aspect-square"
+      className="group block rounded-xl border border-gray-200 bg-white p-6 transition hover:border-amber-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
     >
-      {/* Background Image */}
-      <div className="absolute inset-0">
-        <Image
-          src={img}
-          alt={title}
-          fill
-          className="object-cover group-hover:scale-105 transition-transform duration-300"
-        />
-        {/* Dark overlay confined to the caption area, so most of the image stays at full brightness */}
-        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
-      </div>
-
-      {/* Content overlay */}
-      <div className="relative z-10 h-full flex flex-col justify-end p-6 text-white">
-        <h3 className="text-xl font-bold mb-3 group-hover:text-amber-300 transition-colors">
-          {title}
-        </h3>
-        <p className="text-gray-200 text-sm leading-relaxed mb-4 opacity-90">
-          {desc}
-        </p>
-
-      </div>
+      <h3 className="mb-2 text-xl font-bold text-gray-900 transition-colors group-hover:text-amber-600 dark:text-gray-100 dark:group-hover:text-amber-300">
+        {title}
+      </h3>
+      <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-300">{desc}</p>
     </Link>
   );
 }
