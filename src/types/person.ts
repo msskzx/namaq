@@ -23,6 +23,7 @@ export interface PersonBase {
   fullName?: string;
   kunya?: string;
   nameTransliterated?: string;
+  sex?: string | null;
 }
 
 export interface PersonWithTitles extends PersonBase {

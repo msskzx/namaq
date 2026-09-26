@@ -4,6 +4,7 @@ import type { PersonWithTitles } from '@/types/person';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faSignature } from '@fortawesome/free-solid-svg-icons';
 import Badge from '@/components/common/Badge';
+import { titleName } from '@/lib/titleName';
 
 interface PersonCardProps {
   person: PersonWithTitles;
@@ -28,7 +29,7 @@ function PersonCard({ person, language = 'ar', titleLimit = 7 }: PersonCardProps
             // badges it counts rather than wrapping onto a line of its own.
             <div className="flex flex-wrap gap-1 mt-auto">
               {person.titles.slice(0, titleLimit).map((title) => (
-                <Badge key={title.id} text={language === 'ar' && title.name ? title.name : title.nameTransliterated || title.name} color="indigo" />
+                <Badge key={title.id} text={titleName(title, person.sex, language)} color="indigo" />
               ))}
               {person.titles.length > titleLimit && (
                 <Badge text={`+${person.titles.length - titleLimit}`} color="indigo" />
