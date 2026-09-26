@@ -55,7 +55,7 @@ function PersonDetailPage() {
             <Image src={person.picture} alt={person.name} width={64} height={64} className="w-16 h-16 rounded-full object-cover border" />
           )}
           <h1 className="text-5xl font-bold text-center text-gray-900 dark:text-gray-200 mb-4">{person.name}</h1>
-          <div className="flex flex-wrap gap-2 justify-center">
+          <div className="flex flex-wrap gap-2 justify-center mt-2">
             {person.titles && person.titles.length > 0 && person.titles.map((title) => (
               <Badge
                 key={title.id}
