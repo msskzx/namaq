@@ -26,7 +26,7 @@ export default function TitlesPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {Array.isArray(titles) && titles.length > 0 ? (
                 titles.map((title: TitleBase) => (
-                  <TitleCard key={title.slug} title={title} language={language} url={`/titles/${title.slug}`} />
+                  <TitleCard key={title.slug} title={title} language={language} url={`/people?title=${title.slug}`} />
                 ))
               ) : (
                 <div className="col-span-full text-center py-4 text-gray-500 font-arabic">
