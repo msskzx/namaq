@@ -198,6 +198,7 @@ const translations = {
     },
     // Graph filter/fullscreen controls
     graph: {
+      updating: 'Updating graph…',
       relationshipTypes: 'Relationship types',
       nodeKinds: 'Node kinds',
       allRelations: 'All relations',
@@ -498,6 +499,7 @@ const translations = {
     },
     // Graph filter/fullscreen controls
     graph: {
+      updating: 'جارٍ تحديث الشبكة…',
       relationshipTypes: 'أنواع العلاقات',
       nodeKinds: 'أنواع العُقد',
       allRelations: 'كل العلاقات',
