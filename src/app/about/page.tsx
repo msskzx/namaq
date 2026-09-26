@@ -1,5 +1,8 @@
 "use client";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBookmark } from "@fortawesome/free-solid-svg-icons";
+import Button from "@/components/common/Button";
 import { useLanguage } from "@/components/language/LanguageContext";
 import NamaqDefinition from "@/components/homepage/NamaqDefinition";
 
@@ -19,6 +22,22 @@ export default function AboutPage() {
         </p>
 
         <NamaqDefinition />
+
+        <section className="mt-12 rounded-lg border border-gray-200 p-6 dark:border-white/10">
+          <h2 className="mb-2 text-3xl text-gray-900 dark:text-gray-100">
+            <FontAwesomeIcon icon={faBookmark} className="w-7 h-7 text-amber-500 me-2" />
+            {language === 'ar' ? 'المراجع' : 'References'}
+          </h2>
+          <p className="mb-4 text-gray-700 dark:text-gray-300">
+            {language === 'ar'
+              ? 'المصادر التي اعتمدنا عليها في بناء نمق ومحتواه التاريخي.'
+              : 'Sources used to build Namaq and its historical content.'}
+          </p>
+          <Button href="/references">
+            <FontAwesomeIcon icon={faBookmark} />
+            {language === 'ar' ? 'عرض المراجع' : 'View references'}
+          </Button>
+        </section>
       </div>
     </div>
   );
