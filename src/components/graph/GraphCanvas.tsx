@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState, RefObject } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
+import { useTheme } from 'next-themes';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { ForceGraphMethods, NodeObject, LinkObject } from 'react-force-graph-2d';
 import { GraphNode, GraphNodeFull, GraphLink } from '@/types/graph';
@@ -68,13 +69,14 @@ const GROUP_ROW = 'mt-3 flex flex-wrap gap-3 border-t border-amber-200 pt-3 dark
 
 // Placement only: a control sitting on the canvas needs its own ground to stay
 // legible against whatever the graph draws behind it.
-const FLOATING_OVER_CANVAS = 'absolute top-2 z-10 bg-black/90 backdrop-blur border border-white/10';
+const FLOATING_OVER_CANVAS = 'absolute top-2 z-10 bg-white/90 dark:bg-black/90 backdrop-blur border border-gray-200 dark:border-white/10';
 
 // Keep disabled kinds and relations available even when absent from the response.
 const ALL_RELATION_TYPES = sortRelationTypes(RELATION_ORDER.filter(type => governingRelationType(type) === type));
 
 export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFullscreen = false, nodesLabel = 'people' }: GraphCanvasProps) {
   const { language } = useLanguage();
+  const isDark = useTheme().resolvedTheme === 'dark';
   const t = translations[language];
   const router = useRouter();
   const pathname = usePathname();
@@ -645,7 +647,6 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
   // it; only a failure with nothing to show takes over the page.
   if (hasGraphError && !graphData) return <div className="flex items-center justify-center min-h-screen"><ErrorMessage title={t.graph.loadError} description={String(graphError)} /></div>;
 
-  const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
   const typeLabels: Record<string, string> = { person: t.people, title: t.titles, battle: t.battles.title, event: t.events };
   const kindColor = (kind: string) => kindFillColor(kind, isDark);
   const kindLabel = (kind: string) => typeLabels[kind] ?? kind;
@@ -675,13 +676,13 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
   };
 
   const updatingNotice = exploration.isFetching && (
-    <div role="status" className="mt-3 flex items-center gap-2 text-xs text-gray-300">
+    <div role="status" className="mt-3 flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300">
       <LoadingSpinner size="sm" />
     </div>
   );
 
   const explorationControls = (
-    <aside dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-amber-700 bg-black p-4">
+    <aside dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-amber-700 bg-white dark:bg-black p-4">
       {selectedNode && selectedPersonHasProfile && (
         <div className="mb-3">
           <Button href={profilePath(selectedNode.type, selectedNode.slug)}>
@@ -690,7 +691,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
           </Button>
         </div>
       )}
-      <h2 className="text-lg font-semibold text-gray-100">{selectedNode ? (selectedPreview?.fullName ?? selectedNode.label) : t.graph.globalRelationships}</h2>
+      <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode ? (selectedPreview?.fullName ?? selectedNode.label) : t.graph.globalRelationships}</h2>
       {isSelectedPerson && selectedPreview && selectedPreview.titles.length > 0 && (
         <div className="mt-1 flex flex-wrap gap-2">
           {selectedPreview.titles.map(title => (
@@ -707,7 +708,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
           hasProfile={selectedPersonHasProfile}
         />
       )}
-      {!selectedNode && <p className="text-sm text-gray-300">{t.graph.globalRelationshipsHint}</p>}
+      {!selectedNode && <p className="text-sm text-gray-600 dark:text-gray-300">{t.graph.globalRelationshipsHint}</p>}
       {/* Four groups, divided: where the subject leads, what it reveals, what
           it removes, and what acts on the whole exploration. */}
       {updatingNotice}
@@ -839,7 +840,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
         // scrolls and hides its overflow, and it sits at the bottom of the
         // screen when collapsed, so a dropdown opening downwards from the
         // button lands outside the screen with no way to reach it.
-        <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="fixed inset-x-3 bottom-3 z-[70] max-h-[70dvh] overflow-y-auto rounded-lg border border-amber-400 bg-black p-3 lg:inset-x-auto lg:bottom-auto lg:top-14 lg:start-3 lg:w-64 lg:max-h-[80dvh]">
+        <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="fixed inset-x-3 bottom-3 z-[70] max-h-[70dvh] overflow-y-auto rounded-lg border border-amber-400 bg-white dark:bg-black p-3 lg:inset-x-auto lg:bottom-auto lg:top-14 lg:start-3 lg:w-64 lg:max-h-[80dvh]">
           <ul className="flex flex-col gap-1">
             {navLinks.map(link => (
               <li key={link.href}>
@@ -905,7 +906,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
             {t.graph.nodesList}
           </Button>
         </div>
-        {showNodesPanel && <div className="mt-3 rounded-lg border border-white/10 p-3">
+        {showNodesPanel && <div className="mt-3 rounded-lg border border-gray-200 dark:border-white/10 p-3">
           <ul className="mt-2 space-y-1">
             {rankedViewNodes?.map(node => (
               <li key={node.id}>
@@ -939,7 +940,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
       // here, on the wrapper. Putting it on the canvas layer instead buried the
       // panel, which sits lower so the graph can fill the screen behind it.
       <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="relative z-[100]">
-        <div className="fixed inset-0 z-0 bg-black" role="region" aria-label={t.graph.interactiveGraph}>
+        <div className="fixed inset-0 z-0 bg-white dark:bg-black" role="region" aria-label={t.graph.interactiveGraph}>
           <div className={`${FLOATING_OVER_CANVAS} flex items-center gap-2 ${language === 'ar' ? 'left-2' : 'right-2'}`}>
             <Button size="icon" onClick={() => fitToView(true)} aria-label={t.graph.fitGraph}>
               <FontAwesomeIcon icon={faMagnifyingGlassMinus} />
@@ -953,8 +954,8 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
         <div
           ref={panelRef}
           className={panelExpanded
-            ? 'fixed inset-x-0 bottom-0 z-[60] flex max-h-[75dvh] flex-col overflow-hidden rounded-t-lg border-t border-amber-400 bg-black pb-[env(safe-area-inset-bottom)] lg:inset-y-0 lg:pb-0 lg:bottom-auto lg:start-0 lg:end-auto lg:h-full lg:max-h-none lg:w-80 lg:rounded-none lg:border-t-0 lg:border-e'
-            : 'fixed inset-x-0 bottom-0 z-[60] rounded-t-lg border-t border-amber-400 bg-black pb-[env(safe-area-inset-bottom)] lg:inset-auto lg:top-3 lg:start-3 lg:rounded-lg lg:border lg:pb-0'
+            ? 'fixed inset-x-0 bottom-0 z-[60] flex max-h-[75dvh] flex-col overflow-hidden rounded-t-lg border-t border-amber-400 bg-white dark:bg-black pb-[env(safe-area-inset-bottom)] lg:inset-y-0 lg:pb-0 lg:bottom-auto lg:start-0 lg:end-auto lg:h-full lg:max-h-none lg:w-80 lg:rounded-none lg:border-t-0 lg:border-e'
+            : 'fixed inset-x-0 bottom-0 z-[60] rounded-t-lg border-t border-amber-400 bg-white dark:bg-black pb-[env(safe-area-inset-bottom)] lg:inset-auto lg:top-3 lg:start-3 lg:rounded-lg lg:border lg:pb-0'
           }
         >
           {panelExpanded ? panelContent : collapsedBar}
@@ -974,7 +975,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
   return (
     <div
       dir={language === 'ar' ? 'rtl' : 'ltr'}
-      className="relative h-[85vh] min-h-[40rem] overflow-hidden rounded-lg border border-white/10"
+      className="relative h-[85vh] min-h-[40rem] overflow-hidden rounded-lg border border-gray-200 dark:border-white/10"
       role="region"
       aria-label={t.graph.interactiveGraph}
     >
