@@ -774,13 +774,6 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
 
   const filterPanel = (
     <>
-      <div className="mb-4 flex justify-end">
-        <Button onClick={resetGraphView}>
-          <FontAwesomeIcon icon={faRotateLeft} />
-          {t.graph.resetGraphView}
-        </Button>
-      </div>
-
       <RelationFilterPanel
         types={relationTypesPresent}
         includedRelations={scope === 'selected' ? localRelations : includedRelations}
@@ -794,6 +787,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
         scope={scope}
         onScopeChange={setScope}
         disabled={scope === 'selected' && !selectedSubjectId}
+        onReset={resetGraphView}
         kindFilters={{ kinds: kindsUniverse, included: includedKinds, label: kindLabel, color: kindColor, onToggle: toggleKind }}
         statusFilters={isFullscreen && includedKinds.has('battle') ? {
           choices: PARTICIPATION_STATUS_CHOICES,
