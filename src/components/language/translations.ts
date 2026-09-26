@@ -49,9 +49,6 @@ const translations = {
 
 
     battleParticipantsGraph: 'Participants Graph',
-    familyRelations: 'People Graph',
-    titlesGraph: 'Titles Graph',
-    battlesGraph: 'Battles Graph',
     notablePeople: 'Notable People',
     allGraph: 'Graph',
     sources: 'Source material',
@@ -355,9 +352,6 @@ const translations = {
     // Coming Soon Messages
 
     battleParticipantsGraph: 'شبكة المشاركين',
-    familyRelations: 'شبكة الأشخاص',
-    titlesGraph: 'شبكة الألقاب',
-    battlesGraph: 'شبكة المعارك',
     notablePeople: 'شخصيات بارزة',
     allGraph: 'الشبكة',
     sources: 'المصادر',
