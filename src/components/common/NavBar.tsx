@@ -187,7 +187,7 @@ export default function NavBar() {
         </div>
         {/* Mobile Dropdown Menu */}
         {menuOpen && (
-          <div className="lg:hidden fixed top-[72px] left-0 right-0 bg-black border-t-2 border-amber-400 px-4 pb-4 animate-fade-in-down z-40">
+          <div className="lg:hidden fixed top-[72px] left-0 right-0 bg-gray-50 dark:bg-black border-t-2 border-amber-400 px-4 pb-4 animate-fade-in-down z-40">
             <div className="flex flex-col gap-3 mt-2">
               {allLinks.map((link) => (
                 <Link

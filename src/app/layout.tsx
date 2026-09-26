@@ -36,7 +36,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${amiri.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${amiri.variable} ${geistMono.variable} antialiased bg-white dark:bg-black`}>
         <CustomThemeProvider>
           <LanguageProvider>
             <SWRProvider>
