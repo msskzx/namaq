@@ -184,8 +184,7 @@ const PeoplePage = () => {
             {isValidating && !isInitialLoad && <LoadingSpinner />}
           </div>
 
-          {/* Show end of results message */}
-          {!isValidating && peoplePages && peoplePages.length > 0 && !peoplePages[peoplePages.length - 1]?.pagination.hasNextPage && (
+          {!isValidating && peoplePages && allPeople.length === 0 && (
             <p className="text-center text-gray-500 dark:text-gray-400 mt-4">
               {translations[language]?.noMoreResults || 'No more results'}
             </p>
