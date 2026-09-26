@@ -45,6 +45,11 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   (`npm run seed:*`, `npm run people:sync`, `npm run battles:sync`)
   should work once it's in place. Only say local verification isn't
   possible if the symlink is present and the commands still fail.
+- The PostgreSQL and Neo4j databases behind `.env` are **preview databases**,
+  not production. Writes, deletes and re-imports against them are fine when the
+  user asks for them. Still go through the sync scripts where one exists (see
+  Data model), and do not print or read credentials out of `.env` to do it:
+  run the project's own scripts, which load it themselves.
 - Don't reach for browser computer-use (screenshots, clicking, typing)
   by default. Only use it when the user asks for it, or when it's
   necessary to verify something lint/tsc/tests can't catch — e.g. actual

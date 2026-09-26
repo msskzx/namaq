@@ -136,6 +136,7 @@
       "subjectSlug": "aqil-ibn-al-bukayr",
       "extractionUrl": "https://shamela.ws/book/10906/1611",
       "accessedAt": "2026-09-25",
+      "volumeNumber": 4,
       "pages": [
         {
           "sequence": 1,
@@ -317,9 +318,9 @@
     }
   ],
   "approval": {
-    "revision": "7894671ba43aa8eb",
-    "approvedAt": "2026-09-25",
+    "revision": "cebdbce524d0c90a",
+    "approvedAt": "2026-09-26",
     "approvedBy": "msskzx",
-    "note": "Approved for publication. All four claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+    "note": "Re-recorded for publication after the account was given volumeNumber 4, so the reader lists it under the book's contents rather than under entries with no volume. No claim, citation or page text changed. All four claims are Not reviewed."
   }
 }

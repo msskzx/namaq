@@ -12,13 +12,15 @@ import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 const abuSalamah = {
   kind: 'PERSON',
   slug: 'abu-salamah',
-  name: 'أبو سلمة بن عبد الأسد',
+  name: 'أَبُو سَلَمَةَ بنُ عَبْدِ الأَسَدِ',
   nameTransliterated: 'Abu Salamah ibn Abd al-Asad',
   hasProfile: true,
   fields: {
+    // The heading's name and the lineage line under it, as the edition prints
+    // them; the entry number and collection marks are dropped.
     fullName: {
-      value: 'عبد الله بن عبد الأسد بن هلال بن عبد الله بن عمر بن مخزوم',
-      claims: ['abu-salamah/full-name'],
+      value: 'أَبُو سَلَمَةَ بنُ عَبْدِ الأَسَدِ بنِ هِلاَلِ ابْنِ عَبْدِ اللهِ بنِ عُمَرَ بنِ مَخْزُوْمِ بنِ يَقَظَةَ بنِ مُرَّةَ بنِ كَعْبٍ',
+      claims: ['abu-salamah-siyar8/full-name'],
     },
     // Two citations for one value: the obituary dates the death to جمادى
     // الآخرة سنة أربع, and the expedition's own page gives the day within that
