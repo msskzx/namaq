@@ -5,7 +5,7 @@ import Link from 'next/link';
 import useSWR from 'swr';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookOpen, faBars, faCompress, faExpand, faList, faGear, faXmark, faFont, faSun, faMoon, faPalette, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faCompress, faExpand, faList, faGear, faXmark, faFont, faSun, faMoon, faPalette, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import Button from '@/components/common/Button';
@@ -21,6 +21,8 @@ interface AccountsResponse {
   accounts: AccountSummary[];
   account: AccountSummary | null;
   page: AccountPage | null;
+  pages?: AccountPage[];
+  pageNumbers?: { sequence: number; printedPage: string | null; volume: { number: number } | null }[];
 }
 
 interface SectionsResponse {
@@ -29,10 +31,12 @@ interface SectionsResponse {
 
 interface SourceAccountReaderProps {
   basePath: string;
-  heading?: string;
   labelAccount?: (account: AccountSummary) => string;
   selectorLabel?: { ar: string; en: string };
+  defaultFullscreen?: boolean;
 }
+const PREFETCH_AHEAD = 2;
+const WINDOW = 5;
 
 type ReaderFont = 'amiri' | 'sans';
 type ReaderSize = 's' | 'm' | 'l' | 'xl';
@@ -57,9 +61,9 @@ function isRtl(language: string) {
 
 export default function SourceAccountReader({
   basePath,
-  heading,
   labelAccount = accountLabel,
   selectorLabel = { ar: 'الكتاب', en: 'Book' },
+  defaultFullscreen = false,
 }: SourceAccountReaderProps) {
   const { language } = useLanguage();
   const router = useRouter();
@@ -68,7 +72,8 @@ export default function SourceAccountReader({
   const book = searchParams.get('book');
   const requestedPage = Number(searchParams.get('page') ?? '1');
   const page = Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1;
-  const fullscreen = searchParams.get('fullscreen') === '1';
+  const fullscreenParam = searchParams.get('fullscreen');
+  const fullscreen = fullscreenParam === '1' || (defaultFullscreen && fullscreenParam !== '0');
   const [indexOpen, setIndexOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -76,18 +81,54 @@ export default function SourceAccountReader({
   const [size, setSize] = useState<ReaderSize>('m');
   const [background, setBackground] = useState<ReaderBackground>('light');
   const [headerHidden, setHeaderHidden] = useState(false);
-  const section = useRef<HTMLElement>(null);
+  const section = useRef<HTMLDivElement>(null);
   const contentScrollTop = useRef(0);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  const query = new URLSearchParams({ page: String(page) });
+  const [shellPage, setShellPage] = useState(page);
+  const [fetched, setFetched] = useState<Record<string, AccountPage>>({});
+  const inFlight = useRef(new Set<string>());
+  const query = new URLSearchParams({ page: String(shellPage) });
   if (book) query.set('account', book);
   const { data, error, isLoading } = useSWR<AccountsResponse>(
     basePath ? `${basePath}/accounts?${query.toString()}` : null,
     fetcher,
+    { revalidateOnFocus: false, revalidateOnReconnect: false },
   );
   const accountId = data?.account?.id;
+  const pageCount = data?.account?.pageCount ?? 0;
+  const cached = useCallback((sequence: number) => {
+    if (!accountId) return undefined;
+    return fetched[`${accountId}:${sequence}`] ?? data?.pages?.find((candidate) => candidate.sequence === sequence);
+  }, [accountId, data?.pages, fetched]);
+  const currentPage = cached(page);
+
+  const fetchRange = useCallback(async (from: number, to: number) => {
+    if (!accountId) return;
+    const key = `${accountId}:${from}-${to}`;
+    if (inFlight.current.has(key)) return;
+    inFlight.current.add(key);
+    try {
+      const body = await fetcher(`${basePath}/accounts?account=${accountId}&from=${from}&to=${to}`) as { pages: AccountPage[] };
+      setFetched((previous) => {
+        const next = { ...previous };
+        body.pages.forEach((item) => { next[`${accountId}:${item.sequence}`] = item; });
+        return next;
+      });
+    } catch {
+      inFlight.current.delete(key);
+    }
+  }, [accountId, basePath]);
+
+  useEffect(() => {
+    if (!accountId || !pageCount || page > pageCount) return;
+    if (!cached(page)) { fetchRange(Math.max(1, page - PREFETCH_AHEAD), Math.min(pageCount, page + PREFETCH_AHEAD)); return; }
+    const last = Math.min(pageCount, page + PREFETCH_AHEAD);
+    const first = Math.max(1, page - PREFETCH_AHEAD);
+    if (!cached(last)) fetchRange(last, Math.min(pageCount, last + WINDOW - 1));
+    if (!cached(first)) fetchRange(Math.max(1, first - WINDOW + 1), first);
+  }, [accountId, pageCount, page, cached, fetchRange]);
   const { data: sectionsData } = useSWR<SectionsResponse>(
     basePath && accountId ? `${basePath}/accounts/sections?account=${accountId}` : null,
     fetcher,
@@ -132,27 +173,29 @@ export default function SourceAccountReader({
   };
 
   const setSelection = useCallback((nextBook: string | null, nextPage: number) => {
+    if (nextBook !== data?.account?.id) { setShellPage(nextPage); setFetched({}); inFlight.current.clear(); }
     const next = new URLSearchParams(searchParams.toString());
     if (nextBook) next.set('book', nextBook);
     else next.delete('book');
     next.set('page', String(nextPage));
     router.replace(`${pathname}?${next.toString()}`, { scroll: false });
     if (!fullscreen) section.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, [fullscreen, pathname, router, searchParams]);
+  }, [data?.account?.id, fullscreen, pathname, router, searchParams]);
 
   const setFullscreen = useCallback((value: boolean) => {
     setHeaderHidden(false);
     const next = new URLSearchParams(searchParams.toString());
     if (value) next.set('fullscreen', '1');
+    else if (defaultFullscreen) next.set('fullscreen', '0');
     else next.delete('fullscreen');
     router.replace(`${pathname}?${next.toString()}`, { scroll: false });
-  }, [pathname, router, searchParams]);
+  }, [defaultFullscreen, pathname, router, searchParams]);
 
   const turnPage = useCallback((direction: -1 | 1) => {
-    if (!data?.account || !data.page) return;
-    const nextPage = data.page.sequence + direction;
+    if (!data?.account) return;
+    const nextPage = page + direction;
     if (nextPage >= 1 && nextPage <= data.account.pageCount) setSelection(data.account.id, nextPage);
-  }, [data?.account, data?.page, setSelection]);
+  }, [data?.account, page, setSelection]);
 
   useEffect(() => {
     if (!fullscreen || !data?.account) return;
@@ -171,9 +214,10 @@ export default function SourceAccountReader({
   if (error) return <ErrorMessage title={language === 'ar' ? 'تعذر تحميل نص المصدر' : 'The source text could not be loaded'} description={String(error)} />;
   if (isLoading || !data) return <LoadingSpinner />;
   if (!data.account || !data.page) return null;
+  if (!currentPage) return <LoadingSpinner />;
 
   const { accounts, account } = data;
-  const current = data.page;
+  const current = currentPage;
   const printed = current.printedPage ?? String(current.sequence);
   const rtl = isRtl(account.source.language);
   let currentSectionIndex = -1;
@@ -181,6 +225,11 @@ export default function SourceAccountReader({
   const t = language === 'ar';
   const backIcon = t ? faArrowRight : faArrowLeft;
   const forwardIcon = t ? faArrowLeft : faArrowRight;
+  const pageOptions = Array.from({ length: account.pageCount }, (_, index) => {
+    const entry = data.pageNumbers?.[index];
+    if (!entry) return String(index + 1);
+    return [entry.printedPage ?? entry.sequence, entry.volume && (t ? `ج${entry.volume.number}` : `vol. ${entry.volume.number}`)].filter(Boolean).join(' · ');
+  });
   const pageContentStyle = {
     ...backgroundStyles[background],
     fontSize: fontSizes[size],
@@ -189,41 +238,42 @@ export default function SourceAccountReader({
 
   return (
     <section
-      ref={section}
-      className={fullscreen ? 'fixed inset-0 z-[60] flex min-h-0 flex-col overflow-hidden bg-white text-gray-900 dark:bg-black dark:text-gray-100' : 'scroll-mt-4 rounded-lg border border-gray-200 bg-white p-4 dark:border-white/10 dark:bg-black'}
+      className={fullscreen ? 'fixed inset-0 z-[60] flex min-h-0 flex-col overflow-hidden bg-white text-gray-900 dark:bg-black dark:text-gray-100' : 'rounded-lg border border-gray-200 bg-white p-4 dark:border-white/10 dark:bg-black'}
       dir={language === 'ar' ? 'rtl' : 'ltr'}
     >
-      {!fullscreen && (
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-3xl text-gray-900 dark:text-gray-200"><FontAwesomeIcon icon={faBookOpen} className="mx-2 h-7 w-7 text-amber-500" />{heading ?? (t ? 'نص المصدر' : 'Source text')}</h2>
-          <Button onClick={() => setFullscreen(true)}><FontAwesomeIcon icon={faExpand} />{t ? 'قراءة بملء الشاشة' : 'Read fullscreen'}</Button>
-        </div>
-      )}
-
-      {fullscreen && (
-        <div className={`shrink-0 overflow-hidden transition-[max-height,opacity] duration-200 ${headerHidden ? 'max-h-0 opacity-0' : 'max-h-[40rem] opacity-100'}`}>
+      {(
+        <div ref={section} className={`shrink-0 scroll-mt-[88px] overflow-hidden transition-[max-height,opacity] duration-200 ${fullscreen && headerHidden ? 'max-h-0 opacity-0' : 'max-h-[40rem] opacity-100'} ${fullscreen ? '' : 'mb-3 rounded-lg border border-amber-400'}`}>
         <header className="relative z-10 flex shrink-0 items-center gap-2 border-b border-amber-400 bg-gray-50 px-3 py-2 dark:bg-gray-950">
+          {fullscreen && (
           <div className="relative" ref={menuRef}>
             <Button size="icon" onClick={() => setMenuOpen((open) => !open)} aria-label={menuOpen ? (t ? 'إغلاق القائمة' : 'Close menu') : (t ? 'فتح القائمة' : 'Open menu')} aria-pressed={menuOpen}><FontAwesomeIcon icon={menuOpen ? faXmark : faBars} /></Button>
             {menuOpen && (
               <div className="fixed inset-x-3 top-14 z-[70] max-h-[75dvh] overflow-y-auto rounded-lg border border-amber-400 bg-white p-3 shadow-xl dark:bg-gray-950 lg:inset-x-auto lg:start-3 lg:w-64">
-                <Button className="mb-2 w-full" onClick={() => { setMenuOpen(false); setFullscreen(false); }}><FontAwesomeIcon icon={faCompress} />{t ? 'إنهاء وضع القراءة' : 'Exit fullscreen'}</Button>
                 <ul className="flex flex-col gap-1">
                   {getAllNavLinks(language).map((link) => <li key={link.href}><Link href={link.href} onClick={() => setMenuOpen(false)} className="block rounded px-2 py-2 text-sm hover:bg-amber-50 dark:hover:bg-gray-800">{link.label}</Link></li>)}
                   <li><Link href="/about" onClick={() => setMenuOpen(false)} className="block rounded px-2 py-2 text-sm hover:bg-amber-50 dark:hover:bg-gray-800">{t ? 'عن الموقع' : 'About'}</Link></li>
-                  <li><Link href="/references" onClick={() => setMenuOpen(false)} className="block rounded px-2 py-2 text-sm hover:bg-amber-50 dark:hover:bg-gray-800">{t ? 'المراجع' : 'References'}</Link></li>
                 </ul>
                 <div className="mt-3 flex flex-col gap-3 border-t border-amber-400 pt-3"><LanguageSwitcher /><ThemeSwitcher /></div>
               </div>
             )}
           </div>
+          )}
           <p className="min-w-0 flex-1 truncate text-sm text-gray-700 dark:text-gray-200">{labelAccount(account)}</p>
           <div className="flex shrink-0 items-center gap-1">
             <Button variant="outline" size="icon" disabled={current.sequence <= 1} onClick={() => turnPage(-1)} aria-label={t ? 'الصفحة السابقة' : 'Previous page'}><FontAwesomeIcon icon={backIcon} /></Button>
+            <select
+              aria-label={t ? 'انتقل إلى صفحة' : 'Go to page'}
+              className="max-w-[7.5rem] cursor-pointer self-stretch appearance-none rounded border border-amber-400 bg-transparent px-2 text-center text-sm text-gray-800 dark:text-gray-100"
+              value={current.sequence}
+              onChange={(event) => setSelection(account.id, Number(event.target.value))}
+            >
+              {pageOptions.map((label, index) => <option key={index + 1} value={index + 1} className="text-gray-900">{label}</option>)}
+            </select>
             <Button variant="outline" size="icon" disabled={current.sequence >= account.pageCount} onClick={() => turnPage(1)} aria-label={t ? 'الصفحة التالية' : 'Next page'}><FontAwesomeIcon icon={forwardIcon} /></Button>
           </div>
           <Button size="icon" active={indexOpen} onClick={() => { setIndexOpen((open) => !open); setSettingsOpen(false); }} aria-label={t ? 'فتح الفهرس' : 'Open index'} aria-pressed={indexOpen}><FontAwesomeIcon icon={indexOpen ? faXmark : faList} /></Button>
           <Button size="icon" active={settingsOpen} onClick={() => { setSettingsOpen((open) => !open); setIndexOpen(false); }} aria-label={t ? 'فتح إعدادات القراءة' : 'Open reading settings'} aria-pressed={settingsOpen}><FontAwesomeIcon icon={settingsOpen ? faXmark : faGear} /></Button>
+          <Button size="icon" onClick={() => setFullscreen(!fullscreen)} aria-label={fullscreen ? (t ? 'إنهاء وضع القراءة' : 'Exit fullscreen') : (t ? 'قراءة بملء الشاشة' : 'Read fullscreen')}><FontAwesomeIcon icon={fullscreen ? faCompress : faExpand} /></Button>
         </header>
       {(indexOpen || settingsOpen) && (
         <div className="z-[5] shrink-0 border-b border-amber-300 bg-amber-50 p-3 dark:border-amber-800 dark:bg-gray-900">
@@ -279,7 +329,7 @@ export default function SourceAccountReader({
 
       <div className={fullscreen ? 'flex min-h-0 flex-1 flex-col px-3 pb-2 pt-3 sm:px-6' : 'flex flex-col'}>
         <div
-          className={fullscreen ? 'min-h-0 flex-1 overflow-y-auto rounded-lg border border-black/10 px-4 py-3 dark:border-white/10 sm:px-8' : 'max-h-[65vh] overflow-y-auto rounded-lg border border-gray-200 px-4 py-3 dark:border-white/10'}
+          className={fullscreen ? 'muted-scrollbar min-h-0 flex-1 overflow-y-auto rounded-lg border border-black/10 px-4 py-3 dark:border-white/10 sm:px-8' : 'muted-scrollbar max-h-[75vh] overflow-y-auto rounded-lg border border-gray-200 px-4 py-3 dark:border-white/10'}
           style={pageContentStyle}
           onScroll={(event) => {
             const top = event.currentTarget.scrollTop;
