@@ -7,14 +7,18 @@ import TitleCard from '@/components/people/TitleCard';
 import { TitleBase } from "@/types/title";
 import ErrorMessage from '@/components/common/ErrorMessage';
 
+import translations from '@/components/language/translations';
 import { fetcher } from '@/lib/swr';
 
 export default function TitlesPage() {
   const { language } = useLanguage();
+  const t = translations[language];
   const { data: titles, error, isLoading } = useSWR("/api/titles", fetcher);
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div className="container mx-auto px-4 py-8">
+        <h1 className="mb-6 text-4xl text-gray-900 dark:text-gray-100">{t.titles}</h1>
+
         <div>
           {error && <ErrorMessage title={language === 'ar' ? 'تعذر تحميل الألقاب.' : 'Failed to load titles.'} />}
           {isLoading || !titles ? (
