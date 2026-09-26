@@ -912,7 +912,6 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
           </Button>
         </div>
         {showNodesPanel && <div className="mt-3 rounded-lg border border-white/10 p-3">
-          <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100 capitalize">{t.graph.nodesInView}</h2>
           <ul className="mt-2 space-y-1">
             {rankedViewNodes?.map(node => (
               <li key={node.id}>
