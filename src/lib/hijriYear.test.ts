@@ -21,10 +21,10 @@ describe('compareHijriYear', () => {
     expect([2, -3, -1, 8].sort(compareHijriYear)).toEqual([-3, -1, 2, 8]);
   });
 
-  // The old `(a ?? 0) - (b ?? 0)` put an undated entry at zero, which was
-  // before everything only while every year was positive.
-  it('keeps undated entries first rather than among the years before the hijra', () => {
-    expect([2, null, -3].sort(compareHijriYear)).toEqual([null, -3, 2]);
+  // The old `(a ?? 0) - (b ?? 0)` put an undated entry at zero, which is
+  // among the years before the hijra rather than after every year.
+  it('keeps undated entries last rather than among the years before the hijra', () => {
+    expect([2, null, -3].sort(compareHijriYear)).toEqual([-3, 2, null]);
     expect(compareHijriYear(null, undefined)).toBe(0);
   });
 });

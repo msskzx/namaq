@@ -101,13 +101,9 @@ function TimelineItem({ entry, language }: { entry: TimelineEntry; language: str
       <div className="h-6 w-0.5 bg-amber-400"></div>
 
       {/* Year */}
-      {
-        period && (
-          <div className="text-xs font-medium text-amber-600 dark:text-amber-400 mt-4">
-            {period}
-          </div>
-        )
-      }
+      <div className={`text-xs font-medium mt-4 ${period ? 'text-amber-600 dark:text-amber-400' : 'text-gray-500'}`}>
+        {period ?? (language === 'ar' ? 'غير معروف' : 'Unknown')}
+      </div>
     </div >
   );
 }
