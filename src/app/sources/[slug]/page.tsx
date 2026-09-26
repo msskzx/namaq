@@ -139,7 +139,7 @@ export default function SourcePage({ params }: { params: Promise<{ slug: string 
 
                 <SourceAccountReader
                   basePath={`/api/sources/${slug}`}
-                  heading={language === 'ar' ? 'القراءة' : 'Reading'}
+                  defaultFullscreen
                   labelAccount={entryLabel}
                   selectorLabel={{ ar: 'الترجمة', en: 'Entry' }}
                 />

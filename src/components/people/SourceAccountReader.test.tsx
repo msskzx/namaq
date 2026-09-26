@@ -92,8 +92,9 @@ function page(overrides: Record<string, unknown> = {}) {
   };
 }
 
-function respondWith(body: unknown) {
-  fetchJson.mockImplementation(async () => body);
+function respondWith(body: Record<string, unknown>) {
+  const shell = { pages: body.page ? [body.page] : [], ...body };
+  fetchJson.mockImplementation(async (url: string) => (url.includes('from=') ? { pages: [] } : shell));
 }
 
 // Each render gets its own SWR cache so one test's response cannot satisfy the
@@ -121,6 +122,48 @@ describe('SourceAccountReader', () => {
 
     expect(await screen.findByText('الفقرة الأولى')).toBeTruthy();
     expect(screen.getByText('الفقرة الثانية')).toBeTruthy();
+  });
+
+  it('fetches the window around the page once and turns within it without another request', async () => {
+    nav.setUrl('/people/abu-ubaydah-ibn-al-jarrah?page=3&fullscreen=1');
+    const run = (from: number, to: number) => Array.from({ length: to - from + 1 }, (_, i) =>
+      page({ sequence: from + i, printedPage: String(from + i), bodyMarkdown: `صفحة ${from + i}` }));
+    respondWith({ accounts: [account()], account: account(), page: run(3, 3)[0], pages: run(1, 5) });
+
+    renderReader();
+    await screen.findByText('صفحة 3');
+    fireEvent.click(screen.getByRole('button', { name: 'Next page' }));
+    await screen.findByText('صفحة 4');
+
+    const ranges = () => fetchJson.mock.calls.map(([url]) => String(url)).filter((url) => url.includes('from='));
+    expect(ranges()).toEqual([expect.stringContaining('from=6&to=10')]);
+    fireEvent.click(screen.getByRole('button', { name: 'Previous page' }));
+    await screen.findByText('صفحة 3');
+    expect(ranges()).toHaveLength(1);
+  });
+
+  it('asks for the next five pages when the cache runs within two of the reader', async () => {
+    nav.setUrl('/people/abu-ubaydah-ibn-al-jarrah?page=3&fullscreen=1');
+    respondWith({ accounts: [account()], account: account(), page: page({ sequence: 3 }), pages: [1, 2, 3, 4, 5].map((sequence) => page({ sequence })) });
+
+    renderReader();
+    fireEvent.click(await screen.findByRole('button', { name: 'Next page' }));
+
+    await waitFor(() => expect(fetchJson).toHaveBeenCalledWith(expect.stringContaining('from=6&to=10')));
+  });
+
+  it('opens fullscreen by default and exits to fullscreen=0', async () => {
+    nav.setUrl('/sources/siyar?book=account-siyar&page=1');
+    render(
+      <SWRConfig value={{ provider: () => new Map(), dedupingInterval: 0 }}>
+        <SourceAccountReader basePath="/api/sources/siyar" defaultFullscreen />
+      </SWRConfig>,
+    );
+
+    expect(await screen.findByLabelText('Go to page')).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'Exit fullscreen' }));
+
+    expect(nav.replaceCalls.at(-1)).toContain('fullscreen=0');
   });
 
   it('renders bracketed source headings without their brackets', async () => {
@@ -151,12 +194,13 @@ describe('SourceAccountReader', () => {
   });
 
   it('keeps the source text right-to-left while the interface is English', async () => {
+    nav.setUrl('/people/abu-ubaydah-ibn-al-jarrah?fullscreen=1');
     const { container } = renderReader();
 
     await screen.findByText('الفقرة الأولى');
 
     expect(container.querySelector('article')?.getAttribute('dir')).toBe('rtl');
-    expect(screen.getByText('Previous')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Previous page' })).toBeTruthy();
   });
 
   it('asks for the page named in the URL', async () => {
@@ -168,8 +212,9 @@ describe('SourceAccountReader', () => {
     await waitFor(() => expect(fetchJson).toHaveBeenCalledWith(expect.stringContaining('page=7')));
   });
 
-  it('shows the book page number in the page selector', async () => {
-    Element.prototype.scrollIntoView = vi.fn();
+  it('paginates inline from the same header as fullscreen, labelled by printed page and volume', async () => {
+    const scrollIntoView = vi.fn();
+    Element.prototype.scrollIntoView = scrollIntoView;
     const selected = account({ pageCount: 2 });
     respondWith({
       accounts: [selected], account: selected,
@@ -185,56 +230,42 @@ describe('SourceAccountReader', () => {
 
     const select = container.querySelector('select[aria-label="Go to page"]') as HTMLSelectElement;
     expect(select.selectedOptions[0].textContent).toBe('158 · vol. 1');
-    expect(select.options[1].textContent).toBe('158 · vol. 2');
-    fireEvent.change(select, { target: { value: '2' } });
-    expect(nav.replaceCalls.at(-1)).toContain('page=2');
-  });
-
-  it('brings the reader back into view when the page changes', async () => {
-    const scrollIntoView = vi.fn();
-    Element.prototype.scrollIntoView = scrollIntoView;
-
-    renderReader();
-    fireEvent.click(await screen.findByText('Next'));
-
-    await waitFor(() => expect(scrollIntoView).toHaveBeenCalled());
+    expect((screen.getByRole('button', { name: 'Previous page' })).hasAttribute('disabled')).toBe(true);
+    fireEvent.click(screen.getByRole('button', { name: 'Next page' }));
+    await waitFor(() => expect(nav.replaceCalls.at(-1)).toContain('page=2'));
+    expect(scrollIntoView).toHaveBeenCalled();
   });
 
   it('leaves the browser to keep its own scroll position', async () => {
+    nav.setUrl('/people/abu-ubaydah-ibn-al-jarrah?fullscreen=1');
     renderReader();
-    fireEvent.click(await screen.findByText('Next'));
+    fireEvent.click(await screen.findByRole('button', { name: 'Next page' }));
 
     await waitFor(() => expect(nav.replaceOptions.at(-1)).toEqual({ scroll: false }));
   });
 
   it('puts the page it moves to in the URL', async () => {
+    nav.setUrl('/people/abu-ubaydah-ibn-al-jarrah?fullscreen=1');
     renderReader();
-    fireEvent.click(await screen.findByText('Next'));
+    fireEvent.click(await screen.findByRole('button', { name: 'Next page' }));
 
     await waitFor(() => expect(nav.replaceCalls.at(-1)).toContain('page=2'));
   });
 
   it('cannot page back from the first page or on past the last', async () => {
+    nav.setUrl('/people/abu-ubaydah-ibn-al-jarrah?fullscreen=1');
     renderReader();
 
-    const previous = (await screen.findByText('Previous')).closest('button');
+    const previous = await screen.findByRole('button', { name: 'Previous page' });
     expect(previous?.hasAttribute('disabled')).toBe(true);
 
     cleanup();
+    nav.setUrl('/people/abu-ubaydah-ibn-al-jarrah?page=19&fullscreen=1');
     respondWith({ accounts: [account()], account: account(), page: page({ sequence: 19 }) });
     renderReader();
 
-    const next = (await screen.findByText('Next')).closest('button');
+    const next = await screen.findByRole('button', { name: 'Next page' });
     expect(next?.hasAttribute('disabled')).toBe(true);
-  });
-
-  it('offers no book selector when only one account exists', async () => {
-    const { container } = renderReader();
-
-    await screen.findByText('الفقرة الأولى');
-
-    // Only the printed-page jump remains.
-    expect(container.querySelectorAll('select')).toHaveLength(1);
   });
 
   it('switches book and returns to that account\'s first page', async () => {
@@ -280,8 +311,9 @@ describe('SourceAccountReader', () => {
           ],
         };
       }
-      return { accounts: [account()], account: account(), page: page({ sequence: 4, printedPage: '10' }) };
+      return { accounts: [account()], account: account(), page: page({ sequence: 4, printedPage: '10' }), pages: [page({ sequence: 4, printedPage: '10' })] };
     });
+    nav.setUrl('/people/abu-ubaydah-ibn-al-jarrah?page=4');
 
     renderReader();
 

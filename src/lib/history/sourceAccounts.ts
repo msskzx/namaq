@@ -151,6 +151,40 @@ export async function readPage(accountId: string, sequence: number) {
   });
 }
 
+/** The most pages one request may ask for, so a range cannot read a whole book. */
+export const MAX_PAGES_PER_REQUEST = 9;
+
+/** Pages `from..to` (inclusive) of one account, in reading order. */
+export async function readPages(accountId: string, from: number, to: number) {
+  return prisma.sourceAccountPage.findMany({
+    where: { accountId, sequence: { gte: from, lte: to } },
+    select: {
+      sequence: true,
+      printedPage: true,
+      bodyMarkdown: true,
+      notesMarkdown: true,
+      extractionUrl: true,
+    },
+    orderBy: { sequence: 'asc' },
+  });
+}
+
+/**
+ * Page bodies alone, for a reader that already holds the account list and is
+ * filling its cache ahead of the reader's position.
+ */
+export async function pagesPayload(
+  where: Prisma.SourceAccountWhereInput,
+  accountId: string,
+  from: number,
+  to: number,
+  unknownAccount: string,
+) {
+  const account = await prisma.sourceAccount.findFirst({ where: { ...where, id: accountId }, select: { id: true } });
+  if (!account) return { status: 404 as const, body: { error: unknownAccount } };
+  return { status: 200 as const, body: { pages: await readPages(accountId, from, to) } };
+}
+
 /**
  * Every heading the account's pages declare. Building it reads every page's
  * body, which is why it is served apart from the page itself.
@@ -193,13 +227,14 @@ export async function accountsPayload(
 
   if (!selected) return { status: 404 as const, body: { error: unknownAccount } };
 
-  const [page, pageNumbers] = await Promise.all([
+  const [page, pageNumbers, pages] = await Promise.all([
     readPage(selected.id, requestedPage),
     prisma.sourceAccountPage.findMany({
       where: { accountId: selected.id },
       select: { sequence: true, printedPage: true, volume: { select: { number: true } } },
       orderBy: { sequence: 'asc' },
     }),
+    readPages(selected.id, Math.max(1, requestedPage - 2), requestedPage + 2),
   ]);
   if (!page) {
     return {
@@ -208,5 +243,5 @@ export async function accountsPayload(
     };
   }
 
-  return { status: 200 as const, body: { accounts, account: selected, page, pageNumbers } };
+  return { status: 200 as const, body: { accounts, account: selected, page, pages, pageNumbers } };
 }
