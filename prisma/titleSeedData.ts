@@ -77,6 +77,11 @@ export const titles = [
     slug: 'caliph',
   },
   {
+    name: 'الخلفاء الراشدون',
+    nameTransliterated: 'The Rightly-Guided Caliphs',
+    slug: 'al-khulafa-al-rashidun',
+  },
+  {
     name: 'صديق الأمة',
     nameTransliterated: 'Siddiq al-Ummah',
     slug: 'siddiq-al-ummah',
@@ -157,43 +162,13 @@ export const titles = [
     slug: 'sayyid-al-shuhada',
   },
   {
-    name: 'سبط النبي',
-    nameTransliterated: 'Grandson of the Prophet',
-    slug: 'grandson-of-prophet',
-  },
-  {
     name: 'سيد شباب أهل الجنة',
     nameTransliterated: 'Master of the Youth of Paradise',
     slug: 'sayyid-shabab-ahl-al-jannah',
   },
   {
-    name: 'شهيد',
-    nameTransliterated: 'Martyr',
-    slug: 'martyr',
-  },
-  {
-    name: 'ابن النبي',
-    nameTransliterated: 'Son of the Prophet',
-    slug: 'son-of-prophet',
-  },
-  {
-    name: 'عم النبي',
-    nameTransliterated: 'Uncle of the Prophet',
-    slug: 'uncle-of-prophet',
-  },
-  {
-    name: 'حفيدة النبي',
-    nameTransliterated: 'Granddaughter of the Prophet',
-    slug: 'granddaughter-of-prophet',
-  },
-  {
     name: 'أول زوجات النبي',
     nameTransliterated: 'First Wife of the Prophet',
     slug: 'first-wife',
-  },
-  {
-    name: 'ابن عم النبي',
-    nameTransliterated: 'Cousin of the Prophet',
-    slug: 'cousin-of-prophet',
   },
 ];

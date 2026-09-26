@@ -21,9 +21,7 @@ const alHusaynIbnAli = {
   },
   titles: [
     // Carried from the seed rows; this chapter records only his birth.
-    { title: 'grandson-of-prophet', claims: legacyUnreviewed },
     { title: 'sayyid-shabab-ahl-al-jannah', claims: legacyUnreviewed },
-    { title: 'martyr', claims: legacyUnreviewed },
   ],
   relations: [
     // Carried from the graph seed.

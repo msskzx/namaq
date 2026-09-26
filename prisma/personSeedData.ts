@@ -182,7 +182,7 @@ export const people = [
     appearance: null,
     virtues: 'أول أبناء النبي، توفي صغيراً.',
     picture: null,
-    titles: ['son-of-prophet'],
+    titles: [],
     ayat: [],
   },
   {
@@ -192,7 +192,7 @@ export const people = [
     appearance: null,
     virtues: 'ابن النبي، توفي صغيراً، لقب بالطيب والطاهر.',
     picture: null,
-    titles: ['son-of-prophet'],
+    titles: [],
     ayat: [],
   },
   {
@@ -202,7 +202,7 @@ export const people = [
     appearance: null,
     virtues: 'ابن النبي من مارية القبطية، توفي صغيراً.',
     picture: null,
-    titles: ['son-of-prophet'],
+    titles: [],
     ayat: [],
   },
   // Uncles of the Prophet (Peace be upon him)
@@ -216,7 +216,7 @@ export const people = [
     appearance: null,
     virtues: 'عم النبي وكافله بعد وفاة جده، حاميه وناصره في بداية الدعوة الإسلامية رغم عدم إسلامه.',
     picture: null,
-    titles: ['uncle-of-prophet'],
+    titles: [],
     ayat: [],
   },
   {
@@ -226,7 +226,7 @@ export const people = [
     appearance: null,
     virtues: 'عم النبي، من السابقين إلى الإسلام، كان له دور في حماية النبي والدعوة بعد إسلامه، جد الخلفاء العباسيين.',
     picture: null,
-    titles: ['uncle-of-prophet', 'companion'],
+    titles: ['companion'],
     ayat: [],
   },
   // Nephews of the Prophet (Peace be upon him)
@@ -237,7 +237,7 @@ export const people = [
     appearance: 'كان يشبه النبي صلى الله عليه وسلم في ملامحه.',
     virtues: 'سبط النبي وريحانته، سيد شباب أهل الجنة، خامس الخلفاء الراشدين، تنازل عن الخلافة حقناً لدماء المسلمين.',
     picture: null,
-    titles: ['grandson-of-prophet', 'sayyid-shabab-ahl-al-jannah', 'caliph'],
+    titles: ['sayyid-shabab-ahl-al-jannah', 'caliph'],
     ayat: [
       { surah: 76, ayah: 8 }, // الإنسان: 8 - "ويطعمون الطعام..." (هو وأهله)
       { surah: 33, ayah: 33 }, // الأحزاب: 33 - آية التطهير
@@ -250,7 +250,7 @@ export const people = [
     appearance: 'كان يشبه النبي صلى الله عليه وسلم.',
     virtues: 'سبط النبي وريحانته، سيد شباب أهل الجنة، استشهد في كربلاء دفاعاً عن الحق.',
     picture: null,
-    titles: ['grandson-of-prophet', 'sayyid-shabab-ahl-al-jannah', 'martyr'],
+    titles: ['sayyid-shabab-ahl-al-jannah'],
     ayat: [
       { surah: 76, ayah: 8 }, // الإنسان: 8 - "ويطعمون الطعام..." (هو وأهله)
       { surah: 33, ayah: 33 }, // الأحزاب: 33 - آية التطهير
@@ -263,7 +263,7 @@ export const people = [
     appearance: null,
     virtues: 'ابن عم النبي، من أجود الناس وأكرمهم، كان يُلقب بـ "بحر الجود".',
     picture: null,
-    titles: ['cousin-of-prophet', 'companion'],
+    titles: ['companion'],
     ayat: [],
   },
   // Grandchildren of the Prophet (Peace be upon him) through Fatimah and Ali
@@ -274,7 +274,7 @@ export const people = [
     appearance: null,
     virtues: 'بنت علي وفاطمة، حفيدة النبي.',
     picture: null,
-    titles: ['granddaughter-of-prophet'],
+    titles: [],
     ayat: [],
   },
   {
@@ -284,7 +284,7 @@ export const people = [
     appearance: null,
     virtues: 'بنت علي وفاطمة، حفيدة النبي، عرفت بشجاعتها وفصاحتها.',
     picture: null,
-    titles: ['granddaughter-of-prophet'],
+    titles: [],
     ayat: [],
   },
 ];

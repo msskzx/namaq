@@ -71,6 +71,17 @@ async function projectPeople(people: Catalog['people']) {
     }
 
     const set = settleFields(`people/${subject.slug}`, live, subject.fields);
+    for (const column of ['name', 'nameTransliterated'] as const) {
+      const value = subject[column];
+      const held = live[column];
+      if (!value || held === value) continue;
+      if (ownedByCatalog(subject.slug)) {
+        planned.push(`people/${subject.slug}.${column}: overwrite ${JSON.stringify(held)} with ${JSON.stringify(value)}`);
+        set[column] = value;
+      } else {
+        conflicts.push(`people/${subject.slug}.${column}: database has ${JSON.stringify(held)}, catalog has ${JSON.stringify(value)}`);
+      }
+    }
     if (apply && Object.keys(set).length > 0) {
       await prisma.person.update({ where: { slug: subject.slug }, data: set });
     }
