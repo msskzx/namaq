@@ -198,7 +198,6 @@ const translations = {
     },
     // Graph filter/fullscreen controls
     graph: {
-      updating: 'Updating graph…',
       relationshipTypes: 'Relationship types',
       nodeKinds: 'Node kinds',
       allRelations: 'All relations',
@@ -225,7 +224,6 @@ const translations = {
       },
       nodesInView: 'Nodes in view',
       nodesList: 'List of Nodes',
-      selectEntryHint: 'Use these keyboard-accessible controls to select an entry.',
       graphSummary: (nodes: number, nodesLabel: string, relationships: number) => `${nodes} ${nodesLabel} · ${relationships} relationships`,
       noGraphData: 'No graph data available',
       loadError: 'Failed to load the graph',
@@ -499,7 +497,6 @@ const translations = {
     },
     // Graph filter/fullscreen controls
     graph: {
-      updating: 'جارٍ تحديث الشبكة…',
       relationshipTypes: 'أنواع العلاقات',
       nodeKinds: 'أنواع العُقد',
       allRelations: 'كل العلاقات',
@@ -526,12 +523,11 @@ const translations = {
       },
       nodesInView: 'العُقد المعروضة',
       nodesList: 'قائمة العُقد',
-      selectEntryHint: 'استخدم عناصر التحكم هذه القابلة للوصول عبر لوحة المفاتيح لاختيار عنصر.',
       graphSummary: (nodes: number, nodesLabel: string, relationships: number) => `${nodes} ${nodesLabel} · ${relationships} علاقة`,
       noGraphData: 'لا تتوفر بيانات للرسم البياني',
       loadError: 'تعذر تحميل الرسم البياني',
       resetGraphView: 'تصفير',
-      viewProfile: 'عرض الصفحة الشخصية',
+      viewProfile: 'الصفحة الشخصية',
       interactiveGraph: 'رسم بياني تفاعلي للعلاقات',
       nodesLabels: {
         people: 'أشخاص',

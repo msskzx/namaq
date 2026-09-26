@@ -675,16 +675,22 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
   };
 
   const updatingNotice = exploration.isFetching && (
-    <div role="status" className="mt-1 flex items-center gap-2 text-xs text-gray-700 dark:text-gray-300">
+    <div role="status" className="mt-3 flex items-center gap-2 text-xs text-gray-300">
       <LoadingSpinner size="sm" />
-      {t.graph.updating}
     </div>
   );
 
   const explorationControls = (
-    <aside dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4 dark:border-amber-700 dark:bg-gray-800">
-      <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedNode ? (selectedPreview?.fullName ?? selectedNode.label) : t.graph.globalRelationships}</h2>
-      {updatingNotice}
+    <aside dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 rounded-lg border border-amber-700 bg-black p-4">
+      {selectedNode && selectedPersonHasProfile && (
+        <div className="mb-3">
+          <Button href={profilePath(selectedNode.type, selectedNode.slug)}>
+            <FontAwesomeIcon icon={faUser} />
+            {t.graph.viewProfile}
+          </Button>
+        </div>
+      )}
+      <h2 className="text-lg font-semibold text-gray-100">{selectedNode ? (selectedPreview?.fullName ?? selectedNode.label) : t.graph.globalRelationships}</h2>
       {isSelectedPerson && selectedPreview && selectedPreview.titles.length > 0 && (
         <div className="mt-1 flex flex-wrap gap-2">
           {selectedPreview.titles.map(title => (
@@ -701,17 +707,10 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
           hasProfile={selectedPersonHasProfile}
         />
       )}
-      {!selectedNode && <p className="text-sm text-gray-600 dark:text-gray-300">{t.graph.globalRelationshipsHint}</p>}
+      {!selectedNode && <p className="text-sm text-gray-300">{t.graph.globalRelationshipsHint}</p>}
       {/* Four groups, divided: where the subject leads, what it reveals, what
           it removes, and what acts on the whole exploration. */}
-      {selectedNode && selectedPersonHasProfile && (
-        <div className={GROUP_ROW}>
-          <Button href={profilePath(selectedNode.type, selectedNode.slug)}>
-            <FontAwesomeIcon icon={faUser} />
-            {t.graph.viewProfile}
-          </Button>
-        </div>
-      )}
+      {updatingNotice}
       <ExpansionControls
         isPerson={Boolean(selectedNode && (selectedNode.type ?? 'person') === 'person')}
         hasEligibleDirectRelations={hasEligibleDirectRelations}
@@ -914,7 +913,6 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
         </div>
         {showNodesPanel && <div className="mt-3 rounded-lg border border-white/10 p-3">
           <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100 capitalize">{t.graph.nodesInView}</h2>
-          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{t.graph.selectEntryHint}</p>
           <ul className="mt-2 space-y-1">
             {rankedViewNodes?.map(node => (
               <li key={node.id}>
