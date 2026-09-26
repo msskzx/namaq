@@ -34,11 +34,6 @@ export default function SourcesPage() {
           {language === 'ar' ? 'المصادر' : 'Source material'}
         </h1>
 
-        <Button href="/references" variant="outline" size="sm" className="mb-6">
-          <FontAwesomeIcon icon={faBookmark} />
-          {language === 'ar' ? 'المراجع' : 'References'}
-        </Button>
-
         {error && (
           <ErrorMessage
             title={language === 'ar' ? 'تعذر تحميل المصادر' : 'The sources could not be loaded'}
@@ -82,6 +77,22 @@ export default function SourcesPage() {
             ))}
           </ul>
         )}
+
+        <section className="mt-12 rounded-lg border border-gray-200 p-6 dark:border-white/10">
+          <h2 className="mb-2 text-3xl text-gray-900 dark:text-gray-100">
+            <FontAwesomeIcon icon={faBookmark} className="w-7 h-7 text-amber-500 me-2" />
+            {language === 'ar' ? 'المراجع' : 'References'}
+          </h2>
+          <p className="mb-4 text-gray-700 dark:text-gray-300">
+            {language === 'ar'
+              ? 'المصادر التي اعتمدنا عليها في بناء نمق ومحتواه التاريخي.'
+              : 'Sources used to build Namaq and its historical content.'}
+          </p>
+          <Button href="/references">
+            <FontAwesomeIcon icon={faBookmark} />
+            {language === 'ar' ? 'عرض المراجع' : 'View references'}
+          </Button>
+        </section>
       </div>
     </div>
   );
