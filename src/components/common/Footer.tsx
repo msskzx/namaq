@@ -45,7 +45,7 @@ function Footer() {
     <footer className="w-full bg-gray-50 dark:bg-black text-amber-600 dark:text-amber-400 border-t-2 border-amber-400">
       <div className="container mx-auto px-4 py-8">
         {/* Main content with 4 columns */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+        <div dir={isRTL ? 'rtl' : 'ltr'} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {Object.entries(linkGroups).map(([key, group]) => (
             <div key={key} className="space-y-3">
               <h3 className={`text-lg font-semibold mb-3 dark:text-amber-300 ${isRTL ? 'text-right' : 'text-left'}`}>
