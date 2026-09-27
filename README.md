@@ -12,6 +12,10 @@ Open the graph → explore and filter relationships → open a person's profile 
 
 ## What is implemented
 
+### Quizzes
+
+- Relation questions preserve the claim's direction in Arabic and English: a `FATHER` claim asks whose father the subject was, while a `SON` claim asks whose son they were. The answer is the claim's related person.
+
 ### Relationship graph
 
 - The **Nodes in view** list can be hidden and shown; every action button in the graph UI comes from the shared `Button` component, and a selected person's titles render as the same badges the profile page uses.

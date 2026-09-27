@@ -20,6 +20,7 @@ import ErrorMessage from "@/components/common/ErrorMessage";
 import Button from "@/components/common/Button";
 import { useLanguage } from "@/components/language/LanguageContext";
 import { fetcher } from "@/lib/swr";
+import { relationPrompt } from "@/lib/quiz/relationPrompt";
 import { QUIZ_LENGTHS, QUIZ_TOPICS, type QuizLength, type QuizTopic } from "@/lib/quiz/types";
 
 interface DisplayName {
@@ -64,20 +65,8 @@ function displayName(name: DisplayName | null | undefined, fallback: string, ar:
 }
 
 function questionPrompt(question: QuizQuestionView, subject: string, ar: boolean): string {
-  const relationRoles: Record<string, { en: string; ar: string }> = {
-    SON: { en: "father", ar: "والد" },
-    DAUGHTER: { en: "father or mother", ar: "والدًا أو والدة" },
-    FATHER: { en: "son", ar: "ابن" },
-    MOTHER: { en: "son or daughter", ar: "ابنًا أو ابنة" },
-    WIFE: { en: "wife", ar: "زوجة" },
-    HUSBAND: { en: "husband", ar: "زوج" },
-  };
-  if (question.family === "RELATION" && relationRoles[question.attribute]) {
-    const role = relationRoles[question.attribute];
-    return ar ? `من كان ${role.ar} ${subject}؟` : `Who was ${subject}'s ${role.en}?`;
-  }
+  if (question.family === "RELATION") return relationPrompt(subject, question.attribute, ar ? "ar" : "en");
   const prompts: Record<string, { en: string; ar: string }> = {
-    RELATION: { en: `Who was ${subject}'s ${question.attribute.toLowerCase()}?`, ar: `من كان ${question.attribute} لـ${subject}؟` },
     PARTICIPATION: { en: `Which battle did ${subject} participate in?`, ar: `في أي معركة شارك ${subject}؟` },
     TITLE: { en: `Which title did ${subject} hold?`, ar: `ما اللقب الذي حمله ${subject}؟` },
     TITLE_HOLDER: { en: "Who held this title?", ar: "من حمل هذا اللقب؟" },
