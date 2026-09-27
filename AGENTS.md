@@ -67,6 +67,14 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   Worktree root to the matching repository-local path; this file does not change
   the app setting automatically.
 - In every new worktree, create and verify the `.env` symlink described under Local verification before running project commands. Reuse the main checkout's file; preserve an existing file instead of overwriting it.
+- A worktree is a separate working directory sharing only the main checkout's
+  git history, not its `node_modules` -- gitignored files live on disk per
+  checkout, so Next.js/Node have nothing to resolve `import`s against until
+  something is there. Symlink it to the main checkout's
+  (`ln -s <main-checkout>/node_modules node_modules`) rather than running a
+  fresh `npm install`, as long as the branch hasn't changed `package.json` or
+  the lockfile; if it has, install instead so the worktree gets its own,
+  correct set of packages.
 - Branch names should not contain numbers.
 - Commit messages follow Conventional Commits: `type(scope): summary`
   (e.g. `fix(graph): ...`, `feat(search): ...`, `test(pipeline): ...`),
