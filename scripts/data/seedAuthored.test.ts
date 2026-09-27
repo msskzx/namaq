@@ -18,15 +18,15 @@ describe('seedAuthoredPeople', () => {
   // theirs: reading them as catalog-owned would have a project run take away
   // every value the catalog does not repeat. Every subject the catalog does
   // describe has since been handed over, so the subjects left to stand for
-  // this are ones it has not reached — these three are in personSeedData11.ts
+  // this are ones it has not reached — these three are in personSeedData13.ts
   // with no module of their own.
   it('keeps a subject the seeds still describe, which the catalog has not reached', () => {
-    expect(seeded.has('khawwat-ibn-jubair')).toBe(true);
-    expect(seeded.has('sahl-ibn-hunayf')).toBe(true);
-    expect(seeded.has('uthman-ibn-hunayf')).toBe(true);
+    expect(seeded.has('jarir-ibn-abdullah')).toBe(true);
+    expect(seeded.has('abu-al-yusr-al-ansari')).toBe(true);
+    expect(seeded.has('abu-usayd-al-saidi')).toBe(true);
   });
 
   it('reads the dormant seed file too, since a dormant author is still an author', () => {
-    expect(seeded.size).toBeGreaterThan(100);
+    expect(seeded.size).toBeGreaterThan(60);
   });
 });
