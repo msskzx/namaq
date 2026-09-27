@@ -1,11 +1,23 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { assembleQuiz, citationFindMany } = vi.hoisted(() => ({
+const { assembleQuiz, citationFindMany, personFindMany, titleFindMany, battleFindMany, eventFindMany } = vi.hoisted(() => ({
   assembleQuiz: vi.fn(),
   citationFindMany: vi.fn(),
+  personFindMany: vi.fn(),
+  titleFindMany: vi.fn(),
+  battleFindMany: vi.fn(),
+  eventFindMany: vi.fn(),
 }));
 vi.mock('@/lib/quiz/assemble', () => ({ assembleQuiz }));
-vi.mock('@/lib/prisma', () => ({ prisma: { citation: { findMany: citationFindMany } } }));
+vi.mock('@/lib/prisma', () => ({
+  prisma: {
+    citation: { findMany: citationFindMany },
+    person: { findMany: personFindMany },
+    title: { findMany: titleFindMany },
+    battle: { findMany: battleFindMany },
+    event: { findMany: eventFindMany },
+  },
+}));
 
 import { GET } from './route';
 
@@ -29,6 +41,10 @@ function question(overrides: Record<string, unknown> = {}) {
 beforeEach(() => {
   vi.clearAllMocks();
   citationFindMany.mockResolvedValue([]);
+  personFindMany.mockResolvedValue([]);
+  titleFindMany.mockResolvedValue([]);
+  battleFindMany.mockResolvedValue([]);
+  eventFindMany.mockResolvedValue([]);
 });
 
 describe('GET /api/quiz', () => {
@@ -74,5 +90,32 @@ describe('GET /api/quiz', () => {
     assembleQuiz.mockResolvedValueOnce([]);
     await GET(request('?topic=PERSON_CIRCLE&length=5&person=prophet-muhammad'));
     expect(assembleQuiz).toHaveBeenCalledWith(expect.objectContaining({ personSlug: 'prophet-muhammad' }));
+  });
+
+  it('resolves display names for the subject and person-slug choices', async () => {
+    assembleQuiz.mockResolvedValueOnce([question({ choices: ['a', 'b', 'c', 'd'], correctAnswer: 'a' })]);
+    personFindMany.mockResolvedValueOnce([
+      { slug: 'zaynab-bint-jahsh', name: 'زينب بنت جحش', nameTransliterated: 'Zaynab bint Jahsh' },
+      { slug: 'a', name: 'ا', nameTransliterated: 'A' },
+    ]);
+
+    const response = await GET(request('?topic=PEOPLE&length=5'));
+    const body = await response.json();
+
+    expect(body.questions[0].subjectName).toEqual({ name: 'زينب بنت جحش', nameTransliterated: 'Zaynab bint Jahsh' });
+    expect(body.questions[0].choiceLabels.a).toEqual({ name: 'ا', nameTransliterated: 'A' });
+    expect(body.questions[0].choiceLabels.b).toBeUndefined();
+  });
+
+  it('does not resolve names for families whose choices are plain values', async () => {
+    assembleQuiz.mockResolvedValueOnce([
+      question({ family: 'NAME', attribute: 'kunya', choices: ['أبو بكر', 'أبو محمد', 'أبو سعيد', 'أبو حفص'], correctAnswer: 'أبو بكر' }),
+    ]);
+    personFindMany.mockResolvedValueOnce([{ slug: 'zaynab-bint-jahsh', name: 'زينب بنت جحش', nameTransliterated: null }]);
+
+    const response = await GET(request('?topic=PEOPLE&length=5'));
+    const body = await response.json();
+
+    expect(body.questions[0].choiceLabels).toEqual({});
   });
 });

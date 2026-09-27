@@ -22,11 +22,18 @@ import { useLanguage } from "@/components/language/LanguageContext";
 import { fetcher } from "@/lib/swr";
 import { QUIZ_LENGTHS, QUIZ_TOPICS, type QuizLength, type QuizTopic } from "@/lib/quiz/types";
 
+interface DisplayName {
+  name: string;
+  nameTransliterated: string | null;
+}
+
 interface QuizQuestionView {
   claimId: string;
   family: string;
   subject: { kind: string; slug: string };
+  subjectName: DisplayName | null;
   choices: string[];
+  choiceLabels: Record<string, DisplayName>;
   correctAnswer: string;
   evidence: { readerUrls: string[] };
 }
@@ -46,6 +53,11 @@ const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
   EVENTS: { en: "Events", ar: "أحداث" },
   PERSON_CIRCLE: { en: "A person's circle", ar: "دائرة شخص" },
 };
+
+function displayName(name: DisplayName | null | undefined, fallback: string, ar: boolean): string {
+  if (!name) return fallback;
+  return ar ? name.name : name.nameTransliterated || name.name;
+}
 
 function QuizzesPage() {
   const { language } = useLanguage();
@@ -171,12 +183,14 @@ function QuizzesPage() {
                   <li key={question.claimId} className="rounded-lg border border-gray-200 p-4 dark:border-white/10">
                     <div className="mb-2 flex items-center gap-2">
                       <FontAwesomeIcon icon={correct ? faCircleCheck : faCircleXmark} className={correct ? "text-green-600" : "text-red-500"} />
-                      <span className="font-semibold">{given ?? (ar ? "بدون إجابة" : "No answer")}</span>
+                      <span className="font-semibold">
+                        {given ? displayName(question.choiceLabels[given], given, ar) : ar ? "بدون إجابة" : "No answer"}
+                      </span>
                     </div>
                     {!correct && (
                       <p className="text-sm text-gray-600 dark:text-gray-400">
                         {ar ? "الصحيح: " : "Correct: "}
-                        {question.correctAnswer}
+                        {displayName(question.choiceLabels[question.correctAnswer], question.correctAnswer, ar)}
                       </p>
                     )}
                     {question.evidence.readerUrls.map((url) => (
@@ -212,7 +226,9 @@ function QuizzesPage() {
 
             <div className="rounded-lg border border-gray-200 p-6 dark:border-white/10">
               <p className="mb-4 text-sm text-gray-500 dark:text-gray-400">{questions[current].family}</p>
-              <p className="mb-4 font-semibold text-gray-900 dark:text-gray-100">{questions[current].subject.slug}</p>
+              <p className="mb-4 font-semibold text-gray-900 dark:text-gray-100">
+                {displayName(questions[current].subjectName, questions[current].subject.slug, ar)}
+              </p>
               <div className="flex flex-col gap-2">
                 {questions[current].choices.map((choice) => (
                   <Button
@@ -221,7 +237,7 @@ function QuizzesPage() {
                     active={answers[current] === choice}
                     onClick={() => setAnswers((prev) => ({ ...prev, [current]: choice }))}
                   >
-                    {choice}
+                    {displayName(questions[current].choiceLabels[choice], choice, ar)}
                   </Button>
                 ))}
               </div>

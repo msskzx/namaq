@@ -48,9 +48,11 @@ describe('generateRelationQuestion', () => {
     findFirst.mockResolvedValueOnce(
       claim({ relationshipType: 'WIFE', relatedSubjectSlug: 'prophet-muhammad' }),
     );
+    person.findUnique.mockResolvedValueOnce({ slug: 'prophet-muhammad' });
     findMany
       .mockResolvedValueOnce([{ relatedSubjectSlug: 'prophet-muhammad' }])
       .mockResolvedValueOnce([{ relatedSubjectSlug: 'a' }, { relatedSubjectSlug: 'b' }, { relatedSubjectSlug: 'c' }]);
+    person.findMany.mockResolvedValueOnce([{ slug: 'a' }, { slug: 'b' }, { slug: 'c' }]);
 
     const question = await generateRelationQuestion('zaynab-bint-jahsh', eligibility, zero);
 
@@ -65,19 +67,51 @@ describe('generateRelationQuestion', () => {
     });
     expect(question?.choices).toHaveLength(4);
     expect(findFirst).toHaveBeenCalledWith(
-      expect.objectContaining({ where: expect.objectContaining({ disputed: false, reviewStatus: { in: ['REVIEWED'] } }) }),
+      expect.objectContaining({
+        where: expect.objectContaining({ disputed: false, reviewStatus: { in: ['REVIEWED'] }, relatedSubjectKind: 'PERSON' }),
+      }),
+    );
+  });
+
+  it('never treats an event-involvement relation claim as a person relation', async () => {
+    // docs/plans/quiz-question-engine.md
+    findFirst.mockResolvedValueOnce(null);
+    await generateRelationQuestion('zaynab-bint-jahsh', eligibility, zero);
+
+    expect(findFirst).toHaveBeenCalledWith(
+      expect.objectContaining({ where: expect.objectContaining({ relatedSubjectKind: 'PERSON' }) }),
     );
   });
 
   it('returns null when there are fewer than three eligible distractors', async () => {
     findFirst.mockResolvedValueOnce(claim({ relationshipType: 'WIFE', relatedSubjectSlug: 'prophet-muhammad' }));
+    person.findUnique.mockResolvedValueOnce({ slug: 'prophet-muhammad' });
     findMany.mockResolvedValueOnce([{ relatedSubjectSlug: 'prophet-muhammad' }]).mockResolvedValueOnce([]);
+    person.findMany.mockResolvedValueOnce([]);
 
     expect(await generateRelationQuestion('zaynab-bint-jahsh', eligibility, zero)).toBeNull();
   });
 
   it('returns null when the subject has no eligible relation claim', async () => {
     findFirst.mockResolvedValueOnce(null);
+    expect(await generateRelationQuestion('zaynab-bint-jahsh', eligibility, zero)).toBeNull();
+  });
+
+  it('returns null when the claimed related person has no Person row', async () => {
+    findFirst.mockResolvedValueOnce(claim({ relationshipType: 'WIFE', relatedSubjectSlug: 'ghost-person' }));
+    person.findUnique.mockResolvedValueOnce(null);
+
+    expect(await generateRelationQuestion('zaynab-bint-jahsh', eligibility, zero)).toBeNull();
+  });
+
+  it('excludes a distractor candidate that has no Person row', async () => {
+    findFirst.mockResolvedValueOnce(claim({ relationshipType: 'WIFE', relatedSubjectSlug: 'prophet-muhammad' }));
+    person.findUnique.mockResolvedValueOnce({ slug: 'prophet-muhammad' });
+    findMany
+      .mockResolvedValueOnce([{ relatedSubjectSlug: 'prophet-muhammad' }])
+      .mockResolvedValueOnce([{ relatedSubjectSlug: 'a' }, { relatedSubjectSlug: 'b' }, { relatedSubjectSlug: 'ghost' }]);
+    person.findMany.mockResolvedValueOnce([{ slug: 'a' }, { slug: 'b' }]);
+
     expect(await generateRelationQuestion('zaynab-bint-jahsh', eligibility, zero)).toBeNull();
   });
 });
