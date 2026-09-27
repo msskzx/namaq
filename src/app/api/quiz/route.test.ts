@@ -1,12 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { assembleQuiz, citationFindMany, personFindMany, titleFindMany, battleFindMany, eventFindMany } = vi.hoisted(() => ({
+const { assembleQuiz, citationFindMany, personFindMany, titleFindMany, battleFindMany, eventFindMany, ayahFindMany } = vi.hoisted(() => ({
   assembleQuiz: vi.fn(),
   citationFindMany: vi.fn(),
   personFindMany: vi.fn(),
   titleFindMany: vi.fn(),
   battleFindMany: vi.fn(),
   eventFindMany: vi.fn(),
+  ayahFindMany: vi.fn(),
 }));
 vi.mock('@/lib/quiz/assemble', () => ({ assembleQuiz }));
 vi.mock('@/lib/prisma', () => ({
@@ -16,6 +17,7 @@ vi.mock('@/lib/prisma', () => ({
     title: { findMany: titleFindMany },
     battle: { findMany: battleFindMany },
     event: { findMany: eventFindMany },
+    ayah: { findMany: ayahFindMany },
   },
 }));
 
@@ -45,6 +47,7 @@ beforeEach(() => {
   titleFindMany.mockResolvedValue([]);
   battleFindMany.mockResolvedValue([]);
   eventFindMany.mockResolvedValue([]);
+  ayahFindMany.mockResolvedValue([]);
 });
 
 describe('GET /api/quiz', () => {
@@ -117,5 +120,20 @@ describe('GET /api/quiz', () => {
     const body = await response.json();
 
     expect(body.questions[0].choiceLabels).toEqual({});
+  });
+
+  it('resolves ayah text and references for Quran-link choices', async () => {
+    assembleQuiz.mockResolvedValueOnce([question({ family: 'QURAN_LINK', choices: ['2:255', '2:256', '2:257', '2:258'], correctAnswer: '2:255' })]);
+    ayahFindMany.mockResolvedValueOnce([
+      { number: 255, text: 'اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ', surah: { number: 2, name: 'البقرة', nameTransliterated: 'Al-Baqarah' } },
+    ]);
+
+    const response = await GET(request('?topic=PEOPLE&length=5'));
+    const body = await response.json();
+
+    expect(body.questions[0].choiceDetails['2:255']).toEqual({
+      text: 'اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ',
+      reference: 'Al-Baqarah 2:255',
+    });
   });
 });

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import type { SubjectKind } from '@/generated/prisma';
 import { prisma } from '@/lib/prisma';
 import { assembleQuiz } from '@/lib/quiz/assemble';
+import { parseQuizTopics } from '@/lib/quiz/topics';
 import {
   DEVELOPMENT_ELIGIBILITY,
   QUIZ_LENGTHS,
@@ -39,6 +40,28 @@ async function resolveEvidence(citationIds: readonly string[]): Promise<Evidence
 interface DisplayName {
   name: string;
   nameTransliterated: string | null;
+}
+
+interface AyahDisplay {
+  text: string;
+  reference: string;
+}
+
+async function resolveAyahDetails(questions: readonly { family: string; choices: readonly string[] }[]) {
+  const keys = [...new Set(questions.filter((q) => q.family === 'QURAN_LINK').flatMap((q) => q.choices))];
+  const pairs = keys.flatMap((key) => {
+    const [surah, number] = key.split(':').map(Number);
+    return Number.isInteger(surah) && Number.isInteger(number) ? [{ surah, number }] : [];
+  });
+  if (!pairs.length) return new Map<string, AyahDisplay>();
+  const ayat = await prisma.ayah.findMany({
+    where: { OR: pairs.map(({ surah, number }) => ({ number, surah: { number: surah } })) },
+    include: { surah: { select: { number: true, name: true, nameTransliterated: true } } },
+  });
+  return new Map(ayat.map((ayah) => [`${ayah.surah.number}:${ayah.number}`, {
+    text: ayah.text,
+    reference: `${ayah.surah.nameTransliterated || ayah.surah.name} ${ayah.surah.number}:${ayah.number}`,
+  }]));
 }
 
 /**
@@ -90,7 +113,7 @@ async function resolveDisplayNames(
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const topics = [...new Set(searchParams.getAll('topic').flatMap((value) => value.split(',').filter(Boolean)))];
+  const topics = parseQuizTopics(searchParams);
   const length = Number(searchParams.get('length'));
   const person = searchParams.get('person') ?? undefined;
 
@@ -115,7 +138,11 @@ export async function GET(request: Request) {
     });
 
     const citationIds = [...new Set(questions.flatMap((q) => q.evidence.citationIds))];
-    const [evidence, namesByKind] = await Promise.all([resolveEvidence(citationIds), resolveDisplayNames(questions)]);
+    const [evidence, namesByKind, ayahDetails] = await Promise.all([
+      resolveEvidence(citationIds),
+      resolveDisplayNames(questions),
+      resolveAyahDetails(questions),
+    ]);
     const evidenceByCitationId = new Map(evidence.map((e) => [e.citationId, e]));
     const withEvidenceLinks = questions.map((question) => {
       const choiceKind = CHOICE_SUBJECT_KIND[question.family as QuestionFamily];
@@ -130,6 +157,11 @@ export async function GET(request: Request) {
         ...question,
         subjectName: namesByKind[question.subject.kind].get(question.subject.slug) ?? null,
         choiceLabels,
+        choiceDetails: Object.fromEntries(
+          question.choices
+            .map((choice) => [choice, ayahDetails.get(choice)])
+            .filter((entry): entry is [string, AyahDisplay] => Boolean(entry[1])),
+        ),
         evidence: {
           ...question.evidence,
           readerUrls: question.evidence.citationIds

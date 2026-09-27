@@ -7,25 +7,26 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowLeft,
   faArrowRight,
-  faBook,
-  faCalendarAlt,
   faCircleCheck,
   faCircleXmark,
   faPaperPlane,
-  faShieldAlt,
-  faUserGroup,
 } from "@fortawesome/free-solid-svg-icons";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import Button from "@/components/common/Button";
+import SlideSwitch from "@/components/graph/SlideSwitch";
 import { useLanguage } from "@/components/language/LanguageContext";
 import { fetcher } from "@/lib/swr";
+import { relationPrompt } from "@/lib/quiz/relationPrompt";
+import { parseQuizTopics } from "@/lib/quiz/topics";
 import { QUIZ_LENGTHS, QUIZ_TOPICS, type QuizLength, type QuizTopic } from "@/lib/quiz/types";
 
 interface DisplayName {
   name: string;
   nameTransliterated: string | null;
 }
+
+interface AyahDisplay { text: string; reference: string }
 
 interface QuizQuestionView {
   claimId: string;
@@ -34,18 +35,11 @@ interface QuizQuestionView {
   subjectName: DisplayName | null;
   choices: string[];
   choiceLabels: Record<string, DisplayName>;
+  choiceDetails: Record<string, AyahDisplay>;
   attribute: string;
   correctAnswer: string;
   evidence: { readerUrls: string[] };
 }
-
-const TOPIC_ICONS: Record<QuizTopic, typeof faBook> = {
-  PEOPLE: faUserGroup,
-  BATTLES: faShieldAlt,
-  TITLES: faBook,
-  EVENTS: faCalendarAlt,
-  PERSON_CIRCLE: faUserGroup,
-};
 
 const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
   PEOPLE: { en: "People", ar: "أشخاص" },
@@ -61,8 +55,8 @@ function displayName(name: DisplayName | null | undefined, fallback: string, ar:
 }
 
 function questionPrompt(question: QuizQuestionView, subject: string, ar: boolean): string {
+  if (question.family === "RELATION") return relationPrompt(subject, question.attribute, ar ? "ar" : "en");
   const prompts: Record<string, { en: string; ar: string }> = {
-    RELATION: { en: `Who was ${subject}'s ${question.attribute.toLowerCase()}?`, ar: `من كان ${question.attribute} لـ${subject}؟` },
     PARTICIPATION: { en: `Which battle did ${subject} participate in?`, ar: `في أي معركة شارك ${subject}؟` },
     TITLE: { en: `Which title did ${subject} hold?`, ar: `ما اللقب الذي حمله ${subject}؟` },
     TITLE_HOLDER: { en: "Who held this title?", ar: "من حمل هذا اللقب؟" },
@@ -73,6 +67,12 @@ function questionPrompt(question: QuizQuestionView, subject: string, ar: boolean
   return prompts[question.family]?.[ar ? "ar" : "en"] ?? (ar ? "اختر الإجابة الصحيحة" : "Choose the correct answer");
 }
 
+function choiceDisplay(question: QuizQuestionView, choice: string, ar: boolean): React.ReactNode {
+  const ayah = question.choiceDetails[choice];
+  if (!ayah) return displayName(question.choiceLabels[choice], choice, ar);
+  return <span><span className="block leading-relaxed">{ayah.text}</span><span className="text-xs text-gray-500 dark:text-gray-400">{ayah.reference}</span></span>;
+}
+
 function QuizzesPage() {
   const { language } = useLanguage();
   const ar = language === "ar";
@@ -80,13 +80,17 @@ function QuizzesPage() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const topics = useMemo(() => searchParams.getAll("topic") as QuizTopic[], [searchParams]);
+  const topics = useMemo(() => parseQuizTopics(searchParams), [searchParams]);
   const length = Number(searchParams.get("length")) as QuizLength | 0;
   const person = searchParams.get("person") ?? "";
   const started = Boolean(topics.length && length && (!topics.includes("PERSON_CIRCLE") || person));
 
   const query = started ? `/api/quiz?${topics.map((value) => `topic=${encodeURIComponent(value)}`).join("&")}&length=${length}${person ? `&person=${encodeURIComponent(person)}` : ""}` : null;
-  const { data, error, isLoading } = useSWR<{ questions: QuizQuestionView[] }>(query, fetcher);
+  const { data, error, isLoading } = useSWR<{ questions: QuizQuestionView[] }>(query, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    revalidateIfStale: false,
+  });
 
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
@@ -133,20 +137,17 @@ function QuizzesPage() {
             {ar ? "اختبار" : "Quiz"}
           </h1>
 
-          <fieldset className="mb-6 flex flex-wrap gap-2">
+          <fieldset className="mb-6 flex flex-wrap gap-x-4 gap-y-2 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
             <legend className="mb-2 w-full text-sm font-semibold text-gray-700 dark:text-gray-300">
-              {ar ? "الموضوع" : "Topic"}
+              {ar ? "المواضيع — اختر واحدًا أو أكثر" : "Topics — choose one or more"}
             </legend>
             {QUIZ_TOPICS.map((value) => (
-              <Button
+              <SlideSwitch
                 key={value}
-                variant="outline"
-                active={topics.includes(value)}
-                onClick={() => setParam({ topic: topics.includes(value) ? topics.filter((item) => item !== value).join(",") || undefined : [...topics, value].join(",") })}
-              >
-                <FontAwesomeIcon icon={TOPIC_ICONS[value]} />
-                {TOPIC_LABELS[value][ar ? "ar" : "en"]}
-              </Button>
+                checked={topics.includes(value)}
+                onChange={() => setParam({ topic: topics.includes(value) ? topics.filter((item) => item !== value).join(",") || undefined : [...topics, value].join(",") })}
+                label={TOPIC_LABELS[value][ar ? "ar" : "en"]}
+              />
             ))}
           </fieldset>
 
@@ -214,13 +215,13 @@ function QuizzesPage() {
                     <div className="mb-2 flex items-center gap-2">
                       <FontAwesomeIcon icon={correct ? faCircleCheck : faCircleXmark} className={correct ? "text-green-600" : "text-red-500"} />
                       <span className="font-semibold">
-                        {given ? displayName(question.choiceLabels[given], given, ar) : ar ? "بدون إجابة" : "No answer"}
+                        {given ? choiceDisplay(question, given, ar) : ar ? "بدون إجابة" : "No answer"}
                       </span>
                     </div>
                     {!correct && (
                       <p className="text-sm text-gray-600 dark:text-gray-400">
                         {ar ? "الصحيح: " : "Correct: "}
-                        {displayName(question.choiceLabels[question.correctAnswer], question.correctAnswer, ar)}
+                        {choiceDisplay(question, question.correctAnswer, ar)}
                       </p>
                     )}
                     {question.evidence.readerUrls.map((url) => (
@@ -266,7 +267,7 @@ function QuizzesPage() {
                     active={answers[current] === choice}
                     onClick={() => setAnswers((prev) => ({ ...prev, [current]: choice }))}
                   >
-                    {displayName(questions[current].choiceLabels[choice], choice, ar)}
+                    {choiceDisplay(questions[current], choice, ar)}
                   </Button>
                 ))}
               </div>
