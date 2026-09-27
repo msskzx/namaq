@@ -18,10 +18,5 @@ export function seedAuthoredPeople(): Set<string> {
     for (const match of source.matchAll(/slug: '([a-z0-9-]+)'/g)) slugs.add(match[1]);
   }
 
-  for (const file of readdirSync('neo4j').filter((name) => /^graphSeedData\d*\.ts$/.test(name))) {
-    const source = readFileSync(join('neo4j', file), 'utf8');
-    for (const match of source.matchAll(/CREATE \(:Person \{[^}]*?slug: "([a-z0-9-]+)"/g)) slugs.add(match[1]);
-  }
-
   return slugs;
 }

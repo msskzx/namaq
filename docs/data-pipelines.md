@@ -1,18 +1,19 @@
 # How data reaches the app
 
-Historical data has three hand-authored paths today, plus one retired.
+Historical data has two hand-authored paths today; two more are retired.
 
-**Seed files** under `prisma/` hold the subjects themselves: people, titles,
-battles, events, and the Qur'an tables. **History batches** under
+**The catalog** under `data/catalog/` holds every subject — people, titles,
+battles, events, utterances — declaratively, with each field's evidence
+cited or marked `legacy-unreviewed`. **History batches** under
 `data/history/` hold the evidence about those subjects: source editions, the
-complete source accounts, claims and their citations. **The catalog** under
-`data/catalog/` holds subjects the same two sources cover, but cited and
-declarative, and is where any of them ends up once its seed entry is deleted.
-**Graph seed files** under `neo4j/` once held a fourth path: graph-only people
-and person-to-person relationships. That path is retired —
-`neo4j/graphSeedData.ts` is what remains of it, exporting empty arrays now
-that every person and relationship it once declared has a catalog module (see
-[The graph seeds are retired](#the-graph-seeds-are-retired) below).
+complete source accounts, claims and their citations. **Seed files** under
+`prisma/` once held the subjects themselves by hand, unevidenced; every one
+of them (people, titles, battles, events, and the Qur'an surah/ayah tables)
+is migrated into the catalog and deleted, leaving `prisma/` with nothing but
+`schema.prisma` and its migrations. **Graph seed files** under `neo4j/` once
+held a fourth path: graph-only people and person-to-person relationships.
+Both retired paths are gone outright, not stubbed — see
+[The graph seeds are retired](#the-graph-seeds-are-retired) below.
 
 The first two write into PostgreSQL. A catalog-owned person's Neo4j node and
 relations come from the catalog directly: `catalog:project-graph` merges the
@@ -26,14 +27,12 @@ battles and events declared in `prisma/*SeedData*.ts` — is gone: no
 ```mermaid
 flowchart TB
   subgraph authoring["Authored by hand"]
-    seeds["prisma/*SeedData*.ts<br/>people, titles, battles, events"]
     batches["data/history/batches/<br/>sources, accounts, claims, citations"]
-    catalog["data/catalog/people/*.ts<br/>catalog-owned people, their relations"]
+    catalog["data/catalog/<br/>people, titles, battles, events, their relations"]
   end
 
-  seeds -->|"npm run seed:*"| pg[("PostgreSQL")]
   batches -->|"npm run history:import -- --apply"| pg
-  catalog -->|"catalog:project<br/>(hasProfile only)"| pg
+  catalog -->|"catalog:project<br/>(fields, titles, participations)"| pg[("PostgreSQL")]
   catalog -->|"catalog:project-graph<br/>(node + relations)"| neo
 
   pg -->|"people:sync, titles:sync,<br/>battles:sync, events:sync"| neo[("Neo4j")]
@@ -44,33 +43,26 @@ flowchart TB
   neo --> workspace["Graph workspace"]
 ```
 
-## Seed files to PostgreSQL
+## The catalog to PostgreSQL
 
-Each subject kind has a data file and a script that loads it.
+Every subject kind — people, titles, battles, events — is created or updated
+by `catalog:project` from `data/catalog/`, the way it always did for a
+subject no seed declared (see "The files decide, subject by subject" below)
+— that is now everyone, since no seed file exists any more.
 
-There is no seed file left for any of these. `catalog:project` creates or
-updates every Person, Title, Battle and Event row outright from
-`data/catalog/`, the way it always did for a person no seed declared (see
-"The files decide, subject by subject" below) — that is now everyone.
-`prisma/personSeed.ts` stays as an empty script (`npm run seed:people` runs
-it and does nothing) only because `scripts/people/activeSeedData.ts` still
-parses its import list; nothing else depends on it.
-
-Battle participations were never seeded through a script at all — the block
-that would have loaded them in `prisma/personSeed.ts` was commented out
-before this migration started, and the data it would have read is what
-`data/catalog/battles/*.ts`'s participants now carry, promoted or left
-`legacy-unreviewed`.
+Battle participations were never seeded through a script at all: the data a
+seed would have read is what `data/catalog/battles/*.ts`'s participants now
+carry, promoted to a cited claim or left `legacy-unreviewed`.
 
 ### The files decide, subject by subject
 
-`catalog:project` and `catalog:project-graph` make the stores match the catalog
-for any person no seed file declares: values are overwritten, and a title,
-Qur'an link, participation or relation a store holds and the catalog does not is
-removed. For a person a seed file still describes, the catalog only adds and the
-difference is reported, because the seed is that subject's author until its
-entry goes. Deleting someone's seed entry is therefore what hands the catalog
-authority over them; nothing else has to be declared or remembered.
+`catalog:project` and `catalog:project-graph` make the stores match the
+catalog for every subject: values are overwritten, and a title, Qur'an link,
+participation or relation a store holds and the catalog does not is removed.
+This was additive rather than total for as long as a seed file still
+described a given subject — the seed was that subject's author until its
+entry was deleted — but no seed file describes anyone any more, so every
+subject is total now.
 
 ### Three subjects were the first to leave the seeds entirely
 
@@ -121,9 +113,15 @@ not only the handful this doc used to call out by name. All of it is deleted.
 Every node those files created and every relationship they declared is now a
 catalog module or a relation on one, `catalog:project-graph`'s node-merge and
 relation-write standing in for what `npm run seed:graph` used to do.
-`neo4j/graphSeedData.ts` stays, exporting empty `peopleQueries` /
-`peopleRelationsQueries` arrays, because `scripts/people/activeSeedData.ts` and
-`src/lib/graphIntegrity.live.test.ts` still import those names directly.
+`neo4j/graphSeedData.ts`, `neo4j/graphSeed.ts` and `scripts/people/
+activeSeedData.ts` are deleted outright along with it — nothing reads a
+graph-seed file any more, including the live integrity test in
+`src/lib/graphIntegrity.live.test.ts`, which now compares Neo4j against
+`catalogRelations()` alone. `neo4j/seedRelations.ts` stays: despite the name,
+`findSeedRelationDrift` and `parseSeedRelations` are generic Cypher-parsing
+and drift-comparison helpers with no seed data of their own, and
+`catalog:project-graph` still uses them to compare the catalog against what's
+deployed.
 
 Where a batch already cites the specific link (the Prophet's own line, on
 `prophet/lineage`; a handful of others with their own citations), the module
@@ -148,16 +146,6 @@ Sa'id ibn Zayd's father. The one piece of real information the duplicate held
 (his edge to his own father) moved onto the correct module; the duplicate node
 itself, left with no relationships once its stale edges were dropped, was
 deleted from Neo4j directly.
-
-**Known cleanup owed**: the bulk generation of these modules capitalized
-"Ibn" mid-string in roughly 250 `nameTransliterated` values (e.g. `'Abu
-Sufyan Ibn Harb'`), against this codebase's lowercase-`ibn` convention used
-everywhere else. Find every offender with `grep -rl "nameTransliterated: '[^']* Ibn [^']*'" data/catalog/people/*.ts`
-(excluding `*.test.ts`) and lowercase the standalone word "Ibn" to "ibn" —
-careful to leave other capitalized words alone. After the fix, `npm run
-lint`, `npx tsc --noEmit`, `npm run catalog:validate`, `npm test`, and a
-`npm run catalog:project` dry run should show no changes beyond the
-capitalization fix itself.
 
 ## History batches to PostgreSQL
 
@@ -446,15 +434,16 @@ Importing evidence alone does not change graph structure and does not require it
 
 ## Applying a canonical change today
 
-A change to a person's own fields, a participation, or an event goes through
-whichever path is live for it.
+A change to a person's own fields, a title, a participation, a battle, or an
+event goes through the catalog, the only path there is now.
 
-1. Author the change in the seed file that owns the subject, so the file records
-   what is true even where the seed no longer runs.
-2. Apply it. An active file needs its seed script. A subject in the dormant file
-   needs a targeted write, because running the seed is not an option.
-3. Sync the affected kind to Neo4j, then re-run the layout if graph structure
-   changed.
+1. Author the change in the subject's `data/catalog/` module (or a new one),
+   citing a batch claim where evidence supports it and `legacy-unreviewed`
+   otherwise.
+2. Run `catalog:validate`, then `catalog:project` and `catalog:project-graph`
+   as dry runs before `--apply`, to see exactly what will be written.
+3. Sync the affected kind to Neo4j if the change didn't already reach it via
+   `catalog:project-graph`, then re-run the layout if graph structure changed.
 4. If evidence supports the change, it belongs in a history batch, and the batch
    is what a reader sees as the reason.
 
@@ -463,13 +452,12 @@ whichever path is live for it.
 [ADR 0010](adr/0010-author-historical-data-under-data.md) makes `data/` the
 only authoring source for historical subjects, relationships, and evidence —
 seed code, PostgreSQL, Neo4j and layout values are derived projections, never
-independent facts. This is partly built: `data/catalog/` already holds 509
-people, 43 battles and 46 events as declarative TypeScript modules (`kind`,
-`slug`, and per-field `claims` or the `legacy-unreviewed` marker — see "The
-files decide, subject by subject" above), validated by `npm run
-catalog:validate` and written to the stores by `catalog:project` /
-`catalog:project-graph`. `npm run catalog:ledger` reports every value whose
-evidence is still owed.
+independent facts. `data/catalog/` holds every person, title, battle and
+event as declarative TypeScript modules (`kind`, `slug`, and per-field
+`claims` or the `legacy-unreviewed` marker — see "The files decide, subject
+by subject" above), validated by `npm run catalog:validate` and written to
+the stores by `catalog:project` / `catalog:project-graph`. `npm run
+catalog:ledger` reports every value whose evidence is still owed.
 
 What the ADR calls for and this doesn't yet do:
 
@@ -478,14 +466,11 @@ What the ADR calls for and this doesn't yet do:
   catalog module today is an omission, not a recorded, approved removal — there
   is no `data/catalog/tombstones/` mechanism, so `catalog:project` cannot yet
   tell an accidental omission from an intended deletion.
-- **A hashed batch-review workflow spanning evidence and catalog.** The graph
-  side (see [The graph seeds are retired](#the-graph-seeds-are-retired) above)
-  and the profile-fields side are both done now: every `prisma/personSeedData
-  *.ts` file, dormant or wired, is migrated into the catalog and deleted, each
-  field carried as `legacy-unreviewed` where no batch has cited it yet. Every
-  person is catalog-owned outright, the way the three subjects with no seed
-  entry at all always were ("Three subjects have left the seeds entirely"
-  above).
+- **A hashed batch-review workflow spanning evidence and catalog.** Every seed
+  path is retired now (see [The graph seeds are retired](#the-graph-seeds-are-retired)
+  above and "Three subjects were the first to leave the seeds entirely"
+  above), each field carried as `legacy-unreviewed` where no batch has cited
+  it yet. Every subject is catalog-owned outright.
 - **One evidence role per citation** ([ADR 0011](adr/0011-classify-the-role-of-cited-evidence.md):
   direct evidence, transmitted report, synthesis, or editorial analysis) —
   decided, not built.
