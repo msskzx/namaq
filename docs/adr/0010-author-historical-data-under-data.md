@@ -60,7 +60,6 @@ That fails when sources conflict or a value requires editorial interpretation.
 Consequences: data changes gain an explicit research, review, promotion, seed,
 sync, and drift-check path. Clean rebuilds become possible. Uncited legacy values
 remain visible as unreviewed legacy data rather than receiving invented evidence,
-and backfilling them can proceed independently after cutover. Deletion semantics,
-relationship normalization, and operational details are specified in
-[the implementation handoff](../authoritative-data-workflow-plan.md). Explicit
-removal follows ADR 0012.
+and backfilling them can proceed independently after cutover. See
+[Removing split authority](../data-pipelines.md#removing-split-authority) for
+what this has built so far. Explicit removal follows ADR 0012.

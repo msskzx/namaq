@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 
 // A light-weight sibling of GET /api/people/[slug]: the graph workspace's
 // selected-subject panel only ever shows a person's full name and titles
-// (see docs/graph-exploration-plan.md's "Learning information in the
+// (see docs/graph-exploration.md's "Learning information in the
 // panel" decision), not the full profile payload (participations, events,
 // ayat, claims) that route fetches -- reusing it here would mean an extra
 // full profile query on every subject the learner clicks through.

@@ -25,8 +25,8 @@ flowchart LR
 Three properties reached this conclusion separately. `layoutX`/`layoutY` were
 PostgreSQL-only until [graph layout](../graph-layout.md) moved them,
 `nasabRank` until [graph-only people
-search](../graph-only-people-search.md) did the same, and `graphRank` until
-[subject search](../graph-subject-search.md), which also deleted
+search](../graph-search.md) did the same, and `graphRank` until
+[subject search](../graph-search.md), which also deleted
 `nasabRank` outright once `graphRank` covered every kind. Each time the gap
 surfaced as a feature quietly excluding graph-only subjects rather than as an
 error. Recording the rule is meant to stop the fourth property from repeating it.

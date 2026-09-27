@@ -3,7 +3,7 @@
 This batch preserves al-Dhahabi's dedicated Siyar entry on Hamzah ibn Abd
 al-Muttalib and supports the small amount of canonical ground it covers
 that `prophet-muhammad-sira` had not already claimed. It follows the
-[data quality and references workflow](../../../../docs/data-quality-references.md).
+[data quality and references workflow](../../../../docs/data-pipelines.md).
 
 - Batch definition: [batch.json](batch.json)
 - Source pages: [accounts/hamzah-ibn-abd-al-muttalib/](accounts/hamzah-ibn-abd-al-muttalib/)

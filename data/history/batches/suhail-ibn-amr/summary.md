@@ -3,7 +3,7 @@
 This batch gives سهيل بن عمرو بن عبد شمس his own catalog file and cites
 al-Dhahabi's dedicated Siyar entry on him, the father of both أبو جندل
 (entry 23) and عبد الله بن سهيل (entry 24). It follows the
-[data quality and references workflow](../../../../docs/data-quality-references.md)
+[data quality and references workflow](../../../../docs/data-pipelines.md)
 and [docs/extraction-checklist.md](../../../../docs/extraction-checklist.md).
 
 - Batch definition: [batch.json](batch.json)

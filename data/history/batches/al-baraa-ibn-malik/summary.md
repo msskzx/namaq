@@ -3,7 +3,7 @@
 This batch gives البراء بن مالك بن النضر his own catalog file, cited from
 al-Dhahabi's Siyar entry on him, the tenth and last of this ten-chapter run
 (entries 17-26), immediately after his neighbour سهيل بن عمرو (entry 25). It
-follows [docs/data-quality-references.md](../../../../docs/data-quality-references.md)
+follows [docs/data-pipelines.md](../../../../docs/data-pipelines.md)
 and [docs/extraction-checklist.md](../../../../docs/extraction-checklist.md).
 
 - Batch definition: [batch.json](batch.json)

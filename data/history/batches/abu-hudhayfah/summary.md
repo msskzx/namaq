@@ -2,7 +2,7 @@
 
 This batch preserves al-Dhahabi's complete entry on Abu Hudhayfah ibn Utbah
 ibn Rabiah and supports the canonical records selected from it. It follows
-the [data quality and references workflow](../../../../docs/data-quality-references.md).
+the [data quality and references workflow](../../../../docs/data-pipelines.md).
 
 - Batch definition: [batch.json](batch.json)
 - Source pages: [accounts/abu-hudhayfah/](accounts/abu-hudhayfah/)

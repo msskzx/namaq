@@ -72,5 +72,5 @@ Father cap. Start over begins a new exploration and clears cap history. There
 is no next-global-hop button; use local expansion or lineage actions to go
 further deliberately.
 
-These are agreed design rules. Implementation compliance is still pending the
-[docs-first exploration review](../graph-exploration-review.md).
+These are agreed design rules, implemented per
+[Graph exploration](../graph-exploration.md).

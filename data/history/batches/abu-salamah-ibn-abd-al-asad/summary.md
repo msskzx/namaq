@@ -2,7 +2,7 @@
 
 This batch preserves al-Dhahabi's complete entry on Abu Salamah ibn Abd
 al-Asad and supports the canonical records selected from it. It follows the
-[data quality and references workflow](../../../../docs/data-quality-references.md).
+[data quality and references workflow](../../../../docs/data-pipelines.md).
 
 - Batch definition: [batch.json](batch.json)
 - Source pages: [accounts/abu-salamah-ibn-abd-al-asad/](accounts/abu-salamah-ibn-abd-al-asad/)

@@ -262,7 +262,7 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   into كبار التابعين twice. Skip those two runs, except a subject whose صحبة
   another work holds: a contested Companion is taken in and the contest recorded,
   never dropped for being contested. The table in
-  [docs/data-quality-references.md](docs/data-quality-references.md) gives the
+  [docs/data-pipelines.md](docs/data-pipelines.md) gives the
   pages and says what waits on what.
 
 ## UI

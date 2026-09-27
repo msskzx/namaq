@@ -5,15 +5,14 @@ Historical data currently has three hand-authored paths.
 **Seed files** under `prisma/` hold the subjects themselves: people, titles,
 battles, events, and the Qur'an tables. **History batches** under
 `data/history/` hold the evidence about those subjects: source editions, the
-complete source accounts, claims and their citations
-([data quality and references](data-quality-references.md)). **Graph seed files** under
+complete source accounts, claims and their citations. **Graph seed files** under
 `neo4j/` hold graph-only people and person-to-person relationships.
 
 The first two write into PostgreSQL. Most shared graph data is then derived from
 PostgreSQL, while the graph seeds write their records directly to Neo4j. The
 layout is computed from the graph and written back to both. Removing this split
-authority is proposed in the
-[authoritative data workflow](authoritative-data-workflow-plan.md).
+authority is in progress; see [Removing split authority](#removing-split-authority)
+below.
 
 ```mermaid
 flowchart TB
@@ -190,14 +189,168 @@ without duplicating anything.
 Files are the source of truth here. The database holds a copy: change the files
 and re-import, never edit the evidence tables directly.
 
+### Authoring a claim
+
+A claim is authored only when it backs a value the model holds today: a
+profile field, a title assignment, a participation, an event link, or a
+person relation. `npm run history:validate` rejects a claim naming neither a
+field nor a relationship, since the complete entry is already stored page by
+page with anchored paragraphs — a claim backing nothing is a second copy of
+text, not evidence a reader can check a value against. A statement the model
+has no shape for stays in the pages until the model grows one.
+
+One citation record represents one meaningful selection from one source
+account, not one page or extracted paragraph. Join sentence fragments split
+by pagination, layout or footnotes, and use a page range when the selection
+crosses printed pages; mark an omitted interval with an ellipsis. Prefer the
+shortest complete sentence or self-contained clause that proves the value,
+never stopping mid-word or mid-phrase, and omit repetition or material that
+adds no support. Keep separate citations for independent or competing
+evidence. Profile citations link to the corresponding page in Namaq's own
+source reader; the reader page links to the digital host after the editor's
+footnotes, so repeating the host link beside every citation adds nothing.
+
+Competing accounts are kept as separate attributed claims only where the
+model holds the value they compete over, such as two reported death years. A
+disagreement about something the app does not record stays in the source
+pages. Preserve complete transmission chains in the source text, but do not
+create graph nodes or edges for people mentioned only as narrators.
+
+### Review status
+
+Each claim carries one of three review statuses: Not reviewed, In review, or
+Reviewed. Legacy information with no review record starts Not reviewed.
+Recorded data stays public regardless of its status — review status is not a
+visibility gate ([review independent of visibility](adr/0008-separate-review-from-visibility.md)).
+
+Publishing and reviewing are two separate actions and neither implies the
+other. Approving for publication (the previous section) records the current
+revision in the batch's approval block and permits import; it says nothing
+about whether anyone read the content. Marking reviewed sets a claim's
+review status, one claim at a time, after comparing the assertion against
+the passage it cites — only an explicit instruction to "mark this batch as
+reviewed" does this, via `npm run history:review -- <batch dir>` (dry run)
+and `-- --apply`. Reading the batch, discussing corrections, or approving and
+importing it does not imply that instruction. A published batch whose claims
+are all Not reviewed is an honest state.
+
+### Where the existing seed data stands
+
+The people, battle and event seeds under `prisma/` and `neo4j/` were
+extracted from Siyar A'lam al-Nubala' by an earlier agent, without citations,
+passage anchors or edition metadata. They are mostly correct and evidentially
+worthless: the values are probably what the book says, and nothing in the
+repository shows where. That makes them a checklist, not a source — an agent
+authoring a catalog entry reads the seed to learn which subjects exist and
+which fields a subject is claimed to have, then looks for each of them in
+the source.
+
+A value carried into the catalog that no batch supports yet is marked
+`legacy-unreviewed`: in use, with its evidence owed, which is a normal state
+and not a defect. A batch covering a subject visits every legacy value on it
+and resolves each one of three ways: promoted to a cited claim, left legacy
+because the entry is silent, or flagged as a contradiction in `summary.md` —
+two extractions from one book disagreeing means one misread, so it is
+reported rather than silently overwritten. `npm run catalog:ledger` lists
+every value whose evidence is owed; `-- --batch <dir>` narrows it to the
+subjects a batch speaks about.
+
+### Companion scope
+
+الصحابة are the only subjects in scope; التابعون and later generations wait
+until the app carries what the Companions already give it — the data model,
+graph usage, profile, search, timeline, and battle visualisation — because
+every generation added multiplies whatever the model still gets wrong.
+
+This boundary is Ibn Hajar's, not al-Dhahabi's. In تقريب التهذيب الصحابة are
+tabaqa 1 and كبار التابعين tabaqa 2, cut by whom a narrator actually met. The
+Siyar's الطبقة الأولى is a death cohort instead, so it runs through the
+Companions and on into the senior Tabi'un while still calling itself the
+first tabaqa. Following the book's own order therefore walks out of scope
+twice, and the Companion entries are not one contiguous run:
+
+| Shamela page | section | entries | in scope |
+| --- | --- | --- | --- |
+| 1431 | الطبقة الأولى — الصحابة (v1) | 97 | yes |
+| 1985 | تابع: الصحابة (v2) | 61 | yes |
+| 2300 | فصل في بقية كبراء الصحابة | 65 | yes |
+| 2614 | تابع: الصحابة (v3) | 38 | yes |
+| 2806 | ومن بقايا صغار الصحابة | 6 | yes |
+| 2849 | ومن صغار الصحابة | 54 | yes |
+| 3084 | كبار التابعين | 45 | mostly — see below |
+| 3158 | تابع: الطبقة الأولى - الصحابة (v4) | 35 | yes |
+| 3263 | بقية الطبقة الأولى من كبراء التابعين | 71 | no |
+
+About 356 entries are in scope and 116 outside it before contested cases are
+taken in; الطبقة الثانية opens at page 3440 and ends the first tabaqa.
+
+**The skip is by person, not by block, and a contested صحبة is taken in
+rather than left out** — نزداد خيراً بمعرفة الرجال. The two costs are not
+equal: including someone another work places outside the Companions costs a
+subject whose status is recorded honestly (the batch's `summary.md` states
+who holds what); excluding a real Companion costs a silent hole — nothing
+downstream points at a subject that was never authored.
+
+The 3084 run is where this bites, and al-Dhahabi supplies part of the signal
+himself. He heads a stretch of it وممن أدرك زمان النبوة at page 3112, and
+several entries on both sides of that heading are counted صحابة elsewhere —
+محمود بن لبيد before it, ربيعة بن عباد, أبو أمامة بن سهل بن حنيف, محمود بن
+الربيع and يوسف بن عبد الله بن سلام after it. How far the heading governs is
+not something the table of contents settles; the pages have to be read. The
+rest of that run — كعب الأحبار, زياد بن أبيه, المختار, عبيد الله بن زياد —
+is nobody's contested Companion and stays out.
+
+Settling a contest properly wants الإصابة, which sorts its entries by exactly
+this question and is why تمييز الصحابة is in its title. It is not extracted,
+so until it is, record the contest rather than resolve it.
+
+Which generation a person belongs to is a fact about the person, not about
+the section that supplied their entry, so it does not belong in the
+extraction order where it currently sits. Modelling it as a cited value, the
+way تقريب التهذيب carries a tabaqa per narrator, is open and not decided.
+
+### Eligible historical works
+
+Use historical works as evidence: البداية والنهاية, الكامل في التاريخ,
+المنتظم في تاريخ الملوك والأمم, تاريخ الخلفاء, تهذيب الكمال في أسماء الرجال,
+حلية الأولياء وطبقات الأصفياء, and سير أعلام النبلاء. For Companions, four
+more are eligible: the three صحابة dictionaries الإصابة في تمييز الصحابة,
+الاستيعاب في معرفة الأصحاب and أسد الغابة في معرفة الصحابة, and the early
+الطبقات الكبرى لابن سعد. The Risalah editors cite all four throughout their
+footnotes, which is the practical way into them: where a note sends you, that
+book has something the Siyar left out. Distinguish the work and consulted
+edition from the website hosting it.
+
+Eligible is not in use: no fact needs all eleven, and every batch today draws
+on سير أعلام النبلاء alone. A second book enters by becoming a source account
+with its own extracted pages, anchors and citations, never by being consulted
+behind a Siyar citation.
+
+Extraction host: Shamela (`shamela.ws`), verified to retain editorial
+footnotes. A source is the work and edition, not the site hosting it — check
+a book's edition card before merging records on publisher alone; two
+printings of the same title can differ.
+
 ## PostgreSQL to Neo4j
 
 The sync scripts are one-way and non-destructive. They `MERGE` by slug, update
 the properties PostgreSQL owns, and never delete a node, a relationship, or a
 graph-only property. Each runs as a report first and writes only with `--apply`.
 
-- `npm run people:sync` — shared person identity fields
-  ([details](canonical-people-pipeline.md))
+- `npm run people:sync` — shared person identity fields. PostgreSQL
+  `Person.slug` is the canonical identity for a person with a profile page,
+  and Neo4j `:Person.slug` is the same identity in the relationship graph.
+  The non-mutating report distinguishes profiles missing from Neo4j, property
+  mismatches (`name`, `fullName`, or `nameTransliterated` differing for the
+  same slug), and graph-only people — valid people such as ancestors with no
+  profile page yet, reported but never treated as errors or removed. `npm run
+  people:validate` runs the same checks in strict mode, failing CI on a
+  missing graph node, a conflicting shared field, or invalid slug/name data.
+  A `null` optional profile property is not used to clear an existing Neo4j
+  value, so importing incomplete profile data cannot erase graph enrichment.
+  The pipeline does not create PostgreSQL profiles for graph-only people,
+  resolve renamed slugs, or decide which historical spelling is correct —
+  those are editorial decisions to review before automating.
 - `npm run titles:sync` — `:Title` nodes and `HOLDS_TITLE`
 - `npm run battles:sync` — `:Battle` nodes and the roster relations
   `PARTICIPATED_IN` and `ABSENT_FROM`, carrying each participant's status and
@@ -229,3 +382,38 @@ whichever path is live for it.
    changed.
 4. If evidence supports the change, it belongs in a history batch, and the batch
    is what a reader sees as the reason.
+
+## Removing split authority
+
+[ADR 0010](adr/0010-author-historical-data-under-data.md) makes `data/` the
+only authoring source for historical subjects, relationships, and evidence —
+seed code, PostgreSQL, Neo4j and layout values are derived projections, never
+independent facts. This is partly built: `data/catalog/` already holds 79
+people, 47 battles and 50 events as declarative TypeScript modules (`kind`,
+`slug`, and per-field `claims` or the `legacy-unreviewed` marker — see "The
+files decide, subject by subject" above), validated by `npm run
+catalog:validate` and written to the stores by `catalog:project` /
+`catalog:project-graph`. `npm run catalog:ledger` reports every value whose
+evidence is still owed.
+
+What the ADR calls for and this doesn't yet do:
+
+- **Explicit tombstones** ([ADR 0012](adr/0012-require-explicit-catalog-tombstones.md)).
+  Deleting a
+  catalog module today is an omission, not a recorded, approved removal — there
+  is no `data/catalog/tombstones/` mechanism, so `catalog:project` cannot yet
+  tell an accidental omission from an intended deletion.
+- **A hashed batch-review workflow spanning evidence and catalog.** The seed
+  files (`prisma/*SeedData*.ts`, `neo4j/graphSeedData*.ts`) still run and still
+  author their own subjects; only subjects whose seed entry was deleted are
+  catalog-owned outright ("Three subjects have left the seeds" above). Full
+  removal needs every seed migrated to a catalog module first, each marked
+  `legacy-unreviewed` where a batch hasn't cited it yet.
+- **One evidence role per citation** ([ADR 0011](adr/0011-classify-the-role-of-cited-evidence.md):
+  direct evidence, transmitted report, synthesis, or editorial analysis) and
+  **person-to-person relationships written straight to Neo4j from the catalog**
+  without a PostgreSQL relation table — both decided, neither built.
+
+None of this blocks today's workflow: a subject with a catalog module already
+behaves as this ADR describes; a subject still in the seeds is unaffected
+until its seed entry is deleted.

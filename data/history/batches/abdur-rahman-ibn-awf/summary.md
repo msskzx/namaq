@@ -2,7 +2,7 @@
 
 This batch preserves al-Dhahabi's complete entry on Abd al-Rahman ibn Awf and
 supports the canonical records selected from it. It follows the
-[data quality and references workflow](../../../../docs/data-quality-references.md).
+[data quality and references workflow](../../../../docs/data-pipelines.md).
 
 - Batch definition: [batch.json](batch.json)
 - Source pages: [accounts/abdur-rahman-ibn-awf/](accounts/abdur-rahman-ibn-awf/)

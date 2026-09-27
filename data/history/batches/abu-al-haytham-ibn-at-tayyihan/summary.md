@@ -2,7 +2,7 @@
 
 This batch gives أبو الهيثم بن التيهان his own catalog file and cites
 al-Dhahabi's dedicated Siyar entry on him. It follows the
-[data quality and references workflow](../../../../docs/data-quality-references.md).
+[data quality and references workflow](../../../../docs/data-pipelines.md).
 
 - Batch definition: [batch.json](batch.json)
 - Source pages: [accounts/abu-al-haytham-ibn-at-tayyihan/](accounts/abu-al-haytham-ibn-at-tayyihan/)

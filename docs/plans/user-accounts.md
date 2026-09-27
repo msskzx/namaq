@@ -59,10 +59,9 @@ flowchart LR
 
 ## Privacy
 
-Accounts change what the app stores, so the privacy page and the cookie banner
-change in the same PR as the feature
-([privacy-page.md](privacy-page.md)): what is kept, why, how to delete an
-account, and the contact route.
+Accounts change what the app stores, so `src/app/privacy/page.tsx` and the
+cookie banner change in the same PR as the feature: what is kept, why, how
+to delete an account, and the contact route.
 
 ## Open questions
 

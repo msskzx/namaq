@@ -304,7 +304,7 @@ describe('buildExploration', () => {
     );
   });
 
-  // Covers criteria 2 and 3 of docs/graph-subject-search.md at this
+  // Covers criteria 2 and 3 of docs/graph-search.md at this
   // layer: a subject picked from search becomes a root, and roots are visible
   // without any expansion. That path does not touch matchExpansionNeighbors,
   // so it is unaffected by the one-way-edge bug in
