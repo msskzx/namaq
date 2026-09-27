@@ -1,9 +1,8 @@
 import { prisma } from '../src/lib/prisma';
-import { people as people13 } from './personSeedData13';
 import { people as people14 } from './personSeedData14';
 import { people as people15 } from './personSeedData15';
 
-const people = [...people13, ...people14, ...people15];
+const people = [...people14, ...people15];
 
 async function main() {
   try {
