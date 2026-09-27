@@ -7,17 +7,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowLeft,
   faArrowRight,
-  faBook,
-  faCalendarAlt,
   faCircleCheck,
   faCircleXmark,
   faPaperPlane,
-  faShieldAlt,
-  faUserGroup,
 } from "@fortawesome/free-solid-svg-icons";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import Button from "@/components/common/Button";
+import SlideSwitch from "@/components/graph/SlideSwitch";
 import { useLanguage } from "@/components/language/LanguageContext";
 import { fetcher } from "@/lib/swr";
 import { relationPrompt } from "@/lib/quiz/relationPrompt";
@@ -43,14 +40,6 @@ interface QuizQuestionView {
   correctAnswer: string;
   evidence: { readerUrls: string[] };
 }
-
-const TOPIC_ICONS: Record<QuizTopic, typeof faBook> = {
-  PEOPLE: faUserGroup,
-  BATTLES: faShieldAlt,
-  TITLES: faBook,
-  EVENTS: faCalendarAlt,
-  PERSON_CIRCLE: faUserGroup,
-};
 
 const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
   PEOPLE: { en: "People", ar: "أشخاص" },
@@ -148,21 +137,17 @@ function QuizzesPage() {
             {ar ? "اختبار" : "Quiz"}
           </h1>
 
-          <fieldset className="mb-6 flex flex-wrap gap-2">
+          <fieldset className="mb-6 flex flex-wrap gap-x-4 gap-y-2 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
             <legend className="mb-2 w-full text-sm font-semibold text-gray-700 dark:text-gray-300">
-              {ar ? "الموضوع" : "Topic"}
+              {ar ? "المواضيع — اختر واحدًا أو أكثر" : "Topics — choose one or more"}
             </legend>
             {QUIZ_TOPICS.map((value) => (
-              <Button
+              <SlideSwitch
                 key={value}
-                variant="outline"
-                active={topics.includes(value)}
-                aria-pressed={topics.includes(value)}
-                onClick={() => setParam({ topic: topics.includes(value) ? topics.filter((item) => item !== value).join(",") || undefined : [...topics, value].join(",") })}
-              >
-                <FontAwesomeIcon icon={TOPIC_ICONS[value]} />
-                {TOPIC_LABELS[value][ar ? "ar" : "en"]}
-              </Button>
+                checked={topics.includes(value)}
+                onChange={() => setParam({ topic: topics.includes(value) ? topics.filter((item) => item !== value).join(",") || undefined : [...topics, value].join(",") })}
+                label={TOPIC_LABELS[value][ar ? "ar" : "en"]}
+              />
             ))}
           </fieldset>
 
