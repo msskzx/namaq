@@ -64,6 +64,18 @@ function displayName(name: DisplayName | null | undefined, fallback: string, ar:
 }
 
 function questionPrompt(question: QuizQuestionView, subject: string, ar: boolean): string {
+  const relationRoles: Record<string, { en: string; ar: string }> = {
+    SON: { en: "father", ar: "والد" },
+    DAUGHTER: { en: "father or mother", ar: "والدًا أو والدة" },
+    FATHER: { en: "son", ar: "ابن" },
+    MOTHER: { en: "son or daughter", ar: "ابنًا أو ابنة" },
+    WIFE: { en: "wife", ar: "زوجة" },
+    HUSBAND: { en: "husband", ar: "زوج" },
+  };
+  if (question.family === "RELATION" && relationRoles[question.attribute]) {
+    const role = relationRoles[question.attribute];
+    return ar ? `من كان ${role.ar} ${subject}؟` : `Who was ${subject}'s ${role.en}?`;
+  }
   const prompts: Record<string, { en: string; ar: string }> = {
     RELATION: { en: `Who was ${subject}'s ${question.attribute.toLowerCase()}?`, ar: `من كان ${question.attribute} لـ${subject}؟` },
     PARTICIPATION: { en: `Which battle did ${subject} participate in?`, ar: `في أي معركة شارك ${subject}؟` },
@@ -95,7 +107,11 @@ function QuizzesPage() {
   const started = Boolean(topics.length && length && (!topics.includes("PERSON_CIRCLE") || person));
 
   const query = started ? `/api/quiz?${topics.map((value) => `topic=${encodeURIComponent(value)}`).join("&")}&length=${length}${person ? `&person=${encodeURIComponent(person)}` : ""}` : null;
-  const { data, error, isLoading } = useSWR<{ questions: QuizQuestionView[] }>(query, fetcher);
+  const { data, error, isLoading } = useSWR<{ questions: QuizQuestionView[] }>(query, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    revalidateIfStale: false,
+  });
 
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
