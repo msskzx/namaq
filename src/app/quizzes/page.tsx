@@ -27,6 +27,8 @@ interface DisplayName {
   nameTransliterated: string | null;
 }
 
+interface AyahDisplay { text: string; reference: string }
+
 interface QuizQuestionView {
   claimId: string;
   family: string;
@@ -34,6 +36,7 @@ interface QuizQuestionView {
   subjectName: DisplayName | null;
   choices: string[];
   choiceLabels: Record<string, DisplayName>;
+  choiceDetails: Record<string, AyahDisplay>;
   attribute: string;
   correctAnswer: string;
   evidence: { readerUrls: string[] };
@@ -71,6 +74,12 @@ function questionPrompt(question: QuizQuestionView, subject: string, ar: boolean
     QURAN_LINK: { en: `Which ayah is linked to ${subject}?`, ar: `أي آية ارتبطت بـ${subject}؟` },
   };
   return prompts[question.family]?.[ar ? "ar" : "en"] ?? (ar ? "اختر الإجابة الصحيحة" : "Choose the correct answer");
+}
+
+function choiceDisplay(question: QuizQuestionView, choice: string, ar: boolean): React.ReactNode {
+  const ayah = question.choiceDetails[choice];
+  if (!ayah) return displayName(question.choiceLabels[choice], choice, ar);
+  return <span><span className="block leading-relaxed">{ayah.text}</span><span className="text-xs text-gray-500 dark:text-gray-400">{ayah.reference}</span></span>;
 }
 
 function QuizzesPage() {
@@ -214,13 +223,13 @@ function QuizzesPage() {
                     <div className="mb-2 flex items-center gap-2">
                       <FontAwesomeIcon icon={correct ? faCircleCheck : faCircleXmark} className={correct ? "text-green-600" : "text-red-500"} />
                       <span className="font-semibold">
-                        {given ? displayName(question.choiceLabels[given], given, ar) : ar ? "بدون إجابة" : "No answer"}
+                        {given ? choiceDisplay(question, given, ar) : ar ? "بدون إجابة" : "No answer"}
                       </span>
                     </div>
                     {!correct && (
                       <p className="text-sm text-gray-600 dark:text-gray-400">
                         {ar ? "الصحيح: " : "Correct: "}
-                        {displayName(question.choiceLabels[question.correctAnswer], question.correctAnswer, ar)}
+                        {choiceDisplay(question, question.correctAnswer, ar)}
                       </p>
                     )}
                     {question.evidence.readerUrls.map((url) => (
@@ -266,7 +275,7 @@ function QuizzesPage() {
                     active={answers[current] === choice}
                     onClick={() => setAnswers((prev) => ({ ...prev, [current]: choice }))}
                   >
-                    {displayName(questions[current].choiceLabels[choice], choice, ar)}
+                    {choiceDisplay(questions[current], choice, ar)}
                   </Button>
                 ))}
               </div>
