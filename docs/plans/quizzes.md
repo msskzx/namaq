@@ -4,6 +4,12 @@ Status: not built. Two modes: a solo quiz, and a party game where several people
 play the same game at the same time, receiving the same questions and competing
 on score. The party mode is in the spirit of Sporcle's party trivia.
 
+The question-generation engine described below is built — see
+[quiz-question-engine.md](quiz-question-engine.md) for what it actually does
+and how it differs in detail (a seventh family, `TITLE_HOLDER`, and the exact
+eligibility rule). The solo quiz, party mode, and everything past generating
+one question are still not built.
+
 ## Principle: questions come from the claims
 
 A question is not new data. It is a view of a value the model already holds and
