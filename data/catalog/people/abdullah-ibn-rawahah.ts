@@ -12,8 +12,15 @@ const abdullahIbnRawahah = {
   name: 'عبد الله بن رواحة',
   nameTransliterated: 'Abdullah ibn Rawahah',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'عبد الله بن رواحة بن ثعلبة بن امرئ القيس بن ثعلبة الأنصاري الخزرجي',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'rawahah-ibn-thalabah', claims: legacyUnreviewed },
   ],

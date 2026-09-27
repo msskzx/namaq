@@ -10,7 +10,7 @@ const abdAlUzzaIbnYazid = {
   kind: 'PERSON',
   slug: 'abd-al-uzza-ibn-yazid',
   name: 'عبد العزى بن يزيد',
-  nameTransliterated: 'Abd Al Uzza Ibn Yazid',
+  nameTransliterated: 'Abd Al Uzza ibn Yazid',
   hasProfile: false,
   fields: {},
   titles: [],

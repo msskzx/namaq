@@ -10,7 +10,7 @@ const alHarithIbnMalik = {
   kind: 'PERSON',
   slug: 'al-harith-ibn-malik',
   name: 'الحارث بن مالك',
-  nameTransliterated: 'Al Harith Ibn Malik',
+  nameTransliterated: 'Al Harith ibn Malik',
   hasProfile: false,
   fields: {},
   titles: [],

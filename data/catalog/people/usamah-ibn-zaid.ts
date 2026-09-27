@@ -12,8 +12,15 @@ const usamahIbnZaid = {
   name: 'أسامة بن زيد',
   nameTransliterated: 'Usamah ibn Zaid',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'أسامة بن زيد بن حارثة بن شراحيل بن عبد العزى بن امرئ القيس',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'zaid-ibn-harithah', claims: legacyUnreviewed },
     { type: 'SON', inverse: 'MOTHER', to: 'umm-ayman', claims: legacyUnreviewed },

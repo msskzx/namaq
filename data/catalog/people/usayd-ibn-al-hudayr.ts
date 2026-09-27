@@ -12,8 +12,15 @@ const usaydIbnAlHudayr = {
   name: 'أسيد بن الحضير',
   nameTransliterated: 'Usayd ibn al-Hudayr',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'أسيد بن الحضير بن سماك بن عتيك بن نافع بن امرئ القيس بن زيد بن عبد الأشهل الأنصاري الأوسي الأشهلي',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'al-hudayr-ibn-simak', claims: legacyUnreviewed },
   ],

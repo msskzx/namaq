@@ -10,7 +10,7 @@ const hishamIbnAlMughirah = {
   kind: 'PERSON',
   slug: 'hisham-ibn-al-mughirah',
   name: 'هشام بن المغيرة',
-  nameTransliterated: 'Hisham Ibn Al Mughirah',
+  nameTransliterated: 'Hisham ibn Al Mughirah',
   hasProfile: false,
   fields: {},
   titles: [],

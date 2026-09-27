@@ -12,8 +12,15 @@ const khubaybIbnYasaf = {
   name: 'خبيب بن يساف',
   nameTransliterated: 'Khubayb ibn Yasaf',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'خبيب بن يساف بن عنبة بن عمرو بن خديج بن عامر بن جشم بن الحارث الأنصاري الخزرجي',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'yasaf-ibn-inabah', claims: legacyUnreviewed },
   ],

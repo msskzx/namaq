@@ -10,7 +10,7 @@ const alHarithIbnRifaahAlNajjari = {
   kind: 'PERSON',
   slug: 'al-harith-ibn-rifaah-al-najjari',
   name: 'الحارث بن رفاعة',
-  nameTransliterated: 'Al Harith Ibn Rifaah Al Najjari',
+  nameTransliterated: 'Al Harith ibn Rifaah Al Najjari',
   hasProfile: false,
   fields: {},
   titles: [],

@@ -10,7 +10,7 @@ const hashimIbnAbdManafAlAbdari = {
   kind: 'PERSON',
   slug: 'hashim-ibn-abd-manaf-al-abdari',
   name: 'هاشم بن عبد مناف',
-  nameTransliterated: 'Hashim Ibn Abd Manaf Al Abdari',
+  nameTransliterated: 'Hashim ibn Abd Manaf Al Abdari',
   hasProfile: false,
   fields: {},
   titles: [],

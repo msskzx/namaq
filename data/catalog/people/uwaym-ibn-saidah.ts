@@ -12,8 +12,15 @@ const uwaymIbnSaidah = {
   name: 'عويم بن ساعدة',
   nameTransliterated: 'Uwaym ibn Saidah',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'عويم بن ساعدة بن عائش بن قيس بن النعمان بن زيد بن أمية الأنصاري الأوسي من بني عمرو بن عوف',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'saidah-ibn-aish', claims: legacyUnreviewed },
   ],

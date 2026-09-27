@@ -12,8 +12,15 @@ const zaidIbnHarithah = {
   name: 'زيد بن حارثة',
   nameTransliterated: 'Zaid ibn Harithah',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'زيد بن حارثة بن شراحيل بن كعب بن عبد العزى بن يزيد بن امرئ القيس بن عامر بن النعمان الكلبي',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'sharahil-ibn-kaab', claims: legacyUnreviewed },
   ],

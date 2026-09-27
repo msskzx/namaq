@@ -10,7 +10,7 @@ const mutimIbnAdi = {
   kind: 'PERSON',
   slug: 'mutim-ibn-adi',
   name: 'المطعم بن عدي',
-  nameTransliterated: 'Mutim Ibn Adi',
+  nameTransliterated: 'Mutim ibn Adi',
   hasProfile: false,
   fields: {},
   titles: [],

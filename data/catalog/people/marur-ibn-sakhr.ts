@@ -10,7 +10,7 @@ const marurIbnSakhr = {
   kind: 'PERSON',
   slug: 'marur-ibn-sakhr',
   name: 'معرور بن صخر',
-  nameTransliterated: 'Marur Ibn Sakhr',
+  nameTransliterated: 'Marur ibn Sakhr',
   hasProfile: false,
   fields: {},
   titles: [],

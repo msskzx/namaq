@@ -10,7 +10,7 @@ const alJumuhIbnZayd = {
   kind: 'PERSON',
   slug: 'al-jumuh-ibn-zayd',
   name: 'الجموح بن زيد',
-  nameTransliterated: 'Al Jumuh Ibn Zayd',
+  nameTransliterated: 'Al Jumuh ibn Zayd',
   hasProfile: false,
   fields: {},
   titles: [],

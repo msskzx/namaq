@@ -10,7 +10,7 @@ const umayrIbnSalamahAlLakhmi = {
   kind: 'PERSON',
   slug: 'umayr-ibn-salamah-al-lakhmi',
   name: 'عمير بن سلمة',
-  nameTransliterated: 'Umayr Ibn Salamah Al Lakhmi',
+  nameTransliterated: 'Umayr ibn Salamah Al Lakhmi',
   hasProfile: false,
   fields: {},
   titles: [],

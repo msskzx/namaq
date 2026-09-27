@@ -12,8 +12,15 @@ const abuZaid = {
   name: 'أبو زيد',
   nameTransliterated: 'Abu Zaid',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'ثابت بن زيد بن قيس بن زيد بن النعمان بن مالك بن ثعلبة بن كعب بن الخزرج الأنصاري الخزرجي الحارثي',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'zayd-ibn-qais', claims: legacyUnreviewed },
   ],

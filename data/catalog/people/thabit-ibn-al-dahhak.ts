@@ -10,7 +10,7 @@ const thabitIbnAlDahhak = {
   kind: 'PERSON',
   slug: 'thabit-ibn-al-dahhak',
   name: 'ثابت بن الضحاك',
-  nameTransliterated: 'Thabit Ibn Al Dahhak',
+  nameTransliterated: 'Thabit ibn Al Dahhak',
   hasProfile: false,
   fields: {},
   titles: [],

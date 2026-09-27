@@ -17,7 +17,10 @@ const safiyyahBintHuyayy = {
   name: 'صفية بنت حيي',
   nameTransliterated: 'Safiyyah bint Huyayy',
   hasProfile: true,
-  fields: {},
+  fields: {
+    // Carried from the retired prisma/personSeedData9.ts entry, uncited.
+    fullName: { value: 'صفية بنت حيي بن أخطب بن سعية', claims: legacyUnreviewed },
+  },
   titles: [
     // Carried from the seed rows; the chapter calls her neither.
     { title: 'mother-of-believers', claims: legacyUnreviewed },

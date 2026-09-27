@@ -10,7 +10,7 @@ const umaysIbnMabadAlKhathami = {
   kind: 'PERSON',
   slug: 'umays-ibn-mabad-al-khathami',
   name: 'عميس بن معبد',
-  nameTransliterated: 'Umays Ibn Mabad Al Khathami',
+  nameTransliterated: 'Umays ibn Mabad Al Khathami',
   hasProfile: false,
   fields: {},
   titles: [],

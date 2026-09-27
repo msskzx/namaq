@@ -10,7 +10,7 @@ const amrIbnThalabah = {
   kind: 'PERSON',
   slug: 'amr-ibn-thalabah',
   name: 'عمرو بن ثعلبة',
-  nameTransliterated: 'Amr Ibn Thalabah',
+  nameTransliterated: 'Amr ibn Thalabah',
   hasProfile: false,
   fields: {},
   titles: [],

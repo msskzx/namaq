@@ -10,7 +10,7 @@ const abdAlAsadIbnHilal = {
   kind: 'PERSON',
   slug: 'abd-al-asad-ibn-hilal',
   name: 'عبد الأسد بن هلال',
-  nameTransliterated: 'Abd Al Asad Ibn Hilal',
+  nameTransliterated: 'Abd Al Asad ibn Hilal',
   hasProfile: false,
   fields: {},
   titles: [],

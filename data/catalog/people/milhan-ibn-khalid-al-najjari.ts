@@ -10,7 +10,7 @@ const milhanIbnKhalidAlNajjari = {
   kind: 'PERSON',
   slug: 'milhan-ibn-khalid-al-najjari',
   name: 'ملحان بن خالد',
-  nameTransliterated: 'Milhan Ibn Khalid Al Najjari',
+  nameTransliterated: 'Milhan ibn Khalid Al Najjari',
   hasProfile: false,
   fields: {},
   titles: [],

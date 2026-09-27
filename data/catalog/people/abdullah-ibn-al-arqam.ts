@@ -12,8 +12,15 @@ const abdullahIbnAlArqam = {
   name: 'عبد الله بن الأرقم',
   nameTransliterated: 'Abdullah ibn al-Arqam',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'عبد الله بن الأرقم بن عبد يغوث بن وهب بن عبد مناف بن زهرة القرشي الزهري',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abd-yaghuth-ibn-wahb', claims: legacyUnreviewed },
   ],

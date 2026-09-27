@@ -12,8 +12,15 @@ const abdullahIbnAmrIbnHaram = {
   name: 'عبد الله بن عمرو بن حرام',
   nameTransliterated: 'Abdullah ibn Amr ibn Haram',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'عبد الله بن عمرو بن حرام بن ثعلبة بن حرام بن كعب بن غنم بن كعب بن سلمة الأنصاري الخزرجي السلمي',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'amr-ibn-haram', claims: legacyUnreviewed },
   ],

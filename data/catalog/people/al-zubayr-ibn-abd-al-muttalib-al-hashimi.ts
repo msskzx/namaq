@@ -10,7 +10,7 @@ const alZubayrIbnAbdAlMuttalibAlHashimi = {
   kind: 'PERSON',
   slug: 'al-zubayr-ibn-abd-al-muttalib-al-hashimi',
   name: 'الزبير بن عبد المطلب',
-  nameTransliterated: 'Al Zubayr Ibn Abd Al Muttalib Al Hashimi',
+  nameTransliterated: 'Al Zubayr ibn Abd Al Muttalib Al Hashimi',
   hasProfile: false,
   fields: {},
   titles: [],

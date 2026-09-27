@@ -10,7 +10,7 @@ const abdIbnAlHarithIbnZuhrah = {
   kind: 'PERSON',
   slug: 'abd-ibn-al-harith-ibn-zuhrah',
   name: 'عبد بن الحارث',
-  nameTransliterated: 'Abd Ibn Al Harith Ibn Zuhrah',
+  nameTransliterated: 'Abd ibn Al Harith ibn Zuhrah',
   hasProfile: false,
   fields: {},
   titles: [],

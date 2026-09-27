@@ -10,7 +10,7 @@ const malikIbnAnNadrAlNajjari = {
   kind: 'PERSON',
   slug: 'malik-ibn-an-nadr-al-najjari',
   name: 'مالك بن النضر',
-  nameTransliterated: 'Malik Ibn An Nadr Al Najjari',
+  nameTransliterated: 'Malik ibn An Nadr Al Najjari',
   hasProfile: false,
   fields: {},
   titles: [],

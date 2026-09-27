@@ -12,8 +12,15 @@ const muhammadIbnMaslamah = {
   name: 'محمد بن مسلمة',
   nameTransliterated: 'Muhammad ibn Maslamah',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'محمد بن سلمة بن خالد بن عدي بن مجدعة الأنصاري الحارثي',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'PATERNAL_COUSIN', inverse: 'PATERNAL_COUSIN', to: 'salamah-ibn-salamah', claims: legacyUnreviewed },
   ],

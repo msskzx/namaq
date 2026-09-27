@@ -10,7 +10,7 @@ const simakIbnAtik = {
   kind: 'PERSON',
   slug: 'simak-ibn-atik',
   name: 'سماك بن عتيك',
-  nameTransliterated: 'Simak Ibn Atik',
+  nameTransliterated: 'Simak ibn Atik',
   hasProfile: false,
   fields: {},
   titles: [],

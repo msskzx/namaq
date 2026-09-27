@@ -12,8 +12,12 @@ const utbahIbnGhazwan = {
   name: 'عتبة بن غزوان',
   nameTransliterated: 'Utbah ibn Ghazwan',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: { value: 'عتبة بن غزوان بن جابر بن وهيب المازني حليف بني عبد شمس', claims: legacyUnreviewed },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'ghazwan-ibn-jabir', claims: legacyUnreviewed },
   ],

@@ -10,7 +10,7 @@ const talhahIbnAbdullahIbnAbdAlUzza = {
   kind: 'PERSON',
   slug: 'talhah-ibn-abdullah-ibn-abd-al-uzza',
   name: 'طلحة بن عبد الله',
-  nameTransliterated: 'Talhah Ibn Abdullah Ibn Abd Al Uzza',
+  nameTransliterated: 'Talhah ibn Abdullah ibn Abd Al Uzza',
   hasProfile: false,
   fields: {},
   titles: [],

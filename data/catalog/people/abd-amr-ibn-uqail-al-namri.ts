@@ -10,7 +10,7 @@ const abdAmrIbnUqailAlNamri = {
   kind: 'PERSON',
   slug: 'abd-amr-ibn-uqail-al-namri',
   name: 'عبد عمرو بن عقيل',
-  nameTransliterated: 'Abd Amr Ibn Uqail Al Namri',
+  nameTransliterated: 'Abd Amr ibn Uqail Al Namri',
   hasProfile: false,
   fields: {},
   titles: [],

@@ -10,7 +10,7 @@ const hudhafahIbnQaisAlSahmi = {
   kind: 'PERSON',
   slug: 'hudhafah-ibn-qais-al-sahmi',
   name: 'حذافة بن قيس',
-  nameTransliterated: 'Hudhafah Ibn Qais Al Sahmi',
+  nameTransliterated: 'Hudhafah ibn Qais Al Sahmi',
   hasProfile: false,
   fields: {},
   titles: [],

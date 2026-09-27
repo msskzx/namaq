@@ -10,7 +10,7 @@ const amirIbnKurayz = {
   kind: 'PERSON',
   slug: 'amir-ibn-kurayz',
   name: 'عامر بن كريز',
-  nameTransliterated: 'Amir Ibn Kurayz',
+  nameTransliterated: 'Amir ibn Kurayz',
   hasProfile: false,
   fields: {},
   titles: [],

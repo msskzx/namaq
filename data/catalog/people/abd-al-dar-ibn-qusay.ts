@@ -10,7 +10,7 @@ const abdAlDarIbnQusay = {
   kind: 'PERSON',
   slug: 'abd-al-dar-ibn-qusay',
   name: 'عبد الدار بن قصي',
-  nameTransliterated: 'Abd Al Dar Ibn Qusay',
+  nameTransliterated: 'Abd Al Dar ibn Qusay',
   hasProfile: false,
   fields: {},
   titles: [],

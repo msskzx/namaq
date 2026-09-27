@@ -10,7 +10,7 @@ const abdAwfIbnAbd = {
   kind: 'PERSON',
   slug: 'abd-awf-ibn-abd',
   name: 'عبد عوف بن عبد',
-  nameTransliterated: 'Abd Awf Ibn Abd',
+  nameTransliterated: 'Abd Awf ibn Abd',
   hasProfile: false,
   fields: {},
   titles: [],

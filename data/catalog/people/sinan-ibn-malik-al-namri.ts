@@ -10,7 +10,7 @@ const sinanIbnMalikAlNamri = {
   kind: 'PERSON',
   slug: 'sinan-ibn-malik-al-namri',
   name: 'سنان بن مالك',
-  nameTransliterated: 'Sinan Ibn Malik Al Namri',
+  nameTransliterated: 'Sinan ibn Malik Al Namri',
   hasProfile: false,
   fields: {},
   titles: [],

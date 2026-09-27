@@ -10,7 +10,7 @@ const abbadIbnAlMuttalib = {
   kind: 'PERSON',
   slug: 'abbad-ibn-al-muttalib',
   name: 'عباد بن المطلب',
-  nameTransliterated: 'Abbad Ibn Al Muttalib',
+  nameTransliterated: 'Abbad ibn Al Muttalib',
   hasProfile: false,
   fields: {},
   titles: [],

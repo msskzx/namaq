@@ -10,7 +10,7 @@ const abiUmayyahIbnAlMughirah = {
   kind: 'PERSON',
   slug: 'abi-umayyah-ibn-al-mughirah',
   name: 'أبو أمية بن المغيرة',
-  nameTransliterated: 'Abi Umayyah Ibn Al Mughirah',
+  nameTransliterated: 'Abi Umayyah ibn Al Mughirah',
   hasProfile: false,
   fields: {},
   titles: [],

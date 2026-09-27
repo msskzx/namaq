@@ -10,7 +10,7 @@ const atTayyihanIbnBali = {
   kind: 'PERSON',
   slug: 'at-tayyihan-ibn-bali',
   name: 'التيهان بن بلي',
-  nameTransliterated: 'At Tayyihan Ibn Bali',
+  nameTransliterated: 'At Tayyihan ibn Bali',
   hasProfile: false,
   fields: {},
   titles: [],

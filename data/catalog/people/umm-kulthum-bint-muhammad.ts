@@ -1,0 +1,26 @@
+import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
+
+/**
+ * Carried from the retired prisma/personSeedData9.ts entry. Her FATHER edge
+ * (prophet-muhammad.ts) and HUSBAND edge (uthman-ibn-affan.ts, married after
+ * her sister Ruqayyah's death) are already declared from the other side.
+ */
+const ummKulthumBintMuhammad = {
+  kind: 'PERSON',
+  slug: 'umm-kulthum-bint-muhammad',
+  name: 'أم كلثوم بنت محمد',
+  nameTransliterated: 'Umm Kulthum bint Muhammad',
+  hasProfile: true,
+  fields: {
+    fullName: {
+      value: 'أم كلثوم بنت محمد بن عبد الله بن عبد المطلب بن هاشم القرشية الهاشمية',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
+  relations: [],
+} satisfies CatalogPerson;
+
+export default ummKulthumBintMuhammad;

@@ -10,7 +10,7 @@ const malikIbnAbdAmrAlNamri = {
   kind: 'PERSON',
   slug: 'malik-ibn-abd-amr-al-namri',
   name: 'مالك بن عبد عمرو',
-  nameTransliterated: 'Malik Ibn Abd Amr Al Namri',
+  nameTransliterated: 'Malik ibn Abd Amr Al Namri',
   hasProfile: false,
   fields: {},
   titles: [],

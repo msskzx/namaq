@@ -12,8 +12,15 @@ const ubayyIbnKaab = {
   name: 'أبي بن كعب',
   nameTransliterated: 'Ubayy ibn Kaab',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'أبي بن كعب بن قيس بن عبيد بن زيد بن معاوية بن عمرو بن مالك بن النجار الأنصاري النجاري',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'kaab-ibn-qais', claims: legacyUnreviewed },
   ],

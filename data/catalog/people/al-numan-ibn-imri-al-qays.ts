@@ -10,7 +10,7 @@ const alNumanIbnImriAlQays = {
   kind: 'PERSON',
   slug: 'al-numan-ibn-imri-al-qays',
   name: 'النعمان بن امرئ القيس',
-  nameTransliterated: 'Al Numan Ibn Imri Al Qays',
+  nameTransliterated: 'Al Numan ibn Imri Al Qays',
   hasProfile: false,
   fields: {},
   titles: [],

@@ -10,7 +10,7 @@ const harithahIbnAbiHuzaymah = {
   kind: 'PERSON',
   slug: 'harithah-ibn-abi-huzaymah',
   name: 'حارثة بن أبي حزيمة',
-  nameTransliterated: 'Harithah Ibn Abi Huzaymah',
+  nameTransliterated: 'Harithah ibn Abi Huzaymah',
   hasProfile: false,
   fields: {},
   titles: [],

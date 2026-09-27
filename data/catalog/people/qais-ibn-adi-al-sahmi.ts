@@ -10,7 +10,7 @@ const qaisIbnAdiAlSahmi = {
   kind: 'PERSON',
   slug: 'qais-ibn-adi-al-sahmi',
   name: 'قيس بن عدي',
-  nameTransliterated: 'Qais Ibn Adi Al Sahmi',
+  nameTransliterated: 'Qais ibn Adi Al Sahmi',
   hasProfile: false,
   fields: {},
   titles: [],

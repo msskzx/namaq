@@ -10,7 +10,7 @@ const alWalidIbnAlMughirah = {
   kind: 'PERSON',
   slug: 'al-walid-ibn-al-mughirah',
   name: 'الوليد بن المغيرة',
-  nameTransliterated: 'Al Walid Ibn Al Mughirah',
+  nameTransliterated: 'Al Walid ibn Al Mughirah',
   hasProfile: false,
   fields: {},
   titles: [],

@@ -10,7 +10,7 @@ const asadIbnAbdullahIbnUmar = {
   kind: 'PERSON',
   slug: 'asad-ibn-abdullah-ibn-umar',
   name: 'أسد بن عبد الله',
-  nameTransliterated: 'Asad Ibn Abdullah Ibn Umar',
+  nameTransliterated: 'Asad ibn Abdullah ibn Umar',
   hasProfile: false,
   fields: {},
   titles: [],

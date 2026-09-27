@@ -10,7 +10,7 @@ const nafiIbnImriAlQays = {
   kind: 'PERSON',
   slug: 'nafi-ibn-imri-al-qays',
   name: 'نافع بن امرئ القيس',
-  nameTransliterated: 'Nafi Ibn Imri Al Qays',
+  nameTransliterated: 'Nafi ibn Imri Al Qays',
   hasProfile: false,
   fields: {},
   titles: [],

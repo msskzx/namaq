@@ -10,7 +10,7 @@ const alJarrahIbnHilal = {
   kind: 'PERSON',
   slug: 'al-jarrah-ibn-hilal',
   name: 'الجراح بن هلال',
-  nameTransliterated: 'Al Jarrah Ibn Hilal',
+  nameTransliterated: 'Al Jarrah ibn Hilal',
   hasProfile: false,
   fields: {},
   titles: [],

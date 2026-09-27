@@ -10,7 +10,7 @@ const damdamIbnZayd = {
   kind: 'PERSON',
   slug: 'damdam-ibn-zayd',
   name: 'ضمضم بن زيد',
-  nameTransliterated: 'Damdam Ibn Zayd',
+  nameTransliterated: 'Damdam ibn Zayd',
   hasProfile: false,
   fields: {},
   titles: [],

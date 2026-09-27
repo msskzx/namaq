@@ -12,8 +12,15 @@ const jabrIbnAtik = {
   name: 'جبر بن عتيك',
   nameTransliterated: 'Jabr ibn Atik',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'جبر بن عتيك بن قيس بن هيشة بن الحارث بن أمية بن معاوية بن مالك بن عوف بن عمرو بن عوف الأنصاري',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'atik-ibn-qais-al-ansari', claims: legacyUnreviewed },
   ],

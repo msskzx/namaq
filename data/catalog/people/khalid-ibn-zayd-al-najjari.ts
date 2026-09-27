@@ -10,7 +10,7 @@ const khalidIbnZaydAlNajjari = {
   kind: 'PERSON',
   slug: 'khalid-ibn-zayd-al-najjari',
   name: 'خالد بن زيد',
-  nameTransliterated: 'Khalid Ibn Zayd Al Najjari',
+  nameTransliterated: 'Khalid ibn Zayd Al Najjari',
   hasProfile: false,
   fields: {},
   titles: [],

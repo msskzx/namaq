@@ -10,7 +10,7 @@ const hudhafahIbnJumah = {
   kind: 'PERSON',
   slug: 'hudhafah-ibn-jumah',
   name: 'حذافة بن جمح',
-  nameTransliterated: 'Hudhafah Ibn Jumah',
+  nameTransliterated: 'Hudhafah ibn Jumah',
   hasProfile: false,
   fields: {},
   titles: [],

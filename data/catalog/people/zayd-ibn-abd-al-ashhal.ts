@@ -10,7 +10,7 @@ const zaydIbnAbdAlAshhal = {
   kind: 'PERSON',
   slug: 'zayd-ibn-abd-al-ashhal',
   name: 'زيد بن عبد الأشهل',
-  nameTransliterated: 'Zayd Ibn Abd Al Ashhal',
+  nameTransliterated: 'Zayd ibn Abd Al Ashhal',
   hasProfile: false,
   fields: {},
   titles: [],

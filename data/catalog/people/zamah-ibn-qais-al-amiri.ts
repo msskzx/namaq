@@ -10,7 +10,7 @@ const zamahIbnQaisAlAmiri = {
   kind: 'PERSON',
   slug: 'zamah-ibn-qais-al-amiri',
   name: 'زمعة بن قيس',
-  nameTransliterated: 'Zamah Ibn Qais Al Amiri',
+  nameTransliterated: 'Zamah ibn Qais Al Amiri',
   hasProfile: false,
   fields: {},
   titles: [],

@@ -10,7 +10,7 @@ const imruAlQaysIbnZayd = {
   kind: 'PERSON',
   slug: 'imru-al-qays-ibn-zayd',
   name: 'امرؤ القيس بن زيد',
-  nameTransliterated: 'Imru Al Qays Ibn Zayd',
+  nameTransliterated: 'Imru Al Qays ibn Zayd',
   hasProfile: false,
   fields: {},
   titles: [],

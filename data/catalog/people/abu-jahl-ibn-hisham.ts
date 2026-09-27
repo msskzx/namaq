@@ -10,7 +10,7 @@ const abuJahlIbnHisham = {
   kind: 'PERSON',
   slug: 'abu-jahl-ibn-hisham',
   name: 'أبو جهل',
-  nameTransliterated: 'Abu Jahl Ibn Hisham',
+  nameTransliterated: 'Abu Jahl ibn Hisham',
   hasProfile: false,
   fields: {},
   titles: [],

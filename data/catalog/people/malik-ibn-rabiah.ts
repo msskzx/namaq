@@ -10,7 +10,7 @@ const malikIbnRabiah = {
   kind: 'PERSON',
   slug: 'malik-ibn-rabiah',
   name: 'مالك بن ربيعة',
-  nameTransliterated: 'Malik Ibn Rabiah',
+  nameTransliterated: 'Malik ibn Rabiah',
   hasProfile: false,
   fields: {},
   titles: [],

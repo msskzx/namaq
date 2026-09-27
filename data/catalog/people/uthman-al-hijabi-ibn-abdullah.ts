@@ -10,7 +10,7 @@ const uthmanAlHijabiIbnAbdullah = {
   kind: 'PERSON',
   slug: 'uthman-al-hijabi-ibn-abdullah',
   name: 'عثمان بن عبد الله',
-  nameTransliterated: 'Uthman Al Hijabi Ibn Abdullah',
+  nameTransliterated: 'Uthman Al Hijabi ibn Abdullah',
   hasProfile: false,
   fields: {},
   titles: [],

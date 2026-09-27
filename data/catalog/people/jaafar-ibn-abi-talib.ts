@@ -12,8 +12,15 @@ const jaafarIbnAbiTalib = {
   name: 'جعفر بن أبي طالب',
   nameTransliterated: 'Jaafar ibn Abi Talib',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'جعفر بن أبي طالب عبد مناف بن عبد المطلب بن هاشم بن عبد مناف بن قصي القرشي الهاشمي',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abu-talib', claims: legacyUnreviewed },
   ],

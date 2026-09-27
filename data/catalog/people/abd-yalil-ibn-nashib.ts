@@ -10,7 +10,7 @@ const abdYalilIbnNashib = {
   kind: 'PERSON',
   slug: 'abd-yalil-ibn-nashib',
   name: 'عبد ياليل بن ناشب',
-  nameTransliterated: 'Abd Yalil Ibn Nashib',
+  nameTransliterated: 'Abd Yalil ibn Nashib',
   hasProfile: false,
   fields: {},
   titles: [],

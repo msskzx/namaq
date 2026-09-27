@@ -10,7 +10,7 @@ const qaisIbnMuadikaribAlKindi = {
   kind: 'PERSON',
   slug: 'qais-ibn-muadikarib-al-kindi',
   name: 'قيس بن معدي كرب',
-  nameTransliterated: 'Qais Ibn Muadikarib Al Kindi',
+  nameTransliterated: 'Qais ibn Muadikarib Al Kindi',
   hasProfile: false,
   fields: {},
   titles: [],

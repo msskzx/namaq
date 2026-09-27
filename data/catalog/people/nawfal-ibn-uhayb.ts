@@ -10,7 +10,7 @@ const nawfalIbnUhayb = {
   kind: 'PERSON',
   slug: 'nawfal-ibn-uhayb',
   name: 'نوفل بن أهيب',
-  nameTransliterated: 'Nawfal Ibn Uhayb',
+  nameTransliterated: 'Nawfal ibn Uhayb',
   hasProfile: false,
   fields: {},
   titles: [],

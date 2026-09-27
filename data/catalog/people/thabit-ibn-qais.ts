@@ -12,8 +12,15 @@ const thabitIbnQais = {
   name: 'ثابت بن قيس',
   nameTransliterated: 'Thabit ibn Qais',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'ثابت بن قيس بن شماس بن زهير بن مالك بن امرئ القيس بن مالك الأغر بن ثعلبة الأنصاري الخزرجي',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'qais-ibn-shammas', claims: legacyUnreviewed },
   ],

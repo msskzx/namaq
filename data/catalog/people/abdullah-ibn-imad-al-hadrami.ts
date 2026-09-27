@@ -10,7 +10,7 @@ const abdullahIbnImadAlHadrami = {
   kind: 'PERSON',
   slug: 'abdullah-ibn-imad-al-hadrami',
   name: 'عبد الله بن عماد',
-  nameTransliterated: 'Abdullah Ibn Imad Al Hadrami',
+  nameTransliterated: 'Abdullah ibn Imad Al Hadrami',
   hasProfile: false,
   fields: {},
   titles: [],

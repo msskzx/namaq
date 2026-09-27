@@ -10,7 +10,7 @@ const adiIbnAmir = {
   kind: 'PERSON',
   slug: 'adi-ibn-amir',
   name: 'عدي بن عامر',
-  nameTransliterated: 'Adi Ibn Amir',
+  nameTransliterated: 'Adi ibn Amir',
   hasProfile: false,
   fields: {},
   titles: [],

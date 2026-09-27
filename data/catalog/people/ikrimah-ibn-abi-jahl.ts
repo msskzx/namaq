@@ -12,8 +12,15 @@ const ikrimahIbnAbiJahl = {
   name: 'عكرمة بن أبي جهل',
   nameTransliterated: 'Ikrimah ibn Abi Jahl',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'عكرمة بن أبي جهل عمرو بن هشام بن المغيرة بن عبد الله بن عمر بن مخزوم القرشي المخزومي',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abu-jahl-ibn-hisham', claims: legacyUnreviewed },
   ],

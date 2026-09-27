@@ -10,7 +10,7 @@ const alSamitIbnQaisAlKhazraji = {
   kind: 'PERSON',
   slug: 'al-samit-ibn-qais-al-khazraji',
   name: 'الصامت بن قيس',
-  nameTransliterated: 'Al Samit Ibn Qais Al Khazraji',
+  nameTransliterated: 'Al Samit ibn Qais Al Khazraji',
   hasProfile: false,
   fields: {},
   titles: [],

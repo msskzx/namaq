@@ -10,7 +10,7 @@ const alJiddIbnAlAjlan = {
   kind: 'PERSON',
   slug: 'al-jidd-ibn-al-ajlan',
   name: 'الجد بن العجلان',
-  nameTransliterated: 'Al Jidd Ibn Al Ajlan',
+  nameTransliterated: 'Al Jidd ibn Al Ajlan',
   hasProfile: false,
   fields: {},
   titles: [],

@@ -10,7 +10,7 @@ const alNumanIbnMalik = {
   kind: 'PERSON',
   slug: 'al-numan-ibn-malik',
   name: 'النعمان بن مالك',
-  nameTransliterated: 'Al Numan Ibn Malik',
+  nameTransliterated: 'Al Numan ibn Malik',
   hasProfile: false,
   fields: {},
   titles: [],

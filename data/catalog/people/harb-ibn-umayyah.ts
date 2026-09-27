@@ -10,7 +10,7 @@ const harbIbnUmayyah = {
   kind: 'PERSON',
   slug: 'harb-ibn-umayyah',
   name: 'حرب بن أمية',
-  nameTransliterated: 'Harb Ibn Umayyah',
+  nameTransliterated: 'Harb ibn Umayyah',
   hasProfile: false,
   fields: {},
   titles: [],

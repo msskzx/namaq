@@ -12,8 +12,15 @@ const ubadahIbnAlSamit = {
   name: 'عبادة بن الصامت',
   nameTransliterated: 'Ubadah ibn al-Samit',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'عبادة بن الصامت بن قيس بن أصرم بن فهر بن ثعلبة بن غنم بن عوف بن عمرو بن عوف الأنصاري الخزرجي',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'al-samit-ibn-qais-al-khazraji', claims: legacyUnreviewed },
     { type: 'HUSBAND', inverse: 'WIFE', to: 'umm-haram-bint-milhan', claims: legacyUnreviewed },

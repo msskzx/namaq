@@ -10,7 +10,7 @@ const alHarithIbnHaznAlHilali = {
   kind: 'PERSON',
   slug: 'al-harith-ibn-hazn-al-hilali',
   name: 'الحارث بن حزن',
-  nameTransliterated: 'Al Harith Ibn Hazn Al Hilali',
+  nameTransliterated: 'Al Harith ibn Hazn Al Hilali',
   hasProfile: false,
   fields: {},
   titles: [],

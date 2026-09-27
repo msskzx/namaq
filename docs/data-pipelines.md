@@ -151,6 +151,16 @@ Sa'id ibn Zayd's father. The one piece of real information the duplicate held
 itself, left with no relationships once its stale edges were dropped, was
 deleted from Neo4j directly.
 
+**Known cleanup owed**: the bulk generation of these modules capitalized
+"Ibn" mid-string in roughly 250 `nameTransliterated` values (e.g. `'Abu
+Sufyan Ibn Harb'`), against this codebase's lowercase-`ibn` convention used
+everywhere else. Find every offender with `grep -rl "nameTransliterated: '[^']* Ibn [^']*'" data/catalog/people/*.ts`
+(excluding `*.test.ts`) and lowercase the standalone word "Ibn" to "ibn" —
+careful to leave other capitalized words alone. After the fix, `npm run
+lint`, `npx tsc --noEmit`, `npm run catalog:validate`, `npm test`, and a
+`npm run catalog:project` dry run should show no changes beyond the
+capitalization fix itself.
+
 ## History batches to PostgreSQL
 
 A batch lives in `data/history/batches/<batch>/`:

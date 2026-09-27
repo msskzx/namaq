@@ -10,7 +10,7 @@ const nashibIbnGhirah = {
   kind: 'PERSON',
   slug: 'nashib-ibn-ghirah',
   name: 'ناشب بن غيرة',
-  nameTransliterated: 'Nashib Ibn Ghirah',
+  nameTransliterated: 'Nashib ibn Ghirah',
   hasProfile: false,
   fields: {},
   titles: [],

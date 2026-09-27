@@ -12,8 +12,15 @@ const abuDujanahAlAnsari = {
   name: 'أبو دجانة الأنصاري',
   nameTransliterated: 'Abu Dujanah al-Ansari',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'سماك بن خرشة بن لوذان بن عبد ود بن زيد الأنصاري الساعدي',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'khirashah-ibn-lawdhan', claims: legacyUnreviewed },
   ],

@@ -10,7 +10,7 @@ const bishrIbnWaqsh = {
   kind: 'PERSON',
   slug: 'bishr-ibn-waqsh',
   name: 'بشر بن وقش',
-  nameTransliterated: 'Bishr Ibn Waqsh',
+  nameTransliterated: 'Bishr ibn Waqsh',
   hasProfile: false,
   fields: {},
   titles: [],

@@ -10,7 +10,7 @@ const alHafIbnQudaah = {
   kind: 'PERSON',
   slug: 'al-haf-ibn-qudaah',
   name: 'الحاف بن قضاعة',
-  nameTransliterated: 'Al Haf Ibn Qudaah',
+  nameTransliterated: 'Al Haf ibn Qudaah',
   hasProfile: false,
   fields: {},
   titles: [],

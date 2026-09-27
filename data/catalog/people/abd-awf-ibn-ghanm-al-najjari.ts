@@ -10,7 +10,7 @@ const abdAwfIbnGhanmAlNajjari = {
   kind: 'PERSON',
   slug: 'abd-awf-ibn-ghanm-al-najjari',
   name: 'عبد عوف بن غنم',
-  nameTransliterated: 'Abd Awf Ibn Ghanm Al Najjari',
+  nameTransliterated: 'Abd Awf ibn Ghanm Al Najjari',
   hasProfile: false,
   fields: {},
   titles: [],

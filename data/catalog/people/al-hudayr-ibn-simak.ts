@@ -10,7 +10,7 @@ const alHudayrIbnSimak = {
   kind: 'PERSON',
   slug: 'al-hudayr-ibn-simak',
   name: 'الحضير بن سماك',
-  nameTransliterated: 'Al Hudayr Ibn Simak',
+  nameTransliterated: 'Al Hudayr ibn Simak',
   hasProfile: false,
   fields: {},
   titles: [],

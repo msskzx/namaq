@@ -10,7 +10,7 @@ const jushamIbnHaritha = {
   kind: 'PERSON',
   slug: 'jusham-ibn-haritha',
   name: 'جشم بن حارثة',
-  nameTransliterated: 'Jusham Ibn Haritha',
+  nameTransliterated: 'Jusham ibn Haritha',
   hasProfile: false,
   fields: {},
   titles: [],

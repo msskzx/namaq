@@ -10,7 +10,7 @@ const sharahilIbnKaab = {
   kind: 'PERSON',
   slug: 'sharahil-ibn-kaab',
   name: 'شراحيل بن كعب',
-  nameTransliterated: 'Sharahil Ibn Kaab',
+  nameTransliterated: 'Sharahil ibn Kaab',
   hasProfile: false,
   fields: {},
   titles: [],

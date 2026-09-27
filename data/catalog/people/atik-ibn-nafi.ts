@@ -10,7 +10,7 @@ const atikIbnNafi = {
   kind: 'PERSON',
   slug: 'atik-ibn-nafi',
   name: 'عتيك بن نافع',
-  nameTransliterated: 'Atik Ibn Nafi',
+  nameTransliterated: 'Atik ibn Nafi',
   hasProfile: false,
   fields: {},
   titles: [],

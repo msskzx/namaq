@@ -10,7 +10,7 @@ const rawahahIbnThalabah = {
   kind: 'PERSON',
   slug: 'rawahah-ibn-thalabah',
   name: 'رواحة بن ثعلبة',
-  nameTransliterated: 'Rawahah Ibn Thalabah',
+  nameTransliterated: 'Rawahah ibn Thalabah',
   hasProfile: false,
   fields: {},
   titles: [],

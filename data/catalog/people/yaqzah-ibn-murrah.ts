@@ -10,7 +10,7 @@ const yaqzahIbnMurrah = {
   kind: 'PERSON',
   slug: 'yaqzah-ibn-murrah',
   name: 'يقظة بن مرة',
-  nameTransliterated: 'Yaqzah Ibn Murrah',
+  nameTransliterated: 'Yaqzah ibn Murrah',
   hasProfile: false,
   fields: {},
   titles: [],

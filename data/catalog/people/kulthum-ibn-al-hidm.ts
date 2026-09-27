@@ -12,8 +12,15 @@ const kulthumIbnAlHidm = {
   name: 'كلثوم بن الهدم',
   nameTransliterated: 'Kulthum ibn al-Hidm',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'كلثوم بن الهدم بن امرئ القيس بن الحارث بن زيد الأنصاري الأوسي',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'al-hidm-ibn-imri-al-qays', claims: legacyUnreviewed },
   ],

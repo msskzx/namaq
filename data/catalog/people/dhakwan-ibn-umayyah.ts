@@ -10,7 +10,7 @@ const dhakwanIbnUmayyah = {
   kind: 'PERSON',
   slug: 'dhakwan-ibn-umayyah',
   name: 'ذكوان بن أمية',
-  nameTransliterated: 'Dhakwan Ibn Umayyah',
+  nameTransliterated: 'Dhakwan ibn Umayyah',
   hasProfile: false,
   fields: {},
   titles: [],

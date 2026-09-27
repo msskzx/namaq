@@ -10,7 +10,7 @@ const abdManafIbnZuhrah = {
   kind: 'PERSON',
   slug: 'abd-manaf-ibn-zuhrah',
   name: 'عبد مناف بن زهرة',
-  nameTransliterated: 'Abd Manaf Ibn Zuhrah',
+  nameTransliterated: 'Abd Manaf ibn Zuhrah',
   hasProfile: false,
   fields: {},
   titles: [],

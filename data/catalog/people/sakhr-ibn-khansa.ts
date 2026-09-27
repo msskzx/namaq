@@ -10,7 +10,7 @@ const sakhrIbnKhansa = {
   kind: 'PERSON',
   slug: 'sakhr-ibn-khansa',
   name: 'صخر بن خنساء',
-  nameTransliterated: 'Sakhr Ibn Khansa',
+  nameTransliterated: 'Sakhr ibn Khansa',
   hasProfile: false,
   fields: {},
   titles: [],

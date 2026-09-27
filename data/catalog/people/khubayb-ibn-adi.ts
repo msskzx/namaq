@@ -12,8 +12,15 @@ const khubaybIbnAdi = {
   name: 'خبيب بن عدي',
   nameTransliterated: 'Khubayb ibn Adi',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'خبيب بن عدي بن عامر بن مجدعة بن جحجبى الأنصاري',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'adi-ibn-amir', claims: legacyUnreviewed },
   ],

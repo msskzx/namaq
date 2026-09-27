@@ -12,8 +12,15 @@ const saadIbnAlRabi = {
   name: 'سعد بن الربيع',
   nameTransliterated: 'Saad ibn al-Rabi',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'سعد بن الربيع بن عمرو بن أبي زهير بن مالك بن امرئ القيس بن مالك بن ثعلبة بن كعب بن الخزرج الأنصاري الخزرجي الحارثي',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'al-rabi-ibn-amr', claims: legacyUnreviewed },
   ],

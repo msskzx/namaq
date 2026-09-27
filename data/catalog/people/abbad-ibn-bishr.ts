@@ -12,8 +12,15 @@ const abbadIbnBishr = {
   name: 'عباد بن بشر',
   nameTransliterated: 'Abbad ibn Bishr',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'عباد بن بشر بن وقش بن زغبة بن زعوراء بن عبد الأشهل الأنصاري الأوسي الأشهلي',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'bishr-ibn-waqsh', claims: legacyUnreviewed },
   ],

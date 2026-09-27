@@ -10,7 +10,7 @@ const alMundhirIbnHaram = {
   kind: 'PERSON',
   slug: 'al-mundhir-ibn-haram',
   name: 'المنذر بن حرام',
-  nameTransliterated: 'Al Mundhir Ibn Haram',
+  nameTransliterated: 'Al Mundhir ibn Haram',
   hasProfile: false,
   fields: {},
   titles: [],

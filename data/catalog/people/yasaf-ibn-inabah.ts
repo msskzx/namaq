@@ -10,7 +10,7 @@ const yasafIbnInabah = {
   kind: 'PERSON',
   slug: 'yasaf-ibn-inabah',
   name: 'يساف بن عنبة',
-  nameTransliterated: 'Yasaf Ibn Inabah',
+  nameTransliterated: 'Yasaf ibn Inabah',
   hasProfile: false,
   fields: {},
   titles: [],

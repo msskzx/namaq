@@ -10,7 +10,7 @@ const amrIbnAbdShams = {
   kind: 'PERSON',
   slug: 'amr-ibn-abd-shams',
   name: 'عمرو بن عبد شمس',
-  nameTransliterated: 'Amr Ibn Abd Shams',
+  nameTransliterated: 'Amr ibn Abd Shams',
   hasProfile: false,
   fields: {},
   titles: [],

@@ -10,7 +10,7 @@ const abdManatIbnKinanah = {
   kind: 'PERSON',
   slug: 'abd-manat-ibn-kinanah',
   name: 'عبد مناة بن كنانة',
-  nameTransliterated: 'Abd Manat Ibn Kinanah',
+  nameTransliterated: 'Abd Manat ibn Kinanah',
   hasProfile: false,
   fields: {},
   titles: [],

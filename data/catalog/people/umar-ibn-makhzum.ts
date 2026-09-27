@@ -10,7 +10,7 @@ const umarIbnMakhzum = {
   kind: 'PERSON',
   slug: 'umar-ibn-makhzum',
   name: 'عمر بن مخزوم',
-  nameTransliterated: 'Umar Ibn Makhzum',
+  nameTransliterated: 'Umar ibn Makhzum',
   hasProfile: false,
   fields: {},
   titles: [],

@@ -10,7 +10,7 @@ const awsIbnThabit = {
   kind: 'PERSON',
   slug: 'aws-ibn-thabit',
   name: 'أوس بن ثابت',
-  nameTransliterated: 'Aws Ibn Thabit',
+  nameTransliterated: 'Aws ibn Thabit',
   hasProfile: false,
   fields: {},
   titles: [],

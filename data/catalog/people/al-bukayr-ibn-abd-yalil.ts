@@ -10,7 +10,7 @@ const alBukayrIbnAbdYalil = {
   kind: 'PERSON',
   slug: 'al-bukayr-ibn-abd-yalil',
   name: 'البكير بن عبد ياليل',
-  nameTransliterated: 'Al Bukayr Ibn Abd Yalil',
+  nameTransliterated: 'Al Bukayr ibn Abd Yalil',
   hasProfile: false,
   fields: {},
   titles: [],

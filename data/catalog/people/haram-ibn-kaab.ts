@@ -10,7 +10,7 @@ const haramIbnKaab = {
   kind: 'PERSON',
   slug: 'haram-ibn-kaab',
   name: 'حرام بن كعب',
-  nameTransliterated: 'Haram Ibn Kaab',
+  nameTransliterated: 'Haram ibn Kaab',
   hasProfile: false,
   fields: {},
   titles: [],

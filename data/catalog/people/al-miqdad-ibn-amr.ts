@@ -12,8 +12,15 @@ const alMiqdadIbnAmr = {
   name: 'المقداد بن عمرو',
   nameTransliterated: 'Al-Miqdad ibn Amr',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'المقداد بن عمرو بن ثعلبة بن مالك بن ربيعة القضاعي الكندي البهراني',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'amr-ibn-thalabah', claims: legacyUnreviewed },
     { type: 'HUSBAND', inverse: 'WIFE', to: 'dubaah-bint-al-zubayr-ibn-abd-al-muttalib', claims: legacyUnreviewed },

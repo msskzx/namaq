@@ -12,8 +12,12 @@ const alAbbasIbnAbdAlMuttalib = {
   name: 'العباس بن عبد المطلب',
   nameTransliterated: 'Al-Abbas ibn Abd al-Muttalib',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: { value: 'العباس بن عبد المطلب بن هاشم القرشي الهاشمي', claims: legacyUnreviewed },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abd-al-muttalib-ibn-hashim', claims: legacyUnreviewed },
     { type: 'HUSBAND', inverse: 'WIFE', to: 'umm-al-fadl-bint-al-harith', claims: legacyUnreviewed },

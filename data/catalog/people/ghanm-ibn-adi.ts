@@ -10,7 +10,7 @@ const ghanmIbnAdi = {
   kind: 'PERSON',
   slug: 'ghanm-ibn-adi',
   name: 'غنم بن عدي',
-  nameTransliterated: 'Ghanm Ibn Adi',
+  nameTransliterated: 'Ghanm ibn Adi',
   hasProfile: false,
   fields: {},
   titles: [],

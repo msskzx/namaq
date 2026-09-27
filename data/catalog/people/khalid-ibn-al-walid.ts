@@ -12,8 +12,15 @@ const khalidIbnAlWalid = {
   name: 'خالد بن الوليد',
   nameTransliterated: 'Khalid ibn al-Walid',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'خالد بن الوليد بن المغيرة بن عبد الله بن عمر بن مخزوم بن يقظة القرشي المخزومي',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'al-walid-ibn-al-mughirah', claims: legacyUnreviewed },
   ],

@@ -10,7 +10,7 @@ const majdaahIbnJahjaba = {
   kind: 'PERSON',
   slug: 'majdaah-ibn-jahjaba',
   name: 'مجدعة بن جحجبى',
-  nameTransliterated: 'Majdaah Ibn Jahjaba',
+  nameTransliterated: 'Majdaah ibn Jahjaba',
   hasProfile: false,
   fields: {},
   titles: [],

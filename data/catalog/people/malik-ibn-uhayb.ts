@@ -10,7 +10,7 @@ const malikIbnUhayb = {
   kind: 'PERSON',
   slug: 'malik-ibn-uhayb',
   name: 'مالك بن أهيب (أبو وقاص)',
-  nameTransliterated: 'Malik Ibn Uhayb',
+  nameTransliterated: 'Malik ibn Uhayb',
   hasProfile: false,
   fields: {},
   titles: [],

@@ -10,7 +10,7 @@ const khirashahIbnLawdhan = {
   kind: 'PERSON',
   slug: 'khirashah-ibn-lawdhan',
   name: 'خرشة بن لوذان',
-  nameTransliterated: 'Khirashah Ibn Lawdhan',
+  nameTransliterated: 'Khirashah ibn Lawdhan',
   hasProfile: false,
   fields: {},
   titles: [],

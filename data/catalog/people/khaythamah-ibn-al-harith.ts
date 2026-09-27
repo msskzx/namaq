@@ -10,7 +10,7 @@ const khaythamahIbnAlHarith = {
   kind: 'PERSON',
   slug: 'khaythamah-ibn-al-harith',
   name: 'خيثمة بن الحارث',
-  nameTransliterated: 'Khaythamah Ibn Al Harith',
+  nameTransliterated: 'Khaythamah ibn Al Harith',
   hasProfile: false,
   fields: {},
   titles: [],

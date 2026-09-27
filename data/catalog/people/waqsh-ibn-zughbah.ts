@@ -10,7 +10,7 @@ const waqshIbnZughbah = {
   kind: 'PERSON',
   slug: 'waqsh-ibn-zughbah',
   name: 'وقش بن زغبة',
-  nameTransliterated: 'Waqsh Ibn Zughbah',
+  nameTransliterated: 'Waqsh ibn Zughbah',
   hasProfile: false,
   fields: {},
   titles: [],

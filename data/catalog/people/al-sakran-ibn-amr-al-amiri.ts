@@ -10,7 +10,7 @@ const alSakranIbnAmrAlAmiri = {
   kind: 'PERSON',
   slug: 'al-sakran-ibn-amr-al-amiri',
   name: 'السكران بن عمرو',
-  nameTransliterated: 'Al Sakran Ibn Amr Al Amiri',
+  nameTransliterated: 'Al Sakran ibn Amr Al Amiri',
   hasProfile: false,
   fields: {},
   titles: [],

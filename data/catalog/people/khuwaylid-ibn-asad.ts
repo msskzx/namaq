@@ -10,7 +10,7 @@ const khuwaylidIbnAsad = {
   kind: 'PERSON',
   slug: 'khuwaylid-ibn-asad',
   name: 'خويلد بن أسد',
-  nameTransliterated: 'Khuwaylid Ibn Asad',
+  nameTransliterated: 'Khuwaylid ibn Asad',
   hasProfile: false,
   fields: {},
   titles: [],

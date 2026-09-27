@@ -10,7 +10,7 @@ const abanIbnDhakwan = {
   kind: 'PERSON',
   slug: 'aban-ibn-dhakwan',
   name: 'أبان بن ذكوان',
-  nameTransliterated: 'Aban Ibn Dhakwan',
+  nameTransliterated: 'Aban ibn Dhakwan',
   hasProfile: false,
   fields: {},
   titles: [],

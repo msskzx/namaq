@@ -12,8 +12,15 @@ const yazidIbnAbiSufyan = {
   name: 'يزيد بن أبي سفيان',
   nameTransliterated: 'Yazid ibn Abi Sufyan',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'يزيد بن أبي سفيان صخر بن حرب بن أمية بن عبد شمس بن عبد مناف القرشي الأموي',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abu-sufyan-ibn-harb', claims: legacyUnreviewed },
   ],

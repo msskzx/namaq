@@ -10,7 +10,7 @@ const alHarithIbnAbiDirarAlMustaliqi = {
   kind: 'PERSON',
   slug: 'al-harith-ibn-abi-dirar-al-mustaliqi',
   name: 'الحارث بن أبي ضرار',
-  nameTransliterated: 'Al Harith Ibn Abi Dirar Al Mustaliqi',
+  nameTransliterated: 'Al Harith ibn Abi Dirar Al Mustaliqi',
   hasProfile: false,
   fields: {},
   titles: [],

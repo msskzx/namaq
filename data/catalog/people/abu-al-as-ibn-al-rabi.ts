@@ -12,8 +12,15 @@ const abuAlAsIbnAlRabi = {
   name: 'أبو العاص بن الربيع',
   nameTransliterated: 'Abu al-As ibn al-Rabi',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'أبو العاص بن الربيع بن عبد العزى بن عبد شمس بن عبد مناف بن قصي القرشي العبشمي',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'al-rabi-ibn-abd-al-uzza', claims: legacyUnreviewed },
     { type: 'HUSBAND', inverse: 'WIFE', to: 'zaynab-bint-muhammad', claims: legacyUnreviewed },

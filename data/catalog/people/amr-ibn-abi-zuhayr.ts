@@ -10,7 +10,7 @@ const amrIbnAbiZuhayr = {
   kind: 'PERSON',
   slug: 'amr-ibn-abi-zuhayr',
   name: 'عمرو بن أبي زهير',
-  nameTransliterated: 'Amr Ibn Abi Zuhayr',
+  nameTransliterated: 'Amr ibn Abi Zuhayr',
   hasProfile: false,
   fields: {},
   titles: [],

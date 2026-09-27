@@ -10,7 +10,7 @@ const abiHuzaymahIbnThalabah = {
   kind: 'PERSON',
   slug: 'abi-huzaymah-ibn-thalabah',
   name: 'أبو حزيمة بن ثعلبة',
-  nameTransliterated: 'Abi Huzaymah Ibn Thalabah',
+  nameTransliterated: 'Abi Huzaymah ibn Thalabah',
   hasProfile: false,
   fields: {},
   titles: [],

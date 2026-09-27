@@ -10,7 +10,7 @@ const imruAlQaysIbnAlHarith = {
   kind: 'PERSON',
   slug: 'imru-al-qays-ibn-al-harith',
   name: 'امرؤ القيس بن الحارث',
-  nameTransliterated: 'Imru Al Qays Ibn Al Harith',
+  nameTransliterated: 'Imru Al Qays ibn Al Harith',
   hasProfile: false,
   fields: {},
   titles: [],

@@ -12,8 +12,15 @@ const abuTalhaAlAnsari = {
   name: 'أبو طلحة الأنصاري',
   nameTransliterated: 'Abu Talha al-Ansari',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'زيد بن سهل بن الأسود بن حرام بن عمرو بن زيد مناة بن عدي بن عمرو بن مالك بن النجار الأنصاري الخزرجي النجاري',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'sahl-ibn-al-aswad', claims: legacyUnreviewed },
     { type: 'HUSBAND', inverse: 'WIFE', to: 'umm-sulaym-al-ghumaysa', claims: legacyUnreviewed },

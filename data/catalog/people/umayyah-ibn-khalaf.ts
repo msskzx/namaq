@@ -10,7 +10,7 @@ const umayyahIbnKhalaf = {
   kind: 'PERSON',
   slug: 'umayyah-ibn-khalaf',
   name: 'أمية بن خلف',
-  nameTransliterated: 'Umayyah Ibn Khalaf',
+  nameTransliterated: 'Umayyah ibn Khalaf',
   hasProfile: false,
   fields: {},
   titles: [],

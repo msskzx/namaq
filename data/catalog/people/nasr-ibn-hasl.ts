@@ -10,7 +10,7 @@ const nasrIbnHasl = {
   kind: 'PERSON',
   slug: 'nasr-ibn-hasl',
   name: 'نصر بن حسل',
-  nameTransliterated: 'Nasr Ibn Hasl',
+  nameTransliterated: 'Nasr ibn Hasl',
   hasProfile: false,
   fields: {},
   titles: [],

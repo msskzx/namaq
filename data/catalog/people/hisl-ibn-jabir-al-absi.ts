@@ -10,7 +10,7 @@ const hislIbnJabirAlAbsi = {
   kind: 'PERSON',
   slug: 'hisl-ibn-jabir-al-absi',
   name: 'حسل بن جابر',
-  nameTransliterated: 'Hisl Ibn Jabir Al Absi',
+  nameTransliterated: 'Hisl ibn Jabir Al Absi',
   hasProfile: false,
   fields: {},
   titles: [],

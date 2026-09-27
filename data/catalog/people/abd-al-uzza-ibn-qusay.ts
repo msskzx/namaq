@@ -10,7 +10,7 @@ const abdAlUzzaIbnQusay = {
   kind: 'PERSON',
   slug: 'abd-al-uzza-ibn-qusay',
   name: 'عبد العزى بن قصي',
-  nameTransliterated: 'Abd Al Uzza Ibn Qusay',
+  nameTransliterated: 'Abd Al Uzza ibn Qusay',
   hasProfile: false,
   fields: {},
   titles: [],

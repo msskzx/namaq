@@ -10,7 +10,7 @@ const ubaydIbnZayd = {
   kind: 'PERSON',
   slug: 'ubayd-ibn-zayd',
   name: 'عبيد بن زيد',
-  nameTransliterated: 'Ubayd Ibn Zayd',
+  nameTransliterated: 'Ubayd ibn Zayd',
   hasProfile: false,
   fields: {},
   titles: [],

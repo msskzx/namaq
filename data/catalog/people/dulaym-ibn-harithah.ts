@@ -10,7 +10,7 @@ const dulaymIbnHarithah = {
   kind: 'PERSON',
   slug: 'dulaym-ibn-harithah',
   name: 'دليم بن حارثة',
-  nameTransliterated: 'Dulaym Ibn Harithah',
+  nameTransliterated: 'Dulaym ibn Harithah',
   hasProfile: false,
   fields: {},
   titles: [],

@@ -10,7 +10,7 @@ const alRabiIbnAbdAlUzza = {
   kind: 'PERSON',
   slug: 'al-rabi-ibn-abd-al-uzza',
   name: 'الربيع بن عبد العزى',
-  nameTransliterated: 'Al Rabi Ibn Abd Al Uzza',
+  nameTransliterated: 'Al Rabi ibn Abd Al Uzza',
   hasProfile: false,
   fields: {},
   titles: [],

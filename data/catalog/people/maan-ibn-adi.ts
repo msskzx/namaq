@@ -12,8 +12,15 @@ const maanIbnAdi = {
   name: 'معن بن عدي',
   nameTransliterated: 'Maan ibn Adi',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'معن بن عدي بن الجد بن العجلان الأنصاري حليف بني مالك بن عوف',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'adi-ibn-al-jidd', claims: legacyUnreviewed },
   ],

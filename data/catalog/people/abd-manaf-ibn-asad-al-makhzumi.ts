@@ -10,7 +10,7 @@ const abdManafIbnAsadAlMakhzumi = {
   kind: 'PERSON',
   slug: 'abd-manaf-ibn-asad-al-makhzumi',
   name: 'عبد مناف بن أسد',
-  nameTransliterated: 'Abd Manaf Ibn Asad Al Makhzumi',
+  nameTransliterated: 'Abd Manaf ibn Asad Al Makhzumi',
   hasProfile: false,
   fields: {},
   titles: [],

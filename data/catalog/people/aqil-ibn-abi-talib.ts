@@ -12,8 +12,15 @@ const aqilIbnAbiTalib = {
   name: 'عقيل بن أبي طالب',
   nameTransliterated: 'Aqil ibn Abi Talib',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'عقيل بن أبي طالب عبد مناف بن عبد المطلب بن هاشم بن عبد مناف بن قصي القرشي الهاشمي',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abu-talib', claims: legacyUnreviewed },
     { type: 'BROTHER', inverse: 'BROTHER', to: 'jaafar-ibn-abi-talib', claims: legacyUnreviewed },

@@ -12,8 +12,14 @@ const abuSufyanIbnAlHarith = {
   name: 'أبو سفيان بن الحارث',
   nameTransliterated: 'Abu Sufyan ibn al-Harith',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    // Carried from the retired prisma/personSeedData5.ts entry. "Abu Sufyan"
+    // is his kunya; the fullName gives his given name, al-Mughirah.
+    fullName: { value: 'المغيرة بن الحارث بن عبد المطلب بن هاشم القرشي الهاشمي', claims: legacyUnreviewed },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'al-harith-ibn-abd-al-muttalib', claims: legacyUnreviewed },
   ],

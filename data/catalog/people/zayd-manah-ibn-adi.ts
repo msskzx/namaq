@@ -10,7 +10,7 @@ const zaydManahIbnAdi = {
   kind: 'PERSON',
   slug: 'zayd-manah-ibn-adi',
   name: 'زيد مناة بن عدي',
-  nameTransliterated: 'Zayd Manah Ibn Adi',
+  nameTransliterated: 'Zayd Manah ibn Adi',
   hasProfile: false,
   fields: {},
   titles: [],

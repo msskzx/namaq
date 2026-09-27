@@ -10,7 +10,7 @@ const hilalIbnAbdullahAlMakhzumi = {
   kind: 'PERSON',
   slug: 'hilal-ibn-abdullah-al-makhzumi',
   name: 'هلال بن عبد الله',
-  nameTransliterated: 'Hilal Ibn Abdullah Al Makhzumi',
+  nameTransliterated: 'Hilal ibn Abdullah Al Makhzumi',
   hasProfile: false,
   fields: {},
   titles: [],

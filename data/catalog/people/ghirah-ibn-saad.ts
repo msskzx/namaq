@@ -10,7 +10,7 @@ const ghirahIbnSaad = {
   kind: 'PERSON',
   slug: 'ghirah-ibn-saad',
   name: 'غيرة بن سعد',
-  nameTransliterated: 'Ghirah Ibn Saad',
+  nameTransliterated: 'Ghirah ibn Saad',
   hasProfile: false,
   fields: {},
   titles: [],

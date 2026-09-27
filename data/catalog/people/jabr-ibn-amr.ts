@@ -10,7 +10,7 @@ const jabrIbnAmr = {
   kind: 'PERSON',
   slug: 'jabr-ibn-amr',
   name: 'جبر بن عمرو',
-  nameTransliterated: 'Jabr Ibn Amr',
+  nameTransliterated: 'Jabr ibn Amr',
   hasProfile: false,
   fields: {},
   titles: [],

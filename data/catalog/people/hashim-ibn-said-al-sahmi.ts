@@ -10,7 +10,7 @@ const hashimIbnSaidAlSahmi = {
   kind: 'PERSON',
   slug: 'hashim-ibn-said-al-sahmi',
   name: 'هاشم بن سعيد',
-  nameTransliterated: 'Hashim Ibn Said Al Sahmi',
+  nameTransliterated: 'Hashim ibn Said Al Sahmi',
   hasProfile: false,
   fields: {},
   titles: [],

@@ -10,7 +10,7 @@ const muawiyahIbnAmr = {
   kind: 'PERSON',
   slug: 'muawiyah-ibn-amr',
   name: 'معاوية بن عمرو',
-  nameTransliterated: 'Muawiyah Ibn Amr',
+  nameTransliterated: 'Muawiyah ibn Amr',
   hasProfile: false,
   fields: {},
   titles: [],

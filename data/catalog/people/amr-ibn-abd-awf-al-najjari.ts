@@ -10,7 +10,7 @@ const amrIbnAbdAwfAlNajjari = {
   kind: 'PERSON',
   slug: 'amr-ibn-abd-awf-al-najjari',
   name: 'عمرو بن عبد عوف',
-  nameTransliterated: 'Amr Ibn Abd Awf Al Najjari',
+  nameTransliterated: 'Amr ibn Abd Awf Al Najjari',
   hasProfile: false,
   fields: {},
   titles: [],

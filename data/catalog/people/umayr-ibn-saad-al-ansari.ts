@@ -5,6 +5,10 @@ import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
  * with the rest. The catalog owns this subject's edges now, so they live
  * here or not at all. No batch has read this far into the nasab yet, so
  * every link stays on the legacy marker.
+ *
+ * fullName per one report cited on his own page (Abdullah ibn Muhammad
+ * al-Qaddah), per the retired prisma/personSeedData8.ts entry: "Sa'd ibn
+ * Shahid" -- the page does not extend the nasab further back.
  */
 const umayrIbnSaadAlAnsari = {
   kind: 'PERSON',
@@ -12,8 +16,12 @@ const umayrIbnSaadAlAnsari = {
   name: 'عمير بن سعد الأنصاري',
   nameTransliterated: 'Umayr ibn Saad al-Ansari',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: { value: 'عمير بن سعد بن شهيد الأنصاري الأوسي', claims: legacyUnreviewed },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'saad-ibn-shahid-al-awsi', claims: legacyUnreviewed },
   ],

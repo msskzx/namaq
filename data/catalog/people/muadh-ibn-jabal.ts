@@ -12,8 +12,15 @@ const muadhIbnJabal = {
   name: 'معاذ بن جبل',
   nameTransliterated: 'Muadh ibn Jabal',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'معاذ بن جبل بن عمرو بن أوس بن عائذ بن عدي بن كعب بن عمرو بن عدي بن سعد بن علي بن أسد بن ساردة بن يزيد بن جشم بن الخزرج الأنصاري الخزرجي',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'jabal-ibn-amr', claims: legacyUnreviewed },
   ],

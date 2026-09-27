@@ -10,7 +10,7 @@ const uqbaIbnAbiMuayt = {
   kind: 'PERSON',
   slug: 'uqba-ibn-abi-muayt',
   name: 'عقبة بن أبي معيط',
-  nameTransliterated: 'Uqba Ibn Abi Muayt',
+  nameTransliterated: 'Uqba ibn Abi Muayt',
   hasProfile: false,
   fields: {},
   titles: [],

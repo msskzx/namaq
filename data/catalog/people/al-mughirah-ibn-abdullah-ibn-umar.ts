@@ -10,7 +10,7 @@ const alMughirahIbnAbdullahIbnUmar = {
   kind: 'PERSON',
   slug: 'al-mughirah-ibn-abdullah-ibn-umar',
   name: 'المغيرة بن عبد الله',
-  nameTransliterated: 'Al Mughirah Ibn Abdullah Ibn Umar',
+  nameTransliterated: 'Al Mughirah ibn Abdullah ibn Umar',
   hasProfile: false,
   fields: {},
   titles: [],

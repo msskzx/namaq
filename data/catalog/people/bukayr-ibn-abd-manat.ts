@@ -10,7 +10,7 @@ const bukayrIbnAbdManat = {
   kind: 'PERSON',
   slug: 'bukayr-ibn-abd-manat',
   name: 'بكير بن عبد مناة',
-  nameTransliterated: 'Bukayr Ibn Abd Manat',
+  nameTransliterated: 'Bukayr ibn Abd Manat',
   hasProfile: false,
   fields: {},
   titles: [],

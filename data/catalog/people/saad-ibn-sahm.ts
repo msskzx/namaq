@@ -10,7 +10,7 @@ const saadIbnSahm = {
   kind: 'PERSON',
   slug: 'saad-ibn-sahm',
   name: 'سعد بن سهم',
-  nameTransliterated: 'Saad Ibn Sahm',
+  nameTransliterated: 'Saad ibn Sahm',
   hasProfile: false,
   fields: {},
   titles: [],

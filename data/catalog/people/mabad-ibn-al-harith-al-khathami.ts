@@ -10,7 +10,7 @@ const mabadIbnAlHarithAlKhathami = {
   kind: 'PERSON',
   slug: 'mabad-ibn-al-harith-al-khathami',
   name: 'معبد بن الحارث',
-  nameTransliterated: 'Mabad Ibn Al Harith Al Khathami',
+  nameTransliterated: 'Mabad ibn Al Harith Al Khathami',
   hasProfile: false,
   fields: {},
   titles: [],

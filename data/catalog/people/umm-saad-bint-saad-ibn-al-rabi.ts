@@ -10,7 +10,7 @@ const ummSaadBintSaadIbnAlRabi = {
   kind: 'PERSON',
   slug: 'umm-saad-bint-saad-ibn-al-rabi',
   name: 'أم سعد بنت سعد بن الربيع',
-  nameTransliterated: 'Umm Saad Bint Saad Ibn Al Rabi',
+  nameTransliterated: 'Umm Saad Bint Saad ibn Al Rabi',
   hasProfile: false,
   fields: {},
   titles: [],

@@ -12,8 +12,12 @@ const alHakamIbnAmrAlGhifari = {
   name: 'الحكم بن عمرو الغفاري',
   nameTransliterated: 'Al-Hakam ibn Amr al-Ghifari',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: { value: 'الحكم بن عمرو الغفاري', claims: legacyUnreviewed },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'BROTHER', inverse: 'BROTHER', to: 'rafi-ibn-amr-al-ghifari', claims: legacyUnreviewed },
   ],

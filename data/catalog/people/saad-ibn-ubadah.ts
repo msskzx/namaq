@@ -12,8 +12,15 @@ const saadIbnUbadah = {
   name: 'سعد بن عبادة',
   nameTransliterated: 'Saad ibn Ubadah',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'سعد بن عبادة بن دليم بن حارثة بن أبي حزيمة بن ثعلبة الأنصاري الخزرجي الساعدي',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'ubadah-ibn-dulaym', claims: legacyUnreviewed },
   ],

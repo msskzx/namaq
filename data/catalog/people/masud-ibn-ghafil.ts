@@ -10,7 +10,7 @@ const masudIbnGhafil = {
   kind: 'PERSON',
   slug: 'masud-ibn-ghafil',
   name: 'مسعود بن غافل',
-  nameTransliterated: 'Masud Ibn Ghafil',
+  nameTransliterated: 'Masud ibn Ghafil',
   hasProfile: false,
   fields: {},
   titles: [],

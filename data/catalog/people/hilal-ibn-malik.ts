@@ -10,7 +10,7 @@ const hilalIbnMalik = {
   kind: 'PERSON',
   slug: 'hilal-ibn-malik',
   name: 'هلال بن مالك',
-  nameTransliterated: 'Hilal Ibn Malik',
+  nameTransliterated: 'Hilal ibn Malik',
   hasProfile: false,
   fields: {},
   titles: [],

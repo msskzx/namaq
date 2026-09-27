@@ -10,7 +10,7 @@ const kaabIbnAmrIbnAwf = {
   kind: 'PERSON',
   slug: 'kaab-ibn-amr-ibn-awf',
   name: 'كعب بن عمرو',
-  nameTransliterated: 'Kaab Ibn Amr Ibn Awf',
+  nameTransliterated: 'Kaab ibn Amr ibn Awf',
   hasProfile: false,
   fields: {},
   titles: [],

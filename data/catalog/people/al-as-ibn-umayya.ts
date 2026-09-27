@@ -10,7 +10,7 @@ const alAsIbnUmayya = {
   kind: 'PERSON',
   slug: 'al-as-ibn-umayya',
   name: 'العاص بن أمية',
-  nameTransliterated: 'Al As Ibn Umayya',
+  nameTransliterated: 'Al As ibn Umayya',
   hasProfile: false,
   fields: {},
   titles: [],

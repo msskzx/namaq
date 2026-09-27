@@ -10,7 +10,7 @@ const niyarIbnAmrAlBalawi = {
   kind: 'PERSON',
   slug: 'niyar-ibn-amr-al-balawi',
   name: 'نيار بن عمرو',
-  nameTransliterated: 'Niyar Ibn Amr Al Balawi',
+  nameTransliterated: 'Niyar ibn Amr Al Balawi',
   hasProfile: false,
   fields: {},
   titles: [],

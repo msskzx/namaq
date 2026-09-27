@@ -12,8 +12,17 @@ const abdullahIbnAlHarithIbnNawfal = {
   name: 'عبد الله بن الحارث',
   nameTransliterated: 'Abdullah ibn al-Harith (Babbah)',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    // Carried from the retired prisma/personSeedData5.ts entry, which took it
+    // from the nasab chain on his own page without citing it.
+    fullName: {
+      value: 'عبد الله بن الحارث بن نوفل بن الحارث بن عبد المطلب بن هاشم القرشي الهاشمي',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'al-harith-ibn-nawfal', claims: legacyUnreviewed },
   ],

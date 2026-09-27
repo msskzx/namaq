@@ -10,7 +10,7 @@ const thabitIbnAlMundhir = {
   kind: 'PERSON',
   slug: 'thabit-ibn-al-mundhir',
   name: 'ثابت بن المنذر',
-  nameTransliterated: 'Thabit Ibn Al Mundhir',
+  nameTransliterated: 'Thabit ibn Al Mundhir',
   hasProfile: false,
   fields: {},
   titles: [],

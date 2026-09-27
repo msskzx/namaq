@@ -10,7 +10,7 @@ const zaydIbnMuawiyah = {
   kind: 'PERSON',
   slug: 'zayd-ibn-muawiyah',
   name: 'زيد بن معاوية',
-  nameTransliterated: 'Zayd Ibn Muawiyah',
+  nameTransliterated: 'Zayd ibn Muawiyah',
   hasProfile: false,
   fields: {},
   titles: [],

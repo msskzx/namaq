@@ -10,7 +10,7 @@ const uthathahIbnAbbad = {
   kind: 'PERSON',
   slug: 'uthathah-ibn-abbad',
   name: 'أثاثة بن عباد',
-  nameTransliterated: 'Uthathah Ibn Abbad',
+  nameTransliterated: 'Uthathah ibn Abbad',
   hasProfile: false,
   fields: {},
   titles: [],

@@ -12,8 +12,15 @@ const muadhIbnAmrIbnAlJumuh = {
   name: 'معاذ بن عمرو بن الجموح',
   nameTransliterated: 'Muadh ibn Amr ibn al-Jumuh',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'معاذ بن عمرو بن الجموح بن زيد بن حرام بن كعب بن غنم بن كعب بن سلمة الأنصاري الخزرجي السلمي',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'amr-ibn-al-jumuh', claims: legacyUnreviewed },
   ],

@@ -10,7 +10,7 @@ const zaidIbnLawdhan = {
   kind: 'PERSON',
   slug: 'zaid-ibn-lawdhan',
   name: 'زيد بن لوذان',
-  nameTransliterated: 'Zaid Ibn Lawdhan',
+  nameTransliterated: 'Zaid ibn Lawdhan',
   hasProfile: false,
   fields: {},
   titles: [],

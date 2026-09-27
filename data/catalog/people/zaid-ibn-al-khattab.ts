@@ -5,6 +5,9 @@ import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
  * with the rest. The catalog owns this subject's edges now, so they live
  * here or not at all. No batch has read this far into the nasab yet, so
  * every link stays on the legacy marker.
+ *
+ * Full brother of Umar ibn al-Khattab (same father and grandfather) per the
+ * retired prisma/personSeedData6.ts entry.
  */
 const zaidIbnAlKhattab = {
   kind: 'PERSON',
@@ -12,8 +15,15 @@ const zaidIbnAlKhattab = {
   name: 'زيد بن الخطاب',
   nameTransliterated: 'Zaid ibn al-Khattab',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'زيد بن الخطاب بن نفيل بن عبد العزى بن رياح بن قرط بن رزاح بن عدي بن كعب بن لؤي القرشي العدوي',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'al-khattab-ibn-nufayl', claims: legacyUnreviewed },
   ],

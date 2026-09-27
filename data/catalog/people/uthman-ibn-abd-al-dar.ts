@@ -10,7 +10,7 @@ const uthmanIbnAbdAlDar = {
   kind: 'PERSON',
   slug: 'uthman-ibn-abd-al-dar',
   name: 'عثمان بن عبد الدار',
-  nameTransliterated: 'Uthman Ibn Abd Al Dar',
+  nameTransliterated: 'Uthman ibn Abd Al Dar',
   hasProfile: false,
   fields: {},
   titles: [],

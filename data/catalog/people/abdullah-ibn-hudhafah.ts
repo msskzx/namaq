@@ -12,8 +12,12 @@ const abdullahIbnHudhafah = {
   name: 'عبد الله بن حذافة',
   nameTransliterated: 'Abdullah ibn Hudhafah',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: { value: 'عبد الله بن حذافة بن قيس بن عدي السهمي القرشي', claims: legacyUnreviewed },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'hudhafah-ibn-qais-al-sahmi', claims: legacyUnreviewed },
   ],

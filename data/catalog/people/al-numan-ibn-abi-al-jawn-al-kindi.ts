@@ -10,7 +10,7 @@ const alNumanIbnAbiAlJawnAlKindi = {
   kind: 'PERSON',
   slug: 'al-numan-ibn-abi-al-jawn-al-kindi',
   name: 'النعمان بن أبي الجون',
-  nameTransliterated: 'Al Numan Ibn Abi Al Jawn Al Kindi',
+  nameTransliterated: 'Al Numan ibn Abi Al Jawn Al Kindi',
   hasProfile: false,
   fields: {},
   titles: [],

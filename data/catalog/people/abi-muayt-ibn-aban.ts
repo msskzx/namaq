@@ -10,7 +10,7 @@ const abiMuaytIbnAban = {
   kind: 'PERSON',
   slug: 'abi-muayt-ibn-aban',
   name: 'أبو معيط بن أبان',
-  nameTransliterated: 'Abi Muayt Ibn Aban',
+  nameTransliterated: 'Abi Muayt ibn Aban',
   hasProfile: false,
   fields: {},
   titles: [],

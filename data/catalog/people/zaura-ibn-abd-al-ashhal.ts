@@ -10,7 +10,7 @@ const zauraIbnAbdAlAshhal = {
   kind: 'PERSON',
   slug: 'zaura-ibn-abd-al-ashhal',
   name: 'زعوراء بن عبد الأشهل',
-  nameTransliterated: 'Zaura Ibn Abd Al Ashhal',
+  nameTransliterated: 'Zaura ibn Abd Al Ashhal',
   hasProfile: false,
   fields: {},
   titles: [],

@@ -10,7 +10,7 @@ const laythIbnBukayr = {
   kind: 'PERSON',
   slug: 'layth-ibn-bukayr',
   name: 'ليث بن بكير',
-  nameTransliterated: 'Layth Ibn Bukayr',
+  nameTransliterated: 'Layth ibn Bukayr',
   hasProfile: false,
   fields: {},
   titles: [],

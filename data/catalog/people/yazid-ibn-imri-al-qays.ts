@@ -10,7 +10,7 @@ const yazidIbnImriAlQays = {
   kind: 'PERSON',
   slug: 'yazid-ibn-imri-al-qays',
   name: 'يزيد بن امرئ القيس',
-  nameTransliterated: 'Yazid Ibn Imri Al Qays',
+  nameTransliterated: 'Yazid ibn Imri Al Qays',
   hasProfile: false,
   fields: {},
   titles: [],

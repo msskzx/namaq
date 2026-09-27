@@ -10,7 +10,7 @@ const baliIbnAmr = {
   kind: 'PERSON',
   slug: 'bali-ibn-amr',
   name: 'بلي بن عمرو',
-  nameTransliterated: 'Bali Ibn Amr',
+  nameTransliterated: 'Bali ibn Amr',
   hasProfile: false,
   fields: {},
   titles: [],

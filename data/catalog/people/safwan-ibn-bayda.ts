@@ -12,8 +12,15 @@ const safwanIbnBayda = {
   name: 'صفوان ابن بيضاء',
   nameTransliterated: 'Safwan ibn Bayda',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'صفوان بن بيضاء وهب بن ربيعة بن هلال بن مالك بن ضبة بن الحارث بن فهر القرشي الفهري',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'wahb-ibn-rabiah', claims: legacyUnreviewed },
   ],

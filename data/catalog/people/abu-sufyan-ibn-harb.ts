@@ -10,10 +10,17 @@ const abuSufyanIbnHarb = {
   kind: 'PERSON',
   slug: 'abu-sufyan-ibn-harb',
   name: 'أبو سفيان بن حرب',
-  nameTransliterated: 'Abu Sufyan Ibn Harb',
+  nameTransliterated: 'Abu Sufyan ibn Harb',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'صخر بن حرب بن أمية بن عبد شمس بن عبد مناف بن قصي بن كلاب القرشي الأموي',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'harb-ibn-umayyah', claims: legacyUnreviewed },
     { type: 'HUSBAND', inverse: 'WIFE', to: 'hind-bint-utbah', claims: legacyUnreviewed },

@@ -12,8 +12,15 @@ const fatimahBintAsad = {
   name: 'فاطمة بنت أسد',
   nameTransliterated: 'Fatimah bint Asad',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'فاطمة بنت أسد بن هاشم بن عبد مناف بن قصي القرشية الهاشمية',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'DAUGHTER', inverse: 'FATHER', to: 'asad-ibn-hashim', claims: legacyUnreviewed },
   ],

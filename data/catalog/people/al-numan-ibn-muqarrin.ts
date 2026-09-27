@@ -12,8 +12,15 @@ const alNumanIbnMuqarrin = {
   name: 'النعمان بن مقرن',
   nameTransliterated: 'Al-Numan ibn Muqarrin',
   hasProfile: true,
-  fields: {},
-  titles: [],
+  fields: {
+    fullName: {
+      value: 'النعمان بن عمرو بن مقرن بن عائذ بن ميجا بن هجير بن نصر بن حبشية بن كعب بن ثور بن هدمة بن لاطم بن عثمان المزني',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', claims: legacyUnreviewed },
+  ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'amr-ibn-muqarrin', claims: legacyUnreviewed },
   ],

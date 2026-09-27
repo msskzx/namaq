@@ -10,7 +10,7 @@ const muqarrinIbnAidh = {
   kind: 'PERSON',
   slug: 'muqarrin-ibn-aidh',
   name: 'مقرن بن عائذ',
-  nameTransliterated: 'Muqarrin Ibn Aidh',
+  nameTransliterated: 'Muqarrin ibn Aidh',
   hasProfile: false,
   fields: {},
   titles: [],

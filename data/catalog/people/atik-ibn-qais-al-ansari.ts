@@ -10,7 +10,7 @@ const atikIbnQaisAlAnsari = {
   kind: 'PERSON',
   slug: 'atik-ibn-qais-al-ansari',
   name: 'عتيك بن قيس',
-  nameTransliterated: 'Atik Ibn Qais Al Ansari',
+  nameTransliterated: 'Atik ibn Qais Al Ansari',
   hasProfile: false,
   fields: {},
   titles: [],

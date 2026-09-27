@@ -10,7 +10,7 @@ const alDahhakIbnZaid = {
   kind: 'PERSON',
   slug: 'al-dahhak-ibn-zaid',
   name: 'الضحاك بن زيد',
-  nameTransliterated: 'Al Dahhak Ibn Zaid',
+  nameTransliterated: 'Al Dahhak ibn Zaid',
   hasProfile: false,
   fields: {},
   titles: [],

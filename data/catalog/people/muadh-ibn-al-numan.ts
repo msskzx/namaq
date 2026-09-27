@@ -10,7 +10,7 @@ const muadhIbnAlNuman = {
   kind: 'PERSON',
   slug: 'muadh-ibn-al-numan',
   name: 'معاذ بن النعمان',
-  nameTransliterated: 'Muadh Ibn Al Numan',
+  nameTransliterated: 'Muadh ibn Al Numan',
   hasProfile: false,
   fields: {},
   titles: [],
