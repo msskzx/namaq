@@ -48,7 +48,7 @@ describe('assembleQuiz', () => {
     generators.generateQuranLinkQuestion.mockResolvedValue(question({ claimId: 'c4', family: 'QURAN_LINK' }));
     generators.generateParticipationQuestion.mockResolvedValue(question({ claimId: 'c5', family: 'PARTICIPATION' }));
 
-    const questions = await assembleQuiz({ topic: 'PEOPLE', length: 5, eligibility, random: zero });
+    const questions = await assembleQuiz({ topics: ['PEOPLE'], length: 5, eligibility, random: zero });
 
     expect(questions).toHaveLength(5);
     expect(new Set(questions.map((q) => q.family))).toEqual(
@@ -62,16 +62,27 @@ describe('assembleQuiz', () => {
       question({ claimId: 'shared-claim', family: 'PARTICIPATION' }),
     );
 
-    const questions = await assembleQuiz({ topic: 'BATTLES', length: 5, eligibility, random: zero });
+    const questions = await assembleQuiz({ topics: ['BATTLES'], length: 5, eligibility, random: zero });
 
     expect(questions).toHaveLength(1);
+  });
+
+  it('combines families from multiple topics', async () => {
+    findMany.mockResolvedValue([{ subjectSlug: 'p1' }]);
+    generators.generateParticipationQuestion.mockResolvedValue(question({ claimId: 'battle', family: 'PARTICIPATION' }));
+    titleFindMany.mockResolvedValue([{ slug: 'title-1' }]);
+    generators.generateTitleHolderQuestion.mockResolvedValue(question({ claimId: 'title', family: 'TITLE_HOLDER' }));
+
+    const questions = await assembleQuiz({ topics: ['BATTLES', 'TITLES'], length: 5, eligibility, random: zero });
+
+    expect(new Set(questions.map((item) => item.family))).toEqual(new Set(['PARTICIPATION', 'TITLE_HOLDER']));
   });
 
   it('skips a candidate the generator declines', async () => {
     findMany.mockResolvedValue([{ subjectSlug: 'p1' }, { subjectSlug: 'p2' }]);
     generators.generateEventQuestion.mockResolvedValueOnce(null).mockResolvedValueOnce(question({ family: 'EVENT' }));
 
-    const questions = await assembleQuiz({ topic: 'EVENTS', length: 5, eligibility, random: zero });
+    const questions = await assembleQuiz({ topics: ['EVENTS'], length: 5, eligibility, random: zero });
 
     expect(questions).toHaveLength(1);
   });
@@ -84,7 +95,7 @@ describe('assembleQuiz', () => {
     generators.generateParticipationQuestion.mockResolvedValue(null);
 
     const questions = await assembleQuiz({
-      topic: 'PERSON_CIRCLE',
+      topics: ['PERSON_CIRCLE'],
       personSlug: 'prophet-muhammad',
       length: 5,
       eligibility,
@@ -97,7 +108,7 @@ describe('assembleQuiz', () => {
   });
 
   it('returns an empty list for person-circle with no person given', async () => {
-    const questions = await assembleQuiz({ topic: 'PERSON_CIRCLE', length: 5, eligibility, random: zero });
+    const questions = await assembleQuiz({ topics: ['PERSON_CIRCLE'], length: 5, eligibility, random: zero });
     expect(questions).toEqual([]);
   });
 });

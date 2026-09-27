@@ -37,6 +37,7 @@ export async function generateRelationQuestion(
 
   const otherClaims = await prisma.historicalClaim.findMany({
     where: {
+      subjectKind: 'PERSON',
       relationshipType: claim.relationshipType,
       relatedSubjectKind: 'PERSON',
       relatedSubjectSlug: { not: null, notIn: excluded },

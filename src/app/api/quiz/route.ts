@@ -4,7 +4,6 @@ import { prisma } from '@/lib/prisma';
 import { assembleQuiz } from '@/lib/quiz/assemble';
 import {
   DEVELOPMENT_ELIGIBILITY,
-  PRODUCTION_ELIGIBILITY,
   QUIZ_LENGTHS,
   QUIZ_TOPICS,
   type QuestionFamily,
@@ -91,24 +90,24 @@ async function resolveDisplayNames(
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const topic = searchParams.get('topic');
+  const topics = [...new Set(searchParams.getAll('topic').flatMap((value) => value.split(',').filter(Boolean)))];
   const length = Number(searchParams.get('length'));
   const person = searchParams.get('person') ?? undefined;
 
-  if (!QUIZ_TOPICS.includes(topic as QuizTopic)) {
+  if (!topics.length || topics.some((topic) => !QUIZ_TOPICS.includes(topic as QuizTopic))) {
     return NextResponse.json({ error: 'Unknown topic', topics: QUIZ_TOPICS }, { status: 400 });
   }
   if (!QUIZ_LENGTHS.includes(length as QuizLength)) {
     return NextResponse.json({ error: 'Unknown length', lengths: QUIZ_LENGTHS }, { status: 400 });
   }
-  if (topic === 'PERSON_CIRCLE' && !person) {
+  if (topics.includes('PERSON_CIRCLE') && !person) {
     return NextResponse.json({ error: 'This topic needs a person' }, { status: 400 });
   }
 
   try {
-    const eligibility = process.env.NODE_ENV === 'production' ? PRODUCTION_ELIGIBILITY : DEVELOPMENT_ELIGIBILITY;
+    const eligibility = DEVELOPMENT_ELIGIBILITY;
     const questions = await assembleQuiz({
-      topic: topic as QuizTopic,
+      topics: topics as QuizTopic[],
       personSlug: person,
       length: length as QuizLength,
       eligibility,
