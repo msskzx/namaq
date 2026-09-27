@@ -201,3 +201,25 @@ himself), or a battle proper. The events page filters on it alongside plain
 events.
 _Avoid_: Node type or subject kind (those say whether something is a battle or an
 event at all, not which sort of battle it was)
+
+### Quizzes
+
+**Question**:
+One generated multiple-choice item: a subject, a correct choice drawn from an
+eligible claim, three distractors, and the evidence backing the correct
+choice. Regenerated from the catalog, never stored as a source of truth.
+_Avoid_: Quiz (a quiz is several questions assembled together, not one)
+
+**Question family**:
+One shape of quiz question -- which historical claims can answer it, and what
+a choice looks like (a person, a battle, a title, a year, an ayah). Distinct
+from a single generated question, the way a template is distinct from what it
+produces.
+_Avoid_: Question type, category (both read as a property of one question
+rather than the shape a whole class of questions shares)
+
+**Distractor**:
+A wrong choice offered beside a quiz question's correct answer. Drawn from
+another eligible claim of the same family, and never true for the question's
+own subject, however that value is dispute-scored.
+_Avoid_: Wrong answer, decoy (imprecise about where it comes from)
