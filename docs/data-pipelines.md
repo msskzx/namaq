@@ -18,8 +18,9 @@ The first two write into PostgreSQL. A catalog-owned person's Neo4j node and
 relations come from the catalog directly: `catalog:project-graph` merges the
 node whether or not the person has a PostgreSQL row, and writes every relation
 the catalog declares. The layout is computed from the graph and written back
-to both. Removing the remaining split authority — profiles still declared in
-`prisma/*SeedData*.ts` — is in progress; see
+to both. The remaining split authority — profiles declared in
+`prisma/*SeedData*.ts` — is gone: every people-seed file has been migrated
+into the catalog except the dormant `personSeedData.ts`; see
 [Removing split authority](#removing-split-authority) below.
 
 ```mermaid
@@ -49,7 +50,7 @@ Each subject kind has a data file and a script that loads it.
 
 | Data | Script | Wired in |
 | --- | --- | --- |
-| People | `npm run seed:people` | `personSeedData3` through `personSeedData15` |
+| People | `npm run seed:people` | none — every non-dormant file is migrated |
 | Titles | `npm run seed:titles` | `titleSeedData` |
 | Battles | `npm run seed:battles` | `battleSeedData` |
 | Events | `npm run seed:events` | `eventSeedData` |
@@ -59,16 +60,15 @@ duplicating them.
 
 ### One file is dormant
 
-`prisma/personSeedData.ts` is **not imported** by `prisma/personSeed.ts` (only
-`personSeedData3` through `personSeedData15` are). It holds the earliest
-people declared, loaded once and since edited in the database directly.
-Editing it changes nothing until it is wired back in, and wiring it back in
-would write its contents over whatever the database now holds.
-`seedAuthoredPeople()` still counts a slug in it as seed-authored regardless,
-so a catalog module for someone it also declares stays additive until that
-entry is deleted too. `prisma/personSeedData2.ts`, also dormant, held only
-graph-only ancestors with no real profile content (every field empty but the
-name); it is deleted, its people now authored in the catalog.
+`prisma/personSeedData.ts` is **not imported** by `prisma/personSeed.ts` —
+every `personSeedData2` through `personSeedData15` file that once was has
+since been migrated into the catalog and deleted, leaving `personSeed.ts`'s
+own `people` array empty. `personSeedData.ts` holds the earliest people
+declared, loaded once and since edited in the database directly. Editing it
+changes nothing until it is wired back in, and wiring it back in would write
+its contents over whatever the database now holds. `seedAuthoredPeople()`
+still counts a slug in it as seed-authored regardless, so a catalog module
+for someone it also declares stays additive until that entry is deleted too.
 
 Battle participations are **not seeded at all**. The block that loads them in
 `prisma/personSeed.ts` is commented out, and the data it reads lives in the
@@ -480,15 +480,15 @@ What the ADR calls for and this doesn't yet do:
   catalog module today is an omission, not a recorded, approved removal — there
   is no `data/catalog/tombstones/` mechanism, so `catalog:project` cannot yet
   tell an accidental omission from an intended deletion.
-- **A hashed batch-review workflow spanning evidence and catalog.** The graph
-  side of this is done — see [The graph seeds are retired](#the-graph-seeds-are-retired)
-  above — but `prisma/*SeedData*.ts` still runs and still authors most
-  people's own profile fields and titles; only subjects whose entry there was
-  deleted too are catalog-owned outright ("Three subjects have left the seeds
-  entirely" above). Full removal needs every profile migrated to the catalog
-  next, each field marked `legacy-unreviewed` where a batch hasn't cited it
-  yet — the same migration this section just describes for relationships, one
-  layer further in.
+- **A hashed batch-review workflow spanning evidence and catalog.** Both the
+  graph side (see [The graph seeds are retired](#the-graph-seeds-are-retired)
+  above) and the profile-fields side are done now: every `personSeedData2`
+  through `personSeedData15` file that once ran is migrated into the catalog
+  and deleted, each field carried as `legacy-unreviewed` where no batch has
+  cited it yet. Only the dormant `personSeedData.ts` remains as a seed author
+  (see "One file is dormant" above) — everyone else it and the three subjects
+  with no seed entry at all ("Three subjects have left the seeds entirely"
+  above) are catalog-owned outright.
 - **One evidence role per citation** ([ADR 0011](adr/0011-classify-the-role-of-cited-evidence.md):
   direct evidence, transmitted report, synthesis, or editorial analysis) —
   decided, not built.
