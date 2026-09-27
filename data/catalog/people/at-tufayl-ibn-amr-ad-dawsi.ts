@@ -16,7 +16,7 @@ const atTufaylIbnAmrAdDawsi = {
     fullName: { value: 'الطفيل بن عمرو بن طريف الدوسي', claims: legacyUnreviewed },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'amr-ibn-tarif', claims: legacyUnreviewed },

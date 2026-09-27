@@ -24,8 +24,7 @@ function approvedClaimKeys() {
   return { keys, unapproved };
 }
 
-async function seedSlugs(): Promise<Pick<KnownSlugs, 'people' | 'titles' | 'battles'>> {
-  const { titles } = await import('../../prisma/titleSeedData');
+async function seedSlugs(): Promise<Pick<KnownSlugs, 'people' | 'battles'>> {
   const { battles } = await import('../../prisma/battleSeedData');
 
   const people = new Set<string>();
@@ -45,7 +44,6 @@ async function seedSlugs(): Promise<Pick<KnownSlugs, 'people' | 'titles' | 'batt
 
   return {
     people,
-    titles: new Set(titles.map((title: { slug: string }) => title.slug)),
     battles: new Set(battles.map((battle: { slug: string }) => battle.slug)),
   };
 }

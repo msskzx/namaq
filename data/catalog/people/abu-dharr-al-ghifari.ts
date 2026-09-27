@@ -24,7 +24,7 @@ const abuDharrAlGhifari = {
   titles: [
     // Carried from the retired seed entry. The seeds gave every صحابي this
     // title without citing it.
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [],
 } satisfies CatalogPerson;

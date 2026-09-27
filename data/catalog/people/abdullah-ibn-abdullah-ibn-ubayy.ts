@@ -23,7 +23,7 @@ const abdullahIbnAbdullahIbnUbayy = {
     },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abdullah-ibn-ubayy', claims: legacyUnreviewed },

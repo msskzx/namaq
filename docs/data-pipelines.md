@@ -51,7 +51,7 @@ Each subject kind has a data file and a script that loads it.
 | Data | Script | Wired in |
 | --- | --- | --- |
 | People | `npm run seed:people` | none — every non-dormant file is migrated |
-| Titles | `npm run seed:titles` | `titleSeedData` |
+| Titles | none — `catalog:project` creates a Title row from a person's own title assignment | — |
 | Battles | `npm run seed:battles` | `battleSeedData` |
 | Events | `npm run seed:events` | `eventSeedData` |
 
@@ -96,6 +96,19 @@ authored in the catalog instead, Qur'an links included: no seed file mentions
 them at all any more, so their catalog module is total, not additive.
 `catalog:project` creates their PostgreSQL row outright, and `people:sync`
 mirrors it to Neo4j.
+
+### Titles have no seed of their own
+
+A title has no existence apart from the people who hold it, so there is no
+`prisma/titleSeedData.ts` and no `data/catalog/titles.ts` either: a person
+module's `CatalogTitleAssignment` (`title`, `name`, `nameTransliterated`,
+`claims`) carries the display name right alongside the assignment.
+`catalog:project` upserts the `Title` row the first time it sees a slug —
+the same operation whether the row already exists or not, so a typo just
+becomes a new row rather than a rejected reference. What still catches a
+typo: `catalog:validate` rejects two people who declare the same title slug
+with a different `name` or `nameTransliterated`, since a title's spelling
+cannot legitimately differ depending on who holds it.
 
 ### Graph-only catalog people
 

@@ -19,7 +19,7 @@ const usamahIbnZaid = {
     },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'zaid-ibn-harithah', claims: legacyUnreviewed },

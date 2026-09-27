@@ -22,7 +22,7 @@ const sahlIbnHunayf = {
     },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'BROTHER', inverse: 'BROTHER', to: 'uthman-ibn-hunayf', claims: legacyUnreviewed },

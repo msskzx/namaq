@@ -19,7 +19,7 @@ const ummAyman = {
     fullName: { value: 'بركة', claims: legacyUnreviewed },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'WIFE', inverse: 'HUSBAND', to: 'zaid-ibn-harithah', claims: legacyUnreviewed },

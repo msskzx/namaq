@@ -20,7 +20,7 @@ const ibnUmmMaktum = {
     fullName: { value: 'عبد الله بن قيس بن زائدة بن الأصم بن رواحة القرشي العامري', claims: legacyUnreviewed },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'qais-ibn-zaidah', claims: legacyUnreviewed },

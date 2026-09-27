@@ -23,7 +23,7 @@ const yalaIbnUmayyah = {
     },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'SON', inverse: 'MOTHER', to: 'munyah-bint-ghazwan', claims: legacyUnreviewed },

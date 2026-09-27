@@ -15,7 +15,7 @@ const asSaibIbnUthman = {
   },
   titles: [
     // Carried from the seed. This entry never calls him صحابي outright.
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   // The FATHER edge back to him is declared on uthman-ibn-mazun's own
   // catalog file, now cited from this entry's own opening nasab. The Badr

@@ -19,7 +19,7 @@ const abuMusaAlAshari = {
     fullName: { value: 'عبد الله بن قيس بن سليم بن حضار بن حرب الأشعري', claims: legacyUnreviewed },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'SON', inverse: 'MOTHER', to: 'zabyah-bint-wahb', claims: legacyUnreviewed },

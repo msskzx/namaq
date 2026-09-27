@@ -23,8 +23,8 @@ const safiyyahBintHuyayy = {
   },
   titles: [
     // Carried from the seed rows; the chapter calls her neither.
-    { title: 'mother-of-believers', claims: legacyUnreviewed },
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'mother-of-believers', name: 'أم المؤمنين', nameTransliterated: 'Mother of the Believers', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'WIFE', inverse: 'HUSBAND', to: 'prophet-muhammad', claims: ['safiyyah/freedom-as-dower'] },

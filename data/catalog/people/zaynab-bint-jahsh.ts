@@ -22,8 +22,8 @@ const zaynabBintJahsh = {
   titles: [
     // Carried from the seed rows. The chapter has her among the Prophet's
     // wives without calling her either name.
-    { title: 'mother-of-believers', claims: legacyUnreviewed },
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'mother-of-believers', name: 'أم المؤمنين', nameTransliterated: 'Mother of the Believers', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   ayat: [{ surah: 33, ayah: 37, claims: ['zaynab-jahsh/ayah-al-ahzab'] }],
   relations: [

@@ -26,7 +26,7 @@ const ummHaniBintAbiTalib = {
     },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'DAUGHTER', inverse: 'FATHER', to: 'abu-talib', claims: legacyUnreviewed },

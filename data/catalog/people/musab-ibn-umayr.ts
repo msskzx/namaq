@@ -25,8 +25,8 @@ const musabIbnUmayr = {
   titles: [
     // Carried from the retired seed entry. The Siyar entry never calls him
     // صحابي in so many words, so this stays legacy rather than promoted.
-    { title: 'companion', claims: legacyUnreviewed },
-    { title: 'al-sabiqoon', claims: ['musab/titles'] },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    { title: 'al-sabiqoon', name: 'السابقون', nameTransliterated: 'Al-Sabiqoon', claims: ['musab/titles'] },
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'umayr-ibn-hashim', claims: ['musab/father'] },

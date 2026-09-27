@@ -19,7 +19,7 @@ const kulthumIbnAlHidm = {
     },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'al-hidm-ibn-imri-al-qays', claims: legacyUnreviewed },

@@ -19,7 +19,7 @@ const khubaybIbnAdi = {
     },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'adi-ibn-amir', claims: legacyUnreviewed },

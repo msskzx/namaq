@@ -19,8 +19,8 @@ const sawdahBintZamah = {
     fullName: { value: 'سودة بنت زمعة بن قيس القرشية العامرية', claims: legacyUnreviewed },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
-    { title: 'mother-of-believers', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    { title: 'mother-of-believers', name: 'أم المؤمنين', nameTransliterated: 'Mother of the Believers', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'DAUGHTER', inverse: 'FATHER', to: 'zamah-ibn-qais-al-amiri', claims: legacyUnreviewed },

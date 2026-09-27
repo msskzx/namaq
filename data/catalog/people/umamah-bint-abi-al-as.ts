@@ -26,7 +26,7 @@ const umamahBintAbiAlAs = {
     },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'DAUGHTER', inverse: 'FATHER', to: 'abu-al-as-ibn-al-rabi', claims: legacyUnreviewed },

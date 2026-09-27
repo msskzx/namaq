@@ -20,7 +20,7 @@ const abdAlRahmanIbnAbiBakr = {
     fullName: { value: 'عبد الرحمن بن أبي بكر الصديق', claims: legacyUnreviewed },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'BROTHER', inverse: 'SISTER', to: 'aisha-bint-abi-bakr', claims: legacyUnreviewed },

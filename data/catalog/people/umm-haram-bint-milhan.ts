@@ -24,7 +24,7 @@ const ummHaramBintMilhan = {
     },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'DAUGHTER', inverse: 'FATHER', to: 'milhan-ibn-khalid-al-najjari', claims: legacyUnreviewed },

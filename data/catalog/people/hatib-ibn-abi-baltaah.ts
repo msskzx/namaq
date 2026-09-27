@@ -23,7 +23,7 @@ const hatibIbnAbiBaltaah = {
     },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'amr-ibn-umayr-al-lakhmi', claims: legacyUnreviewed },

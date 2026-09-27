@@ -18,7 +18,7 @@ const alHarithIbnNawfal = {
     fullName: { value: 'الحارث بن نوفل بن الحارث بن عبد المطلب بن هاشم القرشي الهاشمي', claims: legacyUnreviewed },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'nawfal-ibn-al-harith', claims: legacyUnreviewed },

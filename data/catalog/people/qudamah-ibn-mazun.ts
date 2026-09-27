@@ -21,7 +21,7 @@ const qudamahIbnMazun = {
   titles: [
     // Carried from the seed. This entry calls him a Badr veteran and an
     // early Muslim, not صحابي in those words, so it stays legacy.
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     // The seed's graph already carries this SON edge with no citation; this

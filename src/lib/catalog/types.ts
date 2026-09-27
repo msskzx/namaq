@@ -44,8 +44,16 @@ export interface CatalogPersonFields {
   readonly placeOfDeathTransliterated?: Cited<string>;
 }
 
+/**
+ * A title has no existence apart from the people who hold it, so its display
+ * name travels with every assignment rather than living in a separate list
+ * -- the projector upserts the Title row from whichever assignment it sees,
+ * the same operation whether the row exists yet or not.
+ */
 export interface CatalogTitleAssignment {
   readonly title: string;
+  readonly name: string;
+  readonly nameTransliterated: string;
   readonly claims: Provenance;
 }
 

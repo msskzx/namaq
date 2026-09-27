@@ -16,7 +16,7 @@ const uthmanIbnAbiAlAs = {
     fullName: { value: 'عثمان بن أبي العاص الثقفي الطائفي', claims: legacyUnreviewed },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [],
 } satisfies CatalogPerson;

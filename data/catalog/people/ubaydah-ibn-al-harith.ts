@@ -21,7 +21,7 @@ const ubaydahIbnAlHarith = {
   },
   titles: [
     // Carried from the seed rows.
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'HUSBAND', inverse: 'WIFE', to: 'zaynab-bint-khuzaymah', claims: ['zaynab-khuzaymah/wife-ubaydah'] },

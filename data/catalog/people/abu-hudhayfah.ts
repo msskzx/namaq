@@ -16,7 +16,7 @@ const abuHudhayfah = {
   },
   titles: [
     // Carried from the seed. This entry never calls him صحابي outright.
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'utbah-ibn-rabiah', claims: ['abu-hudhayfah-siyar13/father'] },

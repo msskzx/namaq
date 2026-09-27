@@ -24,7 +24,7 @@ const jaafarIbnAbiSufyanAlHashimi = {
     },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abu-sufyan-ibn-al-harith', claims: legacyUnreviewed },

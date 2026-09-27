@@ -21,7 +21,7 @@ const asmaBintUmays = {
     fullName: { value: 'أسماء بنت عميس بن معبد بن الحارث الخثعمية', claims: legacyUnreviewed },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'DAUGHTER', inverse: 'FATHER', to: 'umays-ibn-mabad-al-khathami', claims: legacyUnreviewed },

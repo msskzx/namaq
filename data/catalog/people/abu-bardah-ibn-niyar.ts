@@ -23,7 +23,7 @@ const abuBardahIbnNiyar = {
     },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'niyar-ibn-amr-al-balawi', claims: legacyUnreviewed },

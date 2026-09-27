@@ -15,7 +15,7 @@ const khawlahBintHakim = {
     fullName: { value: 'خولة بنت حكيم', claims: legacyUnreviewed },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [],
 } satisfies CatalogPerson;

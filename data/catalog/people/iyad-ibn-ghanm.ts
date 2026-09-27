@@ -15,7 +15,7 @@ const iyadIbnGhanm = {
     fullName: { value: 'عياض بن غنم بن زهير بن أبي شداد الفهري', claims: legacyUnreviewed },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [],
 } satisfies CatalogPerson;

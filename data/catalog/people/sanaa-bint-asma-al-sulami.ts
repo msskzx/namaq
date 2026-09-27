@@ -16,7 +16,7 @@ const sanaaBintAsmaAlSulami = {
     fullName: { value: 'سناء بنت أسماء بن الصلت السلمية', claims: legacyUnreviewed },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [],
 } satisfies CatalogPerson;

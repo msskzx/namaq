@@ -26,7 +26,7 @@ const alBaraaIbnMalik = {
   },
   titles: [
     // Carried from the retired seed.
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     {

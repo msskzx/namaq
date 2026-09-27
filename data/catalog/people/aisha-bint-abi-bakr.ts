@@ -18,9 +18,9 @@ const aishaBintAbiBakr = {
     },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
-    { title: 'siddiqa', claims: legacyUnreviewed },
-    { title: 'mother-of-believers', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    { title: 'siddiqa', name: 'صديقة', nameTransliterated: 'Siddiqa', claims: legacyUnreviewed },
+    { title: 'mother-of-believers', name: 'أم المؤمنين', nameTransliterated: 'Mother of the Believers', claims: legacyUnreviewed },
   ],
   relations: [],
 } satisfies CatalogPerson;

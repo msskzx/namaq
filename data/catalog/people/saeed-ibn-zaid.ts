@@ -34,9 +34,9 @@ const saeedIbnZaid = {
   },
 
   titles: [
-    { title: 'the-ten-promised-paradise', claims: ['saeed/titles'] },
-    { title: 'al-sabiqoon', claims: ['saeed/titles'] },
-    { title: 'companion', claims: ['saeed/companion-of-prophet'] },
+    { title: 'the-ten-promised-paradise', name: 'العشرة المبشرون بالجنة', nameTransliterated: 'The Ten Promised Paradise', claims: ['saeed/titles'] },
+    { title: 'al-sabiqoon', name: 'السابقون', nameTransliterated: 'Al-Sabiqoon', claims: ['saeed/titles'] },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: ['saeed/companion-of-prophet'] },
   ],
 
   ayat: [

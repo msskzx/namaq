@@ -16,7 +16,7 @@ const qatadahIbnAlNuman = {
     fullName: { value: 'قتادة بن النعمان بن زيد بن عامر الأنصاري الظفري', claims: legacyUnreviewed },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [],
 } satisfies CatalogPerson;

@@ -21,7 +21,7 @@ const abuAbs = {
   titles: [
     // Carried from the retired seed. البدري is modeled as the Badr
     // PARTICIPATED_IN relation below rather than repeated as a title.
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'jabr-ibn-amr', claims: ['abu-abs-siyar21/full-name'] },

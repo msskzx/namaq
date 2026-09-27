@@ -19,7 +19,7 @@ const muadhIbnJabal = {
     },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'jabal-ibn-amr', claims: legacyUnreviewed },

@@ -22,7 +22,7 @@ const uthmanIbnTalhah = {
     },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'talhah-ibn-abdullah-ibn-abd-al-uzza', claims: legacyUnreviewed },

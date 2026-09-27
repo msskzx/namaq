@@ -20,7 +20,7 @@ const durrahBintAbiLahab = {
     fullName: { value: 'درة بنت أبي لهب بن عبد المطلب القرشية الهاشمية', claims: legacyUnreviewed },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'DAUGHTER', inverse: 'FATHER', to: 'abu-lahab-ibn-abd-al-muttalib', claims: legacyUnreviewed },

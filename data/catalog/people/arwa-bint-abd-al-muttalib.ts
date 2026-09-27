@@ -22,7 +22,7 @@ const arwaBintAbdAlMuttalib = {
     fullName: { value: 'أروى بنت عبد المطلب بن هاشم القرشية الهاشمية', claims: legacyUnreviewed },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'DAUGHTER', inverse: 'FATHER', to: 'abd-al-muttalib-ibn-hashim', claims: legacyUnreviewed },

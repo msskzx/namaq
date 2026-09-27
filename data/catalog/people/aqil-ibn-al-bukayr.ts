@@ -21,7 +21,7 @@ const aqilIbnAlBukayr = {
   },
   titles: [
     // Carried from the retired seed entry; this entry never calls him صحابي outright.
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'al-bukayr-ibn-abd-yalil', claims: ['aqil-bukayr-siyar16/full-name'] },

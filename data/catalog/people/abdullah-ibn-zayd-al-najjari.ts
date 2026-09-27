@@ -17,7 +17,7 @@ const abdullahIbnZaydAlNajjari = {
     fullName: { value: 'عبد الله بن زيد بن عاصم بن كعب الأنصاري المازني النجاري', claims: legacyUnreviewed },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [],
 } satisfies CatalogPerson;

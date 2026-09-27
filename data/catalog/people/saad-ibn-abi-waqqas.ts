@@ -43,16 +43,16 @@ const saadIbnAbiWaqqas = {
   },
 
   titles: [
-    { title: 'al-sabiqoon', claims: ['saad/al-sabiqoon-eight'] },
-    { title: 'the-ten-promised-paradise', claims: ['saad/titles'] },
-    { title: 'companion', claims: ['saad/companion-of-prophet'] },
-    { title: 'the-six-of-the-shura', claims: ['saad/titles'] },
+    { title: 'al-sabiqoon', name: 'السابقون', nameTransliterated: 'Al-Sabiqoon', claims: ['saad/al-sabiqoon-eight'] },
+    { title: 'the-ten-promised-paradise', name: 'العشرة المبشرون بالجنة', nameTransliterated: 'The Ten Promised Paradise', claims: ['saad/titles'] },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: ['saad/companion-of-prophet'] },
+    { title: 'the-six-of-the-shura', name: 'الستة أهل الشورى', nameTransliterated: 'The Six of the Shura', claims: ['saad/titles'] },
     // The seed gave him this one. He claims it himself: أول المسلمين رمى
     // المشركين بسهم.
-    { title: 'awwal-rami', claims: ['saad/titles'] },
+    { title: 'awwal-rami', name: 'أول رامي', nameTransliterated: 'Awwal Rami', claims: ['saad/titles'] },
     // Not in the seed's list for him: the naming line counts him among
     // السابقين الأولين.
-    { title: 'al-sabiqoon', claims: ['saad/titles'] },
+    { title: 'al-sabiqoon', name: 'السابقون', nameTransliterated: 'Al-Sabiqoon', claims: ['saad/titles'] },
   ],
 
   ayat: [

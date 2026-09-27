@@ -117,11 +117,13 @@ npm install
 npm run db:generate
 npm run db:push
 
-# Seed PostgreSQL content in dependency order.
-npm run seed:titles
+# Seed PostgreSQL content in dependency order. Titles have no seed of their
+# own — catalog:project creates each Title row the first time a person
+# declares it.
 npm run seed:people
 npm run seed:battles
 npm run seed:events
+npm run catalog:project -- --apply
 
 # Create Neo4j nodes for any Postgres-only profiles (e.g. newly seeded
 # companions) before seeding relations that reference them by slug.
@@ -201,7 +203,6 @@ republishing its pages.
 | `npm run db:generate` | Generate the Prisma client |
 | `npm run db:push` | Apply the Prisma schema to the configured database |
 | `npm run seed:people` | Upsert PostgreSQL person records |
-| `npm run seed:titles` | Seed titles used by people |
 | `npm run seed:battles` | Seed battle records |
 | `npm run seed:events` | Seed events and connect related records |
 | `npm run seed:graph` | Seed or update the Neo4j relationship graph |

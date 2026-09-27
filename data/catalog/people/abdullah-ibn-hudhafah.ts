@@ -16,7 +16,7 @@ const abdullahIbnHudhafah = {
     fullName: { value: 'عبد الله بن حذافة بن قيس بن عدي السهمي القرشي', claims: legacyUnreviewed },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'hudhafah-ibn-qais-al-sahmi', claims: legacyUnreviewed },

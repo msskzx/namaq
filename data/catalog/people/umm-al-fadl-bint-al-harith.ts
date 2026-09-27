@@ -22,7 +22,7 @@ const ummAlFadlBintAlHarith = {
     fullName: { value: 'لبابة بنت الحارث بن حزن بن بجير الهلالية', claims: legacyUnreviewed },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'DAUGHTER', inverse: 'FATHER', to: 'al-harith-ibn-hazn-al-hilali', claims: legacyUnreviewed },

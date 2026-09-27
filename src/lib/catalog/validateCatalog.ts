@@ -17,7 +17,6 @@ export interface CatalogIssue {
 /** Slugs a catalog module may point at that this repository does not author. */
 export interface KnownSlugs {
   readonly people: ReadonlySet<string>;
-  readonly titles: ReadonlySet<string>;
   readonly battles: ReadonlySet<string>;
   /** Claim keys from every approved batch. */
   readonly claims: ReadonlySet<string>;
@@ -45,6 +44,10 @@ export function validateCatalog(catalog: Catalog, known: KnownSlugs): CatalogIss
   const issues: CatalogIssue[] = [];
   const authored = new Set(catalog.people.map((person) => person.slug));
   const person = (slug: string) => authored.has(slug) || known.people.has(slug);
+  // A title has no module of its own: its name travels with every assignment,
+  // so two people declaring the same title slug must agree on what it says —
+  // a mismatch means one of them misspelled or mistranslated it.
+  const titleNames = new Map<string, { name: string; nameTransliterated: string; at: string }>();
 
   catalog.people.forEach((subject) => {
     const at = `people/${subject.slug}`;
@@ -56,7 +59,15 @@ export function validateCatalog(catalog: Catalog, known: KnownSlugs): CatalogIss
     }
     subject.titles.forEach((title) => {
       checkProvenance(title.claims, known, `${at}.titles.${title.title}`, issues);
-      if (!known.titles.has(title.title)) issues.push({ path: at, message: `unknown title ${title.title}` });
+      const seen = titleNames.get(title.title);
+      if (!seen) {
+        titleNames.set(title.title, { name: title.name, nameTransliterated: title.nameTransliterated, at });
+      } else if (seen.name !== title.name || seen.nameTransliterated !== title.nameTransliterated) {
+        issues.push({
+          path: `${at}.titles.${title.title}`,
+          message: `disagrees with ${seen.at} on the name of title ${title.title}`,
+        });
+      }
     });
     (subject.ayat ?? []).forEach((ayah) => {
       const at_ = `${at}.ayat.${ayah.surah}:${ayah.ayah}`;

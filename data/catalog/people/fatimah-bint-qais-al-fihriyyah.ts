@@ -17,7 +17,7 @@ const fatimahBintQaisAlFihriyyah = {
     fullName: { value: 'فاطمة بنت قيس الفهرية القرشية', claims: legacyUnreviewed },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [],
 } satisfies CatalogPerson;

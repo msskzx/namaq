@@ -23,7 +23,7 @@ const suhailIbnBayda = {
     },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'wahb-ibn-rabiah', claims: legacyUnreviewed },

@@ -22,9 +22,9 @@ const ummSalamah = {
     sex: { value: 'FEMALE', claims: ['umm-salamah/sex'] },
   },
   titles: [
-    { title: 'mother-of-believers', claims: ['umm-salamah/umm-al-mumineen'] },
+    { title: 'mother-of-believers', name: 'أم المؤمنين', nameTransliterated: 'Mother of the Believers', claims: ['umm-salamah/umm-al-mumineen'] },
     // Carried from the seed rows; no batch cites it for her.
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'WIFE', inverse: 'HUSBAND', to: 'prophet-muhammad', claims: ['prophet/wife-umm-salamah'] },

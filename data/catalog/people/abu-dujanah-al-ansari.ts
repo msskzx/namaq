@@ -19,7 +19,7 @@ const abuDujanahAlAnsari = {
     },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'khirashah-ibn-lawdhan', claims: legacyUnreviewed },

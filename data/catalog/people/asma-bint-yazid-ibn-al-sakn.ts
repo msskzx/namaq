@@ -22,7 +22,7 @@ const asmaBintYazidIbnAlSakn = {
     fullName: { value: 'أسماء بنت يزيد بن السكن الأنصارية الأشهلية', claims: legacyUnreviewed },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'PATERNAL_COUSIN', inverse: 'PATERNAL_COUSIN', to: 'muadh-ibn-jabal', claims: legacyUnreviewed },

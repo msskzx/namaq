@@ -20,7 +20,7 @@ const makhramahIbnNawfal = {
     },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'nawfal-ibn-uhayb', claims: legacyUnreviewed },

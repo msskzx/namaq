@@ -28,12 +28,12 @@ const aliIbnAbiTalib = {
   },
   titles: [
     // Carried from the retired seed entry; no batch cites these yet.
-    { title: 'the-ten-promised-paradise', claims: legacyUnreviewed },
-    { title: 'the-six-of-the-shura', claims: legacyUnreviewed },
-    { title: 'caliph', claims: legacyUnreviewed },
-    { title: 'al-khulafa-al-rashidun', claims: legacyUnreviewed },
-    { title: 'companion', claims: legacyUnreviewed },
-    { title: 'al-sabiqoon', claims: ['ali/al-sabiqoon-eight'] },
+    { title: 'the-ten-promised-paradise', name: 'العشرة المبشرون بالجنة', nameTransliterated: 'The Ten Promised Paradise', claims: legacyUnreviewed },
+    { title: 'the-six-of-the-shura', name: 'الستة أهل الشورى', nameTransliterated: 'The Six of the Shura', claims: legacyUnreviewed },
+    { title: 'caliph', name: 'خليفة', nameTransliterated: 'Caliph', claims: legacyUnreviewed },
+    { title: 'al-khulafa-al-rashidun', name: 'الخلفاء الراشدون', nameTransliterated: 'The Rightly-Guided Caliphs', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    { title: 'al-sabiqoon', name: 'السابقون', nameTransliterated: 'Al-Sabiqoon', claims: ['ali/al-sabiqoon-eight'] },
   ],
   relations: [
     // Carried from neo4j/graphSeedData.ts, whose node declaration is retired

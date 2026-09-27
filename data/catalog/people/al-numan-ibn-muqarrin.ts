@@ -19,7 +19,7 @@ const alNumanIbnMuqarrin = {
     },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'amr-ibn-muqarrin', claims: legacyUnreviewed },

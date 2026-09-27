@@ -21,7 +21,7 @@ const alHusaynIbnAli = {
   },
   titles: [
     // Carried from the seed rows; this chapter records only his birth.
-    { title: 'sayyid-shabab-ahl-al-jannah', claims: legacyUnreviewed },
+    { title: 'sayyid-shabab-ahl-al-jannah', name: 'سيد شباب أهل الجنة', nameTransliterated: 'Master of the Youth of Paradise', claims: legacyUnreviewed },
   ],
   relations: [
     // Carried from the graph seed.

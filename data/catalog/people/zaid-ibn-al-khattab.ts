@@ -22,7 +22,7 @@ const zaidIbnAlKhattab = {
     },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'al-khattab-ibn-nufayl', claims: legacyUnreviewed },

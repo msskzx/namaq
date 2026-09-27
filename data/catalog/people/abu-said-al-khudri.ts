@@ -21,7 +21,7 @@ const abuSaidAlKhudri = {
     },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'BROTHER', inverse: 'BROTHER', to: 'qatadah-ibn-al-numan', claims: legacyUnreviewed },

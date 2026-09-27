@@ -31,10 +31,10 @@ const zaynabBintKhuzaymah = {
     placeOfDeathArabic: { value: 'البَقِيْع', claims: ['zaynab-khuzaymah/burial-baqi'] },
   },
   titles: [
-    { title: 'umm-al-masakeen', claims: ['zaynab-khuzaymah/umm-al-masakeen'] },
-    { title: 'mother-of-believers', claims: ['zaynab-khuzaymah/umm-al-mumineen'] },
+    { title: 'umm-al-masakeen', name: 'أم المساكين', nameTransliterated: 'Mother of the Destitute', claims: ['zaynab-khuzaymah/umm-al-masakeen'] },
+    { title: 'mother-of-believers', name: 'أم المؤمنين', nameTransliterated: 'Mother of the Believers', claims: ['zaynab-khuzaymah/umm-al-mumineen'] },
     // Carried from the retired seed entry; no batch cites it yet.
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'WIFE', inverse: 'HUSBAND', to: 'prophet-muhammad', claims: ['zaynab-khuzaymah/wife-prophet'] },

@@ -28,7 +28,7 @@ const uthmanIbnMazun = {
   titles: [
     // Carried from the seed. This entry never calls him صحابي in so many
     // words, so it stays legacy rather than promoted.
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'mazun-ibn-habib', claims: ['uthman-mazun-siyar9/father'] },

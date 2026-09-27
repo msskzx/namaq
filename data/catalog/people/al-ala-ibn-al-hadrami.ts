@@ -22,7 +22,7 @@ const alAlaIbnAlHadrami = {
     fullName: { value: 'العلاء بن عبد الله بن عماد الحضرمي حليف بني أمية', claims: legacyUnreviewed },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abdullah-ibn-imad-al-hadrami', claims: legacyUnreviewed },

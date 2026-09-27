@@ -21,8 +21,8 @@ const fatimahBintMuhammad = {
     },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
-    { title: 'sayyidat-nisa-ahl-al-jannah', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    { title: 'sayyidat-nisa-ahl-al-jannah', name: 'سيدة نساء أهل الجنة', nameTransliterated: 'Mistress of the Women of Paradise', claims: legacyUnreviewed },
   ],
   relations: [],
 } satisfies CatalogPerson;

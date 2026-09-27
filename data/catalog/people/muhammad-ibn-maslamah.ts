@@ -19,7 +19,7 @@ const muhammadIbnMaslamah = {
     },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'PATERNAL_COUSIN', inverse: 'PATERNAL_COUSIN', to: 'salamah-ibn-salamah', claims: legacyUnreviewed },

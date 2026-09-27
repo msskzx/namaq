@@ -16,7 +16,7 @@ const asmaBintAlNumanAlKindiyyah = {
     fullName: { value: 'أسماء بنت النعمان بن أبي الجون الكندي', claims: legacyUnreviewed },
   },
   titles: [
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'DAUGHTER', inverse: 'FATHER', to: 'al-numan-ibn-abi-al-jawn-al-kindi', claims: legacyUnreviewed },
