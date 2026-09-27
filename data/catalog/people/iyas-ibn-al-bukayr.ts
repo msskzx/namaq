@@ -19,6 +19,7 @@ const iyasIbnAlBukayr = {
     { title: 'companion', claims: legacyUnreviewed },
   ],
   relations: [
+    { type: 'SON', inverse: 'FATHER', to: 'al-bukayr-ibn-abd-yalil', claims: ['iyas-bukayr-siyar18/full-name'] },
     { type: 'PACT_BROTHER', inverse: 'PACT_BROTHER', to: 'al-harith-ibn-khazamah', claims: ['iyas-bukayr-siyar18/pact-brother-harith'] },
   ],
 } satisfies CatalogPerson;

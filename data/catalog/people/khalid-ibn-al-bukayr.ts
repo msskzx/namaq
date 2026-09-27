@@ -20,6 +20,7 @@ const khalidIbnAlBukayr = {
     { title: 'companion', claims: legacyUnreviewed },
   ],
   relations: [
+    { type: 'SON', inverse: 'FATHER', to: 'al-bukayr-ibn-abd-yalil', claims: ['khalid-bukayr-siyar17/full-name'] },
     { type: 'PACT_BROTHER', inverse: 'PACT_BROTHER', to: 'zayd-ibn-al-dathinah', claims: ['khalid-bukayr-siyar17/pact-brother-zayd'] },
   ],
 } satisfies CatalogPerson;

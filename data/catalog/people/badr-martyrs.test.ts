@@ -33,14 +33,13 @@ describe('the fourteen dead of Badr', () => {
   // joined them from chapter six, which names him Zaynab bint Khuzaymah's
   // second husband and so gives the catalog a cited value to author him for.
   // Aqil ibn al-Bukayr joined them from his own Siyar entry (entry 16), which
-  // retired his seed row the same way. The two left have nothing cited about
-  // them yet and keep their seed entries.
-  it('creates a subject for each of the twelve reached so far', () => {
+  // retired his seed row the same way. Saad ibn Khaythamah and Safwan ibn
+  // Bayda joined last, carried wholesale off the graph seeds when the wider
+  // ancestor migration reached their fathers' edges -- still nothing cited
+  // about either beyond that carried ancestor link.
+  it('creates a subject for every one of the fourteen', () => {
     const authored = martyrs.filter((slug) => bySlug.has(slug));
-    expect(authored).toHaveLength(12);
-
-    const seedDeclared = martyrs.filter((slug) => !bySlug.has(slug));
-    expect(seedDeclared.sort()).toEqual(['saad-ibn-khaythamah', 'safwan-ibn-bayda'].sort());
+    expect(authored).toHaveLength(14);
   });
 
   // The roster's own word رجالا is what states this, so one claim carries it

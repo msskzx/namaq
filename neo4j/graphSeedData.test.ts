@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { parseSeedRelations } from './seedRelations';
 import { getActiveSeedPeople, getRawGraphQueries } from '../scripts/people/activeSeedData';
 import { loadCatalog } from '../src/lib/catalog/loadCatalog';
+import { catalogRelations } from '../src/lib/catalog/relations';
 import { RECIPROCAL_INVERSES } from '../src/lib/relationship/categories';
 import type { RelationType } from '../src/lib/relationship/types';
 
@@ -49,13 +50,11 @@ describe('graph seed data integrity', () => {
     const { peopleQueries, peopleRelationsQueries } = await getRawGraphQueries();
     const graphSlugs = new Set(parseCreatedSlugs(peopleQueries));
     const profileSlugs = new Set((await getActiveSeedPeople()).map((p) => p.slug));
-    // The catalog is the third node source: for a person it declares with a
-    // profile, catalog:project writes the PostgreSQL row and people:sync
-    // merges the node, so a seed relation may point at someone whose seed
-    // entry has been retired in the catalog's favour.
-    const catalogSlugs = new Set(
-      (await loadCatalog()).people.filter((person) => person.hasProfile).map((person) => person.slug),
-    );
+    // The catalog is the third node source: catalog:project-graph merges
+    // every catalog-owned person's node directly, profile or not, so a seed
+    // relation may point at someone whose seed entry has been retired in the
+    // catalog's favour, with or without a PostgreSQL row.
+    const catalogSlugs = new Set((await loadCatalog()).people.map((person) => person.slug));
     const knownSlugs = new Set([...graphSlugs, ...profileSlugs, ...catalogSlugs]);
 
     const dangling = new Set<string>();
@@ -75,6 +74,13 @@ describe('graph seed data integrity', () => {
     const graphSlugs = parseCreatedSlugs(peopleQueries);
     const referenced = new Set<string>();
     for (const { from, to } of parseSeedRelations(peopleRelationsQueries)) {
+      referenced.add(from);
+      referenced.add(to);
+    }
+    // The catalog can relate a node the seed files only create: an ancestor's
+    // link to the next ancestor now lives on their own catalog module and is
+    // written by catalog:project-graph, not by a seed relation query.
+    for (const { from, to } of catalogRelations(await loadCatalog())) {
       referenced.add(from);
       referenced.add(to);
     }

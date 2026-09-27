@@ -19,6 +19,7 @@ const amirIbnAlBukayr = {
     { title: 'companion', claims: legacyUnreviewed },
   ],
   relations: [
+    { type: 'SON', inverse: 'FATHER', to: 'al-bukayr-ibn-abd-yalil', claims: ['amir-bukayr-siyar19/full-name'] },
     // Thabit still has only a seed row (personSeedData6.ts), not a catalog
     // file, so this stays a one-sided reference to his existing slug.
     { type: 'PACT_BROTHER', inverse: 'PACT_BROTHER', to: 'thabit-ibn-qais', claims: ['amir-bukayr-siyar19/pact-brother-thabit'] },

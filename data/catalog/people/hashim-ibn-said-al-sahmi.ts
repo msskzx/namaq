@@ -1,0 +1,22 @@
+import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
+
+/**
+ * Carried from neo4j/graphSeedData*.ts, whose node declaration is retired
+ * with the rest. The catalog owns this subject's edges now, so they live
+ * here or not at all. No batch has read this far into the nasab yet, so
+ * every link stays on the legacy marker.
+ */
+const hashimIbnSaidAlSahmi = {
+  kind: 'PERSON',
+  slug: 'hashim-ibn-said-al-sahmi',
+  name: 'هاشم بن سعيد',
+  nameTransliterated: 'Hashim Ibn Said Al Sahmi',
+  hasProfile: false,
+  fields: {},
+  titles: [],
+  relations: [
+    { type: 'SON', inverse: 'FATHER', to: 'said-ibn-saad-al-sahmi', claims: legacyUnreviewed },
+  ],
+} satisfies CatalogPerson;
+
+export default hashimIbnSaidAlSahmi;
