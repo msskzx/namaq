@@ -117,12 +117,11 @@ npm install
 npm run db:generate
 npm run db:push
 
-# Seed PostgreSQL content in dependency order. Titles have no seed of their
-# own — catalog:project creates each Title row the first time a person
-# declares it.
+# Seed PostgreSQL content in dependency order. Titles and events have no
+# seed of their own — catalog:project creates each Title row the first time
+# a person declares it, and creates or updates every Event row outright.
 npm run seed:people
 npm run seed:battles
-npm run seed:events
 npm run catalog:project -- --apply
 
 # Create Neo4j nodes for any Postgres-only profiles (e.g. newly seeded
@@ -204,7 +203,6 @@ republishing its pages.
 | `npm run db:push` | Apply the Prisma schema to the configured database |
 | `npm run seed:people` | Upsert PostgreSQL person records |
 | `npm run seed:battles` | Seed battle records |
-| `npm run seed:events` | Seed events and connect related records |
 | `npm run seed:graph` | Seed or update the Neo4j relationship graph |
 | `npm run people:sync` / `-- --apply` | Report (or apply) PostgreSQL → Neo4j drift for people |
 | `npm run people:sync-companions` / `-- --apply` | Report (or create) missing `COMPANION_OF`/`ACCOMPANIED_BY` edges from every companion to the Prophet |

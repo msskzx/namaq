@@ -53,7 +53,7 @@ Each subject kind has a data file and a script that loads it.
 | People | `npm run seed:people` | none — every non-dormant file is migrated |
 | Titles | none — `catalog:project` creates a Title row from a person's own title assignment | — |
 | Battles | `npm run seed:battles` | `battleSeedData` |
-| Events | `npm run seed:events` | `eventSeedData` |
+| Events | none — `catalog:project` creates or updates every Event row outright | — |
 
 Seeds upsert by slug, so re-running one updates the rows it owns rather than
 duplicating them.

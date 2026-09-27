@@ -1,4 +1,4 @@
-import type { CatalogEvent } from '@/lib/catalog/types';
+import { legacyUnreviewed, type CatalogEvent } from '@/lib/catalog/types';
 
 /**
  * Name and type match the seeded event, which still authors it; this module
@@ -8,6 +8,8 @@ import type { CatalogEvent } from '@/lib/catalog/types';
  * The first two came from their own Siyar entries. The rest come from the
  * sira's chapter two, where Ibn Ishaq names the first party outright. Only
  * those with subjects in the app are here; his roster runs to eighty-three.
+ * Jaafar ibn Abi Talib is carried from the retired prisma/eventSeedData.ts
+ * entry, uncited -- he had no module of his own when this file was written.
  */
 const firstHijraToAbyssinia = {
   kind: 'EVENT',
@@ -30,6 +32,7 @@ const firstHijraToAbyssinia = {
     { person: 'uthman-ibn-mazun', claims: ['ibn-mazun/hijra-habasha-first'] },
     { person: 'amir-ibn-rabiah', claims: ['amir-ibn-rabiah/hijra-habasha-first'] },
     { person: 'suhail-ibn-bayda', claims: ['suhail/hijra-habasha-first'] },
+    { person: 'jaafar-ibn-abi-talib', claims: legacyUnreviewed },
   ],
 } satisfies CatalogEvent;
 
