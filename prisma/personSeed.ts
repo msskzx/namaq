@@ -1,7 +1,17 @@
 import { prisma } from '../src/lib/prisma';
-import { people as people15 } from './personSeedData15';
 
-const people = [...people15];
+// prisma/personSeedData.ts is dormant (not imported) — see docs/data-pipelines.md.
+// Every other personSeedData*.ts file has been migrated into data/catalog/.
+const people: {
+  name: string;
+  fullName: string | null;
+  slug: string;
+  nameTransliterated: string;
+  appearance: string | null;
+  virtues: string | null;
+  picture: string | null;
+  titles: string[];
+}[] = [];
 
 async function main() {
   try {
