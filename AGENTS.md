@@ -35,6 +35,14 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 - Before considering a change finished: `npm run lint`, `npx tsc --noEmit`,
   and `npm test` should all pass.
 
+## Quiz questions
+
+- Quiz candidates and review decisions are authored under `data/quiz/` and
+  projected into PostgreSQL. Whenever an agent generates or changes the bank,
+  it must follow [docs/quiz-question-review.md](docs/quiz-question-review.md),
+  resolve every pending question, run `npm run quiz:validate`, dry-run
+  `npm run quiz:project`, inspect the diff, and only then apply it.
+
 ## Local verification
 
 - Local dev requires a running PostgreSQL **and** Neo4j instance (see

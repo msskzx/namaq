@@ -1,6 +1,7 @@
 # Quiz question engine
 
-Status: **implemented**. This is the first plan under
+Status: **implemented; replacement planned** in
+[reviewed-quiz-bank.md](reviewed-quiz-bank.md). This is the first plan under
 [quizzes.md](quizzes.md): a pure, tested library that turns eligible
 historical claims into multiple-choice questions. No API route, UI, party
 mode, or accounts — those are separate, later plans that build on this one.

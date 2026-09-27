@@ -9,7 +9,8 @@ built — see [quiz-question-engine.md](quiz-question-engine.md) (a seventh
 family, `TITLE_HOLDER`, and the exact eligibility rule) and
 [solo-quiz.md](solo-quiz.md) (topic/length picking, free navigation, batch
 feedback) for what they actually do and how they differ in detail. Party
-mode is still not built.
+mode is still not built. The reviewed-bank quality redesign is planned in
+[reviewed-quiz-bank.md](reviewed-quiz-bank.md).
 
 ## Principle: questions come from the claims
 

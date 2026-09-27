@@ -71,6 +71,10 @@ Open the graph → explore and filter relationships → open a person's profile 
 - Arabic and English UI support, plus light and dark themes.
 - Client-side data fetching and pagination through SWR.
 - PostgreSQL/Prisma is used for people, events, battles, titles, and supporting content; Neo4j is used for relationship traversal and graph rendering.
+- Solo quizzes draw Arabic multiple-choice questions from an agent-reviewed,
+  file-authored bank projected into PostgreSQL. People, battles,
+  relationships, ayat, events and one-person circles have separate scopes;
+  `/quizzes/questions` exposes the paginated read-only review inventory.
 
 ## Architecture
 

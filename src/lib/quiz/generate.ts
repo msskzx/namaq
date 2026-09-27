@@ -1,346 +1,264 @@
+import { createHash } from 'node:crypto';
+import { readdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { loadCatalog } from '@/lib/catalog/loadCatalog';
+import { legacyUnreviewed, type Provenance } from '@/lib/catalog/types';
+import { formatHijriYear } from '@/lib/hijriYear';
 import { prisma } from '@/lib/prisma';
-import { sampleDistinct, shuffleChoices, type Random } from './random';
-import type { QuizEligibility, QuizQuestion } from './types';
+import type { GeneratedQuestion, QuestionChoice } from './types';
 
-function evidence(citations: readonly { id: string }[]) {
-  return { citationIds: citations.map((c) => c.id) };
+type CandidateInput = Omit<GeneratedQuestion, 'key' | 'choices' | 'correctAnswer'> & {
+  answer: QuestionChoice;
+  pool: QuestionChoice[];
+  excludedValues?: Iterable<string>;
+};
+
+function cited(claims: Provenance, eligible: Set<string>): string[] {
+  if (claims === legacyUnreviewed) return [];
+  return claims.filter((key) => eligible.has(key));
 }
 
-export async function generateRelationQuestion(
-  personSlug: string,
-  eligibility: QuizEligibility,
-  random: Random,
-): Promise<QuizQuestion | null> {
-  const claim = await prisma.historicalClaim.findFirst({
-    where: {
-      subjectKind: 'PERSON',
-      subjectSlug: personSlug,
-      relationshipType: { not: null },
-      relatedSubjectSlug: { not: null },
-      reviewStatus: { in: eligibility.reviewStatuses },
-      disputed: false,
-    },
-    include: { citations: true },
+function orderedPool(key: string, choices: QuestionChoice[]) {
+  return [...choices].sort((a, b) => {
+    const left = createHash('sha256').update(`${key}:${a.value}`).digest('hex');
+    const right = createHash('sha256').update(`${key}:${b.value}`).digest('hex');
+    return left.localeCompare(right);
   });
-  if (!claim?.relationshipType || !claim.relatedSubjectSlug) return null;
+}
 
-  const trueForSubject = await prisma.historicalClaim.findMany({
-    where: { subjectKind: 'PERSON', subjectSlug: personSlug, relationshipType: claim.relationshipType },
-    select: { relatedSubjectSlug: true },
-  });
-  const excluded = trueForSubject.map((c) => c.relatedSubjectSlug).filter((slug): slug is string => slug !== null);
-
-  const otherClaims = await prisma.historicalClaim.findMany({
-    where: {
-      relationshipType: claim.relationshipType,
-      relatedSubjectSlug: { not: null, notIn: excluded },
-      reviewStatus: { in: eligibility.reviewStatuses },
-    },
-    distinct: ['relatedSubjectSlug'],
-    select: { relatedSubjectSlug: true },
-  });
-  const distractors = sampleDistinct(
-    otherClaims.map((c) => c.relatedSubjectSlug!),
-    3,
-    random,
-  );
-  if (!distractors) return null;
-
-  const choices = shuffleChoices(claim.relatedSubjectSlug, distractors, random);
+function candidate(input: CandidateInput): GeneratedQuestion | null {
+  const evidence = [...new Set(input.evidence.claimKeys)].sort();
+  if (evidence.length === 0) return null;
+  const key = [input.family, input.subject?.kind ?? '-', input.subject?.slug ?? '-', input.attribute ?? '-', input.answer.value].join(':');
+  const excluded = new Set([input.answer.value, ...(input.excludedValues ?? [])]);
+  const distinct = new Map(input.pool.map((item) => [item.value, item]));
+  const distractors = orderedPool(key, [...distinct.values()].filter((item) => !excluded.has(item.value))).slice(0, 3);
+  if (distractors.length < 3) return null;
   return {
-    claimId: claim.id,
-    family: 'RELATION',
-    attribute: claim.relationshipType,
-    subject: { kind: 'PERSON', slug: personSlug },
-    choices,
-    correctAnswer: claim.relatedSubjectSlug,
-    evidence: evidence(claim.citations),
+    key,
+    family: input.family,
+    topic: input.topic,
+    subject: input.subject,
+    attribute: input.attribute,
+    personSlugs: [...new Set(input.personSlugs)].sort(),
+    promptArabic: input.promptArabic,
+    choices: [input.answer, ...distractors],
+    correctAnswer: input.answer.value,
+    evidence: { claimKeys: evidence },
   };
 }
 
-export async function generateParticipationQuestion(
-  personSlug: string,
-  eligibility: QuizEligibility,
-  random: Random,
-): Promise<QuizQuestion | null> {
-  const claim = await prisma.historicalClaim.findFirst({
-    where: {
-      subjectKind: 'PERSON',
-      subjectSlug: personSlug,
-      relationshipType: { in: ['PARTICIPATED_IN', 'ABSENT_FROM'] },
-      relatedSubjectKind: 'BATTLE',
-      relatedSubjectSlug: { not: null },
-      reviewStatus: { in: eligibility.reviewStatuses },
-      disputed: false,
-    },
-    include: { citations: true },
-  });
-  if (!claim?.relatedSubjectSlug) return null;
-
-  const trueForSubject = await prisma.historicalClaim.findMany({
-    where: { subjectKind: 'PERSON', subjectSlug: personSlug, relatedSubjectKind: 'BATTLE' },
-    select: { relatedSubjectSlug: true },
-  });
-  const excluded = trueForSubject.map((c) => c.relatedSubjectSlug).filter((slug): slug is string => slug !== null);
-
-  const battles = await prisma.battle.findMany({ where: { slug: { notIn: excluded } }, select: { slug: true } });
-  const distractors = sampleDistinct(
-    battles.map((b) => b.slug),
-    3,
-    random,
-  );
-  if (!distractors) return null;
-
-  const choices = shuffleChoices(claim.relatedSubjectSlug, distractors, random);
-  return {
-    claimId: claim.id,
-    family: 'PARTICIPATION',
-    attribute: claim.relationshipType!,
-    subject: { kind: 'PERSON', slug: personSlug },
-    choices,
-    correctAnswer: claim.relatedSubjectSlug,
-    evidence: evidence(claim.citations),
-  };
-}
-
-/**
- * A "titles" claim names no specific title (no relatedSubjectSlug), so a
- * person's assignment is only unambiguous when they hold exactly one title
- * backed by exactly one eligible claim -- see docs/plans/quiz-question-engine.md.
- */
-export async function generateTitleQuestion(
-  personSlug: string,
-  eligibility: QuizEligibility,
-  random: Random,
-): Promise<QuizQuestion | null> {
-  const [claims, person] = await Promise.all([
-    prisma.historicalClaim.findMany({
-      where: {
-        subjectKind: 'PERSON',
-        subjectSlug: personSlug,
-        field: 'titles',
-        reviewStatus: { in: eligibility.reviewStatuses },
-        disputed: false,
-      },
-      include: { citations: true },
-    }),
-    prisma.person.findUnique({ where: { slug: personSlug }, include: { titles: { select: { slug: true } } } }),
-  ]);
-  if (claims.length !== 1 || !person || person.titles.length !== 1) return null;
-  const titleSlug = person.titles[0].slug;
-
-  const otherTitles = await prisma.title.findMany({ where: { slug: { not: titleSlug } }, select: { slug: true } });
-  const distractors = sampleDistinct(
-    otherTitles.map((t) => t.slug),
-    3,
-    random,
-  );
-  if (!distractors) return null;
-
-  const choices = shuffleChoices(titleSlug, distractors, random);
-  return {
-    claimId: claims[0].id,
-    family: 'TITLE',
-    attribute: 'titles',
-    subject: { kind: 'PERSON', slug: personSlug },
-    choices,
-    correctAnswer: titleSlug,
-    evidence: evidence(claims[0].citations),
-  };
-}
-
-/** Same ambiguity rule as generateTitleQuestion, applied from the title's side. */
-export async function generateTitleHolderQuestion(
-  titleSlug: string,
-  eligibility: QuizEligibility,
-  random: Random,
-): Promise<QuizQuestion | null> {
-  const title = await prisma.title.findUnique({ where: { slug: titleSlug }, include: { people: { select: { slug: true } } } });
-  if (!title || title.people.length === 0) return null;
-  const candidateSlugs = title.people.map((p) => p.slug);
-
-  const [claims, people] = await Promise.all([
-    prisma.historicalClaim.findMany({
-      where: {
-        subjectKind: 'PERSON',
-        subjectSlug: { in: candidateSlugs },
-        field: 'titles',
-        reviewStatus: { in: eligibility.reviewStatuses },
-        disputed: false,
-      },
-      include: { citations: true },
-    }),
-    prisma.person.findMany({ where: { slug: { in: candidateSlugs } }, include: { titles: { select: { slug: true } } } }),
-  ]);
-  const soleHolderOf = new Set(people.filter((p) => p.titles.length === 1).map((p) => p.slug));
-  const claimsBySubject = new Map<string, typeof claims>();
-  for (const claim of claims) {
-    claimsBySubject.set(claim.subjectSlug, [...(claimsBySubject.get(claim.subjectSlug) ?? []), claim]);
+function mergeCandidates(candidates: GeneratedQuestion[]) {
+  const merged = new Map<string, GeneratedQuestion>();
+  for (const question of candidates) {
+    const existing = merged.get(question.key);
+    if (!existing) {
+      merged.set(question.key, question);
+      continue;
+    }
+    existing.evidence.claimKeys = [...new Set([...existing.evidence.claimKeys, ...question.evidence.claimKeys])].sort();
   }
-  const unambiguousHolders = [...claimsBySubject.entries()]
-    .filter(([slug, cs]) => cs.length === 1 && soleHolderOf.has(slug))
-    .map(([slug, cs]) => ({ slug, claim: cs[0] }));
-  if (unambiguousHolders.length === 0) return null;
-  const answer = unambiguousHolders[Math.floor(random() * unambiguousHolders.length)];
-
-  const otherPeople = await prisma.person.findMany({
-    where: { titles: { none: { slug: titleSlug } } },
-    select: { slug: true },
-    take: 200, // ponytail: small sample cap, widen if 3 distinct distractors get hard to find
-  });
-  const distractors = sampleDistinct(
-    otherPeople.map((p) => p.slug),
-    3,
-    random,
-  );
-  if (!distractors) return null;
-
-  const choices = shuffleChoices(answer.slug, distractors, random);
-  return {
-    claimId: answer.claim.id,
-    family: 'TITLE_HOLDER',
-    attribute: 'titles',
-    subject: { kind: 'TITLE', slug: titleSlug },
-    choices,
-    correctAnswer: answer.slug,
-    evidence: evidence(answer.claim.citations),
-  };
+  return [...merged.values()];
 }
 
-export async function generateNameQuestion(
-  personSlug: string,
-  eligibility: QuizEligibility,
-  random: Random,
-): Promise<QuizQuestion | null> {
-  const claim = await prisma.historicalClaim.findFirst({
-    where: {
-      subjectKind: 'PERSON',
-      subjectSlug: personSlug,
-      field: 'kunya',
-      reviewStatus: { in: eligibility.reviewStatuses },
-      disputed: false,
-    },
-    include: { citations: true },
-  });
-  if (!claim) return null;
-  const person = await prisma.person.findUnique({ where: { slug: personSlug } });
-  if (!person?.kunya) return null;
-
-  const others = await prisma.person.findMany({
-    where: { kunya: { not: null }, slug: { not: personSlug } },
-    select: { kunya: true },
-    distinct: ['kunya'],
-  });
-  const distractors = sampleDistinct(
-    others.map((p) => p.kunya!).filter((k) => k !== person.kunya),
-    3,
-    random,
-  );
-  if (!distractors) return null;
-
-  const choices = shuffleChoices(person.kunya, distractors, random);
-  return {
-    claimId: claim.id,
-    family: 'NAME',
-    attribute: 'kunya',
-    subject: { kind: 'PERSON', slug: personSlug },
-    choices,
-    correctAnswer: person.kunya,
-    evidence: evidence(claim.citations),
-  };
+function choice(value: string, labelArabic: string): QuestionChoice {
+  return { value, labelArabic };
 }
 
-export async function generateEventQuestion(
-  eventSlug: string,
-  eligibility: QuizEligibility,
-  random: Random,
-): Promise<QuizQuestion | null> {
-  const claim = await prisma.historicalClaim.findFirst({
-    where: {
-      subjectKind: 'EVENT',
-      subjectSlug: eventSlug,
-      field: 'hijriYear',
-      reviewStatus: { in: eligibility.reviewStatuses },
-      disputed: false,
-    },
-    include: { citations: true },
-  });
-  if (!claim) return null;
-  const event = await prisma.event.findUnique({ where: { slug: eventSlug } });
-  if (event?.hijriYear == null) return null;
-
-  const others = await prisma.event.findMany({
-    where: { hijriYear: { not: null }, slug: { not: eventSlug } },
-    select: { hijriYear: true },
-    distinct: ['hijriYear'],
-  });
-  const distractors = sampleDistinct(
-    others.map((e) => String(e.hijriYear)).filter((year) => year !== String(event.hijriYear)),
-    3,
-    random,
-  );
-  if (!distractors) return null;
-
-  const choices = shuffleChoices(String(event.hijriYear), distractors, random);
-  return {
-    claimId: claim.id,
-    family: 'EVENT',
-    attribute: 'hijriYear',
-    subject: { kind: 'EVENT', slug: eventSlug },
-    choices,
-    correctAnswer: String(event.hijriYear),
-    evidence: evidence(claim.citations),
+function relationPrompt(type: string, name: string, answerSex: string | null) {
+  const prompts: Record<string, string> = {
+    FATHER: `أي من هؤلاء كان ${answerSex === 'FEMALE' ? 'ابنةً' : 'ابنًا'} لـ«${name}»؟`,
+    MOTHER: `أي من هؤلاء كان ${answerSex === 'FEMALE' ? 'ابنةً' : 'ابنًا'} لـ«${name}»؟`,
+    HUSBAND: `من كانت زوجة «${name}»؟`,
+    WIFE: `من كان زوج «${name}»؟`,
+    SON: `من ${answerSex === 'FEMALE' ? 'كانت والدة' : 'كان والد'} «${name}»؟`,
+    DAUGHTER: `من ${answerSex === 'FEMALE' ? 'كانت والدة' : 'كان والد'} «${name}»؟`,
+    BROTHER: `أي من هؤلاء كان من أشقاء «${name}»؟`,
+    SISTER: `أي من هؤلاء كان من أشقاء «${name}»؟`,
+    HALF_BROTHER: `أي من هؤلاء كان أخًا غير شقيق لـ«${name}»؟`,
+    HALF_SISTER: `أي من هؤلاء كان أختًا غير شقيقة لـ«${name}»؟`,
+    GRANDFATHER: `أي من هؤلاء كان حفيدًا لـ«${name}»؟`,
+    GRANDMOTHER: `أي من هؤلاء كان حفيدًا لـ«${name}»؟`,
+    GRANDSON: `من ${answerSex === 'FEMALE' ? 'كانت جدة' : 'كان جد'} «${name}»؟`,
+    GRANDDAUGHTER: `من ${answerSex === 'FEMALE' ? 'كانت جدة' : 'كان جد'} «${name}»؟`,
+    MAWLA: `من ارتبط بـ«${name}» بعلاقة الولاء؟`,
+    PATRON: `من كان مولى «${name}»؟`,
+    PACT_BROTHER: `من آخى النبي بينه وبين «${name}»؟`,
+    CALLED_TO_ISLAM: `من أسلم بدعوة «${name}»؟`,
+    ANSWERED_CALL_OF: `على يد من أسلم «${name}»؟`,
+    COMPANION_OF: `من النبي الذي صحبه «${name}»؟`,
+    PATERNAL_UNCLE: `أي من هؤلاء كان «${name}» عمًّا له؟`,
+    PATERNAL_NEPHEW: `من كان عم «${name}»؟`,
+    MATERNAL_UNCLE: `أي من هؤلاء كان «${name}» خالًا له؟`,
+    PATERNAL_COUSIN: `من كان ابن عم «${name}» أو ابنة عمه؟`,
+    MATERNAL_COUSIN: `من كان ابن خال «${name}» أو ابنة خاله؟`,
+    MILK_BROTHER: `من كان أخًا أو أختًا لـ«${name}» من الرضاعة؟`,
+    MILK_SISTER: `من كان أخًا أو أختًا لـ«${name}» من الرضاعة؟`,
   };
+  return prompts[type] ?? `من ارتبط بـ«${name}» بعلاقة «${type}»؟`;
 }
 
-/**
- * A "ayat" claim backs the person having Qur'an links at all, not one specific
- * ayah -- the answer is drawn from their linked ayat directly, per
- * docs/plans/quiz-question-engine.md.
- */
-export async function generateQuranLinkQuestion(
-  personSlug: string,
-  eligibility: QuizEligibility,
-  random: Random,
-): Promise<QuizQuestion | null> {
-  const claim = await prisma.historicalClaim.findFirst({
-    where: {
-      subjectKind: 'PERSON',
-      subjectSlug: personSlug,
-      field: 'ayat',
-      reviewStatus: { in: eligibility.reviewStatuses },
-      disputed: false,
-    },
-    include: { citations: true },
-  });
-  if (!claim) return null;
-  const person = await prisma.person.findUnique({
-    where: { slug: personSlug },
-    include: { ayat: { include: { surah: { select: { number: true } } } } },
-  });
-  if (!person || person.ayat.length === 0) return null;
+function eligibleClaimKeys() {
+  const keys = new Set<string>();
+  for (const dir of readdirSync('data/history/batches')) {
+    const path = join('data/history/batches', dir, 'batch.json');
+    const batch = JSON.parse(readFileSync(path, 'utf8')) as {
+      claims: { key: string; disputed?: boolean; citations?: unknown[] }[];
+    };
+    for (const claim of batch.claims) {
+      if (!claim.disputed && (claim.citations?.length ?? 0) > 0) keys.add(claim.key);
+    }
+  }
+  return keys;
+}
 
-  const linked = person.ayat.map((a) => `${a.surah.number}:${a.number}`);
-  const correct = linked[Math.floor(random() * linked.length)];
-  const excluded = new Set(linked);
-
-  const others = await prisma.ayah.findMany({
-    where: { people: { none: { slug: personSlug } } },
-    include: { surah: { select: { number: true } } },
-    take: 100, // ponytail: small sample cap, widen if 3 distinct distractors get hard to find
+export async function generateQuestionCandidates(): Promise<GeneratedQuestion[]> {
+  const [catalog, dbPeople, dbTitles] = await Promise.all([
+    loadCatalog(),
+    prisma.person.findMany({
+      select: {
+        slug: true,
+        name: true,
+        sex: true,
+        titles: { select: { slug: true } },
+        ayat: { select: { number: true, surah: { select: { number: true } } } },
+      },
+    }),
+    prisma.title.findMany({ select: { slug: true, name: true } }),
+  ]);
+  const eligible = eligibleClaimKeys();
+  const peopleBySlug = new Map(dbPeople.map((person) => [person.slug, person]));
+  for (const person of catalog.people) {
+    const stored = peopleBySlug.get(person.slug);
+    if (!stored) {
+      peopleBySlug.set(person.slug, { slug: person.slug, name: person.name, sex: person.fields.sex?.value ?? null, titles: [], ayat: [] });
+    } else if (!stored.sex && person.fields.sex?.value) {
+      stored.sex = person.fields.sex.value;
+    }
+  }
+  const personChoices = [...peopleBySlug.values()].map((person) => choice(person.slug, person.name));
+  const titleBySlug = new Map(dbTitles.map((title) => [title.slug, title]));
+  const titleChoices = dbTitles.map((title) => choice(title.slug, title.name));
+  const catalogTitlesByPerson = new Map(catalog.people.map((person) => [person.slug, new Set(person.titles.map((title) => title.title))]));
+  const catalogAyatByPerson = new Map(catalog.people.map((person) => [person.slug, new Set((person.ayat ?? []).map((ayah) => `${ayah.surah}:${ayah.ayah}`))]));
+  const candidates: GeneratedQuestion[] = [];
+  const add = (value: GeneratedQuestion | null) => value && candidates.push(value);
+  const eligibleKunyas = catalog.people.flatMap((person) => {
+    const field = person.fields.kunya;
+    return field && cited(field.claims, eligible).length > 0 ? [choice(field.value, field.value)] : [];
   });
-  const pool = new Set(others.map((a) => `${a.surah.number}:${a.number}`).filter((v) => !excluded.has(v)));
-  const distractors = sampleDistinct([...pool], 3, random);
-  if (!distractors) return null;
+  const ayahPool = catalog.people.flatMap((person) =>
+    (person.ayat ?? []).flatMap((ayah) => cited(ayah.claims, eligible).length > 0
+      ? [choice(`${ayah.surah}:${ayah.ayah}`, `${ayah.surah}:${ayah.ayah}`)]
+      : []),
+  );
 
-  const choices = shuffleChoices(correct, distractors, random);
-  return {
-    claimId: claim.id,
-    family: 'QURAN_LINK',
-    attribute: 'ayat',
-    subject: { kind: 'PERSON', slug: personSlug },
-    choices,
-    correctAnswer: correct,
-    evidence: evidence(claim.citations),
-  };
+  for (const person of catalog.people) {
+    const dbPerson = peopleBySlug.get(person.slug);
+    if (!dbPerson) continue;
+    const kunya = person.fields.kunya;
+    if (kunya) {
+      add(candidate({
+        family: 'KUNYA', topic: 'PEOPLE', subject: { kind: 'PERSON', slug: person.slug }, attribute: 'kunya',
+        personSlugs: [person.slug], promptArabic: `ما كنية ${person.name}؟`, answer: choice(kunya.value, kunya.value),
+        pool: eligibleKunyas, evidence: { claimKeys: cited(kunya.claims, eligible) },
+      }));
+    }
+
+    const virtues = person.fields.virtues;
+    if (virtues) {
+      add(candidate({
+        family: 'VIRTUE_HOLDER', topic: 'PEOPLE', subject: { kind: 'PERSON', slug: person.slug }, attribute: 'virtues',
+        personSlugs: [person.slug], promptArabic: `من تصفه المصادر بهذه المنقبة: «${virtues.value}»؟`,
+        answer: choice(person.slug, person.name), pool: personChoices, evidence: { claimKeys: cited(virtues.claims, eligible) },
+      }));
+    }
+
+    const heldTitles = new Set([...dbPerson.titles.map((title) => title.slug), ...(catalogTitlesByPerson.get(person.slug) ?? [])]);
+    for (const assignment of person.titles) {
+      const title = titleBySlug.get(assignment.title);
+      if (!title) continue;
+      const evidence = { claimKeys: cited(assignment.claims, eligible) };
+      add(candidate({
+        family: 'PERSON_TITLE', topic: 'PEOPLE', subject: { kind: 'PERSON', slug: person.slug }, attribute: 'titles',
+        personSlugs: [person.slug], promptArabic: `أي لقب ${dbPerson.sex === 'FEMALE' ? 'عُرفت' : 'عُرف'} به ${person.name}؟`,
+        answer: choice(title.slug, title.name), pool: titleChoices, excludedValues: heldTitles, evidence,
+      }));
+      const holders = new Set([...peopleBySlug.values()].filter((other) =>
+        other.titles.some((held) => held.slug === title.slug) || catalogTitlesByPerson.get(other.slug)?.has(title.slug),
+      ).map((other) => other.slug));
+      add(candidate({
+        family: 'TITLE_HOLDER', topic: 'PEOPLE', subject: { kind: 'TITLE', slug: title.slug }, attribute: 'titles',
+        personSlugs: [person.slug], promptArabic: `من حمل لقب «${title.name}»؟`, answer: choice(person.slug, person.name),
+        pool: personChoices, excludedValues: holders, evidence,
+      }));
+    }
+
+    const linkedAyat = new Set([...dbPerson.ayat.map((ayah) => `${ayah.surah.number}:${ayah.number}`), ...(catalogAyatByPerson.get(person.slug) ?? [])]);
+    for (const ayah of person.ayat ?? []) {
+      const value = `${ayah.surah}:${ayah.ayah}`;
+      add(candidate({
+        family: 'AYAH_LINK', topic: 'AYAT', subject: { kind: 'PERSON', slug: person.slug }, attribute: 'ayat',
+        personSlugs: [person.slug], promptArabic: `أي آية ربطتها المصادر بسيرة «${person.name}»؟`, answer: choice(value, value),
+        pool: ayahPool, excludedValues: linkedAyat, evidence: { claimKeys: cited(ayah.claims, eligible) },
+      }));
+    }
+
+    for (const relation of person.relations) {
+      const answer = peopleBySlug.get(relation.to);
+      if (!answer) continue;
+      const trueTargets = new Set(person.relations.filter((other) => other.type === relation.type).map((other) => other.to));
+      add(candidate({
+        family: 'RELATION', topic: 'RELATIONSHIPS', subject: { kind: 'PERSON', slug: person.slug }, attribute: relation.type,
+        personSlugs: [person.slug, relation.to], promptArabic: relationPrompt(relation.type, person.name, answer.sex),
+        answer: choice(answer.slug, answer.name), pool: personChoices, excludedValues: trueTargets,
+        evidence: { claimKeys: cited(relation.claims, eligible) },
+      }));
+    }
+  }
+
+  const battleYears = catalog.battles.flatMap((battle) => battle.fields?.hijriYear
+    ? [choice(String(battle.fields.hijriYear.value), formatHijriYear(battle.fields.hijriYear.value, 'ar'))]
+    : []);
+  const absenceReasons = catalog.battles.flatMap((battle) => battle.participants.flatMap((participation) =>
+    participation.relation === 'ABSENT_FROM' && participation.status?.includes('ABSENT_EXCUSED') && participation.summary
+      ? [choice(participation.summary.value, participation.summary.value)]
+      : [],
+  ));
+  for (const battle of catalog.battles) {
+    const year = battle.fields?.hijriYear;
+    if (year) {
+      add(candidate({
+        family: 'BATTLE_HIJRI_YEAR', topic: 'BATTLES', subject: { kind: 'BATTLE', slug: battle.slug }, attribute: 'hijriYear',
+        personSlugs: [], promptArabic: `في أي سنة هجرية وقع الحدث المعروف بـ«${battle.name}»؟`, answer: choice(String(year.value), formatHijriYear(year.value, 'ar')),
+        pool: battleYears, evidence: { claimKeys: cited(year.claims, eligible) },
+      }));
+    }
+    for (const participation of battle.participants) {
+      if (participation.relation !== 'ABSENT_FROM' || !participation.status?.includes('ABSENT_EXCUSED') || !participation.summary) continue;
+      const person = peopleBySlug.get(participation.person);
+      if (!person) continue;
+      add(candidate({
+        family: 'EXCUSED_ABSENCE_REASON', topic: 'BATTLES', subject: { kind: 'BATTLE', slug: battle.slug }, attribute: person.slug,
+        personSlugs: [person.slug], promptArabic: `لماذا ${person.sex === 'FEMALE' ? 'غابت' : 'غاب'} ${person.name} عن ${battle.name}؟`,
+        answer: choice(participation.summary.value, participation.summary.value), pool: absenceReasons,
+        evidence: { claimKeys: cited(participation.summary.claims, eligible) },
+      }));
+    }
+  }
+
+  const eventYears = catalog.events.flatMap((event) => event.fields.hijriYear
+    ? [choice(String(event.fields.hijriYear.value), formatHijriYear(event.fields.hijriYear.value, 'ar'))]
+    : []);
+  for (const event of catalog.events) {
+    const year = event.fields.hijriYear;
+    if (!year) continue;
+    add(candidate({
+      family: 'EVENT_HIJRI_YEAR', topic: 'EVENTS', subject: { kind: 'EVENT', slug: event.slug }, attribute: 'hijriYear',
+      personSlugs: [], promptArabic: `في أي سنة هجرية وقع حدث «${event.name}»؟`, answer: choice(String(year.value), formatHijriYear(year.value, 'ar')),
+      pool: eventYears, evidence: { claimKeys: cited(year.claims, eligible) },
+    }));
+  }
+
+  return mergeCandidates(candidates);
 }

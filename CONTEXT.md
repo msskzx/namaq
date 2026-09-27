@@ -205,10 +205,25 @@ event at all, not which sort of battle it was)
 ### Quizzes
 
 **Question**:
-One generated multiple-choice item: a subject, a correct choice drawn from an
-eligible claim, three distractors, and the evidence backing the correct
-choice. Regenerated from the catalog, never stored as a source of truth.
-_Avoid_: Quiz (a quiz is several questions assembled together, not one)
+One approved multiple-choice item: its Arabic prompt, subject, choices, correct
+answer, and supporting evidence. A quiz is a selection of questions.
+_Avoid_: Quiz question candidate, quiz (a quiz is several questions)
+
+**Question candidate**:
+A complete generated Arabic question, including its prompt, choices, correct
+answer, and evidence, awaiting an agent's editorial decision.
+_Avoid_: Question (only approved candidates become questions)
+
+**Reviewed question bank**:
+The file-authored inventory of pending, approved, rejected, and retired question
+candidates, projected into PostgreSQL for the app. A quiz samples approved
+questions; rejected candidates remain recorded with a reason.
+_Avoid_: Quiz cache, generated quiz
+
+**Question review decision**:
+An agent's editorial approval or rejection of one exact candidate, including
+its Arabic prompt, choice set, correct answer, and evidence.
+_Avoid_: Historical review status, source review
 
 **Question family**:
 One shape of quiz question -- which historical claims can answer it, and what

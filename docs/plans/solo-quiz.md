@@ -1,6 +1,7 @@
 # Solo quiz
 
-Status: **implemented**. The second plan under [quizzes.md](quizzes.md):
+Status: **implemented; quality redesign planned** in
+[reviewed-quiz-bank.md](reviewed-quiz-bank.md). The second plan under [quizzes.md](quizzes.md):
 assembles the [quiz question engine](quiz-question-engine.md)'s questions into
 a solo quiz, serves them over one API route, and lets a reader take one at
 `/quizzes`. Party mode is unaffected and still blocked on the realtime

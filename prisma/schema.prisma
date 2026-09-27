@@ -59,6 +59,39 @@ model AnalyticsEvent {
   @@map("analytics_events")
 }
 
+enum QuizQuestionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  RETIRED
+}
+
+model QuizQuestion {
+  key                   String             @id
+  fingerprint           String
+  family                String
+  topic                 String
+  subjectKind           SubjectKind?
+  subjectSlug           String?
+  attribute             String?
+  personSlugs           String[]
+  generatedPromptArabic String             @db.Text
+  promptArabicOverride  String?            @db.Text
+  choices               Json
+  correctAnswer         String
+  evidence              Json
+  status                QuizQuestionStatus @default(PENDING)
+  rejectionReason       String?            @db.Text
+  reviewedAt            DateTime?
+  reviewedBy            String?
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+
+  @@index([status, topic])
+  @@index([family])
+  @@map("quiz_questions")
+}
+
 // Historical figures model
 model Person {
   id                 String  @id @default(cuid())
