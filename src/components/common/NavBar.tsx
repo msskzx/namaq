@@ -9,22 +9,25 @@ import { faBars, faXmark, faGear } from '@fortawesome/free-solid-svg-icons';
 import translations from '../language/translations';
 import ThemeSwitcher from '../theme/ThemeSwitcher';
 import Button from './Button';
-import { getAllNavLinks } from '@/lib/siteLinks';
+import { getAllNavLinks, type SiteLink } from '@/lib/siteLinks';
 
-interface NavLink {
-  href: string;
-  label: string;
+// A subset of getAllNavLinks, by href, so a dropdown never lists a link under
+// a different label than the mobile menu and the graph workspace menu give it.
+const PEOPLE_SUBMENU_HREFS = ['/people', '/people/prophet-muhammad', '/titles', '/events'];
+
+function submenuFrom(hrefs: string[], language: 'en' | 'ar'): SiteLink[] {
+  const all = getAllNavLinks(language);
+  return hrefs.map((wanted) => all.find((link) => link.href === wanted)).filter((link): link is SiteLink => link !== undefined);
 }
 
-const getLinkItems = (href: string, language: 'en' | 'ar'): NavLink[] => {
+const getLinkItems = (href: string, language: 'en' | 'ar'): SiteLink[] => {
   switch (href) {
     case '/people':
-      return [
-        { href: '/people', label: translations[language].people },
-        { href: '/people/prophet-muhammad', label: translations[language].prophet },
-        { href: '/titles', label: translations[language].titles },
-        { href: '/events', label: translations[language].events },
-      ];
+      return submenuFrom(PEOPLE_SUBMENU_HREFS, language);
+    case '/quizzes':
+      // Solo today; party mode (docs/plans/quizzes.md) adds its own entry
+      // here once built, rather than a second top-level dropdown.
+      return [{ href: '/quizzes', label: translations[language].soloQuiz }];
     default:
       return [];
   }
@@ -73,11 +76,10 @@ export default function NavBar() {
     );
   }
 
-  const mainLinks = [
-    { href: '/graphs', label: translations[language].allGraph },
-    { href: '/people', label: translations[language].people },
-    { href: '/sources', label: translations[language].sources },
-  ];
+  const mainLinkHrefs = ['/graphs', '/people', '/quizzes', '/sources'];
+  const mainLinks = mainLinkHrefs
+    .map((wanted) => getAllNavLinks(language).find((link) => link.href === wanted))
+    .filter((link): link is SiteLink => link !== undefined);
 
   const allLinks = getAllNavLinks(language);
 

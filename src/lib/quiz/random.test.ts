@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { placeAnswer, sampleDistinct } from './random';
+import { sampleDistinct, shuffleChoices } from './random';
 
 function sequence(values: number[]) {
   let i = 0;
@@ -17,12 +17,17 @@ describe('sampleDistinct', () => {
   });
 });
 
-describe('placeAnswer', () => {
-  it('inserts the correct choice at the position the random draw picks', () => {
-    const random = sequence([0.5]);
-    const { choices, correctIndex } = placeAnswer('correct', ['a', 'b'], random);
-    expect(correctIndex).toBe(1);
-    expect(choices[correctIndex]).toBe('correct');
+describe('shuffleChoices', () => {
+  it('includes the correct choice among the shuffled distractors, exactly once', () => {
+    const random = sequence([0.9, 0.1, 0.5]);
+    const choices = shuffleChoices('correct', ['a', 'b'], random);
     expect(choices).toHaveLength(3);
+    expect(choices.filter((c) => c === 'correct')).toHaveLength(1);
+    expect(new Set(choices)).toEqual(new Set(['correct', 'a', 'b']));
+  });
+
+  it('is deterministic for a given random sequence', () => {
+    const runOnce = () => shuffleChoices('correct', ['a', 'b'], sequence([0.9, 0.1, 0.5]));
+    expect(runOnce()).toEqual(runOnce());
   });
 });

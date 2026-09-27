@@ -59,10 +59,11 @@ describe('generateRelationQuestion', () => {
       family: 'RELATION',
       attribute: 'WIFE',
       subject: { kind: 'PERSON', slug: 'zaynab-bint-jahsh' },
-      choices: ['prophet-muhammad', 'a', 'b', 'c'],
-      correctIndex: 0,
+      choices: expect.arrayContaining(['prophet-muhammad', 'a', 'b', 'c']),
+      correctAnswer: 'prophet-muhammad',
       evidence: { citationIds: ['citation-1'] },
     });
+    expect(question?.choices).toHaveLength(4);
     expect(findFirst).toHaveBeenCalledWith(
       expect.objectContaining({ where: expect.objectContaining({ disputed: false, reviewStatus: { in: ['REVIEWED'] } }) }),
     );
@@ -90,7 +91,7 @@ describe('generateParticipationQuestion', () => {
     const question = await generateParticipationQuestion('abdullah-ibn-mazun-al-jumahi', eligibility, zero);
 
     expect(question?.choices).toContain('badr');
-    expect(question?.correctIndex).toBe(0);
+    expect(question?.correctAnswer).toBe('badr');
     expect(question?.family).toBe('PARTICIPATION');
   });
 
@@ -111,7 +112,7 @@ describe('generateTitleQuestion', () => {
 
     const question = await generateTitleQuestion('prophet-muhammad', eligibility, zero);
 
-    expect(question?.choices[0]).toBe('al-amin');
+    expect(question?.correctAnswer).toBe('al-amin');
     expect(question?.family).toBe('TITLE');
   });
 
@@ -140,7 +141,7 @@ describe('generateTitleHolderQuestion', () => {
     const question = await generateTitleHolderQuestion('al-amin', eligibility, zero);
 
     expect(question?.subject).toEqual({ kind: 'TITLE', slug: 'al-amin' });
-    expect(question?.choices[0]).toBe('prophet-muhammad');
+    expect(question?.correctAnswer).toBe('prophet-muhammad');
   });
 
   it('returns null when no candidate holder is unambiguous', async () => {
@@ -163,7 +164,7 @@ describe('generateNameQuestion', () => {
 
     const question = await generateNameQuestion('abdullah-ibn-mazun-al-jumahi', eligibility, zero);
 
-    expect(question?.choices[0]).toBe('أبو محمد');
+    expect(question?.correctAnswer).toBe('أبو محمد');
     expect(question?.family).toBe('NAME');
   });
 });
@@ -176,7 +177,7 @@ describe('generateEventQuestion', () => {
 
     const question = await generateEventQuestion('isra-and-miraj', eligibility, zero);
 
-    expect(question?.choices[0]).toBe('1');
+    expect(question?.correctAnswer).toBe('1');
     expect(question?.family).toBe('EVENT');
   });
 });
@@ -193,7 +194,7 @@ describe('generateQuranLinkQuestion', () => {
 
     const question = await generateQuranLinkQuestion('az-zubayr-ibn-al-awwam', eligibility, zero);
 
-    expect(question?.choices[0]).toBe('3:172');
+    expect(question?.correctAnswer).toBe('3:172');
     expect(question?.family).toBe('QURAN_LINK');
   });
 

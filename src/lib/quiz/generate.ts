@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import { placeAnswer, sampleDistinct, type Random } from './random';
+import { sampleDistinct, shuffleChoices, type Random } from './random';
 import type { QuizEligibility, QuizQuestion } from './types';
 
 function evidence(citations: readonly { id: string }[]) {
@@ -46,14 +46,14 @@ export async function generateRelationQuestion(
   );
   if (!distractors) return null;
 
-  const { choices, correctIndex } = placeAnswer(claim.relatedSubjectSlug, distractors, random);
+  const choices = shuffleChoices(claim.relatedSubjectSlug, distractors, random);
   return {
     claimId: claim.id,
     family: 'RELATION',
     attribute: claim.relationshipType,
     subject: { kind: 'PERSON', slug: personSlug },
     choices,
-    correctIndex,
+    correctAnswer: claim.relatedSubjectSlug,
     evidence: evidence(claim.citations),
   };
 }
@@ -91,14 +91,14 @@ export async function generateParticipationQuestion(
   );
   if (!distractors) return null;
 
-  const { choices, correctIndex } = placeAnswer(claim.relatedSubjectSlug, distractors, random);
+  const choices = shuffleChoices(claim.relatedSubjectSlug, distractors, random);
   return {
     claimId: claim.id,
     family: 'PARTICIPATION',
     attribute: claim.relationshipType!,
     subject: { kind: 'PERSON', slug: personSlug },
     choices,
-    correctIndex,
+    correctAnswer: claim.relatedSubjectSlug,
     evidence: evidence(claim.citations),
   };
 }
@@ -137,14 +137,14 @@ export async function generateTitleQuestion(
   );
   if (!distractors) return null;
 
-  const { choices, correctIndex } = placeAnswer(titleSlug, distractors, random);
+  const choices = shuffleChoices(titleSlug, distractors, random);
   return {
     claimId: claims[0].id,
     family: 'TITLE',
     attribute: 'titles',
     subject: { kind: 'PERSON', slug: personSlug },
     choices,
-    correctIndex,
+    correctAnswer: titleSlug,
     evidence: evidence(claims[0].citations),
   };
 }
@@ -195,14 +195,14 @@ export async function generateTitleHolderQuestion(
   );
   if (!distractors) return null;
 
-  const { choices, correctIndex } = placeAnswer(answer.slug, distractors, random);
+  const choices = shuffleChoices(answer.slug, distractors, random);
   return {
     claimId: answer.claim.id,
     family: 'TITLE_HOLDER',
     attribute: 'titles',
     subject: { kind: 'TITLE', slug: titleSlug },
     choices,
-    correctIndex,
+    correctAnswer: answer.slug,
     evidence: evidence(answer.claim.citations),
   };
 }
@@ -238,14 +238,14 @@ export async function generateNameQuestion(
   );
   if (!distractors) return null;
 
-  const { choices, correctIndex } = placeAnswer(person.kunya, distractors, random);
+  const choices = shuffleChoices(person.kunya, distractors, random);
   return {
     claimId: claim.id,
     family: 'NAME',
     attribute: 'kunya',
     subject: { kind: 'PERSON', slug: personSlug },
     choices,
-    correctIndex,
+    correctAnswer: person.kunya,
     evidence: evidence(claim.citations),
   };
 }
@@ -281,14 +281,14 @@ export async function generateEventQuestion(
   );
   if (!distractors) return null;
 
-  const { choices, correctIndex } = placeAnswer(String(event.hijriYear), distractors, random);
+  const choices = shuffleChoices(String(event.hijriYear), distractors, random);
   return {
     claimId: claim.id,
     family: 'EVENT',
     attribute: 'hijriYear',
     subject: { kind: 'EVENT', slug: eventSlug },
     choices,
-    correctIndex,
+    correctAnswer: String(event.hijriYear),
     evidence: evidence(claim.citations),
   };
 }
@@ -333,14 +333,14 @@ export async function generateQuranLinkQuestion(
   const distractors = sampleDistinct([...pool], 3, random);
   if (!distractors) return null;
 
-  const { choices, correctIndex } = placeAnswer(correct, distractors, random);
+  const choices = shuffleChoices(correct, distractors, random);
   return {
     claimId: claim.id,
     family: 'QURAN_LINK',
     attribute: 'ayat',
     subject: { kind: 'PERSON', slug: personSlug },
     choices,
-    correctIndex,
+    correctAnswer: correct,
     evidence: evidence(claim.citations),
   };
 }

@@ -4,11 +4,12 @@ Status: not built. Two modes: a solo quiz, and a party game where several people
 play the same game at the same time, receiving the same questions and competing
 on score. The party mode is in the spirit of Sporcle's party trivia.
 
-The question-generation engine described below is built — see
-[quiz-question-engine.md](quiz-question-engine.md) for what it actually does
-and how it differs in detail (a seventh family, `TITLE_HOLDER`, and the exact
-eligibility rule). The solo quiz, party mode, and everything past generating
-one question are still not built.
+The question-generation engine and the solo quiz described below are both
+built — see [quiz-question-engine.md](quiz-question-engine.md) (a seventh
+family, `TITLE_HOLDER`, and the exact eligibility rule) and
+[solo-quiz.md](solo-quiz.md) (topic/length picking, free navigation, batch
+feedback) for what they actually do and how they differ in detail. Party
+mode is still not built.
 
 ## Principle: questions come from the claims
 
@@ -56,7 +57,12 @@ here.
 
 - Pick a topic (people, battles, titles, events, or a person's own circle) and a
   length.
-- Instant feedback per question, with the evidence link.
+- No timer. Free navigation: jump to any question, skip one and return to it
+  later, in any order.
+- Feedback is batched, not per question: answers are revealed together, with
+  evidence links, only after the whole quiz is submitted -- unlike the party
+  game below, which reveals each round live. See
+  [solo-quiz.md](solo-quiz.md) for why the two modes differ here.
 - Result page with the questions missed.
 - Works without an account. With one ([user-accounts.md](user-accounts.md)), keep
   history and per-topic progress.

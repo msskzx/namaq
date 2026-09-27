@@ -12,7 +12,9 @@ export const getAllNavLinks = (language: 'en' | 'ar'): SiteLink[] => [
   { href: '/graphs', label: translations[language].allGraph },
   { href: '/people/prophet-muhammad', label: translations[language].prophet },
   { href: '/people', label: translations[language].people },
+  { href: '/titles', label: translations[language].titles },
   { href: '/events', label: translations[language].events },
+  { href: '/quizzes', label: translations[language].quizzes },
   { href: '/sources', label: translations[language].sources },
   { href: '/references', label: language === 'ar' ? 'المراجع' : 'References' },
 ];

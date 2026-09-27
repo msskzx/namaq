@@ -11,9 +11,20 @@ export function sampleDistinct<T>(pool: readonly T[], count: number, random: Ran
   return picked;
 }
 
-export function placeAnswer<T>(correct: T, distractors: readonly T[], random: Random): { choices: T[]; correctIndex: number } {
-  const correctIndex = Math.floor(random() * (distractors.length + 1));
-  const choices = [...distractors];
-  choices.splice(correctIndex, 0, correct);
-  return { choices, correctIndex };
+export function shuffle<T>(items: readonly T[], random: Random): T[] {
+  const result = [...items];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
+/**
+ * Choices come back shuffled, correctness identified by value rather than
+ * position -- see docs/plans/solo-quiz.md, "Why correctAnswer, not
+ * correctIndex".
+ */
+export function shuffleChoices<T>(correct: T, distractors: readonly T[], random: Random): T[] {
+  return shuffle([correct, ...distractors], random);
 }
