@@ -21,6 +21,7 @@ export const DEVELOPMENT_ELIGIBILITY: QuizEligibility = {
 
 export const QUIZ_TOPICS = ['PEOPLE', 'BATTLES', 'TITLES', 'EVENTS', 'PERSON_CIRCLE'] as const;
 export type QuizTopic = (typeof QUIZ_TOPICS)[number];
+export type QuizTopics = readonly QuizTopic[];
 
 export const QUIZ_LENGTHS = [5, 10, 15] as const;
 export type QuizLength = (typeof QUIZ_LENGTHS)[number];

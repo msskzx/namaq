@@ -82,7 +82,7 @@ describe('GET /api/quiz', () => {
       '/people/zaynab-bint-jahsh?book=account-1&page=3',
     ]);
     expect(assembleQuiz).toHaveBeenCalledWith(
-      expect.objectContaining({ topic: 'PEOPLE', length: 5, personSlug: undefined }),
+      expect.objectContaining({ topics: ['PEOPLE'], length: 5, personSlug: undefined }),
     );
   });
 

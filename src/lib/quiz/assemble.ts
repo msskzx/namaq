@@ -9,7 +9,7 @@ import {
   generateTitleQuestion,
 } from './generate';
 import { shuffle, type Random } from './random';
-import type { QuestionFamily, QuizEligibility, QuizLength, QuizQuestion, QuizTopic } from './types';
+import type { QuestionFamily, QuizEligibility, QuizLength, QuizQuestion, QuizTopic, QuizTopics } from './types';
 
 type Generator = (subjectSlug: string, eligibility: QuizEligibility, random: Random) => Promise<QuizQuestion | null>;
 
@@ -60,7 +60,7 @@ async function candidateSubjects(family: QuestionFamily): Promise<string[]> {
 }
 
 export interface AssembleQuizParams {
-  topic: QuizTopic;
+  topics: QuizTopics;
   /** Required, and the only subject used, when topic is PERSON_CIRCLE. */
   personSlug?: string;
   length: QuizLength;
@@ -78,19 +78,22 @@ export interface AssembleQuizParams {
  * fine at this data size, revisit if assembling a quiz gets slow.
  */
 export async function assembleQuiz({
-  topic,
+  topics,
   personSlug,
   length,
   eligibility,
   random,
 }: AssembleQuizParams): Promise<QuizQuestion[]> {
   const attempts: { family: QuestionFamily; slug: string }[] = [];
-  if (topic === 'PERSON_CIRCLE') {
+  if (topics.includes('PERSON_CIRCLE')) {
     if (!personSlug) return [];
     for (const family of PERSON_FAMILIES) attempts.push({ family, slug: personSlug });
   } else {
-    for (const family of FAMILIES_BY_TOPIC[topic]) {
-      for (const slug of await candidateSubjects(family)) attempts.push({ family, slug });
+    for (const topic of topics) {
+      if (topic === 'PERSON_CIRCLE') continue;
+      for (const family of FAMILIES_BY_TOPIC[topic]) {
+        for (const slug of await candidateSubjects(family)) attempts.push({ family, slug });
+      }
     }
   }
   const order = shuffle(attempts, random);
