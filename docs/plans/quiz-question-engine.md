@@ -48,10 +48,13 @@ mode, or accounts — those are separate, later plans that build on this one.
 - **`QURAN_LINK` is coarse by design:** a `field: "ayat"` claim backs "this
   person has Qur'an links," not one specific ayah. The answer is drawn from
   the person's linked `Ayah` rows directly once an eligible claim exists.
-- **4 choices, fixed.** 1 correct + 3 distractors, order randomized by an
-  injected `Random` (`() => number`) so tests are deterministic. Fewer than 3
-  valid distractors → the generator returns `null` (skip), never a shorter
-  option list.
+- **4 choices, fixed.** 1 correct + 3 distractors, shuffled by an injected
+  `Random` (`() => number`) so tests are deterministic. Fewer than 3 valid
+  distractors → the generator returns `null` (skip), never a shorter option
+  list. `QuizQuestion` carries `correctAnswer: string`, not an index — see
+  [solo-quiz.md](solo-quiz.md), "Why `correctAnswer`, not `correctIndex`"
+  (revised from this plan's first version once solo-quiz needed to share the
+  same question shape with a future party mode).
 - **A question's identity is its `claimId`**, not `(subject, family)` — a
   subject can have several eligible claims in one family (e.g. both a
   `FATHER` and a `WIFE` relation claim). `TITLE` and `TITLE_HOLDER` for the
