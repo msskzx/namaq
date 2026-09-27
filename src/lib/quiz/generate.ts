@@ -16,6 +16,7 @@ export async function generateRelationQuestion(
       subjectKind: 'PERSON',
       subjectSlug: personSlug,
       relationshipType: { not: null },
+      relatedSubjectKind: 'PERSON',
       relatedSubjectSlug: { not: null },
       reviewStatus: { in: eligibility.reviewStatuses },
       disputed: false,
@@ -23,6 +24,10 @@ export async function generateRelationQuestion(
     include: { citations: true },
   });
   if (!claim?.relationshipType || !claim.relatedSubjectSlug) return null;
+
+  // docs/plans/quiz-question-engine.md
+  const relatedPerson = await prisma.person.findUnique({ where: { slug: claim.relatedSubjectSlug }, select: { slug: true } });
+  if (!relatedPerson) return null;
 
   const trueForSubject = await prisma.historicalClaim.findMany({
     where: { subjectKind: 'PERSON', subjectSlug: personSlug, relationshipType: claim.relationshipType },
@@ -33,14 +38,21 @@ export async function generateRelationQuestion(
   const otherClaims = await prisma.historicalClaim.findMany({
     where: {
       relationshipType: claim.relationshipType,
+      relatedSubjectKind: 'PERSON',
       relatedSubjectSlug: { not: null, notIn: excluded },
       reviewStatus: { in: eligibility.reviewStatuses },
     },
     distinct: ['relatedSubjectSlug'],
     select: { relatedSubjectSlug: true },
   });
+  const candidateSlugs = otherClaims.map((c) => c.relatedSubjectSlug!);
+  const existingCandidates = await prisma.person.findMany({
+    where: { slug: { in: candidateSlugs } },
+    select: { slug: true },
+  });
+  const existingSlugs = new Set(existingCandidates.map((p) => p.slug));
   const distractors = sampleDistinct(
-    otherClaims.map((c) => c.relatedSubjectSlug!),
+    candidateSlugs.filter((slug) => existingSlugs.has(slug)),
     3,
     random,
   );

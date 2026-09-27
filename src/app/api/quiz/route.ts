@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import type { SubjectKind } from '@/generated/prisma';
 import { prisma } from '@/lib/prisma';
 import { assembleQuiz } from '@/lib/quiz/assemble';
 import {
@@ -6,6 +7,7 @@ import {
   PRODUCTION_ELIGIBILITY,
   QUIZ_LENGTHS,
   QUIZ_TOPICS,
+  type QuestionFamily,
   type QuizLength,
   type QuizTopic,
 } from '@/lib/quiz/types';
@@ -35,6 +37,58 @@ async function resolveEvidence(citationIds: readonly string[]): Promise<Evidence
   }));
 }
 
+interface DisplayName {
+  name: string;
+  nameTransliterated: string | null;
+}
+
+/**
+ * The kind a family's choices are slugs of, so the client can show a name
+ * instead of the raw slug. NAME (a kunya) and EVENT (a year) are already
+ * human-readable values, not slugs, so they're absent here.
+ */
+const CHOICE_SUBJECT_KIND: Partial<Record<QuestionFamily, SubjectKind>> = {
+  RELATION: 'PERSON',
+  PARTICIPATION: 'BATTLE',
+  TITLE: 'TITLE',
+  TITLE_HOLDER: 'PERSON',
+};
+
+async function resolveDisplayNames(
+  questions: readonly { family: string; subject: { kind: SubjectKind; slug: string }; choices: readonly string[] }[],
+): Promise<Record<SubjectKind, Map<string, DisplayName>>> {
+  const slugsByKind: Record<SubjectKind, Set<string>> = {
+    PERSON: new Set(),
+    TITLE: new Set(),
+    BATTLE: new Set(),
+    EVENT: new Set(),
+  };
+  for (const question of questions) {
+    slugsByKind[question.subject.kind].add(question.subject.slug);
+    const choiceKind = CHOICE_SUBJECT_KIND[question.family as QuestionFamily];
+    if (choiceKind) for (const choice of question.choices) slugsByKind[choiceKind].add(choice);
+  }
+
+  const select = { slug: true, name: true, nameTransliterated: true } as const;
+  const [people, titles, battles, events] = await Promise.all([
+    slugsByKind.PERSON.size ? prisma.person.findMany({ where: { slug: { in: [...slugsByKind.PERSON] } }, select }) : [],
+    slugsByKind.TITLE.size ? prisma.title.findMany({ where: { slug: { in: [...slugsByKind.TITLE] } }, select }) : [],
+    slugsByKind.BATTLE.size ? prisma.battle.findMany({ where: { slug: { in: [...slugsByKind.BATTLE] } }, select }) : [],
+    slugsByKind.EVENT.size ? prisma.event.findMany({ where: { slug: { in: [...slugsByKind.EVENT] } }, select }) : [],
+  ]);
+
+  const toDisplayName = ({ name, nameTransliterated }: { name: string; nameTransliterated: string | null }) => ({
+    name,
+    nameTransliterated,
+  });
+  return {
+    PERSON: new Map(people.map((p) => [p.slug, toDisplayName(p)])),
+    TITLE: new Map(titles.map((t) => [t.slug, toDisplayName(t)])),
+    BATTLE: new Map(battles.map((b) => [b.slug, toDisplayName(b)])),
+    EVENT: new Map(events.map((e) => [e.slug, toDisplayName(e)])),
+  };
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const topic = searchParams.get('topic');
@@ -62,17 +116,29 @@ export async function GET(request: Request) {
     });
 
     const citationIds = [...new Set(questions.flatMap((q) => q.evidence.citationIds))];
-    const evidence = await resolveEvidence(citationIds);
+    const [evidence, namesByKind] = await Promise.all([resolveEvidence(citationIds), resolveDisplayNames(questions)]);
     const evidenceByCitationId = new Map(evidence.map((e) => [e.citationId, e]));
-    const withEvidenceLinks = questions.map((question) => ({
-      ...question,
-      evidence: {
-        ...question.evidence,
-        readerUrls: question.evidence.citationIds
-          .map((id) => evidenceByCitationId.get(id)?.readerUrl)
-          .filter((url): url is string => Boolean(url)),
-      },
-    }));
+    const withEvidenceLinks = questions.map((question) => {
+      const choiceKind = CHOICE_SUBJECT_KIND[question.family as QuestionFamily];
+      const choiceLabels: Record<string, DisplayName> = {};
+      if (choiceKind) {
+        for (const choice of question.choices) {
+          const resolved = namesByKind[choiceKind].get(choice);
+          if (resolved) choiceLabels[choice] = resolved;
+        }
+      }
+      return {
+        ...question,
+        subjectName: namesByKind[question.subject.kind].get(question.subject.slug) ?? null,
+        choiceLabels,
+        evidence: {
+          ...question.evidence,
+          readerUrls: question.evidence.citationIds
+            .map((id) => evidenceByCitationId.get(id)?.readerUrl)
+            .filter((url): url is string => Boolean(url)),
+        },
+      };
+    });
 
     return NextResponse.json({ questions: withEvidenceLinks });
   } catch (error) {
