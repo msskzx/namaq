@@ -19,9 +19,15 @@ const ruqayyahBintMuhammad = {
       value: 'رقية بنت محمد بن عبد الله بن عبد المطلب بن هاشم القرشية الهاشمية',
       claims: legacyUnreviewed,
     },
+    // Carried from the retired prisma/personSeedData.ts entry, uncited.
+    virtues: {
+      value: 'بنت النبي، زوجة عثمان بن عفان رضي الله عنه، هاجرت إلى الحبشة.',
+      claims: legacyUnreviewed,
+    },
   },
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    { title: 'daughter-of-prophet', name: 'بنت النبي', nameTransliterated: 'Daughter of the Prophet', claims: legacyUnreviewed },
   ],
   relations: [],
 } satisfies CatalogPerson;

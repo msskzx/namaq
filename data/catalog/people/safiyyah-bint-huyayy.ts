@@ -20,6 +20,12 @@ const safiyyahBintHuyayy = {
   fields: {
     // Carried from the retired prisma/personSeedData9.ts entry, uncited.
     fullName: { value: 'صفية بنت حيي بن أخطب بن سعية', claims: legacyUnreviewed },
+    // Carried from the retired prisma/personSeedData.ts entry, uncited.
+    appearance: { value: 'وصفت بأنها كانت جميلة جداً.', claims: legacyUnreviewed },
+    virtues: {
+      value: 'أم المؤمنين، كانت من سبايا خيبر، أسلمت وتزوجها النبي، عرفت بحلمها وصبرها.',
+      claims: legacyUnreviewed,
+    },
   },
   titles: [
     // Carried from the seed rows; the chapter calls her neither.

@@ -20,12 +20,20 @@ const ummSalamah = {
       claims: ['umm-salamah/full-name'],
     },
     sex: { value: 'FEMALE', claims: ['umm-salamah/sex'] },
+    // Carried from the retired prisma/personSeedData.ts entry, uncited.
+    appearance: { value: 'وصفت بأنها كانت من أجمل النساء.', claims: legacyUnreviewed },
+    virtues: {
+      value: 'أم المؤمنين، من أعقل وأفقه نساء الصحابة، ذات رأي سديد، هاجرت هجرتين، روت أحاديث كثيرة.',
+      claims: legacyUnreviewed,
+    },
   },
   titles: [
     { title: 'mother-of-believers', name: 'أم المؤمنين', nameTransliterated: 'Mother of the Believers', claims: ['umm-salamah/umm-al-mumineen'] },
     // Carried from the seed rows; no batch cites it for her.
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
+  // Carried from the retired prisma/personSeedData.ts entry, uncited.
+  ayat: [{ surah: 33, ayah: 33, claims: legacyUnreviewed }],
   relations: [
     { type: 'WIFE', inverse: 'HUSBAND', to: 'prophet-muhammad', claims: ['prophet/wife-umm-salamah'] },
     { type: 'WIFE', inverse: 'HUSBAND', to: 'abu-salamah', claims: ['abu-salamah/husband-umm-salamah'] },

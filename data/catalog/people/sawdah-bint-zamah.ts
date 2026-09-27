@@ -17,6 +17,11 @@ const sawdahBintZamah = {
   hasProfile: true,
   fields: {
     fullName: { value: 'سودة بنت زمعة بن قيس القرشية العامرية', claims: legacyUnreviewed },
+    // Carried from the retired prisma/personSeedData.ts entry, uncited.
+    virtues: {
+      value: 'أم المؤمنين، أول امرأة تزوجها النبي بعد خديجة، عرفت بخفة روحها وحبها للخير.',
+      claims: legacyUnreviewed,
+    },
   },
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },

@@ -23,6 +23,7 @@ const banuQurayzah = {
     // them here yet.
     { person: 'ali-ibn-abi-talib', isMuslim: true, claims: legacyUnreviewed },
     { person: 'prophet-muhammad', isMuslim: true, claims: legacyUnreviewed },
+    { person: 'al-abbas-ibn-abd-al-muttalib', isMuslim: true, claims: legacyUnreviewed },
     {
       person: 'az-zubayr-ibn-al-awwam',
       isMuslim: true,

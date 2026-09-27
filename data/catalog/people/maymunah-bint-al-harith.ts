@@ -20,6 +20,8 @@ const maymunahBintAlHarith = {
       value: 'ميمونة بنت الحارث بن حزن بن بجير بن الهزم بن رويبة بن عبد الله بن هلال بن عامر بن صعصعة الهلالية',
       claims: legacyUnreviewed,
     },
+    // Carried from the retired prisma/personSeedData.ts entry, uncited.
+    virtues: { value: 'أم المؤمنين، آخر من تزوجها النبي، عرفت بورعها وصلة رحمها.', claims: legacyUnreviewed },
   },
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },

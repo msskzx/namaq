@@ -18,6 +18,15 @@ const zaynabBintJahsh = {
   fields: {
     fullName: { value: 'زينب بنت جحش بن رئاب الأسدي', claims: ['zaynab-jahsh/full-name'] },
     sex: { value: 'FEMALE', claims: ['zaynab-jahsh/sex'] },
+    // Carried from the retired prisma/personSeedData.ts entry, uncited.
+    appearance: {
+      value: 'وصفت بأنها كانت جميلة وذات صنعة، وكانت تعمل بيديها وتتصدق.',
+      claims: legacyUnreviewed,
+    },
+    virtues: {
+      value: 'أم المؤمنين، تزوجها النبي بأمر من الله بعد طلاقها من زيد بن حارثة، عرفت بكثرة عبادتها وجودها وكرمها.',
+      claims: legacyUnreviewed,
+    },
   },
   titles: [
     // Carried from the seed rows. The chapter has her among the Prophet's

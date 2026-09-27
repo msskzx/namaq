@@ -4,7 +4,8 @@ import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
  * Carried from neo4j/graphSeedData*.ts, whose node declaration is retired
  * with the rest. The catalog owns this subject's edges now, so they live
  * here or not at all. No batch has read this far into the nasab yet, so
- * every link stays on the legacy marker.
+ * every link stays on the legacy marker. fullName and virtues are carried
+ * from the retired prisma/personSeedData.ts entry, uncited.
  */
 const ummKulthumBintAli = {
   kind: 'PERSON',
@@ -12,7 +13,10 @@ const ummKulthumBintAli = {
   name: 'أم كلثوم بنت علي',
   nameTransliterated: 'Umm Kulthum bint Ali',
   hasProfile: true,
-  fields: {},
+  fields: {
+    fullName: { value: 'أم كلثوم بنت علي بن أبي طالب الهاشمية القرشية', claims: legacyUnreviewed },
+    virtues: { value: 'بنت علي وفاطمة، حفيدة النبي.', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'DAUGHTER', inverse: 'MOTHER', to: 'fatimah-bint-muhammad', claims: legacyUnreviewed },

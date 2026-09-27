@@ -32,6 +32,8 @@ const fathMakkah = {
       },
       claims: ['suhail-ibn-amr-siyar25/fath-makkah'],
     },
+    // Carried from the old seed when he left it; no batch places him here yet.
+    { person: 'al-abbas-ibn-abd-al-muttalib', isMuslim: true, claims: legacyUnreviewed },
   ],
 } satisfies CatalogBattle;
 

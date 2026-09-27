@@ -64,6 +64,8 @@ const khandaq = {
       },
       claims: ['salman/khandaq'],
     },
+    // Carried from the old seed when he left it; no batch places him here yet.
+    { person: 'al-abbas-ibn-abd-al-muttalib', isMuslim: true, claims: legacyUnreviewed },
   ],
 } satisfies CatalogBattle;
 

@@ -18,6 +18,11 @@ const ummHabibah = {
       value: 'رملة بنت أبي سفيان صخر بن حرب بن أمية بن عبد شمس بن عبد مناف بن قصي القرشية الأموية',
       claims: legacyUnreviewed,
     },
+    // Carried from the retired prisma/personSeedData.ts entry, uncited.
+    virtues: {
+      value: 'أم المؤمنين، ابنة أبي سفيان، هاجرت إلى الحبشة، تزوجها النبي وهي هناك.',
+      claims: legacyUnreviewed,
+    },
   },
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },

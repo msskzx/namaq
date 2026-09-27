@@ -14,6 +14,12 @@ const juwayriyahBintAlHarith = {
   hasProfile: true,
   fields: {
     fullName: { value: 'جويرية بنت الحارث بن أبي ضرار المصطلقية', claims: legacyUnreviewed },
+    // Carried from the retired prisma/personSeedData.ts entry, uncited.
+    appearance: { value: 'وصفت بأنها كانت ذات جمال فاتن.', claims: legacyUnreviewed },
+    virtues: {
+      value: 'أم المؤمنين، من سبايا غزوة بني المصطلق، أسلمت وتزوجها النبي، كان زواجها سببًا في إعتاق مئات الأسرى من قومها.',
+      claims: legacyUnreviewed,
+    },
   },
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },

@@ -14,6 +14,11 @@ const alAbbasIbnAbdAlMuttalib = {
   hasProfile: true,
   fields: {
     fullName: { value: 'العباس بن عبد المطلب بن هاشم القرشي الهاشمي', claims: legacyUnreviewed },
+    // Carried from the retired prisma/personSeedData.ts entry, uncited.
+    virtues: {
+      value: 'عم النبي، من السابقين إلى الإسلام، كان له دور في حماية النبي والدعوة بعد إسلامه، جد الخلفاء العباسيين.',
+      claims: legacyUnreviewed,
+    },
   },
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },

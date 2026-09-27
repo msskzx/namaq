@@ -15,6 +15,7 @@ const jamal = {
     // Carried from the old seed when these people left it; no batch places
     // them here yet.
     { person: 'ali-ibn-abi-talib', isMuslim: true, claims: legacyUnreviewed },
+    { person: 'aisha-bint-abi-bakr', isMuslim: true, claims: legacyUnreviewed },
     {
       person: 'saad-ibn-abi-waqqas',
       isMuslim: true,

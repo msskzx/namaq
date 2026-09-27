@@ -17,6 +17,7 @@ const taif = {
     { person: 'abu-bakr-as-siddiq', isMuslim: true, claims: legacyUnreviewed },
     { person: 'prophet-muhammad', isMuslim: true, claims: legacyUnreviewed },
     { person: 'umar-ibn-al-khattab', isMuslim: true, claims: legacyUnreviewed },
+    { person: 'al-abbas-ibn-abd-al-muttalib', isMuslim: true, claims: legacyUnreviewed },
   ],
 } satisfies CatalogBattle;
 

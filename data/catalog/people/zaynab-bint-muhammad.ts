@@ -16,9 +16,12 @@ const zaynabBintMuhammad = {
       value: 'زينب بنت محمد بن عبد الله بن عبد المطلب بن هاشم القرشية الهاشمية',
       claims: legacyUnreviewed,
     },
+    // Carried from the retired prisma/personSeedData.ts entry, uncited.
+    virtues: { value: 'كبرى بنات النبي، هاجرت بعد معاناة، عرفت بوفائها لزوجها.', claims: legacyUnreviewed },
   },
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    { title: 'daughter-of-prophet', name: 'بنت النبي', nameTransliterated: 'Daughter of the Prophet', claims: legacyUnreviewed },
   ],
   relations: [],
 } satisfies CatalogPerson;
