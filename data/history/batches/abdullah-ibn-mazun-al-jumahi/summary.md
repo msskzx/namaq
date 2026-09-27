@@ -2,7 +2,7 @@
 
 This batch preserves al-Dhahabi's complete entry on Abdullah ibn Maz'un
 al-Jumahi and supports the canonical records selected from it. It follows the
-[data quality and references workflow](../../../../docs/data-quality-references.md).
+[data quality and references workflow](../../../../docs/data-pipelines.md).
 
 - Batch definition: [batch.json](batch.json)
 - Source pages: [accounts/abdullah-ibn-mazun-al-jumahi/](accounts/abdullah-ibn-mazun-al-jumahi/)

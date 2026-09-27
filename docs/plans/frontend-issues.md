@@ -74,7 +74,6 @@ pictures and the hero. Check alt text and sizing on the hero.
 - [graph-nodes-list.md](graph-nodes-list.md)
 - [graph-node-font-size.md](graph-node-font-size.md)
 - [relative-event-dating.md](relative-event-dating.md)
-- [privacy-page.md](privacy-page.md)
 
 ## Acceptance
 

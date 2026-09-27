@@ -60,7 +60,7 @@ const relationName = (value: string) => value.toLowerCase().replaceAll('_', ' ')
 
 // Companionship keeps whatever state its own switch left it in: it connects
 // hundreds of people at once, so a bulk action that swept it along would bury
-// the exploration (rule 3 of docs/graph-exploration-review.md).
+// the exploration (rule 3 of docs/graph-exploration.md).
 const isBulkRelation = (type: string) => governingRelationType(type) !== 'COMPANION_OF';
 
 // One row of buttons per group in the selected-subject panel, each divided
@@ -152,13 +152,13 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
   // clicked through in the workspace. Non-person subjects (title/battle/
   // event) and graph-only people with no Postgres profile just keep
   // showing the graph label, per the "Learning information in the panel"
-  // decision in docs/graph-exploration-plan.md.
+  // decision in docs/graph-exploration.md.
   const isSelectedPerson = (selectedNode?.type ?? 'person') === 'person';
   const { data: selectedPreview, error: selectedPreviewError } = useSWR<{ fullName: string | null; titles: { name: string; slug: string }[] }>(
     isSelectedPerson && selectedNode ? `/api/people/${selectedNode.slug}/preview` : null,
     fetcher
   );
-  // This fetch 404s for a graph-only person (docs/graph-only-people-search.md);
+  // This fetch 404s for a graph-only person (docs/graph-search.md);
   // optimistic (true) until then, so the link doesn't stay hidden for the
   // common case while the fetch is still in flight.
   const selectedPersonHasProfile = !isSelectedPerson || !selectedPreviewError;
@@ -320,7 +320,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
   const expandParams = useMemo(() => searchParams?.getAll('expand') ?? [], [searchParams]);
   // Relationship choices apply to the selected subject by default; the panel's
   // own switch moves them to the whole exploration (rule 1 of
-  // docs/graph-exploration-review.md). Nothing changes scope on its own.
+  // docs/graph-exploration.md). Nothing changes scope on its own.
   const [scope, setScope] = useState<ControlScope>('selected');
   const localRelations = useMemo(() => {
     if (!selectedSubjectId) return new Set<string>();
@@ -380,7 +380,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
   };
 
   // A fresh visit opens on the same family Start over installs (rule 11 of
-  // docs/graph-exploration-review.md), seeded as the root's own choices
+  // docs/graph-exploration.md), seeded as the root's own choices
   // so no global filter has to be on. A shared or refreshed URL brings its
   // own contributions and is left alone.
   const rootSeededRef = useRef(false);
@@ -452,7 +452,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
   const toggleCompanionTitle = () => updateParams({ showCompanionTitle: showCompanionTitle ? null : '1' });
   // Absent status choices mean every status, so the panel opens fully on the
   // first time battles are enabled and keeps the user's later choices until
-  // Start over (rule 6 of docs/graph-exploration-review.md).
+  // Start over (rule 6 of docs/graph-exploration.md).
   const activeStatuses = explorationInput.statuses ?? [...PARTICIPATION_STATUS_CHOICES];
   const toggleStatus = (status: string) => {
     const next = activeStatuses.includes(status) ? activeStatuses.filter(item => item !== status) : [...activeStatuses, status];

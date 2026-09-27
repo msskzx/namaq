@@ -24,7 +24,7 @@ interface ReferencesResponse {
 // behind the name it is displaying rather than everything on record.
 const identityFields = new Set(['name', 'fullName', 'titles']);
 
-// docs/data-quality-references.md, on what the graph pane shows.
+// docs/data-pipelines.md, on what the graph pane shows.
 export default function SubjectEvidenceAccess({
   kind,
   slug,

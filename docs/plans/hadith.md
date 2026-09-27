@@ -3,7 +3,7 @@
 Status: not built. The plan is to bring in Sahih al-Bukhari with its chains of
 narration, and to show in the graph when one hadith comes by more than one chain.
 The sequence agreed so far is in
-[data-quality-references.md](../data-quality-references.md), which puts ayat
+[data-pipelines.md](../data-pipelines.md), which puts ayat
 revealed about people first, then hadith, and names al-Nawawi's Forty Hadith and
 Sahih al-Bukhari as candidate first collections.
 
@@ -11,7 +11,7 @@ Sahih al-Bukhari as candidate first collections.
 
 Today, complete chains stay in the source text, and a person named only as a
 narrator does not become a graph node or an edge
-([data-quality-references.md](../data-quality-references.md), "Transmission
+([data-pipelines.md](../data-pipelines.md), "Transmission
 chains", and `AGENTS.md`). That rule was written for the biographical entries.
 For hadith the chain is the content, so this plan needs its own decision before
 any code:

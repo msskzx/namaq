@@ -2,7 +2,7 @@
 
 This batch gives أبو عبس بن جبر his own catalog file and cites al-Dhahabi's
 dedicated Siyar entry on him. It follows the
-[data quality and references workflow](../../../../docs/data-quality-references.md).
+[data quality and references workflow](../../../../docs/data-pipelines.md).
 
 - Batch definition: [batch.json](batch.json)
 - Source pages: [accounts/abu-abs/](accounts/abu-abs/)

@@ -1,9 +1,11 @@
-# Historical subjects are searchable
+# Subjects are searchable
 
-Current design review: [Exploration rules review](graph-exploration-review.md) supersedes conflicting
-local/global scope, filter, search-enablement, reset, and removal behavior below.
-The rules are confirmed but not yet implemented; older implementation
-descriptions are not evidence of compliance.
+This merges two documents on one evolving topic: graph-only people first, then
+every historical subject.
+
+See [Graph exploration](graph-exploration.md) for the confirmed local/global
+scope, filter, search-enablement, reset, and removal rules, which supersede
+conflicting behavior described below.
 
 Status: implemented, phases one to six. The recomputation has run; the two
 steps that remain must wait until this is deployed, since they remove data the
@@ -11,10 +13,59 @@ live code still reads -- see
 [Data and operational consequences](#data-and-operational-consequences). One dependency is recorded under [Open issues](#open-issues); it
 gates end-to-end verification of criteria 2 and 3, not the work itself.
 
-Follows on from [graph-only people are
-searchable](graph-only-people-search.md), whose "Out of scope" note left
-non-person kinds findable only if the current exploration had already loaded
-them.
+## Background: graph-only people are searchable
+
+Follows up on [the stable graph layout](graph-layout.md)'s "Deferred:
+graph-only people are not searchable" note, discovered while applying its
+Phase one.
+
+A [graph-only person](../CONTEXT.md) (present in Neo4j, no PostgreSQL row)
+could not be found by typing their name -- only by expanding a connected
+relative already visible in an exploration. `/api/people/suggest` was
+PostgreSQL-only by design; `GraphSearch.tsx`'s client-side fallback excluded
+every person-type node on the assumption that PostgreSQL already covered all
+of them, which was false for these people. Visiting one directly also 404s,
+since `/people/[slug]` reads the PostgreSQL-only profile route.
+
+Decisions from that round, most still standing:
+
+1. **Findable by search.** A graph-only person should be findable by name
+   from a blank exploration, not just by expanding into them. Still true.
+2. **No profile destination.** Rather than inventing a profile page from
+   graph data alone, the "View profile" affordance is omitted for a
+   graph-only person. Still true.
+3. **One combined suggest endpoint -- superseded below.** The original
+   decision had `/api/people/suggest` query both PostgreSQL and Neo4j and
+   return one merged, ranked list. Shipping this (PR #35) caused a live
+   regression: `PeopleSearch.tsx` renders an unconditional Profile button
+   that 404s for a graph-only person, and it filters the PostgreSQL-backed
+   `/people` list by a name that has no row. "Subjects are searchable" below
+   restores `/api/people/suggest` to PostgreSQL-only and moves graph-only
+   (and every non-person kind) to a new, separate `/api/graph/suggest`.
+4. **One ranking, not two tiers.** Matches are ranked by match quality then
+   the prominence signal, profiled or not, in a single list. Still true; the
+   signal itself changes from `nasabRank` to `graphRank` below.
+5. **nasabRank extended to Neo4j -- superseded below.** `computeNasabRanks.ts`
+   computed nasabRank over the complete Neo4j family graph but only persisted
+   it for PostgreSQL-backed people. The fix that shipped is `graphRank`
+   persisted to Neo4j instead, once `nasabRank` itself was retired (decisions
+   9-10 below).
+6. **No client-side widening.** `GraphSearch.tsx`'s client-side matching over
+   already-loaded nodes stays as a fallback only, not a search mechanism, once
+   the suggest endpoint covers every subject.
+7. **No extra dropdown label.** The absence of a "View profile" button is
+   enough to communicate that a result has no profile.
+
+Non-person kinds (title/battle/event) were explicitly out of scope for this
+round -- they were never in `/api/people/suggest` and kept their existing
+client-side match against whatever the current view had already loaded. That
+gap is what the rest of this document closes.
+
+## Subjects are searchable
+
+Follows on from graph-only people being searchable above, whose "Out of
+scope" note left non-person kinds findable only if the current exploration
+had already loaded them.
 
 ## Objective
 

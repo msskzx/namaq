@@ -328,7 +328,7 @@ export function passageExcerpts(page: PageRecord, files: BatchFiles): Map<string
 }
 
 /**
- * Checks a batch against the rules in docs/data-quality-references.md:
+ * Checks a batch against the rules in docs/data-pipelines.md:
  * known sources, resolvable citation targets, required provenance, and page
  * integrity. Returns every issue found rather than throwing on the first.
  */

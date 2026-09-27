@@ -4,8 +4,6 @@ import React from 'react';
 import { useLanguage } from '@/components/language/LanguageContext';
 import AnalyticsOptOut from '@/components/cookies/AnalyticsOptOut';
 
-
-
 export default function PrivacyPage() {
   const { language } = useLanguage();
 
@@ -21,95 +19,58 @@ export default function PrivacyPage() {
             <div className="space-y-6 text-gray-700 dark:text-gray-200">
               <section>
                 <h2 className="text-xl font-semibold text-amber-400 mb-3">
-                  {language === 'ar' ? 'المعلومات التي نجمعها' : 'Information We Collect'}
+                  {language === 'ar' ? 'ما نخزنه' : 'What We Store'}
                 </h2>
                 <p className="mb-3">
                   {language === 'ar'
-                    ? 'نجمع المعلومات لتقديم خدمات أفضل لمستخدمينا وتحسين منصتنا التعليمية.'
-                    : 'We collect information to provide better services to our users and improve our educational platform.'
+                    ? 'الشيء الأساسي الذي نحفظه هو تفضيلاتك الظاهرة على الموقع:'
+                    : 'The main thing we store is the display preferences you set on the site:'
                   }
                 </p>
                 <ul className={`list-disc list-inside space-y-1 ${language === 'ar' ? 'mr-4' : 'ml-4'}`}>
                   {language === 'ar' ? (
                     <>
-                      <li>بيانات الاستخدام والتحليلات لتحسين خدماتنا</li>
-                      <li>تفضيلات اللغة لتقديم محتوى محلي</li>
-                      <li>مقاييس الأداء لتحسين تجربة المستخدم</li>
+                      <li>لغة الواجهة المختارة</li>
+                      <li>المظهر الفاتح أو الداكن</li>
                     </>
                   ) : (
                     <>
-                      <li>Usage data and analytics to improve our services</li>
-                      <li>Language preferences to provide localized content</li>
-                      <li>Performance metrics to optimize user experience</li>
+                      <li>Your chosen interface language</li>
+                      <li>Light or dark theme</li>
                     </>
                   )}
                 </ul>
+                <p className="mt-3">
+                  {language === 'ar'
+                    ? 'هذه التفضيلات تُحفظ في متصفحك فقط (تخزين محلي أو ملف تعريف ارتباط)، ولا تُرسل إلى أي طرف آخر.'
+                    : 'These preferences are stored only in your browser (local storage or a cookie), and are never sent to anyone else.'
+                  }
+                </p>
               </section>
 
               <section>
                 <h2 className="text-xl font-semibold text-amber-400 mb-3">
-                  {language === 'ar' ? 'ملفات تعريف الارتباط والتحليلات' : 'Cookies and Analytics'}
+                  {language === 'ar' ? 'التحليلات' : 'Analytics'}
                 </h2>
                 <p className="mb-3">
                   {language === 'ar'
-                    ? 'نستخدم ملفات تعريف الارتباط وأدوات التحليلات لفهم كيفية استخدامك لموقعنا وتحسين تجربتك.'
-                    : 'We use cookies and analytics tools to understand how you use our website and improve your experience.'
+                    ? 'ندمج تحليلات Vercel في الموقع، لكننا لا نطّلع عليها بانتظام في هذه المرحلة من التطوير. إذا وافقت، تُجمع بيانات مجهولة مثل مشاهدات الصفحات، مقاييس الأداء، ونوع الجهاز والموقع الجغرافي على مستوى البلد فقط. لا شيء يُجمع دون موافقتك.'
+                    : 'We embed Vercel Analytics in the site, but do not regularly review it at this stage of development. If you consent, anonymous data is collected: page views, performance metrics, and device and country-level location. Nothing is collected without your consent.'
                   }
                 </p>
-                <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg">
-                  <h3 className="font-semibold mb-2">
-                    {language === 'ar' ? 'تحليلات Vercel' : 'Vercel Analytics'}
-                  </h3>
-                  <p className="text-sm mb-2">
-                    {language === 'ar'
-                      ? 'نستخدم تحليلات Vercel لجمع بيانات الاستخدام المجهولة بما في ذلك:'
-                      : 'We use Vercel Analytics to collect anonymous usage data including:'
-                    }
-                  </p>
-                  <ul className={`list-disc list-inside text-sm space-y-1 ${language === 'ar' ? 'mr-4' : 'ml-4'}`}>
-                    {language === 'ar' ? (
-                      <>
-                        <li>مشاهدات الصفحات وأنماط التنقل</li>
-                        <li>مقاييس الأداء وأوقات التحميل</li>
-                        <li>معلومات الجهاز والمتصفح</li>
-                        <li>الموقع الجغرافي (مستوى البلد فقط)</li>
-                      </>
-                    ) : (
-                      <>
-                        <li>Page views and navigation patterns</li>
-                        <li>Performance metrics and loading times</li>
-                        <li>Device and browser information</li>
-                        <li>Geographic location (country level only)</li>
-                      </>
-                    )}
-                  </ul>
-                </div>
+                <AnalyticsOptOut />
               </section>
 
               <section>
                 <h2 className="text-xl font-semibold text-amber-400 mb-3">
-                  {language === 'ar' ? 'حقوقك' : 'Your Rights'}
+                  {language === 'ar' ? 'الحسابات' : 'Accounts'}
                 </h2>
-                <p className="mb-3">
-                  {language === 'ar' ? 'لديك الحق في:' : 'You have the right to:'}
+                <p>
+                  {language === 'ar'
+                    ? 'نمق لا يقدم حاليًا إنشاء حساب أو تسجيل دخول، ولا يجمع أي معلومات شخصية.'
+                    : 'Namaq does not currently offer accounts or sign-in, and collects no personal information.'
+                  }
                 </p>
-                <ul className={`list-disc list-inside space-y-1 ${language === 'ar' ? 'mr-4' : 'ml-4'}`}>
-                  {language === 'ar' ? (
-                    <>
-                      <li>الانسحاب من تتبع التحليلات</li>
-                      <li>طلب حذف بياناتك</li>
-                      <li>الوصول إلى معلومات حول البيانات التي نجمعها</li>
-                      <li>التواصل معنا بشأن مخاوف الخصوصية</li>
-                    </>
-                  ) : (
-                    <>
-                      <li>Opt-out of analytics tracking</li>
-                      <li>Request deletion of your data</li>
-                      <li>Access information about data we collect</li>
-                      <li>Contact us with privacy concerns</li>
-                    </>
-                  )}
-                </ul>
               </section>
 
               <section>
@@ -118,8 +79,8 @@ export default function PrivacyPage() {
                 </h2>
                 <p>
                   {language === 'ar'
-                    ? 'إذا كان لديك أي أسئلة حول سياسة الخصوصية هذه، يرجى الاتصال بنا على msskzx@gmail.com'
-                    : 'If you have any questions about this privacy policy, please contact us at msskzx@gmail.com'
+                    ? 'لأي أسئلة حول هذه السياسة، راسلنا على msskzx@gmail.com'
+                    : 'For any questions about this policy, contact us at msskzx@gmail.com'
                   }
                 </p>
               </section>
@@ -130,23 +91,10 @@ export default function PrivacyPage() {
                 </h2>
                 <p>
                   {language === 'ar'
-                    ? 'قد نحدث سياسة الخصوصية هذه من وقت لآخر. سنخطر المستخدمين بأي تغييرات جوهرية.'
-                    : 'We may update this privacy policy from time to time. We will notify users of any material changes.'
+                    ? 'إذا أضفنا ميزة تغيّر ما نخزنه، مثل الحسابات، أو غيّرنا كيفية استخدامنا للتحليلات، ستُحدَّث هذه الصفحة في نفس التغيير.'
+                    : 'If we add a feature that changes what we store, such as accounts, or change how we use analytics, this page will be updated in the same change.'
                   }
                 </p>
-              </section>
-
-              <section>
-                <h2 className="text-xl font-semibold text-amber-400 mb-3">
-                  {language === 'ar' ? 'إعدادات التحليلات' : 'Analytics Settings'}
-                </h2>
-                <p className="mb-4">
-                  {language === 'ar'
-                    ? 'يمكنك التحكم في جمع بيانات التحليلات لتحسين تجربتك.'
-                    : 'You can control the collection of analytics data to improve your experience.'
-                  }
-                </p>
-                <AnalyticsOptOut />
               </section>
             </div>
           </div>

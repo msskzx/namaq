@@ -2,7 +2,7 @@
 
 This batch preserves al-Dhahabi's complete entry on Abu Ubaydah ibn al-Jarrah
 and supports the canonical records selected from it. It is the pilot for the
-[data quality and references workflow](../../../../docs/data-quality-references.md).
+[data quality and references workflow](../../../../docs/data-pipelines.md).
 
 - Batch definition: [batch.json](batch.json)
 - Source pages: [accounts/abu-ubaydah-ibn-al-jarrah/](accounts/abu-ubaydah-ibn-al-jarrah/)

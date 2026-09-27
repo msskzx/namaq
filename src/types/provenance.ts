@@ -75,7 +75,7 @@ export type SubjectReferences = {
 /**
  * Not displayed. Confidence is an editorial reading of how a source states a
  * claim, not something the source says, so it stays hidden until claims are
- * reviewed — see docs/data-quality-references.md.
+ * reviewed — see docs/data-pipelines.md.
  */
 export const confidenceLabel: Record<ClaimConfidence, { en: string; ar: string }> = {
   ESTABLISHED: { en: 'Well attested', ar: 'ثابت' },

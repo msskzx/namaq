@@ -11,7 +11,8 @@ or applying filters reveals content at saved positions without moving other
 subjects. Camera movement follows the learner's navigation intent.
 
 The [graph-map ADR](adr/0005-use-a-precomputed-global-graph-map.md) replaces the
-[earlier exploration plan](graph-exploration-plan.md)'s nearby-placement rule.
+exploration design's earlier nearby-placement rule (see
+[Graph exploration](graph-exploration.md)).
 Relationship semantics, independent expansion retention, introduction caps,
 and the single-workspace model remain the baseline.
 
@@ -163,4 +164,4 @@ skill.
 ## Follow-up: graph-only people are not searchable
 
 Discovered while applying Phase one, out of scope here. Resolved in
-[graph-only people search](graph-only-people-search.md).
+[graph-only people search](graph-search.md).

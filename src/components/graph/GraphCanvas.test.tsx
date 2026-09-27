@@ -548,7 +548,7 @@ it('toggles the family group without removing title filters', async () => {
 
 // The retired `relation` hide-list cannot be re-read as contributions, so an
 // old link opens its subject with nothing on. See the legacy limitation in
-// docs/graph-exploration-implementation.md.
+// docs/graph-exploration.md.
 it('opens an old exclusion link on its subject alone, with filters off', async () => {
   nav.setUrl(`/graphs?subject=person:${root}&relation=FATHER`);
   mount();

@@ -23,7 +23,7 @@ const ONE_WAY_RELATIONS: ReadonlySet<ExpansionRelationId> = new Set([
 
 // The two recorded directions of companionship, which share one toggle (see
 // governingRelationType in categories.ts). Rule 3 of
-// docs/graph-exploration-review.md makes that toggle answer for both,
+// docs/graph-exploration.md makes that toggle answer for both,
 // so unlike a family role neither direction names an answer of its own.
 const COMPANION_RELATIONS: ReadonlySet<ExpansionRelationId> = new Set(['COMPANION_OF', 'ACCOMPANIED_BY']);
 

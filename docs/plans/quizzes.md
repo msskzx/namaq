@@ -11,7 +11,7 @@ cites, so every answer can show the passage it came from. Nothing enters a quiz
 that the catalog cannot back.
 
 Question families, each tied to something the model holds today
-([data-quality-references.md](../data-quality-references.md)):
+([data-pipelines.md](../data-pipelines.md)):
 
 | Family | Example | Backed by |
 | --- | --- | --- |

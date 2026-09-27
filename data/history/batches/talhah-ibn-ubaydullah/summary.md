@@ -2,7 +2,7 @@
 
 This batch preserves al-Dhahabi's complete entry on Talhah ibn Ubaydullah and
 supports the canonical records selected from it. It follows the
-[data quality and references workflow](../../../../docs/data-quality-references.md)
+[data quality and references workflow](../../../../docs/data-pipelines.md)
 and the [Abu Ubaydah pilot](../abu-ubaydah-pilot/summary.md).
 
 - Batch definition: [batch.json](batch.json)

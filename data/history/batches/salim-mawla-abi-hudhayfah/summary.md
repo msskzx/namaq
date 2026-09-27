@@ -2,7 +2,7 @@
 
 This batch preserves al-Dhahabi's complete entry on Salim, the mawla of Abu
 Hudhayfah, and supports the canonical records selected from it. It follows
-the [data quality and references workflow](../../../../docs/data-quality-references.md).
+the [data quality and references workflow](../../../../docs/data-pipelines.md).
 
 - Batch definition: [batch.json](batch.json)
 - Source pages: [accounts/salim-mawla-abi-hudhayfah/](accounts/salim-mawla-abi-hudhayfah/)
