@@ -21,6 +21,7 @@ import Button from "@/components/common/Button";
 import { useLanguage } from "@/components/language/LanguageContext";
 import { fetcher } from "@/lib/swr";
 import { relationPrompt } from "@/lib/quiz/relationPrompt";
+import { parseQuizTopics } from "@/lib/quiz/topics";
 import { QUIZ_LENGTHS, QUIZ_TOPICS, type QuizLength, type QuizTopic } from "@/lib/quiz/types";
 
 interface DisplayName {
@@ -90,7 +91,7 @@ function QuizzesPage() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const topics = useMemo(() => searchParams.getAll("topic") as QuizTopic[], [searchParams]);
+  const topics = useMemo(() => parseQuizTopics(searchParams), [searchParams]);
   const length = Number(searchParams.get("length")) as QuizLength | 0;
   const person = searchParams.get("person") ?? "";
   const started = Boolean(topics.length && length && (!topics.includes("PERSON_CIRCLE") || person));
@@ -156,6 +157,7 @@ function QuizzesPage() {
                 key={value}
                 variant="outline"
                 active={topics.includes(value)}
+                aria-pressed={topics.includes(value)}
                 onClick={() => setParam({ topic: topics.includes(value) ? topics.filter((item) => item !== value).join(",") || undefined : [...topics, value].join(",") })}
               >
                 <FontAwesomeIcon icon={TOPIC_ICONS[value]} />

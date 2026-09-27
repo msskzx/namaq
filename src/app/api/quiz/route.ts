@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import type { SubjectKind } from '@/generated/prisma';
 import { prisma } from '@/lib/prisma';
 import { assembleQuiz } from '@/lib/quiz/assemble';
+import { parseQuizTopics } from '@/lib/quiz/topics';
 import {
   DEVELOPMENT_ELIGIBILITY,
   QUIZ_LENGTHS,
@@ -112,7 +113,7 @@ async function resolveDisplayNames(
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const topics = [...new Set(searchParams.getAll('topic').flatMap((value) => value.split(',').filter(Boolean)))];
+  const topics = parseQuizTopics(searchParams);
   const length = Number(searchParams.get('length'));
   const person = searchParams.get('person') ?? undefined;
 
