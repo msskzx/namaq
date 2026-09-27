@@ -18,6 +18,8 @@ const badr = {
   fields: {
     engagement: { value: 'GHAZWAH', claims: ['sira/badr-ghazwah'] },
     hijriYear: { value: 2, claims: ['sira/badr'] },
+    // Carried from the retired prisma/battleSeedData.ts entry, uncited.
+    location: { value: 'بدر', claims: legacyUnreviewed },
 
     /*
      * Four counts, and the chapter competes with itself over all four.

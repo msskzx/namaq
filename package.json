@@ -17,7 +17,6 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",
     "seed:people": "tsx prisma/personSeed.ts",
-    "seed:battles": "tsx prisma/battleSeed.ts",
     "seed:graph": "tsx neo4j/graphSeed.ts",
     "people:sync": "tsx scripts/people/syncCanonicalPeople.ts",
     "people:validate": "tsx scripts/people/syncCanonicalPeople.ts --strict",

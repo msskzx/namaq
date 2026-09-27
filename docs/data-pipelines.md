@@ -18,9 +18,9 @@ The first two write into PostgreSQL. A catalog-owned person's Neo4j node and
 relations come from the catalog directly: `catalog:project-graph` merges the
 node whether or not the person has a PostgreSQL row, and writes every relation
 the catalog declares. The layout is computed from the graph and written back
-to both. The remaining split authority — profiles declared in
-`prisma/*SeedData*.ts` — is gone: every people-seed file has been migrated
-into the catalog except the dormant `personSeedData.ts`; see
+to both. The split authority this used to describe — profiles, titles,
+battles and events declared in `prisma/*SeedData*.ts` — is gone: no
+`prisma/` file authors any of them any more; see
 [Removing split authority](#removing-split-authority) below.
 
 ```mermaid
@@ -48,36 +48,19 @@ flowchart TB
 
 Each subject kind has a data file and a script that loads it.
 
-| Data | Script | Wired in |
-| --- | --- | --- |
-| People | `npm run seed:people` | none — every non-dormant file is migrated |
-| Titles | none — `catalog:project` creates a Title row from a person's own title assignment | — |
-| Battles | `npm run seed:battles` | `battleSeedData` |
-| Events | none — `catalog:project` creates or updates every Event row outright | — |
+There is no seed file left for any of these. `catalog:project` creates or
+updates every Person, Title, Battle and Event row outright from
+`data/catalog/`, the way it always did for a person no seed declared (see
+"The files decide, subject by subject" below) — that is now everyone.
+`prisma/personSeed.ts` stays as an empty script (`npm run seed:people` runs
+it and does nothing) only because `scripts/people/activeSeedData.ts` still
+parses its import list; nothing else depends on it.
 
-Seeds upsert by slug, so re-running one updates the rows it owns rather than
-duplicating them.
-
-### One file is dormant
-
-`prisma/personSeedData.ts` is **not imported** by `prisma/personSeed.ts` —
-every `personSeedData2` through `personSeedData15` file that once was has
-since been migrated into the catalog and deleted, leaving `personSeed.ts`'s
-own `people` array empty. `personSeedData.ts` holds the earliest people
-declared, loaded once and since edited in the database directly. Editing it
-changes nothing until it is wired back in, and wiring it back in would write
-its contents over whatever the database now holds. `seedAuthoredPeople()`
-still counts a slug in it as seed-authored regardless, so a catalog module
-for someone it also declares stays additive until that entry is deleted too.
-
-Battle participations are **not seeded at all**. The block that loads them in
-`prisma/personSeed.ts` is commented out, and the data it reads lives in the
-dormant file above. Participation rows in PostgreSQL came from an earlier run
-and nothing maintains them now.
-
-Neither is a bug to fix in passing. Both mean a canonical edit to an affected
-subject needs a deliberate writer, and that the file and the database can
-disagree without anything noticing.
+Battle participations were never seeded through a script at all — the block
+that would have loaded them in `prisma/personSeed.ts` was commented out
+before this migration started, and the data it would have read is what
+`data/catalog/battles/*.ts`'s participants now carry, promoted or left
+`legacy-unreviewed`.
 
 ### The files decide, subject by subject
 
@@ -89,13 +72,15 @@ difference is reported, because the seed is that subject's author until its
 entry goes. Deleting someone's seed entry is therefore what hands the catalog
 authority over them; nothing else has to be declared or remembered.
 
-### Three subjects have left the seeds entirely
+### Three subjects were the first to leave the seeds entirely
 
-Abu Ubaydah ibn al-Jarrah, Talhah ibn Ubaydullah and al-Zubayr ibn al-Awwam are
-authored in the catalog instead, Qur'an links included: no seed file mentions
-them at all any more, so their catalog module is total, not additive.
+Abu Ubaydah ibn al-Jarrah, Talhah ibn Ubaydullah and al-Zubayr ibn al-Awwam
+were the first people authored in the catalog instead of a seed, Qur'an links
+included, before any `prisma/personSeedData*.ts` migration started: their
+catalog module was total, not additive, from the day it was written.
 `catalog:project` creates their PostgreSQL row outright, and `people:sync`
-mirrors it to Neo4j.
+mirrors it to Neo4j — the same total authorship every person now has, seed
+files having caught up rather than these three being an exception any more.
 
 ### Titles have no seed of their own
 
@@ -493,15 +478,14 @@ What the ADR calls for and this doesn't yet do:
   catalog module today is an omission, not a recorded, approved removal — there
   is no `data/catalog/tombstones/` mechanism, so `catalog:project` cannot yet
   tell an accidental omission from an intended deletion.
-- **A hashed batch-review workflow spanning evidence and catalog.** Both the
-  graph side (see [The graph seeds are retired](#the-graph-seeds-are-retired)
-  above) and the profile-fields side are done now: every `personSeedData2`
-  through `personSeedData15` file that once ran is migrated into the catalog
-  and deleted, each field carried as `legacy-unreviewed` where no batch has
-  cited it yet. Only the dormant `personSeedData.ts` remains as a seed author
-  (see "One file is dormant" above) — everyone else it and the three subjects
-  with no seed entry at all ("Three subjects have left the seeds entirely"
-  above) are catalog-owned outright.
+- **A hashed batch-review workflow spanning evidence and catalog.** The graph
+  side (see [The graph seeds are retired](#the-graph-seeds-are-retired) above)
+  and the profile-fields side are both done now: every `prisma/personSeedData
+  *.ts` file, dormant or wired, is migrated into the catalog and deleted, each
+  field carried as `legacy-unreviewed` where no batch has cited it yet. Every
+  person is catalog-owned outright, the way the three subjects with no seed
+  entry at all always were ("Three subjects have left the seeds entirely"
+  above).
 - **One evidence role per citation** ([ADR 0011](adr/0011-classify-the-role-of-cited-evidence.md):
   direct evidence, transmitted report, synthesis, or editorial analysis) —
   decided, not built.

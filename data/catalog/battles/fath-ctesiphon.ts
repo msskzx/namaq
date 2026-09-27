@@ -8,7 +8,12 @@ const fathCtesiphon = {
   slug: 'fath-ctesiphon',
   name: 'فتح المدائن',
   nameTransliterated: 'Conquest of Ctesiphon',
-  fields: { engagement: { value: 'BATTLE', claims: legacyUnreviewed },},
+  fields: {
+    engagement: { value: 'BATTLE', claims: legacyUnreviewed },
+    // Carried from the retired prisma/battleSeedData.ts entry, uncited.
+    hijriYear: { value: 16, claims: legacyUnreviewed },
+    location: { value: 'العراق', claims: legacyUnreviewed },
+  },
   participants: [
     // Carried from the old seed when these people left it; no batch places
     // them here yet.

@@ -117,11 +117,9 @@ npm install
 npm run db:generate
 npm run db:push
 
-# Seed PostgreSQL content in dependency order. Titles and events have no
-# seed of their own — catalog:project creates each Title row the first time
-# a person declares it, and creates or updates every Event row outright.
-npm run seed:people
-npm run seed:battles
+# Seed PostgreSQL content. People, titles, battles and events have no seed
+# files of their own any more — catalog:project creates or updates every one
+# of them from data/catalog/ outright.
 npm run catalog:project -- --apply
 
 # Create Neo4j nodes for any Postgres-only profiles (e.g. newly seeded

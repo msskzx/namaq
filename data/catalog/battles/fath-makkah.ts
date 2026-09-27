@@ -7,7 +7,12 @@ const fathMakkah = {
   slug: 'fath-makkah',
   name: 'فتح مكة',
   nameTransliterated: 'Conquest of Mecca',
-  fields: { engagement: { value: 'GHAZWAH', claims: legacyUnreviewed }, hijriYear: { value: 8, claims: legacyUnreviewed } },
+  fields: {
+    engagement: { value: 'GHAZWAH', claims: legacyUnreviewed },
+    hijriYear: { value: 8, claims: legacyUnreviewed },
+    // Carried from the retired prisma/battleSeedData.ts entry, uncited.
+    location: { value: 'مكة المكرمة', claims: legacyUnreviewed },
+  },
   participants: [
     // Carried from the old seed when these people left it; no batch places
     // them here yet.

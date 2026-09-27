@@ -15,6 +15,8 @@ const uhud = {
   fields: {
     engagement: { value: 'GHAZWAH', claims: ['sira/uhud'] },
     hijriYear: { value: 3, claims: ['sira/uhud'] },
+    // Carried from the retired prisma/battleSeedData.ts entry, uncited.
+    location: { value: 'أحد', claims: legacyUnreviewed },
 
     /*
      * The Muslim seven hundred is not a choice between readings: Urwah's ألف

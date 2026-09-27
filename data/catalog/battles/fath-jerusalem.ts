@@ -7,7 +7,12 @@ const fathJerusalem = {
   slug: 'fath-jerusalem',
   name: 'فتح بيت المقدس',
   nameTransliterated: 'Conquest of Jerusalem',
-  fields: { engagement: { value: 'BATTLE', claims: legacyUnreviewed }, hijriYear: { value: 16, claims: legacyUnreviewed } },
+  fields: {
+    engagement: { value: 'BATTLE', claims: legacyUnreviewed },
+    hijriYear: { value: 16, claims: legacyUnreviewed },
+    // Carried from the retired prisma/battleSeedData.ts entry, uncited.
+    location: { value: 'القدس', claims: legacyUnreviewed },
+  },
   participants: [
     { person: 'abu-ubaydah-ibn-al-jarrah', isMuslim: true, claims: legacyUnreviewed },
     // Carried from the old seed when these people left it; no batch places

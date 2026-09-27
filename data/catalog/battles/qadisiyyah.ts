@@ -7,7 +7,12 @@ const qadisiyyah = {
   slug: 'qadisiyyah',
   name: 'معركة القادسية',
   nameTransliterated: 'Battle of al-Qadisiyyah',
-  fields: { engagement: { value: 'BATTLE', claims: legacyUnreviewed }, hijriYear: { value: 15, claims: ['saad/qadisiyyah'] } },
+  fields: {
+    engagement: { value: 'BATTLE', claims: legacyUnreviewed },
+    hijriYear: { value: 15, claims: ['saad/qadisiyyah'] },
+    // Carried from the retired prisma/battleSeedData.ts entry, uncited.
+    location: { value: 'العراق', claims: legacyUnreviewed },
+  },
   participants: [
     // Carried from the old seed when these people left it; no batch places
     // them here yet.

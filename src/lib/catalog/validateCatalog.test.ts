@@ -4,7 +4,6 @@ import { validateCatalog, type KnownSlugs } from './validateCatalog';
 
 const known: KnownSlugs = {
   people: new Set(['prophet-muhammad']),
-  battles: new Set(['badr']),
   claims: new Set(['pilot/one']),
 };
 

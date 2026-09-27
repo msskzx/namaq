@@ -17,7 +17,6 @@ export interface CatalogIssue {
 /** Slugs a catalog module may point at that this repository does not author. */
 export interface KnownSlugs {
   readonly people: ReadonlySet<string>;
-  readonly battles: ReadonlySet<string>;
   /** Claim keys from every approved batch. */
   readonly claims: ReadonlySet<string>;
 }
@@ -163,7 +162,7 @@ export function validateCatalog(catalog: Catalog, known: KnownSlugs): CatalogIss
     if (utterance.event && !events.has(utterance.event)) {
       issues.push({ path: at, message: `unknown event ${utterance.event}` });
     }
-    if (utterance.battle && !battles.has(utterance.battle) && !known.battles.has(utterance.battle)) {
+    if (utterance.battle && !battles.has(utterance.battle)) {
       issues.push({ path: at, message: `unknown battle ${utterance.battle}` });
     }
   });

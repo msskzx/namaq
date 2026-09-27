@@ -57,17 +57,18 @@ async function projectPeople(people: Catalog['people']) {
   for (const subject of people) {
     let live = await prisma.person.findUnique({ where: { slug: subject.slug } });
 
-    if (!live && subject.hasProfile && ownedByCatalog(subject.slug)) {
-      planned.push(`people/${subject.slug}: create`);
-      if (apply) {
-        live = await prisma.person.create({
-          data: { slug: subject.slug, name: subject.name, nameTransliterated: subject.nameTransliterated },
-        });
-      }
-    }
     if (!live) {
-      conflicts.push(`people/${subject.slug}: no row, and a seed file still authors them`);
-      continue;
+      // Graph-only: no Postgres row is ever expected for this slug.
+      if (!subject.hasProfile) continue;
+      if (!ownedByCatalog(subject.slug)) {
+        conflicts.push(`people/${subject.slug}: no row, and a seed file still authors them`);
+        continue;
+      }
+      planned.push(`people/${subject.slug}: create`);
+      if (!apply) continue;
+      live = await prisma.person.create({
+        data: { slug: subject.slug, name: subject.name, nameTransliterated: subject.nameTransliterated },
+      });
     }
 
     const set = settleFields(`people/${subject.slug}`, live, subject.fields);

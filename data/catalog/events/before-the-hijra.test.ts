@@ -47,7 +47,7 @@ describe('events the sira dates against the hijra', () => {
   it('rejects a year zero, which the era does not have', () => {
     const issues = validateCatalog(
       { people: [], battles: [], utterances: [], events: [{ ...isra, people: [], fields: { hijriYear: { value: 0, claims: ['sira/isra-year'] } } }] },
-      { people: new Set(), battles: new Set(), claims: new Set(['sira/isra-year']) },
+      { people: new Set(), claims: new Set(['sira/isra-year']) },
     );
 
     expect(issues).toEqual([{ path: 'events/al-isra-wal-miraj.hijriYear', message: 'there is no hijri year zero' }]);

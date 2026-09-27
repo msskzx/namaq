@@ -7,7 +7,12 @@ const fihl = {
   slug: 'fihl',
   name: 'معركة فحل',
   nameTransliterated: 'Battle of Fihl',
-  fields: { engagement: { value: 'BATTLE', claims: legacyUnreviewed }, hijriYear: { value: 13, claims: legacyUnreviewed } },
+  fields: {
+    engagement: { value: 'BATTLE', claims: legacyUnreviewed },
+    hijriYear: { value: 13, claims: legacyUnreviewed },
+    // Carried from the retired prisma/battleSeedData.ts entry, uncited.
+    location: { value: 'الأردن', claims: legacyUnreviewed },
+  },
   participants: [
     { person: 'abu-ubaydah-ibn-al-jarrah', isMuslim: true, claims: legacyUnreviewed },
     // Carried from the old seed when these people left it; no batch places
