@@ -1,9 +1,12 @@
 import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
-// The seed entry is retired, so this module is the author; what it held and
-// no batch cites is carried below with its evidence owed. He is the one who
-// said ابسط يدك يا رسول الله نبايعك at the second Aqaba, and his was the
-// first hand.
+/**
+ * Authored from data/history/batches/al-baraa-ibn-marur, entry 53. The seed
+ * entry that carried this subject is retired, so this module is the author;
+ * what it held and no batch cited is still carried below with its evidence
+ * owed. He is the one who said ابسط يدك يا رسول الله نبايعك at the second
+ * Aqaba, and his was the first hand.
+ */
 const alBaraaIbnMarur = {
   kind: 'PERSON',
   slug: 'al-baraa-ibn-marur',
@@ -11,29 +14,37 @@ const alBaraaIbnMarur = {
   nameTransliterated: 'Al-Baraa ibn Marur',
   hasProfile: true,
   fields: {
-    // Carried from the retired seed entry, which took it from the Siyar
-    // without citing it.
-    fullName: {
-      value: 'البراء بن معرور بن صخر بن خنساء بن سنان الأنصاري الخزرجي السلمي',
-      claims: legacyUnreviewed,
-    },
     sex: { value: 'MALE', claims: ['al-baraa/sex'] },
+    fullName: {
+      value: 'البراء بن معرور بن صخر بن خنساء بن سنان الخزرجي',
+      claims: ['al-baraa-ibn-marur-siyar53/full-name'],
+    },
+    kunya: {
+      value: 'أبو بشر',
+      claims: ['al-baraa-ibn-marur-siyar53/kunya'],
+    },
+    tribalAffiliation: {
+      value: 'الخزرجي، الأنصاري، السلمي، نقيب بني سلمة',
+      claims: ['al-baraa-ibn-marur-siyar53/tribal-affiliation'],
+    },
     virtues: {
       value:
-        'أحد نقباء العقبة، وهو أول من بايع النبي صلى الله عليه وسلم ليلة العقبة، وكان كبير الشأن.',
-      claims: ['al-baraa/first-to-pledge'],
+        'أول من بايع ليلة العقبة الأولى، فاضل تقي فقيه النفس، وأجل السبعين يومها. ولما ذكر له صلاته إلى الكعبة قال له النبي صلى الله عليه وسلم: قد كنت على قبلة لو صبرت عليها. وقدم النبي المدينة وقد مات، فسأل عن قبره فصف عليه وكبر.',
+      claims: ['al-baraa/first-to-pledge', 'al-baraa-ibn-marur-siyar53/virtues'],
     },
   },
   titles: [
-    // Carried from the retired seed entry. The seeds gave every صحابي this
-    // title without citing it.
-    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    {
+      title: 'companion',
+      name: 'صحابي',
+      nameTransliterated: 'Companion',
+      claims: ['al-baraa-ibn-marur-siyar53/titles'],
+    },
   ],
   relations: [
-    // Carried from neo4j/graphSeedData*.ts, which stated these ties without
-    // citing them. The catalog owns this subject's edges now, so they live
-    // here or not at all.
-    { type: 'SON', inverse: 'FATHER', to: 'marur-ibn-sakhr', claims: legacyUnreviewed },
+    { type: 'SON', inverse: 'FATHER', to: 'marur-ibn-sakhr', claims: ['al-baraa-ibn-marur-siyar53/father'] },
+    // Carried from neo4j/graphSeedData*.ts. The entry closes by naming no son,
+    // so the edge stays uncited: see the batch's summary.md.
     { type: 'FATHER', inverse: 'SON', to: 'bishr-ibn-al-baraa', claims: legacyUnreviewed },
   ],
 } satisfies CatalogPerson;
