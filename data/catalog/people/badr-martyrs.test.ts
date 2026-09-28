@@ -51,14 +51,18 @@ describe('the fourteen dead of Badr', () => {
       expect(SEXES).toContain(sex?.value);
     }
     // Each cites the roster line that names him plus the count that calls the
-    // fourteen رجالا, rather than inferring a man from an Arabic name.
+    // fourteen رجالا, rather than inferring a man from an Arabic name. Ubaydah
+    // ibn al-Harith's sex claim cites his Siyar nasab line instead.
     const cited = martyrs.flatMap((slug) => {
       const claims = bySlug.get(slug)?.fields.sex?.claims;
       return claims && claims !== legacyUnreviewed ? [...claims] : [];
     });
-    expect(cited).toHaveLength(10);
+    expect(cited).toHaveLength(11);
     for (const key of cited) {
-      expect(claimByKey.get(key)?.citations.some((c) => c.excerptArabic.includes('أربعة عشر رجلا'))).toBe(true);
+      const claim = claimByKey.get(key);
+      const citesRoster = claim?.citations.some((c) => c.excerptArabic.includes('أربعة عشر رجلا'));
+      const citesSiyar = claim?.citations.some((c) => c.excerptArabic.includes('عُبَيْدَةُ بنُ الحَارِثِ'));
+      expect(citesRoster || citesSiyar).toBe(true);
     }
   });
 });

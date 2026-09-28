@@ -1,0 +1,326 @@
+{
+  "slug": "ubaydah-ibn-al-harith",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ubaydah-ibn-al-harith",
+      "extractionUrl": "https://shamela.ws/book/10906/1682",
+      "accessedAt": "2026-09-28",
+      "volumeNumber": 4,
+      "notInSource": ["kunya", "wives", "siblings"],
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "256",
+          "bodyFile": "accounts/ubaydah-ibn-al-harith/001.md",
+          "notesFile": "accounts/ubaydah-ibn-al-harith/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1682",
+          "passages": [
+            {
+              "anchor": "256-p1"
+            },
+            {
+              "anchor": "256-p2"
+            },
+            {
+              "anchor": "256-p3"
+            },
+            {
+              "anchor": "256-p4"
+            },
+            {
+              "anchor": "256-p5"
+            },
+            {
+              "anchor": "256-p6"
+            },
+            {
+              "anchor": "256-p7"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "ubaydah-ibn-al-harith-siyar45/fullName",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ubaydah-ibn-al-harith",
+      "field": "fullName",
+      "assertion": "عبيدة بن الحارث بن المطلب بن عبد مناف بن قصي القرشي المطلبي",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "256-p1",
+          "volume": "4",
+          "pageReference": "256",
+          "extractionUrl": "https://shamela.ws/book/10906/1682",
+          "excerptArabic": "٤٥ - عُبَيْدَةُ بنُ الحَارِثِ بنِ المُطَّلِبِ بنِ عَبْدِ مَنَافٍ بنِ قُصَيٍّ القُرَشِيُّ المُطَّلِبِيُّ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "ubaydah-ibn-al-harith-siyar45/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ubaydah-ibn-al-harith",
+      "field": "sex",
+      "assertion": "MALE",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "256-p1",
+          "volume": "4",
+          "pageReference": "256",
+          "extractionUrl": "https://shamela.ws/book/10906/1682",
+          "excerptArabic": "٤٥ - عُبَيْدَةُ بنُ الحَارِثِ بنِ المُطَّلِبِ بنِ عَبْدِ مَنَافٍ بنِ قُصَيٍّ القُرَشِيُّ المُطَّلِبِيُّ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "ubaydah-ibn-al-harith-siyar45/companion",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ubaydah-ibn-al-harith",
+      "field": "titles",
+      "assertion": "صحابي: كان أحد السابقين الأولين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "256-p3",
+          "volume": "4",
+          "pageReference": "256",
+          "extractionUrl": "https://shamela.ws/book/10906/1682",
+          "excerptArabic": "وَكَانَ أَحَدَ السَّابِقِيْنَ الأَوَّلِيْنَ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "ubaydah-ibn-al-harith-siyar45/appearance",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ubaydah-ibn-al-harith",
+      "field": "appearance",
+      "assertion": "كان ربعة من الرجال، مليحا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "256-p4",
+          "volume": "4",
+          "pageReference": "256",
+          "extractionUrl": "https://shamela.ws/book/10906/1682",
+          "excerptArabic": "وَكَانَ رَبْعَةً مِنَ الرِّجَالِ، مَلِيْحاً",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "ubaydah-ibn-al-harith-siyar45/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ubaydah-ibn-al-harith",
+      "field": "virtues",
+      "assertion": "كان أحد السابقين الأولين، كبير المنزلة عند رسول الله صلى الله عليه وسلم. بارز رأس المشركين يوم بدر عتبة بن ربيعة فاختلفا ضربتين، فأثبت كل منهما الآخر، وشد علي وحمزة على عتبة فقتلاه، واحتملوا عبيدة وبه رمق، ثم توفي بالصفراء. أمره النبي على ستين راكبا من المهاجرين، وعقد له لواء فكان أول لواء عقد في الإسلام.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "256-p3",
+          "volume": "4",
+          "pageReference": "256",
+          "extractionUrl": "https://shamela.ws/book/10906/1682",
+          "excerptArabic": "وَكَانَ أَحَدَ السَّابِقِيْنَ الأَوَّلِيْنَ",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "256-p4",
+          "volume": "4",
+          "pageReference": "256",
+          "extractionUrl": "https://shamela.ws/book/10906/1682",
+          "excerptArabic": "كَبِيْرَ المَنْزِلَةِ عِنْدَ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "256-p5",
+          "volume": "4",
+          "pageReference": "256",
+          "extractionUrl": "https://shamela.ws/book/10906/1682",
+          "excerptArabic": "وَهُوَ الَّذِي بَارَزَ رَأْسَ المُشْرِكِيْنَ يَوْمَ بَدْرٍ",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "256-p6",
+          "volume": "4",
+          "pageReference": "256",
+          "extractionUrl": "https://shamela.ws/book/10906/1682",
+          "excerptArabic": "وَقَدْ كَانَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَمَّرَهُ عَلَى سِتِّيْنَ رَاكِباً مِنَ المُهَاجِرِيْنَ، وَعَقَدَ لَهُ لِوَاءً، فَكَانَ أَوَّلَ لِوَاءٍ عُقِدَ فِي الإِسْلاَمِ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "ubaydah-ibn-al-harith-siyar45/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ubaydah-ibn-al-harith",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "al-harith-ibn-al-muttalib",
+      "assertion": "عبيدة بن الحارث بن المطلب: أبوه الحارث بن المطلب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "256-p1",
+          "volume": "4",
+          "pageReference": "256",
+          "extractionUrl": "https://shamela.ws/book/10906/1682",
+          "excerptArabic": "٤٥ - عُبَيْدَةُ بنُ الحَارِثِ بنِ المُطَّلِبِ بنِ عَبْدِ مَنَافٍ بنِ قُصَيٍّ القُرَشِيُّ المُطَّلِبِيُّ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    }
+  ]
+}
