@@ -238,8 +238,8 @@ above.
 
 ## Implementation result
 
-The initial review produced 300 retained records: 262 approved, 34 rejected and
-4 retired. The validated file projects to PostgreSQL with no drift. A direct
+The refreshed review produced 341 retained records: 265 approved, 72 rejected
+and 4 retired. The validated file projects to PostgreSQL with no drift. A direct
 preview-database measurement of a 15-question People request took 716.6 ms on
 the first run and 292.9 ms warm on 2026-09-27. The request performs one
 availability count, one bounded question-bank read and one batched evidence
