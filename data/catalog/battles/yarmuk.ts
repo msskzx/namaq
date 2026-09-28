@@ -37,6 +37,18 @@ const yarmuk = {
       summary: { value: 'وَكَانَ أَمِيْراً عَلَى كُرْدُوْسٍ يَوْم اليَرْمُوْكِ.', claims: ['suhail-ibn-amr-siyar25/yarmuk'] },
       claims: ['suhail-ibn-amr-siyar25/yarmuk'],
     },
+    // The entry gives Ajnadayn as the alternative battle for the same death
+    // (amr-ibn-said-al-umawi-siyar50/ajnadayn, marked disputed).
+    {
+      person: 'amr-ibn-said-al-umawi',
+      isMuslim: true,
+      status: ['MARTYRED'],
+      summary: {
+        value: 'اسْتُشْهِدَ يَوْمَ اليَرْمُوْكِ مَعَ أَخَوَيْهِ.',
+        claims: ['amr-ibn-said-al-umawi-siyar50/yarmuk'],
+      },
+      claims: ['amr-ibn-said-al-umawi-siyar50/yarmuk'],
+    },
   ],
 } satisfies CatalogBattle;
 

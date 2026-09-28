@@ -1,0 +1,380 @@
+{
+  "slug": "amr-ibn-said-al-umawi",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "amr-ibn-said-al-umawi",
+      "extractionUrl": "https://shamela.ws/book/10906/1687",
+      "accessedAt": "2026-09-28",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "261",
+          "bodyFile": "accounts/amr-ibn-said-al-umawi/001.md",
+          "notesFile": "accounts/amr-ibn-said-al-umawi/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1687",
+          "passages": [
+            {
+              "anchor": "261-p9"
+            },
+            {
+              "anchor": "261-p10"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "262",
+          "bodyFile": "accounts/amr-ibn-said-al-umawi/002.md",
+          "notesFile": "accounts/amr-ibn-said-al-umawi/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1688",
+          "passages": [
+            {
+              "anchor": "262-p1"
+            },
+            {
+              "anchor": "262-p2"
+            },
+            {
+              "anchor": "262-p3"
+            },
+            {
+              "anchor": "262-p4"
+            },
+            {
+              "anchor": "262-p5"
+            },
+            {
+              "anchor": "262-p6"
+            }
+          ]
+        }
+      ],
+      "volumeNumber": 4,
+      "notInSource": [
+        "kunya",
+        "appearance",
+        "wives"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "amr-ibn-said-al-umawi-siyar50/fullName",
+      "subjectKind": "PERSON",
+      "subjectSlug": "amr-ibn-said-al-umawi",
+      "field": "fullName",
+      "assertion": "عمرو بن سعيد بن العاص الأموي",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "261-p9",
+          "volume": "4",
+          "pageReference": "261",
+          "extractionUrl": "https://shamela.ws/book/10906/1687",
+          "excerptArabic": "٥٠ - عَمْرُو بنُ سَعِيْدِ بنِ العَاصِ الأُمَوِيُّ **",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "amr-ibn-said-al-umawi-siyar50/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "amr-ibn-said-al-umawi",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "said-ibn-al-as",
+      "assertion": "ابن سعيد بن العاص.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "261-p9",
+          "volume": "4",
+          "pageReference": "261",
+          "extractionUrl": "https://shamela.ws/book/10906/1687",
+          "excerptArabic": "٥٠ - عَمْرُو بنُ سَعِيْدِ بنِ العَاصِ الأُمَوِيُّ **",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "amr-ibn-said-al-umawi-siyar50/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "amr-ibn-said-al-umawi",
+      "field": "virtues",
+      "assertion": "له هجرتان: إلى الحبشة ثم إلى المدينة، ورجع عن عمله حين بلغه موت رسول الله صلى الله عليه وسلم، فأبى العودة إليه وخرج إلى الشام فقتل.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "261-p10",
+          "volume": "4",
+          "pageReference": "261",
+          "extractionUrl": "https://shamela.ws/book/10906/1687",
+          "excerptArabic": "لَهُ هِجْرَتَانِ: إِلَى الحَبَشَةِ، ثُمَّ إِلَى المَدِيْنَةِ",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "262-p4",
+          "volume": "4",
+          "pageReference": "262",
+          "extractionUrl": "https://shamela.ws/book/10906/1688",
+          "excerptArabic": "أَنَّ أَعْمَامَهُ؛ خَالِداً، وَأَبَاناً، وَعَمْراً رَجَعُوا عَنْ أَعْمَالِهِم حِيْنَ بَلَغَهُم مَوْتُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-.",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "262-p6",
+          "volume": "4",
+          "pageReference": "262",
+          "extractionUrl": "https://shamela.ws/book/10906/1688",
+          "excerptArabic": "فَأَبَوا، وَخَرَجُوا إِلَى الشَّامِ، فَقُتِلُوا - رَضِيَ اللهُ عَنْهُم -.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "amr-ibn-said-al-umawi-siyar50/brother-khalid",
+      "subjectKind": "PERSON",
+      "subjectSlug": "amr-ibn-said-al-umawi",
+      "relationshipType": "HALF_BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "khalid-ibn-said",
+      "assertion": "أخوه خالد بن سعيد، أشركا في الأب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "262-p2",
+          "volume": "4",
+          "pageReference": "262",
+          "extractionUrl": "https://shamela.ws/book/10906/1688",
+          "excerptArabic": "مَعَ أَخَوَيْهِ - رَضِيَ اللهُ عَنْهُم -.",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "262-p4",
+          "volume": "4",
+          "pageReference": "262",
+          "extractionUrl": "https://shamela.ws/book/10906/1688",
+          "excerptArabic": "أَنَّ أَعْمَامَهُ؛ خَالِداً، وَأَبَاناً، وَعَمْراً رَجَعُوا عَنْ أَعْمَالِهِم حِيْنَ بَلَغَهُم مَوْتُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "amr-ibn-said-al-umawi-siyar50/brother-aban",
+      "subjectKind": "PERSON",
+      "subjectSlug": "amr-ibn-said-al-umawi",
+      "relationshipType": "HALF_BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "aban-ibn-said",
+      "assertion": "أخوه أبان بن سعيد، أشركا في الأب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "262-p2",
+          "volume": "4",
+          "pageReference": "262",
+          "extractionUrl": "https://shamela.ws/book/10906/1688",
+          "excerptArabic": "مَعَ أَخَوَيْهِ - رَضِيَ اللهُ عَنْهُم -.",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "262-p4",
+          "volume": "4",
+          "pageReference": "262",
+          "extractionUrl": "https://shamela.ws/book/10906/1688",
+          "excerptArabic": "أَنَّ أَعْمَامَهُ؛ خَالِداً، وَأَبَاناً، وَعَمْراً رَجَعُوا عَنْ أَعْمَالِهِم حِيْنَ بَلَغَهُم مَوْتُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "amr-ibn-said-al-umawi-siyar50/yarmuk",
+      "subjectKind": "PERSON",
+      "subjectSlug": "amr-ibn-said-al-umawi",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "yarmuk",
+      "assertion": "استشهد يوم اليرموك مع أخويه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "262-p2",
+          "volume": "4",
+          "pageReference": "262",
+          "extractionUrl": "https://shamela.ws/book/10906/1688",
+          "excerptArabic": "اسْتُشْهِدَ يَوْمَ اليَرْمُوْكِ - وَيُقَالُ: يَوْم أَجْنَادِيْنَ - مَعَ أَخَوَيْهِ - رَضِيَ اللهُ عَنْهُم -.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "amr-ibn-said-al-umawi-siyar50/ajnadayn",
+      "subjectKind": "PERSON",
+      "subjectSlug": "amr-ibn-said-al-umawi",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "ajnadayn",
+      "assertion": "ويقال: يوم أجنادين مع أخويه (يعارض قول اليرموك).",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "disputed": true,
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "262-p2",
+          "volume": "4",
+          "pageReference": "262",
+          "extractionUrl": "https://shamela.ws/book/10906/1688",
+          "excerptArabic": "وَيُقَالُ: يَوْم أَجْنَادِيْنَ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    }
+  ]
+}
