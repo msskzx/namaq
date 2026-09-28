@@ -337,6 +337,22 @@ const badr = {
       claims: ['aqil-ibn-abi-talib-siyar35/badr'],
     },
     { person: 'khallad-ibn-amr-ibn-al-jumuh', isMuslim: true, claims: ['khallad-siyar4/badr'] },
+    {
+      person: 'amr-ibn-al-jumuh',
+      isMuslim: true,
+      relation: 'ABSENT_FROM',
+      status: ['ABSENT_EXCUSED'],
+      summary: { value: 'لَمْ يَشْهَدْ بَدْراً، كَانَ أَعْرَجَ.', claims: ['amr-ibn-al-jumuh-siyar44/badr-absent'] },
+      claims: ['amr-ibn-al-jumuh-siyar44/badr-absent'],
+    },
+    // Entry 54; al-Dhahabi names him among the leading men of Badr and says
+    // nothing about what became of him there.
+    {
+      person: 'bishr-ibn-al-baraa',
+      isMuslim: true,
+      summary: { value: 'وَهُوَ مِنْ كِبَارِ البَدْرِيِّيْنَ', claims: ['bishr-ibn-al-baraa-siyar54/badr'] },
+      claims: ['bishr-ibn-al-baraa-siyar54/badr'],
+    },
   ],
 } satisfies CatalogBattle;
 

@@ -1,17 +1,5 @@
-import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
+import type { CatalogPerson } from '@/lib/catalog/types';
 
-/**
- * Carried from neo4j/graphSeedData*.ts, whose node declaration is retired
- * with the rest. The catalog owns this subject's edges now, so they live
- * here or not at all. No batch has read this far into the nasab yet, so
- * every link stays on the legacy marker.
- *
- * Ally (حليف) of Banu Umayya from Hadramawt, not blood Quraysh, per the
- * retired prisma/personSeedData6.ts entry -- whose own page gave more than
- * one variant report of his father's ancestry; fullName here keeps only the
- * consistently-reported immediate father rather than the disputed deeper
- * chain.
- */
 const alAlaIbnAlHadrami = {
   kind: 'PERSON',
   slug: 'al-ala-ibn-al-hadrami',
@@ -19,14 +7,33 @@ const alAlaIbnAlHadrami = {
   nameTransliterated: 'Al-Ala ibn al-Hadrami',
   hasProfile: true,
   fields: {
-    sex: { value: 'MALE', claims: legacyUnreviewed },
-    fullName: { value: 'العلاء بن عبد الله بن عماد الحضرمي حليف بني أمية', claims: legacyUnreviewed },
+    sex: { value: 'MALE', claims: ['al-ala-ibn-al-hadrami-siyar51/sex'] },
+    fullName: {
+      value: 'العلاء بن عبد الله بن عماد بن أكبر بن ربيعة بن مقنع بن حضرموت، من حلفاء بني أمية',
+      claims: ['al-ala-ibn-al-hadrami-siyar51/full-name'],
+    },
+    virtues: {
+      value:
+        'ولاه رسول الله البحرين ثم وليها لأبي بكر وعمر؛ وبعثه أبو بكر في جيش قبل البحرين فمشى البحر الذي بينه وبينهم — وهو الرقراق — بأرجلهم، فقاتلهم وأظهره الله عليهم وبذلوا الزكاة؛ وكان أبو هريرة يقول: رأيت من العلاء ثلاثة أشياء لا أزال أحبه أبدا.',
+      claims: ['al-ala-ibn-al-hadrami-siyar51/virtues'],
+    },
+    deathYearHijri: { value: '21', claims: ['al-ala-ibn-al-hadrami-siyar51/death-year'] },
   },
   titles: [
-    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    {
+      title: 'companion',
+      name: 'صحابي',
+      nameTransliterated: 'Companion',
+      claims: ['al-ala-ibn-al-hadrami-siyar51/titles'],
+    },
   ],
   relations: [
-    { type: 'SON', inverse: 'FATHER', to: 'abdullah-ibn-imad-al-hadrami', claims: legacyUnreviewed },
+    {
+      type: 'SON',
+      inverse: 'FATHER',
+      to: 'abdullah-ibn-imad-al-hadrami',
+      claims: ['al-ala-ibn-al-hadrami-siyar51/father'],
+    },
   ],
 } satisfies CatalogPerson;
 

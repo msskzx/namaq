@@ -173,7 +173,7 @@ const uhud = {
       isMuslim: true,
       status: ['MARTYRED'],
       summary: { value: 'كان أعرج فسأل أيمشي برجله صحيحة في الجنة فقيل له: نعم، فقتل.', claims: ['amr-jumuh/uhud'] },
-      claims: ['amr-jumuh/uhud'],
+      claims: ['amr-jumuh/uhud', 'amr-ibn-al-jumuh-siyar44/uhud'],
     },
     {
       person: 'abdullah-ibn-amr-ibn-haram',

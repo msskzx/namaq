@@ -1,16 +1,7 @@
 import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
-/**
- * Carried from neo4j/graphSeedData*.ts, whose node declaration is retired
- * with the rest. The catalog owns this subject's edges now, so they live
- * here or not at all. No batch has read this far into the nasab yet, so
- * every link stays on the legacy marker.
- *
- * Confirmed by the retired prisma/personSeedData6.ts entry as a companion
- * (two hijras -- Abyssinia then Medina -- martyred at Yarmouk alongside his
- * brothers Khalid and Aban above), distinct from the much later Umayyad
- * governor "Amr ibn Sa'id al-Ashdaq".
- */
+// Authored from data/history/batches/amr-ibn-said-al-umawi, entry 50, the
+// page between his brothers Khalid (entry 48) and Aban (entry 49).
 const amrIbnSaidAlUmawi = {
   kind: 'PERSON',
   slug: 'amr-ibn-said-al-umawi',
@@ -20,15 +11,34 @@ const amrIbnSaidAlUmawi = {
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
-      value: 'عمرو بن سعيد بن العاص بن أمية بن عبد شمس بن عبد مناف بن قصي القرشي الأموي',
-      claims: legacyUnreviewed,
+      value: 'عمرو بن سعيد بن العاص الأموي',
+      claims: ['amr-ibn-said-al-umawi-siyar50/fullName'],
+    },
+    virtues: {
+      value:
+        'له هجرتان: إلى الحبشة ثم إلى المدينة، ورجع عن عمله حين بلغه موت رسول الله صلى الله عليه وسلم، فأبى العودة إليه وخرج إلى الشام فقتل.',
+      claims: ['amr-ibn-said-al-umawi-siyar50/virtues'],
     },
   },
   titles: [
-    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: ['amr-ibn-said-al-umawi-siyar50/virtues'] },
   ],
   relations: [
-    { type: 'SON', inverse: 'FATHER', to: 'said-ibn-al-as', claims: legacyUnreviewed },
+    { type: 'SON', inverse: 'FATHER', to: 'said-ibn-al-as', claims: ['amr-ibn-said-al-umawi-siyar50/father'] },
+    // docs/extraction-checklist.md item 6: the entry names both brothers and
+    // the shared father, and no mother, so neither tie is a full brother.
+    {
+      type: 'HALF_BROTHER',
+      inverse: 'HALF_BROTHER',
+      to: 'khalid-ibn-said',
+      claims: ['amr-ibn-said-al-umawi-siyar50/brother-khalid'],
+    },
+    {
+      type: 'HALF_BROTHER',
+      inverse: 'HALF_BROTHER',
+      to: 'aban-ibn-said',
+      claims: ['amr-ibn-said-al-umawi-siyar50/brother-aban'],
+    },
   ],
 } satisfies CatalogPerson;
 
