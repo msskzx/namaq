@@ -25,11 +25,27 @@ beforeEach(() => {
         { title: 't1', claims: ['abu-ubaydah/titles'] },
         { title: 't2', claims: ['abu-ubaydah/titles'] },
       ],
-      relations: [{ type: 'FATHER', to: 'p4', claims: ['abdullah-ibn-suhail-siyar24/father'] }],
+      relations: [
+        { type: 'FATHER', to: 'p4', claims: ['abdullah-ibn-suhail-siyar24/father'] },
+        { type: 'HUSBAND', to: 'p5', claims: ['abdullah-ibn-suhail-siyar24/father'] },
+      ],
     },
-    basePerson('p2', 'الثاني', 'أبو الثاني'),
-    basePerson('p3', 'الثالث', 'أبو الثالث'),
+    {
+      ...basePerson('p2', 'الثاني', 'أبو الثاني'),
+      relations: [
+        { type: 'WIFE', to: 'p8', claims: ['abdullah-ibn-suhail-siyar24/father'] },
+        { type: 'PATERNAL_COUSIN', to: 'p4', claims: ['abdullah-ibn-suhail-siyar24/father'] },
+      ],
+    },
+    {
+      ...basePerson('p3', 'الثالث', 'أبو الثالث'),
+      relations: [{ type: 'BROTHER', to: 'p8', claims: ['abdullah-ibn-suhail-siyar24/father'] }],
+    },
     basePerson('p4', 'الرابع', 'أبو الرابع'),
+    basePerson('p5', 'الخامسة', 'أم الخامسة'),
+    basePerson('p6', 'السادسة', 'أم السادسة'),
+    basePerson('p7', 'السابعة', 'أم السابعة'),
+    basePerson('p8', 'الثامن', 'أبو الثامن'),
   ];
   const battles = [1, 2, 3, 4].map((year) => ({
     kind: 'BATTLE',
@@ -57,7 +73,7 @@ beforeEach(() => {
   personFindMany.mockResolvedValue(people.map((person) => ({
     slug: person.slug,
     name: person.name,
-    sex: person.slug === 'p4' ? 'FEMALE' : 'MALE',
+    sex: ['p4', 'p5', 'p6', 'p7'].includes(person.slug) ? 'FEMALE' : 'MALE',
     titles: [],
     ayat: [],
   })));
@@ -103,6 +119,49 @@ describe('question candidate generation', () => {
   it('uses feminine Arabic for a female relationship answer', async () => {
     const questions = await generateQuestionCandidates();
     expect(questions.find((question) => question.family === 'RELATION')?.promptArabic).toContain('ابنةً');
+  });
+
+  it('fills wife-answer questions with women only', async () => {
+    const questions = await generateQuestionCandidates();
+    const wife = questions.find((question) => question.family === 'RELATION' && question.correctAnswer === 'p5');
+    expect(wife?.promptArabic).toContain('زوجة');
+    expect(wife?.choices.map((item) => item.value).sort()).toEqual(['p4', 'p5', 'p6', 'p7']);
+  });
+
+  it('fills husband-answer, son and brother questions with men only', async () => {
+    const questions = await generateQuestionCandidates();
+    for (const answer of ['p8']) {
+      const asked = questions.filter((question) => question.family === 'RELATION' && question.correctAnswer === answer);
+      expect(asked.length).toBeGreaterThan(0);
+      for (const question of asked) {
+        expect(question.choices.map((item) => item.value).sort()).toEqual(['p1', 'p2', 'p3', 'p8']);
+      }
+    }
+  });
+
+  it('keeps gender-neutral relationship prompts on the full pool', async () => {
+    const questions = await generateQuestionCandidates();
+    const cousin = questions.find((question) => question.family === 'RELATION' && question.attribute === 'PATERNAL_COUSIN');
+    const values = cousin?.choices.map((item) => item.value) ?? [];
+    expect(values).toContain('p4');
+    expect(values.some((slug) => ['p1', 'p2', 'p3', 'p8'].includes(slug))).toBe(true);
+  });
+
+  it('drops a gender-constrained candidate without same-sex supply', async () => {
+    const pair = [
+      {
+        ...basePerson('s1', 'الزوج', 'أبو الزوج'),
+        relations: [{ type: 'HUSBAND', to: 'w1', claims: ['abdullah-ibn-suhail-siyar24/father'] }],
+      },
+      basePerson('w1', 'الزوجة', 'أم الزوجة'),
+    ];
+    loadCatalog.mockResolvedValue({ people: pair, battles: [], events: [], utterances: [] });
+    personFindMany.mockResolvedValue([
+      { slug: 's1', name: 'الزوج', sex: 'MALE', titles: [], ayat: [] },
+      { slug: 'w1', name: 'الزوجة', sex: 'FEMALE', titles: [], ayat: [] },
+    ]);
+    const questions = await generateQuestionCandidates();
+    expect(questions.filter((question) => question.family === 'RELATION')).toEqual([]);
   });
 
   it('keeps battle identity in excused-absence keys even when one person has several', async () => {

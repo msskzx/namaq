@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-28T07:18:23.018Z",
+  "generatedAt": "2026-09-28T09:39:30.527Z",
   "questions": [
     {
       "key": "AYAH_LINK:PERSON:abdur-rahman-ibn-awf:ayat:48:18",
@@ -6045,7 +6045,7 @@
       "personSlugs": [
         "zaynab-bint-khuzaymah"
       ],
-      "promptArabic": "أي لقب عُرف به زينب بنت خزيمة؟",
+      "promptArabic": "أي لقب عُرفت به زينب بنت خزيمة؟",
       "choices": [
         {
           "value": "mother-of-believers",
@@ -6070,11 +6070,11 @@
           "zaynab-khuzaymah/umm-al-mumineen"
         ]
       },
-      "fingerprint": "21900cf71136a05d495eafaa7f34de5a9aa480bc52a17e6f1b574438f2da129f",
-      "promptArabicOverride": "أي لقب عُرفت به زينب بنت خزيمة؟",
+      "fingerprint": "859612403f9904962a488415470fccd672aa62adb016040ad5faf8ed9bc8abd9",
+      "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:14:53.186Z",
+      "reviewedAt": "2026-09-28T09:44:56.060Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6089,7 +6089,7 @@
       "personSlugs": [
         "zaynab-bint-khuzaymah"
       ],
-      "promptArabic": "أي لقب عُرف به زينب بنت خزيمة؟",
+      "promptArabic": "أي لقب عُرفت به زينب بنت خزيمة؟",
       "choices": [
         {
           "value": "umm-al-masakeen",
@@ -6114,11 +6114,11 @@
           "zaynab-khuzaymah/umm-al-masakeen"
         ]
       },
-      "fingerprint": "83b1884b630ef974d297e54e10ee1b52446c3899df08ff244768e66e8067cff2",
-      "promptArabicOverride": "أي لقب عُرفت به زينب بنت خزيمة؟",
+      "fingerprint": "2d7eb52bd22b7c1bf500fc0643b4e99798ec08b7ee77ad3f7f1144fcdece63fd",
+      "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:14:55.739Z",
+      "reviewedAt": "2026-09-28T09:44:56.402Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6239,8 +6239,8 @@
           "labelArabic": "جندب الأزدي"
         },
         {
-          "value": "raitah-bint-al-hajjaj",
-          "labelArabic": "رائطة بنت الحجاج"
+          "value": "sharahil-ibn-kaab",
+          "labelArabic": "شراحيل بن كعب"
         }
       ],
       "correctAnswer": "abd-al-muttalib-ibn-hashim",
@@ -6249,11 +6249,11 @@
           "prophet/lineage"
         ]
       },
-      "fingerprint": "40e55eed0e5f0c3ef4faa97d1a6727918859aae9a2849071f5508b877782c6f5",
+      "fingerprint": "6e118a4db2b31ca60c0803002669de985b80bb37dc600daabee84fb5853d64ee",
       "promptArabicOverride": null,
       "status": "REJECTED",
       "rejectionReason": "السؤال عن والد الشخصية مباشر وسهل.",
-      "reviewedAt": "2026-09-28T07:04:45.073Z",
+      "reviewedAt": "2026-09-28T09:44:56.737Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6366,16 +6366,16 @@
           "labelArabic": "أم كلثوم بنت عقبة"
         },
         {
-          "value": "zayd-ibn-al-numan",
-          "labelArabic": "زيد بن النعمان"
+          "value": "dubaah-bint-al-zubayr-ibn-abd-al-muttalib",
+          "labelArabic": "ضباعة بنت الزبير"
         },
         {
-          "value": "wahb-ibn-abd-manaf-al-zuhri",
-          "labelArabic": "وهب بن عبد مناف"
+          "value": "qutaylah-bint-qais-al-kindiyyah",
+          "labelArabic": "قتيلة"
         },
         {
-          "value": "al-nabighah-al-jadi",
-          "labelArabic": "النابغة الجعدي"
+          "value": "umm-sulaym-al-ghumaysa",
+          "labelArabic": "أم سليم الغميصاء"
         }
       ],
       "correctAnswer": "umm-kulthum-bint-uqbah",
@@ -6384,11 +6384,11 @@
           "awf/wife-umm-kulthum"
         ]
       },
-      "fingerprint": "3e4ca16baef9c13b70cb78a087e0d4bee917ff7161df57e8d6901aa83f476536",
+      "fingerprint": "a66d90615607e72bc1cc7756cea8e3349b2d33ff8394f311379afe35459585e5",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "reviewedAt": "2026-09-28T09:44:57.071Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6854,7 +6854,7 @@
         "abu-hudhayfah",
         "musab-ibn-umayr"
       ],
-      "promptArabic": "أي من هؤلاء كان من أشقاء «أبو حذيفة»؟",
+      "promptArabic": "أي من هؤلاء كان أخًا لـ«أبو حذيفة»؟",
       "choices": [
         {
           "value": "musab-ibn-umayr",
@@ -6879,11 +6879,11 @@
           "abu-hudhayfah-siyar13/brother-musab"
         ]
       },
-      "fingerprint": "5fd80380a5f113a3eb87390557fb30ab169967decbcdcca7e32ff1bc348f7e36",
+      "fingerprint": "b39bb56387545617cec742892695efc42472cb01d70919e5a61c4b3a2b24751b",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "reviewedAt": "2026-09-28T09:44:57.419Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6906,16 +6906,16 @@
           "labelArabic": "عتبة بن ربيعة"
         },
         {
-          "value": "arwa-bint-abd-al-muttalib",
-          "labelArabic": "أروى بنت عبد المطلب"
-        },
-        {
           "value": "khabbab-ibn-al-aratt",
           "labelArabic": "خباب بن الأرت"
         },
         {
           "value": "jabir-ibn-samurah",
           "labelArabic": "جابر بن سمرة"
+        },
+        {
+          "value": "al-samit-ibn-qais-al-khazraji",
+          "labelArabic": "الصامت بن قيس"
         }
       ],
       "correctAnswer": "utbah-ibn-rabiah",
@@ -6924,11 +6924,11 @@
           "abu-hudhayfah-siyar13/father"
         ]
       },
-      "fingerprint": "4d152a5e9b9830e346253512ebec453b5714fea445ec103a0d4b3edd7c0914ed",
+      "fingerprint": "3862d6b34c66a0e7826c324bc75a1a7524c9cbae861fc0e6c45a3e2dde37242d",
       "promptArabicOverride": null,
       "status": "REJECTED",
       "rejectionReason": "السؤال عن والد الشخصية مباشر وسهل.",
-      "reviewedAt": "2026-09-28T07:04:45.073Z",
+      "reviewedAt": "2026-09-28T09:44:57.771Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6996,16 +6996,16 @@
           "labelArabic": "أم سلمة"
         },
         {
-          "value": "amir-ibn-al-bukayr",
-          "labelArabic": "عامر بن أبي البكير"
+          "value": "qutaylah-bint-qais-al-kindiyyah",
+          "labelArabic": "قتيلة"
         },
         {
-          "value": "al-baraa-ibn-malik",
-          "labelArabic": "البراء بن مالك"
+          "value": "umm-hani-bint-abi-talib",
+          "labelArabic": "أم هانئ"
         },
         {
-          "value": "rabiah-ibn-habib-al-abshami",
-          "labelArabic": "ربيعة بن حبيب"
+          "value": "durrah-bint-abi-lahab",
+          "labelArabic": "درة بنت أبي لهب"
         }
       ],
       "correctAnswer": "umm-salamah",
@@ -7014,11 +7014,11 @@
           "abu-salamah/husband-umm-salamah"
         ]
       },
-      "fingerprint": "d1711da3af5fa0bd01ee9aca687810fe47b64d8d761b6b841b8234ef9ed0d621",
+      "fingerprint": "c001f005335ee8c053a02ac78d4dbc01909cdb2ba5db5ed8b33ad754c8820db1",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "reviewedAt": "2026-09-28T09:44:58.105Z",
       "reviewedBy": "Codex"
     },
     {
@@ -7034,7 +7034,7 @@
         "abu-salamah",
         "prophet-muhammad"
       ],
-      "promptArabic": "من كان أخًا أو أختًا لـ«أَبُو سَلَمَةَ بنُ عَبْدِ الأَسَدِ بنِ هِلاَلِ» من الرضاعة؟",
+      "promptArabic": "من كان أخًا لـ«أَبُو سَلَمَةَ بنُ عَبْدِ الأَسَدِ بنِ هِلاَلِ» من الرضاعة؟",
       "choices": [
         {
           "value": "prophet-muhammad",
@@ -7059,11 +7059,11 @@
           "abu-salamah/rida-thuwaybah"
         ]
       },
-      "fingerprint": "4cc599283c4b585b4c7d1bc4238b323191e96109a6a398d137059061d7144a57",
+      "fingerprint": "0572acb26ac9b1626f7159b50637b1dfeb0bdbdf13ae54cfb53005f02929b35b",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "reviewedAt": "2026-09-28T09:44:58.447Z",
       "reviewedBy": "Codex"
     },
     {
@@ -7151,7 +7151,7 @@
       },
       "fingerprint": "4570d30c24d3c1db619a0e14aa0f0f2dda8dc6fc148361ee0dcd0ff6daf0286d",
       "promptArabicOverride": null,
-      "status": "REJECTED",
+      "status": "RETIRED",
       "rejectionReason": "السؤال عن والد الشخصية مباشر وسهل.",
       "reviewedAt": "2026-09-28T07:04:45.073Z",
       "reviewedBy": "Codex"
@@ -7274,8 +7274,8 @@
           "labelArabic": "أبو واقد الليثي"
         },
         {
-          "value": "ruqayyah-bint-muhammad",
-          "labelArabic": "رقية بنت محمد"
+          "value": "adi-ibn-hatim",
+          "labelArabic": "عدي بن حاتم"
         }
       ],
       "correctAnswer": "maad-ibn-adnan",
@@ -7284,11 +7284,11 @@
           "prophet/lineage"
         ]
       },
-      "fingerprint": "8acd13135369d80a5381aed47bc4df034e24a9eeee2d2079dae5a8282bd60aee",
+      "fingerprint": "3109403b943726c49f0ae81a43a11ac0a87a433902b2babb7d210441e74d95e9",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "reviewedAt": "2026-09-28T09:44:58.792Z",
       "reviewedBy": "Codex"
     },
     {
@@ -7319,8 +7319,8 @@
           "labelArabic": "امرؤ القيس بن عامر"
         },
         {
-          "value": "fatimah-bint-muhammad",
-          "labelArabic": "فاطمة بنت محمد"
+          "value": "umayr-ibn-al-humam",
+          "labelArabic": "عمير بن الحمام"
         }
       ],
       "correctAnswer": "anas-ibn-malik",
@@ -7329,11 +7329,11 @@
           "al-baraa-ibn-malik-siyar26/half-brother"
         ]
       },
-      "fingerprint": "7e38cb362e3fc9ff51d5baa2280d0d98f3bd2b38b13bf3a821779760eb4a7f5e",
+      "fingerprint": "64823d8fa4bddeb141c9283b3f372aef988fe28f436ed5e7acb7c074159b0fda",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "reviewedAt": "2026-09-28T09:44:59.127Z",
       "reviewedBy": "Codex"
     },
     {
@@ -7401,16 +7401,16 @@
           "labelArabic": "فاطمة بنت محمد"
         },
         {
-          "value": "amr-ibn-abi-zuhayr",
-          "labelArabic": "عمرو بن أبي زهير"
+          "value": "durrah-bint-abi-lahab",
+          "labelArabic": "درة بنت أبي لهب"
         },
         {
-          "value": "abu-rafi",
-          "labelArabic": "أبو رافع"
+          "value": "umm-sharik",
+          "labelArabic": "أم شريك"
         },
         {
-          "value": "qurt-ibn-razah",
-          "labelArabic": "قرط بن رزاح"
+          "value": "umm-hani-bint-abi-talib",
+          "labelArabic": "أم هانئ"
         }
       ],
       "correctAnswer": "fatimah-bint-muhammad",
@@ -7419,11 +7419,11 @@
           "ali/husband-fatimah"
         ]
       },
-      "fingerprint": "666b75b07c6628dff0a362b0aba4e4d54ff411ba31311a897e843118ac66ea1b",
+      "fingerprint": "baf1673e924aa3622848a1592ea81a24e8f62275fd1df404161f05b29bc20d43",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "reviewedAt": "2026-09-28T09:44:59.465Z",
       "reviewedBy": "Codex"
     },
     {
@@ -7761,16 +7761,16 @@
           "labelArabic": "أسماء بنت أبي بكر"
         },
         {
-          "value": "muawiyah-ibn-hudayj",
-          "labelArabic": "معاوية بن حديج"
+          "value": "umaymah-bint-abd-al-muttalib",
+          "labelArabic": "أميمة بنت عبد المطلب"
         },
         {
-          "value": "zurarah-ibn-udas",
-          "labelArabic": "زرارة بن عدس"
+          "value": "raitah-bint-al-hajjaj",
+          "labelArabic": "رائطة بنت الحجاج"
         },
         {
-          "value": "muawwidh-ibn-amr-ibn-al-jumuh",
-          "labelArabic": "معوذ بن عمرو"
+          "value": "zaynab-bint-ali",
+          "labelArabic": "زينب بنت علي"
         }
       ],
       "correctAnswer": "asma-bint-abi-bakr",
@@ -7779,11 +7779,11 @@
           "zubayr/wife-asma"
         ]
       },
-      "fingerprint": "cafc1a056f3f8db7a4e1c12017d7d4aef0b680d66399899d332b6bbeb1e41d87",
+      "fingerprint": "e39c3934f3bc057c15b448f3cedcb87f386046c81e91c5550079ed480205481f",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "reviewedAt": "2026-09-28T09:44:59.810Z",
       "reviewedBy": "Codex"
     },
     {
@@ -7916,7 +7916,7 @@
       },
       "fingerprint": "3b755cb3dc516c0db242eebc9e658b68e97a04904da7da415ac7fe34a1d80e65",
       "promptArabicOverride": null,
-      "status": "REJECTED",
+      "status": "RETIRED",
       "rejectionReason": "السؤال عن والد الشخصية مباشر وسهل.",
       "reviewedAt": "2026-09-28T07:04:45.073Z",
       "reviewedBy": "Codex"
@@ -8024,7 +8024,7 @@
         "hamzah-ibn-abd-al-muttalib",
         "prophet-muhammad"
       ],
-      "promptArabic": "من كان أخًا أو أختًا لـ«حَمْزَةُ بنُ عَبْدِ المُطَّلِبِ» من الرضاعة؟",
+      "promptArabic": "من كان أخًا لـ«حَمْزَةُ بنُ عَبْدِ المُطَّلِبِ» من الرضاعة؟",
       "choices": [
         {
           "value": "prophet-muhammad",
@@ -8049,11 +8049,11 @@
           "hamzah/rida-thuwaybah"
         ]
       },
-      "fingerprint": "89c9e090eda5e2e4aec2318430fbd3f6ee6e20873ec80cffe0378fc7b701af30",
+      "fingerprint": "6157594891f24778f0f4eea3df3238159ce52f88c09283446206e4aa2eefdf9c",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "reviewedAt": "2026-09-28T09:45:00.149Z",
       "reviewedBy": "Codex"
     },
     {
@@ -8084,8 +8084,8 @@
           "labelArabic": "حبيب بن ربيعة"
         },
         {
-          "value": "khadijah-bint-khuwaylid",
-          "labelArabic": "خديجة بنت خويلد"
+          "value": "kaab-ibn-qais",
+          "labelArabic": "كعب بن قيس"
         }
       ],
       "correctAnswer": "prophet-muhammad",
@@ -8094,11 +8094,11 @@
           "hamzah/uncle-prophet"
         ]
       },
-      "fingerprint": "8f94e23f699e338ca669e427bc71ea50dbf21f0f3013aafe2521b04d0369ce8f",
+      "fingerprint": "4d9b4530cc35187f1b0cc711b0f5a14d37d1bd639cfaa9bbe860700e1cf89cbd",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "reviewedAt": "2026-09-28T09:45:00.486Z",
       "reviewedBy": "Codex"
     },
     {
@@ -8125,12 +8125,12 @@
           "labelArabic": "التيهان بن بلي"
         },
         {
-          "value": "khadijah-bint-khuwaylid",
-          "labelArabic": "خديجة بنت خويلد"
-        },
-        {
           "value": "abu-bakrah-al-thaqafi",
           "labelArabic": "أبو بكرة الثقفي"
+        },
+        {
+          "value": "zughbah-ibn-zaura",
+          "labelArabic": "زغبة بن زعوراء"
         }
       ],
       "correctAnswer": "abd-manaf-ibn-qusay",
@@ -8139,11 +8139,11 @@
           "prophet/lineage"
         ]
       },
-      "fingerprint": "46040a09851737fd0cf0db4a0b73453de2a5f39cadc3b43fdb1d164c9d6a01dd",
+      "fingerprint": "0e6570cc693ce3fde2295c799e84d06f0cc456359a18ae812dce5f7b0838641a",
       "promptArabicOverride": null,
       "status": "REJECTED",
       "rejectionReason": "السؤال عن والد الشخصية مباشر وسهل.",
-      "reviewedAt": "2026-09-28T07:04:45.073Z",
+      "reviewedAt": "2026-09-28T09:45:00.836Z",
       "reviewedBy": "Codex"
     },
     {
@@ -8391,16 +8391,16 @@
           "labelArabic": "البكير بن عبد ياليل"
         },
         {
-          "value": "zabyah-bint-wahb",
-          "labelArabic": "ظبية بنت وهب"
-        },
-        {
           "value": "yasaf-ibn-inabah",
           "labelArabic": "يساف بن عنبة"
         },
         {
           "value": "aqil-ibn-al-bukayr",
           "labelArabic": "عاقل بن البكير"
+        },
+        {
+          "value": "umar-ibn-makhzum",
+          "labelArabic": "عمر بن مخزوم"
         }
       ],
       "correctAnswer": "al-bukayr-ibn-abd-yalil",
@@ -8409,11 +8409,11 @@
           "khalid-bukayr-siyar17/full-name"
         ]
       },
-      "fingerprint": "f5a34d533a2211afc322ac8536ce6711a85144724bfb42d9924122971dcd9596",
+      "fingerprint": "c2259462bde6d7cc340c07f0e2cb769a746ce3df8d6c9120ffe94d797e68fe77",
       "promptArabicOverride": null,
       "status": "REJECTED",
       "rejectionReason": "السؤال عن والد الشخصية مباشر وسهل.",
-      "reviewedAt": "2026-09-28T07:04:45.073Z",
+      "reviewedAt": "2026-09-28T09:45:01.177Z",
       "reviewedBy": "Codex"
     },
     {
@@ -8751,16 +8751,16 @@
           "labelArabic": "نزار بن معد"
         },
         {
-          "value": "barrah-bint-abd-al-muttalib",
-          "labelArabic": "برة بنت عبد المطلب"
-        },
-        {
           "value": "muawiyah-ibn-abi-sufyan",
           "labelArabic": "معاوية بن أبي سفيان"
         },
         {
           "value": "awf-ibn-malik-al-ashjai",
           "labelArabic": "عوف بن مالك الأشجعي"
+        },
+        {
+          "value": "saad-ibn-layth",
+          "labelArabic": "سعد بن ليث"
         }
       ],
       "correctAnswer": "nizar-ibn-maad",
@@ -8769,11 +8769,11 @@
           "prophet/lineage"
         ]
       },
-      "fingerprint": "03b804f7c69a4e149e55a3bc4a573a5aab125164447b4923c639443d4cfa6eae",
+      "fingerprint": "b0b364bbe4de0c14122a530e9310a58c85d45505abcabb98343e4883fdbb2e35",
       "promptArabicOverride": null,
       "status": "REJECTED",
       "rejectionReason": "السؤال عن والد الشخصية مباشر وسهل.",
-      "reviewedAt": "2026-09-28T07:04:45.073Z",
+      "reviewedAt": "2026-09-28T09:45:01.514Z",
       "reviewedBy": "Codex"
     },
     {
@@ -8796,16 +8796,16 @@
           "labelArabic": "إلياس بن مضر"
         },
         {
-          "value": "hind-bint-utbah",
-          "labelArabic": "هند بنت عتبة"
-        },
-        {
           "value": "amr-ibn-said-al-umawi",
           "labelArabic": "عمرو بن سعيد الأموي"
         },
         {
           "value": "hatib-ibn-abi-baltaah",
           "labelArabic": "حاطب بن أبي بلتعة"
+        },
+        {
+          "value": "sakhr-ibn-khansa",
+          "labelArabic": "صخر بن خنساء"
         }
       ],
       "correctAnswer": "ilias-ibn-mudar",
@@ -8814,11 +8814,11 @@
           "prophet/lineage"
         ]
       },
-      "fingerprint": "df4ad29277d2156a82a62adab45b61d897863da00e76520ccebdefd5e6733856",
+      "fingerprint": "ec4c7fb06c8835c896a8e0594840b9cfa9f447c262ee278d2c1a13024db61979",
       "promptArabicOverride": null,
       "status": "REJECTED",
       "rejectionReason": "السؤال عن والد الشخصية مباشر وسهل.",
-      "reviewedAt": "2026-09-28T07:04:45.073Z",
+      "reviewedAt": "2026-09-28T09:45:01.862Z",
       "reviewedBy": "Codex"
     },
     {
@@ -8845,12 +8845,12 @@
           "labelArabic": "الربيع بن عبد العزى"
         },
         {
-          "value": "al-bayda-bint-abd-al-muttalib",
-          "labelArabic": "البيضاء بنت عبد المطلب"
+          "value": "abd-manat-ibn-kinanah",
+          "labelArabic": "عبد مناة بن كنانة"
         },
         {
-          "value": "umm-kulthum-bint-muhammad",
-          "labelArabic": "أم كلثوم بنت محمد"
+          "value": "zayd-ibn-al-dathinah",
+          "labelArabic": "زيد بن الدثنة"
         }
       ],
       "correctAnswer": "kaab-ibn-luay",
@@ -8859,11 +8859,11 @@
           "prophet/lineage"
         ]
       },
-      "fingerprint": "618d3e0fb92c89557557787c190fce7195c82302077a32beecd22d2cd3c01323",
+      "fingerprint": "9cd2b730083ccf17d1c9b2c67fae3890a50d3b2217536c0c70395f3ceece076d",
       "promptArabicOverride": null,
       "status": "REJECTED",
       "rejectionReason": "السؤال عن والد الشخصية مباشر وسهل.",
-      "reviewedAt": "2026-09-28T07:04:45.073Z",
+      "reviewedAt": "2026-09-28T09:45:02.199Z",
       "reviewedBy": "Codex"
     },
     {
@@ -8890,12 +8890,12 @@
           "labelArabic": "دليم بن حارثة"
         },
         {
-          "value": "hind-bint-utbah",
-          "labelArabic": "هند بنت عتبة"
-        },
-        {
           "value": "abu-al-darda",
           "labelArabic": "أبو الدرداء"
+        },
+        {
+          "value": "abu-jandal",
+          "labelArabic": "أبو جندل"
         }
       ],
       "correctAnswer": "umayr-ibn-hashim",
@@ -8904,11 +8904,11 @@
           "musab/father"
         ]
       },
-      "fingerprint": "af60adb099235ec92a1e747c8e24ead78feac6790a6771d65f65637c9bd73523",
+      "fingerprint": "db92a59424085702f694464160d8d24148e12c5782511f7bbb90669c6b8fa6eb",
       "promptArabicOverride": null,
       "status": "REJECTED",
       "rejectionReason": "السؤال عن والد الشخصية مباشر وسهل.",
-      "reviewedAt": "2026-09-28T07:04:45.073Z",
+      "reviewedAt": "2026-09-28T09:45:02.550Z",
       "reviewedBy": "Codex"
     },
     {
@@ -8980,12 +8980,12 @@
           "labelArabic": "رواحة بن ثعلبة"
         },
         {
-          "value": "al-bayda-bint-abd-al-muttalib",
-          "labelArabic": "البيضاء بنت عبد المطلب"
-        },
-        {
           "value": "abdullah-ibn-saad-ibn-abi-sarh",
           "labelArabic": "عبد الله بن سعد بن أبي سرح"
+        },
+        {
+          "value": "awf-ibn-al-harith",
+          "labelArabic": "عوف بن الحارث"
         }
       ],
       "correctAnswer": "al-qasim-ibn-muhammad",
@@ -8994,11 +8994,11 @@
           "prophet/son-al-qasim"
         ]
       },
-      "fingerprint": "2ebc4a74ce2fe86e97798fece31d221b33c5e778ada91831080e968a9150dc24",
+      "fingerprint": "720e52af3b8ba10c2a034233e2f3a64392bb6210e2872cb5eb7c31769fb29caf",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "reviewedAt": "2026-09-28T09:45:02.895Z",
       "reviewedBy": "Codex"
     },
     {
@@ -9014,23 +9014,23 @@
         "fatimah-bint-muhammad",
         "prophet-muhammad"
       ],
-      "promptArabic": "أي من هؤلاء كان ابنًا لـ«محمد ﷺ»؟",
+      "promptArabic": "أي من هؤلاء كان ابنةً لـ«محمد ﷺ»؟",
       "choices": [
         {
           "value": "fatimah-bint-muhammad",
           "labelArabic": "فاطمة بنت محمد"
         },
         {
-          "value": "rafi-ibn-khudayj",
-          "labelArabic": "رافع بن خديج"
+          "value": "zabyah-bint-wahb",
+          "labelArabic": "ظبية بنت وهب"
         },
         {
-          "value": "abu-sufyan-ibn-al-harith",
-          "labelArabic": "أبو سفيان بن الحارث"
+          "value": "fatimah-bint-qais-al-fihriyyah",
+          "labelArabic": "فاطمة بنت قيس الفهرية"
         },
         {
-          "value": "nashib-ibn-ghirah",
-          "labelArabic": "ناشب بن غيرة"
+          "value": "safiyyah-bint-huyayy",
+          "labelArabic": "صفية بنت حيي"
         }
       ],
       "correctAnswer": "fatimah-bint-muhammad",
@@ -9039,11 +9039,11 @@
           "prophet/daughter-fatimah"
         ]
       },
-      "fingerprint": "93bb391a1733d3296120dcbc8220574059e77133d3b4b85c0497dd1caffe3f70",
-      "promptArabicOverride": "أي من هؤلاء كانت ابنةً لـ«محمد ﷺ»؟",
+      "fingerprint": "52ea52284ebbaad6f7906edfc26508b8775a5aa55b335bc866ae739a912128cd",
+      "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:14:58.662Z",
+      "reviewedAt": "2026-09-28T09:45:03.273Z",
       "reviewedBy": "Codex"
     },
     {
@@ -9104,7 +9104,7 @@
         "prophet-muhammad",
         "ruqayyah-bint-muhammad"
       ],
-      "promptArabic": "أي من هؤلاء كان ابنًا لـ«محمد ﷺ»؟",
+      "promptArabic": "أي من هؤلاء كان ابنةً لـ«محمد ﷺ»؟",
       "choices": [
         {
           "value": "ruqayyah-bint-muhammad",
@@ -9115,12 +9115,12 @@
           "labelArabic": "أميمة بنت عبد المطلب"
         },
         {
-          "value": "khuzaymah-ibn-thabit",
-          "labelArabic": "خزيمة بن ثابت"
+          "value": "sanaa-bint-asma-al-sulami",
+          "labelArabic": "سناء"
         },
         {
-          "value": "abu-barzah-al-aslami",
-          "labelArabic": "أبو برزة الأسلمي"
+          "value": "al-kilabiyyah",
+          "labelArabic": "الكلابية"
         }
       ],
       "correctAnswer": "ruqayyah-bint-muhammad",
@@ -9129,11 +9129,11 @@
           "prophet/daughter-ruqayyah"
         ]
       },
-      "fingerprint": "52e32d7e55aec11414cec18221ea41d3ad9b7b089d96fa03d494cd762b0318ce",
-      "promptArabicOverride": "أي من هؤلاء كانت ابنةً لـ«محمد ﷺ»؟",
+      "fingerprint": "9422849ec9feb153a07a292dc2d171aa3453bc94df499a5962403d736ff2ac93",
+      "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:15:02.246Z",
+      "reviewedAt": "2026-09-28T09:45:03.648Z",
       "reviewedBy": "Codex"
     },
     {
@@ -9149,23 +9149,23 @@
         "prophet-muhammad",
         "umm-kulthum-bint-muhammad"
       ],
-      "promptArabic": "أي من هؤلاء كان ابنًا لـ«محمد ﷺ»؟",
+      "promptArabic": "أي من هؤلاء كان ابنةً لـ«محمد ﷺ»؟",
       "choices": [
         {
           "value": "umm-kulthum-bint-muhammad",
           "labelArabic": "أم كلثوم بنت محمد"
         },
         {
-          "value": "fadalah-ibn-ubayd",
-          "labelArabic": "فضالة بن عبيد"
+          "value": "asma-bint-yazid-ibn-al-sakn",
+          "labelArabic": "أسماء بنت يزيد بن السكن"
         },
         {
-          "value": "amr-ibn-al-haf",
-          "labelArabic": "عمرو بن الحاف"
+          "value": "safiyyah-bint-huyayy",
+          "labelArabic": "صفية بنت حيي"
         },
         {
-          "value": "khirashah-ibn-lawdhan",
-          "labelArabic": "خرشة بن لوذان"
+          "value": "fatimah-bint-asad",
+          "labelArabic": "فاطمة بنت أسد"
         }
       ],
       "correctAnswer": "umm-kulthum-bint-muhammad",
@@ -9174,11 +9174,11 @@
           "prophet/daughter-umm-kulthum"
         ]
       },
-      "fingerprint": "90d7e4e578bf0a132cb3436ac3c072977763b50fd1270596a918b825857480cb",
-      "promptArabicOverride": "أي من هؤلاء كانت ابنةً لـ«محمد ﷺ»؟",
+      "fingerprint": "cff9ae1ed8d6d1effc05e7d857f7410ef6bd149529450f8ce2b736ce22758dfa",
+      "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:15:05.079Z",
+      "reviewedAt": "2026-09-28T09:45:03.995Z",
       "reviewedBy": "Codex"
     },
     {
@@ -9194,23 +9194,23 @@
         "prophet-muhammad",
         "zaynab-bint-muhammad"
       ],
-      "promptArabic": "أي من هؤلاء كان ابنًا لـ«محمد ﷺ»؟",
+      "promptArabic": "أي من هؤلاء كان ابنةً لـ«محمد ﷺ»؟",
       "choices": [
         {
           "value": "zaynab-bint-muhammad",
           "labelArabic": "زينب بنت محمد"
         },
         {
-          "value": "suhaib-ibn-sinan",
-          "labelArabic": "صهيب بن سنان"
-        },
-        {
-          "value": "abdullah-ibn-amr-ibn-haram",
-          "labelArabic": "عبد الله بن عمرو بن حرام"
-        },
-        {
           "value": "umm-harmalah-al-makhzumiyyah",
           "labelArabic": "أم حرملة المخزومية"
+        },
+        {
+          "value": "qutaylah-bint-qais-al-kindiyyah",
+          "labelArabic": "قتيلة"
+        },
+        {
+          "value": "fatimah-bint-asad",
+          "labelArabic": "فاطمة بنت أسد"
         }
       ],
       "correctAnswer": "zaynab-bint-muhammad",
@@ -9219,11 +9219,11 @@
           "prophet/daughter-zaynab"
         ]
       },
-      "fingerprint": "cf891b27f43493af2f048ed8e4ce4ee6e39fa9e09f391867838e18d916bf4e41",
-      "promptArabicOverride": "أي من هؤلاء كانت ابنةً لـ«محمد ﷺ»؟",
+      "fingerprint": "aef371a7bed466376d6d918cde6f75b5736ce00126b368d5fcf08a28dad2d197",
+      "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:15:09.845Z",
+      "reviewedAt": "2026-09-28T09:45:04.331Z",
       "reviewedBy": "Codex"
     },
     {
@@ -9254,8 +9254,8 @@
           "labelArabic": "النعمان بن امرئ القيس"
         },
         {
-          "value": "umm-haram-bint-milhan",
-          "labelArabic": "أم حرام"
+          "value": "muayqib-ibn-abi-fatimah-al-dawsi",
+          "labelArabic": "معيقيب بن أبي فاطمة الدوسي"
         }
       ],
       "correctAnswer": "abd-al-muttalib-ibn-hashim",
@@ -9264,11 +9264,11 @@
           "prophet/grandfather"
         ]
       },
-      "fingerprint": "767fc3f3df92b54c1ed28cd3b368494be9293738c23402a5e4d1f91b23bfbd4f",
+      "fingerprint": "0ce1a333618a30508e94c6a5e5f99ebd227f827a432604c4116739224bc5a959",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "reviewedAt": "2026-09-28T09:45:04.704Z",
       "reviewedBy": "Codex"
     },
     {
@@ -9295,12 +9295,12 @@
           "labelArabic": "أم عمارة"
         },
         {
-          "value": "abu-jahm-ibn-hudhayfah",
-          "labelArabic": "أبو جهم بن حذيفة القرشي"
+          "value": "asma-bint-umays",
+          "labelArabic": "أسماء بنت عميس"
         },
         {
-          "value": "abd-ibn-al-harith-ibn-zuhrah",
-          "labelArabic": "عبد بن الحارث"
+          "value": "asma-bint-al-numan-al-kindiyyah",
+          "labelArabic": "أسماء بنت النعمان"
         }
       ],
       "correctAnswer": "aisha-bint-abi-bakr",
@@ -9309,11 +9309,11 @@
           "prophet/wife-aishah"
         ]
       },
-      "fingerprint": "bcb1c6d18bb2d2ba9e370df9f5a16390317231b7a1c6dd53d8e47fb18b5bc4ac",
+      "fingerprint": "ab0c3f4014196ce6f0afc0bed9cc7d9deb9bfcd8037c75e75585760b429e1650",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "reviewedAt": "2026-09-28T09:45:05.055Z",
       "reviewedBy": "Codex"
     },
     {
@@ -9336,16 +9336,16 @@
           "labelArabic": "حفصة بنت عمر"
         },
         {
-          "value": "kulthum-ibn-al-hidm",
-          "labelArabic": "كلثوم بن الهدم"
+          "value": "umm-sulaym-al-ghumaysa",
+          "labelArabic": "أم سليم الغميصاء"
         },
         {
-          "value": "abdullah-ibn-mughaffal",
-          "labelArabic": "عبد الله بن مغفل"
+          "value": "ruqayyah-bint-muhammad",
+          "labelArabic": "رقية بنت محمد"
         },
         {
-          "value": "abd-manat-ibn-kinanah",
-          "labelArabic": "عبد مناة بن كنانة"
+          "value": "umm-saad-bint-saad-ibn-al-rabi",
+          "labelArabic": "أم سعد بنت سعد بن الربيع"
         }
       ],
       "correctAnswer": "hafsa-bint-umar",
@@ -9354,11 +9354,11 @@
           "prophet/wife-hafsah"
         ]
       },
-      "fingerprint": "025e037fbd616678ea5d3380818012e8c7fbe6c307ec98869e91e2581e7dc95d",
+      "fingerprint": "be08c3123bbd60dfaf2eb699ca4664db6b60bcfafe0ce218e898e418a07a5500",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "reviewedAt": "2026-09-28T09:45:05.396Z",
       "reviewedBy": "Codex"
     },
     {
@@ -9381,16 +9381,16 @@
           "labelArabic": "خديجة بنت خويلد"
         },
         {
-          "value": "khubayb-ibn-adi",
-          "labelArabic": "خبيب بن عدي"
+          "value": "raitah-bint-al-hajjaj",
+          "labelArabic": "رائطة بنت الحجاج"
         },
         {
-          "value": "muawwidh-ibn-amr-ibn-al-jumuh",
-          "labelArabic": "معوذ بن عمرو"
+          "value": "al-aliyah",
+          "labelArabic": "العالية"
         },
         {
-          "value": "al-numan-ibn-muqarrin",
-          "labelArabic": "النعمان بن مقرن"
+          "value": "umamah-bint-abi-al-as",
+          "labelArabic": "أمامة بنت أبي العاص"
         }
       ],
       "correctAnswer": "khadijah-bint-khuwaylid",
@@ -9399,11 +9399,11 @@
           "prophet/wife-khadijah"
         ]
       },
-      "fingerprint": "99ebd22996e0c14be7c9d846b987414d3c3f2fb1ebd672b4c650f0048a94591c",
+      "fingerprint": "44283c810b08b838a81b69596b1dc447a4d73780952861439ad76c4d19350d16",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "reviewedAt": "2026-09-28T09:45:05.746Z",
       "reviewedBy": "Codex"
     },
     {
@@ -9426,16 +9426,16 @@
           "labelArabic": "صفية بنت حيي"
         },
         {
-          "value": "al-abbas-ibn-abd-al-muttalib",
-          "labelArabic": "العباس بن عبد المطلب"
+          "value": "umm-sulaym-al-ghumaysa",
+          "labelArabic": "أم سليم الغميصاء"
         },
         {
-          "value": "zamah-ibn-qais-al-amiri",
-          "labelArabic": "زمعة بن قيس"
+          "value": "umm-haram-bint-milhan",
+          "labelArabic": "أم حرام"
         },
         {
-          "value": "an-najashi",
-          "labelArabic": "النجاشي"
+          "value": "asma-bint-al-numan-al-kindiyyah",
+          "labelArabic": "أسماء بنت النعمان"
         }
       ],
       "correctAnswer": "safiyyah-bint-huyayy",
@@ -9444,11 +9444,11 @@
           "prophet/wife-safiyyah"
         ]
       },
-      "fingerprint": "817036623472a9c3ad7232415032c49427ba57c9501d2be73a9cc8ce1e333401",
+      "fingerprint": "10f8379656e2060ffd280f23068b1be3d724ac4a8c9fac711e9b2314abb5cd41",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "reviewedAt": "2026-09-28T09:45:06.092Z",
       "reviewedBy": "Codex"
     },
     {
@@ -9471,16 +9471,16 @@
           "labelArabic": "سودة بنت زمعة"
         },
         {
-          "value": "ubayd-ibn-zayd",
-          "labelArabic": "عبيد بن زيد"
+          "value": "asma-bint-yazid-ibn-al-sakn",
+          "labelArabic": "أسماء بنت يزيد بن السكن"
         },
         {
-          "value": "yazid-ibn-imri-al-qays",
-          "labelArabic": "يزيد بن امرئ القيس"
+          "value": "umamah-bint-abi-al-as",
+          "labelArabic": "أمامة بنت أبي العاص"
         },
         {
-          "value": "nafi-ibn-imri-al-qays",
-          "labelArabic": "نافع بن امرئ القيس"
+          "value": "atikah-bint-abd-al-muttalib",
+          "labelArabic": "عاتكة بنت عبد المطلب"
         }
       ],
       "correctAnswer": "sawdah-bint-zamah",
@@ -9489,11 +9489,11 @@
           "prophet/wife-sawdah"
         ]
       },
-      "fingerprint": "0142a43c158d236ff7f0be0a7da7b1e16508630ab61ffd6ff122e256c70b1ae0",
+      "fingerprint": "373bad33fc1de524c24fda77af5ccfcf3443f89feeef3c5fe4bfd7295b9738db",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "reviewedAt": "2026-09-28T09:45:06.428Z",
       "reviewedBy": "Codex"
     },
     {
@@ -9520,12 +9520,12 @@
           "labelArabic": "بريرة"
         },
         {
-          "value": "abd-yalil-ibn-nashib",
-          "labelArabic": "عبد ياليل بن ناشب"
+          "value": "asma-bint-umays",
+          "labelArabic": "أسماء بنت عميس"
         },
         {
-          "value": "abu-al-darda",
-          "labelArabic": "أبو الدرداء"
+          "value": "khawlah-bint-hakim",
+          "labelArabic": "خولة بنت حكيم"
         }
       ],
       "correctAnswer": "umm-habibah",
@@ -9534,11 +9534,11 @@
           "prophet/wife-umm-habibah"
         ]
       },
-      "fingerprint": "f48d6d5273a4119934b36b565167473c1ecbe4a5db6cdef771b587a0e8d7f950",
+      "fingerprint": "f0ef1dfaa85a4c5ea832d48ae73136e1797babd82d8684461d405028d36abe69",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "reviewedAt": "2026-09-28T09:45:06.766Z",
       "reviewedBy": "Codex"
     },
     {
@@ -9565,12 +9565,12 @@
           "labelArabic": "خولة بنت حكيم"
         },
         {
-          "value": "nizar-ibn-maad",
-          "labelArabic": "نزار بن معد"
+          "value": "fatimah-bint-muhammad",
+          "labelArabic": "فاطمة بنت محمد"
         },
         {
-          "value": "bishr-ibn-al-baraa",
-          "labelArabic": "بشر بن البراء"
+          "value": "munyah-bint-ghazwan",
+          "labelArabic": "منية بنت غزوان"
         }
       ],
       "correctAnswer": "umm-salamah",
@@ -9579,11 +9579,11 @@
           "prophet/wife-umm-salamah"
         ]
       },
-      "fingerprint": "e20f73163898208b1da5a9c44bc59ac308cdb79cdfb5c512e8613db50ed0a1af",
+      "fingerprint": "df0d6629feb1f118c1575e0bfcaab30a95f11b1a86566137873c1a99534095e5",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "reviewedAt": "2026-09-28T09:45:07.110Z",
       "reviewedBy": "Codex"
     },
     {
@@ -9606,16 +9606,16 @@
           "labelArabic": "زينب بنت جحش"
         },
         {
-          "value": "ikrimah-ibn-abi-jahl",
-          "labelArabic": "عكرمة بن أبي جهل"
+          "value": "asma-bint-yazid-ibn-al-sakn",
+          "labelArabic": "أسماء بنت يزيد بن السكن"
         },
         {
-          "value": "abd-wudd-ibn-zayd",
-          "labelArabic": "عبد ود بن زيد"
+          "value": "safiyyah-bint-abd-al-muttalib",
+          "labelArabic": "صفية بنت عبد المطلب"
         },
         {
-          "value": "habib-ibn-maslamah",
-          "labelArabic": "حبيب بن مسلمة"
+          "value": "umm-kulthum-bint-uqbah",
+          "labelArabic": "أم كلثوم بنت عقبة"
         }
       ],
       "correctAnswer": "zaynab-bint-jahsh",
@@ -9624,11 +9624,11 @@
           "prophet/wife-zaynab-jahsh"
         ]
       },
-      "fingerprint": "be58d35218e5f182ddbaeb254b127cd2c6d27a1f4ff948aa627b494c6639d0c0",
+      "fingerprint": "597d11b0d7362c275e7cdf207b32e67141c7fc4b42c36acf15684487de429853",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "reviewedAt": "2026-09-28T09:45:07.444Z",
       "reviewedBy": "Codex"
     },
     {
@@ -9651,16 +9651,16 @@
           "labelArabic": "زينب بنت خزيمة"
         },
         {
-          "value": "amr-ibn-nufayl",
-          "labelArabic": "عمرو بن نفيل"
+          "value": "dubaah-bint-al-zubayr-ibn-abd-al-muttalib",
+          "labelArabic": "ضباعة بنت الزبير"
         },
         {
-          "value": "al-harith-ibn-al-muttalib",
-          "labelArabic": "الحارث بن المطلب"
+          "value": "umm-sharik",
+          "labelArabic": "أم شريك"
         },
         {
-          "value": "al-rabi-ibn-amr",
-          "labelArabic": "الربيع بن عمرو"
+          "value": "arwa-bint-abd-al-muttalib",
+          "labelArabic": "أروى بنت عبد المطلب"
         }
       ],
       "correctAnswer": "zaynab-bint-khuzaymah",
@@ -9669,11 +9669,11 @@
           "prophet/wife-zaynab-khuzaymah"
         ]
       },
-      "fingerprint": "fce3f4200342c9864b2be0e7bc3ecf3db5bda7966f7aa03d49b33c3fffb8cd25",
+      "fingerprint": "8fe3bf0086cac7ba93b3d210ec8a4271d39646f162ae04cc833c920de212a781",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "reviewedAt": "2026-09-28T09:45:07.778Z",
       "reviewedBy": "Codex"
     },
     {
@@ -9696,16 +9696,16 @@
           "labelArabic": "أبو طالب بن عبد المطلب"
         },
         {
-          "value": "sumayyah-bint-khayyat",
-          "labelArabic": "سمية بنت خياط"
-        },
-        {
           "value": "malik-ibn-imri-al-qays",
           "labelArabic": "مالك بن امرئ القيس"
         },
         {
           "value": "abu-waqid-al-laythi",
           "labelArabic": "أبو واقد الليثي"
+        },
+        {
+          "value": "muawwidh-ibn-al-harith",
+          "labelArabic": "معوذ بن الحارث"
         }
       ],
       "correctAnswer": "abu-talib",
@@ -9714,11 +9714,11 @@
           "prophet/uncle-abu-talib"
         ]
       },
-      "fingerprint": "61a4aeda1732d7cde03d59dbe2eadc2786f97b477f2ac79339a897772f32b9d7",
+      "fingerprint": "159e32f4d08730b849cfd571428da4ac1bb84875dc69a5cbab6a47d15f260936",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "reviewedAt": "2026-09-28T09:45:08.190Z",
       "reviewedBy": "Codex"
     },
     {
@@ -10060,12 +10060,12 @@
           "labelArabic": "ليث بن بكير"
         },
         {
-          "value": "zabyah-bint-wahb",
-          "labelArabic": "ظبية بنت وهب"
-        },
-        {
           "value": "dulaym-ibn-harithah",
           "labelArabic": "دليم بن حارثة"
+        },
+        {
+          "value": "abdullah-ibn-amr-ibn-haram",
+          "labelArabic": "عبد الله بن عمرو بن حرام"
         }
       ],
       "correctAnswer": "zayd-ibn-amr-ibn-nufayl",
@@ -10074,11 +10074,11 @@
           "saeed/father"
         ]
       },
-      "fingerprint": "2bd88e4cc581724703c9dca178019ea2cf59698ed21ba2aa5521138c0af072d9",
+      "fingerprint": "619624f58b4e0112bd058a97bb00e37a053fb34b2941d32807f484c10ce6ac3a",
       "promptArabicOverride": null,
       "status": "REJECTED",
       "rejectionReason": "السؤال عن والد الشخصية مباشر وسهل.",
-      "reviewedAt": "2026-09-28T07:04:45.073Z",
+      "reviewedAt": "2026-09-28T09:45:08.573Z",
       "reviewedBy": "Codex"
     },
     {
@@ -10371,16 +10371,16 @@
           "labelArabic": "زينب بنت خزيمة"
         },
         {
-          "value": "al-mundhir-ibn-haram",
-          "labelArabic": "المنذر بن حرام"
+          "value": "al-bayda-bint-abd-al-muttalib",
+          "labelArabic": "البيضاء بنت عبد المطلب"
         },
         {
-          "value": "ghalib-ibn-fahar",
-          "labelArabic": "غالب بن فهر"
+          "value": "umm-kulthum-bint-ali",
+          "labelArabic": "أم كلثوم بنت علي"
         },
         {
-          "value": "abu-waqid-al-laythi",
-          "labelArabic": "أبو واقد الليثي"
+          "value": "asma-bint-umays",
+          "labelArabic": "أسماء بنت عميس"
         }
       ],
       "correctAnswer": "zaynab-bint-khuzaymah",
@@ -10389,11 +10389,11 @@
           "zaynab-khuzaymah/wife-ubaydah"
         ]
       },
-      "fingerprint": "3b534899652a2d3ab6adeeccc1db0ce3f6b9e7d6b587b83e094196118e056d18",
+      "fingerprint": "fe398a0db3a80d95749c6338dabacf807a09059b620e310fe28957fc4abccb71",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "reviewedAt": "2026-09-28T09:45:08.915Z",
       "reviewedBy": "Codex"
     },
     {
@@ -10506,16 +10506,16 @@
           "labelArabic": "رقية بنت محمد"
         },
         {
-          "value": "sinan-ibn-malik-al-namri",
-          "labelArabic": "سنان بن مالك"
+          "value": "maymunah-bint-al-harith",
+          "labelArabic": "ميمونة بنت الحارث"
         },
         {
-          "value": "abu-abs",
-          "labelArabic": "أبو عبس"
+          "value": "hafsa-bint-umar",
+          "labelArabic": "حفصة بنت عمر"
         },
         {
-          "value": "kilab-ibn-murrah",
-          "labelArabic": "كلاب بن مرة"
+          "value": "zaynab-bint-muhammad",
+          "labelArabic": "زينب بنت محمد"
         }
       ],
       "correctAnswer": "ruqayyah-bint-muhammad",
@@ -10524,11 +10524,11 @@
           "uthman/husband-ruqayyah"
         ]
       },
-      "fingerprint": "a6679e9cecab85049ed577e9300f61cd415cd36706a090d39f54ecb781245311",
+      "fingerprint": "87a1a5e237a2199feebab71babb5a1bb74caf588d4c66d1856d5f40f224862db",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "reviewedAt": "2026-09-28T09:45:09.288Z",
       "reviewedBy": "Codex"
     },
     {
@@ -10551,16 +10551,16 @@
           "labelArabic": "أم كلثوم بنت محمد"
         },
         {
-          "value": "hamzah-ibn-abd-al-muttalib",
-          "labelArabic": "حَمْزَةُ بنُ عَبْدِ المُطَّلِبِ"
+          "value": "hafsa-bint-umar",
+          "labelArabic": "حفصة بنت عمر"
         },
         {
-          "value": "malik-ibn-thalabah",
-          "labelArabic": "مالك بن ثعلبة"
+          "value": "qutaylah-bint-qais-al-kindiyyah",
+          "labelArabic": "قتيلة"
         },
         {
-          "value": "zaura-ibn-abd-al-ashhal",
-          "labelArabic": "زعوراء بن عبد الأشهل"
+          "value": "zaynab-bint-muhammad",
+          "labelArabic": "زينب بنت محمد"
         }
       ],
       "correctAnswer": "umm-kulthum-bint-muhammad",
@@ -10569,11 +10569,11 @@
           "uthman/husband-umm-kulthum"
         ]
       },
-      "fingerprint": "7d80730fcee6bf468bcf7a8dc7899a548a59bf057707fe208c69e958cfb0501f",
+      "fingerprint": "c21f92ffc625b7890f94f04c0dae9a3f5dee6693e812ae118f571edf869c6715",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "reviewedAt": "2026-09-28T09:45:09.658Z",
       "reviewedBy": "Codex"
     },
     {
@@ -10589,7 +10589,7 @@
         "abdullah-ibn-mazun-al-jumahi",
         "uthman-ibn-mazun"
       ],
-      "promptArabic": "أي من هؤلاء كان من أشقاء «عثمان بن مظعون»؟",
+      "promptArabic": "أي من هؤلاء كان أخًا لـ«عثمان بن مظعون»؟",
       "choices": [
         {
           "value": "abdullah-ibn-mazun-al-jumahi",
@@ -10614,11 +10614,11 @@
           "uthman-mazun-siyar9/brother-abdullah"
         ]
       },
-      "fingerprint": "938ee04d84c707dffdf9b239f4393c6220a23b290fc60867e8b34a62b4933b2d",
+      "fingerprint": "ac6f7e90d7e91c33353792691f3c8d70cdb6e9d80b6423dc1160801f974ed8ff",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "status": "REJECTED",
+      "rejectionReason": "الاسم المعروض يكشف الإجابة باشتراكه مع اسم السؤال في النسب.",
+      "reviewedAt": "2026-09-28T09:45:09.992Z",
       "reviewedBy": "Codex"
     },
     {
@@ -10634,7 +10634,7 @@
         "qudamah-ibn-mazun",
         "uthman-ibn-mazun"
       ],
-      "promptArabic": "أي من هؤلاء كان من أشقاء «عثمان بن مظعون»؟",
+      "promptArabic": "أي من هؤلاء كان أخًا لـ«عثمان بن مظعون»؟",
       "choices": [
         {
           "value": "qudamah-ibn-mazun",
@@ -10659,11 +10659,11 @@
           "uthman-mazun-siyar9/brother-qudamah"
         ]
       },
-      "fingerprint": "3669139546b1f1bd3eeaac9fb7ab6ba80f0b35e3a8636b8b18dd3a3b0df08e92",
+      "fingerprint": "6da0c13aa556909ad615ff101e031ddacedf338cbbb06caff0b4cba4cbdcd4ca",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "status": "REJECTED",
+      "rejectionReason": "الاسم المعروض يكشف الإجابة باشتراكه مع اسم السؤال في النسب.",
+      "reviewedAt": "2026-09-28T09:45:10.336Z",
       "reviewedBy": "Codex"
     },
     {
@@ -10841,7 +10841,7 @@
       },
       "fingerprint": "7907323dd97929e9a5d43e6b00fb238e1160f64688bb8f9956a1e6e10cd8f6a6",
       "promptArabicOverride": null,
-      "status": "REJECTED",
+      "status": "RETIRED",
       "rejectionReason": "السؤال عن والدة الشخصية مباشر وسهل.",
       "reviewedAt": "2026-09-28T07:04:54.795Z",
       "reviewedBy": "Codex"
@@ -10874,8 +10874,8 @@
           "labelArabic": "سفينة"
         },
         {
-          "value": "umaymah-bint-abd-al-muttalib",
-          "labelArabic": "أميمة بنت عبد المطلب"
+          "value": "abdullah-ibn-abdullah-ibn-ubayy",
+          "labelArabic": "عبد الله بن عبد الله بن أبي"
         }
       ],
       "correctAnswer": "prophet-muhammad",
@@ -10884,11 +10884,11 @@
           "prophet/wife-zaynab-jahsh"
         ]
       },
-      "fingerprint": "239c4a3624888930d306abfbef7d756a583fefe3820fb00647df23a9bfae45d3",
+      "fingerprint": "e37822b88679baabe80050a7f857dc1abad5342021445a1d6313343f37b69349",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "reviewedAt": "2026-09-28T09:45:10.673Z",
       "reviewedBy": "Codex"
     },
     {
@@ -10911,16 +10911,16 @@
           "labelArabic": "محمد ﷺ"
         },
         {
-          "value": "asma-bint-abi-bakr",
-          "labelArabic": "أسماء بنت أبي بكر"
-        },
-        {
           "value": "abu-zaid",
           "labelArabic": "أبو زيد"
         },
         {
           "value": "al-muttalib-ibn-abd-manaf",
           "labelArabic": "المطلب بن عبد مناف"
+        },
+        {
+          "value": "adi-ibn-kaab",
+          "labelArabic": "عدي بن كعب"
         }
       ],
       "correctAnswer": "prophet-muhammad",
@@ -10929,11 +10929,11 @@
           "zaynab-khuzaymah/wife-prophet"
         ]
       },
-      "fingerprint": "ef8c3e577c4ceadcea861a926c0ad85c1c3427ca93b68569bb54acd6d24e9784",
+      "fingerprint": "331293c7b684d18e1e0c792fb0ee6fb5131d7394e305bbeb0e7de660a31cbd75",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:21.160Z",
+      "reviewedAt": "2026-09-28T09:45:11.037Z",
       "reviewedBy": "Codex"
     },
     {

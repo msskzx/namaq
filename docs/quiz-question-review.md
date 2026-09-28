@@ -15,6 +15,9 @@ Reject the candidate with a concrete reason when:
 - the prompt states or mechanically reveals its answer;
 - it asks who a named person's father or mother was;
 - masculine wording is used for a woman or feminine wording for a man;
+- a gender-constrained question shows a choice of the wrong recorded sex;
+- an ordinary biological-sibling question whose displayed names mechanically
+  reveal the relationship, such as an obvious shared patronymic;
 - raw slugs, internal family names or incomplete text appear;
 - a distractor is also true, ambiguous or indistinguishable from the answer;
 - the evidence does not support the exact answer;
