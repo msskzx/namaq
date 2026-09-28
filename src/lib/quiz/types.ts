@@ -16,6 +16,7 @@ export type QuestionFamily = (typeof QUESTION_FAMILIES)[number];
 
 export const QUIZ_TOPICS = ['PEOPLE', 'BATTLES', 'RELATIONSHIPS', 'AYAT', 'EVENTS', 'PERSON_CIRCLE'] as const;
 export type QuizTopic = (typeof QUIZ_TOPICS)[number];
+export type QuizTopics = readonly QuizTopic[];
 export type QuestionTopic = Exclude<QuizTopic, 'PERSON_CIRCLE'>;
 
 export const QUIZ_LENGTHS = [5, 10, 15] as const;

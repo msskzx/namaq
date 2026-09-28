@@ -1,7 +1,7 @@
 # Quiz question engine
 
-Status: **implemented; replacement planned** in
-[reviewed-quiz-bank.md](reviewed-quiz-bank.md). This is the first plan under
+Status: **superseded** by
+[reviewed-quiz-bank.md](reviewed-quiz-bank.md). This was the first plan under
 [quizzes.md](quizzes.md): a pure, tested library that turns eligible
 historical claims into multiple-choice questions. No API route, UI, party
 mode, or accounts — those are separate, later plans that build on this one.
@@ -41,6 +41,18 @@ mode, or accounts — those are separate, later plans that build on this one.
   hijra), so the query filters `relatedSubjectKind = 'BATTLE'` explicitly.
   Single-select: one attended (or absent) battle is the answer, distractors
   are battles the person has no claim for at all.
+- **`RELATION` is person-only, for the same reason:** a shared
+  `relationshipType` string (e.g. one also used for a hijra's
+  event-involvement claims) does not make the related subject a person, so
+  the query filters `relatedSubjectKind = 'PERSON'` explicitly, on both the
+  answer claim and the distractor pool.
+- **A `RELATION` candidate's related person must actually exist as a `Person`
+  row.** `relatedSubjectSlug` is a plain string, not a foreign key, so a claim
+  can name someone who was never added as their own `Person` (a parent
+  mentioned only in passing, say). Using such a slug as an answer or
+  distractor would show a reader a name that resolves to nothing. The
+  generator checks existence before picking the answer (skipping the claim
+  entirely if it fails) and again before sampling distractors.
 - **`TITLE`/`TITLE_HOLDER` ambiguity guard:** a `field: "titles"` claim names
   no specific title. A person's title assignment is only used when it's
   unambiguous — exactly one eligible `titles` claim **and** exactly one title
@@ -80,6 +92,7 @@ mode, or accounts — those are separate, later plans that build on this one.
   query that selects an answer or a distractor.
 - `PARTICIPATION` never surfaces an event-involvement claim as a battle
   question.
+- `RELATION` never surfaces an event-involvement claim as a person relation.
 
 ## Affected components
 

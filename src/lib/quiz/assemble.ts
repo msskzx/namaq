@@ -1,7 +1,7 @@
 import type { Prisma } from '@/generated/prisma';
 import { prisma } from '@/lib/prisma';
 import { shuffle, type Random } from './random';
-import type { QuestionChoice, QuestionFamily, QuizLength, QuizTopic } from './types';
+import type { QuestionChoice, QuestionFamily, QuizLength, QuizTopics } from './types';
 
 export interface AssembledQuestion {
   key: string;
@@ -13,24 +13,24 @@ export interface AssembledQuestion {
 }
 
 export interface AssembleQuizParams {
-  topic: QuizTopic;
+  topics: QuizTopics;
   personSlug?: string;
   length: QuizLength;
   random: Random;
 }
 
-function whereFor(topic: QuizTopic, personSlug?: string): Prisma.QuizQuestionWhereInput | null {
-  if (topic === 'PERSON_CIRCLE') return personSlug ? { status: 'APPROVED', personSlugs: { has: personSlug } } : null;
-  return { status: 'APPROVED', topic };
+function whereFor(topics: QuizTopics, personSlug?: string): Prisma.QuizQuestionWhereInput | null {
+  if (topics.includes('PERSON_CIRCLE')) return personSlug ? { status: 'APPROVED', personSlugs: { has: personSlug } } : null;
+  return topics.length > 0 ? { status: 'APPROVED', topic: { in: [...topics] } } : null;
 }
 
-export async function availableQuestionCount(topic: QuizTopic, personSlug?: string) {
-  const where = whereFor(topic, personSlug);
+export async function availableQuestionCount(topics: QuizTopics, personSlug?: string) {
+  const where = whereFor(topics, personSlug);
   return where ? prisma.quizQuestion.count({ where }) : 0;
 }
 
-export async function assembleQuiz({ topic, personSlug, length, random }: AssembleQuizParams): Promise<AssembledQuestion[]> {
-  const where = whereFor(topic, personSlug);
+export async function assembleQuiz({ topics, personSlug, length, random }: AssembleQuizParams): Promise<AssembledQuestion[]> {
+  const where = whereFor(topics, personSlug);
   if (!where) return [];
   const rows = await prisma.quizQuestion.findMany({
     where,

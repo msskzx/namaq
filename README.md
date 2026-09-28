@@ -12,6 +12,11 @@ Open the graph → explore and filter relationships → open a person's profile 
 
 ## What is implemented
 
+### Quizzes
+
+- The quiz picker can combine several reviewed scopes in one quiz. Question
+  content is Arabic; ayah choices show their stored Qur'an text and reference.
+
 ### Relationship graph
 
 - The **Nodes in view** list can be hidden and shown; every action button in the graph UI comes from the shared `Button` component, and a selected person's titles render as the same badges the profile page uses.

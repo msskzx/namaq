@@ -14,6 +14,13 @@ describe('GET /api/quiz/availability', () => {
     availableQuestionCount.mockResolvedValueOnce(12);
     const response = await GET(new Request('http://localhost/api/quiz/availability?topic=PEOPLE'));
     await expect(response.json()).resolves.toEqual({ available: 12, lengths: [5, 10] });
+    expect(availableQuestionCount).toHaveBeenCalledWith(['PEOPLE'], undefined);
+  });
+
+  it('counts a unique multi-topic selection', async () => {
+    availableQuestionCount.mockResolvedValueOnce(30);
+    await GET(new Request('http://localhost/api/quiz/availability?topic=PEOPLE,BATTLES&topic=AYAT&topic=PEOPLE'));
+    expect(availableQuestionCount).toHaveBeenCalledWith(['PEOPLE', 'BATTLES', 'AYAT'], undefined);
   });
 
   it('returns an exact count below the minimum quiz length', async () => {

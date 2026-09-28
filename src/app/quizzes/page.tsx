@@ -1,30 +1,26 @@
 "use client";
 
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowLeft,
   faArrowRight,
-  faBook,
-  faBookQuran,
-  faCalendarAlt,
   faCircle,
   faCircleCheck,
   faCircleQuestion,
   faCircleXmark,
-  faLink,
   faListOl,
   faPaperPlane,
   faRotateLeft,
-  faShieldAlt,
-  faUserGroup,
 } from "@fortawesome/free-solid-svg-icons";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import Button from "@/components/common/Button";
+import SlideSwitch from "@/components/graph/SlideSwitch";
 import { useLanguage } from "@/components/language/LanguageContext";
+import { parseQuizTopics } from "@/lib/quiz/topics";
 import { fetcher } from "@/lib/swr";
 import type { QuestionChoice, QuestionFamily, QuizLength, QuizTopic } from "@/lib/quiz/types";
 import { QUIZ_TOPICS } from "@/lib/quiz/types";
@@ -34,18 +30,10 @@ interface QuizQuestionView {
   family: QuestionFamily;
   promptArabic: string;
   choices: QuestionChoice[];
+  choiceDetails: Record<string, { text: string; reference: string }>;
   correctAnswer: string;
   evidence: { readerUrls: string[] };
 }
-
-const TOPIC_ICONS: Record<QuizTopic, typeof faBook> = {
-  PEOPLE: faUserGroup,
-  BATTLES: faShieldAlt,
-  RELATIONSHIPS: faLink,
-  AYAT: faBookQuran,
-  EVENTS: faCalendarAlt,
-  PERSON_CIRCLE: faUserGroup,
-};
 
 const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
   PEOPLE: { en: "People", ar: "أشخاص" },
@@ -62,23 +50,35 @@ export default function QuizzesPage() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const topic = searchParams.get("topic") as QuizTopic | null;
+  const topics = useMemo(() => parseQuizTopics(searchParams) as QuizTopic[], [searchParams]);
   const length = Number(searchParams.get("length")) as QuizLength | 0;
   const person = searchParams.get("person") ?? "";
-  const canCheckAvailability = Boolean(topic && (topic !== "PERSON_CIRCLE" || person));
+  const topicQuery = topics.map((value) => `topic=${encodeURIComponent(value)}`).join("&");
+  const canCheckAvailability = Boolean(topics.length && (!topics.includes("PERSON_CIRCLE") || person));
   const availabilityQuery = canCheckAvailability
-    ? `/api/quiz/availability?topic=${topic}${person ? `&person=${encodeURIComponent(person)}` : ""}`
+    ? `/api/quiz/availability?${topicQuery}${person ? `&person=${encodeURIComponent(person)}` : ""}`
     : null;
   const { data: availability } = useSWR<{ available: number; lengths: QuizLength[] }>(availabilityQuery, fetcher);
-  const started = Boolean(topic && length && availability?.lengths.includes(length) && (topic !== "PERSON_CIRCLE" || person));
+  const started = Boolean(topics.length && length && availability?.lengths.includes(length) && (!topics.includes("PERSON_CIRCLE") || person));
   const query = started
-    ? `/api/quiz?topic=${topic}&length=${length}${person ? `&person=${encodeURIComponent(person)}` : ""}`
+    ? `/api/quiz?${topicQuery}&length=${length}${person ? `&person=${encodeURIComponent(person)}` : ""}`
     : null;
-  const { data, error, isLoading } = useSWR<{ questions: QuizQuestionView[] }>(query, fetcher);
+  const { data, error, isLoading } = useSWR<{ questions: QuizQuestionView[] }>(query, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    revalidateIfStale: false,
+  });
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [submitted, setSubmitted] = useState(false);
   const [personInput, setPersonInput] = useState(person);
+  const [personSuggestions, setPersonSuggestions] = useState<{ slug: string; name: string; nameTransliterated: string | null }[]>([]);
+
+  useEffect(() => {
+    setCurrent(0);
+    setAnswers({});
+    setSubmitted(false);
+  }, [query]);
 
   const setParam = useCallback((changes: Record<string, string | undefined>) => {
     const next = new URLSearchParams(searchParams.toString());
@@ -98,34 +98,58 @@ export default function QuizzesPage() {
 
   const questions = useMemo(() => data?.questions ?? [], [data]);
   const score = useMemo(() => questions.filter((question, index) => answers[index] === question.correctAnswer).length, [questions, answers]);
-  const answerLabel = (question: QuizQuestionView, value: string | undefined) =>
-    question.choices.find((choice) => choice.value === value)?.labelArabic;
+  const answerContent = (question: QuizQuestionView, value: string | undefined) => {
+    const choice = question.choices.find((item) => item.value === value);
+    if (!choice) return null;
+    const detail = question.choiceDetails?.[choice.value];
+    if (!detail) return choice.labelArabic;
+    return <span><span className="block leading-relaxed">{detail.text}</span><span className="text-xs text-gray-500 dark:text-gray-400">{detail.reference}</span></span>;
+  };
 
   if (!started) {
     return (
       <div className="min-h-screen bg-white dark:bg-black">
         <div className="container mx-auto max-w-2xl px-4 py-8" dir={ar ? "rtl" : "ltr"}>
           <h1 className="mb-6 text-2xl font-bold text-gray-900 dark:text-gray-100">{ar ? "اختبار" : "Quiz"}</h1>
-          <fieldset className="mb-6 flex flex-wrap gap-2">
-            <legend className="mb-2 w-full text-sm font-semibold text-gray-700 dark:text-gray-300">{ar ? "الموضوع" : "Topic"}</legend>
+          <fieldset className="mb-6 flex flex-wrap gap-x-4 gap-y-2 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
+            <legend className="mb-2 w-full text-sm font-semibold text-gray-700 dark:text-gray-300">{ar ? "المواضيع — اختر واحدًا أو أكثر" : "Topics — choose one or more"}</legend>
             {QUIZ_TOPICS.map((value) => (
-              <Button key={value} variant="outline" active={topic === value} onClick={() => setParam({ topic: value, length: undefined, person: value === "PERSON_CIRCLE" ? person : undefined })}>
-                <FontAwesomeIcon icon={TOPIC_ICONS[value]} />
-                {TOPIC_LABELS[value][ar ? "ar" : "en"]}
-              </Button>
+              <SlideSwitch
+                key={value}
+                checked={topics.includes(value)}
+                onChange={() => setParam({
+                  topic: topics.includes(value) ? topics.filter((item) => item !== value).join(",") || undefined : [...topics, value].join(","),
+                  length: undefined,
+                  person: value === "PERSON_CIRCLE" || topics.includes("PERSON_CIRCLE") ? person || undefined : undefined,
+                })}
+                label={TOPIC_LABELS[value][ar ? "ar" : "en"]}
+              />
             ))}
           </fieldset>
-          {topic === "PERSON_CIRCLE" && (
+          {topics.includes("PERSON_CIRCLE") && (
             <label className="mb-6 block">
-              <span className="mb-1 block text-sm font-semibold text-gray-700 dark:text-gray-300">{ar ? "معرّف الشخص" : "Person slug"}</span>
+              <span className="mb-1 block text-sm font-semibold text-gray-700 dark:text-gray-300">{ar ? "الشخص" : "Person"}</span>
               <input
                 type="text"
                 value={personInput}
-                onChange={(event) => setPersonInput(event.target.value)}
+                onChange={async (event) => {
+                  const value = event.target.value;
+                  setPersonInput(value);
+                  if (!value.trim()) {
+                    setPersonSuggestions([]);
+                    return;
+                  }
+                  const response = await fetch(`/api/people/suggest?q=${encodeURIComponent(value)}`);
+                  if (response.ok) setPersonSuggestions((await response.json()).data ?? []);
+                }}
                 onBlur={() => setParam({ person: personInput || undefined, length: undefined })}
-                placeholder="abu-ubaydah-ibn-al-jarrah"
+                list="quiz-people"
+                placeholder={ar ? "ابحث عن شخص" : "Search for a person"}
                 className="w-full rounded border border-amber-400 bg-transparent px-3 py-2 text-gray-900 dark:text-gray-100"
               />
+              <datalist id="quiz-people">
+                {personSuggestions.map((suggestion) => <option key={suggestion.slug} value={suggestion.slug}>{suggestion.nameTransliterated ?? suggestion.name}</option>)}
+              </datalist>
             </label>
           )}
           {availability && (
@@ -156,12 +180,14 @@ export default function QuizzesPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-black">
       <div className="container mx-auto max-w-2xl px-4 py-8" dir="rtl">
-        {error && <ErrorMessage title={ar ? "تعذر إنشاء الاختبار" : "Failed to build the quiz"} />}
+        {error && <><ErrorMessage title={ar ? "تعذر إنشاء الاختبار" : "Failed to build the quiz"} /><Button className="mt-4" variant="outline" onClick={reset}><FontAwesomeIcon icon={faRotateLeft} />{ar ? "العودة للإعداد" : "Back to setup"}</Button></>}
         {isLoading || !data ? (
           <LoadingSpinner fill />
+        ) : questions.length === 0 ? (
+          <div className="text-center text-gray-600 dark:text-gray-400"><p>{ar ? "لا توجد أسئلة كافية لهذا الاختيار." : "Not enough approved questions for this choice."}</p><Button className="mt-4" variant="outline" onClick={reset}><FontAwesomeIcon icon={faRotateLeft} />{ar ? "العودة للإعداد" : "Back to setup"}</Button></div>
         ) : submitted ? (
           <div>
-            <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-gray-100">{`النتيجة: ${score} من ${questions.length}`}</h2>
+            <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-gray-100">{ar ? `النتيجة: ${score} من ${questions.length}` : `Score: ${score} / ${questions.length}`}</h2>
             <ul className="space-y-4">
               {questions.map((question, index) => {
                 const given = answers[index];
@@ -171,10 +197,10 @@ export default function QuizzesPage() {
                     <p className="mb-3 font-semibold text-gray-900 dark:text-gray-100">{question.promptArabic}</p>
                     <div className="mb-2 flex items-center gap-2">
                       <FontAwesomeIcon icon={correct ? faCircleCheck : faCircleXmark} className={correct ? "text-green-600" : "text-red-500"} />
-                      <span>{given ? answerLabel(question, given) : "بدون إجابة"}</span>
+                      <span>{given ? answerContent(question, given) : ar ? "بدون إجابة" : "No answer"}</span>
                     </div>
-                    {!correct && <p className="text-sm text-gray-600 dark:text-gray-400">الصحيح: {answerLabel(question, question.correctAnswer)}</p>}
-                    {question.evidence.readerUrls.map((url) => <a key={url} href={url} className="mt-1 block text-sm text-amber-600 hover:underline dark:text-amber-400">المصدر</a>)}
+                    {!correct && <p className="text-sm text-gray-600 dark:text-gray-400">{ar ? "الصحيح: " : "Correct: "}{answerContent(question, question.correctAnswer)}</p>}
+                    {question.evidence.readerUrls.map((url) => <a key={url} href={url} className="mt-1 block text-sm text-amber-600 hover:underline dark:text-amber-400">{ar ? "المصدر" : "Evidence"}</a>)}
                   </li>
                 );
               })}
@@ -200,7 +226,7 @@ export default function QuizzesPage() {
                 {questions[current].choices.map((choice) => (
                   <Button key={choice.value} variant="outline" active={answers[current] === choice.value} onClick={() => setAnswers((previous) => ({ ...previous, [current]: choice.value }))}>
                     <FontAwesomeIcon icon={answers[current] === choice.value ? faCircleCheck : faCircle} />
-                    {choice.labelArabic}
+                    {answerContent(questions[current], choice.value)}
                   </Button>
                 ))}
               </div>

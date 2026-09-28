@@ -28,18 +28,18 @@ beforeEach(() => {
 
 describe('approved quiz assembly', () => {
   it('reads only approved rows for the selected topic', async () => {
-    const questions = await assembleQuiz({ topic: 'PEOPLE', length: 5, random: () => 0 });
+    const questions = await assembleQuiz({ topics: ['PEOPLE', 'AYAT'], length: 5, random: () => 0 });
     expect(questions[0]).toMatchObject({ key: 'one', promptArabic: 'ما كنيته؟', correctAnswer: 'a' });
-    expect(findMany).toHaveBeenCalledWith(expect.objectContaining({ where: { status: 'APPROVED', topic: 'PEOPLE' } }));
+    expect(findMany).toHaveBeenCalledWith(expect.objectContaining({ where: { status: 'APPROVED', topic: { in: ['PEOPLE', 'AYAT'] } } }));
   });
 
   it('finds every approved question materially involving a selected person', async () => {
-    await assembleQuiz({ topic: 'PERSON_CIRCLE', personSlug: 'abu-ubaydah', length: 5, random: () => 0 });
+    await assembleQuiz({ topics: ['PERSON_CIRCLE'], personSlug: 'abu-ubaydah', length: 5, random: () => 0 });
     expect(findMany).toHaveBeenCalledWith(expect.objectContaining({ where: { status: 'APPROVED', personSlugs: { has: 'abu-ubaydah' } } }));
   });
 
   it('counts availability with the same scope', async () => {
-    expect(await availableQuestionCount('AYAT')).toBe(1);
-    expect(count).toHaveBeenCalledWith({ where: { status: 'APPROVED', topic: 'AYAT' } });
+    expect(await availableQuestionCount(['AYAT'])).toBe(1);
+    expect(count).toHaveBeenCalledWith({ where: { status: 'APPROVED', topic: { in: ['AYAT'] } } });
   });
 });

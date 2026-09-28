@@ -48,6 +48,7 @@ const questions = Array.from({ length: 5 }, (_, index) => ({
     { value: 'three', labelArabic: 'الثالث' },
   ],
   correctAnswer: 'right',
+  choiceDetails: {},
   evidence: { readerUrls: [] },
 }));
 
@@ -94,8 +95,8 @@ describe('QuizzesPage', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Question 5' }));
     fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
 
-    expect(screen.getByText('النتيجة: 0 من 5')).toBeTruthy();
-    expect(screen.getAllByText('بدون إجابة')).toHaveLength(5);
+    expect(screen.getByText('Score: 0 / 5')).toBeTruthy();
+    expect(screen.getAllByText('No answer')).toHaveLength(5);
   });
 
   it('shows the exact small supply and offers no impossible length', () => {
@@ -105,5 +106,33 @@ describe('QuizzesPage', () => {
     expect(screen.getByText('2 questions available')).toBeTruthy();
     expect(screen.getByText('Fewer than five approved questions are available.')).toBeTruthy();
     expect(screen.queryByRole('button', { name: '5' })).toBeNull();
+  });
+
+  it('toggles a unique multi-topic selection', () => {
+    nav.reset('/quizzes?topic=PEOPLE,BATTLES,RELATIONSHIPS,BATTLES');
+    render(<QuizzesPage />);
+
+    for (const name of ['People', 'Battles', 'Relationships']) {
+      expect(screen.getByRole('switch', { name }).getAttribute('aria-checked')).toBe('true');
+    }
+    fireEvent.click(screen.getByRole('switch', { name: 'Battles' }));
+    expect(new URLSearchParams(nav.getUrl().split('?')[1]).get('topic')).toBe('PEOPLE,RELATIONSHIPS');
+  });
+
+  it('renders Quran text supplied for an ayah choice', () => {
+    const original = questions[0];
+    questions[0] = {
+      ...original,
+      family: 'AYAH_LINK',
+      choiceDetails: { right: { text: 'اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ', reference: 'البقرة 2:255' } },
+    };
+    try {
+      nav.reset('/quizzes?topic=PEOPLE&length=5');
+      render(<QuizzesPage />);
+      expect(screen.getByText('اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ')).toBeTruthy();
+      expect(screen.getByText('البقرة 2:255')).toBeTruthy();
+    } finally {
+      questions[0] = original;
+    }
   });
 });

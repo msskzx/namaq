@@ -114,6 +114,9 @@ The learner-facing topics become:
 - A quiz request queries the approved PostgreSQL projection rather than running
   candidate and distractor queries serially. The requested quiz remains random;
   the bank is not a cache of whole quizzes.
+- The picker may combine several non-person topics in one quiz. Selecting the
+  person-circle scope instead filters the whole approved bank to questions that
+  materially involve that person.
 - Available question counts are computed before starting. The picker offers
   only lengths the selected topic or person circle can satisfy and states the
   exact available count when fewer than five questions exist. It never promises
