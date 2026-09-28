@@ -35,6 +35,19 @@ const ajnadayn = {
       },
       claims: ['aban-ibn-said-siyar49/ajnadayn'],
     },
+    // The entry's own reading is Yarmouk and Ajnadayn is given as the
+    // alternative ("ويقال"), so this participation carries the disputed claim
+    // and its summary keeps the attribution the source gives it.
+    {
+      person: 'amr-ibn-said-al-umawi',
+      isMuslim: true,
+      status: ['MARTYRED'],
+      summary: {
+        value: 'وَيُقَالُ: يَوْم أَجْنَادِيْنَ مَعَ أَخَوَيْهِ.',
+        claims: ['amr-ibn-said-al-umawi-siyar50/ajnadayn'],
+      },
+      claims: ['amr-ibn-said-al-umawi-siyar50/ajnadayn'],
+    },
   ],
 } satisfies CatalogBattle;
 

@@ -1,0 +1,346 @@
+{
+  "slug": "bishr-ibn-al-baraa",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "bishr-ibn-al-baraa",
+      "extractionUrl": "https://shamela.ws/book/10906/1695",
+      "accessedAt": "2026-09-28",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "269",
+          "bodyFile": "accounts/bishr-ibn-al-baraa/001.md",
+          "notesFile": "accounts/bishr-ibn-al-baraa/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1695",
+          "passages": [
+            {
+              "anchor": "269-p2"
+            },
+            {
+              "anchor": "269-p3"
+            },
+            {
+              "anchor": "269-p4"
+            },
+            {
+              "anchor": "269-p5"
+            },
+            {
+              "anchor": "269-p6"
+            },
+            {
+              "anchor": "269-p7"
+            },
+            {
+              "anchor": "269-p8"
+            }
+          ]
+        }
+      ],
+      "volumeNumber": 4,
+      "notInSource": [
+        "kunya",
+        "appearance",
+        "wives",
+        "siblings"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "bishr-ibn-al-baraa-siyar54/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "bishr-ibn-al-baraa",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "fullName",
+      "assertion": "بشر بن البراء بن معرور الخزرجي",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "269-p2",
+          "volume": "4",
+          "pageReference": "269",
+          "extractionUrl": "https://shamela.ws/book/10906/1695",
+          "excerptArabic": "٥٤ - بِشْرُ بنُ البَرَاءِ بنُ مَعْرُوْرٍ الخَزْرَجِيُّ *",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "bishr-ibn-al-baraa-siyar54/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "bishr-ibn-al-baraa",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "al-baraa-ibn-marur",
+      "assertion": "بشر بن البراء بن معرور، فالبراء بن معرور أبوه.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "269-p2",
+          "volume": "4",
+          "pageReference": "269",
+          "extractionUrl": "https://shamela.ws/book/10906/1695",
+          "excerptArabic": "٥٤ - بِشْرُ بنُ البَرَاءِ بنُ مَعْرُوْرٍ الخَزْرَجِيُّ *",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "bishr-ibn-al-baraa-siyar54/virtues-chiefs",
+      "subjectKind": "PERSON",
+      "subjectSlug": "bishr-ibn-al-baraa",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "assertion": "من أشراف قومه.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "269-p3",
+          "volume": "4",
+          "pageReference": "269",
+          "extractionUrl": "https://shamela.ws/book/10906/1695",
+          "excerptArabic": "مِنْ أَشْرَافِ قَوْمِهِ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "bishr-ibn-al-baraa-siyar54/virtues-sayyid",
+      "subjectKind": "PERSON",
+      "subjectSlug": "bishr-ibn-al-baraa",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "assertion": "قال رسول الله صلى الله عليه وسلم: بل سيّدكم الأبيض الجعد: بشر بن البراء. وضعف الذهبي الخبر في حاشيته على الصفحة نفسها، فقال البخاري: ذاهب الحديث، وقال أبو حاتم: متروك الحديث.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "269-p7",
+          "volume": "4",
+          "pageReference": "269",
+          "extractionUrl": "https://shamela.ws/book/10906/1695",
+          "excerptArabic": "فَقَالَ: (وَأَيُّ دَاءٍ أَدْوَى مِنَ البُخْلِ؟ بَلْ سَيِّدُكُم الأَبْيَضُ الجَعْدُ: بِشْرُ بنُ البَرَاءِ (١)) .",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "bishr-ibn-al-baraa-siyar54/virtues-khaybar",
+      "subjectKind": "PERSON",
+      "subjectSlug": "bishr-ibn-al-baraa",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "assertion": "هو الذي أكل مع النبي صلى الله عليه وسلم من الشاة المسمومة يوم خيبر فأصيب.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "269-p8",
+          "volume": "4",
+          "pageReference": "269",
+          "extractionUrl": "https://shamela.ws/book/10906/1695",
+          "excerptArabic": "هُوَ الَّذِي أَكَلَ مَعَ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مِنَ الشَّاةِ المَسْمُوْمَةِ يَوْمَ خَيْبَرَ، فَأُصِيْبَ (٢) ، وَهُوَ مِنْ كِبَارِ البَدْرِيِّيْنَ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "bishr-ibn-al-baraa-siyar54/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "bishr-ibn-al-baraa",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "assertion": "هو من كبار البدريين.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "269-p8",
+          "volume": "4",
+          "pageReference": "269",
+          "extractionUrl": "https://shamela.ws/book/10906/1695",
+          "excerptArabic": "هُوَ الَّذِي أَكَلَ مَعَ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مِنَ الشَّاةِ المَسْمُوْمَةِ يَوْمَ خَيْبَرَ، فَأُصِيْبَ (٢) ، وَهُوَ مِنْ كِبَارِ البَدْرِيِّيْنَ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "bishr-ibn-al-baraa-siyar54/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "bishr-ibn-al-baraa",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "titles",
+      "assertion": "صحابي: هو من كبار البدريين.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "269-p8",
+          "volume": "4",
+          "pageReference": "269",
+          "extractionUrl": "https://shamela.ws/book/10906/1695",
+          "excerptArabic": "هُوَ الَّذِي أَكَلَ مَعَ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مِنَ الشَّاةِ المَسْمُوْمَةِ يَوْمَ خَيْبَرَ، فَأُصِيْبَ (٢) ، وَهُوَ مِنْ كِبَارِ البَدْرِيِّيْنَ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "bishr-ibn-al-baraa-siyar54/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "bishr-ibn-al-baraa",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "assertion": "MALE — فعل مذكر: أَكَلَ … فَأُصِيْبَ.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "269-p8",
+          "volume": "4",
+          "pageReference": "269",
+          "extractionUrl": "https://shamela.ws/book/10906/1695",
+          "excerptArabic": "هُوَ الَّذِي أَكَلَ مَعَ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مِنَ الشَّاةِ المَسْمُوْمَةِ يَوْمَ خَيْبَرَ، فَأُصِيْبَ (٢) ، وَهُوَ مِنْ كِبَارِ البَدْرِيِّيْنَ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    }
+  ]
+}

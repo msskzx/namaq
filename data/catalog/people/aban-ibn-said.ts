@@ -44,7 +44,7 @@ const abanIbnSaid = {
       type: 'HALF_BROTHER',
       inverse: 'HALF_BROTHER',
       to: 'amr-ibn-said-al-umawi',
-      claims: ['aban-ibn-said-siyar49/half-brother-amr'],
+      claims: ['aban-ibn-said-siyar49/half-brother-amr', 'amr-ibn-said-al-umawi-siyar50/brother-aban'],
     },
   ],
 } satisfies CatalogPerson;
