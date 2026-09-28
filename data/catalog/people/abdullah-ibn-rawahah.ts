@@ -1,11 +1,5 @@
 import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
-/**
- * Carried from neo4j/graphSeedData*.ts, whose node declaration is retired
- * with the rest. The catalog owns this subject's edges now, so they live
- * here or not at all. No batch has read this far into the nasab yet, so
- * every link stays on the legacy marker.
- */
 const abdullahIbnRawahah = {
   kind: 'PERSON',
   slug: 'abdullah-ibn-rawahah',
@@ -16,14 +10,34 @@ const abdullahIbnRawahah = {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عبد الله بن رواحة بن ثعلبة بن امرئ القيس بن ثعلبة الأنصاري الخزرجي',
-      claims: legacyUnreviewed,
+      claims: ['abdullah-ibn-rawahah-siyar37/full-name'],
+    },
+    kunya: {
+      value: 'أبو عمرو، أبو محمد، أبو رواحة',
+      claims: ['abdullah-ibn-rawahah-siyar37/kunya'],
+    },
+    virtues: {
+      value:
+        'بدري نقيب شاعر، شهد العقبة، وكان من كتاب الأنصار، واستخلفه النبي صلى الله عليه وسلم على المدينة، وقال فيه: رحم الله ابن رواحة إنه يحب المجالس التي تتباهى بها الملائكة.',
+      claims: ['abdullah-ibn-rawahah-siyar37/virtues', 'abdullah-ibn-rawahah-siyar37/virtues-praise'],
     },
   },
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
-    { type: 'SON', inverse: 'FATHER', to: 'rawahah-ibn-thalabah', claims: legacyUnreviewed },
+    {
+      type: 'SON',
+      inverse: 'FATHER',
+      to: 'rawahah-ibn-thalabah',
+      claims: ['abdullah-ibn-rawahah-siyar37/father'],
+    },
+    {
+      type: 'HALF_BROTHER',
+      inverse: 'HALF_BROTHER',
+      to: 'abu-al-darda',
+      claims: ['abdullah-ibn-rawahah-siyar37/half-brother'],
+    },
   ],
 } satisfies CatalogPerson;
 
