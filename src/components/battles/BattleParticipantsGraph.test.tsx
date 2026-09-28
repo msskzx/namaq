@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import type { GraphNodeFull } from '@/types/graph';
 
 const { push, capturedProps } = vi.hoisted(() => ({
@@ -24,24 +24,27 @@ const battle: GraphNodeFull = { id: 'battle:badr', label: 'غزوة بدر', slu
 const participant: GraphNodeFull = { id: 'person:ali-ibn-abi-talib', label: 'Ali', slug: 'ali-ibn-abi-talib', group: 1, type: 'person' };
 
 describe('BattleParticipantsGraph', () => {
-  it('fetches that battle', () => {
+  it('fetches that battle', async () => {
     render(<BattleParticipantsGraph slug="badr" />);
 
+    await waitFor(() => expect(capturedProps.current).not.toBeNull());
     expect(capturedProps.current.url).toBe('/api/graph?battle=badr');
   });
 
-  it('navigates to a person profile when a person node is clicked', () => {
+  it('navigates to a person profile when a person node is clicked', async () => {
     render(<BattleParticipantsGraph slug="badr" />);
 
+    await waitFor(() => expect(capturedProps.current).not.toBeNull());
     capturedProps.current.onNodeClick(participant);
 
     expect(push).toHaveBeenCalledWith('/people/ali-ibn-abi-talib');
   });
 
-  it('does not navigate when the battle node itself is clicked', () => {
+  it('does not navigate when the battle node itself is clicked', async () => {
     push.mockClear();
     render(<BattleParticipantsGraph slug="badr" />);
 
+    await waitFor(() => expect(capturedProps.current).not.toBeNull());
     capturedProps.current.onNodeClick(battle);
 
     expect(push).not.toHaveBeenCalled();

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import GraphSurface from '@/components/graph/GraphSurface';
+import GraphSurface from '@/components/graph/LazyGraphSurface';
 import { useLanguage } from '@/components/language/LanguageContext';
 
 interface BattleParticipantsGraphProps {

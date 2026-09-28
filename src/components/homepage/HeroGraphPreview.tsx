@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import GraphSurface, { GraphSurfaceMethods } from '@/components/graph/GraphSurface';
+import GraphSurface, { GraphSurfaceMethods } from '@/components/graph/LazyGraphSurface';
 
 const PROPHET_SLUG = 'prophet-muhammad';
 
