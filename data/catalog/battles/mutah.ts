@@ -27,7 +27,19 @@ const mutah = {
     hijriYear: { value: 8, claims: ['mutah/year'] },
     location: { value: 'مؤتة', claims: ['mutah/engagement'] },
   },
-  participants: [{ person: 'zaid-ibn-harithah', isMuslim: true, claims: ['mutah/zayd-command'] }],
+  participants: [
+    { person: 'zaid-ibn-harithah', isMuslim: true, claims: ['mutah/zayd-command'] },
+    {
+      person: 'abdullah-ibn-rawahah',
+      isMuslim: true,
+      status: ['MARTYRED'],
+      summary: {
+        value: 'أخذ الراية بعد قتل صاحبيه فقاتل حتى قتل.',
+        claims: ['abdullah-ibn-rawahah-siyar37/mutah'],
+      },
+      claims: ['abdullah-ibn-rawahah-siyar37/mutah'],
+    },
+  ],
 } satisfies CatalogBattle;
 
 export default mutah;
