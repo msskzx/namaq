@@ -1,15 +1,5 @@
 import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
-/**
- * Carried from neo4j/graphSeedData*.ts, whose node declaration is retired
- * with the rest. The catalog owns this subject's edges now, so they live
- * here or not at all. No batch has read this far into the nasab yet, so
- * every link stays on the legacy marker.
- *
- * Marginal companion status: the retired prisma/personSeedData5.ts entry
- * noted that al-Hakim alone counted him among the Companions, on a single
- * contested transmitted hadith. Worth a second look once a batch reaches him.
- */
 const saeedIbnAlHarith = {
   kind: 'PERSON',
   slug: 'saeed-ibn-al-harith',
@@ -18,13 +8,27 @@ const saeedIbnAlHarith = {
   hasProfile: true,
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
-    fullName: { value: 'سعيد بن الحارث بن عبد المطلب بن هاشم القرشي الهاشمي', claims: legacyUnreviewed },
+    fullName: {
+      value: 'سعيد بن الحارث بن عبد المطلب',
+      claims: ['saeed-ibn-al-harith-siyar31/full-name'],
+    },
   },
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
-    { type: 'SON', inverse: 'FATHER', to: 'al-harith-ibn-abd-al-muttalib', claims: legacyUnreviewed },
+    {
+      type: 'SON',
+      inverse: 'FATHER',
+      to: 'al-harith-ibn-abd-al-muttalib',
+      claims: ['saeed-ibn-al-harith-siyar31/father'],
+    },
+    {
+      type: 'PATERNAL_COUSIN',
+      inverse: 'PATERNAL_COUSIN',
+      to: 'prophet-muhammad',
+      claims: ['saeed-ibn-al-harith-siyar31/cousin-of-prophet'],
+    },
   ],
 } satisfies CatalogPerson;
 
