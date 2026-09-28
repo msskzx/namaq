@@ -250,6 +250,16 @@ const badr = {
     // Fourth and last of the al-Bukayr brothers; survived Badr, martyred later at Yamama.
     { person: 'amir-ibn-al-bukayr', isMuslim: true, claims: ['amir-bukayr-siyar19/badr'] },
     { person: 'mistah-ibn-uthathah', isMuslim: true, claims: ['mistah-siyar20/badr'] },
+    {
+      person: 'muadh-ibn-amr-ibn-al-jumuh',
+      isMuslim: true,
+      status: ['INJURED'],
+      summary: {
+        value: 'جعل أبا جهل يوم بدر من شأني، فلما أمكنني حملت عليه فضربته فقطعت قدمه بنصف ساقه.',
+        claims: ['muadh-ibn-amr-ibn-al-jumuh-siyar41/badr'],
+      },
+      claims: ['muadh-ibn-amr-ibn-al-jumuh-siyar41/badr'],
+    },
     // Entry 42; witnessed Badr with his brothers Muadh and Khallad, though Ibn
     // Ishaq does not mention him.
     {

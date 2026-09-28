@@ -1,0 +1,279 @@
+{
+  "slug": "muadh-ibn-amr-ibn-al-jumuh",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        { "number": 1, "name": "السيرة النبوية ج١" },
+        { "number": 2, "name": "السيرة النبوية ج٢" },
+        { "number": 3, "name": "سيرة الخلفاء الراشدين" },
+        { "number": 4, "name": "سير أعلام النبلاء ج١" },
+        { "number": 5, "name": "سير أعلام النبلاء ج٢" },
+        { "number": 6, "name": "سير أعلام النبلاء ج٣" },
+        { "number": 7, "name": "سير أعلام النبلاء ج٤" },
+        { "number": 8, "name": "سير أعلام النبلاء ج٥" },
+        { "number": 9, "name": "سير أعلام النبلاء ج٦" },
+        { "number": 10, "name": "سير أعلام النبلاء ج٧" },
+        { "number": 11, "name": "سير أعلام النبلاء ج٨" },
+        { "number": 12, "name": "سير أعلام النبلاء ج٩" },
+        { "number": 13, "name": "سير أعلام النبلاء ج١٠" },
+        { "number": 14, "name": "سير أعلام النبلاء ج١١" },
+        { "number": 15, "name": "سير أعلام النبلاء ج١٢" },
+        { "number": 16, "name": "سير أعلام النبلاء ج١٣" },
+        { "number": 17, "name": "سير أعلام النبلاء ج١٤" },
+        { "number": 18, "name": "سير أعلام النبلاء ج١٥" },
+        { "number": 19, "name": "سير أعلام النبلاء ج١٦" },
+        { "number": 20, "name": "سير أعلام النبلاء ج١٧" },
+        { "number": 21, "name": "سير أعلام النبلاء ج١٨" },
+        { "number": 22, "name": "سير أعلام النبلاء ج١٩" },
+        { "number": 23, "name": "سير أعلام النبلاء ج٢٠" },
+        { "number": 24, "name": "سير أعلام النبلاء ج٢١" },
+        { "number": 25, "name": "سير أعلام النبلاء ج٢٢" },
+        { "number": 26, "name": "سير أعلام النبلاء ج٢٣" },
+        { "number": 27, "name": "الفهارس ج١" },
+        { "number": 28, "name": "الفهارس ج٢" }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "muadh-ibn-amr-ibn-al-jumuh",
+      "extractionUrl": "https://shamela.ws/book/10906/1675",
+      "accessedAt": "2026-09-28",
+      "volumeNumber": 4,
+      "notInSource": ["kunya", "appearance", "wives", "siblings"],
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "249",
+          "bodyFile": "accounts/muadh-ibn-amr-ibn-al-jumuh/001.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1675",
+          "passages": [
+            { "anchor": "249-p4" },
+            { "anchor": "249-p5" },
+            { "anchor": "249-p6" },
+            { "anchor": "249-p7" }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "250",
+          "bodyFile": "accounts/muadh-ibn-amr-ibn-al-jumuh/002.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1676",
+          "passages": [
+            { "anchor": "250-p1" },
+            { "anchor": "250-p2" },
+            { "anchor": "250-p3" },
+            { "anchor": "250-p4" },
+            { "anchor": "250-p5" },
+            { "anchor": "250-p6" },
+            { "anchor": "250-p7" },
+            { "anchor": "250-p8" },
+            { "anchor": "250-p9" },
+            { "anchor": "250-p10" },
+            { "anchor": "250-p11" },
+            { "anchor": "250-p12" },
+            { "anchor": "250-p13" },
+            { "anchor": "250-p14" },
+            { "anchor": "250-p15" },
+            { "anchor": "250-p16" },
+            { "anchor": "250-p17" },
+            { "anchor": "250-p18" },
+            { "anchor": "250-p19" }
+          ]
+        },
+        {
+          "sequence": 3,
+          "printedPage": "251",
+          "bodyFile": "accounts/muadh-ibn-amr-ibn-al-jumuh/003.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1677",
+          "passages": [
+            { "anchor": "251-p1" },
+            { "anchor": "251-p2" },
+            { "anchor": "251-p3" },
+            { "anchor": "251-p4" },
+            { "anchor": "251-p5" },
+            { "anchor": "251-p6" },
+            { "anchor": "251-p7" }
+          ]
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "muadh-ibn-amr-ibn-al-jumuh-siyar41/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "muadh-ibn-amr-ibn-al-jumuh",
+      "field": "fullName",
+      "assertion": "معاذ بن عمرو بن الجموح بن زيد بن حرام بن كعب بن غنم بن كعب بن سلمة",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "249-p7",
+          "volume": "4",
+          "pageReference": "249",
+          "extractionUrl": "https://shamela.ws/book/10906/1675",
+          "excerptArabic": "عَنِ ابْنِ إِسْحَاقَ: مُعَاذُ بنُ عَمْرِو بنِ الجَمُوْحِ بنُ زَيْدِ بنِ حَرَامِ بنِ كَعْبِ بنِ غَنْمِ بنِ كَعْبِ بنِ سَلِمَةَ، شَهِدَ بَدْراً.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "muadh-ibn-amr-ibn-al-jumuh-siyar41/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "muadh-ibn-amr-ibn-al-jumuh",
+      "assertion": "معاذ بن عمرو بن الجموح: أبوه عمرو بن الجموح.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "amr-ibn-al-jumuh",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "249-p4",
+          "volume": "4",
+          "pageReference": "249",
+          "extractionUrl": "https://shamela.ws/book/10906/1675",
+          "excerptArabic": "٤١ - مُعَاذُ بنُ عَمْرِو بنِ الجَمُوْحِ بنِ كَعْبٍ الأَنْصاريُّ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "muadh-ibn-amr-ibn-al-jumuh-siyar41/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "muadh-ibn-amr-ibn-al-jumuh",
+      "field": "titles",
+      "assertion": "شهد بدراً مع النبي صلى الله عليه وسلم — صحابي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "249-p7",
+          "volume": "4",
+          "pageReference": "249",
+          "extractionUrl": "https://shamela.ws/book/10906/1675",
+          "excerptArabic": "شَهِدَ بَدْراً.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "muadh-ibn-amr-ibn-al-jumuh-siyar41/killer-of-abu-jahl",
+      "subjectKind": "PERSON",
+      "subjectSlug": "muadh-ibn-amr-ibn-al-jumuh",
+      "field": "titles",
+      "assertion": "قاتل أبي جهل",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "249-p5",
+          "volume": "4",
+          "pageReference": "249",
+          "extractionUrl": "https://shamela.ws/book/10906/1675",
+          "excerptArabic": "قَاتِلُ أَبِي جَهْلٍ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "muadh-ibn-amr-ibn-al-jumuh-siyar41/tribal-affiliation",
+      "subjectKind": "PERSON",
+      "subjectSlug": "muadh-ibn-amr-ibn-al-jumuh",
+      "field": "tribalAffiliation",
+      "assertion": "الخزرجي، السلمي، المدني، البدري، العقبي",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "249-p5",
+          "volume": "4",
+          "pageReference": "249",
+          "extractionUrl": "https://shamela.ws/book/10906/1675",
+          "excerptArabic": "الخَزْرَجِيُّ، السَّلَمِيُّ، المَدَنِيُّ، البَدْرِيُّ، العَقَبِيُّ، قَاتِلُ أَبِي جَهْلٍ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "muadh-ibn-amr-ibn-al-jumuh-siyar41/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "muadh-ibn-amr-ibn-al-jumuh",
+      "field": "virtues",
+      "assertion": "ضربه ابنه عكرمة على عاتقه فطرح يده، وبقيت معلقة بجلدة بجانبه. هذه -والله- الشجاعة، لا كآخر من خدش بسهم ينقطع قلبه، وتخور قواه",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "250-p19",
+          "volume": "4",
+          "pageReference": "250",
+          "extractionUrl": "https://shamela.ws/book/10906/1676",
+          "excerptArabic": "وَضَرَبَنِي ابْنُهُ عِكْرِمَةُ بنُ أَبِي جَهْلٍ عَلَى عَاتِقِي، فَطَرَحَ يَدِي، وَبَقِيَتْ مُعَلَّقَةً بِجِلْدَةٍ بِجَنْبِي",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "251-p3",
+          "volume": "4",
+          "pageReference": "251",
+          "extractionUrl": "https://shamela.ws/book/10906/1677",
+          "excerptArabic": "هَذِهِ -وَاللهِ- الشَّجَاعَةُ، لاَ كَآخَرُ مِنْ خُدْشٍ بِسَهْمٍ يَنْقَطِعُ قَلْبُهُ، وَتَخُوْرُ قِوَاهُ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "muadh-ibn-amr-ibn-al-jumuh-siyar41/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "muadh-ibn-amr-ibn-al-jumuh",
+      "assertion": "شهد بدراً، وقاتل أبا جهل ففطع قدمه بنصف ساقه، وأثبت النبي أن أخاه معاذ بن عفراء قتله معه وقضى له بسلبه",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "249-p7",
+          "volume": "4",
+          "pageReference": "249",
+          "extractionUrl": "https://shamela.ws/book/10906/1675",
+          "excerptArabic": "مُعَاذُ بنُ عَمْرِو بنِ الجَمُوْحِ بنُ زَيْدِ بنِ حَرَامِ بنِ كَعْبِ بنِ غَنْمِ بنِ كَعْبِ بنِ سَلِمَةَ، شَهِدَ بَدْراً.",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "250-p18",
+          "volume": "4",
+          "pageReference": "250",
+          "extractionUrl": "https://shamela.ws/book/10906/1676",
+          "excerptArabic": "جَعَلْتُ أَبَا جَهْلٍ يَوْمَ بَدْرٍ مِنْ شَأْنِي، فَلَمَّا أَمْكَنَنِي، حَمَلْتُ عَلَيْهِ، فَضَرَبْتُهُ، فَقَطَعْتُ قَدَمَهُ بِنِصْفِ سَاقِهِ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    }
+  ]
+}

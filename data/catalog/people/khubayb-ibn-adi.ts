@@ -1,11 +1,8 @@
 import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
-/**
- * Carried from neo4j/graphSeedData*.ts, whose node declaration is retired
- * with the rest. The catalog owns this subject's edges now, so they live
- * here or not at all. No batch has read this far into the nasab yet, so
- * every link stays on the legacy marker.
- */
+// Authored from data/history/batches/khubayb-ibn-adi, entry 40, the martyr of
+// al-Raji'. The entry never states his sex outright, so it stays on the
+// legacy marker.
 const khubaybIbnAdi = {
   kind: 'PERSON',
   slug: 'khubayb-ibn-adi',
@@ -15,15 +12,31 @@ const khubaybIbnAdi = {
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
-      value: 'خبيب بن عدي بن عامر بن مجدعة بن جحجبى الأنصاري',
-      claims: legacyUnreviewed,
+      value: 'خبيب بن عدي بن عامر بن مجدعة الأنصاري ابن جحجبى الأنصاري',
+      claims: ['khubayb-ibn-adi-siyar40/full-name'],
+    },
+    placeOfDeathArabic: { value: 'مكة', claims: ['khubayb-ibn-adi-siyar40/death-place'] },
+    virtues: {
+      value:
+        'فكان أول من سن الصلاة عند القتل. ودعا على قاتليه: اللهم أحصهم عدداً، واقتلهم بدداً، ولا تغادر منهم أحداً. قال معاوية: كنت فيمن حضره، فلقد رأيت أبا سفيان يلقيني إلى الأرض فرقاً من دعوة خبيب. ووجدته ماوية يأكل قطفاً من عنب مثل رأس الرجل وما أعلم في الأرض حبة عنب',
+      claims: ['khubayb-ibn-adi-siyar40/virtues'],
     },
   },
   titles: [
-    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    {
+      title: 'companion',
+      name: 'صحابي',
+      nameTransliterated: 'Companion',
+      claims: ['khubayb-ibn-adi-siyar40/titles'],
+    },
   ],
   relations: [
-    { type: 'SON', inverse: 'FATHER', to: 'adi-ibn-amir', claims: legacyUnreviewed },
+    {
+      type: 'SON',
+      inverse: 'FATHER',
+      to: 'adi-ibn-amir',
+      claims: ['khubayb-ibn-adi-siyar40/father'],
+    },
   ],
 } satisfies CatalogPerson;
 
