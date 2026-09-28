@@ -12,7 +12,9 @@ const amrIbnAbdShams = {
   name: 'عمرو بن عبد شمس',
   nameTransliterated: 'Amr ibn Abd Shams',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abd-shams-ibn-abd-wud', claims: legacyUnreviewed },

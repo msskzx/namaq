@@ -12,7 +12,9 @@ const ummHarmalahAlMakhzumiyyah = {
   name: 'أم حرملة المخزومية',
   nameTransliterated: 'Umm Harmalah Al Makhzumiyyah',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SISTER', inverse: 'BROTHER', to: 'abu-jahl-ibn-hisham', claims: legacyUnreviewed },

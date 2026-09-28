@@ -12,7 +12,9 @@ const uthathahIbnAbbad = {
   name: 'أثاثة بن عباد',
   nameTransliterated: 'Uthathah ibn Abbad',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abbad-ibn-al-muttalib', claims: legacyUnreviewed },

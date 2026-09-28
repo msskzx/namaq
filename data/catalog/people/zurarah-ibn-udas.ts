@@ -12,7 +12,9 @@ const zurarahIbnUdas = {
   name: 'زرارة بن عدس',
   nameTransliterated: 'Zurarah ibn Udas',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'udas-ibn-ubayd', claims: legacyUnreviewed },

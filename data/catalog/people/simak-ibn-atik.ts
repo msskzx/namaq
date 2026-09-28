@@ -12,7 +12,9 @@ const simakIbnAtik = {
   name: 'سماك بن عتيك',
   nameTransliterated: 'Simak ibn Atik',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'atik-ibn-nafi', claims: legacyUnreviewed },

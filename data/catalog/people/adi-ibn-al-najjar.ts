@@ -12,7 +12,9 @@ const adiIbnAlNajjar = {
   name: 'عدي بن النجار',
   nameTransliterated: 'Adi ibn Al Najjar',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'SON', to: 'ghanm-ibn-adi', claims: legacyUnreviewed },

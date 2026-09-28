@@ -12,7 +12,9 @@ const hilalIbnAbdullahAlMakhzumi = {
   name: 'هلال بن عبد الله',
   nameTransliterated: 'Hilal ibn Abdullah Al Makhzumi',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abdullah-ibn-umar-ibn-makhzum', claims: legacyUnreviewed },

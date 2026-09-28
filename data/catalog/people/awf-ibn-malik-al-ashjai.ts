@@ -12,6 +12,7 @@ const awfIbnMalikAlAshjai = {
   nameTransliterated: 'Awf ibn Malik al-Ashjai',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عوف بن مالك الأشجعي الغطفاني',
       claims: legacyUnreviewed,

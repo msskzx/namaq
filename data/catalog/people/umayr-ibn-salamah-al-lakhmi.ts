@@ -12,7 +12,9 @@ const umayrIbnSalamahAlLakhmi = {
   name: 'عمير بن سلمة',
   nameTransliterated: 'Umayr ibn Salamah Al Lakhmi',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'SON', to: 'amr-ibn-umayr-al-lakhmi', claims: legacyUnreviewed },

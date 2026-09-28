@@ -13,6 +13,7 @@ const abdullahIbnAmrIbnHaram = {
   nameTransliterated: 'Abdullah ibn Amr ibn Haram',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عبد الله بن عمرو بن حرام بن ثعلبة بن حرام بن كعب بن غنم بن كعب بن سلمة الأنصاري الخزرجي السلمي',
       claims: legacyUnreviewed,

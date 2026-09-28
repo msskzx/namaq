@@ -12,7 +12,9 @@ const alHarithIbnZayd = {
   name: 'الحارث بن زيد',
   nameTransliterated: 'Al Harith ibn Zayd',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'SON', to: 'imru-al-qays-ibn-al-harith', claims: legacyUnreviewed },

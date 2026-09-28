@@ -12,7 +12,9 @@ const imruAlQaysIbnZayd = {
   name: 'امرؤ القيس بن زيد',
   nameTransliterated: 'Imru Al Qays ibn Zayd',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'zayd-ibn-abd-al-ashhal', claims: legacyUnreviewed },

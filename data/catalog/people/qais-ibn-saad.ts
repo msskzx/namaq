@@ -14,6 +14,7 @@ const qaisIbnSaad = {
   nameTransliterated: 'Qais ibn Saad',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'قيس بن سعد بن عبادة بن دليم بن حارثة بن أبي حزيمة بن ثعلبة بن طريف بن الخزرج بن ساعدة بن كعب بن الخزرج الأنصاري الخزرجي الساعدي',
       claims: legacyUnreviewed,

@@ -18,6 +18,7 @@ const awfIbnAlHarith = {
   nameTransliterated: 'Awf ibn al-Harith',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عوف بن الحارث بن رفاعة بن الحارث بن سواد بن مالك بن غنم بن مالك بن النجار الأنصاري النجاري',
       claims: legacyUnreviewed,

@@ -17,6 +17,7 @@ const alArqamIbnAbiAlArqam = {
   nameTransliterated: 'Al-Arqam ibn Abi al-Arqam',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'الأرقم بن عبد مناف بن أسد بن عبد الله بن عمر بن مخزوم بن يقظة المخزومي',
       claims: legacyUnreviewed,

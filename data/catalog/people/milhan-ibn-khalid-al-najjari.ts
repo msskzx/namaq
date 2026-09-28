@@ -12,7 +12,9 @@ const milhanIbnKhalidAlNajjari = {
   name: 'ملحان بن خالد',
   nameTransliterated: 'Milhan ibn Khalid Al Najjari',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'khalid-ibn-zayd-al-najjari', claims: legacyUnreviewed },

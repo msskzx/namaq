@@ -12,7 +12,9 @@ const awfIbnAbdAwf = {
   name: 'عوف بن عبد عوف',
   nameTransliterated: 'Awf ibn Abd Awf',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abd-awf-ibn-abd', claims: legacyUnreviewed },

@@ -12,6 +12,7 @@ const abuDharrAlGhifari = {
   nameTransliterated: 'Abu Dharr al-Ghifari',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     // Carried from the retired seed entry, which took it from the Siyar
     // without citing it.
     fullName: { value: 'جندب بن جنادة الغفاري', claims: legacyUnreviewed },

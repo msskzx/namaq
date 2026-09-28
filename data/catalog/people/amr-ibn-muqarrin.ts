@@ -12,7 +12,9 @@ const amrIbnMuqarrin = {
   name: 'عمرو بن مقرن',
   nameTransliterated: 'Amr ibn Muqarrin',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'muqarrin-ibn-aidh', claims: legacyUnreviewed },

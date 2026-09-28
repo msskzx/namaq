@@ -29,7 +29,10 @@ export type ClaimWithCitations = HistoricalClaim & {
 export type AccountPage = Pick<
   SourceAccountPage,
   'sequence' | 'printedPage' | 'bodyMarkdown' | 'notesMarkdown' | 'extractionUrl'
->;
+> & {
+  /** The page's cited passages, so a deep link can find its paragraph. */
+  passages: { anchor: string; excerpt: string }[];
+};
 
 /** An account's identity without its text, for the profile's book selector. */
 export type AccountSummary = Pick<

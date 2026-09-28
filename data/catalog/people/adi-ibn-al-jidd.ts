@@ -12,7 +12,9 @@ const adiIbnAlJidd = {
   name: 'عدي بن الجد',
   nameTransliterated: 'Adi ibn Al Jidd',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'al-jidd-ibn-al-ajlan', claims: legacyUnreviewed },

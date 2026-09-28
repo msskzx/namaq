@@ -13,6 +13,7 @@ const abuAlHaythamIbnAtTayyihan = {
   nameTransliterated: 'Abu al-Haytham ibn at-Tayyihan',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'مالك بن التيهان بن بلي بن عمرو بن الحاف بن قضاعة الأنصاري',
       claims: ['abu-al-haytham-siyar22/full-name'],

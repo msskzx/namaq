@@ -12,7 +12,9 @@ const umayrIbnHashim = {
   name: 'عمير بن هاشم',
   nameTransliterated: 'Umayr ibn Hashim',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'hashim-ibn-abd-manaf-al-abdari', claims: legacyUnreviewed },

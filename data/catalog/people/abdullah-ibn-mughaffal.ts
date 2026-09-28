@@ -14,6 +14,7 @@ const abdullahIbnMughaffal = {
   nameTransliterated: 'Abdullah ibn Mughaffal',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عبد الله بن مغفل بن عبد نهم بن عفيف المزني',
       claims: legacyUnreviewed,

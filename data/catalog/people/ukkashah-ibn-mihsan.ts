@@ -12,6 +12,7 @@ const ukkashahIbnMihsan = {
   nameTransliterated: 'Ukkashah ibn Mihsan',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'عكاشة بن محصن الأسدي حليف قريش', claims: legacyUnreviewed },
   },
   titles: [

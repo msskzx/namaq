@@ -12,6 +12,7 @@ const dihyahAlKalbi = {
   nameTransliterated: 'Dihyah al-Kalbi',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'دحية بن خليفة بن فروة بن فضالة الكلبي القضاعي',
       claims: legacyUnreviewed,

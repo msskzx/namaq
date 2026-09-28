@@ -13,6 +13,7 @@ const saadIbnUbadah = {
   nameTransliterated: 'Saad ibn Ubadah',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'سعد بن عبادة بن دليم بن حارثة بن أبي حزيمة بن ثعلبة الأنصاري الخزرجي الساعدي',
       claims: legacyUnreviewed,

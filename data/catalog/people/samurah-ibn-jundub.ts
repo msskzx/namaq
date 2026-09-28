@@ -12,6 +12,7 @@ const samurahIbnJundub = {
   nameTransliterated: 'Samurah ibn Jundub',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'سمرة بن جندب بن هلال الفزاري',
       claims: legacyUnreviewed,

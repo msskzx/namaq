@@ -12,7 +12,9 @@ const alJarrahIbnHilal = {
   name: 'الجراح بن هلال',
   nameTransliterated: 'Al Jarrah ibn Hilal',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'hilal-ibn-uhayb', claims: legacyUnreviewed },

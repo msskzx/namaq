@@ -12,7 +12,9 @@ const ubaydullahIbnUthman = {
   name: 'عبيد الله بن عثمان',
   nameTransliterated: 'Ubaydullah ibn Uthman',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'uthman-ibn-amr', claims: legacyUnreviewed },

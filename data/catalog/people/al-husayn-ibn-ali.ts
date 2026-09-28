@@ -13,6 +13,7 @@ const alHusaynIbnAli = {
   nameTransliterated: 'Al-Husayn ibn Ali',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     // شعبان is the month; the year is the chapter's heading. The model holds
     // the year, so the month stays in the page.
     birthYearHijri: { value: '4 AH', claims: ['husayn/birth-year'] },

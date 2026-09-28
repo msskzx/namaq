@@ -13,6 +13,7 @@ const abuTalhaAlAnsari = {
   nameTransliterated: 'Abu Talha al-Ansari',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'زيد بن سهل بن الأسود بن حرام بن عمرو بن زيد مناة بن عدي بن عمرو بن مالك بن النجار الأنصاري الخزرجي النجاري',
       claims: legacyUnreviewed,

@@ -13,6 +13,7 @@ const sanaaBintAsmaAlSulami = {
   nameTransliterated: 'Sanaa bint Asma al-Sulami',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: { value: 'سناء بنت أسماء بن الصلت السلمية', claims: legacyUnreviewed },
   },
   titles: [

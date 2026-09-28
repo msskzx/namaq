@@ -13,6 +13,7 @@ const ubadahIbnAlSamit = {
   nameTransliterated: 'Ubadah ibn al-Samit',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عبادة بن الصامت بن قيس بن أصرم بن فهر بن ثعلبة بن غنم بن عوف بن عمرو بن عوف الأنصاري الخزرجي',
       claims: legacyUnreviewed,

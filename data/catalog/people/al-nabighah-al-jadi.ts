@@ -11,6 +11,7 @@ const alNabighahAlJadi = {
   nameTransliterated: 'Al-Nabighah al-Jadi',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'قيس بن عبد الله بن عدس بن ربيعة بن جعدة',
       claims: legacyUnreviewed,

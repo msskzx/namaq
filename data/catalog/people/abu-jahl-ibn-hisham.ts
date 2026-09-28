@@ -12,7 +12,9 @@ const abuJahlIbnHisham = {
   name: 'أبو جهل',
   nameTransliterated: 'Abu Jahl ibn Hisham',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'hisham-ibn-al-mughirah', claims: legacyUnreviewed },

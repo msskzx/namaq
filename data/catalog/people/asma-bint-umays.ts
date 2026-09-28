@@ -18,6 +18,7 @@ const asmaBintUmays = {
   nameTransliterated: 'Asma bint Umays',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: { value: 'أسماء بنت عميس بن معبد بن الحارث الخثعمية', claims: legacyUnreviewed },
   },
   titles: [

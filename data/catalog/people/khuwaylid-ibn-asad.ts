@@ -12,7 +12,9 @@ const khuwaylidIbnAsad = {
   name: 'خويلد بن أسد',
   nameTransliterated: 'Khuwaylid ibn Asad',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'asad-ibn-abd-al-uzza', claims: legacyUnreviewed },

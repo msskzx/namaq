@@ -15,6 +15,7 @@ const abdullahIbnJaafar = {
   nameTransliterated: 'Abdullah ibn Jafar',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'عبد الله بن جعفر بن أبي طالب الهاشمي القرشي', claims: legacyUnreviewed },
     virtues: {
       value: 'ابن عم النبي، من أجود الناس وأكرمهم، كان يُلقب بـ "بحر الجود".',

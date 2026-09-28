@@ -13,6 +13,7 @@ const muawwidhIbnAmrIbnAlJumuh = {
   nameTransliterated: 'Muawwidh ibn Amr ibn al-Jumuh',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'معوذ بن عمرو بن الجموح بن زيد بن حرام بن كعب بن غنم بن كعب بن سلمة الأنصاري الخزرجي السلمي',
       claims: legacyUnreviewed,

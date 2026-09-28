@@ -12,7 +12,9 @@ const lawdhanIbnAmr = {
   name: 'لوذان بن عمرو',
   nameTransliterated: 'Lawdhan ibn Amr',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'amr-ibn-abd-awf-al-najjari', claims: legacyUnreviewed },

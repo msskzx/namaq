@@ -12,7 +12,9 @@ const harithahIbnAbiHuzaymah = {
   name: 'حارثة بن أبي حزيمة',
   nameTransliterated: 'Harithah ibn Abi Huzaymah',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abi-huzaymah-ibn-thalabah', claims: legacyUnreviewed },

@@ -12,6 +12,7 @@ const maqilIbnSinanAlAshjai = {
   nameTransliterated: 'Maqil ibn Sinan al-Ashjai',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'معقل بن سنان الأشجعي',
       claims: legacyUnreviewed,

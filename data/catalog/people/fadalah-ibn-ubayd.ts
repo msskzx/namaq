@@ -12,6 +12,7 @@ const fadalahIbnUbayd = {
   nameTransliterated: 'Fadalah ibn Ubayd',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'فضالة بن عبيد بن نافذ بن قيس بن صهيب بن أصرم بن جحجبى الأنصاري الأوسي',
       claims: legacyUnreviewed,

@@ -12,7 +12,9 @@ const uqbaIbnAbiMuayt = {
   name: 'عقبة بن أبي معيط',
   nameTransliterated: 'Uqba ibn Abi Muayt',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abi-muayt-ibn-aban', claims: legacyUnreviewed },

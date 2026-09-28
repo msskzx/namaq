@@ -12,7 +12,9 @@ const mazunIbnHabib = {
   name: 'مظعون بن حبيب',
   nameTransliterated: 'Mazun ibn Habib',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'habib-ibn-wahb', claims: legacyUnreviewed },

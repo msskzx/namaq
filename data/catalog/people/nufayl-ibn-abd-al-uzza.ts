@@ -12,7 +12,9 @@ const nufaylIbnAbdAlUzza = {
   name: 'نفيل بن عبد العزى',
   nameTransliterated: 'Nufayl ibn Abd al-Uzza',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abd-al-uzza-ibn-riyah', claims: legacyUnreviewed },

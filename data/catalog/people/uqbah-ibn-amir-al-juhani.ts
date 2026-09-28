@@ -12,6 +12,7 @@ const uqbahIbnAmirAlJuhani = {
   nameTransliterated: 'Uqbah ibn Amir al-Juhani',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عقبة بن عامر الجهني',
       claims: legacyUnreviewed,

@@ -20,6 +20,7 @@ const ummHaniBintAbiTalib = {
   nameTransliterated: 'Umm Hani bint Abi Talib',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: {
       value: 'أم هانئ فاختة بنت أبي طالب عبد مناف بن عبد المطلب بن هاشم القرشية الهاشمية',
       claims: legacyUnreviewed,

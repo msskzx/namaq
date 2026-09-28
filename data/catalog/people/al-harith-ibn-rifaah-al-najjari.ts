@@ -12,7 +12,9 @@ const alHarithIbnRifaahAlNajjari = {
   name: 'الحارث بن رفاعة',
   nameTransliterated: 'Al Harith ibn Rifaah Al Najjari',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'SON', to: 'awf-ibn-al-harith', claims: legacyUnreviewed },

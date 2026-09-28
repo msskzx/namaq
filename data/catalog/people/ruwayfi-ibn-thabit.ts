@@ -11,6 +11,7 @@ const ruwayfiIbnThabit = {
   nameTransliterated: 'Ruwayfi ibn Thabit',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'رويفع بن ثابت الأنصاري النجاري',
       claims: legacyUnreviewed,

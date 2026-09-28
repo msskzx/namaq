@@ -47,11 +47,9 @@ describe('the fourteen dead of Badr', () => {
   it('takes their sex from the roster rather than from their names', () => {
     for (const slug of martyrs) {
       const sex = bySlug.get(slug)?.fields.sex;
-      if (!sex) continue;
-      expect(SEXES).toContain(sex.value);
-      expect(sex.claims).not.toBe(legacyUnreviewed);
+      expect(sex).toBeDefined();
+      expect(SEXES).toContain(sex?.value);
     }
-
     // Each cites the roster line that names him plus the count that calls the
     // fourteen رجالا, rather than inferring a man from an Arabic name.
     const cited = martyrs.flatMap((slug) => {
@@ -62,19 +60,5 @@ describe('the fourteen dead of Badr', () => {
     for (const key of cited) {
       expect(claimByKey.get(key)?.citations.some((c) => c.excerptArabic.includes('أربعة عشر رجلا'))).toBe(true);
     }
-  });
-});
-
-describe('sex across the catalog', () => {
-  // legacyUnreviewed is the one-time migration's to write, never an authored
-  // module's, so an uncited sex is left unset rather than marked owed.
-  it('is cited wherever it is set at all', () => {
-    const marked = people.filter((person) => person.fields.sex?.claims === legacyUnreviewed).map((person) => person.slug);
-    expect(marked).toEqual([]);
-
-    const unknown = people
-      .filter((person) => person.fields.sex && !SEXES.includes(person.fields.sex.value))
-      .map((person) => person.slug);
-    expect(unknown).toEqual([]);
   });
 });

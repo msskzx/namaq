@@ -12,7 +12,9 @@ const ghazwanIbnJabir = {
   name: 'غزوان بن جابر',
   nameTransliterated: 'Ghazwan ibn Jabir',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'jabir-ibn-wuhayb', claims: legacyUnreviewed },

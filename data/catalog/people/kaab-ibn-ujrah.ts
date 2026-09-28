@@ -13,6 +13,7 @@ const kaabIbnUjrah = {
   nameTransliterated: 'Kaab ibn Ujrah',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'كعب بن عجرة الأنصاري السالمي',
       claims: legacyUnreviewed,

@@ -37,6 +37,13 @@ vi.mock('next/navigation', async () => {
   };
 });
 
+const reference = {
+  excerptArabic: 'نص الشاهد',
+  sourceTitle: 'سير أعلام النبلاء',
+  pageReference: '5',
+  readerUrl: '/people/zaynab-bint-jahsh?book=account-1&page=3&passage=5-p3',
+};
+
 const questions = Array.from({ length: 5 }, (_, index) => ({
   key: `question-${index + 1}`,
   family: 'KUNYA',
@@ -49,7 +56,7 @@ const questions = Array.from({ length: 5 }, (_, index) => ({
   ],
   correctAnswer: 'right',
   choiceDetails: {},
-  evidence: { readerUrls: [] },
+  evidence: { reference: null as typeof reference | null },
 }));
 
 vi.mock('swr', () => ({
@@ -82,7 +89,7 @@ describe('QuizzesPage', () => {
 
     expect(screen.getByText('السؤال العربي 1؟')).toBeTruthy();
     expect(screen.queryByRole('button', { name: 'Submit' })).toBeNull();
-    fireEvent.click(screen.getByRole('button', { name: 'Question 5' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Question 5 - unanswered' }));
     expect(screen.getByText('السؤال العربي 5؟')).toBeTruthy();
     expect(screen.getAllByRole('button', { name: 'Submit' })).toHaveLength(1);
     expect(screen.queryByRole('button', { name: 'Next' })).toBeNull();
@@ -92,10 +99,11 @@ describe('QuizzesPage', () => {
     nav.reset('/quizzes?topic=PEOPLE&length=5');
     render(<QuizzesPage />);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Question 5' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Question 5 - unanswered' }));
     fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
 
-    expect(screen.getByText('Score: 0 / 5')).toBeTruthy();
+    expect(screen.getByText('Score: 0 / 5 (0%)')).toBeTruthy();
+    expect(screen.getByText('Not passed')).toBeTruthy();
     expect(screen.getAllByText('No answer')).toHaveLength(5);
   });
 
@@ -134,5 +142,71 @@ describe('QuizzesPage', () => {
     } finally {
       questions[0] = original;
     }
+  });
+
+  it('locks the first answer and shows immediate correct feedback with its source', () => {
+    const original = questions[0];
+    questions[0] = { ...original, evidence: { reference } };
+    try {
+      nav.reset('/quizzes?topic=PEOPLE&length=5');
+      render(<QuizzesPage />);
+
+      expect(screen.queryByRole('button', { name: 'Source' })).toBeNull();
+      fireEvent.click(screen.getByRole('button', { name: 'الصحيح' }));
+      expect(screen.getByText('Correct')).toBeTruthy();
+      expect(screen.getByRole('button', { name: 'Source' })).toBeTruthy();
+
+      fireEvent.click(screen.getByRole('button', { name: 'الأول' }));
+      expect(screen.queryByText('Incorrect')).toBeNull();
+      expect(screen.getByRole('button', { name: 'Question 1 - correct' })).toBeTruthy();
+    } finally {
+      questions[0] = original;
+    }
+  });
+
+  it('marks a wrong answer incorrect, reveals the correct one and keeps feedback across navigation', () => {
+    nav.reset('/quizzes?topic=PEOPLE&length=5');
+    render(<QuizzesPage />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'الأول' }));
+    expect(screen.getByText('Incorrect')).toBeTruthy();
+    expect(screen.getByText('Correct')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Question 1 - incorrect' })).toBeTruthy();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Question 1 - incorrect' }));
+    expect(screen.getByText('Incorrect')).toBeTruthy();
+    expect(screen.getByText('Correct')).toBeTruthy();
+  });
+
+  it('opens the quiz reference overlay from a locked question', () => {
+    const original = questions[0];
+    questions[0] = { ...original, evidence: { reference } };
+    try {
+      nav.reset('/quizzes?topic=PEOPLE&length=5');
+      render(<QuizzesPage />);
+
+      fireEvent.click(screen.getByRole('button', { name: 'الصحيح' }));
+      fireEvent.click(screen.getByRole('button', { name: 'Source' }));
+      expect(screen.getByRole('dialog')).toBeTruthy();
+      expect(screen.getByText('نص الشاهد')).toBeTruthy();
+    } finally {
+      questions[0] = original;
+    }
+  });
+
+  it('reports a rounded percentage with a pass state at the inclusive threshold', () => {
+    nav.reset('/quizzes?topic=PEOPLE&length=5');
+    render(<QuizzesPage />);
+
+    for (const name of ['Question 1 - unanswered', 'Question 2 - unanswered', 'Question 3 - unanswered']) {
+      fireEvent.click(screen.getByRole('button', { name }));
+      fireEvent.click(screen.getByRole('button', { name: 'الصحيح' }));
+    }
+    fireEvent.click(screen.getByRole('button', { name: 'Question 5 - unanswered' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
+
+    expect(screen.getByText('Score: 3 / 5 (60%)')).toBeTruthy();
+    expect(screen.getByText('Passed')).toBeTruthy();
   });
 });

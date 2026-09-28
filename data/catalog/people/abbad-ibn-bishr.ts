@@ -13,6 +13,7 @@ const abbadIbnBishr = {
   nameTransliterated: 'Abbad ibn Bishr',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عباد بن بشر بن وقش بن زغبة بن زعوراء بن عبد الأشهل الأنصاري الأوسي الأشهلي',
       claims: legacyUnreviewed,

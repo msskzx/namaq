@@ -12,6 +12,7 @@ const amrIbnAbsah = {
   nameTransliterated: 'Amr ibn Absah',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عمرو بن عبسة بن خالد بن حذيفة السلمي البجلي',
       claims: legacyUnreviewed,

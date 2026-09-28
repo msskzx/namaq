@@ -17,6 +17,7 @@ const abdAlRahmanIbnAbiBakr = {
   nameTransliterated: 'Abd al-Rahman ibn Abi Bakr',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'عبد الرحمن بن أبي بكر الصديق', claims: legacyUnreviewed },
   },
   titles: [

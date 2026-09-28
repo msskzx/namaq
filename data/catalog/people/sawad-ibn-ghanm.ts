@@ -12,7 +12,9 @@ const sawadIbnGhanm = {
   name: 'سواد بن غنم',
   nameTransliterated: 'Sawad ibn Ghanm',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'ghanm-ibn-kaab', claims: legacyUnreviewed },

@@ -12,7 +12,9 @@ const abdullahIbnImadAlHadrami = {
   name: 'عبد الله بن عماد',
   nameTransliterated: 'Abdullah ibn Imad Al Hadrami',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'SON', to: 'al-ala-ibn-al-hadrami', claims: legacyUnreviewed },

@@ -12,6 +12,7 @@ const adiIbnHatim = {
   nameTransliterated: 'Adi ibn Hatim',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عدي بن حاتم بن عبد الله بن سعد بن الحشرج بن امرئ القيس بن عدي الطائي',
       claims: legacyUnreviewed,

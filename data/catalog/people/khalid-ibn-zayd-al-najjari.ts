@@ -12,7 +12,9 @@ const khalidIbnZaydAlNajjari = {
   name: 'خالد بن زيد',
   nameTransliterated: 'Khalid ibn Zayd Al Najjari',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'zayd-ibn-haram', claims: legacyUnreviewed },

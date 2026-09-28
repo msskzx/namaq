@@ -12,7 +12,9 @@ const muawiyahIbnAmr = {
   name: 'معاوية بن عمرو',
   nameTransliterated: 'Muawiyah ibn Amr',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'amr-ibn-malik', claims: legacyUnreviewed },

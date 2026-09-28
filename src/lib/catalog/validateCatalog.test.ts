@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { legacyUnreviewed, type Catalog, type CatalogPerson } from './types';
+import { legacyUnreviewed, type Catalog, type CatalogPerson, type CatalogPersonFields } from './types';
 import { validateCatalog, type KnownSlugs } from './validateCatalog';
 
 const known: KnownSlugs = {
@@ -7,16 +7,19 @@ const known: KnownSlugs = {
   claims: new Set(['pilot/one']),
 };
 
-const person = (over: Partial<CatalogPerson> = {}): CatalogPerson => ({
-  kind: 'PERSON',
-  slug: 'someone',
-  name: 'فلان',
-  hasProfile: true,
-  fields: {},
-  titles: [],
-  relations: [],
-  ...over,
-});
+const person = (over: Omit<Partial<CatalogPerson>, 'fields'> & { fields?: Partial<CatalogPersonFields> } = {}): CatalogPerson => {
+  const { fields, titles, relations, ...rest } = over;
+  return {
+    kind: 'PERSON',
+    slug: 'someone',
+    name: 'فلان',
+    hasProfile: true,
+    ...rest,
+    fields: { sex: { value: 'MALE', claims: legacyUnreviewed }, ...fields },
+    titles: titles ?? [],
+    relations: relations ?? [],
+  };
+};
 
 const catalog = (over: Partial<Catalog> = {}): Catalog => ({ people: [], battles: [], events: [], utterances: [], ...over });
 
@@ -198,5 +201,23 @@ describe('validateCatalog', () => {
     expect(validateCatalog(catalog({ battles: [battle] }), known)).toEqual([
       { path: 'battles/badr.engagement', message: 'no batch declares claim pilot/nope' },
     ]);
+  });
+
+  it('rejects a person with no recorded sex', () => {
+    const subject = { ...person(), fields: {} as never };
+
+    expect(validateCatalog(catalog({ people: [subject] }), known)).toContainEqual({
+      path: 'people/someone.sex',
+      message: 'missing sex',
+    });
+  });
+
+  it('rejects a sex outside the vocabulary', () => {
+    const subject = person({ fields: { sex: { value: 'UNKNOWN' as never, claims: ['pilot/one'] } } });
+
+    expect(validateCatalog(catalog({ people: [subject] }), known)).toContainEqual({
+      path: 'people/someone.sex',
+      message: 'unknown sex UNKNOWN',
+    });
   });
 });

@@ -12,6 +12,7 @@ const abuWaqidAlLaythi = {
   nameTransliterated: 'Abu Waqid al-Laythi',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'الحارث بن عوف الليثي',
       claims: legacyUnreviewed,

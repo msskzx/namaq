@@ -13,6 +13,7 @@ const maanIbnAdi = {
   nameTransliterated: 'Maan ibn Adi',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'معن بن عدي بن الجد بن العجلان الأنصاري حليف بني مالك بن عوف',
       claims: legacyUnreviewed,

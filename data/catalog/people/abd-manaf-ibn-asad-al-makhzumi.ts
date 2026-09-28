@@ -12,7 +12,9 @@ const abdManafIbnAsadAlMakhzumi = {
   name: 'عبد مناف بن أسد',
   nameTransliterated: 'Abd Manaf ibn Asad Al Makhzumi',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'asad-ibn-abdullah-ibn-umar', claims: legacyUnreviewed },

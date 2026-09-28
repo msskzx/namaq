@@ -12,7 +12,9 @@ const ummSaadBintSaadIbnAlRabi = {
   name: 'أم سعد بنت سعد بن الربيع',
   nameTransliterated: 'Umm Saad Bint Saad ibn Al Rabi',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'DAUGHTER', inverse: 'FATHER', to: 'saad-ibn-al-rabi', claims: legacyUnreviewed },

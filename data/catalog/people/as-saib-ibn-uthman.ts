@@ -10,6 +10,7 @@ const asSaibIbnUthman = {
   nameTransliterated: 'As-Saib ibn Uthman',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     virtues: { value: 'وَكَانَ مِنَ الرُّمَاةِ المَذْكُوْرِيْنَ', claims: ['saib-uthman-siyar12/virtues'] },
     deathYearHijri: { value: '12', claims: ['saib-uthman-siyar12/death-year'] },
   },

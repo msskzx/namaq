@@ -19,6 +19,7 @@ const muawwidhIbnAlHarith = {
   nameTransliterated: 'Muawwidh ibn al-Harith',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'معوذ بن الحارث بن رفاعة بن الحارث بن سواد بن مالك بن غنم بن مالك بن النجار الأنصاري النجاري',
       claims: legacyUnreviewed,

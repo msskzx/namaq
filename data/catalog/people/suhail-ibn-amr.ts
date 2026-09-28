@@ -12,6 +12,7 @@ const suhailIbnAmr = {
   nameTransliterated: 'Suhail ibn Amr',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'سهيل بن عمرو', claims: ['suhail-ibn-amr-siyar25/full-name'] },
     kunya: { value: 'أبو يزيد', claims: ['suhail-ibn-amr-siyar25/kunya'] },
     virtues: {

@@ -15,6 +15,7 @@ const abdAlRahmanIbnSamurah = {
   nameTransliterated: 'Abd al-Rahman ibn Samurah',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عبد الرحمن بن سمرة بن حبيب بن ربيعة بن عبد شمس بن عبد مناف بن قصي بن كلاب القرشي العبشمي',
       claims: legacyUnreviewed,

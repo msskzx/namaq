@@ -13,6 +13,7 @@ const abdullahIbnHudhafah = {
   nameTransliterated: 'Abdullah ibn Hudhafah',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'عبد الله بن حذافة بن قيس بن عدي السهمي القرشي', claims: legacyUnreviewed },
   },
   titles: [

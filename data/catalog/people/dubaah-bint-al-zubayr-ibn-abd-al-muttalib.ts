@@ -19,6 +19,7 @@ const dubaahBintAlZubayrIbnAbdAlMuttalib = {
   nameTransliterated: 'Dubaah bint al-Zubayr ibn Abd al-Muttalib',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: {
       value: 'ضباعة بنت الزبير بن عبد المطلب بن هاشم القرشية الهاشمية',
       claims: legacyUnreviewed,

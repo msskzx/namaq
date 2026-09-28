@@ -12,7 +12,9 @@ const razahIbnAdi = {
   name: 'رزاح بن عدي',
   nameTransliterated: 'Razah ibn Adi',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'adi-ibn-kaab', claims: legacyUnreviewed },

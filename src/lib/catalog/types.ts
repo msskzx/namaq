@@ -23,7 +23,7 @@ export const SEXES = ['MALE', 'FEMALE'] as const;
 export type Sex = (typeof SEXES)[number];
 
 export interface CatalogPersonFields {
-  readonly sex?: Cited<Sex>;
+  readonly sex: Cited<Sex>;
   readonly fullName?: Cited<string>;
   readonly kunya?: Cited<string>;
   /**

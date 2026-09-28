@@ -16,6 +16,7 @@ const jubairIbnMutim = {
   nameTransliterated: 'Jubair ibn Mutim',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'جبير بن مطعم بن عدي بن نوفل بن عبد مناف بن قصي القرشي النوفلي',
       claims: legacyUnreviewed,

@@ -12,7 +12,9 @@ const alZubayrIbnAbdAlMuttalibAlHashimi = {
   name: 'الزبير بن عبد المطلب',
   nameTransliterated: 'Al Zubayr ibn Abd Al Muttalib Al Hashimi',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abd-al-muttalib-ibn-hashim', claims: legacyUnreviewed },

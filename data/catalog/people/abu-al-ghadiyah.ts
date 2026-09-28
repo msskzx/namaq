@@ -12,7 +12,9 @@ const abuAlGhadiyah = {
   name: 'أبو الغادية الصحابي',
   nameTransliterated: 'Abu al-Ghadiyah',
   hasProfile: true,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],

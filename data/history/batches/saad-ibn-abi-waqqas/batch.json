@@ -1994,12 +1994,32 @@
       "relationshipType": "ABSENT_FROM",
       "relatedSubjectKind": "BATTLE",
       "relatedSubjectSlug": "jamal"
+    },
+    {
+      "key": "saad/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-abi-waqqas",
+      "assertion": "سعد بن أبي وقاص الزهري.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "92-p8",
+          "volume": "1",
+          "pageReference": "92",
+          "extractionUrl": "https://shamela.ws/book/10906/1518",
+          "excerptArabic": "٥ - سَعْدُ بنُ أَبِي وَقَّاصٍ مَالِكِ بنِ أُهَيْبٍ الزُّهْرِيُّ * (ع)",
+          "accessedAt": "2026-09-28"
+        }
+      ],
+      "field": "sex"
     }
   ],
   "approval": {
-    "revision": "a361aec3f5695426",
-    "approvedAt": "2026-09-22",
+    "revision": "8a0880efc5978a57",
+    "approvedAt": "2026-09-28",
     "approvedBy": "msskzx",
-    "note": "Re-recorded for publication after the edition's volumes were authored onto its source record and this entry was linked to the volume it opens in. No claim, citation or page changed: the revision moved because batch.json now says which of the twenty-eight volumes this reading came from. Review status is untouched and every claim remains Not reviewed; this permits the import and asserts nothing about anyone having read it. Previously: Approved for publication. All nineteen claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+    "note": "Re-approved for publication after adding a field:sex claim for the subject, cited from the entry's self-identifying opening line. No other claim, citation or page changed. The new claim is Not reviewed; this permits the import and asserts nothing about anyone having read it. Pre-existing catalog:checklist warnings on this subject (wives/siblings) are untouched and remain for a later pass."
   }
 }

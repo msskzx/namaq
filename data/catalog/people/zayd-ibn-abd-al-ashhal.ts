@@ -12,7 +12,9 @@ const zaydIbnAbdAlAshhal = {
   name: 'زيد بن عبد الأشهل',
   nameTransliterated: 'Zayd ibn Abd Al Ashhal',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'SON', to: 'imru-al-qays-ibn-zayd', claims: legacyUnreviewed },

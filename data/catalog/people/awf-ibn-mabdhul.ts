@@ -12,7 +12,9 @@ const awfIbnMabdhul = {
   name: 'عوف بن مبذول',
   nameTransliterated: 'Awf ibn Mabdhul',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'SON', to: 'amr-ibn-awf-ibn-mabdhul', claims: legacyUnreviewed },

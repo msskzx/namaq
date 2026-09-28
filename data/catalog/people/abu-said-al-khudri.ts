@@ -15,6 +15,7 @@ const abuSaidAlKhudri = {
   nameTransliterated: 'Abu Said al-Khudri',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'سعد بن مالك بن سنان بن ثعلبة بن عبيد بن الأبجر بن عوف بن الحارث بن الخزرج الأنصاري الخزرجي',
       claims: legacyUnreviewed,

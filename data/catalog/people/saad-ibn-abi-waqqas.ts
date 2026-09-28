@@ -13,6 +13,7 @@ const saadIbnAbiWaqqas = {
   hasProfile: true,
 
   fields: {
+    sex: { value: 'MALE', claims: ['saad/sex'] },
     // The heading gives أبو وقاص by kunya and the next paragraph unpacks it to
     // مالك بن أهيب, so the two are joined; the nisbas arrive a page later.
     fullName: {

@@ -12,7 +12,9 @@ const arwaBintKurayz = {
   name: 'أروى بنت كريز',
   nameTransliterated: 'Arwa Bint Kurayz',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'DAUGHTER', inverse: 'MOTHER', to: 'al-bayda-bint-abd-al-muttalib', claims: legacyUnreviewed },

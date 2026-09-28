@@ -13,6 +13,7 @@ const buraidahIbnAlHusayb = {
   nameTransliterated: 'Buraidah ibn al-Husayb',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'بريدة بن الحصيب بن عبد الله بن الحارث بن الأعرج بن سعد الأسلمي',
       claims: legacyUnreviewed,

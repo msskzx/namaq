@@ -12,6 +12,7 @@ const alBaraaIbnMalik = {
   nameTransliterated: 'Al-Baraa ibn Malik',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'البراء بن مالك بن النضر بن ضمضم الأنصاري، ابن زيد بن حرام بن جندب بن عامر بن غنم بن عدي بن النجار، الأنصاري النجاري المدني',
       claims: ['al-baraa-ibn-malik-siyar26/full-name'],

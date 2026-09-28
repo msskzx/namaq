@@ -12,7 +12,9 @@ const munyahBintGhazwan = {
   name: 'منية بنت غزوان',
   nameTransliterated: 'Munyah Bint Ghazwan',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'DAUGHTER', inverse: 'FATHER', to: 'ghazwan-ibn-jabir', claims: legacyUnreviewed },

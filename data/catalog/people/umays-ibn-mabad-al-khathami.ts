@@ -12,7 +12,9 @@ const umaysIbnMabadAlKhathami = {
   name: 'عميس بن معبد',
   nameTransliterated: 'Umays ibn Mabad Al Khathami',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'mabad-ibn-al-harith-al-khathami', claims: legacyUnreviewed },

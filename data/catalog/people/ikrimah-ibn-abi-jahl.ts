@@ -13,6 +13,7 @@ const ikrimahIbnAbiJahl = {
   nameTransliterated: 'Ikrimah ibn Abi Jahl',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عكرمة بن أبي جهل عمرو بن هشام بن المغيرة بن عبد الله بن عمر بن مخزوم القرشي المخزومي',
       claims: legacyUnreviewed,

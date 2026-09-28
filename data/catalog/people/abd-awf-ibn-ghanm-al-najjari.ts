@@ -12,7 +12,9 @@ const abdAwfIbnGhanmAlNajjari = {
   name: 'عبد عوف بن غنم',
   nameTransliterated: 'Abd Awf ibn Ghanm Al Najjari',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'ghanm-ibn-malik', claims: legacyUnreviewed },

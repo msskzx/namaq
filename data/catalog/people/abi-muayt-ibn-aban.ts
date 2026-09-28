@@ -12,7 +12,9 @@ const abiMuaytIbnAban = {
   name: 'أبو معيط بن أبان',
   nameTransliterated: 'Abi Muayt ibn Aban',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'aban-ibn-dhakwan', claims: legacyUnreviewed },

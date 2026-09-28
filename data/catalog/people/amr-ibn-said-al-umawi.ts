@@ -18,6 +18,7 @@ const amrIbnSaidAlUmawi = {
   nameTransliterated: 'Amr ibn Said al-Umawi',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عمرو بن سعيد بن العاص بن أمية بن عبد شمس بن عبد مناف بن قصي القرشي الأموي',
       claims: legacyUnreviewed,

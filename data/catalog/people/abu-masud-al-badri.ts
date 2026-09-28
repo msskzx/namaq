@@ -14,6 +14,7 @@ const abuMasudAlBadri = {
   nameTransliterated: 'Abu Masud al-Badri',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عقبة بن عمرو بن ثعلبة بن يسيرة بن عسيرة بن عطية بن خدارة بن عوف بن الحارث بن الخزرج الأنصاري',
       claims: legacyUnreviewed,

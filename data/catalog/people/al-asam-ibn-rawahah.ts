@@ -12,7 +12,9 @@ const alAsamIbnRawahah = {
   name: 'الأصم بن رواحة',
   nameTransliterated: 'Al Asam ibn Rawahah',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'SON', to: 'zaidah-ibn-al-asam', claims: legacyUnreviewed },

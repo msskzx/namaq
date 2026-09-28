@@ -12,7 +12,9 @@ const abiHuzaymahIbnThalabah = {
   name: 'أبو حزيمة بن ثعلبة',
   nameTransliterated: 'Abi Huzaymah ibn Thalabah',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'SON', to: 'harithah-ibn-abi-huzaymah', claims: legacyUnreviewed },

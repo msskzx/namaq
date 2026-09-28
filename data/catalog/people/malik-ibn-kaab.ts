@@ -12,7 +12,9 @@ const malikIbnKaab = {
   name: 'مالك بن كعب',
   nameTransliterated: 'Malik ibn Kaab',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'SON', to: 'al-harith-ibn-malik', claims: legacyUnreviewed },

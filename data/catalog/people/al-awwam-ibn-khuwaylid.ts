@@ -12,7 +12,9 @@ const alAwwamIbnKhuwaylid = {
   name: 'العوام بن خويلد',
   nameTransliterated: 'Al Awwam ibn Khuwaylid',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'khuwaylid-ibn-asad', claims: legacyUnreviewed },

@@ -12,6 +12,7 @@ const jarirIbnAbdullah = {
   nameTransliterated: 'Jarir ibn Abdullah',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'جرير بن عبد الله بن جابر بن مالك بن نصر بن ثعلبة بن جشم بن عوف البجلي القسري',
       claims: legacyUnreviewed,

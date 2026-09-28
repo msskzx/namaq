@@ -12,7 +12,9 @@ const hudhafahIbnQaisAlSahmi = {
   name: 'حذافة بن قيس',
   nameTransliterated: 'Hudhafah ibn Qais Al Sahmi',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'qais-ibn-adi-al-sahmi', claims: legacyUnreviewed },

@@ -11,6 +11,7 @@ const alQasimIbnMuhammad = {
   nameTransliterated: 'Al-Qasim ibn Muhammad',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'القاسم بن محمد بن عبد الله الهاشمي القرشي', claims: legacyUnreviewed },
     virtues: { value: 'أول أبناء النبي، توفي صغيراً.', claims: legacyUnreviewed },
   },

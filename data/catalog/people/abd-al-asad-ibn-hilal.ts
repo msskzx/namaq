@@ -12,7 +12,9 @@ const abdAlAsadIbnHilal = {
   name: 'عبد الأسد بن هلال',
   nameTransliterated: 'Abd Al Asad ibn Hilal',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'hilal-ibn-abdullah-al-makhzumi', claims: legacyUnreviewed },

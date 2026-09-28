@@ -18,6 +18,7 @@ const zaynabBintKhuzaymah = {
   nameTransliterated: 'Zaynab bint Khuzaymah',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     // The obituary's nasab runs further than the retired seed's did, so the
     // carried value is replaced rather than merely cited.
     fullName: {

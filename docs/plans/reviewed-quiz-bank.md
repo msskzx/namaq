@@ -1,6 +1,6 @@
 # Reviewed quiz bank and quiz-quality pass
 
-Status: **implemented**.
+Status: **implemented; follow-up quality pass ready for implementation**.
 
 This plan replaces runtime-only question generation with a reviewed question
 bank and fixes the topic, wording, supply, performance and quiz-interface
@@ -121,13 +121,14 @@ The learner-facing topics become:
   only lengths the selected topic or person circle can satisfy and states the
   exact available count when fewer than five questions exist. It never promises
   5, 10 or 15 and silently returns fewer.
-- The learner keeps the current one-question-at-a-time view, numbered palette,
-  Previous/Next navigation and batch feedback. The only Submit button replaces
+- The learner keeps the current one-question-at-a-time view, numbered palette
+  and Previous/Next navigation. The first choice locks the question and shows
+  immediate feedback; the final recap remains. The only Submit button replaces
   Next on the final question. It may submit with unanswered questions, which
   count as incorrect.
 - The UI renders the reviewed Arabic prompt and Arabic choice labels, never a
   raw family name, slug or unphrased subject. Results repeat the question,
-  selected answer, correct answer and evidence link.
+  selected answer, correct answer and one quiz reference.
 - `/quizzes/questions` is a public, read-only, unlinked and `noindex` review
   page. It uses server-side pagination with 50 rows per page and filters for
   status, topic, family, Arabic-prompt completeness and free-text search. Each row
@@ -245,7 +246,223 @@ the first run and 292.9 ms warm on 2026-09-27. The request performs one
 availability count, one bounded question-bank read and one batched evidence
 lookup; it performs no per-candidate query.
 
-## Validation
+## Follow-up quality pass
+
+### Complete recorded sex
+
+- Every catalog person has `MALE` or `FEMALE`; unknown sex is not permitted.
+  Existing cited values remain cited. Where an authored source account contains
+  a self-identifying name or first identifying passage, add a `field: "sex"`
+  claim with the shortest complete citation that supports the value. Do not
+  mark those claims reviewed without the user's explicit instruction.
+- Where no citable source passage exists yet, determine sex from the recorded
+  Arabic name and available relationship context and store it as
+  `legacy-unreviewed`. Clear markers include a leading `أبو`/`أبي`/`أبا` or
+  `أم`, and the nearest `بن`/`ابن` or `بنت`/`ابنة`. A single or otherwise
+  ambiguous name still receives a manually checked legacy value; none remain
+  unset. The name guides the editorial decision but is not represented as a
+  citation to the catalog itself.
+- Catalog people with profiles project sex to PostgreSQL. Graph-only people
+  project sex to their Neo4j Person node, even when a stale PostgreSQL row with
+  the same slug happens to exist. Those legacy rows are not deleted as part of
+  this change.
+- PostgreSQL already has `Person.sex`; no database migration is required.
+  Neo4j accepts the new node property without a schema migration. The graph
+  projector must detect property-only drift so its dry run and `--apply` do not
+  exit merely because nodes and relationships already exist.
+
+### Gender-compatible relationship choices
+
+- Every gender-constrained relationship candidate contains four people of the
+  sex required by the answer wording. A wife-answer question contains only
+  women; a husband-answer question contains only men. The same rule covers
+  father/mother, son/daughter, brother/sister, grandfather/grandmother and any
+  other prompt that fixes the answer's sex.
+- The expected sex comes from the recorded answer sex and the relationship's
+  explicit role. Gender-neutral relationship prompts retain the full person
+  pool. If three distinct eligible same-sex distractors do not exist, the
+  candidate is not generated.
+- Ordinary biological sibling candidates remain reviewable only when the
+  displayed names do not mechanically reveal the relationship. The reviewing
+  agent rejects an obvious shared-patronymic answer. Half-, milk- and
+  pact-sibling questions remain subject to the normal ambiguity review.
+- Quiz selection receives no new duplicate restriction. The existing unique
+  question key and without-replacement sampling continue to prevent the same
+  prompt-and-answer candidate from appearing twice.
+
+### References and ayah review
+
+- Solo quizzes and `/quizzes/questions` expose one deterministic quiz reference
+  per question, selected as the first usable cited passage in stable claim and
+  citation order. The reviewed bank and historical claim retain every supporting
+  claim and citation; only presentation is limited to one.
+- Pressing Source opens an accessible overlay on the current page. It shows the
+  exact cited Arabic excerpt, source title and page information. Close works by
+  button, Escape or backdrop. A Visit reference button opens a new browser tab
+  at the exact passage in the person's source reader, preserving an active quiz.
+- Reader deep links carry account, page and stable passage anchor. The reader
+  scrolls to and highlights the cited passage. If an older citation has no
+  passage anchor, it falls back to the cited page. Manual book or page changes
+  clear the stale passage target.
+- Rejected or retired review rows with no usable citation keep their claim keys
+  visible and omit the Source button.
+- `/quizzes/questions` resolves every `AYAH_LINK` choice on its current page and
+  shows the complete Arabic ayah text and surah/ayah reference for all four
+  choices. Missing or malformed values fall back to the stored label so a bad
+  candidate remains reviewable.
+
+### Immediate solo feedback
+
+- The first selected answer locks that question. Correct feedback marks the
+  choice green; incorrect feedback marks the selected choice red and reveals
+  the correct choice in green. Text and icons accompany color in both interface
+  languages. The Source button appears only after the answer is locked.
+- Feedback remains visible when revisiting a question. The numbered palette
+  shows accessible correct, incorrect and unanswered states. Next, Previous and
+  palette navigation remain manual, and learners may leave questions unanswered.
+- The final question still owns the only Submit button. Submission keeps the
+  full per-question recap and counts unanswered questions as incorrect. The
+  summary shows both the fraction and a normally rounded whole percentage.
+  Scores of at least 50% show an explicit Passed label and green treatment;
+  lower scores show Not passed and red treatment.
+
+### Follow-up acceptance criteria
+
+14. All 594 catalog people have recorded sex. Catalog validation fails for an
+    omitted or invalid value.
+15. Profile sex projects only to PostgreSQL profile rows; graph-only sex
+    projects to Neo4j and property-only drift is reported and applied.
+16. Every gender-constrained approved question has one correct answer and three
+    distractors of the required recorded sex; gender-neutral questions are not
+    filtered by sex.
+17. The agent review rejects ordinary sibling questions whose displayed names
+    reveal the answer, without automatically excluding non-obvious, half-, milk-
+    or pact-sibling questions.
+18. Existing without-replacement question selection remains unchanged; no new
+    prompt grouping or duplicate restriction is introduced.
+19. Both quiz surfaces present at most one Source control per question. Its
+    overlay shows the chosen citation text and its Visit reference control opens
+    the exact highlighted reader passage in a new tab.
+20. The review page displays Arabic text and surah/ayah reference for every
+    choice of every ayah question on the page.
+21. Selecting an answer immediately locks and grades the question, exposes its
+    source, preserves feedback across navigation and prevents score-changing
+    edits.
+22. Skipping remains possible, the sole final Submit control remains, and the
+    recap reports fraction, rounded percentage and the correct accessible pass
+    state at the inclusive 50% threshold.
+
+### Follow-up affected components
+
+Existing paths:
+
+1. `data/catalog/people/*.ts` — fill every missing sex value; use cited claim
+   keys where a source passage supports the value and `legacy-unreviewed`
+   otherwise.
+2. `data/history/batches/*/batch.json` and cited account pages — add sex claims
+   only where the stored source text supports them; reapprove edited batch
+   revisions for publication without marking them historically reviewed.
+3. `src/lib/catalog/types.ts` and `src/lib/catalog/validateCatalog.ts` — make
+   catalog sex complete and validate the allowed values; extend colocated tests.
+4. `scripts/data/projectCatalog.ts` — route only profile people to PostgreSQL
+   even when a graph-only slug has a legacy row.
+5. `scripts/data/projectCatalogGraph.ts` — store sex on graph-only Person nodes
+   and include node-property drift in dry-run/apply reporting.
+6. `src/lib/quiz/generate.ts` — build recorded-sex person pools and apply them
+   to gender-constrained relationship candidates.
+7. `docs/quiz-question-review.md` — add gender-compatible choice and
+   name-revealing biological-sibling rules.
+8. `src/app/api/quiz/route.ts` and
+   `src/app/api/quiz/questions/route.ts` — return one structured citation and
+   share batched ayah-choice enrichment.
+9. `src/components/common/ClaimEvidence.tsx` — use the same passage-aware reader
+   URL contract as quiz references.
+10. `src/components/people/SourceAccountReader.tsx`, the person account API and
+    provenance response types — accept a stable passage target, scroll to it,
+    highlight it and clear it during manual navigation.
+11. `src/app/quizzes/page.tsx` — lock answers, show immediate feedback/reference,
+    expose palette states and report percentage/pass result.
+12. `src/app/quizzes/questions/QuestionBankReview.tsx` — show enriched ayah
+    choices and open the same reference overlay.
+13. `src/components/language/translations.ts` and `README.md` — add bilingual
+    labels and record the completed behavior.
+14. `data/quiz/questions.json` — regenerate and agent-review changed choice sets
+    and sibling decisions before projecting them.
+
+Proposed new paths:
+
+1. `src/components/common/QuizReferenceDialog.tsx` — one accessible reference
+   overlay shared by both quiz surfaces.
+2. `src/lib/quiz/ayahDetails.ts` — the existing batched ayah resolver extracted
+   from the learner route and reused by the review route.
+3. `src/lib/provenance/citationReaderUrl.ts` — one passage-aware reader URL
+   builder shared by quiz APIs and profile claim evidence.
+4. `data/catalog/people/sex.test.ts` — completeness and expected
+   cited-versus-legacy coverage across the entire catalog.
+
+Implementation order:
+
+1. Complete and validate catalog sex, then update PostgreSQL/Neo4j projection
+   routing and property-drift checks.
+2. Dry-run and apply both catalog projections; confirm relationship drift is
+   zero before deciding whether graph layout is needed.
+3. Apply gender-compatible choice generation and the sibling review rule;
+   regenerate, review and validate every changed question, then project the bank.
+4. Introduce the shared structured citation/deep-link contract and reader
+   passage targeting, followed by the shared overlay.
+5. Enrich ayah choices on the review page and implement locked instant feedback,
+   palette states and percentage results.
+6. Run the complete automated and visual verification below.
+
+### Follow-up validation
+
+- Catalog tests cover all 594 people, zero missing sex, valid values, the
+  expected source-backed claims and the remaining legacy evidence debt.
+- Projector tests cover profile-versus-graph-only routing, including a
+  graph-only slug that has a stale PostgreSQL row, and Neo4j property-only dry
+  run/apply drift.
+- Generator tests cover wife/female, husband/male, son, daughter, brother,
+  sister and neutral relationship pools, plus insufficient same-sex supply.
+- Review-bank validation ends with no pending or stale candidates. Inspect and
+  reject every name-revealing biological-sibling candidate before projection.
+- Quiz API tests assert one structured citation in stable order and an anchored
+  reader URL. Review API tests cover one citation and batched details for all
+  four ayah choices, including missing-detail fallback.
+- Reader and shared-dialog tests cover exact excerpt rendering, focus and Escape
+  behavior, new-tab navigation, anchored scroll/highlight, page fallback and
+  clearing a stale passage target.
+- Solo component tests cover immediate correct/incorrect feedback, answer
+  locking, hidden-then-visible Source, manual navigation and skipping, persistent
+  feedback, accessible palette states, unanswered scoring, percentage rounding,
+  the inclusive 50% threshold and the sole final Submit button.
+- Run `npm run catalog:validate`, scoped batch validation/checklists/ledger,
+  catalog projection dry runs and applies, `npm run quiz:generate`, agent review,
+  `npm run quiz:validate`, quiz projection dry run and apply, `npm run lint`,
+  `npx tsc --noEmit` and `npm test`.
+- Browser-check Arabic RTL and English layouts, keyboard/focus handling, overlay
+  and reader highlighting, light/dark themes, phone width, long excerpts, ayah
+  choice readability, palette states and pass/fail summaries.
+
+### Follow-up data and operational consequences
+
+- PostgreSQL needs no schema migration. Neo4j receives a `sex` property on 314
+  graph-only Person nodes; PostgreSQL profile rows receive the catalog value.
+- Current catalog relations already supply explicit inverses, so sex completion
+  should not add or remove edges. Do not rerun graph layout when the graph
+  projection reports only property updates and zero relationship drift. If its
+  inspected dry run reports structural drift, resolve it and rerun layout under
+  the repository rule before applying.
+- Adding or editing historical claims changes batch revisions. Validate,
+  checklist, reapprove for publication and import those batches. Do not run
+  `history:review --apply`; the user has said they will review the references
+  later, not authorized marking the claims reviewed now.
+- Question choice changes alter fingerprints. Regeneration deliberately returns
+  affected rows to pending; implementation is incomplete until the agent review
+  is clean and the preview PostgreSQL question projection reports zero drift.
+- Reference overlays and passage targeting are read enrichment only and require
+  no database migration or question-bank rewrite.
+
+## Initial implementation validation
 
 Automated scenarios tied to the acceptance criteria:
 
@@ -279,7 +496,7 @@ Automated scenarios tied to the acceptance criteria:
   dark/light themes, phone width, the sole final Submit control, and review-page
   pagination/filter usability.
 
-## Data and operational consequences
+## Initial implementation data and operational consequences
 
 - Add a PostgreSQL migration and a file-to-database projection. No historical
   catalog migration, Neo4j synchronization or graph-layout recomputation is
@@ -308,6 +525,11 @@ Nonblocking assumptions:
 - The public review page may expose answers and rejection reasons because the
   current solo API already sends answers to the client and the owner explicitly
   chose public access. It remains unlinked and `noindex`.
+- A deterministic first usable citation is sufficient for quiz presentation;
+  the historical model continues retaining all supporting citations.
+- Passage targeting may fall back to a highlighted excerpt above the page when
+  an old page body cannot be matched safely; the overlay still shows the exact
+  stored citation and the reader still opens the cited page.
 
 Deferred work:
 

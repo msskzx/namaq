@@ -13,6 +13,7 @@ const jabirIbnSamurah = {
   nameTransliterated: 'Jabir ibn Samurah',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'جابر بن سمرة بن جنادة بن جندب السوائي',
       claims: legacyUnreviewed,

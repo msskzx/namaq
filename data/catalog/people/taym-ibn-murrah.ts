@@ -12,7 +12,9 @@ const taymIbnMurrah = {
   name: 'تيم بن مرة',
   nameTransliterated: 'Taym ibn Murrah',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'murrah-ibn-kaab', claims: legacyUnreviewed },

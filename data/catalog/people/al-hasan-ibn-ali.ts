@@ -15,6 +15,7 @@ const alHasanIbnAli = {
   nameTransliterated: 'Al-Hasan ibn Ali',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'الحسن بن علي بن أبي طالب الهاشمي القرشي', claims: legacyUnreviewed },
     appearance: {
       value: 'كان يشبه النبي صلى الله عليه وسلم في ملامحه.',

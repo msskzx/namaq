@@ -12,7 +12,9 @@ const baliIbnAmr = {
   name: 'بلي بن عمرو',
   nameTransliterated: 'Bali ibn Amr',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'amr-ibn-al-haf', claims: legacyUnreviewed },

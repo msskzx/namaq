@@ -14,6 +14,7 @@ const abdullahIbnZaydAlNajjari = {
   nameTransliterated: 'Abdullah ibn Zayd al-Najjari',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'عبد الله بن زيد بن عاصم بن كعب الأنصاري المازني النجاري', claims: legacyUnreviewed },
   },
   titles: [

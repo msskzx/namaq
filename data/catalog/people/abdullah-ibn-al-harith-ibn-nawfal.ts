@@ -13,6 +13,7 @@ const abdullahIbnAlHarithIbnNawfal = {
   nameTransliterated: 'Abdullah ibn al-Harith (Babbah)',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     // Carried from the retired prisma/personSeedData5.ts entry, which took it
     // from the nasab chain on his own page without citing it.
     fullName: {

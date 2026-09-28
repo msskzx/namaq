@@ -12,7 +12,9 @@ const zaydIbnAlNuman = {
   name: 'زيد بن النعمان',
   nameTransliterated: 'Zayd ibn Al Numan',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'al-numan-ibn-malik', claims: legacyUnreviewed },

@@ -13,6 +13,7 @@ const khubaybIbnYasaf = {
   nameTransliterated: 'Khubayb ibn Yasaf',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'خبيب بن يساف بن عنبة بن عمرو بن خديج بن عامر بن جشم بن الحارث الأنصاري الخزرجي',
       claims: legacyUnreviewed,

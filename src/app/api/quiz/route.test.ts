@@ -63,12 +63,19 @@ describe('GET /api/quiz', () => {
     expect(assembleQuiz).not.toHaveBeenCalled();
   });
 
-  it('returns reviewed Arabic questions with resolved reader links', async () => {
+  it('returns reviewed Arabic questions with one structured quiz reference', async () => {
     assembleQuiz.mockResolvedValueOnce([question()]);
     historicalClaimFindMany.mockResolvedValueOnce([
       {
         authoringKey: 'zaynab/relation',
-        citations: [{ subjectKind: 'PERSON', subjectSlug: 'zaynab-bint-jahsh', passage: { page: { accountId: 'account-1', sequence: 3 } } }],
+        citations: [{
+          subjectKind: 'PERSON',
+          subjectSlug: 'zaynab-bint-jahsh',
+          excerptArabic: 'نص الشاهد',
+          pageReference: '5',
+          source: { title: 'سير أعلام النبلاء' },
+          passage: { anchor: '5-p3', page: { accountId: 'account-1', sequence: 3 } },
+        }],
       },
     ]);
 
@@ -79,9 +86,29 @@ describe('GET /api/quiz', () => {
     expect(body.questions[0]).toMatchObject({
       promptArabic: 'من كان زوج زينب بنت جحش؟',
       choices: expect.arrayContaining([{ value: 'prophet-muhammad', labelArabic: 'محمد ﷺ' }]),
-      evidence: { readerUrls: ['/people/zaynab-bint-jahsh?book=account-1&page=3'] },
+      evidence: {
+        reference: {
+          excerptArabic: 'نص الشاهد',
+          sourceTitle: 'سير أعلام النبلاء',
+          pageReference: '5',
+          readerUrl: '/people/zaynab-bint-jahsh?book=account-1&page=3&passage=5-p3',
+        },
+      },
     });
     expect(assembleQuiz).toHaveBeenCalledWith(expect.objectContaining({ topics: ['PEOPLE'], length: 5, personSlug: undefined }));
+  });
+
+  it('omits the reference when no citation resolves to a reader passage', async () => {
+    assembleQuiz.mockResolvedValueOnce([question()]);
+    historicalClaimFindMany.mockResolvedValueOnce([
+      { authoringKey: 'zaynab/relation', citations: [{ subjectKind: 'EVENT', subjectSlug: 'badr' }] },
+    ]);
+
+    const response = await GET(request('?topic=PEOPLE&length=5'));
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.questions[0].evidence).toEqual({ reference: null });
   });
 
   it('passes the requested person through for PERSON_CIRCLE', async () => {

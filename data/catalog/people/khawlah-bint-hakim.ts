@@ -12,6 +12,7 @@ const khawlahBintHakim = {
   nameTransliterated: 'Khawlah bint Hakim',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: { value: 'خولة بنت حكيم', claims: legacyUnreviewed },
   },
   titles: [

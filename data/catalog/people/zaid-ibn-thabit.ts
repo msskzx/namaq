@@ -16,6 +16,7 @@ const zaidIbnThabit = {
   nameTransliterated: 'Zaid ibn Thabit',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'زيد بن ثابت بن الضحاك بن زيد بن لوذان بن عمرو بن عبد عوف بن غنم بن مالك بن النجار بن ثعلبة الأنصاري الخزرجي النجاري',
       claims: legacyUnreviewed,

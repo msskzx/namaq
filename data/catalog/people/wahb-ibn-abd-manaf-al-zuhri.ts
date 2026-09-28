@@ -12,7 +12,9 @@ const wahbIbnAbdManafAlZuhri = {
   name: 'وهب بن عبد مناف',
   nameTransliterated: 'Wahb ibn Abd Manaf Al Zuhri',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abd-manaf-ibn-zuhrah', claims: legacyUnreviewed },

@@ -12,7 +12,9 @@ const alNumanIbnAbiAlJawnAlKindi = {
   name: 'النعمان بن أبي الجون',
   nameTransliterated: 'Al Numan ibn Abi Al Jawn Al Kindi',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'DAUGHTER', to: 'asma-bint-al-numan-al-kindiyyah', claims: legacyUnreviewed },

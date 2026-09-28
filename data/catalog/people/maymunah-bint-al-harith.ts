@@ -16,6 +16,7 @@ const maymunahBintAlHarith = {
   nameTransliterated: 'Maymunah bint al-Harith',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: {
       value: 'ميمونة بنت الحارث بن حزن بن بجير بن الهزم بن رويبة بن عبد الله بن هلال بن عامر بن صعصعة الهلالية',
       claims: legacyUnreviewed,

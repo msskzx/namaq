@@ -13,6 +13,7 @@ const fatimahBintAsad = {
   nameTransliterated: 'Fatimah bint Asad',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: {
       value: 'فاطمة بنت أسد بن هاشم بن عبد مناف بن قصي القرشية الهاشمية',
       claims: legacyUnreviewed,

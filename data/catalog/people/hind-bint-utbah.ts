@@ -12,7 +12,9 @@ const hindBintUtbah = {
   name: 'هند بنت عتبة',
   nameTransliterated: 'Hind Bint Utbah',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'DAUGHTER', inverse: 'FATHER', to: 'utbah-ibn-rabiah', claims: legacyUnreviewed },

@@ -12,7 +12,9 @@ const affanIbnAbiAlAs = {
   name: 'عفان بن أبي العاص',
   nameTransliterated: 'Affan ibn Abi al-As',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abi-al-as-ibn-umayya', claims: legacyUnreviewed },

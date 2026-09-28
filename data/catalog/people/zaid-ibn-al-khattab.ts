@@ -16,6 +16,7 @@ const zaidIbnAlKhattab = {
   nameTransliterated: 'Zaid ibn al-Khattab',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'زيد بن الخطاب بن نفيل بن عبد العزى بن رياح بن قرط بن رزاح بن عدي بن كعب بن لؤي القرشي العدوي',
       claims: legacyUnreviewed,

@@ -13,6 +13,7 @@ const saadIbnAlRabi = {
   nameTransliterated: 'Saad ibn al-Rabi',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'سعد بن الربيع بن عمرو بن أبي زهير بن مالك بن امرئ القيس بن مالك بن ثعلبة بن كعب بن الخزرج الأنصاري الخزرجي الحارثي',
       claims: legacyUnreviewed,

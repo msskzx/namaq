@@ -12,7 +12,9 @@ const alAsIbnWailAlSahmi = {
   name: 'العاص بن وائل',
   nameTransliterated: 'Al As ibn Wail Al Sahmi',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'wail-ibn-hashim-al-sahmi', claims: legacyUnreviewed },

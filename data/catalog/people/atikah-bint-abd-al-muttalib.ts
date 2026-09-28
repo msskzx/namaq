@@ -18,6 +18,7 @@ const atikahBintAbdAlMuttalib = {
   nameTransliterated: 'Atikah bint Abd al-Muttalib',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: { value: 'عاتكة بنت عبد المطلب بن هاشم القرشية الهاشمية', claims: legacyUnreviewed },
   },
   titles: [

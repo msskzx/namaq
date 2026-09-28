@@ -15,6 +15,7 @@ const ruqayyahBintMuhammad = {
   nameTransliterated: 'Ruqayyah bint Muhammad',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: {
       value: 'رقية بنت محمد بن عبد الله بن عبد المطلب بن هاشم القرشية الهاشمية',
       claims: legacyUnreviewed,

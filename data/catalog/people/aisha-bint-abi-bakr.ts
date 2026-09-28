@@ -13,6 +13,7 @@ const aishaBintAbiBakr = {
   nameTransliterated: 'Aisha bint Abi Bakr',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عائشة بنت أبي بكر عبد الله بن أبي قحافة عثمان بن عامر بن عمرو بن كعب بن سعد بن تيم بن مرة بن كعب بن لؤي القرشية التيمية',
       claims: legacyUnreviewed,

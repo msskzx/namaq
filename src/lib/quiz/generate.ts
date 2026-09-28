@@ -65,6 +65,31 @@ function choice(value: string, labelArabic: string): QuestionChoice {
   return { value, labelArabic };
 }
 
+// The sex the answer wording requires, by declared relation type: a fixed sex
+// when the prompt names it, ANSWER when the prompt agrees with the answer,
+// null when the wording is neutral. See docs/plans/reviewed-quiz-bank.md.
+const RELATION_ANSWER_SEX: Record<string, 'MALE' | 'FEMALE' | 'ANSWER' | null> = {
+  HUSBAND: 'FEMALE',
+  WIFE: 'MALE',
+  SON: 'MALE',
+  DAUGHTER: 'MALE',
+  FATHER: 'ANSWER',
+  MOTHER: 'ANSWER',
+  BROTHER: 'MALE',
+  SISTER: 'FEMALE',
+  HALF_BROTHER: 'MALE',
+  HALF_SISTER: 'FEMALE',
+  GRANDFATHER: 'ANSWER',
+  GRANDMOTHER: 'ANSWER',
+  GRANDSON: 'ANSWER',
+  GRANDDAUGHTER: 'ANSWER',
+  MILK_BROTHER: 'MALE',
+  MILK_SISTER: 'FEMALE',
+  PATERNAL_UNCLE: 'MALE',
+  PATERNAL_NEPHEW: 'MALE',
+  MATERNAL_UNCLE: 'MALE',
+};
+
 function relationPrompt(type: string, name: string, answerSex: string | null) {
   const prompts: Record<string, string> = {
     FATHER: `أي من هؤلاء كان ${answerSex === 'FEMALE' ? 'ابنةً' : 'ابنًا'} لـ«${name}»؟`,
@@ -73,12 +98,12 @@ function relationPrompt(type: string, name: string, answerSex: string | null) {
     WIFE: `من كان زوج «${name}»؟`,
     SON: `من ${answerSex === 'FEMALE' ? 'كانت والدة' : 'كان والد'} «${name}»؟`,
     DAUGHTER: `من ${answerSex === 'FEMALE' ? 'كانت والدة' : 'كان والد'} «${name}»؟`,
-    BROTHER: `أي من هؤلاء كان من أشقاء «${name}»؟`,
-    SISTER: `أي من هؤلاء كان من أشقاء «${name}»؟`,
+    BROTHER: `أي من هؤلاء كان أخًا لـ«${name}»؟`,
+    SISTER: `أي من هؤلاء كان أختًا لـ«${name}»؟`,
     HALF_BROTHER: `أي من هؤلاء كان أخًا غير شقيق لـ«${name}»؟`,
     HALF_SISTER: `أي من هؤلاء كان أختًا غير شقيقة لـ«${name}»؟`,
-    GRANDFATHER: `أي من هؤلاء كان حفيدًا لـ«${name}»؟`,
-    GRANDMOTHER: `أي من هؤلاء كان حفيدًا لـ«${name}»؟`,
+    GRANDFATHER: `أي من هؤلاء كان ${answerSex === 'FEMALE' ? 'حفيدةً' : 'حفيدًا'} لـ«${name}»؟`,
+    GRANDMOTHER: `أي من هؤلاء كان ${answerSex === 'FEMALE' ? 'حفيدةً' : 'حفيدًا'} لـ«${name}»؟`,
     GRANDSON: `من ${answerSex === 'FEMALE' ? 'كانت جدة' : 'كان جد'} «${name}»؟`,
     GRANDDAUGHTER: `من ${answerSex === 'FEMALE' ? 'كانت جدة' : 'كان جد'} «${name}»؟`,
     MAWLA: `من ارتبط بـ«${name}» بعلاقة الولاء؟`,
@@ -92,8 +117,8 @@ function relationPrompt(type: string, name: string, answerSex: string | null) {
     MATERNAL_UNCLE: `أي من هؤلاء كان «${name}» خالًا له؟`,
     PATERNAL_COUSIN: `من كان ابن عم «${name}» أو ابنة عمه؟`,
     MATERNAL_COUSIN: `من كان ابن خال «${name}» أو ابنة خاله؟`,
-    MILK_BROTHER: `من كان أخًا أو أختًا لـ«${name}» من الرضاعة؟`,
-    MILK_SISTER: `من كان أخًا أو أختًا لـ«${name}» من الرضاعة؟`,
+    MILK_BROTHER: `من كان أخًا لـ«${name}» من الرضاعة؟`,
+    MILK_SISTER: `من كانت أختًا لـ«${name}» من الرضاعة؟`,
   };
   return prompts[type] ?? `من ارتبط بـ«${name}» بعلاقة «${type}»؟`;
 }
@@ -208,10 +233,23 @@ export async function generateQuestionCandidates(): Promise<GeneratedQuestion[]>
       const answer = peopleBySlug.get(relation.to);
       if (!answer) continue;
       const trueTargets = new Set(person.relations.filter((other) => other.type === relation.type).map((other) => other.to));
+      const role = RELATION_ANSWER_SEX[relation.type] ?? null;
+      const expected = role === 'ANSWER' ? answer.sex : role;
+      if (expected !== 'MALE' && expected !== 'FEMALE') {
+        add(candidate({
+          family: 'RELATION', topic: 'RELATIONSHIPS', subject: { kind: 'PERSON', slug: person.slug }, attribute: relation.type,
+          personSlugs: [person.slug, relation.to], promptArabic: relationPrompt(relation.type, person.name, answer.sex),
+          answer: choice(answer.slug, answer.name), pool: personChoices, excludedValues: trueTargets,
+          evidence: { claimKeys: cited(relation.claims, eligible) },
+        }));
+        continue;
+      }
+      if (answer.sex !== expected) continue;
+      const pool = personChoices.filter((item) => peopleBySlug.get(item.value)?.sex === expected);
       add(candidate({
         family: 'RELATION', topic: 'RELATIONSHIPS', subject: { kind: 'PERSON', slug: person.slug }, attribute: relation.type,
         personSlugs: [person.slug, relation.to], promptArabic: relationPrompt(relation.type, person.name, answer.sex),
-        answer: choice(answer.slug, answer.name), pool: personChoices, excludedValues: trueTargets,
+        answer: choice(answer.slug, answer.name), pool, excludedValues: trueTargets,
         evidence: { claimKeys: cited(relation.claims, eligible) },
       }));
     }

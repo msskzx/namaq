@@ -19,6 +19,7 @@ const ummAlFadlBintAlHarith = {
   nameTransliterated: 'Umm al-Fadl bint al-Harith',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: { value: 'لبابة بنت الحارث بن حزن بن بجير الهلالية', claims: legacyUnreviewed },
   },
   titles: [

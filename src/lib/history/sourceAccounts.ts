@@ -147,6 +147,7 @@ export async function readPage(accountId: string, sequence: number) {
       bodyMarkdown: true,
       notesMarkdown: true,
       extractionUrl: true,
+      passages: { select: { anchor: true, excerpt: true } },
     },
   });
 }
@@ -164,6 +165,7 @@ export async function readPages(accountId: string, from: number, to: number) {
       bodyMarkdown: true,
       notesMarkdown: true,
       extractionUrl: true,
+      passages: { select: { anchor: true, excerpt: true } },
     },
     orderBy: { sequence: 'asc' },
   });

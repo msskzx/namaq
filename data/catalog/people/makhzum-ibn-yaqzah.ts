@@ -12,7 +12,9 @@ const makhzumIbnYaqzah = {
   name: 'مخزوم بن يقظة',
   nameTransliterated: 'Makhzum ibn Yaqzah',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'yaqzah-ibn-murrah', claims: legacyUnreviewed },

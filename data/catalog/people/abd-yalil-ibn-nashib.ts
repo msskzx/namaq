@@ -12,7 +12,9 @@ const abdYalilIbnNashib = {
   name: 'عبد ياليل بن ناشب',
   nameTransliterated: 'Abd Yalil ibn Nashib',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'nashib-ibn-ghirah', claims: legacyUnreviewed },

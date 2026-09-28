@@ -13,6 +13,7 @@ const salamahIbnSalamah = {
   nameTransliterated: 'Salamah ibn Salamah',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'سلمة بن سلامة بن وقش بن زغبة بن زعوراء بن عبد الأشهل الأنصاري الأشهلي',
       claims: legacyUnreviewed,

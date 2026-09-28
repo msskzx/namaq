@@ -12,7 +12,9 @@ const zabyahBintWahb = {
   name: 'ظبية بنت وهب',
   nameTransliterated: 'Zabyah Bint Wahb',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'MOTHER', inverse: 'SON', to: 'abu-musa-al-ashari', claims: legacyUnreviewed },

@@ -13,6 +13,7 @@ const talhahIbnUbaydullah = {
   hasProfile: true,
 
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     // The heading carries the entry number and the collection marks, and the
     // lineage runs on past them into the next paragraph; both are dropped, and
     // what is left is the name as the edition prints it.

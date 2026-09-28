@@ -12,7 +12,9 @@ const nasrIbnHasl = {
   name: 'نصر بن حسل',
   nameTransliterated: 'Nasr ibn Hasl',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'hasl-ibn-amir', claims: legacyUnreviewed },

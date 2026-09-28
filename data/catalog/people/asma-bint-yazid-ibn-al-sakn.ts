@@ -19,6 +19,7 @@ const asmaBintYazidIbnAlSakn = {
   nameTransliterated: 'Asma bint Yazid ibn al-Sakn',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: { value: 'أسماء بنت يزيد بن السكن الأنصارية الأشهلية', claims: legacyUnreviewed },
   },
   titles: [

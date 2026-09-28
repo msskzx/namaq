@@ -14,6 +14,7 @@ const abuAlYusrAlAnsari = {
   nameTransliterated: 'Abu al-Yusr al-Ansari',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'كعب بن عمرو الأنصاري السلمي',
       claims: legacyUnreviewed,

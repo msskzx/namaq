@@ -13,6 +13,7 @@ const jaafarIbnAbiTalib = {
   nameTransliterated: 'Jaafar ibn Abi Talib',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'جعفر بن أبي طالب عبد مناف بن عبد المطلب بن هاشم بن عبد مناف بن قصي القرشي الهاشمي',
       claims: legacyUnreviewed,

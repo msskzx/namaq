@@ -13,6 +13,7 @@ const abuAlAsIbnAlRabi = {
   nameTransliterated: 'Abu al-As ibn al-Rabi',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'أبو العاص بن الربيع بن عبد العزى بن عبد شمس بن عبد مناف بن قصي القرشي العبشمي',
       claims: legacyUnreviewed,

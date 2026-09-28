@@ -12,7 +12,9 @@ const dhakwanIbnUmayyah = {
   name: 'ذكوان بن أمية',
   nameTransliterated: 'Dhakwan ibn Umayyah',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'umayya-ibn-abd-shams', claims: legacyUnreviewed },

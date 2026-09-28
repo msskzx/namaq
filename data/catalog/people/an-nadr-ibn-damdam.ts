@@ -12,7 +12,9 @@ const anNadrIbnDamdam = {
   name: 'النضر بن ضمضم',
   nameTransliterated: 'An Nadr ibn Damdam',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'damdam-ibn-zayd', claims: legacyUnreviewed },

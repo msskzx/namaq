@@ -13,6 +13,7 @@ const qatadahIbnAlNuman = {
   nameTransliterated: 'Qatadah ibn al-Numan',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'قتادة بن النعمان بن زيد بن عامر الأنصاري الظفري', claims: legacyUnreviewed },
   },
   titles: [

@@ -16,6 +16,7 @@ const abuSalamah = {
   nameTransliterated: 'Abu Salamah ibn Abd al-Asad',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     // The heading's name and the lineage line under it, as the edition prints
     // them; the entry number and collection marks are dropped.
     fullName: {

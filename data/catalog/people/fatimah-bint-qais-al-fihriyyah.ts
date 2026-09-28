@@ -14,6 +14,7 @@ const fatimahBintQaisAlFihriyyah = {
   nameTransliterated: 'Fatimah bint Qais al-Fihriyyah',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: { value: 'فاطمة بنت قيس الفهرية القرشية', claims: legacyUnreviewed },
   },
   titles: [

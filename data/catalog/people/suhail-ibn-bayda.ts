@@ -17,6 +17,7 @@ const suhailIbnBayda = {
   nameTransliterated: 'Suhail ibn Bayda al-Fihri',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'سهيل بن بيضاء وهب بن ربيعة بن هلال بن مالك بن ضبة بن الحارث بن فهر القرشي الفهري',
       claims: legacyUnreviewed,

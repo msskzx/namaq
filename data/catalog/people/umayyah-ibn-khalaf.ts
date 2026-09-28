@@ -12,7 +12,9 @@ const umayyahIbnKhalaf = {
   name: 'أمية بن خلف',
   nameTransliterated: 'Umayyah ibn Khalaf',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'khalaf-ibn-wahb', claims: legacyUnreviewed },

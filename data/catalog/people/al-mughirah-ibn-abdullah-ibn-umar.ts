@@ -12,7 +12,9 @@ const alMughirahIbnAbdullahIbnUmar = {
   name: 'المغيرة بن عبد الله',
   nameTransliterated: 'Al Mughirah ibn Abdullah ibn Umar',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abdullah-ibn-umar-ibn-makhzum', claims: legacyUnreviewed },

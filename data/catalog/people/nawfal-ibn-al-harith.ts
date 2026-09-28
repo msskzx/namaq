@@ -13,6 +13,7 @@ const nawfalIbnAlHarith = {
   nameTransliterated: 'Nawfal ibn al-Harith',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     // Carried from the retired prisma/personSeedData5.ts entry, which took it
     // from the nasab chain on his own page without citing it.
     fullName: { value: 'نوفل بن الحارث بن عبد المطلب بن هاشم القرشي الهاشمي', claims: legacyUnreviewed },

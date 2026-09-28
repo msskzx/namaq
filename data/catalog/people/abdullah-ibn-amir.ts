@@ -14,6 +14,7 @@ const abdullahIbnAmir = {
   nameTransliterated: 'Abdullah ibn Amir',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عبد الله بن عامر بن كريز بن ربيعة بن حبيب بن عبد شمس بن عبد مناف بن قصي القرشي العبشمي',
       claims: legacyUnreviewed,

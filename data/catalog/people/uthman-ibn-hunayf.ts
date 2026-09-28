@@ -15,6 +15,7 @@ const uthmanIbnHunayf = {
   nameTransliterated: 'Uthman ibn Hunayf',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عثمان بن حنيف بن واهب بن عكيم بن ثعلبة بن الحارث بن مجدعة بن عمرو بن حنش بن عوف بن عمرو بن عوف الأنصاري الأوسي القبائي',
       claims: legacyUnreviewed,

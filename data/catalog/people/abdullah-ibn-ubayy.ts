@@ -12,7 +12,9 @@ const abdullahIbnUbayy = {
   name: 'عبد الله بن أبي',
   nameTransliterated: 'Abdullah ibn Ubayy',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'SON', to: 'abdullah-ibn-abdullah-ibn-ubayy', claims: legacyUnreviewed },

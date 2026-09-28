@@ -12,7 +12,9 @@ const abiZuhayrIbnMalik = {
   name: 'أبو زهير بن مالك',
   nameTransliterated: 'Abi Zuhayr ibn Malik',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'malik-ibn-imri-al-qays', claims: legacyUnreviewed },

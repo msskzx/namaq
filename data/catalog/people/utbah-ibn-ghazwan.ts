@@ -13,6 +13,7 @@ const utbahIbnGhazwan = {
   nameTransliterated: 'Utbah ibn Ghazwan',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'عتبة بن غزوان بن جابر بن وهيب المازني حليف بني عبد شمس', claims: legacyUnreviewed },
   },
   titles: [

@@ -13,6 +13,7 @@ const alBaraaIbnAzib = {
   nameTransliterated: 'Al-Baraa ibn Azib',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'البراء بن عازب بن الحارث الأنصاري الحارثي المدني',
       claims: legacyUnreviewed,

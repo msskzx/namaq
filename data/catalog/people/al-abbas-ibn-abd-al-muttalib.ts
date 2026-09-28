@@ -13,6 +13,7 @@ const alAbbasIbnAbdAlMuttalib = {
   nameTransliterated: 'Al-Abbas ibn Abd al-Muttalib',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'العباس بن عبد المطلب بن هاشم القرشي الهاشمي', claims: legacyUnreviewed },
     // Carried from the retired prisma/personSeedData.ts entry, uncited.
     virtues: {

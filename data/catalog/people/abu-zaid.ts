@@ -13,6 +13,7 @@ const abuZaid = {
   nameTransliterated: 'Abu Zaid',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'ثابت بن زيد بن قيس بن زيد بن النعمان بن مالك بن ثعلبة بن كعب بن الخزرج الأنصاري الخزرجي الحارثي',
       claims: legacyUnreviewed,

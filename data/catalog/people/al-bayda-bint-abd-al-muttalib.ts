@@ -18,6 +18,7 @@ const alBaydaBintAbdAlMuttalib = {
   nameTransliterated: 'Al-Bayda bint Abd al-Muttalib (Umm Hakim)',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: {
       value: 'البيضاء أم حكيم بنت عبد المطلب بن هاشم القرشية الهاشمية',
       claims: legacyUnreviewed,

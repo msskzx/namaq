@@ -16,6 +16,7 @@ const abuMusaAlAshari = {
   nameTransliterated: 'Abu Musa al-Ashari',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'عبد الله بن قيس بن سليم بن حضار بن حرب الأشعري', claims: legacyUnreviewed },
   },
   titles: [

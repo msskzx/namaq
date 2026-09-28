@@ -1,4 +1,4 @@
-import { type CatalogPerson } from '@/lib/catalog/types';
+import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
 /**
  * Named only in prophet-muhammad.ts's nasab chain (see
@@ -12,7 +12,9 @@ const faharIbnMalik = {
   name: 'فهر بن مالك',
   nameTransliterated: 'Fahar ibn Malik',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'malik-ibn-an-nadr', claims: ['prophet/lineage'] },

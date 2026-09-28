@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import type { Prisma } from '@/generated/prisma';
 import { prisma } from '@/lib/prisma';
+import { ayahDetails } from '@/lib/quiz/ayahDetails';
+import { selectQuizReference } from '@/lib/quiz/quizReference';
 import { QUESTION_FAMILIES, QUESTION_STATUSES } from '@/lib/quiz/types';
 
 const PAGE_SIZE = 50;
@@ -42,24 +44,33 @@ export async function GET(request: Request) {
     where: { authoringKey: { in: claimKeys } },
     select: {
       authoringKey: true,
-      citations: { select: { subjectKind: true, subjectSlug: true, passage: { select: { page: { select: { accountId: true, sequence: true } } } } } },
+      citations: {
+        select: {
+          subjectKind: true,
+          subjectSlug: true,
+          excerptArabic: true,
+          pageReference: true,
+          source: { select: { title: true } },
+          passage: { select: { anchor: true, page: { select: { accountId: true, sequence: true } } } },
+        },
+      },
     },
   }) : [];
-  const links = new Map(claims.map((claim) => [
-    claim.authoringKey,
-    claim.citations.flatMap((citation) =>
-      citation.subjectKind === 'PERSON' && citation.passage?.page
-        ? [`/people/${citation.subjectSlug}?book=${citation.passage.page.accountId}&page=${citation.passage.page.sequence}`]
-        : [],
-    ),
-  ]));
+  const details = await ayahDetails(questions.map((question) => ({
+    family: question.family,
+    choices: question.choices as { value: string }[],
+  })));
   return NextResponse.json({
     questions: questions.map((question) => {
       const evidence = question.evidence as { claimKeys?: string[] };
       const keys = evidence.claimKeys ?? [];
+      const choices = question.choices as { value: string }[];
       return {
         ...question,
-        evidence: { claimKeys: keys, readerUrls: [...new Set(keys.flatMap((key) => links.get(key) ?? []))] },
+        choiceDetails: Object.fromEntries(
+          choices.map((choice) => [choice.value, details.get(choice.value)]).filter((entry) => entry[1]),
+        ),
+        evidence: { claimKeys: keys, reference: selectQuizReference(keys, claims) },
       };
     }),
     pagination: {

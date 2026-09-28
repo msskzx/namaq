@@ -16,6 +16,7 @@ const ummAyman = {
   nameTransliterated: 'Umm Ayman',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: { value: 'بركة', claims: legacyUnreviewed },
   },
   titles: [

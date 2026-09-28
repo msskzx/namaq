@@ -17,6 +17,7 @@ const abuBardahIbnNiyar = {
   nameTransliterated: 'Abu Bardah ibn Niyar',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'هانئ بن نيار بن عمرو بن عبيد بن عمرو بن كلاب بن دهمان البلوي القضاعي حليف الأوس',
       claims: legacyUnreviewed,

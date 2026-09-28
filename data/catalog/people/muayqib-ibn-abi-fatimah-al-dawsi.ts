@@ -14,6 +14,7 @@ const muayqibIbnAbiFatimahAlDawsi = {
   nameTransliterated: 'Muayqib ibn Abi Fatimah al-Dawsi',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'معيقيب بن أبي فاطمة الدوسي',
       claims: legacyUnreviewed,

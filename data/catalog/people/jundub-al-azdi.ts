@@ -12,6 +12,7 @@ const jundubAlAzdi = {
   nameTransliterated: 'Jundub al-Azdi',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'جندب بن عبد الله الأزدي',
       claims: legacyUnreviewed,

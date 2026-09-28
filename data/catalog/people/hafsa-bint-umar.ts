@@ -13,6 +13,7 @@ const hafsaBintUmar = {
   nameTransliterated: 'Hafsa bint Umar',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: {
       value: 'حفصة بنت عمر بن الخطاب بن نفيل بن عبد العزى بن رياح بن قرط بن رزاح بن عدي بن كعب بن لؤي القرشية العدوية',
       claims: legacyUnreviewed,

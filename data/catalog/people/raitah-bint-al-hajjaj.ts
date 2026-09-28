@@ -12,7 +12,9 @@ const raitahBintAlHajjaj = {
   name: 'رائطة بنت الحجاج',
   nameTransliterated: 'Raitah Bint Al Hajjaj',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'MOTHER', inverse: 'SON', to: 'abdullah-ibn-amr-ibn-al-as', claims: legacyUnreviewed },

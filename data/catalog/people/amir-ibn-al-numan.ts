@@ -12,7 +12,9 @@ const amirIbnAlNuman = {
   name: 'عامر بن النعمان',
   nameTransliterated: 'Amir ibn Al Numan',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'SON', to: 'imru-al-qays-ibn-amir', claims: legacyUnreviewed },

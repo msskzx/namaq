@@ -16,6 +16,7 @@ const safwanIbnUmayyah = {
   nameTransliterated: 'Safwan ibn Umayyah',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'صفوان بن أمية بن خلف بن وهب بن حذافة بن جمح بن عمرو بن هصيص بن كعب بن لؤي بن غالب القرشي الجمحي المكي',
       claims: legacyUnreviewed,

@@ -12,7 +12,9 @@ const abuLahabIbnAbdAlMuttalib = {
   name: 'أبو لهب',
   nameTransliterated: 'Abu Lahab ibn Abd Al Muttalib',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abd-al-muttalib-ibn-hashim', claims: legacyUnreviewed },

@@ -12,7 +12,9 @@ const waqshIbnZughbah = {
   name: 'وقش بن زغبة',
   nameTransliterated: 'Waqsh ibn Zughbah',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'zughbah-ibn-zaura', claims: legacyUnreviewed },

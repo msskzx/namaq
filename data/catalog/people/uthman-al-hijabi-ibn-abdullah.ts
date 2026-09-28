@@ -12,7 +12,9 @@ const uthmanAlHijabiIbnAbdullah = {
   name: 'عثمان بن عبد الله',
   nameTransliterated: 'Uthman Al Hijabi ibn Abdullah',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abdullah-ibn-abd-al-uzza-abu-talhah', claims: legacyUnreviewed },

@@ -20,6 +20,7 @@ const hassanIbnThabit = {
   nameTransliterated: 'Hassan ibn Thabit',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'حسان بن ثابت بن المنذر بن حرام بن عمرو بن زيد مناة بن عدي بن عمرو بن مالك بن النجار الأنصاري الخزرجي النجاري',
       claims: legacyUnreviewed,

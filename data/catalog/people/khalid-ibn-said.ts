@@ -13,6 +13,7 @@ const khalidIbnSaid = {
   nameTransliterated: 'Khalid ibn Said',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'خالد بن سعيد بن العاص بن أمية بن عبد شمس بن عبد مناف بن قصي القرشي الأموي',
       claims: legacyUnreviewed,

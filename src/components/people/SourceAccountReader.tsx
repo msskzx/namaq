@@ -14,7 +14,7 @@ import ThemeSwitcher from '@/components/theme/ThemeSwitcher';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { fetcher } from '@/lib/swr';
 import { getAllNavLinks } from '@/lib/siteLinks';
-import { pageParagraphs } from '@/lib/history/sectionHeadings';
+import { pageParagraphs, findPassageParagraph } from '@/lib/history/sectionHeadings';
 import type { AccountPage, AccountSection, AccountSummary } from '@/types/provenance';
 
 interface AccountsResponse {
@@ -72,6 +72,7 @@ export default function SourceAccountReader({
   const book = searchParams.get('book');
   const requestedPage = Number(searchParams.get('page') ?? '1');
   const page = Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1;
+  const passage = searchParams.get('passage');
   const fullscreenParam = searchParams.get('fullscreen');
   const fullscreen = fullscreenParam === '1' || (defaultFullscreen && fullscreenParam !== '0');
   const [indexOpen, setIndexOpen] = useState(false);
@@ -178,6 +179,7 @@ export default function SourceAccountReader({
     if (nextBook) next.set('book', nextBook);
     else next.delete('book');
     next.set('page', String(nextPage));
+    next.delete('passage');
     router.replace(`${pathname}?${next.toString()}`, { scroll: false });
     if (!fullscreen) section.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, [data?.account?.id, fullscreen, pathname, router, searchParams]);
@@ -211,6 +213,18 @@ export default function SourceAccountReader({
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [fullscreen, data?.account, turnPage, setFullscreen]);
 
+  const targetIndex = (() => {
+    if (!passage) return -1;
+    const excerpt = currentPage?.passages?.find((item) => item.anchor === passage)?.excerpt;
+    if (!excerpt || !currentPage) return -1;
+    return findPassageParagraph(currentPage.bodyMarkdown, excerpt);
+  })();
+
+  useEffect(() => {
+    if (targetIndex < 0) return;
+    document.getElementById('cited-passage')?.scrollIntoView({ block: 'center' });
+  }, [targetIndex, page]);
+
   if (error) return <ErrorMessage title={language === 'ar' ? 'تعذر تحميل نص المصدر' : 'The source text could not be loaded'} description={String(error)} />;
   if (isLoading || !data) return <LoadingSpinner />;
   if (!data.account || !data.page) return null;
@@ -218,6 +232,7 @@ export default function SourceAccountReader({
 
   const { accounts, account } = data;
   const current = currentPage;
+  const paragraphs = pageParagraphs(current.bodyMarkdown);
   const printed = current.printedPage ?? String(current.sequence);
   const rtl = isRtl(account.source.language);
   let currentSectionIndex = -1;
@@ -350,9 +365,14 @@ export default function SourceAccountReader({
           }}
         >
           <article dir={rtl ? 'rtl' : 'ltr'} lang={account.source.language} className="arabic-source space-y-4 text-justify">
-            {pageParagraphs(current.bodyMarkdown).map(({ text, heading: isHeading }, index) => isHeading
-              ? <h2 key={index} className="my-6 border-b border-amber-400 pb-2 text-center text-[1.5em] font-bold">{text}</h2>
-              : <p key={index}>{text}</p>)}
+            {paragraphs.map(({ text, heading: isHeading }, index) => {
+              const targeted = index === targetIndex;
+              const targetProps = targeted ? { id: 'cited-passage' } : {};
+              const highlight = targeted ? 'scroll-mt-24 rounded bg-amber-100 px-2 -mx-2 dark:bg-amber-900/40' : '';
+              return isHeading
+                ? <h2 key={index} {...targetProps} className={`my-6 border-b border-amber-400 pb-2 text-center text-[1.5em] font-bold ${highlight}`}>{text}</h2>
+                : <p key={index} {...targetProps} className={highlight}>{text}</p>;
+            })}
           </article>
           {current.notesMarkdown && (
             <aside className="mt-4 border-t border-gray-400/40 pt-3 text-sm opacity-80">

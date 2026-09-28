@@ -21,6 +21,7 @@ const alAshathIbnQais = {
   nameTransliterated: 'Al-Ashath ibn Qais',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'الأشعث بن قيس بن معدي كرب بن معاوية بن جبلة بن عدي بن ربيعة بن معاوية الأكرمين بن الحارث بن معاوية بن ثور بن مرتع بن كندة',
       claims: legacyUnreviewed,

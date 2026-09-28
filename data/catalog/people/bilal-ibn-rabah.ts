@@ -11,6 +11,7 @@ const bilalIbnRabah = {
   nameTransliterated: 'Bilal ibn Rabah',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     // Carried from the retired seed entry, which took it from the Siyar
     // without citing it.
     fullName: { value: 'بلال بن رباح', claims: legacyUnreviewed },

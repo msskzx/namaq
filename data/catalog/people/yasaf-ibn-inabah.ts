@@ -12,7 +12,9 @@ const yasafIbnInabah = {
   name: 'يساف بن عنبة',
   nameTransliterated: 'Yasaf ibn Inabah',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'SON', to: 'khubayb-ibn-yasaf', claims: legacyUnreviewed },

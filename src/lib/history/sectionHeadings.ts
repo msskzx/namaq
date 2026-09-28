@@ -52,3 +52,24 @@ export function pageParagraphs(bodyMarkdown: string): PageParagraph[] {
     })
     .filter(({ text }) => text.length > 0);
 }
+
+/**
+ * Collapses whitespace and drops the editor's inline footnote markers, so a
+ * stored citation excerpt matches the paragraph it was read from.
+ */
+export function normalizePassageText(text: string) {
+  return text
+    .replace(/\(\s*[٠-٩0-9]+\s*\)/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
+ * Index of the rendered paragraph holding the cited excerpt, or -1 when the
+ * page body cannot be matched safely and the reader should stay at the top.
+ */
+export function findPassageParagraph(bodyMarkdown: string, excerpt: string): number {
+  const needle = normalizePassageText(excerpt);
+  if (!needle) return -1;
+  return pageParagraphs(bodyMarkdown).findIndex(({ text }) => normalizePassageText(text).includes(needle));
+}

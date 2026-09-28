@@ -13,6 +13,7 @@ const abdullahIbnZaydIbnAbdRabbih = {
   nameTransliterated: 'Abdullah ibn Zayd ibn Abd Rabbih',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عبد الله بن زيد بن عبد ربه بن ثعلبة الأنصاري الخزرجي المدني البدري',
       claims: legacyUnreviewed,

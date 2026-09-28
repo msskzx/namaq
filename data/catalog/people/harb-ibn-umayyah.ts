@@ -12,7 +12,9 @@ const harbIbnUmayyah = {
   name: 'حرب بن أمية',
   nameTransliterated: 'Harb ibn Umayyah',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'umayya-ibn-abd-shams', claims: legacyUnreviewed },

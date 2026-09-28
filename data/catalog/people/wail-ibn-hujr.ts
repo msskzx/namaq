@@ -13,6 +13,7 @@ const wailIbnHujr = {
   nameTransliterated: 'Wail ibn Hujr',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'وائل بن حجر بن سعد الحضرمي',
       claims: legacyUnreviewed,

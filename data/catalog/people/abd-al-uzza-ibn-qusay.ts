@@ -12,7 +12,9 @@ const abdAlUzzaIbnQusay = {
   name: 'عبد العزى بن قصي',
   nameTransliterated: 'Abd Al Uzza ibn Qusay',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'qusay-ibn-kilab', claims: legacyUnreviewed },

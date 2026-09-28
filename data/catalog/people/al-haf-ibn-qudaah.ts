@@ -12,7 +12,9 @@ const alHafIbnQudaah = {
   name: 'الحاف بن قضاعة',
   nameTransliterated: 'Al Haf ibn Qudaah',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'SON', to: 'amr-ibn-al-haf', claims: legacyUnreviewed },

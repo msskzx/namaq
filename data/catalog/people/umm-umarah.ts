@@ -21,6 +21,7 @@ const ummUmarah = {
   nameTransliterated: 'Umm Umarah (Nusaybah bint Kaab)',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: {
       value: 'نسيبة بنت كعب بن عمرو بن عوف بن مبذول الأنصارية الخزرجية النجارية المازنية',
       claims: legacyUnreviewed,

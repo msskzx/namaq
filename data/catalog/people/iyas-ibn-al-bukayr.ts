@@ -11,6 +11,7 @@ const iyasIbnAlBukayr = {
   nameTransliterated: 'Iyas ibn Abi al-Bukayr',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'إِيَاسُ بنُ أَبِي البُكَيْرِ بنِ عَبْدِ يَا لَيْلَ اللَّيْثِيُّ', claims: ['iyas-bukayr-siyar18/full-name'] },
     deathYearHijri: { value: '34', claims: ['iyas-bukayr-siyar18/death-year'] },
   },

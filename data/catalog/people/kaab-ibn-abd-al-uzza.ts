@@ -12,7 +12,9 @@ const kaabIbnAbdAlUzza = {
   name: 'كعب بن عبد العزى',
   nameTransliterated: 'Kaab ibn Abd Al Uzza',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abd-al-uzza-ibn-yazid', claims: legacyUnreviewed },

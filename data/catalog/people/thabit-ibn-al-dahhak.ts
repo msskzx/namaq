@@ -12,7 +12,9 @@ const thabitIbnAlDahhak = {
   name: 'ثابت بن الضحاك',
   nameTransliterated: 'Thabit ibn Al Dahhak',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'al-dahhak-ibn-zaid', claims: legacyUnreviewed },

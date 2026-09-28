@@ -14,6 +14,7 @@ const abuAlDarda = {
   nameTransliterated: 'Abu al-Darda',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عويمر بن قيس بن زيد بن قيس بن أمية بن عامر بن عدي بن كعب الأنصاري الخزرجي',
       claims: legacyUnreviewed,

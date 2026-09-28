@@ -12,7 +12,9 @@ const alRabiIbnAbdAlUzza = {
   name: 'الربيع بن عبد العزى',
   nameTransliterated: 'Al Rabi ibn Abd Al Uzza',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abd-al-uzza-ibn-abd-shams', claims: legacyUnreviewed },

@@ -20,6 +20,7 @@ const umamahBintAbiAlAs = {
   nameTransliterated: 'Umamah bint Abi al-As',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: {
       value: 'أمامة بنت أبي العاص بن الربيع بن عبد العزى بن عبد شمس القرشي العبشمي',
       claims: legacyUnreviewed,

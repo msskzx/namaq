@@ -12,7 +12,9 @@ const umayyaIbnAbdShams = {
   name: 'أمية بن عبد شمس',
   nameTransliterated: 'Umayya ibn Abd Shams',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abd-shams-ibn-abd-manaf', claims: legacyUnreviewed },

@@ -11,6 +11,7 @@ const khalidIbnAlBukayr = {
   nameTransliterated: 'Khalid ibn al-Bukayr',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'خَالِدُ بنُ البُكَيْرِ بنِ عَبْدِ يَا لَيْلَ بنِ نَاشِبٍ اللَّيْثِيُّ', claims: ['khalid-bukayr-siyar17/full-name'] },
     deathYearHijri: { value: '4', claims: ['khalid-bukayr-siyar17/death-year'] },
     placeOfDeathArabic: { value: 'الرجيع', claims: ['khalid-bukayr-siyar17/death-place'] },

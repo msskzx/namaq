@@ -12,7 +12,9 @@ const mutimIbnAdi = {
   name: 'المطعم بن عدي',
   nameTransliterated: 'Mutim ibn Adi',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'adi-ibn-nawfal', claims: legacyUnreviewed },

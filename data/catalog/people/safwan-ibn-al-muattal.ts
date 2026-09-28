@@ -14,6 +14,7 @@ const safwanIbnAlMuattal = {
   nameTransliterated: 'Safwan ibn al-Muattal',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'صفوان بن المعطل بن رحضة بن المؤمل السلمي الذكواني',
       claims: legacyUnreviewed,

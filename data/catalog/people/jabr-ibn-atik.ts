@@ -13,6 +13,7 @@ const jabrIbnAtik = {
   nameTransliterated: 'Jabr ibn Atik',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'جبر بن عتيك بن قيس بن هيشة بن الحارث بن أمية بن معاوية بن مالك بن عوف بن عمرو بن عوف الأنصاري',
       claims: legacyUnreviewed,

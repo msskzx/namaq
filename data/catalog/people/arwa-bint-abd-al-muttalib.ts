@@ -19,6 +19,7 @@ const arwaBintAbdAlMuttalib = {
   nameTransliterated: 'Arwa bint Abd al-Muttalib',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: { value: 'أروى بنت عبد المطلب بن هاشم القرشية الهاشمية', claims: legacyUnreviewed },
   },
   titles: [

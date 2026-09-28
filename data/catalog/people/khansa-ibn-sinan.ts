@@ -12,7 +12,9 @@ const khansaIbnSinan = {
   name: 'خنساء بن سنان',
   nameTransliterated: 'Khansa ibn Sinan',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'SON', to: 'sakhr-ibn-khansa', claims: legacyUnreviewed },

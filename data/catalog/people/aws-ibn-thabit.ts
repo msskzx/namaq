@@ -12,7 +12,9 @@ const awsIbnThabit = {
   name: 'أوس بن ثابت',
   nameTransliterated: 'Aws ibn Thabit',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'thabit-ibn-al-mundhir', claims: legacyUnreviewed },

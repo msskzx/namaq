@@ -12,7 +12,9 @@ const ghanmIbnMalik = {
   name: 'غنم بن مالك',
   nameTransliterated: 'Ghanm ibn Malik',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'malik-ibn-al-najjar', claims: legacyUnreviewed },

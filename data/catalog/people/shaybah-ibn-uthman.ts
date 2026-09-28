@@ -16,6 +16,7 @@ const shaybahIbnUthman = {
   nameTransliterated: 'Shaybah ibn Uthman',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'شيبة بن عثمان بن عبد الله بن عبد العزى القرشي العبدري',
       claims: legacyUnreviewed,

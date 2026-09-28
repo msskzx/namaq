@@ -12,7 +12,9 @@ const haramIbnAmr = {
   name: 'حرام بن عمرو',
   nameTransliterated: 'Haram ibn Amr',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'amr-ibn-zayd-manah', claims: legacyUnreviewed },

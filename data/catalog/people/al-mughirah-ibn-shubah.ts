@@ -12,6 +12,7 @@ const alMughirahIbnShubah = {
   nameTransliterated: 'Al-Mughirah ibn Shubah',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'المغيرة بن شعبة بن أبي عامر بن مسعود بن معتب الثقفي',
       claims: legacyUnreviewed,

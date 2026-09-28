@@ -12,7 +12,9 @@ const nawfalIbnAbdManaf = {
   name: 'نوفل بن عبد مناف',
   nameTransliterated: 'Nawfal ibn Abd Manaf',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abd-manaf-ibn-qusay', claims: legacyUnreviewed },

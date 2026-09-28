@@ -1,4 +1,4 @@
-import { type CatalogPerson } from '@/lib/catalog/types';
+import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
 /**
  * Named only in prophet-muhammad.ts's nasab chain (see
@@ -12,7 +12,9 @@ const kaabIbnLuay = {
   name: 'كعب بن لؤي',
   nameTransliterated: 'Kaab ibn Luay',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'luay-ibn-ghalib', claims: ['prophet/lineage'] },

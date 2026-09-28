@@ -21,6 +21,7 @@ const alHakamIbnAbiAlAs = {
   nameTransliterated: 'Al-Hakam ibn Abi al-As',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'الحكم بن أبي العاص بن أمية بن عبد شمس القرشي الأموي',
       claims: legacyUnreviewed,

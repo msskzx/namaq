@@ -12,7 +12,9 @@ const sinanIbnMalikAlNamri = {
   name: 'سنان بن مالك',
   nameTransliterated: 'Sinan ibn Malik Al Namri',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'malik-ibn-abd-amr-al-namri', claims: legacyUnreviewed },

@@ -12,7 +12,9 @@ const asadIbnHashim = {
   name: 'أسد بن هاشم',
   nameTransliterated: 'Asad ibn Hashim',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'hashim-ibn-abd-manaf', claims: legacyUnreviewed },

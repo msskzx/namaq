@@ -12,6 +12,7 @@ const huwaytibIbnAbdAlUzza = {
   nameTransliterated: 'Huwaytib ibn Abd al-Uzza',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'حويطب بن عبد العزى القرشي العامري',
       claims: legacyUnreviewed,

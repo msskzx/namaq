@@ -12,7 +12,9 @@ const uhaybIbnAbdManaf = {
   name: 'أهيب بن عبد مناف',
   nameTransliterated: 'Uhayb ibn Abd Manaf',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abd-manaf-ibn-zuhrah', claims: legacyUnreviewed },

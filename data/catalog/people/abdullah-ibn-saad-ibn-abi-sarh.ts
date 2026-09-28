@@ -14,6 +14,7 @@ const abdullahIbnSaadIbnAbiSarh = {
   nameTransliterated: 'Abdullah ibn Saad ibn Abi Sarh',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عبد الله بن سعد بن أبي سرح بن الحارث القرشي العامري',
       claims: legacyUnreviewed,

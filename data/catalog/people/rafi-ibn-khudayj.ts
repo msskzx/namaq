@@ -12,6 +12,7 @@ const rafiIbnKhudayj = {
   nameTransliterated: 'Rafi ibn Khudayj',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'رافع بن خديج بن رافع بن عدي بن تزيد الأنصاري الخزرجي المدني',
       claims: legacyUnreviewed,

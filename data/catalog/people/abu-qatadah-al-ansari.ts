@@ -14,6 +14,7 @@ const abuQatadahAlAnsari = {
   nameTransliterated: 'Abu Qatadah al-Ansari',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'الحارث بن ربعي الأنصاري السلمي',
       claims: legacyUnreviewed,

@@ -10,6 +10,7 @@ const abuAbs = {
   nameTransliterated: 'Abu Abs',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عبد الرحمن بن جبر بن عمرو بن زيد بن جشم بن حارثة بن الحارث الأوسي.',
       claims: ['abu-abs-siyar21/full-name'],

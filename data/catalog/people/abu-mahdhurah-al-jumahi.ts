@@ -14,6 +14,7 @@ const abuMahdhurahAlJumahi = {
   nameTransliterated: 'Abu Mahdhurah al-Jumahi',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'أوس بن معير بن لوذان بن ربيعة بن سعد بن جمح القرشي الجمحي',
       claims: legacyUnreviewed,

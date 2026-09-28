@@ -12,6 +12,7 @@ const iyadIbnGhanm = {
   nameTransliterated: 'Iyad ibn Ghanm',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'عياض بن غنم بن زهير بن أبي شداد الفهري', claims: legacyUnreviewed },
   },
   titles: [

@@ -13,6 +13,7 @@ const khubaybIbnAdi = {
   nameTransliterated: 'Khubayb ibn Adi',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'خبيب بن عدي بن عامر بن مجدعة بن جحجبى الأنصاري',
       claims: legacyUnreviewed,

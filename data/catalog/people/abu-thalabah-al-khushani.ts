@@ -11,7 +11,9 @@ const abuThalabahAlKhushani = {
   name: 'أبو ثعلبة الخشني',
   nameTransliterated: 'Abu Thalabah al-Khushani',
   hasProfile: true,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],

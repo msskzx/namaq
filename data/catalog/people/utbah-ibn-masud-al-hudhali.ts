@@ -16,6 +16,7 @@ const utbahIbnMasudAlHudhali = {
   nameTransliterated: 'Utbah ibn Masud al-Hudhali',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عتبة بن مسعود بن غافل بن حبيب بن شمخ بن فار بن مخزوم بن صاهلة بن كاهل بن الحارث بن تميم بن سعد بن هذيل الهذلي',
       claims: legacyUnreviewed,

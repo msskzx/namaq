@@ -1,17 +1,22 @@
 import { describe, expect, it } from 'vitest';
-import { legacyUnreviewed, type Catalog, type CatalogPerson } from './types';
+import { legacyUnreviewed, type Catalog, type CatalogPerson, type CatalogPersonFields } from './types';
 import { awaitingEvidence, catalogProvenance } from './provenance';
 
-const person = (over: Partial<CatalogPerson> = {}): CatalogPerson => ({
-  kind: 'PERSON',
-  slug: 'someone',
-  name: 'فلان',
-  hasProfile: true,
-  fields: {},
-  titles: [],
-  relations: [],
-  ...over,
-});
+type PersonOver = Omit<Partial<CatalogPerson>, 'fields'> & { fields?: Partial<CatalogPersonFields> };
+
+const person = (over: PersonOver = {}): CatalogPerson => {
+  const { fields, titles, relations, ...rest } = over;
+  return {
+    kind: 'PERSON',
+    slug: 'someone',
+    name: 'فلان',
+    hasProfile: true,
+    ...rest,
+    fields: { sex: { value: 'MALE', claims: legacyUnreviewed }, ...fields },
+    titles: titles ?? [],
+    relations: relations ?? [],
+  };
+};
 
 const catalog = (over: Partial<Catalog> = {}): Catalog => ({ people: [], battles: [], events: [], utterances: [], ...over });
 
@@ -24,6 +29,7 @@ describe('catalogProvenance', () => {
     });
 
     expect(catalogProvenance(catalog({ people: [subject] }))).toEqual([
+      { subject: 'people/someone', path: 'fields.sex', claims: legacyUnreviewed },
       { subject: 'people/someone', path: 'fields.fullName', claims: ['pilot/one'] },
       { subject: 'people/someone', path: 'titles[0]', claims: legacyUnreviewed },
       { subject: 'people/someone', path: 'relations[0]', claims: ['pilot/two'] },
@@ -53,12 +59,15 @@ describe('awaitingEvidence', () => {
     });
 
     expect(awaitingEvidence(catalog({ people: [subject] }))).toEqual([
+      { subject: 'people/someone', path: 'fields.sex', claims: legacyUnreviewed },
       { subject: 'people/someone', path: 'fields.deathYearHijri', claims: legacyUnreviewed },
     ]);
   });
 
   it('is empty when every value is cited', () => {
-    const subject = person({ fields: { virtues: { value: 'مناقب', claims: ['pilot/one'] } } });
+    const subject = person({
+      fields: { virtues: { value: 'مناقب', claims: ['pilot/one'] }, sex: { value: 'MALE', claims: ['pilot/one'] } },
+    });
 
     expect(awaitingEvidence(catalog({ people: [subject] }))).toEqual([]);
   });

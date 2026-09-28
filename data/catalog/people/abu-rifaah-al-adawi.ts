@@ -12,6 +12,7 @@ const abuRifaahAlAdawi = {
   nameTransliterated: 'Abu Rifaah al-Adawi',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'تميم بن أسيد بن عدي بن عبد مناة بن أد بن طابخة المضري',
       claims: legacyUnreviewed,

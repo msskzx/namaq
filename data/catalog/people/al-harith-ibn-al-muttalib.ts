@@ -12,7 +12,9 @@ const alHarithIbnAlMuttalib = {
   name: 'الحارث بن المطلب',
   nameTransliterated: 'Al Harith ibn Al Muttalib',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'al-muttalib-ibn-abd-manaf', claims: legacyUnreviewed },

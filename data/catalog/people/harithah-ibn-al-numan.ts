@@ -13,6 +13,7 @@ const harithahIbnAlNuman = {
   nameTransliterated: 'Harithah ibn al-Numan',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'حارثة بن النعمان بن نفع بن زيد بن عبيد بن ثعلبة بن غنم بن مالك بن النجار الأنصاري النجاري',
       claims: legacyUnreviewed,

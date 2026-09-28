@@ -55,11 +55,12 @@ function settleFields(
 
 async function projectPeople(people: Catalog['people']) {
   for (const subject of people) {
+    // Graph-only subjects project to Neo4j, never to PostgreSQL: a stale row
+    // with the same slug is left alone. See docs/plans/reviewed-quiz-bank.md.
+    if (!subject.hasProfile) continue;
     let live = await prisma.person.findUnique({ where: { slug: subject.slug } });
 
     if (!live) {
-      // Graph-only: no Postgres row is ever expected for this slug.
-      if (!subject.hasProfile) continue;
       if (!ownedByCatalog(subject.slug)) {
         conflicts.push(`people/${subject.slug}: no row, and a seed file still authors them`);
         continue;

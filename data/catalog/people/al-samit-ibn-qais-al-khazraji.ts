@@ -12,7 +12,9 @@ const alSamitIbnQaisAlKhazraji = {
   name: 'الصامت بن قيس',
   nameTransliterated: 'Al Samit ibn Qais Al Khazraji',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'SON', to: 'ubadah-ibn-al-samit', claims: legacyUnreviewed },

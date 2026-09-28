@@ -12,7 +12,9 @@ const alJumuhIbnZayd = {
   name: 'الجموح بن زيد',
   nameTransliterated: 'Al Jumuh ibn Zayd',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'zayd-ibn-haram-ibn-kaab', claims: legacyUnreviewed },

@@ -12,7 +12,9 @@ const malikIbnDabbah = {
   name: 'مالك بن ضبة',
   nameTransliterated: 'Malik ibn Dabbah',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'dabbah-ibn-al-harith', claims: legacyUnreviewed },

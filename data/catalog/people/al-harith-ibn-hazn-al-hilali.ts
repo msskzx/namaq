@@ -12,7 +12,9 @@ const alHarithIbnHaznAlHilali = {
   name: 'الحارث بن حزن',
   nameTransliterated: 'Al Harith ibn Hazn Al Hilali',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'DAUGHTER', to: 'maymunah-bint-al-harith', claims: legacyUnreviewed },

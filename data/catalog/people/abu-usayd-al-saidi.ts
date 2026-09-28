@@ -13,6 +13,7 @@ const abuUsaydAlSaidi = {
   nameTransliterated: 'Abu Usayd al-Saidi',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'مالك بن ربيعة بن البدن الأنصاري الساعدي',
       claims: legacyUnreviewed,

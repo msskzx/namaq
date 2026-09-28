@@ -12,7 +12,9 @@ const hislIbnJabirAlAbsi = {
   name: 'حسل بن جابر',
   nameTransliterated: 'Hisl ibn Jabir Al Absi',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'SON', to: 'hudhayfah-ibn-al-yaman', claims: legacyUnreviewed },
