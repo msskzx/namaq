@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { apiError, CATALOG_CACHE_HEADERS } from '@/lib/apiError';
 
 // A light-weight sibling of GET /api/people/[slug]: the graph workspace's
 // selected-subject panel only ever shows a person's full name and titles
@@ -29,12 +30,8 @@ export async function GET(
       );
     }
 
-    return NextResponse.json({ ...person, hasProfile: true });
+    return NextResponse.json({ ...person, hasProfile: true }, { headers: CATALOG_CACHE_HEADERS });
   } catch (error) {
-    console.error('API Error:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch person preview' },
-      { status: 500 }
-    );
+    return apiError('GET /api/people/[slug]/preview', error, 'Failed to fetch person preview');
   }
 }

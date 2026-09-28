@@ -405,6 +405,16 @@ describe('GET /api/graph', () => {
     expect(run.mock.calls[0][1]).toEqual({ persons: ['a', 'b'] });
   });
 
+  it('truncates a request naming more than the max number of subjects', async () => {
+    const run = vi.fn().mockResolvedValue({ records: [] });
+    getSession.mockReturnValue({ run });
+    const many = Array.from({ length: 80 }, (_, i) => `person=p${i}`).join('&');
+
+    await GET(request(`?${many}`));
+
+    expect(run.mock.calls[0][1].persons).toHaveLength(50);
+  });
+
   it('walks FATHER-only chains for ancestorsOf (nasab is patrilineal)', async () => {
     const run = vi.fn().mockResolvedValue({ records: [] });
     getSession.mockReturnValue({ run });

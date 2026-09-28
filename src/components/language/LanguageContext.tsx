@@ -13,32 +13,29 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
+function readStoredLanguage(): Language | undefined {
+  if (typeof window === 'undefined') return undefined;
+
+  const cookieConsent = localStorage.getItem('cookie-consent');
+  const savedLanguage = cookieConsent === 'accepted'
+    ? (Cookies.get('language') as Language)
+    : (localStorage.getItem('language') as Language);
+
+  return savedLanguage === 'en' || savedLanguage === 'ar' ? savedLanguage : undefined;
+}
+
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguage] = useState<Language>('ar');
+  const [language, setLanguage] = useState<Language>(() => readStoredLanguage() ?? 'ar');
   const [languageLoaded, setLanguageLoaded] = useState(false);
 
-  // Initialize language from storage on mount
   useEffect(() => {
-    // Only run on client side
-    if (typeof window === 'undefined') return;
-    
-    const cookieConsent = localStorage.getItem('cookie-consent');
-    
-    if (cookieConsent === 'accepted') {
-      // Use cookies when consent is given
-      const savedLanguage = Cookies.get('language') as Language;
-      if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'ar')) {
-        setLanguage(savedLanguage);
-      }
-    } else {
-      // Use localStorage as fallback when cookies not accepted
-      const savedLanguage = localStorage.getItem('language') as Language;
-      if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'ar')) {
-        setLanguage(savedLanguage);
-      }
-    }
     setLanguageLoaded(true);
   }, []);
+
+  useEffect(() => {
+    document.documentElement.lang = language;
+    document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
+  }, [language]);
 
   const toggleLanguage = () => {
     const newLanguage: Language = language === 'en' ? 'ar' : 'en';

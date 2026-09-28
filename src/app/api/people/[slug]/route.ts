@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { utteranceSelect } from '@/lib/utteranceSelect';
+import { apiError, CATALOG_CACHE_HEADERS } from '@/lib/apiError';
 
 type RelatedSubject = { relatedSubjectSlug: string | null; relatedSubjectKind: string | null };
 
@@ -77,12 +78,12 @@ export async function GET(
       orderBy: { updatedAt: 'desc' },
     });
 
-    return NextResponse.json({ ...person, claims: await withRelatedSubjectNames(claims) });
-  } catch (error) {
-    console.error('API Error:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch person' },
-      { status: 500 }
+      { ...person, claims: await withRelatedSubjectNames(claims) },
+      { headers: CATALOG_CACHE_HEADERS }
     );
+  } catch (error) {
+    return apiError('GET /api/people/[slug]', error, 'Failed to fetch person');
   }
-} 
+}
+

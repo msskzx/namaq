@@ -39,6 +39,27 @@ const mutah = {
       },
       claims: ['mutah/zayd-command', 'zaid-ibn-harithah-siyar36/mutah'],
     },
+    {
+      person: 'jaafar-ibn-abi-talib',
+      isMuslim: true,
+      status: ['MARTYRED'],
+      summary: {
+        value:
+          'أمره رسول الله صلى الله عليه وسلم على جيش مؤتة، فأخذ اللواء بعد زيد وشد على الناس حتى قتل.',
+        claims: ['jaafar-ibn-abi-talib-siyar34/mutah'],
+      },
+      claims: ['jaafar-ibn-abi-talib-siyar34/mutah'],
+    },
+    {
+      person: 'abdullah-ibn-rawahah',
+      isMuslim: true,
+      status: ['MARTYRED'],
+      summary: {
+        value: 'أخذ الراية بعد قتل صاحبيه فقاتل حتى قتل.',
+        claims: ['abdullah-ibn-rawahah-siyar37/mutah'],
+      },
+      claims: ['abdullah-ibn-rawahah-siyar37/mutah'],
+    },
   ],
 } satisfies CatalogBattle;
 
