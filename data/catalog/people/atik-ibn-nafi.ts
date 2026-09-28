@@ -12,7 +12,9 @@ const atikIbnNafi = {
   name: 'عتيك بن نافع',
   nameTransliterated: 'Atik ibn Nafi',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'nafi-ibn-imri-al-qays', claims: legacyUnreviewed },

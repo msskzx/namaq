@@ -14,7 +14,9 @@ const alKilabiyyah = {
   name: 'الكلابية',
   nameTransliterated: 'Al-Kilabiyyah',
   hasProfile: true,
-  fields: {},
+  fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
+  },
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],

@@ -1,4 +1,4 @@
-import { type CatalogPerson } from '@/lib/catalog/types';
+import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
 /**
  * Named only in prophet-muhammad.ts's nasab chain (see
@@ -12,7 +12,9 @@ const khuzaymaIbnMudrika = {
   name: 'خزيمة بن مدركة',
   nameTransliterated: 'Khuzayma ibn Mudrika',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'mudrika-ibn-ilias', claims: ['prophet/lineage'] },

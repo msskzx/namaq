@@ -12,7 +12,9 @@ const alBukayrIbnAbdYalil = {
   name: 'البكير بن عبد ياليل',
   nameTransliterated: 'Al Bukayr ibn Abd Yalil',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abd-yalil-ibn-nashib', claims: legacyUnreviewed },

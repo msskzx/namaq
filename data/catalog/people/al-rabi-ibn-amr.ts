@@ -12,7 +12,9 @@ const alRabiIbnAmr = {
   name: 'الربيع بن عمرو',
   nameTransliterated: 'Al Rabi ibn Amr',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'amr-ibn-abi-zuhayr', claims: legacyUnreviewed },

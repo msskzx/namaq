@@ -12,7 +12,9 @@ const malikIbnAbdAmrAlNamri = {
   name: 'مالك بن عبد عمرو',
   nameTransliterated: 'Malik ibn Abd Amr Al Namri',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abd-amr-ibn-uqail-al-namri', claims: legacyUnreviewed },

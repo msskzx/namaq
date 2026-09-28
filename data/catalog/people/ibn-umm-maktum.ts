@@ -17,6 +17,7 @@ const ibnUmmMaktum = {
   nameTransliterated: 'Ibn Umm Maktum',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'عبد الله بن قيس بن زائدة بن الأصم بن رواحة القرشي العامري', claims: legacyUnreviewed },
   },
   titles: [

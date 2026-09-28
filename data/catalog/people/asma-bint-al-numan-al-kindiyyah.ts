@@ -13,6 +13,7 @@ const asmaBintAlNumanAlKindiyyah = {
   nameTransliterated: 'Asma bint al-Numan al-Kindiyyah',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: { value: 'أسماء بنت النعمان بن أبي الجون الكندي', claims: legacyUnreviewed },
   },
   titles: [

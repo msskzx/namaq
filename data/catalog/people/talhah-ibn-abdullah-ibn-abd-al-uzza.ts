@@ -12,7 +12,9 @@ const talhahIbnAbdullahIbnAbdAlUzza = {
   name: 'طلحة بن عبد الله',
   nameTransliterated: 'Talhah ibn Abdullah ibn Abd Al Uzza',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abdullah-ibn-abd-al-uzza-abu-talhah', claims: legacyUnreviewed },

@@ -12,6 +12,7 @@ const zaidIbnArqam = {
   nameTransliterated: 'Zaid ibn Arqam',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'زيد بن أرقم بن زيد بن قيس بن النعمان بن مالك الأغر بن ثعلبة بن كعب بن الخزرج بن الحارث بن الخزرج الأنصاري الخزرجي',
       claims: legacyUnreviewed,

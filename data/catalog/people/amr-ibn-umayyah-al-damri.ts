@@ -13,6 +13,7 @@ const amrIbnUmayyahAlDamri = {
   nameTransliterated: 'Amr ibn Umayyah al-Damri',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عمرو بن أمية بن خويلد بن عبد الله بن إياس الضمري',
       claims: legacyUnreviewed,

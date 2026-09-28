@@ -13,6 +13,7 @@ const muadhIbnJabal = {
   nameTransliterated: 'Muadh ibn Jabal',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'معاذ بن جبل بن عمرو بن أوس بن عائذ بن عدي بن كعب بن عمرو بن عدي بن سعد بن علي بن أسد بن ساردة بن يزيد بن جشم بن الخزرج الأنصاري الخزرجي',
       claims: legacyUnreviewed,

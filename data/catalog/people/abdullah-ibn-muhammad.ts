@@ -11,6 +11,7 @@ const abdullahIbnMuhammad = {
   nameTransliterated: 'Abdullah ibn Muhammad',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عبد الله بن محمد بن عبد الله الهاشمي القرشي (الطيب الطاهر)',
       claims: legacyUnreviewed,

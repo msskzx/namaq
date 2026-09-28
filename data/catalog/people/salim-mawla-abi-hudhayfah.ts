@@ -12,6 +12,7 @@ const salimMawlaAbiHudhayfah = {
   nameTransliterated: 'Salim, mawla of Abi Hudhayfah',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'سَالِمُ بنُ مَعْقِلٍ', claims: ['salim-siyar14/full-name'] },
     virtues: {
       value:

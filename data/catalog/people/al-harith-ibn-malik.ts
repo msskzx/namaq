@@ -12,7 +12,9 @@ const alHarithIbnMalik = {
   name: 'الحارث بن مالك',
   nameTransliterated: 'Al Harith ibn Malik',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'malik-ibn-kaab', claims: legacyUnreviewed },

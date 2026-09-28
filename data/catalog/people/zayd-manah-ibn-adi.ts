@@ -12,7 +12,9 @@ const zaydManahIbnAdi = {
   name: 'زيد مناة بن عدي',
   nameTransliterated: 'Zayd Manah ibn Adi',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'adi-ibn-amr', claims: legacyUnreviewed },

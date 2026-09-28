@@ -19,6 +19,7 @@ const ummSulaymAlGhumaysa = {
   nameTransliterated: 'Umm Sulaym al-Ghumaysa',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: {
       value: 'الغميصاء بنت ملحان بن خالد بن زيد بن حرام بن جندب بن عامر بن غنم بن عدي بن النجار الأنصارية الخزرجية',
       claims: legacyUnreviewed,

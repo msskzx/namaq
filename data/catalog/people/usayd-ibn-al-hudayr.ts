@@ -13,6 +13,7 @@ const usaydIbnAlHudayr = {
   nameTransliterated: 'Usayd ibn al-Hudayr',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'أسيد بن الحضير بن سماك بن عتيك بن نافع بن امرئ القيس بن زيد بن عبد الأشهل الأنصاري الأوسي الأشهلي',
       claims: legacyUnreviewed,

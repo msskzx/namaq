@@ -13,6 +13,7 @@ const khalidIbnAlWalid = {
   nameTransliterated: 'Khalid ibn al-Walid',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'خالد بن الوليد بن المغيرة بن عبد الله بن عمر بن مخزوم بن يقظة القرشي المخزومي',
       claims: legacyUnreviewed,

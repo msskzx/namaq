@@ -12,7 +12,9 @@ const imruAlQaysIbnMalikAlAghar = {
   name: 'امرؤ القيس بن مالك الأغر',
   nameTransliterated: 'Imru Al Qays ibn Malik Al Aghar',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'malik-ibn-thalabah', claims: legacyUnreviewed },

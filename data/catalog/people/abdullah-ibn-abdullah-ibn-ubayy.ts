@@ -17,6 +17,7 @@ const abdullahIbnAbdullahIbnUbayy = {
   nameTransliterated: 'Abdullah ibn Abdullah ibn Ubayy',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عبد الله بن عبد الله بن أبي بن مالك بن الحارث بن عبيد بن مالك بن سالم بن غنم بن عوف بن الخزرج الأنصاري الخزرجي',
       claims: legacyUnreviewed,

@@ -17,6 +17,7 @@ const durrahBintAbiLahab = {
   nameTransliterated: 'Durrah bint Abi Lahab',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: { value: 'درة بنت أبي لهب بن عبد المطلب القرشية الهاشمية', claims: legacyUnreviewed },
   },
   titles: [

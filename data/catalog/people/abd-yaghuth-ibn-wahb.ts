@@ -12,7 +12,9 @@ const abdYaghuthIbnWahb = {
   name: 'عبد يغوث بن وهب',
   nameTransliterated: 'Abd Yaghuth ibn Wahb',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'wahb-ibn-abd-manaf-al-zuhri', claims: legacyUnreviewed },

@@ -14,6 +14,7 @@ const abdullahIbnAmrIbnAlAs = {
   nameTransliterated: 'Abdullah ibn Amr ibn al-As',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عبد الله بن عمرو بن العاص بن وائل بن هاشم بن سعيد بن سعد بن سهم بن عمرو بن هصيص بن كعب بن لؤي بن غالب القرشي السهمي',
       claims: legacyUnreviewed,

@@ -14,6 +14,7 @@ const makhramahIbnNawfal = {
   nameTransliterated: 'Makhramah ibn Nawfal',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'مخرمة بن نوفل بن أهيب بن عبد مناف بن زهرة بن كلاب القرشي الزهري',
       claims: legacyUnreviewed,

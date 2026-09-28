@@ -18,6 +18,7 @@ const barrahBintAbdAlMuttalib = {
   nameTransliterated: 'Barrah bint Abd al-Muttalib',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: { value: 'برة بنت عبد المطلب بن هاشم القرشية الهاشمية', claims: legacyUnreviewed },
   },
   titles: [

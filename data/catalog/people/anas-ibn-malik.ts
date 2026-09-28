@@ -1,4 +1,4 @@
-import { type CatalogPerson } from '@/lib/catalog/types';
+import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
 /**
  * Carried from neo4j/graphSeedData*.ts, whose node declaration is retired
@@ -12,7 +12,9 @@ const anasIbnMalik = {
   name: 'أنس بن مالك',
   nameTransliterated: 'Anas ibn Malik',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'HALF_BROTHER', inverse: 'HALF_BROTHER', to: 'al-baraa-ibn-malik', claims: ['al-baraa-ibn-malik-siyar26/half-brother'] },

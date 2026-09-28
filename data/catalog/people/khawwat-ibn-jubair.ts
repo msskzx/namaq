@@ -11,6 +11,7 @@ const khawwatIbnJubair = {
   nameTransliterated: 'Khawwat ibn Jubair',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'خوات بن جبير بن النعمان بن أمية بن البرك الأنصاري الأوسي', claims: legacyUnreviewed },
   },
   titles: [

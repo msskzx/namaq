@@ -12,7 +12,9 @@ const amrIbnNufayl = {
   name: 'عمرو بن نفيل',
   nameTransliterated: 'Amr ibn Nufayl',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'nufayl-ibn-abd-al-uzza', claims: legacyUnreviewed },

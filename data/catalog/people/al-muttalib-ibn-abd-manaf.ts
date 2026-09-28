@@ -12,7 +12,9 @@ const alMuttalibIbnAbdManaf = {
   name: 'المطلب بن عبد مناف',
   nameTransliterated: 'Al Muttalib ibn Abd Manaf',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abd-manaf-ibn-qusay', claims: legacyUnreviewed },

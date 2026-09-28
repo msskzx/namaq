@@ -12,7 +12,9 @@ const saadIbnTaym = {
   name: 'سعد بن تيم',
   nameTransliterated: 'Saad ibn Taym',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'taym-ibn-murrah', claims: legacyUnreviewed },

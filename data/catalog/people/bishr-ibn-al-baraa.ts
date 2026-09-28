@@ -12,6 +12,7 @@ const bishrIbnAlBaraa = {
   nameTransliterated: 'Bishr ibn al-Baraa',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'بشر بن البراء بن معرور بن صخر بن خنساء بن سنان الأنصاري الخزرجي السلمي',
       claims: legacyUnreviewed,

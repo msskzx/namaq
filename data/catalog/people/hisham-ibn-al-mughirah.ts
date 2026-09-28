@@ -12,7 +12,9 @@ const hishamIbnAlMughirah = {
   name: 'هشام بن المغيرة',
   nameTransliterated: 'Hisham ibn Al Mughirah',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'al-mughirah-ibn-abdullah-ibn-umar', claims: legacyUnreviewed },

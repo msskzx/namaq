@@ -12,7 +12,9 @@ const zamahIbnQaisAlAmiri = {
   name: 'زمعة بن قيس',
   nameTransliterated: 'Zamah ibn Qais Al Amiri',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'DAUGHTER', to: 'sawdah-bint-zamah', claims: legacyUnreviewed },

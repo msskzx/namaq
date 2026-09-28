@@ -18,6 +18,7 @@ const qutaylahBintQaisAlKindiyyah = {
   nameTransliterated: 'Qutaylah bint Qais al-Kindiyyah',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: { value: 'قتيلة بنت قيس بن معدي كرب الكندية', claims: legacyUnreviewed },
   },
   titles: [

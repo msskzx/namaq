@@ -12,7 +12,9 @@ const marurIbnSakhr = {
   name: 'معرور بن صخر',
   nameTransliterated: 'Marur ibn Sakhr',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'sakhr-ibn-khansa', claims: legacyUnreviewed },

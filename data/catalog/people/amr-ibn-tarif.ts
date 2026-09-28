@@ -12,7 +12,9 @@ const amrIbnTarif = {
   name: 'عمرو بن طريف',
   nameTransliterated: 'Amr ibn Tarif',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'SON', to: 'at-tufayl-ibn-amr-ad-dawsi', claims: legacyUnreviewed },

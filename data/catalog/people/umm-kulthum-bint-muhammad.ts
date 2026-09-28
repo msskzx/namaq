@@ -12,6 +12,7 @@ const ummKulthumBintMuhammad = {
   nameTransliterated: 'Umm Kulthum bint Muhammad',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: {
       value: 'أم كلثوم بنت محمد بن عبد الله بن عبد المطلب بن هاشم القرشية الهاشمية',
       claims: legacyUnreviewed,

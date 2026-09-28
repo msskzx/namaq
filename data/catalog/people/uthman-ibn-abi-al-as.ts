@@ -13,6 +13,7 @@ const uthmanIbnAbiAlAs = {
   nameTransliterated: 'Uthman ibn Abi al-As',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'عثمان بن أبي العاص الثقفي الطائفي', claims: legacyUnreviewed },
   },
   titles: [

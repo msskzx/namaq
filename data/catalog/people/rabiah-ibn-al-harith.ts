@@ -13,6 +13,7 @@ const rabiahIbnAlHarith = {
   nameTransliterated: 'Rabiah ibn al-Harith',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'ربيعة بن الحارث بن عبد المطلب بن هاشم القرشي الهاشمي', claims: legacyUnreviewed },
   },
   titles: [

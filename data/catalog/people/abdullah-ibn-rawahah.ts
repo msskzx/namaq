@@ -13,6 +13,7 @@ const abdullahIbnRawahah = {
   nameTransliterated: 'Abdullah ibn Rawahah',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عبد الله بن رواحة بن ثعلبة بن امرئ القيس بن ثعلبة الأنصاري الخزرجي',
       claims: legacyUnreviewed,

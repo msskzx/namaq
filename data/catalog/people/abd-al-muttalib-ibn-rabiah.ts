@@ -15,6 +15,7 @@ const abdAlMuttalibIbnRabiah = {
   nameTransliterated: 'Abd al-Muttalib ibn Rabiah',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عبد المطلب بن ربيعة بن الحارث بن عبد المطلب بن هاشم القرشي الهاشمي',
       claims: legacyUnreviewed,

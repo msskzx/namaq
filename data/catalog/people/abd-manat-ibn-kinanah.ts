@@ -12,7 +12,9 @@ const abdManatIbnKinanah = {
   name: 'عبد مناة بن كنانة',
   nameTransliterated: 'Abd Manat ibn Kinanah',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'kinanah-ibn-khuzayma', claims: legacyUnreviewed },

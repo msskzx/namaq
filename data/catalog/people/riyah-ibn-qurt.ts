@@ -12,7 +12,9 @@ const riyahIbnQurt = {
   name: 'رياح بن قرط',
   nameTransliterated: 'Riyah ibn Qurt',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'qurt-ibn-razah', claims: legacyUnreviewed },

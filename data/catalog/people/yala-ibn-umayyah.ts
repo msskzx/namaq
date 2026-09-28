@@ -17,6 +17,7 @@ const yalaIbnUmayyah = {
   nameTransliterated: 'Yala ibn Umayyah',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'يعلى بن أمية بن أبي عبيدة التميمي المكي',
       claims: legacyUnreviewed,

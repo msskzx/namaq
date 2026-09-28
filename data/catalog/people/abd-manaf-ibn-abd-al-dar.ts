@@ -12,7 +12,9 @@ const abdManafIbnAbdAlDar = {
   name: 'عبد مناف بن عبد الدار',
   nameTransliterated: 'Abd Manaf ibn Abd Al Dar',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abd-al-dar-ibn-qusay', claims: legacyUnreviewed },

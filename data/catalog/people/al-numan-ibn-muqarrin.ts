@@ -13,6 +13,7 @@ const alNumanIbnMuqarrin = {
   nameTransliterated: 'Al-Numan ibn Muqarrin',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'النعمان بن عمرو بن مقرن بن عائذ بن ميجا بن هجير بن نصر بن حبشية بن كعب بن ثور بن هدمة بن لاطم بن عثمان المزني',
       claims: legacyUnreviewed,

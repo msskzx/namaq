@@ -17,6 +17,7 @@ const shaddadIbnAws = {
   nameTransliterated: 'Shaddad ibn Aws',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'شداد بن أوس بن ثابت بن المنذر بن حرام الأنصاري النجاري الخزرجي',
       claims: legacyUnreviewed,

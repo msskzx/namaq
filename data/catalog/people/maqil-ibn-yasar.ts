@@ -11,6 +11,7 @@ const maqilIbnYasar = {
   nameTransliterated: 'Maqil ibn Yasar',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'معقل بن يسار المزني',
       claims: legacyUnreviewed,

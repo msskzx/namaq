@@ -12,7 +12,9 @@ const abdAmrIbnUqailAlNamri = {
   name: 'عبد عمرو بن عقيل',
   nameTransliterated: 'Abd Amr ibn Uqail Al Namri',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'SON', to: 'malik-ibn-abd-amr-al-namri', claims: legacyUnreviewed },

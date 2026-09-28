@@ -13,6 +13,7 @@ const kulthumIbnAlHidm = {
   nameTransliterated: 'Kulthum ibn al-Hidm',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'كلثوم بن الهدم بن امرئ القيس بن الحارث بن زيد الأنصاري الأوسي',
       claims: legacyUnreviewed,

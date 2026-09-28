@@ -12,7 +12,9 @@ const hashimIbnAbdManafAlAbdari = {
   name: 'هاشم بن عبد مناف',
   nameTransliterated: 'Hashim ibn Abd Manaf Al Abdari',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abd-manaf-ibn-abd-al-dar', claims: legacyUnreviewed },

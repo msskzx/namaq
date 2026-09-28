@@ -13,6 +13,7 @@ const abuTalib = {
   nameTransliterated: 'Abu Talib ibn Abd al-Muttalib',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'عبد مناف بن عبد المطلب بن هاشم القرشي الهاشمي (أبو طالب)', claims: legacyUnreviewed },
     virtues: {
       value: 'عم النبي وكافله بعد وفاة جده، حاميه وناصره في بداية الدعوة الإسلامية رغم عدم إسلامه.',

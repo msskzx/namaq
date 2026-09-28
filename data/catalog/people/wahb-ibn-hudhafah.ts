@@ -12,7 +12,9 @@ const wahbIbnHudhafah = {
   name: 'وهب بن حذافة',
   nameTransliterated: 'Wahb ibn Hudhafah',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'hudhafah-ibn-jumah', claims: legacyUnreviewed },

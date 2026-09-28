@@ -13,6 +13,7 @@ const atTufaylIbnAmrAdDawsi = {
   nameTransliterated: 'At-Tufayl ibn Amr ad-Dawsi',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'الطفيل بن عمرو بن طريف الدوسي', claims: legacyUnreviewed },
   },
   titles: [

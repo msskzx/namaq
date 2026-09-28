@@ -1,4 +1,4 @@
-import { type CatalogPerson } from '@/lib/catalog/types';
+import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
 /**
  * Named in prophet-muhammad.ts's own nasab chain (see
@@ -11,7 +11,9 @@ const abdAlMuttalibIbnHashim = {
   name: 'عبد المطلب بن هاشم',
   nameTransliterated: 'Abd al-Muttalib ibn Hashim',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'hashim-ibn-abd-manaf', claims: ['prophet/lineage'] },

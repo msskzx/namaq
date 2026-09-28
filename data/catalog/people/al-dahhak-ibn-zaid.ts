@@ -12,7 +12,9 @@ const alDahhakIbnZaid = {
   name: 'الضحاك بن زيد',
   nameTransliterated: 'Al Dahhak ibn Zaid',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'zaid-ibn-lawdhan', claims: legacyUnreviewed },

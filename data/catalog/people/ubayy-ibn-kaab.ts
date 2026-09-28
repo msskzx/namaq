@@ -13,6 +13,7 @@ const ubayyIbnKaab = {
   nameTransliterated: 'Ubayy ibn Kaab',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'أبي بن كعب بن قيس بن عبيد بن زيد بن معاوية بن عمرو بن مالك بن النجار الأنصاري النجاري',
       claims: legacyUnreviewed,

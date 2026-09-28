@@ -12,7 +12,9 @@ const abdIbnAlHarithIbnZuhrah = {
   name: 'عبد بن الحارث',
   nameTransliterated: 'Abd ibn Al Harith ibn Zuhrah',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'al-harith-ibn-zuhrah', claims: legacyUnreviewed },

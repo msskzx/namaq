@@ -14,6 +14,7 @@ const zaynabBintAli = {
   nameTransliterated: 'Zaynab bint Ali',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: { value: 'زينب بنت علي بن أبي طالب الهاشمية القرشية', claims: legacyUnreviewed },
     virtues: {
       value: 'بنت علي وفاطمة، حفيدة النبي، عرفت بشجاعتها وفصاحتها.',

@@ -12,7 +12,9 @@ const sharahilIbnKaab = {
   name: 'شراحيل بن كعب',
   nameTransliterated: 'Sharahil ibn Kaab',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'kaab-ibn-abd-al-uzza', claims: legacyUnreviewed },

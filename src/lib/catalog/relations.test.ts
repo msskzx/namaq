@@ -1,17 +1,21 @@
 import { describe, expect, it } from 'vitest';
+import { legacyUnreviewed } from './types';
 import { catalogRelations } from './relations';
-import type { Catalog, CatalogPerson } from './types';
+import type { Catalog, CatalogPerson, CatalogPersonFields } from './types';
 
-const person = (over: Partial<CatalogPerson> = {}): CatalogPerson => ({
-  kind: 'PERSON',
-  slug: 'someone',
-  name: 'فلان',
-  hasProfile: true,
-  fields: {},
-  titles: [],
-  relations: [],
-  ...over,
-});
+const person = (over: Omit<Partial<CatalogPerson>, 'fields'> & { fields?: Partial<CatalogPersonFields> } = {}): CatalogPerson => {
+  const { fields, titles, relations, ...rest } = over;
+  return {
+    kind: 'PERSON',
+    slug: 'someone',
+    name: 'فلان',
+    hasProfile: true,
+    ...rest,
+    fields: { sex: { value: 'MALE', claims: legacyUnreviewed }, ...fields },
+    titles: titles ?? [],
+    relations: relations ?? [],
+  };
+};
 
 const catalog = (people: CatalogPerson[]): Catalog => ({ people, battles: [], events: [], utterances: [] });
 
@@ -112,8 +116,8 @@ describe('an inverse that depends on sex', () => {
     });
   });
 
-  // Unset sex is the normal state for anyone the sources have not stated it
-  // for, and it must not guess: one direction is better than a wrong pair.
+  // A target outside the catalog carries no sex here, and the projector must
+  // not guess: one direction is better than a wrong pair.
   it('writes one direction when the target has no sex', () => {
     const father: CatalogPerson = {
       ...withSex('father', 'MALE'),

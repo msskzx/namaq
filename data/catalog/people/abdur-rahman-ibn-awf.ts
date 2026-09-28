@@ -13,6 +13,7 @@ const abdurRahmanIbnAwf = {
   hasProfile: true,
 
   fields: {
+    sex: { value: 'MALE', claims: ['awf/sex'] },
     // The heading breaks the lineage in two, carrying the entry number and the
     // collection marks, and the nisbas arrive a paragraph later. The number and
     // the marks are dropped and the rest joined back into one line.

@@ -13,6 +13,7 @@ const muawiyahIbnHudayj = {
   nameTransliterated: 'Muawiyah ibn Hudayj',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'معاوية بن حديج بن جفنة بن قتيرة الكندي السكوني',
       claims: legacyUnreviewed,

@@ -13,6 +13,7 @@ const alMiqdadIbnAmr = {
   nameTransliterated: 'Al-Miqdad ibn Amr',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'المقداد بن عمرو بن ثعلبة بن مالك بن ربيعة القضاعي الكندي البهراني',
       claims: legacyUnreviewed,

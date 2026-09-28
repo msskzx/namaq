@@ -12,7 +12,9 @@ const saadIbnShahidAlAwsi = {
   name: 'سعد بن شهيد',
   nameTransliterated: 'Saad ibn Shahid Al Awsi',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'SON', to: 'umayr-ibn-saad-al-ansari', claims: legacyUnreviewed },

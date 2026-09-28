@@ -12,7 +12,9 @@ const atikIbnQaisAlAnsari = {
   name: 'عتيك بن قيس',
   nameTransliterated: 'Atik ibn Qais Al Ansari',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'SON', to: 'jabr-ibn-atik', claims: legacyUnreviewed },

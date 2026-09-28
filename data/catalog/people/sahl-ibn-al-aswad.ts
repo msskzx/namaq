@@ -12,7 +12,9 @@ const sahlIbnAlAswad = {
   name: 'سهل بن الأسود',
   nameTransliterated: 'Sahl ibn Al Aswad',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'al-aswad-ibn-haram', claims: legacyUnreviewed },

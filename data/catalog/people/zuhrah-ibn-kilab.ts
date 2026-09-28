@@ -12,7 +12,9 @@ const zuhrahIbnKilab = {
   name: 'زهرة بن كلاب',
   nameTransliterated: 'Zuhrah ibn Kilab',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'kilab-ibn-murrah', claims: legacyUnreviewed },

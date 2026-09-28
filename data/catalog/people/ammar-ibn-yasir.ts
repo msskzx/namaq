@@ -10,6 +10,7 @@ const ammarIbnYasir = {
   nameTransliterated: 'Ammar ibn Yasir',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     // Carried from the retired seed entry, which took it from the Siyar
     // without citing it.
     fullName: {

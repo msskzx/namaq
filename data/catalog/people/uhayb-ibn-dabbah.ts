@@ -12,7 +12,9 @@ const uhaybIbnDabbah = {
   name: 'أهيب بن ضبة',
   nameTransliterated: 'Uhayb ibn Dabbah',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'dabbah-ibn-al-harith', claims: legacyUnreviewed },

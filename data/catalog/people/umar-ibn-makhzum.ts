@@ -12,7 +12,9 @@ const umarIbnMakhzum = {
   name: 'عمر بن مخزوم',
   nameTransliterated: 'Umar ibn Makhzum',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'makhzum-ibn-yaqzah', claims: legacyUnreviewed },

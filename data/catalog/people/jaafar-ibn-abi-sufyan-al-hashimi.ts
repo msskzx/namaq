@@ -18,6 +18,7 @@ const jaafarIbnAbiSufyanAlHashimi = {
   nameTransliterated: 'Jaafar ibn Abi Sufyan al-Hashimi',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'جعفر بن أبي سفيان المغيرة بن الحارث بن عبد المطلب بن هاشم القرشي الهاشمي',
       claims: legacyUnreviewed,

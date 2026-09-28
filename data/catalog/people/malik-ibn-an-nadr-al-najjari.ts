@@ -12,7 +12,9 @@ const malikIbnAnNadrAlNajjari = {
   name: 'مالك بن النضر',
   nameTransliterated: 'Malik ibn An Nadr Al Najjari',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'an-nadr-ibn-damdam', claims: legacyUnreviewed },

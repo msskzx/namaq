@@ -13,6 +13,7 @@ const saidIbnYarbuAlQurashi = {
   nameTransliterated: 'Said ibn Yarbu al-Qurashi',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'سعيد بن يربوع القرشي المخزومي',
       claims: legacyUnreviewed,

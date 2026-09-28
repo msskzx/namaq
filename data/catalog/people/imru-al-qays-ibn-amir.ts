@@ -12,7 +12,9 @@ const imruAlQaysIbnAmir = {
   name: 'امرؤ القيس بن عامر',
   nameTransliterated: 'Imru Al Qays ibn Amir',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'amir-ibn-al-numan', claims: legacyUnreviewed },

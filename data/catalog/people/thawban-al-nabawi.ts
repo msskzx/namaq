@@ -12,6 +12,7 @@ const thawbanAlNabawi = {
   nameTransliterated: 'Thawban al-Nabawi',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'ثوبان بن جحدر',
       claims: legacyUnreviewed,

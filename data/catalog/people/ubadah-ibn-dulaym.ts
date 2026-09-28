@@ -12,7 +12,9 @@ const ubadahIbnDulaym = {
   name: 'عبادة بن دليم',
   nameTransliterated: 'Ubadah ibn Dulaym',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'dulaym-ibn-harithah', claims: legacyUnreviewed },

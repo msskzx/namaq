@@ -13,6 +13,7 @@ const ubaydahIbnAlHarith = {
   nameTransliterated: 'Ubaydah ibn al-Harith',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     // Carried from the seed rows.
     fullName: {
       value: 'عبيدة بن الحارث بن المطلب بن عبد مناف بن قصي القرشي المطلبي',

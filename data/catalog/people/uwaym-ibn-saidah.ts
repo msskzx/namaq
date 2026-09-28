@@ -13,6 +13,7 @@ const uwaymIbnSaidah = {
   nameTransliterated: 'Uwaym ibn Saidah',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عويم بن ساعدة بن عائش بن قيس بن النعمان بن زيد بن أمية الأنصاري الأوسي من بني عمرو بن عوف',
       claims: legacyUnreviewed,

@@ -12,7 +12,9 @@ const yaqzahIbnMurrah = {
   name: 'يقظة بن مرة',
   nameTransliterated: 'Yaqzah ibn Murrah',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'murrah-ibn-kaab', claims: legacyUnreviewed },

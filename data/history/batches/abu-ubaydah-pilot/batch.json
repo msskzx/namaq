@@ -1304,12 +1304,32 @@
           "accessedAt": "2026-09-09"
         }
       ]
+    },
+    {
+      "key": "abu-ubaydah/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-ubaydah-ibn-al-jarrah",
+      "assertion": "أبو عبيدة بن الجراح، عامر بن عبد الله.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5-p3",
+          "volume": "1",
+          "pageReference": "5",
+          "extractionUrl": "https://shamela.ws/book/10906/1431",
+          "excerptArabic": "١ - أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ عَامِرُ بنُ عَبْدِ اللهِ * (م، ق) .",
+          "accessedAt": "2026-09-28"
+        }
+      ],
+      "field": "sex"
     }
   ],
   "approval": {
-    "revision": "bd512c522769dc0d",
-    "approvedAt": "2026-09-22",
+    "revision": "5f4c5786ce0d566b",
+    "approvedAt": "2026-09-28",
     "approvedBy": "msskzx",
-    "note": "Re-recorded for publication after the edition's volumes were authored onto its source record and this entry was linked to the volume it opens in. No claim, citation or page changed: the revision moved because batch.json now says which of the twenty-eight volumes this reading came from. Review status is untouched and every claim remains Not reviewed; this permits the import and asserts nothing about anyone having read it. Previously: Re-approved at the revision the kunya claim produced. Fourteen claims keep the Reviewed status set on 2026-09-11. The kunya claim added afterwards is Not reviewed, so this approval says the batch may be published and says nothing about that one claim having been read."
+    "note": "Re-approved for publication after adding a field:sex claim for the subject, cited from the entry's self-identifying opening line. No other claim, citation or page changed. The new claim is Not reviewed; this permits the import and asserts nothing about anyone having read it. Pre-existing catalog:checklist warnings on this subject (wives/siblings) are untouched and remain for a later pass."
   }
 }

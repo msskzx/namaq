@@ -12,7 +12,9 @@ const thabitIbnAlMundhir = {
   name: 'ثابت بن المنذر',
   nameTransliterated: 'Thabit ibn Al Mundhir',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'al-mundhir-ibn-haram', claims: legacyUnreviewed },

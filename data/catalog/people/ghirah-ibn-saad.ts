@@ -12,7 +12,9 @@ const ghirahIbnSaad = {
   name: 'غيرة بن سعد',
   nameTransliterated: 'Ghirah ibn Saad',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'saad-ibn-layth', claims: legacyUnreviewed },

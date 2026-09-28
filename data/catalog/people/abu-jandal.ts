@@ -12,6 +12,7 @@ const abuJandal = {
   nameTransliterated: 'Abu Jandal',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'العاص بن سهيل بن عمرو بن عبد شمس بن عبد ود بن نصر بن حسل بن عامر بن لؤي بن غالب بن فهر العامري القرشي',
       claims: ['abu-jandal-siyar23/full-name'],

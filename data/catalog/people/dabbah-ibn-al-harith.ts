@@ -12,7 +12,9 @@ const dabbahIbnAlHarith = {
   name: 'ضبة بن الحارث',
   nameTransliterated: 'Dabbah ibn Al Harith',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'al-harith-ibn-fahr', claims: legacyUnreviewed },

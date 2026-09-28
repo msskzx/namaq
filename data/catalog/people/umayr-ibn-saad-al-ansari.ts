@@ -17,6 +17,7 @@ const umayrIbnSaadAlAnsari = {
   nameTransliterated: 'Umayr ibn Saad al-Ansari',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'عمير بن سعد بن شهيد الأنصاري الأوسي', claims: legacyUnreviewed },
   },
   titles: [

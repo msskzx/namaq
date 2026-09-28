@@ -12,7 +12,9 @@ const bukayrIbnAbdManat = {
   name: 'بكير بن عبد مناة',
   nameTransliterated: 'Bukayr ibn Abd Manat',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abd-manat-ibn-kinanah', claims: legacyUnreviewed },

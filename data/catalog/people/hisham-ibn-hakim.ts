@@ -14,6 +14,7 @@ const hishamIbnHakim = {
   nameTransliterated: 'Hisham ibn Hakim',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'هشام بن حكيم بن حزام القرشي الأسدي',
       claims: legacyUnreviewed,

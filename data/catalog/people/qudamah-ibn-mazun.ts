@@ -11,6 +11,7 @@ const qudamahIbnMazun = {
   nameTransliterated: 'Qudamah ibn Mazun',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     kunya: { value: 'أَبُو عَمْرٍو', claims: ['qudamah-mazun-siyar10/kunya'] },
     appearance: {
       value: 'كَانَ طَوِيْلاً أَسْمَرَ.',

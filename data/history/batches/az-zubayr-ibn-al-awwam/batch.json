@@ -1877,12 +1877,32 @@
           "accessedAt": "2026-09-18"
         }
       ]
+    },
+    {
+      "key": "zubayr/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "الزبير بن العوام، أبو عبد الله.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "41-p1",
+          "volume": "1",
+          "pageReference": "41",
+          "extractionUrl": "https://shamela.ws/book/10906/1467",
+          "excerptArabic": "٣ - الزُّبَيْرُ بنُ العَوَّامِ بنِ خُوَيْلِدِ بنِ أَسَدِ بنِ عَبْدِ العُزَّى * (ع)",
+          "accessedAt": "2026-09-28"
+        }
+      ],
+      "field": "sex"
     }
   ],
   "approval": {
-    "revision": "3ac94cdb89b99ddc",
-    "approvedAt": "2026-09-22",
+    "revision": "bee63400ea92c8f6",
+    "approvedAt": "2026-09-28",
     "approvedBy": "msskzx",
-    "note": "Re-recorded for publication after the edition's volumes were authored onto its source record and this entry was linked to the volume it opens in. No claim, citation or page changed: the revision moved because batch.json now says which of the twenty-eight volumes this reading came from. Review status is untouched and every claim remains Not reviewed; this permits the import and asserts nothing about anyone having read it. Previously: Approved for publication. All twenty-four claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+    "note": "Re-approved for publication after adding a field:sex claim for the subject, cited from the entry's self-identifying opening line. No other claim, citation or page changed. The new claim is Not reviewed; this permits the import and asserts nothing about anyone having read it. Pre-existing catalog:checklist warnings on this subject (wives/siblings) are untouched and remain for a later pass."
   }
 }

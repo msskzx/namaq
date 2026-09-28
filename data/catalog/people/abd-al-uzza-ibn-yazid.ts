@@ -12,7 +12,9 @@ const abdAlUzzaIbnYazid = {
   name: 'عبد العزى بن يزيد',
   nameTransliterated: 'Abd Al Uzza ibn Yazid',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'yazid-ibn-imri-al-qays', claims: legacyUnreviewed },

@@ -12,7 +12,9 @@ const alAliyah = {
   name: 'العالية',
   nameTransliterated: 'Al-Aliyah',
   hasProfile: true,
-  fields: {},
+  fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
+  },
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],

@@ -12,6 +12,7 @@ const abdullahIbnSuhail = {
   nameTransliterated: 'Abdullah ibn Suhail',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عبد الله بن سهيل بن عمرو العامري',
       claims: ['abdullah-ibn-suhail-siyar24/full-name'],

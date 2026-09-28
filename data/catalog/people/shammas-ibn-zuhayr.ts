@@ -12,7 +12,9 @@ const shammasIbnZuhayr = {
   name: 'شماس بن زهير',
   nameTransliterated: 'Shammas ibn Zuhayr',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'zuhayr-ibn-malik', claims: legacyUnreviewed },

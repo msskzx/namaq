@@ -13,6 +13,7 @@ const yazidIbnAbiSufyan = {
   nameTransliterated: 'Yazid ibn Abi Sufyan',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'يزيد بن أبي سفيان صخر بن حرب بن أمية بن عبد شمس بن عبد مناف القرشي الأموي',
       claims: legacyUnreviewed,

@@ -12,7 +12,9 @@ const amirIbnAmr = {
   name: 'عامر بن عمرو',
   nameTransliterated: 'Amir ibn Amr',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'amr-ibn-kaab', claims: legacyUnreviewed },

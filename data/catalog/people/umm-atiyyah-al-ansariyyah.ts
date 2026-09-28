@@ -15,6 +15,7 @@ const ummAtiyyahAlAnsariyyah = {
   nameTransliterated: 'Umm Atiyyah al-Ansariyyah',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: { value: 'نسيبة بنت الحارث الأنصارية', claims: legacyUnreviewed },
   },
   titles: [

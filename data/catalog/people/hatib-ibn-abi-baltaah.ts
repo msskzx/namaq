@@ -17,6 +17,7 @@ const hatibIbnAbiBaltaah = {
   nameTransliterated: 'Hatib ibn Abi Baltaah',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'حاطب بن عمرو بن عمير بن سلمة اللخمي المكي حليف بني أسد بن عبد العزى بن قصي',
       claims: legacyUnreviewed,

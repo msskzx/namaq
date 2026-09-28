@@ -17,6 +17,7 @@ const amrIbnAlJumuh = {
   nameTransliterated: 'Amr ibn al-Jumuh',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عمرو بن الجموح بن زيد بن حرام بن كعب بن غنم بن كعب بن سلمة الأنصاري الخزرجي السلمي',
       claims: legacyUnreviewed,

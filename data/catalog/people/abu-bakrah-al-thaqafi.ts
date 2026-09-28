@@ -14,6 +14,7 @@ const abuBakrahAlThaqafi = {
   nameTransliterated: 'Abu Bakrah al-Thaqafi',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'نفيع بن الحارث الثقفي الطائفي',
       claims: legacyUnreviewed,

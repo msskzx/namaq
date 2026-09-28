@@ -13,6 +13,7 @@ const saadIbnKhaythamah = {
   nameTransliterated: 'Saad ibn Khaythamah',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'سعد بن خيثمة بن الحارث بن مالك بن كعب الأنصاري الأوسي',
       claims: legacyUnreviewed,

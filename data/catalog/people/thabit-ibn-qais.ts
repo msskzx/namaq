@@ -13,6 +13,7 @@ const thabitIbnQais = {
   nameTransliterated: 'Thabit ibn Qais',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'ثابت بن قيس بن شماس بن زهير بن مالك بن امرئ القيس بن مالك الأغر بن ثعلبة الأنصاري الخزرجي',
       claims: legacyUnreviewed,

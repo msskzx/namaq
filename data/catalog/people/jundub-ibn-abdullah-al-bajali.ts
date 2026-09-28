@@ -12,6 +12,7 @@ const jundubIbnAbdullahAlBajali = {
   nameTransliterated: 'Jundub ibn Abdullah al-Bajali',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'جندب بن عبد الله بن سفيان البجلي العلقي',
       claims: legacyUnreviewed,

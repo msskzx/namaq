@@ -12,7 +12,9 @@ const alQaynIbnKaab = {
   name: 'القين بن كعب',
   nameTransliterated: 'Al Qayn ibn Kaab',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'kaab-ibn-sawad', claims: legacyUnreviewed },

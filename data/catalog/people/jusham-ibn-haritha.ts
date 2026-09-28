@@ -12,7 +12,9 @@ const jushamIbnHaritha = {
   name: 'جشم بن حارثة',
   nameTransliterated: 'Jusham ibn Haritha',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'haritha-ibn-al-harith', claims: legacyUnreviewed },

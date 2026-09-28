@@ -12,7 +12,9 @@ const samurahIbnHabib = {
   name: 'سمرة بن حبيب',
   nameTransliterated: 'Samurah ibn Habib',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'habib-ibn-rabiah', claims: legacyUnreviewed },

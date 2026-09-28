@@ -13,6 +13,7 @@ const alHakamIbnAmrAlGhifari = {
   nameTransliterated: 'Al-Hakam ibn Amr al-Ghifari',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'الحكم بن عمرو الغفاري', claims: legacyUnreviewed },
   },
   titles: [

@@ -1,4 +1,4 @@
-import { type CatalogPerson } from '@/lib/catalog/types';
+import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
 /**
  * Named in prophet-muhammad.ts's own nasab chain (see
@@ -11,7 +11,9 @@ const abdullahIbnAbdAlMuttalib = {
   name: 'عبد الله بن عبد المطلب',
   nameTransliterated: 'Abdullah ibn Abd al-Muttalib',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abd-al-muttalib-ibn-hashim', claims: ['prophet/lineage'] },

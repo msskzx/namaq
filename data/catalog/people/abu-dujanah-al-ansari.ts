@@ -13,6 +13,7 @@ const abuDujanahAlAnsari = {
   nameTransliterated: 'Abu Dujanah al-Ansari',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'سماك بن خرشة بن لوذان بن عبد ود بن زيد الأنصاري الساعدي',
       claims: legacyUnreviewed,

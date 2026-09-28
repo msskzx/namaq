@@ -12,7 +12,9 @@ const malikIbnUhayb = {
   name: 'مالك بن أهيب (أبو وقاص)',
   nameTransliterated: 'Malik ibn Uhayb',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'uhayb-ibn-abd-manaf', claims: legacyUnreviewed },

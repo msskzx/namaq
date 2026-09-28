@@ -12,7 +12,9 @@ const abdShamsIbnAbdWud = {
   name: 'عبد شمس بن عبد ود',
   nameTransliterated: 'Abd Shams ibn Abd Wud',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abd-wud-ibn-nasr', claims: legacyUnreviewed },

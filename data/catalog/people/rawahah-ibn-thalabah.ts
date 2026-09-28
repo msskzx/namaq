@@ -12,7 +12,9 @@ const rawahahIbnThalabah = {
   name: 'رواحة بن ثعلبة',
   nameTransliterated: 'Rawahah ibn Thalabah',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'thalabah-ibn-imri-al-qays', claims: legacyUnreviewed },

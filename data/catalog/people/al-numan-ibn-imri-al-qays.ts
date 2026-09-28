@@ -12,7 +12,9 @@ const alNumanIbnImriAlQays = {
   name: 'النعمان بن امرئ القيس',
   nameTransliterated: 'Al Numan ibn Imri Al Qays',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'imru-al-qays-ibn-zayd', claims: legacyUnreviewed },

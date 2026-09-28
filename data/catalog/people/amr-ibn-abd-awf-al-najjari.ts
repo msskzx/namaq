@@ -12,7 +12,9 @@ const amrIbnAbdAwfAlNajjari = {
   name: 'عمرو بن عبد عوف',
   nameTransliterated: 'Amr ibn Abd Awf Al Najjari',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abd-awf-ibn-ghanm-al-najjari', claims: legacyUnreviewed },

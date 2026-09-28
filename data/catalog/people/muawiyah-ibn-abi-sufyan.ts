@@ -14,6 +14,7 @@ const muawiyahIbnAbiSufyan = {
   nameTransliterated: 'Muawiyah ibn Abi Sufyan',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'صخر بن حرب بن أمية بن عبد شمس بن عبد مناف بن قصي بن كلاب القرشي الأموي',
       claims: legacyUnreviewed,

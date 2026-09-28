@@ -15,6 +15,7 @@ const abuHurayrah = {
   nameTransliterated: 'Abu Hurayrah',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عبد الرحمن بن صخر الدوسي اليماني',
       claims: legacyUnreviewed,

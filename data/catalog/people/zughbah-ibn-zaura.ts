@@ -12,7 +12,9 @@ const zughbahIbnZaura = {
   name: 'زغبة بن زعوراء',
   nameTransliterated: 'Zughbah ibn Zaura',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'zaura-ibn-abd-al-ashhal', claims: legacyUnreviewed },

@@ -13,6 +13,7 @@ const azZubayrIbnAlAwwam = {
   hasProfile: true,
 
   fields: {
+    sex: { value: 'MALE', claims: ['zubayr/sex'] },
     // The heading carries the entry number and the collection marks, and the
     // lineage runs on past them into the next paragraph; both are dropped.
     fullName: {

@@ -12,7 +12,9 @@ const mabadIbnAlHarithAlKhathami = {
   name: 'معبد بن الحارث',
   nameTransliterated: 'Mabad ibn Al Harith Al Khathami',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'SON', to: 'umays-ibn-mabad-al-khathami', claims: legacyUnreviewed },

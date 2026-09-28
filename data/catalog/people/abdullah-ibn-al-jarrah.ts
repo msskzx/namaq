@@ -12,7 +12,9 @@ const abdullahIbnAlJarrah = {
   name: 'عبد الله بن الجراح',
   nameTransliterated: 'Abdullah ibn Al Jarrah',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'al-jarrah-ibn-hilal', claims: legacyUnreviewed },

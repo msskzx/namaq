@@ -13,7 +13,9 @@ const salmanAlFarisi = {
   name: 'سلمان الفارسي',
   nameTransliterated: 'Salman al-Farisi',
   hasProfile: true,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],

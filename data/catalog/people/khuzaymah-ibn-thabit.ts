@@ -14,6 +14,7 @@ const khuzaymahIbnThabit = {
   nameTransliterated: 'Khuzaymah ibn Thabit',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'خزيمة بن ثابت بن الفاكه بن ثعلبة بن ساعدة الأنصاري الخطمي',
       claims: legacyUnreviewed,

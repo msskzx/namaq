@@ -12,7 +12,9 @@ const ubaydIbnZayd = {
   name: 'عبيد بن زيد',
   nameTransliterated: 'Ubayd ibn Zayd',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'zayd-ibn-muawiyah', claims: legacyUnreviewed },

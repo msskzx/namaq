@@ -16,6 +16,7 @@ const sahlIbnHunayf = {
   nameTransliterated: 'Sahl ibn Hunayf',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'سهل بن حنيف بن واهب بن عكيم بن ثعلبة بن عمرو بن الحارث بن مجدعة بن عمرو بن حنش بن عوف بن عمرو بن عوف الأنصاري الأوسي العوفي',
       claims: legacyUnreviewed,

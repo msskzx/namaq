@@ -12,7 +12,9 @@ const nafiIbnImriAlQays = {
   name: 'نافع بن امرئ القيس',
   nameTransliterated: 'Nafi ibn Imri Al Qays',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'imru-al-qays-ibn-zayd', claims: legacyUnreviewed },

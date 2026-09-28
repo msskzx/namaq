@@ -12,7 +12,9 @@ const zaydIbnJusham = {
   name: 'زيد بن جشم',
   nameTransliterated: 'Zayd ibn Jusham',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'jusham-ibn-haritha', claims: legacyUnreviewed },

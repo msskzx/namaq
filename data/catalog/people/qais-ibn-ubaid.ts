@@ -12,7 +12,9 @@ const qaisIbnUbaid = {
   name: 'قيس بن عبيد',
   nameTransliterated: 'Qais ibn Ubaid',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'ubayd-ibn-zayd', claims: legacyUnreviewed },

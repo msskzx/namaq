@@ -12,7 +12,9 @@ const laythIbnBukayr = {
   name: 'ليث بن بكير',
   nameTransliterated: 'Layth ibn Bukayr',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'bukayr-ibn-abd-manat', claims: legacyUnreviewed },

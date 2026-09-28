@@ -12,7 +12,9 @@ const lawdhanIbnAbdWudd = {
   name: 'لوذان بن عبد ود',
   nameTransliterated: 'Lawdhan ibn Abd Wudd',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abd-wudd-ibn-zayd', claims: legacyUnreviewed },

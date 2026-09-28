@@ -12,6 +12,7 @@ const imranIbnHusain = {
   nameTransliterated: 'Imran ibn Husain',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عمران بن حصين بن عبيد بن خلف الخزاعي',
       claims: legacyUnreviewed,

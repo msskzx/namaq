@@ -13,6 +13,7 @@ const tamimAlDari = {
   nameTransliterated: 'Tamim al-Dari',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'تميم بن أوس بن خارجة بن سود بن جذيمة اللخمي',
       claims: legacyUnreviewed,

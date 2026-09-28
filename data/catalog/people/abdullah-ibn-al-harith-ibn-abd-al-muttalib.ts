@@ -20,6 +20,7 @@ const abdullahIbnAlHarithIbnAbdAlMuttalib = {
   nameTransliterated: 'Abdullah ibn al-Harith ibn Abd al-Muttalib',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عبد الله بن الحارث بن عبد المطلب بن هاشم القرشي الهاشمي',
       claims: legacyUnreviewed,

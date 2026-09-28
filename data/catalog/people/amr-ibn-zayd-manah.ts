@@ -12,7 +12,9 @@ const amrIbnZaydManah = {
   name: 'عمرو بن زيد مناة',
   nameTransliterated: 'Amr ibn Zayd Manah',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'zayd-manah-ibn-adi', claims: legacyUnreviewed },

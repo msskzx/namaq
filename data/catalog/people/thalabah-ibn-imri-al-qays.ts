@@ -12,7 +12,9 @@ const thalabahIbnImriAlQays = {
   name: 'ثعلبة بن امرئ القيس',
   nameTransliterated: 'Thalabah ibn Imri Al Qays',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'imru-al-qays-ibn-thalabah', claims: legacyUnreviewed },

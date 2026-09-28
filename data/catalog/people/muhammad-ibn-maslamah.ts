@@ -13,6 +13,7 @@ const muhammadIbnMaslamah = {
   nameTransliterated: 'Muhammad ibn Maslamah',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'محمد بن سلمة بن خالد بن عدي بن مجدعة الأنصاري الحارثي',
       claims: legacyUnreviewed,

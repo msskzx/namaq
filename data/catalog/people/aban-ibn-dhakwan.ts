@@ -12,7 +12,9 @@ const abanIbnDhakwan = {
   name: 'أبان بن ذكوان',
   nameTransliterated: 'Aban ibn Dhakwan',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'dhakwan-ibn-umayyah', claims: legacyUnreviewed },

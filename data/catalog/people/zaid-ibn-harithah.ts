@@ -13,6 +13,7 @@ const zaidIbnHarithah = {
   nameTransliterated: 'Zaid ibn Harithah',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'زيد بن حارثة بن شراحيل بن كعب بن عبد العزى بن يزيد بن امرئ القيس بن عامر بن النعمان الكلبي',
       claims: legacyUnreviewed,

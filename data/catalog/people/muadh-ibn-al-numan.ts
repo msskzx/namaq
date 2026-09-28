@@ -12,7 +12,9 @@ const muadhIbnAlNuman = {
   name: 'معاذ بن النعمان',
   nameTransliterated: 'Muadh ibn Al Numan',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'al-numan-ibn-imri-al-qays', claims: legacyUnreviewed },

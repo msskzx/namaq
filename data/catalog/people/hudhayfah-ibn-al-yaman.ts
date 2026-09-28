@@ -17,6 +17,7 @@ const hudhayfahIbnAlYaman = {
   nameTransliterated: 'Hudhayfah ibn al-Yaman',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'حذيفة بن حسل بن جابر العبسي اليماني', claims: legacyUnreviewed },
   },
   titles: [

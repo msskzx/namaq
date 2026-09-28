@@ -11,6 +11,7 @@ const amirIbnAlBukayr = {
   nameTransliterated: 'Amir ibn Abi al-Bukayr',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'عَامِرُ بنُ أَبِي البُكَيْرِ اللَّيْثِيُّ', claims: ['amir-bukayr-siyar19/full-name'] },
     placeOfDeathArabic: { value: 'اليمامة', claims: ['amir-bukayr-siyar19/death-place'] },
   },

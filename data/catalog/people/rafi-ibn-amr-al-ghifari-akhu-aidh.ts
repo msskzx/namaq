@@ -15,6 +15,7 @@ const rafiIbnAmrAlGhifariAkhuAidh = {
   nameTransliterated: 'Rafi ibn Amr al-Ghifari (brother of Aidh)',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'رافع بن عمرو الغفاري',
       claims: legacyUnreviewed,

@@ -12,7 +12,9 @@ const qurtIbnRazah = {
   name: 'قرط بن رزاح',
   nameTransliterated: 'Qurt ibn Razah',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'razah-ibn-adi', claims: legacyUnreviewed },

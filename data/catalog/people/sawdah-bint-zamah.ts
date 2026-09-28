@@ -16,6 +16,7 @@ const sawdahBintZamah = {
   nameTransliterated: 'Sawdah bint Zam\'ah',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: { value: 'سودة بنت زمعة بن قيس القرشية العامرية', claims: legacyUnreviewed },
     // Carried from the retired prisma/personSeedData.ts entry, uncited.
     virtues: {

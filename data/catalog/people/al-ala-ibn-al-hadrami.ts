@@ -19,6 +19,7 @@ const alAlaIbnAlHadrami = {
   nameTransliterated: 'Al-Ala ibn al-Hadrami',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'العلاء بن عبد الله بن عماد الحضرمي حليف بني أمية', claims: legacyUnreviewed },
   },
   titles: [

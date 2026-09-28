@@ -14,6 +14,7 @@ const ummKulthumBintAli = {
   nameTransliterated: 'Umm Kulthum bint Ali',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: { value: 'أم كلثوم بنت علي بن أبي طالب الهاشمية القرشية', claims: legacyUnreviewed },
     virtues: { value: 'بنت علي وفاطمة، حفيدة النبي.', claims: legacyUnreviewed },
   },

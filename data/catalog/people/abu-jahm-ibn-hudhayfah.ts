@@ -13,6 +13,7 @@ const abuJahmIbnHudhayfah = {
   nameTransliterated: 'Abu Jahm ibn Hudhayfah',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عبيد بن حذيفة القرشي العدوي',
       claims: legacyUnreviewed,

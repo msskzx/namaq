@@ -12,7 +12,9 @@ const alNumanIbnMalik = {
   name: 'النعمان بن مالك',
   nameTransliterated: 'Al Numan ibn Malik',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'malik-ibn-thalabah', claims: legacyUnreviewed },

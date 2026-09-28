@@ -11,6 +11,7 @@ const abdullahIbnMazun = {
   nameTransliterated: 'Abdullah ibn Mazun al-Jumahi',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     kunya: { value: 'أَبُو مُحَمَّدٍ', claims: ['abdullah-mazun-siyar11/kunya'] },
     deathYearHijri: { value: '30', claims: ['abdullah-mazun-siyar11/death-year'] },
   },

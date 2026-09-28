@@ -53,7 +53,9 @@ export function validateCatalog(catalog: Catalog, known: KnownSlugs): CatalogIss
     Object.entries(subject.fields).forEach(([field, cited]) => {
       if (cited) checkProvenance(cited.claims, known, `${at}.${field}`, issues);
     });
-    if (subject.fields.sex && !SEXES.includes(subject.fields.sex.value)) {
+    if (!subject.fields.sex) {
+      issues.push({ path: `${at}.sex`, message: 'missing sex' });
+    } else if (!SEXES.includes(subject.fields.sex.value)) {
       issues.push({ path: `${at}.sex`, message: `unknown sex ${subject.fields.sex.value}` });
     }
     subject.titles.forEach((title) => {

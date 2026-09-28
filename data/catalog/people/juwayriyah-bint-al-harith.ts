@@ -13,6 +13,7 @@ const juwayriyahBintAlHarith = {
   nameTransliterated: 'Juwayriyah bint al-Harith',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: { value: 'جويرية بنت الحارث بن أبي ضرار المصطلقية', claims: legacyUnreviewed },
     // Carried from the retired prisma/personSeedData.ts entry, uncited.
     appearance: { value: 'وصفت بأنها كانت ذات جمال فاتن.', claims: legacyUnreviewed },

@@ -18,6 +18,7 @@ const safiyyahBintHuyayy = {
   nameTransliterated: 'Safiyyah bint Huyayy',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     // Carried from the retired prisma/personSeedData9.ts entry, uncited.
     fullName: { value: 'صفية بنت حيي بن أخطب بن سعية', claims: legacyUnreviewed },
     // Carried from the retired prisma/personSeedData.ts entry, uncited.

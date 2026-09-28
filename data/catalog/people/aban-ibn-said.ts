@@ -13,6 +13,7 @@ const abanIbnSaid = {
   nameTransliterated: 'Aban ibn Said',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'أبان بن سعيد بن العاص بن أمية بن عبد شمس بن عبد مناف بن قصي القرشي الأموي',
       claims: legacyUnreviewed,

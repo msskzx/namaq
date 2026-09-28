@@ -13,6 +13,7 @@ const usamahIbnZaid = {
   nameTransliterated: 'Usamah ibn Zaid',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'أسامة بن زيد بن حارثة بن شراحيل بن عبد العزى بن امرئ القيس',
       claims: legacyUnreviewed,

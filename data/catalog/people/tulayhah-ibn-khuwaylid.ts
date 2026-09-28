@@ -21,6 +21,7 @@ const tulayhahIbnKhuwaylid = {
   nameTransliterated: 'Tulayhah ibn Khuwaylid',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'طليحة بن خويلد بن نوفل الأسدي', claims: legacyUnreviewed },
   },
   titles: [

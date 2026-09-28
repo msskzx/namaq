@@ -12,7 +12,9 @@ const abiAlAsIbnUmayya = {
   name: 'أبي العاص بن أمية',
   nameTransliterated: 'Abi al-As ibn Umayya',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'umayya-ibn-abd-shams', claims: legacyUnreviewed },

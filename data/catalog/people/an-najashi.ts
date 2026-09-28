@@ -15,7 +15,9 @@ const anNajashi = {
   name: 'النجاشي',
   nameTransliterated: 'An-Najashi (the Negus)',
   hasProfile: true,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],

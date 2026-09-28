@@ -12,6 +12,7 @@ const abdullahIbnMasud = {
   nameTransliterated: 'Abdullah ibn Masud',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     // Carried from the retired seed entry, which took it from the Siyar
     // without citing it.
     fullName: {

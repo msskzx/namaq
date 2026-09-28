@@ -18,6 +18,7 @@ const ummHaramBintMilhan = {
   nameTransliterated: 'Umm Haram bint Milhan',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: {
       value: 'أم حرام بنت ملحان بن خالد بن زيد بن حرام بن جندب بن عامر بن غنم بن عدي بن النجار الأنصارية النجارية',
       claims: legacyUnreviewed,

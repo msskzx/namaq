@@ -12,7 +12,9 @@ const khirashahIbnLawdhan = {
   name: 'خرشة بن لوذان',
   nameTransliterated: 'Khirashah ibn Lawdhan',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'lawdhan-ibn-abd-wudd', claims: legacyUnreviewed },

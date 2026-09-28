@@ -12,7 +12,9 @@ const amirIbnMajdaah = {
   name: 'عامر بن مجدعة',
   nameTransliterated: 'Amir ibn Majdaah',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'majdaah-ibn-jahjaba', claims: legacyUnreviewed },

@@ -18,6 +18,7 @@ const safiyyahBintAbdAlMuttalib = {
   nameTransliterated: 'Safiyyah bint Abd al-Muttalib',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: { value: 'صفية بنت عبد المطلب بن هاشم القرشية الهاشمية', claims: legacyUnreviewed },
   },
   titles: [

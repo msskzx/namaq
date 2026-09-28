@@ -46,6 +46,8 @@ const upsertPersonQuery = `
     SET node.fullName = person.fullName)
   FOREACH (_ IN CASE WHEN person.nameTransliterated IS NULL THEN [] ELSE [1] END |
     SET node.nameTransliterated = person.nameTransliterated)
+  FOREACH (_ IN CASE WHEN person.sex IS NULL THEN [] ELSE [1] END |
+    SET node.sex = person.sex)
 `;
 
 // Only edges touching a person the catalog owns outright, and only the types
@@ -65,17 +67,22 @@ const deleteQuery = (type: string) => `
 
 const personSlugsQuery = `MATCH (p:Person) RETURN p.slug AS slug`;
 
+const personSexQuery = `MATCH (p:Person) WHERE p.slug IN $slugs RETURN p.slug AS slug, p.sex AS sex`;
+
 async function main() {
   const catalog = await loadCatalog();
   const edges = catalogRelations(catalog);
   const seedAuthored = seedAuthoredPeople();
   const ownedPeople = catalog.people.filter((person) => !seedAuthored.has(person.slug));
   const owned = ownedPeople.map((person) => person.slug);
+  // Profile sex projects to PostgreSQL; only graph-only sex lands on the
+  // Neo4j node. See docs/plans/reviewed-quiz-bank.md.
   const people = ownedPeople.map((person) => ({
     slug: person.slug,
     name: person.name,
     fullName: person.fields.fullName?.value ?? null,
     nameTransliterated: person.nameTransliterated ?? null,
+    sex: person.hasProfile ? null : person.fields.sex.value,
   }));
 
   const session = getDriver().session({
@@ -110,16 +117,34 @@ async function main() {
       }))
       .filter((edge) => !declared.has(`${edge.from}|${edge.type}|${edge.to}`));
 
+    const wantedSex = new Map(
+      ownedPeople.filter((person) => !person.hasProfile).map((person) => [person.slug, person.fields.sex.value] as const),
+    );
+    const liveSex = await session.run(personSexQuery, { slugs: [...wantedSex.keys()] });
+    const sexDrift = liveSex.records
+      .map((record) => ({
+        slug: record.get('slug') as string,
+        live: record.get('sex') as string | null,
+        wanted: wantedSex.get(record.get('slug') as string) as string,
+      }))
+      .filter((entry) => entry.live !== entry.wanted);
+
     console.log(`Catalog people (${apply ? 'apply' : 'dry run'})`);
     console.log(`  declared ${people.length}, missing from Neo4j ${missingPeople.length}`);
     missingPeople.forEach((person) => console.log(`  add person ${person.slug}`));
+
+    console.log(`Catalog person properties (${apply ? 'apply' : 'dry run'})`);
+    console.log(`  graph-only sex drift ${sexDrift.length}`);
+    sexDrift.forEach((entry) =>
+      console.log(`  set sex ${entry.slug}: ${JSON.stringify(entry.live)} to ${JSON.stringify(entry.wanted)}`),
+    );
 
     console.log(`Catalog relations (${apply ? 'apply' : 'dry run'})`);
     console.log(`  declared ${edges.length}, missing from Neo4j ${missing.length}, stale ${stale.length}`);
     missing.forEach((edge) => console.log(`  add ${edge}`));
     stale.forEach((edge) => console.log(`  drop ${edge.from} -[:${edge.type}]-> ${edge.to}`));
 
-    if (missingPeople.length === 0 && missing.length === 0 && stale.length === 0) return;
+    if (missingPeople.length === 0 && sexDrift.length === 0 && missing.length === 0 && stale.length === 0) return;
     if (!apply) {
       console.log('Nothing written. Re-run with --apply to reconcile them.');
       return;

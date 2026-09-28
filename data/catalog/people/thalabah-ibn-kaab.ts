@@ -12,7 +12,9 @@ const thalabahIbnKaab = {
   name: 'ثعلبة بن كعب',
   nameTransliterated: 'Thalabah ibn Kaab',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'SON', to: 'malik-ibn-thalabah', claims: legacyUnreviewed },

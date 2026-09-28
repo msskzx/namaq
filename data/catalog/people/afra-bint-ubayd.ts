@@ -12,7 +12,9 @@ const afraBintUbayd = {
   name: 'عفراء بنت عبيد',
   nameTransliterated: 'Afra Bint Ubayd',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'MOTHER', inverse: 'SON', to: 'awf-ibn-al-harith', claims: legacyUnreviewed },

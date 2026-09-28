@@ -1,4 +1,4 @@
-import { type CatalogPerson } from '@/lib/catalog/types';
+import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
 /**
  * The terminus of the nasab chain (see
@@ -14,7 +14,9 @@ const adnan = {
   name: 'عدنان',
   nameTransliterated: 'Adnan',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'SON', to: 'maad-ibn-adnan', claims: ['prophet/lineage'] },

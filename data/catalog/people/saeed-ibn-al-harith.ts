@@ -17,6 +17,7 @@ const saeedIbnAlHarith = {
   nameTransliterated: 'Saeed ibn al-Harith',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'سعيد بن الحارث بن عبد المطلب بن هاشم القرشي الهاشمي', claims: legacyUnreviewed },
   },
   titles: [

@@ -11,6 +11,7 @@ const abuHudhayfah = {
   nameTransliterated: 'Abu Hudhayfah',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     virtues: { value: 'السَّيِّدُ الكَبِيْرُ، الشَّهِيْدُ', claims: ['abu-hudhayfah-siyar13/virtues'] },
     deathYearHijri: { value: '12', claims: ['abu-hudhayfah-siyar13/death-year'] },
   },

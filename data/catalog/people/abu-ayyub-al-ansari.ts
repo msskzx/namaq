@@ -14,6 +14,7 @@ const abuAyyubAlAnsari = {
   nameTransliterated: 'Abu Ayyub al-Ansari',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'خالد بن زيد بن كليب بن ثعلبة بن عبد عمرو بن عوف بن غنم بن مالك بن النجار بن ثعلبة بن الخزرج',
       claims: legacyUnreviewed,

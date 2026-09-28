@@ -16,6 +16,7 @@ const uthmanIbnTalhah = {
   nameTransliterated: 'Uthman ibn Talhah',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عثمان بن طلحة بن عبد الله بن عبد العزى بن عثمان بن عبد الدار بن قصي بن كلاب القرشي العبدري',
       claims: legacyUnreviewed,

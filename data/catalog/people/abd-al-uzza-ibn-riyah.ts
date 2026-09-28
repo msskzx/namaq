@@ -12,7 +12,9 @@ const abdAlUzzaIbnRiyah = {
   name: 'عبد العزى بن رياح',
   nameTransliterated: 'Abd al-Uzza ibn Riyah',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'riyah-ibn-qurt', claims: legacyUnreviewed },

@@ -12,7 +12,9 @@ const amirIbnKurayz = {
   name: 'عامر بن كريز',
   nameTransliterated: 'Amir ibn Kurayz',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'kurayz-ibn-rabiah', claims: legacyUnreviewed },

@@ -12,7 +12,9 @@ const alHarithIbnAbiDirarAlMustaliqi = {
   name: 'الحارث بن أبي ضرار',
   nameTransliterated: 'Al Harith ibn Abi Dirar Al Mustaliqi',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'DAUGHTER', to: 'juwayriyah-bint-al-harith', claims: legacyUnreviewed },

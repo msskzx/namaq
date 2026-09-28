@@ -12,7 +12,9 @@ const damdamIbnZayd = {
   name: 'ضمضم بن زيد',
   nameTransliterated: 'Damdam ibn Zayd',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'zayd-ibn-haram', claims: legacyUnreviewed },

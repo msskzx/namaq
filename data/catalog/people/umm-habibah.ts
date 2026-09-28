@@ -14,6 +14,7 @@ const ummHabibah = {
   nameTransliterated: 'Umm Habibah',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: {
       value: 'رملة بنت أبي سفيان صخر بن حرب بن أمية بن عبد شمس بن عبد مناف بن قصي القرشية الأموية',
       claims: legacyUnreviewed,

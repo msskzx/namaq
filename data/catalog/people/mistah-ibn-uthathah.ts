@@ -11,6 +11,7 @@ const mistahIbnUthathah = {
   nameTransliterated: 'Mistah ibn Uthathah',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'مسطح بن أثاثة بن عباد بن المطلب بن عبد مناف بن قصي، المطلبي.', claims: ['mistah-siyar20/full-name'] },
     appearance: { value: 'كان قصيرا، غائر العينين، شثن الأصابع.', claims: ['mistah-siyar20/appearance'] },
     deathYearHijri: { value: '34', claims: ['mistah-siyar20/death-year'] },

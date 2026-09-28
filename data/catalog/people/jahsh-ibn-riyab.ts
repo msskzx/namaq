@@ -12,7 +12,9 @@ const jahshIbnRiyab = {
   name: 'جحش بن رئاب',
   nameTransliterated: 'Jahsh ibn Riyab',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'HUSBAND', inverse: 'WIFE', to: 'umaymah-bint-abd-al-muttalib', claims: legacyUnreviewed },

@@ -12,7 +12,9 @@ const alSakranIbnAmrAlAmiri = {
   name: 'السكران بن عمرو',
   nameTransliterated: 'Al Sakran ibn Amr Al Amiri',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'HUSBAND', inverse: 'WIFE', to: 'sawdah-bint-zamah', claims: legacyUnreviewed },

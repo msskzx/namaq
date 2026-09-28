@@ -16,6 +16,7 @@ const kaabIbnMalik = {
   nameTransliterated: 'Kaab ibn Malik',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'كعب بن مالك بن أبي كعب عمرو بن القين بن كعب بن سواد بن غنم بن كعب بن سلمة الأنصاري الخزرجي',
       claims: legacyUnreviewed,

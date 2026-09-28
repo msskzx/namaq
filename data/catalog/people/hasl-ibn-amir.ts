@@ -12,7 +12,9 @@ const haslIbnAmir = {
   name: 'حسل بن عامر',
   nameTransliterated: 'Hasl ibn Amir',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'amir-ibn-luay', claims: legacyUnreviewed },

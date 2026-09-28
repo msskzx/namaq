@@ -13,6 +13,7 @@ const abdullahIbnAlArqam = {
   nameTransliterated: 'Abdullah ibn al-Arqam',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عبد الله بن الأرقم بن عبد يغوث بن وهب بن عبد مناف بن زهرة القرشي الزهري',
       claims: legacyUnreviewed,

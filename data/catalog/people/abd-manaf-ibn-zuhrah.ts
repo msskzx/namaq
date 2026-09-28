@@ -12,7 +12,9 @@ const abdManafIbnZuhrah = {
   name: 'عبد مناف بن زهرة',
   nameTransliterated: 'Abd Manaf ibn Zuhrah',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'zuhrah-ibn-kilab', claims: legacyUnreviewed },

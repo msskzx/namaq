@@ -13,6 +13,7 @@ const abuBarzahAlAslami = {
   nameTransliterated: 'Abu Barzah al-Aslami',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'نضلة بن عبيد الأسلمي',
       claims: legacyUnreviewed,

@@ -12,6 +12,7 @@ const aqilIbnAlBukayr = {
   nameTransliterated: 'Aqil ibn al-Bukayr',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'عَاقِلُ بنُ البُكَيْرِ بنِ عَبْدِ يَا لَيْلَ بنِ نَاشِبٍ اللَّيْثِيُّ', claims: ['aqil-bukayr-siyar16/full-name'] },
     virtues: {
       value:

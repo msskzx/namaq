@@ -12,7 +12,9 @@ const bishrIbnWaqsh = {
   name: 'بشر بن وقش',
   nameTransliterated: 'Bishr ibn Waqsh',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'waqsh-ibn-zughbah', claims: legacyUnreviewed },

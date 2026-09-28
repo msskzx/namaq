@@ -20,6 +20,7 @@ const ummKulthumBintUqbah = {
   nameTransliterated: 'Umm Kulthum bint Uqbah',
   hasProfile: true,
   fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: {
       value: 'أم كلثوم بنت عقبة بن أبي معيط بن أبان بن ذكوان بن أمية بن عبد شمس القرشية الأموية',
       claims: legacyUnreviewed,

@@ -12,7 +12,9 @@ const ummSharik = {
   name: 'أم شريك',
   nameTransliterated: 'Umm Sharik',
   hasProfile: true,
-  fields: {},
+  fields: {
+    sex: { value: 'FEMALE', claims: legacyUnreviewed },
+  },
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],

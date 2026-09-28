@@ -12,7 +12,9 @@ const rabiahIbnHilal = {
   name: 'ربيعة بن هلال',
   nameTransliterated: 'Rabiah ibn Hilal',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'hilal-ibn-malik', claims: legacyUnreviewed },

@@ -12,6 +12,7 @@ const habibIbnMaslamah = {
   nameTransliterated: 'Habib ibn Maslamah',
   hasProfile: true,
   fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value: 'حبيب بن مسلمة بن مالك القرشي الفهري',
       claims: legacyUnreviewed,

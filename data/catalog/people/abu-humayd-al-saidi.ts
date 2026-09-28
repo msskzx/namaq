@@ -12,7 +12,9 @@ const abuHumaydAlSaidi = {
   name: 'أبو حميد الساعدي',
   nameTransliterated: 'Abu Humayd al-Saidi',
   hasProfile: true,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],

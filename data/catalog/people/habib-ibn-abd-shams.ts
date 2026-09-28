@@ -12,7 +12,9 @@ const habibIbnAbdShams = {
   name: 'حبيب بن عبد شمس',
   nameTransliterated: 'Habib ibn Abd Shams',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abd-shams-ibn-abd-manaf', claims: legacyUnreviewed },

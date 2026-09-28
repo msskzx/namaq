@@ -12,7 +12,9 @@ const yazidIbnImriAlQays = {
   name: 'يزيد بن امرئ القيس',
   nameTransliterated: 'Yazid ibn Imri Al Qays',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'imru-al-qays-ibn-amir', claims: legacyUnreviewed },

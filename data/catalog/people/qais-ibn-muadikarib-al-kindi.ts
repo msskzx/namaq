@@ -12,7 +12,9 @@ const qaisIbnMuadikaribAlKindi = {
   name: 'قيس بن معدي كرب',
   nameTransliterated: 'Qais ibn Muadikarib Al Kindi',
   hasProfile: false,
-  fields: {},
+  fields: {
+    sex: { value: 'MALE', claims: legacyUnreviewed },
+  },
   titles: [],
   relations: [
     { type: 'FATHER', inverse: 'SON', to: 'al-ashath-ibn-qais', claims: legacyUnreviewed },
