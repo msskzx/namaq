@@ -1,0 +1,909 @@
+{
+  "slug": "abdullah-ibn-rawahah",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-rawahah",
+      "extractionUrl": "https://shamela.ws/book/10906/1656",
+      "accessedAt": "2026-09-28",
+      "volumeNumber": 4,
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "230",
+          "bodyFile": "accounts/abdullah-ibn-rawahah/001.md",
+          "notesFile": "accounts/abdullah-ibn-rawahah/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1656",
+          "passages": [
+            {
+              "anchor": "230-p9"
+            },
+            {
+              "anchor": "230-p10"
+            },
+            {
+              "anchor": "230-p11"
+            },
+            {
+              "anchor": "230-p12"
+            },
+            {
+              "anchor": "230-p13"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "231",
+          "bodyFile": "accounts/abdullah-ibn-rawahah/002.md",
+          "notesFile": "accounts/abdullah-ibn-rawahah/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1657",
+          "passages": [
+            {
+              "anchor": "231-p1"
+            },
+            {
+              "anchor": "231-p2"
+            },
+            {
+              "anchor": "231-p3"
+            },
+            {
+              "anchor": "231-p4"
+            },
+            {
+              "anchor": "231-p5"
+            },
+            {
+              "anchor": "231-p6"
+            },
+            {
+              "anchor": "231-p7"
+            },
+            {
+              "anchor": "231-p8"
+            },
+            {
+              "anchor": "231-p9"
+            },
+            {
+              "anchor": "231-p10"
+            },
+            {
+              "anchor": "231-p11"
+            },
+            {
+              "anchor": "231-p12"
+            },
+            {
+              "anchor": "231-p13"
+            },
+            {
+              "anchor": "231-p14"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "printedPage": "232",
+          "bodyFile": "accounts/abdullah-ibn-rawahah/003.md",
+          "notesFile": "accounts/abdullah-ibn-rawahah/003.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1658",
+          "passages": [
+            {
+              "anchor": "232-p1"
+            },
+            {
+              "anchor": "232-p2"
+            },
+            {
+              "anchor": "232-p3"
+            },
+            {
+              "anchor": "232-p4"
+            },
+            {
+              "anchor": "232-p5"
+            },
+            {
+              "anchor": "232-p6"
+            },
+            {
+              "anchor": "232-p7"
+            },
+            {
+              "anchor": "232-p8"
+            },
+            {
+              "anchor": "232-p9"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "printedPage": "233",
+          "bodyFile": "accounts/abdullah-ibn-rawahah/004.md",
+          "notesFile": "accounts/abdullah-ibn-rawahah/004.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1659",
+          "passages": [
+            {
+              "anchor": "233-p1"
+            },
+            {
+              "anchor": "233-p2"
+            },
+            {
+              "anchor": "233-p3"
+            },
+            {
+              "anchor": "233-p4"
+            },
+            {
+              "anchor": "233-p5"
+            },
+            {
+              "anchor": "233-p6"
+            },
+            {
+              "anchor": "233-p7"
+            },
+            {
+              "anchor": "233-p8"
+            },
+            {
+              "anchor": "233-p9"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "printedPage": "234",
+          "bodyFile": "accounts/abdullah-ibn-rawahah/005.md",
+          "notesFile": "accounts/abdullah-ibn-rawahah/005.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1660",
+          "passages": [
+            {
+              "anchor": "234-p1"
+            },
+            {
+              "anchor": "234-p2"
+            },
+            {
+              "anchor": "234-p3"
+            },
+            {
+              "anchor": "234-p4"
+            },
+            {
+              "anchor": "234-p5"
+            },
+            {
+              "anchor": "234-p6"
+            },
+            {
+              "anchor": "234-p7"
+            },
+            {
+              "anchor": "234-p8"
+            },
+            {
+              "anchor": "234-p9"
+            },
+            {
+              "anchor": "234-p10"
+            },
+            {
+              "anchor": "234-p11"
+            },
+            {
+              "anchor": "234-p12"
+            },
+            {
+              "anchor": "234-p13"
+            },
+            {
+              "anchor": "234-p14"
+            },
+            {
+              "anchor": "234-p15"
+            },
+            {
+              "anchor": "234-p16"
+            },
+            {
+              "anchor": "234-p17"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "printedPage": "235",
+          "bodyFile": "accounts/abdullah-ibn-rawahah/006.md",
+          "notesFile": "accounts/abdullah-ibn-rawahah/006.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1661",
+          "passages": [
+            {
+              "anchor": "235-p1"
+            },
+            {
+              "anchor": "235-p2"
+            },
+            {
+              "anchor": "235-p3"
+            },
+            {
+              "anchor": "235-p4"
+            },
+            {
+              "anchor": "235-p5"
+            },
+            {
+              "anchor": "235-p6"
+            },
+            {
+              "anchor": "235-p7"
+            },
+            {
+              "anchor": "235-p8"
+            },
+            {
+              "anchor": "235-p9"
+            },
+            {
+              "anchor": "235-p10"
+            },
+            {
+              "anchor": "235-p11"
+            },
+            {
+              "anchor": "235-p12"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "printedPage": "236",
+          "bodyFile": "accounts/abdullah-ibn-rawahah/007.md",
+          "notesFile": "accounts/abdullah-ibn-rawahah/007.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1662",
+          "passages": [
+            {
+              "anchor": "236-p1"
+            },
+            {
+              "anchor": "236-p2"
+            },
+            {
+              "anchor": "236-p3"
+            },
+            {
+              "anchor": "236-p4"
+            },
+            {
+              "anchor": "236-p5"
+            },
+            {
+              "anchor": "236-p6"
+            },
+            {
+              "anchor": "236-p7"
+            },
+            {
+              "anchor": "236-p8"
+            },
+            {
+              "anchor": "236-p9"
+            },
+            {
+              "anchor": "236-p10"
+            },
+            {
+              "anchor": "236-p11"
+            },
+            {
+              "anchor": "236-p12"
+            },
+            {
+              "anchor": "236-p13"
+            },
+            {
+              "anchor": "236-p14"
+            },
+            {
+              "anchor": "236-p15"
+            },
+            {
+              "anchor": "236-p16"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "printedPage": "237",
+          "bodyFile": "accounts/abdullah-ibn-rawahah/008.md",
+          "notesFile": "accounts/abdullah-ibn-rawahah/008.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1663",
+          "passages": [
+            {
+              "anchor": "237-p1"
+            },
+            {
+              "anchor": "237-p2"
+            },
+            {
+              "anchor": "237-p3"
+            },
+            {
+              "anchor": "237-p4"
+            },
+            {
+              "anchor": "237-p5"
+            },
+            {
+              "anchor": "237-p6"
+            },
+            {
+              "anchor": "237-p7"
+            },
+            {
+              "anchor": "237-p8"
+            }
+          ]
+        },
+        {
+          "sequence": 9,
+          "printedPage": "238",
+          "bodyFile": "accounts/abdullah-ibn-rawahah/009.md",
+          "notesFile": "accounts/abdullah-ibn-rawahah/009.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1664",
+          "passages": [
+            {
+              "anchor": "238-p1"
+            },
+            {
+              "anchor": "238-p2"
+            },
+            {
+              "anchor": "238-p3"
+            },
+            {
+              "anchor": "238-p4"
+            },
+            {
+              "anchor": "238-p5"
+            },
+            {
+              "anchor": "238-p6"
+            },
+            {
+              "anchor": "238-p7"
+            },
+            {
+              "anchor": "238-p8"
+            },
+            {
+              "anchor": "238-p9"
+            },
+            {
+              "anchor": "238-p10"
+            },
+            {
+              "anchor": "238-p11"
+            },
+            {
+              "anchor": "238-p12"
+            },
+            {
+              "anchor": "238-p13"
+            },
+            {
+              "anchor": "238-p14"
+            },
+            {
+              "anchor": "238-p15"
+            },
+            {
+              "anchor": "238-p16"
+            },
+            {
+              "anchor": "238-p17"
+            }
+          ]
+        },
+        {
+          "sequence": 10,
+          "printedPage": "239",
+          "bodyFile": "accounts/abdullah-ibn-rawahah/010.md",
+          "notesFile": "accounts/abdullah-ibn-rawahah/010.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1665",
+          "passages": [
+            {
+              "anchor": "239-p1"
+            },
+            {
+              "anchor": "239-p2"
+            },
+            {
+              "anchor": "239-p3"
+            },
+            {
+              "anchor": "239-p4"
+            },
+            {
+              "anchor": "239-p5"
+            },
+            {
+              "anchor": "239-p6"
+            },
+            {
+              "anchor": "239-p7"
+            },
+            {
+              "anchor": "239-p8"
+            },
+            {
+              "anchor": "239-p9"
+            },
+            {
+              "anchor": "239-p10"
+            },
+            {
+              "anchor": "239-p11"
+            },
+            {
+              "anchor": "239-p12"
+            },
+            {
+              "anchor": "239-p13"
+            },
+            {
+              "anchor": "239-p14"
+            }
+          ]
+        },
+        {
+          "sequence": 11,
+          "printedPage": "240",
+          "bodyFile": "accounts/abdullah-ibn-rawahah/011.md",
+          "notesFile": "accounts/abdullah-ibn-rawahah/011.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1666",
+          "passages": [
+            {
+              "anchor": "240-p1"
+            },
+            {
+              "anchor": "240-p2"
+            },
+            {
+              "anchor": "240-p3"
+            },
+            {
+              "anchor": "240-p4"
+            },
+            {
+              "anchor": "240-p5"
+            },
+            {
+              "anchor": "240-p6"
+            },
+            {
+              "anchor": "240-p7"
+            },
+            {
+              "anchor": "240-p8"
+            },
+            {
+              "anchor": "240-p9"
+            },
+            {
+              "anchor": "240-p10"
+            },
+            {
+              "anchor": "240-p11"
+            },
+            {
+              "anchor": "240-p12"
+            },
+            {
+              "anchor": "240-p13"
+            }
+          ]
+        }
+      ],
+      "notInSource": [
+        "appearance",
+        "wives"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "abdullah-ibn-rawahah-siyar37/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-rawahah",
+      "field": "fullName",
+      "assertion": "عبد الله بن رواحة بن ثعلبة بن امرئ القيس بن ثعلبة الأنصاري الخزرجي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "230-p9",
+          "volume": "4",
+          "pageReference": "230",
+          "extractionUrl": "https://shamela.ws/book/10906/1656",
+          "excerptArabic": "٣٧ - عَبْدُ اللهِ بنُ رَوَاحَةَ بنِ ثَعْلَبَةَ بنِ امْرِئِ القَيْسِ الأَنْصَارِيُّ",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "230-p10",
+          "volume": "4",
+          "pageReference": "230",
+          "extractionUrl": "https://shamela.ws/book/10906/1656",
+          "excerptArabic": "ابْنِ ثَعْلَبَةَ",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "230-p11",
+          "volume": "4",
+          "pageReference": "230",
+          "extractionUrl": "https://shamela.ws/book/10906/1656",
+          "excerptArabic": "الأَمِيْرُ، السَّعِيْدُ، الشَّهِيْدُ، أَبُو عَمْرٍو الأَنْصَارِيُّ، الخَزْرَجِيُّ، البَدْرِيُّ، النَّقِيْبُ، الشَّاعِرُ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abdullah-ibn-rawahah-siyar37/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-rawahah",
+      "assertion": "عبد الله بن رواحة ابن لرواحة بن ثعلبة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "rawahah-ibn-thalabah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "230-p9",
+          "volume": "4",
+          "pageReference": "230",
+          "extractionUrl": "https://shamela.ws/book/10906/1656",
+          "excerptArabic": "٣٧ - عَبْدُ اللهِ بنُ رَوَاحَةَ بنِ ثَعْلَبَةَ بنِ امْرِئِ القَيْسِ الأَنْصَارِيُّ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abdullah-ibn-rawahah-siyar37/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-rawahah",
+      "field": "kunya",
+      "assertion": "يكنى أبا عمرو، وأبا محمد، وأبا رواحة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "230-p11",
+          "volume": "4",
+          "pageReference": "230",
+          "extractionUrl": "https://shamela.ws/book/10906/1656",
+          "excerptArabic": "الأَمِيْرُ، السَّعِيْدُ، الشَّهِيْدُ، أَبُو عَمْرٍو الأَنْصَارِيُّ، الخَزْرَجِيُّ، البَدْرِيُّ، النَّقِيْبُ، الشَّاعِرُ",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "231-p3",
+          "volume": "4",
+          "pageReference": "231",
+          "extractionUrl": "https://shamela.ws/book/10906/1657",
+          "excerptArabic": "وَيُكْنَى: أَبَا مُحَمَّدٍ، وَأَبَا رَوَاحَةَ، وَلَيْسَ لَهُ عَقِبٌ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abdullah-ibn-rawahah-siyar37/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-rawahah",
+      "field": "virtues",
+      "assertion": "بدري نقيب شاعر، شهد العقبة، وكان من كتاب الأنصار، واستخلفه النبي صلى الله عليه وسلم على المدينة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "230-p11",
+          "volume": "4",
+          "pageReference": "230",
+          "extractionUrl": "https://shamela.ws/book/10906/1656",
+          "excerptArabic": "الأَمِيْرُ، السَّعِيْدُ، الشَّهِيْدُ، أَبُو عَمْرٍو الأَنْصَارِيُّ، الخَزْرَجِيُّ، البَدْرِيُّ، النَّقِيْبُ، الشَّاعِرُ",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "231-p2",
+          "volume": "4",
+          "pageReference": "231",
+          "extractionUrl": "https://shamela.ws/book/10906/1657",
+          "excerptArabic": "شَهِدَ بَدْراً، وَالعَقَبَةَ",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "231-p5",
+          "volume": "4",
+          "pageReference": "231",
+          "extractionUrl": "https://shamela.ws/book/10906/1657",
+          "excerptArabic": "وَكَانَ مِنْ كُتَّابِ الأَنْصَارِ",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "231-p6",
+          "volume": "4",
+          "pageReference": "231",
+          "extractionUrl": "https://shamela.ws/book/10906/1657",
+          "excerptArabic": "اسْتَخْلَفَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- عَلَى المَدِيْنَةِ فِي غَزْوَةِ بَدْرٍ المَوْعِدِ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abdullah-ibn-rawahah-siyar37/virtues-praise",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-rawahah",
+      "field": "virtues",
+      "assertion": "قال فيه النبي صلى الله عليه وسلم: رحم الله ابن رواحة إنه يحب المجالس التي تتباهى بها الملائكة، وقال: زادك الله حرصا على طواعية الله ورسوله، وقال: خل يا عمر فهو أسرع فيهم من نضح النبل.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "231-p14",
+          "volume": "4",
+          "pageReference": "231",
+          "extractionUrl": "https://shamela.ws/book/10906/1657",
+          "excerptArabic": "فَقَالَ: (رَحِمَ اللهُ ابْنَ رَوَاحَةَ، إِنَّهُ يُحِبُّ المَجَالِسَ الَّتِي تَتَبَاهَى بِهَا المَلاَئِكَةُ)",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "232-p3",
+          "volume": "4",
+          "pageReference": "232",
+          "extractionUrl": "https://shamela.ws/book/10906/1658",
+          "excerptArabic": "فَبَلَغَ ذَلِكَ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فَقَالَ: (زَادَكَ اللهُ حِرْصاً عَلَى طَوَاعِيَةِ اللهِ وَرَسُوْلِهِ)",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "235-p7",
+          "volume": "4",
+          "pageReference": "235",
+          "extractionUrl": "https://shamela.ws/book/10906/1661",
+          "excerptArabic": "فَقَالَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-: (خَلِّ يَا عُمَرُ، فَهُوَ أَسْرَعُ فِيْهِم مِنْ نَضْحِ النَّبْلِ)",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abdullah-ibn-rawahah-siyar37/half-brother",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-rawahah",
+      "assertion": "ابن رواحة وأبو الدرداء أخوان لأم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "HALF_BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "abu-al-darda",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "231-p9",
+          "volume": "4",
+          "pageReference": "231",
+          "extractionUrl": "https://shamela.ws/book/10906/1657",
+          "excerptArabic": "قَالَ قُتَيْبَةُ: ابْنُ رَوَاحَةَ، وَأَبُو الدَّرْدَاءِ أَخَوَانِ لأُمٍّ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abdullah-ibn-rawahah-siyar37/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-rawahah",
+      "assertion": "شهد بدرا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "231-p2",
+          "volume": "4",
+          "pageReference": "231",
+          "extractionUrl": "https://shamela.ws/book/10906/1657",
+          "excerptArabic": "شَهِدَ بَدْراً، وَالعَقَبَةَ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abdullah-ibn-rawahah-siyar37/mutah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-rawahah",
+      "assertion": "سماه النبي صلى الله عليه وسلم ثالث الأمراء إلى مؤتة، فأخذ الراية بعد قتل صاحبيه فقاتل حتى قتل.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "mutah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "234-p1",
+          "volume": "4",
+          "pageReference": "234",
+          "extractionUrl": "https://shamela.ws/book/10906/1660",
+          "excerptArabic": "فَقَالَ: (الأَمِيْرُ زَيْدٌ، فَإِنْ أُصِيْبَ فَجَعْفَرٌ، فَإِنْ أُصِيْبَ فَابْنُ رَوَاحَةَ)",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "234-p5",
+          "volume": "4",
+          "pageReference": "234",
+          "extractionUrl": "https://shamela.ws/book/10906/1660",
+          "excerptArabic": "فَقَاتَلَ حَتَّى قُتِلَ",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "239-p14",
+          "volume": "4",
+          "pageReference": "239",
+          "extractionUrl": "https://shamela.ws/book/10906/1665",
+          "excerptArabic": "ثُمَّ نَزَلَ، فَقَاتَلَ حَتَّى قُتِلَ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    }
+  ]
+}
