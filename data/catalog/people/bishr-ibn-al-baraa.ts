@@ -1,10 +1,5 @@
-import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
+import { type CatalogPerson } from '@/lib/catalog/types';
 
-/**
- * Carried from the retired prisma/personSeedData6.ts entry, which took it
- * from the nasab chain on his own page without citing it. His edge to his
- * father is already declared on al-baraa-ibn-marur.ts.
- */
 const bishrIbnAlBaraa = {
   kind: 'PERSON',
   slug: 'bishr-ibn-al-baraa',
@@ -12,16 +7,32 @@ const bishrIbnAlBaraa = {
   nameTransliterated: 'Bishr ibn al-Baraa',
   hasProfile: true,
   fields: {
-    sex: { value: 'MALE', claims: legacyUnreviewed },
+    sex: { value: 'MALE', claims: ['bishr-ibn-al-baraa-siyar54/sex'] },
     fullName: {
-      value: 'بشر بن البراء بن معرور بن صخر بن خنساء بن سنان الأنصاري الخزرجي السلمي',
-      claims: legacyUnreviewed,
+      value: 'بشر بن البراء بن معرور الخزرجي',
+      claims: ['bishr-ibn-al-baraa-siyar54/full-name'],
+    },
+    virtues: {
+      value:
+        'من أشراف قومه. وقال النبي صلى الله عليه وسلم حين سئل عن سيّد بني سلمة: «بل سيّدكم الأبيض الجعد: بشر بن البراء»، وقد ضعف الذهبي هذا الخبر في حاشيته. وهو الذي أكل مع النبي صلى الله عليه وسلم من الشاة المسمومة يوم خيبر فأصيب.',
+      claims: [
+        'bishr-ibn-al-baraa-siyar54/virtues-chiefs',
+        'bishr-ibn-al-baraa-siyar54/virtues-sayyid',
+        'bishr-ibn-al-baraa-siyar54/virtues-khaybar',
+      ],
     },
   },
   titles: [
-    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: ['bishr-ibn-al-baraa-siyar54/titles'] },
   ],
-  relations: [],
+  relations: [
+    {
+      type: 'SON',
+      inverse: 'FATHER',
+      to: 'al-baraa-ibn-marur',
+      claims: ['bishr-ibn-al-baraa-siyar54/father'],
+    },
+  ],
 } satisfies CatalogPerson;
 
 export default bishrIbnAlBaraa;
