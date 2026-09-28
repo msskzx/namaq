@@ -223,6 +223,7 @@ const uhud = {
       claims: ['umm-sulaym/uhud'],
     },
     { person: 'al-baraa-ibn-malik', isMuslim: true, claims: ['al-baraa-ibn-malik-siyar26/uhud'] },
+    { person: 'khubayb-ibn-adi', isMuslim: true, claims: ['khubayb-ibn-adi-siyar40/uhud'] },
   ],
 } satisfies CatalogBattle;
 
