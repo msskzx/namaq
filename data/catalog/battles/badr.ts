@@ -306,6 +306,7 @@ const badr = {
       },
       claims: ['aqil-ibn-abi-talib-siyar35/badr'],
     },
+    { person: 'khallad-ibn-amr-ibn-al-jumuh', isMuslim: true, claims: ['khallad-siyar4/badr'] },
   ],
 } satisfies CatalogBattle;
 
