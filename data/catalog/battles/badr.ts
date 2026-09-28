@@ -208,7 +208,16 @@ const badr = {
       claims: ['aqil-bukayr/badr', 'aqil-bukayr-siyar16/badr-summary'],
     },
     { person: 'safwan-ibn-bayda', isMuslim: true, status: ['MARTYRED'], claims: ['safwan-bayda/badr'] },
-    { person: 'saad-ibn-khaythamah', isMuslim: true, status: ['MARTYRED'], claims: ['saad-khaythamah/badr'] },
+    {
+      person: 'saad-ibn-khaythamah',
+      isMuslim: true,
+      status: ['MARTYRED'],
+      summary: {
+        value: 'فَاقْتَرَعَا، فَخَرَجَ سَهْمُ سَعْدٍ، فَخَرَجَ، وَاسْتُشْهِدَ بِبَدْرٍ.',
+        claims: ['saad-ibn-khaythamah-siyar52/badr'],
+      },
+      claims: ['saad-khaythamah/badr', 'saad-ibn-khaythamah-siyar52/badr'],
+    },
     {
       person: 'mihja-mawla-umar',
       isMuslim: true,
