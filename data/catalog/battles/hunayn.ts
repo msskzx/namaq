@@ -40,6 +40,15 @@ const hunayn = {
       },
       claims: ['rabiah-ibn-al-harith-siyar46/hunayn'],
     },
+    {
+      person: 'abu-sufyan-ibn-al-harith',
+      isMuslim: true,
+      summary: {
+        value: 'وَلَزِمَ هُوَ وَالعَبَّاسُ رَسُوْلَ اللهِ يَوْمَ حُنَيْنٍ إِذْ فَرَّ النَّاسُ، وَأَخَذَ بِلِجَامِ البَغْلَةِ، وَثَبَتَ مَعَهُ.',
+        claims: ['abu-sufyan-ibn-al-harith-siyar32/hunayn'],
+      },
+      claims: ['abu-sufyan-ibn-al-harith-siyar32/hunayn'],
+    },
   ],
 } satisfies CatalogBattle;
 
