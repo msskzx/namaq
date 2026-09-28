@@ -126,6 +126,12 @@ NEO4J_DATABASE="neo4j"
 
 ### Install and run
 
+`src/generated/prisma` is gitignored and only exists after `prisma generate`,
+which `npm install`'s `postinstall` hook runs. A checkout that skips
+`npm install` — a git worktree sharing another checkout's `node_modules`, for
+example — needs `npm run db:generate` run by hand before `tsc` or the app will
+resolve `@prisma/client`.
+
 ```bash
 npm install
 npm run db:generate

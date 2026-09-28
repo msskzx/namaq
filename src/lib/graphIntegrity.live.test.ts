@@ -1,9 +1,10 @@
 /**
  * Unlike every other test in this repo, this one is not pure — it queries
  * the real Neo4j instance from .env (see AGENTS.md "Local verification").
- * Skips itself when Neo4j credentials aren't configured, so `npm test`
- * still passes in an environment without live infra (CI, a worktree with
- * no `.env` symlink); runs for real whenever they are.
+ * Excluded from `npm test` (vitest.config.mts) and run only via
+ * `npm run test:live` (vitest.live.config.mts); still skips itself there
+ * when Neo4j credentials aren't configured. See docs/plans/backend-issues.md,
+ * item 2.
  */
 
 import { afterAll, describe, expect, it } from 'vitest';
