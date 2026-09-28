@@ -1,0 +1,440 @@
+{
+  "slug": "nawfal-ibn-al-harith",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "nawfal-ibn-al-harith",
+      "extractionUrl": "https://shamela.ws/book/10906/1625",
+      "accessedAt": "2026-09-28",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "199",
+          "bodyFile": "accounts/nawfal-ibn-al-harith/001.md",
+          "notesFile": "accounts/nawfal-ibn-al-harith/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1625",
+          "passages": [
+            {
+              "anchor": "199-p1"
+            },
+            {
+              "anchor": "199-p2"
+            },
+            {
+              "anchor": "199-p3"
+            },
+            {
+              "anchor": "199-p4"
+            },
+            {
+              "anchor": "199-p5"
+            },
+            {
+              "anchor": "199-p6"
+            },
+            {
+              "anchor": "199-p7"
+            },
+            {
+              "anchor": "199-p8"
+            },
+            {
+              "anchor": "199-p9"
+            },
+            {
+              "anchor": "199-p10"
+            }
+          ]
+        }
+      ],
+      "volumeNumber": 4,
+      "notInSource": [
+        "appearance",
+        "wives"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "nawfal-ibn-al-harith-siyar27/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "nawfal-ibn-al-harith",
+      "field": "fullName",
+      "assertion": "نوفل بن الحارث بن عبد المطلب الهاشمي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "199-p1",
+          "volume": "4",
+          "pageReference": "199",
+          "extractionUrl": "https://shamela.ws/book/10906/1625",
+          "excerptArabic": "٢٧ - نَوْفَلُ بنُ الحَارِثِ بنِ عَبْدِ المُطَّلِبِ الهَاشِمِيُّ *",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "nawfal-ibn-al-harith-siyar27/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "nawfal-ibn-al-harith",
+      "assertion": "نوفل بن الحارث بن عبد المطلب (الحارث بن عبد المطلب: أبوه).",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "al-harith-ibn-abd-al-muttalib",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "199-p1",
+          "volume": "4",
+          "pageReference": "199",
+          "extractionUrl": "https://shamela.ws/book/10906/1625",
+          "excerptArabic": "٢٧ - نَوْفَلُ بنُ الحَارِثِ بنِ عَبْدِ المُطَّلِبِ الهَاشِمِيُّ *",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "nawfal-ibn-al-harith-siyar27/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "nawfal-ibn-al-harith",
+      "field": "kunya",
+      "assertion": "أبو الحارث.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "199-p2",
+          "volume": "4",
+          "pageReference": "199",
+          "extractionUrl": "https://shamela.ws/book/10906/1625",
+          "excerptArabic": "أَبُو الحَارِثِ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "nawfal-ibn-al-harith-siyar27/half-brother",
+      "subjectKind": "PERSON",
+      "subjectSlug": "nawfal-ibn-al-harith",
+      "assertion": "أخو أبي سفيان بن الحارث (الأب مشترك عبر النسب؛ الأم غير مذكورة هنا، فالعلاقة أخ لأب).",
+      "confidence": "LIKELY",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "HALF_BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "abu-sufyan-ibn-al-harith",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "199-p2",
+          "volume": "4",
+          "pageReference": "199",
+          "extractionUrl": "https://shamela.ws/book/10906/1625",
+          "excerptArabic": "أَخُو أَبِي (١) سُفْيَانَ بنِ الحَارِثِ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "nawfal-ibn-al-harith-siyar27/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "nawfal-ibn-al-harith",
+      "field": "virtues",
+      "assertion": "كان أسن من عمه العباس، وكان أسن بني هاشم في زمانه؛ وأعان رسول الله يوم حنين بثلاثة آلاف رمح، وثبت معه يومئذ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "199-p3",
+          "volume": "4",
+          "pageReference": "199",
+          "extractionUrl": "https://shamela.ws/book/10906/1625",
+          "excerptArabic": "كَانَ نَوْفَلُ أَسَنَّ مِنْ عَمِّهِ العَبَّاسِ.",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "199-p6",
+          "volume": "4",
+          "pageReference": "199",
+          "extractionUrl": "https://shamela.ws/book/10906/1625",
+          "excerptArabic": "وَأَعَانَ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَوْمَ حُنَيْنٍ بِثَلاَثَةِ آلاَفِ رُمْحٍ، وَثَبَتَ مَعَهُ يَوْمَئِذٍ",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "199-p9",
+          "volume": "4",
+          "pageReference": "199",
+          "extractionUrl": "https://shamela.ws/book/10906/1625",
+          "excerptArabic": "وَكَانَ أَسَنَّ بَنِي هَاشِمٍ فِي زَمَانِهِ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "nawfal-ibn-al-harith-siyar27/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "nawfal-ibn-al-harith",
+      "assertion": "حضر بدرا مع المشركين، فأسر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "199-p4",
+          "volume": "4",
+          "pageReference": "199",
+          "extractionUrl": "https://shamela.ws/book/10906/1625",
+          "excerptArabic": "حَضَرَ بَدْراً مَعَ المُشْرِكِيْنَ، فَأُسِرَ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "nawfal-ibn-al-harith-siyar27/hudaybiyyah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "nawfal-ibn-al-harith",
+      "assertion": "شهد بيعة الرضوان.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "hudaybiyyah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "199-p6",
+          "volume": "4",
+          "pageReference": "199",
+          "extractionUrl": "https://shamela.ws/book/10906/1625",
+          "excerptArabic": "شَهِدَ نَوْفَلُ بَيْعَةَ الرّضْوَانِ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "nawfal-ibn-al-harith-siyar27/hunayn",
+      "subjectKind": "PERSON",
+      "subjectSlug": "nawfal-ibn-al-harith",
+      "assertion": "أعان رسول الله يوم حنين بثلاثة آلاف رمح، وثبت معه يومئذ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "hunayn",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "199-p6",
+          "volume": "4",
+          "pageReference": "199",
+          "extractionUrl": "https://shamela.ws/book/10906/1625",
+          "excerptArabic": "وَأَعَانَ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَوْمَ حُنَيْنٍ بِثَلاَثَةِ آلاَفِ رُمْحٍ، وَثَبَتَ مَعَهُ يَوْمَئِذٍ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "nawfal-ibn-al-harith-siyar27/muakhah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "nawfal-ibn-al-harith",
+      "assertion": "وقيل: آخى النبي بينه وبين العباس.",
+      "confidence": "LIKELY",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PACT_BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "al-abbas-ibn-abd-al-muttalib",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "199-p5",
+          "volume": "4",
+          "pageReference": "199",
+          "extractionUrl": "https://shamela.ws/book/10906/1625",
+          "excerptArabic": "وَقِيْلَ: آخَى النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بَيْنَهُ وَبَيْنَ العَبَّاسِ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "nawfal-ibn-al-harith-siyar27/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "nawfal-ibn-al-harith",
+      "field": "deathYearHijri",
+      "assertion": "مات سنة عشرين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "199-p7",
+          "volume": "4",
+          "pageReference": "199",
+          "extractionUrl": "https://shamela.ws/book/10906/1625",
+          "excerptArabic": "قِيْلَ: مَاتَ سَنَةَ عِشْرِيْنَ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "nawfal-ibn-al-harith-siyar27/death-year-alt",
+      "subjectKind": "PERSON",
+      "subjectSlug": "nawfal-ibn-al-harith",
+      "field": "deathYearHijri",
+      "assertion": "وقيل: مات سنة خمس عشرة (يعارض رواية سنة عشرين).",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "disputed": true,
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "199-p8",
+          "volume": "4",
+          "pageReference": "199",
+          "extractionUrl": "https://shamela.ws/book/10906/1625",
+          "excerptArabic": "وَقِيْلَ: مَاتَ سَنَةَ خَمْسَ عَشْرَةَ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    }
+  ]
+}

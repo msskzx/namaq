@@ -22,6 +22,15 @@ const hunayn = {
     { person: 'prophet-muhammad', isMuslim: true, claims: ['prophet/hunayn'] },
     { person: 'umar-ibn-al-khattab', isMuslim: true, claims: legacyUnreviewed },
     { person: 'al-abbas-ibn-abd-al-muttalib', isMuslim: true, claims: legacyUnreviewed },
+    {
+      person: 'nawfal-ibn-al-harith',
+      isMuslim: true,
+      summary: {
+        value: 'أَعَانَ رَسُوْلَ اللهِ يَوْمَ حُنَيْنٍ بِثَلاَثَةِ آلاَفِ رُمْحٍ، وَثَبَتَ مَعَهُ يَوْمَئِذٍ.',
+        claims: ['nawfal-ibn-al-harith-siyar27/hunayn'],
+      },
+      claims: ['nawfal-ibn-al-harith-siyar27/hunayn'],
+    },
   ],
 } satisfies CatalogBattle;
 
