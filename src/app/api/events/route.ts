@@ -2,13 +2,14 @@ import { NextResponse } from 'next/server';
 import { Prisma } from '@/generated/prisma';
 import { prisma } from '@/lib/prisma';
 import { EventType } from '@/generated/prisma';
+import { parseLimit } from '@/lib/apiParams';
+import { apiError, CATALOG_CACHE_HEADERS } from '@/lib/apiError';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const type = searchParams.get('type');
   const search = searchParams.get('search');
   const year = searchParams.get('year');
-  const limit = searchParams.get('limit');
 
   const where: Prisma.EventWhereInput = {};
 
@@ -38,10 +39,8 @@ export async function GET(request: Request) {
     }
   }
 
-  // Set up pagination
-  const take = limit ? parseInt(limit, 10) : 20;
-  
   try {
+    const take = parseLimit(searchParams, { defaultLimit: 20, maxLimit: 100 });
     const events = await prisma.event.findMany({
       where,
       include: {
@@ -57,15 +56,11 @@ export async function GET(request: Request) {
         { hijriYear: 'asc' },
         { gregorianYear: 'asc' },
       ],
-      take: Math.min(take, 100), // Limit to 100 items max for safety
+      take,
     });
 
-    return NextResponse.json(events);
+    return NextResponse.json(events, { headers: CATALOG_CACHE_HEADERS });
   } catch (error) {
-    console.error('Error fetching events:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch events' },
-      { status: 500 }
-    );
+    return apiError('GET /api/events', error, 'Failed to fetch events');
   }
 }

@@ -62,6 +62,20 @@ describe('GET /api/events', () => {
     expect(findMany.mock.calls[0][0].take).toBe(100);
   });
 
+  it('rejects a non-numeric limit with 400 instead of reaching Prisma', async () => {
+    const response = await GET(request('?limit=abc'));
+
+    expect(response.status).toBe(400);
+    expect(findMany).not.toHaveBeenCalled();
+  });
+
+  it('rejects a negative limit with 400', async () => {
+    const response = await GET(request('?limit=-1'));
+
+    expect(response.status).toBe(400);
+    expect(findMany).not.toHaveBeenCalled();
+  });
+
   it('returns 500 when the database call fails', async () => {
     findMany.mockRejectedValue(new Error('boom'));
 

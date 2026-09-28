@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/neo4j';
 import { filterAndRankSubjects, type SubjectKind } from '@/lib/subjectSearch';
+import { apiError, CATALOG_CACHE_HEADERS } from '@/lib/apiError';
 
 // The workspace searches the graph; /api/people/suggest searches profiles.
 // See docs/graph-search.md for why these stayed two endpoints.
@@ -84,12 +85,8 @@ export async function GET(request: Request) {
         match,
       }));
 
-    return NextResponse.json({ data });
+    return NextResponse.json({ data }, { headers: CATALOG_CACHE_HEADERS });
   } catch (error) {
-    console.error('Error fetching graph suggestions:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch graph suggestions' },
-      { status: 500 }
-    );
+    return apiError('GET /api/graph/suggest', error, 'Failed to fetch graph suggestions');
   }
 }

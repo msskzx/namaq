@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { battleKind, type TimelineItem } from '@/lib/timeline';
+import { apiError, CATALOG_CACHE_HEADERS } from '@/lib/apiError';
 
 /**
  * Every event and every battle as one list for the events page, which sorts and
@@ -25,9 +26,8 @@ export async function GET() {
         kind: battleKind(engagement),
       })),
     ];
-    return NextResponse.json(items);
+    return NextResponse.json(items, { headers: CATALOG_CACHE_HEADERS });
   } catch (error) {
-    console.error('Timeline API error:', error);
-    return NextResponse.json({ error: 'Failed to fetch the timeline' }, { status: 500 });
+    return apiError('GET /api/timeline', error, 'Failed to fetch the timeline');
   }
 }

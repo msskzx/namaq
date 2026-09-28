@@ -3,6 +3,8 @@ import { Session } from 'neo4j-driver';
 import { getSession } from '@/lib/neo4j';
 import { GraphLink, GraphNodeFull } from '@/types/graph';
 import { governingRelationType } from '@/lib/relationship/categories';
+import { clampSubjects } from '@/lib/apiParams';
+import { apiError, CATALOG_CACHE_HEADERS } from '@/lib/apiError';
 
 type EntityType = 'person' | 'battle' | 'title' | 'event';
 const KNOWN_TYPES: readonly EntityType[] = ['person', 'battle', 'title', 'event'];
@@ -107,13 +109,13 @@ async function attachNeo4jSubjectProperties(session: Session, nodeList: GraphNod
 
 export async function GET(_request: Request) {
   const { searchParams } = new URL(_request.url);
-  const persons = searchParams.getAll('person') as string[];
-  const ancestorsOf = searchParams.getAll('ancestorsOf') as string[];
-  const ancestorsOfBothParents = searchParams.getAll('ancestorsOfBothParents') as string[];
-  const descendantsOf = searchParams.getAll('descendantsOf') as string[];
-  const battles = searchParams.getAll('battle') as string[];
-  const relationSubjects = searchParams.getAll('relationSubjects') as string[];
-  const relationTypes = searchParams.getAll('relationTypes') as string[];
+  const persons = clampSubjects(searchParams.getAll('person'));
+  const ancestorsOf = clampSubjects(searchParams.getAll('ancestorsOf'));
+  const ancestorsOfBothParents = clampSubjects(searchParams.getAll('ancestorsOfBothParents'));
+  const descendantsOf = clampSubjects(searchParams.getAll('descendantsOf'));
+  const battles = clampSubjects(searchParams.getAll('battle'));
+  const relationSubjects = clampSubjects(searchParams.getAll('relationSubjects'));
+  const relationTypes = clampSubjects(searchParams.getAll('relationTypes'));
   const focus = searchParams.get('focus');
   const includedRelations = searchParams.has('filter') ? new Set(searchParams.getAll('filter').map(governingRelationType)) : null;
   const includeLink = (link: GraphLink) => includedRelations === null || includedRelations.has(governingRelationType(link.label));
@@ -430,7 +432,10 @@ export async function GET(_request: Request) {
       const nodeList = Array.from(nodes.values());
       await attachNeo4jSubjectProperties(session, nodeList);
 
-      return NextResponse.json({ nodes: nodeList, links: links.filter(includeLink) });
+      return NextResponse.json(
+        { nodes: nodeList, links: links.filter(includeLink) },
+        { headers: CATALOG_CACHE_HEADERS }
+      );
     }
 
     // Default: no scoping params at all. Return the full unified graph
@@ -473,20 +478,19 @@ export async function GET(_request: Request) {
     const nodeList = Array.from(nodes.values());
     await attachNeo4jSubjectProperties(session, nodeList);
 
-    return NextResponse.json({ nodes: nodeList, links: links.filter(includeLink) });
+    return NextResponse.json(
+      { nodes: nodeList, links: links.filter(includeLink) },
+      { headers: CATALOG_CACHE_HEADERS }
+    );
 
   } catch (error) {
     if (error instanceof MissingLayoutError) {
-      console.error('Graph layout error:', error.message);
-      return NextResponse.json(
-        { error: 'Graph layout is incomplete. Run `npm run graph:layout -- --apply` to recompute it.' },
-        { status: 500 }
+      return apiError(
+        'GET /api/graph',
+        error,
+        'Graph layout is incomplete. Run `npm run graph:layout -- --apply` to recompute it.'
       );
     }
-    console.error('Database query error:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch graph data' },
-      { status: 500 }
-    );
+    return apiError('GET /api/graph', error, 'Failed to fetch graph data');
   }
 }

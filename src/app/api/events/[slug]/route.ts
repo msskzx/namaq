@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { utteranceSelect } from '@/lib/utteranceSelect';
+import { apiError, CATALOG_CACHE_HEADERS } from '@/lib/apiError';
 
 export async function GET(
   _request: Request,
@@ -40,12 +41,8 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(event);
+    return NextResponse.json(event, { headers: CATALOG_CACHE_HEADERS });
   } catch (error) {
-    console.error(`Error fetching event with slug ${slug}:`, error);
-    return NextResponse.json(
-      { error: 'Failed to fetch event' },
-      { status: 500 }
-    );
+    return apiError('GET /api/events/[slug]', error, 'Failed to fetch event');
   }
 }
