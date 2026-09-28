@@ -406,4 +406,48 @@ describe('SourceAccountReader', () => {
     await screen.findByText('<img src=x onerror="window.__pwned = true">');
     expect(container.querySelector('img')).toBeNull();
   });
+
+  it('scrolls to and highlights the cited passage named in the URL', async () => {
+    const scrollIntoView = vi.fn();
+    Element.prototype.scrollIntoView = scrollIntoView;
+    nav.setUrl('/people/abu-ubaydah-ibn-al-jarrah?book=account-siyar&page=1&passage=5-p8');
+    respondWith({
+      accounts: [account()],
+      account: account(),
+      page: page({ passages: [{ anchor: '5-p8', excerpt: 'الفقرة الثانية' }] }),
+    });
+
+    const { container } = renderReader();
+    await screen.findByText('الفقرة الثانية');
+
+    const target = container.querySelector('#cited-passage');
+    expect(target?.textContent).toBe('الفقرة الثانية');
+    expect(scrollIntoView).toHaveBeenCalled();
+  });
+
+  it('stays at the top of the page when the passage anchor matches nothing', async () => {
+    nav.setUrl('/people/abu-ubaydah-ibn-al-jarrah?book=account-siyar&page=1&passage=5-p99');
+    respondWith({
+      accounts: [account()],
+      account: account(),
+      page: page({ passages: [{ anchor: '5-p8', excerpt: 'الفقرة الثانية' }] }),
+    });
+
+    const { container } = renderReader();
+    await screen.findByText('الفقرة الأولى');
+
+    expect(container.querySelector('#cited-passage')).toBeNull();
+  });
+
+  it('clears a stale passage target when turning the page by hand', async () => {
+    nav.setUrl('/people/abu-ubaydah-ibn-al-jarrah?book=account-siyar&page=1&passage=5-p8');
+    const selected = account({ pageCount: 2 });
+    respondWith({ accounts: [selected], account: selected, page: page({ sequence: 1 }) });
+
+    renderReader();
+    fireEvent.click(await screen.findByRole('button', { name: 'Next page' }));
+
+    await waitFor(() => expect(nav.replaceCalls.at(-1)).toContain('page=2'));
+    expect(nav.replaceCalls.at(-1)).not.toContain('passage=');
+  });
 });

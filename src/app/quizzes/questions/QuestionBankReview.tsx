@@ -2,15 +2,18 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faArrowRight, faFilter, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faArrowRight, faBookOpen, faFilter, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import useSWR from 'swr';
 import Button from '@/components/common/Button';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
+import QuizReferenceDialog from '@/components/common/QuizReferenceDialog';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { QUESTION_FAMILIES, QUESTION_STATUSES } from '@/lib/quiz/types';
 import type { QuestionChoice } from '@/lib/quiz/types';
+import type { QuizReference } from '@/lib/quiz/quizReference';
 import { fetcher } from '@/lib/swr';
+import { useState } from 'react';
 
 interface ReviewQuestion {
   key: string;
@@ -20,8 +23,9 @@ interface ReviewQuestion {
   generatedPromptArabic: string;
   promptArabicOverride: string | null;
   choices: QuestionChoice[];
+  choiceDetails: Record<string, { text: string; reference: string }>;
   correctAnswer: string;
-  evidence: { claimKeys: string[]; readerUrls: string[] };
+  evidence: { claimKeys: string[]; reference: QuizReference | null };
   status: string;
   rejectionReason: string | null;
 }
@@ -50,6 +54,13 @@ export default function QuestionBankReview() {
   };
 
   const page = data?.pagination.page ?? Number(searchParams.get('page') ?? 1);
+  const [reference, setReference] = useState<QuizReference | null>(null);
+
+  const choiceContent = (question: ReviewQuestion, choice: QuestionChoice) => {
+    const detail = question.choiceDetails?.[choice.value];
+    if (!detail) return choice.labelArabic;
+    return <span><span className="block leading-relaxed">{detail.text}</span><span className="text-xs text-gray-500 dark:text-gray-400">{detail.reference}</span></span>;
+  };
 
   return (
     <main className="container mx-auto px-4 py-8" dir={ar ? 'rtl' : 'ltr'}>
@@ -88,14 +99,19 @@ export default function QuestionBankReview() {
                   <ul className="mb-3 grid gap-2 md:grid-cols-2" dir="rtl">
                     {question.choices.map((choice) => (
                       <li key={choice.value} className={`rounded border px-3 py-2 ${choice.value === question.correctAnswer ? 'border-green-600 bg-green-50 dark:bg-green-950/30' : 'border-gray-200 dark:border-white/10'}`}>
-                        {choice.labelArabic}
+                        {choiceContent(question, choice)}
                         {choice.value === question.correctAnswer ? <span className="ms-2 text-xs font-semibold text-green-700 dark:text-green-300">{ar ? 'الإجابة الصحيحة' : 'Correct answer'}</span> : null}
                       </li>
                     ))}
                   </ul>
                   {question.rejectionReason ? <p className="mb-2 text-sm text-red-700 dark:text-red-300">{question.rejectionReason}</p> : null}
                   <p className="text-xs text-gray-500">{question.evidence.claimKeys.join(', ')}</p>
-                  {question.evidence.readerUrls.map((url) => <a key={url} href={url} className="mt-1 block text-sm text-amber-600 hover:underline dark:text-amber-400">{ar ? 'المصدر' : 'Source'}</a>)}
+                  {question.evidence.reference && (
+                    <Button className="mt-2" size="sm" variant="outline" onClick={() => setReference(question.evidence.reference)}>
+                      <FontAwesomeIcon icon={faBookOpen} />
+                      {ar ? 'المصدر' : 'Source'}
+                    </Button>
+                  )}
                   <p className="mt-1 break-all text-xs text-gray-400">{question.fingerprint}</p>
                 </li>
               );
@@ -110,6 +126,7 @@ export default function QuestionBankReview() {
               {ar ? 'التالي' : 'Next'}<FontAwesomeIcon icon={ar ? faArrowLeft : faArrowRight} />
             </Button>
           </div>
+          <QuizReferenceDialog reference={reference} onClose={() => setReference(null)} />
         </>
       )}
     </main>

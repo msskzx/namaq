@@ -16,6 +16,11 @@ Open the graph → explore and filter relationships → open a person's profile 
 
 - The quiz picker can combine several reviewed scopes in one quiz. Question
   content is Arabic; ayah choices show their stored Qur'an text and reference.
+  Every catalog person has recorded sex, so gender-constrained relationship
+  questions offer only choices of the required sex. Solo quizzes lock each
+  answer for immediate feedback, expose one source reference per question in
+  an overlay that deep-links to the exact reader passage, and report a
+  percentage with a pass mark at 50%.
 
 ### Relationship graph
 

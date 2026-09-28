@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { pageHeadings, pageParagraphs } from './sectionHeadings';
+import { findPassageParagraph, pageHeadings, pageParagraphs } from './sectionHeadings';
 
 describe('pageHeadings', () => {
   it('reads a bracketed paragraph as a heading, brackets stripped', () => {
@@ -56,5 +56,27 @@ describe('pageHeadings', () => {
       { text: '١ - أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ عَامِرُ بنِ عَبْدِ اللهِ * (م، ق) .', heading: true },
       { text: 'ابْنِ الجَرَّاحِ بنِ هِلاَلِ بنِ أُهَيْبِ بنِ ضَبَّةَ.', heading: false },
     ]);
+  });
+});
+
+describe('findPassageParagraph', () => {
+  const body = [
+    '١ - أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ عَامِرُ بنُ عَبْدِ اللهِ * (م، ق) .',
+    'ابْنِ الجَرَّاحِ بنِ هِلاَلِ بنِ أُهَيْبِ بنِ ضَبَّةَ (١) .',
+    'يَجْتَمِعُ فِي النَّسَبِ هُوَ وَالنَّبِيُّ.',
+  ].join('\n\n');
+
+  it('finds the paragraph holding the cited excerpt', () => {
+    expect(findPassageParagraph(body, 'أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ')).toBe(0);
+    expect(findPassageParagraph(body, 'يَجْتَمِعُ فِي النَّسَبِ')).toBe(2);
+  });
+
+  it('matches across whitespace and the editor footnote markers', () => {
+    expect(findPassageParagraph(body, 'ابْنِ الجَرَّاحِ بنِ هِلاَلِ')).toBe(1);
+  });
+
+  it('returns -1 when the excerpt matches nothing or is empty', () => {
+    expect(findPassageParagraph(body, 'نص غير موجود')).toBe(-1);
+    expect(findPassageParagraph(body, '   ')).toBe(-1);
   });
 });

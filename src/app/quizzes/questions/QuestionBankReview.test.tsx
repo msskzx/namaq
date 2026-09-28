@@ -1,6 +1,6 @@
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 
 vi.mock('next/navigation', async () => {
   const ReactActual = await vi.importActual<typeof import('react')>('react');
@@ -30,7 +30,16 @@ vi.mock('swr', () => ({
           { value: 'three', labelArabic: 'أبو الثالث' },
         ],
         correctAnswer: 'right',
-        evidence: { claimKeys: ['person/kunya'], readerUrls: ['/people/person?book=account&page=1'] },
+        choiceDetails: {},
+        evidence: {
+          claimKeys: ['person/kunya'],
+          reference: {
+            excerptArabic: 'نص الشاهد',
+            sourceTitle: 'سير أعلام النبلاء',
+            pageReference: '5',
+            readerUrl: '/people/person?book=account&page=1&passage=5-p3',
+          },
+        },
         status: 'APPROVED',
         rejectionReason: null,
       }],
@@ -55,6 +64,14 @@ describe('QuestionBankReview', () => {
     expect(screen.getByText('أبو الثالث')).toBeTruthy();
     expect(screen.getByText('Correct answer')).toBeTruthy();
     expect(screen.getByText('person/kunya')).toBeTruthy();
-    expect(screen.getByRole('link', { name: 'Source' }).getAttribute('href')).toBe('/people/person?book=account&page=1');
+  });
+
+  it('opens the single quiz reference in an overlay instead of navigating away', () => {
+    render(<QuestionBankReview />);
+    fireEvent.click(screen.getByRole('button', { name: 'Source' }));
+    expect(screen.getByRole('dialog')).toBeTruthy();
+    expect(screen.getByText('نص الشاهد')).toBeTruthy();
+    expect(screen.getByText('Visit reference').closest('a')?.getAttribute('href'))
+      .toBe('/people/person?book=account&page=1&passage=5-p3');
   });
 });

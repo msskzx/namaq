@@ -11,6 +11,7 @@ import {
   type ClaimWithCitations,
 } from '@/types/provenance';
 import Badge from '@/components/common/Badge';
+import { citationReaderUrl } from '@/lib/provenance/citationReaderUrl';
 
 interface ClaimEvidenceProps {
   /** The profile's own subject, so a relation names both of its ends. */
@@ -134,7 +135,12 @@ export default function ClaimEvidence({
                           {citation.passage?.page && subjectSlug ? (
                             <Link
                               className="underline"
-                              href={`/people/${subjectSlug}?book=${citation.passage.page.accountId}&page=${citation.passage.page.sequence}`}
+                              href={citationReaderUrl({
+                                subjectSlug,
+                                accountId: citation.passage.page.accountId,
+                                sequence: citation.passage.page.sequence,
+                                anchor: citation.passage.anchor,
+                              })}
                             >
                               {citationText(citation, language)}
                             </Link>

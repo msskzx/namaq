@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowLeft,
   faArrowRight,
+  faBookOpen,
   faCircle,
   faCircleCheck,
   faCircleQuestion,
@@ -18,11 +19,13 @@ import {
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import Button from "@/components/common/Button";
+import QuizReferenceDialog from "@/components/common/QuizReferenceDialog";
 import SlideSwitch from "@/components/graph/SlideSwitch";
 import { useLanguage } from "@/components/language/LanguageContext";
 import { parseQuizTopics } from "@/lib/quiz/topics";
 import { fetcher } from "@/lib/swr";
 import type { QuestionChoice, QuestionFamily, QuizLength, QuizTopic } from "@/lib/quiz/types";
+import type { QuizReference } from "@/lib/quiz/quizReference";
 import { QUIZ_TOPICS } from "@/lib/quiz/types";
 
 interface QuizQuestionView {
@@ -32,7 +35,7 @@ interface QuizQuestionView {
   choices: QuestionChoice[];
   choiceDetails: Record<string, { text: string; reference: string }>;
   correctAnswer: string;
-  evidence: { readerUrls: string[] };
+  evidence: { reference: QuizReference | null };
 }
 
 const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
@@ -71,6 +74,7 @@ export default function QuizzesPage() {
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [submitted, setSubmitted] = useState(false);
+  const [referenceIndex, setReferenceIndex] = useState<number | null>(null);
   const [personInput, setPersonInput] = useState(person);
   const [personSuggestions, setPersonSuggestions] = useState<{ slug: string; name: string; nameTransliterated: string | null }[]>([]);
 
@@ -78,6 +82,7 @@ export default function QuizzesPage() {
     setCurrent(0);
     setAnswers({});
     setSubmitted(false);
+    setReferenceIndex(null);
   }, [query]);
 
   const setParam = useCallback((changes: Record<string, string | undefined>) => {
@@ -93,11 +98,22 @@ export default function QuizzesPage() {
     setCurrent(0);
     setAnswers({});
     setSubmitted(false);
+    setReferenceIndex(null);
     router.push(pathname);
   }, [pathname, router]);
 
   const questions = useMemo(() => data?.questions ?? [], [data]);
   const score = useMemo(() => questions.filter((question, index) => answers[index] === question.correctAnswer).length, [questions, answers]);
+  const percent = questions.length === 0 ? 0 : Math.round((score / questions.length) * 100);
+  const passed = questions.length > 0 && score / questions.length >= 0.5;
+  const questionState = (index: number) => {
+    const given = answers[index];
+    if (given === undefined) return 'unanswered' as const;
+    return given === questions[index].correctAnswer ? 'correct' as const : 'incorrect' as const;
+  };
+  const stateLabel = (state: 'correct' | 'incorrect' | 'unanswered') =>
+    ar ? ({ correct: 'صحيح', incorrect: 'خطأ', unanswered: 'بدون إجابة' } as const)[state]
+      : ({ correct: 'correct', incorrect: 'incorrect', unanswered: 'unanswered' } as const)[state];
   const answerContent = (question: QuizQuestionView, value: string | undefined) => {
     const choice = question.choices.find((item) => item.value === value);
     if (!choice) return null;
@@ -187,7 +203,11 @@ export default function QuizzesPage() {
           <div className="text-center text-gray-600 dark:text-gray-400"><p>{ar ? "لا توجد أسئلة كافية لهذا الاختيار." : "Not enough approved questions for this choice."}</p><Button className="mt-4" variant="outline" onClick={reset}><FontAwesomeIcon icon={faRotateLeft} />{ar ? "العودة للإعداد" : "Back to setup"}</Button></div>
         ) : submitted ? (
           <div>
-            <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-gray-100">{ar ? `النتيجة: ${score} من ${questions.length}` : `Score: ${score} / ${questions.length}`}</h2>
+            <h2 className="mb-2 text-xl font-bold text-gray-900 dark:text-gray-100">{ar ? `النتيجة: ${score} من ${questions.length} (${percent}٪)` : `Score: ${score} / ${questions.length} (${percent}%)`}</h2>
+            <p className={`mb-4 flex items-center gap-2 font-semibold ${passed ? 'text-green-700 dark:text-green-300' : 'text-red-600 dark:text-red-400'}`}>
+              <FontAwesomeIcon icon={passed ? faCircleCheck : faCircleXmark} />
+              {ar ? (passed ? 'ناجح' : 'راسب') : passed ? 'Passed' : 'Not passed'}
+            </p>
             <ul className="space-y-4">
               {questions.map((question, index) => {
                 const given = answers[index];
@@ -200,7 +220,12 @@ export default function QuizzesPage() {
                       <span>{given ? answerContent(question, given) : ar ? "بدون إجابة" : "No answer"}</span>
                     </div>
                     {!correct && <p className="text-sm text-gray-600 dark:text-gray-400">{ar ? "الصحيح: " : "Correct: "}{answerContent(question, question.correctAnswer)}</p>}
-                    {question.evidence.readerUrls.map((url) => <a key={url} href={url} className="mt-1 block text-sm text-amber-600 hover:underline dark:text-amber-400">{ar ? "المصدر" : "Evidence"}</a>)}
+                    {question.evidence.reference && (
+                      <Button className="mt-2" size="sm" variant="outline" onClick={() => setReferenceIndex(index)}>
+                        <FontAwesomeIcon icon={faBookOpen} />
+                        {ar ? "المصدر" : "Source"}
+                      </Button>
+                    )}
                   </li>
                 );
               })}
@@ -213,23 +238,61 @@ export default function QuizzesPage() {
         ) : (
           <div>
             <div className="mb-4 flex flex-wrap gap-2" role="group" aria-label={ar ? "الأسئلة" : "Questions"}>
-              {questions.map((_, index) => (
-                <Button key={index} size="icon" variant="outline" active={index === current} onClick={() => setCurrent(index)} aria-label={ar ? `السؤال ${index + 1}` : `Question ${index + 1}`}>
-                  <FontAwesomeIcon icon={faCircleQuestion} />
-                  {index + 1}
-                </Button>
-              ))}
+              {questions.map((_, index) => {
+                const state = questionState(index);
+                return (
+                  <Button
+                    key={index}
+                    size="icon"
+                    variant="outline"
+                    active={index === current}
+                    onClick={() => setCurrent(index)}
+                    aria-label={`${ar ? `السؤال ${index + 1}` : `Question ${index + 1}`} - ${stateLabel(state)}`}
+                  >
+                    <FontAwesomeIcon
+                      icon={state === 'correct' ? faCircleCheck : state === 'incorrect' ? faCircleXmark : faCircleQuestion}
+                      className={state === 'correct' ? 'text-green-600' : state === 'incorrect' ? 'text-red-500' : undefined}
+                    />
+                    {index + 1}
+                  </Button>
+                );
+              })}
             </div>
             <div className="rounded-lg border border-gray-200 p-6 dark:border-white/10">
               <p className="mb-4 font-semibold text-gray-900 dark:text-gray-100">{questions[current].promptArabic}</p>
               <div className="flex flex-col gap-2">
-                {questions[current].choices.map((choice) => (
-                  <Button key={choice.value} variant="outline" active={answers[current] === choice.value} onClick={() => setAnswers((previous) => ({ ...previous, [current]: choice.value }))}>
-                    <FontAwesomeIcon icon={answers[current] === choice.value ? faCircleCheck : faCircle} />
-                    {answerContent(questions[current], choice.value)}
-                  </Button>
-                ))}
+                {questions[current].choices.map((choice) => {
+                  const locked = answers[current] !== undefined;
+                  const isAnswer = choice.value === questions[current].correctAnswer;
+                  const isGiven = answers[current] === choice.value;
+                  return (
+                    <Button
+                      key={choice.value}
+                      variant="outline"
+                      active={isGiven}
+                      onClick={() => {
+                        if (answers[current] !== undefined) return;
+                        setAnswers((previous) => ({ ...previous, [current]: choice.value }));
+                      }}
+                      className={locked && isAnswer ? 'border-green-600 bg-green-50 dark:bg-green-950/30' : locked && isGiven ? 'border-red-500 bg-red-50 dark:bg-red-950/30' : undefined}
+                    >
+                      <FontAwesomeIcon
+                        icon={locked && (isAnswer || isGiven) ? (isAnswer ? faCircleCheck : faCircleXmark) : isGiven ? faCircleCheck : faCircle}
+                        className={locked && isAnswer ? 'text-green-600' : locked && isGiven ? 'text-red-500' : undefined}
+                      />
+                      {answerContent(questions[current], choice.value)}
+                      {locked && isAnswer ? <span className="text-xs font-semibold text-green-700 dark:text-green-300">{ar ? 'صحيح' : 'Correct'}</span> : null}
+                      {locked && isGiven && !isAnswer ? <span className="text-xs font-semibold text-red-600 dark:text-red-400">{ar ? 'خطأ' : 'Incorrect'}</span> : null}
+                    </Button>
+                  );
+                })}
               </div>
+              {answers[current] !== undefined && questions[current].evidence.reference && (
+                <Button className="mt-3" size="sm" variant="outline" onClick={() => setReferenceIndex(current)}>
+                  <FontAwesomeIcon icon={faBookOpen} />
+                  {ar ? "المصدر" : "Source"}
+                </Button>
+              )}
             </div>
             <div className="mt-4 flex items-center justify-between">
               <Button variant="outline" disabled={current === 0} onClick={() => setCurrent((value) => Math.max(0, value - 1))}>
@@ -248,6 +311,10 @@ export default function QuizzesPage() {
                 </Button>
               )}
             </div>
+            <QuizReferenceDialog
+              reference={referenceIndex !== null ? questions[referenceIndex]?.evidence.reference ?? null : null}
+              onClose={() => setReferenceIndex(null)}
+            />
           </div>
         )}
       </div>
