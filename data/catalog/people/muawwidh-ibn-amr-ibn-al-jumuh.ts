@@ -1,11 +1,5 @@
-import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
+import type { CatalogPerson } from '@/lib/catalog/types';
 
-/**
- * Carried from neo4j/graphSeedData*.ts, whose node declaration is retired
- * with the rest. The catalog owns this subject's edges now, so they live
- * here or not at all. No batch has read this far into the nasab yet, so
- * every link stays on the legacy marker.
- */
 const muawwidhIbnAmrIbnAlJumuh = {
   kind: 'PERSON',
   slug: 'muawwidh-ibn-amr-ibn-al-jumuh',
@@ -13,17 +7,43 @@ const muawwidhIbnAmrIbnAlJumuh = {
   nameTransliterated: 'Muawwidh ibn Amr ibn al-Jumuh',
   hasProfile: true,
   fields: {
-    sex: { value: 'MALE', claims: legacyUnreviewed },
+    sex: { value: 'MALE', claims: ['muawwidh-ibn-amr-ibn-al-jumuh-siyar42/sex'] },
     fullName: {
-      value: 'معوذ بن عمرو بن الجموح بن زيد بن حرام بن كعب بن غنم بن كعب بن سلمة الأنصاري الخزرجي السلمي',
-      claims: legacyUnreviewed,
+      value: 'معوذ بن عمرو بن الجموح الأنصاري السلمي',
+      claims: ['muawwidh-ibn-amr-ibn-al-jumuh-siyar42/full-name'],
+    },
+    virtues: {
+      value: 'شهد بدراً مع أخويه معاذ وخلاد',
+      claims: ['muawwidh-ibn-amr-ibn-al-jumuh-siyar42/virtues'],
     },
   },
   titles: [
-    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    {
+      title: 'companion',
+      name: 'صحابي',
+      nameTransliterated: 'Companion',
+      claims: ['muawwidh-ibn-amr-ibn-al-jumuh-siyar42/titles'],
+    },
   ],
   relations: [
-    { type: 'SON', inverse: 'FATHER', to: 'amr-ibn-al-jumuh', claims: legacyUnreviewed },
+    {
+      type: 'SON',
+      inverse: 'FATHER',
+      to: 'amr-ibn-al-jumuh',
+      claims: ['muawwidh-ibn-amr-ibn-al-jumuh-siyar42/father'],
+    },
+    {
+      type: 'HALF_BROTHER',
+      inverse: 'HALF_BROTHER',
+      to: 'muadh-ibn-amr-ibn-al-jumuh',
+      claims: ['muawwidh-ibn-amr-ibn-al-jumuh-siyar42/brother-muadh'],
+    },
+    {
+      type: 'HALF_BROTHER',
+      inverse: 'HALF_BROTHER',
+      to: 'khallad-ibn-amr-ibn-al-jumuh',
+      claims: ['muawwidh-ibn-amr-ibn-al-jumuh-siyar42/brother-khallad'],
+    },
   ],
 } satisfies CatalogPerson;
 
