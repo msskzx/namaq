@@ -1,5 +1,4 @@
 import neo4j, { Driver, Session } from 'neo4j-driver';
-import 'dotenv/config';
 
 interface Neo4jConfig {
   uri: string;
@@ -32,8 +31,8 @@ function getDriver(): Driver {
         neo4jConfig.uri,
         neo4j.auth.basic(neo4jConfig.username, neo4jConfig.password),
         {
-          maxConnectionPoolSize: 50,
-          connectionTimeout: 30000,
+          maxConnectionPoolSize: 10,
+          connectionTimeout: 5000,
           maxTransactionRetryTime: 30000,
           disableLosslessIntegers: true
         }
