@@ -238,3 +238,14 @@ A wrong choice offered beside a quiz question's correct answer. Drawn from
 another eligible claim of the same family, and never true for the question's
 own subject, however that value is dispute-scored.
 _Avoid_: Wrong answer, decoy (imprecise about where it comes from)
+
+**Gender-constrained question**:
+A question whose wording requires its answer to be male or female. Every person
+choice in that question has the required recorded sex; gender-neutral questions
+do not impose this constraint.
+
+**Quiz reference**:
+The single citation a quiz surface presents for an answer. It shows the cited
+excerpt in an overlay and links onward to the same passage in the person's
+source reader; other supporting citations remain part of the historical claim.
+_Avoid_: Evidence set (the complete support may contain several citations)
