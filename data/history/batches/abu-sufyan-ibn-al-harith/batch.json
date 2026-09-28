@@ -1,0 +1,412 @@
+{
+  "slug": "abu-sufyan-ibn-al-harith",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        { "number": 1, "name": "السيرة النبوية ج١" },
+        { "number": 2, "name": "السيرة النبوية ج٢" },
+        { "number": 3, "name": "سيرة الخلفاء الراشدين" },
+        { "number": 4, "name": "سير أعلام النبلاء ج١" },
+        { "number": 5, "name": "سير أعلام النبلاء ج٢" },
+        { "number": 6, "name": "سير أعلام النبلاء ج٣" },
+        { "number": 7, "name": "سير أعلام النبلاء ج٤" },
+        { "number": 8, "name": "سير أعلام النبلاء ج٥" },
+        { "number": 9, "name": "سير أعلام النبلاء ج٦" },
+        { "number": 10, "name": "سير أعلام النبلاء ج٧" },
+        { "number": 11, "name": "سير أعلام النبلاء ج٨" },
+        { "number": 12, "name": "سير أعلام النبلاء ج٩" },
+        { "number": 13, "name": "سير أعلام النبلاء ج١٠" },
+        { "number": 14, "name": "سير أعلام النبلاء ج١١" },
+        { "number": 15, "name": "سير أعلام النبلاء ج١٢" },
+        { "number": 16, "name": "سير أعلام النبلاء ج١٣" },
+        { "number": 17, "name": "سير أعلام النبلاء ج١٤" },
+        { "number": 18, "name": "سير أعلام النبلاء ج١٥" },
+        { "number": 19, "name": "سير أعلام النبلاء ج١٦" },
+        { "number": 20, "name": "سير أعلام النبلاء ج١٧" },
+        { "number": 21, "name": "سير أعلام النبلاء ج١٨" },
+        { "number": 22, "name": "سير أعلام النبلاء ج١٩" },
+        { "number": 23, "name": "سير أعلام النبلاء ج٢٠" },
+        { "number": 24, "name": "سير أعلام النبلاء ج٢١" },
+        { "number": 25, "name": "سير أعلام النبلاء ج٢٢" },
+        { "number": 26, "name": "سير أعلام النبلاء ج٢٣" },
+        { "number": 27, "name": "الفهارس ج١" },
+        { "number": 28, "name": "الفهارس ج٢" }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-al-harith",
+      "extractionUrl": "https://shamela.ws/book/10906/1628",
+      "accessedAt": "2026-09-28",
+      "volumeNumber": 4,
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "202",
+          "bodyFile": "accounts/abu-sufyan-ibn-al-harith/001.md",
+          "notesFile": "accounts/abu-sufyan-ibn-al-harith/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1628",
+          "passages": [
+            { "anchor": "4/202-p9" },
+            { "anchor": "4/202-p10" },
+            { "anchor": "4/202-p11" }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "203",
+          "bodyFile": "accounts/abu-sufyan-ibn-al-harith/002.md",
+          "notesFile": "accounts/abu-sufyan-ibn-al-harith/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1629",
+          "passages": [
+            { "anchor": "4/203-p1" },
+            { "anchor": "4/203-p2" },
+            { "anchor": "4/203-p3" },
+            { "anchor": "4/203-p4" },
+            { "anchor": "4/203-p5" },
+            { "anchor": "4/203-p6" },
+            { "anchor": "4/203-p7" },
+            { "anchor": "4/203-p8" },
+            { "anchor": "4/203-p9" },
+            { "anchor": "4/203-p10" },
+            { "anchor": "4/203-p11" },
+            { "anchor": "4/203-p12" },
+            { "anchor": "4/203-p13" }
+          ]
+        },
+        {
+          "sequence": 3,
+          "printedPage": "204",
+          "bodyFile": "accounts/abu-sufyan-ibn-al-harith/003.md",
+          "notesFile": "accounts/abu-sufyan-ibn-al-harith/003.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1630",
+          "passages": [
+            { "anchor": "4/204-p1" },
+            { "anchor": "4/204-p2" },
+            { "anchor": "4/204-p3" },
+            { "anchor": "4/204-p4" },
+            { "anchor": "4/204-p5" },
+            { "anchor": "4/204-p6" },
+            { "anchor": "4/204-p7" },
+            { "anchor": "4/204-p8" },
+            { "anchor": "4/204-p9" },
+            { "anchor": "4/204-p10" },
+            { "anchor": "4/204-p11" },
+            { "anchor": "4/204-p12" },
+            { "anchor": "4/204-p13" },
+            { "anchor": "4/204-p14" },
+            { "anchor": "4/204-p15" }
+          ]
+        },
+        {
+          "sequence": 4,
+          "printedPage": "205",
+          "bodyFile": "accounts/abu-sufyan-ibn-al-harith/004.md",
+          "notesFile": "accounts/abu-sufyan-ibn-al-harith/004.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1631",
+          "passages": [
+            { "anchor": "4/205-p1" },
+            { "anchor": "4/205-p2" },
+            { "anchor": "4/205-p3" },
+            { "anchor": "4/205-p4" },
+            { "anchor": "4/205-p5" },
+            { "anchor": "4/205-p6" },
+            { "anchor": "4/205-p7" },
+            { "anchor": "4/205-p8" },
+            { "anchor": "4/205-p9" },
+            { "anchor": "4/205-p10" },
+            { "anchor": "4/205-p11" },
+            { "anchor": "4/205-p12" }
+          ]
+        }
+      ],
+      "notInSource": ["appearance", "wives"]
+    }
+  ],
+  "claims": [
+    {
+      "key": "abu-sufyan-ibn-al-harith-siyar32/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-al-harith",
+      "field": "fullName",
+      "assertion": "أبو سفيان بن الحارث، اسمه المغيرة بن الحارث بن عبد المطلب بن هاشم الهاشمي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/202-p10",
+          "volume": "4",
+          "pageReference": "202",
+          "extractionUrl": "https://shamela.ws/book/10906/1628",
+          "excerptArabic": "هُوَ ابْنُ عَمِّ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- المُغِيْرَةُ بنُ الحَارِثِ بنِ عَبْدِ المُطَّلِبِ بنِ هَاشِمٍ الهَاشِمِيُّ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-al-harith-siyar32/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-al-harith",
+      "assertion": "المغيرة بن الحارث بن عبد المطلب، فالحارث بن عبد المطلب أبوه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "al-harith-ibn-abd-al-muttalib",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/202-p10",
+          "volume": "4",
+          "pageReference": "202",
+          "extractionUrl": "https://shamela.ws/book/10906/1628",
+          "excerptArabic": "هُوَ ابْنُ عَمِّ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- المُغِيْرَةُ بنُ الحَارِثِ بنِ عَبْدِ المُطَّلِبِ بنِ هَاشِمٍ الهَاشِمِيُّ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-al-harith-siyar32/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-al-harith",
+      "field": "kunya",
+      "assertion": "يكنى أبا سفيان.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/202-p9",
+          "volume": "4",
+          "pageReference": "202",
+          "extractionUrl": "https://shamela.ws/book/10906/1628",
+          "excerptArabic": "٣٢ - أَبُو سُفْيَانَ بنُ الحَارِثِ، المُغِيْرَةُ بنُ الحَارِثِ الهَاشِمِيُّ **",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-al-harith-siyar32/cousin-of-prophet",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-al-harith",
+      "assertion": "هو ابن عم رسول الله صلى الله عليه وسلم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PATERNAL_COUSIN",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "prophet-muhammad",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/202-p10",
+          "volume": "4",
+          "pageReference": "202",
+          "extractionUrl": "https://shamela.ws/book/10906/1628",
+          "excerptArabic": "هُوَ ابْنُ عَمِّ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-al-harith-siyar32/milk-brother",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-al-harith",
+      "assertion": "كان أخا النبي صلى الله عليه وسلم من الرضاعة، أرضعتهما حليمة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "MILK_BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "prophet-muhammad",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/203-p5",
+          "volume": "4",
+          "pageReference": "203",
+          "extractionUrl": "https://shamela.ws/book/10906/1629",
+          "excerptArabic": "وَكَانَ أَخَا النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مِنَ الرَّضَاعَةِ، أَرْضَعَتْهُمَا حَلِيْمَةُ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-al-harith-siyar32/half-brother-nawfal",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-al-harith",
+      "assertion": "أخو نوفل بن الحارث، لأبيه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "HALF_BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "nawfal-ibn-al-harith",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/202-p11",
+          "volume": "4",
+          "pageReference": "202",
+          "extractionUrl": "https://shamela.ws/book/10906/1628",
+          "excerptArabic": "أَخُو نَوْفَل وَرَبِيْعَةَ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-al-harith-siyar32/half-brother-rabiah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-al-harith",
+      "assertion": "أخو ربيعة بن الحارث، لأبيه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "HALF_BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "rabiah-ibn-al-harith",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/202-p11",
+          "volume": "4",
+          "pageReference": "202",
+          "extractionUrl": "https://shamela.ws/book/10906/1628",
+          "excerptArabic": "أَخُو نَوْفَل وَرَبِيْعَةَ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-al-harith-siyar32/hunayn",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-al-harith",
+      "assertion": "لزم رسول الله صلى الله عليه وسلم يوم حنين إذ فر الناس، وأخذ بلجام بغلته، وثبت معه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "hunayn",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/203-p2",
+          "volume": "4",
+          "pageReference": "203",
+          "extractionUrl": "https://shamela.ws/book/10906/1629",
+          "excerptArabic": "ثُمَّ حَسُنَ إِسْلاَمُهُ، وَلَزِمَ هُوَ وَالعَبَّاسُ رَسُوْلَ اللهِ يَوْمَ حُنَيْنٍ إِذْ فَرَّ النَّاسُ، وَأَخَذَ بِلِجَامِ البَغْلَةِ، وَثَبَتَ مَعَهُ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-al-harith-siyar32/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-al-harith",
+      "field": "virtues",
+      "assertion": "أحبه النبي صلى الله عليه وسلم وشهد له بالجنة وقال: أرجو أن يكون خلفا من حمزة. وكان ممن يشبه بالنبي صلى الله عليه وسلم. وقال رسول الله صلى الله عليه وسلم: أبو سفيان بن الحارث سيد فتيان أهل الجنة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/204-p2",
+          "volume": "4",
+          "pageReference": "204",
+          "extractionUrl": "https://shamela.ws/book/10906/1630",
+          "excerptArabic": "ثُمَّ إِنَّ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَحَبَّ أَبَا سُفْيَانَ هَذَا، وَشَهِدَ لَهُ بِالجَنَّةِ، وَقَالَ: (أَرْجُو أَنْ يَكُوْنَ خَلَفاً مِنْ حَمْزَةَ) .",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/203-p8",
+          "volume": "4",
+          "pageReference": "203",
+          "extractionUrl": "https://shamela.ws/book/10906/1629",
+          "excerptArabic": "وَقِيْلَ: كَانَ الَّذِيْنَ يُشَبَّهُوْنَ بِالنَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-: جَعْفَرٌ، وَالحَسَنُ بنُ عَلِيٍّ، وَقُثَمُ بنُ العَبَّاسِ، وَأَبُو سُفْيَانَ بنُ الحَارِثِ.",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/205-p10",
+          "volume": "4",
+          "pageReference": "205",
+          "extractionUrl": "https://shamela.ws/book/10906/1631",
+          "excerptArabic": "قَالَ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-: (أَبُو سُفْيَانَ بنُ الحَارِثِ سَيِّدُ فِتْيَانِ أَهْلِ الجَنَّةِ) .",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-al-harith-siyar32/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-al-harith",
+      "field": "deathYearHijri",
+      "assertion": "يقال: مات سنة عشرين بالمدينة.",
+      "confidence": "LIKELY",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/205-p12",
+          "volume": "4",
+          "pageReference": "205",
+          "extractionUrl": "https://shamela.ws/book/10906/1631",
+          "excerptArabic": "وَيُقَالُ: مَاتَ سَنَةَ عِشْرِيْنَ بِالمَدِيْنَةِ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-al-harith-siyar32/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-al-harith",
+      "field": "sex",
+      "assertion": "أبو سفيان بن الحارث، رجل.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/202-p9",
+          "volume": "4",
+          "pageReference": "202",
+          "extractionUrl": "https://shamela.ws/book/10906/1628",
+          "excerptArabic": "٣٢ - أَبُو سُفْيَانَ بنُ الحَارِثِ، المُغِيْرَةُ بنُ الحَارِثِ الهَاشِمِيُّ **",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-al-harith-siyar32/companion",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-al-harith",
+      "field": "titles",
+      "assertion": "صحابي؛ شهد له النبي صلى الله عليه وسلم بالجنة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/204-p2",
+          "volume": "4",
+          "pageReference": "204",
+          "extractionUrl": "https://shamela.ws/book/10906/1630",
+          "excerptArabic": "ثُمَّ إِنَّ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَحَبَّ أَبَا سُفْيَانَ هَذَا، وَشَهِدَ لَهُ بِالجَنَّةِ، وَقَالَ: (أَرْجُو أَنْ يَكُوْنَ خَلَفاً مِنْ حَمْزَةَ) .",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    }
+  ]
+}
