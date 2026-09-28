@@ -1,0 +1,371 @@
+{
+  "slug": "aqil-ibn-abi-talib",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aqil-ibn-abi-talib",
+      "extractionUrl": "https://shamela.ws/book/10906/1644",
+      "accessedAt": "2026-09-28",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "218",
+          "bodyFile": "accounts/aqil-ibn-abi-talib/001.md",
+          "notesFile": "accounts/aqil-ibn-abi-talib/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1644",
+          "passages": [
+            {
+              "anchor": "218-p1"
+            },
+            {
+              "anchor": "218-p2"
+            },
+            {
+              "anchor": "218-p3"
+            },
+            {
+              "anchor": "218-p4"
+            },
+            {
+              "anchor": "218-p5"
+            },
+            {
+              "anchor": "218-p6"
+            },
+            {
+              "anchor": "218-p7"
+            },
+            {
+              "anchor": "218-p8"
+            },
+            {
+              "anchor": "218-p9"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "219",
+          "bodyFile": "accounts/aqil-ibn-abi-talib/002.md",
+          "notesFile": "accounts/aqil-ibn-abi-talib/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1645",
+          "passages": [
+            {
+              "anchor": "219-p1"
+            },
+            {
+              "anchor": "219-p2"
+            },
+            {
+              "anchor": "219-p3"
+            },
+            {
+              "anchor": "219-p4"
+            },
+            {
+              "anchor": "219-p5"
+            },
+            {
+              "anchor": "219-p6"
+            },
+            {
+              "anchor": "219-p7"
+            },
+            {
+              "anchor": "219-p8"
+            },
+            {
+              "anchor": "219-p9"
+            },
+            {
+              "anchor": "219-p10"
+            }
+          ]
+        }
+      ],
+      "volumeNumber": 4,
+      "notInSource": [
+        "appearance",
+        "wives"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "aqil-ibn-abi-talib-siyar35/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aqil-ibn-abi-talib",
+      "assertion": "عقيل بن أبي طالب الهاشمي: أبوه أبو طالب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "abu-talib",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "218-p1",
+          "volume": "4",
+          "pageReference": "218",
+          "extractionUrl": "https://shamela.ws/book/10906/1644",
+          "excerptArabic": "٣٥ - عَقِيْلُ بنُ أَبِي طَالِبٍ الهَاشِمِيُّ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "aqil-ibn-abi-talib-siyar35/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aqil-ibn-abi-talib",
+      "field": "kunya",
+      "assertion": "له ابن يقال له يزيد وبه كان يكنى؛ وخاطبه النبي صلى الله عليه وسلم: يا أبا يزيد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "218-p3",
+          "volume": "4",
+          "pageReference": "218",
+          "extractionUrl": "https://shamela.ws/book/10906/1644",
+          "excerptArabic": "وَلَهُ أَوْلاَدٌ: مُسلمٌ، وَيَزِيْدُ وَبِهِ كَانَ يُكْنَى، وَسَعِيْدٌ، وَجَعْفَرٌ، وَأَبُو سَعِيْدٍ الأَحْوَلُ، وَمُحَمَّدٌ، وَعَبْدُ الرَّحْمَنِ، وَعَبْدُ اللهِ",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "219-p7",
+          "volume": "4",
+          "pageReference": "219",
+          "extractionUrl": "https://shamela.ws/book/10906/1645",
+          "excerptArabic": "قَالَ لِعَقِيْلٍ: (يَا أَبَا يَزِيْدَ! إِنِّي أُحِبُّكَ حُبَّيْنِ: لِقَرَابَتِكَ، وَلِحُبِّ عَمِّي لَكَ (٤))",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "aqil-ibn-abi-talib-siyar35/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aqil-ibn-abi-talib",
+      "field": "virtues",
+      "assertion": "قال له رسول الله صلى الله عليه وسلم: يا أبا يزيد إني أحبك حبين: لقرابتك، ولحب عمي لك.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "219-p7",
+          "volume": "4",
+          "pageReference": "219",
+          "extractionUrl": "https://shamela.ws/book/10906/1645",
+          "excerptArabic": "أَنَّ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَالَ لِعَقِيْلٍ: (يَا أَبَا يَزِيْدَ! إِنِّي أُحِبُّكَ حُبَّيْنِ: لِقَرَابَتِكَ، وَلِحُبِّ عَمِّي لَكَ (٤))",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "aqil-ibn-abi-talib-siyar35/companion-of-prophet",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aqil-ibn-abi-talib",
+      "assertion": "لقي رسول الله صلى الله عليه وسلم وخاطبه: يا أبا يزيد إني أحبك حبين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "COMPANION_OF",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "prophet-muhammad",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "219-p7",
+          "volume": "4",
+          "pageReference": "219",
+          "extractionUrl": "https://shamela.ws/book/10906/1645",
+          "excerptArabic": "أَنَّ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَالَ لِعَقِيْلٍ: (يَا أَبَا يَزِيْدَ! إِنِّي أُحِبُّكَ حُبَّيْنِ: لِقَرَابَتِكَ، وَلِحُبِّ عَمِّي لَكَ (٤))",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "aqil-ibn-abi-talib-siyar35/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aqil-ibn-abi-talib",
+      "assertion": "شهد بدرا مشركا، وأخرج إليها مكرها، فأسر، ولم يكن له مال، ففداه عمه العباس.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "218-p4",
+          "volume": "4",
+          "pageReference": "218",
+          "extractionUrl": "https://shamela.ws/book/10906/1644",
+          "excerptArabic": "شَهِدَ بَدْراً مُشْرِكاً، وَأُخْرِجَ إِلَيْهَا مُكْرَهاً، فَأُسِرَ، وَلَمْ يَكُنْ لَهُ مَالٌ، فَفَدَاهُ عَمُّهُ العَبَّاسُ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "aqil-ibn-abi-talib-siyar35/mutah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aqil-ibn-abi-talib",
+      "assertion": "خرج مهاجرا في أول سنة ثمان، وشهد مؤتة؛ وروى حفيده أنه أصاب يوم مؤتة خاتما فيه تماثيل فنفله أباه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "mutah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "218-p8",
+          "volume": "4",
+          "pageReference": "218",
+          "extractionUrl": "https://shamela.ws/book/10906/1644",
+          "excerptArabic": "قَالَ ابْنُ سَعْدٍ: خَرَجَ عَقِيْلٌ مُهَاجِراً فِي أَوَّلِ سَنَةِ ثَمَانٍ، وَشَهِدَ مُؤْتَةَ",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "219-p1",
+          "volume": "4",
+          "pageReference": "219",
+          "extractionUrl": "https://shamela.ws/book/10906/1645",
+          "excerptArabic": "أَنَّ جَدَّهُ أَصَابَ يَوْمَ مُؤْتَةَ خَاتَماً فِيْهِ تَمَاثِيْلُ، فَنَفَلَهُ أَبَاهُ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    }
+  ]
+}

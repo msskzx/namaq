@@ -60,6 +60,15 @@ const mutah = {
       },
       claims: ['abdullah-ibn-rawahah-siyar37/mutah'],
     },
+    {
+      person: 'aqil-ibn-abi-talib',
+      isMuslim: true,
+      summary: {
+        value: 'خَرَجَ عَقِيْلٌ مُهَاجِراً فِي أَوَّلِ سَنَةِ ثَمَانٍ، وَشَهِدَ مُؤْتَةَ.',
+        claims: ['aqil-ibn-abi-talib-siyar35/mutah'],
+      },
+      claims: ['aqil-ibn-abi-talib-siyar35/mutah'],
+    },
   ],
 } satisfies CatalogBattle;
 

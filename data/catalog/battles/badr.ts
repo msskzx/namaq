@@ -296,6 +296,16 @@ const badr = {
       summary: { value: 'حَضَرَ بَدْراً مَعَ المُشْرِكِيْنَ، فَأُسِرَ.', claims: ['nawfal-ibn-al-harith-siyar27/badr'] },
       claims: ['nawfal-ibn-al-harith-siyar27/badr'],
     },
+    {
+      person: 'aqil-ibn-abi-talib',
+      isMuslim: false,
+      status: ['WAS_CAPTURED'],
+      summary: {
+        value: 'شَهِدَ بَدْراً مُشْرِكاً، وَأُخْرِجَ إِلَيْهَا مُكْرَهاً، فَأُسِرَ، وَلَمْ يَكُنْ لَهُ مَالٌ، فَفَدَاهُ عَمُّهُ العَبَّاسُ.',
+        claims: ['aqil-ibn-abi-talib-siyar35/badr'],
+      },
+      claims: ['aqil-ibn-abi-talib-siyar35/badr'],
+    },
   ],
 } satisfies CatalogBattle;
 
