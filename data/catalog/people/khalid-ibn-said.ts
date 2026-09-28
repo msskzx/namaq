@@ -31,6 +31,12 @@ const khalidIbnSaid = {
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'said-ibn-al-as', claims: ['khalid-ibn-said-siyar48/father'] },
+    {
+      type: 'HALF_BROTHER',
+      inverse: 'HALF_BROTHER',
+      to: 'amr-ibn-said-al-umawi',
+      claims: ['amr-ibn-said-al-umawi-siyar50/brother-khalid'],
+    },
   ],
 } satisfies CatalogPerson;
 
