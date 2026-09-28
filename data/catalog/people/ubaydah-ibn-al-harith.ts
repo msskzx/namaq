@@ -1,11 +1,5 @@
-import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
+import type { CatalogPerson } from '@/lib/catalog/types';
 
-/**
- * He reaches this chapter through Zaynab bint Khuzaymah's obituary, which
- * names him her second husband and says he was martyred at Badr. That is the
- * one value chapter six adds to him; everything else his rows held is carried
- * on the marker, a module having made him catalog-owned.
- */
 const ubaydahIbnAlHarith = {
   kind: 'PERSON',
   slug: 'ubaydah-ibn-al-harith',
@@ -13,21 +7,27 @@ const ubaydahIbnAlHarith = {
   nameTransliterated: 'Ubaydah ibn al-Harith',
   hasProfile: true,
   fields: {
-    sex: { value: 'MALE', claims: legacyUnreviewed },
-    // Carried from the seed rows.
+    sex: { value: 'MALE', claims: ['ubaydah-ibn-al-harith-siyar45/sex'] },
     fullName: {
       value: 'عبيدة بن الحارث بن المطلب بن عبد مناف بن قصي القرشي المطلبي',
-      claims: legacyUnreviewed,
+      claims: ['ubaydah-ibn-al-harith-siyar45/fullName'],
+    },
+    appearance: {
+      value: 'كان ربعة من الرجال، مليحا.',
+      claims: ['ubaydah-ibn-al-harith-siyar45/appearance'],
+    },
+    virtues: {
+      value:
+        'كان أحد السابقين الأولين، كبير المنزلة عند رسول الله صلى الله عليه وسلم. بارز رأس المشركين يوم بدر عتبة بن ربيعة فاختلفا ضربتين، فأثبت كل منهما الآخر، وشد علي وحمزة على عتبة فقتلاه، واحتملوا عبيدة وبه رمق، ثم توفي بالصفراء. أمره النبي على ستين راكبا من المهاجرين، وعقد له لواء فكان أول لواء عقد في الإسلام.',
+      claims: ['ubaydah-ibn-al-harith-siyar45/virtues'],
     },
   },
   titles: [
-    // Carried from the seed rows.
-    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: ['ubaydah-ibn-al-harith-siyar45/companion'] },
   ],
   relations: [
     { type: 'HUSBAND', inverse: 'WIFE', to: 'zaynab-bint-khuzaymah', claims: ['zaynab-khuzaymah/wife-ubaydah'] },
-    // Carried from the graph seed.
-    { type: 'SON', inverse: 'FATHER', to: 'al-harith-ibn-al-muttalib', claims: legacyUnreviewed },
+    { type: 'SON', inverse: 'FATHER', to: 'al-harith-ibn-al-muttalib', claims: ['ubaydah-ibn-al-harith-siyar45/father'] },
   ],
 } satisfies CatalogPerson;
 
