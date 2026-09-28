@@ -3,12 +3,6 @@ const LIMIT = 100;
 
 const hits = new Map<string, { count: number; resetAt: number }>();
 
-/**
- * Fixed-window request counter keyed by an arbitrary string (typically an IP).
- * ponytail: single-process in-memory map, resets on deploy/restart and isn't
- * shared across serverless instances; move to Upstash/Redis if abuse survives
- * that or the app grows past one region.
- */
 export function checkRateLimit(key: string, now = Date.now()) {
   const entry = hits.get(key);
 
