@@ -1,11 +1,5 @@
-import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
+import type { CatalogPerson } from '@/lib/catalog/types';
 
-/**
- * Carried from neo4j/graphSeedData*.ts, whose node declaration is retired
- * with the rest. The catalog owns this subject's edges now, so they live
- * here or not at all. No batch has read this far into the nasab yet, so
- * every link stays on the legacy marker.
- */
 const rabiahIbnAlHarith = {
   kind: 'PERSON',
   slug: 'rabiah-ibn-al-harith',
@@ -13,14 +7,20 @@ const rabiahIbnAlHarith = {
   nameTransliterated: 'Rabiah ibn al-Harith',
   hasProfile: true,
   fields: {
-    sex: { value: 'MALE', claims: legacyUnreviewed },
-    fullName: { value: 'ربيعة بن الحارث بن عبد المطلب بن هاشم القرشي الهاشمي', claims: legacyUnreviewed },
+    sex: { value: 'MALE', claims: ['rabiah-ibn-al-harith-siyar46/sex'] },
+    fullName: { value: 'ربيعة بن الحارث بن عبد المطلب بن هاشم الهاشمي', claims: ['rabiah-ibn-al-harith-siyar46/full-name'] },
+    kunya: { value: 'أبو أروى', claims: ['rabiah-ibn-al-harith-siyar46/kunya'] },
+    virtues: {
+      value:
+        'قال فيه النبي صلى الله عليه وسلم: نعم العبد ربيعة بن الحارث، لو قصر من شعره، وشمر من ثوبه. وأطعمه رسول الله صلى الله عليه وسلم بخيبر مائة وسق كل سنة، وشهد معه الفتح، وحنيناً، وكان شريكا لعثمان في التجارة.',
+      claims: ['rabiah-ibn-al-harith-siyar46/virtues'],
+    },
   },
   titles: [
-    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: ['rabiah-ibn-al-harith-siyar46/companion'] },
   ],
   relations: [
-    { type: 'SON', inverse: 'FATHER', to: 'al-harith-ibn-abd-al-muttalib', claims: legacyUnreviewed },
+    { type: 'SON', inverse: 'FATHER', to: 'al-harith-ibn-abd-al-muttalib', claims: ['rabiah-ibn-al-harith-siyar46/father'] },
   ],
 } satisfies CatalogPerson;
 

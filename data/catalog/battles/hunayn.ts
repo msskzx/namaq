@@ -31,6 +31,15 @@ const hunayn = {
       },
       claims: ['nawfal-ibn-al-harith-siyar27/hunayn'],
     },
+    {
+      person: 'rabiah-ibn-al-harith',
+      isMuslim: true,
+      summary: {
+        value: 'وَشَهِدَ مَعَهُ الفَتْحَ، وَحُنَيْناً، وَابْتَنَى دَاراً بِالمَدِيْنَةِ.',
+        claims: ['rabiah-ibn-al-harith-siyar46/hunayn'],
+      },
+      claims: ['rabiah-ibn-al-harith-siyar46/hunayn'],
+    },
   ],
 } satisfies CatalogBattle;
 

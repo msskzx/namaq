@@ -19,6 +19,12 @@ const ajnadayn = {
     // them here yet.
     { person: 'abu-bakr-as-siddiq', isMuslim: true, claims: legacyUnreviewed },
     { person: 'umar-ibn-al-khattab', isMuslim: true, claims: legacyUnreviewed },
+    {
+      person: 'khalid-ibn-said',
+      isMuslim: true,
+      status: ['MARTYRED'],
+      claims: ['khalid-ibn-said-siyar48/ajnadayn'],
+    },
   ],
 } satisfies CatalogBattle;
 

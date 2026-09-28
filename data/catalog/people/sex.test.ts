@@ -25,7 +25,7 @@ describe('sex across the catalog', () => {
     const cited = people.filter((person) => person.fields.sex.claims !== legacyUnreviewed);
     const legacy = people.filter((person) => person.fields.sex.claims === legacyUnreviewed);
 
-    expect(cited).toHaveLength(38);
-    expect(legacy).toHaveLength(557);
+    expect(cited).toHaveLength(39);
+    expect(legacy).toHaveLength(556);
   });
 });

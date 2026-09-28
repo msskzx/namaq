@@ -224,6 +224,13 @@ const uhud = {
     },
     { person: 'al-baraa-ibn-malik', isMuslim: true, claims: ['al-baraa-ibn-malik-siyar26/uhud'] },
     { person: 'khubayb-ibn-adi', isMuslim: true, claims: ['khubayb-ibn-adi-siyar40/uhud'] },
+    {
+      person: 'khallad-ibn-amr-ibn-al-jumuh',
+      isMuslim: true,
+      status: ['MARTYRED'],
+      summary: { value: 'استشهد يوم أحد.', claims: ['khallad-siyar4/uhud'] },
+      claims: ['khallad-siyar4/uhud'],
+    },
   ],
 } satisfies CatalogBattle;
 

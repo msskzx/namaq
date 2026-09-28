@@ -250,6 +250,17 @@ const badr = {
     // Fourth and last of the al-Bukayr brothers; survived Badr, martyred later at Yamama.
     { person: 'amir-ibn-al-bukayr', isMuslim: true, claims: ['amir-bukayr-siyar19/badr'] },
     { person: 'mistah-ibn-uthathah', isMuslim: true, claims: ['mistah-siyar20/badr'] },
+    // Entry 42; witnessed Badr with his brothers Muadh and Khallad, though Ibn
+    // Ishaq does not mention him.
+    {
+      person: 'muawwidh-ibn-amr-ibn-al-jumuh',
+      isMuslim: true,
+      summary: {
+        value: 'شَهِدَ مَعَ أَخَوَيْهِ مُعَاذٍ وَخَلاَّدٍ بَدْراً، لَكِنْ لَمْ يَذْكُرْهُ ابْنُ إِسْحَاقَ، فَاللهُ أَعْلَمُ.',
+        claims: ['muawwidh-ibn-amr-ibn-al-jumuh-siyar42/badr'],
+      },
+      claims: ['muawwidh-ibn-amr-ibn-al-jumuh-siyar42/badr'],
+    },
     { person: 'abu-abs', isMuslim: true, claims: ['abu-abs-siyar21/badr'] },
     { person: 'abu-al-haytham-ibn-at-tayyihan', isMuslim: true, claims: ['abu-al-haytham-siyar22/badr'] },
     // Entry 24, Abu Jandal's half-brother; went out with his father Suhail
@@ -306,6 +317,7 @@ const badr = {
       },
       claims: ['aqil-ibn-abi-talib-siyar35/badr'],
     },
+    { person: 'khallad-ibn-amr-ibn-al-jumuh', isMuslim: true, claims: ['khallad-siyar4/badr'] },
   ],
 } satisfies CatalogBattle;
 

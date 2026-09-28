@@ -39,6 +39,15 @@ const fathMakkah = {
     },
     // Carried from the old seed when he left it; no batch places him here yet.
     { person: 'al-abbas-ibn-abd-al-muttalib', isMuslim: true, claims: legacyUnreviewed },
+    {
+      person: 'rabiah-ibn-al-harith',
+      isMuslim: true,
+      summary: {
+        value: 'وَشَهِدَ مَعَهُ الفَتْحَ، وَحُنَيْناً، وَابْتَنَى دَاراً بِالمَدِيْنَةِ.',
+        claims: ['rabiah-ibn-al-harith-siyar46/fath-makkah'],
+      },
+      claims: ['rabiah-ibn-al-harith-siyar46/fath-makkah'],
+    },
   ],
 } satisfies CatalogBattle;
 
