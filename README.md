@@ -115,7 +115,10 @@ Open the graph → explore and filter relationships → open a person's profile 
 Create a `.env` file in the project root:
 
 ```bash
-DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/namaq"
+# Pooled connection (PgBouncer or the provider's pooler) — used by the app itself.
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:6543/namaq?pgbouncer=true"
+# Direct connection — used by Prisma migrations, which a pooler can't run.
+DATABASE_URL_UNPOOLED="postgresql://USER:PASSWORD@HOST:5432/namaq"
 
 NEO4J_URI="neo4j+s://YOUR-INSTANCE.databases.neo4j.io"
 NEO4J_USERNAME="neo4j"
