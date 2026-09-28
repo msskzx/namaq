@@ -8,6 +8,7 @@ import CookieConsent from "@/components/cookies/CookieConsent";
 import ConditionalAnalytics from "@/components/cookies/ConditionalAnalytics";
 import SWRProvider from "@/components/common/SWRProvider";
 import CustomThemeProvider from "@/components/theme/CustomThemeProvider";
+import { SITE_URL } from "@/lib/siteUrl";
 
 // Amiri is a naskh revival drawn for vocalized classical Arabic, which is what
 // the source accounts are. Its Latin comes along for the interface, so one
@@ -25,6 +26,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Namaq - Data Driven Interactive Learning",
   description: "Data driven interactive learning platform to learn about all kinds of useful topics",
 };
