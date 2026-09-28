@@ -289,6 +289,13 @@ const badr = {
       summary: { value: 'وَكَانَ قَدْ أُسِرَ يَوْم بَدْرٍ، وَتَخَلَّصَ.', claims: ['suhail-ibn-amr-siyar25/badr'] },
       claims: ['suhail-ibn-amr-siyar25/badr'],
     },
+    {
+      person: 'nawfal-ibn-al-harith',
+      isMuslim: false,
+      status: ['WAS_CAPTURED'],
+      summary: { value: 'حَضَرَ بَدْراً مَعَ المُشْرِكِيْنَ، فَأُسِرَ.', claims: ['nawfal-ibn-al-harith-siyar27/badr'] },
+      claims: ['nawfal-ibn-al-harith-siyar27/badr'],
+    },
   ],
 } satisfies CatalogBattle;
 
