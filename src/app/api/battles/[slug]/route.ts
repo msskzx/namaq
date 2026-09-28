@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { utteranceSelect } from '@/lib/utteranceSelect';
+import { apiError, CATALOG_CACHE_HEADERS } from '@/lib/apiError';
 
 export async function GET(
   _request: Request,
@@ -29,8 +30,8 @@ export async function GET(
     if (!battle) {
       return NextResponse.json({ error: 'Not found' }, { status: 404 });
     }
-    return NextResponse.json(battle);
-  } catch {
-    return NextResponse.json({ error: 'Failed to fetch battle' }, { status: 500 });
+    return NextResponse.json(battle, { headers: CATALOG_CACHE_HEADERS });
+  } catch (error) {
+    return apiError('GET /api/battles/[slug]', error, 'Failed to fetch battle');
   }
-} 
+}

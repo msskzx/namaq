@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { filterAndRankSubjects } from '@/lib/subjectSearch';
+import { apiError, CATALOG_CACHE_HEADERS } from '@/lib/apiError';
 
 // The directory searches profiles: every suggestion here opens /people/<slug>,
 // so a graph-only person (Neo4j node, no PostgreSQL row) must not appear.
@@ -34,12 +35,8 @@ export async function GET(request: Request) {
       .slice(0, limit)
       .map(({ subject, match }) => ({ ...subject, match }));
 
-    return NextResponse.json({ data });
+    return NextResponse.json({ data }, { headers: CATALOG_CACHE_HEADERS });
   } catch (error) {
-    console.error('Error fetching people suggestions:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch people suggestions' },
-      { status: 500 }
-    );
+    return apiError('GET /api/people/suggest', error, 'Failed to fetch people suggestions');
   }
 }

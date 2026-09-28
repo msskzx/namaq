@@ -40,6 +40,16 @@ const mutah = {
       },
       claims: ['jaafar-ibn-abi-talib-siyar34/mutah'],
     },
+    {
+      person: 'abdullah-ibn-rawahah',
+      isMuslim: true,
+      status: ['MARTYRED'],
+      summary: {
+        value: 'أخذ الراية بعد قتل صاحبيه فقاتل حتى قتل.',
+        claims: ['abdullah-ibn-rawahah-siyar37/mutah'],
+      },
+      claims: ['abdullah-ibn-rawahah-siyar37/mutah'],
+    },
   ],
 } satisfies CatalogBattle;
 

@@ -37,6 +37,19 @@ const translations = {
     // Common UI
     loading: 'Loading...',
 
+    // Error/not-found pages
+    notFound: {
+      title: 'Page not found',
+      description: "The page you're looking for doesn't exist or was moved.",
+      goHome: 'Go home',
+    },
+    errorPage: {
+      title: 'Something went wrong',
+      description: 'An unexpected error occurred while loading this page.',
+      tryAgain: 'Try again',
+      goHome: 'Go home',
+    },
+
     // Battle/Event Participants
     participants: 'Participants',
     noParticipants: 'No participants in this battle.',
@@ -337,6 +350,19 @@ const translations = {
 
     // Common UI
     loading: 'جاري التحميل...',
+
+    // Error/not-found pages
+    notFound: {
+      title: 'الصفحة غير موجودة',
+      description: 'الصفحة التي تبحث عنها غير موجودة أو تم نقلها.',
+      goHome: 'العودة للرئيسية',
+    },
+    errorPage: {
+      title: 'حدث خطأ ما',
+      description: 'حدث خطأ غير متوقع أثناء تحميل هذه الصفحة.',
+      tryAgain: 'حاول مرة أخرى',
+      goHome: 'العودة للرئيسية',
+    },
 
     // Battle/Event Participants
     participants: 'المشاركون',

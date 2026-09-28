@@ -1,11 +1,5 @@
 import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
-/**
- * Carried from neo4j/graphSeedData*.ts, whose node declaration is retired
- * with the rest. The catalog owns this subject's edges now, so they live
- * here or not at all. No batch has read this far into the nasab yet, so
- * every link stays on the legacy marker.
- */
 const alHarithIbnNawfal = {
   kind: 'PERSON',
   slug: 'al-harith-ibn-nawfal',
@@ -14,15 +8,26 @@ const alHarithIbnNawfal = {
   hasProfile: true,
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
-    // Carried from the retired prisma/personSeedData5.ts entry, which took it
-    // from the nasab chain on his own page without citing it.
-    fullName: { value: 'الحارث بن نوفل بن الحارث بن عبد المطلب بن هاشم القرشي الهاشمي', claims: legacyUnreviewed },
+    fullName: {
+      value: 'الحارث بن نوفل بن الحارث الهاشمي',
+      claims: ['al-harith-ibn-nawfal-siyar28/full-name'],
+    },
+    virtues: {
+      value:
+        'أسلم مع أبيه، واستعمله النبي صلى الله عليه وسلم على بعض العمل، وولي مكة لعمر وعثمان.',
+      claims: ['al-harith-ibn-nawfal-siyar28/virtues'],
+    },
   },
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
-    { type: 'SON', inverse: 'FATHER', to: 'nawfal-ibn-al-harith', claims: legacyUnreviewed },
+    {
+      type: 'SON',
+      inverse: 'FATHER',
+      to: 'nawfal-ibn-al-harith',
+      claims: ['al-harith-ibn-nawfal-siyar28/father'],
+    },
   ],
 } satisfies CatalogPerson;
 

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { apiError, CATALOG_CACHE_HEADERS } from '@/lib/apiError';
 
 /**
  * The shelf: every work the evidence is read from, with how much of each has
@@ -27,15 +28,17 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json({
-      sources: sources.map(({ accounts, ...source }) => ({
-        ...source,
-        entryCount: accounts.length,
-        pageCount: accounts.reduce((total, account) => total + account._count.pages, 0),
-      })),
-    });
+    return NextResponse.json(
+      {
+        sources: sources.map(({ accounts, ...source }) => ({
+          ...source,
+          entryCount: accounts.length,
+          pageCount: accounts.reduce((total, account) => total + account._count.pages, 0),
+        })),
+      },
+      { headers: CATALOG_CACHE_HEADERS }
+    );
   } catch (error) {
-    console.error('Sources API error:', error);
-    return NextResponse.json({ error: 'Failed to fetch the sources' }, { status: 500 });
+    return apiError('GET /api/sources', error, 'Failed to fetch the sources');
   }
 }

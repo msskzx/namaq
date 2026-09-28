@@ -1,0 +1,247 @@
+{
+  "slug": "al-harith-ibn-nawfal",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-harith-ibn-nawfal",
+      "extractionUrl": "https://shamela.ws/book/10906/1625",
+      "accessedAt": "2026-09-28",
+      "volumeNumber": 4,
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "199",
+          "bodyFile": "accounts/al-harith-ibn-nawfal/001.md",
+          "notesFile": "accounts/al-harith-ibn-nawfal/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1625",
+          "passages": [
+            {
+              "anchor": "199-p11"
+            },
+            {
+              "anchor": "199-p12"
+            },
+            {
+              "anchor": "199-p13"
+            },
+            {
+              "anchor": "199-p14"
+            },
+            {
+              "anchor": "199-p15"
+            }
+          ]
+        }
+      ],
+      "notInSource": [
+        "kunya",
+        "appearance",
+        "wives",
+        "siblings"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "al-harith-ibn-nawfal-siyar28/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-harith-ibn-nawfal",
+      "field": "fullName",
+      "assertion": "الحارث بن نوفل بن الحارث الهاشمي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "199-p11",
+          "volume": "4",
+          "pageReference": "199",
+          "extractionUrl": "https://shamela.ws/book/10906/1625",
+          "excerptArabic": "الحَارِثُ بنُ نَوْفَلِ بنِ الحَارِثِ الهَاشِمِيُّ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "al-harith-ibn-nawfal-siyar28/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-harith-ibn-nawfal",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "assertion": "الحارث بن نوفل (نوفل بن الحارث: أبوه).",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "nawfal-ibn-al-harith",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "199-p11",
+          "volume": "4",
+          "pageReference": "199",
+          "extractionUrl": "https://shamela.ws/book/10906/1625",
+          "excerptArabic": "الحَارِثُ بنُ نَوْفَلِ بنِ الحَارِثِ الهَاشِمِيُّ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "al-harith-ibn-nawfal-siyar28/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-harith-ibn-nawfal",
+      "field": "virtues",
+      "assertion": "أسلم مع أبيه، واستعمله النبي صلى الله عليه وسلم على بعض العمل، وولي مكة لعمر وعثمان.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "199-p12",
+          "volume": "4",
+          "pageReference": "199",
+          "extractionUrl": "https://shamela.ws/book/10906/1625",
+          "excerptArabic": "أَسْلَمَ مَعَ أَبِيْهِ، وَوَلِيَ مَكَّةَ لِعُمَرَ وَعُثْمَانَ.",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "199-p13",
+          "volume": "4",
+          "pageReference": "199",
+          "extractionUrl": "https://shamela.ws/book/10906/1625",
+          "excerptArabic": "وَقَدِ اسْتَعْمَلَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- عَلَى بَعْضِ العَمَلِ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    }
+  ]
+}
