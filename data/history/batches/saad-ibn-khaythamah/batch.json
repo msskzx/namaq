@@ -1,0 +1,416 @@
+{
+  "slug": "saad-ibn-khaythamah",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-khaythamah",
+      "extractionUrl": "https://shamela.ws/book/10906/1692",
+      "accessedAt": "2026-09-28",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "266",
+          "bodyFile": "accounts/saad-ibn-khaythamah/001.md",
+          "notesFile": "accounts/saad-ibn-khaythamah/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1692",
+          "passages": [
+            {
+              "anchor": "266-p2"
+            },
+            {
+              "anchor": "266-p3"
+            },
+            {
+              "anchor": "266-p4"
+            },
+            {
+              "anchor": "266-p5"
+            },
+            {
+              "anchor": "266-p6"
+            },
+            {
+              "anchor": "266-p7"
+            },
+            {
+              "anchor": "266-p8"
+            },
+            {
+              "anchor": "266-p9"
+            },
+            {
+              "anchor": "266-p10"
+            },
+            {
+              "anchor": "266-p11"
+            }
+          ]
+        }
+      ],
+      "volumeNumber": 4,
+      "notInSource": [
+        "appearance",
+        "wives"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "saad-ibn-khaythamah-siyar52/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-khaythamah",
+      "field": "fullName",
+      "assertion": "سعد بن خيثمة بن الحارث بن مالك بن كعب بن النحاط بن كعب بن حارثة بن غنم بن السلم",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "266-p2",
+          "volume": "4",
+          "pageReference": "266",
+          "extractionUrl": "https://shamela.ws/book/10906/1692",
+          "excerptArabic": "سَعْدُ بنُ خَيْثَمَةَ بنِ الحَارِثِ الأَنْصَارِيُّ الأَوْسِيُّ",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "266-p3",
+          "volume": "4",
+          "pageReference": "266",
+          "extractionUrl": "https://shamela.ws/book/10906/1692",
+          "excerptArabic": "ابْنِ مَالِكِ بنِ كَعْبِ بنِ النَّحَّاطِ بنِ كَعْبِ بنِ حَارِثَةَ بنِ غَنْمِ بنِ السَّلْمِ، أَبُو عَبْدِ اللهِ الأَنْصَارِيُّ، الأَوْسِيُّ، البَدْرِيُّ، النَّقِيْبُ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-khaythamah-siyar52/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-khaythamah",
+      "assertion": "سعد بن خيثمة: أبوه خيثمة بن الحارث، واستشهد أبوه خيثمة يوم أحد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "khaythamah-ibn-al-harith",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "266-p2",
+          "volume": "4",
+          "pageReference": "266",
+          "extractionUrl": "https://shamela.ws/book/10906/1692",
+          "excerptArabic": "سَعْدُ بنُ خَيْثَمَةَ بنِ الحَارِثِ الأَنْصَارِيُّ الأَوْسِيُّ",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "266-p11",
+          "volume": "4",
+          "pageReference": "266",
+          "extractionUrl": "https://shamela.ws/book/10906/1692",
+          "excerptArabic": "وَاسْتُشْهِدَ أَبُوْهُ خَيْثَمَةُ يَوْمَ أُحُدٍ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-khaythamah-siyar52/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-khaythamah",
+      "field": "kunya",
+      "assertion": "أبو عبد الله",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "266-p3",
+          "volume": "4",
+          "pageReference": "266",
+          "extractionUrl": "https://shamela.ws/book/10906/1692",
+          "excerptArabic": "أَبُو عَبْدِ اللهِ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-khaythamah-siyar52/tribal-affiliation",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-khaythamah",
+      "field": "tribalAffiliation",
+      "assertion": "الأنصاري، الأوسي، البدري",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "266-p3",
+          "volume": "4",
+          "pageReference": "266",
+          "extractionUrl": "https://shamela.ws/book/10906/1692",
+          "excerptArabic": "أَبُو عَبْدِ اللهِ الأَنْصَارِيُّ، الأَوْسِيُّ، البَدْرِيُّ، النَّقِيْبُ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-khaythamah-siyar52/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-khaythamah",
+      "field": "titles",
+      "assertion": "البَدْرِيُّ، النَّقِيبُ، وَاسْتُشْهِدَ بِبَدْرٍ — صحابي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "266-p3",
+          "volume": "4",
+          "pageReference": "266",
+          "extractionUrl": "https://shamela.ws/book/10906/1692",
+          "excerptArabic": "أَبُو عَبْدِ اللهِ الأَنْصَارِيُّ، الأَوْسِيُّ، البَدْرِيُّ، النَّقِيْبُ",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "266-p11",
+          "volume": "4",
+          "pageReference": "266",
+          "extractionUrl": "https://shamela.ws/book/10906/1692",
+          "excerptArabic": "فَاقْتَرَعَا، فَخَرَجَ سَهْمُ سَعْدٍ، فَخَرَجَ، وَاسْتُشْهِدَ بِبَدْرٍ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-khaythamah-siyar52/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-khaythamah",
+      "field": "virtues",
+      "assertion": "قَالُوا: وَكَانَ أَحَدَ النُّقَبَاءِ الاثْنَيْ عَشَرَ. آخَى النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بَيْنَهُ وَبَيْنَ أَبِي سَلَمَةَ بنِ عَبْدِ الأَسَدِ. وَلَمَّا نَدَبَ النَّبِيُّ (٢) -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- المُسْلِمِيْنَ يَوْمَ بَدْرٍ، فَأَسْرَعُوا، قَالَ خَيْثَمَةُ لابْنِهِ سَعْدٍ: آثِرْنِي بِالخُرُوْجِ، وَأَقِمْ مَعَ نِسَائِكَ. فَأَبَى، وَقَالَ: لَوْ كَانَ غَيْرَ الجَنَّةِ آثَرْتُكَ بِهِ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "266-p7",
+          "volume": "4",
+          "pageReference": "266",
+          "extractionUrl": "https://shamela.ws/book/10906/1692",
+          "excerptArabic": "قَالُوا: وَكَانَ أَحَدَ النُّقَبَاءِ الاثْنَيْ عَشَرَ.",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "266-p6",
+          "volume": "4",
+          "pageReference": "266",
+          "extractionUrl": "https://shamela.ws/book/10906/1692",
+          "excerptArabic": "آخَى النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بَيْنَهُ وَبَيْنَ أَبِي سَلَمَةَ بنِ عَبْدِ الأَسَدِ.",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "266-p8",
+          "volume": "4",
+          "pageReference": "266",
+          "extractionUrl": "https://shamela.ws/book/10906/1692",
+          "excerptArabic": "وَلَمَّا نَدَبَ النَّبِيُّ (٢) -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- المُسْلِمِيْنَ يَوْمَ بَدْرٍ، فَأَسْرَعُوا، قَالَ خَيْثَمَةُ لابْنِهِ سَعْدٍ:",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "266-p9",
+          "volume": "4",
+          "pageReference": "266",
+          "extractionUrl": "https://shamela.ws/book/10906/1692",
+          "excerptArabic": "آثِرْنِي بِالخُرُوْجِ، وَأَقِمْ مَعَ نِسَائِكَ.",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "266-p10",
+          "volume": "4",
+          "pageReference": "266",
+          "extractionUrl": "https://shamela.ws/book/10906/1692",
+          "excerptArabic": "فَأَبَى، وَقَالَ: لَوْ كَانَ غَيْرَ الجَنَّةِ آثَرْتُكَ بِهِ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-khaythamah-siyar52/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-khaythamah",
+      "assertion": "شهد بدراً، فاقترع مع أبيه خيثمة على الخروج، فخرج سهمه فخرج واستشهد ببدر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "266-p11",
+          "volume": "4",
+          "pageReference": "266",
+          "extractionUrl": "https://shamela.ws/book/10906/1692",
+          "excerptArabic": "فَاقْتَرَعَا، فَخَرَجَ سَهْمُ سَعْدٍ، فَخَرَجَ، وَاسْتُشْهِدَ بِبَدْرٍ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-khaythamah-siyar52/death-place",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-khaythamah",
+      "field": "placeOfDeathArabic",
+      "assertion": "بدر",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "266-p11",
+          "volume": "4",
+          "pageReference": "266",
+          "extractionUrl": "https://shamela.ws/book/10906/1692",
+          "excerptArabic": "فَاقْتَرَعَا، فَخَرَجَ سَهْمُ سَعْدٍ، فَخَرَجَ، وَاسْتُشْهِدَ بِبَدْرٍ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    }
+  ]
+}
