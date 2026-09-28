@@ -1,0 +1,423 @@
+{
+  "slug": "khubayb-ibn-adi",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "khubayb-ibn-adi",
+      "extractionUrl": "https://shamela.ws/book/10906/1672",
+      "accessedAt": "2026-09-28",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "246",
+          "bodyFile": "accounts/khubayb-ibn-adi/001.md",
+          "notesFile": "accounts/khubayb-ibn-adi/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1672",
+          "passages": [
+            {
+              "anchor": "246-p1"
+            },
+            {
+              "anchor": "246-p2"
+            },
+            {
+              "anchor": "246-p3"
+            },
+            {
+              "anchor": "246-p4"
+            },
+            {
+              "anchor": "246-p5"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "247",
+          "bodyFile": "accounts/khubayb-ibn-adi/002.md",
+          "notesFile": "accounts/khubayb-ibn-adi/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1673",
+          "passages": [
+            {
+              "anchor": "247-p1"
+            },
+            {
+              "anchor": "247-p2"
+            },
+            {
+              "anchor": "247-p3"
+            },
+            {
+              "anchor": "247-p4"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "printedPage": "248",
+          "bodyFile": "accounts/khubayb-ibn-adi/003.md",
+          "notesFile": "accounts/khubayb-ibn-adi/003.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1674",
+          "passages": [
+            {
+              "anchor": "248-p1"
+            },
+            {
+              "anchor": "248-p2"
+            },
+            {
+              "anchor": "248-p3"
+            },
+            {
+              "anchor": "248-p4"
+            },
+            {
+              "anchor": "248-p5"
+            },
+            {
+              "anchor": "248-p6"
+            },
+            {
+              "anchor": "248-p7"
+            },
+            {
+              "anchor": "248-p8"
+            },
+            {
+              "anchor": "248-p9"
+            },
+            {
+              "anchor": "248-p10"
+            },
+            {
+              "anchor": "248-p11"
+            },
+            {
+              "anchor": "248-p12"
+            },
+            {
+              "anchor": "248-p13"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "printedPage": "249",
+          "bodyFile": "accounts/khubayb-ibn-adi/004.md",
+          "notesFile": "accounts/khubayb-ibn-adi/004.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1675",
+          "passages": [
+            {
+              "anchor": "249-p1"
+            },
+            {
+              "anchor": "249-p2"
+            },
+            {
+              "anchor": "249-p3"
+            }
+          ]
+        }
+      ],
+      "volumeNumber": 4,
+      "notInSource": [
+        "kunya",
+        "appearance",
+        "wives",
+        "siblings"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "khubayb-ibn-adi-siyar40/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "khubayb-ibn-adi",
+      "field": "fullName",
+      "assertion": "خبيب بن عدي بن عامر بن مجدعة الأنصاري ابن جحجبى الأنصاري.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "246-p1",
+          "volume": "4",
+          "pageReference": "246",
+          "extractionUrl": "https://shamela.ws/book/10906/1672",
+          "excerptArabic": "٤٠ - خُبَيْبُ بنُ عَدِيِّ بنِ عَامِرِ بنِ مَجْدَعَةَ الأَنْصَارِيُّ *",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "246-p2",
+          "volume": "4",
+          "pageReference": "246",
+          "extractionUrl": "https://shamela.ws/book/10906/1672",
+          "excerptArabic": "ابْنِ جَحْجَبَا الأَنْصَارِيُّ، الشَّهِيْدُ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "khubayb-ibn-adi-siyar40/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "khubayb-ibn-adi",
+      "assertion": "خبيب بن عدي: أبوه عدي بن عامر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "adi-ibn-amir",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "246-p1",
+          "volume": "4",
+          "pageReference": "246",
+          "extractionUrl": "https://shamela.ws/book/10906/1672",
+          "excerptArabic": "٤٠ - خُبَيْبُ بنُ عَدِيِّ بنِ عَامِرِ بنِ مَجْدَعَةَ الأَنْصَارِيُّ *",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "khubayb-ibn-adi-siyar40/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "khubayb-ibn-adi",
+      "field": "titles",
+      "assertion": "شهد أحداً، وكان فيمن بعثه النبي صلى الله عليه وسلم مع بني لحيان — صحابي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "246-p3",
+          "volume": "4",
+          "pageReference": "246",
+          "extractionUrl": "https://shamela.ws/book/10906/1672",
+          "excerptArabic": "ذَكَرَهُ: ابْنُ سَعْدٍ، فَقَالَ: شَهِدَ أُحُداً، وَكَانَ فِيْمَنْ بَعَثَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مَعَ بَنِي لِحْيَانَ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "khubayb-ibn-adi-siyar40/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "khubayb-ibn-adi",
+      "field": "virtues",
+      "assertion": "فكان أول من سن الصلاة عند القتل. ودعا على قاتليه: اللهم أحصهم عدداً، واقتلهم بدداً، ولا تغادر منهم أحداً. قال معاوية: كنت فيمن حضره، فلقد رأيت أبا سفيان يلقيني إلى الأرض فرقاً من دعوة خبيب. ووجدته ماوية يأكل قطفاً من عنب مثل رأس الرجل وما أعلم في الأرض حبة عنب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "248-p6",
+          "volume": "4",
+          "pageReference": "248",
+          "extractionUrl": "https://shamela.ws/book/10906/1674",
+          "excerptArabic": "فَكَانَ أَوَّلَ مَنْ سَنَّ الصَّلاَةَ عِنْدَ القَتْلِ.",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "248-p7",
+          "volume": "4",
+          "pageReference": "248",
+          "extractionUrl": "https://shamela.ws/book/10906/1674",
+          "excerptArabic": "ثُمَّ رَفَعُوْهُ عَلَى خَشَبَتِهِ، فَقَالَ: اللَّهُمَّ أَحْصِهِم عَدَداً، وَاقْتُلْهُم بَدَداً، وَلاَ تُغَادِرْ مِنْهُم أَحَداً",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "248-p8",
+          "volume": "4",
+          "pageReference": "248",
+          "extractionUrl": "https://shamela.ws/book/10906/1674",
+          "excerptArabic": "قَالَ: وَقَالَ مُعَاوِيَةُ: كُنْتُ فِيْمَنْ حَضَرَهُ، فَلَقَدْ رَأَيْتْ أَبَا سُفْيَانَ يُلْقِيْنِي إِلَى الأَرْضِ فَرَقاً مِنْ دَعْوَةِ خُبَيْبٍ.",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "249-p3",
+          "volume": "4",
+          "pageReference": "249",
+          "extractionUrl": "https://shamela.ws/book/10906/1675",
+          "excerptArabic": "وَاللهِ إِنَّهُ لَمَحْبُوْسٌ إِذْ اطَّلَعْتُ مِنْ صِيْرِ البَابِ إِلَيْهِ، وَفِي يَدِهِ قِطَفُ عِنَبٍ مِثْلُ رَأْسِ الرَّجُلِ يَأْكُلُ مِنْهُ، وَمَا أَعْلَمُ فِي الأَرْضِ حَبَّةَ عِنَبٍ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "khubayb-ibn-adi-siyar40/uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "khubayb-ibn-adi",
+      "assertion": "شهد أحداً.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "246-p3",
+          "volume": "4",
+          "pageReference": "246",
+          "extractionUrl": "https://shamela.ws/book/10906/1672",
+          "excerptArabic": "شَهِدَ أُحُداً",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "khubayb-ibn-adi-siyar40/death-place",
+      "subjectKind": "PERSON",
+      "subjectSlug": "khubayb-ibn-adi",
+      "field": "placeOfDeathArabic",
+      "assertion": "قتل بمكة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "246-p3",
+          "volume": "4",
+          "pageReference": "246",
+          "extractionUrl": "https://shamela.ws/book/10906/1672",
+          "excerptArabic": "فَبَاعُوْهُمَا بِمَكَّةَ، فَقَتَلُوْهُمَا بِمَنْ قَتَلَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مِنْ قَوْمِهِم، وَصَلَبُوْهُمَا بِالتَّنْعِيْمِ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    }
+  ]
+}
