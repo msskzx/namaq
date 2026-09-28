@@ -24,6 +24,12 @@ const abanIbnSaid = {
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'said-ibn-al-as', claims: legacyUnreviewed },
+    {
+      type: 'HALF_BROTHER',
+      inverse: 'HALF_BROTHER',
+      to: 'amr-ibn-said-al-umawi',
+      claims: ['amr-ibn-said-al-umawi-siyar50/brother-aban'],
+    },
   ],
 } satisfies CatalogPerson;
 
