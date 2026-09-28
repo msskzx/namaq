@@ -1,0 +1,412 @@
+{
+  "slug": "khalid-ibn-said",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "khalid-ibn-said",
+      "extractionUrl": "https://shamela.ws/book/10906/1685",
+      "accessedAt": "2026-09-28",
+      "volumeNumber": 4,
+      "notInSource": [
+        "wives",
+        "siblings"
+      ],
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "259",
+          "bodyFile": "accounts/khalid-ibn-said/001.md",
+          "notesFile": "accounts/khalid-ibn-said/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1685",
+          "passages": [
+            {
+              "anchor": "259-p12"
+            },
+            {
+              "anchor": "259-p13"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "260",
+          "bodyFile": "accounts/khalid-ibn-said/002.md",
+          "notesFile": "accounts/khalid-ibn-said/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1686",
+          "passages": [
+            {
+              "anchor": "260-p1"
+            },
+            {
+              "anchor": "260-p2"
+            },
+            {
+              "anchor": "260-p3"
+            },
+            {
+              "anchor": "260-p4"
+            },
+            {
+              "anchor": "260-p5"
+            },
+            {
+              "anchor": "260-p6"
+            },
+            {
+              "anchor": "260-p7"
+            },
+            {
+              "anchor": "260-p8"
+            },
+            {
+              "anchor": "260-p9"
+            },
+            {
+              "anchor": "260-p10"
+            },
+            {
+              "anchor": "260-p11"
+            },
+            {
+              "anchor": "260-p12"
+            },
+            {
+              "anchor": "260-p13"
+            },
+            {
+              "anchor": "260-p14"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "khalid-ibn-said-siyar48/fullName",
+      "subjectKind": "PERSON",
+      "subjectSlug": "khalid-ibn-said",
+      "field": "fullName",
+      "assertion": "خالد بن سعيد بن العاص بن أمية بن عبد شمس بن عبد مناف بن قصي",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "259-p12",
+          "volume": "4",
+          "pageReference": "259",
+          "extractionUrl": "https://shamela.ws/book/10906/1685",
+          "excerptArabic": "٤٨ - خَالِدُ بنُ سَعِيْدِ بنِ العَاصِ بنِ أُمَيَّةَ الأُمَوِيُّ **",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "259-p13",
+          "volume": "4",
+          "pageReference": "259",
+          "extractionUrl": "https://shamela.ws/book/10906/1685",
+          "excerptArabic": "ابْنِ عَبْدِ شَمْسٍ بنِ عَبْدِ مَنَافٍ بنِ قُصَيٍّ،",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "khalid-ibn-said-siyar48/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "khalid-ibn-said",
+      "field": "kunya",
+      "assertion": "كنيته أبو سعيد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "260-p1",
+          "volume": "4",
+          "pageReference": "260",
+          "extractionUrl": "https://shamela.ws/book/10906/1686",
+          "excerptArabic": "السَّيِّدُ الكَبِيْرُ، أَبُو سَعِيْدٍ القُرَشِيُّ، الأُمَوِيُّ، أَحَدُ السَّابِقِيْنَ الأَوَّلِيْنَ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "khalid-ibn-said-siyar48/appearance",
+      "subjectKind": "PERSON",
+      "subjectSlug": "khalid-ibn-said",
+      "field": "appearance",
+      "assertion": "كان وسيمًا، جميلًا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "260-p12",
+          "volume": "4",
+          "pageReference": "260",
+          "extractionUrl": "https://shamela.ws/book/10906/1686",
+          "excerptArabic": "وَقِيْلَ: كَانَ خَالدُ بنُ سَعِيْدٍ وَسِيْماً، جَمِيْلاً، قُتِلَ يَوْمَ أَجْنَادِيْنَ، وَهَاجَرَ مَعَ جَعْفَرِ بنِ أَبِي طَالِبٍ إِلَى المَدِيْنَةِ زَمَنَ خَيْبَرَ، وَبِنْتُهُ المَذْكُوْرَةُ عُمِّرَتْ، وَتَأَخَّرَتْ إِلَى قَرِيْبِ عَامِ تِسْعِيْنَ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "khalid-ibn-said-siyar48/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "khalid-ibn-said",
+      "field": "virtues",
+      "assertion": "أحد السابقين الأولين، خامس في الإسلام، هاجر إلى الحبشة، أول من كتب بسم الله الرحمن الرحيم، استعمله رسول الله على صنعاء، أمره أبو بكر على بعض الجيش في غزو الشام، قتل مشركاً، استشهد، قتل يوم أجنادين، رئي له نور ساطع إلى السماء.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "260-p1",
+          "volume": "4",
+          "pageReference": "260",
+          "extractionUrl": "https://shamela.ws/book/10906/1686",
+          "excerptArabic": "السَّيِّدُ الكَبِيْرُ، أَبُو سَعِيْدٍ القُرَشِيُّ، الأُمَوِيُّ، أَحَدُ السَّابِقِيْنَ الأَوَّلِيْنَ.",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "260-p3",
+          "volume": "4",
+          "pageReference": "260",
+          "extractionUrl": "https://shamela.ws/book/10906/1686",
+          "excerptArabic": "كَانَ أَبِي خَامِساً فِي الإِسْلاَمِ، وَهَاجَرَ إِلَى أَرْضِ الحَبَشَةِ، وَأَقَامَ بِهَا بِضْعَ عَشْرَةَ سَنَةً",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "260-p5",
+          "volume": "4",
+          "pageReference": "260",
+          "extractionUrl": "https://shamela.ws/book/10906/1686",
+          "excerptArabic": "أَبِي أَوَّلُ مَنْ كَتَبَ: بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيْمِ.",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "260-p6",
+          "volume": "4",
+          "pageReference": "260",
+          "extractionUrl": "https://shamela.ws/book/10906/1686",
+          "excerptArabic": "وَرُوِيَ أَنَّ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- اسْتَعْمَلَهُ عَلَى صَنْعَاءَ، وَأَنَّ أَبَا بَكْرٍ أَمَّرَهُ عَلَى بَعْضِ الجَيْشِ فِي غَزْوِ الشَّامِ.",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "260-p8",
+          "volume": "4",
+          "pageReference": "260",
+          "extractionUrl": "https://shamela.ws/book/10906/1686",
+          "excerptArabic": "أَنَّ خَالِداً قَتَلَ مُشْرِكاً، ثُمَّ لَبِسَ سَلَبَهُ دِيْبَاجاً أَوْ حَرِيْراً",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "260-p10",
+          "volume": "4",
+          "pageReference": "260",
+          "extractionUrl": "https://shamela.ws/book/10906/1686",
+          "excerptArabic": "وَيُرْوَى أَنَّ خَالِداً -رَضِيَ اللهُ عَنْهُ- اسْتُشْهِدَ",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "260-p11",
+          "volume": "4",
+          "pageReference": "260",
+          "extractionUrl": "https://shamela.ws/book/10906/1686",
+          "excerptArabic": "مَنْ هَذَا الرَّجُلُ؟ فَإِنِّي رَأَيْتُ نُوْراً لَهُ سَاطِعاً إِلَى السَّمَاءِ.",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "260-p12",
+          "volume": "4",
+          "pageReference": "260",
+          "extractionUrl": "https://shamela.ws/book/10906/1686",
+          "excerptArabic": "قُتِلَ يَوْمَ أَجْنَادِيْنَ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "khalid-ibn-said-siyar48/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "khalid-ibn-said",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "said-ibn-al-as",
+      "assertion": "ابن سعيد بن العاص.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "259-p12",
+          "volume": "4",
+          "pageReference": "259",
+          "extractionUrl": "https://shamela.ws/book/10906/1685",
+          "excerptArabic": "٤٨ - خَالِدُ بنُ سَعِيْدِ بنِ العَاصِ بنِ أُمَيَّةَ الأُمَوِيُّ **",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "khalid-ibn-said-siyar48/ajnadayn",
+      "subjectKind": "PERSON",
+      "subjectSlug": "khalid-ibn-said",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "ajnadayn",
+      "assertion": "قتل يوم أجنادين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "260-p12",
+          "volume": "4",
+          "pageReference": "260",
+          "extractionUrl": "https://shamela.ws/book/10906/1686",
+          "excerptArabic": "قُتِلَ يَوْمَ أَجْنَادِيْنَ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    }
+  ]
+}
