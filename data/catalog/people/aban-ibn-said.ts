@@ -1,11 +1,10 @@
 import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
-/**
- * Carried from neo4j/graphSeedData*.ts, whose node declaration is retired
- * with the rest. The catalog owns this subject's edges now, so they live
- * here or not at all. No batch has read this far into the nasab yet, so
- * every link stays on the legacy marker.
- */
+// Authored from data/history/batches/aban-ibn-said, entry 49, sharing
+// printed page 261 with entry 50. The entry names his father but stops there,
+// so the chain deeper than Sa'id rides on the SON edge (docs/extraction-checklist.md,
+// "Nasab"). No mother is stated for either brother, so the sibling ties are
+// HALF_BROTHER.
 const abanIbnSaid = {
   kind: 'PERSON',
   slug: 'aban-ibn-said',
@@ -15,20 +14,37 @@ const abanIbnSaid = {
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
-      value: 'أبان بن سعيد بن العاص بن أمية بن عبد شمس بن عبد مناف بن قصي القرشي الأموي',
-      claims: legacyUnreviewed,
+      value: 'أبان بن سعيد الأموي',
+      claims: ['aban-ibn-said-siyar49/fullName'],
+    },
+    kunya: { value: 'أبو الوليد', claims: ['aban-ibn-said-siyar49/kunya'] },
+    virtues: {
+      value:
+        'تأخر إسلامه، كان تاجراً موسراً، سافر إلى الشام، أجار ابن عمه عثمان بن عفان يوم الحديبية، أسلم قبل الفتح وهاجر، قدم المدينة مسلماً، استعمله رسول الله سنة تسع على البحرين، استشهد هو وأخوه خالد يوم أجنادين.',
+      claims: ['aban-ibn-said-siyar49/virtues'],
     },
   },
   titles: [
-    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    {
+      title: 'companion',
+      name: 'صحابي',
+      nameTransliterated: 'Companion',
+      claims: ['aban-ibn-said-siyar49/virtues'],
+    },
   ],
   relations: [
-    { type: 'SON', inverse: 'FATHER', to: 'said-ibn-al-as', claims: legacyUnreviewed },
+    { type: 'SON', inverse: 'FATHER', to: 'said-ibn-al-as', claims: ['aban-ibn-said-siyar49/father'] },
+    {
+      type: 'HALF_BROTHER',
+      inverse: 'HALF_BROTHER',
+      to: 'khalid-ibn-said',
+      claims: ['aban-ibn-said-siyar49/half-brother-khalid'],
+    },
     {
       type: 'HALF_BROTHER',
       inverse: 'HALF_BROTHER',
       to: 'amr-ibn-said-al-umawi',
-      claims: ['amr-ibn-said-al-umawi-siyar50/brother-aban'],
+      claims: ['aban-ibn-said-siyar49/half-brother-amr', 'amr-ibn-said-al-umawi-siyar50/brother-aban'],
     },
   ],
 } satisfies CatalogPerson;
