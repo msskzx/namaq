@@ -14,7 +14,8 @@ Open the graph → explore and filter relationships → open a person's profile 
 
 ### Quizzes
 
-- Relation questions preserve the claim's direction in Arabic and English: a `FATHER` claim asks whose father the subject was, while a `SON` claim asks whose son they were. The answer is the claim's related person.
+- The quiz picker can combine several reviewed scopes in one quiz. Question
+  content is Arabic; ayah choices show their stored Qur'an text and reference.
 
 ### Relationship graph
 
@@ -75,6 +76,10 @@ Open the graph → explore and filter relationships → open a person's profile 
 - Arabic and English UI support, plus light and dark themes.
 - Client-side data fetching and pagination through SWR.
 - PostgreSQL/Prisma is used for people, events, battles, titles, and supporting content; Neo4j is used for relationship traversal and graph rendering.
+- Solo quizzes draw Arabic multiple-choice questions from an agent-reviewed,
+  file-authored bank projected into PostgreSQL. People, battles,
+  relationships, ayat, events and one-person circles have separate scopes;
+  `/quizzes/questions` exposes the paginated read-only review inventory.
 
 ## Architecture
 

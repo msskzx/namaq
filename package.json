@@ -35,7 +35,11 @@
     "catalog:project": "tsx scripts/data/projectCatalog.ts",
     "catalog:project-graph": "tsx scripts/data/projectCatalogGraph.ts",
     "catalog:ledger": "tsx scripts/data/catalogLedger.ts",
-    "catalog:checklist": "tsx scripts/data/catalogChecklist.ts"
+    "catalog:checklist": "tsx scripts/data/catalogChecklist.ts",
+    "quiz:generate": "tsx scripts/quiz/generateQuestions.ts",
+    "quiz:review": "tsx scripts/quiz/reviewQuestion.ts",
+    "quiz:validate": "tsx scripts/quiz/validateQuestions.ts",
+    "quiz:project": "tsx scripts/quiz/projectQuestions.ts"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",

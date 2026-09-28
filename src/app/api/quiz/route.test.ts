@@ -1,25 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { assembleQuiz, citationFindMany, personFindMany, titleFindMany, battleFindMany, eventFindMany, ayahFindMany } = vi.hoisted(() => ({
+const { assembleQuiz, availableQuestionCount, historicalClaimFindMany, ayahFindMany } = vi.hoisted(() => ({
   assembleQuiz: vi.fn(),
-  citationFindMany: vi.fn(),
-  personFindMany: vi.fn(),
-  titleFindMany: vi.fn(),
-  battleFindMany: vi.fn(),
-  eventFindMany: vi.fn(),
+  availableQuestionCount: vi.fn(),
+  historicalClaimFindMany: vi.fn(),
   ayahFindMany: vi.fn(),
 }));
-vi.mock('@/lib/quiz/assemble', () => ({ assembleQuiz }));
-vi.mock('@/lib/prisma', () => ({
-  prisma: {
-    citation: { findMany: citationFindMany },
-    person: { findMany: personFindMany },
-    title: { findMany: titleFindMany },
-    battle: { findMany: battleFindMany },
-    event: { findMany: eventFindMany },
-    ayah: { findMany: ayahFindMany },
-  },
-}));
+vi.mock('@/lib/quiz/assemble', () => ({ assembleQuiz, availableQuestionCount }));
+vi.mock('@/lib/prisma', () => ({ prisma: { historicalClaim: { findMany: historicalClaimFindMany }, ayah: { findMany: ayahFindMany } } }));
 
 import { GET } from './route';
 
@@ -29,24 +17,25 @@ function request(query: string) {
 
 function question(overrides: Record<string, unknown> = {}) {
   return {
-    claimId: 'claim-1',
+    key: 'RELATION:PERSON:zaynab-bint-jahsh:WIFE:prophet-muhammad',
     family: 'RELATION',
-    attribute: 'WIFE',
-    subject: { kind: 'PERSON', slug: 'zaynab-bint-jahsh' },
-    choices: ['a', 'b', 'c', 'd'],
-    correctAnswer: 'a',
-    evidence: { citationIds: ['citation-1'] },
+    promptArabic: 'من كان زوج زينب بنت جحش؟',
+    choices: [
+      { value: 'prophet-muhammad', labelArabic: 'محمد ﷺ' },
+      { value: 'a', labelArabic: 'الأول' },
+      { value: 'b', labelArabic: 'الثاني' },
+      { value: 'c', labelArabic: 'الثالث' },
+    ],
+    correctAnswer: 'prophet-muhammad',
+    evidence: { claimKeys: ['zaynab/relation'] },
     ...overrides,
   };
 }
 
 beforeEach(() => {
   vi.clearAllMocks();
-  citationFindMany.mockResolvedValue([]);
-  personFindMany.mockResolvedValue([]);
-  titleFindMany.mockResolvedValue([]);
-  battleFindMany.mockResolvedValue([]);
-  eventFindMany.mockResolvedValue([]);
+  availableQuestionCount.mockResolvedValue(20);
+  historicalClaimFindMany.mockResolvedValue([]);
   ayahFindMany.mockResolvedValue([]);
 });
 
@@ -66,14 +55,20 @@ describe('GET /api/quiz', () => {
     expect(response.status).toBe(400);
   });
 
-  it('returns the assembled questions with resolved reader links', async () => {
+  it('reports the exact available count instead of returning a short quiz', async () => {
+    availableQuestionCount.mockResolvedValueOnce(3);
+    const response = await GET(request('?topic=AYAT&length=5'));
+    expect(response.status).toBe(409);
+    await expect(response.json()).resolves.toEqual({ error: 'Not enough approved questions', available: 3 });
+    expect(assembleQuiz).not.toHaveBeenCalled();
+  });
+
+  it('returns reviewed Arabic questions with resolved reader links', async () => {
     assembleQuiz.mockResolvedValueOnce([question()]);
-    citationFindMany.mockResolvedValueOnce([
+    historicalClaimFindMany.mockResolvedValueOnce([
       {
-        id: 'citation-1',
-        subjectKind: 'PERSON',
-        subjectSlug: 'zaynab-bint-jahsh',
-        passage: { page: { accountId: 'account-1', sequence: 3 } },
+        authoringKey: 'zaynab/relation',
+        citations: [{ subjectKind: 'PERSON', subjectSlug: 'zaynab-bint-jahsh', passage: { page: { accountId: 'account-1', sequence: 3 } } }],
       },
     ]);
 
@@ -81,59 +76,47 @@ describe('GET /api/quiz', () => {
     const body = await response.json();
 
     expect(response.status).toBe(200);
-    expect(body.questions[0].evidence.readerUrls).toEqual([
-      '/people/zaynab-bint-jahsh?book=account-1&page=3',
-    ]);
-    expect(assembleQuiz).toHaveBeenCalledWith(
-      expect.objectContaining({ topics: ['PEOPLE'], length: 5, personSlug: undefined }),
-    );
+    expect(body.questions[0]).toMatchObject({
+      promptArabic: 'من كان زوج زينب بنت جحش؟',
+      choices: expect.arrayContaining([{ value: 'prophet-muhammad', labelArabic: 'محمد ﷺ' }]),
+      evidence: { readerUrls: ['/people/zaynab-bint-jahsh?book=account-1&page=3'] },
+    });
+    expect(assembleQuiz).toHaveBeenCalledWith(expect.objectContaining({ topics: ['PEOPLE'], length: 5, personSlug: undefined }));
   });
 
   it('passes the requested person through for PERSON_CIRCLE', async () => {
     assembleQuiz.mockResolvedValueOnce([]);
     await GET(request('?topic=PERSON_CIRCLE&length=5&person=prophet-muhammad'));
+    expect(availableQuestionCount).toHaveBeenCalledWith(['PERSON_CIRCLE'], 'prophet-muhammad');
     expect(assembleQuiz).toHaveBeenCalledWith(expect.objectContaining({ personSlug: 'prophet-muhammad' }));
   });
 
-  it('resolves display names for the subject and person-slug choices', async () => {
-    assembleQuiz.mockResolvedValueOnce([question({ choices: ['a', 'b', 'c', 'd'], correctAnswer: 'a' })]);
-    personFindMany.mockResolvedValueOnce([
-      { slug: 'zaynab-bint-jahsh', name: 'زينب بنت جحش', nameTransliterated: 'Zaynab bint Jahsh' },
-      { slug: 'a', name: 'ا', nameTransliterated: 'A' },
-    ]);
-
-    const response = await GET(request('?topic=PEOPLE&length=5'));
-    const body = await response.json();
-
-    expect(body.questions[0].subjectName).toEqual({ name: 'زينب بنت جحش', nameTransliterated: 'Zaynab bint Jahsh' });
-    expect(body.questions[0].choiceLabels.a).toEqual({ name: 'ا', nameTransliterated: 'A' });
-    expect(body.questions[0].choiceLabels.b).toBeUndefined();
+  it('combines repeated and comma-separated topics without duplicates', async () => {
+    assembleQuiz.mockResolvedValueOnce([]);
+    await GET(request('?topic=PEOPLE,BATTLES&topic=AYAT&topic=PEOPLE&length=5'));
+    expect(availableQuestionCount).toHaveBeenCalledWith(['PEOPLE', 'BATTLES', 'AYAT'], undefined);
+    expect(assembleQuiz).toHaveBeenCalledWith(expect.objectContaining({ topics: ['PEOPLE', 'BATTLES', 'AYAT'] }));
   });
 
-  it('does not resolve names for families whose choices are plain values', async () => {
-    assembleQuiz.mockResolvedValueOnce([
-      question({ family: 'NAME', attribute: 'kunya', choices: ['أبو بكر', 'أبو محمد', 'أبو سعيد', 'أبو حفص'], correctAnswer: 'أبو بكر' }),
-    ]);
-    personFindMany.mockResolvedValueOnce([{ slug: 'zaynab-bint-jahsh', name: 'زينب بنت جحش', nameTransliterated: null }]);
-
-    const response = await GET(request('?topic=PEOPLE&length=5'));
-    const body = await response.json();
-
-    expect(body.questions[0].choiceLabels).toEqual({});
-  });
-
-  it('resolves ayah text and references for Quran-link choices', async () => {
-    assembleQuiz.mockResolvedValueOnce([question({ family: 'QURAN_LINK', choices: ['2:255', '2:256', '2:257', '2:258'], correctAnswer: '2:255' })]);
+  it('resolves Quran text for ayah choices', async () => {
+    assembleQuiz.mockResolvedValueOnce([question({
+      family: 'AYAH_LINK',
+      choices: [
+        { value: '2:255', labelArabic: '2:255' },
+        { value: '2:256', labelArabic: '2:256' },
+        { value: '2:257', labelArabic: '2:257' },
+        { value: '2:258', labelArabic: '2:258' },
+      ],
+      correctAnswer: '2:255',
+    })]);
     ayahFindMany.mockResolvedValueOnce([
-      { number: 255, text: 'اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ', surah: { number: 2, name: 'البقرة', nameTransliterated: 'Al-Baqarah' } },
+      { number: 255, text: 'اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ', surah: { number: 2, name: 'البقرة' } },
     ]);
-
-    const response = await GET(request('?topic=PEOPLE&length=5'));
+    const response = await GET(request('?topic=AYAT&length=5'));
     const body = await response.json();
-
     expect(body.questions[0].choiceDetails['2:255']).toEqual({
       text: 'اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ',
-      reference: 'Al-Baqarah 2:255',
+      reference: 'البقرة 2:255',
     });
   });
 });
