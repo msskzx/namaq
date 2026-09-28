@@ -79,6 +79,7 @@ Open the graph → explore and filter relationships → open a person's profile 
 ### Application experience
 
 - Arabic and English UI support, plus light and dark themes.
+- Bilingual, themed `not-found.tsx`, `error.tsx`, and `loading.tsx` pages at the app root, using the shared `ErrorMessage`, `LoadingSpinner`, and `Button` components instead of Next.js's default unstyled fallback.
 - Client-side data fetching and pagination through SWR.
 - PostgreSQL/Prisma is used for people, events, battles, titles, and supporting content; Neo4j is used for relationship traversal and graph rendering.
 - Solo quizzes draw Arabic multiple-choice questions from an agent-reviewed,
