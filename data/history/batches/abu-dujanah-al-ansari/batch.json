@@ -1,0 +1,483 @@
+{
+  "slug": "abu-dujanah-al-ansari",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-dujanah-al-ansari",
+      "extractionUrl": "https://shamela.ws/book/10906/1670",
+      "accessedAt": "2026-09-28",
+      "volumeNumber": 4,
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "244",
+          "bodyFile": "accounts/abu-dujanah-al-ansari/001.md",
+          "notesFile": "accounts/abu-dujanah-al-ansari/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1670",
+          "passages": [
+            {
+              "anchor": "244-p1"
+            },
+            {
+              "anchor": "244-p2"
+            },
+            {
+              "anchor": "244-p3"
+            },
+            {
+              "anchor": "244-p4"
+            },
+            {
+              "anchor": "244-p5"
+            },
+            {
+              "anchor": "244-p6"
+            },
+            {
+              "anchor": "244-p7"
+            },
+            {
+              "anchor": "244-p8"
+            },
+            {
+              "anchor": "244-p9"
+            },
+            {
+              "anchor": "244-p10"
+            },
+            {
+              "anchor": "244-p11"
+            },
+            {
+              "anchor": "244-p12"
+            },
+            {
+              "anchor": "244-p13"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "245",
+          "bodyFile": "accounts/abu-dujanah-al-ansari/002.md",
+          "notesFile": "accounts/abu-dujanah-al-ansari/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1671",
+          "passages": [
+            {
+              "anchor": "245-p1"
+            },
+            {
+              "anchor": "245-p2"
+            },
+            {
+              "anchor": "245-p3"
+            },
+            {
+              "anchor": "245-p4"
+            }
+          ]
+        }
+      ],
+      "notInSource": [
+        "appearance",
+        "wives",
+        "siblings"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "abu-dujanah-al-ansari-siyar39/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-dujanah-al-ansari",
+      "field": "fullName",
+      "assertion": "سماك بن خرشة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "244-p3",
+          "volume": "4",
+          "pageReference": "244",
+          "extractionUrl": "https://shamela.ws/book/10906/1670",
+          "excerptArabic": "وَقِيْلَ: هُوَ سِمَاكُ بنُ أَوْسِ بنِ خَرَشَةَ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abu-dujanah-al-ansari-siyar39/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-dujanah-al-ansari",
+      "assertion": "سماك بن خرشة: أبوه خرشة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "khirashah-ibn-lawdhan",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "244-p3",
+          "volume": "4",
+          "pageReference": "244",
+          "extractionUrl": "https://shamela.ws/book/10906/1670",
+          "excerptArabic": "وَقِيْلَ: هُوَ سِمَاكُ بنُ أَوْسِ بنِ خَرَشَةَ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abu-dujanah-al-ansari-siyar39/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-dujanah-al-ansari",
+      "field": "kunya",
+      "assertion": "أبو دجانة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "244-p2",
+          "volume": "4",
+          "pageReference": "244",
+          "extractionUrl": "https://shamela.ws/book/10906/1670",
+          "excerptArabic": "رَمَى أَبُو دُجَانَةَ بِنَفْسِهِ يَوْمَ اليَمَامَةِ إِلَى دَاخِلِ الحَدِيْقَةِ، فَانْكَسَرَتْ رِجْلُهُ، فَقَاتَلَ وَهُوَ مَكْسُوْرُ الرِّجْلِ حَتَّى قُتِلَ -رَضِيَ اللهُ عَنْهُ (١) -.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abu-dujanah-al-ansari-siyar39/virtues-sword",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-dujanah-al-ansari",
+      "field": "virtues",
+      "assertion": "كان سيف أبي دجانة غير ذميم، عرضه النبي صلى الله عليه وسلم فقال: من يأخذ هذا السيف بحقه؟ فأحجم الناس، فقال أبو دجانة: وما حقه يا رسول الله؟ قال: تقاتل به في سبيل الله حتى يفتح الله عليك، أو تقتل. فأخذه بذلك الشرط.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "244-p7",
+          "volume": "4",
+          "pageReference": "244",
+          "extractionUrl": "https://shamela.ws/book/10906/1670",
+          "excerptArabic": "وَكَانَ سَيْفُ أَبِي دُجَانَةَ غَيْرَ ذَمِيْمٍ.",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "244-p8",
+          "volume": "4",
+          "pageReference": "244",
+          "extractionUrl": "https://shamela.ws/book/10906/1670",
+          "excerptArabic": "وَذَلِكَ أَنَّ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- عَرَضَ ذَلِكَ السَّيْفَ حَتَّى قَالَ: (مَنْ يَأْخُذُ هَذَا السَّيْفَ بِحَقِّهِ؟) .",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "244-p9",
+          "volume": "4",
+          "pageReference": "244",
+          "extractionUrl": "https://shamela.ws/book/10906/1670",
+          "excerptArabic": "فَأَحْجَمَ النَّاسُ عَنْهُ.",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "244-p10",
+          "volume": "4",
+          "pageReference": "244",
+          "extractionUrl": "https://shamela.ws/book/10906/1670",
+          "excerptArabic": "فَقَالَ أَبُو دُجَانَةَ: وَمَا حَقُّهُ يَا رَسُوْلَ اللهِ؟",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "244-p11",
+          "volume": "4",
+          "pageReference": "244",
+          "extractionUrl": "https://shamela.ws/book/10906/1670",
+          "excerptArabic": "قَالَ: (تُقَاتِلُ بِهِ فِي سَبِيْلِ اللهِ حَتَّى يَفْتَحَ اللهُ عَلَيْكَ، أَوْ تُقْتَلَ) .",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "244-p12",
+          "volume": "4",
+          "pageReference": "244",
+          "extractionUrl": "https://shamela.ws/book/10906/1670",
+          "excerptArabic": "فَأَخَذَهُ بِذَلِكَ الشَّرْطِ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abu-dujanah-al-ansari-siyar39/virtues-uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-dujanah-al-ansari",
+      "field": "virtues",
+      "assertion": "خرج أبو دجانة بسيفه مصلاً يتبختر يوم أحد، ما عليه إلا قميص وعمامة حمراء قد عصّب بها رأسه، ويرتجز: إني امرؤ عاهدني خليل... أن لا أقيم الدهر في الكبول... أضرب بسيف الله والرسول. فقال النبي صلى الله عليه وسلم: إنها لمشية يبغضها الله ورسوله إلا في مثل هذا الموطن.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "244-p13",
+          "volume": "4",
+          "pageReference": "244",
+          "extractionUrl": "https://shamela.ws/book/10906/1670",
+          "excerptArabic": "فَلَمَّا كَانَ قَبْلَ الهَزِيْمَة يَوْمَ أُحُدٍ، خَرَجَ بِسَيْفِهِ مُصْلَتاً وَهُوَ يَتَبَخْتَرُ، مَا عَلَيْهِ إِلاَّ قَمِيْصٌ وَعِمَامَةٌ حَمْرَاءُ قَدْ عَصَبَ بِهَا رَأْسَهُ، وَإِنَّهُ لَيَرْتَجِزُ، وَيَقُوْلُ:",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "245-p1",
+          "volume": "4",
+          "pageReference": "245",
+          "extractionUrl": "https://shamela.ws/book/10906/1671",
+          "excerptArabic": "إِنِّي امْرُؤٌ عَاهَدَنِي خَلِيْلِي ... إِذْ نَحْنُ بِالسَّفْحِ لَدَى النَّخِيْلِ",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "245-p2",
+          "volume": "4",
+          "pageReference": "245",
+          "extractionUrl": "https://shamela.ws/book/10906/1671",
+          "excerptArabic": "أَنْ لاَ أُقِيْمَ الدَّهْرَ فِي الكُبُوْلِ ... أَضْرِبْ بِسَيْفِ اللهِ وَالرَّسُوْلِ",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "245-p3",
+          "volume": "4",
+          "pageReference": "245",
+          "extractionUrl": "https://shamela.ws/book/10906/1671",
+          "excerptArabic": "قَالَ: يَقُوْلُ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-: (إِنَّهَا لَمِشْيَةٌ يُبْغِضُهَا اللهُ وَرَسُوْلُهُ إِلاَّ فِي مِثْلِ هَذَا المَوْطِنِ (٢)) .",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abu-dujanah-al-ansari-siyar39/virtues-yamamah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-dujanah-al-ansari",
+      "field": "virtues",
+      "assertion": "رمى أبو دجانة بنفسه يوم اليمامة إلى داخل الحديقة، فانكسرت رجله، فقاتل وهو مكسور الرجل حتى قتل.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "244-p2",
+          "volume": "4",
+          "pageReference": "244",
+          "extractionUrl": "https://shamela.ws/book/10906/1670",
+          "excerptArabic": "رَمَى أَبُو دُجَانَةَ بِنَفْسِهِ يَوْمَ اليَمَامَةِ إِلَى دَاخِلِ الحَدِيْقَةِ، فَانْكَسَرَتْ رِجْلُهُ، فَقَاتَلَ وَهُوَ مَكْسُوْرُ الرِّجْلِ حَتَّى قُتِلَ -رَضِيَ اللهُ عَنْهُ (١) -.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abu-dujanah-al-ansari-siyar39/virtues-silence",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-dujanah-al-ansari",
+      "field": "virtues",
+      "assertion": "لما وضعت الحرب أوزارها، افتخر أصحاب رسول الله صلى الله عليه وسلم بأيامهم، وسماك بن خرشة أبو دجانة ساكت لا ينطق.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "244-p5",
+          "volume": "4",
+          "pageReference": "244",
+          "extractionUrl": "https://shamela.ws/book/10906/1670",
+          "excerptArabic": "لَمَّا وَضَعَتْ الحَرْب أَوْزَارَهَا، افْتَخَرَ أَصْحَابُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِأَيَّامِهِم، وَطَلْحَةُ سَاكِتٌ لاَ يَنْطِقُ، وَسِمَاكُ بنُ خَرَشَةَ أَبُو دُجَانَةَ سَاكِتٌ لاَ يَنْطِقُ (٢) .",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abu-dujanah-al-ansari-siyar39/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-dujanah-al-ansari",
+      "field": "titles",
+      "assertion": "من الأنصار، شهد أحد وقتل في اليمامة — صحابي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "244-p2",
+          "volume": "4",
+          "pageReference": "244",
+          "extractionUrl": "https://shamela.ws/book/10906/1670",
+          "excerptArabic": "رَمَى أَبُو دُجَانَةَ بِنَفْسِهِ يَوْمَ اليَمَامَةِ إِلَى دَاخِلِ الحَدِيْقَةِ، فَانْكَسَرَتْ رِجْلُهُ، فَقَاتَلَ وَهُوَ مَكْسُوْرُ الرِّجْلِ حَتَّى قُتِلَ -رَضِيَ اللهُ عَنْهُ (١) -.",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "244-p13",
+          "volume": "4",
+          "pageReference": "244",
+          "extractionUrl": "https://shamela.ws/book/10906/1670",
+          "excerptArabic": "فَلَمَّا كَانَ قَبْلَ الهَزِيْمَة يَوْمَ أُحُدٍ، خَرَجَ بِسَيْفِهِ مُصْلَتاً وَهُوَ يَتَبَخْتَرُ، مَا عَلَيْهِ إِلاَّ قَمِيْصٌ وَعِمَامَةٌ حَمْرَاءُ قَدْ عَصَبَ بِهَا رَأْسَهُ، وَإِنَّهُ لَيَرْتَجِزُ، وَيَقُوْلُ:",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abu-dujanah-al-ansari-siyar39/virtues-prophet-uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-dujanah-al-ansari",
+      "field": "virtues",
+      "assertion": "قال رسول الله صلى الله عليه وسلم حين رأى سكونهما: لقد رأيتني يوم أحد وما في الأرض قربني مخلوق غير جبريل عن يميني، وطلحة عن يساري.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "244-p6",
+          "volume": "4",
+          "pageReference": "244",
+          "extractionUrl": "https://shamela.ws/book/10906/1670",
+          "excerptArabic": "فَقَالَ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- حِيْنَ رَأَى سُكُوْتَهُمَا: (لَقَدْ رَأَيْتُنِي يَوْمَ أُحُدٍ وَمَا فِي الأَرْضِ قُرْبِي مَخْلُوْقٌ غَيْرَ جِبْرِيْلَ عَنْ يَمِيْنِي، وَطَلْحَةَ عَنْ يَسَارِي (٣)) .",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    }
+  ]
+}
