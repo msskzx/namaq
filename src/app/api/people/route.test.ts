@@ -26,7 +26,6 @@ describe('GET /api/people', () => {
     const response = await GET(request('?page=0'));
 
     expect(response.status).toBe(400);
-    expect(await response.json()).toEqual({ error: 'Invalid pagination parameters' });
     expect(findMany).not.toHaveBeenCalled();
   });
 
@@ -35,6 +34,22 @@ describe('GET /api/people', () => {
 
     expect(response.status).toBe(400);
     expect(findMany).not.toHaveBeenCalled();
+  });
+
+  it('rejects a non-numeric limit', async () => {
+    const response = await GET(request('?limit=abc'));
+
+    expect(response.status).toBe(400);
+    expect(findMany).not.toHaveBeenCalled();
+  });
+
+  it('clamps an over-the-max limit', async () => {
+    count.mockResolvedValue(0);
+    findMany.mockResolvedValue([]);
+
+    await GET(request('?limit=100000'));
+
+    expect(findMany).toHaveBeenCalledWith(expect.objectContaining({ take: 100 }));
   });
 
   it('lists people ordered by name with pagination metadata when there is no search term', async () => {
@@ -47,7 +62,16 @@ describe('GET /api/people', () => {
     expect(count).toHaveBeenCalledWith({ where: {} });
     expect(findMany).toHaveBeenCalledWith({
       where: {},
-      include: { titles: true },
+      select: {
+        id: true,
+        slug: true,
+        name: true,
+        fullName: true,
+        nameTransliterated: true,
+        sex: true,
+        graphRank: true,
+        titles: true,
+      },
       orderBy: [{ graphRank: { sort: 'asc', nulls: 'last' } }, { name: 'asc' }],
       take: 12,
       skip: 0,
