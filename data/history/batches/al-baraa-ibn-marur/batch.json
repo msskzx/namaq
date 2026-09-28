@@ -1,0 +1,446 @@
+{
+  "slug": "al-baraa-ibn-marur",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-baraa-ibn-marur",
+      "extractionUrl": "https://shamela.ws/book/10906/1693",
+      "accessedAt": "2026-09-28",
+      "volumeNumber": 4,
+      "notInSource": [
+        "appearance",
+        "wives",
+        "siblings"
+      ],
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "267",
+          "bodyFile": "accounts/al-baraa-ibn-marur/001.md",
+          "notesFile": "accounts/al-baraa-ibn-marur/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1693",
+          "passages": [
+            {
+              "anchor": "267-p1"
+            },
+            {
+              "anchor": "267-p2"
+            },
+            {
+              "anchor": "267-p3"
+            },
+            {
+              "anchor": "267-p4"
+            },
+            {
+              "anchor": "267-p5"
+            },
+            {
+              "anchor": "267-p6"
+            },
+            {
+              "anchor": "267-p7"
+            },
+            {
+              "anchor": "267-p8"
+            },
+            {
+              "anchor": "267-p9"
+            },
+            {
+              "anchor": "267-p10"
+            },
+            {
+              "anchor": "267-p11"
+            },
+            {
+              "anchor": "267-p12"
+            },
+            {
+              "anchor": "267-p13"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "268",
+          "bodyFile": "accounts/al-baraa-ibn-marur/002.md",
+          "notesFile": "accounts/al-baraa-ibn-marur/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1694",
+          "passages": [
+            {
+              "anchor": "268-p1"
+            },
+            {
+              "anchor": "268-p2"
+            },
+            {
+              "anchor": "268-p3"
+            },
+            {
+              "anchor": "268-p4"
+            },
+            {
+              "anchor": "268-p5"
+            },
+            {
+              "anchor": "268-p6"
+            },
+            {
+              "anchor": "268-p7"
+            },
+            {
+              "anchor": "268-p8"
+            },
+            {
+              "anchor": "268-p9"
+            },
+            {
+              "anchor": "268-p10"
+            },
+            {
+              "anchor": "268-p11"
+            },
+            {
+              "anchor": "268-p12"
+            },
+            {
+              "anchor": "268-p13"
+            },
+            {
+              "anchor": "268-p14"
+            },
+            {
+              "anchor": "268-p15"
+            },
+            {
+              "anchor": "268-p16"
+            },
+            {
+              "anchor": "268-p17"
+            },
+            {
+              "anchor": "268-p18"
+            },
+            {
+              "anchor": "268-p19"
+            },
+            {
+              "anchor": "268-p20"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "printedPage": "269",
+          "bodyFile": "accounts/al-baraa-ibn-marur/003.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1695",
+          "passages": [
+            {
+              "anchor": "269-p1"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "al-baraa-ibn-marur-siyar53/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-baraa-ibn-marur",
+      "field": "fullName",
+      "assertion": "البراء بن معرور بن صخر بن خنساء بن سنان الخزرجي",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "267-p1",
+          "volume": "4",
+          "pageReference": "267",
+          "extractionUrl": "https://shamela.ws/book/10906/1693",
+          "excerptArabic": "٥٣ - البَرَاءُ بنُ مَعْرُوْرِ بنِ صَخْرِ بنِ خَنْسَاءَ بنِ سِنَانَ الخَزْرَجِيُّ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "al-baraa-ibn-marur-siyar53/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-baraa-ibn-marur",
+      "assertion": "البراء بن معرور: أبوه معرور بن صخر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "marur-ibn-sakhr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "267-p1",
+          "volume": "4",
+          "pageReference": "267",
+          "extractionUrl": "https://shamela.ws/book/10906/1693",
+          "excerptArabic": "البَرَاءُ بنُ مَعْرُوْرِ بنِ صَخْرِ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "al-baraa-ibn-marur-siyar53/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-baraa-ibn-marur",
+      "field": "kunya",
+      "assertion": "أبو بشر",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "267-p2",
+          "volume": "4",
+          "pageReference": "267",
+          "extractionUrl": "https://shamela.ws/book/10906/1693",
+          "excerptArabic": "أَبُو بِشْرٍ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "al-baraa-ibn-marur-siyar53/tribal-affiliation",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-baraa-ibn-marur",
+      "field": "tribalAffiliation",
+      "assertion": "الخزرجي، الأنصاري، السلمي، نقيب بني سلمة",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "267-p1",
+          "volume": "4",
+          "pageReference": "267",
+          "extractionUrl": "https://shamela.ws/book/10906/1693",
+          "excerptArabic": "سِنَانَ الخَزْرَجِيُّ",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "267-p2",
+          "volume": "4",
+          "pageReference": "267",
+          "extractionUrl": "https://shamela.ws/book/10906/1693",
+          "excerptArabic": "أَبُو بِشْرٍ الأَنْصَارِيُّ، الخَزْرَجِيُّ.",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "267-p4",
+          "volume": "4",
+          "pageReference": "267",
+          "extractionUrl": "https://shamela.ws/book/10906/1693",
+          "excerptArabic": "وَكَانَ نَقِيْبَ قَوْمِهِ بَنِي سَلِمَةَ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "al-baraa-ibn-marur-siyar53/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-baraa-ibn-marur",
+      "field": "titles",
+      "assertion": "أحد نقباء ليلة العقبة — صحابي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "267-p3",
+          "volume": "4",
+          "pageReference": "267",
+          "extractionUrl": "https://shamela.ws/book/10906/1693",
+          "excerptArabic": "أَحَدُ النُّقَبَاءِ لَيْلَةَ العَقَبَةِ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "al-baraa-ibn-marur-siyar53/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-baraa-ibn-marur",
+      "field": "virtues",
+      "assertion": "أول من بايع ليلة العقبة الأولى، فاضل تقي فقيه النفس، وأجل السبعين يومها. ولما ذكر له صلاته إلى الكعبة قال له النبي صلى الله عليه وسلم: قد كنت على قبلة لو صبرت عليها. وقدم النبي المدينة وقد مات، فسأل عن قبره فصف عليه وكبر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "267-p5",
+          "volume": "4",
+          "pageReference": "267",
+          "extractionUrl": "https://shamela.ws/book/10906/1693",
+          "excerptArabic": "وَكَانَ أَوَّلَ مَنْ بَايَعَ لَيْلَةَ العَقَبَةِ الأُوْلَى، وَكَانَ فَاضِلاً، تَقِيّاً، فَقِيْهَ النَّفْسِ.",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "268-p12",
+          "volume": "4",
+          "pageReference": "268",
+          "extractionUrl": "https://shamela.ws/book/10906/1694",
+          "excerptArabic": "فَقَالَ: (قَدْ كُنْتَ عَلَى قِبْلَةٍ لَوْ صَبَرْتَ عَلَيْهَا) .",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "268-p18",
+          "volume": "4",
+          "pageReference": "268",
+          "extractionUrl": "https://shamela.ws/book/10906/1694",
+          "excerptArabic": "فَقَدِمَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَقَدْ مَاتَ، فَسَأَلَ عَنْ قَبْرِهِ، فَأَتَاهُ، فَصَفَّ عَلَيْهِ، وَكَبَّرَ.",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "268-p20",
+          "volume": "4",
+          "pageReference": "268",
+          "extractionUrl": "https://shamela.ws/book/10906/1694",
+          "excerptArabic": "وَكَانَ البَرَاءُ لَيْلَةَ العَقَبَةِ هُوَ أَجَلُّ (٤) السَّبْعِيْنَ، وَهُوَ أَوَّلُهُم مُبَايَعَةً لِرَسُوْلِ اللهِ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    }
+  ]
+}
