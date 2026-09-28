@@ -238,4 +238,5 @@ republishing its pages.
 | `npm run catalog:project` / `-- --apply` | Report (or write) catalog values into PostgreSQL: person fields, title assignments, participations, events |
 | `npm run catalog:project-graph` / `-- --apply` | Report (or write) catalog person relations, both directions, into Neo4j |
 | `npm run graph:layout` / `-- --apply` | Report (or persist) cross-type rank, Louvain clusters, and layout positions over the unified graph |
+| `npm run sync:all` | Run the full catalog → PostgreSQL/Neo4j sync, recompute the graph layout, and generate quiz questions, stopping at `quiz:project`'s dry run for manual review |
 | `npm run history:review -- <batch dir>` / `-- --apply` | Preview or mark every claim in a batch as Reviewed |
