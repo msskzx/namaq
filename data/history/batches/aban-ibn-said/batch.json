@@ -1,0 +1,358 @@
+{
+  "slug": "aban-ibn-said",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aban-ibn-said",
+      "extractionUrl": "https://shamela.ws/book/10906/1687",
+      "accessedAt": "2026-09-28",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "261",
+          "bodyFile": "accounts/aban-ibn-said/001.md",
+          "notesFile": "accounts/aban-ibn-said/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1687",
+          "passages": [
+            {
+              "anchor": "4/261-p1"
+            },
+            {
+              "anchor": "4/261-p2"
+            },
+            {
+              "anchor": "4/261-p3"
+            },
+            {
+              "anchor": "4/261-p4"
+            },
+            {
+              "anchor": "4/261-p5"
+            },
+            {
+              "anchor": "4/261-p6"
+            },
+            {
+              "anchor": "4/261-p7"
+            },
+            {
+              "anchor": "4/261-p8"
+            }
+          ]
+        }
+      ],
+      "volumeNumber": 4,
+      "notInSource": [
+        "appearance",
+        "wives"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "key": "aban-ibn-said-siyar49/fullName",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aban-ibn-said",
+      "field": "fullName",
+      "assertion": "أبان بن سعيد الأموي.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/261-p1",
+          "volume": "4",
+          "pageReference": "261",
+          "extractionUrl": "https://shamela.ws/book/10906/1687",
+          "excerptArabic": "أَبَانُ بنُ سَعِيْدٍ الأُمَوِيُّ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "key": "aban-ibn-said-siyar49/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aban-ibn-said",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "said-ibn-al-as",
+      "assertion": "أبان بن سعيد، ابن سعيد بن العاص.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/261-p1",
+          "volume": "4",
+          "pageReference": "261",
+          "extractionUrl": "https://shamela.ws/book/10906/1687",
+          "excerptArabic": "أَبَانُ بنُ سَعِيْدٍ الأُمَوِيُّ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "key": "aban-ibn-said-siyar49/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aban-ibn-said",
+      "field": "kunya",
+      "assertion": "كنيته أبو الوليد.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/261-p2",
+          "volume": "4",
+          "pageReference": "261",
+          "extractionUrl": "https://shamela.ws/book/10906/1687",
+          "excerptArabic": "أَبُو الوَلِيْدِ الأُمَوِيُّ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "key": "aban-ibn-said-siyar49/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aban-ibn-said",
+      "field": "virtues",
+      "assertion": "تأخر إسلامه، كان تاجراً موسراً، سافر إلى الشام، أجار ابن عمه عثمان بن عفان يوم الحديبية، أسلم قبل الفتح وهاجر، قدم المدينة مسلماً، استعمله رسول الله سنة تسع على البحرين، استشهد هو وأخوه خالد يوم أجنادين.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/261-p2",
+          "volume": "4",
+          "pageReference": "261",
+          "extractionUrl": "https://shamela.ws/book/10906/1687",
+          "excerptArabic": "تَأَخَّرَ إِسْلاَمُهُ، وَكَانَ تَاجِراً مُوْسِراً، سَافَرَ إِلَى الشَّامِ، وَهُوَ الَّذِي أَجَارَ ابْنَ عَمِّهِ عُثْمَانَ بنَ عَفَّانَ يَوْمَ الحُدَيْبِيَةِ",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/261-p4",
+          "volume": "4",
+          "pageReference": "261",
+          "extractionUrl": "https://shamela.ws/book/10906/1687",
+          "excerptArabic": "ثُمَّ أَسْلَمَ يَوْمَ الفَتْحِ، لاَ بَلْ قَبْلَ الفَتْحِ، وَهَاجَرَ",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/261-p5",
+          "volume": "4",
+          "pageReference": "261",
+          "extractionUrl": "https://shamela.ws/book/10906/1687",
+          "excerptArabic": "وَقَدِ اسْتَعْمَلَهُ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- سَنَةَ تِسْعٍ عَلَى البَحْرَيْنِ.",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/261-p6",
+          "volume": "4",
+          "pageReference": "261",
+          "extractionUrl": "https://shamela.ws/book/10906/1687",
+          "excerptArabic": "ثُمَّ إِنَّهُ اسْتُشْهِدَ هُوَ وَأَخُوْهُ خَالِدٌ يَوْمَ أَجْنَادِيْنَ عَلَى الصَّحِيْحِ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "key": "aban-ibn-said-siyar49/half-brother-khalid",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aban-ibn-said",
+      "relationshipType": "HALF_BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "khalid-ibn-said",
+      "assertion": "أخوه خالد بن سعيد.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/261-p6",
+          "volume": "4",
+          "pageReference": "261",
+          "extractionUrl": "https://shamela.ws/book/10906/1687",
+          "excerptArabic": "ثُمَّ إِنَّهُ اسْتُشْهِدَ هُوَ وَأَخُوْهُ خَالِدٌ يَوْمَ أَجْنَادِيْنَ عَلَى الصَّحِيْحِ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "key": "aban-ibn-said-siyar49/half-brother-amr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aban-ibn-said",
+      "relationshipType": "HALF_BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "amr-ibn-said-al-umawi",
+      "assertion": "أخوه عمرو بن سعيد.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/261-p4",
+          "volume": "4",
+          "pageReference": "261",
+          "extractionUrl": "https://shamela.ws/book/10906/1687",
+          "excerptArabic": "وَذَلِكَ أَنَّ أَخَوَيْهِ خَالِداً المَذْكُوْرَ، وَعَمْراً، لَمَّا قَدِمَا مِنْ هِجْرَةِ الحَبَشَةِ إِلَى المَدِيْنَةِ، بَعَثَا إِلَيْهِ يَدْعُوَانِهِ إِلَى اللهِ -تَعَالَى- فَبَادَرَ وَقَدِمَ المَدِيْنَةَ مُسْلِماً.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "key": "aban-ibn-said-siyar49/ajnadayn",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aban-ibn-said",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "ajnadayn",
+      "assertion": "استشهد يوم أجنادين.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/261-p6",
+          "volume": "4",
+          "pageReference": "261",
+          "extractionUrl": "https://shamela.ws/book/10906/1687",
+          "excerptArabic": "ثُمَّ إِنَّهُ اسْتُشْهِدَ هُوَ وَأَخُوْهُ خَالِدٌ يَوْمَ أَجْنَادِيْنَ عَلَى الصَّحِيْحِ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    }
+  ]
+}

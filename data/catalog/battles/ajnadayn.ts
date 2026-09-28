@@ -25,6 +25,16 @@ const ajnadayn = {
       status: ['MARTYRED'],
       claims: ['khalid-ibn-said-siyar48/ajnadayn'],
     },
+    {
+      person: 'aban-ibn-said',
+      isMuslim: true,
+      status: ['MARTYRED'],
+      summary: {
+        value: 'استشهد هو وأخوه خالد يوم أجنادين على الصحيح.',
+        claims: ['aban-ibn-said-siyar49/ajnadayn'],
+      },
+      claims: ['aban-ibn-said-siyar49/ajnadayn'],
+    },
   ],
 } satisfies CatalogBattle;
 
