@@ -1,0 +1,307 @@
+{
+  "slug": "abdullah-ibn-al-harith-ibn-abd-al-muttalib",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-al-harith-ibn-abd-al-muttalib",
+      "extractionUrl": "https://shamela.ws/book/10906/1685",
+      "accessedAt": "2026-09-28",
+      "volumeNumber": 4,
+      "notInSource": [
+        "kunya",
+        "appearance",
+        "wives"
+      ],
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "259",
+          "bodyFile": "accounts/abdullah-ibn-al-harith-ibn-abd-al-muttalib/001.md",
+          "notesFile": "accounts/abdullah-ibn-al-harith-ibn-abd-al-muttalib/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1685",
+          "passages": [
+            {
+              "anchor": "259-p5"
+            },
+            {
+              "anchor": "259-p6"
+            },
+            {
+              "anchor": "259-p7"
+            },
+            {
+              "anchor": "259-p8"
+            },
+            {
+              "anchor": "259-p9"
+            },
+            {
+              "anchor": "259-p10"
+            },
+            {
+              "anchor": "259-p11"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "abdullah-ibn-al-harith-ibn-abd-al-muttalib-siyar47/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-al-harith-ibn-abd-al-muttalib",
+      "field": "fullName",
+      "assertion": "عبد الله بن الحارث بن عبد المطلب الهاشمي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "259-p5",
+          "volume": "4",
+          "pageReference": "259",
+          "extractionUrl": "https://shamela.ws/book/10906/1685",
+          "excerptArabic": "عَبْدُ اللهِ بنُ الحَارِثِ بنِ عَبْدِ المُطَّلِبِ الهَاشِمِيُّ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abdullah-ibn-al-harith-ibn-abd-al-muttalib-siyar47/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-al-harith-ibn-abd-al-muttalib",
+      "assertion": "عبد الله بن الحارث بن عبد المطلب (الحارث بن عبد المطلب: أبوه، عقدة موجودة في الرسم البياني باسم al-harith-ibn-abd-al-muttalib).",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "al-harith-ibn-abd-al-muttalib",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "259-p5",
+          "volume": "4",
+          "pageReference": "259",
+          "extractionUrl": "https://shamela.ws/book/10906/1685",
+          "excerptArabic": "عَبْدُ اللهِ بنُ الحَارِثِ بنِ عَبْدِ المُطَّلِبِ الهَاشِمِيُّ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abdullah-ibn-al-harith-ibn-abd-al-muttalib-siyar47/half-brother-rabiah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-al-harith-ibn-abd-al-muttalib",
+      "assertion": "عبد الله بن الحارث أخو ربيعة بن الحارث (ربيعة: عقدة موجودة في الرسم البياني باسم rabiah-ibn-al-harith).",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "HALF_BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "rabiah-ibn-al-harith",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "259-p6",
+          "volume": "4",
+          "pageReference": "259",
+          "extractionUrl": "https://shamela.ws/book/10906/1685",
+          "excerptArabic": "أَخُو رَبِيْعَةَ وَنَوْفَلٍ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abdullah-ibn-al-harith-ibn-abd-al-muttalib-siyar47/half-brother-nawfal",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-al-harith-ibn-abd-al-muttalib",
+      "assertion": "عبد الله بن الحارث أخو نوفل بن الحارث (نوفل: عقدة موجودة في الرسم البياني باسم nawfal-ibn-al-harith).",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "HALF_BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "nawfal-ibn-al-harith",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "259-p6",
+          "volume": "4",
+          "pageReference": "259",
+          "extractionUrl": "https://shamela.ws/book/10906/1685",
+          "excerptArabic": "أَخُو رَبِيْعَةَ وَنَوْفَلٍ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abdullah-ibn-al-harith-ibn-abd-al-muttalib-siyar47/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-al-harith-ibn-abd-al-muttalib",
+      "field": "virtues",
+      "assertion": "قيل إنه قال فيه: هو سعيد، أدركته السعادة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "259-p9",
+          "volume": "4",
+          "pageReference": "259",
+          "extractionUrl": "https://shamela.ws/book/10906/1685",
+          "excerptArabic": "هُوَ سَعِيْدٌ، أَدْرَكَتْهُ السَّعَادَةُ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "key": "abdullah-ibn-al-harith-ibn-abd-al-muttalib-siyar47/death-place",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-al-harith-ibn-abd-al-muttalib",
+      "field": "placeOfDeathArabic",
+      "assertion": "مات بالصفراء.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "259-p8",
+          "volume": "4",
+          "pageReference": "259",
+          "extractionUrl": "https://shamela.ws/book/10906/1685",
+          "excerptArabic": "فَمَاتَ بِالصَّفْرَاءِ",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    }
+  ]
+}
