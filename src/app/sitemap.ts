@@ -8,6 +8,8 @@ import {
   type SitemapEntry,
 } from '@/lib/siteContent';
 
+export const dynamic = 'force-dynamic';
+
 const STATIC_ROUTES = ['/', '/about', '/people', '/events', '/battles', '/sources', '/titles', '/graphs', '/quizzes', '/references'];
 
 function toSitemapEntries(basePath: string, entries: SitemapEntry[]): MetadataRoute.Sitemap {
