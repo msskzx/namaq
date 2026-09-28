@@ -1,15 +1,5 @@
 import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
-/**
- * Carried from neo4j/graphSeedData*.ts, whose node declaration is retired
- * with the rest. The catalog owns this subject's edges now, so they live
- * here or not at all. No batch has read this far into the nasab yet, so
- * every link stays on the legacy marker.
- *
- * Father of Mu'adh, Mu'awwidh and Khallad ibn Amr ibn al-Jumuh -- a companion
- * in his own right per the retired prisma/personSeedData6.ts entry (fought
- * and was killed at Uhud), not merely a father-only entry.
- */
 const amrIbnAlJumuh = {
   kind: 'PERSON',
   slug: 'amr-ibn-al-jumuh',
@@ -19,15 +9,43 @@ const amrIbnAlJumuh = {
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
-      value: 'عمرو بن الجموح بن زيد بن حرام بن كعب بن غنم بن كعب بن سلمة الأنصاري الخزرجي السلمي',
-      claims: legacyUnreviewed,
+      value:
+        'عمرو بن الجموح بن زيد بن حرام بن كعب بن غنم بن كعب بن سلمة بن سعد بن علي بن أسد بن ساردة بن تزيد بن جشم بن الخزرج الأنصاري، السلمي، الغنمي',
+      claims: ['amr-ibn-al-jumuh-siyar44/full-name'],
+    },
+    appearance: {
+      value: 'كان أعرج.',
+      claims: ['amr-ibn-al-jumuh-siyar44/appearance'],
+    },
+    virtues: {
+      value:
+        'سيد بني سلمة؛ أشهد على قومه بما أنزل على محمد؛ قال رسول الله صلى الله عليه وسلم: بل سيدكم الجعد الأبيض: عمرو بن الجموح؛ وقال لهم: لا عليكم أن لا تمنعوه، لعل الله يرزقه الشهادة؛ فقاتل حتى قتل يوم أحد، وكفن هو وابن عمرو بن حرام في كفن واحد.',
+      claims: ['amr-ibn-al-jumuh-siyar44/virtues'],
     },
   },
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
-    { type: 'SON', inverse: 'FATHER', to: 'al-jumuh-ibn-zayd', claims: legacyUnreviewed },
+    { type: 'SON', inverse: 'FATHER', to: 'al-jumuh-ibn-zayd', claims: ['amr-ibn-al-jumuh-siyar44/father'] },
+    {
+      type: 'FATHER',
+      inverse: 'SON',
+      to: 'muadh-ibn-amr-ibn-al-jumuh',
+      claims: ['amr-ibn-al-jumuh-siyar44/child-muadh'],
+    },
+    {
+      type: 'FATHER',
+      inverse: 'SON',
+      to: 'muawwidh-ibn-amr-ibn-al-jumuh',
+      claims: ['amr-ibn-al-jumuh-siyar44/child-muawwidh'],
+    },
+    {
+      type: 'FATHER',
+      inverse: 'SON',
+      to: 'khallad-ibn-amr-ibn-al-jumuh',
+      claims: ['amr-ibn-al-jumuh-siyar44/child-khallad'],
+    },
   ],
 } satisfies CatalogPerson;
 
