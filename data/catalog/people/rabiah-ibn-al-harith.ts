@@ -21,6 +21,12 @@ const rabiahIbnAlHarith = {
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'al-harith-ibn-abd-al-muttalib', claims: ['rabiah-ibn-al-harith-siyar46/father'] },
+    {
+      type: 'HALF_BROTHER',
+      inverse: 'HALF_BROTHER',
+      to: 'abu-sufyan-ibn-al-harith',
+      claims: ['abu-sufyan-ibn-al-harith-siyar32/half-brother-rabiah'],
+    },
   ],
 } satisfies CatalogPerson;
 
