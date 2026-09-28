@@ -17,9 +17,11 @@ const mistahIbnUthathah = {
   },
   titles: [
     // Carried from the retired seed entry; this entry never calls him صحابي outright.
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
-  relations: [],
+  relations: [
+    { type: 'SON', inverse: 'FATHER', to: 'uthathah-ibn-abbad', claims: ['mistah-siyar20/full-name'] },
+  ],
 } satisfies CatalogPerson;
 
 export default mistahIbnUthathah;

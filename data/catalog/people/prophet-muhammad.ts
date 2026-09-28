@@ -54,19 +54,19 @@ const prophetMuhammad = {
   // so they stay the seed's until a later one reaches the passages naming them.
   titles: [
     // Carried from the retired seed entry; no batch cites these yet.
-    { title: 'master-of-children-of-adam', claims: legacyUnreviewed },
-    { title: 'the-intercessor', claims: legacyUnreviewed },
-    { title: 'al-sabiqoon', claims: ['sira/al-sabiqoon-eight'] },
-    { title: 'prophet', claims: ['prophet/described-in-quran'] },
-    { title: 'messenger', claims: ['prophet/described-in-quran'] },
-    { title: 'the-chosen-one', claims: ['prophet/istifa'] },
-    { title: 'ahmad', claims: ['prophet/names'] },
-    { title: 'the-gatherer', claims: ['prophet/names'] },
-    { title: 'the-last', claims: ['prophet/names'] },
-    { title: 'prophet-of-mercy', claims: ['prophet/names'] },
-    { title: 'prophet-of-repentance', claims: ['prophet/names'] },
-    { title: 'truthful-trustworthy', claims: ['prophet/al-amin'] },
-    { title: 'seal-of-the-prophets', claims: ['prophet/names'] },
+    { title: 'master-of-children-of-adam', name: 'سيد ولد آدم', nameTransliterated: 'Master of the Children of Adam', claims: legacyUnreviewed },
+    { title: 'the-intercessor', name: 'الشفیع', nameTransliterated: 'The Intercessor', claims: legacyUnreviewed },
+    { title: 'al-sabiqoon', name: 'السابقون', nameTransliterated: 'Al-Sabiqoon', claims: ['sira/al-sabiqoon-eight'] },
+    { title: 'prophet', name: 'نبي', nameTransliterated: 'Prophet', claims: ['prophet/described-in-quran'] },
+    { title: 'messenger', name: 'رسول', nameTransliterated: 'Messenger', claims: ['prophet/described-in-quran'] },
+    { title: 'the-chosen-one', name: 'المصطفى', nameTransliterated: 'The Chosen One', claims: ['prophet/istifa'] },
+    { title: 'ahmad', name: 'أحمد', nameTransliterated: 'Ahmad', claims: ['prophet/names'] },
+    { title: 'the-gatherer', name: 'الحاشر', nameTransliterated: 'The Gatherer', claims: ['prophet/names'] },
+    { title: 'the-last', name: 'العاقب', nameTransliterated: 'The Last (Prophet)', claims: ['prophet/names'] },
+    { title: 'prophet-of-mercy', name: 'نبي الرحمة', nameTransliterated: 'Prophet of Mercy', claims: ['prophet/names'] },
+    { title: 'prophet-of-repentance', name: 'نبي التوبة', nameTransliterated: 'Prophet of Repentance', claims: ['prophet/names'] },
+    { title: 'truthful-trustworthy', name: 'الصادق الأمين', nameTransliterated: 'The Truthful and Trustworthy', claims: ['prophet/al-amin'] },
+    { title: 'seal-of-the-prophets', name: 'خاتم النبيين', nameTransliterated: 'Seal of the Prophets', claims: ['prophet/names'] },
   ],
 
   ayat: [

@@ -25,9 +25,9 @@ const khadijahBintKhuwaylid = {
   },
   titles: [
     // Carried from the retired seed entry; no batch cites these yet.
-    { title: 'companion', claims: legacyUnreviewed },
-    { title: 'mother-of-believers', claims: legacyUnreviewed },
-    { title: 'first-wife', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    { title: 'mother-of-believers', name: 'أم المؤمنين', nameTransliterated: 'Mother of the Believers', claims: legacyUnreviewed },
+    { title: 'first-wife', name: 'أول زوجات النبي', nameTransliterated: 'First Wife of the Prophet', claims: legacyUnreviewed },
   ],
   relations: [
     // Carried from neo4j/graphSeedData.ts, whose node declaration is retired

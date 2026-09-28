@@ -10,11 +10,17 @@ const jamal = {
   // which takes its year from the death it killed him in. A later entry may
   // date the battle outright -- al-Zubayr died there too -- and would then
   // cite it directly instead of through him.
-  fields: { engagement: { value: 'BATTLE', claims: legacyUnreviewed }, hijriYear: { value: 36, claims: ['talhah/death-year', 'talhah/jamal'] } },
+  fields: {
+    engagement: { value: 'BATTLE', claims: legacyUnreviewed },
+    hijriYear: { value: 36, claims: ['talhah/death-year', 'talhah/jamal'] },
+    // Carried from the retired prisma/battleSeedData.ts entry, uncited.
+    location: { value: 'البصرة', claims: legacyUnreviewed },
+  },
   participants: [
     // Carried from the old seed when these people left it; no batch places
     // them here yet.
     { person: 'ali-ibn-abi-talib', isMuslim: true, claims: legacyUnreviewed },
+    { person: 'aisha-bint-abi-bakr', isMuslim: true, claims: legacyUnreviewed },
     {
       person: 'saad-ibn-abi-waqqas',
       isMuslim: true,

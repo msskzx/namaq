@@ -43,12 +43,12 @@ const abuUbaydahIbnAlJarrah = {
   },
 
   titles: [
-    { title: 'amin-al-ummah', claims: ['abu-ubaydah/titles'] },
-    { title: 'companion', claims: ['abu-ubaydah/companion-of-prophet'] },
-    { title: 'al-sabiqoon', claims: ['abu-ubaydah/titles'] },
+    { title: 'amin-al-ummah', name: 'أمين الأمة', nameTransliterated: 'Amin al-Ummah', claims: ['abu-ubaydah/titles'] },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: ['abu-ubaydah/companion-of-prophet'] },
+    { title: 'al-sabiqoon', name: 'السابقون', nameTransliterated: 'Al-Sabiqoon', claims: ['abu-ubaydah/titles'] },
     // Rests on the testimony of paradise; this entry never enumerates the ten.
     // Sa'id ibn Zayd's entry carries the listing hadith, to be added with it.
-    { title: 'the-ten-promised-paradise', claims: ['abu-ubaydah/titles'] },
+    { title: 'the-ten-promised-paradise', name: 'العشرة المبشرون بالجنة', nameTransliterated: 'The Ten Promised Paradise', claims: ['abu-ubaydah/titles'] },
   ],
 
   ayat: [

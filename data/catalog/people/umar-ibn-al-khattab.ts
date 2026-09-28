@@ -23,11 +23,11 @@ const umarIbnAlKhattab = {
   },
   titles: [
     // Carried from the retired seed entry; no batch cites these yet.
-    { title: 'the-ten-promised-paradise', claims: legacyUnreviewed },
-    { title: 'caliph', claims: legacyUnreviewed },
-    { title: 'al-khulafa-al-rashidun', claims: legacyUnreviewed },
-    { title: 'companion', claims: legacyUnreviewed },
-    { title: 'al-farouq', claims: legacyUnreviewed },
+    { title: 'the-ten-promised-paradise', name: 'العشرة المبشرون بالجنة', nameTransliterated: 'The Ten Promised Paradise', claims: legacyUnreviewed },
+    { title: 'caliph', name: 'خليفة', nameTransliterated: 'Caliph', claims: legacyUnreviewed },
+    { title: 'al-khulafa-al-rashidun', name: 'الخلفاء الراشدون', nameTransliterated: 'The Rightly-Guided Caliphs', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    { title: 'al-farouq', name: 'الفاروق', nameTransliterated: 'Al-Farouq', claims: legacyUnreviewed },
   ],
   relations: [
     // Carried from neo4j/graphSeedData.ts, whose node declaration is retired

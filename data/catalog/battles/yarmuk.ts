@@ -8,7 +8,12 @@ const yarmuk = {
   // Carried from the old seed, which an earlier agent extracted from this same
   // work without citations. The entry does not date it, so the evidence is
   // still owed (AGENTS.md, "Historical evidence data").
-  fields: { engagement: { value: 'BATTLE', claims: legacyUnreviewed }, hijriYear: { value: 15, claims: legacyUnreviewed } },
+  fields: {
+    engagement: { value: 'BATTLE', claims: legacyUnreviewed },
+    hijriYear: { value: 15, claims: legacyUnreviewed },
+    // Carried from the retired prisma/battleSeedData.ts entry, uncited.
+    location: { value: 'الأردن', claims: legacyUnreviewed },
+  },
   participants: [
     // Carried from the old seed when these people left it; no batch places
     // them here yet.

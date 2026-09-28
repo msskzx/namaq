@@ -20,6 +20,8 @@ const khandaq = {
     hijriYear: { value: 5, claims: ['khandaq/year'] },
     muslimForceCount: { value: 3000, claims: ['khandaq/muslim-force'] },
     nonMuslimForceCount: { value: 10000, claims: ['khandaq/confederate-force'] },
+    // Carried from the retired prisma/battleSeedData.ts entry, uncited.
+    location: { value: 'المدينة المنورة', claims: legacyUnreviewed },
   },
   participants: [
     { person: 'saad-ibn-muadh', isMuslim: true, status: ['INJURED'], claims: ['saad-muadh/khandaq-wound'] },
@@ -64,6 +66,8 @@ const khandaq = {
       },
       claims: ['salman/khandaq'],
     },
+    // Carried from the old seed when he left it; no batch places him here yet.
+    { person: 'al-abbas-ibn-abd-al-muttalib', isMuslim: true, claims: legacyUnreviewed },
   ],
 } satisfies CatalogBattle;
 

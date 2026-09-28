@@ -34,11 +34,11 @@ const hamzahIbnAbdAlMuttalib = {
   // Not a title the book assigns him: it is what he called himself, fighting
   // with two swords in front of the Prophet at Uhud.
   titles: [
-    { title: 'asadu-allah', claims: ['hamzah/asadu-allah'] },
+    { title: 'asadu-allah', name: 'أسد الله', nameTransliterated: 'Lion of Allah', claims: ['hamzah/asadu-allah'] },
     // Two chains, each marked weak by al-Dhahabi himself: see
     // hamzah-ibn-abd-al-muttalib-siyar15/batch.json's reviewerNote.
-    { title: 'sayyid-al-shuhada', claims: ['hamzah-siyar15/sayyid-al-shuhada'] },
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'sayyid-al-shuhada', name: 'سيد الشهداء', nameTransliterated: 'Master of the Martyrs', claims: ['hamzah-siyar15/sayyid-al-shuhada'] },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
 
   relations: [

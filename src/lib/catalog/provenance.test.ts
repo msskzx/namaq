@@ -19,7 +19,7 @@ describe('catalogProvenance', () => {
   it('finds a value however deeply it is nested', () => {
     const subject = person({
       fields: { fullName: { value: 'فلان بن فلان', claims: ['pilot/one'] } },
-      titles: [{ title: 'companion', claims: legacyUnreviewed }],
+      titles: [{ title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed }],
       relations: [{ type: 'SON', to: 'other', claims: ['pilot/two'] }],
     });
 

@@ -36,8 +36,8 @@ const abuSalamah = {
   titles: [
     // Carried from the retired seed entry. The seeds gave every صحابي this
     // title without citing it.
-    { title: 'companion', claims: legacyUnreviewed },
-    { title: 'al-sabiqoon', claims: ['abu-salamah-siyar8/title-sabiqoon'] },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    { title: 'al-sabiqoon', name: 'السابقون', nameTransliterated: 'Al-Sabiqoon', claims: ['abu-salamah-siyar8/title-sabiqoon'] },
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abd-al-asad-ibn-hilal', claims: ['abu-salamah-siyar8/father'] },

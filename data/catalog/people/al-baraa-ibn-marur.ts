@@ -27,7 +27,7 @@ const alBaraaIbnMarur = {
   titles: [
     // Carried from the retired seed entry. The seeds gave every صحابي this
     // title without citing it.
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     // Carried from neo4j/graphSeedData*.ts, which stated these ties without

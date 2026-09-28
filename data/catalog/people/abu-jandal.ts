@@ -23,7 +23,7 @@ const abuJandal = {
   },
   titles: [
     // Carried from the retired seed.
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'suhail-ibn-amr', claims: ['abu-jandal-siyar23/father'] },

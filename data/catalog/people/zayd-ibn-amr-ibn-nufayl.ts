@@ -1,4 +1,4 @@
-import type { CatalogPerson } from '@/lib/catalog/types';
+import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
 /**
  * No seed file declares him, so this module is his only author. He is not a
@@ -8,6 +8,11 @@ import type { CatalogPerson } from '@/lib/catalog/types';
  * `hasProfile` is true because the chapter says enough about him to fill a
  * page: the ḥanīf who refused what was slaughtered for idols and saved the
  * buried daughters.
+ *
+ * neo4j/graphSeedData3.ts separately created a bare "zaid-ibn-amr" node for
+ * this same person -- same nasab, same declared son -- and gave that
+ * duplicate his edge to his own father. That node is retired; the edge is
+ * carried here instead, onto the correct slug.
  */
 const zaydIbnAmrIbnNufayl = {
   kind: 'PERSON',
@@ -24,7 +29,9 @@ const zaydIbnAmrIbnNufayl = {
     },
   },
   titles: [],
-  relations: [],
+  relations: [
+    { type: 'SON', inverse: 'FATHER', to: 'amr-ibn-nufayl', claims: legacyUnreviewed },
+  ],
 } satisfies CatalogPerson;
 
 export default zaydIbnAmrIbnNufayl;

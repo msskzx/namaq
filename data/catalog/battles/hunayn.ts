@@ -7,7 +7,12 @@ const hunayn = {
   slug: 'hunayn',
   name: 'غزوة حنين',
   nameTransliterated: 'Battle of Hunayn',
-  fields: { engagement: { value: 'GHAZWAH', claims: legacyUnreviewed }, hijriYear: { value: 8, claims: legacyUnreviewed } },
+  fields: {
+    engagement: { value: 'GHAZWAH', claims: legacyUnreviewed },
+    hijriYear: { value: 8, claims: legacyUnreviewed },
+    // Carried from the retired prisma/battleSeedData.ts entry, uncited.
+    location: { value: 'حنين', claims: legacyUnreviewed },
+  },
   participants: [
     { person: 'abu-ubaydah-ibn-al-jarrah', isMuslim: true, claims: legacyUnreviewed },
     // Carried from the old seed when these people left it; no batch places
@@ -16,6 +21,7 @@ const hunayn = {
     { person: 'ali-ibn-abi-talib', isMuslim: true, claims: legacyUnreviewed },
     { person: 'prophet-muhammad', isMuslim: true, claims: ['prophet/hunayn'] },
     { person: 'umar-ibn-al-khattab', isMuslim: true, claims: legacyUnreviewed },
+    { person: 'al-abbas-ibn-abd-al-muttalib', isMuslim: true, claims: legacyUnreviewed },
   ],
 } satisfies CatalogBattle;
 

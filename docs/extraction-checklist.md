@@ -246,8 +246,9 @@ full, so this document doesn't drift out of sync with the actual schema:
 
 ## Other precedent to know about before extracting family relations
 
-These are conventions established in `neo4j/graphSeedData*.ts` comments,
-worth knowing so a new agent doesn't reinvent or accidentally violate them:
+These are conventions the retired `neo4j/graphSeedData*.ts` files' comments
+established before they were migrated into `data/catalog/`, worth knowing so
+a new agent doesn't reinvent or accidentally violate them:
 
 - **Bidirectional edges are the convention.** A `FATHER`/`SON` (or any
   relation) pair declared only in one direction is a bug, not a stylistic

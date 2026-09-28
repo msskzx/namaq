@@ -43,15 +43,15 @@ const talhahIbnUbaydullah = {
   },
 
   titles: [
-    { title: 'al-sabiqoon', claims: ['talhah/al-sabiqoon-eight'] },
+    { title: 'al-sabiqoon', name: 'السابقون', nameTransliterated: 'Al-Sabiqoon', claims: ['talhah/al-sabiqoon-eight'] },
     // Shared with Abu Bakr: one rope, one name.
-    { title: 'al-qarinayn', claims: ['talhah/al-qarinayn'] },
-    { title: 'the-ten-promised-paradise', claims: ['talhah/titles'] },
-    { title: 'companion', claims: ['talhah/companion-of-prophet'] },
-    { title: 'al-sabiqoon', claims: ['talhah/titles'] },
+    { title: 'al-qarinayn', name: 'القرينان', nameTransliterated: 'Al-Qarinayn', claims: ['talhah/al-qarinayn'] },
+    { title: 'the-ten-promised-paradise', name: 'العشرة المبشرون بالجنة', nameTransliterated: 'The Ten Promised Paradise', claims: ['talhah/titles'] },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: ['talhah/companion-of-prophet'] },
+    { title: 'al-sabiqoon', name: 'السابقون', nameTransliterated: 'Al-Sabiqoon', claims: ['talhah/titles'] },
     // The entry never places him among the six, so the seed's assignment keeps
     // its marker rather than borrowing evidence from the rest of the entry.
-    { title: 'the-six-of-the-shura', claims: legacyUnreviewed },
+    { title: 'the-six-of-the-shura', name: 'الستة أهل الشورى', nameTransliterated: 'The Six of the Shura', claims: legacyUnreviewed },
   ],
 
   ayat: [

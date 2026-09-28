@@ -16,6 +16,8 @@ const banuQurayzah = {
   fields: {
     engagement: { value: 'GHAZWAH', claims: ['qurayzah/engagement'] },
     hijriYear: { value: 5, claims: legacyUnreviewed },
+    // Carried from the retired prisma/battleSeedData.ts entry, uncited.
+    location: { value: 'المدينة المنورة', claims: legacyUnreviewed },
   },
   participants: [
     { person: 'saad-ibn-muadh', isMuslim: true, status: ['MARTYRED'], claims: ['saad-muadh/qurayzah-judgement'] },
@@ -23,6 +25,7 @@ const banuQurayzah = {
     // them here yet.
     { person: 'ali-ibn-abi-talib', isMuslim: true, claims: legacyUnreviewed },
     { person: 'prophet-muhammad', isMuslim: true, claims: legacyUnreviewed },
+    { person: 'al-abbas-ibn-abd-al-muttalib', isMuslim: true, claims: legacyUnreviewed },
     {
       person: 'az-zubayr-ibn-al-awwam',
       isMuslim: true,

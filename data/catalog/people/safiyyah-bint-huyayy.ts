@@ -17,11 +17,20 @@ const safiyyahBintHuyayy = {
   name: 'صفية بنت حيي',
   nameTransliterated: 'Safiyyah bint Huyayy',
   hasProfile: true,
-  fields: {},
+  fields: {
+    // Carried from the retired prisma/personSeedData9.ts entry, uncited.
+    fullName: { value: 'صفية بنت حيي بن أخطب بن سعية', claims: legacyUnreviewed },
+    // Carried from the retired prisma/personSeedData.ts entry, uncited.
+    appearance: { value: 'وصفت بأنها كانت جميلة جداً.', claims: legacyUnreviewed },
+    virtues: {
+      value: 'أم المؤمنين، كانت من سبايا خيبر، أسلمت وتزوجها النبي، عرفت بحلمها وصبرها.',
+      claims: legacyUnreviewed,
+    },
+  },
   titles: [
     // Carried from the seed rows; the chapter calls her neither.
-    { title: 'mother-of-believers', claims: legacyUnreviewed },
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'mother-of-believers', name: 'أم المؤمنين', nameTransliterated: 'Mother of the Believers', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'WIFE', inverse: 'HUSBAND', to: 'prophet-muhammad', claims: ['safiyyah/freedom-as-dower'] },

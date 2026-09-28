@@ -20,10 +20,10 @@ const asmaBintAbiBakr = {
     sex: { value: 'FEMALE', claims: ['asma/sex'] },
   },
   titles: [
-    { title: 'dhat-an-nitaqayn', claims: ['asma/dhat-an-nitaqayn'] },
+    { title: 'dhat-an-nitaqayn', name: 'ذات النطاقين', nameTransliterated: 'Dhat an-Nitaqayn', claims: ['asma/dhat-an-nitaqayn'] },
     // Carried from the retired seed entry. The seeds gave every صحابي this
     // title without citing it.
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     // Carried from neo4j/graphSeedData*.ts, which stated these ties without

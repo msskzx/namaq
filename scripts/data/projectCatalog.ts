@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { PrismaClient } from '../../src/generated/prisma';
 import { loadCatalog } from '../../src/lib/catalog/loadCatalog';
 import { seedAuthoredPeople } from './seedAuthored';
-import type { Catalog, CatalogBattleFields, CatalogEventFields, CatalogPersonFields, Cited } from '../../src/lib/catalog/types';
+import type { Catalog, CatalogBattleFields, CatalogEventFields, CatalogPersonFields, CatalogTitleAssignment, Cited } from '../../src/lib/catalog/types';
 
 const apply = process.argv.includes('--apply');
 const prisma = new PrismaClient();
@@ -57,17 +57,18 @@ async function projectPeople(people: Catalog['people']) {
   for (const subject of people) {
     let live = await prisma.person.findUnique({ where: { slug: subject.slug } });
 
-    if (!live && subject.hasProfile && ownedByCatalog(subject.slug)) {
-      planned.push(`people/${subject.slug}: create`);
-      if (apply) {
-        live = await prisma.person.create({
-          data: { slug: subject.slug, name: subject.name, nameTransliterated: subject.nameTransliterated },
-        });
-      }
-    }
     if (!live) {
-      conflicts.push(`people/${subject.slug}: no row, and a seed file still authors them`);
-      continue;
+      // Graph-only: no Postgres row is ever expected for this slug.
+      if (!subject.hasProfile) continue;
+      if (!ownedByCatalog(subject.slug)) {
+        conflicts.push(`people/${subject.slug}: no row, and a seed file still authors them`);
+        continue;
+      }
+      planned.push(`people/${subject.slug}: create`);
+      if (!apply) continue;
+      live = await prisma.person.create({
+        data: { slug: subject.slug, name: subject.name, nameTransliterated: subject.nameTransliterated },
+      });
     }
 
     const set = settleFields(`people/${subject.slug}`, live, subject.fields);
@@ -166,6 +167,29 @@ async function retireStaleParticipations(catalog: Catalog) {
   }
 }
 
+const ensuredTitles = new Set<string>();
+
+/**
+ * A title has no existence apart from the people who hold it: its name
+ * travels with every assignment (CatalogTitleAssignment), so the row is
+ * upserted from whatever assignment is seen first, the same operation
+ * whether the row exists yet or not — there is no separate title list to
+ * keep in sync with what people actually declare.
+ */
+async function ensureTitle(assignment: CatalogTitleAssignment) {
+  if (ensuredTitles.has(assignment.title)) return;
+  ensuredTitles.add(assignment.title);
+  const data = { name: assignment.name, nameTransliterated: assignment.nameTransliterated };
+
+  const existing = await prisma.title.findUnique({ where: { slug: assignment.title } });
+  if (existing && existing.name === data.name && existing.nameTransliterated === data.nameTransliterated) return;
+
+  planned.push(`titles/${assignment.title}: ${existing ? 'update' : 'create'}`);
+  if (apply) {
+    await prisma.title.upsert({ where: { slug: assignment.title }, create: { slug: assignment.title, ...data }, update: data });
+  }
+}
+
 /**
  * Title assignments are additive, like every other value here: a title the
  * catalog declares is connected, and one the database holds that the catalog
@@ -183,20 +207,25 @@ async function projectTitles(subject: Catalog['people'][number]) {
   const declared = subject.titles.map((title) => title.title);
   const added = declared.filter((slug) => !held.has(slug));
   const extra = [...held].filter((slug) => !declared.includes(slug));
+  const owned = ownedByCatalog(subject.slug);
+
+  const relevant = owned ? subject.titles : subject.titles.filter((title) => added.includes(title.title));
+  for (const assignment of relevant) {
+    await ensureTitle(assignment);
+  }
 
   if (added.length > 0) planned.push(`people/${subject.slug}: hold ${added.join(', ')}`);
   if (extra.length > 0) {
-    const owned = ownedByCatalog(subject.slug);
     (owned ? planned : conflicts).push(
       owned
         ? `people/${subject.slug}: drop ${extra.join(', ')}`
         : `people/${subject.slug}.titles: database holds ${extra.join(', ')}, catalog does not`,
     );
   }
-  if (added.length === 0 && (extra.length === 0 || !ownedByCatalog(subject.slug))) return;
+  if (added.length === 0 && (extra.length === 0 || !owned)) return;
 
   if (apply) {
-    const titles = ownedByCatalog(subject.slug)
+    const titles = owned
       ? { set: declared.map((slug) => ({ slug })) }
       : { connect: added.map((slug) => ({ slug })) };
     await prisma.person.update({ where: { id: live.id }, data: { titles } });

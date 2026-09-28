@@ -44,14 +44,14 @@ const abdurRahmanIbnAwf = {
   },
 
   titles: [
-    { title: 'al-sabiqoon', claims: ['awf/al-sabiqoon-eight'] },
-    { title: 'the-ten-promised-paradise', claims: ['awf/titles'] },
-    { title: 'companion', claims: ['awf/companion-of-prophet'] },
-    { title: 'the-six-of-the-shura', claims: ['awf/titles'] },
+    { title: 'al-sabiqoon', name: 'السابقون', nameTransliterated: 'Al-Sabiqoon', claims: ['awf/al-sabiqoon-eight'] },
+    { title: 'the-ten-promised-paradise', name: 'العشرة المبشرون بالجنة', nameTransliterated: 'The Ten Promised Paradise', claims: ['awf/titles'] },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: ['awf/companion-of-prophet'] },
+    { title: 'the-six-of-the-shura', name: 'الستة أهل الشورى', nameTransliterated: 'The Six of the Shura', claims: ['awf/titles'] },
     // السابقين البدريين splits: السابقين is this title, which the seed held
     // but never gave him, and البدريين is his Badr participation, recorded
     // as a relation rather than repeated here.
-    { title: 'al-sabiqoon', claims: ['awf/titles'] },
+    { title: 'al-sabiqoon', name: 'السابقون', nameTransliterated: 'Al-Sabiqoon', claims: ['awf/titles'] },
   ],
 
   ayat: [

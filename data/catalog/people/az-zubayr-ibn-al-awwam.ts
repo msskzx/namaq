@@ -42,16 +42,16 @@ const azZubayrIbnAlAwwam = {
   },
 
   titles: [
-    { title: 'al-sabiqoon', claims: ['zubayr/al-sabiqoon-eight'] },
-    { title: 'the-ten-promised-paradise', claims: ['zubayr/titles'] },
-    { title: 'companion', claims: ['zubayr/companion-of-prophet'] },
+    { title: 'al-sabiqoon', name: 'السابقون', nameTransliterated: 'Al-Sabiqoon', claims: ['zubayr/al-sabiqoon-eight'] },
+    { title: 'the-ten-promised-paradise', name: 'العشرة المبشرون بالجنة', nameTransliterated: 'The Ten Promised Paradise', claims: ['zubayr/titles'] },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: ['zubayr/companion-of-prophet'] },
     // His own entry lists the title; chapter five of the sira gives where it
     // came from, the duel at Uhud and إن لكل نبي حواريا والزبير حواريي.
-    { title: 'hawari-al-ummah', claims: ['zubayr/titles', 'zubayr/uhud-hawari'] },
-    { title: 'the-six-of-the-shura', claims: ['zubayr/titles'] },
+    { title: 'hawari-al-ummah', name: 'حواري الأمة', nameTransliterated: 'Hawari al-Ummah', claims: ['zubayr/titles', 'zubayr/uhud-hawari'] },
+    { title: 'the-six-of-the-shura', name: 'الستة أهل الشورى', nameTransliterated: 'The Six of the Shura', claims: ['zubayr/titles'] },
     // Not in the old seed's list for him: the entry adds it in al-Dhahabi's
     // own voice, counting the four among السابقين الأولين.
-    { title: 'al-sabiqoon', claims: ['zubayr/titles'] },
+    { title: 'al-sabiqoon', name: 'السابقون', nameTransliterated: 'Al-Sabiqoon', claims: ['zubayr/titles'] },
   ],
 
   ayat: [

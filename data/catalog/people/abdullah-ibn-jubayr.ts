@@ -32,7 +32,7 @@ const abdullahIbnJubayr = {
   titles: [
     // Carried from the retired seed entry, like every other صحابي the seeds
     // gave this title without citing it.
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     // Carried from neo4j/graphSeedData10.ts, which stated the tie without

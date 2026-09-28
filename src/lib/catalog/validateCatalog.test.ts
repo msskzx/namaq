@@ -4,8 +4,6 @@ import { validateCatalog, type KnownSlugs } from './validateCatalog';
 
 const known: KnownSlugs = {
   people: new Set(['prophet-muhammad']),
-  titles: new Set(['companion']),
-  battles: new Set(['badr']),
   claims: new Set(['pilot/one']),
 };
 
@@ -26,7 +24,7 @@ describe('validateCatalog', () => {
   it('passes a catalog whose every reference resolves', () => {
     const subject = person({
       fields: { fullName: { value: 'فلان بن فلان', claims: ['pilot/one'] } },
-      titles: [{ title: 'companion', claims: ['pilot/one'] }],
+      titles: [{ title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: ['pilot/one'] }],
       relations: [{ type: 'COMPANION_OF', to: 'prophet-muhammad', claims: ['pilot/one'] }],
     });
 
@@ -102,12 +100,28 @@ describe('validateCatalog', () => {
   });
 
   it('reports every problem in one pass rather than stopping at the first', () => {
-    const subject = person({
-      titles: [{ title: 'unheard-of', claims: ['pilot/absent'] }],
+    const one = person({
+      slug: 'one',
+      titles: [{ title: 'unheard-of', name: 'اسم', nameTransliterated: 'Name', claims: ['pilot/absent'] }],
       relations: [{ type: 'SON', inverse: 'FATHER', to: 'nobody', claims: ['pilot/one'] }],
     });
+    const two = person({
+      slug: 'two',
+      titles: [{ title: 'unheard-of', name: 'اسم آخر', nameTransliterated: 'Other name', claims: legacyUnreviewed }],
+    });
 
-    expect(validateCatalog(catalog({ people: [subject] }), known)).toHaveLength(3);
+    expect(validateCatalog(catalog({ people: [one, two] }), known)).toHaveLength(3);
+  });
+
+  // A title has no module of its own, so its name travels with every
+  // assignment — two subjects declaring the same slug must agree on it.
+  it('rejects two subjects who disagree on what a title says', () => {
+    const one = person({ slug: 'one', titles: [{ title: 'poet', name: 'شاعر', nameTransliterated: 'Poet', claims: legacyUnreviewed }] });
+    const two = person({ slug: 'two', titles: [{ title: 'poet', name: 'شاعر', nameTransliterated: 'The Poet', claims: legacyUnreviewed }] });
+
+    expect(validateCatalog(catalog({ people: [one, two] }), known)).toEqual([
+      { path: 'people/two.titles.poet', message: 'disagrees with people/one on the name of title poet' },
+    ]);
   });
 
   // The projector writes both directions, and SON's reciprocal is FATHER or

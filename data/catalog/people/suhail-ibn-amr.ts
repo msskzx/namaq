@@ -28,7 +28,7 @@ const suhailIbnAmr = {
   },
   titles: [
     // Carried from the retired seed.
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'amr-ibn-abd-shams', claims: ['suhail-ibn-amr-siyar25/father'] },

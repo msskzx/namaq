@@ -46,6 +46,8 @@ const hudaybiyyah = {
       summary: { value: 'وَبَايَعَ تَحْتَ الشَّجَرَةِ.', claims: ['al-baraa-ibn-malik-siyar26/hudaybiyyah'] },
       claims: ['al-baraa-ibn-malik-siyar26/hudaybiyyah'],
     },
+    // Carried from the old seed when he left it; no batch places him here yet.
+    { person: 'al-abbas-ibn-abd-al-muttalib', isMuslim: true, claims: legacyUnreviewed },
   ],
 } satisfies CatalogBattle;
 

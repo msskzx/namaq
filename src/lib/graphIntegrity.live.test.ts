@@ -8,8 +8,7 @@
 
 import { afterAll, describe, expect, it } from 'vitest';
 import neo4j from 'neo4j-driver';
-import { peopleRelationsQueries } from '../../neo4j/graphSeedData';
-import { findSeedRelationDrift, parseSeedRelations } from '../../neo4j/seedRelations';
+import { findSeedRelationDrift } from '../../neo4j/seedRelations';
 import { loadCatalog } from './catalog/loadCatalog';
 import { catalogRelations } from './catalog/relations';
 import { excludeKnownHomonyms, findDuplicateLabelGroups, findIsolatedNodes } from './graphIntegrity';
@@ -27,17 +26,14 @@ const hasNeo4jConfig = Boolean(process.env.NEO4J_URI && process.env.NEO4J_USERNA
 // unexpected collision that happens to reuse one of these slugs still
 // surfaces.
 const KNOWN_HOMONYM_GROUPS: ReadonlySet<string>[] = [
-  // neo4j/graphSeedData3.ts:72 vs graphSeedData2.ts:9 -- Hashim ibn Abd
-  // Manaf of Banu Hashim (the Prophet's great-grandfather) vs of Banu Abd
-  // al-Dar ("al-Abdari").
+  // Hashim ibn Abd Manaf of Banu Hashim (the Prophet's great-grandfather)
+  // vs of Banu Abd al-Dar ("al-Abdari").
   new Set(['person:hashim-ibn-abd-manaf', 'person:hashim-ibn-abd-manaf-al-abdari']),
-  // neo4j/graphSeedData4.ts:18-22 -- the Quraysh ancestor Malik ibn
-  // al-Nadr vs an unrelated Ansari (Banu al-Najjar) figure of the same
-  // name, father of al-Baraa ibn Malik.
+  // The Quraysh ancestor Malik ibn al-Nadr vs an unrelated Ansari (Banu
+  // al-Najjar) figure of the same name, father of al-Baraa ibn Malik.
   new Set(['person:malik-ibn-an-nadr', 'person:malik-ibn-an-nadr-al-najjari']),
-  // neo4j/graphSeedData5.ts:27-32 -- Zayd ibn Haram of Banu al-Najjar
-  // (ancestor of al-Baraa ibn Malik) vs a different Khazraji Zayd ibn
-  // Haram of Banu Salamah (father of al-Jumuh).
+  // Zayd ibn Haram of Banu al-Najjar (ancestor of al-Baraa ibn Malik) vs a
+  // different Khazraji Zayd ibn Haram of Banu Salamah (father of al-Jumuh).
   new Set(['person:zayd-ibn-haram', 'person:zayd-ibn-haram-ibn-kaab']),
   // Two different people named Abdullah ibn al-Harith, distinguished by
   // their own father's name in the slug itself (ibn-abd-al-muttalib vs
@@ -75,9 +71,7 @@ describe.skipIf(!hasNeo4jConfig)('unified graph connectivity (live Neo4j)', () =
         to: record.get('target') as string,
         type: record.get('type') as string,
       }));
-      // Person relations have two authors while the migration is unfinished:
-      // the graph seeds, and the catalog for subjects a batch has covered.
-      const expected = [...parseSeedRelations(peopleRelationsQueries), ...catalogRelations(await loadCatalog())];
+      const expected = catalogRelations(await loadCatalog());
       const drift = findSeedRelationDrift(expected, deployed);
       expect(drift).toEqual({ missing: [], unexpected: [] });
     } finally {

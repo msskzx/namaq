@@ -21,7 +21,7 @@ const salimMawlaAbiHudhayfah = {
   },
   titles: [
     // Carried from the seed. This entry never calls him صحابي outright.
-    { title: 'companion', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
     // Musa ibn Uqbah's own account: the wala' runs to Abu Hudhayfah even

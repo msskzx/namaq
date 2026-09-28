@@ -18,10 +18,21 @@ const alHusaynIbnAli = {
     birthYearHijri: { value: '4 AH', claims: ['husayn/birth-year'] },
     // Carried from the seed rows.
     fullName: { value: 'الحسين بن علي بن أبي طالب الهاشمي القرشي', claims: legacyUnreviewed },
+    // Carried from the retired prisma/personSeedData.ts entry, uncited.
+    appearance: { value: 'كان يشبه النبي صلى الله عليه وسلم.', claims: legacyUnreviewed },
+    virtues: {
+      value: 'سبط النبي وريحانته، سيد شباب أهل الجنة، استشهد في كربلاء دفاعاً عن الحق.',
+      claims: legacyUnreviewed,
+    },
   },
   titles: [
     // Carried from the seed rows; this chapter records only his birth.
-    { title: 'sayyid-shabab-ahl-al-jannah', claims: legacyUnreviewed },
+    { title: 'sayyid-shabab-ahl-al-jannah', name: 'سيد شباب أهل الجنة', nameTransliterated: 'Master of the Youth of Paradise', claims: legacyUnreviewed },
+  ],
+  // Carried from the retired prisma/personSeedData.ts entry, uncited.
+  ayat: [
+    { surah: 76, ayah: 8, claims: legacyUnreviewed },
+    { surah: 33, ayah: 33, claims: legacyUnreviewed },
   ],
   relations: [
     // Carried from the graph seed.

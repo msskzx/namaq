@@ -30,15 +30,15 @@ const abuBakrAsSiddiq = {
   // أبو بكر الصديق.
   titles: [
     // Carried from the retired seed entry; no batch cites these yet.
-    { title: 'the-ten-promised-paradise', claims: legacyUnreviewed },
-    { title: 'caliph', claims: legacyUnreviewed },
-    { title: 'al-khulafa-al-rashidun', claims: legacyUnreviewed },
-    { title: 'companion', claims: legacyUnreviewed },
-    { title: 'siddiq-al-ummah', claims: ['abu-bakr/siddiq'] },
-    { title: 'al-sabiqoon', claims: ['abu-bakr/al-sabiqoon-eight'] },
+    { title: 'the-ten-promised-paradise', name: 'العشرة المبشرون بالجنة', nameTransliterated: 'The Ten Promised Paradise', claims: legacyUnreviewed },
+    { title: 'caliph', name: 'خليفة', nameTransliterated: 'Caliph', claims: legacyUnreviewed },
+    { title: 'al-khulafa-al-rashidun', name: 'الخلفاء الراشدون', nameTransliterated: 'The Rightly-Guided Caliphs', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    { title: 'siddiq-al-ummah', name: 'صديق الأمة', nameTransliterated: 'Siddiq al-Ummah', claims: ['abu-bakr/siddiq'] },
+    { title: 'al-sabiqoon', name: 'السابقون', nameTransliterated: 'Al-Sabiqoon', claims: ['abu-bakr/al-sabiqoon-eight'] },
     // Not a title he holds alone: Nawfal tied him and Talhah in one rope, and
     // the pair got one name out of it. Both modules carry it.
-    { title: 'al-qarinayn', claims: ['abu-bakr/al-qarinayn'] },
+    { title: 'al-qarinayn', name: 'القرينان', nameTransliterated: 'Al-Qarinayn', claims: ['abu-bakr/al-qarinayn'] },
   ],
 
   // Three verses for one occasion: the chapter quotes الروم ٢-٤ whole as what

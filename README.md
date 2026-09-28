@@ -59,7 +59,7 @@ Open the graph → explore and filter relationships → open a person's profile 
 - Profiles show the evidence behind what they state: each claim with its citations, review status and a short Arabic excerpt, and the complete entry from the source work, one printed page at a time with the edition's footnotes kept apart from the author's text. The book and page are in the URL, so a citation links to the page it cites. Review status is shown to the reader and never decides what is served, so a Not reviewed claim is visible and labelled.
 - The References page links to the Archive.org scan of the third edition and its two searchable OCR text files, labeled as aids whose footnotes should be checked against the scan.
 - Evidence attaches to a subject's kind and slug rather than to a profile row, so titles, battles, events and graph-only people can carry citations. `GET /api/subjects/[kind]/[slug]/references` serves them; in the graph workspace a subject with a profile shows no evidence control (its evidence is on the profile), and a subject without one expands a compact list in the panel, or says it has no evidence.
-- Abu Ubaydah ibn al-Jarrah, Talhah ibn Ubaydullah and al-Zubayr ibn al-Awwam are authored entirely in the catalog: their fields, title assignments, battle participations and their cited relation to their father come from `data/catalog/`, written by `npm run catalog:project` and `npm run catalog:project-graph`, and their old seed entries are gone, Qur'an links included. Every other person still comes from the seed files, so both paths are live at once.
+- Every person, title, battle and event is authored in `data/catalog/`: fields, title assignments, battle participations, Qur'an links, and person relations, written to PostgreSQL and Neo4j by `npm run catalog:project` and `npm run catalog:project-graph`. There are no seed files left under `prisma/` or `neo4j/`.
 - Historical data is authored as files under `data/history/batches/`: source editions, the source account's Markdown pages with anchored paragraphs, and claims with their citations. `npm run history:validate` checks that every citation names a declared source, carries a working extraction link and an Arabic excerpt, and points at a passage some page declares. `npm run history:import` refuses to write unless the files match the revision that was approved, and upserts so a retry cannot duplicate anything. `npm run history:extract` pulls an entry from Shamela into that shape.
 - Person records use stable slugs, making graph nodes, search results, and detail pages linkable.
 
@@ -121,18 +121,17 @@ npm install
 npm run db:generate
 npm run db:push
 
-# Seed PostgreSQL content in dependency order.
-npm run seed:titles
-npm run seed:people
-npm run seed:battles
-npm run seed:events
+# Seed PostgreSQL content. People, titles, battles and events have no seed
+# files of their own any more — catalog:project creates or updates every one
+# of them from data/catalog/ outright.
+npm run catalog:project -- --apply
 
-# Create Neo4j nodes for any Postgres-only profiles (e.g. newly seeded
-# companions) before seeding relations that reference them by slug.
+# Create Neo4j nodes for any Postgres-only profiles before writing the
+# relationship graph, which reads them by slug.
 npm run people:sync -- --apply
 
-# Seed the relationship graph.
-npm run seed:graph
+# Write every catalog person's node and relations into Neo4j.
+npm run catalog:project-graph -- --apply
 # Create Neo4j :Battle/:Title/:Event nodes and their relationships from the
 # PostgreSQL rosters.
 npm run battles:sync -- --apply
@@ -151,7 +150,10 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000). Use `npm run build` for a production build and `npx tsc --noEmit` for a TypeScript check.
 
-Graph seed files live in `neo4j/`; the main seed entry point is `neo4j/graphSeed.ts`.
+The graph has no seed files of its own; every Person node and relation comes
+from `data/catalog/` via `catalog:project-graph`, and `neo4j/` holds the sync
+and drift-checking scripts that keep Neo4j matching PostgreSQL and the
+catalog.
 
 ## Removed from scope
 
@@ -204,11 +206,6 @@ republishing its pages.
 | `npm run build` | Create a production build |
 | `npm run db:generate` | Generate the Prisma client |
 | `npm run db:push` | Apply the Prisma schema to the configured database |
-| `npm run seed:people` | Upsert PostgreSQL person records |
-| `npm run seed:titles` | Seed titles used by people |
-| `npm run seed:battles` | Seed battle records |
-| `npm run seed:events` | Seed events and connect related records |
-| `npm run seed:graph` | Seed or update the Neo4j relationship graph |
 | `npm run people:sync` / `-- --apply` | Report (or apply) PostgreSQL → Neo4j drift for people |
 | `npm run people:sync-companions` / `-- --apply` | Report (or create) missing `COMPANION_OF`/`ACCOMPANIED_BY` edges from every companion to the Prophet |
 | `npm run battles:sync` / `-- --apply` | Report (or apply) PostgreSQL → Neo4j drift for battles and participations |

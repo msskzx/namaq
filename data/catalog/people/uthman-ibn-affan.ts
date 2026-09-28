@@ -24,13 +24,13 @@ const uthmanIbnAffan = {
   },
   titles: [
     // Carried from the retired seed entry; no batch cites these yet.
-    { title: 'the-ten-promised-paradise', claims: legacyUnreviewed },
-    { title: 'the-six-of-the-shura', claims: legacyUnreviewed },
-    { title: 'caliph', claims: legacyUnreviewed },
-    { title: 'al-khulafa-al-rashidun', claims: legacyUnreviewed },
-    { title: 'companion', claims: legacyUnreviewed },
-    { title: 'dhu-al-nurayn', claims: legacyUnreviewed },
-    { title: 'al-sabiqoon', claims: ['uthman/al-sabiqoon-eight'] },
+    { title: 'the-ten-promised-paradise', name: 'العشرة المبشرون بالجنة', nameTransliterated: 'The Ten Promised Paradise', claims: legacyUnreviewed },
+    { title: 'the-six-of-the-shura', name: 'الستة أهل الشورى', nameTransliterated: 'The Six of the Shura', claims: legacyUnreviewed },
+    { title: 'caliph', name: 'خليفة', nameTransliterated: 'Caliph', claims: legacyUnreviewed },
+    { title: 'al-khulafa-al-rashidun', name: 'الخلفاء الراشدون', nameTransliterated: 'The Rightly-Guided Caliphs', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    { title: 'dhu-al-nurayn', name: 'ذو النورين', nameTransliterated: 'Dhu al-Nurayn', claims: legacyUnreviewed },
+    { title: 'al-sabiqoon', name: 'السابقون', nameTransliterated: 'Al-Sabiqoon', claims: ['uthman/al-sabiqoon-eight'] },
   ],
   // Both daughters, in the order the sira gives them: Ruqayyah to Abyssinia
   // and dying during Badr, then Umm Kulthum in the same year.

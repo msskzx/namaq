@@ -1,0 +1,29 @@
+import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
+
+/**
+ * Carried from neo4j/graphSeedData*.ts, whose node declaration is retired
+ * with the rest. The catalog owns this subject's edges now, so they live
+ * here or not at all. No batch has read this far into the nasab yet, so
+ * every link stays on the legacy marker.
+ */
+const abuDujanahAlAnsari = {
+  kind: 'PERSON',
+  slug: 'abu-dujanah-al-ansari',
+  name: 'أبو دجانة الأنصاري',
+  nameTransliterated: 'Abu Dujanah al-Ansari',
+  hasProfile: true,
+  fields: {
+    fullName: {
+      value: 'سماك بن خرشة بن لوذان بن عبد ود بن زيد الأنصاري الساعدي',
+      claims: legacyUnreviewed,
+    },
+  },
+  titles: [
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+  ],
+  relations: [
+    { type: 'SON', inverse: 'FATHER', to: 'khirashah-ibn-lawdhan', claims: legacyUnreviewed },
+  ],
+} satisfies CatalogPerson;
+
+export default abuDujanahAlAnsari;
