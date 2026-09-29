@@ -14,34 +14,118 @@
       "url": "https://shamela.ws/index.php/book/10906",
       "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
       "volumes": [
-        { "number": 1, "name": "السيرة النبوية ج١" },
-        { "number": 2, "name": "السيرة النبوية ج٢" },
-        { "number": 3, "name": "سيرة الخلفاء الراشدين" },
-        { "number": 4, "name": "سير أعلام النبلاء ج١" },
-        { "number": 5, "name": "سير أعلام النبلاء ج٢" },
-        { "number": 6, "name": "سير أعلام النبلاء ج٣" },
-        { "number": 7, "name": "سير أعلام النبلاء ج٤" },
-        { "number": 8, "name": "سير أعلام النبلاء ج٥" },
-        { "number": 9, "name": "سير أعلام النبلاء ج٦" },
-        { "number": 10, "name": "سير أعلام النبلاء ج٧" },
-        { "number": 11, "name": "سير أعلام النبلاء ج٨" },
-        { "number": 12, "name": "سير أعلام النبلاء ج٩" },
-        { "number": 13, "name": "سير أعلام النبلاء ج١٠" },
-        { "number": 14, "name": "سير أعلام النبلاء ج١١" },
-        { "number": 15, "name": "سير أعلام النبلاء ج١٢" },
-        { "number": 16, "name": "سير أعلام النبلاء ج١٣" },
-        { "number": 17, "name": "سير أعلام النبلاء ج١٤" },
-        { "number": 18, "name": "سير أعلام النبلاء ج١٥" },
-        { "number": 19, "name": "سير أعلام النبلاء ج١٦" },
-        { "number": 20, "name": "سير أعلام النبلاء ج١٧" },
-        { "number": 21, "name": "سير أعلام النبلاء ج١٨" },
-        { "number": 22, "name": "سير أعلام النبلاء ج١٩" },
-        { "number": 23, "name": "سير أعلام النبلاء ج٢٠" },
-        { "number": 24, "name": "سير أعلام النبلاء ج٢١" },
-        { "number": 25, "name": "سير أعلام النبلاء ج٢٢" },
-        { "number": 26, "name": "سير أعلام النبلاء ج٢٣" },
-        { "number": 27, "name": "الفهارس ج١" },
-        { "number": 28, "name": "الفهارس ج٢" }
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
       ]
     }
   ],
@@ -53,7 +137,12 @@
       "extractionUrl": "https://shamela.ws/book/10906/1675",
       "accessedAt": "2026-09-28",
       "volumeNumber": 4,
-      "notInSource": ["kunya", "appearance", "wives", "siblings"],
+      "notInSource": [
+        "kunya",
+        "appearance",
+        "wives",
+        "siblings"
+      ],
       "pages": [
         {
           "sequence": 1,
@@ -61,10 +150,18 @@
           "bodyFile": "accounts/muadh-ibn-amr-ibn-al-jumuh/001.md",
           "extractionUrl": "https://shamela.ws/book/10906/1675",
           "passages": [
-            { "anchor": "249-p4" },
-            { "anchor": "249-p5" },
-            { "anchor": "249-p6" },
-            { "anchor": "249-p7" }
+            {
+              "anchor": "249-p4"
+            },
+            {
+              "anchor": "249-p5"
+            },
+            {
+              "anchor": "249-p6"
+            },
+            {
+              "anchor": "249-p7"
+            }
           ]
         },
         {
@@ -73,25 +170,63 @@
           "bodyFile": "accounts/muadh-ibn-amr-ibn-al-jumuh/002.md",
           "extractionUrl": "https://shamela.ws/book/10906/1676",
           "passages": [
-            { "anchor": "250-p1" },
-            { "anchor": "250-p2" },
-            { "anchor": "250-p3" },
-            { "anchor": "250-p4" },
-            { "anchor": "250-p5" },
-            { "anchor": "250-p6" },
-            { "anchor": "250-p7" },
-            { "anchor": "250-p8" },
-            { "anchor": "250-p9" },
-            { "anchor": "250-p10" },
-            { "anchor": "250-p11" },
-            { "anchor": "250-p12" },
-            { "anchor": "250-p13" },
-            { "anchor": "250-p14" },
-            { "anchor": "250-p15" },
-            { "anchor": "250-p16" },
-            { "anchor": "250-p17" },
-            { "anchor": "250-p18" },
-            { "anchor": "250-p19" }
+            {
+              "anchor": "250-p1"
+            },
+            {
+              "anchor": "250-p2"
+            },
+            {
+              "anchor": "250-p3"
+            },
+            {
+              "anchor": "250-p4"
+            },
+            {
+              "anchor": "250-p5"
+            },
+            {
+              "anchor": "250-p6"
+            },
+            {
+              "anchor": "250-p7"
+            },
+            {
+              "anchor": "250-p8"
+            },
+            {
+              "anchor": "250-p9"
+            },
+            {
+              "anchor": "250-p10"
+            },
+            {
+              "anchor": "250-p11"
+            },
+            {
+              "anchor": "250-p12"
+            },
+            {
+              "anchor": "250-p13"
+            },
+            {
+              "anchor": "250-p14"
+            },
+            {
+              "anchor": "250-p15"
+            },
+            {
+              "anchor": "250-p16"
+            },
+            {
+              "anchor": "250-p17"
+            },
+            {
+              "anchor": "250-p18"
+            },
+            {
+              "anchor": "250-p19"
+            }
           ]
         },
         {
@@ -100,13 +235,27 @@
           "bodyFile": "accounts/muadh-ibn-amr-ibn-al-jumuh/003.md",
           "extractionUrl": "https://shamela.ws/book/10906/1677",
           "passages": [
-            { "anchor": "251-p1" },
-            { "anchor": "251-p2" },
-            { "anchor": "251-p3" },
-            { "anchor": "251-p4" },
-            { "anchor": "251-p5" },
-            { "anchor": "251-p6" },
-            { "anchor": "251-p7" }
+            {
+              "anchor": "251-p1"
+            },
+            {
+              "anchor": "251-p2"
+            },
+            {
+              "anchor": "251-p3"
+            },
+            {
+              "anchor": "251-p4"
+            },
+            {
+              "anchor": "251-p5"
+            },
+            {
+              "anchor": "251-p6"
+            },
+            {
+              "anchor": "251-p7"
+            }
           ]
         }
       ]
@@ -275,5 +424,11 @@
         }
       ]
     }
-  ]
+  ],
+  "approval": {
+    "revision": "1cdc82cf1173c76e",
+    "approvedAt": "2026-09-28",
+    "approvedBy": "msskzx",
+    "note": "Approved for publication. Claims are Not reviewed: the entries are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+  }
 }

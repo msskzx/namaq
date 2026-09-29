@@ -137,7 +137,11 @@
       "extractionUrl": "https://shamela.ws/book/10906/1682",
       "accessedAt": "2026-09-28",
       "volumeNumber": 4,
-      "notInSource": ["kunya", "wives", "siblings"],
+      "notInSource": [
+        "kunya",
+        "wives",
+        "siblings"
+      ],
       "pages": [
         {
           "sequence": 1,
@@ -322,5 +326,11 @@
         }
       ]
     }
-  ]
+  ],
+  "approval": {
+    "revision": "07d3681b8eaf2595",
+    "approvedAt": "2026-09-28",
+    "approvedBy": "msskzx",
+    "note": "Approved for publication. Claims are Not reviewed: the entries are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+  }
 }
