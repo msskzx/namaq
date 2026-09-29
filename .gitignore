@@ -42,3 +42,8 @@ next-env.d.ts
 
 /src/generated/prisma
 .prettierrc
+
+# agent worktrees and local scratch config (see AGENTS.md "Git")
+/.claude/worktrees
+/.codex/worktrees
+/.opencode
