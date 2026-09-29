@@ -31,6 +31,7 @@
     "history:validate": "tsx scripts/history/validateBatch.ts",
     "history:import": "tsx scripts/history/importBatch.ts",
     "history:review": "tsx scripts/history/reviewBatch.ts",
+    "history:approve": "tsx scripts/history/approveBatch.ts",
     "history:extract": "tsx scripts/history/extractShamelaEntry.ts",
     "catalog:validate": "tsx scripts/data/validateCatalog.ts",
     "catalog:project": "tsx scripts/data/projectCatalog.ts",
