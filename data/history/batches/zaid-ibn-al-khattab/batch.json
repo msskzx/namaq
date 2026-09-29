@@ -1,0 +1,553 @@
+{
+  "slug": "zaid-ibn-al-khattab",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaid-ibn-al-khattab",
+      "extractionUrl": "https://shamela.ws/book/10906/1723",
+      "accessedAt": "2026-09-29",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "297",
+          "bodyFile": "accounts/zaid-ibn-al-khattab/001.md",
+          "notesFile": "accounts/zaid-ibn-al-khattab/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1723",
+          "passages": [
+            {
+              "anchor": "297-p11"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "298",
+          "bodyFile": "accounts/zaid-ibn-al-khattab/002.md",
+          "notesFile": "accounts/zaid-ibn-al-khattab/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1724",
+          "passages": [
+            {
+              "anchor": "298-p1"
+            },
+            {
+              "anchor": "298-p2"
+            },
+            {
+              "anchor": "298-p3"
+            },
+            {
+              "anchor": "298-p4"
+            },
+            {
+              "anchor": "298-p5"
+            },
+            {
+              "anchor": "298-p6"
+            },
+            {
+              "anchor": "298-p7"
+            },
+            {
+              "anchor": "298-p8"
+            },
+            {
+              "anchor": "298-p9"
+            },
+            {
+              "anchor": "298-p10"
+            },
+            {
+              "anchor": "298-p11"
+            },
+            {
+              "anchor": "298-p12"
+            },
+            {
+              "anchor": "298-p13"
+            },
+            {
+              "anchor": "298-p14"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "printedPage": "299",
+          "bodyFile": "accounts/zaid-ibn-al-khattab/003.md",
+          "notesFile": "accounts/zaid-ibn-al-khattab/003.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1725",
+          "passages": [
+            {
+              "anchor": "299-p1"
+            },
+            {
+              "anchor": "299-p2"
+            }
+          ]
+        }
+      ],
+      "volumeNumber": 4,
+      "notInSource": [
+        "wives"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "zaid-ibn-al-khattab-siyar57/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaid-ibn-al-khattab",
+      "field": "fullName",
+      "assertion": "زيد بن الخطاب بن نفيل بن عبد العزى بن رياح العدوي",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "297-p11",
+          "volume": "4",
+          "pageReference": "297",
+          "extractionUrl": "https://shamela.ws/book/10906/1723",
+          "excerptArabic": "٥٧ - زَيْدُ بنُ الخَطَّابِ بنِ نُفَيْلِ بنِ عَبْدِ العُزَّى بنِ رِيَاحٍ العَدَوِيُّ *",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "zaid-ibn-al-khattab-siyar57/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaid-ibn-al-khattab",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "al-khattab-ibn-nufayl",
+      "assertion": "زيد بن الخطاب بن نفيل، فالخطاب بن نفيل أبوه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "297-p11",
+          "volume": "4",
+          "pageReference": "297",
+          "extractionUrl": "https://shamela.ws/book/10906/1723",
+          "excerptArabic": "٥٧ - زَيْدُ بنُ الخَطَّابِ بنِ نُفَيْلِ بنِ عَبْدِ العُزَّى بنِ رِيَاحٍ العَدَوِيُّ *",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "zaid-ibn-al-khattab-siyar57/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaid-ibn-al-khattab",
+      "field": "kunya",
+      "assertion": "أبو عبد الرحمن",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "298-p1",
+          "volume": "4",
+          "pageReference": "298",
+          "extractionUrl": "https://shamela.ws/book/10906/1724",
+          "excerptArabic": "السَّيِّدُ، الشَّهِيْدُ، المُجَاهِدُ، التَّقِيُّ، أَبُو عَبْدِ الرَّحْمَنِ القُرَشِيُّ، العَدَوِيُّ، أَخُو أَمِيْرِ المُؤْمِنِيْنَ عُمَرَ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "zaid-ibn-al-khattab-siyar57/half-brother-umar",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaid-ibn-al-khattab",
+      "relationshipType": "HALF_BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "umar-ibn-al-khattab",
+      "assertion": "زيد أخو عمر بن الخطاب، يجمعهما أبوهما الخطاب بن نفيل، ولم يسم المصدر أما تجمعهما.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "298-p1",
+          "volume": "4",
+          "pageReference": "298",
+          "extractionUrl": "https://shamela.ws/book/10906/1724",
+          "excerptArabic": "أَخُو أَمِيْرِ المُؤْمِنِيْنَ عُمَرَ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "zaid-ibn-al-khattab-siyar57/appearance",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaid-ibn-al-khattab",
+      "field": "appearance",
+      "assertion": "كان أسمر، طويلاً جداً.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "298-p3",
+          "volume": "4",
+          "pageReference": "298",
+          "extractionUrl": "https://shamela.ws/book/10906/1724",
+          "excerptArabic": "وَكَانَ أَسْمَرَ، طَوِيْلاً جِدّاً",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "zaid-ibn-al-khattab-siyar57/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaid-ibn-al-khattab",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "assertion": "شهد بدراً والمشاهد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "298-p3",
+          "volume": "4",
+          "pageReference": "298",
+          "extractionUrl": "https://shamela.ws/book/10906/1724",
+          "excerptArabic": "شَهِدَ بَدْراً وَالمَشَاهِدَ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "zaid-ibn-al-khattab-siyar57/pact-brother-maan",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaid-ibn-al-khattab",
+      "relationshipType": "PACT_BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "maan-ibn-adi",
+      "assertion": "آخى النبي صلى الله عليه وسلم بينه وبين معن بن عدي العجلاني.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "298-p3",
+          "volume": "4",
+          "pageReference": "298",
+          "extractionUrl": "https://shamela.ws/book/10906/1724",
+          "excerptArabic": "وَكَانَ قَدْ آخَى النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بَيْنَهُ وَبَيْنَ مَعْنِ بنِ عَدِيٍّ العَجْلاَنِيِّ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "zaid-ibn-al-khattab-siyar57/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaid-ibn-al-khattab",
+      "field": "titles",
+      "assertion": "صحابي: شهد بدراً والمشاهد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "298-p3",
+          "volume": "4",
+          "pageReference": "298",
+          "extractionUrl": "https://shamela.ws/book/10906/1724",
+          "excerptArabic": "شَهِدَ بَدْراً وَالمَشَاهِدَ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "zaid-ibn-al-khattab-siyar57/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaid-ibn-al-khattab",
+      "field": "sex",
+      "assertion": "MALE — فعل مذكر: قَاتَلَ … قُتِلَ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "298-p6",
+          "volume": "4",
+          "pageReference": "298",
+          "extractionUrl": "https://shamela.ws/book/10906/1724",
+          "excerptArabic": "ثُمَّ قَاتَلَ حَتَّى قُتِلَ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "zaid-ibn-al-khattab-siyar57/virtues-seniority",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaid-ibn-al-khattab",
+      "field": "virtues",
+      "assertion": "كان أسن من عمر، وأسلم قبله.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "298-p2",
+          "volume": "4",
+          "pageReference": "298",
+          "extractionUrl": "https://shamela.ws/book/10906/1724",
+          "excerptArabic": "وَكَانَ أَسَنَّ مِنْ عُمَرَ، وَأَسْلَمَ قَبْلَهُ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "zaid-ibn-al-khattab-siyar57/virtues-badr-armor",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaid-ibn-al-khattab",
+      "field": "virtues",
+      "assertion": "قال له عمر يوم بدر: البس درعي، فقال: إني أريد من الشهادة ما تريد، فتركاها جميعاً.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "298-p4",
+          "volume": "4",
+          "pageReference": "298",
+          "extractionUrl": "https://shamela.ws/book/10906/1724",
+          "excerptArabic": "وَلَقَدْ قَالَ لَهُ عُمَرُ يَوْم بَدْرٍ: الْبِسْ دِرْعِي.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "298-p5",
+          "volume": "4",
+          "pageReference": "298",
+          "extractionUrl": "https://shamela.ws/book/10906/1724",
+          "excerptArabic": "قَالَ: إِنِّي أُرِيْدُ مِنَ الشَّهَادَةِ مَا تُرِيْدُ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "zaid-ibn-al-khattab-siyar57/virtues-yamama-banner",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaid-ibn-al-khattab",
+      "field": "virtues",
+      "assertion": "كانت راية المسلمين معه يوم اليمامة، فلم يزل يقدم بها في نحر العدو ثم قاتل حتى قتل، فأخذها سالم مولى أبي حذيفة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "298-p6",
+          "volume": "4",
+          "pageReference": "298",
+          "extractionUrl": "https://shamela.ws/book/10906/1724",
+          "excerptArabic": "وَكَانَتْ رَايَةُ المُسْلِمِيْنَ مَعَهُ يَوْمَ اليَمَامَةِ، فَلَمْ يَزَلْ يَقْدَمُ بِهَا فِي نَحْرِ العَدُوِّ، ثُمَّ قَاتَلَ حَتَّى قُتِلَ، فَوَقَعَتْ الرَّايَةُ، فَأَخَذَهَا سَالِمٌ مَوْلَى أَبِي حُذَيْفَةَ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "zaid-ibn-al-khattab-siyar57/virtues-umar-grief",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaid-ibn-al-khattab",
+      "field": "virtues",
+      "assertion": "حزن عليه عمر وكان يقول: أسلم قبلي، واستشهد قبلي، وما هبت الصبا إلا وأنا أجد ريح زيد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "298-p7",
+          "volume": "4",
+          "pageReference": "298",
+          "extractionUrl": "https://shamela.ws/book/10906/1724",
+          "excerptArabic": "وَحَزِنَ عَلَيْهِ عُمَرُ، وَكَانَ يَقُوْلُ: أَسْلَمَ قَبْلِي، وَاسْتُشْهِدَ قَبْلِي.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "298-p8",
+          "volume": "4",
+          "pageReference": "298",
+          "extractionUrl": "https://shamela.ws/book/10906/1724",
+          "excerptArabic": "وَكَانَ يَقُوْلُ: مَا هَبَّتِ الصَّبَا إِلاَّ وَأَنَا أَجِدُ رِيْحَ زَيْدٍ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "zaid-ibn-al-khattab-siyar57/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaid-ibn-al-khattab",
+      "field": "deathYearHijri",
+      "assertion": "استشهد في ربيع الأول، سنة اثنتي عشرة للهجرة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "298-p11",
+          "volume": "4",
+          "pageReference": "298",
+          "extractionUrl": "https://shamela.ws/book/10906/1724",
+          "excerptArabic": "اسْتُشْهِدَ فِي رَبِيْعٍ الأَوَّلِ، سَنَةَ اثْنَتَيْ عَشْرَةَ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "zaid-ibn-al-khattab-siyar57/death-place",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaid-ibn-al-khattab",
+      "field": "placeOfDeathArabic",
+      "assertion": "استشهد باليمامة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "298-p12",
+          "volume": "4",
+          "pageReference": "298",
+          "extractionUrl": "https://shamela.ws/book/10906/1724",
+          "excerptArabic": "- مِنْ شُهَدَاءِ اليَمَامَةِ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    }
+  ]
+}
