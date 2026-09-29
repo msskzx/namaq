@@ -57,16 +57,37 @@ nothing there.
 
 His virtues, carried as `virtues`: the hero epithet ("وَمَنْ يُضْرَبُ
 بِشَجَاعَتِهِ المَثَلُ", `317-p1`); Umar's letter to Sa'd ibn Abi Waqqas to
-consult Tulayhah in war but appoint him to nothing (`317-p6`); Ibn Sa'd's
+consult Tulayhah in war but appoint him to nothing (`317-p6`); and Ibn Sa'd's
 "كَانَ طُلَيْحَةُ يُعَدُّ بِأَلْفِ فَارِسٍ لِشَجَاعَتِهِ وَشِدَّتِهِ"
-(`317-p7`); and "أَبْلَى يَوْمَ نَهَاوَنْدَ" (`317-p8`).
+(`317-p7`). All three are transmitted material — the book is quoting Umar and
+Ibn Sa'd — so the field rests on none of the entry's own editorial voice.
 
 His Qadisiyyah and Nahavand attendance: "ثُمَّ شَهِدَ القَادِسِيَّةَ
 وَنَهَاوَنْدَ" (`317-p5`) gives him a `PARTICIPATED_IN` relation to each of
 `data/catalog/battles/qadisiyyah.ts` and `data/catalog/battles/nahavand.ts`,
-with no `status` on Qadisiyyah. Nahavand carries `MARTYRED`: the entry's
-closing "أَبْلَى يَوْمَ نَهَاوَنْدَ، ثُمَّ اسْتُشْهِدَ" (`317-p8`) places his
-martyrdom there, which also backs `placeOfDeathArabic` ("نهاوند").
+with no `status` on Qadisiyyah. Nahavand carries `MARTYRED`, with the
+source's own wording as its `summary`, and the same passage backs
+`placeOfDeathArabic` ("نهاوند").
+
+## What rests on al-Dhahabi's own voice
+
+The entry's last paragraph is "قُلْتُ: أَبْلَى يَوْمَ نَهَاوَنْدَ، ثُمَّ
+اسْتُشْهِدَ" (`317-p8`) — al-Dhahabi speaking in the first person, not a
+report from anyone. The "قَلْتُ" passages are the least evidential material in
+the Siyar, and the Siyar's own footnote (٢) on نهاوند gives the battle's date
+as year 19 "وقيل" 21 without settling it. Everything else in this entry is
+attributed to someone — Umar, Ibn Sa'd, or the transmitted report of Buzakhah
+— so this one paragraph carries the death on its own.
+
+`death-place` is therefore LIKELY, not ESTABLISHED, and the Nahavand
+participation's `summary` quotes the line rather than paraphrasing it, so a
+reader sees that the martyrdom is al-Dhahabi's assertion and not a cited
+report. Nothing here contradicts the entry; it is the difference between
+"the book says" and "the author says".
+
+The same caution applies to his standing as a hero of the battle, so
+`أَبْلَى يَوْمَ نَهَاوَنْدَ` is kept out of `virtues` and left to the battle
+summary where its provenance is visible.
 
 ## What the entry does not state
 
@@ -83,7 +104,7 @@ but with no name there is no slug to link, so no edge can be recorded;
 No death year: the entry gives no year for his martyrdom. The (٢) footnote
 on نهاوند reports the conquest as year 19, "وقيل" 21 — competing reports
 about the battle, not a stated death year for him — so no
-`deathYearHijri` is set.
+`deathYearHijri` is set. `death-place` is LIKELY for the reason given above.
 
 ## What stays in the pages
 

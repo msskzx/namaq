@@ -260,7 +260,7 @@
       "subjectKind": "PERSON",
       "subjectSlug": "tulayhah-ibn-khuwaylid",
       "field": "virtues",
-      "assertion": "البطل الكرار ومن يضرب بشجاعته المثل. كتب عمر إلى سعد بن أبي وقاص: أن شاور طليحة في أمر الحرب ولا توله شيئا. قال محمد بن سعد: كان طليحة يعد بألف فارس لشجاعته وشدته. أبلى يوم نهاوند.",
+      "assertion": "البطل الكرار ومن يضرب بشجاعته المثل. كتب عمر إلى سعد بن أبي وقاص: أن شاور طليحة في أمر الحرب ولا توله شيئا. قال محمد بن سعد: كان طليحة يعد بألف فارس لشجاعته وشدته.",
       "confidence": "ESTABLISHED",
       "reviewStatus": "NOT_REVIEWED",
       "citations": [
@@ -289,15 +289,6 @@
           "pageReference": "317",
           "extractionUrl": "https://shamela.ws/book/10906/1743",
           "excerptArabic": "قَالَ مُحَمَّدُ بنُ سَعْدٍ: كَانَ طُلَيْحَةُ يُعَدُّ بِأَلْفِ فَارِسٍ لِشَجَاعَتِهِ وَشِدَّتِهِ.",
-          "accessedAt": "2026-09-29"
-        },
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "317-p8",
-          "volume": "4",
-          "pageReference": "317",
-          "extractionUrl": "https://shamela.ws/book/10906/1743",
-          "excerptArabic": "أَبْلَى يَوْمَ نَهَاوَنْدَ (٢)، ثُمَّ اسْتُشْهِدَ.",
           "accessedAt": "2026-09-29"
         }
       ]
@@ -352,7 +343,7 @@
       "subjectSlug": "tulayhah-ibn-khuwaylid",
       "field": "placeOfDeathArabic",
       "assertion": "استشهد يوم نهاوند.",
-      "confidence": "ESTABLISHED",
+      "confidence": "LIKELY",
       "reviewStatus": "NOT_REVIEWED",
       "citations": [
         {
