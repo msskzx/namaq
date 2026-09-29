@@ -353,6 +353,8 @@ const badr = {
       summary: { value: 'وَهُوَ مِنْ كِبَارِ البَدْرِيِّيْنَ', claims: ['bishr-ibn-al-baraa-siyar54/badr'] },
       claims: ['bishr-ibn-al-baraa-siyar54/badr'],
     },
+    // Entry 67; witnessed Badr, martyred later at Uhud.
+    { person: 'abdullah-ibn-amr-ibn-haram', isMuslim: true, claims: ['abdullah-ibn-amr-ibn-haram-siyar67/badr'] },
   ],
 } satisfies CatalogBattle;
 
