@@ -167,6 +167,11 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   — both were schema-valid and both were wrong; this is what closes that
   class of gap going forward. Existing batches published before this
   checklist are not swept retroactively without being told to.
+- [docs/companion-extraction-checklist.md](docs/companion-extraction-checklist.md)
+  tracks, in the companion index's own order, which entries already have a
+  batch. **Check the next entry off in the same PR that extracts it** —
+  otherwise the next agent has to reconstruct extraction order from PR
+  history to find where to resume, which is what this file exists to avoid.
 - Curated historical records live in `data/history/batches/<batch>/`, separate
   from application code: `batch.json` holds source editions, source accounts and
   claims with their citations; `accounts/<subject>/NNN.md` holds one printed page
