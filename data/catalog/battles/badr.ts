@@ -353,6 +353,13 @@ const badr = {
       summary: { value: 'وَهُوَ مِنْ كِبَارِ البَدْرِيِّيْنَ', claims: ['bishr-ibn-al-baraa-siyar54/badr'] },
       claims: ['bishr-ibn-al-baraa-siyar54/badr'],
     },
+    {
+      person: 'thabit-ibn-qais',
+      isMuslim: true,
+      relation: 'ABSENT_FROM',
+      summary: { value: 'وَلَمْ يَشْهَدْ بَدْراً.', claims: ['thabit-ibn-qais-siyar61/badr-absence'] },
+      claims: ['thabit-ibn-qais-siyar61/badr-absence'],
+    },
   ],
 } satisfies CatalogBattle;
 
