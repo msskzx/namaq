@@ -37,6 +37,8 @@ interface SourceAccountReaderProps {
 }
 const PREFETCH_AHEAD = 2;
 const WINDOW = 5;
+const BOUNCE_EDGE = 24;
+const HEADER_TOGGLE_DISTANCE = 12;
 
 type ReaderFont = 'amiri' | 'sans';
 type ReaderSize = 's' | 'm' | 'l' | 'xl';
@@ -82,7 +84,10 @@ export default function SourceAccountReader({
   const [size, setSize] = useState<ReaderSize>('m');
   const [background, setBackground] = useState<ReaderBackground>('light');
   const [headerHidden, setHeaderHidden] = useState(false);
+  const [headerHeight, setHeaderHeight] = useState(0);
   const section = useRef<HTMLDivElement>(null);
+  const content = useRef<HTMLDivElement>(null);
+  const headerBar = useRef<HTMLElement>(null);
   const contentScrollTop = useRef(0);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -157,6 +162,16 @@ export default function SourceAccountReader({
   }, [fullscreen]);
 
   useEffect(() => {
+    const node = headerBar.current;
+    if (!node || typeof ResizeObserver === 'undefined') return;
+    const measure = () => setHeaderHeight(node.offsetHeight);
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [fullscreen, data]);
+
+  useEffect(() => {
     if (!menuOpen) return;
     const close = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) setMenuOpen(false);
@@ -181,6 +196,9 @@ export default function SourceAccountReader({
     next.set('page', String(nextPage));
     next.delete('passage');
     router.replace(`${pathname}?${next.toString()}`, { scroll: false });
+    if (content.current) content.current.scrollTop = 0;
+    contentScrollTop.current = 0;
+    setHeaderHidden(false);
     if (!fullscreen) section.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, [data?.account?.id, fullscreen, pathname, router, searchParams]);
 
@@ -245,10 +263,12 @@ export default function SourceAccountReader({
     if (!entry) return String(index + 1);
     return [entry.printedPage ?? entry.sequence, entry.volume && (t ? `ج${entry.volume.number}` : `vol. ${entry.volume.number}`)].filter(Boolean).join(' · ');
   });
+  const headerCollapsed = fullscreen && headerHidden && !indexOpen && !settingsOpen && !menuOpen;
   const pageContentStyle = {
     ...backgroundStyles[background],
     fontSize: fontSizes[size],
     fontFamily: font === 'amiri' ? 'var(--font-amiri), ui-serif, Georgia, serif' : 'var(--font-reader-sans)',
+    ...(fullscreen ? { paddingTop: headerHeight + 12 } : {}),
   };
 
   return (
@@ -257,8 +277,8 @@ export default function SourceAccountReader({
       dir={language === 'ar' ? 'rtl' : 'ltr'}
     >
       {(
-        <div ref={section} className={`shrink-0 scroll-mt-[88px] overflow-hidden transition-[max-height,opacity] duration-200 ${fullscreen && headerHidden ? 'max-h-0 opacity-0' : 'max-h-[40rem] opacity-100'} ${fullscreen ? '' : 'mb-3 rounded-lg border border-amber-400'}`}>
-        <header className="relative z-10 flex shrink-0 items-center gap-2 border-b border-amber-400 bg-gray-50 px-3 py-2 dark:bg-black">
+        <div ref={section} className={`shrink-0 scroll-mt-[88px] overflow-hidden ${fullscreen ? `absolute inset-x-0 top-0 z-20 transition-transform duration-200 ${headerCollapsed ? '-translate-y-full' : 'translate-y-0'}` : 'mb-3 rounded-lg border border-amber-400'}`}>
+        <header ref={headerBar} className="relative z-10 flex shrink-0 items-center gap-2 border-b border-amber-400 bg-gray-50 px-3 py-2 dark:bg-black">
           {fullscreen && (
           <div className="relative" ref={menuRef}>
             <Button size="icon" onClick={() => setMenuOpen((open) => !open)} aria-label={menuOpen ? (t ? 'إغلاق القائمة' : 'Close menu') : (t ? 'فتح القائمة' : 'Open menu')} aria-pressed={menuOpen}><FontAwesomeIcon icon={menuOpen ? faXmark : faBars} /></Button>
@@ -342,17 +362,21 @@ export default function SourceAccountReader({
         </div>
       )}
 
-      <div className={fullscreen ? 'flex min-h-0 flex-1 flex-col px-3 pb-2 pt-3 sm:px-6' : 'flex flex-col'}>
+      <div className={fullscreen ? 'flex min-h-0 flex-1 flex-col px-3 pb-2 sm:px-6' : 'flex flex-col'}>
         <div
-          className={fullscreen ? 'muted-scrollbar min-h-0 flex-1 overflow-y-auto rounded-lg border border-black/10 px-4 py-3 dark:border-white/10 sm:px-8' : 'muted-scrollbar max-h-[75vh] overflow-y-auto rounded-lg border border-gray-200 px-4 py-3 dark:border-white/10'}
+          ref={content}
+          className={fullscreen ? 'muted-scrollbar min-h-0 flex-1 overflow-y-auto overscroll-contain rounded-lg border border-black/10 px-4 pb-3 dark:border-white/10 sm:px-8' : 'muted-scrollbar max-h-[75vh] overflow-y-auto overscroll-contain rounded-lg border border-gray-200 px-4 py-3 dark:border-white/10'}
           style={pageContentStyle}
           onScroll={(event) => {
-            const top = event.currentTarget.scrollTop;
-            if (fullscreen) {
-              if (top <= 0) setHeaderHidden(false);
-              else if (top > contentScrollTop.current + 4) setHeaderHidden(true);
-              else if (top < contentScrollTop.current - 4) setHeaderHidden(false);
-            }
+            const node = event.currentTarget;
+            const limit = Math.max(node.scrollHeight - node.clientHeight, 0);
+            const top = Math.min(Math.max(node.scrollTop, 0), limit);
+            if (!fullscreen) { contentScrollTop.current = top; return; }
+            if (node.scrollTop <= 0) { setHeaderHidden(false); contentScrollTop.current = top; return; }
+            if (node.scrollTop >= limit - BOUNCE_EDGE) { contentScrollTop.current = top; return; }
+            const moved = top - contentScrollTop.current;
+            if (Math.abs(moved) < HEADER_TOGGLE_DISTANCE) return;
+            setHeaderHidden(moved > 0);
             contentScrollTop.current = top;
           }}
           onTouchStart={(event) => { const touch = event.touches[0]; touchStart.current = { x: touch.clientX, y: touch.clientY }; }}

@@ -107,6 +107,28 @@ function renderReader(slug = 'abu-ubaydah-ibn-al-jarrah') {
   );
 }
 
+// jsdom lays nothing out, so the scroll geometry a real browser reports has to
+// be supplied by hand before a scroll event means anything.
+async function scrollContainer() {
+  const node = await waitFor(() => {
+    const found = document.querySelector('.muted-scrollbar') as HTMLDivElement | null;
+    if (!found) throw new Error('reader not mounted');
+    return found;
+  });
+  Object.defineProperty(node, 'scrollHeight', { value: 2000, configurable: true });
+  Object.defineProperty(node, 'clientHeight', { value: 600, configurable: true });
+  return node;
+}
+
+function headerWrapper() {
+  return document.querySelector('[class*="scroll-mt-"]') as HTMLDivElement;
+}
+
+function scrollTo(node: HTMLDivElement, top: number) {
+  node.scrollTop = top;
+  fireEvent.scroll(node);
+}
+
 describe('SourceAccountReader', () => {
   beforeEach(() => {
     nav.reset('/people/abu-ubaydah-ibn-al-jarrah');
@@ -392,6 +414,69 @@ describe('SourceAccountReader', () => {
     renderReader();
 
     expect(await screen.findByText('The source text could not be loaded')).toBeTruthy();
+  });
+
+  it('returns to the top of the text when the page changes', async () => {
+    nav.setUrl('/people/abu-ubaydah-ibn-al-jarrah?fullscreen=1');
+    renderReader();
+
+    const reader = await scrollContainer();
+    reader.scrollTop = 300;
+    fireEvent.click(screen.getByRole('button', { name: 'Next page' }));
+
+    await waitFor(() => expect(nav.replaceCalls.at(-1)).toContain('page=2'));
+    expect(reader.scrollTop).toBe(0);
+  });
+
+  it('hides the header on the way down without resizing the text area', async () => {
+    nav.setUrl('/people/abu-ubaydah-ibn-al-jarrah?fullscreen=1');
+    renderReader();
+
+    const reader = await scrollContainer();
+    const before = reader.className;
+    scrollTo(reader, 200);
+
+    await waitFor(() => expect(headerWrapper().className).toContain('-translate-y-full'));
+    expect(reader.className).toBe(before);
+  });
+
+  it('keeps the header hidden when the page springs back from the bottom', async () => {
+    nav.setUrl('/people/abu-ubaydah-ibn-al-jarrah?fullscreen=1');
+    renderReader();
+
+    const reader = await scrollContainer();
+    scrollTo(reader, 200);
+    await waitFor(() => expect(headerWrapper().className).toContain('-translate-y-full'));
+
+    scrollTo(reader, 1400);
+    scrollTo(reader, 1450);
+    scrollTo(reader, 1390);
+
+    expect(headerWrapper().className).toContain('-translate-y-full');
+  });
+
+  it('shows the header again on a deliberate scroll back up', async () => {
+    nav.setUrl('/people/abu-ubaydah-ibn-al-jarrah?fullscreen=1');
+    renderReader();
+
+    const reader = await scrollContainer();
+    scrollTo(reader, 300);
+    await waitFor(() => expect(headerWrapper().className).toContain('-translate-y-full'));
+
+    scrollTo(reader, 280);
+
+    await waitFor(() => expect(headerWrapper().className).toContain('translate-y-0'));
+  });
+
+  it('keeps the header in reach while a panel is open', async () => {
+    nav.setUrl('/people/abu-ubaydah-ibn-al-jarrah?fullscreen=1');
+    renderReader();
+
+    const reader = await scrollContainer();
+    fireEvent.click(await screen.findByRole('button', { name: 'Open reading settings' }));
+    scrollTo(reader, 300);
+
+    expect(headerWrapper().className).toContain('translate-y-0');
   });
 
   it('does not execute markup that appears in the source text', async () => {
