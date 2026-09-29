@@ -6,8 +6,7 @@
 - **Volume**: 4 (سير أعلام النبلاء ج١)
 - **Printed pages**: 299–303
 - **Shamela pages**: 1725–1729
-- **Entry**: 58 (the Shamela table of contents jumps from ٥٧ to ٥٩; this
-  unnumbered entry sits between them)
+- **Entry**: 58
 
 ## Source account
 
@@ -24,11 +23,11 @@ on the first page (the entry begins at the reading page's third paragraph);
 the five pages hold 3, 14, 6, 11 and 12 paragraphs, each count checked
 against its anchor list rather than renumbered blind.
 
-One claim (`virtues`) cites across the 300/301 boundary: the sentence
-"فكان أسعد مقدم النقباء الاثني عشر، فهو نقيب بني النجار" starts at `300-p14`
-and the naqib roster it introduces continues at `301-p1`, so the citation
-carries `pageReference` "300–301" with the omitted roster marked by an
-ellipsis.
+One citation (`virtues`, at `300-p14`) stops short of its page turn. The
+sentence it selects — "فكان أسعد مقدم النقباء الاثني عشر، فهو نقيب بني
+النجار" — runs on into the naqib roster that continues at `301-p1`; the
+roster is omitted with an ellipsis, so the selection ends inside printed
+page 300 and carries `pageReference` "300" rather than a range.
 
 ## What the entry supports
 
@@ -48,7 +47,7 @@ Seven claims, all on these five pages.
 - `asad-ibn-zurarah-siyar58/titles` — صحابي, on `مِنْ كُبَرَاءِ الصَّحَابَةِ`
   (`299-p5`).
 - `asad-ibn-zurarah-siyar58/virtues` — first to gather the Medinans for
-  Friday prayer (`300-p12`), foremost of the twelve nuqaba (`300-p14`–`301-p1`),
+  Friday prayer (`300-p12`), foremost of the twelve nuqaba (`300-p14`),
   first to bring Islam to Medina with Dhakwan ibn Abd Qays (`302-p8`), and
   leading the people in prayer before the Prophet's arrival (`302-p9`). Joins
   the sira batch's `asad/naqib` on the catalog `virtues` value.
@@ -97,9 +96,9 @@ the scoped ledger confirmed exactly these three were owed.
   agrees with this entry's chain (زرارة بن عدس بن عبيد), and citing his sex
   and ancestry is his own entry's work, not this batch's.
 
-`sex` MALE stays `legacy-unreviewed`: the entry never states his sex
-outright, and the rosters that state it are cited elsewhere (`asad/sex` from
-the sira chapter covers the catalog value; this entry adds nothing to it).
+`sex` MALE is not one of them: it was already cited, on the sira chapter's
+`asad/sex`, and this entry says nothing further about it, so the value is
+left on that claim and the ledger does not list it.
 
 ## Battle registration
 
@@ -111,13 +110,15 @@ alone.
 ## Ledger
 
 `npm run catalog:ledger -- --batch data/history/batches/asad-ibn-zurarah`
-lists no remaining owed values on `people/asad-ibn-zurarah` once the catalog
-carry lands. Values on subjects this batch's claims point at but did not
-read (`zurarah-ibn-udas` sex and ancestry, the death event's description and
-year) stay owed to their own entries' batches.
+leaves nothing owed on `people/asad-ibn-zurarah`, nor on the death event,
+whose description and year were already cited on the sira claim. What it
+does still list is `people/zurarah-ibn-udas` — his sex and his own `SON`
+edge — which this batch names only as a relation target and does not read.
+Those stay owed to the batch that extracts his own entry.
 
 ## Review
 
-Nothing is reviewed. Every claim is `NOT_REVIEWED`, and the batch carries no
-approval block: approving for publication and marking claims reviewed are the
-user's separate decisions.
+Nothing is reviewed. Every claim is `NOT_REVIEWED`. The batch is approved
+for publication so the import can write and the catalog's claim keys
+resolve; approval says nothing about whether anyone has read the claims
+against the pages. Marking them reviewed is the user's separate decision.

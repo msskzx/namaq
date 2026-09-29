@@ -472,7 +472,7 @@
           "sourceSlug": "siyar-alam-al-nubala-risalah",
           "passageAnchor": "300-p14",
           "volume": "4",
-          "pageReference": "300–301",
+          "pageReference": "300",
           "extractionUrl": "https://shamela.ws/book/10906/1726",
           "excerptArabic": "فَكَانَ أَسَعْدٌ مُقَدَّمَ النُّقَبَاءِ الاثْنَيْ عَشَرَ، فَهُوَ نَقِيْبُ بَنِي النَّجَّارِ …",
           "accessedAt": "2026-09-29"
@@ -537,5 +537,11 @@
         }
       ]
     }
-  ]
+  ],
+  "approval": {
+    "revision": "c2d712a1a9410096",
+    "approvedAt": "2026-09-29",
+    "approvedBy": "msskzx",
+    "note": "Approved for publication. Claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+  }
 }

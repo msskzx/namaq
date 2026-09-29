@@ -1,7 +1,7 @@
 import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
 // Authored from data/history/batches/asad-ibn-zurarah, entry 58. The entry
-// never states his sex outright, so it stays on the legacy marker.
+// never states his sex outright, so sex stays on the sira chapter's claim.
 const asadIbnZurarah = {
   kind: 'PERSON',
   slug: 'asad-ibn-zurarah',
