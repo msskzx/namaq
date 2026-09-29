@@ -21,18 +21,21 @@ labels الأنصاري الخزرجي الحارثي البدري النقيب 
 records that لفظة "الحارثي" سقطت من المطبوع — the chain itself still carries
 بن الحارث بن الخزرج, so the label is kept as the entry states it.
 
-The body holds three reports: the Prophet paired him with عبد الرحمن بن عوف,
-and Sa'd offered him half his wealth and the divorce of one of his two wives
-so he could marry her — Abd al-Rahman declined, prayed for him, and left. At
-Uhud the Prophet sent first an unnamed Ansari, then (in Kharijah ibn Zayd's
-report) Zayd ibn Thabit himself, to find him; dying of his wounds — seventy
-sword-cuts — he sent the Prophet his greeting and his thanks (جزاك الله عني
-خير ما جزى نبيا عن أمته), said أجد ريح الجنة, and charged the Ansar لا عذر لكم
-عند الله إن خلص إلى نبيكم ومنكم عين تطرف, then died. A third report has his
-widow bring his two daughters to the Prophet after Uhud; their uncle had taken
-their inheritance, the Prophet said يقضي الله في ذلك, and the inheritance verse
-came down — two thirds to the daughters, an eighth to the mother, the rest to
-the uncle.
+The body holds four reports. First the Prophet paired him with عبد الرحمن بن
+عوف, and Sa'd offered him half his wealth and the divorce of one of his two
+wives so he could marry her; Abd al-Rahman declined, prayed for him, and left.
+At Uhud the Prophet sent an unnamed Ansari, who found him moribund and carried
+back his greeting, his thanks (جزاك الله عني خير ما جزى نبيا عن أمته), and his
+charge to the Ansar that they have no excuse while one of them can still reach
+the Prophet. A separate report, from خارجة بن زيد بن ثابت about his father, has
+the Prophet send **Kharijah himself** on the same errand: بَعَثَنِي النَّبِيُّ and
+فَطُفْتُ بَيْنَ القَتْلَى are his own words, so it is Kharijah who finds him with
+seventy sword-cuts, not his father Zayd ibn Thabit. Dying, he said أجد ريح
+الجنة and repeated the same charge in its second wording, then his soul
+departed. A fourth report has his widow bring their two daughters to the Prophet
+after Uhud; their uncle had taken their inheritance, the Prophet said يقضي الله
+في ذلك, and the inheritance verse came down — two thirds to the daughters, an
+eighth to the mother, the rest to the uncle.
 
 Muhammad ibn Abd al-Rahman ibn Abi Sa'sa'ah, Ibn Ishaq, Jabir ibn Abd Allah,
 Abd Allah ibn Muhammad ibn Aqil, Kharijah ibn Zayd and his father are named as
@@ -48,7 +51,7 @@ graph nodes or edges.
 | Kunya | Confirmed absent — no كنية anywhere in the entry |
 | Appearance | Confirmed absent — no physical description |
 | Manaqeb | Found — the Aqaba naqibship, the muakhat generosity, and the Uhud death reports, printed 318–319 |
-| Wives | Confirmed absent as a relation — two wives are mentioned (إحدى زوجتيه، امرأته، أمهما) but none is named, so no edge can be declared |
+| Wives | Confirmed absent as a relation — two wives are mentioned (إحدى زوجتيه، امرأة سعد، أمهما) but none is named, so no edge can be declared |
 | Siblings | Confirmed absent — no sibling trigger in the entry |
 
 ## Values already held, visited
@@ -77,3 +80,9 @@ does not list him — adding a Badr roster membership is a catalog change beyond
 this batch's four owed values and is left for a follow-up. His Uhud
 participation is already cited (`saad-rabi/uhud`). His two daughters and his
 wife are unnamed in the entry, so no family edges are declared.
+
+## Review status
+
+Every claim is `NOT_REVIEWED`. The pages were read against Shamela and the
+claims authored against them, but nobody has compared the finished batch
+against the stored pages, and this note is not that review.
