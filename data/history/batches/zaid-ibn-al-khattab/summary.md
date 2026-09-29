@@ -29,7 +29,9 @@ gives.
   - Older than Umar and Muslim before him (298-p2).
   - The Badr armour exchange: Umar offers his coat of mail, Zaid answers
     he wants of martyrdom what Umar wants, and both go without it
-    (298-p4–p5, one claim with two citations).
+    (298-p4–p6, one claim with three citations — the closing
+    `فَتَرَكَاهَا جَمِيْعاً` opens the next paragraph, on the same printed
+    page).
   - The Muslim banner at Yamama: he kept advancing with it into the
     enemy's ranks, fought till killed, and Salim mawla Abi Hudhayfah took
     it up (298-p6).
@@ -47,7 +49,7 @@ gives.
   299-p1 is Ma'n ibn Adi's brother, not Zaid's.
 - **Source text detail** — `printedPage` 297/298/299, `volumeNumber` 4,
   `extractionUrl` per page and `accessedAt` 2026-09-29 on the account and
-  on all fifteen citations.
+  on all eighteen citations.
 
 Also recorded: Badr participation (`شَهِدَ بَدْراً وَالمَشَاهِدَ`, 298-p3,
 carried into `data/catalog/battles/badr.ts` with that wording as summary
