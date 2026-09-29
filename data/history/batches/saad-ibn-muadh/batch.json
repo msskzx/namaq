@@ -1,0 +1,1249 @@
+{
+  "slug": "saad-ibn-muadh",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-muadh",
+      "extractionUrl": "https://shamela.ws/book/10906/1705",
+      "accessedAt": "2026-09-29",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "279",
+          "bodyFile": "accounts/saad-ibn-muadh/001.md",
+          "notesFile": "accounts/saad-ibn-muadh/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1705",
+          "passages": [
+            {
+              "anchor": "279-p3"
+            },
+            {
+              "anchor": "279-p4"
+            },
+            {
+              "anchor": "279-p5"
+            },
+            {
+              "anchor": "279-p6"
+            },
+            {
+              "anchor": "279-p7"
+            },
+            {
+              "anchor": "279-p8"
+            },
+            {
+              "anchor": "279-p9"
+            },
+            {
+              "anchor": "279-p10"
+            },
+            {
+              "anchor": "279-p11"
+            },
+            {
+              "anchor": "279-p12"
+            },
+            {
+              "anchor": "279-p13"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "280",
+          "bodyFile": "accounts/saad-ibn-muadh/002.md",
+          "notesFile": "accounts/saad-ibn-muadh/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1706",
+          "passages": [
+            {
+              "anchor": "280-p1"
+            },
+            {
+              "anchor": "280-p2"
+            },
+            {
+              "anchor": "280-p3"
+            },
+            {
+              "anchor": "280-p4"
+            },
+            {
+              "anchor": "280-p5"
+            },
+            {
+              "anchor": "280-p6"
+            },
+            {
+              "anchor": "280-p7"
+            },
+            {
+              "anchor": "280-p8"
+            },
+            {
+              "anchor": "280-p9"
+            },
+            {
+              "anchor": "280-p10"
+            },
+            {
+              "anchor": "280-p11"
+            },
+            {
+              "anchor": "280-p12"
+            },
+            {
+              "anchor": "280-p13"
+            },
+            {
+              "anchor": "280-p14"
+            },
+            {
+              "anchor": "280-p15"
+            },
+            {
+              "anchor": "280-p16"
+            },
+            {
+              "anchor": "280-p17"
+            },
+            {
+              "anchor": "280-p18"
+            },
+            {
+              "anchor": "280-p19"
+            },
+            {
+              "anchor": "280-p20"
+            },
+            {
+              "anchor": "280-p21"
+            },
+            {
+              "anchor": "280-p22"
+            },
+            {
+              "anchor": "280-p23"
+            },
+            {
+              "anchor": "280-p24"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "printedPage": "281",
+          "bodyFile": "accounts/saad-ibn-muadh/003.md",
+          "notesFile": "accounts/saad-ibn-muadh/003.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1707",
+          "passages": [
+            {
+              "anchor": "281-p1"
+            },
+            {
+              "anchor": "281-p2"
+            },
+            {
+              "anchor": "281-p3"
+            },
+            {
+              "anchor": "281-p4"
+            },
+            {
+              "anchor": "281-p5"
+            },
+            {
+              "anchor": "281-p6"
+            },
+            {
+              "anchor": "281-p7"
+            },
+            {
+              "anchor": "281-p8"
+            },
+            {
+              "anchor": "281-p9"
+            },
+            {
+              "anchor": "281-p10"
+            },
+            {
+              "anchor": "281-p11"
+            },
+            {
+              "anchor": "281-p12"
+            },
+            {
+              "anchor": "281-p13"
+            },
+            {
+              "anchor": "281-p14"
+            },
+            {
+              "anchor": "281-p15"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "printedPage": "282",
+          "bodyFile": "accounts/saad-ibn-muadh/004.md",
+          "notesFile": "accounts/saad-ibn-muadh/004.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1708",
+          "passages": [
+            {
+              "anchor": "282-p1"
+            },
+            {
+              "anchor": "282-p2"
+            },
+            {
+              "anchor": "282-p3"
+            },
+            {
+              "anchor": "282-p4"
+            },
+            {
+              "anchor": "282-p5"
+            },
+            {
+              "anchor": "282-p6"
+            },
+            {
+              "anchor": "282-p7"
+            },
+            {
+              "anchor": "282-p8"
+            },
+            {
+              "anchor": "282-p9"
+            },
+            {
+              "anchor": "282-p10"
+            },
+            {
+              "anchor": "282-p11"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "printedPage": "283",
+          "bodyFile": "accounts/saad-ibn-muadh/005.md",
+          "notesFile": "accounts/saad-ibn-muadh/005.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1709",
+          "passages": [
+            {
+              "anchor": "283-p1"
+            },
+            {
+              "anchor": "283-p2"
+            },
+            {
+              "anchor": "283-p3"
+            },
+            {
+              "anchor": "283-p4"
+            },
+            {
+              "anchor": "283-p5"
+            },
+            {
+              "anchor": "283-p6"
+            },
+            {
+              "anchor": "283-p7"
+            },
+            {
+              "anchor": "283-p8"
+            },
+            {
+              "anchor": "283-p9"
+            },
+            {
+              "anchor": "283-p10"
+            },
+            {
+              "anchor": "283-p11"
+            },
+            {
+              "anchor": "283-p12"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "printedPage": "284",
+          "bodyFile": "accounts/saad-ibn-muadh/006.md",
+          "notesFile": "accounts/saad-ibn-muadh/006.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1710",
+          "passages": [
+            {
+              "anchor": "284-p1"
+            },
+            {
+              "anchor": "284-p2"
+            },
+            {
+              "anchor": "284-p3"
+            },
+            {
+              "anchor": "284-p4"
+            },
+            {
+              "anchor": "284-p5"
+            },
+            {
+              "anchor": "284-p6"
+            },
+            {
+              "anchor": "284-p7"
+            },
+            {
+              "anchor": "284-p8"
+            },
+            {
+              "anchor": "284-p9"
+            },
+            {
+              "anchor": "284-p10"
+            },
+            {
+              "anchor": "284-p11"
+            },
+            {
+              "anchor": "284-p12"
+            },
+            {
+              "anchor": "284-p13"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "printedPage": "285",
+          "bodyFile": "accounts/saad-ibn-muadh/007.md",
+          "notesFile": "accounts/saad-ibn-muadh/007.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1711",
+          "passages": [
+            {
+              "anchor": "285-p1"
+            },
+            {
+              "anchor": "285-p2"
+            },
+            {
+              "anchor": "285-p3"
+            },
+            {
+              "anchor": "285-p4"
+            },
+            {
+              "anchor": "285-p5"
+            },
+            {
+              "anchor": "285-p6"
+            },
+            {
+              "anchor": "285-p7"
+            },
+            {
+              "anchor": "285-p8"
+            },
+            {
+              "anchor": "285-p9"
+            },
+            {
+              "anchor": "285-p10"
+            },
+            {
+              "anchor": "285-p11"
+            },
+            {
+              "anchor": "285-p12"
+            },
+            {
+              "anchor": "285-p13"
+            },
+            {
+              "anchor": "285-p14"
+            },
+            {
+              "anchor": "285-p15"
+            },
+            {
+              "anchor": "285-p16"
+            },
+            {
+              "anchor": "285-p17"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "printedPage": "286",
+          "bodyFile": "accounts/saad-ibn-muadh/008.md",
+          "notesFile": "accounts/saad-ibn-muadh/008.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1712",
+          "passages": [
+            {
+              "anchor": "286-p1"
+            },
+            {
+              "anchor": "286-p2"
+            },
+            {
+              "anchor": "286-p3"
+            },
+            {
+              "anchor": "286-p4"
+            },
+            {
+              "anchor": "286-p5"
+            },
+            {
+              "anchor": "286-p6"
+            },
+            {
+              "anchor": "286-p7"
+            },
+            {
+              "anchor": "286-p8"
+            },
+            {
+              "anchor": "286-p9"
+            },
+            {
+              "anchor": "286-p10"
+            },
+            {
+              "anchor": "286-p11"
+            },
+            {
+              "anchor": "286-p12"
+            },
+            {
+              "anchor": "286-p13"
+            },
+            {
+              "anchor": "286-p14"
+            },
+            {
+              "anchor": "286-p15"
+            },
+            {
+              "anchor": "286-p16"
+            }
+          ]
+        },
+        {
+          "sequence": 9,
+          "printedPage": "287",
+          "bodyFile": "accounts/saad-ibn-muadh/009.md",
+          "notesFile": "accounts/saad-ibn-muadh/009.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1713",
+          "passages": [
+            {
+              "anchor": "287-p1"
+            },
+            {
+              "anchor": "287-p2"
+            },
+            {
+              "anchor": "287-p3"
+            },
+            {
+              "anchor": "287-p4"
+            },
+            {
+              "anchor": "287-p5"
+            },
+            {
+              "anchor": "287-p6"
+            },
+            {
+              "anchor": "287-p7"
+            },
+            {
+              "anchor": "287-p8"
+            },
+            {
+              "anchor": "287-p9"
+            },
+            {
+              "anchor": "287-p10"
+            },
+            {
+              "anchor": "287-p11"
+            },
+            {
+              "anchor": "287-p12"
+            },
+            {
+              "anchor": "287-p13"
+            },
+            {
+              "anchor": "287-p14"
+            },
+            {
+              "anchor": "287-p15"
+            },
+            {
+              "anchor": "287-p16"
+            },
+            {
+              "anchor": "287-p17"
+            }
+          ]
+        },
+        {
+          "sequence": 10,
+          "printedPage": "288",
+          "bodyFile": "accounts/saad-ibn-muadh/010.md",
+          "notesFile": "accounts/saad-ibn-muadh/010.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1714",
+          "passages": [
+            {
+              "anchor": "288-p1"
+            },
+            {
+              "anchor": "288-p2"
+            },
+            {
+              "anchor": "288-p3"
+            },
+            {
+              "anchor": "288-p4"
+            },
+            {
+              "anchor": "288-p5"
+            },
+            {
+              "anchor": "288-p6"
+            },
+            {
+              "anchor": "288-p7"
+            },
+            {
+              "anchor": "288-p8"
+            },
+            {
+              "anchor": "288-p9"
+            },
+            {
+              "anchor": "288-p10"
+            },
+            {
+              "anchor": "288-p11"
+            }
+          ]
+        },
+        {
+          "sequence": 11,
+          "printedPage": "289",
+          "bodyFile": "accounts/saad-ibn-muadh/011.md",
+          "notesFile": "accounts/saad-ibn-muadh/011.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1715",
+          "passages": [
+            {
+              "anchor": "289-p1"
+            },
+            {
+              "anchor": "289-p2"
+            },
+            {
+              "anchor": "289-p3"
+            },
+            {
+              "anchor": "289-p4"
+            },
+            {
+              "anchor": "289-p5"
+            },
+            {
+              "anchor": "289-p6"
+            },
+            {
+              "anchor": "289-p7"
+            },
+            {
+              "anchor": "289-p8"
+            },
+            {
+              "anchor": "289-p9"
+            },
+            {
+              "anchor": "289-p10"
+            }
+          ]
+        },
+        {
+          "sequence": 12,
+          "printedPage": "290",
+          "bodyFile": "accounts/saad-ibn-muadh/012.md",
+          "notesFile": "accounts/saad-ibn-muadh/012.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1716",
+          "passages": [
+            {
+              "anchor": "290-p1"
+            },
+            {
+              "anchor": "290-p2"
+            },
+            {
+              "anchor": "290-p3"
+            },
+            {
+              "anchor": "290-p4"
+            },
+            {
+              "anchor": "290-p5"
+            },
+            {
+              "anchor": "290-p6"
+            },
+            {
+              "anchor": "290-p7"
+            },
+            {
+              "anchor": "290-p8"
+            }
+          ]
+        },
+        {
+          "sequence": 13,
+          "printedPage": "291",
+          "bodyFile": "accounts/saad-ibn-muadh/013.md",
+          "notesFile": "accounts/saad-ibn-muadh/013.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1717",
+          "passages": [
+            {
+              "anchor": "291-p1"
+            },
+            {
+              "anchor": "291-p2"
+            },
+            {
+              "anchor": "291-p3"
+            },
+            {
+              "anchor": "291-p4"
+            },
+            {
+              "anchor": "291-p5"
+            },
+            {
+              "anchor": "291-p6"
+            },
+            {
+              "anchor": "291-p7"
+            },
+            {
+              "anchor": "291-p8"
+            },
+            {
+              "anchor": "291-p9"
+            },
+            {
+              "anchor": "291-p10"
+            },
+            {
+              "anchor": "291-p11"
+            },
+            {
+              "anchor": "291-p12"
+            },
+            {
+              "anchor": "291-p13"
+            },
+            {
+              "anchor": "291-p14"
+            },
+            {
+              "anchor": "291-p15"
+            }
+          ]
+        },
+        {
+          "sequence": 14,
+          "printedPage": "292",
+          "bodyFile": "accounts/saad-ibn-muadh/014.md",
+          "notesFile": "accounts/saad-ibn-muadh/014.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1718",
+          "passages": [
+            {
+              "anchor": "292-p1"
+            },
+            {
+              "anchor": "292-p2"
+            },
+            {
+              "anchor": "292-p3"
+            },
+            {
+              "anchor": "292-p4"
+            },
+            {
+              "anchor": "292-p5"
+            },
+            {
+              "anchor": "292-p6"
+            },
+            {
+              "anchor": "292-p7"
+            },
+            {
+              "anchor": "292-p8"
+            },
+            {
+              "anchor": "292-p9"
+            }
+          ]
+        },
+        {
+          "sequence": 15,
+          "printedPage": "293",
+          "bodyFile": "accounts/saad-ibn-muadh/015.md",
+          "notesFile": "accounts/saad-ibn-muadh/015.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1719",
+          "passages": [
+            {
+              "anchor": "293-p1"
+            },
+            {
+              "anchor": "293-p2"
+            },
+            {
+              "anchor": "293-p3"
+            },
+            {
+              "anchor": "293-p4"
+            },
+            {
+              "anchor": "293-p5"
+            },
+            {
+              "anchor": "293-p6"
+            },
+            {
+              "anchor": "293-p7"
+            },
+            {
+              "anchor": "293-p8"
+            },
+            {
+              "anchor": "293-p9"
+            },
+            {
+              "anchor": "293-p10"
+            },
+            {
+              "anchor": "293-p11"
+            },
+            {
+              "anchor": "293-p12"
+            },
+            {
+              "anchor": "293-p13"
+            }
+          ]
+        },
+        {
+          "sequence": 16,
+          "printedPage": "294",
+          "bodyFile": "accounts/saad-ibn-muadh/016.md",
+          "notesFile": "accounts/saad-ibn-muadh/016.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1720",
+          "passages": [
+            {
+              "anchor": "294-p1"
+            },
+            {
+              "anchor": "294-p2"
+            },
+            {
+              "anchor": "294-p3"
+            },
+            {
+              "anchor": "294-p4"
+            },
+            {
+              "anchor": "294-p5"
+            },
+            {
+              "anchor": "294-p6"
+            },
+            {
+              "anchor": "294-p7"
+            },
+            {
+              "anchor": "294-p8"
+            },
+            {
+              "anchor": "294-p9"
+            },
+            {
+              "anchor": "294-p10"
+            },
+            {
+              "anchor": "294-p11"
+            },
+            {
+              "anchor": "294-p12"
+            },
+            {
+              "anchor": "294-p13"
+            },
+            {
+              "anchor": "294-p14"
+            }
+          ]
+        },
+        {
+          "sequence": 17,
+          "printedPage": "295",
+          "bodyFile": "accounts/saad-ibn-muadh/017.md",
+          "notesFile": "accounts/saad-ibn-muadh/017.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1721",
+          "passages": [
+            {
+              "anchor": "295-p1"
+            },
+            {
+              "anchor": "295-p2"
+            },
+            {
+              "anchor": "295-p3"
+            },
+            {
+              "anchor": "295-p4"
+            },
+            {
+              "anchor": "295-p5"
+            },
+            {
+              "anchor": "295-p6"
+            },
+            {
+              "anchor": "295-p7"
+            },
+            {
+              "anchor": "295-p8"
+            },
+            {
+              "anchor": "295-p9"
+            },
+            {
+              "anchor": "295-p10"
+            },
+            {
+              "anchor": "295-p11"
+            },
+            {
+              "anchor": "295-p12"
+            },
+            {
+              "anchor": "295-p13"
+            }
+          ]
+        },
+        {
+          "sequence": 18,
+          "printedPage": "296",
+          "bodyFile": "accounts/saad-ibn-muadh/018.md",
+          "notesFile": "accounts/saad-ibn-muadh/018.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1722",
+          "passages": [
+            {
+              "anchor": "296-p1"
+            },
+            {
+              "anchor": "296-p2"
+            },
+            {
+              "anchor": "296-p3"
+            },
+            {
+              "anchor": "296-p4"
+            },
+            {
+              "anchor": "296-p5"
+            },
+            {
+              "anchor": "296-p6"
+            },
+            {
+              "anchor": "296-p7"
+            },
+            {
+              "anchor": "296-p8"
+            },
+            {
+              "anchor": "296-p9"
+            },
+            {
+              "anchor": "296-p10"
+            },
+            {
+              "anchor": "296-p11"
+            },
+            {
+              "anchor": "296-p12"
+            },
+            {
+              "anchor": "296-p13"
+            },
+            {
+              "anchor": "296-p14"
+            },
+            {
+              "anchor": "296-p15"
+            }
+          ]
+        },
+        {
+          "sequence": 19,
+          "printedPage": "297",
+          "bodyFile": "accounts/saad-ibn-muadh/019.md",
+          "notesFile": "accounts/saad-ibn-muadh/019.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1723",
+          "passages": [
+            {
+              "anchor": "297-p1"
+            },
+            {
+              "anchor": "297-p2"
+            },
+            {
+              "anchor": "297-p3"
+            },
+            {
+              "anchor": "297-p4"
+            },
+            {
+              "anchor": "297-p5"
+            },
+            {
+              "anchor": "297-p6"
+            },
+            {
+              "anchor": "297-p7"
+            },
+            {
+              "anchor": "297-p8"
+            },
+            {
+              "anchor": "297-p9"
+            },
+            {
+              "anchor": "297-p10"
+            }
+          ]
+        }
+      ],
+      "volumeNumber": 4,
+      "notInSource": [
+        "wives",
+        "siblings"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "saad-ibn-muadh-siyar56/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-muadh",
+      "field": "fullName",
+      "assertion": "سعد بن معاذ بن النعمان بن امرئ القيس بن زيد بن عبد الأشهل الأنصاري الأوسي",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "279-p3",
+          "volume": "4",
+          "pageReference": "279",
+          "extractionUrl": "https://shamela.ws/book/10906/1705",
+          "excerptArabic": "٥٦ - سَعْدُ بنُ مُعَاذِ بنِ النُّعْمَانِ بنِ امْرِئِ القَيْسِ الأَنْصَارِيُّ * ابْنِ زَيْدِ بنِ عَبْدِ الأَشْهَلِ. السَّيِّدُ الكَبِيْرُ، الشَّهِيْدُ، أَبُو عَمْرٍو الأَنْصَارِيُّ، الأَوْسِيُّ، الأَشْهَلِيُّ، البَدْرِيُّ، الَّذِي اهْتَزَّ العَرْشُ لِمَوْتِهِ.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "279-p4",
+          "volume": "4",
+          "pageReference": "279",
+          "extractionUrl": "https://shamela.ws/book/10906/1705",
+          "excerptArabic": "ابْنِ زَيْدِ بنِ عَبْدِ الأَشْهَلِ.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "279-p5",
+          "volume": "4",
+          "pageReference": "279",
+          "extractionUrl": "https://shamela.ws/book/10906/1705",
+          "excerptArabic": "السَّيِّدُ الكَبِيْرُ، الشَّهِيْدُ، أَبُو عَمْرٍو الأَنْصَارِيُّ، الأَوْسِيُّ، الأَشْهَلِيُّ، البَدْرِيُّ، الَّذِي اهْتَزَّ العَرْشُ لِمَوْتِهِ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-muadh-siyar56/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-muadh",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "muadh-ibn-al-numan",
+      "assertion": "أبوه معاذ بن النعمان.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "279-p3",
+          "volume": "4",
+          "pageReference": "279",
+          "extractionUrl": "https://shamela.ws/book/10906/1705",
+          "excerptArabic": "٥٦ - سَعْدُ بنُ مُعَاذِ بنِ النُّعْمَانِ بنِ امْرِئِ القَيْسِ الأَنْصَارِيُّ *",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-muadh-siyar56/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-muadh",
+      "field": "kunya",
+      "assertion": "كنيته أبو عمرو.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "279-p5",
+          "volume": "4",
+          "pageReference": "279",
+          "extractionUrl": "https://shamela.ws/book/10906/1705",
+          "excerptArabic": "السَّيِّدُ الكَبِيْرُ، الشَّهِيْدُ، أَبُو عَمْرٍو الأَنْصَارِيُّ، الأَوْسِيُّ، الأَشْهَلِيُّ، البَدْرِيُّ، الَّذِي اهْتَزَّ العَرْشُ لِمَوْتِهِ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-muadh-siyar56/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-muadh",
+      "field": "titles",
+      "assertion": "صحابي بدري: ترسمه الذهبي بالبدري.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "279-p5",
+          "volume": "4",
+          "pageReference": "279",
+          "extractionUrl": "https://shamela.ws/book/10906/1705",
+          "excerptArabic": "السَّيِّدُ الكَبِيْرُ، الشَّهِيْدُ، أَبُو عَمْرٍو الأَنْصَارِيُّ، الأَوْسِيُّ، الأَشْهَلِيُّ، البَدْرِيُّ، الَّذِي اهْتَزَّ العَرْشُ لِمَوْتِهِ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-muadh-siyar56/appearance",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-muadh",
+      "field": "appearance",
+      "assertion": "كان رجلاً أبيض، طوالاً، جميلاً، حسن الوجه، أعين، حسن اللحية.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "289-p10",
+          "volume": "4",
+          "pageReference": "289",
+          "extractionUrl": "https://shamela.ws/book/10906/1715",
+          "excerptArabic": "كَانَ سَعْدُ بنُ مُعَاذٍ رَجُلاً أَبْيَضَ، طُوَالاً، جَمِيْلاً، حَسَنَ الوَجْهِ، أَعْيَنَ، حَسَنَ اللِّحْيَةِ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-muadh-siyar56/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-muadh",
+      "field": "sex",
+      "assertion": "ذكره المصدر بالذكّر: كان رجلاً أبيض، طوالاً، جميلاً، حسن الوجه، أعين، حسن اللحية.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "289-p10",
+          "volume": "4",
+          "pageReference": "289",
+          "extractionUrl": "https://shamela.ws/book/10906/1715",
+          "excerptArabic": "كَانَ سَعْدُ بنُ مُعَاذٍ رَجُلاً أَبْيَضَ، طُوَالاً، جَمِيْلاً، حَسَنَ الوَجْهِ، أَعْيَنَ، حَسَنَ اللِّحْيَةِ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "muadh-ibn-al-numan-siyar56/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "muadh-ibn-al-numan",
+      "field": "sex",
+      "assertion": "ذكره المصدر بالذكّر في نسب ابنه: سعد بن معاذ بن النعمان.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "279-p3",
+          "volume": "4",
+          "pageReference": "279",
+          "extractionUrl": "https://shamela.ws/book/10906/1705",
+          "excerptArabic": "٥٦ - سَعْدُ بنُ مُعَاذِ بنِ النُّعْمَانِ بنِ امْرِئِ القَيْسِ الأَنْصَارِيُّ *",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    }
+  ],
+  "approval": {
+    "revision": "f5328bdb82fdb2af",
+    "approvedAt": "2026-09-29",
+    "approvedBy": "msskzx",
+    "note": "Approved for publication. Claims are Not reviewed: the entries are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+  }
+}
