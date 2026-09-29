@@ -353,6 +353,13 @@ const badr = {
       summary: { value: 'وَهُوَ مِنْ كِبَارِ البَدْرِيِّيْنَ', claims: ['bishr-ibn-al-baraa-siyar54/badr'] },
       claims: ['bishr-ibn-al-baraa-siyar54/badr'],
     },
+    // ADR 0013
+    {
+      person: 'maan-ibn-adi',
+      isMuslim: true,
+      summary: { value: 'العَجْلاَنِيُّ، العَقَبِيُّ، البَدْرِيُّ', claims: ['maan-ibn-adi-siyar64/badr'] },
+      claims: ['maan-ibn-adi-siyar64/badr'],
+    },
   ],
 } satisfies CatalogBattle;
 
