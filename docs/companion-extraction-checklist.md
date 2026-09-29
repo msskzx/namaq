@@ -90,7 +90,7 @@ that.
 - [x] سعد بن خيثمة (`saad-ibn-khaythamah`, PR #177)
 - [x] البراء بن معرور (`al-baraa-ibn-marur`, PR #176)
 - [x] بشر بن البراء (`bishr-ibn-al-baraa`, PR #174)
-- [x] سعد بن عبادة (`saad-ibn-ubadah`)
+- [x] سعد بن عبادة (`saad-ibn-ubadah`, PR #188)
 - [ ] سعد بن معاذ
 - [ ] زيد بن الخطاب
 - [ ] أسعد بن زرارة
