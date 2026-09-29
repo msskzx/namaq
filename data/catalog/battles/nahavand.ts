@@ -15,6 +15,12 @@ const nahavand = {
   },
   participants: [
     { person: 'umar-ibn-al-khattab', isMuslim: true, claims: legacyUnreviewed },
+    {
+      person: 'tulayhah-ibn-khuwaylid',
+      isMuslim: true,
+      status: ['MARTYRED'],
+      claims: ['tulayhah-ibn-khuwaylid-siyar62/nahavand', 'tulayhah-ibn-khuwaylid-siyar62/death-place'],
+    },
   ],
 } satisfies CatalogBattle;
 

@@ -1,19 +1,7 @@
 import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
-/**
- * Carried from neo4j/graphSeedData*.ts, whose node declaration is retired
- * with the rest. The catalog owns this subject's edges now, so they live
- * here or not at all. No batch has read this far into the nasab yet, so
- * every link stays on the legacy marker.
- *
- * A marginal/unusual case per the retired prisma/personSeedData7.ts entry:
- * converted in 9 AH, apostatized and fought Muslims in the Ridda wars
- * claiming false prophethood, then returned to Islam under Abu Bakr and
- * died a Muslim general at Nahawand. Kept as a companion per the book's own
- * framing ("صاحب رسول الله") and the classical position that an initial
- * conversion during the Prophet's lifetime plus a final death as a Muslim
- * qualifies, despite the intervening apostasy -- worth a second look.
- */
+// Authored from data/history/batches/tulayhah-ibn-khuwaylid, entry 62. The
+// entry never states his sex outright, so it stays on the legacy marker.
 const tulayhahIbnKhuwaylid = {
   kind: 'PERSON',
   slug: 'tulayhah-ibn-khuwaylid',
@@ -22,13 +10,32 @@ const tulayhahIbnKhuwaylid = {
   hasProfile: true,
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
-    fullName: { value: 'طليحة بن خويلد بن نوفل الأسدي', claims: legacyUnreviewed },
+    fullName: {
+      value: 'طليحة بن خويلد بن نوفل الأسدي',
+      claims: ['tulayhah-ibn-khuwaylid-siyar62/full-name'],
+    },
+    virtues: {
+      value:
+        'البطل الكرار ومن يضرب بشجاعته المثل. كتب عمر إلى سعد بن أبي وقاص: أن شاور طليحة في أمر الحرب ولا توله شيئا. قال محمد بن سعد: كان طليحة يعد بألف فارس لشجاعته وشدته. أبلى يوم نهاوند.',
+      claims: ['tulayhah-ibn-khuwaylid-siyar62/virtues'],
+    },
+    placeOfDeathArabic: { value: 'نهاوند', claims: ['tulayhah-ibn-khuwaylid-siyar62/death-place'] },
   },
   titles: [
-    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    {
+      title: 'companion',
+      name: 'صحابي',
+      nameTransliterated: 'Companion',
+      claims: ['tulayhah-ibn-khuwaylid-siyar62/titles'],
+    },
   ],
   relations: [
-    { type: 'SON', inverse: 'FATHER', to: 'khuwaylid-ibn-nawfal', claims: legacyUnreviewed },
+    {
+      type: 'SON',
+      inverse: 'FATHER',
+      to: 'khuwaylid-ibn-nawfal',
+      claims: ['tulayhah-ibn-khuwaylid-siyar62/father'],
+    },
   ],
 } satisfies CatalogPerson;
 
