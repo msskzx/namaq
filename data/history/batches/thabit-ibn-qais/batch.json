@@ -417,27 +417,9 @@
           "sourceSlug": "siyar-alam-al-nubala-risalah",
           "passageAnchor": "308-p7",
           "volume": "4",
-          "pageReference": "308",
+          "pageReference": "308–309",
           "extractionUrl": "https://shamela.ws/book/10906/1734",
-          "excerptArabic": "٦١ - ثَابِتُ بنُ قَيْسِ بنِ شَمَّاسِ بنِ زُهَيْرِ بنِ مَالِكٍ الأَنْصَارِيُّ",
-          "accessedAt": "2026-09-29"
-        },
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "308-p8",
-          "volume": "4",
-          "pageReference": "308",
-          "extractionUrl": "https://shamela.ws/book/10906/1734",
-          "excerptArabic": "ابْنِ امْرِئِ القَيْسِ بنِ مَالِكٍ الأَغَرِّ بنِ ثَعْلَبَةَ بنِ",
-          "accessedAt": "2026-09-29"
-        },
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "309-p1",
-          "volume": "4",
-          "pageReference": "309",
-          "extractionUrl": "https://shamela.ws/book/10906/1735",
-          "excerptArabic": "كَعْبِ بنِ الخَزْرَجِ بنِ الحَارِثِ بنِ الخَزْرَجِ.",
+          "excerptArabic": "ثَابِتُ بنُ قَيْسِ بنِ شَمَّاسِ بنِ زُهَيْرِ بنِ مَالِكٍ الأَنْصَارِيُّ ابْنِ امْرِئِ القَيْسِ بنِ مَالِكٍ الأَغَرِّ بنِ ثَعْلَبَةَ بنِ كَعْبِ بنِ الخَزْرَجِ بنِ الحَارِثِ بنِ الخَزْرَجِ.",
           "accessedAt": "2026-09-29"
         }
       ]
@@ -459,7 +441,7 @@
           "volume": "4",
           "pageReference": "308",
           "extractionUrl": "https://shamela.ws/book/10906/1734",
-          "excerptArabic": "٦١ - ثَابِتُ بنُ قَيْسِ بنِ شَمَّاسِ بنِ زُهَيْرِ بنِ مَالِكٍ الأَنْصَارِيُّ",
+          "excerptArabic": "ثَابِتُ بنُ قَيْسِ بنِ شَمَّاسِ",
           "accessedAt": "2026-09-29"
         }
       ]
@@ -489,7 +471,7 @@
       "subjectKind": "PERSON",
       "subjectSlug": "thabit-ibn-qais",
       "field": "tribalAffiliation",
-      "assertion": "الأنصاري، الخزرجي.",
+      "assertion": "الأنصاري، ونسبه ينتهي إلى بن كعب بن الخزرج بن الحارث بن الخزرج.",
       "confidence": "ESTABLISHED",
       "reviewStatus": "NOT_REVIEWED",
       "citations": [
@@ -518,7 +500,7 @@
       "subjectKind": "PERSON",
       "subjectSlug": "thabit-ibn-qais",
       "field": "titles",
-      "assertion": "مِنْ نُجَبَاءِ أَصْحَابِ مُحَمَّدٍ — صحابي.",
+      "assertion": "كان من نجباء أصحاب محمد صلى الله عليه وسلم — صحابي.",
       "confidence": "ESTABLISHED",
       "reviewStatus": "NOT_REVIEWED",
       "citations": [
@@ -538,7 +520,7 @@
       "subjectKind": "PERSON",
       "subjectSlug": "thabit-ibn-qais",
       "field": "virtues",
-      "assertion": "خَطِيْبُ الأَنْصَارِ، جَهِيْرُ الصَّوْتِ، خَطِيْبٌ بَلِيْغٌ. خَطَبَ مَقْدَمَ رَسُوْلِ اللهِ المَدِيْنَةَ: نَمْنَعُكَ مِمَّا نَمْنَعُ مِنْهُ أَنْفُسَنَا وَأَوْلاَدَنَا، فَمَا لَنَا؟ قَالَ: الجَنَّةُ، قَالُوا: رَضِيْنَا. وَقَالَ لَهُ: أَمَا تَرْضَى أَنْ تَعِيْشَ حَمِيْداً، وَتُقْتَلَ شَهِيْداً، وَتَدْخُلَ الجَنَّةَ. وَلَمَّا نَزَلَتْ: لاَ تَرْفَعُوا أَصْوَاتَكُم فَوْقَ صَوْتِ النَّبِيِّ، قَعَدَ فِي بَيْتِهِ، فَقَالَ: بَلْ هُوَ مِنْ أَهْلِ الجَنَّةِ. وَقَالَ: نِعْمَ الرَّجُلُ ثَابِتُ بنُ قَيْسِ بنِ شَمَّاسٍ. وَأَجَابَ خَطِيْبَ وَفْدِ تَمِيْمٍ، فَسُرَّ بِمَقَامِهِ رَسُوْلُ اللهِ وَالمُسْلِمُوْنَ. وَكَانَ عَلَى الأَنْصَارِ يَوْمَ اليَمَامَةِ، فَقَاتَلَ حَتَّى قُتِلَ.",
+      "assertion": "خَطِيْبُ الأَنْصَارِ، وَكَانَ جَهِيْرَ الصَّوْتِ، خَطِيْباً بَلِيْغاً. خَطَبَ مَقْدَمَ رَسُوْلِ اللهِ المَدِيْنَةَ فَقَالَ: نَمْنَعُكَ مِمَّا نَمْنَعُ مِنْهُ أَنْفُسَنَا وَأَوْلاَدَنَا، فَمَا لَنَا؟ قَالَ: الجَنَّةُ، قَالُوا: رَضِيْنَا. فَقَالَ: (يَا ثَابِتُ! أَمَا تَرْضَى أَنْ تَعِيْشَ حَمِيْداً، وَتُقْتَلَ شَهِيْداً، وَتَدْخُلَ الجَنَّةَ). وَلَمَّا نَزَلَتْ: لاَ تَرْفَعُوا أَصْوَاتَكُم فَوْقَ صَوْتِ النَّبِيِّ، قَعَدَ فِي بَيْتِهِ، فَقَالَ: بَلْ هُوَ مِنْ أَهْلِ الجَنَّةِ. وَقَالَ: نِعْمَ الرَّجُلُ ثَابِتُ بنُ قَيْسِ بنِ شَمَّاسٍ. فَقَامَ، فَحَمِدَ اللهَ، وَأَبْلَغَ، وَسُرَّ رَسُوْلُ اللهِ وَالمُسْلِمُوْنَ بِمَقَامِهِ فِي وَفْدِ تَمِيْمٍ. وَكَانَ عَلَى الأَنْصَارِ يَوْمَ اليَمَامَةِ، فَقَاتَلَ حَتَّى قُتِلَ.",
       "confidence": "ESTABLISHED",
       "reviewStatus": "NOT_REVIEWED",
       "citations": [
@@ -548,7 +530,7 @@
           "volume": "4",
           "pageReference": "309",
           "extractionUrl": "https://shamela.ws/book/10906/1735",
-          "excerptArabic": "خَطِيْبُ الأَنْصَارِ، كَانَ مِنْ نُجَبَاءِ أَصْحَابِ مُحَمَّدٍ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-",
+          "excerptArabic": "خَطِيْبُ الأَنْصَارِ، كَانَ مِنْ نُجَبَاءِ أَصْحَابِ مُحَمَّدٍ",
           "accessedAt": "2026-09-29"
         },
         {
@@ -562,20 +544,11 @@
         },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "309-p13",
+          "passageAnchor": "309-p12",
           "volume": "4",
           "pageReference": "309",
           "extractionUrl": "https://shamela.ws/book/10906/1735",
-          "excerptArabic": "نَمْنَعُكَ مِمَّا نَمْنَعُ مِنْهُ أَنْفُسَنَا وَأَوْلاَدَنَا، فَمَا لَنَا؟",
-          "accessedAt": "2026-09-29"
-        },
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "309-p14",
-          "volume": "4",
-          "pageReference": "309",
-          "extractionUrl": "https://shamela.ws/book/10906/1735",
-          "excerptArabic": "قَالَ: (الجَنَّةُ) .",
+          "excerptArabic": "خَطَبَ ثَابِتُ بنُ قَيْسٍ مَقْدَمَ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- المَدِيْنَةَ، فَقَالَ: نَمْنَعُكَ مِمَّا نَمْنَعُ مِنْهُ أَنْفُسَنَا وَأَوْلاَدَنَا، فَمَا لَنَا؟ قَالَ: (الجَنَّةُ) . قَالُوا: رَضِيْنَا (١) .",
           "accessedAt": "2026-09-29"
         },
         {
@@ -589,11 +562,11 @@
         },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "310-p7",
+          "passageAnchor": "310-p4",
           "volume": "4",
           "pageReference": "310",
           "extractionUrl": "https://shamela.ws/book/10906/1736",
-          "excerptArabic": "فَقَالَ: (بَلْ هُوَ مِنْ أَهْلِ الجَنَّةِ) .",
+          "excerptArabic": "لَمَّا نَزَلَتْ: {لاَ تَرْفَعُوا أَصْوَاتَكُم فَوْقَ صَوْتِ النَّبِيِّ} الآيَة، [الحُجُرَاتُ: ٢] قَالَ ثَابِتُ بنُ قَيْسٍ: أَنَا كُنْتُ أَرْفَعُ صَوْتِي فَوْقَ صَوْتِهِ، فَأَنَا مِنْ أَهْلِ النَّارِ. فَقَعَدَ فِي بَيْتِهِ، فَتَفَقَّدَهُ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فَذَكَرَ مَا أَقْعَدَهُ. فَقَالَ: (بَلْ هُوَ مِنْ أَهْلِ الجَنَّةِ) .",
           "accessedAt": "2026-09-29"
         },
         {
@@ -607,11 +580,11 @@
         },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "312-p7",
+          "passageAnchor": "312-p6",
           "volume": "4",
           "pageReference": "312",
           "extractionUrl": "https://shamela.ws/book/10906/1738",
-          "excerptArabic": "فَقَامَ، فَحَمِدَ اللهَ، وَأَبْلَغَ، وَسُرَّ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَالمُسْلِمُوْنَ بِمَقَامِهِ (٣) .",
+          "excerptArabic": "فَقَالَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- لِثَابِتِ بنِ قَيْسٍ: (قُمْ، فَأَجِبْ خَطِيْبَهُم) . فَقَامَ، فَحَمِدَ اللهَ، وَأَبْلَغَ، وَسُرَّ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَالمُسْلِمُوْنَ بِمَقَامِهِ (٣) .",
           "accessedAt": "2026-09-29"
         },
         {
@@ -635,10 +608,52 @@
       ]
     },
     {
+      "key": "jamilah-bint-abd-allah-ibn-abi-siyar61/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "jamilah-bint-abd-allah-ibn-abi",
+      "field": "fullName",
+      "assertion": "جميلة بنت عبد الله بن أبي ابن سلول.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "309-p7",
+          "volume": "4",
+          "pageReference": "309",
+          "extractionUrl": "https://shamela.ws/book/10906/1735",
+          "excerptArabic": "جَمِيْلَةَ بِنْتِ عَبْدِ اللهِ بنِ أُبَيِّ ابْنِ سَلُوْلٍ، فَوَلَدَتْ لَهُ مُحَمَّداً.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "thabit-ibn-qais-siyar61/wife-jamilah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "thabit-ibn-qais",
+      "assertion": "كان زوج جميلة بنت عبد الله بن أبي ابن سلول، فولدت له محمداً.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "HUSBAND",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "jamilah-bint-abd-allah-ibn-abi",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "309-p7",
+          "volume": "4",
+          "pageReference": "309",
+          "extractionUrl": "https://shamela.ws/book/10906/1735",
+          "excerptArabic": "وَكَانَ زَوْجَ جَمِيْلَةَ بِنْتِ عَبْدِ اللهِ بنِ أُبَيِّ ابْنِ سَلُوْلٍ، فَوَلَدَتْ لَهُ مُحَمَّداً.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
       "key": "thabit-ibn-qais-siyar61/half-brother-abdullah",
       "subjectKind": "PERSON",
       "subjectSlug": "thabit-ibn-qais",
-      "assertion": "إخوته لأمه: عبد الله بن رواحة، وعمرة بنت رواحة.",
+      "assertion": "أخوه لأمه: عبد الله بن رواحة.",
       "confidence": "ESTABLISHED",
       "reviewStatus": "NOT_REVIEWED",
       "relationshipType": "HALF_BROTHER",
@@ -733,20 +748,31 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "311-p1",
+          "passageAnchor": "310-p8",
           "volume": "4",
-          "pageReference": "311",
-          "extractionUrl": "https://shamela.ws/book/10906/1737",
-          "excerptArabic": "أَتَيْتُ عَلَى ثَابِتِ بنِ قَيْسٍ يَوْمَ اليَمَامَةِ وَهُوَ يَتَحَنَّطُ",
+          "pageReference": "310",
+          "extractionUrl": "https://shamela.ws/book/10906/1736",
+          "excerptArabic": "فَلَمَّا كَانَ يَوْمُ اليَمَامَةِ انْهَزَمَ النَّاسُ، فَقَالَ ثَابِتُ: … وَرَجُلٌ قَائِمٌ عَلَى ثُلْمَةٍ، فَقَتَلَهُ، وَقُتِلَ.",
           "accessedAt": "2026-09-29"
-        },
+        }
+      ]
+    },
+    {
+      "key": "jamilah-bint-abd-allah-ibn-abi-siyar61/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "jamilah-bint-abd-allah-ibn-abi",
+      "field": "sex",
+      "assertion": "بنت عبد الله: جَمِيْلَةَ بِنْتِ عَبْدِ اللهِ بنِ أُبَيِّ ابْنِ سَلُوْلٍ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "311-p9",
+          "passageAnchor": "309-p7",
           "volume": "4",
-          "pageReference": "311",
-          "extractionUrl": "https://shamela.ws/book/10906/1737",
-          "excerptArabic": "فَقَاتَلَ حَتَّى قُتِلَ (١) .",
+          "pageReference": "309",
+          "extractionUrl": "https://shamela.ws/book/10906/1735",
+          "excerptArabic": "جَمِيْلَةَ بِنْتِ عَبْدِ اللهِ بنِ أُبَيِّ ابْنِ سَلُوْلٍ",
           "accessedAt": "2026-09-29"
         }
       ]

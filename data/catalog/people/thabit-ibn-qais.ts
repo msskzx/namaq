@@ -1,6 +1,18 @@
 import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
-// Authored from data/history/batches/thabit-ibn-qais, entry 61 (docs/extraction-checklist.md).
+/**
+ * Authored from data/history/batches/thabit-ibn-qais, entry 61, the Siyar's
+ * own account of him (docs/extraction-checklist.md).
+ *
+ * The entry never states his sex outright, so `sex` stays on the legacy
+ * marker. The nasab runs to the tribal eponym الخَزْرَج, so the chain stops
+ * there rather than growing a node per generation, and الأنصاري / الخزرجي
+ * moved to `tribalAffiliation` the way the neighbouring batches split a
+ * heading's chain from its nisba labels.
+ *
+ * The muakhah report (Ibn Ishaq: آخى رسول الله بينه وبين عمار) is disputed in
+ * the entry's own next sentence, so no PACT_BROTHER edge is declared on it.
+ */
 const thabitIbnQais = {
   kind: 'PERSON',
   slug: 'thabit-ibn-qais',
@@ -24,7 +36,7 @@ const thabitIbnQais = {
     },
     virtues: {
       value:
-        'خَطِيْبُ الأَنْصَارِ، جَهِيْرُ الصَّوْتِ، خَطِيْبٌ بَلِيْغٌ. خَطَبَ مَقْدَمَ رَسُوْلِ اللهِ المَدِيْنَةَ: نَمْنَعُكَ مِمَّا نَمْنَعُ مِنْهُ أَنْفُسَنَا وَأَوْلاَدَنَا، فَمَا لَنَا؟ قَالَ: الجَنَّةُ، قَالُوا: رَضِيْنَا. وَقَالَ لَهُ: أَمَا تَرْضَى أَنْ تَعِيْشَ حَمِيْداً، وَتُقْتَلَ شَهِيْداً، وَتَدْخُلَ الجَنَّةَ. وَلَمَّا نَزَلَتْ: لاَ تَرْفَعُوا أَصْوَاتَكُم فَوْقَ صَوْتِ النَّبِيِّ، قَعَدَ فِي بَيْتِهِ، فَقَالَ: بَلْ هُوَ مِنْ أَهْلِ الجَنَّةِ. وَقَالَ: نِعْمَ الرَّجُلُ ثَابِتُ بنُ قَيْسِ بنِ شَمَّاسٍ. وَأَجَابَ خَطِيْبَ وَفْدِ تَمِيْمٍ، فَسُرَّ بِمَقَامِهِ رَسُوْلُ اللهِ وَالمُسْلِمُوْنَ. وَكَانَ عَلَى الأَنْصَارِ يَوْمَ اليَمَامَةِ، فَقَاتَلَ حَتَّى قُتِلَ.',
+        'خَطِيْبُ الأَنْصَارِ، وَكَانَ جَهِيْرَ الصَّوْتِ، خَطِيْباً بَلِيْغاً. خَطَبَ مَقْدَمَ رَسُوْلِ اللهِ المَدِيْنَةَ فَقَالَ: نَمْنَعُكَ مِمَّا نَمْنَعُ مِنْهُ أَنْفُسَنَا وَأَوْلاَدَنَا، فَمَا لَنَا؟ قَالَ: الجَنَّةُ، قَالُوا: رَضِيْنَا. فَقَالَ: (يَا ثَابِتُ! أَمَا تَرْضَى أَنْ تَعِيْشَ حَمِيْداً، وَتُقْتَلَ شَهِيْداً، وَتَدْخُلَ الجَنَّةَ). وَلَمَّا نَزَلَتْ: لاَ تَرْفَعُوا أَصْوَاتَكُم فَوْقَ صَوْتِ النَّبِيِّ، قَعَدَ فِي بَيْتِهِ، فَقَالَ: بَلْ هُوَ مِنْ أَهْلِ الجَنَّةِ. وَقَالَ: نِعْمَ الرَّجُلُ ثَابِتُ بنُ قَيْسِ بنِ شَمَّاسٍ. فَقَامَ، فَحَمِدَ اللهَ، وَأَبْلَغَ، وَسُرَّ رَسُوْلُ اللهِ وَالمُسْلِمُوْنَ بِمَقَامِهِ فِي وَفْدِ تَمِيْمٍ. وَكَانَ عَلَى الأَنْصَارِ يَوْمَ اليَمَامَةِ، فَقَاتَلَ حَتَّى قُتِلَ.',
       claims: ['thabit-ibn-qais-siyar61/virtues'],
     },
     placeOfDeathArabic: { value: 'اليمامة', claims: ['thabit-ibn-qais-siyar61/death-place'] },
@@ -43,6 +55,12 @@ const thabitIbnQais = {
       inverse: 'FATHER',
       to: 'qais-ibn-shammas',
       claims: ['thabit-ibn-qais-siyar61/father'],
+    },
+    {
+      type: 'HUSBAND',
+      inverse: 'WIFE',
+      to: 'jamilah-bint-abd-allah-ibn-abi',
+      claims: ['thabit-ibn-qais-siyar61/wife-jamilah'],
     },
     {
       type: 'HALF_BROTHER',
