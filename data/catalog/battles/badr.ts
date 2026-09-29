@@ -183,8 +183,8 @@ const badr = {
     {
       person: 'ukkashah-ibn-mihsan',
       isMuslim: true,
-      summary: { value: 'انقطع سيفه فأعطاه رسول الله صلى الله عليه وسلم عودا فعاد سيفا في يده، فقاتل به.', claims: ['ukkashah/badr'] },
-      claims: ['ukkashah/badr'],
+      summary: { value: 'انقطع سيفه فأعطاه رسول الله صلى الله عليه وسلم عودا فعاد سيفا في يده، فقاتل به.', claims: ['ukkashah/badr', 'ukkashah-ibn-mihsan-siyar60/badr'] },
+      claims: ['ukkashah/badr', 'ukkashah-ibn-mihsan-siyar60/badr'],
     },
     {
       person: 'bilal-ibn-rabah',

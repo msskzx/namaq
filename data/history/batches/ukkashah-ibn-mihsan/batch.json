@@ -1,0 +1,438 @@
+{
+  "slug": "ukkashah-ibn-mihsan",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ukkashah-ibn-mihsan",
+      "extractionUrl": "https://shamela.ws/book/10906/1733",
+      "accessedAt": "2026-09-29",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "307",
+          "bodyFile": "accounts/ukkashah-ibn-mihsan/001.md",
+          "notesFile": "accounts/ukkashah-ibn-mihsan/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1733",
+          "passages": [
+            {
+              "anchor": "307-p1"
+            },
+            {
+              "anchor": "307-p2"
+            },
+            {
+              "anchor": "307-p3"
+            },
+            {
+              "anchor": "307-p4"
+            },
+            {
+              "anchor": "307-p5"
+            },
+            {
+              "anchor": "307-p6"
+            },
+            {
+              "anchor": "307-p7"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "308",
+          "bodyFile": "accounts/ukkashah-ibn-mihsan/002.md",
+          "notesFile": "accounts/ukkashah-ibn-mihsan/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1734",
+          "passages": [
+            {
+              "anchor": "308-p1"
+            },
+            {
+              "anchor": "308-p2"
+            },
+            {
+              "anchor": "308-p3"
+            },
+            {
+              "anchor": "308-p4"
+            },
+            {
+              "anchor": "308-p5"
+            },
+            {
+              "anchor": "308-p6"
+            }
+          ]
+        }
+      ],
+      "volumeNumber": 4,
+      "notInSource": [
+        "nasab",
+        "wives",
+        "siblings"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "ukkashah-ibn-mihsan-siyar60/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ukkashah-ibn-mihsan",
+      "field": "fullName",
+      "assertion": "عكاشة بن محصن الأسدي حليف قريش",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "307-p1",
+          "volume": "4",
+          "pageReference": "307",
+          "extractionUrl": "https://shamela.ws/book/10906/1733",
+          "excerptArabic": "عُكَّاشَةُ بنُ مِحْصَنٍ أَبُو مِحْصَنٍ الأَسَدِيُّ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "307-p2",
+          "volume": "4",
+          "pageReference": "307",
+          "extractionUrl": "https://shamela.ws/book/10906/1733",
+          "excerptArabic": "أَبُو مِحْصَنٍ الأَسَدِيُّ، حَلِيْفُ قُرَيْشٍ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "ukkashah-ibn-mihsan-siyar60/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ukkashah-ibn-mihsan",
+      "field": "kunya",
+      "assertion": "أبو محصن",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "307-p1",
+          "volume": "4",
+          "pageReference": "307",
+          "extractionUrl": "https://shamela.ws/book/10906/1733",
+          "excerptArabic": "عُكَّاشَةُ بنُ مِحْصَنٍ أَبُو مِحْصَنٍ الأَسَدِيُّ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "ukkashah-ibn-mihsan-siyar60/tribal-affiliation",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ukkashah-ibn-mihsan",
+      "field": "tribalAffiliation",
+      "assertion": "الأسدي، حليف قريش",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "307-p2",
+          "volume": "4",
+          "pageReference": "307",
+          "extractionUrl": "https://shamela.ws/book/10906/1733",
+          "excerptArabic": "أَبُو مِحْصَنٍ الأَسَدِيُّ، حَلِيْفُ قُرَيْشٍ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "ukkashah-ibn-mihsan-siyar60/appearance",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ukkashah-ibn-mihsan",
+      "field": "appearance",
+      "assertion": "كان من أجمل الرجال.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "307-p7",
+          "volume": "4",
+          "pageReference": "307",
+          "extractionUrl": "https://shamela.ws/book/10906/1733",
+          "excerptArabic": "وَكَانَ مِنْ أَجْمَلِ الرِّجَالِ -رَضِيَ اللهُ عَنْهُ-",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "ukkashah-ibn-mihsan-siyar60/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ukkashah-ibn-mihsan",
+      "field": "virtues",
+      "assertion": "السعيد الشهيد، من السابقين الأولين، البدريين، أهل الجنة. استعمله النبي صلى الله عليه وسلم على سرية الغمر فلم يلقوا كيدا. وأبلى يوم بدر بلاء حسنا، وانكسر سيفه في يده، فأعطاه النبي صلى الله عليه وسلم عرجونا من نخل أو عودا فعاد بإذن الله في يده سيفا فقاتل به وشهد به المشاهد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "307-p2",
+          "volume": "4",
+          "pageReference": "307",
+          "extractionUrl": "https://shamela.ws/book/10906/1733",
+          "excerptArabic": "السَّعِيْدُ الشَّهِيْدُ، أَبُو مِحْصَنٍ الأَسَدِيُّ، حَلِيْفُ قُرَيْشٍ، مِنَ السَّابِقِيْنَ الأَوَّلِيْنَ، البَدْرِيِّيْنَ، أَهْلِ الجَنَّةِ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "307-p3",
+          "volume": "4",
+          "pageReference": "307",
+          "extractionUrl": "https://shamela.ws/book/10906/1733",
+          "excerptArabic": "اسْتَعْمَلَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- عَلَى سَرِيَّةِ الغَمْرِ (١) ، فَلَمْ يَلْقَوْا كَيْداً",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "308-p2",
+          "volume": "4",
+          "pageReference": "308",
+          "extractionUrl": "https://shamela.ws/book/10906/1734",
+          "excerptArabic": "وَقَدْ أَبْلَى عُكَّاشَةُ يَوْم بَدْرٍ بَلاَءً حَسَناً، وَانْكَسَرَ سَيْفُهُ فِي يَدِهِ، فَأَعْطَاهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- عُرْجُوْناً مِنْ نَخْلٍ، أَوْ عُوْداً، فَعَادَ بِإِذْنِ اللهِ فِي يَدِهِ سَيْفاً، فَقَاتَلَ بِهِ، وَشَهِدَ بِهِ المَشَاهِدَ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "ukkashah-ibn-mihsan-siyar60/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ukkashah-ibn-mihsan",
+      "field": "titles",
+      "assertion": "مِنَ السَّابِقِيْنَ الأَوَّلِيْنَ، البَدْرِيِّيْنَ — صحابي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "307-p2",
+          "volume": "4",
+          "pageReference": "307",
+          "extractionUrl": "https://shamela.ws/book/10906/1733",
+          "excerptArabic": "مِنَ السَّابِقِيْنَ الأَوَّلِيْنَ، البَدْرِيِّيْنَ، أَهْلِ الجَنَّةِ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "ukkashah-ibn-mihsan-siyar60/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ukkashah-ibn-mihsan",
+      "assertion": "أبلى عكاشة يوم بدر بلاء حسنا، وانكسر سيفه في يده، فأعطاه النبي صلى الله عليه وسلم عرجونا من نخل أو عودا، فعاد بإذن الله في يده سيفا، فقاتل به، وشهد به المشاهد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "308-p2",
+          "volume": "4",
+          "pageReference": "308",
+          "extractionUrl": "https://shamela.ws/book/10906/1734",
+          "excerptArabic": "وَقَدْ أَبْلَى عُكَّاشَةُ يَوْم بَدْرٍ بَلاَءً حَسَناً، وَانْكَسَرَ سَيْفُهُ فِي يَدِهِ، فَأَعْطَاهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- عُرْجُوْناً مِنْ نَخْلٍ، أَوْ عُوْداً، فَعَادَ بِإِذْنِ اللهِ فِي يَدِهِ سَيْفاً، فَقَاتَلَ بِهِ، وَشَهِدَ بِهِ المَشَاهِدَ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "ukkashah-ibn-mihsan-siyar60/death-place",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ukkashah-ibn-mihsan",
+      "field": "placeOfDeathArabic",
+      "assertion": "بزاخة",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "307-p6",
+          "volume": "4",
+          "pageReference": "307",
+          "extractionUrl": "https://shamela.ws/book/10906/1733",
+          "excerptArabic": "وَقُتِلَ بَعْدَ ذَلِكَ بِسَنَةٍ بِبُزَاخَةَ، فِي خِلاَفَةِ أَبِي بَكْرٍ الصِّدِّيْقِ، سَنَةَ اثْنَتَيْ عَشْرَةَ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "ukkashah-ibn-mihsan-siyar60/death-year-twelve",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ukkashah-ibn-mihsan",
+      "field": "deathYearHijri",
+      "assertion": "قيل قتل ببزاخة في خلافة أبي بكر الصديق سنة اثنتي عشرة، وقال الذهبي: كذا هذا القول والصحيح أن مقتله كان في سنة إحدى عشرة.",
+      "confidence": "DISPUTED",
+      "disputed": true,
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "307-p6",
+          "volume": "4",
+          "pageReference": "307",
+          "extractionUrl": "https://shamela.ws/book/10906/1733",
+          "excerptArabic": "وَقُتِلَ بَعْدَ ذَلِكَ بِسَنَةٍ بِبُزَاخَةَ، فِي خِلاَفَةِ أَبِي بَكْرٍ الصِّدِّيْقِ، سَنَةَ اثْنَتَيْ عَشْرَةَ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "ukkashah-ibn-mihsan-siyar60/death-year-eleven",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ukkashah-ibn-mihsan",
+      "field": "deathYearHijri",
+      "assertion": "الصحيح أن مقتله كان في سنة إحدى عشرة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "308-p1",
+          "volume": "4",
+          "pageReference": "308",
+          "extractionUrl": "https://shamela.ws/book/10906/1734",
+          "excerptArabic": "كَذَا هَذَا القَوْلُ، وَالصَّحِيْحُ أَنَّ مَقْتَلَهُ كَانَ فِي سَنَةِ إِحْدَى عَشْرَةَ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    }
+  ]
+}
