@@ -1096,24 +1096,6 @@
           "extractionUrl": "https://shamela.ws/book/10906/1705",
           "excerptArabic": "٥٦ - سَعْدُ بنُ مُعَاذِ بنِ النُّعْمَانِ بنِ امْرِئِ القَيْسِ الأَنْصَارِيُّ * ابْنِ زَيْدِ بنِ عَبْدِ الأَشْهَلِ. السَّيِّدُ الكَبِيْرُ، الشَّهِيْدُ، أَبُو عَمْرٍو الأَنْصَارِيُّ، الأَوْسِيُّ، الأَشْهَلِيُّ، البَدْرِيُّ، الَّذِي اهْتَزَّ العَرْشُ لِمَوْتِهِ.",
           "accessedAt": "2026-09-29"
-        },
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "279-p4",
-          "volume": "4",
-          "pageReference": "279",
-          "extractionUrl": "https://shamela.ws/book/10906/1705",
-          "excerptArabic": "ابْنِ زَيْدِ بنِ عَبْدِ الأَشْهَلِ.",
-          "accessedAt": "2026-09-29"
-        },
-        {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "279-p5",
-          "volume": "4",
-          "pageReference": "279",
-          "extractionUrl": "https://shamela.ws/book/10906/1705",
-          "excerptArabic": "السَّيِّدُ الكَبِيْرُ، الشَّهِيْدُ، أَبُو عَمْرٍو الأَنْصَارِيُّ، الأَوْسِيُّ، الأَشْهَلِيُّ، البَدْرِيُّ، الَّذِي اهْتَزَّ العَرْشُ لِمَوْتِهِ.",
-          "accessedAt": "2026-09-29"
         }
       ]
     },
@@ -1241,9 +1223,9 @@
     }
   ],
   "approval": {
-    "revision": "f5328bdb82fdb2af",
+    "revision": "634596085f970ec0",
     "approvedAt": "2026-09-29",
     "approvedBy": "msskzx",
-    "note": "Approved for publication. Claims are Not reviewed: the entries are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+    "note": "Approved for publication. Claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
   }
 }

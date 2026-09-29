@@ -29,12 +29,14 @@ Banu Qurayzah) to `saad-muadh/badr`, `saad-muadh/khandaq-wound` and
 `saad-muadh/qurayzah-judgement`. This batch does not add a second citation to a
 value that already has one.
 
-- **Nasab** — the heading split across the digital edition's line break:
-  `سعد بن معاذ بن النعمان بن امرئ القيس الأنصاري` (`279-p3`), `ابن زيد بن عبد
-  الأشهل` (`279-p4`), with `الأوسي` in the epithet line at `279-p5`. Three
-  paragraphs, one selection, so `fullName` carries one citation per paragraph. The same passage supports the `SON` edge to `muadh-ibn-al-numan`, whose
-  own module does not restate the reciprocal `FATHER` edge —
-  `catalog:project-graph` writes it from the `inverse`.
+- **Nasab** — one selection across the three paragraphs the digital edition
+  breaks the heading into: `سعد بن معاذ بن النعمان بن امرئ القيس الأنصاري`
+  (`279-p3`), `ابن زيد بن عبد الأشهل` (`279-p4`), and the epithet line with
+  `الأوسي` (`279-p5`). `fullName` cites the three as one joined record, since a
+  paragraph break in the layout is not a second piece of evidence. The same
+  passage supports the `SON` edge to `muadh-ibn-al-numan`, whose own module
+  does not restate the reciprocal `FATHER` edge — `catalog:project-graph` writes
+  it from the `inverse`.
 - **Kunya** — `أبو عمرو`, in the epithet line at `279-p5`. The entry names it
   once more in verse at `294-p13` (`لِسَعْدٍ أَبِي عَمْرِو`), which adds nothing the
   heading does not.
