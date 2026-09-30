@@ -1,0 +1,547 @@
+{
+  "slug": "asad-ibn-zurarah",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "asad-ibn-zurarah",
+      "extractionUrl": "https://shamela.ws/book/10906/1725",
+      "accessedAt": "2026-09-29",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "299",
+          "bodyFile": "accounts/asad-ibn-zurarah/001.md",
+          "notesFile": "accounts/asad-ibn-zurarah/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1725",
+          "passages": [
+            {
+              "anchor": "299-p3"
+            },
+            {
+              "anchor": "299-p4"
+            },
+            {
+              "anchor": "299-p5"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "300",
+          "bodyFile": "accounts/asad-ibn-zurarah/002.md",
+          "notesFile": "accounts/asad-ibn-zurarah/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1726",
+          "passages": [
+            {
+              "anchor": "300-p1"
+            },
+            {
+              "anchor": "300-p2"
+            },
+            {
+              "anchor": "300-p3"
+            },
+            {
+              "anchor": "300-p4"
+            },
+            {
+              "anchor": "300-p5"
+            },
+            {
+              "anchor": "300-p6"
+            },
+            {
+              "anchor": "300-p7"
+            },
+            {
+              "anchor": "300-p8"
+            },
+            {
+              "anchor": "300-p9"
+            },
+            {
+              "anchor": "300-p10"
+            },
+            {
+              "anchor": "300-p11"
+            },
+            {
+              "anchor": "300-p12"
+            },
+            {
+              "anchor": "300-p13"
+            },
+            {
+              "anchor": "300-p14"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "printedPage": "301",
+          "bodyFile": "accounts/asad-ibn-zurarah/003.md",
+          "notesFile": "accounts/asad-ibn-zurarah/003.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1727",
+          "passages": [
+            {
+              "anchor": "301-p1"
+            },
+            {
+              "anchor": "301-p2"
+            },
+            {
+              "anchor": "301-p3"
+            },
+            {
+              "anchor": "301-p4"
+            },
+            {
+              "anchor": "301-p5"
+            },
+            {
+              "anchor": "301-p6"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "printedPage": "302",
+          "bodyFile": "accounts/asad-ibn-zurarah/004.md",
+          "notesFile": "accounts/asad-ibn-zurarah/004.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1728",
+          "passages": [
+            {
+              "anchor": "302-p1"
+            },
+            {
+              "anchor": "302-p2"
+            },
+            {
+              "anchor": "302-p3"
+            },
+            {
+              "anchor": "302-p4"
+            },
+            {
+              "anchor": "302-p5"
+            },
+            {
+              "anchor": "302-p6"
+            },
+            {
+              "anchor": "302-p7"
+            },
+            {
+              "anchor": "302-p8"
+            },
+            {
+              "anchor": "302-p9"
+            },
+            {
+              "anchor": "302-p10"
+            },
+            {
+              "anchor": "302-p11"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "printedPage": "303",
+          "bodyFile": "accounts/asad-ibn-zurarah/005.md",
+          "notesFile": "accounts/asad-ibn-zurarah/005.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1729",
+          "passages": [
+            {
+              "anchor": "303-p1"
+            },
+            {
+              "anchor": "303-p2"
+            },
+            {
+              "anchor": "303-p3"
+            },
+            {
+              "anchor": "303-p4"
+            },
+            {
+              "anchor": "303-p5"
+            },
+            {
+              "anchor": "303-p6"
+            },
+            {
+              "anchor": "303-p7"
+            },
+            {
+              "anchor": "303-p8"
+            },
+            {
+              "anchor": "303-p9"
+            },
+            {
+              "anchor": "303-p10"
+            },
+            {
+              "anchor": "303-p11"
+            },
+            {
+              "anchor": "303-p12"
+            }
+          ]
+        }
+      ],
+      "volumeNumber": 4,
+      "notInSource": [
+        "appearance",
+        "wives",
+        "siblings"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "asad-ibn-zurarah-siyar58/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "asad-ibn-zurarah",
+      "field": "fullName",
+      "assertion": "أسعد بن زرارة بن عدس بن عبيد بن ثعلبة بن غنم بن مالك بن النجار",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "299-p3",
+          "volume": "4",
+          "pageReference": "299",
+          "extractionUrl": "https://shamela.ws/book/10906/1725",
+          "excerptArabic": "أَسَعْدُ بنُ زُرَارَةَ بنِ عُدَسَ بنِ عُبَيْدِ بنِ ثَعْلَبَةَ الأَنْصَارِيُّ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "299-p4",
+          "volume": "4",
+          "pageReference": "299",
+          "extractionUrl": "https://shamela.ws/book/10906/1725",
+          "excerptArabic": "ابْنِ غَنْمِ بنِ مَالِكِ بنِ النَّجَّارِ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "asad-ibn-zurarah-siyar58/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "asad-ibn-zurarah",
+      "assertion": "أسعد بن زرارة: أبوه زرارة بن عدس.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "zurarah-ibn-udas",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "299-p3",
+          "volume": "4",
+          "pageReference": "299",
+          "extractionUrl": "https://shamela.ws/book/10906/1725",
+          "excerptArabic": "أَسَعْدُ بنُ زُرَارَةَ بنِ عُدَسَ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "asad-ibn-zurarah-siyar58/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "asad-ibn-zurarah",
+      "field": "kunya",
+      "assertion": "أبو أمامة",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "299-p5",
+          "volume": "4",
+          "pageReference": "299",
+          "extractionUrl": "https://shamela.ws/book/10906/1725",
+          "excerptArabic": "أَبُو أُمَامَةَ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "asad-ibn-zurarah-siyar58/tribal-affiliation",
+      "subjectKind": "PERSON",
+      "subjectSlug": "asad-ibn-zurarah",
+      "field": "tribalAffiliation",
+      "assertion": "الأنصاري، الخزرجي، النجاري",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "299-p5",
+          "volume": "4",
+          "pageReference": "299",
+          "extractionUrl": "https://shamela.ws/book/10906/1725",
+          "excerptArabic": "أَبُو أُمَامَةَ الأَنْصَارِيُّ، الخَزْرَجِيُّ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "299-p4",
+          "volume": "4",
+          "pageReference": "299",
+          "extractionUrl": "https://shamela.ws/book/10906/1725",
+          "excerptArabic": "ابْنِ غَنْمِ بنِ مَالِكِ بنِ النَّجَّارِ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "asad-ibn-zurarah-siyar58/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "asad-ibn-zurarah",
+      "field": "titles",
+      "assertion": "السَّيِّدُ، نَقِيْبُ بَنِي النَّجَّارِ، مِنْ كُبَرَاءِ الصَّحَابَةِ — صحابي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "299-p5",
+          "volume": "4",
+          "pageReference": "299",
+          "extractionUrl": "https://shamela.ws/book/10906/1725",
+          "excerptArabic": "السَّيِّدُ، نَقِيْبُ بَنِي النَّجَّارِ، أَبُو أُمَامَةَ الأَنْصَارِيُّ، الخَزْرَجِيُّ، مِنْ كُبَرَاءِ الصَّحَابَةِ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "asad-ibn-zurarah-siyar58/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "asad-ibn-zurarah",
+      "field": "virtues",
+      "assertion": "كَانَ أَوَّلَ مَنْ جَمَعَ بِالمَدِيْنَةِ، وَمُقَدَّمَ النُّقَبَاءِ الاثْنَيْ عَشَرَ، وَأَوَّلَ مَنْ قَدِمَ المَدِيْنَةَ بِالإِسْلاَمِ مَعَ ذَكْوَانَ بنِ عَبْدِ قَيْسٍ، وَصَلَّى بِالنَّاسِ قَبْلَ مَقْدَمِ النَّبِيِّ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "300-p12",
+          "volume": "4",
+          "pageReference": "300",
+          "extractionUrl": "https://shamela.ws/book/10906/1726",
+          "excerptArabic": "كَانَ أَوَّلَ مَنْ جَمَعَ بِنَا بِالمَدِيْنَةِ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "300-p14",
+          "volume": "4",
+          "pageReference": "300",
+          "extractionUrl": "https://shamela.ws/book/10906/1726",
+          "excerptArabic": "فَكَانَ أَسَعْدٌ مُقَدَّمَ النُّقَبَاءِ الاثْنَيْ عَشَرَ، فَهُوَ نَقِيْبُ بَنِي النَّجَّارِ …",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "302-p8",
+          "volume": "4",
+          "pageReference": "302",
+          "extractionUrl": "https://shamela.ws/book/10906/1728",
+          "excerptArabic": "فَأَسْلَمَا، فَكَانَا أَوَّلَ مَنْ قَدِمَ المَدِيْنَةَ بِالإِسْلاَمِ.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "302-p9",
+          "volume": "4",
+          "pageReference": "302",
+          "extractionUrl": "https://shamela.ws/book/10906/1728",
+          "excerptArabic": "رَأَتْ أَسَعْدَ بنَ زُرَارَةَ قَبلَ مَقْدَمِ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يُصَلِّي بِالنَّاسِ الصَّلَوَاتِ الخَمْسَ، يُجَمِّعُ بِهِم فِي مَسْجِدٍ بَنَاهُ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "asad-ibn-zurarah-siyar58/death",
+      "subjectKind": "PERSON",
+      "subjectSlug": "asad-ibn-zurarah",
+      "assertion": "تُوُفِّيَ شَهِيْداً بِالذُّبْحَةِ وَالنَّبِيُّ يَبْنِي مَسْجِدَهُ قَبْلَ بَدْرٍ، وَقِيْلَ مَاتَ فِي السَّنَةِ الأُوْلَى مِنَ الهِجْرَةِ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "death-of-asad-ibn-zurarah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "300-p1",
+          "volume": "4",
+          "pageReference": "300",
+          "extractionUrl": "https://shamela.ws/book/10906/1726",
+          "excerptArabic": "تُوُفِّيَ: شَهِيْداً بِالذُّبْحَةِ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "300-p4",
+          "volume": "4",
+          "pageReference": "300",
+          "extractionUrl": "https://shamela.ws/book/10906/1726",
+          "excerptArabic": "قَالَ ابْنُ إِسْحَاقَ: تُوُفِّيَ وَالنَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَبْنِي مَسْجِدَهُ قَبْلَ بَدْرٍ.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "302-p1",
+          "volume": "4",
+          "pageReference": "302",
+          "extractionUrl": "https://shamela.ws/book/10906/1728",
+          "excerptArabic": "وَقِيْلَ: إِنَّهُ مَاتَ فِي السَّنَةِ الأُوْلَى منَ الهِجْرَةِ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    }
+  ],
+  "approval": {
+    "revision": "c2d712a1a9410096",
+    "approvedAt": "2026-09-29",
+    "approvedBy": "msskzx",
+    "note": "Approved for publication. Claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+  }
+}

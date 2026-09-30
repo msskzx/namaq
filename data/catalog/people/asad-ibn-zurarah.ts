@@ -1,9 +1,7 @@
 import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
-// The seed entry is retired, so this module is the author; what it held and
-// no batch cites is carried below with its evidence owed. The Prophet left
-// his naqib place unfilled and took it himself, which the chapter says Banu
-// al-Najjar took pride in.
+// Authored from data/history/batches/asad-ibn-zurarah, entry 58. The entry
+// never states his sex outright, so sex stays on the sira chapter's claim.
 const asadIbnZurarah = {
   kind: 'PERSON',
   slug: 'asad-ibn-zurarah',
@@ -11,30 +9,40 @@ const asadIbnZurarah = {
   nameTransliterated: 'Asad ibn Zurarah',
   hasProfile: true,
   fields: {
-    // Carried from the retired seed entry, which took it from the Siyar
-    // without citing it.
     fullName: {
-      value:
-        'أسعد بن زرارة بن عدس بن عبيد بن ثعلبة بن غنم بن مالك بن النجار الأنصاري الخزرجي النجاري',
-      claims: legacyUnreviewed,
+      value: 'أسعد بن زرارة بن عدس بن عبيد بن ثعلبة بن غنم بن مالك بن النجار',
+      claims: ['asad-ibn-zurarah-siyar58/full-name'],
     },
     sex: { value: 'MALE', claims: ['asad/sex'] },
+    kunya: {
+      value: 'أبو أمامة',
+      claims: ['asad-ibn-zurarah-siyar58/kunya'],
+    },
+    tribalAffiliation: {
+      value: 'الأنصاري، الخزرجي، النجاري',
+      claims: ['asad-ibn-zurarah-siyar58/tribal-affiliation'],
+    },
     virtues: {
       value:
-        'كان من سادة الأنصار ومن نقبائهم الأبرار، ولم يجعل النبي صلى الله عليه وسلم على بني النجار بعده نقيبا وقال: (أنا نقيبكم) ، فكانوا يفخرون بذلك.',
-      claims: ['asad/naqib'],
+        'كان من سادة الأنصار ومن نقبائهم الأبرار، ولم يجعل النبي صلى الله عليه وسلم على بني النجار بعده نقيبا وقال: (أنا نقيبكم) ، فكانوا يفخرون بذلك. وكان أول من جمع بالمدينة، ومقدم النقباء الاثني عشر، وأول من قدم المدينة بالإسلام مع ذكوان بن عبد قيس، وصلى بالناس قبل مقدم النبي صلى الله عليه وسلم.',
+      claims: ['asad/naqib', 'asad-ibn-zurarah-siyar58/virtues'],
     },
   },
   titles: [
-    // Carried from the retired seed entry. The seeds gave every صحابي this
-    // title without citing it.
-    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    {
+      title: 'companion',
+      name: 'صحابي',
+      nameTransliterated: 'Companion',
+      claims: ['asad-ibn-zurarah-siyar58/titles'],
+    },
   ],
   relations: [
-    // Carried from neo4j/graphSeedData*.ts, which stated these ties without
-    // citing them. The catalog owns this subject's edges now, so they live
-    // here or not at all.
-    { type: 'SON', inverse: 'FATHER', to: 'zurarah-ibn-udas', claims: legacyUnreviewed },
+    {
+      type: 'SON',
+      inverse: 'FATHER',
+      to: 'zurarah-ibn-udas',
+      claims: ['asad-ibn-zurarah-siyar58/father'],
+    },
   ],
 } satisfies CatalogPerson;
 
