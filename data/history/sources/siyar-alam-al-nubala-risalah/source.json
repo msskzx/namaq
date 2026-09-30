@@ -10,8 +10,8 @@
   "url": "https://shamela.ws/book/10906",
   "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده. أجزاء الشاملة (الجزء ١..٢٣) لا تُحصي مجلدي السيرة النبوية ومجلد الخلفاء الراشدين المجلدة قبلها، فالجزء ٢ من الشاملة هو المجلد رقم ٥ هنا (راجع AGENTS.md، قسم \"Content sources\").",
   "volumes": [
-    { "number": 1, "name": "السيرة النبوية ج١", "firstPrintedPage": 29, "lastPrintedPage": 527 },
-    { "number": 2, "name": "السيرة النبوية ج٢", "firstPrintedPage": 5, "lastPrintedPage": 496 },
+    { "number": 1, "name": "السيرة النبوية ج١", "firstPrintedPage": 29, "lastPrintedPage": 527, "skippedPrintedPages": [296, 442] },
+    { "number": 2, "name": "السيرة النبوية ج٢", "firstPrintedPage": 5, "lastPrintedPage": 496, "skippedPrintedPages": [298] },
     { "number": 3, "name": "سيرة الخلفاء الراشدين", "firstPrintedPage": 7, "lastPrintedPage": 290 },
     { "number": 4, "name": "سير أعلام النبلاء ج١", "firstPrintedPage": 5, "lastPrintedPage": 558 },
     { "number": 5, "name": "سير أعلام النبلاء ج٢", "firstPrintedPage": 5, "lastPrintedPage": 633 },

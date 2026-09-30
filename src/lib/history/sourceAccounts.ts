@@ -8,6 +8,14 @@ import type { Prisma } from '@/generated/prisma';
  * there the paging, the page body and the section index do not differ. The
  * queries live here so the two route pairs are the `where` clause and nothing
  * else.
+ *
+ * An account holds no pages of its own -- it names a span of pages per
+ * volume (`SourceAccountSpan`), and the pages themselves belong to the
+ * volume (`SourcePage`), shared by every account whose entry touches one --
+ * see docs/plans/source-page-store.md and
+ * docs/adr/0018-a-page-belongs-to-the-edition.md. `sequence` here is a
+ * position within one account's own span(s), 1-based, translated to a real
+ * `(volumeId, printedPage)` before touching `SourcePage`.
  */
 
 const accountSummary = {
@@ -16,79 +24,10 @@ const accountSummary = {
   subjectSlug: true,
   entryIdentifier: true,
   titleArabic: true,
-  volume: true,
   extractionUrl: true,
   source: true,
-  _count: { select: { pages: true } },
+  spans: { select: { firstPrintedPage: true, lastPrintedPage: true, volume: { select: { number: true, name: true } } } },
 } as const;
-
-/**
- * Where an entry begins in its work, taken from the host's page id for its
- * first page.
- *
- * A SourceAccount records no position of its own, so `createdAt` is the only
- * order the table has, and that is the order batches were imported rather than
- * the order the work reads in: the pilot batch lands first and the sira, which
- * opens the book, lands last. The host numbers its pages in the work's own
- * sequence, so the first page's id stands in until an account carries its
- * place itself. An entry with no id sorts last rather than jumping the queue.
- */
-function openingPage(url: string | null | undefined) {
-  const id = url?.match(/(\d+)\s*$/)?.[1];
-  return id ? Number(id) : Number.MAX_SAFE_INTEGER;
-}
-
-/**
- * Which volumes each account's pages are bound in, and the run of pages in
- * each. An entry is a run of pages and a run can cross a binding, so one entry
- * may sit in two volumes -- the sira is 497 pages of one and 491 of the next --
- * and the contents list it under both, each with only its own pages.
- */
-async function volumeSpans(accountIds: string[]) {
-  if (accountIds.length === 0) return new Map<string, VolumeSpan[]>();
-
-  const groups = await prisma.sourceAccountPage.groupBy({
-    by: ['accountId', 'volumeId'],
-    where: { accountId: { in: accountIds }, volumeId: { not: null } },
-    _min: { sequence: true },
-    _max: { sequence: true },
-    _count: { _all: true },
-  });
-  const volumeIds = [...new Set(groups.map((group) => group.volumeId!))];
-  const volumes = volumeIds.length
-    ? await prisma.sourceVolume.findMany({
-        where: { id: { in: volumeIds } },
-        select: { id: true, number: true, name: true },
-      })
-    : [];
-  const volumeById = new Map(volumes.map((volume) => [volume.id, volume]));
-
-  // The printed page each run opens on, which is what a reader looks for in a
-  // contents list; the sequence only says where it falls in our own paging.
-  const openings = await prisma.sourceAccountPage.findMany({
-    where: { OR: groups.map((group) => ({ accountId: group.accountId, sequence: group._min.sequence! })) },
-    select: { accountId: true, sequence: true, printedPage: true },
-  });
-  const printedAt = new Map(openings.map((page) => [`${page.accountId}:${page.sequence}`, page.printedPage]));
-
-  const spans = new Map<string, VolumeSpan[]>();
-  for (const group of groups) {
-    const volume = volumeById.get(group.volumeId!);
-    if (!volume) continue;
-    const list = spans.get(group.accountId) ?? [];
-    list.push({
-      number: volume.number,
-      name: volume.name,
-      firstSequence: group._min.sequence!,
-      firstPrintedPage: printedAt.get(`${group.accountId}:${group._min.sequence}`) ?? null,
-      lastSequence: group._max.sequence!,
-      pageCount: group._count._all,
-    });
-    spans.set(group.accountId, list);
-  }
-  spans.forEach((list) => list.sort((a, b) => a.number - b.number));
-  return spans;
-}
 
 export interface VolumeSpan {
   number: number;
@@ -99,6 +38,43 @@ export interface VolumeSpan {
   firstPrintedPage: string | null;
   lastSequence: number;
   pageCount: number;
+}
+
+type SpanRow = { firstPrintedPage: number; lastPrintedPage: number; volume: { number: number; name: string | null } };
+
+/** An account's spans, ordered by volume, with the running `sequence` each one starts at. */
+function orderedSpans(spans: SpanRow[]) {
+  const sorted = [...spans].sort((a, b) => a.volume.number - b.volume.number || a.firstPrintedPage - b.firstPrintedPage);
+  let sequence = 1;
+  return sorted.map((span) => {
+    const pageCount = span.lastPrintedPage - span.firstPrintedPage + 1;
+    const firstSequence = sequence;
+    sequence += pageCount;
+    return { ...span, firstSequence, lastSequence: firstSequence + pageCount - 1, pageCount };
+  });
+}
+
+function toVolumeSpans(spans: SpanRow[]): VolumeSpan[] {
+  return orderedSpans(spans).map((span) => ({
+    number: span.volume.number,
+    name: span.volume.name,
+    firstSequence: span.firstSequence,
+    firstPrintedPage: String(span.firstPrintedPage),
+    lastSequence: span.lastSequence,
+    pageCount: span.pageCount,
+  }));
+}
+
+/** The `(volumeNumber, printedPage)` a 1-based `sequence` resolves to within an account's spans. */
+function sequenceToPage(spans: SpanRow[], sequence: number): { volumeNumber: number; printedPage: number } | null {
+  const span = orderedSpans(spans).find((candidate) => sequence >= candidate.firstSequence && sequence <= candidate.lastSequence);
+  if (!span) return null;
+  return { volumeNumber: span.volume.number, printedPage: span.firstPrintedPage + (sequence - span.firstSequence) };
+}
+
+async function volumeIdsBySource(sourceId: string): Promise<Map<number, string>> {
+  const volumes = await prisma.sourceVolume.findMany({ where: { sourceId }, select: { id: true, number: true } });
+  return new Map(volumes.map((volume) => [volume.number, volume.id]));
 }
 
 export async function listAccounts(where: Prisma.SourceAccountWhereInput) {
@@ -118,38 +94,56 @@ export async function listAccounts(where: Prisma.SourceAccountWhereInput) {
     : [];
   const nameBySlug = new Map(people.map((person) => [person.slug, person.name]));
 
-  const openings = rows.length
-    ? await prisma.sourceAccountPage.findMany({
-        where: { accountId: { in: rows.map((row) => row.id) }, sequence: 1 },
-        select: { accountId: true, extractionUrl: true },
-      })
-    : [];
-  const openingByAccount = new Map(openings.map((page) => [page.accountId, openingPage(page.extractionUrl)]));
-
-  const spans = await volumeSpans(rows.map((row) => row.id));
-
   return rows
-    .map(({ _count, ...account }) => ({
-      ...account,
-      pageCount: _count.pages,
-      subjectName: nameBySlug.get(account.subjectSlug) ?? null,
-      volumes: spans.get(account.id) ?? [],
-    }))
-    .sort((a, b) => (openingByAccount.get(a.id) ?? 0) - (openingByAccount.get(b.id) ?? 0));
+    .map((row) => {
+      const volumes = toVolumeSpans(row.spans);
+      return {
+        ...row,
+        spans: undefined,
+        pageCount: volumes.reduce((total, span) => total + span.pageCount, 0),
+        subjectName: row.subjectKind === 'PERSON' ? (nameBySlug.get(row.subjectSlug) ?? null) : null,
+        volumes,
+      };
+    })
+    // The book's own reading order: which volume an entry opens in, and
+    // where in it -- see docs/plans/source-page-store.md, "Nonblocking".
+    .sort((a, b) => (a.volumes[0]?.number ?? 0) - (b.volumes[0]?.number ?? 0) || (a.volumes[0]?.firstSequence ?? 0) - (b.volumes[0]?.firstSequence ?? 0));
+}
+
+async function accountSpans(accountId: string): Promise<SpanRow[]> {
+  return prisma.sourceAccountSpan.findMany({
+    where: { accountId },
+    select: { firstPrintedPage: true, lastPrintedPage: true, volume: { select: { number: true, name: true } } },
+  });
+}
+
+async function readSourcePage(sourceId: string, volumeNumber: number, printedPage: number, extractionUrl: string) {
+  const volumeIds = await volumeIdsBySource(sourceId);
+  const volumeId = volumeIds.get(volumeNumber);
+  if (!volumeId) return null;
+  const page = await prisma.sourcePage.findUnique({
+    where: { volumeId_printedPage: { volumeId, printedPage } },
+    select: { printedPage: true, bodyMarkdown: true, notesMarkdown: true, extractionUrl: true, passages: { select: { anchor: true, excerpt: true } } },
+  });
+  if (!page) return null;
+  return {
+    sequence: 0, // filled in by the caller, which knows the account's own spans
+    printedPage: String(page.printedPage),
+    bodyMarkdown: page.bodyMarkdown,
+    notesMarkdown: page.notesMarkdown,
+    extractionUrl: page.extractionUrl ?? extractionUrl,
+    passages: page.passages,
+  };
 }
 
 export async function readPage(accountId: string, sequence: number) {
-  return prisma.sourceAccountPage.findUnique({
-    where: { accountId_sequence: { accountId, sequence } },
-    select: {
-      sequence: true,
-      printedPage: true,
-      bodyMarkdown: true,
-      notesMarkdown: true,
-      extractionUrl: true,
-      passages: { select: { anchor: true, excerpt: true } },
-    },
-  });
+  const account = await prisma.sourceAccount.findUnique({ where: { id: accountId }, select: { sourceId: true, extractionUrl: true } });
+  if (!account) return null;
+  const spans = await accountSpans(accountId);
+  const target = sequenceToPage(spans, sequence);
+  if (!target) return null;
+  const page = await readSourcePage(account.sourceId, target.volumeNumber, target.printedPage, account.extractionUrl);
+  return page && { ...page, sequence };
 }
 
 /** The most pages one request may ask for, so a range cannot read a whole book. */
@@ -157,18 +151,17 @@ export const MAX_PAGES_PER_REQUEST = 9;
 
 /** Pages `from..to` (inclusive) of one account, in reading order. */
 export async function readPages(accountId: string, from: number, to: number) {
-  return prisma.sourceAccountPage.findMany({
-    where: { accountId, sequence: { gte: from, lte: to } },
-    select: {
-      sequence: true,
-      printedPage: true,
-      bodyMarkdown: true,
-      notesMarkdown: true,
-      extractionUrl: true,
-      passages: { select: { anchor: true, excerpt: true } },
-    },
-    orderBy: { sequence: 'asc' },
-  });
+  const account = await prisma.sourceAccount.findUnique({ where: { id: accountId }, select: { sourceId: true, extractionUrl: true } });
+  if (!account) return [];
+  const spans = await accountSpans(accountId);
+  const pages = [];
+  for (let sequence = from; sequence <= to; sequence += 1) {
+    const target = sequenceToPage(spans, sequence);
+    if (!target) continue;
+    const page = await readSourcePage(account.sourceId, target.volumeNumber, target.printedPage, account.extractionUrl);
+    if (page) pages.push({ ...page, sequence });
+  }
+  return pages;
 }
 
 /**
@@ -192,19 +185,29 @@ export async function pagesPayload(
  * body, which is why it is served apart from the page itself.
  */
 export async function sectionIndex(accountId: string) {
-  const pages = await prisma.sourceAccountPage.findMany({
-    where: { accountId },
-    select: { sequence: true, printedPage: true, bodyMarkdown: true },
-    orderBy: { sequence: 'asc' },
-  });
+  const account = await prisma.sourceAccount.findUnique({ where: { id: accountId }, select: { sourceId: true } });
+  if (!account) return [];
+  const spans = await accountSpans(accountId);
+  const ordered = orderedSpans(spans);
+  const volumeIds = await volumeIdsBySource(account.sourceId);
 
-  return pages.flatMap((page) =>
-    pageHeadings(page.bodyMarkdown).map((heading) => ({
-      sequence: page.sequence,
-      printedPage: page.printedPage,
-      heading: heading.text,
-    })),
-  );
+  const headings = [];
+  for (const span of ordered) {
+    const volumeId = volumeIds.get(span.volume.number);
+    if (!volumeId) continue;
+    const pages = await prisma.sourcePage.findMany({
+      where: { volumeId, printedPage: { gte: span.firstPrintedPage, lte: span.lastPrintedPage } },
+      select: { printedPage: true, bodyMarkdown: true },
+      orderBy: { printedPage: 'asc' },
+    });
+    for (const page of pages) {
+      const sequence = span.firstSequence + (page.printedPage - span.firstPrintedPage);
+      for (const heading of pageHeadings(page.bodyMarkdown)) {
+        headings.push({ sequence, printedPage: String(page.printedPage), heading: heading.text });
+      }
+    }
+  }
+  return headings;
 }
 
 /**
@@ -213,29 +216,47 @@ export async function sectionIndex(accountId: string) {
  * of printed pages, so the caller names the page it wants rather than
  * receiving every account's full text on load.
  */
+/** Which account, and which of its own `sequence` positions, a citation's `(volume, printedPage)` deep link lands on. */
+function resolveByPage(
+  accounts: Awaited<ReturnType<typeof listAccounts>>,
+  volumeNumber: number,
+  printedPage: number,
+) {
+  for (const account of accounts) {
+    const span = account.volumes.find(
+      (candidate) => candidate.number === volumeNumber && printedPage >= Number(candidate.firstPrintedPage) && printedPage <= Number(candidate.firstPrintedPage) + candidate.pageCount - 1,
+    );
+    if (span) return { account, sequence: span.firstSequence + (printedPage - Number(span.firstPrintedPage)) };
+  }
+  return null;
+}
+
 export async function accountsPayload(
   where: Prisma.SourceAccountWhereInput,
   requestedAccount: string | null,
   requestedPage: number,
   /** Each caller says what the account was not found in, since it knows. */
   unknownAccount: string,
+  /** A citation deep link: which account to open is resolved from the page itself. */
+  volumeAndPage?: { volumeNumber: number; printedPage: number },
 ) {
   const accounts = await listAccounts(where);
   if (accounts.length === 0) return { status: 200 as const, body: { accounts: [], account: null, page: null } };
 
-  const selected = requestedAccount
-    ? accounts.find((account) => account.id === requestedAccount)
-    : accounts[0];
+  const resolved = volumeAndPage ? resolveByPage(accounts, volumeAndPage.volumeNumber, volumeAndPage.printedPage) : null;
+  if (volumeAndPage && !resolved) return { status: 404 as const, body: { error: unknownAccount } };
+
+  const selected = resolved
+    ? resolved.account
+    : requestedAccount
+      ? accounts.find((account) => account.id === requestedAccount)
+      : accounts[0];
+  requestedPage = resolved ? resolved.sequence : requestedPage;
 
   if (!selected) return { status: 404 as const, body: { error: unknownAccount } };
 
-  const [page, pageNumbers, pages] = await Promise.all([
+  const [page, pages] = await Promise.all([
     readPage(selected.id, requestedPage),
-    prisma.sourceAccountPage.findMany({
-      where: { accountId: selected.id },
-      select: { sequence: true, printedPage: true, volume: { select: { number: true } } },
-      orderBy: { sequence: 'asc' },
-    }),
     readPages(selected.id, Math.max(1, requestedPage - 2), requestedPage + 2),
   ]);
   if (!page) {
@@ -244,6 +265,14 @@ export async function accountsPayload(
       body: { error: `Page ${requestedPage} is outside this account`, pageCount: selected.pageCount },
     };
   }
+
+  const pageNumbers = selected.volumes.flatMap((span) =>
+    Array.from({ length: span.pageCount }, (_, index) => ({
+      sequence: span.firstSequence + index,
+      printedPage: String(Number(span.firstPrintedPage) + index),
+      volume: { number: span.number },
+    })),
+  );
 
   return { status: 200 as const, body: { accounts, account: selected, page, pages, pageNumbers } };
 }

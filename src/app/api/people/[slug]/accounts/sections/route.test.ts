@@ -1,8 +1,19 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { findFirst, findMany } = vi.hoisted(() => ({ findFirst: vi.fn(), findMany: vi.fn() }));
+const { findFirst, findAccount, findSpans, findVolumes, findPages } = vi.hoisted(() => ({
+  findFirst: vi.fn(),
+  findAccount: vi.fn(),
+  findSpans: vi.fn(async () => [] as unknown[]),
+  findVolumes: vi.fn(async () => [] as { id: string; number: number }[]),
+  findPages: vi.fn(),
+}));
 vi.mock('@/lib/prisma', () => ({
-  prisma: { sourceAccount: { findFirst }, sourceAccountPage: { findMany } },
+  prisma: {
+    sourceAccount: { findFirst, findUnique: findAccount },
+    sourceAccountSpan: { findMany: findSpans },
+    sourceVolume: { findMany: findVolumes },
+    sourcePage: { findMany: findPages },
+  },
 }));
 
 import { GET } from './route';
@@ -16,7 +27,10 @@ function call(slug: string, query = '') {
 describe('GET /api/people/[slug]/accounts/sections', () => {
   beforeEach(() => {
     findFirst.mockReset();
-    findMany.mockReset();
+    findAccount.mockReset().mockResolvedValue({ sourceId: 'source-siyar' });
+    findSpans.mockReset().mockResolvedValue([{ firstPrintedPage: 29, lastPrintedPage: 31, volume: { number: 1, name: null } }]);
+    findVolumes.mockReset().mockResolvedValue([{ id: 'volume-1', number: 1 }]);
+    findPages.mockReset();
   });
 
   it('requires an account', async () => {
@@ -33,15 +47,15 @@ describe('GET /api/people/[slug]/accounts/sections', () => {
 
     expect(response.status).toBe(404);
     expect(await response.json()).toEqual({ error: 'Unknown account for this person' });
-    expect(findMany).not.toHaveBeenCalled();
+    expect(findPages).not.toHaveBeenCalled();
   });
 
   it('collects every heading across the account\'s pages, in page order', async () => {
     findFirst.mockResolvedValue({ id: 'account-siyar' });
-    findMany.mockResolvedValue([
-      { sequence: 1, printedPage: '29', bodyMarkdown: '[الباب الأول:]\n\nنص.' },
-      { sequence: 2, printedPage: '30', bodyMarkdown: 'نص بلا عنوان.' },
-      { sequence: 3, printedPage: '31', bodyMarkdown: '[الباب الثاني:]\n\nنص آخر.' },
+    findPages.mockResolvedValue([
+      { printedPage: 29, bodyMarkdown: '[الباب الأول:]\n\nنص.' },
+      { printedPage: 30, bodyMarkdown: 'نص بلا عنوان.' },
+      { printedPage: 31, bodyMarkdown: '[الباب الثاني:]\n\nنص آخر.' },
     ]);
 
     const body = await (await call('abu-ubaydah-ibn-al-jarrah', '?account=account-siyar')).json();

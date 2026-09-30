@@ -14,6 +14,7 @@ export async function GET(
   const query = new URL(request.url).searchParams;
   const from = query.get('from');
   const requestedPage = Number(query.get('page') ?? '1');
+  const volumeParam = query.get('volume');
 
   if (from !== null) {
     const start = Number(from);
@@ -36,11 +37,13 @@ export async function GET(
   }
 
   try {
+    const volumeNumber = volumeParam !== null ? Number(volumeParam) : undefined;
     const { status, body } = await accountsPayload(
       { subjectKind: 'PERSON', subjectSlug: slug },
       query.get('account'),
       requestedPage,
       'Unknown account for this person',
+      volumeNumber !== undefined ? { volumeNumber, printedPage: requestedPage } : undefined,
     );
     return NextResponse.json(body, { status });
   } catch (error) {

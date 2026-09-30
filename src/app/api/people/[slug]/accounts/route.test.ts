@@ -1,29 +1,26 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { findMany, findUnique, findPeople, findOpenings, groupSpans } = vi.hoisted(() => ({
-  findMany: vi.fn(),
-  findUnique: vi.fn(),
+const { findAccounts, findAccount, findSpans, findVolumes, findPage, findPeople } = vi.hoisted(() => ({
+  findAccounts: vi.fn(),
+  // readPage/readPages/sectionIndex each resolve the account's own sourceId
+  // and extractionUrl before touching its spans or the store.
+  findAccount: vi.fn(),
+  // ...then read the spans (one per volume the entry's pages fall in) that
+  // translate a 1-based `sequence` into a real `(volume, printedPage)`.
+  findSpans: vi.fn(async () => [] as unknown[]),
+  // ...and the source's volumes, to turn a volume number into its row id.
+  findVolumes: vi.fn(async () => [] as { id: string; number: number }[]),
+  findPage: vi.fn(),
   // listAccounts resolves each PERSON subject's own name so a reader that does
   // not already know whose entry it is can label it with something but a slug.
   findPeople: vi.fn(async () => []),
-  // ...and reads each account's first page to order them by where they open in
-  // the work rather than by when they were imported.
-  findOpenings: vi.fn(async () => [] as {
-    accountId?: string;
-    sequence?: number;
-    printedPage?: string | null;
-    extractionUrl?: string | null;
-    volume?: { number: number } | null;
-  }[]),
-  // ...and groups each account's pages by the volume they are bound in, since
-  // an entry that crosses a binding sits in two.
-  groupSpans: vi.fn(async () => []),
 }));
 vi.mock('@/lib/prisma', () => ({
   prisma: {
-    sourceAccount: { findMany },
-    sourceAccountPage: { findUnique, findMany: findOpenings, groupBy: groupSpans },
-    sourceVolume: { findMany: vi.fn(async () => []) },
+    sourceAccount: { findMany: findAccounts, findUnique: findAccount, findFirst: vi.fn() },
+    sourceAccountSpan: { findMany: findSpans },
+    sourceVolume: { findMany: findVolumes },
+    sourcePage: { findUnique: findPage },
     person: { findMany: findPeople },
   },
 }));
@@ -42,23 +39,27 @@ const siyar = {
   subjectSlug: 'abu-ubaydah-ibn-al-jarrah',
   entryIdentifier: '1',
   titleArabic: null,
-  volume: '1',
   extractionUrl: 'https://shamela.ws/book/10906/1431',
   source: { slug: 'siyar-alam-al-nubala-risalah', title: 'سير أعلام النبلاء' },
-  _count: { pages: 19 },
+  spans: [{ firstPrintedPage: 5, lastPrintedPage: 23, volume: { number: 1, name: null } }],
 };
 
-const hilya = { ...siyar, id: 'account-hilya', source: { slug: 'hilyat-al-awliya', title: 'حلية الأولياء' }, _count: { pages: 3 } };
+const hilya = {
+  ...siyar,
+  id: 'account-hilya',
+  source: { slug: 'hilyat-al-awliya', title: 'حلية الأولياء' },
+  spans: [{ firstPrintedPage: 1, lastPrintedPage: 3, volume: { number: 1, name: null } }],
+};
 
-const page = { sequence: 1, printedPage: '5', bodyMarkdown: 'نص', notesMarkdown: null, extractionUrl: null };
+const storePage = { printedPage: 5, bodyMarkdown: 'نص', notesMarkdown: null, extractionUrl: null, passages: [] };
 
 describe('GET /api/people/[slug]/accounts', () => {
   beforeEach(() => {
-    findMany.mockReset();
-    findUnique.mockReset();
-    findOpenings.mockReset().mockResolvedValue([]);
-    findMany.mockResolvedValue([siyar]);
-    findUnique.mockResolvedValue(page);
+    findAccounts.mockReset().mockResolvedValue([siyar]);
+    findAccount.mockReset().mockResolvedValue({ sourceId: 'source-siyar', extractionUrl: siyar.extractionUrl });
+    findSpans.mockReset().mockResolvedValue(siyar.spans);
+    findVolumes.mockReset().mockResolvedValue([{ id: 'volume-1', number: 1 }]);
+    findPage.mockReset().mockResolvedValue(storePage);
   });
 
   it('serves the first account and its first page by default', async () => {
@@ -66,16 +67,14 @@ describe('GET /api/people/[slug]/accounts', () => {
 
     expect(body.account.id).toBe('account-siyar');
     expect(body.account.pageCount).toBe(19);
-    expect(body.page).toEqual(page);
-    expect(findUnique).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: { accountId_sequence: { accountId: 'account-siyar', sequence: 1 } },
-      }),
+    expect(body.page).toEqual({ ...storePage, printedPage: '5', sequence: 1, extractionUrl: siyar.extractionUrl });
+    expect(findPage).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { volumeId_printedPage: { volumeId: 'volume-1', printedPage: 5 } } }),
     );
   });
 
   it('lists every account so the reader can switch book', async () => {
-    findMany.mockResolvedValue([siyar, hilya]);
+    findAccounts.mockResolvedValue([siyar, hilya]);
 
     const body = await (await call('abu-ubaydah-ibn-al-jarrah')).json();
 
@@ -83,36 +82,32 @@ describe('GET /api/people/[slug]/accounts', () => {
   });
 
   it('serves the requested account and page', async () => {
-    findMany.mockResolvedValue([siyar, hilya]);
+    findAccounts.mockResolvedValue([siyar, hilya]);
+    findSpans.mockResolvedValue(hilya.spans);
 
     await call('abu-ubaydah-ibn-al-jarrah', '?account=account-hilya&page=3');
 
-    expect(findUnique).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: { accountId_sequence: { accountId: 'account-hilya', sequence: 3 } },
-      }),
+    expect(findPage).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { volumeId_printedPage: { volumeId: 'volume-1', printedPage: 3 } } }),
     );
   });
 
   it('returns printed page labels with their volume for reader navigation', async () => {
-    findOpenings
-      .mockResolvedValueOnce([])
-      .mockResolvedValueOnce([])
-      .mockResolvedValueOnce([{ sequence: 1, printedPage: '29', volume: { number: 1 } }]);
-
     const body = await (await call('abu-ubaydah-ibn-al-jarrah')).json();
 
-    expect(body.pageNumbers).toEqual([{ sequence: 1, printedPage: '29', volume: { number: 1 } }]);
+    expect(body.pageNumbers).toEqual(
+      Array.from({ length: 19 }, (_, index) => ({ sequence: index + 1, printedPage: String(5 + index), volume: { number: 1 } })),
+    );
   });
 
   it('reports no accounts as an empty result, not an error', async () => {
-    findMany.mockResolvedValue([]);
+    findAccounts.mockResolvedValue([]);
 
     const response = await call('someone');
 
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({ accounts: [], account: null, page: null });
-    expect(findUnique).not.toHaveBeenCalled();
+    expect(findPage).not.toHaveBeenCalled();
   });
 
   it('rejects an account that does not belong to this person', async () => {
@@ -123,7 +118,7 @@ describe('GET /api/people/[slug]/accounts', () => {
   });
 
   it('rejects a page beyond the account', async () => {
-    findUnique.mockResolvedValue(null);
+    findPage.mockResolvedValue(null);
 
     const response = await call('abu-ubaydah-ibn-al-jarrah', '?page=99');
 
@@ -135,11 +130,11 @@ describe('GET /api/people/[slug]/accounts', () => {
     const response = await call('abu-ubaydah-ibn-al-jarrah', `?page=${value}`);
 
     expect(response.status).toBe(400);
-    expect(findMany).not.toHaveBeenCalled();
+    expect(findAccounts).not.toHaveBeenCalled();
   });
 
   it('reports a database failure as a failure', async () => {
-    findMany.mockRejectedValue(new Error('boom'));
+    findAccounts.mockRejectedValue(new Error('boom'));
 
     const response = await call('abu-ubaydah-ibn-al-jarrah');
 

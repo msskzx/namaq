@@ -52,8 +52,8 @@ export default function SourcePage({ params }: { params: Promise<{ slug: string 
   const source = data?.sources.find((candidate) => candidate.slug === slug);
 
   const entryLabel = (account: AccountSummary) => {
-    const volume = account.volume && (/^[\d٠-٩]+$/.test(account.volume) ? `ج${account.volume}` : account.volume);
-    return [account.titleArabic || account.subjectName || account.subjectSlug, volume]
+    const volumeNumber = account.volumes?.[0]?.number;
+    return [account.titleArabic || account.subjectName || account.subjectSlug, volumeNumber && `ج${volumeNumber}`]
       .filter(Boolean)
       .join(' — ');
   };

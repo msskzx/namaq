@@ -8,6 +8,13 @@ export interface StoreVolumeRecord {
   name?: string;
   firstPrintedPage?: number | null;
   lastPrintedPage?: number | null;
+  /**
+   * Printed page numbers the edition itself skips within this volume's
+   * extent -- distinct from a page nobody has read yet. Authored once here
+   * rather than inferred, since inferring it needs each page's own digital
+   * host id, which the store does not keep (see AGENTS.md, "Content sources").
+   */
+  skippedPrintedPages?: number[];
   notes?: string;
 }
 

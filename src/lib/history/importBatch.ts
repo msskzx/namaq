@@ -1,5 +1,5 @@
 import type { PrismaClient } from '@/generated/prisma';
-import type { ClaimRecord, HistoryBatch, SourceManifests, StorePages } from './batchSchema';
+import type { AccountRecord, ClaimRecord, HistoryBatch, SourceManifests, StorePages } from './batchSchema';
 import { batchRevision, storePageKey } from './batchSchema';
 import { pageAnchors } from './sourceStore';
 
@@ -55,8 +55,20 @@ async function writeManifests(tx: Tx, manifests: SourceManifests) {
     for (const volume of volumes) {
       const written = await tx.sourceVolume.upsert({
         where: { sourceId_number: { sourceId: row.id, number: volume.number } },
-        create: { sourceId: row.id, number: volume.number, name: volume.name ?? null },
-        update: { name: volume.name ?? null },
+        create: {
+          sourceId: row.id,
+          number: volume.number,
+          name: volume.name ?? null,
+          firstPrintedPage: volume.firstPrintedPage ?? null,
+          lastPrintedPage: volume.lastPrintedPage ?? null,
+          skippedPrintedPages: volume.skippedPrintedPages ?? [],
+        },
+        update: {
+          name: volume.name ?? null,
+          firstPrintedPage: volume.firstPrintedPage ?? null,
+          lastPrintedPage: volume.lastPrintedPage ?? null,
+          skippedPrintedPages: volume.skippedPrintedPages ?? [],
+        },
       });
       bySource.set(volume.number, written.id);
     }
@@ -64,6 +76,77 @@ async function writeManifests(tx: Tx, manifests: SourceManifests) {
   }
 
   return { sourceIds, volumeIds };
+}
+
+/**
+ * Upserts every store page an account's run touches, keyed by
+ * `(volumeId, printedPage)` -- the natural key that makes a page shared
+ * across every account whose entry touches it, and keeps its id (and so its
+ * passages' ids) stable across re-imports.
+ */
+async function writePagesAndPassages(
+  tx: Tx,
+  account: AccountRecord,
+  sourceSlug: string,
+  pages: StorePages,
+  volumeIds: Map<number, string>,
+  passageIds: Map<string, string>,
+) {
+  for (const page of account.pages) {
+    const volumeNumber = page.volumeNumber ?? account.volumeNumber!;
+    const volumeId = volumeIds.get(volumeNumber);
+    if (!volumeId) continue;
+    const store = pages.get(storePageKey(sourceSlug, volumeNumber, page.printedPage));
+    if (!store) continue;
+
+    const printedPage = Number(page.printedPage);
+    // The store doesn't record each page's own Shamela id (only the account
+    // that opened an entry does, on its own extractionUrl), so a shared page
+    // has no single accurate host link of its own yet -- left null rather
+    // than asserting one account's URL for a page other entries also touch.
+    // Citation.extractionUrl is unaffected: each citation still carries its
+    // own accurate link, authored per claim.
+    const pageRow = await tx.sourcePage.upsert({
+      where: { volumeId_printedPage: { volumeId, printedPage } },
+      create: {
+        volumeId,
+        printedPage,
+        bodyMarkdown: store.body,
+        notesMarkdown: store.notes,
+        accessedAt: new Date(account.accessedAt),
+      },
+      update: {
+        bodyMarkdown: store.body,
+        notesMarkdown: store.notes,
+      },
+    });
+
+    for (const [anchor, excerpt] of pageAnchors(volumeNumber, page.printedPage, store.body)) {
+      const passageRow = await tx.sourcePassage.upsert({
+        where: { pageId_anchor: { pageId: pageRow.id, anchor } },
+        create: { pageId: pageRow.id, anchor, excerpt },
+        update: { excerpt },
+      });
+      passageIds.set(anchor, passageRow.id);
+    }
+  }
+}
+
+/** The [min, max] printed page an account's pages cover, per volume. */
+function accountSpans(account: AccountRecord): Map<number, { first: number; last: number }> {
+  const spans = new Map<number, { first: number; last: number }>();
+  for (const page of account.pages) {
+    const volumeNumber = page.volumeNumber ?? account.volumeNumber!;
+    const printed = Number(page.printedPage);
+    const span = spans.get(volumeNumber);
+    if (!span) {
+      spans.set(volumeNumber, { first: printed, last: printed });
+    } else {
+      span.first = Math.min(span.first, printed);
+      span.last = Math.max(span.last, printed);
+    }
+  }
+  return spans;
 }
 
 async function writeAccounts(
@@ -74,7 +157,6 @@ async function writeAccounts(
   batchId: string,
   volumeIds: Map<string, Map<number, string>>,
 ) {
-  const accountIds = new Map<string, string>();
   const passageIds = new Map<string, string>();
   let pageCount = 0;
 
@@ -87,7 +169,6 @@ async function writeAccounts(
     const fields = {
       entryIdentifier: account.entryIdentifier ?? null,
       titleArabic: account.titleArabic ?? null,
-      volume: account.volumeNumber !== undefined ? String(account.volumeNumber) : null,
       extractionUrl: account.extractionUrl,
       accessedAt: new Date(account.accessedAt),
       batchId,
@@ -98,66 +179,33 @@ async function writeAccounts(
       create: { ...identity, ...fields },
       update: fields,
     });
-    accountIds.set(`${account.sourceSlug}:${account.subjectSlug}`, row.id);
 
-    // Pages carry no authoring key of their own, so a re-import replaces the
-    // account's run wholesale rather than matching pages one by one.
-    await tx.sourceAccountPage.deleteMany({ where: { accountId: row.id } });
-    const volumes = volumeIds.get(account.sourceSlug);
-
-    await tx.sourceAccountPage.createMany({
-      data: account.pages.map((page) => {
-        const volumeNumber = page.volumeNumber ?? account.volumeNumber!;
-        const store = pages.get(storePageKey(account.sourceSlug, volumeNumber, page.printedPage))!;
-        return {
-          accountId: row.id,
-          sequence: page.sequence,
-          printedPage: page.printedPage,
-          bodyMarkdown: store.body,
-          notesMarkdown: store.notes,
-          extractionUrl: account.extractionUrl,
-          volumeId: volumes?.get(volumeNumber) ?? null,
-        };
-      }),
-    });
+    const sourceVolumeIds = volumeIds.get(account.sourceSlug) ?? new Map<number, string>();
+    await writePagesAndPassages(tx, account, account.sourceSlug, pages, sourceVolumeIds, passageIds);
     pageCount += account.pages.length;
 
-    const written = await tx.sourceAccountPage.findMany({
-      where: { accountId: row.id },
-      select: { id: true, sequence: true },
-    });
-    const pageIdBySequence = new Map(written.map((page) => [page.sequence, page.id]));
-
-    // The store page is the one copy of the text; a passage is a derived
-    // anchor into it, not something the batch declares.
-    const passages = account.pages.flatMap((page) => {
-      const volumeNumber = page.volumeNumber ?? account.volumeNumber!;
-      const store = pages.get(storePageKey(account.sourceSlug, volumeNumber, page.printedPage))!;
-      const anchors = pageAnchors(volumeNumber, page.printedPage, store.body);
-      return [...anchors].map(([anchor, excerpt]) => ({
-        pageId: pageIdBySequence.get(page.sequence)!,
-        anchor,
-        kind: 'BODY' as const,
-        excerpt,
+    // An account's spans have no authoring key of their own, so they are
+    // replaced wholesale on each import rather than matched one by one.
+    await tx.sourceAccountSpan.deleteMany({ where: { accountId: row.id } });
+    const spans = [...accountSpans(account)]
+      .filter(([volumeNumber]) => sourceVolumeIds.has(volumeNumber))
+      .map(([volumeNumber, { first, last }]) => ({
+        accountId: row.id,
+        volumeId: sourceVolumeIds.get(volumeNumber)!,
+        firstPrintedPage: first,
+        lastPrintedPage: last,
       }));
-    });
-    if (passages.length > 0) {
-      await tx.sourcePassage.createMany({ data: passages });
-      const stored = await tx.sourcePassage.findMany({
-        where: { pageId: { in: [...pageIdBySequence.values()] } },
-        select: { id: true, anchor: true },
-      });
-      stored.forEach((passage) => passageIds.set(passage.anchor, passage.id));
-    }
+    if (spans.length > 0) await tx.sourceAccountSpan.createMany({ data: spans });
   }
 
-  return { accountIds, passageIds, pages: pageCount };
+  return { passageIds, pages: pageCount };
 }
 
 /**
  * Writes a validated, approved batch. Re-running it with the same files is a
- * no-op in effect, so a partly failed import can be retried without leaving
- * duplicate accounts, claims or citations behind.
+ * no-op in effect: pages and passages are upserted by their natural key, so a
+ * partly failed import can be retried without duplicating or re-keying
+ * anything a citation already points at.
  */
 export async function importBatch(
   prisma: PrismaClient,
@@ -182,11 +230,14 @@ export async function importBatch(
     });
 
     const { sourceIds, volumeIds } = await writeManifests(tx, manifests);
-    const {
-      accountIds,
-      passageIds,
-      pages: pageCount,
-    } = await writeAccounts(tx, batch, pages, sourceIds, batchRow.id, volumeIds);
+    const { passageIds, pages: pageCount } = await writeAccounts(
+      tx,
+      batch,
+      pages,
+      sourceIds,
+      batchRow.id,
+      volumeIds,
+    );
 
     const claimIds = new Map<string, string>();
     for (const claim of batch.claims) {
@@ -207,7 +258,6 @@ export async function importBatch(
         subjectKind: claim.subjectKind,
         subjectSlug: claim.subjectSlug,
         sourceId: sourceIds.get(citation.sourceSlug)!,
-        accountId: accountIds.get(`${citation.sourceSlug}:${claim.subjectSlug}`) ?? null,
         passageId: citation.passageAnchor ? (passageIds.get(citation.passageAnchor) ?? null) : null,
         paragraphKey: citation.paragraphKey ?? null,
         footnoteNumber: citation.footnoteNumber ?? null,

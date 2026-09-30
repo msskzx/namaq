@@ -7,7 +7,7 @@ const citation = (over: Record<string, unknown> = {}) => ({
   excerptArabic: 'نص الشاهد',
   pageReference: '5',
   source: { title: 'سير أعلام النبلاء' },
-  passage: { anchor: '5-p3', page: { accountId: 'account-1', sequence: 3 } },
+  passage: { anchor: '4/5-p3', page: { printedPage: 3, volume: { number: 4 } } },
   ...over,
 });
 
@@ -18,10 +18,12 @@ describe('selectQuizReference', () => {
     const reference = selectQuizReference(
       ['zaynab/second', 'zaynab/first'],
       [
-        claim('zaynab/second', [citation({ excerptArabic: 'الثاني', passage: { anchor: '6-p1', page: { accountId: 'account-1', sequence: 6 } } })]),
+        claim('zaynab/second', [
+          citation({ excerptArabic: 'الثاني', passage: { anchor: '4/6-p1', page: { printedPage: 6, volume: { number: 4 } } } }),
+        ]),
         claim('zaynab/first', [
-          citation({ excerptArabic: 'الأول متأخر', passage: { anchor: '7-p1', page: { accountId: 'account-1', sequence: 7 } } }),
-          citation({ excerptArabic: 'الأول', passage: { anchor: '5-p3', page: { accountId: 'account-1', sequence: 3 } } }),
+          citation({ excerptArabic: 'الأول متأخر', passage: { anchor: '4/7-p1', page: { printedPage: 7, volume: { number: 4 } } } }),
+          citation({ excerptArabic: 'الأول', passage: { anchor: '4/5-p3', page: { printedPage: 3, volume: { number: 4 } } } }),
         ]),
       ],
     );
@@ -29,7 +31,7 @@ describe('selectQuizReference', () => {
       excerptArabic: 'الأول',
       sourceTitle: 'سير أعلام النبلاء',
       pageReference: '5',
-      readerUrl: '/people/zaynab-bint-jahsh?book=account-1&page=3&passage=5-p3',
+      readerUrl: '/people/zaynab-bint-jahsh?volume=4&page=3&passage=4%2F5-p3',
     });
   });
 

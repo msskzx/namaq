@@ -199,12 +199,12 @@ describe('ClaimEvidence', () => {
 
   it('links a citation to the page in our own reader without repeating the host link', () => {
     const cited = claim();
-    cited.citations[0].passage = { page: { accountId: 'acct-1', sequence: 7 } } as never;
+    cited.citations[0].passage = { page: { printedPage: 7, volume: { number: 4 } } } as never;
 
     render(<ClaimEvidence title="Sources" claims={[cited]} subjectSlug="abu-ubaydah-ibn-al-jarrah" />);
 
     expect(screen.getByText(/سير أعلام النبلاء/).closest('a')?.getAttribute('href'))
-      .toBe('/people/abu-ubaydah-ibn-al-jarrah?book=acct-1&page=7');
+      .toBe('/people/abu-ubaydah-ibn-al-jarrah?volume=4&page=7');
     expect(screen.queryByText('shamela')).toBeNull();
   });
 
