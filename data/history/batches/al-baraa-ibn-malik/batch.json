@@ -250,9 +250,9 @@
     }
   ],
   "approval": {
-    "revision": "f8e485994b1e4aa6",
-    "approvedAt": "2026-09-25",
+    "revision": "996ef1acc52560e4",
+    "approvedAt": "2026-09-30",
     "approvedBy": "msskzx",
-    "note": "Approved for publication. All eight claims are Not reviewed: the entry is extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+    "note": "Approved for publication. Claims are Not reviewed: the entries are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
   }
 }

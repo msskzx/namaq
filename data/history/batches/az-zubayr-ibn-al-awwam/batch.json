@@ -755,9 +755,9 @@
     }
   ],
   "approval": {
-    "revision": "bee63400ea92c8f6",
-    "approvedAt": "2026-09-28",
+    "revision": "79b5f303a174d5c1",
+    "approvedAt": "2026-09-30",
     "approvedBy": "msskzx",
-    "note": "Re-approved for publication after adding a field:sex claim for the subject, cited from the entry's self-identifying opening line. No other claim, citation or page changed. The new claim is Not reviewed; this permits the import and asserts nothing about anyone having read it. Pre-existing catalog:checklist warnings on this subject (wives/siblings) are untouched and remain for a later pass."
+    "note": "Approved for publication. Claims are Not reviewed: the entries are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
   }
 }

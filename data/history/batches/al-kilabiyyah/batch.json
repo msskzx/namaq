@@ -119,5 +119,11 @@
       "relatedSubjectKind": "PERSON",
       "relatedSubjectSlug": "prophet-muhammad"
     }
-  ]
+  ],
+  "approval": {
+    "revision": "9077fd6444c151a6",
+    "approvedAt": "2026-09-30",
+    "approvedBy": "msskzx",
+    "note": "Approved for publication. Claims are Not reviewed: the entries are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+  }
 }

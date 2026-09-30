@@ -236,9 +236,9 @@
     }
   ],
   "approval": {
-    "revision": "a828bda9a97ad1aa",
-    "approvedAt": "2026-09-29",
+    "revision": "87937ead5eee6dff",
+    "approvedAt": "2026-09-30",
     "approvedBy": "msskzx",
-    "note": "Extracted from سيرة أعلام النبلاء volume 4, page 35. Claims cover nasab (fullName), kunya, given name, father relation (SON), maternal uncle relation (MATERNAL_UNCLE), battle participations (Aqaba, Badr, prophetic battles), survival until Muawiyah's caliphate, and hadith in the six books. Marked notInSource for appearance, manaqeb, wives, and siblings as the entry does not mention them. All claims are Not reviewed."
+    "note": "Approved for publication. Claims are Not reviewed: the entries are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
   }
 }
