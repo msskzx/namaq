@@ -1,10 +1,10 @@
 import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
 /**
- * Carried from neo4j/graphSeedData*.ts, whose node declaration is retired
- * with the rest. The catalog owns this subject's edges now, so they live
- * here or not at all. No batch has read this far into the nasab yet, so
- * every link stays on the legacy marker.
+ * See data/history/batches/asma-bint-al-numan-al-kindiyyah/summary.md — the
+ * Siyar entry titled "الكندية" reads as this subject and now backs her nasab,
+ * appearance and second marriage. `sex` and the companion title stay on the
+ * legacy marker per Siyar-batch convention (see that batch's summary).
  */
 const asmaBintAlNumanAlKindiyyah = {
   kind: 'PERSON',
@@ -14,13 +14,31 @@ const asmaBintAlNumanAlKindiyyah = {
   hasProfile: true,
   fields: {
     sex: { value: 'FEMALE', claims: legacyUnreviewed },
-    fullName: { value: 'أسماء بنت النعمان بن أبي الجون الكندي', claims: legacyUnreviewed },
+    fullName: {
+      value: 'أسماء بنت النعمان بن أبي الجون الكندي',
+      claims: ['asma-bint-al-numan-al-kindiyyah-siyar/father'],
+    },
+    appearance: {
+      value: 'وصفها أبوها بأنها أجمل أيم (امرأة لا زوج لها) في العرب',
+      claims: ['asma-bint-al-numan-al-kindiyyah-siyar/appearance'],
+    },
   },
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
-    { type: 'DAUGHTER', inverse: 'FATHER', to: 'al-numan-ibn-abi-al-jawn-al-kindi', claims: legacyUnreviewed },
+    {
+      type: 'DAUGHTER',
+      inverse: 'FATHER',
+      to: 'al-numan-ibn-abi-al-jawn-al-kindi',
+      claims: ['asma-bint-al-numan-al-kindiyyah-siyar/father'],
+    },
+    {
+      type: 'WIFE',
+      inverse: 'HUSBAND',
+      to: 'al-muhajir-ibn-abi-umayyah-al-makhzumi',
+      claims: ['asma-bint-al-numan-al-kindiyyah-siyar/husband-al-muhajir'],
+    },
   ],
 } satisfies CatalogPerson;
 

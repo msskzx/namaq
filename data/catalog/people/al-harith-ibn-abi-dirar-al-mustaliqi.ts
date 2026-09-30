@@ -17,7 +17,7 @@ const alHarithIbnAbiDirarAlMustaliqi = {
   },
   titles: [],
   relations: [
-    { type: 'FATHER', inverse: 'DAUGHTER', to: 'juwayriyah-bint-al-harith', claims: legacyUnreviewed },
+    { type: 'FATHER', inverse: 'DAUGHTER', to: 'juwayriyah-bint-al-harith', claims: ['juwayriyah-siyar39/father'] },
   ],
 } satisfies CatalogPerson;
 

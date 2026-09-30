@@ -1,0 +1,439 @@
+{
+  "slug": "abu-al-as-ibn-ar-rabia",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-al-as-ibn-al-rabi",
+      "extractionUrl": "https://shamela.ws/book/10906/1756",
+      "accessedAt": "2026-09-29",
+      "volumeNumber": 4,
+      "notInSource": [
+        "appearance",
+        "kunya",
+        "siblings"
+      ],
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "330",
+          "bodyFile": "accounts/abu-al-as-ibn-al-rabi/001.md",
+          "notesFile": "accounts/abu-al-as-ibn-al-rabi/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1756",
+          "passages": [
+            {
+              "anchor": "330-p10"
+            },
+            {
+              "anchor": "330-p11"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "331",
+          "bodyFile": "accounts/abu-al-as-ibn-al-rabi/002.md",
+          "notesFile": "accounts/abu-al-as-ibn-al-rabi/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1757",
+          "passages": [
+            {
+              "anchor": "331-p1"
+            },
+            {
+              "anchor": "331-p2"
+            },
+            {
+              "anchor": "331-p3"
+            },
+            {
+              "anchor": "331-p4"
+            },
+            {
+              "anchor": "331-p5"
+            },
+            {
+              "anchor": "331-p6"
+            },
+            {
+              "anchor": "331-p7"
+            },
+            {
+              "anchor": "331-p8"
+            },
+            {
+              "anchor": "331-p9"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "printedPage": "332",
+          "bodyFile": "accounts/abu-al-as-ibn-al-rabi/003.md",
+          "notesFile": "accounts/abu-al-as-ibn-al-rabi/003.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1758",
+          "passages": [
+            {
+              "anchor": "332-p1"
+            },
+            {
+              "anchor": "332-p2"
+            },
+            {
+              "anchor": "332-p3"
+            },
+            {
+              "anchor": "332-p4"
+            },
+            {
+              "anchor": "332-p5"
+            },
+            {
+              "anchor": "332-p6"
+            },
+            {
+              "anchor": "332-p7"
+            },
+            {
+              "anchor": "332-p8"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "printedPage": "333",
+          "bodyFile": "accounts/abu-al-as-ibn-al-rabi/004.md",
+          "notesFile": "accounts/abu-al-as-ibn-al-rabi/004.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1759",
+          "passages": [
+            {
+              "anchor": "333-p1"
+            },
+            {
+              "anchor": "333-p2"
+            },
+            {
+              "anchor": "333-p3"
+            },
+            {
+              "anchor": "333-p4"
+            },
+            {
+              "anchor": "333-p5"
+            },
+            {
+              "anchor": "333-p6"
+            },
+            {
+              "anchor": "333-p7"
+            },
+            {
+              "anchor": "333-p8"
+            },
+            {
+              "anchor": "333-p9"
+            },
+            {
+              "anchor": "333-p10"
+            },
+            {
+              "anchor": "333-p11"
+            },
+            {
+              "anchor": "333-p12"
+            },
+            {
+              "anchor": "333-p13"
+            },
+            {
+              "anchor": "333-p14"
+            },
+            {
+              "anchor": "333-p15"
+            },
+            {
+              "anchor": "333-p16"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "printedPage": "334",
+          "bodyFile": "accounts/abu-al-as-ibn-al-rabi/005.md",
+          "notesFile": "accounts/abu-al-as-ibn-al-rabi/005.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1760",
+          "passages": [
+            {
+              "anchor": "334-p1"
+            },
+            {
+              "anchor": "334-p2"
+            },
+            {
+              "anchor": "334-p3"
+            },
+            {
+              "anchor": "334-p4"
+            },
+            {
+              "anchor": "334-p5"
+            },
+            {
+              "anchor": "334-p6"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "abu-al-as-ibn-al-rabi-siyar69/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-al-as-ibn-al-rabi",
+      "field": "fullName",
+      "assertion": "أبو العاص بن الربيع بن عبد العزى بن عبد شمس بن عبد مناف بن قصي بن كلاب القرشي العبشمي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "330-p10",
+          "volume": "4",
+          "pageReference": "330",
+          "extractionUrl": "https://shamela.ws/book/10906/1756",
+          "excerptArabic": "٦٩ - أَبُو العَاصِ بنُ الرَّبِيْعِ بنِ عَبْدِ العُزَّى القُرَشِيُّ *",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "330-p11",
+          "volume": "4",
+          "pageReference": "330",
+          "extractionUrl": "https://shamela.ws/book/10906/1756",
+          "excerptArabic": "ابْنِ عَبْدِ شَمْسٍ بنِ عَبْدِ مَنَافٍ بنِ قُصَيِّ بنِ كِلاَبٍ القُرَشِيُّ، العَبْشَمِيُّ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "abu-al-as-ibn-al-rabi-siyar69/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-al-as-ibn-al-rabi",
+      "assertion": "ابن الربيع بن عبد العزى.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "al-rabi-ibn-abd-al-uzza",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "330-p10",
+          "volume": "4",
+          "pageReference": "330",
+          "extractionUrl": "https://shamela.ws/book/10906/1756",
+          "excerptArabic": "أَبُو العَاصِ بنُ الرَّبِيْعِ بنِ عَبْدِ العُزَّى القُرَشِيُّ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "abu-al-as-ibn-al-rabi-siyar69/zaynab-wife",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-al-as-ibn-al-rabi",
+      "assertion": "صهر رسول الله صلى الله عليه وسلم، زوج بنته زينب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "HUSBAND",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "zaynab-bint-muhammad",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "331-p2",
+          "volume": "4",
+          "pageReference": "331",
+          "extractionUrl": "https://shamela.ws/book/10906/1757",
+          "excerptArabic": "صِهْرُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- زَوْجُ بِنْتِهِ زَيْنَبَ، وَهُوَ وَالِدُ أُمَامَةَ الَّتِي كَانَ يَحْمِلُهَا النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فِي صَلاَتِهِ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "abu-al-as-ibn-al-rabi-siyar69/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-al-as-ibn-al-rabi",
+      "field": "virtues",
+      "assertion": "صهر رسول الله صلى الله عليه وسلم، زوج بنته زينب، ووالد أمامة التي كان يحملها النبي في صلاته؛ أثنى النبي عليه في مصاهرته خيرا، وقال: حدثني فصدقني، ووعدني فوفى لي؛ وكان من تجار قريش وأمنائهم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "331-p2",
+          "volume": "4",
+          "pageReference": "331",
+          "extractionUrl": "https://shamela.ws/book/10906/1757",
+          "excerptArabic": "صِهْرُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- زَوْجُ بِنْتِهِ زَيْنَبَ، وَهُوَ وَالِدُ أُمَامَةَ الَّتِي كَانَ يَحْمِلُهَا النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّmَ- فِي صَلاَتِهِ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "331-p5",
+          "volume": "4",
+          "pageReference": "331",
+          "extractionUrl": "https://shamela.ws/book/10906/1757",
+          "excerptArabic": "أَثْنَى النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- عَلَى أَبِي العَاصِ فِي مُصَاهَرَتِهِ خَيْراً",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "331-p6",
+          "volume": "4",
+          "pageReference": "331",
+          "extractionUrl": "https://shamela.ws/book/10906/1757",
+          "excerptArabic": "وَقَالَ: (حَدَّثَنِي فَصَدَقَنِي، وَوَعَدَنِي فَوَفَى لِي)",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "331-p7",
+          "volume": "4",
+          "pageReference": "331",
+          "extractionUrl": "https://shamela.ws/book/10906/1757",
+          "excerptArabic": "وَكَانَ مِنْ تُجَّارِ قُرَيْشٍ وَأُمَنَائِهِم",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    }
+  ]
+}

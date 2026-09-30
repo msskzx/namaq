@@ -201,6 +201,7 @@ export async function generateQuestionCandidates(): Promise<GeneratedQuestion[]>
 
     const heldTitles = new Set([...dbPerson.titles.map((title) => title.slug), ...(catalogTitlesByPerson.get(person.slug) ?? [])]);
     for (const assignment of person.titles) {
+      if (assignment.title === 'companion') continue;
       const title = titleBySlug.get(assignment.title);
       if (!title) continue;
       const evidence = { claimKeys: cited(assignment.claims, eligible) };
@@ -230,6 +231,7 @@ export async function generateQuestionCandidates(): Promise<GeneratedQuestion[]>
     }
 
     for (const relation of person.relations) {
+      if (relation.type === 'COMPANION_OF' || relation.type === 'ACCOMPANIED_BY') continue;
       const answer = peopleBySlug.get(relation.to);
       if (!answer) continue;
       const trueTargets = new Set(person.relations.filter((other) => other.type === relation.type).map((other) => other.to));
