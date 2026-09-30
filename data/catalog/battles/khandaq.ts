@@ -68,6 +68,15 @@ const khandaq = {
     },
     // Carried from the old seed when he left it; no batch places him here yet.
     { person: 'al-abbas-ibn-abd-al-muttalib', isMuslim: true, claims: legacyUnreviewed },
+    {
+      person: 'safiyyah-bint-abd-al-muttalib',
+      isMuslim: true,
+      summary: {
+        value: 'أَنَا أَوَّلُ امْرَأَةٍ قَتَلَتْ رَجُلاً، كَانَ حَسَّانٌ مَعَنَا، فَمَرَّ بِنَا يَهُوْدِيٌّ، فَجَعَلَ يُطِيْفُ بِالحِصْنِ.',
+        claims: ['safiyyah-siyar15/khandaq'],
+      },
+      claims: ['safiyyah-siyar15/khandaq'],
+    },
   ],
 } satisfies CatalogBattle;
 

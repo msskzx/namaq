@@ -15,6 +15,18 @@ const nahavand = {
   },
   participants: [
     { person: 'umar-ibn-al-khattab', isMuslim: true, claims: legacyUnreviewed },
+    // Attendance is al-Dhahabi's transmitted report; the martyrdom rests on
+    // the closing "قُلْتُ", his own voice, so the summary keeps that wording.
+    {
+      person: 'tulayhah-ibn-khuwaylid',
+      isMuslim: true,
+      status: ['MARTYRED'],
+      summary: {
+        value: 'أَبْلَى يَوْمَ نَهَاوَنْدَ، ثُمَّ اسْتُشْهِدَ.',
+        claims: ['tulayhah-ibn-khuwaylid-siyar62/death-place'],
+      },
+      claims: ['tulayhah-ibn-khuwaylid-siyar62/nahavand', 'tulayhah-ibn-khuwaylid-siyar62/death-place'],
+    },
   ],
 } satisfies CatalogBattle;
 
