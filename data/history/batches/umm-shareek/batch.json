@@ -1,0 +1,304 @@
+{
+  "slug": "umm-shareek",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umm-shareek",
+      "extractionUrl": "https://shamela.ws/book/10906/2235",
+      "accessedAt": "2026-09-29",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "255",
+          "bodyFile": "accounts/umm-shareek/001.md",
+          "notesFile": "accounts/umm-shareek/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2235",
+          "passages": [
+            {
+              "anchor": "2/255-p10"
+            },
+            {
+              "anchor": "2/255-p11"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "256",
+          "bodyFile": "accounts/umm-shareek/002.md",
+          "notesFile": "accounts/umm-shareek/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2236",
+          "passages": [
+            {
+              "anchor": "2/256-p1"
+            },
+            {
+              "anchor": "2/256-p2"
+            },
+            {
+              "anchor": "2/256-p3"
+            }
+          ]
+        }
+      ],
+      "volumeNumber": 2,
+      "notInSource": [
+        "fullName",
+        "nasab",
+        "appearance",
+        "wives",
+        "siblings"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "umm-shareek-siyar33/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umm-shareek",
+      "field": "sex",
+      "assertion": "أم شريك امرأة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/255-p11",
+          "volume": "2",
+          "pageReference": "255",
+          "extractionUrl": "https://shamela.ws/book/10906/2235",
+          "excerptArabic": "امْرَأَةٌ أَنْصَارِيَّةٌ، النَّجَّارِيَّةُ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "umm-shareek-siyar33/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umm-shareek",
+      "field": "kunya",
+      "assertion": "أم شريك.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/255-p10",
+          "volume": "2",
+          "pageReference": "255",
+          "extractionUrl": "https://shamela.ws/book/10906/2235",
+          "excerptArabic": "٣٣ - أُمُّ شَرِيْكٍ الأَنْصَارِيَّةُ النَّجَّارِيَّةُ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "umm-shareek-siyar33/tribal-affiliation",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umm-shareek",
+      "field": "tribalAffiliation",
+      "assertion": "امرأة أنصارية، النجارية.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/255-p11",
+          "volume": "2",
+          "pageReference": "255",
+          "extractionUrl": "https://shamela.ws/book/10906/2235",
+          "excerptArabic": "امْرَأَةٌ أَنْصَارِيَّةٌ، النَّجَّارِيَّةُ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "umm-shareek-siyar33/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umm-shareek",
+      "field": "titles",
+      "assertion": "روى عروة بن الزبير عنها أنها كانت فيمن وهبت نفسها للنبي صلى الله عليه وسلم — صحابية.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/256-p3",
+          "volume": "2",
+          "pageReference": "256",
+          "extractionUrl": "https://shamela.ws/book/10906/2236",
+          "excerptArabic": "نَعَمْ، وَرَوَى: عُرْوَةُ بنُ الزُّبَيْرِ، عَنِ أُمِّ شَرِيْكٍ: أَنَّهَا كَانَتْ فِيْمَنْ وَهَبَتْ نَفْسَهَا لِلنَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "umm-shareek-siyar33/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umm-shareek",
+      "field": "virtues",
+      "assertion": "عن قتادة: أن النبي صلى الله عليه وسلم قال: إني أحب أن أتزوج في الأنصار، ثم إني أكره غيرتهن، قال: فلم يدخل بها. نعم، وروى عروة بن الزبير، عن أم شريك: أنها كانت فيمن وهبت نفسها للنبي صلى الله عليه وسلم.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/256-p1",
+          "volume": "2",
+          "pageReference": "256",
+          "extractionUrl": "https://shamela.ws/book/10906/2236",
+          "excerptArabic": "عَنْ قَتَادَةَ: أَنَّ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَالَ: (إِنِّي أُحِبُّ أَن أَتَزَوَّجَ فِي الأَنْصَارِ؛ ثُمَّ إِنِّي أَكْرَهُ غَيْرَتَهُنَّ) .",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/256-p2",
+          "volume": "2",
+          "pageReference": "256",
+          "extractionUrl": "https://shamela.ws/book/10906/2236",
+          "excerptArabic": "قَالَ: فَلَمْ يَدْخُلْ بِهَا (١) .",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/256-p3",
+          "volume": "2",
+          "pageReference": "256",
+          "extractionUrl": "https://shamela.ws/book/10906/2236",
+          "excerptArabic": "نَعَمْ، وَرَوَى: عُرْوَةُ بنُ الزُّبَيْرِ، عَنِ أُمِّ شَرِيْكٍ: أَنَّهَا كَانَتْ فِيْمَنْ وَهَبَتْ نَفْسَهَا لِلنَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    }
+  ]
+}

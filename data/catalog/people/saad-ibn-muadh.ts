@@ -1,17 +1,5 @@
-import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
+import type { CatalogPerson } from '@/lib/catalog/types';
 
-/**
- * The seed entry is retired, so this module is the author; what it held and no
- * batch cites is carried below with its evidence owed. His Islam is chapter
- * four's turning point in Medina: بنو عبد الأشهل followed him in a single day.
- *
- * Chapter seven is his end. The Khandaq wound and the judgement on Banu
- * Qurayzah are one sequence and not two facts — حبان بن العرقة hit him in the
- * أكحل, the Prophet pitched him a tent in the mosque, and the vein reopened
- * once he had given the judgement they came down to. His participation in both
- * battles carries it, so his `virtues` take what the book says about him after
- * the death rather than repeating the death itself.
- */
 const saadIbnMuadh = {
   kind: 'PERSON',
   slug: 'saad-ibn-muadh',
@@ -19,12 +7,16 @@ const saadIbnMuadh = {
   nameTransliterated: 'Saad ibn Muadh',
   hasProfile: true,
   fields: {
-    sex: { value: 'MALE', claims: legacyUnreviewed },
-    // Carried from the retired seed entry, which took it from the Siyar
-    // without citing it.
+    sex: { value: 'MALE', claims: ['saad-ibn-muadh-siyar56/sex'] },
     fullName: {
       value: 'سعد بن معاذ بن النعمان بن امرئ القيس بن زيد بن عبد الأشهل الأنصاري الأوسي',
-      claims: legacyUnreviewed,
+      claims: ['saad-ibn-muadh-siyar56/full-name'],
+    },
+    kunya: { value: 'أبو عمرو', claims: ['saad-ibn-muadh-siyar56/kunya'] },
+    appearance: {
+      value:
+        'كَانَ رَجُلاً أَبْيَضَ، طُوَالاً، جَمِيْلاً، حَسَنَ الوَجْهِ، أَعْيَنَ، حَسَنَ اللِّحْيَةِ.',
+      claims: ['saad-ibn-muadh-siyar56/appearance'],
     },
     virtues: {
       value:
@@ -34,15 +26,20 @@ const saadIbnMuadh = {
     deathYearHijri: { value: '5 AH', claims: ['saad-muadh/death-year'] },
   },
   titles: [
-    // Carried from the retired seed entry. The seeds gave every صحابي this
-    // title without citing it.
-    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    {
+      title: 'companion',
+      name: 'صحابي',
+      nameTransliterated: 'Companion',
+      claims: ['saad-ibn-muadh-siyar56/titles'],
+    },
   ],
   relations: [
-    // Carried from neo4j/graphSeedData*.ts, which stated these ties without
-    // citing them. The catalog owns this subject's edges now, so they live
-    // here or not at all.
-    { type: 'SON', inverse: 'FATHER', to: 'muadh-ibn-al-numan', claims: legacyUnreviewed },
+    {
+      type: 'SON',
+      inverse: 'FATHER',
+      to: 'muadh-ibn-al-numan',
+      claims: ['saad-ibn-muadh-siyar56/father'],
+    },
   ],
 } satisfies CatalogPerson;
 
