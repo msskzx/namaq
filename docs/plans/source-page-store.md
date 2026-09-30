@@ -1,7 +1,7 @@
 # Source page store
 
-Status: **blocked**. The prerequisite under [Blockers](#blockers) must land
-first. Nothing here is implemented.
+Status: **ready**. The prerequisite under [Blockers](#blockers) has landed.
+Nothing below is implemented yet.
 
 Move the authored source text out of review batches into a per-source page
 store, make a page belong to its volume rather than to an entry, and let
@@ -122,25 +122,24 @@ flowchart LR
 1. `data/history/sources/siyar-alam-al-nubala-risalah/source.json` is the only
    place the edition and its 28 volumes are declared, and each volume carries a
    first and last printed page.
-2. Every printed page in the store exists exactly once. The 38 pages currently
+2. Every printed page in the store exists exactly once. The 41 pages currently
    split across two or three batches are single files whose text is the union of
-   the halves, in printed order.
+   the halves in printed order, and the 3 held twice in full collapse to one
+   file each.
 3. No authored file declares a passage anchor. A citation naming
    `<volume>/<printedPage>-p<n>` resolves to the *n*-th paragraph of that page
    file, and `history:validate` fails a citation whose anchor names a paragraph
    that does not exist.
 4. `SourcePage` is unique on `(volumeId, printedPage)`, and importing the full
-   corpus produces 1,441 page rows from the 1,482 records that remain after the
-   prerequisite lands.
+   corpus produces 1,449 page rows from 1,496 page records.
 5. Re-importing an unchanged batch twice leaves `Citation.passageId` values
    unchanged.
 6. Opening a volume in `/sources` pages from its first read page to its last
    across entry boundaries, without switching entries by hand.
 7. A boundary page renders identically whichever entry was used to reach it.
 8. The contents view names every unread stretch inside a read volume — including
-   volume 5's 202–222, 246–255, 257–259 and 266–268 — and does not report
-   volume 1's missing 296, 442 or volume 2's missing 298, which the edition
-   skips.
+   volume 5's 202–222 — and does not report volume 1's missing 296, 442 or
+   volume 2's missing 298, which the edition skips.
 9. A batch can be published without publishing a page it references, and a page
    can be published without any batch being published.
 10. `npm run lint`, `npx tsc --noEmit` and `npm test` pass.
@@ -239,20 +238,22 @@ read path → UI. The files are authority, so they move first.
 
 ### Blockers
 
-- **Five accounts are filed under the wrong volume** and must be corrected
-  before the 38 split pages can be merged, because some apparent splits are two
-  different pages sharing a number: `sawdah-bint-zamah`, `umm-shareek`,
-  `abu-bardah-ibn-niyar`, `al-kilabiyyah` (also three wrong extraction URLs) and
-  `asma-bint-al-numan-al-kindiyyah` (Risalah source, islamweb URLs). Resolution:
-  verify each against the source, correct `batch.json`, re-publish.
+None outstanding. The prerequisite — four accounts filed against the wrong
+volume or the wrong edition — was corrected and verified against Shamela before
+this plan was unblocked. `abu-bardah-ibn-niyar` was published at an earlier
+revision and needs publishing again; that is the user's call and does not block
+the work below.
 
 ### Nonblocking
 
 - **Merging the 38 split pages needs the full printed page**, which the halves
   may not reconstruct if either omitted text at the seam. Assumption: the union
   in printed order is the page. Check each against its Shamela id while merging.
-- **The islamweb source has one account and its own pagination.** Assumed to
-  work unchanged under the manifest; not verified in depth.
+- **Two batches still hold text read from a host other than Shamela**, which is
+  now the only host this project extracts from. Both entries are located and the
+  work is planned in [reextract-from-shamela.md](reextract-from-shamela.md).
+  Until it lands the second source stays in the manifest, and its pagination is
+  not this edition's.
 - **Contents ordering currently derives from the Shamela id** in the first
   page's `extractionUrl` (`src/lib/history/sourceAccounts.ts:121-138`), which
   makes the digital host structural, against the spirit of

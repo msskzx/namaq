@@ -158,8 +158,6 @@ model HistoricalSource {
   publisher       String?
   publicationYear String?
   edition         String?
-  /// The website the edition was read on, such as Shamela or Islamweb. Kept
-  /// apart from the work itself: a host is not a publisher.
   digitalHost     String?
   url             String?
   notes           String?  @db.Text

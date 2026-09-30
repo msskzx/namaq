@@ -131,7 +131,8 @@ A historical work used as evidence for information about a historical subject,
 including the edition consulted.
 
 **Digital host**:
-A website that makes a historical source available to read, such as Islamweb.
+A website that makes a historical source available to read. Shamela is the only
+one this project extracts from.
 
 **Historical claim**:
 An assertion about a historical subject or a recorded relationship that can be

@@ -273,11 +273,21 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 
 ## Content sources
 
-- Companion (صحابي) names/biographies are being sourced from *سير أعلام
-  النبلاء* (al-Dhahabi) on islamweb:
-  - Full book text: https://www.islamweb.net/ar/library/content/60/1/سير-أعلام-النبلاء?idfrom=1&idto=6537
-  - Book's companion index/tree (list of entries, useful for enumerating
-    names without paging through the full text): https://www.islamweb.net/ar/library/maktaba/nindex.php?id=2&treeLevel=1&bookid=60&page=bookssubtree&searchtext=&showexact=
+- Companion (صحابي) names/biographies are sourced from *سير أعلام النبلاء*
+  (al-Dhahabi) in the مؤسسة الرسالة edition on **Shamela, which is the only
+  digital host this project extracts from**. It carries the editor's footnotes,
+  which other hosts drop, and its printed page numbers are the ones every
+  citation records.
+  - Book, with its فهرس الموضوعات for enumerating entries without paging
+    through the text: https://shamela.ws/book/10906
+  - A page is `https://shamela.ws/book/10906/<id>`, and the id runs
+    monotonically through the whole edition. That makes it the check on a
+    declared volume or printed page, never a fact about the source itself
+    ([ADR 0011](docs/adr/0011-classify-the-role-of-cited-evidence.md)).
+  - **Shamela's `الجزء` labels the Siyar's own parts and does not count the two
+    sira volumes and the caliph volume bound before them, so its `الجزء ٢` is
+    this edition's volume 5.** Three batches recorded the label as the volume
+    before this was written down.
   - Extraction proceeds in batches (currently batches of 10), following
     the book's own ordering, and checks each name against existing
     `prisma/personSeedData*.ts` slugs before treating it as new.

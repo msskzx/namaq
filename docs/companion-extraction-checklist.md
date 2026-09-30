@@ -1,7 +1,7 @@
 # Companion extraction checklist
 
-Tracks, in the order of the [islamweb companion
-index](https://www.islamweb.net/ar/library/maktaba/nindex.php?id=2&treeLevel=1&bookid=60&page=bookssubtree&searchtext=&showexact=),
+Tracks, in the book's own order as its
+[فهرس الموضوعات](https://shamela.ws/book/10906) gives it,
 which *سير أعلام النبلاء* entries already have a batch under
 `data/history/batches/` and which don't. See
 [docs/data-pipelines.md](data-pipelines.md#companion-scope) for the scope
@@ -301,5 +301,5 @@ against [docs/data-pipelines.md](data-pipelines.md#companion-scope) — a
 `[ ]` this deep into the list has not been screened for whether it's in
 تقريب التهذيب's الصحابة or already past it into كبار التابعين.
 
-Note: عقيل بن أبي طالب الهاشمي (entry 35) appears twice in the raw
-islamweb index output; it is one entry, listed once above.
+Note: عقيل بن أبي طالب الهاشمي (entry 35) appeared twice in the index output
+this list was first built from; it is one entry, listed once above.
