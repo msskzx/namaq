@@ -276,3 +276,83 @@ export async function accountsPayload(
 
   return { status: 200 as const, body: { accounts, account: selected, page, pages, pageNumbers } };
 }
+
+export interface VolumeContentsItem {
+  printedPage: string;
+  /** Entries that open on this exact page, in reading order if more than one shares it. */
+  entries: { accountId: string; subjectKind: string; subjectSlug: string; label: string }[];
+  /** This page's own section headings, so the index reads like the book's table of contents. */
+  headings: string[];
+}
+
+export interface VolumeContents {
+  number: number;
+  name: string | null;
+  firstPrintedPage: number | null;
+  lastPrintedPage: number | null;
+  skippedPrintedPages: number[];
+  /** Every page actually in the store, in printed order -- the book's own index, not grouped by who it's about. */
+  items: VolumeContentsItem[];
+}
+
+/**
+ * One volume's contents as the book itself orders them: every stored page in
+ * printed order, with whichever entry opens on it and whatever headings the
+ * page declares. Replaces grouping by account -- a printed page belongs to
+ * the book before it belongs to whoever it is about (see
+ * docs/adr/0018-a-page-belongs-to-the-edition.md), and a contents list should
+ * read the same way.
+ */
+export async function volumeContents(sourceSlug: string, volumeNumber: number): Promise<VolumeContents | null> {
+  const volume = await prisma.sourceVolume.findFirst({
+    where: { number: volumeNumber, source: { slug: sourceSlug } },
+    select: { id: true, number: true, name: true, firstPrintedPage: true, lastPrintedPage: true, skippedPrintedPages: true },
+  });
+  if (!volume) return null;
+
+  const [pages, spans] = await Promise.all([
+    prisma.sourcePage.findMany({
+      where: { volumeId: volume.id },
+      select: { printedPage: true, bodyMarkdown: true },
+      orderBy: { printedPage: 'asc' },
+    }),
+    prisma.sourceAccountSpan.findMany({
+      where: { volumeId: volume.id },
+      select: {
+        firstPrintedPage: true,
+        account: { select: { id: true, subjectKind: true, subjectSlug: true, titleArabic: true, entryIdentifier: true } },
+      },
+      orderBy: { account: { entryIdentifier: 'asc' } },
+    }),
+  ]);
+
+  const personSlugs = spans.filter((span) => span.account.subjectKind === 'PERSON').map((span) => span.account.subjectSlug);
+  const people = personSlugs.length
+    ? await prisma.person.findMany({ where: { slug: { in: personSlugs } }, select: { slug: true, name: true } })
+    : [];
+  const nameBySlug = new Map(people.map((person) => [person.slug, person.name]));
+
+  const entriesByPage = new Map<number, VolumeContentsItem['entries']>();
+  for (const span of spans) {
+    const { account } = span;
+    const label = account.titleArabic || nameBySlug.get(account.subjectSlug) || account.subjectSlug;
+    const list = entriesByPage.get(span.firstPrintedPage) ?? [];
+    list.push({ accountId: account.id, subjectKind: account.subjectKind, subjectSlug: account.subjectSlug, label });
+    entriesByPage.set(span.firstPrintedPage, list);
+  }
+
+  const items = pages.map((page) => ({
+    printedPage: String(page.printedPage),
+    entries: entriesByPage.get(page.printedPage) ?? [],
+    headings: pageHeadings(page.bodyMarkdown).map((heading) => heading.text),
+  }));
+
+  return {
+    number: volume.number,
+    name: volume.name,
+    firstPrintedPage: volume.firstPrintedPage,
+    lastPrintedPage: volume.lastPrintedPage,
+    skippedPrintedPages: volume.skippedPrintedPages,
+    items,
+  };
+}

@@ -123,3 +123,20 @@ export type SourceShelfEntry = Pick<
   /** Printed pages held across those entries. */
   pageCount: number;
 };
+
+/** One page of a volume's printed-order contents: whatever opens there, and whatever headings it declares. */
+export interface VolumeContentsItem {
+  printedPage: string;
+  entries: { accountId: string; subjectKind: string; subjectSlug: string; label: string }[];
+  headings: string[];
+}
+
+/** A volume's contents in the book's own order -- not grouped by whose entry a page belongs to. */
+export interface VolumeContents {
+  number: number;
+  name: string | null;
+  firstPrintedPage: number | null;
+  lastPrintedPage: number | null;
+  skippedPrintedPages: number[];
+  items: VolumeContentsItem[];
+}
