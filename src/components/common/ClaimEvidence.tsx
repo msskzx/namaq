@@ -137,8 +137,8 @@ export default function ClaimEvidence({
                               className="underline"
                               href={citationReaderUrl({
                                 subjectSlug,
-                                accountId: citation.passage.page.accountId,
-                                sequence: citation.passage.page.sequence,
+                                volumeNumber: citation.passage.page.volume.number,
+                                printedPage: citation.passage.page.printedPage,
                                 anchor: citation.passage.anchor,
                               })}
                             >

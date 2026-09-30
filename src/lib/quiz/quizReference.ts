@@ -16,7 +16,7 @@ interface ReferenceCitation {
   readonly source: { readonly title: string };
   readonly passage: {
     readonly anchor: string | null;
-    readonly page: { readonly accountId: string; readonly sequence: number } | null;
+    readonly page: { readonly printedPage: number; readonly volume: { readonly number: number } } | null;
   } | null;
 }
 
@@ -37,7 +37,8 @@ export function selectQuizReference(
     const [first] = claim.citations
       .filter((citation) => citation.subjectKind === 'PERSON' && citation.passage?.page)
       .sort((a, b) =>
-        (a.passage?.page?.sequence ?? 0) - (b.passage?.page?.sequence ?? 0) ||
+        (a.passage?.page?.volume.number ?? 0) - (b.passage?.page?.volume.number ?? 0) ||
+        (a.passage?.page?.printedPage ?? 0) - (b.passage?.page?.printedPage ?? 0) ||
         (a.passage?.anchor ?? '').localeCompare(b.passage?.anchor ?? ''),
       );
     if (!first?.passage?.page) continue;
@@ -47,8 +48,8 @@ export function selectQuizReference(
       pageReference: first.pageReference,
       readerUrl: citationReaderUrl({
         subjectSlug: first.subjectSlug,
-        accountId: first.passage.page.accountId,
-        sequence: first.passage.page.sequence,
+        volumeNumber: first.passage.page.volume.number,
+        printedPage: first.passage.page.printedPage,
         anchor: first.passage.anchor,
       }),
     };

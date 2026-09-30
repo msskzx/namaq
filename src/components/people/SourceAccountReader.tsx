@@ -52,7 +52,8 @@ const backgroundStyles: Record<ReaderBackground, React.CSSProperties> = {
 };
 
 function accountLabel(account: AccountSummary) {
-  return [account.source.title, account.source.edition, account.volume && `ج${account.volume}`]
+  const volumeNumber = account.volumes?.[0]?.number;
+  return [account.source.title, account.source.edition, volumeNumber && `ج${volumeNumber}`]
     .filter(Boolean)
     .join(' — ');
 }
@@ -72,6 +73,7 @@ export default function SourceAccountReader({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const book = searchParams.get('book');
+  const volumeDeepLink = searchParams.get('volume');
   const requestedPage = Number(searchParams.get('page') ?? '1');
   const page = Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1;
   const passage = searchParams.get('passage');
@@ -97,6 +99,10 @@ export default function SourceAccountReader({
   const inFlight = useRef(new Set<string>());
   const query = new URLSearchParams({ page: String(shellPage) });
   if (book) query.set('account', book);
+  // A citation's deep link names a printed page, not an account -- the API
+  // resolves which of the subject's entries it belongs to. Once resolved,
+  // the address is rewritten to the normal book+page form below.
+  if (!book && volumeDeepLink) query.set('volume', volumeDeepLink);
   const { data, error, isLoading } = useSWR<AccountsResponse>(
     basePath ? `${basePath}/accounts?${query.toString()}` : null,
     fetcher,
@@ -201,6 +207,18 @@ export default function SourceAccountReader({
     setHeaderHidden(false);
     if (!fullscreen) section.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, [data?.account?.id, fullscreen, pathname, router, searchParams]);
+
+  // A volume+page deep link resolves to a real account server-side; once it
+  // does, the address is normalized to book+page so paging and the passage
+  // scroll-in below work exactly as they do for a normal selection.
+  useEffect(() => {
+    if (!volumeDeepLink || !data?.account || !data.page) return;
+    const next = new URLSearchParams(searchParams.toString());
+    next.delete('volume');
+    next.set('book', data.account.id);
+    next.set('page', String(data.page.sequence));
+    router.replace(`${pathname}?${next.toString()}`, { scroll: false });
+  }, [volumeDeepLink, data?.account, data?.page, pathname, router, searchParams]);
 
   const setFullscreen = useCallback((value: boolean) => {
     setHeaderHidden(false);

@@ -5,14 +5,14 @@ import type {
   HistoricalClaim,
   HistoricalSource,
   SourceAccount,
-  SourceAccountPage,
+  SourcePage,
   SourcePassage,
   SubjectKind,
 } from '@/generated/prisma';
 
 export type CitationWithSource = Citation & {
   source: HistoricalSource;
-  passage?: (SourcePassage & { page: SourceAccountPage }) | null;
+  passage?: (SourcePassage & { page: SourcePage & { volume: { number: number } } }) | null;
 };
 
 export type ClaimWithCitations = HistoricalClaim & {
@@ -25,19 +25,27 @@ export type ClaimWithCitations = HistoricalClaim & {
   relatedSubjectName?: string | null;
 };
 
-/** One printed page of a source account, as served to the profile reader. */
-export type AccountPage = Pick<
-  SourceAccountPage,
-  'sequence' | 'printedPage' | 'bodyMarkdown' | 'notesMarkdown' | 'extractionUrl'
-> & {
+/**
+ * One printed page of a source account, as served to the profile reader.
+ * `sequence` is the page's position within the requesting account's own
+ * span(s), 1-based -- not a stored field, since one page can belong to
+ * several accounts at different positions in each (see
+ * src/lib/history/sourceAccounts.ts).
+ */
+export interface AccountPage {
+  sequence: number;
+  printedPage: string;
+  bodyMarkdown: string;
+  notesMarkdown: string | null;
+  extractionUrl: string | null;
   /** The page's cited passages, so a deep link can find its paragraph. */
   passages: { anchor: string; excerpt: string }[];
-};
+}
 
 /** An account's identity without its text, for the profile's book selector. */
 export type AccountSummary = Pick<
   SourceAccount,
-  'id' | 'subjectKind' | 'subjectSlug' | 'entryIdentifier' | 'titleArabic' | 'volume' | 'extractionUrl'
+  'id' | 'subjectKind' | 'subjectSlug' | 'entryIdentifier' | 'titleArabic' | 'extractionUrl'
 > & {
   source: HistoricalSource;
   /**

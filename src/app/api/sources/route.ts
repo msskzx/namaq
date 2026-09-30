@@ -23,17 +23,21 @@ export async function GET() {
         digitalHost: true,
         url: true,
         notes: true,
-        accounts: { select: { _count: { select: { pages: true } } } },
-        volumes: { select: { number: true, name: true }, orderBy: { number: 'asc' } },
+        _count: { select: { accounts: true } },
+        volumes: {
+          select: { number: true, name: true, _count: { select: { pages: true } } },
+          orderBy: { number: 'asc' },
+        },
       },
     });
 
     return NextResponse.json(
       {
-        sources: sources.map(({ accounts, ...source }) => ({
+        sources: sources.map(({ _count, volumes, ...source }) => ({
           ...source,
-          entryCount: accounts.length,
-          pageCount: accounts.reduce((total, account) => total + account._count.pages, 0),
+          volumes: volumes.map((volume) => ({ number: volume.number, name: volume.name })),
+          entryCount: _count.accounts,
+          pageCount: volumes.reduce((total, volume) => total + volume._count.pages, 0),
         })),
       },
       { headers: CATALOG_CACHE_HEADERS }

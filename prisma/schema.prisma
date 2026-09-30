@@ -107,7 +107,7 @@ model Person {
   // so the vocabulary lives in src/lib/catalog/types.ts where validateCatalog
   // can enforce it. It is what lets an ambiguous reciprocal be resolved without
   // the author stating it -- see src/lib/catalog/relations.ts.
-  sex                        String?
+  sex String?
 
   /// How the source places the person among the clans: النمري, الفهري,
   /// حليف بني زهرة. A name rather than a relationship, the way a kunya is
@@ -179,17 +179,27 @@ model HistoricalSource {
 /// of recording them at all -- a reader can see that a work runs to twenty-five
 /// volumes and that two of them have been read.
 model SourceVolume {
-  id       String  @id @default(cuid())
-  sourceId String
+  id                  String  @id @default(cuid())
+  sourceId            String
   /// Position in the edition's own reading order, which is not always the
   /// number printed on the spine: this edition opens with two appended sira
   /// volumes before the numbered series begins.
-  number   Int
+  number              Int
   /// What the volume is called, where it is called anything.
-  name     String?
+  name                String?
+  /// The volume's own first and last printed page, from the source manifest
+  /// -- what gives read-coverage a denominator. Null where nobody has
+  /// checked the edition's true extent yet.
+  firstPrintedPage    Int?
+  lastPrintedPage     Int?
+  /// Printed page numbers the edition itself skips within this extent --
+  /// distinct from a page nobody has read yet, see AGENTS.md's "Content
+  /// sources" and docs/plans/source-page-store.md's "Coverage and gaps".
+  skippedPrintedPages Int[]   @default([])
 
-  source   HistoricalSource    @relation(fields: [sourceId], references: [id], onDelete: Cascade)
-  pages    SourceAccountPage[]
+  source HistoricalSource    @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  pages  SourcePage[]
+  spans  SourceAccountSpan[]
 
   @@unique([sourceId, number])
   @@map("source_volumes")
@@ -292,7 +302,9 @@ model HistoricalClaim {
 }
 
 /// The complete entry about one subject in one work and edition, stored page by
-/// page so profiles can page through it as printed.
+/// page so profiles can page through it as printed. Holds no pages of its own
+/// -- those belong to the volume (`SourcePage`) -- only its spans within one
+/// or more volumes and the claims it backs.
 model SourceAccount {
   id              String      @id @default(cuid())
   sourceId        String
@@ -301,54 +313,61 @@ model SourceAccount {
   /// The work's own entry or section number, when it numbers entries.
   entryIdentifier String?
   titleArabic     String?
-  /// What the batch wrote about the volume, such as "السيرة ١-٢". Free text;
-  /// the volume each page is bound in is recorded on the page itself.
-  volume          String?
   extractionUrl   String
   accessedAt      DateTime
   batchId         String?
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
 
-  source    HistoricalSource    @relation(fields: [sourceId], references: [id], onDelete: Restrict)
-  batch     ReviewBatch?        @relation(fields: [batchId], references: [id], onDelete: SetNull)
-  pages     SourceAccountPage[]
-  citations Citation[]
+  source HistoricalSource    @relation(fields: [sourceId], references: [id], onDelete: Restrict)
+  batch  ReviewBatch?        @relation(fields: [batchId], references: [id], onDelete: SetNull)
+  spans  SourceAccountSpan[]
 
   @@unique([sourceId, subjectKind, subjectSlug])
   @@index([subjectKind, subjectSlug])
   @@map("source_accounts")
 }
 
-/// One printed page of an account. `printedPage` is the page as printed and
-/// `sequence` is its position within this account, because an account can begin
-/// mid-page and printed numbering is not always contiguous.
-model SourceAccountPage {
-  id            String  @id @default(cuid())
-  accountId     String
-  sequence      Int
-  printedPage   String?
-  bodyMarkdown  String  @db.Text
-  notesMarkdown String? @db.Text
-  extractionUrl String?
-  /// The volume this page is bound in. On the page rather than the account
-  /// because an account is a run of pages and a run can cross a binding: the
-  /// sira is 497 pages of one volume and 491 of the next.
-  volumeId      String?
+/// The run of pages an account covers within one volume. Usually one row;
+/// two where an entry crosses a binding, such as the Prophet's sira running
+/// 497 pages of one volume into 491 of the next -- see
+/// docs/plans/source-page-store.md.
+model SourceAccountSpan {
+  id               String @id @default(cuid())
+  accountId        String
+  volumeId         String
+  firstPrintedPage Int
+  lastPrintedPage  Int
 
-  account  SourceAccount   @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  volume   SourceVolume?   @relation(fields: [volumeId], references: [id], onDelete: SetNull)
-  passages SourcePassage[]
+  account SourceAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  volume  SourceVolume  @relation(fields: [volumeId], references: [id], onDelete: Restrict)
 
-  @@unique([accountId, sequence])
-  @@index([accountId, printedPage])
-  @@index([volumeId])
-  @@map("source_account_pages")
+  @@unique([accountId, volumeId])
+  @@map("source_account_spans")
 }
 
-/// A citable span within a page. `anchor` is authored in the data files and
-/// stays stable across re-extraction, so citation links keep landing on the
-/// cited text.
+/// One printed page of one volume, held once and read by every account whose
+/// entry touches it -- see docs/plans/source-page-store.md and
+/// docs/adr/0018-a-page-belongs-to-the-edition.md.
+model SourcePage {
+  id            String    @id @default(cuid())
+  volumeId      String
+  printedPage   Int
+  bodyMarkdown  String    @db.Text
+  notesMarkdown String?   @db.Text
+  extractionUrl String?
+  accessedAt    DateTime?
+
+  volume   SourceVolume    @relation(fields: [volumeId], references: [id], onDelete: Cascade)
+  passages SourcePassage[]
+
+  @@unique([volumeId, printedPage])
+  @@map("source_pages")
+}
+
+/// A citable span within a page. `anchor` is derived from the page's own
+/// paragraph order at import time, never authored -- see
+/// docs/adr/0018-a-page-belongs-to-the-edition.md.
 model SourcePassage {
   id      String      @id @default(cuid())
   pageId  String
@@ -356,7 +375,7 @@ model SourcePassage {
   kind    PassageKind @default(BODY)
   excerpt String      @db.Text
 
-  page      SourceAccountPage @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  page      SourcePage @relation(fields: [pageId], references: [id], onDelete: Cascade)
   citations Citation[]
 
   @@unique([pageId, anchor])
@@ -373,7 +392,6 @@ model Citation {
   subjectKind    SubjectKind
   subjectSlug    String
   sourceId       String
-  accountId      String?
   passageId      String?
   paragraphKey   String?
   footnoteNumber Int?
@@ -390,7 +408,6 @@ model Citation {
 
   claim   HistoricalClaim? @relation(fields: [claimId], references: [id], onDelete: Cascade)
   source  HistoricalSource @relation(fields: [sourceId], references: [id], onDelete: Restrict)
-  account SourceAccount?   @relation(fields: [accountId], references: [id], onDelete: SetNull)
   passage SourcePassage?   @relation(fields: [passageId], references: [id], onDelete: SetNull)
 
   @@index([subjectKind, subjectSlug])

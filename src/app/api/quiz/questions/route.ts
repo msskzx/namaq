@@ -51,7 +51,7 @@ export async function GET(request: Request) {
           excerptArabic: true,
           pageReference: true,
           source: { select: { title: true } },
-          passage: { select: { anchor: true, page: { select: { accountId: true, sequence: true } } } },
+          passage: { select: { anchor: true, page: { select: { printedPage: true, volume: { select: { number: true } } } } } },
         },
       },
     },

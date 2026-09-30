@@ -74,7 +74,7 @@ describe('GET /api/quiz', () => {
           excerptArabic: 'نص الشاهد',
           pageReference: '5',
           source: { title: 'سير أعلام النبلاء' },
-          passage: { anchor: '5-p3', page: { accountId: 'account-1', sequence: 3 } },
+          passage: { anchor: '4/5-p3', page: { printedPage: 3, volume: { number: 4 } } },
         }],
       },
     ]);
@@ -91,7 +91,7 @@ describe('GET /api/quiz', () => {
           excerptArabic: 'نص الشاهد',
           sourceTitle: 'سير أعلام النبلاء',
           pageReference: '5',
-          readerUrl: '/people/zaynab-bint-jahsh?book=account-1&page=3&passage=5-p3',
+          readerUrl: '/people/zaynab-bint-jahsh?volume=4&page=3&passage=4%2F5-p3',
         },
       },
     });

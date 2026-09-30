@@ -10,9 +10,10 @@ import type { SourceManifest } from './sourceStore';
  */
 function fakePrisma() {
   const calls = {
-    accountDeletes: [] as unknown[],
+    spanDeletes: [] as unknown[],
     citationDeletes: [] as unknown[],
     pages: [] as Record<string, unknown>[],
+    spans: [] as Record<string, unknown>[],
     passages: [] as Record<string, unknown>[],
     citations: [] as Record<string, unknown>[],
     claimUpserts: [] as Record<string, unknown>[],
@@ -40,27 +41,33 @@ function fakePrisma() {
         return { id: 'account-1' };
       }),
     },
-    sourceAccountPage: {
+    // A page is shared across every account whose entry touches it, so it is
+    // upserted by its natural key (volume + printed page) rather than
+    // recreated wholesale per account.
+    sourcePage: {
+      upsert: vi.fn(async ({ where, create }: { where: { volumeId_printedPage: { volumeId: string; printedPage: number } }; create: Record<string, unknown> }) => {
+        const { volumeId, printedPage } = where.volumeId_printedPage;
+        const row = { id: `page-${volumeId}-${printedPage}`, ...create };
+        calls.pages.push(row);
+        return row;
+      }),
+    },
+    sourcePassage: {
+      upsert: vi.fn(async ({ where, create }: { where: { pageId_anchor: { pageId: string; anchor: string } }; create: Record<string, unknown> }) => {
+        const row = { id: `passage-${where.pageId_anchor.anchor}`, ...create };
+        calls.passages.push(row);
+        return row;
+      }),
+    },
+    sourceAccountSpan: {
       deleteMany: vi.fn(async (args: unknown) => {
-        calls.accountDeletes.push(args);
+        calls.spanDeletes.push(args);
         return { count: 0 };
       }),
       createMany: vi.fn(async ({ data }: { data: Record<string, unknown>[] }) => {
-        data.forEach((row) => calls.pages.push(row));
+        data.forEach((row) => calls.spans.push(row));
         return { count: data.length };
       }),
-      findMany: vi.fn(async () =>
-        calls.pages.map((page, index) => ({ id: `page-${index + 1}`, sequence: page.sequence as number })),
-      ),
-    },
-    sourcePassage: {
-      createMany: vi.fn(async ({ data }: { data: Record<string, unknown>[] }) => {
-        data.forEach((row) => calls.passages.push(row));
-        return { count: data.length };
-      }),
-      findMany: vi.fn(async () =>
-        calls.passages.map((passage, index) => ({ id: `passage-${index + 1}`, anchor: passage.anchor as string })),
-      ),
     },
     historicalClaim: {
       upsert: vi.fn(async (args: Record<string, unknown>) => {
@@ -158,7 +165,7 @@ describe('importBatch', () => {
 
     await importBatch(prisma, batch(), manifests(manifest({ volumes: [{ number: 1 }] })), pages());
 
-    expect(calls.pages[0]).toMatchObject({ printedPage: '5', bodyMarkdown: 'نص الصفحة', sequence: 1 });
+    expect(calls.pages[0]).toMatchObject({ printedPage: 5, bodyMarkdown: 'نص الصفحة' });
   });
 
   // An entry is a run of pages and a run can cross a binding, so the volume is
@@ -187,9 +194,14 @@ describe('importBatch', () => {
       pages({ 'siyar-risalah/v1/527': 'نص', 'siyar-risalah/v2/5': 'نص' }),
     );
 
-    expect(calls.pages.map((page) => page.volumeId)).toEqual([
-      'volume-source-siyar-risalah-1',
-      'volume-source-siyar-risalah-2',
+    expect(calls.pages.map((page) => page.id)).toEqual([
+      'page-volume-source-siyar-risalah-1-527',
+      'page-volume-source-siyar-risalah-2-5',
+    ]);
+    // Two volumes means two spans, one printed page each.
+    expect(calls.spans).toEqual([
+      { accountId: 'account-1', volumeId: 'volume-source-siyar-risalah-1', firstPrintedPage: 527, lastPrintedPage: 527 },
+      { accountId: 'account-1', volumeId: 'volume-source-siyar-risalah-2', firstPrintedPage: 5, lastPrintedPage: 5 },
     ]);
   });
 
@@ -198,7 +210,7 @@ describe('importBatch', () => {
 
     await importBatch(prisma, batch(), manifests(manifest({ volumes: [{ number: 1 }] })), pages());
 
-    expect(calls.citations[0]).toMatchObject({ claimId: 'claim-1', passageId: 'passage-1' });
+    expect(calls.citations[0]).toMatchObject({ claimId: 'claim-1', passageId: 'passage-1/5-p1' });
   });
 
   it('keys claims on their authoring key so a re-import updates in place', async () => {
@@ -209,12 +221,12 @@ describe('importBatch', () => {
     expect(calls.claimUpserts[0]).toMatchObject({ where: { authoringKey: 'abu-ubaydah/full-name' } });
   });
 
-  it("clears an account's old pages and a claim's old citations before rewriting", async () => {
+  it("clears an account's old spans and a claim's old citations before rewriting", async () => {
     const { prisma, calls } = fakePrisma();
 
     await importBatch(prisma, batch(), manifests(manifest({ volumes: [{ number: 1 }] })), pages());
 
-    expect(calls.accountDeletes).toEqual([{ where: { accountId: 'account-1' } }]);
+    expect(calls.spanDeletes).toEqual([{ where: { accountId: 'account-1' } }]);
     expect(calls.citationDeletes).toEqual([{ where: { claimId: { in: ['claim-1'] } } }]);
   });
 
