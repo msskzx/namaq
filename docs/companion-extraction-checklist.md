@@ -163,7 +163,7 @@ that.
 - [ ] أسماء
 - [x] أم شريك — `data/history/batches/umm-shareek` (PR #201)
 - [x] سناء (`sanaa-bint-asma-al-sulami`, PR #200)
-- [ ] الكلابية
+- [x] الكلابية — `data/history/batches/al-kilabiyyah` (PR #204)
 - [ ] الكندية
 - [ ] قتيلة
 - [ ] خولة
