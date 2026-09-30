@@ -22,6 +22,10 @@ const abuBardahIbnNiyar = {
       value: 'هانئ بن نيار بن عمرو بن عبيد بن عمرو بن كلاب بن دهمان البلوي القضاعي حليف الأوس',
       claims: legacyUnreviewed,
     },
+    kunya: {
+      value: 'أبو بردة',
+      claims: ['abu-bardah-ibn-niyar-siyar13/kunya'],
+    },
   },
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
