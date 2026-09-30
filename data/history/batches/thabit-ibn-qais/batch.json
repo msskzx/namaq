@@ -1,134 +1,6 @@
 {
   "slug": "thabit-ibn-qais",
   "summaryFile": "summary.md",
-  "sources": [
-    {
-      "slug": "siyar-alam-al-nubala-risalah",
-      "title": "سير أعلام النبلاء",
-      "author": "شمس الدين الذهبي",
-      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
-      "publisher": "مؤسسة الرسالة",
-      "publicationYear": "1405/1985",
-      "edition": "الطبعة الثالثة",
-      "digitalHost": "المكتبة الشاملة",
-      "url": "https://shamela.ws/index.php/book/10906",
-      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
-      "volumes": [
-        {
-          "number": 1,
-          "name": "السيرة النبوية ج١"
-        },
-        {
-          "number": 2,
-          "name": "السيرة النبوية ج٢"
-        },
-        {
-          "number": 3,
-          "name": "سيرة الخلفاء الراشدين"
-        },
-        {
-          "number": 4,
-          "name": "سير أعلام النبلاء ج١"
-        },
-        {
-          "number": 5,
-          "name": "سير أعلام النبلاء ج٢"
-        },
-        {
-          "number": 6,
-          "name": "سير أعلام النبلاء ج٣"
-        },
-        {
-          "number": 7,
-          "name": "سير أعلام النبلاء ج٤"
-        },
-        {
-          "number": 8,
-          "name": "سير أعلام النبلاء ج٥"
-        },
-        {
-          "number": 9,
-          "name": "سير أعلام النبلاء ج٦"
-        },
-        {
-          "number": 10,
-          "name": "سير أعلام النبلاء ج٧"
-        },
-        {
-          "number": 11,
-          "name": "سير أعلام النبلاء ج٨"
-        },
-        {
-          "number": 12,
-          "name": "سير أعلام النبلاء ج٩"
-        },
-        {
-          "number": 13,
-          "name": "سير أعلام النبلاء ج١٠"
-        },
-        {
-          "number": 14,
-          "name": "سير أعلام النبلاء ج١١"
-        },
-        {
-          "number": 15,
-          "name": "سير أعلام النبلاء ج١٢"
-        },
-        {
-          "number": 16,
-          "name": "سير أعلام النبلاء ج١٣"
-        },
-        {
-          "number": 17,
-          "name": "سير أعلام النبلاء ج١٤"
-        },
-        {
-          "number": 18,
-          "name": "سير أعلام النبلاء ج١٥"
-        },
-        {
-          "number": 19,
-          "name": "سير أعلام النبلاء ج١٦"
-        },
-        {
-          "number": 20,
-          "name": "سير أعلام النبلاء ج١٧"
-        },
-        {
-          "number": 21,
-          "name": "سير أعلام النبلاء ج١٨"
-        },
-        {
-          "number": 22,
-          "name": "سير أعلام النبلاء ج١٩"
-        },
-        {
-          "number": 23,
-          "name": "سير أعلام النبلاء ج٢٠"
-        },
-        {
-          "number": 24,
-          "name": "سير أعلام النبلاء ج٢١"
-        },
-        {
-          "number": 25,
-          "name": "سير أعلام النبلاء ج٢٢"
-        },
-        {
-          "number": 26,
-          "name": "سير أعلام النبلاء ج٢٣"
-        },
-        {
-          "number": 27,
-          "name": "الفهارس ج١"
-        },
-        {
-          "number": 28,
-          "name": "الفهارس ج٢"
-        }
-      ]
-    }
-  ],
   "accounts": [
     {
       "sourceSlug": "siyar-alam-al-nubala-risalah",
@@ -139,262 +11,31 @@
       "pages": [
         {
           "sequence": 1,
-          "printedPage": "308",
-          "bodyFile": "accounts/thabit-ibn-qais/001.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1734",
-          "passages": [
-            {
-              "anchor": "308-p7"
-            },
-            {
-              "anchor": "308-p8"
-            }
-          ]
+          "printedPage": "308"
         },
         {
           "sequence": 2,
-          "printedPage": "309",
-          "bodyFile": "accounts/thabit-ibn-qais/002.md",
-          "notesFile": "accounts/thabit-ibn-qais/002.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1735",
-          "passages": [
-            {
-              "anchor": "309-p1"
-            },
-            {
-              "anchor": "309-p2"
-            },
-            {
-              "anchor": "309-p3"
-            },
-            {
-              "anchor": "309-p4"
-            },
-            {
-              "anchor": "309-p5"
-            },
-            {
-              "anchor": "309-p6"
-            },
-            {
-              "anchor": "309-p7"
-            },
-            {
-              "anchor": "309-p8"
-            },
-            {
-              "anchor": "309-p9"
-            },
-            {
-              "anchor": "309-p10"
-            },
-            {
-              "anchor": "309-p11"
-            },
-            {
-              "anchor": "309-p12"
-            },
-            {
-              "anchor": "309-p13"
-            },
-            {
-              "anchor": "309-p14"
-            },
-            {
-              "anchor": "309-p15"
-            },
-            {
-              "anchor": "309-p16"
-            },
-            {
-              "anchor": "309-p17"
-            }
-          ]
+          "printedPage": "309"
         },
         {
           "sequence": 3,
-          "printedPage": "310",
-          "bodyFile": "accounts/thabit-ibn-qais/003.md",
-          "notesFile": "accounts/thabit-ibn-qais/003.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1736",
-          "passages": [
-            {
-              "anchor": "310-p1"
-            },
-            {
-              "anchor": "310-p2"
-            },
-            {
-              "anchor": "310-p3"
-            },
-            {
-              "anchor": "310-p4"
-            },
-            {
-              "anchor": "310-p5"
-            },
-            {
-              "anchor": "310-p6"
-            },
-            {
-              "anchor": "310-p7"
-            },
-            {
-              "anchor": "310-p8"
-            },
-            {
-              "anchor": "310-p9"
-            },
-            {
-              "anchor": "310-p10"
-            }
-          ]
+          "printedPage": "310"
         },
         {
           "sequence": 4,
-          "printedPage": "311",
-          "bodyFile": "accounts/thabit-ibn-qais/004.md",
-          "notesFile": "accounts/thabit-ibn-qais/004.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1737",
-          "passages": [
-            {
-              "anchor": "311-p1"
-            },
-            {
-              "anchor": "311-p2"
-            },
-            {
-              "anchor": "311-p3"
-            },
-            {
-              "anchor": "311-p4"
-            },
-            {
-              "anchor": "311-p5"
-            },
-            {
-              "anchor": "311-p6"
-            },
-            {
-              "anchor": "311-p7"
-            },
-            {
-              "anchor": "311-p8"
-            },
-            {
-              "anchor": "311-p9"
-            },
-            {
-              "anchor": "311-p10"
-            },
-            {
-              "anchor": "311-p11"
-            },
-            {
-              "anchor": "311-p12"
-            },
-            {
-              "anchor": "311-p13"
-            }
-          ]
+          "printedPage": "311"
         },
         {
           "sequence": 5,
-          "printedPage": "312",
-          "bodyFile": "accounts/thabit-ibn-qais/005.md",
-          "notesFile": "accounts/thabit-ibn-qais/005.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1738",
-          "passages": [
-            {
-              "anchor": "312-p1"
-            },
-            {
-              "anchor": "312-p2"
-            },
-            {
-              "anchor": "312-p3"
-            },
-            {
-              "anchor": "312-p4"
-            },
-            {
-              "anchor": "312-p5"
-            },
-            {
-              "anchor": "312-p6"
-            },
-            {
-              "anchor": "312-p7"
-            },
-            {
-              "anchor": "312-p8"
-            },
-            {
-              "anchor": "312-p9"
-            },
-            {
-              "anchor": "312-p10"
-            }
-          ]
+          "printedPage": "312"
         },
         {
           "sequence": 6,
-          "printedPage": "313",
-          "bodyFile": "accounts/thabit-ibn-qais/006.md",
-          "notesFile": "accounts/thabit-ibn-qais/006.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1739",
-          "passages": [
-            {
-              "anchor": "313-p1"
-            },
-            {
-              "anchor": "313-p2"
-            },
-            {
-              "anchor": "313-p3"
-            },
-            {
-              "anchor": "313-p4"
-            },
-            {
-              "anchor": "313-p5"
-            },
-            {
-              "anchor": "313-p6"
-            },
-            {
-              "anchor": "313-p7"
-            },
-            {
-              "anchor": "313-p8"
-            },
-            {
-              "anchor": "313-p9"
-            },
-            {
-              "anchor": "313-p10"
-            },
-            {
-              "anchor": "313-p11"
-            },
-            {
-              "anchor": "313-p12"
-            },
-            {
-              "anchor": "313-p13"
-            }
-          ]
+          "printedPage": "313"
         },
         {
           "sequence": 7,
-          "printedPage": "314",
-          "bodyFile": "accounts/thabit-ibn-qais/007.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1740",
-          "passages": [
-            {
-              "anchor": "314-p1"
-            }
-          ]
+          "printedPage": "314"
         }
       ],
       "volumeNumber": 4,
@@ -415,7 +56,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "308-p7",
+          "passageAnchor": "4/308-p7",
           "volume": "4",
           "pageReference": "308–309",
           "extractionUrl": "https://shamela.ws/book/10906/1734",
@@ -437,7 +78,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "308-p7",
+          "passageAnchor": "4/308-p7",
           "volume": "4",
           "pageReference": "308",
           "extractionUrl": "https://shamela.ws/book/10906/1734",
@@ -457,7 +98,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "309-p2",
+          "passageAnchor": "4/309-p2",
           "volume": "4",
           "pageReference": "309",
           "extractionUrl": "https://shamela.ws/book/10906/1735",
@@ -477,7 +118,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "308-p7",
+          "passageAnchor": "4/308-p7",
           "volume": "4",
           "pageReference": "308",
           "extractionUrl": "https://shamela.ws/book/10906/1734",
@@ -486,7 +127,7 @@
         },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "309-p1",
+          "passageAnchor": "4/309-p1",
           "volume": "4",
           "pageReference": "309",
           "extractionUrl": "https://shamela.ws/book/10906/1735",
@@ -506,7 +147,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "309-p3",
+          "passageAnchor": "4/309-p3",
           "volume": "4",
           "pageReference": "309",
           "extractionUrl": "https://shamela.ws/book/10906/1735",
@@ -526,7 +167,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "309-p3",
+          "passageAnchor": "4/309-p3",
           "volume": "4",
           "pageReference": "309",
           "extractionUrl": "https://shamela.ws/book/10906/1735",
@@ -535,7 +176,7 @@
         },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "309-p10",
+          "passageAnchor": "4/309-p10",
           "volume": "4",
           "pageReference": "309",
           "extractionUrl": "https://shamela.ws/book/10906/1735",
@@ -544,7 +185,7 @@
         },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "309-p12",
+          "passageAnchor": "4/309-p12",
           "volume": "4",
           "pageReference": "309",
           "extractionUrl": "https://shamela.ws/book/10906/1735",
@@ -553,7 +194,7 @@
         },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "310-p2",
+          "passageAnchor": "4/310-p2",
           "volume": "4",
           "pageReference": "310",
           "extractionUrl": "https://shamela.ws/book/10906/1736",
@@ -562,7 +203,7 @@
         },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "310-p4",
+          "passageAnchor": "4/310-p4",
           "volume": "4",
           "pageReference": "310",
           "extractionUrl": "https://shamela.ws/book/10906/1736",
@@ -571,7 +212,7 @@
         },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "312-p4",
+          "passageAnchor": "4/312-p4",
           "volume": "4",
           "pageReference": "312",
           "extractionUrl": "https://shamela.ws/book/10906/1738",
@@ -580,7 +221,7 @@
         },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "312-p6",
+          "passageAnchor": "4/312-p6",
           "volume": "4",
           "pageReference": "312",
           "extractionUrl": "https://shamela.ws/book/10906/1738",
@@ -589,7 +230,7 @@
         },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "313-p2",
+          "passageAnchor": "4/313-p2",
           "volume": "4",
           "pageReference": "313",
           "extractionUrl": "https://shamela.ws/book/10906/1739",
@@ -598,7 +239,7 @@
         },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "311-p9",
+          "passageAnchor": "4/311-p9",
           "volume": "4",
           "pageReference": "311",
           "extractionUrl": "https://shamela.ws/book/10906/1737",
@@ -618,7 +259,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "309-p7",
+          "passageAnchor": "4/309-p7",
           "volume": "4",
           "pageReference": "309",
           "extractionUrl": "https://shamela.ws/book/10906/1735",
@@ -640,7 +281,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "309-p7",
+          "passageAnchor": "4/309-p7",
           "volume": "4",
           "pageReference": "309",
           "extractionUrl": "https://shamela.ws/book/10906/1735",
@@ -662,7 +303,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "309-p6",
+          "passageAnchor": "4/309-p6",
           "volume": "4",
           "pageReference": "309",
           "extractionUrl": "https://shamela.ws/book/10906/1735",
@@ -684,7 +325,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "309-p3",
+          "passageAnchor": "4/309-p3",
           "volume": "4",
           "pageReference": "309",
           "extractionUrl": "https://shamela.ws/book/10906/1735",
@@ -706,7 +347,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "309-p3",
+          "passageAnchor": "4/309-p3",
           "volume": "4",
           "pageReference": "309",
           "extractionUrl": "https://shamela.ws/book/10906/1735",
@@ -728,7 +369,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "309-p3",
+          "passageAnchor": "4/309-p3",
           "volume": "4",
           "pageReference": "309",
           "extractionUrl": "https://shamela.ws/book/10906/1735",
@@ -748,7 +389,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "310-p8",
+          "passageAnchor": "4/310-p8",
           "volume": "4",
           "pageReference": "310",
           "extractionUrl": "https://shamela.ws/book/10906/1736",
@@ -768,7 +409,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "309-p7",
+          "passageAnchor": "4/309-p7",
           "volume": "4",
           "pageReference": "309",
           "extractionUrl": "https://shamela.ws/book/10906/1735",

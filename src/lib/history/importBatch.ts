@@ -1,6 +1,7 @@
 import type { PrismaClient } from '@/generated/prisma';
-import type { BatchFiles, ClaimRecord, HistoryBatch } from './batchSchema';
-import { batchRevision, passageExcerpts } from './batchSchema';
+import type { ClaimRecord, HistoryBatch, SourceManifests, StorePages } from './batchSchema';
+import { batchRevision, storePageKey } from './batchSchema';
+import { pageAnchors } from './sourceStore';
 
 export interface ImportResult {
   sources: number;
@@ -36,17 +37,46 @@ function claimFields(claim: ClaimRecord, batchId: string) {
   };
 }
 
+/** Upserts every source manifest and volume the batch's accounts name. */
+async function writeManifests(tx: Tx, manifests: SourceManifests) {
+  const sourceIds = new Map<string, string>();
+  const volumeIds = new Map<string, Map<number, string>>();
+
+  for (const [slug, manifest] of manifests) {
+    const { volumes, ...fields } = manifest;
+    const row = await tx.historicalSource.upsert({
+      where: { slug },
+      create: fields,
+      update: fields,
+    });
+    sourceIds.set(slug, row.id);
+
+    const bySource = new Map<number, string>();
+    for (const volume of volumes) {
+      const written = await tx.sourceVolume.upsert({
+        where: { sourceId_number: { sourceId: row.id, number: volume.number } },
+        create: { sourceId: row.id, number: volume.number, name: volume.name ?? null },
+        update: { name: volume.name ?? null },
+      });
+      bySource.set(volume.number, written.id);
+    }
+    volumeIds.set(slug, bySource);
+  }
+
+  return { sourceIds, volumeIds };
+}
+
 async function writeAccounts(
   tx: Tx,
   batch: HistoryBatch,
-  files: BatchFiles,
+  pages: StorePages,
   sourceIds: Map<string, string>,
   batchId: string,
   volumeIds: Map<string, Map<number, string>>,
 ) {
   const accountIds = new Map<string, string>();
   const passageIds = new Map<string, string>();
-  let pages = 0;
+  let pageCount = 0;
 
   for (const account of batch.accounts) {
     const identity = {
@@ -57,7 +87,7 @@ async function writeAccounts(
     const fields = {
       entryIdentifier: account.entryIdentifier ?? null,
       titleArabic: account.titleArabic ?? null,
-      volume: account.volume ?? null,
+      volume: account.volumeNumber !== undefined ? String(account.volumeNumber) : null,
       extractionUrl: account.extractionUrl,
       accessedAt: new Date(account.accessedAt),
       batchId,
@@ -71,27 +101,26 @@ async function writeAccounts(
     accountIds.set(`${account.sourceSlug}:${account.subjectSlug}`, row.id);
 
     // Pages carry no authoring key of their own, so a re-import replaces the
-    // account's text wholesale rather than matching pages one by one.
+    // account's run wholesale rather than matching pages one by one.
     await tx.sourceAccountPage.deleteMany({ where: { accountId: row.id } });
-    // A page names its own volume only where its entry crosses a binding;
-    // otherwise it is bound in the volume the entry opens in.
     const volumes = volumeIds.get(account.sourceSlug);
-    const volumeOf = (page: (typeof account.pages)[number]) => {
-      const number = page.volumeNumber ?? account.volumeNumber;
-      return number === undefined ? null : (volumes?.get(number) ?? null);
-    };
+
     await tx.sourceAccountPage.createMany({
-      data: account.pages.map((page) => ({
-        accountId: row.id,
-        sequence: page.sequence,
-        printedPage: page.printedPage ?? null,
-        bodyMarkdown: files[page.bodyFile] ?? '',
-        notesMarkdown: page.notesFile ? (files[page.notesFile] ?? null) : null,
-        extractionUrl: page.extractionUrl ?? null,
-        volumeId: volumeOf(page),
-      })),
+      data: account.pages.map((page) => {
+        const volumeNumber = page.volumeNumber ?? account.volumeNumber!;
+        const store = pages.get(storePageKey(account.sourceSlug, volumeNumber, page.printedPage))!;
+        return {
+          accountId: row.id,
+          sequence: page.sequence,
+          printedPage: page.printedPage,
+          bodyMarkdown: store.body,
+          notesMarkdown: store.notes,
+          extractionUrl: account.extractionUrl,
+          volumeId: volumes?.get(volumeNumber) ?? null,
+        };
+      }),
     });
-    pages += account.pages.length;
+    pageCount += account.pages.length;
 
     const written = await tx.sourceAccountPage.findMany({
       where: { accountId: row.id },
@@ -99,15 +128,17 @@ async function writeAccounts(
     });
     const pageIdBySequence = new Map(written.map((page) => [page.sequence, page.id]));
 
-    // The page file is the one copy of the text; a passage is an anchor into
-    // it, so its excerpt is read back out here rather than stored twice.
+    // The store page is the one copy of the text; a passage is a derived
+    // anchor into it, not something the batch declares.
     const passages = account.pages.flatMap((page) => {
-      const excerpts = passageExcerpts(page, files);
-      return (page.passages ?? []).map((passage) => ({
+      const volumeNumber = page.volumeNumber ?? account.volumeNumber!;
+      const store = pages.get(storePageKey(account.sourceSlug, volumeNumber, page.printedPage))!;
+      const anchors = pageAnchors(volumeNumber, page.printedPage, store.body);
+      return [...anchors].map(([anchor, excerpt]) => ({
         pageId: pageIdBySequence.get(page.sequence)!,
-        anchor: passage.anchor,
-        kind: passage.kind ?? 'BODY',
-        excerpt: excerpts.get(passage.anchor) ?? '',
+        anchor,
+        kind: 'BODY' as const,
+        excerpt,
       }));
     });
     if (passages.length > 0) {
@@ -120,7 +151,7 @@ async function writeAccounts(
     }
   }
 
-  return { accountIds, passageIds, pages };
+  return { accountIds, passageIds, pages: pageCount };
 }
 
 /**
@@ -131,9 +162,10 @@ async function writeAccounts(
 export async function importBatch(
   prisma: PrismaClient,
   batch: HistoryBatch,
-  files: BatchFiles,
+  manifests: SourceManifests,
+  pages: StorePages,
 ): Promise<ImportResult> {
-  const revision = batchRevision(batch, files);
+  const revision = batchRevision(batch);
 
   return prisma.$transaction(async (tx) => {
     const batchRow = await tx.reviewBatch.upsert({
@@ -149,41 +181,12 @@ export async function importBatch(
       update: { importedAt: new Date() },
     });
 
-    const sourceIds = new Map<string, string>();
-    // Volume number -> row id, per source, for the accounts to link against.
-    const volumeIds = new Map<string, Map<number, string>>();
-    for (const source of batch.sources) {
-      const { slug, volumes, ...fields } = source;
-      const row = await tx.historicalSource.upsert({
-        where: { slug },
-        create: { slug, ...fields },
-        update: fields,
-      });
-      sourceIds.set(slug, row.id);
-
-      // Volumes are added and updated, never cleared. A batch declares the
-      // volumes it knows about, and a batch that knows of none should not
-      // retract what another already recorded.
-      const bySource = new Map<number, string>();
-      for (const volume of volumes ?? []) {
-        const written = await tx.sourceVolume.upsert({
-          where: { sourceId_number: { sourceId: row.id, number: volume.number } },
-          create: { sourceId: row.id, number: volume.number, name: volume.name ?? null },
-          update: { name: volume.name ?? null },
-        });
-        bySource.set(volume.number, written.id);
-      }
-      // An account may name a volume another batch declared, so the map is
-      // filled from the table rather than from this batch alone.
-      const existing = await tx.sourceVolume.findMany({
-        where: { sourceId: row.id },
-        select: { id: true, number: true },
-      });
-      existing.forEach((volume) => bySource.set(volume.number, volume.id));
-      volumeIds.set(slug, bySource);
-    }
-
-    const { accountIds, passageIds, pages } = await writeAccounts(tx, batch, files, sourceIds, batchRow.id, volumeIds);
+    const { sourceIds, volumeIds } = await writeManifests(tx, manifests);
+    const {
+      accountIds,
+      passageIds,
+      pages: pageCount,
+    } = await writeAccounts(tx, batch, pages, sourceIds, batchRow.id, volumeIds);
 
     const claimIds = new Map<string, string>();
     for (const claim of batch.claims) {
@@ -218,9 +221,9 @@ export async function importBatch(
     if (citations.length > 0) await tx.citation.createMany({ data: citations });
 
     return {
-      sources: batch.sources.length,
+      sources: manifests.size,
       accounts: batch.accounts.length,
-      pages,
+      pages: pageCount,
       claims: batch.claims.length,
       citations: citations.length,
     };

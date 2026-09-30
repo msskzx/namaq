@@ -1,26 +1,6 @@
 {
   "slug": "safiyyah-bint-huyayy",
   "summaryFile": "summary.md",
-  "sources": [
-    {
-      "slug": "siyar-alam-al-nubala-risalah",
-      "title": "سير أعلام النبلاء",
-      "author": "شمس الدين الذهبي",
-      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
-      "publisher": "مؤسسة الرسالة",
-      "publicationYear": "1405/1985",
-      "edition": "الطبعة الثالثة",
-      "digitalHost": "المكتبة الشاملة",
-      "url": "https://shamela.ws/index.php/book/10906",
-      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
-      "volumes": [
-        {
-          "number": 5,
-          "name": "سير أعلام النبلاء ج٢"
-        }
-      ]
-    }
-  ],
   "accounts": [
     {
       "sourceSlug": "siyar-alam-al-nubala-risalah",
@@ -29,307 +9,42 @@
       "extractionUrl": "https://shamela.ws/book/10906/2211",
       "accessedAt": "2026-09-29",
       "volumeNumber": 5,
-      "notInSource": ["kunya", "siblings"],
+      "notInSource": [
+        "kunya",
+        "siblings"
+      ],
       "pages": [
         {
           "sequence": 1,
-          "printedPage": "231",
-          "bodyFile": "accounts/safiyyah-bint-huyayy/001.md",
-          "notesFile": "accounts/safiyyah-bint-huyayy/001.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/2211",
-          "passages": [
-            {
-              "anchor": "231-p3"
-            },
-            {
-              "anchor": "231-p4"
-            },
-            {
-              "anchor": "231-p5"
-            },
-            {
-              "anchor": "231-p6"
-            }
-          ]
+          "printedPage": "231"
         },
         {
           "sequence": 2,
-          "printedPage": "232",
-          "bodyFile": "accounts/safiyyah-bint-huyayy/002.md",
-          "notesFile": "accounts/safiyyah-bint-huyayy/002.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/2212",
-          "passages": [
-            {
-              "anchor": "232-p1"
-            },
-            {
-              "anchor": "232-p2"
-            },
-            {
-              "anchor": "232-p3"
-            },
-            {
-              "anchor": "232-p4"
-            },
-            {
-              "anchor": "232-p5"
-            },
-            {
-              "anchor": "232-p6"
-            },
-            {
-              "anchor": "232-p7"
-            },
-            {
-              "anchor": "232-p8"
-            },
-            {
-              "anchor": "232-p9"
-            }
-          ]
+          "printedPage": "232"
         },
         {
           "sequence": 3,
-          "printedPage": "233",
-          "bodyFile": "accounts/safiyyah-bint-huyayy/003.md",
-          "notesFile": "accounts/safiyyah-bint-huyayy/003.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/2213",
-          "passages": [
-            {
-              "anchor": "233-p1"
-            },
-            {
-              "anchor": "233-p2"
-            },
-            {
-              "anchor": "233-p3"
-            },
-            {
-              "anchor": "233-p4"
-            },
-            {
-              "anchor": "233-p5"
-            },
-            {
-              "anchor": "233-p6"
-            },
-            {
-              "anchor": "233-p7"
-            },
-            {
-              "anchor": "233-p8"
-            },
-            {
-              "anchor": "233-p9"
-            }
-          ]
+          "printedPage": "233"
         },
         {
           "sequence": 4,
-          "printedPage": "234",
-          "bodyFile": "accounts/safiyyah-bint-huyayy/004.md",
-          "notesFile": "accounts/safiyyah-bint-huyayy/004.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/2214",
-          "passages": [
-            {
-              "anchor": "234-p1"
-            },
-            {
-              "anchor": "234-p2"
-            },
-            {
-              "anchor": "234-p3"
-            },
-            {
-              "anchor": "234-p4"
-            },
-            {
-              "anchor": "234-p5"
-            },
-            {
-              "anchor": "234-p6"
-            },
-            {
-              "anchor": "234-p7"
-            },
-            {
-              "anchor": "234-p8"
-            },
-            {
-              "anchor": "234-p9"
-            }
-          ]
+          "printedPage": "234"
         },
         {
           "sequence": 5,
-          "printedPage": "235",
-          "bodyFile": "accounts/safiyyah-bint-huyayy/005.md",
-          "notesFile": "accounts/safiyyah-bint-huyayy/005.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/2215",
-          "passages": [
-            {
-              "anchor": "235-p1"
-            },
-            {
-              "anchor": "235-p2"
-            },
-            {
-              "anchor": "235-p3"
-            },
-            {
-              "anchor": "235-p4"
-            },
-            {
-              "anchor": "235-p5"
-            },
-            {
-              "anchor": "235-p6"
-            },
-            {
-              "anchor": "235-p7"
-            },
-            {
-              "anchor": "235-p8"
-            },
-            {
-              "anchor": "235-p9"
-            },
-            {
-              "anchor": "235-p10"
-            },
-            {
-              "anchor": "235-p11"
-            },
-            {
-              "anchor": "235-p12"
-            },
-            {
-              "anchor": "235-p13"
-            },
-            {
-              "anchor": "235-p14"
-            }
-          ]
+          "printedPage": "235"
         },
         {
           "sequence": 6,
-          "printedPage": "236",
-          "bodyFile": "accounts/safiyyah-bint-huyayy/006.md",
-          "notesFile": "accounts/safiyyah-bint-huyayy/006.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/2216",
-          "passages": [
-            {
-              "anchor": "236-p1"
-            },
-            {
-              "anchor": "236-p2"
-            },
-            {
-              "anchor": "236-p3"
-            },
-            {
-              "anchor": "236-p4"
-            },
-            {
-              "anchor": "236-p5"
-            },
-            {
-              "anchor": "236-p6"
-            },
-            {
-              "anchor": "236-p7"
-            },
-            {
-              "anchor": "236-p8"
-            },
-            {
-              "anchor": "236-p9"
-            },
-            {
-              "anchor": "236-p10"
-            },
-            {
-              "anchor": "236-p11"
-            },
-            {
-              "anchor": "236-p12"
-            }
-          ]
+          "printedPage": "236"
         },
         {
           "sequence": 7,
-          "printedPage": "237",
-          "bodyFile": "accounts/safiyyah-bint-huyayy/007.md",
-          "notesFile": "accounts/safiyyah-bint-huyayy/007.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/2217",
-          "passages": [
-            {
-              "anchor": "237-p1"
-            },
-            {
-              "anchor": "237-p2"
-            },
-            {
-              "anchor": "237-p3"
-            },
-            {
-              "anchor": "237-p4"
-            },
-            {
-              "anchor": "237-p5"
-            },
-            {
-              "anchor": "237-p6"
-            },
-            {
-              "anchor": "237-p7"
-            },
-            {
-              "anchor": "237-p8"
-            },
-            {
-              "anchor": "237-p9"
-            },
-            {
-              "anchor": "237-p10"
-            },
-            {
-              "anchor": "237-p11"
-            },
-            {
-              "anchor": "237-p12"
-            },
-            {
-              "anchor": "237-p13"
-            },
-            {
-              "anchor": "237-p14"
-            },
-            {
-              "anchor": "237-p15"
-            },
-            {
-              "anchor": "237-p16"
-            }
-          ]
+          "printedPage": "237"
         },
         {
           "sequence": 8,
-          "printedPage": "238",
-          "bodyFile": "accounts/safiyyah-bint-huyayy/008.md",
-          "notesFile": "accounts/safiyyah-bint-huyayy/008.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/2218",
-          "passages": [
-            {
-              "anchor": "238-p1"
-            },
-            {
-              "anchor": "238-p2"
-            },
-            {
-              "anchor": "238-p3"
-            }
-          ]
+          "printedPage": "238"
         }
       ]
     }
@@ -346,7 +61,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "231-p3",
+          "passageAnchor": "5/231-p5",
           "volume": "2",
           "pageReference": "231",
           "extractionUrl": "https://shamela.ws/book/10906/2211",
@@ -366,7 +81,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "232-p5",
+          "passageAnchor": "5/232-p5",
           "volume": "2",
           "pageReference": "232",
           "extractionUrl": "https://shamela.ws/book/10906/2212",
@@ -388,7 +103,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "231-p3",
+          "passageAnchor": "5/231-p3",
           "volume": "2",
           "pageReference": "231",
           "extractionUrl": "https://shamela.ws/book/10906/2211",
@@ -408,7 +123,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "231-p3",
+          "passageAnchor": "5/231-p3",
           "volume": "2",
           "pageReference": "231",
           "extractionUrl": "https://shamela.ws/book/10906/2211",
@@ -417,7 +132,7 @@
         },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "232-p5",
+          "passageAnchor": "5/232-p5",
           "volume": "2",
           "pageReference": "232",
           "extractionUrl": "https://shamela.ws/book/10906/2212",
@@ -426,7 +141,7 @@
         },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "235-p3",
+          "passageAnchor": "5/235-p3",
           "volume": "2",
           "pageReference": "235",
           "extractionUrl": "https://shamela.ws/book/10906/2215",
@@ -448,7 +163,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "232-p3",
+          "passageAnchor": "5/232-p3",
           "volume": "2",
           "pageReference": "232",
           "extractionUrl": "https://shamela.ws/book/10906/2212",
@@ -470,7 +185,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "231-p5",
+          "passageAnchor": "5/231-p5",
           "volume": "2",
           "pageReference": "231",
           "extractionUrl": "https://shamela.ws/book/10906/2211",
@@ -492,7 +207,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "231-p5",
+          "passageAnchor": "5/231-p7",
           "volume": "2",
           "pageReference": "231",
           "extractionUrl": "https://shamela.ws/book/10906/2211",
@@ -513,7 +228,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "235-p1",
+          "passageAnchor": "5/235-p1",
           "volume": "2",
           "pageReference": "235",
           "extractionUrl": "https://shamela.ws/book/10906/2215",
@@ -534,7 +249,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "235-p2",
+          "passageAnchor": "5/235-p2",
           "volume": "2",
           "pageReference": "235",
           "extractionUrl": "https://shamela.ws/book/10906/2215",

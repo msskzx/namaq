@@ -8,13 +8,13 @@ if (!dir) {
   process.exit(1);
 }
 
-const { batch, files } = loadBatch(dir);
-const issues = validateBatch(batch, files);
-const approval = checkApproval(batch, files);
+const { batch, files, manifests, pages } = loadBatch(dir);
+const issues = validateBatch(batch, files, manifests, pages);
+const approval = checkApproval(batch);
 const reminders = checklistReminders(batch);
 
-console.log(`Batch ${batch.slug} at revision ${batchRevision(batch, files)}`);
-console.log(`  sources ${batch.sources.length}, accounts ${batch.accounts.length}, claims ${batch.claims.length}`);
+console.log(`Batch ${batch.slug} at revision ${batchRevision(batch)}`);
+console.log(`  sources ${manifests.size}, accounts ${batch.accounts.length}, claims ${batch.claims.length}`);
 console.log(approval.approved ? '  approval: current' : `  approval: none — ${approval.reason}`);
 
 for (const reminder of reminders) console.log(`  reminder: ${reminder}`);

@@ -149,54 +149,53 @@ deleted from Neo4j directly.
 
 ## History batches to PostgreSQL
 
-A batch lives in `data/history/batches/<batch>/`:
+The source text and a batch's own evidence are two separate authored trees
+now ([source-page-store.md](plans/source-page-store.md);
+[ADR 0018](adr/0018-a-page-belongs-to-the-edition.md)):
 
 | Path | Holds |
 | --- | --- |
-| `batch.json` | Sources, accounts and claims |
-| `accounts/<subject>/NNN.md` | One printed page of the work's own text |
-| `accounts/<subject>/NNN.notes.md` | That page's editorial footnotes |
-| `summary.md` | The review summary, linking to the files above |
+| `data/history/sources/<source>/source.json` | The edition, once: title, editor, digital host, and every volume's `number` and printed-page extent |
+| `data/history/sources/<source>/v<N>/<printedPage>.md` | One printed page of the work's own text, referenced by every batch whose entry touches it |
+| `data/history/sources/<source>/v<N>/<printedPage>.notes.md` | That page's editorial footnotes |
+| `data/history/batches/<batch>/batch.json` | Accounts (spans of pages) and claims with their citations |
+| `data/history/batches/<batch>/summary.md` | The review summary |
 
-The page files carry the author's text and the editor's notes separately so each
-stays attributable to whoever wrote it. Together with `batch.json` they hash to a
-revision, which is what approval is recorded against.
+A batch no longer carries page text or its own copy of the source's
+bibliographic fields — it names a page by volume and printed page, and
+`loadBatch` reads the manifest and the pages a batch's accounts actually
+name. `batchRevision` hashes only the batch's own content (its accounts and
+claims), not the store: a page is published on its own, independent of any
+batch that cites it.
 
 ### What batch.json holds
 
-Six record types, defined in `src/lib/history/batchSchema.ts`. Rows below name
-the required fields; every record also accepts optional bibliographic and
-locator fields.
+Four record types, defined in `src/lib/history/batchSchema.ts`. Rows below
+name the required fields; every record also accepts optional bibliographic
+and locator fields.
 
 | Record | Identifies | Required fields |
 | --- | --- | --- |
-| Source | One edition of one work | `slug`, `title` |
 | Account | One subject's entry in one source | `sourceSlug`, `subjectKind`, `subjectSlug`, `extractionUrl`, `accessedAt`, `pages` |
-| Page | One printed page of an account | `sequence`, `bodyFile` |
-| Passage | One paragraph a citation can target | `anchor` |
+| Page | One printed page the account's run covers | `sequence`, `printedPage` |
 | Claim | One assertion about a subject | `key`, `subjectKind`, `subjectSlug`, `assertion`, `citations` |
 | Citation | Where a claim is supported | `sourceSlug`, `extractionUrl`, `excerptArabic`, `accessedAt` |
 
-A source is the work and edition, not the site hosting it, so two editions of the
-same book are two sources. A claim carries `field` when it supports a recorded
-profile value, or `relationshipType` with a related subject when it supports an
-edge; a claim with neither is a biographical statement. A citation's
-`passageAnchor` must name a passage some page in the batch declares, which is
-what makes a citation link land on the cited text.
-
-A passage carries no text of its own. The page file is the one copy of the
-work's text, and a page's anchors are listed in its order, so the nth anchor
-names the nth paragraph. Anchors are the reading page's own paragraph ids, which
-is why they are declared rather than derived: an entry starting mid-page starts
-at whatever id it starts at, `23-p9` in Talhah's case. Validation rejects a page
-whose anchor count and paragraph count disagree, since positional pairing is
-only as good as that invariant.
+A claim carries `field` when it supports a recorded profile value, or
+`relationshipType` with a related subject when it supports an edge; a claim
+with neither is a biographical statement. A citation's `passageAnchor` names
+`<volume>/<printedPage>-p<n>`, the *n*th paragraph of that store page —
+derived from the page's own paragraph order, never declared. An account
+whose entry crosses a volume names the volume per page (`23-p9` in Talhah's
+case became `4/23-p17` once the anchor carried its real volume); every other
+page takes its account's own `volumeNumber`.
 
 ### Extraction
 
-`npm run history:extract` reads Shamela's reading pages and writes one account
-into an existing batch. It takes `--book`, `--from`, `--to`, `--out`,
-`--subject-slug` and `--source-slug`, and optionally `--subject-kind`,
+`npm run history:extract` reads Shamela's reading pages and writes one
+account's page run into the store, then adds the account to an existing
+batch. It takes `--book`, `--from`, `--to`, `--out`, `--subject-slug`,
+`--source-slug` and `--volume`, and optionally `--subject-kind`,
 `--start-anchor`, `--end-anchor`, `--notes-start-marker`, `--notes-end-marker`
 and `--accessed-at`.
 
@@ -207,21 +206,24 @@ and last pages of an entry are the only ones shared with a neighbouring entry, s
 the anchor options trim the body at either end and the notes markers trim the
 notes, which run together in one block and cannot be cut by anchor:
 `--notes-start-marker` drops a preceding entry's notes, `--notes-end-marker` a
-following one's.
+following one's. If the store already holds a page (another entry claimed it
+first), the extractor leaves it alone and logs that the two need merging by
+hand rather than overwriting one entry's text with the other's.
 
-The extractor stops at the account. Sources, claims, citations, confidence and
-review status are authored by hand, and the batch must already exist with a
-source whose slug matches, so extraction cannot start a batch from nothing.
+The extractor stops at the account. The source manifest, claims, citations,
+confidence and review status are authored by hand, and the batch must already
+exist with an account whose `sourceSlug` matches, so extraction cannot start
+a batch from nothing.
 
 ```mermaid
 flowchart TB
   shamela["Shamela reading pages"]
   subgraph extracted["Written by history:extract"]
-    md["accounts/&lt;subject&gt;/NNN.md<br/>NNN.notes.md"]
-    accounts["batch.json: accounts<br/>pages and passages"]
+    md["sources/&lt;source&gt;/v&lt;N&gt;/&lt;page&gt;.md<br/>&lt;page&gt;.notes.md"]
+    accounts["batch.json: accounts<br/>(span of pages)"]
   end
   subgraph byhand["Written by hand"]
-    sources["batch.json: sources"]
+    manifest["sources/&lt;source&gt;/source.json"]
     claims["batch.json: claims<br/>with their citations"]
     summary["summary.md"]
   end

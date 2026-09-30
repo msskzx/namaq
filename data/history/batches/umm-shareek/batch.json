@@ -1,134 +1,6 @@
 {
   "slug": "umm-shareek",
   "summaryFile": "summary.md",
-  "sources": [
-    {
-      "slug": "siyar-alam-al-nubala-risalah",
-      "title": "سير أعلام النبلاء",
-      "author": "شمس الدين الذهبي",
-      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
-      "publisher": "مؤسسة الرسالة",
-      "publicationYear": "1405/1985",
-      "edition": "الطبعة الثالثة",
-      "digitalHost": "المكتبة الشاملة",
-      "url": "https://shamela.ws/index.php/book/10906",
-      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
-      "volumes": [
-        {
-          "number": 1,
-          "name": "السيرة النبوية ج١"
-        },
-        {
-          "number": 2,
-          "name": "السيرة النبوية ج٢"
-        },
-        {
-          "number": 3,
-          "name": "سيرة الخلفاء الراشدين"
-        },
-        {
-          "number": 4,
-          "name": "سير أعلام النبلاء ج١"
-        },
-        {
-          "number": 5,
-          "name": "سير أعلام النبلاء ج٢"
-        },
-        {
-          "number": 6,
-          "name": "سير أعلام النبلاء ج٣"
-        },
-        {
-          "number": 7,
-          "name": "سير أعلام النبلاء ج٤"
-        },
-        {
-          "number": 8,
-          "name": "سير أعلام النبلاء ج٥"
-        },
-        {
-          "number": 9,
-          "name": "سير أعلام النبلاء ج٦"
-        },
-        {
-          "number": 10,
-          "name": "سير أعلام النبلاء ج٧"
-        },
-        {
-          "number": 11,
-          "name": "سير أعلام النبلاء ج٨"
-        },
-        {
-          "number": 12,
-          "name": "سير أعلام النبلاء ج٩"
-        },
-        {
-          "number": 13,
-          "name": "سير أعلام النبلاء ج١٠"
-        },
-        {
-          "number": 14,
-          "name": "سير أعلام النبلاء ج١١"
-        },
-        {
-          "number": 15,
-          "name": "سير أعلام النبلاء ج١٢"
-        },
-        {
-          "number": 16,
-          "name": "سير أعلام النبلاء ج١٣"
-        },
-        {
-          "number": 17,
-          "name": "سير أعلام النبلاء ج١٤"
-        },
-        {
-          "number": 18,
-          "name": "سير أعلام النبلاء ج١٥"
-        },
-        {
-          "number": 19,
-          "name": "سير أعلام النبلاء ج١٦"
-        },
-        {
-          "number": 20,
-          "name": "سير أعلام النبلاء ج١٧"
-        },
-        {
-          "number": 21,
-          "name": "سير أعلام النبلاء ج١٨"
-        },
-        {
-          "number": 22,
-          "name": "سير أعلام النبلاء ج١٩"
-        },
-        {
-          "number": 23,
-          "name": "سير أعلام النبلاء ج٢٠"
-        },
-        {
-          "number": 24,
-          "name": "سير أعلام النبلاء ج٢١"
-        },
-        {
-          "number": 25,
-          "name": "سير أعلام النبلاء ج٢٢"
-        },
-        {
-          "number": 26,
-          "name": "سير أعلام النبلاء ج٢٣"
-        },
-        {
-          "number": 27,
-          "name": "الفهارس ج١"
-        },
-        {
-          "number": 28,
-          "name": "الفهارس ج٢"
-        }
-      ]
-    }
-  ],
   "accounts": [
     {
       "sourceSlug": "siyar-alam-al-nubala-risalah",
@@ -139,36 +11,11 @@
       "pages": [
         {
           "sequence": 1,
-          "printedPage": "255",
-          "bodyFile": "accounts/umm-shareek/001.md",
-          "notesFile": "accounts/umm-shareek/001.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/2235",
-          "passages": [
-            {
-              "anchor": "2/255-p10"
-            },
-            {
-              "anchor": "2/255-p11"
-            }
-          ]
+          "printedPage": "255"
         },
         {
           "sequence": 2,
-          "printedPage": "256",
-          "bodyFile": "accounts/umm-shareek/002.md",
-          "notesFile": "accounts/umm-shareek/002.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/2236",
-          "passages": [
-            {
-              "anchor": "2/256-p1"
-            },
-            {
-              "anchor": "2/256-p2"
-            },
-            {
-              "anchor": "2/256-p3"
-            }
-          ]
+          "printedPage": "256"
         }
       ],
       "volumeNumber": 5,

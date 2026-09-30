@@ -1,9 +1,10 @@
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { JSDOM } from 'jsdom';
-import { bodyMarkdown, extractShamelaPage, notesMarkdown, passageAnchor, sliceEntry } from '../../src/lib/history/shamelaEntry';
+import { bodyMarkdown, extractShamelaPage, notesMarkdown, sliceEntry } from '../../src/lib/history/shamelaEntry';
 import type { AccountRecord, HistoryBatch, PageRecord, SubjectKind } from '../../src/lib/history/batchSchema';
 import { batchDefinitionFile } from '../../src/lib/history/loadBatch';
+import { sourcesRoot } from '../../src/lib/history/sourceStore';
 
 // Shamela serves the reading pages only to a browser-shaped request.
 const userAgent =
@@ -40,14 +41,13 @@ async function main() {
   const notesStartMarker = option('notes-start-marker');
   const notesEndMarker = option('notes-end-marker');
   const accessedAt = option('accessed-at') ?? new Date().toISOString().slice(0, 10);
-  // An account that crosses a volume sees printed numbering restart, and
-  // printed page alone stops identifying a passage. --volume turns anchors into
-  // <volume>/<printed>-<paragraph> and bumps the volume on each restart.
-  const startVolume = option('volume');
+  // An account that crosses a volume sees printed numbering restart.
+  // --volume bumps on each restart, matching the source manifest's own volumes.
+  const startVolume = Number(required('volume'));
 
   const pages: PageRecord[] = [];
   let firstUrl = '';
-  let volume = startVolume ? Number(startVolume) : undefined;
+  let volume = startVolume;
   let previousPrinted: number | undefined;
 
   for (let pageId = from; pageId <= to; pageId += 1) {
@@ -62,43 +62,40 @@ async function main() {
       notesEndMarker: pageId === to ? notesEndMarker : undefined,
     });
     const printed = Number(page.printedPage);
-    if (volume !== undefined && previousPrinted !== undefined && printed < previousPrinted) volume += 1;
-    if (!Number.isNaN(printed)) previousPrinted = printed;
+    if (Number.isNaN(printed)) {
+      throw new Error(`page ${pageId} has no parseable printed page number; extract it by hand`);
+    }
+    if (previousPrinted !== undefined && printed < previousPrinted) volume += 1;
+    previousPrinted = printed;
 
     const sequence = pageId - from + 1;
-    const bodyFile = `accounts/${subjectSlug}/${String(sequence).padStart(3, '0')}.md`;
+    const printedPage = page.printedPage!;
+    const volumeDir = join(sourcesRoot, sourceSlug, `v${volume}`);
+    const bodyPath = join(volumeDir, `${printedPage}.md`);
+    const notesPath = join(volumeDir, `${printedPage}.notes.md`);
 
-    const target = join(batchDir, bodyFile);
-    mkdirSync(dirname(target), { recursive: true });
-    writeFileSync(target, bodyMarkdown(page));
+    if (existsSync(bodyPath)) {
+      console.log(
+        `  vol ${volume} page ${printedPage}: already in the store — leaving it; ` +
+          `merge by hand if this entry also belongs on it (docs/plans/source-page-store.md)`,
+      );
+    } else {
+      mkdirSync(volumeDir, { recursive: true });
+      writeFileSync(bodyPath, bodyMarkdown(page));
+      const notes = notesMarkdown(page);
+      if (notes) writeFileSync(notesPath, notes);
+    }
 
-    const notes = notesMarkdown(page);
-    const notesFile = notes ? bodyFile.replace(/\.md$/, '.notes.md') : undefined;
-    if (notes && notesFile) writeFileSync(join(batchDir, notesFile), notes);
+    pages.push({ sequence, printedPage, volumeNumber: volume });
 
-    pages.push({
-      sequence,
-      printedPage: page.printedPage ?? undefined,
-      bodyFile,
-      notesFile,
-      extractionUrl: url,
-      // Anchors only: the paragraph text goes to the page file, and a passage
-      // is read back out of it by position (batchSchema.passageExcerpts).
-      passages: page.body.map((paragraph) => ({
-        anchor: passageAnchor(volume, page.printedPage ?? String(sequence), paragraph.anchor),
-      })),
-    });
-
-    console.log(
-      `  ${volume === undefined ? '' : `vol ${volume} `}page ${page.printedPage ?? sequence}: ` +
-        `${page.body.length} paragraphs, ${raw.notes.length} note block(s)`,
-    );
+    console.log(`  vol ${volume} page ${printedPage}: ${page.body.length} paragraphs, ${raw.notes.length} note block(s)`);
   }
 
   const account: AccountRecord = {
     sourceSlug,
     subjectKind,
     subjectSlug,
+    volumeNumber: startVolume,
     extractionUrl: firstUrl,
     accessedAt,
     pages,
@@ -114,7 +111,7 @@ async function main() {
   else batch.accounts[existing] = merged;
 
   writeFileSync(definition, `${JSON.stringify(batch, null, 2)}\n`);
-  console.log(`Wrote ${pages.length} page(s) and updated ${definition}`);
+  console.log(`Wrote ${pages.length} page(s) to the store and updated ${definition}`);
   console.log('  approval must be re-recorded: the batch revision has changed');
 }
 

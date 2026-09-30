@@ -1,5 +1,6 @@
 import { loadBatch } from '../../src/lib/history/loadBatch';
-import { passageExcerpts } from '../../src/lib/history/batchSchema';
+import { storePageKey } from '../../src/lib/history/batchSchema';
+import { pageAnchors } from '../../src/lib/history/sourceStore';
 
 /**
  * The needle-assertion check this batch's authoring harness relies on: every
@@ -25,13 +26,18 @@ function normalize(text: string) {
     .trim();
 }
 
-const { batch, files } = loadBatch(dir);
+const { batch, pages } = loadBatch(dir);
 
 const paragraphsByAnchor = new Map<string, string>();
 for (const account of batch.accounts) {
   for (const page of account.pages) {
-    const excerpts = passageExcerpts(page, files);
-    for (const [anchor, text] of excerpts) paragraphsByAnchor.set(anchor, text);
+    const volumeNumber = page.volumeNumber ?? account.volumeNumber;
+    if (volumeNumber === undefined) continue;
+    const store = pages.get(storePageKey(account.sourceSlug, volumeNumber, page.printedPage));
+    if (!store) continue;
+    for (const [anchor, text] of pageAnchors(volumeNumber, page.printedPage, store.body)) {
+      paragraphsByAnchor.set(anchor, text);
+    }
   }
 }
 

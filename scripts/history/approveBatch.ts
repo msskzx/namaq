@@ -22,21 +22,21 @@ const dirs = dirArg ? [dirArg] : readdirSync(root).map((name) => join(root, name
 
 let pending = 0;
 for (const dir of dirs) {
-  const { batch, files } = loadBatch(dir);
-  const issues = validateBatch(batch, files);
+  const { batch, files, manifests, pages } = loadBatch(dir);
+  const issues = validateBatch(batch, files, manifests, pages);
   if (issues.length > 0) {
     for (const issue of issues) console.error(`  ${batch.slug}: ${issue.path}: ${issue.message}`);
     continue;
   }
 
-  const status = checkApproval(batch, files);
+  const status = checkApproval(batch);
   if (status.approved) {
     if (dirArg) console.log(`${batch.slug}: already approved at revision ${status.revision}`);
     continue;
   }
 
   pending += 1;
-  const revision = batchRevision(batch, files);
+  const revision = batchRevision(batch);
   console.log(`${batch.slug}: pending approval at revision ${revision} (${status.reason})`);
 
   if (!apply) continue;

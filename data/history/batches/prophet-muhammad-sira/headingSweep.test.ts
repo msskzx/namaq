@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import { loadStorePage, pageAnchors } from '../../../../src/lib/history/sourceStore';
 
 /**
  * The sweep this pins: al-Dhahabi's own section headings are the checklist, and
@@ -32,18 +33,17 @@ const DECLINED: Record<string, string> = {
 };
 
 type Batch = {
-  accounts: { pages: { bodyFile: string; passages: { anchor: string }[] }[] }[];
+  accounts: { sourceSlug: string; volumeNumber?: number; pages: { printedPage: string; volumeNumber?: number }[] }[];
   claims: { citations: { passageAnchor: string }[] }[];
 };
 
 const batch = JSON.parse(readFileSync(`${BATCH}/batch.json`, 'utf8')) as Batch;
 
 const passages = batch.accounts[0].pages.flatMap((page) => {
-  const paragraphs = readFileSync(`${BATCH}/${page.bodyFile}`, 'utf8')
-    .split('\n\n')
-    .map((text) => text.trim())
-    .filter(Boolean);
-  return page.passages.map((passage, index) => ({ anchor: passage.anchor, text: paragraphs[index] ?? '' }));
+  const volumeNumber = page.volumeNumber ?? batch.accounts[0].volumeNumber!;
+  const store = loadStorePage('.', batch.accounts[0].sourceSlug, volumeNumber, page.printedPage);
+  if (!store) return [];
+  return [...pageAnchors(volumeNumber, page.printedPage, store.body)].map(([anchor, text]) => ({ anchor, text }));
 });
 
 const cited = new Set(batch.claims.flatMap((claim) => claim.citations.map((citation) => citation.passageAnchor)));
