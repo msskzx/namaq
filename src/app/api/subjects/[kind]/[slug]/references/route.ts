@@ -29,7 +29,7 @@ export async function GET(
         where: { subjectKind, subjectSlug: slug },
         include: {
           citations: {
-            include: { source: true, passage: { include: { page: true } } },
+            include: { source: true, passage: { include: { page: { include: { volume: true } } } } },
           },
         },
         orderBy: { updatedAt: 'desc' },

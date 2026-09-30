@@ -51,7 +51,9 @@ describe('GET /api/people/[slug]', () => {
     });
     expect(findMany).toHaveBeenCalledWith({
       where: { subjectKind: 'PERSON', subjectSlug: 'prophet-muhammad' },
-      include: { citations: { include: { source: true, passage: { include: { page: true } } } } },
+      include: {
+        citations: { include: { source: true, passage: { include: { page: { include: { volume: true } } } } } },
+      },
       orderBy: { updatedAt: 'desc' },
     });
     expect(response.status).toBe(200);
