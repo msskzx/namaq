@@ -133,7 +133,7 @@ that.
 - [ ] أبو رافع
 - [ ] صهيب بن سنان
 - [ ] أبو طلحة الأنصاري
-- [x] أبو بردة بن نيار (data/history/batches/abu-bardah-ibn-niyar, PR #183)
+- [x] أبو بردة بن نيار (data/history/batches/abu-bardah-ibn-niyar, PR #198)
 - [ ] جبر بن عتيك
 - [ ] الأشعث بن قيس
 - [ ] حاطب بن أبي بلتعة
