@@ -353,6 +353,26 @@ const badr = {
       summary: { value: 'وَهُوَ مِنْ كِبَارِ البَدْرِيِّيْنَ', claims: ['bishr-ibn-al-baraa-siyar54/badr'] },
       claims: ['bishr-ibn-al-baraa-siyar54/badr'],
     },
+    {
+      person: 'zaid-ibn-al-khattab',
+      isMuslim: true,
+      summary: { value: 'شَهِدَ بَدْراً وَالمَشَاهِدَ', claims: ['zaid-ibn-al-khattab-siyar57/badr'] },
+      claims: ['zaid-ibn-al-khattab-siyar57/badr'],
+    },
+    // Entry 55; the majority report is absence — preparing to march, stung,
+    // stayed behind — against Urwah and al-Bukhari's attendance report.
+    {
+      person: 'saad-ibn-ubadah',
+      isMuslim: true,
+      relation: 'ABSENT_FROM',
+      status: ['ABSENT_EXCUSED'],
+      summary: {
+        value:
+          'كَانَ يَتَهَيَّأُ لِلْخُرُوْجِ إِلَى بَدْرٍ، وَيَأْتِي دُوْرَ الأَنْصَارِ يَحُضُّهُم عَلَى الخُرُوْجِ، فَنُهِشَ، فَأَقَامَ. وَقَالَ جَمَاعَةٌ: مَا شَهِدَهَا؛ وَقَالَ أَبُو الأَسْوَدِ عَنْ عُرْوَةَ وَالبُخَارِيُّ فِي تَارِيْخِهِ: شَهِدَهَا.',
+        claims: ['saad-ibn-ubadah-siyar55/badr-absent'],
+      },
+      claims: ['saad-ibn-ubadah-siyar55/badr-absent'],
+    },
   ],
 } satisfies CatalogBattle;
 
