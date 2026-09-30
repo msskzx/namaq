@@ -153,12 +153,7 @@ export default function SourcePage({ params }: { params: Promise<{ slug: string 
                   {language === 'ar' ? 'محتويات الكتاب' : 'Contents'}
                 </h2>
 
-                <SourceContents
-                  slug={slug}
-                  volumes={source.volumes}
-                  accounts={contents.accounts}
-                  label={(account) => account.titleArabic || account.subjectName || account.subjectSlug}
-                />
+                <SourceContents slug={slug} volumes={source.volumes} accounts={contents.accounts} />
               </section>
             )}
           </>

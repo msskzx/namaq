@@ -8,140 +8,124 @@ import { faChevronDown, faChevronLeft, faChevronRight } from '@fortawesome/free-
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { fetcher } from '@/lib/swr';
-import type { AccountSection, AccountSummary } from '@/types/provenance';
-
-interface SectionsResponse {
-  sections: AccountSection[];
-}
+import type { AccountSummary, VolumeContents } from '@/types/provenance';
 
 /**
- * One entry inside an opened volume, with whatever chapters it declares.
- *
- * Whether it declares any is only knowable by reading its pages, so the answer
- * arrives with the sections themselves rather than ahead of them: an entry with
- * none simply shows as its own link, and nothing offers to open an index that
- * would be empty.
+ * One volume's contents, read in the book's own printed-page order -- not
+ * grouped by whose entry a page belongs to, since the page belongs to the
+ * book first (docs/adr/0018-a-page-belongs-to-the-edition.md). A page shows
+ * up once, whichever entry opens on it (if any) named inline, next to
+ * whatever section headings the page itself declares.
  */
-function VolumeEntry({
-  slug,
-  account,
-  label,
-  span,
-}: {
-  slug: string;
-  account: AccountSummary;
-  label: string;
-  /** This entry's run of pages within the volume being shown; absent for an entry no volume holds. */
-  span?: { firstSequence: number; firstPrintedPage: string | null; lastSequence: number; pageCount: number };
-}) {
+function VolumeBody({ slug, volume }: { slug: string; volume: VolumeContents }) {
   const { language } = useLanguage();
-  const { data, isLoading } = useSWR<SectionsResponse>(
-    `/api/sources/${slug}/accounts/sections?account=${account.id}`,
-    fetcher,
-  );
-  // An entry that crosses a binding shows under each volume with only the
-  // chapters that begin in it, so the sira's chapters divide between its two
-  // volumes the way its pages do.
-  const sections = (data?.sections ?? []).filter(
-    (section) => !span || (section.sequence >= span.firstSequence && section.sequence <= span.lastSequence),
-  );
-  const firstPage = span?.firstSequence ?? 1;
-  // A contents list says where a thing begins, as the printed book numbers it.
-  const startsOn = span?.firstPrintedPage ?? String(firstPage);
-  const pageLabel = (page: string) => (language === 'ar' ? `ص ${page}` : `p. ${page}`);
+  const t = language === 'ar';
+  const pageLabel = (page: string) => (t ? `ص ${page}` : `p. ${page}`);
 
   return (
-    <li className="p-4">
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <Link
-          href={`/sources/${slug}?book=${account.id}&page=${firstPage}`}
-          dir="rtl"
-          lang="ar"
-          className="text-xl text-gray-900 hover:underline dark:text-gray-100"
-        >
-          {label}
-        </Link>
-        <span className="text-sm text-gray-600 dark:text-gray-400">{pageLabel(startsOn)}</span>
-      </div>
+    <ol className="divide-y divide-gray-200 border-t border-gray-200 dark:divide-white/10 dark:border-white/10">
+      {volume.items.map((item) => (
+        <li key={item.printedPage} className="p-4">
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              {item.entries.length > 0 ? (
+                item.entries.map((entry) => (
+                  <Link
+                    key={entry.accountId}
+                    href={`/sources/${slug}?volume=${volume.number}&page=${item.printedPage}`}
+                    dir="rtl"
+                    lang="ar"
+                    className="text-lg text-gray-900 hover:underline dark:text-gray-100"
+                  >
+                    {entry.label}
+                  </Link>
+                ))
+              ) : item.headings.length > 0 ? (
+                <Link
+                  href={`/sources/${slug}?volume=${volume.number}&page=${item.printedPage}`}
+                  dir="rtl"
+                  lang="ar"
+                  className="text-sm text-gray-700 hover:underline dark:text-gray-300"
+                >
+                  {item.headings[0]}
+                </Link>
+              ) : null}
+            </div>
+            <span className="shrink-0 text-xs text-gray-500">{pageLabel(item.printedPage)}</span>
+          </div>
 
-      {isLoading && <LoadingSpinner />}
-
-      {sections.length > 0 && (
-        <ol dir="rtl" lang="ar" className="mt-3 space-y-1 border-t border-gray-200 pt-3 dark:border-white/10">
-          {sections.map((section, index) => (
-            <li key={index}>
-              <Link
-                href={`/sources/${slug}?book=${account.id}&page=${section.sequence}`}
-                className="flex items-baseline justify-between gap-3 rounded px-2 py-1 text-gray-800 transition hover:bg-amber-50 dark:text-gray-200 dark:hover:bg-white/5"
-              >
-                <span>{section.heading}</span>
-                <span className="shrink-0 text-xs text-gray-500">
-                  {pageLabel(section.printedPage ?? String(section.sequence))}
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ol>
-      )}
-    </li>
+          {item.entries.length > 0 && item.headings.length > 0 && (
+            <ol dir="rtl" lang="ar" className="mt-2 space-y-1 ps-1 text-sm text-gray-700 dark:text-gray-300">
+              {item.headings.map((heading, index) => (
+                <li key={index}>{heading}</li>
+              ))}
+            </ol>
+          )}
+        </li>
+      ))}
+    </ol>
   );
 }
 
-/**
- * A work's contents, grouped by volume and opened one volume at a time.
- *
- * A volume stays shut until it is asked for, and opening it is what fetches the
- * chapters of the entries inside: building that index reads every page of an
- * account's body, which the sira alone makes 988 pages of work.
- *
- * A SourceAccount records a volume only where the batch authored one, so
- * entries naming none are grouped under the work itself rather than invented
- * into a volume they never claimed.
- */
+/** Where a volume's read pages leave off its own declared extent -- what the shamela id check in AGENTS.md's "Content sources" catches by hand, shown here instead. */
+function unreadStretches(volume: VolumeContents): { from: number; to: number }[] {
+  if (volume.firstPrintedPage === null || volume.lastPrintedPage === null) return [];
+  const skipped = new Set(volume.skippedPrintedPages);
+  const read = new Set(volume.items.map((item) => Number(item.printedPage)));
+  const stretches: { from: number; to: number }[] = [];
+  let open: { from: number; to: number } | null = null;
+  for (let page = volume.firstPrintedPage; page <= volume.lastPrintedPage; page += 1) {
+    if (skipped.has(page) || read.has(page)) {
+      if (open) { stretches.push(open); open = null; }
+      continue;
+    }
+    if (open) open.to = page;
+    else open = { from: page, to: page };
+  }
+  if (open) stretches.push(open);
+  return stretches;
+}
+
 export default function SourceContents({
   slug,
   volumes,
   accounts,
-  label,
 }: {
   slug: string;
   volumes: { number: number; name: string | null }[];
   accounts: AccountSummary[];
-  label: (account: AccountSummary) => string;
 }) {
   const { language } = useLanguage();
+  const t = language === 'ar';
   const [openVolume, setOpenVolume] = useState<number | null>(null);
 
-  // Every volume the edition has, not only the ones something was read from:
-  // a reader should be able to see that a work runs to twenty-eight volumes
-  // and that two of them have been read.
-  const groups = volumes.map((volume) => ({
-    ...volume,
-    entries: accounts.flatMap((account) => {
-      const span = account.volumes?.find((candidate) => candidate.number === volume.number);
-      return span ? [{ account, span }] : [];
-    }),
-  }));
+  // A volume with nothing read from it yet still shows, so a reader can see
+  // that the work runs to twenty-eight volumes and that two are read.
+  const readVolumeNumbers = new Set(
+    accounts.flatMap((account) => account.volumes?.map((span) => span.number) ?? []),
+  );
 
-  // An entry whose pages are bound in no recorded volume belongs nowhere
-  // above, and is shown rather than dropped.
-  const unplaced = accounts.filter((account) => !account.volumes?.length);
+  const { data: openContents, isLoading } = useSWR<VolumeContents>(
+    openVolume !== null ? `/api/sources/${slug}/volumes/${openVolume}` : null,
+    fetcher,
+  );
 
   return (
     <div className="space-y-3">
-      {groups.map((group) => {
-        const open = openVolume === group.number;
-        const read = group.entries.length > 0;
-        const pages = group.entries.reduce((total, entry) => total + entry.span.pageCount, 0);
+      {volumes.map((volume) => {
+        const open = openVolume === volume.number;
+        const read = readVolumeNumbers.has(volume.number);
+        const contents = open ? openContents : undefined;
+        const gaps = contents ? unreadStretches(contents) : [];
 
         return (
           <section
-            key={group.number}
+            key={volume.number}
             className={`rounded-lg border ${read ? 'border-gray-200 dark:border-white/10' : 'border-dashed border-gray-200/70 dark:border-white/5'}`}
           >
             <button
               type="button"
-              onClick={() => read && setOpenVolume(open ? null : group.number)}
+              onClick={() => read && setOpenVolume(open ? null : volume.number)}
               aria-expanded={read ? open : undefined}
               disabled={!read}
               className={`flex w-full flex-wrap items-baseline justify-between gap-2 p-4 text-start ${
@@ -155,46 +139,38 @@ export default function SourceContents({
               >
                 {read && (
                   <FontAwesomeIcon
-                    icon={open ? faChevronDown : language === 'ar' ? faChevronLeft : faChevronRight}
+                    icon={open ? faChevronDown : t ? faChevronLeft : faChevronRight}
                     className="w-3 h-3 mx-2"
                   />
                 )}
-                {group.name ?? (language === 'ar' ? `الجزء ${group.number}` : `Volume ${group.number}`)}
+                {volume.name ?? (t ? `الجزء ${volume.number}` : `Volume ${volume.number}`)}
               </span>
               <span className={`text-sm ${read ? 'text-gray-600 dark:text-gray-400' : 'text-gray-400 dark:text-gray-600'}`}>
-                {read
-                  ? language === 'ar'
-                    ? `التراجم: ${group.entries.length} · الصفحات: ${pages}`
-                    : `${group.entries.length} entries · ${pages} pages`
-                  : language === 'ar'
-                    ? 'لم يُقرأ بعد'
-                    : 'Not read yet'}
+                {read ? (t ? 'مقروء جزئياً أو كاملاً' : 'Read') : t ? 'لم يُقرأ بعد' : 'Not read yet'}
               </span>
             </button>
 
             {open && (
-              <ul className="divide-y divide-gray-200 border-t border-gray-200 dark:divide-white/10 dark:border-white/10">
-                {group.entries.map(({ account, span }) => (
-                  <VolumeEntry key={account.id} slug={slug} account={account} label={label(account)} span={span} />
-                ))}
-              </ul>
+              <>
+                {isLoading && <div className="p-4"><LoadingSpinner /></div>}
+                {contents && (
+                  <>
+                    <VolumeBody slug={slug} volume={contents} />
+                    {gaps.length > 0 && (
+                      <p dir="rtl" lang="ar" className="border-t border-gray-200 p-4 text-sm text-gray-500 dark:border-white/10 dark:text-gray-400">
+                        {t ? 'صفحات لم تُقرأ بعد: ' : 'Not yet read: '}
+                        {gaps
+                          .map((gap) => (gap.from === gap.to ? `${gap.from}` : `${gap.from}–${gap.to}`))
+                          .join('، ')}
+                      </p>
+                    )}
+                  </>
+                )}
+              </>
             )}
           </section>
         );
       })}
-
-      {unplaced.length > 0 && (
-        <section className="rounded-lg border border-gray-200 dark:border-white/10">
-          <h3 dir="rtl" lang="ar" className="p-4 text-xl text-amber-600 dark:text-amber-500">
-            {language === 'ar' ? 'تراجم لم يُحدَّد جزؤها' : 'Entries with no volume recorded'}
-          </h3>
-          <ul className="divide-y divide-gray-200 border-t border-gray-200 dark:divide-white/10 dark:border-white/10">
-            {unplaced.map((account) => (
-              <VolumeEntry key={account.id} slug={slug} account={account} label={label(account)} />
-            ))}
-          </ul>
-        </section>
-      )}
     </div>
   );
 }
