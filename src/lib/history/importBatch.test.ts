@@ -267,7 +267,7 @@ describe('importBatch', () => {
 
     await importBatch(prisma, batch(), manifests(manifest({ volumes: [{ number: 1 }] })), pages());
 
-    expect(transactionOptions[0]).toMatchObject({ timeout: 120_000 });
+    expect(transactionOptions[0]).toMatchObject({ timeout: 600_000 });
   });
 
   it('records a narrator-only mention as no graph relationship', async () => {

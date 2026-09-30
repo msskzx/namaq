@@ -170,6 +170,29 @@ describe('validateBatch', () => {
     });
   });
 
+  // The database enforces its own enum at write time, but a bad value here
+  // passed validate/approve clean before and only failed on import, minutes
+  // into a bulk run -- see docs/lessons/lessons/0003-a-check-that-exists-but-doesnt-run.html.
+  it('rejects a confidence value outside the enum', () => {
+    const b = batch();
+    b.claims[0].confidence = 'REPORTED' as never;
+
+    expect(validateBatch(b, files(), manifests(), pages())).toContainEqual({
+      path: 'claims[0]',
+      message: expect.stringContaining('confidence "REPORTED" is not one of'),
+    });
+  });
+
+  it('rejects a reviewStatus value outside the enum', () => {
+    const b = batch();
+    b.claims[0].reviewStatus = 'PENDING' as never;
+
+    expect(validateBatch(b, files(), manifests(), pages())).toContainEqual({
+      path: 'claims[0]',
+      message: expect.stringContaining('reviewStatus "PENDING" is not one of'),
+    });
+  });
+
   it('rejects a claim that backs no recorded value, since the pages already hold the text', () => {
     const b = batch();
     b.claims[0].field = undefined;

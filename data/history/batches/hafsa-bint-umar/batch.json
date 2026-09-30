@@ -205,9 +205,9 @@
     }
   ],
   "approval": {
-    "revision": "a33af1a2dc3424ac",
+    "revision": "d1789f5d361a4cb7",
     "approvedAt": "2026-09-30",
-    "approvedBy": "Codex",
-    "note": "Approved for publication. Claims remain Not reviewed; approval permits import and does not assert source review."
+    "approvedBy": "msskzx",
+    "note": "Approved for publication. Claims are Not reviewed: the entries are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
   }
 }

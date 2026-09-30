@@ -294,6 +294,17 @@ export function validateBatch(
     if (!claim.assertion.trim()) issues.push({ path, message: 'assertion is required' });
     if (!claim.subjectSlug.trim()) issues.push({ path, message: 'subjectSlug is required' });
 
+    // Caught nothing before this: the database enforces its own enum at
+    // write time, but a batch with a bad value passed validate/approve
+    // clean and only failed on import, minutes into a bulk run -- see
+    // docs/lessons/lessons/0003-a-check-that-exists-but-doesnt-run.html.
+    if (claim.confidence !== undefined && !confidences.includes(claim.confidence)) {
+      issues.push({ path, message: `confidence "${claim.confidence}" is not one of ${confidences.join(', ')}` });
+    }
+    if (claim.reviewStatus !== undefined && !reviewStatuses.includes(claim.reviewStatus)) {
+      issues.push({ path, message: `reviewStatus "${claim.reviewStatus}" is not one of ${reviewStatuses.join(', ')}` });
+    }
+
     // A claim exists to make one recorded value checkable. The source pages
     // already hold everything the entry says, so a claim backing nothing is a
     // second copy of text rather than evidence -- see AGENTS.md, "Historical

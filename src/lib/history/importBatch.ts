@@ -15,10 +15,13 @@ export interface ImportResult {
 type Tx = Omit<PrismaClient, '$connect' | '$disconnect' | '$on' | '$transaction' | '$use' | '$extends'>;
 
 /**
- * A batch is dozens of pages and hundreds of passages, and the default five
- * seconds is not enough for that many round trips against a hosted database.
+ * A batch is usually dozens of pages and hundreds of passages, but the sira
+ * alone runs to 988 pages, and pages and passages are now upserted one at a
+ * time by natural key (docs/plans/source-page-store.md) rather than bulk
+ * inserted, so round trips scale with the batch, not a fixed count. 120s
+ * covered every batch but the sira; ten minutes covers it with room.
  */
-const transactionOptions = { timeout: 120_000, maxWait: 20_000 };
+const transactionOptions = { timeout: 600_000, maxWait: 20_000 };
 
 function claimFields(claim: ClaimRecord, batchId: string) {
   return {
