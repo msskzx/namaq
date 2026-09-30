@@ -16,6 +16,7 @@ tailwind.config = {
 
 const PAGES = [
   { group: 'Lessons', href: '../lessons/0001-where-text-becomes-citable.html', label: '0001 · Where text becomes citable' },
+  { group: 'Lessons', href: '../lessons/0002-who-owns-a-page.html', label: '0002 · Who owns a page' },
   { group: 'Reference', href: '../reference/source-pipeline.html', label: 'Source pipeline card' },
   { group: 'Workspace', href: '../MISSION.md', label: 'Mission' },
   { group: 'Workspace', href: '../RESOURCES.md', label: 'Resources' },

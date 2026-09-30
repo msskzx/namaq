@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Who Owns a Page</title>
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<script src="../assets/lesson.js"></script>
+</head>
+<body class="bg-stone-50 font-serif text-stone-900 antialiased dark:bg-stone-950 dark:text-stone-100">
+
+<div class="fixed inset-x-0 top-0 z-20 flex items-start justify-between p-3 print:hidden">
+  <button id="index-toggle" aria-controls="index" aria-expanded="true"
+    class="rounded border border-stone-300 bg-stone-50/90 px-3 py-1.5 font-mono text-xs uppercase tracking-wider text-stone-600 backdrop-blur hover:border-amber-500 hover:text-amber-700 dark:border-stone-700 dark:bg-stone-950/90 dark:text-stone-400 dark:hover:text-amber-400">
+    Index
+  </button>
+  <button id="theme-toggle"
+    class="rounded border border-stone-300 bg-stone-50/90 px-3 py-1.5 text-sm text-stone-600 backdrop-blur hover:border-amber-500 hover:text-amber-700 dark:border-stone-700 dark:bg-stone-950/90 dark:text-stone-400 dark:hover:text-amber-400">
+  </button>
+</div>
+
+<nav id="index" aria-label="Lesson index"
+  class="fixed inset-y-0 start-0 z-10 w-64 overflow-y-auto border-e border-stone-200 bg-stone-100/95 px-3 pb-8 pt-16 backdrop-blur dark:border-stone-800 dark:bg-stone-900/95 print:hidden"></nav>
+
+<main class="mx-auto max-w-3xl px-4 pb-24 pt-20">
+<article class="prose prose-stone max-w-none dark:prose-invert prose-headings:font-semibold prose-pre:bg-amber-50 prose-pre:text-stone-800 prose-pre:border-s-4 prose-pre:border-amber-600 prose-pre:rounded-s-none dark:prose-pre:bg-stone-900 dark:prose-pre:text-stone-200 prose-code:font-mono prose-a:text-amber-700 dark:prose-a:text-amber-400">
+
+<header class="mb-10 border-b border-stone-300 pb-6 dark:border-stone-700">
+  <p class="m-0 font-mono text-xs uppercase tracking-[0.12em] text-amber-700 dark:text-amber-500">Lesson 0002 · storing and showing a source</p>
+  <h1 class="mb-2 mt-3">Who owns a page</h1>
+  <p class="m-0 text-lg text-stone-600 dark:text-stone-400">A reader asked whether <code>/sources</code> lets you read the book. The answer
+  turned out to be a question about ownership, and the ownership turned out to be wrong.</p>
+</header>
+
+<h2>The symptom</h2>
+
+<p>Open volume 5 of the Siyar in <code>/sources</code>, read every entry the contents lists, and you
+have read 128 printed pages of it — in five separate runs, with a 21-page hole after Aisha's
+entry that nothing on screen mentions. Volumes 1 and 2 <em>are</em> complete. Volume 3 and volumes
+6 through 28 are marked <span dir="rtl" lang="ar">لم يُقرأ بعد</span>, honestly. Only the holes
+<em>inside</em> a volume that has been read are silent.</p>
+
+<p>The interesting part is why the same UI is honest at one level and silent at the other. It
+isn't an oversight. The volume list can be honest because the edition declares its volumes, so
+something exists to be missing from. Inside a volume, nothing declares the pages — so there is no
+absence to detect.</p>
+
+<h2>Follow it down</h2>
+
+<p>Why does nothing declare the pages? Because until now a page belonged to the account that
+extracted it:</p>
+
+<pre>SourceAccountPage {
+  accountId    // the entry this page was read for
+  sequence     // its position within that entry
+  printedPage  // nullable
+}</pre>
+
+<p>A page's identity was <em>(entry, ordinal)</em>. The book's own coordinates — volume and printed
+page — were along for the ride. So the reader could page through an entry and had no notion of
+paging through a volume, and a volume had no notion of which of its pages existed.</p>
+
+<h2>The evidence that settled it</h2>
+
+<p>Printed page 230 of volume 4 exists <strong>twice</strong>, at the same Shamela id 1656: 413
+characters under Zaid ibn Harithah, 402 under Abdullah ibn Rawahah. Neither contains the other.
+The entry boundary falls inside the page, so each batch kept its own half.</p>
+
+<pre>Zaid's copy,  tail:  … قَالَتْ: أَنَا لِزَيْدِ بنِ حَارِثَةَ. إِسْنَادُهُ حَسَنٌ.
+Rawahah's copy, head: ٣٧ - عَبْدُ اللهِ بنُ رَوَاحَةَ بنِ ثَعْلَبَةَ …</pre>
+
+<p>Thirty-eight pages are split this way, across 61 of the 88 batches. Which means a printed page's
+text depended on who read it — the same mistake
+<a href="../../adr/0010-author-historical-data-under-data.md">ADR 0010</a> already rules out for
+values, arrived at from a different direction.</p>
+
+<aside class="not-prose my-8 rounded border border-stone-300 p-4 text-sm leading-relaxed text-stone-600 dark:border-stone-700 dark:text-stone-400">
+<strong class="text-stone-900 dark:text-stone-100">What the duplication hid.</strong> Because two accounts holding one printed page was
+normal, five accounts filed under the wrong volume looked normal too. One of them,
+<code class="font-mono">al-kilabiyyah</code>, carries extraction URLs pointing at unrelated pages —
+its stored text is about the Prophet's marriages, the linked pages are about the Khandaq.
+<code class="font-mono">verifyExcerpts</code> cannot catch it: it compares the excerpt against the
+stored body, and the body is right. Only the link is wrong.
+</aside>
+
+<h2>The decision</h2>
+
+<p>A printed page is a fact about the edition, so it belongs to the volume:</p>
+
+<pre>SourceVolume ──owns──&gt; SourcePage   (volumeId, printedPage)  one page, one text
+SourceAccount ─spans─&gt; a range of them
+Citation ──&gt; Passage ──&gt; Page ──&gt; Volume     (the account is not in this chain)</pre>
+
+<p>The entry survives — it is a real thing in the book, and <code>notInSource</code> needs a bearer
+— but it stops owning text and becomes a span. Read
+<a href="../../adr/0018-a-page-belongs-to-the-edition.md">ADR 0018</a> for the argument and
+<a href="../../plans/source-page-store.md">the plan</a> for the work.</p>
+
+<h3>What falls out for free</h3>
+
+<p>Once a page is keyed by volume and printed page, a passage anchor can be <em>derived</em> —
+paragraph <em>n</em> of the page is <code>&lt;volume&gt;/&lt;printedPage&gt;-p&lt;n&gt;</code> —
+instead of declared in a list and zipped to the text by position. That deletes the drift class
+<a href="0001-where-text-becomes-citable.html">lesson 0001</a> is about: not by guarding it, but by
+removing the second copy that could fall out of step. Stable anchors also stop
+<code>Citation.passageId</code> churning on every re-import.</p>
+
+<section data-quiz="2" class="not-prose my-8 rounded border border-stone-300 p-5 dark:border-stone-700 print:hidden">
+  <h3 class="mb-2 mt-0 font-semibold">Retrieval</h3>
+  <p class="mb-4 text-stone-700 dark:text-stone-300">Why could the contents view mark an unread volume but not an unread stretch inside one?</p>
+  <ol class="m-0 list-none space-y-2 p-0">
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">The volume list was built later, by a different author</button></li>
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">The edition declares its volumes but nothing declares its pages</button></li>
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">A printed page number is a string and cannot be compared</button></li>
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">The reader caches pages and cannot know what it lacks</button></li>
+  </ol>
+  <p data-feedback hidden class="mt-4 text-sm text-stone-600 dark:text-stone-400"
+     data-right="Right. An absence needs something to be absent from, and only the volume list had that."
+     data-wrong="An absence needs something to be absent from. The edition declares 28 volumes, so a missing one is detectable; nothing declared a volume's pages, so a missing page was not."></p>
+</section>
+
+<section data-quiz="3" class="not-prose my-8 rounded border border-stone-300 p-5 dark:border-stone-700 print:hidden">
+  <h3 class="mb-2 mt-0 font-semibold">Retrieval</h3>
+  <p class="mb-4 text-stone-700 dark:text-stone-300">Under the new model, what does Hamzah's account span?</p>
+  <ol class="m-0 list-none space-y-2 p-0">
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">His own entry and the sira pages that mention him</button></li>
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">Every page holding a claim about him, in any volume</button></li>
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">His own entry alone, volume 4 pages 171 to 184</button></li>
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">Nothing; a span belongs to the volume, not the subject</button></li>
+  </ol>
+  <p data-feedback hidden class="mt-4 text-sm text-stone-600 dark:text-stone-400"
+     data-right="Right. An account is the work's delimited entry about him. The sira mentions him in eleven claims, and those cite passages directly."
+     data-wrong="An account is the work's delimited entry about a subject, which for Hamzah is volume 4 pp 171-184. The sira's eleven claims about him cite passages directly, with no account involved — which is why one span per subject per source still suffices."></p>
+</section>
+
+<h2>The move worth stealing</h2>
+
+<p>The question you asked was about a reading experience. The answer was a key: a page was
+identified by who read it rather than by where it sits in the book. Every symptom — no continuous
+reading, no detectable gaps, split text, five misfilings nothing caught — followed from that one
+choice, and all of them resolve together when the key changes.</p>
+
+<p>When a UI can't tell you something, it is often because the model was never asked to know it.</p>
+
+<h2>Read next</h2>
+
+<p><strong>Primary source:</strong> <a href="../../adr/0018-a-page-belongs-to-the-edition.md">ADR
+0018</a>, then <a href="../../plans/source-page-store.md">the plan</a> — read the acceptance
+criteria as a description of what "the book is readable" means concretely.</p>
+
+<p><strong>Card:</strong> <a href="../reference/source-pipeline.html">Source pipeline card</a>,
+which still describes the model as it stands today.</p>
+
+<footer class="mt-14 border-t border-stone-300 pt-6 text-sm text-stone-600 dark:border-stone-700 dark:text-stone-400">
+  <p>One lesson, one win: you can name the key that produced four unrelated-looking symptoms.</p>
+  <p class="mb-0">Anything unclear — <strong class="text-stone-900 dark:text-stone-100">ask your teacher.</strong></p>
+</footer>
+
+</article>
+</main>
+</body>
+</html>

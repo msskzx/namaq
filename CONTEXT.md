@@ -138,14 +138,31 @@ An assertion about a historical subject or a recorded relationship that can be
 supported or challenged by evidence.
 
 **Citation**:
-A meaningful selection from one source account connecting a historical claim to
+A meaningful selection from one source passage connecting a historical claim to
 the exact source location used. Formatting boundaries such as a page turn do not
 make separate citations, while genuinely distinct or competing evidence does.
 
 **Source account**:
 The complete entry about a historical subject in a particular work and edition,
-with its accompanying notes kept attributable to their authors. Different works
-can provide separate source accounts of the same subject.
+recorded as the span of pages it runs over. Different works can provide separate
+source accounts of the same subject.
+_Avoid_: Entry text, subject pages
+
+**Source page**:
+One printed page of an edition, held once and belonging to its volume rather
+than to any entry, with the editorial notes printed on it kept attributable to
+their authors. Two entries meeting inside a page both span it.
+_Avoid_: Account page
+
+**Passage**:
+One paragraph of a source page, addressed by its position in that page and
+citable on its own.
+_Avoid_: Excerpt, fragment, anchor
+
+**Unread stretch**:
+Pages of a volume that have not been transcribed, as distinct from page numbers
+the edition itself never printed.
+_Avoid_: Gap, missing pages
 
 **Focal subject**:
 The historical subject whose source account defines the scope of a review batch.

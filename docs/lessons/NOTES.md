@@ -23,9 +23,11 @@ the docs they cite. Relative links assume that location: `../data-pipelines.md`,
   `NOTE`. A group heading in the Siyar's index carries a real model value
   (martyrdom at Badr) and no paragraph. Currently out of scope by consequence
   rather than by decision — that asymmetry is a design lesson.
-- **`verifyExcerpts` is not wired into `history:validate`.** The one check that
-  detects positional anchor drift is opt-in. Worth a lesson on which invariants
-  this pipeline enforces and which it merely offers.
+- **Which invariants does this pipeline enforce, and which does it merely
+  offer?** `verifyExcerpts` is not wired into `history:validate`, and nothing
+  checked a declared volume against its pages' own extraction URLs — which is
+  how five accounts sat in the wrong volume. A lesson on checks that exist but
+  do not run.
 - **Two authoring paths live at once.** Three subjects (Abu Ubaydah, Talhah,
   al-Zubayr) come from the catalog alone; everyone else still comes from the
   seeds. Worth a lesson on the hand-off and how the catalog's authority differs
@@ -33,3 +35,10 @@ the docs they cite. Relative links assume that location: `../data-pipelines.md`,
 - **The read side.** `sourceAccounts.ts` caps pages per request at 9 and builds
   a section index by stripping the editor's bracketed headings. Lesson material
   on how the reader's constraints feed back into what a page may be.
+
+## Settled, no longer open
+
+- **Who owns a page** — answered by [ADR 0018](../adr/0018-a-page-belongs-to-the-edition.md)
+  and taught in lesson 0002. The page store plan is
+  [docs/plans/source-page-store.md](../plans/source-page-store.md), blocked on
+  the five misfiled accounts.
