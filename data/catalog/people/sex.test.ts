@@ -24,6 +24,6 @@ describe('sex across the catalog', () => {
       .filter((person) => !person.fields.sex.claims)
       .map((person) => person.slug);
 
-<    expect(missing).toEqual([]);
+    expect(missing).toEqual([]);
   });
 });

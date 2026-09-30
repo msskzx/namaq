@@ -353,7 +353,7 @@ const badr = {
       summary: { value: 'وَهُوَ مِنْ كِبَارِ البَدْرِيِّيْنَ', claims: ['bishr-ibn-al-baraa-siyar54/badr'] },
       claims: ['bishr-ibn-al-baraa-siyar54/badr'],
     },
-<    {
+    {
       person: 'zaid-ibn-al-khattab',
       isMuslim: true,
       summary: { value: 'شَهِدَ بَدْراً وَالمَشَاهِدَ', claims: ['zaid-ibn-al-khattab-siyar57/badr'] },
