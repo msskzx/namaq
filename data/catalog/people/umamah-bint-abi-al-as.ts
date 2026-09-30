@@ -1,17 +1,11 @@
 import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
 /**
- * Carried from neo4j/graphSeedData*.ts, whose node declaration is retired
- * with the rest. The catalog owns this subject's edges now, so they live
- * here or not at all. No batch has read this far into the nasab yet, so
- * every link stays on the legacy marker.
- *
- * The Prophet's granddaughter (through Zaynab and Abu al-Ass above), famously
- * carried by him during prayer. The retired prisma/personSeedData7.ts entry
- * notes her own page says she did not narrate any hadith, but al-Dhahabi
- * still gives her a dedicated Companions-section entry -- a marginal-but-
- * book-gives-own-entry case, and the first female profile this pipeline
- * added.
+ * The Prophet's granddaughter (through Zaynab and Abu al-As above), famously
+ * carried by him during prayer. The Siyar entry (batch umamah-bint-abi-al-as)
+ * cites her name, sex, the carrying virtue, and both parent edges, and adds
+ * a WIFE edge to Ali ibn Abi Talib. The companion title stays legacy: the
+ * entry sits in the Companions section but does not itself state the word.
  */
 const umamahBintAbiAlAs = {
   kind: 'PERSON',
@@ -20,18 +14,23 @@ const umamahBintAbiAlAs = {
   nameTransliterated: 'Umamah bint Abi al-As',
   hasProfile: true,
   fields: {
-    sex: { value: 'FEMALE', claims: legacyUnreviewed },
+    sex: { value: 'FEMALE', claims: ['umamah-bint-abi-al-as/sex'] },
     fullName: {
-      value: 'أمامة بنت أبي العاص بن الربيع بن عبد العزى بن عبد شمس القرشي العبشمي',
-      claims: legacyUnreviewed,
+      value: 'أمامة بنت أبي العاص',
+      claims: ['umamah-bint-abi-al-as/fullName'],
+    },
+    virtues: {
+      value: 'الَّتِي كَانَ رَسُوْلُ اللهِ يَحْمِلُهَا فِي صَلاَتِهِ',
+      claims: ['umamah-bint-abi-al-as/virtues'],
     },
   },
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   relations: [
-    { type: 'DAUGHTER', inverse: 'FATHER', to: 'abu-al-as-ibn-al-rabi', claims: legacyUnreviewed },
-    { type: 'DAUGHTER', inverse: 'MOTHER', to: 'zaynab-bint-muhammad', claims: legacyUnreviewed },
+    { type: 'DAUGHTER', inverse: 'FATHER', to: 'abu-al-as-ibn-al-rabi', claims: ['umamah-bint-abi-al-as/father'] },
+    { type: 'DAUGHTER', inverse: 'MOTHER', to: 'zaynab-bint-muhammad', claims: ['umamah-bint-abi-al-as/mother'] },
+    { type: 'WIFE', inverse: 'HUSBAND', to: 'ali-ibn-abi-talib', claims: ['umamah-bint-abi-al-as/husband-ali'] },
   ],
 } satisfies CatalogPerson;
 

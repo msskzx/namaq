@@ -1,0 +1,474 @@
+{
+  "slug": "hafsa-bint-umar",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الثاني بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hafsa-bint-umar",
+      "extractionUrl": "https://shamela.ws/book/10906/2207",
+      "accessedAt": "2026-09-29",
+      "volumeNumber": 5,
+      "notInSource": [
+        "kunya",
+        "appearance",
+        "siblings"
+      ],
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "227",
+          "bodyFile": "accounts/hafsa-bint-umar/001.md",
+          "notesFile": "accounts/hafsa-bint-umar/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2207",
+          "passages": [
+            {
+              "anchor": "227-p5"
+            },
+            {
+              "anchor": "227-p6"
+            },
+            {
+              "anchor": "227-p7"
+            },
+            {
+              "anchor": "227-p8"
+            },
+            {
+              "anchor": "227-p9"
+            },
+            {
+              "anchor": "227-p10"
+            },
+            {
+              "anchor": "227-p11"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "228",
+          "bodyFile": "accounts/hafsa-bint-umar/002.md",
+          "notesFile": "accounts/hafsa-bint-umar/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2208",
+          "passages": [
+            {
+              "anchor": "228-p1"
+            },
+            {
+              "anchor": "228-p2"
+            },
+            {
+              "anchor": "228-p3"
+            },
+            {
+              "anchor": "228-p4"
+            },
+            {
+              "anchor": "228-p5"
+            },
+            {
+              "anchor": "228-p6"
+            },
+            {
+              "anchor": "228-p7"
+            },
+            {
+              "anchor": "228-p8"
+            },
+            {
+              "anchor": "228-p9"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "printedPage": "229",
+          "bodyFile": "accounts/hafsa-bint-umar/003.md",
+          "notesFile": "accounts/hafsa-bint-umar/003.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2209",
+          "passages": [
+            {
+              "anchor": "229-p1"
+            },
+            {
+              "anchor": "229-p2"
+            },
+            {
+              "anchor": "229-p3"
+            },
+            {
+              "anchor": "229-p4"
+            },
+            {
+              "anchor": "229-p5"
+            },
+            {
+              "anchor": "229-p6"
+            },
+            {
+              "anchor": "229-p7"
+            },
+            {
+              "anchor": "229-p8"
+            },
+            {
+              "anchor": "229-p9"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "printedPage": "230",
+          "bodyFile": "accounts/hafsa-bint-umar/004.md",
+          "notesFile": "accounts/hafsa-bint-umar/004.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2210",
+          "passages": [
+            {
+              "anchor": "230-p1"
+            },
+            {
+              "anchor": "230-p2"
+            },
+            {
+              "anchor": "230-p3"
+            },
+            {
+              "anchor": "230-p4"
+            },
+            {
+              "anchor": "230-p5"
+            },
+            {
+              "anchor": "230-p6"
+            },
+            {
+              "anchor": "230-p7"
+            },
+            {
+              "anchor": "230-p8"
+            },
+            {
+              "anchor": "230-p9"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "printedPage": "231",
+          "bodyFile": "accounts/hafsa-bint-umar/005.md",
+          "notesFile": "accounts/hafsa-bint-umar/005.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2211",
+          "passages": [
+            {
+              "anchor": "231-p1"
+            },
+            {
+              "anchor": "231-p2"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "hafsa-bint-umar-siyar25/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hafsa-bint-umar",
+      "field": "fullName",
+      "assertion": "حفصة بنت عمر بن الخطاب العدوية أم المؤمنين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "227-p5",
+          "volume": "5",
+          "pageReference": "227",
+          "extractionUrl": "https://shamela.ws/book/10906/2207",
+          "excerptArabic": "حَفْصَةُ بِنْتُ عُمَرَ بنِ الخَطَّابِ العَدَوِيَّةُ أُمُّ المُؤْمِنِيْنَ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "hafsa-bint-umar-siyar25/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hafsa-bint-umar",
+      "assertion": "حفصة بنت عمر بن الخطاب؛ عمر بن الخطاب أبوها.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "DAUGHTER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "umar-ibn-al-khattab",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "227-p6",
+          "volume": "5",
+          "pageReference": "227",
+          "extractionUrl": "https://shamela.ws/book/10906/2207",
+          "excerptArabic": "بِنْتُ أَمِيْرِ المُؤْمِنِيْنَ أَبِي حَفْصٍ عُمَرَ بنِ الخَطَّابِ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "hafsa-bint-umar-siyar25/mother-of-believers",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hafsa-bint-umar",
+      "field": "titles",
+      "assertion": "لقبها الذهبي أم المؤمنين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "227-p5",
+          "volume": "5",
+          "pageReference": "227",
+          "extractionUrl": "https://shamela.ws/book/10906/2207",
+          "excerptArabic": "حَفْصَةُ بِنْتُ عُمَرَ بنِ الخَطَّابِ العَدَوِيَّةُ أُمُّ المُؤْمِنِيْنَ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "hafsa-bint-umar-siyar25/husband-prophet",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hafsa-bint-umar",
+      "assertion": "تزوج النبي حفصة بعد انقضاء عدتها من خنيس بن حذافة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "WIFE",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "prophet-muhammad",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "227-p7",
+          "volume": "5",
+          "pageReference": "227",
+          "extractionUrl": "https://shamela.ws/book/10906/2207",
+          "excerptArabic": "تَزَوَّجَهَا النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بَعْدَ انْقِضَاءِ عِدَّتِهَا مِنْ خُنَيْسِ بنِ حُذَافَةَ السَّهْمِيِّ، أَحَدِ المُهَاجِرِيْنَ، فِي سَنَةِ ثَلاَثٍ مِنَ الهِجْرَةِ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "hafsa-bint-umar-siyar25/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hafsa-bint-umar",
+      "field": "virtues",
+      "assertion": "قال جبريل للنبي أن يراجع حفصة لأنها صوامة قوامة وزوجته في الجنة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "231-p1",
+          "volume": "5",
+          "pageReference": "231",
+          "extractionUrl": "https://shamela.ws/book/10906/2211",
+          "excerptArabic": "قَالَ لِي جِبْرِيْلُ: رَاجِعْ حَفْصَةَ، فَإَنَّهَا صَوَّامَةٌ، قَوَّامَةٌ، وَإِنَّهَا زَوْجَتُكَ فِي الجَنَّةِ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "hafsa-bint-umar-siyar25/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hafsa-bint-umar",
+      "field": "deathYearHijri",
+      "assertion": "توفيت حفصة سنة إحدى وأربعين، عام الجماعة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "229-p7",
+          "volume": "5",
+          "pageReference": "229",
+          "extractionUrl": "https://shamela.ws/book/10906/2209",
+          "excerptArabic": "تُوُفِّيَتْ حَفْصَةُ: سَنَةَ إِحْدَى وَأَرْبَعِيْنَ، عَامَ الجَمَاعَةِ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "hafsa-bint-umar-siyar25/death-year-forty-five",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hafsa-bint-umar",
+      "field": "deathYearHijri",
+      "assertion": "قيل إن حفصة توفيت سنة خمس وأربعين بالمدينة.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "229-p8",
+          "volume": "5",
+          "pageReference": "229",
+          "extractionUrl": "https://shamela.ws/book/10906/2209",
+          "excerptArabic": "وَقِيْلَ: تُوُفِّيَتْ سَنَةَ خَمْسٍ وَأَرْبَعِيْنَ بِالمَدِيْنَةِ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "hafsa-bint-umar-siyar25/ayah-at-tahrim",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hafsa-bint-umar",
+      "field": "ayat",
+      "assertion": "ذكر الذهبي أن آية التحريم 4 نزلت في حفصة وعائشة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "229-p3",
+          "volume": "5",
+          "pageReference": "229",
+          "extractionUrl": "https://shamela.ws/book/10906/2209",
+          "excerptArabic": "وَحَفْصَةُ، وَعَائِشَةُ: هُمَا اللَّتَانِ تَظَاهَرَتَا عَلَى النَّبِيِّ - صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ -؛ فَأَنْزَلَ اللهُ فِيْهِمَا: {إِنْ تَتُوْبَا إِلَى اللهِ فَقَدْ صَغَتْ قُلُوْبُكُمَا، وَإِنْ تَظَاهَرَا عَلَيْهِ فَإِنَّ اللهَ هُوَ مَوْلاَهُ وَجِبْرِيْلُ ... } الآيَةَ، [التَّحْرِيْمُ: ٤]",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    }
+  ],
+  "approval": {
+    "revision": "a33af1a2dc3424ac",
+    "approvedAt": "2026-09-30",
+    "approvedBy": "Codex",
+    "note": "Approved for publication. Claims remain Not reviewed; approval permits import and does not assert source review."
+  }
+}
