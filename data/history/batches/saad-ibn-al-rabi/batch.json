@@ -1,0 +1,482 @@
+{
+  "slug": "saad-ibn-al-rabi",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-al-rabi",
+      "extractionUrl": "https://shamela.ws/book/10906/1744",
+      "accessedAt": "2026-09-29",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "318",
+          "bodyFile": "accounts/saad-ibn-al-rabi/001.md",
+          "notesFile": "accounts/saad-ibn-al-rabi/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1744",
+          "passages": [
+            {
+              "anchor": "318-p1"
+            },
+            {
+              "anchor": "318-p2"
+            },
+            {
+              "anchor": "318-p3"
+            },
+            {
+              "anchor": "318-p4"
+            },
+            {
+              "anchor": "318-p5"
+            },
+            {
+              "anchor": "318-p6"
+            },
+            {
+              "anchor": "318-p7"
+            },
+            {
+              "anchor": "318-p8"
+            },
+            {
+              "anchor": "318-p9"
+            },
+            {
+              "anchor": "318-p10"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "319",
+          "bodyFile": "accounts/saad-ibn-al-rabi/002.md",
+          "notesFile": "accounts/saad-ibn-al-rabi/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1745",
+          "passages": [
+            {
+              "anchor": "319-p1"
+            },
+            {
+              "anchor": "319-p2"
+            },
+            {
+              "anchor": "319-p3"
+            },
+            {
+              "anchor": "319-p4"
+            },
+            {
+              "anchor": "319-p5"
+            },
+            {
+              "anchor": "319-p6"
+            },
+            {
+              "anchor": "319-p7"
+            },
+            {
+              "anchor": "319-p8"
+            },
+            {
+              "anchor": "319-p9"
+            },
+            {
+              "anchor": "319-p10"
+            },
+            {
+              "anchor": "319-p11"
+            },
+            {
+              "anchor": "319-p12"
+            },
+            {
+              "anchor": "319-p13"
+            },
+            {
+              "anchor": "319-p14"
+            },
+            {
+              "anchor": "319-p15"
+            }
+          ]
+        }
+      ],
+      "volumeNumber": 4,
+      "notInSource": [
+        "kunya",
+        "appearance",
+        "wives",
+        "siblings"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "saad-ibn-al-rabi-siyar63/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-al-rabi",
+      "field": "fullName",
+      "assertion": "سعد بن الربيع بن عمرو بن أبي زهير بن مالك بن امرئ القيس بن مالك بن ثعلبة بن كعب بن الخزرج بن الحارث بن الخزرج الأنصاري",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "318-p1",
+          "volume": "4",
+          "pageReference": "318",
+          "extractionUrl": "https://shamela.ws/book/10906/1744",
+          "excerptArabic": "٦٣ - سَعْدُ بنُ الرَّبِيْعِ بنِ عَمْرِو بنِ أَبِي زُهَيْرٍ الأَنْصَارِيُّ *  ابْنِ مَالِكِ بنِ امْرِئِ القَيْسِ بنِ مَالِكِ بنِ ثَعْلَبَةَ بنِ كَعْبِ بنِ الخَزْرَجِ بنِ الحَارِثِ بنِ الخَزْرَجِ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-al-rabi-siyar63/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-al-rabi",
+      "assertion": "سعد بن الربيع: أبوه الربيع بن عمرو.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "al-rabi-ibn-amr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "318-p1",
+          "volume": "4",
+          "pageReference": "318",
+          "extractionUrl": "https://shamela.ws/book/10906/1744",
+          "excerptArabic": "سَعْدُ بنُ الرَّبِيْعِ بنِ عَمْرِو",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-al-rabi-siyar63/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-al-rabi",
+      "field": "sex",
+      "assertion": "MALE — الأنصاري الخزرجي البدري النقيب الشهيد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "318-p3",
+          "volume": "4",
+          "pageReference": "318",
+          "extractionUrl": "https://shamela.ws/book/10906/1744",
+          "excerptArabic": "الأَنْصَارِيُّ، الخَزْرَجِيُّ، الحَارِثِيُّ (١) ، البَدْرِيُّ، النَّقِيْبُ، الشَّهِيْدُ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-al-rabi-siyar63/tribal-affiliation",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-al-rabi",
+      "field": "tribalAffiliation",
+      "assertion": "الأنصاري، الخزرجي، الحارثي — من بني الحارث بن الخزرج.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "318-p2",
+          "volume": "4",
+          "pageReference": "318",
+          "extractionUrl": "https://shamela.ws/book/10906/1744",
+          "excerptArabic": "ابْنِ مَالِكِ بنِ امْرِئِ القَيْسِ بنِ مَالِكِ بنِ ثَعْلَبَةَ بنِ كَعْبِ بنِ الخَزْرَجِ بنِ الحَارِثِ بنِ الخَزْرَجِ.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "318-p3",
+          "volume": "4",
+          "pageReference": "318",
+          "extractionUrl": "https://shamela.ws/book/10906/1744",
+          "excerptArabic": "الأَنْصَارِيُّ، الخَزْرَجِيُّ، الحَارِثِيُّ (١) ، البَدْرِيُّ، النَّقِيْبُ، الشَّهِيْدُ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-al-rabi-siyar63/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-al-rabi",
+      "field": "titles",
+      "assertion": "البدري النقيب الشهيد — صحابي، أحد النقباء ليلة العقبة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "318-p3",
+          "volume": "4",
+          "pageReference": "318",
+          "extractionUrl": "https://shamela.ws/book/10906/1744",
+          "excerptArabic": "البَدْرِيُّ، النَّقِيْبُ، الشَّهِيْدُ … وَكَانَ أَحَدَ النُّقَبَاءِ لَيْلَةَ العَقَبَةِ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-al-rabi-siyar63/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-al-rabi",
+      "field": "virtues",
+      "assertion": "آخى النبي صلى الله عليه وسلم بينه وبين عبد الرحمن بن عوف، فعزم أن يعطيه شطر ماله ويطلق إحدى زوجتيه ليتزوج بها فامتنع عبد الرحمن ودعا له. وثبت يوم أحد حتى أثبتته الجراح، فأبلغ النبي السلام وقال: جزاك الله عني خير ما جزى نبيا عن أمته، وأوصى قومه ألا عذر لهم عند الله إن خلص إلى نبيهم ومنهم عين تطرف. ووجده خارجة بن زيد بن ثابت وبه سبعون ضربة، فقال: أجد ريح الجنة، وفاضت نفسه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "318-p3",
+          "volume": "4",
+          "pageReference": "318",
+          "extractionUrl": "https://shamela.ws/book/10906/1744",
+          "excerptArabic": "الَّذِي آخَى النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بَيْنَهُ وَبَيْنَ عَبْدِ الرَّحْمَنِ (٢) بنِ عَوْفٍ، فَعَزَمَ عَلَى أَنْ يُعْطِيَ عَبْدَ الرَّحْمَنِ شَطْرَ مَالِهِ، وَيُطَلِّقَ إِحْدَى زَوْجَتَيْهِ لِيَتَزَوَّجَ بِهَا، فَامْتَنَعَ عَبْدُ الرَّحْمَنِ مِنْ ذَلِكَ، وَدَعَا لَهُ، وَكَانَ أَحَدَ النُّقَبَاءِ لَيْلَةَ العَقَبَةِ.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "318-p10",
+          "volume": "4",
+          "pageReference": "318",
+          "extractionUrl": "https://shamela.ws/book/10906/1744",
+          "excerptArabic": "إِنَّ سَعْداً يَقُوْلُ: جَزَاكَ اللهُ عَنِّي خَيْرَ مَا جَزَى نَبِيّاً عَنْ أُمَّتِهِ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "319-p2",
+          "volume": "4",
+          "pageReference": "319",
+          "extractionUrl": "https://shamela.ws/book/10906/1745",
+          "excerptArabic": "إِنَّ سَعْداً يَقُوْلُ لَكُم: إِنَّهُ لاَ عُذْرَ لَكُم عِنْدَ اللهِ إِنْ خُلِصَ إِلَى نَبِيِّكُم وَمِنْكُم عَيْنٌ تَطْرُفُ (١) .",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "319-p11",
+          "volume": "4",
+          "pageReference": "319",
+          "extractionUrl": "https://shamela.ws/book/10906/1745",
+          "excerptArabic": "فَطُفْتُ بَيْنَ القَتْلَى، فَأَصَبْتُهُ وَهُوَ فِي آخِرِ رَمَقٍ، وَبِهِ سَبْعُوْنَ ضَرْبَةً، فَأَخْبَرْتُهُ.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "319-p13",
+          "volume": "4",
+          "pageReference": "319",
+          "extractionUrl": "https://shamela.ws/book/10906/1745",
+          "excerptArabic": "يَا رَسُوْلَ اللهِ! أَجِدُ رِيْحَ الجَنَّةِ، وَقُلْ لِقَوْمِي الأَنْصَارِ: لاَ عُذْرَ لَكُم عِنْدَ اللهِ إِنْ خُلِصَ إِلَى رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَفِيْكُم شَفْرٌ (٣) يَطْرُفُ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-al-rabi-siyar63/pact-brother",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-al-rabi",
+      "assertion": "آخى النبي صلى الله عليه وسلم بين سعد بن الربيع وبين عبد الرحمن بن عوف.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PACT_BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "abdur-rahman-ibn-awf",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "318-p3",
+          "volume": "4",
+          "pageReference": "318",
+          "extractionUrl": "https://shamela.ws/book/10906/1744",
+          "excerptArabic": "الَّذِي آخَى النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بَيْنَهُ وَبَيْنَ عَبْدِ الرَّحْمَنِ (٢) بنِ عَوْفٍ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-al-rabi-siyar63/rabi-father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-rabi-ibn-amr",
+      "assertion": "الربيع بن عمرو: أبوه عمرو بن أبي زهير.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "amr-ibn-abi-zuhayr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "318-p1",
+          "volume": "4",
+          "pageReference": "318",
+          "extractionUrl": "https://shamela.ws/book/10906/1744",
+          "excerptArabic": "سَعْدُ بنُ الرَّبِيْعِ بنِ عَمْرِو بنِ أَبِي زُهَيْرٍ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-al-rabi-siyar63/rabi-sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-rabi-ibn-amr",
+      "field": "sex",
+      "assertion": "MALE — أبو سعد بن الربيع.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "318-p1",
+          "volume": "4",
+          "pageReference": "318",
+          "extractionUrl": "https://shamela.ws/book/10906/1744",
+          "excerptArabic": "سَعْدُ بنُ الرَّبِيْعِ بنِ عَمْرِو بنِ أَبِي زُهَيْرٍ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    }
+  ],
+  "approval": {
+    "revision": "ee017c759ee00256",
+    "approvedAt": "2026-09-29",
+    "approvedBy": "msskzx",
+    "note": "Re-approved for publication after correcting the batch: the Uhud report's finder is خارجة بن زيد بن ثابت, not زيد بن ثابت, per the entry's own wording (بَعَثَنِي النَّبِيُّ / فَطُفْتُ), and several citations that split one selection across paragraph or page breaks were joined. No page changed and no claim was added or removed. Every claim remains Not reviewed; this permits the import and asserts nothing about anyone having read the batch."
+  }
+}

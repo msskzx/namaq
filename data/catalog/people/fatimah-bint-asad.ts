@@ -1,11 +1,4 @@
-import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
-
-/**
- * Carried from neo4j/graphSeedData*.ts, whose node declaration is retired
- * with the rest. The catalog owns this subject's edges now, so they live
- * here or not at all. No batch has read this far into the nasab yet, so
- * every link stays on the legacy marker.
- */
+import type { CatalogPerson } from '@/lib/catalog/types';
 const fatimahBintAsad = {
   kind: 'PERSON',
   slug: 'fatimah-bint-asad',
@@ -13,17 +6,38 @@ const fatimahBintAsad = {
   nameTransliterated: 'Fatimah bint Asad',
   hasProfile: true,
   fields: {
-    sex: { value: 'FEMALE', claims: legacyUnreviewed },
+    sex: { value: 'FEMALE', claims: ['fatimah-bint-asad-siyar17/sex'] },
     fullName: {
-      value: 'فاطمة بنت أسد بن هاشم بن عبد مناف بن قصي القرشية الهاشمية',
-      claims: legacyUnreviewed,
+      value: 'فاطمة بنت أسد بن هاشم بن عبد مناف بن قصي الهاشمية',
+      claims: ['fatimah-bint-asad-siyar17/fullName'],
+    },
+    virtues: {
+      value:
+        'من المهاجرات الأول، وأول هاشمية ولدت هاشميا. قال النبي صلى الله عليه وسلم إنه لم يكن أحد بعد أبي طالب أبر به منها',
+      claims: ['fatimah-bint-asad-siyar17/virtues'],
     },
   },
   titles: [
-    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    {
+      title: 'companion',
+      name: 'صحابي',
+      nameTransliterated: 'Companion',
+      claims: ['fatimah-bint-asad-siyar17/titles'],
+    },
   ],
   relations: [
-    { type: 'DAUGHTER', inverse: 'FATHER', to: 'asad-ibn-hashim', claims: legacyUnreviewed },
+    {
+      type: 'DAUGHTER',
+      inverse: 'FATHER',
+      to: 'asad-ibn-hashim',
+      claims: ['fatimah-bint-asad-siyar17/father'],
+    },
+    {
+      type: 'MOTHER',
+      inverse: 'SON',
+      to: 'ali-ibn-abi-talib',
+      claims: ['fatimah-bint-asad-siyar17/mother-ali'],
+    },
   ],
 } satisfies CatalogPerson;
 

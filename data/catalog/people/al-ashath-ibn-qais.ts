@@ -32,7 +32,12 @@ const alAshathIbnQais = {
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'qais-ibn-muadikarib-al-kindi', claims: legacyUnreviewed },
-    { type: 'BROTHER', inverse: 'SISTER', to: 'qutaylah-bint-qais-al-kindiyyah', claims: legacyUnreviewed },
+    {
+      type: 'BROTHER',
+      inverse: 'SISTER',
+      to: 'qutaylah-bint-qais-al-kindiyyah',
+      claims: ['qutaylah-siyar10/sister-ashath'],
+    },
   ],
 } satisfies CatalogPerson;
 

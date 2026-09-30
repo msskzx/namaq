@@ -1,14 +1,5 @@
 import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
-/**
- * Carried from neo4j/graphSeedData*.ts, whose node declaration is retired
- * with the rest. The catalog owns this subject's edges now, so they live
- * here or not at all. No batch has read this far into the nasab yet, so
- * every link stays on the legacy marker. Barakah, the Prophet's Abyssinian
- * freedwoman/nurse and mother of Usama ibn Zaid, per the retired
- * prisma/personSeedData9.ts entry. Her own page gives no father or tribe at
- * all, so fullName is just her known given name.
- */
 const ummAyman = {
   kind: 'PERSON',
   slug: 'umm-ayman',
@@ -17,13 +8,34 @@ const ummAyman = {
   hasProfile: true,
   fields: {
     sex: { value: 'FEMALE', claims: legacyUnreviewed },
-    fullName: { value: 'بركة', claims: legacyUnreviewed },
+    fullName: { value: 'بركة', claims: ['umm-ayman-siyar24/full-name'] },
+    virtues: {
+      value:
+        'من المهاجرات الأول، وحاضنة رسول الله صلى الله عليه وسلم. وصفها بأنها بقية أهل بيته، وقال: من سره أن يتزوج امرأة من أهل الجنة فليتزوج أم أيمن. دلي عليها دلو من السماء حين عطشت في هجرتها، فما عطشت بعد ذلك. وبكت بعد وفاة النبي لانقطاع الوحي من السماء.',
+      claims: ['umm-ayman-siyar24/virtues'],
+    },
   },
   titles: [
-    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    {
+      title: 'companion',
+      name: 'صحابي',
+      nameTransliterated: 'Companion',
+      claims: ['umm-ayman-siyar24/virtues'],
+    },
   ],
   relations: [
-    { type: 'WIFE', inverse: 'HUSBAND', to: 'zaid-ibn-harithah', claims: legacyUnreviewed },
+    {
+      type: 'WIFE',
+      inverse: 'HUSBAND',
+      to: 'zaid-ibn-harithah',
+      claims: ['umm-ayman-siyar24/husband-zaid'],
+    },
+    {
+      type: 'MOTHER',
+      inverse: 'SON',
+      to: 'usamah-ibn-zaid',
+      claims: ['umm-ayman-siyar24/son-usamah'],
+    },
   ],
 } satisfies CatalogPerson;
 
