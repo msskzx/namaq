@@ -31,8 +31,8 @@ ADRs outrank everything else, because they are the thing being learned.
 
 | Resource | Trust | Notes |
 | --- | --- | --- |
-| [Siyar, al-Risalah ed. on Shamela](https://shamela.ws/index.php/book/10906) | High for the text | The edition the batches cite: ed. Husayn al-Asad under Shu'ayb al-Arna'ut, 3rd ed., 1405/1985. Delivery host, not an evidence class (ADR 0011) |
-| [Siyar on Islamweb](https://www.islamweb.net/ar/library/content/60/1/) | High for the text | Different edition data from the Shamela copy — noted in `batch.json`. Its [companion index](https://www.islamweb.net/ar/library/maktaba/nindex.php?id=2&treeLevel=1&bookid=60&page=bookssubtree&searchtext=&showexact=) is what extraction order follows |
+| [Siyar, al-Risalah ed. on Shamela](https://shamela.ws/book/10906) | High for the text | The only host this project extracts from: ed. Husayn al-Asad under Shu'ayb al-Arna'ut, 3rd ed., 1405/1985. It carries the editor's footnotes, and its printed pages are the ones citations record. Its فهرس الموضوعات is where extraction order comes from. A delivery host, not an evidence class (ADR 0011) |
+| Page ids | Diagnostic only | `https://shamela.ws/book/10906/<id>` runs monotonically through the edition, so it checks a declared volume or printed page. Note `الجزء` there labels the Siyar's own parts: its `الجزء ٢` is this edition's volume 5 |
 
 ## Communities
 
