@@ -13,56 +13,49 @@ import type { AccountSummary, VolumeContents } from '@/types/provenance';
 /**
  * One volume's contents, read in the book's own printed-page order -- not
  * grouped by whose entry a page belongs to, since the page belongs to the
- * book first (docs/adr/0018-a-page-belongs-to-the-edition.md). A page shows
- * up once, whichever entry opens on it (if any) named inline, next to
- * whatever section headings the page itself declares.
+ * book first (docs/adr/0018-a-page-belongs-to-the-edition.md). This is the
+ * book's own table of contents, so it names chapters and sections, the way
+ * a printed فهرس does -- never the person an entry happens to be about. A
+ * page with no heading of its own, including nearly every biographical
+ * entry (its title line is already read as a heading, see
+ * sectionHeadings.ts's isNumberedEntryTitle), has nothing to contribute and
+ * is left out; the rare entry that opens with no heading at all falls back
+ * to its own label so it is still reachable.
  */
 function VolumeBody({ slug, volume }: { slug: string; volume: VolumeContents }) {
   const { language } = useLanguage();
   const t = language === 'ar';
   const pageLabel = (page: string) => (t ? `ص ${page}` : `p. ${page}`);
 
+  const contentsItems = volume.items
+    .map((item) => ({ item, title: item.headings[0] ?? item.entries[0]?.label }))
+    .filter((row): row is { item: typeof volume.items[number]; title: string } => Boolean(row.title));
+
   return (
     <ol className="divide-y divide-gray-200 border-t border-gray-200 dark:divide-white/10 dark:border-white/10">
-      {volume.items.map((item) => (
-        <li key={item.printedPage} className="p-4">
-          <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              {item.entries.length > 0 ? (
-                item.entries.map((entry) => (
-                  <Link
-                    key={entry.accountId}
-                    href={`/sources/${slug}?volume=${volume.number}&page=${item.printedPage}`}
-                    dir="rtl"
-                    lang="ar"
-                    className="text-lg text-gray-900 hover:underline dark:text-gray-100"
-                  >
-                    {entry.label}
-                  </Link>
-                ))
-              ) : item.headings.length > 0 ? (
-                <Link
-                  href={`/sources/${slug}?volume=${volume.number}&page=${item.printedPage}`}
-                  dir="rtl"
-                  lang="ar"
-                  className="text-sm text-gray-700 hover:underline dark:text-gray-300"
-                >
-                  {item.headings[0]}
-                </Link>
-              ) : null}
-            </div>
-            <span className="shrink-0 text-xs text-gray-500">{pageLabel(item.printedPage)}</span>
-          </div>
+      {contentsItems.map(({ item, title }) => {
+        const href = `/sources/${slug}?volume=${volume.number}&page=${item.printedPage}`;
+        const subheadings = item.headings.slice(1);
 
-          {item.entries.length > 0 && item.headings.length > 0 && (
-            <ol dir="rtl" lang="ar" className="mt-2 space-y-1 ps-1 text-sm text-gray-700 dark:text-gray-300">
-              {item.headings.map((heading, index) => (
-                <li key={index}>{heading}</li>
-              ))}
-            </ol>
-          )}
-        </li>
-      ))}
+        return (
+          <li key={item.printedPage} className="p-4">
+            <div className="flex flex-wrap items-baseline justify-between gap-2">
+              <Link href={href} dir="rtl" lang="ar" className="text-lg text-gray-900 hover:underline dark:text-gray-100">
+                {title}
+              </Link>
+              <span className="shrink-0 text-xs text-gray-500">{pageLabel(item.printedPage)}</span>
+            </div>
+
+            {subheadings.length > 0 && (
+              <ol dir="rtl" lang="ar" className="mt-2 space-y-1 ps-1 text-sm text-gray-700 dark:text-gray-300">
+                {subheadings.map((heading, index) => (
+                  <li key={index}>{heading}</li>
+                ))}
+              </ol>
+            )}
+          </li>
+        );
+      })}
     </ol>
   );
 }
