@@ -11,7 +11,7 @@ and [docs/extraction-checklist.md](../../../../docs/extraction-checklist.md).
 ## Source account
 
 Entry 69 of *Siyar A'lam al-Nubala'*, Risalah third edition (1405/1985),
-volume 1, edited by Hussein Asad under Shuayb al-Arnaut. The entry runs
+volume 4, edited by Hussein Asad under Shuayb al-Arnaut. The entry runs
 five Shamela pages, 1756–1760 (printed 330–334): the first page opens with
 the end of entry 68 (Yazid ibn Abi Sufyan), so the body was trimmed with
 start-anchor `p10` where the ٦٩ heading begins; the last page carries the

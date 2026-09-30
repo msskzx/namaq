@@ -136,7 +136,7 @@
       "subjectSlug": "abu-al-as-ibn-al-rabi",
       "extractionUrl": "https://shamela.ws/book/10906/1756",
       "accessedAt": "2026-09-29",
-      "volumeNumber": 1,
+      "volumeNumber": 4,
       "notInSource": [
         "appearance",
         "kunya",
@@ -316,7 +316,7 @@
   ],
   "claims": [
     {
-      "key": "abu-al-as-ibn-al-rabi-siyar1/full-name",
+      "key": "abu-al-as-ibn-al-rabi-siyar69/full-name",
       "subjectKind": "PERSON",
       "subjectSlug": "abu-al-as-ibn-al-rabi",
       "field": "fullName",
@@ -327,7 +327,7 @@
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
           "passageAnchor": "330-p10",
-          "volume": "1",
+          "volume": "4",
           "pageReference": "330",
           "extractionUrl": "https://shamela.ws/book/10906/1756",
           "excerptArabic": "٦٩ - أَبُو العَاصِ بنُ الرَّبِيْعِ بنِ عَبْدِ العُزَّى القُرَشِيُّ *",
@@ -336,7 +336,7 @@
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
           "passageAnchor": "330-p11",
-          "volume": "1",
+          "volume": "4",
           "pageReference": "330",
           "extractionUrl": "https://shamela.ws/book/10906/1756",
           "excerptArabic": "ابْنِ عَبْدِ شَمْسٍ بنِ عَبْدِ مَنَافٍ بنِ قُصَيِّ بنِ كِلاَبٍ القُرَشِيُّ، العَبْشَمِيُّ.",
@@ -345,7 +345,7 @@
       ]
     },
     {
-      "key": "abu-al-as-ibn-al-rabi-siyar1/father",
+      "key": "abu-al-as-ibn-al-rabi-siyar69/father",
       "subjectKind": "PERSON",
       "subjectSlug": "abu-al-as-ibn-al-rabi",
       "assertion": "ابن الربيع بن عبد العزى.",
@@ -358,7 +358,7 @@
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
           "passageAnchor": "330-p10",
-          "volume": "1",
+          "volume": "4",
           "pageReference": "330",
           "extractionUrl": "https://shamela.ws/book/10906/1756",
           "excerptArabic": "أَبُو العَاصِ بنُ الرَّبِيْعِ بنِ عَبْدِ العُزَّى القُرَشِيُّ",
@@ -367,7 +367,7 @@
       ]
     },
     {
-      "key": "abu-al-as-ibn-al-rabi-siyar1/zaynab-wife",
+      "key": "abu-al-as-ibn-al-rabi-siyar69/zaynab-wife",
       "subjectKind": "PERSON",
       "subjectSlug": "abu-al-as-ibn-al-rabi",
       "assertion": "صهر رسول الله صلى الله عليه وسلم، زوج بنته زينب.",
@@ -380,7 +380,7 @@
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
           "passageAnchor": "331-p2",
-          "volume": "1",
+          "volume": "4",
           "pageReference": "331",
           "extractionUrl": "https://shamela.ws/book/10906/1757",
           "excerptArabic": "صِهْرُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- زَوْجُ بِنْتِهِ زَيْنَبَ، وَهُوَ وَالِدُ أُمَامَةَ الَّتِي كَانَ يَحْمِلُهَا النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فِي صَلاَتِهِ",
@@ -389,7 +389,7 @@
       ]
     },
     {
-      "key": "abu-al-as-ibn-al-rabi-siyar1/virtues",
+      "key": "abu-al-as-ibn-al-rabi-siyar69/virtues",
       "subjectKind": "PERSON",
       "subjectSlug": "abu-al-as-ibn-al-rabi",
       "field": "virtues",
@@ -400,7 +400,7 @@
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
           "passageAnchor": "331-p2",
-          "volume": "1",
+          "volume": "4",
           "pageReference": "331",
           "extractionUrl": "https://shamela.ws/book/10906/1757",
           "excerptArabic": "صِهْرُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- زَوْجُ بِنْتِهِ زَيْنَبَ، وَهُوَ وَالِدُ أُمَامَةَ الَّتِي كَانَ يَحْمِلُهَا النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّmَ- فِي صَلاَتِهِ",
@@ -409,7 +409,7 @@
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
           "passageAnchor": "331-p5",
-          "volume": "1",
+          "volume": "4",
           "pageReference": "331",
           "extractionUrl": "https://shamela.ws/book/10906/1757",
           "excerptArabic": "أَثْنَى النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- عَلَى أَبِي العَاصِ فِي مُصَاهَرَتِهِ خَيْراً",
@@ -418,7 +418,7 @@
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
           "passageAnchor": "331-p6",
-          "volume": "1",
+          "volume": "4",
           "pageReference": "331",
           "extractionUrl": "https://shamela.ws/book/10906/1757",
           "excerptArabic": "وَقَالَ: (حَدَّثَنِي فَصَدَقَنِي، وَوَعَدَنِي فَوَفَى لِي)",
@@ -427,7 +427,7 @@
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
           "passageAnchor": "331-p7",
-          "volume": "1",
+          "volume": "4",
           "pageReference": "331",
           "extractionUrl": "https://shamela.ws/book/10906/1757",
           "excerptArabic": "وَكَانَ مِنْ تُجَّارِ قُرَيْشٍ وَأُمَنَائِهِم",
