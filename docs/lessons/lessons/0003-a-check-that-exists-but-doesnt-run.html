@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Check That Exists But Doesn't Run</title>
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<script src="../assets/lesson.js"></script>
+</head>
+<body class="bg-stone-50 font-serif text-stone-900 antialiased dark:bg-stone-950 dark:text-stone-100">
+
+<div class="fixed inset-x-0 top-0 z-20 flex items-start justify-between p-3 print:hidden">
+  <button id="index-toggle" aria-controls="index" aria-expanded="true"
+    class="rounded border border-stone-300 bg-stone-50/90 px-3 py-1.5 font-mono text-xs uppercase tracking-wider text-stone-600 backdrop-blur hover:border-amber-500 hover:text-amber-700 dark:border-stone-700 dark:bg-stone-950/90 dark:text-stone-400 dark:hover:text-amber-400">
+    Index
+  </button>
+  <button id="theme-toggle"
+    class="rounded border border-stone-300 bg-stone-50/90 px-3 py-1.5 text-sm text-stone-600 backdrop-blur hover:border-amber-500 hover:text-amber-700 dark:border-stone-700 dark:bg-stone-950/90 dark:text-stone-400 dark:hover:text-amber-400">
+  </button>
+</div>
+
+<nav id="index" aria-label="Lesson index"
+  class="fixed inset-y-0 start-0 z-10 w-64 overflow-y-auto border-e border-stone-200 bg-stone-100/95 px-3 pb-8 pt-16 backdrop-blur dark:border-stone-800 dark:bg-stone-900/95 print:hidden"></nav>
+
+<main class="mx-auto max-w-3xl px-4 pb-24 pt-20">
+<article class="prose prose-stone max-w-none dark:prose-invert prose-headings:font-semibold prose-pre:bg-amber-50 prose-pre:text-stone-800 prose-pre:border-s-4 prose-pre:border-amber-600 prose-pre:rounded-s-none dark:prose-pre:bg-stone-900 dark:prose-pre:text-stone-200 prose-code:font-mono prose-a:text-amber-700 dark:prose-a:text-amber-400">
+
+<header class="mb-10 border-b border-stone-300 pb-6 dark:border-stone-700">
+  <p class="m-0 font-mono text-xs uppercase tracking-[0.12em] text-amber-700 dark:text-amber-500">Lesson 0003 · building the page store</p>
+  <h1 class="mb-2 mt-3">A check that exists but doesn't run</h1>
+  <p class="m-0 text-lg text-stone-600 dark:text-stone-400">Building <a href="0002-who-owns-a-page.html">lesson 0002</a>'s decision
+  surfaced two bugs, at two different layers, with the same shape: something had a name that
+  promised a check nothing actually performed.</p>
+</header>
+
+<h2>The first symptom</h2>
+
+<p>Once <code>SourcePage</code> derived a paragraph anchor from the page's own text instead of an
+authored list, <code>history:validate</code> — unchanged — went from passing the whole corpus to
+failing dozens of batches. Not because the migration broke anything: because the check got
+stricter, and the corpus had been living under the old, weaker version of it the whole time.</p>
+
+<p>Talhah ibn Ubaydullah's <code>full-name</code> claim cites anchor <code>4/23-p17</code> —
+paragraph <em>seventeen</em> of printed page 23. The store's <code>v4/23.md</code> has ten
+paragraphs.</p>
+
+<h2>Follow it down</h2>
+
+<p>The old schema paired a declared passage with a paragraph <em>by array position</em>:</p>
+
+<pre>passages: [{ anchor: "4/23-p17" }, { anchor: "4/23-p18" }, …]
+                              ↓ zipped positionally, not by the number in the string ↓
+paragraphs: [p[0], p[1], …]</pre>
+
+<p><code>validateBatch</code> checked that the count of declared passages matched the count of
+paragraphs in the file. It never checked that an anchor's own number, <code>p17</code>, meant
+"the seventeenth paragraph" of anything. The number was a label a human wrote down, trusted
+without being read.</p>
+
+<p>The reason it was seventeen: whoever extracted Talhah's entry correctly recorded where his page
+sits in the full printed page — something else, still untranscribed, occupies the paragraphs
+before his. The label was honest about the book. The <em>check</em> just never looked.</p>
+
+<aside class="not-prose my-8 rounded border border-stone-300 p-4 text-sm leading-relaxed text-stone-600 dark:border-stone-700 dark:text-stone-400">
+<strong class="text-stone-900 dark:text-stone-100">A second version of the same gap.</strong> 871 of
+1,511 citation anchors across the corpus were authored as <code>258-p4</code> with no volume —
+valid under the old scheme wherever an account never crossed a binding, since the anchor was never
+resolved against anything but its own account's file. Deriving anchors from the shared store
+made the missing volume load-bearing for the first time. Fixed mechanically, by qualifying each
+bare anchor against the one volume its own batch declared for that page — unambiguous in all
+871 cases, verified before rewriting.
+</aside>
+
+<h2>The second symptom, same shape</h2>
+
+<p>The schema swap itself shipped clean: lint passed, <code>tsc</code> passed, all 1,701 tests
+passed. Then <code>/api/people/[slug]</code> 500'd, in a running app, on a real request:</p>
+
+<pre>The column `citations.accountId` does not exist in the current database.</pre>
+
+<p>Nothing in the diff added that field. Early in the change, <code>SourceAccount</code> still
+declared <code>citations Citation[]</code> — copied forward out of habit, a relation to a field
+that no longer existed on <code>Citation</code> once its own <code>accountId</code> was removed.
+<code>prisma format</code> doesn't reject a one-sided relation; it repairs it, silently adding
+<code>sourceAccountId</code> back so both sides matched. The repair was syntactically correct and
+semantically wrong — a field nothing was meant to have — and every static check waved it through,
+because as far as the type system was concerned, it was consistent.</p>
+
+<h2>What both had in common</h2>
+
+<p>Neither gap was a missing check. <code>history:validate</code> ran, and reported "no issues."
+Lint, <code>tsc</code>, and the test suite all ran, and reported green. Each one was checking a
+real invariant — <em>a</em> real invariant, just not the one that mattered: paragraph count
+instead of paragraph correspondence; type consistency instead of "should this field exist at
+all." A check with the right name and the wrong question passes exactly the inputs that should
+fail it.</p>
+
+<p>Only two things caught the real problem, and both were the same kind of thing: deriving the
+answer independently and comparing it to what was claimed, rather than checking that the claim
+was internally well-formed. Position-derived anchors compare against the store's real paragraph
+order. A live query against the real database compares against what the schema actually
+produces, not what its types say it should.</p>
+
+<section data-quiz="2" class="not-prose my-8 rounded border border-stone-300 p-5 dark:border-stone-700 print:hidden">
+  <h3 class="mb-2 mt-0 font-semibold">Retrieval</h3>
+  <p class="mb-4 text-stone-700 dark:text-stone-300">Why did <code>tsc</code> and every test pass with a phantom <code>sourceAccountId</code> column in place?</p>
+  <ol class="m-0 list-none space-y-2 p-0">
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">The tests never imported the generated Prisma client</button></li>
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">The column was type-consistent with itself; nothing checks that a field should exist at all</button></li>
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">The migration hadn't actually applied to the test database</button></li>
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">Prisma client tests were skipped in CI for this change</button></li>
+  </ol>
+  <p data-feedback hidden class="mt-4 text-sm text-stone-600 dark:text-stone-400"
+     data-right="Right. tsc checks that code agrees with the schema's types; it can't ask whether the schema should say what it says. The mocked import tests never touched a real database at all, so a self-consistent phantom column was invisible to both."
+     data-wrong="tsc checks that code agrees with the schema's types, which the phantom field satisfied — it just shouldn't have existed. The import tests mock Prisma entirely, so they never queried a real database either; only a live request did."></p>
+</section>
+
+<section data-quiz="1" class="not-prose my-8 rounded border border-stone-300 p-5 dark:border-stone-700 print:hidden">
+  <h3 class="mb-2 mt-0 font-semibold">Retrieval</h3>
+  <p class="mb-4 text-stone-700 dark:text-stone-300">Talhah's anchor said <code>p17</code> and the store held ten paragraphs. What does that mean is true about page 23?</p>
+  <ol class="m-0 list-none space-y-2 p-0">
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">The anchor is wrong and should be renumbered to p1</button></li>
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">Paragraphs 1 through 16 of that page exist in the book and are not yet in the store</button></li>
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">The citation is fabricated and should be dropped</button></li>
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">Page 23 does not exist in this edition</button></li>
+  </ol>
+  <p data-feedback hidden class="mt-4 text-sm text-stone-600 dark:text-stone-400"
+     data-right="Right. That's why it's tracked as a store gap in docs/plans/unresolved-page-store-anchors.md rather than silently renumbered: the honest move is to say the leading content is missing, not to relabel around the fact."
+     data-wrong="Whoever extracted Talhah's entry wrote down where his text sits on the real printed page — the leading sixteen paragraphs belong to something else nobody has transcribed yet. Renumbering to p1 would erase that fact rather than record it, which is why it's tracked as a store gap instead."></p>
+</section>
+
+<h2>The move worth stealing</h2>
+
+<p>Before trusting a check, ask what it actually compares. A count check tells you two lists are
+the same length, not that they correspond. A type check tells you code agrees with a schema, not
+that the schema is the one you meant to write. Neither failure mode looks like a missing check —
+both look, from the outside, exactly like "validated." The distinguishing question is: does
+passing this check require the value in question to be independently re-derived and compared, or
+only to have the right shape?</p>
+
+<p><a href="../NOTES.md">The workspace notes</a> already had this thread open — five accounts sat
+in the wrong volume before anything caught it, because nothing compared a declared volume against
+its own pages' links (<a href="0002-who-owns-a-page.html">lesson 0002</a>'s aside). This is the
+same question asked twice more, at the paragraph layer and at the schema layer, with the same
+answer each time: the fix was never "add a check." It was "make the existing check compare
+against a derivation instead of a shape."</p>
+
+<h2>Read next</h2>
+
+<p><strong>Primary sources:</strong>
+<a href="../../plans/source-page-store.md">the plan</a>'s Order section, which put the store
+before the schema before the read path for exactly this reason — each step's output is what the
+next step derives against;
+<a href="../../plans/unresolved-page-store-anchors.md">the tracked anchor gaps</a>, which is what
+"derive, don't guess" looks like when the derivation can't resolve.</p>
+
+<p><strong>Card:</strong> <a href="../reference/source-pipeline.html">Source pipeline card</a>.</p>
+
+<footer class="mt-14 border-t border-stone-300 pt-6 text-sm text-stone-600 dark:border-stone-700 dark:text-stone-400">
+  <p>One lesson, one win: given a check that's green, you can ask what it actually re-derives, and name what it would miss if the answer is "nothing."</p>
+  <p class="mb-0">Anything unclear — <strong class="text-stone-900 dark:text-stone-100">ask your teacher.</strong></p>
+</footer>
+
+</article>
+</main>
+</body>
+</html>

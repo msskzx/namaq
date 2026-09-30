@@ -23,11 +23,6 @@ the docs they cite. Relative links assume that location: `../data-pipelines.md`,
   `NOTE`. A group heading in the Siyar's index carries a real model value
   (martyrdom at Badr) and no paragraph. Currently out of scope by consequence
   rather than by decision — that asymmetry is a design lesson.
-- **Which invariants does this pipeline enforce, and which does it merely
-  offer?** `verifyExcerpts` is not wired into `history:validate`, and nothing
-  checked a declared volume against its pages' own extraction URLs — which is
-  how five accounts sat in the wrong volume. A lesson on checks that exist but
-  do not run.
 - **Two authoring paths live at once.** Three subjects (Abu Ubaydah, Talhah,
   al-Zubayr) come from the catalog alone; everyone else still comes from the
   seeds. Worth a lesson on the hand-off and how the catalog's authority differs
@@ -40,5 +35,19 @@ the docs they cite. Relative links assume that location: `../data-pipelines.md`,
 
 - **Who owns a page** — answered by [ADR 0018](../adr/0018-a-page-belongs-to-the-edition.md)
   and taught in lesson 0002. The page store plan is
-  [docs/plans/source-page-store.md](../plans/source-page-store.md), blocked on
-  the five misfiled accounts.
+  [docs/plans/source-page-store.md](../plans/source-page-store.md); implemented
+  in PRs #220-222.
+- **Which invariants does this pipeline enforce, and which does it merely
+  offer?** Taught in lesson 0003, using two instances the page-store migration
+  itself produced: an anchor-position check that counted paragraphs instead of
+  comparing the anchor's own number, and a dangling Prisma relation that
+  shipped past lint/tsc/1,701 tests and was only caught by a live query.
+  `verifyExcerpts` still isn't wired into `history:validate` — that specific
+  gap is unresolved, tracked as its own item below rather than folded into the
+  lesson, since it's a workflow fix, not a design question.
+
+## Not yet fixed (not lesson material, just owed)
+
+- `npm run history:verify-excerpts` runs as a separate script; nothing calls
+  it from `history:validate` or CI, so a batch can pass validation with a
+  citation excerpt that doesn't literally appear in its cited paragraph.
