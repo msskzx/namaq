@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Source Pipeline Card</title>
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<script src="../assets/lesson.js"></script>
+</head>
+<body class="bg-stone-50 font-serif text-stone-900 antialiased dark:bg-stone-950 dark:text-stone-100">
+
+<div class="fixed inset-x-0 top-0 z-20 flex items-start justify-between p-3 print:hidden">
+  <button id="index-toggle" aria-controls="index" aria-expanded="true"
+    class="rounded border border-stone-300 bg-stone-50/90 px-3 py-1.5 font-mono text-xs uppercase tracking-wider text-stone-600 backdrop-blur hover:border-amber-500 hover:text-amber-700 dark:border-stone-700 dark:bg-stone-950/90 dark:text-stone-400 dark:hover:text-amber-400">
+    Index
+  </button>
+  <button id="theme-toggle"
+    class="rounded border border-stone-300 bg-stone-50/90 px-3 py-1.5 text-sm text-stone-600 backdrop-blur hover:border-amber-500 hover:text-amber-700 dark:border-stone-700 dark:bg-stone-950/90 dark:text-stone-400 dark:hover:text-amber-400">
+  </button>
+</div>
+
+<nav id="index" aria-label="Lesson index"
+  class="fixed inset-y-0 start-0 z-10 w-64 overflow-y-auto border-e border-stone-200 bg-stone-100/95 px-3 pb-8 pt-16 backdrop-blur dark:border-stone-800 dark:bg-stone-900/95 print:hidden"></nav>
+
+<main class="mx-auto max-w-3xl px-4 pb-24 pt-20">
+<article class="prose prose-stone max-w-none dark:prose-invert prose-headings:font-semibold prose-pre:bg-amber-50 prose-pre:text-stone-800 prose-pre:border-s-4 prose-pre:border-amber-600 prose-pre:rounded-s-none dark:prose-pre:bg-stone-900 dark:prose-pre:text-stone-200 prose-code:font-mono prose-a:text-amber-700 dark:prose-a:text-amber-400 prose-th:font-mono prose-th:text-xs prose-th:uppercase prose-th:tracking-wider prose-th:text-amber-700 dark:prose-th:text-amber-500">
+
+<header class="mb-10 border-b border-stone-300 pb-6 dark:border-stone-700">
+  <p class="m-0 font-mono text-xs uppercase tracking-[0.12em] text-amber-700 dark:text-amber-500">Reference · Namaq</p>
+  <h1 class="mb-2 mt-3">Source pipeline card</h1>
+  <p class="m-0 text-lg text-stone-600 dark:text-stone-400">Every artifact a source passes through, from a printed page in
+  <span dir="rtl" lang="ar">سير أعلام النبلاء</span> to a citation on a profile.</p>
+</header>
+
+<h2>The chain</h2>
+
+<table>
+<thead><tr><th>Authored file</th><th>Postgres model</th><th>Where it shows</th></tr></thead>
+<tbody>
+<tr>
+  <td><code>batch.json → sources[]</code><br>edition, editor, publisher, <code>volumes[]</code></td>
+  <td><code>HistoricalSource</code><br><code>SourceVolume</code></td>
+  <td><code>/sources</code> shelf — one card per <em>edition</em>, not per work</td>
+</tr>
+<tr>
+  <td><code>batch.json → accounts[]</code><br><code>subjectSlug</code>, <code>extractionUrl</code>, <code>volumeNumber</code>, <code>notInSource[]</code></td>
+  <td><code>SourceAccount</code></td>
+  <td><code>/sources/[slug]</code> contents — the work's entry for one subject</td>
+</tr>
+<tr>
+  <td><code>accounts/&lt;subject&gt;/NNN.md</code><br>+ <code>NNN.notes.md</code></td>
+  <td><code>SourceAccountPage</code><br>(<code>bodyMarkdown</code>, <code>notesMarkdown</code>)</td>
+  <td>The reader, one printed page at a time</td>
+</tr>
+<tr>
+  <td><code>pages[].passages[].anchor</code><br>e.g. <code>135-p2</code></td>
+  <td><code>SourcePassage</code></td>
+  <td>The link target a citation lands on</td>
+</tr>
+<tr>
+  <td><code>claims[]</code><br><code>assertion</code>, <code>field</code>, <code>confidence</code>, <code>reviewStatus</code></td>
+  <td><code>HistoricalClaim</code></td>
+  <td>Evidence behind a profile value, at whatever review status is honest</td>
+</tr>
+<tr>
+  <td><code>claims[].citations[]</code><br><code>passageAnchor</code>, <code>excerptArabic</code>, <code>pageReference</code></td>
+  <td><code>Citation</code></td>
+  <td>The pinpoint link from a value into the passage that proves it</td>
+</tr>
+<tr>
+  <td><code>summary.md</code></td>
+  <td><code>ReviewBatch</code></td>
+  <td>Review summary; not reader-facing</td>
+</tr>
+</tbody>
+</table>
+
+<h2>Commands</h2>
+
+<pre>npm run history:validate -- data/history/batches/&lt;batch&gt;   # structure, anchors, provenance
+npm run history:import   -- data/history/batches/&lt;batch&gt;   # dry run: prints the plan
+npm run history:import   -- &lt;batch&gt; --apply                # writes; needs the approved revision
+npm run history:review   -- &lt;batch&gt; --apply                # sets reviewStatus; separate gate
+npm run catalog:ledger   -- --batch &lt;batch&gt;                # legacy values the batch walked past</pre>
+
+<aside class="not-prose my-8 rounded border border-stone-300 p-4 text-sm leading-relaxed text-stone-600 dark:border-stone-700 dark:text-stone-400">
+<strong class="text-stone-900 dark:text-stone-100">Two gates, neither implying the other.</strong> Publishing records the current revision
+in <code class="font-mono">batch.json</code>, which is what lets <code class="font-mono">--apply</code> write. Marking reviewed sets
+each claim's <code class="font-mono">reviewStatus</code> and needs the user to say so explicitly. A published batch
+whose claims are all <code class="font-mono">NOT_REVIEWED</code> is a normal state
+(<a class="text-amber-700 underline dark:text-amber-400" href="../../adr/0008-separate-review-from-visibility.md">ADR 0008</a>).
+</aside>
+
+<h2>Rules that decide what may exist</h2>
+
+<h3>A claim must back a value the model holds</h3>
+<p>A profile field, a title, a participation, an event link, or a person relation — otherwise
+<code>history:validate</code> rejects it. The pages already preserve the text, so a claim naming
+nothing is a second copy of it.</p>
+
+<h3>The files are authority; a row is a copy</h3>
+<p><a href="../../adr/0010-author-historical-data-under-data.md">ADR 0010</a>. Never edit the
+database; edit the files and re-import.</p>
+
+<h3>Evidence role lives on the citation, not the work</h3>
+<p><a href="../../adr/0011-classify-the-role-of-cited-evidence.md">ADR 0011</a>. Shamela and
+Islamweb are delivery hosts, not evidence classes.</p>
+
+<h3>One citation is one meaningful selection</h3>
+<p>Page turns, paragraph boundaries and footnote placement do not create citations. Join
+fragments, use a page range across printed pages, ellipse omitted text.</p>
+
+<h3>A multi-volume source needs <code>volumeNumber</code></h3>
+<p>Set on the account (or on a page, where an entry crosses a binding). Nothing infers it, and a
+batch missing it still validates clean — the entry just files under "no assigned volume".</p>
+
+<h2>The seam to remember</h2>
+<p>An anchor is paired to its paragraph <strong>by position</strong>, not by any marker in the
+markdown: <code>passageExcerpts</code> in <code>src/lib/history/batchSchema.ts</code>
+splits the body on blank lines and zips the list. Insert a paragraph mid-page and every later
+anchor now excerpts different text. See
+<a href="../lessons/0001-where-text-becomes-citable.html">lesson 0001</a>.</p>
+
+<footer class="mt-14 border-t border-stone-300 pt-6 text-sm text-stone-600 dark:border-stone-700 dark:text-stone-400">
+  <p class="mb-0">Card for <a class="text-amber-700 underline dark:text-amber-400" href="../MISSION.md">the design mission</a>. Ask your teacher when any row here
+  stops matching the code.</p>
+</footer>
+
+</article>
+</main>
+</body>
+</html>
