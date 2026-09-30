@@ -1,11 +1,5 @@
 import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
-/**
- * Carried from the retired prisma/personSeedData9.ts entry. Her FATHER edge
- * (abu-bakr-as-siddiq.ts) and HUSBAND edge (prophet-muhammad.ts) are already
- * declared from the other side. appearance, virtues and the ayat below are
- * carried from the retired prisma/personSeedData.ts entry, uncited.
- */
 const aishaBintAbiBakr = {
   kind: 'PERSON',
   slug: 'aisha-bint-abi-bakr',
@@ -16,24 +10,33 @@ const aishaBintAbiBakr = {
     sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: {
       value: 'عائشة بنت أبي بكر عبد الله بن أبي قحافة عثمان بن عامر بن عمرو بن كعب بن سعد بن تيم بن مرة بن كعب بن لؤي القرشية التيمية',
-      claims: legacyUnreviewed,
+      claims: ['aisha-siyar/full-name'],
     },
-    appearance: { value: 'وصفت بأنها كانت بيضاء اللون، ذات جمال، وكانت نحيفة.', claims: legacyUnreviewed },
+    appearance: { value: 'كانت امرأة بيضاء جميلة، ولذلك كانت تسمى الحميراء.', claims: ['aisha-siyar/appearance'] },
     virtues: {
-      value: 'أم المؤمنين، حبيبة رسول الله، أفقه نساء الأمة، روت أحاديث كثيرة، اشتهرت بذكائها وفصاحتها.',
-      claims: legacyUnreviewed,
+      value: 'كانت أفقه نساء الأمة، ولم يعلم الذهبي في النساء امرأة أعلم منها.',
+      claims: ['aisha-siyar/virtues'],
     },
   },
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
-    { title: 'siddiqa', name: 'صديقة', nameTransliterated: 'Siddiqa', claims: legacyUnreviewed },
-    { title: 'mother-of-believers', name: 'أم المؤمنين', nameTransliterated: 'Mother of the Believers', claims: legacyUnreviewed },
+    { title: 'siddiqa', name: 'صديقة', nameTransliterated: 'Siddiqa', claims: ['aisha-siyar/title-siddiqa'] },
+    {
+      title: 'mother-of-believers',
+      name: 'أم المؤمنين',
+      nameTransliterated: 'Mother of the Believers',
+      claims: ['aisha-siyar/title-mother-of-believers'],
+    },
   ],
   ayat: [
-    { surah: 24, ayah: 11, claims: legacyUnreviewed },
-    { surah: 33, ayah: 33, claims: legacyUnreviewed },
+    { surah: 24, ayah: 11, claims: ['aisha-siyar/ayah-an-nur-eleven'] },
+    { surah: 33, ayah: 33, claims: ['aisha-siyar/ayah-al-ahzab-thirty-three'] },
   ],
-  relations: [],
+  relations: [
+    { type: 'DAUGHTER', inverse: 'FATHER', to: 'abu-bakr-as-siddiq', claims: ['aisha-siyar/father'] },
+    { type: 'SISTER', inverse: 'BROTHER', to: 'abd-al-rahman-ibn-abi-bakr', claims: ['aisha-siyar/brother-abd-al-rahman'] },
+    { type: 'WIFE', inverse: 'HUSBAND', to: 'prophet-muhammad', claims: ['aisha-siyar/wife-prophet'] },
+  ],
 } satisfies CatalogPerson;
 
 export default aishaBintAbiBakr;

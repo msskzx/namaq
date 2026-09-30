@@ -146,7 +146,7 @@ that.
 - [x] خديجة أم المؤمنين (`khadijah-bint-khuwaylid`, PR #203)
 - [x] فاطمة بنت أسد (`fatimah-bint-asad`, PR #205)
 - [x] فاطمة بنت رسول الله صلى الله عليه وسلم (`fatimah-bint-muhammad`, PR #215)
-- [ ] عائشة أم المؤمنين
+- [x] عائشة أم المؤمنين — `data/history/batches/aisha-bint-abi-bakr/` ([PR #216](https://github.com/msskzx/namaq/pull/216))
 - [ ] أم سلمة أم المؤمنين
 - [ ] زينب أم المؤمنين
 - [ ] زينب أم المؤمنين

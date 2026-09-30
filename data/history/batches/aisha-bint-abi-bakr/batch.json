@@ -1,0 +1,3282 @@
+{
+  "slug": "aisha-bint-abi-bakr",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aisha-bint-abi-bakr",
+      "extractionUrl": "https://shamela.ws/book/10906/2115",
+      "accessedAt": "2026-09-30",
+      "volumeNumber": 5,
+      "notInSource": [
+        "kunya"
+      ],
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "135",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/001.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2115",
+          "passages": [
+            {
+              "anchor": "135-p1"
+            },
+            {
+              "anchor": "135-p2"
+            },
+            {
+              "anchor": "135-p3"
+            },
+            {
+              "anchor": "135-p4"
+            },
+            {
+              "anchor": "135-p5"
+            },
+            {
+              "anchor": "135-p6"
+            },
+            {
+              "anchor": "135-p7"
+            },
+            {
+              "anchor": "135-p8"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "136",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/002.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2116",
+          "passages": [
+            {
+              "anchor": "136-p1"
+            },
+            {
+              "anchor": "136-p2"
+            },
+            {
+              "anchor": "136-p3"
+            },
+            {
+              "anchor": "136-p4"
+            },
+            {
+              "anchor": "136-p5"
+            },
+            {
+              "anchor": "136-p6"
+            },
+            {
+              "anchor": "136-p7"
+            },
+            {
+              "anchor": "136-p8"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "printedPage": "137",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/003.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/003.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2117",
+          "passages": [
+            {
+              "anchor": "137-p1"
+            },
+            {
+              "anchor": "137-p2"
+            },
+            {
+              "anchor": "137-p3"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "printedPage": "138",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/004.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/004.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2118",
+          "passages": [
+            {
+              "anchor": "138-p1"
+            },
+            {
+              "anchor": "138-p2"
+            },
+            {
+              "anchor": "138-p3"
+            },
+            {
+              "anchor": "138-p4"
+            },
+            {
+              "anchor": "138-p5"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "printedPage": "139",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/005.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/005.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2119",
+          "passages": [
+            {
+              "anchor": "139-p1"
+            },
+            {
+              "anchor": "139-p2"
+            },
+            {
+              "anchor": "139-p3"
+            },
+            {
+              "anchor": "139-p4"
+            },
+            {
+              "anchor": "139-p5"
+            },
+            {
+              "anchor": "139-p6"
+            },
+            {
+              "anchor": "139-p7"
+            },
+            {
+              "anchor": "139-p8"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "printedPage": "140",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/006.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/006.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2120",
+          "passages": [
+            {
+              "anchor": "140-p1"
+            },
+            {
+              "anchor": "140-p2"
+            },
+            {
+              "anchor": "140-p3"
+            },
+            {
+              "anchor": "140-p4"
+            },
+            {
+              "anchor": "140-p5"
+            },
+            {
+              "anchor": "140-p6"
+            },
+            {
+              "anchor": "140-p7"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "printedPage": "141",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/007.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/007.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2121",
+          "passages": [
+            {
+              "anchor": "141-p1"
+            },
+            {
+              "anchor": "141-p2"
+            },
+            {
+              "anchor": "141-p3"
+            },
+            {
+              "anchor": "141-p4"
+            },
+            {
+              "anchor": "141-p5"
+            },
+            {
+              "anchor": "141-p6"
+            },
+            {
+              "anchor": "141-p7"
+            },
+            {
+              "anchor": "141-p8"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "printedPage": "142",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/008.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/008.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2122",
+          "passages": [
+            {
+              "anchor": "142-p1"
+            },
+            {
+              "anchor": "142-p2"
+            },
+            {
+              "anchor": "142-p3"
+            },
+            {
+              "anchor": "142-p4"
+            },
+            {
+              "anchor": "142-p5"
+            },
+            {
+              "anchor": "142-p6"
+            },
+            {
+              "anchor": "142-p7"
+            },
+            {
+              "anchor": "142-p8"
+            },
+            {
+              "anchor": "142-p9"
+            },
+            {
+              "anchor": "142-p10"
+            },
+            {
+              "anchor": "142-p11"
+            },
+            {
+              "anchor": "142-p12"
+            },
+            {
+              "anchor": "142-p13"
+            },
+            {
+              "anchor": "142-p14"
+            },
+            {
+              "anchor": "142-p15"
+            }
+          ]
+        },
+        {
+          "sequence": 9,
+          "printedPage": "143",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/009.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/009.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2123",
+          "passages": [
+            {
+              "anchor": "143-p1"
+            },
+            {
+              "anchor": "143-p2"
+            },
+            {
+              "anchor": "143-p3"
+            },
+            {
+              "anchor": "143-p4"
+            },
+            {
+              "anchor": "143-p5"
+            },
+            {
+              "anchor": "143-p6"
+            },
+            {
+              "anchor": "143-p7"
+            },
+            {
+              "anchor": "143-p8"
+            },
+            {
+              "anchor": "143-p9"
+            },
+            {
+              "anchor": "143-p10"
+            },
+            {
+              "anchor": "143-p11"
+            }
+          ]
+        },
+        {
+          "sequence": 10,
+          "printedPage": "144",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/010.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/010.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2124",
+          "passages": [
+            {
+              "anchor": "144-p1"
+            },
+            {
+              "anchor": "144-p2"
+            },
+            {
+              "anchor": "144-p3"
+            },
+            {
+              "anchor": "144-p4"
+            },
+            {
+              "anchor": "144-p5"
+            },
+            {
+              "anchor": "144-p6"
+            },
+            {
+              "anchor": "144-p7"
+            },
+            {
+              "anchor": "144-p8"
+            },
+            {
+              "anchor": "144-p9"
+            },
+            {
+              "anchor": "144-p10"
+            },
+            {
+              "anchor": "144-p11"
+            },
+            {
+              "anchor": "144-p12"
+            },
+            {
+              "anchor": "144-p13"
+            },
+            {
+              "anchor": "144-p14"
+            }
+          ]
+        },
+        {
+          "sequence": 11,
+          "printedPage": "145",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/011.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/011.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2125",
+          "passages": [
+            {
+              "anchor": "145-p1"
+            },
+            {
+              "anchor": "145-p2"
+            },
+            {
+              "anchor": "145-p3"
+            },
+            {
+              "anchor": "145-p4"
+            },
+            {
+              "anchor": "145-p5"
+            },
+            {
+              "anchor": "145-p6"
+            },
+            {
+              "anchor": "145-p7"
+            },
+            {
+              "anchor": "145-p8"
+            },
+            {
+              "anchor": "145-p9"
+            },
+            {
+              "anchor": "145-p10"
+            },
+            {
+              "anchor": "145-p11"
+            },
+            {
+              "anchor": "145-p12"
+            },
+            {
+              "anchor": "145-p13"
+            }
+          ]
+        },
+        {
+          "sequence": 12,
+          "printedPage": "146",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/012.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/012.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2126",
+          "passages": [
+            {
+              "anchor": "146-p1"
+            },
+            {
+              "anchor": "146-p2"
+            },
+            {
+              "anchor": "146-p3"
+            },
+            {
+              "anchor": "146-p4"
+            },
+            {
+              "anchor": "146-p5"
+            },
+            {
+              "anchor": "146-p6"
+            },
+            {
+              "anchor": "146-p7"
+            },
+            {
+              "anchor": "146-p8"
+            },
+            {
+              "anchor": "146-p9"
+            },
+            {
+              "anchor": "146-p10"
+            },
+            {
+              "anchor": "146-p11"
+            },
+            {
+              "anchor": "146-p12"
+            },
+            {
+              "anchor": "146-p13"
+            },
+            {
+              "anchor": "146-p14"
+            },
+            {
+              "anchor": "146-p15"
+            },
+            {
+              "anchor": "146-p16"
+            },
+            {
+              "anchor": "146-p17"
+            }
+          ]
+        },
+        {
+          "sequence": 13,
+          "printedPage": "147",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/013.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/013.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2127",
+          "passages": [
+            {
+              "anchor": "147-p1"
+            },
+            {
+              "anchor": "147-p2"
+            },
+            {
+              "anchor": "147-p3"
+            },
+            {
+              "anchor": "147-p4"
+            },
+            {
+              "anchor": "147-p5"
+            },
+            {
+              "anchor": "147-p6"
+            },
+            {
+              "anchor": "147-p7"
+            },
+            {
+              "anchor": "147-p8"
+            },
+            {
+              "anchor": "147-p9"
+            },
+            {
+              "anchor": "147-p10"
+            },
+            {
+              "anchor": "147-p11"
+            },
+            {
+              "anchor": "147-p12"
+            }
+          ]
+        },
+        {
+          "sequence": 14,
+          "printedPage": "148",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/014.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/014.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2128",
+          "passages": [
+            {
+              "anchor": "148-p1"
+            },
+            {
+              "anchor": "148-p2"
+            },
+            {
+              "anchor": "148-p3"
+            },
+            {
+              "anchor": "148-p4"
+            },
+            {
+              "anchor": "148-p5"
+            },
+            {
+              "anchor": "148-p6"
+            },
+            {
+              "anchor": "148-p7"
+            },
+            {
+              "anchor": "148-p8"
+            },
+            {
+              "anchor": "148-p9"
+            },
+            {
+              "anchor": "148-p10"
+            },
+            {
+              "anchor": "148-p11"
+            },
+            {
+              "anchor": "148-p12"
+            },
+            {
+              "anchor": "148-p13"
+            },
+            {
+              "anchor": "148-p14"
+            },
+            {
+              "anchor": "148-p15"
+            },
+            {
+              "anchor": "148-p16"
+            },
+            {
+              "anchor": "148-p17"
+            },
+            {
+              "anchor": "148-p18"
+            }
+          ]
+        },
+        {
+          "sequence": 15,
+          "printedPage": "149",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/015.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/015.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2129",
+          "passages": [
+            {
+              "anchor": "149-p1"
+            },
+            {
+              "anchor": "149-p2"
+            },
+            {
+              "anchor": "149-p3"
+            },
+            {
+              "anchor": "149-p4"
+            },
+            {
+              "anchor": "149-p5"
+            },
+            {
+              "anchor": "149-p6"
+            },
+            {
+              "anchor": "149-p7"
+            },
+            {
+              "anchor": "149-p8"
+            },
+            {
+              "anchor": "149-p9"
+            },
+            {
+              "anchor": "149-p10"
+            },
+            {
+              "anchor": "149-p11"
+            },
+            {
+              "anchor": "149-p12"
+            },
+            {
+              "anchor": "149-p13"
+            },
+            {
+              "anchor": "149-p14"
+            },
+            {
+              "anchor": "149-p15"
+            },
+            {
+              "anchor": "149-p16"
+            },
+            {
+              "anchor": "149-p17"
+            },
+            {
+              "anchor": "149-p18"
+            },
+            {
+              "anchor": "149-p19"
+            },
+            {
+              "anchor": "149-p20"
+            },
+            {
+              "anchor": "149-p21"
+            },
+            {
+              "anchor": "149-p22"
+            },
+            {
+              "anchor": "149-p23"
+            },
+            {
+              "anchor": "149-p24"
+            },
+            {
+              "anchor": "149-p25"
+            },
+            {
+              "anchor": "149-p26"
+            }
+          ]
+        },
+        {
+          "sequence": 16,
+          "printedPage": "150",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/016.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/016.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2130",
+          "passages": [
+            {
+              "anchor": "150-p1"
+            },
+            {
+              "anchor": "150-p2"
+            },
+            {
+              "anchor": "150-p3"
+            },
+            {
+              "anchor": "150-p4"
+            },
+            {
+              "anchor": "150-p5"
+            },
+            {
+              "anchor": "150-p6"
+            },
+            {
+              "anchor": "150-p7"
+            },
+            {
+              "anchor": "150-p8"
+            },
+            {
+              "anchor": "150-p9"
+            }
+          ]
+        },
+        {
+          "sequence": 17,
+          "printedPage": "151",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/017.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/017.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2131",
+          "passages": [
+            {
+              "anchor": "151-p1"
+            },
+            {
+              "anchor": "151-p2"
+            },
+            {
+              "anchor": "151-p3"
+            },
+            {
+              "anchor": "151-p4"
+            },
+            {
+              "anchor": "151-p5"
+            },
+            {
+              "anchor": "151-p6"
+            },
+            {
+              "anchor": "151-p7"
+            },
+            {
+              "anchor": "151-p8"
+            },
+            {
+              "anchor": "151-p9"
+            }
+          ]
+        },
+        {
+          "sequence": 18,
+          "printedPage": "152",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/018.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/018.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2132",
+          "passages": [
+            {
+              "anchor": "152-p1"
+            },
+            {
+              "anchor": "152-p2"
+            },
+            {
+              "anchor": "152-p3"
+            },
+            {
+              "anchor": "152-p4"
+            },
+            {
+              "anchor": "152-p5"
+            },
+            {
+              "anchor": "152-p6"
+            }
+          ]
+        },
+        {
+          "sequence": 19,
+          "printedPage": "153",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/019.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/019.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2133",
+          "passages": [
+            {
+              "anchor": "153-p1"
+            },
+            {
+              "anchor": "153-p2"
+            },
+            {
+              "anchor": "153-p3"
+            },
+            {
+              "anchor": "153-p4"
+            },
+            {
+              "anchor": "153-p5"
+            },
+            {
+              "anchor": "153-p6"
+            },
+            {
+              "anchor": "153-p7"
+            },
+            {
+              "anchor": "153-p8"
+            },
+            {
+              "anchor": "153-p9"
+            },
+            {
+              "anchor": "153-p10"
+            }
+          ]
+        },
+        {
+          "sequence": 20,
+          "printedPage": "154",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/020.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/020.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2134",
+          "passages": [
+            {
+              "anchor": "154-p1"
+            },
+            {
+              "anchor": "154-p2"
+            },
+            {
+              "anchor": "154-p3"
+            },
+            {
+              "anchor": "154-p4"
+            },
+            {
+              "anchor": "154-p5"
+            }
+          ]
+        },
+        {
+          "sequence": 21,
+          "printedPage": "155",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/021.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/021.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2135",
+          "passages": [
+            {
+              "anchor": "155-p1"
+            },
+            {
+              "anchor": "155-p2"
+            },
+            {
+              "anchor": "155-p3"
+            },
+            {
+              "anchor": "155-p4"
+            },
+            {
+              "anchor": "155-p5"
+            },
+            {
+              "anchor": "155-p6"
+            }
+          ]
+        },
+        {
+          "sequence": 22,
+          "printedPage": "156",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/022.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/022.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2136",
+          "passages": [
+            {
+              "anchor": "156-p1"
+            },
+            {
+              "anchor": "156-p2"
+            },
+            {
+              "anchor": "156-p3"
+            },
+            {
+              "anchor": "156-p4"
+            },
+            {
+              "anchor": "156-p5"
+            },
+            {
+              "anchor": "156-p6"
+            },
+            {
+              "anchor": "156-p7"
+            },
+            {
+              "anchor": "156-p8"
+            },
+            {
+              "anchor": "156-p9"
+            },
+            {
+              "anchor": "156-p10"
+            },
+            {
+              "anchor": "156-p11"
+            },
+            {
+              "anchor": "156-p12"
+            },
+            {
+              "anchor": "156-p13"
+            },
+            {
+              "anchor": "156-p14"
+            },
+            {
+              "anchor": "156-p15"
+            },
+            {
+              "anchor": "156-p16"
+            }
+          ]
+        },
+        {
+          "sequence": 23,
+          "printedPage": "157",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/023.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/023.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2137",
+          "passages": [
+            {
+              "anchor": "157-p1"
+            },
+            {
+              "anchor": "157-p2"
+            },
+            {
+              "anchor": "157-p3"
+            },
+            {
+              "anchor": "157-p4"
+            },
+            {
+              "anchor": "157-p5"
+            },
+            {
+              "anchor": "157-p6"
+            },
+            {
+              "anchor": "157-p7"
+            },
+            {
+              "anchor": "157-p8"
+            },
+            {
+              "anchor": "157-p9"
+            },
+            {
+              "anchor": "157-p10"
+            }
+          ]
+        },
+        {
+          "sequence": 24,
+          "printedPage": "158",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/024.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/024.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2138",
+          "passages": [
+            {
+              "anchor": "158-p1"
+            },
+            {
+              "anchor": "158-p2"
+            },
+            {
+              "anchor": "158-p3"
+            },
+            {
+              "anchor": "158-p4"
+            },
+            {
+              "anchor": "158-p5"
+            },
+            {
+              "anchor": "158-p6"
+            },
+            {
+              "anchor": "158-p7"
+            },
+            {
+              "anchor": "158-p8"
+            },
+            {
+              "anchor": "158-p9"
+            },
+            {
+              "anchor": "158-p10"
+            }
+          ]
+        },
+        {
+          "sequence": 25,
+          "printedPage": "159",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/025.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/025.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2139",
+          "passages": [
+            {
+              "anchor": "159-p1"
+            },
+            {
+              "anchor": "159-p2"
+            },
+            {
+              "anchor": "159-p3"
+            },
+            {
+              "anchor": "159-p4"
+            },
+            {
+              "anchor": "159-p5"
+            },
+            {
+              "anchor": "159-p6"
+            },
+            {
+              "anchor": "159-p7"
+            },
+            {
+              "anchor": "159-p8"
+            },
+            {
+              "anchor": "159-p9"
+            },
+            {
+              "anchor": "159-p10"
+            },
+            {
+              "anchor": "159-p11"
+            },
+            {
+              "anchor": "159-p12"
+            },
+            {
+              "anchor": "159-p13"
+            }
+          ]
+        },
+        {
+          "sequence": 26,
+          "printedPage": "160",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/026.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/026.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2140",
+          "passages": [
+            {
+              "anchor": "160-p1"
+            },
+            {
+              "anchor": "160-p2"
+            },
+            {
+              "anchor": "160-p3"
+            },
+            {
+              "anchor": "160-p4"
+            },
+            {
+              "anchor": "160-p5"
+            },
+            {
+              "anchor": "160-p6"
+            },
+            {
+              "anchor": "160-p7"
+            },
+            {
+              "anchor": "160-p8"
+            },
+            {
+              "anchor": "160-p9"
+            },
+            {
+              "anchor": "160-p10"
+            },
+            {
+              "anchor": "160-p11"
+            },
+            {
+              "anchor": "160-p12"
+            }
+          ]
+        },
+        {
+          "sequence": 27,
+          "printedPage": "161",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/027.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/027.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2141",
+          "passages": [
+            {
+              "anchor": "161-p1"
+            },
+            {
+              "anchor": "161-p2"
+            },
+            {
+              "anchor": "161-p3"
+            },
+            {
+              "anchor": "161-p4"
+            },
+            {
+              "anchor": "161-p5"
+            },
+            {
+              "anchor": "161-p6"
+            },
+            {
+              "anchor": "161-p7"
+            },
+            {
+              "anchor": "161-p8"
+            },
+            {
+              "anchor": "161-p9"
+            }
+          ]
+        },
+        {
+          "sequence": 28,
+          "printedPage": "162",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/028.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/028.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2142",
+          "passages": [
+            {
+              "anchor": "162-p1"
+            },
+            {
+              "anchor": "162-p2"
+            },
+            {
+              "anchor": "162-p3"
+            },
+            {
+              "anchor": "162-p4"
+            },
+            {
+              "anchor": "162-p5"
+            },
+            {
+              "anchor": "162-p6"
+            },
+            {
+              "anchor": "162-p7"
+            },
+            {
+              "anchor": "162-p8"
+            },
+            {
+              "anchor": "162-p9"
+            },
+            {
+              "anchor": "162-p10"
+            },
+            {
+              "anchor": "162-p11"
+            },
+            {
+              "anchor": "162-p12"
+            },
+            {
+              "anchor": "162-p13"
+            },
+            {
+              "anchor": "162-p14"
+            },
+            {
+              "anchor": "162-p15"
+            },
+            {
+              "anchor": "162-p16"
+            }
+          ]
+        },
+        {
+          "sequence": 29,
+          "printedPage": "163",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/029.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/029.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2143",
+          "passages": [
+            {
+              "anchor": "163-p1"
+            },
+            {
+              "anchor": "163-p2"
+            },
+            {
+              "anchor": "163-p3"
+            },
+            {
+              "anchor": "163-p4"
+            },
+            {
+              "anchor": "163-p5"
+            },
+            {
+              "anchor": "163-p6"
+            },
+            {
+              "anchor": "163-p7"
+            },
+            {
+              "anchor": "163-p8"
+            },
+            {
+              "anchor": "163-p9"
+            },
+            {
+              "anchor": "163-p10"
+            },
+            {
+              "anchor": "163-p11"
+            },
+            {
+              "anchor": "163-p12"
+            },
+            {
+              "anchor": "163-p13"
+            },
+            {
+              "anchor": "163-p14"
+            }
+          ]
+        },
+        {
+          "sequence": 30,
+          "printedPage": "164",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/030.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/030.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2144",
+          "passages": [
+            {
+              "anchor": "164-p1"
+            },
+            {
+              "anchor": "164-p2"
+            },
+            {
+              "anchor": "164-p3"
+            },
+            {
+              "anchor": "164-p4"
+            },
+            {
+              "anchor": "164-p5"
+            },
+            {
+              "anchor": "164-p6"
+            },
+            {
+              "anchor": "164-p7"
+            },
+            {
+              "anchor": "164-p8"
+            },
+            {
+              "anchor": "164-p9"
+            },
+            {
+              "anchor": "164-p10"
+            },
+            {
+              "anchor": "164-p11"
+            },
+            {
+              "anchor": "164-p12"
+            }
+          ]
+        },
+        {
+          "sequence": 31,
+          "printedPage": "165",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/031.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/031.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2145",
+          "passages": [
+            {
+              "anchor": "165-p1"
+            },
+            {
+              "anchor": "165-p2"
+            },
+            {
+              "anchor": "165-p3"
+            },
+            {
+              "anchor": "165-p4"
+            },
+            {
+              "anchor": "165-p5"
+            },
+            {
+              "anchor": "165-p6"
+            }
+          ]
+        },
+        {
+          "sequence": 32,
+          "printedPage": "166",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/032.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/032.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2146",
+          "passages": [
+            {
+              "anchor": "166-p1"
+            },
+            {
+              "anchor": "166-p2"
+            },
+            {
+              "anchor": "166-p3"
+            }
+          ]
+        },
+        {
+          "sequence": 33,
+          "printedPage": "167",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/033.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/033.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2147",
+          "passages": [
+            {
+              "anchor": "167-p1"
+            },
+            {
+              "anchor": "167-p2"
+            },
+            {
+              "anchor": "167-p3"
+            },
+            {
+              "anchor": "167-p4"
+            },
+            {
+              "anchor": "167-p5"
+            },
+            {
+              "anchor": "167-p6"
+            },
+            {
+              "anchor": "167-p7"
+            },
+            {
+              "anchor": "167-p8"
+            },
+            {
+              "anchor": "167-p9"
+            },
+            {
+              "anchor": "167-p10"
+            },
+            {
+              "anchor": "167-p11"
+            },
+            {
+              "anchor": "167-p12"
+            },
+            {
+              "anchor": "167-p13"
+            },
+            {
+              "anchor": "167-p14"
+            }
+          ]
+        },
+        {
+          "sequence": 34,
+          "printedPage": "168",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/034.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/034.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2148",
+          "passages": [
+            {
+              "anchor": "168-p1"
+            },
+            {
+              "anchor": "168-p2"
+            },
+            {
+              "anchor": "168-p3"
+            },
+            {
+              "anchor": "168-p4"
+            },
+            {
+              "anchor": "168-p5"
+            },
+            {
+              "anchor": "168-p6"
+            },
+            {
+              "anchor": "168-p7"
+            },
+            {
+              "anchor": "168-p8"
+            }
+          ]
+        },
+        {
+          "sequence": 35,
+          "printedPage": "169",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/035.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/035.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2149",
+          "passages": [
+            {
+              "anchor": "169-p1"
+            },
+            {
+              "anchor": "169-p2"
+            },
+            {
+              "anchor": "169-p3"
+            },
+            {
+              "anchor": "169-p4"
+            },
+            {
+              "anchor": "169-p5"
+            },
+            {
+              "anchor": "169-p6"
+            },
+            {
+              "anchor": "169-p7"
+            },
+            {
+              "anchor": "169-p8"
+            },
+            {
+              "anchor": "169-p9"
+            },
+            {
+              "anchor": "169-p10"
+            },
+            {
+              "anchor": "169-p11"
+            },
+            {
+              "anchor": "169-p12"
+            },
+            {
+              "anchor": "169-p13"
+            },
+            {
+              "anchor": "169-p14"
+            }
+          ]
+        },
+        {
+          "sequence": 36,
+          "printedPage": "170",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/036.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/036.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2150",
+          "passages": [
+            {
+              "anchor": "170-p1"
+            },
+            {
+              "anchor": "170-p2"
+            },
+            {
+              "anchor": "170-p3"
+            },
+            {
+              "anchor": "170-p4"
+            },
+            {
+              "anchor": "170-p5"
+            },
+            {
+              "anchor": "170-p6"
+            },
+            {
+              "anchor": "170-p7"
+            },
+            {
+              "anchor": "170-p8"
+            },
+            {
+              "anchor": "170-p9"
+            },
+            {
+              "anchor": "170-p10"
+            },
+            {
+              "anchor": "170-p11"
+            }
+          ]
+        },
+        {
+          "sequence": 37,
+          "printedPage": "171",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/037.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/037.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2151",
+          "passages": [
+            {
+              "anchor": "171-p1"
+            },
+            {
+              "anchor": "171-p2"
+            },
+            {
+              "anchor": "171-p3"
+            },
+            {
+              "anchor": "171-p4"
+            },
+            {
+              "anchor": "171-p5"
+            },
+            {
+              "anchor": "171-p6"
+            },
+            {
+              "anchor": "171-p7"
+            },
+            {
+              "anchor": "171-p8"
+            },
+            {
+              "anchor": "171-p9"
+            },
+            {
+              "anchor": "171-p10"
+            },
+            {
+              "anchor": "171-p11"
+            },
+            {
+              "anchor": "171-p12"
+            }
+          ]
+        },
+        {
+          "sequence": 38,
+          "printedPage": "172",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/038.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/038.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2152",
+          "passages": [
+            {
+              "anchor": "172-p1"
+            },
+            {
+              "anchor": "172-p2"
+            },
+            {
+              "anchor": "172-p3"
+            },
+            {
+              "anchor": "172-p4"
+            },
+            {
+              "anchor": "172-p5"
+            },
+            {
+              "anchor": "172-p6"
+            },
+            {
+              "anchor": "172-p7"
+            },
+            {
+              "anchor": "172-p8"
+            },
+            {
+              "anchor": "172-p9"
+            },
+            {
+              "anchor": "172-p10"
+            },
+            {
+              "anchor": "172-p11"
+            },
+            {
+              "anchor": "172-p12"
+            },
+            {
+              "anchor": "172-p13"
+            },
+            {
+              "anchor": "172-p14"
+            },
+            {
+              "anchor": "172-p15"
+            }
+          ]
+        },
+        {
+          "sequence": 39,
+          "printedPage": "173",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/039.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/039.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2153",
+          "passages": [
+            {
+              "anchor": "173-p1"
+            },
+            {
+              "anchor": "173-p2"
+            },
+            {
+              "anchor": "173-p3"
+            },
+            {
+              "anchor": "173-p4"
+            },
+            {
+              "anchor": "173-p5"
+            },
+            {
+              "anchor": "173-p6"
+            },
+            {
+              "anchor": "173-p7"
+            },
+            {
+              "anchor": "173-p8"
+            },
+            {
+              "anchor": "173-p9"
+            }
+          ]
+        },
+        {
+          "sequence": 40,
+          "printedPage": "174",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/040.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/040.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2154",
+          "passages": [
+            {
+              "anchor": "174-p1"
+            },
+            {
+              "anchor": "174-p2"
+            },
+            {
+              "anchor": "174-p3"
+            },
+            {
+              "anchor": "174-p4"
+            },
+            {
+              "anchor": "174-p5"
+            },
+            {
+              "anchor": "174-p6"
+            },
+            {
+              "anchor": "174-p7"
+            },
+            {
+              "anchor": "174-p8"
+            }
+          ]
+        },
+        {
+          "sequence": 41,
+          "printedPage": "175",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/041.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/041.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2155",
+          "passages": [
+            {
+              "anchor": "175-p1"
+            },
+            {
+              "anchor": "175-p2"
+            },
+            {
+              "anchor": "175-p3"
+            },
+            {
+              "anchor": "175-p4"
+            },
+            {
+              "anchor": "175-p5"
+            },
+            {
+              "anchor": "175-p6"
+            },
+            {
+              "anchor": "175-p7"
+            },
+            {
+              "anchor": "175-p8"
+            },
+            {
+              "anchor": "175-p9"
+            },
+            {
+              "anchor": "175-p10"
+            }
+          ]
+        },
+        {
+          "sequence": 42,
+          "printedPage": "176",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/042.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/042.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2156",
+          "passages": [
+            {
+              "anchor": "176-p1"
+            },
+            {
+              "anchor": "176-p2"
+            },
+            {
+              "anchor": "176-p3"
+            },
+            {
+              "anchor": "176-p4"
+            },
+            {
+              "anchor": "176-p5"
+            },
+            {
+              "anchor": "176-p6"
+            },
+            {
+              "anchor": "176-p7"
+            },
+            {
+              "anchor": "176-p8"
+            },
+            {
+              "anchor": "176-p9"
+            },
+            {
+              "anchor": "176-p10"
+            }
+          ]
+        },
+        {
+          "sequence": 43,
+          "printedPage": "177",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/043.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/043.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2157",
+          "passages": [
+            {
+              "anchor": "177-p1"
+            },
+            {
+              "anchor": "177-p2"
+            },
+            {
+              "anchor": "177-p3"
+            },
+            {
+              "anchor": "177-p4"
+            },
+            {
+              "anchor": "177-p5"
+            },
+            {
+              "anchor": "177-p6"
+            },
+            {
+              "anchor": "177-p7"
+            },
+            {
+              "anchor": "177-p8"
+            },
+            {
+              "anchor": "177-p9"
+            },
+            {
+              "anchor": "177-p10"
+            },
+            {
+              "anchor": "177-p11"
+            },
+            {
+              "anchor": "177-p12"
+            },
+            {
+              "anchor": "177-p13"
+            }
+          ]
+        },
+        {
+          "sequence": 44,
+          "printedPage": "178",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/044.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/044.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2158",
+          "passages": [
+            {
+              "anchor": "178-p1"
+            },
+            {
+              "anchor": "178-p2"
+            },
+            {
+              "anchor": "178-p3"
+            },
+            {
+              "anchor": "178-p4"
+            },
+            {
+              "anchor": "178-p5"
+            },
+            {
+              "anchor": "178-p6"
+            },
+            {
+              "anchor": "178-p7"
+            },
+            {
+              "anchor": "178-p8"
+            },
+            {
+              "anchor": "178-p9"
+            },
+            {
+              "anchor": "178-p10"
+            },
+            {
+              "anchor": "178-p11"
+            },
+            {
+              "anchor": "178-p12"
+            },
+            {
+              "anchor": "178-p13"
+            },
+            {
+              "anchor": "178-p14"
+            }
+          ]
+        },
+        {
+          "sequence": 45,
+          "printedPage": "179",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/045.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/045.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2159",
+          "passages": [
+            {
+              "anchor": "179-p1"
+            },
+            {
+              "anchor": "179-p2"
+            },
+            {
+              "anchor": "179-p3"
+            },
+            {
+              "anchor": "179-p4"
+            },
+            {
+              "anchor": "179-p5"
+            },
+            {
+              "anchor": "179-p6"
+            },
+            {
+              "anchor": "179-p7"
+            },
+            {
+              "anchor": "179-p8"
+            },
+            {
+              "anchor": "179-p9"
+            },
+            {
+              "anchor": "179-p10"
+            },
+            {
+              "anchor": "179-p11"
+            },
+            {
+              "anchor": "179-p12"
+            },
+            {
+              "anchor": "179-p13"
+            }
+          ]
+        },
+        {
+          "sequence": 46,
+          "printedPage": "180",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/046.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/046.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2160",
+          "passages": [
+            {
+              "anchor": "180-p1"
+            },
+            {
+              "anchor": "180-p2"
+            },
+            {
+              "anchor": "180-p3"
+            },
+            {
+              "anchor": "180-p4"
+            },
+            {
+              "anchor": "180-p5"
+            },
+            {
+              "anchor": "180-p6"
+            },
+            {
+              "anchor": "180-p7"
+            },
+            {
+              "anchor": "180-p8"
+            },
+            {
+              "anchor": "180-p9"
+            },
+            {
+              "anchor": "180-p10"
+            },
+            {
+              "anchor": "180-p11"
+            },
+            {
+              "anchor": "180-p12"
+            },
+            {
+              "anchor": "180-p13"
+            },
+            {
+              "anchor": "180-p14"
+            },
+            {
+              "anchor": "180-p15"
+            },
+            {
+              "anchor": "180-p16"
+            },
+            {
+              "anchor": "180-p17"
+            },
+            {
+              "anchor": "180-p18"
+            }
+          ]
+        },
+        {
+          "sequence": 47,
+          "printedPage": "181",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/047.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/047.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2161",
+          "passages": [
+            {
+              "anchor": "181-p1"
+            },
+            {
+              "anchor": "181-p2"
+            },
+            {
+              "anchor": "181-p3"
+            },
+            {
+              "anchor": "181-p4"
+            },
+            {
+              "anchor": "181-p5"
+            },
+            {
+              "anchor": "181-p6"
+            },
+            {
+              "anchor": "181-p7"
+            },
+            {
+              "anchor": "181-p8"
+            },
+            {
+              "anchor": "181-p9"
+            },
+            {
+              "anchor": "181-p10"
+            }
+          ]
+        },
+        {
+          "sequence": 48,
+          "printedPage": "182",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/048.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/048.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2162",
+          "passages": [
+            {
+              "anchor": "182-p1"
+            },
+            {
+              "anchor": "182-p2"
+            },
+            {
+              "anchor": "182-p3"
+            },
+            {
+              "anchor": "182-p4"
+            },
+            {
+              "anchor": "182-p5"
+            },
+            {
+              "anchor": "182-p6"
+            },
+            {
+              "anchor": "182-p7"
+            },
+            {
+              "anchor": "182-p8"
+            },
+            {
+              "anchor": "182-p9"
+            }
+          ]
+        },
+        {
+          "sequence": 49,
+          "printedPage": "183",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/049.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/049.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2163",
+          "passages": [
+            {
+              "anchor": "183-p1"
+            },
+            {
+              "anchor": "183-p2"
+            },
+            {
+              "anchor": "183-p3"
+            },
+            {
+              "anchor": "183-p4"
+            },
+            {
+              "anchor": "183-p5"
+            },
+            {
+              "anchor": "183-p6"
+            },
+            {
+              "anchor": "183-p7"
+            },
+            {
+              "anchor": "183-p8"
+            },
+            {
+              "anchor": "183-p9"
+            },
+            {
+              "anchor": "183-p10"
+            },
+            {
+              "anchor": "183-p11"
+            },
+            {
+              "anchor": "183-p12"
+            },
+            {
+              "anchor": "183-p13"
+            },
+            {
+              "anchor": "183-p14"
+            },
+            {
+              "anchor": "183-p15"
+            }
+          ]
+        },
+        {
+          "sequence": 50,
+          "printedPage": "184",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/050.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/050.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2164",
+          "passages": [
+            {
+              "anchor": "184-p1"
+            },
+            {
+              "anchor": "184-p2"
+            },
+            {
+              "anchor": "184-p3"
+            },
+            {
+              "anchor": "184-p4"
+            },
+            {
+              "anchor": "184-p5"
+            },
+            {
+              "anchor": "184-p6"
+            },
+            {
+              "anchor": "184-p7"
+            },
+            {
+              "anchor": "184-p8"
+            },
+            {
+              "anchor": "184-p9"
+            },
+            {
+              "anchor": "184-p10"
+            },
+            {
+              "anchor": "184-p11"
+            },
+            {
+              "anchor": "184-p12"
+            },
+            {
+              "anchor": "184-p13"
+            }
+          ]
+        },
+        {
+          "sequence": 51,
+          "printedPage": "185",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/051.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/051.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2165",
+          "passages": [
+            {
+              "anchor": "185-p1"
+            },
+            {
+              "anchor": "185-p2"
+            },
+            {
+              "anchor": "185-p3"
+            },
+            {
+              "anchor": "185-p4"
+            },
+            {
+              "anchor": "185-p5"
+            },
+            {
+              "anchor": "185-p6"
+            },
+            {
+              "anchor": "185-p7"
+            },
+            {
+              "anchor": "185-p8"
+            },
+            {
+              "anchor": "185-p9"
+            },
+            {
+              "anchor": "185-p10"
+            }
+          ]
+        },
+        {
+          "sequence": 52,
+          "printedPage": "186",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/052.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/052.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2166",
+          "passages": [
+            {
+              "anchor": "186-p1"
+            },
+            {
+              "anchor": "186-p2"
+            },
+            {
+              "anchor": "186-p3"
+            },
+            {
+              "anchor": "186-p4"
+            },
+            {
+              "anchor": "186-p5"
+            },
+            {
+              "anchor": "186-p6"
+            },
+            {
+              "anchor": "186-p7"
+            },
+            {
+              "anchor": "186-p8"
+            },
+            {
+              "anchor": "186-p9"
+            },
+            {
+              "anchor": "186-p10"
+            },
+            {
+              "anchor": "186-p11"
+            },
+            {
+              "anchor": "186-p12"
+            },
+            {
+              "anchor": "186-p13"
+            }
+          ]
+        },
+        {
+          "sequence": 53,
+          "printedPage": "187",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/053.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/053.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2167",
+          "passages": [
+            {
+              "anchor": "187-p1"
+            },
+            {
+              "anchor": "187-p2"
+            },
+            {
+              "anchor": "187-p3"
+            },
+            {
+              "anchor": "187-p4"
+            },
+            {
+              "anchor": "187-p5"
+            },
+            {
+              "anchor": "187-p6"
+            },
+            {
+              "anchor": "187-p7"
+            },
+            {
+              "anchor": "187-p8"
+            },
+            {
+              "anchor": "187-p9"
+            },
+            {
+              "anchor": "187-p10"
+            },
+            {
+              "anchor": "187-p11"
+            },
+            {
+              "anchor": "187-p12"
+            },
+            {
+              "anchor": "187-p13"
+            },
+            {
+              "anchor": "187-p14"
+            },
+            {
+              "anchor": "187-p15"
+            },
+            {
+              "anchor": "187-p16"
+            }
+          ]
+        },
+        {
+          "sequence": 54,
+          "printedPage": "188",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/054.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/054.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2168",
+          "passages": [
+            {
+              "anchor": "188-p1"
+            },
+            {
+              "anchor": "188-p2"
+            },
+            {
+              "anchor": "188-p3"
+            },
+            {
+              "anchor": "188-p4"
+            },
+            {
+              "anchor": "188-p5"
+            },
+            {
+              "anchor": "188-p6"
+            },
+            {
+              "anchor": "188-p7"
+            },
+            {
+              "anchor": "188-p8"
+            },
+            {
+              "anchor": "188-p9"
+            },
+            {
+              "anchor": "188-p10"
+            }
+          ]
+        },
+        {
+          "sequence": 55,
+          "printedPage": "189",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/055.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/055.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2169",
+          "passages": [
+            {
+              "anchor": "189-p1"
+            },
+            {
+              "anchor": "189-p2"
+            },
+            {
+              "anchor": "189-p3"
+            },
+            {
+              "anchor": "189-p4"
+            },
+            {
+              "anchor": "189-p5"
+            },
+            {
+              "anchor": "189-p6"
+            },
+            {
+              "anchor": "189-p7"
+            },
+            {
+              "anchor": "189-p8"
+            },
+            {
+              "anchor": "189-p9"
+            },
+            {
+              "anchor": "189-p10"
+            },
+            {
+              "anchor": "189-p11"
+            },
+            {
+              "anchor": "189-p12"
+            }
+          ]
+        },
+        {
+          "sequence": 56,
+          "printedPage": "190",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/056.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/056.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2170",
+          "passages": [
+            {
+              "anchor": "190-p1"
+            },
+            {
+              "anchor": "190-p2"
+            },
+            {
+              "anchor": "190-p3"
+            },
+            {
+              "anchor": "190-p4"
+            },
+            {
+              "anchor": "190-p5"
+            },
+            {
+              "anchor": "190-p6"
+            },
+            {
+              "anchor": "190-p7"
+            },
+            {
+              "anchor": "190-p8"
+            },
+            {
+              "anchor": "190-p9"
+            },
+            {
+              "anchor": "190-p10"
+            },
+            {
+              "anchor": "190-p11"
+            },
+            {
+              "anchor": "190-p12"
+            },
+            {
+              "anchor": "190-p13"
+            },
+            {
+              "anchor": "190-p14"
+            },
+            {
+              "anchor": "190-p15"
+            },
+            {
+              "anchor": "190-p16"
+            },
+            {
+              "anchor": "190-p17"
+            }
+          ]
+        },
+        {
+          "sequence": 57,
+          "printedPage": "191",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/057.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/057.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2171",
+          "passages": [
+            {
+              "anchor": "191-p1"
+            },
+            {
+              "anchor": "191-p2"
+            },
+            {
+              "anchor": "191-p3"
+            },
+            {
+              "anchor": "191-p4"
+            },
+            {
+              "anchor": "191-p5"
+            },
+            {
+              "anchor": "191-p6"
+            },
+            {
+              "anchor": "191-p7"
+            },
+            {
+              "anchor": "191-p8"
+            },
+            {
+              "anchor": "191-p9"
+            }
+          ]
+        },
+        {
+          "sequence": 58,
+          "printedPage": "192",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/058.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/058.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2172",
+          "passages": [
+            {
+              "anchor": "192-p1"
+            },
+            {
+              "anchor": "192-p2"
+            },
+            {
+              "anchor": "192-p3"
+            },
+            {
+              "anchor": "192-p4"
+            },
+            {
+              "anchor": "192-p5"
+            },
+            {
+              "anchor": "192-p6"
+            },
+            {
+              "anchor": "192-p7"
+            },
+            {
+              "anchor": "192-p8"
+            },
+            {
+              "anchor": "192-p9"
+            },
+            {
+              "anchor": "192-p10"
+            }
+          ]
+        },
+        {
+          "sequence": 59,
+          "printedPage": "193",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/059.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/059.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2173",
+          "passages": [
+            {
+              "anchor": "193-p1"
+            },
+            {
+              "anchor": "193-p2"
+            },
+            {
+              "anchor": "193-p3"
+            },
+            {
+              "anchor": "193-p4"
+            },
+            {
+              "anchor": "193-p5"
+            },
+            {
+              "anchor": "193-p6"
+            },
+            {
+              "anchor": "193-p7"
+            },
+            {
+              "anchor": "193-p8"
+            },
+            {
+              "anchor": "193-p9"
+            },
+            {
+              "anchor": "193-p10"
+            },
+            {
+              "anchor": "193-p11"
+            },
+            {
+              "anchor": "193-p12"
+            },
+            {
+              "anchor": "193-p13"
+            },
+            {
+              "anchor": "193-p14"
+            },
+            {
+              "anchor": "193-p15"
+            },
+            {
+              "anchor": "193-p16"
+            }
+          ]
+        },
+        {
+          "sequence": 60,
+          "printedPage": "194",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/060.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/060.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2174",
+          "passages": [
+            {
+              "anchor": "194-p1"
+            },
+            {
+              "anchor": "194-p2"
+            },
+            {
+              "anchor": "194-p3"
+            },
+            {
+              "anchor": "194-p4"
+            },
+            {
+              "anchor": "194-p5"
+            }
+          ]
+        },
+        {
+          "sequence": 61,
+          "printedPage": "195",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/061.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/061.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2175",
+          "passages": [
+            {
+              "anchor": "195-p1"
+            },
+            {
+              "anchor": "195-p2"
+            },
+            {
+              "anchor": "195-p3"
+            },
+            {
+              "anchor": "195-p4"
+            },
+            {
+              "anchor": "195-p5"
+            },
+            {
+              "anchor": "195-p6"
+            },
+            {
+              "anchor": "195-p7"
+            },
+            {
+              "anchor": "195-p8"
+            },
+            {
+              "anchor": "195-p9"
+            }
+          ]
+        },
+        {
+          "sequence": 62,
+          "printedPage": "196",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/062.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/062.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2176",
+          "passages": [
+            {
+              "anchor": "196-p1"
+            },
+            {
+              "anchor": "196-p2"
+            },
+            {
+              "anchor": "196-p3"
+            },
+            {
+              "anchor": "196-p4"
+            },
+            {
+              "anchor": "196-p5"
+            },
+            {
+              "anchor": "196-p6"
+            },
+            {
+              "anchor": "196-p7"
+            },
+            {
+              "anchor": "196-p8"
+            },
+            {
+              "anchor": "196-p9"
+            },
+            {
+              "anchor": "196-p10"
+            },
+            {
+              "anchor": "196-p11"
+            },
+            {
+              "anchor": "196-p12"
+            }
+          ]
+        },
+        {
+          "sequence": 63,
+          "printedPage": "197",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/063.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/063.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2177",
+          "passages": [
+            {
+              "anchor": "197-p1"
+            },
+            {
+              "anchor": "197-p2"
+            },
+            {
+              "anchor": "197-p3"
+            },
+            {
+              "anchor": "197-p4"
+            },
+            {
+              "anchor": "197-p5"
+            },
+            {
+              "anchor": "197-p6"
+            },
+            {
+              "anchor": "197-p7"
+            },
+            {
+              "anchor": "197-p8"
+            },
+            {
+              "anchor": "197-p9"
+            },
+            {
+              "anchor": "197-p10"
+            },
+            {
+              "anchor": "197-p11"
+            },
+            {
+              "anchor": "197-p12"
+            }
+          ]
+        },
+        {
+          "sequence": 64,
+          "printedPage": "198",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/064.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/064.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2178",
+          "passages": [
+            {
+              "anchor": "198-p1"
+            },
+            {
+              "anchor": "198-p2"
+            },
+            {
+              "anchor": "198-p3"
+            },
+            {
+              "anchor": "198-p4"
+            },
+            {
+              "anchor": "198-p5"
+            },
+            {
+              "anchor": "198-p6"
+            },
+            {
+              "anchor": "198-p7"
+            },
+            {
+              "anchor": "198-p8"
+            },
+            {
+              "anchor": "198-p9"
+            },
+            {
+              "anchor": "198-p10"
+            },
+            {
+              "anchor": "198-p11"
+            },
+            {
+              "anchor": "198-p12"
+            },
+            {
+              "anchor": "198-p13"
+            },
+            {
+              "anchor": "198-p14"
+            },
+            {
+              "anchor": "198-p15"
+            }
+          ]
+        },
+        {
+          "sequence": 65,
+          "printedPage": "199",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/065.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/065.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2179",
+          "passages": [
+            {
+              "anchor": "199-p1"
+            },
+            {
+              "anchor": "199-p2"
+            },
+            {
+              "anchor": "199-p3"
+            },
+            {
+              "anchor": "199-p4"
+            },
+            {
+              "anchor": "199-p5"
+            },
+            {
+              "anchor": "199-p6"
+            },
+            {
+              "anchor": "199-p7"
+            },
+            {
+              "anchor": "199-p8"
+            },
+            {
+              "anchor": "199-p9"
+            },
+            {
+              "anchor": "199-p10"
+            },
+            {
+              "anchor": "199-p11"
+            },
+            {
+              "anchor": "199-p12"
+            },
+            {
+              "anchor": "199-p13"
+            },
+            {
+              "anchor": "199-p14"
+            },
+            {
+              "anchor": "199-p15"
+            }
+          ]
+        },
+        {
+          "sequence": 66,
+          "printedPage": "200",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/066.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/066.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2180",
+          "passages": [
+            {
+              "anchor": "200-p1"
+            },
+            {
+              "anchor": "200-p2"
+            },
+            {
+              "anchor": "200-p3"
+            },
+            {
+              "anchor": "200-p4"
+            },
+            {
+              "anchor": "200-p5"
+            },
+            {
+              "anchor": "200-p6"
+            },
+            {
+              "anchor": "200-p7"
+            },
+            {
+              "anchor": "200-p8"
+            },
+            {
+              "anchor": "200-p9"
+            },
+            {
+              "anchor": "200-p10"
+            },
+            {
+              "anchor": "200-p11"
+            },
+            {
+              "anchor": "200-p12"
+            },
+            {
+              "anchor": "200-p13"
+            },
+            {
+              "anchor": "200-p14"
+            },
+            {
+              "anchor": "200-p15"
+            },
+            {
+              "anchor": "200-p16"
+            },
+            {
+              "anchor": "200-p17"
+            },
+            {
+              "anchor": "200-p18"
+            }
+          ]
+        },
+        {
+          "sequence": 67,
+          "printedPage": "201",
+          "bodyFile": "accounts/aisha-bint-abi-bakr/067.md",
+          "notesFile": "accounts/aisha-bint-abi-bakr/067.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2181",
+          "passages": [
+            {
+              "anchor": "201-p1"
+            },
+            {
+              "anchor": "201-p2"
+            },
+            {
+              "anchor": "201-p3"
+            },
+            {
+              "anchor": "201-p4"
+            },
+            {
+              "anchor": "201-p5"
+            },
+            {
+              "anchor": "201-p6"
+            },
+            {
+              "anchor": "201-p7"
+            },
+            {
+              "anchor": "201-p8"
+            },
+            {
+              "anchor": "201-p9"
+            },
+            {
+              "anchor": "201-p10"
+            },
+            {
+              "anchor": "201-p11"
+            },
+            {
+              "anchor": "201-p12"
+            },
+            {
+              "anchor": "201-p13"
+            },
+            {
+              "anchor": "201-p14"
+            },
+            {
+              "anchor": "201-p15"
+            },
+            {
+              "anchor": "201-p16"
+            },
+            {
+              "anchor": "201-p17"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "aisha-siyar/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aisha-bint-abi-bakr",
+      "assertion": "عائشة بنت أبي بكر عبد الله بن أبي قحافة عثمان بن عامر بن عمرو بن كعب بن سعد بن تيم بن مرة بن كعب بن لؤي القرشية التيمية.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "fullName",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "135-p2",
+          "volume": "5",
+          "pageReference": "135",
+          "extractionUrl": "https://shamela.ws/book/10906/2115",
+          "excerptArabic": "بِنْتُ الإِمَامِ الصِّدِّيْقِ الأَكْبَرِ، خَلِيْفَةِ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَبِي بَكْرٍ عَبْدِ اللهِ بنِ أَبِي قُحَافَةَ عُثْمَانَ بنِ عَامِرِ بنِ عَمْرِو بنِ كَعْبِ بنِ سَعْدِ بنِ تَيْمِ بنِ مُرَّةَ بنِ كَعْبِ بنِ لُؤَيٍّ القُرَشِيَّةُ، التَّيْمِيَّةُ.",
+          "accessedAt": "2026-09-30"
+        }
+      ]
+    },
+    {
+      "key": "aisha-siyar/appearance",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aisha-bint-abi-bakr",
+      "assertion": "كانت امرأة بيضاء جميلة، ولذلك كانت تسمى الحميراء.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "appearance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "140-p1",
+          "volume": "5",
+          "pageReference": "140",
+          "extractionUrl": "https://shamela.ws/book/10906/2120",
+          "excerptArabic": "وَكَانَتِ امْرَأَةً بَيْضَاءَ جَمِيْلَةً، وَمِنْ ثَمَّ يُقَالُ لَهَا: الحُمَيْرَاءُ.",
+          "accessedAt": "2026-09-30"
+        }
+      ]
+    },
+    {
+      "key": "aisha-siyar/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aisha-bint-abi-bakr",
+      "assertion": "كانت أفقه نساء الأمة، ولم يعلم الذهبي في النساء امرأة أعلم منها.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "135-p2",
+          "volume": "5",
+          "pageReference": "135",
+          "extractionUrl": "https://shamela.ws/book/10906/2115",
+          "excerptArabic": "أُمُّ المُؤْمِنِيْنَ، زَوجَةُ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَفْقَهُ نِسَاءِ الأُمَّةِ عَلَى الإِطْلاَقِ.",
+          "accessedAt": "2026-09-30"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "140-p1",
+          "volume": "5",
+          "pageReference": "140",
+          "extractionUrl": "https://shamela.ws/book/10906/2120",
+          "excerptArabic": "وَلاَ أَعْلَمُ فِي أُمَّةِ مُحَمَّدٍ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بَلْ وَلاَ فِي النِّسَاءِ مُطْلَقاً امْرَأَةً أَعْلَمَ مِنْهَا.",
+          "accessedAt": "2026-09-30"
+        }
+      ]
+    },
+    {
+      "key": "aisha-siyar/title-mother-of-believers",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aisha-bint-abi-bakr",
+      "assertion": "عائشة أم المؤمنين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "titles",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "135-p1",
+          "volume": "5",
+          "pageReference": "135",
+          "extractionUrl": "https://shamela.ws/book/10906/2115",
+          "excerptArabic": "١٩ - عَائِشَةُ بِنْتُ الصِّدِّيْقِ أَبِي بَكْرٍ التَّيْمِيَّةُ أُمُّ المُؤْمِنِيْنَ.",
+          "accessedAt": "2026-09-30"
+        }
+      ]
+    },
+    {
+      "key": "aisha-siyar/title-siddiqa",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aisha-bint-abi-bakr",
+      "assertion": "وصف مسروق عائشة بالصديقة بنت الصديق.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "titles",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "181-p8",
+          "volume": "5",
+          "pageReference": "181",
+          "extractionUrl": "https://shamela.ws/book/10906/2161",
+          "excerptArabic": "حَدَّثَتْنِي الصِّدِّيْقَةُ بِنْتُ الصِّدِّيْقِ، حَبِيْبَةُ حَبِيْبِ اللهِ، المُبَرَّأَةُ مِنْ فَوْقِ سَبْعِ سَمَاوَاتٍ.",
+          "accessedAt": "2026-09-30"
+        }
+      ]
+    },
+    {
+      "key": "aisha-siyar/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aisha-bint-abi-bakr",
+      "assertion": "عائشة ابنة أبي بكر عبد الله بن أبي قحافة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "DAUGHTER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "abu-bakr-as-siddiq",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "135-p2",
+          "volume": "5",
+          "pageReference": "135",
+          "extractionUrl": "https://shamela.ws/book/10906/2115",
+          "excerptArabic": "بِنْتُ الإِمَامِ الصِّدِّيْقِ الأَكْبَرِ، خَلِيْفَةِ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَبِي بَكْرٍ عَبْدِ اللهِ بنِ أَبِي قُحَافَةَ.",
+          "accessedAt": "2026-09-30"
+        }
+      ]
+    },
+    {
+      "key": "aisha-siyar/wife-prophet",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aisha-bint-abi-bakr",
+      "assertion": "عائشة زوجة النبي صلى الله عليه وسلم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "WIFE",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "prophet-muhammad",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "135-p2",
+          "volume": "5",
+          "pageReference": "135",
+          "extractionUrl": "https://shamela.ws/book/10906/2115",
+          "excerptArabic": "أُمُّ المُؤْمِنِيْنَ، زَوجَةُ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-.",
+          "accessedAt": "2026-09-30"
+        }
+      ]
+    },
+    {
+      "key": "aisha-siyar/brother-abd-al-rahman",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aisha-bint-abi-bakr",
+      "assertion": "عبد الرحمن بن أبي بكر أخو عائشة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SISTER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "abd-al-rahman-ibn-abi-bakr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "179-p13",
+          "endPassageAnchor": "180-p1",
+          "volume": "5",
+          "pageReference": "179-180",
+          "extractionUrl": "https://shamela.ws/book/10906/2159",
+          "excerptArabic": "وَعِنْدَ رَأْسِهَا عَبْدُ اللهِ ابْنُ أَخِيْهَا عَبْدِ الرَّحْمَنِ.",
+          "accessedAt": "2026-09-30"
+        }
+      ]
+    },
+    {
+      "key": "aisha-siyar/ayah-an-nur-eleven",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aisha-bint-abi-bakr",
+      "assertion": "نزلت آيات الإفك من سورة النور ابتداء من الآية الحادية عشرة في براءة عائشة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "ayat",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "159-p3",
+          "endPassageAnchor": "159-p6",
+          "volume": "5",
+          "pageReference": "159",
+          "extractionUrl": "https://shamela.ws/book/10906/2139",
+          "excerptArabic": "كَانَ أَوَّلَ كَلِمَةٍ تَكَلَّمَ بِهَا: (يَا عَائِشَةُ، أَمَا -وَاللهِ- لَقَدْ بَرَّأَكِ اللهُ) ... وَأَنْزَلَ اللهُ -تَعَالَى-: {إِنَّ الَّذِيْنَ جَاؤُوا بِالإِفْكِ عُصْبَةٌ مِنْكُم} [النُّوْرُ: ١١] العَشْرُ الآيَاتُ كُلُّهَا.",
+          "accessedAt": "2026-09-30"
+        }
+      ]
+    },
+    {
+      "key": "aisha-siyar/ayah-al-ahzab-thirty-three",
+      "subjectKind": "PERSON",
+      "subjectSlug": "aisha-bint-abi-bakr",
+      "assertion": "كانت عائشة تقرأ الآية الثالثة والثلاثين من سورة الأحزاب وتبكي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "ayat",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "177-p6",
+          "volume": "5",
+          "pageReference": "177",
+          "extractionUrl": "https://shamela.ws/book/10906/2157",
+          "excerptArabic": "فَعَنْ عُمَارَةَ بنِ عُمَيْرٍ، عَمَّنْ سَمِعَ عَائِشَةَ إِذَا قَرَأَتْ: {وَقَرْنَ فِي بُيُوْتِكُنَّ} [الأَحْزَابُ: ٣٣] بَكَتْ حَتَّى تَبُلَّ خِمَارَهَا.",
+          "accessedAt": "2026-09-30"
+        }
+      ]
+    }
+  ]
+}
