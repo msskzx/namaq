@@ -1,0 +1,406 @@
+{
+  "slug": "maan-ibn-adi",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "maan-ibn-adi",
+      "extractionUrl": "https://shamela.ws/book/10906/1746",
+      "accessedAt": "2026-09-29",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "320",
+          "bodyFile": "accounts/maan-ibn-adi/001.md",
+          "notesFile": "accounts/maan-ibn-adi/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1746",
+          "passages": [
+            {
+              "anchor": "320-p9"
+            },
+            {
+              "anchor": "320-p10"
+            },
+            {
+              "anchor": "320-p11"
+            },
+            {
+              "anchor": "320-p12"
+            },
+            {
+              "anchor": "320-p13"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "321",
+          "bodyFile": "accounts/maan-ibn-adi/002.md",
+          "notesFile": "accounts/maan-ibn-adi/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1747",
+          "passages": [
+            {
+              "anchor": "321-p1"
+            },
+            {
+              "anchor": "321-p2"
+            },
+            {
+              "anchor": "321-p3"
+            },
+            {
+              "anchor": "321-p4"
+            },
+            {
+              "anchor": "321-p5"
+            },
+            {
+              "anchor": "321-p6"
+            },
+            {
+              "anchor": "321-p7"
+            },
+            {
+              "anchor": "321-p8"
+            },
+            {
+              "anchor": "321-p9"
+            }
+          ]
+        }
+      ],
+      "volumeNumber": 4,
+      "notInSource": [
+        "kunya",
+        "appearance",
+        "wives"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "maan-ibn-adi-siyar64/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "maan-ibn-adi",
+      "field": "fullName",
+      "assertion": "معن بن عدي بن الجد بن العجلان الأنصاري حليف بني مالك بن عوف",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "320-p9",
+          "volume": "4",
+          "pageReference": "320",
+          "extractionUrl": "https://shamela.ws/book/10906/1746",
+          "excerptArabic": "٦٤ - مَعْنُ بنُ عَدِيِّ بنِ الجدِّ بنِ العَجْلاَنِ الأَنْصَارِيُّ *",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "320-p10",
+          "volume": "4",
+          "pageReference": "320",
+          "extractionUrl": "https://shamela.ws/book/10906/1746",
+          "excerptArabic": "العَجْلاَنِيُّ، العَقَبِيُّ، البَدْرِيُّ، مِنْ حُلَفَاءِ بَنِي مَالِكِ بنِ عَوْفٍ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "maan-ibn-adi-siyar64/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "maan-ibn-adi",
+      "assertion": "معن بن عدي: أبوه عدي بن الجد، وهو أخو عاصم بن عدي بن الجد بن العجلان.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "adi-ibn-al-jidd",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "320-p9",
+          "volume": "4",
+          "pageReference": "320",
+          "extractionUrl": "https://shamela.ws/book/10906/1746",
+          "excerptArabic": "٦٤ - مَعْنُ بنُ عَدِيِّ بنِ الجدِّ بنِ العَجْلاَنِ الأَنْصَارِيُّ *",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "321-p7",
+          "volume": "4",
+          "pageReference": "321",
+          "extractionUrl": "https://shamela.ws/book/10906/1747",
+          "excerptArabic": "قُلْتُ: هُوَ أَخُو عَاصِمِ بنِ عَدِيِّ بنِ الجدِّ بنِ العَجْلاَنِ البَلَوِيِّ، حَلِيْفِ بَنِي عَمْرِو بنِ عَوْفٍ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "maan-ibn-adi-siyar64/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "maan-ibn-adi",
+      "field": "titles",
+      "assertion": "العَقَبِيُّ، البَدْرِيُّ — صحابي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "320-p10",
+          "volume": "4",
+          "pageReference": "320",
+          "extractionUrl": "https://shamela.ws/book/10906/1746",
+          "excerptArabic": "العَجْلاَنِيُّ، العَقَبِيُّ، البَدْرِيُّ، مِنْ حُلَفَاءِ بَنِي مَالِكِ بنِ عَوْفٍ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "321-p6",
+          "volume": "4",
+          "pageReference": "321",
+          "extractionUrl": "https://shamela.ws/book/10906/1747",
+          "excerptArabic": "قَالَ ابْنُ الأَثِيْرِ: مَعْنُ بنُ عَدِيِّ بنِ العَجْلاَنِ البَلَوِيُّ، حَلِيْفُ بَنِي عَمْرِو بنِ عَوْفٍ، عَقَبِيٌّ، بَدْرِيٌّ، مَشْهُوْرٌ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "maan-ibn-adi-siyar64/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "maan-ibn-adi",
+      "field": "virtues",
+      "assertion": "مِنْ سَادَةِ الأَنْصَارِ، كَانَ يَكْتُبُ العَرَبِيَّةَ قَبْلَ الإِسْلاَمِ. أَنَّ مَعْنَ بنَ عَدِيٍّ أَحَدُ الرَّجُلَيْنِ اللَّذَيْنِ لَقِيَا أَبَا بَكْرٍ وَعُمَرَ وَهُمَا يُرِيْدَانِ سَقِيْفَةَ بَنِي سَاعِدَةَ، فَقَالاَ لأَبِي بَكْرٍ وَعُمَرَ: لاَ عَلَيْكُم أَنْ لاَ تَقْرَبُوْهُم، وَاقْضُوا أَمْرَكُم. فَقَالَ مَعْنٌ: لَكِنِّي -وَاللهِ- مَا أُحِبُّ أَنِّي مُتُّ قَبْلَهُ حَتَّى أُصَدِّقَهُ مَيْتاً، كَمَا صَدَّقْتُهُ حَيّاً.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "320-p10",
+          "volume": "4",
+          "pageReference": "320",
+          "extractionUrl": "https://shamela.ws/book/10906/1746",
+          "excerptArabic": "مِنْ سَادَةِ الأَنْصَارِ، كَانَ يَكْتُبُ العَرَبِيَّةَ قَبْلَ الإِسْلاَمِ.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "320-p13",
+          "volume": "4",
+          "pageReference": "320-321",
+          "extractionUrl": "https://shamela.ws/book/10906/1746",
+          "excerptArabic": "أَنَّ مَعْنَ بنَ عَدِيٍّ أَحَدُ الرَّجُلَيْنِ اللَّذَيْنِ لَقِيَا أَبَا بَكْرٍ وَعُمَرَ وَهُمَا يُرِيْدَانِ سَقِيْفَةَ بَنِي سَاعِدَةَ، فَقَالاَ لأَبِي بَكْرٍ وَعُمَرَ: لاَ عَلَيْكُم أَنْ لاَ تَقْرَبُوْهُم، وَاقْضُوا أَمْرَكُم.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "321-p5",
+          "volume": "4",
+          "pageReference": "321",
+          "extractionUrl": "https://shamela.ws/book/10906/1747",
+          "excerptArabic": "فَقَالَ مَعْنٌ: لَكِنِّي -وَاللهِ- مَا أُحِبُّ أَنِّي مُتُّ قَبْلَهُ حَتَّى أُصَدِّقَهُ مَيْتاً، كَمَا صَدَّقْتُهُ حَيّاً (١) .",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "maan-ibn-adi-siyar64/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "maan-ibn-adi",
+      "assertion": "بدري: شهد بدراً.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "320-p10",
+          "volume": "4",
+          "pageReference": "320",
+          "extractionUrl": "https://shamela.ws/book/10906/1746",
+          "excerptArabic": "العَجْلاَنِيُّ، العَقَبِيُّ، البَدْرِيُّ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "maan-ibn-adi-siyar64/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "maan-ibn-adi",
+      "field": "deathYearHijri",
+      "assertion": "استشهد يوم اليمامة سنة اثنتي عشرة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "321-p9",
+          "volume": "4",
+          "pageReference": "321",
+          "extractionUrl": "https://shamela.ws/book/10906/1747",
+          "excerptArabic": "وَكَانَ مَعْنٌ مِمَّنِ اسْتُشْهِدَ يَوْمَ اليَمَامَةِ، سَنَةَ اثْنَتَيْ عَشْرَةَ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "maan-ibn-adi-siyar64/death-place",
+      "subjectKind": "PERSON",
+      "subjectSlug": "maan-ibn-adi",
+      "field": "placeOfDeathArabic",
+      "assertion": "اليمامة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "321-p9",
+          "volume": "4",
+          "pageReference": "321",
+          "extractionUrl": "https://shamela.ws/book/10906/1747",
+          "excerptArabic": "وَكَانَ مَعْنٌ مِمَّنِ اسْتُشْهِدَ يَوْمَ اليَمَامَةِ، سَنَةَ اثْنَتَيْ عَشْرَةَ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    }
+  ],
+  "approval": {
+    "revision": "86831f8d3d9ebd5c",
+    "approvedAt": "2026-09-29",
+    "approvedBy": "msskzx",
+    "note": "Re-recorded for publication after the virtues claim's page-crossing citation was rejoined without the ellipsis (nothing was omitted across the turn) and the summary's ledger section was completed."
+  }
+}

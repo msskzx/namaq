@@ -1,0 +1,179 @@
+{
+  "slug": "sanaa-bint-asma-al-sulami",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        { "number": 1, "name": "السيرة النبوية ج١" },
+        { "number": 2, "name": "السيرة النبوية ج٢" },
+        { "number": 3, "name": "سيرة الخلفاء الراشدين" },
+        { "number": 4, "name": "سير أعلام النبلاء ج١" },
+        { "number": 5, "name": "سير أعلام النبلاء ج٢" },
+        { "number": 6, "name": "سير أعلام النبلاء ج٣" },
+        { "number": 7, "name": "سير أعلام النبلاء ج٤" },
+        { "number": 8, "name": "سير أعلام النبلاء ج٥" },
+        { "number": 9, "name": "سير أعلام النبلاء ج٦" },
+        { "number": 10, "name": "سير أعلام النبلاء ج٧" },
+        { "number": 11, "name": "سير أعلام النبلاء ج٨" },
+        { "number": 12, "name": "سير أعلام النبلاء ج٩" },
+        { "number": 13, "name": "سير أعلام النبلاء ج١٠" },
+        { "number": 14, "name": "سير أعلام النبلاء ج١١" },
+        { "number": 15, "name": "سير أعلام النبلاء ج١٢" },
+        { "number": 16, "name": "سير أعلام النبلاء ج١٣" },
+        { "number": 17, "name": "سير أعلام النبلاء ج١٤" },
+        { "number": 18, "name": "سير أعلام النبلاء ج١٥" },
+        { "number": 19, "name": "سير أعلام النبلاء ج١٦" },
+        { "number": 20, "name": "سير أعلام النبلاء ج١٧" },
+        { "number": 21, "name": "سير أعلام النبلاء ج١٨" },
+        { "number": 22, "name": "سير أعلام النبلاء ج١٩" },
+        { "number": 23, "name": "سير أعلام النبلاء ج٢٠" },
+        { "number": 24, "name": "سير أعلام النبلاء ج٢١" },
+        { "number": 25, "name": "سير أعلام النبلاء ج٢٢" },
+        { "number": 26, "name": "سير أعلام النبلاء ج٢٣" },
+        { "number": 27, "name": "الفهارس ج١" },
+        { "number": 28, "name": "الفهارس ج٢" }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "sanaa-bint-asma-al-sulami",
+      "extractionUrl": "https://shamela.ws/book/10906/2236",
+      "accessedAt": "2026-09-29",
+      "volumeNumber": 5,
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "256",
+          "bodyFile": "accounts/sanaa-bint-asma-al-sulami/001.md",
+          "notesFile": "accounts/sanaa-bint-asma-al-sulami/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2236",
+          "passages": [
+            { "anchor": "5/256-p1" },
+            { "anchor": "5/256-p2" },
+            { "anchor": "5/256-p3" }
+          ]
+        }
+      ],
+      "notInSource": ["kunya", "appearance", "manaqeb", "siblings"]
+    }
+  ],
+  "claims": [
+    {
+      "key": "sanaa-bint-asma-al-sulami-siyar/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "sanaa-bint-asma-al-sulami",
+      "field": "fullName",
+      "assertion": "سناء بنت أسماء بن الصلت السلمية.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/256-p2",
+          "volume": "5",
+          "pageReference": "256",
+          "extractionUrl": "https://shamela.ws/book/10906/2236",
+          "excerptArabic": "تَزَوَّجَ سَنَاءَ بِنْتَ أَسْمَاءَ بنِ الصَّلْتِ السُّلَمِيَّةَ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "sanaa-bint-asma-al-sulami-siyar/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "sanaa-bint-asma-al-sulami",
+      "field": "sex",
+      "assertion": "سناء بنت أسماء بن الصلت، امرأة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/256-p2",
+          "volume": "5",
+          "pageReference": "256",
+          "extractionUrl": "https://shamela.ws/book/10906/2236",
+          "excerptArabic": "تَزَوَّجَ سَنَاءَ بِنْتَ أَسْمَاءَ بنِ الصَّلْتِ السُّلَمِيَّةَ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "sanaa-bint-asma-al-sulami-siyar/companion",
+      "subjectKind": "PERSON",
+      "subjectSlug": "sanaa-bint-asma-al-sulami",
+      "field": "titles",
+      "assertion": "أفردها الذهبي بترجمة ضمن من تزوجهن النبي صلى الله عليه وسلم أو خطبهن.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/256-p1",
+          "volume": "5",
+          "pageReference": "256",
+          "extractionUrl": "https://shamela.ws/book/10906/2236",
+          "excerptArabic": "سَنَاءُ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "sanaa-bint-asma-al-sulami-siyar/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "sanaa-bint-asma-al-sulami",
+      "assertion": "سناء بنت أسماء بن الصلت السلمية.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "DAUGHTER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "asma-ibn-al-salt-al-sulami",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/256-p2",
+          "volume": "5",
+          "pageReference": "256",
+          "extractionUrl": "https://shamela.ws/book/10906/2236",
+          "excerptArabic": "تَزَوَّجَ سَنَاءَ بِنْتَ أَسْمَاءَ بنِ الصَّلْتِ السُّلَمِيَّةَ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "sanaa-bint-asma-al-sulami-siyar/wife-of-prophet",
+      "subjectKind": "PERSON",
+      "subjectSlug": "sanaa-bint-asma-al-sulami",
+      "assertion": "زعم حفص بن النضر السلمي وعبد القاهر بن السري أن النبي صلى الله عليه وسلم تزوج سناء بنت أسماء بن الصلت السلمية، فماتت قبل أن يدخل بها.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "WIFE",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "prophet-muhammad",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/256-p2",
+          "volume": "5",
+          "pageReference": "256",
+          "extractionUrl": "https://shamela.ws/book/10906/2236",
+          "excerptArabic": "قَالَ أَبُو عُبَيْدٍ القَاسِمُ بنُ سَلاَّمٍ: وَزَعَمَ حَفْصُ بنُ النَّضْرِ السُّلَمِيُّ، وَعَبْدُ القَاهِرِ بنِ السَّرِيِّ: أَنَّ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- تَزَوَّجَ سَنَاءَ بِنْتَ أَسْمَاءَ بنِ الصَّلْتِ السُّلَمِيَّةَ؛ فَمَاتَتْ قَبْلَ أَنْ يَدْخُلَ بِهَا.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    }
+  ]
+}

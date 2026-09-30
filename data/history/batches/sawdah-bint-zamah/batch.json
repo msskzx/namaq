@@ -1,0 +1,322 @@
+{
+  "slug": "sawdah-bint-zamah",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        { "number": 1, "name": "السيرة النبوية ج١" },
+        { "number": 2, "name": "السيرة النبوية ج٢" },
+        { "number": 3, "name": "سيرة الخلفاء الراشدين" },
+        { "number": 4, "name": "سير أعلام النبلاء ج١" },
+        { "number": 5, "name": "سير أعلام النبلاء ج٢" },
+        { "number": 6, "name": "سير أعلام النبلاء ج٣" },
+        { "number": 7, "name": "سير أعلام النبلاء ج٤" },
+        { "number": 8, "name": "سير أعلام النبلاء ج٥" },
+        { "number": 9, "name": "سير أعلام النبلاء ج٦" },
+        { "number": 10, "name": "سير أعلام النبلاء ج٧" },
+        { "number": 11, "name": "سير أعلام النبلاء ج٨" },
+        { "number": 12, "name": "سير أعلام النبلاء ج٩" },
+        { "number": 13, "name": "سير أعلام النبلاء ج١٠" },
+        { "number": 14, "name": "سير أعلام النبلاء ج١١" },
+        { "number": 15, "name": "سير أعلام النبلاء ج١٢" },
+        { "number": 16, "name": "سير أعلام النبلاء ج١٣" },
+        { "number": 17, "name": "سير أعلام النبلاء ج١٤" },
+        { "number": 18, "name": "سير أعلام النبلاء ج١٥" },
+        { "number": 19, "name": "سير أعلام النبلاء ج١٦" },
+        { "number": 20, "name": "سير أعلام النبلاء ج١٧" },
+        { "number": 21, "name": "سير أعلام النبلاء ج١٨" },
+        { "number": 22, "name": "سير أعلام النبلاء ج١٩" },
+        { "number": 23, "name": "سير أعلام النبلاء ج٢٠" },
+        { "number": 24, "name": "سير أعلام النبلاء ج٢١" },
+        { "number": 25, "name": "سير أعلام النبلاء ج٢٢" },
+        { "number": 26, "name": "سير أعلام النبلاء ج٢٣" },
+        { "number": 27, "name": "الفهارس ج١" },
+        { "number": 28, "name": "الفهارس ج٢" }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "sawdah-bint-zamah",
+      "extractionUrl": "https://shamela.ws/book/10906/2245",
+      "accessedAt": "2026-09-29",
+      "volumeNumber": 2,
+      "notInSource": ["kunya", "siblings"],
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "265",
+          "bodyFile": "accounts/sawdah-bint-zamah/001.md",
+          "notesFile": "accounts/sawdah-bint-zamah/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2245",
+          "passages": [
+            { "anchor": "265-p9" },
+            { "anchor": "265-p10" },
+            { "anchor": "265-p11" },
+            { "anchor": "265-p12" },
+            { "anchor": "265-p13" }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "266",
+          "bodyFile": "accounts/sawdah-bint-zamah/002.md",
+          "notesFile": "accounts/sawdah-bint-zamah/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2246",
+          "passages": [
+            { "anchor": "266-p1" },
+            { "anchor": "266-p2" },
+            { "anchor": "266-p3" },
+            { "anchor": "266-p4" },
+            { "anchor": "266-p5" },
+            { "anchor": "266-p6" }
+          ]
+        },
+        {
+          "sequence": 3,
+          "printedPage": "267",
+          "bodyFile": "accounts/sawdah-bint-zamah/003.md",
+          "notesFile": "accounts/sawdah-bint-zamah/003.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2247",
+          "passages": [
+            { "anchor": "267-p1" },
+            { "anchor": "267-p2" },
+            { "anchor": "267-p3" },
+            { "anchor": "267-p4" },
+            { "anchor": "267-p5" },
+            { "anchor": "267-p6" },
+            { "anchor": "267-p7" },
+            { "anchor": "267-p8" },
+            { "anchor": "267-p9" },
+            { "anchor": "267-p10" },
+            { "anchor": "267-p11" },
+            { "anchor": "267-p12" }
+          ]
+        },
+        {
+          "sequence": 4,
+          "printedPage": "268",
+          "bodyFile": "accounts/sawdah-bint-zamah/004.md",
+          "notesFile": "accounts/sawdah-bint-zamah/004.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2248",
+          "passages": [
+            { "anchor": "268-p1" },
+            { "anchor": "268-p2" },
+            { "anchor": "268-p3" },
+            { "anchor": "268-p4" },
+            { "anchor": "268-p5" },
+            { "anchor": "268-p6" },
+            { "anchor": "268-p7" },
+            { "anchor": "268-p8" },
+            { "anchor": "268-p9" },
+            { "anchor": "268-p10" },
+            { "anchor": "268-p11" }
+          ]
+        },
+        {
+          "sequence": 5,
+          "printedPage": "269",
+          "bodyFile": "accounts/sawdah-bint-zamah/005.md",
+          "notesFile": "accounts/sawdah-bint-zamah/005.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2249",
+          "passages": [
+            { "anchor": "269-p1" },
+            { "anchor": "269-p2" },
+            { "anchor": "269-p3" },
+            { "anchor": "269-p4" },
+            { "anchor": "269-p5" },
+            { "anchor": "269-p6" },
+            { "anchor": "269-p7" }
+          ]
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "sawdah-bint-zamah-siyar40/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "sawdah-bint-zamah",
+      "field": "fullName",
+      "assertion": "سودة أم المؤمنين بنت زمعة بن قيس، القرشية العامرية.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "265-p9",
+          "volume": "السيرة 2",
+          "pageReference": "265",
+          "extractionUrl": "https://shamela.ws/book/10906/2245",
+          "excerptArabic": "سَوْدَةُ أُمُّ المُؤْمِنِيْنَ بِنْتُ زَمْعَةَ بنِ قَيْسٍ العَامِرِيَّةُ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "265-p10",
+          "volume": "السيرة 2",
+          "pageReference": "265",
+          "extractionUrl": "https://shamela.ws/book/10906/2245",
+          "excerptArabic": "القُرَشِيَّةُ، العَامِرِيَّةُ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "sawdah-bint-zamah-siyar40/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "sawdah-bint-zamah",
+      "field": "titles",
+      "assertion": "لقبت بأم المؤمنين، وهي من أزواج النبي صلى الله عليه وسلم فتثبت لها صحبته.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "265-p9",
+          "volume": "السيرة 2",
+          "pageReference": "265",
+          "extractionUrl": "https://shamela.ws/book/10906/2245",
+          "excerptArabic": "سَوْدَةُ أُمُّ المُؤْمِنِيْنَ بِنْتُ زَمْعَةَ بنِ قَيْسٍ العَامِرِيَّةُ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "sawdah-bint-zamah-siyar40/appearance",
+      "subjectKind": "PERSON",
+      "subjectSlug": "sawdah-bint-zamah",
+      "field": "appearance",
+      "assertion": "كانت سيدة جليلة، نبيلة، ضخمة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "265-p12",
+          "volume": "السيرة 2",
+          "pageReference": "265",
+          "extractionUrl": "https://shamela.ws/book/10906/2245",
+          "excerptArabic": "وَكَانَتْ سَيِّدَةً جَلِيْلَةً، نَبِيْلَةً، ضَخْمَةً.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "sawdah-bint-zamah-siyar40/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "sawdah-bint-zamah",
+      "field": "virtues",
+      "assertion": "أول من تزوجها النبي صلى الله عليه وسلم بعد خديجة وانفردت به نحوا من ثلاث سنين، ثم وهبت يومها لعائشة رعاية لقلب رسول الله صلى الله عليه وسلم، وكانت معروفة بالزهد والصدقة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "265-p11",
+          "volume": "السيرة 2",
+          "pageReference": "265",
+          "extractionUrl": "https://shamela.ws/book/10906/2245",
+          "excerptArabic": "وَهِيَ أَوَّلُ مَنْ تَزَوَّجَ بِهَا النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بَعْدَ خَدِيْجَةَ، وَانْفَرَدَتْ بِهِ نَحْواً مِنْ ثَلاَثِ سِنِيْنَ أَوْ أَكْثَرَ، حَتَّى دَخَلَ بِعَائِشَةَ.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "266-p1",
+          "volume": "السيرة 2",
+          "pageReference": "266",
+          "extractionUrl": "https://shamela.ws/book/10906/2246",
+          "excerptArabic": "وَهِيَ الَّتِي وَهَبَتْ يَوْمَهَا لِعَائِشَةَ، رِعَايَةً لِقَلْبِ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "269-p4",
+          "volume": "السيرة 2",
+          "pageReference": "269",
+          "extractionUrl": "https://shamela.ws/book/10906/2249",
+          "excerptArabic": "قَالَتْ: فِي الغِرَارَةِ مِثْلَ التَّمْرِ، يَا جَارِيَةُ بَلِّغِيْنِي القُنْعَ، فَفَرَّقَتْهَا",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "sawdah-bint-zamah-siyar40/husband-prophet",
+      "subjectKind": "PERSON",
+      "subjectSlug": "sawdah-bint-zamah",
+      "assertion": "تزوجها النبي صلى الله عليه وسلم بعد وفاة خديجة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "WIFE",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "prophet-muhammad",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "265-p11",
+          "volume": "السيرة 2",
+          "pageReference": "265",
+          "extractionUrl": "https://shamela.ws/book/10906/2245",
+          "excerptArabic": "وَهِيَ أَوَّلُ مَنْ تَزَوَّجَ بِهَا النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بَعْدَ خَدِيْجَةَ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "sawdah-bint-zamah-siyar40/husband-sakran",
+      "subjectKind": "PERSON",
+      "subjectSlug": "sawdah-bint-zamah",
+      "assertion": "كانت أولا عند السكران بن عمرو، أخي سهيل بن عمرو العامري.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "WIFE",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "al-sakran-ibn-amr-al-amiri",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "265-p13",
+          "volume": "السيرة 2",
+          "pageReference": "265",
+          "extractionUrl": "https://shamela.ws/book/10906/2245",
+          "excerptArabic": "وَكَانَتْ أَوَّلاً عِنْدَ: السَّكْرَانِ بنِ عَمْرٍو، أَخِي سُهَيْلِ بنِ عَمْرٍو العَامِرِيِّ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "sawdah-bint-zamah-siyar40/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "sawdah-bint-zamah",
+      "assertion": "سودة بنت زمعة بن قيس.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "DAUGHTER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "zamah-ibn-qais-al-amiri",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "265-p9",
+          "volume": "السيرة 2",
+          "pageReference": "265",
+          "extractionUrl": "https://shamela.ws/book/10906/2245",
+          "excerptArabic": "سَوْدَةُ أُمُّ المُؤْمِنِيْنَ بِنْتُ زَمْعَةَ بنِ قَيْسٍ العَامِرِيَّةُ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    }
+  ]
+}
