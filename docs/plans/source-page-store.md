@@ -250,11 +250,10 @@ the work below.
   may not reconstruct if either omitted text at the seam. Assumption: the union
   in printed order is the page. Check each against its Shamela id while merging.
 - **Two batches still hold text read from a host other than Shamela**, which is
-  now the only host this project extracts from: `arwa-bint-abd-al-muttalib-siyar175`
-  and `asma-bint-al-numan-al-kindiyyah`. Both need re-extracting from the Risalah
-  edition, which replaces their text and citation excerpts and is extraction work
-  under [docs/extraction-checklist.md](../extraction-checklist.md). Until then the
-  second source stays in the manifest, and its pagination is not this edition's.
+  now the only host this project extracts from. Both entries are located and the
+  work is planned in [reextract-from-shamela.md](reextract-from-shamela.md).
+  Until it lands the second source stays in the manifest, and its pagination is
+  not this edition's.
 - **Contents ordering currently derives from the Shamela id** in the first
   page's `extractionUrl` (`src/lib/history/sourceAccounts.ts:121-138`), which
   makes the digital host structural, against the spirit of
