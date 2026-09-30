@@ -3,51 +3,27 @@
   "summaryFile": "summary.md",
   "sources": [
     {
-      "slug": "siyar-alam-al-nubala-risalah",
+      "slug": "siyar-alam-al-nubala-islamweb",
       "title": "سير أعلام النبلاء",
       "author": "شمس الدين الذهبي",
-      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
-      "publisher": "مؤسسة الرسالة",
-      "publicationYear": "1405/1985",
-      "edition": "الطبعة الثالثة",
-      "digitalHost": "المكتبة الشاملة",
-      "url": "https://shamela.ws/index.php/book/10906",
-      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "digitalHost": "islamweb",
+      "url": "https://www.islamweb.net/ar/library/content/60/1/سير-أعلام-النبلاء?idfrom=1&idto=6537",
+      "notes": "إسلام ويب يعرض هذا الجزء من كتاب النساء الصحابيات ضمن ترقيم مستقل عن طبعة الرسالة المستخدمة في دفعات أخرى (مثل hamzah-ibn-abd-al-muttalib-siyar15)، فلا تُدمج السجلات بينهما.",
       "volumes": [
-        { "number": 1, "name": "السيرة النبوية ج١" },
-        { "number": 2, "name": "السيرة النبوية ج٢" },
-        { "number": 3, "name": "سيرة الخلفاء الراشدين" },
-        { "number": 4, "name": "سير أعلام النبلاء ج١" },
-        { "number": 5, "name": "سير أعلام النبلاء ج٢" },
-        { "number": 6, "name": "سير أعلام النبلاء ج٣" },
-        { "number": 7, "name": "سير أعلام النبلاء ج٤" },
-        { "number": 8, "name": "سير أعلام النبلاء ج٥" },
-        { "number": 9, "name": "سير أعلام النبلاء ج٦" },
-        { "number": 10, "name": "سير أعلام النبلاء ج٧" },
-        { "number": 11, "name": "سير أعلام النبلاء ج٨" },
-        { "number": 12, "name": "سير أعلام النبلاء ج٩" },
-        { "number": 13, "name": "سير أعلام النبلاء ج١٠" },
-        { "number": 14, "name": "سير أعلام النبلاء ج١١" },
-        { "number": 15, "name": "سير أعلام النبلاء ج١٢" },
-        { "number": 16, "name": "سير أعلام النبلاء ج١٣" },
-        { "number": 17, "name": "سير أعلام النبلاء ج١٤" },
-        { "number": 18, "name": "سير أعلام النبلاء ج١٥" },
-        { "number": 19, "name": "سير أعلام النبلاء ج١٦" },
-        { "number": 20, "name": "سير أعلام النبلاء ج١٧" },
-        { "number": 21, "name": "سير أعلام النبلاء ج١٨" },
-        { "number": 22, "name": "سير أعلام النبلاء ج١٩" },
-        { "number": 23, "name": "سير أعلام النبلاء ج٢٠" },
-        { "number": 24, "name": "سير أعلام النبلاء ج٢١" },
-        { "number": 25, "name": "سير أعلام النبلاء ج٢٢" },
-        { "number": 26, "name": "سير أعلام النبلاء ج٢٣" },
-        { "number": 27, "name": "الفهارس ج١" },
-        { "number": 28, "name": "الفهارس ج٢" }
+        {
+          "number": 1,
+          "name": "الجزء الأول"
+        },
+        {
+          "number": 2,
+          "name": "الجزء الثاني"
+        }
       ]
     }
   ],
   "accounts": [
     {
-      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "sourceSlug": "siyar-alam-al-nubala-islamweb",
       "subjectKind": "PERSON",
       "subjectSlug": "asma-bint-al-numan-al-kindiyyah",
       "titleArabic": "الكندية",
@@ -62,12 +38,24 @@
           "notesFile": "accounts/asma-bint-al-numan-al-kindiyyah/001.notes.md",
           "extractionUrl": "https://www.islamweb.net/ar/library/content/60/169/الكندية",
           "passages": [
-            { "anchor": "258-p1" },
-            { "anchor": "258-p2" },
-            { "anchor": "258-p3" },
-            { "anchor": "258-p4" },
-            { "anchor": "258-p5" },
-            { "anchor": "258-p6" }
+            {
+              "anchor": "258-p1"
+            },
+            {
+              "anchor": "258-p2"
+            },
+            {
+              "anchor": "258-p3"
+            },
+            {
+              "anchor": "258-p4"
+            },
+            {
+              "anchor": "258-p5"
+            },
+            {
+              "anchor": "258-p6"
+            }
           ]
         },
         {
@@ -77,9 +65,15 @@
           "notesFile": "accounts/asma-bint-al-numan-al-kindiyyah/002.notes.md",
           "extractionUrl": "https://www.islamweb.net/ar/library/content/60/169/الكندية",
           "passages": [
-            { "anchor": "259-p1" },
-            { "anchor": "259-p2" },
-            { "anchor": "259-p3" }
+            {
+              "anchor": "259-p1"
+            },
+            {
+              "anchor": "259-p2"
+            },
+            {
+              "anchor": "259-p3"
+            }
           ]
         },
         {
@@ -89,13 +83,23 @@
           "notesFile": "accounts/asma-bint-al-numan-al-kindiyyah/003.notes.md",
           "extractionUrl": "https://www.islamweb.net/ar/library/content/60/169/الكندية",
           "passages": [
-            { "anchor": "260-p1" },
-            { "anchor": "260-p2" },
-            { "anchor": "260-p3" }
+            {
+              "anchor": "260-p1"
+            },
+            {
+              "anchor": "260-p2"
+            },
+            {
+              "anchor": "260-p3"
+            }
           ]
         }
       ],
-      "notInSource": ["kunya", "manaqeb", "siblings"]
+      "notInSource": [
+        "kunya",
+        "manaqeb",
+        "siblings"
+      ]
     }
   ],
   "claims": [
@@ -112,7 +116,7 @@
       "relatedSubjectSlug": "al-numan-ibn-abi-al-jawn-al-kindi",
       "citations": [
         {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "sourceSlug": "siyar-alam-al-nubala-islamweb",
           "passageAnchor": "258-p4",
           "volume": "2",
           "pageReference": "258",
@@ -121,7 +125,7 @@
           "accessedAt": "2026-09-29"
         },
         {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "sourceSlug": "siyar-alam-al-nubala-islamweb",
           "passageAnchor": "259-p2",
           "volume": "2",
           "pageReference": "259",
@@ -141,7 +145,7 @@
       "reviewStatus": "NOT_REVIEWED",
       "citations": [
         {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "sourceSlug": "siyar-alam-al-nubala-islamweb",
           "passageAnchor": "258-p4",
           "volume": "2",
           "pageReference": "258",
@@ -165,7 +169,7 @@
       "relatedSubjectSlug": "al-muhajir-ibn-abi-umayyah-al-makhzumi",
       "citations": [
         {
-          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "sourceSlug": "siyar-alam-al-nubala-islamweb",
           "passageAnchor": "260-p3",
           "volume": "2",
           "pageReference": "260",

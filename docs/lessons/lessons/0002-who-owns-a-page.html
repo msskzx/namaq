@@ -69,18 +69,19 @@ The entry boundary falls inside the page, so each batch kept its own half.</p>
 <pre>Zaid's copy,  tail:  … قَالَتْ: أَنَا لِزَيْدِ بنِ حَارِثَةَ. إِسْنَادُهُ حَسَنٌ.
 Rawahah's copy, head: ٣٧ - عَبْدُ اللهِ بنُ رَوَاحَةَ بنِ ثَعْلَبَةَ …</pre>
 
-<p>Thirty-eight pages are split this way, across 61 of the 88 batches. Which means a printed page's
+<p>Forty-one pages are split this way, across 67 of the 88 batches, and three more are held twice
+in full where the work places a short entry inside a longer one. Which means a printed page's
 text depended on who read it — the same mistake
 <a href="../../adr/0010-author-historical-data-under-data.md">ADR 0010</a> already rules out for
 values, arrived at from a different direction.</p>
 
 <aside class="not-prose my-8 rounded border border-stone-300 p-4 text-sm leading-relaxed text-stone-600 dark:border-stone-700 dark:text-stone-400">
 <strong class="text-stone-900 dark:text-stone-100">What the duplication hid.</strong> Because two accounts holding one printed page was
-normal, five accounts filed under the wrong volume looked normal too. One of them,
-<code class="font-mono">al-kilabiyyah</code>, carries extraction URLs pointing at unrelated pages —
-its stored text is about the Prophet's marriages, the linked pages are about the Khandaq.
-<code class="font-mono">verifyExcerpts</code> cannot catch it: it compares the excerpt against the
-stored body, and the body is right. Only the link is wrong.
+normal, four accounts filed against the wrong volume or the wrong edition looked normal too.
+Three of them had read the digital host's own volume label, which numbers the Siyar's parts
+without counting the sira and caliph volumes this edition binds before them — so Shamela's
+<span dir="rtl" lang="ar">الجزء ٢</span> is this edition's volume 5. Nothing compared a declared
+volume against its own pages' links.
 </aside>
 
 <h2>The decision</h2>

@@ -14,19 +14,21 @@ Until now a page belonged to the account that extracted it, which let one
 printed page hold two different texts. Printed page 230 of volume 4 exists twice
 at the same Shamela id, 413 characters under Zaid ibn Harithah and 402 under
 Abdullah ibn Rawahah, because the entry boundary falls inside the page and each
-batch kept its own half. Thirty-eight pages are split this way across 61 of the
-88 batches. The alternative — keeping the split, so a page record means "the
+batch kept its own half. Forty-one pages are split this way across 67 of the
+88 batches, and three more are held twice in full, where the work places a short
+entry inside a longer one. The alternative — keeping the split, so a page record means "the
 part of this page belonging to this entry" — was rejected because it makes a
 page's content depend on who read it, which is the mistake ADR 0010 already
 rules out for values, and because it permanently prevents reading the book
 continuously.
 
-The same ownership hid a class of error. Five accounts declared a volume their
-own pages contradict, and each collided with a page another account already
-held, without any check firing: a duplicate was normal, so a misfiling looked
-like one. `al-kilabiyyah` went further and carried extraction URLs pointing at
-unrelated pages, which `verifyExcerpts` cannot catch because it compares an
-excerpt against the stored body and the body was right.
+The same ownership hid a class of error. Three accounts declared a volume their
+own pages contradict, and a fourth recorded pages from a different edition
+against this one; each collided with a page another account already held,
+without any check firing, because a duplicate was normal and so a misfiling
+looked like one. The three came from reading the digital host's own volume
+label, which numbers the Siyar's parts without counting the sira and caliph
+volumes this edition binds before them.
 
 ## Consequences
 
