@@ -1,0 +1,547 @@
+{
+  "slug": "safiyyah-bint-huyayy",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "safiyyah-bint-huyayy",
+      "extractionUrl": "https://shamela.ws/book/10906/2211",
+      "accessedAt": "2026-09-29",
+      "volumeNumber": 5,
+      "notInSource": ["kunya", "siblings"],
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "231",
+          "bodyFile": "accounts/safiyyah-bint-huyayy/001.md",
+          "notesFile": "accounts/safiyyah-bint-huyayy/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2211",
+          "passages": [
+            {
+              "anchor": "231-p3"
+            },
+            {
+              "anchor": "231-p4"
+            },
+            {
+              "anchor": "231-p5"
+            },
+            {
+              "anchor": "231-p6"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "232",
+          "bodyFile": "accounts/safiyyah-bint-huyayy/002.md",
+          "notesFile": "accounts/safiyyah-bint-huyayy/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2212",
+          "passages": [
+            {
+              "anchor": "232-p1"
+            },
+            {
+              "anchor": "232-p2"
+            },
+            {
+              "anchor": "232-p3"
+            },
+            {
+              "anchor": "232-p4"
+            },
+            {
+              "anchor": "232-p5"
+            },
+            {
+              "anchor": "232-p6"
+            },
+            {
+              "anchor": "232-p7"
+            },
+            {
+              "anchor": "232-p8"
+            },
+            {
+              "anchor": "232-p9"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "printedPage": "233",
+          "bodyFile": "accounts/safiyyah-bint-huyayy/003.md",
+          "notesFile": "accounts/safiyyah-bint-huyayy/003.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2213",
+          "passages": [
+            {
+              "anchor": "233-p1"
+            },
+            {
+              "anchor": "233-p2"
+            },
+            {
+              "anchor": "233-p3"
+            },
+            {
+              "anchor": "233-p4"
+            },
+            {
+              "anchor": "233-p5"
+            },
+            {
+              "anchor": "233-p6"
+            },
+            {
+              "anchor": "233-p7"
+            },
+            {
+              "anchor": "233-p8"
+            },
+            {
+              "anchor": "233-p9"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "printedPage": "234",
+          "bodyFile": "accounts/safiyyah-bint-huyayy/004.md",
+          "notesFile": "accounts/safiyyah-bint-huyayy/004.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2214",
+          "passages": [
+            {
+              "anchor": "234-p1"
+            },
+            {
+              "anchor": "234-p2"
+            },
+            {
+              "anchor": "234-p3"
+            },
+            {
+              "anchor": "234-p4"
+            },
+            {
+              "anchor": "234-p5"
+            },
+            {
+              "anchor": "234-p6"
+            },
+            {
+              "anchor": "234-p7"
+            },
+            {
+              "anchor": "234-p8"
+            },
+            {
+              "anchor": "234-p9"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "printedPage": "235",
+          "bodyFile": "accounts/safiyyah-bint-huyayy/005.md",
+          "notesFile": "accounts/safiyyah-bint-huyayy/005.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2215",
+          "passages": [
+            {
+              "anchor": "235-p1"
+            },
+            {
+              "anchor": "235-p2"
+            },
+            {
+              "anchor": "235-p3"
+            },
+            {
+              "anchor": "235-p4"
+            },
+            {
+              "anchor": "235-p5"
+            },
+            {
+              "anchor": "235-p6"
+            },
+            {
+              "anchor": "235-p7"
+            },
+            {
+              "anchor": "235-p8"
+            },
+            {
+              "anchor": "235-p9"
+            },
+            {
+              "anchor": "235-p10"
+            },
+            {
+              "anchor": "235-p11"
+            },
+            {
+              "anchor": "235-p12"
+            },
+            {
+              "anchor": "235-p13"
+            },
+            {
+              "anchor": "235-p14"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "printedPage": "236",
+          "bodyFile": "accounts/safiyyah-bint-huyayy/006.md",
+          "notesFile": "accounts/safiyyah-bint-huyayy/006.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2216",
+          "passages": [
+            {
+              "anchor": "236-p1"
+            },
+            {
+              "anchor": "236-p2"
+            },
+            {
+              "anchor": "236-p3"
+            },
+            {
+              "anchor": "236-p4"
+            },
+            {
+              "anchor": "236-p5"
+            },
+            {
+              "anchor": "236-p6"
+            },
+            {
+              "anchor": "236-p7"
+            },
+            {
+              "anchor": "236-p8"
+            },
+            {
+              "anchor": "236-p9"
+            },
+            {
+              "anchor": "236-p10"
+            },
+            {
+              "anchor": "236-p11"
+            },
+            {
+              "anchor": "236-p12"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "printedPage": "237",
+          "bodyFile": "accounts/safiyyah-bint-huyayy/007.md",
+          "notesFile": "accounts/safiyyah-bint-huyayy/007.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2217",
+          "passages": [
+            {
+              "anchor": "237-p1"
+            },
+            {
+              "anchor": "237-p2"
+            },
+            {
+              "anchor": "237-p3"
+            },
+            {
+              "anchor": "237-p4"
+            },
+            {
+              "anchor": "237-p5"
+            },
+            {
+              "anchor": "237-p6"
+            },
+            {
+              "anchor": "237-p7"
+            },
+            {
+              "anchor": "237-p8"
+            },
+            {
+              "anchor": "237-p9"
+            },
+            {
+              "anchor": "237-p10"
+            },
+            {
+              "anchor": "237-p11"
+            },
+            {
+              "anchor": "237-p12"
+            },
+            {
+              "anchor": "237-p13"
+            },
+            {
+              "anchor": "237-p14"
+            },
+            {
+              "anchor": "237-p15"
+            },
+            {
+              "anchor": "237-p16"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "printedPage": "238",
+          "bodyFile": "accounts/safiyyah-bint-huyayy/008.md",
+          "notesFile": "accounts/safiyyah-bint-huyayy/008.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2218",
+          "passages": [
+            {
+              "anchor": "238-p1"
+            },
+            {
+              "anchor": "238-p2"
+            },
+            {
+              "anchor": "238-p3"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "safiyyah-bint-huyayy-siyar/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "safiyyah-bint-huyayy",
+      "assertion": "صفية بنت حيي بن أخطب بن سعية، من سبط اللاوي بن نبي الله إسرائيل بن إسحاق بن إبراهيم، ومن ذرية هارون عليه السلام.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "fullName",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "231-p3",
+          "volume": "2",
+          "pageReference": "231",
+          "extractionUrl": "https://shamela.ws/book/10906/2211",
+          "excerptArabic": "صَفِيَّةُ بِنْتُ حُيَيِّ بنِ أَخْطَبَ بنِ سَعْيَةَ أُمُّ المُؤْمِنِيْنَ ... مِنْ سِبْطِ اللاَّوِي بنِ نَبِيِّ اللهِ إِسْرَائِيْلَ بنِ إِسْحَاقَ بنِ إِبْرَاهِيْمَ ... ثُمَّ مِنْ ذُرِّيَّةِ رَسُوْلِ اللهِ هَارُوْنَ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "safiyyah-bint-huyayy-siyar/appearance",
+      "subjectKind": "PERSON",
+      "subjectSlug": "safiyyah-bint-huyayy",
+      "assertion": "كانت ذات جمال.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "appearance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "232-p5",
+          "volume": "2",
+          "pageReference": "232",
+          "extractionUrl": "https://shamela.ws/book/10906/2212",
+          "excerptArabic": "وَكَانَتْ شَرِيْفَةً، عَاقِلَةً، ذَاتَ حَسَبٍ، وَجَمَالٍ، وَدِيْنٍ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "safiyyah-bint-huyayy-siyar/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "safiyyah-bint-huyayy",
+      "assertion": "صفية بنت حيي بن أخطب بن سعية، فحيي بن أخطب أبوها.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "DAUGHTER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "huyayy-ibn-akhtab",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "231-p3",
+          "volume": "2",
+          "pageReference": "231",
+          "extractionUrl": "https://shamela.ws/book/10906/2211",
+          "excerptArabic": "صَفِيَّةُ بِنْتُ حُيَيِّ بنِ أَخْطَبَ بنِ سَعْيَةَ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "safiyyah-bint-huyayy-siyar/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "safiyyah-bint-huyayy",
+      "assertion": "أم المؤمنين، وكانت شريفة عاقلة ذات حسب ودين، وذات حلم ووقار.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "231-p3",
+          "volume": "2",
+          "pageReference": "231",
+          "extractionUrl": "https://shamela.ws/book/10906/2211",
+          "excerptArabic": "صَفِيَّةُ بِنْتُ حُيَيِّ بنِ أَخْطَبَ بنِ سَعْيَةَ أُمُّ المُؤْمِنِيْنَ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "232-p5",
+          "volume": "2",
+          "pageReference": "232",
+          "extractionUrl": "https://shamela.ws/book/10906/2212",
+          "excerptArabic": "وَكَانَتْ شَرِيْفَةً، عَاقِلَةً، ذَاتَ حَسَبٍ، وَجَمَالٍ، وَدِيْنٍ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "235-p3",
+          "volume": "2",
+          "pageReference": "235",
+          "extractionUrl": "https://shamela.ws/book/10906/2215",
+          "excerptArabic": "وَكَانَتْ صَفِيَّةُ ذَاتَ حِلْمٍ، وَوَقَارٍ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "safiyyah-bint-huyayy-siyar/marriage-prophet",
+      "subjectKind": "PERSON",
+      "subjectSlug": "safiyyah-bint-huyayy",
+      "assertion": "تزوج النبي صلى الله عليه وسلم صفية وجعل عتقها صداقها.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "WIFE",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "prophet-muhammad",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "232-p3",
+          "volume": "2",
+          "pageReference": "232",
+          "extractionUrl": "https://shamela.ws/book/10906/2212",
+          "excerptArabic": "ثُمَّ إِنَّ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- لَمَّا طَهُرَتْ تَزَوَّجَهَا، وَجَعَلَ عِتْقَهَا صَدَاقَهَا",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "safiyyah-bint-huyayy-siyar/husband-sallam",
+      "subjectKind": "PERSON",
+      "subjectSlug": "safiyyah-bint-huyayy",
+      "assertion": "تزوج سلام بن أبي الحقيق صفية قبل إسلامها.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "WIFE",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "sallam-ibn-abi-al-huqayq",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "231-p5",
+          "volume": "2",
+          "pageReference": "231",
+          "extractionUrl": "https://shamela.ws/book/10906/2211",
+          "excerptArabic": "تَزَوَّجَهَا قَبْلَ إِسْلاَمِهَا: سَلاَمُ بنُ أَبِي الحُقَيْقِ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "safiyyah-bint-huyayy-siyar/husband-kinanah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "safiyyah-bint-huyayy",
+      "assertion": "تزوج كنانة بن أبي الحقيق صفية بعد سلام، وقتل عنها يوم خيبر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "WIFE",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "kinanah-ibn-abi-al-huqayq",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "231-p5",
+          "volume": "2",
+          "pageReference": "231",
+          "extractionUrl": "https://shamela.ws/book/10906/2211",
+          "excerptArabic": "ثُمَّ خَلَفَ عَلَيْهَا: كِنَانَةُ بن أَبِي الحُقَيْقِ ... فَقُتِلَ كِنَانَةُ يَوْم خَيْبَرَ عَنْهَا",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "safiyyah-bint-huyayy-siyar/death-year-thirty-six",
+      "subjectKind": "PERSON",
+      "subjectSlug": "safiyyah-bint-huyayy",
+      "assertion": "قيل إن صفية توفيت سنة ست وثلاثين.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "disputed": true,
+      "field": "deathYearHijri",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "235-p1",
+          "volume": "2",
+          "pageReference": "235",
+          "extractionUrl": "https://shamela.ws/book/10906/2215",
+          "excerptArabic": "قِيْلَ: تُوُفِّيَتْ سَنَةَ سِتٍّ وَثَلاَثِيْنَ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "safiyyah-bint-huyayy-siyar/death-year-fifty",
+      "subjectKind": "PERSON",
+      "subjectSlug": "safiyyah-bint-huyayy",
+      "assertion": "قيل إن صفية توفيت سنة خمسين.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "disputed": true,
+      "field": "deathYearHijri",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "235-p2",
+          "volume": "2",
+          "pageReference": "235",
+          "extractionUrl": "https://shamela.ws/book/10906/2215",
+          "excerptArabic": "وَقِيْلَ: تُوُفِّيَتْ سَنَةَ خَمْسِيْنَ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    }
+  ]
+}

@@ -1,11 +1,5 @@
 import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
-/**
- * Seed-declared, so the catalog only adds. The chapter gives a great deal the
- * model has no shape for: الطاهرة as her name in the jahiliyyah, her two
- * husbands before him, her age at marriage and at death, and the house of
- * قصب she was promised. Only the virtues land, in the Prophet's own words.
- */
 const khadijahBintKhuwaylid = {
   kind: 'PERSON',
   slug: 'khadijah-bint-khuwaylid',
@@ -13,9 +7,11 @@ const khadijahBintKhuwaylid = {
   nameTransliterated: 'Khadijah bint Khuwaylid',
   hasProfile: true,
   fields: {
-    // Carried from the retired seed entry, which took it from the Siyar
-    // without citing it.
-    fullName: { value: 'خديجة بنت خويلد بن أسد بن عبد العزى بن قصي القرشية الأسدية', claims: legacyUnreviewed },
+    fullName: {
+      value: 'خديجة بنت خويلد بن أسد بن عبد العزى بن قصي بن كلاب القرشية الأسدية',
+      claims: ['khadijah-siyar/full-name'],
+    },
+    kunya: { value: 'أم القاسم', claims: ['khadijah-siyar/kunya'] },
     sex: { value: 'FEMALE', claims: ['khadijah/sex'] },
     virtues: {
       value:
@@ -24,18 +20,24 @@ const khadijahBintKhuwaylid = {
     },
   },
   titles: [
-    // Carried from the retired seed entry; no batch cites these yet.
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
-    { title: 'mother-of-believers', name: 'أم المؤمنين', nameTransliterated: 'Mother of the Believers', claims: legacyUnreviewed },
-    { title: 'first-wife', name: 'أول زوجات النبي', nameTransliterated: 'First Wife of the Prophet', claims: legacyUnreviewed },
+    {
+      title: 'mother-of-believers',
+      name: 'أم المؤمنين',
+      nameTransliterated: 'Mother of the Believers',
+      claims: ['khadijah-siyar/title-mother-of-believers'],
+    },
+    {
+      title: 'first-wife',
+      name: 'أول زوجات النبي',
+      nameTransliterated: 'First Wife of the Prophet',
+      claims: ['khadijah-siyar/title-first-wife'],
+    },
   ],
   relations: [
-    // Carried from neo4j/graphSeedData.ts, whose node declaration is retired
-    // with the rest. The catalog owns this subject's edges now, so they live
-    // here or not at all.
-    { type: 'DAUGHTER', inverse: 'FATHER', to: 'khuwaylid-ibn-asad', claims: legacyUnreviewed },
+    { type: 'DAUGHTER', inverse: 'FATHER', to: 'khuwaylid-ibn-asad', claims: ['khadijah-siyar/father'] },
     { type: 'SISTER', inverse: 'BROTHER', to: 'hizam-ibn-khuwaylid', claims: legacyUnreviewed },
-    { type: 'WIFE', inverse: 'HUSBAND', to: 'prophet-muhammad', claims: legacyUnreviewed },
+    { type: 'WIFE', inverse: 'HUSBAND', to: 'prophet-muhammad', claims: ['khadijah-siyar/wife-prophet'] },
   ],
 } satisfies CatalogPerson;
 
