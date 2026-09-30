@@ -12,18 +12,18 @@ if (!dir) {
 }
 
 async function main() {
-  const { batch, files } = loadBatch(dir);
-  const issues = validateBatch(batch, files);
+  const { batch, files, manifests, pages } = loadBatch(dir);
+  const issues = validateBatch(batch, files, manifests, pages);
 
   if (issues.length > 0) {
     for (const issue of issues) console.error(`  ${issue.path}: ${issue.message}`);
     throw new Error(`${batch.slug} has ${issues.length} validation issue(s)`);
   }
 
-  const approval = checkApproval(batch, files);
+  const approval = checkApproval(batch);
 
   const plan = {
-    sources: batch.sources.length,
+    sources: manifests.size,
     accounts: batch.accounts.length,
     pages: batch.accounts.reduce((total, account) => total + account.pages.length, 0),
     claims: batch.claims.length,
@@ -44,7 +44,7 @@ async function main() {
     throw new Error(`${batch.slug} is not approved for import: ${approval.reason}`);
   }
 
-  const result = await importBatch(prisma, batch, files);
+  const result = await importBatch(prisma, batch, manifests, pages);
   console.log(`  applied: ${JSON.stringify(result)}`);
   console.log('  shared person fields still need `npm run people:sync`');
 }

@@ -137,8 +137,8 @@ a known gap, not something a routine batch needs to fix.
 - Printed page number(s) per page (`printedPage`).
 - The volume this account/page is bound in (`volumeNumber`) — **required
   whenever the source is multi-volume**, per its declared `volumes` list in
-  `batch.json`'s `sources[]`. This is the exact field that went missing on
-  ten batches; see "Why this exists" above. `history:validate` checks that
+  `data/history/sources/<source>/source.json`. This is the exact field that
+  went missing on ten batches; see "Why this exists" above. `history:validate` checks that
   a declared `volumeNumber` matches a real volume, but does **not** check
   that one was declared at all — that gap is why `catalog:checklist`
   exists.

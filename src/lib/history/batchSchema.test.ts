@@ -7,36 +7,50 @@ import {
   validateBatch,
   type BatchFiles,
   type HistoryBatch,
+  type SourceManifests,
+  type StorePages,
 } from './batchSchema';
+import type { SourceManifest } from './sourceStore';
 
 function files(overrides: BatchFiles = {}): BatchFiles {
   return {
     'summary.md': '# Batch summary',
-    'accounts/abu-ubaydah/001.md': 'نص الصفحة الأولى',
     ...overrides,
   };
+}
+
+function manifest(overrides: Partial<SourceManifest> = {}): SourceManifest {
+  return {
+    slug: 'siyar-risalah',
+    title: 'سير أعلام النبلاء',
+    digitalHost: 'shamela',
+    volumes: [{ number: 1 }],
+    ...overrides,
+  };
+}
+
+function manifests(overrides: SourceManifest = manifest()): SourceManifests {
+  return new Map([[overrides.slug, overrides]]);
+}
+
+function pages(overrides: Record<string, string> = {}): StorePages {
+  const bodies: Record<string, string> = { 'siyar-risalah/v1/5': 'نص الصفحة الأولى', ...overrides };
+  return new Map(Object.entries(bodies).map(([key, body]) => [key, { body, notes: null }]));
 }
 
 function batch(overrides: Partial<HistoryBatch> = {}): HistoryBatch {
   return {
     slug: 'abu-ubaydah-pilot',
     summaryFile: 'summary.md',
-    sources: [{ slug: 'siyar-risalah', title: 'سير أعلام النبلاء', digitalHost: 'shamela' }],
     accounts: [
       {
         sourceSlug: 'siyar-risalah',
         subjectKind: 'PERSON',
         subjectSlug: 'abu-ubaydah-ibn-al-jarrah',
+        volumeNumber: 1,
         extractionUrl: 'https://shamela.ws/book/10906/1431',
         accessedAt: '2026-09-09',
-        pages: [
-          {
-            sequence: 1,
-            printedPage: '5',
-            bodyFile: 'accounts/abu-ubaydah/001.md',
-            passages: [{ anchor: 'p5-opening' }],
-          },
-        ],
+        pages: [{ sequence: 1, printedPage: '5' }],
       },
     ],
     claims: [
@@ -49,10 +63,10 @@ function batch(overrides: Partial<HistoryBatch> = {}): HistoryBatch {
         citations: [
           {
             sourceSlug: 'siyar-risalah',
-            passageAnchor: 'p5-opening',
+            passageAnchor: '1/5-p1',
             pageReference: '5',
             extractionUrl: 'https://shamela.ws/book/10906/1431',
-            excerptArabic: 'أبو عبيدة بن الجراح',
+            excerptArabic: 'نص الصفحة الأولى',
             accessedAt: '2026-09-09',
           },
         ],
@@ -74,18 +88,17 @@ describe('markBatchReviewed', () => {
 
 describe('validateBatch', () => {
   it('accepts a well-formed batch', () => {
-    expect(validateBatch(batch(), files())).toEqual([]);
+    expect(validateBatch(batch(), files(), manifests(), pages())).toEqual([]);
   });
 
   // A volume number is only meaningful against the volumes its own source
   // declares, so a typo fails here rather than importing an unbound page.
-  it('rejects a page bound in a volume its source does not declare', () => {
+  it('rejects an account bound in a volume its source does not declare', () => {
     const b = batch();
-    b.sources[0].volumes = [{ number: 1 }];
-    b.accounts[0].pages[0].volumeNumber = 2;
+    b.accounts[0].volumeNumber = 2;
 
-    expect(validateBatch(b, files())).toContainEqual({
-      path: 'accounts[0].pages[0]',
+    expect(validateBatch(b, files(), manifests(), pages())).toContainEqual({
+      path: 'accounts[0]',
       message: `volumeNumber 2 is not a volume "${b.accounts[0].sourceSlug}" declares`,
     });
   });
@@ -97,26 +110,16 @@ describe('validateBatch', () => {
     const b = batch();
     b.accounts[0].notInSource = ['wives', 'siblings'];
 
-    expect(validateBatch(b, files())).toEqual([]);
+    expect(validateBatch(b, files(), manifests(), pages())).toEqual([]);
   });
 
   it('rejects a notInSource item outside the checklist vocabulary', () => {
     const b = batch();
     b.accounts[0].notInSource = ['spouse' as never];
 
-    expect(validateBatch(b, files())).toContainEqual({
+    expect(validateBatch(b, files(), manifests(), pages())).toContainEqual({
       path: 'accounts[0].notInSource[0]',
       message: expect.stringContaining('"spouse" is not a checklist content item'),
-    });
-  });
-
-  it('rejects the same volume declared twice', () => {
-    const b = batch();
-    b.sources[0].volumes = [{ number: 1 }, { number: 1 }];
-
-    expect(validateBatch(b, files())).toContainEqual({
-      path: 'sources[0].volumes[1]',
-      message: 'volume 1 is declared twice',
     });
   });
 
@@ -124,7 +127,7 @@ describe('validateBatch', () => {
     const b = batch();
     b.claims[0].citations[0].sourceSlug = 'unknown-book';
 
-    expect(validateBatch(b, files())).toContainEqual({
+    expect(validateBatch(b, files(), manifests(), pages())).toContainEqual({
       path: 'claims[0].citations[0]',
       message: 'unknown source "unknown-book"',
     });
@@ -134,7 +137,7 @@ describe('validateBatch', () => {
     const b = batch();
     b.claims[0].citations[0].extractionUrl = 'not a url';
 
-    expect(validateBatch(b, files())).toContainEqual({
+    expect(validateBatch(b, files(), manifests(), pages())).toContainEqual({
       path: 'claims[0].citations[0]',
       message: 'extractionUrl must be an http(s) URL',
     });
@@ -144,16 +147,16 @@ describe('validateBatch', () => {
     const b = batch();
     delete b.claims[0].citations[0].pageReference;
 
-    expect(validateBatch(b, files())).toEqual([]);
+    expect(validateBatch(b, files(), manifests(), pages())).toEqual([]);
   });
 
   it('rejects a citation pointing at a passage no page declares', () => {
     const b = batch();
-    b.claims[0].citations[0].passageAnchor = 'p9-missing';
+    b.claims[0].citations[0].passageAnchor = '1/5-p9';
 
-    expect(validateBatch(b, files())).toContainEqual({
+    expect(validateBatch(b, files(), manifests(), pages())).toContainEqual({
       path: 'claims[0].citations[0]',
-      message: 'citation targets unknown passage "p9-missing"',
+      message: 'citation targets unknown passage "1/5-p9"',
     });
   });
 
@@ -161,7 +164,7 @@ describe('validateBatch', () => {
     const b = batch();
     b.claims[0].citations = [];
 
-    expect(validateBatch(b, files())).toContainEqual({
+    expect(validateBatch(b, files(), manifests(), pages())).toContainEqual({
       path: 'claims[0]',
       message: 'every claim needs at least one citation',
     });
@@ -172,7 +175,7 @@ describe('validateBatch', () => {
     b.claims[0].field = undefined;
     b.claims[0].relationshipType = undefined;
 
-    expect(validateBatch(b, files())).toContainEqual({
+    expect(validateBatch(b, files(), manifests(), pages())).toContainEqual({
       path: 'claims[0]',
       message: 'a claim must name the field or relationship it supports',
     });
@@ -182,7 +185,7 @@ describe('validateBatch', () => {
     const b = batch();
     b.claims[0].relationshipType = 'COMPANION_OF';
 
-    expect(validateBatch(b, files())).toContainEqual({
+    expect(validateBatch(b, files(), manifests(), pages())).toContainEqual({
       path: 'claims[0]',
       message: 'a relationship claim needs type, related kind and related slug',
     });
@@ -194,24 +197,24 @@ describe('validateBatch', () => {
     b.claims[0].relatedSubjectKind = 'PERSON';
     b.claims[0].relatedSubjectSlug = 'prophet-muhammad';
 
-    expect(validateBatch(b, files())).toEqual([]);
+    expect(validateBatch(b, files(), manifests(), pages())).toEqual([]);
   });
 
-  it('rejects a page whose Markdown file is absent', () => {
+  it('rejects a page absent from the store', () => {
     const b = batch();
-    b.accounts[0].pages[0].bodyFile = 'accounts/abu-ubaydah/404.md';
+    b.accounts[0].pages[0].printedPage = '404';
 
-    expect(validateBatch(b, files())).toContainEqual({
+    expect(validateBatch(b, files(), manifests(), pages())).toContainEqual({
       path: 'accounts[0].pages[0]',
-      message: 'missing page file "accounts/abu-ubaydah/404.md"',
+      message: `no store page at v1/404 for "siyar-risalah"`,
     });
   });
 
   it('rejects a gap in page sequence', () => {
     const b = batch();
-    b.accounts[0].pages.push({ sequence: 3, bodyFile: 'accounts/abu-ubaydah/002.md' });
+    b.accounts[0].pages.push({ sequence: 3, printedPage: '6' });
 
-    const issues = validateBatch(b, files({ 'accounts/abu-ubaydah/002.md': 'نص' }));
+    const issues = validateBatch(b, files(), manifests(), pages({ 'siyar-risalah/v1/6': 'نص' }));
 
     expect(issues).toContainEqual({
       path: 'accounts[0].pages[1]',
@@ -223,7 +226,7 @@ describe('validateBatch', () => {
     const b = batch();
     b.claims.push({ ...b.claims[0] });
 
-    expect(validateBatch(b, files())).toContainEqual({
+    expect(validateBatch(b, files(), manifests(), pages())).toContainEqual({
       path: 'claims[1]',
       message: 'duplicate claim key "abu-ubaydah/full-name"',
     });
@@ -256,7 +259,7 @@ describe('checklistReminders', () => {
 
 describe('checkApproval', () => {
   it('refuses a batch that was never approved', () => {
-    const result = checkApproval(batch(), files());
+    const result = checkApproval(batch());
 
     expect(result.approved).toBe(false);
     expect(result).toMatchObject({ reason: 'the batch has no recorded approval' });
@@ -264,34 +267,38 @@ describe('checkApproval', () => {
 
   it('accepts the exact approved revision', () => {
     const b = batch();
-    const revision = batchRevision(b, files());
+    const revision = batchRevision(b);
     b.approval = { revision, approvedAt: '2026-09-09', approvedBy: 'msskzx' };
 
-    expect(checkApproval(b, files())).toEqual({ approved: true, revision });
+    expect(checkApproval(b)).toEqual({ approved: true, revision });
   });
 
   it('refuses a batch edited after approval', () => {
     const b = batch();
-    b.approval = { revision: batchRevision(b, files()), approvedAt: '2026-09-09', approvedBy: 'msskzx' };
+    b.approval = { revision: batchRevision(b), approvedAt: '2026-09-09', approvedBy: 'msskzx' };
     b.claims[0].assertion = 'عامر بن عبد الله';
 
-    const result = checkApproval(b, files());
+    const result = checkApproval(b);
 
     expect(result.approved).toBe(false);
   });
 
   it('ignores edits to the approval block itself when hashing', () => {
     const b = batch();
-    const revision = batchRevision(b, files());
+    const revision = batchRevision(b);
     b.approval = { revision, approvedAt: '2026-09-10', approvedBy: 'someone-else' };
 
-    expect(batchRevision(b, files())).toBe(revision);
+    expect(batchRevision(b)).toBe(revision);
   });
 
-  it("changes revision when a page's Markdown changes", () => {
+  // Store page text is published on its own (docs/plans/source-page-store.md)
+  // and does not gate a batch's approval, so only the batch's own content —
+  // claims, citations, account spans — changes the revision.
+  it('changes revision when an account span changes', () => {
     const b = batch();
-    const before = batchRevision(b, files());
+    const before = batchRevision(b);
+    b.accounts[0].pages.push({ sequence: 2, printedPage: '6' });
 
-    expect(batchRevision(b, files({ 'accounts/abu-ubaydah/001.md': 'نص مختلف' }))).not.toBe(before);
+    expect(batchRevision(b)).not.toBe(before);
   });
 });

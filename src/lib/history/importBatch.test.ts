@@ -1,7 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { PrismaClient } from '@/generated/prisma';
 import { importBatch } from './importBatch';
-import type { BatchFiles, HistoryBatch } from './batchSchema';
+import type { HistoryBatch, SourceManifests, StorePages } from './batchSchema';
+import type { SourceManifest } from './sourceStore';
 
 /**
  * A Prisma stand-in that records writes. Ids are derived from the arguments so
@@ -90,31 +91,32 @@ function fakePrisma() {
   return { prisma, calls, tx, transactionOptions };
 }
 
-const files: BatchFiles = {
-  'summary.md': '# summary',
-  'accounts/abu-ubaydah/001.md': 'نص الصفحة',
-};
+function manifest(overrides: Partial<SourceManifest> = {}): SourceManifest {
+  return { slug: 'siyar-risalah', title: 'سير أعلام النبلاء', volumes: [], ...overrides };
+}
+
+function manifests(...list: SourceManifest[]): SourceManifests {
+  return new Map(list.map((m) => [m.slug, m]));
+}
+
+function pages(overrides: Record<string, string> = {}): StorePages {
+  const bodies: Record<string, string> = { 'siyar-risalah/v1/5': 'نص الصفحة', ...overrides };
+  return new Map(Object.entries(bodies).map(([key, body]) => [key, { body, notes: null }]));
+}
 
 function batch(): HistoryBatch {
   return {
     slug: 'abu-ubaydah-pilot',
     summaryFile: 'summary.md',
-    sources: [{ slug: 'siyar-risalah', title: 'سير أعلام النبلاء' }],
     accounts: [
       {
         sourceSlug: 'siyar-risalah',
         subjectKind: 'PERSON',
         subjectSlug: 'abu-ubaydah-ibn-al-jarrah',
+        volumeNumber: 1,
         extractionUrl: 'https://shamela.ws/book/10906/1431',
         accessedAt: '2026-09-09',
-        pages: [
-          {
-            sequence: 1,
-            printedPage: '5',
-            bodyFile: 'accounts/abu-ubaydah/001.md',
-            passages: [{ anchor: 'p5-opening' }],
-          },
-        ],
+        pages: [{ sequence: 1, printedPage: '5' }],
       },
     ],
     claims: [
@@ -127,9 +129,9 @@ function batch(): HistoryBatch {
         citations: [
           {
             sourceSlug: 'siyar-risalah',
-            passageAnchor: 'p5-opening',
+            passageAnchor: '1/5-p1',
             extractionUrl: 'https://shamela.ws/book/10906/1431',
-            excerptArabic: 'أبو عبيدة',
+            excerptArabic: 'نص الصفحة',
             accessedAt: '2026-09-09',
           },
         ],
@@ -142,7 +144,7 @@ describe('importBatch', () => {
   it('reports what it wrote', async () => {
     const { prisma } = fakePrisma();
 
-    expect(await importBatch(prisma, batch(), files)).toEqual({
+    expect(await importBatch(prisma, batch(), manifests(manifest({ volumes: [{ number: 1 }] })), pages())).toEqual({
       sources: 1,
       accounts: 1,
       pages: 1,
@@ -151,10 +153,10 @@ describe('importBatch', () => {
     });
   });
 
-  it('stores the page Markdown the batch file names', async () => {
+  it("stores the store page's Markdown", async () => {
     const { prisma, calls } = fakePrisma();
 
-    await importBatch(prisma, batch(), files);
+    await importBatch(prisma, batch(), manifests(manifest({ volumes: [{ number: 1 }] })), pages());
 
     expect(calls.pages[0]).toMatchObject({ printedPage: '5', bodyMarkdown: 'نص الصفحة', sequence: 1 });
   });
@@ -164,18 +166,26 @@ describe('importBatch', () => {
   it('binds each page in its own volume, defaulting to the one its entry opens in', async () => {
     const { prisma, calls } = fakePrisma();
     const crossing = batch();
-    crossing.sources[0].volumes = [
-      { number: 1, name: 'السيرة النبوية ج١' },
-      { number: 2, name: 'السيرة النبوية ج٢' },
-    ];
     crossing.accounts[0].volumeNumber = 1;
     crossing.accounts[0].pages = [
-      { sequence: 1, printedPage: '527', bodyFile: 'accounts/abu-ubaydah/001.md' },
-      { sequence: 2, printedPage: '5', bodyFile: 'accounts/abu-ubaydah/001.md', volumeNumber: 2 },
+      { sequence: 1, printedPage: '527' },
+      { sequence: 2, printedPage: '5', volumeNumber: 2 },
     ];
     crossing.claims = [];
 
-    await importBatch(prisma, crossing, files);
+    await importBatch(
+      prisma,
+      crossing,
+      manifests(
+        manifest({
+          volumes: [
+            { number: 1, name: 'السيرة النبوية ج١' },
+            { number: 2, name: 'السيرة النبوية ج٢' },
+          ],
+        }),
+      ),
+      pages({ 'siyar-risalah/v1/527': 'نص', 'siyar-risalah/v2/5': 'نص' }),
+    );
 
     expect(calls.pages.map((page) => page.volumeId)).toEqual([
       'volume-source-siyar-risalah-1',
@@ -183,18 +193,10 @@ describe('importBatch', () => {
     ]);
   });
 
-  it('leaves a page unbound when neither it nor its entry names a volume', async () => {
-    const { prisma, calls } = fakePrisma();
-
-    await importBatch(prisma, batch(), files);
-
-    expect(calls.pages[0].volumeId).toBeNull();
-  });
-
   it('links a citation to the passage its anchor names', async () => {
     const { prisma, calls } = fakePrisma();
 
-    await importBatch(prisma, batch(), files);
+    await importBatch(prisma, batch(), manifests(manifest({ volumes: [{ number: 1 }] })), pages());
 
     expect(calls.citations[0]).toMatchObject({ claimId: 'claim-1', passageId: 'passage-1' });
   });
@@ -202,7 +204,7 @@ describe('importBatch', () => {
   it('keys claims on their authoring key so a re-import updates in place', async () => {
     const { prisma, calls } = fakePrisma();
 
-    await importBatch(prisma, batch(), files);
+    await importBatch(prisma, batch(), manifests(manifest({ volumes: [{ number: 1 }] })), pages());
 
     expect(calls.claimUpserts[0]).toMatchObject({ where: { authoringKey: 'abu-ubaydah/full-name' } });
   });
@@ -210,7 +212,7 @@ describe('importBatch', () => {
   it("clears an account's old pages and a claim's old citations before rewriting", async () => {
     const { prisma, calls } = fakePrisma();
 
-    await importBatch(prisma, batch(), files);
+    await importBatch(prisma, batch(), manifests(manifest({ volumes: [{ number: 1 }] })), pages());
 
     expect(calls.accountDeletes).toEqual([{ where: { accountId: 'account-1' } }]);
     expect(calls.citationDeletes).toEqual([{ where: { claimId: { in: ['claim-1'] } } }]);
@@ -219,7 +221,7 @@ describe('importBatch', () => {
   it('records the batch under its slug and revision together', async () => {
     const { prisma, tx } = fakePrisma();
 
-    await importBatch(prisma, batch(), files);
+    await importBatch(prisma, batch(), manifests(manifest({ volumes: [{ number: 1 }] })), pages());
 
     expect(tx.reviewBatch.upsert).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -233,7 +235,7 @@ describe('importBatch', () => {
     const approved = batch();
     approved.approval = { revision: 'r1', approvedAt: '2026-09-09', approvedBy: 'msskzx' };
 
-    await importBatch(prisma, approved, files);
+    await importBatch(prisma, approved, manifests(manifest({ volumes: [{ number: 1 }] })), pages());
 
     expect(tx.reviewBatch.upsert).toHaveBeenCalledWith(
       expect.objectContaining({ create: expect.objectContaining({ approvedBy: 'msskzx' }) }),
@@ -243,7 +245,7 @@ describe('importBatch', () => {
   it('imports claims at the review status the files give them', async () => {
     const { prisma, calls } = fakePrisma();
 
-    await importBatch(prisma, batch(), files);
+    await importBatch(prisma, batch(), manifests(manifest({ volumes: [{ number: 1 }] })), pages());
 
     expect(calls.claimUpserts[0]).toMatchObject({ create: { reviewStatus: 'NOT_REVIEWED' } });
   });
@@ -251,7 +253,7 @@ describe('importBatch', () => {
   it('gives the transaction long enough for a whole account', async () => {
     const { prisma, transactionOptions } = fakePrisma();
 
-    await importBatch(prisma, batch(), files);
+    await importBatch(prisma, batch(), manifests(manifest({ volumes: [{ number: 1 }] })), pages());
 
     expect(transactionOptions[0]).toMatchObject({ timeout: 120_000 });
   });
@@ -261,7 +263,7 @@ describe('importBatch', () => {
     const b = batch();
     b.claims[0].assertion = 'حدثنا محمد بن سعد عن أبي عبيدة';
 
-    await importBatch(prisma, b, files);
+    await importBatch(prisma, b, manifests(manifest({ volumes: [{ number: 1 }] })), pages());
 
     expect(calls.claimUpserts[0]).toMatchObject({
       create: { relationshipType: null, relatedSubjectSlug: null },

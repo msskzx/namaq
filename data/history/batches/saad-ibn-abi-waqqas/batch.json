@@ -1,134 +1,6 @@
 {
   "slug": "saad-ibn-abi-waqqas",
   "summaryFile": "summary.md",
-  "sources": [
-    {
-      "slug": "siyar-alam-al-nubala-risalah",
-      "title": "سير أعلام النبلاء",
-      "author": "شمس الدين الذهبي",
-      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
-      "publisher": "مؤسسة الرسالة",
-      "publicationYear": "1405/1985",
-      "edition": "الطبعة الثالثة",
-      "digitalHost": "المكتبة الشاملة",
-      "url": "https://shamela.ws/index.php/book/10906",
-      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
-      "volumes": [
-        {
-          "number": 1,
-          "name": "السيرة النبوية ج١"
-        },
-        {
-          "number": 2,
-          "name": "السيرة النبوية ج٢"
-        },
-        {
-          "number": 3,
-          "name": "سيرة الخلفاء الراشدين"
-        },
-        {
-          "number": 4,
-          "name": "سير أعلام النبلاء ج١"
-        },
-        {
-          "number": 5,
-          "name": "سير أعلام النبلاء ج٢"
-        },
-        {
-          "number": 6,
-          "name": "سير أعلام النبلاء ج٣"
-        },
-        {
-          "number": 7,
-          "name": "سير أعلام النبلاء ج٤"
-        },
-        {
-          "number": 8,
-          "name": "سير أعلام النبلاء ج٥"
-        },
-        {
-          "number": 9,
-          "name": "سير أعلام النبلاء ج٦"
-        },
-        {
-          "number": 10,
-          "name": "سير أعلام النبلاء ج٧"
-        },
-        {
-          "number": 11,
-          "name": "سير أعلام النبلاء ج٨"
-        },
-        {
-          "number": 12,
-          "name": "سير أعلام النبلاء ج٩"
-        },
-        {
-          "number": 13,
-          "name": "سير أعلام النبلاء ج١٠"
-        },
-        {
-          "number": 14,
-          "name": "سير أعلام النبلاء ج١١"
-        },
-        {
-          "number": 15,
-          "name": "سير أعلام النبلاء ج١٢"
-        },
-        {
-          "number": 16,
-          "name": "سير أعلام النبلاء ج١٣"
-        },
-        {
-          "number": 17,
-          "name": "سير أعلام النبلاء ج١٤"
-        },
-        {
-          "number": 18,
-          "name": "سير أعلام النبلاء ج١٥"
-        },
-        {
-          "number": 19,
-          "name": "سير أعلام النبلاء ج١٦"
-        },
-        {
-          "number": 20,
-          "name": "سير أعلام النبلاء ج١٧"
-        },
-        {
-          "number": 21,
-          "name": "سير أعلام النبلاء ج١٨"
-        },
-        {
-          "number": 22,
-          "name": "سير أعلام النبلاء ج١٩"
-        },
-        {
-          "number": 23,
-          "name": "سير أعلام النبلاء ج٢٠"
-        },
-        {
-          "number": 24,
-          "name": "سير أعلام النبلاء ج٢١"
-        },
-        {
-          "number": 25,
-          "name": "سير أعلام النبلاء ج٢٢"
-        },
-        {
-          "number": 26,
-          "name": "سير أعلام النبلاء ج٢٣"
-        },
-        {
-          "number": 27,
-          "name": "الفهارس ج١"
-        },
-        {
-          "number": 28,
-          "name": "الفهارس ج٢"
-        }
-      ]
-    }
-  ],
   "accounts": [
     {
       "sourceSlug": "siyar-alam-al-nubala-risalah",
@@ -139,1377 +11,135 @@
       "pages": [
         {
           "sequence": 1,
-          "printedPage": "92",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/001.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/001.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1518",
-          "passages": [
-            {
-              "anchor": "92-p8"
-            },
-            {
-              "anchor": "92-p9"
-            }
-          ]
+          "printedPage": "92"
         },
         {
           "sequence": 2,
-          "printedPage": "93",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/002.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/002.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1519",
-          "passages": [
-            {
-              "anchor": "93-p1"
-            },
-            {
-              "anchor": "93-p2"
-            },
-            {
-              "anchor": "93-p3"
-            },
-            {
-              "anchor": "93-p4"
-            },
-            {
-              "anchor": "93-p5"
-            },
-            {
-              "anchor": "93-p6"
-            }
-          ]
+          "printedPage": "93"
         },
         {
           "sequence": 3,
-          "printedPage": "94",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/003.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/003.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1520",
-          "passages": [
-            {
-              "anchor": "94-p1"
-            },
-            {
-              "anchor": "94-p2"
-            },
-            {
-              "anchor": "94-p3"
-            },
-            {
-              "anchor": "94-p4"
-            },
-            {
-              "anchor": "94-p5"
-            },
-            {
-              "anchor": "94-p6"
-            },
-            {
-              "anchor": "94-p7"
-            },
-            {
-              "anchor": "94-p8"
-            },
-            {
-              "anchor": "94-p9"
-            },
-            {
-              "anchor": "94-p10"
-            },
-            {
-              "anchor": "94-p11"
-            },
-            {
-              "anchor": "94-p12"
-            },
-            {
-              "anchor": "94-p13"
-            },
-            {
-              "anchor": "94-p14"
-            },
-            {
-              "anchor": "94-p15"
-            }
-          ]
+          "printedPage": "94"
         },
         {
           "sequence": 4,
-          "printedPage": "95",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/004.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/004.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1521",
-          "passages": [
-            {
-              "anchor": "95-p1"
-            },
-            {
-              "anchor": "95-p2"
-            },
-            {
-              "anchor": "95-p3"
-            },
-            {
-              "anchor": "95-p4"
-            },
-            {
-              "anchor": "95-p5"
-            },
-            {
-              "anchor": "95-p6"
-            },
-            {
-              "anchor": "95-p7"
-            },
-            {
-              "anchor": "95-p8"
-            },
-            {
-              "anchor": "95-p9"
-            },
-            {
-              "anchor": "95-p10"
-            },
-            {
-              "anchor": "95-p11"
-            },
-            {
-              "anchor": "95-p12"
-            },
-            {
-              "anchor": "95-p13"
-            }
-          ]
+          "printedPage": "95"
         },
         {
           "sequence": 5,
-          "printedPage": "96",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/005.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/005.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1522",
-          "passages": [
-            {
-              "anchor": "96-p1"
-            },
-            {
-              "anchor": "96-p2"
-            },
-            {
-              "anchor": "96-p3"
-            },
-            {
-              "anchor": "96-p4"
-            },
-            {
-              "anchor": "96-p5"
-            },
-            {
-              "anchor": "96-p6"
-            },
-            {
-              "anchor": "96-p7"
-            },
-            {
-              "anchor": "96-p8"
-            },
-            {
-              "anchor": "96-p9"
-            },
-            {
-              "anchor": "96-p10"
-            },
-            {
-              "anchor": "96-p11"
-            }
-          ]
+          "printedPage": "96"
         },
         {
           "sequence": 6,
-          "printedPage": "97",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/006.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/006.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1523",
-          "passages": [
-            {
-              "anchor": "97-p1"
-            },
-            {
-              "anchor": "97-p2"
-            },
-            {
-              "anchor": "97-p3"
-            },
-            {
-              "anchor": "97-p4"
-            },
-            {
-              "anchor": "97-p5"
-            },
-            {
-              "anchor": "97-p6"
-            },
-            {
-              "anchor": "97-p7"
-            },
-            {
-              "anchor": "97-p8"
-            },
-            {
-              "anchor": "97-p9"
-            },
-            {
-              "anchor": "97-p10"
-            }
-          ]
+          "printedPage": "97"
         },
         {
           "sequence": 7,
-          "printedPage": "98",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/007.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/007.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1524",
-          "passages": [
-            {
-              "anchor": "98-p1"
-            },
-            {
-              "anchor": "98-p2"
-            },
-            {
-              "anchor": "98-p3"
-            },
-            {
-              "anchor": "98-p4"
-            },
-            {
-              "anchor": "98-p5"
-            },
-            {
-              "anchor": "98-p6"
-            },
-            {
-              "anchor": "98-p7"
-            },
-            {
-              "anchor": "98-p8"
-            },
-            {
-              "anchor": "98-p9"
-            },
-            {
-              "anchor": "98-p10"
-            }
-          ]
+          "printedPage": "98"
         },
         {
           "sequence": 8,
-          "printedPage": "99",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/008.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/008.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1525",
-          "passages": [
-            {
-              "anchor": "99-p1"
-            },
-            {
-              "anchor": "99-p2"
-            },
-            {
-              "anchor": "99-p3"
-            },
-            {
-              "anchor": "99-p4"
-            },
-            {
-              "anchor": "99-p5"
-            },
-            {
-              "anchor": "99-p6"
-            },
-            {
-              "anchor": "99-p7"
-            },
-            {
-              "anchor": "99-p8"
-            },
-            {
-              "anchor": "99-p9"
-            },
-            {
-              "anchor": "99-p10"
-            },
-            {
-              "anchor": "99-p11"
-            },
-            {
-              "anchor": "99-p12"
-            }
-          ]
+          "printedPage": "99"
         },
         {
           "sequence": 9,
-          "printedPage": "100",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/009.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/009.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1526",
-          "passages": [
-            {
-              "anchor": "100-p1"
-            },
-            {
-              "anchor": "100-p2"
-            },
-            {
-              "anchor": "100-p3"
-            },
-            {
-              "anchor": "100-p4"
-            },
-            {
-              "anchor": "100-p5"
-            },
-            {
-              "anchor": "100-p6"
-            },
-            {
-              "anchor": "100-p7"
-            },
-            {
-              "anchor": "100-p8"
-            },
-            {
-              "anchor": "100-p9"
-            }
-          ]
+          "printedPage": "100"
         },
         {
           "sequence": 10,
-          "printedPage": "101",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/010.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/010.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1527",
-          "passages": [
-            {
-              "anchor": "101-p1"
-            },
-            {
-              "anchor": "101-p2"
-            },
-            {
-              "anchor": "101-p3"
-            },
-            {
-              "anchor": "101-p4"
-            },
-            {
-              "anchor": "101-p5"
-            },
-            {
-              "anchor": "101-p6"
-            },
-            {
-              "anchor": "101-p7"
-            },
-            {
-              "anchor": "101-p8"
-            },
-            {
-              "anchor": "101-p9"
-            },
-            {
-              "anchor": "101-p10"
-            }
-          ]
+          "printedPage": "101"
         },
         {
           "sequence": 11,
-          "printedPage": "102",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/011.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/011.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1528",
-          "passages": [
-            {
-              "anchor": "102-p1"
-            },
-            {
-              "anchor": "102-p2"
-            },
-            {
-              "anchor": "102-p3"
-            },
-            {
-              "anchor": "102-p4"
-            },
-            {
-              "anchor": "102-p5"
-            },
-            {
-              "anchor": "102-p6"
-            },
-            {
-              "anchor": "102-p7"
-            },
-            {
-              "anchor": "102-p8"
-            },
-            {
-              "anchor": "102-p9"
-            },
-            {
-              "anchor": "102-p10"
-            },
-            {
-              "anchor": "102-p11"
-            },
-            {
-              "anchor": "102-p12"
-            },
-            {
-              "anchor": "102-p13"
-            },
-            {
-              "anchor": "102-p14"
-            },
-            {
-              "anchor": "102-p15"
-            }
-          ]
+          "printedPage": "102"
         },
         {
           "sequence": 12,
-          "printedPage": "103",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/012.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/012.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1529",
-          "passages": [
-            {
-              "anchor": "103-p1"
-            },
-            {
-              "anchor": "103-p2"
-            },
-            {
-              "anchor": "103-p3"
-            },
-            {
-              "anchor": "103-p4"
-            },
-            {
-              "anchor": "103-p5"
-            },
-            {
-              "anchor": "103-p6"
-            },
-            {
-              "anchor": "103-p7"
-            },
-            {
-              "anchor": "103-p8"
-            },
-            {
-              "anchor": "103-p9"
-            },
-            {
-              "anchor": "103-p10"
-            }
-          ]
+          "printedPage": "103"
         },
         {
           "sequence": 13,
-          "printedPage": "104",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/013.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/013.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1530",
-          "passages": [
-            {
-              "anchor": "104-p1"
-            },
-            {
-              "anchor": "104-p2"
-            },
-            {
-              "anchor": "104-p3"
-            },
-            {
-              "anchor": "104-p4"
-            },
-            {
-              "anchor": "104-p5"
-            },
-            {
-              "anchor": "104-p6"
-            },
-            {
-              "anchor": "104-p7"
-            },
-            {
-              "anchor": "104-p8"
-            }
-          ]
+          "printedPage": "104"
         },
         {
           "sequence": 14,
-          "printedPage": "105",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/014.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/014.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1531",
-          "passages": [
-            {
-              "anchor": "105-p1"
-            },
-            {
-              "anchor": "105-p2"
-            },
-            {
-              "anchor": "105-p3"
-            },
-            {
-              "anchor": "105-p4"
-            },
-            {
-              "anchor": "105-p5"
-            },
-            {
-              "anchor": "105-p6"
-            },
-            {
-              "anchor": "105-p7"
-            },
-            {
-              "anchor": "105-p8"
-            },
-            {
-              "anchor": "105-p9"
-            }
-          ]
+          "printedPage": "105"
         },
         {
           "sequence": 15,
-          "printedPage": "106",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/015.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/015.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1532",
-          "passages": [
-            {
-              "anchor": "106-p1"
-            },
-            {
-              "anchor": "106-p2"
-            },
-            {
-              "anchor": "106-p3"
-            },
-            {
-              "anchor": "106-p4"
-            },
-            {
-              "anchor": "106-p5"
-            },
-            {
-              "anchor": "106-p6"
-            },
-            {
-              "anchor": "106-p7"
-            },
-            {
-              "anchor": "106-p8"
-            },
-            {
-              "anchor": "106-p9"
-            },
-            {
-              "anchor": "106-p10"
-            },
-            {
-              "anchor": "106-p11"
-            },
-            {
-              "anchor": "106-p12"
-            }
-          ]
+          "printedPage": "106"
         },
         {
           "sequence": 16,
-          "printedPage": "107",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/016.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/016.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1533",
-          "passages": [
-            {
-              "anchor": "107-p1"
-            },
-            {
-              "anchor": "107-p2"
-            },
-            {
-              "anchor": "107-p3"
-            },
-            {
-              "anchor": "107-p4"
-            },
-            {
-              "anchor": "107-p5"
-            },
-            {
-              "anchor": "107-p6"
-            }
-          ]
+          "printedPage": "107"
         },
         {
           "sequence": 17,
-          "printedPage": "108",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/017.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/017.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1534",
-          "passages": [
-            {
-              "anchor": "108-p1"
-            },
-            {
-              "anchor": "108-p2"
-            },
-            {
-              "anchor": "108-p3"
-            },
-            {
-              "anchor": "108-p4"
-            },
-            {
-              "anchor": "108-p5"
-            },
-            {
-              "anchor": "108-p6"
-            },
-            {
-              "anchor": "108-p7"
-            },
-            {
-              "anchor": "108-p8"
-            },
-            {
-              "anchor": "108-p9"
-            }
-          ]
+          "printedPage": "108"
         },
         {
           "sequence": 18,
-          "printedPage": "109",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/018.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/018.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1535",
-          "passages": [
-            {
-              "anchor": "109-p1"
-            },
-            {
-              "anchor": "109-p2"
-            },
-            {
-              "anchor": "109-p3"
-            },
-            {
-              "anchor": "109-p4"
-            },
-            {
-              "anchor": "109-p5"
-            },
-            {
-              "anchor": "109-p6"
-            },
-            {
-              "anchor": "109-p7"
-            },
-            {
-              "anchor": "109-p8"
-            },
-            {
-              "anchor": "109-p9"
-            },
-            {
-              "anchor": "109-p10"
-            },
-            {
-              "anchor": "109-p11"
-            },
-            {
-              "anchor": "109-p12"
-            }
-          ]
+          "printedPage": "109"
         },
         {
           "sequence": 19,
-          "printedPage": "110",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/019.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/019.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1536",
-          "passages": [
-            {
-              "anchor": "110-p1"
-            },
-            {
-              "anchor": "110-p2"
-            },
-            {
-              "anchor": "110-p3"
-            },
-            {
-              "anchor": "110-p4"
-            },
-            {
-              "anchor": "110-p5"
-            },
-            {
-              "anchor": "110-p6"
-            },
-            {
-              "anchor": "110-p7"
-            },
-            {
-              "anchor": "110-p8"
-            },
-            {
-              "anchor": "110-p9"
-            }
-          ]
+          "printedPage": "110"
         },
         {
           "sequence": 20,
-          "printedPage": "111",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/020.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/020.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1537",
-          "passages": [
-            {
-              "anchor": "111-p1"
-            },
-            {
-              "anchor": "111-p2"
-            },
-            {
-              "anchor": "111-p3"
-            },
-            {
-              "anchor": "111-p4"
-            },
-            {
-              "anchor": "111-p5"
-            },
-            {
-              "anchor": "111-p6"
-            },
-            {
-              "anchor": "111-p7"
-            },
-            {
-              "anchor": "111-p8"
-            },
-            {
-              "anchor": "111-p9"
-            },
-            {
-              "anchor": "111-p10"
-            }
-          ]
+          "printedPage": "111"
         },
         {
           "sequence": 21,
-          "printedPage": "112",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/021.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/021.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1538",
-          "passages": [
-            {
-              "anchor": "112-p1"
-            },
-            {
-              "anchor": "112-p2"
-            },
-            {
-              "anchor": "112-p3"
-            },
-            {
-              "anchor": "112-p4"
-            },
-            {
-              "anchor": "112-p5"
-            },
-            {
-              "anchor": "112-p6"
-            },
-            {
-              "anchor": "112-p7"
-            },
-            {
-              "anchor": "112-p8"
-            },
-            {
-              "anchor": "112-p9"
-            },
-            {
-              "anchor": "112-p10"
-            },
-            {
-              "anchor": "112-p11"
-            }
-          ]
+          "printedPage": "112"
         },
         {
           "sequence": 22,
-          "printedPage": "113",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/022.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/022.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1539",
-          "passages": [
-            {
-              "anchor": "113-p1"
-            },
-            {
-              "anchor": "113-p2"
-            },
-            {
-              "anchor": "113-p3"
-            },
-            {
-              "anchor": "113-p4"
-            },
-            {
-              "anchor": "113-p5"
-            },
-            {
-              "anchor": "113-p6"
-            },
-            {
-              "anchor": "113-p7"
-            },
-            {
-              "anchor": "113-p8"
-            },
-            {
-              "anchor": "113-p9"
-            },
-            {
-              "anchor": "113-p10"
-            },
-            {
-              "anchor": "113-p11"
-            },
-            {
-              "anchor": "113-p12"
-            },
-            {
-              "anchor": "113-p13"
-            },
-            {
-              "anchor": "113-p14"
-            }
-          ]
+          "printedPage": "113"
         },
         {
           "sequence": 23,
-          "printedPage": "114",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/023.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/023.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1540",
-          "passages": [
-            {
-              "anchor": "114-p1"
-            },
-            {
-              "anchor": "114-p2"
-            },
-            {
-              "anchor": "114-p3"
-            },
-            {
-              "anchor": "114-p4"
-            },
-            {
-              "anchor": "114-p5"
-            },
-            {
-              "anchor": "114-p6"
-            },
-            {
-              "anchor": "114-p7"
-            },
-            {
-              "anchor": "114-p8"
-            },
-            {
-              "anchor": "114-p9"
-            },
-            {
-              "anchor": "114-p10"
-            },
-            {
-              "anchor": "114-p11"
-            },
-            {
-              "anchor": "114-p12"
-            },
-            {
-              "anchor": "114-p13"
-            },
-            {
-              "anchor": "114-p14"
-            },
-            {
-              "anchor": "114-p15"
-            }
-          ]
+          "printedPage": "114"
         },
         {
           "sequence": 24,
-          "printedPage": "115",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/024.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/024.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1541",
-          "passages": [
-            {
-              "anchor": "115-p1"
-            },
-            {
-              "anchor": "115-p2"
-            },
-            {
-              "anchor": "115-p3"
-            },
-            {
-              "anchor": "115-p4"
-            },
-            {
-              "anchor": "115-p5"
-            },
-            {
-              "anchor": "115-p6"
-            },
-            {
-              "anchor": "115-p7"
-            },
-            {
-              "anchor": "115-p8"
-            },
-            {
-              "anchor": "115-p9"
-            },
-            {
-              "anchor": "115-p10"
-            },
-            {
-              "anchor": "115-p11"
-            },
-            {
-              "anchor": "115-p12"
-            },
-            {
-              "anchor": "115-p13"
-            }
-          ]
+          "printedPage": "115"
         },
         {
           "sequence": 25,
-          "printedPage": "116",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/025.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/025.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1542",
-          "passages": [
-            {
-              "anchor": "116-p1"
-            },
-            {
-              "anchor": "116-p2"
-            },
-            {
-              "anchor": "116-p3"
-            },
-            {
-              "anchor": "116-p4"
-            },
-            {
-              "anchor": "116-p5"
-            },
-            {
-              "anchor": "116-p6"
-            },
-            {
-              "anchor": "116-p7"
-            },
-            {
-              "anchor": "116-p8"
-            },
-            {
-              "anchor": "116-p9"
-            },
-            {
-              "anchor": "116-p10"
-            },
-            {
-              "anchor": "116-p11"
-            },
-            {
-              "anchor": "116-p12"
-            },
-            {
-              "anchor": "116-p13"
-            }
-          ]
+          "printedPage": "116"
         },
         {
           "sequence": 26,
-          "printedPage": "117",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/026.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/026.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1543",
-          "passages": [
-            {
-              "anchor": "117-p1"
-            },
-            {
-              "anchor": "117-p2"
-            },
-            {
-              "anchor": "117-p3"
-            },
-            {
-              "anchor": "117-p4"
-            },
-            {
-              "anchor": "117-p5"
-            },
-            {
-              "anchor": "117-p6"
-            },
-            {
-              "anchor": "117-p7"
-            },
-            {
-              "anchor": "117-p8"
-            },
-            {
-              "anchor": "117-p9"
-            },
-            {
-              "anchor": "117-p10"
-            },
-            {
-              "anchor": "117-p11"
-            },
-            {
-              "anchor": "117-p12"
-            },
-            {
-              "anchor": "117-p13"
-            }
-          ]
+          "printedPage": "117"
         },
         {
           "sequence": 27,
-          "printedPage": "118",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/027.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/027.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1544",
-          "passages": [
-            {
-              "anchor": "118-p1"
-            },
-            {
-              "anchor": "118-p2"
-            },
-            {
-              "anchor": "118-p3"
-            },
-            {
-              "anchor": "118-p4"
-            },
-            {
-              "anchor": "118-p5"
-            },
-            {
-              "anchor": "118-p6"
-            },
-            {
-              "anchor": "118-p7"
-            },
-            {
-              "anchor": "118-p8"
-            },
-            {
-              "anchor": "118-p9"
-            }
-          ]
+          "printedPage": "118"
         },
         {
           "sequence": 28,
-          "printedPage": "119",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/028.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/028.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1545",
-          "passages": [
-            {
-              "anchor": "119-p1"
-            },
-            {
-              "anchor": "119-p2"
-            },
-            {
-              "anchor": "119-p3"
-            },
-            {
-              "anchor": "119-p4"
-            },
-            {
-              "anchor": "119-p5"
-            },
-            {
-              "anchor": "119-p6"
-            },
-            {
-              "anchor": "119-p7"
-            },
-            {
-              "anchor": "119-p8"
-            },
-            {
-              "anchor": "119-p9"
-            },
-            {
-              "anchor": "119-p10"
-            }
-          ]
+          "printedPage": "119"
         },
         {
           "sequence": 29,
-          "printedPage": "120",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/029.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/029.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1546",
-          "passages": [
-            {
-              "anchor": "120-p1"
-            },
-            {
-              "anchor": "120-p2"
-            },
-            {
-              "anchor": "120-p3"
-            },
-            {
-              "anchor": "120-p4"
-            },
-            {
-              "anchor": "120-p5"
-            },
-            {
-              "anchor": "120-p6"
-            },
-            {
-              "anchor": "120-p7"
-            },
-            {
-              "anchor": "120-p8"
-            },
-            {
-              "anchor": "120-p9"
-            },
-            {
-              "anchor": "120-p10"
-            },
-            {
-              "anchor": "120-p11"
-            },
-            {
-              "anchor": "120-p12"
-            },
-            {
-              "anchor": "120-p13"
-            },
-            {
-              "anchor": "120-p14"
-            },
-            {
-              "anchor": "120-p15"
-            },
-            {
-              "anchor": "120-p16"
-            },
-            {
-              "anchor": "120-p17"
-            },
-            {
-              "anchor": "120-p18"
-            }
-          ]
+          "printedPage": "120"
         },
         {
           "sequence": 30,
-          "printedPage": "121",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/030.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/030.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1547",
-          "passages": [
-            {
-              "anchor": "121-p1"
-            },
-            {
-              "anchor": "121-p2"
-            },
-            {
-              "anchor": "121-p3"
-            },
-            {
-              "anchor": "121-p4"
-            },
-            {
-              "anchor": "121-p5"
-            },
-            {
-              "anchor": "121-p6"
-            },
-            {
-              "anchor": "121-p7"
-            },
-            {
-              "anchor": "121-p8"
-            },
-            {
-              "anchor": "121-p9"
-            },
-            {
-              "anchor": "121-p10"
-            },
-            {
-              "anchor": "121-p11"
-            },
-            {
-              "anchor": "121-p12"
-            }
-          ]
+          "printedPage": "121"
         },
         {
           "sequence": 31,
-          "printedPage": "122",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/031.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/031.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1548",
-          "passages": [
-            {
-              "anchor": "122-p1"
-            },
-            {
-              "anchor": "122-p2"
-            },
-            {
-              "anchor": "122-p3"
-            },
-            {
-              "anchor": "122-p4"
-            },
-            {
-              "anchor": "122-p5"
-            },
-            {
-              "anchor": "122-p6"
-            },
-            {
-              "anchor": "122-p7"
-            },
-            {
-              "anchor": "122-p8"
-            },
-            {
-              "anchor": "122-p9"
-            },
-            {
-              "anchor": "122-p10"
-            },
-            {
-              "anchor": "122-p11"
-            },
-            {
-              "anchor": "122-p12"
-            },
-            {
-              "anchor": "122-p13"
-            },
-            {
-              "anchor": "122-p14"
-            },
-            {
-              "anchor": "122-p15"
-            },
-            {
-              "anchor": "122-p16"
-            },
-            {
-              "anchor": "122-p17"
-            },
-            {
-              "anchor": "122-p18"
-            }
-          ]
+          "printedPage": "122"
         },
         {
           "sequence": 32,
-          "printedPage": "123",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/032.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/032.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1549",
-          "passages": [
-            {
-              "anchor": "123-p1"
-            },
-            {
-              "anchor": "123-p2"
-            },
-            {
-              "anchor": "123-p3"
-            },
-            {
-              "anchor": "123-p4"
-            },
-            {
-              "anchor": "123-p5"
-            },
-            {
-              "anchor": "123-p6"
-            },
-            {
-              "anchor": "123-p7"
-            },
-            {
-              "anchor": "123-p8"
-            },
-            {
-              "anchor": "123-p9"
-            },
-            {
-              "anchor": "123-p10"
-            }
-          ]
+          "printedPage": "123"
         },
         {
           "sequence": 33,
-          "printedPage": "124",
-          "bodyFile": "accounts/saad-ibn-abi-waqqas/033.md",
-          "notesFile": "accounts/saad-ibn-abi-waqqas/033.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/1550",
-          "passages": [
-            {
-              "anchor": "124-p1"
-            },
-            {
-              "anchor": "124-p2"
-            },
-            {
-              "anchor": "124-p3"
-            },
-            {
-              "anchor": "124-p4"
-            },
-            {
-              "anchor": "124-p5"
-            }
-          ]
+          "printedPage": "124"
         }
       ],
       "volumeNumber": 4
@@ -1526,7 +156,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "92-p8",
+          "passageAnchor": "4/92-p15",
           "volume": "1",
           "pageReference": "92-93",
           "extractionUrl": "https://shamela.ws/book/10906/1518",
@@ -1546,7 +176,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "93-p1",
+          "passageAnchor": "4/93-p1",
           "volume": "1",
           "pageReference": "93",
           "extractionUrl": "https://shamela.ws/book/10906/1519",
@@ -1566,7 +196,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "93-p2",
+          "passageAnchor": "4/93-p2",
           "volume": "1",
           "pageReference": "93",
           "extractionUrl": "https://shamela.ws/book/10906/1519",
@@ -1575,7 +205,7 @@
         },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "98-p7",
+          "passageAnchor": "4/98-p7",
           "volume": "1",
           "pageReference": "98",
           "extractionUrl": "https://shamela.ws/book/10906/1524",
@@ -1595,7 +225,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "97-p4",
+          "passageAnchor": "4/97-p4",
           "volume": "1",
           "pageReference": "97",
           "extractionUrl": "https://shamela.ws/book/10906/1523",
@@ -1615,7 +245,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "97-p6",
+          "passageAnchor": "4/97-p6",
           "volume": "1",
           "pageReference": "97",
           "extractionUrl": "https://shamela.ws/book/10906/1523",
@@ -1636,7 +266,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "98-p6",
+          "passageAnchor": "4/98-p6",
           "volume": "1",
           "pageReference": "98",
           "extractionUrl": "https://shamela.ws/book/10906/1524",
@@ -1645,7 +275,7 @@
         },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "110-p5",
+          "passageAnchor": "4/110-p5",
           "volume": "1",
           "pageReference": "110",
           "extractionUrl": "https://shamela.ws/book/10906/1536",
@@ -1654,7 +284,7 @@
         },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "111-p8",
+          "passageAnchor": "4/111-p8",
           "volume": "1",
           "pageReference": "111",
           "extractionUrl": "https://shamela.ws/book/10906/1537",
@@ -1663,7 +293,7 @@
         },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "115-p2",
+          "passageAnchor": "4/115-p2",
           "volume": "1",
           "pageReference": "115",
           "extractionUrl": "https://shamela.ws/book/10906/1541",
@@ -1683,7 +313,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "123-p10",
+          "passageAnchor": "4/123-p10",
           "volume": "1",
           "pageReference": "123",
           "extractionUrl": "https://shamela.ws/book/10906/1549",
@@ -1692,7 +322,7 @@
         },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "97-p2",
+          "passageAnchor": "4/97-p2",
           "volume": "1",
           "pageReference": "97",
           "extractionUrl": "https://shamela.ws/book/10906/1523",
@@ -1712,7 +342,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "124-p2",
+          "passageAnchor": "4/124-p2",
           "volume": "1",
           "pageReference": "124",
           "extractionUrl": "https://shamela.ws/book/10906/1550",
@@ -1733,7 +363,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "97-p2",
+          "passageAnchor": "4/97-p2",
           "volume": "1",
           "pageReference": "97",
           "extractionUrl": "https://shamela.ws/book/10906/1523",
@@ -1753,7 +383,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "92-p9",
+          "passageAnchor": "4/92-p9",
           "volume": "1",
           "pageReference": "92",
           "extractionUrl": "https://shamela.ws/book/10906/1518",
@@ -1775,7 +405,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "110-p5",
+          "passageAnchor": "4/110-p5",
           "volume": "1",
           "pageReference": "110",
           "extractionUrl": "https://shamela.ws/book/10906/1536",
@@ -1797,7 +427,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "95-p10",
+          "passageAnchor": "4/95-p10",
           "volume": "1",
           "pageReference": "95",
           "extractionUrl": "https://shamela.ws/book/10906/1521",
@@ -1819,7 +449,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "109-p4",
+          "passageAnchor": "4/109-p4",
           "volume": "1",
           "pageReference": "109",
           "extractionUrl": "https://shamela.ws/book/10906/1535",
@@ -1839,7 +469,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "109-p7",
+          "passageAnchor": "4/109-p7",
           "volume": "1",
           "pageReference": "109",
           "extractionUrl": "https://shamela.ws/book/10906/1535",
@@ -1848,7 +478,7 @@
         },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "109-p9",
+          "passageAnchor": "4/109-p9",
           "volume": "1",
           "pageReference": "109",
           "extractionUrl": "https://shamela.ws/book/10906/1535",
@@ -1868,7 +498,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "101-p2",
+          "passageAnchor": "4/101-p2",
           "volume": "1",
           "pageReference": "101",
           "extractionUrl": "https://shamela.ws/book/10906/1527",
@@ -1877,7 +507,7 @@
         },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "107-p6",
+          "passageAnchor": "4/107-p6",
           "volume": "1",
           "pageReference": "107-108",
           "extractionUrl": "https://shamela.ws/book/10906/1533",
@@ -1899,7 +529,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "99-p10",
+          "passageAnchor": "4/99-p10",
           "volume": "1",
           "pageReference": "99",
           "extractionUrl": "https://shamela.ws/book/10906/1525",
@@ -1908,7 +538,7 @@
         },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "101-p10",
+          "passageAnchor": "4/101-p10",
           "volume": "1",
           "pageReference": "101",
           "extractionUrl": "https://shamela.ws/book/10906/1527",
@@ -1930,7 +560,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "102-p15",
+          "passageAnchor": "4/102-p15",
           "volume": "1",
           "pageReference": "102-103",
           "extractionUrl": "https://shamela.ws/book/10906/1528",
@@ -1952,7 +582,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "115-p2",
+          "passageAnchor": "4/115-p2",
           "volume": "1",
           "pageReference": "115",
           "extractionUrl": "https://shamela.ws/book/10906/1541",
@@ -1961,7 +591,7 @@
         },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "117-p13",
+          "passageAnchor": "4/117-p13",
           "volume": "1",
           "pageReference": "117",
           "extractionUrl": "https://shamela.ws/book/10906/1543",
@@ -1983,7 +613,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "122-p7",
+          "passageAnchor": "4/122-p7",
           "volume": "1",
           "pageReference": "122",
           "extractionUrl": "https://shamela.ws/book/10906/1548",
@@ -2005,7 +635,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "92-p8",
+          "passageAnchor": "4/92-p8",
           "volume": "1",
           "pageReference": "92",
           "extractionUrl": "https://shamela.ws/book/10906/1518",

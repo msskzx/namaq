@@ -16,8 +16,8 @@ function approvedClaimKeys() {
   const keys = new Set<string>();
   const unapproved: string[] = [];
   for (const dir of readdirSync(batchesRoot)) {
-    const { batch, files } = loadBatch(join(batchesRoot, dir));
-    const approval = checkApproval(batch, files);
+    const { batch } = loadBatch(join(batchesRoot, dir));
+    const approval = checkApproval(batch);
     if (!approval.approved) unapproved.push(`${dir} (${approval.reason})`);
     else batch.claims.forEach((claim) => keys.add(claim.key));
   }

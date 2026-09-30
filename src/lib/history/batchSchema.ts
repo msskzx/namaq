@@ -1,4 +1,6 @@
 import { createHash } from 'node:crypto';
+import type { SourceManifest, StorePage } from './sourceStore';
+import { pageAnchors } from './sourceStore';
 
 export const subjectKinds = ['PERSON', 'TITLE', 'BATTLE', 'EVENT'] as const;
 export const reviewStatuses = ['NOT_REVIEWED', 'IN_REVIEW', 'REVIEWED'] as const;
@@ -28,56 +30,21 @@ export type ReviewStatus = (typeof reviewStatuses)[number];
 export type Confidence = (typeof confidences)[number];
 export type PassageKind = (typeof passageKinds)[number];
 
-export interface SourceRecord {
-  slug: string;
-  title: string;
-  language?: string;
-  author?: string;
-  editor?: string;
-  publisher?: string;
-  publicationYear?: string;
-  edition?: string;
-  digitalHost?: string;
-  url?: string;
-  notes?: string;
-  /**
-   * The edition's volumes, whether or not this batch reads from them. A work
-   * is bound in volumes and the edition decides how many, so recording them on
-   * the source is what lets a reader see the shape of the whole book rather
-   * than only the parts some entry happens to sit in.
-   */
-  volumes?: VolumeRecord[];
-}
-
-export interface VolumeRecord {
-  /**
-   * Position in the edition's own reading order, which is not always the
-   * number on the spine: this edition opens with appended sira volumes before
-   * its numbered series begins.
-   */
-  number: number;
-  name?: string;
-}
-
-export interface PassageRecord {
-  anchor: string;
-  kind?: PassageKind;
-}
-
+/**
+ * One page of an account's run, naming the store page it reads rather than
+ * carrying the page's text: the text lives once in
+ * `data/history/sources/<source>/v<N>/<printedPage>.md` — see
+ * docs/plans/source-page-store.md.
+ */
 export interface PageRecord {
   sequence: number;
-  printedPage?: string;
-  /** Path to the page's Markdown, relative to the batch directory. */
-  bodyFile: string;
-  notesFile?: string;
-  extractionUrl?: string;
+  printedPage: string;
   /**
    * The volume this page is bound in, by the source's `number`. Omitted, the
-   * page takes its account's `volumeNumber`, so only the pages of an entry that
-   * crosses a binding need to say anything.
+   * page takes its account's `volumeNumber`, so only the pages of an entry
+   * that crosses a binding need to say anything.
    */
   volumeNumber?: number;
-  passages?: PassageRecord[];
 }
 
 export interface AccountRecord {
@@ -86,13 +53,8 @@ export interface AccountRecord {
   subjectSlug: string;
   entryIdentifier?: string;
   titleArabic?: string;
-  /**
-   * The volume this entry opens in, by the source's `number`, and so the volume
-   * of every page that does not name its own.
-   */
+  /** The volume this entry opens in, by the source's `number`. */
   volumeNumber?: number;
-  /** What the batch wrote, such as "السيرة ١-٢" for an entry spanning two. */
-  volume?: string;
   extractionUrl: string;
   accessedAt: string;
   pages: PageRecord[];
@@ -107,7 +69,7 @@ export interface AccountRecord {
 
 export interface CitationRecord {
   sourceSlug: string;
-  /** Anchor of a passage declared by one of this batch's account pages. */
+  /** Derived anchor `<volume>/<printedPage>-p<n>` of a store page's paragraph. */
   passageAnchor?: string;
   paragraphKey?: string;
   footnoteNumber?: number;
@@ -149,7 +111,6 @@ export interface BatchApproval {
 export interface HistoryBatch {
   slug: string;
   summaryFile: string;
-  sources: SourceRecord[];
   accounts: AccountRecord[];
   claims: ClaimRecord[];
   approval?: BatchApproval;
@@ -165,8 +126,18 @@ export function markBatchReviewed(batch: HistoryBatch) {
   return changed;
 }
 
-/** Markdown for every page file the batch references, keyed by its relative path. */
+/** `summary.md`'s text, the one local file a batch still carries. */
 export type BatchFiles = Record<string, string>;
+
+/** The source manifests a batch's accounts and citations refer to, by slug. */
+export type SourceManifests = Map<string, SourceManifest>;
+
+/** Store pages the batch's accounts reference, keyed by `sourceSlug/v<N>/<printedPage>`. */
+export type StorePages = Map<string, StorePage>;
+
+export function storePageKey(sourceSlug: string, volumeNumber: number, printedPage: string) {
+  return `${sourceSlug}/v${volumeNumber}/${printedPage}`;
+}
 
 export interface ValidationIssue {
   path: string;
@@ -189,11 +160,11 @@ function isHttpUrl(value: string) {
 function checkCitation(
   citation: CitationRecord,
   path: string,
-  sourceSlugs: Set<string>,
+  manifests: SourceManifests,
   anchors: Set<string>,
   issues: ValidationIssue[],
 ) {
-  if (!sourceSlugs.has(citation.sourceSlug)) {
+  if (!manifests.has(citation.sourceSlug)) {
     issues.push({ path, message: `unknown source "${citation.sourceSlug}"` });
   }
   if (!isHttpUrl(citation.extractionUrl)) {
@@ -214,34 +185,24 @@ function checkCitation(
 function checkAccount(
   account: AccountRecord,
   index: number,
-  sourceSlugs: Set<string>,
-  volumeNumbers: Map<string, Set<number>>,
-  files: BatchFiles,
+  manifests: SourceManifests,
+  pages: StorePages,
   anchors: Set<string>,
   issues: ValidationIssue[],
 ) {
   const path = `accounts[${index}]`;
 
-  if (!sourceSlugs.has(account.sourceSlug)) {
+  const manifest = manifests.get(account.sourceSlug);
+  if (!manifest) {
     issues.push({ path, message: `unknown source "${account.sourceSlug}"` });
   }
-  // An entry may only sit in a volume its own source declares, so a typo in
-  // the number fails here rather than quietly importing an unlinked account.
-  const declared = volumeNumbers.get(account.sourceSlug);
-  if (account.volumeNumber !== undefined && !declared?.has(account.volumeNumber)) {
+  const declared = new Set((manifest?.volumes ?? []).map((volume) => volume.number));
+  if (account.volumeNumber !== undefined && !declared.has(account.volumeNumber)) {
     issues.push({
       path,
       message: `volumeNumber ${account.volumeNumber} is not a volume "${account.sourceSlug}" declares`,
     });
   }
-  account.pages.forEach((page, position) => {
-    if (page.volumeNumber !== undefined && !declared?.has(page.volumeNumber)) {
-      issues.push({
-        path: `${path}.pages[${position}]`,
-        message: `volumeNumber ${page.volumeNumber} is not a volume "${account.sourceSlug}" declares`,
-      });
-    }
-  });
   if (!isHttpUrl(account.extractionUrl)) {
     issues.push({ path, message: 'extractionUrl must be an http(s) URL' });
   }
@@ -275,64 +236,44 @@ function checkAccount(
     }
     seen.add(page.sequence);
 
-    if (files[page.bodyFile] === undefined) {
-      issues.push({ path: pagePath, message: `missing page file "${page.bodyFile}"` });
-    } else if (!files[page.bodyFile].trim()) {
-      issues.push({ path: pagePath, message: `page file "${page.bodyFile}" is empty` });
-    }
-    if (page.notesFile && files[page.notesFile] === undefined) {
-      issues.push({ path: pagePath, message: `missing notes file "${page.notesFile}"` });
-    }
-
-    const excerpts = passageExcerpts(page, files);
-    page.passages?.forEach((passage, passageIndex) => {
-      const key = `${account.sourceSlug}:${account.subjectSlug}:${passage.anchor}`;
-      if (anchors.has(key)) {
-        issues.push({ path: `${pagePath}.passages[${passageIndex}]`, message: `duplicate anchor "${passage.anchor}"` });
-      }
-      anchors.add(key);
-      anchors.add(passage.anchor);
-      // An anchor whose paragraph is missing means the list and the page file
-      // have drifted apart, which is what pairing them by position risks.
-      if (!excerpts.get(passage.anchor)) {
-        issues.push({
-          path: `${pagePath}.passages[${passageIndex}]`,
-          message: `anchor "${passage.anchor}" has no paragraph in "${page.bodyFile}"`,
-        });
-      }
-    });
-
-    const declared = page.passages?.length ?? 0;
-    const paragraphs = (files[page.bodyFile] ?? '').split(/\n{2,}/).filter((text) => text.trim()).length;
-    if (declared > 0 && declared !== paragraphs) {
+    const volumeNumber = page.volumeNumber ?? account.volumeNumber;
+    if (volumeNumber !== undefined && !declared.has(volumeNumber)) {
       issues.push({
         path: pagePath,
-        message: `declares ${declared} passage(s) but "${page.bodyFile}" has ${paragraphs} paragraph(s)`,
+        message: `volumeNumber ${volumeNumber} is not a volume "${account.sourceSlug}" declares`,
       });
+    }
+    if (volumeNumber === undefined) {
+      issues.push({ path: pagePath, message: 'no volumeNumber on the page or the account' });
+      return;
+    }
+
+    const store = pages.get(storePageKey(account.sourceSlug, volumeNumber, page.printedPage));
+    if (!store) {
+      issues.push({
+        path: pagePath,
+        message: `no store page at v${volumeNumber}/${page.printedPage} for "${account.sourceSlug}"`,
+      });
+      return;
+    }
+    for (const anchor of pageAnchors(volumeNumber, page.printedPage, store.body).keys()) {
+      anchors.add(anchor);
     }
   });
 }
 
 /**
- * The text each declared anchor stands for, read from the page's Markdown.
- *
- * The page file is the one copy of the work's text, so an anchor carries no
- * excerpt of its own; it is paired with the paragraph in the same position.
- * Anchors are the reading page's own paragraph ids, so they need not start at
- * p1 -- an entry beginning mid-page starts wherever it starts -- which is why
- * they are declared in order rather than derived from the file.
+ * Checks a batch against the rules in docs/data-pipelines.md: known sources,
+ * resolvable citation targets and required provenance. `manifests` and
+ * `pages` come from `loadBatch`, which reads only the sources and store pages
+ * this batch's accounts actually name.
  */
-export function passageExcerpts(page: PageRecord, files: BatchFiles): Map<string, string> {
-  const paragraphs = (files[page.bodyFile] ?? '').split(/\n{2,}/).map((text) => text.trim()).filter(Boolean);
-  return new Map((page.passages ?? []).map((passage, index) => [passage.anchor, paragraphs[index] ?? '']));
-}
-
-/**
- * Checks a batch against the rules in docs/data-pipelines.md:
- * known sources, resolvable citation targets, required provenance, and page
- * integrity. Returns every issue found rather than throwing on the first.
- */
-export function validateBatch(batch: HistoryBatch, files: BatchFiles): ValidationIssue[] {
+export function validateBatch(
+  batch: HistoryBatch,
+  files: BatchFiles,
+  manifests: SourceManifests,
+  pages: StorePages,
+): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
 
   if (!batch.slug.trim()) issues.push({ path: 'slug', message: 'slug is required' });
@@ -340,33 +281,8 @@ export function validateBatch(batch: HistoryBatch, files: BatchFiles): Validatio
     issues.push({ path: 'summaryFile', message: `missing summary "${batch.summaryFile}"` });
   }
 
-  const sourceSlugs = new Set<string>();
-  const volumeNumbers = new Map<string, Set<number>>();
-  batch.sources.forEach((source, index) => {
-    if (sourceSlugs.has(source.slug)) {
-      issues.push({ path: `sources[${index}]`, message: `duplicate source slug "${source.slug}"` });
-    }
-    sourceSlugs.add(source.slug);
-    if (!source.title.trim()) issues.push({ path: `sources[${index}]`, message: 'title is required' });
-
-    const numbers = new Set<number>();
-    (source.volumes ?? []).forEach((volume, position) => {
-      const where = `sources[${index}].volumes[${position}]`;
-      if (!Number.isInteger(volume.number) || volume.number < 1) {
-        issues.push({ path: where, message: 'number must be a whole number from 1' });
-      } else if (numbers.has(volume.number)) {
-        issues.push({ path: where, message: `volume ${volume.number} is declared twice` });
-      } else {
-        numbers.add(volume.number);
-      }
-    });
-    volumeNumbers.set(source.slug, numbers);
-  });
-
   const anchors = new Set<string>();
-  batch.accounts.forEach((account, index) =>
-    checkAccount(account, index, sourceSlugs, volumeNumbers, files, anchors, issues),
-  );
+  batch.accounts.forEach((account, index) => checkAccount(account, index, manifests, pages, anchors, issues));
 
   const keys = new Set<string>();
   batch.claims.forEach((claim, index) => {
@@ -396,7 +312,7 @@ export function validateBatch(batch: HistoryBatch, files: BatchFiles): Validatio
       issues.push({ path, message: 'every claim needs at least one citation' });
     }
     claim.citations.forEach((citation, citationIndex) =>
-      checkCitation(citation, `${path}.citations[${citationIndex}]`, sourceSlugs, anchors, issues),
+      checkCitation(citation, `${path}.citations[${citationIndex}]`, manifests, anchors, issues),
     );
   });
 
@@ -422,22 +338,17 @@ export function checklistReminders(batch: HistoryBatch): string[] {
 }
 
 /**
- * Content hash of the batch and the source pages, so any edit after approval
- * has to be approved again. summary.md is outside it: the summary is written
- * for the reviewer and changing its wording invalidates nothing about the
- * evidence.
+ * Content hash of the batch itself: its claims, citations and account spans.
+ * Store page text is published on its own
+ * (docs/plans/source-page-store.md, "Publication") and does not gate a
+ * batch's approval. `summary.md` is outside the hash too: the summary is
+ * written for the reviewer and changing its wording invalidates nothing
+ * about the evidence.
  */
-export function batchRevision(batch: HistoryBatch, files: BatchFiles): string {
+export function batchRevision(batch: HistoryBatch): string {
   const content = { ...batch, approval: undefined };
   const hash = createHash('sha256');
   hash.update(JSON.stringify(content));
-  Object.keys(files)
-    .filter((path) => path !== batch.summaryFile)
-    .sort()
-    .forEach((path) => {
-      hash.update(path);
-      hash.update(files[path]);
-    });
   return hash.digest('hex').slice(0, 16);
 }
 
@@ -446,8 +357,8 @@ export type ApprovalCheck =
   | { approved: false; revision: string; reason: string };
 
 /** Whether the batch as it stands on disk is the exact revision the user approved. */
-export function checkApproval(batch: HistoryBatch, files: BatchFiles): ApprovalCheck {
-  const revision = batchRevision(batch, files);
+export function checkApproval(batch: HistoryBatch): ApprovalCheck {
+  const revision = batchRevision(batch);
 
   if (!batch.approval) {
     return { approved: false, revision, reason: 'the batch has no recorded approval' };

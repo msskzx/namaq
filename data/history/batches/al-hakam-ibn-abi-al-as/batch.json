@@ -1,26 +1,6 @@
 {
   "slug": "al-hakam-ibn-abi-al-as",
   "summaryFile": "summary.md",
-  "sources": [
-    {
-      "slug": "siyar-alam-al-nubala-risalah",
-      "title": "سير أعلام النبلاء",
-      "author": "شمس الدين الذهبي",
-      "editor": "مأمون الصاغرجي، بإشراف شعيب الأرناؤوط",
-      "publisher": "مؤسسة الرسالة",
-      "publicationYear": "1405/1985",
-      "edition": "الطبعة الثالثة",
-      "digitalHost": "المكتبة الشاملة",
-      "url": "https://shamela.ws/index.php/book/10906",
-      "notes": "الجزء الثاني بتحقيق مأمون الصاغرجي. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
-      "volumes": [
-        {
-          "number": 5,
-          "name": "سير أعلام النبلاء ج٢"
-        }
-      ]
-    }
-  ],
   "accounts": [
     {
       "sourceSlug": "siyar-alam-al-nubala-risalah",
@@ -32,66 +12,11 @@
       "pages": [
         {
           "sequence": 1,
-          "printedPage": "107",
-          "bodyFile": "accounts/al-hakam-ibn-abi-al-as/001.md",
-          "notesFile": "accounts/al-hakam-ibn-abi-al-as/001.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/2087",
-          "passages": [
-            {
-              "anchor": "107-p12"
-            },
-            {
-              "anchor": "107-p13"
-            },
-            {
-              "anchor": "107-p14"
-            },
-            {
-              "anchor": "107-p15"
-            }
-          ]
+          "printedPage": "107"
         },
         {
           "sequence": 2,
-          "printedPage": "108",
-          "bodyFile": "accounts/al-hakam-ibn-abi-al-as/002.md",
-          "notesFile": "accounts/al-hakam-ibn-abi-al-as/002.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/2088",
-          "passages": [
-            {
-              "anchor": "108-p1"
-            },
-            {
-              "anchor": "108-p2"
-            },
-            {
-              "anchor": "108-p3"
-            },
-            {
-              "anchor": "108-p4"
-            },
-            {
-              "anchor": "108-p5"
-            },
-            {
-              "anchor": "108-p6"
-            },
-            {
-              "anchor": "108-p7"
-            },
-            {
-              "anchor": "108-p8"
-            },
-            {
-              "anchor": "108-p9"
-            },
-            {
-              "anchor": "108-p10"
-            },
-            {
-              "anchor": "108-p11"
-            }
-          ]
+          "printedPage": "108"
         }
       ],
       "notInSource": [
@@ -114,7 +39,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "107-p12",
+          "passageAnchor": "5/107-p1",
           "volume": "5",
           "pageReference": "107",
           "extractionUrl": "https://shamela.ws/book/10906/2087",
@@ -136,7 +61,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "107-p12",
+          "passageAnchor": "5/107-p1",
           "volume": "5",
           "pageReference": "107",
           "extractionUrl": "https://shamela.ws/book/10906/2087",
@@ -156,7 +81,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "107-p14",
+          "passageAnchor": "5/107-p3",
           "volume": "5",
           "pageReference": "107",
           "extractionUrl": "https://shamela.ws/book/10906/2087",
@@ -176,7 +101,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "107-p15",
+          "passageAnchor": "5/107-p4",
           "volume": "5",
           "pageReference": "107",
           "extractionUrl": "https://shamela.ws/book/10906/2087",
@@ -196,7 +121,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "108-p11",
+          "passageAnchor": "5/108-p11",
           "volume": "5",
           "pageReference": "108",
           "extractionUrl": "https://shamela.ws/book/10906/2088",

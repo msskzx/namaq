@@ -11,8 +11,8 @@ if (!dir) {
   process.exit(1);
 }
 
-const { batch, files } = loadBatch(dir);
-const issues = validateBatch(batch, files);
+const { batch, files, manifests, pages } = loadBatch(dir);
+const issues = validateBatch(batch, files, manifests, pages);
 if (issues.length > 0) {
   for (const issue of issues) console.error(`  ${issue.path}: ${issue.message}`);
   process.exit(1);
@@ -27,5 +27,5 @@ if (!apply) {
 }
 
 writeFileSync(join(dir, batchDefinitionFile), `${JSON.stringify(batch, null, 2)}\n`);
-console.log(`  marked reviewed at revision ${batchRevision(batch, files)}`);
+console.log(`  marked reviewed at revision ${batchRevision(batch)}`);
 console.log('  publication approval is now stale; review and approve the new revision before import');

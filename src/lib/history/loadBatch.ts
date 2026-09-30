@@ -1,23 +1,45 @@
-import { readdirSync, readFileSync, statSync } from 'node:fs';
-import { join, relative, sep } from 'node:path';
-import type { BatchFiles, HistoryBatch } from './batchSchema';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import type { BatchFiles, HistoryBatch, SourceManifests, StorePages } from './batchSchema';
+import { storePageKey } from './batchSchema';
+import { loadSourceManifest, loadStorePage } from './sourceStore';
 
 export const batchDefinitionFile = 'batch.json';
 
-function collectMarkdown(dir: string, root: string, files: BatchFiles) {
-  for (const entry of readdirSync(dir)) {
-    const full = join(dir, entry);
-    if (statSync(full).isDirectory()) {
-      collectMarkdown(full, root, files);
-    } else if (entry.endsWith('.md')) {
-      files[relative(root, full).split(sep).join('/')] = readFileSync(full, 'utf8');
+/**
+ * Reads a batch directory (its definition and `summary.md`), plus every
+ * source manifest and store page the batch's accounts name — see AGENTS.md,
+ * "Do not read a whole account to answer a question."
+ */
+export function loadBatch(
+  dir: string,
+  root = '.',
+): { batch: HistoryBatch; files: BatchFiles; manifests: SourceManifests; pages: StorePages } {
+  const batch = JSON.parse(readFileSync(join(dir, batchDefinitionFile), 'utf8')) as HistoryBatch;
+
+  const files: BatchFiles = {};
+  files[batch.summaryFile] = readFileSync(join(dir, batch.summaryFile), 'utf8');
+
+  const manifests: SourceManifests = new Map();
+  const pages: StorePages = new Map();
+
+  for (const account of batch.accounts) {
+    if (!manifests.has(account.sourceSlug)) {
+      try {
+        manifests.set(account.sourceSlug, loadSourceManifest(root, account.sourceSlug));
+      } catch {
+        // Left unresolved; validateBatch reports the unknown source.
+      }
+    }
+    for (const page of account.pages) {
+      const volumeNumber = page.volumeNumber ?? account.volumeNumber;
+      if (volumeNumber === undefined) continue;
+      const key = storePageKey(account.sourceSlug, volumeNumber, page.printedPage);
+      if (pages.has(key)) continue;
+      const store = loadStorePage(root, account.sourceSlug, volumeNumber, page.printedPage);
+      if (store) pages.set(key, store);
     }
   }
-  return files;
-}
 
-/** Reads a batch directory: its definition plus every Markdown file it holds. */
-export function loadBatch(dir: string): { batch: HistoryBatch; files: BatchFiles } {
-  const batch = JSON.parse(readFileSync(join(dir, batchDefinitionFile), 'utf8')) as HistoryBatch;
-  return { batch, files: collectMarkdown(dir, dir, {}) };
+  return { batch, files, manifests, pages };
 }

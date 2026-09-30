@@ -1,26 +1,6 @@
 {
   "slug": "fatimah-bint-asad",
   "summaryFile": "summary.md",
-  "sources": [
-    {
-      "slug": "siyar-alam-al-nubala-risalah",
-      "title": "سير أعلام النبلاء",
-      "author": "شمس الدين الذهبي",
-      "editor": "مأمون الصاغرجي، بإشراف شعيب الأرناؤوط",
-      "publisher": "مؤسسة الرسالة",
-      "publicationYear": "1405/1985",
-      "edition": "الطبعة الثالثة",
-      "digitalHost": "المكتبة الشاملة",
-      "url": "https://shamela.ws/index.php/book/10906",
-      "notes": "الجزء الثاني بتحقيق مأمون الصاغرجي، بإشراف شعيب الأرناؤوط. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
-      "volumes": [
-        {
-          "number": 5,
-          "name": "سير أعلام النبلاء ج٢"
-        }
-      ]
-    }
-  ],
   "accounts": [
     {
       "sourceSlug": "siyar-alam-al-nubala-risalah",
@@ -38,42 +18,7 @@
       "pages": [
         {
           "sequence": 1,
-          "printedPage": "118",
-          "bodyFile": "accounts/fatimah-bint-asad/001.md",
-          "notesFile": "accounts/fatimah-bint-asad/001.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/2098",
-          "passages": [
-            {
-              "anchor": "118-p1"
-            },
-            {
-              "anchor": "118-p2"
-            },
-            {
-              "anchor": "118-p3"
-            },
-            {
-              "anchor": "118-p4"
-            },
-            {
-              "anchor": "118-p5"
-            },
-            {
-              "anchor": "118-p6"
-            },
-            {
-              "anchor": "118-p7"
-            },
-            {
-              "anchor": "118-p8"
-            },
-            {
-              "anchor": "118-p9"
-            },
-            {
-              "anchor": "118-p10"
-            }
-          ]
+          "printedPage": "118"
         }
       ]
     }
@@ -90,7 +35,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "118-p1",
+          "passageAnchor": "5/118-p1",
           "volume": "5",
           "pageReference": "118",
           "extractionUrl": "https://shamela.ws/book/10906/2098",
@@ -110,7 +55,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "118-p2",
+          "passageAnchor": "5/118-p2",
           "volume": "5",
           "pageReference": "118",
           "extractionUrl": "https://shamela.ws/book/10906/2098",
@@ -130,7 +75,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "118-p3",
+          "passageAnchor": "5/118-p3",
           "volume": "5",
           "pageReference": "118",
           "extractionUrl": "https://shamela.ws/book/10906/2098",
@@ -152,7 +97,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "118-p1",
+          "passageAnchor": "5/118-p1",
           "volume": "5",
           "pageReference": "118",
           "extractionUrl": "https://shamela.ws/book/10906/2098",
@@ -174,7 +119,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "118-p2",
+          "passageAnchor": "5/118-p2",
           "volume": "5",
           "pageReference": "118",
           "extractionUrl": "https://shamela.ws/book/10906/2098",
@@ -194,7 +139,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "118-p3",
+          "passageAnchor": "5/118-p3",
           "volume": "5",
           "pageReference": "118",
           "extractionUrl": "https://shamela.ws/book/10906/2098",
@@ -203,7 +148,7 @@
         },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "118-p9",
+          "passageAnchor": "5/118-p9",
           "volume": "5",
           "pageReference": "118",
           "extractionUrl": "https://shamela.ws/book/10906/2098",

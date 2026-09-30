@@ -1,20 +1,6 @@
 {
   "slug": "arwa-bint-abd-al-muttalib-siyar175",
   "summaryFile": "summary.md",
-  "sources": [
-    {
-      "slug": "siyar-alam-al-nubala-islamweb",
-      "title": "سير أعلام النبلاء",
-      "author": "شمس الدين الذهبي",
-      "digitalHost": "islamweb",
-      "url": "https://www.islamweb.net/ar/library/content/60/1/سير-أعلام-النبلاء?idfrom=1&idto=6537",
-      "notes": "إسلام ويب يعرض هذا الجزء من كتاب النساء الصحابيات ضمن ترقيم مستقل عن طبعة الرسالة المستخدمة في دفعات أخرى (مثل hamzah-ibn-abd-al-muttalib-siyar15)، فلا تُدمج السجلات بينهما.",
-      "volumes": [
-        { "number": 1, "name": "الجزء الأول" },
-        { "number": 2, "name": "الجزء الثاني" }
-      ]
-    }
-  ],
   "accounts": [
     {
       "sourceSlug": "siyar-alam-al-nubala-islamweb",
@@ -25,19 +11,16 @@
       "extractionUrl": "https://www.islamweb.net/ar/library/content/60/175/أروى-عمة-رسول-الله-صلى-الله-عليه-وسلم",
       "accessedAt": "2026-09-29",
       "volumeNumber": 2,
-      "notInSource": ["fullName", "kunya", "appearance", "siblings"],
+      "notInSource": [
+        "fullName",
+        "kunya",
+        "appearance",
+        "siblings"
+      ],
       "pages": [
         {
           "sequence": 1,
-          "printedPage": "272",
-          "bodyFile": "accounts/arwa-bint-abd-al-muttalib/001.md",
-          "extractionUrl": "https://www.islamweb.net/ar/library/content/60/175/أروى-عمة-رسول-الله-صلى-الله-عليه-وسلم",
-          "passages": [
-            { "anchor": "272-p1" },
-            { "anchor": "272-p2" },
-            { "anchor": "272-p3" },
-            { "anchor": "272-p4" }
-          ]
+          "printedPage": "272"
         }
       ]
     }
@@ -56,7 +39,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-islamweb",
-          "passageAnchor": "272-p1",
+          "passageAnchor": "2/272-p1",
           "volume": "2",
           "pageReference": "272",
           "extractionUrl": "https://www.islamweb.net/ar/library/content/60/175/أروى-عمة-رسول-الله-صلى-الله-عليه-وسلم",
@@ -79,7 +62,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-islamweb",
-          "passageAnchor": "272-p2",
+          "passageAnchor": "2/272-p2",
           "volume": "2",
           "pageReference": "272",
           "extractionUrl": "https://www.islamweb.net/ar/library/content/60/175/أروى-عمة-رسول-الله-صلى-الله-عليه-وسلم",
@@ -99,7 +82,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-islamweb",
-          "passageAnchor": "272-p3",
+          "passageAnchor": "2/272-p3",
           "volume": "2",
           "pageReference": "272",
           "extractionUrl": "https://www.islamweb.net/ar/library/content/60/175/أروى-عمة-رسول-الله-صلى-الله-عليه-وسلم",

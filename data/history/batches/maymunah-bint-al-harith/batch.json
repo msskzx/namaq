@@ -1,134 +1,6 @@
 {
   "slug": "maymunah-bint-al-harith",
   "summaryFile": "summary.md",
-  "sources": [
-    {
-      "slug": "siyar-alam-al-nubala-risalah",
-      "title": "سير أعلام النبلاء",
-      "author": "شمس الدين الذهبي",
-      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
-      "publisher": "مؤسسة الرسالة",
-      "publicationYear": "1405/1985",
-      "edition": "الطبعة الثالثة",
-      "digitalHost": "المكتبة الشاملة",
-      "url": "https://shamela.ws/index.php/book/10906",
-      "notes": "الجزء الثاني بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
-      "volumes": [
-        {
-          "number": 1,
-          "name": "السيرة النبوية ج١"
-        },
-        {
-          "number": 2,
-          "name": "السيرة النبوية ج٢"
-        },
-        {
-          "number": 3,
-          "name": "سيرة الخلفاء الراشدين"
-        },
-        {
-          "number": 4,
-          "name": "سير أعلام النبلاء ج١"
-        },
-        {
-          "number": 5,
-          "name": "سير أعلام النبلاء ج٢"
-        },
-        {
-          "number": 6,
-          "name": "سير أعلام النبلاء ج٣"
-        },
-        {
-          "number": 7,
-          "name": "سير أعلام النبلاء ج٤"
-        },
-        {
-          "number": 8,
-          "name": "سير أعلام النبلاء ج٥"
-        },
-        {
-          "number": 9,
-          "name": "سير أعلام النبلاء ج٦"
-        },
-        {
-          "number": 10,
-          "name": "سير أعلام النبلاء ج٧"
-        },
-        {
-          "number": 11,
-          "name": "سير أعلام النبلاء ج٨"
-        },
-        {
-          "number": 12,
-          "name": "سير أعلام النبلاء ج٩"
-        },
-        {
-          "number": 13,
-          "name": "سير أعلام النبلاء ج١٠"
-        },
-        {
-          "number": 14,
-          "name": "سير أعلام النبلاء ج١١"
-        },
-        {
-          "number": 15,
-          "name": "سير أعلام النبلاء ج١٢"
-        },
-        {
-          "number": 16,
-          "name": "سير أعلام النبلاء ج١٣"
-        },
-        {
-          "number": 17,
-          "name": "سير أعلام النبلاء ج١٤"
-        },
-        {
-          "number": 18,
-          "name": "سير أعلام النبلاء ج١٥"
-        },
-        {
-          "number": 19,
-          "name": "سير أعلام النبلاء ج١٦"
-        },
-        {
-          "number": 20,
-          "name": "سير أعلام النبلاء ج١٧"
-        },
-        {
-          "number": 21,
-          "name": "سير أعلام النبلاء ج١٨"
-        },
-        {
-          "number": 22,
-          "name": "سير أعلام النبلاء ج١٩"
-        },
-        {
-          "number": 23,
-          "name": "سير أعلام النبلاء ج٢٠"
-        },
-        {
-          "number": 24,
-          "name": "سير أعلام النبلاء ج٢١"
-        },
-        {
-          "number": 25,
-          "name": "سير أعلام النبلاء ج٢٢"
-        },
-        {
-          "number": 26,
-          "name": "سير أعلام النبلاء ج٢٣"
-        },
-        {
-          "number": 27,
-          "name": "الفهارس ج١"
-        },
-        {
-          "number": 28,
-          "name": "الفهارس ج٢"
-        }
-      ]
-    }
-  ],
   "accounts": [
     {
       "sourceSlug": "siyar-alam-al-nubala-risalah",
@@ -139,288 +11,35 @@
       "pages": [
         {
           "sequence": 1,
-          "printedPage": "238",
-          "bodyFile": "accounts/maymunah-bint-al-harith/001.md",
-          "notesFile": "accounts/maymunah-bint-al-harith/001.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/2218",
-          "passages": [
-            {
-              "anchor": "238-p4"
-            },
-            {
-              "anchor": "238-p5"
-            },
-            {
-              "anchor": "238-p6"
-            }
-          ]
+          "printedPage": "238"
         },
         {
           "sequence": 2,
-          "printedPage": "239",
-          "bodyFile": "accounts/maymunah-bint-al-harith/002.md",
-          "notesFile": "accounts/maymunah-bint-al-harith/002.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/2219",
-          "passages": [
-            {
-              "anchor": "239-p1"
-            },
-            {
-              "anchor": "239-p2"
-            },
-            {
-              "anchor": "239-p3"
-            },
-            {
-              "anchor": "239-p4"
-            },
-            {
-              "anchor": "239-p5"
-            },
-            {
-              "anchor": "239-p6"
-            },
-            {
-              "anchor": "239-p7"
-            },
-            {
-              "anchor": "239-p8"
-            },
-            {
-              "anchor": "239-p9"
-            },
-            {
-              "anchor": "239-p10"
-            },
-            {
-              "anchor": "239-p11"
-            }
-          ]
+          "printedPage": "239"
         },
         {
           "sequence": 3,
-          "printedPage": "240",
-          "bodyFile": "accounts/maymunah-bint-al-harith/003.md",
-          "notesFile": "accounts/maymunah-bint-al-harith/003.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/2220",
-          "passages": [
-            {
-              "anchor": "240-p1"
-            },
-            {
-              "anchor": "240-p2"
-            },
-            {
-              "anchor": "240-p3"
-            },
-            {
-              "anchor": "240-p4"
-            },
-            {
-              "anchor": "240-p5"
-            },
-            {
-              "anchor": "240-p6"
-            },
-            {
-              "anchor": "240-p7"
-            },
-            {
-              "anchor": "240-p8"
-            },
-            {
-              "anchor": "240-p9"
-            },
-            {
-              "anchor": "240-p10"
-            }
-          ]
+          "printedPage": "240"
         },
         {
           "sequence": 4,
-          "printedPage": "241",
-          "bodyFile": "accounts/maymunah-bint-al-harith/004.md",
-          "notesFile": "accounts/maymunah-bint-al-harith/004.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/2221",
-          "passages": [
-            {
-              "anchor": "241-p1"
-            },
-            {
-              "anchor": "241-p2"
-            },
-            {
-              "anchor": "241-p3"
-            },
-            {
-              "anchor": "241-p4"
-            },
-            {
-              "anchor": "241-p5"
-            },
-            {
-              "anchor": "241-p6"
-            },
-            {
-              "anchor": "241-p7"
-            },
-            {
-              "anchor": "241-p8"
-            },
-            {
-              "anchor": "241-p9"
-            },
-            {
-              "anchor": "241-p10"
-            },
-            {
-              "anchor": "241-p11"
-            }
-          ]
+          "printedPage": "241"
         },
         {
           "sequence": 5,
-          "printedPage": "242",
-          "bodyFile": "accounts/maymunah-bint-al-harith/005.md",
-          "notesFile": "accounts/maymunah-bint-al-harith/005.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/2222",
-          "passages": [
-            {
-              "anchor": "242-p1"
-            },
-            {
-              "anchor": "242-p2"
-            },
-            {
-              "anchor": "242-p3"
-            },
-            {
-              "anchor": "242-p4"
-            },
-            {
-              "anchor": "242-p5"
-            },
-            {
-              "anchor": "242-p6"
-            },
-            {
-              "anchor": "242-p7"
-            },
-            {
-              "anchor": "242-p8"
-            },
-            {
-              "anchor": "242-p9"
-            },
-            {
-              "anchor": "242-p10"
-            },
-            {
-              "anchor": "242-p11"
-            },
-            {
-              "anchor": "242-p12"
-            },
-            {
-              "anchor": "242-p13"
-            },
-            {
-              "anchor": "242-p14"
-            }
-          ]
+          "printedPage": "242"
         },
         {
           "sequence": 6,
-          "printedPage": "243",
-          "bodyFile": "accounts/maymunah-bint-al-harith/006.md",
-          "notesFile": "accounts/maymunah-bint-al-harith/006.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/2223",
-          "passages": [
-            {
-              "anchor": "243-p1"
-            },
-            {
-              "anchor": "243-p2"
-            },
-            {
-              "anchor": "243-p3"
-            },
-            {
-              "anchor": "243-p4"
-            },
-            {
-              "anchor": "243-p5"
-            },
-            {
-              "anchor": "243-p6"
-            },
-            {
-              "anchor": "243-p7"
-            },
-            {
-              "anchor": "243-p8"
-            }
-          ]
+          "printedPage": "243"
         },
         {
           "sequence": 7,
-          "printedPage": "244",
-          "bodyFile": "accounts/maymunah-bint-al-harith/007.md",
-          "notesFile": "accounts/maymunah-bint-al-harith/007.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/2224",
-          "passages": [
-            {
-              "anchor": "244-p1"
-            },
-            {
-              "anchor": "244-p2"
-            },
-            {
-              "anchor": "244-p3"
-            },
-            {
-              "anchor": "244-p4"
-            },
-            {
-              "anchor": "244-p5"
-            }
-          ]
+          "printedPage": "244"
         },
         {
           "sequence": 8,
-          "printedPage": "245",
-          "bodyFile": "accounts/maymunah-bint-al-harith/008.md",
-          "notesFile": "accounts/maymunah-bint-al-harith/008.notes.md",
-          "extractionUrl": "https://shamela.ws/book/10906/2225",
-          "passages": [
-            {
-              "anchor": "245-p1"
-            },
-            {
-              "anchor": "245-p2"
-            },
-            {
-              "anchor": "245-p3"
-            },
-            {
-              "anchor": "245-p4"
-            },
-            {
-              "anchor": "245-p5"
-            },
-            {
-              "anchor": "245-p6"
-            },
-            {
-              "anchor": "245-p7"
-            },
-            {
-              "anchor": "245-p8"
-            },
-            {
-              "anchor": "245-p9"
-            }
-          ]
+          "printedPage": "245"
         }
       ],
       "volumeNumber": 5,
@@ -442,7 +61,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "238-p4",
+          "passageAnchor": "5/238-p4",
           "volume": "5",
           "pageReference": "238",
           "extractionUrl": "https://shamela.ws/book/10906/2218",
@@ -451,7 +70,7 @@
         },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "238-p5",
+          "passageAnchor": "5/238-p5",
           "volume": "5",
           "pageReference": "238",
           "extractionUrl": "https://shamela.ws/book/10906/2218",
@@ -471,7 +90,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "238-p4",
+          "passageAnchor": "5/238-p4",
           "volume": "5",
           "pageReference": "238",
           "extractionUrl": "https://shamela.ws/book/10906/2218",
@@ -491,7 +110,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "238-p4",
+          "passageAnchor": "5/238-p4",
           "volume": "5",
           "pageReference": "238",
           "extractionUrl": "https://shamela.ws/book/10906/2218",
@@ -513,7 +132,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "238-p4",
+          "passageAnchor": "5/238-p4",
           "volume": "5",
           "pageReference": "238",
           "extractionUrl": "https://shamela.ws/book/10906/2218",
@@ -535,7 +154,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "238-p6",
+          "passageAnchor": "5/238-p6",
           "volume": "5",
           "pageReference": "238",
           "extractionUrl": "https://shamela.ws/book/10906/2218",
@@ -557,7 +176,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "238-p6",
+          "passageAnchor": "5/238-p6",
           "volume": "5",
           "pageReference": "238",
           "extractionUrl": "https://shamela.ws/book/10906/2218",
@@ -577,7 +196,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "239-p4",
+          "passageAnchor": "5/239-p4",
           "volume": "5",
           "pageReference": "239",
           "extractionUrl": "https://shamela.ws/book/10906/2219",
@@ -586,7 +205,7 @@
         },
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "244-p1",
+          "passageAnchor": "5/244-p1",
           "volume": "5",
           "pageReference": "244",
           "extractionUrl": "https://shamela.ws/book/10906/2224",
@@ -606,7 +225,7 @@
       "citations": [
         {
           "sourceSlug": "siyar-alam-al-nubala-risalah",
-          "passageAnchor": "245-p8",
+          "passageAnchor": "5/245-p8",
           "volume": "5",
           "pageReference": "245",
           "extractionUrl": "https://shamela.ws/book/10906/2225",
