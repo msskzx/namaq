@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import useSWR from 'swr';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -93,6 +94,10 @@ export default function SourceAccountReader({
   const contentScrollTop = useRef(0);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  // The panel is portaled to <body> (see below), so it falls outside
+  // menuRef's own DOM subtree -- this ref lets the outside-click check
+  // still recognize a click inside it as "inside".
+  const menuPanelRef = useRef<HTMLDivElement>(null);
 
   const [shellPage, setShellPage] = useState(page);
   const [fetched, setFetched] = useState<Record<string, AccountPage>>({});
@@ -180,7 +185,9 @@ export default function SourceAccountReader({
   useEffect(() => {
     if (!menuOpen) return;
     const close = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) setMenuOpen(false);
+      const target = event.target as Node;
+      if (menuRef.current?.contains(target) || menuPanelRef.current?.contains(target)) return;
+      setMenuOpen(false);
     };
     document.addEventListener('mousedown', close);
     return () => document.removeEventListener('mousedown', close);
@@ -300,14 +307,19 @@ export default function SourceAccountReader({
           {fullscreen && (
           <div className="relative" ref={menuRef}>
             <Button size="icon" onClick={() => setMenuOpen((open) => !open)} aria-label={menuOpen ? (t ? 'إغلاق القائمة' : 'Close menu') : (t ? 'فتح القائمة' : 'Open menu')} aria-pressed={menuOpen}><FontAwesomeIcon icon={menuOpen ? faXmark : faBars} /></Button>
-            {menuOpen && (
-              <div className="fixed inset-x-3 top-14 z-[70] max-h-[75dvh] overflow-y-auto rounded-lg border border-amber-400 bg-white p-3 shadow-xl dark:bg-black lg:inset-x-auto lg:start-3 lg:w-64">
+            {menuOpen && typeof document !== 'undefined' && createPortal(
+              // Portaled to <body>: this header sits in a div the header-steadying
+              // transform moves (translate-y), which makes that div the containing
+              // block for a `fixed` descendant and clips it to the div's own small,
+              // overflow-hidden box instead of the viewport.
+              <div ref={menuPanelRef} className="fixed inset-x-3 top-14 z-[70] max-h-[75dvh] overflow-y-auto rounded-lg border border-amber-400 bg-white p-3 shadow-xl dark:bg-black lg:inset-x-auto lg:start-3 lg:w-64">
                 <ul className="flex flex-col gap-1">
                   {getAllNavLinks(language).map((link) => <li key={link.href}><Link href={link.href} onClick={() => setMenuOpen(false)} className="block rounded px-2 py-2 text-sm hover:bg-amber-50 dark:hover:bg-gray-800">{link.label}</Link></li>)}
                   <li><Link href="/about" onClick={() => setMenuOpen(false)} className="block rounded px-2 py-2 text-sm hover:bg-amber-50 dark:hover:bg-gray-800">{t ? 'عن الموقع' : 'About'}</Link></li>
                 </ul>
                 <div className="mt-3 flex flex-col gap-3 border-t border-amber-400 pt-3"><LanguageSwitcher /><ThemeSwitcher /></div>
-              </div>
+              </div>,
+              document.body,
             )}
           </div>
           )}
