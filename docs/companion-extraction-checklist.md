@@ -165,7 +165,7 @@ that.
 - [ ] سناء
 - [ ] الكلابية
 - [ ] الكندية
-- [x] قتيلة — (`qutaylah-bint-qais-al-kindiyyah`)
+- [x] قتيلة — (`qutaylah-bint-qais-al-kindiyyah`, PR #208)
 - [ ] خولة
 - [ ] جويرية أم المؤمنين
 - [ ] سودة أم المؤمنين
