@@ -92,7 +92,7 @@ that.
 - [x] بشر بن البراء (`bishr-ibn-al-baraa`, PR #174)
 - [x] سعد بن عبادة (`saad-ibn-ubadah`, PR #188)
 - [ ] سعد بن معاذ
-<- [x] زيد بن الخطاب (`zaid-ibn-al-khattab`, PR #183)
+- [x] زيد بن الخطاب (`zaid-ibn-al-khattab`, PR #183)
 - [x] أسعد بن زرارة (`asad-ibn-zurarah`, PR #185)
 - [ ] عتبة بن غزوان
 - [ ] عكاشة بن محصن
