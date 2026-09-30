@@ -27,6 +27,11 @@ const qadisiyyah = {
       },
       claims: ['saad/qadisiyyah'],
     },
+    {
+      person: 'tulayhah-ibn-khuwaylid',
+      isMuslim: true,
+      claims: ['tulayhah-ibn-khuwaylid-siyar62/qadisiyyah'],
+    },
   ],
 } satisfies CatalogBattle;
 
