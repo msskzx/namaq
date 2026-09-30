@@ -183,8 +183,8 @@ const badr = {
     {
       person: 'ukkashah-ibn-mihsan',
       isMuslim: true,
-      summary: { value: 'انقطع سيفه فأعطاه رسول الله صلى الله عليه وسلم عودا فعاد سيفا في يده، فقاتل به.', claims: ['ukkashah/badr'] },
-      claims: ['ukkashah/badr'],
+      summary: { value: 'انقطع سيفه فأعطاه رسول الله صلى الله عليه وسلم عودا فعاد سيفا في يده، فقاتل به.', claims: ['ukkashah/badr', 'ukkashah-ibn-mihsan-siyar60/badr'] },
+      claims: ['ukkashah/badr', 'ukkashah-ibn-mihsan-siyar60/badr'],
     },
     {
       person: 'bilal-ibn-rabah',
@@ -352,6 +352,42 @@ const badr = {
       isMuslim: true,
       summary: { value: 'وَهُوَ مِنْ كِبَارِ البَدْرِيِّيْنَ', claims: ['bishr-ibn-al-baraa-siyar54/badr'] },
       claims: ['bishr-ibn-al-baraa-siyar54/badr'],
+    },
+    // Entry 67; witnessed Badr, martyred later at Uhud.
+    { person: 'abdullah-ibn-amr-ibn-haram', isMuslim: true, claims: ['abdullah-ibn-amr-ibn-haram-siyar67/badr'] },
+    // ADR 0013
+    {
+      person: 'maan-ibn-adi',
+      isMuslim: true,
+      summary: { value: 'العَجْلاَنِيُّ، العَقَبِيُّ، البَدْرِيُّ', claims: ['maan-ibn-adi-siyar64/badr'] },
+      claims: ['maan-ibn-adi-siyar64/badr'],
+    },
+    {
+      person: 'thabit-ibn-qais',
+      isMuslim: true,
+      relation: 'ABSENT_FROM',
+      summary: { value: 'وَلَمْ يَشْهَدْ بَدْراً.', claims: ['thabit-ibn-qais-siyar61/badr-absence'] },
+      claims: ['thabit-ibn-qais-siyar61/badr-absence'],
+    },
+    {
+      person: 'zaid-ibn-al-khattab',
+      isMuslim: true,
+      summary: { value: 'شَهِدَ بَدْراً وَالمَشَاهِدَ', claims: ['zaid-ibn-al-khattab-siyar57/badr'] },
+      claims: ['zaid-ibn-al-khattab-siyar57/badr'],
+    },
+    // Entry 55; the majority report is absence — preparing to march, stung,
+    // stayed behind — against Urwah and al-Bukhari's attendance report.
+    {
+      person: 'saad-ibn-ubadah',
+      isMuslim: true,
+      relation: 'ABSENT_FROM',
+      status: ['ABSENT_EXCUSED'],
+      summary: {
+        value:
+          'كَانَ يَتَهَيَّأُ لِلْخُرُوْجِ إِلَى بَدْرٍ، وَيَأْتِي دُوْرَ الأَنْصَارِ يَحُضُّهُم عَلَى الخُرُوْجِ، فَنُهِشَ، فَأَقَامَ. وَقَالَ جَمَاعَةٌ: مَا شَهِدَهَا؛ وَقَالَ أَبُو الأَسْوَدِ عَنْ عُرْوَةَ وَالبُخَارِيُّ فِي تَارِيْخِهِ: شَهِدَهَا.',
+        claims: ['saad-ibn-ubadah-siyar55/badr-absent'],
+      },
+      claims: ['saad-ibn-ubadah-siyar55/badr-absent'],
     },
   ],
 } satisfies CatalogBattle;
