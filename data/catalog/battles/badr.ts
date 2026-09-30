@@ -353,6 +353,12 @@ const badr = {
       summary: { value: 'وَهُوَ مِنْ كِبَارِ البَدْرِيِّيْنَ', claims: ['bishr-ibn-al-baraa-siyar54/badr'] },
       claims: ['bishr-ibn-al-baraa-siyar54/badr'],
     },
+<    {
+      person: 'zaid-ibn-al-khattab',
+      isMuslim: true,
+      summary: { value: 'شَهِدَ بَدْراً وَالمَشَاهِدَ', claims: ['zaid-ibn-al-khattab-siyar57/badr'] },
+      claims: ['zaid-ibn-al-khattab-siyar57/badr'],
+    },
     // Entry 55; the majority report is absence — preparing to march, stung,
     // stayed behind — against Urwah and al-Bukhari's attendance report.
     {
