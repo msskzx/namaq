@@ -180,7 +180,7 @@ const uhud = {
       isMuslim: true,
       status: ['MARTYRED'],
       summary: { value: 'دفن مع عمرو بن الجموح في قبر واحد، فإنهما كانا متصافيين في الدنيا.', claims: ['ibn-haram/uhud'] },
-      claims: ['ibn-haram/uhud'],
+      claims: ['ibn-haram/uhud', 'abdullah-ibn-amr-ibn-haram-siyar67/uhud'],
     },
     {
       person: 'qatadah-ibn-al-numan',
