@@ -16,7 +16,7 @@ const deathOfAsadIbnZurarah = {
       claims: ['asad/death', 'asad/naqib'],
     },
   },
-  people: [{ person: 'asad-ibn-zurarah', claims: ['asad/death'] }],
+  people: [{ person: 'asad-ibn-zurarah', claims: ['asad/death', 'asad-ibn-zurarah-siyar58/death'] }],
 } satisfies CatalogEvent;
 
 export default deathOfAsadIbnZurarah;

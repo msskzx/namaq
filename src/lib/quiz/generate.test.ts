@@ -93,6 +93,53 @@ describe('question candidate generation', () => {
     expect(questions.filter((question) => question.family === 'TITLE_HOLDER')).toHaveLength(2);
   });
 
+  it('skips companion title assignments in both title directions', async () => {
+    loadCatalog.mockResolvedValue({
+      people: [{
+        ...basePerson('p1', 'الأول', 'أبو الأول'),
+        fields: {},
+        titles: [{ title: 'companion', claims: ['abu-ubaydah/titles'] }],
+        relations: [],
+        ayat: [],
+      }],
+      battles: [],
+      events: [],
+      utterances: [],
+    });
+    personFindMany.mockResolvedValue([{ slug: 'p1', name: 'الأول', sex: 'MALE', titles: [], ayat: [] }]);
+    titleFindMany.mockResolvedValue([{ slug: 'companion', name: 'صحابي' }]);
+    const questions = await generateQuestionCandidates();
+    expect(questions.filter((question) => question.family === 'PERSON_TITLE')).toEqual([]);
+    expect(questions.filter((question) => question.family === 'TITLE_HOLDER')).toEqual([]);
+  });
+
+  it('skips companionship relations', async () => {
+    loadCatalog.mockResolvedValue({
+      people: [
+        {
+          ...basePerson('p1', 'الأول', 'أبو الأول'),
+          fields: {},
+          titles: [],
+          relations: [
+            { type: 'COMPANION_OF', to: 'p2', claims: ['abdullah-ibn-suhail-siyar24/father'] },
+            { type: 'ACCOMPANIED_BY', to: 'p2', claims: ['abdullah-ibn-suhail-siyar24/father'] },
+          ],
+          ayat: [],
+        },
+        { ...basePerson('p2', 'الثاني', 'أبو الثاني'), fields: {}, titles: [], relations: [], ayat: [] },
+      ],
+      battles: [],
+      events: [],
+      utterances: [],
+    });
+    personFindMany.mockResolvedValue([
+      { slug: 'p1', name: 'الأول', sex: 'MALE', titles: [], ayat: [] },
+      { slug: 'p2', name: 'الثاني', sex: 'MALE', titles: [], ayat: [] },
+    ]);
+    const questions = await generateQuestionCandidates();
+    expect(questions.filter((question) => question.family === 'RELATION')).toEqual([]);
+  });
+
   it('creates complete Arabic questions with stable semantic keys', async () => {
     const questions = await generateQuestionCandidates();
     const kunya = questions.find((question) => question.family === 'KUNYA');

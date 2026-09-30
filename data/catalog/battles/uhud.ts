@@ -231,6 +231,7 @@ const uhud = {
       summary: { value: 'استشهد يوم أحد.', claims: ['khallad-siyar4/uhud'] },
       claims: ['khallad-siyar4/uhud'],
     },
+    { person: 'thabit-ibn-qais', isMuslim: true, claims: ['thabit-ibn-qais-siyar61/uhud'] },
   ],
 } satisfies CatalogBattle;
 
