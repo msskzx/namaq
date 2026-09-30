@@ -1,12 +1,15 @@
 import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
 /**
- * Carried from the retired prisma/personSeedData10.ts entry. The retired
- * entry presented her as a composite/disputed identity in the book itself
- * -- possibly Fatimah bint al-Dahhak ibn Sufyan, Amrah bint Zayd, al-Aliyah
- * bint Zubyan, or Sanaa bint Sufyan -- with no single nasab settled, so no
- * fullName and no ancestor chain. Her marriage to the Prophet was not
- * consummated.
+ * data/history/batches/al-kilabiyyah cites سير أعلام النبلاء (الرسالة، السيرة
+ * النبوية ج٢، ص٤٩٢-٤٩٤) for three of the retired prisma/personSeedData10.ts
+ * entry's four candidate identities -- Fatimah bint al-Dahhak ibn Sufyan,
+ * Sanaa bint Sufyan al-Kilabiyyah, and al-Aliyah bint Zabyan -- each reported
+ * there as a woman the Prophet married then separated from, and each kept as
+ * its own disputed claim rather than settled on one. The fourth candidate,
+ * Amrah bint Zayd al-Kilabiyyah (Ibn Ishaq, via secondary sources), is not in
+ * this edition's account and stays unclaimed. No single nasab is settled, so
+ * no fullName and no ancestor chain.
  */
 const alKilabiyyah = {
   kind: 'PERSON',
@@ -20,7 +23,18 @@ const alKilabiyyah = {
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
-  relations: [],
+  relations: [
+    {
+      type: 'WIFE',
+      inverse: 'HUSBAND',
+      to: 'prophet-muhammad',
+      claims: [
+        'kilabiyyah/candidate-fatimah-bint-al-dahhak',
+        'kilabiyyah/candidate-sanaa-bint-sufyan',
+        'kilabiyyah/candidate-aliyah-bint-zabyan',
+      ],
+    },
+  ],
 } satisfies CatalogPerson;
 
 export default alKilabiyyah;
