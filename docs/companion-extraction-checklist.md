@@ -162,7 +162,7 @@ that.
 - [ ] العالية
 - [ ] أسماء
 - [x] أم شريك — `data/history/batches/umm-shareek` (PR #201)
-- [ ] سناء
+- [x] سناء (`sanaa-bint-asma-al-sulami`, PR #200)
 - [ ] الكلابية
 - [ ] الكندية
 - [ ] قتيلة
