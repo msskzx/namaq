@@ -354,6 +354,13 @@ const badr = {
       claims: ['bishr-ibn-al-baraa-siyar54/badr'],
     },
     {
+      person: 'thabit-ibn-qais',
+      isMuslim: true,
+      relation: 'ABSENT_FROM',
+      summary: { value: 'وَلَمْ يَشْهَدْ بَدْراً.', claims: ['thabit-ibn-qais-siyar61/badr-absence'] },
+      claims: ['thabit-ibn-qais-siyar61/badr-absence'],
+    },
+    {
       person: 'zaid-ibn-al-khattab',
       isMuslim: true,
       summary: { value: 'شَهِدَ بَدْراً وَالمَشَاهِدَ', claims: ['zaid-ibn-al-khattab-siyar57/badr'] },
