@@ -164,7 +164,7 @@ that.
 - [x] أم شريك — `data/history/batches/umm-shareek` (PR #201)
 - [x] سناء (`sanaa-bint-asma-al-sulami`, PR #200)
 - [x] الكلابية — `data/history/batches/al-kilabiyyah` (PR #204)
-- [ ] الكندية
+- [x] الكندية — `data/history/batches/asma-bint-al-numan-al-kindiyyah` (PR #206)
 - [ ] قتيلة
 - [ ] خولة
 - [x] جويرية أم المؤمنين (`juwayriyah-bint-al-harith`, PR #187)
