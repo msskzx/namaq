@@ -1,0 +1,974 @@
+{
+  "slug": "saad-ibn-ubadah",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-ubadah",
+      "extractionUrl": "https://shamela.ws/book/10906/1696",
+      "accessedAt": "2026-09-29",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "270",
+          "bodyFile": "accounts/saad-ibn-ubadah/001.md",
+          "notesFile": "accounts/saad-ibn-ubadah/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1696",
+          "passages": [
+            {
+              "anchor": "270-p1"
+            },
+            {
+              "anchor": "270-p2"
+            },
+            {
+              "anchor": "270-p3"
+            },
+            {
+              "anchor": "270-p4"
+            },
+            {
+              "anchor": "270-p5"
+            },
+            {
+              "anchor": "270-p6"
+            },
+            {
+              "anchor": "270-p7"
+            },
+            {
+              "anchor": "270-p8"
+            },
+            {
+              "anchor": "270-p9"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "271",
+          "bodyFile": "accounts/saad-ibn-ubadah/002.md",
+          "notesFile": "accounts/saad-ibn-ubadah/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1697",
+          "passages": [
+            {
+              "anchor": "271-p1"
+            },
+            {
+              "anchor": "271-p2"
+            },
+            {
+              "anchor": "271-p3"
+            },
+            {
+              "anchor": "271-p4"
+            },
+            {
+              "anchor": "271-p5"
+            },
+            {
+              "anchor": "271-p6"
+            },
+            {
+              "anchor": "271-p7"
+            },
+            {
+              "anchor": "271-p8"
+            },
+            {
+              "anchor": "271-p9"
+            },
+            {
+              "anchor": "271-p10"
+            },
+            {
+              "anchor": "271-p11"
+            },
+            {
+              "anchor": "271-p12"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "printedPage": "272",
+          "bodyFile": "accounts/saad-ibn-ubadah/003.md",
+          "notesFile": "accounts/saad-ibn-ubadah/003.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1698",
+          "passages": [
+            {
+              "anchor": "272-p1"
+            },
+            {
+              "anchor": "272-p2"
+            },
+            {
+              "anchor": "272-p3"
+            },
+            {
+              "anchor": "272-p4"
+            },
+            {
+              "anchor": "272-p5"
+            },
+            {
+              "anchor": "272-p6"
+            },
+            {
+              "anchor": "272-p7"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "printedPage": "273",
+          "bodyFile": "accounts/saad-ibn-ubadah/004.md",
+          "notesFile": "accounts/saad-ibn-ubadah/004.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1699",
+          "passages": [
+            {
+              "anchor": "273-p1"
+            },
+            {
+              "anchor": "273-p2"
+            },
+            {
+              "anchor": "273-p3"
+            },
+            {
+              "anchor": "273-p4"
+            },
+            {
+              "anchor": "273-p5"
+            },
+            {
+              "anchor": "273-p6"
+            },
+            {
+              "anchor": "273-p7"
+            },
+            {
+              "anchor": "273-p8"
+            },
+            {
+              "anchor": "273-p9"
+            },
+            {
+              "anchor": "273-p10"
+            },
+            {
+              "anchor": "273-p11"
+            },
+            {
+              "anchor": "273-p12"
+            },
+            {
+              "anchor": "273-p13"
+            },
+            {
+              "anchor": "273-p14"
+            },
+            {
+              "anchor": "273-p15"
+            },
+            {
+              "anchor": "273-p16"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "printedPage": "274",
+          "bodyFile": "accounts/saad-ibn-ubadah/005.md",
+          "notesFile": "accounts/saad-ibn-ubadah/005.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1700",
+          "passages": [
+            {
+              "anchor": "274-p1"
+            },
+            {
+              "anchor": "274-p2"
+            },
+            {
+              "anchor": "274-p3"
+            },
+            {
+              "anchor": "274-p4"
+            },
+            {
+              "anchor": "274-p5"
+            },
+            {
+              "anchor": "274-p6"
+            },
+            {
+              "anchor": "274-p7"
+            },
+            {
+              "anchor": "274-p8"
+            },
+            {
+              "anchor": "274-p9"
+            },
+            {
+              "anchor": "274-p10"
+            },
+            {
+              "anchor": "274-p11"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "printedPage": "275",
+          "bodyFile": "accounts/saad-ibn-ubadah/006.md",
+          "notesFile": "accounts/saad-ibn-ubadah/006.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1701",
+          "passages": [
+            {
+              "anchor": "275-p1"
+            },
+            {
+              "anchor": "275-p2"
+            },
+            {
+              "anchor": "275-p3"
+            },
+            {
+              "anchor": "275-p4"
+            },
+            {
+              "anchor": "275-p5"
+            },
+            {
+              "anchor": "275-p6"
+            },
+            {
+              "anchor": "275-p7"
+            },
+            {
+              "anchor": "275-p8"
+            },
+            {
+              "anchor": "275-p9"
+            },
+            {
+              "anchor": "275-p10"
+            },
+            {
+              "anchor": "275-p11"
+            },
+            {
+              "anchor": "275-p12"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "printedPage": "276",
+          "bodyFile": "accounts/saad-ibn-ubadah/007.md",
+          "notesFile": "accounts/saad-ibn-ubadah/007.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1702",
+          "passages": [
+            {
+              "anchor": "276-p1"
+            },
+            {
+              "anchor": "276-p2"
+            },
+            {
+              "anchor": "276-p3"
+            },
+            {
+              "anchor": "276-p4"
+            },
+            {
+              "anchor": "276-p5"
+            },
+            {
+              "anchor": "276-p6"
+            },
+            {
+              "anchor": "276-p7"
+            },
+            {
+              "anchor": "276-p8"
+            },
+            {
+              "anchor": "276-p9"
+            },
+            {
+              "anchor": "276-p10"
+            },
+            {
+              "anchor": "276-p11"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "printedPage": "277",
+          "bodyFile": "accounts/saad-ibn-ubadah/008.md",
+          "notesFile": "accounts/saad-ibn-ubadah/008.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1703",
+          "passages": [
+            {
+              "anchor": "277-p1"
+            },
+            {
+              "anchor": "277-p2"
+            },
+            {
+              "anchor": "277-p3"
+            },
+            {
+              "anchor": "277-p4"
+            },
+            {
+              "anchor": "277-p5"
+            },
+            {
+              "anchor": "277-p6"
+            },
+            {
+              "anchor": "277-p7"
+            },
+            {
+              "anchor": "277-p8"
+            },
+            {
+              "anchor": "277-p9"
+            },
+            {
+              "anchor": "277-p10"
+            },
+            {
+              "anchor": "277-p11"
+            },
+            {
+              "anchor": "277-p12"
+            },
+            {
+              "anchor": "277-p13"
+            },
+            {
+              "anchor": "277-p14"
+            },
+            {
+              "anchor": "277-p15"
+            }
+          ]
+        },
+        {
+          "sequence": 9,
+          "printedPage": "278",
+          "bodyFile": "accounts/saad-ibn-ubadah/009.md",
+          "notesFile": "accounts/saad-ibn-ubadah/009.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1704",
+          "passages": [
+            {
+              "anchor": "278-p1"
+            },
+            {
+              "anchor": "278-p2"
+            },
+            {
+              "anchor": "278-p3"
+            },
+            {
+              "anchor": "278-p4"
+            },
+            {
+              "anchor": "278-p5"
+            },
+            {
+              "anchor": "278-p6"
+            },
+            {
+              "anchor": "278-p7"
+            },
+            {
+              "anchor": "278-p8"
+            },
+            {
+              "anchor": "278-p9"
+            },
+            {
+              "anchor": "278-p10"
+            },
+            {
+              "anchor": "278-p11"
+            },
+            {
+              "anchor": "278-p12"
+            }
+          ]
+        },
+        {
+          "sequence": 10,
+          "printedPage": "279",
+          "bodyFile": "accounts/saad-ibn-ubadah/010.md",
+          "notesFile": "accounts/saad-ibn-ubadah/010.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1705",
+          "passages": [
+            {
+              "anchor": "279-p1"
+            },
+            {
+              "anchor": "279-p2"
+            }
+          ]
+        }
+      ],
+      "volumeNumber": 4,
+      "notInSource": [
+        "appearance",
+        "wives",
+        "siblings"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "saad-ibn-ubadah-siyar55/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-ubadah",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "fullName",
+      "assertion": "سعد بن عبادة بن دليم بن حارثة بن أبي حزيمة بن ثعلبة بن طريف بن الخزرج بن ساعدة بن كعب بن الخزرج",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "270-p1",
+          "volume": "4",
+          "pageReference": "270",
+          "extractionUrl": "https://shamela.ws/book/10906/1696",
+          "excerptArabic": "٥٥ - سَعْدُ بنُ عُبَادَةَ بنِ دُلَيْمِ بنِ حَارِثَةَ الأَنْصَارِيُّ ابْنِ أَبِي حَزِيْمَةَ بنِ ثَعْلَبَةَ بنِ طَرِيْفِ بنِ الخَزْرَجِ بنِ سَاعِدَةَ بنِ كَعْبِ بنِ الخَزْرَجِ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-ubadah-siyar55/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-ubadah",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "ubadah-ibn-dulaym",
+      "assertion": "سعد بن عبادة بن دليم، فعبادة بن دليم أبوه.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "270-p1",
+          "volume": "4",
+          "pageReference": "270",
+          "extractionUrl": "https://shamela.ws/book/10906/1696",
+          "excerptArabic": "سَعْدُ بنُ عُبَادَةَ بنِ دُلَيْمِ بنِ حَارِثَةَ الأَنْصَارِيُّ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-ubadah-siyar55/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-ubadah",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "kunya",
+      "assertion": "أبو قيس",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "270-p3",
+          "volume": "4",
+          "pageReference": "270",
+          "extractionUrl": "https://shamela.ws/book/10906/1696",
+          "excerptArabic": "السَّيِّدُ الكَبِيْرُ، الشَّرِيْفُ، أَبُو قَيْسٍ الأَنْصَارِيُّ، الخَزْرَجِيُّ، السَّاعِدِيُّ، المَدَنِيُّ، النَّقِيْبُ، سَيِّدُ الخَزْرَجِ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-ubadah-siyar55/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-ubadah",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "assertion": "MALE — صيغ مذكر: السَّيِّدُ الكَبِيْرُ … سَيِّدُ الخَزْرَجِ.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "270-p3",
+          "volume": "4",
+          "pageReference": "270",
+          "extractionUrl": "https://shamela.ws/book/10906/1696",
+          "excerptArabic": "السَّيِّدُ الكَبِيْرُ، الشَّرِيْفُ … سَيِّدُ الخَزْرَجِ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-ubadah-siyar55/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-ubadah",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "titles",
+      "assertion": "صحابي: أحد النقباء ليلة العقبة.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "272-p4",
+          "volume": "4",
+          "pageReference": "272",
+          "extractionUrl": "https://shamela.ws/book/10906/1698",
+          "excerptArabic": "قَالَ مُوْسَى بنُ عُقْبَةَ، وَالجَمَاعَةُ: إِنَّهُ أَحَدُ النُّقَبَاءِ، لَيْلَةَ العَقَبَةِ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-ubadah-siyar55/virtues-sayyid",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-ubadah",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "assertion": "سَيِّدُ الخَزْرَجِ، النَّقِيْبُ، أَحَدُ النُّقَبَاءِ لَيْلَةَ العَقَبَةِ؛ عَقَبِيٌّ نَقِيْبٌ سَيِّدٌ جَوَادٌ. والتفّت عليه الأنصار يوم وفاة رسول الله صلى الله عليه وسلم ليبايعوه.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "270-p3",
+          "volume": "4",
+          "pageReference": "270",
+          "extractionUrl": "https://shamela.ws/book/10906/1696",
+          "excerptArabic": "السَّيِّدُ الكَبِيْرُ، الشَّرِيْفُ، أَبُو قَيْسٍ الأَنْصَارِيُّ، الخَزْرَجِيُّ، السَّاعِدِيُّ، المَدَنِيُّ، النَّقِيْبُ، سَيِّدُ الخَزْرَجِ.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "271-p3",
+          "volume": "4",
+          "pageReference": "271",
+          "extractionUrl": "https://shamela.ws/book/10906/1697",
+          "excerptArabic": "قَالَ: وَكَانَ عَقَبِيّاً، نَقِيْباً، سَيِّداً، جَوَاداً.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "272-p4",
+          "volume": "4",
+          "pageReference": "272",
+          "extractionUrl": "https://shamela.ws/book/10906/1698",
+          "excerptArabic": "قَالَ مُوْسَى بنُ عُقْبَةَ، وَالجَمَاعَةُ: إِنَّهُ أَحَدُ النُّقَبَاءِ، لَيْلَةَ العَقَبَةِ.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "276-p7",
+          "volume": "4",
+          "pageReference": "276",
+          "extractionUrl": "https://shamela.ws/book/10906/1702",
+          "excerptArabic": "كَانَ مَلِكاً شَرِيْفاً، مُطَاعاً، وَقَدِ الْتَفَّتْ عَلَيْهِ الأَنْصَارُ يَوْمَ وَفَاةِ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- لِيُبَايِعُوْهُ … فَمَا طَابَ لِسَعْدٍ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-ubadah-siyar55/virtues-badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-ubadah",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "assertion": "قال قبل بدر: لو أمرتنا أن نخيضها البحر لأخضناها، ولو أمرتنا أن نضرب أكبادها إلى برك الغماد لفعلنا؛ ولواء الأنصار ورايتهم كانا معه.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "273-p16",
+          "volume": "4",
+          "pageReference": "273-274",
+          "extractionUrl": "https://shamela.ws/book/10906/1699",
+          "excerptArabic": "فَقَامَ سَعْدُ بنُ عُبَادَةَ، فَقَالَ: لَوْ أَمَرْتَنَا يَا رَسُوْلَ اللهِ أَنْ نُخِيْضَهَا البَحْرَ لأَخَضْنَاهَا، وَلَوْ أَمَرْتَنَا أَنْ نَضْرِبَ أَكْبَادَهَا إِلَى بَرْكِ الغِمَادِ لَفَعَلْنَا.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "273-p8",
+          "volume": "4",
+          "pageReference": "273",
+          "extractionUrl": "https://shamela.ws/book/10906/1699",
+          "excerptArabic": "كَانَ لِواءُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مَعَ عَلِيٍّ، وَلِواءُ الأَنصَارِ مَعَ سَعْدِ بنِ عُبَادَةَ (٣) .",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "273-p11",
+          "volume": "4",
+          "pageReference": "273",
+          "extractionUrl": "https://shamela.ws/book/10906/1699",
+          "excerptArabic": "إِنَّ رَايَةَ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- كَانَتْ تَكُوْنُ مَعَ عَلِيٍّ، وَرَايَةَ الأَنْصَارِ مَعَ سَعْدِ بنِ عُبَادَةَ (٤) .",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-ubadah-siyar55/virtues-generosity",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-ubadah",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "assertion": "كان يبعث إلى النبي صلى الله عليه وسلم كل يوم جفنة تدور معه في بيوت أزواجه؛ وكان يرجع كل ليلة بثمانين من أهل الصفة يعشيهم؛ وكان يقول: اللهم هب لي حمدا ومجدا، اللهم لا يصلحني القليل ولا أصلح عليه.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "271-p4",
+          "volume": "4",
+          "pageReference": "271",
+          "extractionUrl": "https://shamela.ws/book/10906/1697",
+          "excerptArabic": "كَانَ يَبْعَثُ إِلَيْهِ كُلَّ يَوْمٍ جَفْنَةً مِنْ ثَرِيْدِ اللَّحْمِ … فَكَانَتْ جَفْنَةُ سَعْدٍ تَدُوْرُ مَعَ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فِي بُيُوْتِ أَزْوَاجِهِ.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "276-p4",
+          "volume": "4",
+          "pageReference": "276",
+          "extractionUrl": "https://shamela.ws/book/10906/1702",
+          "excerptArabic": "كَانَ سَعْدُ بنُ عُبَادَةَ يَرْجِعُ كُلَّ لَيْلَةٍ إِلَى أَهْلِهِ بِثَمَانِيْنَ مِنْ أَهْلِ الصُّفَّةِ يُعَشِّيْهِم.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "276-p6",
+          "volume": "4",
+          "pageReference": "276",
+          "extractionUrl": "https://shamela.ws/book/10906/1702",
+          "excerptArabic": "اللَّهُمَّ هَبْ لِي حَمْداً وَمَجْداً، اللَّهُمَّ لاَ يُصْلِحُنِي القَلِيْلُ، وَلاَ أَصْلُحُ عَلَيْهِ (٢) .",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-ubadah-siyar55/virtues-kamil",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-ubadah",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "assertion": "كان يكتب في الجاهلية ويحسن العوم والرمي، سمي الكامل؛ وكان ينادى على أطمه: من أحب الشحم واللحم فليأت أطم دليم بن حارثة.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "278-p12",
+          "volume": "4",
+          "pageReference": "278-279",
+          "extractionUrl": "https://shamela.ws/book/10906/1704",
+          "excerptArabic": "قَالَ ابْنُ سَعْدٍ: كَانَ سَعْدٌ يَكْتُبُ فِي الجَاهِلِيَّةِ، وَيُحْسِنُ العَوْمَ وَالرَّمْيَ، وَكَانَ مِنْ أَحْسَنِ ذَلِكَ، سُمِّيَ الكَامِلَ.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "279-p2",
+          "volume": "4",
+          "pageReference": "279",
+          "extractionUrl": "https://shamela.ws/book/10906/1705",
+          "excerptArabic": "وَكَانَ سَعْدٌ، وَعِدَّةُ آبَاءٍ لَهُ قَبْلَهُ يُنَادَى عَلَى أُطُمِهِمْ: مَنْ أَحَبَّ الشَّحْمَ وَاللَّحْمَ فَلْيَأْتِ أُطُمَ دُلَيْمِ بنِ حَارِثَةَ (١) .",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-ubadah-siyar55/badr-absent",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-ubadah",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "ABSENT_FROM",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "assertion": "لم يشهد بدرا: كان يتهيأ للخروج فنُهش فأقام، وقال جماعة: ما شهدها. وقال أبو الأسود عن عروة والبخاري في تاريخه: إنه شهدها.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "271-p1",
+          "volume": "4",
+          "pageReference": "271",
+          "extractionUrl": "https://shamela.ws/book/10906/1697",
+          "excerptArabic": "قَالَ ابْنُ سَعْدٍ: كَانَ يَتَهَيَّأُ لِلْخُرُوْجِ إِلَى بَدْرٍ، وَيَأْتِي دُوْرَ الأَنْصَارِ يَحُضُّهُم عَلَى الخُرُوْجِ، فَنُهِشَ، فَأَقَامَ.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "270-p9",
+          "volume": "4",
+          "pageReference": "270",
+          "extractionUrl": "https://shamela.ws/book/10906/1696",
+          "excerptArabic": "وَقَالَ جَمَاعَةٌ: مَا شَهِدَهَا.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "270-p8",
+          "volume": "4",
+          "pageReference": "270",
+          "extractionUrl": "https://shamela.ws/book/10906/1696",
+          "excerptArabic": "قَالَ أَبُو الأَسْوَدِ: عَنْ عُرْوَةَ: إِنَّهُ شَهِدَ بَدْراً.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "271-p5",
+          "volume": "4",
+          "pageReference": "271",
+          "extractionUrl": "https://shamela.ws/book/10906/1697",
+          "excerptArabic": "وَقَالَ البُخَارِيُّ فِي (تَارِيْخِهِ) : إِنَّهُ شَهِدَ بَدْراً.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-ubadah-siyar55/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-ubadah",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "deathYearHijri",
+      "assertion": "مات بحوران سنة ست عشرة (يحيى بن بكير وابن عائشة وغيرهما)؛ وقال الواقدي: توفي لسنتين ونصف من خلافة عمر.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "278-p9",
+          "volume": "4",
+          "pageReference": "278",
+          "extractionUrl": "https://shamela.ws/book/10906/1704",
+          "excerptArabic": "وَقَالَ يَحْيَى بنُ بُكَيْرٍ، وَابْنُ عَائِشَةَ، وَغَيْرُهُمَا: مَاتَ بِحَوْرَانَ، سَنَةَ سِتَّ عَشْرَةَ.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "278-p4",
+          "volume": "4",
+          "pageReference": "278",
+          "extractionUrl": "https://shamela.ws/book/10906/1704",
+          "excerptArabic": "تُوُفِّيَ سَعْدٌ بِحَوْرَانَ، لِسَنَتَيْنِ وَنِصْفٍ مِنْ خِلاَفَةِ عُمَرَ …",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-ubadah-siyar55/death-year-alt",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-ubadah",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "deathYearHijri",
+      "assertion": "وقال أبو عبيد: مات سنة أربع عشرة بحوران؛ وروى المدائني عن يحيى بن عبد العزيز عن أبيه: مات في خلافة أبي بكر.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "277-p13",
+          "volume": "4",
+          "pageReference": "277",
+          "extractionUrl": "https://shamela.ws/book/10906/1703",
+          "excerptArabic": "وَقَالَ أَبُو عُبَيْدٍ: مَاتَ سَنَةَ أَرْبَعَ عَشْرَةَ بِحَوْرَانَ (٤) .",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "278-p11",
+          "volume": "4",
+          "pageReference": "278",
+          "extractionUrl": "https://shamela.ws/book/10906/1704",
+          "excerptArabic": "مَاتَ فِي خِلاَفَةِ أَبِي بَكْرٍ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-ubadah-siyar55/death-place",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-ubadah",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "placeOfDeathArabic",
+      "assertion": "مات بحوران.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "277-p7",
+          "volume": "4",
+          "pageReference": "277",
+          "extractionUrl": "https://shamela.ws/book/10906/1703",
+          "excerptArabic": "… حَتَّى انْتَقَلَ إِلَى الشَّامِ، فَمَاتَ بِحَوْرَانَ.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "278-p9",
+          "volume": "4",
+          "pageReference": "278",
+          "extractionUrl": "https://shamela.ws/book/10906/1704",
+          "excerptArabic": "وَقَالَ يَحْيَى بنُ بُكَيْرٍ، وَابْنُ عَائِشَةَ، وَغَيْرُهُمَا: مَاتَ بِحَوْرَانَ، سَنَةَ سِتَّ عَشْرَةَ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "saad-ibn-ubadah-siyar55/father-of-qays",
+      "subjectKind": "PERSON",
+      "subjectSlug": "saad-ibn-ubadah",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "FATHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "qais-ibn-saad",
+      "assertion": "قيس بن سعد من أولاده (قيس وسعيد وإسحاق).",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "271-p7",
+          "volume": "4",
+          "pageReference": "271",
+          "extractionUrl": "https://shamela.ws/book/10906/1697",
+          "excerptArabic": "وَمِمَّنْ رَوَى عَنْهُ: أَوْلاَدُهُ؛ قَيْسٌ، وَسَعِيْدٌ، وَإِسْحَاقُ، وَابْنُ عَبَّاسٍ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    }
+  ]
+}
