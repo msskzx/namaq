@@ -161,7 +161,7 @@ that.
 - [ ] زوجاته صلى الله عليه وسلم
 - [ ] العالية
 - [ ] أسماء
-- [x] أم شريك — `data/history/batches/umm-shareek`
+- [x] أم شريك — `data/history/batches/umm-shareek` (PR #201)
 - [ ] سناء
 - [ ] الكلابية
 - [ ] الكندية
