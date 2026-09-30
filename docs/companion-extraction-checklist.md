@@ -165,7 +165,7 @@ that.
 - [x] سناء (`sanaa-bint-asma-al-sulami`, PR #200)
 - [x] الكلابية — `data/history/batches/al-kilabiyyah` (PR #204)
 - [x] الكندية — `data/history/batches/asma-bint-al-numan-al-kindiyyah` (PR #206)
-- [ ] قتيلة
+- [x] قتيلة — (`qutaylah-bint-qais-al-kindiyyah`, PR #208)
 - [ ] خولة
 - [x] جويرية أم المؤمنين (`juwayriyah-bint-al-harith`, PR #187)
 - [ ] سودة أم المؤمنين
