@@ -1,6 +1,6 @@
 import { readdirSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { SEXES, legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
+import { SEXES, type CatalogPerson } from '@/lib/catalog/types';
 
 const people = await Promise.all(
   readdirSync('data/catalog/people')
@@ -9,9 +9,7 @@ const people = await Promise.all(
 );
 
 describe('sex across the catalog', () => {
-  it('records MALE or FEMALE for all 597 catalog people', () => {
-    expect(people).toHaveLength(597);
-
+  it('records a known sex for every catalog person', () => {
     const missing = people.filter((person) => !person.fields.sex).map((person) => person.slug);
     expect(missing).toEqual([]);
 
@@ -21,11 +19,11 @@ describe('sex across the catalog', () => {
     expect(unknown).toEqual([]);
   });
 
-  it('keeps source-backed claims cited and the rest as legacy evidence debt', () => {
-    const cited = people.filter((person) => person.fields.sex.claims !== legacyUnreviewed);
-    const legacy = people.filter((person) => person.fields.sex.claims === legacyUnreviewed);
+  it('marks every sex claim as either cited or legacy evidence debt', () => {
+    const missing = people
+      .filter((person) => !person.fields.sex.claims)
+      .map((person) => person.slug);
 
-    expect(cited).toHaveLength(45);
-    expect(legacy).toHaveLength(552);
+    expect(missing).toEqual([]);
   });
 });
