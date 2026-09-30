@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Where Text Becomes Citable</title>
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<script src="../assets/lesson.js"></script>
+</head>
+<body class="bg-stone-50 font-serif text-stone-900 antialiased dark:bg-stone-950 dark:text-stone-100">
+
+<div class="fixed inset-x-0 top-0 z-20 flex items-start justify-between p-3 print:hidden">
+  <button id="index-toggle" aria-controls="index" aria-expanded="true"
+    class="rounded border border-stone-300 bg-stone-50/90 px-3 py-1.5 font-mono text-xs uppercase tracking-wider text-stone-600 backdrop-blur hover:border-amber-500 hover:text-amber-700 dark:border-stone-700 dark:bg-stone-950/90 dark:text-stone-400 dark:hover:text-amber-400">
+    Index
+  </button>
+  <button id="theme-toggle"
+    class="rounded border border-stone-300 bg-stone-50/90 px-3 py-1.5 text-sm text-stone-600 backdrop-blur hover:border-amber-500 hover:text-amber-700 dark:border-stone-700 dark:bg-stone-950/90 dark:text-stone-400 dark:hover:text-amber-400">
+  </button>
+</div>
+
+<nav id="index" aria-label="Lesson index"
+  class="fixed inset-y-0 start-0 z-10 w-64 overflow-y-auto border-e border-stone-200 bg-stone-100/95 px-3 pb-8 pt-16 backdrop-blur dark:border-stone-800 dark:bg-stone-900/95 print:hidden"></nav>
+
+<main class="mx-auto max-w-3xl px-4 pb-24 pt-20">
+<article class="prose prose-stone max-w-none dark:prose-invert prose-headings:font-semibold prose-pre:bg-amber-50 prose-pre:text-stone-800 prose-pre:border-s-4 prose-pre:border-amber-600 prose-pre:rounded-s-none dark:prose-pre:bg-stone-900 dark:prose-pre:text-stone-200 prose-code:font-mono prose-a:text-amber-700 dark:prose-a:text-amber-400">
+
+<header class="mb-10 border-b border-stone-300 pb-6 dark:border-stone-700">
+  <p class="m-0 font-mono text-xs uppercase tracking-[0.12em] text-amber-700 dark:text-amber-500">Lesson 0001 · storing and showing a source</p>
+  <h1 class="mb-2 mt-3">Where text becomes citable</h1>
+  <p class="m-0 text-lg text-stone-600 dark:text-stone-400">A source reaches Namaq as five nested things, and only one of them is a
+  design decision you could still change cheaply. This lesson finds that one.</p>
+</header>
+
+<h2>The shape, in one pass</h2>
+
+<p>Open <code>data/history/batches/aisha-bint-abi-bakr/</code> and you have the whole
+model in front of you: a <code>batch.json</code>, a <code>summary.md</code>, and
+<code>accounts/aisha-bint-abi-bakr/</code> holding 67 printed pages as <code>001.md</code> …
+<code>067.md</code>, each with a <code>.notes.md</code> beside it for that page's editorial
+footnotes.</p>
+
+<p>Nesting, outermost first:</p>
+
+<pre>source   one <em>edition</em> of a work (al-Risalah's Siyar, ed. al-Asad) + its 28 volumes
+account  that work's entry for one subject  ← unique per (source, subjectKind, subjectSlug)
+page     one printed page of that entry     ← bodyMarkdown + notesMarkdown
+passage  one paragraph of that page         ← addressed by an anchor: 135-p2
+claim    one value the model holds          ← field: "fullName"
+citation the pinpoint link between them     ← passageAnchor + excerptArabic</pre>
+
+<p>The reader shows the top three. A profile shows the bottom two. Nothing in the app renders a
+claim without the passage underneath it, which is the point of
+<a href="../../adr/0009-citations-independent-of-profiles.md">ADR 0009</a>: evidence attaches to a
+subject slug, not to a profile page, so a graph-only person can carry citations before anyone
+writes their profile.</p>
+
+<h2>Four of these five are barely decisions</h2>
+
+<p>Source, account, page and claim are each pinned by something outside Namaq's control. A page is
+a page because the book printed it that way — <a href="../../adr/0016-a-reader-that-owns-the-whole-screen.md">ADR
+0016</a> says so outright, and a citation's <code>pageReference</code> depends on it. An account is
+unique per subject because a work has one entry per person. A claim must name a field because
+<code>history:validate</code> rejects one that names nothing.</p>
+
+<p>The passage is the exception. Nothing outside the repo says a paragraph is the citable unit, or
+that <code>135-p2</code> is what addresses it. That was chosen — and the way it was chosen is the
+interesting part.</p>
+
+<h2>The choice: an anchor is bound to its paragraph by position</h2>
+
+<p>The page file is plain markdown. It contains no anchors, no ids, no markers:</p>
+
+<pre dir="rtl" lang="ar" class="text-right text-base leading-loose">١٩ - عَائِشَةُ بِنْتُ الصِّدِّيْقِ أَبِي بَكْرٍ التَّيْمِيَّةُ …
+
+بِنْتُ الإِمَامِ الصِّدِّيْقِ الأَكْبَرِ … القُرَشِيَّةُ، التَّيْمِيَّةُ …
+
+وَأُمُّهَا: هِيَ أُمُّ رُوْمَانَ بِنْتُ عَامِرٍ …</pre>
+
+<p>The anchors live in <code>batch.json</code>, as a bare list:</p>
+
+<pre>"passages": [{ "anchor": "135-p1" }, { "anchor": "135-p2" }, { "anchor": "135-p3" }, …]</pre>
+
+<p>And they are joined to the text by index, nothing else
+(<code>src/lib/history/batchSchema.ts</code>):</p>
+
+<pre>export function passageExcerpts(page, files) {
+  const paragraphs = (files[page.bodyFile] ?? '').split(/\n{2,}/)…;
+  return new Map((page.passages ?? []).map((p, index) =&gt; [p.anchor, paragraphs[index] ?? '']));
+}</pre>
+
+<p>So <code>135-p2</code> means "the second paragraph on this page" and means nothing else. The
+name looks like an identifier; it is an ordinal wearing a costume.</p>
+
+<h3>What that buys</h3>
+
+<p>The page file stays exactly the book's text. No markup for an extractor to get wrong, no ids to
+keep in sync by hand, and a re-extraction that reproduces the same paragraphs reproduces the same
+anchors for free. Compare the alternative — anchors written into the markdown — and you have made
+the source text a Namaq format, which cuts against <em>the source text is the book</em>.</p>
+
+<h3>What it costs, and how the cost is contained</h3>
+
+<p>Insert one paragraph in the middle of a page and every anchor after it now excerpts the
+following paragraph. Citations keep resolving. Nothing errors. They just quietly point one
+paragraph off.</p>
+
+<p>The validator's answer is a count, not a checksum:</p>
+
+<pre>if (declared &gt; 0 &amp;&amp; declared !== paragraphs) {
+  issues.push({ …, message: `declares ${declared} passage(s) but "${page.bodyFile}" has ${paragraphs} paragraph(s)` });
+}</pre>
+
+<aside class="not-prose my-8 rounded border border-stone-300 p-4 text-sm leading-relaxed text-stone-600 dark:border-stone-700 dark:text-stone-400">
+<strong class="text-stone-900 dark:text-stone-100">Notice the gap.</strong> Add a paragraph in the middle <em>and</em> append an anchor at the
+end of the list, and the count matches again. Validation passes. Every downstream excerpt has
+shifted by one. The one real guard against this is <code class="font-mono">scripts/history/verifyExcerpts.ts</code>,
+which checks that each citation's stored <code class="font-mono">excerptArabic</code> is literally a substring of the
+paragraph its anchor resolves to. The redundancy that looks like duplication is what makes the
+drift detectable. Note it has no <code class="font-mono">npm run</code> script and <code class="font-mono">history:validate</code> does
+not call it — it is run by hand with <code class="font-mono">tsx</code>.
+</aside>
+
+<p>That is the design lesson worth carrying: <code>excerptArabic</code> on the citation is not a
+convenience copy of the passage. It is the check digit on a positional binding.</p>
+
+<section data-quiz="3" class="not-prose my-8 rounded border border-stone-300 p-5 dark:border-stone-700 print:hidden">
+  <h3 class="mb-2 mt-0 font-semibold">Retrieval</h3>
+  <p class="mb-4 text-stone-700 dark:text-stone-300">A page file gains a paragraph mid-page, and an anchor is appended to the list.
+  What catches it?</p>
+  <ol class="m-0 list-none space-y-2 p-0">
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">The anchor uniqueness check in the batch validator</button></li>
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">The declared passage count against the page body</button></li>
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">The stored citation excerpt against its passage</button></li>
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">The account's unique constraint on subject slug</button></li>
+  </ol>
+  <p data-feedback hidden class="mt-4 text-sm text-stone-600 dark:text-stone-400"
+     data-right="Right. Only verifyExcerpts compares text to text; the count check is satisfied and the anchors are still unique."
+     data-wrong="The count check is satisfied by the appended anchor, and uniqueness never looked at the text. Only verifyExcerpts compares stored excerpt to resolved passage."></p>
+</section>
+
+<section data-quiz="2" class="not-prose my-8 rounded border border-stone-300 p-5 dark:border-stone-700 print:hidden">
+  <h3 class="mb-2 mt-0 font-semibold">Retrieval</h3>
+  <p class="mb-4 text-stone-700 dark:text-stone-300">Why does the page markdown carry no anchors of its own?</p>
+  <ol class="m-0 list-none space-y-2 p-0">
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">Because markdown cannot express a stable inline identifier</button></li>
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">Because the page file should stay the book's own text</button></li>
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">Because the database assigns each passage its identifier</button></li>
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">Because citations address a printed page, not a line</button></li>
+  </ol>
+  <p data-feedback hidden class="mt-4 text-sm text-stone-600 dark:text-stone-400"
+     data-right="Right. Anchors in the body would make the source text a Namaq format, and the pages are never edited to follow the model."
+     data-wrong="Markdown could hold an id, and the database id is not what citations use. The reason is that the page file is the book's text, and the model is not allowed to write into it."></p>
+</section>
+
+<h2>Bring it back to your question</h2>
+
+<p>The group headings — <span dir="rtl" lang="ar">شهداء بدر</span>,
+<span dir="rtl" lang="ar">السابقون الأولون</span> — now have a precise answer rather than a rule
+of thumb. A heading is an index line with no paragraph, so it yields no <em>passage</em>; with no
+passage there is no <code>passageAnchor</code>, and a citation without one cites a page and no
+text. The martyrdom is a real model value, but the evidence for it has to come from a paragraph
+inside that person's own account, which is where al-Dhahabi actually says it.</p>
+
+<p>The heading is not excluded because it is a heading. It is excluded because the citable unit is
+a paragraph, and <em>that</em> is the decision you could revisit — <code>PassageKind</code> already
+distinguishes <code>NOTE</code> from <code>BODY</code>, so a third kind is a small change. Whether
+it should exist is a design question for a later lesson.</p>
+
+<h2>Read next</h2>
+
+<p><strong>Primary source:</strong>
+<a href="../../data-pipelines.md">docs/data-pipelines.md</a> — the authored-layer map this whole
+model is described by; read the three hand-authored paths and which of them are one-way. Then
+<a href="../../adr/0010-author-historical-data-under-data.md">ADR 0010</a> for why files outrank
+rows at all.</p>
+
+<p><strong>Card:</strong> <a href="../reference/source-pipeline.html">Source pipeline card</a> —
+the full artifact-to-screen table, the commands, and the rules that decide what may exist.</p>
+
+<footer class="mt-14 border-t border-stone-300 pt-6 text-sm text-stone-600 dark:border-stone-700 dark:text-stone-400">
+  <p>One lesson, one win: you can now say where a positional binding hides in this pipeline and
+  what detects its drift.</p>
+  <p class="mb-0">Anything unclear, or a claim here that does not match the code — <strong class="text-stone-900 dark:text-stone-100">ask your teacher.</strong>
+  That is what I am for, and a lesson that has gone stale is worth saying so.</p>
+</footer>
+
+</article>
+</main>
+</body>
+</html>
