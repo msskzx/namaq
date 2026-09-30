@@ -153,7 +153,7 @@ that.
 - [ ] أم حبيبة أم المؤمنين
 - [x] أم أيمن (`umm-ayman`, PR #207)
 - [x] حفصة أم المؤمنين — `data/history/batches/hafsa-bint-umar/` ([PR #202](https://github.com/msskzx/namaq/pull/202))
-- [ ] صفية أم المؤمنين
+- [x] صفية أم المؤمنين (`safiyyah-bint-huyayy`, PR #210)
 - [ ] ميمونة أم المؤمنين
 - [ ] زينب بنت رسول الله
 - [ ] رقية
