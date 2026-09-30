@@ -120,6 +120,7 @@ const prophetMuhammad = {
     { type: 'HUSBAND', inverse: 'WIFE', to: 'umm-habibah', claims: ['prophet/wife-umm-habibah'] },
     { type: 'HUSBAND', inverse: 'WIFE', to: 'safiyyah-bint-huyayy', claims: ['prophet/wife-safiyyah'] },
     { type: 'HUSBAND', inverse: 'WIFE', to: 'maymunah-bint-al-harith', claims: legacyUnreviewed },
+    { type: 'HUSBAND', inverse: 'WIFE', to: 'qutaylah-bint-qais-al-kindiyyah', claims: legacyUnreviewed },
     { type: 'FATHER', inverse: 'SON', to: 'abdullah-ibn-muhammad', claims: legacyUnreviewed },
     { type: 'PATERNAL_NEPHEW', inverse: 'PATERNAL_UNCLE', to: 'hamzah-ibn-abd-al-muttalib', claims: legacyUnreviewed },
     { type: 'PATERNAL_NEPHEW', inverse: 'PATERNAL_UNCLE', to: 'al-abbas-ibn-abd-al-muttalib', claims: legacyUnreviewed },
