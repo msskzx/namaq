@@ -164,7 +164,7 @@ that.
 - [ ] أم شريك
 - [ ] سناء
 - [ ] الكلابية
-- [ ] الكندية
+- [x] الكندية — `data/history/batches/asma-bint-al-numan-al-kindiyyah` (PR TBD)
 - [ ] قتيلة
 - [ ] خولة
 - [ ] جويرية أم المؤمنين
