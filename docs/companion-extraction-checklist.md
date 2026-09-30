@@ -166,7 +166,7 @@ that.
 - [x] الكلابية — `data/history/batches/al-kilabiyyah` (PR #204)
 - [x] الكندية — `data/history/batches/asma-bint-al-numan-al-kindiyyah` (PR #206)
 - [x] قتيلة — (`qutaylah-bint-qais-al-kindiyyah`, PR #208)
-- [ ] خولة
+- [x] خولة — entry 38 (`khawlah-bint-hakim`)
 - [x] جويرية أم المؤمنين (`juwayriyah-bint-al-harith`, PR #187)
 - [ ] سودة أم المؤمنين
 - [ ] صفية عمة رسول الله صلى الله عليه وسلم
