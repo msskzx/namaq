@@ -1,0 +1,470 @@
+{
+  "slug": "umm-ayman",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umm-ayman",
+      "extractionUrl": "https://shamela.ws/book/10906/2203",
+      "accessedAt": "2026-09-29",
+      "volumeNumber": 5,
+      "notInSource": [
+        "kunya",
+        "appearance",
+        "nasab",
+        "siblings"
+      ],
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "223",
+          "bodyFile": "accounts/umm-ayman/001.md",
+          "notesFile": "accounts/umm-ayman/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2203",
+          "passages": [
+            {
+              "anchor": "223-p13"
+            },
+            {
+              "anchor": "223-p14"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "224",
+          "bodyFile": "accounts/umm-ayman/002.md",
+          "notesFile": "accounts/umm-ayman/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2204",
+          "passages": [
+            {
+              "anchor": "224-p1"
+            },
+            {
+              "anchor": "224-p2"
+            },
+            {
+              "anchor": "224-p3"
+            },
+            {
+              "anchor": "224-p4"
+            },
+            {
+              "anchor": "224-p5"
+            },
+            {
+              "anchor": "224-p6"
+            },
+            {
+              "anchor": "224-p7"
+            },
+            {
+              "anchor": "224-p8"
+            },
+            {
+              "anchor": "224-p9"
+            },
+            {
+              "anchor": "224-p10"
+            },
+            {
+              "anchor": "224-p11"
+            },
+            {
+              "anchor": "224-p12"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "printedPage": "225",
+          "bodyFile": "accounts/umm-ayman/003.md",
+          "notesFile": "accounts/umm-ayman/003.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2205",
+          "passages": [
+            {
+              "anchor": "225-p1"
+            },
+            {
+              "anchor": "225-p2"
+            },
+            {
+              "anchor": "225-p3"
+            },
+            {
+              "anchor": "225-p4"
+            },
+            {
+              "anchor": "225-p5"
+            },
+            {
+              "anchor": "225-p6"
+            },
+            {
+              "anchor": "225-p7"
+            },
+            {
+              "anchor": "225-p8"
+            },
+            {
+              "anchor": "225-p9"
+            },
+            {
+              "anchor": "225-p10"
+            },
+            {
+              "anchor": "225-p11"
+            },
+            {
+              "anchor": "225-p12"
+            },
+            {
+              "anchor": "225-p13"
+            },
+            {
+              "anchor": "225-p14"
+            },
+            {
+              "anchor": "225-p15"
+            },
+            {
+              "anchor": "225-p16"
+            },
+            {
+              "anchor": "225-p17"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "printedPage": "226",
+          "bodyFile": "accounts/umm-ayman/004.md",
+          "notesFile": "accounts/umm-ayman/004.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2206",
+          "passages": [
+            {
+              "anchor": "226-p1"
+            },
+            {
+              "anchor": "226-p2"
+            },
+            {
+              "anchor": "226-p3"
+            },
+            {
+              "anchor": "226-p4"
+            },
+            {
+              "anchor": "226-p5"
+            },
+            {
+              "anchor": "226-p6"
+            },
+            {
+              "anchor": "226-p7"
+            },
+            {
+              "anchor": "226-p8"
+            },
+            {
+              "anchor": "226-p9"
+            },
+            {
+              "anchor": "226-p10"
+            },
+            {
+              "anchor": "226-p11"
+            },
+            {
+              "anchor": "226-p12"
+            },
+            {
+              "anchor": "226-p13"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "printedPage": "227",
+          "bodyFile": "accounts/umm-ayman/005.md",
+          "notesFile": "accounts/umm-ayman/005.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2207",
+          "passages": [
+            {
+              "anchor": "227-p1"
+            },
+            {
+              "anchor": "227-p2"
+            },
+            {
+              "anchor": "227-p3"
+            },
+            {
+              "anchor": "227-p4"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "umm-ayman-siyar24/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umm-ayman",
+      "field": "fullName",
+      "assertion": "اسم أم أيمن: بركة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "224-p3",
+          "volume": "5",
+          "pageReference": "224",
+          "extractionUrl": "https://shamela.ws/book/10906/2204",
+          "excerptArabic": "اسْمُهَا: بَرَكَةٌ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "umm-ayman-siyar24/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umm-ayman",
+      "field": "virtues",
+      "assertion": "كانت أم أيمن من المهاجرات الأول، وحاضنة رسول الله صلى الله عليه وسلم، ووصفها بأنها بقية أهل بيته، وقال: من سره أن يتزوج امرأة من أهل الجنة فليتزوج أم أيمن. ولما عطشت في هجرتها وهي صائمة دلي عليها دلو من السماء، فما عطشت بعد ذلك. وبكت بعد وفاة النبي لانقطاع الوحي من السماء.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "223-p13",
+          "volume": "5",
+          "pageReference": "223",
+          "extractionUrl": "https://shamela.ws/book/10906/2203",
+          "excerptArabic": "أُمُّ أَيْمَنَ الحَبَشِيَّةُ بَرَكَةُ مَوْلاَةُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَحَاضِنَتُهُ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "224-p2",
+          "volume": "5",
+          "pageReference": "224",
+          "extractionUrl": "https://shamela.ws/book/10906/2204",
+          "excerptArabic": "وَكَانَتْ مِنَ المُهَاجِرَاتِ الأُوَلِ.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "224-p5",
+          "volume": "5",
+          "pageReference": "224",
+          "extractionUrl": "https://shamela.ws/book/10906/2204",
+          "excerptArabic": "وَيَقُوْلُ: (هَذِهِ بَقِيَّةُ أَهْلِ بَيْتِي)",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "224-p7",
+          "volume": "5",
+          "pageReference": "224",
+          "extractionUrl": "https://shamela.ws/book/10906/2204",
+          "excerptArabic": "فَدُلِّيَ عَلَيْهَا مِنَ السِّمَاءِ دَلْوٌ مِنْ مَاءٍ بِرِشَاءٍ أَبْيَضَ، فَشَرِبَتْ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "224-p12",
+          "volume": "5",
+          "pageReference": "224",
+          "extractionUrl": "https://shamela.ws/book/10906/2204",
+          "excerptArabic": "فَقَالَ: (مَنْ سَرَّهُ أَنْ يَتَزَوَّجَ امْرَأَةً مِنْ أَهْلِ الجَنَّةِ، فَلْيَتَزَوَّجْ أُمَّ أَيْمَنَ)",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "226-p10",
+          "volume": "5",
+          "pageReference": "226",
+          "extractionUrl": "https://shamela.ws/book/10906/2206",
+          "excerptArabic": "وَلَكِنِّي إِنَّمَا أَبْكِي عَلَى الوَحْيِ إِذِ انْقَطَعَ عَنَّا مِنَ السِّمَاءِ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "umm-ayman-siyar24/husband-zaid",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umm-ayman",
+      "assertion": "تزوج زيد بن حارثة أم أيمن ليالي بعث النبي صلى الله عليه وسلم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "WIFE",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "zaid-ibn-harithah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "224-p4",
+          "volume": "5",
+          "pageReference": "224",
+          "extractionUrl": "https://shamela.ws/book/10906/2204",
+          "excerptArabic": "ثُمَّ تَزَوَّجَهَا زَيْدُ بنُ حَارِثَةَ لَيَالِيَ بُعِثَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "umm-ayman-siyar24/son-usamah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umm-ayman",
+      "assertion": "ولدت أم أيمن لزيد بن حارثة أسامة بن زيد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "MOTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "usamah-ibn-zaid",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "224-p4",
+          "volume": "5",
+          "pageReference": "224",
+          "extractionUrl": "https://shamela.ws/book/10906/2204",
+          "excerptArabic": "فَوَلَدَتْ لَهُ أُسَامَةَ بنَ زَيْدٍ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    }
+  ]
+}
