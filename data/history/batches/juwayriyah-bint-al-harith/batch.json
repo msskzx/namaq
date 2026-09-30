@@ -1,0 +1,589 @@
+{
+  "slug": "juwayriyah-bint-al-harith",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "juwayriyah-bint-al-harith",
+      "extractionUrl": "https://shamela.ws/book/10906/2241",
+      "accessedAt": "2026-09-29",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "261",
+          "bodyFile": "accounts/juwayriyah-bint-al-harith/001.md",
+          "notesFile": "accounts/juwayriyah-bint-al-harith/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2241",
+          "passages": [
+            {
+              "anchor": "261-p2"
+            },
+            {
+              "anchor": "261-p3"
+            },
+            {
+              "anchor": "261-p4"
+            },
+            {
+              "anchor": "261-p5"
+            },
+            {
+              "anchor": "261-p6"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "262",
+          "bodyFile": "accounts/juwayriyah-bint-al-harith/002.md",
+          "notesFile": "accounts/juwayriyah-bint-al-harith/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2242",
+          "passages": [
+            {
+              "anchor": "262-p1"
+            },
+            {
+              "anchor": "262-p2"
+            },
+            {
+              "anchor": "262-p3"
+            },
+            {
+              "anchor": "262-p4"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "printedPage": "263",
+          "bodyFile": "accounts/juwayriyah-bint-al-harith/003.md",
+          "notesFile": "accounts/juwayriyah-bint-al-harith/003.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2243",
+          "passages": [
+            {
+              "anchor": "263-p1"
+            },
+            {
+              "anchor": "263-p2"
+            },
+            {
+              "anchor": "263-p3"
+            },
+            {
+              "anchor": "263-p4"
+            },
+            {
+              "anchor": "263-p5"
+            },
+            {
+              "anchor": "263-p6"
+            },
+            {
+              "anchor": "263-p7"
+            },
+            {
+              "anchor": "263-p8"
+            },
+            {
+              "anchor": "263-p9"
+            },
+            {
+              "anchor": "263-p10"
+            },
+            {
+              "anchor": "263-p11"
+            },
+            {
+              "anchor": "263-p12"
+            },
+            {
+              "anchor": "263-p13"
+            },
+            {
+              "anchor": "263-p14"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "printedPage": "264",
+          "bodyFile": "accounts/juwayriyah-bint-al-harith/004.md",
+          "notesFile": "accounts/juwayriyah-bint-al-harith/004.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2244",
+          "passages": [
+            {
+              "anchor": "264-p1"
+            },
+            {
+              "anchor": "264-p2"
+            },
+            {
+              "anchor": "264-p3"
+            },
+            {
+              "anchor": "264-p4"
+            },
+            {
+              "anchor": "264-p5"
+            },
+            {
+              "anchor": "264-p6"
+            },
+            {
+              "anchor": "264-p7"
+            },
+            {
+              "anchor": "264-p8"
+            },
+            {
+              "anchor": "264-p9"
+            },
+            {
+              "anchor": "264-p10"
+            },
+            {
+              "anchor": "264-p11"
+            },
+            {
+              "anchor": "264-p12"
+            },
+            {
+              "anchor": "264-p13"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "printedPage": "265",
+          "bodyFile": "accounts/juwayriyah-bint-al-harith/005.md",
+          "notesFile": "accounts/juwayriyah-bint-al-harith/005.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2245",
+          "passages": [
+            {
+              "anchor": "265-p1"
+            },
+            {
+              "anchor": "265-p2"
+            },
+            {
+              "anchor": "265-p3"
+            },
+            {
+              "anchor": "265-p4"
+            },
+            {
+              "anchor": "265-p5"
+            },
+            {
+              "anchor": "265-p6"
+            },
+            {
+              "anchor": "265-p7"
+            },
+            {
+              "anchor": "265-p8"
+            }
+          ]
+        }
+      ],
+      "volumeNumber": 5,
+      "notInSource": [
+        "kunya",
+        "siblings"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "juwayriyah-siyar39/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "juwayriyah-bint-al-harith",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "fullName",
+      "assertion": "جويرية بنت الحارث بن أبي ضرار المصطلقية",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "261-p2",
+          "volume": "5",
+          "pageReference": "261",
+          "extractionUrl": "https://shamela.ws/book/10906/2241",
+          "excerptArabic": "٣٩ - جُوَيْرِيَةُ أُمُّ المُؤْمِنِيْنَ بِنْتُ الحَارِثِ بنِ أَبِي ضِرَارٍ المُصْطَلِقِيَّةُ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "juwayriyah-siyar39/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "juwayriyah-bint-al-harith",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "sex",
+      "assertion": "FEMALE — أم المؤمنين بنت الحارث.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "261-p2",
+          "volume": "5",
+          "pageReference": "261",
+          "extractionUrl": "https://shamela.ws/book/10906/2241",
+          "excerptArabic": "٣٩ - جُوَيْرِيَةُ أُمُّ المُؤْمِنِيْنَ بِنْتُ الحَارِثِ بنِ أَبِي ضِرَارٍ المُصْطَلِقِيَّةُ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "juwayriyah-siyar39/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "juwayriyah-bint-al-harith",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "DAUGHTER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "al-harith-ibn-abi-dirar-al-mustaliqi",
+      "assertion": "جويرية بنت الحارث بن أبي ضرار، فالحارث بن أبي ضرار أبوها.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "261-p2",
+          "volume": "5",
+          "pageReference": "261",
+          "extractionUrl": "https://shamela.ws/book/10906/2241",
+          "excerptArabic": "٣٩ - جُوَيْرِيَةُ أُمُّ المُؤْمِنِيْنَ بِنْتُ الحَارِثِ بنِ أَبِي ضِرَارٍ المُصْطَلِقِيَّةُ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "juwayriyah-siyar39/wife-prophet",
+      "subjectKind": "PERSON",
+      "subjectSlug": "juwayriyah-bint-al-harith",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "WIFE",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "prophet-muhammad",
+      "assertion": "أسلمت وتزوجها النبي صلى الله عليه وسلم.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "261-p5",
+          "volume": "5",
+          "pageReference": "261",
+          "extractionUrl": "https://shamela.ws/book/10906/2241",
+          "excerptArabic": "فَأَسْلَمَتْ، وَتَزَوَّجَ بِهَا؛ وَأَطْلَقَ لَهَا الأُسَارَى مِنْ قَوْمِهَا (٣) ، وَكَانَ أَبُوْهَا سَيِّداً مُطَاعاً.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "juwayriyah-siyar39/titles-mother-of-believers",
+      "subjectKind": "PERSON",
+      "subjectSlug": "juwayriyah-bint-al-harith",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "titles",
+      "assertion": "أم المؤمنين: يسميها الذهبي بذلك في رأس الترجمة.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "261-p2",
+          "volume": "5",
+          "pageReference": "261",
+          "extractionUrl": "https://shamela.ws/book/10906/2241",
+          "excerptArabic": "٣٩ - جُوَيْرِيَةُ أُمُّ المُؤْمِنِيْنَ بِنْتُ الحَارِثِ بنِ أَبِي ضِرَارٍ المُصْطَلِقِيَّةُ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "juwayriyah-siyar39/titles-companion",
+      "subjectKind": "PERSON",
+      "subjectSlug": "juwayriyah-bint-al-harith",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "titles",
+      "assertion": "صحابية: أسلمت وتزوجها النبي صلى الله عليه وسلم.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "261-p5",
+          "volume": "5",
+          "pageReference": "261",
+          "extractionUrl": "https://shamela.ws/book/10906/2241",
+          "excerptArabic": "فَأَسْلَمَتْ، وَتَزَوَّجَ بِهَا؛ وَأَطْلَقَ لَهَا الأُسَارَى مِنْ قَوْمِهَا (٣) ، وَكَانَ أَبُوْهَا سَيِّداً مُطَاعاً.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "juwayriyah-siyar39/appearance",
+      "subjectKind": "PERSON",
+      "subjectSlug": "juwayriyah-bint-al-harith",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "appearance",
+      "assertion": "كانت من أجمل النساء، ووصفتها عائشة بأنها امرأة حلوة ملاحة لا يراها أحد إلا أخذت بنفسه.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "261-p3",
+          "volume": "5",
+          "pageReference": "261",
+          "extractionUrl": "https://shamela.ws/book/10906/2241",
+          "excerptArabic": "وَكَانَتْ مِنْ أَجْمَلِ النِّسَاءِ.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "262-p1",
+          "volume": "5",
+          "pageReference": "262",
+          "extractionUrl": "https://shamela.ws/book/10906/2242",
+          "excerptArabic": "عَنْ عَائِشَةَ، قَالَتْ: كَانَتْ جُوَيْرِيَةُ امْرَأَةً حُلْوَةً مُلاَّحَةً (١) ، لاَ يَرَاهَا أَحَدٌ إِلاَّ أَخَذَتْ بِنَفْسِهِ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "juwayriyah-siyar39/virtues-captives",
+      "subjectKind": "PERSON",
+      "subjectSlug": "juwayriyah-bint-al-harith",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "assertion": "سبيت يوم المريسيع سنة خمس، فأسلمت وتزوجها النبي صلى الله عليه وسلم، وأطلق لها الأسارى من قومها.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "261-p3",
+          "volume": "5",
+          "pageReference": "261",
+          "extractionUrl": "https://shamela.ws/book/10906/2241",
+          "excerptArabic": "سُبِيَتْ يَوْمَ غَزْوَةِ المُرَيْسِيْعِ، فِي السَّنَةِ الخَامِسَةِ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "261-p5",
+          "volume": "5",
+          "pageReference": "261",
+          "extractionUrl": "https://shamela.ws/book/10906/2241",
+          "excerptArabic": "فَأَسْلَمَتْ، وَتَزَوَّجَ بِهَا؛ وَأَطْلَقَ لَهَا الأُسَارَى مِنْ قَوْمِهَا (٣)",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "juwayriyah-siyar39/virtues-baraka",
+      "subjectKind": "PERSON",
+      "subjectSlug": "juwayriyah-bint-al-harith",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "assertion": "قالت عائشة: لقد أعتق بها مائة أهل بيت، فما أعلم امرأة كانت أعظم بركة على قومها منها.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "265-p8",
+          "volume": "5",
+          "pageReference": "265",
+          "extractionUrl": "https://shamela.ws/book/10906/2245",
+          "excerptArabic": "فَلَقَدْ أُعْتِقَ بِهَا مائَةُ أَهْلِ بَيْتٍ، فَمَا أَعْلَمُ امْرَأَةً كَانَتْ أَعْظَمَ بَرَكَةً عَلَى قَوْمِهَا مِنْهَا (١) .",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "juwayriyah-siyar39/virtues-chose-prophet",
+      "subjectKind": "PERSON",
+      "subjectSlug": "juwayriyah-bint-al-harith",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "assertion": "خيّرها النبي صلى الله عليه وسلم حين جاء أبوها يطلبها، فاختارته.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "263-p9",
+          "volume": "5",
+          "pageReference": "263",
+          "extractionUrl": "https://shamela.ws/book/10906/2243",
+          "excerptArabic": "فَأَتَاهَا أَبُوْهَا، فَقَالَ: إِنَّ هَذَا الرَّجُلَ قَدْ خَيَّرَكِ، فَلاَ تَفْضَحِيْنَا. … فَقَالَتْ: فَإِنِّي قَدِ اخْتَرْتُهُ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "juwayriyah-siyar39/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "juwayriyah-bint-al-harith",
+      "confidence": "LIKELY",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "deathYearHijri",
+      "assertion": "توفيت سنة خمسين.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "263-p3",
+          "volume": "5",
+          "pageReference": "263",
+          "extractionUrl": "https://shamela.ws/book/10906/2243",
+          "excerptArabic": "تُوُفِّيَتْ أُمُّ المُؤْمِنِيْنَ جُوَيْرِيَةُ فِي سَنَةِ خَمْسِيْنَ (٢) .",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "juwayriyah-siyar39/death-year-alternate",
+      "subjectKind": "PERSON",
+      "subjectSlug": "juwayriyah-bint-al-harith",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "deathYearHijri",
+      "assertion": "وقيل توفيت سنة ست وخمسين.",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "263-p4",
+          "volume": "5",
+          "pageReference": "263",
+          "extractionUrl": "https://shamela.ws/book/10906/2243",
+          "excerptArabic": "وَقِيْلَ: تُوُفِّيَتْ سَنَةَ سِتٍّ وَخَمْسِيْنَ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    }
+  ]
+}

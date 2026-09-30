@@ -51,7 +51,7 @@ const hamzahIbnAbdAlMuttalib = {
     // abd-al-muttalib-ibn-hashim (see graphSeedData7.ts's note on the same
     // gap for Al-Abbas). No new node needed, just the missing edge.
     { type: 'SON', inverse: 'FATHER', to: 'abd-al-muttalib-ibn-hashim', claims: legacyUnreviewed },
-    { type: 'BROTHER', inverse: 'SISTER', to: 'safiyyah-bint-abd-al-muttalib', claims: legacyUnreviewed },
+    { type: 'BROTHER', inverse: 'SISTER', to: 'safiyyah-bint-abd-al-muttalib', claims: ['safiyyah-siyar15/sibling-hamzah'] },
     { type: 'PATERNAL_UNCLE', inverse: 'PATERNAL_NEPHEW', to: 'prophet-muhammad', claims: ['hamzah/uncle-prophet'] },
     // The reciprocal is whichever milk sibling the far end is, so it is stated
     // here the way every sex-dependent reciprocal in the catalog is.

@@ -1,0 +1,216 @@
+{
+  "slug": "fatimah-bint-asad",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "مأمون الصاغرجي، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الثاني بتحقيق مأمون الصاغرجي، بإشراف شعيب الأرناؤوط. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "fatimah-bint-asad",
+      "extractionUrl": "https://shamela.ws/book/10906/2098",
+      "accessedAt": "2026-09-29",
+      "volumeNumber": 5,
+      "notInSource": [
+        "kunya",
+        "appearance",
+        "wives",
+        "siblings"
+      ],
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "118",
+          "bodyFile": "accounts/fatimah-bint-asad/001.md",
+          "notesFile": "accounts/fatimah-bint-asad/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2098",
+          "passages": [
+            {
+              "anchor": "118-p1"
+            },
+            {
+              "anchor": "118-p2"
+            },
+            {
+              "anchor": "118-p3"
+            },
+            {
+              "anchor": "118-p4"
+            },
+            {
+              "anchor": "118-p5"
+            },
+            {
+              "anchor": "118-p6"
+            },
+            {
+              "anchor": "118-p7"
+            },
+            {
+              "anchor": "118-p8"
+            },
+            {
+              "anchor": "118-p9"
+            },
+            {
+              "anchor": "118-p10"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "fatimah-bint-asad-siyar17/fullName",
+      "subjectKind": "PERSON",
+      "subjectSlug": "fatimah-bint-asad",
+      "field": "fullName",
+      "assertion": "فاطمة بنت أسد بن هاشم بن عبد مناف بن قصي الهاشمية.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "118-p1",
+          "volume": "5",
+          "pageReference": "118",
+          "extractionUrl": "https://shamela.ws/book/10906/2098",
+          "excerptArabic": "١٧ - فَاطِمَةُ بِنْتُ أَسَدِ بنِ هَاشِمِ بنِ عَبْدِ مَنَافٍ بنِ قُصَيٍّ الهَاشِمِيَّةُ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "fatimah-bint-asad-siyar17/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "fatimah-bint-asad",
+      "field": "sex",
+      "assertion": "هي والدة علي بن أبي طالب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "118-p2",
+          "volume": "5",
+          "pageReference": "118",
+          "extractionUrl": "https://shamela.ws/book/10906/2098",
+          "excerptArabic": "وَالِدَةُ عَلِيِّ بنِ أَبِي طَالِبٍ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "fatimah-bint-asad-siyar17/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "fatimah-bint-asad",
+      "field": "titles",
+      "assertion": "من المهاجرات الأول، صحابية.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "118-p3",
+          "volume": "5",
+          "pageReference": "118",
+          "extractionUrl": "https://shamela.ws/book/10906/2098",
+          "excerptArabic": "كَانَتْ مِنَ المُهَاجِرَاتِ الأُوَلِ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "fatimah-bint-asad-siyar17/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "fatimah-bint-asad",
+      "relationshipType": "DAUGHTER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "asad-ibn-hashim",
+      "assertion": "فاطمة بنت أسد بن هاشم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "118-p1",
+          "volume": "5",
+          "pageReference": "118",
+          "extractionUrl": "https://shamela.ws/book/10906/2098",
+          "excerptArabic": "فَاطِمَةُ بِنْتُ أَسَدِ بنِ هَاشِمِ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "fatimah-bint-asad-siyar17/mother-ali",
+      "subjectKind": "PERSON",
+      "subjectSlug": "fatimah-bint-asad",
+      "relationshipType": "MOTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "ali-ibn-abi-talib",
+      "assertion": "والدة علي بن أبي طالب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "118-p2",
+          "volume": "5",
+          "pageReference": "118",
+          "extractionUrl": "https://shamela.ws/book/10906/2098",
+          "excerptArabic": "وَالِدَةُ عَلِيِّ بنِ أَبِي طَالِبٍ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "fatimah-bint-asad-siyar17/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "fatimah-bint-asad",
+      "field": "virtues",
+      "assertion": "من المهاجرات الأول، وأول هاشمية ولدت هاشميا. قال النبي صلى الله عليه وسلم إنه لم يكن أحد بعد أبي طالب أبر به منها.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "118-p3",
+          "volume": "5",
+          "pageReference": "118",
+          "extractionUrl": "https://shamela.ws/book/10906/2098",
+          "excerptArabic": "كَانَتْ مِنَ المُهَاجِرَاتِ الأُوَلِ، وَهِيَ أَوَّلُ هَاشِمِيَّةٍ وَلَدَتْ هَاشِمِيّاً.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "118-p9",
+          "volume": "5",
+          "pageReference": "118",
+          "extractionUrl": "https://shamela.ws/book/10906/2098",
+          "excerptArabic": "إِنَّه لَمْ يَكُنْ أَحَدٌ بَعْدَ أَبِي طَالِبٍ أَبَرَّ بِي مِنْهَا",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    }
+  ]
+}

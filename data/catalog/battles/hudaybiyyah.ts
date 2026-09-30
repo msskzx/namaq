@@ -52,6 +52,12 @@ const hudaybiyyah = {
       summary: { value: 'شَهِدَ بَيْعَةَ الرِّضْوَانِ.', claims: ['nawfal-ibn-al-harith-siyar27/hudaybiyyah'] },
       claims: ['nawfal-ibn-al-harith-siyar27/hudaybiyyah'],
     },
+    {
+      person: 'thabit-ibn-qais',
+      isMuslim: true,
+      summary: { value: 'شَهِدَ بَيْعَةَ الرِّضْوَانِ.', claims: ['thabit-ibn-qais-siyar61/hudaybiyyah'] },
+      claims: ['thabit-ibn-qais-siyar61/hudaybiyyah'],
+    },
     // Carried from the old seed when he left it; no batch places him here yet.
     { person: 'al-abbas-ibn-abd-al-muttalib', isMuslim: true, claims: legacyUnreviewed },
   ],
