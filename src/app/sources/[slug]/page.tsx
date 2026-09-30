@@ -39,7 +39,7 @@ export default function SourcePage({ params }: { params: Promise<{ slug: string 
   const { slug } = use(params);
   const { language } = useLanguage();
   const searchParams = useSearchParams();
-  const openEntry = searchParams.get('book');
+  const openEntry = searchParams.get('book') || searchParams.get('volume');
 
   const { data, error, isLoading } = useSWR<ShelfResponse>('/api/sources', fetcher);
   // Only the contents view needs the entry list up front; once one is open the
