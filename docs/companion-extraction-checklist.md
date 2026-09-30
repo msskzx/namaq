@@ -91,7 +91,7 @@ that.
 - [x] البراء بن معرور (`al-baraa-ibn-marur`, PR #176)
 - [x] بشر بن البراء (`bishr-ibn-al-baraa`, PR #174)
 - [x] سعد بن عبادة (`saad-ibn-ubadah`, PR #188)
-- [ ] سعد بن معاذ
+- [x] سعد بن معاذ (`saad-ibn-muadh`, PR #191)
 - [x] زيد بن الخطاب (`zaid-ibn-al-khattab`, PR #183)
 - [x] أسعد بن زرارة (`asad-ibn-zurarah`, PR #185)
 - [ ] عتبة بن غزوان
