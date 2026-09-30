@@ -1,6 +1,18 @@
 # Re-extract Arwa and Asma from Shamela
 
-Status: **not started**.
+Status: **not started** for Arwa. Asma's batch already names
+`siyar-alam-al-nubala-risalah` as its `sourceSlug`, but its three pages are
+recorded as `258`, `259`, `260` in volume 2 — the printed pages of
+`prophet-muhammad-sira`'s own chronicle entries for year 9 AH, not the `255`
+this document gives below. The text on those three pages
+(`data/history/batches/asma-bint-al-numan-al-kindiyyah/accounts/asma-bint-al-numan-al-kindiyyah/00{1,2,3}.md`)
+does not match `prophet-muhammad-sira`'s text for the same claimed pages, so
+this is a page-number mistake in the existing batch, not a second entry
+genuinely sharing those pages. The page store built for
+[source-page-store.md](source-page-store.md) therefore holds only
+`prophet-muhammad-sira`'s content at `v2/258.md`–`v2/260.md`; Asma's batch
+needs its `pages` corrected to volume 5 page 255 (see below) before her
+content can be added anywhere.
 
 Two batches hold text read from islamweb. Shamela is the only digital host this
 project extracts from (`AGENTS.md`, "Content sources"), because it carries the
