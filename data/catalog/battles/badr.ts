@@ -353,6 +353,18 @@ const badr = {
       summary: { value: 'وَهُوَ مِنْ كِبَارِ البَدْرِيِّيْنَ', claims: ['bishr-ibn-al-baraa-siyar54/badr'] },
       claims: ['bishr-ibn-al-baraa-siyar54/badr'],
     },
+    // Entry 59; al-Dhahabi names him among the archers at Badr and says
+    // nothing about what became of him there: the entry has him dying on the
+    // road to Basra years afterwards.
+    {
+      person: 'utbah-ibn-ghazwan',
+      isMuslim: true,
+      summary: {
+        value: 'شَهِدَ بَدْراً وَالمَشَاهِدَ، وَكَانَ أَحَدَ الرُّمَاةِ المَذْكُوْرِيْنَ',
+        claims: ['utbah-ibn-ghazwan-siyar59/badr'],
+      },
+      claims: ['utbah-ibn-ghazwan-siyar59/badr'],
+    },
     // Entry 67; witnessed Badr, martyred later at Uhud.
     { person: 'abdullah-ibn-amr-ibn-haram', isMuslim: true, claims: ['abdullah-ibn-amr-ibn-haram-siyar67/badr'] },
     // ADR 0013

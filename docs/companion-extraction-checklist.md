@@ -94,7 +94,7 @@ that.
 - [x] سعد بن معاذ (`saad-ibn-muadh`, PR #191)
 - [x] زيد بن الخطاب (`zaid-ibn-al-khattab`, PR #183)
 - [x] أسعد بن زرارة (`asad-ibn-zurarah`, PR #185)
-- [ ] عتبة بن غزوان
+- [x] عتبة بن غزوان (`utbah-ibn-ghazwan`, PR #196)
 - [x] عكاشة بن محصن — entry 60 (`ukkashah-ibn-mihsan`, PR #193)
 - [x] ثابت بن قيس (`thabit-ibn-qais`, PR #190)
 - [ ] شهداء أجنادين واليرموك
