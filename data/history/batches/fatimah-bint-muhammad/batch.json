@@ -1,0 +1,1050 @@
+{
+  "slug": "fatimah-bint-muhammad",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "fatimah-bint-muhammad",
+      "volumeNumber": 5,
+      "extractionUrl": "https://shamela.ws/book/10906/2098",
+      "accessedAt": "2026-09-30",
+      "notInSource": [
+        "kunya",
+        "siblings"
+      ],
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "118",
+          "bodyFile": "accounts/fatimah-bint-muhammad/001.md",
+          "notesFile": "accounts/fatimah-bint-muhammad/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2098",
+          "passages": [
+            {
+              "anchor": "5/118-p11"
+            },
+            {
+              "anchor": "5/118-p12"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "119",
+          "bodyFile": "accounts/fatimah-bint-muhammad/002.md",
+          "notesFile": "accounts/fatimah-bint-muhammad/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2099",
+          "passages": [
+            {
+              "anchor": "5/119-p1"
+            },
+            {
+              "anchor": "5/119-p2"
+            },
+            {
+              "anchor": "5/119-p3"
+            },
+            {
+              "anchor": "5/119-p4"
+            },
+            {
+              "anchor": "5/119-p5"
+            },
+            {
+              "anchor": "5/119-p6"
+            },
+            {
+              "anchor": "5/119-p7"
+            },
+            {
+              "anchor": "5/119-p8"
+            },
+            {
+              "anchor": "5/119-p9"
+            },
+            {
+              "anchor": "5/119-p10"
+            },
+            {
+              "anchor": "5/119-p11"
+            },
+            {
+              "anchor": "5/119-p12"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "printedPage": "120",
+          "bodyFile": "accounts/fatimah-bint-muhammad/003.md",
+          "notesFile": "accounts/fatimah-bint-muhammad/003.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2100",
+          "passages": [
+            {
+              "anchor": "5/120-p1"
+            },
+            {
+              "anchor": "5/120-p2"
+            },
+            {
+              "anchor": "5/120-p3"
+            },
+            {
+              "anchor": "5/120-p4"
+            },
+            {
+              "anchor": "5/120-p5"
+            },
+            {
+              "anchor": "5/120-p6"
+            },
+            {
+              "anchor": "5/120-p7"
+            },
+            {
+              "anchor": "5/120-p8"
+            },
+            {
+              "anchor": "5/120-p9"
+            },
+            {
+              "anchor": "5/120-p10"
+            },
+            {
+              "anchor": "5/120-p11"
+            },
+            {
+              "anchor": "5/120-p12"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "printedPage": "121",
+          "bodyFile": "accounts/fatimah-bint-muhammad/004.md",
+          "notesFile": "accounts/fatimah-bint-muhammad/004.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2101",
+          "passages": [
+            {
+              "anchor": "5/121-p1"
+            },
+            {
+              "anchor": "5/121-p2"
+            },
+            {
+              "anchor": "5/121-p3"
+            },
+            {
+              "anchor": "5/121-p4"
+            },
+            {
+              "anchor": "5/121-p5"
+            },
+            {
+              "anchor": "5/121-p6"
+            },
+            {
+              "anchor": "5/121-p7"
+            },
+            {
+              "anchor": "5/121-p8"
+            },
+            {
+              "anchor": "5/121-p9"
+            },
+            {
+              "anchor": "5/121-p10"
+            },
+            {
+              "anchor": "5/121-p11"
+            },
+            {
+              "anchor": "5/121-p12"
+            },
+            {
+              "anchor": "5/121-p13"
+            },
+            {
+              "anchor": "5/121-p14"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "printedPage": "122",
+          "bodyFile": "accounts/fatimah-bint-muhammad/005.md",
+          "notesFile": "accounts/fatimah-bint-muhammad/005.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2102",
+          "passages": [
+            {
+              "anchor": "5/122-p1"
+            },
+            {
+              "anchor": "5/122-p2"
+            },
+            {
+              "anchor": "5/122-p3"
+            },
+            {
+              "anchor": "5/122-p4"
+            },
+            {
+              "anchor": "5/122-p5"
+            },
+            {
+              "anchor": "5/122-p6"
+            },
+            {
+              "anchor": "5/122-p7"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "printedPage": "123",
+          "bodyFile": "accounts/fatimah-bint-muhammad/006.md",
+          "notesFile": "accounts/fatimah-bint-muhammad/006.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2103",
+          "passages": [
+            {
+              "anchor": "5/123-p1"
+            },
+            {
+              "anchor": "5/123-p2"
+            },
+            {
+              "anchor": "5/123-p3"
+            },
+            {
+              "anchor": "5/123-p4"
+            },
+            {
+              "anchor": "5/123-p5"
+            },
+            {
+              "anchor": "5/123-p6"
+            },
+            {
+              "anchor": "5/123-p7"
+            },
+            {
+              "anchor": "5/123-p8"
+            },
+            {
+              "anchor": "5/123-p9"
+            },
+            {
+              "anchor": "5/123-p10"
+            },
+            {
+              "anchor": "5/123-p11"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "printedPage": "124",
+          "bodyFile": "accounts/fatimah-bint-muhammad/007.md",
+          "notesFile": "accounts/fatimah-bint-muhammad/007.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2104",
+          "passages": [
+            {
+              "anchor": "5/124-p1"
+            },
+            {
+              "anchor": "5/124-p2"
+            },
+            {
+              "anchor": "5/124-p3"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "printedPage": "125",
+          "bodyFile": "accounts/fatimah-bint-muhammad/008.md",
+          "notesFile": "accounts/fatimah-bint-muhammad/008.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2105",
+          "passages": [
+            {
+              "anchor": "5/125-p1"
+            },
+            {
+              "anchor": "5/125-p2"
+            },
+            {
+              "anchor": "5/125-p3"
+            },
+            {
+              "anchor": "5/125-p4"
+            },
+            {
+              "anchor": "5/125-p5"
+            },
+            {
+              "anchor": "5/125-p6"
+            },
+            {
+              "anchor": "5/125-p7"
+            },
+            {
+              "anchor": "5/125-p8"
+            },
+            {
+              "anchor": "5/125-p9"
+            },
+            {
+              "anchor": "5/125-p10"
+            },
+            {
+              "anchor": "5/125-p11"
+            },
+            {
+              "anchor": "5/125-p12"
+            },
+            {
+              "anchor": "5/125-p13"
+            },
+            {
+              "anchor": "5/125-p14"
+            },
+            {
+              "anchor": "5/125-p15"
+            }
+          ]
+        },
+        {
+          "sequence": 9,
+          "printedPage": "126",
+          "bodyFile": "accounts/fatimah-bint-muhammad/009.md",
+          "notesFile": "accounts/fatimah-bint-muhammad/009.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2106",
+          "passages": [
+            {
+              "anchor": "5/126-p1"
+            },
+            {
+              "anchor": "5/126-p2"
+            },
+            {
+              "anchor": "5/126-p3"
+            },
+            {
+              "anchor": "5/126-p4"
+            },
+            {
+              "anchor": "5/126-p5"
+            },
+            {
+              "anchor": "5/126-p6"
+            },
+            {
+              "anchor": "5/126-p7"
+            },
+            {
+              "anchor": "5/126-p8"
+            },
+            {
+              "anchor": "5/126-p9"
+            },
+            {
+              "anchor": "5/126-p10"
+            },
+            {
+              "anchor": "5/126-p11"
+            },
+            {
+              "anchor": "5/126-p12"
+            },
+            {
+              "anchor": "5/126-p13"
+            },
+            {
+              "anchor": "5/126-p14"
+            },
+            {
+              "anchor": "5/126-p15"
+            },
+            {
+              "anchor": "5/126-p16"
+            }
+          ]
+        },
+        {
+          "sequence": 10,
+          "printedPage": "127",
+          "bodyFile": "accounts/fatimah-bint-muhammad/010.md",
+          "notesFile": "accounts/fatimah-bint-muhammad/010.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2107",
+          "passages": [
+            {
+              "anchor": "5/127-p1"
+            },
+            {
+              "anchor": "5/127-p2"
+            },
+            {
+              "anchor": "5/127-p3"
+            },
+            {
+              "anchor": "5/127-p4"
+            },
+            {
+              "anchor": "5/127-p5"
+            },
+            {
+              "anchor": "5/127-p6"
+            },
+            {
+              "anchor": "5/127-p7"
+            },
+            {
+              "anchor": "5/127-p8"
+            },
+            {
+              "anchor": "5/127-p9"
+            },
+            {
+              "anchor": "5/127-p10"
+            },
+            {
+              "anchor": "5/127-p11"
+            }
+          ]
+        },
+        {
+          "sequence": 11,
+          "printedPage": "128",
+          "bodyFile": "accounts/fatimah-bint-muhammad/011.md",
+          "notesFile": "accounts/fatimah-bint-muhammad/011.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2108",
+          "passages": [
+            {
+              "anchor": "5/128-p1"
+            },
+            {
+              "anchor": "5/128-p2"
+            },
+            {
+              "anchor": "5/128-p3"
+            },
+            {
+              "anchor": "5/128-p4"
+            },
+            {
+              "anchor": "5/128-p5"
+            },
+            {
+              "anchor": "5/128-p6"
+            },
+            {
+              "anchor": "5/128-p7"
+            },
+            {
+              "anchor": "5/128-p8"
+            },
+            {
+              "anchor": "5/128-p9"
+            },
+            {
+              "anchor": "5/128-p10"
+            },
+            {
+              "anchor": "5/128-p11"
+            },
+            {
+              "anchor": "5/128-p12"
+            },
+            {
+              "anchor": "5/128-p13"
+            },
+            {
+              "anchor": "5/128-p14"
+            },
+            {
+              "anchor": "5/128-p15"
+            }
+          ]
+        },
+        {
+          "sequence": 12,
+          "printedPage": "129",
+          "bodyFile": "accounts/fatimah-bint-muhammad/012.md",
+          "notesFile": "accounts/fatimah-bint-muhammad/012.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2109",
+          "passages": [
+            {
+              "anchor": "5/129-p1"
+            },
+            {
+              "anchor": "5/129-p2"
+            },
+            {
+              "anchor": "5/129-p3"
+            },
+            {
+              "anchor": "5/129-p4"
+            },
+            {
+              "anchor": "5/129-p5"
+            },
+            {
+              "anchor": "5/129-p6"
+            },
+            {
+              "anchor": "5/129-p7"
+            },
+            {
+              "anchor": "5/129-p8"
+            },
+            {
+              "anchor": "5/129-p9"
+            },
+            {
+              "anchor": "5/129-p10"
+            },
+            {
+              "anchor": "5/129-p11"
+            },
+            {
+              "anchor": "5/129-p12"
+            },
+            {
+              "anchor": "5/129-p13"
+            }
+          ]
+        },
+        {
+          "sequence": 13,
+          "printedPage": "130",
+          "bodyFile": "accounts/fatimah-bint-muhammad/013.md",
+          "notesFile": "accounts/fatimah-bint-muhammad/013.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2110",
+          "passages": [
+            {
+              "anchor": "5/130-p1"
+            },
+            {
+              "anchor": "5/130-p2"
+            },
+            {
+              "anchor": "5/130-p3"
+            },
+            {
+              "anchor": "5/130-p4"
+            },
+            {
+              "anchor": "5/130-p5"
+            },
+            {
+              "anchor": "5/130-p6"
+            },
+            {
+              "anchor": "5/130-p7"
+            },
+            {
+              "anchor": "5/130-p8"
+            },
+            {
+              "anchor": "5/130-p9"
+            },
+            {
+              "anchor": "5/130-p10"
+            },
+            {
+              "anchor": "5/130-p11"
+            },
+            {
+              "anchor": "5/130-p12"
+            },
+            {
+              "anchor": "5/130-p13"
+            }
+          ]
+        },
+        {
+          "sequence": 14,
+          "printedPage": "131",
+          "bodyFile": "accounts/fatimah-bint-muhammad/014.md",
+          "notesFile": "accounts/fatimah-bint-muhammad/014.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2111",
+          "passages": [
+            {
+              "anchor": "5/131-p1"
+            },
+            {
+              "anchor": "5/131-p2"
+            },
+            {
+              "anchor": "5/131-p3"
+            },
+            {
+              "anchor": "5/131-p4"
+            },
+            {
+              "anchor": "5/131-p5"
+            },
+            {
+              "anchor": "5/131-p6"
+            },
+            {
+              "anchor": "5/131-p7"
+            },
+            {
+              "anchor": "5/131-p8"
+            },
+            {
+              "anchor": "5/131-p9"
+            },
+            {
+              "anchor": "5/131-p10"
+            },
+            {
+              "anchor": "5/131-p11"
+            },
+            {
+              "anchor": "5/131-p12"
+            },
+            {
+              "anchor": "5/131-p13"
+            }
+          ]
+        },
+        {
+          "sequence": 15,
+          "printedPage": "132",
+          "bodyFile": "accounts/fatimah-bint-muhammad/015.md",
+          "notesFile": "accounts/fatimah-bint-muhammad/015.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2112",
+          "passages": [
+            {
+              "anchor": "5/132-p1"
+            },
+            {
+              "anchor": "5/132-p2"
+            },
+            {
+              "anchor": "5/132-p3"
+            },
+            {
+              "anchor": "5/132-p4"
+            },
+            {
+              "anchor": "5/132-p5"
+            },
+            {
+              "anchor": "5/132-p6"
+            },
+            {
+              "anchor": "5/132-p7"
+            },
+            {
+              "anchor": "5/132-p8"
+            },
+            {
+              "anchor": "5/132-p9"
+            }
+          ]
+        },
+        {
+          "sequence": 16,
+          "printedPage": "133",
+          "bodyFile": "accounts/fatimah-bint-muhammad/016.md",
+          "notesFile": "accounts/fatimah-bint-muhammad/016.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2113",
+          "passages": [
+            {
+              "anchor": "5/133-p1"
+            },
+            {
+              "anchor": "5/133-p2"
+            },
+            {
+              "anchor": "5/133-p3"
+            },
+            {
+              "anchor": "5/133-p4"
+            },
+            {
+              "anchor": "5/133-p5"
+            },
+            {
+              "anchor": "5/133-p6"
+            },
+            {
+              "anchor": "5/133-p7"
+            },
+            {
+              "anchor": "5/133-p8"
+            },
+            {
+              "anchor": "5/133-p9"
+            },
+            {
+              "anchor": "5/133-p10"
+            },
+            {
+              "anchor": "5/133-p11"
+            },
+            {
+              "anchor": "5/133-p12"
+            },
+            {
+              "anchor": "5/133-p13"
+            },
+            {
+              "anchor": "5/133-p14"
+            }
+          ]
+        },
+        {
+          "sequence": 17,
+          "printedPage": "134",
+          "bodyFile": "accounts/fatimah-bint-muhammad/017.md",
+          "notesFile": "accounts/fatimah-bint-muhammad/017.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/2114",
+          "passages": [
+            {
+              "anchor": "5/134-p1"
+            },
+            {
+              "anchor": "5/134-p2"
+            },
+            {
+              "anchor": "5/134-p3"
+            },
+            {
+              "anchor": "5/134-p4"
+            },
+            {
+              "anchor": "5/134-p5"
+            },
+            {
+              "anchor": "5/134-p6"
+            },
+            {
+              "anchor": "5/134-p7"
+            },
+            {
+              "anchor": "5/134-p8"
+            },
+            {
+              "anchor": "5/134-p9"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "fatimah-siyar/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "fatimah-bint-muhammad",
+      "assertion": "فاطمة بنت محمد بن عبد الله بن عبد المطلب بن هاشم بن عبد مناف القرشية الهاشمية.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "fullName",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/119-p1",
+          "volume": "2",
+          "pageReference": "119",
+          "extractionUrl": "https://shamela.ws/book/10906/2099",
+          "excerptArabic": "أُمُّ أَبِيْهَا، بِنْتُ سَيِّدِ الخَلْقِ رَسُوْلِ اللهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ أَبِي القَاسِمِ مُحَمَّدِ بنِ عَبْدِ اللهِ بنِ عَبْدِ المُطَّلِبِ بنِ هَاشِمِ بنِ عَبْدِ مَنَافٍ القُرَشِيَّةُ، الهَاشِمِيَّةُ، وَأُمُّ الحَسَنَيْنِ.",
+          "accessedAt": "2026-09-30"
+        }
+      ]
+    },
+    {
+      "key": "fatimah-siyar/appearance",
+      "subjectKind": "PERSON",
+      "subjectSlug": "fatimah-bint-muhammad",
+      "assertion": "كانت تشبه النبي صلى الله عليه وسلم في مشيتها وكلامها.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "appearance",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/120-p9",
+          "volume": "2",
+          "pageReference": "120",
+          "extractionUrl": "https://shamela.ws/book/10906/2100",
+          "excerptArabic": "وَقَالَتْ عَائِشَةُ رَضِيَ اللهُ عَنْهَا: جَاءتْ فَاطِمَةُ تَمْشِي مَا تُخْطِئُ مِشْيَتُهَا مِشْيَةَ رَسُوْلِ اللهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ.",
+          "accessedAt": "2026-09-30"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/127-p6",
+          "volume": "2",
+          "pageReference": "127",
+          "extractionUrl": "https://shamela.ws/book/10906/2107",
+          "excerptArabic": "مَا رَأَيْتُ أَحَداً كَانَ أَشْبَهَ كَلاَماً وَحَدِيْثاً بِرَسُوْلِ اللهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ مِنْ فَاطِمَةَ.",
+          "accessedAt": "2026-09-30"
+        }
+      ]
+    },
+    {
+      "key": "fatimah-siyar/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "fatimah-bint-muhammad",
+      "assertion": "بضعة من رسول الله، سيدة نساء أهل الجنة، زوجة علي بن أبي طالب، أم الحسنين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/118-p12",
+          "volume": "2",
+          "pageReference": "118",
+          "extractionUrl": "https://shamela.ws/book/10906/2098",
+          "excerptArabic": "سَيِّدَةُ نِسَاءِ العَالَمِيْنَ فِي زَمَانِهَا، البَضْعَةُ النَّبَوِيَّةُ، وَالجِهَةُ المُصْطَفَوِيَّةُ.",
+          "accessedAt": "2026-09-30"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/119-p1",
+          "volume": "2",
+          "pageReference": "119",
+          "extractionUrl": "https://shamela.ws/book/10906/2099",
+          "excerptArabic": "أُمُّ أَبِيْهَا، بِنْتُ سَيِّدِ الخَلْقِ رَسُوْلِ اللهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ أَبِي القَاسِمِ مُحَمَّدِ بنِ عَبْدِ اللهِ بنِ عَبْدِ المُطَّلِبِ بنِ هَاشِمِ بنِ عَبْدِ مَنَافٍ القُرَشِيَّةُ، الهَاشِمِيَّةُ، وَأُمُّ الحَسَنَيْنِ.",
+          "accessedAt": "2026-09-30"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/119-p3",
+          "volume": "2",
+          "pageReference": "119",
+          "extractionUrl": "https://shamela.ws/book/10906/2099",
+          "excerptArabic": "وَتَزَوَّجَهَا الإِمَامُ عَلِيُّ بنُ أَبِي طَالِبٍ فِي ذِي القَعْدَةِ، أَوْ قُبَيْلَهُ، مِنْ سَنَةِ اثْنَتَيْنِ بَعْدَ وَقْعَةِ بَدْرٍ.",
+          "accessedAt": "2026-09-30"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/123-p5",
+          "volume": "2",
+          "pageReference": "123",
+          "extractionUrl": "https://shamela.ws/book/10906/2103",
+          "excerptArabic": "قَالَ النَّبِيُّ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ: نَزَلَ مَلَكٌ، فَبَشَّرَنِي أَنَّ فَاطِمَةَ سَيِّدَةُ نِسَاءِ أَهْلِ الجَنَّةِ.",
+          "accessedAt": "2026-09-30"
+        }
+      ]
+    },
+    {
+      "key": "fatimah-siyar/title-daughter-of-prophet",
+      "subjectKind": "PERSON",
+      "subjectSlug": "fatimah-bint-muhammad",
+      "assertion": "فاطمة بنت رسول الله صلى الله عليه وسلم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "titles",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/118-p11",
+          "volume": "2",
+          "pageReference": "118",
+          "extractionUrl": "https://shamela.ws/book/10906/2098",
+          "excerptArabic": "١٨ - فَاطِمَةُ بِنْتُ رَسُوْلِ اللهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ.",
+          "accessedAt": "2026-09-30"
+        }
+      ]
+    },
+    {
+      "key": "fatimah-siyar/title-sayyidat-nisa",
+      "subjectKind": "PERSON",
+      "subjectSlug": "fatimah-bint-muhammad",
+      "assertion": "فاطمة سيدة نساء أهل الجنة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "titles",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/123-p5",
+          "volume": "2",
+          "pageReference": "123",
+          "extractionUrl": "https://shamela.ws/book/10906/2103",
+          "excerptArabic": "قَالَ النَّبِيُّ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ: نَزَلَ مَلَكٌ، فَبَشَّرَنِي أَنَّ فَاطِمَةَ سَيِّدَةُ نِسَاءِ أَهْلِ الجَنَّةِ.",
+          "accessedAt": "2026-09-30"
+        }
+      ]
+    },
+    {
+      "key": "fatimah-siyar/daughter-prophet",
+      "subjectKind": "PERSON",
+      "subjectSlug": "fatimah-bint-muhammad",
+      "assertion": "فاطمة بنت رسول الله محمد بن عبد الله صلى الله عليه وسلم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "DAUGHTER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "prophet-muhammad",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/119-p1",
+          "volume": "2",
+          "pageReference": "119",
+          "extractionUrl": "https://shamela.ws/book/10906/2099",
+          "excerptArabic": "أُمُّ أَبِيْهَا، بِنْتُ سَيِّدِ الخَلْقِ رَسُوْلِ اللهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ أَبِي القَاسِمِ مُحَمَّدِ بنِ عَبْدِ اللهِ بنِ عَبْدِ المُطَّلِبِ بنِ هَاشِمِ بنِ عَبْدِ مَنَافٍ القُرَشِيَّةُ، الهَاشِمِيَّةُ، وَأُمُّ الحَسَنَيْنِ.",
+          "accessedAt": "2026-09-30"
+        }
+      ]
+    },
+    {
+      "key": "fatimah-siyar/wife-ali",
+      "subjectKind": "PERSON",
+      "subjectSlug": "fatimah-bint-muhammad",
+      "assertion": "تزوج علي بن أبي طالب فاطمة بنت رسول الله.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "WIFE",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "ali-ibn-abi-talib",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/119-p3",
+          "volume": "2",
+          "pageReference": "119",
+          "extractionUrl": "https://shamela.ws/book/10906/2099",
+          "excerptArabic": "وَتَزَوَّجَهَا الإِمَامُ عَلِيُّ بنُ أَبِي طَالِبٍ فِي ذِي القَعْدَةِ، أَوْ قُبَيْلَهُ، مِنْ سَنَةِ اثْنَتَيْنِ بَعْدَ وَقْعَةِ بَدْرٍ.",
+          "accessedAt": "2026-09-30"
+        }
+      ]
+    }
+  ]
+}
