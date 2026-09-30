@@ -89,6 +89,9 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   matching existing history.
 - PR descriptions must include a summary of what changed and why, not
   just a list of touched files.
+- After a PR merges, delete its branch on both remote and local, and remove
+  its worktree if it has one (`git worktree remove <path>` before
+  `git branch -D`, since a worktree checkout blocks the branch delete).
 
 ## Shared components
 
