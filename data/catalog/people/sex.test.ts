@@ -9,8 +9,8 @@ const people = await Promise.all(
 );
 
 describe('sex across the catalog', () => {
-  it('records MALE or FEMALE for all 595 catalog people', () => {
-    expect(people).toHaveLength(595);
+  it('records MALE or FEMALE for all 598 catalog people', () => {
+    expect(people).toHaveLength(598);
 
     const missing = people.filter((person) => !person.fields.sex).map((person) => person.slug);
     expect(missing).toEqual([]);
@@ -26,6 +26,6 @@ describe('sex across the catalog', () => {
     const legacy = people.filter((person) => person.fields.sex.claims === legacyUnreviewed);
 
     expect(cited).toHaveLength(45);
-    expect(legacy).toHaveLength(550);
+    expect(legacy).toHaveLength(553);
   });
 });
