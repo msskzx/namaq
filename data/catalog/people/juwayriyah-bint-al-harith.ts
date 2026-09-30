@@ -1,11 +1,6 @@
-import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
+import { type CatalogPerson } from '@/lib/catalog/types';
 
-/**
- * Carried from neo4j/graphSeedData*.ts, whose node declaration is retired
- * with the rest. The catalog owns this subject's edges now, so they live
- * here or not at all. No batch has read this far into the nasab yet, so
- * every link stays on the legacy marker.
- */
+// data/history/batches/juwayriyah-bint-al-harith/summary.md
 const juwayriyahBintAlHarith = {
   kind: 'PERSON',
   slug: 'juwayriyah-bint-al-harith',
@@ -13,21 +8,43 @@ const juwayriyahBintAlHarith = {
   nameTransliterated: 'Juwayriyah bint al-Harith',
   hasProfile: true,
   fields: {
-    sex: { value: 'FEMALE', claims: legacyUnreviewed },
-    fullName: { value: 'جويرية بنت الحارث بن أبي ضرار المصطلقية', claims: legacyUnreviewed },
-    // Carried from the retired prisma/personSeedData.ts entry, uncited.
-    appearance: { value: 'وصفت بأنها كانت ذات جمال فاتن.', claims: legacyUnreviewed },
+    sex: { value: 'FEMALE', claims: ['juwayriyah-siyar39/sex'] },
+    fullName: { value: 'جويرية بنت الحارث بن أبي ضرار المصطلقية', claims: ['juwayriyah-siyar39/full-name'] },
+    appearance: {
+      value: 'كانت من أجمل النساء، ووصفتها عائشة بأنها امرأة حلوة ملاحة لا يراها أحد إلا أخذت بنفسه.',
+      claims: ['juwayriyah-siyar39/appearance'],
+    },
     virtues: {
-      value: 'أم المؤمنين، من سبايا غزوة بني المصطلق، أسلمت وتزوجها النبي، كان زواجها سببًا في إعتاق مئات الأسرى من قومها.',
-      claims: legacyUnreviewed,
+      value:
+        'سبيت يوم المريسيع سنة خمس، فأسلمت وتزوجها النبي صلى الله عليه وسلم، وأطلق لها الأسارى من قومها. قالت عائشة: لقد أعتق بها مائة أهل بيت، فما أعلم امرأة كانت أعظم بركة على قومها منها. وخيّرها النبي صلى الله عليه وسلم حين جاء أبوها يطلبها، فاختارته.',
+      claims: [
+        'juwayriyah-siyar39/virtues-captives',
+        'juwayriyah-siyar39/virtues-baraka',
+        'juwayriyah-siyar39/virtues-chose-prophet',
+      ],
+    },
+    deathYearHijri: {
+      value: '50',
+      claims: ['juwayriyah-siyar39/death-year', 'juwayriyah-siyar39/death-year-alternate'],
     },
   },
   titles: [
-    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
-    { title: 'mother-of-believers', name: 'أم المؤمنين', nameTransliterated: 'Mother of the Believers', claims: legacyUnreviewed },
+    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: ['juwayriyah-siyar39/titles-companion'] },
+    {
+      title: 'mother-of-believers',
+      name: 'أم المؤمنين',
+      nameTransliterated: 'Mother of the Believers',
+      claims: ['juwayriyah-siyar39/titles-mother-of-believers'],
+    },
   ],
   relations: [
-    { type: 'DAUGHTER', inverse: 'FATHER', to: 'al-harith-ibn-abi-dirar-al-mustaliqi', claims: legacyUnreviewed },
+    {
+      type: 'DAUGHTER',
+      inverse: 'FATHER',
+      to: 'al-harith-ibn-abi-dirar-al-mustaliqi',
+      claims: ['juwayriyah-siyar39/father'],
+    },
+    { type: 'WIFE', inverse: 'HUSBAND', to: 'prophet-muhammad', claims: ['juwayriyah-siyar39/wife-prophet'] },
   ],
 } satisfies CatalogPerson;
 
