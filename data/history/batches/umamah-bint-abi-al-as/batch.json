@@ -1,0 +1,297 @@
+{
+  "slug": "umamah-bint-abi-al-as",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umamah-bint-abi-al-as",
+      "extractionUrl": "https://shamela.ws/book/10906/1761",
+      "accessedAt": "2026-09-29",
+      "volumeNumber": 4,
+      "notInSource": ["kunya", "appearance", "siblings"],
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "335",
+          "bodyFile": "accounts/umamah-bint-abi-al-as/001.md",
+          "notesFile": "accounts/umamah-bint-abi-al-as/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1761",
+          "passages": [
+            {
+              "anchor": "4/335-p4"
+            },
+            {
+              "anchor": "4/335-p5"
+            },
+            {
+              "anchor": "4/335-p6"
+            },
+            {
+              "anchor": "4/335-p7"
+            },
+            {
+              "anchor": "4/335-p8"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "umamah-bint-abi-al-as/fullName",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umamah-bint-abi-al-as",
+      "field": "fullName",
+      "assertion": "أمامة بنت أبي العاص.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/335-p4",
+          "volume": "4",
+          "pageReference": "335",
+          "extractionUrl": "https://shamela.ws/book/10906/1761",
+          "excerptArabic": "٧١ - أُمَامَةُ بِنْتُ أَبِي العَاصِ*",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "umamah-bint-abi-al-as/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umamah-bint-abi-al-as",
+      "field": "sex",
+      "assertion": "أمامة بنت أبي العاص: أنثى، من لفظ النسب في اسمها.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/335-p4",
+          "volume": "4",
+          "pageReference": "335",
+          "extractionUrl": "https://shamela.ws/book/10906/1761",
+          "excerptArabic": "أُمَامَةُ بِنْتُ أَبِي العَاصِ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "umamah-bint-abi-al-as/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umamah-bint-abi-al-as",
+      "field": "virtues",
+      "assertion": "كانت النبي صلى الله عليه وسلم يحملها في صلاته.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/335-p5",
+          "volume": "4",
+          "pageReference": "335",
+          "extractionUrl": "https://shamela.ws/book/10906/1761",
+          "excerptArabic": "الَّتِي كَانَ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَحْمِلُهَا فِي صَلاَتِهِ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "umamah-bint-abi-al-as/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umamah-bint-abi-al-as",
+      "assertion": "أبو العاص بن الربيع: أبوها.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "DAUGHTER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "abu-al-as-ibn-al-rabi",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/335-p4",
+          "volume": "4",
+          "pageReference": "335",
+          "extractionUrl": "https://shamela.ws/book/10906/1761",
+          "excerptArabic": "أُمَامَةُ بِنْتُ أَبِي العَاصِ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "umamah-bint-abi-al-as/mother",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umamah-bint-abi-al-as",
+      "assertion": "زينب بنت محمد: أمها، هي بنت بنته.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "DAUGHTER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "zaynab-bint-muhammad",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/335-p6",
+          "volume": "4",
+          "pageReference": "335",
+          "extractionUrl": "https://shamela.ws/book/10906/1761",
+          "excerptArabic": "هِيَ بِنْتُ بِنْتِهِ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "umamah-bint-abi-al-as/husband-ali",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umamah-bint-abi-al-as",
+      "assertion": "تزوج بها علي بن أبي طالب في خلافة عمر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "WIFE",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "ali-ibn-abi-talib",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/335-p6",
+          "volume": "4",
+          "pageReference": "335",
+          "extractionUrl": "https://shamela.ws/book/10906/1761",
+          "excerptArabic": "تَزَوَّجَ بِهَا عَلِيُّ بنُ أَبِي طَالِبٍ فِي خِلاَفَةِ عُمَرَ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    }
+  ]
+}
