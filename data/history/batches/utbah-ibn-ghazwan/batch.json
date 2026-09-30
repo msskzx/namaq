@@ -1,0 +1,546 @@
+{
+  "slug": "utbah-ibn-ghazwan",
+  "summaryFile": "summary.md",
+  "sources": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "title": "سير أعلام النبلاء",
+      "author": "شمس الدين الذهبي",
+      "editor": "حسين الأسد، بإشراف شعيب الأرناؤوط",
+      "publisher": "مؤسسة الرسالة",
+      "publicationYear": "1405/1985",
+      "edition": "الطبعة الثالثة",
+      "digitalHost": "المكتبة الشاملة",
+      "url": "https://shamela.ws/index.php/book/10906",
+      "notes": "الجزء الأول بتحقيق حسين الأسد. تختلف بيانات هذه الطبعة عن نسخة إسلام ويب، فلا تُدمج السجلات بالناشر وحده.",
+      "volumes": [
+        {
+          "number": 1,
+          "name": "السيرة النبوية ج١"
+        },
+        {
+          "number": 2,
+          "name": "السيرة النبوية ج٢"
+        },
+        {
+          "number": 3,
+          "name": "سيرة الخلفاء الراشدين"
+        },
+        {
+          "number": 4,
+          "name": "سير أعلام النبلاء ج١"
+        },
+        {
+          "number": 5,
+          "name": "سير أعلام النبلاء ج٢"
+        },
+        {
+          "number": 6,
+          "name": "سير أعلام النبلاء ج٣"
+        },
+        {
+          "number": 7,
+          "name": "سير أعلام النبلاء ج٤"
+        },
+        {
+          "number": 8,
+          "name": "سير أعلام النبلاء ج٥"
+        },
+        {
+          "number": 9,
+          "name": "سير أعلام النبلاء ج٦"
+        },
+        {
+          "number": 10,
+          "name": "سير أعلام النبلاء ج٧"
+        },
+        {
+          "number": 11,
+          "name": "سير أعلام النبلاء ج٨"
+        },
+        {
+          "number": 12,
+          "name": "سير أعلام النبلاء ج٩"
+        },
+        {
+          "number": 13,
+          "name": "سير أعلام النبلاء ج١٠"
+        },
+        {
+          "number": 14,
+          "name": "سير أعلام النبلاء ج١١"
+        },
+        {
+          "number": 15,
+          "name": "سير أعلام النبلاء ج١٢"
+        },
+        {
+          "number": 16,
+          "name": "سير أعلام النبلاء ج١٣"
+        },
+        {
+          "number": 17,
+          "name": "سير أعلام النبلاء ج١٤"
+        },
+        {
+          "number": 18,
+          "name": "سير أعلام النبلاء ج١٥"
+        },
+        {
+          "number": 19,
+          "name": "سير أعلام النبلاء ج١٦"
+        },
+        {
+          "number": 20,
+          "name": "سير أعلام النبلاء ج١٧"
+        },
+        {
+          "number": 21,
+          "name": "سير أعلام النبلاء ج١٨"
+        },
+        {
+          "number": 22,
+          "name": "سير أعلام النبلاء ج١٩"
+        },
+        {
+          "number": 23,
+          "name": "سير أعلام النبلاء ج٢٠"
+        },
+        {
+          "number": 24,
+          "name": "سير أعلام النبلاء ج٢١"
+        },
+        {
+          "number": 25,
+          "name": "سير أعلام النبلاء ج٢٢"
+        },
+        {
+          "number": 26,
+          "name": "سير أعلام النبلاء ج٢٣"
+        },
+        {
+          "number": 27,
+          "name": "الفهارس ج١"
+        },
+        {
+          "number": 28,
+          "name": "الفهارس ج٢"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "utbah-ibn-ghazwan",
+      "extractionUrl": "https://shamela.ws/book/10906/1730",
+      "accessedAt": "2026-09-29",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "304",
+          "bodyFile": "accounts/utbah-ibn-ghazwan/001.md",
+          "notesFile": "accounts/utbah-ibn-ghazwan/001.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1730",
+          "passages": [
+            {
+              "anchor": "304-p3"
+            },
+            {
+              "anchor": "304-p4"
+            },
+            {
+              "anchor": "304-p5"
+            },
+            {
+              "anchor": "304-p6"
+            },
+            {
+              "anchor": "304-p7"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "printedPage": "305",
+          "bodyFile": "accounts/utbah-ibn-ghazwan/002.md",
+          "notesFile": "accounts/utbah-ibn-ghazwan/002.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1731",
+          "passages": [
+            {
+              "anchor": "305-p1"
+            },
+            {
+              "anchor": "305-p2"
+            },
+            {
+              "anchor": "305-p3"
+            },
+            {
+              "anchor": "305-p4"
+            },
+            {
+              "anchor": "305-p5"
+            },
+            {
+              "anchor": "305-p6"
+            },
+            {
+              "anchor": "305-p7"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "printedPage": "306",
+          "bodyFile": "accounts/utbah-ibn-ghazwan/003.md",
+          "notesFile": "accounts/utbah-ibn-ghazwan/003.notes.md",
+          "extractionUrl": "https://shamela.ws/book/10906/1732",
+          "passages": [
+            {
+              "anchor": "306-p1"
+            },
+            {
+              "anchor": "306-p2"
+            },
+            {
+              "anchor": "306-p3"
+            },
+            {
+              "anchor": "306-p4"
+            },
+            {
+              "anchor": "306-p5"
+            },
+            {
+              "anchor": "306-p6"
+            },
+            {
+              "anchor": "306-p7"
+            },
+            {
+              "anchor": "306-p8"
+            },
+            {
+              "anchor": "306-p9"
+            },
+            {
+              "anchor": "306-p10"
+            }
+          ]
+        }
+      ],
+      "volumeNumber": 4,
+      "notInSource": [
+        "appearance",
+        "wives",
+        "siblings"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "utbah-ibn-ghazwan-siyar59/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "utbah-ibn-ghazwan",
+      "field": "fullName",
+      "assertion": "عتبة بن غزوان بن جابر بن وهيب",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "304-p3",
+          "volume": "4",
+          "pageReference": "304",
+          "extractionUrl": "https://shamela.ws/book/10906/1730",
+          "excerptArabic": "٥٩ - عُتْبَةُ بنُ غَزْوَانَ * بنِ جَابِرِ بنِ وُهَيْبٍ أَبُو غَزْوَانَ المَازنِيُّ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "utbah-ibn-ghazwan-siyar59/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "utbah-ibn-ghazwan",
+      "assertion": "عتبة بن غزوان: أبوه غزوان بن جابر.",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "ghazwan-ibn-jabir",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "304-p3",
+          "volume": "4",
+          "pageReference": "304",
+          "extractionUrl": "https://shamela.ws/book/10906/1730",
+          "excerptArabic": "٥٩ - عُتْبَةُ بنُ غَزْوَانَ * بنِ جَابِرِ بنِ وُهَيْبٍ أَبُو غَزْوَانَ المَازنِيُّ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "utbah-ibn-ghazwan-siyar59/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "utbah-ibn-ghazwan",
+      "field": "kunya",
+      "assertion": "أبو غزوان",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "304-p3",
+          "volume": "4",
+          "pageReference": "304",
+          "extractionUrl": "https://shamela.ws/book/10906/1730",
+          "excerptArabic": "أَبُو غَزْوَانَ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "utbah-ibn-ghazwan-siyar59/kunya-alt",
+      "subjectKind": "PERSON",
+      "subjectSlug": "utbah-ibn-ghazwan",
+      "field": "kunya",
+      "assertion": "وقيل: كُنْيَتُهُ: أَبُو عَبْدِ اللهِ (يعارض كنيته أبو غزوان).",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "disputed": true,
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "304-p7",
+          "volume": "4",
+          "pageReference": "304",
+          "extractionUrl": "https://shamela.ws/book/10906/1730",
+          "excerptArabic": "وَقِيْلَ: كُنْيَتُهُ: أَبُو عَبْدِ اللهِ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "utbah-ibn-ghazwan-siyar59/tribal-affiliation",
+      "subjectKind": "PERSON",
+      "subjectSlug": "utbah-ibn-ghazwan",
+      "field": "tribalAffiliation",
+      "assertion": "المازني، حليف بني عبد شمس",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "304-p4",
+          "volume": "4",
+          "pageReference": "304",
+          "extractionUrl": "https://shamela.ws/book/10906/1730",
+          "excerptArabic": "أَبُو غَزْوَانَ المَازنِيُّ، حَلِيْفُ بَنِي عَبْدِ شَمْسٍ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "utbah-ibn-ghazwan-siyar59/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "utbah-ibn-ghazwan",
+      "field": "titles",
+      "assertion": "صحابي: أسلم سابع سبعة في الإسلام وشهد بدراً، وله صحبة قديمة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "304-p5",
+          "volume": "4",
+          "pageReference": "304",
+          "extractionUrl": "https://shamela.ws/book/10906/1730",
+          "excerptArabic": "أَسْلَمَ سَابِعَ سَبْعَةٍ فِي الإِسْلاَمِ، وَهَاجَرَ إِلَى الحَبَشَةِ، ثُمَّ شَهِدَ بَدْراً وَالمَشَاهِدَ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "305-p7",
+          "volume": "4",
+          "pageReference": "305",
+          "extractionUrl": "https://shamela.ws/book/10906/1731",
+          "excerptArabic": "وَلِي صُحْبَةٌ قَدِيْمَةٌ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "utbah-ibn-ghazwan-siyar59/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "utbah-ibn-ghazwan",
+      "field": "virtues",
+      "assertion": "السيد الأمير المجاهد. أسلم سابع سبعة في الإسلام، وهاجر إلى الحبشة، وشهد بدراً والمشاهد، وكان أحد الرماة المذكورين ومن أمراء الغزاة، وهو الذي اختط البصرة وأنشاها.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "304-p4",
+          "volume": "4",
+          "pageReference": "304",
+          "extractionUrl": "https://shamela.ws/book/10906/1730",
+          "excerptArabic": "السَّيِّدُ، الأَمِيْرُ، المُجَاهِدُ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "304-p5",
+          "volume": "4",
+          "pageReference": "304",
+          "extractionUrl": "https://shamela.ws/book/10906/1730",
+          "excerptArabic": "أَسْلَمَ سَابِعَ سَبْعَةٍ فِي الإِسْلاَمِ، وَهَاجَرَ إِلَى الحَبَشَةِ، ثُمَّ شَهِدَ بَدْراً وَالمَشَاهِدَ، وَكَانَ أَحَدَ الرُّمَاةِ المَذْكُوْرِيْنَ، وَمِنْ أُمَرَاءِ الغَزَاةِ، وَهُوَ الَّذِي اخْتَطَ البَصْرَةَ وَأَنْشَأَهَا.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "utbah-ibn-ghazwan-siyar59/virtues-basra",
+      "subjectKind": "PERSON",
+      "subjectSlug": "utbah-ibn-ghazwan",
+      "field": "virtues",
+      "assertion": "استعمله عمر على البصرة فمصرها واختطها وبنى مسجدها بقصب ولم يبن بها داراً. وقيل: كانت البصرة قبل تسمى أرض الهند، فأول من نزلها عتبة، كان في ثمان مائة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "305-p2",
+          "volume": "4",
+          "pageReference": "305",
+          "extractionUrl": "https://shamela.ws/book/10906/1731",
+          "excerptArabic": "اسْتَعْمَلَ عُمَرُ عُتْبَةَ بنَ غَزْوَانَ عَلَى البَصْرَةِ، فَهُوَ الَّذِي مَصَّرَ البَصْرَةَ وَاخْتَطَّهَا، وَكَانَتْ قَبْلَهَا الأُبُلَّةُ، وَبَنَى المَسْجِدَ بِقَصَبٍ، وَلَمْ يَبْنِ بِهَا دَاراً",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "305-p3",
+          "volume": "4",
+          "pageReference": "305",
+          "extractionUrl": "https://shamela.ws/book/10906/1731",
+          "excerptArabic": "وَقِيْلَ: كَانَتِ البَصْرَةُ قَبْلُ تُسَمَّى أَرْضَ الهِنْدِ، فَأَوَّلُ مَنْ نَزَلَهَا عُتْبَةُ، كَانَ فِي ثَمَانِ مَائَةٍ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "utbah-ibn-ghazwan-siyar59/virtues-khutbah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "utbah-ibn-ghazwan",
+      "field": "virtues",
+      "assertion": "خطب الناس فقال: ألا إن الدنيا قد آذنت بصرم وولت حذاء ولم يبق منها إلا صبابة كصبابة الإناء، فانتقلوا بخير ما بحضرتكم. وله حديث في صحيح مسلم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "306-p9",
+          "volume": "4",
+          "pageReference": "306",
+          "extractionUrl": "https://shamela.ws/book/10906/1732",
+          "excerptArabic": "خَطَبَنَا عُتْبَةُ بنُ غَزْوَانَ، فَقَالَ: أَلاَ إِنَّ الدُّنْيَا قَدْ آذَنَتْ بِصَرْمٍ، وَوَلَّتْ حِذَاءً (٢) ، وَلَمْ يَبْقَ مِنْهَا إِلاَّ صُبَابَةٌ كَصُبَابَةِ الإِنَاءِ، وَإِنَّكُمْ فِي دَارٍ تَنْتَقِلُوْنَ عَنْهَا، فَانْتَقِلُوا بِخَيْرِ مَا بِحَضْرَتِكُم",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "306-p7",
+          "volume": "4",
+          "pageReference": "306",
+          "extractionUrl": "https://shamela.ws/book/10906/1732",
+          "excerptArabic": "لَهُ حَدِيْثٌ فِي (صَحِيْحِ مُسْلِمٍ)",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "utbah-ibn-ghazwan-siyar59/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "utbah-ibn-ghazwan",
+      "assertion": "شهد بدراً والمشاهد، وكان أحد الرماة المذكورين.",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "304-p5",
+          "volume": "4",
+          "pageReference": "304",
+          "extractionUrl": "https://shamela.ws/book/10906/1730",
+          "excerptArabic": "ثُمَّ شَهِدَ بَدْراً وَالمَشَاهِدَ، وَكَانَ أَحَدَ الرُّمَاةِ المَذْكُوْرِيْنَ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "utbah-ibn-ghazwan-siyar59/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "utbah-ibn-ghazwan",
+      "field": "deathYearHijri",
+      "assertion": "توفي بطريق البصرة وافداً إلى المدينة سنة سبع عشرة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "306-p5",
+          "volume": "4",
+          "pageReference": "306",
+          "extractionUrl": "https://shamela.ws/book/10906/1732",
+          "excerptArabic": "تُوُفِّيَ بِطَرِيْقِ البَصْرَةِ وَافِداً إِلَى المَدِيْنَةِ سَنَةَ سَبْعَ عَشْرَةَ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "utbah-ibn-ghazwan-siyar59/death-year-alt",
+      "subjectKind": "PERSON",
+      "subjectSlug": "utbah-ibn-ghazwan",
+      "field": "deathYearHijri",
+      "assertion": "وقيل: مات سنة خمس عشرة، وعاش سبعاً وخمسين سنة (يعارض رواية سنة سبع عشرة).",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "disputed": true,
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "306-p6",
+          "volume": "4",
+          "pageReference": "306",
+          "extractionUrl": "https://shamela.ws/book/10906/1732",
+          "excerptArabic": "وَقِيْلَ: مَاتَ سَنَةَ خَمْسَ عَشْرَةَ، وَعَاشَ سَبْعاً وَخَمْسِيْنَ سَنَةً",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "utbah-ibn-ghazwan-siyar59/death-place",
+      "subjectKind": "PERSON",
+      "subjectSlug": "utbah-ibn-ghazwan",
+      "field": "placeOfDeathArabic",
+      "assertion": "بطريق البصرة",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "306-p5",
+          "volume": "4",
+          "pageReference": "306",
+          "extractionUrl": "https://shamela.ws/book/10906/1732",
+          "excerptArabic": "تُوُفِّيَ بِطَرِيْقِ البَصْرَةِ وَافِداً إِلَى المَدِيْنَةِ سَنَةَ سَبْعَ عَشْرَةَ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    }
+  ]
+}
