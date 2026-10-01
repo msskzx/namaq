@@ -47,6 +47,15 @@ const tabuk = {
       },
       claims: ['abu-dharr-al-ghifari-siyar10/tabuk'],
     },
+    {
+      person: 'abbad-ibn-bishr',
+      isMuslim: true,
+      summary: {
+        value: 'جعله النبي على حرسه في غزوة تبوك.',
+        claims: ['abbad-ibn-bishr-siyar73/tabuk'],
+      },
+      claims: ['abbad-ibn-bishr-siyar73/tabuk'],
+    },
   ],
 } satisfies CatalogBattle;
 
