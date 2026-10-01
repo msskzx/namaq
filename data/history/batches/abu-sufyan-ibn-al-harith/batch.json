@@ -356,9 +356,9 @@
     }
   ],
   "approval": {
-    "revision": "eedf3df1e812d288",
-    "approvedAt": "2026-09-30",
+    "revision": "04f45ab980c6ac7e",
+    "approvedAt": "2026-10-01",
     "approvedBy": "msskzx",
-    "note": "Approved for publication. Claims are Not reviewed: the entries are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+    "note": "Approved for publication at the revision that carries the two rescued claims (full-name-alt, death-place), recovered from the retired .opencode worktree in PR #242 and checked against the stored pages. Claims are Not reviewed: nobody has compared the batch against its source beyond that check, and approval asserts nothing about review."
   }
 }
