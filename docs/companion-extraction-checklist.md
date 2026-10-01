@@ -106,7 +106,7 @@ that.
 - [x] عبد الله بن عمرو بن حرام (abdullah-ibn-amr-ibn-haram, PR #194)
 - [ ] يزيد بن أبي سفيان
 - [x] أبو العاص بن الربيع (abu-al-as-ibn-ar-rabia, PR #195)
-- [ ] زينب
+- [x] زينب — entry 70 (`zaynab-bint-muhammad`)
 - [x] أمامة بنت أبي العاص (`umamah-bint-abi-al-as`, PR #197)
 - [ ] أبو زيد
 - [ ] عباد بن بشر
@@ -155,7 +155,7 @@ that.
 - [x] حفصة أم المؤمنين — `data/history/batches/hafsa-bint-umar/` ([PR #202](https://github.com/msskzx/namaq/pull/202))
 - [x] صفية أم المؤمنين (`safiyyah-bint-huyayy`, PR #210)
 - [x] ميمونة أم المؤمنين (`maymunah-bint-al-harith`, PR #214)
-- [ ] زينب بنت رسول الله
+- [x] زينب بنت رسول الله — entry 28 (`zaynab-bint-muhammad`)
 - [ ] رقية
 - [ ] أم كلثوم بنت رسول الله
 - [ ] زوجاته صلى الله عليه وسلم
