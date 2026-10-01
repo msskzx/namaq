@@ -82,6 +82,12 @@ const badr = {
     // His own entry names him البدري outright too (see
     // data/history/batches/salim-mawla-abi-hudhayfah).
     { person: 'salim-mawla-abi-hudhayfah', isMuslim: true, claims: ['salim-siyar14/badr'] },
+    // His own entry names him أحد البدريين (see
+    // data/history/batches/abbad-ibn-bishr).
+    { person: 'abbad-ibn-bishr', isMuslim: true, claims: ['abbad-ibn-bishr-siyar73/badr'] },
+    // His own entry calls him بدري كبير and has him at Badr and the later days
+    // (see data/history/batches/jabr-ibn-atik).
+    { person: 'jabr-ibn-atik', isMuslim: true, claims: ['jabr-ibn-atik-siyar/badr'] },
     // The old seed had him present here with no status at all. He was away
     // trading in Syria, and given the share and the reward all the same.
     {

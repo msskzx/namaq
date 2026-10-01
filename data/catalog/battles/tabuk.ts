@@ -38,6 +38,15 @@ const tabuk = {
       status: ['ABSENT_EXCUSED'],
       claims: ['ali/tabuk-absence'],
     },
+    {
+      person: 'abbad-ibn-bishr',
+      isMuslim: true,
+      summary: {
+        value: 'جعله النبي على حرسه في غزوة تبوك.',
+        claims: ['abbad-ibn-bishr-siyar73/tabuk'],
+      },
+      claims: ['abbad-ibn-bishr-siyar73/tabuk'],
+    },
   ],
 } satisfies CatalogBattle;
 
