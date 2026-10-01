@@ -16,7 +16,8 @@ import { useLanguage } from '@/components/language/LanguageContext';
 import { fetcher } from '@/lib/swr';
 import { getAllNavLinks } from '@/lib/siteLinks';
 import { pageParagraphs, findPassageParagraph } from '@/lib/history/sectionHeadings';
-import type { AccountPage, AccountSection, AccountSummary } from '@/types/provenance';
+import { volumeChapterRows } from '@/lib/history/volumeChapters';
+import type { AccountPage, AccountSection, AccountSummary, VolumeContents } from '@/types/provenance';
 
 interface AccountsResponse {
   accounts: AccountSummary[];
@@ -90,7 +91,6 @@ export default function SourceAccountReader({
   const [headerHeight, setHeaderHeight] = useState(0);
   const section = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
-  const headerBar = useRef<HTMLElement>(null);
   const contentScrollTop = useRef(0);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -152,6 +152,23 @@ export default function SourceAccountReader({
   );
   const sections = sectionsData?.sections ?? [];
 
+  // Reading from a source, the index's first question is the book's own
+  // table of contents, not which of its many subjects to switch to --
+  // SourceContents.tsx asks that same question outside the reader, in the
+  // book's own chapter and section terms, so the two should answer it the
+  // same way. Reading from a profile, the question stays which of the
+  // subject's books to switch to, which the account selector already does.
+  const sourceSlug = basePath.match(/^\/api\/sources\/(.+)$/)?.[1] ?? null;
+  const accountVolumes = data?.account?.volumes;
+  const volumeNumber = accountVolumes?.find(
+    (volume) => currentPage && currentPage.sequence >= volume.firstSequence && currentPage.sequence <= volume.lastSequence,
+  )?.number ?? accountVolumes?.[0]?.number;
+  const { data: volumeContents } = useSWR<VolumeContents>(
+    indexOpen && sourceSlug && volumeNumber ? `/api/sources/${sourceSlug}/volumes/${volumeNumber}` : null,
+    fetcher,
+  );
+  const chapterRows = volumeContents ? volumeChapterRows(volumeContents.items) : [];
+
   useEffect(() => {
     try {
       const stored = localStorage.getItem('namaq-reader-settings');
@@ -173,7 +190,11 @@ export default function SourceAccountReader({
   }, [fullscreen]);
 
   useEffect(() => {
-    const node = headerBar.current;
+    // Measuring section (the toolbar plus the index/settings panel when one
+    // is open), not headerBar (the toolbar alone) -- an open panel pushes
+    // the covered area past the toolbar's own height, and the page content
+    // beneath needs padding for the whole thing or the panel covers it.
+    const node = section.current;
     if (!node || typeof ResizeObserver === 'undefined') return;
     const measure = () => setHeaderHeight(node.offsetHeight);
     measure();
@@ -214,6 +235,28 @@ export default function SourceAccountReader({
     setHeaderHidden(false);
     if (!fullscreen) section.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, [data?.account?.id, fullscreen, pathname, router, searchParams]);
+
+  // Picking a chapter from the index names a printed page, not an account --
+  // the same volume+page deep link a book-contents link uses, resolved by
+  // the effect below exactly as it is when arrived at from outside the reader.
+  const openChapter = useCallback((printedPage: string) => {
+    if (!volumeNumber) return;
+    // The volume+page fetch below reads shellPage as the printed page, not
+    // an account sequence -- same as on first mount from a bare ?volume=
+    // link (see the useState initializer above), so it has to move too.
+    setShellPage(Number(printedPage));
+    setFetched({});
+    inFlight.current.clear();
+    const next = new URLSearchParams(searchParams.toString());
+    next.delete('book');
+    next.set('volume', String(volumeNumber));
+    next.set('page', printedPage);
+    next.delete('passage');
+    router.replace(`${pathname}?${next.toString()}`, { scroll: false });
+    if (content.current) content.current.scrollTop = 0;
+    contentScrollTop.current = 0;
+    setHeaderHidden(false);
+  }, [pathname, router, searchParams, volumeNumber]);
 
   // A volume+page deep link resolves to a real account server-side; once it
   // does, the address is normalized to book+page so paging and the passage
@@ -277,6 +320,12 @@ export default function SourceAccountReader({
   const current = currentPage;
   const paragraphs = pageParagraphs(current.bodyMarkdown);
   const printed = current.printedPage ?? String(current.sequence);
+  // The chapter at or just before the current printed page, so the select
+  // reflects where reading actually is, not only where a chapter opened.
+  const currentPrintedPage = current.printedPage ? Number(current.printedPage) : null;
+  const selectedChapterPage = currentPrintedPage !== null
+    ? [...chapterRows].reverse().find((row) => Number(row.item.printedPage) <= currentPrintedPage)?.item.printedPage
+    : undefined;
   const rtl = isRtl(account.source.language);
   let currentSectionIndex = -1;
   sections.forEach((candidate, index) => { if (candidate.sequence <= current.sequence) currentSectionIndex = index; });
@@ -303,7 +352,7 @@ export default function SourceAccountReader({
     >
       {(
         <div ref={section} className={`shrink-0 scroll-mt-[88px] overflow-hidden ${fullscreen ? `absolute inset-x-0 top-0 z-20 transition-transform duration-200 ${headerCollapsed ? '-translate-y-full' : 'translate-y-0'}` : 'mb-3 rounded-lg border border-amber-400'}`}>
-        <header ref={headerBar} className="relative z-10 flex shrink-0 items-center gap-2 border-b border-amber-400 bg-gray-50 px-3 py-2 dark:bg-black">
+        <header className="relative z-10 flex shrink-0 items-center gap-2 border-b border-amber-400 bg-gray-50 px-3 py-2 dark:bg-black">
           {fullscreen && (
           <div className="relative" ref={menuRef}>
             <Button size="icon" onClick={() => setMenuOpen((open) => !open)} aria-label={menuOpen ? (t ? 'إغلاق القائمة' : 'Close menu') : (t ? 'فتح القائمة' : 'Open menu')} aria-pressed={menuOpen}><FontAwesomeIcon icon={menuOpen ? faXmark : faBars} /></Button>
@@ -344,11 +393,20 @@ export default function SourceAccountReader({
         <div className="z-[5] shrink-0 border-b border-amber-300 bg-amber-50 p-3 dark:border-amber-800 dark:bg-gray-900">
           {indexOpen && (
             <div className="grid gap-3 sm:grid-cols-2">
-              <label className="flex flex-col gap-1 text-sm text-gray-700 dark:text-gray-200">{t ? selectorLabel.ar : selectorLabel.en}
-                <select className="rounded border border-amber-400 bg-white px-2 py-2 dark:bg-black" value={account.id} onChange={(event) => setSelection(event.target.value, 1)}>
-                  {accounts.map((option) => <option key={option.id} value={option.id}>{labelAccount(option)}</option>)}
-                </select>
-              </label>
+              {sourceSlug ? (
+                <label className="flex flex-col gap-1 text-sm text-gray-700 dark:text-gray-200">{t ? 'الفصول' : 'Chapters'}
+                  <select dir="rtl" className="rounded border border-amber-400 bg-white px-2 py-2 dark:bg-black" value={selectedChapterPage ?? ''} onChange={(event) => openChapter(event.target.value)}>
+                    {!chapterRows.length && <option value="" disabled>{t ? '...' : 'Loading…'}</option>}
+                    {chapterRows.map(({ item, title }) => <option key={item.printedPage} value={item.printedPage}>{title}</option>)}
+                  </select>
+                </label>
+              ) : (
+                <label className="flex flex-col gap-1 text-sm text-gray-700 dark:text-gray-200">{t ? selectorLabel.ar : selectorLabel.en}
+                  <select className="rounded border border-amber-400 bg-white px-2 py-2 dark:bg-black" value={account.id} onChange={(event) => setSelection(event.target.value, 1)}>
+                    {accounts.map((option) => <option key={option.id} value={option.id}>{labelAccount(option)}</option>)}
+                  </select>
+                </label>
+              )}
               <label className="flex flex-col gap-1 text-sm text-gray-700 dark:text-gray-200">{t ? 'الأبواب' : 'Sections'}
                 <select className="max-w-full rounded border border-amber-400 bg-white px-2 py-2 dark:bg-black" dir="rtl" value={currentSectionIndex} onChange={(event) => {
                   const target = sections[Number(event.target.value)];

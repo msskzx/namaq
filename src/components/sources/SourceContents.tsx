@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { useLanguage } from '@/components/language/LanguageContext';
+import { volumeChapterRows } from '@/lib/history/volumeChapters';
 import { fetcher } from '@/lib/swr';
 import type { AccountSummary, VolumeContents } from '@/types/provenance';
 
@@ -14,22 +15,15 @@ import type { AccountSummary, VolumeContents } from '@/types/provenance';
  * One volume's contents, read in the book's own printed-page order -- not
  * grouped by whose entry a page belongs to, since the page belongs to the
  * book first (docs/adr/0018-a-page-belongs-to-the-edition.md). This is the
- * book's own table of contents, so it names chapters and sections, the way
- * a printed فهرس does -- never the person an entry happens to be about. A
- * page with no heading of its own, including nearly every biographical
- * entry (its title line is already read as a heading, see
- * sectionHeadings.ts's isNumberedEntryTitle), has nothing to contribute and
- * is left out; the rare entry that opens with no heading at all falls back
- * to its own label so it is still reachable.
+ * book's own table of contents, so it names chapters and sections (see
+ * volumeChapters.ts), never the person an entry happens to be about.
  */
 function VolumeBody({ slug, volume }: { slug: string; volume: VolumeContents }) {
   const { language } = useLanguage();
   const t = language === 'ar';
   const pageLabel = (page: string) => (t ? `ص ${page}` : `p. ${page}`);
 
-  const contentsItems = volume.items
-    .map((item) => ({ item, title: item.headings[0] ?? item.entries[0]?.label }))
-    .filter((row): row is { item: typeof volume.items[number]; title: string } => Boolean(row.title));
+  const contentsItems = volumeChapterRows(volume.items);
 
   return (
     <ol className="divide-y divide-gray-200 border-t border-gray-200 dark:divide-white/10 dark:border-white/10">
