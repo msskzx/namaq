@@ -618,5 +618,10 @@
       ],
       "field": "placeOfDeathArabic"
     }
-  ]
+  ],
+  "approval": {
+    "revision": "976bc1198c7f32f3",
+    "approvedAt": "2026-10-01",
+    "approvedBy": "msskzx"
+  }
 }

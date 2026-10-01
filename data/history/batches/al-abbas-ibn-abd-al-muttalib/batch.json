@@ -718,5 +718,10 @@
     }
   ],
   "slug": "al-abbas-ibn-abd-al-muttalib",
-  "summaryFile": "summary.md"
+  "summaryFile": "summary.md",
+  "approval": {
+    "revision": "71e3f1224565275a",
+    "approvedAt": "2026-10-01",
+    "approvedBy": "msskzx"
+  }
 }
