@@ -1,0 +1,503 @@
+{
+  "slug": "suhaib-ibn-sinan",
+  "summaryFile": "summary.md",
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "suhaib-ibn-sinan",
+      "volumeNumber": 5,
+      "extractionUrl": "https://shamela.ws/book/10906/1997",
+      "accessedAt": "2026-10-01",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "17",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 2,
+          "printedPage": "18",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 3,
+          "printedPage": "19",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 4,
+          "printedPage": "20",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 5,
+          "printedPage": "21",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 6,
+          "printedPage": "22",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 7,
+          "printedPage": "23",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 8,
+          "printedPage": "24",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 9,
+          "printedPage": "25",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 10,
+          "printedPage": "26",
+          "volumeNumber": 5
+        }
+      ],
+      "notInSource": [
+        "wives",
+        "siblings"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "suhaib-ibn-sinan-siyar4/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "suhaib-ibn-sinan",
+      "field": "fullName",
+      "assertion": "صهيب بن سنان بن مالك بن عبد عمرو بن عقيل بن عامر النمري",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/17-p7",
+          "volume": "5",
+          "pageReference": "17",
+          "extractionUrl": "https://shamela.ws/book/10906/1997",
+          "excerptArabic": "صُهَيْبُ بنُ سِنَانٍ أَبُو يَحْيَى النَّمِرِيُّ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/17-p8",
+          "volume": "5",
+          "pageReference": "17",
+          "extractionUrl": "https://shamela.ws/book/10906/1997",
+          "excerptArabic": "مِنَ النَّمِرِ بنِ قَاسِطٍ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/18-p11",
+          "volume": "5",
+          "pageReference": "18",
+          "extractionUrl": "https://shamela.ws/book/10906/1998",
+          "excerptArabic": "صُهَيْبُ بنُ سِنَانِ بنِ مَالِكِ بنِ عَبْدِ عَمْرٍو بنِ عُقَيْلِ بنِ عَامِرٍ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "suhaib-ibn-sinan-siyar4/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "suhaib-ibn-sinan",
+      "field": "sex",
+      "assertion": "MALE — صيغ مذكر: أَبُو يَحْيَى النَّمِرِيُّ … البَدْرِيُّ المُهَاجِرِيُّ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/17-p7",
+          "volume": "5",
+          "pageReference": "17",
+          "extractionUrl": "https://shamela.ws/book/10906/1997",
+          "excerptArabic": "أَبُو يَحْيَى النَّمِرِيُّ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/18-p11",
+          "volume": "5",
+          "pageReference": "18",
+          "extractionUrl": "https://shamela.ws/book/10906/1998",
+          "excerptArabic": "النَّمِرِيُّ، الرُّوْمِيُّ، البَدْرِيُّ، المُهَاجِرِيُّ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "suhaib-ibn-sinan-siyar4/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "suhaib-ibn-sinan",
+      "field": "kunya",
+      "assertion": "أبو يحيى",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/17-p7",
+          "volume": "5",
+          "pageReference": "17",
+          "extractionUrl": "https://shamela.ws/book/10906/1997",
+          "excerptArabic": "صُهَيْبُ بنُ سِنَانٍ أَبُو يَحْيَى النَّمِرِيُّ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/19-p7",
+          "volume": "5",
+          "pageReference": "19",
+          "extractionUrl": "https://shamela.ws/book/10906/1999",
+          "excerptArabic": "كَنَّانِي النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-: أَبَا يَحْيَى .",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "suhaib-ibn-sinan-siyar4/kunya-alt",
+      "subjectKind": "PERSON",
+      "subjectSlug": "suhaib-ibn-sinan",
+      "field": "kunya",
+      "assertion": "وقيل: أبو غسان.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/18-p11",
+          "volume": "5",
+          "pageReference": "18",
+          "extractionUrl": "https://shamela.ws/book/10906/1998",
+          "excerptArabic": "وَيُقَالُ أَبُو غَسَّانَ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "suhaib-ibn-sinan-siyar4/appearance",
+      "subjectKind": "PERSON",
+      "subjectSlug": "suhaib-ibn-sinan",
+      "field": "appearance",
+      "assertion": "رجل أحمر شديد الحمرة ليس بالطويل.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/19-p3",
+          "volume": "5",
+          "pageReference": "19",
+          "extractionUrl": "https://shamela.ws/book/10906/1999",
+          "excerptArabic": "وَكَانَ رَجُلاً أَحْمَرَ، شَدِيْدَ الحُمْرَةِ، لَيْسَ بِالطَّوِيْلِ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "suhaib-ibn-sinan-siyar4/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "suhaib-ibn-sinan",
+      "field": "virtues",
+      "assertion": "من كبار السابقين البدريين؛ صهيب سابق الروم؛ أول من أظهر الإسلام في السبعة؛ عذب في الله حتى نزلت فيه آيات؛ صحب النبي قبل أن يوحى إليه؛ خلع ماله لأهل مكة يوم هجرته فقال النبي ربح صهيب، ونزلت ومن الناس من يشري نفسه ابتغاء مرضاة الله؛ قال فيه من كان يؤمن بالله واليوم الآخر فليحب صهيبا حب الوالدة لولدها؛ استنابه عمر على الصلاة بالمسلمين؛ موصوف بالكرم والسماحة؛ ممن اعتزل الفتنة؛ له نحو ثلاثين حديثا روى له مسلم منها ثلاثة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/18-p4",
+          "volume": "5",
+          "pageReference": "18",
+          "extractionUrl": "https://shamela.ws/book/10906/1998",
+          "excerptArabic": "كَانَ مِنْ كِبَارِ السَّابِقِيْنَ البَدْرِيِّيْنَ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/19-p13",
+          "volume": "5",
+          "pageReference": "19",
+          "extractionUrl": "https://shamela.ws/book/10906/1999",
+          "excerptArabic": "صُهَيْبٌ سَابِقُ الرُّوْمِ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/20-p2",
+          "volume": "5",
+          "pageReference": "20",
+          "extractionUrl": "https://shamela.ws/book/10906/2000",
+          "excerptArabic": "أَوَّلُ مَنْ أَظْهَرَ الإِسْلاَمَ سَبْعَةٌ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/21-p3",
+          "volume": "5",
+          "pageReference": "21",
+          "extractionUrl": "https://shamela.ws/book/10906/2001",
+          "excerptArabic": "وَكَانَ صُهَيْبٌ يُعَذَّبُ حَتَّى لاَ يَدْرِي مَا يَقُوْلُ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/22-p1",
+          "volume": "5",
+          "pageReference": "22",
+          "extractionUrl": "https://shamela.ws/book/10906/2002",
+          "excerptArabic": "نَزَلَتْ فِي صُهَيْبٍ، وَنَفَرٍ مِنَ أَصْحَابِهِ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/19-p9",
+          "volume": "5",
+          "pageReference": "19",
+          "extractionUrl": "https://shamela.ws/book/10906/1999",
+          "excerptArabic": "صَحِبْتُ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَبْلَ أَنْ يُوْحَى إِلَيْهِ .",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/22-p9",
+          "volume": "5",
+          "pageReference": "22",
+          "extractionUrl": "https://shamela.ws/book/10906/2002",
+          "excerptArabic": "فَخَلَعَ لَهُمْ مَالَهُ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/22-p10",
+          "volume": "5",
+          "pageReference": "22",
+          "extractionUrl": "https://shamela.ws/book/10906/2002",
+          "excerptArabic": "رَبِحَ صُهَيْبٌ! رَبِحَ صُهَيْبٌ!",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/23-p13",
+          "volume": "5",
+          "pageReference": "23",
+          "extractionUrl": "https://shamela.ws/book/10906/2003",
+          "excerptArabic": "رَبِحَ البَيْعُ أَبَا يَحْيَى!",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/23-p13",
+          "volume": "5",
+          "pageReference": "23",
+          "extractionUrl": "https://shamela.ws/book/10906/2003",
+          "excerptArabic": "وَمِنَ النَّاسِ مَنْ يَشْرِيْ نَفْسَهُ ابْتِغَاءَ مَرْضَاةِ اللهِ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/24-p9",
+          "volume": "5",
+          "pageReference": "24",
+          "extractionUrl": "https://shamela.ws/book/10906/2004",
+          "excerptArabic": "فَلْيُحِبَّ صُهَيْباً حُبَّ الوَالِدَةِ لِوَلَدِهَا",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/18-p8",
+          "volume": "5",
+          "pageReference": "18",
+          "extractionUrl": "https://shamela.ws/book/10906/1998",
+          "excerptArabic": "اسْتَنَابَهُ عَلَى الصَّلاَةِ بِالمُسْلِمِيْنَ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/18-p9",
+          "volume": "5",
+          "pageReference": "18",
+          "extractionUrl": "https://shamela.ws/book/10906/1998",
+          "excerptArabic": "مَوْصُوْفاً بِالكَرَمِ وَالسَّمَاحَةِ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/18-p10",
+          "volume": "5",
+          "pageReference": "18",
+          "extractionUrl": "https://shamela.ws/book/10906/1998",
+          "excerptArabic": "مِمَّنِ اعْتَزَلَ الفِتْنَةَ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/26-p12",
+          "volume": "5",
+          "pageReference": "26",
+          "extractionUrl": "https://shamela.ws/book/10906/2006",
+          "excerptArabic": "لَهُ نَحْوٌ مِنْ ثَلاَثِيْنَ حَدِيْثاً.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/26-p13",
+          "volume": "5",
+          "pageReference": "26",
+          "extractionUrl": "https://shamela.ws/book/10906/2006",
+          "excerptArabic": "رَوَى لَهُ مُسْلِمٌ مِنْهَا ثَلاَثَةَ أَحَادِيْثَ .",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "suhaib-ibn-sinan-siyar4/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "suhaib-ibn-sinan",
+      "field": "titles",
+      "assertion": "من كبار السابقين البدريين، المهاجري — صحابي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/18-p4",
+          "volume": "5",
+          "pageReference": "18",
+          "extractionUrl": "https://shamela.ws/book/10906/1998",
+          "excerptArabic": "كَانَ مِنْ كِبَارِ السَّابِقِيْنَ البَدْرِيِّيْنَ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/18-p11",
+          "volume": "5",
+          "pageReference": "18",
+          "extractionUrl": "https://shamela.ws/book/10906/1998",
+          "excerptArabic": "البَدْرِيُّ، المُهَاجِرِيُّ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "suhaib-ibn-sinan-siyar4/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "suhaib-ibn-sinan",
+      "assertion": "شهد بدراً؛ من كبار السابقين البدريين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/18-p4",
+          "volume": "5",
+          "pageReference": "18",
+          "extractionUrl": "https://shamela.ws/book/10906/1998",
+          "excerptArabic": "كَانَ مِنْ كِبَارِ السَّابِقِيْنَ البَدْرِيِّيْنَ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/24-p7",
+          "volume": "5",
+          "pageReference": "24",
+          "extractionUrl": "https://shamela.ws/book/10906/2004",
+          "excerptArabic": "ذَكَرَ عُرْوَةُ، وَمُوْسَى بنُ عُقْبَةَ، وَغَيْرُهُمَا صُهَيْباً فِيْمَنْ شَهِدَ بَدْراً.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "suhaib-ibn-sinan-siyar4/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "suhaib-ibn-sinan",
+      "assertion": "ابن سنان بن مالك.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "sinan-ibn-malik-al-namri",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/18-p11",
+          "volume": "5",
+          "pageReference": "18",
+          "extractionUrl": "https://shamela.ws/book/10906/1998",
+          "excerptArabic": "صُهَيْبُ بنُ سِنَانِ بنِ مَالِكِ بنِ عَبْدِ عَمْرٍو بنِ عُقَيْلِ بنِ عَامِرٍ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "suhaib-ibn-sinan-siyar4/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "suhaib-ibn-sinan",
+      "field": "deathYearHijri",
+      "assertion": "مات بالمدينة في شوال سنة ثمان وثلاثين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/18-p10",
+          "volume": "5",
+          "pageReference": "18",
+          "extractionUrl": "https://shamela.ws/book/10906/1998",
+          "excerptArabic": "مَاتَ: بِالمَدِيْنَةِ، فِي شَوَّالٍ، سَنَةَ ثَمَانٍ وَثَلاَثِيْنَ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/26-p8",
+          "volume": "5",
+          "pageReference": "26",
+          "extractionUrl": "https://shamela.ws/book/10906/2006",
+          "excerptArabic": "مَاتَ صُهَيْبٌ بِالمَدِيْنَةِ، فِي شَوَّالٍ، سَنَةَ ثَمَانٍ وَثَلاَثِيْنَ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "suhaib-ibn-sinan-siyar4/death-place",
+      "subjectKind": "PERSON",
+      "subjectSlug": "suhaib-ibn-sinan",
+      "field": "placeOfDeathArabic",
+      "assertion": "المدينة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/18-p10",
+          "volume": "5",
+          "pageReference": "18",
+          "extractionUrl": "https://shamela.ws/book/10906/1998",
+          "excerptArabic": "مَاتَ: بِالمَدِيْنَةِ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/26-p8",
+          "volume": "5",
+          "pageReference": "26",
+          "extractionUrl": "https://shamela.ws/book/10906/2006",
+          "excerptArabic": "مَاتَ صُهَيْبٌ بِالمَدِيْنَةِ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    }
+  ]
+}
