@@ -249,6 +249,15 @@ const uhud = {
       },
       claims: ['at-tufayl-ibn-amr-ad-dawsi-siyar75/uhud-absence'],
     },
+    {
+      person: 'abu-sufyan-ibn-harb',
+      isMuslim: false,
+      summary: {
+        value: 'رَأْسُ قُرَيْشٍ، وَقَائِدُهُمْ يَوْمَ أُحُدٍ.',
+        claims: ['abu-sufyan-ibn-harb-siyar13/uhud'],
+      },
+      claims: ['abu-sufyan-ibn-harb-siyar13/uhud'],
+    },
   ],
 } satisfies CatalogBattle;
 
