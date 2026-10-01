@@ -1,0 +1,420 @@
+{
+  "slug": "usayd-ibn-al-hudayr",
+  "summaryFile": "summary.md",
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "usayd-ibn-al-hudayr",
+      "volumeNumber": 4,
+      "extractionUrl": "https://shamela.ws/book/10906/1766",
+      "accessedAt": "2026-10-01",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "340",
+          "volumeNumber": 4
+        },
+        {
+          "sequence": 2,
+          "printedPage": "341",
+          "volumeNumber": 4
+        },
+        {
+          "sequence": 3,
+          "printedPage": "342",
+          "volumeNumber": 4
+        },
+        {
+          "sequence": 4,
+          "printedPage": "343",
+          "volumeNumber": 4
+        }
+      ],
+      "notInSource": [
+        "appearance",
+        "wives",
+        "siblings"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "usayd-ibn-al-hudayr-siyar74/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "usayd-ibn-al-hudayr",
+      "field": "fullName",
+      "assertion": "أسيد بن الحضير بن سماك بن عتيك بن نافع بن امرئ القيس بن زيد بن عبد الأشهل",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/340-p10",
+          "volume": "4",
+          "pageReference": "340",
+          "extractionUrl": "https://shamela.ws/book/10906/1766",
+          "excerptArabic": "أُسَيْدُ بنُ الحُضَيْرِ بنِ سِمَاكِ بنِ عَتِيْكٍ الأَنْصَارِيُّ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/340-p11",
+          "volume": "4",
+          "pageReference": "340",
+          "extractionUrl": "https://shamela.ws/book/10906/1766",
+          "excerptArabic": "ابْنِ نَافِعِ بنِ امْرِئِ القَيْسِ بنِ زَيْدِ بنِ عَبْدِ الأَشْهَلِ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "usayd-ibn-al-hudayr-siyar74/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "usayd-ibn-al-hudayr",
+      "assertion": "أسيد بن الحضير: أبوه الحضير بن سماك.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "al-hudayr-ibn-simak",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/340-p10",
+          "volume": "4",
+          "pageReference": "340",
+          "extractionUrl": "https://shamela.ws/book/10906/1766",
+          "excerptArabic": "أُسَيْدُ بنُ الحُضَيْرِ بنِ سِمَاكِ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "usayd-ibn-al-hudayr-siyar74/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "usayd-ibn-al-hudayr",
+      "field": "kunya",
+      "assertion": "أبو يحيى، وقيل أبو عتيك",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/341-p1",
+          "volume": "4",
+          "pageReference": "341",
+          "extractionUrl": "https://shamela.ws/book/10906/1767",
+          "excerptArabic": "الإِمَامُ أَبُو يَحْيَى - وَقِيْلَ: أَبُو عَتِيْكٍ - الأَنْصَارِيُّ، الأَوْسِيُّ، الأَشْهَلِيُّ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "usayd-ibn-al-hudayr-siyar74/tribal-affiliation",
+      "subjectKind": "PERSON",
+      "subjectSlug": "usayd-ibn-al-hudayr",
+      "field": "tribalAffiliation",
+      "assertion": "الأنصاري، الأوسي، الأشهلي",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/340-p10",
+          "volume": "4",
+          "pageReference": "340",
+          "extractionUrl": "https://shamela.ws/book/10906/1766",
+          "excerptArabic": "الأَنْصَارِيُّ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/341-p1",
+          "volume": "4",
+          "pageReference": "341",
+          "extractionUrl": "https://shamela.ws/book/10906/1767",
+          "excerptArabic": "الأَنْصَارِيُّ، الأَوْسِيُّ، الأَشْهَلِيُّ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "usayd-ibn-al-hudayr-siyar74/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "usayd-ibn-al-hudayr",
+      "field": "titles",
+      "assertion": "أحد النقباء الاثني عشر ليلة العقبة — صحابي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/341-p2",
+          "volume": "4",
+          "pageReference": "341",
+          "extractionUrl": "https://shamela.ws/book/10906/1767",
+          "excerptArabic": "أَحَدُ النُّقَبَاءِ الاثْنَيْ عَشَرَ لَيْلَةَ العَقَبَةِ، أَسْلَمَ قَدِيْماً",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "usayd-ibn-al-hudayr-siyar74/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "usayd-ibn-al-hudayr",
+      "field": "sex",
+      "assertion": "MALE — صيغ مذكر: الإِمَامُ … أَسْلَمَ قَدِيْماً.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/341-p1",
+          "volume": "4",
+          "pageReference": "341",
+          "extractionUrl": "https://shamela.ws/book/10906/1767",
+          "excerptArabic": "الإِمَامُ أَبُو يَحْيَى",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/341-p2",
+          "volume": "4",
+          "pageReference": "341",
+          "extractionUrl": "https://shamela.ws/book/10906/1767",
+          "excerptArabic": "أَسْلَمَ قَدِيْماً",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "usayd-ibn-al-hudayr-siyar74/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "usayd-ibn-al-hudayr",
+      "field": "virtues",
+      "assertion": "أَحَدُ النُّقَبَاءِ الاثْنَيْ عَشَرَ لَيْلَةَ العَقَبَةِ، أَسْلَمَ قَدِيْماً عَلَى يَدِ مُصْعَبِ بنِ عُمَيْرٍ هُوَ وَسَعْدُ بنُ مُعَاذٍ. كَانَ يُعَدُّ مِنْ عُقَلاَءِ الأَشْرَافِ وَذَوِي الرَّأْيِ. آخَى النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بَيْنَهُ وَبَيْنَ زَيْدِ بنِ حَارِثَةَ. قَالَ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-: (نِعْمَ الرَّجُلُ أُسَيْدُ بنُ حُضَيْرٍ). كَانَ مِنْ أَحْسَنِ النَّاسِ صَوْتاً بِالقُرْآنِ. قَالَتْ عَائِشَةُ: ثَلاَثَةٌ مِنَ الأَنْصَارِ مِنْ بَنِي عَبْدِ الأَشْهَلِ لَمْ يَكُنْ أَحَدٌ يَعْتَدُّ عَلَيْهِم فَضْلاً: سَعْدُ بنُ مُعَاذٍ، وَأُسَيْدُ بنُ حُضَيْرٍ، وَعَبَّادُ بنُ بِشْرٍ. كَانَ فِيْهِ مِزَاحٌ وَطِيْبُ أَخْلاَقٍ؛ طَعَنَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِعُوْدٍ فَاسْتَقَادَ، فَكَشَفَ النَّبِيُّ قَمِيْصَهُ فَجَعَلَ يُقَبِّلُ كَشْحَهُ وَيَقُوْلُ: إِنَّمَا أَرَدْتُ هَذَا يَا رَسُوْلَ اللهِ. قَدِمَ الجَابِيَةَ مَعَ عُمَرَ مُقَدَّماً عَلَى رُبُعِ الأَنْصَارِ. مَاتَ وَعَلَيْهِ دَيْنُ أَرْبَعَةِ آلاَفٍ، فَسَأَلَ عُمَرُ غُرَمَاءَهُ أَنْ يَقْبِضُوا كُلَّ عَامٍ أَلْفاً مِنْ ثَمَرِ أَرْضِهِ فَرَضُوا. حَمَلَهُ عُمَرُ بَيْنَ عَمُوْدَيِ السَّرِيْرِ حَتَّى وَضَعَهُ بِالبَقِيْعِ ثُمَّ صَلَّى عَلَيْهِ. نَدِمَ عَلَى تَخَلُّفِهِ عَنْ بَدْرٍ وَقَالَ: ظَنَنْتُ أَنَّهَا العِيْرُ. وَجُرِحَ يَوْمَ أُحُدٍ سَبْعَ جِرَاحَاتٍ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/341-p2",
+          "volume": "4",
+          "pageReference": "341",
+          "extractionUrl": "https://shamela.ws/book/10906/1767",
+          "excerptArabic": "أَحَدُ النُّقَبَاءِ الاثْنَيْ عَشَرَ لَيْلَةَ العَقَبَةِ، أَسْلَمَ قَدِيْماً",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/341-p3",
+          "volume": "4",
+          "pageReference": "341",
+          "extractionUrl": "https://shamela.ws/book/10906/1767",
+          "excerptArabic": "وَكَانَ أُسَيْدٌ يُعَدُّ مِنْ عُقَلاَءِ الأَشْرَافِ، وَذَوِي الرَّأْيِ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/341-p4",
+          "volume": "4",
+          "pageReference": "341",
+          "extractionUrl": "https://shamela.ws/book/10906/1767",
+          "excerptArabic": "آخَى النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بَيْنَهُ وَبَيْنَ زَيْدِ بنِ حَارِثَةَ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/341-p7",
+          "volume": "4",
+          "pageReference": "341",
+          "extractionUrl": "https://shamela.ws/book/10906/1767",
+          "excerptArabic": "أَنَّهُ قَدِمَ الجَابِيَةَ مَعَ عُمَرَ، وَكَانَ مُقَدَّماً عَلَى رُبُعِ الأَنْصَارِ، وَأَنَّهُ مِمَّنْ أَسْلَمَ عَلَى يَدِ مُصْعَبِ بنِ عُمَيْرٍ، هُوَ وَسَعْدُ بنُ مُعَاذٍ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/341-p9",
+          "volume": "4",
+          "pageReference": "341",
+          "extractionUrl": "https://shamela.ws/book/10906/1767",
+          "excerptArabic": "نِعْمَ الرَّجُلُ أُسَيْدُ بنُ حُضَيْرٍ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/341-p11",
+          "volume": "4",
+          "pageReference": "341",
+          "extractionUrl": "https://shamela.ws/book/10906/1767",
+          "excerptArabic": "أُسَيْداً كَانَ مِنْ أَحْسَنِ النَّاسِ صَوْتاً بِالقُرْآنِ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/342-p2",
+          "volume": "4",
+          "pageReference": "342",
+          "extractionUrl": "https://shamela.ws/book/10906/1768",
+          "excerptArabic": "ثَلاَثَةٌ مِنَ الأَنْصَارِ مِنْ بَنِي عَبْدِ الأَشْهَلِ، لَمْ يَكُنْ أَحَدٌ يَعْتَدُّ عَلَيْهِم فَضْلاً … سَعْدُ بنُ مُعَاذٍ، وَأُسَيْدُ بنُ حُضَيْرٍ، وَعَبَّادُ بنُ بِشْرٍ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/342-p4",
+          "volume": "4",
+          "pageReference": "342",
+          "extractionUrl": "https://shamela.ws/book/10906/1768",
+          "excerptArabic": "كَانَ فِي أُسَيْدٍ مِزَاحٌ، وَطِيْبُ أَخْلاَقٍ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/342-p6",
+          "volume": "4",
+          "pageReference": "342",
+          "extractionUrl": "https://shamela.ws/book/10906/1768",
+          "excerptArabic": "فَطَعَنَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِعُوْدٍ كَانَ مَعَهُ، فَقَالَ: أَصْبِرْنِي",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/342-p10",
+          "volume": "4",
+          "pageReference": "342",
+          "extractionUrl": "https://shamela.ws/book/10906/1768",
+          "excerptArabic": "فَجَعَلَ يُقَبِّلُ كَشْحَهُ، وَيَقُوْلُ: إِنَّمَا أَرَدْتُ هَذَا يَا رَسُوْلَ اللهِ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/342-p13",
+          "volume": "4",
+          "pageReference": "342",
+          "extractionUrl": "https://shamela.ws/book/10906/1768",
+          "excerptArabic": "لَمَّا هَلَكَ أُسَيْدُ بنُ الحُضَيْرِ، وَقَامَ غُرَمَاؤُهُ بِمَالِهِم، سَأَلَ عُمَرُ فِي كَمْ يُؤَدَّى ثَمَرُهَا لِيُوْفَى مَا عَلَيْهِ مِنَ الدَّيْنِ؟",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/343-p4",
+          "volume": "4",
+          "pageReference": "343",
+          "extractionUrl": "https://shamela.ws/book/10906/1769",
+          "excerptArabic": "فَبَعَثَ عُمَرُ إِلَى غُرَمَائِهِ: هَلْ لَكُمْ أَنْ تَقْبِضُوا كُلَّ عَامٍ أَلْفاً؟ قَالُوا: نَعَمْ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/343-p6",
+          "volume": "4",
+          "pageReference": "343",
+          "extractionUrl": "https://shamela.ws/book/10906/1769",
+          "excerptArabic": "وَحَمَلَهُ عُمَرُ بَيْنَ العَمُوْدَيْنِ عَمُوْدَيِ السَّرِيْرِ حَتَّى وَضَعَهُ بِالبَقِيْعِ، ثُمَّ صَلَّى عَلَيْهِ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/343-p8",
+          "volume": "4",
+          "pageReference": "343",
+          "extractionUrl": "https://shamela.ws/book/10906/1769",
+          "excerptArabic": "وَنَدِمَ عَلَى تَخَلُّفِهِ عَنْ بَدْرٍ، وَقَالَ: ظَنَنْتُ أَنَّهَا العِيْرُ، وَلَوْ ظَنَنْتُ أَنَّهُ غَزْوٌ مَا تَخَلَّفْتُ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/343-p9",
+          "volume": "4",
+          "pageReference": "343",
+          "extractionUrl": "https://shamela.ws/book/10906/1769",
+          "excerptArabic": "وَقَدْ جُرِحَ يَوْمَ أُحُدٍ سَبْعَ جِرَاحَاتٍ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "usayd-ibn-al-hudayr-siyar74/badr-absence",
+      "subjectKind": "PERSON",
+      "subjectSlug": "usayd-ibn-al-hudayr",
+      "assertion": "لم يشهد بدراً؛ ظن أنها العير، وندم على التخلف عنها.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "ABSENT_FROM",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/341-p3",
+          "volume": "4",
+          "pageReference": "341",
+          "extractionUrl": "https://shamela.ws/book/10906/1767",
+          "excerptArabic": "مَا شَهِدَ بَدْراً",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/343-p8",
+          "volume": "4",
+          "pageReference": "343",
+          "extractionUrl": "https://shamela.ws/book/10906/1769",
+          "excerptArabic": "وَنَدِمَ عَلَى تَخَلُّفِهِ عَنْ بَدْرٍ، وَقَالَ: ظَنَنْتُ أَنَّهَا العِيْرُ، وَلَوْ ظَنَنْتُ أَنَّهُ غَزْوٌ مَا تَخَلَّفْتُ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "usayd-ibn-al-hudayr-siyar74/uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "usayd-ibn-al-hudayr",
+      "assertion": "جرح يوم أحد سبع جراحات.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/343-p9",
+          "volume": "4",
+          "pageReference": "343",
+          "extractionUrl": "https://shamela.ws/book/10906/1769",
+          "excerptArabic": "وَقَدْ جُرِحَ يَوْمَ أُحُدٍ سَبْعَ جِرَاحَاتٍ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "usayd-ibn-al-hudayr-siyar74/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "usayd-ibn-al-hudayr",
+      "field": "deathYearHijri",
+      "assertion": "مات سنة عشرين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/343-p6",
+          "volume": "4",
+          "pageReference": "343",
+          "extractionUrl": "https://shamela.ws/book/10906/1769",
+          "excerptArabic": "مَاتَ أُسَيْدٌ سَنَةَ عِشْرِيْنَ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/343-p7",
+          "volume": "4",
+          "pageReference": "343",
+          "extractionUrl": "https://shamela.ws/book/10906/1769",
+          "excerptArabic": "وَفِيْهَا أَرَّخَ مَوْتَهُ: الوَاقِدِيُّ، وَأَبُو عُبَيْدٍ، وَجَمَاعَةٌ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    }
+  ]
+}
