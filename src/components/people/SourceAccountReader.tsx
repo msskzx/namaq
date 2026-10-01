@@ -16,7 +16,8 @@ import { useLanguage } from '@/components/language/LanguageContext';
 import { fetcher } from '@/lib/swr';
 import { getAllNavLinks } from '@/lib/siteLinks';
 import { pageParagraphs, findPassageParagraph } from '@/lib/history/sectionHeadings';
-import type { AccountPage, AccountSection, AccountSummary } from '@/types/provenance';
+import { volumeChapterRows } from '@/lib/history/volumeChapters';
+import type { AccountPage, AccountSection, AccountSummary, VolumeContents } from '@/types/provenance';
 
 interface AccountsResponse {
   accounts: AccountSummary[];
@@ -90,13 +91,9 @@ export default function SourceAccountReader({
   const [headerHeight, setHeaderHeight] = useState(0);
   const section = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
-  const headerBar = useRef<HTMLElement>(null);
   const contentScrollTop = useRef(0);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
-  // The panel is portaled to <body> (see below), so it falls outside
-  // menuRef's own DOM subtree -- this ref lets the outside-click check
-  // still recognize a click inside it as "inside".
   const menuPanelRef = useRef<HTMLDivElement>(null);
 
   const [shellPage, setShellPage] = useState(page);
@@ -152,6 +149,18 @@ export default function SourceAccountReader({
   );
   const sections = sectionsData?.sections ?? [];
 
+  // See docs/adr/0019-a-contents-list-names-chapters-not-entries.md.
+  const sourceSlug = basePath.match(/^\/api\/sources\/(.+)$/)?.[1] ?? null;
+  const accountVolumes = data?.account?.volumes;
+  const volumeNumber = accountVolumes?.find(
+    (volume) => currentPage && currentPage.sequence >= volume.firstSequence && currentPage.sequence <= volume.lastSequence,
+  )?.number ?? accountVolumes?.[0]?.number;
+  const { data: volumeContents } = useSWR<VolumeContents>(
+    indexOpen && sourceSlug && volumeNumber ? `/api/sources/${sourceSlug}/volumes/${volumeNumber}` : null,
+    fetcher,
+  );
+  const chapterRows = volumeContents ? volumeChapterRows(volumeContents.items) : [];
+
   useEffect(() => {
     try {
       const stored = localStorage.getItem('namaq-reader-settings');
@@ -173,7 +182,7 @@ export default function SourceAccountReader({
   }, [fullscreen]);
 
   useEffect(() => {
-    const node = headerBar.current;
+    const node = section.current;
     if (!node || typeof ResizeObserver === 'undefined') return;
     const measure = () => setHeaderHeight(node.offsetHeight);
     measure();
@@ -214,6 +223,22 @@ export default function SourceAccountReader({
     setHeaderHidden(false);
     if (!fullscreen) section.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, [data?.account?.id, fullscreen, pathname, router, searchParams]);
+
+  const openChapter = useCallback((printedPage: string) => {
+    if (!volumeNumber) return;
+    setShellPage(Number(printedPage));
+    setFetched({});
+    inFlight.current.clear();
+    const next = new URLSearchParams(searchParams.toString());
+    next.delete('book');
+    next.set('volume', String(volumeNumber));
+    next.set('page', printedPage);
+    next.delete('passage');
+    router.replace(`${pathname}?${next.toString()}`, { scroll: false });
+    if (content.current) content.current.scrollTop = 0;
+    contentScrollTop.current = 0;
+    setHeaderHidden(false);
+  }, [pathname, router, searchParams, volumeNumber]);
 
   // A volume+page deep link resolves to a real account server-side; once it
   // does, the address is normalized to book+page so paging and the passage
@@ -277,6 +302,10 @@ export default function SourceAccountReader({
   const current = currentPage;
   const paragraphs = pageParagraphs(current.bodyMarkdown);
   const printed = current.printedPage ?? String(current.sequence);
+  const currentPrintedPage = current.printedPage ? Number(current.printedPage) : null;
+  const selectedChapterPage = currentPrintedPage !== null
+    ? [...chapterRows].reverse().find((row) => Number(row.item.printedPage) <= currentPrintedPage)?.item.printedPage
+    : undefined;
   const rtl = isRtl(account.source.language);
   let currentSectionIndex = -1;
   sections.forEach((candidate, index) => { if (candidate.sequence <= current.sequence) currentSectionIndex = index; });
@@ -303,15 +332,11 @@ export default function SourceAccountReader({
     >
       {(
         <div ref={section} className={`shrink-0 scroll-mt-[88px] overflow-hidden ${fullscreen ? `absolute inset-x-0 top-0 z-20 transition-transform duration-200 ${headerCollapsed ? '-translate-y-full' : 'translate-y-0'}` : 'mb-3 rounded-lg border border-amber-400'}`}>
-        <header ref={headerBar} className="relative z-10 flex shrink-0 items-center gap-2 border-b border-amber-400 bg-gray-50 px-3 py-2 dark:bg-black">
+        <header className="relative z-10 flex shrink-0 items-center gap-2 border-b border-amber-400 bg-gray-50 px-3 py-2 dark:bg-black">
           {fullscreen && (
           <div className="relative" ref={menuRef}>
             <Button size="icon" onClick={() => setMenuOpen((open) => !open)} aria-label={menuOpen ? (t ? 'إغلاق القائمة' : 'Close menu') : (t ? 'فتح القائمة' : 'Open menu')} aria-pressed={menuOpen}><FontAwesomeIcon icon={menuOpen ? faXmark : faBars} /></Button>
             {menuOpen && typeof document !== 'undefined' && createPortal(
-              // Portaled to <body>: this header sits in a div the header-steadying
-              // transform moves (translate-y), which makes that div the containing
-              // block for a `fixed` descendant and clips it to the div's own small,
-              // overflow-hidden box instead of the viewport.
               <div ref={menuPanelRef} className="fixed inset-x-3 top-14 z-[70] max-h-[75dvh] overflow-y-auto rounded-lg border border-amber-400 bg-white p-3 shadow-xl dark:bg-black lg:inset-x-auto lg:start-3 lg:w-64">
                 <ul className="flex flex-col gap-1">
                   {getAllNavLinks(language).map((link) => <li key={link.href}><Link href={link.href} onClick={() => setMenuOpen(false)} className="block rounded px-2 py-2 text-sm hover:bg-amber-50 dark:hover:bg-gray-800">{link.label}</Link></li>)}
@@ -344,11 +369,20 @@ export default function SourceAccountReader({
         <div className="z-[5] shrink-0 border-b border-amber-300 bg-amber-50 p-3 dark:border-amber-800 dark:bg-gray-900">
           {indexOpen && (
             <div className="grid gap-3 sm:grid-cols-2">
-              <label className="flex flex-col gap-1 text-sm text-gray-700 dark:text-gray-200">{t ? selectorLabel.ar : selectorLabel.en}
-                <select className="rounded border border-amber-400 bg-white px-2 py-2 dark:bg-black" value={account.id} onChange={(event) => setSelection(event.target.value, 1)}>
-                  {accounts.map((option) => <option key={option.id} value={option.id}>{labelAccount(option)}</option>)}
-                </select>
-              </label>
+              {sourceSlug ? (
+                <label className="flex flex-col gap-1 text-sm text-gray-700 dark:text-gray-200">{t ? 'الفصول' : 'Chapters'}
+                  <select dir="rtl" className="rounded border border-amber-400 bg-white px-2 py-2 dark:bg-black" value={selectedChapterPage ?? ''} onChange={(event) => openChapter(event.target.value)}>
+                    {!chapterRows.length && <option value="" disabled>{t ? '...' : 'Loading…'}</option>}
+                    {chapterRows.map(({ item, title }) => <option key={item.printedPage} value={item.printedPage}>{title}</option>)}
+                  </select>
+                </label>
+              ) : (
+                <label className="flex flex-col gap-1 text-sm text-gray-700 dark:text-gray-200">{t ? selectorLabel.ar : selectorLabel.en}
+                  <select className="rounded border border-amber-400 bg-white px-2 py-2 dark:bg-black" value={account.id} onChange={(event) => setSelection(event.target.value, 1)}>
+                    {accounts.map((option) => <option key={option.id} value={option.id}>{labelAccount(option)}</option>)}
+                  </select>
+                </label>
+              )}
               <label className="flex flex-col gap-1 text-sm text-gray-700 dark:text-gray-200">{t ? 'الأبواب' : 'Sections'}
                 <select className="max-w-full rounded border border-amber-400 bg-white px-2 py-2 dark:bg-black" dir="rtl" value={currentSectionIndex} onChange={(event) => {
                   const target = sections[Number(event.target.value)];
