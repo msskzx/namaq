@@ -13,8 +13,9 @@ Entry 66 of *Siyar A'lam al-Nubala'*, Risalah third edition (1405/1985),
 volume 4 (*سير أعلام النبلاء ج١*), edited by حسين الأسد under شعيب الأرناؤوط.
 Shamela 1749–1750, printed 323–324.
 
-The entry is short — two printed pages. Printed 323 is entirely entry 66;
-printed 324 is a boundary page, with entry 66's end above entry 67's
+The entry is short — two printed pages. Printed 323 carries one paragraph of
+entry 65's close (`323-p1`) above entry 66's opening; printed 324 is a boundary
+page, with entry 66's end above entry 67's
 opening. The store page for printed 324 held entry 67's half only, carried
 over from that batch's own account pages when the store was built; this
 batch completes it to the whole printed page, entry 66's end first. That

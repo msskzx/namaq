@@ -1,0 +1,272 @@
+{
+  "slug": "zaynab-bint-muhammad",
+  "summaryFile": "summary.md",
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaynab-bint-muhammad",
+      "volumeNumber": 4,
+      "extractionUrl": "https://shamela.ws/book/10906/1760",
+      "accessedAt": "2026-10-01",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "334",
+          "volumeNumber": 4
+        },
+        {
+          "sequence": 2,
+          "printedPage": "246",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 3,
+          "printedPage": "247",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 4,
+          "printedPage": "248",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 5,
+          "printedPage": "249",
+          "volumeNumber": 5
+        }
+      ],
+      "notInSource": [
+        "kunya",
+        "appearance",
+        "wives",
+        "siblings"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "zaynab-siyar28/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaynab-bint-muhammad",
+      "assertion": "بنت رسول الله، صحابية — من المهاجرات السيدات.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "titles",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/246-p1",
+          "volume": "5",
+          "pageReference": "246",
+          "extractionUrl": "https://shamela.ws/book/10906/2226",
+          "excerptArabic": "٢٨ - زَيْنَبُ بِنْتُ رَسُوْلِ اللهِ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/246-p2",
+          "volume": "5",
+          "pageReference": "246",
+          "extractionUrl": "https://shamela.ws/book/10906/2226",
+          "excerptArabic": "وَأَكْبَرُ أَخَوَاتِهَا، مِنَ المُهَاجِرَاتِ السَّيِّدَاتِ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "zaynab-siyar28/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaynab-bint-muhammad",
+      "assertion": "بنت رسول الله صلى الله عليه وسلم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "DAUGHTER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "prophet-muhammad",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/246-p1",
+          "volume": "5",
+          "pageReference": "246",
+          "extractionUrl": "https://shamela.ws/book/10906/2226",
+          "excerptArabic": "زَيْنَبُ بِنْتُ رَسُوْلِ اللهِ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/334-p8",
+          "volume": "4",
+          "pageReference": "334",
+          "extractionUrl": "https://shamela.ws/book/10906/1760",
+          "excerptArabic": "زَيْنَبُ (٢) هَذِهِ كَانَتْ - رَضِيَ اللهُ عَنْهَا - أَكْبَرَ بَنَاتِ رَسُوْلِ اللهِ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "zaynab-siyar28/husband",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaynab-bint-muhammad",
+      "assertion": "تزوجها في حياة أمها ابن خالتها أبو العاص بن الربيع، فولدت له أمامة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "HUSBAND",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "abu-al-as-ibn-al-rabi",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/246-p3",
+          "volume": "5",
+          "pageReference": "246",
+          "extractionUrl": "https://shamela.ws/book/10906/2226",
+          "excerptArabic": "تَزَوَّجَهَا فِي حَيَاةِ أُمِّهَا: ابْنُ خَالَتِهَا أَبُو العَاصِ؛ فَوَلَدَتْ لَهُ أُمَامَةَ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "zaynab-siyar28/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaynab-bint-muhammad",
+      "assertion": "أكبر أخواتها، من المهاجرات السيدات. أسلمت وهاجرت قبل إسلام زوجها بست سنين.  ransomed him among the prisoners of Badr with a collar of زَفار that Khadijah had put in it, and the Prophet recognised it and said: إِنْ رَأَيْتُمْ أَنْ تُطْلِقُوا لَهَا أَسِيْرَهَا فَعَلْتُمْ؟ then took his oath that he would leave her her captive, and he did. أجرت أبا العاص herself and announced it from her chamber: إني قد أجرت أبا العاص بن الربيع, and the Prophet said: وَإِنَّهُ يُجِيْرُ عَلَى النَّاسِ أَدْنَاهُمْ. Then براءة نساء was revealed: if a woman accepts Islam before her husband, he has no claim on her save by marriage contract. The Prophet restored her to Abu al-As on their first marriage after years, without renewing a dowry, and he was hers again at the raid on the caravan out of Syria. ولم تزل ضبنة من المرض حتى ماتت.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/246-p2",
+          "volume": "5",
+          "pageReference": "246",
+          "extractionUrl": "https://shamela.ws/book/10906/2226",
+          "excerptArabic": "وَأَكْبَرُ أَخَوَاتِهَا، مِنَ المُهَاجِرَاتِ السَّيِّدَاتِ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/246-p5",
+          "volume": "5",
+          "pageReference": "246",
+          "extractionUrl": "https://shamela.ws/book/10906/2226",
+          "excerptArabic": "أَسْلَمَتْ زَيْنَبُ، وَهَاجَرَتْ قَبْلَ إِسْلاَمِ زَوْجِهَا بِسِتِّ سِنِيْنَ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/246-p6",
+          "volume": "5",
+          "pageReference": "246",
+          "extractionUrl": "https://shamela.ws/book/10906/2226",
+          "excerptArabic": "جَاءَ فِي فِدَاءِ أَبِي العَاصِ أَخُوْهُ عَمْرٌو، وَبَعَثَتْ مَعَهُ زَيْنَبُ بِقِلاَدَةٍ لَهَا مِنْ جَزْعِ ظَفَارٍ - أَدْخَلَتْهَا بِهَا خَدِيْجَةُ - فِي فِدَاءِ زَوْجِهَا",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/246-p7",
+          "volume": "5",
+          "pageReference": "246",
+          "extractionUrl": "https://shamela.ws/book/10906/2226",
+          "excerptArabic": "فَلَمَّا رَأَى رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- القِلاَدَةَ عَرَفَهَا، وَرَقَّ لَهَا",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/247-p4",
+          "volume": "5",
+          "pageReference": "247",
+          "extractionUrl": "https://shamela.ws/book/10906/2227",
+          "excerptArabic": "وَكَانَا نَخَسَا بِزَيْنَبَ بِنْتِ رَسُوْلِ اللهِ حِيْنَ خَرَجَتْ، فَلَمْ تَزَلْ ضَبِنَةً",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/248-p2",
+          "volume": "5",
+          "pageReference": "248",
+          "extractionUrl": "https://shamela.ws/book/10906/2228",
+          "excerptArabic": "إِنِّي قَدْ أَجَرْتُ أَبَا العَاصِ بنَ الرَّبِيْعِ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/248-p3",
+          "volume": "5",
+          "pageReference": "248",
+          "extractionUrl": "https://shamela.ws/book/10906/2228",
+          "excerptArabic": "وَإِنَّهُ يُجِيْرُ عَلَى النَّاسِ أَدْنَاهُمْ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/248-p5",
+          "volume": "5",
+          "pageReference": "248",
+          "extractionUrl": "https://shamela.ws/book/10906/2228",
+          "excerptArabic": "ثُمَّ أُنْزِلَتْ بَرَاءَةٌ بَعْدُ، فَإِذَا أَسْلَمَتِ امْرَأَةٌ قَبْلَ زَوْجِهَا؛ فَلاَ سَبِيْلَ لَهُ عَلَيْهَا إِلاَّ بِخِطْبَةٍ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/249-p2",
+          "volume": "5",
+          "pageReference": "249",
+          "extractionUrl": "https://shamela.ws/book/10906/2229",
+          "excerptArabic": "رَدَّ ابْنَتَهُ إِلَى أَبِي العَاصِ بَعْدَ سِنِيْنَ بِنِكَاحِهَا الأَوَّلِ، وَلَمْ يُحْدِثْ صَدَاقاً",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/249-p5",
+          "volume": "5",
+          "pageReference": "249",
+          "extractionUrl": "https://shamela.ws/book/10906/2229",
+          "excerptArabic": "ثُمَّ رَجَعَ مُسْلِماً مُهَاجِراً فِي المُحَرَّمِ، سَنَةَ سَبْعٍ، فَرَدَّ عَلَيْهِ زَيْنَبَ بِذَاكَ النِّكَاحِ الأَوَّلِ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "zaynab-siyar28/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaynab-bint-muhammad",
+      "assertion": "8",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "deathYearHijri",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/334-p8",
+          "volume": "4",
+          "pageReference": "334",
+          "extractionUrl": "https://shamela.ws/book/10906/1760",
+          "excerptArabic": "وَتُوُفِّيَتْ سَنَةَ ثَمَانٍ مِنَ الهِجْرَةِ، وَغَسَّلَتْهَا أُمُّ عَطِيَّةَ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "zaynab-siyar28/funeral-gift",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaynab-bint-muhammad",
+      "assertion": "غُسِّلَتْ بِأَمِّ عَطِيَّةَ، فَأَعْطَاهُنَّ حِقْوَهُ، وَقَالَ: (أَشْعِرْنَهَا إِيَّاهُ).",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/334-p9",
+          "volume": "4",
+          "pageReference": "334",
+          "extractionUrl": "https://shamela.ws/book/10906/1760",
+          "excerptArabic": "فَأَعْطَاهُنَّ حَقْوَهُ، وَقَالَ: (أَشْعِرْنَهَا إِيَّاهُ)",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    }
+  ]
+}

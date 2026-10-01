@@ -14,6 +14,12 @@ const hunayn = {
     location: { value: 'حنين', claims: legacyUnreviewed },
   },
   participants: [
+    {
+      person: 'yazid-ibn-abi-sufyan',
+      isMuslim: true,
+      summary: { value: 'وَشَهِدَ حُنَيْناً.', claims: ['yazid-ibn-abi-sufyan-siyar68/hunayn'] },
+      claims: ['yazid-ibn-abi-sufyan-siyar68/hunayn'],
+    },
     { person: 'abu-ubaydah-ibn-al-jarrah', isMuslim: true, claims: legacyUnreviewed },
     // Carried from the old seed when these people left it; no batch places
     // them here yet.
@@ -21,7 +27,16 @@ const hunayn = {
     { person: 'ali-ibn-abi-talib', isMuslim: true, claims: legacyUnreviewed },
     { person: 'prophet-muhammad', isMuslim: true, claims: ['prophet/hunayn'] },
     { person: 'umar-ibn-al-khattab', isMuslim: true, claims: legacyUnreviewed },
-    { person: 'al-abbas-ibn-abd-al-muttalib', isMuslim: true, claims: legacyUnreviewed },
+    {
+      person: 'al-abbas-ibn-abd-al-muttalib',
+      isMuslim: true,
+      summary: {
+        value:
+          'كَانَ يَوْمَ حُنِيْنٍ، وَقْتَ الهَزِيْمَةِ، آخِذاً بِلِجَامِ بَغْلَةِ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَثَبَتَ مَعَهُ حَتَّى نَزَلَ النَّصْرُ. وَهُوَ الَّذِي أَمَرَهُ النَّبِيُّ أَن يَهْتِفَ يَوْمَ حُنَيْنٍ: يَا أَصْحَابَ الشَّجَرَةِ.',
+        claims: ['al-abbas-ibn-abd-al-muttalib-siyar11/hunayn'],
+      },
+      claims: ['al-abbas-ibn-abd-al-muttalib-siyar11/hunayn'],
+    },
     {
       person: 'nawfal-ibn-al-harith',
       isMuslim: true,
@@ -48,6 +63,34 @@ const hunayn = {
         claims: ['abu-sufyan-ibn-al-harith-siyar32/hunayn'],
       },
       claims: ['abu-sufyan-ibn-al-harith-siyar32/hunayn'],
+    },
+    {
+      person: 'abu-sufyan-ibn-harb',
+      isMuslim: true,
+      summary: {
+        value:
+          'شَهِدَ حُنَيْناً؛ وَأَعْطَاهُ صِهْرُهُ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مِنَ الغَنَائِمِ مائَةً مِنَ الإِبِلِ، وَأَرْبَعِيْنَ أُوْقِيَّةً مِنَ الدَّرَاهِمِ يَتَأَلَّفُهُ بِذَلِكَ.',
+        claims: ['abu-sufyan-ibn-harb-siyar13/hunayn'],
+      },
+      claims: ['abu-sufyan-ibn-harb-siyar13/hunayn'],
+    },
+    {
+      person: 'abu-talha-al-ansari',
+      isMuslim: true,
+      summary: {
+        value: 'قَتَلَ يَوْمَ حُنَيْنٍ عِشْرِيْنَ رَجُلاً، وَأَخَذَ أَسْلاَبَهُمْ.',
+        claims: ['abu-talha-al-ansari-siyar5/hunayn'],
+      },
+      claims: ['abu-talha-al-ansari-siyar5/hunayn'],
+    },
+    {
+      person: 'abu-dharr-al-ghifari',
+      isMuslim: true,
+      summary: {
+        value: 'كَانَ حَامِلَ رَايَةِ غِفَارَ يَوْمَ حُنَيْنٍ.',
+        claims: ['abu-dharr-al-ghifari-siyar10/hunayn'],
+      },
+      claims: ['abu-dharr-al-ghifari-siyar10/hunayn'],
     },
   ],
 } satisfies CatalogBattle;

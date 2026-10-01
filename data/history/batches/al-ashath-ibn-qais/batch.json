@@ -1,0 +1,311 @@
+{
+  "slug": "al-ashath-ibn-qais",
+  "summaryFile": "summary.md",
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-ashath-ibn-qais",
+      "volumeNumber": 5,
+      "extractionUrl": "https://shamela.ws/book/10906/2017",
+      "accessedAt": "2026-10-01",
+      "notInSource": [
+        "kunya",
+        "appearance",
+        "siblings"
+      ],
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "37",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 2,
+          "printedPage": "38",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 3,
+          "printedPage": "39",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 4,
+          "printedPage": "40",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 5,
+          "printedPage": "41",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 6,
+          "printedPage": "42",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 7,
+          "printedPage": "43",
+          "volumeNumber": 5
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "al-ashath-ibn-qais-siyar8/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-ashath-ibn-qais",
+      "field": "fullName",
+      "assertion": "الأشعث بن قيس بن معدي كرب بن معاوية بن جبلة بن عدي بن ربيعة بن معاوية الأكرمين بن الحارث بن معاوية بن ثور بن مرتع بن كندة الكندي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/37-p6",
+          "volume": "5",
+          "pageReference": "37",
+          "extractionUrl": "https://shamela.ws/book/10906/2017",
+          "excerptArabic": "الأَشْعَثُ بنُ قَيْسِ بنِ مَعْدِيْ كَرِبَ الكِنْدِيُّ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/37-p7",
+          "volume": "5",
+          "pageReference": "37",
+          "extractionUrl": "https://shamela.ws/book/10906/2017",
+          "excerptArabic": "ابْنِ مُعَاوِيَةَ بنِ جَبَلَةَ بنِ عَدِيِّ بنِ رَبِيْعَةَ بنِ مُعَاوِيَةَ الأَكْرَمِيْنَ بنِ الحَارِثِ بنِ مُعَاوِيَةَ بنِ ثَوْرِ بنِ مُرْتِعِ بنِ كِنْدَةَ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "al-ashath-ibn-qais-siyar8/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-ashath-ibn-qais",
+      "assertion": "الأشعث بن قيس بن معدي كرب؛ فأبوه قيس.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "qais-ibn-muadikarib-al-kindi",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/37-p6",
+          "volume": "5",
+          "pageReference": "37",
+          "extractionUrl": "https://shamela.ws/book/10906/2017",
+          "excerptArabic": "الأَشْعَثُ بنُ قَيْسِ بنِ مَعْدِيْ كَرِبَ الكِنْدِيُّ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "al-ashath-ibn-qais-siyar8/companion",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-ashath-ibn-qais",
+      "field": "titles",
+      "assertion": "له صحبة ورواية؛ وفد في سبعين من كندة على النبي صلى الله عليه وسلم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/38-p6",
+          "volume": "5",
+          "pageReference": "38",
+          "extractionUrl": "https://shamela.ws/book/10906/2017",
+          "excerptArabic": "لَهُ صُحْبَةٌ، وَرِوَايَةٌ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/38-p18",
+          "volume": "5",
+          "pageReference": "38",
+          "extractionUrl": "https://shamela.ws/book/10906/2017",
+          "excerptArabic": "قَالَ ابْنُ الكَلْبِيِّ: وَفَدَ الأَشْعَثُ فِي سَبْعِيْنَ مِنْ كِنْدَةَ عَلَى النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "al-ashath-ibn-qais-siyar8/yarmuk",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-ashath-ibn-qais",
+      "assertion": "أصيبت عينه يوم اليرموك.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "yarmuk",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/38-p9",
+          "volume": "5",
+          "pageReference": "38",
+          "extractionUrl": "https://shamela.ws/book/10906/2017",
+          "excerptArabic": "وَأُصِيْبَتْ عَيْنُهُ يَوْمَ اليَرْمُوْكِ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "al-ashath-ibn-qais-siyar8/siffin",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-ashath-ibn-qais",
+      "assertion": "كان على ميمنة علي يوم صفين، وكان أكبر أمرائه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "siffin",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/40-p5",
+          "volume": "5",
+          "pageReference": "40",
+          "extractionUrl": "https://shamela.ws/book/10906/2017",
+          "excerptArabic": "قَالَ أَبُو عُبَيْدَةَ: كَانَ عَلَى مَيْمَنَةِ عَلِيٍّ يَوْمَ صِفِّيْنَ الأَشْعَثُ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/38-p10",
+          "volume": "5",
+          "pageReference": "38",
+          "extractionUrl": "https://shamela.ws/book/10906/2017",
+          "excerptArabic": "وَكَانَ أَكْبَرَ أُمَرَاءِ عَلِيٍّ يَوْمَ صِفِّيْنَ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "al-ashath-ibn-qais-siyar8/ayah-al-imran",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-ashath-ibn-qais",
+      "field": "ayat",
+      "assertion": "قال الأشعث: في نزلت آية آل عمران ٧٧.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/38-p12",
+          "volume": "5",
+          "pageReference": "38",
+          "extractionUrl": "https://shamela.ws/book/10906/2017",
+          "excerptArabic": "قَالَ لَنَا الأَشْعَثُ: فِيَّ نَزَلَتْ: {إِنَّ الَّذِيْنَ يَشْتَرُوْنَ بِعَهْدِ اللهِ وَأَيْمَانِهِمْ ثَمَناً قَلِيْلاً ... } [آلُ عِمْرَانَ: ٧٧] .",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "al-ashath-ibn-qais-siyar8/wife-farwah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-ashath-ibn-qais",
+      "assertion": "زوج أبو بكر الأشعث أخته فروة بنت أبي قحافة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "HUSBAND",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "farwah-bint-abi-quhafah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/39-p8",
+          "volume": "5",
+          "pageReference": "39",
+          "extractionUrl": "https://shamela.ws/book/10906/2017",
+          "excerptArabic": "فَزَوَّجَهُ فَرْوَةَ بِنْتَ أَبِي قُحَافَةَ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/39-p6",
+          "volume": "5",
+          "pageReference": "39",
+          "extractionUrl": "https://shamela.ws/book/10906/2017",
+          "excerptArabic": "قَالَ: فَفَعَلَ، وَزَوَّجَهُ أُخْتَهُ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "al-ashath-ibn-qais-siyar8/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-ashath-ibn-qais",
+      "field": "virtues",
+      "assertion": "كان جوادا: كفر عن يمينه بخمسة عشر ألفا، وقال وقد حلف على حق ورد على صاحبه ثلاثين ألفا: قبحك الله من مال.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/41-p11",
+          "volume": "5",
+          "pageReference": "41",
+          "extractionUrl": "https://shamela.ws/book/10906/2017",
+          "excerptArabic": "أَنَّ الأَشْعَثَ كَانَ عَامِلاً لِعُثْمَانَ عَلَى أَذْرَبِيْجَانَ، فَحَلَفَ مَرَّةً عَلَى شَيْءٍ؛ فَكَفَّرَ عَنْ يَمِيْنِهِ بِخَمْسَةَ عَشَرَ أَلْفاً.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/41-p14",
+          "volume": "5",
+          "pageReference": "41",
+          "extractionUrl": "https://shamela.ws/book/10906/2017",
+          "excerptArabic": "قَبَّحَكَ اللهُ مِنْ مَالٍ! أَمَا وَاللهِ مَا حَلَفْتُ إِلاَّ عَلَى حَقٍّ، وَلَكِنَّهُ رَدٌّ عَلَى صَاحِبِهِ، وَكَانَ ثَلاَثِيْنَ أَلْفاً.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "al-ashath-ibn-qais-siyar8/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-ashath-ibn-qais",
+      "field": "deathYearHijri",
+      "assertion": "توفي سنة أربعين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/42-p8",
+          "volume": "5",
+          "pageReference": "42",
+          "extractionUrl": "https://shamela.ws/book/10906/2017",
+          "excerptArabic": "قَالُوا: تُوُفِّيَ سَنَةَ أَرْبَعِيْنَ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "al-ashath-ibn-qais-siyar8/death-place",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-ashath-ibn-qais",
+      "field": "placeOfDeathArabic",
+      "assertion": "مات بالكوفة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/42-p12",
+          "volume": "5",
+          "pageReference": "42",
+          "extractionUrl": "https://shamela.ws/book/10906/2017",
+          "excerptArabic": "وَقَالَ مُحَمَّدُ بنُ سَعْدٍ: مَاتَ بِالكُوْفَةِ، وَالحَسَنُ بِهَا حِيْنَ صَالَحَ مُعَاوِيَةَ، وَهُوَ الَّذِي صَلَّى عَلَيْهِ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    }
+  ]
+}

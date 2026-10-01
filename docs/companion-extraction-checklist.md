@@ -104,12 +104,12 @@ that.
 - [x] عبد الله بن عبد الله بن أبي (`abdullah-ibn-abdullah-ibn-ubayy`)
 - [x] عكرمة بن أبي جهل (`ikrimah-ibn-abi-jahl`)
 - [x] عبد الله بن عمرو بن حرام (abdullah-ibn-amr-ibn-haram, PR #194)
-- [ ] يزيد بن أبي سفيان
+- [x] يزيد بن أبي سفيان (`yazid-ibn-abi-sufyan`)
 - [x] أبو العاص بن الربيع (abu-al-as-ibn-ar-rabia, PR #195)
-- [ ] زينب
+- [x] زينب — entry 70 (`zaynab-bint-muhammad`)
 - [x] أمامة بنت أبي العاص (`umamah-bint-abi-al-as`, PR #197)
 - [ ] أبو زيد
-- [ ] عباد بن بشر
+- [x] عباد بن بشر (`abbad-ibn-bishr`)
 - [x] أسيد بن الحضير (`usayd-ibn-al-hudayr`)
 - [x] الطفيل بن عمرو الدوسي (`at-tufayl-ibn-amr-ad-dawsi`)
 - [x] بلال بن رباح (`bilal-ibn-rabah`)
@@ -131,16 +131,16 @@ that.
 - [ ] عبادة بن الصامت
 - [ ] عبد الله بن حذافة
 - [ ] أبو رافع
-- [ ] صهيب بن سنان
-- [ ] أبو طلحة الأنصاري
+- [x] صهيب بن سنان (`suhaib-ibn-sinan`)
+- [x] أبو طلحة الأنصاري (`abu-talha-al-ansari`)
 - [x] أبو بردة بن نيار (data/history/batches/abu-bardah-ibn-niyar, PR #198)
-- [ ] جبر بن عتيك
-- [ ] الأشعث بن قيس
-- [ ] حاطب بن أبي بلتعة
-- [ ] أبو ذر
-- [ ] العباس
-- [ ] عمير بن سعد الأنصاري
-- [ ] أبو سفيان
+- [x] جبر بن عتيك (`jabr-ibn-atik`)
+- [x] الأشعث بن قيس (`al-ashath-ibn-qais`)
+- [x] حاطب بن أبي بلتعة (`hatib-ibn-abi-baltaah`)
+- [x] أبو ذر (`abu-dharr-al-ghifari`)
+- [x] العباس (`al-abbas-ibn-abd-al-muttalib`)
+- [x] عمير بن سعد الأنصاري (`umayr-ibn-saad-al-ansari`)
+- [x] أبو سفيان (`abu-sufyan-ibn-harb`)
 - [x] الحكم بن أبي العاص (`al-hakam-ibn-abi-al-as`, PR #186)
 - [ ] كسرى
 - [x] خديجة أم المؤمنين (`khadijah-bint-khuwaylid`, PR #203)
@@ -155,7 +155,7 @@ that.
 - [x] حفصة أم المؤمنين — `data/history/batches/hafsa-bint-umar/` ([PR #202](https://github.com/msskzx/namaq/pull/202))
 - [x] صفية أم المؤمنين (`safiyyah-bint-huyayy`, PR #210)
 - [x] ميمونة أم المؤمنين (`maymunah-bint-al-harith`, PR #214)
-- [ ] زينب بنت رسول الله
+- [x] زينب بنت رسول الله — entry 28 (`zaynab-bint-muhammad`)
 - [ ] رقية
 - [ ] أم كلثوم بنت رسول الله
 - [ ] زوجاته صلى الله عليه وسلم
