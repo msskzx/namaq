@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useReducer, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import useSWR from 'swr';
@@ -97,6 +97,13 @@ export default function SourceAccountReader({
   const menuPanelRef = useRef<HTMLDivElement>(null);
 
   const [shellPage, setShellPage] = useState(page);
+  // router.replace() updates the URL, but a search-params-only navigation
+  // does not by itself re-render this component -- without some local state
+  // change forcing one, `page` (read fresh from useSearchParams on each
+  // render) is never re-read, and the reader looks frozen on whatever it
+  // last rendered. This tick exists purely to force that re-render; it
+  // carries no data of its own.
+  const [, bumpTick] = useReducer((count: number) => count + 1, 0);
   const [fetched, setFetched] = useState<Record<string, AccountPage>>({});
   const inFlight = useRef(new Set<string>());
   const query = new URLSearchParams({ page: String(shellPage) });
@@ -211,7 +218,16 @@ export default function SourceAccountReader({
   };
 
   const setSelection = useCallback((nextBook: string | null, nextPage: number) => {
-    if (nextBook !== data?.account?.id) { setShellPage(nextPage); setFetched({}); inFlight.current.clear(); }
+    const sameBook = nextBook === data?.account?.id;
+    // A page already in `fetched` (the sliding prefetch window) needs no new
+    // primary fetch -- only bump shellPage, which re-keys that request, when
+    // the target isn't already cached or the book itself is changing.
+    // bumpTick still fires unconditionally: changing the URL alone does not
+    // re-render this component, and the next two lines are the only state
+    // updates that would otherwise do it for us.
+    if (!sameBook || !cached(nextPage)) setShellPage(nextPage);
+    else bumpTick();
+    if (!sameBook) { setFetched({}); inFlight.current.clear(); }
     const next = new URLSearchParams(searchParams.toString());
     if (nextBook) next.set('book', nextBook);
     else next.delete('book');
@@ -222,7 +238,7 @@ export default function SourceAccountReader({
     contentScrollTop.current = 0;
     setHeaderHidden(false);
     if (!fullscreen) section.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, [data?.account?.id, fullscreen, pathname, router, searchParams]);
+  }, [data?.account?.id, cached, fullscreen, pathname, router, searchParams]);
 
   const openChapter = useCallback((printedPage: string) => {
     if (!volumeNumber) return;
