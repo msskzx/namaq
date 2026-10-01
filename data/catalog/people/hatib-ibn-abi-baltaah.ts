@@ -1,15 +1,5 @@
-import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
+import type { CatalogPerson } from '@/lib/catalog/types';
 
-/**
- * Carried from neo4j/graphSeedData*.ts, whose node declaration is retired
- * with the rest. The catalog owns this subject's edges now, so they live
- * here or not at all. No batch has read this far into the nasab yet, so
- * every link stays on the legacy marker.
- *
- * Ally (حليف) of Banu Asad ibn Abd al-Uzza, not blood Quraysh, per the
- * retired prisma/personSeedData8.ts entry, which used his real name (Amr)
- * in the nasab chain in place of his father's kunya "Abi Baltaah".
- */
 const hatibIbnAbiBaltaah = {
   kind: 'PERSON',
   slug: 'hatib-ibn-abi-baltaah',
@@ -17,17 +7,49 @@ const hatibIbnAbiBaltaah = {
   nameTransliterated: 'Hatib ibn Abi Baltaah',
   hasProfile: true,
   fields: {
-    sex: { value: 'MALE', claims: legacyUnreviewed },
+    sex: { value: 'MALE', claims: ['hatib-ibn-abi-baltaah-siyar9/sex'] },
     fullName: {
-      value: 'حاطب بن عمرو بن عمير بن سلمة اللخمي المكي حليف بني أسد بن عبد العزى بن قصي',
-      claims: legacyUnreviewed,
+      value: 'حاطب بن أبي بلتعة عمرو بن عمير بن سلمة اللخمي',
+      claims: ['hatib-ibn-abi-baltaah-siyar9/full-name'],
     },
+    kunya: { value: 'أبو بلتعة', claims: ['hatib-ibn-abi-baltaah-siyar9/kunya'] },
+    tribalAffiliation: {
+      value: 'المكي، حليف بني أسد بن عبد العزى بن قصي',
+      claims: ['hatib-ibn-abi-baltaah-siyar9/tribal-affiliation'],
+    },
+    appearance: {
+      value: 'كان حسن الجسم، خفيف اللحية، أجنى، إلى القصر ما هو، شثن الأصابع — قاله الواقدي.',
+      claims: ['hatib-ibn-abi-baltaah-siyar9/appearance'],
+    },
+    virtues: {
+      value:
+        'وَكَانَ رَسُوْلَ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- إِلَى المُقَوْقسِ، صَاحِبِ مِصْرَ. وَكَانَ تَاجِراً فِي الطَّعَامِ، لَهُ عَبِيْدٌ. وَكَانَ مِنَ الرُّمَاةِ المَوْصُوْفِيْنَ. وَدَعَا لِي، فَقَالَ: (رَضِيَ اللهُ عَنْكَ)، مَرَّتَيْنِ — وقال الذهبي عن إسناده: إِسْنَادٌ مُظْلِمٌ. قَالَ: كَذَبْتَ، لاَ يَدْخُلُهَا أَبَداً — وقال الذهبي عن الحديث: صَحِيْحٌ. كَتَبَ إِلَى كُفَّارِ قُرَيْشٍ كِتَاباً … فَقَالَ عُمَرُ: ائْذَنْ لِي يَا رَسُوْلَ اللهِ فِي قَتْلِهِ. قَالَ: (لاَ، إِنَّهُ قَدْ شَهِدَ بَدْراً، وَإِنَّكَ لاَ تَدْرِي، لَعَلَّ اللهَ قَدِ اطَّلَعَ عَلَى أَهْلِ بَدْرٍ، فَقَالَ: اعْمَلُوا مَا شِئْتُم، فَإِنِّي غَافِرٌ لَكُم).',
+      claims: [
+        'hatib-ibn-abi-baltaah-siyar9/virtues-messenger',
+        'hatib-ibn-abi-baltaah-siyar9/virtues-trade',
+        'hatib-ibn-abi-baltaah-siyar9/virtues-archer',
+        'hatib-ibn-abi-baltaah-siyar9/virtues-uhud',
+        'hatib-ibn-abi-baltaah-siyar9/virtues-fire',
+        'hatib-ibn-abi-baltaah-siyar9/virtues-letter',
+      ],
+    },
+    deathYearHijri: { value: '30', claims: ['hatib-ibn-abi-baltaah-siyar9/death-year'] },
   },
   titles: [
-    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    {
+      title: 'companion',
+      name: 'صحابي',
+      nameTransliterated: 'Companion',
+      claims: ['hatib-ibn-abi-baltaah-siyar9/titles'],
+    },
   ],
   relations: [
-    { type: 'SON', inverse: 'FATHER', to: 'amr-ibn-umayr-al-lakhmi', claims: legacyUnreviewed },
+    {
+      type: 'SON',
+      inverse: 'FATHER',
+      to: 'amr-ibn-umayr-al-lakhmi',
+      claims: ['hatib-ibn-abi-baltaah-siyar9/father'],
+    },
   ],
 } satisfies CatalogPerson;
 

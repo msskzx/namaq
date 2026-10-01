@@ -1,11 +1,6 @@
 import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
-/**
- * Carried from neo4j/graphSeedData*.ts, whose node declaration is retired
- * with the rest. The catalog owns this subject's edges now, so they live
- * here or not at all. No batch has read this far into the nasab yet, so
- * every link stays on the legacy marker.
- */
+// data/history/batches/hatib-ibn-abi-baltaah, entry 9.
 const amrIbnUmayrAlLakhmi = {
   kind: 'PERSON',
   slug: 'amr-ibn-umayr-al-lakhmi',
@@ -17,7 +12,12 @@ const amrIbnUmayrAlLakhmi = {
   },
   titles: [],
   relations: [
-    { type: 'SON', inverse: 'FATHER', to: 'umayr-ibn-salamah-al-lakhmi', claims: legacyUnreviewed },
+    {
+      type: 'SON',
+      inverse: 'FATHER',
+      to: 'umayr-ibn-salamah-al-lakhmi',
+      claims: ['hatib-ibn-abi-baltaah-siyar9/father-of-amr'],
+    },
   ],
 } satisfies CatalogPerson;
 

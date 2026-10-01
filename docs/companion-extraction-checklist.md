@@ -136,7 +136,7 @@ that.
 - [x] أبو بردة بن نيار (data/history/batches/abu-bardah-ibn-niyar, PR #198)
 - [x] جبر بن عتيك (`jabr-ibn-atik`)
 - [x] الأشعث بن قيس (`al-ashath-ibn-qais`)
-- [ ] حاطب بن أبي بلتعة
+- [x] حاطب بن أبي بلتعة (`hatib-ibn-abi-baltaah`)
 - [x] أبو ذر (`abu-dharr-al-ghifari`)
 - [x] العباس (`al-abbas-ibn-abd-al-muttalib`)
 - [x] عمير بن سعد الأنصاري (`umayr-ibn-saad-al-ansari`)

@@ -60,6 +60,15 @@ const hudaybiyyah = {
     },
     // Carried from the old seed when he left it; no batch places him here yet.
     { person: 'al-abbas-ibn-abd-al-muttalib', isMuslim: true, claims: legacyUnreviewed },
+    {
+      person: 'hatib-ibn-abi-baltaah',
+      isMuslim: true,
+      summary: {
+        value: 'قَالَ: كَذَبْتَ، لاَ يَدْخُلُهَا أَبَداً وَقَدْ شَهِدَ بَدْراً وَالحُدَيْبِيَةَ.',
+        claims: ['hatib-ibn-abi-baltaah-siyar9/hudaybiyyah'],
+      },
+      claims: ['hatib-ibn-abi-baltaah-siyar9/hudaybiyyah'],
+    },
   ],
 } satisfies CatalogBattle;
 

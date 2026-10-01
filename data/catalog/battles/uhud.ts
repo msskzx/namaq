@@ -250,6 +250,16 @@ const uhud = {
       claims: ['at-tufayl-ibn-amr-ad-dawsi-siyar75/uhud-absence'],
     },
     {
+      person: 'hatib-ibn-abi-baltaah',
+      isMuslim: true,
+      summary: {
+        value:
+          'إِنَّهُ اطَّلَعَ عَلَى النَّبِيِّ -صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ- بِأُحُدٍ … فَمَضَيْتُ حَتَّى ظَفِرْتُ بِهِ، فَضَرَبْتُهُ بِالسَّيْفِ، فَطَرَحْتُ رَأْسَهُ! فَنَزَلْتُ، فَأَخَذْتُ رَأْسَهُ وَسَلَبَهُ وَفَرَسَهُ، وَجِئْتُ بِهِ إِلَى النَّبِيِّ -صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ- فَسَلَّمَ ذَلِكَ إِلَيَّ.',
+        claims: ['hatib-ibn-abi-baltaah-siyar9/uhud'],
+      },
+      claims: ['hatib-ibn-abi-baltaah-siyar9/uhud'],
+    },
+    {
       person: 'abu-sufyan-ibn-harb',
       isMuslim: false,
       summary: {
