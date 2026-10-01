@@ -424,6 +424,16 @@ const badr = {
       },
       claims: ['at-tufayl-ibn-amr-ad-dawsi-siyar75/badr-absence'],
     },
+    {
+      person: 'abu-dharr-al-ghifari',
+      isMuslim: true,
+      relation: 'ABSENT_FROM',
+      summary: {
+        value: 'فَاتَتْهُ بَدْرٌ.',
+        claims: ['abu-dharr-al-ghifari-siyar10/badr-absence'],
+      },
+      claims: ['abu-dharr-al-ghifari-siyar10/badr-absence'],
+    },
   ],
 } satisfies CatalogBattle;
 
