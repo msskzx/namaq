@@ -555,6 +555,26 @@
       ],
       "field": "placeOfDeathArabic",
       "disputed": true
+    },
+    {
+      "key": "abu-talha-al-ansari-siyar5/ayah-al-tawbah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-talha-al-ansari",
+      "assertion": "قرأ {انْفِرُوا خِفَافاً وَثِقَالاً} فقال: استنفرنا الله وأمرنا، شيوخنا وشبابنا، جهزوني — والآية التوبة 41، واللفظ المطبوع يرقمها 42.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "ayat",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/34-p3",
+          "volume": "5",
+          "pageReference": "34",
+          "extractionUrl": "https://shamela.ws/book/10906/2014",
+          "excerptArabic": "أَنَّ أَبَا طَلْحَةَ قَرَأَ: {انْفِرُوا خِفَافاً وَثِقَالاً} [التَّوْبَةُ: ٤٢] ، فَقَالَ:",
+          "accessedAt": "2026-10-01"
+        }
+      ]
     }
   ]
 }

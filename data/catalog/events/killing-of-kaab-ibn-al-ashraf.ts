@@ -20,6 +20,7 @@ const killingOfKaabIbnAlAshraf = {
   people: [
     { person: 'muhammad-ibn-maslamah', claims: ['sira/kaab-ibn-al-ashraf'] },
     { person: 'abu-abs', claims: ['abu-abs-siyar21/kaab-ashraf'] },
+    { person: 'abbad-ibn-bishr', claims: ['abbad-ibn-bishr-siyar73/kaab-ashraf'] },
   ],
 } satisfies CatalogEvent;
 

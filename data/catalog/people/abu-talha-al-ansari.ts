@@ -53,6 +53,11 @@ const abuTalhaAlAnsari = {
       claims: ['abu-talha-al-ansari-siyar5/wife-umm-sulaym'],
     },
   ],
+  ayat: [
+    // He read {انفروا خفافا وثقالا} as his call to arms. Numbered 9:41 here;
+    // the print labels it [التوبة: 42] (see data/history/batches/abu-talha-al-ansari).
+    { surah: 9, ayah: 41, claims: ['abu-talha-al-ansari-siyar5/ayah-al-tawbah'] },
+  ],
 } satisfies CatalogPerson;
 
 export default abuTalhaAlAnsari;

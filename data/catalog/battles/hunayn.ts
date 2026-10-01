@@ -58,6 +58,15 @@ const hunayn = {
       },
       claims: ['abu-talha-al-ansari-siyar5/hunayn'],
     },
+    {
+      person: 'abu-dharr-al-ghifari',
+      isMuslim: true,
+      summary: {
+        value: 'كَانَ حَامِلَ رَايَةِ غِفَارَ يَوْمَ حُنَيْنٍ.',
+        claims: ['abu-dharr-al-ghifari-siyar10/hunayn'],
+      },
+      claims: ['abu-dharr-al-ghifari-siyar10/hunayn'],
+    },
   ],
 } satisfies CatalogBattle;
 

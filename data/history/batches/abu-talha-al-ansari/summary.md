@@ -43,10 +43,10 @@ parked transcription in `.claude/worktrees/abu-talha-al-ansari` verbatim.
 - Death year and death place each carry competing reports, kept as separate
   DISPUTED claims: 34 AH in Medina (الأشهر, what the catalog holds) against
   32 AH per Khalifah alone, 51 AH per قيل, and death at sea off Byzantium.
-- The entry's {انْفِرُوا خِفَافاً وَثِقَالاً} [التوبة: 42] (p. 34) is not
-  authored as an ayah claim: the printed numbering (42) does not match the
-  numbering the app links verses by (41), so no clean {surah, ayah} value can
-  back it without editorializing. The passage stays in the store.
+- The entry's {انْفِرُوا خِفَافاً وَثِقَالاً} (p. 34) is authored as an ayah
+  claim at 9:41 with the print's own [التوبة: 42] quoted verbatim in the
+  citation and the offset noted in the assertion — the verse is 41 by standard
+  numbering, so the structured value follows the verse, not the print's digit.
 - Hadith counts (نحو عشرين حديثا؛ حديثان في الصحيحين) and narrator lists are
   preserved in the store pages; the model holds no field for them, so no
   claims.
