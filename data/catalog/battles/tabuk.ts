@@ -30,7 +30,6 @@ const tabuk = {
     { person: 'prophet-muhammad', isMuslim: true, claims: ['prophet/tabuk'] },
     { person: 'umar-ibn-al-khattab', isMuslim: true, claims: legacyUnreviewed },
     { person: 'uthman-ibn-affan', isMuslim: true, claims: legacyUnreviewed },
-    { person: 'al-abbas-ibn-abd-al-muttalib', isMuslim: true, claims: legacyUnreviewed },
     {
       person: 'ali-ibn-abi-talib',
       isMuslim: true,

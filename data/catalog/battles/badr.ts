@@ -339,6 +339,19 @@ const badr = {
       },
       claims: ['aqil-ibn-abi-talib-siyar35/badr'],
     },
+    // With Quraysh like his nephew Aqil above; Dhahabi weighs his Islam as
+    // after Badr (see data/history/batches/al-abbas-ibn-abd-al-muttalib).
+    {
+      person: 'al-abbas-ibn-abd-al-muttalib',
+      isMuslim: false,
+      status: ['WAS_CAPTURED'],
+      summary: {
+        value:
+          'خَرَجَ مَعَ قَوْمِهِ إِلَى بَدْرٍ، فَأُسِرَ يَوْمَئِذٍ. وَكَانَ أَكْثَرُ الأُسَارَى فِدَاءً يَوْمَ بَدْرٍ العَبَّاسُ، افْتَدَى نَفْسَهُ بِمائَةِ أُوْقِيَّةٍ مِنْ ذَهَبٍ.',
+        claims: ['al-abbas-ibn-abd-al-muttalib-siyar11/badr'],
+      },
+      claims: ['al-abbas-ibn-abd-al-muttalib-siyar11/badr'],
+    },
     { person: 'khallad-ibn-amr-ibn-al-jumuh', isMuslim: true, claims: ['khallad-siyar4/badr'] },
     {
       person: 'amr-ibn-al-jumuh',
