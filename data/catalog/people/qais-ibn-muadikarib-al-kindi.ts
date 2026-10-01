@@ -17,7 +17,12 @@ const qaisIbnMuadikaribAlKindi = {
   },
   titles: [],
   relations: [
-    { type: 'FATHER', inverse: 'SON', to: 'al-ashath-ibn-qais', claims: legacyUnreviewed },
+    {
+      type: 'FATHER',
+      inverse: 'SON',
+      to: 'al-ashath-ibn-qais',
+      claims: ['al-ashath-ibn-qais-siyar8/father'],
+    },
     { type: 'FATHER', inverse: 'DAUGHTER', to: 'qutaylah-bint-qais-al-kindiyyah', claims: legacyUnreviewed },
   ],
 } satisfies CatalogPerson;
