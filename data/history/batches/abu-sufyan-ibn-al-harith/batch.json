@@ -55,6 +55,27 @@
       ]
     },
     {
+      "key": "abu-sufyan-ibn-al-harith-siyar32/full-name-alt",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-al-harith",
+      "field": "fullName",
+      "assertion": "وقال طائفة: اسمه كنيته (أبو سفيان)، وإنما المغيرة أخوه.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "disputed": true,
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/203-p7",
+          "volume": "4",
+          "pageReference": "203",
+          "extractionUrl": "https://shamela.ws/book/10906/1629",
+          "excerptArabic": "وَقَالَ طَائِفَةٌ: اسْمُهُ كُنْيَتُهُ، وَإِنَّمَا المُغِيْرَةُ أَخُوْهُم.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
       "key": "abu-sufyan-ibn-al-harith-siyar32/father",
       "subjectKind": "PERSON",
       "subjectSlug": "abu-sufyan-ibn-al-harith",
@@ -265,6 +286,35 @@
       ]
     },
     {
+      "key": "abu-sufyan-ibn-al-harith-siyar32/death-place",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-al-harith",
+      "field": "placeOfDeathArabic",
+      "assertion": "مات بالمدينة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/204-p3",
+          "volume": "4",
+          "pageReference": "204",
+          "extractionUrl": "https://shamela.ws/book/10906/1630",
+          "excerptArabic": "قِيْلَ: إِنَّ أَبَا سُفْيَانَ حَجَّ، فَحَلَقَهُ الحَلاَّقُ، فَقَطَعَ ثُؤْلُوْلاً فِي رَأْسِهِ، فَمَرِضَ مِنْهُ، وَمَاتَ بَعْدَ قُدُوْمِهِ بِالمَدِيْنَةِ، وَصَلَّى عَلَيْهِ عُمَرُ.",
+          "accessedAt": "2026-09-28"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/205-p12",
+          "volume": "4",
+          "pageReference": "205",
+          "extractionUrl": "https://shamela.ws/book/10906/1631",
+          "excerptArabic": "وَيُقَالُ: مَاتَ سَنَةَ عِشْرِيْنَ بِالمَدِيْنَةِ.",
+          "accessedAt": "2026-09-28"
+        }
+      ]
+    },
+    {
       "key": "abu-sufyan-ibn-al-harith-siyar32/sex",
       "subjectKind": "PERSON",
       "subjectSlug": "abu-sufyan-ibn-al-harith",
@@ -306,9 +356,9 @@
     }
   ],
   "approval": {
-    "revision": "eedf3df1e812d288",
-    "approvedAt": "2026-09-30",
+    "revision": "04f45ab980c6ac7e",
+    "approvedAt": "2026-10-01",
     "approvedBy": "msskzx",
-    "note": "Approved for publication. Claims are Not reviewed: the entries are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+    "note": "Approved for publication at the revision that carries the two rescued claims (full-name-alt, death-place), recovered from the retired .opencode worktree in PR #242 and checked against the stored pages. Claims are Not reviewed: nobody has compared the batch against its source beyond that check, and approval asserts nothing about review."
   }
 }

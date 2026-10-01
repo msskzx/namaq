@@ -279,7 +279,11 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   which other hosts drop, and its printed page numbers are the ones every
   citation records.
   - Book, with its فهرس الموضوعات for enumerating entries without paging
-    through the text: https://shamela.ws/book/10906
+    through the text: https://shamela.ws/book/10906. `npm run history:search
+    -- <term> [<term> ...]` searches a partial, hand-discovered subset of
+    that فهرس tree rather than fetching pages one at a time; a miss there
+    doesn't mean the subject is absent from the book, only that their index
+    page isn't in the known set yet.
   - A page is `https://shamela.ws/book/10906/<id>`, and the id runs
     monotonically through the whole edition. That makes it the check on a
     declared volume or printed page, never a fact about the source itself

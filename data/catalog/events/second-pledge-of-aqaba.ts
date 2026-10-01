@@ -30,6 +30,11 @@ const secondPledgeOfAqaba = {
       person: 'al-abbas-ibn-abd-al-muttalib',
       claims: ['al-abbas-ibn-abd-al-muttalib-siyar11/second-aqaba'],
     },
+    // One of the twelve naqibs of the pledge night (see data/history/batches/abu-talha-al-ansari).
+    {
+      person: 'abu-talha-al-ansari',
+      claims: ['abu-talha-al-ansari-siyar5/aqaba'],
+    },
     { person: 'asad-ibn-zurarah', claims: ['asad/aqaba-second'] },
     { person: 'al-baraa-ibn-marur', claims: ['al-baraa/aqaba-second'] },
     { person: 'saad-ibn-ubadah', claims: ['saad-ubadah/aqaba-second'] },

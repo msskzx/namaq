@@ -49,6 +49,16 @@ const yarmuk = {
       },
       claims: ['amr-ibn-said-al-umawi-siyar50/yarmuk'],
     },
+    {
+      person: 'al-ashath-ibn-qais',
+      isMuslim: true,
+      status: ['INJURED'],
+      summary: {
+        value: 'وَأُصِيْبَتْ عَيْنُهُ يَوْمَ اليَرْمُوْكِ.',
+        claims: ['al-ashath-ibn-qais-siyar8/yarmuk'],
+      },
+      claims: ['al-ashath-ibn-qais-siyar8/yarmuk'],
+    },
   ],
 } satisfies CatalogBattle;
 
