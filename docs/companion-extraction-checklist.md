@@ -135,12 +135,12 @@ that.
 - [x] أبو طلحة الأنصاري (`abu-talha-al-ansari`)
 - [x] أبو بردة بن نيار (data/history/batches/abu-bardah-ibn-niyar, PR #198)
 - [x] جبر بن عتيك (`jabr-ibn-atik`)
-- [ ] الأشعث بن قيس
+- [x] الأشعث بن قيس (`al-ashath-ibn-qais`)
 - [x] حاطب بن أبي بلتعة (`hatib-ibn-abi-baltaah`)
 - [x] أبو ذر (`abu-dharr-al-ghifari`)
 - [ ] العباس
 - [x] عمير بن سعد الأنصاري (`umayr-ibn-saad-al-ansari`)
-- [ ] أبو سفيان
+- [x] أبو سفيان (`abu-sufyan-ibn-harb`)
 - [x] الحكم بن أبي العاص (`al-hakam-ibn-abi-al-as`, PR #186)
 - [ ] كسرى
 - [x] خديجة أم المؤمنين (`khadijah-bint-khuwaylid`, PR #203)

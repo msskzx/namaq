@@ -260,6 +260,15 @@ const uhud = {
       claims: ['hatib-ibn-abi-baltaah-siyar9/uhud'],
     },
     {
+      person: 'abu-sufyan-ibn-harb',
+      isMuslim: false,
+      summary: {
+        value: 'رَأْسُ قُرَيْشٍ، وَقَائِدُهُمْ يَوْمَ أُحُدٍ.',
+        claims: ['abu-sufyan-ibn-harb-siyar13/uhud'],
+      },
+      claims: ['abu-sufyan-ibn-harb-siyar13/uhud'],
+    },
+    {
       person: 'abu-talha-al-ansari',
       isMuslim: true,
       summary: {
