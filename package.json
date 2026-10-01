@@ -33,6 +33,7 @@
     "history:review": "tsx scripts/history/reviewBatch.ts",
     "history:approve": "tsx scripts/history/approveBatch.ts",
     "history:extract": "tsx scripts/history/extractShamelaEntry.ts",
+    "history:search": "tsx scripts/history/searchShamela.ts",
     "catalog:validate": "tsx scripts/data/validateCatalog.ts",
     "catalog:project": "tsx scripts/data/projectCatalog.ts",
     "catalog:project-graph": "tsx scripts/data/projectCatalogGraph.ts",

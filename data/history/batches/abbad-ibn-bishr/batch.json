@@ -1,0 +1,391 @@
+{
+  "slug": "abbad-ibn-bishr",
+  "summaryFile": "summary.md",
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abbad-ibn-bishr",
+      "accessedAt": "2026-09-29",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "337"
+        },
+        {
+          "sequence": 2,
+          "printedPage": "338"
+        },
+        {
+          "sequence": 3,
+          "printedPage": "339"
+        },
+        {
+          "sequence": 4,
+          "printedPage": "340"
+        }
+      ],
+      "volumeNumber": 4,
+      "notInSource": [
+        "appearance",
+        "wives",
+        "siblings"
+      ],
+      "extractionUrl": "https://shamela.ws/book/10906/1763"
+    }
+  ],
+  "claims": [
+    {
+      "key": "abbad-ibn-bishr-siyar73/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abbad-ibn-bishr",
+      "field": "fullName",
+      "assertion": "عباد بن بشر بن وقش بن زغبة بن زعوراء بن عبد الأشهل",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/337-p1",
+          "volume": "4",
+          "pageReference": "337",
+          "extractionUrl": "https://shamela.ws/book/10906/1763",
+          "excerptArabic": "عَبَّادُ بنُ بِشْرِ بنِ وَقْشِ بنِ زُغْبَةَ بنِ زَعُوْرَاءَ الأَنْصَارِيُّ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/337-p2",
+          "volume": "4",
+          "pageReference": "337",
+          "extractionUrl": "https://shamela.ws/book/10906/1763",
+          "excerptArabic": "ابْنِ عَبْدِ الأَشْهَلِ الإِمَامُ، أَبُو الرَّبِيْعِ الأَنْصَارِيُّ، الأَشْهَلِيُّ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "abbad-ibn-bishr-siyar73/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abbad-ibn-bishr",
+      "assertion": "عباد بن بشر: أبوه بشر بن وقش.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "bishr-ibn-waqsh",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/337-p1",
+          "volume": "4",
+          "pageReference": "337",
+          "extractionUrl": "https://shamela.ws/book/10906/1763",
+          "excerptArabic": "عَبَّادُ بنُ بِشْرِ بنِ وَقْشِ بنِ زُغْبَةَ بنِ زَعُوْرَاءَ الأَنْصَارِيُّ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "abbad-ibn-bishr-siyar73/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abbad-ibn-bishr",
+      "field": "kunya",
+      "assertion": "أبو الربيع",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/337-p2",
+          "volume": "4",
+          "pageReference": "337",
+          "extractionUrl": "https://shamela.ws/book/10906/1763",
+          "excerptArabic": "أَبُو الرَّبِيْعِ الأَنْصَارِيُّ، الأَشْهَلِيُّ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "abbad-ibn-bishr-siyar73/tribal-affiliation",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abbad-ibn-bishr",
+      "field": "tribalAffiliation",
+      "assertion": "الأنصاري، الأوسي، الأشهلي، البدري",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/337-p1",
+          "volume": "4",
+          "pageReference": "337",
+          "extractionUrl": "https://shamela.ws/book/10906/1763",
+          "excerptArabic": "عَبَّادُ بنُ بِشْرِ بنِ وَقْشِ بنِ زُغْبَةَ بنِ زَعُوْرَاءَ الأَنْصَارِيُّ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/337-p2",
+          "volume": "4",
+          "pageReference": "337",
+          "extractionUrl": "https://shamela.ws/book/10906/1763",
+          "excerptArabic": "أَبُو الرَّبِيْعِ الأَنْصَارِيُّ، الأَشْهَلِيُّ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/337-p3",
+          "volume": "4",
+          "pageReference": "337",
+          "extractionUrl": "https://shamela.ws/book/10906/1763",
+          "excerptArabic": "أَحَدُ البَدْرِيِّيْنَ، كَانَ مِنْ سَادَةِ الأَوْسِ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/339-p3",
+          "volume": "4",
+          "pageReference": "339",
+          "extractionUrl": "https://shamela.ws/book/10906/1765",
+          "excerptArabic": "عَبَّادُ بنُ بِشْرِ بنِ وَقْشِ بنِ زُغْبَةَ بنِ زَعُوْرَاءَ بنِ عَبْدِ الأَشْهَلِ بنِ جُشَمَ بنِ الحَارِثِ بنِ الخَزْرَجِ بنِ الأَوْسِ الأَوْسِيُّ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "abbad-ibn-bishr-siyar73/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abbad-ibn-bishr",
+      "field": "titles",
+      "assertion": "صحابي — أحد البدريين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/337-p3",
+          "volume": "4",
+          "pageReference": "337",
+          "extractionUrl": "https://shamela.ws/book/10906/1763",
+          "excerptArabic": "أَحَدُ البَدْرِيِّيْنَ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "abbad-ibn-bishr-siyar73/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abbad-ibn-bishr",
+      "field": "virtues",
+      "assertion": "كَانَ مِنْ سَادَةِ الأَوْسِ. عَاشَ خَمْساً وَأَرْبَعِيْنَ سَنَةً، وَهُوَ الَّذِي أَضَاءتْ لَهُ عَصَاتُهُ لَيْلَةَ انْقَلَبَ إِلَى مَنْزِلِهِ مِنْ عِنْدِ رَسُوْلِاللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-. أَسْلَمَ عَلَى يَدِ مُصْعَبِ بنِ عُمَيْرٍ، وَكَانَ أَحَدَ مَنْ قَتَلَ كَعْبَ بنَ الأَشْرَفِ اليَهُوْدِيَّ. وَاسْتَعْمَلَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- عَلَى صَدَقَاتِ مُزَيْنَةَ، وَبَنِي سُلَيْمٍ، وَجَعَلَهُ عَلَى حَرَسِهِ فِي غَزْوَةِ تَبُوْكٍ، وَكَانَ كَبِيْرَ القَدْرِ -رَضِيَ اللهُ عَنْهُ-. أَبْلَى يَوْمَ اليَمَامَةِ بَلاَءً حَسَناً، وَكَانَ أَحَدَ الشُّجْعَانِ المَوْصُوْفِيْنَ. قَالَتْ عَائِشَةُ: ثَلاَثَةٌ مِنَ الأَنْصَارِ لَمْ يَكُنْ أَحَدٌ يَعْتَدُّ عَلَيْهِم فَضْلاً، كُلُّهُم مِنْ بَنِي عَبْدِ الأَشْهَلِ: سَعْدُ بنُ مُعَاذٍ، وَعَبَّادُ بنُ بِشْرٍ، وَأُسَيْدُ بنُ حُضَيْرٍ. آخَى النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بَيْنَهُ وَبَيْنَ أَبِي حُذَيْفَةَ بنِ عُتْبَةَ بنِ رَبِيْعَةَ. سُمِعَ عَبَّادُ بنُ بِشْرٍ يَقُوْلُ: رَأَيْتُ اللَّيْلَةَ كَأَنَّ السَّمَاءَ فُرِجَتْ لِي، ثُمَّ أَطْبَقَتْ عَلَيَّ، فَهِيَ - إِنْ شَاءَ اللهُ - الشَّهَادَةُ. نُظِرَ يَوْمَ اليَمَامَةِ وَهُوَ يَصِيْحُ: احْطِمُوا جُفُوْنَ السُّيُوْفِ، وَقَاتَلَ حَتَّى قُتِلَ بِضَرَبَاتٍ فِي وَجْهِهِ -رَضِيَ اللهُ عَنْهُ-. تَهَجَّدَ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فِي بَيْتِي، فَسَمِعَ صَوْتَ عَبَّادِ بن بِشْرٍ، فَقَالَ: (يَا عَائِشَةُ! هَذَا صَوْتُ عَبَّادِ بن بِشْرٍ). قُلْتُ: نَعَمْ. قَالَ: (اللَّهُمَّ اغْفِرْ لَهُ). أَنَّ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَالَ: (يَا مَعْشَرَ الأَنْصَارِ! أَنْتُمُ الشِّعَارُ، وَالنَّاسُ الدِّثَارُ).",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/337-p3",
+          "volume": "4",
+          "pageReference": "337",
+          "extractionUrl": "https://shamela.ws/book/10906/1763",
+          "excerptArabic": "كَانَ مِنْ سَادَةِ الأَوْسِ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/337-p4",
+          "volume": "4",
+          "pageReference": "337",
+          "extractionUrl": "https://shamela.ws/book/10906/1763",
+          "excerptArabic": "عَاشَ خَمْساً وَأَرْبَعِيْنَ سَنَةً، وَهُوَ الَّذِي أَضَاءتْ لَهُ عَصَاتُهُ لَيْلَةَ انْقَلَبَ إِلَى مَنْزِلِهِ مِنْ عِنْدِ رَسُوْلِاللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/337-p5",
+          "volume": "4",
+          "pageReference": "337",
+          "extractionUrl": "https://shamela.ws/book/10906/1763",
+          "excerptArabic": "أَسْلَمَ عَلَى يَدِ مُصْعَبِ بنِ عُمَيْرٍ، وَكَانَ أَحَدَ مَنْ قَتَلَ كَعْبَ بنَ الأَشْرَفِ اليَهُوْدِيَّ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/337-p6",
+          "volume": "4",
+          "pageReference": "337",
+          "extractionUrl": "https://shamela.ws/book/10906/1763",
+          "excerptArabic": "وَاسْتَعْمَلَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- عَلَى صَدَقَاتِ مُزَيْنَةَ، وَبَنِي سُلَيْمٍ، وَجَعَلَهُ عَلَى حَرَسِهِ فِي غَزْوَةِ تَبُوْكٍ، وَكَانَ كَبِيْرَ القَدْرِ -رَضِيَ اللهُ عَنْهُ- أَبْلَى يَوْمَ اليَمَامَةِ بَلاَءً حَسَناً، وَكَانَ أَحَدَ الشُّجْعَانِ المَوْصُوْفِيْنَ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/337-p8",
+          "volume": "4",
+          "pageReference": "337",
+          "extractionUrl": "https://shamela.ws/book/10906/1763",
+          "excerptArabic": "ثَلاَثَةٌ مِنَ الأَنْصَارِ لَمْ يَكُنْ أَحَدٌ يَعْتَدُّ عَلَيْهِم فَضْلاً، كُلُّهُم مِنْ بَنِي عَبْدِ الأَشْهَلِ: سَعْدُ بنُ مُعَاذٍ، وَعَبَّادُ بنُ بِشْرٍ، وَأُسَيْدُ بنُ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/338-p1",
+          "volume": "4",
+          "pageReference": "338",
+          "extractionUrl": "https://shamela.ws/book/10906/1764",
+          "excerptArabic": "حُضَيْرٍ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/338-p2",
+          "volume": "4",
+          "pageReference": "338",
+          "extractionUrl": "https://shamela.ws/book/10906/1764",
+          "excerptArabic": "آخَى النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بَيْنَهُ وَبَيْنَ أَبِي حُذَيْفَةَ بنِ عُتْبَةَ بنِ رَبِيْعَةَ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/338-p5",
+          "volume": "4",
+          "pageReference": "338",
+          "extractionUrl": "https://shamela.ws/book/10906/1764",
+          "excerptArabic": "رَأَيْتُ اللَّيْلَةَ كَأَنَّ السَّمَاءَ فُرِجَتْ لِي، ثُمَّ أَطْبَقَتْ عَلَيَّ، فَهِيَ - إِنْ شَاءَ اللهُ - الشَّهَادَةُ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/338-p6",
+          "volume": "4",
+          "pageReference": "338",
+          "extractionUrl": "https://shamela.ws/book/10906/1764",
+          "excerptArabic": "نُظِرَ يَوْمَ اليَمَامَةِ وَهُوَ يَصِيْحُ: احْطِمُوا جُفُوْنَ السُّيُوْفِ، وَقَاتَلَ حَتَّى قُتِلَ بِضَرَبَاتٍ فِي وَجْهِهِ -رَضِيَ اللهُ عَنْهُ-",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/338-p8",
+          "volume": "4",
+          "pageReference": "338",
+          "extractionUrl": "https://shamela.ws/book/10906/1764",
+          "excerptArabic": "تَهَجَّدَ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فِي بَيْتِي، فَسَمِعَ صَوْتَ عَبَّادِ بن بِشْرٍ، فَقَالَ: (يَا عَائِشَةُ! هَذَا صَوْتُ عَبَّادِ بن بِشْرٍ)",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/338-p10",
+          "volume": "4",
+          "pageReference": "338",
+          "extractionUrl": "https://shamela.ws/book/10906/1764",
+          "excerptArabic": "قَالَ: (اللَّهُمَّ اغْفِرْ لَهُ)",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/338-p12",
+          "volume": "4",
+          "pageReference": "338",
+          "extractionUrl": "https://shamela.ws/book/10906/1764",
+          "excerptArabic": "أَنَّ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَالَ: (يَا مَعْشَرَ الأَنْصَارِ! أَنْتُمُ الشِّعَارُ، وَالنَّاسُ الدِّثَارُ)",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/340-p9",
+          "volume": "4",
+          "pageReference": "340",
+          "extractionUrl": "https://shamela.ws/book/10906/1766",
+          "excerptArabic": "أَنَّ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَالَ: (يَا مَعْشَرَ الأَنْصَارِ! أَنْتُمُ الشِّعَارُ، وَالنَّاسُ الدِّثَارُ، فَلاَ أُوْتَيَنَّ مِنْ قِبَلِكُم)",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "abbad-ibn-bishr-siyar73/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abbad-ibn-bishr",
+      "assertion": "شهد بدراً — أحد البدريين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/337-p3",
+          "volume": "4",
+          "pageReference": "337",
+          "extractionUrl": "https://shamela.ws/book/10906/1763",
+          "excerptArabic": "أَحَدُ البَدْرِيِّيْنَ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "abbad-ibn-bishr-siyar73/tabuk",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abbad-ibn-bishr",
+      "assertion": "جعله النبي على حرسه في غزوة تبوك.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "tabuk",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/337-p6",
+          "volume": "4",
+          "pageReference": "337",
+          "extractionUrl": "https://shamela.ws/book/10906/1763",
+          "excerptArabic": "وَجَعَلَهُ عَلَى حَرَسِهِ فِي غَزْوَةِ تَبُوْكٍ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "abbad-ibn-bishr-siyar73/kaab-ashraf",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abbad-ibn-bishr",
+      "assertion": "كان أحد من قتل كعب بن الأشرف اليهودي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "killing-of-kaab-ibn-al-ashraf",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/337-p5",
+          "volume": "4",
+          "pageReference": "337",
+          "extractionUrl": "https://shamela.ws/book/10906/1763",
+          "excerptArabic": "وَكَانَ أَحَدَ مَنْ قَتَلَ كَعْبَ بنَ الأَشْرَفِ اليَهُوْدِيَّ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "abbad-ibn-bishr-siyar73/death-place",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abbad-ibn-bishr",
+      "field": "placeOfDeathArabic",
+      "assertion": "اليمامة",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/339-p4",
+          "volume": "4",
+          "pageReference": "339",
+          "extractionUrl": "https://shamela.ws/book/10906/1765",
+          "excerptArabic": "اسْتُشْهِدَ -رَضِيَ اللهُ عَنْهُ- يَوْمَ اليَمَامَةِ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    }
+  ]
+}

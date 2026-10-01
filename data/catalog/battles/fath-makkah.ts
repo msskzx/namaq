@@ -48,6 +48,17 @@ const fathMakkah = {
       },
       claims: ['rabiah-ibn-al-harith-siyar46/fath-makkah'],
     },
+    // His own entry has the Banu Muawiyah ibn Malik banner with him on the day
+    // of the conquest (see data/history/batches/jabr-ibn-atik).
+    {
+      person: 'jabr-ibn-atik',
+      isMuslim: true,
+      summary: {
+        value: 'كَانَتْ إِلَيْهِ رَايَةُ بَنِي مُعَاوِيَةَ بنِ مَالِكٍ يَوْمَ الفَتْحِ.',
+        claims: ['jabr-ibn-atik-siyar/fath-makkah'],
+      },
+      claims: ['jabr-ibn-atik-siyar/fath-makkah'],
+    },
     {
       person: 'at-tufayl-ibn-amr-ad-dawsi',
       isMuslim: true,
