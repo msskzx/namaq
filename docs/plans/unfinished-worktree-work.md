@@ -1,6 +1,14 @@
 # Unfinished work sitting in agent worktrees
 
-Status: **inventory**, taken 2026-09-30. Nothing here is scheduled.
+Status: **inventory**, taken 2026-09-30. All of it has since been decided — every
+subject below is now a batch on `main` or on an open PR. Nothing here is scheduled,
+and nothing is left uncommitted. What follows is the record of what the worktrees
+held and where each subject ended up, kept so the decision to resume or drop is
+visible rather than assumed.
+
+The two tables that were still outstanding when this was written have since landed:
+the seven page-only subjects in #236, #237, #238, #239, #240, #244 and #245, and
+the three near-complete batches in #233, #234 and #235.
 
 Sixteen agent worktrees under `.claude/worktrees/` and `.opencode/worktrees/`
 hold work that was never committed. **None of it is in git.** It is untracked
@@ -44,14 +52,36 @@ Each has a catalog person on main already, so the catalog expects them.
 A recorded approval here means someone published the batch inside a worktree and
 the file never reached main. The approval covers a revision no one else can see.
 
-### Started and abandoned early
+### Started and abandoned early — all four finished
 
-| Batch | State | Worktree |
-| --- | --- | --- |
-| `zaynab-bint-muhammad` | 6 pages, 0 claims | `.claude/worktrees/zaynab` |
-| `ikrimah-ibn-abi-jahl` | 2 pages, 0 claims | `.claude/worktrees/ikrimah-ibn-abi-jahl` |
-| `abdullah-ibn-abdullah-ibn-abi` | `batch.json` plus 1 page, 0 claims | `.claude/worktrees/abdullah-ibn-abdullah-ibn-abi` |
-| `yazid-ibn-abi-sufyan` | `batch.json` only, empty | `.claude/worktrees/yazid-ibn-abi-sufyan` |
+Decided 2026-10-01. **None was dropped.** Each is now a batch on its own branch,
+read from Shamela rather than resumed. What changed the call is that three of the
+four worktrees held text for a **different subject**, so there was nothing to
+resume and nothing to lose — and the real entries turned out to be short.
+
+| Batch | Worktree held | PR | Real entry |
+| --- | --- | --- | --- |
+| `ikrimah-ibn-abi-jahl` | its own entry, 5 claims already authored | [#247](https://github.com/msskzx/namaq/pull/247) | vol. 4 pp. 323-324, 5 claims |
+| `yazid-ibn-abi-sufyan` | an empty `batch.json`, no pages | [#248](https://github.com/msskzx/namaq/pull/248) | vol. 4 pp. 328-330, 10 claims |
+| `zaynab-bint-muhammad` | **حمزة بن عبد المطلب** (Shamela 1610-1615) | [#249](https://github.com/msskzx/namaq/pull/249) | vols. 4 and 5, pp. 334 and 246-249, 6 claims |
+| `abdullah-ibn-abdullah-ibn-ubayy` | **عُثْمَان بن حُنَيْف** (entry 61), and the wrong slug | [#250](https://github.com/msskzx/namaq/pull/250) | vol. 4 pp. 321-323, 7 claims |
+
+Two findings worth keeping:
+
+- **`yazid-ibn-abi-sufyan` was in scope**, which the open issue below doubted. He
+  is entry 68 in the middle of the in-scope run, not a `كبار التابعين` overrun.
+- **Zaynab's fuller entry is in volume 5, not where the editor's cross-reference
+  says.** Printed 334's footnote (٢) points at "الجزء الثاني برقم (١٢١)", but
+  volume 5's numbering restarts and her entry is 28 of that run at printed
+  246-249. Printed 121 of vol. 5 is فاطمة. Reading only what the note names
+  would have found nothing.
+
+**Seven more printed pages in the store were incomplete**, each holding one
+entry's half where the printed page carries both. Completed here: `v4/320`,
+`v4/321`, `v4/324`, `v4/330`, `v4/334`. Absent entirely: `v4/322`, `v4/323`.
+All were left by the store being seeded out of each batch's own account pages.
+**A sweep of the whole store for pages that are a strict prefix of Shamela's is
+still owed** — this is five of an unknown number.
 
 ### Tooling
 
@@ -131,8 +161,9 @@ declared volume yet at all, which is the moment to get it right.
    void: they cover revisions nobody reviewed on main.
 3. **Preserve the 86 transcribed pages** even if no one structures them soon.
    They are the expensive part and they are one command from being lost.
-4. **Decide on the four early-stage batches.** Each is worth less than the
-   effort of resuming it cold; dropping them is defensible.
+4. ~~**Decide on the four early-stage batches.**~~ Done, 2026-10-01: all four
+   finished rather than dropped, in #247–#250. See
+   [Started and abandoned early](#started-and-abandoned-early--all-four-finished).
 5. ~~**Check the two superseded worktrees** and remove them.~~ Done, 2026-10-01;
    see [Superseded, or nearly](#superseded-or-nearly). One of the two yielded a
    PR before removal.
@@ -157,14 +188,17 @@ None. Everything here is readable where it stands.
 
 ### Nonblocking
 
-- **Are the seven page-only subjects in scope?** `AGENTS.md` limits subjects to
-  الصحابة, and the Siyar's الطبقة الأولى runs past them into كبار التابعين
-  twice. `al-ashath-ibn-qais` and `yazid-ibn-abi-sufyan` in particular should be
-  checked against the scope rules in
-  [data-pipelines.md](../data-pipelines.md) before anyone invests further.
+- ~~**Are the seven page-only subjects in scope?**~~ Settled: all seven landed,
+  and `al-ashath-ibn-qais` (#239) was taken in. `yazid-ibn-abi-sufyan` is in
+  scope too — entry 68, mid-run, not a `كبار التابعين` overrun (#248).
 - **`docs/companion-extraction-checklist.md` may disagree with this list.** It
   tracks which entries have a batch, and these batches are invisible to it. Any
-  subject landed from here needs checking off in the same PR.
-- **Whether the transcriptions are complete entries** is unverified. A directory
-  of pages does not say whether the entry ran longer, and `notInSource` cannot
-  be asserted over a partial reading.
+  subject landed from here needs checking off in the same PR. Done for the four in
+  #247–#250; `al-ashath-ibn-qais` and the other six landed with theirs.
+- ~~**Whether the transcriptions are complete entries** is unverified.~~ Where it
+  mattered, the store settled it: every one of the four was checked against
+  Shamela directly, and three were found to hold a different subject entirely.
+- **The store may hold more partial pages than the seven found here.** Five of
+  them surfaced only because these four entries happened to touch them. A page
+  whose file is a strict prefix of its Shamela original is a printed page missing
+  its second entry, and nothing in the pipeline detects it.
