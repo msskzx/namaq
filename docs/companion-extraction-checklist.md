@@ -109,7 +109,7 @@ that.
 - [ ] زينب
 - [x] أمامة بنت أبي العاص (`umamah-bint-abi-al-as`, PR #197)
 - [ ] أبو زيد
-- [ ] عباد بن بشر
+- [x] عباد بن بشر (`abbad-ibn-bishr`)
 - [x] أسيد بن الحضير (`usayd-ibn-al-hudayr`)
 - [x] الطفيل بن عمرو الدوسي (`at-tufayl-ibn-amr-ad-dawsi`)
 - [x] بلال بن رباح (`bilal-ibn-rabah`)
