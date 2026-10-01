@@ -15,6 +15,15 @@ const siffin = {
   },
   participants: [
     { person: 'ali-ibn-abi-talib', isMuslim: true, claims: legacyUnreviewed },
+    {
+      person: 'al-ashath-ibn-qais',
+      isMuslim: true,
+      summary: {
+        value: 'كَانَ عَلَى مَيْمَنَةِ عَلِيٍّ يَوْمَ صِفِّيْنَ.',
+        claims: ['al-ashath-ibn-qais-siyar8/siffin'],
+      },
+      claims: ['al-ashath-ibn-qais-siyar8/siffin'],
+    },
   ],
 } satisfies CatalogBattle;
 
