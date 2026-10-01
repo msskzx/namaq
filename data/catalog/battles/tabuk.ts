@@ -39,6 +39,15 @@ const tabuk = {
       claims: ['ali/tabuk-absence'],
     },
     {
+      person: 'abu-dharr-al-ghifari',
+      isMuslim: true,
+      summary: {
+        value: 'أبطأ في غزوة تبوك من عجف بعيره، ثم أخذ متاعه على ظهره ولحق بالنبي ماشياً.',
+        claims: ['abu-dharr-al-ghifari-siyar10/tabuk'],
+      },
+      claims: ['abu-dharr-al-ghifari-siyar10/tabuk'],
+    },
+    {
       person: 'abbad-ibn-bishr',
       isMuslim: true,
       summary: {
