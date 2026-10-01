@@ -37,11 +37,14 @@ him at Hunayn, and received the Prophet's direct testimony of Paradise
 ## New values authored
 
 - kunya: أبو سفيان (`abu-sufyan-ibn-al-harith-siyar32/kunya`)
+- fullName, competing report DISPUTED: his name is his kunya, and al-Mughira is
+  their brother (`abu-sufyan-ibn-al-harith-siyar32/full-name-alt`)
 - virtues: the Prophet's love and testimony of Paradise, the Hamza remark, being
   counted among those who resembled the Prophet, "سيد فتيان أهل الجنة"
   (`abu-sufyan-ibn-al-harith-siyar32/virtues`)
 - deathYearHijri: 20, confidence LIKELY — the entry hedges with "يُقَالُ"
   (`abu-sufyan-ibn-al-harith-siyar32/death-year`)
+- placeOfDeathArabic: المدينة (`abu-sufyan-ibn-al-harith-siyar32/death-place`)
 - PATERNAL_COUSIN → prophet-muhammad (`abu-sufyan-ibn-al-harith-siyar32/cousin-of-prophet`)
 - MILK_BROTHER → prophet-muhammad, nursed by the same حليمة
   (`abu-sufyan-ibn-al-harith-siyar32/milk-brother`)
@@ -70,8 +73,14 @@ him at Hunayn, and received the Prophet's direct testimony of Paradise
 - The two death reports (haircut wound after Hajj, four months after نوفل; and
   "سنة عشرين") are not modeled as competing claims: they agree with each other and
   with نوفل's own already-cited death year, so a single `deathYearHijri` claim is
-  authored from the explicit year statement, and the haircut-wound account stays
-  in the source text unclaimed since the model holds no cause-of-death field.
+  authored from the explicit year statement. The haircut-wound account stays in the
+  source text unclaimed since the model holds no cause-of-death field; the place it
+  does hold is Medina, named on both pages, and `placeOfDeathArabic` takes it
+  (`abu-sufyan-ibn-al-harith-siyar32/death-place`).
+- "وَقَالَ طَائِفَةٌ: اسْمُهُ كُنْيَتُهُ، وَإِنَّمَا المُغِيْرَةُ أَخُوْهُم" (`4/203-p7`)
+  reports his name as his kunya, with al-Mughira a brother rather than this man.
+  The model holds `fullName`, so the report is kept as its own DISPUTED claim
+  (`abu-sufyan-ibn-al-harith-siyar32/full-name-alt`) and does not take the field.
 - "وَقَدْ رَوَى عَنْهُ وَلَدُهُ عَبْدُ المَلِكِ" names a son, عبد الملك, who is not
   a catalog subject and gets no relation — the checklist's seven content items
   do not include a subject's own children.
@@ -80,5 +89,6 @@ him at Hunayn, and received the Prophet's direct testimony of Paradise
 
 ## Review
 
-Nothing is reviewed. All twelve claims are Not reviewed, and the batch carries no
-approval block.
+Nothing is reviewed. All fourteen claims are Not reviewed. The batch's approval
+block predates the two claims added here and no longer names this revision, so it
+is stale and the batch needs approving again before it can be imported.
