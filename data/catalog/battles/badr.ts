@@ -424,6 +424,16 @@ const badr = {
       },
       claims: ['at-tufayl-ibn-amr-ad-dawsi-siyar75/badr-absence'],
     },
+    {
+      person: 'suhaib-ibn-sinan',
+      isMuslim: true,
+      summary: {
+        value:
+          'كَانَ مِنْ كِبَارِ السَّابِقِيْنَ البَدْرِيِّيْنَ؛ ذَكَرَهُ عُرْوَةُ وَمُوْسَى بنُ عُقْبَةَ وَغَيْرُهُمَا فِيْمَنْ شَهِدَ بَدْراً.',
+        claims: ['suhaib-ibn-sinan-siyar4/badr'],
+      },
+      claims: ['suhaib-ibn-sinan-siyar4/badr'],
+    },
   ],
 } satisfies CatalogBattle;
 
