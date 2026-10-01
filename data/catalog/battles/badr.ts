@@ -424,6 +424,12 @@ const badr = {
       },
       claims: ['at-tufayl-ibn-amr-ad-dawsi-siyar75/badr-absence'],
     },
+    {
+      person: 'hatib-ibn-abi-baltaah',
+      isMuslim: true,
+      summary: { value: 'شَهِدَ بَدْراً وَالمَشَاهِدَ.', claims: ['hatib-ibn-abi-baltaah-siyar9/badr'] },
+      claims: ['hatib-ibn-abi-baltaah-siyar9/badr'],
+    },
   ],
 } satisfies CatalogBattle;
 
