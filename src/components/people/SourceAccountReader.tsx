@@ -94,9 +94,6 @@ export default function SourceAccountReader({
   const contentScrollTop = useRef(0);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
-  // The panel is portaled to <body> (see below), so it falls outside
-  // menuRef's own DOM subtree -- this ref lets the outside-click check
-  // still recognize a click inside it as "inside".
   const menuPanelRef = useRef<HTMLDivElement>(null);
 
   const [shellPage, setShellPage] = useState(page);
@@ -152,12 +149,7 @@ export default function SourceAccountReader({
   );
   const sections = sectionsData?.sections ?? [];
 
-  // Reading from a source, the index's first question is the book's own
-  // table of contents, not which of its many subjects to switch to --
-  // SourceContents.tsx asks that same question outside the reader, in the
-  // book's own chapter and section terms, so the two should answer it the
-  // same way. Reading from a profile, the question stays which of the
-  // subject's books to switch to, which the account selector already does.
+  // See docs/adr/0019-a-contents-list-names-chapters-not-entries.md.
   const sourceSlug = basePath.match(/^\/api\/sources\/(.+)$/)?.[1] ?? null;
   const accountVolumes = data?.account?.volumes;
   const volumeNumber = accountVolumes?.find(
@@ -190,10 +182,6 @@ export default function SourceAccountReader({
   }, [fullscreen]);
 
   useEffect(() => {
-    // Measuring section (the toolbar plus the index/settings panel when one
-    // is open), not headerBar (the toolbar alone) -- an open panel pushes
-    // the covered area past the toolbar's own height, and the page content
-    // beneath needs padding for the whole thing or the panel covers it.
     const node = section.current;
     if (!node || typeof ResizeObserver === 'undefined') return;
     const measure = () => setHeaderHeight(node.offsetHeight);
@@ -236,14 +224,8 @@ export default function SourceAccountReader({
     if (!fullscreen) section.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, [data?.account?.id, fullscreen, pathname, router, searchParams]);
 
-  // Picking a chapter from the index names a printed page, not an account --
-  // the same volume+page deep link a book-contents link uses, resolved by
-  // the effect below exactly as it is when arrived at from outside the reader.
   const openChapter = useCallback((printedPage: string) => {
     if (!volumeNumber) return;
-    // The volume+page fetch below reads shellPage as the printed page, not
-    // an account sequence -- same as on first mount from a bare ?volume=
-    // link (see the useState initializer above), so it has to move too.
     setShellPage(Number(printedPage));
     setFetched({});
     inFlight.current.clear();
@@ -320,8 +302,6 @@ export default function SourceAccountReader({
   const current = currentPage;
   const paragraphs = pageParagraphs(current.bodyMarkdown);
   const printed = current.printedPage ?? String(current.sequence);
-  // The chapter at or just before the current printed page, so the select
-  // reflects where reading actually is, not only where a chapter opened.
   const currentPrintedPage = current.printedPage ? Number(current.printedPage) : null;
   const selectedChapterPage = currentPrintedPage !== null
     ? [...chapterRows].reverse().find((row) => Number(row.item.printedPage) <= currentPrintedPage)?.item.printedPage
@@ -357,10 +337,6 @@ export default function SourceAccountReader({
           <div className="relative" ref={menuRef}>
             <Button size="icon" onClick={() => setMenuOpen((open) => !open)} aria-label={menuOpen ? (t ? 'إغلاق القائمة' : 'Close menu') : (t ? 'فتح القائمة' : 'Open menu')} aria-pressed={menuOpen}><FontAwesomeIcon icon={menuOpen ? faXmark : faBars} /></Button>
             {menuOpen && typeof document !== 'undefined' && createPortal(
-              // Portaled to <body>: this header sits in a div the header-steadying
-              // transform moves (translate-y), which makes that div the containing
-              // block for a `fixed` descendant and clips it to the div's own small,
-              // overflow-hidden box instead of the viewport.
               <div ref={menuPanelRef} className="fixed inset-x-3 top-14 z-[70] max-h-[75dvh] overflow-y-auto rounded-lg border border-amber-400 bg-white p-3 shadow-xl dark:bg-black lg:inset-x-auto lg:start-3 lg:w-64">
                 <ul className="flex flex-col gap-1">
                   {getAllNavLinks(language).map((link) => <li key={link.href}><Link href={link.href} onClick={() => setMenuOpen(false)} className="block rounded px-2 py-2 text-sm hover:bg-amber-50 dark:hover:bg-gray-800">{link.label}</Link></li>)}

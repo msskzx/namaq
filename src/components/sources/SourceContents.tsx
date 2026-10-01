@@ -11,13 +11,7 @@ import { volumeChapterRows } from '@/lib/history/volumeChapters';
 import { fetcher } from '@/lib/swr';
 import type { AccountSummary, VolumeContents } from '@/types/provenance';
 
-/**
- * One volume's contents, read in the book's own printed-page order -- not
- * grouped by whose entry a page belongs to, since the page belongs to the
- * book first (docs/adr/0018-a-page-belongs-to-the-edition.md). This is the
- * book's own table of contents, so it names chapters and sections (see
- * volumeChapters.ts), never the person an entry happens to be about.
- */
+/** See docs/adr/0018-a-page-belongs-to-the-edition.md and docs/adr/0019-a-contents-list-names-chapters-not-entries.md. */
 function VolumeBody({ slug, volume }: { slug: string; volume: VolumeContents }) {
   const { language } = useLanguage();
   const t = language === 'ar';
@@ -54,7 +48,6 @@ function VolumeBody({ slug, volume }: { slug: string; volume: VolumeContents }) 
   );
 }
 
-/** Where a volume's read pages leave off its own declared extent -- what the shamela id check in AGENTS.md's "Content sources" catches by hand, shown here instead. */
 function unreadStretches(volume: VolumeContents): { from: number; to: number }[] {
   if (volume.firstPrintedPage === null || volume.lastPrintedPage === null) return [];
   const skipped = new Set(volume.skippedPrintedPages);
@@ -86,8 +79,6 @@ export default function SourceContents({
   const t = language === 'ar';
   const [openVolume, setOpenVolume] = useState<number | null>(null);
 
-  // A volume with nothing read from it yet still shows, so a reader can see
-  // that the work runs to twenty-eight volumes and that two are read.
   const readVolumeNumbers = new Set(
     accounts.flatMap((account) => account.volumes?.map((span) => span.number) ?? []),
   );

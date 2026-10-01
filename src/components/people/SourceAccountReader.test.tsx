@@ -188,11 +188,6 @@ describe('SourceAccountReader', () => {
     expect(nav.replaceCalls.at(-1)).toContain('fullscreen=0');
   });
 
-  // The header wrapper the header-steadying fix (750b401a) moves with a
-  // translate-y transform becomes a containing block for a `fixed`
-  // descendant, clipping it to that small, overflow-hidden box instead of
-  // the viewport -- portaling the menu panel to <body> is what keeps it
-  // visible and outside-click-closeable.
   it('opens the fullscreen menu as a portal and closes it on an outside click', async () => {
     nav.setUrl('/sources/siyar?book=account-siyar&page=1');
     render(
