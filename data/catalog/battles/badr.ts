@@ -424,6 +424,15 @@ const badr = {
       },
       claims: ['at-tufayl-ibn-amr-ad-dawsi-siyar75/badr-absence'],
     },
+    {
+      person: 'abu-talha-al-ansari',
+      isMuslim: true,
+      summary: {
+        value: 'شَهِدَ بَدْراً؛ سَقَطَ السَّيْفُ مِنْهُ يَوْمَ بَدْرٍ، لِمَا غَشِيَهُمْ مِنَ النُّعَاسِ.',
+        claims: ['abu-talha-al-ansari-siyar5/badr'],
+      },
+      claims: ['abu-talha-al-ansari-siyar5/badr'],
+    },
   ],
 } satisfies CatalogBattle;
 

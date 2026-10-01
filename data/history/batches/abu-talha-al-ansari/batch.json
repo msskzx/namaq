@@ -1,0 +1,560 @@
+{
+  "slug": "abu-talha-al-ansari",
+  "summaryFile": "summary.md",
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-talha-al-ansari",
+      "volumeNumber": 5,
+      "extractionUrl": "https://shamela.ws/book/10906/2007",
+      "accessedAt": "2026-10-01",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "27",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 2,
+          "printedPage": "28",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 3,
+          "printedPage": "29",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 4,
+          "printedPage": "30",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 5,
+          "printedPage": "31",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 6,
+          "printedPage": "32",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 7,
+          "printedPage": "33",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 8,
+          "printedPage": "34",
+          "volumeNumber": 5
+        }
+      ],
+      "notInSource": [
+        "siblings"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "abu-talha-al-ansari-siyar5/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-talha-al-ansari",
+      "assertion": "MALE — صيغ مذكر: صَاحِبُ رَسُوْلِ اللهِ … وَاسْمُهُ: زَيْدُ",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/27-p2",
+          "volume": "5",
+          "pageReference": "27",
+          "extractionUrl": "https://shamela.ws/book/10906/2007",
+          "excerptArabic": "صَاحِبُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَمِنْ بَنِي أَخْوَالِهِ، وَأَحَدُ أَعْيَانِ البَدْرِيِّيْنَ، وَأَحَدُ النُّقَبَاءِ الاثْنَيْ عَشَرَ لَيْلَةَ العَقَبَةِ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/27-p3",
+          "volume": "5",
+          "pageReference": "27",
+          "extractionUrl": "https://shamela.ws/book/10906/2007",
+          "excerptArabic": "وَاسْمُهُ: زَيْدُ بنُ سَهْلِ بنِ الأَسْوَدِ بنِ حَرَامِ بنِ عَمْرِو بنِ زَيْدِ مَنَاةَ بنِ عَدِيِّ بنِ عَمْرِو بنِ مَالِكِ بنِ النَّجَّارِ الخَزْرَجِيُّ، النَّجَّارِيُّ.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "field": "sex"
+    },
+    {
+      "key": "abu-talha-al-ansari-siyar5/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-talha-al-ansari",
+      "assertion": "زَيْدُ بنُ سَهْلِ بنِ الأَسْوَدِ بنِ حَرَامِ بنِ عَمْرِو بنِ زَيْدِ مَنَاةَ بنِ عَدِيِّ بنِ عَمْرِو بنِ مَالِكِ بنِ النَّجَّارِ الخَزْرَجِيُّ، النَّجَّارِيُّ",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/27-p3",
+          "volume": "5",
+          "pageReference": "27",
+          "extractionUrl": "https://shamela.ws/book/10906/2007",
+          "excerptArabic": "وَاسْمُهُ: زَيْدُ بنُ سَهْلِ بنِ الأَسْوَدِ بنِ حَرَامِ بنِ عَمْرِو بنِ زَيْدِ مَنَاةَ بنِ عَدِيِّ بنِ عَمْرِو بنِ مَالِكِ بنِ النَّجَّارِ الخَزْرَجِيُّ، النَّجَّارِيُّ.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "field": "fullName"
+    },
+    {
+      "key": "abu-talha-al-ansari-siyar5/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-talha-al-ansari",
+      "assertion": "أبو طلحة",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/27-p1",
+          "volume": "5",
+          "pageReference": "27",
+          "extractionUrl": "https://shamela.ws/book/10906/2007",
+          "excerptArabic": "٥ - أَبُو طَلْحَةَ الأَنْصَارِيُّ زَيْدُ بنُ سَهْلِ بنِ الأَسْوَدِ * (ع)",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "field": "kunya"
+    },
+    {
+      "key": "abu-talha-al-ansari-siyar5/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-talha-al-ansari",
+      "assertion": "أبو طلحة زيد بن سهل بن الأسود",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/27-p1",
+          "volume": "5",
+          "pageReference": "27",
+          "extractionUrl": "https://shamela.ws/book/10906/2007",
+          "excerptArabic": "٥ - أَبُو طَلْحَةَ الأَنْصَارِيُّ زَيْدُ بنُ سَهْلِ بنِ الأَسْوَدِ * (ع)",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "sahl-ibn-al-aswad"
+    },
+    {
+      "key": "abu-talha-al-ansari-siyar5/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-talha-al-ansari",
+      "assertion": "صاحب رسول الله صلى الله عليه وسلم، من بني أخواله، أحد أعيان البدريين، أحد النقباء الاثني عشر ليلة العقبة — صحابي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/27-p2",
+          "volume": "5",
+          "pageReference": "27",
+          "extractionUrl": "https://shamela.ws/book/10906/2007",
+          "excerptArabic": "صَاحِبُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَمِنْ بَنِي أَخْوَالِهِ، وَأَحَدُ أَعْيَانِ البَدْرِيِّيْنَ، وَأَحَدُ النُّقَبَاءِ الاثْنَيْ عَشَرَ لَيْلَةَ العَقَبَةِ.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "field": "titles"
+    },
+    {
+      "key": "abu-talha-al-ansari-siyar5/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-talha-al-ansari",
+      "assertion": "صوت أبي طلحة في الجيش خير من فئة؛ نفسي لنفسك الفداء ووجهي لوجهك الوقاء؛ كان يرمي بين يدي رسول الله يوم أحد ويدفع صدره بيده؛ قتل يوم حنين عشرين رجلا وأخذ أسلابهم؛ تصدق بأحب أمواله بيرحاء؛ سرد الصوم بعد النبي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/28-p1",
+          "volume": "5",
+          "pageReference": "28",
+          "extractionUrl": "https://shamela.ws/book/10906/2008",
+          "excerptArabic": "وَهُوَ الَّذِي قَالَ فِيْهِ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-: (صَوْتُ أَبِي طَلْحَةَ فِي الجَيْشِ خَيْرٌ مِنْ فِئَةٍ (١)) .",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/32-p4",
+          "volume": "5",
+          "pageReference": "32",
+          "extractionUrl": "https://shamela.ws/book/10906/2012",
+          "excerptArabic": "نَفْسِي لِنَفْسِكَ الفِدَاءُ، وَوَجْهِي لِوَجْهِكَ الوِقَاءُ (٢) .",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/31-p3",
+          "volume": "5",
+          "pageReference": "31",
+          "extractionUrl": "https://shamela.ws/book/10906/2011",
+          "excerptArabic": "أَنَّ أَبَا طَلْحَةَ كَانَ يَرْمِي بَيْنَ يَدَيْ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَوْمَ أُحُدٍ، وَكَانَ رَجُلاً رَامِياً.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/31-p5",
+          "volume": "5",
+          "pageReference": "31",
+          "extractionUrl": "https://shamela.ws/book/10906/2011",
+          "excerptArabic": "وَكَانَ يَدْفَعُ صَدْرَ رَسُوْلِ اللهِ بِيَدِهِ، وَيَقُوْلُ:",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/32-p11",
+          "volume": "5",
+          "pageReference": "32",
+          "extractionUrl": "https://shamela.ws/book/10906/2012",
+          "excerptArabic": "فَقَتَلَ أَبُو طَلْحَةَ يَوْمَئِذٍ عِشْرِيْنَ رَجُلاً، وَأَخَذَ أَسْلاَبَهُمْ (٤) .",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/33-p4",
+          "volume": "5",
+          "pageReference": "33",
+          "extractionUrl": "https://shamela.ws/book/10906/2013",
+          "excerptArabic": "يَا رَسُوْلَ اللهِ، إِنَّ أَحَبَّ أَمْوَالِي إِلَيَّ بَيْرُحَاءُ، وَإِنَّهَا صَدَقَةٌ للهِ، أَرْجُوْ بِرَّهَا وَذُخْرَهَا، فَضَعْهَا يَا رَسُوْلَ اللهِ حَيْثُ أَرَاكَ اللهُ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/27-p6",
+          "volume": "5",
+          "pageReference": "27",
+          "extractionUrl": "https://shamela.ws/book/10906/2007",
+          "excerptArabic": "وَكَانَ قَدْ سَرَدَ الصَّوْمَ بَعْدَ النَّبِيِّ (١) -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "field": "virtues"
+    },
+    {
+      "key": "abu-talha-al-ansari-siyar5/appearance",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-talha-al-ansari",
+      "assertion": "كَانَ جَلْداً، صَيِّتاً، آدَمَ، مَرْبُوْعاً، لاَ يُغَيِّرُ شَيْبَهُ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/34-p10",
+          "volume": "5",
+          "pageReference": "34",
+          "extractionUrl": "https://shamela.ws/book/10906/2014",
+          "excerptArabic": "قَالَ: وَكَانَ جَلْداً، صَيِّتاً، آدَمَ، مَرْبُوْعاً، لاَ يُغَيِّرُ شَيْبَهُ.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "field": "appearance"
+    },
+    {
+      "key": "abu-talha-al-ansari-siyar5/wife-umm-sulaym",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-talha-al-ansari",
+      "assertion": "خطب أم سليم فأسلم وتزوجها؛ جعل إسلامه مهرها.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/29-p10",
+          "volume": "5",
+          "pageReference": "29",
+          "extractionUrl": "https://shamela.ws/book/10906/2009",
+          "excerptArabic": "فَأَسْلَمَ، وَتَزَوَّجَهَا.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/30-p8",
+          "volume": "5",
+          "pageReference": "30",
+          "extractionUrl": "https://shamela.ws/book/10906/2010",
+          "excerptArabic": "قَالَ: فَتَزَوَّجَهَا عَلَى ذَلِكَ ... ، الحَدِيْثَ بِطُوْلِهِ، وَكَيْفَ مَاتَ ابْنُهُ مِنْهَا، وَكَتَمَتْهُ وَتَصَنَّعَتْ لَهُ حَتَّى أَصَابَهَا، ثُمَّ أَخْبَرَتْهُ، وَقَالَتْ:",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "relationshipType": "HUSBAND",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "umm-sulaym-al-ghumaysa"
+    },
+    {
+      "key": "abu-talha-al-ansari-siyar5/aqaba",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-talha-al-ansari",
+      "assertion": "أحد النقباء الاثني عشر ليلة العقبة؛ ممن شهد العقبة وبدرا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/27-p2",
+          "volume": "5",
+          "pageReference": "27",
+          "extractionUrl": "https://shamela.ws/book/10906/2007",
+          "excerptArabic": "صَاحِبُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَمِنْ بَنِي أَخْوَالِهِ، وَأَحَدُ أَعْيَانِ البَدْرِيِّيْنَ، وَأَحَدُ النُّقَبَاءِ الاثْنَيْ عَشَرَ لَيْلَةَ العَقَبَةِ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/28-p9",
+          "volume": "5",
+          "pageReference": "28",
+          "extractionUrl": "https://shamela.ws/book/10906/2008",
+          "excerptArabic": "أَنَّ أَبَا طَلْحَةَ مِمَّنْ شَهِدَ العَقَبَةَ وَبَدْراً.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "second-pledge-of-aqaba"
+    },
+    {
+      "key": "abu-talha-al-ansari-siyar5/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-talha-al-ansari",
+      "assertion": "شهد بدرا؛ سقط السيف منه يوم بدر لما غشيهم من النعاس.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/28-p9",
+          "volume": "5",
+          "pageReference": "28",
+          "extractionUrl": "https://shamela.ws/book/10906/2008",
+          "excerptArabic": "أَنَّ أَبَا طَلْحَةَ مِمَّنْ شَهِدَ العَقَبَةَ وَبَدْراً.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/30-p11",
+          "volume": "5",
+          "pageReference": "30",
+          "extractionUrl": "https://shamela.ws/book/10906/2010",
+          "excerptArabic": "قَالَ أَبُو طَلْحَةَ: لَقَدْ سَقَطَ السَّيْفُ مِنِّي يَوْمَ بَدْرٍ، لِمَا غَشِيَنَا مِنَ النُّعَاسِ (٢) .",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr"
+    },
+    {
+      "key": "abu-talha-al-ansari-siyar5/uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-talha-al-ansari",
+      "assertion": "كان يرمي بين يدي رسول الله يوم أحد؛ لما انهزم ناس ثبت مجوبا عليه بحجفة وكسر يومئذ قوسين أو ثلاثة؛ قال: نحري دون نحرك.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/31-p3",
+          "volume": "5",
+          "pageReference": "31",
+          "extractionUrl": "https://shamela.ws/book/10906/2011",
+          "excerptArabic": "أَنَّ أَبَا طَلْحَةَ كَانَ يَرْمِي بَيْنَ يَدَيْ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَوْمَ أُحُدٍ، وَكَانَ رَجُلاً رَامِياً.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/31-p8",
+          "volume": "5",
+          "pageReference": "31",
+          "extractionUrl": "https://shamela.ws/book/10906/2011",
+          "excerptArabic": "لَمَّا كَانَ يَوْمُ أُحُدٍ، انْهَزَمَ نَاسٌ عَنْ رَسُوْلِ اللهِ، وَأَبُو طَلْحَةَ بَيْنَ يَدَيْهِ مُجَوِّباً عَلَيْهِ بِحَجْفَةٍ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/31-p9",
+          "volume": "5",
+          "pageReference": "31",
+          "extractionUrl": "https://shamela.ws/book/10906/2011",
+          "excerptArabic": "وَكَانَ رَامِياً شَدِيْدَ النَّزْعِ، كَسَرَ يَوْمَئِذٍ قَوْسَيْنِ أَوْ ثَلاَثَةً.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/31-p11",
+          "volume": "5",
+          "pageReference": "31",
+          "extractionUrl": "https://shamela.ws/book/10906/2011",
+          "excerptArabic": "ثُمَّ يُشْرِفُ إِلَى القَوْمِ، فَيَقُوْلُ أَبُو طَلْحَةَ: يَا نَبِيَّ اللهِ، بِأَبِي أَنْتَ، لاَ تُشْرِفْ، لاَ يُصِيْبُكَ سَهْمٌ، نَحْرِي دُوْنَ نَحْرِكَ.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud"
+    },
+    {
+      "key": "abu-talha-al-ansari-siyar5/hunayn",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-talha-al-ansari",
+      "assertion": "قال رسول الله يوم حنين: من قتل قتيلا فله سلبه؛ فقتل أبو طلحة يومئذ عشرين رجلا وأخذ أسلابهم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/32-p10",
+          "volume": "5",
+          "pageReference": "32",
+          "extractionUrl": "https://shamela.ws/book/10906/2012",
+          "excerptArabic": "أَنَّ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَالَ يَوْمَ حُنَيْنٍ: (مَنْ قَتَلَ قَتِيْلاً فَلَهُ سَلَبُهُ) .",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/32-p11",
+          "volume": "5",
+          "pageReference": "32",
+          "extractionUrl": "https://shamela.ws/book/10906/2012",
+          "excerptArabic": "فَقَتَلَ أَبُو طَلْحَةَ يَوْمَئِذٍ عِشْرِيْنَ رَجُلاً، وَأَخَذَ أَسْلاَبَهُمْ (٤) .",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "hunayn"
+    },
+    {
+      "key": "abu-talha-al-ansari-siyar5/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-talha-al-ansari",
+      "assertion": "مَاتَ سَنَةَ أَرْبَعٍ وَثَلاَثِيْنَ؛ مات بالمدينة وصلى عليه عثمان.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/34-p7",
+          "volume": "5",
+          "pageReference": "34",
+          "extractionUrl": "https://shamela.ws/book/10906/2014",
+          "excerptArabic": "مَاتَ: سَنَةَ أَرْبَعٍ وَثَلاَثِيْنَ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/28-p4",
+          "volume": "5",
+          "pageReference": "28",
+          "extractionUrl": "https://shamela.ws/book/10906/2008",
+          "excerptArabic": "وَالأَشْهَرُ: أَنَّهُ مَاتَ بِالمَدِيْنَةِ، وَصَلَّى عَلَيْهِ عُثْمَانُ فِي سَنَةِ أَرْبَعٍ وَثَلاَثِيْنَ -رَضِيَ اللهُ عَنْهُ-.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "field": "deathYearHijri"
+    },
+    {
+      "key": "abu-talha-al-ansari-siyar5/death-year-khalifah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-talha-al-ansari",
+      "assertion": "وقال خليفة وحده: سنة اثنتين وثلاثين.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/34-p8",
+          "volume": "5",
+          "pageReference": "34",
+          "extractionUrl": "https://shamela.ws/book/10906/2014",
+          "excerptArabic": "وَقَالَ خَلِيْفَةُ وَحْدَهُ: سَنَةَ اثْنَتَيْنِ وَثَلاَثِيْنَ.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "field": "deathYearHijri",
+      "disputed": true
+    },
+    {
+      "key": "abu-talha-al-ansari-siyar5/death-year-51",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-talha-al-ansari",
+      "assertion": "وقيل: مات سنة إحدى وخمسين.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/34-p12",
+          "volume": "5",
+          "pageReference": "34",
+          "extractionUrl": "https://shamela.ws/book/10906/2014",
+          "excerptArabic": "وَقِيْلَ: مَاتَ سَنَةَ إِحْدَى وَخَمْسِيْنَ.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "field": "deathYearHijri",
+      "disputed": true
+    },
+    {
+      "key": "abu-talha-al-ansari-siyar5/death-place",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-talha-al-ansari",
+      "assertion": "مَاتَ بِالمَدِيْنَةِ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/28-p4",
+          "volume": "5",
+          "pageReference": "28",
+          "extractionUrl": "https://shamela.ws/book/10906/2008",
+          "excerptArabic": "وَالأَشْهَرُ: أَنَّهُ مَاتَ بِالمَدِيْنَةِ، وَصَلَّى عَلَيْهِ عُثْمَانُ فِي سَنَةِ أَرْبَعٍ وَثَلاَثِيْنَ -رَضِيَ اللهُ عَنْهُ-.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "field": "placeOfDeathArabic"
+    },
+    {
+      "key": "abu-talha-al-ansari-siyar5/death-place-sea",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-talha-al-ansari",
+      "assertion": "قيل: إنه غزا بحر الروم فتوفي في السفينة؛ غزا البحر فمات فلم يجدوا له جزيرة يدفنونه فيها إلا بعد سبعة أيام فلم يتغير.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/28-p3",
+          "volume": "5",
+          "pageReference": "28",
+          "extractionUrl": "https://shamela.ws/book/10906/2008",
+          "excerptArabic": "قِيْلَ: إِنَّهُ غَزَا بَحْرَ الرُّوْمِ، فَتُوُفِّيَ فِي السَّفِيْنَةِ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/34-p6",
+          "volume": "5",
+          "pageReference": "34",
+          "extractionUrl": "https://shamela.ws/book/10906/2014",
+          "excerptArabic": "قَالَ: فَغَزَا البَحْرَ، فَمَاتَ، فَلَمْ يَجِدُوا لَهُ جَزِيْرَةً يَدْفِنُوْنَهُ فِيْهَا إِلاَّ بَعْدَ سَبْعَةِ أَيَّامٍ، فَلَمْ يَتَغَيَّرْ (٢) .",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "field": "placeOfDeathArabic",
+      "disputed": true
+    }
+  ]
+}
