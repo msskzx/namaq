@@ -37,8 +37,16 @@ const fathMakkah = {
       },
       claims: ['suhail-ibn-amr-siyar25/fath-makkah'],
     },
-    // Carried from the old seed when he left it; no batch places him here yet.
-    { person: 'al-abbas-ibn-abd-al-muttalib', isMuslim: true, claims: legacyUnreviewed },
+    {
+      person: 'al-abbas-ibn-abd-al-muttalib',
+      isMuslim: true,
+      summary: {
+        value:
+          'كَانَ قَدْ قَدِمَ إِلَى النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَبْلَ الفَتْحِ؛ أَلاَ تَرَاهُ أَجَارَ أَبَا سُفْيَانَ بنَ حَرْبٍ. ثُمَّ خَرَجَ مَعَهُ إِلَى فَتْحِ مَكَّةَ.',
+        claims: ['al-abbas-ibn-abd-al-muttalib-siyar11/fath-makkah'],
+      },
+      claims: ['al-abbas-ibn-abd-al-muttalib-siyar11/fath-makkah'],
+    },
     {
       person: 'rabiah-ibn-al-harith',
       isMuslim: true,

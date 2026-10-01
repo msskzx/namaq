@@ -138,7 +138,7 @@ that.
 - [x] الأشعث بن قيس (`al-ashath-ibn-qais`)
 - [x] حاطب بن أبي بلتعة (`hatib-ibn-abi-baltaah`)
 - [x] أبو ذر (`abu-dharr-al-ghifari`)
-- [ ] العباس
+- [x] العباس (`al-abbas-ibn-abd-al-muttalib`)
 - [x] عمير بن سعد الأنصاري (`umayr-ibn-saad-al-ansari`)
 - [x] أبو سفيان (`abu-sufyan-ibn-harb`)
 - [x] الحكم بن أبي العاص (`al-hakam-ibn-abi-al-as`, PR #186)

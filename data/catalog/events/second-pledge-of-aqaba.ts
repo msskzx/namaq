@@ -24,6 +24,12 @@ const secondPledgeOfAqaba = {
   },
   people: [
     { person: 'prophet-muhammad', claims: ['sira/aqaba-second'] },
+    // With his nephew at the pledge, holding his hand to confirm it for him
+    // (see data/history/batches/al-abbas-ibn-abd-al-muttalib).
+    {
+      person: 'al-abbas-ibn-abd-al-muttalib',
+      claims: ['al-abbas-ibn-abd-al-muttalib-siyar11/second-aqaba'],
+    },
     // One of the twelve naqibs of the pledge night (see data/history/batches/abu-talha-al-ansari).
     {
       person: 'abu-talha-al-ansari',

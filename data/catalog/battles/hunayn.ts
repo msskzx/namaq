@@ -21,7 +21,16 @@ const hunayn = {
     { person: 'ali-ibn-abi-talib', isMuslim: true, claims: legacyUnreviewed },
     { person: 'prophet-muhammad', isMuslim: true, claims: ['prophet/hunayn'] },
     { person: 'umar-ibn-al-khattab', isMuslim: true, claims: legacyUnreviewed },
-    { person: 'al-abbas-ibn-abd-al-muttalib', isMuslim: true, claims: legacyUnreviewed },
+    {
+      person: 'al-abbas-ibn-abd-al-muttalib',
+      isMuslim: true,
+      summary: {
+        value:
+          'كَانَ يَوْمَ حُنِيْنٍ، وَقْتَ الهَزِيْمَةِ، آخِذاً بِلِجَامِ بَغْلَةِ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَثَبَتَ مَعَهُ حَتَّى نَزَلَ النَّصْرُ. وَهُوَ الَّذِي أَمَرَهُ النَّبِيُّ أَن يَهْتِفَ يَوْمَ حُنَيْنٍ: يَا أَصْحَابَ الشَّجَرَةِ.',
+        claims: ['al-abbas-ibn-abd-al-muttalib-siyar11/hunayn'],
+      },
+      claims: ['al-abbas-ibn-abd-al-muttalib-siyar11/hunayn'],
+    },
     {
       person: 'nawfal-ibn-al-harith',
       isMuslim: true,
