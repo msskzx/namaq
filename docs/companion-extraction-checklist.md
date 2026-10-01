@@ -135,7 +135,7 @@ that.
 - [x] أبو طلحة الأنصاري (`abu-talha-al-ansari`)
 - [x] أبو بردة بن نيار (data/history/batches/abu-bardah-ibn-niyar, PR #198)
 - [ ] جبر بن عتيك
-- [ ] الأشعث بن قيس
+- [x] الأشعث بن قيس (`al-ashath-ibn-qais`)
 - [ ] حاطب بن أبي بلتعة
 - [ ] أبو ذر
 - [ ] العباس
