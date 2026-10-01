@@ -20,8 +20,8 @@ const jabrIbnAtik = {
       claims: ['jabr-ibn-atik-siyar/virtues'],
     },
     deathYearHijri: {
-      value: '61',
-      claims: ['jabr-ibn-atik-siyar/death-year-61', 'jabr-ibn-atik-siyar/death-year-42'],
+      value: '42',
+      claims: ['jabr-ibn-atik-siyar/death-year-42'],
     },
   },
   titles: [
