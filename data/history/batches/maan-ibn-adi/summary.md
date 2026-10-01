@@ -126,5 +126,11 @@ about, one of them on the batch's own subject.
 
 Nothing is reviewed. Every claim is `NOT_REVIEWED`: the entry is extracted and
 the claims authored, and nobody has compared them against the stored pages.
-The batch is approved for publication, which permits the import and asserts
-nothing about review.
+
+**The approval no longer covers the files.** Completing store page `v4/320`
+(#252) moved this entry from paragraphs 1-5 to 9-13 on that page, and the anchor
+corrections above changed the batch again, so the revision recorded in the approval
+block matches neither. `npm run history:validate -- data/history/batches/maan-ibn-adi`
+says so until it is approved again, and the batch cannot be imported until it is.
+This is the second such notice: an earlier change to the same page had already
+invalidated it.
