@@ -307,5 +307,10 @@
         }
       ]
     }
-  ]
+  ],
+  "approval": {
+    "revision": "9cd0f8dc897f9245",
+    "approvedAt": "2026-10-01",
+    "approvedBy": "msskzx"
+  }
 }
