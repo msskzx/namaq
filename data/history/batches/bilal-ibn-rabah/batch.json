@@ -1,0 +1,365 @@
+{
+  "slug": "bilal-ibn-rabah",
+  "summaryFile": "summary.md",
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "bilal-ibn-rabah",
+      "volumeNumber": 4,
+      "extractionUrl": "https://shamela.ws/book/10906/1773",
+      "accessedAt": "2026-10-01",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "347",
+          "volumeNumber": 4
+        },
+        {
+          "sequence": 2,
+          "printedPage": "348",
+          "volumeNumber": 4
+        },
+        {
+          "sequence": 3,
+          "printedPage": "349",
+          "volumeNumber": 4
+        },
+        {
+          "sequence": 4,
+          "printedPage": "350",
+          "volumeNumber": 4
+        },
+        {
+          "sequence": 5,
+          "printedPage": "351",
+          "volumeNumber": 4
+        },
+        {
+          "sequence": 6,
+          "printedPage": "352",
+          "volumeNumber": 4
+        },
+        {
+          "sequence": 7,
+          "printedPage": "353",
+          "volumeNumber": 4
+        },
+        {
+          "sequence": 8,
+          "printedPage": "354",
+          "volumeNumber": 4
+        },
+        {
+          "sequence": 9,
+          "printedPage": "355",
+          "volumeNumber": 4
+        },
+        {
+          "sequence": 10,
+          "printedPage": "356",
+          "volumeNumber": 4
+        },
+        {
+          "sequence": 11,
+          "printedPage": "357",
+          "volumeNumber": 4
+        },
+        {
+          "sequence": 12,
+          "printedPage": "358",
+          "volumeNumber": 4
+        },
+        {
+          "sequence": 13,
+          "printedPage": "359",
+          "volumeNumber": 4
+        },
+        {
+          "sequence": 14,
+          "printedPage": "360",
+          "volumeNumber": 4
+        }
+      ],
+      "notInSource": [
+        "nasab",
+        "wives",
+        "siblings"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "bilal-ibn-rabah-siyar76/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "bilal-ibn-rabah",
+      "field": "fullName",
+      "assertion": "بلال بن رباح",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/347-p2",
+          "volume": "4",
+          "pageReference": "347",
+          "extractionUrl": "https://shamela.ws/book/10906/1773",
+          "excerptArabic": "بِلاَلُ بنُ رَبَاحٍ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "bilal-ibn-rabah-siyar76/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "bilal-ibn-rabah",
+      "field": "sex",
+      "assertion": "MALE — صيغ مذكر: مُؤَذِّنُ رَسُوْلِ اللهِ … كَانَ سَيِّداً.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/347-p5",
+          "volume": "4",
+          "pageReference": "347",
+          "extractionUrl": "https://shamela.ws/book/10906/1773",
+          "excerptArabic": "وَهُوَ مُؤَذِّنُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "bilal-ibn-rabah-siyar76/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "bilal-ibn-rabah",
+      "field": "kunya",
+      "assertion": "أبو عبد الكريم، وأبو عبد الله، وأبو عمرو",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/350-p4",
+          "volume": "4",
+          "pageReference": "350",
+          "extractionUrl": "https://shamela.ws/book/10906/1776",
+          "excerptArabic": "وَفِي كُنْيَةِ بِلاَلٍ ثَلاَثَةُ أَقْوَالٍ: أَبُو عَبْدِ الكَرِيْمِ، وَأَبُو عَبْدِ اللهِ، وَأَبُو عَمْرٍو",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "bilal-ibn-rabah-siyar76/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "bilal-ibn-rabah",
+      "field": "titles",
+      "assertion": "من السابقين الأولين — صحابي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/347-p6",
+          "volume": "4",
+          "pageReference": "347",
+          "extractionUrl": "https://shamela.ws/book/10906/1773",
+          "excerptArabic": "مِنَ السَّابِقِيْنَ الأَوَّلِيْنَ الَّذِيْنَ عُذِّبُوا فِي اللهِ، شَهِدَ بَدْراً",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "bilal-ibn-rabah-siyar76/appearance",
+      "subjectKind": "PERSON",
+      "subjectSlug": "bilal-ibn-rabah",
+      "field": "appearance",
+      "assertion": "رجل آدم شديد الأدمة، نحيف طوال أجنأ، له شعر كثير وخفيف العارضين، به شمط كثير، وكان لا يغير.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/359-p6",
+          "volume": "4",
+          "pageReference": "359",
+          "extractionUrl": "https://shamela.ws/book/10906/1785",
+          "excerptArabic": "رَجُلاً آدَمَ، شَدِيْدَ الأُدْمَةِ، نَحِيْفاً، طُوَالاً، أَجْنَأَ، لَهُ شَعْرٌ كَثِيْرٌ، وَخَفِيْفُ العَارِضَيْنِ، بِهِ شَمَطٌ كَثِيْرٌ، وَكَانَ لاَ يُغَيِّرُ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "bilal-ibn-rabah-siyar76/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "bilal-ibn-rabah",
+      "field": "virtues",
+      "assertion": "مُؤَذِّنُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-؛ أَذَّنَ فَوْقَ الكَعْبَةِ وَقْتَ الفَتْحِ، وَهُوَ أَوَّلُ مَنْ أَذَّنَ. مِنَ السَّابِقِيْنَ الأَوَّلِيْنَ الَّذِيْنَ عُذِّبُوا فِي اللهِ، وَأَوَّلُ مَنْ أَظْهَرَ إِسْلاَمَهُ مَعَ السَّبْعَةِ. سَمِعَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- خَشْخَشَةَ نَعْلَيْهِ فِي الجَنَّةِ، وَشَهِدَ لَهُ عَلَى التَّعْيِيْنِ بِالجَنَّةِ. اشْتَرَاهُ أَبُو بَكْرٍ فَأَعْتَقَهُ (أَبُو بَكْرٍ سَيِّدُنَا أَعْتَقَ بِلاَلاً سَيِّدَنَا). بِلاَلٌ سَابِقُ الحَبَشَةِ، سَيِّدُ المُؤَذِّنِيْنَ يَوْمَ القِيَامَةِ. جَاءَ عَنْهُ أَرْبَعَةٌ وَأَرْبَعُوْنَ حَدِيْثاً، مِنْهَا فِي الصَّحِيْحَيْنِ أَرْبَعَةٌ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/347-p5",
+          "volume": "4",
+          "pageReference": "347",
+          "extractionUrl": "https://shamela.ws/book/10906/1773",
+          "excerptArabic": "وَهُوَ مُؤَذِّنُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/347-p6",
+          "volume": "4",
+          "pageReference": "347",
+          "extractionUrl": "https://shamela.ws/book/10906/1773",
+          "excerptArabic": "مِنَ السَّابِقِيْنَ الأَوَّلِيْنَ الَّذِيْنَ عُذِّبُوا فِي اللهِ … وَشَهِدَ لَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- عَلَى التَّعْيِيْنِ بِالجَنَّةِ، وَحَدِيْثُهُ فِي الكُتُبِ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/347-p14",
+          "volume": "4",
+          "pageReference": "347",
+          "extractionUrl": "https://shamela.ws/book/10906/1773",
+          "excerptArabic": "أَوَّلُ مَنْ أَظْهَرَ إِسْلاَمَهُ سَبْعَةٌ … وَبِلاَلٌ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/348-p7",
+          "volume": "4",
+          "pageReference": "348",
+          "extractionUrl": "https://shamela.ws/book/10906/1774",
+          "excerptArabic": "فَإِنِّي قَدْ سَمِعْتُ اللَّيْلَةَ خشفَةَ نَعْلَيْكَ بَيْنَ يَدَيَّ فِي الجَنَّةِ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/349-p8",
+          "volume": "4",
+          "pageReference": "349",
+          "extractionUrl": "https://shamela.ws/book/10906/1775",
+          "excerptArabic": "أَوَّلُ مَنْ أَذَّنَ بِلاَلٌ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/349-p10",
+          "volume": "4",
+          "pageReference": "349",
+          "extractionUrl": "https://shamela.ws/book/10906/1775",
+          "excerptArabic": "أَبُو بَكْرٍ سَيِّدُنَا، أَعْتَقَ بِلاَلاً سَيِّدَنَا",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/354-p2",
+          "volume": "4",
+          "pageReference": "354",
+          "extractionUrl": "https://shamela.ws/book/10906/1780",
+          "excerptArabic": "بِلاَلٌ سَابِقُ الحَبَشَةِ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/355-p4",
+          "volume": "4",
+          "pageReference": "355",
+          "extractionUrl": "https://shamela.ws/book/10906/1781",
+          "excerptArabic": "نِعْمَ المَرْءُ بِلاَلٌ، سَيِّدُ المُؤَذِّنِيْنَ يَوْمَ القِيَامَةِ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/356-p3",
+          "volume": "4",
+          "pageReference": "356",
+          "extractionUrl": "https://shamela.ws/book/10906/1782",
+          "excerptArabic": "أَمَرَ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِلاَلاً وَقْتَ الفَتْحِ، فَأَذَّنَ فَوْقَ الكَعْبَةِ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/360-p8",
+          "volume": "4",
+          "pageReference": "360",
+          "extractionUrl": "https://shamela.ws/book/10906/1786",
+          "excerptArabic": "جَاءَ عَنْهُ: أَرْبَعَةٌ وَأَرْبَعُوْنَ حَدِيْثاً، مِنْهَا فِي الصَّحِيْحَيْنِ: أَرْبَعَةٌ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "bilal-ibn-rabah-siyar76/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "bilal-ibn-rabah",
+      "assertion": "شهد بدراً.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/347-p6",
+          "volume": "4",
+          "pageReference": "347",
+          "extractionUrl": "https://shamela.ws/book/10906/1773",
+          "excerptArabic": "شَهِدَ بَدْراً",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "bilal-ibn-rabah-siyar76/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "bilal-ibn-rabah",
+      "field": "deathYearHijri",
+      "assertion": "مات سنة عشرين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/347-p12",
+          "volume": "4",
+          "pageReference": "347",
+          "extractionUrl": "https://shamela.ws/book/10906/1773",
+          "excerptArabic": "وَفِي وَفَاتِهِ أَقْوَالٌ، أَحَدُهَا: بِدَارَيَّا، فِي سَنَةِ عِشْرِيْنَ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/359-p13",
+          "volume": "4",
+          "pageReference": "359",
+          "extractionUrl": "https://shamela.ws/book/10906/1785",
+          "excerptArabic": "تُوُفِّيَ بِلاَلٌ سَنَةَ عِشْرِيْنَ بِدِمَشْقَ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "bilal-ibn-rabah-siyar76/death-year-alt",
+      "subjectKind": "PERSON",
+      "subjectSlug": "bilal-ibn-rabah",
+      "field": "deathYearHijri",
+      "assertion": "وقيل: مات سنة إحدى وعشرين.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/359-p17",
+          "volume": "4",
+          "pageReference": "359–360",
+          "extractionUrl": "https://shamela.ws/book/10906/1785",
+          "excerptArabic": "وَقِيْلَ: مَاتَ سَنَةَ … إِحْدَى وَعِشْرِيْنَ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    }
+  ]
+}

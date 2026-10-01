@@ -401,6 +401,12 @@ const badr = {
       },
       claims: ['saad-ibn-ubadah-siyar55/badr-absent'],
     },
+    {
+      person: 'bilal-ibn-rabah',
+      isMuslim: true,
+      summary: { value: 'شَهِدَ بَدْراً.', claims: ['bilal-ibn-rabah-siyar76/badr'] },
+      claims: ['bilal-ibn-rabah-siyar76/badr'],
+    },
   ],
 } satisfies CatalogBattle;
 
