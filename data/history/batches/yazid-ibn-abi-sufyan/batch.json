@@ -1,0 +1,345 @@
+{
+  "slug": "yazid-ibn-abi-sufyan",
+  "summaryFile": "summary.md",
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "yazid-ibn-abi-sufyan",
+      "volumeNumber": 4,
+      "extractionUrl": "https://shamela.ws/book/10906/1754",
+      "accessedAt": "2026-10-01",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "328",
+          "volumeNumber": 4
+        },
+        {
+          "sequence": 2,
+          "printedPage": "329",
+          "volumeNumber": 4
+        },
+        {
+          "sequence": 3,
+          "printedPage": "330",
+          "volumeNumber": 4
+        }
+      ],
+      "notInSource": [
+        "kunya",
+        "appearance",
+        "wives"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "yazid-ibn-abi-sufyan-siyar68/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "yazid-ibn-abi-sufyan",
+      "assertion": "يزيد بن أبي سفيان بن حرب بن أمية بن عبد شمس بن عبد مناف بن قصي الأموي",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "fullName",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/328-p6",
+          "volume": "4",
+          "pageReference": "328",
+          "extractionUrl": "https://shamela.ws/book/10906/1754",
+          "excerptArabic": "يَزِيْدُ بنُ أَبِي سُفْيَانَ بنِ حَرْبِ بنِ أُمَيَّةَ الأُمَوِيُّ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/328-p7",
+          "volume": "4",
+          "pageReference": "328",
+          "extractionUrl": "https://shamela.ws/book/10906/1754",
+          "excerptArabic": "ابْنِ عَبْدِ شَمْسٍ بنِ عَبْدِ مَنَافٍ بنِ قُصَيِّ الأُمَوِيُّ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "yazid-ibn-abi-sufyan-siyar68/tribal-affiliation",
+      "subjectKind": "PERSON",
+      "subjectSlug": "yazid-ibn-abi-sufyan",
+      "assertion": "الأموي",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "tribalAffiliation",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/328-p6",
+          "volume": "4",
+          "pageReference": "328",
+          "extractionUrl": "https://shamela.ws/book/10906/1754",
+          "excerptArabic": "يَزِيْدُ بنُ أَبِي سُفْيَانَ بنِ حَرْبِ بنِ أُمَيَّةَ الأُمَوِيُّ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/328-p7",
+          "volume": "4",
+          "pageReference": "328",
+          "extractionUrl": "https://shamela.ws/book/10906/1754",
+          "excerptArabic": "ابْنِ عَبْدِ شَمْسٍ بنِ عَبْدِ مَنَافٍ بنِ قُصَيِّ الأُمَوِيُّ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "yazid-ibn-abi-sufyan-siyar68/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "yazid-ibn-abi-sufyan",
+      "assertion": "أبوه أبو سفيان بن حرب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "abu-sufyan-ibn-harb",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/328-p6",
+          "volume": "4",
+          "pageReference": "328",
+          "extractionUrl": "https://shamela.ws/book/10906/1754",
+          "excerptArabic": "يَزِيْدُ بنُ أَبِي سُفْيَانَ بنِ حَرْبِ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "yazid-ibn-abi-sufyan-siyar68/half-brother",
+      "subjectKind": "PERSON",
+      "subjectSlug": "yazid-ibn-abi-sufyan",
+      "assertion": "أخو معاوية من أبيه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "HALF_BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "muawiyah-ibn-abi-sufyan",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/329-p1",
+          "volume": "4",
+          "pageReference": "329",
+          "extractionUrl": "https://shamela.ws/book/10906/1755",
+          "excerptArabic": "أَخُو مُعَاوِيَةَ مِنْ أَبِيْهِ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "yazid-ibn-abi-sufyan-siyar68/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "yazid-ibn-abi-sufyan",
+      "assertion": "صحابي — أسلم يوم الفتح وحسن إسلامه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "titles",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/329-p3",
+          "volume": "4",
+          "pageReference": "329",
+          "extractionUrl": "https://shamela.ws/book/10906/1755",
+          "excerptArabic": "أَسْلَمَ يَوْمَ الفَتْحِ، وَحَسُنَ إِسْلاَمُهُ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "yazid-ibn-abi-sufyan-siyar68/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "yazid-ibn-abi-sufyan",
+      "assertion": "يقال له يزيد الخير؛ كان من العقلاء الألباء والشجعان المذكورين؛ شهد حنيناً، وقيل: إن النبي أعطاه من غنائم حنين مائة من الإبل وأربعين أوقية فضة؛ كان أحد الأمراء الأربعة الذين ندبهم أبو بكر لغزو الروم؛ وعلى يده كان فتح قيسارية؛ كان على ربع يوم اليرموك؛ وشهد له أبو ذر بإرجاع الجارية إلى صاحبها.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/329-p1",
+          "volume": "4",
+          "pageReference": "329",
+          "extractionUrl": "https://shamela.ws/book/10906/1755",
+          "excerptArabic": "وَيُقَالُ لَهُ: يَزِيْدُ الخَيْرُ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/329-p3",
+          "volume": "4",
+          "pageReference": "329",
+          "extractionUrl": "https://shamela.ws/book/10906/1755",
+          "excerptArabic": "كَانَ مِنَ العُقَلاَءِ الأَلِبَّاءِ، وَالشُّجْعَانِ المَذْكُوْرِيْنَ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/329-p4",
+          "volume": "4",
+          "pageReference": "329",
+          "extractionUrl": "https://shamela.ws/book/10906/1755",
+          "excerptArabic": "فَقِيْلَ: إِنَّ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَعْطَاهُ مِنْ غَنَائِمِ حُنَيْنٍ: مَائَةً مِنَ الإِبِلِ، وَأَرْبَعِيْنَ أُوْقِيَّةً فِضَّةً",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/329-p5",
+          "volume": "4",
+          "pageReference": "329",
+          "extractionUrl": "https://shamela.ws/book/10906/1755",
+          "excerptArabic": "وَهُوَ أَحَدُ الأُمَرَاءِ الأَرْبَعَةِ الَّذِيْنَ نَدَبَهُم أَبُو بَكْرٍ لِغَزْوِ الرُّوْمِ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/329-p9",
+          "volume": "4",
+          "pageReference": "329",
+          "extractionUrl": "https://shamela.ws/book/10906/1755",
+          "excerptArabic": "وَعَلَى يَدِهِ كَانَ فَتْحُ قَيْسَارِيَّةَ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/329-p12",
+          "volume": "4",
+          "pageReference": "329",
+          "extractionUrl": "https://shamela.ws/book/10906/1755",
+          "excerptArabic": "وَقَعَتْ جَارِيَةٌ نَفِيْسَةٌ فِي سَهْمِ رَجُلٍ، فَاغْتَصَبَهَا يَزِيْدُ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/329-p13",
+          "volume": "4",
+          "pageReference": "329",
+          "extractionUrl": "https://shamela.ws/book/10906/1755",
+          "excerptArabic": "فَأَتَاهُ أَبُو ذَرٍّ، فَقَالَ: رُدَّ عَلَى الرَّجُلِ جَارِيَتَهُ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/330-p4",
+          "volume": "4",
+          "pageReference": "330",
+          "extractionUrl": "https://shamela.ws/book/10906/1756",
+          "excerptArabic": "فَرَدَّ عَلَى الرَّجُلِ جَارِيَتَهُ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/330-p6",
+          "volume": "4",
+          "pageReference": "330",
+          "extractionUrl": "https://shamela.ws/book/10906/1756",
+          "excerptArabic": "كَانَ يَزِيْدُ بنُ أَبِي سُفْيَانَ عَلَى رُبُعٍ، وَأَبُو عُبَيْدَةَ عَلَى رُبُعٍ، وَعَمْرُو بنُ العَاصِ عَلَى رُبُعٍ، وَشُرَحْبِيْلُ بنُ حَسَنَةَ عَلَى رُبُعٍ -يَعْنِي: يَوْمَ اليَرْمُوْكِ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "yazid-ibn-abi-sufyan-siyar68/mother-and-sister",
+      "subjectKind": "PERSON",
+      "subjectSlug": "yazid-ibn-abi-sufyan",
+      "assertion": "أمه زينب بنت نوفل الكنانية، وهو أخ أم المؤمنين أم حبيبة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/329-p2",
+          "volume": "4",
+          "pageReference": "329",
+          "extractionUrl": "https://shamela.ws/book/10906/1755",
+          "excerptArabic": "وَأُمُّهُ: هِيَ زَيْنَبُ بِنْتُ نَوْفَلٍ الكِنَانِيَّةُ، وَهُوَ أَخُو أُمِّ المُؤْمِنِيْنَ أُمِّ حَبِيْبَةَ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "yazid-ibn-abi-sufyan-siyar68/hunayn",
+      "subjectKind": "PERSON",
+      "subjectSlug": "yazid-ibn-abi-sufyan",
+      "assertion": "شهد حنيناً بعد إسلامه بيوم الفتح.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "hunayn",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/329-p3",
+          "volume": "4",
+          "pageReference": "329",
+          "extractionUrl": "https://shamela.ws/book/10906/1755",
+          "excerptArabic": "أَسْلَمَ يَوْمَ الفَتْحِ، وَحَسُنَ إِسْلاَمُهُ، وَشَهِدَ حُنَيْناً",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "yazid-ibn-abi-sufyan-siyar68/yarmuk",
+      "subjectKind": "PERSON",
+      "subjectSlug": "yazid-ibn-abi-sufyan",
+      "assertion": "كان على ربع يوم اليرموك، ولم يكن يومئذ عليهم أمير.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "yarmuk",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/330-p6",
+          "volume": "4",
+          "pageReference": "330",
+          "extractionUrl": "https://shamela.ws/book/10906/1756",
+          "excerptArabic": "كَانَ يَزِيْدُ بنُ أَبِي سُفْيَانَ عَلَى رُبُعٍ، وَأَبُو عُبَيْدَةَ عَلَى رُبُعٍ، وَعَمْرُو بنُ العَاصِ عَلَى رُبُعٍ، وَشُرَحْبِيْلُ بنُ حَسَنَةَ عَلَى رُبُعٍ -يَعْنِي: يَوْمَ اليَرْمُوْكِ- وَلَمْ يَكُنْ يَوْمَئِذٍ عَلَيْهِم أَمِيْرٌ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "yazid-ibn-abi-sufyan-siyar68/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "yazid-ibn-abi-sufyan",
+      "assertion": "18",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "deathYearHijri",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/330-p7",
+          "volume": "4",
+          "pageReference": "330",
+          "extractionUrl": "https://shamela.ws/book/10906/1756",
+          "excerptArabic": "تُوُفِّيَ يَزِيْدُ فِي الطَّاعُوْنِ، سَنَةَ ثَمَانِيَ عَشْرَةَ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/330-p8",
+          "volume": "4",
+          "pageReference": "330",
+          "extractionUrl": "https://shamela.ws/book/10906/1756",
+          "excerptArabic": "وَمَاتَ (٢) هَذِهِ السَّنَةَ فِي الطَّاعُوْنِ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    }
+  ]
+}
