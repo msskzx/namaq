@@ -104,7 +104,7 @@ that.
 - [ ] عبد الله بن عبد الله بن أبي
 - [x] عكرمة بن أبي جهل (`ikrimah-ibn-abi-jahl`)
 - [x] عبد الله بن عمرو بن حرام (abdullah-ibn-amr-ibn-haram, PR #194)
-- [ ] يزيد بن أبي سفيان
+- [x] يزيد بن أبي سفيان (`yazid-ibn-abi-sufyan`)
 - [x] أبو العاص بن الربيع (abu-al-as-ibn-ar-rabia, PR #195)
 - [x] زينب — entry 70 (`zaynab-bint-muhammad`)
 - [x] أمامة بنت أبي العاص (`umamah-bint-abi-al-as`, PR #197)

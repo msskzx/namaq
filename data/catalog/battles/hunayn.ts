@@ -14,6 +14,12 @@ const hunayn = {
     location: { value: 'حنين', claims: legacyUnreviewed },
   },
   participants: [
+    {
+      person: 'yazid-ibn-abi-sufyan',
+      isMuslim: true,
+      summary: { value: 'وَشَهِدَ حُنَيْناً.', claims: ['yazid-ibn-abi-sufyan-siyar68/hunayn'] },
+      claims: ['yazid-ibn-abi-sufyan-siyar68/hunayn'],
+    },
     { person: 'abu-ubaydah-ibn-al-jarrah', isMuslim: true, claims: legacyUnreviewed },
     // Carried from the old seed when these people left it; no batch places
     // them here yet.
