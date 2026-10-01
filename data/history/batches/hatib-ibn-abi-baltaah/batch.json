@@ -1,0 +1,515 @@
+{
+  "slug": "hatib-ibn-abi-baltaah",
+  "summaryFile": "summary.md",
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hatib-ibn-abi-baltaah",
+      "volumeNumber": 5,
+      "extractionUrl": "https://shamela.ws/book/10906/2023",
+      "accessedAt": "2026-10-01",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "43",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 2,
+          "printedPage": "44",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 3,
+          "printedPage": "45",
+          "volumeNumber": 5
+        }
+      ],
+      "notInSource": [
+        "wives",
+        "siblings"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "hatib-ibn-abi-baltaah-siyar9/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hatib-ibn-abi-baltaah",
+      "field": "fullName",
+      "assertion": "حاطب بن أبي بلتعة عمرو بن عمير بن سلمة اللخمي",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/43-p4",
+          "volume": "5",
+          "pageReference": "43",
+          "extractionUrl": "https://shamela.ws/book/10906/2023",
+          "excerptArabic": "حَاطِبُ بنُ أَبِي بَلْتَعَةَ عَمْرِو بنِ عُمَيْرِ بنِ سَلَمَةَ اللَّخْمِيُّ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "hatib-ibn-abi-baltaah-siyar9/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hatib-ibn-abi-baltaah",
+      "field": "sex",
+      "assertion": "MALE — صيغ مذكر: وَكَانَ تَاجِراً فِي الطَّعَامِ، لَهُ عَبِيْدٌ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/43-p8",
+          "volume": "5",
+          "pageReference": "43",
+          "extractionUrl": "https://shamela.ws/book/10906/2023",
+          "excerptArabic": "وَكَانَ تَاجِراً فِي الطَّعَامِ، لَهُ عَبِيْدٌ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "hatib-ibn-abi-baltaah-siyar9/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hatib-ibn-abi-baltaah",
+      "field": "kunya",
+      "assertion": "أبو بلتعة",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/43-p4",
+          "volume": "5",
+          "pageReference": "43",
+          "extractionUrl": "https://shamela.ws/book/10906/2023",
+          "excerptArabic": "حَاطِبُ بنُ أَبِي بَلْتَعَةَ عَمْرِو بنِ عُمَيْرِ بنِ سَلَمَةَ اللَّخْمِيُّ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "hatib-ibn-abi-baltaah-siyar9/tribal-affiliation",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hatib-ibn-abi-baltaah",
+      "field": "tribalAffiliation",
+      "assertion": "المكي، حليف بني أسد بن عبد العزى بن قصي",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/43-p5",
+          "volume": "5",
+          "pageReference": "43",
+          "extractionUrl": "https://shamela.ws/book/10906/2023",
+          "excerptArabic": "المَكِّيُّ، حَلِيْفُ بَنِي أَسَدِ بنِ عَبْدِ العُزَّى بنِ قُصَيٍّ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "hatib-ibn-abi-baltaah-siyar9/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hatib-ibn-abi-baltaah",
+      "field": "titles",
+      "assertion": "من مشاهير المهاجرين — صحابي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/43-p6",
+          "volume": "5",
+          "pageReference": "43",
+          "extractionUrl": "https://shamela.ws/book/10906/2023",
+          "excerptArabic": "مِنْ مَشَاهِيْرِ المُهَاجِرِيْنَ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "hatib-ibn-abi-baltaah-siyar9/appearance",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hatib-ibn-abi-baltaah",
+      "field": "appearance",
+      "assertion": "كان حسن الجسم، خفيف اللحية، أجنى، إلى القصر ما هو، شثن الأصابع — قاله الواقدي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/43-p10",
+          "volume": "5",
+          "pageReference": "43",
+          "extractionUrl": "https://shamela.ws/book/10906/2023",
+          "excerptArabic": "كَانَ حَسَنَ الجِسْمِ، خَفِيْفَ اللِّحْيَةِ، أَجْنَى (٣) ، إِلَى القِصَرِ مَا هُوَ، شَثْنَ الأَصَابِعِ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/43-p11",
+          "volume": "5",
+          "pageReference": "43",
+          "extractionUrl": "https://shamela.ws/book/10906/2023",
+          "excerptArabic": "قَالَهُ الوَاقِدِيُّ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "hatib-ibn-abi-baltaah-siyar9/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hatib-ibn-abi-baltaah",
+      "assertion": "حاطب بن أبي بلتعة، وهو عمرو بن عمير بن سلمة اللخمي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "amr-ibn-umayr-al-lakhmi",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/43-p4",
+          "volume": "5",
+          "pageReference": "43",
+          "extractionUrl": "https://shamela.ws/book/10906/2023",
+          "excerptArabic": "حَاطِبُ بنُ أَبِي بَلْتَعَةَ عَمْرِو بنِ عُمَيْرِ بنِ سَلَمَةَ اللَّخْمِيُّ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "hatib-ibn-abi-baltaah-siyar9/virtues-messenger",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hatib-ibn-abi-baltaah",
+      "field": "virtues",
+      "assertion": "وَكَانَ رَسُوْلَ النَّبِيِّ -صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ- إِلَى المُقَوْقسِ، صَاحِبِ مِصْرَ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/43-p7",
+          "volume": "5",
+          "pageReference": "43",
+          "extractionUrl": "https://shamela.ws/book/10906/2023",
+          "excerptArabic": "وَكَانَ رَسُوْلَ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- إِلَى المُقَوْقسِ، صَاحِبِ مِصْرَ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "hatib-ibn-abi-baltaah-siyar9/virtues-trade",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hatib-ibn-abi-baltaah",
+      "field": "virtues",
+      "assertion": "وَكَانَ تَاجِراً فِي الطَّعَامِ، لَهُ عَبِيْدٌ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/43-p8",
+          "volume": "5",
+          "pageReference": "43",
+          "extractionUrl": "https://shamela.ws/book/10906/2023",
+          "excerptArabic": "وَكَانَ تَاجِراً فِي الطَّعَامِ، لَهُ عَبِيْدٌ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "hatib-ibn-abi-baltaah-siyar9/virtues-archer",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hatib-ibn-abi-baltaah",
+      "field": "virtues",
+      "assertion": "وَكَانَ مِنَ الرُّمَاةِ المَوْصُوْفِيْنَ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/43-p9",
+          "volume": "5",
+          "pageReference": "43",
+          "extractionUrl": "https://shamela.ws/book/10906/2023",
+          "excerptArabic": "وَكَانَ مِنَ الرُّمَاةِ المَوْصُوْفِيْنَ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "hatib-ibn-abi-baltaah-siyar9/virtues-uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hatib-ibn-abi-baltaah",
+      "field": "virtues",
+      "assertion": "فَسَلَّمَ ذَلِكَ إِلَيَّ، وَدَعَا لِي، فَقَالَ: (رَضِيَ اللهُ عَنْكَ)، مَرَّتَيْنِ — وقال الذهبي عن إسناده: إِسْنَادٌ مُظْلِمٌ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/44-p9",
+          "volume": "5",
+          "pageReference": "44",
+          "extractionUrl": "https://shamela.ws/book/10906/2024",
+          "excerptArabic": "وَدَعَا لِي، فَقَالَ: (رَضِيَ اللهُ عَنْكَ) ، مَرَّتَيْنِ (١)",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/44-p10",
+          "volume": "5",
+          "pageReference": "44",
+          "extractionUrl": "https://shamela.ws/book/10906/2024",
+          "excerptArabic": "إِسْنَادٌ مُظْلِمٌ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "hatib-ibn-abi-baltaah-siyar9/virtues-fire",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hatib-ibn-abi-baltaah",
+      "field": "virtues",
+      "assertion": "شَكَا عَبْدٌ لِحَاطِبٍ حَاطِباً، فَقَالَ: يَا نَبِيَّ اللهِ، لَيَدْخُلَنَّ النَّارَ! قَالَ: كَذَبْتَ، لاَ يَدْخُلُهَا أَبَداً — وقال الذهبي عن الحديث: صَحِيْحٌ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/44-p12",
+          "volume": "5",
+          "pageReference": "44",
+          "extractionUrl": "https://shamela.ws/book/10906/2024",
+          "excerptArabic": "يَا نَبِيَّ اللهِ، لَيَدْخُلَنَّ النَّارَ!",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/44-p13",
+          "volume": "5",
+          "pageReference": "44",
+          "extractionUrl": "https://shamela.ws/book/10906/2024",
+          "excerptArabic": "كَذَبْتَ، لاَ يَدْخُلُهَا أَبَداً",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/44-p14",
+          "volume": "5",
+          "pageReference": "44",
+          "extractionUrl": "https://shamela.ws/book/10906/2024",
+          "excerptArabic": "صَحِيْحٌ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "hatib-ibn-abi-baltaah-siyar9/virtues-letter",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hatib-ibn-abi-baltaah",
+      "field": "virtues",
+      "assertion": "أَنَّ أَبَاهُ كَتَبَ إِلَى كُفَّارِ قُرَيْشٍ كِتَاباً. فَقَالَ عُمَرُ: ائْذَنْ لِي يَا رَسُوْلَ اللهِ فِي قَتْلِهِ. قَالَ: (لاَ، إِنَّهُ قَدْ شَهِدَ بَدْراً، وَإِنَّكَ لاَ تَدْرِي، لَعَلَّ اللهَ قَدِ اطَّلَعَ عَلَى أَهْلِ بَدْرٍ، فَقَالَ: اعْمَلُوا مَا شِئْتُم، فَإِنِّي غَافِرٌ لَكُم) — وقال الذهبي: إِسْنَادُهُ صَالِحٌ، وَأَصْلُهُ فِي الصَّحِيْحَيْنِ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/44-p16",
+          "volume": "5",
+          "pageReference": "44",
+          "extractionUrl": "https://shamela.ws/book/10906/2024",
+          "excerptArabic": "أَنَّ أَبَاهُ كَتَبَ إِلَى كُفَّارِ قُرَيْشٍ كِتَاباً.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/44-p17",
+          "volume": "5",
+          "pageReference": "44",
+          "extractionUrl": "https://shamela.ws/book/10906/2024",
+          "excerptArabic": "فَدَعَا رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- عَلِيّاً وَالزُّبَيْرَ، فَقَالَ: (انْطَلِقَا حَتَّى تُدْرِكَا امْرَأَةً مَعَهَا كِتَابٌ، فَائْتِيَانِي بِهِ) .",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/45-p5",
+          "volume": "5",
+          "pageReference": "45",
+          "extractionUrl": "https://shamela.ws/book/10906/2025",
+          "excerptArabic": "كَانَ بِمَكَّةَ قَرَابَتِي وَوَلَدِي، وَكُنْتُ غَرِيْباً فِيْكُمْ مَعْشَرَ قُرَيْشٍ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/45-p6",
+          "volume": "5",
+          "pageReference": "45",
+          "extractionUrl": "https://shamela.ws/book/10906/2025",
+          "excerptArabic": "فَقَالَ عُمَرُ: ائْذَنْ لِي يَا رَسُوْلَ اللهِ فِي قَتْلِهِ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/45-p7",
+          "volume": "5",
+          "pageReference": "45",
+          "extractionUrl": "https://shamela.ws/book/10906/2025",
+          "excerptArabic": "(لاَ، إِنَّهُ قَدْ شَهِدَ بَدْراً، وَإِنَّكَ لاَ تَدْرِي، لَعَلَّ اللهَ قَدِ اطَّلَعَ عَلَى أَهْلِ بَدْرٍ، فَقَالَ: اعْمَلُوا مَا شِئْتُم، فَإِنِّي غَافِرٌ لَكُم",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/45-p8",
+          "volume": "5",
+          "pageReference": "45",
+          "extractionUrl": "https://shamela.ws/book/10906/2025",
+          "excerptArabic": "إِسْنَادُهُ صَالِحٌ، وَأَصْلُهُ فِي (الصَّحِيْحَيْنِ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "hatib-ibn-abi-baltaah-siyar9/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hatib-ibn-abi-baltaah",
+      "assertion": "شَهِدَ بَدْراً وَالمَشَاهِدَ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/43-p6",
+          "volume": "5",
+          "pageReference": "43",
+          "extractionUrl": "https://shamela.ws/book/10906/2023",
+          "excerptArabic": "شَهِدَ بَدْراً وَالمَشَاهِدَ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "hatib-ibn-abi-baltaah-siyar9/uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hatib-ibn-abi-baltaah",
+      "assertion": "إِنَّهُ اطَّلَعَ عَلَى النَّبِيِّ -صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ- بِأُحُدٍ، فَقَالَ: مَنْ فَعَلَ هَذَا؟ فَقَالَ عُتْبَةُ بنُ أَبِي وَقَّاصٍ: هَشَمَ وَجْهِي، وَدَقَّ رَبَاعَيَتِي بِحَجَرٍ! فَمَضَيْتُ حَتَّى ظَفِرْتُ بِهِ، فَضَرَبْتُهُ بِالسَّيْفِ، فَطَرَحْتُ رَأْسَهُ! فَنَزَلْتُ، فَأَخَذْتُ رَأْسَهُ وَسَلَبَهُ وَفَرَسَهُ، وَجِئْتُ بِهِ إِلَى النَّبِيِّ -صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ- فَسَلَّمَ ذَلِكَ إِلَيَّ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/44-p2",
+          "volume": "5",
+          "pageReference": "44",
+          "extractionUrl": "https://shamela.ws/book/10906/2024",
+          "excerptArabic": "إِنَّهُ اطَّلَعَ عَلَى النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِأُحُدٍ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/44-p5",
+          "volume": "5",
+          "pageReference": "44",
+          "extractionUrl": "https://shamela.ws/book/10906/2024",
+          "excerptArabic": "قَالَ عُتْبَةُ بنُ أَبِي وَقَّاصٍ: هَشَمَ وَجْهِي، وَدَقَّ رَبَاعِيَتِي بِحَجَرٍ!",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/44-p8",
+          "volume": "5",
+          "pageReference": "44",
+          "extractionUrl": "https://shamela.ws/book/10906/2024",
+          "excerptArabic": "فَمَضَيْتُ حَتَّى ظَفِرْتُ بِهِ، فَضَرَبْتُهُ بِالسَّيْفِ، فَطَرَحْتُ رَأْسَهُ!",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/44-p9",
+          "volume": "5",
+          "pageReference": "44",
+          "extractionUrl": "https://shamela.ws/book/10906/2024",
+          "excerptArabic": "فَنَزَلْتُ، فَأَخَذْتُ رَأْسَهُ وَسَلَبَهُ وَفَرَسَهُ، وَجِئْتُ بِهِ إِلَى النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فَسَلَّمَ ذَلِكَ إِلَيَّ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "hatib-ibn-abi-baltaah-siyar9/hudaybiyyah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hatib-ibn-abi-baltaah",
+      "assertion": "وَقَدْ شَهِدَ بَدْراً وَالحُدَيْبِيَةَ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "hudaybiyyah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/44-p13",
+          "volume": "5",
+          "pageReference": "44",
+          "extractionUrl": "https://shamela.ws/book/10906/2024",
+          "excerptArabic": "وَقَدْ شَهِدَ بَدْراً وَالحُدَيْبِيَةَ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "hatib-ibn-abi-baltaah-siyar9/father-of-amr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "amr-ibn-umayr-al-lakhmi",
+      "assertion": "عمرو بن عمير بن سلمة اللخمي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "umayr-ibn-salamah-al-lakhmi",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/43-p4",
+          "volume": "5",
+          "pageReference": "43",
+          "extractionUrl": "https://shamela.ws/book/10906/2023",
+          "excerptArabic": "حَاطِبُ بنُ أَبِي بَلْتَعَةَ عَمْرِو بنِ عُمَيْرِ بنِ سَلَمَةَ اللَّخْمِيُّ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "hatib-ibn-abi-baltaah-siyar9/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "hatib-ibn-abi-baltaah",
+      "field": "deathYearHijri",
+      "assertion": "وَمَاتَ حَاطِبٌ سَنَةَ ثَمَلاَثِيْنَ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/45-p13",
+          "volume": "5",
+          "pageReference": "45",
+          "extractionUrl": "https://shamela.ws/book/10906/2025",
+          "excerptArabic": "وَمَاتَ حَاطِبٌ سَنَةَ ثَلاَثِيْنَ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    }
+  ]
+}

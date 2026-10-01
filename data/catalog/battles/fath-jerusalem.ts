@@ -18,6 +18,15 @@ const fathJerusalem = {
     // Carried from the old seed when these people left it; no batch places
     // them here yet.
     { person: 'umar-ibn-al-khattab', isMuslim: true, claims: legacyUnreviewed },
+    {
+      person: 'abu-dharr-al-ghifari',
+      isMuslim: true,
+      summary: {
+        value: 'شَهِدَ فَتْحَ بَيْتِ المَقْدِسِ مَعَ عُمَرَ.',
+        claims: ['abu-dharr-al-ghifari-siyar10/fath-jerusalem'],
+      },
+      claims: ['abu-dharr-al-ghifari-siyar10/fath-jerusalem'],
+    },
   ],
 } satisfies CatalogBattle;
 

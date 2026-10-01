@@ -1,0 +1,622 @@
+{
+  "slug": "abu-dharr-al-ghifari",
+  "summaryFile": "summary.md",
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-dharr-al-ghifari",
+      "volumeNumber": 5,
+      "extractionUrl": "https://shamela.ws/book/10906/2026",
+      "accessedAt": "2026-10-01",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "46",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 2,
+          "printedPage": "47",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 3,
+          "printedPage": "48",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 4,
+          "printedPage": "49",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 5,
+          "printedPage": "50",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 6,
+          "printedPage": "51",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 7,
+          "printedPage": "52",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 8,
+          "printedPage": "53",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 9,
+          "printedPage": "54",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 10,
+          "printedPage": "55",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 11,
+          "printedPage": "56",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 12,
+          "printedPage": "57",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 13,
+          "printedPage": "58",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 14,
+          "printedPage": "59",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 15,
+          "printedPage": "60",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 16,
+          "printedPage": "61",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 17,
+          "printedPage": "62",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 18,
+          "printedPage": "63",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 19,
+          "printedPage": "64",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 20,
+          "printedPage": "65",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 21,
+          "printedPage": "66",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 22,
+          "printedPage": "67",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 23,
+          "printedPage": "68",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 24,
+          "printedPage": "69",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 25,
+          "printedPage": "70",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 26,
+          "printedPage": "71",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 27,
+          "printedPage": "72",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 28,
+          "printedPage": "73",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 29,
+          "printedPage": "74",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 30,
+          "printedPage": "75",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 31,
+          "printedPage": "76",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 32,
+          "printedPage": "77",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 33,
+          "printedPage": "78",
+          "volumeNumber": 5
+        }
+      ],
+      "notInSource": [
+        "wives"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "abu-dharr-al-ghifari-siyar10/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-dharr-al-ghifari",
+      "assertion": "جندب بن جنادة الغفاري",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/46-p1",
+          "volume": "5",
+          "pageReference": "46",
+          "extractionUrl": "https://shamela.ws/book/10906/2026",
+          "excerptArabic": "١٠ - أَبُو ذَرٍّ جُنْدُبُ بنُ جُنَادَةَ الغِفَارِيُّ * (ع)",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/46-p5",
+          "volume": "5",
+          "pageReference": "46",
+          "extractionUrl": "https://shamela.ws/book/10906/2026",
+          "excerptArabic": "وَنَبَّأَنِّي الدِّمْيَاطِيُّ: أَنَّهُ جُنْدُبُ بنُ جُنَادَةَ بنِ سُفْيَانَ بنِ عُبَيْدِ بنِ حَرَامِ بنِ غِفَارَ - أَخِي ثَعْلَبَةَ - ابْنَيْ مُلَيْلِ بنِ ضَمْرَةَ أَخِي لَيْثٍ وَالدِّيْلِ، أَوْلاَدِ بَكْرٍ، أَخِي مُرَّةَ، وَالِدِ مُدْلِجِ بنِ مُرَّةَ، ابْنَيْ عَبْدِ مَنَاةَ بنِ كِنَانَةَ.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "field": "fullName"
+    },
+    {
+      "key": "abu-dharr-al-ghifari-siyar10/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-dharr-al-ghifari",
+      "assertion": "MALE — صيغ مذكر: أَحَدُ السَّابِقِيْنَ الأَوَّلِيْنَ … وَكَانَ يُفْتِي",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/46-p6",
+          "volume": "5",
+          "pageReference": "46",
+          "extractionUrl": "https://shamela.ws/book/10906/2026",
+          "excerptArabic": "قُلْتُ: أَحَدُ السَّابِقِيْنَ الأَوَّلِيْنَ، مِنْ نُجَبَاءِ أَصْحَابِ مُحَمَّدٍ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "field": "sex"
+    },
+    {
+      "key": "abu-dharr-al-ghifari-siyar10/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-dharr-al-ghifari",
+      "assertion": "ابن جنادة بن سفيان.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/46-p5",
+          "volume": "5",
+          "pageReference": "46",
+          "extractionUrl": "https://shamela.ws/book/10906/2026",
+          "excerptArabic": "أَنَّهُ جُنْدُبُ بنُ جُنَادَةَ بنِ سُفْيَانَ بنِ عُبَيْدِ بنِ حَرَامِ بنِ غِفَارَ",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "junadah-ibn-sufyan-al-ghifari"
+    },
+    {
+      "key": "abu-dharr-al-ghifari-siyar10/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-dharr-al-ghifari",
+      "assertion": "أبو ذر",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/46-p1",
+          "volume": "5",
+          "pageReference": "46",
+          "extractionUrl": "https://shamela.ws/book/10906/2026",
+          "excerptArabic": "١٠ - أَبُو ذَرٍّ جُنْدُبُ بنُ جُنَادَةَ الغِفَارِيُّ * (ع)",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/54-p16",
+          "volume": "5",
+          "pageReference": "54",
+          "extractionUrl": "https://shamela.ws/book/10906/2034",
+          "excerptArabic": "فَقَالَ لِي: (يَا أَبَا ذَرٍّ، اكْتُمْ هَذَا الأَمْرَ، وَارْجِعْ إِلَى قَوْمِكَ! فَإِذَا بَلَغَكَ ظُهُوْرُنَا، فَأَقْبِلْ) .",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "field": "kunya"
+    },
+    {
+      "key": "abu-dharr-al-ghifari-siyar10/appearance",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-dharr-al-ghifari",
+      "assertion": "آدم، ضخم جسيم كث اللحية؛ طوال أبيض الرأس واللحية",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/47-p3",
+          "volume": "5",
+          "pageReference": "47",
+          "extractionUrl": "https://shamela.ws/book/10906/2027",
+          "excerptArabic": "وَقِيْلَ: كَانَ آدَمَ، ضَخْماً، جَسِيْماً، كَثَّ اللِّحْيَةِ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/50-p2",
+          "volume": "5",
+          "pageReference": "50",
+          "extractionUrl": "https://shamela.ws/book/10906/2030",
+          "excerptArabic": "إِذْ دَخَلَ رَجُلٌ طُوَالٌ، آدَمُ، أَبْيَضُ الرَّأْسِ وَاللِّحْيَةِ، مَحْلُوْقٌ، يُشْبِهُ بَعْضُهُ بَعْضاً.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "field": "appearance"
+    },
+    {
+      "key": "abu-dharr-al-ghifari-siyar10/brother-unays",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-dharr-al-ghifari",
+      "assertion": "أخوه أنيس.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/50-p6",
+          "volume": "5",
+          "pageReference": "50",
+          "extractionUrl": "https://shamela.ws/book/10906/2030",
+          "excerptArabic": "فَخَرَجْتُ أَنَا وَأَخِي أُنَيْسٌ وَأُمُّنَا، فَنَزَلْنَا عَلَى خَالٍ لَنَا",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/53-p16",
+          "volume": "5",
+          "pageReference": "53",
+          "extractionUrl": "https://shamela.ws/book/10906/2033",
+          "excerptArabic": "فَأَرْسَلْتُ أَخِي لِيُكَلِّمَهُ، فَقُلْتُ: انْطَلِقْ إِلَى هَذَا الرَّجُلِ، فَكَلِّمْهُ.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "relationshipType": "BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "unays-ibn-junadah-al-ghifari"
+    },
+    {
+      "key": "abu-dharr-al-ghifari-siyar10/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-dharr-al-ghifari",
+      "assertion": "من السابقين الأولين — صحابي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/46-p6",
+          "volume": "5",
+          "pageReference": "46",
+          "extractionUrl": "https://shamela.ws/book/10906/2026",
+          "excerptArabic": "قُلْتُ: أَحَدُ السَّابِقِيْنَ الأَوَّلِيْنَ، مِنْ نُجَبَاءِ أَصْحَابِ مُحَمَّدٍ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "field": "titles"
+    },
+    {
+      "key": "abu-dharr-al-ghifari-siyar10/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-dharr-al-ghifari",
+      "assertion": "أحد السابقين الأولين، من نجباء أصحاب محمد صلى الله عليه وسلم؛ رابع الإسلام، أسلم قبله ثلاثة؛ أول من حيا رسول الله بتحية الإسلام؛ رأس في الزهد والصدق والعلم والعمل، قوال بالحق لا تأخذه في الله لومة لائم؛ ما أقلت الغبراء ولا أظلت الخضراء من رجل أصدق لهجة منه؛ من سره أن ينظر إلى زهد عيسى فلينظر إليه؛ بايعه رسول الله خمساً وواثقه سبعاً ألا يخاف في الله لومة لائم؛ رحم الله أبا ذر يمشي وحده ويموت وحده ويبعث وحده؛ كان يفتي في خلافة أبي بكر وعمر وعثمان.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/46-p6",
+          "volume": "5",
+          "pageReference": "46",
+          "extractionUrl": "https://shamela.ws/book/10906/2026",
+          "excerptArabic": "قُلْتُ: أَحَدُ السَّابِقِيْنَ الأَوَّلِيْنَ، مِنْ نُجَبَاءِ أَصْحَابِ مُحَمَّدٍ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/55-p6",
+          "volume": "5",
+          "pageReference": "55",
+          "extractionUrl": "https://shamela.ws/book/10906/2035",
+          "excerptArabic": "كُنْتُ رَابِعَ الإِسْلاَمِ، أَسْلَمَ قَبْلِي ثَلاَثَةٌ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/52-p9",
+          "volume": "5",
+          "pageReference": "52",
+          "extractionUrl": "https://shamela.ws/book/10906/2032",
+          "excerptArabic": "وَكُنْتُ أَوَّلَ مَنْ حَيَّاهُ بِتَحِيَّةِ الإِسْلاَمِ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/47-p4",
+          "volume": "5",
+          "pageReference": "47",
+          "extractionUrl": "https://shamela.ws/book/10906/2027",
+          "excerptArabic": "وَكَانَ رَأْساً فِي الزُّهْدِ، وَالصِّدْقِ، وَالعِلْمِ، وَالعَمَلِ، قَوَّالاً بِالحَقِّ، لاَ تَأْخُذُهُ فِي اللهِ لَوْمَةُ لائِمٍ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/59-p2",
+          "volume": "5",
+          "pageReference": "59",
+          "extractionUrl": "https://shamela.ws/book/10906/2039",
+          "excerptArabic": "سَمِعْتُ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَقُوْلُ: (مَا أَقَلَّتِ الغَبْرَاءُ، وَلاَ أَظَلَّتِ الخَضْرَاءُ مِنْ رَجُلٍ أَصْدَقَ لَهْجَةً مِنْ أَبِي ذَرٍّ (١)) .",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/59-p10",
+          "volume": "5",
+          "pageReference": "59",
+          "extractionUrl": "https://shamela.ws/book/10906/2039",
+          "excerptArabic": "(مَا أَظَلَّتِ الخَضْرَاءُ، وَلاَ أَقَلَّتِ الغَبْرَاءُ عَلَى ذِي لَهْجَةٍ أَصْدَقَ مِنْ أَبِي ذَرٍّ! مَنْ سَرَّهُ أَنْ يَنْظُرَ إِلَى زُهْدِ عِيْسَى فَلْيَنْظُرْ إِلَى أَبِي ذَرٍّ) (٣) .",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/62-p3",
+          "volume": "5",
+          "pageReference": "62",
+          "extractionUrl": "https://shamela.ws/book/10906/2042",
+          "excerptArabic": "بَايَعَنِي رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- خَمْساً، وَوَاثَقَنِي سَبْعاً، وَأَشْهَدَ اللهَ عَلَيَّ سَبْعاً: أَلاَّ أَخَافَ فِي اللهِ لَوْمَةَ لاَئِمٍ (٢) .",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/56-p14",
+          "volume": "5",
+          "pageReference": "56",
+          "extractionUrl": "https://shamela.ws/book/10906/2036",
+          "excerptArabic": "فَقَالَ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-: (رَحِمَ اللهُ أَبَا ذَرٍّ، يَمْشِي وَحْدَهُ، وَيَمُوْتُ وَحْدَهُ، وَيُبْعَثُ وَحَدَهُ) .",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/46-p9",
+          "volume": "5",
+          "pageReference": "46",
+          "extractionUrl": "https://shamela.ws/book/10906/2026",
+          "excerptArabic": "وَكَانَ يُفْتِي فِي خِلاَفَةِ أَبِي بَكْرٍ، وَعُمَرَ، وَعُثْمَانَ.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "field": "virtues"
+    },
+    {
+      "key": "abu-dharr-al-ghifari-siyar10/badr-absence",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-dharr-al-ghifari",
+      "assertion": "فاتته بدر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/47-p2",
+          "volume": "5",
+          "pageReference": "47",
+          "extractionUrl": "https://shamela.ws/book/10906/2027",
+          "excerptArabic": "فَاتَتْهُ (١) بَدْرٌ، قَالَهُ: أَبُو دَاوُدَ.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "relationshipType": "ABSENT_FROM",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr"
+    },
+    {
+      "key": "abu-dharr-al-ghifari-siyar10/hunayn",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-dharr-al-ghifari",
+      "assertion": "حمل راية غفار يوم حنين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/56-p3",
+          "volume": "5",
+          "pageReference": "56",
+          "extractionUrl": "https://shamela.ws/book/10906/2036",
+          "excerptArabic": "قَالَ الوَاقِدِيُّ: كَانَ حَامِلَ رَايَةِ غِفَارَ يَوْمَ حُنَيْنٍ: أَبُو ذَرٍّ.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "hunayn"
+    },
+    {
+      "key": "abu-dharr-al-ghifari-siyar10/tabuk",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-dharr-al-ghifari",
+      "assertion": "أبطأ في غزوة تبوك من عجف بعيره، ثم أخذ متاعه على ظهره ولحق بالنبي ماشياً.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/56-p4",
+          "volume": "5",
+          "pageReference": "56",
+          "extractionUrl": "https://shamela.ws/book/10906/2036",
+          "excerptArabic": "وَكَانَ يَقُوْلُ: أَبْطَأْتُ فِي غَزْوَةِ تَبُوْكٍ، مِنْ عَجَفِ (٢) بَعِيْرِي.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/56-p9",
+          "volume": "5",
+          "pageReference": "56",
+          "extractionUrl": "https://shamela.ws/book/10906/2036",
+          "excerptArabic": "حَتَّى قِيْلَ: يَا رَسُوْلَ اللهِ، تَخَلَّفَ أَبُو ذَرٍّ، وَأَبْطَأَ بِهِ بَعِيْرُهُ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/56-p10",
+          "volume": "5",
+          "pageReference": "56",
+          "extractionUrl": "https://shamela.ws/book/10906/2036",
+          "excerptArabic": "فَلَمَّا أَبْطَأَ عَلَيْهِ أَخَذَ مَتَاعَهُ، فَجَعَلَهُ عَلَى ظَهْرِهِ، وَخَرَجَ يَتْبَعُ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/56-p14",
+          "volume": "5",
+          "pageReference": "56",
+          "extractionUrl": "https://shamela.ws/book/10906/2036",
+          "excerptArabic": "فَقَالَ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-: (رَحِمَ اللهُ أَبَا ذَرٍّ، يَمْشِي وَحْدَهُ، وَيَمُوْتُ وَحْدَهُ، وَيُبْعَثُ وَحَدَهُ) .",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "tabuk"
+    },
+    {
+      "key": "abu-dharr-al-ghifari-siyar10/fath-jerusalem",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-dharr-al-ghifari",
+      "assertion": "شهد فتح بيت المقدس مع عمر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/47-p5",
+          "volume": "5",
+          "pageReference": "47",
+          "extractionUrl": "https://shamela.ws/book/10906/2027",
+          "excerptArabic": "وَقَدْ شَهِدَ فَتْحَ بَيْتِ المَقْدِسِ مَعَ عُمَرَ.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "fath-jerusalem"
+    },
+    {
+      "key": "abu-dharr-al-ghifari-siyar10/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-dharr-al-ghifari",
+      "assertion": "مات سنة اثنتين وثلاثين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/74-p11",
+          "volume": "5",
+          "pageReference": "74",
+          "extractionUrl": "https://shamela.ws/book/10906/2054",
+          "excerptArabic": "قَالَ الفَلاَّسُ، وَالهَيْثَمُ بنُ عَدِيٍّ، وَغَيْرُهُمَا: مَاتَ سَنَةَ اثْنَتَيْنِ وَثَلاَثِيْنَ.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "field": "deathYearHijri"
+    },
+    {
+      "key": "abu-dharr-al-ghifari-siyar10/death-place",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-dharr-al-ghifari",
+      "assertion": "الربذة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/76-p2",
+          "volume": "5",
+          "pageReference": "76",
+          "extractionUrl": "https://shamela.ws/book/10906/2056",
+          "excerptArabic": "أَنَّ أَبَا ذَرٍّ حَضَرَهُ المَوْتُ بِالرَّبَذَةِ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/77-p8",
+          "volume": "5",
+          "pageReference": "77",
+          "extractionUrl": "https://shamela.ws/book/10906/2057",
+          "excerptArabic": "لَمَّا نَفَى عُثْمَانُ أَبَا ذَرٍّ إِلَى الرَّبَذَةِ، وَأَصَابَهُ بِهَا قَدَرُهُ، لَمْ يَكُنْ مَعَهُ إِلاَّ امْرَأَتُهُ وَغُلاَمُهُ",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "field": "placeOfDeathArabic"
+    }
+  ]
+}

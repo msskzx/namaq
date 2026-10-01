@@ -18,6 +18,10 @@ const sinanIbnMalikAlNamri = {
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'malik-ibn-abd-amr-al-namri', claims: legacyUnreviewed },
+    // Stated from the other side by his son's Siyar entry
+    // (suhaib-ibn-sinan-siyar4/father); restated here so the node carries
+    // the tie, with its evidence owed like the rest.
+    { type: 'FATHER', inverse: 'SON', to: 'suhaib-ibn-sinan', claims: legacyUnreviewed },
   ],
 } satisfies CatalogPerson;
 

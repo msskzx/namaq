@@ -18,6 +18,16 @@ const taif = {
     { person: 'prophet-muhammad', isMuslim: true, claims: legacyUnreviewed },
     { person: 'umar-ibn-al-khattab', isMuslim: true, claims: legacyUnreviewed },
     { person: 'al-abbas-ibn-abd-al-muttalib', isMuslim: true, claims: legacyUnreviewed },
+    {
+      person: 'abu-sufyan-ibn-harb',
+      isMuslim: true,
+      status: ['INJURED'],
+      summary: {
+        value: 'شَهِدَ قِتَالَ الطَّائِفِ، فَقُلِعَتْ عَيْنُهُ حِيْنَئِذٍ.',
+        claims: ['abu-sufyan-ibn-harb-siyar13/taif'],
+      },
+      claims: ['abu-sufyan-ibn-harb-siyar13/taif'],
+    },
   ],
 } satisfies CatalogBattle;
 

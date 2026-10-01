@@ -1,0 +1,537 @@
+{
+  "slug": "abu-sufyan-ibn-harb",
+  "summaryFile": "summary.md",
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-harb",
+      "volumeNumber": 5,
+      "extractionUrl": "https://shamela.ws/book/10906/2085",
+      "accessedAt": "2026-10-01",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "105",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 2,
+          "printedPage": "106",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 3,
+          "printedPage": "107",
+          "volumeNumber": 5
+        }
+      ],
+      "notInSource": [
+        "appearance",
+        "siblings",
+        "wives"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "abu-sufyan-ibn-harb-siyar13/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-harb",
+      "field": "sex",
+      "assertion": "MALE — صيغ مذكر: رَأْسُ قُرَيْشٍ، وَقَائِدُهُمْ … وَكَانَ حَمْوَ النَّبِيِّ",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/106-p2",
+          "volume": "5",
+          "pageReference": "106",
+          "extractionUrl": "https://shamela.ws/book/10906/2086",
+          "excerptArabic": "رَأْسُ قُرَيْشٍ، وَقَائِدُهُمْ يَوْمَ أُحُدٍ، وَيَوْمَ الخَنْدَقِ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/107-p6",
+          "volume": "5",
+          "pageReference": "107",
+          "extractionUrl": "https://shamela.ws/book/10906/2087",
+          "excerptArabic": "وَكَانَ حَمْوَ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-harb-siyar13/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-harb",
+      "field": "fullName",
+      "assertion": "صَخْرُ بنُ حَرْبِ بنِ أُمَيَّةَ … ابْنِ عَبْدِ شَمْسٍ بنِ عَبْدِ مَنَافٍ بنِ قُصَيِّ بنِ كِلاَبٍ",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/105-p9",
+          "volume": "5",
+          "pageReference": "105",
+          "extractionUrl": "https://shamela.ws/book/10906/2085",
+          "excerptArabic": "١٣ - أَبُو سُفْيَانَ صَخْرُ بنُ حَرْبِ بنِ أُمَيَّةَ الأُمَوِيُّ *",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/105-p10",
+          "volume": "5",
+          "pageReference": "105",
+          "extractionUrl": "https://shamela.ws/book/10906/2085",
+          "excerptArabic": "ابْنِ عَبْدِ شَمْسٍ بنِ عَبْدِ مَنَافٍ بنِ قُصَيِّ بنِ كِلاَبٍ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-harb-siyar13/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-harb",
+      "field": "kunya",
+      "assertion": "أبو سفيان",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/105-p9",
+          "volume": "5",
+          "pageReference": "105",
+          "extractionUrl": "https://shamela.ws/book/10906/2085",
+          "excerptArabic": "١٣ - أَبُو سُفْيَانَ صَخْرُ بنُ حَرْبِ بنِ أُمَيَّةَ الأُمَوِيُّ *",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-harb-siyar13/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-harb",
+      "assertion": "صخر بن حرب بن أمية، فحرب بن أمية أبوه.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "harb-ibn-umayyah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/105-p9",
+          "volume": "5",
+          "pageReference": "105",
+          "extractionUrl": "https://shamela.ws/book/10906/2085",
+          "excerptArabic": "١٣ - أَبُو سُفْيَانَ صَخْرُ بنُ حَرْبِ بنِ أُمَيَّةَ الأُمَوِيُّ *",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/105-p10",
+          "volume": "5",
+          "pageReference": "105",
+          "extractionUrl": "https://shamela.ws/book/10906/2085",
+          "excerptArabic": "ابْنِ عَبْدِ شَمْسٍ بنِ عَبْدِ مَنَافٍ بنِ قُصَيِّ بنِ كِلاَبٍ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-harb-siyar13/companion",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-harb",
+      "field": "titles",
+      "assertion": "صحابي؛ تَدَارَكَهُ اللهُ بِالإِسْلاَمِ يَوْمَ الفَتْحِ فَأَسْلَمَ، وَشَهِدَ حُنَيْناً وَالطَّائِفَ وَاليَرْمُوْكَ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/106-p3",
+          "volume": "5",
+          "pageReference": "106",
+          "extractionUrl": "https://shamela.ws/book/10906/2086",
+          "excerptArabic": "لَكِنْ تَدَارَكَهُ اللهُ بِالإِسْلاَمِ يَوْمَ الفَتْحِ، فَأَسْلَمَ شِبْهَ مُكْرَهٍ خَائِفٍ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/106-p5",
+          "volume": "5",
+          "pageReference": "106",
+          "extractionUrl": "https://shamela.ws/book/10906/2086",
+          "excerptArabic": "فَشَهِدَ حُنَيْناً، وَأَعْطَاهُ صِهْرُهُ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مِنَ الغَنَائِمِ مائَةً مِنَ الإِبِلِ، وَأَرْبَعِيْنَ أُوْقِيَّةً مِنَ الدَّرَاهِمِ يَتَأَلَّفُهُ بِذَلِكَ (١) .",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-harb-siyar13/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-harb",
+      "field": "virtues",
+      "assertion": "مِنْ دُهَاةِ العَرَبِ وَمِنْ أَهْلِ الرَّأْيِ وَالشَّرَفِ فِيْهِمْ؛ حَسُنَ إِسْلاَمُهُ وَحَسُنَ - إِنْ شَاءَ اللهُ - إِيْمَانُهُ؛ كَانَ يَوْمَ اليَرْمُوْكِ يُحَرِّضُ عَلَى الجِهَادِ وَيَقِفُ عَلَى الكَرَادِيْسِ يُذَكِّرُ؛ وَحَدِيْثُهُ عَنْ هِرَقْلَ يَدُلُّ عَلَى إِيْمَانِهِ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/106-p5",
+          "volume": "5",
+          "pageReference": "106",
+          "extractionUrl": "https://shamela.ws/book/10906/2086",
+          "excerptArabic": "وَكَانَ مِنْ دُهَاةِ العَرَبِ، وَمِنْ أَهْلِ الرَّأْيِ وَالشَّرَفِ فِيْهِمْ، فَشَهِدَ حُنَيْناً، وَأَعْطَاهُ صِهْرُهُ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مِنَ الغَنَائِمِ مائَةً مِنَ الإِبِلِ، وَأَرْبَعِيْنَ أُوْقِيَّةً مِنَ الدَّرَاهِمِ يَتَأَلَّفُهُ بِذَلِكَ (١) .",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/106-p7",
+          "volume": "5",
+          "pageReference": "106",
+          "extractionUrl": "https://shamela.ws/book/10906/2086",
+          "excerptArabic": "وَشَهِدَ قِتَالَ الطَّائِفِ، فَقُلِعَتْ عَيْنُهُ حِيْنَئِذٍ، ثُمَّ قُلِعَتِ الأُخْرَى يَوْمَ اليَرْمُوْكِ، وَكَانَ يَوْمَئِذٍ قَدْ حَسُنَ - إِنْ شَاءَ اللهُ - إِيْمَانُهُ، فَإِنَّهُ كَانَ يَوْمَئِذٍ يُحَرِّضُ عَلَى الجِهَادِ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/106-p9",
+          "volume": "5",
+          "pageReference": "106",
+          "extractionUrl": "https://shamela.ws/book/10906/2086",
+          "excerptArabic": "وَكَانَ يَقِفُ عَلَى الكَرَادِيْسِ (٣) يُذَكِّرُ، وَيَقُوْلُ:",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/107-p2",
+          "volume": "5",
+          "pageReference": "107",
+          "extractionUrl": "https://shamela.ws/book/10906/2087",
+          "excerptArabic": "وَلاَ رَيْبَ أَنَّ حَدِيْثَهُ عَنْ هِرَقْلَ (١) وَكِتَابِ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَدُلُّ عَلَى إِيْمَانِهِ، وَللهِ الحَمْدُ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-harb-siyar13/uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-harb",
+      "assertion": "رَأْسُ قُرَيْشٍ، وَقَائِدُهُمْ يَوْمَ أُحُدٍ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/106-p2",
+          "volume": "5",
+          "pageReference": "106",
+          "extractionUrl": "https://shamela.ws/book/10906/2086",
+          "excerptArabic": "رَأْسُ قُرَيْشٍ، وَقَائِدُهُمْ يَوْمَ أُحُدٍ، وَيَوْمَ الخَنْدَقِ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-harb-siyar13/khandaq",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-harb",
+      "assertion": "رَأْسُ قُرَيْشٍ، وَقَائِدُهُمْ يَوْمَ الخَنْدَقِ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "khandaq",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/106-p2",
+          "volume": "5",
+          "pageReference": "106",
+          "extractionUrl": "https://shamela.ws/book/10906/2086",
+          "excerptArabic": "رَأْسُ قُرَيْشٍ، وَقَائِدُهُمْ يَوْمَ أُحُدٍ، وَيَوْمَ الخَنْدَقِ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-harb-siyar13/fath-makkah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-harb",
+      "assertion": "تَدَارَكَهُ اللهُ بِالإِسْلاَمِ يَوْمَ الفَتْحِ، فَأَسْلَمَ شِبْهَ مُكْرَهٍ خَائِفٍ؛ ثُمَّ بَعْدَ أَيَّامٍ صَلُحَ إِسْلاَمُهُ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "fath-makkah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/106-p3",
+          "volume": "5",
+          "pageReference": "106",
+          "extractionUrl": "https://shamela.ws/book/10906/2086",
+          "excerptArabic": "لَكِنْ تَدَارَكَهُ اللهُ بِالإِسْلاَمِ يَوْمَ الفَتْحِ، فَأَسْلَمَ شِبْهَ مُكْرَهٍ خَائِفٍ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/106-p4",
+          "volume": "5",
+          "pageReference": "106",
+          "extractionUrl": "https://shamela.ws/book/10906/2086",
+          "excerptArabic": "ثُمَّ بَعْدَ أَيَّامٍ صَلُحَ إِسْلاَمُهُ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-harb-siyar13/hunayn",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-harb",
+      "assertion": "شَهِدَ حُنَيْناً؛ وَأَعْطَاهُ صِهْرُهُ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مِنَ الغَنَائِمِ مائَةً مِنَ الإِبِلِ، وَأَرْبَعِيْنَ أُوْقِيَّةً مِنَ الدَّرَاهِمِ يَتَأَلَّفُهُ بِذَلِكَ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "hunayn",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/106-p5",
+          "volume": "5",
+          "pageReference": "106",
+          "extractionUrl": "https://shamela.ws/book/10906/2086",
+          "excerptArabic": "وَكَانَ مِنْ دُهَاةِ العَرَبِ، وَمِنْ أَهْلِ الرَّأْيِ وَالشَّرَفِ فِيْهِمْ، فَشَهِدَ حُنَيْناً، وَأَعْطَاهُ صِهْرُهُ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مِنَ الغَنَائِمِ مائَةً مِنَ الإِبِلِ، وَأَرْبَعِيْنَ أُوْقِيَّةً مِنَ الدَّرَاهِمِ يَتَأَلَّفُهُ بِذَلِكَ (١) .",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-harb-siyar13/taif",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-harb",
+      "assertion": "شَهِدَ قِتَالَ الطَّائِفِ، فَقُلِعَتْ عَيْنُهُ حِيْنَئِذٍ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "taif",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/106-p7",
+          "volume": "5",
+          "pageReference": "106",
+          "extractionUrl": "https://shamela.ws/book/10906/2086",
+          "excerptArabic": "وَشَهِدَ قِتَالَ الطَّائِفِ، فَقُلِعَتْ عَيْنُهُ حِيْنَئِذٍ، ثُمَّ قُلِعَتِ الأُخْرَى يَوْمَ اليَرْمُوْكِ، وَكَانَ يَوْمَئِذٍ قَدْ حَسُنَ - إِنْ شَاءَ اللهُ - إِيْمَانُهُ، فَإِنَّهُ كَانَ يَوْمَئِذٍ يُحَرِّضُ عَلَى الجِهَادِ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-harb-siyar13/yarmuk",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-harb",
+      "assertion": "قُلِعَتْ عَيْنُهُ الأُخْرَى يَوْمَ اليَرْمُوْكِ؛ وَكَانَ تَحْتَ رَايَةِ وَلَدِهِ يَزِيْدَ، يُحَرِّضُ عَلَى الجِهَادِ وَيَصِيْحُ: يَا نَصْرَ اللهِ اقْتَرِبْ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "yarmuk",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/106-p7",
+          "volume": "5",
+          "pageReference": "106",
+          "extractionUrl": "https://shamela.ws/book/10906/2086",
+          "excerptArabic": "وَشَهِدَ قِتَالَ الطَّائِفِ، فَقُلِعَتْ عَيْنُهُ حِيْنَئِذٍ، ثُمَّ قُلِعَتِ الأُخْرَى يَوْمَ اليَرْمُوْكِ، وَكَانَ يَوْمَئِذٍ قَدْ حَسُنَ - إِنْ شَاءَ اللهُ - إِيْمَانُهُ، فَإِنَّهُ كَانَ يَوْمَئِذٍ يُحَرِّضُ عَلَى الجِهَادِ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/106-p8",
+          "volume": "5",
+          "pageReference": "106",
+          "extractionUrl": "https://shamela.ws/book/10906/2086",
+          "excerptArabic": "وَكَانَ تَحْتَ رَايَةِ وَلَدِهِ يَزِيْدَ، فَكَانَ يَصِيْحُ: يَا نَصْرَ اللهِ اقْتَرِبْ (٢) .",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-harb-siyar13/father-of-yazid",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-harb",
+      "assertion": "يزيد بن أبي سفيان ولده؛ كَانَ أَبُو سُفْيَانَ تَحْتَ رَايَتِهِ يَوْمَ اليَرْمُوْكِ، وَرَآهُ أَمِيْراً عَلَى دِمَشْقَ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "FATHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "yazid-ibn-abi-sufyan",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/106-p8",
+          "volume": "5",
+          "pageReference": "106",
+          "extractionUrl": "https://shamela.ws/book/10906/2086",
+          "excerptArabic": "وَكَانَ تَحْتَ رَايَةِ وَلَدِهِ يَزِيْدَ، فَكَانَ يَصِيْحُ: يَا نَصْرَ اللهِ اقْتَرِبْ (٢) .",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/107-p7",
+          "volume": "5",
+          "pageReference": "107",
+          "extractionUrl": "https://shamela.ws/book/10906/2087",
+          "excerptArabic": "وَمَا مَاتَ حَتَّى رَأَى وَلَدَيْهِ يَزِيْدَ ثُمَّ مُعَاوِيَةَ أَمِيْرَيْنِ عَلَى دِمَشْقَ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-harb-siyar13/father-of-muawiyah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-harb",
+      "assertion": "معاوية بن أبي سفيان ولده؛ رَآهُ أَبُو سُفْيَانَ أَمِيْراً عَلَى دِمَشْقَ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "FATHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "muawiyah-ibn-abi-sufyan",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/107-p7",
+          "volume": "5",
+          "pageReference": "107",
+          "extractionUrl": "https://shamela.ws/book/10906/2087",
+          "excerptArabic": "وَمَا مَاتَ حَتَّى رَأَى وَلَدَيْهِ يَزِيْدَ ثُمَّ مُعَاوِيَةَ أَمِيْرَيْنِ عَلَى دِمَشْقَ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-harb-siyar13/father-in-law",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-harb",
+      "assertion": "كَانَ حَمْوَ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-؛ وَهُوَ صِهْرُهُ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "FATHER_IN_LAW",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "prophet-muhammad",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/107-p6",
+          "volume": "5",
+          "pageReference": "107",
+          "extractionUrl": "https://shamela.ws/book/10906/2087",
+          "excerptArabic": "وَكَانَ حَمْوَ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/106-p5",
+          "volume": "5",
+          "pageReference": "106",
+          "extractionUrl": "https://shamela.ws/book/10906/2086",
+          "excerptArabic": "وَكَانَ مِنْ دُهَاةِ العَرَبِ، وَمِنْ أَهْلِ الرَّأْيِ وَالشَّرَفِ فِيْهِمْ، فَشَهِدَ حُنَيْناً، وَأَعْطَاهُ صِهْرُهُ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مِنَ الغَنَائِمِ مائَةً مِنَ الإِبِلِ، وَأَرْبَعِيْنَ أُوْقِيَّةً مِنَ الدَّرَاهِمِ يَتَأَلَّفُهُ بِذَلِكَ (١) .",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-harb-siyar13/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-harb",
+      "field": "deathYearHijri",
+      "assertion": "تُوُفِّيَ بِالمَدِيْنَةِ سَنَةَ إِحْدَى وَثَلاَثِيْنَ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/107-p9",
+          "volume": "5",
+          "pageReference": "107",
+          "extractionUrl": "https://shamela.ws/book/10906/2087",
+          "excerptArabic": "تُوُفِّيَ: بِالمَدِيْنَةِ سَنَةَ إِحْدَى وَثَلاَثِيْنَ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-harb-siyar13/death-year-32",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-harb",
+      "field": "deathYearHijri",
+      "assertion": "وَقِيْلَ: سَنَةَ اثْنَتَيْنِ.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/107-p10",
+          "volume": "5",
+          "pageReference": "107",
+          "extractionUrl": "https://shamela.ws/book/10906/2087",
+          "excerptArabic": "وَقِيْلَ: سَنَةَ اثْنَتَيْنِ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-harb-siyar13/death-year-33-34",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-harb",
+      "field": "deathYearHijri",
+      "assertion": "وَقِيْلَ: سَنَةَ ثَلاَثٍ أَوْ أَرْبَعٍ وَثَلاَثِيْنَ، وَلَهُ نَحْوُ التِّسْعِيْنَ.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/107-p11",
+          "volume": "5",
+          "pageReference": "107",
+          "extractionUrl": "https://shamela.ws/book/10906/2087",
+          "excerptArabic": "وَقِيْلَ: سَنَةَ ثَلاَثٍ أَوْ أَرْبَعٍ وَثَلاَثِيْنَ، وَلَهُ نَحْوُ التِّسْعِيْنَ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "abu-sufyan-ibn-harb-siyar13/death-place",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abu-sufyan-ibn-harb",
+      "field": "placeOfDeathArabic",
+      "assertion": "المدينة",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/107-p9",
+          "volume": "5",
+          "pageReference": "107",
+          "extractionUrl": "https://shamela.ws/book/10906/2087",
+          "excerptArabic": "تُوُفِّيَ: بِالمَدِيْنَةِ سَنَةَ إِحْدَى وَثَلاَثِيْنَ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    }
+  ]
+}
