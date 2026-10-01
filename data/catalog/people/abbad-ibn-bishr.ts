@@ -1,11 +1,6 @@
 import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
-/**
- * Carried from neo4j/graphSeedData*.ts, whose node declaration is retired
- * with the rest. The catalog owns this subject's edges now, so they live
- * here or not at all. No batch has read this far into the nasab yet, so
- * every link stays on the legacy marker.
- */
+// data/history/batches/abbad-ibn-bishr, entry 73.
 const abbadIbnBishr = {
   kind: 'PERSON',
   slug: 'abbad-ibn-bishr',
@@ -15,15 +10,36 @@ const abbadIbnBishr = {
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
-      value: 'عباد بن بشر بن وقش بن زغبة بن زعوراء بن عبد الأشهل الأنصاري الأوسي الأشهلي',
-      claims: legacyUnreviewed,
+      value: 'عباد بن بشر بن وقش بن زغبة بن زعوراء بن عبد الأشهل',
+      claims: ['abbad-ibn-bishr-siyar73/full-name'],
     },
+    kunya: { value: 'أبو الربيع', claims: ['abbad-ibn-bishr-siyar73/kunya'] },
+    tribalAffiliation: {
+      value: 'الأنصاري، الأوسي، الأشهلي، البدري',
+      claims: ['abbad-ibn-bishr-siyar73/tribal-affiliation'],
+    },
+    virtues: {
+      value:
+        'كَانَ مِنْ سَادَةِ الأَوْسِ. عَاشَ خَمْساً وَأَرْبَعِيْنَ سَنَةً، وَهُوَ الَّذِي أَضَاءتْ لَهُ عَصَاتُهُ لَيْلَةَ انْقَلَبَ إِلَى مَنْزِلِهِ مِنْ عِنْدِ رَسُوْلِاللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-. أَسْلَمَ عَلَى يَدِ مُصْعَبِ بنِ عُمَيْرٍ، وَكَانَ أَحَدَ مَنْ قَتَلَ كَعْبَ بنَ الأَشْرَفِ اليَهُوْدِيَّ. وَاسْتَعْمَلَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- عَلَى صَدَقَاتِ مُزَيْنَةَ، وَبَنِي سُلَيْمٍ، وَجَعَلَهُ عَلَى حَرَسِهِ فِي غَزْوَةِ تَبُوْكٍ، وَكَانَ كَبِيْرَ القَدْرِ -رَضِيَ اللهُ عَنْهُ-. أَبْلَى يَوْمَ اليَمَامَةِ بَلاَءً حَسَناً، وَكَانَ أَحَدَ الشُّجْعَانِ المَوْصُوْفِيْنَ. قَالَتْ عَائِشَةُ: ثَلاَثَةٌ مِنَ الأَنْصَارِ لَمْ يَكُنْ أَحَدٌ يَعْتَدُّ عَلَيْهِم فَضْلاً، كُلُّهُم مِنْ بَنِي عَبْدِ الأَشْهَلِ: سَعْدُ بنُ مُعَاذٍ، وَعَبَّادُ بنُ بِشْرٍ، وَأُسَيْدُ بنُ حُضَيْرٍ. آخَى النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بَيْنَهُ وَبَيْنَ أَبِي حُذَيْفَةَ بنِ عُتْبَةَ بنِ رَبِيْعَةَ. سُمِعَ عَبَّادُ بنُ بِشْرٍ يَقُوْلُ: رَأَيْتُ اللَّيْلَةَ كَأَنَّ السَّمَاءَ فُرِجَتْ لِي، ثُمَّ أَطْبَقَتْ عَلَيَّ، فَهِيَ - إِنْ شَاءَ اللهُ - الشَّهَادَةُ. نُظِرَ يَوْمَ اليَمَامَةِ وَهُوَ يَصِيْحُ: احْطِمُوا جُفُوْنَ السُّيُوْفِ، وَقَاتَلَ حَتَّى قُتِلَ بِضَرَبَاتٍ فِي وَجْهِهِ -رَضِيَ اللهُ عَنْهُ-. تَهَجَّدَ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فِي بَيْتِي، فَسَمِعَ صَوْتَ عَبَّادِ بن بِشْرٍ، فَقَالَ: (يَا عَائِشَةُ! هَذَا صَوْتُ عَبَّادِ بن بِشْرٍ). قُلْتُ: نَعَمْ. قَالَ: (اللَّهُمَّ اغْفِرْ لَهُ). أَنَّ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَالَ: (يَا مَعْشَرَ الأَنْصَارِ! أَنْتُمُ الشِّعَارُ، وَالنَّاسُ الدِّثَارُ).',
+      claims: ['abbad-ibn-bishr-siyar73/virtues'],
+    },
+    placeOfDeathArabic: { value: 'اليمامة', claims: ['abbad-ibn-bishr-siyar73/death-place'] },
   },
   titles: [
-    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    {
+      title: 'companion',
+      name: 'صحابي',
+      nameTransliterated: 'Companion',
+      claims: ['abbad-ibn-bishr-siyar73/titles'],
+    },
   ],
   relations: [
-    { type: 'SON', inverse: 'FATHER', to: 'bishr-ibn-waqsh', claims: legacyUnreviewed },
+    {
+      type: 'SON',
+      inverse: 'FATHER',
+      to: 'bishr-ibn-waqsh',
+      claims: ['abbad-ibn-bishr-siyar73/father'],
+    },
   ],
 } satisfies CatalogPerson;
 
