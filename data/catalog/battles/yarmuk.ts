@@ -50,6 +50,17 @@ const yarmuk = {
       claims: ['amr-ibn-said-al-umawi-siyar50/yarmuk'],
     },
     {
+      person: 'abu-sufyan-ibn-harb',
+      isMuslim: true,
+      status: ['INJURED'],
+      summary: {
+        value:
+          'قُلِعَتْ عَيْنُهُ الأُخْرَى يَوْمَ اليَرْمُوْكِ؛ وَكَانَ تَحْتَ رَايَةِ وَلَدِهِ يَزِيْدَ، يُحَرِّضُ عَلَى الجِهَادِ وَيَصِيْحُ: يَا نَصْرَ اللهِ اقْتَرِبْ.',
+        claims: ['abu-sufyan-ibn-harb-siyar13/yarmuk'],
+      },
+      claims: ['abu-sufyan-ibn-harb-siyar13/yarmuk'],
+    },
+    {
       person: 'al-ashath-ibn-qais',
       isMuslim: true,
       status: ['INJURED'],

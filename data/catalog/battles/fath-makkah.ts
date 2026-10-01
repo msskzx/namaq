@@ -76,6 +76,15 @@ const fathMakkah = {
       },
       claims: ['at-tufayl-ibn-amr-ad-dawsi-siyar75/fath-makkah'],
     },
+    {
+      person: 'abu-sufyan-ibn-harb',
+      isMuslim: true,
+      summary: {
+        value: 'تَدَارَكَهُ اللهُ بِالإِسْلاَمِ يَوْمَ الفَتْحِ، فَأَسْلَمَ شِبْهَ مُكْرَهٍ خَائِفٍ؛ ثُمَّ بَعْدَ أَيَّامٍ صَلُحَ إِسْلاَمُهُ.',
+        claims: ['abu-sufyan-ibn-harb-siyar13/fath-makkah'],
+      },
+      claims: ['abu-sufyan-ibn-harb-siyar13/fath-makkah'],
+    },
   ],
 } satisfies CatalogBattle;
 
