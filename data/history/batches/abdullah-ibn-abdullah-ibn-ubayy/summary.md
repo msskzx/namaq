@@ -41,10 +41,21 @@ which is what `docs/adr/0018-a-page-belongs-to-the-edition.md` asks for.
 
 **Two neighbouring pages in the store were partial and are now whole.** Printed
 320 held five paragraphs where the page has thirteen, and printed 321 held nine
-where it has twelve. Both grew at the end only, so no existing anchor moved and no
-batch's approval was invalidated. Printed 322 was absent entirely. None of the
-three pages was cited by another batch's claims before this one, apart from معن بن
-عدي on the two pages that were partial.
+where it has twelve. Printed 322 was absent entirely.
+
+The two completions were not equal. Printed 321 grew at the end only, so nothing
+moved. Printed 320 grew at the **top** — the eight paragraphs above entry 64 are
+entry 63's close, which the store had dropped — so every existing anchor on that
+page shifted by eight, and `maan-ibn-adi`'s six citations on it moved from
+`4/320-p1`/`-p2` to `4/320-p9`/`-p10` with their excerpts unchanged. Its recorded
+approval no longer covers its files, and `history:validate` says so until it is
+approved again.
+
+Checked by hand afterwards: all 248 citations in the corpus whose excerpt is not
+contained in a single paragraph are the same 248 before and after this branch. The
+large majority are page-crossing selections, which `AGENTS.md` allows with an
+ellipsis; the count is a floor on how much a machine check can say, not a defect
+list.
 
 ## What the entry supports
 
@@ -112,6 +123,11 @@ all four were checked against the entry:
   matches the legacy string exactly, so there is nothing to reconcile.
 - **`titles: [companion]`.** Promoted to the claim above.
 - **`relations[0]` (`SON → abdullah-ibn-ubayy`).** Promoted to the claim above.
+
+One batch this one invalidated rather than promoted: `maan-ibn-adi`'s six
+citations on printed 320 moved when that page was completed, and its approval is
+stale until the user re-records it. It is not owed anything — every one of its
+values is cited — but it is not importable until then.
 
 The ledger also pulls in `people/abdullah-ibn-ubayy` and `battles/badr`,
 `battles/uhud`, since these claims point at them. Ibn Ubayy already declares
