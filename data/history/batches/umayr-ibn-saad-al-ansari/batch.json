@@ -1,0 +1,257 @@
+{
+  "slug": "umayr-ibn-saad-al-ansari",
+  "summaryFile": "summary.md",
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umayr-ibn-saad-al-ansari",
+      "extractionUrl": "https://shamela.ws/book/10906/2083",
+      "accessedAt": "2026-09-29",
+      "volumeNumber": 5,
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "103"
+        },
+        {
+          "sequence": 2,
+          "printedPage": "104"
+        },
+        {
+          "sequence": 3,
+          "printedPage": "105"
+        }
+      ],
+      "notInSource": [
+        "kunya",
+        "appearance",
+        "wives",
+        "siblings"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "umayr-ibn-saad-al-ansari-siyar/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umayr-ibn-saad-al-ansari",
+      "field": "fullName",
+      "assertion": "عمير بن سعد بن شهيد الأنصاري الأوسي",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/103-p9",
+          "volume": "5",
+          "pageReference": "103",
+          "extractionUrl": "https://shamela.ws/book/10906/2083",
+          "excerptArabic": "١٢ - عُمَيْرُ بنُ سَعْدٍ الأَنْصَارِيُّ الأَوْسِيُّ الزَّاهِدُ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/104-p8",
+          "volume": "5",
+          "pageReference": "104",
+          "extractionUrl": "https://shamela.ws/book/10906/2084",
+          "excerptArabic": "صَحِبَ عُمَيْرُ بنُ سَعْدِ بنِ شُهَيْدٍ النَّبِيَّ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "umayr-ibn-saad-al-ansari-siyar/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umayr-ibn-saad-al-ansari",
+      "assertion": "ابن سعد بن شهيد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "saad-ibn-shahid-al-awsi",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/104-p8",
+          "volume": "5",
+          "pageReference": "104",
+          "extractionUrl": "https://shamela.ws/book/10906/2084",
+          "excerptArabic": "عُمَيْرُ بنُ سَعْدِ بنِ شُهَيْدٍ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "umayr-ibn-saad-al-ansari-siyar/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umayr-ibn-saad-al-ansari",
+      "field": "virtues",
+      "assertion": "الزاهد نسيج وحده، له حديث واحد؛ شهد فتح الشام وولي دمشق وحمص لعمر؛ صحب النبي صلى الله عليه وسلم ورفع إليه كلام الجلاس بن سويد وكان يتيما في حجره؛ ولي حمص بعد ابن حذيم فشارك معاوية الشام حتى قتل عمر فنزعه عثمان؛ سماه عمر نسيج وحده وبعثه على جيش؛ قال ابن عمر لابنه: ما كان رجل من الصحابة أفضل من أبيك؛ عده المفضل الغلابي في زهاد الأنصار الثلاثة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/103-p9",
+          "volume": "5",
+          "pageReference": "103",
+          "extractionUrl": "https://shamela.ws/book/10906/2083",
+          "excerptArabic": "عُمَيْرُ بنُ سَعْدٍ الأَنْصَارِيُّ الأَوْسِيُّ الزَّاهِدُ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/103-p10",
+          "volume": "5",
+          "pageReference": "103",
+          "extractionUrl": "https://shamela.ws/book/10906/2083",
+          "excerptArabic": "نَسيجُ وَحْدِهِ.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/103-p11",
+          "volume": "5",
+          "pageReference": "103",
+          "extractionUrl": "https://shamela.ws/book/10906/2083",
+          "excerptArabic": "لَهُ حَدِيْثٌ وَاحِدٌ.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/104-p2",
+          "volume": "5",
+          "pageReference": "104",
+          "extractionUrl": "https://shamela.ws/book/10906/2084",
+          "excerptArabic": "شَهِدَ فَتْحَ الشَّامِ، وَوَلِيَ دِمَشْقَ وَحِمْصَ لِعُمَرَ.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/104-p8",
+          "volume": "5",
+          "pageReference": "104",
+          "extractionUrl": "https://shamela.ws/book/10906/2084",
+          "excerptArabic": "صَحِبَ عُمَيْرُ بنُ سَعْدِ بنِ شُهَيْدٍ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَلَمْ يَشْهَدْ شَيْئاً مِنَ المَشَاهِدِ.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/104-p9",
+          "volume": "5",
+          "pageReference": "104",
+          "extractionUrl": "https://shamela.ws/book/10906/2084",
+          "excerptArabic": "وَهُوَ الَّذِي رَفَعَ إِلَى النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- كَلاَمَ الجُلاَسِ بنِ سُوَيْدٍ، وَكَانَ يَتِيْماً فِي حَجْرِهِ.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/105-p1",
+          "volume": "5",
+          "pageReference": "105",
+          "extractionUrl": "https://shamela.ws/book/10906/2085",
+          "excerptArabic": "وَاسْتَعْمَلَهُ عُمَرُ عَلَى حِمْصَ، وَكَانَ مِنَ الزُّهَّادِ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/105-p2",
+          "volume": "5",
+          "pageReference": "105",
+          "extractionUrl": "https://shamela.ws/book/10906/2085",
+          "excerptArabic": "كَانَت وَلاَيَتُهُ حِمْصَ بَعْدَ ابْنِ حِذْيَمٍ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/105-p3",
+          "volume": "5",
+          "pageReference": "105",
+          "extractionUrl": "https://shamela.ws/book/10906/2085",
+          "excerptArabic": "وَقَامَ مَكَانَهُ عُمَيْرُ بنُ سَعْدٍ، فَكَانَ عَلَى الشَّامِ هُوَ وَمُعَاوِيَةُ حَتَّى قُتِلَ عُمَرُ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/105-p4",
+          "volume": "5",
+          "pageReference": "105",
+          "extractionUrl": "https://shamela.ws/book/10906/2085",
+          "excerptArabic": "ثُمَّ جَمَعَ عُثْمَانُ الشَّامَ لِمُعَاوِيَةَ، وَنَزَعَ عُمَيْراً.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/105-p5",
+          "volume": "5",
+          "pageReference": "105",
+          "extractionUrl": "https://shamela.ws/book/10906/2085",
+          "excerptArabic": "قَالَ لِي ابْنُ عُمَرَ: مَا كَانَ مِنَ المُسْلِمِيْنَ رَجُلٌ مِنَ الصَّحَابَةِ أَفْضَلَ مِنْ أَبِيْكَ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/105-p6",
+          "volume": "5",
+          "pageReference": "105",
+          "extractionUrl": "https://shamela.ws/book/10906/2085",
+          "excerptArabic": "كَانَ عُمَرُ مِنْ عُجْبِهِ بِعُمَيْرِ بنِ سَعْدٍ يُسَمِّيْهِ: نَسِيْجَ وَحْدِهِ، وَبَعَثَهُ مَرَّةً عَلَى جَيْشٍ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/105-p7",
+          "volume": "5",
+          "pageReference": "105",
+          "extractionUrl": "https://shamela.ws/book/10906/2085",
+          "excerptArabic": "قَالَ المُفَضَّلُ الغَلاَبِيُّ: زُهَّادُ الأَنْصَارِ ثَلاَثَةٌ: أَبُو الدَّرْدَاءِ، وَشَدَّادُ بنُ أَوْسٍ، وَعُمَيْرُ بنُ سَعْدٍ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "umayr-ibn-saad-al-ansari-siyar/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umayr-ibn-saad-al-ansari",
+      "field": "titles",
+      "assertion": "صحابي: صحب النبي صلى الله عليه وسلم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/104-p8",
+          "volume": "5",
+          "pageReference": "104",
+          "extractionUrl": "https://shamela.ws/book/10906/2084",
+          "excerptArabic": "صَحِبَ عُمَيْرُ بنُ سَعْدِ بنِ شُهَيْدٍ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "umayr-ibn-saad-al-ansari-siyar/son-abd-al-rahman",
+      "subjectKind": "PERSON",
+      "subjectSlug": "umayr-ibn-saad-al-ansari",
+      "assertion": "والد عبد الرحمن.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "FATHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "abd-al-rahman-ibn-umayr-ibn-saad",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/105-p5",
+          "volume": "5",
+          "pageReference": "105",
+          "extractionUrl": "https://shamela.ws/book/10906/2085",
+          "excerptArabic": "عَنْ عَبْدِ الرَّحْمَنِ بنِ عُمَيْرِ بن سَعْدٍ: قَالَ لِي ابْنُ عُمَرَ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    }
+  ]
+}

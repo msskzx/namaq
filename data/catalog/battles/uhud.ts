@@ -249,6 +249,35 @@ const uhud = {
       },
       claims: ['at-tufayl-ibn-amr-ad-dawsi-siyar75/uhud-absence'],
     },
+    {
+      person: 'hatib-ibn-abi-baltaah',
+      isMuslim: true,
+      summary: {
+        value:
+          'إِنَّهُ اطَّلَعَ عَلَى النَّبِيِّ -صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ- بِأُحُدٍ … فَمَضَيْتُ حَتَّى ظَفِرْتُ بِهِ، فَضَرَبْتُهُ بِالسَّيْفِ، فَطَرَحْتُ رَأْسَهُ! فَنَزَلْتُ، فَأَخَذْتُ رَأْسَهُ وَسَلَبَهُ وَفَرَسَهُ، وَجِئْتُ بِهِ إِلَى النَّبِيِّ -صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ- فَسَلَّمَ ذَلِكَ إِلَيَّ.',
+        claims: ['hatib-ibn-abi-baltaah-siyar9/uhud'],
+      },
+      claims: ['hatib-ibn-abi-baltaah-siyar9/uhud'],
+    },
+    {
+      person: 'abu-sufyan-ibn-harb',
+      isMuslim: false,
+      summary: {
+        value: 'رَأْسُ قُرَيْشٍ، وَقَائِدُهُمْ يَوْمَ أُحُدٍ.',
+        claims: ['abu-sufyan-ibn-harb-siyar13/uhud'],
+      },
+      claims: ['abu-sufyan-ibn-harb-siyar13/uhud'],
+    },
+    {
+      person: 'abu-talha-al-ansari',
+      isMuslim: true,
+      summary: {
+        value:
+          'كَانَ يَرْمِي بَيْنَ يَدَيْ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَوْمَ أُحُدٍ؛ وَلَمَّا انْهَزَمَ نَاسٌ ثَبَتَ مُجَوِّباً عَلَيْهِ بِحَجْفَةٍ، وَكَسَرَ يَوْمَئِذٍ قَوْسَيْنِ أَوْ ثَلاَثَةً؛ وَقَالَ: يَا نَبِيَّ اللهِ، لاَ تُشْرِفْ، لاَ يُصِيْبُكَ سَهْمٌ، نَحْرِي دُوْنَ نَحْرِكَ.',
+        claims: ['abu-talha-al-ansari-siyar5/uhud'],
+      },
+      claims: ['abu-talha-al-ansari-siyar5/uhud'],
+    },
   ],
 } satisfies CatalogBattle;
 

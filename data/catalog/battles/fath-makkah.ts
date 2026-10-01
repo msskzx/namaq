@@ -37,8 +37,16 @@ const fathMakkah = {
       },
       claims: ['suhail-ibn-amr-siyar25/fath-makkah'],
     },
-    // Carried from the old seed when he left it; no batch places him here yet.
-    { person: 'al-abbas-ibn-abd-al-muttalib', isMuslim: true, claims: legacyUnreviewed },
+    {
+      person: 'al-abbas-ibn-abd-al-muttalib',
+      isMuslim: true,
+      summary: {
+        value:
+          'كَانَ قَدْ قَدِمَ إِلَى النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَبْلَ الفَتْحِ؛ أَلاَ تَرَاهُ أَجَارَ أَبَا سُفْيَانَ بنَ حَرْبٍ. ثُمَّ خَرَجَ مَعَهُ إِلَى فَتْحِ مَكَّةَ.',
+        claims: ['al-abbas-ibn-abd-al-muttalib-siyar11/fath-makkah'],
+      },
+      claims: ['al-abbas-ibn-abd-al-muttalib-siyar11/fath-makkah'],
+    },
     {
       person: 'rabiah-ibn-al-harith',
       isMuslim: true,
@@ -48,6 +56,17 @@ const fathMakkah = {
       },
       claims: ['rabiah-ibn-al-harith-siyar46/fath-makkah'],
     },
+    // His own entry has the Banu Muawiyah ibn Malik banner with him on the day
+    // of the conquest (see data/history/batches/jabr-ibn-atik).
+    {
+      person: 'jabr-ibn-atik',
+      isMuslim: true,
+      summary: {
+        value: 'كَانَتْ إِلَيْهِ رَايَةُ بَنِي مُعَاوِيَةَ بنِ مَالِكٍ يَوْمَ الفَتْحِ.',
+        claims: ['jabr-ibn-atik-siyar/fath-makkah'],
+      },
+      claims: ['jabr-ibn-atik-siyar/fath-makkah'],
+    },
     {
       person: 'at-tufayl-ibn-amr-ad-dawsi',
       isMuslim: true,
@@ -56,6 +75,15 @@ const fathMakkah = {
         claims: ['at-tufayl-ibn-amr-ad-dawsi-siyar75/fath-makkah'],
       },
       claims: ['at-tufayl-ibn-amr-ad-dawsi-siyar75/fath-makkah'],
+    },
+    {
+      person: 'abu-sufyan-ibn-harb',
+      isMuslim: true,
+      summary: {
+        value: 'تَدَارَكَهُ اللهُ بِالإِسْلاَمِ يَوْمَ الفَتْحِ، فَأَسْلَمَ شِبْهَ مُكْرَهٍ خَائِفٍ؛ ثُمَّ بَعْدَ أَيَّامٍ صَلُحَ إِسْلاَمُهُ.',
+        claims: ['abu-sufyan-ibn-harb-siyar13/fath-makkah'],
+      },
+      claims: ['abu-sufyan-ibn-harb-siyar13/fath-makkah'],
     },
   ],
 } satisfies CatalogBattle;

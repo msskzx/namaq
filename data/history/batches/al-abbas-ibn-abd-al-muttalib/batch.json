@@ -1,0 +1,722 @@
+{
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-abbas-ibn-abd-al-muttalib",
+      "volumeNumber": 5,
+      "extractionUrl": "https://shamela.ws/book/10906/2058",
+      "accessedAt": "2026-10-01",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "78",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 2,
+          "printedPage": "79",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 3,
+          "printedPage": "80",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 4,
+          "printedPage": "81",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 5,
+          "printedPage": "82",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 6,
+          "printedPage": "83",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 7,
+          "printedPage": "84",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 8,
+          "printedPage": "85",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 9,
+          "printedPage": "86",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 10,
+          "printedPage": "87",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 11,
+          "printedPage": "88",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 12,
+          "printedPage": "89",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 13,
+          "printedPage": "90",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 14,
+          "printedPage": "91",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 15,
+          "printedPage": "92",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 16,
+          "printedPage": "93",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 17,
+          "printedPage": "94",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 18,
+          "printedPage": "95",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 19,
+          "printedPage": "96",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 20,
+          "printedPage": "97",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 21,
+          "printedPage": "98",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 22,
+          "printedPage": "99",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 23,
+          "printedPage": "100",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 24,
+          "printedPage": "101",
+          "volumeNumber": 5
+        },
+        {
+          "sequence": 25,
+          "printedPage": "102",
+          "volumeNumber": 5
+        }
+      ],
+      "notInSource": [
+        "kunya",
+        "siblings"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "al-abbas-ibn-abd-al-muttalib-siyar11/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-abbas-ibn-abd-al-muttalib",
+      "assertion": "MALE — صيغ مذكر: عَمُّ رَسُوْلِ اللهِ … كَانَ العَبَّاسُ شَرِيْفاً مَهِيْباً",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/78-p7",
+          "volume": "5",
+          "pageReference": "78",
+          "extractionUrl": "https://shamela.ws/book/10906/2058",
+          "excerptArabic": "١١ - العَبَّاسُ عَمُّ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- * (ع)",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/79-p7",
+          "volume": "5",
+          "pageReference": "79",
+          "extractionUrl": "https://shamela.ws/book/10906/2059",
+          "excerptArabic": "قَالَ الكَلْبِيُّ: كَانَ العَبَّاسُ شَرِيْفاً، مَهِيْباً، عَاقِلاً، جَمِيْلاً، أَبْيَضَ، بَضّاً، لَهُ ضَفِيْرَتَانِ، مُعْتَدِلَ القَامَةِ.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "field": "sex"
+    },
+    {
+      "key": "al-abbas-ibn-abd-al-muttalib-siyar11/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-abbas-ibn-abd-al-muttalib",
+      "assertion": "عم النبي، أسلم وكتم إسلامه ثم هاجر قبيل فتح مكة وثبت مع النبي يوم حنين — صحابي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/78-p8",
+          "volume": "5",
+          "pageReference": "78",
+          "extractionUrl": "https://shamela.ws/book/10906/2058",
+          "excerptArabic": "قِيْلَ: إِنَّهُ أَسْلَمَ قَبْلَ الهِجْرَةِ، وَكَتَمَ إِسْلاَمَهُ، وَخَرَجَ مَعَ قَوْمِهِ إِلَى بَدْرٍ، فَأُسِرَ يَوْمَئِذٍ، فَادَّعَى أَنَّهُ مُسْلِمٌ، فَاللهُ أَعْلَمُ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/96-p8",
+          "volume": "5",
+          "pageReference": "96",
+          "extractionUrl": "https://shamela.ws/book/10906/2076",
+          "excerptArabic": "ثُمَّ جَاءَ إِلَى النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مُهَاجِراً قُبَيْلَ فَتْحِ مَكَّةَ؛ فَلَمْ يَتَحَرَّرْ لَنَا قُدُوْمُهُ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/88-p2",
+          "volume": "5",
+          "pageReference": "88",
+          "extractionUrl": "https://shamela.ws/book/10906/2068",
+          "excerptArabic": "وَثَبَتَ أَنَّ العَبَّاسَ كَانَ يَوْمَ حُنِيْنٍ، وَقْتَ الهَزِيْمَةِ، آخِذاً بِلِجَامِ بَغْلَةِ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَثَبَتَ مَعَهُ حَتَّى نَزَلَ النَّصْرُ (١) .",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "field": "titles"
+    },
+    {
+      "key": "al-abbas-ibn-abd-al-muttalib-siyar11/appearance",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-abbas-ibn-abd-al-muttalib",
+      "assertion": "شريف مهيب عاقل جميل أبيض بض له ضفيرتان معتدل القامة؛ من أطول الرجال وأحسنهم صورة وأبهاهم وأجهرهم صوتا؛ تام الشكل جهوري الصوت جدا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/79-p7",
+          "volume": "5",
+          "pageReference": "79",
+          "extractionUrl": "https://shamela.ws/book/10906/2059",
+          "excerptArabic": "قَالَ الكَلْبِيُّ: كَانَ العَبَّاسُ شَرِيْفاً، مَهِيْباً، عَاقِلاً، جَمِيْلاً، أَبْيَضَ، بَضّاً، لَهُ ضَفِيْرَتَانِ، مُعْتَدِلَ القَامَةِ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/79-p9",
+          "volume": "5",
+          "pageReference": "79",
+          "extractionUrl": "https://shamela.ws/book/10906/2059",
+          "excerptArabic": "قُلْتُ: بَلْ كَانَ مِنْ أَطْوَلِ الرِّجَالِ، وَأَحْسَنِهِمْ صُوْرَةً، وَأَبْهَاهُم،",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/80-p1",
+          "volume": "5",
+          "pageReference": "80",
+          "extractionUrl": "https://shamela.ws/book/10906/2060",
+          "excerptArabic": "وَأَجْهَرِهِمْ صَوْتاً، مَعَ الحِلْمِ الوَافِرِ، وَالسُّؤْدُدِ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/95-p6",
+          "volume": "5",
+          "pageReference": "95",
+          "extractionUrl": "https://shamela.ws/book/10906/2075",
+          "excerptArabic": "قُلْتُ: كَانَ تَامَّ الشَّكْلِ، جَهْوَرِيَّ الصَّوْتِ جِدّاً، وَهُوَ الَّذِي أَمَرَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَن يَهْتِفَ يَوْمَ حُنَيْنٍ: يَا أَصْحَابَ الشَّجَرَةِ (٢) .",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "field": "appearance"
+    },
+    {
+      "key": "al-abbas-ibn-abd-al-muttalib-siyar11/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-abbas-ibn-abd-al-muttalib",
+      "assertion": "عم الرجل صنو أبيه، من آذاه فقد آذى النبي؛ العباس من النبي والنبي منه؛ أجود قريش كفا وأوصلها؛ دعا له النبي بالمغفرة له ولولده؛ توسل به عمر في الاستسقاء عام الرمادة؛ كان النبي يرى له ما يرى الولد لوالده؛ قدم قبل الفتح فأجار أبا سفيان وليس في عداد الطلقاء؛ ثبت يوم حنين آخذا بلجام بغلة النبي حتى نزل النصر وهو الذي هتف يا أصحاب الشجرة؛ فرض له عمر اثني عشر ألفا؛ كان له ثوب لعاري بني هاشم وجفنة لجائعهم وكان يمنع الجار ويبذل المال؛ قبل علي يده ورجله؛ لم يزل مشفقا على النبي محبا له صابرا على الأذى.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/87-p11",
+          "volume": "5",
+          "pageReference": "87",
+          "extractionUrl": "https://shamela.ws/book/10906/2067",
+          "excerptArabic": "قَالَ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-: (مَا بَالُ رِجَالٍ يُؤْذُوْنَنِي فِي العَبَّاسِ، وَإِنَّ عَمَّ الرَّجُلِ صِنْوُ أَبِيْهِ، مَنْ آذَى العَبَّاسَ فَقَدْ آذَانِي) (٤) .",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/90-p6",
+          "volume": "5",
+          "pageReference": "90",
+          "extractionUrl": "https://shamela.ws/book/10906/2070",
+          "excerptArabic": "ثُمَّ قَالَ: (أَمَا شَعَرْتَ أَنَّ عَمَّ الرَّجُلِ صِنْوُ أَبِيْهِ (٢)) .",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/88-p12",
+          "volume": "5",
+          "pageReference": "88",
+          "extractionUrl": "https://shamela.ws/book/10906/2068",
+          "excerptArabic": "قَالَ: (فَإِنَّ العَبَّاسَ مِنِّي، وَأَنَا مِنْهُ، لاَ تَسُبُّوا أَمْوَاتَنَا فَتُؤْذُوا أَحْيَاءنَا) .",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/89-p3",
+          "volume": "5",
+          "pageReference": "89",
+          "extractionUrl": "https://shamela.ws/book/10906/2069",
+          "excerptArabic": "أَنَّ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- جَعَلَ عَلَى العَبَّاسِ وَوَلَدِهِ كِسَاءً، ثُمَّ قَالَ: (اللَّهُمَّ اغْفِرْ لِلْعَبَّاسِ وَوَلَدِهِ مَغْفِرَةً ظَاهِرَةً وَبَاطِنَةً لاَ تُغَادِرُ ذَنْباً، اللَّهُمَّ اخْلُفْهُ فِي وَلَدِهِ (٢)) .",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/91-p5",
+          "volume": "5",
+          "pageReference": "91",
+          "extractionUrl": "https://shamela.ws/book/10906/2071",
+          "excerptArabic": "فَقَالَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-: (هَذَا العَبَّاسُ عَمُّ نَبِيِّكُم، أَجْوَدُ قُرَيْشٍ كَفّاً، وَأَوْصَلُهَا (٣)) .",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/91-p8",
+          "volume": "5",
+          "pageReference": "91",
+          "extractionUrl": "https://shamela.ws/book/10906/2071",
+          "excerptArabic": "أَنَّ عُمَرَ اسْتَسْقَى، فَقَالَ: اللَّهُمَّ إِنَّا كُنَّا إِذَا قَحَطْنَا عَلَى عَهْدِ نَبِيِّكَ تَوَسَّلْنَا بِهِ؛ وَإِنَا نَسْتَسْقِي إِلَيْكَ بِعَمِّ نَبِيِّكَ العَبَّاسِ (٤) .",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/93-p10",
+          "volume": "5",
+          "pageReference": "93",
+          "extractionUrl": "https://shamela.ws/book/10906/2073",
+          "excerptArabic": "قَالَ عُمَرُ: اللَّهُمَّ إِنَّا نَتَوَسَّلُ إِلَيْكَ بِعَمِّ نَبِيِّكَ مُحَمَّدٍ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فَاسْقِنَا. صَحِيْحٌ (٥) .",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/92-p5",
+          "volume": "5",
+          "pageReference": "92",
+          "extractionUrl": "https://shamela.ws/book/10906/2072",
+          "excerptArabic": "إِنَّ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- كَانَ يَرَى لِلْعَبَّاسِ مَا يَرَى الوَلَدُ لِوَالِدِهِ، فَيُعَظِّمُهُ، وَيُفَخِّمُهُ، وَيَبَرُّ قَسَمَهُ؛ فَاقْتَدُوا أَيَّهَا النَّاسُ بِرَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فِي عَمِّهِ العَبَّاسِ، وَاتَّخِذُوْهُ وَسِيْلَةً إِلَى اللهِ فِيْمَا نَزَلَ بِكُم.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/79-p1",
+          "volume": "5",
+          "pageReference": "79",
+          "extractionUrl": "https://shamela.ws/book/10906/2059",
+          "excerptArabic": "وَلَيْسَ هُوَ فِي عِدَادِ الطُّلَقَاءِ؛ فَإِنَّهُ كَانَ قَدْ قَدِمَ إِلَى النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَبْلَ الفَتْحِ؛ أَلاَ تَرَاهُ أَجَارَ أَبَا سُفْيَانَ بنَ حَرْبٍ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/80-p5",
+          "volume": "5",
+          "pageReference": "80",
+          "extractionUrl": "https://shamela.ws/book/10906/2060",
+          "excerptArabic": "قَالَ الزُّبَيْرُ بنُ بَكَّارٍ: كَانَ لِلعَبَّاسِ ثَوْبٌ لِعَارِي بَنِي هَاشِمٍ، وَجَفْنَةٌ لِجَائِعِهِمْ، وَمَنْظَرَةٌ (٢) لِجَاهِلِهِمْ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/80-p6",
+          "volume": "5",
+          "pageReference": "80",
+          "extractionUrl": "https://shamela.ws/book/10906/2060",
+          "excerptArabic": "وَكَانَ يَمْنَعُ الجَارَ، وَيَبْذُلُ المَالَ، وَيُعْطِي فِي النَّوَائِبِ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/94-p6",
+          "volume": "5",
+          "pageReference": "94",
+          "extractionUrl": "https://shamela.ws/book/10906/2074",
+          "excerptArabic": "وَفَرَضَ لِلْعَبَّاسِ اثْنَيْ عَشَرَ أَلْفاً (١) .",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/94-p8",
+          "volume": "5",
+          "pageReference": "94",
+          "extractionUrl": "https://shamela.ws/book/10906/2074",
+          "excerptArabic": "رَأَيْتُ عَلِيّاً يُقَبِّلُ يَدَ العَبَّاسِ وَرِجْلَهُ، وَيَقُوْلُ: يَا عَمّ، ارْضَ عَنِّي (٢) .",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/95-p6",
+          "volume": "5",
+          "pageReference": "95",
+          "extractionUrl": "https://shamela.ws/book/10906/2075",
+          "excerptArabic": "وَهُوَ الَّذِي أَمَرَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَن يَهْتِفَ يَوْمَ حُنَيْنٍ: يَا أَصْحَابَ الشَّجَرَةِ (٢) .",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/96-p5",
+          "volume": "5",
+          "pageReference": "96",
+          "extractionUrl": "https://shamela.ws/book/10906/2076",
+          "excerptArabic": "قُلْتُ: لَمْ يَزَلِ العَبَّاسُ مُشْفِقاً عَلَى النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مُحِبّاً لَهُ، صَابِراً عَلَى الأَذَى، وَلَمَّا يُسْلِمْ بَعْدُ، بِحَيْثُ أَنَّهُ لَيْلَةَ العَقَبَةِ عُرِفَ، وَقَامَ مَعَ ابْنِ أَخِيْهِ فِي اللَّيْلِ، وَتَوَثَّقَ لَهُ مِنَ السَّبْعِيْنَ، ثُمَّ خَرَجَ إِلَى بَدْرٍ مَعَ قَوْمِهِ مُكْرَهاً؛ فَأُسِرَ، فَأَبْدَى لَهُم أَنَّهُ كَانَ أَسْلَمَ، ثُمَّ رَجَعَ إِلَى مَكَّةَ.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "field": "virtues"
+    },
+    {
+      "key": "al-abbas-ibn-abd-al-muttalib-siyar11/nasab-father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-abbas-ibn-abd-al-muttalib",
+      "assertion": "العباس بن عبد المطلب؛ أمه نتيلة بنت جناب بن كليب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/100-p9",
+          "volume": "5",
+          "pageReference": "100",
+          "extractionUrl": "https://shamela.ws/book/10906/2080",
+          "excerptArabic": "لَمَّا مَاتَ العَبَّاسُ، بَعَثَتْ بَنُوْ هَاشِمٍ مَن يُؤْذِنُ أَهْلَ العَوَالِي: رَحِمَ اللهُ مَنْ شَهِدَ العَبَّاسَ بنَ عَبْدِ المُطَّلِبِ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/84-p8",
+          "volume": "5",
+          "pageReference": "84",
+          "extractionUrl": "https://shamela.ws/book/10906/2064",
+          "excerptArabic": "قَالَ: وَأُمُّهُ نُتَيْلَةُ بِنْتُ جَنَابِ بنِ كُلَيْبٍ.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "abd-al-muttalib-ibn-hashim"
+    },
+    {
+      "key": "al-abbas-ibn-abd-al-muttalib-siyar11/wife-umm-al-fadl",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-abbas-ibn-abd-al-muttalib",
+      "assertion": "بنوه الفضل وعبد الله وعبيد الله وقثم وعبد الرحمن ومعبد وأم حبيب أمهم أم الفضل لبابة الهلالية.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/84-p11",
+          "volume": "5",
+          "pageReference": "84",
+          "extractionUrl": "https://shamela.ws/book/10906/2064",
+          "excerptArabic": "وَبَنُوْهُ: الفَضْلُ - وَهُوَ أَكْبَرُهُمْ - وَعَبْدُ اللهِ البَحْرُ (٤) ، وَعُبَيْدُ اللهِ، وَقُثَمُ - وَلَمْ يُعْقِبْ - وَعَبْدُ الرَّحْمَنِ - تُوُفِّيَ بِالشَّامِ وَلَمْ يُعْقِبْ - وَمَعَبْدٌ - اسْتُشْهِدَ بِإِفْرِيْقِيَةَ - وَأَمُّ حَبِيْبٍ (٥) .",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/84-p12",
+          "volume": "5",
+          "pageReference": "84",
+          "extractionUrl": "https://shamela.ws/book/10906/2064",
+          "excerptArabic": "وَأُمُّهُمْ: أُمُّ الفَضْلِ لُبَابَةُ الهِلاَلِيَّةُ، وَفِيْهَا يَقُوْلُ ابْنُ يَزِيْدَ الهِلاَلِيُّ:",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "relationshipType": "HUSBAND",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "umm-al-fadl-bint-al-harith"
+    },
+    {
+      "key": "al-abbas-ibn-abd-al-muttalib-siyar11/nephew-aqil",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-abbas-ibn-abd-al-muttalib",
+      "assertion": "ابن أخيه عقيل؛ أمره النبي يوم بدر أن يفدي نفسه وابن أخيه عقيلا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/81-p18",
+          "volume": "5",
+          "pageReference": "81",
+          "extractionUrl": "https://shamela.ws/book/10906/2061",
+          "excerptArabic": "ثُمَّ قَالَ لِلعَبَّاسِ: افْدِ نَفْسَكَ، وَابْنَ أَخِيْكَ عَقِيْلاً، وَنَوْفَلَ بنَ الحَارِثِ، وَحَلِيْفَكَ عُتْبَةَ بنَ جَحْدَمٍ (٤) .",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "relationshipType": "PATERNAL_UNCLE",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "aqil-ibn-abi-talib"
+    },
+    {
+      "key": "al-abbas-ibn-abd-al-muttalib-siyar11/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-abbas-ibn-abd-al-muttalib",
+      "assertion": "خرج مع قومه إلى بدر فأسر يومئذ؛ كان أكثر الأسرى فداء يوم بدر العباس، افتدى نفسه بمائة أوقية من ذهب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/78-p8",
+          "volume": "5",
+          "pageReference": "78",
+          "extractionUrl": "https://shamela.ws/book/10906/2058",
+          "excerptArabic": "قِيْلَ: إِنَّهُ أَسْلَمَ قَبْلَ الهِجْرَةِ، وَكَتَمَ إِسْلاَمَهُ، وَخَرَجَ مَعَ قَوْمِهِ إِلَى بَدْرٍ، فَأُسِرَ يَوْمَئِذٍ، فَادَّعَى أَنَّهُ مُسْلِمٌ، فَاللهُ أَعْلَمُ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/83-p2",
+          "volume": "5",
+          "pageReference": "83",
+          "extractionUrl": "https://shamela.ws/book/10906/2063",
+          "excerptArabic": "قَالَ ابْنُ إِسْحَاقَ: وَكَانَ أَكْثَرُ الأُسَارَى فِدَاءً يَوْمَ بَدْرٍ العَبَّاسُ، افْتَدَى نَفْسَهُ بِمائَةِ أُوْقِيَّةٍ مِنْ ذَهَبٍ.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr"
+    },
+    {
+      "key": "al-abbas-ibn-abd-al-muttalib-siyar11/fath-makkah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-abbas-ibn-abd-al-muttalib",
+      "assertion": "قدم إلى النبي قبل الفتح فأجار أبا سفيان بن حرب، ثم خرج معه إلى فتح مكة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/79-p1",
+          "volume": "5",
+          "pageReference": "79",
+          "extractionUrl": "https://shamela.ws/book/10906/2059",
+          "excerptArabic": "وَلَيْسَ هُوَ فِي عِدَادِ الطُّلَقَاءِ؛ فَإِنَّهُ كَانَ قَدْ قَدِمَ إِلَى النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَبْلَ الفَتْحِ؛ أَلاَ تَرَاهُ أَجَارَ أَبَا سُفْيَانَ بنَ حَرْبٍ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/87-p9",
+          "volume": "5",
+          "pageReference": "87",
+          "extractionUrl": "https://shamela.ws/book/10906/2067",
+          "excerptArabic": "ثُمَّ خَرَجَ العَبَّاسُ بَعْدَ ذَلِكَ، فَلَحِقَ بِالنَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فَأَطْعَمَهُ بِخَيْبَرَ مائَتَيْ وَسْقٍ كُلَّ سَنَةٍ، ثُمَّ خَرَجَ مَعَهُ إِلَى فَتْحِ مَكَّةَ (٣) .",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "fath-makkah"
+    },
+    {
+      "key": "al-abbas-ibn-abd-al-muttalib-siyar11/hunayn",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-abbas-ibn-abd-al-muttalib",
+      "assertion": "كان يوم حنين وقت الهزيمة آخذا بلجام بغلة النبي وثبت معه حتى نزل النصر؛ وهو الذي أمره النبي أن يهتف: يا أصحاب الشجرة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/88-p2",
+          "volume": "5",
+          "pageReference": "88",
+          "extractionUrl": "https://shamela.ws/book/10906/2068",
+          "excerptArabic": "وَثَبَتَ أَنَّ العَبَّاسَ كَانَ يَوْمَ حُنِيْنٍ، وَقْتَ الهَزِيْمَةِ، آخِذاً بِلِجَامِ بَغْلَةِ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَثَبَتَ مَعَهُ حَتَّى نَزَلَ النَّصْرُ (١) .",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/95-p6",
+          "volume": "5",
+          "pageReference": "95",
+          "extractionUrl": "https://shamela.ws/book/10906/2075",
+          "excerptArabic": "وَهُوَ الَّذِي أَمَرَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَن يَهْتِفَ يَوْمَ حُنَيْنٍ: يَا أَصْحَابَ الشَّجَرَةِ (٢) .",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "hunayn"
+    },
+    {
+      "key": "al-abbas-ibn-abd-al-muttalib-siyar11/second-aqaba",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-abbas-ibn-abd-al-muttalib",
+      "assertion": "حضر بيعة العقبة الثانية مع ابن أخيه؛ سبق الأنصار إلى المكان معه عمه العباس وحده، وتكلم أولهم، وبايعهم النبي والعباس آخذ بيده يؤكد له البيعة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/85-p12",
+          "volume": "5",
+          "pageReference": "85",
+          "extractionUrl": "https://shamela.ws/book/10906/2065",
+          "excerptArabic": "فَخَرَجُوْا بَعْدَ هَدْأَةٍ يَتَسَلَّلُوْنَ، وَقَدْ سَبَقَهُمْ إِلَى ذَلِكَ المَكَانِ، مَعَهُ عَمُّهُ العَبَّاسُ وَحْدَهُ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/86-p8",
+          "volume": "5",
+          "pageReference": "86",
+          "extractionUrl": "https://shamela.ws/book/10906/2066",
+          "excerptArabic": "فَبَايَعَهُمُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَالعَبَّاسُ آخِذٌ بِيَدِهِ، يُؤَكِّدُ لَهُ البَيْعَةَ (٢) .",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/96-p5",
+          "volume": "5",
+          "pageReference": "96",
+          "extractionUrl": "https://shamela.ws/book/10906/2076",
+          "excerptArabic": "بِحَيْثُ أَنَّهُ لَيْلَةَ العَقَبَةِ عُرِفَ، وَقَامَ مَعَ ابْنِ أَخِيْهِ فِي اللَّيْلِ، وَتَوَثَّقَ لَهُ مِنَ السَّبْعِيْنَ، ثُمَّ خَرَجَ إِلَى بَدْرٍ مَعَ قَوْمِهِ مُكْرَهاً؛ فَأُسِرَ، فَأَبْدَى لَهُم أَنَّهُ كَانَ أَسْلَمَ، ثُمَّ رَجَعَ إِلَى مَكَّةَ.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "second-pledge-of-aqaba"
+    },
+    {
+      "key": "al-abbas-ibn-abd-al-muttalib-siyar11/ayah-anfal",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-abbas-ibn-abd-al-muttalib",
+      "assertion": "نزلت فيه وفي الأسرى آية الأنفال فيمن في أيدي المسلمين من الأسرى؛ قال: فقد أنجزها الله، فأعطاه مكان العشرين أوقية عشرين عبدا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/82-p13",
+          "volume": "5",
+          "pageReference": "82",
+          "extractionUrl": "https://shamela.ws/book/10906/2062",
+          "excerptArabic": "إِلَى أَنْ قَالَ: وَأُنزِلَتْ: {يَا أَيُّهَا النَّبِيُّ قُلْ لِمَنْ فِي أَيْدِيْكُم مِنَ الأَسْرَى (٤) إِنْ يَعْلَمِ اللهُ فِي قُلُوْبِكُم خَيْراً يُؤتِكُم خَيْراً مِمَّا أُخِذَ مِنْكُم وَيَغْفِرْ لَكُم} [الأَنْفَالُ: ٧٠] .",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/90-p1",
+          "volume": "5",
+          "pageReference": "90",
+          "extractionUrl": "https://shamela.ws/book/10906/2070",
+          "excerptArabic": "فَقَدْ أَنْجَزَهَا، يَعْنِي قَوْلَهُ: {قُلْ لِمَنْ فِي أَيْدِيْكُمْ مِنَ الأَسْرَى إِنْ يَعْلَمِ اللهُ فِي قُلُوْبِكُم خَيْراً يُؤْتِكُمْ خَيْراً مِمَّا أُخِذَ مِنْكُمْ وَيَغْفِرْ لَكُمْ} [الأَنْفَالُ: ٧٠] .",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "field": "ayat"
+    },
+    {
+      "key": "al-abbas-ibn-abd-al-muttalib-siyar11/death-year",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-abbas-ibn-abd-al-muttalib",
+      "assertion": "مات سنة اثنتين وثلاثين، فصلى عليه عثمان ودفن بالبقيع؛ كانت وفاته سنة اثنتين وثلاثين من الهجرة وله ست وثمانون سنة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/97-p4",
+          "volume": "5",
+          "pageReference": "97",
+          "extractionUrl": "https://shamela.ws/book/10906/2077",
+          "excerptArabic": "وَمَاتَ: سَنَةَ اثْنَتَيْنِ وَثَلاَثِيْنَ، فَصَلَّى عَلَيْهِ عُثْمَانُ، وَدُفِنَ بِالبَقِيْعِ.",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/100-p4",
+          "volume": "5",
+          "pageReference": "100",
+          "extractionUrl": "https://shamela.ws/book/10906/2080",
+          "excerptArabic": "كَانَتْ فِي سَنَةِ اثْنَتَيْنِ وَثَلاَثِيْنَ مِنَ الهِجْرَةِ، وَلَهُ سِتٌّ وَثَمَانُوْنَ سَنَةً؛ وَلَمْ يَبْلُغْ أَحَدٌ هَذِهِ السِّنَّ مِنْ أَوْلاَدِهِ، وَلاَ أَوْلاَدِهِمْ، وَلاَ ذُرِّيَّتِهِ الخُلَفَاءِ.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "field": "deathYearHijri"
+    },
+    {
+      "key": "al-abbas-ibn-abd-al-muttalib-siyar11/death-year-alt-34",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-abbas-ibn-abd-al-muttalib",
+      "assertion": "وقال خليفة وغيره: بل مات سنة أربع وثلاثين (يعارض رواية الاثنتين وثلاثين).",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/97-p6",
+          "volume": "5",
+          "pageReference": "97",
+          "extractionUrl": "https://shamela.ws/book/10906/2077",
+          "excerptArabic": "وَقَالَ خَلِيْفَةُ، وَغَيْرُهُ: بَلْ مَاتَ سَنَةَ أَرْبَعٍ وَثَلاَثِيْنَ.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "field": "deathYearHijri"
+    },
+    {
+      "key": "al-abbas-ibn-abd-al-muttalib-siyar11/death-year-alt-33",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-abbas-ibn-abd-al-muttalib",
+      "assertion": "وقال المدائني: سنة ثلاث وثلاثين (يعارض رواية الاثنتين وثلاثين).",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/97-p7",
+          "volume": "5",
+          "pageReference": "97",
+          "extractionUrl": "https://shamela.ws/book/10906/2077",
+          "excerptArabic": "وَقَالَ المَدَائِنِيُّ: سَنَةَ ثَلاَثٍ وَثَلاَثِيْنَ.",
+          "accessedAt": "2026-10-01"
+        }
+      ],
+      "field": "deathYearHijri"
+    }
+  ],
+  "slug": "al-abbas-ibn-abd-al-muttalib",
+  "summaryFile": "summary.md"
+}

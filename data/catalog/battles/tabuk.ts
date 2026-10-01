@@ -30,13 +30,30 @@ const tabuk = {
     { person: 'prophet-muhammad', isMuslim: true, claims: ['prophet/tabuk'] },
     { person: 'umar-ibn-al-khattab', isMuslim: true, claims: legacyUnreviewed },
     { person: 'uthman-ibn-affan', isMuslim: true, claims: legacyUnreviewed },
-    { person: 'al-abbas-ibn-abd-al-muttalib', isMuslim: true, claims: legacyUnreviewed },
     {
       person: 'ali-ibn-abi-talib',
       isMuslim: true,
       relation: 'ABSENT_FROM',
       status: ['ABSENT_EXCUSED'],
       claims: ['ali/tabuk-absence'],
+    },
+    {
+      person: 'abu-dharr-al-ghifari',
+      isMuslim: true,
+      summary: {
+        value: 'أبطأ في غزوة تبوك من عجف بعيره، ثم أخذ متاعه على ظهره ولحق بالنبي ماشياً.',
+        claims: ['abu-dharr-al-ghifari-siyar10/tabuk'],
+      },
+      claims: ['abu-dharr-al-ghifari-siyar10/tabuk'],
+    },
+    {
+      person: 'abbad-ibn-bishr',
+      isMuslim: true,
+      summary: {
+        value: 'جعله النبي على حرسه في غزوة تبوك.',
+        claims: ['abbad-ibn-bishr-siyar73/tabuk'],
+      },
+      claims: ['abbad-ibn-bishr-siyar73/tabuk'],
     },
   ],
 } satisfies CatalogBattle;

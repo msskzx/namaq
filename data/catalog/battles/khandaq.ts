@@ -87,6 +87,15 @@ const khandaq = {
       },
       claims: ['at-tufayl-ibn-amr-ad-dawsi-siyar75/khandaq-absence'],
     },
+    {
+      person: 'abu-sufyan-ibn-harb',
+      isMuslim: false,
+      summary: {
+        value: 'رَأْسُ قُرَيْشٍ، وَقَائِدُهُمْ يَوْمَ الخَنْدَقِ.',
+        claims: ['abu-sufyan-ibn-harb-siyar13/khandaq'],
+      },
+      claims: ['abu-sufyan-ibn-harb-siyar13/khandaq'],
+    },
   ],
 } satisfies CatalogBattle;
 

@@ -12,22 +12,46 @@ const abuDharrAlGhifari = {
   nameTransliterated: 'Abu Dharr al-Ghifari',
   hasProfile: true,
   fields: {
-    sex: { value: 'MALE', claims: legacyUnreviewed },
-    // Carried from the retired seed entry, which took it from the Siyar
-    // without citing it.
-    fullName: { value: 'جندب بن جنادة الغفاري', claims: legacyUnreviewed },
+    sex: { value: 'MALE', claims: ['abu-dharr-al-ghifari-siyar10/sex'] },
+    fullName: {
+      value: 'جندب بن جنادة الغفاري',
+      claims: ['abu-dharr-al-ghifari-siyar10/full-name'],
+    },
+    kunya: { value: 'أبو ذر', claims: ['abu-dharr-al-ghifari-siyar10/kunya'] },
+    appearance: {
+      value: 'آدم، ضخم جسيم كث اللحية؛ طوال أبيض الرأس واللحية',
+      claims: ['abu-dharr-al-ghifari-siyar10/appearance'],
+    },
     virtues: {
       value:
-        'قال: كنت ربع الإسلام، أسلم قبل ثلاثة نفر. وكان أول من حيَّا النبي صلى الله عليه وسلم بتحية الإسلام.',
-      claims: ['abu-dharr/rubu-al-islam'],
+        'أحد السابقين الأولين، من نجباء أصحاب محمد صلى الله عليه وسلم؛ رابع الإسلام، أسلم قبله ثلاثة؛ أول من حيا رسول الله بتحية الإسلام؛ رأس في الزهد والصدق والعلم والعمل، قوال بالحق لا تأخذه في الله لومة لائم؛ ما أقلت الغبراء ولا أظلت الخضراء من رجل أصدق لهجة منه؛ من سره أن ينظر إلى زهد عيسى فلينظر إليه؛ بايعه رسول الله خمساً وواثقه سبعاً ألا يخاف في الله لومة لائم؛ رحم الله أبا ذر يمشي وحده ويموت وحده ويبعث وحده؛ كان يفتي في خلافة أبي بكر وعمر وعثمان.',
+      claims: ['abu-dharr/rubu-al-islam', 'abu-dharr-al-ghifari-siyar10/virtues'],
     },
+    deathYearHijri: { value: '32', claims: ['abu-dharr-al-ghifari-siyar10/death-year'] },
+    placeOfDeathArabic: { value: 'الربذة', claims: ['abu-dharr-al-ghifari-siyar10/death-place'] },
   },
   titles: [
-    // Carried from the retired seed entry. The seeds gave every صحابي this
-    // title without citing it.
-    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    {
+      title: 'companion',
+      name: 'صحابي',
+      nameTransliterated: 'Companion',
+      claims: ['abu-dharr-al-ghifari-siyar10/titles'],
+    },
   ],
-  relations: [],
+  relations: [
+    {
+      type: 'SON',
+      inverse: 'FATHER',
+      to: 'junadah-ibn-sufyan-al-ghifari',
+      claims: ['abu-dharr-al-ghifari-siyar10/father'],
+    },
+    {
+      type: 'BROTHER',
+      inverse: 'BROTHER',
+      to: 'unays-ibn-junadah-al-ghifari',
+      claims: ['abu-dharr-al-ghifari-siyar10/brother-unays'],
+    },
+  ],
 } satisfies CatalogPerson;
 
 export default abuDharrAlGhifari;
