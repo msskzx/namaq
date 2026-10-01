@@ -1,10 +1,11 @@
 import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
 /**
- * Carried from neo4j/graphSeedData*.ts, whose node declaration is retired
- * with the rest. The catalog owns this subject's edges now, so they live
- * here or not at all. No batch has read this far into the nasab yet, so
- * every link stays on the legacy marker.
+ * Read in full from data/history/batches/ikrimah-ibn-abi-jahl (Siyar entry
+ * 66, vol. 4 pp. 323-324). `sex` stays on the legacy marker: the entry uses
+ * masculine grammar throughout and names him أبو عثمان, but never states his
+ * sex as a fact. The two reports of where he was killed stay in one virtues
+ * claim, since the entry names the battles rather than years.
  */
 const ikrimahIbnAbiJahl = {
   kind: 'PERSON',
@@ -15,15 +16,31 @@ const ikrimahIbnAbiJahl = {
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
-      value: 'عكرمة بن أبي جهل عمرو بن هشام بن المغيرة بن عبد الله بن عمر بن مخزوم القرشي المخزومي',
-      claims: legacyUnreviewed,
+      value: 'عكرمة بن أبي جهل عمرو بن هشام بن المغيرة بن عبد الله بن عمر بن مخزوم بن يقظة بن مرة بن كعب بن لؤي',
+      claims: ['ikrimah-ibn-abi-jahl-siyar66/full-name'],
+    },
+    kunya: { value: 'أبو عثمان', claims: ['ikrimah-ibn-abi-jahl-siyar66/kunya'] },
+    virtues: {
+      value:
+        'الشريف، الرئيس، الشهيد؛ أسلم وحسن إسلامه بالمرة؛ كان محمود البلاء في الإسلام؛ استشهد يوم اليرموك، وقيل: يوم أجنادين.',
+      claims: ['ikrimah-ibn-abi-jahl-siyar66/virtues'],
     },
   },
   titles: [
-    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    {
+      title: 'companion',
+      name: 'صحابي',
+      nameTransliterated: 'Companion',
+      claims: ['ikrimah-ibn-abi-jahl-siyar66/companion'],
+    },
   ],
   relations: [
-    { type: 'SON', inverse: 'FATHER', to: 'abu-jahl-ibn-hisham', claims: legacyUnreviewed },
+    {
+      type: 'SON',
+      inverse: 'FATHER',
+      to: 'abu-jahl-ibn-hisham',
+      claims: ['ikrimah-ibn-abi-jahl-siyar66/father'],
+    },
   ],
 } satisfies CatalogPerson;
 
