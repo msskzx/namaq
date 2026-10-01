@@ -11,10 +11,25 @@ an entry once you get to it.
 
 A `[ ]` here means "not yet extracted," not "out of scope" — scope for an
 entry this list hasn't reached yet is undetermined until someone reads it
-against the boundaries in data-pipelines.md. Group martyrdom headings
-(شهداء ...) are listed and struck through: they are not single-person
-entries and are skipped the way earlier batches skipped them, unless a named
-person inside one later gets their own dedicated entry.
+against the boundaries in data-pipelines.md. Group headings (`السابقون
+الأولون`, `شهداء ...`, and similar) are listed and struck through because
+they are not single-person entries and get no `data/history/batches/`
+directory of their own — but **struck through is not skipped**. These
+headings carry real evidence the model holds fields for: `السابقون
+الأولون` backs the `al-sabiqoon` title, a `شهداء` heading backs a
+`MARTYRED` status, and so on. That evidence has to be read from the
+heading's own position in the printed book and cited on whichever named
+person's batch it supports — the same way any other page is cited, just
+without a batch of its own.
+
+The heading's own position is not something page-by-page reading surfaces
+on its own: it is drawn from the فهرس الموضوعات (the book's topic index),
+not necessarily printed as a page in the entry run the way a numbered
+companion's own entry is. Find it deliberately — check the فهرس for where
+it sits — rather than assuming it will turn up while reading entries in
+order. Citing a title or status from an unrelated source (e.g. the Sira)
+that happens to name the same people is not a substitute: it leaves this
+book's own heading, and whatever it specifically says, unread.
 
 ## Maintenance rule
 

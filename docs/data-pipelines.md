@@ -190,6 +190,23 @@ whose entry crosses a volume names the volume per page (`23-p9` in Talhah's
 case became `4/23-p17` once the anchor carried its real volume); every other
 page takes its account's own `volumeNumber`.
 
+### Known gap: undetected partial pages
+
+A store page can silently hold only one entry's half of a printed page that
+carries two. This happens because the store was originally seeded out of
+each batch's own account pages rather than from the printed page itself, so
+a page sitting between two entries kept only whichever entry's batch created
+it. `history:validate` does not catch this — it range-checks that an anchor
+names a paragraph that exists, not that the stored page is the complete
+printed page, so a page missing its neighbour's half validates clean.
+
+Seven such pages surfaced in the batches landed 2026-10-01 — five held only
+half their text (`v4/320`, `v4/321`, `v4/324`, `v4/330`, `v4/334`) and two
+were absent from the store entirely (`v4/322`, `v4/323`) — each found only
+because the entry being extracted happened to touch it, not by any
+systematic check. A sweep of the whole store for pages that are a strict
+prefix of their Shamela original, to find the rest, is still owed.
+
 ### Extraction
 
 `npm run history:extract` reads Shamela's reading pages and writes one
