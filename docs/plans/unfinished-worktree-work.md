@@ -65,12 +65,43 @@ the file never reached main. The approval covers a revision no one else can see.
 
 ### Superseded, or nearly
 
-- `.opencode/worktrees/abdullah-ibn-rawahah` — one commit ahead of main adding a
-  batch that main already has. Its untracked `src/generated` is build output.
-  Nothing to keep unless the commit differs from what landed.
-- `.opencode/worktrees/abu-sufyan-ibn-al-harith` — the batch is on main, but
-  `data/catalog/people/abu-sufyan-ibn-al-harith.ts` **differs from main's
-  version** and the difference has not been read. Check before discarding.
+Both `.opencode` worktrees checked and removed on 2026-10-01. Branches
+`opencode/abdullah-ibn-rawahah` and `opencode/abu-sufyan-ibn-al-harith`
+deleted locally and on origin.
+
+- **`.opencode/worktrees/abdullah-ibn-rawahah`** — retired, nothing kept. Its
+  single commit (`3c5e496b`, one ahead of a merge-base of `57838021`) holds a
+  batch main already has. Same 8 claims, same `notInSource`, same
+  `volumeNumber: 4`, and `summary.md` byte-identical; the only claim-level
+  difference is the anchor format, the commit carrying pre-migration `230-p9`
+  against main's `4/230-p9`. Main also has the approval block the commit
+  lacks, and the pages are in the page store (`v4/230.md`–`240.md`) as whole
+  printed pages rather than entry-trimmed slices, which is what ADR 0018 asks
+  for. The commit's `data/catalog/battles/mutah.ts` change is a regression: it
+  drops Ja'far, Aqil and Zayd's `MARTYRED` status. The untracked `src/generated`
+  was Prisma build output.
+- **`.opencode/worktrees/abu-sufyan-ibn-al-harith`** — retired, main's version
+  kept, two claims rescued. The worktree's batch was pre-migration (inline
+  `sources` block, `accounts/` pages, anchors without a volume prefix, no
+  approval) against a merge-base of `ad4e5da5`. Main's is the later revision
+  and better on shape: volume-prefixed anchors, an approval block, reciprocal
+  `HALF_BROTHER` edges on نوفل and ربيعة, a Hunayn participant row, `sex` and
+  `companion` promoted off the legacy marker, and `deathYearHijri` marked
+  `LIKELY` where the entry hedges with `يُقَالُ`. The worktree folded "cousin of
+  the Prophet" into the `fullName` string instead of a `PATERNAL_COUSIN`
+  relation, and left `sex`/`companion` legacy-unreviewed. Its `accounts/`
+  directory holds no text main lacks: pages 203 and 204 are byte-identical to
+  the store, and 202 and 205 are entry-trimmed slices of the store's whole
+  printed pages.
+
+  Two claims the entry supports were missing from main and came from the
+  worktree, verified against the stored pages before it was removed:
+  `full-name-alt` (DISPUTED, `4/203-p7`, `وَقَالَ طَائِفَةٌ: اسْمُهُ كُنْيَتُهُ`)
+  and `death-place` (`placeOfDeathArabic` = `المدينة`, from `4/204-p3` and
+  `4/205-p12`). Both are in [#242](../..//tree/opencode/abu-sufyan-missing-claims),
+  which leaves main's batch otherwise untouched. Main's summary had reasoned
+  the haircut-wound account stays unclaimed because the model holds no
+  cause-of-death field — true, but the passage also names a place.
 
 ## What makes this urgent rather than merely untidy
 
@@ -102,7 +133,9 @@ declared volume yet at all, which is the moment to get it right.
    They are the expensive part and they are one command from being lost.
 4. **Decide on the four early-stage batches.** Each is worth less than the
    effort of resuming it cold; dropping them is defensible.
-5. **Check the two superseded worktrees** and remove them.
+5. ~~**Check the two superseded worktrees** and remove them.~~ Done, 2026-10-01;
+   see [Superseded, or nearly](#superseded-or-nearly). One of the two yielded a
+   PR before removal.
 
 ## Acceptance criteria
 
