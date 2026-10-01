@@ -1,0 +1,400 @@
+{
+  "slug": "at-tufayl-ibn-amr-ad-dawsi",
+  "summaryFile": "summary.md",
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "at-tufayl-ibn-amr-ad-dawsi",
+      "volumeNumber": 4,
+      "extractionUrl": "https://shamela.ws/book/10906/1770",
+      "accessedAt": "2026-10-01",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "344",
+          "volumeNumber": 4
+        },
+        {
+          "sequence": 2,
+          "printedPage": "345",
+          "volumeNumber": 4
+        },
+        {
+          "sequence": 3,
+          "printedPage": "346",
+          "volumeNumber": 4
+        },
+        {
+          "sequence": 4,
+          "printedPage": "347",
+          "volumeNumber": 4
+        }
+      ],
+      "notInSource": [
+        "kunya",
+        "appearance",
+        "wives",
+        "siblings"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "at-tufayl-ibn-amr-ad-dawsi-siyar75/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "at-tufayl-ibn-amr-ad-dawsi",
+      "field": "fullName",
+      "assertion": "الطفيل بن عمرو بن طريف الدوسي",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/344-p1",
+          "volume": "4",
+          "pageReference": "344",
+          "extractionUrl": "https://shamela.ws/book/10906/1770",
+          "excerptArabic": "الطُّفَيْلُ بنُ عَمْرِو بنِ طَرِيْفٍ الدَّوْسِيُّ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "at-tufayl-ibn-amr-ad-dawsi-siyar75/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "at-tufayl-ibn-amr-ad-dawsi",
+      "assertion": "الطفيل بن عمرو: أبوه عمرو بن طريف.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "amr-ibn-tarif",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/344-p1",
+          "volume": "4",
+          "pageReference": "344",
+          "extractionUrl": "https://shamela.ws/book/10906/1770",
+          "excerptArabic": "الطُّفَيْلُ بنُ عَمْرِو بنِ طَرِيْفٍ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "at-tufayl-ibn-amr-ad-dawsi-siyar75/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "at-tufayl-ibn-amr-ad-dawsi",
+      "field": "titles",
+      "assertion": "صاحب النبي — صحابي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/344-p2",
+          "volume": "4",
+          "pageReference": "344",
+          "extractionUrl": "https://shamela.ws/book/10906/1770",
+          "excerptArabic": "صَاحِبُ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/344-p4",
+          "volume": "4",
+          "pageReference": "344",
+          "extractionUrl": "https://shamela.ws/book/10906/1770",
+          "excerptArabic": "أَسْلَمَ قَبْلَ الهِجْرَةِ بِمَكَّةَ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "at-tufayl-ibn-amr-ad-dawsi-siyar75/sex",
+      "subjectKind": "PERSON",
+      "subjectSlug": "at-tufayl-ibn-amr-ad-dawsi",
+      "field": "sex",
+      "assertion": "MALE — صيغ مذكر: صَاحِبُ النَّبِيِّ … كَانَ سَيِّداً مُطَاعاً.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/344-p2",
+          "volume": "4",
+          "pageReference": "344",
+          "extractionUrl": "https://shamela.ws/book/10906/1770",
+          "excerptArabic": "صَاحِبُ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- كَانَ سَيِّداً مُطَاعاً مِنْ أَشْرَافِ العَرَبِ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "at-tufayl-ibn-amr-ad-dawsi-siyar75/tribal-affiliation",
+      "subjectKind": "PERSON",
+      "subjectSlug": "at-tufayl-ibn-amr-ad-dawsi",
+      "field": "tribalAffiliation",
+      "assertion": "الدوسي، الأزدي",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/344-p1",
+          "volume": "4",
+          "pageReference": "344",
+          "extractionUrl": "https://shamela.ws/book/10906/1770",
+          "excerptArabic": "الدَّوْسِيُّ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/344-p3",
+          "volume": "4",
+          "pageReference": "344",
+          "extractionUrl": "https://shamela.ws/book/10906/1770",
+          "excerptArabic": "وَدَوْسٌ بَطْنٌ مِنَ الأَزْدِ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "at-tufayl-ibn-amr-ad-dawsi-siyar75/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "at-tufayl-ibn-amr-ad-dawsi",
+      "field": "virtues",
+      "assertion": "كَانَ سَيِّداً مُطَاعاً مِنْ أَشْرَافِ العَرَبِ، شَاعِراً سَيِّداً فِي قَوْمِهِ. لُقِّبَ ذَا النُّوْرِ؛ جَعَلَ اللهُ لَهُ نُوْراً بَيْنَ عَيْنَيْهِ يَتَرَاءَاهُ الحَاضِرُ فِي ظُلْمَةِ اللَّيْلِ، فَتَحَوَّلَ إِلَى طَرَفِ سَوْطِهِ كَأَنَّهُ قِنْدِيْلٌ مُعَلَّقٌ. أَسْلَمَ قَبْلَ الهِجْرَةِ بِمَكَّةَ بَعْدَمَا سَدَّ أُذُنَيْهِ بِالكُرْسُفِ حَذَرَ قُرَيْشٍ، فَسَمِعَ القُرْآنَ فَوَقَعَ فِي نَفْسِهِ أَنَّهُ حَقٌّ. رَجَعَ إِلَى دَوْسٍ فَأَسْلَمَ أَبُوْهُ وَأُمُّهُ، وَدَعَا دَوْساً فَأَبَتْ وَتَعَاصَتْ، ثُمَّ اسْتَجَابَ مِنْهُم مَنِ اسْتَجَابَ. قَدِمَ بِثَمَانِيْنَ أَوْ تِسْعِيْنَ أَهْلِ بَيْتٍ مِنْ دَوْسٍ، وَكَانَ مَعَ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- حَتَّى فَتَحَ مَكَّةَ، فَبَعَثَهُ إِلَى ذِي الكَفَّيْنِ صَنَمِ عَمْرِو بنِ حُمَمَةَ فَأَحْرَقَهُ. أَقَامَ مَعَهُ حَتَّى قُبِضَ، ثُمَّ خَرَجَ إِلَى بَعْثِ مُسَيْلِمَةَ، فَرَأَى أَنَّ رَأْسَهُ حُلِقَ وَخَرَجَ مِنْ فَمِهِ طَائِرٌ، فَأَوَّلَهَا قَطْعَ رَأْسِهِ وَخُرُوْجَ رُوْحِهِ، وَرُوِّعَ أَنْ يُقْتَلَ شَهِيْداً. فَقُتِلَ يَوْمَ اليَمَامَةِ، وَجُرِحَ ابْنُهُ ثُمَّ قُتِلَ يَوْمَ اليَرْمُوْكِ.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/344-p2",
+          "volume": "4",
+          "pageReference": "344",
+          "extractionUrl": "https://shamela.ws/book/10906/1770",
+          "excerptArabic": "كَانَ سَيِّداً مُطَاعاً مِنْ أَشْرَافِ العَرَبِ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/344-p4",
+          "volume": "4",
+          "pageReference": "344",
+          "extractionUrl": "https://shamela.ws/book/10906/1770",
+          "excerptArabic": "وَكَانَ الطُّفَيْلُ يُلَقَّبُ: ذَا النُّوْرِ، أَسْلَمَ قَبْلَ الهِجْرَةِ بِمَكَّةَ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/345-p2",
+          "volume": "4",
+          "pageReference": "345",
+          "extractionUrl": "https://shamela.ws/book/10906/1771",
+          "excerptArabic": "كُنْتُ رَجُلاً شَاعِراً، سَيِّداً فِي قَوْمِي",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/345-p10",
+          "volume": "4",
+          "pageReference": "345",
+          "extractionUrl": "https://shamela.ws/book/10906/1771",
+          "excerptArabic": "فَعَرَضَ عَلَيَّ الإِسْلاَمَ، فَأَسْلَمْتُ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/345-p13",
+          "volume": "4",
+          "pageReference": "345",
+          "extractionUrl": "https://shamela.ws/book/10906/1771",
+          "excerptArabic": "وَضَعَ اللهُ بَيْنَ عَيْنَيَّ نُوْراً كَالشِّهَابِ يَتَرَاءاهُ الحَاضِرُ فِي ظُلْمَةِ اللَّيْلِ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/346-p2",
+          "volume": "4",
+          "pageReference": "346",
+          "extractionUrl": "https://shamela.ws/book/10906/1772",
+          "excerptArabic": "فَوَقَعَ فِي رَأْسِ سَوْطِي … وَإِنَّهُ عَلَى رَأْسِ سَوْطِي كَأَنَّهُ قِنْدِيْلٌ مُعَلَّقٌ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/346-p6",
+          "volume": "4",
+          "pageReference": "346",
+          "extractionUrl": "https://shamela.ws/book/10906/1772",
+          "excerptArabic": "أَيْ بُنَيَّ! دِيْنِي دِيْنُكَ، وَكَذَلِكَ أُمِّي، فَأَسْلَمَا",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/346-p7",
+          "volume": "4",
+          "pageReference": "346",
+          "extractionUrl": "https://shamela.ws/book/10906/1772",
+          "excerptArabic": "ثُمَّ دَعَوْتُ دَوْساً إِلَى الإِسْلاَمِ، فَأَبَتْ عَلَيَّ، وَتَعَاصَتْ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/346-p12",
+          "volume": "4",
+          "pageReference": "346",
+          "extractionUrl": "https://shamela.ws/book/10906/1772",
+          "excerptArabic": "ثُمَّ قَدِمْتُ بِثَمَانِيْنَ أَوْ تِسْعِيْنَ أَهْلِ بَيْتٍ مِنْ دَوْسٍ، فَكُنْتُ مَعَ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- حَتَّى فَتَحَ مَكَّةَ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/346-p13",
+          "volume": "4",
+          "pageReference": "346",
+          "extractionUrl": "https://shamela.ws/book/10906/1772",
+          "excerptArabic": "ابْعَثْنِي إِلَى ذِي الكَّفَيْنِ، صَنَمِ عَمْرِو بنِ حُمَمَةَ حَتَّى أُحْرِقَهُ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/346-p16",
+          "volume": "4",
+          "pageReference": "346",
+          "extractionUrl": "https://shamela.ws/book/10906/1772",
+          "excerptArabic": "رَأَيْتُ كَأَنَّ رَأْسِي حُلِقَ، وَخَرَجَ مِنْ فَمِي طَائِرٌ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/346-p20",
+          "volume": "4",
+          "pageReference": "346",
+          "extractionUrl": "https://shamela.ws/book/10906/1772",
+          "excerptArabic": "فَقَدْ رُوِّعْتُ أَنْ أُقْتَلَ شَهِيْداً",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/346-p22",
+          "volume": "4",
+          "pageReference": "346",
+          "extractionUrl": "https://shamela.ws/book/10906/1772",
+          "excerptArabic": "فَقُتِلَ الطُّفَيْلُ يَوْمَ اليَمَامَةِ، وَجُرِحَ ابْنُهُ، ثُمَّ قُتِلَ يَوْمَ اليَرْمُوْكِ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "at-tufayl-ibn-amr-ad-dawsi-siyar75/badr-absence",
+      "subjectKind": "PERSON",
+      "subjectSlug": "at-tufayl-ibn-amr-ad-dawsi",
+      "assertion": "سبقته بدر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "ABSENT_FROM",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/346-p11",
+          "volume": "4",
+          "pageReference": "346",
+          "extractionUrl": "https://shamela.ws/book/10906/1772",
+          "excerptArabic": "وَسَبَقَتْنِي بَدْرٌ وَأُحُدٌ وَالخَنْدَقُ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "at-tufayl-ibn-amr-ad-dawsi-siyar75/uhud-absence",
+      "subjectKind": "PERSON",
+      "subjectSlug": "at-tufayl-ibn-amr-ad-dawsi",
+      "assertion": "سبقته أحد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "ABSENT_FROM",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/346-p11",
+          "volume": "4",
+          "pageReference": "346",
+          "extractionUrl": "https://shamela.ws/book/10906/1772",
+          "excerptArabic": "وَسَبَقَتْنِي بَدْرٌ وَأُحُدٌ وَالخَنْدَقُ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "at-tufayl-ibn-amr-ad-dawsi-siyar75/khandaq-absence",
+      "subjectKind": "PERSON",
+      "subjectSlug": "at-tufayl-ibn-amr-ad-dawsi",
+      "assertion": "سبقته الخندق.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "ABSENT_FROM",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "khandaq",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/346-p11",
+          "volume": "4",
+          "pageReference": "346",
+          "extractionUrl": "https://shamela.ws/book/10906/1772",
+          "excerptArabic": "وَسَبَقَتْنِي بَدْرٌ وَأُحُدٌ وَالخَنْدَقُ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "at-tufayl-ibn-amr-ad-dawsi-siyar75/fath-makkah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "at-tufayl-ibn-amr-ad-dawsi",
+      "assertion": "كان مع النبي حتى فتح مكة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "fath-makkah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/346-p12",
+          "volume": "4",
+          "pageReference": "346",
+          "extractionUrl": "https://shamela.ws/book/10906/1772",
+          "excerptArabic": "فَكُنْتُ مَعَ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- حَتَّى فَتَحَ مَكَّةَ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "at-tufayl-ibn-amr-ad-dawsi-siyar75/death-place",
+      "subjectKind": "PERSON",
+      "subjectSlug": "at-tufayl-ibn-amr-ad-dawsi",
+      "field": "placeOfDeathArabic",
+      "assertion": "اليمامة",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/346-p22",
+          "volume": "4",
+          "pageReference": "346",
+          "extractionUrl": "https://shamela.ws/book/10906/1772",
+          "excerptArabic": "فَقُتِلَ الطُّفَيْلُ يَوْمَ اليَمَامَةِ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    }
+  ]
+}

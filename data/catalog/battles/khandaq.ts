@@ -77,6 +77,16 @@ const khandaq = {
       },
       claims: ['safiyyah-siyar15/khandaq'],
     },
+    {
+      person: 'at-tufayl-ibn-amr-ad-dawsi',
+      isMuslim: true,
+      relation: 'ABSENT_FROM',
+      summary: {
+        value: 'وَسَبَقَتْنِي بَدْرٌ وَأُحُدٌ وَالخَنْدَقُ.',
+        claims: ['at-tufayl-ibn-amr-ad-dawsi-siyar75/khandaq-absence'],
+      },
+      claims: ['at-tufayl-ibn-amr-ad-dawsi-siyar75/khandaq-absence'],
+    },
   ],
 } satisfies CatalogBattle;
 

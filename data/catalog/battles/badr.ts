@@ -411,6 +411,16 @@ const badr = {
       },
       claims: ['usayd-ibn-al-hudayr-siyar74/badr-absence'],
     },
+    {
+      person: 'at-tufayl-ibn-amr-ad-dawsi',
+      isMuslim: true,
+      relation: 'ABSENT_FROM',
+      summary: {
+        value: 'وَسَبَقَتْنِي بَدْرٌ وَأُحُدٌ وَالخَنْدَقُ.',
+        claims: ['at-tufayl-ibn-amr-ad-dawsi-siyar75/badr-absence'],
+      },
+      claims: ['at-tufayl-ibn-amr-ad-dawsi-siyar75/badr-absence'],
+    },
   ],
 } satisfies CatalogBattle;
 

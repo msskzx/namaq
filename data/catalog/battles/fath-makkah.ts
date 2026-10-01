@@ -48,6 +48,15 @@ const fathMakkah = {
       },
       claims: ['rabiah-ibn-al-harith-siyar46/fath-makkah'],
     },
+    {
+      person: 'at-tufayl-ibn-amr-ad-dawsi',
+      isMuslim: true,
+      summary: {
+        value: 'فَكُنْتُ مَعَ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- حَتَّى فَتَحَ مَكَّةَ.',
+        claims: ['at-tufayl-ibn-amr-ad-dawsi-siyar75/fath-makkah'],
+      },
+      claims: ['at-tufayl-ibn-amr-ad-dawsi-siyar75/fath-makkah'],
+    },
   ],
 } satisfies CatalogBattle;
 
