@@ -83,8 +83,6 @@ export default function NavBar() {
 
   const allLinks = getAllNavLinks(language);
 
-  const sortedMainLinks = language === 'ar' ? [...mainLinks].reverse() : mainLinks;
-
   return (
     <>
       <nav className="bg-gray-50 dark:bg-black w-full border-b-2 border-amber-400 shadow-lg fixed top-0 left-0 right-0 z-50 min-h-[72px]">
@@ -98,7 +96,7 @@ export default function NavBar() {
           </Link>
           {/* Desktop Nav */}
           <div className="hidden lg:flex space-x-4 items-center">
-            {sortedMainLinks.map((link) => {
+            {mainLinks.map((link) => {
               const linkItems = getLinkItems(link.href, language);
               const isHovered = hoveredLink === link.href;
 
