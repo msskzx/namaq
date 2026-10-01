@@ -1,0 +1,187 @@
+{
+  "slug": "ikrimah-ibn-abi-jahl",
+  "summaryFile": "summary.md",
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ikrimah-ibn-abi-jahl",
+      "extractionUrl": "https://shamela.ws/book/10906/1749",
+      "accessedAt": "2026-10-01",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "323"
+        },
+        {
+          "sequence": 2,
+          "printedPage": "324"
+        }
+      ],
+      "volumeNumber": 4,
+      "notInSource": [
+        "appearance",
+        "wives",
+        "siblings"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "ikrimah-ibn-abi-jahl-siyar66/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ikrimah-ibn-abi-jahl",
+      "field": "fullName",
+      "assertion": "عكرمة بن أبي جهل عمرو بن هشام بن المغيرة بن عبد الله بن عمر بن مخزوم بن يقظة بن مرة بن كعب بن لؤي",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/323-p2",
+          "volume": "4",
+          "pageReference": "323",
+          "extractionUrl": "https://shamela.ws/book/10906/1749",
+          "excerptArabic": "٦٦ - عِكْرِمَةُ بنُ أَبِي جَهْلٍ عَمْرِو بنِ هِشَامٍ المَخْزُوْمِيُّ * (ت)",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/323-p3",
+          "volume": "4",
+          "pageReference": "323",
+          "extractionUrl": "https://shamela.ws/book/10906/1749",
+          "excerptArabic": "ابْنِ المُغِيْرَةِ بنِ عَبْدِ اللهِ بنِ عُمَرَ بنِ مَخْزُوْمِ بنِ يَقَظَةَ بنِ مُرَّةَ بنِ كَعْبِ بنِ لُؤَيٍّ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "ikrimah-ibn-abi-jahl-siyar66/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ikrimah-ibn-abi-jahl",
+      "field": "kunya",
+      "assertion": "أبو عثمان",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/323-p4",
+          "volume": "4",
+          "pageReference": "323",
+          "extractionUrl": "https://shamela.ws/book/10906/1749",
+          "excerptArabic": "الشَّرِيْفُ، الرَّئِيْسُ، الشَّهِيْدُ، أَبُو عُثْمَانَ القُرَشِيُّ، المَخْزُوْمِيُّ، المَكِّيُّ.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "ikrimah-ibn-abi-jahl-siyar66/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ikrimah-ibn-abi-jahl",
+      "assertion": "ابن أبي جهل.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "abu-jahl-ibn-hisham",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/323-p2",
+          "volume": "4",
+          "pageReference": "323",
+          "extractionUrl": "https://shamela.ws/book/10906/1749",
+          "excerptArabic": "عِكْرِمَةُ بنُ أَبِي جَهْلٍ عَمْرِو بنِ هِشَامٍ المَخْزُوْمِيُّ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "ikrimah-ibn-abi-jahl-siyar66/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ikrimah-ibn-abi-jahl",
+      "field": "virtues",
+      "assertion": "الشريف، الرئيس، الشهيد؛ أسلم، وحسن إسلامه بالمرة؛ كان محمود البلاء في الإسلام؛ استشهد يوم اليرموك، وقيل: يوم أجنادين",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/323-p4",
+          "volume": "4",
+          "pageReference": "323",
+          "extractionUrl": "https://shamela.ws/book/10906/1749",
+          "excerptArabic": "الشَّرِيْفُ، الرَّئِيْسُ، الشَّهِيْدُ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/323-p5",
+          "volume": "4",
+          "pageReference": "323",
+          "extractionUrl": "https://shamela.ws/book/10906/1749",
+          "excerptArabic": "ثُمَّ إِنَّهُ أَسْلَمَ، وَحَسُنَ إِسْلاَمُهُ بِالمَرَّةِ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/324-p7",
+          "volume": "4",
+          "pageReference": "324",
+          "extractionUrl": "https://shamela.ws/book/10906/1750",
+          "excerptArabic": "قَالَ الشَّافِعِيُّ: كَانَ مَحْمُوْدَ البَلاَءِ فِي الإِسْلاَمِ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/324-p8",
+          "volume": "4",
+          "pageReference": "324",
+          "extractionUrl": "https://shamela.ws/book/10906/1750",
+          "excerptArabic": "نَزَلَ عِكْرِمَةُ يَوْمَ اليَرْمُوْكِ، فَقَاتَلَ قِتَالاً شَدِيْداً، ثُمَّ اسْتُشْهِدَ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/324-p9",
+          "volume": "4",
+          "pageReference": "324",
+          "extractionUrl": "https://shamela.ws/book/10906/1750",
+          "excerptArabic": "وَقَالَ عُرْوَةُ، وَابْنُ سَعْدٍ، وَطَائِفَةٌ: قُتِلَ يَوْمَ أَجْنَادِيْنَ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "ikrimah-ibn-abi-jahl-siyar66/companion",
+      "subjectKind": "PERSON",
+      "subjectSlug": "ikrimah-ibn-abi-jahl",
+      "field": "titles",
+      "assertion": "صحابي؛ أسلم، وحسن إسلامه بالمرة",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/323-p5",
+          "volume": "4",
+          "pageReference": "323",
+          "extractionUrl": "https://shamela.ws/book/10906/1749",
+          "excerptArabic": "ثُمَّ إِنَّهُ أَسْلَمَ، وَحَسُنَ إِسْلاَمُهُ بِالمَرَّةِ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/324-p4",
+          "volume": "4",
+          "pageReference": "324",
+          "extractionUrl": "https://shamela.ws/book/10906/1750",
+          "excerptArabic": "أَنَّ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَالَ لَهُ: (مَرْحَباً بِالرَّاكِبِ المُهَاجِرِ)",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    }
+  ]
+}
