@@ -50,6 +50,16 @@ const hunayn = {
       claims: ['abu-sufyan-ibn-al-harith-siyar32/hunayn'],
     },
     {
+      person: 'abu-sufyan-ibn-harb',
+      isMuslim: true,
+      summary: {
+        value:
+          'شَهِدَ حُنَيْناً؛ وَأَعْطَاهُ صِهْرُهُ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مِنَ الغَنَائِمِ مائَةً مِنَ الإِبِلِ، وَأَرْبَعِيْنَ أُوْقِيَّةً مِنَ الدَّرَاهِمِ يَتَأَلَّفُهُ بِذَلِكَ.',
+        claims: ['abu-sufyan-ibn-harb-siyar13/hunayn'],
+      },
+      claims: ['abu-sufyan-ibn-harb-siyar13/hunayn'],
+    },
+    {
       person: 'abu-talha-al-ansari',
       isMuslim: true,
       summary: {
