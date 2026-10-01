@@ -101,12 +101,12 @@ that.
 - [x] طليحة بن خويلد (`tulayhah-ibn-khuwaylid`, PR #184)
 - [x] سعد بن الربيع (`saad-ibn-al-rabi`, PR #189)
 - [x] معن بن عدي — entry 64 (`maan-ibn-adi`, PR #192)
-- [ ] عبد الله بن عبد الله بن أبي
-- [ ] عكرمة بن أبي جهل
+- [x] عبد الله بن عبد الله بن أبي (`abdullah-ibn-abdullah-ibn-ubayy`)
+- [x] عكرمة بن أبي جهل (`ikrimah-ibn-abi-jahl`)
 - [x] عبد الله بن عمرو بن حرام (abdullah-ibn-amr-ibn-haram, PR #194)
-- [ ] يزيد بن أبي سفيان
+- [x] يزيد بن أبي سفيان (`yazid-ibn-abi-sufyan`)
 - [x] أبو العاص بن الربيع (abu-al-as-ibn-ar-rabia, PR #195)
-- [ ] زينب
+- [x] زينب — entry 70 (`zaynab-bint-muhammad`)
 - [x] أمامة بنت أبي العاص (`umamah-bint-abi-al-as`, PR #197)
 - [ ] أبو زيد
 - [x] عباد بن بشر (`abbad-ibn-bishr`)
@@ -155,7 +155,7 @@ that.
 - [x] حفصة أم المؤمنين — `data/history/batches/hafsa-bint-umar/` ([PR #202](https://github.com/msskzx/namaq/pull/202))
 - [x] صفية أم المؤمنين (`safiyyah-bint-huyayy`, PR #210)
 - [x] ميمونة أم المؤمنين (`maymunah-bint-al-harith`, PR #214)
-- [ ] زينب بنت رسول الله
+- [x] زينب بنت رسول الله — entry 28 (`zaynab-bint-muhammad`)
 - [ ] رقية
 - [ ] أم كلثوم بنت رسول الله
 - [ ] زوجاته صلى الله عليه وسلم

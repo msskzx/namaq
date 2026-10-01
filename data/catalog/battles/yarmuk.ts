@@ -17,6 +17,15 @@ const yarmuk = {
   participants: [
     // Carried from the old seed when these people left it; no batch places
     // them here yet.
+    {
+      person: 'yazid-ibn-abi-sufyan',
+      isMuslim: true,
+      summary: {
+        value: 'كَانَ يَزِيْدُ بنُ أَبِي سُفْيَانَ عَلَى رُبُعٍ -يَعْنِي: يَوْمَ اليَرْمُوْكِ- وَلَمْ يَكُنْ يَوْمَئِذٍ عَلَيْهِم أَمِيْرٌ.',
+        claims: ['yazid-ibn-abi-sufyan-siyar68/yarmuk'],
+      },
+      claims: ['yazid-ibn-abi-sufyan-siyar68/yarmuk'],
+    },
     { person: 'umar-ibn-al-khattab', isMuslim: true, claims: legacyUnreviewed },
     { person: 'abu-ubaydah-ibn-al-jarrah', isMuslim: true, claims: ['abu-ubaydah/yarmuk'] },
     {

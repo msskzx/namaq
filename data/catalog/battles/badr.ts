@@ -45,6 +45,7 @@ const badr = {
     nonMuslimDeathCount: { value: 70, claims: ['sira/badr-quraysh-dead'] },
   },
   participants: [
+    { person: 'abdullah-ibn-abdullah-ibn-ubayy', isMuslim: true, claims: ['abdullah-ibn-abdullah-ibn-ubayy-siyar65/badr'] },
     // Carried from the old seed when these people left it; no batch places
     // them here yet.
     { person: 'umar-ibn-al-khattab', isMuslim: true, claims: legacyUnreviewed },

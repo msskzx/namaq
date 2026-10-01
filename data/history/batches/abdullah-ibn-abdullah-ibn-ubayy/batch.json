@@ -1,0 +1,266 @@
+{
+  "slug": "abdullah-ibn-abdullah-ibn-ubayy",
+  "summaryFile": "summary.md",
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-abdullah-ibn-ubayy",
+      "volumeNumber": 4,
+      "extractionUrl": "https://shamela.ws/book/10906/1747",
+      "accessedAt": "2026-10-01",
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "321",
+          "volumeNumber": 4
+        },
+        {
+          "sequence": 2,
+          "printedPage": "322",
+          "volumeNumber": 4
+        },
+        {
+          "sequence": 3,
+          "printedPage": "323",
+          "volumeNumber": 4
+        }
+      ],
+      "notInSource": [
+        "kunya",
+        "appearance",
+        "wives",
+        "siblings"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "abdullah-ibn-abdullah-ibn-ubayy-siyar65/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-abdullah-ibn-ubayy",
+      "assertion": "عبد الله بن عبد الله بن أبي بن مالك بن الحارث بن عبيد بن مالك بن سالم بن غنم بن عوف بن الخزرج الأنصاري الخزرجي",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "fullName",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/321-p10",
+          "volume": "4",
+          "pageReference": "321",
+          "extractionUrl": "https://shamela.ws/book/10906/1747",
+          "excerptArabic": "٦٥ - عَبْدُ اللهِ بنُ عَبْدِ اللهِ بنِ أُبَيِّ بنِ مَالِكٍ الأَنْصَارِيُّ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/321-p11",
+          "volume": "4",
+          "pageReference": "321",
+          "extractionUrl": "https://shamela.ws/book/10906/1747",
+          "excerptArabic": "ابْنِ الحَارثِ بنِ عُبَيْدِ بنِ مَالِكِ بنِ سَالِمِ - وَسَالِمٌ هُوَ الَّذِي يُقَالُ لَهُ الحُبْلَى، لِعِظَمِ بَطْنِهِ - بنِ غَنْمِ بنِ عَوْفِ بنِ الخَزْرَجِ الأَنْصَارِيُّ، الخَزْرَجِيُّ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "abdullah-ibn-abdullah-ibn-ubayy-siyar65/tribal-affiliation",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-abdullah-ibn-ubayy",
+      "assertion": "الأنصاري، الخزرجي",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "tribalAffiliation",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/321-p10",
+          "volume": "4",
+          "pageReference": "321",
+          "extractionUrl": "https://shamela.ws/book/10906/1747",
+          "excerptArabic": "عَبْدُ اللهِ بنُ عَبْدِ اللهِ بنِ أُبَيِّ بنِ مَالِكٍ الأَنْصَارِيُّ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/321-p11",
+          "volume": "4",
+          "pageReference": "321",
+          "extractionUrl": "https://shamela.ws/book/10906/1747",
+          "excerptArabic": "الأَنْصَارِيُّ، الخَزْرَجِيُّ، المَعْرُوْفُ وَالِدُهُ بِابْنِ سَلُوْلٍ، المُنَافِقُ المَشْهُوْرُ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "abdullah-ibn-abdullah-ibn-ubayy-siyar65/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-abdullah-ibn-ubayy",
+      "assertion": "أبوه عبد الله بن أبي، المعروف بابن سلول، المنافق المشهور.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "abdullah-ibn-ubayy",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/321-p11",
+          "volume": "4",
+          "pageReference": "321",
+          "extractionUrl": "https://shamela.ws/book/10906/1747",
+          "excerptArabic": "وَالِدُهُ بِابْنِ سَلُوْلٍ، المُنَافِقُ المَشْهُوْرُ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/321-p12",
+          "volume": "4",
+          "pageReference": "321",
+          "extractionUrl": "https://shamela.ws/book/10906/1747",
+          "excerptArabic": "وَسَلُوْلٌ الخُزَاعِيَّةُ: هِيَ وَالِدَةُ أُبَيٍّ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "abdullah-ibn-abdullah-ibn-ubayy-siyar65/titles",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-abdullah-ibn-ubayy",
+      "assertion": "صحابي — من سادة الصحابة وأخيارهم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "titles",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/322-p2",
+          "volume": "4",
+          "pageReference": "322",
+          "extractionUrl": "https://shamela.ws/book/10906/1748",
+          "excerptArabic": "وَقَدْ كَانَ عَبْدُ اللهِ بنُ عَبْدِ اللهِ مِنْ سَادَةِ الصَّحَابَةِ وَأَخْيَارِهِم",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "abdullah-ibn-abdullah-ibn-ubayy-siyar65/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-abdullah-ibn-ubayy",
+      "assertion": "كان اسمه الحبّاب، وبه كان أبوه يكنى، فغيّره النبي صلى الله عليه وسلم وسمّاه عبد الله. أصيب أنفه يوم أحد فأمره النبي أن يتخذ أنفاً من ذهب، وندرت ثنيته فأمره أن يتخذ ثنية من ذهب. استشهد يوم اليمامة، وقد مات أبوه سنة تسع، فألبسه النبي قميصه وصلى عليه واستغفر له إكراماً لولده حتى نزلت: ولا تصل على أحد منهم مات أبداً ولا تقم على قبره. وكان رئيساً مطاعاً، عزم أهل المدينة قبل أن يهاجر النبي على أن يملّكوه عليهم، فانحل أمره، ولا حصل دنيا ولا آخرة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "virtues",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/322-p2",
+          "volume": "4",
+          "pageReference": "322",
+          "extractionUrl": "https://shamela.ws/book/10906/1748",
+          "excerptArabic": "وَكَانَ اسْمُهُ الحُبَابُ، وَبِهِ كَانَ أَبُوْهُ يُكْنَى، فَغَيَّرَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَسَمَّاهُ: عَبْدَ اللهِ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/322-p4",
+          "volume": "4",
+          "pageReference": "322",
+          "extractionUrl": "https://shamela.ws/book/10906/1748",
+          "excerptArabic": "أَنَّ أَنْفَهُ أُصِيْبَ يَوْمَ أُحُدٍ، فَأَمَرَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَنْ يَتَّخِذَ أَنْفاً مِنْ ذَهَبٍ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/322-p6",
+          "volume": "4",
+          "pageReference": "322",
+          "extractionUrl": "https://shamela.ws/book/10906/1748",
+          "excerptArabic": "نَدَرَتْ ثَنِيَّتِي، فَأَمَرنِي رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَنْ أَتَّخِذَ ثَنِيَّةً مِنْ ذَهَبٍ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/322-p7",
+          "volume": "4",
+          "pageReference": "322",
+          "extractionUrl": "https://shamela.ws/book/10906/1748",
+          "excerptArabic": "اسْتُشْهِدَ عَبْدُ اللهِ يَوْمَ اليَمَامَةِ، وَقَدْ مَاتَ أَبُوْهُ سَنَةَ تِسْعٍ، فَأَلْبَسَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَمِيْصَهُ، وَصَلَّى عَلَيْهِ، وَاسْتَغْفَرَ لَهُ إِكْرَاماً لِوَلَدِهِ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/323-p1",
+          "volume": "4",
+          "pageReference": "323",
+          "extractionUrl": "https://shamela.ws/book/10906/1749",
+          "excerptArabic": "وَقَدْ كَانَ رَئِيْساً مُطَاعاً، عَزَمَ أَهْلُ المَدِيْنَةِ قَبْلَ أَنْ يُهَاجِرَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- عَلَى أَنْ يُمَلِّكُوْهُ عَلَيْهِم، فَانْحَلَّ أَمْرُهُ، وَلاَ حَصَّلَ دُنْيَا وَلاَ آخِرَةً - نَسْأَلُ اللهَ العَافِيَةَ -.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "abdullah-ibn-abdullah-ibn-ubayy-siyar65/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-abdullah-ibn-ubayy",
+      "assertion": "شهد بدراً وما بعدها.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/322-p3",
+          "volume": "4",
+          "pageReference": "322",
+          "extractionUrl": "https://shamela.ws/book/10906/1748",
+          "excerptArabic": "شَهِدَ بَدْراً وَمَا بَعْدَهَا.",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "key": "abdullah-ibn-abdullah-ibn-ubayy-siyar65/uhud",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-abdullah-ibn-ubayy",
+      "assertion": "أصيب أنفه يوم أحد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "uhud",
+      "status": [
+        "INJURED"
+      ],
+      "summary": {
+        "value": "أَنَّ أَنْفَهُ أُصِيْبَ يَوْمَ أُحُدٍ، فَأَمَرَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَنْ يَتَّخِذَ أَنْفاً مِنْ ذَهَبٍ.",
+        "claims": [
+          "abdullah-ibn-abdullah-ibn-ubayy-siyar65/uhud"
+        ]
+      },
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/322-p4",
+          "volume": "4",
+          "pageReference": "322",
+          "extractionUrl": "https://shamela.ws/book/10906/1748",
+          "excerptArabic": "أَنَّ أَنْفَهُ أُصِيْبَ يَوْمَ أُحُدٍ، فَأَمَرَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَنْ يَتَّخِذَ أَنْفاً مِنْ ذَهَبٍ",
+          "accessedAt": "2026-10-01"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/322-p6",
+          "volume": "4",
+          "pageReference": "322",
+          "extractionUrl": "https://shamela.ws/book/10906/1748",
+          "excerptArabic": "نَدَرَتْ ثَنِيَّتِي، فَأَمَرنِي رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَنْ أَتَّخِذَ ثَنِيَّةً مِنْ ذَهَبٍ",
+          "accessedAt": "2026-10-01"
+        }
+      ]
+    }
+  ]
+}
