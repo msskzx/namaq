@@ -101,7 +101,7 @@ that.
 - [x] طليحة بن خويلد (`tulayhah-ibn-khuwaylid`, PR #184)
 - [x] سعد بن الربيع (`saad-ibn-al-rabi`, PR #189)
 - [x] معن بن عدي — entry 64 (`maan-ibn-adi`, PR #192)
-- [ ] عبد الله بن عبد الله بن أبي
+- [x] عبد الله بن عبد الله بن أبي (`abdullah-ibn-abdullah-ibn-ubayy`)
 - [x] عكرمة بن أبي جهل (`ikrimah-ibn-abi-jahl`)
 - [x] عبد الله بن عمرو بن حرام (abdullah-ibn-amr-ibn-haram, PR #194)
 - [ ] يزيد بن أبي سفيان
