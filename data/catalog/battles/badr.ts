@@ -402,6 +402,26 @@ const badr = {
       claims: ['saad-ibn-ubadah-siyar55/badr-absent'],
     },
     {
+      person: 'usayd-ibn-al-hudayr',
+      isMuslim: true,
+      relation: 'ABSENT_FROM',
+      summary: {
+        value: 'مَا شَهِدَ بَدْراً؛ ظَنَّ أَنَّهَا العِيْرُ، وَلَوْ ظَنَّ أَنَّهُ غَزْوٌ مَا تَخَلَّفَ.',
+        claims: ['usayd-ibn-al-hudayr-siyar74/badr-absence'],
+      },
+      claims: ['usayd-ibn-al-hudayr-siyar74/badr-absence'],
+    },
+    {
+      person: 'at-tufayl-ibn-amr-ad-dawsi',
+      isMuslim: true,
+      relation: 'ABSENT_FROM',
+      summary: {
+        value: 'وَسَبَقَتْنِي بَدْرٌ وَأُحُدٌ وَالخَنْدَقُ.',
+        claims: ['at-tufayl-ibn-amr-ad-dawsi-siyar75/badr-absence'],
+      },
+      claims: ['at-tufayl-ibn-amr-ad-dawsi-siyar75/badr-absence'],
+    },
+    {
       person: 'bilal-ibn-rabah',
       isMuslim: true,
       summary: { value: 'شَهِدَ بَدْراً.', claims: ['bilal-ibn-rabah-siyar76/badr'] },

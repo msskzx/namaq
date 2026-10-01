@@ -232,6 +232,23 @@ const uhud = {
       claims: ['khallad-siyar4/uhud'],
     },
     { person: 'thabit-ibn-qais', isMuslim: true, claims: ['thabit-ibn-qais-siyar61/uhud'] },
+    {
+      person: 'usayd-ibn-al-hudayr',
+      isMuslim: true,
+      status: ['INJURED'],
+      summary: { value: 'وَقَدْ جُرِحَ يَوْمَ أُحُدٍ سَبْعَ جِرَاحَاتٍ.', claims: ['usayd-ibn-al-hudayr-siyar74/uhud'] },
+      claims: ['usayd-ibn-al-hudayr-siyar74/uhud'],
+    },
+    {
+      person: 'at-tufayl-ibn-amr-ad-dawsi',
+      isMuslim: true,
+      relation: 'ABSENT_FROM',
+      summary: {
+        value: 'وَسَبَقَتْنِي بَدْرٌ وَأُحُدٌ وَالخَنْدَقُ.',
+        claims: ['at-tufayl-ibn-amr-ad-dawsi-siyar75/uhud-absence'],
+      },
+      claims: ['at-tufayl-ibn-amr-ad-dawsi-siyar75/uhud-absence'],
+    },
   ],
 } satisfies CatalogBattle;
 
