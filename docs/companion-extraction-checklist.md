@@ -132,7 +132,7 @@ that.
 - [ ] عبد الله بن حذافة
 - [ ] أبو رافع
 - [x] صهيب بن سنان (`suhaib-ibn-sinan`)
-- [ ] أبو طلحة الأنصاري
+- [x] أبو طلحة الأنصاري (`abu-talha-al-ansari`)
 - [x] أبو بردة بن نيار (data/history/batches/abu-bardah-ibn-niyar, PR #198)
 - [x] جبر بن عتيك (`jabr-ibn-atik`)
 - [ ] الأشعث بن قيس
