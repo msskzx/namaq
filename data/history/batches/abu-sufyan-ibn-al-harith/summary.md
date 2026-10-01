@@ -89,6 +89,6 @@ him at Hunayn, and received the Prophet's direct testimony of Paradise
 
 ## Review
 
-Nothing is reviewed. All fourteen claims are Not reviewed. The batch's approval
-block predates the two claims added here and no longer names this revision, so it
-is stale and the batch needs approving again before it can be imported.
+Nothing is reviewed. All fourteen claims are Not reviewed, including the two added
+in PR #242. The batch is approved for publication at the revision carrying them,
+which permits the import and asserts nothing about review.
