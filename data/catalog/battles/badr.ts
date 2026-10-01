@@ -189,8 +189,11 @@ const badr = {
     {
       person: 'bilal-ibn-rabah',
       isMuslim: true,
-      summary: { value: 'صرخ: يا أنصار الله، رأس الكفر أمية بن خلف، لا نجوت إن نجا.', claims: ['bilal/badr'] },
-      claims: ['bilal/badr'],
+      summary: {
+        value: 'صرخ: يا أنصار الله، رأس الكفر أمية بن خلف، لا نجوت إن نجا.',
+        claims: ['bilal/badr', 'bilal-ibn-rabah-siyar76/badr'],
+      },
+      claims: ['bilal/badr', 'bilal-ibn-rabah-siyar76/badr'],
     },
     {
       person: 'ubadah-ibn-al-samit',
@@ -420,12 +423,6 @@ const badr = {
         claims: ['at-tufayl-ibn-amr-ad-dawsi-siyar75/badr-absence'],
       },
       claims: ['at-tufayl-ibn-amr-ad-dawsi-siyar75/badr-absence'],
-    },
-    {
-      person: 'bilal-ibn-rabah',
-      isMuslim: true,
-      summary: { value: 'شَهِدَ بَدْراً.', claims: ['bilal-ibn-rabah-siyar76/badr'] },
-      claims: ['bilal-ibn-rabah-siyar76/badr'],
     },
   ],
 } satisfies CatalogBattle;
