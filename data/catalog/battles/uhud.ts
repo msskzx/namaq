@@ -37,6 +37,16 @@ const uhud = {
     muslimDeathCount: { value: 70, claims: ['sira/uhud-muslim-dead'] },
   },
   participants: [
+    {
+      person: 'abdullah-ibn-abdullah-ibn-ubayy',
+      isMuslim: true,
+      status: ['INJURED'],
+      summary: {
+        value: 'أَنَّ أَنْفَهُ أُصِيْبَ يَوْمَ أُحُدٍ، فَأَمَرَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَنْ يَتَّخِذَ أَنْفاً مِنْ ذَهَبٍ.',
+        claims: ['abdullah-ibn-abdullah-ibn-ubayy-siyar65/uhud'],
+      },
+      claims: ['abdullah-ibn-abdullah-ibn-ubayy-siyar65/uhud'],
+    },
     // Carried from the old seed when these people left it; no batch places
     // them here yet.
     { person: 'abu-bakr-as-siddiq', isMuslim: true, claims: legacyUnreviewed },
