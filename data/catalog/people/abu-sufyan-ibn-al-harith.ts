@@ -8,6 +8,9 @@ const abuSufyanIbnAlHarith = {
   hasProfile: true,
   fields: {
     sex: { value: 'MALE', claims: ['abu-sufyan-ibn-al-harith-siyar32/sex'] },
+    // The heading and the nasab paragraph give al-Mughira; a report on 203 says
+    // his name is his kunya and al-Mughira is their brother. That report is
+    // full-name-alt, DISPUTED, and does not take the field.
     fullName: {
       value: 'المغيرة بن الحارث بن عبد المطلب بن هاشم الهاشمي',
       claims: ['abu-sufyan-ibn-al-harith-siyar32/full-name'],
@@ -19,6 +22,7 @@ const abuSufyanIbnAlHarith = {
       claims: ['abu-sufyan-ibn-al-harith-siyar32/virtues'],
     },
     deathYearHijri: { value: '20', claims: ['abu-sufyan-ibn-al-harith-siyar32/death-year'] },
+    placeOfDeathArabic: { value: 'المدينة', claims: ['abu-sufyan-ibn-al-harith-siyar32/death-place'] },
   },
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: ['abu-sufyan-ibn-al-harith-siyar32/companion'] },

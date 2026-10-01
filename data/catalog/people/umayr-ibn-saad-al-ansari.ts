@@ -1,15 +1,6 @@
 import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 
-/**
- * Carried from neo4j/graphSeedData*.ts, whose node declaration is retired
- * with the rest. The catalog owns this subject's edges now, so they live
- * here or not at all. No batch has read this far into the nasab yet, so
- * every link stays on the legacy marker.
- *
- * fullName per one report cited on his own page (Abdullah ibn Muhammad
- * al-Qaddah), per the retired prisma/personSeedData8.ts entry: "Sa'd ibn
- * Shahid" -- the page does not extend the nasab further back.
- */
+// data/history/batches/umayr-ibn-saad-al-ansari, entry 12.
 const umayrIbnSaadAlAnsari = {
   kind: 'PERSON',
   slug: 'umayr-ibn-saad-al-ansari',
@@ -18,13 +9,37 @@ const umayrIbnSaadAlAnsari = {
   hasProfile: true,
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
-    fullName: { value: 'عمير بن سعد بن شهيد الأنصاري الأوسي', claims: legacyUnreviewed },
+    fullName: {
+      value: 'عمير بن سعد بن شهيد الأنصاري الأوسي',
+      claims: ['umayr-ibn-saad-al-ansari-siyar/full-name'],
+    },
+    virtues: {
+      value:
+        'الزاهد نسيج وحده، له حديث واحد؛ شهد فتح الشام وولي دمشق وحمص لعمر؛ صحب النبي صلى الله عليه وسلم ورفع إليه كلام الجلاس بن سويد وكان يتيما في حجره؛ ولي حمص بعد ابن حذيم فشارك معاوية الشام حتى قتل عمر فنزعه عثمان؛ سماه عمر نسيج وحده وبعثه على جيش؛ قال ابن عمر لابنه: ما كان رجل من الصحابة أفضل من أبيك؛ عده المفضل الغلابي في زهاد الأنصار الثلاثة.',
+      claims: ['umayr-ibn-saad-al-ansari-siyar/virtues'],
+    },
   },
   titles: [
-    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    {
+      title: 'companion',
+      name: 'صحابي',
+      nameTransliterated: 'Companion',
+      claims: ['umayr-ibn-saad-al-ansari-siyar/titles'],
+    },
   ],
   relations: [
-    { type: 'SON', inverse: 'FATHER', to: 'saad-ibn-shahid-al-awsi', claims: legacyUnreviewed },
+    {
+      type: 'SON',
+      inverse: 'FATHER',
+      to: 'saad-ibn-shahid-al-awsi',
+      claims: ['umayr-ibn-saad-al-ansari-siyar/father'],
+    },
+    {
+      type: 'FATHER',
+      inverse: 'SON',
+      to: 'abd-al-rahman-ibn-umayr-ibn-saad',
+      claims: ['umayr-ibn-saad-al-ansari-siyar/son-abd-al-rahman'],
+    },
   ],
 } satisfies CatalogPerson;
 

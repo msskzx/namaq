@@ -49,6 +49,24 @@ const hunayn = {
       },
       claims: ['abu-sufyan-ibn-al-harith-siyar32/hunayn'],
     },
+    {
+      person: 'abu-talha-al-ansari',
+      isMuslim: true,
+      summary: {
+        value: 'قَتَلَ يَوْمَ حُنَيْنٍ عِشْرِيْنَ رَجُلاً، وَأَخَذَ أَسْلاَبَهُمْ.',
+        claims: ['abu-talha-al-ansari-siyar5/hunayn'],
+      },
+      claims: ['abu-talha-al-ansari-siyar5/hunayn'],
+    },
+    {
+      person: 'abu-dharr-al-ghifari',
+      isMuslim: true,
+      summary: {
+        value: 'كَانَ حَامِلَ رَايَةِ غِفَارَ يَوْمَ حُنَيْنٍ.',
+        claims: ['abu-dharr-al-ghifari-siyar10/hunayn'],
+      },
+      claims: ['abu-dharr-al-ghifari-siyar10/hunayn'],
+    },
   ],
 } satisfies CatalogBattle;
 

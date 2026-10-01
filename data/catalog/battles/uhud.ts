@@ -259,6 +259,16 @@ const uhud = {
       },
       claims: ['hatib-ibn-abi-baltaah-siyar9/uhud'],
     },
+    {
+      person: 'abu-talha-al-ansari',
+      isMuslim: true,
+      summary: {
+        value:
+          'كَانَ يَرْمِي بَيْنَ يَدَيْ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَوْمَ أُحُدٍ؛ وَلَمَّا انْهَزَمَ نَاسٌ ثَبَتَ مُجَوِّباً عَلَيْهِ بِحَجْفَةٍ، وَكَسَرَ يَوْمَئِذٍ قَوْسَيْنِ أَوْ ثَلاَثَةً؛ وَقَالَ: يَا نَبِيَّ اللهِ، لاَ تُشْرِفْ، لاَ يُصِيْبُكَ سَهْمٌ، نَحْرِي دُوْنَ نَحْرِكَ.',
+        claims: ['abu-talha-al-ansari-siyar5/uhud'],
+      },
+      claims: ['abu-talha-al-ansari-siyar5/uhud'],
+    },
   ],
 } satisfies CatalogBattle;
 

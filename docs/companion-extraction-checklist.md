@@ -109,7 +109,7 @@ that.
 - [ ] زينب
 - [x] أمامة بنت أبي العاص (`umamah-bint-abi-al-as`, PR #197)
 - [ ] أبو زيد
-- [ ] عباد بن بشر
+- [x] عباد بن بشر (`abbad-ibn-bishr`)
 - [x] أسيد بن الحضير (`usayd-ibn-al-hudayr`)
 - [x] الطفيل بن عمرو الدوسي (`at-tufayl-ibn-amr-ad-dawsi`)
 - [x] بلال بن رباح (`bilal-ibn-rabah`)
@@ -131,15 +131,15 @@ that.
 - [ ] عبادة بن الصامت
 - [ ] عبد الله بن حذافة
 - [ ] أبو رافع
-- [ ] صهيب بن سنان
-- [ ] أبو طلحة الأنصاري
+- [x] صهيب بن سنان (`suhaib-ibn-sinan`)
+- [x] أبو طلحة الأنصاري (`abu-talha-al-ansari`)
 - [x] أبو بردة بن نيار (data/history/batches/abu-bardah-ibn-niyar, PR #198)
-- [ ] جبر بن عتيك
+- [x] جبر بن عتيك (`jabr-ibn-atik`)
 - [ ] الأشعث بن قيس
 - [x] حاطب بن أبي بلتعة (`hatib-ibn-abi-baltaah`)
-- [ ] أبو ذر
+- [x] أبو ذر (`abu-dharr-al-ghifari`)
 - [ ] العباس
-- [ ] عمير بن سعد الأنصاري
+- [x] عمير بن سعد الأنصاري (`umayr-ibn-saad-al-ansari`)
 - [ ] أبو سفيان
 - [x] الحكم بن أبي العاص (`al-hakam-ibn-abi-al-as`, PR #186)
 - [ ] كسرى

@@ -82,6 +82,12 @@ const badr = {
     // His own entry names him البدري outright too (see
     // data/history/batches/salim-mawla-abi-hudhayfah).
     { person: 'salim-mawla-abi-hudhayfah', isMuslim: true, claims: ['salim-siyar14/badr'] },
+    // His own entry names him أحد البدريين (see
+    // data/history/batches/abbad-ibn-bishr).
+    { person: 'abbad-ibn-bishr', isMuslim: true, claims: ['abbad-ibn-bishr-siyar73/badr'] },
+    // His own entry calls him بدري كبير and has him at Badr and the later days
+    // (see data/history/batches/jabr-ibn-atik).
+    { person: 'jabr-ibn-atik', isMuslim: true, claims: ['jabr-ibn-atik-siyar/badr'] },
     // The old seed had him present here with no status at all. He was away
     // trading in Syria, and given the share and the reward all the same.
     {
@@ -429,6 +435,35 @@ const badr = {
       isMuslim: true,
       summary: { value: 'شَهِدَ بَدْراً وَالمَشَاهِدَ.', claims: ['hatib-ibn-abi-baltaah-siyar9/badr'] },
       claims: ['hatib-ibn-abi-baltaah-siyar9/badr'],
+    },
+    {
+      person: 'abu-talha-al-ansari',
+      isMuslim: true,
+      summary: {
+        value: 'شَهِدَ بَدْراً؛ سَقَطَ السَّيْفُ مِنْهُ يَوْمَ بَدْرٍ، لِمَا غَشِيَهُمْ مِنَ النُّعَاسِ.',
+        claims: ['abu-talha-al-ansari-siyar5/badr'],
+      },
+      claims: ['abu-talha-al-ansari-siyar5/badr'],
+    },
+    {
+      person: 'abu-dharr-al-ghifari',
+      isMuslim: true,
+      relation: 'ABSENT_FROM',
+      summary: {
+        value: 'فَاتَتْهُ بَدْرٌ.',
+        claims: ['abu-dharr-al-ghifari-siyar10/badr-absence'],
+      },
+      claims: ['abu-dharr-al-ghifari-siyar10/badr-absence'],
+    },
+    {
+      person: 'suhaib-ibn-sinan',
+      isMuslim: true,
+      summary: {
+        value:
+          'كَانَ مِنْ كِبَارِ السَّابِقِيْنَ البَدْرِيِّيْنَ؛ ذَكَرَهُ عُرْوَةُ وَمُوْسَى بنُ عُقْبَةَ وَغَيْرُهُمَا فِيْمَنْ شَهِدَ بَدْراً.',
+        claims: ['suhaib-ibn-sinan-siyar4/badr'],
+      },
+      claims: ['suhaib-ibn-sinan-siyar4/badr'],
     },
   ],
 } satisfies CatalogBattle;
