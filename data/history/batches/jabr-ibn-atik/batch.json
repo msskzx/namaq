@@ -1,0 +1,354 @@
+{
+  "slug": "jabr-ibn-atik",
+  "summaryFile": "summary.md",
+  "accounts": [
+    {
+      "sourceSlug": "siyar-alam-al-nubala-risalah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "jabr-ibn-atik",
+      "extractionUrl": "https://shamela.ws/book/10906/2016",
+      "accessedAt": "2026-09-29",
+      "volumeNumber": 5,
+      "pages": [
+        {
+          "sequence": 1,
+          "printedPage": "36"
+        },
+        {
+          "sequence": 2,
+          "printedPage": "37"
+        }
+      ],
+      "notInSource": [
+        "appearance",
+        "wives",
+        "siblings"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "key": "jabr-ibn-atik-siyar/full-name",
+      "subjectKind": "PERSON",
+      "subjectSlug": "jabr-ibn-atik",
+      "field": "fullName",
+      "assertion": "جبر بن عتيك بن قيس بن هيشة بن الحارث بن أمية بن معاوية بن مالك بن عوف بن عمرو بن عوف الأنصاري",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/36-p3",
+          "volume": "5",
+          "pageReference": "36",
+          "extractionUrl": "https://shamela.ws/book/10906/2016",
+          "excerptArabic": "٧ - جَبْرُ بنُ عَتِيْكِ بنِ قَيْسِ بنِ هَيْشَةَ بنِ الحَارِثِ الأَنْصَارِيُّ",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/36-p4",
+          "volume": "5",
+          "pageReference": "36",
+          "extractionUrl": "https://shamela.ws/book/10906/2016",
+          "excerptArabic": "ابْنِ أُمَيَّةَ بنِ مُعَاوِيَةَ بنِ مَالِكِ بنِ عَوْفِ بنِ عَمْرِو بنِ عَوْفٍ الأَنْصَارِيُّ، أَبُو عَبْدِ اللهِ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "jabr-ibn-atik-siyar/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "jabr-ibn-atik",
+      "assertion": "ابن عتيك بن قيس.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "atik-ibn-qais-al-ansari",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/36-p3",
+          "volume": "5",
+          "pageReference": "36",
+          "extractionUrl": "https://shamela.ws/book/10906/2016",
+          "excerptArabic": "جَبْرُ بنُ عَتِيْكِ بنِ قَيْسِ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "jabr-ibn-atik-siyar/kunya",
+      "subjectKind": "PERSON",
+      "subjectSlug": "jabr-ibn-atik",
+      "field": "kunya",
+      "assertion": "أبو عبد الله",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/36-p4",
+          "volume": "5",
+          "pageReference": "36",
+          "extractionUrl": "https://shamela.ws/book/10906/2016",
+          "excerptArabic": "أَبُو عَبْدِ اللهِ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "jabr-ibn-atik-siyar/child-atik",
+      "subjectKind": "PERSON",
+      "subjectSlug": "jabr-ibn-atik",
+      "assertion": "والد عتيك.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "FATHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "atik-ibn-jabr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/36-p7",
+          "volume": "5",
+          "pageReference": "36",
+          "extractionUrl": "https://shamela.ws/book/10906/2016",
+          "excerptArabic": "وَلَهُ أَوْلاَدٌ: عَتِيْكٌ، وَعَبْدُ اللهِ، وَأُمُّ ثَابِتٍ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "jabr-ibn-atik-siyar/child-abdullah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "jabr-ibn-atik",
+      "assertion": "والد عبد الله.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "FATHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "abdullah-ibn-jabr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/36-p7",
+          "volume": "5",
+          "pageReference": "36",
+          "extractionUrl": "https://shamela.ws/book/10906/2016",
+          "excerptArabic": "وَلَهُ أَوْلاَدٌ: عَتِيْكٌ، وَعَبْدُ اللهِ، وَأُمُّ ثَابِتٍ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "jabr-ibn-atik-siyar/child-umm-thabit",
+      "subjectKind": "PERSON",
+      "subjectSlug": "jabr-ibn-atik",
+      "assertion": "والد أم ثابت.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "FATHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "umm-thabit-bint-jabr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/36-p7",
+          "volume": "5",
+          "pageReference": "36",
+          "extractionUrl": "https://shamela.ws/book/10906/2016",
+          "excerptArabic": "وَلَهُ أَوْلاَدٌ: عَتِيْكٌ، وَعَبْدُ اللهِ، وَأُمُّ ثَابِتٍ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "jabr-ibn-atik-siyar/pact-brother-khabbab",
+      "subjectKind": "PERSON",
+      "subjectSlug": "jabr-ibn-atik",
+      "assertion": "آخى رسول الله صلى الله عليه وسلم بينه وبين خباب بن الأرت.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PACT_BROTHER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "khabbab-ibn-al-aratt",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/36-p8",
+          "volume": "5",
+          "pageReference": "36",
+          "extractionUrl": "https://shamela.ws/book/10906/2016",
+          "excerptArabic": "آخَى رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بَيْنَهُ وَبَيْنَ خَبَّابِ بنِ الأَرَتِّ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "jabr-ibn-atik-siyar/virtues",
+      "subjectKind": "PERSON",
+      "subjectSlug": "jabr-ibn-atik",
+      "field": "virtues",
+      "assertion": "كان أحد الرماة الموصوفين؛ بدري كبير؛ شهد بدرا والمشاهد؛ كانت إليه راية بني معاوية بن مالك يوم الفتح.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/36-p1",
+          "volume": "5",
+          "pageReference": "36",
+          "extractionUrl": "https://shamela.ws/book/10906/2016",
+          "excerptArabic": "وَكَانَ أَحَدَ الرُّمَاةِ المَوْصُوْفِيْنَ.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/36-p5",
+          "volume": "5",
+          "pageReference": "36",
+          "extractionUrl": "https://shamela.ws/book/10906/2016",
+          "excerptArabic": "بَدْرِيٌّ كَبِيْرٌ.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/36-p9",
+          "volume": "5",
+          "pageReference": "36",
+          "extractionUrl": "https://shamela.ws/book/10906/2016",
+          "excerptArabic": "شَهِدَ بَدْراً وَالمَشَاهِدَ، وَكَانَتْ إِلَيْهِ رَايَةُ بَنِي مُعَاوِيَةَ بنِ مَالِكٍ يَوْمَ الفَتْحِ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "jabr-ibn-atik-siyar/badr",
+      "subjectKind": "PERSON",
+      "subjectSlug": "jabr-ibn-atik",
+      "assertion": "شهد جبر بن عتيك بدرا.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "badr",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/36-p9",
+          "volume": "5",
+          "pageReference": "36",
+          "extractionUrl": "https://shamela.ws/book/10906/2016",
+          "excerptArabic": "شَهِدَ بَدْراً",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "jabr-ibn-atik-siyar/fath-makkah",
+      "subjectKind": "PERSON",
+      "subjectSlug": "jabr-ibn-atik",
+      "assertion": "كانت إليه راية بني معاوية بن مالك يوم الفتح.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PARTICIPATED_IN",
+      "relatedSubjectKind": "BATTLE",
+      "relatedSubjectSlug": "fath-makkah",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/36-p9",
+          "volume": "5",
+          "pageReference": "36",
+          "extractionUrl": "https://shamela.ws/book/10906/2016",
+          "excerptArabic": "وَكَانَتْ إِلَيْهِ رَايَةُ بَنِي مُعَاوِيَةَ بنِ مَالِكٍ يَوْمَ الفَتْحِ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "jabr-ibn-atik-siyar/death-year-61",
+      "subjectKind": "PERSON",
+      "subjectSlug": "jabr-ibn-atik",
+      "field": "deathYearHijri",
+      "assertion": "توفي سنة إحدى وستين.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/36-p10",
+          "volume": "5",
+          "pageReference": "36",
+          "extractionUrl": "https://shamela.ws/book/10906/2016",
+          "excerptArabic": "قَالَ الوَاقِدِيُّ، وَابْنُ سَعْدٍ، وَخَلِيْفَةُ، وَابْنُ زَبْرٍ، وَابْنُ مَنْدَةَ: تُوُفِّيَ سَنَةَ إِحْدَى وَسِتِّيْنَ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "jabr-ibn-atik-siyar/death-year-42",
+      "subjectKind": "PERSON",
+      "subjectSlug": "jabr-ibn-atik",
+      "field": "deathYearHijri",
+      "assertion": "قيل: توفي سنة اثنتين وأربعين.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/36-p2",
+          "volume": "5",
+          "pageReference": "36",
+          "extractionUrl": "https://shamela.ws/book/10906/2016",
+          "excerptArabic": "وَقِيْلَ: تُوُفِّيَ سَنَةَ اثْنَتَيْنِ وَأَرْبَعِيْنَ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "jabr-ibn-atik-siyar/paternal-uncle-harith",
+      "subjectKind": "PERSON",
+      "subjectSlug": "jabr-ibn-atik",
+      "assertion": "عم جبر: الحارث بن قيس بن هيشة الأوسي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "PATERNAL_UNCLE",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "al-harith-ibn-qais-ibn-hayshah-al-awsi",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/37-p3",
+          "volume": "5",
+          "pageReference": "37",
+          "extractionUrl": "https://shamela.ws/book/10906/2017",
+          "excerptArabic": "وَعَمُّهُمَا: الحَارِثُ بنُ قَيْسِ بنِ هَيْشَةَ الأَوْسِيُّ",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "key": "jabr-ibn-atik-siyar/full-name-variant",
+      "subjectKind": "PERSON",
+      "subjectSlug": "jabr-ibn-atik",
+      "field": "fullName",
+      "assertion": "جبر بن عتيك بن الحارث بن قيس بن هيشة (قول ابن إسحاق وأبي معشر).",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/37-p5",
+          "volume": "5",
+          "pageReference": "37",
+          "extractionUrl": "https://shamela.ws/book/10906/2017",
+          "excerptArabic": "قَالَ ابْنُ إِسْحَاقَ، وَأَبُو مَعْشَرٍ: جَبْرُ بنُ عَتِيْكِ بنِ الحَارِثِ بنِ قَيْسِ بنِ هَيْشَةَ.",
+          "accessedAt": "2026-09-29"
+        }
+      ]
+    }
+  ]
+}
