@@ -274,7 +274,7 @@
       "subjectSlug": "jabr-ibn-atik",
       "field": "deathYearHijri",
       "assertion": "توفي سنة إحدى وستين.",
-      "confidence": "ESTABLISHED",
+      "confidence": "DISPUTED",
       "reviewStatus": "NOT_REVIEWED",
       "citations": [
         {
@@ -284,6 +284,15 @@
           "pageReference": "36",
           "extractionUrl": "https://shamela.ws/book/10906/2016",
           "excerptArabic": "قَالَ الوَاقِدِيُّ، وَابْنُ سَعْدٍ، وَخَلِيْفَةُ، وَابْنُ زَبْرٍ، وَابْنُ مَنْدَةَ: تُوُفِّيَ سَنَةَ إِحْدَى وَسِتِّيْنَ.",
+          "accessedAt": "2026-09-29"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "5/37-p2",
+          "volume": "5",
+          "pageReference": "37",
+          "extractionUrl": "https://shamela.ws/book/10906/2017",
+          "excerptArabic": "قُلْتُ: الصَّحِيْحُ أَنَّ جَابِرَ بنَ عَتِيْكٍ هُوَ صَاحِبُ هَذَا الخَبَرِ، وَصَاحِبُ تَارِيْخِ الوَفَاةِ، وَأَنَّ جَبْراً قَدِيْمُ الوَفَاةِ، وَأَنَّ جَابِراً مِنْ بَنِي غَنَمِ بنِ سَلِمَةَ.",
           "accessedAt": "2026-09-29"
         }
       ]

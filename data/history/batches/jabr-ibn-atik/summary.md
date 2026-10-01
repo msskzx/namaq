@@ -40,7 +40,7 @@ Page 37 holds the entry's tail (5 paragraphs) before al-Ash'ath's entry (entry 8
 | jabr-ibn-atik-siyar/virtues | field: virtues | ESTABLISHED |
 | jabr-ibn-atik-siyar/badr | relation: PARTICIPATED_IN (badr) | ESTABLISHED |
 | jabr-ibn-atik-siyar/fath-makkah | relation: PARTICIPATED_IN (fath-makkah) | ESTABLISHED |
-| jabr-ibn-atik-siyar/death-year-61 | field: deathYearHijri | ESTABLISHED |
+| jabr-ibn-atik-siyar/death-year-61 | field: deathYearHijri | DISPUTED |
 | jabr-ibn-atik-siyar/death-year-42 | field: deathYearHijri | DISPUTED |
 | jabr-ibn-atik-siyar/paternal-uncle-harith | relation: PATERNAL_UNCLE (al-harith-ibn-qais-ibn-hayshah-al-awsi) | ESTABLISHED |
 | jabr-ibn-atik-siyar/full-name-variant | field: fullName (Ibn Ishaq / Abu Mashar wording) | DISPUTED |
@@ -53,7 +53,7 @@ Page 37 holds the entry's tail (5 paragraphs) before al-Ash'ath's entry (entry 8
 These are recorded in `account.notInSource`.
 
 ## Notes
-- Two competing death years (42 AH vs 61 AH) both recorded as separate claims; 61 AH carried as the catalog value with both claims cited. **Contradiction flagged:** the entry's own tail (p. 37) has al-Dhahabi reassigning "تاريخ الوفاة" to Jabir ibn Atik and calling Jabr "قديم الوفاة" (dead long before). The carried 61 AH value therefore stands on the entry header's reports against the entry tail's verdict — reviewer to decide whether it should move, stay disputed, or drop.
+- Two competing death years (42 AH vs 61 AH) both recorded as separate claims; 61 AH carried as the catalog value with both claims cited, both now marked DISPUTED. The entry's own tail (p. 37) has al-Dhahabi reassigning "تاريخ الوفاة" to Jabir ibn Atik and calling Jabr "قديم الوفاة" (dead long before), explicitly placing Jabir in بني غنم بن سلمة — a different sub-lineage from this entry's بني معاوية بن مالك, so this reads as al-Dhahabi disambiguating two similarly-named men rather than a transcription variant. The 61 AH claim's citations now include that verdict; the catalog keeps 61 AH as the recorded value pending a dedicated Jabir ibn Atik entry, with both supporting and contradicting evidence visible in the claim.
 - Name variant "Jabir" (p6) is resolved by that same tail verdict: Jabr and Jabir are two men, not two readings — Jabir of Banu Ghanm ibn Salima owns the hadith and the death date. No name claim authored; lifespan 91 years (p11) likewise stays in the source pages only, since the catalog holds no age field and the tail suggests the date belongs to Jabir.
 - Ibn Ishaq's and Abu Mashar's variant nasab (inserting al-Harith between Atik and Qays) kept as a DISPUTED fullName claim; the header nasab stays the carried value, and the SON edge to atik-ibn-qais-al-ansari follows the header.
 - The Muwatta transmission chain (p36 p12-14, concluding p37-p1) is not modeled — narrators only, no profile fields or relations. The uncle's Badri standing (p37-p4) is about the uncle and stays in the source pages until he has his own entry.
