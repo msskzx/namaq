@@ -33,10 +33,19 @@ investigation found three separate causes:
   collection marks, footnote markers and a closing full stop; clipping to the
   span it needs; and the seam edit (`ابْنِ` at the start of a sentence becomes
   `بنِ`). Nothing else is respelled, reordered or normalised.
-- This covers catalog text fields (`fullName`, `kunya`, `appearance`, `virtues`
-  and the other prose fields), `name`, title names, citation excerpts, stored
-  pages with their footnotes, and chapter headings. It does not cover
-  structured values (`sex`, years, counts), whose evidence is the citation.
+- Field classes (verified against `src/lib/catalog/types.ts`):
+
+  | Class | Fields | Rule |
+  | --- | --- | --- |
+  | Quoted | `fullName`, `kunya`, `tribalAffiliation`, `appearance`, `virtues`, `placeOfBirthArabic`, `placeOfDeathArabic`, battle and event `location`, event `description`, participation `summary` (cited like `virtues`), utterance text, `speakerName`, `grading`, `occasion`, `name`, title names | Must pass the quoted-value check |
+  | Structured | `sex`, `hijriYear`, `engagement`, force and death counts | No text check; the citation is the evidence |
+  | Authored | transliterations, Gregorian years | Left alone |
+  | Reference | `ayat` (`surah`, `ayah`) | The text is never copied from the source: it is read from the `Ayah` table. The check is that the reference resolves |
+
+  Year strings (`deathYearHijri` and similar) are typed as text; the report
+  lists them for review and does not fail them.
+- Citation excerpts, stored pages with their footnotes, and chapter headings
+  are held to the same rule.
 - `name` is the known name: a clipped, vowelled span of the chapter heading,
   chosen by the author and checked only to be a literal span of that heading.
   A subject with no such span stays `legacy-unreviewed`.
@@ -127,6 +136,11 @@ by bucket, then turn the check on.
 None.
 
 ### Nonblocking
+
+- The Qur'an text in the `Ayah` table (seeded from `api.alquran.cloud`, edition
+  `ar.hafs`) has not been checked for correctness, as
+  [quran-as-a-source.md](quran-as-a-source.md) already says. Ayat display
+  depends on it, so a later pass checks the table. Not part of this plan.
 
 - Another host for volumes 1-2 (vowelled text and footnotes); the user's call.
 - Entries not yet extracted (for example Sa'id ibn Zayd) have no heading in
