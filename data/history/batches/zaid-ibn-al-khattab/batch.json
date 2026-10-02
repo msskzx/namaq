@@ -34,7 +34,7 @@
       "subjectKind": "PERSON",
       "subjectSlug": "zaid-ibn-al-khattab",
       "field": "fullName",
-      "assertion": "زيد بن الخطاب بن نفيل بن عبد العزى بن رياح العدوي",
+      "assertion": "زَيْدُ بنُ الخَطَّابِ بنِ نُفَيْلِ بنِ عَبْدِ العُزَّى بنِ رِيَاحٍ العَدَوِيُّ",
       "confidence": "ESTABLISHED",
       "reviewStatus": "NOT_REVIEWED",
       "citations": [
@@ -76,7 +76,7 @@
       "subjectKind": "PERSON",
       "subjectSlug": "zaid-ibn-al-khattab",
       "field": "kunya",
-      "assertion": "أبو عبد الرحمن",
+      "assertion": "أَبُو عَبْدِ الرَّحْمَنِ",
       "confidence": "ESTABLISHED",
       "reviewStatus": "NOT_REVIEWED",
       "citations": [
