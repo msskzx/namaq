@@ -1,187 +1,138 @@
-# Tashkeel and literal-wording audit
+# Quoted values: vowel marks and exact wording
 
-Status: **not started**. This is a plan only — nothing below is implemented.
+Status: **ready**. Nothing below is implemented. Terms are in
+[CONTEXT.md](../../CONTEXT.md) (Seam, Quoted value, Known name).
 
-User report (sources page for `siyar-alam-al-nubala-risalah`, and the profiles
-built from its batches): chapter titles in the volume contents list don't
-match al-Dhahabi's own headings, and several profile fields (`fullName`, body
-text in `الشواهد`) are missing tashkeel that the source carries. Example:
-`سَعِيْدُ بنُ زَيْدِ بنِ عَمْرِو بنِ نُفَيْلٍ العَدَوِيُّ` (shamela.ws/book/10906/1550)
-shows as `سعيد بن زيد` in the chapters list; az-Zubayr ibn al-Awwam's profile
-shows `fullName` as `الزبير بن العوام بن خويلد بن أسد بن عبد العزى بن قصي بن
-كلاب بن مرة بن كعب بن لؤي بن غالب، القرشي الأسدي` with no tashkeel at all.
+## Why
 
-This splits into two different defects with two different causes. Confirmed
-by reading the actual files, not by inference:
+A reader noticed that profile text and the sources contents list do not match
+al-Dhahabi's printed Arabic, and that vowel marks (tashkeel) are missing. The
+investigation found three separate causes:
 
-## Finding 1: chapter-list titles aren't always the source heading
+- **Catalog values are the profile.** A profile's `fullName` and `kunya` come
+  from `data/catalog/people/<slug>.ts`, not from a batch. Zubayr's `fullName`
+  there is already vowelled; the unvowelled text the reader saw was `name`, the
+  short label. So the exactness rule applies to the catalog, and an earlier
+  attempt that rewrote `claim.assertion` in 25 batches (PRs 258-282, closed
+  unmerged) fixed a field no profile value reads.
+- **The Sira volumes are bare at the source.** Shamela serves volumes 1 and 2
+  without tashkeel and without footnotes (checked on `10906/428`). Our stored
+  pages for them match it. Volumes 4 and 5 are vowelled. Nothing to re-extract
+  until another host is chosen, which is out of scope here.
+- **Nothing enforces exactness.** `scripts/history/verifyExcerpts.ts` proves a
+  citation excerpt is a literal piece of its stored page and nothing else. No
+  check ties a catalog value or a heading to a passage.
 
-`SourceContents.tsx` renders each page's title as
-`item.headings[0] ?? item.entries[0]?.label`
-([volumeChapters.ts:11](../../src/lib/history/volumeChapters.ts)).
-`headings` come from `sectionHeadings.ts` scanning the stored page's own
-markdown for a bold-paragraph line matching the book's heading format
-([sourceAccounts.ts:194-210](../../src/lib/history/sourceAccounts.ts)); when
-that scan finds nothing on a page, the row falls back to
-`entries[0]?.label`, which is the catalog person's short `name` —
-unvocalized, by design (it's the display name, not a transcription).
+## Agreed behavior and scope
 
-So an unvocalized, numberless chapter title is not necessarily a bad
-transcription. It can mean:
-- the page genuinely has no detected heading in the store yet (no batch has
-  extracted that printed page, or the batch that did didn't preserve the
-  `النَّص - رقم - اسم` heading line as its own paragraph), and the UI is
-  silently substituting the catalog name, or
-- the heading line was transcribed but normalized/stripped during extraction.
+- Scope is volumes 4 and 5 only, decided per value by the volume its citations
+  point at. A subject with citations in both keeps its volume 1-2 values as
+  they are.
+- A **quoted value** reads exactly as the cited passages print it, with vowel
+  marks. It may differ only by: dropping the entry number, the `*`/`(ع)`
+  collection marks, footnote markers and a closing full stop; clipping to the
+  span it needs; and the seam edit (`ابْنِ` at the start of a sentence becomes
+  `بنِ`). Nothing else is respelled, reordered or normalised.
+- This covers catalog text fields (`fullName`, `kunya`, `appearance`, `virtues`
+  and the other prose fields), `name`, title names, citation excerpts, stored
+  pages with their footnotes, and chapter headings. It does not cover
+  structured values (`sex`, years, counts), whose evidence is the citation.
+- `name` is the known name: a clipped, vowelled span of the chapter heading,
+  chosen by the author and checked only to be a literal span of that heading.
+  A subject with no such span stays `legacy-unreviewed`.
+- `fullName` keeps the nisbas and drops only the closing full stop. For Abu
+  Ubaydah it is `عَامِرُ بنُ عَبْدِ اللهِ بنِ الجَرَّاحِ بنِ هِلاَلِ…المَكِّيُّ`,
+  with `الجَرَّاحِ` once, because al-Jarrah is the grandfather and the heading's
+  `أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ` is the known name.
+- A stored page is re-fetched from Shamela only when it has no vowel marks, and
+  today that means volumes 1 and 2, where it changes nothing. A later review
+  pass will re-check every volume.
+- `SubjectEvidenceAccess` shows the cited excerpt, as `ClaimEvidence` already
+  does, instead of `claim.assertion`.
+- Out of scope: another host for volumes 1-2, extracting entries not yet in the
+  store, and editing `claim.assertion`.
 
-These need different fixes (extract the missing page vs. fix a bad
-transcription), so the audit below checks the store, not just the rendered
-page.
+## Acceptance criteria
 
-## Finding 2: `assertion` text is not held to the same fidelity as `excerptArabic`
+1. A read-only report lists every catalog value, heading and citation in
+   volumes 4-5 that is not a quoted value, with the passage it should match.
+2. `catalog:validate` fails on a text value or `name` whose claims' passages do
+   not contain it as a quoted value, once the report is clean. Subjects with
+   `legacy-unreviewed` values are skipped, as they are today.
+3. Every volume 4-5 citation anchor resolves to a passage that contains its
+   excerpt; the 14 bare citations (for example Abdullah ibn Amr ibn Haram,
+   `4/324-p10`) are traced and fixed or explained.
+4. The `volume` field on citations is one form (`4`, not `1` or `السيرة 1`), so
+   per-volume scoping counts correctly.
+5. The sources contents list shows the heading as printed, vowelled, for every
+   chapter present in the store.
+6. `SubjectEvidenceAccess` no longer prints `claim.assertion`.
+7. `npm run lint`, `npx tsc --noEmit` and `npm test` pass, and
+   `npm run catalog:validate` passes on the real catalog.
 
-Every claim has two Arabic text fields: `excerptArabic` (the citation) and
-`assertion` (the field value, which is what the profile displays).
-`scripts/history/verifyExcerpts.ts` already proves every `excerptArabic` is a
-literal substring of its source page — this check passed for az-Zubayr's
-batch, and his citation for `fullName` is fully vocalized:
-`الزُّبَيْرُ بنُ العَوَّامِ بنِ خُوَيْلِدِ بنِ أَسَدِ بنِ عَبْدِ العُزَّى...`
-([batch.json](../../data/history/batches/az-zubayr-ibn-al-awwam/batch.json)).
-But the `assertion` next to it — the text that actually reaches the
-database and the profile page — reads
-`الزبير بن العوام بن خويلد بن أسد بن عبد العزى...` with every diacritic
-dropped, despite being nearly a verbatim copy of the citation sitting right
-beside it.
+## Affected components
 
-Nothing in `history:validate` or the extraction checklist requires
-`assertion` to match the source's wording or diacritics. It's written as a
-paraphrase and is allowed to be one. For narrative fields (`titles`,
-`appearance`, participation `summary`) a paraphrase is reasonable. For fields
-that are themselves a name or a direct quotation — `fullName`, `kunya`,
-`nasab`-shaped assertions — a paraphrase that drops tashkeel is a quiet
-quality regression with no check catching it, because the one tool that
-checks fidelity (`verifyExcerpts.ts`) only ever looks at `excerptArabic`.
+Verified paths; changes marked proposed are new.
 
-## Scope question to settle first
+- `src/lib/catalog/validateCatalog.ts` and `scripts/data/validateCatalog.ts`:
+  add the quoted-value check. It needs each value's claim keys, resolved through
+  the batches to passages (`src/lib/history/sourceStore.ts`, `pageAnchors`), so
+  the check lives beside `approvedClaimKeys` in the script. Proposed new
+  helper: a pure function in `src/lib/catalog/` that takes a value and its
+  passages and returns the span match or the first mismatch, tested in
+  `validateCatalog.test.ts`'s style.
+- `scripts/history/verifyExcerpts.ts`: keep; the new check reuses its
+  normalisation of footnote markers and extends it to the permitted drops.
+- `src/lib/history/sectionHeadings.ts`, `volumeChapters.ts` and
+  `src/components/sources/SourceContents.tsx`: headings already come from the
+  stored page; find why a chapter falls back to the catalog name
+  (`item.entries[0]?.label`) and fix the cause (missing page, or heading not
+  detected).
+- `src/components/graph/SubjectEvidenceAccess.tsx:62`: show the excerpt.
+- `data/catalog/people/*.ts`: fix failures the report finds. The Abu Ubaydah
+  pilot is the reference.
+- Batches under `data/history/batches/`: only to fix anchors and `volume` form.
+- `src/lib/subjectSearch.ts` already strips diacritics, so vowelled names do
+  not break search.
 
-Confirm with the user before scripting anything: **which fields should be
-verbatim-with-tashkeel, and which stay as editorial paraphrase?** Candidate
-split, to confirm or correct:
+Order: normalise `volume` and trace the 14 anchors, then the report, then fix
+by bucket, then turn the check on.
 
-| Field | Expected to be verbatim | Why |
-| --- | --- | --- |
-| `fullName`, `nasab` | Yes | It's a name, not a summary of one |
-| `kunya`, `titles` (when quoting a title phrase) | Yes | Same — a title is quoted, not described |
-| `appearance` | Yes, if it's a quoted description | The source's own wording is the evidence |
-| `summary` (battle participation) | No — explicitly "in the source's own wording" per `AGENTS.md`, but that already implies verbatim-ish; confirm whether paraphrase is acceptable here | — |
-| `notInSource` notes | No | These are the agent's own notes, not source text |
+## Validation
 
-## Plan
+- Unit tests for the span matcher: the seam edit, a dropped entry number and
+  marks, a clipped span, a value that is respelled (fails), a value that
+  reorders (fails), and the Abu Ubaydah and Zubayr values (pass).
+- A test that a vowelled `name` still matches its search query.
+- A component test that `SubjectEvidenceAccess` shows the excerpt.
+- `npm run catalog:validate` on the real catalog is the integration check.
 
-### Step 1 — Inventory, read-only, no code changes yet
+## Data and operational consequences
 
-1. For every batch under `data/history/batches/`, extract all `claims[].assertion`
-   paired with their first citation's `excerptArabic`. A small script
-   (`tsx`, read-only) suffices — this doesn't need `--apply` anything.
-2. For each pair, check:
-   - Does `assertion`, with tashkeel stripped from both sides, appear as a
-     substring of `excerptArabic` with tashkeel also stripped? (Confirms the
-     wording itself, ignoring diacritics, already matches — i.e. this is a
-     tashkeel-only gap, the easy case.)
-   - If that fails too, the wording itself diverges (a real paraphrase, or a
-     transcription mismatch) — flag separately, don't auto-fix.
-3. Cross-reference against the field table above: only flag fields marked
-   "expected to be verbatim."
-4. Output: one list of `(subject, field, batch file, current assertion,
-   source excerpt)` tuples needing a tashkeel restore, and a second list of
-   fields where the wording itself differs and needs a human read.
-
-### Step 2 — Inventory the chapter-list gap separately
-
-1. For each volume of `siyar-alam-al-nubala-risalah`, call
-   `volumeChapterRows` (or the `/api/sources/<slug>/volumes/<n>` route data)
-   and record which rows fall back to `entries[0]?.label` (no store heading
-   found) versus which use a store heading.
-2. For the fallback rows, check whether the printed page is actually in the
-   store at all (`data/history/sources/siyar-alam-al-nubala-risalah/v<n>/<page>.md`
-   missing entirely — a coverage gap, batch work) versus present but
-   `sectionHeadings.ts` not matching its heading line (a parser gap, code
-   work).
-3. Separately, grep every page actually in the store across all volumes for
-   heading-shaped lines that lack tashkeel while the rest of that same page
-   has it — a signal of a bad transcription on that specific page, not a
-   coverage gap. (v1–v3, the two Sira volumes and the caliphs volume, appear
-   from a spot check to be unvocalized edition-wide — confirm this is a
-   property of those volumes' Shamela pages themselves, not an extraction
-   defect, before flagging anything there.)
-
-### Step 3 — Decide fixes per bucket, with the user
-
-Do not batch-fix. Each bucket above needs a different action and a human
-decision:
-- Tashkeel-only `assertion` drift (Step 1, easy case): re-copy the vocalized
-  wording from the existing, already-verified `excerptArabic` into
-  `assertion`. Mechanical, but still a per-batch edit + `history:validate` +
-  re-approval (this changes the batch, so prior publication approval no
-  longer covers it — same consequence noted in
-  [reextract-from-shamela.md](reextract-from-shamela.md)).
-- Wording-diverges cases: needs a person to re-read the source page and
-  either fix `assertion` or confirm the paraphrase is intentional.
-- Missing store pages (Step 2): extraction work under
-  [extraction-checklist.md](../extraction-checklist.md) for that subject —
-  not a quick fix, it's a new batch.
-- Heading-detection misses on pages already in the store: a `sectionHeadings.ts`
-  fix, with a test fixture from the actual page that failed.
-
-### Step 4 — Decide whether to add a lasting check
-
-If Step 1 finds this is systemic (more than a handful of subjects), consider
-extending `verifyExcerpts.ts` or adding a sibling script that checks
-tashkeel-stripped `assertion` against tashkeel-stripped `excerptArabic` for
-the fields marked verbatim in the scope table, and wiring it into the same
-place `catalog:checklist` runs. This is a decision to make after Step 1's
-numbers are in, not before — don't design the check before knowing the shape
-of the problem.
-
-## Acceptance criteria (for the audit phase only — fixes are separate work)
-
-1. A list exists of every `(subject, field)` pair where `assertion` drops
-   tashkeel that its own citation's `excerptArabic` already has.
-2. A list exists of every `(subject, field)` pair where `assertion` wording
-   diverges from the citation beyond tashkeel.
-3. A list exists of every volume/page in `siyar-alam-al-nubala-risalah` whose
-   chapter-list row falls back to the catalog name, split into "page missing
-   from store" vs. "page present, heading not detected."
-4. The scope table above is confirmed or corrected by the user before any
-   fix work starts.
-5. No batch file, source page, or database row is edited in this phase.
-
-## Out of scope
-
-- Fixing anything found. This plan ends at a reviewed inventory.
-- Re-extracting v1–v3 to add tashkeel, if the audit confirms those Shamela
-  pages are unvocalized in the edition itself rather than in this project's
-  transcription.
-- Any change to `verifyExcerpts.ts` or a new checking script, beyond the
-  read-only inventory scripts needed to produce the lists above.
+- Changing a batch's citations or `volume` field lapses its recorded
+  publication approval, and `catalog:validate` then treats that batch's claim
+  keys as unknown. Fix catalog files and batches together and re-approve in one
+  pass at the end ("publish", not "mark reviewed").
+- Page corrections touch the shared store under `data/history/sources/`: one PR
+  per volume. Catalog fixes: one PR per ten or so subjects.
+- Catalog edits reach PostgreSQL and Neo4j through `npm run sync:all` after
+  `history:import --apply` for the changed batches. `name` changes reach Neo4j,
+  so the graph label width may change; check the graph visually once.
+- `graph:layout` need not rerun: no edge changes.
 
 ## Open issues
 
 ### Blockers
 
-None — both findings are confirmed by reading existing files; the audit can
-start without further investigation.
+None.
 
 ### Nonblocking
 
-- Whether `summary` (battle participation) belongs in the verbatim set.
-  `AGENTS.md`'s "Data model" section already says it carries the source's
-  "own wording," which is ambiguous between verbatim and close paraphrase —
-  worth settling once, since it affects every participation claim, not just
-  this subject's.
-- Whether v1–v3 (the Sira and caliphs volumes) are unvocalized in Shamela's
-  own edition or only in this project's stored pages. If the former, nothing
-  to fix there; if the latter, those three volumes need the same
-  re-extraction treatment as
-  [reextract-from-shamela.md](reextract-from-shamela.md), at a much larger
-  scale.
+- Another host for volumes 1-2 (vowelled text and footnotes); the user's call.
+- Entries not yet extracted (for example Sa'id ibn Zayd) have no heading in
+  the store; extracting them is separate work.
+- A subject whose heading holds only the full lineage and no short known name
+  may need `name` left `legacy-unreviewed`; decide per case in the report.
+- Pages drifting from Shamela in vowelled volumes are not re-fetched; the
+  validator against stored pages and the later all-volume review are the
+  safeguards.
