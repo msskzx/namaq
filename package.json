@@ -39,6 +39,7 @@
     "catalog:project-graph": "tsx scripts/data/projectCatalogGraph.ts",
     "catalog:ledger": "tsx scripts/data/catalogLedger.ts",
     "catalog:checklist": "tsx scripts/data/catalogChecklist.ts",
+    "catalog:quoted-report": "tsx scripts/data/quotedValueReport.ts",
     "quiz:generate": "tsx scripts/quiz/generateQuestions.ts",
     "quiz:review": "tsx scripts/quiz/reviewQuestion.ts",
     "quiz:validate": "tsx scripts/quiz/validateQuestions.ts",
