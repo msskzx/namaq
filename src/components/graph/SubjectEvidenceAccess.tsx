@@ -59,7 +59,17 @@ export default function SubjectEvidenceAccess({
         <ul className="mt-2 space-y-2 text-sm text-gray-700 dark:text-gray-300">
           {claims.map((claim) => (
             <li key={claim.id} className="border-s-2 border-amber-400 ps-2">
-              <p>{claim.assertion}</p>
+              {claim.citations.some((citation) => citation.excerptArabic) ? (
+                claim.citations
+                  .filter((citation) => citation.excerptArabic)
+                  .map((citation) => (
+                    <p key={citation.id} dir="rtl" lang="ar" className="arabic-source">
+                      {citation.excerptArabic}
+                    </p>
+                  ))
+              ) : (
+                <p>{claim.assertion}</p>
+              )}
               <div className="mt-1 flex flex-wrap items-center gap-2">
                 <Badge
                   size="sm"
