@@ -94,7 +94,7 @@
       "subjectKind": "PERSON",
       "subjectSlug": "bilal-ibn-rabah",
       "field": "fullName",
-      "assertion": "بلال بن رباح",
+      "assertion": "بِلاَلُ بنُ رَبَاحٍ",
       "confidence": "ESTABLISHED",
       "reviewStatus": "NOT_REVIEWED",
       "citations": [
@@ -134,7 +134,7 @@
       "subjectKind": "PERSON",
       "subjectSlug": "bilal-ibn-rabah",
       "field": "kunya",
-      "assertion": "أبو عبد الكريم، وأبو عبد الله، وأبو عمرو",
+      "assertion": "أَبُو عَبْدِ الكَرِيْمِ، وَأَبُو عَبْدِ اللهِ، وَأَبُو عَمْرٍو",
       "confidence": "ESTABLISHED",
       "reviewStatus": "NOT_REVIEWED",
       "citations": [
