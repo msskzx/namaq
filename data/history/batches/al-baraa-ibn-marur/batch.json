@@ -36,7 +36,7 @@
       "subjectKind": "PERSON",
       "subjectSlug": "al-baraa-ibn-marur",
       "field": "fullName",
-      "assertion": "البراء بن معرور بن صخر بن خنساء بن سنان الخزرجي",
+      "assertion": "البَرَاءُ بنُ مَعْرُوْرِ بنِ صَخْرِ بنِ خَنْسَاءَ بنِ سِنَانَ الخَزْرَجِيُّ",
       "confidence": "ESTABLISHED",
       "reviewStatus": "NOT_REVIEWED",
       "citations": [
@@ -78,7 +78,7 @@
       "subjectKind": "PERSON",
       "subjectSlug": "al-baraa-ibn-marur",
       "field": "kunya",
-      "assertion": "أبو بشر",
+      "assertion": "أَبُو بِشْرٍ",
       "confidence": "ESTABLISHED",
       "reviewStatus": "NOT_REVIEWED",
       "citations": [
