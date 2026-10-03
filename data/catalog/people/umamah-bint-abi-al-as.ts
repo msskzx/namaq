@@ -10,17 +10,17 @@ import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 const umamahBintAbiAlAs = {
   kind: 'PERSON',
   slug: 'umamah-bint-abi-al-as',
-  name: 'أمامة بنت أبي العاص',
+  name: 'أُمَامَةُ بِنْتُ أَبِي العَاصِ',
   nameTransliterated: 'Umamah bint Abi al-As',
   hasProfile: true,
   fields: {
     sex: { value: 'FEMALE', claims: ['umamah-bint-abi-al-as/sex'] },
     fullName: {
-      value: 'أمامة بنت أبي العاص',
+      value: 'أُمَامَةُ بِنْتُ أَبِي العَاصِ',
       claims: ['umamah-bint-abi-al-as/fullName'],
     },
     virtues: {
-      value: 'الَّتِي كَانَ رَسُوْلُ اللهِ يَحْمِلُهَا فِي صَلاَتِهِ',
+      value: 'الَّتِي كَانَ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَحْمِلُهَا فِي صَلاَتِهِ',
       claims: ['umamah-bint-abi-al-as/virtues'],
     },
   },

@@ -8,7 +8,7 @@ import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 const talhahIbnUbaydullah = {
   kind: 'PERSON',
   slug: 'talhah-ibn-ubaydullah',
-  name: 'طلحة بن عبيد الله',
+  name: 'طَلْحَةُ بنُ عُبَيْدِ اللهِ',
   nameTransliterated: 'Talhah ibn Ubaydullah',
   hasProfile: true,
 
@@ -19,7 +19,7 @@ const talhahIbnUbaydullah = {
     // what is left is the name as the edition prints it.
     fullName: {
       value:
-        'طَلْحَةُ بنُ عُبَيْدِ اللهِ بنِ عُثْمَانَ بنِ عَمْرٍو التَّيْمِيُّ ابْنِ كَعْبِ بنِ سَعْدِ بنِ تَيْمِ بنِ مُرَّةَ بنِ كَعْبِ بنِ لُؤَيِّ بنِ غَالِبِ بنِ فِهْرِ بنِ مَالِكِ بنِ النَّضْرِ بنِ كِنَانَةَ القُرَشِيُّ، التَّيْمِيُّ، المَكِّيُّ، أَبُو مُحَمَّدٍ.',
+        'طَلْحَةُ بنُ عُبَيْدِ اللهِ بنِ عُثْمَانَ بنِ عَمْرٍو التَّيْمِيُّ بنِ كَعْبِ بنِ سَعْدِ بنِ تَيْمِ بنِ مُرَّةَ بنِ كَعْبِ بنِ لُؤَيِّ بنِ غَالِبِ بنِ فِهْرِ بنِ مَالِكِ بنِ النَّضْرِ بنِ كِنَانَةَ القُرَشِيُّ، التَّيْمِيُّ، المَكِّيُّ، أَبُو مُحَمَّدٍ',
       claims: ['talhah/full-name'],
     },
     // A name, not a title: the entry prints it in the naming line and the
@@ -30,7 +30,7 @@ const talhahIbnUbaydullah = {
     // prefers neither, so the value follows source order and keeps both.
     appearance: {
       value:
-        'كَانَ رَجُلاً آَدَمَ، كَثِيْرَ الشَّعْرِ، لَيْسَ بِالجَعْدِ القَطَطِ، وَلاَ بِالسَّبْطِ، حَسَنَ الوَجْهِ، إِذَا مَشَى أَسْرَعَ، وَلاَ يُغَيِّرُ شَعْرَهُ.',
+        'كَانَ رَجُلاً آَدَمَ، كَثِيْرَ الشَّعْرِ، لَيْسَ بِالجَعْدِ القَطَطِ، وَلاَ بِالسَّبْطِ، حَسَنَ الوَجْهِ، إِذَا مَشَى أَسْرَعَ، وَلاَ يُغَيِّرُ شَعْرَهُ',
       claims: ['talhah/appearance'],
     },
     virtues: {
