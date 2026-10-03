@@ -3,19 +3,19 @@ import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 const safiyyahBintHuyayy = {
   kind: 'PERSON',
   slug: 'safiyyah-bint-huyayy',
-  name: 'صفية بنت حيي',
+  name: 'صَفِيَّةُ بِنْتُ حُيَيِّ',
   nameTransliterated: 'Safiyyah bint Huyayy',
   hasProfile: true,
   fields: {
     sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: {
       value:
-        'صفية بنت حيي بن أخطب بن سعية، من سبط اللاوي بن نبي الله إسرائيل بن إسحاق بن إبراهيم، ومن ذرية هارون عليه السلام',
+        'صَفِيَّةُ بِنْتُ حُيَيِّ بنِ أَخْطَبَ بنِ سَعْيَةَ أُمُّ المُؤْمِنِيْنَ مِنْ سِبْطِ اللاَّوِي بنِ نَبِيِّ اللهِ إِسْرَائِيْلَ بنِ إِسْحَاقَ بنِ إِبْرَاهِيْمَ - عَلَيْهِمُ السَّلاَمُ - ثُمَّ مِنْ ذُرِّيَّةِ رَسُوْلِ اللهِ هَارُوْنَ',
       claims: ['safiyyah-bint-huyayy-siyar/full-name'],
     },
-    appearance: { value: 'كانت ذات جمال.', claims: ['safiyyah-bint-huyayy-siyar/appearance'] },
+    appearance: { value: 'ذَاتَ حَسَبٍ، وَجَمَالٍ', claims: ['safiyyah-bint-huyayy-siyar/appearance'] },
     virtues: {
-      value: 'أم المؤمنين، وكانت شريفة عاقلة ذات حسب ودين، وذات حلم ووقار.',
+      value: 'أُمُّ المُؤْمِنِيْنَ شَرِيْفَةً، عَاقِلَةً، ذَاتَ حَسَبٍ، وَجَمَالٍ، وَدِيْنٍ ذَاتَ حِلْمٍ، وَوَقَارٍ',
       claims: ['safiyyah-bint-huyayy-siyar/virtues'],
     },
     deathYearHijri: { value: '50', claims: ['safiyyah-bint-huyayy-siyar/death-year-fifty'] },
