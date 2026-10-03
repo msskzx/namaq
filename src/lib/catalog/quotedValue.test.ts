@@ -12,13 +12,20 @@ describe('cleanPassage', () => {
   });
 
   it('drops footnote markers and keeps ordinary parentheses', () => {
-    expect(cleanPassage('قَالَ (١) : (لِكُلِّ نَبِيٍّ حَوَارِيٌّ)')).toBe('قَالَ : (لِكُلِّ نَبِيٍّ حَوَارِيٌّ)');
+    expect(cleanPassage('قَالَ (١) : (لِكُلِّ نَبِيٍّ حَوَارِيٌّ)')).toBe('قَالَ: (لِكُلِّ نَبِيٍّ حَوَارِيٌّ)');
   });
 });
 
 describe('joinAtSeams', () => {
   it('writes a sentence-initial ابْنِ as بنِ where one passage runs into the next', () => {
     expect(joinAtSeams([heading, continuation])).toContain('عَبْدِ العُزَّى بنِ قُصَيِّ');
+  });
+});
+
+describe('punctuation left behind by a footnote marker', () => {
+  it('drops the space the marker leaves before a comma', () => {
+    expect(cleanPassage('أَبُو الرَّبِيْعِ الأَنْصَارِيُّ (١) ، الأَشْهَلِيُّ.')).toBe('أَبُو الرَّبِيْعِ الأَنْصَارِيُّ، الأَشْهَلِيُّ.');
+    expect(matchQuotedValue('الأَنْصَارِيُّ، الأَشْهَلِيُّ', [['أَبُو الرَّبِيْعِ الأَنْصَارِيُّ (١) ، الأَشْهَلِيُّ.']])).toEqual({ ok: true });
   });
 });
 
