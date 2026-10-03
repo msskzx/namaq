@@ -223,10 +223,13 @@ export async function generateQuestionCandidates(): Promise<GeneratedQuestion[]>
       const holders = new Set([...peopleBySlug.values()].filter((other) =>
         other.titles.some((held) => held.slug === title.slug) || catalogTitlesByPerson.get(other.slug)?.has(title.slug),
       ).map((other) => other.slug));
+      const holderPool = dbPerson.sex
+        ? personChoices.filter((item) => peopleBySlug.get(item.value)?.sex === dbPerson.sex)
+        : personChoices;
       add(candidate({
         family: 'TITLE_HOLDER', topic: 'PEOPLE', subject: { kind: 'TITLE', slug: title.slug }, attribute: 'titles',
-        personSlugs: [person.slug], promptArabic: `من حمل لقب «${title.name}»؟`, answer: choice(person.slug, person.name),
-        pool: personChoices, excludedValues: holders, evidence,
+        personSlugs: [person.slug], promptArabic: `من ${dbPerson.sex === 'FEMALE' ? 'حملت' : 'حمل'} لقب «${title.name}»؟`, answer: choice(person.slug, person.name),
+        pool: holderPool, excludedValues: holders, evidence,
       }));
     }
 

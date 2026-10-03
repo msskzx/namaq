@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-10-03T10:57:04.331Z",
+  "generatedAt": "2026-10-03T11:03:06.105Z",
   "questions": [
     {
       "key": "AYAH_LINK:PERSON:abdur-rahman-ibn-awf:ayat:48:18",
@@ -3822,11 +3822,11 @@
         ]
       },
       "fingerprint": "77a9ac560eded72c683efc8712e3812fede3ea824872cd444f6611668d343200",
-      "promptArabicOverride": null,
-      "status": "REJECTED",
-      "rejectionReason": "kunya mechanically present in subject's own displayed name ('أبو عبيدة بن الجراح')",
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
-      "reviewedBy": "Claude"
+      "promptArabicOverride": "ما كنية عامر بن عبد الله؟",
+      "status": "APPROVED",
+      "rejectionReason": null,
+      "reviewedAt": "2026-10-03T11:03:28.418Z",
+      "reviewedBy": "Codex"
     },
     {
       "key": "KUNYA:PERSON:al-baraa-ibn-marur:kunya:أبو بشر",
@@ -14880,19 +14880,19 @@
       "choices": [
         {
           "value": "talhah-ibn-ubaydullah",
-          "labelArabic": "طلحة بن عبيد الله"
+          "labelArabic": "طَلْحَةُ بنُ عُبَيْدِ اللهِ"
         },
         {
           "value": "rabiah-ibn-al-harith",
           "labelArabic": "ربيعة بن الحارث"
         },
         {
-          "value": "fatimah-bint-muhammad",
-          "labelArabic": "فاطمة بنت محمد"
-        },
-        {
           "value": "abd-al-uzza-ibn-yazid",
           "labelArabic": "عبد العزى بن يزيد"
+        },
+        {
+          "value": "ubaydah-ibn-al-harith",
+          "labelArabic": "عبيدة بن الحارث"
         }
       ],
       "correctAnswer": "talhah-ibn-ubaydullah",
@@ -14901,11 +14901,11 @@
           "talhah/al-qarinayn"
         ]
       },
-      "fingerprint": "1046711a5003a8559f33335ccf17cbe8c14df1cf166a98d79584e9461d2b3d61",
+      "fingerprint": "0bb90938a79110ea1b6a927baf6944d1797b7f5492d900b67d8ef5736541eea6",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "reviewedAt": "2026-10-03T11:03:24.357Z",
       "reviewedBy": "Codex"
     },
     {
@@ -16552,23 +16552,23 @@
       "personSlugs": [
         "asma-bint-abi-bakr"
       ],
-      "promptArabic": "من حمل لقب «ذات النطاقين»؟",
+      "promptArabic": "من حملت لقب «ذات النطاقين»؟",
       "choices": [
         {
           "value": "asma-bint-abi-bakr",
           "labelArabic": "أسماء بنت أبي بكر"
         },
         {
-          "value": "imru-al-qays-ibn-zayd",
-          "labelArabic": "امرؤ القيس بن زيد"
+          "value": "sumayyah-bint-khayyat",
+          "labelArabic": "سمية بنت خياط"
         },
         {
-          "value": "yasaf-ibn-inabah",
-          "labelArabic": "يساف بن عنبة"
+          "value": "umm-sulaym-al-ghumaysa",
+          "labelArabic": "أم سليم الغميصاء"
         },
         {
-          "value": "bukayr-ibn-abd-manat",
-          "labelArabic": "بكير بن عبد مناة"
+          "value": "raitah-bint-al-hajjaj",
+          "labelArabic": "رائطة بنت الحجاج"
         }
       ],
       "correctAnswer": "asma-bint-abi-bakr",
@@ -16577,11 +16577,11 @@
           "asma/dhat-an-nitaqayn"
         ]
       },
-      "fingerprint": "2c844cff1514877577436d39b3ecdf39d1198ccdaeecead767779ee15f79a084",
+      "fingerprint": "582183074fcf64656b9dd2dcc47999d95865a45f059123c1e463ef1aedb45dd7",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "reviewedAt": "2026-10-03T11:01:37.980Z",
       "reviewedBy": "Codex"
     },
     {
@@ -16603,16 +16603,16 @@
           "labelArabic": "الزبير بن العوام"
         },
         {
-          "value": "ruqayyah-bint-muhammad",
-          "labelArabic": "رقية بنت محمد"
-        },
-        {
           "value": "abdullah-ibn-hudhafah",
           "labelArabic": "عبد الله بن حذافة"
         },
         {
           "value": "al-ashath-ibn-qais",
           "labelArabic": "الأشعث بن قيس"
+        },
+        {
+          "value": "al-baraa-ibn-azib",
+          "labelArabic": "البراء بن عازب"
         }
       ],
       "correctAnswer": "az-zubayr-ibn-al-awwam",
@@ -16622,11 +16622,11 @@
           "zubayr/uhud-hawari"
         ]
       },
-      "fingerprint": "4f56db84589f6ce8a7f92084c236494363336da895d675b24d7a049fa5ae7467",
+      "fingerprint": "b24f24da56ffeb9e0bd470354bd25ca7b4cc4885005fe55e5d513e1ecbd4cc7b",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "reviewedAt": "2026-10-03T11:03:24.935Z",
       "reviewedBy": "Codex"
     },
     {
@@ -16729,23 +16729,23 @@
       "personSlugs": [
         "umm-salamah"
       ],
-      "promptArabic": "من حمل لقب «أم المؤمنين»؟",
+      "promptArabic": "من حملت لقب «أم المؤمنين»؟",
       "choices": [
         {
           "value": "umm-salamah",
           "labelArabic": "أم سلمة"
         },
         {
-          "value": "saad-ibn-shahid-al-awsi",
-          "labelArabic": "سعد بن شهيد"
+          "value": "umaymah-bint-abd-al-muttalib",
+          "labelArabic": "أميمة بنت عبد المطلب"
         },
         {
-          "value": "abu-dujanah-al-ansari",
-          "labelArabic": "أبو دجانة الأنصاري"
+          "value": "zabyah-bint-wahb",
+          "labelArabic": "ظبية بنت وهب"
         },
         {
-          "value": "as-saib-ibn-uthman",
-          "labelArabic": "السائب بن عثمان"
+          "value": "umm-harmalah-al-makhzumiyyah",
+          "labelArabic": "أم حرملة المخزومية"
         }
       ],
       "correctAnswer": "umm-salamah",
@@ -16754,11 +16754,11 @@
           "umm-salamah/umm-al-mumineen"
         ]
       },
-      "fingerprint": "b1935c668ce71f771ea1626f64514890afdbe7c89d988334b1164f9973d7532c",
+      "fingerprint": "de16a428f72aee817fb7378f12529ca2f8dd5b35857be7dc9e2d370af1d4927e",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "reviewedAt": "2026-10-03T11:01:38.565Z",
       "reviewedBy": "Codex"
     },
     {
@@ -16773,23 +16773,23 @@
       "personSlugs": [
         "zaynab-bint-khuzaymah"
       ],
-      "promptArabic": "من حمل لقب «أم المؤمنين»؟",
+      "promptArabic": "من حملت لقب «أم المؤمنين»؟",
       "choices": [
         {
           "value": "zaynab-bint-khuzaymah",
           "labelArabic": "زينب بنت خزيمة"
         },
         {
-          "value": "abu-bakrah-al-thaqafi",
-          "labelArabic": "أبو بكرة الثقفي"
-        },
-        {
           "value": "al-bayda-bint-abd-al-muttalib",
           "labelArabic": "البيضاء بنت عبد المطلب"
         },
         {
-          "value": "amr-ibn-haram",
-          "labelArabic": "عمرو بن حرام"
+          "value": "asma-bint-umays",
+          "labelArabic": "أسماء بنت عميس"
+        },
+        {
+          "value": "umaymah-bint-abd-al-muttalib",
+          "labelArabic": "أميمة بنت عبد المطلب"
         }
       ],
       "correctAnswer": "zaynab-bint-khuzaymah",
@@ -16798,11 +16798,11 @@
           "zaynab-khuzaymah/umm-al-mumineen"
         ]
       },
-      "fingerprint": "f32cf0208561d063157c5f015756edb52da1f07ae1bae7099d3868e0b25790b1",
+      "fingerprint": "0679ff0c65fc9a00c9356ae5d05406262b3b53ab3948e84a439881f8350e40e8",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "reviewedAt": "2026-10-03T11:01:39.239Z",
       "reviewedBy": "Codex"
     },
     {
@@ -17048,12 +17048,12 @@
           "labelArabic": "عاقل بن البكير"
         },
         {
-          "value": "dimad-al-azdi",
-          "labelArabic": "ضماد الأزدي"
+          "value": "unays-ibn-junadah-al-ghifari",
+          "labelArabic": "أنيس بن جنادة الغفاري"
         },
         {
-          "value": "haram-ibn-jundub",
-          "labelArabic": "حرام بن جندب"
+          "value": "dimad-al-azdi",
+          "labelArabic": "ضماد الأزدي"
         }
       ],
       "correctAnswer": "abu-bakr-as-siddiq",
@@ -17062,11 +17062,11 @@
           "abu-bakr/siddiq"
         ]
       },
-      "fingerprint": "71c96e52497602b342799bad87877f65dfe6cd6851e5c09b5be02bef063b2d3f",
+      "fingerprint": "4ff12c11cf1b754cbc2ed7843f4ef9955e58096b2f422cb981e4e00bc6de250a",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "reviewedAt": "2026-10-03T11:03:25.514Z",
       "reviewedBy": "Codex"
     },
     {
@@ -17272,8 +17272,8 @@
           "labelArabic": "أبو طلحة الأنصاري"
         },
         {
-          "value": "amr-ibn-haram",
-          "labelArabic": "عمرو بن حرام"
+          "value": "sallam-ibn-abi-al-huqayq",
+          "labelArabic": "سَلاَمُ بنُ أَبِي الحُقَيْقِ"
         }
       ],
       "correctAnswer": "az-zubayr-ibn-al-awwam",
@@ -17282,11 +17282,11 @@
           "zubayr/titles"
         ]
       },
-      "fingerprint": "9d462c01346afa9b5e8e0b1d3590a49d72cf0a81235156693299abacb96b9636",
+      "fingerprint": "91444c8240c5c72c9d9dc256a935c98e19d294cf24c689e6c8db95d035706b13",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "reviewedAt": "2026-10-03T11:03:26.104Z",
       "reviewedBy": "Codex"
     },
     {
@@ -17448,8 +17448,8 @@
           "labelArabic": "جابر بن وهيب"
         },
         {
-          "value": "ruqayyah-bint-muhammad",
-          "labelArabic": "رقية بنت محمد"
+          "value": "qatadah-ibn-al-numan",
+          "labelArabic": "قتادة بن النعمان"
         }
       ],
       "correctAnswer": "az-zubayr-ibn-al-awwam",
@@ -17458,11 +17458,11 @@
           "zubayr/titles"
         ]
       },
-      "fingerprint": "c4822181517b274653a40f23fe877c88b461e759fc929b1d7997e0430e1c03e5",
+      "fingerprint": "650e5f524360015bc116c2bcf275a91b0994a884f5eb1b375cfc09a9474e7a52",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "reviewedAt": "2026-10-03T11:03:26.682Z",
       "reviewedBy": "Codex"
     },
     {
@@ -17525,7 +17525,7 @@
       "choices": [
         {
           "value": "saeed-ibn-zaid",
-          "labelArabic": "سعيد بن زيد"
+          "labelArabic": "سَعِيْدُ بنُ زَيْدِ"
         },
         {
           "value": "amr-ibn-abd-awf-al-najjari",
@@ -17546,11 +17546,11 @@
           "saeed/titles"
         ]
       },
-      "fingerprint": "c17d9244aea332137ca0cc1d83ae323c213c121abf0846554111f28331d8caef",
+      "fingerprint": "50a5c1a76ec637832a1c5bfa545d4d7a137336e878ef984436ca819263e2b606",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "reviewedAt": "2026-10-03T11:03:27.262Z",
       "reviewedBy": "Codex"
     },
     {
@@ -17569,7 +17569,7 @@
       "choices": [
         {
           "value": "talhah-ibn-ubaydullah",
-          "labelArabic": "طلحة بن عبيد الله"
+          "labelArabic": "طَلْحَةُ بنُ عُبَيْدِ اللهِ"
         },
         {
           "value": "abd-wudd-ibn-zayd",
@@ -17590,11 +17590,11 @@
           "talhah/titles"
         ]
       },
-      "fingerprint": "b4c09ab321de16cebd83c1c388cf65242eed69bf1c6f837515d839d65ca03512",
+      "fingerprint": "703b2ea7c19ba91ab2e9128aa853d532f31d1da7ca9c52a66a5a7840f8207531",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "reviewedAt": "2026-10-03T11:03:27.837Z",
       "reviewedBy": "Codex"
     },
     {
@@ -17653,23 +17653,23 @@
       "personSlugs": [
         "zaynab-bint-khuzaymah"
       ],
-      "promptArabic": "من حمل لقب «أم المساكين»؟",
+      "promptArabic": "من حملت لقب «أم المساكين»؟",
       "choices": [
         {
           "value": "zaynab-bint-khuzaymah",
           "labelArabic": "زينب بنت خزيمة"
         },
         {
-          "value": "khawwat-ibn-jubair",
-          "labelArabic": "خوات بن جبير"
+          "value": "sawdah-bint-zamah",
+          "labelArabic": "سودة بنت زمعة"
         },
         {
-          "value": "abd-awf-ibn-ghanm-al-najjari",
-          "labelArabic": "عبد عوف بن غنم"
+          "value": "asma-bint-umays",
+          "labelArabic": "أسماء بنت عميس"
         },
         {
-          "value": "simak-ibn-atik",
-          "labelArabic": "سماك بن عتيك"
+          "value": "asma-bint-abi-bakr",
+          "labelArabic": "أسماء بنت أبي بكر"
         }
       ],
       "correctAnswer": "zaynab-bint-khuzaymah",
@@ -17678,11 +17678,11 @@
           "zaynab-khuzaymah/umm-al-masakeen"
         ]
       },
-      "fingerprint": "68db7f6e41c45a0671125150530f8639dcadf61ba432811b82389d77f97ee662",
+      "fingerprint": "28c4484787be257f816fdb989b8c18b3c0165251ecc7096c3a9f5c4cc6eabe80",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "reviewedAt": "2026-10-03T11:01:39.823Z",
       "reviewedBy": "Codex"
     },
     {

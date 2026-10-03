@@ -114,6 +114,25 @@ describe('question candidate generation', () => {
     expect(question?.choices.map((choice) => choice.value).sort()).toEqual(['t1', 't2', 't3', 't4']);
   });
 
+  it('uses women as distractors and feminine wording for a title held by a woman', async () => {
+    const women = ['p1', 'p2', 'p3', 'p4'].map((slug, index) => ({
+      ...basePerson(slug, `المرأة ${index + 1}`, `أم ${index + 1}`),
+      fields: { sex: { value: 'FEMALE', claims: ['abu-ubaydah/titles'] } },
+      titles: [{ title: `t${index + 1}`, claims: ['abu-ubaydah/titles'] }],
+      ayat: [],
+    }));
+    loadCatalog.mockResolvedValue({ people: women, battles: [], events: [], utterances: [] });
+    personFindMany.mockResolvedValue([
+      ...women.map((person, index) => ({ slug: person.slug, name: person.name, sex: 'FEMALE', titles: [{ slug: `t${index + 1}` }], ayat: [] })),
+      { slug: 'p5', name: 'الرجل', sex: 'MALE', titles: [], ayat: [] },
+    ]);
+
+    const question = (await generateQuestionCandidates()).find((item) => item.key === 'TITLE_HOLDER:TITLE:t1:titles:p1');
+
+    expect(question?.promptArabic).toBe('من حملت لقب «اللقب الأول»؟');
+    expect(question?.choices.map((choice) => choice.value).sort()).toEqual(['p1', 'p2', 'p3', 'p4']);
+  });
+
   it('skips companion title assignments in both title directions', async () => {
     loadCatalog.mockResolvedValue({
       people: [{
