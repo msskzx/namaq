@@ -67,11 +67,17 @@ describe('matchQuotedValue', () => {
     expect(matchQuotedValue('ابْنِ قُصَيِّ بنِ كِلاَبِ', [[continuation]])).toEqual({ ok: true });
   });
 
-  it('accepts a value composed from two cited pages and rejects one that reorders words', () => {
+  it('rejects a value composed from two cited pages and one that reorders words', () => {
     const pageOne = ['كَانَ رَجُلاً طَوِيْلاً.'];
     const pageTwo = ['وَكَانَ يَخْضِبُ بِالحِنَّاءِ.'];
-    expect(matchQuotedValue('كَانَ رَجُلاً طَوِيْلاً. وَكَانَ يَخْضِبُ', [pageOne, pageTwo])).toEqual({ ok: true });
+    expect(matchQuotedValue('كَانَ رَجُلاً طَوِيْلاً. وَكَانَ يَخْضِبُ', [pageOne, pageTwo])).toMatchObject({ ok: false });
     expect(matchQuotedValue('طَوِيْلاً رَجُلاً كَانَ وَكَانَ يَخْضِبُ', [pageOne, pageTwo])).toMatchObject({ ok: false });
+  });
+
+  it('rejects a value stitched from two clips of one passage with the text between them skipped', () => {
+    const passage = ['قَالَ قَائِمٌ: سَقَطَ السَّيْفُ مِنْ يَدِهِ ثُمَّ قَالَ: صَدَقْتَ.'];
+    expect(matchQuotedValue('قَالَ قَائِمٌ: سَقَطَ السَّيْفُ ثُمَّ قَالَ: صَدَقْتَ', [passage])).toMatchObject({ ok: false });
+    expect(matchQuotedValue('سَقَطَ السَّيْفُ مِنْ يَدِهِ ثُمَّ قَالَ: صَدَقْتَ', [passage])).toEqual({ ok: true });
   });
 
   it('rejects a value with its vowel marks removed', () => {

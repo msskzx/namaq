@@ -23,12 +23,10 @@ export function joinAtSeams(passages: readonly string[], keepStops = false): str
   }, '');
 }
 
-export type QuotedValueResult =
-  | { ok: true }
-  | { ok: false; reason: 'diverges'; matched: string; next: string }
-  | { ok: false; reason: 'pieces'; matched: string; next: string };
+export type QuotedValueResult = { ok: true } | { ok: false; reason: 'diverges'; matched: string; next: string };
 
-/** Each group is the paragraphs of one cited page; a value may be tiled by at most one clip per group. */
+const NEXT_CHARS = 24;
+
 export function matchQuotedValue(value: string, groups: readonly (readonly string[])[]): QuotedValueResult {
   const result = matchExact(value, groups);
   const closed = value.trim().replace(/\.$/, '');
@@ -37,31 +35,14 @@ export function matchQuotedValue(value: string, groups: readonly (readonly strin
 
 function matchExact(value: string, groups: readonly (readonly string[])[]): QuotedValueResult {
   const haystacks = groups.flatMap((group) => [...group.map(cleanPassage), joinAtSeams(group), joinAtSeams(group, true)]);
-  const tokens = value.replace(/\s+/g, ' ').trim().split(' ');
-  const found = (text: string) => haystacks.some((haystack) => haystack.includes(text));
+  const chars = [...value.replace(/\s+/g, ' ').trim()];
+  if (haystacks.some((haystack) => haystack.includes(chars.join('')))) return { ok: true };
 
-  let index = 0;
-  let pieces = 0;
-  while (index < tokens.length) {
-    let end = index;
-    while (end < tokens.length && found(tokens.slice(index, end + 1).join(' '))) end += 1;
-    if (end === index) {
-      const token = tokens[index];
-      let length = 0;
-      while (length < token.length && found(token.slice(0, length + 1))) length += 1;
-      const before = tokens.slice(0, index).join(' ');
-      return {
-        ok: false,
-        reason: 'diverges',
-        matched: `${before}${before ? ' ' : ''}${token.slice(0, length)}`,
-        next: [token.slice(length), ...tokens.slice(index + 1)].join(' ').slice(0, 24),
-      };
-    }
-    index = end;
-    pieces += 1;
+  let matched = 0;
+  for (const haystack of haystacks) {
+    let length = 0;
+    while (length < chars.length && haystack.includes(chars.slice(0, length + 1).join(''))) length += 1;
+    matched = Math.max(matched, length);
   }
-  if (pieces > Math.max(groups.length, 1)) {
-    return { ok: false, reason: 'pieces', matched: tokens.join(' '), next: '' };
-  }
-  return { ok: true };
+  return { ok: false, reason: 'diverges', matched: chars.slice(0, matched).join(''), next: chars.slice(matched, matched + NEXT_CHARS).join('') };
 }
