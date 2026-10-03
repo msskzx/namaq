@@ -30,7 +30,7 @@ const ajnadayn = {
       isMuslim: true,
       status: ['MARTYRED'],
       summary: {
-        value: 'استشهد هو وأخوه خالد يوم أجنادين على الصحيح.',
+        value: 'اسْتُشْهِدَ هُوَ وَأَخُوْهُ خَالِدٌ يَوْمَ أَجْنَادِيْنَ عَلَى الصَّحِيْحِ',
         claims: ['aban-ibn-said-siyar49/ajnadayn'],
       },
       claims: ['aban-ibn-said-siyar49/ajnadayn'],
@@ -43,7 +43,7 @@ const ajnadayn = {
       isMuslim: true,
       status: ['MARTYRED'],
       summary: {
-        value: 'وَيُقَالُ: يَوْم أَجْنَادِيْنَ مَعَ أَخَوَيْهِ.',
+        value: 'وَيُقَالُ: يَوْم أَجْنَادِيْنَ - مَعَ أَخَوَيْهِ -',
         claims: ['amr-ibn-said-al-umawi-siyar50/ajnadayn'],
       },
       claims: ['amr-ibn-said-al-umawi-siyar50/ajnadayn'],

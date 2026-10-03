@@ -55,7 +55,7 @@ const badr = {
       status: ['CAPTURED'],
       summary: {
         value:
-          'لَقَدْ رَأَيْتُ سَعْداً يُقَاتِلُ يَوْمَ بَدْرٍ قِتَالَ الفَارِسِ فِي الرِّجَالِ. اشْتَرَكْتُ أَنَا، وَسَعْدٌ، وَعَمَّارٌ، يَوْمَ بَدْرٍ فِيْمَا أَصَبْنَا مِنَ الغَنِيْمَةِ، فَجَاءَ سَعْدٌ بِأَسِيْرَيْنِ، وَلَمْ أَجِئْ أَنَا وَعَمَّارٌ بِشَيْءٍ.',
+          'لَقَدْ رَأَيْتُ سَعْداً يُقَاتِلُ يَوْمَ بَدْرٍ قِتَالَ الفَارِسِ فِي الرِّجَالِ اشْتَرَكْتُ أَنَا، وَسَعْدٌ، وَعَمَّارٌ، يَوْمَ بَدْرٍ فِيْمَا أَصَبْنَا مِنَ الغَنِيْمَةِ، فَجَاءَ سَعْدٌ بِأَسِيْرَيْنِ، وَلَمْ أَجِئْ أَنَا وَعَمَّارٌ بِشَيْءٍ',
         claims: ['saad/badr'],
       },
       claims: ['saad/badr'],
@@ -65,7 +65,7 @@ const badr = {
       isMuslim: true,
       summary: {
         value:
-          'وَمِنْ مَنَاقِبِهِ: أَنَّ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- شَهِدَ لَهُ بِالجَنَّةِ، وَأَنَّهُ مِنْ أَهْلِ بَدْرٍ الَّذِيْنَ قِيْلَ لَهُم: (اعْمَلُوا مَا شِئْتُم) .',
+          'وَأَنَّهُ مِنْ أَهْلِ بَدْرٍ الَّذِيْنَ قِيْلَ لَهُم: (اعْمَلُوا مَا شِئْتُم )',
         claims: ['awf/badr'],
       },
       claims: ['awf/badr'],
@@ -98,7 +98,7 @@ const badr = {
       status: ['ABSENT_EXCUSED'],
       summary: {
         value:
-          'غَابَ عَنْ وَقْعَة بَدْرٍ فِي تِجَارَةٍ لَهُ بِالشَّامِ، وَتَأَلَّمَ لِغَيْبَتِهِ، فَضَرَبَ لَهُ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِسَهْمِهِ، وَأَجره.',
+          'غَابَ عَنْ وَقْعَة بَدْرٍ فِي تِجَارَةٍ لَهُ بِالشَّامِ ، وَتَأَلَّمَ لِغَيْبَتِهِ، فَضَرَبَ لَهُ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِسَهْمِهِ، وَأَجره',
         claims: ['talhah/badr'],
       },
       claims: ['talhah/badr'],
@@ -111,7 +111,7 @@ const badr = {
       status: ['INJURED'],
       summary: {
         value:
-          'كَانَ يَوْمَ بَدْرٍ مَعَ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فَارِسَانِ: الزُّبَيْرُ عَلَى فَرَسٍ، عَلَى المَيْمَنَةِ، وَالمِقْدَادُ بنُ الأَسْوَدِ عَلَى فَرَسٍ، عَلَى المَيْسَرَةِ.',
+          'كَانَ يَوْمَ بَدْرٍ مَعَ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فَارِسَانِ: الزُّبَيْرُ عَلَى فَرَسٍ، عَلَى المَيْمَنَةِ، وَالمِقْدَادُ بنُ الأَسْوَدِ عَلَى فَرَسٍ، عَلَى المَيْسَرَةِ',
         claims: ['zubayr/badr'],
       },
       claims: ['zubayr/badr'],
@@ -214,7 +214,7 @@ const badr = {
       person: 'aqil-ibn-al-bukayr',
       isMuslim: true,
       status: ['MARTYRED'],
-      summary: { value: 'قَتَلَهُ مَالِكُ بنُ زُهَيْرٍ الجُشَمِيُّ.', claims: ['aqil-bukayr-siyar16/badr-summary'] },
+      summary: { value: 'قَتَلَهُ مَالِكُ بنُ زُهَيْرٍ الجُشَمِيُّ', claims: ['aqil-bukayr-siyar16/badr-summary'] },
       claims: ['aqil-bukayr/badr', 'aqil-bukayr-siyar16/badr-summary'],
     },
     { person: 'safwan-ibn-bayda', isMuslim: true, status: ['MARTYRED'], claims: ['safwan-bayda/badr'] },
@@ -223,7 +223,7 @@ const badr = {
       isMuslim: true,
       status: ['MARTYRED'],
       summary: {
-        value: 'فَاقْتَرَعَا، فَخَرَجَ سَهْمُ سَعْدٍ، فَخَرَجَ، وَاسْتُشْهِدَ بِبَدْرٍ.',
+        value: 'فَاقْتَرَعَا، فَخَرَجَ سَهْمُ سَعْدٍ، فَخَرَجَ، وَاسْتُشْهِدَ بِبَدْرٍ',
         claims: ['saad-ibn-khaythamah-siyar52/badr'],
       },
       claims: ['saad-khaythamah/badr', 'saad-ibn-khaythamah-siyar52/badr'],
@@ -274,7 +274,7 @@ const badr = {
       isMuslim: true,
       status: ['INJURED'],
       summary: {
-        value: 'جعل أبا جهل يوم بدر من شأني، فلما أمكنني حملت عليه فضربته فقطعت قدمه بنصف ساقه.',
+        value: 'جَعَلْتُ أَبَا جَهْلٍ يَوْمَ بَدْرٍ مِنْ شَأْنِي، فَلَمَّا أَمْكَنَنِي، حَمَلْتُ عَلَيْهِ، فَضَرَبْتُهُ، فَقَطَعْتُ قَدَمَهُ بِنِصْفِ سَاقِهِ',
         claims: ['muadh-ibn-amr-ibn-al-jumuh-siyar41/badr'],
       },
       claims: ['muadh-ibn-amr-ibn-al-jumuh-siyar41/badr'],
@@ -298,7 +298,7 @@ const badr = {
       person: 'abdullah-ibn-suhail',
       isMuslim: true,
       summary: {
-        value: 'خرج مع أبيه إلى بدر يكتم إيمانه، فلما التقى الجمعان، تحول إلى المسلمين، وقاتل، وعد بدريا.',
+        value: 'خَرَجَ مَعَ أَبِيْهِ إِلَى بَدْرٍ يَكْتُمُ إِيْمَانَهُ، فَلَمَّا الْتَقَى الجَمْعَانِ، تَحَوَّلَ إِلَى المُسْلِمِيْنَ، وَقَاتَلَ، وَعُدَّ بَدْرِيّاً',
         claims: ['abdullah-ibn-suhail-siyar24/badr'],
       },
       claims: ['abdullah-ibn-suhail-siyar24/badr'],
@@ -333,7 +333,7 @@ const badr = {
       person: 'nawfal-ibn-al-harith',
       isMuslim: false,
       status: ['WAS_CAPTURED'],
-      summary: { value: 'حَضَرَ بَدْراً مَعَ المُشْرِكِيْنَ، فَأُسِرَ.', claims: ['nawfal-ibn-al-harith-siyar27/badr'] },
+      summary: { value: 'حَضَرَ بَدْراً مَعَ المُشْرِكِيْنَ، فَأُسِرَ', claims: ['nawfal-ibn-al-harith-siyar27/badr'] },
       claims: ['nawfal-ibn-al-harith-siyar27/badr'],
     },
     {
@@ -341,7 +341,7 @@ const badr = {
       isMuslim: false,
       status: ['WAS_CAPTURED'],
       summary: {
-        value: 'شَهِدَ بَدْراً مُشْرِكاً، وَأُخْرِجَ إِلَيْهَا مُكْرَهاً، فَأُسِرَ، وَلَمْ يَكُنْ لَهُ مَالٌ، فَفَدَاهُ عَمُّهُ العَبَّاسُ.',
+        value: 'شَهِدَ بَدْراً مُشْرِكاً، وَأُخْرِجَ إِلَيْهَا مُكْرَهاً، فَأُسِرَ، وَلَمْ يَكُنْ لَهُ مَالٌ، فَفَدَاهُ عَمُّهُ العَبَّاسُ',
         claims: ['aqil-ibn-abi-talib-siyar35/badr'],
       },
       claims: ['aqil-ibn-abi-talib-siyar35/badr'],
@@ -354,7 +354,7 @@ const badr = {
       status: ['WAS_CAPTURED'],
       summary: {
         value:
-          'خَرَجَ مَعَ قَوْمِهِ إِلَى بَدْرٍ، فَأُسِرَ يَوْمَئِذٍ. وَكَانَ أَكْثَرُ الأُسَارَى فِدَاءً يَوْمَ بَدْرٍ العَبَّاسُ، افْتَدَى نَفْسَهُ بِمائَةِ أُوْقِيَّةٍ مِنْ ذَهَبٍ.',
+          'خَرَجَ مَعَ قَوْمِهِ إِلَى بَدْرٍ، فَأُسِرَ يَوْمَئِذٍ وَكَانَ أَكْثَرُ الأُسَارَى فِدَاءً يَوْمَ بَدْرٍ العَبَّاسُ، افْتَدَى نَفْسَهُ بِمائَةِ أُوْقِيَّةٍ مِنْ ذَهَبٍ',
         claims: ['al-abbas-ibn-abd-al-muttalib-siyar11/badr'],
       },
       claims: ['al-abbas-ibn-abd-al-muttalib-siyar11/badr'],
@@ -365,7 +365,7 @@ const badr = {
       isMuslim: true,
       relation: 'ABSENT_FROM',
       status: ['ABSENT_EXCUSED'],
-      summary: { value: 'لَمْ يَشْهَدْ بَدْراً، كَانَ أَعْرَجَ.', claims: ['amr-ibn-al-jumuh-siyar44/badr-absent'] },
+      summary: { value: 'لَمْ يَشْهَدْ بَدْراً، كَانَ أَعْرَجَ', claims: ['amr-ibn-al-jumuh-siyar44/badr-absent'] },
       claims: ['amr-ibn-al-jumuh-siyar44/badr-absent'],
     },
     // Entry 54; al-Dhahabi names him among the leading men of Badr and says
@@ -401,7 +401,7 @@ const badr = {
       person: 'thabit-ibn-qais',
       isMuslim: true,
       relation: 'ABSENT_FROM',
-      summary: { value: 'وَلَمْ يَشْهَدْ بَدْراً.', claims: ['thabit-ibn-qais-siyar61/badr-absence'] },
+      summary: { value: 'وَلَمْ يَشْهَدْ بَدْراً', claims: ['thabit-ibn-qais-siyar61/badr-absence'] },
       claims: ['thabit-ibn-qais-siyar61/badr-absence'],
     },
     {
@@ -419,7 +419,7 @@ const badr = {
       status: ['ABSENT_EXCUSED'],
       summary: {
         value:
-          'كَانَ يَتَهَيَّأُ لِلْخُرُوْجِ إِلَى بَدْرٍ، وَيَأْتِي دُوْرَ الأَنْصَارِ يَحُضُّهُم عَلَى الخُرُوْجِ، فَنُهِشَ، فَأَقَامَ. وَقَالَ جَمَاعَةٌ: مَا شَهِدَهَا؛ وَقَالَ أَبُو الأَسْوَدِ عَنْ عُرْوَةَ وَالبُخَارِيُّ فِي تَارِيْخِهِ: شَهِدَهَا.',
+          'كَانَ يَتَهَيَّأُ لِلْخُرُوْجِ إِلَى بَدْرٍ، وَيَأْتِي دُوْرَ الأَنْصَارِ يَحُضُّهُم عَلَى الخُرُوْجِ، فَنُهِشَ، فَأَقَامَ وَقَالَ جَمَاعَةٌ: مَا شَهِدَهَا قَالَ أَبُو الأَسْوَدِ: عَنْ عُرْوَةَ: إِنَّهُ شَهِدَ بَدْراً وَقَالَ البُخَارِيُّ فِي (تَارِيْخِهِ) : إِنَّهُ شَهِدَ بَدْراً',
         claims: ['saad-ibn-ubadah-siyar55/badr-absent'],
       },
       claims: ['saad-ibn-ubadah-siyar55/badr-absent'],
@@ -429,7 +429,7 @@ const badr = {
       isMuslim: true,
       relation: 'ABSENT_FROM',
       summary: {
-        value: 'مَا شَهِدَ بَدْراً؛ ظَنَّ أَنَّهَا العِيْرُ، وَلَوْ ظَنَّ أَنَّهُ غَزْوٌ مَا تَخَلَّفَ.',
+        value: 'مَا شَهِدَ بَدْراً ظَنَنْتُ أَنَّهَا العِيْرُ، وَلَوْ ظَنَنْتُ أَنَّهُ غَزْوٌ مَا تَخَلَّفْتُ',
         claims: ['usayd-ibn-al-hudayr-siyar74/badr-absence'],
       },
       claims: ['usayd-ibn-al-hudayr-siyar74/badr-absence'],
@@ -454,7 +454,7 @@ const badr = {
       person: 'abu-talha-al-ansari',
       isMuslim: true,
       summary: {
-        value: 'شَهِدَ بَدْراً؛ سَقَطَ السَّيْفُ مِنْهُ يَوْمَ بَدْرٍ، لِمَا غَشِيَهُمْ مِنَ النُّعَاسِ.',
+        value: 'مِمَّنْ شَهِدَ العَقَبَةَ وَبَدْراً لَقَدْ سَقَطَ السَّيْفُ مِنِّي يَوْمَ بَدْرٍ، لِمَا غَشِيَنَا مِنَ النُّعَاسِ',
         claims: ['abu-talha-al-ansari-siyar5/badr'],
       },
       claims: ['abu-talha-al-ansari-siyar5/badr'],
@@ -464,7 +464,7 @@ const badr = {
       isMuslim: true,
       relation: 'ABSENT_FROM',
       summary: {
-        value: 'فَاتَتْهُ بَدْرٌ.',
+        value: 'فَاتَتْهُ بَدْرٌ',
         claims: ['abu-dharr-al-ghifari-siyar10/badr-absence'],
       },
       claims: ['abu-dharr-al-ghifari-siyar10/badr-absence'],
@@ -474,7 +474,7 @@ const badr = {
       isMuslim: true,
       summary: {
         value:
-          'كَانَ مِنْ كِبَارِ السَّابِقِيْنَ البَدْرِيِّيْنَ؛ ذَكَرَهُ عُرْوَةُ وَمُوْسَى بنُ عُقْبَةَ وَغَيْرُهُمَا فِيْمَنْ شَهِدَ بَدْراً.',
+          'كَانَ مِنْ كِبَارِ السَّابِقِيْنَ البَدْرِيِّيْنَ ذَكَرَ عُرْوَةُ، وَمُوْسَى بنُ عُقْبَةَ، وَغَيْرُهُمَا صُهَيْباً فِيْمَنْ شَهِدَ بَدْراً',
         claims: ['suhaib-ibn-sinan-siyar4/badr'],
       },
       claims: ['suhaib-ibn-sinan-siyar4/badr'],

@@ -29,7 +29,7 @@ const banuQurayzah = {
     {
       person: 'az-zubayr-ibn-al-awwam',
       isMuslim: true,
-      summary: { value: 'كَانَ يَمُرُّ إِلَى بَنِي قُرَيْظَةَ، فَيُقَاتِلُهُمْ.', claims: ['zubayr/banu-qurayzah'] },
+      summary: { value: 'يَمُرُّ إِلَى بَنِي قُرَيْظَةَ، فَيُقَاتِلُهُمْ', claims: ['zubayr/banu-qurayzah'] },
       claims: ['zubayr/banu-qurayzah'],
     },
   ],

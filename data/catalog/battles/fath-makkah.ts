@@ -24,7 +24,7 @@ const fathMakkah = {
     {
       person: 'az-zubayr-ibn-al-awwam',
       isMuslim: true,
-      summary: { value: 'أَعْطَاهُ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَوْمَ فَتْحِ مَكَّةَ لِوَاءَ سَعْدِ بنِ عُبَادَةَ، فَدَخَلَ الزُّبَيْرُ مَكَّةَ بِلِوَاءَيْنِ.', claims: ['zubayr/fath-makkah'] },
+      summary: { value: 'رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَعْطَاهُ يَوْمَ فَتْحِ مَكَّةَ لِوَاءِ سَعْدِ بنِ عُبَادَةَ، فَدَخَلَ الزُّبَيْرُ مَكَّةَ بِلِوَاءَيْنِ', claims: ['zubayr/fath-makkah'] },
       claims: ['zubayr/fath-makkah'],
     },
     // His own entry gives the conquest as the point his conversion is dated to.
@@ -42,7 +42,7 @@ const fathMakkah = {
       isMuslim: true,
       summary: {
         value:
-          'كَانَ قَدْ قَدِمَ إِلَى النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَبْلَ الفَتْحِ؛ أَلاَ تَرَاهُ أَجَارَ أَبَا سُفْيَانَ بنَ حَرْبٍ. ثُمَّ خَرَجَ مَعَهُ إِلَى فَتْحِ مَكَّةَ.',
+          'كَانَ قَدْ قَدِمَ إِلَى النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَبْلَ الفَتْحِ؛ أَلاَ تَرَاهُ أَجَارَ أَبَا سُفْيَانَ بنَ حَرْبٍ. ثُمَّ خَرَجَ مَعَهُ إِلَى فَتْحِ مَكَّةَ',
         claims: ['al-abbas-ibn-abd-al-muttalib-siyar11/fath-makkah'],
       },
       claims: ['al-abbas-ibn-abd-al-muttalib-siyar11/fath-makkah'],
@@ -62,7 +62,7 @@ const fathMakkah = {
       person: 'jabr-ibn-atik',
       isMuslim: true,
       summary: {
-        value: 'كَانَتْ إِلَيْهِ رَايَةُ بَنِي مُعَاوِيَةَ بنِ مَالِكٍ يَوْمَ الفَتْحِ.',
+        value: 'كَانَتْ إِلَيْهِ رَايَةُ بَنِي مُعَاوِيَةَ بنِ مَالِكٍ يَوْمَ الفَتْحِ',
         claims: ['jabr-ibn-atik-siyar/fath-makkah'],
       },
       claims: ['jabr-ibn-atik-siyar/fath-makkah'],
@@ -80,7 +80,7 @@ const fathMakkah = {
       person: 'abu-sufyan-ibn-harb',
       isMuslim: true,
       summary: {
-        value: 'تَدَارَكَهُ اللهُ بِالإِسْلاَمِ يَوْمَ الفَتْحِ، فَأَسْلَمَ شِبْهَ مُكْرَهٍ خَائِفٍ؛ ثُمَّ بَعْدَ أَيَّامٍ صَلُحَ إِسْلاَمُهُ.',
+        value: 'تَدَارَكَهُ اللهُ بِالإِسْلاَمِ يَوْمَ الفَتْحِ، فَأَسْلَمَ شِبْهَ مُكْرَهٍ خَائِفٍ ثُمَّ بَعْدَ أَيَّامٍ صَلُحَ إِسْلاَمُهُ',
         claims: ['abu-sufyan-ibn-harb-siyar13/fath-makkah'],
       },
       claims: ['abu-sufyan-ibn-harb-siyar13/fath-makkah'],
