@@ -62,8 +62,11 @@ describe('QuestionBankReview', () => {
     expect(screen.getByText('ما الكنية؟')).toBeTruthy();
     expect(screen.getByText('أبو محمد')).toBeTruthy();
     expect(screen.getByText('أبو الثالث')).toBeTruthy();
-    expect(screen.getByText('Correct answer')).toBeTruthy();
-    expect(screen.getByText('person/kunya')).toBeTruthy();
+    const badge = screen.getByText('Correct answer');
+    expect(badge.className).toContain('shrink-0');
+    expect(badge.closest('li')?.className).toContain('gap-3');
+    expect(screen.queryByText('person/kunya')).toBeNull();
+    expect(screen.queryByText('fingerprint')).toBeNull();
   });
 
   it('opens the single quiz reference in an overlay instead of navigating away', () => {

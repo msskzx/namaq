@@ -98,21 +98,19 @@ export default function QuestionBankReview() {
                   ) : null}
                   <ul className="mb-3 grid gap-2 md:grid-cols-2" dir="rtl">
                     {question.choices.map((choice) => (
-                      <li key={choice.value} className={`rounded border px-3 py-2 ${choice.value === question.correctAnswer ? 'border-green-600 bg-green-50 dark:bg-green-950/30' : 'border-gray-200 dark:border-white/10'}`}>
+                      <li key={choice.value} className={`flex items-start justify-between gap-3 rounded border px-3 py-2 ${choice.value === question.correctAnswer ? 'border-green-600 bg-green-50 dark:bg-green-950/30' : 'border-gray-200 dark:border-white/10'}`}>
                         {choiceContent(question, choice)}
-                        {choice.value === question.correctAnswer ? <span className="ms-2 text-xs font-semibold text-green-700 dark:text-green-300">{ar ? 'الإجابة الصحيحة' : 'Correct answer'}</span> : null}
+                        {choice.value === question.correctAnswer ? <span className="shrink-0 text-xs font-semibold text-green-700 dark:text-green-300">{ar ? 'الإجابة الصحيحة' : 'Correct answer'}</span> : null}
                       </li>
                     ))}
                   </ul>
                   {question.rejectionReason ? <p className="mb-2 text-sm text-red-700 dark:text-red-300">{question.rejectionReason}</p> : null}
-                  <p className="text-xs text-gray-500">{question.evidence.claimKeys.join(', ')}</p>
                   {question.evidence.reference && (
                     <Button className="mt-2" size="sm" variant="outline" onClick={() => setReference(question.evidence.reference)}>
                       <FontAwesomeIcon icon={faBookOpen} />
                       {ar ? 'المصدر' : 'Source'}
                     </Button>
                   )}
-                  <p className="mt-1 break-all text-xs text-gray-400">{question.fingerprint}</p>
                 </li>
               );
             })}
