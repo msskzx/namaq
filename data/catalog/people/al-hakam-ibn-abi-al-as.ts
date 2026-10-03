@@ -12,7 +12,7 @@ const alHakamIbnAbiAlAs = {
       value: 'الحكم بن أبي العاص بن أمية بن عبد شمس القرشي الأموي',
       claims: legacyUnreviewed,
     },
-    kunya: { value: 'أبو مروان', claims: ['al-hakam-ibn-abi-al-as-siyar14/kunya'] },
+    kunya: { value: 'أَبَا مَرْوَانَ', claims: ['al-hakam-ibn-abi-al-as-siyar14/kunya'] },
     deathYearHijri: { value: '31', claims: ['al-hakam-ibn-abi-al-as-siyar14/death-year'] },
   },
   titles: [

@@ -16,11 +16,11 @@ const alBaraaIbnMarur = {
   fields: {
     sex: { value: 'MALE', claims: ['al-baraa/sex'] },
     fullName: {
-      value: 'البراء بن معرور بن صخر بن خنساء بن سنان الخزرجي',
+      value: 'البَرَاءُ بنُ مَعْرُوْرِ بنِ صَخْرِ بنِ خَنْسَاءَ بنِ سِنَانَ الخَزْرَجِيُّ',
       claims: ['al-baraa-ibn-marur-siyar53/full-name'],
     },
     kunya: {
-      value: 'أبو بشر',
+      value: 'أَبُو بِشْرٍ',
       claims: ['al-baraa-ibn-marur-siyar53/kunya'],
     },
     tribalAffiliation: {
