@@ -12,15 +12,15 @@ const abdullahIbnAbdullahIbnAlHarithIbnNawfal = {
       claims: ['abdullah-ibn-abdullah-ibn-al-harith-ibn-nawfal-siyar30/sex'],
     },
     fullName: {
-      value: 'عبد الله بن عبد الله بن الحارث بن نوفل الهاشمي',
+      value: 'عَبْدُ اللهِ بنُ عَبْدِ اللهِ بنِ الحَارِثِ بنِ نَوْفَلٍ الهَاشِمِيُّ',
       claims: ['abdullah-ibn-abdullah-ibn-al-harith-ibn-nawfal-siyar30/full-name'],
     },
     kunya: {
-      value: 'أبو يحيى',
+      value: 'أَبُو يَحْيَى',
       claims: ['abdullah-ibn-abdullah-ibn-al-harith-ibn-nawfal-siyar30/kunya'],
     },
     virtues: {
-      value: 'كان من صحابة سليمان الخليفة؛ وقال ابن سعد: ثقة قليل الحديث.',
+      value: 'وَكَانَ مِنْ صَحَابَةِ سُلَيْمَانَ الخَلِيْفَةِ قَالَ ابْنُ سَعْدٍ: ثِقَةٌ، قَلِيْلُ الحَدِيْثِ',
       claims: ['abdullah-ibn-abdullah-ibn-al-harith-ibn-nawfal-siyar30/virtues'],
     },
     deathYearHijri: {
@@ -28,7 +28,7 @@ const abdullahIbnAbdullahIbnAlHarithIbnNawfal = {
       claims: ['abdullah-ibn-abdullah-ibn-al-harith-ibn-nawfal-siyar30/death-year'],
     },
     placeOfDeathArabic: {
-      value: 'الأبواء',
+      value: 'قَتَلَتْهُ السَّمُوْمُ بِالأَبْوَاءِ',
       claims: ['abdullah-ibn-abdullah-ibn-al-harith-ibn-nawfal-siyar30/death-place'],
     },
   },
