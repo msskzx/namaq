@@ -23,7 +23,7 @@ const abuBardahIbnNiyar = {
       claims: legacyUnreviewed,
     },
     kunya: {
-      value: 'أبو بردة',
+      value: 'أَبُو بُرْدَةَ',
       claims: ['abu-bardah-ibn-niyar-siyar13/kunya'],
     },
   },

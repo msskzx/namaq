@@ -12,17 +12,17 @@ const abuSufyanIbnAlHarith = {
     // his name is his kunya and al-Mughira is their brother. That report is
     // full-name-alt, DISPUTED, and does not take the field.
     fullName: {
-      value: 'المغيرة بن الحارث بن عبد المطلب بن هاشم الهاشمي',
+      value: 'المُغِيْرَةُ بنُ الحَارِثِ بنِ عَبْدِ المُطَّلِبِ بنِ هَاشِمٍ الهَاشِمِيُّ',
       claims: ['abu-sufyan-ibn-al-harith-siyar32/full-name'],
     },
-    kunya: { value: 'أبو سفيان', claims: ['abu-sufyan-ibn-al-harith-siyar32/kunya'] },
+    kunya: { value: 'أَبُو سُفْيَانَ', claims: ['abu-sufyan-ibn-al-harith-siyar32/kunya'] },
     virtues: {
       value:
-        'أحبه النبي صلى الله عليه وسلم وشهد له بالجنة وقال: أرجو أن يكون خلفا من حمزة. وكان ممن يشبه بالنبي صلى الله عليه وسلم. وقال رسول الله صلى الله عليه وسلم: أبو سفيان بن الحارث سيد فتيان أهل الجنة.',
+        'أَحَبَّ أَبَا سُفْيَانَ هَذَا، وَشَهِدَ لَهُ بِالجَنَّةِ، وَقَالَ: (أَرْجُو أَنْ يَكُوْنَ خَلَفاً مِنْ حَمْزَةَ كَانَ الَّذِيْنَ يُشَبَّهُوْنَ بِالنَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-: جَعْفَرٌ، وَالحَسَنُ بنُ عَلِيٍّ، وَقُثَمُ بنُ العَبَّاسِ، وَأَبُو سُفْيَانَ بنُ الحَارِثِ. أَبُو سُفْيَانَ بنُ الحَارِثِ سَيِّدُ فِتْيَانِ أَهْلِ الجَنَّةِ',
       claims: ['abu-sufyan-ibn-al-harith-siyar32/virtues'],
     },
     deathYearHijri: { value: '20', claims: ['abu-sufyan-ibn-al-harith-siyar32/death-year'] },
-    placeOfDeathArabic: { value: 'المدينة', claims: ['abu-sufyan-ibn-al-harith-siyar32/death-place'] },
+    placeOfDeathArabic: { value: 'المَدِيْنَةِ', claims: ['abu-sufyan-ibn-al-harith-siyar32/death-place'] },
   },
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: ['abu-sufyan-ibn-al-harith-siyar32/companion'] },

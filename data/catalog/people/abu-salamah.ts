@@ -20,7 +20,7 @@ const abuSalamah = {
     // The heading's name and the lineage line under it, as the edition prints
     // them; the entry number and collection marks are dropped.
     fullName: {
-      value: 'أَبُو سَلَمَةَ بنُ عَبْدِ الأَسَدِ بنِ هِلاَلِ ابْنِ عَبْدِ اللهِ بنِ عُمَرَ بنِ مَخْزُوْمِ بنِ يَقَظَةَ بنِ مُرَّةَ بنِ كَعْبٍ',
+      value: 'أَبُو سَلَمَةَ بنُ عَبْدِ الأَسَدِ بنِ هِلاَلِ بنِ عَبْدِ اللهِ بنِ عُمَرَ بنِ مَخْزُوْمِ بنِ يَقَظَةَ بنِ مُرَّةَ بنِ كَعْبٍ',
       claims: ['abu-salamah-siyar8/full-name'],
     },
     // The two paragraphs after the lineage, as the edition prints them: the
