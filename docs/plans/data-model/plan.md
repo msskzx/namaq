@@ -404,6 +404,8 @@ Identifications are reviewed per distinct (mention text, neighbouring narrator) 
 
 ## 8. Open questions for the owner
 
+The owner's answers and the plan's gaps and conflicts with their goals are in [owner-goals.md](owner-goals.md). Questions 1, 4, 5, 8 and 9 are answered there; 2, 3, 6 and 7 need research.
+
 1. Who are the human reviewers, and who is the hadith-qualified second reviewer for P9?
 2. Which rijal work is the identification basis (Tahdhib al-Kamal, Taqrib, al-Isabah for companions), and in what order is it ingested?
 3. Which Bukhari edition and witness, and which numbering scheme is primary for display? Which kitab for the pilot?
