@@ -11,7 +11,7 @@ const hajjOfThirteen = {
   fields: {
     hijriYear: { value: 13, claims: ['awf/hajj-thirteen'] },
     description: {
-      value: 'حج عبد الرحمن بن عوف بالمسلمين سنة ثلاث عشرة.',
+      value: 'أَنَّ عَبْدَ الرَّحْمَنِ بنَ عَوْفٍ حَجَّ بِالمُسْلِمِيْنَ فِي سَنَةِ ثَلاَثَ عَشْرَةَ.',
       claims: ['awf/hajj-thirteen'],
     },
   },
