@@ -8,16 +8,16 @@ import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 const suhailIbnAmr = {
   kind: 'PERSON',
   slug: 'suhail-ibn-amr',
-  name: 'سهيل بن عمرو',
+  name: 'سُهَيْلُ بنُ عَمْرٍو',
   nameTransliterated: 'Suhail ibn Amr',
   hasProfile: true,
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
-    fullName: { value: 'سهيل بن عمرو', claims: ['suhail-ibn-amr-siyar25/full-name'] },
-    kunya: { value: 'أبو يزيد', claims: ['suhail-ibn-amr-siyar25/kunya'] },
+    fullName: { value: 'سُهَيْلُ بنُ عَمْرٍو', claims: ['suhail-ibn-amr-siyar25/full-name'] },
+    kunya: { value: 'أَبَا يَزِيْدَ', claims: ['suhail-ibn-amr-siyar25/kunya'] },
     virtues: {
       value:
-        'كان خطيب قريش وفصيحهم ومن أشرافهم، سمحا جوادا مفوها، قام بمكة خطيبا عند وفاة رسول الله صلى الله عليه وسلم فسكنهم وعظم الإسلام، وكان بعد ذلك كثير الصلاة والصوم والصدقة، كثير البكاء إذا سمع القرآن.',
+        'وَكَانَ خَطِيْبَ قُرَيْشٍ، وَفَصِيْحَهُم، وَمِنْ أَشْرَافِهِم. وَكَانَ سَمْحاً، جَوَاداً، مُفَوَّهاً. وَقَدْ قَامَ بِمَكَّةَ خَطِيْباً عِنْدَ وَفَاةِ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِنَحْوٍ مِنْ خُطْبَةِ الصِّدِّيْقِ بِالمَدِيْنَةِ، فَسَكَّنَهُم، وَعَظَّمَ الإِسْلاَمَ. كَانَ سُهَيْلُ بَعْدُ كَثِيْرَ الصَّلاَةِ وَالصَّوْمِ وَالصَّدَقَةِ، وَكَانَ كَثِيْرَ البُكَاءِ إِذَا سَمِعَ القُرْآنَ',
       claims: ['suhail-ibn-amr-siyar25/virtues'],
     },
     // Two competing reports on how he died: martyred at Yarmuk (al-Mada'ini
@@ -25,7 +25,7 @@ const suhailIbnAmr = {
     // named individually). The plague reading takes the field;
     // suhail-ibn-amr-siyar25/death-place-alt carries the Yarmuk martyrdom as
     // its own DISPUTED claim.
-    placeOfDeathArabic: { value: 'طاعون عمواس', claims: ['suhail-ibn-amr-siyar25/death-place'] },
+    placeOfDeathArabic: { value: 'طَاعُوْنِ عَمَوَاسَ', claims: ['suhail-ibn-amr-siyar25/death-place'] },
   },
   titles: [
     // Carried from the retired seed.
