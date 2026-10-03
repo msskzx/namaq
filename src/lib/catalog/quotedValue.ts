@@ -10,15 +10,17 @@ export function cleanPassage(text: string): string {
     .replace(ENTRY_NUMBER, '')
     .replace(COLLECTION_MARKS, ' ')
     .replace(FOOTNOTE_MARKER, ' ')
+    .replace(/\s+\./g, '.')
     .replace(/\s+/g, ' ')
     .trim();
 }
 
 export function joinAtSeams(passages: readonly string[]): string {
-  return passages
-    .map(cleanPassage)
-    .filter(Boolean)
-    .reduce((joined, next, index) => (index === 0 ? next : `${joined} ${next.replace(SENTENCE_INITIAL_IBN, 'بن')}`), '');
+  const cleaned = passages.map(cleanPassage).filter(Boolean);
+  return cleaned.reduce((joined, next, index) => {
+    if (index === 0) return next;
+    return `${joined.replace(/\.$/, '')} ${next.replace(SENTENCE_INITIAL_IBN, 'بن')}`;
+  }, '');
 }
 
 export type QuotedValueResult =
@@ -28,6 +30,12 @@ export type QuotedValueResult =
 
 /** Each group is the paragraphs of one cited page; a value may be tiled by at most one clip per group. */
 export function matchQuotedValue(value: string, groups: readonly (readonly string[])[]): QuotedValueResult {
+  const result = matchExact(value, groups);
+  const closed = value.trim().replace(/\.$/, '');
+  return !result.ok && closed !== value.trim() ? (matchExact(closed, groups).ok ? { ok: true } : result) : result;
+}
+
+function matchExact(value: string, groups: readonly (readonly string[])[]): QuotedValueResult {
   const haystacks = groups.flatMap((group) => [...group.map(cleanPassage), joinAtSeams(group)]);
   const tokens = value.replace(/\s+/g, ' ').trim().split(' ');
   const found = (text: string) => haystacks.some((haystack) => haystack.includes(text));
