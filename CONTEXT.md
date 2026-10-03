@@ -160,6 +160,35 @@ One paragraph of a source page, addressed by its position in that page and
 citable on its own.
 _Avoid_: Excerpt, fragment, anchor
 
+**Seam**:
+The point where a value's text passes from one passage to the next, as when a
+name opens in a chapter heading and its lineage runs on into the first
+paragraph. The only edit a quoted value may make there is the one the book makes
+itself between father and son: a sentence-initial `ابْنِ` is written `بنِ`.
+
+**Quoted value**:
+A text value in the catalog that reads exactly as the cited passages print it,
+with its vowel marks, and differs from them only by dropping the entry number,
+collection marks, footnote markers and closing full stop, by clipping to the
+one contiguous span the value needs, and by the seam edit. It is never stitched
+from separate clips.
+_Avoid_: Verbatim value, vocalized value
+
+**Virtue**:
+One recorded virtue of a person: a single entry in the exact wording of one
+speaker, backed by its own claim. A person has a list of them.
+_Avoid_: Virtues paragraph, manqaba text
+
+**Speaker**:
+Whoever the words of a virtue are. It is al-Dhahabi when he narrates or reports
+a named person's verdict in his own sentence; otherwise it is the named person
+whose own words the virtue quotes. Never left unnamed.
+
+**Known name**:
+The name a subject is called by, taken as a clipped span of the chapter heading
+(`أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ`), as distinct from the full name that follows
+the personal name and its lineage.
+
 **Unread stretch**:
 Pages of a volume that have not been transcribed, as distinct from page numbers
 the edition itself never printed.
