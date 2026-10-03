@@ -12,16 +12,33 @@ const mistahIbnUthathah = {
   hasProfile: true,
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
-    fullName: { value: 'مسطح بن أثاثة بن عباد بن المطلب بن عبد مناف بن قصي، المطلبي.', claims: ['mistah-siyar20/full-name'] },
-    appearance: { value: 'كان قصيرا، غائر العينين، شثن الأصابع.', claims: ['mistah-siyar20/appearance'] },
+    fullName: {
+      value:
+        'مِسْطَحُ بنُ أُثَاثَةَ بنِ عَبَّادِ بنِ المُطَّلِبِ بنِ عَبْدِ مَنَافٍ بنِ قُصَيٍّ، المُطَّلِبِيُّ',
+      claims: ['mistah-siyar20/full-name'],
+    },
+    appearance: {
+      value: 'كَانَ قَصِيْراً، غَائِرَ العَيْنَيْنِ، شَثْنَ الأَصَابِع',
+      claims: ['mistah-siyar20/appearance'],
+    },
     deathYearHijri: { value: '34', claims: ['mistah-siyar20/death-year'] },
   },
   titles: [
     // Carried from the retired seed entry; this entry never calls him صحابي outright.
-    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    {
+      title: 'companion',
+      name: 'صحابي',
+      nameTransliterated: 'Companion',
+      claims: legacyUnreviewed,
+    },
   ],
   relations: [
-    { type: 'SON', inverse: 'FATHER', to: 'uthathah-ibn-abbad', claims: ['mistah-siyar20/full-name'] },
+    {
+      type: 'SON',
+      inverse: 'FATHER',
+      to: 'uthathah-ibn-abbad',
+      claims: ['mistah-siyar20/full-name'],
+    },
   ],
 } satisfies CatalogPerson;
 

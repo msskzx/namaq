@@ -9,11 +9,11 @@ const muawwidhIbnAmrIbnAlJumuh = {
   fields: {
     sex: { value: 'MALE', claims: ['muawwidh-ibn-amr-ibn-al-jumuh-siyar42/sex'] },
     fullName: {
-      value: 'معوذ بن عمرو بن الجموح الأنصاري السلمي',
+      value: 'مُعَوَّذُ بنُ عَمْرِو بنِ الجَمُوْحِ الأَنْصَارِيُّ السَّلَمِي',
       claims: ['muawwidh-ibn-amr-ibn-al-jumuh-siyar42/full-name'],
     },
     virtues: {
-      value: 'شهد بدراً مع أخويه معاذ وخلاد',
+      value: 'شَهِدَ مَعَ أَخَوَيْهِ مُعَاذٍ وَخَلاَّدٍ بَدْرا',
       claims: ['muawwidh-ibn-amr-ibn-al-jumuh-siyar42/virtues'],
     },
   },

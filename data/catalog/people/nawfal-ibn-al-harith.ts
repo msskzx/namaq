@@ -9,16 +9,16 @@ const nawfalIbnAlHarith = {
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
-      value: 'نوفل بن الحارث بن عبد المطلب الهاشمي',
+      value: 'نَوْفَلُ بنُ الحَارِثِ بنِ عَبْدِ المُطَّلِبِ الهَاشِمِي',
       claims: ['nawfal-ibn-al-harith-siyar27/full-name'],
     },
     kunya: {
-      value: 'أبو الحارث',
+      value: 'أَبُو الحَارِث',
       claims: ['nawfal-ibn-al-harith-siyar27/kunya'],
     },
     virtues: {
       value:
-        'كان أسن من عمه العباس، وكان أسن بني هاشم في زمانه؛ وأعان رسول الله يوم حنين بثلاثة آلاف رمح، وثبت معه يومئذ.',
+        'كَانَ نَوْفَلُ أَسَنَّ مِنْ عَمِّهِ العَبَّاس وَأَعَانَ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَوْمَ حُنَيْنٍ بِثَلاَثَةِ آلاَفِ رُمْحٍ، وَثَبَتَ مَعَهُ يَوْمَئِذ وَكَانَ أَسَنَّ بَنِي هَاشِمٍ فِي زَمَانِه',
       claims: ['nawfal-ibn-al-harith-siyar27/virtues'],
     },
     deathYearHijri: {
