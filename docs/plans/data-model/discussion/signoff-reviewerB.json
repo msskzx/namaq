@@ -1,0 +1,24 @@
+{"agent":"reviewerB","axes":[
+{"axis":"X1","sign":true,"reason":"render(span) with a closed, tested deletion list; quoted ayat shown as printed, linked to Ayah. This matches my position."},
+{"axis":"X2","sign":true,"reason":"Minted ids, parent-anchored mentions, verbatim-once re-anchor and a lapse on render change. Agreed design recorded accurately."},
+{"axis":"X3","sign":true,"reason":"I proposed a derived profile over Statements, but I accept the Statement/Assertion split since subject and object pass through Mention/Identification and parsed/classified is kept. The vote note is fair."},
+{"axis":"X4","sign":true,"reason":"Link|Gap elements, 1:1 modeKey, abbreviations kept, derived jazm/tamrid, riwayah and enclosedBy. All of my conditions are met."},
+{"axis":"X5","sign":true,"reason":"No Namaq basis; the mention's own span is never a basis; no edges from unreviewed identifications. But see the fidelity note on sampled segment applications."},
+{"axis":"X6","sign":true,"reason":"Marfu' grouping needs a span basis; NAMAQ grouping is labelled elsewhere; wordings are never merged."},
+{"axis":"X7","sign":true,"reason":"Gradings quote their speaker, authorClaim is scoped, and editor takhrij is attributed to the editor."},
+{"axis":"X8","sign":true,"reason":"The revision includes the rendered text and witness, publish is owner-run, and a lapse affects one record only. Exactly my condition."},
+{"axis":"X9","sign":true,"reason":"Per-Unit files, Glosses, derived stores, and a separate isnad view outside centrality."},
+{"axis":"X10","sign":true,"reason":"The order and the pilot go/no-go are right. The rollback cells for phases 0 and 3 are thin (see the notes)."},
+{"axis":"X11","sign":true,"reason":"Shamela only until the owner decides; fidelity flags, the numbering map, and mushaf/qira'a by ADR."},
+{"axis":"X12","sign":true,"reason":"My conditional dissent is satisfied in 2.10, E4, phase 6 and the cost table (two reviews per Prophetic report), except sampled segment applications, noted below."},
+{"axis":"X13","sign":true,"reason":"Text is never hidden. Prophetic material carries no LEGACY, no NAMAQ grouping and no unreviewed edges or grades, held by a scoped ADR beside 0008."}
+],
+"fidelity_problems":[
+{"where":"Section 7, segment review 'plus a sample'","problem":"In Prophetic chains, the identifications applied by reference get sampled rather than confirmed, so an unreviewed application can sit in a gated chain.","fix":"Inside a P9 statement, two humans confirm the segment once and every application is listed and confirmed; no sampling."},
+{"where":"6.1 claim.reviewStatus to reviewer 'pre-model'","problem":"Carried statuses have no recorded human reviewer and some may come from agent-era work. They could pass as reviews.","fix":"Carried reviews never count toward P9 or edge-drawing; they are shown as 'reviewed before the model' only."},
+{"where":"Phase 0, ADR 0020 migration","problem":"A database migration is applied with rollback 'n/a'.","fix":"Snapshot the preview DBs before applying it, and record the restore command as the rollback."},
+{"where":"Phase 3 rollback 'approvals in archive'","problem":"This names where the data is, not a procedure, and the archive is never projected.","fix":"State the rollback: restore batch.json approvals from the pre-model tag and keep the old import path runnable until phase 4 acceptance."},
+{"where":"Phase 5 acceptance, 20 tarajem reviewed","problem":"No reviewer count or hours are estimated for phase 5, even though it is the first large identification load.","fix":"Add a phase 5 row to the cost table: segments and identifications per tarjama, measured in phase 2."},
+{"where":"P9 vs Q1 unanswered","problem":"If no hadith-qualified reviewer exists, phase 6 cannot pass, and the plan does not say the phase waits.","fix":"Make Q1 answered (named reviewers) an entry criterion for phase 6."}
+],
+"overall":"sign-with-notes"}

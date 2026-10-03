@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What the Model Holds</title>
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<script src="../assets/lesson.js"></script>
+</head>
+<body class="bg-stone-50 font-serif text-stone-900 antialiased dark:bg-stone-950 dark:text-stone-100">
+
+<div class="fixed inset-x-0 top-0 z-20 flex items-start justify-between p-3 print:hidden">
+  <button id="index-toggle" aria-controls="index" aria-expanded="true"
+    class="rounded border border-stone-300 bg-stone-50/90 px-3 py-1.5 font-mono text-xs uppercase tracking-wider text-stone-600 backdrop-blur hover:border-amber-500 hover:text-amber-700 dark:border-stone-700 dark:bg-stone-950/90 dark:text-stone-400 dark:hover:text-amber-400">
+    Index
+  </button>
+  <button id="theme-toggle"
+    class="rounded border border-stone-300 bg-stone-50/90 px-3 py-1.5 text-sm text-stone-600 backdrop-blur hover:border-amber-500 hover:text-amber-700 dark:border-stone-700 dark:bg-stone-950/90 dark:text-stone-400 dark:hover:text-amber-400">
+  </button>
+</div>
+
+<nav id="index" aria-label="Lesson index"
+  class="fixed inset-y-0 start-0 z-10 w-64 overflow-y-auto border-e border-stone-200 bg-stone-100/95 px-3 pb-8 pt-16 backdrop-blur dark:border-stone-800 dark:bg-stone-900/95 print:hidden"></nav>
+
+<main class="mx-auto max-w-3xl px-4 pb-24 pt-20">
+<article class="prose prose-stone max-w-none dark:prose-invert prose-headings:font-semibold prose-pre:bg-amber-50 prose-pre:text-stone-800 prose-pre:border-s-4 prose-pre:border-amber-600 prose-pre:rounded-s-none dark:prose-pre:bg-stone-900 dark:prose-pre:text-stone-200 prose-code:font-mono prose-a:text-amber-700 dark:prose-a:text-amber-400">
+
+<header class="mb-10 border-b border-stone-300 pb-6 dark:border-stone-700">
+  <p class="m-0 font-mono text-xs uppercase tracking-[0.12em] text-amber-700 dark:text-amber-500">Lesson 0004 · the data model before a rethink</p>
+  <h1 class="mb-2 mt-3">What the model holds, and what it cannot</h1>
+  <p class="m-0 text-lg text-stone-600 dark:text-stone-400">Making Siyar volumes 4 and 5 exact quotes
+  showed where the current model drifts. This lesson lays out how it is built, groups the defects by
+  cause, and tests the model against the works the project wants next: another sira, al-Bukhari,
+  tafsir and the tarajem. It names pressures and open questions. It does not propose the redesign.</p>
+</header>
+
+<h2>1. How the model is built</h2>
+
+<h3>The stores, and what copies from what</h3>
+
+<p>A value the app shows passes through five stores. Two are authored by hand, two are derived, and
+one is authored and derived at once.</p>
+
+<figure class="not-prose my-6 overflow-x-auto">
+<svg viewBox="0 0 680 300" class="w-full min-w-[520px] text-stone-800 dark:text-stone-200" role="img" aria-label="Page store and batches feed the catalog; the catalog projects to PostgreSQL and Neo4j; batches import to PostgreSQL">
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+  <g fill="none" stroke="currentColor" stroke-width="1.2">
+    <rect x="10" y="20" width="190" height="60" rx="4"/>
+    <rect x="10" y="120" width="190" height="60" rx="4"/>
+    <rect x="250" y="120" width="190" height="60" rx="4" stroke="#b45309" stroke-width="2"/>
+    <rect x="490" y="60" width="180" height="60" rx="4"/>
+    <rect x="490" y="200" width="180" height="60" rx="4"/>
+    <path d="M105,80 L105,118" marker-end="url(#a)"/>
+    <path d="M200,150 L248,150" marker-end="url(#a)" stroke-dasharray="4 3"/>
+    <path d="M440,140 L488,100" marker-end="url(#a)"/>
+    <path d="M440,165 L488,225" marker-end="url(#a)"/>
+    <path d="M105,180 C105,260 300,260 488,95" marker-end="url(#a)"/>
+    <path d="M200,45 C380,30 440,60 488,80" marker-end="url(#a)"/>
+  </g>
+  <g font-family="ui-monospace,monospace" font-size="12" fill="currentColor">
+    <text x="20" y="45">1 page store (authored)</text>
+    <text x="20" y="64" font-size="10">sources/&lt;src&gt;/v4/41.md</text>
+    <text x="20" y="145">2 batches (authored)</text>
+    <text x="20" y="164" font-size="10">claims + citations + approval</text>
+    <text x="260" y="145">3 catalog (authored)</text>
+    <text x="260" y="164" font-size="10">value + claims: [keys]</text>
+    <text x="500" y="85">4 PostgreSQL (copy)</text>
+    <text x="500" y="225">5 Neo4j (copy)</text>
+    <text x="110" y="104" font-size="10">anchors derived</text>
+    <text x="205" y="140" font-size="10">key ref</text>
+    <text x="250" y="250" font-size="10">history:import</text>
+    <text x="260" y="30" font-size="10">pages imported</text>
+    <text x="445" y="120" font-size="10">catalog:project</text>
+    <text x="445" y="200" font-size="10">project-graph</text>
+  </g>
+</svg>
+<figcaption class="mt-2 text-sm text-stone-600 dark:text-stone-400">The dashed arrow is the only link between evidence and value: a string key. Nothing flows text from a batch into the catalog.</figcaption>
+</figure>
+
+<ol>
+<li><strong>Page store.</strong> One printed page of one edition per file, for example
+<code>data/history/sources/siyar-alam-al-nubala-risalah/v4/41.md</code>, with the editor's
+footnotes beside it in a <code>.notes.md</code>. A page belongs to its volume, not to the entry that
+first needed it (<a href="../../adr/0018-a-page-belongs-to-the-edition.md">ADR 0018</a>).</li>
+<li><strong>Batches.</strong> <code>data/history/batches/&lt;batch&gt;/batch.json</code> holds source
+accounts, claims and citations, plus an approval block
+(<code>src/lib/history/batchSchema.ts</code>).</li>
+<li><strong>Catalog.</strong> <code>data/catalog/{people,battles,events,utterances}/*.ts</code>, one
+module per subject, holding the values the app shows (<code>src/lib/catalog/types.ts</code>). These are
+typed by hand. The header of <code>data/catalog/people/abu-ubaydah-ibn-al-jarrah.ts</code> says its
+Arabic is verbatim from the batch, which is a promise the file makes about itself.</li>
+<li><strong>PostgreSQL.</strong> <code>prisma/schema.prisma</code>: <code>Person</code>,
+<code>PersonVirtue</code>, <code>HistoricalClaim</code>, <code>Citation</code>,
+<code>SourcePage</code>, <code>SourcePassage</code>, <code>Utterance</code>. Written by
+<code>history:import</code> (evidence) and <code>catalog:project</code> (values).</li>
+<li><strong>Neo4j.</strong> Nodes and relations projected from the catalog by
+<code>catalog:project-graph</code>. Person-to-person relations have no PostgreSQL table
+(<a href="../../adr/0010-author-historical-data-under-data.md">ADR 0010</a>).</li>
+</ol>
+
+<p>Behind these sit the dormant seeds, <code>prisma/personSeedData*.ts</code> and
+<code>neo4j/*Seed*.ts</code>. <code>AGENTS.md</code> calls them "a checklist, never a source", but
+while a seed still declares a person the catalog only adds to that person. So for most subjects two
+authoring paths are live at once (<code>AGENTS.md</code>, Historical evidence data).</p>
+
+<h3>The five nouns</h3>
+
+<p><strong>A claim</strong> is a record in a batch: a <code>key</code>, a subject, either a
+<code>field</code> or a relation, a free-text <code>assertion</code>, a <code>confidence</code>
+(<code>ESTABLISHED</code>, <code>LIKELY</code>, <code>DISPUTED</code>, <code>UNASSESSED</code>) and a
+<code>reviewStatus</code> (<code>src/lib/history/batchSchema.ts</code>). A claim that names neither a
+field nor a relation is rejected by <code>history:validate</code> (<code>AGENTS.md</code>).</p>
+
+<p><strong>A citation</strong> hangs off a claim. It carries a <code>passageAnchor</code>, an
+<code>excerptArabic</code>, a <code>volume</code> label, a <code>pageReference</code> and an
+<code>extractionUrl</code> (<code>batchSchema.ts</code>; <code>Citation</code> in
+<code>prisma/schema.prisma</code>). The excerpt is a second copy of the page's words.</p>
+
+<p><strong>An anchor</strong> is <code>&lt;volume&gt;/&lt;printedPage&gt;-p&lt;n&gt;</code>, where
+<em>n</em> is the paragraph's position after splitting the page on blank lines.
+<code>pageAnchors</code> in <code>src/lib/history/sourceStore.ts</code> computes it on read; nobody
+authors it (<a href="../../adr/0018-a-page-belongs-to-the-edition.md">ADR 0018</a>).</p>
+
+<p><strong>A catalog value</strong> is a field such as <code>fullName</code> or a list entry such as
+a virtue, with <code>claims: ['&lt;claim key&gt;']</code> or the marker
+<code>legacy-unreviewed</code> (the <code>Provenance</code> type in
+<code>src/lib/catalog/types.ts</code>). The value's text is typed separately from both the claim's
+assertion and the citation's excerpt.</p>
+
+<p><strong>An approval</strong> is a hash. <code>batchRevision</code> hashes the whole
+<code>batch.json</code> minus the approval block, and <code>checkApproval</code> compares it to the
+recorded revision (<code>src/lib/history/batchSchema.ts</code>). Approving for publication and
+marking reviewed are separate acts, and neither implies the other
+(<a href="../../adr/0008-separate-review-from-visibility.md">ADR 0008</a>, <code>AGENTS.md</code>).</p>
+
+<h3>Which relation decides what a profile shows</h3>
+
+<p>The chain is: value → claim key → claim in a batch approved at its current revision → citation
+→ anchor → page. <code>approvedClaimKeys</code> in <code>scripts/data/validateCatalog.ts</code>
+collects keys only from batches whose <code>checkApproval</code> passes, and a catalog value whose key
+is not in that set is an issue.</p>
+
+<p>The profile shows the <em>catalog value</em>. It does not read <code>claim.assertion</code>, and
+it does not read <code>citation.excerptArabic</code>. The key is a pointer that says "this value
+rests on that claim". Nothing on the pointer checks that the value and the evidence say the same
+words. That one fact explains most of section 2.</p>
+
+<section data-quiz="1" class="not-prose my-8 rounded border border-stone-300 p-5 dark:border-stone-700 print:hidden">
+  <h3 class="mb-2 mt-0 font-semibold">Prediction</h3>
+  <p class="mb-4 text-stone-700 dark:text-stone-300">An agent rewrites <code>claim.assertion</code> for <code>zubayr/full-name</code> to fix a typo. What changes on al-Zubayr's profile?</p>
+  <ol class="m-0 list-none space-y-2 p-0">
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">The full name shown is corrected</button></li>
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">Nothing shown changes, and the batch's approval lapses, so every value keyed to it fails catalog:validate</button></li>
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">Only the citation under the name changes</button></li>
+  </ol>
+  <p data-feedback hidden class="mt-4 text-sm text-stone-600 dark:text-stone-400"
+     data-right="Right. The profile reads the catalog value, not the assertion, and batchRevision hashes the whole batch, so any edit lapses the approval for every claim in it."
+     data-wrong="The profile reads the catalog module's value. The assertion feeds HistoricalClaim and nothing a profile field reads. Meanwhile batchRevision hashes the whole batch.json, so the edit lapses the approval of all its claims at once."></p>
+</section>
+
+<h2>2. The drift and the defects</h2>
+
+<p>The counts below come from the session that made volumes 4 and 5 exact quotes, recorded in
+<code>docs/plans/data-model/00-evidence.md</code>. They are grouped by cause, not by date.</p>
+
+<h3>Cause A: copies of the same text in several places</h3>
+
+<p>One sentence of al-Dhahabi can exist four times: in the page file, in
+<code>citation.excerptArabic</code>, in <code>claim.assertion</code>, and in the catalog value. A
+fifth copy lands in PostgreSQL. Each was typed or pasted separately.</p>
+
+<ul>
+<li><strong>What happened.</strong> 25 PRs rewrote <code>assertion</code>, a field no profile value
+reads, before anyone saw that the profile reads the catalog. Of 727 catalog text values collected,
+414 failed an exact-quote check. <code>name</code>, <code>fullName</code> and <code>kunya</code> were
+unvowelled while the citation beside them was vowelled.</li>
+<li><strong>Where it shows.</strong> <code>zubayr/full-name</code> in
+<code>data/history/batches/az-zubayr-ibn-al-awwam/batch.json</code>: the assertion is unvowelled and
+ends with <code>القرشي الأسدي</code>, which the excerpt beside it does not contain.</li>
+<li><strong>What it cost.</strong> Work spent on a copy that showed nowhere, and a profile that
+could disagree with its own citation while every check passed.</li>
+</ul>
+
+<h3>Cause B: provenance as a long indirection, gated coarsely</h3>
+
+<ul>
+<li><strong>What happened.</strong> The path from a value to its words has five hops and a string
+key in the middle. Approval is one hash over the whole batch (<code>batchRevision</code>), so fixing
+one excerpt lapses every claim in that batch. Five batches carry no approval at all today
+(arwa-bint-abd-al-muttalib-siyar175, fatimah-bint-muhammad, qutaylah-bint-qais-al-kindiyyah,
+safiyyah-bint-huyayy, umm-shareek), and <code>catalog:validate</code> reports every value keyed to
+them.</li>
+<li><strong>Where it shows.</strong> <code>checkApproval</code> in
+<code>src/lib/history/batchSchema.ts</code>; <code>approvedClaimKeys</code> in
+<code>scripts/data/validateCatalog.ts</code>.</li>
+<li><strong>What it cost.</strong> A red <code>catalog:validate</code> on <code>main</code> becomes
+normal, and a normal red check stops being read. A correction becomes expensive, because it reopens a
+whole batch for publication.</li>
+</ul>
+
+<h3>Cause C: anchors addressed by position</h3>
+
+<ul>
+<li><strong>What happened.</strong> <code>4/41-p3</code> means "the third blank-line block of the
+file". Re-splitting a page, adding a missing leading paragraph, or merging two lines re-points every
+citation after it, silently. Eight anchors pointed past the end of their page (for example
+<code>4/92-p15</code>). Lesson 0003 found Talhah's <code>4/23-p17</code> on a ten-paragraph page.</li>
+<li><strong>Where it shows.</strong> <code>pageAnchors</code> in
+<code>src/lib/history/sourceStore.ts</code> splits on <code>/\n{2,}/</code> and numbers from 1.</li>
+<li><strong>What it cost.</strong> An anchor proves only that a page has at least <em>n</em>
+paragraphs. Which words it points at depends on how the file was typed.</li>
+</ul>
+
+<h3>Cause D: two numbering systems for one volume</h3>
+
+<ul>
+<li><strong>What happened.</strong> The anchor's prefix is the edition's own volume number. The
+citation's <code>volume</code> field is a free string. Across all batches it reads
+<code>"1"</code> 234 times, <code>"2"</code> 50, <code>"4"</code> 731, <code>"5"</code> 348,
+<code>"السيرة 1"</code> 523, <code>"السيرة 2"</code> 44. Shamela's <code>الجزء ١</code> is this
+edition's volume 4, so <code>"1"</code> and <code>"4"</code> name the same binding.</li>
+<li><strong>Where it shows.</strong> <code>zubayr/full-name</code> again: anchor <code>4/41-p1</code>,
+<code>volume: "1"</code>. <code>AGENTS.md</code> (Content sources) and
+<a href="../../adr/0018-a-page-belongs-to-the-edition.md">ADR 0018</a> both record that three
+accounts were misfiled by reading the host's label.</li>
+<li><strong>What it cost.</strong> Misfiled accounts, and a field the reader cannot trust without
+re-deriving it from the anchor, which makes the field a copy with no job.</li>
+</ul>
+
+<h3>Cause E: checks that verify something other than the rule</h3>
+
+<ul>
+<li><strong>What happened.</strong> <code>scripts/history/verifyExcerpts.ts</code> checks that an
+excerpt is a substring of the <em>one</em> paragraph its anchor names, after dropping footnote
+markers and collapsing whitespace. <code>AGENTS.md</code> tells authors to join fragments across page
+turns and paragraph boundaries and to mark omissions with an ellipsis. The verifier rejects exactly
+those. 41 of 105 batches failed it, with 248 FAIL lines. The verifier also says nothing about the
+catalog value, which is the text a reader sees. And it is not wired into
+<code>history:validate</code> (<code>docs/lessons/NOTES.md</code>).</li>
+<li><strong>Where it shows.</strong> <code>zubayr/full-name</code> cites <code>4/41-p1</code>, but its
+excerpt runs on into p2 of <code>v4/41.md</code> (<code>ابْنِ قُصَيِّ …</code> is its own paragraph).
+The citation is honest and the verifier fails it. The same normalisation is written twice, in
+<code>verifyExcerpts.ts</code> and as <code>normalizePassageText</code> in
+<code>src/lib/history/sectionHeadings.ts</code>.</li>
+<li><strong>What it cost.</strong> Agent fixes were accepted by their own checks while a reviewer
+found meaning changes in about 65 of about 300 values: dropped clauses, a changed speaker, a lineage
+link added or lost. A check that compares the wrong pair passes the wrong edit
+(<a href="0003-a-check-that-exists-but-doesnt-run.html">lesson 0003</a>).</li>
+</ul>
+
+<h3>Cause F: untyped narrative fields that cannot say who is speaking</h3>
+
+<ul>
+<li><strong>What happened.</strong> <code>virtues</code> was one string joined from up to six
+claims (Hatib), so al-Dhahabi's narration and a companion's testimony read as one voice. Summaries
+were stitched from several places, such as Sa'd ibn Ubadah's Badr summary, which nobody wrote.</li>
+<li><strong>Where it shows.</strong> Fixed for virtues only:
+<a href="../../adr/0020-a-virtue-is-one-entry-with-one-speaker.md">ADR 0020</a> made a virtue a list
+entry with a <code>speaker</code> (<code>CatalogVirtue</code> in <code>src/lib/catalog/types.ts</code>,
+<code>PersonVirtue</code> in the schema). <code>appearance</code>, participation
+<code>summary</code> and the others are still single strings. The Abu Ubaydah module notes its
+<code>appearance</code> is "composed from 7-p9 and 23-p6".</li>
+<li><strong>What it cost.</strong> Words put in the wrong mouth, which is the gravest error the
+owner names. ADR 0020 also bans <code>…</code> stitching for a virtue, while <code>AGENTS.md</code>
+still allows ellipses in citations, so two rules now disagree on what one quote may be.</li>
+</ul>
+
+<h3>Cause G: edition differences</h3>
+
+<ul>
+<li><strong>What happened.</strong> Shamela serves this edition's sira volumes 1 and 2 bare, with no
+tashkeel (vowel marks) and no footnotes (<code>shamela.ws/book/10906/428</code>), while volumes 4 and 5
+are vowelled with footnotes. Some batches carried unvowelled islamweb text while claiming the Shamela
+edition.</li>
+<li><strong>Where it shows.</strong> <code>HistoricalSource</code> and <code>SourceVolume</code> in
+<code>prisma/schema.prisma</code> know one edition per source slug. Nothing records which host
+rendering a page was taken from, beyond <code>extractionUrl</code>.</li>
+<li><strong>What it cost.</strong> An exact-quote rule cannot hold when the "exact" text depends on
+the host. A quote matches its page or not according to which rendering was typed into the page.</li>
+</ul>
+
+<h2>3. Why it happened</h2>
+
+<p>Each cause above traces to one design property, not to a careless agent.</p>
+
+<ul>
+<li><strong>A: text is stored by value, not by reference.</strong> A value, an assertion and an
+excerpt are each a string that <em>should</em> equal a span of the page. None of them <em>is</em> that
+span. Every copy is a place to drift, and <a href="../../adr/0010-author-historical-data-under-data.md">ADR 0010</a>
+separated "what the work says" from "what Namaq selects" without saying the selection must be a
+pointer.</li>
+<li><strong>B: provenance is keyed, not structural, and the unit of approval is the file.</strong>
+The claim key is a name both sides agree to. The approval covers a revision of a file, so its grain is
+whatever an author put in one file, not one value
+(<a href="../../adr/0010-author-historical-data-under-data.md">ADR 0010</a>: "Review batches remain
+revisioned approval units").</li>
+<li><strong>C: identity is derived from layout.</strong> ADR 0018 made the anchor derived so it
+cannot drift from an authored list. It gained consistency and kept dependence on how blank lines fall
+in a file. A paragraph has no identity of its own.</li>
+<li><strong>D: the same fact has two fields with no owner.</strong> The volume lives in the anchor
+and again in a free string. Neither is computed from the other.</li>
+<li><strong>E: checks test shape, not derivation.</strong> The rule ("the value holds exactly as the
+source said it") spans value, citation and page. Each check looks at one pair, and the pair the
+reader sees, value against page, has no check at all.</li>
+<li><strong>F: narrative is a scalar.</strong> A <code>String</code> column has no place for a
+speaker, a span boundary or an isnad. ADR 0020 fixed one field by making it a list of typed entries.
+The property remains for the rest.</li>
+<li><strong>G: a source is identified by work and publisher, not by witness.</strong> The model has
+no layer between "edition" and "page text" to hold that two hosts render one edition differently.</li>
+</ul>
+
+<h2>4. Future works, one at a time</h2>
+
+<p>Each verdict names the model element that decides it. "Holds" means the current types take the
+work with no new concept. "Strains" means it fits by bending a rule or overloading a field. "Breaks"
+means a decision already recorded must be reversed.</p>
+
+<h3>(a) Another sira or companion history: Ibn Hisham, Ibn Sa'd's Tabaqat. Verdict: strains</h3>
+
+<p>Several accounts of one subject are already allowed. <code>SourceAccount</code> is unique on
+<code>(sourceId, subjectKind, subjectSlug)</code>, so each work gets its own account of al-Zubayr
+(<code>prisma/schema.prisma</code>). Competing reports already become separate claims where the model
+holds the value (<code>AGENTS.md</code>; <code>DISPUTED</code> in <code>batchSchema.ts</code>).</p>
+
+<p>The strain is in four places.</p>
+
+<ul>
+<li><strong>One account per subject per work.</strong> The same unique key forbids a work that tells
+of a subject in two separate places, which Ibn Sa'd does when a companion appears under a tribe and
+again elsewhere. The work would need a second slug or a merged span.</li>
+<li><strong>Choosing between works.</strong> <a href="../../adr/0010-author-historical-data-under-data.md">ADR 0010</a>
+says version one uses "one eligible historical source per focal subject and does not rank claims".
+A second work over the same subject is outside version one by its own text.</li>
+<li><strong>Numbering.</strong> The anchor assumes volume and printed page. That holds for Ibn Sa'd
+in print. The free-text <code>volume</code> label (cause D) would add a third numbering system.</li>
+<li><strong>Variant names and identification.</strong> A subject is a slug, and identity across
+works is whatever the author of the batch decided. Nothing records "Ibn Hisham's X is the Siyar's Y"
+as a cited, disputable claim. An event told differently by two works lands in two batches, and the
+catalog <code>summary</code> on a participation is one string with one wording.</li>
+</ul>
+
+<p><strong>Decider:</strong> ADR 0010's one-source-per-subject rule and the account's unique key.</p>
+
+<h3>(b) Sahih al-Bukhari. Verdict: breaks</h3>
+
+<p>A hadith collection is the case <a href="../../adr/0015-one-record-for-what-someone-said.md">ADR 0015</a>
+wrote down in advance: "A hadith record wants an isnad, a collection, a book and a number, and a
+grading vocabulary". It says every one of those "either contradicts a decision this repository
+already made or asserts something it has no source for".</p>
+
+<ul>
+<li><strong>The isnad (chain of narrators).</strong> Each link is a narrator and a mode of
+transmission: haddathana (he told us), akhbarana (he informed us), an (from), qala (he said). The
+model has no record for a link. <code>Utterance</code> has one <code>speaker</code> and one
+<code>speakerName</code> (<code>prisma/schema.prisma</code>), so a chain could only live as page
+text.</li>
+<li><strong>The matn (the wording), exactly.</strong> <code>Utterance.textArabic</code> is a copy
+(cause A). For hadith the owner's bar is exact wording traceable to its reference, which a typed copy
+cannot prove.</li>
+<li><strong>One hadith, many places.</strong> Al-Bukhari repeats a report across chapters with
+different chains and wordings. The model has no notion of two records being "the same report". Each
+would be a separate utterance, or the repetitions would be lost.</li>
+<li><strong>Muallaq reports.</strong> A report with its chain cut at the start is a chain with a
+recorded gap. With no chain model there is no place for the gap either.</li>
+<li><strong>The book's own numbering.</strong> Kitab, bab and hadith number are not volume and
+printed page. The anchor (<code>sourceStore.ts</code>) and <code>SourceAccountSpan</code> know only
+the latter. Different numbering editions of al-Bukhari would make cause D worse.</li>
+<li><strong>Grading.</strong> <code>Utterance.grading</code> is free text in the source's own words
+(ADR 0015). Inside al-Bukhari grading is mostly the collection itself. Later graders are other works
+with their own claims.</li>
+<li><strong>Narrators who are already people.</strong> Abu Hurayrah, Aisha and al-Zubayr are catalog
+people with Siyar biographies. Under the current rule their role as narrators can never be an edge.</li>
+</ul>
+
+<p><strong>Decider:</strong> the AGENTS.md rule keeping chains in source text, and ADR 0015's "not a
+hadith model".</p>
+
+<h3>(c) Tafsir and explanation books. Verdict: strains</h3>
+
+<ul>
+<li><strong>Anchoring to a verse.</strong> <code>Ayah</code> and <code>Surah</code> exist
+(<code>prisma/schema.prisma</code>), and the catalog already links people to ayat with claims
+(<code>AGENTS.md</code>: titles, Qur'an links). So "this explanation is about 2:255" has a target. A
+word within a verse has none: <code>Ayah.text</code> is one string.</li>
+<li><strong>The verse text.</strong> It must come from the Qur'an table, not from the tafsir's own
+printing. The page store would hold the tafsir's copy of the verse inside its paragraph. Two copies of
+the most sensitive text in the system, and cause A says they will drift unless one points at the
+other.</li>
+<li><strong>Opinions attributed to Companions and Followers.</strong> "Ibn Abbas said …" is an
+utterance with a speaker, which ADR 0015 covers. "with a chain" or "without" is the isnad problem of
+(b) again, in smaller form.</li>
+<li><strong>Disagreement side by side.</strong> The model keeps competing accounts only "where the
+model holds the value they compete over" (<code>AGENTS.md</code>). An explanation of a verse is not
+a value the model holds today. Either it becomes one, or the disagreement stays in page text and is
+not structured at all.</li>
+</ul>
+
+<p><strong>Decider:</strong> no model value for "explanation of a verse"; the claim rule admits only
+fields and relations.</p>
+
+<h3>(d) Tarajem, biographical dictionaries. Verdict: strains, close to breaking</h3>
+
+<ul>
+<li><strong>One person across many works.</strong> This is what the account model was built for,
+apart from ADR 0010's one-source rule (see (a)).</li>
+<li><strong>Identification disputes.</strong> <code>docs/data-pipelines.md</code> already says that
+settling a contested صحبة (companionship) "wants الإصابة" and that until it is extracted the contest
+is recorded, not resolved. There is no record type for "these two entries are one person" as a cited
+claim, so the identity of a slug is asserted, never evidenced.</li>
+<li><strong>Narrators as entities.</strong> A tarjama (biography) in تقريب التهذيب exists because
+its subject is a narrator. Most of them would have no relation except teacher and student.</li>
+<li><strong>Teacher and student relations.</strong> These are person-to-person relations, which the
+catalog and Neo4j can hold. But a relation that exists only because one narrated from the other is
+exactly what the current rule forbids. <code>docs/data-pipelines.md</code> also leaves the narrator's
+tabaqa (generation) as "open and not decided".</li>
+</ul>
+
+<p><strong>Decider:</strong> the narrator rule, and the lack of a cited identity claim.</p>
+
+<h3>What the narrator rule does under (b) to (d)</h3>
+
+<p>The rule is in <code>AGENTS.md</code> and <code>docs/data-pipelines.md</code>: "Transmission chains
+stay in the source text. A person mentioned only as a narrator does not become a graph node or an
+edge." <a href="../../adr/0015-one-record-for-what-someone-said.md">ADR 0015</a> reuses it to keep
+poets out of the graph.</p>
+
+<ul>
+<li>Under <strong>(b)</strong> it rules out the core of the work. A hadith collection is, structurally,
+its chains.</li>
+<li>Under <strong>(c)</strong> it costs less. Most tafsir attributions name one speaker, which an
+utterance already holds. Chains in tafsir by transmission (al-Tabari) hit the (b) wall.</li>
+<li>Under <strong>(d)</strong> it removes the reason most entries exist. A narrator who is "only a
+narrator" in the Siyar is the subject in a tarajem work, so the rule's own condition stops being
+true.</li>
+</ul>
+
+<p>The rule was written for a biography source where chains are support, not subject. It names a
+role ("mentioned only as a narrator"), and each new work changes who has that role.</p>
+
+<section data-quiz="2" class="not-prose my-8 rounded border border-stone-300 p-5 dark:border-stone-700 print:hidden">
+  <h3 class="mb-2 mt-0 font-semibold">Prediction</h3>
+  <p class="mb-4 text-stone-700 dark:text-stone-300">Someone proposes storing a Bukhari report as an <code>Utterance</code> with the Prophet as speaker and the isnad in <code>occasion</code>. Which recorded decision does that collide with first?</p>
+  <ol class="m-0 list-none space-y-2 p-0">
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">ADR 0018, a page belongs to the edition</button></li>
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">ADR 0015, which says Utterance is not a hadith model and should not be generalised into one</button></li>
+    <li><button class="w-full rounded border border-stone-300 px-3 py-2 text-start text-sm hover:border-amber-500 disabled:cursor-default data-[state=right]:border-green-600 data-[state=right]:bg-green-50 data-[state=wrong]:border-red-600 data-[state=wrong]:bg-red-50 dark:border-stone-700 dark:data-[state=right]:bg-green-950 dark:data-[state=wrong]:bg-red-950">ADR 0013, attendance separate from outcome</button></li>
+  </ol>
+  <p data-feedback hidden class="mt-4 text-sm text-stone-600 dark:text-stone-400"
+     data-right="Right. ADR 0015's 'Not a hadith model' section predicts this proposal and refuses it: a hadith corpus arrives with its own source model, and a chain in free text is a chain the model cannot see."
+     data-wrong="ADR 0015 has a section titled 'Not a hadith model' that answers this exact proposal: Utterance was built for the sira's verse and sayings, and an isnad in a free-text field is invisible to every check and to the graph."></p>
+</section>
+
+<h2>5. The future</h2>
+
+<h3>Pressure points, soonest first</h3>
+
+<ol>
+<li><strong>Exact quotes for what is already extracted.</strong> Causes A, C and E bite now, on the
+Siyar alone. Every value fixed by hand can drift again, and the check that sees value against page
+does not exist.</li>
+<li><strong>Approval grain.</strong> Each correction lapses a whole batch (cause B). As exact-quote
+work touches all 105 batches, the cost grows with every pass.</li>
+<li><strong>Volume and edition identity.</strong> Cause D and G bite the moment the sira volumes are
+re-extracted with vowels, and again for any second work.</li>
+<li><strong>Remaining scalar narrative fields.</strong> <code>appearance</code>, participation
+<code>summary</code> and similar fields still cannot carry a speaker (cause F). They bite whenever a
+second voice enters a field.</li>
+<li><strong>A second biographical source.</strong> ADR 0010's one-source rule and the missing
+identity claim bite with Ibn Sa'd or Ibn Hisham.</li>
+<li><strong>Tarajem and narrators.</strong> The narrator rule bites with the first narrator-centred
+work.</li>
+<li><strong>Hadith.</strong> Al-Bukhari needs chains, transmission modes, report identity and its
+own numbering at once. It bites last and hardest, and it is where the owner's bar is highest.</li>
+</ol>
+
+<h3>Rules and ADRs that would have to change</h3>
+
+<ul>
+<li><a href="../../adr/0010-author-historical-data-under-data.md">ADR 0010</a>: one source per focal
+subject; batches as the approval unit; two authored layers whose link is a key.</li>
+<li><a href="../../adr/0015-one-record-for-what-someone-said.md">ADR 0015</a>: "not a hadith model"
+and its reuse of the narrator rule.</li>
+<li><a href="../../adr/0018-a-page-belongs-to-the-edition.md">ADR 0018</a>: anchors derived from
+paragraph position.</li>
+<li><code>AGENTS.md</code> and <code>docs/data-pipelines.md</code>: "Transmission chains stay in the
+source text"; "author a claim only when it backs a value the model holds today"; competing accounts
+only where the model holds the value; ellipses allowed in citations, against
+<a href="../../adr/0020-a-virtue-is-one-entry-with-one-speaker.md">ADR 0020</a>'s ban.</li>
+<li><a href="../../adr/0020-a-virtue-is-one-entry-with-one-speaker.md">ADR 0020</a> as a pattern:
+whether every narrative field gets the same treatment.</li>
+<li><a href="../../adr/0011-classify-the-role-of-cited-evidence.md">ADR 0011</a>: its evidence role
+on a citation would need to say whether a hadith or opinion came with a chain.</li>
+</ul>
+
+<p><a href="../../adr/0008-separate-review-from-visibility.md">ADR 0008</a> (review separate from
+visibility) and <a href="../../adr/0009-citations-independent-of-profiles.md">ADR 0009</a> (citations
+independent of profiles) survive every scenario above. They are the parts of the model that already
+generalise.</p>
+
+<h3>Questions the plan stage must answer</h3>
+
+<ul>
+<li>Should a displayed value be a reference to a span of the page rather than a copy of it, and what
+is a span when it crosses paragraphs and pages?</li>
+<li>What gives a paragraph, or a span, an identity that survives re-splitting a page?</li>
+<li>What is the unit of approval: a file, a claim, or a value?</li>
+<li>Is <code>claim.assertion</code> needed at all, if no value reads it?</li>
+<li>Who owns the volume number, and does the citation keep any volume field of its own?</li>
+<li>What is an edition versus a host rendering, and can two renderings of one edition coexist?</li>
+<li>Which check compares the displayed value against the page, and does it run in
+<code>history:validate</code>?</li>
+<li>Does every narrative field become a list of single-speaker entries, as ADR 0020 did for virtues?</li>
+<li>Are ellipses allowed inside a quote, or is every quote one contiguous span?</li>
+<li>How does a cited identity claim ("this entry is that person") look, and who may dispute it?</li>
+<li>When does a narrator become an entity, and does that depend on the work or on the person?</li>
+<li>What is a transmission link: narrator, mode of hearing, and what else?</li>
+<li>How is "the same report" across chapters, chains and wordings represented, if at all?</li>
+<li>How does a work's own numbering (kitab, bab, hadith number) sit beside volume and printed page?</li>
+<li>How is a verse, or a word in a verse, the target of an explanation, with the verse text taken
+only from the Qur'an table?</li>
+<li>Which grading is a quotation from the work, and which is another work's claim about it?</li>
+<li>How does ADR 0010's single-source rule give way when two works disagree about one value?</li>
+</ul>
+
+<h2>Read next</h2>
+
+<p><strong>Primary sources:</strong>
+<code>docs/plans/data-model/00-evidence.md</code> for the counts;
+<a href="../../adr/0010-author-historical-data-under-data.md">ADR 0010</a> for the two layers;
+<a href="../../adr/0015-one-record-for-what-someone-said.md">ADR 0015</a> for the hadith boundary;
+<a href="../../adr/0020-a-virtue-is-one-entry-with-one-speaker.md">ADR 0020</a> for the one field
+already rebuilt around a speaker.</p>
+
+<p><strong>Card:</strong> <a href="../reference/source-pipeline.html">Source pipeline card</a>.</p>
+
+</article>
+</main>
+</body>
+</html>
