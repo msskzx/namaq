@@ -9,9 +9,9 @@ const campaignOfAzZubayrToEgypt = {
   nameTransliterated: "al-Zubayr's Campaign toward Egypt",
   type: 'TRAVEL',
   fields: {
-    location: { value: 'مصر', claims: ['zubayr/campaign-egypt'] },
+    location: { value: 'مِصْرَ،', claims: ['zubayr/campaign-egypt'] },
     description: {
-      value: 'خرج الزبير بن العوام غازياً نحو مصر، فكتب إليه أميرها أن بها الطاعون، فدخلها وقال: إنما خرجت للطعن والطاعون، فلقي طعنة في جبهته.',
+      value: 'أَنَّ الزُّبَيْرَ خَرَجَ غَازِياً نَحْوَ مِصْرَ، فَكَتَبَ إِلَيْهِ أَمِيْرُ مِصْرَ: إِنَّ الأَرْضَ قَدْ وَقَعَ بِهَا الطَّاعُوْنُ، فَلاَ تَدْخُلْهَا. فَقَالَ: إِنَّمَا خَرَجْتُ لِلطَّعْنِ وَالطَّاعُوْنِ، فَدَخَلَهَا فَلَقِيَ طَعْنَةً فِي جَبْهَتِهِ،',
       claims: ['zubayr/campaign-egypt'],
     },
   },

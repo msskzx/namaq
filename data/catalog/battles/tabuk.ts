@@ -41,7 +41,7 @@ const tabuk = {
       person: 'abu-dharr-al-ghifari',
       isMuslim: true,
       summary: {
-        value: 'أبطأ في غزوة تبوك من عجف بعيره، ثم أخذ متاعه على ظهره ولحق بالنبي ماشياً.',
+        value: 'أَبْطَأْتُ فِي غَزْوَةِ تَبُوْكٍ، مِنْ عَجَفِ بَعِيْرِي. وَتَلَوَّمَ بَعِيْرُ أَبِي ذَرٍّ، فَلَمَّا أَبْطَأَ عَلَيْهِ أَخَذَ مَتَاعَهُ، فَجَعَلَهُ عَلَى ظَهْرِهِ، وَخَرَجَ يَتْبَعُ رَسُوْلَ اللهِ',
         claims: ['abu-dharr-al-ghifari-siyar10/tabuk'],
       },
       claims: ['abu-dharr-al-ghifari-siyar10/tabuk'],
@@ -50,7 +50,7 @@ const tabuk = {
       person: 'abbad-ibn-bishr',
       isMuslim: true,
       summary: {
-        value: 'جعله النبي على حرسه في غزوة تبوك.',
+        value: 'وَجَعَلَهُ عَلَى حَرَسِهِ فِي غَزْوَةِ تَبُوْكٍ،',
         claims: ['abbad-ibn-bishr-siyar73/tabuk'],
       },
       claims: ['abbad-ibn-bishr-siyar73/tabuk'],
