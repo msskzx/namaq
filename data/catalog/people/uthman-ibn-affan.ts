@@ -16,12 +16,15 @@ const uthmanIbnAffan = {
     fullName: { value: 'عثمان بن عفان بن أبي العاص الأموي القرشي', claims: legacyUnreviewed },
     appearance: { value: 'كان حسن الوجه، كث اللحية، طويل القامة.', claims: legacyUnreviewed },
     sex: { value: 'MALE', claims: ['uthman/sex'] },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'خرج بامرأته رقية بنت رسول الله صلى الله عليه وسلم إلى الحبشة، فقال صلى الله عليه وسلم: (صحبهما الله، إن عثمان أول من هاجر بأهله بعد لوط) .',
       claims: ['uthman/hijra-habasha-bi-ahlihi'],
     },
-  },
+  ],
+
   titles: [
     // Carried from the retired seed entry; no batch cites these yet.
     { title: 'the-ten-promised-paradise', name: 'العشرة المبشرون بالجنة', nameTransliterated: 'The Ten Promised Paradise', claims: legacyUnreviewed },

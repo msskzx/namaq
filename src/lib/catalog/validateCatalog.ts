@@ -76,6 +76,13 @@ export function validateCatalog(catalog: Catalog, known: KnownSlugs): CatalogIss
       if (ayah.surah < 1 || ayah.surah > 114) issues.push({ path: at_, message: `no surah ${ayah.surah}` });
       if (ayah.ayah < 1) issues.push({ path: at_, message: `no ayah ${ayah.ayah}` });
     });
+    (subject.virtues ?? []).forEach((virtue, index) => {
+      const where = `${at}.virtues[${index}]`;
+      checkProvenance(virtue.claims, known, where, issues);
+      if (virtue.speaker?.slug && !person(virtue.speaker.slug)) {
+        issues.push({ path: where, message: `unknown person ${virtue.speaker.slug}` });
+      }
+    });
     subject.relations.forEach((relation) => {
       const to = `${at}.relations.${relation.type}`;
       checkProvenance(relation.claims, known, to, issues);

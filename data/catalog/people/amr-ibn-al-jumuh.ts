@@ -17,12 +17,15 @@ const amrIbnAlJumuh = {
       value: 'كَانَ أَعْرَجَ',
       claims: ['amr-ibn-al-jumuh-siyar44/appearance'],
     },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'وَكَانَ سَيِّدَ بَنِي سَلِمَةَ فَأُشْهِدُكُم أَنِّي قَدْ آمَنْتُ بِمَا أُنْزِلَ عَلَى مُحَمَّدٍ. بَلْ سَيِّدُكُم الجَعْدُ الأَبْيَضُ: عَمْرُو بنُ الجَمُوْحِ لاَ عَلَيْكُم أَنْ لاَ تَمْنَعُوْهُ، لَعَلَّ اللهُ يَرْزُقُهُ الشَّهَادَةَ فَقَاتَلَ حَتَّى قُتِلَ كُفِّنَ هُوَ وَعَبْدُ اللهِ بنُ عَمْرِو بنِ حَرَامٍ فِي كَفَنٍ وَاحِدٍ.',
       claims: ['amr-ibn-al-jumuh-siyar44/virtues'],
     },
-  },
+  ],
+
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],

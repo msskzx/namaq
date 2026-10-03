@@ -11,12 +11,15 @@ const fatimahBintAsad = {
       value: 'فَاطِمَةُ بِنْتُ أَسَدِ بنِ هَاشِمِ بنِ عَبْدِ مَنَافٍ بنِ قُصَيٍّ الهَاشِمِيَّةُ',
       claims: ['fatimah-bint-asad-siyar17/fullName'],
     },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'مِنَ المُهَاجِرَاتِ الأُوَلِ، وَهِيَ أَوَّلُ هَاشِمِيَّةٍ وَلَدَتْ هَاشِمِيّاً. إِنَّه لَمْ يَكُنْ أَحَدٌ بَعْدَ أَبِي طَالِبٍ أَبَرَّ بِي مِنْهَا',
       claims: ['fatimah-bint-asad-siyar17/virtues'],
     },
-  },
+  ],
+
   titles: [
     {
       title: 'companion',

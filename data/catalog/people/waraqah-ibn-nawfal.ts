@@ -22,12 +22,15 @@ const waraqahIbnNawfal = {
   hasProfile: true,
   fields: {
     sex: { value: 'MALE', claims: ['waraqah/sex'] },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'تنصر وقرأ الكتب، وقال للنبي صلى الله عليه وسلم: (هذا الناموس الذي أنزل على موسى، يا ليتني فيها جذعا حين يخرجك قومك) .',
       claims: ['waraqah/virtues'],
     },
-  },
+  ],
+
   titles: [],
   relations: [
     {

@@ -64,9 +64,20 @@ describe('awaitingEvidence', () => {
     ]);
   });
 
+  it('reaches a virtue list as one value per entry', () => {
+    const subject = person({ virtues: [{ value: 'مناقب', claims: ['pilot/one'] }] });
+
+    expect(catalogProvenance(catalog({ people: [subject] }))).toContainEqual({
+      subject: 'people/someone',
+      path: 'virtues[0]',
+      claims: ['pilot/one'],
+    });
+  });
+
   it('is empty when every value is cited', () => {
     const subject = person({
-      fields: { virtues: { value: 'مناقب', claims: ['pilot/one'] }, sex: { value: 'MALE', claims: ['pilot/one'] } },
+      virtues: [{ value: 'مناقب', claims: ['pilot/one'] }],
+      fields: { sex: { value: 'MALE', claims: ['pilot/one'] }, fullName: { value: 'فلان', claims: ['pilot/one'] } },
     });
 
     expect(awaitingEvidence(catalog({ people: [subject] }))).toEqual([]);

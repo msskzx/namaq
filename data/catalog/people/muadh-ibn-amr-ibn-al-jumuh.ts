@@ -18,12 +18,15 @@ const muadhIbnAmrIbnAlJumuh = {
       value: 'الخَزْرَجِيُّ، السَّلَمِيُّ، المَدَنِيُّ، البَدْرِيُّ، العَقَبِي',
       claims: ['muadh-ibn-amr-ibn-al-jumuh-siyar41/tribal-affiliation'],
     },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'وَضَرَبَنِي ابْنُهُ عِكْرِمَةُ بنُ أَبِي جَهْلٍ عَلَى عَاتِقِي، فَطَرَحَ يَدِي، وَبَقِيَتْ مُعَلَّقَةً بِجِلْدَةٍ بِجَنْبِي هَذِهِ -وَاللهِ- الشَّجَاعَةُ، لاَ كَآخَرُ مِنْ خُدْشٍ بِسَهْمٍ يَنْقَطِعُ قَلْبُهُ، وَتَخُوْرُ قِوَاه',
       claims: ['muadh-ibn-amr-ibn-al-jumuh-siyar41/virtues'],
     },
-  },
+  ],
+
   titles: [
     {
       title: 'companion',

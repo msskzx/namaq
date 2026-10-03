@@ -16,16 +16,19 @@ const nawfalIbnAlHarith = {
       value: 'أَبُو الحَارِث',
       claims: ['nawfal-ibn-al-harith-siyar27/kunya'],
     },
-    virtues: {
-      value:
-        'كَانَ نَوْفَلُ أَسَنَّ مِنْ عَمِّهِ العَبَّاس وَأَعَانَ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَوْمَ حُنَيْنٍ بِثَلاَثَةِ آلاَفِ رُمْحٍ، وَثَبَتَ مَعَهُ يَوْمَئِذ وَكَانَ أَسَنَّ بَنِي هَاشِمٍ فِي زَمَانِه',
-      claims: ['nawfal-ibn-al-harith-siyar27/virtues'],
-    },
     deathYearHijri: {
       value: '20',
       claims: ['nawfal-ibn-al-harith-siyar27/death-year'],
     },
   },
+  virtues: [
+    {
+      value:
+        'كَانَ نَوْفَلُ أَسَنَّ مِنْ عَمِّهِ العَبَّاس وَأَعَانَ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَوْمَ حُنَيْنٍ بِثَلاَثَةِ آلاَفِ رُمْحٍ، وَثَبَتَ مَعَهُ يَوْمَئِذ وَكَانَ أَسَنَّ بَنِي هَاشِمٍ فِي زَمَانِه',
+      claims: ['nawfal-ibn-al-harith-siyar27/virtues'],
+    },
+  ],
+
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],

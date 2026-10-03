@@ -15,12 +15,15 @@ const anasIbnAnNadr = {
   hasProfile: true,
   fields: {
     sex: { value: 'MALE', claims: ['anas-nadr/sex'] },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'قال يوم أحد: إني لأجد ريح الجنة دون أحد، فقاتل حتى قتل، ووجد به بضع وثمانون جراحة، فما عرفوه حتى عرفته أخته ببنانه.',
       claims: ['anas-nadr/uhud'],
     },
-  },
+  ],
+
   titles: [],
   relations: [],
 } satisfies CatalogPerson;

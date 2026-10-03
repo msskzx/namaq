@@ -13,7 +13,11 @@ const saadIbnUbadah = {
       claims: ['saad-ibn-ubadah-siyar55/full-name'],
     },
     kunya: { value: 'أَبُو قَيْسٍ', claims: ['saad-ibn-ubadah-siyar55/kunya'] },
-    virtues: {
+    deathYearHijri: { value: '16 AH', claims: ['saad-ibn-ubadah-siyar55/death-year'] },
+    placeOfDeathArabic: { value: 'حَوْرَان', claims: ['saad-ibn-ubadah-siyar55/death-place'] },
+  },
+  virtues: [
+    {
       value:
         'النَّقِيْبُ، سَيِّدُ الخَزْرَجِ عَقَبِيّاً، نَقِيْباً، سَيِّداً، جَوَاداً وَلِواءُ الأَنصَارِ مَعَ سَعْدِ بنِ عُبَادَةَ يَبْعَثُ إِلَيْهِ كُلَّ يَوْمٍ جَفْنَةً مِنْ ثَرِيْدِ اللَّحْمِ يَرْجِعُ كُلَّ لَيْلَةٍ إِلَى أَهْلِهِ بِثَمَانِيْنَ مِنْ أَهْلِ الصُّفَّةِ يُعَشِّيْهِم كَانَ سَعْدٌ يَكْتُبُ فِي الجَاهِلِيَّةِ، وَيُحْسِنُ العَوْمَ وَالرَّمْيَ',
       claims: [
@@ -23,9 +27,8 @@ const saadIbnUbadah = {
         'saad-ibn-ubadah-siyar55/virtues-kamil',
       ],
     },
-    deathYearHijri: { value: '16 AH', claims: ['saad-ibn-ubadah-siyar55/death-year'] },
-    placeOfDeathArabic: { value: 'حَوْرَان', claims: ['saad-ibn-ubadah-siyar55/death-place'] },
-  },
+  ],
+
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: ['saad-ibn-ubadah-siyar55/titles'] },
   ],

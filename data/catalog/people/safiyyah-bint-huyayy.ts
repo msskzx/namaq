@@ -14,12 +14,15 @@ const safiyyahBintHuyayy = {
       claims: ['safiyyah-bint-huyayy-siyar/full-name'],
     },
     appearance: { value: 'ذَاتَ حَسَبٍ، وَجَمَالٍ', claims: ['safiyyah-bint-huyayy-siyar/appearance'] },
-    virtues: {
+    deathYearHijri: { value: '50', claims: ['safiyyah-bint-huyayy-siyar/death-year-fifty'] },
+  },
+  virtues: [
+    {
       value: 'أُمُّ المُؤْمِنِيْنَ شَرِيْفَةً، عَاقِلَةً، ذَاتَ حَسَبٍ، وَجَمَالٍ، وَدِيْنٍ ذَاتَ حِلْمٍ، وَوَقَارٍ',
       claims: ['safiyyah-bint-huyayy-siyar/virtues'],
     },
-    deathYearHijri: { value: '50', claims: ['safiyyah-bint-huyayy-siyar/death-year-fifty'] },
-  },
+  ],
+
   titles: [
     {
       title: 'mother-of-believers',

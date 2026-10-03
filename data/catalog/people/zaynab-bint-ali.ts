@@ -16,11 +16,14 @@ const zaynabBintAli = {
   fields: {
     sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: { value: 'زينب بنت علي بن أبي طالب الهاشمية القرشية', claims: legacyUnreviewed },
-    virtues: {
+  },
+  virtues: [
+    {
       value: 'بنت علي وفاطمة، حفيدة النبي، عرفت بشجاعتها وفصاحتها.',
       claims: legacyUnreviewed,
     },
-  },
+  ],
+
   titles: [],
   relations: [
     { type: 'DAUGHTER', inverse: 'MOTHER', to: 'fatimah-bint-muhammad', claims: legacyUnreviewed },

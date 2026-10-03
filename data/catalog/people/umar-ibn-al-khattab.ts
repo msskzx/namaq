@@ -17,11 +17,14 @@ const umarIbnAlKhattab = {
     // without citing it.
     fullName: { value: 'عمر بن الخطاب بن نفيل بن عبد العزى بن رياح بن قرط بن رزاح بن عدي بن كعب بن لؤي القرشي العدوي', claims: legacyUnreviewed },
     appearance: { value: 'كان طويلًا، أصلع، شديد البياض، قوي البنية.', claims: legacyUnreviewed },
-    virtues: {
+  },
+  virtues: [
+    {
       value: 'قال صلى الله عليه وسلم: (اللهم أعز الإسلام بعمر بن الخطاب خاصة) .',
       claims: ['umar/virtues-islam'],
     },
-  },
+  ],
+
   titles: [
     // Carried from the retired seed entry; no batch cites these yet.
     { title: 'the-ten-promised-paradise', name: 'العشرة المبشرون بالجنة', nameTransliterated: 'The Ten Promised Paradise', claims: legacyUnreviewed },

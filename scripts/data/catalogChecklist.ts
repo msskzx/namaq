@@ -60,7 +60,7 @@ function foundIn(person: CatalogPerson): Record<ChecklistContentItem, boolean> {
     fullName: person.fields.fullName !== undefined,
     kunya: person.fields.kunya !== undefined,
     appearance: person.fields.appearance !== undefined,
-    manaqeb: person.fields.virtues !== undefined,
+    manaqeb: (person.virtues?.length ?? 0) > 0,
     nasab: hasRelation(person, PARENT_OR_CHILD_TYPES),
     wives: hasRelation(person, SPOUSE_TYPES),
     siblings: hasRelation(person, SIBLING_TYPES),

@@ -12,15 +12,18 @@ const abdullahIbnAlHarithIbnAbdAlMuttalib = {
       value: 'عَبْدُ اللهِ بنُ الحَارِثِ بنِ عَبْدِ المُطَّلِبِ الهَاشِمِيُّ',
       claims: ['abdullah-ibn-al-harith-ibn-abd-al-muttalib-siyar47/full-name'],
     },
-    virtues: {
-      value: 'هُوَ سَعِيْدٌ، أَدْرَكَتْهُ السَّعَادَةُ',
-      claims: ['abdullah-ibn-al-harith-ibn-abd-al-muttalib-siyar47/virtues'],
-    },
     placeOfDeathArabic: {
       value: 'فَمَاتَ بِالصَّفْرَاءِ',
       claims: ['abdullah-ibn-al-harith-ibn-abd-al-muttalib-siyar47/death-place'],
     },
   },
+  virtues: [
+    {
+      value: 'هُوَ سَعِيْدٌ، أَدْرَكَتْهُ السَّعَادَةُ',
+      claims: ['abdullah-ibn-al-harith-ibn-abd-al-muttalib-siyar47/virtues'],
+    },
+  ],
+
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],

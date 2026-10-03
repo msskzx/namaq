@@ -11,9 +11,10 @@ const asSaibIbnUthman = {
   hasProfile: true,
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
-    virtues: { value: 'وَكَانَ مِنَ الرُّمَاةِ المَذْكُوْرِيْنَ', claims: ['saib-uthman-siyar12/virtues'] },
     deathYearHijri: { value: '12', claims: ['saib-uthman-siyar12/death-year'] },
   },
+  virtues: [{ value: 'وَكَانَ مِنَ الرُّمَاةِ المَذْكُوْرِيْنَ', claims: ['saib-uthman-siyar12/virtues'] }],
+
   titles: [
     // Carried from the seed. This entry never calls him صحابي outright.
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },

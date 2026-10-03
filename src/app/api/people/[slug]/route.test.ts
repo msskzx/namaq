@@ -42,6 +42,7 @@ describe('GET /api/people/[slug]', () => {
       where: { slug: 'prophet-muhammad' },
       include: {
         titles: true,
+        virtues: { orderBy: { position: 'asc' } },
         participations: { include: { battle: true } },
         events: true,
         ayat: { include: { surah: true } },

@@ -16,14 +16,17 @@ const abuSufyanIbnAlHarith = {
       claims: ['abu-sufyan-ibn-al-harith-siyar32/full-name'],
     },
     kunya: { value: 'أَبُو سُفْيَانَ', claims: ['abu-sufyan-ibn-al-harith-siyar32/kunya'] },
-    virtues: {
+    deathYearHijri: { value: '20', claims: ['abu-sufyan-ibn-al-harith-siyar32/death-year'] },
+    placeOfDeathArabic: { value: 'المَدِيْنَةِ', claims: ['abu-sufyan-ibn-al-harith-siyar32/death-place'] },
+  },
+  virtues: [
+    {
       value:
         'أَحَبَّ أَبَا سُفْيَانَ هَذَا، وَشَهِدَ لَهُ بِالجَنَّةِ، وَقَالَ: (أَرْجُو أَنْ يَكُوْنَ خَلَفاً مِنْ حَمْزَةَ كَانَ الَّذِيْنَ يُشَبَّهُوْنَ بِالنَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-: جَعْفَرٌ، وَالحَسَنُ بنُ عَلِيٍّ، وَقُثَمُ بنُ العَبَّاسِ، وَأَبُو سُفْيَانَ بنُ الحَارِثِ. أَبُو سُفْيَانَ بنُ الحَارِثِ سَيِّدُ فِتْيَانِ أَهْلِ الجَنَّةِ',
       claims: ['abu-sufyan-ibn-al-harith-siyar32/virtues'],
     },
-    deathYearHijri: { value: '20', claims: ['abu-sufyan-ibn-al-harith-siyar32/death-year'] },
-    placeOfDeathArabic: { value: 'المَدِيْنَةِ', claims: ['abu-sufyan-ibn-al-harith-siyar32/death-place'] },
-  },
+  ],
+
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: ['abu-sufyan-ibn-al-harith-siyar32/companion'] },
   ],

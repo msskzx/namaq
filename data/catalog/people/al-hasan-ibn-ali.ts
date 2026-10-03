@@ -21,11 +21,14 @@ const alHasanIbnAli = {
       value: 'كان يشبه النبي صلى الله عليه وسلم في ملامحه.',
       claims: legacyUnreviewed,
     },
-    virtues: {
+  },
+  virtues: [
+    {
       value: 'سبط النبي وريحانته، سيد شباب أهل الجنة، خامس الخلفاء الراشدين، تنازل عن الخلافة حقناً لدماء المسلمين.',
       claims: legacyUnreviewed,
     },
-  },
+  ],
+
   titles: [
     { title: 'sayyid-shabab-ahl-al-jannah', name: 'سيد شباب أهل الجنة', nameTransliterated: 'Master of the Youth of Paradise', claims: legacyUnreviewed },
     { title: 'caliph', name: 'خليفة', nameTransliterated: 'Caliph', claims: legacyUnreviewed },

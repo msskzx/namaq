@@ -29,19 +29,22 @@ const abuUbaydahIbnAlJarrah = {
         'كَانَ رَجُلاً نَحِيْفاً، مَعْرُوْقَ الوَجْهِ، خَفِيْفَ اللِّحْيَةِ، طُوَالاً، أَحْنَى ، أَثْرَمَ الثَّنِيَّتَيْنِ وَكَانَ يَخْضِبُ بِالحِنَّاءِ وَالكَتَمِ ، وَكَانَ لَهُ عَقِيْصَتَانِ',
       claims: ['abu-ubaydah/appearance'],
     },
-    // No claim names this field, so these cite the passages it composes. It runs
-    // one passage further: 6-p1 finishes the sentence 5-p5 breaks off, uncited.
-    virtues: {
-      value:
-        'أَحَدُ السَّابِقِيْنَ الأَوَّلِيْنَ، وَمَنْ عَزَمَ الصِّدِّيْقُ عَلَى تَوْلِيَتِهِ الخِلاَفَةَ، وَأَشَارَ بِهِ يَوْمَ السَّقِيْفَةِ؛ لِكَمَالِ أَهْلِيَّتِهِ عِنْدَ أَبِي بَكْرٍ شَهِدَ لَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِالجَنَّةِ، وَسَمَّاهُ: أَمِيْنَ الأُمَّةِ، وَمَنَاقِبُهُ شَهِيْرَةٌ جَمَّةٌ',
-      claims: ['abu-ubaydah/virtues'],
-    },
     // The claim is disputed and carries both accounts; 17 is marked Ibn Aidh
     // alone (انفرد), so author preference picks 18.
     deathYearHijri: { value: '18 AH', claims: ['abu-ubaydah/death-year'] },
     // Not a conflict with plague-of-amwas: that names the epidemic, this the place.
     placeOfDeathArabic: { value: 'فِحْل', claims: ['abu-ubaydah/death-place'] },
   },
+
+  // No claim names this field, so these cite the passages it composes. It runs
+  // one passage further: 6-p1 finishes the sentence 5-p5 breaks off, uncited.
+  virtues: [
+    {
+      value:
+        'أَحَدُ السَّابِقِيْنَ الأَوَّلِيْنَ، وَمَنْ عَزَمَ الصِّدِّيْقُ عَلَى تَوْلِيَتِهِ الخِلاَفَةَ، وَأَشَارَ بِهِ يَوْمَ السَّقِيْفَةِ؛ لِكَمَالِ أَهْلِيَّتِهِ عِنْدَ أَبِي بَكْرٍ شَهِدَ لَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِالجَنَّةِ، وَسَمَّاهُ: أَمِيْنَ الأُمَّةِ، وَمَنَاقِبُهُ شَهِيْرَةٌ جَمَّةٌ',
+      claims: ['abu-ubaydah/virtues'],
+    },
+  ],
 
   titles: [
     { title: 'amin-al-ummah', name: 'أمين الأمة', nameTransliterated: 'Amin al-Ummah', claims: ['abu-ubaydah/titles'] },

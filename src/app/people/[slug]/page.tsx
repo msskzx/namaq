@@ -9,6 +9,8 @@ import translations from '@/components/language/translations';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import Badge from '@/components/common/Badge';
+import Link from 'next/link';
+import { virtueSpeakerHref, virtueSpeakerLabel } from '@/lib/virtues';
 import { titleName } from '@/lib/titleName';
 import Timeline from '@/components/people/Timeline';
 import type { PersonFull } from '@/types/person';
@@ -85,8 +87,6 @@ function PersonDetailPage() {
               <p className="text-gray-800 dark:text-gray-200 text-lg">{person.kunya}</p>
             </div>
           )}
-          {/* A حلف is a name here, not a relationship -- see README. It sits
-              with the kunya for that reason. */}
           {person.tribalAffiliation && (
             <div className="bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4">
               <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
@@ -104,12 +104,29 @@ function PersonDetailPage() {
             </div>
           )}
 
-          {person.virtues && (
+          {person.virtues && person.virtues.length > 0 && (
             <div className="bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4">
               <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
                 <FontAwesomeIcon icon={faSeedling} className="w-7 h-7 text-amber-500 me-2" />
                 {t.virtues}</h2>
-              <p className="text-gray-800 dark:text-gray-200 text-lg">{person.virtues}</p>
+              <ul className="flex flex-col gap-3">
+                {person.virtues.map((virtue) => {
+                  const href = virtueSpeakerHref(virtue);
+                  const label = virtue.speakerName ? virtueSpeakerLabel(virtue.speakerName, language, t.virtueSpeakerSays) : null;
+                  return (
+                    <li key={virtue.id} className="text-gray-800 dark:text-gray-200 text-lg">
+                      {label && virtue.speakerName && (
+                        <span className="text-gray-600 dark:text-gray-400 me-2">
+                          {href ? (
+                            <Link href={href} className="underline decoration-dotted hover:text-amber-600 dark:hover:text-amber-400">{label}</Link>
+                          ) : label}
+                        </span>
+                      )}
+                      <span dir="rtl" lang="ar">{virtue.text}</span>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
           )}
 
@@ -127,8 +144,6 @@ function PersonDetailPage() {
 
           <AyatGroup ayat={person.ayat || []} />
 
-          {/* Arabic has no neutral pronoun, so the heading takes the sex the
-              catalog cites; English does not need it. */}
           <UtteranceGroup utterances={person.said} variant="said" sex={person.sex} />
           <UtteranceGroup utterances={person.spokenAbout} variant="about" sex={person.sex} />
 

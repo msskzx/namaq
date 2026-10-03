@@ -22,11 +22,14 @@ const ummSalamah = {
     sex: { value: 'FEMALE', claims: ['umm-salamah/sex'] },
     // Carried from the retired prisma/personSeedData.ts entry, uncited.
     appearance: { value: 'وصفت بأنها كانت من أجمل النساء.', claims: legacyUnreviewed },
-    virtues: {
+  },
+  virtues: [
+    {
       value: 'أم المؤمنين، من أعقل وأفقه نساء الصحابة، ذات رأي سديد، هاجرت هجرتين، روت أحاديث كثيرة.',
       claims: legacyUnreviewed,
     },
-  },
+  ],
+
   titles: [
     { title: 'mother-of-believers', name: 'أم المؤمنين', nameTransliterated: 'Mother of the Believers', claims: ['umm-salamah/umm-al-mumineen'] },
     // Carried from the seed rows; no batch cites it for her.

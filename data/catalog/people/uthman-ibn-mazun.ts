@@ -21,11 +21,14 @@ const uthmanIbnMazun = {
       value: 'كَانَ عُثْمَانُ شَدِيْدَ الأُدْمَة، كَبِيْرَ اللِّحْيَة',
       claims: ['uthman-mazun-siyar9/appearance'],
     },
-    virtues: {
+  },
+  virtues: [
+    {
       value: 'أَمَّا لَيْلُهُ فَقَائِمٌ، وَأَمَّا نَهَارُهُ فَصَائِمٌ.',
       claims: ['uthman-mazun-siyar9/virtues'],
     },
-  },
+  ],
+
   titles: [
     // Carried from the seed. This entry never calls him صحابي in so many
     // words, so it stays legacy rather than promoted.

@@ -18,10 +18,11 @@ const abuJandal = {
       claims: ['abu-jandal-siyar23/full-name'],
     },
     kunya: { value: 'أَبُو جَنْدَلٍ', claims: ['abu-jandal-siyar23/kunya'] },
-    virtues: { value: 'كَانَ مِنْ خِيَارِ الصَّحَابَةِ', claims: ['abu-jandal-siyar23/virtues'] },
     deathYearHijri: { value: '18', claims: ['abu-jandal-siyar23/death'] },
     placeOfDeathArabic: { value: 'طَاعُوْنِ عَمَوَاسَ بِالأُرْدُنِّ', claims: ['abu-jandal-siyar23/death-place'] },
   },
+  virtues: [{ value: 'كَانَ مِنْ خِيَارِ الصَّحَابَةِ', claims: ['abu-jandal-siyar23/virtues'] }],
+
   titles: [
     // Carried from the retired seed.
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },

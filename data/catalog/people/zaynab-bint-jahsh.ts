@@ -23,11 +23,14 @@ const zaynabBintJahsh = {
       value: 'وصفت بأنها كانت جميلة وذات صنعة، وكانت تعمل بيديها وتتصدق.',
       claims: legacyUnreviewed,
     },
-    virtues: {
+  },
+  virtues: [
+    {
       value: 'أم المؤمنين، تزوجها النبي بأمر من الله بعد طلاقها من زيد بن حارثة، عرفت بكثرة عبادتها وجودها وكرمها.',
       claims: legacyUnreviewed,
     },
-  },
+  ],
+
   titles: [
     // Carried from the seed rows. The chapter has her among the Prophet's
     // wives without calling her either name.

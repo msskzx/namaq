@@ -22,10 +22,6 @@ const saeedIbnZaid = {
     // The seed's wording (قصير، أسمر اللون، خفيف اللحية) is not in this entry.
     // Al-Waqidi's is, and replaces it.
     appearance: { value: 'كَانَ سَعِيْدٌ رَجُلاً آدَمَ، طَوِيْلاً، أَشْعَرَ.', claims: ['saeed/appearance'] },
-    virtues: {
-      value: 'شَهِدَ سَعِيْدٌ أُحُداً، وَالخَنْدَقَ، وَالحُدَيْبِيَةَ، وَالمَشَاهِدَ',
-      claims: ['saeed/mashahid'],
-    },
     // Al-Waqidi's 51 AH agrees with the burial account naming Sa'd ibn Abi
     // Waqqas and Ibn Umar at the grave; Ubaydullah ibn Sa'd al-Zuhri's 52 is
     // its own DISPUTED claim.
@@ -33,6 +29,13 @@ const saeedIbnZaid = {
     // Al-Haytham ibn Adi's Kufa is the lone dissent, its own DISPUTED claim.
     placeOfDeathArabic: { value: 'العَقِيْق', claims: ['saeed/death-place'] },
   },
+
+  virtues: [
+    {
+      value: 'شَهِدَ سَعِيْدٌ أُحُداً، وَالخَنْدَقَ، وَالحُدَيْبِيَةَ، وَالمَشَاهِدَ',
+      claims: ['saeed/mashahid'],
+    },
+  ],
 
   titles: [
     { title: 'the-ten-promised-paradise', name: 'العشرة المبشرون بالجنة', nameTransliterated: 'The Ten Promised Paradise', claims: ['saeed/titles'] },

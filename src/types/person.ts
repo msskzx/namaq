@@ -1,4 +1,4 @@
-import type { Person as PrismaPerson, Title } from "@/generated/prisma";
+import type { Person as PrismaPerson, PersonVirtue, Title } from "@/generated/prisma";
 import type { ClaimWithCitations } from "@/types/provenance";
 import type { BattleParticipation } from "@/types/battle";
 import type { EventBase } from "@/types/event";
@@ -7,6 +7,7 @@ import type { Utterance } from "@/types/utterance";
 
 export type PersonFull = PrismaPerson & {
   titles: Title[];
+  virtues?: PersonVirtue[];
   events: EventBase[];
   ayat?: Ayah[];
   participations?: BattleParticipation[];

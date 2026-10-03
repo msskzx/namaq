@@ -14,16 +14,19 @@ const jabrIbnAtik = {
       claims: ['jabr-ibn-atik-siyar/full-name'],
     },
     kunya: { value: 'أَبُو عَبْدِ اللهِ', claims: ['jabr-ibn-atik-siyar/kunya'] },
-    virtues: {
-      value:
-        'بَدْرِيٌّ كَبِيْرٌ. شَهِدَ بَدْراً وَالمَشَاهِدَ، وَكَانَتْ إِلَيْهِ رَايَةُ بَنِي مُعَاوِيَةَ بنِ مَالِكٍ يَوْمَ الفَتْحِ',
-      claims: ['jabr-ibn-atik-siyar/virtues'],
-    },
     deathYearHijri: {
       value: '42',
       claims: ['jabr-ibn-atik-siyar/death-year-42'],
     },
   },
+  virtues: [
+    {
+      value:
+        'بَدْرِيٌّ كَبِيْرٌ. شَهِدَ بَدْراً وَالمَشَاهِدَ، وَكَانَتْ إِلَيْهِ رَايَةُ بَنِي مُعَاوِيَةَ بنِ مَالِكٍ يَوْمَ الفَتْحِ',
+      claims: ['jabr-ibn-atik-siyar/virtues'],
+    },
+  ],
+
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],

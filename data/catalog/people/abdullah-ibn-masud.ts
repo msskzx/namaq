@@ -20,12 +20,15 @@ const abdullahIbnMasud = {
         'عبد الله بن مسعود بن غافل بن حبيب بن شمخ بن فار بن مخزوم بن صاهلة بن كاهل بن الحارث بن تميم بن سعد بن هذيل الهذلي',
       claims: legacyUnreviewed,
     },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'كان يرعى غنما لعقبة بن أبي معيط فمر به النبي صلى الله عليه وسلم وأبو بكر فحلب لهما من جذعة لم ينز عليها الفحل، فقال له: (إنك غلام معلم) . قال: فأخذت من فيه سبعين سورة ما ينازعني فيها أحد.',
       claims: ['ibn-masud/ghanam'],
     },
-  },
+  ],
+
   titles: [
     // Carried from the retired seed entry. The seeds gave every صحابي this
     // title without citing it.

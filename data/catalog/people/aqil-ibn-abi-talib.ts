@@ -13,12 +13,15 @@ const aqilIbnAbiTalib = {
       claims: legacyUnreviewed,
     },
     kunya: { value: 'أَبَا يَزِيْدَ', claims: ['aqil-ibn-abi-talib-siyar35/kunya'] },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'أَنَّ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَالَ لِعَقِيْلٍ: (يَا أَبَا يَزِيْدَ! إِنِّي أُحِبُّكَ حُبَّيْنِ: لِقَرَابَتِكَ، وَلِحُبِّ عَمِّي لَكَ',
       claims: ['aqil-ibn-abi-talib-siyar35/virtues'],
     },
-  },
+  ],
+
   titles: [
     {
       title: 'companion',

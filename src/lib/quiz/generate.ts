@@ -65,9 +65,7 @@ function choice(value: string, labelArabic: string): QuestionChoice {
   return { value, labelArabic };
 }
 
-// The sex the answer wording requires, by declared relation type: a fixed sex
-// when the prompt names it, ANSWER when the prompt agrees with the answer,
-// null when the wording is neutral. See docs/plans/reviewed-quiz-bank.md.
+// See docs/plans/reviewed-quiz-bank.md.
 const RELATION_ANSWER_SEX: Record<string, 'MALE' | 'FEMALE' | 'ANSWER' | null> = {
   HUSBAND: 'FEMALE',
   WIFE: 'MALE',
@@ -190,14 +188,16 @@ export async function generateQuestionCandidates(): Promise<GeneratedQuestion[]>
       }));
     }
 
-    const virtues = person.fields.virtues;
-    if (virtues) {
+    (person.virtues ?? []).forEach((virtue, index) => {
       add(candidate({
-        family: 'VIRTUE_HOLDER', topic: 'PEOPLE', subject: { kind: 'PERSON', slug: person.slug }, attribute: 'virtues',
-        personSlugs: [person.slug], promptArabic: `من تصفه المصادر بهذه المنقبة: «${virtues.value}»؟`,
-        answer: choice(person.slug, person.name), pool: personChoices, evidence: { claimKeys: cited(virtues.claims, eligible) },
+        family: 'VIRTUE_HOLDER', topic: 'PEOPLE', subject: { kind: 'PERSON', slug: person.slug }, attribute: `virtues:${index}`,
+        personSlugs: [person.slug],
+        promptArabic: virtue.speaker
+          ? `من وصفه ${virtue.speaker.name} بقوله: «${virtue.value}»؟`
+          : `من تصفه المصادر بهذه المنقبة: «${virtue.value}»؟`,
+        answer: choice(person.slug, person.name), pool: personChoices, evidence: { claimKeys: cited(virtue.claims, eligible) },
       }));
-    }
+    });
 
     const heldTitles = new Set([...dbPerson.titles.map((title) => title.slug), ...(catalogTitlesByPerson.get(person.slug) ?? [])]);
     for (const assignment of person.titles) {

@@ -14,12 +14,15 @@ const amrIbnSaidAlUmawi = {
       value: 'عَمْرُو بنُ سَعِيْدِ بنِ العَاصِ الأُمَوِيُّ',
       claims: ['amr-ibn-said-al-umawi-siyar50/fullName'],
     },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'لَهُ هِجْرَتَانِ: إِلَى الحَبَشَةِ، ثُمَّ إِلَى المَدِيْنَةِ أَنَّ أَعْمَامَهُ؛ خَالِداً، وَأَبَاناً، وَعَمْراً رَجَعُوا عَنْ أَعْمَالِهِم حِيْنَ بَلَغَهُم مَوْتُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-. فَأَبَوا، وَخَرَجُوا إِلَى الشَّامِ، فَقُتِلُوا - رَضِيَ اللهُ عَنْهُم -.',
       claims: ['amr-ibn-said-al-umawi-siyar50/virtues'],
     },
-  },
+  ],
+
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: ['amr-ibn-said-al-umawi-siyar50/virtues'] },
   ],

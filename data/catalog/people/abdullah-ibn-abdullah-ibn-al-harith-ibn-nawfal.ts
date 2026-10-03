@@ -19,10 +19,6 @@ const abdullahIbnAbdullahIbnAlHarithIbnNawfal = {
       value: 'أَبُو يَحْيَى',
       claims: ['abdullah-ibn-abdullah-ibn-al-harith-ibn-nawfal-siyar30/kunya'],
     },
-    virtues: {
-      value: 'وَكَانَ مِنْ صَحَابَةِ سُلَيْمَانَ الخَلِيْفَةِ قَالَ ابْنُ سَعْدٍ: ثِقَةٌ، قَلِيْلُ الحَدِيْثِ',
-      claims: ['abdullah-ibn-abdullah-ibn-al-harith-ibn-nawfal-siyar30/virtues'],
-    },
     deathYearHijri: {
       value: '97',
       claims: ['abdullah-ibn-abdullah-ibn-al-harith-ibn-nawfal-siyar30/death-year'],
@@ -32,6 +28,13 @@ const abdullahIbnAbdullahIbnAlHarithIbnNawfal = {
       claims: ['abdullah-ibn-abdullah-ibn-al-harith-ibn-nawfal-siyar30/death-place'],
     },
   },
+  virtues: [
+    {
+      value: 'وَكَانَ مِنْ صَحَابَةِ سُلَيْمَانَ الخَلِيْفَةِ قَالَ ابْنُ سَعْدٍ: ثِقَةٌ، قَلِيْلُ الحَدِيْثِ',
+      claims: ['abdullah-ibn-abdullah-ibn-al-harith-ibn-nawfal-siyar30/virtues'],
+    },
+  ],
+
   titles: [],
   relations: [
     {

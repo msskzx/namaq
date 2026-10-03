@@ -19,8 +19,11 @@ beforeEach(() => {
       ...basePerson('p1', 'الأول', 'أبو الأول'),
       fields: {
         kunya: { value: 'أبو الأول', claims: ['abu-ubaydah/kunya'] },
-        virtues: { value: 'من السابقين الأولين', claims: ['abu-ubaydah/virtues'] },
       },
+      virtues: [
+        { value: 'من السابقين الأولين', claims: ['abu-ubaydah/virtues'] },
+        { value: 'أمين هذه الأمة', speaker: { name: 'النبي' }, claims: ['abu-ubaydah/virtues'] },
+      ],
       titles: [
         { title: 't1', claims: ['abu-ubaydah/titles'] },
         { title: 't2', claims: ['abu-ubaydah/titles'] },
@@ -161,6 +164,15 @@ describe('question candidate generation', () => {
       'EXCUSED_ABSENCE_REASON',
       'EVENT_HIJRI_YEAR',
     ]));
+  });
+
+  it('asks one question per virtue entry, naming the speaker where there is one', async () => {
+    const questions = (await generateQuestionCandidates()).filter((question) => question.family === 'VIRTUE_HOLDER');
+    expect(questions.map((question) => question.promptArabic).sort()).toEqual([
+      'من تصفه المصادر بهذه المنقبة: «من السابقين الأولين»؟',
+      'من وصفه النبي بقوله: «أمين هذه الأمة»؟',
+    ].sort());
+    expect(new Set(questions.map((question) => question.key)).size).toBe(2);
   });
 
   it('uses feminine Arabic for a female relationship answer', async () => {

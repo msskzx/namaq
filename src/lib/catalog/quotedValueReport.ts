@@ -13,7 +13,6 @@ const PERSON_TEXT_FIELDS = [
   'kunya',
   'tribalAffiliation',
   'appearance',
-  'virtues',
   'placeOfBirthArabic',
   'placeOfDeathArabic',
 ] as const;
@@ -59,6 +58,7 @@ export function collectQuotedValues(catalog: Catalog): QuotedValue[] {
   catalog.people.forEach((person) => {
     const at = `people/${person.slug}`;
     PERSON_TEXT_FIELDS.forEach((field) => add(at, `${at}.${field}`, person.fields[field]));
+    (person.virtues ?? []).forEach((virtue, index) => add(at, `${at}.virtues[${index}]`, virtue));
     add(at, `${at}.name`, person.fields.fullName, 'name');
   });
 

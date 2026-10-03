@@ -20,12 +20,15 @@ const abuAlHaythamIbnAtTayyihan = {
     },
     kunya: { value: 'أَبُو الهَيْثَمِ', claims: ['abu-al-haytham-siyar22/kunya'] },
     tribalAffiliation: { value: 'حَلِيْفُ بَنِي عَبْدِ الأَشْهَلِ', claims: ['abu-al-haytham-siyar22/tribal-affiliation'] },
-    virtues: {
+    deathYearHijri: { value: '20', claims: ['abu-al-haytham-siyar22/death-year'] },
+  },
+  virtues: [
+    {
       value: 'كَانَ أَبُو الهَيْثَمِ يَكْرَهُ الأَصْنَامَ فِي الجَاهِلِيَّةِ، وَيُؤَفِّفُ بِهَا، وَيَقُوْلُ بِالتَّوْحِيْدِ هُوَ وَأَسَعْدُ بنُ زُرَارَةَ',
       claims: ['abu-al-haytham-siyar22/virtues'],
     },
-    deathYearHijri: { value: '20', claims: ['abu-al-haytham-siyar22/death-year'] },
-  },
+  ],
+
   titles: [
     // Carried from the retired seed. البدري is modeled as the Badr
     // PARTICIPATED_IN relation below rather than repeated as a title.

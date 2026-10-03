@@ -33,7 +33,6 @@ export interface CatalogPersonFields {
    */
   readonly tribalAffiliation?: Cited<string>;
   readonly appearance?: Cited<string>;
-  readonly virtues?: Cited<string>;
   readonly birthYearHijri?: Cited<string>;
   readonly birthYearGregorian?: Cited<string>;
   readonly deathYearHijri?: Cited<string>;
@@ -77,6 +76,14 @@ export interface CatalogAyah {
   readonly claims: Provenance;
 }
 
+/** One virtue, in one speaker's exact words -- see docs/adr/0020-a-virtue-is-one-entry-with-one-speaker.md. */
+export interface CatalogVirtue {
+  readonly value: string;
+  /** Absent means al-Dhahabi narrating or reporting a verdict in his own sentence. */
+  readonly speaker?: { readonly name: string; readonly slug?: string };
+  readonly claims: Provenance;
+}
+
 export interface CatalogPerson {
   readonly kind: 'PERSON';
   readonly slug: string;
@@ -88,6 +95,7 @@ export interface CatalogPerson {
   readonly titles: readonly CatalogTitleAssignment[];
   readonly relations: readonly CatalogRelation[];
   readonly ayat?: readonly CatalogAyah[];
+  readonly virtues?: readonly CatalogVirtue[];
 }
 
 /**

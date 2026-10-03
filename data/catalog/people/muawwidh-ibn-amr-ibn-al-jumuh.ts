@@ -12,11 +12,14 @@ const muawwidhIbnAmrIbnAlJumuh = {
       value: 'مُعَوَّذُ بنُ عَمْرِو بنِ الجَمُوْحِ الأَنْصَارِيُّ السَّلَمِي',
       claims: ['muawwidh-ibn-amr-ibn-al-jumuh-siyar42/full-name'],
     },
-    virtues: {
+  },
+  virtues: [
+    {
       value: 'شَهِدَ مَعَ أَخَوَيْهِ مُعَاذٍ وَخَلاَّدٍ بَدْرا',
       claims: ['muawwidh-ibn-amr-ibn-al-jumuh-siyar42/virtues'],
     },
-  },
+  ],
+
   titles: [
     {
       title: 'companion',
