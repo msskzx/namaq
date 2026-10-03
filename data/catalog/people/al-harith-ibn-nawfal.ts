@@ -9,12 +9,12 @@ const alHarithIbnNawfal = {
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
-      value: 'الحارث بن نوفل بن الحارث الهاشمي',
+      value: 'الحَارِثُ بنُ نَوْفَلِ بنِ الحَارِثِ الهَاشِمِيُّ',
       claims: ['al-harith-ibn-nawfal-siyar28/full-name'],
     },
     virtues: {
       value:
-        'أسلم مع أبيه، واستعمله النبي صلى الله عليه وسلم على بعض العمل، وولي مكة لعمر وعثمان.',
+        'أَسْلَمَ مَعَ أَبِيْهِ، وَوَلِيَ مَكَّةَ لِعُمَرَ وَعُثْمَانَ. وَقَدِ اسْتَعْمَلَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- عَلَى بَعْضِ العَمَلِ.',
       claims: ['al-harith-ibn-nawfal-siyar28/virtues'],
     },
   },
