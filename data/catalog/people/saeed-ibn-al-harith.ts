@@ -3,13 +3,13 @@ import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 const saeedIbnAlHarith = {
   kind: 'PERSON',
   slug: 'saeed-ibn-al-harith',
-  name: 'سعيد بن الحارث',
+  name: 'سَعِيْدُ بنُ الحَارِثِ',
   nameTransliterated: 'Saeed ibn al-Harith',
   hasProfile: true,
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
-      value: 'سعيد بن الحارث بن عبد المطلب',
+      value: 'سَعِيْدُ بنُ الحَارِثِ بنِ عَبْدِ المُطَّلِبِ',
       claims: ['saeed-ibn-al-harith-siyar31/full-name'],
     },
   },

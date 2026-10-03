@@ -8,12 +8,12 @@ import type { CatalogPerson } from '@/lib/catalog/types';
 const sanaaBintAsmaAlSulami = {
   kind: 'PERSON',
   slug: 'sanaa-bint-asma-al-sulami',
-  name: 'سناء',
+  name: 'سَنَاءَ',
   nameTransliterated: 'Sanaa bint Asma al-Sulami',
   hasProfile: true,
   fields: {
     sex: { value: 'FEMALE', claims: ['sanaa-bint-asma-al-sulami-siyar/sex'] },
-    fullName: { value: 'سناء بنت أسماء بن الصلت السلمية', claims: ['sanaa-bint-asma-al-sulami-siyar/full-name'] },
+    fullName: { value: 'سَنَاءَ بِنْتَ أَسْمَاءَ بنِ الصَّلْتِ السُّلَمِيَّةَ', claims: ['sanaa-bint-asma-al-sulami-siyar/full-name'] },
   },
   titles: [
     {
