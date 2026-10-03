@@ -3,13 +3,13 @@ import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 const khalladIbnAmrIbnAlJumuh = {
   kind: 'PERSON',
   slug: 'khallad-ibn-amr-ibn-al-jumuh',
-  name: 'خلاد بن عمرو',
+  name: 'خَلاَّدُ بنُ عَمْرِو',
   nameTransliterated: 'Khallad ibn Amr ibn al-Jumuh',
   hasProfile: true,
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
-      value: 'خلاد بن عمرو بن الجموح الأنصاري',
+      value: 'خَلاَّدُ بنُ عَمْرِو بنِ الجَمُوْحِ الأَنْصَارِيُّ',
       claims: ['khallad-siyar4/fullName'],
     },
   },
