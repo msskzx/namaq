@@ -12,7 +12,7 @@ import type { CatalogPerson } from '@/lib/catalog/types';
 const safiyyahBintAbdAlMuttalib = {
   kind: 'PERSON',
   slug: 'safiyyah-bint-abd-al-muttalib',
-  name: 'صفية بنت عبد المطلب',
+  name: 'صَفِيَّةُ بِنْتُ عَبْدِ المُطَّلِبِ',
   nameTransliterated: 'Safiyyah bint Abd al-Muttalib',
   hasProfile: true,
   fields: {
@@ -24,7 +24,7 @@ const safiyyahBintAbdAlMuttalib = {
     deathYearHijri: { value: '20 AH', claims: ['safiyyah-siyar15/death-year'] },
     virtues: {
       value:
-        'قتلت يهوديا بعمود يوم الخندق دفاعا عن حصن حسان بن ثابت وهي أول امرأة تقتل رجلا، ونادى بها النبي صلى الله عليه وسلم باسمها مع فاطمة بنت محمد وبني عبد المطلب لما نزلت (وأنذر عشيرتك الأقربين).',
+        'أَنَا أَوَّلُ امْرَأَةٍ قَتَلَتْ رَجُلاً يَا فَاطِمَةَ بِنْتَ مُحَمَّدٍ، يَا صَفِيَّةَ بِنْتَ عَبْدِ المُطَّلِبِ، يَا بَنِي عَبْدِ المُطَّلِبِ',
       claims: ['safiyyah-siyar15/virtues'],
     },
   },

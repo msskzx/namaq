@@ -23,11 +23,20 @@ function claim(overrides: Record<string, unknown> = {}) {
         id: 'citation-1',
         pageReference: '5',
         extractionUrl: 'https://shamela.ws/book/10906/1431',
+        excerptArabic: 'نص الشاهد',
         source: { title: 'سير أعلام النبلاء' },
       },
     ],
     ...overrides,
   };
+}
+
+function withoutExcerpt() {
+  return claim({
+    citations: [
+      { id: 'citation-1', extractionUrl: 'https://shamela.ws/book/10906/1431', source: { title: 'سير أعلام النبلاء' } },
+    ],
+  });
 }
 
 function renderAccess(props: Partial<React.ComponentProps<typeof SubjectEvidenceAccess>> = {}) {
@@ -69,8 +78,27 @@ describe('SubjectEvidenceAccess', () => {
 
     fireEvent.click(await screen.findByText('References'));
 
-    expect(await screen.findByText('عامر بن عبد الله بن الجراح')).toBeTruthy();
+    expect(await screen.findByText('نص الشاهد')).toBeTruthy();
     expect(screen.getByText('Not reviewed')).toBeTruthy();
+  });
+
+  it('shows the cited passage rather than the assertion restating it', async () => {
+    renderAccess({ hasProfile: false });
+
+    fireEvent.click(await screen.findByText('References'));
+
+    expect(await screen.findByText('نص الشاهد')).toBeTruthy();
+    expect(screen.queryByText('عامر بن عبد الله بن الجراح')).toBeNull();
+  });
+
+  it('falls back to the assertion when no citation carries a passage', async () => {
+    fetchJson.mockResolvedValue({ claims: [withoutExcerpt()] });
+
+    renderAccess({ hasProfile: false });
+
+    fireEvent.click(await screen.findByText('References'));
+
+    expect(await screen.findByText('عامر بن عبد الله بن الجراح')).toBeTruthy();
   });
 
   it('keeps the compact list collapsed until asked', async () => {
@@ -78,7 +106,7 @@ describe('SubjectEvidenceAccess', () => {
 
     await screen.findByText('References');
 
-    expect(screen.queryByText('عامر بن عبد الله بن الجراح')).toBeNull();
+    expect(screen.queryByText('نص الشاهد')).toBeNull();
   });
 
   it('shows the review status of each claim it lists', async () => {
@@ -101,7 +129,7 @@ describe('SubjectEvidenceAccess', () => {
 
     fireEvent.click(await screen.findByText('References'));
 
-    await screen.findByText('عامر بن عبد الله بن الجراح');
+    await screen.findAllByText('نص الشاهد');
     expect(screen.queryByText('كان نحيفاً')).toBeNull();
   });
 

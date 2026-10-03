@@ -14,15 +14,15 @@ const abdullahIbnSuhail = {
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
-      value: 'عبد الله بن سهيل بن عمرو العامري',
+      value: 'عَبْدُ اللهِ بنُ سُهَيْلِ بنِ عَمْرٍو العَامِرِيُّ',
       claims: ['abdullah-ibn-suhail-siyar24/full-name'],
     },
     virtues: {
-      value: 'وله غزوات ومواقف. وقيل: بل هو من السابقين الأولين، وإنه هاجر إلى الحبشة الهجرة الأولى.',
+      value: 'وَلَهُ غَزَوَاتٌ وَمَوَاقِفُ وَقِيْلَ: بَلْ هُوَ مِنَ السَّابِقِيْنَ الأَوَّلِيْنَ، وَإِنَّهُ هَاجَرَ إِلَى الحَبَشَةِ الهِجْرَةَ الأُوْلَى',
       claims: ['abdullah-ibn-suhail-siyar24/virtues'],
     },
     deathYearHijri: { value: '12', claims: ['abdullah-ibn-suhail-siyar24/death'] },
-    placeOfDeathArabic: { value: 'اليمامة', claims: ['abdullah-ibn-suhail-siyar24/death-place'] },
+    placeOfDeathArabic: { value: 'اسْتُشْهِدَ يَوْمَ اليَمَامَةِ', claims: ['abdullah-ibn-suhail-siyar24/death-place'] },
   },
   titles: [
     // Carried from the retired seed.

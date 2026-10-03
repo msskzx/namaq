@@ -57,6 +57,34 @@ describe('pageHeadings', () => {
       { text: 'ابْنِ الجَرَّاحِ بنِ هِلاَلِ بنِ أُهَيْبِ بنِ ضَبَّةَ.', heading: false },
     ]);
   });
+
+  it('marks a numbered entry title that opens mid-page as a heading', () => {
+    const body = [
+      'وَرَوَى: نُوْحُ بنُ يَزِيْدَ (١) ، عَنْ إِبْرَاهِيْمَ بنِ سَعْدٍ.',
+      '٦ - سَعِيْدُ بنُ زَيْدِ بنِ عَمْرِو بنِ نُفَيْلٍ العَدَوِيُّ * (ع)',
+      'ابْنِ عَبْدِ العُزَّى بنِ رِيَاحِ بنِ قُرْطِ بنِ رَزَاحِ، أَبُو الأَعْوَرِ.',
+    ].join('\n\n');
+
+    expect(pageHeadings(body)).toEqual([
+      { paragraphIndex: 1, text: '٦ - سَعِيْدُ بنُ زَيْدِ بنِ عَمْرِو بنِ نُفَيْلٍ العَدَوِيُّ * (ع)' },
+    ]);
+  });
+
+  it('marks a title whose asterisk falls before the rest of the line', () => {
+    const titles = [
+      '٧ - مُصْعَبُ بنُ عُمَيْرِ * بنِ هَاشِمِ بنِ عَبْدِ مَنَافٍ البَدْرِيُّ',
+      '٥٩ - عُتْبَةُ بنُ غَزْوَانَ * بنِ جَابِرِ بنِ وُهَيْبٍ أَبُو غَزْوَانَ المَازنِيُّ',
+      '٢٨ - زَيْنَبُ بِنْتُ رَسُوْلِ اللهِ * -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-',
+    ];
+
+    expect(pageParagraphs(titles.join('\n\n')).map((paragraph) => paragraph.heading)).toEqual([true, true, true]);
+  });
+
+  it('leaves a long numbered paragraph that only mentions an asterisk as body text', () => {
+    const prose = `١ - قَالَ أَبُو نُعَيْمٍ المُلاَئِيُّ: سَنَةَ ثَمَانٍ وَخَمْسِيْنَ، وَتَبِعَهُ قَعْنَبُ بنُ المحرزِ، وَالأَوَّلُ هُوَ الصَّحِيْحُ، وَذَلِكَ فِي كِتَابِ التَّارِيخِ وَأَكْثَرُ الأَحَادِيْثِ مَرْوِيَّةٌ * عَنْهُ`;
+
+    expect(pageParagraphs(prose).map((paragraph) => paragraph.heading)).toEqual([false]);
+  });
 });
 
 describe('findPassageParagraph', () => {

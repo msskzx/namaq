@@ -6,13 +6,13 @@ import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 const khawlahBintHakim = {
   kind: 'PERSON',
   slug: 'khawlah-bint-hakim',
-  name: 'خولة بنت حكيم',
+  name: 'خَوْلَةُ بِنْتُ حَكِيْمٍ',
   nameTransliterated: 'Khawlah bint Hakim',
   hasProfile: true,
   fields: {
     sex: { value: 'FEMALE', claims: ['khawlah-bint-hakim-siyar38/sex'] },
     fullName: {
-      value: 'خولة بنت حكيم',
+      value: 'خَوْلَةُ بِنْتُ حَكِيْمٍ',
       claims: ['khawlah-bint-hakim-siyar38/full-name'],
     },
   },

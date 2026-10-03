@@ -23,7 +23,7 @@ const taif = {
       isMuslim: true,
       status: ['INJURED'],
       summary: {
-        value: 'شَهِدَ قِتَالَ الطَّائِفِ، فَقُلِعَتْ عَيْنُهُ حِيْنَئِذٍ.',
+        value: 'وَشَهِدَ قِتَالَ الطَّائِفِ، فَقُلِعَتْ عَيْنُهُ حِيْنَئِذٍ،',
         claims: ['abu-sufyan-ibn-harb-siyar13/taif'],
       },
       claims: ['abu-sufyan-ibn-harb-siyar13/taif'],

@@ -3,19 +3,19 @@ import type { CatalogPerson } from '@/lib/catalog/types';
 const saadIbnMuadh = {
   kind: 'PERSON',
   slug: 'saad-ibn-muadh',
-  name: 'سعد بن معاذ',
+  name: 'سَعْدُ بنُ مُعَاذِ',
   nameTransliterated: 'Saad ibn Muadh',
   hasProfile: true,
   fields: {
     sex: { value: 'MALE', claims: ['saad-ibn-muadh-siyar56/sex'] },
     fullName: {
-      value: 'سعد بن معاذ بن النعمان بن امرئ القيس بن زيد بن عبد الأشهل الأنصاري الأوسي',
+      value: 'سَعْدُ بنُ مُعَاذِ بنِ النُّعْمَانِ بنِ امْرِئِ القَيْسِ الأَنْصَارِيُّ بنِ زَيْدِ بنِ عَبْدِ الأَشْهَلِ',
       claims: ['saad-ibn-muadh-siyar56/full-name'],
     },
-    kunya: { value: 'أبو عمرو', claims: ['saad-ibn-muadh-siyar56/kunya'] },
+    kunya: { value: 'أَبُو عَمْرٍو', claims: ['saad-ibn-muadh-siyar56/kunya'] },
     appearance: {
       value:
-        'كَانَ رَجُلاً أَبْيَضَ، طُوَالاً، جَمِيْلاً، حَسَنَ الوَجْهِ، أَعْيَنَ، حَسَنَ اللِّحْيَةِ.',
+        'رَجُلاً أَبْيَضَ، طُوَالاً، جَمِيْلاً، حَسَنَ الوَجْهِ، أَعْيَنَ، حَسَنَ اللِّحْيَةِ',
       claims: ['saad-ibn-muadh-siyar56/appearance'],
     },
     virtues: {

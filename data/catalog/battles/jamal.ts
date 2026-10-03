@@ -26,7 +26,7 @@ const jamal = {
       isMuslim: true,
       relation: 'ABSENT_FROM',
       summary: {
-        value: 'اعْتَزَلَ سَعْدٌ الفِتْنَةَ، فَلاَ حَضَرَ الجَمَلَ، وَلاَ صِفِّيْنَ، وَلاَ التَّحْكِيْمَ.',
+        value: 'اعْتَزَلَ سَعْدٌ الفِتْنَةَ، فَلاَ حَضَرَ الجَمَلَ، وَلاَ صِفِّيْنَ، وَلاَ التَّحْكِيْمَ',
         claims: ['saad/jamal'],
       },
       claims: ['saad/jamal'],
@@ -35,7 +35,7 @@ const jamal = {
       person: 'talhah-ibn-ubaydullah',
       isMuslim: true,
       status: ['MARTYRED'],
-      summary: { value: 'وَكَانَ طَلْحَةُ مِنْ أَوَّلِ قَتِيْلٍ.', claims: ['talhah/jamal'] },
+      summary: { value: 'وَكَانَ طَلْحَةُ مِنْ أَوَّلِ قَتِيْلٍ', claims: ['talhah/jamal'] },
       claims: ['talhah/jamal'],
     },
     {
@@ -43,7 +43,7 @@ const jamal = {
       isMuslim: true,
       status: ['MARTYRED'],
       summary: {
-        value: 'انْصَرَفَ يَوْمَ الجَمَلِ، فَطَعَنَهُ ابْنُ جُرْمُوْزٍ، فَوَقَعَ، وَدُفِنَ بِوَادِي السِّبَاعِ.',
+        value: 'فَطَعَنَهُ ابْنُ جُرْمُوْزٍ ثَانِياً، فَأَثْبَتَهُ، فَوَقَعَ، وَدُفِنَ بِوَادِي السِّبَاعِ',
         claims: ['zubayr/jamal'],
       },
       claims: ['zubayr/jamal'],

@@ -34,7 +34,7 @@ const mutah = {
       status: ['MARTYRED'],
       summary: {
         value:
-          'عقد له رسول الله على الناس في غزوة مؤتة وقدمه على الأمراء، فأخذ اللواء فقاتل حتى قتل طعناً بالرماح.',
+          'عَقَدَ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- لِزَيْدٍ عَلَى النَّاسِ فِي غَزْوَةِ مُؤْتَةَ، وَقَدَّمَهُ عَلَى الأُمَرَاءِ فَأَخَذَ زَيْدٌ اللِّوَاءَ، فَقَاتَلَ، وَقَاتَلَ مَعَهُ النَّاسُ حَتَّى قُتِلَ طَعْناً بِالرِّمَاحِ',
         claims: ['zaid-ibn-harithah-siyar36/mutah'],
       },
       claims: ['mutah/zayd-command', 'zaid-ibn-harithah-siyar36/mutah'],
@@ -45,7 +45,7 @@ const mutah = {
       status: ['MARTYRED'],
       summary: {
         value:
-          'أمره رسول الله صلى الله عليه وسلم على جيش مؤتة، فأخذ اللواء بعد زيد وشد على الناس حتى قتل.',
+          'أَمَّرَهُ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- عَلَى جَيْشِ غَزْوَةِ مُؤْتَةَ بِنَاحِيَةِ الكَرَكِ ثُمَّ أَخَذَ اللِّوَاءَ جَعْفَرٌ، فَشَدَّ عَلَى النَّاسِ حَتَّى قُتِلَ',
         claims: ['jaafar-ibn-abi-talib-siyar34/mutah'],
       },
       claims: ['jaafar-ibn-abi-talib-siyar34/mutah'],
@@ -55,7 +55,7 @@ const mutah = {
       isMuslim: true,
       status: ['MARTYRED'],
       summary: {
-        value: 'أخذ الراية بعد قتل صاحبيه فقاتل حتى قتل.',
+        value: 'ثُمَّ أَخَذَ الرَّايَةَ - يَعْنِي بَعْدَ قَتْلِ صَاحِبِهِ - ثُمَّ نَزَلَ، فَقَاتَلَ حَتَّى قُتِلَ',
         claims: ['abdullah-ibn-rawahah-siyar37/mutah'],
       },
       claims: ['abdullah-ibn-rawahah-siyar37/mutah'],
@@ -64,7 +64,7 @@ const mutah = {
       person: 'aqil-ibn-abi-talib',
       isMuslim: true,
       summary: {
-        value: 'خَرَجَ عَقِيْلٌ مُهَاجِراً فِي أَوَّلِ سَنَةِ ثَمَانٍ، وَشَهِدَ مُؤْتَةَ.',
+        value: 'خَرَجَ عَقِيْلٌ مُهَاجِراً فِي أَوَّلِ سَنَةِ ثَمَانٍ، وَشَهِدَ مُؤْتَةَ',
         claims: ['aqil-ibn-abi-talib-siyar35/mutah'],
       },
       claims: ['aqil-ibn-abi-talib-siyar35/mutah'],

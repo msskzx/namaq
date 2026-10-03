@@ -16,14 +16,14 @@ const bilalIbnRabah = {
     sex: { value: 'MALE', claims: ['bilal-ibn-rabah-siyar76/sex'] },
     // Carried from the retired seed entry, which took it from the Siyar
     // without citing it.
-    fullName: { value: 'بلال بن رباح', claims: ['bilal-ibn-rabah-siyar76/full-name'] },
+    fullName: { value: 'بِلاَلُ بنُ رَبَاحٍ', claims: ['bilal-ibn-rabah-siyar76/full-name'] },
     kunya: {
-      value: 'أبو عبد الكريم، وأبو عبد الله، وأبو عمرو',
+      value: 'أَبُو عَبْدِ الكَرِيْمِ، وَأَبُو عَبْدِ اللهِ، وَأَبُو عَمْرٍو',
       claims: ['bilal-ibn-rabah-siyar76/kunya'],
     },
     appearance: {
       value:
-        'رجل آدم شديد الأدمة، نحيف طوال أجنأ، له شعر كثير وخفيف العارضين، به شمط كثير، وكان لا يغير.',
+        'رَجُلاً آدَمَ، شَدِيْدَ الأُدْمَةِ، نَحِيْفاً، طُوَالاً، أَجْنَأَ ، لَهُ شَعْرٌ كَثِيْرٌ، وَخَفِيْفُ العَارِضَيْنِ، بِهِ شَمَطٌ كَثِيْرٌ، وَكَانَ لاَ يُغَيِّرُ',
       claims: ['bilal-ibn-rabah-siyar76/appearance'],
     },
     virtues: {

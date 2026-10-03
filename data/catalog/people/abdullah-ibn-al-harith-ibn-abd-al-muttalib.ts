@@ -9,15 +9,15 @@ const abdullahIbnAlHarithIbnAbdAlMuttalib = {
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
-      value: 'عبد الله بن الحارث بن عبد المطلب الهاشمي',
+      value: 'عَبْدُ اللهِ بنُ الحَارِثِ بنِ عَبْدِ المُطَّلِبِ الهَاشِمِيُّ',
       claims: ['abdullah-ibn-al-harith-ibn-abd-al-muttalib-siyar47/full-name'],
     },
     virtues: {
-      value: 'قيل إنه قال فيه: هو سعيد، أدركته السعادة.',
+      value: 'هُوَ سَعِيْدٌ، أَدْرَكَتْهُ السَّعَادَةُ',
       claims: ['abdullah-ibn-al-harith-ibn-abd-al-muttalib-siyar47/virtues'],
     },
     placeOfDeathArabic: {
-      value: 'الصفراء',
+      value: 'فَمَاتَ بِالصَّفْرَاءِ',
       claims: ['abdullah-ibn-al-harith-ibn-abd-al-muttalib-siyar47/death-place'],
     },
   },

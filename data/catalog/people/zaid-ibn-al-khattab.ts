@@ -11,17 +11,17 @@ const zaidIbnAlKhattab = {
   fields: {
     sex: { value: 'MALE', claims: ['zaid-ibn-al-khattab-siyar57/sex'] },
     fullName: {
-      value: 'زيد بن الخطاب بن نفيل بن عبد العزى بن رياح العدوي',
+      value: 'زَيْدُ بنُ الخَطَّابِ بنِ نُفَيْلِ بنِ عَبْدِ العُزَّى بنِ رِيَاحٍ العَدَوِيُّ',
       claims: ['zaid-ibn-al-khattab-siyar57/full-name'],
     },
-    kunya: { value: 'أبو عبد الرحمن', claims: ['zaid-ibn-al-khattab-siyar57/kunya'] },
+    kunya: { value: 'أَبُو عَبْدِ الرَّحْمَنِ', claims: ['zaid-ibn-al-khattab-siyar57/kunya'] },
     appearance: {
-      value: 'كان أسمر، طويلاً جداً.',
+      value: 'وَكَانَ أَسْمَرَ، طَوِيْلاً جِدّاً',
       claims: ['zaid-ibn-al-khattab-siyar57/appearance'],
     },
     virtues: {
       value:
-        'كان أسن من عمر، وأسلم قبله. وقال له عمر يوم بدر: البس درعي، فقال: إني أريد من الشهادة ما تريد، فتركاها جميعاً. وكانت راية المسلمين معه يوم اليمامة، فلم يزل يقدم بها في نحر العدو ثم قاتل حتى قتل، فأخذها سالم مولى أبي حذيفة. وحزن عليه عمر وكان يقول: أسلم قبلي، واستشهد قبلي، وما هبت الصبا إلا وأنا أجد ريح زيد.',
+        'كَانَ أَسَنَّ مِنْ عُمَرَ، وَأَسْلَمَ قَبْلَهُ وَلَقَدْ قَالَ لَهُ عُمَرُ يَوْم بَدْرٍ: الْبِسْ دِرْعِي قَالَ: إِنِّي أُرِيْدُ مِنَ الشَّهَادَةِ مَا تُرِيْدُ قَالَ: فَتَرَكَاهَا جَمِيْعاً، وَكَانَتْ رَايَةُ المُسْلِمِيْنَ مَعَهُ يَوْمَ اليَمَامَةِ، فَلَمْ يَزَلْ يَقْدَمُ بِهَا فِي نَحْرِ العَدُوِّ، ثُمَّ قَاتَلَ حَتَّى قُتِلَ، فَوَقَعَتْ الرَّايَةُ، فَأَخَذَهَا سَالِمٌ مَوْلَى أَبِي حُذَيْفَةَ وَحَزِنَ عَلَيْهِ عُمَرُ، وَكَانَ يَقُوْلُ: أَسْلَمَ قَبْلِي، وَاسْتُشْهِدَ قَبْلِي وَكَانَ يَقُوْلُ: مَا هَبَّتِ الصَّبَا إِلاَّ وَأَنَا أَجِدُ رِيْحَ زَيْدٍ',
       claims: [
         'zaid-ibn-al-khattab-siyar57/virtues-seniority',
         'zaid-ibn-al-khattab-siyar57/virtues-badr-armor',
@@ -30,7 +30,7 @@ const zaidIbnAlKhattab = {
       ],
     },
     deathYearHijri: { value: '12', claims: ['zaid-ibn-al-khattab-siyar57/death-year'] },
-    placeOfDeathArabic: { value: 'اليمامة', claims: ['zaid-ibn-al-khattab-siyar57/death-place'] },
+    placeOfDeathArabic: { value: 'اليَمَامَةِ', claims: ['zaid-ibn-al-khattab-siyar57/death-place'] },
   },
   titles: [
     {

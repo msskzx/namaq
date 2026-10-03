@@ -7,18 +7,18 @@ import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 const saadIbnKhaythamah = {
   kind: 'PERSON',
   slug: 'saad-ibn-khaythamah',
-  name: 'سعد بن خيثمة',
+  name: 'سَعْدُ بنُ خَيْثَمَةَ',
   nameTransliterated: 'Saad ibn Khaythamah',
   hasProfile: true,
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
-      value: 'سعد بن خيثمة بن الحارث بن مالك بن كعب بن النحاط بن كعب بن حارثة بن غنم بن السلم',
+      value: 'سَعْدُ بنُ خَيْثَمَةَ بنِ الحَارِثِ الأَنْصَارِيُّ الأَوْسِيُّ بنِ مَالِكِ بنِ كَعْبِ بنِ النَّحَّاطِ بنِ كَعْبِ بنِ حَارِثَةَ بنِ غَنْمِ بنِ السَّلْمِ',
       claims: ['saad-ibn-khaythamah-siyar52/full-name'],
     },
-    kunya: { value: 'أبو عبد الله', claims: ['saad-ibn-khaythamah-siyar52/kunya'] },
+    kunya: { value: 'أَبُو عَبْدِ اللهِ', claims: ['saad-ibn-khaythamah-siyar52/kunya'] },
     tribalAffiliation: {
-      value: 'الأنصاري، الأوسي، البدري',
+      value: 'الأَنْصَارِيُّ، الأَوْسِيُّ، البَدْرِيُّ',
       claims: ['saad-ibn-khaythamah-siyar52/tribal-affiliation'],
     },
     virtues: {
@@ -26,7 +26,7 @@ const saadIbnKhaythamah = {
         'قَالُوا: وَكَانَ أَحَدَ النُّقَبَاءِ الاثْنَيْ عَشَرَ. آخَى النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بَيْنَهُ وَبَيْنَ أَبِي سَلَمَةَ بنِ عَبْدِ الأَسَدِ. وَلَمَّا نَدَبَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- المُسْلِمِيْنَ يَوْمَ بَدْرٍ، فَأَسْرَعُوا، قَالَ خَيْثَمَةُ لابْنِهِ سَعْدٍ: آثِرْنِي بِالخُرُوْجِ، وَأَقِمْ مَعَ نِسَائِكَ. فَأَبَى، وَقَالَ: لَوْ كَانَ غَيْرَ الجَنَّةِ آثَرْتُكَ بِهِ.',
       claims: ['saad-ibn-khaythamah-siyar52/virtues'],
     },
-    placeOfDeathArabic: { value: 'بدر', claims: ['saad-ibn-khaythamah-siyar52/death-place'] },
+    placeOfDeathArabic: { value: 'بَدْرٍ', claims: ['saad-ibn-khaythamah-siyar52/death-place'] },
   },
   titles: [
     {

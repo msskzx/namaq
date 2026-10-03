@@ -7,7 +7,7 @@ import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 const saeedIbnZaid = {
   kind: 'PERSON',
   slug: 'saeed-ibn-zaid',
-  name: 'سعيد بن زيد',
+  name: 'سَعِيْدُ بنُ زَيْدِ',
   nameTransliterated: 'Sa\'id ibn Zayd',
   hasProfile: true,
 
@@ -15,7 +15,7 @@ const saeedIbnZaid = {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value:
-        'سَعِيْدُ بنُ زَيْدِ بنِ عَمْرِو بنِ نُفَيْلٍ، ابْنِ عَبْدِ العُزَّى بنِ رِيَاحِ بنِ قُرْطِ بنِ رَزَاحِ بنِ عَدِيِّ بنِ كَعْبِ بنِ لُؤَيِّ بنِ غَالِبٍ، أَبُو الأَعْوَرِ، القُرَشِيُّ، العَدَوِيُّ.',
+        'سَعِيْدُ بنُ زَيْدِ بنِ عَمْرِو بنِ نُفَيْلٍ العَدَوِيُّ بنِ عَبْدِ العُزَّى بنِ رِيَاحِ بنِ قُرْطِ بنِ رَزَاحِ بنِ عَدِيِّ بنِ كَعْبِ بنِ لُؤَيِّ بنِ غَالِبٍ، أَبُو الأَعْوَرِ، القُرَشِيُّ، العَدَوِيُّ.',
       claims: ['saeed/full-name'],
     },
     kunya: { value: 'أَبُو الأَعْوَرِ', claims: ['saeed/kunya'] },
@@ -23,7 +23,7 @@ const saeedIbnZaid = {
     // Al-Waqidi's is, and replaces it.
     appearance: { value: 'كَانَ سَعِيْدٌ رَجُلاً آدَمَ، طَوِيْلاً، أَشْعَرَ.', claims: ['saeed/appearance'] },
     virtues: {
-      value: 'شَهِدَ سَعِيْدٌ أُحُداً، وَالخَنْدَقَ، وَالحُدَيْبِيَةَ، وَالمَشَاهِدَ.',
+      value: 'شَهِدَ سَعِيْدٌ أُحُداً، وَالخَنْدَقَ، وَالحُدَيْبِيَةَ، وَالمَشَاهِدَ',
       claims: ['saeed/mashahid'],
     },
     // Al-Waqidi's 51 AH agrees with the burial account naming Sa'd ibn Abi

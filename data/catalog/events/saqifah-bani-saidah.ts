@@ -11,7 +11,7 @@ const saqifahBaniSaidah = {
     // prisma/eventSeedData.ts records as 11 AH; the entry states no year itself.
     hijriYear: { value: 11, claims: ['abu-ubaydah/saqifah-nomination'] },
     description: {
-      value: 'رشّح أبو بكر الصديق عمر بن الخطاب وأبا عبيدة بن الجراح للأمر يوم سقيفة بني ساعدة.',
+      value: 'وَقَالَ أَبُو بَكْرٍ الصِّدِّيْقُ وَقْتَ وَفَاةِ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِسَقِيْفَةِ بَنِي سَاعِدَةَ: قَدْ رَضِيْتُ لَكُم أَحَدَ هَذَيْنِ الرَّجُلَيْنِ: عُمَرَ، وَأَبَا عُبَيْدَةَ.',
       claims: ['abu-ubaydah/saqifah-nomination'],
     },
   },

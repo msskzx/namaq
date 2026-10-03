@@ -21,7 +21,7 @@ const yarmuk = {
       person: 'yazid-ibn-abi-sufyan',
       isMuslim: true,
       summary: {
-        value: 'كَانَ يَزِيْدُ بنُ أَبِي سُفْيَانَ عَلَى رُبُعٍ -يَعْنِي: يَوْمَ اليَرْمُوْكِ- وَلَمْ يَكُنْ يَوْمَئِذٍ عَلَيْهِم أَمِيْرٌ.',
+        value: 'كَانَ يَزِيْدُ بنُ أَبِي سُفْيَانَ عَلَى رُبُعٍ، وَأَبُو عُبَيْدَةَ عَلَى رُبُعٍ، وَعَمْرُو بنُ العَاصِ عَلَى رُبُعٍ، وَشُرَحْبِيْلُ بنُ حَسَنَةَ عَلَى رُبُعٍ -يَعْنِي: يَوْمَ اليَرْمُوْكِ- وَلَمْ يَكُنْ يَوْمَئِذٍ عَلَيْهِم أَمِيْرٌ.',
         claims: ['yazid-ibn-abi-sufyan-siyar68/yarmuk'],
       },
       claims: ['yazid-ibn-abi-sufyan-siyar68/yarmuk'],
@@ -32,7 +32,7 @@ const yarmuk = {
       person: 'az-zubayr-ibn-al-awwam',
       isMuslim: true,
       status: ['INJURED'],
-      summary: { value: 'ضُرِبَ ضَرْبَةً بِالسَّيْفِ يَوْمَ اليَرْمُوْكِ.', claims: ['zubayr/yarmuk'] },
+      summary: { value: 'كَانَ فِي الزُّبَيْرِ ثَلاَثُ ضَرَبَاتٍ بِالسَّيْفِ: إِحْدَاهُنَّ فِي عَاتِقِهِ، إِنْ كُنْتُ لأُدْخِلُ أَصَابِعِي فِيْهَا، ضُرِب ثِنْتَيْنِ يَوْمَ بَدْرٍ، وَوَاحِدَةً يَوْمَ اليَرْمُوْكِ.', claims: ['zubayr/yarmuk'] },
       claims: ['zubayr/yarmuk'],
     },
     // Commanded a division here. His own entry disagrees with itself on
@@ -53,7 +53,7 @@ const yarmuk = {
       isMuslim: true,
       status: ['MARTYRED'],
       summary: {
-        value: 'اسْتُشْهِدَ يَوْمَ اليَرْمُوْكِ مَعَ أَخَوَيْهِ.',
+        value: 'اسْتُشْهِدَ يَوْمَ اليَرْمُوْكِ - وَيُقَالُ: يَوْم أَجْنَادِيْنَ - مَعَ أَخَوَيْهِ',
         claims: ['amr-ibn-said-al-umawi-siyar50/yarmuk'],
       },
       claims: ['amr-ibn-said-al-umawi-siyar50/yarmuk'],
@@ -64,7 +64,7 @@ const yarmuk = {
       status: ['INJURED'],
       summary: {
         value:
-          'قُلِعَتْ عَيْنُهُ الأُخْرَى يَوْمَ اليَرْمُوْكِ؛ وَكَانَ تَحْتَ رَايَةِ وَلَدِهِ يَزِيْدَ، يُحَرِّضُ عَلَى الجِهَادِ وَيَصِيْحُ: يَا نَصْرَ اللهِ اقْتَرِبْ.',
+          'ثُمَّ قُلِعَتِ الأُخْرَى يَوْمَ اليَرْمُوْكِ، وَكَانَ يَوْمَئِذٍ قَدْ حَسُنَ - إِنْ شَاءَ اللهُ - إِيْمَانُهُ، فَإِنَّهُ كَانَ يَوْمَئِذٍ يُحَرِّضُ عَلَى الجِهَادِ. وَكَانَ تَحْتَ رَايَةِ وَلَدِهِ يَزِيْدَ، فَكَانَ يَصِيْحُ: يَا نَصْرَ اللهِ اقْتَرِبْ',
         claims: ['abu-sufyan-ibn-harb-siyar13/yarmuk'],
       },
       claims: ['abu-sufyan-ibn-harb-siyar13/yarmuk'],

@@ -13,7 +13,8 @@ const musabIbnUmayr = {
   fields: {
     sex: { value: 'MALE', claims: ['musab/sex'] },
     fullName: {
-      value: 'مصعب بن عمير بن هاشم بن عبد مناف بن عبد الدار بن قصي بن كلاب، القرشي، العبدري.',
+      value:
+        'مُصْعَبُ بنُ عُمَيْرِ بنِ هَاشِمِ بنِ عَبْدِ مَنَافٍ بنِ عَبْدِ الدَّارِ بنِ قُصَيِّ بنِ كِلاَبٍ',
       claims: ['musab/full-name'],
     },
     virtues: {
@@ -25,8 +26,18 @@ const musabIbnUmayr = {
   titles: [
     // Carried from the retired seed entry. The Siyar entry never calls him
     // صحابي in so many words, so this stays legacy rather than promoted.
-    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
-    { title: 'al-sabiqoon', name: 'السابقون', nameTransliterated: 'Al-Sabiqoon', claims: ['musab/titles'] },
+    {
+      title: 'companion',
+      name: 'صحابي',
+      nameTransliterated: 'Companion',
+      claims: legacyUnreviewed,
+    },
+    {
+      title: 'al-sabiqoon',
+      name: 'السابقون',
+      nameTransliterated: 'Al-Sabiqoon',
+      claims: ['musab/titles'],
+    },
   ],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'umayr-ibn-hashim', claims: ['musab/father'] },

@@ -3,7 +3,7 @@ import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 const khadijahBintKhuwaylid = {
   kind: 'PERSON',
   slug: 'khadijah-bint-khuwaylid',
-  name: 'خديجة بنت خويلد',
+  name: 'خَدِيْجَةُ بِنْتُ خُوَيْلِدِ',
   nameTransliterated: 'Khadijah bint Khuwaylid',
   hasProfile: true,
   fields: {
@@ -11,7 +11,7 @@ const khadijahBintKhuwaylid = {
       value: 'خديجة بنت خويلد بن أسد بن عبد العزى بن قصي بن كلاب القرشية الأسدية',
       claims: ['khadijah-siyar/full-name'],
     },
-    kunya: { value: 'أم القاسم', claims: ['khadijah-siyar/kunya'] },
+    kunya: { value: 'أُمُّ القَاسِمِ', claims: ['khadijah-siyar/kunya'] },
     sex: { value: 'FEMALE', claims: ['khadijah/sex'] },
     virtues: {
       value:

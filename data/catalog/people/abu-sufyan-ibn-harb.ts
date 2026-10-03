@@ -15,17 +15,17 @@ const abuSufyanIbnHarb = {
   fields: {
     sex: { value: 'MALE', claims: ['abu-sufyan-ibn-harb-siyar13/sex'] },
     fullName: {
-      value: 'صخر بن حرب بن أمية بن عبد شمس بن عبد مناف بن قصي بن كلاب القرشي الأموي',
+      value: 'صَخْرُ بنُ حَرْبِ بنِ أُمَيَّةَ الأُمَوِيُّ بنِ عَبْدِ شَمْسٍ بنِ عَبْدِ مَنَافٍ بنِ قُصَيِّ بنِ كِلاَبٍ',
       claims: ['abu-sufyan-ibn-harb-siyar13/full-name'],
     },
-    kunya: { value: 'أبو سفيان', claims: ['abu-sufyan-ibn-harb-siyar13/kunya'] },
+    kunya: { value: 'أَبُو سُفْيَانَ', claims: ['abu-sufyan-ibn-harb-siyar13/kunya'] },
     virtues: {
       value:
-        'من دهاة العرب ومن أهل الرأي والشرف فيهم؛ حسن إسلامه وحسن إيمانه؛ كان يوم اليرموك يحرّض على الجهاد ويقف على الكراديس يذكّر؛ وحديثه عن هرقل يدل على إيمانه.',
+        'مِنْ دُهَاةِ العَرَبِ، وَمِنْ أَهْلِ الرَّأْيِ وَالشَّرَفِ فِيْهِمْ وَكَانَ يَوْمَئِذٍ قَدْ حَسُنَ - إِنْ شَاءَ اللهُ - إِيْمَانُهُ، فَإِنَّهُ كَانَ يَوْمَئِذٍ يُحَرِّضُ عَلَى الجِهَادِ وَكَانَ يَقِفُ عَلَى الكَرَادِيْسِ يُذَكِّرُ حَدِيْثَهُ عَنْ هِرَقْلَ وَكِتَابِ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَدُلُّ عَلَى إِيْمَانِهِ',
       claims: ['abu-sufyan-ibn-harb-siyar13/virtues'],
     },
     deathYearHijri: { value: '31', claims: ['abu-sufyan-ibn-harb-siyar13/death-year'] },
-    placeOfDeathArabic: { value: 'المدينة', claims: ['abu-sufyan-ibn-harb-siyar13/death-place'] },
+    placeOfDeathArabic: { value: 'المَدِيْنَةِ', claims: ['abu-sufyan-ibn-harb-siyar13/death-place'] },
   },
   titles: [
     {

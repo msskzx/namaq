@@ -10,12 +10,12 @@ const asadIbnZurarah = {
   hasProfile: true,
   fields: {
     fullName: {
-      value: 'أسعد بن زرارة بن عدس بن عبيد بن ثعلبة بن غنم بن مالك بن النجار',
+      value: 'أَسَعْدُ بنُ زُرَارَةَ بنِ عُدَسَ بنِ عُبَيْدِ بنِ ثَعْلَبَةَ الأَنْصَارِيُّ بنِ غَنْمِ بنِ مَالِكِ بنِ النَّجَّارِ.',
       claims: ['asad-ibn-zurarah-siyar58/full-name'],
     },
     sex: { value: 'MALE', claims: ['asad/sex'] },
     kunya: {
-      value: 'أبو أمامة',
+      value: 'أَبُو أُمَامَةَ',
       claims: ['asad-ibn-zurarah-siyar58/kunya'],
     },
     tribalAffiliation: {

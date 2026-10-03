@@ -14,12 +14,12 @@ const abuDharrAlGhifari = {
   fields: {
     sex: { value: 'MALE', claims: ['abu-dharr-al-ghifari-siyar10/sex'] },
     fullName: {
-      value: 'جندب بن جنادة الغفاري',
+      value: 'جُنْدُبُ بنُ جُنَادَةَ الغِفَارِيُّ',
       claims: ['abu-dharr-al-ghifari-siyar10/full-name'],
     },
-    kunya: { value: 'أبو ذر', claims: ['abu-dharr-al-ghifari-siyar10/kunya'] },
+    kunya: { value: 'أَبُو ذَرٍّ', claims: ['abu-dharr-al-ghifari-siyar10/kunya'] },
     appearance: {
-      value: 'آدم، ضخم جسيم كث اللحية؛ طوال أبيض الرأس واللحية',
+      value: 'كَانَ آدَمَ، ضَخْماً، جَسِيْماً، كَثَّ اللِّحْيَةِ. رَجُلٌ طُوَالٌ، آدَمُ، أَبْيَضُ الرَّأْسِ وَاللِّحْيَةِ',
       claims: ['abu-dharr-al-ghifari-siyar10/appearance'],
     },
     virtues: {
@@ -28,7 +28,7 @@ const abuDharrAlGhifari = {
       claims: ['abu-dharr/rubu-al-islam', 'abu-dharr-al-ghifari-siyar10/virtues'],
     },
     deathYearHijri: { value: '32', claims: ['abu-dharr-al-ghifari-siyar10/death-year'] },
-    placeOfDeathArabic: { value: 'الربذة', claims: ['abu-dharr-al-ghifari-siyar10/death-place'] },
+    placeOfDeathArabic: { value: 'الرَّبَذَةِ', claims: ['abu-dharr-al-ghifari-siyar10/death-place'] },
   },
   titles: [
     {

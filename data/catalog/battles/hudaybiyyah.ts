@@ -35,7 +35,7 @@ const hudaybiyyah = {
       person: 'suhail-ibn-amr',
       isMuslim: false,
       summary: {
-        value: 'لَمَّا أَقْبَلَ فِي شَأْنِ الصُّلْحِ: قَالَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-: (سَهُلَ أَمْرُكُم) .',
+        value: 'لَمَّا أَقْبَلَ فِي شَأْنِ الصُّلْحِ: قَالَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-: (سَهُلَ أَمْرُكُم )',
         claims: ['suhail-ibn-amr-siyar25/hudaybiyyah'],
       },
       claims: ['suhail-ibn-amr-siyar25/hudaybiyyah'],
@@ -49,13 +49,13 @@ const hudaybiyyah = {
     {
       person: 'nawfal-ibn-al-harith',
       isMuslim: true,
-      summary: { value: 'شَهِدَ بَيْعَةَ الرِّضْوَانِ.', claims: ['nawfal-ibn-al-harith-siyar27/hudaybiyyah'] },
+      summary: { value: 'شَهِدَ نَوْفَلُ بَيْعَةَ الرّضْوَانِ', claims: ['nawfal-ibn-al-harith-siyar27/hudaybiyyah'] },
       claims: ['nawfal-ibn-al-harith-siyar27/hudaybiyyah'],
     },
     {
       person: 'thabit-ibn-qais',
       isMuslim: true,
-      summary: { value: 'شَهِدَ بَيْعَةَ الرِّضْوَانِ.', claims: ['thabit-ibn-qais-siyar61/hudaybiyyah'] },
+      summary: { value: 'شَهِدَ أُحُداً، وَبَيْعَةَ الرُّضْوَانِ', claims: ['thabit-ibn-qais-siyar61/hudaybiyyah'] },
       claims: ['thabit-ibn-qais-siyar61/hudaybiyyah'],
     },
     // Carried from the old seed when he left it; no batch places him here yet.
