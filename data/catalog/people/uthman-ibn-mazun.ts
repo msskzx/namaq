@@ -13,12 +13,12 @@ const uthmanIbnMazun = {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
       value:
-        'عُثْمَانُ بنُ مَظْعُوْنِ بنِ حَبِيْبِ بنِ وَهْبٍ بنِ حُذَافَةَ بنِ جُمَح بنِ عَمْرِو بنِ هُصَيْصِ بنِ كَعْبٍ الجُمَحِيُّ.',
+        'عُثْمَانُ بنُ مَظْعُوْنِ بنِ حَبِيْبِ بنِ وَهْبٍ بنِ حُذَافَةَ بنِ جُمَح بنِ عَمْرِو بنِ هُصَيْصِ بنِ كَعْبٍ الجُمَحِيُّ',
       claims: ['uthman-mazun-siyar9/full-name'],
     },
     kunya: { value: 'أَبُو السَّائِبِ', claims: ['uthman-mazun-siyar9/kunya'] },
     appearance: {
-      value: 'كَانَ عُثْمَانُ شَدِيْدَ الأُدْمَة، كَبِيْرَ اللِّحْيَة.',
+      value: 'كَانَ عُثْمَانُ شَدِيْدَ الأُدْمَة، كَبِيْرَ اللِّحْيَة',
       claims: ['uthman-mazun-siyar9/appearance'],
     },
     virtues: {
