@@ -10,7 +10,7 @@ export function cleanPassage(text: string): string {
     .replace(ENTRY_NUMBER, '')
     .replace(COLLECTION_MARKS, ' ')
     .replace(FOOTNOTE_MARKER, ' ')
-    .replace(/\s+\./g, '.')
+    .replace(/\s+([،؛:.!؟])/g, '$1')
     .replace(/\s+/g, ' ')
     .trim();
 }
