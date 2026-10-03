@@ -15,13 +15,13 @@ import type { CatalogPerson } from '@/lib/catalog/types';
 const jamilahBintAbdAllahIbnAbi = {
   kind: 'PERSON',
   slug: 'jamilah-bint-abd-allah-ibn-abi',
-  name: 'جميلة بنت عبد الله بن أبي',
+  name: 'جَمِيْلَةَ بِنْتِ عَبْدِ اللهِ بنِ أُبَيِّ',
   nameTransliterated: 'Jamilah bint Abdullah ibn Abi',
   hasProfile: false,
   fields: {
     sex: { value: 'FEMALE', claims: ['jamilah-bint-abd-allah-ibn-abi-siyar61/sex'] },
     fullName: {
-      value: 'جميلة بنت عبد الله بن أبي ابن سلول',
+      value: 'جَمِيْلَةَ بِنْتِ عَبْدِ اللهِ بنِ أُبَيِّ ابْنِ سَلُوْلٍ',
       claims: ['jamilah-bint-abd-allah-ibn-abi-siyar61/full-name'],
     },
   },
