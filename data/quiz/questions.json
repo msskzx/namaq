@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-29T21:38:46.057Z",
+  "generatedAt": "2026-10-03T11:03:06.105Z",
   "questions": [
     {
       "key": "AYAH_LINK:PERSON:abdur-rahman-ibn-awf:ayat:48:18",
@@ -3822,11 +3822,11 @@
         ]
       },
       "fingerprint": "77a9ac560eded72c683efc8712e3812fede3ea824872cd444f6611668d343200",
-      "promptArabicOverride": null,
-      "status": "REJECTED",
-      "rejectionReason": "kunya mechanically present in subject's own displayed name ('أبو عبيدة بن الجراح')",
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
-      "reviewedBy": "Claude"
+      "promptArabicOverride": "ما كنية عامر بن عبد الله؟",
+      "status": "APPROVED",
+      "rejectionReason": null,
+      "reviewedAt": "2026-10-03T11:03:28.418Z",
+      "reviewedBy": "Codex"
     },
     {
       "key": "KUNYA:PERSON:al-baraa-ibn-marur:kunya:أبو بشر",
@@ -4660,9 +4660,9 @@
       },
       "fingerprint": "bd3a40958f2b34b4cf78f4b09cf6b32b487eabb3db923cb3e67380273da84899",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» لقب مشترك بين أشخاص كثيرين؛ يناسب سؤال اختيار متعدد عن ألقاب الشخص، لا سؤال اختيار واحد.",
+      "reviewedAt": "2026-10-03T11:05:47.535Z",
       "reviewedBy": "Codex"
     },
     {
@@ -4880,9 +4880,9 @@
       },
       "fingerprint": "95d6993abc3c482541f9d6578a7e9a7cbbbb596cb7cc4c4f4d64f415eeb67054",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» لقب مشترك بين أشخاص كثيرين؛ يناسب سؤال اختيار متعدد عن ألقاب الشخص، لا سؤال اختيار واحد.",
+      "reviewedAt": "2026-10-03T11:05:47.535Z",
       "reviewedBy": "Codex"
     },
     {
@@ -5012,9 +5012,9 @@
       },
       "fingerprint": "d2d6cfbde7c89b0e19d97ab2883f5cbe43cecf025290b7d21a89000851cdd40f",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» لقب مشترك بين أشخاص كثيرين؛ يناسب سؤال اختيار متعدد عن ألقاب الشخص، لا سؤال اختيار واحد.",
+      "reviewedAt": "2026-10-03T11:05:47.535Z",
       "reviewedBy": "Codex"
     },
     {
@@ -5100,9 +5100,9 @@
       },
       "fingerprint": "5ad1fd74036a92aab1e64d605df7344ad6108caa9cc9da09e20f51078d616538",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» لقب مشترك بين أشخاص كثيرين؛ يناسب سؤال اختيار متعدد عن ألقاب الشخص، لا سؤال اختيار واحد.",
+      "reviewedAt": "2026-10-03T11:05:47.535Z",
       "reviewedBy": "Codex"
     },
     {
@@ -5364,9 +5364,9 @@
       },
       "fingerprint": "2ca63a659c377a30e1c71e90a0c6724b5c178679c75d90e1e7a201de09d073f2",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» لقب مشترك بين أشخاص كثيرين؛ يناسب سؤال اختيار متعدد عن ألقاب الشخص، لا سؤال اختيار واحد.",
+      "reviewedAt": "2026-10-03T11:05:47.535Z",
       "reviewedBy": "Codex"
     },
     {
@@ -5476,16 +5476,16 @@
           "labelArabic": "ذات النطاقين"
         },
         {
-          "value": "the-last",
-          "labelArabic": "العاقب"
+          "value": "siddiqa",
+          "labelArabic": "صديقة"
         },
         {
-          "value": "hawari-al-ummah",
-          "labelArabic": "حواري الأمة"
+          "value": "first-wife",
+          "labelArabic": "أول زوجات النبي"
         },
         {
-          "value": "master-of-children-of-adam",
-          "labelArabic": "سيد ولد آدم"
+          "value": "mother-of-believers",
+          "labelArabic": "أم المؤمنين"
         }
       ],
       "correctAnswer": "dhat-an-nitaqayn",
@@ -5494,11 +5494,11 @@
           "asma/dhat-an-nitaqayn"
         ]
       },
-      "fingerprint": "df52b888b436c41d5c75c127bfbf785fafdfce90a7d4f42e9c06e100c9c1bda9",
+      "fingerprint": "0c5f80bd8ab8fcb9703857e14e84ad1f86e818b0338be459c3cf0d46d4576c4b",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "reviewedAt": "2026-10-03T10:57:28.601Z",
       "reviewedBy": "Codex"
     },
     {
@@ -5541,10 +5541,10 @@
       },
       "fingerprint": "659c680a06c8f6d9bb1cdd2e257cdd5b215937e91b92dd931494d8a87ad3ab2d",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
-      "reviewedBy": "Claude"
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» لقب مشترك بين أشخاص كثيرين؛ يناسب سؤال اختيار متعدد عن ألقاب الشخص، لا سؤال اختيار واحد.",
+      "reviewedAt": "2026-10-03T11:05:47.535Z",
+      "reviewedBy": "Codex"
     },
     {
       "key": "PERSON_TITLE:PERSON:az-zubayr-ibn-al-awwam:titles:companion",
@@ -6158,9 +6158,9 @@
       },
       "fingerprint": "8bb40760fe0b8823a613c8dfd8fd92a6280ad157b9f9ad35eddac6e5f6b3ce4c",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» لقب مشترك بين أشخاص كثيرين؛ يناسب سؤال اختيار متعدد عن ألقاب الشخص، لا سؤال اختيار واحد.",
+      "reviewedAt": "2026-10-03T11:05:47.535Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6202,9 +6202,9 @@
       },
       "fingerprint": "6ba1bb738a2ed36e3dba14b8e7efb5b416d18109fbbb4baf3b3ed0d0a3407418",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:44.340Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6246,9 +6246,9 @@
       },
       "fingerprint": "91d71e6c5fef84c4257d54bd50cfec15beca5bf59e4ab0ed0e067cf3f2358fa1",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» لقب مشترك بين أشخاص كثيرين؛ يناسب سؤال اختيار متعدد عن ألقاب الشخص، لا سؤال اختيار واحد.",
+      "reviewedAt": "2026-10-03T11:05:47.535Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6290,9 +6290,9 @@
       },
       "fingerprint": "829b108dc8e112a37d5b567a5a38f2220f20b3bf8de8b75a49bbdbc1b16f864d",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:45.560Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6334,9 +6334,9 @@
       },
       "fingerprint": "90ef5cfa2c3e2877e49f86b0fa0675cfe2c88660e34d6418eaf509d931913483",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:46.797Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6378,9 +6378,9 @@
       },
       "fingerprint": "9cd08a3e11cfb2284a9e621262ae18913533acddf6ea1b54fd7dd4ebc8272e9e",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:48.004Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6422,9 +6422,9 @@
       },
       "fingerprint": "5358c94ac7ef040c6287859438baf5f6a7b7efb53f2263d396206792ef9ff9cb",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:49.315Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6466,9 +6466,9 @@
       },
       "fingerprint": "2cdd497ae21a5ca5045584d4fca4d39874a2404d1be036213911d5bcc16d7169",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:50.472Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6510,9 +6510,9 @@
       },
       "fingerprint": "29be0a5f59a163f6a8b4753d598e98adff25b8c45bb1ece5133e4da1d2c3620c",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:51.627Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6554,9 +6554,9 @@
       },
       "fingerprint": "5e3c91b47a0652136dfa16c7ef6857a8566af79086105924d6efd8618b797218",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:52.777Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6598,10 +6598,10 @@
       },
       "fingerprint": "bf426394741b3e427ab556399562bfafde54a1b1e9826ae1bfe5f4a95d28f1ac",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
-      "reviewedBy": "Claude"
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:53.948Z",
+      "reviewedBy": "Codex"
     },
     {
       "key": "PERSON_TITLE:PERSON:prophet-muhammad:titles:truthful-trustworthy",
@@ -6642,9 +6642,9 @@
       },
       "fingerprint": "578748c682ed00811635dd1c278fac3dfe3488c4e27ed3587db4d37ae8a5dab4",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:55.097Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6731,9 +6731,9 @@
       },
       "fingerprint": "de56de5cbb8cf8f13d6d1d36b0a376bff217f563ac4ca1dc104f261d7ed06826",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» لقب مشترك بين أشخاص كثيرين؛ يناسب سؤال اختيار متعدد عن ألقاب الشخص، لا سؤال اختيار واحد.",
+      "reviewedAt": "2026-10-03T11:05:47.535Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6995,9 +6995,9 @@
       },
       "fingerprint": "875e2dc5ae6cec9f71c9f733e2f4c1b7ff54181f10ab39f261e6d42f554a41df",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» لقب مشترك بين أشخاص كثيرين؛ يناسب سؤال اختيار متعدد عن ألقاب الشخص، لا سؤال اختيار واحد.",
+      "reviewedAt": "2026-10-03T11:05:47.535Z",
       "reviewedBy": "Codex"
     },
     {
@@ -7172,9 +7172,9 @@
       },
       "fingerprint": "c84374ecba150bcf277c06bbab4ef28a78d59ac6a5f211f236d07d5fd3edeaf5",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» لقب مشترك بين أشخاص كثيرين؛ يناسب سؤال اختيار متعدد عن ألقاب الشخص، لا سؤال اختيار واحد.",
+      "reviewedAt": "2026-10-03T11:05:47.535Z",
       "reviewedBy": "Codex"
     },
     {
@@ -7336,8 +7336,8 @@
           "labelArabic": "بنت النبي"
         },
         {
-          "value": "killer-of-abu-jahl",
-          "labelArabic": "قاتل أبي جهل"
+          "value": "umm-al-masakeen",
+          "labelArabic": "أم المساكين"
         }
       ],
       "correctAnswer": "mother-of-believers",
@@ -7346,12 +7346,12 @@
           "umm-salamah/umm-al-mumineen"
         ]
       },
-      "fingerprint": "49487c40ad823d8a95d1a89f189dc2f24b5389802960cfe722a10f064248fa02",
+      "fingerprint": "3359016b20f4d1897681c298032db0fa875c05c3fe359c26762769d8ed3b0a2d",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
-      "reviewedBy": "Claude"
+      "reviewedAt": "2026-10-03T10:57:29.134Z",
+      "reviewedBy": "Codex"
     },
     {
       "key": "PERSON_TITLE:PERSON:uthman-ibn-affan:titles:al-sabiqoon",
@@ -7392,9 +7392,9 @@
       },
       "fingerprint": "bee75703f0f75a7504684a0b784d6d9ef2e603e782e7d23cdcba4f43b1cc5f36",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» لقب مشترك بين أشخاص كثيرين؛ يناسب سؤال اختيار متعدد عن ألقاب الشخص، لا سؤال اختيار واحد.",
+      "reviewedAt": "2026-10-03T11:05:47.535Z",
       "reviewedBy": "Codex"
     },
     {
@@ -7416,16 +7416,16 @@
           "labelArabic": "أم المؤمنين"
         },
         {
-          "value": "messenger",
-          "labelArabic": "رسول"
-        },
-        {
           "value": "sayyidat-nisa-ahl-al-jannah",
           "labelArabic": "سيدة نساء أهل الجنة"
         },
         {
-          "value": "hawari-al-ummah",
-          "labelArabic": "حواري الأمة"
+          "value": "siddiqa",
+          "labelArabic": "صديقة"
+        },
+        {
+          "value": "first-wife",
+          "labelArabic": "أول زوجات النبي"
         }
       ],
       "correctAnswer": "mother-of-believers",
@@ -7434,11 +7434,11 @@
           "zaynab-khuzaymah/umm-al-mumineen"
         ]
       },
-      "fingerprint": "859612403f9904962a488415470fccd672aa62adb016040ad5faf8ed9bc8abd9",
+      "fingerprint": "c9ef3f5e263209e03166743a8c8bafbcf23f5323da895bb5d3316479afc8c7ce",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T09:44:56.060Z",
+      "reviewedAt": "2026-10-03T10:57:29.851Z",
       "reviewedBy": "Codex"
     },
     {
@@ -7468,8 +7468,8 @@
           "labelArabic": "سيدة نساء أهل الجنة"
         },
         {
-          "value": "the-gatherer",
-          "labelArabic": "الحاشر"
+          "value": "daughter-of-prophet",
+          "labelArabic": "بنت النبي"
         }
       ],
       "correctAnswer": "umm-al-masakeen",
@@ -7478,11 +7478,11 @@
           "zaynab-khuzaymah/umm-al-masakeen"
         ]
       },
-      "fingerprint": "2d7eb52bd22b7c1bf500fc0643b4e99798ec08b7ee77ad3f7f1144fcdece63fd",
+      "fingerprint": "253d1aa050f3661dd95a175c31fb4e3910fe7b6289c5fb7d7890edbcbd27c5a0",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T09:44:56.402Z",
+      "reviewedAt": "2026-10-03T10:57:30.521Z",
       "reviewedBy": "Codex"
     },
     {
@@ -14815,9 +14815,9 @@
       },
       "fingerprint": "33996bf148ab7108087acae8e853218ed2f6115d405f27465bd28e8b7011c286",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.413Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:44.945Z",
       "reviewedBy": "Codex"
     },
     {
@@ -14880,19 +14880,19 @@
       "choices": [
         {
           "value": "talhah-ibn-ubaydullah",
-          "labelArabic": "طلحة بن عبيد الله"
+          "labelArabic": "طَلْحَةُ بنُ عُبَيْدِ اللهِ"
         },
         {
           "value": "rabiah-ibn-al-harith",
           "labelArabic": "ربيعة بن الحارث"
         },
         {
-          "value": "fatimah-bint-muhammad",
-          "labelArabic": "فاطمة بنت محمد"
-        },
-        {
           "value": "abd-al-uzza-ibn-yazid",
           "labelArabic": "عبد العزى بن يزيد"
+        },
+        {
+          "value": "ubaydah-ibn-al-harith",
+          "labelArabic": "عبيدة بن الحارث"
         }
       ],
       "correctAnswer": "talhah-ibn-ubaydullah",
@@ -14901,11 +14901,11 @@
           "talhah/al-qarinayn"
         ]
       },
-      "fingerprint": "1046711a5003a8559f33335ccf17cbe8c14df1cf166a98d79584e9461d2b3d61",
+      "fingerprint": "0bb90938a79110ea1b6a927baf6944d1797b7f5492d900b67d8ef5736541eea6",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "reviewedAt": "2026-10-03T11:03:24.357Z",
       "reviewedBy": "Codex"
     },
     {
@@ -14948,9 +14948,9 @@
       },
       "fingerprint": "e8a62ff72faef37361c94a64cbefa15458d897ca8e41956df5facc77d12792a6",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» لقب مشترك بين أشخاص كثيرين؛ يناسب سؤال اختيار متعدد عن ألقاب الشخص، لا سؤال اختيار واحد.",
+      "reviewedAt": "2026-10-03T11:05:48.113Z",
       "reviewedBy": "Codex"
     },
     {
@@ -14992,9 +14992,9 @@
       },
       "fingerprint": "d66812f0378e24e613ab2f9dbc01bdb50f4fb1c9a626125ca46435aa3f076ec1",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» لقب مشترك بين أشخاص كثيرين؛ يناسب سؤال اختيار متعدد عن ألقاب الشخص، لا سؤال اختيار واحد.",
+      "reviewedAt": "2026-10-03T11:05:48.114Z",
       "reviewedBy": "Codex"
     },
     {
@@ -15036,9 +15036,9 @@
       },
       "fingerprint": "ee6dbd47cf35a779f532d9fc5e5d4a857b91503e81bfef34b6f0302c82c09939",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» لقب مشترك بين أشخاص كثيرين؛ يناسب سؤال اختيار متعدد عن ألقاب الشخص، لا سؤال اختيار واحد.",
+      "reviewedAt": "2026-10-03T11:05:48.114Z",
       "reviewedBy": "Codex"
     },
     {
@@ -15080,9 +15080,9 @@
       },
       "fingerprint": "1f1340f327c5b17c715b1d7ff907b49c4373893e876fed3ff28a76efb77ed085",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» لقب مشترك بين أشخاص كثيرين؛ يناسب سؤال اختيار متعدد عن ألقاب الشخص، لا سؤال اختيار واحد.",
+      "reviewedAt": "2026-10-03T11:05:48.114Z",
       "reviewedBy": "Codex"
     },
     {
@@ -15124,9 +15124,9 @@
       },
       "fingerprint": "5f278347c53b2484356ff9657f5998a4ee6b74834fd74775670ecdd2ccaced4e",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» لقب مشترك بين أشخاص كثيرين؛ يناسب سؤال اختيار متعدد عن ألقاب الشخص، لا سؤال اختيار واحد.",
+      "reviewedAt": "2026-10-03T11:05:48.114Z",
       "reviewedBy": "Codex"
     },
     {
@@ -15169,9 +15169,9 @@
       },
       "fingerprint": "d6efd63e056615d2f1bb79009b5d9f5724367ee584b9c9b2bd2f4bed8808fac2",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» لقب مشترك بين أشخاص كثيرين؛ يناسب سؤال اختيار متعدد عن ألقاب الشخص، لا سؤال اختيار واحد.",
+      "reviewedAt": "2026-10-03T11:05:48.114Z",
       "reviewedBy": "Codex"
     },
     {
@@ -15213,9 +15213,9 @@
       },
       "fingerprint": "1c31c2bb6f9437eff48028a0b68da9b8f1ea33167394d4db687dbdea8fbeec0d",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» لقب مشترك بين أشخاص كثيرين؛ يناسب سؤال اختيار متعدد عن ألقاب الشخص، لا سؤال اختيار واحد.",
+      "reviewedAt": "2026-10-03T11:05:48.114Z",
       "reviewedBy": "Codex"
     },
     {
@@ -15257,9 +15257,9 @@
       },
       "fingerprint": "c4ce6f8db5d05ece9ad4a9a3be8ddc3a36f1d342686981accffbd79d96b3ab8d",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» لقب مشترك بين أشخاص كثيرين؛ يناسب سؤال اختيار متعدد عن ألقاب الشخص، لا سؤال اختيار واحد.",
+      "reviewedAt": "2026-10-03T11:05:48.114Z",
       "reviewedBy": "Codex"
     },
     {
@@ -15302,9 +15302,9 @@
       },
       "fingerprint": "42d81969843fdc678e229dd85967ed7d616f6ce03e6b255cd7e516206f49bf3d",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» لقب مشترك بين أشخاص كثيرين؛ يناسب سؤال اختيار متعدد عن ألقاب الشخص، لا سؤال اختيار واحد.",
+      "reviewedAt": "2026-10-03T11:05:48.114Z",
       "reviewedBy": "Codex"
     },
     {
@@ -15346,9 +15346,9 @@
       },
       "fingerprint": "d1ed564f75dcb86e80ec0ab040e69dc11d2ed4c3850067219499c4bff8089016",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» لقب مشترك بين أشخاص كثيرين؛ يناسب سؤال اختيار متعدد عن ألقاب الشخص، لا سؤال اختيار واحد.",
+      "reviewedAt": "2026-10-03T11:05:48.114Z",
       "reviewedBy": "Codex"
     },
     {
@@ -15391,9 +15391,9 @@
       },
       "fingerprint": "0d8c882ab9937a6fdf39881da6df0e05722b444695b3fae970f0ca796094b7e8",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» لقب مشترك بين أشخاص كثيرين؛ يناسب سؤال اختيار متعدد عن ألقاب الشخص، لا سؤال اختيار واحد.",
+      "reviewedAt": "2026-10-03T11:05:48.114Z",
       "reviewedBy": "Codex"
     },
     {
@@ -15435,9 +15435,9 @@
       },
       "fingerprint": "45d9d13b8ccbfce99d9e0c85bb49e813602e0ff8eabfe3c62292a6a58cc0bc42",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» لقب مشترك بين أشخاص كثيرين؛ يناسب سؤال اختيار متعدد عن ألقاب الشخص، لا سؤال اختيار واحد.",
+      "reviewedAt": "2026-10-03T11:05:48.114Z",
       "reviewedBy": "Codex"
     },
     {
@@ -16552,23 +16552,23 @@
       "personSlugs": [
         "asma-bint-abi-bakr"
       ],
-      "promptArabic": "من حمل لقب «ذات النطاقين»؟",
+      "promptArabic": "من حملت لقب «ذات النطاقين»؟",
       "choices": [
         {
           "value": "asma-bint-abi-bakr",
           "labelArabic": "أسماء بنت أبي بكر"
         },
         {
-          "value": "imru-al-qays-ibn-zayd",
-          "labelArabic": "امرؤ القيس بن زيد"
+          "value": "sumayyah-bint-khayyat",
+          "labelArabic": "سمية بنت خياط"
         },
         {
-          "value": "yasaf-ibn-inabah",
-          "labelArabic": "يساف بن عنبة"
+          "value": "umm-sulaym-al-ghumaysa",
+          "labelArabic": "أم سليم الغميصاء"
         },
         {
-          "value": "bukayr-ibn-abd-manat",
-          "labelArabic": "بكير بن عبد مناة"
+          "value": "raitah-bint-al-hajjaj",
+          "labelArabic": "رائطة بنت الحجاج"
         }
       ],
       "correctAnswer": "asma-bint-abi-bakr",
@@ -16577,11 +16577,11 @@
           "asma/dhat-an-nitaqayn"
         ]
       },
-      "fingerprint": "2c844cff1514877577436d39b3ecdf39d1198ccdaeecead767779ee15f79a084",
+      "fingerprint": "582183074fcf64656b9dd2dcc47999d95865a45f059123c1e463ef1aedb45dd7",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "reviewedAt": "2026-10-03T11:01:37.980Z",
       "reviewedBy": "Codex"
     },
     {
@@ -16603,16 +16603,16 @@
           "labelArabic": "الزبير بن العوام"
         },
         {
-          "value": "ruqayyah-bint-muhammad",
-          "labelArabic": "رقية بنت محمد"
-        },
-        {
           "value": "abdullah-ibn-hudhafah",
           "labelArabic": "عبد الله بن حذافة"
         },
         {
           "value": "al-ashath-ibn-qais",
           "labelArabic": "الأشعث بن قيس"
+        },
+        {
+          "value": "al-baraa-ibn-azib",
+          "labelArabic": "البراء بن عازب"
         }
       ],
       "correctAnswer": "az-zubayr-ibn-al-awwam",
@@ -16622,11 +16622,11 @@
           "zubayr/uhud-hawari"
         ]
       },
-      "fingerprint": "4f56db84589f6ce8a7f92084c236494363336da895d675b24d7a049fa5ae7467",
+      "fingerprint": "b24f24da56ffeb9e0bd470354bd25ca7b4cc4885005fe55e5d513e1ecbd4cc7b",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "reviewedAt": "2026-10-03T11:03:24.935Z",
       "reviewedBy": "Codex"
     },
     {
@@ -16712,9 +16712,9 @@
       },
       "fingerprint": "2d956bbf2db5f2d7ba5bb2dae3592fc5dc14d11f3d4ae2e8cc78a3b776ca979b",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:46.200Z",
       "reviewedBy": "Codex"
     },
     {
@@ -16729,23 +16729,23 @@
       "personSlugs": [
         "umm-salamah"
       ],
-      "promptArabic": "من حمل لقب «أم المؤمنين»؟",
+      "promptArabic": "من حملت لقب «أم المؤمنين»؟",
       "choices": [
         {
           "value": "umm-salamah",
           "labelArabic": "أم سلمة"
         },
         {
-          "value": "saad-ibn-shahid-al-awsi",
-          "labelArabic": "سعد بن شهيد"
+          "value": "umaymah-bint-abd-al-muttalib",
+          "labelArabic": "أميمة بنت عبد المطلب"
         },
         {
-          "value": "abu-dujanah-al-ansari",
-          "labelArabic": "أبو دجانة الأنصاري"
+          "value": "zabyah-bint-wahb",
+          "labelArabic": "ظبية بنت وهب"
         },
         {
-          "value": "as-saib-ibn-uthman",
-          "labelArabic": "السائب بن عثمان"
+          "value": "umm-harmalah-al-makhzumiyyah",
+          "labelArabic": "أم حرملة المخزومية"
         }
       ],
       "correctAnswer": "umm-salamah",
@@ -16754,11 +16754,11 @@
           "umm-salamah/umm-al-mumineen"
         ]
       },
-      "fingerprint": "b1935c668ce71f771ea1626f64514890afdbe7c89d988334b1164f9973d7532c",
+      "fingerprint": "de16a428f72aee817fb7378f12529ca2f8dd5b35857be7dc9e2d370af1d4927e",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "reviewedAt": "2026-10-03T11:01:38.565Z",
       "reviewedBy": "Codex"
     },
     {
@@ -16773,23 +16773,23 @@
       "personSlugs": [
         "zaynab-bint-khuzaymah"
       ],
-      "promptArabic": "من حمل لقب «أم المؤمنين»؟",
+      "promptArabic": "من حملت لقب «أم المؤمنين»؟",
       "choices": [
         {
           "value": "zaynab-bint-khuzaymah",
           "labelArabic": "زينب بنت خزيمة"
         },
         {
-          "value": "abu-bakrah-al-thaqafi",
-          "labelArabic": "أبو بكرة الثقفي"
-        },
-        {
           "value": "al-bayda-bint-abd-al-muttalib",
           "labelArabic": "البيضاء بنت عبد المطلب"
         },
         {
-          "value": "amr-ibn-haram",
-          "labelArabic": "عمرو بن حرام"
+          "value": "asma-bint-umays",
+          "labelArabic": "أسماء بنت عميس"
+        },
+        {
+          "value": "umaymah-bint-abd-al-muttalib",
+          "labelArabic": "أميمة بنت عبد المطلب"
         }
       ],
       "correctAnswer": "zaynab-bint-khuzaymah",
@@ -16798,11 +16798,11 @@
           "zaynab-khuzaymah/umm-al-mumineen"
         ]
       },
-      "fingerprint": "f32cf0208561d063157c5f015756edb52da1f07ae1bae7099d3868e0b25790b1",
+      "fingerprint": "0679ff0c65fc9a00c9356ae5d05406262b3b53ab3948e84a439881f8350e40e8",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "reviewedAt": "2026-10-03T11:01:39.239Z",
       "reviewedBy": "Codex"
     },
     {
@@ -16844,9 +16844,9 @@
       },
       "fingerprint": "d9b712f1e9c3179fcfb4ab56f41d37e1f5064ec924477d2f883ca2918e55a771",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:48.679Z",
       "reviewedBy": "Codex"
     },
     {
@@ -16888,9 +16888,9 @@
       },
       "fingerprint": "9d7b2aeb4ae4607b6f73d21db5e37bfed1d6a2df5698bb1ad71e98888f470a45",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:49.896Z",
       "reviewedBy": "Codex"
     },
     {
@@ -16932,9 +16932,9 @@
       },
       "fingerprint": "11507f0e1fe78b37e7a269149116cc9a8c6c296618467dddafe4489a9875e10b",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:47.391Z",
       "reviewedBy": "Codex"
     },
     {
@@ -17020,9 +17020,9 @@
       },
       "fingerprint": "21fd8bcd0fbf6f74bc608c0997445a81ae315f295f00e66f1fded11aff1a7a95",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:51.043Z",
       "reviewedBy": "Codex"
     },
     {
@@ -17048,12 +17048,12 @@
           "labelArabic": "عاقل بن البكير"
         },
         {
-          "value": "dimad-al-azdi",
-          "labelArabic": "ضماد الأزدي"
+          "value": "unays-ibn-junadah-al-ghifari",
+          "labelArabic": "أنيس بن جنادة الغفاري"
         },
         {
-          "value": "haram-ibn-jundub",
-          "labelArabic": "حرام بن جندب"
+          "value": "dimad-al-azdi",
+          "labelArabic": "ضماد الأزدي"
         }
       ],
       "correctAnswer": "abu-bakr-as-siddiq",
@@ -17062,11 +17062,11 @@
           "abu-bakr/siddiq"
         ]
       },
-      "fingerprint": "71c96e52497602b342799bad87877f65dfe6cd6851e5c09b5be02bef063b2d3f",
+      "fingerprint": "4ff12c11cf1b754cbc2ed7843f4ef9955e58096b2f422cb981e4e00bc6de250a",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "reviewedAt": "2026-10-03T11:03:25.514Z",
       "reviewedBy": "Codex"
     },
     {
@@ -17108,9 +17108,9 @@
       },
       "fingerprint": "37fd63593ed54d77c224422f5993434e03cb8ff250f1884dbb03ccaf530d461a",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:52.204Z",
       "reviewedBy": "Codex"
     },
     {
@@ -17152,9 +17152,9 @@
       },
       "fingerprint": "8032ca39d73eb26e6d1790604dd85ca45564df99471d43606482594688a0876e",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:53.356Z",
       "reviewedBy": "Codex"
     },
     {
@@ -17196,9 +17196,9 @@
       },
       "fingerprint": "9d496d3e91431b3eb478ad0c84e48dc0d858490ae5e1d7bcbf828ef5af65dfd7",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:54.521Z",
       "reviewedBy": "Codex"
     },
     {
@@ -17272,8 +17272,8 @@
           "labelArabic": "أبو طلحة الأنصاري"
         },
         {
-          "value": "amr-ibn-haram",
-          "labelArabic": "عمرو بن حرام"
+          "value": "sallam-ibn-abi-al-huqayq",
+          "labelArabic": "سَلاَمُ بنُ أَبِي الحُقَيْقِ"
         }
       ],
       "correctAnswer": "az-zubayr-ibn-al-awwam",
@@ -17282,11 +17282,11 @@
           "zubayr/titles"
         ]
       },
-      "fingerprint": "9d462c01346afa9b5e8e0b1d3590a49d72cf0a81235156693299abacb96b9636",
+      "fingerprint": "91444c8240c5c72c9d9dc256a935c98e19d294cf24c689e6c8db95d035706b13",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "reviewedAt": "2026-10-03T11:03:26.104Z",
       "reviewedBy": "Codex"
     },
     {
@@ -17448,8 +17448,8 @@
           "labelArabic": "جابر بن وهيب"
         },
         {
-          "value": "ruqayyah-bint-muhammad",
-          "labelArabic": "رقية بنت محمد"
+          "value": "qatadah-ibn-al-numan",
+          "labelArabic": "قتادة بن النعمان"
         }
       ],
       "correctAnswer": "az-zubayr-ibn-al-awwam",
@@ -17458,11 +17458,11 @@
           "zubayr/titles"
         ]
       },
-      "fingerprint": "c4822181517b274653a40f23fe877c88b461e759fc929b1d7997e0430e1c03e5",
+      "fingerprint": "650e5f524360015bc116c2bcf275a91b0994a884f5eb1b375cfc09a9474e7a52",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "reviewedAt": "2026-10-03T11:03:26.682Z",
       "reviewedBy": "Codex"
     },
     {
@@ -17525,7 +17525,7 @@
       "choices": [
         {
           "value": "saeed-ibn-zaid",
-          "labelArabic": "سعيد بن زيد"
+          "labelArabic": "سَعِيْدُ بنُ زَيْدِ"
         },
         {
           "value": "amr-ibn-abd-awf-al-najjari",
@@ -17546,11 +17546,11 @@
           "saeed/titles"
         ]
       },
-      "fingerprint": "c17d9244aea332137ca0cc1d83ae323c213c121abf0846554111f28331d8caef",
+      "fingerprint": "50a5c1a76ec637832a1c5bfa545d4d7a137336e878ef984436ca819263e2b606",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "reviewedAt": "2026-10-03T11:03:27.262Z",
       "reviewedBy": "Codex"
     },
     {
@@ -17569,7 +17569,7 @@
       "choices": [
         {
           "value": "talhah-ibn-ubaydullah",
-          "labelArabic": "طلحة بن عبيد الله"
+          "labelArabic": "طَلْحَةُ بنُ عُبَيْدِ اللهِ"
         },
         {
           "value": "abd-wudd-ibn-zayd",
@@ -17590,11 +17590,11 @@
           "talhah/titles"
         ]
       },
-      "fingerprint": "b4c09ab321de16cebd83c1c388cf65242eed69bf1c6f837515d839d65ca03512",
+      "fingerprint": "703b2ea7c19ba91ab2e9128aa853d532f31d1da7ca9c52a66a5a7840f8207531",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "reviewedAt": "2026-10-03T11:03:27.837Z",
       "reviewedBy": "Codex"
     },
     {
@@ -17636,9 +17636,9 @@
       },
       "fingerprint": "5519edd6a7d1b9100b2add91f5653467671800ca4ac9a21edf5d3e8cb0f7684f",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:55.671Z",
       "reviewedBy": "Codex"
     },
     {
@@ -17653,23 +17653,23 @@
       "personSlugs": [
         "zaynab-bint-khuzaymah"
       ],
-      "promptArabic": "من حمل لقب «أم المساكين»؟",
+      "promptArabic": "من حملت لقب «أم المساكين»؟",
       "choices": [
         {
           "value": "zaynab-bint-khuzaymah",
           "labelArabic": "زينب بنت خزيمة"
         },
         {
-          "value": "khawwat-ibn-jubair",
-          "labelArabic": "خوات بن جبير"
+          "value": "sawdah-bint-zamah",
+          "labelArabic": "سودة بنت زمعة"
         },
         {
-          "value": "abd-awf-ibn-ghanm-al-najjari",
-          "labelArabic": "عبد عوف بن غنم"
+          "value": "asma-bint-umays",
+          "labelArabic": "أسماء بنت عميس"
         },
         {
-          "value": "simak-ibn-atik",
-          "labelArabic": "سماك بن عتيك"
+          "value": "asma-bint-abi-bakr",
+          "labelArabic": "أسماء بنت أبي بكر"
         }
       ],
       "correctAnswer": "zaynab-bint-khuzaymah",
@@ -17678,11 +17678,11 @@
           "zaynab-khuzaymah/umm-al-masakeen"
         ]
       },
-      "fingerprint": "68db7f6e41c45a0671125150530f8639dcadf61ba432811b82389d77f97ee662",
+      "fingerprint": "28c4484787be257f816fdb989b8c18b3c0165251ecc7096c3a9f5c4cc6eabe80",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "reviewedAt": "2026-10-03T11:01:39.823Z",
       "reviewedBy": "Codex"
     },
     {
