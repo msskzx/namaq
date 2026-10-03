@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-29T21:38:46.057Z",
+  "generatedAt": "2026-10-03T10:57:04.331Z",
   "questions": [
     {
       "key": "AYAH_LINK:PERSON:abdur-rahman-ibn-awf:ayat:48:18",
@@ -5476,16 +5476,16 @@
           "labelArabic": "ذات النطاقين"
         },
         {
-          "value": "the-last",
-          "labelArabic": "العاقب"
+          "value": "siddiqa",
+          "labelArabic": "صديقة"
         },
         {
-          "value": "hawari-al-ummah",
-          "labelArabic": "حواري الأمة"
+          "value": "first-wife",
+          "labelArabic": "أول زوجات النبي"
         },
         {
-          "value": "master-of-children-of-adam",
-          "labelArabic": "سيد ولد آدم"
+          "value": "mother-of-believers",
+          "labelArabic": "أم المؤمنين"
         }
       ],
       "correctAnswer": "dhat-an-nitaqayn",
@@ -5494,11 +5494,11 @@
           "asma/dhat-an-nitaqayn"
         ]
       },
-      "fingerprint": "df52b888b436c41d5c75c127bfbf785fafdfce90a7d4f42e9c06e100c9c1bda9",
+      "fingerprint": "0c5f80bd8ab8fcb9703857e14e84ad1f86e818b0338be459c3cf0d46d4576c4b",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "reviewedAt": "2026-10-03T10:57:28.601Z",
       "reviewedBy": "Codex"
     },
     {
@@ -7336,8 +7336,8 @@
           "labelArabic": "بنت النبي"
         },
         {
-          "value": "killer-of-abu-jahl",
-          "labelArabic": "قاتل أبي جهل"
+          "value": "umm-al-masakeen",
+          "labelArabic": "أم المساكين"
         }
       ],
       "correctAnswer": "mother-of-believers",
@@ -7346,12 +7346,12 @@
           "umm-salamah/umm-al-mumineen"
         ]
       },
-      "fingerprint": "49487c40ad823d8a95d1a89f189dc2f24b5389802960cfe722a10f064248fa02",
+      "fingerprint": "3359016b20f4d1897681c298032db0fa875c05c3fe359c26762769d8ed3b0a2d",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
-      "reviewedBy": "Claude"
+      "reviewedAt": "2026-10-03T10:57:29.134Z",
+      "reviewedBy": "Codex"
     },
     {
       "key": "PERSON_TITLE:PERSON:uthman-ibn-affan:titles:al-sabiqoon",
@@ -7416,16 +7416,16 @@
           "labelArabic": "أم المؤمنين"
         },
         {
-          "value": "messenger",
-          "labelArabic": "رسول"
-        },
-        {
           "value": "sayyidat-nisa-ahl-al-jannah",
           "labelArabic": "سيدة نساء أهل الجنة"
         },
         {
-          "value": "hawari-al-ummah",
-          "labelArabic": "حواري الأمة"
+          "value": "siddiqa",
+          "labelArabic": "صديقة"
+        },
+        {
+          "value": "first-wife",
+          "labelArabic": "أول زوجات النبي"
         }
       ],
       "correctAnswer": "mother-of-believers",
@@ -7434,11 +7434,11 @@
           "zaynab-khuzaymah/umm-al-mumineen"
         ]
       },
-      "fingerprint": "859612403f9904962a488415470fccd672aa62adb016040ad5faf8ed9bc8abd9",
+      "fingerprint": "c9ef3f5e263209e03166743a8c8bafbcf23f5323da895bb5d3316479afc8c7ce",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T09:44:56.060Z",
+      "reviewedAt": "2026-10-03T10:57:29.851Z",
       "reviewedBy": "Codex"
     },
     {
@@ -7468,8 +7468,8 @@
           "labelArabic": "سيدة نساء أهل الجنة"
         },
         {
-          "value": "the-gatherer",
-          "labelArabic": "الحاشر"
+          "value": "daughter-of-prophet",
+          "labelArabic": "بنت النبي"
         }
       ],
       "correctAnswer": "umm-al-masakeen",
@@ -7478,11 +7478,11 @@
           "zaynab-khuzaymah/umm-al-masakeen"
         ]
       },
-      "fingerprint": "2d7eb52bd22b7c1bf500fc0643b4e99798ec08b7ee77ad3f7f1144fcdece63fd",
+      "fingerprint": "253d1aa050f3661dd95a175c31fb4e3910fe7b6289c5fb7d7890edbcbd27c5a0",
       "promptArabicOverride": null,
       "status": "APPROVED",
       "rejectionReason": null,
-      "reviewedAt": "2026-09-28T09:44:56.402Z",
+      "reviewedAt": "2026-10-03T10:57:30.521Z",
       "reviewedBy": "Codex"
     },
     {

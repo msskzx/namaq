@@ -77,7 +77,7 @@ beforeEach(() => {
     slug: person.slug,
     name: person.name,
     sex: ['p4', 'p5', 'p6', 'p7'].includes(person.slug) ? 'FEMALE' : 'MALE',
-    titles: [],
+    titles: person.slug === 'p2' ? [{ slug: 't3' }] : person.slug === 'p3' ? [{ slug: 't4' }] : person.slug === 'p8' ? [{ slug: 't5' }] : [],
     ayat: [],
   })));
   titleFindMany.mockResolvedValue([
@@ -94,6 +94,24 @@ describe('question candidate generation', () => {
     const questions = await generateQuestionCandidates();
     expect(questions.filter((question) => question.family === 'PERSON_TITLE')).toHaveLength(2);
     expect(questions.filter((question) => question.family === 'TITLE_HOLDER')).toHaveLength(2);
+  });
+
+  it('uses titles held by women as distractors for women', async () => {
+    const women = ['p1', 'p2', 'p3', 'p4'].map((slug, index) => ({
+      ...basePerson(slug, `المرأة ${index + 1}`, `أم ${index + 1}`),
+      fields: { sex: { value: 'FEMALE', claims: ['abu-ubaydah/titles'] } },
+      titles: [{ title: `t${index + 1}`, claims: ['abu-ubaydah/titles'] }],
+      ayat: [],
+    }));
+    loadCatalog.mockResolvedValue({ people: women, battles: [], events: [], utterances: [] });
+    personFindMany.mockResolvedValue([
+      ...women.map((person, index) => ({ slug: person.slug, name: person.name, sex: 'FEMALE', titles: [{ slug: `t${index + 1}` }], ayat: [] })),
+      { slug: 'p5', name: 'الرجل', sex: 'MALE', titles: [{ slug: 't5' }], ayat: [] },
+    ]);
+
+    const question = (await generateQuestionCandidates()).find((item) => item.key === 'PERSON_TITLE:PERSON:p1:titles:t1');
+
+    expect(question?.choices.map((choice) => choice.value).sort()).toEqual(['t1', 't2', 't3', 't4']);
   });
 
   it('skips companion title assignments in both title directions', async () => {

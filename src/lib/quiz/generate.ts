@@ -163,6 +163,14 @@ export async function generateQuestionCandidates(): Promise<GeneratedQuestion[]>
   const titleBySlug = new Map(dbTitles.map((title) => [title.slug, title]));
   const titleChoices = dbTitles.map((title) => choice(title.slug, title.name));
   const catalogTitlesByPerson = new Map(catalog.people.map((person) => [person.slug, new Set(person.titles.map((title) => title.title))]));
+  const titlesBySex = new Map<string, Set<string>>();
+  for (const person of peopleBySlug.values()) {
+    if (!person.sex) continue;
+    const titles = titlesBySex.get(person.sex) ?? new Set<string>();
+    person.titles.forEach((title) => titles.add(title.slug));
+    catalogTitlesByPerson.get(person.slug)?.forEach((title) => titles.add(title));
+    titlesBySex.set(person.sex, titles);
+  }
   const catalogAyatByPerson = new Map(catalog.people.map((person) => [person.slug, new Set((person.ayat ?? []).map((ayah) => `${ayah.surah}:${ayah.ayah}`))]));
   const candidates: GeneratedQuestion[] = [];
   const add = (value: GeneratedQuestion | null) => value && candidates.push(value);
@@ -200,6 +208,8 @@ export async function generateQuestionCandidates(): Promise<GeneratedQuestion[]>
     });
 
     const heldTitles = new Set([...dbPerson.titles.map((title) => title.slug), ...(catalogTitlesByPerson.get(person.slug) ?? [])]);
+    const compatibleTitles = dbPerson.sex ? titlesBySex.get(dbPerson.sex) : undefined;
+    const titlePool = compatibleTitles ? titleChoices.filter((item) => compatibleTitles.has(item.value)) : titleChoices;
     for (const assignment of person.titles) {
       if (assignment.title === 'companion') continue;
       const title = titleBySlug.get(assignment.title);
@@ -208,7 +218,7 @@ export async function generateQuestionCandidates(): Promise<GeneratedQuestion[]>
       add(candidate({
         family: 'PERSON_TITLE', topic: 'PEOPLE', subject: { kind: 'PERSON', slug: person.slug }, attribute: 'titles',
         personSlugs: [person.slug], promptArabic: `أي لقب ${dbPerson.sex === 'FEMALE' ? 'عُرفت' : 'عُرف'} به ${person.name}؟`,
-        answer: choice(title.slug, title.name), pool: titleChoices, excludedValues: heldTitles, evidence,
+        answer: choice(title.slug, title.name), pool: titlePool, excludedValues: heldTitles, evidence,
       }));
       const holders = new Set([...peopleBySlug.values()].filter((other) =>
         other.titles.some((held) => held.slug === title.slug) || catalogTitlesByPerson.get(other.slug)?.has(title.slug),
