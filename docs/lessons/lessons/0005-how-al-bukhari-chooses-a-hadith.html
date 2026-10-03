@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How al-Bukhari Chooses</title>
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<script src="../assets/lesson.js"></script>
+</head>
+<body class="bg-stone-50 font-serif text-stone-900 antialiased dark:bg-stone-950 dark:text-stone-100">
+
+<div class="fixed inset-x-0 top-0 z-20 flex items-start justify-between p-3 print:hidden">
+  <button id="index-toggle" aria-controls="index" aria-expanded="true"
+    class="rounded border border-stone-300 bg-stone-50/90 px-3 py-1.5 font-mono text-xs uppercase tracking-wider text-stone-600 backdrop-blur hover:border-amber-500 hover:text-amber-700 dark:border-stone-700 dark:bg-stone-950/90 dark:text-stone-400 dark:hover:text-amber-400">
+    Index
+  </button>
+  <button id="theme-toggle"
+    class="rounded border border-stone-300 bg-stone-50/90 px-3 py-1.5 text-sm text-stone-600 backdrop-blur hover:border-amber-500 hover:text-amber-700 dark:border-stone-700 dark:bg-stone-950/90 dark:text-stone-400 dark:hover:text-amber-400">
+  </button>
+</div>
+
+<nav id="index" aria-label="Lesson index"
+  class="fixed inset-y-0 start-0 z-10 w-64 overflow-y-auto border-e border-stone-200 bg-stone-100/95 px-3 pb-8 pt-16 backdrop-blur dark:border-stone-800 dark:bg-stone-900/95 print:hidden"></nav>
+
+<main class="mx-auto max-w-3xl px-4 pb-24 pt-20">
+<article class="prose prose-stone max-w-none dark:prose-invert prose-headings:font-semibold prose-pre:bg-amber-50 prose-pre:text-stone-800 prose-pre:border-s-4 prose-pre:border-amber-600 prose-pre:rounded-s-none dark:prose-pre:bg-stone-900 dark:prose-pre:text-stone-200 prose-code:font-mono prose-a:text-amber-700 dark:prose-a:text-amber-400">
+
+
+
+<header class="mb-10 border-b border-stone-300 pb-6 dark:border-stone-700">
+  <p class="m-0 font-mono text-xs uppercase tracking-[0.12em] text-amber-700 dark:text-amber-500">Lesson 0005 · before extracting al-Bukhari</p>
+  <h1 class="mb-2 mt-3">How al-Bukhari chooses a hadith, and how a name in a chain becomes a person</h1>
+  <p class="m-0 text-lg text-stone-600 dark:text-stone-400">Namaq plans to extract Sahih al-Bukhari as printed
+  and to link each name in a chain to a person through a sourced identification
+  (<code>docs/plans/data-model/plan.md</code>, section 2.6). This lesson reports what scholars say about
+  al-Bukhari's method, what the Sahih prints about its narrators, and which other books a project needs
+  to say who a narrator is. Every statement about hadith science here is a report of what a named scholar
+  wrote. Namaq adds nothing of its own. A scholar will review this lesson.</p>
+</header>
+
+<p><strong>How to read this lesson.</strong> Each claim names its source in the same sentence. A quotation
+in Arabic is short and was read on the page linked in the Sources list. When a page was reached only through
+a search summary or a secondary article, the claim says so. Anything not confirmed from an opened page is
+marked <strong>UNVERIFIED — for the scholar</strong>.</p>
+
+<h2>1. What a "condition" is</h2>
+
+<p>A <em>condition</em> (شرط, <em>shart</em>) is the rule a compiler used to decide which reports enter
+his book. It concerns the chain (إسناد, <em>isnad</em>: the list of people who passed the report on) and
+the people in it: were they trustworthy, were they accurate, did each one really receive the report from
+the one before?</p>
+
+<p>The six books that most later scholars treat as the core collections are called the Six (الكتب الستة):
+the Sahih of al-Bukhari, the Sahih of Muslim, and the Sunan of Abu Dawud, al-Tirmidhi, al-Nasa'i and Ibn
+Majah. They differ because each compiler had a different aim. Two of them aimed to collect only sound
+reports. The Sunan compilers aimed to gather the reports a jurist needs, and admitted weaker material with
+a note or without one. Their conditions therefore differ in strictness. <strong>UNVERIFIED — for the
+scholar</strong>: this summary of the Sunan compilers' aims is a general description, not a quotation from
+a page opened for this lesson.</p>
+
+<p>One fact governs everything below. The compilers mostly did not write their conditions down. Ibn Tahir
+al-Maqdisi (d. 507 AH), in <em>Shurut al-A'imma al-Sitta</em>, says of al-Bukhari, Muslim and the others
+that none of them is reported to have said what his condition was, and that the conditions are known only by
+studying their books: «وإنما يعرف ذلك من سبر كتبهم» (quoted in the islamweb article «القول المفهم في معنى
+شرط الشيخين»; the book itself was not opened, so the wording is <strong>UNVERIFIED — for the scholar</strong>
+against the printed text). So every "condition of al-Bukhari" in this lesson is a later scholar's
+reconstruction from reading the Sahih. That is why scholars disagree about them.</p>
+
+<h2>2. What scholars say al-Bukhari's conditions are</h2>
+
+<h3>The general definition of a sound hadith</h3>
+
+<p>Ibn al-Salah (d. 643 AH), in the first chapter (النوع الأول) of his <em>Muqaddima</em>, defines the sound
+hadith (الصحيح, <em>sahih</em>) as the report «الذي يتصل إسناده بنقل العدل الضابط عن العدل الضابط» whose chain
+is connected, carried by one upright and accurate narrator from another, and which «لا يكون شاذا ولا معللا»,
+is neither irregular nor defective (Wikisource text of the Muqaddima, النوع الأول). That gives five tests,
+in Ibn al-Salah's words:</p>
+
+<ul>
+<li><strong>Connection</strong> (اتصال, <em>ittisal</em>): no one is missing from the chain.</li>
+<li><strong>Uprightness</strong> (عدالة, <em>'adala</em>): each narrator is morally trustworthy.</li>
+<li><strong>Accuracy</strong> (ضبط, <em>dabt</em>): each narrator remembers or records exactly.</li>
+<li><strong>No irregularity</strong> (شذوذ, <em>shudhudh</em>): the report does not go against what more reliable narrators carry.</li>
+<li><strong>No hidden defect</strong> (علة, <em>'illa</em>): a flaw that only an expert finds on comparing chains.</li>
+</ul>
+
+<p>The glosses of shudhudh and 'illa above are the common textbook meanings, not quotations;
+<strong>UNVERIFIED — for the scholar</strong>.</p>
+
+<p>Ibn al-Salah also records, in the same chapter, that al-Bukhari and Muslim «لم يستوعبا الصحيح في صحيحيهما
+ولا التزما ذلك»: they did not include every sound hadith, nor did they set out to. He supports this with
+al-Bukhari's own reported words: «ما أدخلت في كتابي الجامع إلا ما صحَّ وتركت من الصحاح لملال الطول», "I put
+into my book only what is sound, and left out sound reports so it would not grow too long" (Muqaddima, النوع
+الأول, Wikisource). So absence from the Sahih says nothing about whether a report is sound.</p>
+
+<h3>Meeting versus living at the same time</h3>
+
+<p>The best-known point of difference is about connection. When a chain says only «عن» ("from"), did the
+narrator actually hear the man before him? Ibn Hajar (d. 852 AH), in <em>Hady al-Sari</em>, the introduction
+to his commentary <em>Fath al-Bari</em>, in the chapter «الفصل الثاني في بيان موضوعه والكشف عن مغزاه فيه»,
+reports al-Bukhari's position as not accepting such a chain «حتى يثبت اجتماعهما ولو مرة», "until it is
+established that the two met, even once" (Shamela book 1224, page 10). The same page reports that for Muslim
+«الإسناد المعنعن له حكم الاتصال», a chain with «عن» counts as connected, provided the two lived at the same
+time.</p>
+
+<p>These two positions are named the condition of <strong>meeting</strong> (لقاء, <em>liqa'</em>) and the
+condition of <strong>contemporaneity</strong> (معاصرة, <em>mu'asara</em>). An islamweb fatwa (no. 53837)
+summarises the difference as "al-Bukhari's condition is that the meeting be verified, Muslim's that it be
+possible." Muslim argued for his own position at length in the introduction to his Sahih, and al-Nawawi
+commented on it in his introduction to his commentary on Muslim. Neither text was opened for this lesson;
+<strong>UNVERIFIED — for the scholar</strong>. Whether al-Bukhari held "meeting" as a condition of
+soundness itself, or only as a stricter standard for his own book, is a question some scholars debate;
+<strong>UNVERIFIED — for the scholar</strong>, since no page opened here states the debate.</p>
+
+<h3>Reliability, and how close a student stayed to his teacher</h3>
+
+<p>Al-Hazimi (d. 584 AH), in <em>Shurut al-A'imma al-Khamsa</em>, describes the students of a teacher in
+layers (طبقات, <em>tabaqat</em>). As reported in the islamweb article «القول المفهم», he places al-Bukhari's
+condition in reports whose chain «اتصل إسناده بالثقات المتقنين الملازمين», carried by reliable, precise
+narrators who stayed long with their teachers. A search summary of the same work adds that al-Bukhari
+sometimes takes from the next layer, those who stayed with a teacher only briefly. The book itself was not
+opened: <strong>UNVERIFIED — for the scholar</strong> on exact wording and page.</p>
+
+<h3>What "on the condition of al-Bukhari" means</h3>
+
+<p>Later writers say a hadith outside the Sahih is "on the condition of al-Bukhari". What that means is
+itself disputed. The islamweb article «القول المفهم» quotes al-Nawawi as taking it to mean «أن يكون رجال
+إسناده في كتابيهما», that the chain's men are the very men found in the two books. The islamweb fatwa no.
+53837 sets out two readings, the same men or men of the same quality, and prefers the first. Both are
+secondary reports; <strong>UNVERIFIED — for the scholar</strong> against al-Nawawi's own text.</p>
+
+<h3>Main reports, supporting reports and suspended reports</h3>
+
+<p>Scholars agree that al-Bukhari did not apply the same standard to everything in his book. Three kinds
+matter.</p>
+
+<ul>
+<li><strong>The main reports</strong> (الأصول, <em>al-usul</em>): the full, chained hadith he relies on for a
+chapter.</li>
+<li><strong>Supporting reports</strong> (المتابعات والشواهد, <em>al-mutaba'at wa al-shawahid</em>): other
+chains for the same content, brought to confirm it. Ibn Hajar, opening chapter nine of <em>Hady al-Sari</em>,
+separates narrators «من أخرج له منهم في الأصول أو في المتابعات والاستشهادات», those used in main reports from
+those used only in supporting ones (Shamela book 1224, page 379). The same page says that criticism of a
+narrator al-Bukhari used is not accepted «إلا بقادح واضح», except with a clear flaw.</li>
+<li><strong>Suspended reports</strong> (المعلقات, <em>al-mu'allaqat</em>): Ibn al-Salah defines a suspended
+report as one «ما حُذف من مبتدأ إسناده واحد أو أكثر», where one or more narrators are dropped from the start of
+the chain, and says «أغلب ما وقع ذلك في كتاب البخاري», most of these occur in al-Bukhari's book (Muqaddima,
+Wikisource). Ibn Hajar gave them their own chapter in <em>Hady al-Sari</em>: «الفصل الرابع في بيان السبب في
+إيراده للأحاديث المعلقة: مرفوعة وموقوفة، وشرح أحكام ذلك» (Shamela 1224, table of contents). So scholars do not
+treat a suspended report as meeting the book's full condition by default. How Ibn Hajar grades each kind of
+suspended report was not read here; <strong>UNVERIFIED — for the scholar</strong>.</li>
+</ul>
+
+<p>Ibn Hajar opens the same chapter nine with «تخريج صاحب الصحيح لأي راو كان، مقتض لعدالته عنده», al-Bukhari's
+use of a narrator implies the narrator was upright <em>in al-Bukhari's view</em> (Shamela 1224, page 379).
+Note the last two words. Ibn Hajar is reporting al-Bukhari's judgement, and then lists the narrators other
+critics disputed.</p>
+
+<h2>3. How the Sahih is built</h2>
+
+<h3>Books, chapters and headings</h3>
+
+<p>The Sahih is divided into books (كتاب, <em>kitab</em>, e.g. the Book of Prayer) and each book into
+chapters (باب, <em>bab</em>). Each chapter has a heading (ترجمة, <em>tarjama</em>, plural تراجم,
+<em>tarajim</em>). A heading is al-Bukhari's own sentence, often a legal point he draws from the hadith that
+follow. Ibn Hajar describes his work as «استنباط الأحكام ليبوب عليها», drawing out rulings so as to make
+chapters for them (<em>Hady al-Sari</em>, chapter two, Shamela 1224 page 10). A heading may hold a Qur'an
+verse, a saying of a Companion, or a suspended report. For Namaq, this matters: a heading is al-Bukhari
+speaking, not a narrator.</p>
+
+<h3>Repetition and cutting</h3>
+
+<p>The same hadith often appears in several chapters. Ibn Hajar's chapter three is about this: «الفصل
+الثالث في بيان تقطيعه للحديث واختصاره وفائدة إعادته له في الأبواب وتكراره». He says al-Bukhari repeats a hadith
+«مراعيا مع ذلك عدم إخلائه من فائدة حديثية», always making sure the repetition carries some new point of hadith
+knowledge, for example a different chain (Shamela 1224, page 13). He also cuts long hadith: «فإنه يخرج كل
+جملة منها في باب مستقل فرارا من التطويل», he puts each sentence in its own chapter to avoid length (same
+page). The same page notes that al-Bukhari may bring a chain where a narrator said only «عن», and then give
+another route where that narrator «مصرحا فيها بالسماع», states that he heard it.</p>
+
+<p>Ibn al-Salah gives the count as «سبعة آلاف ومائتان وخمسة وسبعون حديثا بالأحاديث المتكررة», 7,275 with
+repetitions (Muqaddima, Wikisource). Ibn Hajar's own count is in chapter ten, «الفصل العاشر في عد أحاديث
+الجامع» (Shamela 1224, table of contents); his total was not read here, <strong>UNVERIFIED — for the
+scholar</strong>. Counts differ because counters treat repetitions and suspended reports differently.</p>
+
+<h3>What a chain prints, and what it does not</h3>
+
+<p>A chain in the Sahih is a run of names joined by words of transmission. A typical opening is
+«حَدَّثَنَا الحُمَيْدِيُّ ... قَالَ: حَدَّثَنَا سُفْيَانُ» (this pair is the example Namaq's own plan uses, section
+2.6). What is printed:</p>
+
+<ul>
+<li><strong>A name in whatever form the narrator used.</strong> Sometimes a full name with father
+(<em>nasab</em>), sometimes a first name alone («سُفْيَانُ»), sometimes a teknonym (كنية, <em>kunya</em>,
+"father of so-and-so", e.g. «أبو هريرة»), sometimes a descriptive surname (نسبة, <em>nisba</em>, a tribe, town
+or trade, e.g. «الحُمَيْدِيُّ»), sometimes a nickname (لقب, <em>laqab</em>).</li>
+<li><strong>Words of transmission</strong> (صيغ الأداء): «حدثنا» and «أخبرنا» (he told us), «سمعت» (I heard),
+«عن» (from), «قال» (he said). These words are what the meeting debate in section 2 turns on.</li>
+<li><strong>Occasional clarifications</strong> such as «يعني ابن عيينة» ("meaning Ibn 'Uyayna"), added by a
+transmitter. Namaq's plan already treats such a phrase as a possible basis (<code>SAME_WORK_EXPLICIT</code>,
+plan section 2.6).</li>
+</ul>
+
+<p>What is not printed: dates, places of residence, the narrator's teachers and students, and any judgement
+of reliability. The Sahih gives the name as the student spoke it, and nothing more. Ibn Hajar needed two
+whole chapters of <em>Hady al-Sari</em> to sort this out: chapter six on names that look alike in writing,
+«الفصل السادس في بيان المؤتلف والمختلف من الأسماء والكنى والألقاب والأنساب، مما وقع في صحيح البخاري», and
+chapter seven on bare names shared by several people, «الفصل السابع في تبيين الأسماء المهملة التي يكثر
+اشتراكها» (Shamela 1224, table of contents). The existence of chapter seven is itself the evidence: a reader
+of the Sahih alone cannot always tell which person a name is.</p>
+
+<h2>4. How narrators are identified</h2>
+
+<h3>What the Sahih itself gives</h3>
+
+<p>Almost nothing beyond the name as printed, as section 3 showed. The chain gives the name's form and its
+position: who the narrator heard from and who heard from him. A specialist uses that position to narrow the
+candidates: a «سفيان» who teaches al-Humaydi is a different question from a «سفيان» who teaches someone a
+generation earlier. But the rule that settles the question is written in another book.</p>
+
+<h3>What al-Bukhari wrote elsewhere</h3>
+
+<p><strong><em>al-Tarikh al-Kabir</em></strong> (The Great History) is al-Bukhari's own dictionary of
+narrators. It is on Shamela as book 956, in the edition with notes by al-Mu'allimi al-Yamani. A search
+summary reports 12,315 entries in the numbered printed edition; <strong>UNVERIFIED — for the scholar</strong>,
+the page was not opened. Entries are often short: a name, some teachers and students, sometimes a remark.</p>
+
+<p><strong><em>al-Du'afa'</em></strong> (The Weak Narrators), also called <em>al-Du'afa' al-Saghir</em>, is
+his short list of narrators he judged weak. It is on Shamela as book 8632. A search summary gives "under seven
+hundred" entries by old reports; <strong>UNVERIFIED — for the scholar</strong>.</p>
+
+<p>Neither book is an index to the Sahih. They cover far more people than the Sahih uses, and they do not
+say "the «سفيان» on page so-and-so of the Sahih is this man".</p>
+
+<h3>Later works built on the Six</h3>
+
+<table>
+<thead><tr><th>Work</th><th>Author</th><th>What it covers</th><th>How it helps identify</th></tr></thead>
+<tbody>
+<tr><td><em>Tahdhib al-Kamal fi Asma' al-Rijal</em></td><td>al-Mizzi (d. 742 AH)</td><td>Every narrator in the
+Six and some related works. Shamela book 3722: ed. Bashar 'Awwad Ma'ruf, Mu'assasat al-Risala, Beirut,
+1400–1413 AH, 35 volumes.</td><td>Each entry lists the narrator's teachers and students, with symbols for which
+book used him: «خ» for al-Bukhari's Sahih, «خت» for a suspended report in it (symbols from the Taqrib
+introduction, Wikisource). A name in a chain is matched by finding the entry whose teacher list holds the man
+above and whose student list holds the man below.</td></tr>
+<tr><td><em>Tahdhib al-Tahdhib</em></td><td>Ibn Hajar</td><td>An abridgement of al-Mizzi to about a third, keeping
+every entry (Shamela 3722 description). On Shamela as book 3310 (Indian edition); edition details
+<strong>UNVERIFIED — for the scholar</strong>.</td><td>Same use, shorter; adds critics' remarks al-Mizzi
+lacked (<strong>UNVERIFIED — for the scholar</strong>).</td></tr>
+<tr><td><em>Taqrib al-Tahdhib</em></td><td>Ibn Hajar</td><td>One line per narrator. Its introduction says he gives
+each a «حكم يشمل أصح ما قيل فيه» and sorts narrators into twelve ranks of reliability and twelve generations
+(Wikisource, Taqrib introduction).</td><td>Fast way to confirm a candidate's generation and full name. Its grade
+is Ibn Hajar's judgement, to be quoted as his, never restated as fact.</td></tr>
+<tr><td><em>al-Kashif fi Ma'rifat man lahu Riwaya fi al-Kutub al-Sitta</em></td><td>al-Dhahabi (d. 748 AH)</td><td>Narrators
+of the Six, condensed from al-Mizzi. Shamela book 2171; ed. Muhammad 'Awwama and Ahmad al-Khatib, Dar al-Qibla,
+Jeddah, 1413 AH (from search summary; <strong>UNVERIFIED — for the scholar</strong>).</td><td>A short second
+witness beside the Taqrib.</td></tr>
+<tr><td><em>al-Ta'dil wa al-Tajrih li-man Kharraja lahu al-Bukhari fi al-Jami' al-Sahih</em></td><td>Abu al-Walid
+al-Baji (d. 474 AH)</td><td>Only the narrators of al-Bukhari's Sahih. Shamela book 5851; ed. Abu Lubaba Husayn,
+Dar al-Liwa', Riyadh, 1406 AH, 3 volumes (search summary; <strong>UNVERIFIED — for the
+scholar</strong>).</td><td>The one work scoped exactly to the Sahih. Earlier than al-Mizzi.</td></tr>
+<tr><td><em>Hady al-Sari</em>, chapters 6, 7 and 9</td><td>Ibn Hajar</td><td>Look-alike names, shared bare names in the
+Sahih, and the criticised narrators of the Sahih in alphabetical order. Shamela book 1224, al-Maktaba
+al-Salafiyya, 1380 AH, ed. Muhibb al-Din al-Khatib, 493 pages.</td><td>Chapter seven names, for the Sahih
+specifically, which person a frequently shared bare name refers to.</td></tr>
+<tr><td><em>Fath al-Bari</em></td><td>Ibn Hajar</td><td>Commentary on every hadith. Shamela book 1673 (Salafiyya
+edition) holds it with <em>Hady al-Sari</em>.</td><td>At each hadith Ibn Hajar often says which person an
+ambiguous name is. That makes it the place to look for a single occurrence (<strong>UNVERIFIED — for the
+scholar</strong>: no such passage was opened here).</td></tr>
+<tr><td><em>al-Isabah fi Tamyiz al-Sahabah</em></td><td>Ibn Hajar</td><td>The Companions.</td><td>For the first
+link of a chain, the Companion. Its scope and editions were not opened; <strong>UNVERIFIED — for the
+scholar</strong>.</td></tr>
+</tbody>
+</table>
+
+<p>In each case the method is the same, as the works themselves are arranged: find the entry whose name,
+teachers and students fit the position in the chain. When two entries fit, the name stays ambiguous until a
+commentator such as Ibn Hajar says which one it is. This description of method is drawn from how the entries
+are laid out, not from a scholar's statement of method; <strong>UNVERIFIED — for the scholar</strong>.</p>
+
+<h2>5. Do we need a rijal work, or does al-Bukhari suffice?</h2>
+
+<p><strong>Short answer: the Sahih does not suffice. A project that names the person behind each narrator
+must use at least one rijal work (كتب الرجال, books about narrators) and cite it.</strong> The reasons come
+from sections 3 and 4:</p>
+
+<ol>
+<li>The Sahih prints a name as the student spoke it, with no dates, teachers list or grade (section 3).</li>
+<li>Ibn Hajar wrote a chapter of <em>Hady al-Sari</em> just to resolve bare names in the Sahih that many people
+share (chapter seven, section 3). If the Sahih settled them, the chapter would not exist.</li>
+<li>Al-Bukhari's own <em>al-Tarikh al-Kabir</em> is a rijal work, not part of the Sahih. Using it is already
+"using a rijal work beyond the Sahih". It also does not point from a Sahih chain to an entry.</li>
+<li>Namaq's plan already rules out a Namaq-authored basis and allows <code>RIJAL_ENTRY</code> and
+<code>EDITOR_NOTE</code> as bases (plan section 2.6). Without a rijal work, most mentions would stay as
+unidentified text, which the plan allows but which leaves the graph almost empty for narrators.</li>
+</ol>
+
+<h3>Which works, and what they cost</h3>
+
+<ul>
+<li><strong><em>Hady al-Sari</em></strong>, chapters six, seven and nine: one volume of 493 pages on Shamela
+(1224). Small, Sahih-specific, and it covers the hardest cases (shared bare names). The cheapest start.</li>
+<li><strong><em>Tahdhib al-Kamal</em></strong>: 35 volumes on Shamela (3722) in Bashar 'Awwad Ma'ruf's
+edition. Complete teacher and student lists, which is what matching a position in a chain needs. Large: the
+project would cite single entries, not extract the work.</li>
+<li><strong><em>Taqrib al-Tahdhib</em></strong>: one line per narrator. Cheap to cite, but it gives too little
+to match a position in a chain on its own. Several editions exist; which the project uses is a choice to
+make and record.</li>
+<li><strong>al-Baji</strong>: three volumes on Shamela (5851), scoped exactly to the Sahih's narrators. Fewer
+than al-Mizzi's teacher and student lists (<strong>UNVERIFIED — for the scholar</strong>).</li>
+<li><strong><em>Fath al-Bari</em></strong>: many volumes (count not confirmed). Cited one hadith at a time where
+an ambiguous name needs a commentator's word.</li>
+</ul>
+
+<p>Namaq's rule that Shamela is its only digital host (AGENTS.md, "Content sources") applies to the Siyar. All
+of the works above appear on Shamela, so the same rule could extend to them, with the printed page numbers
+each Shamela edition carries.</p>
+
+<h3>What remains for a scholar</h3>
+
+<ul>
+<li>Which work is the first authority for identification, and in what order to consult the rest.</li>
+<li>Whether a position-in-chain match against <em>Tahdhib al-Kamal</em> counts as a basis by itself, or only a
+named statement such as Ibn Hajar's in chapter seven or in <em>Fath al-Bari</em> does.</li>
+<li>Which edition of each work to use.</li>
+</ul>
+
+<h2>6. What this means for Namaq</h2>
+
+<p><strong>What Namaq extracts.</strong> The chain and text as printed, words of transmission included. The
+book, chapter and heading as printed, with the heading recorded as al-Bukhari's own words. Whether a report is
+a main report, a repeat, or a suspended one, but only where a printed source says so; the structure in section
+3 tells you these kinds exist, not which hadith is which.</p>
+
+<p><strong>What Namaq identifies.</strong> A name in a chain links to a person only through an identification
+whose basis is a span in a rijal work, a commentary, or the Sahih's own «يعني» clarification (plan section 2.6).
+Competing identifications are kept side by side and marked disputed. Namaq never picks.</p>
+
+<p><strong>What Namaq must not claim.</strong></p>
+<ul>
+<li>It does not grade. "Sound" is al-Bukhari's judgement, reported by Ibn al-Salah and Ibn Hajar. The app says
+that, with the source, rather than "this hadith is sound".</li>
+<li>It does not say a narrator is reliable. When it shows a grade, it quotes a grader: "Ibn Hajar, <em>Taqrib</em>:
+«ثقة»", with page and edition.</li>
+<li>It does not say "on the condition of al-Bukhari" about anything. Section 2 showed even the meaning is
+disputed.</li>
+<li>It does not infer that a narrator was a weak one from absence, or a strong one from presence. Ibn Hajar's
+own words limit presence to uprightness «عنده», in al-Bukhari's view, and he lists those others disputed.</li>
+<li>It does not restate the meeting-versus-contemporaneity debate as a fact about any one chain.</li>
+</ul>
+
+<h2>What a scholar should check</h2>
+
+<ul>
+<li>Ibn Tahir al-Maqdisi's statement that the conditions are known «من سبر كتبهم», against the printed <em>Shurut al-A'imma al-Sitta</em>.</li>
+<li>Al-Hazimi's description of al-Bukhari's condition by layers of students, against <em>Shurut al-A'imma al-Khamsa</em>.</li>
+<li>Al-Nawawi's reading of "on the condition of the two" and his comments on Muslim's introduction.</li>
+<li>Whether "meeting" is al-Bukhari's condition for soundness or for his own book only.</li>
+<li>The common glosses of shudhudh and 'illa used in section 2.</li>
+<li>How Ibn Hajar grades each kind of suspended report (<em>Hady al-Sari</em>, chapter four), and his hadith count (chapter ten).</li>
+<li>Edition details for <em>Tahdhib al-Tahdhib</em>, <em>al-Kashif</em>, al-Baji, <em>al-Isabah</em> and <em>Fath al-Bari</em>, and entry counts for <em>al-Tarikh al-Kabir</em> and <em>al-Du'afa'</em>.</li>
+<li>That <em>Fath al-Bari</em> regularly resolves ambiguous names at the hadith.</li>
+<li>The description in section 4 of how a name is matched to an entry by teachers and students.</li>
+<li>Which work should be the first authority for identification, and whether a chain-position match is enough without a named statement.</li>
+</ul>
+
+<h2>Sources</h2>
+
+<p>Pages opened:</p>
+<ul>
+<li>Ibn al-Salah, <em>Muqaddima</em>, النوع الأول: https://ar.wikisource.org/wiki/مقدمة_ابن_الصلاح/النوع_الأول</li>
+<li>Ibn Hajar, <em>Hady al-Sari</em>, contents and edition: https://shamela.ws/book/1224</li>
+<li><em>Hady al-Sari</em>, chapter two: https://shamela.ws/book/1224/10</li>
+<li><em>Hady al-Sari</em>, chapter three: https://shamela.ws/book/1224/13</li>
+<li><em>Hady al-Sari</em>, chapter nine: https://shamela.ws/book/1224/379</li>
+<li>al-Mizzi, <em>Tahdhib al-Kamal</em>, edition page: https://shamela.ws/book/3722</li>
+<li>Ibn Hajar, <em>Taqrib al-Tahdhib</em>, introduction: https://ar.wikisource.org/wiki/تقريب_التهذيب/المقدمة</li>
+<li>islamweb, «القول المفهم في معنى شرط الشيخين»: https://www.islamweb.net/ar/article/206914/</li>
+<li>islamweb fatwa 53837: https://www.islamweb.net/ar/fatwa/53837/</li>
+</ul>
+<p>Seen only in search results (not opened): https://shamela.ws/book/956 (<em>al-Tarikh al-Kabir</em>),
+https://shamela.ws/book/8632/128 (<em>al-Du'afa'</em>), https://shamela.ws/book/3310 (<em>Tahdhib al-Tahdhib</em>),
+https://shamela.ws/book/2171 (<em>al-Kashif</em>), https://shamela.ws/index.php/book/5851 (al-Baji),
+https://shamela.ws/book/1673/1 (<em>Fath al-Bari</em>), https://www.bukhari-pedia.net/book/shorot_5 (al-Hazimi).</p>
+
+<h2>Read next</h2>
+
+<p><strong>Primary sources:</strong> <code>docs/plans/data-model/plan.md</code> section 2.6 for mentions and
+identifications; <a href="0004-what-the-model-holds.html">Lesson 0004</a> for how al-Bukhari tests the current model.</p>
+
+</article>
+</main>
+</body>
+</html>
