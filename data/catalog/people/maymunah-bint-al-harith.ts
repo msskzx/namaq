@@ -9,17 +9,24 @@ const maymunahBintAlHarith = {
   fields: {
     sex: { value: 'FEMALE', claims: ['maymunah-siyar27/sex'] },
     fullName: {
-      value: 'ميمونة بنت الحارث بن حزن بن بجير بن الهزم بن رويبة بن عبد الله بن هلال بن عامر بن صعصعة الهلالية',
+      value:
+        'ميمونة بنت الحارث بن حزن بن بجير بن الهزم بن رويبة بن عبد الله بن هلال بن عامر بن صعصعة الهلالية',
       claims: ['maymunah-siyar27/full-name'],
     },
     virtues: {
-      value: 'كانت من سادات النساء، ومن أتقى نساء النبي لله وأوصلهن للرحم.',
+      value:
+        'وَكَانَتْ مِنْ سَادَاتِ النِّسَاء أَمَا إِنَّهَا كَانَتْ مِنْ أَتْقَانَا للهِ، وَأَوْصَلِنَا لِلرَّحِم',
       claims: ['maymunah-siyar27/virtues'],
     },
     deathYearHijri: { value: '51', claims: ['maymunah-siyar27/death-year'] },
   },
   titles: [
-    { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
+    {
+      title: 'companion',
+      name: 'صحابي',
+      nameTransliterated: 'Companion',
+      claims: legacyUnreviewed,
+    },
     {
       title: 'mother-of-believers',
       name: 'أم المؤمنين',

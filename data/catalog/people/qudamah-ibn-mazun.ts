@@ -14,7 +14,7 @@ const qudamahIbnMazun = {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     kunya: { value: 'أَبُو عَمْرٍو', claims: ['qudamah-mazun-siyar10/kunya'] },
     appearance: {
-      value: 'كَانَ طَوِيْلاً أَسْمَرَ.',
+      value: 'وَكَانَ طَوِيْلاً أَسْمَر',
       claims: ['qudamah-mazun-siyar10/appearance'],
     },
     deathYearHijri: { value: '36', claims: ['qudamah-mazun-siyar10/death-year'] },
