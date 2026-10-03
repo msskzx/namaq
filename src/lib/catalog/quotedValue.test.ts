@@ -22,6 +22,29 @@ describe('joinAtSeams', () => {
   });
 });
 
+describe('closing full stops', () => {
+  const headingWithCode = '١ - أَبُو عُبَيْدَةَ بنُ الجَرَّاحِ عَامِرُ بنُ عَبْدِ اللهِ * (م، ق) .';
+  const next = 'ابْنِ الجَرَّاحِ بنِ هِلاَلِ بنِ أُهَيْبِ.';
+
+  it('drops the heading full stop left behind by the collection marks at a seam', () => {
+    expect(matchQuotedValue('عَامِرُ بنُ عَبْدِ اللهِ بنِ الجَرَّاحِ بنِ هِلاَلِ', [[headingWithCode, next]])).toEqual({ ok: true });
+  });
+
+  it('accepts a seam-joined value that also keeps the closing full stop of the last passage', () => {
+    expect(
+      matchQuotedValue('عَامِرُ بنُ عَبْدِ اللهِ بنِ الجَرَّاحِ بنِ هِلاَلِ بنِ أُهَيْبِ.', [[headingWithCode, next, 'جُمْلَةٌ أُخْرَى.']]),
+    ).toEqual({ ok: true });
+  });
+
+  it('accepts a value that keeps the full stop between two paragraphs', () => {
+    expect(matchQuotedValue('جُمْلَةٌ أُولَى. جُمْلَةٌ ثَانِيَةٌ.', [['جُمْلَةٌ أُولَى.', 'جُمْلَةٌ ثَانِيَةٌ.']])).toEqual({ ok: true });
+  });
+
+  it('still accepts a clip that keeps a closing full stop inside one passage', () => {
+    expect(matchQuotedValue('ابْنِ الجَرَّاحِ بنِ هِلاَلِ بنِ أُهَيْبِ.', [[headingWithCode, next]])).toEqual({ ok: true });
+  });
+});
+
 describe('matchQuotedValue', () => {
   it('accepts a value joined across a seam with the seam edit and no closing full stop', () => {
     expect(matchQuotedValue(seamed, [[heading, continuation]])).toEqual({ ok: true });
