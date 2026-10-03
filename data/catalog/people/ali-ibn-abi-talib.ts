@@ -21,11 +21,14 @@ const aliIbnAbiTalib = {
     // goes when this projects.
     kunya: { value: 'أبو الحسن', claims: legacyUnreviewed },
     sex: { value: 'MALE', claims: ['ali/sex'] },
-    virtues: {
+  },
+  virtues: [
+    {
       value: 'عمد علي فرقد على فراش رسول الله صلى الله عليه وسلم ليلة خروجه مهاجرا، يواري عنه العيون.',
       claims: ['ali/hijra-bed'],
     },
-  },
+  ],
+
   titles: [
     // Carried from the retired seed entry; no batch cites these yet.
     { title: 'the-ten-promised-paradise', name: 'العشرة المبشرون بالجنة', nameTransliterated: 'The Ten Promised Paradise', claims: legacyUnreviewed },

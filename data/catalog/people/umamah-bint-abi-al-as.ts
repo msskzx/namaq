@@ -19,11 +19,14 @@ const umamahBintAbiAlAs = {
       value: 'أُمَامَةُ بِنْتُ أَبِي العَاصِ',
       claims: ['umamah-bint-abi-al-as/fullName'],
     },
-    virtues: {
+  },
+  virtues: [
+    {
       value: 'الَّتِي كَانَ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَحْمِلُهَا فِي صَلاَتِهِ',
       claims: ['umamah-bint-abi-al-as/virtues'],
     },
-  },
+  ],
+
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],

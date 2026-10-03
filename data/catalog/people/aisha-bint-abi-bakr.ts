@@ -13,11 +13,14 @@ const aishaBintAbiBakr = {
       claims: ['aisha-siyar/full-name'],
     },
     appearance: { value: 'كَانَتِ امْرَأَةً بَيْضَاءَ جَمِيْلَةً، وَمِنْ ثَمَّ يُقَالُ لَهَا: الحُمَيْرَاءُ', claims: ['aisha-siyar/appearance'] },
-    virtues: {
+  },
+  virtues: [
+    {
       value: 'أَفْقَهُ نِسَاءِ الأُمَّةِ عَلَى الإِطْلاَقِ وَلاَ أَعْلَمُ فِي أُمَّةِ مُحَمَّدٍ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بَلْ وَلاَ فِي النِّسَاءِ مُطْلَقاً امْرَأَةً أَعْلَمَ مِنْهَا',
       claims: ['aisha-siyar/virtues'],
     },
-  },
+  ],
+
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
     { title: 'siddiqa', name: 'صديقة', nameTransliterated: 'Siddiqa', claims: ['aisha-siyar/title-siddiqa'] },

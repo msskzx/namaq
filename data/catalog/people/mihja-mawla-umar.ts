@@ -15,12 +15,15 @@ const mihjaMawlaUmar = {
   hasProfile: true,
   fields: {
     sex: { value: 'MALE', claims: ['mihja/sex'] },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'أول قتيل في سبيل الله، رمي بسهم يوم بدر.',
       claims: ['mihja/badr'],
     },
-  },
+  ],
+
   titles: [],
   relations: [],
 } satisfies CatalogPerson;

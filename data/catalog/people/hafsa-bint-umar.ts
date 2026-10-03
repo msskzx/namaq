@@ -13,12 +13,15 @@ const hafsaBintUmar = {
       claims: ['hafsa-bint-umar-siyar25/full-name'],
     },
     appearance: { value: 'وصفت بأنها كانت ذات هيئة وجمال.', claims: legacyUnreviewed },
-    virtues: {
+    deathYearHijri: { value: '41', claims: ['hafsa-bint-umar-siyar25/death-year'] },
+  },
+  virtues: [
+    {
       value: 'فَإَنَّهَا صَوَّامَةٌ، قَوَّامَةٌ، وَإِنَّهَا زَوْجَتُكَ فِي الجَنَّةِ',
       claims: ['hafsa-bint-umar-siyar25/virtues'],
     },
-    deathYearHijri: { value: '41', claims: ['hafsa-bint-umar-siyar25/death-year'] },
-  },
+  ],
+
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
     {

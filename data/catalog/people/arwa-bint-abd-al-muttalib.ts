@@ -22,11 +22,14 @@ const arwaBintAbdAlMuttalib = {
   fields: {
     sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: { value: 'أروى بنت عبد المطلب بن هاشم القرشية الهاشمية', claims: legacyUnreviewed },
-    virtues: {
+  },
+  virtues: [
+    {
       value: 'ثُمَّ أَسْلَمَتْ أَرْوَى، وَهَاجَرَتْ.',
       claims: ['arwa-siyar175/islam-hijrah'],
     },
-  },
+  ],
+
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],

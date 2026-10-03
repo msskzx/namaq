@@ -17,14 +17,17 @@ const alBaraaIbnMalik = {
       value: 'البَرَاءُ بنُ مَالِكِ بنِ النَّضْرِ بنِ ضَمْضَمٍ الأَنْصَارِيُّ بنِ زَيْدِ بنِ حَرَامِ بنِ جُنْدَبِ بنِ عَامِرِ بنِ غَنْمِ بنِ عَدِيِّ بنِ النَّجَّارِ الأَنْصَارِيُّ، النَّجَّارِيُّ، المَدَنِيُّ',
       claims: ['al-baraa-ibn-malik-siyar26/full-name'],
     },
-    virtues: {
+    deathYearHijri: { value: '20', claims: ['al-baraa-ibn-malik-siyar26/death-year'] },
+    placeOfDeathArabic: { value: 'تُسْتَرَ', claims: ['al-baraa-ibn-malik-siyar26/death-place'] },
+  },
+  virtues: [
+    {
       value:
         'البَطَلُ الكَرَّارُ، صَاحِبُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- لاَ تَسْتَعْمِلُوا البَرَاءَ عَلَى جَيْشٍ، فَإِنَّهُ مَهْلَكَةٌ مِنَ المَهَالِكِ يَقْدَمُ بِهِم اشْتُهِرَ أَنَّ البَرَاءَ قَتَلَ فِي حُرُوْبِهِ مَائَةَ نَفْسٍ مِنَ الشُّجْعَانِ مُبَارَزَةً لَوْ أَقْسَمَ عَلَى اللهِ لأَبَرَّهُ، مِنْهُم: البَرَاءُ بنُ مَالِكٍ أَتَخْشَى عَلَيَّ أَنْ أَمُوْتَ عَلَى فِرَاشِي وَقَدْ قَتَلْتُ تِسْعَةً وَتِسْعِيْنَ نَفَساً مِنَ المُشْرِكِيْنَ مُبَارَزَةً',
       claims: ['al-baraa-ibn-malik-siyar26/virtues'],
     },
-    deathYearHijri: { value: '20', claims: ['al-baraa-ibn-malik-siyar26/death-year'] },
-    placeOfDeathArabic: { value: 'تُسْتَرَ', claims: ['al-baraa-ibn-malik-siyar26/death-place'] },
-  },
+  ],
+
   titles: [
     // Carried from the retired seed.
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },

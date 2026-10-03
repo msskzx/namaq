@@ -13,8 +13,9 @@ const ibrahimIbnMuhammad = {
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'إبراهيم بن محمد بن عبد الله الهاشمي القرشي', claims: legacyUnreviewed },
-    virtues: { value: 'ابن النبي من مارية القبطية، توفي صغيراً.', claims: legacyUnreviewed },
   },
+  virtues: [{ value: 'ابن النبي من مارية القبطية، توفي صغيراً.', claims: legacyUnreviewed }],
+
   titles: [],
   relations: [],
 } satisfies CatalogPerson;

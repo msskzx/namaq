@@ -23,14 +23,17 @@ const abuTalhaAlAnsari = {
       value: 'كَانَ جَلْداً، صَيِّتاً، آدَمَ، مَرْبُوْعاً، لاَ يُغَيِّرُ شَيْبَهُ.',
       claims: ['abu-talha-al-ansari-siyar5/appearance'],
     },
-    virtues: {
+    deathYearHijri: { value: '34', claims: ['abu-talha-al-ansari-siyar5/death-year'] },
+    placeOfDeathArabic: { value: 'المَدِيْنَةِ', claims: ['abu-talha-al-ansari-siyar5/death-place'] },
+  },
+  virtues: [
+    {
       value:
         'صَوْتُ أَبِي طَلْحَةَ فِي الجَيْشِ خَيْرٌ مِنْ فِئَةٍ نَفْسِي لِنَفْسِكَ الفِدَاءُ، وَوَجْهِي لِوَجْهِكَ الوِقَاءُ كَانَ يَرْمِي بَيْنَ يَدَيْ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَوْمَ أُحُدٍ وَكَانَ يَدْفَعُ صَدْرَ رَسُوْلِ اللهِ بِيَدِهِ فَقَتَلَ أَبُو طَلْحَةَ يَوْمَئِذٍ عِشْرِيْنَ رَجُلاً، وَأَخَذَ أَسْلاَبَهُمْ إِنَّ أَحَبَّ أَمْوَالِي إِلَيَّ بَيْرُحَاءُ، وَإِنَّهَا صَدَقَةٌ للهِ سَرَدَ الصَّوْمَ بَعْدَ النَّبِيِّ',
       claims: ['abu-talha-al-ansari-siyar5/virtues'],
     },
-    deathYearHijri: { value: '34', claims: ['abu-talha-al-ansari-siyar5/death-year'] },
-    placeOfDeathArabic: { value: 'المَدِيْنَةِ', claims: ['abu-talha-al-ansari-siyar5/death-place'] },
-  },
+  ],
+
   titles: [
     {
       title: 'companion',

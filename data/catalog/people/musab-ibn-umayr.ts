@@ -17,12 +17,15 @@ const musabIbnUmayr = {
         'مُصْعَبُ بنُ عُمَيْرِ بنِ هَاشِمِ بنِ عَبْدِ مَنَافٍ بنِ عَبْدِ الدَّارِ بنِ قُصَيِّ بنِ كِلاَبٍ',
       claims: ['musab/full-name'],
     },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'بعثه رسول الله صلى الله عليه وسلم إلى المدينة يقرئهم ويفقههم في الدين، فكان يسمى بها المقرئ، وكان أول من جمع الجمعة بالمدينة.',
       claims: ['musab/madinah-muqri'],
     },
-  },
+  ],
+
   titles: [
     // Carried from the retired seed entry. The Siyar entry never calls him
     // صحابي in so many words, so this stays legacy rather than promoted.

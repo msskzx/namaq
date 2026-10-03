@@ -13,13 +13,16 @@ const maymunahBintAlHarith = {
         'ميمونة بنت الحارث بن حزن بن بجير بن الهزم بن رويبة بن عبد الله بن هلال بن عامر بن صعصعة الهلالية',
       claims: ['maymunah-siyar27/full-name'],
     },
-    virtues: {
+    deathYearHijri: { value: '51', claims: ['maymunah-siyar27/death-year'] },
+  },
+  virtues: [
+    {
       value:
         'وَكَانَتْ مِنْ سَادَاتِ النِّسَاء أَمَا إِنَّهَا كَانَتْ مِنْ أَتْقَانَا للهِ، وَأَوْصَلِنَا لِلرَّحِم',
       claims: ['maymunah-siyar27/virtues'],
     },
-    deathYearHijri: { value: '51', claims: ['maymunah-siyar27/death-year'] },
-  },
+  ],
+
   titles: [
     {
       title: 'companion',

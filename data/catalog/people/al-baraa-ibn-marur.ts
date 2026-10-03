@@ -27,12 +27,15 @@ const alBaraaIbnMarur = {
       value: 'الخزرجي، الأنصاري، السلمي، نقيب بني سلمة',
       claims: ['al-baraa-ibn-marur-siyar53/tribal-affiliation'],
     },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'أول من بايع ليلة العقبة الأولى، فاضل تقي فقيه النفس، وأجل السبعين يومها. ولما ذكر له صلاته إلى الكعبة قال له النبي صلى الله عليه وسلم: قد كنت على قبلة لو صبرت عليها. وقدم النبي المدينة وقد مات، فسأل عن قبره فصف عليه وكبر.',
       claims: ['al-baraa/first-to-pledge', 'al-baraa-ibn-marur-siyar53/virtues'],
     },
-  },
+  ],
+
   titles: [
     {
       title: 'companion',

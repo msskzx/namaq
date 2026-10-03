@@ -17,11 +17,14 @@ const abdullahIbnJaafar = {
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'عبد الله بن جعفر بن أبي طالب الهاشمي القرشي', claims: legacyUnreviewed },
-    virtues: {
+  },
+  virtues: [
+    {
       value: 'ابن عم النبي، من أجود الناس وأكرمهم، كان يُلقب بـ "بحر الجود".',
       claims: legacyUnreviewed,
     },
-  },
+  ],
+
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],

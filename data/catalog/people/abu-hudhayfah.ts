@@ -12,9 +12,10 @@ const abuHudhayfah = {
   hasProfile: true,
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
-    virtues: { value: 'السَّيِّدُ الكَبِيْرُ، الشَّهِيْدُ', claims: ['abu-hudhayfah-siyar13/virtues'] },
     deathYearHijri: { value: '12', claims: ['abu-hudhayfah-siyar13/death-year'] },
   },
+  virtues: [{ value: 'السَّيِّدُ الكَبِيْرُ، الشَّهِيْدُ', claims: ['abu-hudhayfah-siyar13/virtues'] }],
+
   titles: [
     // Carried from the seed. This entry never calls him صحابي outright.
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },

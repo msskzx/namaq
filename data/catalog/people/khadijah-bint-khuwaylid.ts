@@ -13,12 +13,15 @@ const khadijahBintKhuwaylid = {
     },
     kunya: { value: 'أُمُّ القَاسِمِ', claims: ['khadijah-siyar/kunya'] },
     sex: { value: 'FEMALE', claims: ['khadijah/sex'] },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'قال صلى الله عليه وسلم: (والله لقد آمنت بي إذ كفر بي الناس، وآوتني إذ رفضني الناس، وصدقتني إذ كذبني الناس، ورزقت منها الولد) .',
       claims: ['khadijah/virtues'],
     },
-  },
+  ],
+
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
     {

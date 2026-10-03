@@ -43,12 +43,15 @@ const prophetMuhammad = {
     // the page.
     deathYearHijri: { value: '11 AH', claims: ['prophet/death-year'] },
     kunya: { value: 'أبو القاسم', claims: ['prophet/kunya'] },
-    virtues: {
+  },
+
+  virtues: [
+    {
       value:
         'خاتم النبيين وسيد المرسلين، اصطفاه الله من بني هاشم، وهو دعوة أبيه إبراهيم وبشرى عيسى، وقال صلى الله عليه وسلم: (إنما أنا رحمة مهداة) .',
       claims: ['prophet/virtues'],
     },
-  },
+  ],
 
   // Ten of the seed's twelve. الشفيع and سيد ولد آدم are not in this chapter,
   // so they stay the seed's until a later one reaches the passages naming them.

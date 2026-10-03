@@ -52,6 +52,7 @@ export async function GET(
       where: { slug },
       include: {
         titles: true,
+        virtues: { orderBy: { position: 'asc' } },
         participations: {
           include: { battle: true },
         },
@@ -59,8 +60,7 @@ export async function GET(
         ayat: {
           include: { surah: true },
         },
-        // What this person said, and what was said about them: two sides of
-        // the same record -- see docs/adr/0015-one-record-for-what-someone-said.md.
+        // See docs/adr/0015-one-record-for-what-someone-said.md.
         said: { select: utteranceSelect, orderBy: { slug: 'asc' } },
         spokenAbout: { select: utteranceSelect, orderBy: { slug: 'asc' } },
       },

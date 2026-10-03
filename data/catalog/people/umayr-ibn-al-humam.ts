@@ -15,12 +15,15 @@ const umayrIbnAlHumam = {
   hasProfile: true,
   fields: {
     sex: { value: 'MALE', claims: ['umayr-humam/sex'] },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'قال حين سمع: (قوموا إلى جنة عرضها السموات والأرض) : بخ بخ! ثم ألقى تمرات كانت معه وقاتل حتى قتل.',
       claims: ['umayr-humam/badr'],
     },
-  },
+  ],
+
   titles: [],
   relations: [],
 } satisfies CatalogPerson;

@@ -69,11 +69,40 @@ describe('validateCatalog', () => {
   });
 
   it('rejects a claim key no approved batch declares', () => {
-    const subject = person({ fields: { virtues: { value: 'مناقب', claims: ['pilot/absent'] } } });
+    const subject = person({ virtues: [{ value: 'مناقب', claims: ['pilot/absent'] }] });
 
     expect(validateCatalog(catalog({ people: [subject] }), known)).toEqual([
-      { path: 'people/someone.virtues', message: 'no batch declares claim pilot/absent' },
+      { path: 'people/someone.virtues[0]', message: 'no batch declares claim pilot/absent' },
     ]);
+  });
+
+  it('points a virtue at its own entry, so a list of them is checked one by one', () => {
+    const subject = person({
+      virtues: [
+        { value: 'أول', claims: ['pilot/one'] },
+        { value: 'ثان', claims: ['pilot/absent'] },
+      ],
+    });
+
+    expect(validateCatalog(catalog({ people: [subject] }), known)).toEqual([
+      { path: 'people/someone.virtues[1]', message: 'no batch declares claim pilot/absent' },
+    ]);
+  });
+
+  it('rejects a virtue whose speaker names a person nobody declares', () => {
+    const subject = person({
+      virtues: [{ value: 'قال فلان', speaker: { name: 'فلان', slug: 'ghost' }, claims: ['pilot/one'] }],
+    });
+
+    expect(validateCatalog(catalog({ people: [subject] }), known)).toEqual([
+      { path: 'people/someone.virtues[0]', message: 'unknown person ghost' },
+    ]);
+  });
+
+  it('accepts a virtue in al-Dhahabi\'s own voice, which names no speaker', () => {
+    const subject = person({ virtues: [{ value: 'مناقب', claims: ['pilot/one'] }] });
+
+    expect(validateCatalog(catalog({ people: [subject] }), known)).toEqual([]);
   });
 
   it('accepts the legacy marker, which stands in for evidence that was never recorded', () => {

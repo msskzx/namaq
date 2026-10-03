@@ -16,12 +16,15 @@ const ummShareek = {
     sex: { value: 'FEMALE', claims: ['umm-shareek-siyar33/sex'] },
     kunya: { value: 'أم شريك', claims: ['umm-shareek-siyar33/kunya'] },
     tribalAffiliation: { value: 'النجارية', claims: ['umm-shareek-siyar33/tribal-affiliation'] },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'عن قتادة: أن النبي صلى الله عليه وسلم قال: إني أحب أن أتزوج في الأنصار، ثم إني أكره غيرتهن، قال: فلم يدخل بها. نعم، وروى عروة بن الزبير، عن أم شريك: أنها كانت فيمن وهبت نفسها للنبي صلى الله عليه وسلم.',
       claims: ['umm-shareek-siyar33/virtues'],
     },
-  },
+  ],
+
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: ['umm-shareek-siyar33/titles'] },
   ],

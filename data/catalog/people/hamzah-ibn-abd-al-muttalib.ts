@@ -24,12 +24,15 @@ const hamzahIbnAbdAlMuttalib = {
     appearance: { value: 'كان رجلاً قوي البنية، شجاعاً، مهاباً.', claims: legacyUnreviewed },
     sex: { value: 'MALE', claims: ['hamzah/sex'] },
     kunya: { value: 'أَبُو عُمَارَةَ، وَأَبُو يَعْلَى', claims: ['hamzah-siyar15/kunya'] },
-    virtues: {
+  },
+
+  virtues: [
+    {
       value:
         'كان أعز فتى في قريش وأشده شكيمة، فلما أسلم عرفت قريش أن رسول الله صلى الله عليه وسلم قد عز وامتنع. وقال فيه يوم أحد لما سمع البكاء على قتلى الأنصار: (لكن حمزة لا بواكي له) ، واستغفر له.',
       claims: ['hamzah/virtues-islam', 'hamzah/la-bawakiya-lah'],
     },
-  },
+  ],
 
   // Not a title the book assigns him: it is what he called himself, fighting
   // with two swords in front of the Prophet at Uhud.

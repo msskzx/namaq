@@ -14,7 +14,13 @@ const juwayriyahBintAlHarith = {
       value: 'وَكَانَتْ مِنْ أَجْمَلِ النِّسَاءِ كَانَتْ جُوَيْرِيَةُ امْرَأَةً حُلْوَةً مُلاَّحَةً ، لاَ يَرَاهَا أَحَدٌ إِلاَّ أَخَذَتْ بِنَفْسِهِ',
       claims: ['juwayriyah-siyar39/appearance'],
     },
-    virtues: {
+    deathYearHijri: {
+      value: '50',
+      claims: ['juwayriyah-siyar39/death-year', 'juwayriyah-siyar39/death-year-alternate'],
+    },
+  },
+  virtues: [
+    {
       value:
         'سُبِيَتْ يَوْمَ غَزْوَةِ المُرَيْسِيْعِ، فِي السَّنَةِ الخَامِسَةِ فَأَسْلَمَتْ، وَتَزَوَّجَ بِهَا؛ وَأَطْلَقَ لَهَا الأُسَارَى مِنْ قَوْمِهَا فَلَقَدْ أُعْتِقَ بِهَا مائَةُ أَهْلِ بَيْتٍ، فَمَا أَعْلَمُ امْرَأَةً كَانَتْ أَعْظَمَ بَرَكَةً عَلَى قَوْمِهَا مِنْهَا فَأَتَاهَا أَبُوْهَا، فَقَالَ: إِنَّ هَذَا الرَّجُلَ قَدْ خَيَّرَكِ، فَلاَ تَفْضَحِيْنَا. فَقَالَتْ: فَإِنِّي قَدِ اخْتَرْتُهُ',
       claims: [
@@ -23,11 +29,8 @@ const juwayriyahBintAlHarith = {
         'juwayriyah-siyar39/virtues-chose-prophet',
       ],
     },
-    deathYearHijri: {
-      value: '50',
-      claims: ['juwayriyah-siyar39/death-year', 'juwayriyah-siyar39/death-year-alternate'],
-    },
-  },
+  ],
+
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: ['juwayriyah-siyar39/titles-companion'] },
     {

@@ -17,12 +17,15 @@ const ummKulthumBintMuhammad = {
       value: 'أم كلثوم بنت محمد بن عبد الله بن عبد المطلب بن هاشم القرشية الهاشمية',
       claims: legacyUnreviewed,
     },
-    // Carried from the retired prisma/personSeedData.ts entry, uncited.
-    virtues: {
+  },
+  // Carried from the retired prisma/personSeedData.ts entry, uncited.
+  virtues: [
+    {
       value: 'بنت النبي، زوجة عثمان بن عفان بعد وفاة أختها رقية، وبذلك لقب عثمان بذي النورين.',
       claims: legacyUnreviewed,
     },
-  },
+  ],
+
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
     { title: 'daughter-of-prophet', name: 'بنت النبي', nameTransliterated: 'Daughter of the Prophet', claims: legacyUnreviewed },

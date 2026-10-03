@@ -14,12 +14,15 @@ const salimMawlaAbiHudhayfah = {
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'سَالِمُ بنُ مَعْقِلٍ', claims: ['salim-siyar14/full-name'] },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'مِنَ السَّابِقِيْنَ الأَوَّلِيْنَ، البَدْرِيِّيْنَ، المُقَرَّبِيْنَ، العَالِمِيْنَ كَانَ سَالِمٌ مَوْلَى أَبِي حُذَيْفَةَ يَؤُمُّ المُهَاجِرِيْنَ الَّذِيْنَ قَدِمُوا مِنْ مَكَّةَ حِيْنَ قَدِمَ المَدِيْنَةَ، لأَنَّهُ كَانَ أَقْرَأَهُم',
       claims: ['salim-siyar14/virtues'],
     },
-  },
+  ],
+
   titles: [
     // Carried from the seed. This entry never calls him صحابي outright.
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },

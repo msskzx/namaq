@@ -15,12 +15,15 @@ const hanzalahIbnAbiAmir = {
   hasProfile: true,
   fields: {
     sex: { value: 'MALE', claims: ['hanzalah/sex'] },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'خرج جنبا حين سمع الهيعة فقتل يوم أحد، فقال صلى الله عليه وسلم: (إن صاحبكم لتغسله الملائكة) ، وهو غسيل الملائكة.',
       claims: ['hanzalah/uhud'],
     },
-  },
+  ],
+
   titles: [],
   relations: [],
 } satisfies CatalogPerson;

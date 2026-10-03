@@ -18,11 +18,14 @@ const sumayyahBintKhayyat = {
   hasProfile: true,
   fields: {
     sex: { value: 'FEMALE', claims: ['sumayyah/sex'] },
-    virtues: {
+  },
+  virtues: [
+    {
       value: 'كانت أول شهيد في الإسلام، طعنها أبو جهل بحربة.',
       claims: ['sumayyah/virtues'],
     },
-  },
+  ],
+
   titles: [],
   relations: [],
 } satisfies CatalogPerson;

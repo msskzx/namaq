@@ -13,8 +13,9 @@ const alQasimIbnMuhammad = {
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'القاسم بن محمد بن عبد الله الهاشمي القرشي', claims: legacyUnreviewed },
-    virtues: { value: 'أول أبناء النبي، توفي صغيراً.', claims: legacyUnreviewed },
   },
+  virtues: [{ value: 'أول أبناء النبي، توفي صغيراً.', claims: legacyUnreviewed }],
+
   titles: [],
   relations: [],
 } satisfies CatalogPerson;

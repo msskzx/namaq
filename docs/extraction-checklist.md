@@ -101,9 +101,13 @@ Physical description: `كَانَ طَوِيْلاً أَسْمَرَ`, `شَد�
 
 Unlike the first three, this is rarely one paragraph — it accumulates
 across the entry as quoted حديث, remarks from the Prophet or other
-companions, and notable deeds. Goes on `fields.virtues` (the catalog field
-is named `virtues`, not `manaqeb` — the checklist uses the Arabic term
-because that's how an agent will recognize it while reading).
+companions, and notable deeds. Goes on `virtues[]` (the catalog key is
+named `virtues`, not `manaqeb` — the checklist uses the Arabic term
+because that's how an agent will recognize it while reading). One entry
+per virtue, each in one speaker's exact words and each citing its own
+claim, with the speaker named wherever the words are not al-Dhahabi's own
+-- see
+[ADR 0020](../adr/0020-a-virtue-is-one-entry-with-one-speaker.md).
 
 ### 5. Wives (الزوجات) — wherever marriage is mentioned
 
@@ -152,7 +156,7 @@ a known gap, not something a routine batch needs to fix.
 | Nasab (father edge) | `relations[]`, `{ type: 'SON'\|'DAUGHTER', inverse: 'FATHER'\|'MOTHER', to: '<father-slug>' }` | `CatalogRelation` |
 | Kunya | `fields.kunya`, claim `field: "kunya"` | `Cited<string>` |
 | Appearance | `fields.appearance`, claim `field: "appearance"` | `Cited<string>` |
-| Manaqeb | `fields.virtues`, claim `field: "virtues"` | `Cited<string>` |
+| Manaqeb | `virtues[]`, one entry per virtue, claim `field: "virtues"` | `CatalogVirtue` |
 | Wives | `relations[]`, `{ type: 'HUSBAND'\|'WIFE', to: '<spouse-slug>' }` | `CatalogRelation` |
 | Siblings | `relations[]`, `{ type: 'BROTHER'\|'SISTER'\|'HALF_BROTHER'\|'HALF_SISTER', to: '<sibling-slug>' }` | `CatalogRelation` |
 | Source text detail | `batch.json`'s `account.volumeNumber` / `page.printedPage` / `extractionUrl` / `accessedAt` | schema-required |

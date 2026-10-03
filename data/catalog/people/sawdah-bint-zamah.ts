@@ -23,12 +23,15 @@ const sawdahBintZamah = {
       value: 'كَانَتْ سَيِّدَةً جَلِيْلَةً، نَبِيْلَةً، ضَخْمَةً',
       claims: ['sawdah-bint-zamah-siyar40/appearance'],
     },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'وَهِيَ أَوَّلُ مَنْ تَزَوَّجَ بِهَا النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بَعْدَ خَدِيْجَةَ، وَانْفَرَدَتْ بِهِ نَحْواً مِنْ ثَلاَثِ سِنِيْنَ أَوْ أَكْثَرَ، حَتَّى دَخَلَ بِعَائِشَةَ. وَهِيَ الَّتِي وَهَبَتْ يَوْمَهَا لِعَائِشَةَ، رِعَايَةً لِقَلْبِ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-',
       claims: ['sawdah-bint-zamah-siyar40/virtues'],
     },
-  },
+  ],
+
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
     {

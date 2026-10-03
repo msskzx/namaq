@@ -21,11 +21,14 @@ const alHusaynIbnAli = {
     fullName: { value: 'الحسين بن علي بن أبي طالب الهاشمي القرشي', claims: legacyUnreviewed },
     // Carried from the retired prisma/personSeedData.ts entry, uncited.
     appearance: { value: 'كان يشبه النبي صلى الله عليه وسلم.', claims: legacyUnreviewed },
-    virtues: {
+  },
+  virtues: [
+    {
       value: 'سبط النبي وريحانته، سيد شباب أهل الجنة، استشهد في كربلاء دفاعاً عن الحق.',
       claims: legacyUnreviewed,
     },
-  },
+  ],
+
   titles: [
     // Carried from the seed rows; this chapter records only his birth.
     { title: 'sayyid-shabab-ahl-al-jannah', name: 'سيد شباب أهل الجنة', nameTransliterated: 'Master of the Youth of Paradise', claims: legacyUnreviewed },

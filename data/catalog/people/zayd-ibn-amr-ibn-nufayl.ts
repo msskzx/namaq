@@ -22,12 +22,15 @@ const zaydIbnAmrIbnNufayl = {
   hasProfile: true,
   fields: {
     sex: { value: 'MALE', claims: ['zayd-amr/sex'] },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'قال قائما مسندا ظهره إلى الكعبة: يا معشر قريش، والله ما منكم أحد على دين إبراهيم غيري. وكان يحيي الموءودة، ويأبى ما ذبح على الأنصاب. وقال فيه النبي صلى الله عليه وسلم: (إنه يبعث يوم القيامة أمة وحده) .',
       claims: ['zayd-amr/hanif', 'zayd-amr/ansab', 'zayd-amr/ummah-wahdah'],
     },
-  },
+  ],
+
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'amr-ibn-nufayl', claims: legacyUnreviewed },

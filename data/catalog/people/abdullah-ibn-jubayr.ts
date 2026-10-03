@@ -17,11 +17,6 @@ const abdullahIbnJubayr = {
   hasProfile: true,
   fields: {
     sex: { value: 'MALE', claims: ['ibn-jubayr/sex'] },
-    virtues: {
-      value:
-        'أمره رسول الله صلى الله عليه وسلم على الرماة يوم أحد وهم خمسون، وقال: (لا تبرحوا) ، فثبت مكانه حتى استشهد.',
-      claims: ['ibn-jubayr/uhud'],
-    },
     // Carried from the retired seed entry. The batch names him without his
     // nasab, so the fuller name's evidence is owed.
     fullName: {
@@ -29,6 +24,14 @@ const abdullahIbnJubayr = {
       claims: legacyUnreviewed,
     },
   },
+  virtues: [
+    {
+      value:
+        'أمره رسول الله صلى الله عليه وسلم على الرماة يوم أحد وهم خمسون، وقال: (لا تبرحوا) ، فثبت مكانه حتى استشهد.',
+      claims: ['ibn-jubayr/uhud'],
+    },
+  ],
+
   titles: [
     // Carried from the retired seed entry, like every other صحابي the seeds
     // gave this title without citing it.

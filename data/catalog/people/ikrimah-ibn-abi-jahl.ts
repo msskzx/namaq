@@ -20,12 +20,15 @@ const ikrimahIbnAbiJahl = {
       claims: ['ikrimah-ibn-abi-jahl-siyar66/full-name'],
     },
     kunya: { value: 'أَبُو عُثْمَانَ', claims: ['ikrimah-ibn-abi-jahl-siyar66/kunya'] },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'الشَّرِيْفُ، الرَّئِيْسُ، الشَّهِيْدُ أَسْلَمَ، وَحَسُنَ إِسْلاَمُهُ بِالمَرَّةِ كَانَ مَحْمُوْدَ البَلاَءِ فِي الإِسْلاَمِ نَزَلَ عِكْرِمَةُ يَوْمَ اليَرْمُوْكِ، فَقَاتَلَ قِتَالاً شَدِيْداً، ثُمَّ اسْتُشْهِدَ قُتِلَ يَوْمَ أَجْنَادِيْنَ',
       claims: ['ikrimah-ibn-abi-jahl-siyar66/virtues'],
     },
-  },
+  ],
+
   titles: [
     {
       title: 'companion',

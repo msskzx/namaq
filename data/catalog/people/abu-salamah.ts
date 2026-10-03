@@ -23,17 +23,20 @@ const abuSalamah = {
       value: 'أَبُو سَلَمَةَ بنُ عَبْدِ الأَسَدِ بنِ هِلاَلِ بنِ عَبْدِ اللهِ بنِ عُمَرَ بنِ مَخْزُوْمِ بنِ يَقَظَةَ بنِ مُرَّةَ بنِ كَعْبٍ',
       claims: ['abu-salamah-siyar8/full-name'],
     },
-    // The two paragraphs after the lineage, as the edition prints them: the
-    // milk-brotherhood and kinship, then the early Muslim, both hijras and Badr.
-    virtues: {
-      value: 'السَّيِّدُ الكَبِيْرُ، أَخُو رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مِنَ الرَّضَاعَةِ، وَابْنُ عَمَّتِهِ: بَرَّةَ بِنْتِ عَبْدِ المُطَّلِبِ. وَأَحَدُ السَّابِقِيْنَ الأَوَّلِيْنَ، هَاجَرَ إِلَى الحَبَشَةِ، ثُمَّ هَاجَرَ إِلَى المَدِيْنَةِ، وَشَهِدَ بَدْراً، وَمَاتَ بَعْدَهَا بِأَشْهُرٍ',
-      claims: ['abu-salamah-siyar8/virtues'],
-    },
     // Two citations for one value: the obituary dates the death to جمادى
     // الآخرة سنة أربع, and the expedition's own page gives the day within that
     // month. Neither states the year and the month together.
     deathYearHijri: { value: '4 AH', claims: ['abu-salamah/death-year'] },
   },
+  // The two paragraphs after the lineage, as the edition prints them: the
+  // milk-brotherhood and kinship, then the early Muslim, both hijras and Badr.
+  virtues: [
+    {
+      value: 'السَّيِّدُ الكَبِيْرُ، أَخُو رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مِنَ الرَّضَاعَةِ، وَابْنُ عَمَّتِهِ: بَرَّةَ بِنْتِ عَبْدِ المُطَّلِبِ. وَأَحَدُ السَّابِقِيْنَ الأَوَّلِيْنَ، هَاجَرَ إِلَى الحَبَشَةِ، ثُمَّ هَاجَرَ إِلَى المَدِيْنَةِ، وَشَهِدَ بَدْراً، وَمَاتَ بَعْدَهَا بِأَشْهُرٍ',
+      claims: ['abu-salamah-siyar8/virtues'],
+    },
+  ],
+
   titles: [
     // Carried from the retired seed entry. The seeds gave every صحابي this
     // title without citing it.

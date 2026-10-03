@@ -17,12 +17,15 @@ const abdullahIbnAmrIbnHaram = {
       value: 'وَكَانَ أَحْمَرَ، أَصْلَعَ، لَيْسَ بِالطَّوِيْلِ',
       claims: ['abdullah-ibn-amr-ibn-haram-siyar67/appearance'],
     },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'أَحَدُ النُّقَبَاءِ لَيْلَةَ العَقَبَةِ مَا زَالَتِ المَلاَئِكَةُ تُظَلِّلُهُ بِأَجْنِحَتِهَا حَتَّى رَفَعْتُمُوْهُ زَمِّلُوْهُم بِجِرَاحِهِم، فَأَنَا شَهِيْدٌ عَلَيْهِم أَلاَ أُخْبِرُكَ أَنَّ اللهَ كَلَّمَ أَبَاكَ كِفَاحاً أَسْأَلُكَ أَنْ تَرُدَّنِي إِلَى الدُّنْيَا، فَأُقْتَلَ فِيْكَ ثَانِياً',
       claims: ['abdullah-ibn-amr-ibn-haram-siyar67/virtues'],
     },
-  },
+  ],
+
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],

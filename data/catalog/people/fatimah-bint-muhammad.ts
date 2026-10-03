@@ -16,11 +16,14 @@ const fatimahBintMuhammad = {
       value: 'جَاءتْ فَاطِمَةُ تَمْشِي مَا تُخْطِئُ مِشْيَتُهَا مِشْيَةَ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مَا رَأَيْتُ أَحَداً كَانَ أَشْبَهَ كَلاَماً وَحَدِيْثاً بِرَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مِنْ فَاطِمَةَ',
       claims: ['fatimah-siyar/appearance'],
     },
-    virtues: {
+  },
+  virtues: [
+    {
       value: 'البَضْعَةُ النَّبَوِيَّةُ سَيِّدَةُ نِسَاءِ أَهْلِ الجَنَّةِ وَتَزَوَّجَهَا الإِمَامُ عَلِيُّ بنُ أَبِي طَالِبٍ وَأُمُّ الحَسَنَيْنِ',
       claims: ['fatimah-siyar/virtues'],
     },
-  },
+  ],
+
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
     { title: 'sayyidat-nisa-ahl-al-jannah', name: 'سيدة نساء أهل الجنة', nameTransliterated: 'Mistress of the Women of Paradise', claims: ['fatimah-siyar/title-sayyidat-nisa'] },

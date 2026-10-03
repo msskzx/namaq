@@ -19,7 +19,11 @@ const zaidIbnAlKhattab = {
       value: 'وَكَانَ أَسْمَرَ، طَوِيْلاً جِدّاً',
       claims: ['zaid-ibn-al-khattab-siyar57/appearance'],
     },
-    virtues: {
+    deathYearHijri: { value: '12', claims: ['zaid-ibn-al-khattab-siyar57/death-year'] },
+    placeOfDeathArabic: { value: 'اليَمَامَةِ', claims: ['zaid-ibn-al-khattab-siyar57/death-place'] },
+  },
+  virtues: [
+    {
       value:
         'كَانَ أَسَنَّ مِنْ عُمَرَ، وَأَسْلَمَ قَبْلَهُ وَلَقَدْ قَالَ لَهُ عُمَرُ يَوْم بَدْرٍ: الْبِسْ دِرْعِي قَالَ: إِنِّي أُرِيْدُ مِنَ الشَّهَادَةِ مَا تُرِيْدُ قَالَ: فَتَرَكَاهَا جَمِيْعاً، وَكَانَتْ رَايَةُ المُسْلِمِيْنَ مَعَهُ يَوْمَ اليَمَامَةِ، فَلَمْ يَزَلْ يَقْدَمُ بِهَا فِي نَحْرِ العَدُوِّ، ثُمَّ قَاتَلَ حَتَّى قُتِلَ، فَوَقَعَتْ الرَّايَةُ، فَأَخَذَهَا سَالِمٌ مَوْلَى أَبِي حُذَيْفَةَ وَحَزِنَ عَلَيْهِ عُمَرُ، وَكَانَ يَقُوْلُ: أَسْلَمَ قَبْلِي، وَاسْتُشْهِدَ قَبْلِي وَكَانَ يَقُوْلُ: مَا هَبَّتِ الصَّبَا إِلاَّ وَأَنَا أَجِدُ رِيْحَ زَيْدٍ',
       claims: [
@@ -29,9 +33,8 @@ const zaidIbnAlKhattab = {
         'zaid-ibn-al-khattab-siyar57/virtues-umar-grief',
       ],
     },
-    deathYearHijri: { value: '12', claims: ['zaid-ibn-al-khattab-siyar57/death-year'] },
-    placeOfDeathArabic: { value: 'اليَمَامَةِ', claims: ['zaid-ibn-al-khattab-siyar57/death-place'] },
-  },
+  ],
+
   titles: [
     {
       title: 'companion',

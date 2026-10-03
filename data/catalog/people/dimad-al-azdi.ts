@@ -14,12 +14,15 @@ const dimadAlAzdi = {
   hasProfile: true,
   fields: {
     sex: { value: 'MALE', claims: ['dimad/sex'] },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'قال: لقد سمعت قول الكهنة والسحرة والشعراء، فما سمعت مثل هؤلاء الكلمات، ولقد بلغن قاموس البحر.',
       claims: ['dimad/virtues'],
     },
-  },
+  ],
+
   titles: [],
   relations: [],
 } satisfies CatalogPerson;

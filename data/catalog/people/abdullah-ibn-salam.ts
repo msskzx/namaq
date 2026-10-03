@@ -15,11 +15,14 @@ const abdullahIbnSalam = {
     // without citing it.
     fullName: { value: 'عبد الله بن سلام بن الحارث الإسرائيلي', claims: legacyUnreviewed },
     sex: { value: 'MALE', claims: ['ibn-salam/sex'] },
-    virtues: {
+  },
+  virtues: [
+    {
       value: 'قال: لقد علمت يهود أني سيدهم وابن سيدهم، وأعلمهم وابن أعلمهم.',
       claims: ['ibn-salam/virtues'],
     },
-  },
+  ],
+
   titles: [
     // Carried from the retired seed entry. The seeds gave every صحابي this
     // title without citing it.

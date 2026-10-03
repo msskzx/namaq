@@ -20,12 +20,15 @@ const ammarIbnYasir = {
     // Ibn Ishaq's roster names him حليف بني مخزوم, the way it names the others
     // by clan. Text, not a link: see README, "What is implemented".
     tribalAffiliation: { value: 'حليف بني مخزوم', claims: ['ammar/hilf'] },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'قال صلى الله عليه وسلم: (ويح عمار، تقتله الفئة الباغية، يدعوهم إلى الجنة ويدعونه إلى النار) .',
       claims: ['ammar/fiah-baghiyah'],
     },
-  },
+  ],
+
   titles: [
     // Carried from the retired seed entry. The seeds gave every صحابي this
     // title without citing it.

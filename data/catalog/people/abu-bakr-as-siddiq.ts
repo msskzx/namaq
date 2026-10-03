@@ -18,12 +18,15 @@ const abuBakrAsSiddiq = {
     fullName: { value: 'عبد الله بن أبي قحافة عثمان بن عامر التيمي القرشي', claims: legacyUnreviewed },
     appearance: { value: 'كان أبيض نحيفًا خفيف العارضين معروق الوجه.', claims: legacyUnreviewed },
     sex: { value: 'MALE', claims: ['abu-bakr/sex'] },
-    virtues: {
+  },
+
+  virtues: [
+    {
       value:
         'كان مألفا لقومه محببا سهلا، أنسب قريش لقريش، فجعل لما أسلم يدعو من وثق به، فأسلم بدعائه عثمان والزبير وعبد الرحمن بن عوف وطلحة وسعد بن أبي وقاص، فجاء بهم إلى رسول الله صلى الله عليه وسلم.',
       claims: ['abu-bakr/called-to-islam'],
     },
-  },
+  ],
 
   // The title is not new, only newly cited for him. The chapter gives the
   // naming outright: he affirmed the Isra' when others turned back, فلذلك سمي

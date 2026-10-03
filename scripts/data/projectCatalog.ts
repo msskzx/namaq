@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import { PrismaClient } from '../../src/generated/prisma';
 import { loadCatalog } from '../../src/lib/catalog/loadCatalog';
+import { planVirtues } from './personVirtues';
 import { seedAuthoredPeople } from './seedAuthored';
 import type { Catalog, CatalogBattleFields, CatalogEventFields, CatalogPersonFields, CatalogTitleAssignment, Cited } from '../../src/lib/catalog/types';
 
@@ -90,6 +91,29 @@ async function projectPeople(people: Catalog['people']) {
 
     await projectTitles(subject);
     await projectAyat(subject);
+    await projectVirtues(subject);
+  }
+}
+
+/** See docs/adr/0020-a-virtue-is-one-entry-with-one-speaker.md. */
+async function projectVirtues(subject: Catalog['people'][number]) {
+  const at = `people/${subject.slug}`;
+  const person = await prisma.person.findUnique({ where: { slug: subject.slug }, select: { id: true } });
+  if (!person) return;
+
+  const live = await prisma.personVirtue.findMany({
+    where: { personId: person.id },
+    orderBy: { position: 'asc' },
+    select: { position: true, text: true, speakerName: true, speakerSlug: true, claimKey: true },
+  });
+
+  const { rows, changes } = planVirtues(at, subject.virtues, live);
+  changes.forEach((line) => planned.push(line));
+  if (!apply || changes.length === 0) return;
+
+  await prisma.personVirtue.deleteMany({ where: { personId: person.id } });
+  if (rows.length > 0) {
+    await prisma.personVirtue.createMany({ data: rows.map((row) => ({ ...row, personId: person.id })) });
   }
 }
 

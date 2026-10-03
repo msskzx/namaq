@@ -25,7 +25,7 @@ const citationsByClaim = new Map<string, CitationRecord[]>([[claimKey, [citation
 
 const sahabi = { title: 'sahabi', name: 'صَحَابِيٌّ', nameTransliterated: 'Sahabi', claims: ['titles.sahabi'] } as const;
 
-function person(fields: Omit<CatalogPerson['fields'], 'sex'> = {}, titles: CatalogPerson['titles'] = []): CatalogPerson {
+function person(fields: Omit<CatalogPerson['fields'], 'sex'> = {}, titles: CatalogPerson['titles'] = [], virtues?: CatalogPerson['virtues']): CatalogPerson {
   return {
     kind: 'PERSON',
     slug: 'az-zubayr-ibn-al-awwam',
@@ -33,6 +33,7 @@ function person(fields: Omit<CatalogPerson['fields'], 'sex'> = {}, titles: Catal
     hasProfile: true,
     fields: { sex: { value: 'MALE', claims: ['people/az-zubayr-ibn-al-awwam.sex'] }, ...fields },
     titles,
+    virtues,
     relations: [],
   };
 }
@@ -69,6 +70,31 @@ describe('collectQuotedValues', () => {
   it('drops the known name of a person with no cited fullName', () => {
     const names = collectQuotedValues(catalog([person()]));
     expect(names.some((entry) => entry.kind === 'name')).toBe(false);
+  });
+
+  it('collects each virtue entry at its own place in the list', () => {
+    const rows = collectQuotedValues(
+      catalog([
+        person(
+          {},
+          [],
+          [
+            { value: heading, claims: [claimKey] },
+            { value: continuation, claims: [claimKey], speaker: { name: 'الزبير', slug: 'az-zubayr-ibn-al-awwam' } },
+          ],
+        ),
+      ]),
+    );
+
+    expect(rows.map((entry) => [entry.path, entry.kind, entry.value])).toEqual([
+      ['people/az-zubayr-ibn-al-awwam.virtues[0]', 'value', heading],
+      ['people/az-zubayr-ibn-al-awwam.virtues[1]', 'value', continuation],
+    ]);
+  });
+
+  it('skips a virtue entry whose evidence is still owed', () => {
+    const rows = collectQuotedValues(catalog([person({}, [], [{ value: heading, claims: legacyUnreviewed }])]));
+    expect(rows.some((entry) => entry.path.includes('virtues'))).toBe(false);
   });
 
   it('collects battle, event and utterance text', () => {

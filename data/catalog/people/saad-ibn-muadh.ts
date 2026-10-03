@@ -18,13 +18,16 @@ const saadIbnMuadh = {
         'رَجُلاً أَبْيَضَ، طُوَالاً، جَمِيْلاً، حَسَنَ الوَجْهِ، أَعْيَنَ، حَسَنَ اللِّحْيَةِ',
       claims: ['saad-ibn-muadh-siyar56/appearance'],
     },
-    virtues: {
+    deathYearHijri: { value: '5 AH', claims: ['saad-muadh/death-year'] },
+  },
+  virtues: [
+    {
       value:
         'أسلم على يد مصعب بن عمير، ثم قال لقومه: كلام رجالكم ونسائكم علي حرام حتى تؤمنوا، فما أمسى في دار بني عبد الأشهل رجل ولا امرأة إلا مسلما ومسلمة. وقال فيه النبي صلى الله عليه وسلم: (إن هذا الذي تحرك له العرش) ، وشيع جنازته سبعون ألف ملك.',
       claims: ['saad-muadh/islam', 'saad-muadh/arsh'],
     },
-    deathYearHijri: { value: '5 AH', claims: ['saad-muadh/death-year'] },
-  },
+  ],
+
   titles: [
     {
       title: 'companion',

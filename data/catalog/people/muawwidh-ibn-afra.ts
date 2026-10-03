@@ -15,12 +15,15 @@ const muawwidhIbnAfra = {
   hasProfile: true,
   fields: {
     sex: { value: 'MALE', claims: ['muawwidh-afra/sex'] },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'قال صلى الله عليه وسلم: (يرحم الله ابني عفراء، فهما شركاء في قتل فرعون هذه الأمة ورأس أئمة الكفر) .',
       claims: ['muawwidh-afra/badr'],
     },
-  },
+  ],
+
   titles: [],
   relations: [],
 } satisfies CatalogPerson;

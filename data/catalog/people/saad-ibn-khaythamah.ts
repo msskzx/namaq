@@ -21,13 +21,16 @@ const saadIbnKhaythamah = {
       value: 'الأَنْصَارِيُّ، الأَوْسِيُّ، البَدْرِيُّ',
       claims: ['saad-ibn-khaythamah-siyar52/tribal-affiliation'],
     },
-    virtues: {
+    placeOfDeathArabic: { value: 'بَدْرٍ', claims: ['saad-ibn-khaythamah-siyar52/death-place'] },
+  },
+  virtues: [
+    {
       value:
         'قَالُوا: وَكَانَ أَحَدَ النُّقَبَاءِ الاثْنَيْ عَشَرَ. آخَى النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بَيْنَهُ وَبَيْنَ أَبِي سَلَمَةَ بنِ عَبْدِ الأَسَدِ. وَلَمَّا نَدَبَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- المُسْلِمِيْنَ يَوْمَ بَدْرٍ، فَأَسْرَعُوا، قَالَ خَيْثَمَةُ لابْنِهِ سَعْدٍ: آثِرْنِي بِالخُرُوْجِ، وَأَقِمْ مَعَ نِسَائِكَ. فَأَبَى، وَقَالَ: لَوْ كَانَ غَيْرَ الجَنَّةِ آثَرْتُكَ بِهِ.',
       claims: ['saad-ibn-khaythamah-siyar52/virtues'],
     },
-    placeOfDeathArabic: { value: 'بَدْرٍ', claims: ['saad-ibn-khaythamah-siyar52/death-place'] },
-  },
+  ],
+
   titles: [
     {
       title: 'companion',

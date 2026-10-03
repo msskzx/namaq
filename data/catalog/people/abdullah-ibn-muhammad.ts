@@ -16,8 +16,9 @@ const abdullahIbnMuhammad = {
       value: 'عبد الله بن محمد بن عبد الله الهاشمي القرشي (الطيب الطاهر)',
       claims: legacyUnreviewed,
     },
-    virtues: { value: 'ابن النبي، توفي صغيراً، لقب بالطيب والطاهر.', claims: legacyUnreviewed },
   },
+  virtues: [{ value: 'ابن النبي، توفي صغيراً، لقب بالطيب والطاهر.', claims: legacyUnreviewed }],
+
   titles: [],
   relations: [],
 } satisfies CatalogPerson;

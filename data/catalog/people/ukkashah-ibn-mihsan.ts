@@ -21,14 +21,17 @@ const ukkashahIbnMihsan = {
       value: 'مِنْ أَجْمَلِ الرِّجَالِ',
       claims: ['ukkashah-ibn-mihsan-siyar60/appearance'],
     },
-    virtues: {
+    deathYearHijri: { value: '11', claims: ['ukkashah-ibn-mihsan-siyar60/death-year-eleven'] },
+    placeOfDeathArabic: { value: 'بُزَاخَةَ', claims: ['ukkashah-ibn-mihsan-siyar60/death-place'] },
+  },
+  virtues: [
+    {
       value:
         'السَّعِيْدُ الشَّهِيْدُ، أَبُو مِحْصَنٍ الأَسَدِيُّ، حَلِيْفُ قُرَيْشٍ، مِنَ السَّابِقِيْنَ الأَوَّلِيْنَ، البَدْرِيِّيْنَ، أَهْلِ الجَنَّةِ. اسْتَعْمَلَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- عَلَى سَرِيَّةِ الغَمْرِ ، فَلَمْ يَلْقَوْا كَيْداً. وَقَدْ أَبْلَى عُكَّاشَةُ يَوْم بَدْرٍ بَلاَءً حَسَناً، وَانْكَسَرَ سَيْفُهُ فِي يَدِهِ، فَأَعْطَاهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- عُرْجُوْناً مِنْ نَخْلٍ، أَوْ عُوْداً، فَعَادَ بِإِذْنِ اللهِ فِي يَدِهِ سَيْفاً، فَقَاتَلَ بِهِ، وَشَهِدَ بِهِ المَشَاهِدَ',
       claims: ['ukkashah-ibn-mihsan-siyar60/virtues'],
     },
-    deathYearHijri: { value: '11', claims: ['ukkashah-ibn-mihsan-siyar60/death-year-eleven'] },
-    placeOfDeathArabic: { value: 'بُزَاخَةَ', claims: ['ukkashah-ibn-mihsan-siyar60/death-place'] },
-  },
+  ],
+
   titles: [
     {
       title: 'companion',

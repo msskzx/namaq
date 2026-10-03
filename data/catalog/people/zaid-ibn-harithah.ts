@@ -18,14 +18,17 @@ const zaidIbnHarithah = {
       value: 'وَكَانَ قَصِيْراً، شَدِيْدَ الأُدْمَةِ، أَفْطَسَ',
       claims: ['zaid-ibn-harithah-siyar36/appearance'],
     },
-    virtues: {
+    deathYearHijri: { value: '8', claims: ['zaid-ibn-harithah-siyar36/death-year'] },
+    placeOfDeathArabic: { value: 'مُؤْتَةَ', claims: ['zaid-ibn-harithah-siyar36/death-place'] },
+  },
+  virtues: [
+    {
       value:
         'المُسَمَّى فِي سُوْرَةِ الأَحْزَابِ سَيِّدُ المَوَالِي، وَأَسْبَقُهُم إِلَى الإِسْلاَمِ، وَحِبُّ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَوَّلُ مَنْ أَسْلَمَ: زَيْدُ بنُ حَارِثَةَ خَرَجَ زَيْدُ بنُ حَارِثَةَ أَمِيْراً سَبْعَ سَرَايَا أَنْتَ مَوْلاَيَ، وَمِنِّي، وَإِلَيَّ، وَأَحَبُّ القَوْمِ إِلَيَّ لَوْ أَنَّ زَيْداً كَانَ حَيّاً لاَسْتَخْلَفَهُ رَسُوْلُ اللهِ مَا بَعَثَ رَسُوْلُ اللهِ زَيْداً فِي جَيْشٍ قَطُّ إِلاَّ أَمَّرَهُ عَلَيْهِم، وَلَوْ بَقِيَ بَعْدَهُ اسْتَخْلَفَهُ اسْتَغْفِرُوا لأَخِيْكُم، قَدْ دَخَلَ الجَنَّةَ وَهُوَ يَسْعَى دَخَلْتُ الجَنَّةَ، فَاسْتَقْبَلَتْنِي جَارِيَةٌ شَابَّةٌ',
       claims: ['zaid-ibn-harithah-siyar36/virtues'],
     },
-    deathYearHijri: { value: '8', claims: ['zaid-ibn-harithah-siyar36/death-year'] },
-    placeOfDeathArabic: { value: 'مُؤْتَةَ', claims: ['zaid-ibn-harithah-siyar36/death-place'] },
-  },
+  ],
+
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],

@@ -14,7 +14,9 @@ const jaafarIbnAbiTalib = {
       claims: ['jaafar-ibn-abi-talib-siyar34/full-name'],
     },
     kunya: { value: 'أَبُو عَبْدِ اللهِ', claims: ['jaafar-ibn-abi-talib-siyar34/kunya'] },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'أَشْبَهَ خَلْقُكَ خَلْقِي، وَأَشْبَهَ خُلُقُكَ خُلُقِي، فَأَنْتَ مِنِّي وَمِنْ شَجَرَتِي رَأَيْتُ جَعْفَرَ بنَ أَبِي طَالِبٍ مَلَكاً فِي الجَنَّةِ، مُضَرَّجَةً قَوَادِمُهُ بِالدِّمَاءِ، يَطِيْرُ فِي الجَنَّةِ لأَنَا بِقُدُوْمِ جَعْفَرٍ أَسَرُّ مِنِّي بِفَتْحِ خَيْبَرَ مَا احْتَذَى النِّعَالَ، وَلاَ رَكِبَ المَطَايَا بَعْدَ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَفْضَلُ مِنْ جَعْفَرِ بنِ أَبِي طَالِبٍ يَعْنِي: فِي الجُوْدِ وَالكَرَمِ كُنَّا نُسَمِّي جَعْفَراً أَبَا المَسَاكِيْنِ',
       claims: [
@@ -22,7 +24,8 @@ const jaafarIbnAbiTalib = {
         'jaafar-ibn-abi-talib-siyar34/virtues-generosity',
       ],
     },
-  },
+  ],
+
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],

@@ -12,17 +12,20 @@ const abdullahIbnAlHarithIbnNawfal = {
       value: 'عَبْدُ اللهِ بنُ الحَارِثِ بنِ نَوْفَلٍ الهَاشِمِيُّ',
       claims: ['abdullah-ibn-al-harith-ibn-nawfal-siyar29/full-name'],
     },
-    virtues: {
-      value:
-        'اجْتَمَعَ أَهْلُ البَصْرَةِ عِنْدَ مَوْتِ يَزِيْدَ عَلَى تَأْمِيْرِهِ عَلَيْهِم اصْطَلَحَ أَهْلُ البَصْرَةِ، فَأَمَّرُوْهُ عِنْدَ هُرُوْبِ عُبَيْدِ اللهِ بنِ زِيَادٍ، وَكَتَبُوا إِلَى ابْنِ الزُّبَيْرِ بِالبَيْعَةِ لَهُ قَالَ: فَأَقَرَّهُ عَلَيْهِم',
-      claims: ['abdullah-ibn-al-harith-ibn-nawfal-siyar29/virtues'],
-    },
     deathYearHijri: { value: '84', claims: ['abdullah-ibn-al-harith-ibn-nawfal-siyar29/death-year'] },
     placeOfDeathArabic: {
       value: 'فَمَاتَ بِعُمَانَ فِي سَنَةِ أَرْبَعٍ وَثَمَانِيْنَ',
       claims: ['abdullah-ibn-al-harith-ibn-nawfal-siyar29/death-place'],
     },
   },
+  virtues: [
+    {
+      value:
+        'اجْتَمَعَ أَهْلُ البَصْرَةِ عِنْدَ مَوْتِ يَزِيْدَ عَلَى تَأْمِيْرِهِ عَلَيْهِم اصْطَلَحَ أَهْلُ البَصْرَةِ، فَأَمَّرُوْهُ عِنْدَ هُرُوْبِ عُبَيْدِ اللهِ بنِ زِيَادٍ، وَكَتَبُوا إِلَى ابْنِ الزُّبَيْرِ بِالبَيْعَةِ لَهُ قَالَ: فَأَقَرَّهُ عَلَيْهِم',
+      claims: ['abdullah-ibn-al-harith-ibn-nawfal-siyar29/virtues'],
+    },
+  ],
+
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],

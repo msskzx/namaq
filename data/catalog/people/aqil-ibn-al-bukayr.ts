@@ -14,12 +14,15 @@ const aqilIbnAlBukayr = {
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'عَاقِلُ بنُ البُكَيْرِ بنِ عَبْدِ يَا لَيْلَ بنِ نَاشِبٍ اللَّيْثِيُّ', claims: ['aqil-bukayr-siyar16/full-name'] },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'كَانَ اسْمُهُ غَافِلاً، فَسَمَّاهُ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- عَاقِلاً. أَسْلَمَ غَافِلٌ، وَعَامِرٌ، وَإِيَاسٌ، وَخَالِدٌ بَنُو أَبِي البُكَيْرِ جَمِيْعاً، وَهُمْ أَوَّلُ مَنْ بَايَعَ فِي دَارِ الأَرْقَمِ خَرَجَ بَنُو أَبِي البُكَيْرِ مُهَاجِرِيْنَ فَأَوْعَبُوا، رِجَالُهُم وَنِسَاؤُهُمْ، حَتَّى غُلِّقَتْ أَبْوَابُهُم.',
       claims: ['aqil-bukayr-siyar16/virtues'],
     },
-  },
+  ],
+
   titles: [
     // Carried from the retired seed entry; this entry never calls him صحابي outright.
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },

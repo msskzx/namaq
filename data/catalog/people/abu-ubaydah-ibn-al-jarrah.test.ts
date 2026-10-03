@@ -15,6 +15,7 @@ const claimByKey = new Map(batch.claims.map((claim) => [claim.key, claim]));
 const citedFields = Object.entries(person.fields) as [string, Cited<string>][];
 const everyProvenance: [string, Provenance][] = [
   ...citedFields.map(([name, cited]): [string, Provenance] => [name, cited.claims]),
+  ...(person.virtues ?? []).map((virtue, index): [string, Provenance] => [`virtue ${index}`, virtue.claims]),
   ...person.titles.map((title): [string, Provenance] => [`title ${title.title}`, title.claims]),
   ...person.relations.map((relation): [string, Provenance] => [`relation ${relation.type}`, relation.claims]),
 ];
@@ -34,7 +35,7 @@ describe('Abu Ubaydah ibn al-Jarrah in the catalog', () => {
 
   it('points a single-claim field at a claim about that same field', () => {
     // Single-claim only: a value stitched from several passages legitimately
-    // cites claims filed elsewhere, as virtues does through amin-al-ummah.
+    // cites claims filed elsewhere.
     const mismatched = citedFields.flatMap(([name, cited]) => {
       if (cited.claims === legacyUnreviewed || cited.claims.length !== 1) return [];
       const claim = claimByKey.get(cited.claims[0]);

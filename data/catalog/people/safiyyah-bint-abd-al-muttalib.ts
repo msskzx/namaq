@@ -22,12 +22,15 @@ const safiyyahBintAbdAlMuttalib = {
       claims: ['safiyyah-siyar15/full-name'],
     },
     deathYearHijri: { value: '20 AH', claims: ['safiyyah-siyar15/death-year'] },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'أَنَا أَوَّلُ امْرَأَةٍ قَتَلَتْ رَجُلاً يَا فَاطِمَةَ بِنْتَ مُحَمَّدٍ، يَا صَفِيَّةَ بِنْتَ عَبْدِ المُطَّلِبِ، يَا بَنِي عَبْدِ المُطَّلِبِ',
       claims: ['safiyyah-siyar15/virtues'],
     },
-  },
+  ],
+
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: ['safiyyah-siyar15/companion'] },
   ],

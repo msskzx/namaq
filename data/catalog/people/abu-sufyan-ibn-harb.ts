@@ -19,14 +19,17 @@ const abuSufyanIbnHarb = {
       claims: ['abu-sufyan-ibn-harb-siyar13/full-name'],
     },
     kunya: { value: 'أَبُو سُفْيَانَ', claims: ['abu-sufyan-ibn-harb-siyar13/kunya'] },
-    virtues: {
+    deathYearHijri: { value: '31', claims: ['abu-sufyan-ibn-harb-siyar13/death-year'] },
+    placeOfDeathArabic: { value: 'المَدِيْنَةِ', claims: ['abu-sufyan-ibn-harb-siyar13/death-place'] },
+  },
+  virtues: [
+    {
       value:
         'مِنْ دُهَاةِ العَرَبِ، وَمِنْ أَهْلِ الرَّأْيِ وَالشَّرَفِ فِيْهِمْ وَكَانَ يَوْمَئِذٍ قَدْ حَسُنَ - إِنْ شَاءَ اللهُ - إِيْمَانُهُ، فَإِنَّهُ كَانَ يَوْمَئِذٍ يُحَرِّضُ عَلَى الجِهَادِ وَكَانَ يَقِفُ عَلَى الكَرَادِيْسِ يُذَكِّرُ حَدِيْثَهُ عَنْ هِرَقْلَ وَكِتَابِ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَدُلُّ عَلَى إِيْمَانِهِ',
       claims: ['abu-sufyan-ibn-harb-siyar13/virtues'],
     },
-    deathYearHijri: { value: '31', claims: ['abu-sufyan-ibn-harb-siyar13/death-year'] },
-    placeOfDeathArabic: { value: 'المَدِيْنَةِ', claims: ['abu-sufyan-ibn-harb-siyar13/death-place'] },
-  },
+  ],
+
   titles: [
     {
       title: 'companion',

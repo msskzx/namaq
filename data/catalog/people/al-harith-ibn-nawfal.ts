@@ -12,12 +12,15 @@ const alHarithIbnNawfal = {
       value: 'الحَارِثُ بنُ نَوْفَلِ بنِ الحَارِثِ الهَاشِمِيُّ',
       claims: ['al-harith-ibn-nawfal-siyar28/full-name'],
     },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'أَسْلَمَ مَعَ أَبِيْهِ، وَوَلِيَ مَكَّةَ لِعُمَرَ وَعُثْمَانَ. وَقَدِ اسْتَعْمَلَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- عَلَى بَعْضِ العَمَلِ.',
       claims: ['al-harith-ibn-nawfal-siyar28/virtues'],
     },
-  },
+  ],
+
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],

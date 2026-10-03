@@ -15,11 +15,14 @@ const abuTalib = {
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'عبد مناف بن عبد المطلب بن هاشم القرشي الهاشمي (أبو طالب)', claims: legacyUnreviewed },
-    virtues: {
+  },
+  virtues: [
+    {
       value: 'عم النبي وكافله بعد وفاة جده، حاميه وناصره في بداية الدعوة الإسلامية رغم عدم إسلامه.',
       claims: legacyUnreviewed,
     },
-  },
+  ],
+
   titles: [],
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abd-al-muttalib-ibn-hashim', claims: legacyUnreviewed },

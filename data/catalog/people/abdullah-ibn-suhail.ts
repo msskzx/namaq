@@ -17,13 +17,16 @@ const abdullahIbnSuhail = {
       value: 'عَبْدُ اللهِ بنُ سُهَيْلِ بنِ عَمْرٍو العَامِرِيُّ',
       claims: ['abdullah-ibn-suhail-siyar24/full-name'],
     },
-    virtues: {
-      value: 'وَلَهُ غَزَوَاتٌ وَمَوَاقِفُ وَقِيْلَ: بَلْ هُوَ مِنَ السَّابِقِيْنَ الأَوَّلِيْنَ، وَإِنَّهُ هَاجَرَ إِلَى الحَبَشَةِ الهِجْرَةَ الأُوْلَى',
-      claims: ['abdullah-ibn-suhail-siyar24/virtues'],
-    },
     deathYearHijri: { value: '12', claims: ['abdullah-ibn-suhail-siyar24/death'] },
     placeOfDeathArabic: { value: 'اسْتُشْهِدَ يَوْمَ اليَمَامَةِ', claims: ['abdullah-ibn-suhail-siyar24/death-place'] },
   },
+  virtues: [
+    {
+      value: 'وَلَهُ غَزَوَاتٌ وَمَوَاقِفُ وَقِيْلَ: بَلْ هُوَ مِنَ السَّابِقِيْنَ الأَوَّلِيْنَ، وَإِنَّهُ هَاجَرَ إِلَى الحَبَشَةِ الهِجْرَةَ الأُوْلَى',
+      claims: ['abdullah-ibn-suhail-siyar24/virtues'],
+    },
+  ],
+
   titles: [
     // Carried from the retired seed.
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },

@@ -12,7 +12,9 @@ const bishrIbnAlBaraa = {
       value: 'بِشْرُ بنُ البَرَاءِ بنُ مَعْرُوْرٍ الخَزْرَجِيُّ',
       claims: ['bishr-ibn-al-baraa-siyar54/full-name'],
     },
-    virtues: {
+  },
+  virtues: [
+    {
       value:
         'مِنْ أَشْرَافِ قَوْمِهِ. بَلْ سَيِّدُكُم الأَبْيَضُ الجَعْدُ: بِشْرُ بنُ البَرَاءِ هُوَ الَّذِي أَكَلَ مَعَ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مِنَ الشَّاةِ المَسْمُوْمَةِ يَوْمَ خَيْبَرَ، فَأُصِيْبَ',
       claims: [
@@ -21,7 +23,8 @@ const bishrIbnAlBaraa = {
         'bishr-ibn-al-baraa-siyar54/virtues-khaybar',
       ],
     },
-  },
+  ],
+
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: ['bishr-ibn-al-baraa-siyar54/titles'] },
   ],
