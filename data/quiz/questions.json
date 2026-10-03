@@ -4660,9 +4660,9 @@
       },
       "fingerprint": "bd3a40958f2b34b4cf78f4b09cf6b32b487eabb3db923cb3e67380273da84899",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» وصف جماعي لا لقب فردي، فلا يصلح لسؤال لقب.",
+      "reviewedAt": "2026-10-03T10:41:17.684Z",
       "reviewedBy": "Codex"
     },
     {
@@ -4880,9 +4880,9 @@
       },
       "fingerprint": "95d6993abc3c482541f9d6578a7e9a7cbbbb596cb7cc4c4f4d64f415eeb67054",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» وصف جماعي لا لقب فردي، فلا يصلح لسؤال لقب.",
+      "reviewedAt": "2026-10-03T10:41:17.685Z",
       "reviewedBy": "Codex"
     },
     {
@@ -5012,9 +5012,9 @@
       },
       "fingerprint": "d2d6cfbde7c89b0e19d97ab2883f5cbe43cecf025290b7d21a89000851cdd40f",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» وصف جماعي لا لقب فردي، فلا يصلح لسؤال لقب.",
+      "reviewedAt": "2026-10-03T10:41:17.685Z",
       "reviewedBy": "Codex"
     },
     {
@@ -5100,9 +5100,9 @@
       },
       "fingerprint": "5ad1fd74036a92aab1e64d605df7344ad6108caa9cc9da09e20f51078d616538",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» وصف جماعي لا لقب فردي، فلا يصلح لسؤال لقب.",
+      "reviewedAt": "2026-10-03T10:41:17.685Z",
       "reviewedBy": "Codex"
     },
     {
@@ -5364,9 +5364,9 @@
       },
       "fingerprint": "2ca63a659c377a30e1c71e90a0c6724b5c178679c75d90e1e7a201de09d073f2",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» وصف جماعي لا لقب فردي، فلا يصلح لسؤال لقب.",
+      "reviewedAt": "2026-10-03T10:41:17.685Z",
       "reviewedBy": "Codex"
     },
     {
@@ -5541,10 +5541,10 @@
       },
       "fingerprint": "659c680a06c8f6d9bb1cdd2e257cdd5b215937e91b92dd931494d8a87ad3ab2d",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
-      "reviewedBy": "Claude"
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» وصف جماعي لا لقب فردي، فلا يصلح لسؤال لقب.",
+      "reviewedAt": "2026-10-03T10:41:17.685Z",
+      "reviewedBy": "Codex"
     },
     {
       "key": "PERSON_TITLE:PERSON:az-zubayr-ibn-al-awwam:titles:companion",
@@ -6158,9 +6158,9 @@
       },
       "fingerprint": "8bb40760fe0b8823a613c8dfd8fd92a6280ad157b9f9ad35eddac6e5f6b3ce4c",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» وصف جماعي لا لقب فردي، فلا يصلح لسؤال لقب.",
+      "reviewedAt": "2026-10-03T10:41:17.685Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6202,9 +6202,9 @@
       },
       "fingerprint": "6ba1bb738a2ed36e3dba14b8e7efb5b416d18109fbbb4baf3b3ed0d0a3407418",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:44.340Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6246,9 +6246,9 @@
       },
       "fingerprint": "91d71e6c5fef84c4257d54bd50cfec15beca5bf59e4ab0ed0e067cf3f2358fa1",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» وصف جماعي لا لقب فردي، فلا يصلح لسؤال لقب.",
+      "reviewedAt": "2026-10-03T10:41:17.685Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6290,9 +6290,9 @@
       },
       "fingerprint": "829b108dc8e112a37d5b567a5a38f2220f20b3bf8de8b75a49bbdbc1b16f864d",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:45.560Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6334,9 +6334,9 @@
       },
       "fingerprint": "90ef5cfa2c3e2877e49f86b0fa0675cfe2c88660e34d6418eaf509d931913483",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:46.797Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6378,9 +6378,9 @@
       },
       "fingerprint": "9cd08a3e11cfb2284a9e621262ae18913533acddf6ea1b54fd7dd4ebc8272e9e",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:48.004Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6422,9 +6422,9 @@
       },
       "fingerprint": "5358c94ac7ef040c6287859438baf5f6a7b7efb53f2263d396206792ef9ff9cb",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:49.315Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6466,9 +6466,9 @@
       },
       "fingerprint": "2cdd497ae21a5ca5045584d4fca4d39874a2404d1be036213911d5bcc16d7169",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:50.472Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6510,9 +6510,9 @@
       },
       "fingerprint": "29be0a5f59a163f6a8b4753d598e98adff25b8c45bb1ece5133e4da1d2c3620c",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:51.627Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6554,9 +6554,9 @@
       },
       "fingerprint": "5e3c91b47a0652136dfa16c7ef6857a8566af79086105924d6efd8618b797218",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:52.777Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6598,10 +6598,10 @@
       },
       "fingerprint": "bf426394741b3e427ab556399562bfafde54a1b1e9826ae1bfe5f4a95d28f1ac",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
-      "reviewedBy": "Claude"
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:53.948Z",
+      "reviewedBy": "Codex"
     },
     {
       "key": "PERSON_TITLE:PERSON:prophet-muhammad:titles:truthful-trustworthy",
@@ -6642,9 +6642,9 @@
       },
       "fingerprint": "578748c682ed00811635dd1c278fac3dfe3488c4e27ed3587db4d37ae8a5dab4",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:55.097Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6731,9 +6731,9 @@
       },
       "fingerprint": "de56de5cbb8cf8f13d6d1d36b0a376bff217f563ac4ca1dc104f261d7ed06826",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» وصف جماعي لا لقب فردي، فلا يصلح لسؤال لقب.",
+      "reviewedAt": "2026-10-03T10:41:17.685Z",
       "reviewedBy": "Codex"
     },
     {
@@ -6995,9 +6995,9 @@
       },
       "fingerprint": "875e2dc5ae6cec9f71c9f733e2f4c1b7ff54181f10ab39f261e6d42f554a41df",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» وصف جماعي لا لقب فردي، فلا يصلح لسؤال لقب.",
+      "reviewedAt": "2026-10-03T10:41:17.685Z",
       "reviewedBy": "Codex"
     },
     {
@@ -7172,9 +7172,9 @@
       },
       "fingerprint": "c84374ecba150bcf277c06bbab4ef28a78d59ac6a5f211f236d07d5fd3edeaf5",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» وصف جماعي لا لقب فردي، فلا يصلح لسؤال لقب.",
+      "reviewedAt": "2026-10-03T10:41:17.685Z",
       "reviewedBy": "Codex"
     },
     {
@@ -7392,9 +7392,9 @@
       },
       "fingerprint": "bee75703f0f75a7504684a0b784d6d9ef2e603e782e7d23cdcba4f43b1cc5f36",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» وصف جماعي لا لقب فردي، فلا يصلح لسؤال لقب.",
+      "reviewedAt": "2026-10-03T10:41:17.685Z",
       "reviewedBy": "Codex"
     },
     {
@@ -14815,9 +14815,9 @@
       },
       "fingerprint": "33996bf148ab7108087acae8e853218ed2f6115d405f27465bd28e8b7011c286",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.413Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:44.945Z",
       "reviewedBy": "Codex"
     },
     {
@@ -14948,9 +14948,9 @@
       },
       "fingerprint": "e8a62ff72faef37361c94a64cbefa15458d897ca8e41956df5facc77d12792a6",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» وصف جماعي لا لقب فردي، فلا يصلح لسؤال لقب.",
+      "reviewedAt": "2026-10-03T10:41:18.280Z",
       "reviewedBy": "Codex"
     },
     {
@@ -14992,9 +14992,9 @@
       },
       "fingerprint": "d66812f0378e24e613ab2f9dbc01bdb50f4fb1c9a626125ca46435aa3f076ec1",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» وصف جماعي لا لقب فردي، فلا يصلح لسؤال لقب.",
+      "reviewedAt": "2026-10-03T10:41:18.281Z",
       "reviewedBy": "Codex"
     },
     {
@@ -15036,9 +15036,9 @@
       },
       "fingerprint": "ee6dbd47cf35a779f532d9fc5e5d4a857b91503e81bfef34b6f0302c82c09939",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» وصف جماعي لا لقب فردي، فلا يصلح لسؤال لقب.",
+      "reviewedAt": "2026-10-03T10:41:18.281Z",
       "reviewedBy": "Codex"
     },
     {
@@ -15080,9 +15080,9 @@
       },
       "fingerprint": "1f1340f327c5b17c715b1d7ff907b49c4373893e876fed3ff28a76efb77ed085",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» وصف جماعي لا لقب فردي، فلا يصلح لسؤال لقب.",
+      "reviewedAt": "2026-10-03T10:41:18.281Z",
       "reviewedBy": "Codex"
     },
     {
@@ -15124,9 +15124,9 @@
       },
       "fingerprint": "5f278347c53b2484356ff9657f5998a4ee6b74834fd74775670ecdd2ccaced4e",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» وصف جماعي لا لقب فردي، فلا يصلح لسؤال لقب.",
+      "reviewedAt": "2026-10-03T10:41:18.281Z",
       "reviewedBy": "Codex"
     },
     {
@@ -15169,9 +15169,9 @@
       },
       "fingerprint": "d6efd63e056615d2f1bb79009b5d9f5724367ee584b9c9b2bd2f4bed8808fac2",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» وصف جماعي لا لقب فردي، فلا يصلح لسؤال لقب.",
+      "reviewedAt": "2026-10-03T10:41:18.281Z",
       "reviewedBy": "Codex"
     },
     {
@@ -15213,9 +15213,9 @@
       },
       "fingerprint": "1c31c2bb6f9437eff48028a0b68da9b8f1ea33167394d4db687dbdea8fbeec0d",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» وصف جماعي لا لقب فردي، فلا يصلح لسؤال لقب.",
+      "reviewedAt": "2026-10-03T10:41:18.281Z",
       "reviewedBy": "Codex"
     },
     {
@@ -15257,9 +15257,9 @@
       },
       "fingerprint": "c4ce6f8db5d05ece9ad4a9a3be8ddc3a36f1d342686981accffbd79d96b3ab8d",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» وصف جماعي لا لقب فردي، فلا يصلح لسؤال لقب.",
+      "reviewedAt": "2026-10-03T10:41:18.281Z",
       "reviewedBy": "Codex"
     },
     {
@@ -15302,9 +15302,9 @@
       },
       "fingerprint": "42d81969843fdc678e229dd85967ed7d616f6ce03e6b255cd7e516206f49bf3d",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» وصف جماعي لا لقب فردي، فلا يصلح لسؤال لقب.",
+      "reviewedAt": "2026-10-03T10:41:18.281Z",
       "reviewedBy": "Codex"
     },
     {
@@ -15346,9 +15346,9 @@
       },
       "fingerprint": "d1ed564f75dcb86e80ec0ab040e69dc11d2ed4c3850067219499c4bff8089016",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» وصف جماعي لا لقب فردي، فلا يصلح لسؤال لقب.",
+      "reviewedAt": "2026-10-03T10:41:18.281Z",
       "reviewedBy": "Codex"
     },
     {
@@ -15391,9 +15391,9 @@
       },
       "fingerprint": "0d8c882ab9937a6fdf39881da6df0e05722b444695b3fae970f0ca796094b7e8",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» وصف جماعي لا لقب فردي، فلا يصلح لسؤال لقب.",
+      "reviewedAt": "2026-10-03T10:41:18.281Z",
       "reviewedBy": "Codex"
     },
     {
@@ -15435,9 +15435,9 @@
       },
       "fingerprint": "45d9d13b8ccbfce99d9e0c85bb49e813602e0ff8eabfe3c62292a6a58cc0bc42",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "«السابقون» وصف جماعي لا لقب فردي، فلا يصلح لسؤال لقب.",
+      "reviewedAt": "2026-10-03T10:41:18.281Z",
       "reviewedBy": "Codex"
     },
     {
@@ -16712,9 +16712,9 @@
       },
       "fingerprint": "2d956bbf2db5f2d7ba5bb2dae3592fc5dc14d11f3d4ae2e8cc78a3b776ca979b",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:46.200Z",
       "reviewedBy": "Codex"
     },
     {
@@ -16844,9 +16844,9 @@
       },
       "fingerprint": "d9b712f1e9c3179fcfb4ab56f41d37e1f5064ec924477d2f883ca2918e55a771",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:48.679Z",
       "reviewedBy": "Codex"
     },
     {
@@ -16888,9 +16888,9 @@
       },
       "fingerprint": "9d7b2aeb4ae4607b6f73d21db5e37bfed1d6a2df5698bb1ad71e98888f470a45",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:49.896Z",
       "reviewedBy": "Codex"
     },
     {
@@ -16932,9 +16932,9 @@
       },
       "fingerprint": "11507f0e1fe78b37e7a269149116cc9a8c6c296618467dddafe4489a9875e10b",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:47.391Z",
       "reviewedBy": "Codex"
     },
     {
@@ -17020,9 +17020,9 @@
       },
       "fingerprint": "21fd8bcd0fbf6f74bc608c0997445a81ae315f295f00e66f1fded11aff1a7a95",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:51.043Z",
       "reviewedBy": "Codex"
     },
     {
@@ -17108,9 +17108,9 @@
       },
       "fingerprint": "37fd63593ed54d77c224422f5993434e03cb8ff250f1884dbb03ccaf530d461a",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:52.204Z",
       "reviewedBy": "Codex"
     },
     {
@@ -17152,9 +17152,9 @@
       },
       "fingerprint": "8032ca39d73eb26e6d1790604dd85ca45564df99471d43606482594688a0876e",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:53.356Z",
       "reviewedBy": "Codex"
     },
     {
@@ -17196,9 +17196,9 @@
       },
       "fingerprint": "9d496d3e91431b3eb478ad0c84e48dc0d858490ae5e1d7bcbf828ef5af65dfd7",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:54.521Z",
       "reviewedBy": "Codex"
     },
     {
@@ -17636,9 +17636,9 @@
       },
       "fingerprint": "5519edd6a7d1b9100b2add91f5653467671800ca4ac9a21edf5d3e8cb0f7684f",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
+      "status": "REJECTED",
+      "rejectionReason": "السؤال عن ألقاب النبي محمد ﷺ يجعل الإجابة بديهية.",
+      "reviewedAt": "2026-10-03T10:42:55.671Z",
       "reviewedBy": "Codex"
     },
     {
