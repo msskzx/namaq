@@ -15,11 +15,11 @@ export function cleanPassage(text: string): string {
     .trim();
 }
 
-export function joinAtSeams(passages: readonly string[]): string {
+export function joinAtSeams(passages: readonly string[], keepStops = false): string {
   const cleaned = passages.map(cleanPassage).filter(Boolean);
   return cleaned.reduce((joined, next, index) => {
     if (index === 0) return next;
-    return `${joined.replace(/\.$/, '')} ${next.replace(SENTENCE_INITIAL_IBN, 'بن')}`;
+    return `${keepStops ? joined : joined.replace(/\.$/, '')} ${next.replace(SENTENCE_INITIAL_IBN, 'بن')}`;
   }, '');
 }
 
@@ -36,7 +36,7 @@ export function matchQuotedValue(value: string, groups: readonly (readonly strin
 }
 
 function matchExact(value: string, groups: readonly (readonly string[])[]): QuotedValueResult {
-  const haystacks = groups.flatMap((group) => [...group.map(cleanPassage), joinAtSeams(group)]);
+  const haystacks = groups.flatMap((group) => [...group.map(cleanPassage), joinAtSeams(group), joinAtSeams(group, true)]);
   const tokens = value.replace(/\s+/g, ' ').trim().split(' ');
   const found = (text: string) => haystacks.some((haystack) => haystack.includes(text));
 
