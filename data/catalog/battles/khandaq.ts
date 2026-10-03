@@ -52,7 +52,7 @@ const khandaq = {
       isMuslim: true,
       summary: {
         value:
-          'ضَرَبَ الزُّبَيْرُ يَوْمَ الخَنْدَقِ عُثْمَانَ بنَ عَبْدِ اللهِ بنِ المُغِيْرَةِ بِالسَّيْفِ عَلَى مِغْفَرِهِ، فَقَطَعَهُ إِلَى القَرَبُوسِ.',
+          'ضَرَبَ الزُّبَيْرُ يَوْمَ الخَنْدَقِ عُثْمَانَ بنَ عَبْدِ اللهِ بنِ المُغِيْرَةِ بِالسَّيْفِ عَلَى مِغْفَرِهِ، فَقَطَعَهُ إِلَى القَرَبُوسِ',
         claims: ['zubayr/khandaq'],
       },
       claims: ['zubayr/khandaq'],
@@ -72,7 +72,7 @@ const khandaq = {
       person: 'safiyyah-bint-abd-al-muttalib',
       isMuslim: true,
       summary: {
-        value: 'أَنَا أَوَّلُ امْرَأَةٍ قَتَلَتْ رَجُلاً، كَانَ حَسَّانٌ مَعَنَا، فَمَرَّ بِنَا يَهُوْدِيٌّ، فَجَعَلَ يُطِيْفُ بِالحِصْنِ.',
+        value: 'أَنَا أَوَّلُ امْرَأَةٍ قَتَلَتْ رَجُلاً، كَانَ حَسَّانٌ مَعَنَا، فَمَرَّ بِنَا يَهُوْدِيٌّ، فَجَعَلَ يُطِيْفُ بِالحِصْنِ',
         claims: ['safiyyah-siyar15/khandaq'],
       },
       claims: ['safiyyah-siyar15/khandaq'],
@@ -91,7 +91,7 @@ const khandaq = {
       person: 'abu-sufyan-ibn-harb',
       isMuslim: false,
       summary: {
-        value: 'رَأْسُ قُرَيْشٍ، وَقَائِدُهُمْ يَوْمَ الخَنْدَقِ.',
+        value: 'رَأْسُ قُرَيْشٍ، وَقَائِدُهُمْ يَوْمَ أُحُدٍ، وَيَوْمَ الخَنْدَقِ',
         claims: ['abu-sufyan-ibn-harb-siyar13/khandaq'],
       },
       claims: ['abu-sufyan-ibn-harb-siyar13/khandaq'],
