@@ -13,7 +13,7 @@ const amirIbnAlBukayr = {
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: { value: 'عَامِرُ بنُ أَبِي البُكَيْرِ اللَّيْثِيُّ', claims: ['amir-bukayr-siyar19/full-name'] },
-    placeOfDeathArabic: { value: 'اليمامة', claims: ['amir-bukayr-siyar19/death-place'] },
+    placeOfDeathArabic: { value: 'اليَمَامَةِ', claims: ['amir-bukayr-siyar19/death-place'] },
   },
   titles: [
     // Carried from the retired seed entry; this entry never calls him صحابي outright.
