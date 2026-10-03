@@ -36,6 +36,10 @@ describe('closing full stops', () => {
     ).toEqual({ ok: true });
   });
 
+  it('accepts a value that keeps the full stop between two paragraphs', () => {
+    expect(matchQuotedValue('جُمْلَةٌ أُولَى. جُمْلَةٌ ثَانِيَةٌ.', [['جُمْلَةٌ أُولَى.', 'جُمْلَةٌ ثَانِيَةٌ.']])).toEqual({ ok: true });
+  });
+
   it('still accepts a clip that keeps a closing full stop inside one passage', () => {
     expect(matchQuotedValue('ابْنِ الجَرَّاحِ بنِ هِلاَلِ بنِ أُهَيْبِ.', [[headingWithCode, next]])).toEqual({ ok: true });
   });
