@@ -3,18 +3,18 @@ import { type CatalogPerson } from '@/lib/catalog/types';
 const bishrIbnAlBaraa = {
   kind: 'PERSON',
   slug: 'bishr-ibn-al-baraa',
-  name: 'بشر بن البراء',
+  name: 'بِشْرُ بنُ البَرَاءِ',
   nameTransliterated: 'Bishr ibn al-Baraa',
   hasProfile: true,
   fields: {
     sex: { value: 'MALE', claims: ['bishr-ibn-al-baraa-siyar54/sex'] },
     fullName: {
-      value: 'بشر بن البراء بن معرور الخزرجي',
+      value: 'بِشْرُ بنُ البَرَاءِ بنُ مَعْرُوْرٍ الخَزْرَجِيُّ',
       claims: ['bishr-ibn-al-baraa-siyar54/full-name'],
     },
     virtues: {
       value:
-        'من أشراف قومه. وقال النبي صلى الله عليه وسلم حين سئل عن سيّد بني سلمة: «بل سيّدكم الأبيض الجعد: بشر بن البراء»، وقد ضعف الذهبي هذا الخبر في حاشيته. وهو الذي أكل مع النبي صلى الله عليه وسلم من الشاة المسمومة يوم خيبر فأصيب.',
+        'مِنْ أَشْرَافِ قَوْمِهِ. بَلْ سَيِّدُكُم الأَبْيَضُ الجَعْدُ: بِشْرُ بنُ البَرَاءِ هُوَ الَّذِي أَكَلَ مَعَ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مِنَ الشَّاةِ المَسْمُوْمَةِ يَوْمَ خَيْبَرَ، فَأُصِيْبَ',
       claims: [
         'bishr-ibn-al-baraa-siyar54/virtues-chiefs',
         'bishr-ibn-al-baraa-siyar54/virtues-sayyid',

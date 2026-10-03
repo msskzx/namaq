@@ -4,19 +4,19 @@ import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 const jabrIbnAtik = {
   kind: 'PERSON',
   slug: 'jabr-ibn-atik',
-  name: 'جبر بن عتيك',
+  name: 'جَبْرُ بنُ عَتِيْكِ',
   nameTransliterated: 'Jabr ibn Atik',
   hasProfile: true,
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
-      value: 'جبر بن عتيك بن قيس بن هيشة بن الحارث بن أمية بن معاوية بن مالك بن عوف بن عمرو بن عوف الأنصاري',
+      value: 'جَبْرُ بنُ عَتِيْكِ بنِ قَيْسِ بنِ هَيْشَةَ بنِ الحَارِثِ بنِ أُمَيَّةَ بنِ مُعَاوِيَةَ بنِ مَالِكِ بنِ عَوْفِ بنِ عَمْرِو بنِ عَوْفٍ الأَنْصَارِيُّ',
       claims: ['jabr-ibn-atik-siyar/full-name'],
     },
-    kunya: { value: 'أبو عبد الله', claims: ['jabr-ibn-atik-siyar/kunya'] },
+    kunya: { value: 'أَبُو عَبْدِ اللهِ', claims: ['jabr-ibn-atik-siyar/kunya'] },
     virtues: {
       value:
-        'كان أحد الرماة الموصوفين؛ بدري كبير؛ شهد بدرا والمشاهد؛ كانت إليه راية بني معاوية بن مالك يوم الفتح.',
+        'بَدْرِيٌّ كَبِيْرٌ. شَهِدَ بَدْراً وَالمَشَاهِدَ، وَكَانَتْ إِلَيْهِ رَايَةُ بَنِي مُعَاوِيَةَ بنِ مَالِكٍ يَوْمَ الفَتْحِ',
       claims: ['jabr-ibn-atik-siyar/virtues'],
     },
     deathYearHijri: {

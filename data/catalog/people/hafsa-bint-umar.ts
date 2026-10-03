@@ -3,18 +3,18 @@ import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 const hafsaBintUmar = {
   kind: 'PERSON',
   slug: 'hafsa-bint-umar',
-  name: 'حفصة بنت عمر',
+  name: 'حَفْصَةُ بِنْتُ عُمَرَ',
   nameTransliterated: 'Hafsa bint Umar',
   hasProfile: true,
   fields: {
     sex: { value: 'FEMALE', claims: legacyUnreviewed },
     fullName: {
-      value: 'حفصة بنت عمر بن الخطاب العدوية أم المؤمنين',
+      value: 'حَفْصَةُ بِنْتُ عُمَرَ بنِ الخَطَّابِ العَدَوِيَّةُ أُمُّ المُؤْمِنِيْنَ',
       claims: ['hafsa-bint-umar-siyar25/full-name'],
     },
     appearance: { value: 'وصفت بأنها كانت ذات هيئة وجمال.', claims: legacyUnreviewed },
     virtues: {
-      value: 'صوامة قوامة، وزوجة النبي في الجنة.',
+      value: 'فَإَنَّهَا صَوَّامَةٌ، قَوَّامَةٌ، وَإِنَّهَا زَوْجَتُكَ فِي الجَنَّةِ',
       claims: ['hafsa-bint-umar-siyar25/virtues'],
     },
     deathYearHijri: { value: '41', claims: ['hafsa-bint-umar-siyar25/death-year'] },
