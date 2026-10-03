@@ -31,6 +31,15 @@ Value -> claim key -> claim in an approved batch -> citation -> anchor -> page. 
 - A repo lesson already records "a check that exists but doesn't run" (`docs/lessons/lessons/0003-...`) and "checks that don't rederive pass the wrong inputs".
 - AGENTS.md rule today: "Transmission chains stay in the source text. A person mentioned only as a narrator does not become a graph node or an edge."
 
+## Corrections after the lesson was verified against the repo
+
+- `virtues` is no longer one string: ADR 0020 and PR #302 made it a list of single-speaker entries (`CatalogVirtue`, `PersonVirtue`). The migration is not applied to the database.
+- Chapter headings: PR #299 now detects a numbered entry title on every paragraph.
+- Approvals: 5 batches have no approval block (arwa-bint-abd-al-muttalib-siyar175, fatimah-bint-muhammad, qutaylah-bint-qais-al-kindiyyah, safiyyah-bint-huyayy, umm-shareek) and 3 carry a stale approval (abu-ubaydah-pilot, saad-ibn-abi-waqqas, talhah-ibn-ubaydullah).
+- Citation `volume` labels are mixed across batches (`1`, `2`, `4`, `5`, `السيرة 1`, `السيرة 2`, ...), while the anchor prefix is the namaq volume.
+- AGENTS.md lets a citation join fragments with an ellipsis; ADR 0020 forbids `…` stitching for a virtue. The two rules conflict.
+- The footnote-marker normalisation is duplicated between `verifyExcerpts.ts` and `src/lib/history/sectionHeadings.ts`.
+
 ## Existing ADRs and docs that bound the model
 
 ADR 0008 (review separate from visibility), 0009 (citations independent of profiles), 0010 (author under data/), 0011 (role of cited evidence), 0013 (attendance vs outcome), 0014 (kunya is a name), 0015 (one record for what someone said), 0018 (page belongs to the edition), 0019 (contents list names chapters), 0020 (a virtue is one entry with one speaker); `docs/data-pipelines.md`, `docs/extraction-checklist.md`, `docs/plans/source-page-store.md`, `CONTEXT.md`, `docs/lessons/MISSION.md`.
