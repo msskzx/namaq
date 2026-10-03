@@ -15,13 +15,13 @@ const abuAlHaythamIbnAtTayyihan = {
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
-      value: 'مالك بن التيهان بن بلي بن عمرو بن الحاف بن قضاعة الأنصاري',
+      value: 'مَالِكُ بنُ التَّيِّهَانِ الأَنْصَارِيُّ بنِ بَلِيِّ بنِ عَمْرِو بنِ الحَافِ بنِ قُضَاعَةَ الأَنْصَارِيُّ',
       claims: ['abu-al-haytham-siyar22/full-name'],
     },
-    kunya: { value: 'أبو الهيثم', claims: ['abu-al-haytham-siyar22/kunya'] },
-    tribalAffiliation: { value: 'حليف بني عبد الأشهل', claims: ['abu-al-haytham-siyar22/tribal-affiliation'] },
+    kunya: { value: 'أَبُو الهَيْثَمِ', claims: ['abu-al-haytham-siyar22/kunya'] },
+    tribalAffiliation: { value: 'حَلِيْفُ بَنِي عَبْدِ الأَشْهَلِ', claims: ['abu-al-haytham-siyar22/tribal-affiliation'] },
     virtues: {
-      value: 'كان أبو الهيثم يكره الأصنام في الجاهلية، ويؤفف بها، ويقول بالتوحيد هو وأسعد بن زرارة.',
+      value: 'كَانَ أَبُو الهَيْثَمِ يَكْرَهُ الأَصْنَامَ فِي الجَاهِلِيَّةِ، وَيُؤَفِّفُ بِهَا، وَيَقُوْلُ بِالتَّوْحِيْدِ هُوَ وَأَسَعْدُ بنُ زُرَارَةَ',
       claims: ['abu-al-haytham-siyar22/virtues'],
     },
     deathYearHijri: { value: '20', claims: ['abu-al-haytham-siyar22/death-year'] },

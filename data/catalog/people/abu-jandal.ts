@@ -14,13 +14,13 @@ const abuJandal = {
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
-      value: 'العاص بن سهيل بن عمرو بن عبد شمس بن عبد ود بن نصر بن حسل بن عامر بن لؤي بن غالب بن فهر العامري القرشي',
+      value: 'العَاصُ بنُ سُهَيْلِ بنِ عَمْرٍو العَامِرِيُّ بنِ عَبْدِ شَمْسٍ بنِ عَبْدِ وُدٍّ بنِ نَصْرِ بنِ حِسْلِ بنِ عَامِرِ بنِ لُؤَيِّ بنِ غَالِبِ بنِ فِهْرٍ العَامِرِيُّ، القُرَشِيّ',
       claims: ['abu-jandal-siyar23/full-name'],
     },
-    kunya: { value: 'أبو جندل', claims: ['abu-jandal-siyar23/kunya'] },
-    virtues: { value: 'كان من خيار الصحابة.', claims: ['abu-jandal-siyar23/virtues'] },
+    kunya: { value: 'أَبُو جَنْدَلٍ', claims: ['abu-jandal-siyar23/kunya'] },
+    virtues: { value: 'كَانَ مِنْ خِيَارِ الصَّحَابَةِ', claims: ['abu-jandal-siyar23/virtues'] },
     deathYearHijri: { value: '18', claims: ['abu-jandal-siyar23/death'] },
-    placeOfDeathArabic: { value: 'طاعون عمواس بالأردن', claims: ['abu-jandal-siyar23/death-place'] },
+    placeOfDeathArabic: { value: 'طَاعُوْنِ عَمَوَاسَ بِالأُرْدُنِّ', claims: ['abu-jandal-siyar23/death-place'] },
   },
   titles: [
     // Carried from the retired seed.

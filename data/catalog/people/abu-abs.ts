@@ -12,12 +12,12 @@ const abuAbs = {
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
-      value: 'عبد الرحمن بن جبر بن عمرو بن زيد بن جشم بن حارثة بن الحارث الأوسي.',
+      value: 'أَبُو عَبْسٍ بنُ جَبْرِ بنِ عَمْرٍو الأَوْسِيُّ بنِ زَيْدِ بنِ جُشَمَ بنِ حَارِثَةَ بنِ الحَارِثِ الأَوْسِيُّ. وَاسْمُهُ: عَبْدُ الرَّحْمَنِ',
       claims: ['abu-abs-siyar21/full-name'],
     },
-    kunya: { value: 'أبو عبس', claims: ['abu-abs-siyar21/kunya'] },
+    kunya: { value: 'أَبُو عَبْسٍ', claims: ['abu-abs-siyar21/kunya'] },
     deathYearHijri: { value: '34', claims: ['abu-abs-siyar21/death-year'] },
-    placeOfDeathArabic: { value: 'المدينة', claims: ['abu-abs-siyar21/death-place'] },
+    placeOfDeathArabic: { value: 'المَدِيْنَةِ', claims: ['abu-abs-siyar21/death-place'] },
   },
   titles: [
     // Carried from the retired seed. البدري is modeled as the Badr
