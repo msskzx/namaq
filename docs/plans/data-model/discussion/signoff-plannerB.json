@@ -1,0 +1,22 @@
+{"agent":"plannerB","axes":[
+{"axis":"X1","sign":true,"reason":"Matches my round-2 proposal: closed deletion list, render test, ayah quotations as printed and linked."},
+{"axis":"X2","sign":true,"reason":"Minted ids, parent-anchored mentions, verbatim-only re-anchor, lapse on rendered change: as agreed."},
+{"axis":"X3","sign":true,"reason":"Statement/Assertion split with Mentions and parsed/classified is what I proposed in round 2; accept."},
+{"axis":"X4","sign":true,"reason":"Link|Gap, 1:1 modeKey, abbreviations, derived classes, enclosedBy, riwayah, failing unmapped forms: matches my merge."},
+{"axis":"X5","sign":true,"reason":"Basis roles, no Namaq basis, segment reuse, all-DISPUTED: matches."},
+{"axis":"X6","sign":true,"reason":"Labelled NAMAQ grouping outside marfu'; span basis required for Prophetic grouping: matches."},
+{"axis":"X7","sign":true,"reason":"Grading as quoted speaker with scoped authorClaim and editor takhrij: accurate."},
+{"axis":"X8","sign":true,"reason":"Revision over rendered text plus witness; owner-run publish; re-anchor lapses nothing: accurate."},
+{"axis":"X9","sign":true,"reason":"Per-Unit files, glosses directory, separate isnad view excluded from centrality: I voted for this."},
+{"axis":"X10","sign":true,"reason":"Siyar first, rollback, Bukhari go/no-go: accurate."},
+{"axis":"X11","sign":true,"reason":"Witness flags, Shamela-only pending owner, numbering table, mushaf/qira'a ADRs: accurate."},
+{"axis":"X12","sign":true,"reason":"Two distinct humans, one hadith-qualified, from the pilot; agents never review: stronger than mine, accept."},
+{"axis":"X13","sign":true,"reason":"Text never hidden, our unreviewed judgments withheld for Prophetic material: matches."}],
+"fidelity_problems":[
+{"where":"Decision table X3 group note","problem":"Says planner B proposed A's Statement-with-about; true in round 1, but in round 2 I proposed the split adopted.","fix":"Say planner B moved to the split in round 2."},
+{"where":"2.5 Report.origin for AUTHOR voice","problem":"origin is a MentionId, but an author-voice report may have no printed author name; a Mention needs a span.","fix":"For AUTHOR voice allow origin = work author Agent justified by voiceBasis span, or make origin optional there."},
+{"where":"2.5 voice vs Statement.role","problem":"Report.voice and Statement.role (ADR 0011) overlap (AUTHOR vs AUTHOR_REPORT) with no consistency rule.","fix":"Add a check: role must be compatible with voice; or derive role except SYNTHESIS vs REPORT."},
+{"where":"Decision table X2 alternatives","problem":"Missing alternative: page-anchored short selectors for mentions (ambiguous after re-fetch).","fix":"Add it with that reason."},
+{"where":"Decision table X5 alternatives","problem":"Missing alternative: identify every occurrence separately (~50k blind reviews for Bukhari).","fix":"Add it as the reason segment reuse won."},
+{"where":"2.6 segment reuse review","problem":"'Reviewed once plus sample' not stated; check only compares resolved results.","fix":"State reviewer approves segment once and a listed sample of applications."}],
+"overall":"sign-with-notes"}

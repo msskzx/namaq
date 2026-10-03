@@ -1,0 +1,425 @@
+{
+ "contested_axes": [
+  {
+   "axis": "X1",
+   "positions": [
+    {
+     "agent": "plannerA",
+     "side": "both-equal",
+     "choice": "Text only in page files; display = render(span) cut from page text; selector exact is a checked locator, never displayed; closed render-deletion list (B's).",
+     "reason": "Both plans agree; B's explicit render rule (only footnote markers removed, sigla kept unless span ends before) is more testable than mine.",
+     "accepts_other_side": true,
+     "condition": ""
+    },
+    {
+     "agent": "plannerB",
+     "side": "both-equal",
+     "choice": "Page file is the only Arabic text; display resolved from span; closed render rule deleting only footnote markers; tested render(span)==page slice minus markers.",
+     "reason": "Both plans agree; copy-and-check produced 414/727 failures. B's explicit render test closes the remaining gap.",
+     "accepts_other_side": true,
+     "condition": ""
+    },
+    {
+     "agent": "reviewerA",
+     "side": "B",
+     "choice": "Display = render(span) with B's closed, tested deletion list (footnote markers, intra-span breaks only); siglum stays or the span ends before it; book's ayah quotation shown as printed.",
+     "reason": "A 3.3/6.6 still renders a quoted ayah from the Ayah table inside a commentator's text; that substitutes a reading. B's render test makes 'resolved' provable.",
+     "accepts_other_side": true,
+     "condition": "A drops Ayah substitution and adopts B's render test."
+    },
+    {
+     "agent": "reviewerB",
+     "side": "both-equal",
+     "choice": "Text only in page files; display = page slice at resolved span minus a closed, tested deletion list (footnote markers only); exact is a locator, never displayed.",
+     "reason": "Both plans agree; B's explicit render test (5a) is the piece that makes 'display is the source' provable rather than asserted.",
+     "accepts_other_side": true,
+     "condition": "Adopt B's render-equals-slice test in model:check."
+    }
+   ]
+  },
+  {
+   "axis": "X3",
+   "positions": [
+    {
+     "agent": "plannerA",
+     "side": "B",
+     "choice": "B's Assertion (subject, predicate, value spans/object/parsed/classified, restsOn statements) replacing catalog; my Statement fields fold in; subject refs via Mention+Identification.",
+     "reason": "B separates what is shown from what was said, and its 'classified' value with span beside it names our reading honestly; mine conflated report wording and value.",
+     "accepts_other_side": true,
+     "condition": "Assertion entity references must still pass through Mention and Identification, not bare slugs."
+    },
+    {
+     "agent": "plannerB",
+     "side": "A",
+     "choice": "A's Statement under a Report, about[] as Mention ids, predicate vocab; add B's parsed vs classified object split.",
+     "reason": "Routing every entity through Mention removes unrecorded identifications; Report gives speaker derivation. Plain Siyar claim costs ~report+statement+2 spans, acceptable.",
+     "accepts_other_side": true,
+     "condition": "Author-voice reports need a frame or heading span, not default."
+    },
+    {
+     "agent": "reviewerA",
+     "side": "third",
+     "choice": "B's Assertion/Statement split with parsed vs classified values, but subject and object must be Mention ids reached through Identification (A's rule).",
+     "reason": "B's Assertion.subject 'agent:az-zubayr' is an unrecorded identification by us. A's Mention-everywhere rule fixes it; B's parsed/classified split is the better value type.",
+     "accepts_other_side": true,
+     "condition": "Siyar plain claim cost stays about 6 records with heading identification explicit-in-text reviewed in bulk."
+    },
+    {
+     "agent": "reviewerB",
+     "side": "A",
+     "choice": "A's Statement with about[]/object as Mention ids plus Report voice; keep B's parsed/classified split for scalars and Statement.role for ADR 0011.",
+     "reason": "Routing every entity through a Mention makes each identification visible; ~6 records per plain Siyar value is acceptable if explicit-in-text identifications are bulk-reviewed.",
+     "accepts_other_side": true,
+     "condition": "Explicit-in-text identifications get bulk review tooling, not per-record clicks."
+    }
+   ]
+  },
+  {
+   "axis": "X4",
+   "positions": [
+    {
+     "agent": "plannerA",
+     "side": "B",
+     "choice": "Speaker per statement with author basis span; Link.mode as span list with 1:1 modeKey from printed lemma; explicit Gap elements; enclosure separate from chain; anonymous = unidentified mention.",
+     "reason": "Gap elements and enclosure model muallaq, mursal and 'qala Ibn Sa'd' better than my booleans; 1:1 key beats my closed vocabulary with jazm/tamrid as derived view.",
+     "accepts_other_side": true,
+     "condition": "Keep jazm/tamrid as a documented derived view, never replacing modeKey on edges."
+    },
+    {
+     "agent": "plannerB",
+     "side": "A",
+     "choice": "A's Report/Chain/Link with modeSpans[] and gapBefore, vocab extended to person/number 1:1 and jazm/tamrid class; reported-anonymous voice for وقيل.",
+     "reason": "A's vocabulary is richer and covers tamrid; B's Gap element equals gapBefore. No edge across a gap either way.",
+     "accepts_other_side": true,
+     "condition": "Unmapped printed formula fails check instead of 'unspecified'."
+    },
+    {
+     "agent": "reviewerA",
+     "side": "third",
+     "choice": "B's modeKey 1:1 with printed lemma+person/number, Gap elements anywhere (ta'liq, mursal, balagha), enclosedBy; add A's derived jazm/tamrid class, Edition.riwayah and reported-anonymous voice.",
+     "reason": "A's gapBefore cannot express a mursal's missing tail; A's codes miss person/number for samia. B lacks riwayah of the book and the tamrid class.",
+     "accepts_other_side": true,
+     "condition": "Abbreviated formulas (ثنا، نا، أنا) map to their full key with the abbreviation span kept."
+    },
+    {
+     "agent": "reviewerB",
+     "side": "third",
+     "choice": "B's Chain of (Link|Gap) elements and lemma+person modeKey; add A's jazm/tamrid class, Unit layer, Edition.riwayah and reported-anonymous voice.",
+     "reason": "A Gap element prevents false edges more robustly than A's gapBefore flag; A's tamrid class and riwayah chain capture distinctions B lacks.",
+     "accepts_other_side": true,
+     "condition": "modeKey stays 1:1 with printed form; classes are derived."
+    }
+   ]
+  },
+  {
+   "axis": "X5",
+   "positions": [
+    {
+     "agent": "plannerA",
+     "side": "B",
+     "choice": "Global Agent per person; Identification with admissible basis roles (editor note, rijal entry, same-work explicit incl. heading); mention's own span never a basis; segment identifications reused per work.",
+     "reason": "Stricter than my namaq-authored basis, which let our opinion in; segment reuse makes review cost tractable.",
+     "accepts_other_side": true,
+     "condition": "Competing sourced identifications all DISPUTED; Namaq never picks."
+    },
+    {
+     "agent": "plannerB",
+     "side": "third",
+     "choice": "Global Entity, Mention everywhere (A); basis roles excluding mention's own span except heading-subject (B); chain-segment identification reuse with listed applications (B).",
+     "reason": "A's explicit-in-text is fine for headings but not ambiguous isnad names; reuse makes Bukhari affordable without blind approval.",
+     "accepts_other_side": true,
+     "condition": "Ambiguous isnad names never identified on explicit-in-text."
+    },
+    {
+     "agent": "reviewerA",
+     "side": "B",
+     "choice": "Global entity; Identification needs a basis span other than the mention itself (EDITOR_NOTE, RIJAL_ENTRY, SAME_WORK_EXPLICIT); no basis means unidentified text, no node; reuse per chain segment within a work.",
+     "reason": "A's 'namaq-authored' identifications shown as labelled edges are our opinion on hadith narrators. B's honest unidentified state meets the Prophetic standard.",
+     "accepts_other_side": false,
+     "condition": ""
+    },
+    {
+     "agent": "reviewerB",
+     "side": "third",
+     "choice": "Global entity, Mention, Identification with basis; basis never the mention's own span; segment-level reuse (A's mention+neighbour pair); edges only from reviewed identifications.",
+     "reason": "A shows namaq-authored unreviewed identifications as edges with a label; for narrators of Prophetic hadith that publishes our opinion as a chain. Visibility as text, edges after review.",
+     "accepts_other_side": true,
+     "condition": "Unreviewed identifications visible as text with label, never as graph edges."
+    }
+   ]
+  },
+  {
+   "axis": "X6",
+   "positions": [
+    {
+     "agent": "plannerA",
+     "side": "both-equal",
+     "choice": "Report/Tradition groups unmerged wordings with basis spans or NAMAQ basis shown as 'grouped by Namaq'.",
+     "reason": "Plans agree; labelled Namaq grouping is honest and useful.",
+     "accepts_other_side": true,
+     "condition": "Owner may forbid NAMAQ basis (open question)."
+    },
+    {
+     "agent": "plannerB",
+     "side": "both-equal",
+     "choice": "Tradition/Report grouping over unmerged wordings, membership with basis; namaq-authored grouping allowed but labelled 'grouped by Namaq'.",
+     "reason": "Both reject merged texts; labelling keeps our judgment visible rather than forbidding useful grouping.",
+     "accepts_other_side": true,
+     "condition": "Owner may forbid Namaq grouping for hadith (open question)."
+    },
+    {
+     "agent": "reviewerA",
+     "side": "both-equal",
+     "choice": "Report/Tradition groups unmerged wordings; basis typed; Namaq grouping allowed only for history and labelled; Prophetic hadith grouping needs a takhrij or editor-note span.",
+     "reason": "Both refuse merging and label Namaq groupings. Grouping marfu' hadith on our word implies a judgment about sameness of the Prophet's words.",
+     "accepts_other_side": true,
+     "condition": "Owner may relax for hadith via Q3/Q9."
+    },
+    {
+     "agent": "reviewerB",
+     "side": "A",
+     "choice": "A's Tradition + Membership with basis (same-origin-and-matn, editor-takhrij, atraf-index, namaq-authored), never merging wordings; namaq-authored labelled in UI.",
+     "reason": "Separating Tradition from Report and typing the basis is clearer than B's Report-of-Statements; both refuse merged text.",
+     "accepts_other_side": true,
+     "condition": "Owner decides whether namaq-authored groupings may publish."
+    }
+   ]
+  },
+  {
+   "axis": "X8",
+   "positions": [
+    {
+     "agent": "plannerA",
+     "side": "B",
+     "choice": "Per-record contentHash including hash of rendered text and witness of every reached span; publish = owner publishes set of record hashes; edit lapses that record only.",
+     "reason": "Same as mine in effect; hashing rendered text catches witness switches too.",
+     "accepts_other_side": true,
+     "condition": ""
+    },
+    {
+     "agent": "plannerB",
+     "side": "both-equal",
+     "choice": "Per-record publication; revision hash over record fields plus rendered text of named spans and transcription id; reanchor with same text lapses nothing.",
+     "reason": "Both converge after review; includes witness so a transcription switch lapses affected records.",
+     "accepts_other_side": true,
+     "condition": ""
+    },
+    {
+     "agent": "reviewerA",
+     "side": "third",
+     "choice": "Per-record publication with minted ids; revision hash = record fields + sha256(rendered text) + witness id of each span (B); only the owner runs publish per change set (A).",
+     "reason": "B's hash catches displayed text moving; A's owner-run publish keeps the AGENTS.md gate. Together nothing lapses en masse except where display truly moved.",
+     "accepts_other_side": true,
+     "condition": ""
+    },
+    {
+     "agent": "reviewerB",
+     "side": "B",
+     "choice": "Per-record publication; hash = record + sha256(render(span)) + witness id for every span reached; reanchor with identical rendered text keeps publication.",
+     "reason": "A hashes only exact; a re-split or witness switch can change displayed text under a published hash. B's hash catches it while still surviving pure re-anchors.",
+     "accepts_other_side": false,
+     "condition": "Only if A shows display text cannot change while exact is unchanged."
+    }
+   ]
+  },
+  {
+   "axis": "X9",
+   "positions": [
+    {
+     "agent": "plannerA",
+     "side": "third",
+     "choice": "data/works (works, editions, witnesses), sources per witness, records per work-unit (A's layout) not per batch; PG and Neo4j derived; NARRATED_FROM edges from reviewed identifications, never across Gap.",
+     "reason": "Batches are a work-process grouping, not a source structure; files per tarjama/hadith map to the book and avoid batch folders recurring.",
+     "accepts_other_side": true,
+     "condition": "Accept B's per-batch folders if owner prefers PR-sized units."
+    },
+    {
+     "agent": "plannerB",
+     "side": "A",
+     "choice": "A's layout: data/works/<work>/units/*.yaml, data/entities/; retire catalog/, batches/, seeds; PG/Neo4j derived; narrator edges in a separate isnad view.",
+     "reason": "Unit files follow the book's structure and scale to Bukhari better than subject batches; separating isnad edges keeps the people graph readable.",
+     "accepts_other_side": true,
+     "condition": "Change sets list record ids for publication, replacing batch.json approval."
+    },
+    {
+     "agent": "reviewerA",
+     "side": "third",
+     "choice": "A's layout (data/works/<work>/units, data/entities) with change sets as PRs; B's Neo4j rule: NARRATED_FROM only from reviewed identifications, never across a Gap, modeKey+span ids on edge.",
+     "reason": "Unit-per-file follows the book's structure for hadith and tafsir; batches are a work-process artefact. Edges from unreviewed identifications contradict the hadith standard.",
+     "accepts_other_side": true,
+     "condition": "An ADR supersedes 0010's layout."
+    },
+    {
+     "agent": "reviewerB",
+     "side": "A",
+     "choice": "Files per Unit under data/works and data/entities; PostgreSQL and Neo4j derived; catalog/batches retired; seeds archived; NARRATED_FROM in separate isnad view, excluded from centrality.",
+     "reason": "Unit-shaped files match how sources are read and reviewed; A's archive keeps old values inspectable; separating isnad edges protects the companion graph layout.",
+     "accepts_other_side": true,
+     "condition": "B's Gloss directory added for English names."
+    }
+   ]
+  },
+  {
+   "axis": "X10",
+   "positions": [
+    {
+     "agent": "plannerA",
+     "side": "third",
+     "choice": "Text core first, Siyar conversion second with voice decided per statement, dual tables plus pre-model tag for rollback; hadith pilot (Kitab al-Ilm) only after Siyar converts and review surface exists.",
+     "reason": "Siyar drift is today's harm; hadith needs the review tool and rijal basis first.",
+     "accepts_other_side": true,
+     "condition": ""
+    },
+    {
+     "agent": "plannerB",
+     "side": "B",
+     "choice": "Siyar conversion first, hadith pilot (بدء الوحي) after; pre-migration tag, dual-run old pipeline on separate preview DB, explicit rollback criterion.",
+     "reason": "Siyar exercises spans/statements on existing data; rollback was missing from A. Hadith pilot measures review cost before scaling.",
+     "accepts_other_side": true,
+     "condition": ""
+    },
+    {
+     "agent": "reviewerA",
+     "side": "both-equal",
+     "choice": "Siyar conversion first, then Siyar chains, then one Bukhari kitab with measured cost as go/no-go; tag, dual tables for a release, archive old excerpts.",
+     "reason": "Both plans now phase Siyar first with rollback; hadith-first would pilot on unchecked infrastructure. Combine B's freeze/go-no-go with A's archive and LegacyValue display.",
+     "accepts_other_side": true,
+     "condition": ""
+    },
+    {
+     "agent": "reviewerB",
+     "side": "both-equal",
+     "choice": "Siyar conversion first, chains on Siyar next, then one Bukhari kitab pilot with measured cost go/no-go; tag pre-migration, dual tables one release.",
+     "reason": "Both converge; text core must be proven on known data before hadith. Pilot measurement gates full Bukhari.",
+     "accepts_other_side": true,
+     "condition": ""
+    }
+   ]
+  },
+  {
+   "axis": "X11",
+   "positions": [
+    {
+     "agent": "plannerA",
+     "side": "B",
+     "choice": "Work/Edition/Witness split, witness per volume range with vowelled and footnote flags; Shamela only for now, extendable; Bukhari edition and numbering chosen by owner; Ayah mushaf named in ADR.",
+     "reason": "B's Witness entity is my Transcription renamed with page text per witness path; cleaner for bare Sira volumes.",
+     "accepts_other_side": true,
+     "condition": ""
+    },
+    {
+     "agent": "plannerB",
+     "side": "A",
+     "choice": "Shamela only for now; transcription records vowelling per volume range; Edition.numbering map with Bukhari scheme as owner choice; Ayah linked never substituted.",
+     "reason": "A's per-unit numbering map handles Fath/Sultaniyya; both agree on fidelity flags and ayah linking.",
+     "accepts_other_side": true,
+     "condition": "Bare Sira v1-2 shown with fidelity flag pending owner decision."
+    },
+    {
+     "agent": "reviewerA",
+     "side": "third",
+     "choice": "Edition/Volume/Witness (B naming) with vowelling and ligature-insertion flags; Edition.riwayah (A); Shamela only until owner says otherwise; Ayah mushaf and qira'a named in an ADR.",
+     "reason": "Host-inserted ﷺ and bare volumes must be visible properties; the book's riwayah is how the book itself was heard. Numbering needs a mapping table, both admit.",
+     "accepts_other_side": true,
+     "condition": ""
+    },
+    {
+     "agent": "reviewerB",
+     "side": "third",
+     "choice": "Shamela only for now; Transcription/Witness records vowelled and ligature flags per range; bare Sira v1-2 shown with fidelity flag; Bukhari edition, numbering map and Ayah mushaf named by ADR.",
+     "reason": "Owner rule stands until changed; flags keep fidelity visible. Book quotations of ayat shown as printed, Ayah linked, never substituted (A 3.3 must change).",
+     "accepts_other_side": true,
+     "condition": "A drops rendering quoted ayat from Ayah."
+    }
+   ]
+  },
+  {
+   "axis": "X12",
+   "positions": [
+    {
+     "agent": "plannerA",
+     "side": "B",
+     "choice": "Owner reviews; agents propose only; P10 stricter gate for Prophetic statements (complete chain record, two reviewers, no LEGACY); review surface built before scale; segment-level identification review.",
+     "reason": "The owner said Prophetic error is far worse; a stricter gate encodes that. My plan lacked it.",
+     "accepts_other_side": true,
+     "condition": "Two reviewers needs a second person; until then Prophetic statements stay PROPOSED and visibly so."
+    },
+    {
+     "agent": "plannerB",
+     "side": "third",
+     "choice": "Owner alone publishes (A); Prophetic statements need two independent reviews, one with hadith training (B); review UI with highlighted spans built in phase 2.",
+     "reason": "Combines A's single publisher with B's stricter gate; cost estimates from both justify the pilot-then-decide approach.",
+     "accepts_other_side": true,
+     "condition": ""
+    },
+    {
+     "agent": "reviewerA",
+     "side": "B",
+     "choice": "P10: Prophetic statements need complete chain record, two distinct reviewers (one hadith-trained), no default speaker, no LEGACY; per-record review surface built before scale; measured budget.",
+     "reason": "A applies one review regime to all genres; the owner explicitly ranks hadith errors as far graver.",
+     "accepts_other_side": false,
+     "condition": ""
+    },
+    {
+     "agent": "reviewerB",
+     "side": "B",
+     "choice": "B's P10: Prophetic statements need complete chain record, explicit gaps, two independent reviews, no LEGACY, honorifics as printed; A's cost table and pair-level identification review.",
+     "reason": "The owner states hadith error is far graver; A has no differentiated gate. Cost figures from A are the better budget basis.",
+     "accepts_other_side": false,
+     "condition": ""
+    }
+   ]
+  },
+  {
+   "axis": "X13",
+   "positions": [
+    {
+     "agent": "plannerA",
+     "side": "both-equal",
+     "choice": "Unreviewed and LEGACY shown with marks (ADR 0008); LEGACY migration-only, never new, counted to zero; graph edges only from reviewed identifications; Prophetic statements never LEGACY.",
+     "reason": "Keeps ADR 0008 for profiles while the graph, which implies identity, waits for review.",
+     "accepts_other_side": true,
+     "condition": ""
+    },
+    {
+     "agent": "plannerB",
+     "side": "third",
+     "choice": "ADR 0008 kept: unreviewed shown with status; legacy shown labelled 'no source yet' until phase close-out; unidentified/unreviewed narrators shown as text, never nodes; no LEGACY on Prophetic statements.",
+     "reason": "Hiding breaks ADR 0008; showing status keeps honesty. Hadith gets the stricter node and legacy rule only.",
+     "accepts_other_side": true,
+     "condition": ""
+    },
+    {
+     "agent": "reviewerA",
+     "side": "third",
+     "choice": "ADR 0008 kept for history: unreviewed and LEGACY shown with marks. For Prophetic statements: text always shown, but unreviewed identifications, groupings and gradings produce no edges or labels.",
+     "reason": "Hiding source text is never needed; hiding our unreviewed judgments about the Prophet's chains is. This narrows the ADR 0008 exception to our judgments.",
+     "accepts_other_side": true,
+     "condition": "Owner confirms the hadith exception in an ADR."
+    },
+    {
+     "agent": "reviewerB",
+     "side": "third",
+     "choice": "Show unreviewed statements with status label (ADR 0008); legacy values shown as 'no source yet'; but for Prophetic matn no LEGACY and no edge from unreviewed identification.",
+     "reason": "Keeps ADR 0008 for history while honouring the hadith standard; text is never hidden, only unsupported links are withheld.",
+     "accepts_other_side": true,
+     "condition": "Owner confirms the hadith exception to ADR 0008 scope."
+    }
+   ]
+  }
+ ],
+ "extra_issues": [
+  "E1 Licensing/terms of re-hosting or deriving from Shamela transcriptions",
+  "E2 Arabic search normalisation (diacritic-insensitive) over rendered spans",
+  "E3 How quiz questions cite statements that later lapse or change",
+  "E4 Reviewer independence: the owner is the only reviewer; who is a hadith-qualified reviewer and how their review is recorded distinctly",
+  "E5 Shamela text is a transcription: no check against printed page images, so a host typo or host-inserted honorific becomes exact",
+  "E6 Re-fetched tashkeel corrections on a published Prophetic matn: policy; normalisation version bumps and what re-resolves or lapses",
+  "E7 Abbreviated transmission formulas (ثنا، نا، أنا، ثني) mapped to mode keys; idraj and narrator-doubt words (أَوْ قَالَ، أَحْسِبُهُ) inside a matn span",
+  "E8 Taqti and ikhtisar: a report cut across chapters, partial wordings within one report",
+  "E9 Editor takhrij footnotes (al-Arna'ut) as gradings with the editor as speaker; sigla such as (ع) as statements",
+  "E10 Shared chain segments repeated across hadiths: drift of duplicated identifications",
+  "E11 Qira'at variants in the Ayah table; the rijal work chosen as identification basis and its ingestion order",
+  "E12 Performance of resolving spans for ~200k records; projection tests for disputed graph edges"
+ ]
+}

@@ -1,0 +1,24 @@
+{"agent":"reviewerA","axes":[
+{"axis":"X1","sign":true,"reason":"P10, 2.3 Render and 3.3 all render a quoted ayah from the book's page with Ayah linked and differences flagged. My condition holds everywhere I checked."},
+{"axis":"X2","sign":true,"reason":"Minted ids, mention anchored in its parent span, re-anchor only on a unique verbatim match, lapse on a change to rendered text. Accurate."},
+{"axis":"X3","sign":true,"reason":"Statement/Assertion split with Mention subjects and objects, and parsed/classified values. The vote and the reasons for rejecting each side are recorded accurately."},
+{"axis":"X4","sign":true,"reason":"Link|Gap, 1:1 modeKey, abbreviations, derived jazm/tamrid, enclosedBy, riwayah and REPORTED_ANONYMOUS are all present. The author-voice origin needs fixing (see fidelity problems)."},
+{"axis":"X5","sign":true,"reason":"There is no Namaq-authored basis anywhere: P4, 2.6, 3.2 (abu Hasin stays text), 3.3 (Ibn Abbas unidentified). Condition met, apart from the 3.1 nasab basis wording."},
+{"axis":"X6","sign":true,"reason":"Grouping a marfu' report requires a span basis; NAMAQ is labelled elsewhere. Matches my proposal."},
+{"axis":"X7","sign":true,"reason":"Grade is a quoted span with a speaker; authorClaim is scoped; editor takhrij is spoken by the editor."},
+{"axis":"X8","sign":true,"reason":"Revision includes rendered text and witness; only the owner publishes; review is separate. Accurate."},
+{"axis":"X9","sign":true,"reason":"Per-Unit layout; isnad view only from reviewed identifications, never across a Gap; archive kept; ADR 0023."},
+{"axis":"X10","sign":true,"reason":"Phases each have a rollback; Siyar comes first; the Bukhari go/no-go is measured."},
+{"axis":"X11","sign":true,"reason":"Witness fidelity flags, Shamela only, numbering map, riwayah, and the mushaf/qira'a ADR."},
+{"axis":"X12","sign":true,"reason":"Two distinct humans, one hadith-qualified; an agent is never a reviewer; the gate applies to the pilot."},
+{"axis":"X13","sign":true,"reason":"Text is never hidden; our unreviewed judgments are never edges; the Prophetic exception is scoped in an ADR."}
+],
+"fidelity_problems":[
+{"where":"3.1 m_awwam identification basis","problem":"The basis is sp_zb1, the mention's own parent span, with role SAME_WORK_EXPLICIT. 2.6 limits that role to a heading or يعني, so the example breaks the plan's own rule.","fix":"Add an explicit NASAB role: a basis span covering the following nasab links (العوام بن خويلد بن أسد), distinct from the mention, or narrow the example."},
+{"where":"Report.origin for AUTHOR voice","problem":"origin must be a MentionId, but al-Dhahabi is not named on v4/41. m_dhahabi has no span, so either it is an unanchored mention or the author is a default speaker.","fix":"For AUTHOR voice, set origin = Work.author (Agent) justified by voiceBasis; restrict Mention to text that is printed."},
+{"where":"3.1 sp_zb_heading","problem":"sp_zb_heading is used as a basis and as voiceBasis but is never defined, and it may overlap sp_zb1, which makes the heading its own basis.","fix":"Define it as the entry-number-plus-heading span and state that a heading may basis its own subject only through SAME_WORK_EXPLICIT."},
+{"where":"Agent display name for authors","problem":"An author with no transcribed mention (al-Dhahabi) renders 'not yet named' in Arabic UI, yet the attribution line names him.","fix":"Allow displayMention from the Work's title-page span, or state that attribution labels use Gloss or a work-title span."},
+{"where":"2.10 Prophetic gate image comparison","problem":"'when an image is available' lets a matn pass P9 with no print check, while Shamela is unchecked against print.","fix":"Record 'no image' explicitly on the review, and show the matn with an 'unchecked against print' mark."},
+{"where":"Goal line 7 vs P10","problem":"'never copied from a book' could be read as forbidding book quotations of ayat, which P10 displays.","fix":"Reword: Qur'an views use Ayah only; a book's quotation is shown as that book's text."}
+],
+"overall":"sign-with-notes"}
