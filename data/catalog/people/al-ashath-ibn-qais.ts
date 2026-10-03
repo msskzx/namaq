@@ -23,15 +23,15 @@ const alAshathIbnQais = {
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
-      value: 'الأشعث بن قيس بن معدي كرب بن معاوية بن جبلة بن عدي بن ربيعة بن معاوية الأكرمين بن الحارث بن معاوية بن ثور بن مرتع بن كندة',
+      value: 'الأَشْعَثُ بنُ قَيْسِ بنِ مَعْدِيْ كَرِبَ الكِنْدِيُّ بنِ مُعَاوِيَةَ بنِ جَبَلَةَ بنِ عَدِيِّ بنِ رَبِيْعَةَ بنِ مُعَاوِيَةَ الأَكْرَمِيْنَ بنِ الحَارِثِ بنِ مُعَاوِيَةَ بنِ ثَوْرِ بنِ مُرْتِعِ بنِ كِنْدَةَ',
       claims: ['al-ashath-ibn-qais-siyar8/full-name'],
     },
     virtues: {
-      value: 'كان جوادا: كفر عن يمينه بخمسة عشر ألفا، وقال وقد حلف على حق ورد على صاحبه ثلاثين ألفا: قبحك الله من مال.',
+      value: 'فَكَفَّرَ عَنْ يَمِيْنِهِ بِخَمْسَةَ عَشَرَ أَلْفاً قَبَّحَكَ اللهُ مِنْ مَالٍ! أَمَا وَاللهِ مَا حَلَفْتُ إِلاَّ عَلَى حَقٍّ، وَلَكِنَّهُ رَدٌّ عَلَى صَاحِبِهِ، وَكَانَ ثَلاَثِيْنَ أَلْفاً',
       claims: ['al-ashath-ibn-qais-siyar8/virtues'],
     },
     deathYearHijri: { value: '40 AH', claims: ['al-ashath-ibn-qais-siyar8/death-year'] },
-    placeOfDeathArabic: { value: 'الكوفة', claims: ['al-ashath-ibn-qais-siyar8/death-place'] },
+    placeOfDeathArabic: { value: 'الكُوْفَةِ', claims: ['al-ashath-ibn-qais-siyar8/death-place'] },
   },
   titles: [
     {

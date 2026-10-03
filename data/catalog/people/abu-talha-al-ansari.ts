@@ -18,18 +18,18 @@ const abuTalhaAlAnsari = {
       value: 'زيد بن سهل بن الأسود بن حرام بن عمرو بن زيد مناة بن عدي بن عمرو بن مالك بن النجار الأنصاري الخزرجي النجاري',
       claims: ['abu-talha-al-ansari-siyar5/full-name'],
     },
-    kunya: { value: 'أبو طلحة', claims: ['abu-talha-al-ansari-siyar5/kunya'] },
+    kunya: { value: 'أَبُو طَلْحَةَ', claims: ['abu-talha-al-ansari-siyar5/kunya'] },
     appearance: {
       value: 'كَانَ جَلْداً، صَيِّتاً، آدَمَ، مَرْبُوْعاً، لاَ يُغَيِّرُ شَيْبَهُ.',
       claims: ['abu-talha-al-ansari-siyar5/appearance'],
     },
     virtues: {
       value:
-        'صوت أبي طلحة في الجيش خير من فئة؛ نفسي لنفسك الفداء ووجهي لوجهك الوقاء؛ كان يرمي بين يدي رسول الله يوم أحد ويدفع صدره بيده؛ قتل يوم حنين عشرين رجلا وأخذ أسلابهم؛ تصدق بأحب أمواله بيرحاء؛ سرد الصوم بعد النبي.',
+        'صَوْتُ أَبِي طَلْحَةَ فِي الجَيْشِ خَيْرٌ مِنْ فِئَةٍ نَفْسِي لِنَفْسِكَ الفِدَاءُ، وَوَجْهِي لِوَجْهِكَ الوِقَاءُ كَانَ يَرْمِي بَيْنَ يَدَيْ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَوْمَ أُحُدٍ وَكَانَ يَدْفَعُ صَدْرَ رَسُوْلِ اللهِ بِيَدِهِ فَقَتَلَ أَبُو طَلْحَةَ يَوْمَئِذٍ عِشْرِيْنَ رَجُلاً، وَأَخَذَ أَسْلاَبَهُمْ إِنَّ أَحَبَّ أَمْوَالِي إِلَيَّ بَيْرُحَاءُ، وَإِنَّهَا صَدَقَةٌ للهِ سَرَدَ الصَّوْمَ بَعْدَ النَّبِيِّ',
       claims: ['abu-talha-al-ansari-siyar5/virtues'],
     },
     deathYearHijri: { value: '34', claims: ['abu-talha-al-ansari-siyar5/death-year'] },
-    placeOfDeathArabic: { value: 'المدينة', claims: ['abu-talha-al-ansari-siyar5/death-place'] },
+    placeOfDeathArabic: { value: 'المَدِيْنَةِ', claims: ['abu-talha-al-ansari-siyar5/death-place'] },
   },
   titles: [
     {
