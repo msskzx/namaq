@@ -114,6 +114,7 @@ const translations = {
     },
     // Homepage
     intro: 'Uncover the fascinating stories of remarkable individuals who shaped the course of human civilization. Learn about many topics in an interactive manner and explore',
+    workInProgress: 'This project is a work in progress and has not yet been reviewed by scholars. The information may contain mistakes, so do not rely on it without checking the sources.',
     definition: 'What is Namaq?',
     verbNamaq: {
       title: 'Namaq (Verb)',
@@ -431,6 +432,7 @@ const translations = {
     },
     // Homepage
     intro: 'اكتشف القصص المذهلة للشخصيات البارزة الذين شكّلوا مسار التاريخ البشري وتعلم عن العديد من الموضوعات بطريقة تفاعلية',
+    workInProgress: 'هذا المشروع قيد التطوير ولم يُراجَع بعد من قِبل أهل العلم. قد تحتوي المعلومات على أخطاء، فلا تعتمد عليها دون الرجوع إلى المصادر.',
     verbNamaq: {
       title: 'نَمَّقَ (فعل)',
       definition: 'نمَّقَ ينمِّق ، تنميقًا ، فهو مُنمِّق ، والمفعول مُنمَّق',
