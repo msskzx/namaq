@@ -3,26 +3,26 @@ import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 const khalidIbnSaid = {
   kind: 'PERSON',
   slug: 'khalid-ibn-said',
-  name: 'خالد بن سعيد',
+  name: 'خَالِدُ بنُ سَعِيْدِ',
   nameTransliterated: 'Khalid ibn Said',
   hasProfile: true,
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
-      value: 'خالد بن سعيد بن العاص بن أمية بن عبد شمس بن عبد مناف بن قصي',
+      value: 'خَالِدُ بنُ سَعِيْدِ بنِ العَاصِ بنِ أُمَيَّةَ الأُمَوِيُّ بنِ عَبْدِ شَمْسٍ بنِ عَبْدِ مَنَافٍ بنِ قُصَيٍّ',
       claims: ['khalid-ibn-said-siyar48/fullName'],
     },
     kunya: {
-      value: 'أبو سعيد',
+      value: 'أَبُو سَعِيْدٍ',
       claims: ['khalid-ibn-said-siyar48/kunya'],
     },
     appearance: {
-      value: 'وسيم، جميل',
+      value: 'وَسِيْماً، جَمِيْلاً',
       claims: ['khalid-ibn-said-siyar48/appearance'],
     },
     virtues: {
       value:
-        'أحد السابقين الأولين، خامس في الإسلام، هاجر إلى الحبشة، أول من كتب بسم الله الرحمن الرحيم، استعمله رسول الله على صنعاء، أمره أبو بكر على بعض الجيش في غزو الشام، قتل مشركاً، استشهد، قتل يوم أجنادين، رئي له نور ساطع إلى السماء.',
+        'أَحَدُ السَّابِقِيْنَ الأَوَّلِيْنَ خَامِساً فِي الإِسْلاَمِ، وَهَاجَرَ إِلَى أَرْضِ الحَبَشَةِ أَوَّلُ مَنْ كَتَبَ: بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيْمِ اسْتَعْمَلَهُ عَلَى صَنْعَاءَ، وَأَنَّ أَبَا بَكْرٍ أَمَّرَهُ عَلَى بَعْضِ الجَيْشِ فِي غَزْوِ الشَّامِ قَتَلَ مُشْرِكاً اسْتُشْهِدَ قُتِلَ يَوْمَ أَجْنَادِيْنَ رَأَيْتُ نُوْراً لَهُ سَاطِعاً إِلَى السَّمَاءِ',
       claims: ['khalid-ibn-said-siyar48/virtues'],
     },
   },

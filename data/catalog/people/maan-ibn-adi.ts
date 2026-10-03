@@ -3,13 +3,13 @@ import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 const maanIbnAdi = {
   kind: 'PERSON',
   slug: 'maan-ibn-adi',
-  name: 'معن بن عدي',
+  name: 'مَعْنُ بنُ عَدِيِّ',
   nameTransliterated: 'Maan ibn Adi',
   hasProfile: true,
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
-      value: 'معن بن عدي بن الجد بن العجلان الأنصاري حليف بني مالك بن عوف',
+      value: 'مَعْنُ بنُ عَدِيِّ بنِ الجدِّ بنِ العَجْلاَنِ الأَنْصَارِيُّ العَجْلاَنِيُّ، العَقَبِيُّ، البَدْرِيُّ، مِنْ حُلَفَاءِ بَنِي مَالِكِ بنِ عَوْفٍ',
       claims: ['maan-ibn-adi-siyar64/full-name'],
     },
     virtues: {
@@ -18,7 +18,7 @@ const maanIbnAdi = {
       claims: ['maan-ibn-adi-siyar64/virtues'],
     },
     deathYearHijri: { value: '12', claims: ['maan-ibn-adi-siyar64/death-year'] },
-    placeOfDeathArabic: { value: 'اليمامة', claims: ['maan-ibn-adi-siyar64/death-place'] },
+    placeOfDeathArabic: { value: 'اليَمَامَةِ', claims: ['maan-ibn-adi-siyar64/death-place'] },
   },
   titles: [
     {

@@ -6,19 +6,19 @@ import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
 const khubaybIbnAdi = {
   kind: 'PERSON',
   slug: 'khubayb-ibn-adi',
-  name: 'خبيب بن عدي',
+  name: 'خُبَيْبُ بنُ عَدِيِّ',
   nameTransliterated: 'Khubayb ibn Adi',
   hasProfile: true,
   fields: {
     sex: { value: 'MALE', claims: legacyUnreviewed },
     fullName: {
-      value: 'خبيب بن عدي بن عامر بن مجدعة الأنصاري ابن جحجبى الأنصاري',
+      value: 'خُبَيْبُ بنُ عَدِيِّ بنِ عَامِرِ بنِ مَجْدَعَةَ الأَنْصَارِيُّ بنِ جَحْجَبَا الأَنْصَارِيُّ',
       claims: ['khubayb-ibn-adi-siyar40/full-name'],
     },
-    placeOfDeathArabic: { value: 'مكة', claims: ['khubayb-ibn-adi-siyar40/death-place'] },
+    placeOfDeathArabic: { value: 'مَكَّةَ', claims: ['khubayb-ibn-adi-siyar40/death-place'] },
     virtues: {
       value:
-        'فكان أول من سن الصلاة عند القتل. ودعا على قاتليه: اللهم أحصهم عدداً، واقتلهم بدداً، ولا تغادر منهم أحداً. قال معاوية: كنت فيمن حضره، فلقد رأيت أبا سفيان يلقيني إلى الأرض فرقاً من دعوة خبيب. ووجدته ماوية يأكل قطفاً من عنب مثل رأس الرجل وما أعلم في الأرض حبة عنب',
+        'فَكَانَ أَوَّلَ مَنْ سَنَّ الصَّلاَةَ عِنْدَ القَتْلِ اللَّهُمَّ أَحْصِهِم عَدَداً، وَاقْتُلْهُم بَدَداً، وَلاَ تُغَادِرْ مِنْهُم أَحَداً وَقَالَ مُعَاوِيَةُ: كُنْتُ فِيْمَنْ حَضَرَهُ، فَلَقَدْ رَأَيْتْ أَبَا سُفْيَانَ يُلْقِيْنِي إِلَى الأَرْضِ فَرَقاً مِنْ دَعْوَةِ خُبَيْبٍ وَفِي يَدِهِ قِطَفُ عِنَبٍ مِثْلُ رَأْسِ الرَّجُلِ يَأْكُلُ مِنْهُ، وَمَا أَعْلَمُ فِي الأَرْضِ حَبَّةَ عِنَبٍ',
       claims: ['khubayb-ibn-adi-siyar40/virtues'],
     },
   },
