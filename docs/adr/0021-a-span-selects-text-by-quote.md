@@ -1,5 +1,5 @@
 ---
-status: proposed
+status: accepted
 ---
 
 # A span selects text by quote, and Arabic is written once

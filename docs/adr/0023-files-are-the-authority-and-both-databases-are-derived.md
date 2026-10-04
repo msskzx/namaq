@@ -1,5 +1,5 @@
 ---
-status: proposed
+status: accepted
 ---
 
 # Files are the authority, and prod holds only reviewed records
