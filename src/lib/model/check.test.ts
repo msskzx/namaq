@@ -204,6 +204,11 @@ describe('checkModel', () => {
     ).toMatch(/not a number/);
   });
 
+  it('fails a frame or isnad span the unit does not define', () => {
+    expect(issuesFor((f) => (f.reports[0].frame = ['nope'])).join()).toMatch(/unknown span nope/);
+    expect(issuesFor((f) => (f.reports[0].isnadSpan = 'nope')).join()).toMatch(/unknown span nope/);
+  });
+
   it('fails an AUTHOR statement that opens with a transmission formula', () => {
     expect(
       issuesFor((f) => {

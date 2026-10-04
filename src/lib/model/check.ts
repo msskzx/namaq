@@ -112,6 +112,8 @@ function checkUnit(folder: WorkFolder, file: UnitFile, root: string, issues: str
       if (!report.voiceBasis) fail(`${owner}: AUTHOR voice needs a voiceBasis`);
       else needSpan(owner, report.voiceBasis);
     }
+    for (const id of report.frame ?? []) needSpan(owner, id);
+    if (report.isnadSpan) needSpan(owner, report.isnadSpan);
     if ('workAuthor' in report.origin && report.voice !== 'AUTHOR') {
       fail(`${owner}: only an AUTHOR report may name the work author as origin`);
     }

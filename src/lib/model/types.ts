@@ -90,6 +90,8 @@ export interface Report {
   ordinal: number;
   voice: Voice;
   voiceBasis?: string;
+  frame?: string[];
+  isnadSpan?: string;
   origin: { mention: string } | { workAuthor: true };
   chainState: 'COMPLETE' | 'DEFERRED';
 }
