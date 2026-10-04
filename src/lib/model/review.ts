@@ -21,7 +21,9 @@ export function loadReviews(root: string): ReviewRecord[] {
   return readdirSync(dir)
     .filter((name) => name.endsWith('.json'))
     .sort()
-    .flatMap((name) => JSON.parse(readFileSync(join(dir, name), 'utf8')).reviews as ReviewRecord[]);
+    .flatMap(
+      (name) => (JSON.parse(readFileSync(join(dir, name), 'utf8')).reviews ?? []) as ReviewRecord[],
+    );
 }
 
 function stable(value: unknown): string {
@@ -72,17 +74,30 @@ export function closureOf(file: UnitFile, assertion: Assertion) {
 
 export function revisionOf(folder: WorkFolder, file: UnitFile, assertion: Assertion, root: string) {
   const closure = closureOf(file, assertion);
-  const text = Object.fromEntries(
-    closure.spans.map((span) => [
-      span.id,
-      {
-        render: sha(renderSpanRecord(folder, span, root)),
-        witness: folder.witnesses.find((w) => w.edition === span.edition)?.slug,
-      },
-    ]),
+  const editions = new Set(closure.spans.map((span) => span.edition));
+  const spans = closure.spans.map(({ exact, prefix, suffix, ...place }) => ({
+    ...place,
+    render: sha(renderSpanRecord(folder, { exact, prefix, suffix, ...place }, root)),
+  }));
+  return sha(
+    stable({
+      ...closure,
+      spans,
+      work: folder.work,
+      unit: file.unit,
+      editions: folder.editions.filter((e) => editions.has(e.slug)),
+      witnesses: folder.witnesses.filter((w) => editions.has(w.edition)),
+    }),
   );
-  return sha(stable({ closure, text }));
 }
+
+const reviewedRevisions = (reviews: ReviewRecord[]) => {
+  const byRecord = new Map<string, Set<string>>();
+  for (const { record, revision } of reviews) {
+    byRecord.set(record, (byRecord.get(record) ?? new Set()).add(revision));
+  }
+  return byRecord;
+};
 
 export function lapsedReviews(folders: WorkFolder[], reviews: ReviewRecord[], root: string) {
   const current = new Map<string, string>();
@@ -97,7 +112,7 @@ export function lapsedReviews(folders: WorkFolder[], reviews: ReviewRecord[], ro
 }
 
 export function selectForProd(folders: WorkFolder[], reviews: ReviewRecord[], root: string) {
-  const reviewed = new Map(reviews.map((r) => [r.record, r.revision]));
+  const reviewed = reviewedRevisions(reviews);
   return folders
     .map((folder) => ({
       ...folder,
@@ -106,7 +121,7 @@ export function selectForProd(folders: WorkFolder[], reviews: ReviewRecord[], ro
           (a) =>
             a.status !== 'LEGACY' &&
             a.status !== 'REJECTED' &&
-            reviewed.get(a.id) === revisionOf(folder, file, a, root),
+            reviewed.get(a.id)?.has(revisionOf(folder, file, a, root)),
         );
         if (kept.length === 0) return [];
         const closures = kept.map((a) => closureOf(file, a));

@@ -20,7 +20,8 @@ How to resume: read [plan.md](plan.md) and [owner-goals.md](owner-goals.md), the
 2. The old-versus-new diff for al-Zubayr: compare the model's profile with the catalog's values (`data/catalog/people`) and list each difference for the **owner**.
 3. Prisma tables and a projection of the model to PostgreSQL and Neo4j (migration prepared; applying it to the preview database waits for the **owner**).
 4. The profile page and a conversation view reading the model, and the review surface.
-5. Chains (links, gaps, mode keys) and `SharhLink`; `SharhLink` needs a real commentary fixture first, which waits on a source (no Arabic is invented).
+5. CI and `CODEOWNERS` rules so only a scholar changes `data/reviews/` and only the owner changes `data/inferences/` (a review file is authored, so without this an agent could forge one). Needs the **owner** to set up on GitHub.
+6. Chains (links, gaps, mode keys) and `SharhLink`; `SharhLink` needs a real commentary fixture first, which waits on a source (no Arabic is invented).
 
 ## Not now
 

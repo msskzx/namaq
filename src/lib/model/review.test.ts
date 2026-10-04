@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { checkModel } from './check';
 import { loadModel } from './load';
 import { lapsedReviews, revisionOf, selectForProd, type ReviewRecord } from './review';
 
@@ -97,5 +98,58 @@ describe('selectForProd', () => {
         '.',
       ),
     ).toEqual([]);
+  });
+
+  it('keeps a record in prod when any reviewer holds its current revision', () => {
+    const { folders, review } = setup();
+    const stale = { ...review('a_child'), revision: 'stale', reviewer: 'late-reviewer' };
+    expect(selectForProd(folders, [review('a_child'), stale], '.')).not.toEqual([]);
+  });
+
+  it('passes model:check as a whole, including the Jibril-free real data', () => {
+    const { folders, file, review } = setup();
+    const set = selectForProd(
+      folders,
+      file.assertions.map((a) => review(a.id)),
+      '.',
+    );
+    expect(checkModel(set, '.')).toEqual([]);
+  });
+});
+
+describe('what lapses a review', () => {
+  it('lapses when the work author, the unit, the edition or the witness flags change', () => {
+    const { folder, file } = setup();
+    const name = file.assertions.find((a) => a.id === 'a_name')!;
+    const before = revisionOf(folder, file, name, '.');
+    for (const change of [
+      () => (folder.work.author = 'someone-else'),
+      () => (file.unit.numbers = { printed: '4' }),
+      () => (folder.editions[0].printing = 'fourth'),
+      () => (folder.witnesses[0].checkedAgainstPrint = true),
+    ]) {
+      const snapshot = structuredClone({
+        w: folder.work,
+        u: file.unit,
+        e: folder.editions,
+        s: folder.witnesses,
+      });
+      change();
+      expect(revisionOf(folder, file, name, '.')).not.toBe(before);
+      Object.assign(folder.work, snapshot.w);
+      file.unit = snapshot.u;
+      folder.editions = snapshot.e;
+      folder.witnesses = snapshot.s;
+    }
+  });
+
+  it('does not lapse when a span is re-anchored to the same rendered text', () => {
+    const { folder, file } = setup();
+    const name = file.assertions.find((a) => a.id === 'a_name')!;
+    const before = revisionOf(folder, file, name, '.');
+    const span = file.spans.find((s) => s.id === 'sp_zb1')!;
+    span.prefix = '٣ - ';
+    span.suffix = ' * (ع)';
+    expect(revisionOf(folder, file, name, '.')).toBe(before);
   });
 });
