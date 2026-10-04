@@ -93,3 +93,38 @@ describe('a review and a foreign basis', () => {
     expect(checkModel(prod, ROOT)).toEqual([]);
   });
 });
+
+describe('a foreign basis and the real al-Zubayr unit (a TARAJEM work)', () => {
+  const real = (change: (file: ReturnType<typeof loadModel>[number]['units'][number]) => void) => {
+    const folders = loadModel('.');
+    const file = folders[0].units[0];
+    change(file);
+    return checkModel(folders, '.').join('\n');
+  };
+  const ident = (mention: string, span: string) => ({
+    id: 'i_probe',
+    mention,
+    agent: 'x',
+    basis: [{ span, role: 'RIJAL_ENTRY' as const }],
+    status: 'PROPOSED' as const,
+  });
+
+  it('accepts a RIJAL_ENTRY span in a TARAJEM unit that names the person', () => {
+    expect(
+      real((f) => f.identifications.push(ident('m_awwam', 'siyar-v4-3-az-zubayr#sp_zb_heading'))),
+    ).toBe('');
+  });
+
+  it("fails the mention's own span as a foreign basis, by id and by equal text", () => {
+    expect(
+      real((f) => f.identifications.push(ident('m_zb', 'siyar-v4-3-az-zubayr#sp_zb1'))),
+    ).toMatch(/own span is not a basis/);
+    expect(
+      real((f) => {
+        const twin = { ...f.spans.find((s) => s.id === 'sp_zb1')!, id: 'sp_zb1_twin' };
+        f.spans.push(twin);
+        f.identifications.push(ident('m_zb', 'siyar-v4-3-az-zubayr#sp_zb1_twin'));
+      }),
+    ).toMatch(/own span is not a basis/);
+  });
+});

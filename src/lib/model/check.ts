@@ -287,7 +287,7 @@ function checkUnit(
     foreignId: string,
     spanId: string,
     role: string,
-    mention: { exact: string } | undefined,
+    mention: { exact: string; parent: string } | undefined,
   ) => {
     const target = units.get(foreignId);
     const foreignSpan = target?.file.spans.find((s) => s.id === spanId);
@@ -308,6 +308,13 @@ function checkUnit(
     }
     try {
       const text = locateSpanRecord(target.folder, foreignSpan, root).text;
+      if (
+        mention &&
+        ((foreignId === file.unit.id && spanId === mention.parent) ||
+          text === rendered.get(mention.parent))
+      ) {
+        fail(`${owner}: the mention's own span is not a basis`);
+      }
       if (
         mention &&
         !text.replace(HARAKAT, '').includes(matchForm(mention.exact).replace(HARAKAT, ''))
