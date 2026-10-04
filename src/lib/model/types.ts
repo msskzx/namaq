@@ -88,6 +88,7 @@ export interface Turn {
   id: string;
   ordinal: number;
   speaker?: string;
+  derivedBy?: string;
   addressee?: string;
   spans: string[];
 }

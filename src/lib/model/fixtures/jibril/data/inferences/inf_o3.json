@@ -1,0 +1,16 @@
+{
+  "id": "inf_o3",
+  "unit": "muslim-jibril",
+  "passage": ["sp_o3"],
+  "value": {
+    "kind": "TURN_SPEAKER",
+    "turn": "o3",
+    "speaker": "m_ibn_umar"
+  },
+  "premises": [
+    {
+      "turn": "o2"
+    }
+  ],
+  "status": "REPORTED"
+}

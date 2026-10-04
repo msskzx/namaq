@@ -178,6 +178,13 @@
       "role": "NARRATOR"
     },
     {
+      "id": "m_ibn_umar",
+      "parent": "sp_story",
+      "exact": "عَبْدُ اللَّهِ بْنُ عُمَرَ بْنِ الْخَطَّابِ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
       "id": "m_prophet",
       "parent": "sp_prophet_frame",
       "exact": "رَسُولُ اللَّهِ",

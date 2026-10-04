@@ -1,0 +1,20 @@
+{
+  "id": "inf_o2",
+  "unit": "muslim-jibril",
+  "passage": ["sp_o2"],
+  "value": {
+    "kind": "TURN_SPEAKER",
+    "turn": "o2",
+    "speaker": "m_ibn_umar"
+  },
+  "premises": [
+    {
+      "turn": "o1"
+    },
+    {
+      "span": "sp_o2"
+    }
+  ],
+  "status": "APPROVED",
+  "approvedInPr": "test-fixture"
+}
