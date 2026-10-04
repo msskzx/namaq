@@ -111,4 +111,17 @@ describe('conversationOf (the hadith of Jibril fixtures)', () => {
     const s2 = conversationOf(folder, file, 'r_hadith', ROOT).scenes[1].turns[1];
     expect(s2.speaker?.agents).toEqual([{ agent: 'prophet-muhammad', status: 'PROPOSED' }]);
   });
+
+  it('does not apply the standing rule to a mention that has a rejected identification', () => {
+    const { folder, file } = muslim();
+    file.identifications.push({
+      id: 'i_other',
+      mention: 'm_prophet',
+      agent: 'prophet-muhammad',
+      basis: [{ span: 'sp_s4', role: 'SAME_WORK_EXPLICIT' }],
+      status: 'REJECTED',
+    });
+    const s2 = conversationOf(folder, file, 'r_hadith', ROOT).scenes[1].turns[1];
+    expect(s2.speaker?.agents).toEqual([]);
+  });
 });

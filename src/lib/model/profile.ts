@@ -44,6 +44,7 @@ export function profilesFromModel(folders: WorkFolder[], root: string) {
       const identify = (mention: string): Identification[] => {
         const found = identified.get(mention);
         if (found) return found;
+        if (file.identifications.some((i) => i.mention === mention)) return [];
         const agent = standingAgent(mentionText.get(mention) ?? '');
         return agent
           ? [{ id: `standing:${mention}`, mention, agent, basis: [], status: 'PROPOSED' }]

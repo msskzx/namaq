@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { Inference } from './inference';
+import { standingAgent } from './referents';
 import { renderSpanRecord } from './render';
 import type { Assertion, UnitFile, WorkFolder } from './types';
 
@@ -78,7 +79,16 @@ export function closureOf(file: UnitFile, assertion: Assertion, inferences: Infe
   );
   for (const mention of mentionRecords) spans([mention.parent]);
   for (const identification of identifications) spans(identification.basis.map((b) => b.span));
+  const standing = Object.fromEntries(
+    mentionRecords
+      .filter((m) => !file.identifications.some((i) => i.mention === m.id))
+      .flatMap((m) => {
+        const agent = standingAgent(m.exact);
+        return agent ? [[m.id, agent]] : [];
+      }),
+  );
   return {
+    standing,
     inferences: approved,
     assertion,
     statements,

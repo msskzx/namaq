@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { checkModel } from './check';
 import { loadModel } from './load';
-import { lapsedReviews, revisionOf, selectForProd, type ReviewRecord } from './review';
+import { closureOf, lapsedReviews, revisionOf, selectForProd, type ReviewRecord } from './review';
 
 const scholar = { reviewer: 'test-scholar', qualification: 'test', date: '2026-01-01' };
 
@@ -151,5 +151,21 @@ describe('what lapses a review', () => {
     span.prefix = '٣ - ';
     span.suffix = ' * (ع)';
     expect(revisionOf(folder, file, name, '.')).toBe(before);
+  });
+});
+
+describe('a mention resolved by the standing rule', () => {
+  it('puts the resolved agent in the closure, so changing the list lapses the review', () => {
+    const { file } = setup();
+    const cousin = file.assertions.find((a) => a.id === 'a_cousin')!;
+    expect(closureOf(file, cousin).standing).toEqual({ m_prophet2: 'prophet-muhammad' });
+    file.identifications.push({
+      id: 'i_x',
+      mention: 'm_prophet2',
+      agent: 'someone',
+      basis: [{ span: 'sp_zb_heading', role: 'SAME_WORK_EXPLICIT' }],
+      status: 'PROPOSED',
+    });
+    expect(closureOf(file, cousin).standing).toEqual({});
   });
 });
