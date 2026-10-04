@@ -84,6 +84,20 @@ export interface Unit {
   numbers: Record<string, string>;
 }
 
+export interface Turn {
+  id: string;
+  ordinal: number;
+  speaker?: string;
+  addressee?: string;
+  spans: string[];
+}
+
+export interface Scene {
+  ordinal: number;
+  inTurn?: string;
+  turns: Turn[];
+}
+
 export interface Report {
   id: string;
   unit: string;
@@ -92,6 +106,7 @@ export interface Report {
   voiceBasis?: string;
   frame?: string[];
   isnadSpan?: string;
+  scenes?: Scene[];
   origin: { mention: string } | { workAuthor: true };
   chainState: 'COMPLETE' | 'DEFERRED';
 }

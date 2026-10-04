@@ -10,14 +10,15 @@ How to resume: read [plan.md](plan.md) and [owner-goals.md](owner-goals.md), the
 
 ## In review
 
-- `profilesFromModel` (`src/lib/model/profile.ts`): a profile built only from span-rendered assertions, tested on the al-Zubayr entry.
+- `profilesFromModel` (`src/lib/model/profile.ts`, [#316](https://github.com/msskzx/namaq/pull/316)): a profile built only from span-rendered assertions, tested on the al-Zubayr entry.
+- Scenes and turns with `model:check` rules, and the hadith of Jibril in Bukhari and Muslim as hand-checked test fixtures under `src/lib/model/fixtures/jibril/` (test data, not a source).
 
 ## Next, in order
 
 1. The old-versus-new diff for al-Zubayr: compare the profile above with the catalog's values (`data/catalog/people`) and list each difference for the **owner**.
 2. Prisma tables and a projection of the model to PostgreSQL (migration prepared; applying it to the preview database waits for the **owner**).
 3. The profile page reading from the model, and the review surface.
-4. Scenes, turns, chains and `SharhLink` for the Jibril slice, on hand-checked fixtures.
+4. Chains (links, gaps, mode keys) and `SharhLink` for the Jibril fixtures; the conversation view that reads scenes and turns.
 5. Inference files and the owner-approval check; review records and the prod filter.
 
 ## Not now
