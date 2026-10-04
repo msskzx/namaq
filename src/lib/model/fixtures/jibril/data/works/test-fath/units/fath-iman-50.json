@@ -1,0 +1,67 @@
+{
+  "unit": {
+    "id": "fath-iman-50",
+    "work": "test-fath",
+    "type": "commentary",
+    "numbers": {
+      "fath-al-bari": "50"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_heading",
+      "edition": "test-fath-edition",
+      "volume": 1,
+      "page": "114",
+      "layer": "MAIN",
+      "exact": "٣٧ - بَاب سُؤَالِ جِبْرِيلَ النَّبِيَّ ﷺ عَنْ الْإِيمَانِ وَالْإِسْلَامِ وَالْإِحْسَانِ وَعِلْمِ السَّاعَةِ"
+    },
+    {
+      "id": "sp_number",
+      "edition": "test-fath-edition",
+      "volume": 1,
+      "page": "114",
+      "layer": "MAIN",
+      "exact": "٥٠ - حَدَّثَنَا مُسَدَّدٌ، قال: حدثنا إِسْمَاعِيلُ بْنُ إِبْرَاهِيمَ"
+    },
+    {
+      "id": "sp_note",
+      "edition": "test-fath-edition",
+      "volume": 1,
+      "page": "115",
+      "layer": "MAIN",
+      "exact": "قَوْلُهُ: (حَدَّثَنَا إِسْمَاعِيلُ بْنُ إِبْرَاهِيمَ) هُوَ الْبَصْرِيُّ الْمَعْرُوفُ بِابْنِ عُلَيَّةَ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_note",
+      "unit": "fath-iman-50",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_note",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_note",
+      "report": "r_note",
+      "spans": ["sp_note"],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [],
+  "identifications": [],
+  "assertions": [],
+  "sharhLinks": [
+    {
+      "id": "sl_iman_50",
+      "explains": "bukhari-jibril",
+      "basis": ["sp_number"]
+    }
+  ]
+}
