@@ -40,7 +40,8 @@ erDiagram
   Unit ||--o{ SharhLink : "commentary Unit"
   SharhLink }o--|| Unit : "explains hadith Unit"
   Report ||--o{ Statement : "wordings"
-  Report ||--o{ Turn : "ordered turns"
+  Report ||--o{ Scene : "scenes in the matn"
+  Scene ||--o{ Turn : "ordered turns"
   Turn }o--o| Mention : "speaker (unset until an inference is approved)"
   Turn }o--o| Mention : "addressee"
   Turn }o--|{ Span : "words (inside the Statements' spans)"
@@ -116,7 +117,7 @@ type Report = {
   origin: { mention: MentionId }   // final speaker as printed; for REPORTED_ANONYMOUS an unnamed-group mention ("آخَرُونَ", "قِيْلَ")
         | { workAuthor: true };     // AUTHOR voice only: the Work's author Agent, justified by voiceBasis; no invented Mention
   isnadSpan?: SpanRef;
-  turns?: Turn[];                  // ordered; a conversation inside one report (2.5a)
+  scenes?: { ordinal: number; inTurn?: TurnId; turns: Turn[] }[];   // each scene has its own ordered turns (2.5a)
 };
 type Turn = {
   ordinal: number;
@@ -138,7 +139,7 @@ type Gap  = { kind: 'GAP'; marker?: SpanRef[] };                  // ta'liq, mur
 
 **A Turn is not a Statement.** A Statement is one wording of the report and carries the words; a Turn is the ordered position and speaker inside it. Turn words are not a second copy: every span of a Turn must lie inside a span of the Report's Statements, which `model:check` verifies, so the two cannot disagree. A report with one speaker has no Turns.
 
-**2.5a Conversation view.** `origin` is the final speaker; `turns` carries who said what inside the report, so a view can show "A said, B said, A said". A turn whose speaker is printed (`قَالَ رَسُولُ اللهِ ﷺ`, `قُلْتُ`) is recorded as it stands. A bare `قَالَ` whose speaker follows only from alternation is an inference special case (2.13): the agent reports it, the owner approves it, and the agent never writes the approval. Until approved, the turn has no speaker and the view shows it as "speaker not stated". The worked example is the hadith of Jibril (3.2).
+**2.5a Conversation view.** `origin` is the final speaker; `scenes` carries who said what inside the report. A scene is something that happened inside the matn, with people speaking in it; each scene has its own ordered `turns`, which makes a conversation easy to trace. The narrators who hand the report down belong to the chain, not to turns. A scene quoted inside a turn of another scene records that turn in `inTurn`: in Muslim's version the Jibril scene sits inside a turn of Ibn Umar in the scene where Yahya meets him. A report with one scene, like Bukhari 50, has one list. A view can show "A said, B said, A said". A turn whose speaker is printed (`قَالَ رَسُولُ اللهِ ﷺ`, `قُلْتُ`) is recorded as it stands. A bare `قَالَ` whose speaker follows only from alternation is an inference special case (2.13): the agent reports it, the owner approves it, and the agent never writes the approval. Until approved, the turn has no speaker and the view shows it as "speaker not stated". The worked example is the hadith of Jibril (3.2).
 
 - **modeKey** is 1:1 with the printed lemma plus person and number: `haddatha/1pl`, `haddatha/1sg`, `akhbara/1pl`, `akhbara/1sg`, `anba'a/1pl`, `samia/1sg`, `samia/3sg`, `an`, `anna`, `qala/3sg`, `qala-li`, `dhakara`, `balagha/1sg`, `yudhkaru`, `ruwiya`, `kataba-ilayya`, `qara'tu-ala`, `quri'a-ala`, `nawala`, `wijadah`. Abbreviations (`ثنا`, `نا`, `أنا`, `ثني`) map to the full key and keep their own span. An unmapped form fails the check and the table gains a row (documented under `docs/`); there is no `OTHER`.
 - **Derived classes**, never replacing the key on an edge: `jazm` vs `tamrid` (`وَقَالَ اللَّيْثُ` vs `وَيُذْكَرُ عَنْ`), and "direct hearing" for filters.
@@ -203,7 +204,7 @@ Two separate acts. The owner **publishes**; a qualified scholar **reviews**. Nei
 
 | Item | Rule |
 |---|---|
-| Unit | One record (Report, Statement, Assertion, Identification, Membership), minted id. `Turn` is part of its Report and has no revision of its own. An Inference has a status and an owner approval (2.13); it is not reviewed, but a derived Assertion built from it is reviewed like any Assertion. |
+| Unit | One record (Report, Statement, Assertion, Identification, Membership), minted id. `Scene` and `Turn` are part of their Report and have no revision of their own. An Inference has a status and an owner approval (2.13); it is not reviewed, but a derived Assertion built from it is reviewed like any Assertion. |
 | Revision | hash(record fields + for each span reached: sha256(render(span)) + witness id). |
 | Publish | Only the owner, on explicit instruction: `npm run model:publish -- <change set>` makes a PR's records visible on preview. Agents never publish. |
 | Review | Only a qualified scholar, never the owner and never an agent. A review record holds reviewer, qualification, date and the revision reviewed, and is written into the files so PostgreSQL and Neo4j on both environments rebuild from them. "Mark reviewed" still needs the owner's explicit words to run the command, which records the scholar's decision and does not make it. |
@@ -261,7 +262,7 @@ flowchart LR
 | `data/works/<work>/units/*.yaml` | one file per Unit (tarjama, hadith, ayah comment) | yes |
 | `data/entities/`, `data/traditions/`, `data/reviews/`, `data/inferences/` | agents, identifications, memberships, review records, inference records | yes (reviews by scholars only; approvals by the owner only) |
 | `data/archive/pre-model/` | today's batches, catalog modules, seeds, `excerptArabic`, `assertion` frozen at the migration tag | read-only, never projected |
-| PostgreSQL | Work, Edition, Volume, Witness, Page, PageText, Span (+resolved cache), Unit, Report, Statement, ChainElement, Agent, Mention, Identification, Assertion, Tradition, Membership, Review, Turn, SharhLink, Premise; `Ayah` gains a reading dimension (2.15) | derived |
+| PostgreSQL | Work, Edition, Volume, Witness, Page, PageText, Span (+resolved cache), Unit, Report, Statement, ChainElement, Agent, Mention, Identification, Assertion, Tradition, Membership, Review, Scene, Turn, SharhLink, Premise; `Ayah` gains a reading dimension (2.15) | derived |
 | Neo4j | Agent/Event/Battle nodes; edges from relation Assertions; `NARRATED_FROM {modeKey, modeSpanIds, reportId}` from adjacent Links whose identifications are REVIEWED (or REVIEWED-as-DISPUTED, drawn marked), never across a Gap, in a separate isnad view excluded from centrality | derived |
 
 Derived, never authored: rendered text, span positions, display names, profiles, contents lists, edges, ranks and layout, mode classes, search index. A change set is a PR listing record ids; ADR 0023 supersedes ADR 0010's layout and keeps its authority rule.
@@ -354,26 +355,29 @@ The first thin slice (phase 2) is this hadith in both books plus its sharh. It n
 flowchart TB
   U1[Unit: hadith, Muslim, Umar's narration] --> R1[Report: TRANSMITTED, chain DEFERRED]
   U2[Unit: hadith, Bukhari 50, Abu Hurayra] --> R2[Report: TRANSMITTED, chain DEFERRED]
-  R1 --> T1[turn 1: stranger asks]
-  R1 --> T2[turn 2: Prophet answers]
-  R1 --> T3[turn 3: stranger says]
-  R1 --> T4[turn 4: Prophet answers]
-  R1 --> N1[Umar narrates and speaks: قُلْتُ]
+  R1 --> SC1[scene 1: Yahya meets Ibn Umar]
+  SC1 -- "inTurn" --> SC2[scene 2: the Jibril scene]
+  SC2 --> T1[turn 1: stranger asks]
+  SC2 --> T2[turn 2: Prophet answers]
+  SC2 --> T3[turn 3: stranger says]
+  SC2 --> T4[turn 4: Prophet answers]
+  SC2 --> N1[Umar narrates and speaks: قُلْتُ]
   S[Unit: sharh, Fath al-Bari on Bukhari 50] -- SharhLink --> U2
-  S -. "COMMENTATOR_NOTE basis" .-> ID[Identification: رَجُلٌ = Jibril]
+  R1 -. "SAME_WORK_EXPLICIT: closing span" .-> ID[Identification: رَجُلٌ = Jibril]
 ```
 
 | Turn | Speaker | Words (as quoted in the owner's notes) | Basis for the speaker |
 |---|---|---|---|
 | Umar, narration | Umar | `فَعَجِبْنَا لَهُ يَسْأَلُهُ وَيُصَدِّقُهُ`, `قُلْتُ` | first person in the text |
-| Stranger | `رَجُلٌ`, later Jibril | `يَا مُحَمَّدُ أَخْبِرْنِي عَنِ الإِسْلاَمِ`, `صَدَقْتَ` | `رَجُلٌ` unidentified until `فَإِنَّهُ جِبْرِيلُ`; that later span, or a sharh note, is the Identification basis |
+| Stranger | `رَجُلٌ`, later Jibril | `يَا مُحَمَّدُ أَخْبِرْنِي عَنِ الإِسْلاَمِ`, `صَدَقْتَ` | `رَجُلٌ` unidentified until `فَإِنَّهُ جِبْرِيلُ`; that later span is the Identification basis (`SAME_WORK_EXPLICIT`) |
 | Prophet ﷺ | the Prophet | `قَالَ رَسُولُ اللهِ ﷺ: الإِسْلاَمُ أَنْ تَشْهَدَ...` | printed |
 | Bare `قَالَ` turns | by alternation | | inference special case (2.13): reported, owner approves, never inserted by an agent |
 
-- Each turn is a `Turn` on its Report with its own spans, so the conversation view shows the order and the speakers, and each turn links to its span (2.14).
+- Each turn is a `Turn` in a scene of its Report, with its own spans, so the conversation view shows the order and the speakers, and each turn links to its span (2.14).
 - The Prophet's turns are Prophetic material: published unreviewed with a visible status; review waits for a hadith-qualified scholar (P9).
+- **The asker in Muslim's version.** He is `رَجُلٌ` through every turn, and the text itself calls him `السَّائِلُ` (`أَتَدْرِي مَنِ السَّائِلُ`), so the view can label him "the asker" with a word from the text. Only the Prophet's closing words (`فَإِنَّهُ جِبْرِيلُ`) identify him, after Umar's `قُلْتُ اللَّهُ وَرَسُولُهُ أَعْلَمُ`. One Mention is therefore identified by a span that comes after the turns it applies to; once identified, all his turns show Jibril. A teaching view may reveal the identification only at that point, as the hadith does; that is a display choice and needs no data change. In Bukhari 50 the narration names him at the start (`فَأَتَاهُ جِبْرِيلُ`).
 - The same hadith in the two books is two Reports in two Units, never merged. They are grouped only if a work says so through a span basis (2.8).
-- A sharh Unit in Fath al-Bari is joined by `SharhLink` to the Bukhari hadith Unit. Its note on the stranger may serve as `COMMENTATOR_NOTE` basis for the identification, and the view labels the sharh as the source of that identification, since the app adds no knowledge of its own. A sharh is also a usable basis before any rijal work exists.
+- A sharh Unit in Fath al-Bari is joined by `SharhLink` to the Bukhari hadith Unit. A sharh note may serve as `COMMENTATOR_NOTE` basis for an identification, and the view labels the sharh as its source. In the hadith of Jibril the stranger needs no sharh: the hadith names him itself (`فَأَتَاهُ جِبْرِيلُ`, and the Prophet's closing `هَذَا جِبْرِيلُ`), so `SAME_WORK_EXPLICIT` is the basis.
 - A mu'allaq `وَقَالَ اللَّيْثُ: ...` at a bab head: chain `[Gap{marker: "وَقَالَ"}, Link(اللَّيْثُ, ...)]`, class `jazm`; `وَيُذْكَرُ عَنْ ...` is `yudhkaru`, class `tamrid`. Neither carries a grade, since `authorClaim.scope` is `musnad-marfu`. Chains of a full isnad, drawn as `NARRATED_FROM` edges (2.12), start in phase 7.
 
 ### 3.3 Tafsir: Ibn Abbas on 2:255 (Tabari-style)
@@ -489,7 +493,7 @@ Needing research or an owner answer:
 
 1. A print-checked witness text for Bukhari 50 and for the Muslim hadith (the slice's first step, phase 3; research.md says none is checked).
 2. The Muslim hadith's number, and which edition's numbering it is given in.
-3. A Fath al-Bari entry that explains Bukhari 50 and whose text names the stranger; without it the stranger stays unidentified.
+3. A Fath al-Bari passage on Bukhari 50, as the `SharhLink` fixture: Shamela book 1673, pages 600-610 (printed pages 114-124 of volume 1), unchecked against print. It is not needed to identify the stranger.
 4. The owner's approval of each bare `قَالَ` turn inference, which can be requested only once the spans exist.
 5. The owner's confirmation that a Turn may exist before its speaker is approved, showing "speaker not stated".
 
