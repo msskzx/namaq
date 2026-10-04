@@ -5,12 +5,12 @@ import type { ProfileEntry } from './profile';
 export interface CatalogLike {
   fields?: Partial<
     Record<
-      'fullName' | 'kunya' | 'appearance' | 'deathYearHijri' | 'placeOfDeathArabic',
+      'sex' | 'fullName' | 'kunya' | 'appearance' | 'deathYearHijri' | 'placeOfDeathArabic',
       { value: string }
     >
   >;
   virtues?: { value: string }[];
-  titles?: unknown[];
+  titles?: { title: string }[];
   ayat?: unknown[];
   relations?: { type: string; inverse?: string; to: string }[];
 }
@@ -26,7 +26,6 @@ const textFields = [
   ['fullName', 'name.full'],
   ['kunya', 'name.kunya'],
   ['appearance', 'appearance'],
-  ['deathYearHijri', 'died.year'],
   ['placeOfDeathArabic', 'died.place'],
 ] as const;
 
@@ -67,6 +66,23 @@ export function diffAgainstCatalog(entries: ProfileEntry[], catalog: CatalogLike
       take(predicate).map((e) => e.text),
     );
   }
+  const sex = catalog.fields?.sex?.value;
+  line(
+    'sex',
+    sex ? [sex] : [],
+    take('sex').map((e) => e.classified ?? e.text),
+  );
+  const death = catalog.fields?.deathYearHijri?.value;
+  line(
+    'deathYearHijri',
+    death ? [String(parseInt(death, 10))] : [],
+    take('died.year').map((e) => String(e.parsed ?? e.text)),
+  );
+  line(
+    'titles',
+    (catalog.titles ?? []).map((t) => t.title),
+    take('title').map((e) => e.classified ?? e.text),
+  );
   line(
     'virtues',
     (catalog.virtues ?? []).map((v) => v.value),
@@ -83,22 +99,36 @@ export function diffAgainstCatalog(entries: ProfileEntry[], catalog: CatalogLike
     take('CHILD_OF').map((e) => e.object ?? `(${e.objectMention})`),
   );
 
-  for (const entry of entries.filter((e) => !used.has(e))) {
-    lines.push({
-      field: entry.predicate,
-      status: 'model-only',
-      model: entry.parsed !== undefined ? String(entry.parsed) : entry.text,
-    });
-  }
-  const others = relations.filter((r) => !isParent(r));
+  const isSpouse = (r: { type: string }) => r.type === 'HUSBAND' || r.type === 'WIFE';
+  line(
+    'spouses',
+    relations.filter(isSpouse).map((r) => r.to),
+    take('MARRIED').map((e) => e.object ?? `(${e.objectMention})`),
+  );
+
+  line(
+    'cousins',
+    relations.filter((r) => r.type === 'PATERNAL_COUSIN').map((r) => r.to),
+    take('PATERNAL_COUSIN').map((e) => e.object ?? `(${e.objectMention})`),
+  );
+  const others = relations.filter(
+    (r) => !isParent(r) && !isSpouse(r) && r.type !== 'PATERNAL_COUSIN',
+  );
   for (const type of new Set(others.map((r) => r.type))) {
     const targets = others.filter((r) => r.type === type).map((r) => r.to);
     lines.push({ field: `relation ${type}`, status: 'catalog-only', catalog: targets.join(' | ') });
   }
-  for (const [field, list] of [
-    ['titles', catalog.titles],
-    ['ayat', catalog.ayat],
-  ] as const) {
+  for (const entry of entries.filter((e) => !used.has(e))) {
+    lines.push({
+      field: entry.predicate,
+      status: 'model-only',
+      model:
+        entry.parsed !== undefined
+          ? String(entry.parsed)
+          : entry.text || entry.object || entry.objectMention,
+    });
+  }
+  for (const [field, list] of [['ayat', catalog.ayat]] as const) {
     if (list?.length)
       lines.push({ field, status: 'catalog-only', catalog: `${list.length} in the catalog` });
   }

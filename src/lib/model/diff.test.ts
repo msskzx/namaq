@@ -11,8 +11,10 @@ const byField = (lines: ReturnType<typeof diffAgainstCatalog>, field: string) =>
 describe('diffAgainstCatalog on al-Zubayr', () => {
   const lines = diffAgainstCatalog(entries, azZubayr as unknown as CatalogLike);
 
-  it("shows the catalog's father and mother against the model's father alone as different", () => {
-    expect(byField(lines, 'parents')[0].status).toBe('different');
+  it('finds both parents and the wife the same in the catalog and the model', () => {
+    expect(byField(lines, 'parents')[0].status).toBe('same');
+    expect(byField(lines, 'spouses')[0].status).toBe('same');
+    expect(byField(lines, 'cousins')[0].status).toBe('different');
   });
 
   it("reads the name across the paragraph break as the lineage is spelled, leaving only the catalog's final full stop", () => {
@@ -24,8 +26,8 @@ describe('diffAgainstCatalog on al-Zubayr', () => {
   });
 
   it('lists what only the catalog holds, and what only the model holds', () => {
-    expect(byField(lines, 'kunya')[0].status).toBe('catalog-only');
-    expect(byField(lines, 'titles')[0].status).toBe('catalog-only');
+    expect(byField(lines, 'placeOfDeathArabic')[0].status).toBe('catalog-only');
+    expect(byField(lines, 'titles')[0].status).toBe('different');
     expect(
       byField(lines, 'islam.age')
         .map((l) => l.model)
@@ -41,18 +43,19 @@ describe('diffAgainstCatalog on al-Zubayr', () => {
     expect(byField(result, 'fullName')[0].status).toBe('same');
   });
 
-  it('compares parents as sets and lists relations the model has no field for', () => {
+  it('compares parents as sets, in any order, and lists relations the model has no field for', () => {
     const catalog: CatalogLike = {
       relations: [
+        { type: 'SON', inverse: 'MOTHER', to: 'safiyyah-bint-abd-al-muttalib' },
         { type: 'SON', inverse: 'FATHER', to: 'al-awwam-ibn-khuwaylid' },
-        { type: 'HUSBAND', to: 'asma-bint-abi-bakr' },
+        { type: 'COMPANION_OF', to: 'prophet-muhammad' },
       ],
     };
     const result = diffAgainstCatalog(entries, catalog);
     expect(byField(result, 'parents')[0].status).toBe('same');
-    expect(byField(result, 'relation HUSBAND')[0]).toMatchObject({
+    expect(byField(result, 'relation COMPANION_OF')[0]).toMatchObject({
       status: 'catalog-only',
-      catalog: 'asma-bint-abi-bakr',
+      catalog: 'prophet-muhammad',
     });
   });
 

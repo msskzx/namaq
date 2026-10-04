@@ -78,4 +78,43 @@ describe('profilesFromModel on the al-Zubayr entry', () => {
     folders[0].units[0].assertions[0].value = { spans: ['nope'] };
     expect(() => profilesFromModel(folders, '.')).toThrow(/unknown span nope/);
   });
+
+  it('reads the sex from the lineage word in the heading, shown with that span', () => {
+    const [sex] = of('sex');
+    expect(sex.classified).toBe('MALE');
+    expect(sex.parts[0]).toContain('بنُ');
+  });
+
+  it("keeps the author's and Urwa's descriptions as two entries with their own speakers", () => {
+    const appearance = of('appearance');
+    expect(appearance).toHaveLength(2);
+    expect(appearance.map((a) => a.origins[0])).toContainEqual({ author: 'al-dhahabi' });
+    expect(appearance.map((a) => a.origins[0])).toContainEqual({ mention: 'عُرْوَةَ' });
+  });
+
+  it('gives the death year as a number with Bukhari as the one it is quoted from', () => {
+    const [death] = of('died.year');
+    expect(death.parsed).toBe(36);
+    expect(death.origins).toEqual([{ mention: 'البُخَارِيُّ' }]);
+  });
+
+  it('records each battle he is stated to have been in, with who reports it', () => {
+    const battles = of('PARTICIPATED_IN');
+    expect(battles.map((b) => b.objectMention).sort()).toEqual(
+      ['بَدْرٍ', 'بَدْرٍ', 'اليَرْمُوْكِ', 'الخَنْدَقِ', 'فَتْحِ مَكَّةَ'].sort(),
+    );
+    const origins = battles
+      .flatMap((b) => b.origins)
+      .map((o) => ('mention' in o ? o.mention : o.author));
+    expect(origins).toEqual(
+      expect.arrayContaining(['البَهِيِّ', 'عُرْوَةَ', 'ابْنُ أَبِي الزِّنَادِ', 'الزُّبَيْرِ']),
+    );
+  });
+
+  it("records the Prophet as the speaker of the cousin relation, identified through the author's own sentence about his aunt", () => {
+    const [cousin] = of('PATERNAL_COUSIN');
+    expect(cousin.origins).toEqual([{ mention: 'رَسُوْلُ اللهِ' }]);
+    expect(cousin.object).toBe('prophet-muhammad');
+    expect(cousin.objectMention).toBe('رَسُوْلُ اللهِ');
+  });
 });
