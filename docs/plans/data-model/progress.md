@@ -13,6 +13,8 @@ How to resume: read [plan.md](plan.md) and [owner-goals.md](owner-goals.md), the
 - Inference records (`src/lib/model/inference.ts`, [#319](https://github.com/msskzx/namaq/pull/319)): `data/inferences/<id>.json`; `model:check` validates them; `applyApprovedInferences` sets a turn speaker only from an APPROVED inference and marks it `derivedBy`.
 - `npm run model:diff -- <slug>` ([#320](https://github.com/msskzx/namaq/pull/320)): the old-versus-new report against `data/catalog/people`.
 
+- The pilot data (most of al-Zubayr's entry, [#323](https://github.com/msskzx/namaq/pull/323)), `conversationOf` ([#324](https://github.com/msskzx/namaq/pull/324): scenes, turns, rendered text, every competing speaker identification, the unit and origin) and `highlightsOnPage` ([#325](https://github.com/msskzx/namaq/pull/325): a page's body, its non-overlapping marks, and the assertions resting on each; the data a review surface reads).
+
 ## Pilot coverage: al-Zubayr (`data/works/siyar-alam-al-nubala/units/siyar-v4-3-az-zubayr.json`)
 
 Authored from the batch's exact citations, all `PROPOSED`: full name, sex (read from `بنُ` in the heading), kunya, three titles, both parents, the wife, the author's first-to-draw-the-sword virtue, both appearance reports (the author's, and Urwa's), the death year (as Bukhari and others say it), both ages at Islam, five battles stated in the text (Badr twice, Yarmuk, the Trench, the conquest of Makkah, each with who reports it), and the cousin relation in the Prophet's own words (a `PATERNAL_COUSIN` predicate, added for it). `npm run model:diff -- az-zubayr-ibn-al-awwam` lists the rest.
@@ -34,7 +36,7 @@ Open points, each for the **owner**:
 
 1. The **owner** reads `npm run model:diff -- az-zubayr-ibn-al-awwam` and decides what the pilot must still cover: the catalog holds kunya, appearance, death, virtues, titles and verses that the model does not yet, and its joined full name drops `ابْنِ` where the book prints it.
 2. Prisma tables and a projection of the model to PostgreSQL and Neo4j (migration prepared; applying it to the preview database waits for the **owner**).
-3. The profile page and a conversation view reading the model, and the review surface.
+3. The profile page, the conversation view and the review surface (page with highlighted spans, accept, reject, dispute) reading `profilesFromModel`, `conversationOf` and `highlightsOnPage`. The data functions exist; the UI does not, and it needs the existing reader and profile components looked at first.
 4. CI and `CODEOWNERS` rules so only a scholar changes `data/reviews/` and only the owner changes `data/inferences/` (a review file is authored, so without this an agent could forge one). Needs the **owner** to set up on GitHub.
 5. Chains (links, gaps, mode keys) and `SharhLink`; `SharhLink` needs a real commentary fixture first, which waits on a source (no Arabic is invented).
 
