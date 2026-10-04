@@ -97,4 +97,24 @@ describe('profilesFromModel on the al-Zubayr entry', () => {
     expect(death.parsed).toBe(36);
     expect(death.origins).toEqual([{ mention: 'البُخَارِيُّ' }]);
   });
+
+  it('records each battle he is stated to have been in, with who reports it', () => {
+    const battles = of('PARTICIPATED_IN');
+    expect(battles.map((b) => b.objectMention).sort()).toEqual(
+      ['بَدْرٍ', 'بَدْرٍ', 'اليَرْمُوْكِ', 'الخَنْدَقِ', 'فَتْحِ مَكَّةَ'].sort(),
+    );
+    const origins = battles
+      .flatMap((b) => b.origins)
+      .map((o) => ('mention' in o ? o.mention : o.author));
+    expect(origins).toEqual(
+      expect.arrayContaining(['البَهِيِّ', 'عُرْوَةَ', 'ابْنُ أَبِي الزِّنَادِ', 'الزُّبَيْرِ']),
+    );
+  });
+
+  it('records the Prophet as the speaker of the cousin relation, and leaves him unidentified', () => {
+    const [cousin] = of('PATERNAL_COUSIN');
+    expect(cousin.origins).toEqual([{ mention: 'رَسُوْلُ اللهِ' }]);
+    expect(cousin.object).toBeUndefined();
+    expect(cousin.objectMention).toBe('رَسُوْلُ اللهِ');
+  });
 });

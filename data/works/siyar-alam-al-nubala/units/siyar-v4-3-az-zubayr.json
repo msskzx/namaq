@@ -228,6 +228,95 @@
       "layer": "MAIN",
       "exact": "الزُّبَيْرُ بنُ العَوَّامِ",
       "prefix": "٣ - "
+    },
+    {
+      "id": "sp_badr1_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "46",
+      "layer": "MAIN",
+      "exact": "أَسَدُ بنُ مُوْسَى: حَدَّثَنَا جَامِعٌ أَبُو سَلَمَةَ، عَنْ إِسْمَاعِيْلَ بنَ أَبِي خَالِدٍ، عَنِ البَهِيِّ"
+    },
+    {
+      "id": "sp_badr1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "46",
+      "layer": "MAIN",
+      "exact": "كَانَ يَوْمَ بَدْرٍ مَعَ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فَارِسَانِ: الزُّبَيْرُ عَلَى فَرَسٍ، عَلَى المَيْمَنَةِ"
+    },
+    {
+      "id": "sp_blows_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "52",
+      "layer": "MAIN",
+      "exact": "مَعْمَرٌ: عَنْ هِشَامٍ، عَنْ عُرْوَةَ"
+    },
+    {
+      "id": "sp_blows",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "52",
+      "layer": "MAIN",
+      "exact": "كَانَ فِي الزُّبَيْرِ ثَلاَثُ ضَرَبَاتٍ بِالسَّيْفِ: إِحْدَاهُنَّ فِي عَاتِقِهِ، إِنْ كُنْتُ لأُدْخِلُ أَصَابِعِي فِيْهَا، ضُرِب ثِنْتَيْنِ يَوْمَ بَدْرٍ، وَوَاحِدَةً يَوْمَ اليَرْمُوْكِ"
+    },
+    {
+      "id": "sp_khandaq_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "51",
+      "layer": "MAIN",
+      "exact": "الرِّيَاشِيُّ: حَدَّثَنَا الأَصْمَعِيُّ، حَدَّثَنَا ابْنُ أَبِي الزِّنَادِ"
+    },
+    {
+      "id": "sp_khandaq",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "51",
+      "layer": "MAIN",
+      "exact": "ضَرَبَ الزُّبَيْرُ يَوْمَ الخَنْدَقِ عُثْمَانَ بنَ عَبْدِ اللهِ بنِ المُغِيْرَةِ بِالسَّيْفِ عَلَى مِغْفَرِهِ، فَقَطَعَهُ إِلَى القَرَبُوسِ"
+    },
+    {
+      "id": "sp_makkah_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "51",
+      "layer": "MAIN",
+      "exact": "أَبُو خَيْثَمَةَ: حَدَّثَنَا مُحَمَّدُ بنُ الحَسَنِ المَدِيْنِيُّ حَدَّثَتْنِي أُمُّ عُرْوَةَ بِنْتُ جَعْفَرٍ، عَنْ أُخْتِهَا عَائِشَةَ، عَنْ أَبِيْهَا، عَنْ جَدِّهَا الزُّبَيْرِ"
+    },
+    {
+      "id": "sp_makkah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "51",
+      "layer": "MAIN",
+      "exact": "أَنَّ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَعْطَاهُ يَوْمَ فَتْحِ مَكَّةَ لِوَاءِ سَعْدِ بنِ عُبَادَةَ، فَدَخَلَ الزُّبَيْرُ مَكَّةَ بِلِوَاءَيْنِ"
+    },
+    {
+      "id": "sp_cousin_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "48",
+      "layer": "MAIN",
+      "exact": "أَبُو مُعَاوِيَةَ: عَنْ هِشَامِ بنِ عُرْوَةَ، عَنِ ابْنِ المُنْكَدِرِ، عَنْ جَابِرٍ"
+    },
+    {
+      "id": "sp_cousin_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "48",
+      "layer": "MAIN",
+      "exact": "قَالَ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-",
+      "suffix": ": (الزُّبَيْرُ ابْنُ"
+    },
+    {
+      "id": "sp_cousin",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "48",
+      "layer": "MAIN",
+      "exact": "الزُّبَيْرُ ابْنُ عَمَّتِي، وَحَوَارِيَّ مِنْ أُمَّتِي"
     }
   ],
   "reports": [
@@ -287,6 +376,62 @@
         "mention": "m_qahdhami"
       },
       "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_badr1",
+      "unit": "siyar-v4-3-az-zubayr",
+      "ordinal": 6,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_badr1_isnad",
+      "origin": {
+        "mention": "m_bahi"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_blows",
+      "unit": "siyar-v4-3-az-zubayr",
+      "ordinal": 7,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_blows_isnad",
+      "origin": {
+        "mention": "m_urwa3"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_khandaq",
+      "unit": "siyar-v4-3-az-zubayr",
+      "ordinal": 8,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_khandaq_isnad",
+      "origin": {
+        "mention": "m_zinad"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_makkah",
+      "unit": "siyar-v4-3-az-zubayr",
+      "ordinal": 9,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_makkah_isnad",
+      "origin": {
+        "mention": "m_zb_origin"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_cousin",
+      "unit": "siyar-v4-3-az-zubayr",
+      "ordinal": 10,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_cousin_isnad",
+      "origin": {
+        "mention": "m_prophet2"
+      },
+      "chainState": "DEFERRED",
+      "frame": ["sp_cousin_frame"]
     }
   ],
   "statements": [
@@ -336,6 +481,36 @@
       "id": "st_wife",
       "report": "r_wife",
       "spans": ["sp_wife"],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_badr1",
+      "report": "r_badr1",
+      "spans": ["sp_badr1"],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_blows",
+      "report": "r_blows",
+      "spans": ["sp_blows"],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_khandaq",
+      "report": "r_khandaq",
+      "spans": ["sp_khandaq"],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_makkah",
+      "report": "r_makkah",
+      "spans": ["sp_makkah"],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_cousin",
+      "report": "r_cousin",
+      "spans": ["sp_cousin"],
       "role": "TRANSMITTED"
     }
   ],
@@ -409,6 +584,111 @@
       "exact": "أَسْمَاءُ",
       "occurrence": 1,
       "role": "REFERENT"
+    },
+    {
+      "id": "m_bahi",
+      "parent": "sp_badr1_isnad",
+      "exact": "البَهِيِّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_zb_badr1",
+      "parent": "sp_badr1",
+      "exact": "الزُّبَيْرُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_badr1",
+      "parent": "sp_badr1",
+      "exact": "بَدْرٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_urwa3",
+      "parent": "sp_blows_isnad",
+      "exact": "عُرْوَةَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_zb_blows",
+      "parent": "sp_blows",
+      "exact": "الزُّبَيْرِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_badr2",
+      "parent": "sp_blows",
+      "exact": "بَدْرٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_yarmuk",
+      "parent": "sp_blows",
+      "exact": "اليَرْمُوْكِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_zinad",
+      "parent": "sp_khandaq_isnad",
+      "exact": "ابْنُ أَبِي الزِّنَادِ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_zb_khandaq",
+      "parent": "sp_khandaq",
+      "exact": "الزُّبَيْرُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_khandaq",
+      "parent": "sp_khandaq",
+      "exact": "الخَنْدَقِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_zb_origin",
+      "parent": "sp_makkah_isnad",
+      "exact": "الزُّبَيْرِ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_zb_makkah",
+      "parent": "sp_makkah",
+      "exact": "الزُّبَيْرُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_fath",
+      "parent": "sp_makkah",
+      "exact": "فَتْحِ مَكَّةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_prophet2",
+      "parent": "sp_cousin_frame",
+      "exact": "رَسُوْلُ اللهِ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_zb_cousin",
+      "parent": "sp_cousin",
+      "exact": "الزُّبَيْرُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
     }
   ],
   "identifications": [
@@ -480,6 +760,78 @@
         {
           "span": "sp_wife_nasab",
           "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zb_badr1",
+      "mention": "m_zb_badr1",
+      "agent": "az-zubayr-ibn-al-awwam",
+      "basis": [
+        {
+          "span": "sp_zb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zb_blows",
+      "mention": "m_zb_blows",
+      "agent": "az-zubayr-ibn-al-awwam",
+      "basis": [
+        {
+          "span": "sp_zb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zb_khandaq",
+      "mention": "m_zb_khandaq",
+      "agent": "az-zubayr-ibn-al-awwam",
+      "basis": [
+        {
+          "span": "sp_zb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zb_origin",
+      "mention": "m_zb_origin",
+      "agent": "az-zubayr-ibn-al-awwam",
+      "basis": [
+        {
+          "span": "sp_zb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zb_makkah",
+      "mention": "m_zb_makkah",
+      "agent": "az-zubayr-ibn-al-awwam",
+      "basis": [
+        {
+          "span": "sp_zb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zb_cousin",
+      "mention": "m_zb_cousin",
+      "agent": "az-zubayr-ibn-al-awwam",
+      "basis": [
+        {
+          "span": "sp_zb_heading",
+          "role": "SAME_WORK_EXPLICIT"
         }
       ],
       "status": "PROPOSED"
@@ -641,6 +993,66 @@
         "spans": ["sp_sex"]
       },
       "restsOn": ["st_name"],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_part_badr1",
+      "subject": "m_zb_badr1",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_badr1"
+      },
+      "restsOn": ["st_badr1"],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_part_badr2",
+      "subject": "m_zb_blows",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_badr2"
+      },
+      "restsOn": ["st_blows"],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_part_yarmuk",
+      "subject": "m_zb_blows",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_yarmuk"
+      },
+      "restsOn": ["st_blows"],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_part_khandaq",
+      "subject": "m_zb_khandaq",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_khandaq"
+      },
+      "restsOn": ["st_khandaq"],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_part_makkah",
+      "subject": "m_zb_makkah",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_fath"
+      },
+      "restsOn": ["st_makkah"],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_cousin",
+      "subject": "m_zb_cousin",
+      "predicate": "PATERNAL_COUSIN",
+      "value": {
+        "object": "m_prophet2"
+      },
+      "restsOn": ["st_cousin"],
       "status": "PROPOSED"
     }
   ]

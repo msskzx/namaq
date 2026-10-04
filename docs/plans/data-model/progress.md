@@ -15,13 +15,16 @@ How to resume: read [plan.md](plan.md) and [owner-goals.md](owner-goals.md), the
 
 ## Pilot coverage: al-Zubayr (`data/works/siyar-alam-al-nubala/units/siyar-v4-3-az-zubayr.json`)
 
-Authored from the batch's exact citations, all `PROPOSED`: full name, sex (read from `بنُ` in the heading), kunya, three titles, both parents, the wife, the author's first-to-draw-the-sword virtue, both appearance reports (the author's, and Urwa's), the death year (as Bukhari and others say it), and both ages at Islam. `npm run model:diff -- az-zubayr-ibn-al-awwam` lists the rest. All of it is in the text; these are not authored yet, and why:
+Authored from the batch's exact citations, all `PROPOSED`: full name, sex (read from `بنُ` in the heading), kunya, three titles, both parents, the wife, the author's first-to-draw-the-sword virtue, both appearance reports (the author's, and Urwa's), the death year (as Bukhari and others say it), both ages at Islam, five battles stated in the text (Badr twice, Yarmuk, the Trench, the conquest of Makkah, each with who reports it), and the cousin relation in the Prophet's own words (a `PATERNAL_COUSIN` predicate, added for it). `npm run model:diff -- az-zubayr-ibn-al-awwam` lists the rest.
 
+Open points, each for the **owner**:
+
+- The Prophet is an unidentified mention (`رَسُوْلُ اللهِ`): P4 needs a basis span for identifying him as an Agent, and the entry gives none. The diff therefore shows the cousin relation as different from the catalog's `prophet-muhammad`. Decide whether the Prophet gets an Agent with a standing basis.
 - Place of death: the page says he was buried at Wadi al-Siba', not that he died there.
-- The cousin of the Prophet and the Hakim relation: the closed predicate list has no cousin predicate.
 - Companion of the Prophet: the text has his own words, "I did not leave him since I became Muslim"; the tie follows from them.
-- The battles (Badr, Uhud, Khandaq, Qurayzah, Fath Makkah, Yarmuk, Jamal): each excerpt has its own speaker to decide, and the participation status is not modelled yet.
+- Uhud and Jamal, and Banu Qurayzah: the excerpts do not state his participation outright (the first is about the aftermath, the second about his withdrawing, the third names him only as "my father").
 - The migrations to Abyssinia and Madinah, the Egypt campaign, the verse in Al Imran: no predicate for them yet.
+- A participation has no status in the model yet (the battle's outcome for him, ADR 0013).
 - Virtues taken from the Prophet's or a narrator's quoted words, and the catalog's other titles: the owner's rule is that a virtue is the author's narration only.
 
 ## Next, in order

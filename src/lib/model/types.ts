@@ -34,6 +34,7 @@ export const predicates = [
   'EXPLAINS_AYAH',
   'is-sahabi',
   'sex',
+  'PATERNAL_COUSIN',
 ] as const;
 
 export const mentionRoles = ['SPEAKER', 'NARRATOR', 'SUBJECT', 'REFERENT'] as const;

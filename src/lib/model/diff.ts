@@ -106,7 +106,14 @@ export function diffAgainstCatalog(entries: ProfileEntry[], catalog: CatalogLike
     take('MARRIED').map((e) => e.object ?? `(${e.objectMention})`),
   );
 
-  const others = relations.filter((r) => !isParent(r) && !isSpouse(r));
+  line(
+    'cousins',
+    relations.filter((r) => r.type === 'PATERNAL_COUSIN').map((r) => r.to),
+    take('PATERNAL_COUSIN').map((e) => e.object ?? `(${e.objectMention})`),
+  );
+  const others = relations.filter(
+    (r) => !isParent(r) && !isSpouse(r) && r.type !== 'PATERNAL_COUSIN',
+  );
   for (const type of new Set(others.map((r) => r.type))) {
     const targets = others.filter((r) => r.type === type).map((r) => r.to);
     lines.push({ field: `relation ${type}`, status: 'catalog-only', catalog: targets.join(' | ') });
@@ -115,7 +122,10 @@ export function diffAgainstCatalog(entries: ProfileEntry[], catalog: CatalogLike
     lines.push({
       field: entry.predicate,
       status: 'model-only',
-      model: entry.parsed !== undefined ? String(entry.parsed) : entry.text,
+      model:
+        entry.parsed !== undefined
+          ? String(entry.parsed)
+          : entry.text || entry.object || entry.objectMention,
     });
   }
   for (const [field, list] of [['ayat', catalog.ayat]] as const) {

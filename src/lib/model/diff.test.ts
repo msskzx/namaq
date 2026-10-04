@@ -14,6 +14,7 @@ describe('diffAgainstCatalog on al-Zubayr', () => {
   it('finds both parents and the wife the same in the catalog and the model', () => {
     expect(byField(lines, 'parents')[0].status).toBe('same');
     expect(byField(lines, 'spouses')[0].status).toBe('same');
+    expect(byField(lines, 'cousins')[0].status).toBe('different');
   });
 
   it("reads the name across the paragraph break as the lineage is spelled, leaving only the catalog's final full stop", () => {
@@ -47,14 +48,14 @@ describe('diffAgainstCatalog on al-Zubayr', () => {
       relations: [
         { type: 'SON', inverse: 'MOTHER', to: 'safiyyah-bint-abd-al-muttalib' },
         { type: 'SON', inverse: 'FATHER', to: 'al-awwam-ibn-khuwaylid' },
-        { type: 'PATERNAL_COUSIN', to: 'hakim-ibn-hizam' },
+        { type: 'COMPANION_OF', to: 'prophet-muhammad' },
       ],
     };
     const result = diffAgainstCatalog(entries, catalog);
     expect(byField(result, 'parents')[0].status).toBe('same');
-    expect(byField(result, 'relation PATERNAL_COUSIN')[0]).toMatchObject({
+    expect(byField(result, 'relation COMPANION_OF')[0]).toMatchObject({
       status: 'catalog-only',
-      catalog: 'hakim-ibn-hizam',
+      catalog: 'prophet-muhammad',
     });
   });
 
