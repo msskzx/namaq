@@ -240,4 +240,5 @@ republishing its pages.
 | `npm run graph:layout` / `-- --apply` | Report (or persist) cross-type rank, Louvain clusters, and layout positions over the unified graph |
 | `npm run sync:all` | Run the full catalog → PostgreSQL/Neo4j sync, recompute the graph layout, and generate quiz questions, stopping at `quiz:project`'s dry run for manual review |
 | `npm run model:check` | Check the span-based data model under `data/works/` against the page text (in development; see `docs/plans/data-model/progress.md`) |
+| `npm run model:diff -- <person-slug>` | List how the span-based model's profile differs from the catalog's values for one person (in development) |
 | `npm run history:review -- <batch dir>` / `-- --apply` | Preview or mark every claim in a batch as Reviewed |
