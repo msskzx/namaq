@@ -1,6 +1,7 @@
 import { loadBatch } from '../../src/lib/history/loadBatch';
 import { storePageKey } from '../../src/lib/history/batchSchema';
 import { pageAnchors } from '../../src/lib/history/sourceStore';
+import { matchForm } from '../../src/lib/model/span';
 
 /**
  * The needle-assertion check this batch's authoring harness relies on: every
@@ -14,16 +15,6 @@ const dir = process.argv[2];
 if (!dir) {
   console.error('Usage: tsx scripts/history/verifyExcerpts.ts data/history/batches/<batch>');
   process.exit(1);
-}
-
-// Footnote markers such as "(١)" are typeset inline with the text but are the
-// editor's, not the author's; an excerpt may legitimately drop them, so both
-// sides are compared with them removed and whitespace collapsed.
-function normalize(text: string) {
-  return text
-    .replace(/\(\s*[٠-٩0-9]+\s*\)/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
 }
 
 const { batch, pages } = loadBatch(dir);
@@ -54,8 +45,8 @@ for (const claim of batch.claims) {
       failures += 1;
       continue;
     }
-    const needle = normalize(citation.excerptArabic);
-    const haystack = normalize(paragraph);
+    const needle = matchForm(citation.excerptArabic);
+    const haystack = matchForm(paragraph);
     if (!haystack.includes(needle)) {
       console.error(`FAIL ${claim.key}: excerpt not found in "${citation.passageAnchor}"`);
       console.error(`  needle:    ${needle}`);

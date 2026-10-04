@@ -26,7 +26,7 @@ flowchart LR
   C -->|reviewed records and their closure| PD[(Prod databases)]
 ```
 
-We considered filtering at read time with one shared database, which one query
+We considered filtering at read time with one shared database, which is one query
 bug away from showing unreviewed text on the public site. We also considered
 keeping a separate store per environment edited by hand, which brings back the
 drift between files and rows that ADR 0010 set out to end.
