@@ -267,6 +267,8 @@ flowchart LR
 
 Derived, never authored: rendered text, span positions, display names, profiles, contents lists, edges, ranks and layout, mode classes, search index. A change set is a PR listing record ids; ADR 0023 supersedes ADR 0010's layout and keeps its authority rule.
 
+**Ingestion is an adapter (ports and adapters).** The model's only input is the files under `data/`: page text per witness, and the records that point into it. It never asks where a page came from. A provider (Shamela, the sunnah.com API, a print scan checked by hand) is an adapter, a separate script that writes page files and a Witness record and does nothing else. Adding or replacing a provider changes no model code, and a Witness's fidelity flags (`vowelled`, `hasFootnotes`, `checkedAgainstPrint`) are the only thing the model knows about its quality. Tests and both pilots run on small hand-checked fixture files marked as test data, so the engine does not wait on any source. Choosing and ingesting real sources comes after the engine, and is planned then.
+
 ### 2.13 Inference and timelines (G4, R5)
 
 The model is filled from the text. Three cases:
