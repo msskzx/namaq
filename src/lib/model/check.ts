@@ -1,6 +1,7 @@
 // docs/plans/data-model/plan.md, sections 2.3 to 2.7
 import { locateSpanRecord } from './render';
 import { modeKeyOf } from './modes';
+import { splitRef } from './refs';
 import { HARAKAT, matchForm } from './span';
 import {
   assertionStatuses,
@@ -29,7 +30,13 @@ const rolesByVoice: Record<Voice, StatementRole[]> = {
 
 const TRANSMISSION_OPENING = /^و?(روى|قال|حدث|عن|قيل)(?=[\s:،]|$)/u;
 
-function checkUnit(folder: WorkFolder, file: UnitFile, root: string, issues: string[]) {
+function checkUnit(
+  folder: WorkFolder,
+  file: UnitFile,
+  root: string,
+  issues: string[],
+  units: Map<string, { folder: WorkFolder; file: UnitFile }>,
+) {
   const where = `${folder.work.slug}/${file.unit.id}`;
   const fail = (message: string) => issues.push(`${where}: ${message}`);
   const oneOf = (owner: string, value: unknown, list: readonly string[]) => {
@@ -275,6 +282,43 @@ function checkUnit(folder: WorkFolder, file: UnitFile, root: string, issues: str
     }
   }
 
+  const checkForeignBasis = (
+    owner: string,
+    foreignId: string,
+    spanId: string,
+    role: string,
+    mention: { exact: string } | undefined,
+  ) => {
+    const target = units.get(foreignId);
+    const foreignSpan = target?.file.spans.find((s) => s.id === spanId);
+    if (!target || !foreignSpan) {
+      fail(`${owner}: unknown span ${foreignId}#${spanId}`);
+      return;
+    }
+    const genre = target.folder.work.genre;
+    if (role === 'COMMENTATOR_NOTE') {
+      if (genre !== 'SHARH') fail(`${owner}: a COMMENTATOR_NOTE basis must be in a SHARH work`);
+      if (!target.file.sharhLinks?.some((l) => l.explains === file.unit.id)) {
+        fail(`${owner}: ${foreignId} has no sharh link to ${file.unit.id}`);
+      }
+    } else if (role === 'RIJAL_ENTRY') {
+      if (genre !== 'TARAJEM') fail(`${owner}: a RIJAL_ENTRY basis must be in a TARAJEM work`);
+    } else {
+      fail(`${owner}: only a COMMENTATOR_NOTE or RIJAL_ENTRY basis may be in another unit`);
+    }
+    try {
+      const text = locateSpanRecord(target.folder, foreignSpan, root).text;
+      if (
+        mention &&
+        !text.replace(HARAKAT, '').includes(matchForm(mention.exact).replace(HARAKAT, ''))
+      ) {
+        fail(`${owner}: ${foreignId}#${spanId} does not name "${mention.exact}"`);
+      }
+    } catch (error) {
+      fail(`${owner}: ${foreignId}#${spanId}: ${(error as Error).message}`);
+    }
+  };
+
   for (const identification of file.identifications) {
     const owner = `identification ${identification.id}`;
     oneOf(`${owner} status`, identification.status, identificationStatuses);
@@ -282,7 +326,12 @@ function checkUnit(folder: WorkFolder, file: UnitFile, root: string, issues: str
     if (!mention) fail(`${owner}: unknown mention`);
     if (!identification.agent?.trim()) fail(`${owner}: no agent`);
     if (identification.basis.length === 0) fail(`${owner}: no basis`);
-    for (const { span, role } of identification.basis) {
+    for (const { span: ref, role } of identification.basis) {
+      const { unit: foreignId, span } = splitRef(ref);
+      if (foreignId !== undefined) {
+        checkForeignBasis(owner, foreignId, span, role, mention);
+        continue;
+      }
       needSpan(owner, span);
       oneOf(`${owner} basis role`, role, basisRoles);
       if (role === 'EDITOR_NOTE' && layerOf.get(span) !== 'NOTES') {
@@ -351,6 +400,11 @@ function checkSharhLinks(folders: WorkFolder[], issues: string[]) {
 
 export function checkModel(folders: WorkFolder[], root: string) {
   const issues: string[] = [];
+  const units = new Map(
+    folders.flatMap((folder) =>
+      folder.units.map((file) => [file.unit.id, { folder, file }] as const),
+    ),
+  );
   checkSharhLinks(folders, issues);
   for (const folder of folders) {
     const slug = folder.work.slug;
@@ -359,7 +413,7 @@ export function checkModel(folders: WorkFolder[], root: string) {
     if (new Set(editions).size !== editions.length) {
       issues.push(`${slug}: an edition has more than one witness`);
     }
-    for (const file of folder.units) checkUnit(folder, file, root, issues);
+    for (const file of folder.units) checkUnit(folder, file, root, issues, units);
   }
   return issues;
 }
