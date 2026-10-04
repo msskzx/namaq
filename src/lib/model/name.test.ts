@@ -18,6 +18,19 @@ describe('joinName', () => {
     expect(joinName(['عَبْدُ اللهِ', 'اِبْنُ عُمَرَ'])).toBe('عَبْدُ اللهِ بنُ عُمَرَ');
   });
 
+  it('handles alif wasla, a three-part lineage, and empty parts', () => {
+    expect(joinName(['عَبْدُ اللهِ', 'ٱبْنِ عُمَرَ'])).toBe('عَبْدُ اللهِ بنِ عُمَرَ');
+    expect(joinName(['أَ', 'ابْنِ بَ', 'ابْنِ جَ'])).toBe('أَ بنِ بَ بنِ جَ');
+    expect(joinName([])).toBe('');
+    expect(joinName(['', 'ابْنِ بَ'])).toBe(' بنِ بَ');
+  });
+
+  it('keeps the alif after punctuation, where the lineage has broken off', () => {
+    expect(joinName(['فُلاَنٌ،', 'ابْنُ عَمِّ النَّبِيِّ'])).toBe(
+      'فُلاَنٌ، ابْنُ عَمِّ النَّبِيِّ',
+    );
+  });
+
   it('does not touch words that merely start with the same letters', () => {
     expect(joinName(['فُلاَنٌ', 'ابْنَةُ فُلاَنٍ'])).toBe('فُلاَنٌ ابْنَةُ فُلاَنٍ');
   });

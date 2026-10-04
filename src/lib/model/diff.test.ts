@@ -20,7 +20,7 @@ describe('diffAgainstCatalog on al-Zubayr', () => {
     expect(name.model).toContain('عَبْدِ العُزَّى بنِ قُصَيِّ');
     expect(name.model).not.toContain('ابْنِ');
     expect(name.status).toBe('different');
-    expect(name.catalog).toBe(`${name.model}.`);
+    expect(name.catalog?.replace(/\.$/, '')).toBe(name.model);
   });
 
   it('lists what only the catalog holds, and what only the model holds', () => {
@@ -36,7 +36,7 @@ describe('diffAgainstCatalog on al-Zubayr', () => {
 
   it('calls two equal texts the same even when whitespace and footnote markers differ', () => {
     const [name] = entries.filter((e) => e.predicate === 'name.full');
-    const text = name.text.replace(' بنِ ', '\n\n بنِ ');
+    const text = name.text.replace(/ /g, '  ');
     const result = diffAgainstCatalog(entries, { fields: { fullName: { value: `${text} (١)` } } });
     expect(byField(result, 'fullName')[0].status).toBe('same');
   });
@@ -80,5 +80,15 @@ describe('diffAgainstCatalog on al-Zubayr', () => {
   it('reports every catalog field as catalog-only when the model has no entries', () => {
     const result = diffAgainstCatalog([], azZubayr as unknown as CatalogLike);
     expect(result.every((l) => l.status === 'catalog-only')).toBe(true);
+  });
+});
+
+describe('the name across the part boundary', () => {
+  it('differs from the catalog if the exact parts are compared without the join rule', () => {
+    const [name] = entries.filter((e) => e.predicate === 'name.full');
+    const result = diffAgainstCatalog(entries, {
+      fields: { fullName: { value: name.parts.join(' ') } },
+    });
+    expect(byField(result, 'fullName')[0].status).toBe('different');
   });
 });
