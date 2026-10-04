@@ -29,6 +29,7 @@
     "graph:layout": "tsx scripts/graph/computeGraphLayout.ts",
     "graph:layout:validate": "tsx scripts/graph/computeGraphLayout.ts --strict",
     "model:check": "tsx scripts/model/check.ts",
+    "model:diff": "tsx scripts/model/diff.ts",
     "history:validate": "tsx scripts/history/validateBatch.ts",
     "history:import": "tsx scripts/history/importBatch.ts",
     "history:review": "tsx scripts/history/reviewBatch.ts",
