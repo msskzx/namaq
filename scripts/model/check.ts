@@ -5,10 +5,11 @@ import { lapsedReviews, loadReviews } from '../../src/lib/model/review';
 
 const root = process.argv[2] ?? '.';
 const folders = loadModel(root);
-const issues = [...checkModel(folders, root), ...checkInferences(folders, loadInferences(root))];
+const inferences = loadInferences(root);
+const issues = [...checkModel(folders, root), ...checkInferences(folders, inferences)];
 for (const issue of issues) console.error(`FAIL ${issue}`);
 if (issues.length === 0) {
-  for (const review of lapsedReviews(folders, loadReviews(root), root)) {
+  for (const review of lapsedReviews(folders, loadReviews(root), root, inferences)) {
     console.warn(
       `LAPSED review of ${review.record} by ${review.reviewer}: it changed since, or is gone`,
     );

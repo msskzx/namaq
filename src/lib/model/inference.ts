@@ -1,7 +1,7 @@
 // docs/plans/data-model/plan.md, section 2.13
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import type { Predicate, UnitFile, WorkFolder } from './types';
+import { predicates, type Predicate, type UnitFile, type WorkFolder } from './types';
 
 export const inferencesRoot = 'data/inferences';
 
@@ -29,19 +29,37 @@ export function loadInferences(root: string): Inference[] {
   return readdirSync(dir)
     .filter((name) => name.endsWith('.json'))
     .sort()
-    .map((name) => JSON.parse(readFileSync(join(dir, name), 'utf8')) as Inference);
+    .map((name) => {
+      try {
+        return JSON.parse(readFileSync(join(dir, name), 'utf8')) as Inference;
+      } catch (error) {
+        throw new Error(`${join(dir, name)}: ${(error as Error).message}`);
+      }
+    });
 }
 
 const unitFiles = (folders: WorkFolder[]) => folders.flatMap((folder) => folder.units);
+
+const kinds = ['TURN_SPEAKER', 'RELATION', 'TIMELINE_BETWEEN'];
 
 export function checkInferences(folders: WorkFolder[], inferences: Inference[]) {
   const issues: string[] = [];
   const files = new Map(unitFiles(folders).map((file) => [file.unit.id, file]));
   const seen = new Set<string>();
+  const approvedTurns = new Set<string>();
   for (const inference of inferences) {
     const fail = (message: string) => issues.push(`inference ${inference.id}: ${message}`);
     if (seen.has(inference.id)) fail('duplicate id');
     seen.add(inference.id);
+    if (
+      !Array.isArray(inference.passage) ||
+      !Array.isArray(inference.premises) ||
+      typeof inference.value !== 'object' ||
+      inference.value === null
+    ) {
+      fail('needs passage, premises and value');
+      continue;
+    }
     const file = files.get(inference.unit);
     if (!file) {
       fail(`unknown unit ${inference.unit}`);
@@ -50,8 +68,10 @@ export function checkInferences(folders: WorkFolder[], inferences: Inference[]) 
     const spans = new Set(file.spans.map((s) => s.id));
     const mentions = new Set(file.mentions.map((m) => m.id));
     const assertions = new Set(file.assertions.map((a) => a.id));
-    const turns = new Set(
-      file.reports.flatMap((r) => (r.scenes ?? []).flatMap((sc) => sc.turns.map((t) => t.id))),
+    const turns = new Map(
+      file.reports.flatMap((r) =>
+        (r.scenes ?? []).flatMap((sc) => sc.turns.map((t) => [t.id, t] as const)),
+      ),
     );
     if (inference.passage.length === 0) fail('no passage');
     for (const id of inference.passage) if (!spans.has(id)) fail(`unknown passage span ${id}`);
@@ -64,14 +84,30 @@ export function checkInferences(folders: WorkFolder[], inferences: Inference[]) 
       if ('assertion' in premise && !assertions.has(premise.assertion)) {
         fail(`unknown premise assertion ${premise.assertion}`);
       }
+      if ('agent' in premise && !premise.agent?.trim()) fail('premise agent is empty');
     }
     const { value } = inference;
-    if (value.kind === 'TURN_SPEAKER') {
-      if (!turns.has(value.turn)) fail(`unknown turn ${value.turn}`);
+    if (!kinds.includes(value.kind)) {
+      fail(`value kind "${value.kind}" is not one of ${kinds.join(', ')}`);
+    } else if (value.kind === 'TURN_SPEAKER') {
+      const turn = turns.get(value.turn);
+      if (!turn) fail(`unknown turn ${value.turn}`);
       if (!mentions.has(value.speaker)) fail(`unknown speaker ${value.speaker}`);
+      if (inference.status === 'APPROVED' && turn) {
+        const key = `${inference.unit}/${value.turn}`;
+        if (approvedTurns.has(key)) fail(`a second approved inference for turn ${value.turn}`);
+        approvedTurns.add(key);
+        if (turn.speaker !== undefined) fail(`turn ${value.turn} already has a printed speaker`);
+      }
     } else if (value.kind === 'RELATION') {
       for (const id of [value.subject, value.object]) {
         if (!mentions.has(id)) fail(`unknown mention ${id}`);
+      }
+      if (!predicates.includes(value.predicate))
+        fail(`predicate ${value.predicate} is not in the closed list`);
+    } else {
+      for (const id of [value.event, value.after, value.before]) {
+        if (!id?.trim()) fail('a timeline value needs an event, an after and a before');
       }
     }
     if (inference.status === 'APPROVED' && !inference.approvedInPr)

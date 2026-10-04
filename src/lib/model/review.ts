@@ -2,6 +2,7 @@
 import { createHash } from 'node:crypto';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import type { Inference } from './inference';
 import { renderSpanRecord } from './render';
 import type { Assertion, UnitFile, WorkFolder } from './types';
 
@@ -37,7 +38,7 @@ function stable(value: unknown): string {
 
 const sha = (text: string) => createHash('sha256').update(text).digest('hex');
 
-export function closureOf(file: UnitFile, assertion: Assertion) {
+export function closureOf(file: UnitFile, assertion: Assertion, inferences: Inference[] = []) {
   const statements = file.statements.filter((s) => assertion.restsOn.includes(s.id));
   const reports = file.reports.filter((r) => statements.some((s) => s.report === r.id));
   const spanIds = new Set<string>();
@@ -56,6 +57,21 @@ export function closureOf(file: UnitFile, assertion: Assertion) {
       mentions([turn.speaker, turn.addressee]);
     }
   }
+  const turnIds = new Set(
+    reports.flatMap((r) => (r.scenes ?? []).flatMap((scene) => scene.turns.map((t) => t.id))),
+  );
+  const approved = inferences.filter(
+    (i) =>
+      i.status === 'APPROVED' &&
+      i.unit === file.unit.id &&
+      i.value.kind === 'TURN_SPEAKER' &&
+      turnIds.has(i.value.turn),
+  );
+  for (const inference of approved) {
+    spans(inference.passage);
+    spans(inference.premises.map((p) => ('span' in p ? p.span : undefined)));
+    if (inference.value.kind === 'TURN_SPEAKER') mentions([inference.value.speaker]);
+  }
   const mentionRecords = file.mentions.filter((m) => mentionIds.has(m.id));
   const identifications = file.identifications.filter(
     (i) => mentionIds.has(i.mention) && i.status !== 'REJECTED',
@@ -63,6 +79,7 @@ export function closureOf(file: UnitFile, assertion: Assertion) {
   for (const mention of mentionRecords) spans([mention.parent]);
   for (const identification of identifications) spans(identification.basis.map((b) => b.span));
   return {
+    inferences: approved,
     assertion,
     statements,
     reports,
@@ -72,8 +89,14 @@ export function closureOf(file: UnitFile, assertion: Assertion) {
   };
 }
 
-export function revisionOf(folder: WorkFolder, file: UnitFile, assertion: Assertion, root: string) {
-  const closure = closureOf(file, assertion);
+export function revisionOf(
+  folder: WorkFolder,
+  file: UnitFile,
+  assertion: Assertion,
+  root: string,
+  inferences: Inference[] = [],
+) {
+  const closure = closureOf(file, assertion, inferences);
   const editions = new Set(closure.spans.map((span) => span.edition));
   const spans = closure.spans.map(({ exact, prefix, suffix, ...place }) => ({
     ...place,
@@ -99,19 +122,29 @@ const reviewedRevisions = (reviews: ReviewRecord[]) => {
   return byRecord;
 };
 
-export function lapsedReviews(folders: WorkFolder[], reviews: ReviewRecord[], root: string) {
+export function lapsedReviews(
+  folders: WorkFolder[],
+  reviews: ReviewRecord[],
+  root: string,
+  inferences: Inference[] = [],
+) {
   const current = new Map<string, string>();
   for (const folder of folders) {
     for (const file of folder.units) {
       for (const assertion of file.assertions) {
-        current.set(assertion.id, revisionOf(folder, file, assertion, root));
+        current.set(assertion.id, revisionOf(folder, file, assertion, root, inferences));
       }
     }
   }
   return reviews.filter((r) => current.get(r.record) !== r.revision);
 }
 
-export function selectForProd(folders: WorkFolder[], reviews: ReviewRecord[], root: string) {
+export function selectForProd(
+  folders: WorkFolder[],
+  reviews: ReviewRecord[],
+  root: string,
+  inferences: Inference[] = [],
+) {
   const reviewed = reviewedRevisions(reviews);
   return folders
     .map((folder) => ({
@@ -121,10 +154,10 @@ export function selectForProd(folders: WorkFolder[], reviews: ReviewRecord[], ro
           (a) =>
             a.status !== 'LEGACY' &&
             a.status !== 'REJECTED' &&
-            reviewed.get(a.id)?.has(revisionOf(folder, file, a, root)),
+            reviewed.get(a.id)?.has(revisionOf(folder, file, a, root, inferences)),
         );
         if (kept.length === 0) return [];
-        const closures = kept.map((a) => closureOf(file, a));
+        const closures = kept.map((a) => closureOf(file, a, inferences));
         const ids = (pick: (c: (typeof closures)[number]) => { id: string }[]) =>
           new Set(closures.flatMap((c) => pick(c).map((r) => r.id)));
         const spans = ids((c) => c.spans);
