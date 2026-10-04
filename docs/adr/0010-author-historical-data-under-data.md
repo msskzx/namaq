@@ -4,6 +4,8 @@ status: accepted
 
 # Author historical data under `data/`
 
+The layout below is superseded by [ADR 0023](0023-files-are-the-authority-and-both-databases-are-derived.md). The rule that `data/` is the authority stands.
+
 Namaq currently authors historical facts in PostgreSQL seed modules, graph-only
 people and relationships in Neo4j Cypher modules, and evidence in
 `data/history/`. Some PostgreSQL writers are dormant, so files and live rows can
