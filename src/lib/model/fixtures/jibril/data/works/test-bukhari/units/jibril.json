@@ -14,7 +14,52 @@
       "volume": 1,
       "page": "jibril",
       "layer": "MAIN",
-      "exact": "مُسَدَّدٌ، قَالَ حَدَّثَنَا إِسْمَاعِيلُ بْنُ إِبْرَاهِيمَ، أَخْبَرَنَا أَبُو حَيَّانَ التَّيْمِيُّ، عَنْ أَبِي زُرْعَةَ، عَنْ أَبِي هُرَيْرَةَ"
+      "exact": "حَدَّثَنَا مُسَدَّدٌ، قَالَ حَدَّثَنَا إِسْمَاعِيلُ بْنُ إِبْرَاهِيمَ، أَخْبَرَنَا أَبُو حَيَّانَ التَّيْمِيُّ، عَنْ أَبِي زُرْعَةَ، عَنْ أَبِي هُرَيْرَةَ"
+    },
+    {
+      "id": "sp_b1",
+      "edition": "test-bukhari-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "حَدَّثَنَا",
+      "suffix": " مُسَدَّدٌ"
+    },
+    {
+      "id": "sp_b2",
+      "edition": "test-bukhari-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "حَدَّثَنَا",
+      "suffix": " إِسْمَاعِيلُ بْنُ"
+    },
+    {
+      "id": "sp_b3",
+      "edition": "test-bukhari-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "أَخْبَرَنَا",
+      "suffix": " أَبُو حَيَّانَ"
+    },
+    {
+      "id": "sp_b4",
+      "edition": "test-bukhari-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "عَنْ",
+      "suffix": " أَبِي زُرْعَةَ"
+    },
+    {
+      "id": "sp_b5",
+      "edition": "test-bukhari-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "عَنْ",
+      "suffix": " أَبِي هُرَيْرَةَ"
     },
     {
       "id": "sp_matn",
@@ -76,7 +121,36 @@
       "origin": {
         "mention": "m_abu_hurayra"
       },
-      "chainState": "DEFERRED",
+      "chainState": "COMPLETE",
+      "chain": {
+        "elements": [
+          {
+            "narrator": "m_musaddad",
+            "mode": ["sp_b1"],
+            "modeKey": "haddatha/1pl"
+          },
+          {
+            "narrator": "m_ismail",
+            "mode": ["sp_b2"],
+            "modeKey": "haddatha/1pl"
+          },
+          {
+            "narrator": "m_abu_hayyan",
+            "mode": ["sp_b3"],
+            "modeKey": "akhbara/1pl"
+          },
+          {
+            "narrator": "m_abu_zura",
+            "mode": ["sp_b4"],
+            "modeKey": "an"
+          },
+          {
+            "narrator": "m_abu_hurayra",
+            "mode": ["sp_b5"],
+            "modeKey": "an"
+          }
+        ]
+      },
       "scenes": [
         {
           "ordinal": 1,
@@ -129,6 +203,34 @@
     }
   ],
   "mentions": [
+    {
+      "id": "m_musaddad",
+      "parent": "sp_isnad",
+      "exact": "مُسَدَّدٌ",
+      "occurrence": 1,
+      "role": "NARRATOR"
+    },
+    {
+      "id": "m_ismail",
+      "parent": "sp_isnad",
+      "exact": "إِسْمَاعِيلُ بْنُ إِبْرَاهِيمَ",
+      "occurrence": 1,
+      "role": "NARRATOR"
+    },
+    {
+      "id": "m_abu_hayyan",
+      "parent": "sp_isnad",
+      "exact": "أَبُو حَيَّانَ التَّيْمِيُّ",
+      "occurrence": 1,
+      "role": "NARRATOR"
+    },
+    {
+      "id": "m_abu_zura",
+      "parent": "sp_isnad",
+      "exact": "أَبِي زُرْعَةَ",
+      "occurrence": 1,
+      "role": "NARRATOR"
+    },
     {
       "id": "m_abu_hurayra",
       "parent": "sp_isnad",

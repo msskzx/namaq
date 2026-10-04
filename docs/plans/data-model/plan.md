@@ -133,8 +133,8 @@ type Statement = {                 // one wording
   insertions?: { span: SpanRef; by: MentionId | 'UNKNOWN' }[];  // idraj, "أَوْ قَالَ", "أَحْسِبُهُ"
   role: 'AUTHOR_REPORT' | 'AUTHOR_SYNTHESIS' | 'TRANSMITTED' | 'EDITOR_ANALYSIS';   // ADR 0011
 };
-type Chain = { elements: (Link | Gap)[]; branches?: Chain[] };   // tahwil (ح) = branch sharing the tail
-type Link = { narrator: MentionId; mode: SpanRef[]; modeKey: string };
+type Chain = { elements: (Link | Gap)[]; branches?: Chain[]; tahwil?: SpanRef[] };   // tahwil (ح): `elements` is empty and each branch is a complete route to the same narrator; `tahwil` marks the ح
+type Link = { narrator: MentionId; mode: SpanRef[]; modeKey: string };   // `mode` is the formula printed before the narrator's name; `model:check` derives the key from it (src/lib/model/modes.ts)
 type Gap  = { kind: 'GAP'; marker?: SpanRef[] };                  // ta'liq, mursal, balagha; length never inferred
 ```
 

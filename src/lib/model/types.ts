@@ -101,6 +101,23 @@ export interface Scene {
   turns: Turn[];
 }
 
+export interface Link {
+  narrator: string;
+  mode: string[];
+  modeKey: string;
+}
+
+export interface Gap {
+  kind: 'GAP';
+  marker?: string[];
+}
+
+export interface Chain {
+  elements: (Link | Gap)[];
+  branches?: Chain[];
+  tahwil?: string[];
+}
+
 export interface Report {
   id: string;
   unit: string;
@@ -111,6 +128,7 @@ export interface Report {
   isnadSpan?: string;
   scenes?: Scene[];
   origin: { mention: string } | { workAuthor: true };
+  chain?: Chain;
   chainState: 'COMPLETE' | 'DEFERRED';
 }
 

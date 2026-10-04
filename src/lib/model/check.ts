@@ -1,5 +1,6 @@
 // docs/plans/data-model/plan.md, sections 2.3 to 2.7
 import { locateSpanRecord } from './render';
+import { modeKeyOf } from './modes';
 import { HARAKAT, matchForm } from './span';
 import {
   assertionStatuses,
@@ -12,6 +13,7 @@ import {
   predicates,
   statementRoles,
   voices,
+  type Chain,
   type StatementRole,
   type UnitFile,
   type Voice,
@@ -96,6 +98,14 @@ function checkUnit(folder: WorkFolder, file: UnitFile, root: string, issues: str
     }
   }
 
+  const within = (inner: string, outers: string[]) => {
+    const a = placed.get(inner);
+    return outers.some((id) => {
+      const b = placed.get(id);
+      return a && b && a.key === b.key && a.start >= b.start && a.end <= b.end;
+    });
+  };
+
   for (const report of file.reports) {
     const owner = `report ${report.id}`;
     oneOf(`${owner} voice`, report.voice, voices);
@@ -112,6 +122,50 @@ function checkUnit(folder: WorkFolder, file: UnitFile, root: string, issues: str
     }
     if ('mention' in report.origin && !mentionIds.has(report.origin.mention)) {
       fail(`${owner}: unknown origin mention ${report.origin.mention}`);
+    }
+    if (report.voice === 'TRANSMITTED' && report.chainState === 'COMPLETE' && !report.chain) {
+      fail(`${owner}: a COMPLETE transmitted report needs a chain`);
+    }
+    if (report.chainState === 'DEFERRED' && report.chain) {
+      fail(`${owner}: a DEFERRED report has no chain yet`);
+    }
+    if (report.chain) {
+      const chainOwner = `${owner} chain`;
+      const inIsnad = (id: string) =>
+        !report.isnadSpan || !placed.has(id) || within(id, [report.isnadSpan]);
+      const walk = (chain: Chain) => {
+        if (chain.elements.length === 0 && (chain.branches?.length ?? 0) < 2) {
+          fail(`${chainOwner}: a chain needs links, or two branches`);
+        }
+        for (const id of chain.tahwil ?? []) {
+          needSpan(chainOwner, id);
+          if (!inIsnad(id)) fail(`${chainOwner}: span ${id} is outside the isnad`);
+        }
+        for (const element of chain.elements) {
+          if ('kind' in element) {
+            for (const id of element.marker ?? []) needSpan(chainOwner, id);
+            continue;
+          }
+          if (!mentionIds.has(element.narrator))
+            fail(`${chainOwner}: unknown narrator ${element.narrator}`);
+          if (element.mode.length === 0) fail(`${chainOwner}: a link has no mode span`);
+          for (const id of element.mode) {
+            needSpan(chainOwner, id);
+            if (!inIsnad(id)) fail(`${chainOwner}: span ${id} is outside the isnad`);
+          }
+          const printed = element.mode.map((id) => rendered.get(id) ?? '').join(' ');
+          const key = modeKeyOf(printed);
+          if (key === undefined)
+            fail(`${chainOwner}: no mode key for the printed formula "${printed}"`);
+          else if (key !== element.modeKey) {
+            fail(
+              `${chainOwner}: mode key ${element.modeKey} does not match the printed "${printed}" (${key})`,
+            );
+          }
+        }
+        for (const branch of chain.branches ?? []) walk(branch);
+      };
+      walk(report.chain);
     }
   }
 
@@ -132,13 +186,6 @@ function checkUnit(folder: WorkFolder, file: UnitFile, root: string, issues: str
     }
   }
 
-  const within = (inner: string, outers: string[]) => {
-    const a = placed.get(inner);
-    return outers.some((id) => {
-      const b = placed.get(id);
-      return a && b && a.key === b.key && a.start >= b.start && a.end <= b.end;
-    });
-  };
   for (const report of file.reports) {
     const turnById = new Map<string, { spans: string[]; scene: number }>();
     const sceneOrdinals = (report.scenes ?? []).map((scene) => scene.ordinal);
