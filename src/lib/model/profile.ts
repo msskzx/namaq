@@ -13,6 +13,7 @@ export interface ProfileEntry {
   spanIds: string[];
   statementIds: string[];
   parsed?: number;
+  classified?: string;
   object?: string;
   objectMention?: string;
   origins: Origin[];
@@ -71,6 +72,7 @@ export function profilesFromModel(folders: WorkFolder[], root: string) {
             identification: subject.status,
           };
           if ('parsed' in value) entry.parsed = value.parsed;
+          if ('classified' in value) entry.classified = value.classified;
           if ('object' in value) {
             entry.object = objects[0]?.agent;
             entry.objectMention = mentionText.get(value.object);

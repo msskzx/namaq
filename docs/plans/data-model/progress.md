@@ -13,6 +13,17 @@ How to resume: read [plan.md](plan.md) and [owner-goals.md](owner-goals.md), the
 - Inference records (`src/lib/model/inference.ts`, [#319](https://github.com/msskzx/namaq/pull/319)): `data/inferences/<id>.json`; `model:check` validates them; `applyApprovedInferences` sets a turn speaker only from an APPROVED inference and marks it `derivedBy`.
 - `npm run model:diff -- <slug>` ([#320](https://github.com/msskzx/namaq/pull/320)): the old-versus-new report against `data/catalog/people`.
 
+## Pilot coverage: al-Zubayr (`data/works/siyar-alam-al-nubala/units/siyar-v4-3-az-zubayr.json`)
+
+Authored from the batch's exact citations, all `PROPOSED`: full name, sex (read from `بنُ` in the heading), kunya, three titles, both parents, the wife, the author's first-to-draw-the-sword virtue, both appearance reports (the author's, and Urwa's), the death year (as Bukhari and others say it), and both ages at Islam. `npm run model:diff -- az-zubayr-ibn-al-awwam` lists the rest. All of it is in the text; these are not authored yet, and why:
+
+- Place of death: the page says he was buried at Wadi al-Siba', not that he died there.
+- The cousin of the Prophet and the Hakim relation: the closed predicate list has no cousin predicate.
+- Companion of the Prophet: the text has his own words, "I did not leave him since I became Muslim"; the tie follows from them.
+- The battles (Badr, Uhud, Khandaq, Qurayzah, Fath Makkah, Yarmuk, Jamal): each excerpt has its own speaker to decide, and the participation status is not modelled yet.
+- The migrations to Abyssinia and Madinah, the Egypt campaign, the verse in Al Imran: no predicate for them yet.
+- Virtues taken from the Prophet's or a narrator's quoted words, and the catalog's other titles: the owner's rule is that a virtue is the author's narration only.
+
 ## Next, in order
 
 1. The **owner** reads `npm run model:diff -- az-zubayr-ibn-al-awwam` and decides what the pilot must still cover: the catalog holds kunya, appearance, death, virtues, titles and verses that the model does not yet, and its joined full name drops `ابْنِ` where the book prints it.

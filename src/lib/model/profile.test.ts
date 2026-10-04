@@ -78,4 +78,23 @@ describe('profilesFromModel on the al-Zubayr entry', () => {
     folders[0].units[0].assertions[0].value = { spans: ['nope'] };
     expect(() => profilesFromModel(folders, '.')).toThrow(/unknown span nope/);
   });
+
+  it('reads the sex from the lineage word in the heading, shown with that span', () => {
+    const [sex] = of('sex');
+    expect(sex.classified).toBe('MALE');
+    expect(sex.parts[0]).toContain('بنُ');
+  });
+
+  it("keeps the author's and Urwa's descriptions as two entries with their own speakers", () => {
+    const appearance = of('appearance');
+    expect(appearance).toHaveLength(2);
+    expect(appearance.map((a) => a.origins[0])).toContainEqual({ author: 'al-dhahabi' });
+    expect(appearance.map((a) => a.origins[0])).toContainEqual({ mention: 'عُرْوَةَ' });
+  });
+
+  it('gives the death year as a number with Bukhari as the one it is quoted from', () => {
+    const [death] = of('died.year');
+    expect(death.parsed).toBe(36);
+    expect(death.origins).toEqual([{ mention: 'البُخَارِيُّ' }]);
+  });
 });
