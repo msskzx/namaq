@@ -152,6 +152,12 @@ export interface Assertion {
   status: 'LEGACY' | 'PROPOSED' | 'DISPUTED' | 'REJECTED';
 }
 
+export interface SharhLink {
+  id: string;
+  explains: string;
+  basis: string[];
+}
+
 export interface UnitFile {
   unit: Unit;
   spans: SpanRecord[];
@@ -160,6 +166,7 @@ export interface UnitFile {
   mentions: Mention[];
   identifications: Identification[];
   assertions: Assertion[];
+  sharhLinks?: SharhLink[];
 }
 
 export interface WorkFolder {

@@ -1,0 +1,20 @@
+{
+  "editions": [
+    {
+      "slug": "test-fath-edition",
+      "work": "test-fath",
+      "publisher": "test",
+      "editors": [],
+      "printing": "test"
+    }
+  ],
+  "witnesses": [
+    {
+      "slug": "test-fath",
+      "edition": "test-fath-edition",
+      "vowelled": true,
+      "hasFootnotes": false,
+      "checkedAgainstPrint": false
+    }
+  ]
+}

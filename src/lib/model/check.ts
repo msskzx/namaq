@@ -43,6 +43,7 @@ function checkUnit(folder: WorkFolder, file: UnitFile, root: string, issues: str
     ...file.mentions,
     ...file.identifications,
     ...file.assertions,
+    ...(file.sharhLinks ?? []),
     ...file.reports.flatMap((r) => (r.scenes ?? []).flatMap((sc) => sc.turns)),
   ];
   for (const { id } of all) {
@@ -233,8 +234,29 @@ function checkUnit(folder: WorkFolder, file: UnitFile, root: string, issues: str
   }
 }
 
+function checkSharhLinks(folders: WorkFolder[], issues: string[]) {
+  const unitIds = new Set(folders.flatMap((f) => f.units.map((u) => u.unit.id)));
+  for (const folder of folders) {
+    for (const file of folder.units) {
+      for (const link of file.sharhLinks ?? []) {
+        const fail = (message: string) =>
+          issues.push(`${folder.work.slug}/${file.unit.id}: sharh link ${link.id}: ${message}`);
+        if (folder.work.genre !== 'SHARH') fail(`work ${folder.work.slug} is not a SHARH`);
+        if (!unitIds.has(link.explains)) fail(`unknown unit ${link.explains}`);
+        if (link.explains === file.unit.id) fail('a commentary cannot explain itself');
+        if (link.basis.length === 0) fail('no basis span');
+        for (const id of link.basis) {
+          if (!file.spans.some((s) => s.id === id))
+            fail(`basis span ${id} is not in the commentary unit`);
+        }
+      }
+    }
+  }
+}
+
 export function checkModel(folders: WorkFolder[], root: string) {
   const issues: string[] = [];
+  checkSharhLinks(folders, issues);
   for (const folder of folders) {
     const slug = folder.work.slug;
     if (!genres.includes(folder.work.genre)) issues.push(`${slug}: genre "${folder.work.genre}"`);
