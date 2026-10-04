@@ -7,7 +7,7 @@ import { loadModel } from './load';
 import type { UnitFile } from './types';
 
 const NAME = 'الزُّبَيْرُ بنُ العَوَّامِ بنِ خُوَيْلِدِ بنِ أَسَدِ بنِ عَبْدِ العُزَّى';
-const PAGE = `٣ - ${NAME} * (ع)\n\nابْنِ قُصَيِّ بنِ كِلاَبِ بنِ مُرَّةَ بنِ كَعْبِ بنِ لُؤَيِّ بنِ غَالِبٍ.\n`;
+const PAGE = `٣ - ${NAME} * (ع)\n\nابْنِ قُصَيِّ بنِ كِلاَبِ بنِ مُرَّةَ بنِ كَعْبِ بنِ لُؤَيِّ بنِ غَالِبٍ.\n\nوَرَوَى: اللَّيْثُ، عَنْ أَبِي الأَسْوَدِ، عَنْ عُرْوَةَ، قَالَ:\n`;
 
 function unit(): UnitFile {
   return {
@@ -153,7 +153,70 @@ describe('checkModel', () => {
   it('fails a predicate outside the closed list and a duplicate id', () => {
     expect(
       issuesFor((f) => ((f.assertions[0] as { predicate: string }).predicate = 'invented')).join(),
-    ).toMatch(/closed list/);
+    ).toMatch(/not one of/);
     expect(issuesFor((f) => (f.statements[0].id = 'sp1')).join()).toMatch(/duplicate id sp1/);
+  });
+
+  it('reports, not throws, on values outside the closed lists', () => {
+    expect(issuesFor((f) => ((f.reports[0] as { voice: string }).voice = 'BOGUS')).join()).toMatch(
+      /voice/,
+    );
+    expect(issuesFor((f) => ((f.mentions[0] as { role: string }).role = 'X')).join()).toMatch(
+      /mention m1 role/,
+    );
+    expect(
+      issuesFor((f) => ((f.identifications[0] as { status: string }).status = 'REVIEWED')).join(),
+    ).toMatch(/status/);
+  });
+
+  it('treats a missing array as empty', () => {
+    expect(issuesFor((f) => delete (f as Partial<UnitFile>).mentions)).not.toEqual([]);
+  });
+
+  it('fails an empty or non-integer mention quote', () => {
+    expect(issuesFor((f) => (f.mentions[0].exact = '')).join()).toMatch(/empty quote/);
+    expect(issuesFor((f) => (f.mentions[0].occurrence = 1.5)).join()).toMatch(/whole number/);
+  });
+
+  it("fails a basis whose text equals the mention's own span, and an EDITOR_NOTE basis on the main layer", () => {
+    expect(
+      issuesFor((f) => {
+        f.spans.push({ ...f.spans[0], id: 'sp3' });
+        f.identifications[0].basis[0].span = 'sp3';
+      }).join(),
+    ).toMatch(/own span/);
+    expect(issuesFor((f) => (f.identifications[0].basis[0].role = 'EDITOR_NOTE')).join()).toMatch(
+      /notes-layer/,
+    );
+  });
+
+  it('fails a missing agent, a foreign report unit, a repeated span and a malformed value', () => {
+    expect(issuesFor((f) => (f.identifications[0].agent = ' ')).join()).toMatch(/no agent/);
+    expect(issuesFor((f) => (f.reports[0].unit = 'other')).join()).toMatch(/names unit/);
+    expect(issuesFor((f) => (f.statements[0].spans = ['sp1', 'sp1'])).join()).toMatch(
+      /repeats a span/,
+    );
+    expect(issuesFor((f) => (f.assertions[0].value = {} as never)).join()).toMatch(
+      /no spans or object/,
+    );
+    expect(
+      issuesFor((f) => (f.assertions[0].value = { parsed: NaN, spans: ['sp1'] })).join(),
+    ).toMatch(/not a number/);
+  });
+
+  it('fails an AUTHOR statement that opens with a transmission formula', () => {
+    expect(
+      issuesFor((f) => {
+        f.spans.push({
+          id: 'sp3',
+          edition: 'ed',
+          volume: 4,
+          page: '41',
+          layer: 'MAIN',
+          exact: 'وَرَوَى: اللَّيْثُ، عَنْ أَبِي الأَسْوَدِ',
+        });
+        f.statements[0].spans = ['sp3'];
+      }).join(),
+    ).toMatch(/transmission formula/);
   });
 });

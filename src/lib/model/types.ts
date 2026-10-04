@@ -35,6 +35,12 @@ export const predicates = [
   'is-sahabi',
 ] as const;
 
+export const mentionRoles = ['SPEAKER', 'NARRATOR', 'SUBJECT', 'REFERENT'] as const;
+export const chainStates = ['COMPLETE', 'DEFERRED'] as const;
+export const layers = ['MAIN', 'NOTES'] as const;
+export const identificationStatuses = ['PROPOSED', 'DISPUTED', 'REJECTED'] as const;
+export const assertionStatuses = ['LEGACY', 'PROPOSED', 'DISPUTED', 'REJECTED'] as const;
+
 export type Genre = (typeof genres)[number];
 export type Voice = (typeof voices)[number];
 export type StatementRole = (typeof statementRoles)[number];

@@ -24,7 +24,15 @@ export function loadModel(root: string): WorkFolder[] {
         ? readdirSync(unitsDir)
             .filter((name) => name.endsWith('.json'))
             .sort()
-            .map((name) => readJson<UnitFile>(join(unitsDir, name)))
+            .map((name) => ({
+              spans: [],
+              reports: [],
+              statements: [],
+              mentions: [],
+              identifications: [],
+              assertions: [],
+              ...readJson<Pick<UnitFile, 'unit'> & Partial<UnitFile>>(join(unitsDir, name)),
+            }))
         : [];
       return { work: readJson<Work>(join(base, 'work.json')), editions, witnesses, units };
     });
