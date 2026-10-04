@@ -30,7 +30,11 @@ const textFields = [
   ['placeOfDeathArabic', 'died.place'],
 ] as const;
 
-const same = (a: string, b: string) => matchForm(a) === matchForm(b);
+const sameSet = (a: string[], b: string[]) => {
+  const left = new Set(a.map(matchForm));
+  const right = new Set(b.map(matchForm));
+  return left.size === right.size && [...left].every((value) => right.has(value));
+};
 
 export function diffAgainstCatalog(entries: ProfileEntry[], catalog: CatalogLike) {
   const lines: DiffLine[] = [];
@@ -49,7 +53,7 @@ export function diffAgainstCatalog(entries: ProfileEntry[], catalog: CatalogLike
         ? 'catalog-only'
         : catalogValues.length === 0
           ? 'model-only'
-          : same(catalogText, modelText)
+          : sameSet(catalogValues, modelValues)
             ? 'same'
             : 'different';
     lines.push({ field, status, catalog: catalogText || undefined, model: modelText || undefined });
@@ -69,12 +73,13 @@ export function diffAgainstCatalog(entries: ProfileEntry[], catalog: CatalogLike
     take('virtue').map((e) => e.parts.join(' ')),
   );
 
-  const fathers = (catalog.relations ?? []).filter(
-    (r) => r.type === 'SON' && r.inverse === 'FATHER',
-  );
+  const isParent = (r: { type: string; inverse?: string }) =>
+    (r.type === 'SON' || r.type === 'DAUGHTER') &&
+    (r.inverse === 'FATHER' || r.inverse === 'MOTHER');
+  const relations = catalog.relations ?? [];
   line(
-    'father',
-    fathers.map((r) => r.to),
+    'parents',
+    relations.filter(isParent).map((r) => r.to),
     take('CHILD_OF').map((e) => e.object ?? `(${e.objectMention})`),
   );
 
@@ -84,6 +89,11 @@ export function diffAgainstCatalog(entries: ProfileEntry[], catalog: CatalogLike
       status: 'model-only',
       model: entry.parsed !== undefined ? String(entry.parsed) : entry.parts.join(' '),
     });
+  }
+  const others = relations.filter((r) => !isParent(r));
+  for (const type of new Set(others.map((r) => r.type))) {
+    const targets = others.filter((r) => r.type === type).map((r) => r.to);
+    lines.push({ field: `relation ${type}`, status: 'catalog-only', catalog: targets.join(' | ') });
   }
   for (const [field, list] of [
     ['titles', catalog.titles],
