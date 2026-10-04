@@ -52,20 +52,30 @@
       "exact": "أَسْلَمَ وَهُوَ حَدَثٌ، لَهُ سِتَّ عَشْرَةَ سَنَةً"
     },
     {
-      "id": "sp_urwa_frame",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 4,
-      "page": "41",
-      "layer": "MAIN",
-      "exact": "وَرَوَى: اللَّيْثُ، عَنْ أَبِي الأَسْوَدِ، عَنْ عُرْوَةَ، قَالَ:"
-    },
-    {
       "id": "sp_age8",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 4,
       "page": "41",
       "layer": "MAIN",
       "exact": "أَسْلَمَ الزُّبَيْرُ ابْنُ ثَمَانِ سِنِيْنَ"
+    },
+    {
+      "id": "sp_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "41",
+      "layer": "MAIN",
+      "exact": "وَرَوَى",
+      "suffix": ": اللَّيْثُ"
+    },
+    {
+      "id": "sp_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "41",
+      "layer": "MAIN",
+      "exact": "اللَّيْثُ، عَنْ أَبِي الأَسْوَدِ، عَنْ عُرْوَةَ",
+      "prefix": "وَرَوَى: "
     }
   ],
   "reports": [
@@ -88,33 +98,28 @@
       "origin": {
         "mention": "m_urwa"
       },
-      "chainState": "DEFERRED"
+      "chainState": "DEFERRED",
+      "frame": ["sp_frame"],
+      "isnadSpan": "sp_isnad"
     }
   ],
   "statements": [
     {
       "id": "st_name",
       "report": "r_zb0",
-      "spans": [
-        "sp_zb1",
-        "sp_zb2"
-      ],
+      "spans": ["sp_zb1", "sp_zb2"],
       "role": "AUTHOR_REPORT"
     },
     {
       "id": "st_age16",
       "report": "r_zb0",
-      "spans": [
-        "sp_age16"
-      ],
+      "spans": ["sp_age16"],
       "role": "AUTHOR_REPORT"
     },
     {
       "id": "st_age8",
       "report": "r_age8",
-      "spans": [
-        "sp_age8"
-      ],
+      "spans": ["sp_age8"],
       "role": "TRANSMITTED"
     }
   ],
@@ -142,7 +147,7 @@
     },
     {
       "id": "m_urwa",
-      "parent": "sp_urwa_frame",
+      "parent": "sp_isnad",
       "exact": "عُرْوَةَ",
       "occurrence": 1,
       "role": "SPEAKER"
@@ -192,14 +197,9 @@
       "subject": "m_zb",
       "predicate": "name.full",
       "value": {
-        "spans": [
-          "sp_zb1",
-          "sp_zb2"
-        ]
+        "spans": ["sp_zb1", "sp_zb2"]
       },
-      "restsOn": [
-        "st_name"
-      ],
+      "restsOn": ["st_name"],
       "status": "PROPOSED"
     },
     {
@@ -209,9 +209,7 @@
       "value": {
         "object": "m_awwam"
       },
-      "restsOn": [
-        "st_name"
-      ],
+      "restsOn": ["st_name"],
       "status": "PROPOSED"
     },
     {
@@ -220,13 +218,9 @@
       "predicate": "islam.age",
       "value": {
         "parsed": 16,
-        "spans": [
-          "sp_age16"
-        ]
+        "spans": ["sp_age16"]
       },
-      "restsOn": [
-        "st_age16"
-      ],
+      "restsOn": ["st_age16"],
       "status": "PROPOSED"
     },
     {
@@ -235,13 +229,9 @@
       "predicate": "islam.age",
       "value": {
         "parsed": 8,
-        "spans": [
-          "sp_age8"
-        ]
+        "spans": ["sp_age8"]
       },
-      "restsOn": [
-        "st_age8"
-      ],
+      "restsOn": ["st_age8"],
       "status": "PROPOSED"
     }
   ]
