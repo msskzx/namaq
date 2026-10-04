@@ -4,7 +4,7 @@
     "work": "test-fath",
     "type": "commentary",
     "numbers": {
-      "printed": "114"
+      "fath-al-bari": "50"
     }
   },
   "spans": [
@@ -39,7 +39,7 @@
       "unit": "fath-iman-50",
       "ordinal": 1,
       "voice": "AUTHOR",
-      "voiceBasis": "sp_heading",
+      "voiceBasis": "sp_note",
       "origin": {
         "workAuthor": true
       },

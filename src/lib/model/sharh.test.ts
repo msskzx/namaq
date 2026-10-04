@@ -57,6 +57,24 @@ describe('sharh link checks', () => {
     );
   });
 
+  it('fails a link to a unit that is not a hadith, and two links to the same hadith', () => {
+    expect(
+      issues(
+        (m) => (m.file.unit.type = 'hadith') && (m.file.sharhLinks![0].explains = 'fath-iman-50'),
+      ),
+    ).toMatch(/explain itself/);
+    expect(
+      issues((m) => {
+        const other = m.folders.find((f) => f.work.slug === 'test-muslim')!.units[0];
+        other.unit.type = 'commentary';
+        m.file.sharhLinks![0].explains = other.unit.id;
+      }),
+    ).toMatch(/is a commentary, not a hadith/);
+    expect(
+      issues((m) => m.file.sharhLinks!.push({ ...m.file.sharhLinks![0], id: 'sl_again' })),
+    ).toMatch(/more than one link to bukhari-jibril/);
+  });
+
   it('fails a duplicate id between a link and another record', () => {
     expect(issues((m) => (m.file.sharhLinks![0].id = 'sp_note'))).toMatch(/duplicate id sp_note/);
   });
