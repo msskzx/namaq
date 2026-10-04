@@ -9,16 +9,13 @@ How to resume: read [plan.md](plan.md) and [owner-goals.md](owner-goals.md), the
 - The al-Zubayr entry authored under `data/works/siyar-alam-al-nubala/` ([#315](https://github.com/msskzx/namaq/pull/315)), guarded by `src/lib/model/data.test.ts`.
 - `profilesFromModel` (`src/lib/model/profile.ts`, [#316](https://github.com/msskzx/namaq/pull/316)): a profile built only from span-rendered assertions.
 - Scenes and turns with `model:check` rules ([#317](https://github.com/msskzx/namaq/pull/317)), and the hadith of Jibril in Bukhari and Muslim as hand-checked test fixtures under `src/lib/model/fixtures/jibril/` (test data, not a source).
-
-## In review
-
-- `model:diff` (`src/lib/model/diff.ts`): the old-versus-new report for one person against `data/catalog/people`, listing same, different, catalog-only and model-only values.
-- Inference records (`src/lib/model/inference.ts`): `data/inferences/<id>.json` with a passage, a closed derived value and premises; `model:check` validates them; `applyApprovedInferences` sets a turn speaker only from an APPROVED inference and marks it `derivedBy`. The approval itself is the owner's merge; the CI rule that enforces it is in the list below.
-- Review records, revisions and the reviewed-only set for prod (`src/lib/model/review.ts`): a revision hashes an assertion's whole closure and the rendered text of its spans; an edit lapses the review; `selectForProd` keeps only reviewed assertions with their closure; `npm run model:check` reports lapsed reviews.
+- Review records, revisions and the reviewed-only set for prod (`src/lib/model/review.ts`, [#318](https://github.com/msskzx/namaq/pull/318)): a revision hashes an assertion's closure (including the work, unit, edition, witness and any approved inference) and the rendered text of its spans; an edit lapses the review; `selectForProd` keeps only reviewed assertions with their closure; `npm run model:check` reports lapsed reviews.
+- Inference records (`src/lib/model/inference.ts`, [#319](https://github.com/msskzx/namaq/pull/319)): `data/inferences/<id>.json`; `model:check` validates them; `applyApprovedInferences` sets a turn speaker only from an APPROVED inference and marks it `derivedBy`.
+- `npm run model:diff -- <slug>` ([#320](https://github.com/msskzx/namaq/pull/320)): the old-versus-new report against `data/catalog/people`.
 
 ## Next, in order
 
-1. The **owner** reads `npm run model:diff -- az-zubayr-ibn-al-awwam` (built, in review) and decides what the pilot must still cover: the catalog holds kunya, appearance, death, virtues, titles and verses that the model does not yet, and its joined full name drops `ابْنِ` where the book prints it.
+1. The **owner** reads `npm run model:diff -- az-zubayr-ibn-al-awwam` and decides what the pilot must still cover: the catalog holds kunya, appearance, death, virtues, titles and verses that the model does not yet, and its joined full name drops `ابْنِ` where the book prints it.
 2. Prisma tables and a projection of the model to PostgreSQL and Neo4j (migration prepared; applying it to the preview database waits for the **owner**).
 3. The profile page and a conversation view reading the model, and the review surface.
 4. CI and `CODEOWNERS` rules so only a scholar changes `data/reviews/` and only the owner changes `data/inferences/` (a review file is authored, so without this an agent could forge one). Needs the **owner** to set up on GitHub.
