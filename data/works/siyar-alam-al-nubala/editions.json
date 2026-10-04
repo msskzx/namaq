@@ -1,0 +1,20 @@
+{
+  "editions": [
+    {
+      "slug": "siyar-risalah-1405-arnaut",
+      "work": "siyar-alam-al-nubala",
+      "publisher": "muassasat-al-risalah",
+      "editors": ["husayn-al-asad", "shuayb-al-arnaut"],
+      "printing": "third-1405-1985"
+    }
+  ],
+  "witnesses": [
+    {
+      "slug": "siyar-alam-al-nubala-risalah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "vowelled": true,
+      "hasFootnotes": true,
+      "checkedAgainstPrint": false
+    }
+  ]
+}

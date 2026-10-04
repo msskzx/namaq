@@ -1,0 +1,248 @@
+{
+  "unit": {
+    "id": "siyar-v4-3-az-zubayr",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٣"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_zb1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "41",
+      "layer": "MAIN",
+      "exact": "الزُّبَيْرُ بنُ العَوَّامِ بنِ خُوَيْلِدِ بنِ أَسَدِ بنِ عَبْدِ العُزَّى",
+      "prefix": "٣ - "
+    },
+    {
+      "id": "sp_zb_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "41",
+      "layer": "MAIN",
+      "exact": "٣ - الزُّبَيْرُ بنُ العَوَّامِ"
+    },
+    {
+      "id": "sp_zb_nasab_tail",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "41",
+      "layer": "MAIN",
+      "exact": "بنِ خُوَيْلِدِ بنِ أَسَدِ بنِ عَبْدِ العُزَّى",
+      "prefix": "العَوَّامِ "
+    },
+    {
+      "id": "sp_zb2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "41",
+      "layer": "MAIN",
+      "exact": "ابْنِ قُصَيِّ بنِ كِلاَبِ بنِ مُرَّةَ بنِ كَعْبِ بنِ لُؤَيِّ بنِ غَالِبٍ",
+      "prefix": "* (ع) "
+    },
+    {
+      "id": "sp_age16",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "41",
+      "layer": "MAIN",
+      "exact": "أَسْلَمَ وَهُوَ حَدَثٌ، لَهُ سِتَّ عَشْرَةَ سَنَةً"
+    },
+    {
+      "id": "sp_urwa_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "41",
+      "layer": "MAIN",
+      "exact": "وَرَوَى: اللَّيْثُ، عَنْ أَبِي الأَسْوَدِ، عَنْ عُرْوَةَ، قَالَ:"
+    },
+    {
+      "id": "sp_age8",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "41",
+      "layer": "MAIN",
+      "exact": "أَسْلَمَ الزُّبَيْرُ ابْنُ ثَمَانِ سِنِيْنَ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_zb0",
+      "unit": "siyar-v4-3-az-zubayr",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_zb_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_age8",
+      "unit": "siyar-v4-3-az-zubayr",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "origin": {
+        "mention": "m_urwa"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_name",
+      "report": "r_zb0",
+      "spans": [
+        "sp_zb1",
+        "sp_zb2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_age16",
+      "report": "r_zb0",
+      "spans": [
+        "sp_age16"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_age8",
+      "report": "r_age8",
+      "spans": [
+        "sp_age8"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_zb",
+      "parent": "sp_zb1",
+      "exact": "الزُّبَيْرُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_awwam",
+      "parent": "sp_zb1",
+      "exact": "العَوَّامِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_zb2",
+      "parent": "sp_age8",
+      "exact": "الزُّبَيْرُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_urwa",
+      "parent": "sp_urwa_frame",
+      "exact": "عُرْوَةَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_zb",
+      "mention": "m_zb",
+      "agent": "az-zubayr-ibn-al-awwam",
+      "basis": [
+        {
+          "span": "sp_zb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zb2",
+      "mention": "m_zb2",
+      "agent": "az-zubayr-ibn-al-awwam",
+      "basis": [
+        {
+          "span": "sp_zb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_awwam",
+      "mention": "m_awwam",
+      "agent": "al-awwam-ibn-khuwaylid",
+      "basis": [
+        {
+          "span": "sp_zb_nasab_tail",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_name",
+      "subject": "m_zb",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_zb1",
+          "sp_zb2"
+        ]
+      },
+      "restsOn": [
+        "st_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_child",
+      "subject": "m_zb",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_awwam"
+      },
+      "restsOn": [
+        "st_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_age16",
+      "subject": "m_zb",
+      "predicate": "islam.age",
+      "value": {
+        "parsed": 16,
+        "spans": [
+          "sp_age16"
+        ]
+      },
+      "restsOn": [
+        "st_age16"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_age8",
+      "subject": "m_zb2",
+      "predicate": "islam.age",
+      "value": {
+        "parsed": 8,
+        "spans": [
+          "sp_age8"
+        ]
+      },
+      "restsOn": [
+        "st_age8"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
