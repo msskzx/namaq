@@ -8,8 +8,11 @@ Every value the app shows is an Assertion that rests on at least one Statement.
 A Statement is one wording of a Report, made of spans, and the Report records who
 said it: the work's author, a transmitter, an editor, or an unnamed group
 (`REPORTED_ANONYMOUS`). A person named in the text is a Mention, tied to an Agent
-only by an Identification that cites a basis span other than the mention itself.
-A name with no basis stays text and never becomes a graph node. Competing values
+only by an Identification that cites a basis span other than the mention itself,
+where a name could belong to more than one person. A referent the whole tradition
+agrees on, the Messenger of Allah and the Prophet, is `prophet-muhammad` through a
+standing rule and needs no per-mention basis, since there is nothing to guess. A
+name with no basis stays text and never becomes a graph node. Competing values
 are competing Assertions, all shown; Namaq never picks one.
 
 Inference is not our own addition. A value exactly in the text is recorded as it

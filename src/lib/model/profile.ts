@@ -1,5 +1,6 @@
 // docs/plans/data-model/plan.md, sections 2.7 and 2.14
 import { joinName } from './name';
+import { standingAgent } from './referents';
 import { renderSpanRecord } from './render';
 import type { Identification, Predicate, WorkFolder } from './types';
 
@@ -39,9 +40,17 @@ export function profilesFromModel(folders: WorkFolder[], root: string) {
           identification,
         ]);
       }
+      const mentionText = new Map(file.mentions.map((m) => [m.id, m.exact]));
+      const identify = (mention: string): Identification[] => {
+        const found = identified.get(mention);
+        if (found) return found;
+        const agent = standingAgent(mentionText.get(mention) ?? '');
+        return agent
+          ? [{ id: `standing:${mention}`, mention, agent, basis: [], status: 'PROPOSED' }]
+          : [];
+      };
       const statements = new Map(file.statements.map((s) => [s.id, s]));
       const reports = new Map(file.reports.map((r) => [r.id, r]));
-      const mentionText = new Map(file.mentions.map((m) => [m.id, m.exact]));
       const originOf = (statementId: string): Origin | undefined => {
         const report = reports.get(statements.get(statementId)?.report ?? '');
         if (!report) return undefined;
@@ -57,8 +66,8 @@ export function profilesFromModel(folders: WorkFolder[], root: string) {
         const origins = assertion.restsOn
           .map(originOf)
           .filter((origin): origin is Origin => origin !== undefined);
-        const objects = 'object' in value ? (identified.get(value.object) ?? []) : [];
-        for (const subject of identified.get(assertion.subject) ?? []) {
+        const objects = 'object' in value ? identify(value.object) : [];
+        for (const subject of identify(assertion.subject)) {
           const parts = spanIds.map(textOf);
           const entry: ProfileEntry = {
             assertionId: assertion.id,
