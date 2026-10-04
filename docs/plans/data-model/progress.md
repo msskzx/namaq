@@ -17,6 +17,8 @@ How to resume: read [plan.md](plan.md) and [owner-goals.md](owner-goals.md), the
 
 Authored from the batch's exact citations, all `PROPOSED`: full name, sex (read from `بنُ` in the heading), kunya, three titles, both parents, the wife, the author's first-to-draw-the-sword virtue, both appearance reports (the author's, and Urwa's), the death year (as Bukhari and others say it), both ages at Islam, five battles stated in the text (Badr twice, Yarmuk, the Trench, the conquest of Makkah, each with who reports it), and the cousin relation in the Prophet's own words (a `PATERNAL_COUSIN` predicate, added for it). `npm run model:diff -- az-zubayr-ibn-al-awwam` lists the rest.
 
+Measured on the pilot (one companion, volume 4 pages 41 to 64): 38 spans, 10 reports, 13 statements, 25 mentions, 13 identifications and 21 assertions; 20 KB of JSON; about 131 bytes of rendered text per span (4,966 in all); `model:check` takes about 10 ms and loading under 1 ms. Owner minutes per decision are not measured yet; they need the owner's review of the diff and of the voice, origin and identification choices.
+
 Open points, each for the **owner**:
 
 - The Prophet in the cousin report is identified as `prophet-muhammad` through the author's own sentence about the Messenger of Allah's paternal aunt, Safiyyah bint Abd al-Muttalib (`SAME_WORK_EXPLICIT`, page 41). The entry never writes his name. Confirm that this is an acceptable basis, or decide the Prophet gets an Agent with a standing basis for every entry.
