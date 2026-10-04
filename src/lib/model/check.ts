@@ -1,5 +1,6 @@
 // docs/plans/data-model/plan.md, sections 2.3 to 2.7
 import { locateSpanRecord } from './render';
+import { modeKeyOf } from './modes';
 import { HARAKAT, matchForm } from './span';
 import {
   assertionStatuses,
@@ -12,6 +13,7 @@ import {
   predicates,
   statementRoles,
   voices,
+  type Chain,
   type StatementRole,
   type UnitFile,
   type Voice,
@@ -96,6 +98,14 @@ function checkUnit(folder: WorkFolder, file: UnitFile, root: string, issues: str
     }
   }
 
+  const within = (inner: string, outers: string[]) => {
+    const a = placed.get(inner);
+    return outers.some((id) => {
+      const b = placed.get(id);
+      return a && b && a.key === b.key && a.start >= b.start && a.end <= b.end;
+    });
+  };
+
   for (const report of file.reports) {
     const owner = `report ${report.id}`;
     oneOf(`${owner} voice`, report.voice, voices);
@@ -112,6 +122,91 @@ function checkUnit(folder: WorkFolder, file: UnitFile, root: string, issues: str
     }
     if ('mention' in report.origin && !mentionIds.has(report.origin.mention)) {
       fail(`${owner}: unknown origin mention ${report.origin.mention}`);
+    }
+    if (report.voice === 'TRANSMITTED' && report.chainState === 'COMPLETE' && !report.chain) {
+      fail(`${owner}: a COMPLETE transmitted report needs a chain`);
+    }
+    if (report.chainState === 'DEFERRED' && report.chain) {
+      fail(`${owner}: a DEFERRED report has no chain yet`);
+    }
+    if (report.chain) {
+      const chainOwner = `${owner} chain`;
+      if (report.voice !== 'TRANSMITTED')
+        fail(`${chainOwner}: only a TRANSMITTED report has a chain`);
+      if (!report.isnadSpan) fail(`${chainOwner}: a chain needs the report's isnadSpan`);
+      const inIsnad = (id: string) =>
+        !report.isnadSpan || !placed.has(id) || within(id, [report.isnadSpan]);
+      const position = (mentionId: string): [number, number] | undefined => {
+        const mention = file.mentions.find((m) => m.id === mentionId);
+        const at = mention && placed.get(mention.parent);
+        const text = mention && rendered.get(mention.parent);
+        if (!mention || !at || text === undefined) return undefined;
+        const needle = matchForm(mention.exact);
+        let index = -1;
+        for (let n = 0; n < mention.occurrence; n += 1) index = text.indexOf(needle, index + 1);
+        return [at.start, index];
+      };
+      const ascending = (a: [number, number], b: [number, number]) =>
+        a[0] < b[0] || (a[0] === b[0] && a[1] < b[1]);
+      const walk = (chain: Chain) => {
+        const branches = chain.branches ?? [];
+        if (chain.elements.length === 0 && branches.length < 2) {
+          fail(`${chainOwner}: a chain needs links, or two branches`);
+        }
+        if (branches.length > 0 && (chain.tahwil ?? []).length === 0) {
+          fail(`${chainOwner}: branches need the tahwil span that marks them`);
+        }
+        for (const id of chain.tahwil ?? []) {
+          needSpan(chainOwner, id);
+          if (!inIsnad(id)) fail(`${chainOwner}: span ${id} is outside the isnad`);
+        }
+        const seen = new Set<string>();
+        let lastNarrator: [number, number] | undefined;
+        let lastMode: number | undefined;
+        for (const element of chain.elements) {
+          if ('kind' in element) {
+            for (const id of element.marker ?? []) needSpan(chainOwner, id);
+            continue;
+          }
+          if (!mentionIds.has(element.narrator)) {
+            fail(`${chainOwner}: unknown narrator ${element.narrator}`);
+          } else {
+            if (seen.has(element.narrator))
+              fail(`${chainOwner}: ${element.narrator} appears twice in one route`);
+            seen.add(element.narrator);
+            const parent = file.mentions.find((m) => m.id === element.narrator)!.parent;
+            if (placed.has(parent) && report.isnadSpan && !within(parent, [report.isnadSpan])) {
+              fail(`${chainOwner}: narrator ${element.narrator} is named outside the isnad`);
+            }
+            const now = position(element.narrator);
+            if (now && lastNarrator && !ascending(lastNarrator, now)) {
+              fail(`${chainOwner}: narrator ${element.narrator} is out of reading order`);
+            }
+            lastNarrator = now ?? lastNarrator;
+          }
+          if (element.mode.length === 0) fail(`${chainOwner}: a link has no mode span`);
+          for (const id of element.mode) {
+            needSpan(chainOwner, id);
+            if (!inIsnad(id)) fail(`${chainOwner}: span ${id} is outside the isnad`);
+          }
+          const modeStart = placed.get(element.mode[0] ?? '')?.start;
+          if (modeStart !== undefined && lastMode !== undefined && modeStart <= lastMode) {
+            fail(`${chainOwner}: the formula of ${element.narrator} is out of reading order`);
+          }
+          lastMode = modeStart ?? lastMode;
+          const printed = element.mode.map((id) => rendered.get(id) ?? '').join(' ');
+          const key = modeKeyOf(printed);
+          if (key === undefined) {
+            fail(`${chainOwner}: no mode key for the printed formula "${printed}"`);
+          } else if (key !== element.modeKey) {
+            fail(
+              `${chainOwner}: mode key ${element.modeKey} does not match the printed "${printed}" (${key})`,
+            );
+          }
+        }
+        for (const branch of branches) walk(branch);
+      };
+      walk(report.chain);
     }
   }
 
@@ -132,13 +227,6 @@ function checkUnit(folder: WorkFolder, file: UnitFile, root: string, issues: str
     }
   }
 
-  const within = (inner: string, outers: string[]) => {
-    const a = placed.get(inner);
-    return outers.some((id) => {
-      const b = placed.get(id);
-      return a && b && a.key === b.key && a.start >= b.start && a.end <= b.end;
-    });
-  };
   for (const report of file.reports) {
     const turnById = new Map<string, { spans: string[]; scene: number }>();
     const sceneOrdinals = (report.scenes ?? []).map((scene) => scene.ordinal);

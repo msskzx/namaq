@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import type { Inference } from './inference';
 import { standingAgent } from './referents';
 import { renderSpanRecord } from './render';
-import type { Assertion, UnitFile, WorkFolder } from './types';
+import type { Assertion, Chain, UnitFile, WorkFolder } from './types';
 
 export const reviewsRoot = 'data/reviews';
 
@@ -39,6 +39,23 @@ function stable(value: unknown): string {
 
 const sha = (text: string) => createHash('sha256').update(text).digest('hex');
 
+function chainParts(chain: Chain): { spans: string[]; mentions: string[] } {
+  const own = chain.elements.map((element) =>
+    'kind' in element
+      ? { spans: element.marker ?? [], mentions: [] }
+      : { spans: element.mode, mentions: [element.narrator] },
+  );
+  const inner = (chain.branches ?? []).map(chainParts);
+  return {
+    spans: [
+      ...(chain.tahwil ?? []),
+      ...own.flatMap((o) => o.spans),
+      ...inner.flatMap((i) => i.spans),
+    ],
+    mentions: [...own.flatMap((o) => o.mentions), ...inner.flatMap((i) => i.mentions)],
+  };
+}
+
 export function closureOf(file: UnitFile, assertion: Assertion, inferences: Inference[] = []) {
   const statements = file.statements.filter((s) => assertion.restsOn.includes(s.id));
   const reports = file.reports.filter((r) => statements.some((s) => s.report === r.id));
@@ -53,6 +70,11 @@ export function closureOf(file: UnitFile, assertion: Assertion, inferences: Infe
   for (const report of reports) {
     spans([report.voiceBasis, report.isnadSpan, ...(report.frame ?? [])]);
     if ('mention' in report.origin) mentions([report.origin.mention]);
+    if (report.chain) {
+      const parts = chainParts(report.chain);
+      spans(parts.spans);
+      mentions(parts.mentions);
+    }
     for (const turn of (report.scenes ?? []).flatMap((scene) => scene.turns)) {
       spans(turn.spans);
       mentions([turn.speaker, turn.addressee]);

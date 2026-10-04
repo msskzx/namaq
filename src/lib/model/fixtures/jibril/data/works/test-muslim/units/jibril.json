@@ -25,6 +25,109 @@
       "exact": "فَقَالَ رَسُولُ اللَّهِ"
     },
     {
+      "id": "sp_tahwil",
+      "edition": "test-muslim-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "ح",
+      "prefix": "يَعْمَرَ، ",
+      "suffix": " وَحَدَّثَنَا"
+    },
+    {
+      "id": "sp_a1",
+      "edition": "test-muslim-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "حَدَّثَنِي",
+      "suffix": " أَبُو خَيْثَمَةَ"
+    },
+    {
+      "id": "sp_a2",
+      "edition": "test-muslim-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "حَدَّثَنَا",
+      "suffix": " وَكِيعٌ"
+    },
+    {
+      "id": "sp_a3",
+      "edition": "test-muslim-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "عَنْ",
+      "suffix": " كَهْمَسٍ"
+    },
+    {
+      "id": "sp_a4",
+      "edition": "test-muslim-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "عَنْ",
+      "prefix": "وَكِيعٌ، عَنْ كَهْمَسٍ، ",
+      "suffix": " عَبْدِ اللَّهِ"
+    },
+    {
+      "id": "sp_a5",
+      "edition": "test-muslim-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "عَنْ",
+      "prefix": "اللَّهِ بْنِ بُرَيْدَةَ، ",
+      "suffix": " يَحْيَى"
+    },
+    {
+      "id": "sp_b1",
+      "edition": "test-muslim-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "حَدَّثَنَا",
+      "suffix": " عُبَيْدُ اللَّهِ"
+    },
+    {
+      "id": "sp_b2",
+      "edition": "test-muslim-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "حَدَّثَنَا",
+      "suffix": " أَبِي"
+    },
+    {
+      "id": "sp_b3",
+      "edition": "test-muslim-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "حَدَّثَنَا",
+      "suffix": " كَهْمَسٌ"
+    },
+    {
+      "id": "sp_b4",
+      "edition": "test-muslim-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "عَنِ",
+      "suffix": " ابْنِ بُرَيْدَةَ"
+    },
+    {
+      "id": "sp_b5",
+      "edition": "test-muslim-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "عَنْ",
+      "prefix": "ابْنِ بُرَيْدَةَ، ",
+      "suffix": " يَحْيَى"
+    },
+    {
       "id": "sp_story",
       "edition": "test-muslim-edition",
       "volume": 1,
@@ -107,7 +210,71 @@
       "origin": {
         "mention": "m_yahya"
       },
-      "chainState": "DEFERRED",
+      "chainState": "COMPLETE",
+      "chain": {
+        "elements": [],
+        "tahwil": ["sp_tahwil"],
+        "branches": [
+          {
+            "elements": [
+              {
+                "narrator": "m_a1",
+                "mode": ["sp_a1"],
+                "modeKey": "haddatha/1sg"
+              },
+              {
+                "narrator": "m_a2",
+                "mode": ["sp_a2"],
+                "modeKey": "haddatha/1pl"
+              },
+              {
+                "narrator": "m_a3",
+                "mode": ["sp_a3"],
+                "modeKey": "an"
+              },
+              {
+                "narrator": "m_a4",
+                "mode": ["sp_a4"],
+                "modeKey": "an"
+              },
+              {
+                "narrator": "m_yahya_a",
+                "mode": ["sp_a5"],
+                "modeKey": "an"
+              }
+            ]
+          },
+          {
+            "elements": [
+              {
+                "narrator": "m_b1",
+                "mode": ["sp_b1"],
+                "modeKey": "haddatha/1pl"
+              },
+              {
+                "narrator": "m_b2",
+                "mode": ["sp_b2"],
+                "modeKey": "haddatha/1pl"
+              },
+              {
+                "narrator": "m_b3",
+                "mode": ["sp_b3"],
+                "modeKey": "haddatha/1pl"
+              },
+              {
+                "narrator": "m_b4",
+                "mode": ["sp_b4"],
+                "modeKey": "an"
+              },
+              {
+                "narrator": "m_yahya",
+                "mode": ["sp_b5"],
+                "modeKey": "an"
+              }
+            ]
+          }
+        ]
+      },
       "scenes": [
         {
           "ordinal": 1,
@@ -175,6 +342,69 @@
       "parent": "sp_isnad",
       "exact": "يَحْيَى بْنِ يَعْمَرَ",
       "occurrence": 2,
+      "role": "NARRATOR"
+    },
+    {
+      "id": "m_yahya_a",
+      "parent": "sp_isnad",
+      "exact": "يَحْيَى بْنِ يَعْمَرَ",
+      "occurrence": 1,
+      "role": "NARRATOR"
+    },
+    {
+      "id": "m_a1",
+      "parent": "sp_isnad",
+      "exact": "أَبُو خَيْثَمَةَ",
+      "occurrence": 1,
+      "role": "NARRATOR"
+    },
+    {
+      "id": "m_a2",
+      "parent": "sp_isnad",
+      "exact": "وَكِيعٌ",
+      "occurrence": 1,
+      "role": "NARRATOR"
+    },
+    {
+      "id": "m_a3",
+      "parent": "sp_isnad",
+      "exact": "كَهْمَسٍ",
+      "occurrence": 1,
+      "role": "NARRATOR"
+    },
+    {
+      "id": "m_a4",
+      "parent": "sp_isnad",
+      "exact": "عَبْدِ اللَّهِ بْنِ بُرَيْدَةَ",
+      "occurrence": 1,
+      "role": "NARRATOR"
+    },
+    {
+      "id": "m_b1",
+      "parent": "sp_isnad",
+      "exact": "عُبَيْدُ اللَّهِ بْنُ مُعَاذٍ الْعَنْبَرِيُّ",
+      "occurrence": 1,
+      "role": "NARRATOR"
+    },
+    {
+      "id": "m_b2",
+      "parent": "sp_isnad",
+      "exact": "أَبِي",
+      "occurrence": 1,
+      "role": "NARRATOR"
+    },
+    {
+      "id": "m_b3",
+      "parent": "sp_isnad",
+      "exact": "كَهْمَسٌ",
+      "occurrence": 1,
+      "role": "NARRATOR"
+    },
+    {
+      "id": "m_b4",
+      "parent": "sp_isnad",
+      "exact": "ابْنِ بُرَيْدَةَ",
+      "occurrence": 1,
       "role": "NARRATOR"
     },
     {
