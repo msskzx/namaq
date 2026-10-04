@@ -15,7 +15,8 @@ describe('matchForm', () => {
 });
 
 describe('resolveSpan', () => {
-  const body = 'قَالَ فُلَانٌ كَذَا وَكَذَا (١) وَقَالَ فُلَانٌ كَذَا وَكَذَا.\n\nثُمَّ ذَهَبَ إِلَى الْمَدِينَةِ.';
+  const body =
+    'قَالَ فُلَانٌ كَذَا وَكَذَا (١) وَقَالَ فُلَانٌ كَذَا وَكَذَا.\n\nثُمَّ ذَهَبَ إِلَى الْمَدِينَةِ.';
 
   it('rejects a quote that occurs twice', () => {
     expect(() => resolveSpan(body, { exact: 'قَالَ فُلَانٌ كَذَا وَكَذَا' })).toThrow(/2 times/);
@@ -49,7 +50,8 @@ describe('resolveSpan edges', () => {
   });
 
   it('uses a suffix to choose between repeats', () => {
-    const body = 'قَالَ فُلَانٌ كَذَا وَكَذَا ثُمَّ سَكَتَ. قَالَ فُلَانٌ كَذَا وَكَذَا ثُمَّ ذَهَبَ.';
+    const body =
+      'قَالَ فُلَانٌ كَذَا وَكَذَا ثُمَّ سَكَتَ. قَالَ فُلَانٌ كَذَا وَكَذَا ثُمَّ ذَهَبَ.';
     const span = { exact: 'قَالَ فُلَانٌ كَذَا وَكَذَا', suffix: 'ثُمَّ ذَهَبَ' };
     expect(resolveSpan(body, span).start).toBeGreaterThan(body.indexOf('سَكَتَ'));
   });

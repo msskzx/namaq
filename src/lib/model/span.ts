@@ -7,6 +7,7 @@ export interface Span {
 
 const FOOTNOTE = /\(\s*[٠-٩0-9]+\s*\)/g;
 const MIN_EXACT = 12;
+export const HARAKAT = /[\u064B-\u0652\u0670]/g;
 const NOT_LETTER = /[^\p{L}]/gu;
 
 function fold(text: string) {

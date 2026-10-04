@@ -28,6 +28,7 @@
     "events:validate": "tsx scripts/events/syncCanonicalEvents.ts --strict",
     "graph:layout": "tsx scripts/graph/computeGraphLayout.ts",
     "graph:layout:validate": "tsx scripts/graph/computeGraphLayout.ts --strict",
+    "model:check": "tsx scripts/model/check.ts",
     "history:validate": "tsx scripts/history/validateBatch.ts",
     "history:import": "tsx scripts/history/importBatch.ts",
     "history:review": "tsx scripts/history/reviewBatch.ts",
