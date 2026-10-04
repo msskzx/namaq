@@ -20,4 +20,11 @@ describe('modeKeyOf', () => {
     expect(modeKeyOf('وَقَدْ رَوَى')).toBeUndefined();
     expect(modeKeyOf('')).toBeUndefined();
   });
+
+  it("has the multi-word formulas of the plan's list", () => {
+    expect(modeKeyOf('قَالَ لِي')).toBe('qala-li');
+    expect(modeKeyOf('بَلَغَنِي')).toBe('balagha/1sg');
+    expect(modeKeyOf('قَرَأْتُ عَلَى')).toBe("qara'tu-ala");
+    expect(modeKeyOf('وَجَدْتُ')).toBe('wijadah');
+  });
 });
