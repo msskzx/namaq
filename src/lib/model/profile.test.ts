@@ -117,4 +117,21 @@ describe('profilesFromModel on the al-Zubayr entry', () => {
     expect(cousin.object).toBe('prophet-muhammad');
     expect(cousin.objectMention).toBe('رَسُوْلُ اللهِ');
   });
+
+  it('lets a recorded identification override the standing rule for the Prophet, even a rejected one', () => {
+    const folders = loadModel('.');
+    const file = folders[0].units[0];
+    file.identifications.push({
+      id: 'i_not_him',
+      mention: 'm_prophet2',
+      agent: 'prophet-muhammad',
+      basis: [{ span: 'sp_zb_heading', role: 'SAME_WORK_EXPLICIT' }],
+      status: 'REJECTED',
+    });
+    const cousin = profilesFromModel(folders, '.')
+      .get('az-zubayr-ibn-al-awwam')
+      ?.find((e) => e.predicate === 'PATERNAL_COUSIN');
+    expect(cousin?.object).toBeUndefined();
+    expect(cousin?.objectMention).toBe('رَسُوْلُ اللهِ');
+  });
 });

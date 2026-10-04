@@ -104,4 +104,24 @@ describe('conversationOf (the hadith of Jibril fixtures)', () => {
     b.file.reports[0].scenes![0].turns[0].spans = ['nope'];
     expect(() => conversationOf(b.folder, b.file, 'r_hadith', ROOT)).toThrow(/unknown span/);
   });
+
+  it('resolves the Prophet as a speaker by the standing rule, with no identification record', () => {
+    const { folder, file } = muslim();
+    expect(file.identifications.some((i) => i.mention === 'm_prophet')).toBe(false);
+    const s2 = conversationOf(folder, file, 'r_hadith', ROOT).scenes[1].turns[1];
+    expect(s2.speaker?.agents).toEqual([{ agent: 'prophet-muhammad', status: 'PROPOSED' }]);
+  });
+
+  it('does not apply the standing rule to a mention that has a rejected identification', () => {
+    const { folder, file } = muslim();
+    file.identifications.push({
+      id: 'i_other',
+      mention: 'm_prophet',
+      agent: 'prophet-muhammad',
+      basis: [{ span: 'sp_s4', role: 'SAME_WORK_EXPLICIT' }],
+      status: 'REJECTED',
+    });
+    const s2 = conversationOf(folder, file, 'r_hadith', ROOT).scenes[1].turns[1];
+    expect(s2.speaker?.agents).toEqual([]);
+  });
 });

@@ -23,7 +23,7 @@ Measured on the pilot (one companion, volume 4 pages 41 to 64): 38 spans, 10 rep
 
 Open points, each for the **owner**:
 
-- The Prophet in the cousin report is identified as `prophet-muhammad` through the author's own sentence about the Messenger of Allah's paternal aunt, Safiyyah bint Abd al-Muttalib (`SAME_WORK_EXPLICIT`, page 41). The entry never writes his name. Confirm that this is an acceptable basis, or decide the Prophet gets an Agent with a standing basis for every entry.
+- The Messenger of Allah and the Prophet are identified as `prophet-muhammad` by a standing rule (`src/lib/model/referents.ts`, decided by the owner): the name has one referent, so no per-mention basis is needed.
 - The five battles and the Prophet's own mentions elsewhere are not identified as Agents: events and the Prophet need a basis span the entry does not give, so the diff lists the battles as model-only.
 - Place of death: the page says he was buried at Wadi al-Siba', not that he died there.
 - Companion of the Prophet: the text has his own words, "I did not leave him since I became Muslim"; the tie follows from them.

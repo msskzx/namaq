@@ -1,4 +1,5 @@
 // docs/plans/data-model/plan.md, sections 2.5a, 2.6 and 2.14
+import { standingAgent } from './referents';
 import { renderSpanRecord } from './render';
 import type { Identification, UnitFile, WorkFolder } from './types';
 
@@ -42,10 +43,14 @@ export function conversationOf(
     if (text === undefined) throw new Error(`${file.unit.id}: unknown mention ${id}`);
     return text;
   };
-  const candidates = (mention: string) =>
-    file.identifications
+  const candidates = (mention: string) => {
+    const found = file.identifications
       .filter((i) => i.mention === mention && i.status !== 'REJECTED')
       .map((i) => ({ agent: i.agent, status: i.status }));
+    const standing = standingAgent(mentions.get(mention) ?? '');
+    const recorded = file.identifications.some((i) => i.mention === mention);
+    return !recorded && standing ? [{ agent: standing, status: 'PROPOSED' as const }] : found;
+  };
 
   return {
     unit: file.unit.id,
