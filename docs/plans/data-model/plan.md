@@ -247,7 +247,7 @@ Source text is not a record in this table and is never hidden on either environm
 ```mermaid
 flowchart LR
   S[data/history/sources/&lt;edition&gt;/&lt;witness&gt;/v*/*.md<br/>AUTHORED text] --> C{model:check}
-  W[data/works/&lt;work&gt;/work.yaml, editions, witnesses<br/>units/*.yaml: spans, reports, chains, statements, assertions] --> C
+  W[data/works/&lt;work&gt;/work.json, editions, witnesses<br/>units/*.json: spans, reports, chains, statements, assertions] --> C
   E[data/entities/: agents, identifications, segment ids] --> C
   T[data/traditions/] --> C
   R[data/reviews/: reviewer, date, revision] --> C
@@ -259,7 +259,7 @@ flowchart LR
 | Store | Holds | Authored? |
 |---|---|---|
 | `data/history/sources/...` | page text and notes, per witness | fetched by script, never hand-typed |
-| `data/works/<work>/units/*.yaml` | one file per Unit (tarjama, hadith, ayah comment) | yes |
+| `data/works/<work>/units/*.json` | one file per Unit (tarjama, hadith, ayah comment) | yes |
 | `data/entities/`, `data/traditions/`, `data/reviews/`, `data/inferences/` | agents, identifications, memberships, review records, inference records | yes (reviews by scholars only; approvals by the owner only) |
 | `data/archive/pre-model/` | today's batches, catalog modules, seeds, `excerptArabic`, `assertion` frozen at the migration tag | read-only, never projected |
 | PostgreSQL | Work, Edition, Volume, Witness, Page, PageText, Span (+resolved cache), Unit, Report, Statement, ChainElement, Agent, Mention, Identification, Assertion, Tradition, Membership, Review, Scene, Turn, SharhLink, Premise; `Ayah` gains a reading dimension (2.15) | derived |
@@ -276,7 +276,7 @@ The model is filled from the text. Three cases:
 | Case | Rule |
 |---|---|
 | Value exactly in the text | Recorded as it stands, with its span. |
-| Implied by the text but not holdable by the model | A **special case**. The agent writes an Inference file in `data/inferences/<id>.yaml` with `status: REPORTED` (passage span, proposed value, why the model cannot hold it, premises) and inserts nothing else. The approval is the owner's merge of the PR that sets `status: APPROVED`. `data/inferences/` is owner-only in `CODEOWNERS` with owner review required on the protected branch, so an agent can propose the change but cannot merge it. `model:check` in CI fails a derived value whose Inference is not `APPROVED`, and fails an `APPROVED` status that arrives in a PR the owner did not merge. The merge PR number is stored in `approvedInPr`. The Inference file is the derived record: the projection builds the Assertion or the Turn speaker from it. Shown as derived with its premises listed, never as a quotation. Example: a Companion martyred at Uhud, whom the text never says took part in it. |
+| Implied by the text but not holdable by the model | A **special case**. The agent writes an Inference file in `data/inferences/<id>.json` with `status: REPORTED` (passage span, proposed value, why the model cannot hold it, premises) and inserts nothing else. The approval is the owner's merge of the PR that sets `status: APPROVED`. `data/inferences/` is owner-only in `CODEOWNERS` with owner review required on the protected branch, so an agent can propose the change but cannot merge it. `model:check` in CI fails a derived value whose Inference is not `APPROVED`, and fails an `APPROVED` status that arrives in a PR the owner did not merge. The merge PR number is stored in `approvedInPr`. The Inference file is the derived record: the projection builds the Assertion or the Turn speaker from it. Shown as derived with its premises listed, never as a quotation. Example: a Companion martyred at Uhud, whom the text never says took part in it. |
 | Absent | Never added. |
 
 ```ts
