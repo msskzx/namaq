@@ -7,7 +7,7 @@ export interface Span {
 
 const FOOTNOTE = /\(\s*[٠-٩0-9]+\s*\)/g;
 const MIN_EXACT = 12;
-const HARAKAT = /[\u064B-\u0652\u0670]/g;
+const NOT_LETTER = /[^\p{L}]/gu;
 
 function fold(text: string) {
   const dropped = new Array<boolean>(text.length).fill(false);
@@ -40,7 +40,7 @@ export function resolveSpan(body: string, { exact, prefix = '', suffix = '' }: S
   const before = matchForm(prefix);
   const after = matchForm(suffix);
   if (!needle) throw new Error('span has an empty quote');
-  if (needle.replace(HARAKAT, '').length < MIN_EXACT && !before && !after) {
+  if (needle.replace(NOT_LETTER, '').length < MIN_EXACT && !before && !after) {
     throw new Error(`a quote under ${MIN_EXACT} letters needs a prefix or suffix: "${needle}"`);
   }
   const hits: number[] = [];

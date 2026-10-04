@@ -14,6 +14,8 @@ outside the page files has a free Arabic field. Arabic we write ourselves is
 interface text only (navbar, footer, titles, labels) and never describes a fact,
 person or source.
 
+The match form deletes parenthesised numerals (the editor's footnote markers) and collapses whitespace; it keeps harakat, hamza, punctuation and sigla. It also deletes a legitimate numeral written in parentheses, such as `(٣٠٠)`, and turns a marker that touches a word into a space. The repository's existing checks already behave this way. A quote of fewer than 12 letters, counting base letters only, needs a prefix or suffix.
+
 A span that does not resolve to exactly one place fails `model:check` and blocks
 the build, so there is no broken state at runtime. A re-fetched page re-anchors a
 span only when the old rendered text appears once, verbatim, in the new page;

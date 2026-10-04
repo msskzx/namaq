@@ -1,4 +1,3 @@
-import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { matchForm, renderSpan, resolveSpan } from './span';
 
@@ -42,17 +41,43 @@ describe('resolveSpan', () => {
   });
 });
 
-describe('the al-Zubayr page', () => {
-  const page = readFileSync(
-    'data/history/sources/siyar-alam-al-nubala-risalah/v4/41.md',
-    'utf8',
-  );
+describe('resolveSpan edges', () => {
+  it('counts base letters only for the 12-letter rule', () => {
+    const body = 'ابتثجحخدذرزس ابتثجحخدذرز';
+    expect(() => resolveSpan(body, { exact: 'ابتثجحخدذرز' })).toThrow(/prefix or suffix/);
+    expect(resolveSpan(body, { exact: 'ابتثجحخدذرزس' })).toEqual({ start: 0, end: 12 });
+  });
+
+  it('uses a suffix to choose between repeats', () => {
+    const body = 'قَالَ فُلَانٌ كَذَا وَكَذَا ثُمَّ سَكَتَ. قَالَ فُلَانٌ كَذَا وَكَذَا ثُمَّ ذَهَبَ.';
+    const span = { exact: 'قَالَ فُلَانٌ كَذَا وَكَذَا', suffix: 'ثُمَّ ذَهَبَ' };
+    expect(resolveSpan(body, span).start).toBeGreaterThan(body.indexOf('سَكَتَ'));
+  });
+
+  it('excludes footnote markers at the edges of the quote', () => {
+    const body = 'قَبْلَهُ (١)الزُّبَيْرُ بنُ العَوَّامِ(٢) بَعْدَهُ';
+    const exact = 'الزُّبَيْرُ بنُ العَوَّامِ';
+    const { start, end } = resolveSpan(body, { exact });
+    expect(body.slice(start, end)).toBe(exact);
+  });
+
+  it('resolves a quote at the very start and end of the body', () => {
+    const body = 'الزُّبَيْرُ بنُ العَوَّامِ بنِ خُوَيْلِدِ';
+    expect(resolveSpan(body, { exact: body })).toEqual({ start: 0, end: body.length });
+  });
+});
+
+describe('a page with an entry number, a siglum and a paragraph break', () => {
+  const page = `٣ - ${NAME} * (ع)
+
+ابْنِ قُصَيِّ بنِ كِلاَبِ بنِ مُرَّةَ بنِ كَعْبِ بنِ لُؤَيِّ بنِ غَالِبٍ.
+`;
 
   it('resolves the name line with the entry number as prefix', () => {
     expect(renderSpan(page, { exact: NAME, prefix: '٣ - ' })).toBe(NAME);
   });
 
-  it('resolves a span across the paragraph break after the siglum', () => {
+  it('resolves a span after the siglum across the paragraph break', () => {
     const exact = 'ابْنِ قُصَيِّ بنِ كِلاَبِ بنِ مُرَّةَ';
     expect(renderSpan(page, { exact, prefix: '* (ع) ' })).toBe(exact);
   });
