@@ -138,8 +138,12 @@ function checkUnit(folder: WorkFolder, file: UnitFile, root: string, issues: str
       return a && b && a.key === b.key && a.start >= b.start && a.end <= b.end;
     });
   };
-  const turnById = new Map<string, { spans: string[]; scene: number }>();
   for (const report of file.reports) {
+    const turnById = new Map<string, { spans: string[]; scene: number }>();
+    const sceneOrdinals = (report.scenes ?? []).map((scene) => scene.ordinal);
+    if (sceneOrdinals.some((o, i) => o !== i + 1)) {
+      fail(`report ${report.id}: scene ordinals must run 1, 2, 3...`);
+    }
     const statementSpans = file.statements
       .filter((s) => s.report === report.id)
       .flatMap((s) => s.spans);
