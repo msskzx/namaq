@@ -258,6 +258,18 @@
         }
       ],
       "status": "PROPOSED"
+    },
+    {
+      "id": "i_ismail",
+      "mention": "m_ismail",
+      "agent": "ismail-ibn-ibrahim-ibn-ulayyah",
+      "basis": [
+        {
+          "span": "fath-iman-50#sp_note",
+          "role": "COMMENTATOR_NOTE"
+        }
+      ],
+      "status": "PROPOSED"
     }
   ],
   "assertions": []

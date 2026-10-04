@@ -4,8 +4,20 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { Inference } from './inference';
 import { standingAgent } from './referents';
+import { splitRef } from './refs';
 import { renderSpanRecord } from './render';
-import type { Assertion, Chain, UnitFile, WorkFolder } from './types';
+import type { Assertion, Chain, SharhLink, SpanRecord, UnitFile, WorkFolder } from './types';
+
+export type UnitLookup = (unit: string) => { folder: WorkFolder; file: UnitFile } | undefined;
+
+export function unitLookup(folders: WorkFolder[]): UnitLookup {
+  const units = new Map(
+    folders.flatMap((folder) =>
+      folder.units.map((file) => [file.unit.id, { folder, file }] as const),
+    ),
+  );
+  return (id) => units.get(id);
+}
 
 export const reviewsRoot = 'data/reviews';
 
@@ -56,7 +68,12 @@ function chainParts(chain: Chain): { spans: string[]; mentions: string[] } {
   };
 }
 
-export function closureOf(file: UnitFile, assertion: Assertion, inferences: Inference[] = []) {
+export function closureOf(
+  file: UnitFile,
+  assertion: Assertion,
+  inferences: Inference[] = [],
+  lookup?: UnitLookup,
+) {
   const statements = file.statements.filter((s) => assertion.restsOn.includes(s.id));
   const reports = file.reports.filter((r) => statements.some((s) => s.report === r.id));
   const spanIds = new Set<string>();
@@ -100,7 +117,27 @@ export function closureOf(file: UnitFile, assertion: Assertion, inferences: Infe
     (i) => mentionIds.has(i.mention) && i.status !== 'REJECTED',
   );
   for (const mention of mentionRecords) spans([mention.parent]);
-  for (const identification of identifications) spans(identification.basis.map((b) => b.span));
+  for (const identification of identifications) {
+    spans(
+      identification.basis.map((b) => b.span).filter((ref) => splitRef(ref).unit === undefined),
+    );
+  }
+  const foreign: { unit: string; span: SpanRecord; links: SharhLink[]; linkSpans: SpanRecord[] }[] =
+    [];
+  for (const identification of identifications) {
+    for (const { span: ref } of identification.basis) {
+      const { unit, span } = splitRef(ref);
+      const target = unit === undefined ? undefined : lookup?.(unit);
+      const found = target?.file.spans.find((s) => s.id === span);
+      if (unit !== undefined && target && found) {
+        const links = (target.file.sharhLinks ?? []).filter((l) => l.explains === file.unit.id);
+        const linkSpans = target.file.spans.filter((s) =>
+          links.some((l) => l.basis.includes(s.id)),
+        );
+        foreign.push({ unit, span: found, links, linkSpans });
+      }
+    }
+  }
   const standing = Object.fromEntries(
     mentionRecords
       .filter((m) => !file.identifications.some((i) => i.mention === m.id))
@@ -110,6 +147,7 @@ export function closureOf(file: UnitFile, assertion: Assertion, inferences: Infe
       }),
   );
   return {
+    foreign,
     standing,
     inferences: approved,
     assertion,
@@ -127,16 +165,38 @@ export function revisionOf(
   assertion: Assertion,
   root: string,
   inferences: Inference[] = [],
+  lookup?: UnitLookup,
 ) {
-  const closure = closureOf(file, assertion, inferences);
+  const closure = closureOf(file, assertion, inferences, lookup);
   const editions = new Set(closure.spans.map((span) => span.edition));
   const spans = closure.spans.map(({ exact, prefix, suffix, ...place }) => ({
     ...place,
     render: sha(renderSpanRecord(folder, { exact, prefix, suffix, ...place }, root)),
   }));
+  const foreign = closure.foreign.map(({ unit, span, links, linkSpans }) => {
+    const place = {
+      id: span.id,
+      edition: span.edition,
+      volume: span.volume,
+      page: span.page,
+      layer: span.layer,
+    };
+    const target = lookup?.(unit);
+    return {
+      unit,
+      links,
+      linkRenders: linkSpans.map((s) =>
+        target ? sha(renderSpanRecord(target.folder, s, root)) : undefined,
+      ),
+      span: place,
+      render: target ? sha(renderSpanRecord(target.folder, span, root)) : undefined,
+      work: target?.folder.work,
+    };
+  });
   return sha(
     stable({
       ...closure,
+      foreign,
       spans,
       work: folder.work,
       unit: file.unit,
@@ -161,10 +221,11 @@ export function lapsedReviews(
   inferences: Inference[] = [],
 ) {
   const current = new Map<string, string>();
+  const lookup = unitLookup(folders);
   for (const folder of folders) {
     for (const file of folder.units) {
       for (const assertion of file.assertions) {
-        current.set(assertion.id, revisionOf(folder, file, assertion, root, inferences));
+        current.set(assertion.id, revisionOf(folder, file, assertion, root, inferences, lookup));
       }
     }
   }
@@ -178,7 +239,9 @@ export function selectForProd(
   inferences: Inference[] = [],
 ) {
   const reviewed = reviewedRevisions(reviews);
-  return folders
+  const lookup = unitLookup(folders);
+  const extra = new Map<string, Map<string, UnitFile>>();
+  const out: WorkFolder[] = folders
     .map((folder) => ({
       ...folder,
       units: folder.units.flatMap((file) => {
@@ -186,10 +249,32 @@ export function selectForProd(
           (a) =>
             a.status !== 'LEGACY' &&
             a.status !== 'REJECTED' &&
-            reviewed.get(a.id)?.has(revisionOf(folder, file, a, root, inferences)),
+            reviewed.get(a.id)?.has(revisionOf(folder, file, a, root, inferences, lookup)),
         );
         if (kept.length === 0) return [];
-        const closures = kept.map((a) => closureOf(file, a, inferences));
+        const closures = kept.map((a) => closureOf(file, a, inferences, lookup));
+        for (const { unit, span, links, linkSpans } of closures.flatMap((c) => c.foreign)) {
+          const target = lookup(unit)!;
+          const slices = extra.get(target.folder.work.slug) ?? new Map<string, UnitFile>();
+          const slice = slices.get(unit) ?? {
+            unit: target.file.unit,
+            spans: [],
+            reports: [],
+            statements: [],
+            mentions: [],
+            identifications: [],
+            assertions: [],
+            sharhLinks: [],
+          };
+          for (const kept of [span, ...linkSpans]) {
+            if (!slice.spans.some((s) => s.id === kept.id)) slice.spans.push(kept);
+          }
+          for (const link of links) {
+            if (!slice.sharhLinks!.some((l) => l.id === link.id)) slice.sharhLinks!.push(link);
+          }
+          slices.set(unit, slice);
+          extra.set(target.folder.work.slug, slices);
+        }
         const ids = (pick: (c: (typeof closures)[number]) => { id: string }[]) =>
           new Set(closures.flatMap((c) => pick(c).map((r) => r.id)));
         const spans = ids((c) => c.spans);
@@ -211,4 +296,21 @@ export function selectForProd(
       }),
     }))
     .filter((folder) => folder.units.length > 0);
+  for (const [slug, slices] of extra) {
+    const home = out.find((f) => f.work.slug === slug);
+    const original = folders.find((f) => f.work.slug === slug)!;
+    const folder = home ?? { ...original, units: [] };
+    for (const [id, slice] of slices) {
+      const present = folder.units.find((u) => u.unit.id === id);
+      if (present) {
+        for (const span of slice.spans)
+          if (!present.spans.some((s) => s.id === span.id)) present.spans.push(span);
+        present.sharhLinks = [...(present.sharhLinks ?? []), ...(slice.sharhLinks ?? [])];
+      } else {
+        folder.units.push(slice);
+      }
+    }
+    if (!home) out.push(folder);
+  }
+  return out;
 }
