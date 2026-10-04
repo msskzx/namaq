@@ -5,20 +5,20 @@ How to resume: read [plan.md](plan.md) and [owner-goals.md](owner-goals.md), the
 ## Done
 
 - ADRs 0021 to 0023 merged, status `proposed` (**owner** accepts them).
-- Span module: `src/lib/model/span.ts` ([#310](https://github.com/msskzx/namaq/pull/310)).
+- Span module `src/lib/model/span.ts` ([#310](https://github.com/msskzx/namaq/pull/310)); record types, loader and `npm run model:check` ([#312](https://github.com/msskzx/namaq/pull/312)); ingestion is an adapter ([#311](https://github.com/msskzx/namaq/pull/311)).
+- The al-Zubayr entry authored under `data/works/siyar-alam-al-nubala/` ([#315](https://github.com/msskzx/namaq/pull/315)), guarded by `src/lib/model/data.test.ts`.
 
 ## In review
 
-- Record types, loader and `npm run model:check`: [#312](https://github.com/msskzx/namaq/pull/312).
+- `profilesFromModel` (`src/lib/model/profile.ts`): a profile built only from span-rendered assertions, tested on the al-Zubayr entry.
 
 ## Next, in order
 
-1. Fixture-driven check of the al-Zubayr example end to end (the plan's section 3.1) under `data/works/`, with page text from the existing Siyar store.
-2. Prisma tables and projection of the pilot records to PostgreSQL (migration prepared; applying it to the preview database waits for the **owner**).
-3. Profile rendering from spans, and the old-versus-new diff.
-4. Review surface.
-5. Scenes, turns, chains and `SharhLink` for the Jibril slice, on hand-checked fixtures.
-6. Inference files and the owner-approval check; review records and the prod filter.
+1. The old-versus-new diff for al-Zubayr: compare the profile above with the catalog's values (`data/catalog/people`) and list each difference for the **owner**.
+2. Prisma tables and a projection of the model to PostgreSQL (migration prepared; applying it to the preview database waits for the **owner**).
+3. The profile page reading from the model, and the review surface.
+4. Scenes, turns, chains and `SharhLink` for the Jibril slice, on hand-checked fixtures.
+5. Inference files and the owner-approval check; review records and the prod filter.
 
 ## Not now
 
