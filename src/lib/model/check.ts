@@ -1,6 +1,6 @@
 // docs/plans/data-model/plan.md, sections 2.3 to 2.7
-import { loadStorePage } from '../history/sourceStore';
-import { HARAKAT, matchForm, renderSpan } from './span';
+import { renderSpanRecord } from './render';
+import { HARAKAT, matchForm } from './span';
 import {
   assertionStatuses,
   basisRoles,
@@ -34,7 +34,6 @@ function checkUnit(folder: WorkFolder, file: UnitFile, root: string, issues: str
     if (!list.includes(value as string))
       fail(`${owner}: "${String(value)}" is not one of ${list.join(', ')}`);
   };
-  const witnessOf = new Map(folder.witnesses.map((w) => [w.edition, w.slug]));
 
   const ids = new Set<string>();
   const all = [
@@ -56,19 +55,8 @@ function checkUnit(folder: WorkFolder, file: UnitFile, root: string, issues: str
   const layerOf = new Map(file.spans.map((s) => [s.id, s.layer]));
   for (const span of file.spans) {
     oneOf(`span ${span.id} layer`, span.layer, layers);
-    const witness = witnessOf.get(span.edition);
-    if (!witness) {
-      fail(`span ${span.id}: edition "${span.edition}" has no witness`);
-      continue;
-    }
-    const page = loadStorePage(root, witness, span.volume, span.page);
-    const body = span.layer === 'NOTES' ? page?.notes : page?.body;
-    if (body == null) {
-      fail(`span ${span.id}: no ${span.layer} text for v${span.volume} page ${span.page}`);
-      continue;
-    }
     try {
-      rendered.set(span.id, renderSpan(body, span));
+      rendered.set(span.id, renderSpanRecord(folder, span, root));
     } catch (error) {
       fail(`span ${span.id}: ${(error as Error).message}`);
     }
