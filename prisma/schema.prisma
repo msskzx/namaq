@@ -151,7 +151,7 @@ model PersonVirtue {
   person   Person @relation(fields: [personId], references: [id], onDelete: Cascade)
   personId String
 
-    position Int
+  position Int
 
   text String @db.Text
 
@@ -683,4 +683,42 @@ model Ayah {
   people Person[] @relation("PersonAyahs")
 
   @@map("ayahs")
+}
+
+// Derived from data/works by `npm run model:project`; never edited by hand (ADR 0023).
+model ModelSpan {
+  unit    String
+  spanId  String
+  witness String
+  volume  Int
+  page    String
+  layer   String
+  text    String
+
+  @@id([unit, spanId])
+  @@index([witness, volume, page])
+  @@map("model_spans")
+}
+
+model ModelProfileEntry {
+  unit           String
+  assertionId    String
+  agent          String
+  predicate      String
+  parts          String[]
+  text           String
+  parsed         Int?
+  classified     String?
+  object         String?
+  objectMention  String?
+  origins        Json
+  spanIds        String[]
+  statementIds   String[]
+  status         String
+  identification String
+  reviewed       Boolean
+
+  @@id([unit, assertionId, agent])
+  @@index([agent])
+  @@map("model_profile_entries")
 }

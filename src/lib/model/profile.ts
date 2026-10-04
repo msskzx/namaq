@@ -7,6 +7,7 @@ import type { Identification, Predicate, WorkFolder } from './types';
 export type Origin = { author: string } | { mention: string };
 
 export interface ProfileEntry {
+  unit: string;
   assertionId: string;
   predicate: Predicate;
   parts: string[];
@@ -71,6 +72,7 @@ export function profilesFromModel(folders: WorkFolder[], root: string) {
         for (const subject of identify(assertion.subject)) {
           const parts = spanIds.map(textOf);
           const entry: ProfileEntry = {
+            unit: file.unit.id,
             assertionId: assertion.id,
             predicate: assertion.predicate,
             parts,
