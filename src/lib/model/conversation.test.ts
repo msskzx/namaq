@@ -13,7 +13,7 @@ function muslim(models = loadModel(ROOT)) {
 describe('conversationOf (the hadith of Jibril fixtures)', () => {
   it('lists the scenes in order, the second quoted inside a turn of the first', () => {
     const { folder, file } = muslim();
-    const scenes = conversationOf(folder, file, 'r_hadith', ROOT);
+    const { scenes } = conversationOf(folder, file, 'r_hadith', ROOT);
     expect(scenes.map((s) => s.ordinal)).toEqual([1, 2]);
     expect(scenes[1].inTurn).toBe('o3');
     expect(scenes[0].turns.map((t) => t.id)).toEqual(['o1', 'o2', 'o3']);
@@ -22,7 +22,7 @@ describe('conversationOf (the hadith of Jibril fixtures)', () => {
 
   it('renders each turn from its spans, keeping two parts around an interruption', () => {
     const { folder, file } = muslim();
-    const [first] = conversationOf(folder, file, 'r_hadith', ROOT)[0].turns;
+    const [first] = conversationOf(folder, file, 'r_hadith', ROOT).scenes[0].turns;
     expect(first.parts).toHaveLength(2);
     expect(first.parts[0].startsWith('أَبَا عَبْدِ الرَّحْمَنِ')).toBe(true);
     expect(first.parts[1].endsWith('أُنُفٌ')).toBe(true);
@@ -30,7 +30,7 @@ describe('conversationOf (the hadith of Jibril fixtures)', () => {
 
   it('names a speaker only where the sentence names one, and leaves a bare qala as not stated', () => {
     const { folder, file } = muslim();
-    const turns = conversationOf(folder, file, 'r_hadith', ROOT).flatMap((s) => s.turns);
+    const turns = conversationOf(folder, file, 'r_hadith', ROOT).scenes.flatMap((s) => s.turns);
     const byId = Object.fromEntries(turns.map((t) => [t.id, t.speaker?.mention]));
     expect(byId).toMatchObject({
       o1: 'يَحْيَى بْنِ يَعْمَرَ',
@@ -43,14 +43,17 @@ describe('conversationOf (the hadith of Jibril fixtures)', () => {
 
   it('shows the stranger as Jibril once the closing words identify him', () => {
     const { folder, file } = muslim();
-    const s1 = conversationOf(folder, file, 'r_hadith', ROOT)[1].turns[0];
-    expect(s1.speaker).toEqual({ mention: 'رَجُلٌ', agent: 'jibril' });
+    const s1 = conversationOf(folder, file, 'r_hadith', ROOT).scenes[1].turns[0];
+    expect(s1.speaker).toEqual({
+      mention: 'رَجُلٌ',
+      agents: [{ agent: 'jibril', status: 'PROPOSED' }],
+    });
   });
 
   it('marks a speaker that came from an approved inference, and only that one', () => {
     const applied = applyApprovedInferences(loadModel(ROOT), loadInferences(ROOT));
     const { folder, file } = muslim(applied);
-    const turns = conversationOf(folder, file, 'r_hadith', ROOT).flatMap((s) => s.turns);
+    const turns = conversationOf(folder, file, 'r_hadith', ROOT).scenes.flatMap((s) => s.turns);
     expect(turns.find((t) => t.id === 'o2')).toMatchObject({ derivedBy: 'inf_o2' });
     expect(turns.find((t) => t.id === 'o3')?.speaker).toBeUndefined();
     expect(turns.filter((t) => t.derivedBy)).toHaveLength(1);
@@ -59,5 +62,46 @@ describe('conversationOf (the hadith of Jibril fixtures)', () => {
   it('fails loudly on an unknown report', () => {
     const { folder, file } = muslim();
     expect(() => conversationOf(folder, file, 'nope', ROOT)).toThrow(/unknown report/);
+  });
+
+  it('carries the unit, the report and its origin, so a view can reach the source', () => {
+    const { folder, file } = muslim();
+    const conversation = conversationOf(folder, file, 'r_hadith', ROOT);
+    expect(conversation).toMatchObject({ unit: 'muslim-jibril', report: 'r_hadith' });
+    expect(conversation.origin).toEqual({ mention: 'يَحْيَى بْنِ يَعْمَرَ' });
+    const bukhari = loadModel(ROOT).find((f) => f.work.slug === 'test-bukhari')!;
+    expect(conversationOf(bukhari, bukhari.units[0], 'r_comment', ROOT).origin).toEqual({
+      author: 'test-compiler',
+    });
+    expect(conversationOf(bukhari, bukhari.units[0], 'r_comment', ROOT).scenes).toEqual([]);
+  });
+
+  it('shows every competing identification of a speaker, and drops a rejected one', () => {
+    const { folder, file } = muslim();
+    const base = file.identifications[0];
+    file.identifications.push(
+      { ...base, id: 'i_other', agent: 'another', status: 'DISPUTED' },
+      { ...base, id: 'i_bad', agent: 'rejected', status: 'REJECTED' },
+    );
+    const s1 = conversationOf(folder, file, 'r_hadith', ROOT).scenes[1].turns[0];
+    expect(s1.speaker?.agents).toEqual([
+      { agent: 'jibril', status: 'PROPOSED' },
+      { agent: 'another', status: 'DISPUTED' },
+    ]);
+  });
+
+  it('gives an unidentified speaker no agents', () => {
+    const { folder, file } = muslim();
+    const o1 = conversationOf(folder, file, 'r_hadith', ROOT).scenes[0].turns[0];
+    expect(o1.speaker?.agents).toEqual([]);
+  });
+
+  it('fails loudly on an unknown mention or span instead of showing an id', () => {
+    const a = muslim();
+    a.file.reports[0].scenes![0].turns[0].speaker = 'm_missing';
+    expect(() => conversationOf(a.folder, a.file, 'r_hadith', ROOT)).toThrow(/unknown mention/);
+    const b = muslim();
+    b.file.reports[0].scenes![0].turns[0].spans = ['nope'];
+    expect(() => conversationOf(b.folder, b.file, 'r_hadith', ROOT)).toThrow(/unknown span/);
   });
 });
