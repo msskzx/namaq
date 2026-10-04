@@ -4,7 +4,7 @@ How to resume: read [plan.md](plan.md) and [owner-goals.md](owner-goals.md), the
 
 ## Done
 
-- ADRs 0021 to 0023 merged, status `proposed` (**owner** accepts them).
+- ADRs 0021 to 0023 merged and accepted by the owner ([#328](https://github.com/msskzx/namaq/pull/328)).
 - Span module `src/lib/model/span.ts` ([#310](https://github.com/msskzx/namaq/pull/310)); record types, loader and `npm run model:check` ([#312](https://github.com/msskzx/namaq/pull/312)); ingestion is an adapter ([#311](https://github.com/msskzx/namaq/pull/311)).
 - The al-Zubayr entry authored under `data/works/siyar-alam-al-nubala/` ([#315](https://github.com/msskzx/namaq/pull/315)), guarded by `src/lib/model/data.test.ts`.
 - `profilesFromModel` (`src/lib/model/profile.ts`, [#316](https://github.com/msskzx/namaq/pull/316)): a profile built only from span-rendered assertions.
@@ -14,6 +14,9 @@ How to resume: read [plan.md](plan.md) and [owner-goals.md](owner-goals.md), the
 - `npm run model:diff -- <slug>` ([#320](https://github.com/msskzx/namaq/pull/320)): the old-versus-new report against `data/catalog/people`.
 
 - The pilot data (most of al-Zubayr's entry, [#323](https://github.com/msskzx/namaq/pull/323)), `conversationOf` ([#324](https://github.com/msskzx/namaq/pull/324): scenes, turns, rendered text, every competing speaker identification, the unit and origin) and `highlightsOnPage` ([#325](https://github.com/msskzx/namaq/pull/325): a page's body, its non-overlapping marks, and the assertions resting on each; the data a review surface reads).
+- The Messenger of Allah and the Prophet are `prophet-muhammad` by a standing rule ([#327](https://github.com/msskzx/namaq/pull/327)); a recorded identification of any status overrides it.
+- `SharhLink` with Fath al-Bari on the hadith of Jibril as a fixture ([#329](https://github.com/msskzx/namaq/pull/329)): Shamela book 1673, printed pages 114 and 115, linked to Bukhari 50 by the number printed in the commentary's own heading.
+- Isnad chains ([#330](https://github.com/msskzx/namaq/pull/330)): links with the printed formula and a derived mode key, gaps, and a tahwil as two complete routes; checks for reading order, the isnad span and a tahwil mark; Bukhari 50 and Muslim's hadith as fixtures.
 
 ## Pilot coverage: al-Zubayr (`data/works/siyar-alam-al-nubala/units/siyar-v4-3-az-zubayr.json`)
 
@@ -38,7 +41,7 @@ Open points, each for the **owner**:
 2. Prisma tables and a projection of the model to PostgreSQL and Neo4j (migration prepared; applying it to the preview database waits for the **owner**).
 3. The profile page, the conversation view and the review surface (page with highlighted spans, accept, reject, dispute) reading `profilesFromModel`, `conversationOf` and `highlightsOnPage`. The data functions exist; the UI does not, and it needs the existing reader and profile components looked at first.
 4. CI and `CODEOWNERS` rules so only a scholar changes `data/reviews/` and only the owner changes `data/inferences/` (a review file is authored, so without this an agent could forge one). Needs the **owner** to set up on GitHub.
-5. Chains (links, gaps, mode keys) and `SharhLink`; `SharhLink` needs a real commentary fixture first, which waits on a source (no Arabic is invented).
+5. A cross-unit span reference, so Ibn Hajar's note on page 115 can be the `COMMENTATOR_NOTE` basis for identifying `إسماعيل بن إبراهيم` (Ibn Ulayyah) in the Bukhari fixture; wording owned by one route (`وَهَذَا حَدِيثُهُ`); a real mu'allaq chain with a Gap.
 
 ## Not now
 
