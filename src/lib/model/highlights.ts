@@ -27,12 +27,15 @@ export function highlightsOnPage(
       folder.witnesses.filter((w) => w.slug === witness).map((w) => w.edition),
     );
     for (const file of folder.units) {
+      const reached = new Map(
+        file.assertions.map((a) => [a.id, new Set(closureOf(file, a).spans.map((s) => s.id))]),
+      );
       for (const span of file.spans) {
         if (!editions.has(span.edition) || span.volume !== volume || span.page !== page) continue;
         if (span.layer !== 'MAIN') continue;
         const { start, end } = locateSpanRecord(folder, span, root);
         const assertions = file.assertions
-          .filter((a) => closureOf(file, a).spans.some((s) => s.id === span.id))
+          .filter((a) => reached.get(a.id)?.has(span.id))
           .map((a) => a.id);
         found.push({ unit: file.unit.id, id: span.id, start, end, assertions });
       }
@@ -48,7 +51,13 @@ export function highlightsOnPage(
       start,
       end,
       spans: covering.map(({ unit, id }) => ({ unit, id })),
-      assertions: covering.flatMap((s) => s.assertions.map((id) => ({ unit: s.unit, id }))),
+      assertions: [
+        ...new Map(
+          covering.flatMap((s) =>
+            s.assertions.map((id) => [`${s.unit}/${id}`, { unit: s.unit, id }]),
+          ),
+        ).values(),
+      ],
     });
   }
   return { body, marks };
