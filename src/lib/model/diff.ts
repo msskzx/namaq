@@ -64,13 +64,13 @@ export function diffAgainstCatalog(entries: ProfileEntry[], catalog: CatalogLike
     line(
       field,
       value ? [value] : [],
-      take(predicate).map((e) => e.parts.join(' ')),
+      take(predicate).map((e) => e.text),
     );
   }
   line(
     'virtues',
     (catalog.virtues ?? []).map((v) => v.value),
-    take('virtue').map((e) => e.parts.join(' ')),
+    take('virtue').map((e) => e.text),
   );
 
   const isParent = (r: { type: string; inverse?: string }) =>
@@ -87,7 +87,7 @@ export function diffAgainstCatalog(entries: ProfileEntry[], catalog: CatalogLike
     lines.push({
       field: entry.predicate,
       status: 'model-only',
-      model: entry.parsed !== undefined ? String(entry.parsed) : entry.parts.join(' '),
+      model: entry.parsed !== undefined ? String(entry.parsed) : entry.text,
     });
   }
   const others = relations.filter((r) => !isParent(r));

@@ -15,11 +15,12 @@ describe('diffAgainstCatalog on al-Zubayr', () => {
     expect(byField(lines, 'parents')[0].status).toBe('different');
   });
 
-  it('shows the joined catalog name as different from the book-printed spans', () => {
+  it("reads the name across the paragraph break as the lineage is spelled, leaving only the catalog's final full stop", () => {
     const [name] = byField(lines, 'fullName');
+    expect(name.model).toContain('عَبْدِ العُزَّى بنِ قُصَيِّ');
+    expect(name.model).not.toContain('ابْنِ');
     expect(name.status).toBe('different');
-    expect(name.model).toContain('ابْنِ قُصَيِّ');
-    expect(name.catalog).not.toContain('ابْنِ قُصَيِّ');
+    expect(name.catalog).toBe(`${name.model}.`);
   });
 
   it('lists what only the catalog holds, and what only the model holds', () => {
@@ -35,7 +36,7 @@ describe('diffAgainstCatalog on al-Zubayr', () => {
 
   it('calls two equal texts the same even when whitespace and footnote markers differ', () => {
     const [name] = entries.filter((e) => e.predicate === 'name.full');
-    const text = name.parts.join('\n\n');
+    const text = name.text.replace(' بنِ ', '\n\n بنِ ');
     const result = diffAgainstCatalog(entries, { fields: { fullName: { value: `${text} (١)` } } });
     expect(byField(result, 'fullName')[0].status).toBe('same');
   });
@@ -61,11 +62,13 @@ describe('diffAgainstCatalog on al-Zubayr', () => {
         ...entries.find((e) => e.predicate === 'islam.age')!,
         predicate: 'virtue' as const,
         parts: ['أَوَّلُ مَنْ سَلَّ سَيْفَهُ'],
+        text: 'أَوَّلُ مَنْ سَلَّ سَيْفَهُ',
       },
       {
         ...entries.find((e) => e.predicate === 'islam.age')!,
         predicate: 'virtue' as const,
         parts: ['حَوَارِيُّ رَسُوْلِ اللهِ'],
+        text: 'حَوَارِيُّ رَسُوْلِ اللهِ',
       },
     ];
     const catalog = {
