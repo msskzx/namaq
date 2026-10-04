@@ -224,4 +224,10 @@ describe('checkModel', () => {
       }).join(),
     ).toMatch(/transmission formula/);
   });
+
+  it('fails two live identifications of one mention as the same agent', () => {
+    expect(
+      issuesFor((f) => f.identifications.push({ ...f.identifications[0], id: 'i2' })).join(),
+    ).toMatch(/already identifies this mention as az-zubayr/);
+  });
 });

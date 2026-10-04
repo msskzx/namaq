@@ -332,6 +332,16 @@ function checkUnit(
     const mention = file.mentions.find((m) => m.id === identification.mention);
     if (!mention) fail(`${owner}: unknown mention`);
     if (!identification.agent?.trim()) fail(`${owner}: no agent`);
+    const twin = file.identifications.find(
+      (i) =>
+        i.id < identification.id &&
+        i.mention === identification.mention &&
+        i.agent === identification.agent &&
+        i.status !== 'REJECTED' &&
+        identification.status !== 'REJECTED',
+    );
+    if (twin)
+      fail(`${owner}: ${twin.id} already identifies this mention as ${identification.agent}`);
     if (identification.basis.length === 0) fail(`${owner}: no basis`);
     for (const { span: ref, role } of identification.basis) {
       const { unit: foreignId, span } = splitRef(ref);

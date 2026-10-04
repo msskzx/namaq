@@ -62,4 +62,45 @@ describe('projectionRows (the al-Zubayr entry)', () => {
     expect(rows.entries.every((e) => e.reviewed)).toBe(true);
     expect(rows.spans.length).toBeLessThan(spans.length);
   });
+
+  it('keeps one row per unit, assertion and agent', () => {
+    const fresh = loadModel('.');
+    const f = fresh[0].units[0];
+    f.identifications.push({ ...f.identifications[0], id: 'i_dup' });
+    const keys = projectionRows(fresh, '.').entries.map(
+      (e) => `${e.unit}/${e.assertionId}/${e.agent}`,
+    );
+    expect(new Set(keys).size).toBe(keys.length);
+  });
+});
+
+describe('projectionRows with a sharh-linked assertion in the reviewed-only set', () => {
+  it('marks it reviewed, though the commentary unit is only a slice in the prod set', () => {
+    const ROOT = 'src/lib/model/fixtures/jibril';
+    const folders = loadModel(ROOT);
+    const bukhari = folders.find((f) => f.work.slug === 'test-bukhari')!;
+    const file = bukhari.units[0];
+    file.assertions.push({
+      id: 'a_probe',
+      subject: 'm_ismail',
+      predicate: 'virtue',
+      value: { spans: ['sp_matn'] },
+      restsOn: ['st_matn'],
+      status: 'PROPOSED',
+    });
+    const probe = file.assertions.find((a) => a.id === 'a_probe')!;
+    const reviews: ReviewRecord[] = [
+      {
+        record: 'a_probe',
+        revision: revisionOf(bukhari, file, probe, ROOT, [], unitLookup(folders)),
+        reviewer: 'test-scholar',
+        qualification: 'test',
+        date: '2026-01-01',
+      },
+    ];
+    const prod = selectForProd(folders, reviews, ROOT);
+    const { entries } = projectionRows(prod, ROOT, reviews, [], folders);
+    expect(entries.length).toBeGreaterThan(0);
+    expect(entries.every((e) => e.reviewed)).toBe(true);
+  });
 });

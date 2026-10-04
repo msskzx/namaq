@@ -241,4 +241,5 @@ republishing its pages.
 | `npm run sync:all` | Run the full catalog → PostgreSQL/Neo4j sync, recompute the graph layout, and generate quiz questions, stopping at `quiz:project`'s dry run for manual review |
 | `npm run model:check` | Check the span-based data model under `data/works/` against the page text (in development; see `docs/plans/data-model/progress.md`) |
 | `npm run model:diff -- <person-slug>` | List how the span-based model's profile differs from the catalog's values for one person (in development) |
+| `npm run model:project` / `-- --env preview\|prod --apply` | Dry-run (or write) the span-based model into the `model_spans` and `model_profile_entries` tables; `--env prod` projects only reviewed records (in development) |
 | `npm run history:review -- <batch dir>` / `-- --apply` | Preview or mark every claim in a batch as Reviewed |

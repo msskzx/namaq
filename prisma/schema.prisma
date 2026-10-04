@@ -151,7 +151,7 @@ model PersonVirtue {
   person   Person @relation(fields: [personId], references: [id], onDelete: Cascade)
   personId String
 
-  position Int
+    position Int
 
   text String @db.Text
 
@@ -685,7 +685,7 @@ model Ayah {
   @@map("ayahs")
 }
 
-// Derived from data/works by `npm run model:project`; never edited by hand (ADR 0023).
+// docs/adr/0023-files-are-the-authority-and-both-databases-are-derived.md
 model ModelSpan {
   unit    String
   spanId  String
