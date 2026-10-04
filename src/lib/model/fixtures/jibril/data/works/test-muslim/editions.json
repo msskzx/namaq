@@ -1,0 +1,20 @@
+{
+  "editions": [
+    {
+      "slug": "test-muslim-edition",
+      "work": "test-muslim",
+      "publisher": "test",
+      "editors": [],
+      "printing": "test"
+    }
+  ],
+  "witnesses": [
+    {
+      "slug": "test-muslim",
+      "edition": "test-muslim-edition",
+      "vowelled": true,
+      "hasFootnotes": false,
+      "checkedAgainstPrint": false
+    }
+  ]
+}

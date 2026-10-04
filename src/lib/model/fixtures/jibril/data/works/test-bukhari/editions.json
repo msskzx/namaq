@@ -1,0 +1,20 @@
+{
+  "editions": [
+    {
+      "slug": "test-bukhari-edition",
+      "work": "test-bukhari",
+      "publisher": "test",
+      "editors": [],
+      "printing": "test"
+    }
+  ],
+  "witnesses": [
+    {
+      "slug": "test-bukhari",
+      "edition": "test-bukhari-edition",
+      "vowelled": true,
+      "hasFootnotes": false,
+      "checkedAgainstPrint": false
+    }
+  ]
+}

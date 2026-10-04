@@ -1,5 +1,5 @@
 // docs/plans/data-model/plan.md, sections 2.3 to 2.7
-import { renderSpanRecord } from './render';
+import { locateSpanRecord } from './render';
 import { HARAKAT, matchForm } from './span';
 import {
   assertionStatuses,
@@ -43,6 +43,7 @@ function checkUnit(folder: WorkFolder, file: UnitFile, root: string, issues: str
     ...file.mentions,
     ...file.identifications,
     ...file.assertions,
+    ...file.reports.flatMap((r) => (r.scenes ?? []).flatMap((sc) => sc.turns)),
   ];
   for (const { id } of all) {
     if (ids.has(id)) fail(`duplicate id ${id}`);
@@ -52,11 +53,14 @@ function checkUnit(folder: WorkFolder, file: UnitFile, root: string, issues: str
   if (file.unit.work !== folder.work.slug) fail(`unit names work "${file.unit.work}"`);
 
   const rendered = new Map<string, string>();
+  const placed = new Map<string, { key: string; start: number; end: number }>();
   const layerOf = new Map(file.spans.map((s) => [s.id, s.layer]));
   for (const span of file.spans) {
     oneOf(`span ${span.id} layer`, span.layer, layers);
     try {
-      rendered.set(span.id, renderSpanRecord(folder, span, root));
+      const found = locateSpanRecord(folder, span, root);
+      rendered.set(span.id, found.text);
+      placed.set(span.id, found);
     } catch (error) {
       fail(`span ${span.id}: ${(error as Error).message}`);
     }
@@ -124,6 +128,57 @@ function checkUnit(folder: WorkFolder, file: UnitFile, root: string, issues: str
     const opening = rendered.get(statement.spans[0])?.replace(HARAKAT, '');
     if (report?.voice === 'AUTHOR' && opening && TRANSMISSION_OPENING.test(opening)) {
       fail(`${owner}: an AUTHOR statement opens with a transmission formula`);
+    }
+  }
+
+  const within = (inner: string, outers: string[]) => {
+    const a = placed.get(inner);
+    return outers.some((id) => {
+      const b = placed.get(id);
+      return a && b && a.key === b.key && a.start >= b.start && a.end <= b.end;
+    });
+  };
+  const turnById = new Map<string, { spans: string[]; scene: number }>();
+  for (const report of file.reports) {
+    const statementSpans = file.statements
+      .filter((s) => s.report === report.id)
+      .flatMap((s) => s.spans);
+    for (const scene of report.scenes ?? []) {
+      for (const turn of scene.turns) {
+        const owner = `turn ${turn.id} of report ${report.id}`;
+        turnById.set(turn.id, { spans: turn.spans, scene: scene.ordinal });
+        if (turn.spans.length === 0) fail(`${owner}: no spans`);
+        for (const id of turn.spans) {
+          needSpan(owner, id);
+          if (placed.has(id) && !within(id, statementSpans)) {
+            fail(`${owner}: span ${id} is outside the report's statements`);
+          }
+        }
+        for (const id of [turn.speaker, turn.addressee]) {
+          if (id !== undefined && !mentionIds.has(id)) fail(`${owner}: unknown mention ${id}`);
+        }
+      }
+      const ordinals = scene.turns.map((t) => t.ordinal);
+      if (ordinals.some((o, i) => o !== i + 1)) {
+        fail(`report ${report.id} scene ${scene.ordinal}: turn ordinals must run 1, 2, 3...`);
+      }
+    }
+    for (const scene of report.scenes ?? []) {
+      if (scene.inTurn === undefined) continue;
+      const outer = turnById.get(scene.inTurn);
+      if (!outer || outer.scene >= scene.ordinal) {
+        fail(
+          `report ${report.id} scene ${scene.ordinal}: inTurn must name a turn of an earlier scene`,
+        );
+      } else {
+        for (const turn of scene.turns) {
+          for (const id of turn.spans) {
+            if (placed.has(id) && !within(id, outer.spans)) {
+              fail(`turn ${turn.id}: span ${id} is outside the turn it is quoted in`);
+            }
+          }
+        }
+      }
     }
   }
 
