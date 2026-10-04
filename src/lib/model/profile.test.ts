@@ -111,10 +111,10 @@ describe('profilesFromModel on the al-Zubayr entry', () => {
     );
   });
 
-  it('records the Prophet as the speaker of the cousin relation, and leaves him unidentified', () => {
+  it("records the Prophet as the speaker of the cousin relation, identified through the author's own sentence about his aunt", () => {
     const [cousin] = of('PATERNAL_COUSIN');
     expect(cousin.origins).toEqual([{ mention: 'رَسُوْلُ اللهِ' }]);
-    expect(cousin.object).toBeUndefined();
+    expect(cousin.object).toBe('prophet-muhammad');
     expect(cousin.objectMention).toBe('رَسُوْلُ اللهِ');
   });
 });

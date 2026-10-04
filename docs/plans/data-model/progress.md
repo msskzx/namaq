@@ -19,7 +19,8 @@ Authored from the batch's exact citations, all `PROPOSED`: full name, sex (read 
 
 Open points, each for the **owner**:
 
-- The Prophet is an unidentified mention (`رَسُوْلُ اللهِ`): P4 needs a basis span for identifying him as an Agent, and the entry gives none. The diff therefore shows the cousin relation as different from the catalog's `prophet-muhammad`. Decide whether the Prophet gets an Agent with a standing basis.
+- The Prophet in the cousin report is identified as `prophet-muhammad` through the author's own sentence about the Messenger of Allah's paternal aunt, Safiyyah bint Abd al-Muttalib (`SAME_WORK_EXPLICIT`, page 41). The entry never writes his name. Confirm that this is an acceptable basis, or decide the Prophet gets an Agent with a standing basis for every entry.
+- The five battles and the Prophet's own mentions elsewhere are not identified as Agents: events and the Prophet need a basis span the entry does not give, so the diff lists the battles as model-only.
 - Place of death: the page says he was buried at Wadi al-Siba', not that he died there.
 - Companion of the Prophet: the text has his own words, "I did not leave him since I became Muslim"; the tie follows from them.
 - Uhud and Jamal, and Banu Qurayzah: the excerpts do not state his participation outright (the first is about the aftermath, the second about his withdrawing, the third names him only as "my father").

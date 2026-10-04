@@ -317,6 +317,14 @@
       "page": "48",
       "layer": "MAIN",
       "exact": "الزُّبَيْرُ ابْنُ عَمَّتِي، وَحَوَارِيَّ مِنْ أُمَّتِي"
+    },
+    {
+      "id": "sp_prophet_aunt",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "41",
+      "layer": "MAIN",
+      "exact": "ابْنُ عَمَّتِهِ صَفِيَّةَ بِنْتِ عَبْدِ المُطَّلِبِ"
     }
   ],
   "reports": [
@@ -831,6 +839,18 @@
       "basis": [
         {
           "span": "sp_zb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_prophet2",
+      "mention": "m_prophet2",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_prophet_aunt",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
