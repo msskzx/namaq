@@ -1,5 +1,5 @@
 ---
-status: proposed
+status: accepted
 ---
 
 # A shown value rests on an attributed statement
