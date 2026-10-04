@@ -12,6 +12,8 @@ describe('profilesFromModel on the al-Zubayr entry', () => {
     expect(name.parts[0]).toBe(
       'الزُّبَيْرُ بنُ العَوَّامِ بنِ خُوَيْلِدِ بنِ أَسَدِ بنِ عَبْدِ العُزَّى',
     );
+    expect(name.text).toContain('عَبْدِ العُزَّى بنِ قُصَيِّ');
+    expect(name.parts[1].startsWith('ابْنِ')).toBe(true);
     expect(name.origins).toEqual([{ author: 'al-dhahabi' }]);
     expect(name.spanIds).toEqual(['sp_zb1', 'sp_zb2']);
     expect(name.statementIds).toEqual(['st_name']);

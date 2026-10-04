@@ -1,4 +1,5 @@
 // docs/plans/data-model/plan.md, sections 2.7 and 2.14
+import { joinName } from './name';
 import { renderSpanRecord } from './render';
 import type { Identification, Predicate, WorkFolder } from './types';
 
@@ -8,6 +9,7 @@ export interface ProfileEntry {
   assertionId: string;
   predicate: Predicate;
   parts: string[];
+  text: string;
   spanIds: string[];
   statementIds: string[];
   parsed?: number;
@@ -56,10 +58,12 @@ export function profilesFromModel(folders: WorkFolder[], root: string) {
           .filter((origin): origin is Origin => origin !== undefined);
         const objects = 'object' in value ? (identified.get(value.object) ?? []) : [];
         for (const subject of identified.get(assertion.subject) ?? []) {
+          const parts = spanIds.map(textOf);
           const entry: ProfileEntry = {
             assertionId: assertion.id,
             predicate: assertion.predicate,
-            parts: spanIds.map(textOf),
+            parts,
+            text: assertion.predicate === 'name.full' ? joinName(parts) : parts.join(' '),
             spanIds,
             statementIds: assertion.restsOn,
             origins,

@@ -31,6 +31,8 @@ checking it against the page, which is what the repository does today: 414 of 72
 checked values failed, and 25 pull requests rewrote an `assertion` the app never
 displayed.
 
+A name can continue past a heading. Al-Dhahabi writes the start of a lineage in the entry's title and carries on in the first paragraph, where `ابْنِ` opens the line and keeps its alif. Joined to the name above it, the same word is spelled `بنِ`, without the alif and without the sukun on the ba. So there are two presentations of the same spans, both correct in their context: the book view and every quotation show the spans exactly as printed, and a profile's name (`name.full`) is the parts joined with that spelling, keeping the case vowel on the nun. A tested rule in `src/lib/model/name.ts` does the join, not an agent, because an agent typing the spelling would be writing Arabic outside a span. The multi-part spans of a `name.full` are a lineage. The rule changes only a whole word `ابن` (with alif or alif wasla) that starts a later part and follows a part that does not end in punctuation; it leaves `ابْنَةُ` and a first part alone. Punctuation that ends the sentence, such as a final full stop, is not part of the name and is not in its span.
+
 Consequences: the validator, the reader and the projection share one versioned
 `matchSpan` module, which ends the duplicate in `verifyExcerpts.ts` and
 `sectionHeadings.ts`. Positions cached in PostgreSQL are derived and rebuilt. A

@@ -96,6 +96,7 @@ type MentionSpan = { parent: SpanId; exact: string; occurrence: number }; // sho
 | Re-anchor | `span:reanchor` proposes a new selector only when the old rendered text appears verbatim exactly once in the new page text. The id is kept. Nothing re-points by similarity. |
 | Failure | A span that does not resolve uniquely fails `model:check` and blocks the build. There is no runtime broken state. |
 | Cache | `{paragraphIndex, charStart, charEnd, pageSha, normVersion}` is derived into PostgreSQL. A re-split page changes the cache, not the span. |
+| Name join | A profile's `name.full` is its spans joined by `joinName` (`src/lib/model/name.ts`): a later part that starts with the whole word `ابن` loses its alif and the ba's sukun, since mid-lineage the word is spelled `بنِ` (ADR 0021). The book view and quotations stay exact. |
 | Numbers | `parsed` values run on match form, so `لَهُ سِتَّ (٢) عَشْرَةَ سَنَةً` parses to 16 (pinned test). |
 
 ### 2.4 Units
