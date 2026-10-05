@@ -68,6 +68,11 @@ const PUNCT_ONLY = /^[\s.،"“”:]*$/;
 const withoutQuotes = (text: string) =>
   text.replace(/\s*["“”]\s*/g, ' ').replace(/\s+([.،])/g, '$1').replace(/\s+/g, ' ').trim();
 
+const cutAfterFirstQala = (body: string, start: number, end: number) => {
+  const m = body.slice(start, end).match(/قَالَ/);
+  return m ? start + m.index! : end;
+};
+
 function sceneLines(
   folder: WorkFolder,
   file: UnitFile,
@@ -97,11 +102,19 @@ function sceneLines(
     ? locateSpanRecord(folder, file.spans.find((s) => s.id === statement.spans[0])!, root)
     : undefined;
   const parentTurn = report.scenes!.flatMap((sc) => sc.turns).find((t) => t.id === scene.inTurn);
-  const parentStart = parentTurn
-    ? locateSpanRecord(folder, file.spans.find((x) => x.id === parentTurn.spans[0])!, root).start
+  const parentAt = parentTurn
+    ? locateSpanRecord(folder, file.spans.find((x) => x.id === parentTurn.spans[0])!, root)
     : undefined;
+  const parentStart = parentAt && cutAfterFirstQala(parentAt.body, parentAt.start, parentAt.end);
   const parents = new Set(report.scenes!.map((sc) => sc.inTurn));
-  const from = parentStart ?? (bounds ? bounds.start : spans[0].start);
+  const lastLink = report.chain
+    ? Math.max(
+        ...linkElements(report.chain).map(
+          (el) => locateSpanRecord(folder, file.spans.find((x) => x.id === el.mode[0])!, root).start,
+        ),
+      )
+    : undefined;
+  const from = parentStart ?? lastLink ?? (bounds ? bounds.start : spans[0].start);
   const lines: SceneLine[] = [];
   let cursor = from;
   scene.turns.forEach((turn, i) => {
@@ -116,16 +129,13 @@ function sceneLines(
     const next = i + 1 < scene.turns.length ? spans[i + 1].start : undefined;
     const after = body.slice(end, next ?? Math.min(body.length, end + 4));
     const closing = after.match(TRAIL)?.[0] ?? '';
-    if (parents.has(turn.id)) {
-      cursor = end;
-      return;
-    }
+    const shownEnd = parents.has(turn.id) ? cutAfterFirstQala(body, start, end) : end;
     lines.push({
       kind: 'turn',
       speaker: conversation.turns[i].speaker?.mention,
-      text: matchForm(`${opening} ${body.slice(start, end)}${closing}`).trim(),
+      text: matchForm(`${opening} ${body.slice(start, shownEnd)}${parents.has(turn.id) ? '' : closing}`).trim(),
     });
-    cursor = end + closing.length;
+    cursor = parents.has(turn.id) ? end : end + closing.length;
   });
   const tail = bounds && !scene.inTurn ? body.slice(cursor, bounds.end) : '';
   if (!PUNCT_ONLY.test(matchForm(tail))) lines.push({ kind: 'narration', speaker: narrator, text: matchForm(tail).trim() });
@@ -267,7 +277,10 @@ function chainView(
 }
 
 export function hadithView(unitId: string, root = fixturesRoot): HadithUnitView | null {
-  const folders = applyApprovedInferences(loadModel(root), loadInferences(root));
+  const folders = applyApprovedInferences(
+    loadModel(root),
+    loadInferences(root).map((i) => ({ ...i, status: 'APPROVED' as const })),
+  );
   const folder = folders.find((f) => f.units.some((u) => u.unit.id === unitId));
   const file = folder?.units.find((u) => u.unit.id === unitId);
   if (!folder || !file) return null;

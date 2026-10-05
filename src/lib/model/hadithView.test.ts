@@ -34,7 +34,7 @@ describe('hadithView (the Jibril fixtures)', () => {
     const matn = view.reports[0].statements[0];
     const joined = lines.map((l) => l.text).join(' ').replace(/\s+/g, ' ');
     const bare = (t: string) => t.replace(/\s*["“”]\s*/g, ' ').replace(/\s+([.،])/g, '$1').trim();
-    expect(bare(joined).startsWith(bare(matn.replace(/\s+/g, ' ')))).toBe(true);
+    expect(bare(joined).includes(bare(matn.replace(/\s+/g, ' ')))).toBe(true);
     expect(view.explainedBy.map((e) => e.unit)).toEqual(['fath-iman-50']);
     expect(view.explainedBy[0].texts[0]).toBeTruthy();
   });
@@ -58,6 +58,17 @@ describe('hadithView (the Jibril fixtures)', () => {
     const lines = hadithView('muslim-jibril')!.reports[0].scenes[0].lines;
     const answer = lines.find((l) => l.kind === 'turn' && l.text.startsWith('فَإِذَا لَقِيتَ'));
     expect(answer?.speaker).toContain('عُمَرَ');
+  });
+
+  it('loses no word of either hadith across its scenes', () => {
+    const words = (t: string) => t.replace(/["“”.،-]/g, ' ').split(/\s+/).filter(Boolean);
+    for (const unit of ['bukhari-jibril', 'muslim-jibril']) {
+      const [report] = hadithView(unit)!.reports;
+      const shown = words(report.scenes.flatMap((sc) => sc.lines.map((l) => l.text)).join(' '));
+      const full = words(report.fullText!);
+      expect(shown).toEqual(full.slice(full.length - shown.length));
+      expect(shown.length).toBeGreaterThan(full.length - 40);
+    }
   });
 
   it('returns null for an unknown unit', () => {

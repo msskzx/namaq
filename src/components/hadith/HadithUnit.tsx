@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBook, faBookOpen, faComments, faListOl } from '@fortawesome/free-solid-svg-icons';
+import { faBook, faBookOpen, faComment, faComments, faRightLeft, faListOl } from '@fortawesome/free-solid-svg-icons';
 import Button from '@/components/common/Button';
 import PageReader from './PageReader';
 import { useLanguage } from '@/components/language/LanguageContext';
@@ -40,6 +40,43 @@ function Chain({ chain, ar }: { chain: ChainView; ar: boolean }) {
   );
 }
 
+function Bubbles({ lines, swapped }: { lines: SceneLine[]; swapped: boolean }) {
+  const first = lines.find((l) => l.kind === 'turn')?.speaker;
+  return (
+    <div className="flex flex-col gap-3">
+      {lines.map((line, i) => {
+        if (line.kind === 'narration') {
+          return (
+            <div key={i} className="px-2">
+              {line.speaker && (
+                <span className="block text-sm text-amber-700 dark:text-amber-400">{line.speaker}</span>
+              )}
+              <p className="text-lg leading-loose text-gray-600 dark:text-gray-400">{line.text}</p>
+            </div>
+          );
+        }
+        const mine = (line.speaker === first) !== swapped;
+        return (
+          <div key={i} className={`flex ${mine ? 'justify-start' : 'justify-end'}`}>
+            <div
+              className={`max-w-[85%] rounded-2xl px-4 py-2 ${
+                mine
+                  ? 'bg-indigo-50 dark:bg-indigo-900 rounded-ss-sm'
+                  : 'bg-amber-50 dark:bg-amber-900 rounded-se-sm'
+              }`}
+            >
+              {line.speaker && (
+                <span className="block text-sm text-amber-700 dark:text-amber-400">{line.speaker}</span>
+              )}
+              <p className="text-lg leading-loose text-gray-900 dark:text-gray-200">{line.text}</p>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function Line({ line }: { line: SceneLine }) {
   const narration = line.kind === 'narration';
   return (
@@ -54,6 +91,8 @@ function Line({ line }: { line: SceneLine }) {
 
 export default function HadithUnit({ view }: { view: HadithUnitView }) {
   const ar = useLanguage().language === 'ar';
+  const [bubbles, setBubbles] = useState(true);
+  const [swapped, setSwapped] = useState(false);
   return (
     <main className="w-full px-6 py-4" dir="rtl">
       <h1 className="mb-4 text-3xl text-gray-900 dark:text-gray-200">
@@ -83,17 +122,35 @@ export default function HadithUnit({ view }: { view: HadithUnitView }) {
               <Chain chain={report.chain} ar={ar} />
             </div>
           )}
+          {report.scenes.length > 0 && (
+            <div className="mb-4 flex flex-wrap gap-2">
+              <Button active={bubbles} onClick={() => setBubbles(!bubbles)}>
+                <FontAwesomeIcon icon={faComment} />
+                {ar ? 'عرض المحادثة فقاعات' : 'Show the conversation as bubbles'}
+              </Button>
+              {bubbles && (
+                <Button onClick={() => setSwapped(!swapped)}>
+                  <FontAwesomeIcon icon={faRightLeft} />
+                  {ar ? 'تبديل الجانبين' : 'Swap sides'}
+                </Button>
+              )}
+            </div>
+          )}
           {report.scenes.map((scene) => (
             <div key={scene.ordinal} className="mb-4">
               <h2 className={h2}>
                 <FontAwesomeIcon icon={faComments} className="text-amber-500 me-2" />
                 {ar ? 'المشهد' : 'Scene'} {scene.ordinal}
               </h2>
-              <div className="flex flex-col gap-3">
-                {scene.lines.map((line, i) => (
-                  <Line key={i} line={line} />
-                ))}
-              </div>
+              {bubbles ? (
+                <Bubbles lines={scene.lines} swapped={swapped} />
+              ) : (
+                <div className="flex flex-col gap-3">
+                  {scene.lines.map((line, i) => (
+                    <Line key={i} line={line} />
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </section>
