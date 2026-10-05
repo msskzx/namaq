@@ -40,7 +40,7 @@
       "volume": 4,
       "page": "41",
       "layer": "MAIN",
-      "exact": "ابْنِ قُصَيِّ بنِ كِلاَبِ بنِ مُرَّةَ بنِ كَعْبِ بنِ لُؤَيِّ بنِ غَالِبٍ",
+      "exact": "ابْنِ قُصَيِّ بنِ كِلاَبِ بنِ مُرَّةَ بنِ كَعْبِ بنِ لُؤَيِّ بنِ غَالِبٍ.",
       "prefix": "* (ع) "
     },
     {
@@ -317,6 +317,23 @@
       "page": "48",
       "layer": "MAIN",
       "exact": "الزُّبَيْرُ ابْنُ عَمَّتِي، وَحَوَارِيَّ مِنْ أُمَّتِي"
+    },
+    {
+      "id": "sp_sabiqoon",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "62",
+      "layer": "MAIN",
+      "exact": "وَمِنَ السَّابِقِيْنَ الأَوَّلِيْنَ"
+    },
+    {
+      "id": "sp_death_place",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "64",
+      "layer": "MAIN",
+      "exact": "وَادِي السِّبَاعِ",
+      "suffix": ":"
     }
   ],
   "reports": [
@@ -512,6 +529,18 @@
       "report": "r_cousin",
       "spans": ["sp_cousin"],
       "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_sabiqoon",
+      "report": "r_zb0",
+      "spans": ["sp_sabiqoon"],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_death_place",
+      "report": "r_zb0",
+      "spans": ["sp_death_place"],
+      "role": "AUTHOR_REPORT"
     }
   ],
   "mentions": [
@@ -1053,6 +1082,27 @@
         "object": "m_prophet2"
       },
       "restsOn": ["st_cousin"],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_title_sabiqoon",
+      "subject": "m_zb",
+      "predicate": "title",
+      "value": {
+        "classified": "al-sabiqoon",
+        "spans": ["sp_sabiqoon"]
+      },
+      "restsOn": ["st_sabiqoon"],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_death_place",
+      "subject": "m_zb",
+      "predicate": "died.place",
+      "value": {
+        "spans": ["sp_death_place"]
+      },
+      "restsOn": ["st_death_place"],
       "status": "PROPOSED"
     }
   ]
