@@ -188,6 +188,19 @@ export default function HadithUnit({ view }: { view: HadithUnitView }) {
           </Button>
         </section>
       ))}
+      {view.sameEvent.map((e) => (
+        <section key={e.unit} className={card}>
+          <h2 className={h2}>{ar ? `الواقعة نفسها في ${e.book}` : `The same event in ${e.book}`}</h2>
+          <p className="mb-2 text-gray-700 dark:text-gray-300">
+            {ar ? `حسب ${e.source}:` : `According to ${e.source}:`}
+          </p>
+          <p dir="rtl" className="mb-3 text-xl leading-loose text-gray-900 dark:text-gray-200">{e.basis}</p>
+          <Button size="sm" href={`/hadith/${e.unit}`}>
+            <FontAwesomeIcon icon={faBookOpen} />
+            {ar ? `اقرأ الحديث في ${e.book}` : `Read the hadith in ${e.book}`}
+          </Button>
+        </section>
+      ))}
       {view.explainedBy.map((e) => (
         <section key={e.unit} className={card}>
           <h2 className={h2}>{ar ? 'ما قاله ابن حجر عن هذا الحديث' : 'What Ibn Hajar says about this hadith'}</h2>

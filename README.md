@@ -26,7 +26,7 @@ Open the graph → explore and filter relationships → open a person's profile 
 
 - `/hadith` lists the Jibril test fixtures (Bukhari, Muslim and the Fath al-Bari
   note); `/hadith/<unit>` shows each one's isnad chains, tahwil, scenes and
-  turns with their speakers, and the commentary link in both directions. The
+  turns with their speakers, the commentary link in both directions, and a link between the two hadith as the same event on Ibn Hajar's wording. The
   data is test fixtures under `src/lib/model/fixtures/jibril`, not a source.
 
 ### Relationship graph

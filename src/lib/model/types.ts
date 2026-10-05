@@ -177,6 +177,12 @@ export interface SharhLink {
   basis: string[];
 }
 
+export interface EventLink {
+  id: string;
+  units: string[];
+  basis: string[];
+}
+
 export interface UnitFile {
   unit: Unit;
   spans: SpanRecord[];
@@ -186,6 +192,7 @@ export interface UnitFile {
   identifications: Identification[];
   assertions: Assertion[];
   sharhLinks?: SharhLink[];
+  eventLinks?: EventLink[];
 }
 
 export interface WorkFolder {
