@@ -69,9 +69,9 @@ the pages should read the database like the person page does. Terms are in
   `npm run model:project -- --units --root src/lib/model/fixtures/jibril --apply --env preview`.
 - Rerun the projection whenever a unit's files change. The tables are derived, never
   edited by hand.
-- Until both steps are done, the pages use the files. On Vercel that needs the
-  fixture folder in the function, which the open fix #339 provides; without it the
-  deployed pages stay broken.
+- Until both steps are done, the pages use the files. On Vercel the fixture folder is not
+  in the function, so the deployed pages stay broken until the migration is applied and
+  the projection has run. (A tracing patch, PR 339, was closed for that reason.)
 
 ## Open issues
 
