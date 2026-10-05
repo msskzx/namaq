@@ -19,8 +19,10 @@ the pages should read the database like the person page does. Terms are in
   There is one code path for the view, so the page and the database cannot drift apart.
 - `npm run model:project -- --units [--root <dir>] [--apply --env preview]` replaces both
   tables. It is separate from the profile projection, so a profile run never clears the
-  units and a units run never clears profile entries. The default root is `.`. A `--root`
-  for test fixtures is refused with `--env prod`.
+  units and a units run never clears profile entries. The default root is `.`. `--units` is
+  refused with `--env prod` until a review rule exists, and `--apply` is refused when no
+  unit is found. Two links with the same from, to and kind become one row with their bases
+  joined.
 - The pages read the database first. If the table is missing or the unit is not in it,
   they fall back to the files, so localhost keeps working before the migration is applied.
   The fallback is temporary.
@@ -39,7 +41,7 @@ the pages should read the database like the person page does. Terms are in
    `model_spans` and `model_profile_entries` untouched.
 5. With the table missing or empty, `/hadith` and `/hadith/<unit>` render from the files.
    With rows present they render from the database.
-6. A `--root` other than `.` with `--env prod` exits with an error.
+6. `--units` with `--env prod`, a missing `--root` value, or `--apply` with no units found, exits with an error.
 
 ## Affected components
 

@@ -31,3 +31,11 @@ describe('unitRows (the Jibril fixtures)', () => {
     for (const u of units) expect(JSON.parse(JSON.stringify(u.view))).toEqual(u.view);
   });
 });
+
+describe('unitRows links with the same key', () => {
+  it('has no duplicate (from, to, kind) key, which the primary key would reject', () => {
+    const { links } = unitRows(fixturesRoot);
+    const keys = links.map((l) => `${l.fromUnit}>${l.toUnit}:${l.kind}`);
+    expect(new Set(keys).size).toBe(keys.length);
+  });
+});

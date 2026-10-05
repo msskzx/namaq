@@ -31,7 +31,7 @@ export function unitRows(root: string) {
       view,
     };
   });
-  const links: UnitLinkRow[] = units.flatMap(({ view }) => [
+  const all: UnitLinkRow[] = units.flatMap(({ view }) => [
     ...view.explains.map((e) => ({
       fromUnit: view.id,
       toUnit: e.unit,
@@ -45,5 +45,12 @@ export function unitRows(root: string) {
       basis: e.basis,
     })),
   ]);
-  return { units, links };
+  const byKey = new Map<string, UnitLinkRow>();
+  for (const link of all) {
+    const key = `${link.fromUnit}>${link.toUnit}:${link.kind}`;
+    const seen = byKey.get(key);
+    if (!seen) byKey.set(key, link);
+    else if (!seen.basis.split(' | ').includes(link.basis)) seen.basis += ` | ${link.basis}`;
+  }
+  return { units, links: [...byKey.values()] };
 }

@@ -8,7 +8,12 @@ import { unitRows } from '../../src/lib/model/unitRows';
 import { loadReviews, selectForProd } from '../../src/lib/model/review';
 
 const rootIndex = process.argv.indexOf('--root');
-const root = rootIndex === -1 ? '.' : process.argv[rootIndex + 1];
+const rootArg = rootIndex === -1 ? '.' : process.argv[rootIndex + 1];
+if (!rootArg) {
+  console.error('--root needs a directory.');
+  process.exit(1);
+}
+const root = rootArg;
 const units = process.argv.includes('--units');
 const apply = process.argv.includes('--apply');
 const envIndex = process.argv.indexOf('--env');
@@ -25,12 +30,16 @@ async function main() {
     process.exit(1);
   }
   if (units) {
-    if (prod && root !== '.') {
-      console.error('--root is for test fixtures and never goes to prod.');
+    if (prod) {
+      console.error('--units has no review rule yet, so it is not allowed with --env prod.');
       process.exit(1);
     }
     const { units: rows, links } = unitRows(root);
     console.log(`${root}: ${rows.length} unit(s), ${links.length} link(s)`);
+    if (apply && rows.length === 0) {
+      console.error('No units found under --root, so nothing is applied.');
+      process.exit(1);
+    }
     if (!apply) {
       console.log('Dry run. Pass --apply --env preview to replace model_units and model_unit_links.');
       return;
