@@ -87,14 +87,6 @@
       "exact": "الإِيمَانُ أَنْ تُؤْمِنَ بِاللَّهِ وَمَلاَئِكَتِهِ وَبِلِقَائِهِ وَرُسُلِهِ، وَتُؤْمِنَ بِالْبَعْثِ"
     },
     {
-      "id": "sp_t3",
-      "edition": "test-bukhari-edition",
-      "volume": 1,
-      "page": "jibril",
-      "layer": "MAIN",
-      "exact": "هَذَا جِبْرِيلُ جَاءَ يُعَلِّمُ النَّاسَ دِينَهُمْ"
-    },
-    {
       "id": "sp_comment_frame",
       "edition": "test-bukhari-edition",
       "volume": 1,
@@ -109,6 +101,74 @@
       "page": "jibril",
       "layer": "MAIN",
       "exact": "جَعَلَ ذَلِكَ كُلَّهُ مِنَ الإِيمَانِ"
+    },
+    {
+      "id": "sp_t3",
+      "edition": "test-bukhari-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "مَا الإِسْلاَمُ",
+      "prefix": "قَالَ "
+    },
+    {
+      "id": "sp_t4",
+      "edition": "test-bukhari-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "الإِسْلاَمُ أَنْ تَعْبُدَ اللَّهَ وَلاَ تُشْرِكَ بِهِ، وَتُقِيمَ الصَّلاَةَ، وَتُؤَدِّيَ الزَّكَاةَ الْمَفْرُوضَةَ، وَتَصُومَ رَمَضَانَ"
+    },
+    {
+      "id": "sp_t5",
+      "edition": "test-bukhari-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "مَا الإِحْسَانُ",
+      "prefix": "قَالَ "
+    },
+    {
+      "id": "sp_t6",
+      "edition": "test-bukhari-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "أَنْ تَعْبُدَ اللَّهَ كَأَنَّكَ تَرَاهُ، فَإِنْ لَمْ تَكُنْ تَرَاهُ فَإِنَّهُ يَرَاكَ"
+    },
+    {
+      "id": "sp_t7",
+      "edition": "test-bukhari-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "مَتَى السَّاعَةُ",
+      "prefix": "قَالَ "
+    },
+    {
+      "id": "sp_t8",
+      "edition": "test-bukhari-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "مَا الْمَسْئُولُ عَنْهَا بِأَعْلَمَ مِنَ السَّائِلِ، وَسَأُخْبِرُكَ عَنْ أَشْرَاطِهَا إِذَا وَلَدَتِ الأَمَةُ رَبَّهَا، وَإِذَا تَطَاوَلَ رُعَاةُ الإِبِلِ الْبُهْمُ فِي الْبُنْيَانِ، فِي خَمْسٍ لاَ يَعْلَمُهُنَّ إِلاَّ اللَّهُ"
+    },
+    {
+      "id": "sp_t10",
+      "edition": "test-bukhari-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "رُدُّوهُ",
+      "prefix": "أَدْبَرَ فَقَالَ \" "
+    },
+    {
+      "id": "sp_t11",
+      "edition": "test-bukhari-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "هَذَا جِبْرِيلُ جَاءَ يُعَلِّمُ النَّاسَ دِينَهُمْ"
     }
   ],
   "reports": [
@@ -126,27 +186,37 @@
         "elements": [
           {
             "narrator": "m_musaddad",
-            "mode": ["sp_b1"],
+            "mode": [
+              "sp_b1"
+            ],
             "modeKey": "haddatha/1pl"
           },
           {
             "narrator": "m_ismail",
-            "mode": ["sp_b2"],
+            "mode": [
+              "sp_b2"
+            ],
             "modeKey": "haddatha/1pl"
           },
           {
             "narrator": "m_abu_hayyan",
-            "mode": ["sp_b3"],
+            "mode": [
+              "sp_b3"
+            ],
             "modeKey": "akhbara/1pl"
           },
           {
             "narrator": "m_abu_zura",
-            "mode": ["sp_b4"],
+            "mode": [
+              "sp_b4"
+            ],
             "modeKey": "an"
           },
           {
             "narrator": "m_abu_hurayra",
-            "mode": ["sp_b5"],
+            "mode": [
+              "sp_b5"
+            ],
             "modeKey": "an"
           }
         ]
@@ -159,17 +229,81 @@
               "id": "t1",
               "ordinal": 1,
               "speaker": "m_jibril",
-              "spans": ["sp_t1"]
+              "spans": [
+                "sp_t1"
+              ]
             },
             {
               "id": "t2",
               "ordinal": 2,
-              "spans": ["sp_t2"]
+              "speaker": "m_prophet",
+              "spans": [
+                "sp_t2"
+              ]
             },
             {
               "id": "t3",
               "ordinal": 3,
-              "spans": ["sp_t3"]
+              "speaker": "m_jibril",
+              "spans": [
+                "sp_t3"
+              ]
+            },
+            {
+              "id": "t4",
+              "ordinal": 4,
+              "speaker": "m_prophet",
+              "spans": [
+                "sp_t4"
+              ]
+            },
+            {
+              "id": "t5",
+              "ordinal": 5,
+              "speaker": "m_jibril",
+              "spans": [
+                "sp_t5"
+              ]
+            },
+            {
+              "id": "t6",
+              "ordinal": 6,
+              "speaker": "m_prophet",
+              "spans": [
+                "sp_t6"
+              ]
+            },
+            {
+              "id": "t7",
+              "ordinal": 7,
+              "speaker": "m_jibril",
+              "spans": [
+                "sp_t7"
+              ]
+            },
+            {
+              "id": "t8",
+              "ordinal": 8,
+              "speaker": "m_prophet",
+              "spans": [
+                "sp_t8"
+              ]
+            },
+            {
+              "id": "t10",
+              "ordinal": 9,
+              "speaker": "m_prophet",
+              "spans": [
+                "sp_t10"
+              ]
+            },
+            {
+              "id": "t11",
+              "ordinal": 10,
+              "speaker": "m_prophet",
+              "spans": [
+                "sp_t11"
+              ]
             }
           ]
         }
@@ -181,7 +315,9 @@
       "ordinal": 2,
       "voice": "AUTHOR",
       "voiceBasis": "sp_comment_frame",
-      "frame": ["sp_comment_frame"],
+      "frame": [
+        "sp_comment_frame"
+      ],
       "origin": {
         "workAuthor": true
       },
@@ -192,13 +328,17 @@
     {
       "id": "st_matn",
       "report": "r_hadith",
-      "spans": ["sp_matn"],
+      "spans": [
+        "sp_matn"
+      ],
       "role": "TRANSMITTED"
     },
     {
       "id": "st_comment",
       "report": "r_comment",
-      "spans": ["sp_comment"],
+      "spans": [
+        "sp_comment"
+      ],
       "role": "AUTHOR_REPORT"
     }
   ],
@@ -242,6 +382,13 @@
       "id": "m_jibril",
       "parent": "sp_matn",
       "exact": "جِبْرِيلُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_prophet",
+      "parent": "sp_matn",
+      "exact": "النَّبِيُّ",
       "occurrence": 1,
       "role": "SPEAKER"
     }

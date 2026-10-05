@@ -12,6 +12,7 @@ export function locateSpanRecord(folder: WorkFolder, span: SpanRecord, root: str
   const { start, end } = resolveSpan(body, span);
   return {
     key: `${witness.slug}/v${span.volume}/${span.page}/${span.layer}`,
+    body,
     start,
     end,
     text: matchForm(body.slice(start, end)),

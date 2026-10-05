@@ -1,0 +1,52 @@
+import { describe, expect, it } from 'vitest';
+import { HARAKAT } from './span';
+import { hadithView, listUnits } from './hadithView';
+
+describe('hadithView (the Jibril fixtures)', () => {
+  it('lists the three units', () => {
+    expect(listUnits().map((u) => u.id).sort()).toEqual(['bukhari-jibril', 'fath-iman-50', 'muslim-jibril']);
+  });
+
+  it('gives Bukhari 50 five links and the conversation', () => {
+    const view = hadithView('bukhari-jibril')!;
+    const [hadith] = view.reports;
+    expect(hadith.chain!.links).toHaveLength(5);
+    const lines = hadith.scenes[0].lines;
+    expect(lines.filter((l) => l.kind === 'turn').map((l) => l.speaker)).toEqual([
+      'جِبْرِيلُ', 'النَّبِيُّ', 'جِبْرِيلُ', 'النَّبِيُّ', 'جِبْرِيلُ', 'النَّبِيُّ',
+      'جِبْرِيلُ', 'النَّبِيُّ', 'النَّبِيُّ', 'النَّبِيُّ',
+    ]);
+    expect(lines[0]).toMatchObject({ kind: 'narration', speaker: 'أَبِي هُرَيْرَةَ' });
+    expect(lines[1].text.startsWith('فَقَالَ')).toBe(true);
+    expect(lines[2].text).toMatch(/^قَالَ ".*الْبَعْثِ ?"\.?$/);
+    const matn = view.reports[0].statements[0];
+    const joined = lines.map((l) => l.text).join(' ').replace(/\s+/g, ' ');
+    expect(joined.startsWith(matn.replace(/\s+/g, ' '))).toBe(true);
+    expect(view.explainedBy.map((e) => e.unit)).toEqual(['fath-iman-50']);
+    expect(view.explainedBy[0].texts[0]).toBeTruthy();
+  });
+
+  it('gives Muslim two branches under a tahwil, and a second scene inside a turn', () => {
+    const [hadith] = hadithView('muslim-jibril')!.reports;
+    expect(hadith.chain!.branches).toHaveLength(2);
+    expect(hadith.chain!.tahwil).toBeTruthy();
+    expect(hadith.scenes[1].inTurn).toBe('o3');
+  });
+
+  it('links the commentary back to the hadith it explains', () => {
+    expect(hadithView('fath-iman-50')!.explains[0].unit).toBe('bukhari-jibril');
+  });
+
+  it('gives the commentary its own words', () => {
+    expect(hadithView('fath-iman-50')!.reports[0].statements[0].replace(HARAKAT, '')).toContain('البصري');
+  });
+
+  it('names the speaker an approved inference identifies', () => {
+    const lines = hadithView('muslim-jibril')!.reports[0].scenes[0].lines;
+    expect(lines[1].speaker).toContain('عُمَرَ');
+  });
+
+  it('returns null for an unknown unit', () => {
+    expect(hadithView('nope')).toBeNull();
+  });
+});
