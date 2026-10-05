@@ -16,6 +16,10 @@ the docs they cite. Relative links assume that location: `../data-pipelines.md`,
   that explain and sends the explanation to a document. Lessons are that
   document's cousin — cite the file or ADR, never assert from memory.
 - Reads Arabic; source excerpts can stay unglossed.
+- Reads the text first and expects agents to. When a rule makes an agent stop on
+  something a reader sees at once (who answers in a question and answer, whether
+  two narrations are one event), the owner treats the rule as the defect. See
+  learning record 0006 and ADR 0024.
 
 ## Open threads for future lessons
 
