@@ -722,3 +722,27 @@ model ModelProfileEntry {
   @@index([agent])
   @@map("model_profile_entries")
 }
+
+model ModelUnit {
+  unit  String @id
+  work  String
+  type  String
+  book  String
+  kitab String?
+  bab   String?
+  view  Json
+
+  @@index([work])
+  @@map("model_units")
+}
+
+model ModelUnitLink {
+  fromUnit String
+  toUnit   String
+  kind     String
+  basis    String
+
+  @@id([fromUnit, toUnit, kind])
+  @@index([toUnit])
+  @@map("model_unit_links")
+}
