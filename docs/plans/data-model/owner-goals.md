@@ -90,3 +90,7 @@ Conflicts, to resolve in the plan:
 | Z3 | Which rijal work is the basis for identification, and whether a digital edition of it exists | the same research |
 | Z4 | Which sources hold the qira'at, and how a reading is recorded beside the Hafs text in `Ayah`. The Qur'an is cited by surah and ayah, not by printed page. Candidates, from memory and unchecked: Tanzil (vowelled Uthmani, Hafs only, reuse unmodified with attribution), Quran.com / QUL (several scripts, possibly other qira'at), the King Fahd Complex mushaf as the check | research, then a plan change |
 | Z5 | Tafsir books worth extracting first, with the same edition criteria | the same research |
+
+## Addendum, 2026-10-05: read the text, and stop where it is unclear
+
+Decided after the hadith pilot, recorded in [ADR 0024](../../adr/0024-read-the-text-and-stop-where-it-is-unclear.md). Rules guard what is unclear or contradictory. Where the text, its headings or its sharh make a reading clear, an agent records it directly with its basis spans, shown as not reviewed. Gap 1 above narrows to what the text does not present. A commentator's own statement that two reports are one event is recorded, attributed to that commentary, and does not break R2. Open for later: the Siyar parsing target (span model or catalog), identity rules for Companions, and the timeline layer.
