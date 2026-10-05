@@ -1,8 +1,8 @@
 import HadithIndex from '@/components/hadith/HadithIndex';
-import { listUnits } from '@/lib/model/hadithView';
+import { loadUnitList } from '@/lib/modelUnits';
 
 export const dynamic = 'force-dynamic';
 
-export default function HadithPage() {
-  return <HadithIndex units={listUnits()} />;
+export default async function HadithPage() {
+  return <HadithIndex units={await loadUnitList()} />;
 }
