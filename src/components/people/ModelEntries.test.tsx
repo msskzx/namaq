@@ -47,14 +47,23 @@ describe('ModelEntries', () => {
           }),
           entry({}),
         ]}
-        spans={[{ unit: 'u', spanId: 's1', volume: 4, page: '41' }]}
+        spans={[
+          {
+            unit: 'u',
+            spanId: 's1',
+            witness: 'siyar-alam-al-nubala-risalah',
+            volume: 4,
+            page: '41',
+          },
+        ]}
       />,
     );
     expect(screen.getAllByRole('heading', { level: 3 }).map((h) => h.textContent)).toEqual([
       'الكنية',
       'عمره عند إسلامه',
     ]);
-    expect(screen.getByText('أَبُو عَبْدِ اللهِ')).toBeTruthy();
+    expect(screen.getByText('أَبُو عَبْدِ اللهِ').getAttribute('lang')).toBe('ar');
+    expect(screen.getByText('16 سنة').getAttribute('lang')).toBeNull();
     expect(screen.getByText('16 سنة')).toBeTruthy();
     expect(screen.getByText('8 سنة')).toBeTruthy();
     expect(screen.getByText('ورد عن: عُرْوَةَ')).toBeTruthy();

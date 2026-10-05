@@ -13,7 +13,6 @@ export type PersonFull = PrismaPerson & {
   ayat?: Ayah[];
   participations?: BattleParticipation[];
   claims?: ClaimWithCitations[];
-  /** Values read from the book through spans, with who said them. */
   modelEntries?: ModelEntryDto[];
   modelSpans?: ModelSpanDto[];
   /** What they said, and what was said about them. */

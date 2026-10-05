@@ -21,6 +21,7 @@ export interface ModelEntryDto {
 export interface ModelSpanDto {
   unit: string;
   spanId: string;
+  witness: string;
   volume: number;
   page: string;
 }
@@ -47,14 +48,18 @@ export const predicateLabels: Record<string, Pair> = {
   'name.kunya': { ar: 'الكنية', en: 'Kunya' },
   sex: { ar: 'الجنس', en: 'Sex' },
   title: { ar: 'الألقاب', en: 'Titles' },
-  CHILD_OF: { ar: 'الوالدان', en: 'Parents' },
-  MARRIED: { ar: 'الزوجة', en: 'Spouse' },
-  PATERNAL_COUSIN: { ar: 'ابن عمة', en: 'Paternal cousin' },
+  CHILD_OF: { ar: 'النسب', en: 'Parentage' },
+  MARRIED: { ar: 'الزواج', en: 'Marriage' },
+  PATERNAL_COUSIN: { ar: 'القرابة (ابن/ابنة عمة)', en: 'Kinship (child of a paternal aunt)' },
   appearance: { ar: 'الصفة', en: 'Appearance' },
   virtue: { ar: 'من فضائله', en: 'Virtues' },
   'islam.age': { ar: 'عمره عند إسلامه', en: 'Age at Islam' },
   'died.year': { ar: 'سنة وفاته', en: 'Year of death' },
-  PARTICIPATED_IN: { ar: 'شهد', en: 'Took part in' },
+  PARTICIPATED_IN: { ar: 'المشاهد', en: 'Battles and expeditions' },
+};
+
+const works: Record<string, Pair> = {
+  'siyar-alam-al-nubala-risalah': { ar: 'سير أعلام النبلاء', en: "Siyar A'lam al-Nubala'" },
 };
 
 const authors: Record<string, Pair> = {
@@ -63,6 +68,10 @@ const authors: Record<string, Pair> = {
 
 export function predicateLabel(predicate: string, language: Language) {
   return predicateLabels[predicate]?.[language] ?? predicate;
+}
+
+export function isBookText(entry: ModelEntryDto) {
+  return entry.parsed === null && entry.classified === null;
 }
 
 export function valueLines(entry: ModelEntryDto, language: Language) {
@@ -77,7 +86,7 @@ export function valueLines(entry: ModelEntryDto, language: Language) {
     return [String(entry.parsed)];
   }
   if (entry.object !== null || entry.objectMention !== null) {
-    return [entry.objectMention ?? entry.object ?? ''];
+    return entry.objectMention ? [entry.objectMention] : entry.parts;
   }
   return entry.predicate === 'name.full' ? [entry.text] : entry.parts;
 }
@@ -93,9 +102,10 @@ export function originLabel(origin: ModelEntryDto['origins'][number], language: 
 export function citationLabel(entry: ModelEntryDto, spans: ModelSpanDto[], language: Language) {
   const span = spans.find((s) => s.unit === entry.unit && s.spanId === entry.spanIds[0]);
   if (!span) return null;
+  const work = works[span.witness]?.[language] ?? span.witness;
   return language === 'ar'
-    ? `سير أعلام النبلاء، مج ${span.volume}، ص ${span.page}`
-    : `Siyar A'lam al-Nubala', vol. ${span.volume}, p. ${span.page}`;
+    ? `${work}، مج ${span.volume}، ص ${span.page}`
+    : `${work}, vol. ${span.volume}, p. ${span.page}`;
 }
 
 export function statusLabel(entry: ModelEntryDto, language: Language) {

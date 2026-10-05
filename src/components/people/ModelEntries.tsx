@@ -5,6 +5,7 @@ import Badge from '@/components/common/Badge';
 import { useLanguage } from '@/components/language/LanguageContext';
 import {
   citationLabel,
+  isBookText,
   originLabel,
   predicateLabel,
   predicateOrder,
@@ -52,7 +53,11 @@ export default function ModelEntries({
                 .map((entry) => (
                   <li key={`${entry.unit}/${entry.assertionId}`} className="flex flex-col gap-1">
                     {valueLines(entry, language).map((line, i) => (
-                      <p key={i} className="text-lg text-gray-800 dark:text-gray-200">
+                      <p
+                        key={i}
+                        className="text-lg text-gray-800 dark:text-gray-200"
+                        {...(isBookText(entry) ? { lang: 'ar', dir: 'rtl' } : {})}
+                      >
                         {line}
                       </p>
                     ))}

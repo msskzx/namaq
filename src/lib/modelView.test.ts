@@ -56,6 +56,12 @@ describe('modelView', () => {
     ).toEqual(['العَوَّامِ']);
   });
 
+  it('does not show a slug when a related person has no mention text', () => {
+    expect(
+      valueLines({ ...base, predicate: 'PARTICIPATED_IN', object: 'badr', parts: [] }, 'ar'),
+    ).toEqual([]);
+  });
+
   it('labels the author and a quoted speaker, in both languages', () => {
     expect(originLabel({ author: 'al-dhahabi' }, 'ar')).toBe('المصنف: الذهبي');
     expect(originLabel({ author: 'al-dhahabi' }, 'en')).toBe('The author: al-Dhahabi');
@@ -63,9 +69,14 @@ describe('modelView', () => {
   });
 
   it("cites the first span's volume and page, and says whether it is reviewed", () => {
-    const spans = [{ unit: 'u', spanId: 's1', volume: 4, page: '41' }];
+    const spans = [
+      { unit: 'u', spanId: 's1', witness: 'siyar-alam-al-nubala-risalah', volume: 4, page: '41' },
+    ];
     expect(citationLabel(base, spans, 'ar')).toBe('سير أعلام النبلاء، مج 4، ص 41');
     expect(citationLabel(base, [], 'ar')).toBeNull();
+    expect(citationLabel(base, [{ ...spans[0], witness: 'other-work' }], 'en')).toBe(
+      'other-work, vol. 4, p. 41',
+    );
     expect(statusLabel(base, 'ar')).toBe('غير مراجَع');
     expect(statusLabel({ ...base, reviewed: true }, 'en')).toBe('Reviewed');
   });
@@ -73,5 +84,7 @@ describe('modelView', () => {
   it('labels each predicate and falls back to the predicate itself', () => {
     expect(predicateLabel('islam.age', 'en')).toBe('Age at Islam');
     expect(predicateLabel('unknown', 'ar')).toBe('unknown');
+    expect(predicateLabel('PATERNAL_COUSIN', 'ar')).toBe('القرابة (ابن/ابنة عمة)');
+    expect(predicateLabel('PARTICIPATED_IN', 'ar')).toBe('المشاهد');
   });
 });
