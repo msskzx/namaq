@@ -229,6 +229,20 @@ report, a synthesis, or editorial analysis. It describes the passage, not the
 digital host or the work as a whole.
 _Avoid_: Source quality, website type
 
+**Entry**:
+One biography in a book, as the book prints it. The model's record of an entry
+is a unit. Older batch files call the same thing an account.
+_Avoid_: Account (in new writing)
+
+**Not modeled**:
+A sentence of an entry that no field covers. It is listed, never hidden, and it
+never fails a check. A date sentence is listed as not modeled until the time
+layer exists.
+
+**Unresolved name**:
+A name the book itself cannot tie to one person. It stays text, is highlighted,
+and never becomes a graph node.
+
 ### People and search
 
 **Graph-only person**:
