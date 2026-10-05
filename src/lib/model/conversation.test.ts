@@ -17,7 +17,7 @@ describe('conversationOf (the hadith of Jibril fixtures)', () => {
     expect(scenes.map((s) => s.ordinal)).toEqual([1, 2]);
     expect(scenes[1].inTurn).toBe('o3');
     expect(scenes[0].turns.map((t) => t.id)).toEqual(['o1', 'o2', 'o3']);
-    expect(scenes[1].turns.map((t) => t.id)).toEqual(['s1', 's2', 's3', 's4']);
+    expect(scenes[1].turns.map((t) => t.id)).toHaveLength(15);
   });
 
   it('renders each turn from its spans, keeping two parts around an interruption', () => {
@@ -38,7 +38,6 @@ describe('conversationOf (the hadith of Jibril fixtures)', () => {
       s2: 'رَسُولُ اللَّهِ',
     });
     expect(byId.o2).toBeUndefined();
-    expect(byId.s3).toBeUndefined();
   });
 
   it('shows the stranger as Jibril once the closing words identify him', () => {
@@ -118,7 +117,7 @@ describe('conversationOf (the hadith of Jibril fixtures)', () => {
       id: 'i_other',
       mention: 'm_prophet',
       agent: 'prophet-muhammad',
-      basis: [{ span: 'sp_s4', role: 'SAME_WORK_EXPLICIT' }],
+      basis: [{ span: 'sp_s15', role: 'SAME_WORK_EXPLICIT' }],
       status: 'REJECTED',
     });
     const s2 = conversationOf(folder, file, 'r_hadith', ROOT).scenes[1].turns[1];

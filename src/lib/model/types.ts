@@ -98,6 +98,7 @@ export interface Turn {
 export interface Scene {
   ordinal: number;
   inTurn?: string;
+  narrator?: string;
   turns: Turn[];
 }
 

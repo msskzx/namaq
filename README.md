@@ -22,6 +22,13 @@ Open the graph → explore and filter relationships → open a person's profile 
   an overlay that deep-links to the exact reader passage, and report a
   percentage with a pass mark at 50%.
 
+### Hadith fixtures
+
+- `/hadith` lists the Jibril test fixtures (Bukhari, Muslim and the Fath al-Bari
+  note); `/hadith/<unit>` shows each one's isnad chains, tahwil, scenes and
+  turns with their speakers, and the commentary link in both directions. The
+  data is test fixtures under `src/lib/model/fixtures/jibril`, not a source.
+
 ### Relationship graph
 
 - The **Nodes in view** list can be hidden and shown; every action button in the graph UI comes from the shared `Button` component, and a selected person's titles render as the same badges the profile page uses.

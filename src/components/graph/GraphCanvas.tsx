@@ -824,7 +824,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
       // immediate and carries no meaning worth reacting to; its own
       // initial/reset framing effect above (and the explicit Fit graph
       // button) are the only things that ever move its camera on their own.
-      onEngineStop={isFullscreen ? undefined : () => fitToView()}
+      onEngineStop={isFullscreen ? undefined : () => fitToView(!focusSlug && (!selectedSlug || selectedSlug === targetSlug))}
     />
   );
 

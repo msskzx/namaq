@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Amiri, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { config } from "@fortawesome/fontawesome-svg-core";
+import "@fortawesome/fontawesome-svg-core/styles.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { LanguageProvider } from "@/components/language/LanguageContext";
 import AppChrome from "@/components/common/AppChrome";
@@ -9,6 +11,8 @@ import ConditionalAnalytics from "@/components/cookies/ConditionalAnalytics";
 import SWRProvider from "@/components/common/SWRProvider";
 import CustomThemeProvider from "@/components/theme/CustomThemeProvider";
 import { SITE_URL } from "@/lib/siteUrl";
+
+config.autoAddCss = false;
 
 // Amiri is a naskh revival drawn for vocalized classical Arabic, which is what
 // the source accounts are. Its Latin comes along for the interface, so one
