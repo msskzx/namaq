@@ -85,6 +85,15 @@ describe('hadithView (the Jibril fixtures)', () => {
     expect(view.explains[0]).toMatchObject({ unit: 'bukhari-jibril', book: 'صحيح البخاري' });
   });
 
+  it('links Bukhari 50 and Muslim as the same event on Ibn Hajar\'s word, from each side', () => {
+    const fromBukhari = hadithView('bukhari-jibril')!.sameEvent;
+    const fromMuslim = hadithView('muslim-jibril')!.sameEvent;
+    expect(fromBukhari).toMatchObject([{ unit: 'muslim-jibril', source: 'فتح الباري بشرح صحيح البخاري' }]);
+    expect(fromBukhari[0].basis).toContain('أَخْرَجَهُ مُسْلِمٌ');
+    expect(fromMuslim.map((e) => e.unit)).toEqual(['bukhari-jibril']);
+    expect(hadithView('fath-iman-50')!.sameEvent).toEqual([]);
+  });
+
   it('returns null for an unknown unit', () => {
     expect(hadithView('nope')).toBeNull();
   });

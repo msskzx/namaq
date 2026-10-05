@@ -31,6 +31,14 @@
       "page": "115",
       "layer": "MAIN",
       "exact": "قَوْلُهُ: (حَدَّثَنَا إِسْمَاعِيلُ بْنُ إِبْرَاهِيمَ) هُوَ الْبَصْرِيُّ الْمَعْرُوفُ بِابْنِ عُلَيَّةَ"
+    },
+    {
+      "id": "sp_same_event",
+      "edition": "test-fath-edition",
+      "volume": 1,
+      "page": "115",
+      "layer": "MAIN",
+      "exact": "وَقَدْ أَخْرَجَهُ مُسْلِمٌ مِنْ حَدِيثِ عُمَرَ بْنِ الْخَطَّابِ، وَفِي سِيَاقِهِ فَوَائِدُ زَوَائِدُ أَيْضًا"
     }
   ],
   "reports": [
@@ -50,7 +58,9 @@
     {
       "id": "st_note",
       "report": "r_note",
-      "spans": ["sp_note"],
+      "spans": [
+        "sp_note"
+      ],
       "role": "AUTHOR_REPORT"
     }
   ],
@@ -61,7 +71,21 @@
     {
       "id": "sl_iman_50",
       "explains": "bukhari-jibril",
-      "basis": ["sp_number"]
+      "basis": [
+        "sp_number"
+      ]
+    }
+  ],
+  "eventLinks": [
+    {
+      "id": "ev_jibril",
+      "units": [
+        "bukhari-jibril",
+        "muslim-jibril"
+      ],
+      "basis": [
+        "sp_same_event"
+      ]
     }
   ]
 }

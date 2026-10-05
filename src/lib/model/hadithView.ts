@@ -60,6 +60,7 @@ export interface HadithUnitView {
   notes: { text: string; narrator?: string }[];
   explains: { unit: string; basis: string; book: string }[];
   explainedBy: { unit: string; texts: string[] }[];
+  sameEvent: { unit: string; book: string; basis: string; source: string }[];
 }
 
 const LEAD = /((?:[فو][\u064B-\u0652]*)?(?:قَالَ|قُلْتُ))(\s*["“]?\s*)$/;
@@ -351,6 +352,25 @@ export function hadithView(unitId: string, root = fixturesRoot): HadithUnitView 
       basis: l.basis.map(spanText).join(' … '),
       book: BOOKS[folders.find((f) => f.units.some((u) => u.unit.id === l.explains))!.work.slug] ?? '',
     })),
+    sameEvent: folders.flatMap((f) =>
+      f.units.flatMap((u) =>
+        (u.eventLinks ?? [])
+          .filter((l) => l.units.includes(unitId))
+          .flatMap((l) =>
+            l.units
+              .filter((other) => other !== unitId)
+              .map((other) => ({
+                unit: other,
+                book:
+                  BOOKS[folders.find((g) => g.units.some((x) => x.unit.id === other))!.work.slug] ?? '',
+                basis: l.basis
+                  .map((id) => renderSpanRecord(f, u.spans.find((x) => x.id === id)!, root))
+                  .join(' … '),
+                source: BOOKS[f.work.slug] ?? f.work.slug,
+              })),
+          ),
+      ),
+    ),
     explainedBy: folders.flatMap((f) =>
       f.units
         .filter((u) => u.sharhLinks?.some((l) => l.explains === unitId))
