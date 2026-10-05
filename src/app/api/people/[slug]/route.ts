@@ -80,8 +80,15 @@ export async function GET(
       orderBy: { updatedAt: 'desc' },
     });
 
+    const modelEntries = await prisma.modelProfileEntry.findMany({
+      where: { agent: slug },
+      orderBy: [{ predicate: 'asc' }, { assertionId: 'asc' }],
+    });
+    const keys = modelEntries.flatMap((e) => e.spanIds.map((spanId) => ({ unit: e.unit, spanId })));
+    const modelSpans = keys.length > 0 ? await prisma.modelSpan.findMany({ where: { OR: keys } }) : [];
+
     return NextResponse.json(
-      { ...person, claims: await withRelatedSubjectNames(claims) },
+      { ...person, claims: await withRelatedSubjectNames(claims), modelEntries, modelSpans },
       { headers: CATALOG_CACHE_HEADERS }
     );
   } catch (error) {

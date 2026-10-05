@@ -23,6 +23,7 @@ import { AyatGroup } from '@/components/quran/AyahCard';
 import UtteranceGroup from '@/components/utterances/UtteranceGroup';
 import ClaimEvidence from '@/components/common/ClaimEvidence';
 import SourceAccountReader from '@/components/people/SourceAccountReader';
+import ModelEntries from '@/components/people/ModelEntries';
 
 function PersonDetailPage() {
   const { language } = useLanguage();
@@ -71,6 +72,9 @@ function PersonDetailPage() {
         </div>
 
         <div className="flex flex-col gap-6 mt-10">
+          {person.modelEntries && person.modelEntries.length > 0 && (
+            <ModelEntries entries={person.modelEntries} spans={person.modelSpans ?? []} />
+          )}
           {person.fullName && (
             <div className="bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4">
               <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
