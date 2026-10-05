@@ -70,7 +70,7 @@ const withoutQuotes = (text: string) =>
 
 const cutAfterFirstQala = (body: string, start: number, end: number) => {
   const m = body.slice(start, end).match(/قَالَ/);
-  return m ? start + m.index! : end;
+  return m ? start + m.index! + m[0].length : end;
 };
 
 function sceneLines(
@@ -98,22 +98,27 @@ function sceneLines(
   }
   const body = spans[0].body;
   const statement = file.statements.find((st) => st.report === report.id);
+  const statementAt = (id: string) => locateSpanRecord(folder, file.spans.find((s) => s.id === id)!, root);
   const bounds = statement
-    ? locateSpanRecord(folder, file.spans.find((s) => s.id === statement.spans[0])!, root)
+    ? {
+        start: statementAt(statement.spans[0]).start,
+        end: statementAt(statement.spans[statement.spans.length - 1]).end,
+      }
     : undefined;
   const parentTurn = report.scenes!.flatMap((sc) => sc.turns).find((t) => t.id === scene.inTurn);
   const parentAt = parentTurn
     ? locateSpanRecord(folder, file.spans.find((x) => x.id === parentTurn.spans[0])!, root)
     : undefined;
-  const parentStart = parentAt && cutAfterFirstQala(parentAt.body, parentAt.start, parentAt.end);
+  const parentStart =
+    parentAt && parentAt.key === spans[0].key
+      ? cutAfterFirstQala(parentAt.body, parentAt.start, parentAt.end)
+      : undefined;
   const parents = new Set(report.scenes!.map((sc) => sc.inTurn));
-  const lastLink = report.chain
-    ? Math.max(
-        ...linkElements(report.chain).map(
-          (el) => locateSpanRecord(folder, file.spans.find((x) => x.id === el.mode[0])!, root).start,
-        ),
-      )
-    : undefined;
+  const linkStarts = (report.chain ? linkElements(report.chain) : [])
+    .map((el) => locateSpanRecord(folder, file.spans.find((x) => x.id === el.mode[0])!, root))
+    .filter((at) => at.key === spans[0].key)
+    .map((at) => at.start);
+  const lastLink = linkStarts.length > 0 ? Math.max(...linkStarts) : undefined;
   const from = parentStart ?? lastLink ?? (bounds ? bounds.start : spans[0].start);
   const lines: SceneLine[] = [];
   let cursor = from;
@@ -201,7 +206,7 @@ const PLACES: Record<string, { kitab: string; bab: string }> = {
 
 export function listUnits(root = fixturesRoot) {
   return loadModel(root).flatMap((folder) =>
-    folder.units.map((file) => ({ id: file.unit.id, work: folder.work.slug, type: file.unit.type })),
+    folder.units.map((file) => ({ id: file.unit.id, book: BOOKS[folder.work.slug] ?? folder.work.slug })),
   );
 }
 
@@ -240,7 +245,7 @@ function linkTexts(
     const lead = raw.match(/\s*قَالَ$/);
     const own = (lead ? raw.slice(0, lead.index) : raw).replace(/[\s،]+$/, '');
     texts.set(link.id, `${carry}${own}`);
-    carry = lead ? 'قَالَ ' : '';
+    carry = lead && links.some((l) => l.at.start === end) ? 'قَالَ ' : '';
   }
   return texts;
 }
@@ -284,10 +289,9 @@ export function hadithView(unitId: string, root = fixturesRoot): HadithUnitView 
   const folder = folders.find((f) => f.units.some((u) => u.unit.id === unitId));
   const file = folder?.units.find((u) => u.unit.id === unitId);
   if (!folder || !file) return null;
+  const mentionText = (id: string) => file.mentions.find((m) => m.id === id)!.exact;
   const originText = (report: UnitFile['reports'][number]) =>
-    'workAuthor' in report.origin
-      ? folder.work.author
-      : file.mentions.find((m) => m.id === (report.origin as { mention: string }).mention)!.exact;
+    'workAuthor' in report.origin ? folder.work.author : mentionText(report.origin.mention);
   const spanText = (id: string) => renderSpanRecord(folder, file.spans.find((s) => s.id === id)!, root);
   return {
     id: file.unit.id,
@@ -300,10 +304,7 @@ export function hadithView(unitId: string, root = fixturesRoot): HadithUnitView 
     reports: file.reports.map((report) => ({
       id: report.id,
       voice: report.voice,
-      origin:
-        'workAuthor' in report.origin
-          ? folder.work.author
-          : file.mentions.find((m) => m.id === (report.origin as { mention: string }).mention)!.exact,
+      origin: originText(report),
       chainState: report.chainState,
       frame: report.frame?.map(spanText).join(' … '),
       fullText: fullTextOf(folder, file, report, root),
@@ -322,7 +323,7 @@ export function hadithView(unitId: string, root = fixturesRoot): HadithUnitView 
           report,
           index,
           report.scenes![index].narrator
-            ? file.mentions.find((m) => m.id === report.scenes![index].narrator)!.exact
+            ? mentionText(report.scenes![index].narrator!)
             : originText(report),
           root,
         ).map((line) => ({

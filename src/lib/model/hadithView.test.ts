@@ -71,6 +71,14 @@ describe('hadithView (the Jibril fixtures)', () => {
     }
   });
 
+  it('ends the first Muslim scene on the son\'s qala and opens the nested story at baynama', () => {
+    const [report] = hadithView('muslim-jibril')!.reports;
+    const last = report.scenes[0].lines.at(-1)!;
+    expect(last.speaker).toContain('عُمَرَ بْنِ الْخَطَّابِ');
+    expect(last.text.endsWith('عُمَرُ بْنُ الْخَطَّابِ قَالَ')).toBe(true);
+    expect(report.scenes[1].lines[0].text.startsWith('بَيْنَمَا')).toBe(true);
+  });
+
   it('returns null for an unknown unit', () => {
     expect(hadithView('nope')).toBeNull();
   });

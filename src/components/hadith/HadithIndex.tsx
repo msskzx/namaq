@@ -6,7 +6,7 @@ import { useLanguage } from '@/components/language/LanguageContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookOpen } from '@fortawesome/free-solid-svg-icons';
 
-export default function HadithIndex({ units }: { units: { id: string; work: string; type: string }[] }) {
+export default function HadithIndex({ units }: { units: { id: string; book: string }[] }) {
   const ar = useLanguage().language === 'ar';
   return (
     <main className="max-w-3xl mx-auto p-4">
@@ -21,7 +21,7 @@ export default function HadithIndex({ units }: { units: { id: string; work: stri
           <li key={u.id}>
             <Button variant="outline" href={`/hadith/${u.id}`}>
               <FontAwesomeIcon icon={faBookOpen} />
-              {u.id}
+              {u.book}
             </Button>
           </li>
         ))}

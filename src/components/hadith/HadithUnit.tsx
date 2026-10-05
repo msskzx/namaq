@@ -2,8 +2,9 @@
 
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBook, faBookOpen, faComment, faComments, faRightLeft, faListOl } from '@fortawesome/free-solid-svg-icons';
+import { faBook, faBookOpen, faComments, faListOl } from '@fortawesome/free-solid-svg-icons';
 import Button from '@/components/common/Button';
+import SlideSwitch from '@/components/graph/SlideSwitch';
 import PageReader from './PageReader';
 import { useLanguage } from '@/components/language/LanguageContext';
 import type { ChainView, HadithUnitView, SceneLine } from '@/lib/model/hadithView';
@@ -14,7 +15,7 @@ const h2 = 'text-2xl mb-3 text-gray-900 dark:text-gray-200';
 function Chain({ chain, ar }: { chain: ChainView; ar: boolean }) {
   return (
     <div>
-      <ol className="flex flex-col gap-1">
+      <ol dir="rtl" className="flex flex-col gap-1">
         {chain.links.map((link, i) => (
           <li key={i} className="text-lg text-gray-900 dark:text-gray-200">
             {link.gap ? (
@@ -40,10 +41,10 @@ function Chain({ chain, ar }: { chain: ChainView; ar: boolean }) {
   );
 }
 
-function Bubbles({ lines, swapped }: { lines: SceneLine[]; swapped: boolean }) {
+function Bubbles({ lines }: { lines: SceneLine[] }) {
   const first = lines.find((l) => l.kind === 'turn')?.speaker;
   return (
-    <div className="flex flex-col gap-3">
+    <div dir="rtl" className="flex flex-col gap-3">
       {lines.map((line, i) => {
         if (line.kind === 'narration') {
           return (
@@ -51,11 +52,11 @@ function Bubbles({ lines, swapped }: { lines: SceneLine[]; swapped: boolean }) {
               {line.speaker && (
                 <span className="block text-sm text-amber-700 dark:text-amber-400">{line.speaker}</span>
               )}
-              <p className="text-lg leading-loose text-gray-600 dark:text-gray-400">{line.text}</p>
+              <p className="text-lg leading-loose text-gray-600 dark:text-gray-300">{line.text}</p>
             </div>
           );
         }
-        const mine = (line.speaker === first) !== swapped;
+        const mine = line.speaker === first;
         return (
           <div key={i} className={`flex ${mine ? 'justify-start' : 'justify-end'}`}>
             <div
@@ -80,7 +81,7 @@ function Bubbles({ lines, swapped }: { lines: SceneLine[]; swapped: boolean }) {
 function Line({ line }: { line: SceneLine }) {
   const narration = line.kind === 'narration';
   return (
-    <div className={narration ? 'text-gray-700 dark:text-gray-300' : 'ps-4 border-s-4 border-amber-400'}>
+    <div dir="rtl" className={narration ? 'text-gray-700 dark:text-gray-300' : 'ps-4 border-s-4 border-amber-400'}>
       {line.speaker && (
         <span className="block text-sm text-amber-700 dark:text-amber-400">{line.speaker}</span>
       )}
@@ -92,15 +93,14 @@ function Line({ line }: { line: SceneLine }) {
 export default function HadithUnit({ view }: { view: HadithUnitView }) {
   const ar = useLanguage().language === 'ar';
   const [bubbles, setBubbles] = useState(true);
-  const [swapped, setSwapped] = useState(false);
   return (
-    <main className="w-full px-6 py-4" dir="rtl">
-      <h1 className="mb-4 text-3xl text-gray-900 dark:text-gray-200">
+    <main className="w-full px-6 py-4" dir={ar ? 'rtl' : 'ltr'}>
+      <h1 dir="rtl" className="mb-4 text-3xl text-gray-900 dark:text-gray-200">
         <FontAwesomeIcon icon={faBook} className="text-amber-500 me-2" />
         {view.book}
       </h1>
       {view.kitab && (
-        <p className="mb-4 text-xl leading-loose text-gray-700 dark:text-gray-300">
+        <p dir="rtl" className="mb-4 text-xl leading-loose text-gray-700 dark:text-gray-300">
           {view.kitab} — {view.bab}
         </p>
       )}
@@ -108,10 +108,10 @@ export default function HadithUnit({ view }: { view: HadithUnitView }) {
         <section key={report.id} className={card}>
           {report.frame && <p className="mb-3 text-gray-700 dark:text-gray-300">{report.frame}</p>}
           {report.fullText && (
-            <p className="mb-4 text-xl leading-loose text-gray-900 dark:text-gray-200">{report.fullText}</p>
+            <p dir="rtl" className="mb-4 text-xl leading-loose text-gray-900 dark:text-gray-200">{report.fullText}</p>
           )}
           {!report.fullText && report.scenes.length === 0 && report.statements.map((text, i) => (
-            <p key={i} className="mb-3 text-xl leading-loose text-gray-900 dark:text-gray-200">{text}</p>
+            <p key={i} dir="rtl" className="mb-3 text-xl leading-loose text-gray-900 dark:text-gray-200">{text}</p>
           ))}
           {report.chain && (
             <div className="mb-4">
@@ -123,17 +123,12 @@ export default function HadithUnit({ view }: { view: HadithUnitView }) {
             </div>
           )}
           {report.scenes.length > 0 && (
-            <div className="mb-4 flex flex-wrap gap-2">
-              <Button active={bubbles} onClick={() => setBubbles(!bubbles)}>
-                <FontAwesomeIcon icon={faComment} />
-                {ar ? 'عرض المحادثة فقاعات' : 'Show the conversation as bubbles'}
-              </Button>
-              {bubbles && (
-                <Button onClick={() => setSwapped(!swapped)}>
-                  <FontAwesomeIcon icon={faRightLeft} />
-                  {ar ? 'تبديل الجانبين' : 'Swap sides'}
-                </Button>
-              )}
+            <div className="mb-4">
+              <SlideSwitch
+                checked={bubbles}
+                onChange={() => setBubbles(!bubbles)}
+                label={ar ? 'عرض المحادثة فقاعات' : 'Show the conversation as bubbles'}
+              />
             </div>
           )}
           {report.scenes.map((scene) => (
@@ -143,7 +138,7 @@ export default function HadithUnit({ view }: { view: HadithUnitView }) {
                 {ar ? 'المشهد' : 'Scene'} {scene.ordinal}
               </h2>
               {bubbles ? (
-                <Bubbles lines={scene.lines} swapped={swapped} />
+                <Bubbles lines={scene.lines} />
               ) : (
                 <div className="flex flex-col gap-3">
                   {scene.lines.map((line, i) => (
@@ -164,7 +159,7 @@ export default function HadithUnit({ view }: { view: HadithUnitView }) {
       {view.explains.map((e) => (
         <section key={e.unit} className={card}>
           <h2 className={h2}>{ar ? 'الشرح' : 'Commentary'}</h2>
-          <p className="mb-2 text-xl text-gray-900 dark:text-gray-200">{e.basis}</p>
+          <p dir="rtl" className="mb-2 text-xl text-gray-900 dark:text-gray-200">{e.basis}</p>
           <Button size="sm" href={`/hadith/${e.unit}`}>
             <FontAwesomeIcon icon={faBookOpen} />
             {ar ? 'الحديث' : 'The hadith'}
@@ -175,7 +170,7 @@ export default function HadithUnit({ view }: { view: HadithUnitView }) {
         <section key={e.unit} className={card}>
           <h2 className={h2}>{ar ? 'الشرح' : 'Commentary'}</h2>
           {e.texts.map((text, i) => (
-            <p key={i} className="mb-2 text-xl leading-loose text-gray-900 dark:text-gray-200">{text}</p>
+            <p key={i} dir="rtl" className="mb-2 text-xl leading-loose text-gray-900 dark:text-gray-200">{text}</p>
           ))}
           <Button size="sm" href={`/hadith/${e.unit}`}>
             <FontAwesomeIcon icon={faBookOpen} />
