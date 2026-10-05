@@ -47,6 +47,7 @@ No prod database yet. No further Siyar conversion, no wording-owned-by-one-route
 3. The profile page, the conversation view and the review surface (page with highlighted spans, accept, reject, dispute) reading `profilesFromModel`, `conversationOf` and `highlightsOnPage`. The data functions exist; the UI does not, and it needs the existing reader and profile components looked at first.
 4. CI and `CODEOWNERS` rules so only a scholar changes `data/reviews/` and only the owner changes `data/inferences/` (a review file is authored, so without this an agent could forge one). Needs the **owner** to set up on GitHub.
 5. A cross-unit span reference, so Ibn Hajar's note on page 115 can be the `COMMENTATOR_NOTE` basis for identifying `إسماعيل بن إبراهيم` (Ibn Ulayyah) in the Bukhari fixture; wording owned by one route (`وَهَذَا حَدِيثُهُ`); a real mu'allaq chain with a Gap.
+6. The code for [ADR 0024](../../adr/0024-read-the-text-and-stop-where-it-is-unclear.md): `speakerBasis` on `Turn`, a `model:check` rule that asks for it where the text does not print the speaker, the Jibril fixtures set it, and a completeness test per entry as `hadithView.test.ts` has for the two hadith. The `/hadith` demo pages and the same-event link are in `main` from #336 and a follow-up.
 
 ## Not now
 

@@ -180,6 +180,20 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   claims with their citations; `accounts/<subject>/NNN.md` holds one printed page
   of the work's text, with `NNN.notes.md` beside it for that page's editorial
   footnotes. `summary.md` is the review summary.
+- **Read the text; stop only where it is unclear.** Rules guard what is unclear
+  or contradictory ([ADR 0024](docs/adr/0024-read-the-text-and-stop-where-it-is-unclear.md)).
+  Where the text, a chapter heading, the question a turn answers or the sharh
+  make a reading clear, record it directly with its basis spans, for example the
+  speaker of a bare `قَالَ` in a question and answer. Do not park it as an
+  inference, and do not leave a gap a reader would not see. An Inference file is
+  for what the text does not present. Where sources contradict each other or the
+  text stays open, record each reading as an attributed claim and pick none.
+  Stop and ask only for an open or contradictory text, a schema change, or an
+  irreversible or outward action. For anything else, record your reading and list
+  it in the batch's `summary.md`.
+- **An extraction covers the whole entry.** The pieces must rebuild the entry's
+  text word for word, so trim nothing to make a reading fit. Check that they do
+  before saying a fixture or batch is checked.
 - **Do not read a whole account to answer a question.** Open `batch.json` for the
   structure and the claims, then only the pages a citation names. Each page's
   paragraphs carry anchors like `9-p7` that citations point at.
