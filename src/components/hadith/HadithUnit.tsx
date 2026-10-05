@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBook, faBookOpen, faComments, faListOl } from '@fortawesome/free-solid-svg-icons';
+import { faBook, faBookOpen, faComments, faListOl, faScroll } from '@fortawesome/free-solid-svg-icons';
 import Button from '@/components/common/Button';
 import SlideSwitch from '@/components/graph/SlideSwitch';
 import PageReader from './PageReader';
@@ -106,50 +106,63 @@ export default function HadithUnit({ view }: { view: HadithUnitView }) {
         </p>
       )}
       {!isSharh && view.reports.map((report) => (
-        <section key={report.id} className={card}>
-          {report.frame && <p className="mb-3 text-gray-700 dark:text-gray-300">{report.frame}</p>}
-          {report.fullText && (
-            <p dir="rtl" className="mb-4 text-xl leading-loose text-gray-900 dark:text-gray-200">{report.fullText}</p>
-          )}
-          {!report.fullText && report.scenes.length === 0 && report.statements.map((text, i) => (
-            <p key={i} dir="rtl" className="mb-3 text-xl leading-loose text-gray-900 dark:text-gray-200">{text}</p>
-          ))}
+        <React.Fragment key={report.id}>
+          <section className={card}>
+            <h2 className={h2}>
+              <FontAwesomeIcon icon={faScroll} className="text-amber-500 me-2" />
+              {report.voice === 'AUTHOR'
+                ? ar ? 'تعليق المصنف' : 'The compiler\'s remark'
+                : ar ? 'الحديث' : 'The hadith'}
+            </h2>
+            {report.frame && <p className="mb-3 text-gray-700 dark:text-gray-300">{report.frame}</p>}
+            {report.fullText && (
+              <p dir="rtl" className="text-xl leading-loose text-gray-900 dark:text-gray-200">{report.fullText}</p>
+            )}
+            {!report.fullText && report.scenes.length === 0 && report.statements.map((text, i) => (
+              <p key={i} dir="rtl" className="mb-3 text-xl leading-loose text-gray-900 dark:text-gray-200">{text}</p>
+            ))}
+          </section>
           {report.chain && (
-            <div className="mb-4">
+            <section className={card}>
               <h2 className={h2}>
                 <FontAwesomeIcon icon={faListOl} className="text-amber-500 me-2" />
                 {ar ? 'الإسناد' : 'Chain'}
               </h2>
               <Chain chain={report.chain} ar={ar} />
-            </div>
+            </section>
           )}
           {report.scenes.length > 0 && (
-            <div className="mb-4">
-              <SlideSwitch
-                checked={bubbles}
-                onChange={() => setBubbles(!bubbles)}
-                label={ar ? 'عرض المحادثة فقاعات' : 'Show the conversation as bubbles'}
-              />
-            </div>
-          )}
-          {report.scenes.map((scene) => (
-            <div key={scene.ordinal} className="mb-4">
+            <section className={card}>
               <h2 className={h2}>
                 <FontAwesomeIcon icon={faComments} className="text-amber-500 me-2" />
-                {ar ? 'المشهد' : 'Scene'} {scene.ordinal}
+                {ar ? 'المشاهد' : 'Scenes'}
               </h2>
-              {bubbles ? (
-                <Bubbles lines={scene.lines} />
-              ) : (
-                <div className="flex flex-col gap-3">
-                  {scene.lines.map((line, i) => (
-                    <Line key={i} line={line} />
-                  ))}
+              <div className="mb-4">
+                <SlideSwitch
+                  checked={bubbles}
+                  onChange={() => setBubbles(!bubbles)}
+                  label={ar ? 'عرض المحادثة فقاعات' : 'Show the conversation as bubbles'}
+                />
+              </div>
+              {report.scenes.map((scene) => (
+                <div key={scene.ordinal} className="mb-4 last:mb-0">
+                  <h3 className="mb-2 text-xl text-gray-900 dark:text-gray-200">
+                    {ar ? 'المشهد' : 'Scene'} {scene.ordinal}
+                  </h3>
+                  {bubbles ? (
+                    <Bubbles lines={scene.lines} />
+                  ) : (
+                    <div className="flex flex-col gap-3">
+                      {scene.lines.map((line, i) => (
+                        <Line key={i} line={line} />
+                      ))}
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          ))}
-        </section>
+              ))}
+            </section>
+          )}
+        </React.Fragment>
       ))}
       {view.reader && view.reader.length > 0 && (
         <section className={card}>
