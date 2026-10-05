@@ -93,6 +93,7 @@ function Line({ line }: { line: SceneLine }) {
 export default function HadithUnit({ view }: { view: HadithUnitView }) {
   const ar = useLanguage().language === 'ar';
   const [bubbles, setBubbles] = useState(true);
+  const isSharh = view.explains.length > 0;
   return (
     <main className="w-full px-6 py-4" dir={ar ? 'rtl' : 'ltr'}>
       <h1 dir="rtl" className="mb-4 text-3xl text-gray-900 dark:text-gray-200">
@@ -104,7 +105,7 @@ export default function HadithUnit({ view }: { view: HadithUnitView }) {
           {view.kitab} — {view.bab}
         </p>
       )}
-      {view.reports.map((report) => (
+      {!isSharh && view.reports.map((report) => (
         <section key={report.id} className={card}>
           {report.frame && <p className="mb-3 text-gray-700 dark:text-gray-300">{report.frame}</p>}
           {report.fullText && (
@@ -152,29 +153,50 @@ export default function HadithUnit({ view }: { view: HadithUnitView }) {
       ))}
       {view.reader && view.reader.length > 0 && (
         <section className={card}>
-          <h2 className={h2}>{ar ? 'نص الكتاب' : 'Text of the book'}</h2>
+          <h2 className={h2}>{ar ? 'نص الكتاب كما طُبع' : 'The book\'s text as printed'}</h2>
           <PageReader pages={view.reader} />
+        </section>
+      )}
+      {view.notes.length > 0 && (
+        <section className={card}>
+          <h2 className={h2}>{ar ? 'ما يقوله الشارح عن هذا الحديث' : 'What the commentator says about this hadith'}</h2>
+          {view.notes.map((note, i) => (
+            <div key={i} className="mb-3">
+              <p dir="rtl" className="text-xl leading-loose text-gray-900 dark:text-gray-200">{note.text}</p>
+              {note.narrator && (
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {ar ? 'التعليق على الراوي: ' : 'This is about the narrator: '}
+                  <span dir="rtl">{note.narrator}</span>
+                </p>
+              )}
+            </div>
+          ))}
         </section>
       )}
       {view.explains.map((e) => (
         <section key={e.unit} className={card}>
-          <h2 className={h2}>{ar ? 'الشرح' : 'Commentary'}</h2>
-          <p dir="rtl" className="mb-2 text-xl text-gray-900 dark:text-gray-200">{e.basis}</p>
+          <h2 className={h2}>{ar ? 'الحديث الذي يشرحه' : 'The hadith it explains'}</h2>
+          <p className="mb-2 text-gray-700 dark:text-gray-300">
+            {ar
+              ? `هذا النص شرحٌ لحديث في ${e.book}، ويحدده بما طُبع في أوله:`
+              : `This text explains a hadith in ${e.book}, and names it by what it prints at the start:`}
+          </p>
+          <p dir="rtl" className="mb-3 text-xl text-gray-900 dark:text-gray-200">{e.basis}</p>
           <Button size="sm" href={`/hadith/${e.unit}`}>
             <FontAwesomeIcon icon={faBookOpen} />
-            {ar ? 'الحديث' : 'The hadith'}
+            {ar ? 'اقرأ الحديث' : 'Read the hadith'}
           </Button>
         </section>
       ))}
       {view.explainedBy.map((e) => (
         <section key={e.unit} className={card}>
-          <h2 className={h2}>{ar ? 'الشرح' : 'Commentary'}</h2>
+          <h2 className={h2}>{ar ? 'ما قاله ابن حجر عن هذا الحديث' : 'What Ibn Hajar says about this hadith'}</h2>
           {e.texts.map((text, i) => (
             <p key={i} dir="rtl" className="mb-2 text-xl leading-loose text-gray-900 dark:text-gray-200">{text}</p>
           ))}
           <Button size="sm" href={`/hadith/${e.unit}`}>
             <FontAwesomeIcon icon={faBookOpen} />
-            {ar ? 'فتح الشرح' : 'Open the commentary'}
+            {ar ? 'اقرأ صفحات الشرح' : 'Read the commentary pages'}
           </Button>
         </section>
       ))}

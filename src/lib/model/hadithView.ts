@@ -57,7 +57,8 @@ export interface HadithUnitView {
   author: string;
   type: string;
   reports: ReportView[];
-  explains: { unit: string; basis: string }[];
+  notes: { text: string; narrator?: string }[];
+  explains: { unit: string; basis: string; book: string }[];
   explainedBy: { unit: string; texts: string[] }[];
 }
 
@@ -332,9 +333,23 @@ export function hadithView(unitId: string, root = fixturesRoot): HadithUnitView 
         })),
       })),
     })),
+    notes: (file.sharhLinks ?? []).length
+      ? file.statements.map((st) => ({
+          text: st.spans.map(spanText).join(' … '),
+          narrator: folders
+            .flatMap((f) => f.units)
+            .flatMap((u) =>
+              u.identifications
+                .filter((i) => i.basis.some((b) => st.spans.some((id) => b.span === `${unitId}#${id}`)))
+                .map((i) => u.mentions.find((m) => m.id === i.mention)?.exact),
+            )
+            .find(Boolean),
+        }))
+      : [],
     explains: (file.sharhLinks ?? []).map((l) => ({
       unit: l.explains,
       basis: l.basis.map(spanText).join(' … '),
+      book: BOOKS[folders.find((f) => f.units.some((u) => u.unit.id === l.explains))!.work.slug] ?? '',
     })),
     explainedBy: folders.flatMap((f) =>
       f.units

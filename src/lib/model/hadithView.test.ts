@@ -79,6 +79,12 @@ describe('hadithView (the Jibril fixtures)', () => {
     expect(report.scenes[1].lines[0].text.startsWith('بَيْنَمَا')).toBe(true);
   });
 
+  it('gives the commentary page its notes, the narrator each is about, and the hadith it explains', () => {
+    const view = hadithView('fath-iman-50')!;
+    expect(view.notes[0].narrator).toContain('إِسْمَاعِيلُ');
+    expect(view.explains[0]).toMatchObject({ unit: 'bukhari-jibril', book: 'صحيح البخاري' });
+  });
+
   it('returns null for an unknown unit', () => {
     expect(hadithView('nope')).toBeNull();
   });
