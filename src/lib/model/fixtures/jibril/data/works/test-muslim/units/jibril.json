@@ -189,10 +189,103 @@
       "volume": 1,
       "page": "jibril",
       "layer": "MAIN",
-      "exact": "فَعَجِبْنَا لَهُ يَسْأَلُهُ وَيُصَدِّقُهُ"
+      "exact": "صَدَقْتَ",
+      "prefix": "قَالَ ",
+      "suffix": ". قَالَ فَعَجِبْنَا"
     },
     {
       "id": "sp_s4",
+      "edition": "test-muslim-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "فَأَخْبِرْنِي عَنِ الإِيمَانِ"
+    },
+    {
+      "id": "sp_s5",
+      "edition": "test-muslim-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "أَنْ تُؤْمِنَ بِاللَّهِ وَمَلاَئِكَتِهِ وَكُتُبِهِ وَرُسُلِهِ وَالْيَوْمِ الآخِرِ وَتُؤْمِنَ بِالْقَدَرِ خَيْرِهِ وَشَرِّهِ"
+    },
+    {
+      "id": "sp_s6",
+      "edition": "test-muslim-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "صَدَقْتَ",
+      "prefix": "قَالَ ",
+      "suffix": " . قَالَ فَأَخْبِرْنِي عَنِ الإِحْسَانِ"
+    },
+    {
+      "id": "sp_s7",
+      "edition": "test-muslim-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "فَأَخْبِرْنِي عَنِ الإِحْسَانِ"
+    },
+    {
+      "id": "sp_s8",
+      "edition": "test-muslim-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "أَنْ تَعْبُدَ اللَّهَ كَأَنَّكَ تَرَاهُ فَإِنْ لَمْ تَكُنْ تَرَاهُ فَإِنَّهُ يَرَاكَ"
+    },
+    {
+      "id": "sp_s9",
+      "edition": "test-muslim-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "فَأَخْبِرْنِي عَنِ السَّاعَةِ"
+    },
+    {
+      "id": "sp_s10",
+      "edition": "test-muslim-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "مَا الْمَسْئُولُ عَنْهَا بِأَعْلَمَ مِنَ السَّائِلِ"
+    },
+    {
+      "id": "sp_s11",
+      "edition": "test-muslim-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "فَأَخْبِرْنِي عَنْ أَمَارَتِهَا"
+    },
+    {
+      "id": "sp_s12",
+      "edition": "test-muslim-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "أَنْ تَلِدَ الأَمَةُ رَبَّتَهَا وَأَنْ تَرَى الْحُفَاةَ الْعُرَاةَ الْعَالَةَ رِعَاءَ الشَّاءِ يَتَطَاوَلُونَ فِي الْبُنْيَانِ"
+    },
+    {
+      "id": "sp_s13",
+      "edition": "test-muslim-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "يَا عُمَرُ أَتَدْرِي مَنِ السَّائِلُ"
+    },
+    {
+      "id": "sp_s14",
+      "edition": "test-muslim-edition",
+      "volume": 1,
+      "page": "jibril",
+      "layer": "MAIN",
+      "exact": "اللَّهُ وَرَسُولُهُ أَعْلَمُ",
+      "prefix": "قُلْتُ "
+    },
+    {
+      "id": "sp_s15",
       "edition": "test-muslim-edition",
       "volume": 1,
       "page": "jibril",
@@ -213,33 +306,45 @@
       "chainState": "COMPLETE",
       "chain": {
         "elements": [],
-        "tahwil": ["sp_tahwil"],
+        "tahwil": [
+          "sp_tahwil"
+        ],
         "branches": [
           {
             "elements": [
               {
                 "narrator": "m_a1",
-                "mode": ["sp_a1"],
+                "mode": [
+                  "sp_a1"
+                ],
                 "modeKey": "haddatha/1sg"
               },
               {
                 "narrator": "m_a2",
-                "mode": ["sp_a2"],
+                "mode": [
+                  "sp_a2"
+                ],
                 "modeKey": "haddatha/1pl"
               },
               {
                 "narrator": "m_a3",
-                "mode": ["sp_a3"],
+                "mode": [
+                  "sp_a3"
+                ],
                 "modeKey": "an"
               },
               {
                 "narrator": "m_a4",
-                "mode": ["sp_a4"],
+                "mode": [
+                  "sp_a4"
+                ],
                 "modeKey": "an"
               },
               {
                 "narrator": "m_yahya_a",
-                "mode": ["sp_a5"],
+                "mode": [
+                  "sp_a5"
+                ],
                 "modeKey": "an"
               }
             ]
@@ -248,27 +353,37 @@
             "elements": [
               {
                 "narrator": "m_b1",
-                "mode": ["sp_b1"],
+                "mode": [
+                  "sp_b1"
+                ],
                 "modeKey": "haddatha/1pl"
               },
               {
                 "narrator": "m_b2",
-                "mode": ["sp_b2"],
+                "mode": [
+                  "sp_b2"
+                ],
                 "modeKey": "haddatha/1pl"
               },
               {
                 "narrator": "m_b3",
-                "mode": ["sp_b3"],
+                "mode": [
+                  "sp_b3"
+                ],
                 "modeKey": "haddatha/1pl"
               },
               {
                 "narrator": "m_b4",
-                "mode": ["sp_b4"],
+                "mode": [
+                  "sp_b4"
+                ],
                 "modeKey": "an"
               },
               {
                 "narrator": "m_yahya",
-                "mode": ["sp_b5"],
+                "mode": [
+                  "sp_b5"
+                ],
                 "modeKey": "an"
               }
             ]
@@ -283,17 +398,24 @@
               "id": "o1",
               "ordinal": 1,
               "speaker": "m_yahya",
-              "spans": ["sp_o1a", "sp_o1b"]
+              "spans": [
+                "sp_o1a",
+                "sp_o1b"
+              ]
             },
             {
               "id": "o2",
               "ordinal": 2,
-              "spans": ["sp_o2"]
+              "spans": [
+                "sp_o2"
+              ]
             },
             {
               "id": "o3",
               "ordinal": 3,
-              "spans": ["sp_o3"]
+              "spans": [
+                "sp_o3"
+              ]
             }
           ]
         },
@@ -305,25 +427,124 @@
               "id": "s1",
               "ordinal": 1,
               "speaker": "m_rajul",
-              "spans": ["sp_s1"]
+              "spans": [
+                "sp_s1"
+              ]
             },
             {
               "id": "s2",
               "ordinal": 2,
               "speaker": "m_prophet",
-              "spans": ["sp_s2"]
+              "spans": [
+                "sp_s2"
+              ]
             },
             {
               "id": "s3",
               "ordinal": 3,
-              "spans": ["sp_s3"]
+              "speaker": "m_rajul",
+              "spans": [
+                "sp_s3"
+              ]
             },
             {
               "id": "s4",
               "ordinal": 4,
-              "spans": ["sp_s4"]
+              "speaker": "m_rajul",
+              "spans": [
+                "sp_s4"
+              ]
+            },
+            {
+              "id": "s5",
+              "ordinal": 5,
+              "speaker": "m_prophet",
+              "spans": [
+                "sp_s5"
+              ]
+            },
+            {
+              "id": "s6",
+              "ordinal": 6,
+              "speaker": "m_rajul",
+              "spans": [
+                "sp_s6"
+              ]
+            },
+            {
+              "id": "s7",
+              "ordinal": 7,
+              "speaker": "m_rajul",
+              "spans": [
+                "sp_s7"
+              ]
+            },
+            {
+              "id": "s8",
+              "ordinal": 8,
+              "speaker": "m_prophet",
+              "spans": [
+                "sp_s8"
+              ]
+            },
+            {
+              "id": "s9",
+              "ordinal": 9,
+              "speaker": "m_rajul",
+              "spans": [
+                "sp_s9"
+              ]
+            },
+            {
+              "id": "s10",
+              "ordinal": 10,
+              "speaker": "m_prophet",
+              "spans": [
+                "sp_s10"
+              ]
+            },
+            {
+              "id": "s11",
+              "ordinal": 11,
+              "speaker": "m_rajul",
+              "spans": [
+                "sp_s11"
+              ]
+            },
+            {
+              "id": "s12",
+              "ordinal": 12,
+              "speaker": "m_prophet",
+              "spans": [
+                "sp_s12"
+              ]
+            },
+            {
+              "id": "s13",
+              "ordinal": 13,
+              "speaker": "m_prophet",
+              "spans": [
+                "sp_s13"
+              ]
+            },
+            {
+              "id": "s14",
+              "ordinal": 14,
+              "speaker": "m_umar",
+              "spans": [
+                "sp_s14"
+              ]
+            },
+            {
+              "id": "s15",
+              "ordinal": 15,
+              "speaker": "m_prophet",
+              "spans": [
+                "sp_s15"
+              ]
             }
-          ]
+          ],
+          "narrator": "m_umar"
         }
       ]
     }
@@ -332,7 +553,9 @@
     {
       "id": "st_story",
       "report": "r_hadith",
-      "spans": ["sp_story"],
+      "spans": [
+        "sp_story"
+      ],
       "role": "TRANSMITTED"
     }
   ],
@@ -427,6 +650,13 @@
       "exact": "رَجُلٌ",
       "occurrence": 1,
       "role": "SPEAKER"
+    },
+    {
+      "id": "m_umar",
+      "parent": "sp_o3",
+      "exact": "عُمَرُ بْنُ الْخَطَّابِ",
+      "occurrence": 1,
+      "role": "SPEAKER"
     }
   ],
   "identifications": [
@@ -436,7 +666,7 @@
       "agent": "jibril",
       "basis": [
         {
-          "span": "sp_s4",
+          "span": "sp_s15",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],

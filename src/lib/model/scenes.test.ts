@@ -29,15 +29,15 @@ describe('the hadith of Jibril fixtures (test data, not a source)', () => {
     expect(second.speaker).toBeUndefined();
     const { report: r } = muslim();
     const unset = r.scenes!.flatMap((sc) => sc.turns).filter((t) => t.speaker === undefined);
-    expect(unset.map((t) => t.id)).toEqual(['o2', 'o3', 's3', 's4']);
+    expect(unset.map((t) => t.id)).toEqual(['o2', 'o3']);
     expect(r.scenes![1].turns[1].speaker).toBe('m_prophet');
   });
 
   it('identify the stranger by a span that comes after the turns he speaks in', () => {
     const { file } = muslim();
     const [identification] = file.identifications;
-    expect(identification.basis[0].span).toBe('sp_s4');
-    expect(file.reports[0].scenes![1].turns.at(-1)?.spans).toEqual(['sp_s4']);
+    expect(identification.basis[0].span).toBe('sp_s15');
+    expect(file.reports[0].scenes![1].turns.at(-1)?.spans).toEqual(['sp_s15']);
   });
 });
 

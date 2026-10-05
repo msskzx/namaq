@@ -2,8 +2,9 @@
 
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookOpen, faComments, faListOl } from '@fortawesome/free-solid-svg-icons';
+import { faBook, faBookOpen, faComments, faListOl } from '@fortawesome/free-solid-svg-icons';
 import Button from '@/components/common/Button';
+import PageReader from './PageReader';
 import { useLanguage } from '@/components/language/LanguageContext';
 import type { ChainView, HadithUnitView, SceneLine } from '@/lib/model/hadithView';
 
@@ -19,9 +20,7 @@ function Chain({ chain, ar }: { chain: ChainView; ar: boolean }) {
             {link.gap ? (
               <span className="text-gray-500">{ar ? '… (حلقة محذوفة)' : '… (omitted link)'}</span>
             ) : (
-              <>
-                <span className="text-amber-600 dark:text-amber-400">{link.mode}</span> {link.narrator}
-              </>
+              link.text ?? `${link.mode} ${link.narrator}`
             )}
           </li>
         ))}
@@ -48,7 +47,7 @@ function Line({ line }: { line: SceneLine }) {
       {line.speaker && (
         <span className="block text-sm text-amber-700 dark:text-amber-400">{line.speaker}</span>
       )}
-      <p className="text-xl leading-loose text-gray-900 dark:text-gray-200">{line.text}</p>
+      <p className="text-lg leading-loose text-gray-900 dark:text-gray-200">{line.text}</p>
     </div>
   );
 }
@@ -56,11 +55,23 @@ function Line({ line }: { line: SceneLine }) {
 export default function HadithUnit({ view }: { view: HadithUnitView }) {
   const ar = useLanguage().language === 'ar';
   return (
-    <main className="max-w-3xl mx-auto p-4" dir="rtl">
+    <main className="w-full px-6 py-4" dir="rtl">
+      <h1 className="mb-4 text-3xl text-gray-900 dark:text-gray-200">
+        <FontAwesomeIcon icon={faBook} className="text-amber-500 me-2" />
+        {view.book}
+      </h1>
+      {view.kitab && (
+        <p className="mb-4 text-xl leading-loose text-gray-700 dark:text-gray-300">
+          {view.kitab} — {view.bab}
+        </p>
+      )}
       {view.reports.map((report) => (
         <section key={report.id} className={card}>
           {report.frame && <p className="mb-3 text-gray-700 dark:text-gray-300">{report.frame}</p>}
-          {report.scenes.length === 0 && report.statements.map((text, i) => (
+          {report.fullText && (
+            <p className="mb-4 text-xl leading-loose text-gray-900 dark:text-gray-200">{report.fullText}</p>
+          )}
+          {!report.fullText && report.scenes.length === 0 && report.statements.map((text, i) => (
             <p key={i} className="mb-3 text-xl leading-loose text-gray-900 dark:text-gray-200">{text}</p>
           ))}
           {report.chain && (
@@ -87,6 +98,12 @@ export default function HadithUnit({ view }: { view: HadithUnitView }) {
           ))}
         </section>
       ))}
+      {view.reader && view.reader.length > 0 && (
+        <section className={card}>
+          <h2 className={h2}>{ar ? 'نص الكتاب' : 'Text of the book'}</h2>
+          <PageReader pages={view.reader} />
+        </section>
+      )}
       {view.explains.map((e) => (
         <section key={e.unit} className={card}>
           <h2 className={h2}>{ar ? 'الشرح' : 'Commentary'}</h2>

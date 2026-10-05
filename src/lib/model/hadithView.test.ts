@@ -11,17 +11,30 @@ describe('hadithView (the Jibril fixtures)', () => {
     const view = hadithView('bukhari-jibril')!;
     const [hadith] = view.reports;
     expect(hadith.chain!.links).toHaveLength(5);
+    expect(hadith.chain!.links.map((l) => ('text' in l ? l.text : ''))).toEqual([
+      'حَدَّثَنَا مُسَدَّدٌ',
+      'قَالَ حَدَّثَنَا إِسْمَاعِيلُ بْنُ إِبْرَاهِيمَ',
+      'أَخْبَرَنَا أَبُو حَيَّانَ التَّيْمِيُّ',
+      'عَنْ أَبِي زُرْعَةَ',
+      'عَنْ أَبِي هُرَيْرَةَ',
+    ]);
     const lines = hadith.scenes[0].lines;
     expect(lines.filter((l) => l.kind === 'turn').map((l) => l.speaker)).toEqual([
       'جِبْرِيلُ', 'النَّبِيُّ', 'جِبْرِيلُ', 'النَّبِيُّ', 'جِبْرِيلُ', 'النَّبِيُّ',
       'جِبْرِيلُ', 'النَّبِيُّ', 'النَّبِيُّ', 'النَّبِيُّ',
     ]);
     expect(lines[0]).toMatchObject({ kind: 'narration', speaker: 'أَبِي هُرَيْرَةَ' });
-    expect(lines[1].text.startsWith('فَقَالَ')).toBe(true);
-    expect(lines[2].text).toMatch(/^قَالَ ".*الْبَعْثِ ?"\.?$/);
+    expect(lines[0].text.endsWith('فَقَالَ')).toBe(true);
+    expect(lines[1]).toMatchObject({ kind: 'turn', text: 'مَا الإِيمَانُ' });
+    expect(lines[2]).toMatchObject({ kind: 'narration', speaker: 'أَبِي هُرَيْرَةَ', text: 'قَالَ' });
+    expect(lines[3].text).toMatch(/^الإِيمَانُ.*الْبَعْثِ\.$/);
+    expect(lines.some((l) => /["“”]/.test(l.text))).toBe(false);
+    expect(hadith.fullText!.startsWith('حَدَّثَنَا مُسَدَّدٌ')).toBe(true);
+    expect(hadith.fullText!.endsWith('دِينَهُمْ ".')).toBe(true);
     const matn = view.reports[0].statements[0];
     const joined = lines.map((l) => l.text).join(' ').replace(/\s+/g, ' ');
-    expect(joined.startsWith(matn.replace(/\s+/g, ' '))).toBe(true);
+    const bare = (t: string) => t.replace(/\s*["“”]\s*/g, ' ').replace(/\s+([.،])/g, '$1').trim();
+    expect(bare(joined).startsWith(bare(matn.replace(/\s+/g, ' ')))).toBe(true);
     expect(view.explainedBy.map((e) => e.unit)).toEqual(['fath-iman-50']);
     expect(view.explainedBy[0].texts[0]).toBeTruthy();
   });
@@ -43,7 +56,8 @@ describe('hadithView (the Jibril fixtures)', () => {
 
   it('names the speaker an approved inference identifies', () => {
     const lines = hadithView('muslim-jibril')!.reports[0].scenes[0].lines;
-    expect(lines[1].speaker).toContain('عُمَرَ');
+    const answer = lines.find((l) => l.kind === 'turn' && l.text.startsWith('فَإِذَا لَقِيتَ'));
+    expect(answer?.speaker).toContain('عُمَرَ');
   });
 
   it('returns null for an unknown unit', () => {
