@@ -23,6 +23,7 @@ import { AyatGroup } from '@/components/quran/AyahCard';
 import UtteranceGroup from '@/components/utterances/UtteranceGroup';
 import ClaimEvidence from '@/components/common/ClaimEvidence';
 import SourceAccountReader from '@/components/people/SourceAccountReader';
+import ModelEntries from '@/components/people/ModelEntries';
 
 function PersonDetailPage() {
   const { language } = useLanguage();
@@ -140,6 +141,9 @@ function PersonDetailPage() {
             <GraphCanvas targetSlug={slug} />
           </div>
 
+          {person.modelEntries && person.modelEntries.length > 0 && (
+            <ModelEntries entries={person.modelEntries} spans={person.modelSpans ?? []} />
+          )}
           <SourceAccountReader basePath={`/api/people/${slug}`} />
 
           <AyatGroup ayat={person.ayat || []} />

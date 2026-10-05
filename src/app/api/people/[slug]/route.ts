@@ -41,6 +41,21 @@ async function withRelatedSubjectNames<T extends RelatedSubject>(claims: T[]) {
   }));
 }
 
+async function modelValues(slug: string) {
+  try {
+    const modelEntries = await prisma.modelProfileEntry.findMany({
+      where: { agent: slug },
+      orderBy: [{ predicate: 'asc' }, { assertionId: 'asc' }],
+    });
+    const keys = modelEntries.flatMap((e) => e.spanIds.map((spanId) => ({ unit: e.unit, spanId })));
+    const modelSpans = keys.length > 0 ? await prisma.modelSpan.findMany({ where: { OR: keys } }) : [];
+    return { modelEntries, modelSpans };
+  } catch (error) {
+    console.error('[GET /api/people/[slug]] model values unavailable', error);
+    return { modelEntries: [], modelSpans: [] };
+  }
+}
+
 export async function GET(
   _request: Request,
   { params }: { params: Promise<{ slug: string }> }
@@ -80,8 +95,10 @@ export async function GET(
       orderBy: { updatedAt: 'desc' },
     });
 
+    const { modelEntries, modelSpans } = await modelValues(slug);
+
     return NextResponse.json(
-      { ...person, claims: await withRelatedSubjectNames(claims) },
+      { ...person, claims: await withRelatedSubjectNames(claims), modelEntries, modelSpans },
       { headers: CATALOG_CACHE_HEADERS }
     );
   } catch (error) {
