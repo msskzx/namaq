@@ -272,6 +272,33 @@ lineage-only ancestors are the common case.
 _Avoid_: Profile-less person, unverified person (both imply something is
 missing or wrong, rather than simply not yet recorded)
 
+### Hadith
+
+**Isnad**:
+The chain of tellers a hadith comes by, from the Companion at its head to the
+collector who wrote it down. A hadith with two chains has two isnads that meet
+at the person they share.
+_Avoid_: Chain (the data structure that stores it), sanad
+
+**Matn**:
+The text of a hadith after its isnad: the words reported, with any conversation
+inside them.
+_Avoid_: Body, content
+
+**Isnad diagram**:
+A picture of an isnad as people joined by arrows that point from the one who
+told to the one who heard, each arrow labelled with the wording of the telling.
+
+**Role in a hadith**:
+Why a person belongs to a hadith: they are in its isnad, they speak in it, or
+they are only mentioned in its matn. A person with a profile lists the hadith
+they have a role in, naming the role.
+_Avoid_: Narrates (it covers only one of the three)
+
+**Compiler's remark**:
+A sentence the collector adds after a hadith in his own voice. It belongs to
+the entry and is not part of the hadith or its isnad.
+
 ### Events and expeditions
 
 **Engagement**:

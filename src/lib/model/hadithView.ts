@@ -3,6 +3,7 @@ import { conversationOf } from './conversation';
 import { applyApprovedInferences, loadInferences } from './inference';
 import { loadModel } from './load';
 import { locateSpanRecord, renderSpanRecord } from './render';
+import { standingAgent } from './referents';
 import { matchForm } from './span';
 import type { Chain, Link, UnitFile, WorkFolder } from './types';
 
@@ -10,7 +11,7 @@ export const fixturesRoot = 'src/lib/model/fixtures/jibril';
 
 export type ChainLink =
   | { gap: true }
-  | { gap?: false; narrator: string; mode: string; modeKey: string; text?: string };
+  | { gap?: false; narrator: string; agent?: string; mode: string; modeKey: string; text?: string };
 
 export interface ChainView {
   links: ChainLink[];
@@ -49,6 +50,7 @@ export interface ReaderPage {
 
 export interface HadithUnitView {
   book: string;
+  compiler?: string;
   kitab?: string;
   bab?: string;
   reader?: ReaderPage[];
@@ -116,11 +118,22 @@ function sceneLines(
       ? cutAfterFirstQala(parentAt.body, parentAt.start, parentAt.end)
       : undefined;
   const parents = new Set(report.scenes!.map((sc) => sc.inTurn));
-  const linkStarts = (report.chain ? linkElements(report.chain) : [])
-    .map((el) => locateSpanRecord(folder, file.spans.find((x) => x.id === el.mode[0])!, root))
-    .filter((at) => at.key === spans[0].key)
-    .map((at) => at.start);
-  const lastLink = linkStarts.length > 0 ? Math.max(...linkStarts) : undefined;
+  const links = (report.chain ? linkElements(report.chain) : [])
+    .map((el) => ({
+      el,
+      at: locateSpanRecord(folder, file.spans.find((x) => x.id === el.mode[0])!, root),
+    }))
+    .filter(({ at }) => at.key === spans[0].key);
+  const last = links.reduce<(typeof links)[number] | undefined>(
+    (best, link) => (!best || link.at.start > best.at.start ? link : best),
+    undefined,
+  );
+  const lastName = last && file.mentions.find((m) => m.id === last.el.narrator)?.exact;
+  const nameAt = last && lastName ? body.indexOf(lastName, last.at.start) : -1;
+  const lastLink =
+    last && nameAt >= 0
+      ? nameAt + lastName!.length + (body.slice(nameAt + lastName!.length).match(/^[\s،]*/)?.[0].length ?? 0)
+      : last?.at.start;
   const from = parentStart ?? lastLink ?? (bounds ? bounds.start : spans[0].start);
   const lines: SceneLine[] = [];
   let cursor = from;
@@ -192,6 +205,11 @@ const BOOKS: Record<string, string> = {
   'test-bukhari': 'صحيح البخاري',
   'test-muslim': 'صحيح مسلم',
   'test-fath': 'فتح الباري بشرح صحيح البخاري',
+};
+
+const COMPILERS: Record<string, string> = {
+  'test-bukhari': 'البخاري',
+  'test-muslim': 'مسلم',
 };
 
 const BUKHARI_BAB =
@@ -267,12 +285,16 @@ function chainView(
       })
       .join(' … ');
   const mention = (id: string) => file.mentions.find((m) => m.id === id)!.exact;
+  const agentOf = (id: string) =>
+    file.identifications.find((i) => i.mention === id && i.status !== 'REJECTED')?.agent ??
+    standingAgent(mention(id));
   return {
     links: chain.elements.map((el) =>
       'kind' in el
         ? { gap: true }
         : {
             narrator: mention(el.narrator),
+            agent: agentOf(el.narrator),
             mode: text(el.mode),
             modeKey: el.modeKey,
             text: texts.get(el.mode[0]),
@@ -298,6 +320,7 @@ export function hadithView(unitId: string, root = fixturesRoot): HadithUnitView 
   return {
     id: file.unit.id,
     book: BOOKS[folder.work.slug] ?? folder.work.slug,
+    compiler: COMPILERS[folder.work.slug],
     ...PLACES[unitId],
     work: folder.work.slug,
     author: folder.work.author,

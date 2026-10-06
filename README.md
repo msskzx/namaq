@@ -30,6 +30,10 @@ Open the graph → explore and filter relationships → open a person's profile 
   data is test fixtures under `src/lib/model/fixtures/jibril`, not a source. The
   pages read `model_units` and fall back to the files; `npm run model:project -- --units`
   fills the tables ([plan](docs/plans/hadith-in-the-database.md)).
+- A hadith page has two modes: the book's full text, or the isnad diagram above
+  the conversation as bubbles. The diagram puts the collector first, with each
+  teller below the one who heard from them and arrows pointing up to the hearer.
+  It is static SVG ([plan](docs/plans/hadith-on-profiles.md)).
 
 ### Relationship graph
 
