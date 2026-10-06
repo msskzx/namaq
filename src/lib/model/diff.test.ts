@@ -17,16 +17,17 @@ describe('diffAgainstCatalog on al-Zubayr', () => {
     expect(byField(lines, 'cousins')[0].status).toBe('different');
   });
 
-  it("reads the name across the paragraph break as the lineage is spelled, leaving only the catalog's final full stop", () => {
+  it('reads the name across the paragraph break as the lineage is spelled, with the join rule applied and a final full stop ignored', () => {
     const [name] = byField(lines, 'fullName');
     expect(name.model).toContain('عَبْدِ العُزَّى بنِ قُصَيِّ');
     expect(name.model).not.toContain('ابْنِ');
-    expect(name.status).toBe('different');
-    expect(name.catalog?.replace(/\.$/, '')).toBe(name.model);
+    expect(name.catalog?.endsWith('.')).toBe(true);
+    expect(name.model?.endsWith('.')).toBe(false);
+    expect(name.status).toBe('same');
   });
 
   it('lists what only the catalog holds, and what only the model holds', () => {
-    expect(byField(lines, 'placeOfDeathArabic')[0].status).toBe('catalog-only');
+    expect(byField(lines, 'placeOfDeathArabic')[0].status).toBe('same');
     expect(byField(lines, 'titles')[0].status).toBe('different');
     expect(
       byField(lines, 'islam.age')
@@ -48,15 +49,24 @@ describe('diffAgainstCatalog on al-Zubayr', () => {
       relations: [
         { type: 'SON', inverse: 'MOTHER', to: 'safiyyah-bint-abd-al-muttalib' },
         { type: 'SON', inverse: 'FATHER', to: 'al-awwam-ibn-khuwaylid' },
-        { type: 'COMPANION_OF', to: 'prophet-muhammad' },
+        { type: 'FRIEND_OF', to: 'prophet-muhammad' },
       ],
     };
     const result = diffAgainstCatalog(entries, catalog);
     expect(byField(result, 'parents')[0].status).toBe('same');
-    expect(byField(result, 'relation COMPANION_OF')[0]).toMatchObject({
+    expect(byField(result, 'relation FRIEND_OF')[0]).toMatchObject({
       status: 'catalog-only',
       catalog: 'prophet-muhammad',
     });
+  });
+
+  it('matches the catalog on companionship and on the verse said to be about him', () => {
+    const result = diffAgainstCatalog(entries, {
+      relations: [{ type: 'COMPANION_OF', to: 'prophet-muhammad' }],
+      ayat: [{ surah: 3, ayah: 172 }],
+    });
+    expect(byField(result, 'companionOf')[0].status).toBe('same');
+    expect(byField(result, 'ayat')[0].status).toBe('same');
   });
 
   it('treats the same values in another order as the same', () => {
