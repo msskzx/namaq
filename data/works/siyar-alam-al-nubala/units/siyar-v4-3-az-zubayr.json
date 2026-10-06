@@ -401,6 +401,47 @@
       "page": "47",
       "layer": "MAIN",
       "exact": "كَانَ أَبُوَاكَ -يَعْنِي: الزُّبَيْرَ، وَأَبَا بَكْرٍ - مِن: {الَّذِيْنَ اسْتَجَابُوا لِلِّهِ وَالرَّسُوْلِ مِنْ بَعْدِ مَا أَصَابَهُمُ القَرْحُ} [آلُ عِمْرَانَ: ١٧٢]"
+    },
+    {
+      "id": "sp_wife_atikah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "64",
+      "layer": "MAIN",
+      "exact": "عَاتِكَةُ أُخْتُ سَعِيْدِ بنِ زَيْدٍ"
+    },
+    {
+      "id": "sp_wife_ukhalid",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "64",
+      "layer": "MAIN",
+      "exact": "أُمُّ خَالِدٍ بِنْتُ خَالِدِ بنِ سَعِيْدٍ"
+    },
+    {
+      "id": "sp_wife_umusab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "64",
+      "layer": "MAIN",
+      "exact": "أُمُّ مُصْعَبٍ الكَلْبِيَّةُ"
+    },
+    {
+      "id": "sp_hakim",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "66",
+      "layer": "MAIN",
+      "exact": "حَكِيْمُ بنُ حِزَامٍ الأَسَدِيُّ"
+    },
+    {
+      "id": "sp_hakim_nasab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "66",
+      "layer": "MAIN",
+      "exact": "بنُ حِزَامٍ الأَسَدِيُّ",
+      "prefix": "حَكِيْمُ "
     }
   ],
   "reports": [
@@ -644,6 +685,24 @@
       "report": "r_ayah",
       "spans": ["sp_ayah"],
       "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_wife_atikah",
+      "report": "r_wife",
+      "spans": ["sp_wife_atikah"],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_wife_ukhalid",
+      "report": "r_wife",
+      "spans": ["sp_wife_ukhalid"],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_wife_umusab",
+      "report": "r_wife",
+      "spans": ["sp_wife_umusab"],
+      "role": "TRANSMITTED"
     }
   ],
   "mentions": [
@@ -849,6 +908,34 @@
       "exact": "الزُّبَيْرَ",
       "occurrence": 1,
       "role": "SUBJECT"
+    },
+    {
+      "id": "m_atikah",
+      "parent": "sp_wife_atikah",
+      "exact": "عَاتِكَةُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_umm_khalid",
+      "parent": "sp_wife_ukhalid",
+      "exact": "أُمُّ خَالِدٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_umm_musab",
+      "parent": "sp_wife_umusab",
+      "exact": "أُمُّ مُصْعَبٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_hakim",
+      "parent": "sp_hakim",
+      "exact": "حَكِيْمُ",
+      "occurrence": 1,
+      "role": "REFERENT"
     }
   ],
   "identifications": [
@@ -1016,6 +1103,18 @@
         {
           "span": "sp_zb_heading",
           "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_hakim",
+      "mention": "m_hakim",
+      "agent": "hakim-ibn-hizam",
+      "basis": [
+        {
+          "span": "sp_hakim_nasab",
+          "role": "NASAB"
         }
       ],
       "status": "PROPOSED"
@@ -1280,6 +1379,46 @@
       },
       "restsOn": ["st_ayah"],
       "status": "PROPOSED"
+    },
+    {
+      "id": "a_wife_atikah",
+      "subject": "m_zb",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_atikah"
+      },
+      "restsOn": ["st_wife_atikah"],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_wife_ukhalid",
+      "subject": "m_zb",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_umm_khalid"
+      },
+      "restsOn": ["st_wife_ukhalid"],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_wife_umusab",
+      "subject": "m_zb",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_umm_musab"
+      },
+      "restsOn": ["st_wife_umusab"],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_cousin_hakim",
+      "subject": "m_zb",
+      "predicate": "PATERNAL_COUSIN",
+      "value": {
+        "object": "m_hakim"
+      },
+      "restsOn": [],
+      "status": "LEGACY"
     }
   ]
 }
