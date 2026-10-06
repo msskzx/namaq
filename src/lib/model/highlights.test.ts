@@ -31,7 +31,7 @@ describe('highlightsOnPage (al-Zubayr, page 41)', () => {
   });
 
   it('marks nothing on a page no span reaches, and fails on a page with no text', () => {
-    expect(highlightsOnPage(loadModel('.'), '.', WITNESS, 4, '43').marks).toEqual([]);
+    expect(highlightsOnPage(loadModel('.'), '.', WITNESS, 4, '44').marks).toEqual([]);
     expect(() => highlightsOnPage(loadModel('.'), '.', WITNESS, 4, '9999')).toThrow(/no text/);
   });
 

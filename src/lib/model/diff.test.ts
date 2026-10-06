@@ -49,15 +49,24 @@ describe('diffAgainstCatalog on al-Zubayr', () => {
       relations: [
         { type: 'SON', inverse: 'MOTHER', to: 'safiyyah-bint-abd-al-muttalib' },
         { type: 'SON', inverse: 'FATHER', to: 'al-awwam-ibn-khuwaylid' },
-        { type: 'COMPANION_OF', to: 'prophet-muhammad' },
+        { type: 'FRIEND_OF', to: 'prophet-muhammad' },
       ],
     };
     const result = diffAgainstCatalog(entries, catalog);
     expect(byField(result, 'parents')[0].status).toBe('same');
-    expect(byField(result, 'relation COMPANION_OF')[0]).toMatchObject({
+    expect(byField(result, 'relation FRIEND_OF')[0]).toMatchObject({
       status: 'catalog-only',
       catalog: 'prophet-muhammad',
     });
+  });
+
+  it('matches the catalog on companionship and on the verse said to be about him', () => {
+    const result = diffAgainstCatalog(entries, {
+      relations: [{ type: 'COMPANION_OF', to: 'prophet-muhammad' }],
+      ayat: [{ surah: 3, ayah: 172 }],
+    });
+    expect(byField(result, 'companionOf')[0].status).toBe('same');
+    expect(byField(result, 'ayat')[0].status).toBe('same');
   });
 
   it('treats the same values in another order as the same', () => {

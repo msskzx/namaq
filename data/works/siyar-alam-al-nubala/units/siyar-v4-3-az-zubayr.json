@@ -334,6 +334,73 @@
       "layer": "MAIN",
       "exact": "وَادِي السِّبَاعِ",
       "suffix": ":"
+    },
+    {
+      "id": "sp_comp_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "43",
+      "layer": "MAIN",
+      "exact": "حَدَّثَنَا عَبْدُ الرَّحْمَنِ، حَدَّثَنَا شُعْبَةُ، عَنْ جَامِعِ بنِ شَدَّادٍ، عَنْ عَامِرٍ"
+    },
+    {
+      "id": "sp_comp_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "43",
+      "layer": "MAIN",
+      "exact": "قَالَ",
+      "suffix": ": مَا فَارَقْتُهُ"
+    },
+    {
+      "id": "sp_comp_q",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "43",
+      "layer": "MAIN",
+      "exact": "مَا لَكَ لاَ تُحَدِّثُ عَنْ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- كَمَا يُحَدِّثُ عَنْهُ فُلاَنٌ وَفُلاَنٌ"
+    },
+    {
+      "id": "sp_comp_son",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "43",
+      "layer": "MAIN",
+      "exact": "قُلْتُ لأَبِي",
+      "suffix": ": مَا لَكَ"
+    },
+    {
+      "id": "sp_comp",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "43",
+      "layer": "MAIN",
+      "exact": "مَا فَارَقْتُهُ مُنْذُ أَسْلَمْتُ"
+    },
+    {
+      "id": "sp_ayah_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "47",
+      "layer": "MAIN",
+      "exact": "أَبُو مُعَاوِيَةَ: عَنْ هِشَامٍ، عَنْ أَبِيْهِ"
+    },
+    {
+      "id": "sp_ayah_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "47",
+      "layer": "MAIN",
+      "exact": "قَالَتْ عَائِشَةُ",
+      "suffix": ": يَا ابْنَ أُخْتِي"
+    },
+    {
+      "id": "sp_ayah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "47",
+      "layer": "MAIN",
+      "exact": "كَانَ أَبُوَاكَ -يَعْنِي: الزُّبَيْرَ، وَأَبَا بَكْرٍ - مِن: {الَّذِيْنَ اسْتَجَابُوا لِلِّهِ وَالرَّسُوْلِ مِنْ بَعْدِ مَا أَصَابَهُمُ القَرْحُ} [آلُ عِمْرَانَ: ١٧٢]"
     }
   ],
   "reports": [
@@ -449,6 +516,30 @@
       },
       "chainState": "DEFERRED",
       "frame": ["sp_cousin_frame"]
+    },
+    {
+      "id": "r_comp",
+      "unit": "siyar-v4-3-az-zubayr",
+      "ordinal": 11,
+      "voice": "TRANSMITTED",
+      "origin": {
+        "mention": "m_zb_comp"
+      },
+      "chainState": "DEFERRED",
+      "frame": ["sp_comp_frame"],
+      "isnadSpan": "sp_comp_isnad"
+    },
+    {
+      "id": "r_ayah",
+      "unit": "siyar-v4-3-az-zubayr",
+      "ordinal": 12,
+      "voice": "TRANSMITTED",
+      "origin": {
+        "mention": "m_aisha"
+      },
+      "chainState": "DEFERRED",
+      "frame": ["sp_ayah_frame"],
+      "isnadSpan": "sp_ayah_isnad"
     }
   ],
   "statements": [
@@ -541,6 +632,18 @@
       "report": "r_zb0",
       "spans": ["sp_death_place"],
       "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_comp",
+      "report": "r_comp",
+      "spans": ["sp_comp"],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ayah",
+      "report": "r_ayah",
+      "spans": ["sp_ayah"],
+      "role": "TRANSMITTED"
     }
   ],
   "mentions": [
@@ -718,6 +821,34 @@
       "exact": "الزُّبَيْرُ",
       "occurrence": 1,
       "role": "SUBJECT"
+    },
+    {
+      "id": "m_zb_comp",
+      "parent": "sp_comp_son",
+      "exact": "أَبِي",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_prophet_comp",
+      "parent": "sp_comp_q",
+      "exact": "رَسُوْلِ اللهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_aisha",
+      "parent": "sp_ayah_frame",
+      "exact": "عَائِشَةُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_zb_ayah",
+      "parent": "sp_ayah",
+      "exact": "الزُّبَيْرَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
     }
   ],
   "identifications": [
@@ -856,6 +987,30 @@
     {
       "id": "i_zb_cousin",
       "mention": "m_zb_cousin",
+      "agent": "az-zubayr-ibn-al-awwam",
+      "basis": [
+        {
+          "span": "sp_zb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zb_comp",
+      "mention": "m_zb_comp",
+      "agent": "az-zubayr-ibn-al-awwam",
+      "basis": [
+        {
+          "span": "sp_zb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zb_ayah",
+      "mention": "m_zb_ayah",
       "agent": "az-zubayr-ibn-al-awwam",
       "basis": [
         {
@@ -1103,6 +1258,27 @@
         "spans": ["sp_death_place"]
       },
       "restsOn": ["st_death_place"],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_companion_of",
+      "subject": "m_zb_comp",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_prophet_comp"
+      },
+      "restsOn": ["st_comp"],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ayah",
+      "subject": "m_zb_ayah",
+      "predicate": "ABOUT_AYAH",
+      "value": {
+        "classified": "3:172",
+        "spans": ["sp_ayah"]
+      },
+      "restsOn": ["st_ayah"],
       "status": "PROPOSED"
     }
   ]

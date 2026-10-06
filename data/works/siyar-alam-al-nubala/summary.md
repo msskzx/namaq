@@ -40,22 +40,23 @@ Read page by page with the editor's footnotes; each value below cites its page a
 - `virtues`: different, by rule. The model holds the one author-narrated deed,
   `أَوَّلُ مَنْ سَلَّ سَيْفَهُ فِي سَبِيْلِ اللهِ` (p41). The catalog's long value
   folds in quoted speech (the Prophet's hawari sayings, the `فِدَاكَ أَبِي
-  وَأُمِّي` scene); quoted speech never enters virtues, so it is not copied.
+وَأُمِّي` scene); quoted speech never enters virtues, so it is not copied.
 - `parents`: same (al-Awwam from the nasab line, Safiyyah from p41).
   `spouses`: same (Asma, p64). The same p64 sentence names three further wives
   (Atikah, Umm Khalid, Umm Mus'ab); the catalog also carries only Asma, so the
   diff is silent there and the model follows it.
-- `cousins`: different, flagged as a possible catalog error. The model holds
-  the Prophet only, from his own words `الزُّبَيْرُ ابْنُ عَمَّتِي` (p48). The
-  Hakim ibn Hizam tie is not added: the entry only has Hakim calling
-  Abd Allah `يَا ابْنَ أَخِي` (p66), which states no relation. Do not copy it.
-- `relation COMPANION_OF`: catalog-only, owner decision (plan §Open issues).
-  The entry has `مَا فَارَقْتُهُ مُنْذُ أَسْلَمْتُ` (p43-44); the edge waits for
-  the owner.
+- `cousins`: different. The model holds the Prophet, from his own words
+  `الزُّبَيْرُ ابْنُ عَمَّتِي` (p48). Hakim ibn Hizam is also his paternal cousin,
+  since al-Awwam and Hizam were brothers, so the catalog is right. This entry
+  does not state it; Hakim only calls Abd Allah `يَا ابْنَ أَخِي` (p66). The tie
+  waits for Hakim's own entry and its nasab line.
+- `companionOf`: same. `مَا فَارَقْتُهُ مُنْذُ أَسْلَمْتُ` (p43), answering the
+  question about the Prophet, rests the new `COMPANION_OF` assertion
+  ([ADR 0026](../../../docs/adr/0026-companionship-and-verses-about-a-person-are-predicates.md)).
+- `ayat`: same. Aisha's report on Al Imran 172 (p47) rests the new `ABOUT_AYAH`
+  assertion.
 - `islam.age` (16, 8), `PARTICIPATED_IN` (Badr, Yarmuk, Khandaq, Fath Makkah):
   model-only. Extra model evidence; the diff has no catalog counterpart.
-- `ayat`: catalog-only, needs a predicate and an ADR (plan §Open issues).
-  Aisha's Al Imran 172 report (p47) is quoted speech and not copied.
 
 ## Coverage (hand list; `model:coverage` does not exist yet)
 
@@ -112,7 +113,7 @@ Not modeled, by page (date sentences: `time-layer`; fight outcomes: `outcome`):
 - p58-60: the Jamal withdrawal and killing narratives (`outcome`); the elegiac
   verses (poetry).
 - p61: the killing details and the head brought to Ali (`outcome`); `قَاتِلَ
-  الزُّبَيْرِ فِي النَّارِ` (quoted speech).
+الزُّبَيْرِ فِي النَّارِ` (quoted speech).
 - p62: al-Sha'bi's five hundred (transmitted tally); the rest of the author
   analysis beyond the sabiqoon clause (ten, Badri, Ridwan, shahada reasons and
   `فَنَحْنُ مُحِبُّوْنَ لَهُم` stance, not separately asserted); the Badr duel

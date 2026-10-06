@@ -11,7 +11,7 @@ export interface CatalogLike {
   >;
   virtues?: { value: string }[];
   titles?: { title: string }[];
-  ayat?: unknown[];
+  ayat?: { surah: number; ayah: number }[];
   relations?: { type: string; inverse?: string; to: string }[];
 }
 
@@ -113,8 +113,18 @@ export function diffAgainstCatalog(entries: ProfileEntry[], catalog: CatalogLike
     relations.filter((r) => r.type === 'PATERNAL_COUSIN').map((r) => r.to),
     take('PATERNAL_COUSIN').map((e) => e.object ?? `(${e.objectMention})`),
   );
+  line(
+    'companionOf',
+    relations.filter((r) => r.type === 'COMPANION_OF').map((r) => r.to),
+    take('COMPANION_OF').map((e) => e.object ?? `(${e.objectMention})`),
+  );
+  line(
+    'ayat',
+    (catalog.ayat ?? []).map((a) => `${a.surah}:${a.ayah}`),
+    take('ABOUT_AYAH').map((e) => e.classified ?? e.text),
+  );
   const others = relations.filter(
-    (r) => !isParent(r) && !isSpouse(r) && r.type !== 'PATERNAL_COUSIN',
+    (r) => !isParent(r) && !isSpouse(r) && !['PATERNAL_COUSIN', 'COMPANION_OF'].includes(r.type),
   );
   for (const type of new Set(others.map((r) => r.type))) {
     const targets = others.filter((r) => r.type === type).map((r) => r.to);
@@ -129,10 +139,6 @@ export function diffAgainstCatalog(entries: ProfileEntry[], catalog: CatalogLike
           ? String(entry.parsed)
           : entry.text || entry.object || entry.objectMention,
     });
-  }
-  for (const [field, list] of [['ayat', catalog.ayat]] as const) {
-    if (list?.length)
-      lines.push({ field, status: 'catalog-only', catalog: `${list.length} in the catalog` });
   }
   return lines;
 }
