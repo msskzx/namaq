@@ -106,6 +106,25 @@ _Avoid_: All direct relations (the former name, which promised every recorded
 type regardless of the switches); ancestors, descendants (both continue across
 generations)
 
+### A person's standing
+
+**Title**:
+An epithet the text gives a person, such as الصِّدِّيق or حَوَارِيُّ رَسُوْلِ اللهِ.
+_Avoid_: Rank, role, label
+
+**Status**:
+The generation a person belongs to, `companion` or `tabii`, as the text places them.
+_Avoid_: Title (for companion or tabi'i), classification
+
+**Companion**:
+A person who met the Prophet ﷺ while believing in him and died a Muslim.
+_Avoid_: Sahabi (in English text)
+
+**Office**:
+A post a person held, with a scope and, where the text states them, dates, such as
+caliph or amir of a province.
+_Avoid_: Title (for caliph or amir)
+
 ### Lineage
 
 **Ancestors**:
