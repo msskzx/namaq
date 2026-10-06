@@ -6,9 +6,10 @@ Read page by page with the editor's footnotes; each value below cites its page a
 
 ## Changes in this pass
 
-- `sp_zb2` now ends with the printed period, so the joined name matches the
-  catalog string exactly. The span keeps the book's `ابْنِ`; `joinName`
-  renders `بنِ` in the model view by code (`src/lib/model/name.ts`).
+- `fullName` closes in the diff, not in the span. `sp_zb2` stays without the
+  printed period, since a final full stop is not part of a name, and the diff
+  ignores a trailing period when it compares. The span keeps the book's `ابْنِ`;
+  `joinName` renders `بنِ` in the model view by code (`src/lib/model/name.ts`).
 - New `sp_sabiqoon` (p62): `وَمِنَ السَّابِقِيْنَ الأَوَّلِيْنَ`, from the author's
   own `قُلْتُ` analysis. New statement `st_sabiqoon` and title assertion
   `a_title_sabiqoon` (`al-sabiqoon`).
@@ -16,11 +17,11 @@ Read page by page with the editor's footnotes; each value below cites its page a
   short quote resolves once. New statement `st_death_place` and `a_death_place`
   (`died.place`).
 - Nothing else added. Virtues stay limited to the author's narration; quoted
-  speech never becomes a virtue ([ADR 0024](docs/adr/0024-read-the-text-and-stop-where-it-is-unclear.md)).
+  speech never becomes a virtue ([ADR 0024](../../../docs/adr/0024-read-the-text-and-stop-where-it-is-unclear.md)).
 
 ## Classified diff (`npm run model:diff -- az-zubayr-ibn-al-awwam`)
 
-- `fullName`: same. Period fix closed it. Book view keeps `ابْنِ قُصَيِّ`;
+- `fullName`: same. The diff ignores the catalog's final full stop. Book view keeps `ابْنِ قُصَيِّ`;
   the joined model form gives `بنِ قُصَيِّ` by code.
 - `kunya`: same (`أَبُو عَبْدِ اللهِ`, p41).
 - `appearance`: different in shape, both sides supported. The catalog merges

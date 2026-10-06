@@ -29,9 +29,11 @@ const textFields = [
   ['placeOfDeathArabic', 'died.place'],
 ] as const;
 
+const comparable = (value: string) => matchForm(value).replace(/\.$/, '');
+
 const sameSet = (a: string[], b: string[]) => {
-  const left = new Set(a.map(matchForm));
-  const right = new Set(b.map(matchForm));
+  const left = new Set(a.map(comparable));
+  const right = new Set(b.map(comparable));
   return left.size === right.size && [...left].every((value) => right.has(value));
 };
 

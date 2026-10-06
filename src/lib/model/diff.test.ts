@@ -17,10 +17,12 @@ describe('diffAgainstCatalog on al-Zubayr', () => {
     expect(byField(lines, 'cousins')[0].status).toBe('different');
   });
 
-  it('reads the name across the paragraph break as the lineage is spelled, with the join rule applied', () => {
+  it('reads the name across the paragraph break as the lineage is spelled, with the join rule applied and a final full stop ignored', () => {
     const [name] = byField(lines, 'fullName');
     expect(name.model).toContain('عَبْدِ العُزَّى بنِ قُصَيِّ');
     expect(name.model).not.toContain('ابْنِ');
+    expect(name.catalog?.endsWith('.')).toBe(true);
+    expect(name.model?.endsWith('.')).toBe(false);
     expect(name.status).toBe('same');
   });
 
