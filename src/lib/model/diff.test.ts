@@ -11,10 +11,12 @@ const byField = (lines: ReturnType<typeof diffAgainstCatalog>, field: string) =>
 describe('diffAgainstCatalog on al-Zubayr', () => {
   const lines = diffAgainstCatalog(entries, azZubayr as unknown as CatalogLike);
 
-  it('finds both parents and the wife the same in the catalog and the model', () => {
+  it('finds both parents and both cousins the same, and the three further wives only in the model', () => {
     expect(byField(lines, 'parents')[0].status).toBe('same');
-    expect(byField(lines, 'spouses')[0].status).toBe('same');
-    expect(byField(lines, 'cousins')[0].status).toBe('different');
+    expect(byField(lines, 'cousins')[0].status).toBe('same');
+    const [spouses] = byField(lines, 'spouses');
+    expect(spouses.status).toBe('different');
+    expect(spouses.model?.split(' | ')).toHaveLength(4);
   });
 
   it('reads the name across the paragraph break as the lineage is spelled, with the join rule applied and a final full stop ignored', () => {

@@ -42,14 +42,17 @@ Read page by page with the editor's footnotes; each value below cites its page a
   folds in quoted speech (the Prophet's hawari sayings, the `فِدَاكَ أَبِي
 وَأُمِّي` scene); quoted speech never enters virtues, so it is not copied.
 - `parents`: same (al-Awwam from the nasab line, Safiyyah from p41).
-  `spouses`: same (Asma, p64). The same p64 sentence names three further wives
-  (Atikah, Umm Khalid, Umm Mus'ab); the catalog also carries only Asma, so the
-  diff is silent there and the model follows it.
-- `cousins`: different. The model holds the Prophet, from his own words
-  `الزُّبَيْرُ ابْنُ عَمَّتِي` (p48). Hakim ibn Hizam is also his paternal cousin,
-  since al-Awwam and Hizam were brothers, so the catalog is right. This entry
-  does not state it; Hakim only calls Abd Allah `يَا ابْنَ أَخِي` (p66). The tie
-  waits for Hakim's own entry and its nasab line.
+  `spouses`: different, by addition. The model holds Asma (p64) and the three
+  further wives the same sentence names, `عَاتِكَةُ أُخْتُ سَعِيْدِ بنِ زَيْدٍ`,
+  `أُمُّ خَالِدٍ بِنْتُ خَالِدِ بنِ سَعِيْدٍ` and `أُمُّ مُصْعَبٍ الكَلْبِيَّةُ`. The
+  catalog has only Asma, and none of the three has a catalog person yet, so
+  they stay unidentified mentions.
+- `cousins`: same. The Prophet rests on `الزُّبَيْرُ ابْنُ عَمَّتِي` (p48). Hakim
+  ibn Hizam is carried as a legacy assertion: his father Hizam and al-Awwam were
+  brothers, so the catalog is right, but this entry does not state the tie.
+  Hakim only calls Abd Allah `يَا ابْنَ أَخِي` (p66), and the name on that page
+  identifies him. The assertion stays legacy until Hakim's own entry supplies
+  the nasab line.
 - `companionOf`: same. `مَا فَارَقْتُهُ مُنْذُ أَسْلَمْتُ` (p43), answering the
   question about the Prophet, rests the new `COMPANION_OF` assertion
   ([ADR 0026](../../../docs/adr/0026-companionship-and-verses-about-a-person-are-predicates.md)).
@@ -65,8 +68,8 @@ age 16 (p41), Urwah age-8 report with frame and isnad (p41), author appearance
 (p42), Urwah appearance with frame and isnad (p45), Badr riders with isnad
 (p46), cousin hadith with frame and isnad (p48), Khandaq blow with isnad
 (p51), Fath Makkah standards with isnad (p51), three wounds with isnad (p52),
-death month and year with frame (p64), death-place gloss (p64), Asma marriage
-with frame (p64), sabiqoon clause from the author analysis (p62).
+death month and year with frame (p64), death-place gloss (p64), the four marriages
+with frame (p64), the companionship reply (p43), Aisha's Al Imran 172 report (p47), sabiqoon clause from the author analysis (p62).
 
 Not modeled, by page (date sentences: `time-layer`; fight outcomes: `outcome`):
 
@@ -123,11 +126,10 @@ Not modeled, by page (date sentences: `time-layer`; fight outcomes: `outcome`):
   the author's `مَعَاذَ الله` rejection (deliberately not modeled); the elegy
   line naming the valley (poetry; the prose gloss carries the place instead).
 - p64: the opening elegy verses (poetry); the competing death ages (`خَمْسُوْنَ`
-  reports, `time-layer`, no age held); the three further wives (see spouses
-  above); the debt counsel (wealth, no predicate).
+  reports, `time-layer`, no age held); the debt counsel (wealth, no predicate).
 - p65-67: the estate, debt and inheritance saga including the four-year
-  announcement (wealth, no predicate); the `ابْنَ أَخِي` passage (flagged
-  above, not a relation); Atika's share and elegy (no predicate; poetry);
+  announcement (wealth, no predicate); the `ابْنَ أَخِي` passage (it
+  identifies Hakim; the tie is carried as legacy, see cousins); Atika's share and elegy (no predicate; poetry);
   the hadith-count colophon (no predicate).
 
 Footnotes on the cited pages (41, 42, 45, 48, 61, 62, 64) are takhrij and rijal
