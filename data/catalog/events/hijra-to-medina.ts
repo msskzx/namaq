@@ -1,20 +1,6 @@
 import type { CatalogEvent } from '@/lib/catalog/types';
 
-/**
- * Name, type and date stay the seed's, which still authors this event; this
- * module only adds the person.
- *
- * Chapter two of the sira adds the Prophet's own hijra to this event: the
- * three nights in غار ثور with Abu Bakr, and the arrival at Medina on Monday
- * the twelfth of Rabi al-Awwal. The date stays the seed's all the same, since a
- * day and month are not the hijriYear the model holds.
- *
- * The entry says هاجر الزبير without naming where to. Unqualified, that is the
- * hijra to Medina, and the claim is recorded LIKELY rather than ESTABLISHED
- * because the age it gives — eighteen — sits closer to Abyssinia than to a
- * migration some thirteen years after an Islam it dates to his sixteenth year.
- * The entry does not resolve it, so neither does this.
- */
+// docs/plans/time-layer.md
 const hijraToMedina = {
   kind: 'EVENT',
   slug: 'hijra-to-medina',
@@ -22,6 +8,7 @@ const hijraToMedina = {
   nameTransliterated: 'Hijra to Medina',
   type: 'HIJRA',
   fields: {},
+  dateParts: { hijriMonth: { value: 3, claims: ['sira/hijra-madinah'] } },
   people: [
     { person: 'az-zubayr-ibn-al-awwam', claims: ['zubayr/hijra-madinah'] },
     { person: 'abdur-rahman-ibn-awf', claims: ['awf/hijra-madinah'] },

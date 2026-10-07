@@ -249,4 +249,183 @@ describe('validateCatalog', () => {
       message: 'unknown sex UNKNOWN',
     });
   });
+
+  // docs/plans/time-layer.md - dateParts validation for events and battles
+  describe('dateParts validation', () => {
+    it('accepts a valid hijri month for a battle', () => {
+      const battle = {
+        kind: 'BATTLE' as const,
+        slug: 'badr',
+        name: 'غزوة بدر',
+        dateParts: { hijriMonth: { value: 3, claims: ['pilot/one'] as const } },
+        participants: [{ person: 'prophet-muhammad', isMuslim: true, claims: ['pilot/one'] as const }],
+      } as const;
+
+      expect(validateCatalog(catalog({ battles: [battle] }), known)).toEqual([]);
+    });
+
+    it('accepts valid month and day together', () => {
+      const event = {
+        kind: 'EVENT' as const,
+        slug: 'some-event',
+        name: 'حدث',
+        type: 'OTHER' as const,
+        fields: {},
+        dateParts: {
+          hijriMonth: { value: 3, claims: ['pilot/one'] as const },
+          hijriDay: { value: 12, claims: ['pilot/one'] as const },
+        },
+        people: [{ person: 'prophet-muhammad', claims: ['pilot/one'] as const }],
+      } as const;
+
+      expect(validateCatalog(catalog({ events: [event] }), known)).toEqual([]);
+    });
+
+    it('rejects a hijri month of 13', () => {
+      const battle = {
+        kind: 'BATTLE' as const,
+        slug: 'badr',
+        name: 'غزوة بدر',
+        dateParts: { hijriMonth: { value: 13, claims: ['pilot/one'] as const } },
+        participants: [{ person: 'prophet-muhammad', isMuslim: true, claims: ['pilot/one'] as const }],
+      } as const;
+
+      expect(validateCatalog(catalog({ battles: [battle] }), known)).toContainEqual({
+        path: 'battles/badr.hijriMonth',
+        message: 'a hijri month is 1 to 12',
+      });
+    });
+
+    it('rejects a hijri month of 0', () => {
+      const battle = {
+        kind: 'BATTLE' as const,
+        slug: 'badr',
+        name: 'غزوة بدر',
+        dateParts: { hijriMonth: { value: 0, claims: ['pilot/one'] as const } },
+        participants: [{ person: 'prophet-muhammad', isMuslim: true, claims: ['pilot/one'] as const }],
+      } as const;
+
+      expect(validateCatalog(catalog({ battles: [battle] }), known)).toContainEqual({
+        path: 'battles/badr.hijriMonth',
+        message: 'a hijri month is 1 to 12',
+      });
+    });
+
+    it('rejects a non-integer hijri month 2.5', () => {
+      const battle = {
+        kind: 'BATTLE' as const,
+        slug: 'badr',
+        name: 'غزوة بدر',
+        dateParts: { hijriMonth: { value: 2.5, claims: ['pilot/one'] as const } },
+        participants: [{ person: 'prophet-muhammad', isMuslim: true, claims: ['pilot/one'] as const }],
+      } as const;
+
+      expect(validateCatalog(catalog({ battles: [battle] }), known)).toContainEqual({
+        path: 'battles/badr.hijriMonth',
+        message: 'a hijri month is 1 to 12',
+      });
+    });
+
+    it('rejects a hijri day of 31', () => {
+      const battle = {
+        kind: 'BATTLE' as const,
+        slug: 'badr',
+        name: 'غزوة بدر',
+        dateParts: {
+          hijriMonth: { value: 3, claims: ['pilot/one'] as const },
+          hijriDay: { value: 31, claims: ['pilot/one'] as const },
+        },
+        participants: [{ person: 'prophet-muhammad', isMuslim: true, claims: ['pilot/one'] as const }],
+      } as const;
+
+      expect(validateCatalog(catalog({ battles: [battle] }), known)).toContainEqual({
+        path: 'battles/badr.hijriDay',
+        message: 'a hijri day is 1 to 30',
+      });
+    });
+
+    it('rejects a non-integer hijri day 15.5', () => {
+      const battle = {
+        kind: 'BATTLE' as const,
+        slug: 'badr',
+        name: 'غزوة بدر',
+        dateParts: {
+          hijriMonth: { value: 3, claims: ['pilot/one'] as const },
+          hijriDay: { value: 15.5, claims: ['pilot/one'] as const },
+        },
+        participants: [{ person: 'prophet-muhammad', isMuslim: true, claims: ['pilot/one'] as const }],
+      } as const;
+
+      expect(validateCatalog(catalog({ battles: [battle] }), known)).toContainEqual({
+        path: 'battles/badr.hijriDay',
+        message: 'a hijri day is 1 to 30',
+      });
+    });
+
+    it('rejects a hijri day without a month', () => {
+      const event = {
+        kind: 'EVENT' as const,
+        slug: 'some-event',
+        name: 'حدث',
+        type: 'OTHER' as const,
+        fields: {},
+        dateParts: { hijriDay: { value: 15, claims: ['pilot/one'] as const } },
+        people: [{ person: 'prophet-muhammad', claims: ['pilot/one'] as const }],
+      } as const;
+
+      expect(validateCatalog(catalog({ events: [event] }), known)).toContainEqual({
+        path: 'events/some-event.hijriDay',
+        message: 'a day needs a month',
+      });
+    });
+
+    it('rejects a hijri month with no claim behind this value', () => {
+      const battle = {
+        kind: 'BATTLE' as const,
+        slug: 'badr',
+        name: 'غزوة بدر',
+        dateParts: { hijriMonth: { value: 3, claims: [] as unknown as ['pilot/one'] } },
+        participants: [{ person: 'prophet-muhammad', isMuslim: true, claims: ['pilot/one'] as const }],
+      } as const;
+
+      expect(validateCatalog(catalog({ battles: [battle] }), known)).toContainEqual({
+        path: 'battles/badr.hijriMonth',
+        message: 'no claim behind this value',
+      });
+    });
+
+    it('rejects a hijri month citing an unknown claim key', () => {
+      const event = {
+        kind: 'EVENT' as const,
+        slug: 'some-event',
+        name: 'حدث',
+        type: 'OTHER' as const,
+        fields: {},
+        dateParts: { hijriMonth: { value: 3, claims: ['pilot/unknown'] as const } },
+        people: [{ person: 'prophet-muhammad', claims: ['pilot/one'] as const }],
+      } as const;
+
+      expect(validateCatalog(catalog({ events: [event] }), known)).toContainEqual({
+        path: 'events/some-event.hijriMonth',
+        message: 'no batch declares claim pilot/unknown',
+      });
+    });
+
+    it('accepts legacyUnreviewed for month and day', () => {
+      const event = {
+        kind: 'EVENT' as const,
+        slug: 'some-event',
+        name: 'حدث',
+        type: 'OTHER' as const,
+        fields: {},
+        dateParts: {
+          hijriMonth: { value: 3, claims: legacyUnreviewed },
+          hijriDay: { value: 12, claims: legacyUnreviewed },
+        },
+        people: [{ person: 'prophet-muhammad', claims: ['pilot/one'] as const }],
+      } as const;
+
+      expect(validateCatalog(catalog({ events: [event] }), known)).toEqual([]);
+    });
+  });
 });

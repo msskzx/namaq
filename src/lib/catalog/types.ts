@@ -146,6 +146,12 @@ export interface CatalogBattleFields {
   readonly nonMuslimDeathCount?: Cited<number>;
 }
 
+// docs/plans/time-layer.md
+export interface CatalogDateParts {
+  readonly hijriMonth?: Cited<number>;
+  readonly hijriDay?: Cited<number>;
+}
+
 /** Names only the participants its batch's focal subject brought, never the full roster. */
 export interface CatalogBattle {
   readonly kind: 'BATTLE';
@@ -154,6 +160,7 @@ export interface CatalogBattle {
   readonly name: string;
   readonly nameTransliterated?: string;
   readonly fields?: CatalogBattleFields;
+  readonly dateParts?: CatalogDateParts;
   readonly participants: readonly CatalogParticipation[];
 }
 
@@ -171,6 +178,7 @@ export interface CatalogEvent {
   readonly nameTransliterated?: string;
   readonly type: EventType;
   readonly fields: CatalogEventFields;
+  readonly dateParts?: CatalogDateParts;
   readonly people: readonly { readonly person: string; readonly claims: Provenance }[];
 }
 

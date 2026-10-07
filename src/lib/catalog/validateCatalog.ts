@@ -3,6 +3,7 @@ import {
   legacyUnreviewed,
   STATUSES_BY_RELATION,
   type Catalog,
+  type CatalogDateParts,
   type Provenance,
   ENGAGEMENTS,
   SEXES,
@@ -28,6 +29,22 @@ export interface KnownSlugs {
  */
 function checkHijriYear(cited: { value: number } | undefined, path: string, issues: CatalogIssue[]) {
   if (cited && cited.value === 0) issues.push({ path, message: 'there is no hijri year zero' });
+}
+
+function checkDateParts(parts: CatalogDateParts | undefined, known: KnownSlugs, at: string, issues: CatalogIssue[]) {
+  if (!parts) return;
+  const { hijriMonth, hijriDay } = parts;
+  if (hijriMonth) {
+    checkProvenance(hijriMonth.claims, known, `${at}.hijriMonth`, issues);
+    if (!Number.isInteger(hijriMonth.value) || hijriMonth.value < 1 || hijriMonth.value > 12)
+      issues.push({ path: `${at}.hijriMonth`, message: 'a hijri month is 1 to 12' });
+  }
+  if (hijriDay) {
+    checkProvenance(hijriDay.claims, known, `${at}.hijriDay`, issues);
+    if (!Number.isInteger(hijriDay.value) || hijriDay.value < 1 || hijriDay.value > 30)
+      issues.push({ path: `${at}.hijriDay`, message: 'a hijri day is 1 to 30' });
+    if (!hijriMonth) issues.push({ path: `${at}.hijriDay`, message: 'a day needs a month' });
+  }
 }
 
 function checkProvenance(claims: Provenance, known: KnownSlugs, path: string, issues: CatalogIssue[]) {
@@ -111,6 +128,7 @@ export function validateCatalog(catalog: Catalog, known: KnownSlugs): CatalogIss
     }
     if (battle.fields?.engagement) checkProvenance(battle.fields.engagement.claims, known, `${at}.engagement`, issues);
     checkHijriYear(battle.fields?.hijriYear, `${at}.hijriYear`, issues);
+    checkDateParts(battle.dateParts, known, at, issues);
     battle.participants.forEach((entry) => {
       const where = `${at}.${entry.person}`;
       checkProvenance(entry.claims, known, where, issues);
@@ -133,6 +151,7 @@ export function validateCatalog(catalog: Catalog, known: KnownSlugs): CatalogIss
       if (cited) checkProvenance(cited.claims, known, `${at}.${field}`, issues);
     });
     checkHijriYear(event.fields.hijriYear, `${at}.hijriYear`, issues);
+    checkDateParts(event.dateParts, known, at, issues);
     event.people.forEach((entry) => {
       checkProvenance(entry.claims, known, `${at}.${entry.person}`, issues);
       if (!person(entry.person)) issues.push({ path: at, message: `unknown person ${entry.person}` });

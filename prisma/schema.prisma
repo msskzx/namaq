@@ -736,6 +736,17 @@ model ModelUnit {
   @@map("model_units")
 }
 
+// docs/plans/time-layer.md
+model CatalogDatePart {
+  kind  String
+  slug  String
+  month Int?
+  day   Int?
+
+  @@id([kind, slug])
+  @@map("catalog_date_parts")
+}
+
 model ModelUnitLink {
   fromUnit String
   toUnit   String
