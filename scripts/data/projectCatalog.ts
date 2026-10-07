@@ -2,6 +2,7 @@ import 'dotenv/config';
 import { PrismaClient } from '../../src/generated/prisma';
 import { loadCatalog } from '../../src/lib/catalog/loadCatalog';
 import { planVirtues } from './personVirtues';
+import { dateRows, planDateParts, type DatePartRow } from './dateParts';
 import { seedAuthoredPeople } from './seedAuthored';
 import type { Catalog, CatalogBattleFields, CatalogEventFields, CatalogPersonFields, CatalogTitleAssignment, Cited } from '../../src/lib/catalog/types';
 
@@ -461,12 +462,42 @@ async function projectUtterances(utterances: Catalog['utterances']) {
   }
 }
 
+// docs/plans/time-layer.md
+async function projectDateParts(catalog: Catalog) {
+  const { rows, invalid, skipped } = dateRows(catalog);
+  invalid.forEach((message) => conflicts.push(message));
+  if (apply && invalid.length > 0) process.exitCode = 1;
+  try {
+    const live = await prisma.catalogDatePart.findMany();
+    const { set, remove } = planDateParts(rows, live as DatePartRow[], skipped);
+    for (const row of set) {
+      planned.push(`${row.kind.toLowerCase()}s/${row.slug}.dateParts: set month ${row.month} day ${row.day}`);
+      if (apply) {
+        await prisma.catalogDatePart.upsert({
+          where: { kind_slug: { kind: row.kind, slug: row.slug } },
+          create: row,
+          update: { month: row.month, day: row.day },
+        });
+      }
+    }
+    for (const row of remove) {
+      planned.push(`${row.kind.toLowerCase()}s/${row.slug}.dateParts: remove`);
+      if (apply) await prisma.catalogDatePart.delete({ where: { kind_slug: { kind: row.kind, slug: row.slug } } });
+    }
+  } catch (error) {
+    if ((error as { code?: string }).code !== 'P2021') throw error;
+    conflicts.push('dateParts: table catalog_date_parts is missing; apply the migration, then rerun');
+    if (apply) process.exitCode = 1;
+  }
+}
+
 async function main() {
   const catalog = await loadCatalog();
   seedAuthored = seedAuthoredPeople();
   await projectPeople(catalog.people);
   await projectBattles(catalog.battles);
   await projectEvents(catalog.events);
+  await projectDateParts(catalog);
   await projectUtterances(catalog.utterances);
   await retireStaleParticipations(catalog);
 
