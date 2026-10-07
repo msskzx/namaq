@@ -42,6 +42,8 @@ export const predicateOrder = [
   'virtue',
   'islam.age',
   'died.year',
+  'died.month',
+  'died.day',
   'PARTICIPATED_IN',
 ];
 
@@ -59,6 +61,11 @@ export const predicateLabels: Record<string, Pair> = {
   virtue: { ar: 'من فضائله', en: 'Virtues' },
   'islam.age': { ar: 'عمره عند إسلامه', en: 'Age at Islam' },
   'died.year': { ar: 'سنة وفاته', en: 'Year of death' },
+  'died.month': { ar: 'شهر وفاته', en: 'Month of death' },
+  'died.day': { ar: 'يوم وفاته', en: 'Day of death' },
+  'born.year': { ar: 'سنة ولادته', en: 'Year of birth' },
+  'born.month': { ar: 'شهر ولادته', en: 'Month of birth' },
+  'born.day': { ar: 'يوم ولادته', en: 'Day of birth' },
   PARTICIPATED_IN: { ar: 'المشاهد', en: 'Battles and expeditions' },
 };
 
@@ -74,8 +81,10 @@ export function predicateLabel(predicate: string, language: Language) {
   return predicateLabels[predicate]?.[language] ?? predicate;
 }
 
+const datePartPredicates = new Set(['born.month', 'born.day', 'died.month', 'died.day']);
+
 export function isBookText(entry: ModelEntryDto) {
-  return entry.parsed === null && entry.classified === null;
+  return (entry.parsed === null || datePartPredicates.has(entry.predicate)) && entry.classified === null;
 }
 
 export function valueLines(entry: ModelEntryDto, language: Language) {
@@ -83,8 +92,8 @@ export function valueLines(entry: ModelEntryDto, language: Language) {
   if (entry.classified && entry.predicate === 'sex') {
     return [entry.classified === 'MALE' ? (ar ? 'ذكر' : 'Male') : ar ? 'أنثى' : 'Female'];
   }
-  if (entry.parsed !== null) {
-    if (entry.predicate === 'died.year') return [ar ? `${entry.parsed} هـ` : `${entry.parsed} AH`];
+  if (entry.parsed !== null && !datePartPredicates.has(entry.predicate)) {
+    if (entry.predicate === 'died.year' || entry.predicate === 'born.year') return [ar ? `${entry.parsed} هـ` : `${entry.parsed} AH`];
     if (entry.predicate === 'islam.age')
       return [ar ? `${entry.parsed} سنة` : `${entry.parsed} years`];
     return [String(entry.parsed)];

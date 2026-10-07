@@ -7,7 +7,7 @@ import { loadModel } from './load';
 import type { UnitFile } from './types';
 
 const NAME = 'الزُّبَيْرُ بنُ العَوَّامِ بنِ خُوَيْلِدِ بنِ أَسَدِ بنِ عَبْدِ العُزَّى';
-const PAGE = `٣ - ${NAME} * (ع)\n\nابْنِ قُصَيِّ بنِ كِلاَبِ بنِ مُرَّةَ بنِ كَعْبِ بنِ لُؤَيِّ بنِ غَالِبٍ.\n\nوَرَوَى: اللَّيْثُ، عَنْ أَبِي الأَسْوَدِ، عَنْ عُرْوَةَ، قَالَ:\n`;
+const PAGE = `٣ - ${NAME} * (ع)\n\nابْنِ قُصَيِّ بنِ كِلاَبِ بنِ مُرَّةَ بنِ كَعْبِ بنِ لُؤَيِّ بنِ غَالِبٍ.\n\nقُتِلَ فِي رَجَبٍ، سَنَةَ سِتٍّ وَثَلاَثِيْنَ مِنَ الْهِجْرَةِ.\n\nوَرَوَى: اللَّيْثُ، عَنْ أَبِي الأَسْوَدِ، عَنْ عُرْوَةَ، قَالَ:\n`;
 
 function unit(): UnitFile {
   return {
@@ -229,5 +229,158 @@ describe('checkModel', () => {
     expect(
       issuesFor((f) => f.identifications.push({ ...f.identifications[0], id: 'i2' })).join(),
     ).toMatch(/already identifies this mention as az-zubayr/);
+  });
+
+  it('accepts a died.year assertion with parsed equal to the reader result', () => {
+    expect(
+      issuesFor((f) => {
+        f.spans.push({
+          id: 'sp3',
+          edition: 'ed',
+          volume: 4,
+          page: '41',
+          layer: 'MAIN',
+          exact: 'سَنَةَ سِتٍّ وَثَلاَثِيْنَ',
+        });
+        f.assertions.push({
+          id: 'a2',
+          subject: 'm1',
+          predicate: 'died.year',
+          value: { spans: ['sp3'], parsed: 36 },
+          restsOn: ['st1'],
+          status: 'PROPOSED',
+        });
+      }),
+    ).toEqual([]);
+  });
+
+  it('fails a parsed value different from the reader result', () => {
+    expect(
+      issuesFor((f) => {
+        f.spans.push({
+          id: 'sp3',
+          edition: 'ed',
+          volume: 4,
+          page: '41',
+          layer: 'MAIN',
+          exact: 'سَنَةَ سِتٍّ وَثَلاَثِيْنَ',
+        });
+        f.assertions.push({
+          id: 'a2',
+          subject: 'm1',
+          predicate: 'died.year',
+          value: { spans: ['sp3'], parsed: 99 },
+          restsOn: ['st1'],
+          status: 'PROPOSED',
+        });
+      }).join(),
+    ).toMatch(/parsed.*99.*quote reads/);
+  });
+
+  it('fails an assertion with parsed but no date reader for its predicate', () => {
+    expect(
+      issuesFor((f) => {
+        f.assertions[0].value = { spans: ['sp1'], parsed: 42 };
+      }).join(),
+    ).toMatch(/no date reader/);
+  });
+
+  it('fails a died.month assertion without a died.year on the same statement', () => {
+    expect(
+      issuesFor((f) => {
+        f.assertions.push({
+          id: 'a2',
+          subject: 'm1',
+          predicate: 'died.month',
+          value: { spans: ['sp1'] },
+          restsOn: ['st1'],
+          status: 'PROPOSED',
+        });
+      }).join(),
+    ).toMatch(/needs a died.year on the same statement/);
+  });
+
+  it('fails a died.day assertion without a died.month on the same statement', () => {
+    expect(
+      issuesFor((f) => {
+        f.assertions.push({
+          id: 'a2',
+          subject: 'm1',
+          predicate: 'died.day',
+          value: { spans: ['sp1'] },
+          restsOn: ['st1'],
+          status: 'PROPOSED',
+        });
+      }).join(),
+    ).toMatch(/needs a died.month on the same statement/);
+  });
+
+  const monthAndYear = (f: UnitFile) => {
+    f.spans.push(
+      { id: 'sp3', edition: 'ed', volume: 4, page: '41', layer: 'MAIN', exact: 'سَنَةَ سِتٍّ وَثَلاَثِيْنَ' },
+      { id: 'sp4', edition: 'ed', volume: 4, page: '41', layer: 'MAIN', exact: 'رَجَبٍ', prefix: 'فِي ' },
+    );
+    f.assertions.push(
+      { id: 'a2', subject: 'm1', predicate: 'died.month', value: { spans: ['sp4'], parsed: 7 }, restsOn: ['st1'], status: 'PROPOSED' },
+      { id: 'a3', subject: 'm1', predicate: 'died.year', value: { spans: ['sp3'], parsed: 36 }, restsOn: ['st1'], status: 'PROPOSED' },
+    );
+  };
+
+  it('accepts died.month and died.year on the same statement', () => {
+    expect(issuesFor(monthAndYear)).toEqual([]);
+  });
+
+  it('fails a date predicate that carries no parsed number', () => {
+    expect(
+      issuesFor((f) => {
+        monthAndYear(f);
+        f.assertions[2].value = { spans: ['sp3'] };
+      }).join(),
+    ).toMatch(/died.year needs a parsed number/);
+  });
+
+  it('fails a died.month whose died.year belongs to another subject', () => {
+    expect(
+      issuesFor((f) => {
+        monthAndYear(f);
+        f.mentions.push({ id: 'm2', parent: 'sp1', exact: 'العَوَّامِ', occurrence: 1, role: 'SUBJECT' });
+        f.assertions[2].subject = 'm2';
+      }).join(),
+    ).toMatch(/needs a died.year on the same statement/);
+  });
+
+  it('fails a died.month whose died.year is rejected', () => {
+    expect(
+      issuesFor((f) => {
+        monthAndYear(f);
+        f.assertions[2].status = 'REJECTED';
+      }).join(),
+    ).toMatch(/needs a died.year on the same statement/);
+  });
+
+  it('fails a date predicate whose value is an object and not a quote', () => {
+    expect(
+      issuesFor((f) => {
+        f.mentions.push({ id: 'm2', parent: 'sp1', exact: 'العَوَّامِ', occurrence: 1, role: 'SUBJECT' });
+        f.assertions.push({
+          id: 'a2',
+          subject: 'm1',
+          predicate: 'died.year',
+          value: { object: 'm2' },
+          restsOn: ['st1'],
+          status: 'PROPOSED',
+        });
+      }).join(),
+    ).toMatch(/died.year needs a parsed number/);
+  });
+
+  it('does not ask a legacy date part for a statement', () => {
+    expect(
+      issuesFor((f) => {
+        monthAndYear(f);
+        f.assertions[1].status = 'LEGACY';
+        f.assertions[1].restsOn = [];
+      }).join(),
+    ).not.toMatch(/died.month needs a died.year/);
   });
 });

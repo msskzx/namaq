@@ -1,4 +1,5 @@
 // docs/plans/data-model/plan.md, sections 2.3 to 2.7
+import { dateParts, dateReaders } from './dateReader';
 import { locateSpanRecord } from './render';
 import { modeKeyOf } from './modes';
 import { splitRef } from './refs';
@@ -376,15 +377,38 @@ function checkUnit(
       if (!statementIds.has(id)) fail(`${owner}: unknown statement ${id}`);
     }
     const { value } = assertion;
+    if (dateReaders[assertion.predicate] && !('parsed' in value)) {
+      fail(`${owner}: ${assertion.predicate} needs a parsed number`);
+    }
     if ('object' in value) {
       if (!mentionIds.has(value.object)) fail(`${owner}: unknown object mention`);
     } else if ('spans' in value) {
       if (value.spans.length === 0) fail(`${owner}: no value spans`);
       for (const id of value.spans) needSpan(owner, id);
-      if ('parsed' in value && !Number.isFinite(value.parsed))
-        fail(`${owner}: parsed is not a number`);
+      if ('parsed' in value) {
+        const read = dateReaders[assertion.predicate];
+        const quote = value.spans.map((id) => rendered.get(id) ?? '').join(' ');
+        if (!Number.isFinite(value.parsed)) fail(`${owner}: parsed is not a number`);
+        else if (!read) fail(`${owner}: ${assertion.predicate} has no date reader`);
+        else if (read(quote) !== value.parsed)
+          fail(`${owner} (${assertion.predicate}): parsed ${value.parsed} but the quote reads ${read(quote) ?? 'nothing'}`);
+      }
     } else {
       fail(`${owner}: value has no spans or object`);
+    }
+    const needed = dateParts[assertion.predicate];
+    if (
+      needed &&
+      assertion.status !== 'LEGACY' &&
+      !file.assertions.some(
+        (other) =>
+          other.predicate === needed &&
+          other.subject === assertion.subject &&
+          other.status !== 'REJECTED' &&
+          other.restsOn.some((id) => assertion.restsOn.includes(id)),
+      )
+    ) {
+      fail(`${owner}: ${assertion.predicate} needs a ${needed} on the same statement`);
     }
   }
 }
