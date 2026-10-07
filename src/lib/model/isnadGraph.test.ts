@@ -119,3 +119,57 @@ describe('isnadGraph and layoutIsnad', () => {
     expect(layout).toBeDefined();
   });
 });
+
+describe('rows by tabaqa', () => {
+  const build = (unit: string) => {
+    const view = hadithView(unit)!;
+    const graph = isnadGraph(view.reports[0], view.compiler ?? view.book, unit);
+    return { graph, layout: layoutIsnad(graph) };
+  };
+  const row = (layout: ReturnType<typeof layoutIsnad>, id: string) =>
+    layout.nodes.find((n) => n.id === id)!.y;
+
+  it('merges a narrator who sits on both routes into one node', () => {
+    const { graph } = build('muslim-jibril');
+    expect(graph.nodes.filter((n) => n.id === 'p:kahmas-ibn-al-hasan')).toHaveLength(1);
+    expect(graph.nodes.filter((n) => n.id === 'p:yahya-ibn-yamar')).toHaveLength(1);
+  });
+
+  it('puts ibn Umar and Umar in one row, joined by an edge', () => {
+    const { graph, layout } = build('muslim-jibril');
+    expect(row(layout, 'p:abdullah-ibn-umar')).toBe(row(layout, 'p:umar-ibn-al-khattab'));
+    expect(graph.edges).toContainEqual({
+      from: 'p:umar-ibn-al-khattab',
+      to: 'p:abdullah-ibn-umar',
+      label: 'حَدَّثَنِي',
+    });
+  });
+
+  it('puts the collector on top and the Companions at the bottom', () => {
+    const { layout } = build('muslim-jibril');
+    const ys = layout.nodes.map((n) => n.y);
+    expect(row(layout, 'collector')).toBe(Math.min(...ys));
+    expect(row(layout, 'p:umar-ibn-al-khattab')).toBe(Math.max(...ys));
+  });
+
+  it('labels rows collector first, then tabaqa from the highest down', () => {
+    const { layout } = build('bukhari-jibril');
+    expect(layout.rows.map((r) => r.tabaqa)).toEqual([undefined, 10, 8, 6, 3, 1]);
+    expect(layout.rows[0].kind).toBe('collector');
+  });
+
+  it('puts a narrator with no tabaqa in a row of its own at the bottom', () => {
+    const view = hadithView('bukhari-jibril')!;
+    const graph = isnadGraph(view.reports[0], view.book, 'bukhari-jibril');
+    graph.nodes.find((n) => n.id === 'p:abu-zurah-ibn-amr-ibn-jarir')!.tabaqa = undefined;
+    const layout = layoutIsnad(graph);
+    expect(layout.rows.at(-1)!.kind).toBe('unranked');
+  });
+
+  it('leaves a unit without ranks laid out by depth', () => {
+    const view = hadithView('bukhari-jibril')!;
+    const layout = layoutIsnad(isnadGraph(view.reports[0], view.book));
+    expect(layout.rows).toEqual([]);
+  });
+});
+
