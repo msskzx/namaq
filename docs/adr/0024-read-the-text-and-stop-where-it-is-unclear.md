@@ -32,8 +32,10 @@ What counts as clear, with the hadith of Jibril as the example:
   attributed to that commentary, with the sentence as its basis.
 
 The Inference file stays for what the text does not present: a participation that
-is never stated, or a date placement between two events. Those need the owner's
-approval, and an agent never writes it.
+is never stated. That needs the owner's approval, and an agent never writes it. A
+date placement between two events is no longer one: [ADR 0028](0028-a-stated-ordering-is-recorded-and-its-placement-is-derived.md)
+records the ordering the text states directly and shows the interval it implies as
+derived, with its premises.
 
 Every extraction must also be complete. The scenes, notes and fields of an entry
 must rebuild its text word for word, and a test checks it. Nothing is trimmed to

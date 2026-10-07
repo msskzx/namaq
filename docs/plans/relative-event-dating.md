@@ -1,6 +1,11 @@
 # Placing undated events on the timeline: future plan
 
-Status: not built. An event or battle with no `hijriYear` is shown as "Unknown"
+Status: not built, and superseded by [time-layer.md](time-layer.md) and
+[ADR 0028](../adr/0028-a-stated-ordering-is-recorded-and-its-placement-is-derived.md).
+Where they differ they win: a constraint is a catalog record with `BEFORE` only, and a
+cross-source cycle is a dispute, not a data error. This file keeps the problem statement.
+
+An event or battle with no `hijriYear` is shown as "Unknown"
 and sorted last, on the events page and on a profile's timeline
 (`compareHijriYear` in `src/lib/hijriYear.ts`). That is honest, but it throws
 away what the sources often do say: that the event fell after one dated event
