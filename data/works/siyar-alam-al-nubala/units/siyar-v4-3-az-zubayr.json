@@ -195,6 +195,15 @@
       "exact": "سَنَةَ سِتٍّ وَثَلاَثِيْنَ"
     },
     {
+      "id": "sp_death_month",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "64",
+      "layer": "MAIN",
+      "exact": "رَجَبٍ",
+      "prefix": "قُتِلَ فِي "
+    },
+    {
       "id": "sp_wife_frame",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 4,
@@ -1253,6 +1262,17 @@
       "value": {
         "parsed": 36,
         "spans": ["sp_death_year"]
+      },
+      "restsOn": ["st_death"],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_death_month",
+      "subject": "m_zb",
+      "predicate": "died.month",
+      "value": {
+        "parsed": 7,
+        "spans": ["sp_death_month"]
       },
       "restsOn": ["st_death"],
       "status": "PROPOSED"

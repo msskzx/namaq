@@ -136,6 +136,15 @@ batch is expected to produce. As of this writing, 12 of Abd al-Muttalib's
 types in `src/lib/relationship/categories.ts` but unused for this family) —
 a known gap, not something a routine batch needs to fix.
 
+### Dates (in a span-model unit)
+
+A year, month or day the entry prints is recorded as `born.*` or `died.*` (and an age as
+`islam.age`) with a `parsed` number, and `model:check` reads the quote itself and fails
+when the number differs ([ADR 0027](adr/0027-a-date-is-read-from-its-quote-and-the-number-is-checked.md)).
+Record the month and day on the same statement as the year. A sentence the reader cannot
+read (an indefinite count, two numbers, a count of nights such as `لعشر خلون`) is listed as
+not modeled with `time-layer:unreadable`; do not guess a number for it.
+
 ### 7. Source text detail (always required, no absent state)
 
 - Printed page number(s) per page (`printedPage`).

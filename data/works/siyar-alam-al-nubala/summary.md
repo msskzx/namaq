@@ -126,7 +126,7 @@ Not modeled, by page (date sentences: `time-layer`; fight outcomes: `outcome`):
   the author's `مَعَاذَ الله` rejection (deliberately not modeled); the elegy
   line naming the valley (poetry; the prose gloss carries the place instead).
 - p64: the opening elegy verses (poetry); the competing death ages (`خَمْسُوْنَ`
-  reports, `time-layer`, no age held); the debt counsel (wealth, no predicate).
+  reports, `time-layer:waiting`, no age held); the debt counsel (wealth, no predicate).
 - p65-67: the estate, debt and inheritance saga including the four-year
   announcement (wealth, no predicate); the `ابْنَ أَخِي` passage (it
   identifies Hakim; the tie is carried as legacy, see cousins); Atika's share and elegy (no predicate; poetry);
