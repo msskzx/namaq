@@ -267,7 +267,8 @@ _Avoid_: Account (in new writing)
 **Not modeled**:
 A sentence of an entry that no field covers. It is listed, never hidden, and it
 never fails a check. A date sentence is listed as not modeled until the time
-layer exists.
+layer reads it, tagged `time-layer:waiting` or, when the reader cannot read it,
+`time-layer:unreadable`.
 
 **Unresolved name**:
 A name the book itself cannot tie to one person. It stays text, is highlighted,
@@ -309,6 +310,30 @@ _Avoid_: Narrates (it covers only one of the three)
 **Compiler's remark**:
 A sentence the collector adds after a hadith in his own voice. It belongs to
 the entry and is not part of the hadith or its isnad.
+
+### Time
+
+**Printed date**:
+A year, month or day exactly as the book prints it, read from its quote. A number stored
+beside the quote must equal what the quote says. Nothing is converted or worked out from
+it.
+_Avoid_: Computed date, converted date
+
+**Ordering constraint**:
+A cited statement that one event came before another, kept as a record between the two
+events and not as part of any person's profile.
+_Avoid_: Relative date (it names the idea, not the record)
+
+**Derived interval**:
+The span an undated event is placed in, worked out from its ordering constraints and the
+dated events around them. It is shown as approximate, with both premise events, and is
+never read as a date.
+_Avoid_: Estimated date
+
+**Order disputed**:
+A flag worked out from the records, not an assertion status: an event whose sources give
+ordering constraints or years that cannot all hold. Every reading is kept and shown, and
+the event is not placed.
 
 ### Events and expeditions
 

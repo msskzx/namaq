@@ -16,9 +16,9 @@ and are marked as such. The rule that governs all of it is
   not touched, converted or removed until the owner has tested the model.
 - An entry is parsed whole. Its pieces must rebuild its text word for word. A sentence
   no field covers is listed as **not modeled** and never fails the check.
-- A date sentence is listed as not modeled with the tag `time-layer`, and waits for the
-  time layer, which gets its own plan (start from
-  [relative-event-dating.md](relative-event-dating.md)). A year the book prints as a
+- A date sentence is listed as not modeled with the tag `time-layer:waiting` when it
+  waits for a later part of the time layer, or `time-layer:unreadable` when the reader
+  cannot read it ([time-layer.md](time-layer.md)). A year the book prints as a
   number, such as a death year, stays recorded as the book prints it, with no
   conversion or derivation.
 - A name is tied to a person only through the book itself: the entry's heading, its
@@ -97,7 +97,7 @@ Nonblocking:
 - **Hakim ibn Hizam as a cousin** is not in the model, on purpose: the batch summary
   records that the entry has al-Zubayr calling Hakim's son «ابن أخي» and does not state
   the relation. It is a possible catalog error, so it is flagged to the owner.
-- **The time layer** has no plan yet. Dates stay in the not-modeled list until it does.
+- **The time layer** is planned in [time-layer.md](time-layer.md). Dates stay in the not-modeled list until its phases land.
 - **A rijal work as a second source for names.** Decide later.
 - **A batch with a hadith in its text** would exercise the cross-unit span reference
   (progress item 5). It is not required for batch one.

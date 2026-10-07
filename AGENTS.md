@@ -35,6 +35,22 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 - Before considering a change finished: `npm run lint`, `npx tsc --noEmit`,
   and `npm test` should all pass.
 
+## Review before a PR
+
+- A subagent reviews the diff before any PR is opened, and it is not the agent
+  that wrote the code or the tests under review. Run one review cycle: the
+  reviewer reads the diff and reports defects, and you fix or answer each one.
+  Run a second cycle only when the first reported a defect that needed a code or
+  test change. A docs-only change, a rename or a typo fix needs the one cycle.
+  Never run a third.
+- Opening the PR means the work is finished: `npm run lint`, `npx tsc --noEmit`
+  and `npm test` pass (the same checks as "Before considering a change
+  finished"), the review findings are fixed or answered in the PR body, and the
+  PR can merge once CI is green unless the owner comments on it. A migration the
+  owner applies is not a reason to hold the merge: write the change so the app
+  works before the migration is applied. Do not open a PR to ask whether the
+  work is right; ask before, in the plan.
+
 ## Quiz questions
 
 - Quiz candidates and review decisions are authored under `data/quiz/` and

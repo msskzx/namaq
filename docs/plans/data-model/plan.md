@@ -289,14 +289,14 @@ type Premise = { assertion: AssertionId } | { span: SpanRef } | { turn: TurnRef 
 type DerivedValue =                                          // closed; no free text (P1)
   | { kind: 'TURN_SPEAKER'; turn: TurnRef; speaker: MentionId }
   | { kind: 'RELATION'; predicate: Predicate; subject: MentionId; object: MentionId }
-  | { kind: 'TIMELINE_BETWEEN'; event: AgentId; after: AgentId; before: AgentId };
+  | { kind: 'TIMELINE_BETWEEN'; event: AgentId; after: AgentId; before: AgentId }; // replaced by ADR 0028, removed in PR C of the time layer
 type Inference = { id: InferenceId; passage: SpanRef[]; value: DerivedValue; premises: Premise[];
                    status: 'REPORTED' | 'APPROVED' | 'REJECTED'; approvedInPr?: string };
 ```
 
 A new kind of derived value needs an ADR. An unapproved report has no effect on any view.
 
-**Timelines.** The model needs a time layer (hijri dates, relative dating as in `docs/plans/relative-event-dating.md`, uncertainty, disagreement); its design is its own plan and is not decided here. One rule is fixed now: an event with no date that the text places between two dated events shows between them with no exact date, and the view names those two events as premises. That is the same special-case path: reported by the agent in `data/inferences/`, approved by the owner, stored as a `TIMELINE_BETWEEN` derived value whose premises are the two events (Agents) and the spans that date them. Without the approval the event stays at the end of the timeline as today.
+**Timelines.** The model needs a time layer (hijri dates, relative dating as in `docs/plans/relative-event-dating.md`, uncertainty, disagreement); its design is its own plan and is not decided here. One rule was fixed here and is now replaced by [ADR 0028](../../adr/0028-a-stated-ordering-is-recorded-and-its-placement-is-derived.md) and [time-layer.md](../time-layer.md): an ordering the text states is recorded directly as a catalog record, and the interval an undated event is shown in is derived from it, labelled as derived, with both premise events named. It needs no Inference and no approval, so the `TIMELINE_BETWEEN` kind in `src/lib/model/inference.ts` is removed in PR C of the time layer.
 
 ### 2.14 Citations from visualizations (G3, G5, G8)
 
