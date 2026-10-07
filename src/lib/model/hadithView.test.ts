@@ -69,6 +69,15 @@ describe('hadithView (the Jibril fixtures)', () => {
     expect(hadith.scenes[1].inTurn).toBe('o3');
   });
 
+  it('starts the first scene after the last narrator of the isnad, not on it', () => {
+    for (const unit of ['bukhari-jibril', 'muslim-jibril']) {
+      const [first] = hadithView(unit)!.reports[0].scenes[0].lines;
+      expect(first.kind).toBe('narration');
+      expect(first.text.replace(HARAKAT, '')).toMatch(/^(قال|كان)/);
+      expect(first.text).not.toMatch(/^عَنْ/);
+    }
+  });
+
   it('links the commentary back to the hadith it explains', () => {
     expect(hadithView('fath-iman-50')!.explains[0].unit).toBe('bukhari-jibril');
   });
