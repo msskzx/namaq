@@ -33,7 +33,12 @@ Open the graph → explore and filter relationships → open a person's profile 
 - A hadith page has two modes: the book's full text, or the isnad diagram above
   the conversation as bubbles. The diagram puts the collector first, with each
   teller below the one who heard from them and arrows pointing up to the hearer.
-  It is static SVG ([plan](docs/plans/hadith-on-profiles.md)).
+  It is static SVG ([plan](docs/plans/hadith-on-profiles.md)). For the two
+  Jibril hadith the rows are Ibn Hajar's ṭabaqāt from تقريب التهذيب, with the
+  collector on top and a narrator who reports from someone of the same ṭabaqa
+  beside them; a person on both routes is one node. The ranks are hand-written
+  demo data in `src/lib/model/tabaqa.ts`
+  ([plan](docs/plans/hadith-chain-rows.md)).
 
 ### Relationship graph
 

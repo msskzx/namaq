@@ -120,6 +120,17 @@ _Avoid_: Title (for companion or tabi'i), classification
 A person who met the Prophet ﷺ while believing in him and died a Muslim.
 _Avoid_: Sahabi (in English text)
 
+**Ṭabaqa**:
+The rank, from 1 to 12, that Ibn Hajar gives a narrator in تقريب التهذيب. It is
+his judgment and is recorded with that source. It is not Status, and it is not
+the death cohort the Siyar sorts its entries by.
+_Avoid_: Layer (the drawing's bands are rows), generation (that is Status)
+
+**Narrator**:
+A person who passes on a report in a chain. A narrator is a person like any
+other and has no separate record.
+_Avoid_: Rawi (in English text)
+
 **Office**:
 A post a person held, with a scope and, where the text states them, dates, such as
 caliph or amir of a province.

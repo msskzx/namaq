@@ -124,7 +124,7 @@ export default function HadithUnit({
             <>
               {report.chain && (
                 <div className="mb-6">
-                  <IsnadSvg graph={isnadGraph(report, view.compiler ?? view.book)} profiles={profiles} />
+                  <IsnadSvg graph={isnadGraph(report, view.compiler ?? view.book, view.id)} profiles={profiles} ar={ar} />
                 </div>
               )}
               {report.scenes.length === 0 &&
