@@ -1,4 +1,5 @@
 import { RECIPROCAL_INVERSES } from '@/lib/relationship/categories';
+import { orderingProblems } from './ordering';
 import {
   legacyUnreviewed,
   STATUSES_BY_RELATION,
@@ -20,6 +21,8 @@ export interface KnownSlugs {
   readonly people: ReadonlySet<string>;
   /** Claim keys from every approved batch. */
   readonly claims: ReadonlySet<string>;
+  readonly spans?: ReadonlySet<string>;
+  readonly claimSources?: ReadonlyMap<string, readonly string[]>;
 }
 
 /**
@@ -157,6 +160,17 @@ export function validateCatalog(catalog: Catalog, known: KnownSlugs): CatalogIss
       if (!person(entry.person)) issues.push({ path: at, message: `unknown person ${entry.person}` });
     });
   });
+
+  (catalog.orderings ?? []).forEach((ordering) => {
+    const at = `orderings/${ordering.earlier}-before-${ordering.later}`;
+    if (ordering.claims === legacyUnreviewed) return;
+    if (ordering.claims.length === 0) issues.push({ path: at, message: 'no claim behind this ordering' });
+    ordering.claims.forEach((ref) => {
+      const found = ref.includes('#') ? known.spans?.has(ref) : known.claims.has(ref);
+      if (!found) issues.push({ path: at, message: ref.includes('#') ? `no model span ${ref}` : `no batch declares claim ${ref}` });
+    });
+  });
+  issues.push(...orderingProblems(catalog, known.claimSources).errors);
 
   const events = new Set(catalog.events.map((event) => event.slug));
   const battles = new Set(catalog.battles.map((battle) => battle.slug));

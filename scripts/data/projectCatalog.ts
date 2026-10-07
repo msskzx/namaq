@@ -3,6 +3,7 @@ import { PrismaClient } from '../../src/generated/prisma';
 import { loadCatalog } from '../../src/lib/catalog/loadCatalog';
 import { planVirtues } from './personVirtues';
 import { dateRows, planDateParts, type DatePartRow } from './dateParts';
+import { orderingRows, planOrderings, type OrderingRow } from './orderings';
 import { seedAuthoredPeople } from './seedAuthored';
 import type { Catalog, CatalogBattleFields, CatalogEventFields, CatalogPersonFields, CatalogTitleAssignment, Cited } from '../../src/lib/catalog/types';
 
@@ -491,6 +492,36 @@ async function projectDateParts(catalog: Catalog) {
   }
 }
 
+// docs/adr/0028-a-stated-ordering-is-recorded-and-its-placement-is-derived.md
+async function projectOrderings(catalog: Catalog) {
+  try {
+    const live = (await prisma.catalogOrdering.findMany()) as unknown as OrderingRow[];
+    const { set, remove } = planOrderings(orderingRows(catalog), live);
+    for (const row of set) {
+      planned.push(`orderings/${row.earlier}-before-${row.later}: set (${row.source})`);
+      if (apply) {
+        await prisma.catalogOrdering.upsert({
+          where: { earlier_later_source: { earlier: row.earlier, later: row.later, source: row.source } },
+          create: { ...row, claims: row.claims as never },
+          update: { claims: row.claims as never },
+        });
+      }
+    }
+    for (const row of remove) {
+      planned.push(`orderings/${row.earlier}-before-${row.later}: remove (${row.source})`);
+      if (apply) {
+        await prisma.catalogOrdering.delete({
+          where: { earlier_later_source: { earlier: row.earlier, later: row.later, source: row.source } },
+        });
+      }
+    }
+  } catch (error) {
+    if ((error as { code?: string }).code !== 'P2021') throw error;
+    conflicts.push('orderings: table catalog_orderings is missing; apply the migration, then rerun');
+    if (apply) process.exitCode = 1;
+  }
+}
+
 async function main() {
   const catalog = await loadCatalog();
   seedAuthored = seedAuthoredPeople();
@@ -498,6 +529,7 @@ async function main() {
   await projectBattles(catalog.battles);
   await projectEvents(catalog.events);
   await projectDateParts(catalog);
+  await projectOrderings(catalog);
   await projectUtterances(catalog.utterances);
   await retireStaleParticipations(catalog);
 

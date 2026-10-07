@@ -10,8 +10,7 @@ export type Premise =
 
 export type DerivedValue =
   | { kind: 'TURN_SPEAKER'; turn: string; speaker: string }
-  | { kind: 'RELATION'; predicate: Predicate; subject: string; object: string }
-  | { kind: 'TIMELINE_BETWEEN'; event: string; after: string; before: string };
+  | { kind: 'RELATION'; predicate: Predicate; subject: string; object: string };
 
 export interface Inference {
   id: string;
@@ -40,7 +39,7 @@ export function loadInferences(root: string): Inference[] {
 
 const unitFiles = (folders: WorkFolder[]) => folders.flatMap((folder) => folder.units);
 
-const kinds = ['TURN_SPEAKER', 'RELATION', 'TIMELINE_BETWEEN'];
+const kinds = ['TURN_SPEAKER', 'RELATION'];
 
 export function checkInferences(folders: WorkFolder[], inferences: Inference[]) {
   const issues: string[] = [];
@@ -105,10 +104,6 @@ export function checkInferences(folders: WorkFolder[], inferences: Inference[]) 
       }
       if (!predicates.includes(value.predicate))
         fail(`predicate ${value.predicate} is not in the closed list`);
-    } else {
-      for (const id of [value.event, value.after, value.before]) {
-        if (!id?.trim()) fail('a timeline value needs an event, an after and a before');
-      }
     }
     if (inference.status === 'APPROVED' && !inference.approvedInPr)
       fail('APPROVED without approvedInPr');
