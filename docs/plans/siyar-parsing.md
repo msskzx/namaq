@@ -1,6 +1,9 @@
 # Parsing the Companions of the Siyar into the span model
 
 Status: ready to implement. Nothing blocks it; open issues are listed at the end.
+Built: `npm run model:coverage` and its completeness test over every entry (criteria 1 and 2),
+and the volume rule in `model:check` (criterion 3). The classified diff and the al-Zubayr
+re-parse (criteria 4 and 5) were already in place.
 
 Decided by the owner: the target format, how uncovered text and unresolved names are
 handled, how names are resolved, and that the time layer comes first. The remaining

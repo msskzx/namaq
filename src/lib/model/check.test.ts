@@ -383,4 +383,34 @@ describe('checkModel', () => {
       }).join(),
     ).not.toMatch(/died.month needs a died.year/);
   });
+
+  const declare = (volumes: number[]) =>
+    writeFileSync(
+      join(root, 'data/history/sources/wit/source.json'),
+      JSON.stringify({ slug: 'wit', title: 'test', volumes: volumes.map((number) => ({ number })) }),
+    );
+
+  it('fails a span whose volume the source manifest does not declare', () => {
+    const file = unit();
+    write(file);
+    declare([5]);
+    expect(checkModel(loadModel(root), root).join()).toMatch(/volume 4 is not declared by source wit/);
+  });
+
+  it('accepts a span whose volume the source manifest declares', () => {
+    const file = unit();
+    write(file);
+    declare([4, 5]);
+    expect(checkModel(loadModel(root), root)).toEqual([]);
+  });
+
+  it('skips the volume rule for a witness whose source has no manifest', () => {
+    const file = unit();
+    file.spans.forEach((span) => (span.volume = 9));
+    write(file);
+    const pages = join(root, 'data/history/sources/wit/v9');
+    mkdirSync(pages, { recursive: true });
+    writeFileSync(join(pages, '41.md'), PAGE);
+    expect(checkModel(loadModel(root), root).join()).not.toMatch(/is not declared by source/);
+  });
 });

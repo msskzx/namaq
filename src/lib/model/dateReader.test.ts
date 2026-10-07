@@ -1,6 +1,6 @@
 // docs/adr/0027-a-date-is-read-from-its-quote-and-the-number-is-checked.md
 import { describe, it, expect } from 'vitest';
-import { readNumber, readYear, readMonth, readDay, dateReaders, dateParts } from './dateReader';
+import { readNumber, readYear, readMonth, readDay, dateReaders, dateParts, dateTag } from './dateReader';
 
 describe('readNumber', () => {
   const cases: Array<[string, number | undefined]> = [
@@ -189,3 +189,18 @@ describe('fail-closed readings from the second review', () => {
     expect(readNumber('ثلاث ومائة')).toBe(103);
   });
 });
+
+describe('dateTag', () => {
+  it.each([
+    ['قُتِلَ فِي رَجَبٍ، سَنَةَ سِتٍّ وَثَلاَثِيْنَ', 'time-layer:waiting'],
+    ['وَهَاجَرَ وَهُوَ ابْنُ ثَمَانِ عَشْرَةَ سَنَةً', 'time-layer:waiting'],
+    ['لِعَشْرٍ خَلَوْنَ مِنْ رَمَضَانَ', 'time-layer:unreadable'],
+    ['عَاشَ سَبْعِيْنَ سَنَةً وَنِصْفاً', 'time-layer:unreadable'],
+    ['وَهُوَ ابْنُ ثَلاَثِيْنَ', 'time-layer:waiting'],
+    ['وَرَوَى أَحَادِيْثَ يَسِيْرَةً', undefined],
+    ['أَخْبَرَنَا فُلاَنٌ، حَدَّثَنَا فُلاَنٌ', undefined],
+  ] as const)('tags %j as %j', (text, expected) => {
+    expect(dateTag(text)).toBe(expected);
+  });
+});
+

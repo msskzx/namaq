@@ -1,4 +1,7 @@
 // docs/plans/data-model/plan.md, sections 2.3 to 2.7
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { loadSourceManifest, sourcesRoot } from '../history/sourceStore';
 import { dateParts, dateReaders } from './dateReader';
 import { locateSpanRecord } from './render';
 import { modeKeyOf } from './modes';
@@ -64,11 +67,27 @@ function checkUnit(
 
   if (file.unit.work !== folder.work.slug) fail(`unit names work "${file.unit.work}"`);
 
+  const declaredVolumes = new Map<string, number[] | undefined>();
   const rendered = new Map<string, string>();
   const placed = new Map<string, { key: string; start: number; end: number }>();
   const layerOf = new Map(file.spans.map((s) => [s.id, s.layer]));
   for (const span of file.spans) {
     oneOf(`span ${span.id} layer`, span.layer, layers);
+    const witness = folder.witnesses.find((w) => w.edition === span.edition);
+    if (witness) {
+      if (!declaredVolumes.has(witness.slug)) {
+        declaredVolumes.set(
+          witness.slug,
+          existsSync(join(root, sourcesRoot, witness.slug, 'source.json'))
+            ? loadSourceManifest(root, witness.slug).volumes.map((v) => v.number)
+            : undefined,
+        );
+      }
+      const declared = declaredVolumes.get(witness.slug);
+      if (declared && !declared.includes(span.volume)) {
+        fail(`span ${span.id}: volume ${span.volume} is not declared by source ${witness.slug}`);
+      }
+    }
     try {
       const found = locateSpanRecord(folder, span, root);
       rendered.set(span.id, found.text);
