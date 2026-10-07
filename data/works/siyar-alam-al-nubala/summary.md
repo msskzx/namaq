@@ -61,7 +61,18 @@ Read page by page with the editor's footnotes; each value below cites its page a
 - `islam.age` (16, 8), `PARTICIPATED_IN` (Badr, Yarmuk, Khandaq, Fath Makkah):
   model-only. Extra model evidence; the diff has no catalog counterpart.
 
-## Coverage (hand list; `model:coverage` does not exist yet)
+## Coverage (`npm run model:coverage -- siyar-v4-3-az-zubayr`)
+
+The entry runs over printed pages 41 to 67. The command finds it from the heading `٣ - ` to the
+next entry's heading and counts sentences: 337 in all, 20 covered by a span (a span covers at
+least half of the sentence), 317 not modeled (the isnads of the quoted reports, the hadith texts,
+the narrative of the battles, the estate and debt saga and the like), 11 of them date sentences
+(7 `time-layer:waiting`, 4 `time-layer:unreadable`, among them the indefinite `بِضْعٌ وَخَمْسُوْنَ`),
+and 16 unresolved names (the narrators, the battles and the wives not named as people). The tags
+are hints from a heuristic, not readings. The test in `src/lib/model/coverage.test.ts` runs the
+command over every entry under `data/works/` and fails when an entry is not bounded by its own
+heading and the next entry's heading (or the volume's last page), or when a span lies outside it. A re-parse is finished when this
+section's counts match the command.
 
 Covered sentences: heading and nasab (p41), epithets with kunya (p41), Islam
 age 16 (p41), Urwah age-8 report with frame and isnad (p41), author appearance
@@ -71,7 +82,7 @@ age 16 (p41), Urwah age-8 report with frame and isnad (p41), author appearance
 death month and year with frame (p64), death-place gloss (p64), the four marriages
 with frame (p64), the companionship reply (p43), Aisha's Al Imran 172 report (p47), sabiqoon clause from the author analysis (p62).
 
-Not modeled, by page (date sentences: `time-layer`; fight outcomes: `outcome`):
+Not modeled, by page (date sentences: `time-layer:waiting`, or `time-layer:unreadable` when the reader cannot read them; fight outcomes: `outcome`):
 
 - p41: the sword-drawn anecdote (`فَخَرَجَ ... بِيَدِهِ السَّيْفُ`) and its
   dialogue; transmitted narrative, quoted speech kept as text.
@@ -81,12 +92,12 @@ Not modeled, by page (date sentences: `time-layer`; fight outcomes: `outcome`):
   predicate).
 - p43-44: the `مَنْ كَذَبَ عَلَيَّ` isnads and wording (quoted speech); the
   `مَا فَارَقْتُهُ مُنْذُ أَسْلَمْتُ` reply (owner decision, see above);
-  the single-birth-year remarks (`time-layer`); the hijra at eighteen and the
-  uncle's torment with `لاَ أَرْجِعُ إِلَى الكُفْرِ أَبَداً` (`time-layer`,
+  the single-birth-year remarks (`time-layer:waiting`); the hijra at eighteen and the
+  uncle's torment with `لاَ أَرْجِعُ إِلَى الكُفْرِ أَبَداً` (`time-layer:waiting`,
   quoted speech).
 - p45: Safiyyah's beating and the two rajaz passages (transmitted poetry);
   Ibn Ishaq's five converts at Abu Bakr's hands (event link, needs a
-  predicate); the fighting age that spills to p46 (`time-layer`).
+  predicate); the fighting age that spills to p46 (`time-layer:waiting`).
 - p46: the yellow turban and angels reports (transmitted marvels).
 - p47: Amir ibn Salih's verses (poetry); the Abyssinia hijra (event link,
   needs a predicate); Aisha's ayah report and the pursuit narrative
@@ -112,7 +123,7 @@ Not modeled, by page (date sentences: `time-layer`; fight outcomes: `outcome`):
 - p56: the thousand slaves and kharaj (no predicate); the Asma/Hassan
   gathering and Hassan's verses (quoted speech, poetry).
 - p57: the house sale (wealth, no predicate); the diwan erasure
-  (`time-layer`); the Anfal-verse answer (ayah, needs a predicate and an ADR).
+  (`time-layer:waiting`); the Anfal-verse answer (ayah, needs a predicate and an ADR).
 - p58-60: the Jamal withdrawal and killing narratives (`outcome`); the elegiac
   verses (poetry).
 - p61: the killing details and the head brought to Ali (`outcome`); `قَاتِلَ
@@ -121,7 +132,7 @@ Not modeled, by page (date sentences: `time-layer`; fight outcomes: `outcome`):
   analysis beyond the sabiqoon clause (ten, Badri, Ridwan, shahada reasons and
   `فَنَحْنُ مُحِبُّوْنَ لَهُم` stance, not separately asserted); the Badr duel
   and spear history (`outcome`).
-- p63: the charge and wounds (`outcome`); the Yamama dating (`time-layer`,
+- p63: the charge and wounds (`outcome`); the Yamama dating (`time-layer:waiting`,
   author inference with `إِنْ شَاءَ اللهُ`); the `قَائِدَ فِتْنَةٍ` report with
   the author's `مَعَاذَ الله` rejection (deliberately not modeled); the elegy
   line naming the valley (poetry; the prose gloss carries the place instead).

@@ -213,6 +213,10 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 - **Do not read a whole account to answer a question.** Open `batch.json` for the
   structure and the claims, then only the pages a citation names. Each page's
   paragraphs carry anchors like `9-p7` that citations point at.
+- Before saying a Siyar unit is parsed, run `npm run model:coverage -- <unit>` and put its
+  counts (sentences, covered, not modeled, unresolved names) in the work's `summary.md`.
+  Every sentence is either covered by a span or listed as not modeled; none is silently
+  dropped.
 - Files are the source of truth; the database holds a copy. Change the files and
   re-import, never edit the database directly. `npm run history:validate --
   <batch dir>` before proposing a batch, and `npm run history:import -- <batch

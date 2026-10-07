@@ -195,3 +195,17 @@ export const dateParts: Partial<Record<Predicate, Predicate>> = {
   'born.day': 'born.month',
   'born.month': 'born.year',
 };
+
+const DATE_WORDS = new Set(['سنه', 'عام', 'سنين', 'سنتين', 'عامين']);
+
+export function dateTag(text: string): string | undefined {
+  const words = tokens(text);
+  const joined = monthText(text);
+  const hasMonth = MONTHS.some(([name]) => monthPattern(name).test(joined));
+  const hasNumber = pieces(words).some(Boolean);
+  const age = words.includes('ابن') && hasNumber;
+  if (!hasMonth && !age && !(words.some((w) => DATE_WORDS.has(w)) && hasNumber)) return undefined;
+  const reads = readMonth(text) !== undefined || readNumber(text) !== undefined;
+  const unreadable = words.some((w) => NOT_A_DAY.has(w) || qualified(w));
+  return reads && !unreadable ? 'time-layer:waiting' : 'time-layer:unreadable';
+}
