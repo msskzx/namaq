@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { ReportView } from './hadithView';
 import { hadithView } from './hadithView';
 import { isnadGraph, layoutIsnad } from './isnadGraph';
+import { TABAQA, TABAQA_NAMES } from './tabaqa';
 
 describe('isnadGraph and layoutIsnad', () => {
   it('builds Bukhari isnad with 6 nodes and 5 edges', () => {
@@ -171,5 +172,15 @@ describe('rows by tabaqa', () => {
     const layout = layoutIsnad(isnadGraph(view.reports[0], view.book));
     expect(layout.rows).toEqual([]);
   });
-});
 
+  it('names every tabaqa the demo table uses, in both languages', () => {
+    const used = Object.values(TABAQA).flatMap((u) => [
+      ...Object.values(u.narrators),
+      ...(u.tail?.links ?? []),
+    ]);
+    expect(Object.keys(TABAQA_NAMES)).toHaveLength(12);
+    for (const { tabaqa } of used) {
+      if (tabaqa !== undefined) expect(TABAQA_NAMES[tabaqa].ar && TABAQA_NAMES[tabaqa].en).toBeTruthy();
+    }
+  });
+});

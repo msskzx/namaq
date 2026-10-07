@@ -54,11 +54,22 @@ page and entry numbers are the edition's.
 Not taken from an entry:
 
 - **Companions** (ʿUmar, ʿAbdullāh ibn ʿUmar, Abū Hurayra). Their entries give
-  no number. They are ṭabaqa 1 on Ibn Hajar's scheme. The introduction page
-  that defines it is not among the pages reachable on Shamela (the first page
-  there already begins at the twelfth ṭabaqa), so the citation is still owed.
+  no number. They are ṭabaqa 1 because Ibn Hajar's introduction says «الأولى:
+  الصحابة، على اختلاف مراتبهم» (see the names below).
 - **Muslim and al-Bukhārī.** Muslim's entry (6623, page 455) gives no ṭabaqa.
   The collector has its own top row, so neither is ranked.
+
+## The names of the ṭabaqāt
+
+Each row is labelled with its number and Ibn Hajar's name for it, from the
+introduction. Shamela's copy of the Dār al-Rashīd edition (book 8609) begins
+partway through that introduction, at the twelfth ṭabaqa, so the list is read
+from the Taḥrīr edition of the same text on Shamela (book 127715, page 53, the
+introduction's statement of the ṭabaqāt, with the editors' footnote). Its
+twelfth ṭabaqa matches the one on page 1 of book 8609. The names are in
+`TABAQA_NAMES` in `src/lib/model/tabaqa.ts`, in Arabic and English. Where he
+writes «منهم» or «من ذلك», the name completes it with the group he means
+(الصغرى من التابعين, الوسطى من أتباع التابعين).
 
 ## Not built (the stored version)
 
@@ -92,8 +103,8 @@ Small, after the demo:
 3. **Show the source of a rank** on the page: a hover or footnote with the
    *Taqrīb* entry number.
 4. **A component test** for `IsnadSvg`: row labels and same-row arrows.
-5. **Cite ṭabaqa 1** for the Companions from the introduction page of the
-   *Taqrīb*, and decide how Muslim, whose entry gives no ṭabaqa, is shown.
+5. **Decide how Muslim is shown.** His entry gives no ṭabaqa, so he has only
+   the collector row. Also check the row names in English.
 6. **Move ʿAbdullāh ibn ʿUmar and ʿUmar** out of the demo table and into the
    model, read from the embedded scene (`scenes[1].narrator` and the speaker of
    turn `o3`; `data/inferences/inf_o3.json` is still `REPORTED`).

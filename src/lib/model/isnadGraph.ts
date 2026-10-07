@@ -39,7 +39,7 @@ export interface IsnadLayout {
 
 export const NODE_W = 200;
 export const NODE_H = 56;
-export const LABEL_W = 110;
+export const LABEL_W = 190;
 const GAP_X = 80;
 const ROW = 96;
 
