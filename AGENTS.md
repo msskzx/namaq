@@ -50,6 +50,9 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   owner applies is not a reason to hold the merge: write the change so the app
   works before the migration is applied. Do not open a PR to ask whether the
   work is right; ask before, in the plan.
+- The skills `pr-cycle`, `blind-test-brief`, `review-brief`, `capture-lesson` and
+  `expand-contract-migration` (kept in the distillate repo under `skill/`) carry the
+  steps and the subagent briefs for this cycle.
 
 ## Quiz questions
 
