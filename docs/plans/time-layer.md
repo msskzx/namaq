@@ -142,9 +142,11 @@ Decided in the ADRs:
    undated events, an event with one bound, an event with none, a cycle, an interval
    crossing the hijra (-1 to 2 reads "from 1 BH to 2 AH"), a tie, and an event with a
    disputed year, which stays unplaced.
-10. The timeline shows an interval as derived, both premise events linked and named. Pass
-    condition: with an event that has two constraints, the page shows the interval text,
-    a "derived" label and two links, and shows no date for the event.
+10. The timeline card of an undated event with a derived interval shows the interval text, a
+    "derived" label and the premise event names, and no date. The event's own page shows the
+    same with the two premise events as links. Pass condition: with an event that has two
+    constraints, the card and the page show the interval text and the label, the page has two
+    links, and neither shows a date.
 11. The al-Zubayr entry's `يوم X` sentences, found by searching pages 41 to 67, are each
     classified under the verb rule in this plan, and `summary.md` lists the ones that are
     date expressions with `time-layer:waiting`. Participation ones carry no tag.

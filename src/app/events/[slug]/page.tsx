@@ -12,6 +12,7 @@ import { EventAll } from '@/types/event';
 import { PersonBase } from "@/types/person";
 import ErrorMessage from '@/components/common/ErrorMessage';
 import UtteranceGroup from '@/components/utterances/UtteranceGroup';
+import DerivedInterval from '@/components/events/DerivedInterval';
 
 import { fetcher } from '@/lib/swr';
 
@@ -54,6 +55,10 @@ function EventPage() {
                           : event.locationTransliterated || event.location || '-'}
                       </span>
                     </div>
+
+                    {event.hijriYear === null && event.interval && (
+                      <DerivedInterval interval={event.interval} language={language} linked />
+                    )}
 
                     {/* Hijri Period */}
                     {event.hijriPeriod && (

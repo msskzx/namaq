@@ -2,7 +2,7 @@
 import { hadithView, listUnits, type HadithUnitView } from '@/lib/model/hadithView';
 import { prisma } from '@/lib/prisma';
 
-const quietIfMissing = <T>(fallback: T) => (error: unknown) => {
+export const quietIfMissing = <T>(fallback: T) => (error: unknown) => {
   if ((error as { code?: string })?.code !== 'P2021') console.error('model_units read failed', error);
   return fallback;
 };

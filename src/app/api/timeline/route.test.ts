@@ -3,6 +3,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 const { eventFindMany, battleFindMany } = vi.hoisted(() => ({ eventFindMany: vi.fn(), battleFindMany: vi.fn() }));
 vi.mock('@/lib/prisma', () => ({ prisma: { event: { findMany: eventFindMany }, battle: { findMany: battleFindMany } } }));
 
+vi.mock('@/lib/derivedPlacements', () => ({ loadDerivedIntervals: async () => new Map() }));
+
 import { GET } from './route';
 
 describe('GET /api/timeline', () => {

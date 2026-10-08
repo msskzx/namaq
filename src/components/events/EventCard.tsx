@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt, faShieldAlt, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { formatHijriYear } from '@/lib/hijriYear';
+import DerivedInterval from '@/components/events/DerivedInterval';
 
 interface EventCardProps {
   event: TimelineItem;
@@ -29,6 +30,7 @@ function EventCard({ event }: EventCardProps) {
            <span>{formatHijriYear(event.hijriYear, language)}</span>
          </div>
        )}
+       {!event.hijriYear && event.interval && <DerivedInterval interval={event.interval} language={language} />}
      </div>
      
      {event.location && (

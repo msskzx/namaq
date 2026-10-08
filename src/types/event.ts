@@ -1,6 +1,7 @@
 import { Event as PrismaEvent, EventType } from "@/generated/prisma";
 import { PersonBase } from "./person";
 import type { Utterance } from "./utterance";
+import type { DerivedInterval } from "@/lib/timeline";
 
 export type EventBase = {
   id: string,
@@ -21,4 +22,5 @@ export type EventBase = {
 export type EventAll = PrismaEvent & {
   people: PersonBase[],
   utterances?: Utterance[],
+  interval?: DerivedInterval | null,
 }
