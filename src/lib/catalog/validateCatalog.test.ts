@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { legacyUnreviewed, type Catalog, type CatalogPerson, type CatalogPersonFields } from './types';
+import { legacyUnreviewed, type Catalog, type CatalogPerson, type CatalogPersonFields, type CatalogOrdering } from './types';
 import { validateCatalog, type KnownSlugs } from './validateCatalog';
 
 const known: KnownSlugs = {
@@ -426,6 +426,136 @@ describe('validateCatalog', () => {
       } as const;
 
       expect(validateCatalog(catalog({ events: [event] }), known)).toEqual([]);
+    });
+  });
+
+  describe('orderings validation', () => {
+    it('accepts a unit#span claim that the known spans hold, and still reports an unknown later event', () => {
+      const known_ = { ...known, spans: new Set(['unit#span-one']) };
+      const subject = catalog({
+        events: [{ kind: 'EVENT' as const, slug: 'first', name: 'أول', type: 'OTHER' as const, fields: {}, people: [] }],
+        orderings: [{ kind: 'ORDERING' as const, earlier: 'first', later: 'second', source: 'src', claims: ['unit#span-one'] as unknown as CatalogOrdering['claims'] }],
+      });
+
+      const issues = validateCatalog(subject, known_);
+      expect(issues.filter(i => i.path.includes('ordering'))).toEqual([
+        { path: 'orderings/first-before-second', message: 'unknown event or battle second' },
+      ]);
+    });
+
+    it('rejects an ordering whose earlier event is unknown', () => {
+      const subject = catalog({
+        events: [{ kind: 'EVENT' as const, slug: 'later', name: 'آخر', type: 'OTHER' as const, fields: {}, people: [] }],
+        orderings: [{ kind: 'ORDERING' as const, earlier: 'unknown', later: 'later', source: 'src', claims: ['pilot/one'] }],
+      });
+
+      const issues = validateCatalog(subject, known);
+      expect(issues).toContainEqual({
+        path: 'orderings/unknown-before-later',
+        message: 'unknown event or battle unknown',
+      });
+    });
+
+    it('rejects an ordering whose later event is unknown', () => {
+      const subject = catalog({
+        events: [{ kind: 'EVENT' as const, slug: 'first', name: 'أول', type: 'OTHER' as const, fields: {}, people: [] }],
+        orderings: [{ kind: 'ORDERING' as const, earlier: 'first', later: 'unknown', source: 'src', claims: ['pilot/one'] }],
+      });
+
+      const issues = validateCatalog(subject, known);
+      expect(issues).toContainEqual({
+        path: 'orderings/first-before-unknown',
+        message: 'unknown event or battle unknown',
+      });
+    });
+
+    it('rejects an ordering with no claim behind it', () => {
+      const subject = catalog({
+        events: [
+          { kind: 'EVENT' as const, slug: 'first', name: 'أول', type: 'OTHER' as const, fields: {}, people: [] },
+          { kind: 'EVENT' as const, slug: 'second', name: 'ثاني', type: 'OTHER' as const, fields: {}, people: [] },
+        ],
+        orderings: [{ kind: 'ORDERING' as const, earlier: 'first', later: 'second', source: 'src', claims: [] as unknown as CatalogOrdering['claims'] }],
+      });
+
+      const issues = validateCatalog(subject, known);
+      expect(issues).toContainEqual({
+        path: 'orderings/first-before-second',
+        message: 'no claim behind this ordering',
+      });
+    });
+
+    it('rejects an ordering that cites a claim key no batch declares', () => {
+      const subject = catalog({
+        events: [
+          { kind: 'EVENT' as const, slug: 'first', name: 'أول', type: 'OTHER' as const, fields: {}, people: [] },
+          { kind: 'EVENT' as const, slug: 'second', name: 'ثاني', type: 'OTHER' as const, fields: {}, people: [] },
+        ],
+        orderings: [{ kind: 'ORDERING' as const, earlier: 'first', later: 'second', source: 'src', claims: ['pilot/unknown'] }],
+      });
+
+      const issues = validateCatalog(subject, known);
+      expect(issues).toContainEqual({
+        path: 'orderings/first-before-second',
+        message: 'no batch declares claim pilot/unknown',
+      });
+    });
+
+    it('rejects an ordering that cites a span ref not in known.spans', () => {
+      const known_ = { ...known, spans: new Set<string>() };
+      const subject = catalog({
+        events: [
+          { kind: 'EVENT' as const, slug: 'first', name: 'أول', type: 'OTHER' as const, fields: {}, people: [] },
+          { kind: 'EVENT' as const, slug: 'second', name: 'ثاني', type: 'OTHER' as const, fields: {}, people: [] },
+        ],
+        orderings: [{ kind: 'ORDERING' as const, earlier: 'first', later: 'second', source: 'src', claims: ['unit#span-unknown'] as unknown as CatalogOrdering['claims'] }],
+      });
+
+      const issues = validateCatalog(subject, known_);
+      expect(issues).toContainEqual({
+        path: 'orderings/first-before-second',
+        message: 'no model span unit#span-unknown',
+      });
+    });
+
+    it('accepts an ordering that cites a span ref in known.spans', () => {
+      const known_ = { ...known, spans: new Set(['unit#span-one']) };
+      const subject = catalog({
+        events: [
+          { kind: 'EVENT' as const, slug: 'first', name: 'أول', type: 'OTHER' as const, fields: {}, people: [] },
+          { kind: 'EVENT' as const, slug: 'second', name: 'ثاني', type: 'OTHER' as const, fields: {}, people: [] },
+        ],
+        orderings: [{ kind: 'ORDERING' as const, earlier: 'first', later: 'second', source: 'src', claims: ['unit#span-one'] as unknown as CatalogOrdering['claims'] }],
+      });
+
+      const issues = validateCatalog(subject, known_);
+      expect(issues).toEqual([]);
+    });
+
+    it('accepts an ordering with legacyUnreviewed claims', () => {
+      const subject = catalog({
+        events: [
+          { kind: 'EVENT' as const, slug: 'first', name: 'أول', type: 'OTHER' as const, fields: {}, people: [] },
+          { kind: 'EVENT' as const, slug: 'second', name: 'ثاني', type: 'OTHER' as const, fields: {}, people: [] },
+        ],
+        orderings: [{ kind: 'ORDERING' as const, earlier: 'first', later: 'second', source: 'src', claims: legacyUnreviewed }],
+      });
+
+      const issues = validateCatalog(subject, known);
+      expect(issues.filter(i => i.path.includes('ordering'))).toEqual([]);
+    });
+
+    it('accepts an ordering between two known events with a known claim', () => {
+      const subject = catalog({
+        events: [
+          { kind: 'EVENT' as const, slug: 'first', name: 'أول', type: 'OTHER' as const, fields: {}, people: [] },
+          { kind: 'EVENT' as const, slug: 'second', name: 'ثاني', type: 'OTHER' as const, fields: {}, people: [] },
+        ],
+        orderings: [{ kind: 'ORDERING' as const, earlier: 'first', later: 'second', source: 'src', claims: ['pilot/one'] }],
+      });
+
+      const issues = validateCatalog(subject, known);
+      expect(issues.filter(i => i.path.includes('ordering'))).toEqual([]);
     });
   });
 });
