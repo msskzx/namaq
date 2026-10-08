@@ -77,10 +77,10 @@ Decided in the ADRs:
   status.
 - **Citing the Siyar from the catalog.** A `CatalogOrdering` may cite a batch claim key or
   a model span reference `unit#span`. `catalog:validate` resolves the span and fails when
-  it does not exist. A cited span whose rendered text changes lapses the ordering's
-  review: `catalog:validate` stores the rendered text of every cited span in the
-  ordering's revision, the way a model assertion's revision hashes its spans, so a
-  changed text changes the revision.
+  it does not exist. `orderingRevision` hashes the ordering and the rendered text of every
+  cited span, the way a model assertion's revision hashes its spans, so a cited span whose
+  text changes changes the revision. The catalog has no review records yet, so nothing
+  consumes the revision until they exist.
 - **Placement.** A pure function places an undated event between the latest dated event it
   follows and the earliest dated event it precedes. The display names both premise
   events with their quotes, links them, marks the interval as derived and never as a

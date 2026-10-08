@@ -4,6 +4,7 @@ import { loadCatalog } from '../../src/lib/catalog/loadCatalog';
 import { validateCatalog, type KnownSlugs } from '../../src/lib/catalog/validateCatalog';
 import { loadBatch } from '../../src/lib/history/loadBatch';
 import { checkApproval } from '../../src/lib/history/batchSchema';
+import { loadModel } from '../../src/lib/model/load';
 
 const batchesRoot = 'data/history/batches';
 
@@ -14,14 +15,20 @@ const batchesRoot = 'data/history/batches';
  */
 function approvedClaimKeys() {
   const keys = new Set<string>();
+  const sources = new Map<string, string[]>();
   const unapproved: string[] = [];
   for (const dir of readdirSync(batchesRoot)) {
     const { batch } = loadBatch(join(batchesRoot, dir));
     const approval = checkApproval(batch);
     if (!approval.approved) unapproved.push(`${dir} (${approval.reason})`);
-    else batch.claims.forEach((claim) => keys.add(claim.key));
+    else {
+      batch.claims.forEach((claim) => {
+        keys.add(claim.key);
+        sources.set(claim.key, [...new Set(claim.citations.map((c) => c.sourceSlug))]);
+      });
+    }
   }
-  return { keys, unapproved };
+  return { keys, sources, unapproved };
 }
 
 async function seedSlugs(): Promise<Pick<KnownSlugs, 'people'>> {
@@ -36,12 +43,15 @@ async function seedSlugs(): Promise<Pick<KnownSlugs, 'people'>> {
 
 async function main() {
   const catalog = await loadCatalog();
-  const { keys, unapproved } = approvedClaimKeys();
-  const issues = validateCatalog(catalog, { ...(await seedSlugs()), claims: keys });
+  const { keys, sources, unapproved } = approvedClaimKeys();
+  const spans = new Set(
+    loadModel('.').flatMap((folder) => folder.units.flatMap((file) => file.spans.map((span) => `${file.unit.id}#${span.id}`))),
+  );
+  const issues = validateCatalog(catalog, { ...(await seedSlugs()), claims: keys, spans, claimSources: sources });
 
   console.log(
     `catalog: ${catalog.people.length} people, ${catalog.battles.length} battles, ${catalog.events.length} events, ` +
-      `${catalog.utterances.length} utterances`,
+      `${catalog.utterances.length} utterances, ${(catalog.orderings ?? []).length} orderings`,
   );
   if (unapproved.length > 0) {
     console.log(`batches not approved at their current revision, claims unusable: ${unapproved.join(', ')}`);

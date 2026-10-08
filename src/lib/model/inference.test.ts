@@ -62,10 +62,8 @@ describe('checkInferences (test fixtures)', () => {
       ),
     ).toMatch(/closed list/);
     expect(
-      issues(
-        (l) => (l[0].value = { kind: 'TIMELINE_BETWEEN', event: 'a', after: '', before: 'c' }),
-      ),
-    ).toMatch(/needs an event/);
+      issues((l) => (l[0].value = { kind: 'TIMELINE_BETWEEN', event: 'a', after: '', before: 'c' } as never)),
+    ).toMatch(/value kind "TIMELINE_BETWEEN" is not one of/);
     expect(issues((l) => delete (l[0] as Partial<Inference>).premises)).toMatch(
       /needs passage, premises and value/,
     );

@@ -218,7 +218,17 @@ export interface CatalogUtterance {
   readonly fields: CatalogUtteranceFields;
 }
 
+// docs/adr/0028-a-stated-ordering-is-recorded-and-its-placement-is-derived.md
+export interface CatalogOrdering {
+  readonly kind: 'ORDERING';
+  readonly earlier: string;
+  readonly later: string;
+  readonly source: string;
+  readonly claims: Provenance;
+}
+
 export interface Catalog {
+  readonly orderings?: readonly CatalogOrdering[];
   readonly people: readonly CatalogPerson[];
   readonly battles: readonly CatalogBattle[];
   readonly events: readonly CatalogEvent[];

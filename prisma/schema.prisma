@@ -736,6 +736,17 @@ model ModelUnit {
   @@map("model_units")
 }
 
+// docs/adr/0028-a-stated-ordering-is-recorded-and-its-placement-is-derived.md
+model CatalogOrdering {
+  earlier String
+  later   String
+  source  String
+  claims  Json
+
+  @@id([earlier, later, source])
+  @@map("catalog_orderings")
+}
+
 // docs/plans/time-layer.md
 model CatalogDatePart {
   kind  String
