@@ -24,6 +24,7 @@ import UtteranceGroup from '@/components/utterances/UtteranceGroup';
 import ClaimEvidence from '@/components/common/ClaimEvidence';
 import SourceAccountReader from '@/components/people/SourceAccountReader';
 import ModelEntries from '@/components/people/ModelEntries';
+import ProfileHadith from '@/components/people/ProfileHadith';
 
 function PersonDetailPage() {
   const { language } = useLanguage();
@@ -144,6 +145,7 @@ function PersonDetailPage() {
           {person.modelEntries && person.modelEntries.length > 0 && (
             <ModelEntries entries={person.modelEntries} spans={person.modelSpans ?? []} />
           )}
+          {person.hadith && person.hadith.length > 0 && <ProfileHadith slug={slug} hadith={person.hadith} />}
           <SourceAccountReader basePath={`/api/people/${slug}`} />
 
           <AyatGroup ayat={person.ayat || []} />

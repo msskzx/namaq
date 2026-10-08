@@ -39,3 +39,51 @@ describe('unitRows links with the same key', () => {
     expect(new Set(keys).size).toBe(keys.length);
   });
 });
+
+describe('unitRows people rows (the Jibril fixtures)', () => {
+  const { people } = unitRows(fixturesRoot);
+
+  it('returns one row per (unit, person, role) combination', () => {
+    const keys = people.map((p) => `${p.unit}|${p.person}|${p.role}`);
+    expect(new Set(keys).size).toBe(keys.length);
+  });
+
+  it('includes identified narrators from the isnad chain', () => {
+    expect(people).toContainEqual({ unit: 'bukhari-jibril', person: 'abu-hurayrah', role: 'isnad' });
+    expect(people).toContainEqual({
+      unit: 'bukhari-jibril',
+      person: 'ismail-ibn-ibrahim-ibn-ulayyah',
+      role: 'isnad',
+    });
+  });
+
+  it('includes identified speakers from the scenes', () => {
+    expect(people).toContainEqual({
+      unit: 'bukhari-jibril',
+      person: 'prophet-muhammad',
+      role: 'speaks',
+    });
+    expect(people).toContainEqual({ unit: 'muslim-jibril', person: 'umar-ibn-al-khattab', role: 'speaks' });
+  });
+
+  it('includes identified proposed speakers', () => {
+    expect(people).toContainEqual({ unit: 'bukhari-jibril', person: 'jibril', role: 'speaks' });
+    expect(people).toContainEqual({ unit: 'muslim-jibril', person: 'jibril', role: 'speaks' });
+  });
+
+  it('gives no row for unidentified narrators', () => {
+    expect(people.every((p) => p.person !== 'musaddad')).toBe(true);
+    expect(people.every((p) => p.person !== 'abu-hayyan')).toBe(true);
+  });
+
+  it('gives no row for unidentified mentions without a standing agent', () => {
+    expect(people.every((p) => p.person !== 'ibn-umar')).toBe(true);
+    expect(people.every((p) => p.person !== 'ragul')).toBe(true);
+  });
+
+  it('includes isnad and speaks roles', () => {
+    const roles = new Set(people.map((p) => p.role));
+    expect(Array.from(roles)).toContain('isnad');
+    expect(Array.from(roles)).toContain('speaks');
+  });
+});

@@ -768,3 +768,15 @@ model ModelUnitLink {
   @@index([toUnit])
   @@map("model_unit_links")
 }
+
+// docs/plans/hadith-on-profiles.md
+model ModelUnitPerson {
+  id     Int    @id @default(autoincrement())
+  unit   String
+  person String
+  role   String
+
+  @@unique([unit, person, role])
+  @@index([person])
+  @@map("model_unit_people")
+}

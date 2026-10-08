@@ -1,3 +1,4 @@
+import type { PersonHadith } from '@/lib/modelUnitPeople';
 import type { Person as PrismaPerson, PersonVirtue, Title } from "@/generated/prisma";
 import type { ClaimWithCitations } from "@/types/provenance";
 import type { BattleParticipation } from "@/types/battle";
@@ -15,6 +16,7 @@ export type PersonFull = PrismaPerson & {
   claims?: ClaimWithCitations[];
   modelEntries?: ModelEntryDto[];
   modelSpans?: ModelSpanDto[];
+  hadith?: PersonHadith[];
   /** What they said, and what was said about them. */
   said?: Utterance[];
   spokenAbout?: Utterance[];

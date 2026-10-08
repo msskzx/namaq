@@ -34,14 +34,14 @@ async function main() {
       console.error('--units has no review rule yet, so it is not allowed with --env prod.');
       process.exit(1);
     }
-    const { units: rows, links } = unitRows(root);
-    console.log(`${root}: ${rows.length} unit(s), ${links.length} link(s)`);
+    const { units: rows, links, people } = unitRows(root);
+    console.log(`${root}: ${rows.length} unit(s), ${links.length} link(s), ${people.length} people row(s)`);
     if (apply && rows.length === 0) {
       console.error('No units found under --root, so nothing is applied.');
       process.exit(1);
     }
     if (!apply) {
-      console.log('Dry run. Pass --apply --env preview to replace model_units and model_unit_links.');
+      console.log('Dry run. Pass --apply --env preview to replace model_units, model_unit_links and model_unit_people.');
       return;
     }
     if (env !== 'preview' && env !== 'prod') {
@@ -51,14 +51,20 @@ async function main() {
     const db = new PrismaClient();
     try {
       await db.$transaction([
+        db.modelUnitPerson.deleteMany(),
         db.modelUnitLink.deleteMany(),
         db.modelUnit.deleteMany(),
         db.modelUnit.createMany({
           data: rows.map((r) => ({ ...r, view: r.view as unknown as Prisma.InputJsonValue })),
         }),
         db.modelUnitLink.createMany({ data: links }),
+        db.modelUnitPerson.createMany({ data: people }),
       ]);
       console.log('Applied.');
+    } catch (error) {
+      if ((error as { code?: string })?.code !== 'P2021') throw error;
+      console.error('A model_unit table is missing. Run `npx prisma migrate deploy` first.');
+      process.exit(1);
     } finally {
       await db.$disconnect();
     }

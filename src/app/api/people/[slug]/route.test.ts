@@ -72,6 +72,7 @@ describe('GET /api/people/[slug]', () => {
     expect(body).toEqual({
       ...person,
       claims: claims.map((c) => ({ ...c, relatedSubjectName: null })),
+      hadith: [],
       modelEntries: [],
       modelSpans: [],
     });
