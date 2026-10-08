@@ -78,7 +78,8 @@ export function orderingProblems(
     }
   });
 
-  const bySource = Map.groupBy(orderings, (o) => o.source);
+  const bySource = new Map<string, CatalogOrdering[]>();
+  orderings.forEach((o) => bySource.set(o.source, [...(bySource.get(o.source) ?? []), o]));
   for (const [source, edges] of bySource) {
     if (hasCycle(edges)) errors.push({ path: `orderings (${source})`, message: 'the orderings of one source form a cycle' });
   }
