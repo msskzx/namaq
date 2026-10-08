@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { loadDerivedIntervals } from '@/lib/derivedPlacements';
 import { battleKind, type TimelineItem } from '@/lib/timeline';
 import { apiError, CATALOG_CACHE_HEADERS } from '@/lib/apiError';
 
@@ -26,7 +27,11 @@ export async function GET() {
         kind: battleKind(engagement),
       })),
     ];
-    return NextResponse.json(items, { headers: CATALOG_CACHE_HEADERS });
+    const intervals = await loadDerivedIntervals();
+    return NextResponse.json(
+      items.map((item) => (item.hijriYear === null ? { ...item, interval: intervals.get(item.slug) ?? null } : item)),
+      { headers: CATALOG_CACHE_HEADERS },
+    );
   } catch (error) {
     return apiError('GET /api/timeline', error, 'Failed to fetch the timeline');
   }

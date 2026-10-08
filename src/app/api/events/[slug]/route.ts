@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { utteranceSelect } from '@/lib/utteranceSelect';
 import { apiError, CATALOG_CACHE_HEADERS } from '@/lib/apiError';
+import { loadDerivedIntervals } from '@/lib/derivedPlacements';
 
 export async function GET(
   _request: Request,
@@ -41,7 +42,8 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(event, { headers: CATALOG_CACHE_HEADERS });
+    const interval = event.hijriYear === null ? ((await loadDerivedIntervals()).get(slug) ?? null) : null;
+    return NextResponse.json({ ...event, interval }, { headers: CATALOG_CACHE_HEADERS });
   } catch (error) {
     return apiError('GET /api/events/[slug]', error, 'Failed to fetch event');
   }

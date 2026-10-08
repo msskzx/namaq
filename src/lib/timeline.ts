@@ -3,6 +3,28 @@ import { normalizeSubjectSearch } from '@/lib/subjectSearch';
 export const TIMELINE_KINDS = ['event', 'battle', 'ghazwah', 'sariyyah'] as const;
 export type TimelineKind = (typeof TIMELINE_KINDS)[number];
 
+// docs/adr/0028-a-stated-ordering-is-recorded-and-its-placement-is-derived.md
+export interface DerivedBound {
+  slug: string;
+  kind: 'event' | 'battle';
+  name: string;
+  nameTransliterated: string | null;
+  year: number;
+}
+
+export interface DerivedInterval {
+  from?: DerivedBound;
+  to?: DerivedBound;
+}
+
+/** The year an item sorts at: its own, or just inside the interval it was derived into. */
+export function timelineYear(item: { hijriYear: number | null; interval?: DerivedInterval | null }) {
+  if (item.hijriYear !== null) return item.hijriYear;
+  if (item.interval?.from) return item.interval.from.year + 0.25;
+  if (item.interval?.to) return item.interval.to.year - 0.25;
+  return null;
+}
+
 /** One row of the events page, whether it came from an Event or a Battle. */
 export interface TimelineItem {
   id: string;
@@ -14,6 +36,7 @@ export interface TimelineItem {
   hijriPeriod: string | null;
   location: string | null;
   locationTransliterated: string | null;
+  interval?: DerivedInterval | null;
 }
 
 /** A battle row's engagement, with an unset one read as a plain battle. */
