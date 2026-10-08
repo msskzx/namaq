@@ -1,3 +1,4 @@
+import { placementSortYear } from './placement';
 import { normalizeSubjectSearch } from '@/lib/subjectSearch';
 
 export const TIMELINE_KINDS = ['event', 'battle', 'ghazwah', 'sariyyah'] as const;
@@ -20,9 +21,7 @@ export interface DerivedInterval {
 /** The year an item sorts at: its own, or just inside the interval it was derived into. */
 export function timelineYear(item: { hijriYear: number | null; interval?: DerivedInterval | null }) {
   if (item.hijriYear !== null) return item.hijriYear;
-  if (item.interval?.from) return item.interval.from.year + 0.25;
-  if (item.interval?.to) return item.interval.to.year - 0.25;
-  return null;
+  return placementSortYear(item.interval ?? undefined);
 }
 
 /** One row of the events page, whether it came from an Event or a Battle. */

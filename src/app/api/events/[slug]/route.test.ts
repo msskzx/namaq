@@ -3,6 +3,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 const { findUnique } = vi.hoisted(() => ({ findUnique: vi.fn() }));
 vi.mock('@/lib/prisma', () => ({ prisma: { event: { findUnique } } }));
 
+vi.mock('@/lib/derivedPlacements', () => ({ loadDerivedIntervals: async () => new Map() }));
+
 import { GET } from './route';
 
 function call(slug: string) {

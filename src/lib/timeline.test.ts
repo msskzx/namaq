@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { battleKind, filterTimeline, parseKinds, type TimelineItem } from './timeline';
+import { battleKind, filterTimeline, parseKinds, timelineYear, type TimelineItem } from './timeline';
 
 function item(overrides: Partial<TimelineItem>): TimelineItem {
   return {
@@ -55,5 +55,42 @@ describe('filterTimeline', () => {
 
   it('applies the kind and the query together', () => {
     expect(ids(filterTimeline(items, ['sariyyah'], 'badr'))).toEqual([]);
+  });
+});
+
+describe('timelineYear', () => {
+  it('returns hijriYear when item is dated', () => {
+    expect(timelineYear(item({ hijriYear: 5 }))).toBe(5);
+    expect(timelineYear(item({ hijriYear: 50 }))).toBe(50);
+  });
+
+  it('returns null for null hijriYear when no interval', () => {
+    expect(timelineYear(item({ hijriYear: null }))).toBeNull();
+  });
+
+  it('sorts after the from bound when interval has only from bound', () => {
+    const year = timelineYear(item({ hijriYear: null, interval: { from: { slug: 'a', kind: 'event', name: 'a', nameTransliterated: null, year: 10 } } }));
+    expect(year).toBe(10.25);
+  });
+
+  it('sorts before the to bound when interval has only to bound', () => {
+    const year = timelineYear(item({ hijriYear: null, interval: { to: { slug: 'b', kind: 'event', name: 'b', nameTransliterated: null, year: 20 } } }));
+    expect(year).toBe(19.75);
+  });
+
+  it('sorts after from when both bounds exist', () => {
+    const year = timelineYear(item({
+      hijriYear: null,
+      interval: {
+        from: { slug: 'a', kind: 'event', name: 'a', nameTransliterated: null, year: 10 },
+        to: { slug: 'b', kind: 'event', name: 'b', nameTransliterated: null, year: 20 },
+      },
+    }));
+    expect(year).toBe(10.25);
+  });
+
+  it('returns null when no interval', () => {
+    expect(timelineYear(item({ hijriYear: null, interval: undefined }))).toBeNull();
+    expect(timelineYear(item({ hijriYear: null, interval: {} }))).toBeNull();
   });
 });

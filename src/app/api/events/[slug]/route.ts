@@ -42,7 +42,8 @@ export async function GET(
       );
     }
 
-    const interval = event.hijriYear === null ? ((await loadDerivedIntervals()).get(slug) ?? null) : null;
+    if (event.hijriYear !== null) return NextResponse.json(event, { headers: CATALOG_CACHE_HEADERS });
+    const interval = (await loadDerivedIntervals()).get(slug) ?? null;
     return NextResponse.json({ ...event, interval }, { headers: CATALOG_CACHE_HEADERS });
   } catch (error) {
     return apiError('GET /api/events/[slug]', error, 'Failed to fetch event');

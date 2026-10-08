@@ -5,19 +5,28 @@ import { placeUndated } from '@/lib/placement';
 import type { DerivedBound, DerivedInterval } from '@/lib/timeline';
 
 export async function loadDerivedIntervals(): Promise<Map<string, DerivedInterval>> {
+  return derive().catch(() => new Map());
+}
+
+async function derive(): Promise<Map<string, DerivedInterval>> {
   const orderings = await prisma.catalogOrdering
     .findMany({ select: { earlier: true, later: true } })
     .catch(quietIfMissing([]));
   if (orderings.length === 0) return new Map();
 
   const select = { slug: true, name: true, nameTransliterated: true, hijriYear: true } as const;
-  const [events, battles] = await Promise.all([
+  const [events, battles, contested] = await Promise.all([
     prisma.event.findMany({ select }),
     prisma.battle.findMany({ select }),
+    prisma.historicalClaim.findMany({
+      where: { disputed: true, field: 'hijriYear', subjectKind: { in: ['EVENT', 'BATTLE'] } },
+      select: { subjectSlug: true },
+    }),
   ]);
+  const disputed = new Set(contested.map((c) => c.subjectSlug));
   const subjects = [
-    ...events.map((s) => ({ ...s, kind: 'event' as const })),
-    ...battles.map((s) => ({ ...s, kind: 'battle' as const })),
+    ...events.map((s) => ({ ...s, kind: 'event' as const, yearDisputed: disputed.has(s.slug) })),
+    ...battles.map((s) => ({ ...s, kind: 'battle' as const, yearDisputed: disputed.has(s.slug) })),
   ];
   const bySlug = new Map(subjects.map((s) => [s.slug, s]));
   const bound = (b: { slug: string; year: number }): DerivedBound => {
