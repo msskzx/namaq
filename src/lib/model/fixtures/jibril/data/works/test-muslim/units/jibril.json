@@ -671,6 +671,18 @@
         }
       ],
       "status": "PROPOSED"
+    },
+    {
+      "id": "i_umar",
+      "mention": "m_umar",
+      "agent": "umar-ibn-al-khattab",
+      "basis": [
+        {
+          "span": "sp_s14",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
     }
   ],
   "assertions": []

@@ -34,6 +34,7 @@ export interface ReportView {
 export interface SceneLine {
   kind: 'turn' | 'narration';
   speaker?: string;
+  agent?: string;
   text: string;
 }
 
@@ -77,6 +78,9 @@ const cutAfterFirstQala = (body: string, start: number, end: number) => {
   return m ? start + m.index! + m[0].length : end;
 };
 
+const agentOf = (speaker?: { agents: { agent: string }[] }) =>
+  speaker?.agents[0] ? { agent: speaker.agents[0].agent } : {};
+
 function sceneLines(
   folder: WorkFolder,
   file: UnitFile,
@@ -97,6 +101,7 @@ function sceneLines(
     return conversation.turns.map((turn) => ({
       kind: 'turn' as const,
       speaker: turn.speaker?.mention,
+      ...agentOf(turn.speaker),
       text: turn.parts.join(' … '),
     }));
   }
@@ -153,6 +158,7 @@ function sceneLines(
     lines.push({
       kind: 'turn',
       speaker: conversation.turns[i].speaker?.mention,
+      ...agentOf(conversation.turns[i].speaker),
       text: matchForm(`${opening} ${body.slice(start, shownEnd)}${parents.has(turn.id) ? '' : closing}`).trim(),
     });
     cursor = parents.has(turn.id) ? end : end + closing.length;

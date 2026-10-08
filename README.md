@@ -39,6 +39,11 @@ Open the graph → explore and filter relationships → open a person's profile 
   beside them; a person on both routes is one node. The ranks are hand-written
   demo data in `src/lib/model/tabaqa.ts`
   ([plan](docs/plans/hadith-chain-rows.md)).
+- A profile lists the hadith a person has a role in (in the isnad, speaking, or
+  mentioned), one per page, with the same two modes and the person's own bubbles
+  highlighted. The roles come from the new `model_unit_people` table, which
+  `npm run model:project -- --units` fills once the migration is applied
+  ([plan](docs/plans/hadith-on-profiles.md)).
 
 ### Relationship graph
 

@@ -417,6 +417,18 @@
         }
       ],
       "status": "PROPOSED"
+    },
+    {
+      "id": "i_abu_hurayra",
+      "mention": "m_abu_hurayra",
+      "agent": "abu-hurayrah",
+      "basis": [
+        {
+          "span": "sp_b5",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
     }
   ],
   "assertions": []

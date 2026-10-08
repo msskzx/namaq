@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { loadPersonHadith } from '@/lib/modelUnitPeople';
 import { prisma } from '@/lib/prisma';
 import { utteranceSelect } from '@/lib/utteranceSelect';
 import { apiError, CATALOG_CACHE_HEADERS } from '@/lib/apiError';
@@ -96,9 +97,10 @@ export async function GET(
     });
 
     const { modelEntries, modelSpans } = await modelValues(slug);
+    const hadith = await loadPersonHadith(slug).catch(() => []);
 
     return NextResponse.json(
-      { ...person, claims: await withRelatedSubjectNames(claims), modelEntries, modelSpans },
+      { ...person, claims: await withRelatedSubjectNames(claims), modelEntries, modelSpans, hadith },
       { headers: CATALOG_CACHE_HEADERS }
     );
   } catch (error) {
