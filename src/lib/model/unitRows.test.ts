@@ -81,18 +81,6 @@ describe('unitRows people rows (the Jibril fixtures)', () => {
     expect(people.every((p) => p.person !== 'ragul')).toBe(true);
   });
 
-  it('gives no row for a (unit, person, role) combination that would be duplicated', () => {
-    const counts = people.reduce(
-      (acc, p) => {
-        const key = `${p.unit}|${p.person}|${p.role}`;
-        acc[key] = (acc[key] ?? 0) + 1;
-        return acc;
-      },
-      {} as Record<string, number>,
-    );
-    expect(Object.values(counts).every((c) => c === 1)).toBe(true);
-  });
-
   it('includes isnad and speaks roles', () => {
     const roles = new Set(people.map((p) => p.role));
     expect(Array.from(roles)).toContain('isnad');

@@ -19,6 +19,8 @@ const roleOrder: PersonRole[] = ['isnad', 'speaks', 'mentioned'];
 
 const compare = (a: string | null, b: string | null) => (a ?? '').localeCompare(b ?? '');
 
+let fixtureRows: ReturnType<typeof unitRows> | undefined;
+
 export async function loadPersonHadith(slug: string): Promise<PersonHadith[]> {
   const people = await prisma.modelUnitPerson
     .findMany({ where: { person: slug } })
@@ -33,7 +35,7 @@ export async function loadPersonHadith(slug: string): Promise<PersonHadith[]> {
         .catch(quietIfMissing([]))
     ).map((r) => ({ ...r, view: r.view as unknown as HadithUnitView }));
   } else {
-    const all = unitRows(fixturesRoot);
+    const all = (fixtureRows ??= unitRows(fixturesRoot));
     roles = all.people.filter((p) => p.person === slug);
     rows = all.units.filter((u) => u.type === 'hadith' && roles.some((r) => r.unit === u.unit));
   }

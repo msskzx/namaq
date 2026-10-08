@@ -21,7 +21,8 @@ export default function ProfileHadith({ slug, hadith }: { slug: string; hadith: 
   const ar = useLanguage().language === 'ar';
   const [page, setPage] = useState(1);
   const [mode, setMode] = useState<HadithMode>('bubbles');
-  const current = hadith[Math.min(page, hadith.length) - 1];
+  const at = Math.min(page, hadith.length);
+  const current = hadith[at - 1];
   const reports = useMemo(
     () => current?.view.reports.filter((r) => r.voice !== 'AUTHOR') ?? [],
     [current],
@@ -60,7 +61,7 @@ export default function ProfileHadith({ slug, hadith }: { slug: string; hadith: 
         </div>
       ))}
       <Pagination
-        page={page}
+        page={at}
         pageCount={hadith.length}
         onChange={setPage}
         showSelect
