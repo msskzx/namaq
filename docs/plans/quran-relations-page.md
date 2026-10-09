@@ -32,11 +32,8 @@ What is missing:
   one ayah). Whether they are empty everywhere is unchecked. `revelationType`
   (Meccan or Medinan) is set on all surahs. It came with the imported dataset,
   not from a source Namaq cites, so the page must label it as imported.
-- Ayah text carries tashkeel, Quranic annotation marks and a trailing newline.
-  Matching text needs a normalization step. 6,235 of 6,236 ayat contain
-  vowel marks, so the one without is probably a muqatta'at ayah.
-- ADR 0026 defines `ABOUT_AYAH` (a verse is about a person) and `EXPLAINS_AYAH`
-  (a hadith or commentary explains a verse). The second has no data yet.
+- Ayah text carries tashkeel, annotation marks and a trailing newline, so
+  matching needs a normalization step.
 
 ## 2. Candidate visualizations
 
@@ -121,14 +118,7 @@ A list I type in by hand does not.
 
 ### E. A person's ayat, from existing links
 
-- **Question:** which ayat does the catalog tie to a person, and in which
-  surahs?
-- **Data:** `_PersonAyahs`: 42 links, 33 ayat, 18 people, all companions. Exists.
-- **Output:** a small bipartite graph, person to surah, or a table with each
-  ayah's text and its cited claim. Profiles already show this per person.
-- **Cost:** small, about half a day with `react-force-graph-2d` or a plain list.
-- **Value for the wish:** low. It answers neither interest of the owner, and 33
-  ayat is thin. It would be honest filler.
+Dropped: 33 ayat for 18 companions answers neither of the owner's interests.
 
 ### F. Shared-wording neighbors of one ayah
 
@@ -258,7 +248,5 @@ that the data is unreviewed.
 11. **One page is enough scope.** A and C and F together may be two pages of
     work squeezed into one PR. Which of the three should go first if the PR is
     cut?
-12. **Arabic only is enough, including for the technical notes.** A reader
-    cannot check the rule text in English. Is that acceptable for a demo?
-13. **No new dependency.** I assume `chart.js` plus plain SVG covers every
+12. **No new dependency.** I assume `chart.js` plus plain SVG covers every
     chart. Is that true for the matrix?
