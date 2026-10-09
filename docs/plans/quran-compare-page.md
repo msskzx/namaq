@@ -20,8 +20,8 @@ it needs no table, migration or generated file.
 4. Every ayah between a block's first and last anchor is paired in step with its
    partner. A pair that shares no word says so.
 5. The last five ayat of each surah form a separate block aligned by count. It
-   claims nothing from the text, and each pair in it shows what it shares. A
-   word-backed block that reaches into those ayat is folded into it.
+   claims nothing from the text, and each pair in it shows what it shares. Anchors
+   that fall in those ayat belong to it, and the rest of their block stays.
 6. Ayat between blocks collapse into one row with both counts.
 
 Words are underlined where the two ayat differ, from the same word alignment the

@@ -15,6 +15,7 @@ const PANEL = 'bg-gray-50 dark:bg-black border border-gray-200 dark:border-white
 const NOTE = 'text-sm text-gray-600 dark:text-gray-400';
 const num = (n: number) => n.toLocaleString('ar-EG');
 const span = (r: NonNullable<Range>) => (r.from === r.to ? num(r.from) : `${num(r.from)}–${num(r.to)}`);
+const ayat = (n: number) => (n === 2 ? 'آيتان' : n >= 3 && n <= 10 ? `${num(n)} آيات` : `${num(n)} آية`);
 const label = (s: Side, r: Range) => (r ? `${s.plain} ${span(r)}` : '—');
 
 function pairLabel(p: Pair) {
@@ -31,22 +32,22 @@ function Card({ side, ayah, marks }: { side: Side; ayah: number; marks?: number[
 function Gap({ a, b, ra, rb }: { a: Side; b: Side; ra: Range; rb: Range }) {
   const [open, setOpen] = useState(false);
   const count = (r: Range) => (r ? r.to - r.from + 1 : 0);
-  const ayat = (s: Side, r: Range) => (r ? Array.from({ length: count(r) }, (_, k) => r.from + k) : []).map(n => <Card key={n} side={s} ayah={n} />);
+  const cards = (s: Side, r: Range) => (r ? Array.from({ length: count(r) }, (_, k) => r.from + k) : []).map(n => <Card key={n} side={s} ayah={n} />);
   return (
     <div className={PANEL}>
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className={NOTE}>
-          {label(a, ra)} ({num(count(ra))} آية) مقابل {label(b, rb)} ({num(count(rb))} آية)
+          {label(a, ra)} ({ayat(count(ra))}) و{label(b, rb)} ({ayat(count(rb))})
         </p>
-        <Button size="sm" aria-expanded={open} onClick={() => setOpen(o => !o)}>
+        <Button size="sm" aria-expanded={open} aria-label={`${open ? 'أخفِ' : 'اعرض'} ${label(a, ra)} و${label(b, rb)}`} onClick={() => setOpen(o => !o)}>
           <FontAwesomeIcon icon={open ? faChevronUp : faChevronDown} />
           {open ? 'أخفِ' : 'اعرض'}
         </Button>
       </div>
       {open && (
         <div className="grid md:grid-cols-2 gap-x-4 mt-3">
-          <div>{ayat(a, ra)}</div>
-          <div>{ayat(b, rb)}</div>
+          <div>{cards(a, ra)}</div>
+          <div>{cards(b, rb)}</div>
         </div>
       )}
     </div>
@@ -63,9 +64,9 @@ export default function CompareView({ a, b, rows }: { a: Side; b: Side; rows: Ro
           <Badge text="تجريبي" color="amber" size="sm" />
         </div>
         <p className={NOTE}>
-          عرض تجريبي لم يراجعه أحد من أهل العلم. النص برواية حفص. تُقابَل آيتان حين تشتركان في تتابع من {num(MIN_RUN)} كلمات فأكثر
-          بعد حذف التشكيل وتوحيد صور بعض الحروف. تُضم المقابلات في كتلة إن كانت الفجوة بينها واحدة في السورتين ولا تزيد على {num(MAX_STEP_GAP)} آيات،
-          وتبقى الكتلة إن كان فيها مقابلتان أو مقابلة بتتابع {num(KEEP_RUN)} كلمات فأكثر. الصيغ المتكررة تُقابَل اعتباطًا.
+          عرض تجريبي لم يراجعه أحد من أهل العلم. النص برواية حفص. تُذكر آيتان معًا حين تشتركان في تتابع من {num(MIN_RUN)} كلمات فأكثر
+          بعد حذف التشكيل وتوحيد صور بعض الحروف. تُضم الأزواج في كتلة إن كانت الفجوة بينها واحدة في السورتين ولا تزيد على {num(MAX_STEP_GAP)} آيات،
+          وتبقى الكتلة إن كان فيها زوجان فيهما نص مشترك أو زوج فيه تتابع {num(KEEP_RUN)} كلمات فأكثر. الصيغ المتكررة تُقرن بإحدى مواضعها اعتباطًا.
           الكلمات المسطَّرة هي ما اختلف بين الآيتين. يدل التطابق على اشتراك اللفظ وحده.
         </p>
         <p className={NOTE}>{`وُجدت ${num(words)} كتلة مبنية على النص.`}</p>
@@ -80,9 +81,9 @@ export default function CompareView({ a, b, rows }: { a: Side; b: Side; rows: Ro
           <section key={i} className={`${PANEL} ${count ? 'border-dashed' : ''}`}>
             <div className="flex flex-wrap items-center gap-2 mb-1">
               <h2 className="text-xl text-amber-600 dark:text-amber-400">
-                {`${a.plain} ${span({ from: first.a, to: end.a })} مقابل ${b.plain} ${span({ from: first.b, to: end.b })}`}
+                {`${a.plain} ${span({ from: first.a, to: end.a })} و${b.plain} ${span({ from: first.b, to: end.b })}`}
               </h2>
-              <Badge size="sm" color="gray" text={count ? 'محاذاة بالعدّ من نهاية السورتين' : `${num(block.anchors)} آيات مقابَلة بالنص`} />
+              <Badge size="sm" color="gray" text={count ? 'محاذاة بالعدّ من نهاية السورتين' : `${ayat(block.anchors)} فيها نص مشترك`} />
             </div>
             {count && (
               <p className={`${NOTE} mb-3`}>

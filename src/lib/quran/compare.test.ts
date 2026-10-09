@@ -52,4 +52,11 @@ describe('alignSurahs edge cases', () => {
     expect(rows.map(r => r.type)).toEqual(['gap', 'block']);
     expect(rows[1].type === 'block' && rows[1].block.pairs.length).toBe(2);
   });
+
+  it('keeps the anchors before the tail when a block reaches into it', () => {
+    const rows = alignSurahs(norm(56), norm(56));
+    const words = rows.flatMap(r => (r.type === 'block' && r.block.kind === 'words' ? [r.block] : []));
+    expect(words.length).toBeGreaterThan(0);
+    expect(words.every(b => last(b).a < 92)).toBe(true);
+  });
 });

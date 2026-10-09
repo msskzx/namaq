@@ -50,11 +50,11 @@ export default async function QuranComparePage({ searchParams }: { searchParams:
           قارن
         </Button>
       </form>
-      <CompareView
+      {a === b ? <p className="text-sm text-gray-600 dark:text-gray-400">اختر سورتين مختلفتين.</p> : <CompareView
         a={{ number: a, name: rawName(a), plain: nameOf(a), words: wordsA.map(w => w.display.join(' ')) }}
         b={{ number: b, name: rawName(b), plain: nameOf(b), words: wordsB.map(w => w.display.join(' ')) }}
         rows={alignSurahs(wordsA.map(w => w.norm), wordsB.map(w => w.norm))}
-      />
+      />}
     </div>
   );
 }

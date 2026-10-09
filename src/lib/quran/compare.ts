@@ -75,8 +75,8 @@ export function alignSurahs(a: string[][], b: string[][]): Row[] {
   const tailA = a.length - tail + 1;
   const tailB = b.length - tail + 1;
   const blocks: Block[] = groups
-    .filter(g => g.length >= 2 || g[0].run >= KEEP_RUN)
-    .filter(g => g[g.length - 1].i < tailA && g[g.length - 1].j < tailB)
+    .map(g => g.filter(x => x.i < tailA && x.j < tailB))
+    .filter(g => g.length >= 2 || (g.length === 1 && g[0].run >= KEEP_RUN))
     .map(g => {
       const pairs: Pair[] = [];
       for (let k = 0; k <= g[g.length - 1].i - g[0].i; k++) {
