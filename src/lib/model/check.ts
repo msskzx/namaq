@@ -415,7 +415,7 @@ function checkUnit(
       const takes = assertion.predicate === 'PARTICIPATED_IN' || assertion.predicate === 'ABSENT_FROM' ? 'event' : 'agent';
       const wrong = takes === 'event' ? 'agent' : 'event';
       if (file.identifications.some((i) => i.mention === value.object && i[wrong] !== undefined && i.status !== 'REJECTED')) {
-        fail(`${owner}: the object of ${assertion.predicate} is ${takes === 'event' ? 'an event, not an agent' : 'an agent, not an event'}`);
+        fail(`${owner}: the object of ${assertion.predicate} must be identified as ${takes}, not ${wrong}`);
       }
     }
     if (file.identifications.some((i) => i.mention === assertion.subject && i.event !== undefined && i.status !== 'REJECTED')) {
