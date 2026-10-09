@@ -69,7 +69,7 @@ least half of the sentence), 317 not modeled (the isnads of the quoted reports, 
 the narrative of the battles, the estate and debt saga and the like), 11 of them date sentences
 (7 `time-layer:waiting`, 4 `time-layer:unreadable`, among them the indefinite `بِضْعٌ وَخَمْسُوْنَ`),
 and 16 unresolved names (the narrators, the battles and the wives not named as people). The tags
-are hints from a heuristic, not readings. The test in `src/lib/model/coverage.test.ts` runs the
+are hints from a heuristic, not readings. The reasons for each follow in "Unresolved names, dated sentences and office". The test in `src/lib/model/coverage.test.ts` runs the
 command over every entry under `data/works/` and fails when an entry is not bounded by its own
 heading and the next entry's heading (or the volume's last page), or when a span lies outside it. A re-parse is finished when this
 section's counts match the command.
@@ -142,6 +142,56 @@ Not modeled, by page (date sentences: `time-layer:waiting`, or `time-layer:unrea
   announcement (wealth, no predicate); the `ابْنَ أَخِي` passage (it
   identifies Hakim; the tie is carried as legacy, see cousins); Atika's share and elegy (no predicate; poetry);
   the hadith-count colophon (no predicate).
+
+## Unresolved names, dated sentences and office
+
+None of the 16 is resolved. `عَائِشَةُ` (p47) is the closest case and stays open: the
+addressee of `يَا ابْنَ أُخْتِي` is never printed (the isnad is `أَبُو مُعَاوِيَةَ: عَنْ هِشَامٍ،
+عَنْ أَبِيْهِ`), and no span in the entry says Aisha is Abu Bakr's daughter. Naming her would
+rest on facts from outside the text.
+
+The 16 stay unresolved, for three reasons:
+
+- The text does not settle the name (Aisha, above).
+- No catalog person exists to name. `عُرْوَةَ` (three mentions, a bare name that the
+  entry does not tie to a father), `البُخَارِيُّ`, `القَحْذَمِيُّ`,
+  `البَهِيِّ` and `ابْنُ أَبِي الزِّنَادِ` are narrators and tabi'un, outside the scope
+  (Companions only), and a narrator does not become a node. `عَاتِكَةُ` (daughter of
+  Zayd ibn Amr ibn Nufayl, named at p67), `أُمُّ خَالِدٍ` and `أُمُّ مُصْعَبٍ` are wives with
+  no catalog person yet. Naming any of them needs a new person, which this pass does not add.
+- The mention is an event. `بَدْرٍ` (twice), `اليَرْمُوْكِ`, `الخَنْدَقِ` and `فَتْحِ مَكَّةَ`
+  are the objects of `PARTICIPATED_IN`, and an identification names an agent, not a
+  battle. The catalog already holds the four participations with their battle slugs.
+  Counting them as resolved needs a decision on how a mention points at an event, a
+  schema change that stops here.
+
+The 11 date-tagged sentences stay tagged. The reader handles `born.year`, `died.year`,
+`islam.age` and month and day. None of the 11 states one of those values:
+
+- p41 (`unreadable`): two ages in one sentence, 8 and 12. The 8 is held as `islam.age`
+  on `sp_age8`; the age 12 outing has no predicate.
+- p44 (`waiting`): `عِذَارَ عَامٍ وَاحِدٍ` gives no year, only the same year as three others;
+  the hijra at eighteen is an age at an event, with no predicate.
+- p63 (`waiting`, two): the age of Abd Allah ibn al-Zubayr at an event, and the author's
+  guess that it is Yamama; no predicate, and the guess is his own inference.
+- p64 (`waiting`, `unreadable`): the death ages 64 and `بِضْعٌ وَخَمْسُوْنَ`. There is no
+  `died.age` predicate, and ADR 0027 keeps an indefinite count unread. Turning an age into
+  a birth year is a derivation the layer does not make.
+- p65, p66 (`unreadable`): sums of money (`أَلْفِ أَلْفٍ`, `مَائَةِ أَلْفٍ`), tagged as dates by the
+  heuristic. They are wealth, which no predicate holds.
+- p67 (`waiting`, two): the four years of the announcement at the pilgrimage, a duration
+  with no predicate.
+
+Adding a `died.age` predicate would let the p64 pair be modeled as competing statements
+(64 by al-Waqidi and Ibn Numayr, against `بِضْعٌ وَخَمْسُوْنَ`). That is a schema change, so it
+is left for the owner.
+
+Office ([ADR 0025](../../../docs/adr/0025-title-status-and-office-are-separate-predicates.md)):
+no sentence of this entry gives al-Zubayr an office. p66 says he never held one
+(`وَمَا وَلِيَ إِمَارَةً قَطُّ`), p54 and p55 give a shura nomination (already a title) and a
+campaign toward Egypt, and the `أَمِيْرُ مِصْرَ` (p55), Mus'ab's governorship of Iraq and Abd
+Allah's caliphate (p64) are other people's offices, in passing. Nothing here needs
+the `office` predicate.
 
 Footnotes on the cited pages (41, 42, 45, 48, 61, 62, 64) are takhrij and rijal
 notes; they settle no new name and add no assertion.
