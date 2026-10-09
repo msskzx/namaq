@@ -20,5 +20,6 @@ export const getAllNavLinks = (language: 'en' | 'ar'): SiteLink[] => [
   { href: '/hadith/muslim-jibril', label: language === 'ar' ? 'حديث جبريل — مسلم' : 'Hadith of Jibril — Muslim' },
   { href: '/hadith/fath-iman-50', label: language === 'ar' ? 'فتح الباري — الحديث ٥٠' : 'Fath al-Bari — hadith 50' },
   { href: '/quran', label: language === 'ar' ? 'القرآن (تجريبي)' : 'Quran (demo)' },
+  { href: '/quran/compare', label: language === 'ar' ? 'مقارنة سورتين (تجريبي)' : 'Compare two surahs (demo)' },
   { href: '/references', label: language === 'ar' ? 'المراجع' : 'References' },
 ];
