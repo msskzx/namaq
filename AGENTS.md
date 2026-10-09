@@ -108,6 +108,17 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   matching existing history.
 - PR descriptions must include a summary of what changed and why, not
   just a list of touched files.
+- Target `main` from the start. Stack a PR on another branch only when it needs
+  that branch's unmerged commits, and expect it to conflict once the base is
+  squash-merged, because the squash rewrites the base's history.
+- An agent that is merging a conflicting PR rebases it without waiting for the
+  author. For a stacked PR whose base was squash-merged, run
+  `git rebase --onto main <old-base-branch>` so the commits the squash already took
+  drop out, re-run `npm run lint`, `npx tsc --noEmit` and `npm test`, and push with
+  `--force-with-lease`. Stop and report when two PRs changed the same lines, when
+  the work's `summary.md` coverage counts disagree after the rebase, or when the
+  resolution changes any line outside the conflicted hunks. That last case goes
+  back through a review cycle, counted under the two-cycle cap above.
 - After a PR merges, delete its branch on both remote and local, and remove
   its worktree if it has one (`git worktree remove <path>` before
   `git branch -D`, since a worktree checkout blocks the branch delete).
