@@ -1362,6 +1362,37 @@ enlistment for a march that had not happened is not an attendance, and the
 distinction is the same one ADR 0013 draws between being somewhere and what
 became of you there.
 
+## Orders the owner stated, read against the text
+
+The owner named three orders as plain in the sira. Each was searched for by
+sentence, and each is recorded only as far as a sentence supports it
+([ADR 0028](../../../docs/adr/0028-a-stated-ordering-is-recorded-and-its-placement-is-derived.md),
+[ADR 0024](../../../docs/adr/0024-read-the-text-and-stop-where-it-is-unclear.md)).
+
+- Islam of al-Zubayr before the first hijra to Abyssinia. Ibn Ishaq says
+  `فخرج عند ذلك المسلمون ... فخرج عثمان ... والزبير بن العوام` (`1/147-p3`), so
+  al-Zubayr left as one of the Muslims. That is the new claim
+  `zubayr/muslims-left-habasha`. His Islam is `zubayr/islam` in his own batch.
+  The ordering cites both.
+- First hijra to Abyssinia before the hijra to Medina. Ibn Ishaq says Abu
+  Salamah `قدم من الحبشة مكة ... فهاجر إلى المدينة` (`1/258-p3`). Abu Salamah is
+  in the first party (`abu-salamah/hijra-habasha-first`), so the sentence orders
+  the two events. The ordering cites that claim and
+  `abu-salamah/hijra-madinah-first`. An earlier pass dropped this ordering
+  because the claims then cited did not state it; this sentence does.
+- Second hijra to Abyssinia before the hijra to Medina stays
+  `legacy-unreviewed`. The only sentence about the Abyssinian emigrants
+  returning (`1/258-p1`, `رجع إلى المدينة بعض من كان هاجر إلى أرض الحبشة`) does
+  not say which wave, and al-Waqidi's `سنة خمسة من المبعث` gives a year from the
+  mission, an offset ADR 0028 forbids computing. No sentence puts the second
+  hijra before the Medina one, so the marker stays.
+
+The first before the second hijra was already cited. al-Zubayr's Egyptian
+campaign before his death cannot be an ordering: his death is a field on the
+person, and an ordering joins two events or battles.
+
+Because `batch.json` changed, the batch needs approving for publication again.
+
 ## What the pass leaves behind
 
 394 claims across thirteen chapters, 735 values cited and 241 still owed. The
