@@ -2,7 +2,7 @@
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
-import { AyatGroup } from './AyahCard';
+import { AyahCard, AyatGroup } from './AyahCard';
 import type { Ayah } from '@/types/quran';
 
 vi.mock('@/components/language/LanguageContext', () => ({
@@ -46,6 +46,14 @@ describe('AyatGroup', () => {
     fireEvent.click(screen.getByText('Previous'));
 
     expect(screen.getByText('آية رقم 0')).toBeTruthy();
+  });
+
+  it('underlines only the marked words of an ayah card', () => {
+    const { container } = render(<AyahCard ayah={ayah({ text: 'أ ب ج' })} marks={[1]} />);
+
+    const underlined = container.querySelectorAll('u');
+    expect(underlined).toHaveLength(1);
+    expect(underlined[0].textContent).toBe('ب');
   });
 
   it('offers no pagination when everything fits on one page', () => {

@@ -8,9 +8,19 @@ import translations from '../language/translations';
 
 interface AyahCardProps {
   ayah: Ayah;
+  marks?: number[];
 }
 
-export function AyahCard({ ayah }: AyahCardProps) {
+function MarkedText({ text, marks }: { text: string; marks: number[] }) {
+  return text.split(' ').map((word, index) => (
+    <React.Fragment key={index}>
+      {index > 0 && ' '}
+      {marks.includes(index) ? <u className="decoration-amber-500 decoration-2 underline-offset-8">{word}</u> : word}
+    </React.Fragment>
+  ));
+}
+
+export function AyahCard({ ayah, marks }: AyahCardProps) {
   const { language } = useLanguage();
   const t = translations[language];
 
@@ -24,7 +34,7 @@ export function AyahCard({ ayah }: AyahCardProps) {
         </div>
         <div className="flex-1">
           <div className="text-right text-2xl mb-2 font-arabic" dir="rtl">
-            {ayah.text}
+            {marks ? <MarkedText text={ayah.text} marks={marks} /> : ayah.text}
           </div>
           <div className="text-sm text-gray-600 dark:text-gray-400 mt-2">
             {language === 'ar' ? ayah.surah.name : ayah.surah.nameTransliterated || ayah.surah.name} - {t.ayahs} {ayah.number}
