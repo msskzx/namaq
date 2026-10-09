@@ -268,6 +268,7 @@ describe('checkModel', () => {
     };
     expect(issuesFor(add('سَنَةَ سِتٍّ وَثَلاَثِيْنَ', 36))).toEqual([]);
     expect(issuesFor(add('سَنَةَ سِتٍّ وَثَلاَثِيْنَ', 64)).join()).toMatch(/parsed 64 but the quote reads 36/);
+    expect(issuesFor(add('وَلَهُ بِضْعٌ وَخَمْسُوْنَ سَنَةً', 50)).join()).toMatch(/parsed 50 but the quote reads nothing/);
   });
 
   it('accepts an office of a known kind and fails an unknown or missing kind', () => {
@@ -312,8 +313,14 @@ describe('checkModel', () => {
       return checkModel(loadModel(root), root, events && new Set(events));
     };
     expect(run(participation({ event: 'badr' }), ['badr'])).toEqual([]);
+    expect(run(participation({ event: 'badr' })).join()).toMatch(/no battle or event "badr"/);
     expect(run(participation({ event: 'nowhere' }), ['badr']).join()).toMatch(/no battle or event "nowhere"/);
     expect(run(participation({ agent: 'badr' }), ['badr']).join()).toMatch(/is an event, not an agent/);
+    const relation = (f: UnitFile) => {
+      participation({ event: 'badr' })(f);
+      f.assertions[f.assertions.length - 1].predicate = 'CHILD_OF';
+    };
+    expect(run(relation, ['badr']).join()).toMatch(/object of CHILD_OF is an agent, not an event/);
     expect(run(participation({ agent: 'badr', event: 'badr' })).join()).toMatch(/both an agent and an event/);
     expect(run(participation({})).join()).toMatch(/no agent or event/);
   });

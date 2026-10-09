@@ -162,13 +162,16 @@ Two readings are recorded because the text makes them clear
 - The five battle mentions (`بَدْرٍ` twice, `اليَرْمُوْكِ`, `الخَنْدَقِ`, `فَتْحِ مَكَّةَ`) are
   identified as the catalog events `badr`, `yarmuk`, `khandaq` and `fath-makkah`, with the
   `يَوْمَ` phrase as basis ([ADR 0029](../../../docs/adr/0029-an-identification-names-an-agent-or-an-event.md)).
-- `عَائِشَةُ` (p47) is identified as `aisha-bint-abi-bakr`, PROPOSED. The isnad alone
-  (`أَبُو مُعَاوِيَةَ: عَنْ هِشَامٍ، عَنْ أَبِيْهِ`) does not name her father. Her own words
-  `كَانَ أَبُوَاكَ -يَعْنِي: الزُّبَيْرَ، وَأَبَا بَكْرٍ-` (`sp_ayah`) and the entry's
-  `كَانَتْ تَحْتَهُ أَسْمَاءُ بِنْتُ أَبِي بَكْرٍ` (p64, `sp_wife`) do. Footnote 2 of p47 only
-  corrects the print's `أخي` to `أختي`, so `ابْنَ أُخْتِي` reads as the addressee being
-  her sister's son. The entry also holds a second Aisha
-  (`عَنْ أُخْتِهَا عَائِشَةَ`, p51, Aisha bint Jafar), so the two basis spans matter.
+- `عَائِشَةُ` (p47) is identified as `aisha-bint-abi-bakr`, PROPOSED, on three printed
+  spans: the isnad `أَبُو مُعَاوِيَةَ: عَنْ هِشَامٍ، عَنْ أَبِيْهِ` (`sp_ayah_isnad`, whose
+  last link is Urwa, the addressee), her words `كَانَ أَبُوَاكَ -يَعْنِي: الزُّبَيْرَ، وَأَبَا
+  بَكْرٍ-` (`sp_ayah`) and the entry's `كَانَتْ تَحْتَهُ أَسْمَاءُ بِنْتُ أَبِي بَكْرٍ` (p64,
+  `sp_wife`). Together they show a speaker who calls Abu Bakr one of the addressee's two
+  fathers and the addressee her sister's son. No sentence says outright that Asma is her
+  sister or Abu Bakr her father, so the owner should confirm this reading before it
+  counts as clear. Footnote 2 of p47 only corrects the print's `أخي` to `أختي`. The entry
+  also holds a second Aisha (`عَنْ أُخْتِهَا عَائِشَةَ`, p51, Aisha bint Jafar), so the
+  basis spans matter.
 
 The 10 date-tagged sentences stay tagged. The reader handles `born.year`, `died.year`,
 `died.age`, `islam.age` and month and day. None of the 10 states one of those values:

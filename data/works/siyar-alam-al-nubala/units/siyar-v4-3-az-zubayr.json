@@ -1297,6 +1297,7 @@
       "mention": "m_aisha",
       "agent": "aisha-bint-abi-bakr",
       "basis": [
+        { "span": "sp_ayah_isnad", "role": "SAME_WORK_EXPLICIT" },
         { "span": "sp_ayah", "role": "SAME_WORK_EXPLICIT" },
         { "span": "sp_wife", "role": "SAME_WORK_EXPLICIT" }
       ],

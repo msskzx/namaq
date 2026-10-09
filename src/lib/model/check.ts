@@ -360,7 +360,7 @@ function checkUnit(
     } else if (!target?.trim()) {
       fail(`${owner}: no agent or event`);
     }
-    if (identification.event !== undefined && events && !events.has(identification.event)) {
+    if (identification.event !== undefined && !events?.has(identification.event)) {
       fail(`${owner}: no battle or event "${identification.event}" in the catalog`);
     }
     const twin = file.identifications.find(
@@ -411,12 +411,12 @@ function checkUnit(
       if (!('classified' in value)) fail(`${owner}: office needs a classified kind`);
       else oneOf(`${owner} office kind`, value.classified, officeKinds);
     }
-    if (
-      (assertion.predicate === 'PARTICIPATED_IN' || assertion.predicate === 'ABSENT_FROM') &&
-      'object' in value &&
-      file.identifications.some((i) => i.mention === value.object && i.agent !== undefined && i.status !== 'REJECTED')
-    ) {
-      fail(`${owner}: the object of ${assertion.predicate} is an event, not an agent`);
+    if ('object' in value) {
+      const takes = assertion.predicate === 'PARTICIPATED_IN' || assertion.predicate === 'ABSENT_FROM' ? 'event' : 'agent';
+      const wrong = takes === 'event' ? 'agent' : 'event';
+      if (file.identifications.some((i) => i.mention === value.object && i[wrong] !== undefined && i.status !== 'REJECTED')) {
+        fail(`${owner}: the object of ${assertion.predicate} is ${takes === 'event' ? 'an event, not an agent' : 'an agent, not an event'}`);
+      }
     }
     if (file.identifications.some((i) => i.mention === assertion.subject && i.event !== undefined && i.status !== 'REJECTED')) {
       fail(`${owner}: the subject is identified as an event`);
