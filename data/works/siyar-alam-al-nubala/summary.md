@@ -163,13 +163,15 @@ Three readings are recorded because the text makes them clear
   `يَوْمَ` phrase as basis ([ADR 0029](../../../docs/adr/0029-an-identification-names-an-agent-or-an-event.md)).
 - The three wives named only by `القَحْذَمِيُّ` now have catalog people, with every value
   `legacy-unreviewed` (no batch cites them) and no value from a seed (none existed):
-  `atikah-bint-zayd` (`عَاتِكَةُ`, daughter of Zayd ibn Amr ibn Nufayl by the p67 phrase
-  `عَاتِكَةَ بِنْتِ زَيْدِ بنِ عَمْرِو بنِ نُفَيْلٍ، زَوْجَةِ الزُّبَيْرِ`),
+  `atikah-bint-zayd` (`عَاتِكَةُ`). The identification rests on the two printed sentences
+  that call an Atikah his wife: p64 (`sp_wife`) and p67 (`عَاتِكَةَ بِنْتِ زَيْدِ بنِ عَمْرِو
+  بنِ نُفَيْلٍ، زَوْجَةِ الزُّبَيْرِ`). The text does not say that `سَعِيْدِ بنِ زَيْدٍ` of p64 is a
+  son of Zayd ibn Amr, and the identification does not need it,
   `umm-khalid-bint-khalid` (`بِنْتُ خَالِدِ بنِ سَعِيْدٍ`) and `umm-musab-al-kalbiyyah`
   (`الكَلْبِيَّةُ`). The fathers `سَعِيْدِ بنِ زَيْدٍ` and `خَالِدِ بنِ سَعِيْدٍ` are not
   linked: the entry gives no more than a name for either, and naming which catalog
   person it is would rest on outside knowledge. Atikah's link to
-  `zayd-ibn-amr-ibn-nufayl` rests on his full three-part nasab.
+  `zayd-ibn-amr-ibn-nufayl` rests on the p67 phrase, which gives his full three-part nasab.
 - `عَائِشَةُ` (p47) is identified as `aisha-bint-abi-bakr`, PROPOSED, on three printed
   spans: the isnad `أَبُو مُعَاوِيَةَ: عَنْ هِشَامٍ، عَنْ أَبِيْهِ` (`sp_ayah_isnad`, whose
   last link is Urwa, the addressee), her words `كَانَ أَبُوَاكَ -يَعْنِي: الزُّبَيْرَ، وَأَبَا

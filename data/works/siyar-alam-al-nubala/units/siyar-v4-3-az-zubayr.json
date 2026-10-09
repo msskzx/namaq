@@ -1334,6 +1334,7 @@
       "mention": "m_atikah",
       "agent": "atikah-bint-zayd",
       "basis": [
+        { "span": "sp_wife", "role": "SAME_WORK_EXPLICIT" },
         { "span": "sp_atikah_estate", "role": "SAME_WORK_EXPLICIT" }
       ],
       "status": "PROPOSED"

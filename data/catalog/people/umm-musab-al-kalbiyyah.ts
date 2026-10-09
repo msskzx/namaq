@@ -11,8 +11,7 @@ const ummMusabAlKalbiyyah = {
     sex: { value: 'FEMALE', claims: legacyUnreviewed },
   },
   titles: [],
-  relations: [
-  ],
+  relations: [],
 } satisfies CatalogPerson;
 
 export default ummMusabAlKalbiyyah;
