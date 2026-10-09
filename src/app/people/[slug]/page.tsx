@@ -10,7 +10,8 @@ import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import Badge from '@/components/common/Badge';
 import Link from 'next/link';
-import { virtueSpeakerHref, virtueSpeakerLabel } from '@/lib/virtues';
+import { valueLines } from '@/lib/modelView';
+import { hasModelVirtues, virtueSpeakerHref, virtueSpeakerLabel } from '@/lib/virtues';
 import { titleName } from '@/lib/titleName';
 import Timeline from '@/components/people/Timeline';
 import type { PersonFull } from '@/types/person';
@@ -31,6 +32,7 @@ function PersonDetailPage() {
   const t = translations[language];
   const { slug } = useParams<{ slug: string }>();
   const { data: person, error, isLoading } = useSWR<PersonFull>(slug ? `/api/people/${slug}` : null, fetcher);
+  const otherModelEntries = (person?.modelEntries ?? []).filter((entry) => entry.predicate !== 'virtue');
 
   if (error) {
     return (
@@ -106,7 +108,24 @@ function PersonDetailPage() {
             </div>
           )}
 
-          {person.virtues && person.virtues.length > 0 && (
+          {hasModelVirtues(person.modelEntries) && (
+            <div className="bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4">
+              <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
+                <FontAwesomeIcon icon={faSeedling} className="w-7 h-7 text-amber-500 me-2" />
+                {t.virtues}</h2>
+              <ul className="flex flex-col gap-3">
+                {(person.modelEntries ?? []).filter((entry) => entry.predicate === 'virtue').flatMap((entry) =>
+                  valueLines(entry, language).map((line, i) => (
+                    <li key={`${entry.assertionId}-${i}`} className="text-gray-800 dark:text-gray-200 text-lg">
+                      <span dir="rtl" lang="ar">{line}</span>
+                    </li>
+                  ))
+                )}
+              </ul>
+            </div>
+          )}
+
+          {!hasModelVirtues(person.modelEntries) && person.virtues && person.virtues.length > 0 && (
             <div className="bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4">
               <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
                 <FontAwesomeIcon icon={faSeedling} className="w-7 h-7 text-amber-500 me-2" />
@@ -142,9 +161,7 @@ function PersonDetailPage() {
             <GraphCanvas targetSlug={slug} />
           </div>
 
-          {person.modelEntries && person.modelEntries.length > 0 && (
-            <ModelEntries entries={person.modelEntries} spans={person.modelSpans ?? []} />
-          )}
+          {otherModelEntries.length > 0 && <ModelEntries entries={otherModelEntries} spans={person.modelSpans ?? []} />}
           {person.hadith && person.hadith.length > 0 && <ProfileHadith slug={slug} hadith={person.hadith} />}
           <SourceAccountReader basePath={`/api/people/${slug}`} />
 
