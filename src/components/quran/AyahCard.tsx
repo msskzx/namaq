@@ -15,7 +15,7 @@ function SharedText({ text, differing }: { text: string; differing: number[] }) 
   return text.split(' ').map((word, index) => (
     <React.Fragment key={index}>
       {index > 0 && ' '}
-      {differing.includes(index) ? word : <mark className="rounded bg-amber-200 px-1 text-amber-900 dark:bg-amber-400/25 dark:text-amber-200">{word}</mark>}
+      {differing.includes(index) ? word : <mark className="bg-transparent text-amber-600 dark:text-amber-400">{word}</mark>}
     </React.Fragment>
   ));
 }
