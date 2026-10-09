@@ -46,7 +46,7 @@ export function conversationOf(
   const candidates = (mention: string) => {
     const found = file.identifications
       .filter((i) => i.mention === mention && i.status !== 'REJECTED')
-      .map((i) => ({ agent: i.agent, status: i.status }));
+      .flatMap((i) => (i.agent ? [{ agent: i.agent, status: i.status }] : []));
     const standing = standingAgent(mentions.get(mention) ?? '');
     const recorded = file.identifications.some((i) => i.mention === mention);
     return !recorded && standing ? [{ agent: standing, status: 'PROPOSED' as const }] : found;

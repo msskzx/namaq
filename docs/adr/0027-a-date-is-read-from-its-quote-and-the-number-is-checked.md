@@ -18,6 +18,11 @@ reader takes the one number phrase in the quote and ignores the other words, so 
 can be the natural clause (`أَسْلَمَ الزُّبَيْرُ ابْنُ ثَمَانِ سِنِيْنَ`). A quote with two
 number phrases is unreadable.
 
+`died.age` is the age at death, read by the same number reader as `islam.age`. The
+64 that al-Waqidi and Ibn Numayr give for al-Zubayr is held; the competing
+`بِضْعٌ وَخَمْسُوْنَ` is an indefinite count, so it stays not modeled and tagged
+`time-layer:unreadable`, and a birth year is never derived from an age.
+
 Month and day are separate predicates (`died.month`, `died.day`, `born.month`,
 `born.day`) that rest on the same statement as the year: a day needs a month and a month
 needs a year on that statement, and competing readings sit on different statements. We

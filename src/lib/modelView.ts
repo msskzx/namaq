@@ -41,9 +41,11 @@ export const predicateOrder = [
   'appearance',
   'virtue',
   'islam.age',
+  'office',
   'died.year',
   'died.month',
   'died.day',
+  'died.age',
   'PARTICIPATED_IN',
 ];
 
@@ -63,6 +65,8 @@ export const predicateLabels: Record<string, Pair> = {
   'died.year': { ar: 'سنة وفاته', en: 'Year of death' },
   'died.month': { ar: 'شهر وفاته', en: 'Month of death' },
   'died.day': { ar: 'يوم وفاته', en: 'Day of death' },
+  'died.age': { ar: 'عمره عند وفاته', en: 'Age at death' },
+  office: { ar: 'المنصب', en: 'Office' },
   'born.year': { ar: 'سنة ولادته', en: 'Year of birth' },
   'born.month': { ar: 'شهر ولادته', en: 'Month of birth' },
   'born.day': { ar: 'يوم ولادته', en: 'Day of birth' },
@@ -94,7 +98,7 @@ export function valueLines(entry: ModelEntryDto, language: Language) {
   }
   if (entry.parsed !== null && !datePartPredicates.has(entry.predicate)) {
     if (entry.predicate === 'died.year' || entry.predicate === 'born.year') return [ar ? `${entry.parsed} هـ` : `${entry.parsed} AH`];
-    if (entry.predicate === 'islam.age')
+    if (entry.predicate === 'islam.age' || entry.predicate === 'died.age')
       return [ar ? `${entry.parsed} سنة` : `${entry.parsed} years`];
     return [String(entry.parsed)];
   }

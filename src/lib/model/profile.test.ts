@@ -103,12 +103,19 @@ describe('profilesFromModel on the al-Zubayr entry', () => {
     expect(battles.map((b) => b.objectMention).sort()).toEqual(
       ['بَدْرٍ', 'بَدْرٍ', 'اليَرْمُوْكِ', 'الخَنْدَقِ', 'فَتْحِ مَكَّةَ'].sort(),
     );
+    expect(battles.map((b) => b.object).sort()).toEqual(['badr', 'badr', 'fath-makkah', 'khandaq', 'yarmuk']);
     const origins = battles
       .flatMap((b) => b.origins)
       .map((o) => ('mention' in o ? o.mention : o.author));
     expect(origins).toEqual(
       expect.arrayContaining(['البَهِيِّ', 'عُرْوَةَ', 'ابْنُ أَبِي الزِّنَادِ', 'الزُّبَيْرِ']),
     );
+  });
+
+  it('records the age at death once, from the two who report it', () => {
+    const [age] = of('died.age');
+    expect(age.parsed).toBe(64);
+    expect(age.origins).toEqual([{ mention: 'الوَاقِدِيُّ' }, { mention: 'ابْنُ نُمَيْرٍ' }]);
   });
 
   it("records the Prophet as the speaker of the cousin relation, identified through the author's own sentence about his aunt", () => {

@@ -22,10 +22,11 @@ if (targets.length === 0) {
 let failed = false;
 for (const { folder, file } of targets) {
   const c = coverageOf(folder, file, root);
-  console.log(`${c.unit}: pages ${c.pages.length > 0 ? `${c.pages[0]}-${c.pages[c.pages.length - 1]}` : 'none'}, ${c.sentences} sentence(s), ${c.covered} covered, ${c.notModeled.length} not modeled, ${c.unresolved.length} unresolved name(s)`);
+  console.log(`${c.unit}: pages ${c.pages.length > 0 ? `${c.pages[0]}-${c.pages[c.pages.length - 1]}` : 'none'}, ${c.sentences} sentence(s), ${c.covered} covered, ${c.notModeled.length} not modeled, ${c.unresolvedPeople.length} unresolved name(s), ${c.unresolvedEvents.length} unresolved event(s)`);
   if (unitId) {
     c.notModeled.forEach((s) => console.log(`  p${s.page}${s.tag ? ` [${s.tag}]` : ''}: ${s.text}`));
-    c.unresolved.forEach((name) => console.log(`  unresolved: ${name}`));
+    c.unresolvedPeople.forEach((name) => console.log(`  unresolved: ${name}`));
+    c.unresolvedEvents.forEach((name) => console.log(`  unresolved event: ${name}`));
   }
   if (!c.bounded) {
     failed = true;
@@ -35,6 +36,6 @@ for (const { folder, file } of targets) {
     failed = true;
     console.error(`  FAIL spans outside the entry: ${c.outside.join(', ')}`);
   }
-  if (strict && (c.notModeled.length > 0 || c.unresolved.length > 0)) failed = true;
+  if (strict && (c.notModeled.length > 0 || c.unresolvedPeople.length > 0 || c.unresolvedEvents.length > 0)) failed = true;
 }
 if (failed) process.exit(1);

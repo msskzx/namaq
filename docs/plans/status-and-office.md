@@ -1,6 +1,6 @@
 # Status and office beside title
 
-Status: blocked on the open issue marked as a blocker below. Everything else is ready.
+Status: `office` is built ([ADR 0025](../adr/0025-title-status-and-office-are-separate-predicates.md), accepted). The `status` rename and the removal of the `companion` title are not, and wait on the open issue marked as a blocker below.
 
 Vocabulary is in [CONTEXT.md](../../CONTEXT.md) under "A person's standing". The
 decision and its reasons are in
@@ -23,9 +23,9 @@ decision and its reasons are in
   separate statement and does not assert `companion`.
 - `title` stays for epithets the text states. Amir al-Mu'minin is an office
   designation and is not a title.
-- `office` has a classified kind (`caliph`, `amir`), a scope (a linked place,
-  army or event, or the span that names it), and dates only where the text states
-  them. Relative dating waits for the time layer
+- `office` has a classified kind (`caliph`, `amir`) and the span that names it.
+  The span carries the scope and any date the text states, so no linked entity is
+  needed (decided in ADR 0025). Relative dating waits for the time layer
   ([relative-event-dating.md](relative-event-dating.md)).
 - `tabii` is in the closed set for contested subjects only. No tabi'i is
   extracted otherwise.
@@ -69,6 +69,9 @@ Verified paths:
 Proposed, not yet created: a unit for Marwan ibn al-Hakam (page 3084, entry 102)
 as the `tabii` case, and the `office` validation in `scripts/model/check.ts`
 (unverified: confirm where predicates are validated before editing).
+
+Done: `office` (types, `check.ts`, `check.test.ts`, view labels). Nothing in
+`src` or `data` uses `is-sahabi`, so `office` did not wait on the rename.
 
 Order: types, then diff and its tests, then the al-Zubayr unit, then Marwan, then
 `office`.

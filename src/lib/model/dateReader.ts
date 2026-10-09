@@ -183,6 +183,7 @@ export const dateReaders: Partial<Record<Predicate, (text: string) => number | u
   'born.year': readYear,
   'died.year': readYear,
   'islam.age': readNumber,
+  'died.age': readNumber,
   'born.month': readMonth,
   'died.month': readMonth,
   'born.day': readDay,

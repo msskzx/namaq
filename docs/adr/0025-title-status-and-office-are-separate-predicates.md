@@ -1,5 +1,5 @@
 ---
-status: proposed
+status: accepted
 ---
 
 # Title, status and office are three predicates
@@ -21,5 +21,16 @@ al-Hakam sits under «كِبَارُ التَّابِعِيْنَ», and the aut
 Prophet only possible, so he is `tabii` and the remark stays a separate statement.
 
 `is-sahabi` is renamed `status`. The app is unreleased, so there is no adapter.
-`office` is decided here and built after the time layer settles how dates are
-held; until then it takes only dates the text states.
+The rename and the removal of the `companion` title are not built yet; nothing
+else depends on them, so they follow in their own change
+([plan](../plans/status-and-office.md)).
+
+`office` is built. Its scope could be a linked entity (a place, an army or an
+event) or the span that names it. A span is simpler and matches
+[ADR 0021](0021-a-span-selects-text-by-quote.md): the assertion is
+`{ classified: <kind>, spans }`, where the kind is `caliph` or `amir` and the
+quote carries the scope and any date the text states, in the author's words. No
+second record is needed and nothing is computed from the quote. `model:check`
+fails an office with no kind or an unknown one. Dates in the quote stay text
+until the time layer needs them as numbers; a linked scope can be added then,
+because the span stays as its evidence.
