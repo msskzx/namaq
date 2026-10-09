@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { eventSlugs } from '../catalog/loadCatalog';
 import { checkModel } from './check';
 import { loadModel } from './load';
 import { projectionRows } from './project';
@@ -53,10 +54,10 @@ describe('projectionRows (the al-Zubayr entry)', () => {
     expect(withReview.filter((e) => e.reviewed).map((e) => e.assertionId)).toEqual(['a_kunya']);
   });
 
-  it('projects the reviewed-only set for prod, with every row reviewed', () => {
+  it('projects the reviewed-only set for prod, with every row reviewed', async () => {
     const reviews = [review(folders, 'a_kunya'), review(folders, 'a_sex')];
     const prod = selectForProd(folders, reviews, '.');
-    expect(checkModel(prod, '.')).toEqual([]);
+    expect(checkModel(prod, '.', await eventSlugs())).toEqual([]);
     const rows = projectionRows(prod, '.', reviews);
     expect(rows.entries.map((e) => e.assertionId).sort()).toEqual(['a_kunya', 'a_sex']);
     expect(rows.entries.every((e) => e.reviewed)).toBe(true);

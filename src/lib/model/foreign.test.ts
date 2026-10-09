@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest';
+import { eventSlugs } from '../catalog/loadCatalog';
 import { checkModel } from './check';
 import { loadModel } from './load';
 import { closureOf, revisionOf, selectForProd, unitLookup, type ReviewRecord } from './review';
 import type { Assertion } from './types';
 
 const ROOT = 'src/lib/model/fixtures/jibril';
+const events = await eventSlugs();
 const probe: Assertion = {
   id: 'a_probe',
   subject: 'm_ismail',
@@ -99,7 +101,7 @@ describe('a foreign basis and the real al-Zubayr unit (a TARAJEM work)', () => {
     const folders = loadModel('.');
     const file = folders[0].units[0];
     change(file);
-    return checkModel(folders, '.').join('\n');
+    return checkModel(folders, '.', events).join('\n');
   };
   const ident = (mention: string, span: string) => ({
     id: 'i_probe',

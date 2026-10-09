@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import { PrismaClient, type Prisma } from '../../src/generated/prisma';
+import { eventSlugs } from '../../src/lib/catalog/loadCatalog';
 import { checkModel } from '../../src/lib/model/check';
 import { checkInferences, loadInferences } from '../../src/lib/model/inference';
 import { loadModel } from '../../src/lib/model/load';
@@ -24,7 +25,7 @@ async function main() {
   const inferences = loadInferences(root);
   const reviews = loadReviews(root);
   const all = loadModel(root);
-  const issues = [...checkModel(all, root), ...checkInferences(all, inferences)];
+  const issues = [...checkModel(all, root, await eventSlugs(`${root}/data/catalog`)), ...checkInferences(all, inferences)];
   if (issues.length > 0) {
     issues.forEach((issue) => console.error(`FAIL ${issue}`));
     process.exit(1);
