@@ -23,6 +23,11 @@ describe("alignSurahs on Al-Waqi'ah and Al-Haqqah", () => {
     expect(at(77).shared).toEqual(expect.arrayContaining(['انه', 'كريم']));
     expect(at(77).run).toBeLessThan(2);
     for (const a of [76, 78, 79]) expect(at(a).shared).toEqual([]);
+    for (const a of [76, 78, 79]) {
+      expect(at(a).marksA).toEqual(norm(56)[a - 1].map((_, k) => k));
+      expect(at(a).marksB).toEqual(norm(69)[at(a).b - 1].map((_, k) => k));
+    }
+    expect(at(80).marksA).toEqual([]);
   });
 
   it('puts the end of both surahs in a count block, with 56:96 ~ 69:52 sharing four words', () => {

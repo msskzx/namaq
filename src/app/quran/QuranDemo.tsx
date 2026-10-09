@@ -109,7 +109,7 @@ function Side({ title, cards, surah }: { title: string; cards: ReturnType<typeof
     <div>
       <h3 className="text-xl mb-2 text-amber-600 dark:text-amber-400">{title}</h3>
       {cards.map(c => (
-        <AyahCard key={c.ayah} ayah={{ id: `${c.surah}:${c.ayah}`, number: c.ayah, text: c.text, surah } as unknown as Ayah} marks={c.marks} />
+        <AyahCard key={c.ayah} ayah={{ id: `${c.surah}:${c.ayah}`, number: c.ayah, text: c.text, surah } as unknown as Ayah} differing={c.marks} />
       ))}
     </div>
   );

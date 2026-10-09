@@ -32,7 +32,7 @@ function longestRun(x: string[], y: string[]): number {
 function pairOf(a: number, b: number, x: string[], y: string[]): Pair {
   const inY = new Set(y);
   const shared = [...new Set(x.filter(w => inY.has(w)))];
-  const diff = shared.length === 0 ? { a: [], b: [] } : wordDiff(x, y);
+  const diff = shared.length === 0 ? { a: x.map((_, k) => k), b: y.map((_, k) => k) } : wordDiff(x, y);
   return { a, b, run: longestRun(x, y), shared, marksA: diff.a, marksB: diff.b };
 }
 

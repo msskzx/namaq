@@ -24,9 +24,9 @@ function pairLabel(p: Pair) {
   return 'لا كلمات مشتركة';
 }
 
-function Card({ side, ayah, marks }: { side: Side; ayah: number; marks?: number[] }) {
+function Card({ side, ayah, differing }: { side: Side; ayah: number; differing?: number[] }) {
   const surah = { id: `s${side.number}`, number: side.number, name: side.name, nameTransliterated: null };
-  return <AyahCard ayah={{ id: `${side.number}:${ayah}`, number: ayah, text: side.words[ayah - 1], surah } as unknown as Ayah} marks={marks} />;
+  return <AyahCard ayah={{ id: `${side.number}:${ayah}`, number: ayah, text: side.words[ayah - 1], surah } as unknown as Ayah} differing={differing} />;
 }
 
 function Gap({ a, b, ra, rb }: { a: Side; b: Side; ra: Range; rb: Range }) {
@@ -92,8 +92,8 @@ export default function CompareView({ a, b, rows }: { a: Side; b: Side; rows: Ro
             )}
             {block.pairs.map(p => (
               <div key={p.a} className="grid md:grid-cols-2 gap-x-4 border-t border-gray-200 dark:border-white/10 pt-3">
-                <Card side={a} ayah={p.a} marks={p.marksA} />
-                <Card side={b} ayah={p.b} marks={p.marksB} />
+                <Card side={a} ayah={p.a} differing={p.marksA} />
+                <Card side={b} ayah={p.b} differing={p.marksB} />
                 <div className="md:col-span-2 -mt-2 mb-3">
                   <Badge size="sm" color={p.run >= MIN_RUN ? 'amber' : 'gray'} text={pairLabel(p)} />
                 </div>
