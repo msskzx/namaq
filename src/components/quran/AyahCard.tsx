@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import type { Ayah } from "@/types/quran";
-import { normalizeWord } from '@/lib/quran/normalize';
 import Pagination from '@/components/common/Pagination';
 import { useLanguage } from '../language/LanguageContext';
 import translations from '../language/translations';
@@ -12,27 +11,11 @@ interface AyahCardProps {
   differing?: number[];
 }
 
-const SHARED_COLORS = [
-  'bg-amber-200 text-amber-900 dark:bg-amber-400/25 dark:text-amber-200',
-  'bg-sky-200 text-sky-900 dark:bg-sky-400/25 dark:text-sky-200',
-  'bg-emerald-200 text-emerald-900 dark:bg-emerald-400/25 dark:text-emerald-200',
-  'bg-rose-200 text-rose-900 dark:bg-rose-400/25 dark:text-rose-200',
-  'bg-violet-200 text-violet-900 dark:bg-violet-400/25 dark:text-violet-200',
-  'bg-orange-200 text-orange-900 dark:bg-orange-400/25 dark:text-orange-200',
-];
-
-function colorOf(word: string) {
-  const key = normalizeWord(word);
-  let hash = 0;
-  for (const ch of key) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
-  return SHARED_COLORS[hash % SHARED_COLORS.length];
-}
-
 function SharedText({ text, differing }: { text: string; differing: number[] }) {
   return text.split(' ').map((word, index) => (
     <React.Fragment key={index}>
       {index > 0 && ' '}
-      {differing.includes(index) ? word : <mark className={`rounded px-1 ${colorOf(word)}`}>{word}</mark>}
+      {differing.includes(index) ? word : <mark className="rounded bg-amber-200 px-1 text-amber-900 dark:bg-amber-400/25 dark:text-amber-200">{word}</mark>}
     </React.Fragment>
   ));
 }

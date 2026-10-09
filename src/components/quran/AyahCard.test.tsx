@@ -55,13 +55,6 @@ describe('AyatGroup', () => {
     expect(shared).toEqual(['أ', 'ج']);
   });
 
-  it('gives one word the same color wherever it appears', () => {
-    const { container } = render(<AyahCard ayah={ayah({ text: 'رَبِّ ب رب' })} differing={[1]} />);
-
-    const marks = container.querySelectorAll('mark');
-    expect(marks[0].className).toBe(marks[1].className);
-  });
-
   it('offers no pagination when everything fits on one page', () => {
     render(<AyatGroup ayat={[ayah()]} />);
 

@@ -24,7 +24,7 @@ it needs no table, migration or generated file.
    that fall in those ayat belong to it, and the rest of their block stays.
 6. Ayat between blocks collapse into one row with both counts.
 
-Words the two ayat share are colored, one color per word, from the same word alignment the
+Words the two ayat share are colored, from the same word alignment the
 relations page uses. A pair with no shared word colors nothing.
 
 ## Known limits
