@@ -115,7 +115,7 @@ function PersonDetailPage() {
               <ul className="flex flex-col gap-3">
                 {(person.modelEntries ?? []).filter((entry) => entry.predicate === 'virtue').flatMap((entry) =>
                   valueLines(entry, language).map((line, i) => (
-                    <li key={`${entry.id}-${i}`} className="text-gray-800 dark:text-gray-200 text-lg">
+                    <li key={`${entry.assertionId}-${i}`} className="text-gray-800 dark:text-gray-200 text-lg">
                       <span dir="rtl" lang="ar">{line}</span>
                     </li>
                   ))
