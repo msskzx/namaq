@@ -32,6 +32,7 @@ function PersonDetailPage() {
   const t = translations[language];
   const { slug } = useParams<{ slug: string }>();
   const { data: person, error, isLoading } = useSWR<PersonFull>(slug ? `/api/people/${slug}` : null, fetcher);
+  const otherModelEntries = (person?.modelEntries ?? []).filter((entry) => entry.predicate !== 'virtue');
 
   if (error) {
     return (
@@ -160,9 +161,7 @@ function PersonDetailPage() {
             <GraphCanvas targetSlug={slug} />
           </div>
 
-          {person.modelEntries && person.modelEntries.length > 0 && (
-            <ModelEntries entries={person.modelEntries} spans={person.modelSpans ?? []} />
-          )}
+          {otherModelEntries.length > 0 && <ModelEntries entries={otherModelEntries} spans={person.modelSpans ?? []} />}
           {person.hadith && person.hadith.length > 0 && <ProfileHadith slug={slug} hadith={person.hadith} />}
           <SourceAccountReader basePath={`/api/people/${slug}`} />
 
