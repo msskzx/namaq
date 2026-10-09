@@ -315,12 +315,12 @@ describe('checkModel', () => {
     expect(run(participation({ event: 'badr' }), ['badr'])).toEqual([]);
     expect(run(participation({ event: 'badr' })).join()).toMatch(/no battle or event "badr"/);
     expect(run(participation({ event: 'nowhere' }), ['badr']).join()).toMatch(/no battle or event "nowhere"/);
-    expect(run(participation({ agent: 'badr' }), ['badr']).join()).toMatch(/is an event, not an agent/);
+    expect(run(participation({ agent: 'badr' }), ['badr']).join()).toMatch(/object of PARTICIPATED_IN must be identified as event, not agent/);
     const relation = (f: UnitFile) => {
       participation({ event: 'badr' })(f);
       f.assertions[f.assertions.length - 1].predicate = 'CHILD_OF';
     };
-    expect(run(relation, ['badr']).join()).toMatch(/object of CHILD_OF is an agent, not an event/);
+    expect(run(relation, ['badr']).join()).toMatch(/object of CHILD_OF must be identified as agent, not event/);
     expect(run(participation({ agent: 'badr', event: 'badr' })).join()).toMatch(/both an agent and an event/);
     expect(run(participation({})).join()).toMatch(/no agent or event/);
   });
