@@ -1,7 +1,6 @@
 # Quran relations demo page
 
 Status: proposal, phase one. Nothing is built.
-
 The owner wants one demo page with visualizations and numbers about the Quran.
 Most interesting to them: relations between ayat, and stories about the same
 prophet told in different surahs, with their relations and differences.
@@ -63,8 +62,7 @@ A list I type in by hand does not.
 - **Grouping:** none. Equality of text is the only rule, and it is shown.
 - **Output:** a ranked list (the refrain with its count and the surahs holding
   it) and a strip chart of where in each surah the repeats fall.
-- **Cost:** small to medium. A pure function plus a test, one table. About one
-  day.
+- **Cost:** small to medium, about one day.
 - **Value for the wish:** medium. It is a real relation between ayat, but a
   narrow one, and mostly refrains inside one surah.
 
