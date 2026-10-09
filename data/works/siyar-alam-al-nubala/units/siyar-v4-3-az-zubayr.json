@@ -451,6 +451,77 @@
       "layer": "MAIN",
       "exact": "بنُ حِزَامٍ الأَسَدِيُّ",
       "prefix": "حَكِيْمُ "
+    },
+    {
+      "id": "sp_day_badr1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "46",
+      "layer": "MAIN",
+      "exact": "يَوْمَ بَدْرٍ",
+      "prefix": "كَانَ ",
+      "suffix": " مَعَ رَسُوْلِ"
+    },
+    {
+      "id": "sp_day_badr2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "52",
+      "layer": "MAIN",
+      "exact": "يَوْمَ بَدْرٍ",
+      "prefix": "ثِنْتَيْنِ ",
+      "suffix": "،"
+    },
+    {
+      "id": "sp_day_yarmuk",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "52",
+      "layer": "MAIN",
+      "exact": "يَوْمَ اليَرْمُوْكِ",
+      "prefix": "وَوَاحِدَةً "
+    },
+    {
+      "id": "sp_day_khandaq",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "51",
+      "layer": "MAIN",
+      "exact": "يَوْمَ الخَنْدَقِ",
+      "prefix": "ضَرَبَ الزُّبَيْرُ "
+    },
+    {
+      "id": "sp_day_makkah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "51",
+      "layer": "MAIN",
+      "exact": "يَوْمَ فَتْحِ مَكَّةَ",
+      "prefix": "أَعْطَاهُ "
+    },
+    {
+      "id": "sp_death_age_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "64",
+      "layer": "MAIN",
+      "exact": "قَالَ الوَاقِدِيُّ، وَابْنُ نُمَيْرٍ"
+    },
+    {
+      "id": "sp_death_age",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "64",
+      "layer": "MAIN",
+      "exact": "قَالَ الوَاقِدِيُّ، وَابْنُ نُمَيْرٍ: قُتِلَ وَلَهُ أَرْبَعٌ وَسِتُّوْنَ سَنَةً"
+    },
+    {
+      "id": "sp_death_age_value",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "64",
+      "layer": "MAIN",
+      "exact": "أَرْبَعٌ وَسِتُّوْنَ سَنَةً"
     }
   ],
   "reports": [
@@ -590,6 +661,28 @@
       "chainState": "DEFERRED",
       "frame": ["sp_ayah_frame"],
       "isnadSpan": "sp_ayah_isnad"
+    },
+    {
+      "id": "r_death_age_waqidi",
+      "unit": "siyar-v4-3-az-zubayr",
+      "ordinal": 13,
+      "voice": "TRANSMITTED",
+      "frame": ["sp_death_age_frame"],
+      "origin": {
+        "mention": "m_waqidi"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_death_age_numayr",
+      "unit": "siyar-v4-3-az-zubayr",
+      "ordinal": 14,
+      "voice": "TRANSMITTED",
+      "frame": ["sp_death_age_frame"],
+      "origin": {
+        "mention": "m_numayr"
+      },
+      "chainState": "DEFERRED"
     }
   ],
   "statements": [
@@ -711,6 +804,18 @@
       "id": "st_wife_umusab",
       "report": "r_wife",
       "spans": ["sp_wife_umusab"],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_death_age_waqidi",
+      "report": "r_death_age_waqidi",
+      "spans": ["sp_death_age"],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_death_age_numayr",
+      "report": "r_death_age_numayr",
+      "spans": ["sp_death_age"],
       "role": "TRANSMITTED"
     }
   ],
@@ -945,6 +1050,20 @@
       "exact": "حَكِيْمُ",
       "occurrence": 1,
       "role": "REFERENT"
+    },
+    {
+      "id": "m_waqidi",
+      "parent": "sp_death_age_frame",
+      "exact": "الوَاقِدِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_numayr",
+      "parent": "sp_death_age_frame",
+      "exact": "ابْنُ نُمَيْرٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
     }
   ],
   "identifications": [
@@ -1125,6 +1244,62 @@
           "span": "sp_hakim_nasab",
           "role": "NASAB"
         }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_badr1",
+      "mention": "m_badr1",
+      "event": "badr",
+      "basis": [
+        { "span": "sp_day_badr1", "role": "SAME_WORK_EXPLICIT" }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_badr2",
+      "mention": "m_badr2",
+      "event": "badr",
+      "basis": [
+        { "span": "sp_day_badr2", "role": "SAME_WORK_EXPLICIT" }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_yarmuk",
+      "mention": "m_yarmuk",
+      "event": "yarmuk",
+      "basis": [
+        { "span": "sp_day_yarmuk", "role": "SAME_WORK_EXPLICIT" }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_khandaq",
+      "mention": "m_khandaq",
+      "event": "khandaq",
+      "basis": [
+        { "span": "sp_day_khandaq", "role": "SAME_WORK_EXPLICIT" }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_makkah",
+      "mention": "m_fath",
+      "event": "fath-makkah",
+      "basis": [
+        { "span": "sp_day_makkah", "role": "SAME_WORK_EXPLICIT" }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aisha",
+      "mention": "m_aisha",
+      "agent": "aisha-bint-abi-bakr",
+      "basis": [
+        { "span": "sp_ayah_isnad", "role": "SAME_WORK_EXPLICIT" },
+        { "span": "sp_ayah", "role": "SAME_WORK_EXPLICIT" },
+        { "span": "sp_wife", "role": "SAME_WORK_EXPLICIT" }
       ],
       "status": "PROPOSED"
     }
@@ -1439,6 +1614,17 @@
       },
       "restsOn": [],
       "status": "LEGACY"
+    },
+    {
+      "id": "a_death_age",
+      "subject": "m_zb",
+      "predicate": "died.age",
+      "value": {
+        "parsed": 64,
+        "spans": ["sp_death_age_value"]
+      },
+      "restsOn": ["st_death_age_waqidi", "st_death_age_numayr"],
+      "status": "PROPOSED"
     }
   ]
 }

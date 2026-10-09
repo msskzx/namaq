@@ -40,7 +40,7 @@ function peopleRows(root: string): UnitPersonRow[] {
     }
     for (const m of file.mentions) {
       const agents = file.identifications.some((i) => i.mention === m.id)
-        ? file.identifications.filter((i) => i.mention === m.id && i.status !== 'REJECTED').map((i) => i.agent)
+        ? file.identifications.filter((i) => i.mention === m.id && i.status !== 'REJECTED').flatMap((i) => (i.agent ? [i.agent] : []))
         : [standingAgent(m.exact)].filter((a): a is string => !!a);
       const own = kinds.get(m.id) ?? new Set<PersonRole>();
       for (const person of agents) {

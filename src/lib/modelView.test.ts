@@ -43,6 +43,7 @@ describe('modelView', () => {
   it('says a number with its unit, and a sex in words', () => {
     expect(valueLines({ ...base, predicate: 'died.year', parsed: 36 }, 'ar')).toEqual(['36 هـ']);
     expect(valueLines({ ...base, predicate: 'islam.age', parsed: 16 }, 'en')).toEqual(['16 years']);
+    expect(valueLines({ ...base, predicate: 'died.age', parsed: 64 }, 'en')).toEqual(['64 years']);
     expect(valueLines({ ...base, predicate: 'sex', classified: 'MALE' }, 'ar')).toEqual(['ذكر']);
     expect(valueLines({ ...base, predicate: 'sex', classified: 'MALE' }, 'en')).toEqual(['Male']);
   });

@@ -254,6 +254,77 @@ describe('checkModel', () => {
     ).toEqual([]);
   });
 
+  it('accepts a died.age assertion read from its quote and fails an indefinite count', () => {
+    const add = (exact: string, parsed: number) => (f: UnitFile) => {
+      f.spans.push({ id: 'sp3', edition: 'ed', volume: 4, page: '41', layer: 'MAIN', exact });
+      f.assertions.push({
+        id: 'a2',
+        subject: 'm1',
+        predicate: 'died.age',
+        value: { spans: ['sp3'], parsed },
+        restsOn: ['st1'],
+        status: 'PROPOSED',
+      });
+    };
+    expect(issuesFor(add('سَنَةَ سِتٍّ وَثَلاَثِيْنَ', 36))).toEqual([]);
+    expect(issuesFor(add('سَنَةَ سِتٍّ وَثَلاَثِيْنَ', 64)).join()).toMatch(/parsed 64 but the quote reads 36/);
+    expect(issuesFor(add('وَلَهُ بِضْعٌ وَخَمْسُوْنَ سَنَةً', 50)).join()).toMatch(/parsed 50 but the quote reads nothing/);
+  });
+
+  it('accepts an office of a known kind and fails an unknown or missing kind', () => {
+    const office = (value: object) => (f: UnitFile) => {
+      f.assertions.push({
+        id: 'a2',
+        subject: 'm1',
+        predicate: 'office',
+        value: { spans: ['sp1'], ...value } as never,
+        restsOn: ['st1'],
+        status: 'PROPOSED',
+      });
+    };
+    expect(issuesFor(office({ classified: 'caliph' }))).toEqual([]);
+    expect(issuesFor(office({ classified: 'king' })).join()).toMatch(/office kind: "king" is not one of caliph, amir/);
+    expect(issuesFor(office({})).join()).toMatch(/office needs a classified kind/);
+  });
+
+  it('takes an event identification for the object of a participation and checks its slug', () => {
+    const participation = (identification: object) => (f: UnitFile) => {
+      f.mentions.push({ id: 'm2', parent: 'sp1', exact: 'العَوَّامِ', occurrence: 1, role: 'REFERENT' });
+      f.assertions.push({
+        id: 'a2',
+        subject: 'm1',
+        predicate: 'PARTICIPATED_IN',
+        value: { object: 'm2' },
+        restsOn: ['st1'],
+        status: 'PROPOSED',
+      });
+      f.identifications.push({
+        id: 'i2',
+        mention: 'm2',
+        basis: [{ span: 'sp2', role: 'SAME_WORK_EXPLICIT' }],
+        status: 'PROPOSED',
+        ...identification,
+      });
+    };
+    const run = (change: (f: UnitFile) => void, events?: string[]) => {
+      const file = unit();
+      change(file);
+      write(file);
+      return checkModel(loadModel(root), root, events && new Set(events));
+    };
+    expect(run(participation({ event: 'badr' }), ['badr'])).toEqual([]);
+    expect(run(participation({ event: 'badr' })).join()).toMatch(/no battle or event "badr"/);
+    expect(run(participation({ event: 'nowhere' }), ['badr']).join()).toMatch(/no battle or event "nowhere"/);
+    expect(run(participation({ agent: 'badr' }), ['badr']).join()).toMatch(/object of PARTICIPATED_IN must be identified as event, not agent/);
+    const relation = (f: UnitFile) => {
+      participation({ event: 'badr' })(f);
+      f.assertions[f.assertions.length - 1].predicate = 'CHILD_OF';
+    };
+    expect(run(relation, ['badr']).join()).toMatch(/object of CHILD_OF must be identified as agent, not event/);
+    expect(run(participation({ agent: 'badr', event: 'badr' })).join()).toMatch(/both an agent and an event/);
+    expect(run(participation({})).join()).toMatch(/no agent or event/);
+  });
+
   it('fails a parsed value different from the reader result', () => {
     expect(
       issuesFor((f) => {

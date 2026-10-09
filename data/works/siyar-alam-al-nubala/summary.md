@@ -16,6 +16,8 @@ Read page by page with the editor's footnotes; each value below cites its page a
 - New `sp_death_place` (p64): `وَادِي السِّبَاعِ`, with `:` as suffix so the
   short quote resolves once. New statement `st_death_place` and `a_death_place`
   (`died.place`).
+- New `died.age` 64 (p64) on `a_death_age`, resting on two statements (`st_death_age_waqidi`,
+  `st_death_age_numayr`) over one span, one per reporter.
 - Nothing else added. Virtues stay limited to the author's narration; quoted
   speech never becomes a virtue ([ADR 0024](../../../docs/adr/0024-read-the-text-and-stop-where-it-is-unclear.md)).
 
@@ -58,17 +60,17 @@ Read page by page with the editor's footnotes; each value below cites its page a
   ([ADR 0026](../../../docs/adr/0026-companionship-and-verses-about-a-person-are-predicates.md)).
 - `ayat`: same. Aisha's report on Al Imran 172 (p47) rests the new `ABOUT_AYAH`
   assertion.
-- `islam.age` (16, 8), `PARTICIPATED_IN` (Badr, Yarmuk, Khandaq, Fath Makkah):
-  model-only. Extra model evidence; the diff has no catalog counterpart.
+- `islam.age` (16, 8), `died.age` (64), `PARTICIPATED_IN` (`badr`, `yarmuk`, `khandaq`,
+  `fath-makkah`, now linked to their catalog slugs): model-only. Extra model evidence; the diff has no catalog counterpart.
 
 ## Coverage (`npm run model:coverage -- siyar-v4-3-az-zubayr`)
 
 The entry runs over printed pages 41 to 67. The command finds it from the heading `٣ - ` to the
-next entry's heading and counts sentences: 337 in all, 20 covered by a span (a span covers at
-least half of the sentence), 317 not modeled (the isnads of the quoted reports, the hadith texts,
-the narrative of the battles, the estate and debt saga and the like), 11 of them date sentences
-(7 `time-layer:waiting`, 4 `time-layer:unreadable`, among them the indefinite `بِضْعٌ وَخَمْسُوْنَ`),
-and 16 unresolved names (the narrators, the battles and the wives not named as people). The tags
+next entry's heading and counts sentences: 337 in all, 21 covered by a span (a span covers at
+least half of the sentence), 316 not modeled (the isnads of the quoted reports, the hadith texts,
+the narrative of the battles, the estate and debt saga and the like), 10 of them date sentences
+(6 `time-layer:waiting`, 4 `time-layer:unreadable`, among them the indefinite `بِضْعٌ وَخَمْسُوْنَ`),
+12 unresolved names (the narrators and the three wives not yet named as people) and 0 unresolved events. The tags
 are hints from a heuristic, not readings. The reasons for each follow in "Unresolved names, dated sentences and office". The test in `src/lib/model/coverage.test.ts` runs the
 command over every entry under `data/works/` and fails when an entry is not bounded by its own
 heading and the next entry's heading (or the volume's last page), or when a span lies outside it. A re-parse is finished when this
@@ -136,8 +138,8 @@ Not modeled, by page (date sentences: `time-layer:waiting`, or `time-layer:unrea
   author inference with `إِنْ شَاءَ اللهُ`); the `قَائِدَ فِتْنَةٍ` report with
   the author's `مَعَاذَ الله` rejection (deliberately not modeled); the elegy
   line naming the valley (poetry; the prose gloss carries the place instead).
-- p64: the opening elegy verses (poetry); the competing death ages (`خَمْسُوْنَ`
-  reports, `time-layer:waiting`, no age held); the debt counsel (wealth, no predicate).
+- p64: the opening elegy verses (poetry); the indefinite death age
+  `بِضْعٌ وَخَمْسُوْنَ` (`time-layer:unreadable`; the 64 is held as `died.age`); the debt counsel (wealth, no predicate).
 - p65-67: the estate, debt and inheritance saga including the four-year
   announcement (wealth, no predicate); the `ابْنَ أَخِي` passage (it
   identifies Hakim; the tie is carried as legacy, see cousins); Atika's share and elegy (no predicate; poetry);
@@ -145,28 +147,34 @@ Not modeled, by page (date sentences: `time-layer:waiting`, or `time-layer:unrea
 
 ## Unresolved names, dated sentences and office
 
-None of the 16 is resolved. `عَائِشَةُ` (p47) is the closest case and stays open: the
-addressee of `يَا ابْنَ أُخْتِي` is never printed (the isnad is `أَبُو مُعَاوِيَةَ: عَنْ هِشَامٍ،
-عَنْ أَبِيْهِ`), and no span in the entry says Aisha is Abu Bakr's daughter. Naming her would
-rest on facts from outside the text.
+12 names stay unresolved, for two reasons:
 
-The 16 stay unresolved, for three reasons:
-
-- The text does not settle the name (Aisha, above).
 - No catalog person exists to name. `عُرْوَةَ` (three mentions, a bare name that the
-  entry does not tie to a father), `البُخَارِيُّ`, `القَحْذَمِيُّ`,
-  `البَهِيِّ` and `ابْنُ أَبِي الزِّنَادِ` are narrators and tabi'un, outside the scope
-  (Companions only), and a narrator does not become a node. `عَاتِكَةُ` (daughter of
-  Zayd ibn Amr ibn Nufayl, named at p67), `أُمُّ خَالِدٍ` and `أُمُّ مُصْعَبٍ` are wives with
-  no catalog person yet. Naming any of them needs a new person, which this pass does not add.
-- The mention is an event. `بَدْرٍ` (twice), `اليَرْمُوْكِ`, `الخَنْدَقِ` and `فَتْحِ مَكَّةَ`
-  are the objects of `PARTICIPATED_IN`, and an identification names an agent, not a
-  battle. The catalog already holds the four participations with their battle slugs.
-  Counting them as resolved needs a decision on how a mention points at an event, a
-  schema change that stops here.
+  entry does not tie to a father), `البُخَارِيُّ`, `القَحْذَمِيُّ`, `البَهِيِّ`,
+  `ابْنُ أَبِي الزِّنَادِ`, `الوَاقِدِيُّ` and `ابْنُ نُمَيْرٍ` are narrators and tabi'un,
+  outside the scope (Companions only), and a narrator does not become a node.
+  `عَاتِكَةُ`, `أُمُّ خَالِدٍ` and `أُمُّ مُصْعَبٍ` are wives with no catalog person yet.
+- Naming them needs a new person, which this pass does not add.
 
-The 11 date-tagged sentences stay tagged. The reader handles `born.year`, `died.year`,
-`islam.age` and month and day. None of the 11 states one of those values:
+Two readings are recorded because the text makes them clear
+([ADR 0024](../../../docs/adr/0024-read-the-text-and-stop-where-it-is-unclear.md)):
+
+- The five battle mentions (`بَدْرٍ` twice, `اليَرْمُوْكِ`, `الخَنْدَقِ`, `فَتْحِ مَكَّةَ`) are
+  identified as the catalog events `badr`, `yarmuk`, `khandaq` and `fath-makkah`, with the
+  `يَوْمَ` phrase as basis ([ADR 0029](../../../docs/adr/0029-an-identification-names-an-agent-or-an-event.md)).
+- `عَائِشَةُ` (p47) is identified as `aisha-bint-abi-bakr`, PROPOSED, on three printed
+  spans: the isnad `أَبُو مُعَاوِيَةَ: عَنْ هِشَامٍ، عَنْ أَبِيْهِ` (`sp_ayah_isnad`, whose
+  last link is Urwa, the addressee), her words `كَانَ أَبُوَاكَ -يَعْنِي: الزُّبَيْرَ، وَأَبَا
+  بَكْرٍ-` (`sp_ayah`) and the entry's `كَانَتْ تَحْتَهُ أَسْمَاءُ بِنْتُ أَبِي بَكْرٍ` (p64,
+  `sp_wife`). Together they show a speaker who calls Abu Bakr one of the addressee's two
+  fathers and the addressee her sister's son. No sentence says outright that Asma is her
+  sister or Abu Bakr her father, so the owner should confirm this reading before it
+  counts as clear. Footnote 2 of p47 only corrects the print's `أخي` to `أختي`. The entry
+  also holds a second Aisha (`عَنْ أُخْتِهَا عَائِشَةَ`, p51, Aisha bint Jafar), so the
+  basis spans matter.
+
+The 10 date-tagged sentences stay tagged. The reader handles `born.year`, `died.year`,
+`died.age`, `islam.age` and month and day. None of the 10 states one of those values:
 
 - p41 (`unreadable`): two ages in one sentence, 8 and 12. The 8 is held as `islam.age`
   on `sp_age8`; the age 12 outing has no predicate.
@@ -174,24 +182,20 @@ The 11 date-tagged sentences stay tagged. The reader handles `born.year`, `died.
   the hijra at eighteen is an age at an event, with no predicate.
 - p63 (`waiting`, two): the age of Abd Allah ibn al-Zubayr at an event, and the author's
   guess that it is Yamama; no predicate, and the guess is his own inference.
-- p64 (`waiting`, `unreadable`): the death ages 64 and `بِضْعٌ وَخَمْسُوْنَ`. There is no
-  `died.age` predicate, and ADR 0027 keeps an indefinite count unread. Turning an age into
-  a birth year is a derivation the layer does not make.
+- p64 (`unreadable`): `بِضْعٌ وَخَمْسُوْنَ`, an indefinite count that ADR 0027 keeps unread.
+  The competing 64 (al-Waqidi and Ibn Numayr) is held as `died.age`, so the alternative
+  reading is not modeled.
 - p65, p66 (`unreadable`): sums of money (`أَلْفِ أَلْفٍ`, `مَائَةِ أَلْفٍ`), tagged as dates by the
   heuristic. They are wealth, which no predicate holds.
 - p67 (`waiting`, two): the four years of the announcement at the pilgrimage, a duration
   with no predicate.
-
-Adding a `died.age` predicate would let the p64 pair be modeled as competing statements
-(64 by al-Waqidi and Ibn Numayr, against `بِضْعٌ وَخَمْسُوْنَ`). That is a schema change, so it
-is left for the owner.
 
 Office ([ADR 0025](../../../docs/adr/0025-title-status-and-office-are-separate-predicates.md)):
 no sentence of this entry gives al-Zubayr an office. p66 says he never held one
 (`وَمَا وَلِيَ إِمَارَةً قَطُّ`), p54 and p55 give a shura nomination (already a title) and a
 campaign toward Egypt, and the `أَمِيْرُ مِصْرَ` (p55), Mus'ab's governorship of Iraq and Abd
 Allah's caliphate (p64) are other people's offices, in passing. Nothing here needs
-the `office` predicate.
+the `office` predicate, which is built and covered by tests on a fixture only.
 
 Footnotes on the cited pages (41, 42, 45, 48, 61, 62, 64) are takhrij and rijal
 notes; they settle no new name and add no assertion.

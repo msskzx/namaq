@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { eventSlugs } from '../catalog/loadCatalog';
 import { checkModel } from './check';
 import { loadModel } from './load';
 import { closureOf, lapsedReviews, revisionOf, selectForProd, type ReviewRecord } from './review';
@@ -106,14 +107,14 @@ describe('selectForProd', () => {
     expect(selectForProd(folders, [review('a_child'), stale], '.')).not.toEqual([]);
   });
 
-  it('passes model:check as a whole, including the Jibril-free real data', () => {
+  it('passes model:check as a whole, including the Jibril-free real data', async () => {
     const { folders, file, review } = setup();
     const set = selectForProd(
       folders,
       file.assertions.map((a) => review(a.id)),
       '.',
     );
-    expect(checkModel(set, '.')).toEqual([]);
+    expect(checkModel(set, '.', await eventSlugs())).toEqual([]);
   });
 });
 

@@ -31,6 +31,13 @@ What counts as clear, with the hadith of Jibril as the example:
   مِنْ حَدِيثِ عُمَرَ…») makes both one event. It is recorded as an `EventLink`
   attributed to that commentary, with the sentence as its basis.
 
+An identification rests on printed statements, never on outside knowledge. A reading
+that the text makes clear through a chain of them is recorded: the isnad
+`أَبُو مُعَاوِيَةَ: عَنْ هِشَامٍ، عَنْ أَبِيْهِ` with the addressee of `يَا ابْنَ أُخْتِي`
+and nothing more would not name Aisha, but the same speaker's «أَبُوَاكَ -يَعْنِي:
+الزُّبَيْرَ، وَأَبَا بَكْرٍ-» (p47) and the printed «كَانَتْ تَحْتَهُ أَسْمَاءُ بِنْتُ أَبِي
+بَكْرٍ» (p64) do. Knowing from elsewhere who the person is does not.
+
 The Inference file stays for what the text does not present: a participation that
 is never stated. That needs the owner's approval, and an agent never writes it. A
 date placement between two events is no longer one: [ADR 0028](0028-a-stated-ordering-is-recorded-and-its-placement-is-derived.md)

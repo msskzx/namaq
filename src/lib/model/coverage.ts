@@ -20,7 +20,8 @@ export interface Coverage {
   sentences: number;
   covered: number;
   notModeled: NotModeled[];
-  unresolved: string[];
+  unresolvedPeople: string[];
+  unresolvedEvents: string[];
   outside: string[];
   bounded: boolean;
 }
@@ -140,9 +141,14 @@ export function coverageOf(folder: WorkFolder, file: UnitFile, root: string): Co
   }
 
   const named = new Set(file.identifications.filter((i) => i.status !== 'REJECTED').map((i) => i.mention));
-  const unresolved = file.mentions
-    .filter((m) => !named.has(m.id) && !standingAgent(m.exact))
-    .map((m) => m.exact);
+  const places = new Set(
+    file.assertions
+      .filter((a) => a.predicate === 'PARTICIPATED_IN' || a.predicate === 'ABSENT_FROM')
+      .flatMap((a) => ('object' in a.value ? [a.value.object] : [])),
+  );
+  const open = file.mentions.filter((m) => !named.has(m.id) && !standingAgent(m.exact));
+  const unresolvedPeople = open.filter((m) => !places.has(m.id)).map((m) => m.exact);
+  const unresolvedEvents = open.filter((m) => places.has(m.id)).map((m) => m.exact);
 
   return {
     unit: file.unit.id,
@@ -150,7 +156,8 @@ export function coverageOf(folder: WorkFolder, file: UnitFile, root: string): Co
     sentences,
     covered,
     notModeled,
-    unresolved,
+    unresolvedPeople,
+    unresolvedEvents,
     outside,
     bounded: ended || (lastPage !== undefined && Number(segments[segments.length - 1]?.page) === lastPage),
   };

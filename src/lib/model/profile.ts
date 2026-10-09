@@ -70,6 +70,7 @@ export function profilesFromModel(folders: WorkFolder[], root: string) {
           .filter((origin): origin is Origin => origin !== undefined);
         const objects = 'object' in value ? identify(value.object) : [];
         for (const subject of identify(assertion.subject)) {
+          if (subject.agent === undefined) continue;
           const parts = spanIds.map(textOf);
           const entry: ProfileEntry = {
             unit: file.unit.id,
@@ -86,7 +87,7 @@ export function profilesFromModel(folders: WorkFolder[], root: string) {
           if ('parsed' in value) entry.parsed = value.parsed;
           if ('classified' in value) entry.classified = value.classified;
           if ('object' in value) {
-            entry.object = objects[0]?.agent;
+            entry.object = objects[0]?.agent ?? objects[0]?.event;
             entry.objectMention = mentionText.get(value.object);
           }
           profiles.set(subject.agent, [...(profiles.get(subject.agent) ?? []), entry]);
