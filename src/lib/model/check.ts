@@ -15,6 +15,7 @@ import {
   identificationStatuses,
   layers,
   mentionRoles,
+  officeKinds,
   predicates,
   statementRoles,
   voices,
@@ -40,6 +41,7 @@ function checkUnit(
   root: string,
   issues: string[],
   units: Map<string, { folder: WorkFolder; file: UnitFile }>,
+  events?: ReadonlySet<string>,
 ) {
   const where = `${folder.work.slug}/${file.unit.id}`;
   const fail = (message: string) => issues.push(`${where}: ${message}`);
@@ -352,17 +354,26 @@ function checkUnit(
     oneOf(`${owner} status`, identification.status, identificationStatuses);
     const mention = file.mentions.find((m) => m.id === identification.mention);
     if (!mention) fail(`${owner}: unknown mention`);
-    if (!identification.agent?.trim()) fail(`${owner}: no agent`);
+    const target = identification.agent ?? identification.event;
+    if (identification.agent !== undefined && identification.event !== undefined) {
+      fail(`${owner}: names both an agent and an event`);
+    } else if (!target?.trim()) {
+      fail(`${owner}: no agent or event`);
+    }
+    if (identification.event !== undefined && events && !events.has(identification.event)) {
+      fail(`${owner}: no battle or event "${identification.event}" in the catalog`);
+    }
     const twin = file.identifications.find(
       (i) =>
         i.id < identification.id &&
         i.mention === identification.mention &&
         i.agent === identification.agent &&
+        i.event === identification.event &&
         i.status !== 'REJECTED' &&
         identification.status !== 'REJECTED',
     );
     if (twin)
-      fail(`${owner}: ${twin.id} already identifies this mention as ${identification.agent}`);
+      fail(`${owner}: ${twin.id} already identifies this mention as ${target}`);
     if (identification.basis.length === 0) fail(`${owner}: no basis`);
     for (const { span: ref, role } of identification.basis) {
       const { unit: foreignId, span } = splitRef(ref);
@@ -396,6 +407,20 @@ function checkUnit(
       if (!statementIds.has(id)) fail(`${owner}: unknown statement ${id}`);
     }
     const { value } = assertion;
+    if (assertion.predicate === 'office') {
+      if (!('classified' in value)) fail(`${owner}: office needs a classified kind`);
+      else oneOf(`${owner} office kind`, value.classified, officeKinds);
+    }
+    if (
+      (assertion.predicate === 'PARTICIPATED_IN' || assertion.predicate === 'ABSENT_FROM') &&
+      'object' in value &&
+      file.identifications.some((i) => i.mention === value.object && i.agent !== undefined && i.status !== 'REJECTED')
+    ) {
+      fail(`${owner}: the object of ${assertion.predicate} is an event, not an agent`);
+    }
+    if (file.identifications.some((i) => i.mention === assertion.subject && i.event !== undefined && i.status !== 'REJECTED')) {
+      fail(`${owner}: the subject is identified as an event`);
+    }
     if (dateReaders[assertion.predicate] && !('parsed' in value)) {
       fail(`${owner}: ${assertion.predicate} needs a parsed number`);
     }
@@ -484,7 +509,7 @@ function checkEventLinks(folders: WorkFolder[], issues: string[]) {
   }
 }
 
-export function checkModel(folders: WorkFolder[], root: string) {
+export function checkModel(folders: WorkFolder[], root: string, events?: ReadonlySet<string>) {
   const issues: string[] = [];
   const units = new Map(
     folders.flatMap((folder) =>
@@ -500,7 +525,7 @@ export function checkModel(folders: WorkFolder[], root: string) {
     if (new Set(editions).size !== editions.length) {
       issues.push(`${slug}: an edition has more than one witness`);
     }
-    for (const file of folder.units) checkUnit(folder, file, root, issues, units);
+    for (const file of folder.units) checkUnit(folder, file, root, issues, units, events);
   }
   return issues;
 }

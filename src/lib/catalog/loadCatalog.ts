@@ -37,3 +37,12 @@ export async function loadCatalog(root = catalogRoot): Promise<Catalog> {
   ]);
   return { people, battles, events, utterances, orderings };
 }
+
+/** The slugs an identification may name as an event. */
+export async function eventSlugs(root = catalogRoot) {
+  const [battles, events] = await Promise.all([
+    loadKind<CatalogBattle>(root, 'battles'),
+    loadKind<CatalogEvent>(root, 'events'),
+  ]);
+  return new Set([...battles, ...events].map((item) => item.slug));
+}

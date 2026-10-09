@@ -124,6 +124,7 @@ describe('dateReaders registry', () => {
       'born.year',
       'died.year',
       'islam.age',
+      'died.age',
       'born.month',
       'died.month',
       'born.day',
@@ -187,6 +188,16 @@ describe('fail-closed readings from the second review', () => {
 
   it('reads a hundred joined by و as a sum, not a product', () => {
     expect(readNumber('ثلاث ومائة')).toBe(103);
+  });
+});
+
+describe('died.age', () => {
+  it('reads the age at death from its quote', () => {
+    expect(dateReaders['died.age']?.('وَلَهُ أَرْبَعٌ وَسِتُّوْنَ سَنَةً')).toBe(64);
+  });
+
+  it('leaves an indefinite count unread', () => {
+    expect(dateReaders['died.age']?.('وَلَهُ بِضْعٌ وَخَمْسُوْنَ سَنَةً')).toBeUndefined();
   });
 });
 

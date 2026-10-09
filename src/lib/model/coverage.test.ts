@@ -159,7 +159,31 @@ describe('coverageOf', () => {
       ];
       f.identifications = [];
     }, entry);
-    expect(cov.unresolved).toEqual(['الزُّبَيْرُ', 'العَوَّامِ']);
+    expect(cov.unresolvedPeople).toEqual(['الزُّبَيْرُ', 'العَوَّامِ']);
+  });
+
+  it('lists the object of a participation as an unresolved event, not a person', () => {
+    const cov = coverageFor((f) => {
+      f.spans = [heading];
+      f.mentions = [
+        { id: 'm1', parent: 'sp1', exact: 'الزُّبَيْرُ', occurrence: 1, role: 'SUBJECT' },
+        { id: 'm2', parent: 'sp1', exact: 'العَوَّامِ', occurrence: 1, role: 'REFERENT' },
+      ];
+      f.assertions = [
+        { id: 'a1', subject: 'm1', predicate: 'PARTICIPATED_IN', value: { object: 'm2' }, restsOn: [], status: 'LEGACY' },
+      ];
+    }, entry);
+    expect(cov.unresolvedPeople).toEqual(['الزُّبَيْرُ']);
+    expect(cov.unresolvedEvents).toEqual(['العَوَّامِ']);
+    const named = coverageFor((f) => {
+      f.spans = [heading];
+      f.mentions = [{ id: 'm2', parent: 'sp1', exact: 'العَوَّامِ', occurrence: 1, role: 'REFERENT' }];
+      f.assertions = [
+        { id: 'a1', subject: 'm2', predicate: 'PARTICIPATED_IN', value: { object: 'm2' }, restsOn: [], status: 'LEGACY' },
+      ];
+      f.identifications = [{ id: 'i1', mention: 'm2', event: 'badr', basis: [], status: 'PROPOSED' }];
+    }, entry);
+    expect(named.unresolvedEvents).toEqual([]);
   });
 
   it('throws when the heading is missing from the first page', () => {

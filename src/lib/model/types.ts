@@ -29,6 +29,7 @@ export const predicates = [
   'died.month',
   'died.day',
   'died.place',
+  'died.age',
   'islam.age',
   'CHILD_OF',
   'MARRIED',
@@ -41,7 +42,10 @@ export const predicates = [
   'PATERNAL_COUSIN',
   'COMPANION_OF',
   'ABOUT_AYAH',
+  'office',
 ] as const;
+
+export const officeKinds = ['caliph', 'amir'] as const;
 
 export const mentionRoles = ['SPEAKER', 'NARRATOR', 'SUBJECT', 'REFERENT'] as const;
 export const chainStates = ['COMPLETE', 'DEFERRED'] as const;
@@ -157,7 +161,8 @@ export interface Mention {
 export interface Identification {
   id: string;
   mention: string;
-  agent: string;
+  agent?: string;
+  event?: string;
   basis: { span: string; role: BasisRole }[];
   status: 'PROPOSED' | 'DISPUTED' | 'REJECTED';
 }
