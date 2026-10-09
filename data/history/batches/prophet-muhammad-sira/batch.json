@@ -5649,6 +5649,28 @@
       ]
     },
     {
+      "key": "zubayr/muslims-left-habasha",
+      "subjectKind": "PERSON",
+      "subjectSlug": "az-zubayr-ibn-al-awwam",
+      "assertion": "كان في المسلمين الذين خرجوا إلى الحبشة فرارا بدينهم.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "first-hijra-to-abyssinia",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/147-p3",
+          "volume": "السيرة 1",
+          "pageReference": "147",
+          "extractionUrl": "https://shamela.ws/book/10906/285",
+          "excerptArabic": "فخرج عند ذلك المسلمون مخافة الفتنة، وفرارا بدينهم إلى الله. فخرج عثمان بزوجته، وأبو حذيفة ولد عتبة بن ربيعة بن عبد شمس بزوجته سهلة بنت سهيل بن عمرو فولدت له بالحبشة محمدا، والزبير بن العوام",
+          "accessedAt": "2026-10-09"
+        }
+      ]
+    },
+    {
       "key": "zubayr/nile-habasha",
       "subjectKind": "PERSON",
       "subjectSlug": "az-zubayr-ibn-al-awwam",
