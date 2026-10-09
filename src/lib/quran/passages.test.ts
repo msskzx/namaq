@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { findPassages } from './passages';
+import { sideCards } from './cards';
+import { normalizeWord } from './normalize';
 import runs from '@/app/quran/data/runs.json';
+import ayat from '@/app/quran/data/ayat.json';
 
 const LETTERS = 'ابتثجحخ';
 const MORE = 'دذرزسشص';
@@ -47,6 +50,20 @@ describe('findPassages', () => {
     expect(found[0].a.to.surah).toBe(1);
   });
 
+  it('never skips over a surah boundary to resume a run', () => {
+    const tail = ['ألف', 'باء', 'جيم', 'دال'];
+    const found = findPassages([
+      { surah: 1, ayah: 1, text: shared.join(' ') },
+      { surah: 2, ayah: 1, text: tail.join(' ') },
+      { surah: 5, ayah: 1, text: [...shared, 'زيد'].join(' ') },
+      { surah: 5, ayah: 2, text: tail.join(' ') },
+    ]);
+    expect(found).toHaveLength(1);
+    expect(found[0].a.to.surah).toBe(1);
+    expect(found[0].b.to.surah).toBe(5);
+    expect(found[0].matched).toBe(24);
+  });
+
   it('bridges a differing word and marks it on both sides', () => {
     const other = [...shared];
     other[11] = 'غير';
@@ -76,10 +93,27 @@ describe('the committed passages', () => {
     expect(runs.passages.some(p => covers(p, 'a', s1, f1, t1) && covers(p, 'b', s2, f2, t2))).toBe(true);
   });
 
-  it('keeps every passage at ten words or more across two surahs', () => {
+  it('keeps every passage inside one surah per side and across two surahs', () => {
     for (const p of runs.passages) {
-      expect(p.matched).toBeGreaterThanOrEqual(runs.minWords);
+      expect(p.a.to.surah).toBe(p.a.from.surah);
+      expect(p.b.to.surah).toBe(p.b.from.surah);
       expect(p.a.from.surah).not.toBe(p.b.from.surah);
+    }
+  });
+
+  it('starts and ends every passage on a word both sides share, with marks inside the span', () => {
+    const norm = (cards: ReturnType<typeof sideCards>, last: boolean) => {
+      const words = cards[last ? cards.length - 1 : 0].text.split(' ');
+      return normalizeWord(words[last ? words.length - 1 : 0]);
+    };
+    for (const p of runs.passages) {
+      const a = sideCards(p.a, p.marksA, ayat as Record<string, string>);
+      const b = sideCards(p.b, p.marksB, ayat as Record<string, string>);
+      expect(norm(a, false)).toBe(norm(b, false));
+      expect(norm(a, true)).toBe(norm(b, true));
+      const wordsA = a.reduce((n, c) => n + c.text.split(' ').length, 0);
+      expect(Math.max(-1, ...p.marksA)).toBeLessThan(wordsA);
+      expect(p.matched).toBeLessThanOrEqual(wordsA);
     }
   });
 });

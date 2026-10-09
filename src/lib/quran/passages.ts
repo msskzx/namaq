@@ -36,10 +36,9 @@ function flatten(ayat: AyahInput[]) {
 }
 
 function resyncs(w: string[], i: number, j: number, step: number, a: number, b: number): boolean {
-  for (let k = 0; k < RESYNC; k++) {
-    const x = w[i + (a + k) * step];
-    if (x === undefined || x[0] === '#' || x !== w[j + (b + k) * step]) return false;
-  }
+  for (let k = 0; k < a + RESYNC; k++) if ((w[i + k * step] ?? '#')[0] === '#') return false;
+  for (let k = 0; k < b + RESYNC; k++) if ((w[j + k * step] ?? '#')[0] === '#') return false;
+  for (let k = 0; k < RESYNC; k++) if (w[i + (a + k) * step] !== w[j + (b + k) * step]) return false;
   return true;
 }
 

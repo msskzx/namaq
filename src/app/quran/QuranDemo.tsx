@@ -16,7 +16,7 @@ type Runs = { minWords: number; surahs: Surah[]; passages: Passage[] };
 const PANEL = 'bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4';
 const STEP = 10;
 const num = (n: number) => n.toLocaleString('ar-EG');
-const plainName = (name: string) => name.replace(/[ً-ٰٟۖ-ۭ]/g, '').replace(/ٱ/g, 'ا');
+const plainName = (name: string) => name.replace(/[\u064B-\u065F\u0640\u0670\u06D6-\u06ED]/g, '').replace(/\u0671/g, '\u0627');
 const xOf = (n: number) => (115 - n) * STEP - STEP / 2;
 
 function Tile({ value, label }: { value: number; label: string }) {
@@ -32,11 +32,11 @@ function SurahBars({ surahs, onPick }: { surahs: Surah[]; onPick: (n: number) =>
   const max = Math.max(...surahs.map(s => s.count));
   return (
     <div className="overflow-x-auto">
-      <svg viewBox={`0 0 ${114 * STEP} 120`} className="min-w-[720px] w-full" role="img" aria-label="عدد الآيات في كل سورة بترتيب المصحف">
+      <svg viewBox={`0 0 ${114 * STEP} 120`} className="min-w-[720px] w-full" role="group" aria-label="عدد الآيات في كل سورة بترتيب المصحف">
         {surahs.map(s => {
           const h = Math.max(1, (s.count / max) * 100);
           return (
-            <rect key={s.n} x={xOf(s.n) - 3.5} y={110 - h} width={7} height={h} className="fill-amber-400 dark:fill-amber-500 hover:fill-amber-600 cursor-pointer" onClick={() => onPick(s.n)}>
+            <rect key={s.n} x={xOf(s.n) - 3.5} y={110 - h} width={7} height={h} role="button" tabIndex={0} aria-label={`${plainName(s.name)}: ${num(s.count)} آية`} className="fill-amber-400 dark:fill-amber-500 hover:fill-amber-600 focus-visible:stroke-gray-900 dark:focus-visible:stroke-white focus-visible:stroke-2 outline-none cursor-pointer" onClick={() => onPick(s.n)} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onPick(s.n); } }}>
               <title>{`${plainName(s.name)}: ${num(s.count)} آية`}</title>
             </rect>
           );
@@ -61,7 +61,7 @@ function Arcs({ passages, selected, onSelect, surahs }: { passages: Passage[]; s
           const d = `M ${x1} ${base} A ${rx} ${(base - 5) * Math.sqrt(rx / (57 * STEP))} 0 0 1 ${x2} ${base}`;
           const label = `نص مشترك بين ${nameOf(p.a.from.surah)} و${nameOf(p.b.from.surah)}`;
           return (
-            <g key={i} role="button" tabIndex={0} aria-label={label} aria-pressed={i === selected} className="cursor-pointer outline-none focus-visible:[&>path:last-of-type]:stroke-2"
+            <g key={i} role="button" tabIndex={0} aria-label={label} aria-pressed={i === selected} className="cursor-pointer outline-none focus-visible:[&>path:first-of-type]:stroke-[4px]"
               onClick={() => onSelect(i)} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect(i); } }}>
               <path d={d} fill="none" strokeWidth={i === selected ? 3 : 1.2} className={i === selected ? 'stroke-amber-600 dark:stroke-amber-300' : 'stroke-gray-500 dark:stroke-gray-400 opacity-60'} />
               <path d={d} fill="none" stroke="transparent" strokeWidth={8}><title>{label}</title></path>
@@ -95,9 +95,9 @@ function Strip({ surah, passages, selected, onSelect }: { surah: Surah; passages
         const on = at?.includes(selected);
         const look = on ? 'bg-amber-600 dark:bg-amber-300' : at ? 'bg-amber-300 dark:bg-amber-700' : 'bg-gray-200 dark:bg-gray-800';
         return at ? (
-          <button key={a} type="button" onClick={() => onSelect(at[0])} title={`الآية ${num(a)}`} aria-label={`الآية ${num(a)}: نص مشترك`} className={`h-4 w-4 rounded-sm ${look}`} />
+          <button key={a} type="button" onClick={() => onSelect(at[(at.indexOf(selected) + 1) % at.length])} title={`الآية ${num(a)}`} aria-label={`الآية ${num(a)}: نص مشترك`} className={`h-6 w-6 rounded-sm ${look}`} />
         ) : (
-          <span key={a} title={`الآية ${num(a)}`} className={`h-4 w-4 rounded-sm ${look}`} />
+          <span key={a} title={`الآية ${num(a)}`} className={`h-6 w-6 rounded-sm ${look}`} />
         );
       })}
     </div>
@@ -149,7 +149,7 @@ export default function QuranDemo({ runs, ayat }: { runs: Runs; ayat: Record<str
       <section className={PANEL}>
         <h2 className="text-2xl mb-1">عدد الآيات في كل سورة</h2>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">السور بترتيب المصحف من اليمين إلى اليسار. اضغط على عمود لعرض آيات السورة أدناه.</p>
-        <SurahBars surahs={surahs} onPick={setStripSurah} />
+        <SurahBars surahs={surahs} onPick={n => { setStripSurah(n); document.getElementById('surah-strip')?.scrollIntoView({ behavior: 'smooth' }); }} />
       </section>
 
       <section className={PANEL}>
@@ -191,7 +191,7 @@ export default function QuranDemo({ runs, ayat }: { runs: Runs; ayat: Record<str
         <p className="text-sm text-gray-600 dark:text-gray-400">الكلمات المسطَّرة هي ما اختلف بين النصين.</p>
       </section>
 
-      <section className={PANEL}>
+      <section id="surah-strip" className={PANEL}>
         <h2 className="text-2xl mb-1">مواضع النص المشترك في {plainName(shown.name)}</h2>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">كل مربع آية. الملوّن منها داخل نص مشترك، والغامق هو النص المعروض أعلاه.</p>
         <Strip surah={shown} passages={passages} selected={selected} onSelect={i => { setSelected(i); setStripSurah(shown.n); }} />
