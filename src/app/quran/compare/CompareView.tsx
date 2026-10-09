@@ -15,7 +15,7 @@ const PANEL = 'bg-gray-50 dark:bg-black border border-gray-200 dark:border-white
 const NOTE = 'text-sm text-gray-600 dark:text-gray-400';
 const num = (n: number) => n.toLocaleString('ar-EG');
 const span = (r: NonNullable<Range>) => (r.from === r.to ? num(r.from) : `${num(r.from)}–${num(r.to)}`);
-const ayat = (n: number) => (n === 2 ? 'آيتان' : n >= 3 && n <= 10 ? `${num(n)} آيات` : `${num(n)} آية`);
+const ayat = (n: number) => (n === 0 ? 'لا آيات' : n === 1 ? 'آية واحدة' : n === 2 ? 'آيتان' : n >= 3 && n <= 10 ? `${num(n)} آيات` : `${num(n)} آية`);
 const label = (s: Side, r: Range) => (r ? `${s.plain} ${span(r)}` : '—');
 
 function pairLabel(p: Pair) {
@@ -67,7 +67,7 @@ export default function CompareView({ a, b, rows }: { a: Side; b: Side; rows: Ro
           عرض تجريبي لم يراجعه أحد من أهل العلم. النص برواية حفص. تُذكر آيتان معًا حين تشتركان في تتابع من {num(MIN_RUN)} كلمات فأكثر
           بعد حذف التشكيل وتوحيد صور بعض الحروف. تُضم الأزواج في كتلة إن كانت الفجوة بينها واحدة في السورتين ولا تزيد على {num(MAX_STEP_GAP)} آيات،
           وتبقى الكتلة إن كان فيها زوجان فيهما نص مشترك أو زوج فيه تتابع {num(KEEP_RUN)} كلمات فأكثر. الصيغ المتكررة تُقرن بإحدى مواضعها اعتباطًا.
-          الكلمات المسطَّرة هي ما اختلف بين الآيتين. يدل التطابق على اشتراك اللفظ وحده.
+          الكلمات المسطَّرة هي ما اختلف بين الآيتين. يدل الاشتراك على اشتراك اللفظ وحده.
         </p>
         <p className={NOTE}>{`وُجدت ${num(words)} كتلة مبنية على النص.`}</p>
       </header>
