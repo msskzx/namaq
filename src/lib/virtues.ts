@@ -12,3 +12,7 @@ export function virtueSpeakerHref(entry: Pick<VirtueEntry, 'speakerSlug'>): stri
 export function virtueSpeakerLabel(name: string, language: 'ar' | 'en', says: string): string {
   return language === 'ar' ? `${says} ${name}:` : `${name} ${says}`;
 }
+
+export function hasModelVirtues(entries: { predicate: string }[] | undefined): boolean {
+  return (entries ?? []).some((entry) => entry.predicate === 'virtue');
+}

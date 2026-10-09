@@ -10,7 +10,7 @@ import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import Badge from '@/components/common/Badge';
 import Link from 'next/link';
-import { virtueSpeakerHref, virtueSpeakerLabel } from '@/lib/virtues';
+import { hasModelVirtues, virtueSpeakerHref, virtueSpeakerLabel } from '@/lib/virtues';
 import { titleName } from '@/lib/titleName';
 import Timeline from '@/components/people/Timeline';
 import type { PersonFull } from '@/types/person';
@@ -106,7 +106,7 @@ function PersonDetailPage() {
             </div>
           )}
 
-          {person.virtues && person.virtues.length > 0 && (
+          {person.virtues && person.virtues.length > 0 && !hasModelVirtues(person.modelEntries) && (
             <div className="bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4">
               <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
                 <FontAwesomeIcon icon={faSeedling} className="w-7 h-7 text-amber-500 me-2" />
