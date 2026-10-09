@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { loadModel } from './load';
 import { profilesFromModel } from './profile';
@@ -110,6 +111,17 @@ describe('profilesFromModel on the al-Zubayr entry', () => {
     expect(origins).toEqual(
       expect.arrayContaining(['البَهِيِّ', 'عُرْوَةَ', 'ابْنُ أَبِي الزِّنَادِ', 'الزُّبَيْرِ']),
     );
+  });
+
+  it('names each of the four wives as a catalog person', () => {
+    const spouses = of('MARRIED').map((m) => m.object);
+    expect(spouses.sort()).toEqual([
+      'asma-bint-abi-bakr',
+      'atikah-bint-zayd',
+      'umm-khalid-bint-khalid',
+      'umm-musab-al-kalbiyyah',
+    ]);
+    for (const slug of spouses) expect(existsSync(`data/catalog/people/${slug}.ts`), slug).toBe(true);
   });
 
   it('records the age at death once, from the two who report it', () => {

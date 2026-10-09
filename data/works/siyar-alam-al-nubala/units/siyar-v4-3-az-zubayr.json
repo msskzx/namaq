@@ -522,6 +522,32 @@
       "page": "64",
       "layer": "MAIN",
       "exact": "أَرْبَعٌ وَسِتُّوْنَ سَنَةً"
+    },
+    {
+      "id": "sp_atikah_estate",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "67",
+      "layer": "MAIN",
+      "exact": "عَاتِكَةَ بِنْتِ زَيْدِ بنِ عَمْرِو بنِ نُفَيْلٍ، زَوْجَةِ الزُّبَيْرِ"
+    },
+    {
+      "id": "sp_ukhalid_nasab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "64",
+      "layer": "MAIN",
+      "exact": "بِنْتُ خَالِدِ بنِ سَعِيْدٍ",
+      "prefix": "أُمُّ خَالِدٍ "
+    },
+    {
+      "id": "sp_umusab_nisba",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "64",
+      "layer": "MAIN",
+      "exact": "الكَلْبِيَّةُ",
+      "prefix": "أُمُّ مُصْعَبٍ "
     }
   ],
   "reports": [
@@ -1300,6 +1326,34 @@
         { "span": "sp_ayah_isnad", "role": "SAME_WORK_EXPLICIT" },
         { "span": "sp_ayah", "role": "SAME_WORK_EXPLICIT" },
         { "span": "sp_wife", "role": "SAME_WORK_EXPLICIT" }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_atikah",
+      "mention": "m_atikah",
+      "agent": "atikah-bint-zayd",
+      "basis": [
+        { "span": "sp_wife", "role": "SAME_WORK_EXPLICIT" },
+        { "span": "sp_atikah_estate", "role": "SAME_WORK_EXPLICIT" }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_umm_khalid",
+      "mention": "m_umm_khalid",
+      "agent": "umm-khalid-bint-khalid",
+      "basis": [
+        { "span": "sp_ukhalid_nasab", "role": "NASAB" }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_umm_musab",
+      "mention": "m_umm_musab",
+      "agent": "umm-musab-al-kalbiyyah",
+      "basis": [
+        { "span": "sp_umusab_nisba", "role": "NASAB" }
       ],
       "status": "PROPOSED"
     }

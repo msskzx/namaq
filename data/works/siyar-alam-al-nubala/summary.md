@@ -44,11 +44,12 @@ Read page by page with the editor's footnotes; each value below cites its page a
   folds in quoted speech (the Prophet's hawari sayings, the `فِدَاكَ أَبِي
 وَأُمِّي` scene); quoted speech never enters virtues, so it is not copied.
 - `parents`: same (al-Awwam from the nasab line, Safiyyah from p41).
-  `spouses`: different, by addition. The model holds Asma (p64) and the three
-  further wives the same sentence names, `عَاتِكَةُ أُخْتُ سَعِيْدِ بنِ زَيْدٍ`,
-  `أُمُّ خَالِدٍ بِنْتُ خَالِدِ بنِ سَعِيْدٍ` and `أُمُّ مُصْعَبٍ الكَلْبِيَّةُ`. The
-  catalog has only Asma, and none of the three has a catalog person yet, so
-  they stay unidentified mentions.
+  `spouses`: different, by addition. The model holds Asma (p64) and the three further
+  wives the same sentence names, `عَاتِكَةُ أُخْتُ سَعِيْدِ بنِ زَيْدٍ`,
+  `أُمُّ خَالِدٍ بِنْتُ خَالِدِ بنِ سَعِيْدٍ` and `أُمُّ مُصْعَبٍ الكَلْبِيَّةُ`, and all
+  four are catalog people. Al-Zubayr's catalog module keeps only Asma: its test allows no
+  relation without a batch claim, and the approved batch cannot take a new claim
+  without approval lapsing. The three husband edges wait for a batch.
 - `cousins`: same. The Prophet rests on `الزُّبَيْرُ ابْنُ عَمَّتِي` (p48). Hakim
   ibn Hizam is carried as a legacy assertion: his father Hizam and al-Awwam were
   brothers, so the catalog is right, but this entry does not state the tie.
@@ -66,11 +67,11 @@ Read page by page with the editor's footnotes; each value below cites its page a
 ## Coverage (`npm run model:coverage -- siyar-v4-3-az-zubayr`)
 
 The entry runs over printed pages 41 to 67. The command finds it from the heading `٣ - ` to the
-next entry's heading and counts sentences: 337 in all, 21 covered by a span (a span covers at
-least half of the sentence), 316 not modeled (the isnads of the quoted reports, the hadith texts,
+next entry's heading and counts sentences: 337 in all, 22 covered by a span (a span covers at
+least half of the sentence), 315 not modeled (the isnads of the quoted reports, the hadith texts,
 the narrative of the battles, the estate and debt saga and the like), 10 of them date sentences
 (6 `time-layer:waiting`, 4 `time-layer:unreadable`, among them the indefinite `بِضْعٌ وَخَمْسُوْنَ`),
-12 unresolved names (the narrators and the three wives not yet named as people) and 0 unresolved events. The tags
+9 unresolved names (all narrators) and 0 unresolved events. The tags
 are hints from a heuristic, not readings. The reasons for each follow in "Unresolved names, dated sentences and office". The test in `src/lib/model/coverage.test.ts` runs the
 command over every entry under `data/works/` and fails when an entry is not bounded by its own
 heading and the next entry's heading (or the volume's last page), or when a span lies outside it. A re-parse is finished when this
@@ -147,21 +148,30 @@ Not modeled, by page (date sentences: `time-layer:waiting`, or `time-layer:unrea
 
 ## Unresolved names, dated sentences and office
 
-12 names stay unresolved, for two reasons:
+9 names stay unresolved, all narrators:
 
-- No catalog person exists to name. `عُرْوَةَ` (three mentions, a bare name that the
-  entry does not tie to a father), `البُخَارِيُّ`, `القَحْذَمِيُّ`, `البَهِيِّ`,
-  `ابْنُ أَبِي الزِّنَادِ`, `الوَاقِدِيُّ` and `ابْنُ نُمَيْرٍ` are narrators and tabi'un,
-  outside the scope (Companions only), and a narrator does not become a node.
-  `عَاتِكَةُ`, `أُمُّ خَالِدٍ` and `أُمُّ مُصْعَبٍ` are wives with no catalog person yet.
-- Naming them needs a new person, which this pass does not add.
+- `عُرْوَةَ` (three mentions, a bare name that the entry does not tie to a father),
+  `البُخَارِيُّ`, `القَحْذَمِيُّ`, `البَهِيِّ`, `ابْنُ أَبِي الزِّنَادِ`, `الوَاقِدِيُّ` and
+  `ابْنُ نُمَيْرٍ` are narrators and tabi'un, outside the scope (Companions only), and a
+  narrator does not become a node.
 
-Two readings are recorded because the text makes them clear
+Three readings are recorded because the text makes them clear
 ([ADR 0024](../../../docs/adr/0024-read-the-text-and-stop-where-it-is-unclear.md)):
 
 - The five battle mentions (`بَدْرٍ` twice, `اليَرْمُوْكِ`, `الخَنْدَقِ`, `فَتْحِ مَكَّةَ`) are
   identified as the catalog events `badr`, `yarmuk`, `khandaq` and `fath-makkah`, with the
   `يَوْمَ` phrase as basis ([ADR 0029](../../../docs/adr/0029-an-identification-names-an-agent-or-an-event.md)).
+- The three wives named only by `القَحْذَمِيُّ` now have catalog people, with every value
+  `legacy-unreviewed` (no batch cites them) and no value from a seed (none existed):
+  `atikah-bint-zayd` (`عَاتِكَةُ`). The identification rests on the two printed sentences
+  that call an Atikah his wife: p64 (`sp_wife`) and p67 (`عَاتِكَةَ بِنْتِ زَيْدِ بنِ عَمْرِو
+  بنِ نُفَيْلٍ، زَوْجَةِ الزُّبَيْرِ`). The text does not say that `سَعِيْدِ بنِ زَيْدٍ` of p64 is a
+  son of Zayd ibn Amr, and the identification does not need it,
+  `umm-khalid-bint-khalid` (`بِنْتُ خَالِدِ بنِ سَعِيْدٍ`) and `umm-musab-al-kalbiyyah`
+  (`الكَلْبِيَّةُ`). The fathers `سَعِيْدِ بنِ زَيْدٍ` and `خَالِدِ بنِ سَعِيْدٍ` are not
+  linked: the entry gives no more than a name for either, and naming which catalog
+  person it is would rest on outside knowledge. Atikah's link to
+  `zayd-ibn-amr-ibn-nufayl` rests on the p67 phrase, which gives his full three-part nasab.
 - `عَائِشَةُ` (p47) is identified as `aisha-bint-abi-bakr`, PROPOSED, on three printed
   spans: the isnad `أَبُو مُعَاوِيَةَ: عَنْ هِشَامٍ، عَنْ أَبِيْهِ` (`sp_ayah_isnad`, whose
   last link is Urwa, the addressee), her words `كَانَ أَبُوَاكَ -يَعْنِي: الزُّبَيْرَ، وَأَبَا
