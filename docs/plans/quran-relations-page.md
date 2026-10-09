@@ -32,7 +32,7 @@ the build runs offline, so that check is still owed.
   field is imported and uncited.
 - **Shared passages.** An arc diagram over the 114 surahs in mushaf order, one
   arc per passage. Tapping an arc, or choosing one in the list, shows the two
-  passages side by side as `AyahCard`s with the differing words underlined.
+  passages side by side as `AyahCard`s with the differing words colored.
 - **Where a surah shares.** A strip of one box per ayah of a surah, coloured
   where a shared passage sits. Tapping a box selects that passage.
 

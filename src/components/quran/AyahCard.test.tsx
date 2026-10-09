@@ -48,12 +48,12 @@ describe('AyatGroup', () => {
     expect(screen.getByText('آية رقم 0')).toBeTruthy();
   });
 
-  it('underlines only the marked words of an ayah card', () => {
+  it('colors only the marked words of an ayah card', () => {
     const { container } = render(<AyahCard ayah={ayah({ text: 'أ ب ج' })} marks={[1]} />);
 
-    const underlined = container.querySelectorAll('u');
-    expect(underlined).toHaveLength(1);
-    expect(underlined[0].textContent).toBe('ب');
+    const marked = container.querySelectorAll('mark');
+    expect(marked).toHaveLength(1);
+    expect(marked[0].textContent).toBe('ب');
   });
 
   it('offers no pagination when everything fits on one page', () => {

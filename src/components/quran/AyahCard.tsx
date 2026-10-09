@@ -15,7 +15,7 @@ function MarkedText({ text, marks }: { text: string; marks: number[] }) {
   return text.split(' ').map((word, index) => (
     <React.Fragment key={index}>
       {index > 0 && ' '}
-      {marks.includes(index) ? <u className="decoration-amber-500 decoration-2 underline-offset-8">{word}</u> : word}
+      {marks.includes(index) ? <mark className="rounded bg-amber-200 px-1 text-amber-900 dark:bg-amber-400/25 dark:text-amber-200">{word}</mark> : word}
     </React.Fragment>
   ));
 }
