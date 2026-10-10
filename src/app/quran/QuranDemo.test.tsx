@@ -27,16 +27,13 @@ afterEach(() => {
 });
 
 describe('QuranDemo boundary buttons', () => {
-  it('expands the partial ayat without fetching', () => {
+  it('shows whole ayat from the start, with no button to expand them and no fetch', () => {
     const fetchMock = mockFetch();
     renderDemo();
-    const before = document.querySelectorAll('mark').length;
-    const words = () => document.querySelector('.font-arabic')!.textContent!.split(' ').length;
-    const wordsBefore = words();
-    fireEvent.click(screen.getAllByRole('button', { name: FULL })[0]);
-    expect(words()).toBeGreaterThan(wordsBefore);
-    expect(screen.getAllByRole('button', { name: FULL })).toHaveLength(1);
-    expect(document.querySelectorAll('mark').length).toBe(before);
+    expect(screen.queryByRole('button', { name: FULL })).toBeNull();
+    const first = side.from;
+    const whole = (ayat as Record<string, string>)[`${first.surah}:${first.ayah}`].split(' ').length;
+    expect(document.querySelector('.font-arabic')!.textContent!.split(' ').length).toBe(whole);
     expect(fetchMock).not.toHaveBeenCalled();
   });
 

@@ -10,6 +10,7 @@ import { AyahCard } from '@/components/quran/AyahCard';
 import type { Ayah } from '@/types/quran';
 import { ayahWords } from '@/lib/quran/normalize';
 import { chipStates, neighbors, type Variant } from '@/lib/quran/qiraat';
+import { num } from '@/lib/quran/arabicNumber';
 
 export type QiraatEntry = { variant: Variant; text: string; surahName: string };
 
@@ -21,7 +22,6 @@ const UNSOURCED = 'غير موثق (اقتراح للتجربة)';
 
 const key = (v: Variant) => `${v.surah}:${v.ayah}`;
 const pediaUrl = (v: Variant) => `https://quranpedia.net/ayahs/${v.surah}/${v.ayah}`;
-const n = (value: number) => value.toLocaleString('ar-EG');
 
 function Meaning({ meaning }: { meaning: Variant['meaning'] }) {
   if (meaning.kind === 'quote') {
@@ -104,11 +104,10 @@ export default function QiraatView({ entries }: { entries: QiraatEntry[] }) {
       <header className="flex flex-col gap-2">
         <h1 className="flex items-center gap-2 text-3xl">
           القراءات: الآية نفسها في أكثر من قراءة
-          <Badge size="sm" text="تجريبي" color="amber" />
         </h1>
         <p>
           اثنا عشر موضعًا اختيرت للتجربة، وأرقام آياتها على عدّ حفص (الكوفي). في رواية ورش لا تُعدّ البسملة آية في الفاتحة، فتكون «مالك يوم الدين» الآية ٣ لا ٤.
-          وسورة البقرة {n(286)} آية في العدّ الكوفي و{n(287)} في البصري و{n(285)} في المدني.
+          وسورة البقرة {num(286)} آية في العدّ الكوفي و{num(287)} في البصري و{num(285)} في المدني.
         </p>
         <p>
           قوائم القرّاء من موسوعة القرآن (Quranpedia) على صفحة كل آية، مثل <bdi dir="ltr">https://quranpedia.net/ayahs/1/4</bdi>، ولا تسمّي الموسوعة الكتاب الذي نقلت عنه، وستُراجع على «النشر» في مرحلة التوثيق. القراءات العشر كلها متواترة، والصفحة لا ترجّح بينها.
@@ -118,7 +117,7 @@ export default function QiraatView({ entries }: { entries: QiraatEntry[] }) {
         {entries.map((e, i) => (
           <Button key={key(e.variant)} size="sm" active={i === selected} onClick={() => setSelected(i)}>
             <FontAwesomeIcon icon={faBookQuran} />
-            {n(e.variant.surah)}:{n(e.variant.ayah)}
+            {num(e.variant.surah)}:{num(e.variant.ayah)}
           </Button>
         ))}
       </nav>

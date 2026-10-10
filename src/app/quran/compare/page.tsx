@@ -6,11 +6,12 @@ import { prisma } from '@/lib/prisma';
 import { alignSurahs, clampRange } from '@/lib/quran/compare';
 import { ayahWords } from '@/lib/quran/normalize';
 import CompareView from './CompareView';
+import { num } from '@/lib/quran/arabicNumber';
 
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'القرآن: مقارنة سورتين (تجريبي)',
+  title: 'القرآن: مقارنة سورتين',
 };
 
 const plainName = (name: string) => name.replace(/[ً-ٟـٰۖ-ۭ]/g, '').replace(/ٱ/g, 'ا');
@@ -39,7 +40,7 @@ export default async function QuranComparePage({ searchParams }: { searchParams:
   const select = (name: string, value: number, label: string) => (
     <select name={name} aria-label={label} defaultValue={value} className="min-w-0 flex-1 rounded border border-amber-400 bg-white dark:bg-gray-900 px-2 py-1 text-sm">
       {surahs.map(s => (
-        <option key={s.number} value={s.number}>{`${s.number.toLocaleString('ar-EG')}. ${plainName(s.name)}`}</option>
+        <option key={s.number} value={s.number}>{`${num(s.number)}. ${plainName(s.name)}`}</option>
       ))}
     </select>
   );

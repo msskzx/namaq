@@ -2,7 +2,7 @@
 
 import React, { useMemo, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAnglesDown, faArrowLeft, faArrowRight, faExpand } from '@fortawesome/free-solid-svg-icons';
+import { faAnglesDown, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import Badge from '@/components/common/Badge';
 import Button from '@/components/common/Button';
 import { AyahCard } from '@/components/quran/AyahCard';
@@ -11,13 +11,13 @@ import { ayahWords } from '@/lib/quran/normalize';
 import { sharedSlots } from '@/lib/quran/wordDiff';
 import type { Ayah } from '@/types/quran';
 import type { Passage } from '@/lib/quran/passages';
+import { num } from '@/lib/quran/arabicNumber';
 
 type Surah = { n: number; name: string; count: number };
 type Runs = { minWords: number; surahs: Surah[]; passages: Passage[] };
 
 const PANEL = 'bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4';
 const STEP = 10;
-const num = (n: number) => n.toLocaleString('ar-EG');
 const plainName = (name: string) => name.replace(/[\u064B-\u065F\u0640\u0670\u06D6-\u06ED]/g, '').replace(/\u0671/g, '\u0627');
 const xOf = (n: number) => (115 - n) * STEP - STEP / 2;
 
@@ -107,15 +107,13 @@ function Strip({ surah, passages, selected, onSelect }: { surah: Surah; passages
 }
 
 function Side({ title, side, marks, ayat, count, surah }: { title: string; side: Passage['a']; marks: number[]; ayat: Record<string, string>; count: number; surah: Ayah['surah'] }) {
-  const [full, setFull] = useState(false);
   const [after, setAfter] = useState(0);
   const [fetched, setFetched] = useState<Record<string, string>>({});
   const [failed, setFailed] = useState(false);
   const [loading, setLoading] = useState(false);
   const n = side.from.surah;
   const known = { ...fetched, ...ayat };
-  const cards = sideCards(side, marks, known, { full, after });
-  const partial = !full && sideCards(side, marks, known, { full: true }).some((c, i) => c.text !== cards[i].text);
+  const cards = sideCards(side, marks, known, { full: true, after });
 
   const more = async () => {
     setFailed(false);
@@ -143,12 +141,6 @@ function Side({ title, side, marks, ayat, count, surah }: { title: string; side:
         <AyahCard key={c.ayah} ayah={{ id: `${c.surah}:${c.ayah}`, number: c.ayah, text: c.text, surah } as unknown as Ayah} slots={sharedSlots(c.text.split(' ').length, c.marks)} />
       ))}
       <div className="flex flex-wrap gap-2">
-        {partial && (
-          <Button size="sm" onClick={() => setFull(true)}>
-            <FontAwesomeIcon icon={faExpand} />
-            عرض الآية كاملة
-          </Button>
-        )}
         {side.to.ayah + after < count && (
           <Button size="sm" disabled={loading} onClick={more}>
             <FontAwesomeIcon icon={faAnglesDown} />
@@ -177,10 +169,9 @@ export default function QuranDemo({ runs, ayat }: { runs: Runs; ayat: Record<str
       <header>
         <div className="flex flex-wrap items-center gap-3 mb-2">
           <h1 className="text-3xl">القرآن: نصوص مشتركة بين السور</h1>
-          <Badge text="تجريبي" color="amber" size="sm" />
         </div>
         <p className="text-sm text-gray-600 dark:text-gray-400">
-          عرض تجريبي لم يراجعه أحد من أهل العلم. النص برواية حفص. النص المشترك هو تتابع من {num(runs.minWords)} كلمات فأكثر
+          لم يراجع هذا العرض أحد من أهل العلم. النص برواية حفص. النص المشترك هو تتابع من {num(runs.minWords)} كلمات فأكثر
           يتطابق في سورتين بعد حذف التشكيل وتوحيد صور بعض الحروف، وقد يتخلله اختلاف في بعض الكلمات. يدل التطابق على اشتراك اللفظ وحده.
         </p>
       </header>

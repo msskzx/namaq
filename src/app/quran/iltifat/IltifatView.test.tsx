@@ -2,7 +2,7 @@
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
-import { buildCurated, CURATED, MODES, USED_MODES } from '@/lib/quran/curatedShifts';
+import { buildCurated, MODES, USED_MODES } from '@/lib/quran/curatedShifts';
 import data from './ayat.json';
 import IltifatView from './IltifatView';
 
@@ -28,10 +28,8 @@ describe('IltifatView', () => {
     expect(we.map(m => m.className.replace('bg-transparent ', ''))).toEqual([swatch, swatch, swatch]);
   });
 
-  it('labels each curated shift as hand-picked and without citations', () => {
+  it('lists each curated shift under its surah range', () => {
     renderView();
-    expect(screen.getAllByText('مختارة يدويًا')).toHaveLength(CURATED.length);
-    expect(screen.getAllByText('اقتراح تجريبي بلا إحالات')).toHaveLength(CURATED.length);
     expect(screen.getByRole('heading', { name: /الفاتحة ٢–٧/ })).toBeTruthy();
   });
 });

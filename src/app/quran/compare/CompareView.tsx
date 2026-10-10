@@ -8,12 +8,12 @@ import Button from '@/components/common/Button';
 import { AyahCard } from '@/components/quran/AyahCard';
 import { groupPairs, KEEP_RUN, MAX_STEP_GAP, MIN_RUN, TAIL_COUNT, wordSlots, type Group, type Pair, type Range, type Row } from '@/lib/quran/compare';
 import type { Ayah } from '@/types/quran';
+import { num } from '@/lib/quran/arabicNumber';
 
 type Side = { number: number; name: string; plain: string; words: string[]; range?: Range };
 
 const PANEL = 'bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4';
 const NOTE = 'text-sm text-gray-600 dark:text-gray-400';
-const num = (n: number) => n.toLocaleString('ar-EG');
 const span = (r: NonNullable<Range>) => (r.from === r.to ? num(r.from) : `${num(r.from)}–${num(r.to)}`);
 const ayat = (n: number) => (n === 0 ? 'لا آيات' : n === 1 ? 'آية واحدة' : n === 2 ? 'آيتان' : n >= 3 && n <= 10 ? `${num(n)} آيات` : `${num(n)} آية`);
 const label = (s: Side, r: Range) => (r ? `${s.plain} ${span(r)}` : '—');
@@ -83,10 +83,9 @@ export default function CompareView({ a, b, rows }: { a: Side; b: Side; rows: Ro
       <header>
         <div className="flex flex-wrap items-center gap-3 mb-2">
           <h1 className="text-3xl">{`${title(a)} و${title(b)}`}</h1>
-          <Badge text="تجريبي" color="amber" size="sm" />
         </div>
         <p className={NOTE}>
-          عرض تجريبي لم يراجعه أحد من أهل العلم. النص برواية حفص. تُذكر آيتان معًا حين تشتركان في تتابع من {num(MIN_RUN)} كلمات فأكثر
+          لم يراجع هذا العرض أحد من أهل العلم. النص برواية حفص. تُذكر آيتان معًا حين تشتركان في تتابع من {num(MIN_RUN)} كلمات فأكثر
           بعد حذف التشكيل وتوحيد صور بعض الحروف. تُضم الأزواج في كتلة إن كانت الفجوة بينها واحدة في السورتين ولا تزيد على {num(MAX_STEP_GAP)} آيات،
           وتبقى الكتلة إن كان فيها زوجان فيهما نص مشترك أو زوج فيه تتابع {num(KEEP_RUN)} كلمات فأكثر. الصيغ المتكررة تُقرن بإحدى مواضعها اعتباطًا. إن وافقت آية أكثر من آية في السورة الأخرى عُرضت مرة واحدة وإلى جانبها مقابلاتها، ولكل مقابلة لون لكلماتها المشتركة.
           الكلمات المسطَّرة هي ما اختلف بين الآيتين. يدل الاشتراك على اشتراك اللفظ وحده.

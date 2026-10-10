@@ -4,7 +4,7 @@ import runs from './data/runs.json';
 import ayat from './data/ayat.json';
 
 export const metadata: Metadata = {
-  title: 'القرآن: نصوص مشتركة بين السور (تجريبي)',
+  title: 'القرآن: نصوص مشتركة بين السور',
 };
 
 export default function QuranPage() {

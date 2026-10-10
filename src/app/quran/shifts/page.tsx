@@ -2,17 +2,17 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { faEye, faLightbulb, faShuffle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Badge from '@/components/common/Badge';
 import Button from '@/components/common/Button';
 import { prisma } from '@/lib/prisma';
 import { ayahWords, plainName } from '@/lib/quran/normalize';
 import { findOpeners, findShifts } from '@/lib/quran/shifts';
 import ShiftsView from './ShiftsView';
+import { num } from '@/lib/quran/arabicNumber';
 
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'القرآن: تحولات داخل السورة (تجريبي)',
+  title: 'القرآن: تحولات داخل السورة',
 };
 
 const EXAMPLES: [number, string][] = [[43, 'الزخرف'], [55, 'الرحمن'], [26, 'الشعراء'], [77, 'المرسلات'], [12, 'يوسف'], [18, 'الكهف']];
@@ -55,14 +55,13 @@ export default async function QuranShiftsPage({ searchParams }: { searchParams: 
       <header>
         <div className="flex flex-wrap items-center gap-3 mb-2">
           <h1 className="text-3xl">القرآن: تحولات داخل السورة</h1>
-          <Badge text="تجريبي" color="amber" size="sm" />
         </div>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-          عرض تجريبي لم يراجعه أحد من أهل العلم. النص برواية حفص. تُقارن الكلمات بعد حذف التشكيل وتوحيد صور بعض الحروف، ويدل التطابق على اشتراك اللفظ وحده.
+          لم يراجع هذا العرض أحد من أهل العلم. النص برواية حفص. تُقارن الكلمات بعد حذف التشكيل وتوحيد صور بعض الحروف، ويدل التطابق على اشتراك اللفظ وحده.
         </p>
         <form method="get" className="flex flex-wrap items-center gap-2">
           <select name="s" aria-label="السورة" defaultValue={n} className="min-w-0 flex-1 rounded border border-amber-400 bg-white dark:bg-gray-900 px-2 py-1 text-sm">
-            {surahs.map(s => <option key={s.number} value={s.number}>{`${s.number.toLocaleString('ar-EG')}. ${plainName(s.name)}`}</option>)}
+            {surahs.map(s => <option key={s.number} value={s.number}>{`${num(s.number)}. ${plainName(s.name)}`}</option>)}
           </select>
           <Button type="submit" size="sm" variant="outline">
             <FontAwesomeIcon icon={faEye} />

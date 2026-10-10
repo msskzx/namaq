@@ -7,12 +7,12 @@ import { ARC_MIN, REFRAIN_MANY, REFRAIN_MIN, type Arc, type Form, type Occ, type
 import type { Ayah } from '@/types/quran';
 
 import type { Surah } from '@/lib/quran/curatedShifts';
+import { num } from '@/lib/quran/arabicNumber';
 type Selection = { kind: 'arc'; i: number } | { kind: 'tick'; lane: number; k: number } | { kind: 'opener'; i: number } | null;
 
 const PANEL = 'bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4';
 const NOTE = 'text-sm text-gray-600 dark:text-gray-400';
 const LANES = 10;
-const num = (n: number) => n.toLocaleString('ar-EG');
 const words = (n: number) => `${num(n)} ${n >= 11 ? 'كلمة' : 'كلمات'}`;
 const run = (at: Occ, len: number, slot = 0) => Object.fromEntries(Array.from({ length: len }, (_, k) => [at.word + k, slot]));
 

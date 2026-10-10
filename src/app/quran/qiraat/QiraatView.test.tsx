@@ -21,7 +21,6 @@ describe('QiraatView', () => {
     const { container } = render(<QiraatView entries={entries} />);
     expect(screen.getByRole('navigation', { name: 'المواضع' }).querySelectorAll('button')).toHaveLength(12);
     expect(container.querySelectorAll('li[data-state]')).toHaveLength(20);
-    expect(container.textContent).toContain('تجريبي');
     expect(container.textContent).toContain('فرق على مستوى الكلمة، وليس نص مصحف تلك الرواية');
   });
 

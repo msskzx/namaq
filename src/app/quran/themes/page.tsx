@@ -7,7 +7,7 @@ import themes from './data/themes.json';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'القرآن: مواضع متقابلة بين سورتين (تجريبي)',
+  title: 'القرآن: مواضع متقابلة بين سورتين',
 };
 
 async function load(number: number) {

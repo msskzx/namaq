@@ -72,8 +72,8 @@ and 20:71 with 26:49.
 
 ## Context around a passage
 
-A passage often starts or ends inside an ayah. Per side, "عرض الآية كاملة" shows
-the whole first and last ayah (words outside the passage plain, shared words
+A passage often starts or ends inside an ayah. Each side shows the whole first
+and last ayah from the start (words outside the passage plain, shared words
 still colored; no fetch, since `ayat.json` holds whole ayat), and "عرض الآية
 التالية" appends the following ayah, plain, one per press until the surah ends.
 The next ayah is not in `ayat.json`, so the first press fetches

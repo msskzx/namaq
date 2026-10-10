@@ -1,12 +1,11 @@
 import React from 'react';
-import Badge from '@/components/common/Badge';
 import { SLOT_COLORS } from '@/components/quran/slotColors';
 import { MODES, type CuratedView, type Mode } from '@/lib/quran/curatedShifts';
 import { Card } from '../shifts/ShiftsView';
+import { num } from '@/lib/quran/arabicNumber';
 
 const PANEL = 'bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4';
 const NOTE = 'text-sm text-gray-600 dark:text-gray-400';
-const num = (n: number) => n.toLocaleString('ar-EG');
 
 function CuratedCard({ item: { surah, parts, note } }: { item: CuratedView }) {
   const [from, to] = [parts[0].from, parts[parts.length - 1].to];
@@ -14,8 +13,6 @@ function CuratedCard({ item: { surah, parts, note } }: { item: CuratedView }) {
     <section className={PANEL}>
       <div className="flex flex-wrap items-center gap-2 mb-1">
         <h2 className="text-xl text-amber-600 dark:text-amber-400">{`${surah.plain} ${from === to ? num(from) : `${num(from)}–${num(to)}`}`}</h2>
-        <Badge size="sm" color="amber" text="مختارة يدويًا" />
-        <Badge size="sm" color="gray" text="اقتراح تجريبي بلا إحالات" />
       </div>
       <p className={`${NOTE} mb-3`}>{note}</p>
       <div className={parts.length > 1 ? 'grid md:grid-cols-2 gap-x-4' : ''}>
