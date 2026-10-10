@@ -14,7 +14,7 @@ import { getAllNavLinks, type SiteLink } from '@/lib/siteLinks';
 // A subset of getAllNavLinks, by href, so a dropdown never lists a link under
 // a different label than the mobile menu and the graph workspace menu give it.
 const HADITH_SUBMENU_HREFS = ['/hadith/bukhari-jibril', '/hadith/muslim-jibril', '/hadith/fath-iman-50'];
-const QURAN_SUBMENU_HREFS = ['/quran', '/quran/compare', '/quran/shifts', '/quran/qiraat'];
+const QURAN_SUBMENU_HREFS = ['/quran', '/quran/compare', '/quran/shifts', '/quran/qiraat', '/quran/themes'];
 const PEOPLE_SUBMENU_HREFS = ['/people', '/people/prophet-muhammad', '/titles', '/events'];
 
 function submenuFrom(hrefs: string[], language: 'en' | 'ar'): SiteLink[] {
