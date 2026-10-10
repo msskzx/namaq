@@ -272,7 +272,8 @@ amber, stays the color of a phrase repeated in two ayat (43:22-23).
   even when its object pronoun is another person. A noun or particle takes its
   attached pronoun (`أباكم`, `عليهم`, `حوله`), even when the pronoun points at
   a thing rather than a person. A noun with no pronoun is left plain
-  (`الرياح`), and so are relative and demonstrative pronouns (`الذي`, `هذه`).
+  (`الرياح`), and so are relative and demonstrative pronouns (`الذي`, `هذه`),
+  including the address particle on a demonstrative (`كذلك`).
 - Exceptions the owner chose: in Al-Fatiha the names of God in 2-4 (`لله رب`,
   `الرحمن الرحيم`, `ملك`) are marked غيبة, and `اهدنا` is marked تكلم for its
   `نا` although its subject is the One addressed.
