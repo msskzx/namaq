@@ -48,11 +48,19 @@ describe('AyatGroup', () => {
     expect(screen.getByText('آية رقم 0')).toBeTruthy();
   });
 
-  it('colors the words an ayah card shares and leaves the differing ones plain', () => {
-    const { container } = render(<AyahCard ayah={ayah({ text: 'أ ب ج' })} differing={[1]} />);
+  it('colors the words an ayah card shares and leaves the others plain', () => {
+    const { container } = render(<AyahCard ayah={ayah({ text: 'أ ب ج' })} slots={{ 0: 0, 2: 0 }} />);
 
     const shared = Array.from(container.querySelectorAll('mark')).map((m) => m.textContent);
     expect(shared).toEqual(['أ', 'ج']);
+  });
+
+  it('gives each color slot its own text color', () => {
+    const { container } = render(<AyahCard ayah={ayah({ text: 'أ ب ج' })} slots={{ 0: 0, 1: 1, 2: 0 }} />);
+
+    const marks = Array.from(container.querySelectorAll('mark'));
+    expect(marks[0].className).toBe(marks[2].className);
+    expect(marks[1].className).not.toBe(marks[0].className);
   });
 
   it('offers no pagination when everything fits on one page', () => {

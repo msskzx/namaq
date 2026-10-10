@@ -8,6 +8,7 @@ import Button from '@/components/common/Button';
 import { AyahCard } from '@/components/quran/AyahCard';
 import { sideCards } from '@/lib/quran/cards';
 import { ayahWords } from '@/lib/quran/normalize';
+import { sharedSlots } from '@/lib/quran/wordDiff';
 import type { Ayah } from '@/types/quran';
 import type { Passage } from '@/lib/quran/passages';
 
@@ -139,7 +140,7 @@ function Side({ title, side, marks, ayat, count, surah }: { title: string; side:
     <div>
       <h3 className="text-xl mb-2 text-amber-600 dark:text-amber-400">{title}</h3>
       {cards.map(c => (
-        <AyahCard key={c.ayah} ayah={{ id: `${c.surah}:${c.ayah}`, number: c.ayah, text: c.text, surah } as unknown as Ayah} differing={c.marks} />
+        <AyahCard key={c.ayah} ayah={{ id: `${c.surah}:${c.ayah}`, number: c.ayah, text: c.text, surah } as unknown as Ayah} slots={sharedSlots(c.text.split(' ').length, c.marks)} />
       ))}
       <div className="flex flex-wrap gap-2">
         {partial && (

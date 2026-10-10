@@ -6,10 +6,10 @@ import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import Badge from '@/components/common/Badge';
 import Button from '@/components/common/Button';
 import { AyahCard } from '@/components/quran/AyahCard';
-import { KEEP_RUN, MAX_STEP_GAP, MIN_RUN, TAIL_COUNT, type Pair, type Range, type Row } from '@/lib/quran/compare';
+import { groupPairs, KEEP_RUN, MAX_STEP_GAP, MIN_RUN, TAIL_COUNT, wordSlots, type Group, type Pair, type Range, type Row } from '@/lib/quran/compare';
 import type { Ayah } from '@/types/quran';
 
-type Side = { number: number; name: string; plain: string; words: string[] };
+type Side = { number: number; name: string; plain: string; words: string[]; range?: Range };
 
 const PANEL = 'bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4';
 const NOTE = 'text-sm text-gray-600 dark:text-gray-400';
@@ -18,15 +18,17 @@ const span = (r: NonNullable<Range>) => (r.from === r.to ? num(r.from) : `${num(
 const ayat = (n: number) => (n === 0 ? 'لا آيات' : n === 1 ? 'آية واحدة' : n === 2 ? 'آيتان' : n >= 3 && n <= 10 ? `${num(n)} آيات` : `${num(n)} آية`);
 const label = (s: Side, r: Range) => (r ? `${s.plain} ${span(r)}` : '—');
 
+const title = (s: Side) => (s.range ? label(s, s.range) : s.plain);
+
 function pairLabel(p: Pair) {
   if (p.run >= MIN_RUN) return `نص مشترك: ${num(p.run)} كلمات متتالية`;
   if (p.shared.length > 0) return `كلمات مشتركة غير متتالية: ${p.shared.join('، ')}`;
   return 'لا كلمات مشتركة';
 }
 
-function Card({ side, ayah, differing }: { side: Side; ayah: number; differing?: number[] }) {
+function Card({ side, ayah, slots }: { side: Side; ayah: number; slots?: Record<number, number> }) {
   const surah = { id: `s${side.number}`, number: side.number, name: side.name, nameTransliterated: null };
-  return <AyahCard ayah={{ id: `${side.number}:${ayah}`, number: ayah, text: side.words[ayah - 1], surah } as unknown as Ayah} differing={differing} />;
+  return <AyahCard ayah={{ id: `${side.number}:${ayah}`, number: ayah, text: side.words[ayah - 1], surah } as unknown as Ayah} slots={slots} />;
 }
 
 function Gap({ a, b, ra, rb }: { a: Side; b: Side; ra: Range; rb: Range }) {
@@ -54,19 +56,39 @@ function Gap({ a, b, ra, rb }: { a: Side; b: Side; ra: Range; rb: Range }) {
   );
 }
 
+function GroupRow({ a, b, group }: { a: Side; b: Side; group: Group }) {
+  const many = group.pairs.length > 1;
+  const column = (side: Side, key: 'a' | 'b', ayat: number[]) => (
+    <div className="flex flex-col justify-center">
+      {ayat.map(n => <Card key={n} side={side} ayah={n} slots={wordSlots(group, key, n, side.words[n - 1].split(' ').length)} />)}
+    </div>
+  );
+  return (
+    <div className="grid md:grid-cols-2 gap-x-4 border-t border-gray-200 dark:border-white/10 pt-3">
+      {column(a, 'a', group.as)}
+      {column(b, 'b', group.bs)}
+      <div className="md:col-span-2 -mt-2 mb-3 flex flex-wrap gap-2">
+        {group.pairs.map((p, k) => (
+          <Badge key={k} size="sm" color={p.run >= MIN_RUN ? 'amber' : 'gray'} text={many ? `${num(p.a)} و${num(p.b)}: ${pairLabel(p)}` : pairLabel(p)} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function CompareView({ a, b, rows }: { a: Side; b: Side; rows: Row[] }) {
   const words = rows.filter(r => r.type === 'block' && r.block.kind === 'words').length;
   return (
     <div className="flex flex-col gap-4">
       <header>
         <div className="flex flex-wrap items-center gap-3 mb-2">
-          <h1 className="text-3xl">{`${a.plain} و${b.plain}`}</h1>
+          <h1 className="text-3xl">{`${title(a)} و${title(b)}`}</h1>
           <Badge text="تجريبي" color="amber" size="sm" />
         </div>
         <p className={NOTE}>
           عرض تجريبي لم يراجعه أحد من أهل العلم. النص برواية حفص. تُذكر آيتان معًا حين تشتركان في تتابع من {num(MIN_RUN)} كلمات فأكثر
           بعد حذف التشكيل وتوحيد صور بعض الحروف. تُضم الأزواج في كتلة إن كانت الفجوة بينها واحدة في السورتين ولا تزيد على {num(MAX_STEP_GAP)} آيات،
-          وتبقى الكتلة إن كان فيها زوجان فيهما نص مشترك أو زوج فيه تتابع {num(KEEP_RUN)} كلمات فأكثر. الصيغ المتكررة تُقرن بإحدى مواضعها اعتباطًا.
+          وتبقى الكتلة إن كان فيها زوجان فيهما نص مشترك أو زوج فيه تتابع {num(KEEP_RUN)} كلمات فأكثر. الصيغ المتكررة تُقرن بإحدى مواضعها اعتباطًا. إن وافقت آية أكثر من آية في السورة الأخرى عُرضت مرة واحدة وإلى جانبها مقابلاتها، ولكل مقابلة لون لكلماتها المشتركة.
           الكلمات المسطَّرة هي ما اختلف بين الآيتين. يدل الاشتراك على اشتراك اللفظ وحده.
         </p>
         <p className={NOTE}>{`وُجدت ${num(words)} كتلة مبنية على النص.`}</p>
@@ -90,15 +112,7 @@ export default function CompareView({ a, b, rows }: { a: Side; b: Side; rows: Ro
                 آخر {num(TAIL_COUNT)} آيات من كل سورة بالترتيب، من غير حساب على النص. ما تحت كل زوج يبيّن ما تشتركان فيه فعلًا.
               </p>
             )}
-            {block.pairs.map(p => (
-              <div key={p.a} className="grid md:grid-cols-2 gap-x-4 border-t border-gray-200 dark:border-white/10 pt-3">
-                <Card side={a} ayah={p.a} differing={p.marksA} />
-                <Card side={b} ayah={p.b} differing={p.marksB} />
-                <div className="md:col-span-2 -mt-2 mb-3">
-                  <Badge size="sm" color={p.run >= MIN_RUN ? 'amber' : 'gray'} text={pairLabel(p)} />
-                </div>
-              </div>
-            ))}
+            {groupPairs(block.pairs).map((g, k) => <GroupRow key={k} a={a} b={b} group={g} />)}
           </section>
         );
       })}

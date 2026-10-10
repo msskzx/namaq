@@ -18,3 +18,8 @@ export function wordDiff(a: string[], b: string[]): { a: number[]; b: number[] }
   const differing = (n: number, same: Set<number>) => Array.from({ length: n }, (_, k) => k).filter(k => !same.has(k));
   return { a: differing(a.length, sameA), b: differing(b.length, sameB) };
 }
+
+export function sharedSlots(count: number, differing: number[], slot = 0, slots: Record<number, number> = {}): Record<number, number> {
+  for (let k = 0; k < count; k++) if (!differing.includes(k) && !(k in slots)) slots[k] = slot;
+  return slots;
+}
