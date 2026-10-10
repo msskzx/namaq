@@ -1,5 +1,5 @@
 // docs/plans/quran-within-surah.md
-import type { AyahWords } from './normalize';
+import { normalizeWord, type AyahWords } from './normalize';
 
 export type Occ = { ayah: number; word: number };
 export type Arc = { a: Occ; b: Occ; len: number };
@@ -64,7 +64,8 @@ export function findShifts(ayat: AyahWords[]): { arcs: Arc[]; refrains: Refrain[
 
 export function findOpeners(ayat: AyahWords[]): Opener[] {
   return ayat.flatMap((a, k) =>
-    a.norm.flatMap((x, word) => {
+    a.display.flatMap((token, word) => {
+      const x = normalizeWord(token.replace(/ٰ/g, 'ا'));
       const form = FORMS[x] ?? FORMS[x.replace(/^[وف]/, '')];
       return form ? [{ ayah: k + 1, word, form }] : [];
     }),

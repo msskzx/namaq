@@ -58,6 +58,11 @@ describe('findOpeners', () => {
     expect(forms).toEqual(['male', 'group', 'woman', 'command', 'group']);
   });
 
+  it('tells the past قَـٰلَ from the command قُلۡ, because the dagger alef stands for the long alef', () => {
+    const forms = findOpeners(words('قَـٰلَ أَوَلَوۡ جِئۡتُكُم', 'قَالُوۤا۟ إِنَّا', 'قُلۡ أَوَلَوۡ جِئۡتُكُم', 'وَقَـٰلَتِ ٱلۡمَلَـٰۤىِٕكَةُ')).map(o => o.form);
+    expect(forms).toEqual(['male', 'group', 'command', 'woman']);
+  });
+
   it('counts the openers of Yusuf, and finds the dense run in Musa and al-Khidr', () => {
     const yusuf = findOpeners(surah(12));
     expect(yusuf).toHaveLength(73);
