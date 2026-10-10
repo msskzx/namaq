@@ -1,7 +1,7 @@
 # Relations within a single surah
 
-Status: idea-finding, for a demo. No citations yet; the goal is to decide
-whether the idea is worth pursuing. Nothing here is built.
+Status: built as the demo page `/quran/shifts`; the section "Verdict after testing"
+at the end overrides the ideas above where they differ. No citations yet.
 
 ## What the owner wants
 
@@ -225,3 +225,32 @@ approves the morphology download.
     no citations are needed at this stage, but the page must not imply they are.
 11. Surah 26's refrain is real in the data. My test found no match, so I have
     not shown it.
+
+## Verdict after testing
+
+A skeptic ran the plan against the real text. What the page builds:
+
+1. Repetition arcs. A run seen exactly twice in one surah, of four words or
+   more, in two different ayat. At that size surah 55 would draw 465 pairs, so
+   anything seen three or more times leaves the arcs. The finder is
+   `src/lib/quran/shifts.ts`. It counts exact repeats, which the fuzzy
+   cross-surah finder in `passages.ts` does not, so `/quran` is untouched. It
+   finds 43:22-23 (an eight-word clause).
+2. Refrain lanes. A run seen three times or more, of four words or more, or of
+   three words seen five times or more (77's «ويل يوميذ للمكذبين», ten times),
+   becomes a lane of ticks. Surahs 55, 77 and 26 show it.
+3. Speech-turn strip. One block per opener (قال, قالوا, قالت, قل), colored by
+   verb form only. The speaker is named after the opener in a small share of
+   cases, so the page draws no names. Surah 12 has 73 openers.
+4. Curated shifts. Seven hand-picked entries in `curatedShifts.ts`, each shown
+   as hand-picked and as a demo suggestion without citations: 43:22-23, 12:80-83,
+   1:2-5, 48:8-9 (Hafs reading), 10:22, 35:9, 17:1. 43:36-37 is left out: the
+   divine We in 36 and 38 and the هم in 37 cover both devils and people, so it
+   is not an address shift.
+
+There is no person and number ribbon. Surface forms give them right about 60%
+of the time and the divine We merges with the human we. Revisit it only with
+the morphology file, which waits on the owner.
+
+Data: nothing new is stored. The page reads the chosen surah's ayat on each
+request and finds the runs in a few milliseconds.
