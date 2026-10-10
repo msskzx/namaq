@@ -8,19 +8,27 @@ import translations from '../language/translations';
 
 interface AyahCardProps {
   ayah: Ayah;
-  marks?: number[];
+  slots?: Record<number, number>;
 }
 
-function MarkedText({ text, marks }: { text: string; marks: number[] }) {
+const SLOT_COLORS = [
+  'text-amber-600 dark:text-amber-400',
+  'text-sky-600 dark:text-sky-400',
+  'text-emerald-600 dark:text-emerald-400',
+  'text-rose-600 dark:text-rose-400',
+  'text-violet-600 dark:text-violet-400',
+];
+
+function SharedText({ text, slots }: { text: string; slots: Record<number, number> }) {
   return text.split(' ').map((word, index) => (
     <React.Fragment key={index}>
       {index > 0 && ' '}
-      {marks.includes(index) ? <u className="decoration-amber-500 decoration-2 underline-offset-8">{word}</u> : word}
+      {index in slots ? <mark className={`bg-transparent ${SLOT_COLORS[slots[index] % SLOT_COLORS.length]}`}>{word}</mark> : word}
     </React.Fragment>
   ));
 }
 
-export function AyahCard({ ayah, marks }: AyahCardProps) {
+export function AyahCard({ ayah, slots }: AyahCardProps) {
   const { language } = useLanguage();
   const t = translations[language];
 
@@ -33,8 +41,8 @@ export function AyahCard({ ayah, marks }: AyahCardProps) {
           </div>
         </div>
         <div className="flex-1">
-          <div className="text-right text-2xl mb-2 font-arabic" dir="rtl">
-            {marks ? <MarkedText text={ayah.text} marks={marks} /> : ayah.text}
+          <div className="text-right text-2xl leading-[2.2] mb-2 font-arabic" dir="rtl">
+            {slots ? <SharedText text={ayah.text} slots={slots} /> : ayah.text}
           </div>
           <div className="text-sm text-gray-600 dark:text-gray-400 mt-2">
             {language === 'ar' ? ayah.surah.name : ayah.surah.nameTransliterated || ayah.surah.name} - {t.ayahs} {ayah.number}

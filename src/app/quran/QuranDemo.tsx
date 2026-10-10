@@ -2,11 +2,13 @@
 
 import React, { useMemo, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faAnglesDown, faArrowLeft, faArrowRight, faExpand } from '@fortawesome/free-solid-svg-icons';
 import Badge from '@/components/common/Badge';
 import Button from '@/components/common/Button';
 import { AyahCard } from '@/components/quran/AyahCard';
 import { sideCards } from '@/lib/quran/cards';
+import { ayahWords } from '@/lib/quran/normalize';
+import { sharedSlots } from '@/lib/quran/wordDiff';
 import type { Ayah } from '@/types/quran';
 import type { Passage } from '@/lib/quran/passages';
 
@@ -104,13 +106,57 @@ function Strip({ surah, passages, selected, onSelect }: { surah: Surah; passages
   );
 }
 
-function Side({ title, cards, surah }: { title: string; cards: ReturnType<typeof sideCards>; surah: Ayah['surah'] }) {
+function Side({ title, side, marks, ayat, count, surah }: { title: string; side: Passage['a']; marks: number[]; ayat: Record<string, string>; count: number; surah: Ayah['surah'] }) {
+  const [full, setFull] = useState(false);
+  const [after, setAfter] = useState(0);
+  const [fetched, setFetched] = useState<Record<string, string>>({});
+  const [failed, setFailed] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const n = side.from.surah;
+  const known = { ...fetched, ...ayat };
+  const cards = sideCards(side, marks, known, { full, after });
+  const partial = !full && sideCards(side, marks, known, { full: true }).some((c, i) => c.text !== cards[i].text);
+
+  const more = async () => {
+    setFailed(false);
+    setLoading(true);
+    if (!known[`${n}:${side.to.ayah + after + 1}`]) {
+      try {
+        const res = await fetch(`/api/quran/surahs/${n}`);
+        if (!res.ok) throw new Error(String(res.status));
+        const body: { ayat: { number: number; text: string }[] } = await res.json();
+        setFetched(Object.fromEntries(body.ayat.map(a => [`${n}:${a.number}`, ayahWords(a.text, a.number === 1 && n !== 1 && n !== 9).display.join(' ')])));
+      } catch {
+        setFailed(true);
+        setLoading(false);
+        return;
+      }
+    }
+    setAfter(a => a + 1);
+    setLoading(false);
+  };
+
   return (
     <div>
       <h3 className="text-xl mb-2 text-amber-600 dark:text-amber-400">{title}</h3>
       {cards.map(c => (
-        <AyahCard key={c.ayah} ayah={{ id: `${c.surah}:${c.ayah}`, number: c.ayah, text: c.text, surah } as unknown as Ayah} marks={c.marks} />
+        <AyahCard key={c.ayah} ayah={{ id: `${c.surah}:${c.ayah}`, number: c.ayah, text: c.text, surah } as unknown as Ayah} slots={sharedSlots(c.text.split(' ').length, c.marks)} />
       ))}
+      <div className="flex flex-wrap gap-2">
+        {partial && (
+          <Button size="sm" onClick={() => setFull(true)}>
+            <FontAwesomeIcon icon={faExpand} />
+            عرض الآية كاملة
+          </Button>
+        )}
+        {side.to.ayah + after < count && (
+          <Button size="sm" disabled={loading} onClick={more}>
+            <FontAwesomeIcon icon={faAnglesDown} />
+            عرض الآية التالية
+          </Button>
+        )}
+      </div>
+      {failed && <p role="alert" className="text-sm text-red-600 dark:text-red-400 mt-2">تعذر تحميل الآية.</p>}
     </div>
   );
 }
@@ -184,9 +230,9 @@ export default function QuranDemo({ runs, ayat }: { runs: Runs; ayat: Record<str
           <Badge size="sm" color="gray" text={`يرد في ${num(p.places)} مواضع`} />
           <Badge size="sm" color="gray" text={p.marksA.length + p.marksB.length === 0 ? 'لا اختلاف في الكلمات' : `${num(p.marksA.length)} كلمة مختلفة في الأول و${num(p.marksB.length)} في الثاني`} />
         </div>
-        <div className="grid md:grid-cols-2 gap-4">
-          <Side title={plainName(surahs[p.a.from.surah - 1].name)} cards={sideCards(p.a, p.marksA, ayat)} surah={surahOf(p.a.from.surah)} />
-          <Side title={plainName(surahs[p.b.from.surah - 1].name)} cards={sideCards(p.b, p.marksB, ayat)} surah={surahOf(p.b.from.surah)} />
+        <div className="grid md:grid-cols-2 gap-4 mb-3">
+          <Side key={`a${selected}`} title={plainName(surahs[p.a.from.surah - 1].name)} side={p.a} marks={p.marksA} ayat={ayat} count={surahs[p.a.from.surah - 1].count} surah={surahOf(p.a.from.surah)} />
+          <Side key={`b${selected}`} title={plainName(surahs[p.b.from.surah - 1].name)} side={p.b} marks={p.marksB} ayat={ayat} count={surahs[p.b.from.surah - 1].count} surah={surahOf(p.b.from.surah)} />
         </div>
         <p className="text-sm text-gray-600 dark:text-gray-400">الكلمات المسطَّرة هي ما اختلف بين النصين.</p>
       </section>

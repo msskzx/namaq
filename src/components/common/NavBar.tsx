@@ -14,6 +14,7 @@ import { getAllNavLinks, type SiteLink } from '@/lib/siteLinks';
 // A subset of getAllNavLinks, by href, so a dropdown never lists a link under
 // a different label than the mobile menu and the graph workspace menu give it.
 const HADITH_SUBMENU_HREFS = ['/hadith/bukhari-jibril', '/hadith/muslim-jibril', '/hadith/fath-iman-50'];
+const QURAN_SUBMENU_HREFS = ['/quran', '/quran/compare'];
 const PEOPLE_SUBMENU_HREFS = ['/people', '/people/prophet-muhammad', '/titles', '/events'];
 
 function submenuFrom(hrefs: string[], language: 'en' | 'ar'): SiteLink[] {
@@ -27,6 +28,8 @@ const getLinkItems = (href: string, language: 'en' | 'ar'): SiteLink[] => {
       return submenuFrom(PEOPLE_SUBMENU_HREFS, language);
     case '/hadith':
       return submenuFrom(HADITH_SUBMENU_HREFS, language);
+    case '/quran':
+      return submenuFrom(QURAN_SUBMENU_HREFS, language);
     case '/quizzes':
       // Solo today; party mode (docs/plans/quizzes.md) adds its own entry
       // here once built, rather than a second top-level dropdown.
@@ -84,6 +87,7 @@ export default function NavBar() {
     .map((wanted) => getAllNavLinks(language).find((link) => link.href === wanted))
     .filter((link): link is SiteLink => link !== undefined);
   mainLinks.splice(3, 0, { href: '/hadith', label: language === 'ar' ? 'الأحاديث' : 'Hadith' });
+  mainLinks.splice(4, 0, { href: '/quran', label: language === 'ar' ? 'القرآن' : 'Quran' });
 
   const allLinks = getAllNavLinks(language);
 

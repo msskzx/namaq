@@ -32,7 +32,7 @@ the build runs offline, so that check is still owed.
   field is imported and uncited.
 - **Shared passages.** An arc diagram over the 114 surahs in mushaf order, one
   arc per passage. Tapping an arc, or choosing one in the list, shows the two
-  passages side by side as `AyahCard`s with the differing words underlined.
+  passages side by side as `AyahCard`s with the words they share colored.
 - **Where a surah shares.** A strip of one box per ayah of a surah, coloured
   where a shared passage sits. Tapping a box selects that passage.
 
@@ -69,6 +69,15 @@ differing-word count are shown, so a reader can judge each one.
 
 Known cases the tests pin: 7:106-109 with 26:31-34, 15:29-31 with 38:72-74,
 and 20:71 with 26:49.
+
+## Context around a passage
+
+A passage often starts or ends inside an ayah. Per side, "عرض الآية كاملة" shows
+the whole first and last ayah (words outside the passage plain, shared words
+still colored; no fetch, since `ayat.json` holds whole ayat), and "عرض الآية
+التالية" appends the following ayah, plain, one per press until the surah ends.
+The next ayah is not in `ayat.json`, so the first press fetches
+`/api/quran/surahs/<n>` and runs the text through `ayahWords(...).display`.
 
 ## Out of scope
 
