@@ -12,23 +12,25 @@ two engines do, challenges the idea, and lists suggestions in the order they cos
 | | `/quran` | `/quran/compare` |
 |---|---|---|
 | Question | Which surahs share a passage? | How do these two ranges line up? |
-| Input | All 6,236 ayat | Two chosen surahs or ayah ranges |
+| Input | All 6,236 ayat | Two different surahs today. Ayah ranges and a surah against itself are requested and being built in PR #362 |
 | When it runs | Build time (`npm run quran:demo`), output in `runs.json` | At request time |
 | Unit | Words, across ayah boundaries, at least 10 | Whole ayat, runs of at least 2 words |
 | Method | Seed and extend with a few skipped words allowed (`passages.ts`) | Order-preserving alignment scored by run length squared (`compare.ts`) |
-| Within one surah | Skipped on purpose | Allowed |
+| Within one surah | Skipped on purpose | Not yet; requested in PR #362 |
 | Output | Arcs and passage pairs | Aligned rows, gaps and a count-based tail |
 
-Both share `normalize.ts` and `wordDiff.ts`. They do not share the run finder:
-`longestRun` in `compare.ts` and the extend step in `passages.ts` do the same job twice.
+Both share `normalize.ts` and `wordDiff.ts`. They do not share the run finder.
+`longestRun` in `compare.ts` finds exact contiguous runs, and the extend step in
+`passages.ts` also tolerates up to four skipped words, so the two overlap without being
+the same.
 
 ```mermaid
 flowchart LR
   T[Quran text] --> N[normalize + words]
   N --> S[seed and extend, all surahs, build time]
   N --> A[ayah alignment, two ranges, request time]
-  S --> P[/quran: arcs and passages/]
-  A --> C[/quran/compare: rows and gaps/]
+  S --> P["/quran: arcs and passages"]
+  A --> C["/quran/compare: rows and gaps"]
   N --> D[wordDiff: shared and differing words]
   D --> P
   D --> C
@@ -44,11 +46,10 @@ flowchart LR
    and a tail. The ayah alignment cannot scan every pair of surahs: that is 114 x 113 / 2
    pairs, and the live cost on large pairs such as 2 and 3 is still unmeasured. A single
    engine would be a shared lower layer with two callers, not one algorithm.
-3. **Two thresholds mean two meanings of "shared".** `/quran` calls ten consecutive
-   words a shared passage. Compare colors any shared word. Showing one passage on both
-   pages, with different definitions, will confuse a reader unless the wording differs.
-   The pages already use "نص مشترك" for runs, and compare could use "كلمات مشتركة" for
-   scattered words.
+3. **Two thresholds already share one label.** `/quran` calls ten consecutive words
+   "نص مشترك". Compare also labels runs of two or more words "نص مشترك" and uses
+   "كلمات مشتركة" for scattered words. Showing one passage on both pages, under one
+   label with two meanings, will confuse a reader. The wording needs to separate them.
 4. **Within-surah passages are noisy.** `/quran` skips them on purpose. Surahs built on
    a refrain (Ar-Rahman, Al-Mursalat, Al-Qamar) would produce many trivially repeating
    passages. Adding them needs a refrain filter first.
@@ -62,8 +63,8 @@ flowchart LR
 ## Suggestions, cheapest first
 
 1. **Link the pages.** A button on each passage on `/quran` opens `/quran/compare` with
-   that passage's surahs and ayah ranges, since compare now accepts ranges. No engine
-   change.
+   that passage's surahs and ayah ranges. This needs compare to accept ranges, which PR
+   #362 is adding. No engine change.
 2. **Write the vocabulary down.** One short glossary: shared passage (a run of ten or
    more consecutive words), shared words (any), aligned pair, gap, count-based tail.
 3. **Share one run finder, when a third caller exists.** Move the run finding and the
@@ -76,15 +77,16 @@ flowchart LR
    filter, and only if the owner wants them.
 6. **Measure the live engine.** Time compare on 2 against 3 and on a range-by-range
    pair, and decide whether to precompute or cache.
-7. **Keep the build-time scan.** It is the right place for an all-pairs search.
+7. **Leave the all-pairs search at build time.** It is the cheapest place for it, unless a
+   later feature needs it live.
 
 ## Options
 
-| Option | What it is | Cost | Verdict |
+| Option | What it is | Cost | Leaning |
 |---|---|---|---|
-| A | Keep two engines, link the pages | Low | Do first |
+| A | Keep two engines, link the pages | Low | First |
 | B | Share the run finder and diff, two callers | Medium | After a third caller exists |
-| C | One algorithm for both | High, and it loses ayah rows or all-pairs scale | Not recommended |
+| C | One algorithm for both | High, and it loses ayah rows or all-pairs scale | Unlikely to fit |
 
 ## Open questions
 
