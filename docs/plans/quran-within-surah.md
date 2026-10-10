@@ -242,11 +242,11 @@ A skeptic ran the plan against the real text. What the page builds:
 3. Speech-turn strip. One block per opener (قال, قالوا, قالت, قل), colored by
    verb form only. The speaker is named after the opener in a small share of
    cases, so the page draws no names. Surah 12 has 73 openers.
-4. Curated shifts. Seven hand-picked entries in `curatedShifts.ts`, each shown
-   as hand-picked and as a demo suggestion without citations: 43:22-23, 12:80-83,
-   1:2-5, 48:8-9 (Hafs reading), 10:22, 35:9, 17:1. 43:36-37 is left out: the
-   divine We in 36 and 38 and the هم in 37 cover both devils and people, so it
-   is not an address shift.
+4. Curated shifts, moved to their own static page `/quran/iltifat`. Seven
+   hand-picked entries in `curatedShifts.ts`, each shown as hand-picked and as a
+   demo suggestion without citations: 43:22-23, 12:80-83, 1:2-7, 48:8-9 (Hafs
+   reading), 10:22, 35:9, 17:1. 43:36-37 is left out: the divine We in 36 and 38
+   and the هم in 37 cover both devils and people, so it is not an address shift.
 
 There is no person and number ribbon. Surface forms give them right about 60%
 of the time and the divine We merges with the human we. Revisit it only with
@@ -254,3 +254,33 @@ the morphology file, which waits on the owner.
 
 Data: nothing new is stored. The page reads the chosen surah's ayat on each
 request and finds the runs in a few milliseconds.
+
+## Person colors on the curated page
+
+The owner asked to see the iltifat inside the ayat, with one color per mode of
+address on every example. The modes are غيبة (third person), تكلم (first
+person) and خطاب (second person), on text slots 1-3 of `AyahCard`; slot 0,
+amber, stays the color of a phrase repeated in two ayat (43:22-23).
+
+- A mark is a phrase of normalized words in one ayah, with its mode. When the
+  phrase occurs more than once in the ayah, the mark names a longer phrase that
+  contains it and occurs once (`عليهم` inside `المغضوب عليهم`). A phrase that
+  does not resolve exactly once is an error, and the unit test fails on it.
+- Every word whose person is plain from its form is marked, in every ayah of
+  a curated shift, so a plain word never reads as a different mode. A verb
+  takes its subject's person (`أرسل`, `فسقناه`, `أرسلناك`, `يسيركم`, `يأتيني`),
+  even when its object pronoun is another person. A noun or particle takes its
+  attached pronoun (`أباكم`, `عليهم`, `حوله`), even when the pronoun points at
+  a thing rather than a person. A noun with no pronoun is left plain
+  (`الرياح`), and so are relative and demonstrative pronouns (`الذي`, `هذه`),
+  including the address particle on a demonstrative (`كذلك`).
+- Exceptions the owner chose: in Al-Fatiha the names of God in 2-4 (`لله رب`,
+  `الرحمن الرحيم`, `ملك`) are marked غيبة, and `اهدنا` is marked تكلم for its
+  `نا` although its subject is the One addressed.
+- No mode for quoted speech. In 12:80-83 the three persons already show the
+  turn: `أبيكم` (خطاب, the eldest to his brothers) becomes `أبانا` (تكلم, the
+  brothers' own words), and `ابنك` addresses the father.
+
+The page is static: `npm run quran:iltifat` writes the text of the curated
+ayat to `src/app/quran/iltifat/ayat.json` from the stored Quran, and Next
+prerenders the page from that file.

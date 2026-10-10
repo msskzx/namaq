@@ -4,12 +4,9 @@ import React, { useState } from 'react';
 import Badge from '@/components/common/Badge';
 import { AyahCard } from '@/components/quran/AyahCard';
 import { ARC_MIN, REFRAIN_MANY, REFRAIN_MIN, type Arc, type Form, type Occ, type Opener, type Refrain } from '@/lib/quran/shifts';
-import type { Range } from '@/lib/quran/curatedShifts';
 import type { Ayah } from '@/types/quran';
 
-type Surah = { number: number; name: string; plain: string };
-type Part = { from: number; to: number; ayat: string[] };
-export type CuratedView = { surah: Surah; note: string; parts: Part[]; arcs: Arc[] };
+import type { Surah } from '@/lib/quran/curatedShifts';
 type Selection = { kind: 'arc'; i: number } | { kind: 'tick'; lane: number; k: number } | { kind: 'opener'; i: number } | null;
 
 const PANEL = 'bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4';
@@ -17,7 +14,6 @@ const NOTE = 'text-sm text-gray-600 dark:text-gray-400';
 const LANES = 10;
 const num = (n: number) => n.toLocaleString('ar-EG');
 const words = (n: number) => `${num(n)} ${n >= 11 ? 'كلمة' : 'كلمات'}`;
-const span = ([from, to]: Range) => (from === to ? num(from) : `${num(from)}–${num(to)}`);
 const run = (at: Occ, len: number, slot = 0) => Object.fromEntries(Array.from({ length: len }, (_, k) => [at.word + k, slot]));
 
 const FORMS: Record<Form, { label: string; slot: number; block: string }> = {
@@ -27,7 +23,7 @@ const FORMS: Record<Form, { label: string; slot: number; block: string }> = {
   woman: { label: 'قالت: امرأة', slot: 3, block: 'bg-rose-500 dark:bg-rose-400' },
 };
 
-function Card({ surah, ayah, text, slots }: { surah: Surah; ayah: number; text: string; slots?: Record<number, number> }) {
+export function Card({ surah, ayah, text, slots }: { surah: Surah; ayah: number; text: string; slots?: Record<number, number> }) {
   const s = { id: `s${surah.number}`, number: surah.number, name: surah.name, nameTransliterated: null };
   return <AyahCard ayah={{ id: `${surah.number}:${ayah}`, number: ayah, text, surah: s } as unknown as Ayah} slots={slots} />;
 }
@@ -91,32 +87,7 @@ function Speech({ openers, selected, onSelect }: { openers: Opener[]; selected: 
   );
 }
 
-function CuratedCard({ item }: { item: CuratedView }) {
-  const { surah, parts, arcs, note } = item;
-  const slotsOf = (ayah: number) => {
-    const hit = arcs.find(a => a.a.ayah === ayah || a.b.ayah === ayah);
-    return hit ? run(hit.a.ayah === ayah ? hit.a : hit.b, hit.len) : undefined;
-  };
-  return (
-    <section className={PANEL}>
-      <div className="flex flex-wrap items-center gap-2 mb-1">
-        <h3 className="text-xl text-amber-600 dark:text-amber-400">{`${surah.plain} ${span([parts[0].from, parts[parts.length - 1].to])}`}</h3>
-        <Badge size="sm" color="amber" text="مختارة يدويًا" />
-        <Badge size="sm" color="gray" text="اقتراح تجريبي بلا إحالات" />
-      </div>
-      <p className={`${NOTE} mb-3`}>{note}</p>
-      <div className={parts.length > 1 ? 'grid md:grid-cols-2 gap-x-4' : ''}>
-        {parts.map(p => (
-          <div key={p.from}>
-            {p.ayat.map((text, k) => <Card key={k} surah={surah} ayah={p.from + k} text={text} slots={slotsOf(p.from + k)} />)}
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-export default function ShiftsView({ surah, ayat, arcs, refrains, openers, curated }: { surah: Surah; ayat: string[]; arcs: Arc[]; refrains: Refrain[]; openers: Opener[]; curated: CuratedView[] }) {
+export default function ShiftsView({ surah, ayat, arcs, refrains, openers }: { surah: Surah; ayat: string[]; arcs: Arc[]; refrains: Refrain[]; openers: Opener[] }) {
   const [sel, setSel] = useState<Selection>(arcs.length ? { kind: 'arc', i: 0 } : null);
   const count = ayat.length;
   const step = Math.min(40, Math.max(6, 720 / count));
@@ -194,14 +165,6 @@ export default function ShiftsView({ surah, ayat, arcs, refrains, openers, curat
             <Speech openers={openers} selected={sel?.kind === 'opener' ? sel.i : -1} onSelect={i => setSel({ kind: 'opener', i })} />
           </>
         )}
-      </section>
-
-      <section className="flex flex-col gap-3">
-        <h2 className="text-2xl">تحولات مختارة</h2>
-        <p className={NOTE}>
-          أمثلة اختيرت باليد، بلا إحالات إلى كتب. لا يوجد شريط للشخص والعدد لأن صيغ الكلمات وحدها لا تدل عليهما إلا في نحو ستين في المئة من المواضع، ولأن «نا» العظمة تلتبس بـ«نا» الجماعة.
-        </p>
-        {curated.map(c => <CuratedCard key={`${c.surah.number}:${c.parts[0].from}`} item={c} />)}
       </section>
     </div>
   );

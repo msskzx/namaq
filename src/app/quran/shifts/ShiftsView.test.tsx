@@ -15,9 +15,8 @@ const ayat = ['أ ب ج د ه', 'و ز ح ط ي', 'أ ب ج د ك', 'ل م ن س
 const arcs = [{ a: { ayah: 1, word: 0 }, b: { ayah: 3, word: 0 }, len: 4 }];
 const refrains = [{ text: 'ل م ن', len: 3, at: [{ ayah: 4, word: 0 }, { ayah: 5, word: 0 }] }];
 const openers = [{ ayah: 2, word: 0, form: 'male' as const }];
-const curated = [{ surah, note: 'ملاحظة', parts: [{ from: 1, to: 1, ayat: ['أ ب'] }, { from: 2, to: 2, ayat: ['ج د'] }], arcs: [] }];
 
-const renderView = () => render(<ShiftsView surah={surah} ayat={ayat} arcs={arcs} refrains={refrains} openers={openers} curated={curated} />);
+const renderView = () => render(<ShiftsView surah={surah} ayat={ayat} arcs={arcs} refrains={refrains} openers={openers} />);
 const marked = () => [...document.querySelectorAll('mark')].map(m => m.textContent);
 
 describe('ShiftsView', () => {
@@ -38,10 +37,4 @@ describe('ShiftsView', () => {
     expect(marked()).toEqual(['و']);
   });
 
-  it('labels each curated shift as hand-picked and without citations', () => {
-    render(<ShiftsView surah={surah} ayat={ayat} arcs={[]} refrains={[]} openers={[]} curated={[curated[0], curated[0]]} />);
-    expect(screen.getAllByText('مختارة يدويًا')).toHaveLength(2);
-    expect(screen.getAllByText('اقتراح تجريبي بلا إحالات')).toHaveLength(2);
-    expect(screen.getByText(/ستين في المئة/)).toBeTruthy();
-  });
 });
