@@ -2,7 +2,7 @@
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
-import { buildCurated, CURATED, MODES, USED_MODES } from '@/lib/quran/curatedShifts';
+import { buildCurated, MODES, USED_MODES } from '@/lib/quran/curatedShifts';
 import data from './ayat.json';
 import IltifatView from './IltifatView';
 
