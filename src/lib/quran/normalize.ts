@@ -23,3 +23,5 @@ export function ayahWords(text: string, stripBasmala: boolean): AyahWords {
   const display = body.filter(token => normalizeWord(token) !== '');
   return { display, norm: display.map(normalizeWord) };
 }
+
+export const plainName = (name: string) => name.replace(/[ً-ٟـٰۖ-ۭ]/g, '').replace(/ٱ/g, 'ا');
