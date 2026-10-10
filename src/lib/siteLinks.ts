@@ -22,5 +22,6 @@ export const getAllNavLinks = (language: 'en' | 'ar'): SiteLink[] => [
   { href: '/quran', label: language === 'ar' ? 'القرآن (تجريبي)' : 'Quran (demo)' },
   { href: '/quran/compare', label: language === 'ar' ? 'مقارنة سورتين (تجريبي)' : 'Compare two surahs (demo)' },
   { href: '/quran/shifts', label: language === 'ar' ? 'تحولات داخل السورة (تجريبي)' : 'Shifts within a surah (demo)' },
+  { href: '/quran/themes', label: language === 'ar' ? 'مواضع متقابلة (تجريبي)' : 'Matching topics (demo)' },
   { href: '/references', label: language === 'ar' ? 'المراجع' : 'References' },
 ];

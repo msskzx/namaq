@@ -23,10 +23,11 @@ describe('NavBar Quran links', () => {
     expect(hrefs.filter(h => h === '/quran').length).toBe(2);
     expect(hrefs).toContain('/quran/compare');
     expect(hrefs).toContain('/quran/shifts');
+    expect(hrefs).toContain('/quran/themes');
   });
 
   it('keeps all three pages in the shared list for the mobile menu and graph menu', () => {
     const hrefs = getAllNavLinks('ar').map(l => l.href);
-    expect(hrefs).toEqual(expect.arrayContaining(['/quran', '/quran/compare', '/quran/shifts']));
+    expect(hrefs).toEqual(expect.arrayContaining(['/quran', '/quran/compare', '/quran/shifts', '/quran/themes']));
   });
 });
