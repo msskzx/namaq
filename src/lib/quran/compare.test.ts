@@ -133,6 +133,7 @@ describe('clampRange', () => {
     expect(clampRange('0', '500', 77)).toEqual({ from: 1, to: 77 });
     expect(clampRange('60', '10', 77)).toEqual({ from: 60, to: 60 });
     expect(clampRange('x', '12', 77)).toEqual({ from: 1, to: 12 });
+    expect(clampRange('', '', 77)).toEqual({ from: 1, to: 77 });
   });
 });
 

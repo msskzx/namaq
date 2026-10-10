@@ -44,7 +44,7 @@ export default async function QuranComparePage({ searchParams }: { searchParams:
     </select>
   );
   const ayahInput = (name: string, value: number, max: number, label: string) => (
-    <input type="number" name={name} aria-label={label} defaultValue={value} min={1} max={max} className="w-16 rounded border border-amber-400 bg-white dark:bg-gray-900 px-2 py-1 text-sm" />
+    <input type="number" name={name} aria-label={label} defaultValue={value} min={1} max={max} className="w-20 rounded border border-amber-400 bg-white dark:bg-gray-900 px-2 py-1 text-sm" />
   );
 
   return (

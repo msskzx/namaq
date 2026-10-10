@@ -111,7 +111,8 @@ export function wordSlots(group: Group, side: 'a' | 'b', ayah: number, count: nu
 
 export function clampRange(from: unknown, to: unknown, count: number): { from: number; to: number } {
   const pick = (v: unknown, fallback: number) => {
-    const n = Number(Array.isArray(v) ? v[0] : v);
+    const raw = Array.isArray(v) ? v[0] : v;
+    const n = raw === '' ? NaN : Number(raw);
     return Number.isInteger(n) ? Math.min(Math.max(n, 1), count) : fallback;
   };
   const start = pick(from, 1);
