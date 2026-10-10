@@ -5,19 +5,12 @@ import type { Ayah } from "@/types/quran";
 import Pagination from '@/components/common/Pagination';
 import { useLanguage } from '../language/LanguageContext';
 import translations from '../language/translations';
+import { SLOT_COLORS } from './slotColors';
 
 interface AyahCardProps {
   ayah: Ayah;
   slots?: Record<number, number>;
 }
-
-const SLOT_COLORS = [
-  'text-amber-600 dark:text-amber-400',
-  'text-sky-600 dark:text-sky-400',
-  'text-emerald-600 dark:text-emerald-400',
-  'text-rose-600 dark:text-rose-400',
-  'text-violet-600 dark:text-violet-400',
-];
 
 function SharedText({ text, slots }: { text: string; slots: Record<number, number> }) {
   return text.split(' ').map((word, index) => (
