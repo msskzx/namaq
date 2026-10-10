@@ -1,12 +1,12 @@
 # Qira'at page: the same ayah in different readings
 
-Status: proposal for a demo. Nothing here is built. Strict citations come after
-the demo; until then every variant and every meaning below is a demo
-suggestion, and the page must say so.
+Status: built as a demo at `/quran/qiraat`. Strict citations come after the
+demo; until then the page says it is a demo, and every meaning line is either a
+quotation with its source or labeled as an unsourced suggestion.
 
 ## What the owner wants
 
-A new page, suggested route `/quran/qiraat`, that shows one ayah in more than
+A page at `/quran/qiraat`, that shows one ayah in more than
 one reading and, where it helps, how the readings differ in meaning. Arabic
 only, light and dark, usable at phone width, styled like `/quran` and
 `/quran/compare`.
@@ -60,95 +60,83 @@ KFGQPC Warsh text (Unicode text, probably a few MB, to live under `data/` as
 source material, not in the repo root), and we would first confirm its licence
 on the official page.
 
-## Candidate variants for the demo set
+## What was built
 
-Hafs wording is checked against `http://localhost:3000/api/quran/surahs/<n>`
-for every row except 2:10, which I did not fetch. Everything in the "other
-reading", "readers" and "meaning" columns is from memory and unverified,
-including reader lists. The only variant confirmed on the web is the 1:4 pair
-(both readings exist, complementary meaning, per the Quran.com explainer).
+The page has a picker of 12 variants, keyed to the Hafs (Kufi) numbering. The
+page says so, and says that Warsh numbers Al-Fatiha without counting the
+basmala, so 1:4 is ayah 3 there, and that Al-Baqara has 286 ayat in the Kufi
+count, 287 in the Basri and 285 in the Madani.
 
-| Ayah | Hafs word (checked locally) | Other reading | Readers of the other side (from memory) | Meaning note, demo suggestion (from memory) |
-| --- | --- | --- | --- | --- |
-| 1:4 | مَالِكِ | مَلِكِ | Nafi', Ibn Kathir, Abu Amr, Ibn Amir, Hamza, Abu Ja'far read ملك; 'Asim, al-Kisa'i, Ya'qub, Khalaf read مالك | Owner of the Day versus King of the Day. Both fit; the Quran.com explainer calls them complementary. Al-Farisi's al-Hujja discusses the choice. |
-| 2:9 | وَمَا يَخۡدَعُونَ | وما يخادعون | Nafi', Ibn Kathir, Abu Amr, plausibly Abu Ja'far and Ya'qub | The second verb mirrors the first (they "deal deceitfully with" God and the believers) versus a plain "deceive only themselves". Source: Ibn Khalawayh, from memory. |
-| 2:10 | يَكۡذِبُونَ | يُكَذِّبُونَ | Kufan readers (Asim, Hamza, al-Kisa'i) read the Hafs form | They lie versus they call the Messenger a liar. Not fetched locally. |
-| 2:132 | وَوَصَّىٰ | وَأَوۡصَىٰ | Nafi', Ibn Amir, Abu Ja'far | Both mean "enjoined". The second is a different verb form and changes the spelling in the mushaf. |
-| 2:259 | نُنشِزُهَا (zay) | نُنشِرُهَا (ra) | Ibn Kathir, Abu Amr (zay is Nafi', Ibn Amir, Hamza, al-Kisa'i, Asim) | Raise and join the bones together versus bring the bones to life. Source: Ibn Khalawayh, from memory. |
-| 3:146 | قَـٰتَلَ | قُتِلَ | Nafi', Ibn Kathir, Abu Amr, Ya'qub | A prophet fought beside many scholars, or a prophet was killed and many scholars with him did not weaken. A well-known case where the sense of who fell changes. |
-| 5:6 | وَأَرۡجُلَكُمۡ (accusative) | وَأَرۡجُلِكُمۡ (genitive) | Ibn Kathir, Abu Amr, Hamza, Shu'ba read genitive | Wash the feet versus wipe over the head and feet. The ruling debate in fiqh turns on it; al-Itqan and the tafsirs discuss it. |
-| 9:100 | تَجۡرِی تَحۡتَهَا | تجري من تحتها | Ibn Kathir (and the Makkan mushaf) | One added word, so the rasm differs. Meaning the same; a clean example of a rasm difference. |
-| 18:86 | حَمِئَةࣲ | حامية | Nafi', Ibn Amir, Abu Ja'far (others uncertain) | Muddy black silt versus hot. The old Ibn Abbas and Mu'awiya exchange about it is told in the tafsirs. Check the anecdote before use. |
-| 49:6 | فَتَبَیَّنُوۤا۟ | فتثبتوا | Hamza, al-Kisa'i, Khalaf | Investigate clearly versus verify and wait. Both warn against acting on a sinner's report. |
+Each variant is a card:
 
-The four I would trust most for a first demo, because the readings are widely
-known and the Hafs side is confirmed in our own text: 1:4, 49:6, 5:6 and 9:100.
-Even these need the reader lists checked against al-Shatibiyya before any
-citation.
+1. The Hafs ayah through `AyahCard`, with the variant word colored. The text
+   comes from the `Ayah` table; no table or migration is added.
+2. A word-level display: the variant word with two neighbors on each side, once
+   in the Hafs reading and once in the other. It never builds a full ayah from
+   the other reading, because that string would be text no mushaf prints. The
+   second line is labeled as a word-level difference, not the mushaf text of
+   that riwaya.
+3. A strip of 20 riwaya chips (`Badge`), one color per reading and grey
+   «غير مؤكد» for a riwaya whose reading is not confirmed, with a legend.
+   Chips are per riwaya, so a split inside one reader (Asim: Hafs against
+   Shu'ba, in 5:6 and 36:35) shows.
+4. A meaning line, either quoted from a named mufassir with its URL, or
+   labeled «غير موثق (اقتراح للتجربة)». 5:6 shows «لا يُعرض شرح هنا لأنه موضع
+   خلاف فقهي», since the difference is a fiqh dispute and the page authors no
+   ruling.
+5. The Quranpedia URL the reader lists come from.
 
-Note that 12:11 and 2:245 in our Hafs text carry marks (an ishmam sign, a small
-letter over a sad) that encode a reading inside the Hafs script. A page that
-splits words must not treat those as variants.
+The data is one typed file, `src/app/quran/qiraat/data/variants.ts`. A reading
+lists readers (expanded to their two riwayat) and, where a reader splits, single
+riwayat. The logic is in `src/lib/quran/qiraat.ts`: the reader-to-riwaya map,
+chip states and neighbor extraction. `data/hafs.fixture.json` holds the twelve
+Hafs ayat so the tests need no database.
 
-## Page ideas
+The Hafs word is stored in plain letters and found by `normalizeWord`, which
+drops the dagger alef. So the Hafs مَـٰلِكِ is matched as «ملك», قَـٰتَلَ as
+«قتل» and عِبَـٰدُ as «عبد». 2:9 carries an `occurrence` because يُخَـٰدِعُونَ and
+يَخۡدَعُونَ normalize to the same word.
 
-### A. Ayah picker with variant words highlighted
+## The 12 variants and what Quranpedia confirmed
 
-An ayah selector (or a list of the demo set) shows the Hafs text with the
-variant word colored. Under it, a badge row per reading: the wording, then the
-readers on that side. A line below carries the meaning note, labeled as a demo
-suggestion.
+Reader lists come from the riwaya tables on each Quranpedia ayah page
+(`https://quranpedia.net/ayahs/<s>/<a>`; the fuller `/qiraat/<surah>/<a>` page
+for 2:259, 5:6 and 18:86). The source book is not named there; check against
+al-Nashr in the citation phase.
 
-- Data: the demo file only. Words located by index into `ayahWords`.
-- Cost: low. Reuses `AyahCard` slots and `Badge`. This is the recommended page.
+| Ayah | First reading (Hafs side) | Second reading | Notes |
+| --- | --- | --- | --- |
+| 1:4 | مالك: Asim, al-Kisa'i, Ya'qub, Khalaf al-Ashir | ملك: Nafi', Ibn Kathir, Abu Amr, Ibn Amir, Hamza, Abu Ja'far | No riwaya table on the page. The lists come from a footnote citing al-Nashr and al-Ithaf, so they are per reader and the card says so. |
+| 2:9 | يخدعون | يخادعون: Nafi', Ibn Kathir, Abu Amr | Matches the proposed list. |
+| 2:132 | ووصى | وأوصى: Nafi', Ibn Amir, Abu Ja'far | Matches. |
+| 2:259 | ننشزها | ننشرها: Nafi', Ibn Kathir, Abu Amr, Abu Ja'far, Ya'qub | Matches. |
+| 3:146 | قاتل | قُتل: Nafi', Ibn Kathir, Abu Amr, Ya'qub | Matches. |
+| 5:6 | وأرجلَكم: Nafi', Ibn Amir, al-Kisa'i, Ya'qub, Hafs | وأرجلِكم: Ibn Kathir, Abu Amr, Hamza, Abu Ja'far, Khalaf al-Ashir, Shu'ba | Matches, with the Asim split. |
+| 9:100 | تحتها | من تحتها: Ibn Kathir (al-Bazzi, Qunbul) | Matches. |
+| 17:93 | قل | قال: Ibn Kathir, Ibn Amir | Matches. |
+| 18:86 | حمئة | حامية | **Quranpedia lists no reading for this word**; its table for 18:86 holds only فيهم. The reader list in the brief is not confirmed, so every chip is grey. |
+| 36:35 | عملته: Nafi', Ibn Kathir, Abu Amr, Ibn Amir, Abu Ja'far, Ya'qub, Hafs | عملت: Hamza, al-Kisa'i, Khalaf al-Ashir, Shu'ba | Matches, with the Asim split. |
+| 43:19 | عباد | عند: Nafi', Ibn Kathir, Ibn Amir, Abu Ja'far, Ya'qub | Matches. |
+| 49:6 | فتبينوا | فتثبتوا: Hamza, al-Kisa'i, Khalaf al-Ashir | Matches. |
 
-### B. Two readings side by side
+"Khalaf" in a reader list is Khalaf al-Ashir (Ishaq, Idris). Khalaf an Hamza is a
+riwaya of Hamza and sits on Hamza's side.
 
-Two stacked cards (stacked on a phone, side by side on a wide screen): Hafs on
-one, the other reading on the other, the differing word colored by the same
-slot in both. The second text is the Hafs ayah with the variant word swapped,
-produced by the static file.
+Meanings: 2:259, 3:146, 18:86, 36:35 and 49:6 quote al-Tabari from the
+Quranpedia ayah page; 1:4 quotes Ibn Kathir from the KSU page the brief named.
+The brief asked for al-Baghawi and al-Baydawi there, but the page shows Ibn
+Kathir, and the quoted line is his. 18:86 quotes al-Tabari's reports on the two
+words, since the brief's Ibn Kathir exchange is not in the page text I read.
+2:9, 2:132, 9:100, 17:93 and 43:19 carry a short unsourced suggestion, labeled.
 
-- Data: demo file with the replacement word per reading.
-- Cost: low. `wordDiff` and `sharedSlots` already do the coloring. The risk is
-  that a swapped word is not the exact printed text of that riwaya (see risks).
+## Open questions for the next phase
 
-### C. Who reads what matrix
-
-Rows are variant words, columns are the ten readers; a cell shows which side
-the reader takes (a color, not a label). It makes the pattern visible: a block
-of Kufan readers on one side, the Hijazis on the other.
-
-- Data: the demo file with a reader list per side. A real matrix needs the full
-  farsh table, which is the expensive dataset. With ten rows it is a teaser.
-- Cost: medium for the UI. A small table on a phone needs horizontal care.
-
-### D. Per-surah heat strip
-
-One strip per surah, one cell per ayah, shaded by number of variant words.
-Honest only with a full dataset. With the demo set, nearly every cell would be
-empty and the strip would mislead. Defer until the full table exists.
-
-### Which are possible now
-
-| Idea | Hand-picked file | Needs full dataset |
-| --- | --- | --- |
-| A picker with highlights | Yes | Only to extend |
-| B side by side | Yes | Only to extend |
-| C reader matrix | Teaser with ten rows | Yes, to mean anything |
-| D heat strip | No | Yes |
-
-Recommended: build A, with B as the view for the chosen pair of readings.
-
-## Suggested data shape for the demo file
-
-One entry per variant: surah, ayah, word index in the Hafs ayah (counted the
-same way `ayahWords` counts), a list of readings, each with its text and its
-readers, and an optional meaning note with its source named in prose. The
-reader ids are the ten names; riwayat can be added later. A short validation
-test should check that each Hafs word at the given index equals `Hafs word` in
-the entry, so a text change cannot silently misalign the file. Per the repo
-rule, any code comment points to this document and nothing more.
+- Whether to download a full farsh al-huruf dataset (see the table above): the
+  likeliest route is digitizing al-Shatibiyya and al-Durra, or checking QUL.
+  Nothing was downloaded for this demo.
+- Check every reader list against al-Nashr and name the book.
+- Find the real source for 18:86, and confirm whether Abu Ja'far and Khalaf
+  al-Ashir read حامية.
 
 ## Risks
 
@@ -180,27 +168,3 @@ rule, any code comment points to this document and nothing more.
    KFGQPC Warsh font would need to be hosted, after a licence check.
 8. A page about reading differences invites reading it as doctrine. It needs a
    short note that all ten readings are mutawatir and the page picks no side.
-
-## Assumptions for the SKEPTIC to attack
-
-1. No ready-made farsh al-huruf dataset exists online in machine-readable form,
-   and a hand-picked file is the right start. (I searched pages, not
-   repositories in depth; QUL and QuranEnc were not checked.)
-2. Ten variants are enough to show the idea, and a demo that shows only ten
-   will not be mistaken for coverage.
-3. Page A plus B is better than the matrix or heat strip for a first demo.
-4. Keying every entry to Hafs surah:ayah and Hafs word index is stable enough.
-5. Swapping one word into the Hafs text and coloring it is an honest enough
-   rendering for a demo, given the rasm risk.
-6. Reader attributions at the level of the ten imams, without riwayat, are
-   acceptable for the demo even though they blur Warsh and Qalun.
-7. The reader lists in the table above are right. They come from memory.
-8. Showing meaning notes before sources exist, labeled as demo suggestions, is
-   acceptable and will not leak into the data later as if cited.
-9. The Hafs word index from `ayahWords` is the same as the index a viewer would
-   count, including after basmala stripping and inside ayat with waqf marks.
-10. Reusing `AyahCard` slots needs no change to the component.
-11. 2:10, 2:9 and 18:86 are well known enough to include; 18:86's anecdote may
-    not be.
-12. The owner will accept that a full dataset is a separate, larger task that
-    needs a licence check and possibly a download approval.
