@@ -58,6 +58,7 @@ function Card({ entry }: { entry: QiraatEntry }) {
   return (
     <section className="flex flex-col gap-4">
       <AyahCard ayah={ayah} slots={slots} />
+      {!found && <p className="rounded-lg border border-red-400 p-4">تعذر تحديد الكلمة المختلف فيها في نص الآية، فلا يُعرض الفرق.</p>}
       {found && (
         <div className="flex flex-col gap-2 rounded-lg border border-gray-200 dark:border-white/10 p-4">
           {rows.map((word, i) => (
@@ -77,9 +78,9 @@ function Card({ entry }: { entry: QiraatEntry }) {
           ))}
         </ul>
         <div className="flex flex-wrap items-center gap-2 text-sm">
-          <Badge size="sm" color={BADGE_COLORS[0]} text={hafsWord} />
-          <Badge size="sm" color={BADGE_COLORS[1]} text={second.text ?? ''} />
-          <Badge size="sm" color="gray" text={UNCONFIRMED} />
+          {found && states.some(c => c.state === 0) && <Badge size="sm" color={BADGE_COLORS[0]} text={hafsWord} />}
+          {states.some(c => c.state === 1) && <Badge size="sm" color={BADGE_COLORS[1]} text={second.text ?? ''} />}
+          {states.some(c => c.state === null) && <Badge size="sm" color="gray" text={UNCONFIRMED} />}
         </div>
         {variant.note && <p className="text-sm text-gray-600 dark:text-gray-400">{variant.note}</p>}
       </div>
@@ -89,7 +90,7 @@ function Card({ entry }: { entry: QiraatEntry }) {
       </div>
       <a href={pediaUrl(variant)} className="inline-flex items-center gap-2 text-sm underline" target="_blank" rel="noreferrer">
         <FontAwesomeIcon icon={faLink} />
-        قوائم القرّاء من موسوعة القرآن: {pediaUrl(variant)}
+        قوائم القرّاء من موسوعة القرآن: <bdi dir="ltr">{pediaUrl(variant)}</bdi>
       </a>
     </section>
   );
@@ -97,6 +98,7 @@ function Card({ entry }: { entry: QiraatEntry }) {
 
 export default function QiraatView({ entries }: { entries: QiraatEntry[] }) {
   const [selected, setSelected] = useState(0);
+  if (entries.length === 0) return <p dir="rtl" className="max-w-3xl mx-auto p-4">لا توجد آيات محفوظة لعرض القراءات.</p>;
   return (
     <div dir="rtl" className="max-w-3xl mx-auto p-4 flex flex-col gap-4 text-gray-900 dark:text-gray-200">
       <header className="flex flex-col gap-2">
@@ -109,7 +111,7 @@ export default function QiraatView({ entries }: { entries: QiraatEntry[] }) {
           وسورة البقرة {n(286)} آية في العدّ الكوفي و{n(287)} في البصري و{n(285)} في المدني.
         </p>
         <p>
-          قوائم القرّاء من موسوعة القرآن (Quranpedia) على صفحة كل آية، مثل https://quranpedia.net/ayahs/1/4، ولا تسمّي الموسوعة الكتاب الذي نقلت عنه، وستُراجع على «النشر» في مرحلة التوثيق. القراءات العشر كلها متواترة، والصفحة لا ترجّح بينها.
+          قوائم القرّاء من موسوعة القرآن (Quranpedia) على صفحة كل آية، مثل <bdi dir="ltr">https://quranpedia.net/ayahs/1/4</bdi>، ولا تسمّي الموسوعة الكتاب الذي نقلت عنه، وستُراجع على «النشر» في مرحلة التوثيق. القراءات العشر كلها متواترة، والصفحة لا ترجّح بينها.
         </p>
       </header>
       <nav className="flex flex-wrap gap-2" aria-label="المواضع">

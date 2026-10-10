@@ -71,8 +71,13 @@ describe('neighbors', () => {
     return { at, text: (r: readonly [number, number]) => words.display.slice(r[0], r[1]).length };
   };
 
-  it('finds the variant word of all twelve entries in the Hafs text', () => {
-    for (const v of variants) expect(neighbors(norm(v.surah, v.ayah), v.hafsWord, v.occurrence), `${v.surah}:${v.ayah}`).not.toBeNull();
+  it('finds the intended Hafs word in all twelve entries', () => {
+    const expected: Record<string, string> = { '1:4': 'مَـٰلِكِ', '2:9': 'یَخۡدَعُونَ', '2:132': 'وَوَصَّىٰ', '2:259': 'نُنشِزُهَا', '3:146': 'قَـٰتَلَ', '5:6': 'وَأَرۡجُلَكُمۡ', '9:100': 'تَحۡتَهَا', '17:93': 'قُلۡ', '18:86': 'حَمِئَةࣲ', '36:35': 'عَمِلَتۡهُ', '43:19': 'عِبَـٰدُ', '49:6': 'فَتَبَیَّنُوۤا۟' };
+    for (const v of variants) {
+      const k = `${v.surah}:${v.ayah}`;
+      const at = neighbors(norm(v.surah, v.ayah), v.hafsWord, v.occurrence)!;
+      expect(ayahWords(texts[k], false).display.slice(at.start, at.end).join(' '), k).toBe(expected[k]);
+    }
   });
 
   it('1:4 has the word first, so only the two words after it', () => {
@@ -89,10 +94,9 @@ describe('neighbors', () => {
     expect(norm(5, 6)[at.start - 1]).toBe('برءوسكم');
   });
 
-  it('2:9 picks the second يخدعون, the first being يخادعون', () => {
-    const { at } = around(2, 9);
-    expect(at.start).toBe(ayahWords(texts['2:9'], false).norm.lastIndexOf('يخدعون'));
-    expect(neighbors(norm(2, 9), 'يخدعون')!.start).toBeLessThan(at.start);
+  it('2:9 picks the second يخدعون by occurrence and the first by default', () => {
+    expect(around(2, 9).at.start).toBe(5);
+    expect(neighbors(norm(2, 9), 'يخدعون')!.start).toBe(0);
   });
 
   it('returns null for a word the ayah lacks', () => {
