@@ -110,6 +110,7 @@ function Side({ title, side, marks, ayat, count, surah }: { title: string; side:
   const [after, setAfter] = useState(0);
   const [fetched, setFetched] = useState<Record<string, string>>({});
   const [failed, setFailed] = useState(false);
+  const [loading, setLoading] = useState(false);
   const n = side.from.surah;
   const known = { ...fetched, ...ayat };
   const cards = sideCards(side, marks, known, { full, after });
@@ -117,6 +118,7 @@ function Side({ title, side, marks, ayat, count, surah }: { title: string; side:
 
   const more = async () => {
     setFailed(false);
+    setLoading(true);
     if (!known[`${n}:${side.to.ayah + after + 1}`]) {
       try {
         const res = await fetch(`/api/quran/surahs/${n}`);
@@ -125,10 +127,12 @@ function Side({ title, side, marks, ayat, count, surah }: { title: string; side:
         setFetched(Object.fromEntries(body.ayat.map(a => [`${n}:${a.number}`, ayahWords(a.text, a.number === 1 && n !== 1 && n !== 9).display.join(' ')])));
       } catch {
         setFailed(true);
+        setLoading(false);
         return;
       }
     }
-    setAfter(after + 1);
+    setAfter(a => a + 1);
+    setLoading(false);
   };
 
   return (
@@ -145,7 +149,7 @@ function Side({ title, side, marks, ayat, count, surah }: { title: string; side:
           </Button>
         )}
         {side.to.ayah + after < count && (
-          <Button size="sm" onClick={more}>
+          <Button size="sm" disabled={loading} onClick={more}>
             <FontAwesomeIcon icon={faAnglesDown} />
             عرض الآية التالية
           </Button>
