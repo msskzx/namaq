@@ -266,11 +266,13 @@ amber, stays the color of a phrase repeated in two ayat (43:22-23).
   phrase occurs more than once in the ayah, the mark names a longer phrase that
   contains it and occurs once (`عليهم` inside `المغضوب عليهم`). A phrase that
   does not resolve exactly once is an error, and the unit test fails on it.
-- A word is marked only when its person is plain from its form: a verb by its
-  subject (`أرسل`, `فسقناه`, `أرسلناك`), a noun or particle by its attached
-  pronoun (`أباكم`, `عليهم`). A noun with no pronoun is left plain (`الرياح`).
-  A word whose subject and object pronoun disagree is left plain (`يأتيني`,
-  `يسيركم`).
+- Every word whose person is plain from its form is marked, in every ayah of
+  a curated shift, so a plain word never reads as a different mode. A verb
+  takes its subject's person (`أرسل`, `فسقناه`, `أرسلناك`, `يسيركم`, `يأتيني`),
+  even when its object pronoun is another person. A noun or particle takes its
+  attached pronoun (`أباكم`, `عليهم`, `حوله`), even when the pronoun points at
+  a thing rather than a person. A noun with no pronoun is left plain
+  (`الرياح`), and so are relative and demonstrative pronouns (`الذي`, `هذه`).
 - Exceptions the owner chose: in Al-Fatiha the names of God in 2-4 (`لله رب`,
   `الرحمن الرحيم`, `ملك`) are marked غيبة, and `اهدنا` is marked تكلم for its
   `نا` although its subject is the One addressed.

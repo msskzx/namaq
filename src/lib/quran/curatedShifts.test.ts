@@ -64,11 +64,12 @@ describe('CURATED', () => {
   });
 
   it('marks أرسل as third person and فسقناه and فأحيينا as first person in 35:9, leaving الرياح plain', () => {
-    expect(colored(35, 9)).toEqual({
+    expect(colored(35, 9)).toMatchObject({
       'أَرۡسَلَ': MODES.third.slot,
       'فَسُقۡنَـٰهُ': MODES.first.slot,
       'فَأَحۡیَیۡنَا': MODES.first.slot,
     });
+    expect(colored(35, 9)).not.toHaveProperty(['ٱلرِّیَـٰحَ']);
   });
 
   it('keeps the amber of the shared clause in 43:22-23, which carries no person marks', () => {
