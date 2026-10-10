@@ -1,14 +1,13 @@
 import type { Metadata } from 'next';
 import { faRepeat } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Badge from '@/components/common/Badge';
 import Button from '@/components/common/Button';
 import { buildCurated, USED_MODES } from '@/lib/quran/curatedShifts';
 import data from './ayat.json';
 import IltifatView from './IltifatView';
 
 export const metadata: Metadata = {
-  title: 'التفات: تحولات مختارة (تجريبي)',
+  title: 'التفات: تحولات مختارة',
 };
 
 export default function QuranIltifatPage() {
@@ -17,10 +16,9 @@ export default function QuranIltifatPage() {
       <header>
         <div className="flex flex-wrap items-center gap-3 mb-2">
           <h1 className="text-3xl">التفات: تحولات مختارة</h1>
-          <Badge text="تجريبي" color="amber" size="sm" />
         </div>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-          عرض تجريبي لم يراجعه أحد من أهل العلم. النص برواية حفص. كل لون نوع من الضمير، واللون نفسه للنوع نفسه في كل الأمثلة.
+          لم يراجع هذا العرض أحد من أهل العلم. النص برواية حفص. كل لون نوع من الضمير، واللون نفسه للنوع نفسه في كل الأمثلة.
         </p>
         <Button size="sm" variant="outline" href="/quran/shifts">
           <FontAwesomeIcon icon={faRepeat} />

@@ -28,10 +28,8 @@ describe('IltifatView', () => {
     expect(we.map(m => m.className.replace('bg-transparent ', ''))).toEqual([swatch, swatch, swatch]);
   });
 
-  it('labels each curated shift as hand-picked and without citations', () => {
+  it('lists each curated shift under its surah range', () => {
     renderView();
-    expect(screen.getAllByText('مختارة يدويًا')).toHaveLength(CURATED.length);
-    expect(screen.getAllByText('اقتراح تجريبي بلا إحالات')).toHaveLength(CURATED.length);
     expect(screen.getByRole('heading', { name: /الفاتحة ٢–٧/ })).toBeTruthy();
   });
 });

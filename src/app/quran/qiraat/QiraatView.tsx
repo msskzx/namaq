@@ -10,6 +10,7 @@ import { AyahCard } from '@/components/quran/AyahCard';
 import type { Ayah } from '@/types/quran';
 import { ayahWords } from '@/lib/quran/normalize';
 import { chipStates, neighbors, type Variant } from '@/lib/quran/qiraat';
+import { num } from '@/lib/quran/arabicNumber';
 
 export type QiraatEntry = { variant: Variant; text: string; surahName: string };
 
@@ -21,7 +22,7 @@ const UNSOURCED = 'غير موثق (اقتراح للتجربة)';
 
 const key = (v: Variant) => `${v.surah}:${v.ayah}`;
 const pediaUrl = (v: Variant) => `https://quranpedia.net/ayahs/${v.surah}/${v.ayah}`;
-const n = (value: number) => value.toLocaleString('ar-EG');
+const n = num;
 
 function Meaning({ meaning }: { meaning: Variant['meaning'] }) {
   if (meaning.kind === 'quote') {
@@ -104,7 +105,6 @@ export default function QiraatView({ entries }: { entries: QiraatEntry[] }) {
       <header className="flex flex-col gap-2">
         <h1 className="flex items-center gap-2 text-3xl">
           القراءات: الآية نفسها في أكثر من قراءة
-          <Badge size="sm" text="تجريبي" color="amber" />
         </h1>
         <p>
           اثنا عشر موضعًا اختيرت للتجربة، وأرقام آياتها على عدّ حفص (الكوفي). في رواية ورش لا تُعدّ البسملة آية في الفاتحة، فتكون «مالك يوم الدين» الآية ٣ لا ٤.

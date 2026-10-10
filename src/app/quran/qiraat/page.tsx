@@ -6,7 +6,7 @@ import { variants } from './data/variants';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'القرآن: القراءات (تجريبي)',
+  title: 'القرآن: القراءات',
 };
 
 export default async function QuranQiraatPage() {
