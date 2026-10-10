@@ -14,7 +14,7 @@ vi.mock('../theme/ThemeSwitcher', () => ({ default: () => null }));
 afterEach(cleanup);
 
 describe('NavBar Quran links', () => {
-  it('shows a top-level Quran link whose submenu lists all three pages', () => {
+  it('shows a top-level Quran link whose submenu lists every page', () => {
     render(<NavBar />);
     const top = screen.getAllByText('Quran').find(el => el.getAttribute('href') === '/quran')!;
     fireEvent.mouseEnter(top.parentElement!);
@@ -23,11 +23,12 @@ describe('NavBar Quran links', () => {
     expect(hrefs.filter(h => h === '/quran').length).toBe(2);
     expect(hrefs).toContain('/quran/compare');
     expect(hrefs).toContain('/quran/shifts');
+    expect(hrefs).toContain('/quran/qiraat');
     expect(hrefs).toContain('/quran/themes');
   });
 
   it('keeps all three pages in the shared list for the mobile menu and graph menu', () => {
     const hrefs = getAllNavLinks('ar').map(l => l.href);
-    expect(hrefs).toEqual(expect.arrayContaining(['/quran', '/quran/compare', '/quran/shifts', '/quran/themes']));
+    expect(hrefs).toEqual(expect.arrayContaining(['/quran', '/quran/compare', '/quran/shifts', '/quran/qiraat', '/quran/themes']));
   });
 });
