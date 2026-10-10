@@ -2,7 +2,7 @@
 
 // docs/plans/quran-qiraat.md
 import React, { useState } from 'react';
-import { faBookQuran, faLink } from '@fortawesome/free-solid-svg-icons';
+import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Badge from '@/components/common/Badge';
 import Button from '@/components/common/Button';
@@ -116,7 +116,6 @@ export default function QiraatView({ entries }: { entries: QiraatEntry[] }) {
       <nav className="flex flex-wrap gap-2" aria-label="المواضع">
         {entries.map((e, i) => (
           <Button key={key(e.variant)} size="sm" active={i === selected} onClick={() => setSelected(i)}>
-            <FontAwesomeIcon icon={faBookQuran} />
             {num(e.variant.surah)}:{num(e.variant.ayah)}
           </Button>
         ))}

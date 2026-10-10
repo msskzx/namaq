@@ -54,6 +54,10 @@ export const CURATED: Curated[] = [
     surah: 17, parts: [[1, 1]], note: '«أسرى بعبده» غيبة، ثم «باركنا» و«لنريه» تكلم، ثم «إنه هو السميع» غيبة.',
     marks: { 1: [['اسري بعبده', 'third'], ['بركنا', 'first'], ['حوله', 'third'], ['لنريه', 'first'], ['ءايتنا', 'first'], ['انه هو', 'third']] },
   },
+  {
+    surah: 40, parts: [[26, 26]], note: 'في آية واحدة يتحول كلام فرعون: «ذروني» خطاب لقومه، و«أقتل» و«إني أخاف» تكلم عن نفسه، و«وليدع ربه» غيبة عن موسى، ثم «دينكم» خطاب من جديد.',
+    marks: { 26: [['وقال', 'third'], ['ذروني', 'second'], ['اقتل', 'first'], ['وليدع', 'third'], ['ربه', 'third'], ['اني', 'first'], ['اخاف', 'first'], ['يبدل', 'third'], ['دينكم', 'second'], ['يظهر', 'third']] },
+  },
 ];
 
 export const USED_MODES = (Object.keys(MODES) as Mode[]).filter(m => CURATED.some(c => Object.values(c.marks).flat().some(([, mode]) => mode === m)));

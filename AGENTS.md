@@ -147,6 +147,8 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   by writing direction, so that back points the way the reader came in Arabic as
   well as English (see `src/components/common/Pagination.tsx`); a vertical arrow
   needs no such care.
+  A picker whose buttons are short codes, such as the ayah references on the qira'at
+  page (`36:35`), carries no icon: the code is the label.
 - Titles and other short labelled chips use `src/components/common/Badge.tsx`
   (`size="sm"` inside dense panels), so a title looks the same on a profile
   page and in the graph panel.
