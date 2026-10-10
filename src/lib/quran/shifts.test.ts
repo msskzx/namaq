@@ -35,13 +35,20 @@ describe('findShifts', () => {
     expect(refrains[0].at.length).toBeGreaterThanOrEqual(REFRAIN_MANY);
   });
 
-  it('drops a three-word run seen only a few times', () => {
-    const r = findShifts(words('هذا نص قصير جدا', 'ثم هذا نص قصير', 'وهذا نص قصير'));
-    expect(r.refrains).toEqual([]);
+  it('drops a three-word run seen three or four times, keeps it at five', () => {
+    const lines = (n: number) => words(...Array.from({ length: n }, (_, k) => `س${'ابجده'[k]} الف باء جيم`));
+    expect(findShifts(lines(4)).refrains).toEqual([]);
+    expect(findShifts(lines(5)).refrains).toHaveLength(1);
   });
 
-  it('does not pair a run with itself across overlap or inside one ayah', () => {
+  it('does not count a run repeated inside one ayah as an arc', () => {
     expect(findShifts(words('الف باء جيم دال الف باء جيم دال')).arcs).toEqual([]);
+  });
+
+  it('draws a run once: a lane swallows the arc that is its longer prefix', () => {
+    const r = findShifts(words('الف باء جيم دال هاء واو', 'الف باء جيم دال هاء واو', 'الف باء جيم دال زاي حاء'));
+    expect(r.refrains).toHaveLength(1);
+    expect(r.arcs).toEqual([]);
   });
 });
 

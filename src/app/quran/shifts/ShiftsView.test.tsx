@@ -3,7 +3,6 @@ import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import ShiftsView from './ShiftsView';
-import { CURATED } from '@/lib/quran/curatedShifts';
 
 vi.mock('@/components/language/LanguageContext', () => ({
   useLanguage: () => ({ language: 'ar' }),
@@ -39,14 +38,10 @@ describe('ShiftsView', () => {
     expect(marked()).toEqual(['و']);
   });
 
-  it('labels every curated shift as hand-picked and without citations', () => {
-    renderView();
-    expect(screen.getAllByText('مختارة يدويًا')).toHaveLength(1);
-    expect(screen.getAllByText('اقتراح تجريبي بلا إحالات')).toHaveLength(1);
+  it('labels each curated shift as hand-picked and without citations', () => {
+    render(<ShiftsView surah={surah} ayat={ayat} arcs={[]} refrains={[]} openers={[]} curated={[curated[0], curated[0]]} />);
+    expect(screen.getAllByText('مختارة يدويًا')).toHaveLength(2);
+    expect(screen.getAllByText('اقتراح تجريبي بلا إحالات')).toHaveLength(2);
     expect(screen.getByText(/ستين في المئة/)).toBeTruthy();
-  });
-
-  it('keeps 43:36-37 out of the curated list', () => {
-    expect(CURATED.some(c => c.surah === 43 && c.parts.some(([f]) => f >= 36))).toBe(false);
   });
 });

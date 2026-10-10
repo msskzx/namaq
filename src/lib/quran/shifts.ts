@@ -56,8 +56,10 @@ export function findShifts(ayat: AyahWords[]): { arcs: Arc[]; refrains: Refrain[
     if (starts.size === 2 && len >= ARC_MIN && at[0].ayah !== at[1].ayah) arcs.push({ a: at[0], b: at[1], len });
     else if (starts.size >= REFRAIN_MIN && (len > GRAM || starts.size >= REFRAIN_MANY)) refrains.push({ text, len, at });
   }
+  const inLane = (at: Occ, len: number) => refrains.some(r => r.at.some(o => o.ayah === at.ayah && o.word < at.word + len && at.word < o.word + r.len));
+  const lone = arcs.filter(a => !(inLane(a.a, a.len) && inLane(a.b, a.len)));
   const byPlace = (p: Occ, q: Occ) => p.ayah - q.ayah || p.word - q.word;
-  return { arcs: arcs.sort((p, q) => byPlace(p.a, q.a)), refrains: refrains.sort((p, q) => q.at.length - p.at.length || byPlace(p.at[0], q.at[0])) };
+  return { arcs: lone.sort((p, q) => byPlace(p.a, q.a)), refrains: refrains.sort((p, q) => q.at.length - p.at.length || byPlace(p.at[0], q.at[0])) };
 }
 
 export function findOpeners(ayat: AyahWords[]): Opener[] {

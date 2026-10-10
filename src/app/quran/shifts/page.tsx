@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { faEye, faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Badge from '@/components/common/Badge';
@@ -48,6 +49,7 @@ export default async function QuranShiftsPage({ searchParams }: { searchParams: 
     return { number, name, plain: plainName(name) };
   };
   const mine = words.get(n) ?? [];
+  if (mine.length === 0) notFound();
   const found = findShifts(mine);
   const curated: CuratedView[] = CURATED.map(c => {
     const all = words.get(c.surah) ?? [];
