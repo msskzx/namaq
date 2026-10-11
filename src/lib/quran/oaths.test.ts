@@ -22,10 +22,10 @@ const sworn = (token: string, w: string) => {
 };
 
 describe('oaths', () => {
-  it('keeps the oaths in mushaf order inside juz 26 to 30', () => {
+  it('keeps the oaths in mushaf order inside juz 25 to 30', () => {
     const keys = OATHS.map(o => o.surah * 1000 + o.range[0]);
     expect(keys).toEqual([...keys].sort((a, b) => a - b));
-    expect(OATHS.every(o => o.surah >= 46 && o.surah <= 114)).toBe(true);
+    expect(OATHS.every(o => o.surah >= 41 && o.surah <= 114)).toBe(true);
   });
 
   it('reads every ayah of every range from the stored text', () => {
@@ -66,6 +66,7 @@ describe('oaths', () => {
     expect([at(52), at(95)].every(n => has('الطور').has(n))).toBe(true);
     expect([at(75), at(85)].every(n => has('اليوم').has(n))).toBe(true);
     expect([at(68), at(69)].every(n => has('ما').has(n))).toBe(true);
+    expect([at(43), at(44), at(52)].every(n => has('الكتاب').has(n))).toBe(true);
   });
 
   it('does not take a word that only ends like the sworn one for it', () => {

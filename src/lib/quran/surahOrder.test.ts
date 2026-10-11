@@ -8,8 +8,8 @@ const count = (n: number) => data.counts[String(n) as keyof typeof data.counts];
 const norm = (key: string) => ayahWords(data.ayat[key as keyof typeof data.ayat], false).norm;
 
 describe('HOPS', () => {
-  it('covers every neighbouring pair from 46 to 113 once, in order', () => {
-    expect(HOPS.map(h => h.from)).toEqual(Array.from({ length: 68 }, (_, k) => 46 + k));
+  it('covers every neighbouring pair from 41 to 113 once, in order', () => {
+    expect(HOPS.map(h => h.from)).toEqual(Array.from({ length: 73 }, (_, k) => 41 + k));
   });
 
   it('keeps each range ordered, at most five ayat, inside its surah', () => {
@@ -44,8 +44,8 @@ describe('HOPS', () => {
 });
 
 describe('TOPICS', () => {
-  it('covers every surah from 46 to 114 with one to six topics', () => {
-    expect(Object.keys(TOPICS).map(Number)).toEqual(Array.from({ length: 69 }, (_, k) => 46 + k));
+  it('covers every surah from 41 to 114 with one to six topics', () => {
+    expect(Object.keys(TOPICS).map(Number)).toEqual(Array.from({ length: 74 }, (_, k) => 41 + k));
     for (const { topics } of Object.values(TOPICS)) {
       expect(topics.length).toBeGreaterThanOrEqual(1);
       expect(topics.length).toBeLessThanOrEqual(6);
@@ -69,7 +69,7 @@ describe('TOPICS', () => {
     for (const id of Object.keys(THEMES)) {
       const n = Object.values(TOPICS).filter(t => t.topics.some(([u]) => u === id)).length;
       expect(n).toBeGreaterThanOrEqual(2);
-      expect(n).toBeLessThan(69);
+      expect(n).toBeLessThan(74);
     }
   });
 
@@ -91,8 +91,8 @@ describe('TOPICS', () => {
 describe('buildOrder', () => {
   const { chips, hops } = buildOrder(data);
 
-  it('lists one chip per surah from 46 to 114 with its name', () => {
-    expect(chips.map(c => c.number)).toEqual(Array.from({ length: 69 }, (_, k) => 46 + k));
+  it('lists one chip per surah from 41 to 114 with its name', () => {
+    expect(chips.map(c => c.number)).toEqual(Array.from({ length: 74 }, (_, k) => 41 + k));
     expect(chips.every(c => c.plain.length > 0)).toBe(true);
   });
 
