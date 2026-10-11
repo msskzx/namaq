@@ -74,9 +74,9 @@ describe('CURATED', () => {
     expect(colored(35, 9)).not.toHaveProperty(['ٱلرِّیَـٰحَ']);
   });
 
-  it('colors مهتدون and مقتدون in 43:22-23 the same, inside the amber clause', () => {
+  it('colors مهتدون and مقتدون in 43:22-23 differently, inside the amber clause', () => {
     expect(slotOfWord(43, 22, 'مهتدون')).toBe(MODES.first.slot);
-    expect(slotOfWord(43, 23, 'مقتدون')).toBe(MODES.first.slot);
+    expect(slotOfWord(43, 23, 'مقتدون')).toBe(MODES.second.slot);
     expect(Object.values(slotsOf(43, 22).slots ?? {}).length).toBeGreaterThanOrEqual(ARC_MIN);
   });
 
