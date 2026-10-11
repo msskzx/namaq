@@ -4,8 +4,22 @@ import { normalizeWord } from './normalize';
 import { buildOaths, OATHS } from './oaths';
 
 const { oaths, lines } = buildOaths(data);
-const skeleton = (w: string) => normalizeWord(w).replace(/^ال/, '').replace(/[اي]/g, '').replace(/^لل/, 'ل');
-const sworn = (token: string, w: string) => [normalizeWord(token)].flatMap(n => [n, n.slice(1), n.slice(2)]).some(t => skeleton(t) === skeleton(w));
+const skeleton = (x: string) => {
+  const n = normalizeWord(x);
+  const art = n.startsWith('ال');
+  return { art, core: (art ? n.slice(2) : n).replace(/[اي]/g, '').replace(/^لل/, 'ل') };
+};
+const variants = (token: string) => {
+  const n = normalizeWord(token);
+  return [n, n.replace(/ها$/, '')].flatMap(v => [v, ...[1, 2].filter(k => /^[وفبلك]+$/.test(v.slice(0, k))).map(k => v.slice(k))]);
+};
+const sworn = (token: string, w: string) => {
+  const b = skeleton(w);
+  return variants(token).some(v => {
+    const a = skeleton(v);
+    return a.core === b.core && (a.art === b.art || a.core.length > 1);
+  });
+};
 
 describe('oaths', () => {
   it('keeps the oaths in mushaf order inside juz 26 to 30', () => {
@@ -52,6 +66,13 @@ describe('oaths', () => {
     expect([at(52), at(95)].every(n => has('الطور').has(n))).toBe(true);
     expect([at(75), at(85)].every(n => has('اليوم').has(n))).toBe(true);
     expect([at(68), at(69)].every(n => has('ما').has(n))).toBe(true);
+  });
+
+  it('does not take a word that only ends like the sworn one for it', () => {
+    expect(sworn('كَلَّا', 'الليل')).toBe(false);
+    expect(sworn('تَجَلَّىٰ', 'الليل')).toBe(false);
+    expect(sworn('وَٱلَّيۡلِ', 'الليل')).toBe(true);
+    expect(sworn('مَسۡطُورٖ', 'الطور')).toBe(false);
   });
 
   it('throws when a range is missing from the data', () => {
