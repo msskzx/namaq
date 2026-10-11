@@ -45,21 +45,25 @@ describe('QiraatView', () => {
     expect(container.querySelectorAll('li[data-state="unknown"]')).toHaveLength(20);
   });
 
-  it('lists the places of juz\' 30 under their surah, and tells two words of one ayah apart', () => {
+  it('lists the places of juz\' 30 under their surah', () => {
     render(<QiraatView entries={entries} />);
     fireEvent.change(screen.getByRole('combobox'), { target: { value: '89' } });
     expect((screen.getByRole('combobox') as HTMLSelectElement).value).toBe('89');
     expect(screen.getByRole('navigation', { name: 'المواضع' }).querySelectorAll('button')).toHaveLength(variants.filter(v => v.surah === 89).length);
-    fireEvent.change(screen.getByRole('combobox'), { target: { value: '78' } });
-    const labels = [...screen.getByRole('navigation', { name: 'المواضع' }).querySelectorAll('button')].map(b => b.textContent);
-    expect(labels).toHaveLength(2);
-    expect(new Set(labels).size).toBe(2);
   });
 
   it('shows no meaning block for a place that has none', () => {
     const { container } = render(<QiraatView entries={entries} />);
     go(89, '٤');
     expect(container.textContent).not.toContain('المعنى');
+  });
+
+  it('shows both words of 78:37 in one place, with al-Tabari on what the difference changes', () => {
+    const { container } = render(<QiraatView entries={entries} />);
+    go(78, '٣٧');
+    expect(container.querySelectorAll('.row-span-3')).toHaveLength(3);
+    expect(container.textContent).toContain('المعنى');
+    expect(container.textContent).toContain('الطبري');
   });
 
   it('nests each imam\'s two riwat under him', () => {

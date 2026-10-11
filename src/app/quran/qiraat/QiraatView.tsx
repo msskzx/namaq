@@ -124,7 +124,6 @@ export default function QiraatView({ entries }: { entries: QiraatEntry[] }) {
   const surah = entries[selected].variant.surah;
   const surahs = [...new Set(entries.map(e => e.variant.surah))];
   const here = entries.flatMap((e, i) => (e.variant.surah === surah ? [{ e, i }] : []));
-  const repeated = (ayah: number) => here.filter(h => h.e.variant.ayah === ayah).length > 1;
   const option = (n: number) => (
     <option key={n} value={n}>{`${surahLabel(entries, n)} (${num(entries.filter(e => e.variant.surah === n).length)})`}</option>
   );
@@ -159,7 +158,6 @@ export default function QiraatView({ entries }: { entries: QiraatEntry[] }) {
           {here.map(({ e, i }) => (
             <Button key={i} size="sm" active={i === selected} onClick={() => setSelected(i)}>
               {num(e.variant.ayah)}
-              {repeated(e.variant.ayah) && ` ${hafsWordOf(e)}`}
             </Button>
           ))}
         </nav>

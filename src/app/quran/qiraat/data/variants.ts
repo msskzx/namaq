@@ -151,18 +151,21 @@ export const variants: Variant[] = [
     },
   },
   {
-    surah: 78, ayah: 37, hafsWord: 'رب',
-    readings: [
-      { riwayat: ['idris', 'khallad', 'ishaq', 'rawh', 'ruways', 'hisham', 'ibn-dhakwan', 'shuba', 'duri-kisai', 'hafs', 'abu-al-harith', 'khalaf-hamza'] },
-      { text: "رَبُّ", riwayat: ['ibn-jammaz', 'ibn-wardan', 'qalun', 'warsh', 'bazzi', 'qunbul', 'susi', 'duri-abu-amr'] },
-    ],
-  },
-  {
-    surah: 78, ayah: 37, hafsWord: 'الرحمن',
+    surah: 78, ayah: 37, hafsWord: 'رب السموت والارض وما بينهما الرحمن',
     readings: [
       { riwayat: ['ruways', 'rawh', 'hisham', 'ibn-dhakwan', 'shuba', 'hafs'] },
-      { text: "الرَّحۡمَنُ", riwayat: ['qalun', 'khallad', 'abu-al-harith', 'khalaf-hamza', 'duri-kisai', 'ibn-wardan', 'ibn-jammaz', 'susi', 'duri-abu-amr', 'qunbul', 'ishaq', 'bazzi', 'idris', 'warsh'] },
+      { text: "رَّبِّ ٱلسَّمَـٰوَٰ⁠تِ وَٱلۡأَرۡضِ وَمَا بَیۡنَهُمَا ٱلرَّحۡمَـٰنُۖ", riwayat: ['idris', 'khallad', 'ishaq', 'duri-kisai', 'abu-al-harith', 'khalaf-hamza'] },
+      { text: "رَّبُّ ٱلسَّمَـٰوَٰ⁠تِ وَٱلۡأَرۡضِ وَمَا بَیۡنَهُمَا ٱلرَّحۡمَـٰنُۖ", riwayat: ['ibn-jammaz', 'ibn-wardan', 'qalun', 'warsh', 'bazzi', 'qunbul', 'susi', 'duri-abu-amr'] },
     ],
+    meaning: {
+      kind: 'quote',
+      quotes: [
+        'الخفض في الربّ، لقربه من قوله جَزَاءً مِنْ رَبّكَ : أعجب إليّ',
+        'وأما الرّحْمَنُ بالرفع، فإنه أحسن، لبعده من ذلك.',
+      ],
+      source: TABARI,
+      url: 'https://quranpedia.net/tafsir/an-naba/37/al-tabari',
+    },
   },
   {
     surah: 79, ayah: 10, hafsWord: 'اءنا',

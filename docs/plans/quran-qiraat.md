@@ -171,7 +171,7 @@ words, since the brief's Ibn Kathir exchange is not in the page text I read.
 
 ## Juz' 30 (surahs 78 to 114)
 
-The page covers 31 more places in juz' 30, taken from Quranpedia's official
+The page covers 30 more places in juz' 30, taken from Quranpedia's official
 data dump (`https://api.quranpedia.net/dumps/qiraat.json.gz`, version
 2026-10-10, about 1 MB), which the dumps page offers in place of scraping. The
 file was read once and not committed; only the places below were authored into
