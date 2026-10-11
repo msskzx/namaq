@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import data from '@/app/quran/iltifat/ayat.json';
 import { buildCurated, CURATED, MODES, resolve, USED_MODES } from './curatedShifts';
-import { ayahWords } from './normalize';
+import { ayahWords, plainName } from './normalize';
 import { ARC_MIN } from './shifts';
 
 const words = (key: string) => ayahWords(data.ayat[key as keyof typeof data.ayat], false);
@@ -12,6 +12,8 @@ const colored = (surah: number, ayah: number) => {
   const { text, slots = {} } = slotsOf(surah, ayah);
   return Object.fromEntries(text.split(' ').flatMap((w, i) => (i in slots ? [[w, slots[i]]] : [])));
 };
+
+const slotOfWord = (surah: number, ayah: number, plain: string) => Object.entries(colored(surah, ayah)).find(([w]) => plainName(w) === plain)?.[1];
 
 describe('CURATED', () => {
   it('leaves 43:36-37 out, which is not an address shift', () => {
@@ -73,8 +75,8 @@ describe('CURATED', () => {
   });
 
   it('colors مهتدون and مقتدون in 43:22-23 the same, inside the amber clause', () => {
-    expect(Object.values(colored(43, 22)).at(-1)).toBe(MODES.first.slot);
-    expect(Object.values(colored(43, 23)).at(-1)).toBe(MODES.first.slot);
+    expect(slotOfWord(43, 22, 'مهتدون')).toBe(MODES.first.slot);
+    expect(slotOfWord(43, 23, 'مقتدون')).toBe(MODES.first.slot);
     expect(Object.values(slotsOf(43, 22).slots ?? {}).length).toBeGreaterThanOrEqual(ARC_MIN);
   });
 
