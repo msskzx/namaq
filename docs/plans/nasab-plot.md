@@ -1,0 +1,40 @@
+# Nasab plot
+
+A page at `/nasab` that draws the patrilineal line (نسب) of one or more people as an SVG tree. One person gives a straight vertical line. Several people give one tree in which their lines merge where they meet.
+
+The force graph at `/graphs` pins every node to a precomputed global position, so it cannot draw a line or a merge
+([ADR 0005](../adr/0005-use-a-precomputed-global-graph-map.md)). The nasab page is a second view over the same Neo4j data, not a change to the graph.
+
+## Acceptance criteria
+
+- `/nasab?subject=person:<slug>` (repeatable) draws each subject's chain of `FATHER` edges up to the oldest recorded ancestor.
+- Lines that share an ancestor are drawn once from the lowest shared ancestor upward, and that ancestor is marked as a meeting point.
+- The page has the same search box as the graph and, under it, pills for the Prophet and the four caliphs.
+- A subject with no recorded father shows as a single node marked "father not recorded". A father is never inferred.
+- A person with several recorded fathers is drawn under the first by slug, with the others listed on the node.
+- Subjects with no common ancestor are drawn side by side.
+- Arabic mirrors the horizontal order. Light and dark themes are supported. Every label has `en` and `ar`.
+- A text version of each chain sits under the drawing for screen readers.
+- The navbar's Graphs entry has a submenu with a link to `/nasab`.
+
+## Layout contract (`src/lib/relationship/nasabLayout.ts`)
+
+`layoutNasab(people, subjects)` is pure. `people` is the ancestor closure of the subjects, `{ slug, name, fathers: string[] }[]`
+with `fathers` holding the slugs recorded as the person's father. `subjects` is the ordered list of requested slugs; unknown
+or repeated slugs are ignored.
+
+- The primary father of a person is the smallest slug in `fathers` that is present in `people` and does not close a cycle. The
+  rest are `otherFathers`.
+- `row` is the distance from the root of the person's tree (the oldest ancestor, row 0).
+- A node with no children takes the next free column, in subject order. A node with children sits at the mean column of its children.
+- `isMeeting` is true when the node has at least two subjects at or below it and no single child holds all of them.
+- `fatherUnrecorded` is true when `fathers` is empty.
+- `chains` lists, per subject, the slugs from the subject up to its root.
+
+## Data
+
+`GET /api/nasab?person=<slug>` (repeatable) returns `{ people, subjects }` from one Cypher query over `(:Person)-[:FATHER]->(:Person)`.
+
+## Not done
+
+Collapsing a long middle run of generations. The drawing scrolls instead.
