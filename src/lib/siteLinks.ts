@@ -25,5 +25,7 @@ export const getAllNavLinks = (language: 'en' | 'ar'): SiteLink[] => [
   { href: '/quran/iltifat', label: language === 'ar' ? 'التفات: تحولات مختارة' : 'Iltifat: hand-picked shifts' },
   { href: '/quran/qiraat', label: language === 'ar' ? 'القراءات' : 'Readings' },
   { href: '/quran/themes', label: language === 'ar' ? 'مواضع متقابلة' : 'Matching topics' },
+  { href: '/quran/order', label: language === 'ar' ? 'ترتيب السور' : 'Surah order' },
+  { href: '/quran/openings', label: language === 'ar' ? 'افتتاح السور: الشرط وجوابه والتسبيح' : 'Surah openings: conditions and tasbih' },
   { href: '/references', label: language === 'ar' ? 'المراجع' : 'References' },
 ];

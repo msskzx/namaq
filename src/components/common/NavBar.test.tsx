@@ -26,10 +26,12 @@ describe('NavBar Quran links', () => {
     expect(hrefs).toContain('/quran/iltifat');
     expect(hrefs).toContain('/quran/qiraat');
     expect(hrefs).toContain('/quran/themes');
+    expect(hrefs).toContain('/quran/order');
+    expect(hrefs).toContain('/quran/openings');
   });
 
   it('keeps every page in the shared list for the mobile menu and graph menu', () => {
     const hrefs = getAllNavLinks('ar').map(l => l.href);
-    expect(hrefs).toEqual(expect.arrayContaining(['/quran', '/quran/compare', '/quran/shifts', '/quran/iltifat', '/quran/qiraat', '/quran/themes']));
+    expect(hrefs).toEqual(expect.arrayContaining(['/quran', '/quran/compare', '/quran/shifts', '/quran/iltifat', '/quran/qiraat', '/quran/themes', '/quran/order', '/quran/openings']));
   });
 });

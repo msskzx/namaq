@@ -2,7 +2,7 @@
 
 import React, { useMemo, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAnglesDown, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faAnglesDown, faArrowLeft, faArrowRight, faListOl } from '@fortawesome/free-solid-svg-icons';
 import Badge from '@/components/common/Badge';
 import Button from '@/components/common/Button';
 import { AyahCard } from '@/components/quran/AyahCard';
@@ -174,6 +174,10 @@ export default function QuranDemo({ runs, ayat }: { runs: Runs; ayat: Record<str
           لم يراجع هذا العرض أحد من أهل العلم. النص برواية حفص. النص المشترك هو تتابع من {num(runs.minWords)} كلمات فأكثر
           يتطابق في سورتين بعد حذف التشكيل وتوحيد صور بعض الحروف، وقد يتخلله اختلاف في بعض الكلمات. يدل التطابق على اشتراك اللفظ وحده.
         </p>
+        <Button size="sm" variant="outline" href="/quran/order" className="mt-3">
+          <FontAwesomeIcon icon={faListOl} />
+          ترتيب السور: من النبأ إلى الناس
+        </Button>
       </header>
 
       <section className="grid grid-cols-2 sm:grid-cols-4 gap-3">
