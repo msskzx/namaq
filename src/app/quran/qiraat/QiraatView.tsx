@@ -63,7 +63,6 @@ function Card({ entry }: { entry: QiraatEntry }) {
   spans.forEach((span, i) => {
     if (i > 0 && span.length === spans[0].length) differing[0].forEach(k => differing[i].add(k));
   });
-  if (!differing.some(d => d.size)) differing.forEach((d, i) => spans[i].forEach((_, k) => d.add(k)));
   const slots = found ? Object.fromEntries([...differing[0]].map(k => [found.start + k, 0])) : undefined;
   const ayah = { id: key(variant), number: variant.ayah, text: words.display.join(' '), surah: { name: surahName } } as unknown as Ayah;
   const around = (side: readonly [number, number]) => words.display.slice(side[0], side[1]).join(' ');
