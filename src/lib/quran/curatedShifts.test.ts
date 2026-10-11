@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import data from '@/app/quran/iltifat/ayat.json';
 import { buildCurated, CURATED, MODES, resolve, USED_MODES } from './curatedShifts';
-import { ayahWords, plainName } from './normalize';
+import { ayahWords } from './normalize';
 import { ARC_MIN } from './shifts';
 
 const words = (key: string) => ayahWords(data.ayat[key as keyof typeof data.ayat], false);
@@ -13,7 +13,7 @@ const colored = (surah: number, ayah: number) => {
   return Object.fromEntries(text.split(' ').flatMap((w, i) => (i in slots ? [[w, slots[i]]] : [])));
 };
 
-const slotOfWord = (surah: number, ayah: number, plain: string) => Object.entries(colored(surah, ayah)).find(([w]) => plainName(w) === plain)?.[1];
+const slotOfWord = (surah: number, ayah: number, plain: string) => slotsOf(surah, ayah).slots?.[words(`${surah}:${ayah}`).norm.indexOf(plain)];
 
 describe('CURATED', () => {
   it('leaves 43:36-37 out, which is not an address shift', () => {
@@ -88,9 +88,14 @@ describe('CURATED', () => {
     expect(new Set(Object.values(slotsOf(12, 83).slots ?? {}))).toEqual(new Set([father]));
   });
 
-  it('colors the opening of 10:22 as one run', () => {
-    const { slots = {} } = slotsOf(10, 22);
-    expect(Array.from({ length: 9 }, (_, i) => slots[i])).toEqual(Array(9).fill(MODES.third.slot));
+  it('colors 10:22 in three runs: addressed to them, said about them, said by them', () => {
+    expect(slotOfWord(10, 22, 'يسيركم')).toBe(MODES.third.slot);
+    expect(slotOfWord(10, 22, 'كنتم')).toBe(MODES.third.slot);
+    expect(slotOfWord(10, 22, 'وفرحوا')).toBe(MODES.first.slot);
+    expect(slotOfWord(10, 22, 'وجاءهم')).toBe(MODES.first.slot);
+    expect(slotOfWord(10, 22, 'لنكونن')).toBe(MODES.second.slot);
+    expect(slotOfWord(10, 22, 'هو')).toBeUndefined();
+    expect(new Set(Object.values(slotsOf(10, 22).slots ?? {}))).toEqual(new Set([1, 2, 3]));
   });
 
   it('keeps Al-Fatiha to him in 2-4 and you in 5-7, and leaves 40:26 to the qira\'at page', () => {
