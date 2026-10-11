@@ -17,7 +17,7 @@ export default function QuranOrderPage() {
       <header>
         <h1 className="text-3xl mb-2">ترتيب السور: من النبأ إلى الناس</h1>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-          لم يراجع هذا العرض أحد من أهل العلم. النص برواية حفص. لكل سورة في الجزء الثلاثين صلة بالتي بعدها، وفي حفظ الصلة عون على حفظ الترتيب.
+          لم يراجع هذا العرض أحد من أهل العلم. النص برواية حفص. نقترح لكل سورة في الجزء الثلاثين صلة بالتي بعدها، ولعل حفظ الصلة يعين على حفظ الترتيب.
         </p>
         <Button size="sm" variant="outline" href="/quran/iltifat">
           <FontAwesomeIcon icon={faShuffle} />

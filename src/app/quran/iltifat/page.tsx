@@ -20,14 +20,16 @@ export default function QuranIltifatPage() {
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
           لم يراجع هذا العرض أحد من أهل العلم. النص برواية حفص. كل لون نوع من الضمير، واللون نفسه للنوع نفسه في كل الأمثلة.
         </p>
-        <Button size="sm" variant="outline" href="/quran/shifts">
-          <FontAwesomeIcon icon={faRepeat} />
-          تحولات داخل السورة
-        </Button>
-        <Button size="sm" variant="outline" href="/quran/order" className="mt-3 me-2">
-          <FontAwesomeIcon icon={faListOl} />
-          ترتيب السور: من النبأ إلى الناس
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button size="sm" variant="outline" href="/quran/shifts">
+            <FontAwesomeIcon icon={faRepeat} />
+            تحولات داخل السورة
+          </Button>
+          <Button size="sm" variant="outline" href="/quran/order">
+            <FontAwesomeIcon icon={faListOl} />
+            ترتيب السور: من النبأ إلى الناس
+          </Button>
+        </div>
       </header>
       <IltifatView curated={buildCurated(data)} modes={USED_MODES} />
     </div>
