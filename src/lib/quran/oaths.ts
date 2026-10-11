@@ -5,6 +5,8 @@ import { ayahWords, plainName } from './normalize';
 export type Oath = { surah: number; range: Range; by: string[] };
 
 export const OATHS: Oath[] = [
+  { surah: 43, range: [2, 2], by: ['الكتاب'] },
+  { surah: 44, range: [2, 2], by: ['الكتاب'] },
   { surah: 50, range: [1, 1], by: ['القرءان'] },
   { surah: 51, range: [1, 4], by: ['الذاريات', 'الحاملات', 'الجاريات', 'المقسمات'] },
   { surah: 51, range: [7, 7], by: ['السماء'] },
