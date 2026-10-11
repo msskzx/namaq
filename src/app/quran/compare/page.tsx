@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
-import { faCodeCompare, faLightbulb } from '@fortawesome/free-solid-svg-icons';
+import { faCodeCompare, faExpand, faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from '@/components/common/Button';
 import { prisma } from '@/lib/prisma';
-import { alignSurahs, clampRange } from '@/lib/quran/compare';
+import { alignSurahs, clampRange, compareHref } from '@/lib/quran/compare';
 import { ayahWords } from '@/lib/quran/normalize';
 import CompareView from './CompareView';
 import { num } from '@/lib/quran/arabicNumber';
@@ -47,6 +47,12 @@ export default async function QuranComparePage({ searchParams }: { searchParams:
   const ayahInput = (name: string, value: number, max: number, label: string) => (
     <input type="number" name={name} aria-label={label} defaultValue={value} min={1} max={max} className="w-20 rounded border border-amber-400 bg-white dark:bg-gray-900 px-2 py-1 text-sm" />
   );
+  const allButton = (href: string, label: string) => (
+    <Button size="sm" href={href} aria-label={label} className="shrink-0">
+      <FontAwesomeIcon icon={faExpand} />
+      الكل
+    </Button>
+  );
 
   return (
     <div dir="rtl" className="max-w-5xl mx-auto p-4 flex flex-col gap-4 text-gray-900 dark:text-gray-200">
@@ -55,11 +61,13 @@ export default async function QuranComparePage({ searchParams }: { searchParams:
           {select('a', a, 'السورة الأولى')}
           {ayahInput('af', ra.from, wordsA.length, 'من آية (الأولى)')}
           {ayahInput('at', ra.to, wordsA.length, 'إلى آية (الأولى)')}
+          {allButton(compareHref(a, { from: 1, to: wordsA.length }, b, rb), 'الكل: آيات السورة الأولى')}
         </div>
         <div className="flex w-full items-center gap-2">
           {select('b', b, 'السورة الثانية')}
           {ayahInput('bf', rb.from, wordsB.length, 'من آية (الثانية)')}
           {ayahInput('bt', rb.to, wordsB.length, 'إلى آية (الثانية)')}
+          {allButton(compareHref(a, ra, b, { from: 1, to: wordsB.length }), 'الكل: آيات السورة الثانية')}
         </div>
         <Button type="submit" size="sm" variant="outline">
           <FontAwesomeIcon icon={faCodeCompare} />

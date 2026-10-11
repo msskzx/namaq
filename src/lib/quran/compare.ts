@@ -178,3 +178,7 @@ export function alignSurahs(a: string[][], b: string[][], first = { a: 1, b: 1 }
   gapTo(a.length + sa, b.length + sb);
   return rows;
 }
+
+export function compareHref(a: number, ra: { from: number; to: number }, b: number, rb: { from: number; to: number }) {
+  return `/quran/compare?${new URLSearchParams({ a: `${a}`, af: `${ra.from}`, at: `${ra.to}`, b: `${b}`, bf: `${rb.from}`, bt: `${rb.to}` })}`;
+}

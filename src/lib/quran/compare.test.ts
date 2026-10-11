@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import fixture from './compare.fixture.json';
-import { alignSurahs, clampRange, groupPairs, wordSlots, type Block } from './compare';
+import { alignSurahs, clampRange, compareHref, groupPairs, wordSlots, type Block } from './compare';
 import { ayahWords } from './normalize';
 
 const fx = fixture as Record<string, string[]>;
@@ -149,5 +149,11 @@ describe('alignSurahs edge cases', () => {
     const words = rows.flatMap(r => (r.type === 'block' && r.block.kind === 'words' ? [r.block] : []));
     expect(words.length).toBeGreaterThan(0);
     expect(words.every(b => last(b).a < 92)).toBe(true);
+  });
+});
+
+describe('compareHref', () => {
+  it('keeps the other side when one side is set to a whole surah', () => {
+    expect(compareHref(70, { from: 1, to: 44 }, 80, { from: 33, to: 37 })).toBe('/quran/compare?a=70&af=1&at=44&b=80&bf=33&bt=37');
   });
 });
