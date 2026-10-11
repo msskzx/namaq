@@ -21,6 +21,7 @@ describe('NavBar Quran links', () => {
 
     const hrefs = screen.getAllByRole('link').map(a => a.getAttribute('href'));
     expect(hrefs.filter(h => h === '/quran').length).toBe(2);
+    expect(hrefs).toContain('/quran/read');
     expect(hrefs).toContain('/quran/compare');
     expect(hrefs).toContain('/quran/shifts');
     expect(hrefs).toContain('/quran/iltifat');
