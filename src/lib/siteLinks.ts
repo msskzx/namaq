@@ -10,6 +10,7 @@ export interface SiteLink {
 // here once so the two never drift apart.
 export const getAllNavLinks = (language: 'en' | 'ar'): SiteLink[] => [
   { href: '/graphs', label: translations[language].allGraph },
+  { href: '/nasab', label: language === 'ar' ? 'النسب' : 'Nasab' },
   { href: '/people/prophet-muhammad', label: translations[language].prophet },
   { href: '/people', label: translations[language].people },
   { href: '/titles', label: translations[language].titles },

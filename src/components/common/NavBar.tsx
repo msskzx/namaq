@@ -15,6 +15,7 @@ import { getAllNavLinks, type SiteLink } from '@/lib/siteLinks';
 // a different label than the mobile menu and the graph workspace menu give it.
 const HADITH_SUBMENU_HREFS = ['/hadith/bukhari-jibril', '/hadith/muslim-jibril', '/hadith/fath-iman-50'];
 const QURAN_SUBMENU_HREFS = ['/quran', '/quran/compare', '/quran/shifts', '/quran/iltifat', '/quran/qiraat', '/quran/themes', '/quran/order', '/quran/openings'];
+const GRAPHS_SUBMENU_HREFS = ['/graphs', '/nasab'];
 const PEOPLE_SUBMENU_HREFS = ['/people', '/people/prophet-muhammad', '/titles', '/events'];
 
 function submenuFrom(hrefs: string[], language: 'en' | 'ar'): SiteLink[] {
@@ -24,6 +25,8 @@ function submenuFrom(hrefs: string[], language: 'en' | 'ar'): SiteLink[] {
 
 const getLinkItems = (href: string, language: 'en' | 'ar'): SiteLink[] => {
   switch (href) {
+    case '/graphs':
+      return submenuFrom(GRAPHS_SUBMENU_HREFS, language);
     case '/people':
       return submenuFrom(PEOPLE_SUBMENU_HREFS, language);
     case '/hadith':

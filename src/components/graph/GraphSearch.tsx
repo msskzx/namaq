@@ -23,7 +23,7 @@ interface Suggestion {
   match: 'exact' | 'prefix' | 'contains';
 }
 
-export default function GraphSearch() {
+export default function GraphSearch({ personOnly = false, hint }: { personOnly?: boolean; hint?: string } = {}) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -49,13 +49,14 @@ export default function GraphSearch() {
     setIsLoading(true);
     try {
       const response = await fetch(`/api/graph/suggest?q=${encodeURIComponent(query)}`);
-      setSuggestions(response.ok ? ((await response.json()).data ?? []) : []);
+      const data: Suggestion[] = response.ok ? ((await response.json()).data ?? []) : [];
+      setSuggestions(personOnly ? data.filter((suggestion) => suggestion.kind === 'person') : data);
     } catch (error) {
       console.error('Error fetching suggestions:', error);
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [personOnly]);
 
   const debouncedFetch = useCallback((value: string) => {
     if (debounceTimeout.current) {
@@ -222,7 +223,7 @@ export default function GraphSearch() {
                   </div>
                   <div className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                     {isAddable(suggestion)
-                      ? (language === 'ar' ? 'اختر لعرض الرسم البياني' : 'Select to focus the graph')
+                      ? (hint ?? (language === 'ar' ? 'اختر لعرض الرسم البياني' : 'Select to focus the graph'))
                       : translations[language].graph.disabledKindResult(kindLabel(suggestion.kind))}
                   </div>
                 </li>
