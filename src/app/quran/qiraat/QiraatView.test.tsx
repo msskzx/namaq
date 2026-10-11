@@ -45,21 +45,39 @@ describe('QiraatView', () => {
     expect(container.querySelectorAll('li[data-state="unknown"]')).toHaveLength(20);
   });
 
-  it('lists the places of juz\' 30 under their surah, and tells two words of one ayah apart', () => {
+  it('lists the places of juz\' 30 under their surah', () => {
     render(<QiraatView entries={entries} />);
     fireEvent.change(screen.getByRole('combobox'), { target: { value: '89' } });
     expect((screen.getByRole('combobox') as HTMLSelectElement).value).toBe('89');
     expect(screen.getByRole('navigation', { name: 'المواضع' }).querySelectorAll('button')).toHaveLength(variants.filter(v => v.surah === 89).length);
-    fireEvent.change(screen.getByRole('combobox'), { target: { value: '78' } });
-    const labels = [...screen.getByRole('navigation', { name: 'المواضع' }).querySelectorAll('button')].map(b => b.textContent);
-    expect(labels).toHaveLength(2);
-    expect(new Set(labels).size).toBe(2);
   });
 
   it('shows no meaning block for a place that has none', () => {
     const { container } = render(<QiraatView entries={entries} />);
     go(89, '٤');
     expect(container.textContent).not.toContain('المعنى');
+  });
+
+  it('shows both words of 78:37 in one place, coloring only the differing words, with al-Tabari on what the difference changes', () => {
+    const { container } = render(<QiraatView entries={entries} />);
+    go(78, '٣٧');
+    const cards = [...container.querySelectorAll('.row-span-2')];
+    expect(cards).toHaveLength(3);
+    expect(cards.map(c => c.querySelectorAll('mark').length)).toEqual([2, 2, 2]);
+    expect(container.textContent).toContain('المعنى');
+    expect(container.textContent).toContain('الطبري');
+  });
+
+  it('colors the only differing word on 1:4, which differs by one letter', () => {
+    const { container } = render(<QiraatView entries={entries} />);
+    expect([...container.querySelectorAll('.row-span-2')].map(c => c.querySelectorAll('mark').length)).toEqual([1, 1]);
+  });
+
+  it('colors the riwaya pills below by reading and leaves the names above the ayah plain', () => {
+    const { container } = render(<QiraatView entries={entries} />);
+    const hafs = screen.getByText('حفص', { selector: 'li[data-state] *' }).closest('li')!;
+    expect(hafs.className + hafs.innerHTML).toContain('amber');
+    expect(container.querySelector('.row-span-2 p')!.className).not.toMatch(/amber|sky|emerald|rose/);
   });
 
   it('nests each imam\'s two riwat under him', () => {

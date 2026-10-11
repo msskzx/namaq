@@ -63,6 +63,22 @@ describe('chip coloring', () => {
   });
 });
 
+describe('places', () => {
+  it('has one entry per ayah, since the index lists ayat', () => {
+    const keys = variants.map(v => `${v.surah}:${v.ayah}`);
+    expect(new Set(keys).size).toBe(keys.length);
+  });
+
+  it('78:37 gives every riwaya one of three combinations of the two words', () => {
+    const states = chipStates(find(78, 37));
+    expect(states.every(c => c.state !== null)).toBe(true);
+    expect(new Set(states.map(c => c.state))).toEqual(new Set([0, 1, 2]));
+    expect(states.find(c => c.id === 'hafs')!.state).toBe(0);
+    expect(states.find(c => c.id === 'khallad')!.state).toBe(1);
+    expect(states.find(c => c.id === 'qalun')!.state).toBe(2);
+  });
+});
+
 describe('four readings', () => {
   it('40:26 gives every riwaya exactly one of the four combinations', () => {
     const states = chipStates(find(40, 26));
