@@ -22,7 +22,7 @@ const SECOND_LABEL = 'فرق على مستوى الكلمة، وليس نص مص
 const key = (v: Variant) => `${v.surah}:${v.ayah}`;
 const pediaUrl = (v: Variant) => `https://quranpedia.net/ayahs/${v.surah}/${v.ayah}`;
 
-function Meaning({ meaning }: { meaning: Variant['meaning'] }) {
+function Meaning({ meaning }: { meaning: NonNullable<Variant['meaning']> }) {
   if (meaning.kind === 'quote') {
     return (
       <div className="flex flex-col gap-1">
@@ -37,12 +37,18 @@ function Meaning({ meaning }: { meaning: Variant['meaning'] }) {
   return <p>{meaning.text}</p>;
 }
 
+function hafsWordOf({ variant, text }: QiraatEntry) {
+  const words = ayahWords(text, false);
+  const found = neighbors(words.norm, variant.hafsWord, variant.occurrence);
+  return found ? words.display.slice(found.start, found.end).join(' ') : '';
+}
+
 function Card({ entry }: { entry: QiraatEntry }) {
   const { variant, text, surahName } = entry;
   const words = ayahWords(text, false);
   const found = neighbors(words.norm, variant.hafsWord, variant.occurrence);
   const states = chipStates(variant);
-  const hafsWord = found ? words.display.slice(found.start, found.end).join(' ') : '';
+  const hafsWord = hafsWordOf(entry);
   const rows = variant.readings.map((r, i) => (i === 0 ? hafsWord : r.text ?? ''));
   const slots = found ? Object.fromEntries(Array.from({ length: found.end - found.start }, (_, k) => [found.start + k, 0])) : undefined;
   const ayah = { id: key(variant), number: variant.ayah, text: words.display.join(' '), surah: { name: surahName } } as unknown as Ayah;
@@ -92,10 +98,12 @@ function Card({ entry }: { entry: QiraatEntry }) {
         </div>
         {variant.note && <p className="text-sm text-gray-600 dark:text-gray-400">{variant.note}</p>}
       </div>
-      <div>
-        <h3 className="text-lg">المعنى</h3>
-        <Meaning meaning={variant.meaning} />
-      </div>
+      {variant.meaning && (
+        <div>
+          <h3 className="text-lg">المعنى</h3>
+          <Meaning meaning={variant.meaning} />
+        </div>
+      )}
       <a href={pediaUrl(variant)} className="inline-flex items-center gap-2 text-sm underline" target="_blank" rel="noreferrer">
         <FontAwesomeIcon icon={faLink} />
         قوائم القرّاء من موسوعة القرآن: <bdi dir="ltr">{pediaUrl(variant)}</bdi>
@@ -104,9 +112,22 @@ function Card({ entry }: { entry: QiraatEntry }) {
   );
 }
 
+const JUZ_AMMA_FROM = 78;
+const surahLabel = (entries: QiraatEntry[], surah: number) => {
+  const name = entries.find(e => e.variant.surah === surah)?.surahName;
+  return name ? plainName(name).replace(/^سورة /, '') : String(surah);
+};
+
 export default function QiraatView({ entries }: { entries: QiraatEntry[] }) {
   const [selected, setSelected] = useState(0);
   if (entries.length === 0) return <p dir="rtl" className="max-w-3xl mx-auto p-4">لا توجد آيات محفوظة لعرض القراءات.</p>;
+  const surah = entries[selected].variant.surah;
+  const surahs = [...new Set(entries.map(e => e.variant.surah))];
+  const here = entries.flatMap((e, i) => (e.variant.surah === surah ? [{ e, i }] : []));
+  const repeated = (ayah: number) => here.filter(h => h.e.variant.ayah === ayah).length > 1;
+  const option = (n: number) => (
+    <option key={n} value={n}>{`${surahLabel(entries, n)} (${num(entries.filter(e => e.variant.surah === n).length)})`}</option>
+  );
   return (
     <div dir="rtl" className="max-w-3xl mx-auto p-4 flex flex-col gap-4 text-gray-900 dark:text-gray-200">
       <header className="flex flex-col gap-2">
@@ -114,20 +135,35 @@ export default function QiraatView({ entries }: { entries: QiraatEntry[] }) {
           القراءات: الآية نفسها في أكثر من قراءة
         </h1>
         <p>
-          ثلاثة عشر موضعًا اختيرت للتجربة، وأرقام آياتها على عدّ حفص (الكوفي). في رواية ورش لا تُعدّ البسملة آية في الفاتحة، فتكون «مالك يوم الدين» الآية ٣ لا ٤.
+          {num(entries.length)} موضعًا اختيرت للتجربة، من الفاتحة إلى المسد، وأرقام آياتها على عدّ حفص (الكوفي). في رواية ورش لا تُعدّ البسملة آية في الفاتحة، فتكون «مالك يوم الدين» الآية ٣ لا ٤.
           وسورة البقرة {num(286)} آية في العدّ الكوفي و{num(287)} في البصري و{num(285)} في المدني.
         </p>
         <p>
-          قوائم القرّاء من موسوعة القرآن (Quranpedia) على صفحة كل آية، مثل <bdi dir="ltr">https://quranpedia.net/ayahs/1/4</bdi>، ولا تسمّي الموسوعة الكتاب الذي نقلت عنه، وستُراجع على «النشر» في مرحلة التوثيق. القراءات العشر كلها متواترة، والصفحة لا ترجّح بينها.
+          قوائم القرّاء من موسوعة القرآن (Quranpedia): الآيات الأولى من صفحة كل آية، مثل <bdi dir="ltr">https://quranpedia.net/ayahs/1/4</bdi>، وآيات جزء عمّ من ملف بيانات الموسوعة الرسمي للقراءات. ولا تسمّي الموسوعة الكتاب الذي نقلت عنه، وستُراجع على «النشر» في مرحلة التوثيق. القراءات العشر كلها متواترة، والصفحة لا ترجّح بينها.
         </p>
       </header>
-      <nav className="flex flex-wrap gap-2" aria-label="المواضع">
-        {entries.map((e, i) => (
-          <Button key={`${key(e.variant)}-${i}`} size="sm" active={i === selected} onClick={() => setSelected(i)}>
-            {e.surahName ? `${plainName(e.surahName).replace(/^سورة /, '')} ` : ''}{num(e.variant.surah)}:{num(e.variant.ayah)}
-          </Button>
-        ))}
-      </nav>
+      <div className="flex flex-col gap-3 rounded-lg border border-gray-200 dark:border-white/10 p-4">
+        <label className="flex flex-wrap items-center gap-3">
+          <span>السورة</span>
+          <select
+            value={surah}
+            onChange={ev => setSelected(entries.findIndex(e => e.variant.surah === Number(ev.target.value)))}
+            className="rounded-lg border border-gray-300 dark:border-white/20 bg-white dark:bg-black px-3 py-2"
+          >
+            <optgroup label="سور أخرى">{surahs.filter(n => n < JUZ_AMMA_FROM).map(option)}</optgroup>
+            <optgroup label="جزء عمّ">{surahs.filter(n => n >= JUZ_AMMA_FROM).map(option)}</optgroup>
+          </select>
+        </label>
+        <nav className="flex flex-wrap items-center gap-2" aria-label="المواضع">
+          <span>الآية</span>
+          {here.map(({ e, i }) => (
+            <Button key={i} size="sm" active={i === selected} onClick={() => setSelected(i)}>
+              {num(e.variant.ayah)}
+              {repeated(e.variant.ayah) && ` ${hafsWordOf(e)}`}
+            </Button>
+          ))}
+        </nav>
+      </div>
       <Card key={selected} entry={entries[selected]} />
     </div>
   );

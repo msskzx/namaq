@@ -168,3 +168,35 @@ words, since the brief's Ibn Kathir exchange is not in the page text I read.
    KFGQPC Warsh font would need to be hosted, after a licence check.
 8. A page about reading differences invites reading it as doctrine. It needs a
    short note that all ten readings are mutawatir and the page picks no side.
+
+## Juz' 30 (surahs 78 to 114)
+
+The page covers 31 more places in juz' 30, taken from Quranpedia's official
+data dump (`https://api.quranpedia.net/dumps/qiraat.json.gz`, version
+2026-10-10, about 1 MB), which the dumps page offers in place of scraping. The
+file was read once and not committed; only the places below were authored into
+`data/variants.ts`, with the Hafs ayat copied into `data/hafs.fixture.json`.
+
+How a place was chosen:
+
+- The dump holds entries whose word is not in the ayah they hang on (101:6
+  carries words from Al-Baqara), so an entry counts only when its word is found
+  in the Hafs text of that ayah.
+- Only word-level differences were taken. Idgham, imala, taqlil, silah,
+  hamza handling and madd are left out.
+- A place counts only when its groups cover all 20 riwayat once. 89:15 and
+  109:6 (the second word) list some riwayat in both groups, so they are not
+  shown.
+- For each place, the group that holds Hafs is checked against the stored Hafs
+  word.
+
+The dump splits one imam's two riwat across readings at 80:25, 89:9 and 104:2
+(for example Ruways and Rawh at 104:2). Yaqub's riwat normally agree, so check
+these against al-Nashr first.
+
+Places the dump does not list are not shown, even where a reading is known from
+the books (for example 78:19, 78:23, 78:28). A place with no sourced
+explanation has no meaning line; none was written for them.
+
+Publishing the dump itself as a downloadable file would need to credit
+quranpedia.net with the dump version; using it inside the app does not.
