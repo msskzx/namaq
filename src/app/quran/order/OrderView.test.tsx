@@ -19,13 +19,13 @@ const strip = () => within(screen.getByRole('list', { name: 'ترتيب السو
 const toggles = () => within(screen.getByRole('list', { name: 'المواضيع' }));
 const cells = (id?: string) => document.querySelectorAll(id ? `[data-rail-cell="${id}"]` : '[data-rail-cell]');
 const carriers = (id: string) => Object.keys(TOPICS).map(Number).filter(n => TOPICS[n].topics.some(([t]) => t === id));
-const rowOf = (n: number) => strip().getAllByRole('heading', { level: 2 })[n - 46].closest('li')!;
+const rowOf = (n: number) => strip().getAllByRole('heading', { level: 2 })[n - 41].closest('li')!;
 
 describe('OrderView', () => {
   it('names each surah once and has one link per neighbouring pair', () => {
     renderView();
-    expect(strip().getAllByRole('heading', { level: 2 })).toHaveLength(69);
-    expect(document.querySelectorAll('details')).toHaveLength(68);
+    expect(strip().getAllByRole('heading', { level: 2 })).toHaveLength(74);
+    expect(document.querySelectorAll('details')).toHaveLength(73);
     expect(screen.getAllByRole('heading', { name: /النازعات/ })).toHaveLength(1);
   });
 
@@ -40,16 +40,16 @@ describe('OrderView', () => {
     renderView();
     const on = toggles().getAllByRole('button').filter(b => b.getAttribute('aria-pressed') === 'true');
     expect(on).toHaveLength(Object.keys(THEMES).length);
-    expect(cells()).toHaveLength(Object.keys(THEMES).length * 69);
+    expect(cells()).toHaveLength(Object.keys(THEMES).length * 74);
   });
 
   it('removes and restores a rail column when a theme is toggled', () => {
     renderView();
     const first = toggles().getAllByRole('button')[0];
     fireEvent.click(first);
-    expect(cells()).toHaveLength((Object.keys(THEMES).length - 1) * 69);
+    expect(cells()).toHaveLength((Object.keys(THEMES).length - 1) * 74);
     fireEvent.click(first);
-    expect(cells()).toHaveLength(Object.keys(THEMES).length * 69);
+    expect(cells()).toHaveLength(Object.keys(THEMES).length * 74);
   });
 
   it('puts a theme dot exactly on the surahs that carry it, and the arrow on the last', { timeout: 30000 }, () => {
@@ -67,7 +67,7 @@ describe('OrderView', () => {
 
   it('draws the line below the first dot, through the middle, and above the last dot', () => {
     renderView();
-    const id = Object.keys(THEMES).find(t => carriers(t)[0] > 46 && carriers(t).length > 2)!;
+    const id = Object.keys(THEMES).find(t => carriers(t)[0] > 41 && carriers(t).length > 2)!;
     const btn = toggles().getByRole('button', { name: new RegExp(THEMES[id]) });
     if (btn.getAttribute('aria-pressed') === 'false') fireEvent.click(btn);
     const [first, last] = [carriers(id)[0], carriers(id).at(-1)!];
@@ -81,7 +81,7 @@ describe('OrderView', () => {
 
   it('puts the rail after the content in reading order', () => {
     renderView();
-    const li = rowOf(46);
+    const li = rowOf(41);
     expect(li.firstElementChild!.querySelector('h2')).toBeTruthy();
     expect(li.lastElementChild!.querySelector('[data-rail-cell]')).toBeTruthy();
   });
@@ -101,12 +101,12 @@ describe('OrderView', () => {
   it('links the surahs that open alike to the openings page', () => {
     renderView();
     const hrefs = screen.getAllByRole('link').map(a => a.getAttribute('href'));
-    expect(hrefs.filter(h => h === '/quran/openings')).toHaveLength(OPENING_GROUPS.flat().filter(n => n >= 46).length);
+    expect(hrefs.filter(h => h === '/quran/openings')).toHaveLength(OPENING_GROUPS.flat().filter(n => n >= 41).length);
   });
 
   it('labels a step without a source and links the ones with one', () => {
     renderView();
-    expect(screen.getAllByText('بلا مصدر')).toHaveLength(68 - 4);
+    expect(screen.getAllByText('بلا مصدر')).toHaveLength(73 - 4);
     expect(within(document.getElementById('hop-105')!).getByRole('link').getAttribute('href')).toMatch(/^https:\/\//);
   });
 

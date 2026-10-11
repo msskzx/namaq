@@ -5,11 +5,13 @@ import { ayahWords, plainName } from './normalize';
 export type Oath = { surah: number; range: Range; by: string[] };
 
 export const OATHS: Oath[] = [
+  { surah: 43, range: [2, 2], by: ['الكتاب'] },
+  { surah: 44, range: [2, 2], by: ['الكتاب'] },
   { surah: 50, range: [1, 1], by: ['القرءان'] },
   { surah: 51, range: [1, 4], by: ['الذاريات', 'الحاملات', 'الجاريات', 'المقسمات'] },
   { surah: 51, range: [7, 7], by: ['السماء'] },
   { surah: 51, range: [23, 23], by: ['رب'] },
-  { surah: 52, range: [1, 6], by: ['الطور', 'كتاب', 'البيت', 'السقف', 'البحر'] },
+  { surah: 52, range: [1, 6], by: ['الطور', 'الكتاب', 'البيت', 'السقف', 'البحر'] },
   { surah: 53, range: [1, 1], by: ['النجم'] },
   { surah: 56, range: [75, 75], by: ['النجوم'] },
   { surah: 64, range: [7, 7], by: ['رب'] },
