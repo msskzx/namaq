@@ -19,11 +19,11 @@ describe('OathsView', () => {
     expect(within(screen.getByRole('list', { name: 'الأقسام' })).getAllByRole('heading', { level: 2 })).toHaveLength(OATHS.length);
   });
 
-  it('starts with the four most repeated words and draws a column for each', () => {
+  it('starts with every word on and draws a column for each', () => {
     renderView();
     const on = toggles().getAllByRole('button').filter(b => b.getAttribute('aria-pressed') === 'true');
-    expect(on).toHaveLength(4);
-    expect(cells()).toHaveLength(4 * OATHS.length);
+    expect(on).toHaveLength(lines.length);
+    expect(cells()).toHaveLength(lines.length * OATHS.length);
   });
 
   it('puts a dot on every oath that carries the word and an arrow on the last', () => {
@@ -33,12 +33,12 @@ describe('OathsView', () => {
     expect(document.querySelectorAll(`[data-arrow="${line.id}"]`)).toHaveLength(1);
   });
 
-  it('adds and removes a column when a word is toggled', () => {
+  it('removes and restores a column when a word is toggled', () => {
     renderView();
-    const off = toggles().getAllByRole('button').find(b => b.getAttribute('aria-pressed') === 'false')!;
-    fireEvent.click(off);
-    expect(cells()).toHaveLength(5 * OATHS.length);
-    fireEvent.click(off);
-    expect(cells()).toHaveLength(4 * OATHS.length);
+    const first = toggles().getAllByRole('button')[0];
+    fireEvent.click(first);
+    expect(cells()).toHaveLength((lines.length - 1) * OATHS.length);
+    fireEvent.click(first);
+    expect(cells()).toHaveLength(lines.length * OATHS.length);
   });
 });

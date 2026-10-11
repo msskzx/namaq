@@ -86,7 +86,7 @@ export default function OrderView({ chips, hops }: { chips: ChipView[]; hops: Ho
     const ns = chips.filter(c => c.topics.some(t => t.theme === id)).map(c => c.number);
     return { id, first: ns[0], last: ns[ns.length - 1], has: new Set(ns) };
   });
-  const [on, setOn] = useState<Set<string>>(() => new Set(spans.filter(s => s.id !== 'oaths').sort((a, b) => b.has.size - a.has.size).slice(0, 4).map(s => s.id)));
+  const [on, setOn] = useState<Set<string>>(() => new Set(spans.map(s => s.id)));
   const toggle = (id: string) => setOn(prev => {
     const next = new Set(prev);
     if (!next.delete(id)) next.add(id);

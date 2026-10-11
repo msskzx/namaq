@@ -36,20 +36,20 @@ describe('OrderView', () => {
     expect(list.getByText('اختلافهم في النبأ العظيم')).toBeTruthy();
   });
 
-  it('starts with the four themes that span the most surahs and draws a column for each', () => {
+  it('starts with every theme on and draws a column for each', () => {
     renderView();
     const on = toggles().getAllByRole('button').filter(b => b.getAttribute('aria-pressed') === 'true');
-    expect(on).toHaveLength(4);
-    expect(cells()).toHaveLength(4 * 74);
+    expect(on).toHaveLength(Object.keys(THEMES).length);
+    expect(cells()).toHaveLength(Object.keys(THEMES).length * 74);
   });
 
-  it('adds and removes a rail column when a theme is toggled', () => {
+  it('removes and restores a rail column when a theme is toggled', () => {
     renderView();
-    const off = toggles().getAllByRole('button').find(b => b.getAttribute('aria-pressed') === 'false')!;
-    fireEvent.click(off);
-    expect(cells()).toHaveLength(5 * 74);
-    fireEvent.click(off);
-    expect(cells()).toHaveLength(4 * 74);
+    const first = toggles().getAllByRole('button')[0];
+    fireEvent.click(first);
+    expect(cells()).toHaveLength((Object.keys(THEMES).length - 1) * 74);
+    fireEvent.click(first);
+    expect(cells()).toHaveLength(Object.keys(THEMES).length * 74);
   });
 
   it('puts a theme dot exactly on the surahs that carry it, and the arrow on the last', { timeout: 30000 }, () => {

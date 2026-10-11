@@ -7,6 +7,7 @@ import { prisma } from '@/lib/prisma';
 import { ayahWords, plainName } from '@/lib/quran/normalize';
 import { findOpeners, findShifts } from '@/lib/quran/shifts';
 import ShiftsView from './ShiftsView';
+import SurahSelect from './SurahSelect';
 import { num } from '@/lib/quran/arabicNumber';
 
 export const dynamic = 'force-dynamic';
@@ -60,9 +61,7 @@ export default async function QuranShiftsPage({ searchParams }: { searchParams: 
           لم يراجع هذا العرض أحد من أهل العلم. النص برواية حفص. تُقارن الكلمات بعد حذف التشكيل وتوحيد صور بعض الحروف، ويدل التطابق على اشتراك اللفظ وحده.
         </p>
         <form method="get" className="flex flex-wrap items-center gap-2">
-          <select name="s" aria-label="السورة" defaultValue={n} className="min-w-0 flex-1 rounded border border-amber-400 bg-white dark:bg-gray-900 px-2 py-1 text-sm">
-            {surahs.map(s => <option key={s.number} value={s.number}>{`${num(s.number)}. ${plainName(s.name)}`}</option>)}
-          </select>
+          <SurahSelect value={n} options={surahs.map(s => ({ number: s.number, label: `${num(s.number)}. ${plainName(s.name)}` }))} />
           <Button type="submit" size="sm" variant="outline">
             <FontAwesomeIcon icon={faEye} />
             اعرض

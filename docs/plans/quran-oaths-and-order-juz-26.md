@@ -6,8 +6,9 @@ Two features on one branch, for the owner's request after the first look at
 
 ## 1. Oaths stop being a theme on /order
 
-Done on the branch: `oaths` draws in neutral gray and is off by default, so a
-shared gray no longer reads as a link. The `oaths` entries stay in `TOPICS` so
+Done on the branch: `oaths` draws in neutral gray. It was off by default, so a
+shared gray would not read as a link; the owner then asked for every filter on
+by default on both pages, so it is on with the rest. The `oaths` entries stay in `TOPICS` so
 the badge still names the oath.
 
 ## 2. /quran/oaths
