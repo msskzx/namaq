@@ -54,11 +54,21 @@ describe('chip coloring', () => {
     }
   });
 
-  it('never lists a riwaya on both readings', () => {
+  it('never lists a riwaya on two readings', () => {
     for (const v of variants) {
-      const [a, b] = v.readings.map(riwayatOfReading);
-      expect([...a].filter(id => b.has(id)), `${v.surah}:${v.ayah}`).toEqual([]);
+      const sets = v.readings.map(riwayatOfReading);
+      const all = sets.flatMap(s => [...s]);
+      expect(all.length, `${v.surah}:${v.ayah}`).toBe(new Set(all).size);
     }
+  });
+});
+
+describe('four readings', () => {
+  it('40:26 gives every riwaya exactly one of the four combinations', () => {
+    const states = chipStates(find(40, 26));
+    expect(states.every(c => c.state !== null)).toBe(true);
+    expect(new Set(states.map(c => c.state))).toEqual(new Set([0, 1, 2, 3]));
+    expect(states.find(c => c.id === 'bazzi')!.state).toBe(3);
   });
 });
 
@@ -71,8 +81,8 @@ describe('neighbors', () => {
     return { at, text: (r: readonly [number, number]) => words.display.slice(r[0], r[1]).length };
   };
 
-  it('finds the intended Hafs word in all twelve entries', () => {
-    const expected: Record<string, string> = { '1:4': 'مَـٰلِكِ', '2:9': 'یَخۡدَعُونَ', '2:132': 'وَوَصَّىٰ', '2:259': 'نُنشِزُهَا', '3:146': 'قَـٰتَلَ', '5:6': 'وَأَرۡجُلَكُمۡ', '9:100': 'تَحۡتَهَا', '17:93': 'قُلۡ', '18:86': 'حَمِئَةࣲ', '36:35': 'عَمِلَتۡهُ', '43:19': 'عِبَـٰدُ', '49:6': 'فَتَبَیَّنُوۤا۟' };
+  it('finds the intended Hafs word in all thirteen entries', () => {
+    const expected: Record<string, string> = { '1:4': 'مَـٰلِكِ', '2:9': 'یَخۡدَعُونَ', '2:132': 'وَوَصَّىٰ', '2:259': 'نُنشِزُهَا', '3:146': 'قَـٰتَلَ', '5:6': 'وَأَرۡجُلَكُمۡ', '9:100': 'تَحۡتَهَا', '17:93': 'قُلۡ', '18:86': 'حَمِئَةࣲ', '36:35': 'عَمِلَتۡهُ', '40:26': 'أَوۡ أَن یُظۡهِرَ', '43:19': 'عِبَـٰدُ', '49:6': 'فَتَبَیَّنُوۤا۟' };
     for (const v of variants) {
       const k = `${v.surah}:${v.ayah}`;
       const at = neighbors(norm(v.surah, v.ayah), v.hafsWord, v.occurrence)!;

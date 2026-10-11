@@ -7,7 +7,7 @@ import { num } from '@/lib/quran/arabicNumber';
 const PANEL = 'bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4';
 const NOTE = 'text-sm text-gray-600 dark:text-gray-400';
 
-function CuratedCard({ item: { surah, parts, note } }: { item: CuratedView }) {
+function CuratedCard({ item: { surah, parts, note, speakers } }: { item: CuratedView }) {
   const [from, to] = [parts[0].from, parts[parts.length - 1].to];
   return (
     <section className={PANEL}>
@@ -15,6 +15,13 @@ function CuratedCard({ item: { surah, parts, note } }: { item: CuratedView }) {
         <h2 className="text-xl text-amber-600 dark:text-amber-400">{`${surah.plain} ${from === to ? num(from) : `${num(from)}–${num(to)}`}`}</h2>
       </div>
       <p className={`${NOTE} mb-3`}>{note}</p>
+      {speakers && (
+        <ul className="flex flex-wrap gap-x-6 gap-y-1 mb-3 text-sm" aria-label="المتكلمون">
+          {(Object.entries(speakers) as [Mode, string][]).map(([m, label]) => (
+            <li key={m} className={`font-arabic text-lg ${SLOT_COLORS[MODES[m].slot]}`}>{label}</li>
+          ))}
+        </ul>
+      )}
       <div className={parts.length > 1 ? 'grid md:grid-cols-2 gap-x-4' : ''}>
         {parts.map(p => (
           <div key={p.from}>
