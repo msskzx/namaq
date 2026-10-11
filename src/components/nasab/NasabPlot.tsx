@@ -7,7 +7,7 @@ const NODE_HEIGHT = 48;
 const PAD = 12;
 
 // See docs/plans/nasab-plot.md.
-export default function NasabPlot({ layout, isArabic }: { layout: NasabLayout; isArabic: boolean }) {
+export default function NasabPlot({ layout, isArabic, className = '' }: { layout: NasabLayout; isArabic: boolean; className?: string }) {
   const maxCol = Math.max(...layout.nodes.map((node) => node.col));
   const maxRow = Math.max(...layout.nodes.map((node) => node.row));
   const width = maxCol * COL_WIDTH + NODE_WIDTH + PAD * 2;
@@ -28,7 +28,7 @@ export default function NasabPlot({ layout, isArabic }: { layout: NasabLayout; i
   };
 
   return (
-    <div tabIndex={0} role="region" aria-label={isArabic ? 'شجرة النسب' : 'Nasab tree'} className="overflow-auto rounded border border-amber-400 bg-gray-50 dark:bg-black">
+    <div tabIndex={0} role="region" aria-label={isArabic ? 'شجرة النسب' : 'Nasab tree'} className={`overflow-auto rounded border border-amber-400 bg-gray-50 dark:bg-black ${className}`}>
       <svg role="img" aria-label={isArabic ? 'شجرة النسب' : 'Nasab tree'} width={width} height={height} className="mx-auto block">
         {layout.edges.map(({ from, to }) => {
           const a = at.get(from)!;

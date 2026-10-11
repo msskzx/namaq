@@ -18,6 +18,7 @@ import type { PersonFull } from '@/types/person';
 import useSWR from 'swr';
 import { useParams } from 'next/navigation';
 import GraphCanvas from '@/components/graph/GraphCanvas';
+import NasabSection from '@/components/nasab/NasabSection';
 
 import { fetcher } from '@/lib/swr';
 import { AyatGroup } from '@/components/quran/AyahCard';
@@ -83,6 +84,7 @@ function PersonDetailPage() {
               <p className="text-gray-800 dark:text-gray-200 text-lg">{person.fullName}</p>
             </div>
           )}
+          <NasabSection slug={person.slug} />
           {person.kunya && (
             <div className="bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4">
               <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
