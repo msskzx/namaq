@@ -58,10 +58,12 @@ describe('QiraatView', () => {
     expect(container.textContent).not.toContain('المعنى');
   });
 
-  it('shows both words of 78:37 in one place, with al-Tabari on what the difference changes', () => {
+  it('shows both words of 78:37 in one place, coloring only the differing words, with al-Tabari on what the difference changes', () => {
     const { container } = render(<QiraatView entries={entries} />);
     go(78, '٣٧');
-    expect(container.querySelectorAll('.row-span-3')).toHaveLength(3);
+    const cards = [...container.querySelectorAll('.row-span-2')];
+    expect(cards).toHaveLength(3);
+    expect(cards.map(c => c.querySelectorAll('mark').length)).toEqual([2, 2, 2]);
     expect(container.textContent).toContain('المعنى');
     expect(container.textContent).toContain('الطبري');
   });

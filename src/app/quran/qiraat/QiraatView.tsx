@@ -11,6 +11,7 @@ import type { Ayah } from '@/types/quran';
 import { ayahWords, plainName } from '@/lib/quran/normalize';
 import { chipStates, neighbors, READERS, RIWAYAT, type Variant } from '@/lib/quran/qiraat';
 import { num } from '@/lib/quran/arabicNumber';
+import { wordDiff } from '@/lib/quran/wordDiff';
 
 export type QiraatEntry = { variant: Variant; text: string; surahName: string };
 
@@ -18,6 +19,8 @@ const WORD_COLORS = ['text-amber-600 dark:text-amber-400', 'text-sky-600 dark:te
 const BADGE_COLORS = ['amber', 'blue', 'emerald', 'rose'];
 const UNCONFIRMED = 'غير مؤكد';
 const SECOND_LABEL = 'فرق على مستوى الكلمة، وليس نص مصحف تلك الرواية';
+
+const sameWord = (w: string) => w.replace(/[\u2060\u0640\u0670\u0652\u06D6-\u06ED\u08D3-\u08FF]/g, '').replace(/[ىی]/g, 'ي').replace(/ٱ/g, 'ا').replace(/([\u064B-\u0650])\u0651/g, '\u0651$1');
 
 const key = (v: Variant) => `${v.surah}:${v.ayah}`;
 const pediaUrl = (v: Variant) => `https://quranpedia.net/ayahs/${v.surah}/${v.ayah}`;
@@ -50,7 +53,17 @@ function Card({ entry }: { entry: QiraatEntry }) {
   const states = chipStates(variant);
   const hafsWord = hafsWordOf(entry);
   const rows = variant.readings.map((r, i) => (i === 0 ? hafsWord : r.text ?? ''));
-  const slots = found ? Object.fromEntries(Array.from({ length: found.end - found.start }, (_, k) => [found.start + k, 0])) : undefined;
+  const spans = rows.map(r => r.split(' ').filter(Boolean));
+  const differing = spans.map(() => new Set<number>());
+  spans.slice(1).forEach((span, n) => {
+    const d = wordDiff(spans[0].map(sameWord), span.map(sameWord));
+    d.a.forEach(k => differing[0].add(k));
+    d.b.forEach(k => differing[n + 1].add(k));
+  });
+  spans.forEach((span, i) => {
+    if (i > 0 && span.length === spans[0].length) differing[0].forEach(k => differing[i].add(k));
+  });
+  const slots = found ? Object.fromEntries([...differing[0]].map(k => [found.start + k, 0])) : undefined;
   const ayah = { id: key(variant), number: variant.ayah, text: words.display.join(' '), surah: { name: surahName } } as unknown as Ayah;
   const around = (side: readonly [number, number]) => words.display.slice(side[0], side[1]).join(' ');
 
@@ -61,12 +74,18 @@ function Card({ entry }: { entry: QiraatEntry }) {
       {found && (
         <div className="flex flex-col gap-3">
           <div className="grid gap-3 md:grid-cols-2">
-            {rows.map((word, i) => (
-              <div key={i} className="row-span-3 grid grid-rows-subgrid gap-2 rounded-lg border border-gray-200 dark:border-white/10 p-4">
-                <div><Badge size="sm" color={BADGE_COLORS[i]} text={word || UNCONFIRMED} /></div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">{states.filter(c => c.state === i).map(c => c.name).join('، ')}</p>
+            {rows.map((_, i) => (
+              <div key={i} className="row-span-2 grid grid-rows-subgrid gap-2 rounded-lg border border-gray-200 dark:border-white/10 p-4">
+                <p className={`text-sm ${WORD_COLORS[i]}`}>{states.filter(c => c.state === i).map(c => c.name).join('، ')}</p>
                 <p className="text-2xl leading-[2.2] font-arabic">
-                  {around(found.before)} <mark className={`bg-transparent ${WORD_COLORS[i]}`}>{word || UNCONFIRMED}</mark> {around(found.after)}
+                  {around(found.before)}{' '}
+                  {spans[i].length === 0 && <mark className={`bg-transparent ${WORD_COLORS[i]}`}>{UNCONFIRMED}</mark>}
+                  {spans[i].map((w, k) => (
+                    <React.Fragment key={k}>
+                      {differing[i].has(k) ? <mark className={`bg-transparent ${WORD_COLORS[i]}`}>{w}</mark> : w}{' '}
+                    </React.Fragment>
+                  ))}
+                  {around(found.after)}
                 </p>
               </div>
             ))}
