@@ -66,6 +66,7 @@ describe('oaths', () => {
     expect([at(52), at(95)].every(n => has('الطور').has(n))).toBe(true);
     expect([at(75), at(85)].every(n => has('اليوم').has(n))).toBe(true);
     expect([at(68), at(69)].every(n => has('ما').has(n))).toBe(true);
+    expect([at(43), at(44), at(52)].every(n => has('الكتاب').has(n))).toBe(true);
   });
 
   it('does not take a word that only ends like the sworn one for it', () => {
