@@ -196,7 +196,8 @@ these against al-Nashr first.
 
 Places the dump does not list are not shown, even where a reading is known from
 the books (for example 78:19, 78:23, 78:28). A place with no sourced
-explanation has no meaning line; none was written for them.
+explanation has no meaning line; none was written for them (78:37 has one,
+quoted from al-Tabari).
 
 Publishing the dump itself as a downloadable file would need to credit
 quranpedia.net with the dump version; using it inside the app does not.

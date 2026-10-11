@@ -16,11 +16,10 @@ import { wordDiff } from '@/lib/quran/wordDiff';
 export type QiraatEntry = { variant: Variant; text: string; surahName: string };
 
 const WORD_COLORS = ['text-amber-600 dark:text-amber-400', 'text-sky-600 dark:text-sky-400', 'text-emerald-600 dark:text-emerald-400', 'text-rose-600 dark:text-rose-400'];
-const BADGE_COLORS = ['amber', 'blue', 'emerald', 'rose'];
 const UNCONFIRMED = 'غير مؤكد';
 const SECOND_LABEL = 'فرق على مستوى الكلمة، وليس نص مصحف تلك الرواية';
 
-const sameWord = (w: string) => w.replace(/[\u2060\u0640\u0670\u0652\u06D6-\u06ED\u08D3-\u08FF]/g, '').replace(/[ىی]/g, 'ي').replace(/ٱ/g, 'ا').replace(/([\u064B-\u0650])\u0651/g, '\u0651$1');
+const sameWord = (w: string) => w.replace(/[\u2060\u0652\u06D6-\u06ED\u08D3-\u08FF]/g, '').replace(/[ىی]/g, 'ي').replace(/ٱ/g, 'ا').replace(/([\u064B-\u0650])\u0651/g, '\u0651$1');
 
 const key = (v: Variant) => `${v.surah}:${v.ayah}`;
 const pediaUrl = (v: Variant) => `https://quranpedia.net/ayahs/${v.surah}/${v.ayah}`;
@@ -63,6 +62,7 @@ function Card({ entry }: { entry: QiraatEntry }) {
   spans.forEach((span, i) => {
     if (i > 0 && span.length === spans[0].length) differing[0].forEach(k => differing[i].add(k));
   });
+  if (!differing.some(d => d.size)) differing.forEach((d, i) => spans[i].forEach((_, k) => d.add(k)));
   const slots = found ? Object.fromEntries([...differing[0]].map(k => [found.start + k, 0])) : undefined;
   const ayah = { id: key(variant), number: variant.ayah, text: words.display.join(' '), surah: { name: surahName } } as unknown as Ayah;
   const around = (side: readonly [number, number]) => words.display.slice(side[0], side[1]).join(' ');
@@ -76,7 +76,7 @@ function Card({ entry }: { entry: QiraatEntry }) {
           <div className="grid gap-3 md:grid-cols-2">
             {rows.map((_, i) => (
               <div key={i} className="row-span-2 grid grid-rows-subgrid gap-2 rounded-lg border border-gray-200 dark:border-white/10 p-4">
-                <p className={`text-sm ${WORD_COLORS[i]}`}>{states.filter(c => c.state === i).map(c => c.name).join('، ')}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{states.filter(c => c.state === i).map(c => c.name).join('، ')}</p>
                 <p className="text-2xl leading-[2.2] font-arabic">
                   {around(found.before)}{' '}
                   {spans[i].length === 0 && <mark className={`bg-transparent ${WORD_COLORS[i]}`}>{UNCONFIRMED}</mark>}
@@ -97,14 +97,13 @@ function Card({ entry }: { entry: QiraatEntry }) {
         <ul className="grid gap-3 sm:grid-cols-2" aria-label="الأئمة ورواتهم">
           {READERS.map(reader => {
             const mine = states.filter(c => RIWAYAT.find(r => r.id === c.id)?.reader === reader.id);
-            const same = mine.every(c => c.state === mine[0].state);
             return (
               <li key={reader.id} className="flex flex-col gap-2 rounded-lg border border-gray-200 dark:border-white/10 p-3">
-                <Badge size="sm" text={reader.name} color={same && mine[0].state !== null ? BADGE_COLORS[mine[0].state!] : 'gray'} />
+                <Badge size="sm" text={reader.name} color="gray" />
                 <ul aria-label="الرواة" className="flex flex-wrap gap-2 ms-4 ps-3 border-s-2 border-gray-300 dark:border-white/20">
                   {mine.map(s => (
                     <li key={s.id} data-state={s.state ?? 'unknown'}>
-                      <Badge size="sm" text={s.name} color={s.state === null ? 'gray' : BADGE_COLORS[s.state]} />
+                      <Badge size="sm" text={s.name} color="gray" />
                     </li>
                   ))}
                 </ul>

@@ -68,6 +68,11 @@ describe('QiraatView', () => {
     expect(container.textContent).toContain('الطبري');
   });
 
+  it('colors the only differing word on 1:4, which differs by one letter', () => {
+    const { container } = render(<QiraatView entries={entries} />);
+    expect([...container.querySelectorAll('.row-span-2')].map(c => c.querySelectorAll('mark').length)).toEqual([1, 1]);
+  });
+
   it('nests each imam\'s two riwat under him', () => {
     render(<QiraatView entries={entries} />);
     const imams = screen.getByRole('list', { name: 'الأئمة ورواتهم' }).children;
