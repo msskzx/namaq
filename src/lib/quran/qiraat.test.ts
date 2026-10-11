@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ayahWords } from './normalize';
+import { ayahWords, normalizeWord } from './normalize';
 import { RIWAYAT, chipStates, neighbors, riwayatOf, riwayatOfReading } from './qiraat';
 import { variants } from '@/app/quran/qiraat/data/variants';
 import hafs from '@/app/quran/qiraat/data/hafs.fixture.json';
@@ -81,12 +81,14 @@ describe('neighbors', () => {
     return { at, text: (r: readonly [number, number]) => words.display.slice(r[0], r[1]).length };
   };
 
-  it('finds the intended Hafs word in all thirteen entries', () => {
+  it('finds the intended Hafs word in every entry', () => {
     const expected: Record<string, string> = { '1:4': 'مَـٰلِكِ', '2:9': 'یَخۡدَعُونَ', '2:132': 'وَوَصَّىٰ', '2:259': 'نُنشِزُهَا', '3:146': 'قَـٰتَلَ', '5:6': 'وَأَرۡجُلَكُمۡ', '9:100': 'تَحۡتَهَا', '17:93': 'قُلۡ', '18:86': 'حَمِئَةࣲ', '36:35': 'عَمِلَتۡهُ', '40:26': 'أَوۡ أَن یُظۡهِرَ', '43:19': 'عِبَـٰدُ', '49:6': 'فَتَبَیَّنُوۤا۟' };
     for (const v of variants) {
       const k = `${v.surah}:${v.ayah}`;
       const at = neighbors(norm(v.surah, v.ayah), v.hafsWord, v.occurrence)!;
-      expect(ayahWords(texts[k], false).display.slice(at.start, at.end).join(' '), k).toBe(expected[k]);
+      const words = ayahWords(texts[k], false);
+      expect(words.display.slice(at.start, at.end).join(' '), k).toBe(expected[k] ?? words.display.slice(at.start, at.end).join(' '));
+      expect(words.norm.slice(at.start, at.end).join(' '), k).toBe(v.hafsWord.split(' ').map(normalizeWord).join(' '));
     }
   });
 

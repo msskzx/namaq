@@ -59,7 +59,7 @@ export type Variant = {
   occurrence?: number;
   readings: Reading[];
   note?: string;
-  meaning: Meaning;
+  meaning?: Meaning;
 };
 
 export type ChipState = number | null;

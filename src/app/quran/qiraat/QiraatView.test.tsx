@@ -11,22 +11,26 @@ vi.mock('@/components/language/LanguageContext', () => ({
 }));
 
 const texts = hafs as Record<string, string>;
-const pick = (label: string) => screen.getByRole('button', { name: new RegExp(`${label}$`) });
+const go = (surah: number, ayah: string) => {
+  fireEvent.change(screen.getByRole('combobox'), { target: { value: String(surah) } });
+  fireEvent.click(screen.getByRole('button', { name: new RegExp(`^${ayah}`) }));
+};
 const entries = variants.map(variant => ({ variant, text: texts[`${variant.surah}:${variant.ayah}`], surahName: 'سُورَةُ ٱلْفَاتِحَةِ' }));
 
 afterEach(cleanup);
 
 describe('QiraatView', () => {
-  it('offers thirteen variants and starts on 1:4', () => {
+  it('indexes every place by surah, then ayah, and starts on 1:4', () => {
     const { container } = render(<QiraatView entries={entries} />);
-    expect(screen.getByRole('navigation', { name: 'المواضع' }).querySelectorAll('button')).toHaveLength(13);
+    expect(screen.getByRole('combobox').querySelectorAll('option')).toHaveLength(new Set(variants.map(v => v.surah)).size);
+    expect(screen.getByRole('navigation', { name: 'المواضع' }).querySelectorAll('button')).toHaveLength(1);
     expect(container.querySelectorAll('li[data-state]')).toHaveLength(20);
     expect(container.textContent).toContain('فرق على مستوى الكلمة، وليس نص مصحف تلك الرواية');
   });
 
   it('shows the Hafs/Shu\'ba split on 5:6 and withholds the meaning', () => {
     const { container } = render(<QiraatView entries={entries} />);
-    fireEvent.click(pick('٥:٦'));
+    go(5, '٦');
     const chip = (name: string) => screen.getByText(name).closest('li')!.getAttribute('data-state');
     expect(chip('حفص')).toBe('0');
     expect(chip('شعبة')).toBe('1');
@@ -35,10 +39,26 @@ describe('QiraatView', () => {
 
   it('shows no unreviewed label on an unsourced meaning and greys every chip on 18:86', () => {
     const { container } = render(<QiraatView entries={entries} />);
-    fireEvent.click(pick('٢:٩'));
+    go(2, '٩');
     expect(container.textContent).not.toContain('غير موثق');
-    fireEvent.click(pick('١٨:٨٦'));
+    go(18, '٨٦');
     expect(container.querySelectorAll('li[data-state="unknown"]')).toHaveLength(20);
+  });
+
+  it('lists the places of juz\' 30 under their surah, and tells two words of one ayah apart', () => {
+    render(<QiraatView entries={entries} />);
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: '89' } });
+    expect(screen.getByRole('navigation', { name: 'المواضع' }).querySelectorAll('button')).toHaveLength(variants.filter(v => v.surah === 89).length);
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: '78' } });
+    const labels = [...screen.getByRole('navigation', { name: 'المواضع' }).querySelectorAll('button')].map(b => b.textContent);
+    expect(labels).toHaveLength(2);
+    expect(new Set(labels).size).toBe(2);
+  });
+
+  it('shows no meaning block for a place that has none', () => {
+    const { container } = render(<QiraatView entries={entries} />);
+    go(89, '٤');
+    expect(container.textContent).not.toContain('المعنى');
   });
 
   it('nests each imam\'s two riwat under him', () => {
