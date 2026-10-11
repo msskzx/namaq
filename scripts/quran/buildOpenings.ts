@@ -1,15 +1,15 @@
 import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { prisma } from '../../src/lib/prisma';
-import { OPENING_SURAHS, SPANS } from '../../src/lib/quran/openings';
+import { OPENING_SURAHS, SPANS, TASBIH_SURAHS } from '../../src/lib/quran/openings';
 import { ayahWords } from '../../src/lib/quran/normalize';
 
 const OUT = join(__dirname, '../../src/app/quran/openings/ayat.json');
 
 async function main() {
-  const surahs = await prisma.surah.findMany({ where: { number: { in: OPENING_SURAHS } }, select: { number: true, name: true }, orderBy: { number: 'asc' } });
+  const surahs = await prisma.surah.findMany({ where: { number: { in: [...OPENING_SURAHS, ...TASBIH_SURAHS] } }, select: { number: true, name: true }, orderBy: { number: 'asc' } });
   const rows = await prisma.ayah.findMany({
-    where: { OR: OPENING_SURAHS.map(n => ({ surah: { number: n }, number: { lte: SPANS[n].to } })) },
+    where: { OR: [...OPENING_SURAHS.map(n => ({ surah: { number: n }, number: { lte: SPANS[n].to } })), ...TASBIH_SURAHS.map(n => ({ surah: { number: n }, number: 1 }))] },
     select: { number: true, text: true, surah: { select: { number: true } } },
     orderBy: [{ surah: { number: 'asc' } }, { number: 'asc' }],
   });

@@ -4,7 +4,7 @@ import { faArrowDown, faTableColumns } from '@fortawesome/free-solid-svg-icons';
 import Button from '@/components/common/Button';
 import { num } from '@/lib/quran/arabicNumber';
 import type { Surah } from '@/lib/quran/curatedShifts';
-import { OPENING_SURAHS } from '@/lib/quran/openings';
+import { OPENING_GROUPS, TASBIH_SURAHS } from '@/lib/quran/openings';
 import type { HopView } from '@/lib/quran/surahOrder';
 import { SLOT_COLORS } from '@/components/quran/slotColors';
 
@@ -75,7 +75,7 @@ export default function OrderView({ chips, hops }: { chips: Surah[]; hops: HopVi
       <ol className="flex flex-col" aria-label="ترتيب السور">
         {chips.map(s => {
           const hop = hops.find(h => h.hop.from === s.number);
-          const like = OPENING_SURAHS.includes(s.number) ? OPENING_SURAHS.filter(n => n !== s.number) : [];
+          const like = (OPENING_GROUPS.find(g => g.includes(s.number)) ?? []).filter(n => n !== s.number);
           return (
             <li key={s.number}>
               <div className={`${PANEL} flex flex-wrap items-center gap-3`}>
@@ -83,7 +83,7 @@ export default function OrderView({ chips, hops }: { chips: Surah[]; hops: HopVi
                 {like.length > 0 && (
                   <Button size="sm" variant="outline" href="/quran/openings">
                     <FontAwesomeIcon icon={faTableColumns} />
-                    {`افتتاحها كافتتاح ${like.map(n => num(n)).join(' و')}`}
+                    {TASBIH_SURAHS.includes(s.number) ? 'افتتاحها بالتسبيح كالمسبّحات' : `افتتاحها كافتتاح ${like.map(n => num(n)).join(' و')}`}
                   </Button>
                 )}
               </div>

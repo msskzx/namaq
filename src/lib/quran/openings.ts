@@ -1,4 +1,4 @@
-import type { Data, Surah } from './curatedShifts';
+import { resolve, type Data, type Surah } from './curatedShifts';
 import { ayahWords, plainName } from './normalize';
 
 export const SPANS: Record<number, { to: number; answer?: number; sourced?: boolean }> = {
@@ -8,6 +8,8 @@ export const SPANS: Record<number, { to: number; answer?: number; sourced?: bool
 };
 
 export const OPENING_SURAHS = Object.keys(SPANS).map(Number);
+export const TASBIH_SURAHS = [17, 57, 59, 61, 62, 64, 87];
+export const OPENING_GROUPS = [OPENING_SURAHS, TASBIH_SURAHS];
 
 export const NOTES = [
   'تبدأ السور الثلاث بـ«إذا» ثم اسم (الشمس أو السماء)، ثم فعل ماضٍ يدل على انقلاب في الكون: كُوِّرت، انفطرت، انشقت.',
@@ -26,7 +28,6 @@ export const DISPUTE = {
     'في الكلام تقديم وتأخير: المبرد',
     '«فأما من أوتي كتابه بيمينه»: الكسائي، وقال النحاس: أصح ما قيل فيه',
   ],
-
   src: [
     { title: 'الطبري والبغوي والقرطبي في تفسير الانشقاق ٥ (جامعة الملك سعود)', url: 'https://quran.ksu.edu.sa/tafseer/ibn-baghawy-tabary-qortobi/sura84-aya5.html' },
   ],
@@ -49,5 +50,45 @@ export function buildOpenings({ names, ayat }: Data): OpeningView[] {
       return { ayah, text: ayahWords(text, false).display.join(' '), role, sourced: sourced === true };
     });
     return { surah: { number, name: names[number] ?? '', plain: plainName(names[number] ?? '') }, lines };
+  });
+}
+
+export type TasbihRole = 'verb' | 'scope' | 'closing';
+
+const THE_SKIES = 'لله ما في السموت وما في الارض';
+export const TASBIH_MARKS: Record<number, [TasbihRole, string][]> = {
+  17: [['verb', 'سبحن'], ['scope', 'الذي اسري بعبده ليلا من المسجد الحرام الي المسجد الاقصا الذي بركنا حوله لنريه من ءايتنا'], ['closing', 'انه هو السميع البصير']],
+  57: [['verb', 'سبح'], ['scope', 'لله ما في السموت والارض'], ['closing', 'وهو العزيز الحكيم']],
+  59: [['verb', 'سبح'], ['scope', THE_SKIES], ['closing', 'وهو العزيز الحكيم']],
+  61: [['verb', 'سبح'], ['scope', THE_SKIES], ['closing', 'وهو العزيز الحكيم']],
+  62: [['verb', 'يسبح'], ['scope', THE_SKIES], ['closing', 'الملك القدوس العزيز الحكيم']],
+  64: [['verb', 'يسبح'], ['scope', THE_SKIES], ['closing', 'له الملك وله الحمد وهو علي كل شيء قدير']],
+  87: [['verb', 'سبح'], ['scope', 'اسم ربك'], ['closing', 'الاعلي']],
+};
+
+export const TASBIH_NOTES = [
+  'المسبّحات سبع سور تبدأ بلفظ التسبيح: ١٧ و٥٧ و٥٩ و٦١ و٦٢ و٦٤ و٨٧. وجاء التسبيح فيها على أربع صيغ.',
+  'سبحان في الإسراء، وسبّح الماضي في ٥٧ و٥٩ و٦١، ويسبّح المضارع في ٦٢ و٦٤، وسبّح الأمر في الأعلى.',
+  'الآية الأولى من ٥٩ و٦١ واحدة بلفظها، وتخلو ٥٧ من «وما» قبل «الأرض». تختم ٥٧ و٥٩ و٦١ بـ«العزيز الحكيم»، وتزيد ٦٢ قبلها «الملك القدوس». وتختم ٦٤ بالملك والحمد وقدرته على كل شيء.',
+  'في الأعلى يؤمر المخاطب بتسبيح اسم ربه، وليس في آيتها الأولى «ما في السماوات والأرض». وتصف آية الإسراء الذي أسرى بعبده ثم تختم بـ«السميع البصير».',
+];
+
+export const TASBIH_SRC = { title: 'موضوع: فضل قراءة سور المسبحات (حديث العرباض بن سارية)', url: 'https://mawdoo3.com/%D9%81%D8%B6%D9%84_%D9%82%D8%B1%D8%A7%D8%A1%D8%A9_%D8%B3%D9%88%D8%B1_%D8%A7%D9%84%D9%85%D8%B3%D8%A8%D8%AD%D8%A7%D8%AA' };
+
+export type TasbihWord = { text: string; role?: TasbihRole };
+export type TasbihView = { surah: Surah; ayah: number; words: TasbihWord[] };
+
+export function buildTasbih({ names, ayat }: Data): TasbihView[] {
+  return TASBIH_SURAHS.map(number => {
+    const text = ayat[`${number}:1`];
+    if (text === undefined) throw new Error(`${number}:1 is missing from the data`);
+    const w = ayahWords(text, false);
+    const roles: Record<number, TasbihRole> = {};
+    for (const [role, phrase] of TASBIH_MARKS[number]) for (const j of resolve(w.norm, [phrase, 'third'])) roles[j] = role;
+    return {
+      surah: { number, name: names[number] ?? '', plain: plainName(names[number] ?? '') },
+      ayah: 1,
+      words: w.display.map((t, j) => ({ text: t, role: roles[j] })),
+    };
   });
 }

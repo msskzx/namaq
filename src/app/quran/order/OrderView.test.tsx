@@ -28,7 +28,7 @@ describe('OrderView', () => {
   it('links the surahs that open alike to the openings page', () => {
     renderView();
     const hrefs = screen.getAllByRole('link').map(a => a.getAttribute('href'));
-    expect(hrefs.filter(h => h === '/quran/openings')).toHaveLength(3);
+    expect(hrefs.filter(h => h === '/quran/openings')).toHaveLength(4);
   });
 
   it('labels a step without a source and links the ones with one', () => {
