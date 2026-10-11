@@ -28,5 +28,6 @@ export const getAllNavLinks = (language: 'en' | 'ar'): SiteLink[] => [
   { href: '/quran/themes', label: language === 'ar' ? 'مواضع متقابلة' : 'Matching topics' },
   { href: '/quran/order', label: language === 'ar' ? 'ترتيب السور' : 'Surah order' },
   { href: '/quran/openings', label: language === 'ar' ? 'افتتاح السور: الشرط وجوابه والتسبيح' : 'Surah openings: conditions and tasbih' },
+  { href: '/quran/oaths', label: language === 'ar' ? 'الأقسام في القرآن' : 'Oaths in the Qur\'an' },
   { href: '/references', label: language === 'ar' ? 'المراجع' : 'References' },
 ];

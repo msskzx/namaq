@@ -20,6 +20,7 @@
     "quran:demo": "tsx --env-file=.env scripts/quran/buildDemo.ts",
     "quran:iltifat": "tsx --env-file=.env scripts/quran/buildIltifat.ts",
     "quran:order": "tsx --env-file=.env scripts/quran/buildOrder.ts",
+    "quran:oaths": "tsx --env-file=.env scripts/quran/buildOaths.ts",
     "quran:openings": "tsx --env-file=.env scripts/quran/buildOpenings.ts",
     "people:sync":"tsx scripts/people/syncCanonicalPeople.ts",
     "people:validate": "tsx scripts/people/syncCanonicalPeople.ts --strict",
