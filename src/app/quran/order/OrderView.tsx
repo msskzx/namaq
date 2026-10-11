@@ -1,44 +1,67 @@
-'use client';
-
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDown } from '@fortawesome/free-solid-svg-icons';
-import Badge from '@/components/common/Badge';
+import { faArrowDown, faTableColumns } from '@fortawesome/free-solid-svg-icons';
+import Button from '@/components/common/Button';
 import { num } from '@/lib/quran/arabicNumber';
 import type { Surah } from '@/lib/quran/curatedShifts';
+import { OPENING_SURAHS } from '@/lib/quran/openings';
 import type { HopView } from '@/lib/quran/surahOrder';
-import { Card } from '../shifts/ShiftsView';
+import { SLOT_COLORS } from '@/components/quran/slotColors';
 
 const PANEL = 'bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4';
 const NOTE = 'text-sm text-gray-600 dark:text-gray-400';
 
-const name = (s: Surah) => `${num(s.number)} ${s.plain}`;
+type Line = HopView['tail'][number];
 
-function Hop({ item: { hop, from, to, tail, head, words } }: { item: HopView }) {
+function Words({ line }: { line: Line }) {
+  return line.text.split(' ').map((word, i) => (
+    <React.Fragment key={i}>
+      {i > 0 && ' '}
+      {line.slots && i in line.slots ? <mark className={`bg-transparent ${SLOT_COLORS[line.slots[i] % SLOT_COLORS.length]}`}>{word}</mark> : word}
+    </React.Fragment>
+  ));
+}
+
+function Side({ title, lines }: { title: string; lines: Line[] }) {
   return (
-    <details id={`hop-${hop.from}`} className={PANEL}>
-      <summary className="cursor-pointer text-xl text-amber-600 dark:text-amber-400 flex flex-wrap items-center gap-3">
-        <span>{name(from)}</span>
-        <FontAwesomeIcon icon={faArrowDown} aria-label="يليها" />
-        <span>{name(to)}</span>
+    <div>
+      <h3 className={`${NOTE} mb-1`}>{title}</h3>
+      {lines.map(l => (
+        <p key={l.ayah} className="text-2xl leading-[2.2] font-arabic">
+          <span className="text-sm text-amber-600 dark:text-amber-400 me-2">{num(l.ayah)}</span>
+          <Words line={l} />
+        </p>
+      ))}
+    </div>
+  );
+}
+
+function Link({ item: { hop, tail, head, words } }: { item: HopView }) {
+  return (
+    <details id={`hop-${hop.from}`} className="ms-6 my-2">
+      <summary className="cursor-pointer text-amber-600 dark:text-amber-400 flex items-center gap-2">
+        <FontAwesomeIcon icon={faArrowDown} aria-hidden />
+        <span>الصلة بما بعدها</span>
       </summary>
-      <p className="my-3">{hop.note}</p>
-      {words.length > 0 && <p className={`${NOTE} mb-3`}>{`كلمات مشتركة: ${words.join('، ')}`}</p>}
-      <div className="grid md:grid-cols-2 gap-x-4">
-        <div>{tail.map(l => <Card key={l.ayah} surah={from} ayah={l.ayah} text={l.text} slots={l.slots} />)}</div>
-        <div>{head.map(l => <Card key={l.ayah} surah={to} ayah={l.ayah} text={l.text} slots={l.slots} />)}</div>
+      <div className={`${PANEL} mt-2`}>
+        <p className="mb-3">{hop.note}</p>
+        {words.length > 0 && <p className={`${NOTE} mb-3`}>{`كلمات مشتركة: ${words.join('، ')}`}</p>}
+        <div className="grid md:grid-cols-2 gap-x-4">
+          <Side title="آخر السورة" lines={tail} />
+          <Side title="أول التالية" lines={head} />
+        </div>
+        {hop.src.length > 0 ? (
+          <ul className={NOTE} aria-label="المصادر">
+            {hop.src.map(s => (
+              <li key={s.url}>
+                <a className="underline" href={s.url} target="_blank" rel="noreferrer">{s.title}</a>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className={NOTE}>بلا مصدر</p>
+        )}
       </div>
-      {hop.src.length > 0 ? (
-        <ul className={NOTE} aria-label="المصادر">
-          {hop.src.map(s => (
-            <li key={s.url}>
-              <a className="underline" href={s.url} target="_blank" rel="noreferrer">{s.title}</a>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className={NOTE}>بلا مصدر</p>
-      )}
     </details>
   );
 }
@@ -46,17 +69,29 @@ function Hop({ item: { hop, from, to, tail, head, words } }: { item: HopView }) 
 export default function OrderView({ chips, hops }: { chips: Surah[]; hops: HopView[] }) {
   return (
     <div className="flex flex-col gap-3">
-      <ol className={`${PANEL} flex flex-wrap gap-2`} aria-label="ترتيب السور">
-        {chips.map(s => (
-          <li key={s.number}>
-            <Badge text={name(s)} size="sm" color="gray" href={hops.some(h => h.hop.from === s.number) ? `#hop-${s.number}` : undefined} />
-          </li>
-        ))}
-      </ol>
       <p className={NOTE}>
-        كل خطوة تصل آخر سورة بأول التي تليها. «بلا مصدر» تعني أن الربط قراءة لنص السورتين لم تُنسب إلى كتاب، وليس لها حجة غير النص. ويُلوَّن اللفظ المشترك في الآيتين بلون واحد، ويُذكر أيضًا في سطر مستقل.
+        اضغط «الصلة بما بعدها» تحت كل سورة لترى آخر آياتها وأول آيات التي تليها. «بلا مصدر» تعني أن الربط قراءة لنص السورتين لم تُنسب إلى كتاب، وليس لها حجة غير النص. ويُلوَّن اللفظ المشترك في الآيتين بلون واحد، ويُذكر أيضًا في سطر مستقل.
       </p>
-      {hops.map(h => <Hop key={h.hop.from} item={h} />)}
+      <ol className="flex flex-col" aria-label="ترتيب السور">
+        {chips.map(s => {
+          const hop = hops.find(h => h.hop.from === s.number);
+          const like = OPENING_SURAHS.includes(s.number) ? OPENING_SURAHS.filter(n => n !== s.number) : [];
+          return (
+            <li key={s.number}>
+              <div className={`${PANEL} flex flex-wrap items-center gap-3`}>
+                <h2 className="text-xl">{`${num(s.number)} ${s.plain}`}</h2>
+                {like.length > 0 && (
+                  <Button size="sm" variant="outline" href="/quran/openings">
+                    <FontAwesomeIcon icon={faTableColumns} />
+                    {`افتتاحها كافتتاح ${like.map(n => num(n)).join(' و')}`}
+                  </Button>
+                )}
+              </div>
+              {hop && <Link item={hop} />}
+            </li>
+          );
+        })}
+      </ol>
     </div>
   );
 }

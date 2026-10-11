@@ -17,10 +17,18 @@ const renderView = () => render(<OrderView chips={chips} hops={hops} />);
 const strip = () => within(screen.getByRole('list', { name: 'ترتيب السور' }));
 
 describe('OrderView', () => {
-  it('shows one chip per surah and one step per neighbouring pair', () => {
+  it('names each surah once and has one link per neighbouring pair', () => {
     renderView();
-    expect(strip().getAllByRole('listitem')).toHaveLength(37);
+    expect(strip().getAllByRole('heading', { level: 2 })).toHaveLength(37);
     expect(document.querySelectorAll('details')).toHaveLength(36);
+    expect(screen.getAllByText(/^٧٩ /)).toHaveLength(1);
+    expect(screen.getAllByRole('heading', { name: /النازعات/ })).toHaveLength(1);
+  });
+
+  it('links the surahs that open alike to the openings page', () => {
+    renderView();
+    const hrefs = screen.getAllByRole('link').map(a => a.getAttribute('href'));
+    expect(hrefs.filter(h => h === '/quran/openings')).toHaveLength(3);
   });
 
   it('labels a step without a source and links the ones with one', () => {
