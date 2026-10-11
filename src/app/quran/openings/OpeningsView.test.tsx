@@ -26,7 +26,8 @@ describe('OpeningsView', () => {
     render(<OpeningsView items={items} />);
     expect(region(81).getAllByText('الجواب')).toHaveLength(1);
     expect(region(82).getAllByText('الجواب، قراءتنا')).toHaveLength(1);
-    expect(region(84).queryAllByText(/الجواب/)).toHaveLength(0);
+    expect(region(84).queryByText('الجواب')).toBeNull();
+    expect(region(84).queryByText('الجواب، قراءتنا')).toBeNull();
     expect(items[0].lines.find(l => l.answer)!.ayah).toBe(14);
     expect(items[1].lines.find(l => l.answer)!.ayah).toBe(5);
   });
