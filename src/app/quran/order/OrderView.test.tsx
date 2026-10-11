@@ -64,6 +64,26 @@ describe('OrderView', () => {
     }
   });
 
+  it('draws the line below the first dot, through the middle, and above the last dot', () => {
+    renderView();
+    const btn = toggles().getByRole('button', { name: new RegExp(THEMES.tawhid) });
+    if (btn.getAttribute('aria-pressed') === 'false') fireEvent.click(btn);
+    const [first, last] = [carriers('tawhid')[0], carriers('tawhid').at(-1)!];
+    const lines = (n: number) => [...rowOf(n).querySelectorAll('[data-rail-cell="tawhid"] [data-line]')].map(l => l.getAttribute('data-line'));
+    expect(lines(first)).toEqual(['below']);
+    expect(lines(last)).toEqual(['above']);
+    expect(rowOf(last).querySelector('[data-rail-cell="tawhid"] [data-arrow]')).toBeTruthy();
+    for (let n = first + 1; n < last; n++) expect(lines(n)).toEqual(['full']);
+    expect(lines(first - 1)).toEqual([]);
+  });
+
+  it('puts the rail after the content in reading order', () => {
+    renderView();
+    const li = rowOf(78);
+    expect(li.firstElementChild!.querySelector('h2')).toBeTruthy();
+    expect(li.lastElementChild!.querySelector('[data-rail-cell]')).toBeTruthy();
+  });
+
   it('labels each dot for screen readers with its theme', () => {
     renderView();
     expect(screen.getAllByText(/^الموضوع: /).length).toBeGreaterThan(0);

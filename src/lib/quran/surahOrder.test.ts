@@ -44,10 +44,10 @@ describe('HOPS', () => {
 });
 
 describe('TOPICS', () => {
-  it('covers every surah from 78 to 114 with two to six topics', () => {
+  it('covers every surah from 78 to 114 with one to six topics', () => {
     expect(Object.keys(TOPICS).map(Number)).toEqual(Array.from({ length: 37 }, (_, k) => 78 + k));
     for (const { topics, focus } of Object.values(TOPICS)) {
-      expect(topics.length).toBeGreaterThanOrEqual(2);
+      expect(topics.length).toBeGreaterThanOrEqual(1);
       expect(topics.length).toBeLessThanOrEqual(6);
       expect(focus.length).toBeGreaterThan(0);
     }

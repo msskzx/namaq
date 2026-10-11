@@ -100,9 +100,9 @@ function RailCell({ span, n }: { span: Span; n: number }) {
   const color = colorOf(id);
   return (
     <span data-rail-cell={id} className="relative self-stretch w-2.5 sm:w-3.5 shrink-0">
-      {n > first && n < last && <span className={`absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 ${color.bg}`} />}
-      {n === first && n < last && <span className={`absolute bottom-0 left-1/2 w-0.5 -translate-x-1/2 ${color.bg}`} style={{ top: DOT_Y }} />}
-      {n === last && n > first && <span className={`absolute top-0 left-1/2 w-0.5 -translate-x-1/2 ${color.bg}`} style={{ height: DOT_Y }} />}
+      {n > first && n < last && <span data-line="full" className={`absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 ${color.bg}`} />}
+      {n === first && n < last && <span data-line="below" className={`absolute bottom-0 left-1/2 w-0.5 -translate-x-1/2 ${color.bg}`} style={{ top: DOT_Y }} />}
+      {n === last && n > first && <span data-line="above" className={`absolute top-0 left-1/2 w-0.5 -translate-x-1/2 ${color.bg}`} style={{ height: DOT_Y }} />}
       {has.has(n) && (
         <span data-dot={id} className={`absolute left-1/2 h-2.5 w-2.5 -translate-x-1/2 rounded-full ${color.bg}`} style={{ top: DOT_Y - 5 }}>
           <span className="sr-only">{`الموضوع: ${THEMES[id]}`}</span>
@@ -151,9 +151,6 @@ export default function OrderView({ chips, hops }: { chips: ChipView[]; hops: Ho
           const like = (OPENING_GROUPS.find(g => g.includes(s.number)) ?? []).filter(n => n !== s.number);
           return (
             <li key={s.number} className="flex gap-1">
-              <div className="flex shrink-0 gap-0.5 sm:gap-1">
-                {active.map(span => <RailCell key={span.id} span={span} n={s.number} />)}
-              </div>
               <div className="min-w-0 flex-1 pb-2">
                 <div className={`${PANEL} flex flex-col gap-2`}>
                   <div className="flex flex-wrap items-center gap-3">
@@ -175,6 +172,9 @@ export default function OrderView({ chips, hops }: { chips: ChipView[]; hops: Ho
                   </ul>
                 </div>
                 {hop && <Link item={hop} />}
+              </div>
+              <div className="order-first flex shrink-0 gap-0.5 sm:gap-1">
+                {active.map(span => <RailCell key={span.id} span={span} n={s.number} />)}
               </div>
             </li>
           );
