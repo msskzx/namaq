@@ -73,6 +73,13 @@ describe('QiraatView', () => {
     expect([...container.querySelectorAll('.row-span-2')].map(c => c.querySelectorAll('mark').length)).toEqual([1, 1]);
   });
 
+  it('colors the riwaya pills below by reading and leaves the names above the ayah plain', () => {
+    const { container } = render(<QiraatView entries={entries} />);
+    const hafs = screen.getByText('حفص', { selector: 'li[data-state] *' }).closest('li')!;
+    expect(hafs.className + hafs.innerHTML).toContain('amber');
+    expect(container.querySelector('.row-span-2 p')!.className).not.toMatch(/amber|sky|emerald|rose/);
+  });
+
   it('nests each imam\'s two riwat under him', () => {
     render(<QiraatView entries={entries} />);
     const imams = screen.getByRole('list', { name: 'الأئمة ورواتهم' }).children;

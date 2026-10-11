@@ -15,6 +15,7 @@ import { wordDiff } from '@/lib/quran/wordDiff';
 
 export type QiraatEntry = { variant: Variant; text: string; surahName: string };
 
+const BADGE_COLORS = ['amber', 'blue', 'emerald', 'rose'];
 const WORD_COLORS = ['text-amber-600 dark:text-amber-400', 'text-sky-600 dark:text-sky-400', 'text-emerald-600 dark:text-emerald-400', 'text-rose-600 dark:text-rose-400'];
 const UNCONFIRMED = 'غير مؤكد';
 const SECOND_LABEL = 'فرق على مستوى الكلمة، وليس نص مصحف تلك الرواية';
@@ -97,13 +98,14 @@ function Card({ entry }: { entry: QiraatEntry }) {
         <ul className="grid gap-3 sm:grid-cols-2" aria-label="الأئمة ورواتهم">
           {READERS.map(reader => {
             const mine = states.filter(c => RIWAYAT.find(r => r.id === c.id)?.reader === reader.id);
+            const same = mine.every(c => c.state === mine[0].state);
             return (
               <li key={reader.id} className="flex flex-col gap-2 rounded-lg border border-gray-200 dark:border-white/10 p-3">
-                <Badge size="sm" text={reader.name} color="gray" />
+                <Badge size="sm" text={reader.name} color={same && mine[0].state !== null ? BADGE_COLORS[mine[0].state!] : 'gray'} />
                 <ul aria-label="الرواة" className="flex flex-wrap gap-2 ms-4 ps-3 border-s-2 border-gray-300 dark:border-white/20">
                   {mine.map(s => (
                     <li key={s.id} data-state={s.state ?? 'unknown'}>
-                      <Badge size="sm" text={s.name} color="gray" />
+                      <Badge size="sm" text={s.name} color={s.state === null ? 'gray' : BADGE_COLORS[s.state]} />
                     </li>
                   ))}
                 </ul>
