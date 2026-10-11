@@ -13,7 +13,7 @@ export default function QuranOpeningsPage() {
       <header>
         <h1 className="text-3xl mb-2">التكوير والانفطار والانشقاق: الشرط وجوابه</h1>
         <p className="text-sm text-gray-600 dark:text-gray-400">
-          لم يراجع هذا العرض أحد من أهل العلم. النص برواية حفص. كل آيات السور ٨١ و٨٢ و٨٤ من أولها إلى جواب «إذا»، واللفظ المشترك بلون واحد.
+          لم يراجع هذا العرض أحد من أهل العلم. النص برواية حفص. كل آيات السور ٨١ و٨٢ و٨٤ من أولها إلى جواب «إذا»، وكل آية بلون دورها: شرط أو جواب.
         </p>
       </header>
       <OpeningsView items={buildOpenings(data)} />

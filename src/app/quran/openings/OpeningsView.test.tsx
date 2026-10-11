@@ -1,48 +1,40 @@
 // @vitest-environment jsdom
 import React from 'react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, render, screen, within } from '@testing-library/react';
 import { buildOpenings, SPANS } from '@/lib/quran/openings';
 import data from './ayat.json';
 import OpeningsView from './OpeningsView';
 
-vi.mock('@/components/language/LanguageContext', () => ({
-  useLanguage: () => ({ language: 'ar' }),
-}));
-
 afterEach(cleanup);
 
 const items = buildOpenings(data);
 const region = (n: number) => within(screen.getByRole('region', { name: new RegExp(String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[+d])) }));
+const roles = (n: number) => [...region(n).getAllByText(/./, { selector: 'p' })].map(p => p.getAttribute('data-role'));
 
 describe('OpeningsView', () => {
-  it('shows every ayah from the first to the end of each span, with no basmala', () => {
+  it('shows every ayah from the first to the end of each span', () => {
     render(<OpeningsView items={items} />);
     expect(items.map(i => i.lines.length)).toEqual([SPANS[81].to, SPANS[82].to, SPANS[84].to]);
-    for (const i of items) expect(i.lines[0].text.split(' ')[0]).toBe(items[0].lines[0].text.split(' ')[0]);
   });
 
-  it('marks the answer ayah in 81 and 82 and none in 84', () => {
+  it('colors each ayah by its role: conditions, then the answer in 81 and 82', () => {
     render(<OpeningsView items={items} />);
-    expect(region(81).getAllByText('الجواب')).toHaveLength(1);
-    expect(region(82).getAllByText('الجواب، قراءتنا')).toHaveLength(1);
-    expect(region(84).queryByText('الجواب')).toBeNull();
-    expect(region(84).queryByText('الجواب، قراءتنا')).toBeNull();
-    expect(items[0].lines.find(l => l.answer)!.ayah).toBe(14);
-    expect(items[1].lines.find(l => l.answer)!.ayah).toBe(5);
+    expect(roles(81)).toEqual([...Array(13).fill('condition'), 'answer']);
+    expect(roles(82)).toEqual([...Array(4).fill('condition'), 'answer']);
   });
 
-  it('colors the shared words, including the answer clause of 81 and 82', () => {
+  it('leaves the answer of 84 unmarked and labels it disputed', () => {
     render(<OpeningsView items={items} />);
-    const marks = (n: number) => region(n).queryAllByText((_, el) => el?.tagName === 'MARK');
-    expect(marks(81)).toHaveLength(1 + 3);
-    expect(marks(82)).toHaveLength(2 + 3);
-    expect(marks(84)).toHaveLength(2);
+    expect(roles(84)).toEqual([...Array(5).fill('condition'), 'disputed']);
+    expect(region(84).queryAllByText('قراءتنا')).toHaveLength(0);
+    expect(region(82).getAllByText('قراءتنا')).toHaveLength(1);
+    expect(region(81).queryAllByText('قراءتنا')).toHaveLength(0);
   });
 
-  it('lists the shared words and the views on the answer in 84', () => {
+  it('lists the views on the answer in 84 with a source', () => {
     render(<OpeningsView items={items} />);
-    expect(within(screen.getByRole('list', { name: 'اللفظ المشترك' })).getAllByRole('listitem')).toHaveLength(3);
+    expect(screen.getByRole('list', { name: 'دلالة الألوان' }).children).toHaveLength(3);
     expect(screen.getByRole('heading', { name: 'الجواب في الانشقاق' })).toBeTruthy();
     expect(screen.getByText(/المبرد/).textContent).toContain('تقديم وتأخير');
     expect(screen.getByText(/الكسائي/).textContent).toContain('النحاس');

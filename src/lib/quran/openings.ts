@@ -1,4 +1,4 @@
-import { resolve, type Data, type Surah } from './curatedShifts';
+import type { Data, Surah } from './curatedShifts';
 import { ayahWords, plainName } from './normalize';
 
 export const SPANS: Record<number, { to: number; answer?: number; sourced?: boolean }> = {
@@ -8,12 +8,6 @@ export const SPANS: Record<number, { to: number; answer?: number; sourced?: bool
 };
 
 export const OPENING_SURAHS = Object.keys(SPANS).map(Number);
-
-export const SHARED: { phrase: string; at: Record<number, number> }[] = [
-  { phrase: 'اذا', at: { 81: 1, 82: 1, 84: 1 } },
-  { phrase: 'السماء', at: { 82: 1, 84: 1 } },
-  { phrase: 'علمت نفس ما', at: { 81: 14, 82: 5 } },
-];
 
 export const NOTES = [
   'تبدأ السور الثلاث بـ«إذا» ثم اسم (الشمس أو السماء)، ثم فعل ماضٍ يدل على انقلاب في الكون: كُوِّرت، انفطرت، انشقت.',
@@ -40,21 +34,19 @@ export const DISPUTE = {
 
 export const ANSWER_SRC = { title: 'الطبري والقرطبي في تفسير التكوير ١٤ (جامعة الملك سعود)', url: 'https://quran.ksu.edu.sa/tafseer/ibn-tabary-qortobi-saadi/sura81-aya14.html' };
 
-export type OpeningLine = { ayah: number; text: string; slots?: Record<number, number>; answer: boolean; sourced: boolean };
+export type Role = 'condition' | 'answer' | 'disputed';
+export type OpeningLine = { ayah: number; text: string; role: Role; sourced: boolean };
 export type OpeningView = { surah: Surah; lines: OpeningLine[] };
 
 export function buildOpenings({ names, ayat }: Data): OpeningView[] {
   return OPENING_SURAHS.map(number => {
-    const lines = Array.from({ length: SPANS[number].to }, (_, k): OpeningLine => {
+    const { to, answer, sourced } = SPANS[number];
+    const lines = Array.from({ length: to }, (_, k): OpeningLine => {
       const ayah = k + 1;
       const text = ayat[`${number}:${ayah}`];
       if (text === undefined) throw new Error(`${number}:${ayah} is missing from the data`);
-      const w = ayahWords(text, false);
-      const slots: Record<number, number> = {};
-      SHARED.forEach((s, i) => {
-        if (s.at[number] === ayah) for (const j of resolve(w.norm, [s.phrase, 'third'])) slots[j] = i + 1;
-      });
-      return { ayah, text: w.display.join(' '), slots: Object.keys(slots).length ? slots : undefined, answer: SPANS[number].answer === ayah, sourced: SPANS[number].sourced === true };
+      const role: Role = answer === undefined ? (ayah === to ? 'disputed' : 'condition') : ayah === answer ? 'answer' : 'condition';
+      return { ayah, text: ayahWords(text, false).display.join(' '), role, sourced: sourced === true };
     });
     return { surah: { number, name: names[number] ?? '', plain: plainName(names[number] ?? '') }, lines };
   });
