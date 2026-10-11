@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import data from '@/app/quran/order/ayat.json';
 import { resolve } from './curatedShifts';
 import { ayahWords } from './normalize';
-import { buildOrder, HOPS } from './surahOrder';
+import { buildOrder, HOPS, sharedThemes, THEMES, TOPICS, TOPICS_SRC, type SurahTopics } from './surahOrder';
 
 const count = (n: number) => data.counts[String(n) as keyof typeof data.counts];
 const norm = (key: string) => ayahWords(data.ayat[key as keyof typeof data.ayat], false).norm;
@@ -43,6 +43,48 @@ describe('HOPS', () => {
   });
 });
 
+describe('TOPICS', () => {
+  it('covers every surah from 78 to 114 with two to six topics', () => {
+    expect(Object.keys(TOPICS).map(Number)).toEqual(Array.from({ length: 37 }, (_, k) => 78 + k));
+    for (const { topics, focus } of Object.values(TOPICS)) {
+      expect(topics.length).toBeGreaterThanOrEqual(2);
+      expect(topics.length).toBeLessThanOrEqual(6);
+      expect(focus.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('uses only known themes, once per surah, with no repeated detail', () => {
+    for (const { topics } of Object.values(TOPICS)) {
+      expect(topics.every(([t, d]) => t in THEMES && d.length > 0)).toBe(true);
+      expect(new Set(topics.map(([t]) => t)).size).toBe(topics.length);
+      expect(new Set(topics.map(([, d]) => d)).size).toBe(topics.length);
+    }
+  });
+
+  it('keeps about twelve themes, each carried by two surahs or more and none by all', () => {
+    expect(Object.keys(THEMES).length).toBeLessThanOrEqual(12);
+    for (const id of Object.keys(THEMES)) {
+      const n = Object.values(TOPICS).filter(t => t.topics.some(([u]) => u === id)).length;
+      expect(n).toBeGreaterThanOrEqual(2);
+      expect(n).toBeLessThan(37);
+    }
+  });
+
+  it('has a topicLink on every hop and cites the focus source', () => {
+    expect(HOPS.every(h => h.topicLink.length > 0)).toBe(true);
+    expect(TOPICS_SRC.url.startsWith('https://')).toBe(true);
+  });
+
+  it('derives the themes a surah shares with the next', () => {
+    const table: Record<number, SurahTopics> = {
+      1: { focus: '', topics: [['a', 'x'], ['b', 'y'], ['c', 'z']] },
+      2: { focus: '', topics: [['c', 'p'], ['a', 'q']] },
+    };
+    expect(sharedThemes(table, 1)).toEqual(['a', 'c']);
+    expect(sharedThemes(table, 2)).toEqual([]);
+  });
+});
+
 describe('buildOrder', () => {
   const { chips, hops } = buildOrder(data);
 
@@ -57,6 +99,12 @@ describe('buildOrder', () => {
     expect(color(hop.tail).map(([, slot]) => slot)).toEqual([1]);
     expect(color(hop.head).map(([, slot]) => slot)).toEqual([1]);
     expect(hop.words.map(w => ayahWords(w, false).norm[0])).toEqual(['دين']);
+  });
+
+  it('puts the derived shared themes on the hop', () => {
+    const hop = hops.find(h => h.hop.from === 112)!;
+    expect(hop.common).toEqual(['prophet', 'tawhid', 'denial'].filter(t => TOPICS[113].topics.some(([u]) => u === t)));
+    expect(hop.common).toEqual(['prophet', 'tawhid']);
   });
 
   it('keeps the basmala out of the first ayah of a surah', () => {
