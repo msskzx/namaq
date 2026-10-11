@@ -4,7 +4,8 @@ import { normalizeWord } from './normalize';
 import { buildOaths, OATHS } from './oaths';
 
 const { oaths, lines } = buildOaths(data);
-const skeleton = (w: string) => normalizeWord(w).replace(/^ال/, '').replace(/[اي]/g, '');
+const skeleton = (w: string) => normalizeWord(w).replace(/^ال/, '').replace(/[اي]/g, '').replace(/^لل/, 'ل');
+const sworn = (token: string, w: string) => [normalizeWord(token)].flatMap(n => [n, n.slice(1), n.slice(2)]).some(t => skeleton(t) === skeleton(w));
 
 describe('oaths', () => {
   it('keeps the oaths in mushaf order inside juz 26 to 30', () => {
@@ -22,8 +23,8 @@ describe('oaths', () => {
 
   it('finds every word sworn by in the text of its own range', () => {
     for (const o of oaths) {
-      const text = o.lines.map(l => l.text.split(' ').map(skeleton).join(' ')).join(' ');
-      for (const w of o.by) expect(text, `${o.surah}:${o.range} ${w}`).toContain(skeleton(w));
+      const tokens = o.lines.flatMap(l => l.text.split(' '));
+      for (const w of o.by) expect(tokens.some(t => sworn(t, w)), `${o.surah}:${o.range} ${w}`).toBe(true);
     }
   });
 
@@ -42,6 +43,15 @@ describe('oaths', () => {
     const at = (s: number) => oaths.find(o => o.surah === s)!.n;
     expect(night.has.has(at(81)) && night.has.has(at(92))).toBe(true);
     expect(lines.some(l => l.has.has(at(79)))).toBe(false);
+  });
+
+  it('joins one word across the article and the prefixes it is written with', () => {
+    const at = (s: number, from = 0) => oaths.find(o => o.surah === s && o.range[0] >= from)!.n;
+    const has = (id: string) => lines.find(l => l.id === id)!.has;
+    expect([at(75), at(91)].every(n => has('النفس').has(n))).toBe(true);
+    expect([at(52), at(95)].every(n => has('الطور').has(n))).toBe(true);
+    expect([at(75), at(85)].every(n => has('اليوم').has(n))).toBe(true);
+    expect([at(68), at(69)].every(n => has('ما').has(n))).toBe(true);
   });
 
   it('throws when a range is missing from the data', () => {

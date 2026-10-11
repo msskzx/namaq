@@ -34,8 +34,8 @@ tafsir. A line is now a sworn-by word that the text repeats.
   is unreviewed, and that 75:1 has a reading «لأقسم» (qira'at are held).
 
 Oaths (surah:ayat, words): 50:1 القرآن; 51:1-4 الذاريات...; 51:7 السماء;
-51:23 رب; 52:1-6 الطور، كتاب، البيت، البحر; 53:1 النجم; 56:75 النجوم; 64:7 رب;
-68:1 القلم; 69:38-39 ما; 70:40 رب; 74:32-34 القمر، الليل، الصبح; 75:1-2 يوم
+51:23 رب; 52:1-6 الطور، كتاب، البيت، السقف، البحر; 53:1 النجم; 56:75 النجوم; 64:7 رب;
+68:1 القلم، ما; 69:38-39 ما; 70:40 رب; 74:32-34 القمر، الليل، الصبح; 75:1-2 يوم
 القيامة، النفس; 77:1-6; 79:1-5; 81:15-18 الليل، الصبح; 84:16-18 الشفق، الليل،
 القمر، ما; 85:1-3 السماء، اليوم; 86:1-3 السماء; 86:11-12 السماء، الأرض; 89:1-4
 الفجر، الليل; 90:1-3 البلد، ما; 91:1-7 الشمس، القمر، النهار، الليل، السماء،
@@ -46,7 +46,7 @@ and 46:34 (people's oaths, not part of this page).
 Files: `src/lib/quran/oaths.ts` (data and builder), `oaths.test.ts`,
 `src/app/quran/oaths/{page,OathsView,ayat.json,OathsView.test}`,
 `scripts/quran/buildOaths.ts` (`npm run quran:oaths`), the shared rail pulled
-out of `OrderView.tsx` into `src/app/quran/Rail.tsx`, a link in
+out of `OrderView.tsx` into `src/components/quran/Rail.tsx`, a link in
 `src/lib/siteLinks.ts` and the nav, a README line.
 
 ## 3. /quran/order from juz' 26

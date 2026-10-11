@@ -67,15 +67,16 @@ describe('OrderView', () => {
 
   it('draws the line below the first dot, through the middle, and above the last dot', () => {
     renderView();
-    const btn = toggles().getByRole('button', { name: new RegExp(THEMES.tawhid) });
+    const id = Object.keys(THEMES).find(t => carriers(t)[0] > 46 && carriers(t).length > 2)!;
+    const btn = toggles().getByRole('button', { name: new RegExp(THEMES[id]) });
     if (btn.getAttribute('aria-pressed') === 'false') fireEvent.click(btn);
-    const [first, last] = [carriers('tawhid')[0], carriers('tawhid').at(-1)!];
-    const lines = (n: number) => [...rowOf(n).querySelectorAll('[data-rail-cell="tawhid"] [data-line]')].map(l => l.getAttribute('data-line'));
+    const [first, last] = [carriers(id)[0], carriers(id).at(-1)!];
+    const lines = (n: number) => [...rowOf(n).querySelectorAll(`[data-rail-cell="${id}"] [data-line]`)].map(l => l.getAttribute('data-line'));
     expect(lines(first)).toEqual(['below']);
     expect(lines(last)).toEqual(['above']);
-    expect(rowOf(last).querySelector('[data-rail-cell="tawhid"] [data-arrow]')).toBeTruthy();
+    expect(rowOf(last).querySelector(`[data-rail-cell="${id}"] [data-arrow]`)).toBeTruthy();
     for (let n = first + 1; n < last; n++) expect(lines(n)).toEqual(['full']);
-    if (first > 46) expect(lines(first - 1)).toEqual([]);
+    expect(lines(first - 1)).toEqual([]);
   }, 30000);
 
   it('puts the rail after the content in reading order', () => {
