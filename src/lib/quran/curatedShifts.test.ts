@@ -80,14 +80,22 @@ describe('CURATED', () => {
     expect(Object.values(slotsOf(43, 22).slots ?? {}).length).toBeGreaterThanOrEqual(ARC_MIN);
   });
 
-  it('colors 12:81-83 by speaker only: brothers, then the father', () => {
-    for (const a of [81, 82]) expect(new Set(Object.values(slotsOf(12, a).slots ?? {}))).toEqual(new Set([MODES.first.slot]));
-    expect(new Set(Object.values(slotsOf(12, 83).slots ?? {}))).toEqual(new Set([MODES.second.slot]));
-    expect(slotsOf(12, 80).slots).toBeUndefined();
+  it('colors 12:80-83 by speaker: the eldest, his brothers\' words inside his speech, then the father', () => {
+    const [eldest, brothers, father] = [MODES.first.slot, MODES.third.slot, MODES.second.slot];
+    expect(new Set(Object.values(slotsOf(12, 80).slots ?? {}))).toEqual(new Set([eldest]));
+    expect(new Set(Object.values(slotsOf(12, 81).slots ?? {}))).toEqual(new Set([eldest, brothers]));
+    expect(new Set(Object.values(slotsOf(12, 82).slots ?? {}))).toEqual(new Set([brothers]));
+    expect(new Set(Object.values(slotsOf(12, 83).slots ?? {}))).toEqual(new Set([father]));
   });
 
-  it('keeps Al-Fatiha to him and you, and leaves 40:26 to the qira\'at page', () => {
+  it('colors the opening of 10:22 as one run', () => {
+    const { slots = {} } = slotsOf(10, 22);
+    expect(Array.from({ length: 9 }, (_, i) => slots[i])).toEqual(Array(9).fill(MODES.third.slot));
+  });
+
+  it('keeps Al-Fatiha to him in 2-4 and you in 5-7, and leaves 40:26 to the qira\'at page', () => {
     for (const a of [2, 3, 4, 5, 6, 7]) expect(Object.values(slotsOf(1, a).slots ?? {})).not.toContain(MODES.first.slot);
+    expect(slotsOf(1, 7).slots).toEqual({ 2: MODES.second.slot });
     expect(CURATED.some(c => c.surah === 40)).toBe(false);
   });
 
