@@ -1,30 +1,61 @@
 import { resolve, type Data, type Surah } from './curatedShifts';
 import { ayahWords, plainName } from './normalize';
 
-export const OPENING_SURAHS = [81, 82, 84];
+export const SPANS: Record<number, { to: number; answer?: number; sourced?: boolean }> = {
+  81: { to: 14, answer: 14, sourced: true },
+  82: { to: 5, answer: 5 },
+  84: { to: 6 },
+};
 
-export const SHARED: { phrase: string; surahs: number[] }[] = [
-  { phrase: 'اذا', surahs: [81, 82, 84] },
-  { phrase: 'السماء', surahs: [82, 84] },
+export const OPENING_SURAHS = Object.keys(SPANS).map(Number);
+
+export const SHARED: { phrase: string; at: Record<number, number> }[] = [
+  { phrase: 'اذا', at: { 81: 1, 82: 1, 84: 1 } },
+  { phrase: 'السماء', at: { 82: 1, 84: 1 } },
+  { phrase: 'علمت نفس ما', at: { 81: 14, 82: 5 } },
 ];
 
 export const NOTES = [
   'تبدأ السور الثلاث بـ«إذا» ثم اسم (الشمس أو السماء)، ثم فعل ماضٍ يدل على انقلاب في الكون: كُوِّرت، انفطرت، انشقت.',
   'الانفطار والانشقاق متقاربان في المعنى، وبينهما اشتراك في «السماء»، وكلا الفعلين على وزن انفعل. أما التكوير فيخص الشمس وفعله مبني للمجهول.',
+  'في التكوير قال الطبري والقرطبي إن «علمت نفس ما أحضرت» جواب «إذا» وما بعدها. ونقرأ «علمت نفس ما قدمت وأخرت» في الانفطار جوابًا على النسق نفسه، وهذه قراءتنا ولم نجد من نص عليها. وفي الانشقاق اختلف المفسرون في الجواب فلم نحدد آية له.',
   'تقع المطففين بين الانفطار والانشقاق وتبدأ بـ«ويل للمطففين»، فيُقطع تتابع الافتتاح ثم يعود.',
 ];
 
-export type OpeningView = { surah: Surah; text: string; slots?: Record<number, number> };
+export const DISPUTE = {
+  title: 'الجواب في الانشقاق',
+  views: [
+    'محذوف يُفهم من السياق، أي أن الإنسان يرى ما قدم: الطبري والبغوي والقرطبي، وهو ما رجّحه الطبري',
+    '«يا أيها الإنسان إنك كادح…» على التقديم والتأخير: بعض نحويي البصرة',
+    '«وأذنت» والواو زائدة: الفراء، وغلّطه ابن الأنباري',
+    'ما دل عليه «فملاقيه»: قول بلا اسم عند القرطبي',
+    'في الكلام تقديم وتأخير: المبرد',
+    '«فأما من أوتي كتابه بيمينه»: الكسائي، وقال النحاس: أصح ما قيل فيه',
+  ],
+
+  src: [
+    { title: 'الطبري والبغوي والقرطبي في تفسير الانشقاق ٥ (جامعة الملك سعود)', url: 'https://quran.ksu.edu.sa/tafseer/ibn-baghawy-tabary-qortobi/sura84-aya5.html' },
+  ],
+};
+
+export const ANSWER_SRC = { title: 'الطبري والقرطبي في تفسير التكوير ١٤ (جامعة الملك سعود)', url: 'https://quran.ksu.edu.sa/tafseer/ibn-tabary-qortobi-saadi/sura81-aya14.html' };
+
+export type OpeningLine = { ayah: number; text: string; slots?: Record<number, number>; answer: boolean; sourced: boolean };
+export type OpeningView = { surah: Surah; lines: OpeningLine[] };
 
 export function buildOpenings({ names, ayat }: Data): OpeningView[] {
   return OPENING_SURAHS.map(number => {
-    const text = ayat[`${number}:1`];
-    if (text === undefined) throw new Error(`${number}:1 is missing from the data`);
-    const w = ayahWords(text, false);
-    const slots: Record<number, number> = {};
-    SHARED.forEach((s, i) => {
-      if (s.surahs.includes(number)) for (const j of resolve(w.norm, [s.phrase, 'third'])) slots[j] = i + 1;
+    const lines = Array.from({ length: SPANS[number].to }, (_, k): OpeningLine => {
+      const ayah = k + 1;
+      const text = ayat[`${number}:${ayah}`];
+      if (text === undefined) throw new Error(`${number}:${ayah} is missing from the data`);
+      const w = ayahWords(text, false);
+      const slots: Record<number, number> = {};
+      SHARED.forEach((s, i) => {
+        if (s.at[number] === ayah) for (const j of resolve(w.norm, [s.phrase, 'third'])) slots[j] = i + 1;
+      });
+      return { ayah, text: w.display.join(' '), slots: Object.keys(slots).length ? slots : undefined, answer: SPANS[number].answer === ayah, sourced: SPANS[number].sourced === true };
     });
-    return { surah: { number, name: names[number] ?? '', plain: plainName(names[number] ?? '') }, text: w.display.join(' '), slots };
+    return { surah: { number, name: names[number] ?? '', plain: plainName(names[number] ?? '') }, lines };
   });
 }

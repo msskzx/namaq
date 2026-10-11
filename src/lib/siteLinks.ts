@@ -26,6 +26,6 @@ export const getAllNavLinks = (language: 'en' | 'ar'): SiteLink[] => [
   { href: '/quran/qiraat', label: language === 'ar' ? 'القراءات' : 'Readings' },
   { href: '/quran/themes', label: language === 'ar' ? 'مواضع متقابلة' : 'Matching topics' },
   { href: '/quran/order', label: language === 'ar' ? 'ترتيب السور' : 'Surah order' },
-  { href: '/quran/openings', label: language === 'ar' ? 'افتتاح التكوير والانفطار والانشقاق' : 'Openings of 81, 82, 84' },
+  { href: '/quran/openings', label: language === 'ar' ? 'التكوير والانفطار والانشقاق: الشرط وجوابه' : 'Conditions and answers of 81, 82, 84' },
   { href: '/references', label: language === 'ar' ? 'المراجع' : 'References' },
 ];
