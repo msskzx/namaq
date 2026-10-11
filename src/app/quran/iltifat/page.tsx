@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { faRepeat } from '@fortawesome/free-solid-svg-icons';
+import { faListOl, faRepeat } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from '@/components/common/Button';
 import { buildCurated, USED_MODES } from '@/lib/quran/curatedShifts';
@@ -23,6 +23,10 @@ export default function QuranIltifatPage() {
         <Button size="sm" variant="outline" href="/quran/shifts">
           <FontAwesomeIcon icon={faRepeat} />
           تحولات داخل السورة
+        </Button>
+        <Button size="sm" variant="outline" href="/quran/order" className="mt-3 me-2">
+          <FontAwesomeIcon icon={faListOl} />
+          ترتيب السور: من النبأ إلى الناس
         </Button>
       </header>
       <IltifatView curated={buildCurated(data)} modes={USED_MODES} />
