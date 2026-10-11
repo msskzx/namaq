@@ -13,7 +13,7 @@ const PANEL = 'bg-gray-50 dark:bg-black border border-gray-200 dark:border-white
 
 export default function OathsView({ oaths, lines }: { oaths: OathView[]; lines: WordLine[] }) {
   const colorOf = (id: string) => RAIL_COLORS[lines.findIndex(l => l.id === id) % RAIL_COLORS.length];
-  const [on, setOn] = useState<Set<string>>(() => new Set(lines.slice(0, 4).map(l => l.id)));
+  const [on, setOn] = useState<Set<string>>(() => new Set(lines.map(l => l.id)));
   const toggle = (id: string) => setOn(prev => {
     const next = new Set(prev);
     if (!next.delete(id)) next.add(id);
