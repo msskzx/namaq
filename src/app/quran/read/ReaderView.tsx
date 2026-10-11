@@ -9,11 +9,9 @@ import JumpForm from './JumpForm';
 
 const BASMALA = 'بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ';
 
-const SAJDA = '۩';
-
 const groups = (tokens: (string | number)[]) =>
-  tokens.reduce<{ word: string; marks: (string | number)[] }[]>((all, token) => {
-    if (typeof token === 'string' && token !== SAJDA) all.push({ word: token, marks: [] });
+  tokens.reduce<{ word: string; marks: number[] }[]>((all, token) => {
+    if (typeof token === 'string') all.push({ word: token, marks: [] });
     else if (all.length === 0) all.push({ word: '', marks: [token] });
     else all.at(-1)?.marks.push(token);
     return all;
@@ -66,18 +64,11 @@ export default function ReaderView({
                 {groups(item.line).map((group, at) => (
                   <span key={at}>
                     {group.word}
-                    {group.marks.map((mark, markAt) =>
-                      mark === SAJDA ? (
-                        <span key={markAt} aria-label="سجدة">
-                          {' '}
-                          {mark}
-                        </span>
-                      ) : (
-                        <span key={markAt} className={MARK}>
-                          {num(Number(mark))}
-                        </span>
-                      ),
-                    )}
+                    {group.marks.map((mark) => (
+                      <span key={mark} className={MARK}>
+                        {num(mark)}
+                      </span>
+                    ))}
                   </span>
                 ))}
               </p>

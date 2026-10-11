@@ -22,4 +22,10 @@ describe('reader page data', () => {
     const opened = pages.flatMap(data => data.items.flatMap(item => ('surah' in item ? [item.surah] : [])));
     expect(opened).toEqual(Array.from({ length: 114 }, (_, i) => i + 1));
   });
+
+  it('carries the sajda sign once in each of the 15 places', () => {
+    const words = pages.flatMap(data => data.items.flatMap(item => ('line' in item ? item.line : [])));
+    expect(words.filter(token => typeof token === 'string' && token.includes('۩'))).toHaveLength(15);
+    expect(words.filter(token => token === '۩')).toHaveLength(0);
+  });
 });

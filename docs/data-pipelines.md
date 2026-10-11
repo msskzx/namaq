@@ -449,9 +449,8 @@ becomes a node or an edge.
 `npm run quran:reader` fetches the 604 pages of the Madinah mushaf from the
 Quran.com API (`verses/by_page`, `mushaf=2`) and writes one file per page under
 `src/app/quran/read/data/`: the words of each printed line, a circled number
-for each ayah end, a sajda sign where the API marks one (14, the API's count,
-and not the 15 some schools count: 22:77 carries none), and a surah header
-where a surah begins. The API leaves out the title and basmala lines, so the
+for each ayah end, and a surah header where a surah begins. The sajda sign is part of the word's text, as the API
+gives it, at all 15 places. The API leaves out the title and basmala lines, so the
 reader draws them. The reader reads these files and the stored surah names, not
 the stored ayat. Nothing syncs to Neo4j. `npm test` checks the files.
 

@@ -19,7 +19,7 @@ afterEach(() => {
 const names = { 2: 'سُورَةُ ٱلْبَقَرَةِ', 9: 'سُورَةُ ٱلتَّوْبَةِ', 114: 'سُورَةُ ٱلنَّاسِ' };
 const data = (...items: ReaderPageData['items']): ReaderPageData => ({ juz: 1, items });
 
-const opening = data({ surah: 2 }, { line: ['الٓمٓ', 1, 'ذَٰلِكَ', 'ٱلْكِتَـٰبُ'] }, { line: ['لَا', 'رَيْبَ', '۩', 2], short: true });
+const opening = data({ surah: 2 }, { line: ['الٓمٓ', 1, 'ذَٰلِكَ', 'ٱلْكِتَـٰبُ'] }, { line: ['لَا', 'رَيْبَ ۩', 2], short: true });
 
 describe('ReaderView', () => {
   it('renders right to left with one circled mark per ayah', () => {
@@ -57,9 +57,9 @@ describe('ReaderView', () => {
     expect(screen.queryByRole('heading', { level: 2 })).toBeNull();
   });
 
-  it('marks a sajda where the data carries one', () => {
-    render(<ReaderView page={3} data={opening} names={names} />);
-    expect(screen.getAllByLabelText('سجدة')).toHaveLength(1);
+  it('shows one sajda sign where the word carries it', () => {
+    const { container } = render(<ReaderView page={3} data={opening} names={names} />);
+    expect(container.textContent?.split('۩')).toHaveLength(2);
   });
 
   it('centres the two opening pages and short lines, and spreads the rest', () => {
