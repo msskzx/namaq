@@ -49,7 +49,7 @@ describe('OpeningsView', () => {
     for (const t of tasbih) {
       const roles = new Set(t.words.map(w => w.role).filter(Boolean));
       expect(roles).toEqual(new Set(['verb', 'scope', 'closing']));
-      expect(region(t.surah.number).getAllByText(/./, { selector: 'mark' }).length).toBeGreaterThan(2);
+      expect(region(t.surah.number).getAllByText(/./, { selector: 'mark' })).toHaveLength(3);
     }
     expect(screen.getByRole('list', { name: 'دلالة ألوان التسبيح' }).children).toHaveLength(3);
   });
@@ -60,5 +60,13 @@ describe('OpeningsView', () => {
     expect(text(59)).toEqual(text(61));
     expect(text(59).length - text(57).length).toBe(2);
     expect(text(59).filter(w => !text(57).includes(w))).toContain('وَمَا');
+  });
+
+  it('highlights a run of words once and keeps the notes free of bare surah numbers', () => {
+    renderView();
+    const closing = region(62).getAllByText(/./, { selector: 'mark[data-role="closing"]' });
+    expect(closing).toHaveLength(1);
+    expect(closing[0].textContent!.split(' ').length).toBeGreaterThan(1);
+    expect(screen.queryByText(/١٧ و٥٧/)).toBeNull();
   });
 });

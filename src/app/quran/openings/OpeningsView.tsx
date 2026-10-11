@@ -17,6 +17,15 @@ const TASBIH_ROLES: Record<TasbihRole, { label: string; mark: string; chip: stri
   closing: { label: 'الختم بالأسماء والصفات', mark: 'bg-rose-200 dark:bg-rose-900', chip: 'bg-rose-500' },
 };
 
+function runs(words: TasbihView['words']): { role?: TasbihRole; text: string }[] {
+  return words.reduce<{ role?: TasbihRole; text: string }[]>((acc, w) => {
+    const last = acc[acc.length - 1];
+    if (last && last.role === w.role) last.text += ` ${w.text}`;
+    else acc.push({ role: w.role, text: w.text });
+    return acc;
+  }, []);
+}
+
 function Legend({ label, items }: { label: string; items: { label: string; chip: string }[] }) {
   return (
     <ul className="flex flex-wrap gap-4" aria-label={label}>
@@ -77,10 +86,10 @@ export default function OpeningsView({ items, tasbih }: { items: OpeningView[]; 
             <h3 className="text-xl text-amber-600 dark:text-amber-400 mb-2">{`${num(surah.number)} ${surah.plain}`}</h3>
             <p className="text-2xl leading-[2.2] font-arabic">
               <span className="text-sm text-amber-600 dark:text-amber-400 me-2">{num(ayah)}</span>
-              {words.map((w, i) => (
+              {runs(words).map((r, i) => (
                 <React.Fragment key={i}>
                   {i > 0 && ' '}
-                  {w.role ? <mark data-role={w.role} className={`rounded px-1 text-inherit ${TASBIH_ROLES[w.role].mark}`}>{w.text}</mark> : w.text}
+                  {r.role ? <mark data-role={r.role} className={`rounded px-1 text-inherit ${TASBIH_ROLES[r.role].mark}`}>{r.text}</mark> : r.text}
                 </React.Fragment>
               ))}
             </p>
