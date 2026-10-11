@@ -34,9 +34,9 @@ describe('OpeningsView', () => {
     render(<OpeningsView items={items} />);
     const list = within(screen.getByRole('list', { name: 'اللفظ المشترك' }));
     const [all, sky] = list.getAllByRole('listitem');
-    expect(all.textContent).toContain('إِذَا');
+    expect(all.textContent).toContain(items[0].text.split(' ')[0]);
     expect(all.textContent).toContain('٨١ و٨٢ و٨٤');
-    expect(sky.textContent).toContain('ٱلسَّمَاۤءُ');
+    expect(sky.textContent).toContain(items[1].text.split(' ')[1]);
     expect(sky.textContent).toContain('٨٢ و٨٤');
   });
 });
