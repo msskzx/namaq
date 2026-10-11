@@ -23,7 +23,8 @@ describe('NasabSection', () => {
     render(<NasabSection slug="ali" />);
     expect(screen.getByRole('link', { name: /compare with others/i }).getAttribute('href')).toBe('/nasab?subject=person:ali');
     expect(screen.getAllByText('علي').length).toBeGreaterThan(0);
-    expect(screen.getByText('أبو طالب')).toBeTruthy();
+    expect(screen.getAllByText('أبو طالب').length).toBeGreaterThan(0);
+    expect(screen.queryByText('Father not recorded')).toBeNull();
   });
 
   it('renders nothing while loading, for an unknown person, and for a person with no recorded father', () => {

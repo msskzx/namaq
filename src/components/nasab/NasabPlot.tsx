@@ -46,7 +46,7 @@ export default function NasabPlot({ layout, isArabic, className = '' }: { layout
         })}
         {layout.nodes.map((node) => {
           const { x, y } = at.get(node.slug)!;
-          const tag = node.isMeeting ? t.meeting : node.otherFathers.length > 0 ? t.several : node.fatherUnrecorded ? t.unrecorded : null;
+          const tag = node.isMeeting ? t.meeting : node.otherFathers.length > 0 ? t.several : node.fatherUnrecorded && node.isSubject ? t.unrecorded : null;
           return (
             <g key={node.slug} transform={`translate(${x - NODE_WIDTH / 2},${y - NODE_HEIGHT / 2})`}>
               <title>{[node.name, tag, ...node.otherFathers].filter(Boolean).join(' · ')}</title>

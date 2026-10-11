@@ -10,7 +10,7 @@ The force graph at `/graphs` pins every node to a precomputed global position, s
 - `/nasab?subject=person:<slug>` (repeatable) draws each subject's chain of `FATHER` edges up to the oldest recorded ancestor.
 - Lines that share an ancestor are drawn once from the lowest shared ancestor upward, and that ancestor is marked as a meeting point.
 - The page has the same search box as the graph and, under it, pills for the Prophet and the four caliphs.
-- A subject with no recorded father shows as a single node marked "father not recorded". A father is never inferred.
+- A subject with no recorded father shows as a single node marked "father not recorded". An ancestor at the top of a line carries no such mark, since the line ends there by definition. A father is never inferred.
 - A person with several recorded fathers is drawn under the first by slug, with the others listed on the node.
 - Subjects with no common ancestor are drawn side by side.
 - Arabic mirrors the horizontal order. Light and dark themes are supported. Every label has `en` and `ar`.
