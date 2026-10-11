@@ -57,12 +57,12 @@ export type Variant = {
   ayah: number;
   hafsWord: string;
   occurrence?: number;
-  readings: [Reading, Reading];
+  readings: Reading[];
   note?: string;
   meaning: Meaning;
 };
 
-export type ChipState = 0 | 1 | null;
+export type ChipState = number | null;
 
 export const riwayatOf = (reader: ReaderId): RiwayaId[] => RIWAYAT.filter(r => r.reader === reader).map(r => r.id);
 
@@ -71,11 +71,10 @@ export function riwayatOfReading(reading: Reading): Set<RiwayaId> {
 }
 
 export function chipStates(variant: Variant): { id: RiwayaId; name: string; state: ChipState }[] {
-  const [first, second] = variant.readings.map(riwayatOfReading);
+  const sets = variant.readings.map(riwayatOfReading);
   return RIWAYAT.map(({ id, name }) => {
-    const inFirst = first.has(id);
-    const inSecond = second.has(id);
-    return { id, name, state: inFirst === inSecond ? null : inFirst ? 0 : 1 };
+    const hits = sets.flatMap((set, i) => (set.has(id) ? [i] : []));
+    return { id, name, state: hits.length === 1 ? hits[0] : null };
   });
 }
 

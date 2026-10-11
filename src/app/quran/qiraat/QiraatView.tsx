@@ -8,17 +8,16 @@ import Badge from '@/components/common/Badge';
 import Button from '@/components/common/Button';
 import { AyahCard } from '@/components/quran/AyahCard';
 import type { Ayah } from '@/types/quran';
-import { ayahWords } from '@/lib/quran/normalize';
-import { chipStates, neighbors, type Variant } from '@/lib/quran/qiraat';
+import { ayahWords, plainName } from '@/lib/quran/normalize';
+import { chipStates, neighbors, READERS, RIWAYAT, type Variant } from '@/lib/quran/qiraat';
 import { num } from '@/lib/quran/arabicNumber';
 
 export type QiraatEntry = { variant: Variant; text: string; surahName: string };
 
-const WORD_COLORS = ['text-amber-600 dark:text-amber-400', 'text-sky-600 dark:text-sky-400'];
-const BADGE_COLORS = ['amber', 'blue'];
+const WORD_COLORS = ['text-amber-600 dark:text-amber-400', 'text-sky-600 dark:text-sky-400', 'text-emerald-600 dark:text-emerald-400', 'text-rose-600 dark:text-rose-400'];
+const BADGE_COLORS = ['amber', 'blue', 'emerald', 'rose'];
 const UNCONFIRMED = 'غير مؤكد';
 const SECOND_LABEL = 'فرق على مستوى الكلمة، وليس نص مصحف تلك الرواية';
-const UNSOURCED = 'غير موثق (اقتراح للتجربة)';
 
 const key = (v: Variant) => `${v.surah}:${v.ayah}`;
 const pediaUrl = (v: Variant) => `https://quranpedia.net/ayahs/${v.surah}/${v.ayah}`;
@@ -35,12 +34,7 @@ function Meaning({ meaning }: { meaning: Variant['meaning'] }) {
       </div>
     );
   }
-  return (
-    <p>
-      {meaning.text}
-      {meaning.kind === 'unsourced' && <span className="block text-sm text-gray-600 dark:text-gray-400">{UNSOURCED}</span>}
-    </p>
-  );
+  return <p>{meaning.text}</p>;
 }
 
 function Card({ entry }: { entry: QiraatEntry }) {
@@ -48,9 +42,8 @@ function Card({ entry }: { entry: QiraatEntry }) {
   const words = ayahWords(text, false);
   const found = neighbors(words.norm, variant.hafsWord, variant.occurrence);
   const states = chipStates(variant);
-  const second = variant.readings[1];
   const hafsWord = found ? words.display.slice(found.start, found.end).join(' ') : '';
-  const rows = [hafsWord, second.text ?? ''];
+  const rows = variant.readings.map((r, i) => (i === 0 ? hafsWord : r.text ?? ''));
   const slots = found ? Object.fromEntries(Array.from({ length: found.end - found.start }, (_, k) => [found.start + k, 0])) : undefined;
   const ayah = { id: key(variant), number: variant.ayah, text: words.display.join(' '), surah: { name: surahName } } as unknown as Ayah;
   const around = (side: readonly [number, number]) => words.display.slice(side[0], side[1]).join(' ');
@@ -60,26 +53,41 @@ function Card({ entry }: { entry: QiraatEntry }) {
       <AyahCard ayah={ayah} slots={slots} />
       {!found && <p className="rounded-lg border border-red-400 p-4">تعذر تحديد الكلمة المختلف فيها في نص الآية، فلا يُعرض الفرق.</p>}
       {found && (
-        <div className="flex flex-col gap-2 rounded-lg border border-gray-200 dark:border-white/10 p-4">
-          {rows.map((word, i) => (
-            <p key={i} className="text-2xl leading-[2.2] font-arabic">
-              {around(found.before)} <mark className={`bg-transparent ${WORD_COLORS[i]}`}>{word || UNCONFIRMED}</mark> {around(found.after)}
-            </p>
-          ))}
+        <div className="flex flex-col gap-3">
+          <div className="grid gap-3 md:grid-cols-2">
+            {rows.map((word, i) => (
+              <div key={i} className="row-span-3 grid grid-rows-subgrid gap-2 rounded-lg border border-gray-200 dark:border-white/10 p-4">
+                <div><Badge size="sm" color={BADGE_COLORS[i]} text={word || UNCONFIRMED} /></div>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{states.filter(c => c.state === i).map(c => c.name).join('، ')}</p>
+                <p className="text-2xl leading-[2.2] font-arabic">
+                  {around(found.before)} <mark className={`bg-transparent ${WORD_COLORS[i]}`}>{word || UNCONFIRMED}</mark> {around(found.after)}
+                </p>
+              </div>
+            ))}
+          </div>
           <p className="text-sm text-gray-600 dark:text-gray-400">{SECOND_LABEL}</p>
         </div>
       )}
       <div className="flex flex-col gap-2">
-        <ul className="flex flex-wrap gap-2" aria-label="الروايات العشرون">
-          {states.map(s => (
-            <li key={s.id} data-state={s.state ?? 'unknown'}>
-              <Badge size="sm" text={s.name} color={s.state === null ? 'gray' : BADGE_COLORS[s.state]} />
-            </li>
-          ))}
+        <ul className="grid gap-3 sm:grid-cols-2" aria-label="الأئمة ورواتهم">
+          {READERS.map(reader => {
+            const mine = states.filter(c => RIWAYAT.find(r => r.id === c.id)?.reader === reader.id);
+            const same = mine.every(c => c.state === mine[0].state);
+            return (
+              <li key={reader.id} className="flex flex-col gap-2 rounded-lg border border-gray-200 dark:border-white/10 p-3">
+                <Badge size="sm" text={reader.name} color={same && mine[0].state !== null ? BADGE_COLORS[mine[0].state!] : 'gray'} />
+                <ul aria-label="الرواة" className="flex flex-wrap gap-2 ms-4 ps-3 border-s-2 border-gray-300 dark:border-white/20">
+                  {mine.map(s => (
+                    <li key={s.id} data-state={s.state ?? 'unknown'}>
+                      <Badge size="sm" text={s.name} color={s.state === null ? 'gray' : BADGE_COLORS[s.state]} />
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            );
+          })}
         </ul>
         <div className="flex flex-wrap items-center gap-2 text-sm">
-          {found && states.some(c => c.state === 0) && <Badge size="sm" color={BADGE_COLORS[0]} text={hafsWord} />}
-          {states.some(c => c.state === 1) && <Badge size="sm" color={BADGE_COLORS[1]} text={second.text ?? ''} />}
           {states.some(c => c.state === null) && <Badge size="sm" color="gray" text={UNCONFIRMED} />}
         </div>
         {variant.note && <p className="text-sm text-gray-600 dark:text-gray-400">{variant.note}</p>}
@@ -106,7 +114,7 @@ export default function QiraatView({ entries }: { entries: QiraatEntry[] }) {
           القراءات: الآية نفسها في أكثر من قراءة
         </h1>
         <p>
-          اثنا عشر موضعًا اختيرت للتجربة، وأرقام آياتها على عدّ حفص (الكوفي). في رواية ورش لا تُعدّ البسملة آية في الفاتحة، فتكون «مالك يوم الدين» الآية ٣ لا ٤.
+          ثلاثة عشر موضعًا اختيرت للتجربة، وأرقام آياتها على عدّ حفص (الكوفي). في رواية ورش لا تُعدّ البسملة آية في الفاتحة، فتكون «مالك يوم الدين» الآية ٣ لا ٤.
           وسورة البقرة {num(286)} آية في العدّ الكوفي و{num(287)} في البصري و{num(285)} في المدني.
         </p>
         <p>
@@ -115,8 +123,8 @@ export default function QiraatView({ entries }: { entries: QiraatEntry[] }) {
       </header>
       <nav className="flex flex-wrap gap-2" aria-label="المواضع">
         {entries.map((e, i) => (
-          <Button key={key(e.variant)} size="sm" active={i === selected} onClick={() => setSelected(i)}>
-            {num(e.variant.surah)}:{num(e.variant.ayah)}
+          <Button key={`${key(e.variant)}-${i}`} size="sm" active={i === selected} onClick={() => setSelected(i)}>
+            {e.surahName ? `${plainName(e.surahName).replace(/^سورة /, '')} ` : ''}{num(e.variant.surah)}:{num(e.variant.ayah)}
           </Button>
         ))}
       </nav>

@@ -13,6 +13,8 @@ const colored = (surah: number, ayah: number) => {
   return Object.fromEntries(text.split(' ').flatMap((w, i) => (i in slots ? [[w, slots[i]]] : [])));
 };
 
+const slotOfWord = (surah: number, ayah: number, plain: string) => slotsOf(surah, ayah).slots?.[words(`${surah}:${ayah}`).norm.indexOf(plain)];
+
 describe('CURATED', () => {
   it('leaves 43:36-37 out, which is not an address shift', () => {
     expect(CURATED.some(c => c.surah === 43 && c.parts.some(([from]) => from >= 36))).toBe(false);
@@ -36,7 +38,7 @@ describe('CURATED', () => {
       for (const [ayah, marks] of Object.entries(c.marks)) {
         expect(Number(ayah)).toBeGreaterThanOrEqual(c.parts[0][0]);
         expect(Number(ayah)).toBeLessThanOrEqual(c.parts[c.parts.length - 1][1]);
-        for (const m of marks) expect(resolve(words(`${c.surah}:${ayah}`).norm, m).length).toBe(m[0].split(' ').length);
+        for (const m of marks) expect(resolve(words(`${c.surah}:${ayah}`).norm, m).length).toBe(m[0] === '*' ? words(`${c.surah}:${ayah}`).norm.length : m[0].split(' ').length);
       }
     }
   });
@@ -72,12 +74,34 @@ describe('CURATED', () => {
     expect(colored(35, 9)).not.toHaveProperty(['ٱلرِّیَـٰحَ']);
   });
 
-  it('keeps the amber of the shared clause in 43:22-23, which carries no person marks', () => {
-    for (const ayah of [22, 23]) {
-      const slots = Object.values(slotsOf(43, ayah).slots ?? {});
-      expect(slots.length).toBeGreaterThanOrEqual(ARC_MIN);
-      expect(new Set(slots)).toEqual(new Set([0]));
-    }
+  it('colors مهتدون and مقتدون in 43:22-23 differently, inside the amber clause', () => {
+    expect(slotOfWord(43, 22, 'مهتدون')).toBe(MODES.first.slot);
+    expect(slotOfWord(43, 23, 'مقتدون')).toBe(MODES.second.slot);
+    expect(Object.values(slotsOf(43, 22).slots ?? {}).length).toBeGreaterThanOrEqual(ARC_MIN);
+  });
+
+  it('colors 12:80-83 by speaker: the eldest, his brothers\' words inside his speech, then the father', () => {
+    const [eldest, brothers, father] = [MODES.first.slot, MODES.third.slot, MODES.second.slot];
+    expect(new Set(Object.values(slotsOf(12, 80).slots ?? {}))).toEqual(new Set([eldest]));
+    expect(new Set(Object.values(slotsOf(12, 81).slots ?? {}))).toEqual(new Set([eldest, brothers]));
+    expect(new Set(Object.values(slotsOf(12, 82).slots ?? {}))).toEqual(new Set([brothers]));
+    expect(new Set(Object.values(slotsOf(12, 83).slots ?? {}))).toEqual(new Set([father]));
+  });
+
+  it('colors 10:22 in three runs: addressed to them, said about them, said by them', () => {
+    expect(slotOfWord(10, 22, 'يسيركم')).toBe(MODES.third.slot);
+    expect(slotOfWord(10, 22, 'كنتم')).toBe(MODES.third.slot);
+    expect(slotOfWord(10, 22, 'وفرحوا')).toBe(MODES.first.slot);
+    expect(slotOfWord(10, 22, 'وجاءهم')).toBe(MODES.first.slot);
+    expect(slotOfWord(10, 22, 'لنكونن')).toBe(MODES.second.slot);
+    expect(slotOfWord(10, 22, 'هو')).toBeUndefined();
+    expect(new Set(Object.values(slotsOf(10, 22).slots ?? {}))).toEqual(new Set([1, 2, 3]));
+  });
+
+  it('keeps Al-Fatiha to him in 2-4 and you in 5-7, and leaves 40:26 to the qira\'at page', () => {
+    for (const a of [2, 3, 4, 5, 6, 7]) expect(Object.values(slotsOf(1, a).slots ?? {})).not.toContain(MODES.first.slot);
+    expect(slotsOf(1, 7).slots).toEqual({ 2: MODES.second.slot });
+    expect(CURATED.some(c => c.surah === 40)).toBe(false);
   });
 
   it('lists exactly the modes the shifts use', () => {
