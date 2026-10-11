@@ -36,7 +36,7 @@ describe('CURATED', () => {
       for (const [ayah, marks] of Object.entries(c.marks)) {
         expect(Number(ayah)).toBeGreaterThanOrEqual(c.parts[0][0]);
         expect(Number(ayah)).toBeLessThanOrEqual(c.parts[c.parts.length - 1][1]);
-        for (const m of marks) expect(resolve(words(`${c.surah}:${ayah}`).norm, m).length).toBe(m[0].split(' ').length);
+        for (const m of marks) expect(resolve(words(`${c.surah}:${ayah}`).norm, m).length).toBe(m[0] === '*' ? words(`${c.surah}:${ayah}`).norm.length : m[0].split(' ').length);
       }
     }
   });
@@ -72,12 +72,21 @@ describe('CURATED', () => {
     expect(colored(35, 9)).not.toHaveProperty(['ٱلرِّیَـٰحَ']);
   });
 
-  it('keeps the amber of the shared clause in 43:22-23, which carries no person marks', () => {
-    for (const ayah of [22, 23]) {
-      const slots = Object.values(slotsOf(43, ayah).slots ?? {});
-      expect(slots.length).toBeGreaterThanOrEqual(ARC_MIN);
-      expect(new Set(slots)).toEqual(new Set([0]));
-    }
+  it('colors مهتدون and مقتدون in 43:22-23 the same, inside the amber clause', () => {
+    expect(Object.values(colored(43, 22)).at(-1)).toBe(MODES.first.slot);
+    expect(Object.values(colored(43, 23)).at(-1)).toBe(MODES.first.slot);
+    expect(Object.values(slotsOf(43, 22).slots ?? {}).length).toBeGreaterThanOrEqual(ARC_MIN);
+  });
+
+  it('colors 12:81-83 by speaker only: brothers, then the father', () => {
+    for (const a of [81, 82]) expect(new Set(Object.values(slotsOf(12, a).slots ?? {}))).toEqual(new Set([MODES.first.slot]));
+    expect(new Set(Object.values(slotsOf(12, 83).slots ?? {}))).toEqual(new Set([MODES.second.slot]));
+    expect(slotsOf(12, 80).slots).toBeUndefined();
+  });
+
+  it('keeps Al-Fatiha to him and you, and leaves 40:26 to the qira\'at page', () => {
+    for (const a of [2, 3, 4, 5, 6, 7]) expect(Object.values(slotsOf(1, a).slots ?? {})).not.toContain(MODES.first.slot);
+    expect(CURATED.some(c => c.surah === 40)).toBe(false);
   });
 
   it('lists exactly the modes the shifts use', () => {

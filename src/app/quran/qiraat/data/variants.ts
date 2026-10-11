@@ -116,6 +116,17 @@ export const variants: Variant[] = [
     },
   },
   {
+    surah: 40, ayah: 26, hafsWord: 'أو أن يظهر',
+    readings: [
+      { riwayat: ['hafs', 'ruways', 'rawh'] },
+      { text: 'أَوۡ أَن یَظۡهَرَ', riwayat: ['shuba', 'khalaf-hamza', 'khallad', 'abu-al-harith', 'duri-kisai', 'ishaq', 'idris'] },
+      { text: 'وَأَن یُظۡهِرَ', riwayat: ['qalun', 'warsh', 'duri-abu-amr', 'susi', 'ibn-wardan', 'ibn-jammaz'] },
+      { text: 'وَأَن یَظۡهَرَ', riwayat: ['bazzi', 'qunbul', 'hisham', 'ibn-dhakwan'] },
+    ],
+    note: 'موضعان في العبارة: «أَوۡ أَن» أو «وَأَن»، و«یُظۡهِرَ» أو «یَظۡهَرَ». القراءة الرابعة وحدها تجمع «وَأَن» و«یَظۡهَرَ». وقوائم الرواة هنا على مستوى الراوي كما تسردها الموسوعة، ولا تسمّي الكتاب الذي نقلت عنه. وتُقرأ «الفسادُ» بالرفع مع «یَظۡهَرَ»، و«الفسادَ» بالنصب مع «یُظۡهِرَ».',
+    meaning: { kind: 'unsourced', text: '«أَوۡ» للتخيير و«وَ» للجمع. و«یُظۡهِرَ» من «أظهر» ومفعولها «الفساد»، و«یَظۡهَرَ» من «ظهر» وفاعلها «الفساد».' },
+  },
+  {
     surah: 43, ayah: 19, hafsWord: 'عبد',
     readings: [
       { readers: ['abu-amr', 'asim', 'hamza', 'kisai', 'khalaf'] },
