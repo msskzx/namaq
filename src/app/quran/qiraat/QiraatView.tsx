@@ -135,7 +135,7 @@ export default function QiraatView({ entries }: { entries: QiraatEntry[] }) {
           القراءات: الآية نفسها في أكثر من قراءة
         </h1>
         <p>
-          {num(entries.length)} موضعًا اختيرت للتجربة، من الفاتحة إلى الناس، وأرقام آياتها على عدّ حفص (الكوفي). في رواية ورش لا تُعدّ البسملة آية في الفاتحة، فتكون «مالك يوم الدين» الآية ٣ لا ٤.
+          {num(entries.length)} موضعًا اختيرت للتجربة، من الفاتحة إلى المسد، وأرقام آياتها على عدّ حفص (الكوفي). في رواية ورش لا تُعدّ البسملة آية في الفاتحة، فتكون «مالك يوم الدين» الآية ٣ لا ٤.
           وسورة البقرة {num(286)} آية في العدّ الكوفي و{num(287)} في البصري و{num(285)} في المدني.
         </p>
         <p>
@@ -150,7 +150,7 @@ export default function QiraatView({ entries }: { entries: QiraatEntry[] }) {
             onChange={ev => setSelected(entries.findIndex(e => e.variant.surah === Number(ev.target.value)))}
             className="rounded-lg border border-gray-300 dark:border-white/20 bg-white dark:bg-black px-3 py-2"
           >
-            <optgroup label="من الفاتحة إلى المرسلات">{surahs.filter(n => n < JUZ_AMMA_FROM).map(option)}</optgroup>
+            <optgroup label="سور أخرى">{surahs.filter(n => n < JUZ_AMMA_FROM).map(option)}</optgroup>
             <optgroup label="جزء عمّ">{surahs.filter(n => n >= JUZ_AMMA_FROM).map(option)}</optgroup>
           </select>
         </label>

@@ -87,7 +87,7 @@ describe('neighbors', () => {
       const k = `${v.surah}:${v.ayah}`;
       const at = neighbors(norm(v.surah, v.ayah), v.hafsWord, v.occurrence)!;
       const words = ayahWords(texts[k], false);
-      expect(words.display.slice(at.start, at.end).join(' '), k).toBe(expected[k] ?? words.display.slice(at.start, at.end).join(' '));
+      if (expected[k]) expect(words.display.slice(at.start, at.end).join(' '), k).toBe(expected[k]);
       expect(words.norm.slice(at.start, at.end).join(' '), k).toBe(v.hafsWord.split(' ').map(normalizeWord).join(' '));
     }
   });

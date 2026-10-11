@@ -48,6 +48,7 @@ describe('QiraatView', () => {
   it('lists the places of juz\' 30 under their surah, and tells two words of one ayah apart', () => {
     render(<QiraatView entries={entries} />);
     fireEvent.change(screen.getByRole('combobox'), { target: { value: '89' } });
+    expect((screen.getByRole('combobox') as HTMLSelectElement).value).toBe('89');
     expect(screen.getByRole('navigation', { name: 'المواضع' }).querySelectorAll('button')).toHaveLength(variants.filter(v => v.surah === 89).length);
     fireEvent.change(screen.getByRole('combobox'), { target: { value: '78' } });
     const labels = [...screen.getByRole('navigation', { name: 'المواضع' }).querySelectorAll('button')].map(b => b.textContent);

@@ -190,6 +190,10 @@ How a place was chosen:
 - For each place, the group that holds Hafs is checked against the stored Hafs
   word.
 
+The dump splits one imam's two riwat across readings at 80:25, 89:9 and 104:2
+(for example Ruways and Rawh at 104:2). Yaqub's riwat normally agree, so check
+these against al-Nashr first.
+
 Places the dump does not list are not shown, even where a reading is known from
 the books (for example 78:19, 78:23, 78:28). A place with no sourced
 explanation has no meaning line; none was written for them.
