@@ -444,6 +444,16 @@ graph-only property. Each runs as a report first and writes only with `--apply`.
 Evidence does not sync. Claims and citations stay in PostgreSQL and no citation
 becomes a node or an edge.
 
+## The Quran reader
+
+`npm run quran:reader` fetches the 604 pages of the Madinah mushaf from the
+Quran.com API (`verses/by_page`, `mushaf=2`) and writes one file per page under
+`src/app/quran/read/data/`: the words of each printed line, a circled number
+for each ayah end, and a surah header where a surah begins. The sajda sign is part of the word's text, as the API
+gives it, at all 15 places. The API leaves out the title and basmala lines, so the
+reader draws them. The reader reads these files and the stored surah names, not
+the stored ayat. Nothing syncs to Neo4j. `npm test` checks the files.
+
 ## Layout
 
 `npm run graph:layout -- --apply` computes prominence, community and position

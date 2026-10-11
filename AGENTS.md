@@ -324,10 +324,9 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 ## Content sources
 
 - Companion (صحابي) names/biographies are sourced from *سير أعلام النبلاء*
-  (al-Dhahabi) in the مؤسسة الرسالة edition on **Shamela, which is the only
-  digital host this project extracts from**. It carries the editor's footnotes,
-  which other hosts drop, and its printed page numbers are the ones every
-  citation records.
+  (al-Dhahabi) in the مؤسسة الرسالة edition on Shamela. It carries the editor's
+  footnotes, which other hosts drop, and its printed page numbers are the ones
+  every citation records.
   - Book, with its فهرس الموضوعات for enumerating entries without paging
     through the text: https://shamela.ws/book/10906. `npm run history:search
     -- <term> [<term> ...]` searches a partial, hand-discovered subset of
