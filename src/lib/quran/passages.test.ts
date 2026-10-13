@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { findPassages } from './passages';
 import { sideCards } from './cards';
 import { normalizeWord } from './normalize';
-import runs from '@/app/quran/data/runs.json';
-import ayat from '@/app/quran/data/ayat.json';
+import runs from './passages.fixture.json';
+import ayat from './ayat.fixture.json';
 
 const LETTERS = 'ابتثجحخ';
 const MORE = 'دذرزسشص';

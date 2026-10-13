@@ -1,6 +1,6 @@
 # Merging `/quran` and `/quran/shifts` into one repetition page
 
-Status: PR 1 and PR 2 built; PR 3 (removal) follows.
+Status: built in three PRs.
 
 ## Why merge
 
@@ -214,9 +214,6 @@ the response is under 600 KB.
 
 ## Next steps
 
-PR 1 (the endpoint) is merged. PR 2 puts the matrix page on `/quran`, reading the
-endpoint, and moves `Card` to `src/app/quran/Card.tsx`. PR 3 removes
-`/quran/shifts`, `findOpeners`, the generated data and the nav entries, and adds
-the redirect. Before PR 3 deletes `src/app/quran/data/runs.json`, the three test
-files that import it (`passages.test.ts`, `cards.test.ts`, `passageGroups.test.ts`)
-need another source for the 112 passages.
+None. PR 3 moved `runs.json` and `ayat.json` to `src/lib/quran/passages.fixture.json`
+and `ayat.fixture.json`, static test data like `compare.fixture.json`; nothing
+regenerates them, so a change to the passage finder updates them by hand.

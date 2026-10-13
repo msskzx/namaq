@@ -1,6 +1,6 @@
 # Notes on unifying the /quran and /quran/compare engines
 
-Status: exploration only. Nothing here is decided or built. Revisit when more Quran
+Status: exploration only. Nothing here is decided or built. The `/quran` and `/quran/shifts` pages have since been merged ([quran-repetition-merge.md](quran-repetition-merge.md)), which keeps the two finders separate and groups their results for display, so this note's argument against unifying them stands. Revisit when more Quran
 features exist and the pages' real needs are clearer.
 
 The owner's idea: the two Quran pages might share one engine, and a comparison such as
@@ -13,7 +13,7 @@ two engines do, challenges the idea, and lists suggestions in the order they cos
 |---|---|---|
 | Question | Which surahs share a passage? | How do these two ranges line up? |
 | Input | All 6,236 ayat | Two different surahs today. Ayah ranges and a surah against itself are requested and being built in PR #362 |
-| When it runs | Build time (`npm run quran:demo`), output in `runs.json` | At request time |
+| When it runs | Request time, through `GET /api/quran/repetition` | At request time |
 | Unit | Words, across ayah boundaries, at least 10 | Whole ayat, runs of at least 2 words |
 | Method | Seed and extend with a few skipped words allowed (`passages.ts`) | Order-preserving alignment scored by run length squared (`compare.ts`) |
 | Within one surah | Skipped on purpose | Not yet; requested in PR #362 |

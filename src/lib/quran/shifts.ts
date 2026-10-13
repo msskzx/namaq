@@ -1,19 +1,15 @@
 // docs/plans/quran-within-surah.md
-import { normalizeWord, type AyahWords } from './normalize';
+import type { AyahWords } from './normalize';
 
 export type Occ = { ayah: number; word: number };
 export type Arc = { a: Occ; b: Occ; len: number };
 export type Refrain = { text: string; len: number; at: Occ[] };
 export type Phrase = { text: string; len: number; at: Occ[] };
-export type Opener = { ayah: number; word: number; form: Form };
-export type Form = 'male' | 'group' | 'woman' | 'command';
 
 export const ARC_MIN = 4;
 export const REFRAIN_MIN = 3;
 export const REFRAIN_MANY = 5;
 const GRAM = 3;
-
-const FORMS: Record<string, Form> = { قال: 'male', قالوا: 'group', قالا: 'group', قالت: 'woman', قل: 'command' };
 
 export function findShifts(ayat: AyahWords[]): { arcs: Arc[]; refrains: Refrain[] } {
   const w: string[] = [];
@@ -68,14 +64,4 @@ export function findPhrases(ayat: AyahWords[]): Phrase[] {
   const byPlace = (p: Occ, q: Occ) => p.ayah - q.ayah || p.word - q.word;
   const arcPhrases = arcs.map(({ a, b, len }) => ({ text: ayat[a.ayah - 1].norm.slice(a.word, a.word + len).join(' '), len, at: [a, b] }));
   return [...arcPhrases, ...refrains].sort((p, q) => q.at.length - p.at.length || q.len - p.len || byPlace(p.at[0], q.at[0]));
-}
-
-export function findOpeners(ayat: AyahWords[]): Opener[] {
-  return ayat.flatMap((a, k) =>
-    a.display.flatMap((token, word) => {
-      const x = normalizeWord(token.replace(/ٰ/g, 'ا'));
-      const form = FORMS[x] ?? FORMS[x.replace(/^[وف]/, '')];
-      return form ? [{ ayah: k + 1, word, form }] : [];
-    }),
-  );
 }

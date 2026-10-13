@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import runs from '@/app/quran/data/runs.json';
+import runs from './passages.fixture.json';
 import { groupPassages } from './passageGroups';
 import type { Passage, Pos } from './passages';
 

@@ -1,6 +1,6 @@
 # Quran relations demo page
 
-Status: first version built at `/quran`. The prophet-story section is the next PR.
+Status: first version built at `/quran`, since merged with `/quran/shifts` into one repetition page ([quran-repetition-merge.md](quran-repetition-merge.md)). The prophet-story section is the next PR.
 
 The owner wants one demo page with visualizations and numbers about the Quran,
 above all relations between ayat and stories about one prophet told in several
@@ -44,9 +44,9 @@ as a count and nothing else.
 
 ## How it is computed
 
-`npm run quran:demo` (`scripts/quran/buildDemo.ts`) reads the ayat once and
-writes `src/app/quran/data/runs.json` and `ayat.json`. The page reads those
-files only, so it needs no database and there is no migration.
+`GET /api/quran/repetition` reads the stored ayat and runs the finders on a cache
+miss; the page fetches it once. There is no build step, no generated file and no
+migration. The old `npm run quran:demo` and its `runs.json` are gone.
 
 1. `src/lib/quran/normalize.ts` drops tashkeel and Quranic marks, folds
    alef forms to alef, alef maqsura and Persian yeh to yeh, teh marbuta to heh,
