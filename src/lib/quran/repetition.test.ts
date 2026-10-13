@@ -107,3 +107,24 @@ describe('buildRepetition basmala', () => {
     expect(r.ayat['1:1']).toBe([...tokens, ...refrain].join(' '));
   });
 });
+
+describe('buildRepetition edge cases', () => {
+  it('counts a three-place phrase as len times two on the diagonal', () => {
+    const r = buildRepetition([{ number: 5, name: 'A', ayat: [0, 1, 2].map(k => `${refrain.join(' ')} ${span('ن', k * 3, 3).join(' ')}`) }]);
+    expect(r.cells).toEqual([{ a: 5, b: 5, words: 8, phrases: 1 }]);
+    expect(r.surahs[0].words).toBe(8);
+  });
+
+  it('returns empty results for no surahs and for a surah with no ayat', () => {
+    expect(buildRepetition([])).toEqual({ surahs: [], cells: [], within: [], across: [], passages: [], ayat: {} });
+    const r = buildRepetition([{ number: 4, name: 'A', ayat: [] }]);
+    expect(r.surahs).toEqual([{ number: 4, name: 'A', ayat: 0, words: 0 }]);
+    expect(r.cells).toEqual([]);
+  });
+
+  it('strips exactly the basmala words, leaving the rest of ayah 1', () => {
+    const r = buildRepetition([{ number: 7, name: 'A', ayat: [`${fx['7'][0].trim()} ${refrain.join(' ')}`, refrain.join(' ')] }]);
+    expect(r.ayat['7:1']).not.toContain(fx['7'][0].trim().split(/\s+/)[0]);
+    expect(r.ayat['7:1']).toContain(refrain.join(' '));
+  });
+});

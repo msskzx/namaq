@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import compare from './compare.fixture.json';
 import own from './shifts.fixture.json';
 import { ayahWords } from './normalize';
-import { findPhrases, type Phrase, REFRAIN_MANY } from './shifts';
+import { findPhrases, findShifts, type Phrase, REFRAIN_MANY } from './shifts';
 
 const fx = { ...compare, ...own } as Record<string, string[]>;
 const surah = (n: number) => fx[n].map((t, i) => ayahWords(t, i === 0 && n !== 1 && n !== 9));
@@ -98,6 +98,13 @@ describe('findPhrases', () => {
     expect(isOrdered(findPhrases(surah(55)))).toBe(true);
     expect(isOrdered(findPhrases(surah(26)))).toBe(true);
     expect(isOrdered(findPhrases(surah(43)))).toBe(true);
+  });
+
+  it.each([12, 26, 43, 55, 77])('lists exactly the arcs and refrains findShifts reports for surah %i', n => {
+    const { arcs, refrains } = findShifts(surah(n));
+    const key = (len: number, at: { ayah: number; word: number }[]) => `${len}|${at.map(o => `${o.ayah}.${o.word}`).join(',')}`;
+    const expected = [...arcs.map(a => key(a.len, [a.a, a.b])), ...refrains.map(r => key(r.len, r.at))].sort();
+    expect(findPhrases(surah(n)).map(p => key(p.len, p.at)).sort()).toEqual(expected);
   });
 
   it('returns an empty list for no ayat', () => {

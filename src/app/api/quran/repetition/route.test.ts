@@ -51,7 +51,10 @@ describe('GET /api/quran/repetition', () => {
     const response = await GET();
 
     expect(findMany).toHaveBeenCalledTimes(1);
-    expect(findMany).toHaveBeenCalledWith(expect.objectContaining({ orderBy: { number: 'asc' } }));
+    expect(findMany).toHaveBeenCalledWith({
+      select: { number: true, name: true, ayat: { select: { number: true, text: true }, orderBy: { number: 'asc' } } },
+      orderBy: { number: 'asc' },
+    });
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual(buildRepetition(expected));
   });
