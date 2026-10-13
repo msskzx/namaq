@@ -122,7 +122,7 @@ describe('buildRepetition edge cases', () => {
     expect(r.cells).toEqual([]);
   });
 
-  it('strips exactly the basmala words, leaving the rest of ayah 1', () => {
+  it('drops the basmala from ayah 1 of surah 7 and keeps the words after it', () => {
     const r = buildRepetition([{ number: 7, name: 'A', ayat: [`${fx['7'][0].trim()} ${refrain.join(' ')}`, refrain.join(' ')] }]);
     expect(r.ayat['7:1']).not.toContain(fx['7'][0].trim().split(/\s+/)[0]);
     expect(r.ayat['7:1']).toContain(refrain.join(' '));
