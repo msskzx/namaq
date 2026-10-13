@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { sideCards } from './cards';
-import runs from '@/app/quran/data/runs.json';
-import ayat from '@/app/quran/data/ayat.json';
+import runs from './passages.fixture.json';
+import ayat from './ayat.fixture.json';
 
 describe('sideCards', () => {
   const text = { '1:2': 'a b c d', '1:3': 'e f g' };

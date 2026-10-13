@@ -1,6 +1,6 @@
 # Relations within a single surah
 
-Status: built as the demo page `/quran/shifts`; the section "Verdict after testing"
+Status: built as the demo page `/quran/shifts`, since merged into `/quran` (see [quran-repetition-merge.md](quran-repetition-merge.md)), whose redirect keeps the old URL working; the section "Verdict after testing"
 at the end overrides the ideas above where they differ. No citations yet.
 
 ## What the owner wants
@@ -240,8 +240,8 @@ A skeptic ran the plan against the real text. What the page builds:
    three words seen five times or more (77's «ويل يوميذ للمكذبين», ten times),
    becomes a lane of ticks. Surahs 55, 77 and 26 show it.
 3. Speech-turn strip. One block per opener (قال, قالوا, قالت, قل), colored by
-   verb form only. The speaker is named after the opener in a small share of
-   cases, so the page draws no names. Surah 12 has 73 openers.
+   verb form only. Removed in the merge: the panel named no speaker, so it
+   said where speech starts and nothing more.
 4. Curated shifts, moved to their own static page `/quran/iltifat`. Seven
    hand-picked entries in `curatedShifts.ts`, each shown as hand-picked and as a
    demo suggestion without citations: 43:22-23, 12:80-83, 1:2-7, 48:8-9 (Hafs

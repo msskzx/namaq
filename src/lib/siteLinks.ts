@@ -23,7 +23,6 @@ export const getAllNavLinks = (language: 'en' | 'ar'): SiteLink[] => [
   { href: '/quran/read', label: language === 'ar' ? 'قراءة القرآن' : 'Read the Quran' },
   { href: '/quran', label: language === 'ar' ? 'القرآن' : 'Quran' },
   { href: '/quran/compare', label: language === 'ar' ? 'مقارنة سورتين' : 'Compare two surahs' },
-  { href: '/quran/shifts', label: language === 'ar' ? 'تحولات داخل السورة' : 'Shifts within a surah' },
   { href: '/quran/iltifat', label: language === 'ar' ? 'التفات: تحولات مختارة' : 'Iltifat: hand-picked shifts' },
   { href: '/quran/qiraat', label: language === 'ar' ? 'القراءات' : 'Readings' },
   { href: '/quran/themes', label: language === 'ar' ? 'مواضع متقابلة' : 'Matching topics' },

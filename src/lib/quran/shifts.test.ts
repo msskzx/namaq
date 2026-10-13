@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import compare from './compare.fixture.json';
 import own from './shifts.fixture.json';
 import { ayahWords } from './normalize';
-import { ARC_MIN, findOpeners, findShifts, REFRAIN_MANY } from './shifts';
+import { ARC_MIN, findShifts, REFRAIN_MANY } from './shifts';
 
 const fx = { ...compare, ...own } as Record<string, string[]>;
 const surah = (n: number) => fx[n].map((t, i) => ayahWords(t, i === 0 && n !== 1 && n !== 9));
@@ -49,24 +49,5 @@ describe('findShifts', () => {
     const r = findShifts(words('الف باء جيم دال هاء واو', 'الف باء جيم دال هاء واو', 'الف باء جيم دال زاي حاء'));
     expect(r.refrains).toHaveLength(1);
     expect(r.arcs).toEqual([]);
-  });
-});
-
-describe('findOpeners', () => {
-  it('reads the verb form, with a leading و or ف', () => {
-    const forms = findOpeners(words('قال الف', 'وقالوا باء', 'فقالت جيم', 'وقل دال', 'قالا هاء')).map(o => o.form);
-    expect(forms).toEqual(['male', 'group', 'woman', 'command', 'group']);
-  });
-
-  it('tells the past قَـٰلَ from the command قُلۡ, because the dagger alef stands for the long alef', () => {
-    const forms = findOpeners(words('قَـٰلَ أَوَلَوۡ جِئۡتُكُم', 'قَالُوۤا۟ إِنَّا', 'قُلۡ أَوَلَوۡ جِئۡتُكُم', 'وَقَـٰلَتِ ٱلۡمَلَـٰۤىِٕكَةُ')).map(o => o.form);
-    expect(forms).toEqual(['male', 'group', 'command', 'woman']);
-  });
-
-  it('counts the openers of Yusuf, and finds the dense run in Musa and al-Khidr', () => {
-    const yusuf = findOpeners(surah(12));
-    expect(yusuf).toHaveLength(73);
-    const khidr = findOpeners(surah(18)).filter(o => o.ayah >= 66 && o.ayah <= 78).map(o => o.form);
-    expect(khidr.length).toBeGreaterThanOrEqual(6);
   });
 });

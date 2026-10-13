@@ -21,9 +21,9 @@ export default function QuranIltifatPage() {
           لم يراجع هذا العرض أحد من أهل العلم. النص برواية حفص. كل لون نوع من الضمير، واللون نفسه للنوع نفسه في كل الأمثلة.
         </p>
         <div className="flex flex-wrap gap-2">
-          <Button size="sm" variant="outline" href="/quran/shifts">
+          <Button size="sm" variant="outline" href="/quran">
             <FontAwesomeIcon icon={faRepeat} />
-            تحولات داخل السورة
+            تكرار العبارات
           </Button>
           <Button size="sm" variant="outline" href="/quran/order">
             <FontAwesomeIcon icon={faListOl} />
