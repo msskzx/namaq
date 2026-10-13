@@ -1,12 +1,15 @@
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
-import QuranDemo from './QuranDemo';
-import runs from './data/runs.json';
-import ayat from './data/ayat.json';
+import RepetitionLoader from './RepetitionLoader';
 
 export const metadata: Metadata = {
-  title: 'القرآن: نصوص مشتركة بين السور',
+  title: 'القرآن: تكرار العبارات',
 };
 
 export default function QuranPage() {
-  return <QuranDemo runs={runs} ayat={ayat} />;
+  return (
+    <Suspense>
+      <RepetitionLoader />
+    </Suspense>
+  );
 }
