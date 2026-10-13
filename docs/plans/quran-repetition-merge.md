@@ -1,7 +1,6 @@
 # Merging `/quran` and `/quran/shifts` into one repetition page
 
-Status: decided in discussion, not built. Nothing here is implemented until the
-owner says so.
+Status: PR 1 and PR 2 built; PR 3 (removal) follows.
 
 ## Why merge
 
@@ -215,5 +214,9 @@ the response is under 600 KB.
 
 ## Next steps
 
-Wait for the owner's go-ahead, then start PR 1 on a new branch without digits
-in its name, with `.env` symlinked from the main checkout.
+PR 1 (the endpoint) is merged. PR 2 puts the matrix page on `/quran`, reading the
+endpoint, and moves `Card` to `src/app/quran/Card.tsx`. PR 3 removes
+`/quran/shifts`, `findOpeners`, the generated data and the nav entries, and adds
+the redirect. Before PR 3 deletes `src/app/quran/data/runs.json`, the three test
+files that import it (`passages.test.ts`, `cards.test.ts`, `passageGroups.test.ts`)
+need another source for the 112 passages.

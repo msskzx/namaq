@@ -2,9 +2,8 @@
 
 import React, { useState } from 'react';
 import Badge from '@/components/common/Badge';
-import { AyahCard } from '@/components/quran/AyahCard';
+import { Card } from '../Card';
 import { ARC_MIN, REFRAIN_MANY, REFRAIN_MIN, type Arc, type Form, type Occ, type Opener, type Refrain } from '@/lib/quran/shifts';
-import type { Ayah } from '@/types/quran';
 
 import type { Surah } from '@/lib/quran/curatedShifts';
 import { num } from '@/lib/quran/arabicNumber';
@@ -22,11 +21,6 @@ const FORMS: Record<Form, { label: string; slot: number; block: string }> = {
   group: { label: 'قالوا: جماعة', slot: 2, block: 'bg-emerald-500 dark:bg-emerald-400' },
   woman: { label: 'قالت: امرأة', slot: 3, block: 'bg-rose-500 dark:bg-rose-400' },
 };
-
-export function Card({ surah, ayah, text, slots }: { surah: Surah; ayah: number; text: string; slots?: Record<number, number> }) {
-  const s = { id: `s${surah.number}`, number: surah.number, name: surah.name, nameTransliterated: null };
-  return <AyahCard ayah={{ id: `${surah.number}:${ayah}`, number: ayah, text, surah: s } as unknown as Ayah} slots={slots} />;
-}
 
 function onKey(act: () => void) {
   return (e: React.KeyboardEvent) => {
