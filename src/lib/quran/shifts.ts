@@ -4,6 +4,7 @@ import { normalizeWord, type AyahWords } from './normalize';
 export type Occ = { ayah: number; word: number };
 export type Arc = { a: Occ; b: Occ; len: number };
 export type Refrain = { text: string; len: number; at: Occ[] };
+export type Phrase = { text: string; len: number; at: Occ[] };
 export type Opener = { ayah: number; word: number; form: Form };
 export type Form = 'male' | 'group' | 'woman' | 'command';
 
@@ -60,6 +61,13 @@ export function findShifts(ayat: AyahWords[]): { arcs: Arc[]; refrains: Refrain[
   const lone = arcs.filter(a => !(inLane(a.a, a.len) && inLane(a.b, a.len)));
   const byPlace = (p: Occ, q: Occ) => p.ayah - q.ayah || p.word - q.word;
   return { arcs: lone.sort((p, q) => byPlace(p.a, q.a)), refrains: refrains.sort((p, q) => q.at.length - p.at.length || byPlace(p.at[0], q.at[0])) };
+}
+
+export function findPhrases(ayat: AyahWords[]): Phrase[] {
+  const { arcs, refrains } = findShifts(ayat);
+  const byPlace = (p: Occ, q: Occ) => p.ayah - q.ayah || p.word - q.word;
+  const arcPhrases = arcs.map(({ a, b, len }) => ({ text: ayat[a.ayah - 1].norm.slice(a.word, a.word + len).join(' '), len, at: [a, b] }));
+  return [...arcPhrases, ...refrains].sort((p, q) => q.at.length - p.at.length || q.len - p.len || byPlace(p.at[0], q.at[0]));
 }
 
 export function findOpeners(ayat: AyahWords[]): Opener[] {
