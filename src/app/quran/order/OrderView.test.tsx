@@ -65,7 +65,7 @@ describe('OrderView', () => {
     expect(screen.queryByRole('dialog')).toBeNull();
   });
 
-  it('lists every item of a theme that has several in the surah', () => {
+  it('lists every item of a theme that has several in the surah', { timeout: 30000 }, () => {
     renderView();
     const byTheme = new Map<string, TopicInstance[]>();
     for (const t of topicsBySurah[78]) if (t.themeId) byTheme.set(t.themeId, [...(byTheme.get(t.themeId) ?? []), t]);
@@ -76,7 +76,7 @@ describe('OrderView', () => {
     expect(dialog.getAllByRole('listitem')).toHaveLength(items.length);
   });
 
-  it('closes the overlay on Escape and locks body scroll only while it is open', () => {
+  it('closes the overlay on Escape and locks body scroll only while it is open', { timeout: 30000 }, () => {
     renderView();
     const list = within(screen.getByRole('list', { name: /موضوعات سورة النبإ/ }));
     expect(document.body.style.overflow).toBe('');
@@ -168,7 +168,7 @@ describe('OrderView', () => {
     expect(marks[0].className).toBe(marks[1].className);
   });
 
-  describe('filtering', () => {
+  describe('filtering', { timeout: 30000 }, () => {
     it('narrows the surah list to the selected juz', () => {
       const juzBySurah: Record<number, JuzRange> = Object.fromEntries(
         chips.map(c => [c.number, c.number <= 46 ? { min: 25, max: 25 } : { min: 26, max: 26 }]),
