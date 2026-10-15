@@ -33,7 +33,11 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   in ways that look like real bugs but aren't. See
   `src/components/graph/GraphSearch.test.tsx` for a working pattern.
 - Before considering a change finished: `npm run lint`, `npx tsc --noEmit`,
-  and `npm test` should all pass.
+  `npm test` and `npm run build` should all pass. `npm run build` catches
+  what the other three don't — Next.js's own page-export-shape checks (a
+  `page.tsx` may only export `default`, `metadata`, and the other names
+  Next recognizes; anything else, like a helper function, fails only here)
+  — run it before every PR, not just when something feels risky.
 
 ## Review before a PR
 
@@ -43,9 +47,9 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   Run a second cycle only when the first reported a defect that needed a code or
   test change. A docs-only change, a rename or a typo fix needs the one cycle.
   Never run a third.
-- Opening the PR means the work is finished: `npm run lint`, `npx tsc --noEmit`
-  and `npm test` pass (the same checks as "Before considering a change
-  finished"), the review findings are fixed or answered in the PR body, and the
+- Opening the PR means the work is finished: `npm run lint`, `npx tsc --noEmit`,
+  `npm test` and `npm run build` pass (the same checks as "Before considering a
+  change finished"), the review findings are fixed or answered in the PR body, and the
   PR can merge once CI is green unless the owner comments on it. A migration the
   owner applies is not a reason to hold the merge: write the change so the app
   works before the migration is applied. Do not open a PR to ask whether the
@@ -114,7 +118,7 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 - An agent that is merging a conflicting PR rebases it without waiting for the
   author. For a stacked PR whose base was squash-merged, run
   `git rebase --onto main <old-base-branch>` so the commits the squash already took
-  drop out, re-run `npm run lint`, `npx tsc --noEmit` and `npm test`, and push with
+  drop out, re-run `npm run lint`, `npx tsc --noEmit`, `npm test` and `npm run build`, and push with
   `--force-with-lease`. Stop and report when two PRs changed the same lines, when
   the work's `summary.md` coverage counts disagree after the rebase, or when the
   resolution changes any line outside the conflicted hunks. That last case goes

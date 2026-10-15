@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { SharedTopic } from '@/lib/quran/topicTypes';
-import { toThemeRows } from './page';
+import { toThemeRows } from './toThemeRows';
 
 describe('toThemeRows', () => {
   it('maps a SharedTopic to the theme/a/b shape ThemesView renders', () => {
