@@ -65,6 +65,28 @@ describe('OrderView', () => {
     expect(screen.queryByRole('dialog')).toBeNull();
   });
 
+  it('lists every item of a theme that has several in the surah', () => {
+    renderView();
+    const byTheme = new Map<string, TopicInstance[]>();
+    for (const t of topicsBySurah[78]) if (t.themeId) byTheme.set(t.themeId, [...(byTheme.get(t.themeId) ?? []), t]);
+    const [themeId, items] = [...byTheme].find(([, list]) => list.length > 1)!;
+    const list = within(screen.getByRole('list', { name: /موضوعات سورة النبإ/ }));
+    fireEvent.click(list.getByRole('button', { name: THEMES[themeId] }));
+    const dialog = within(screen.getByRole('dialog', { name: THEMES[themeId] }));
+    expect(dialog.getAllByRole('listitem')).toHaveLength(items.length);
+  });
+
+  it('closes the overlay on Escape and locks body scroll only while it is open', () => {
+    renderView();
+    const list = within(screen.getByRole('list', { name: /موضوعات سورة النبإ/ }));
+    expect(document.body.style.overflow).toBe('');
+    fireEvent.click(list.getAllByRole('button')[0]);
+    expect(document.body.style.overflow).toBe('hidden');
+    fireEvent.keyDown(window, { key: 'Escape' });
+    expect(screen.queryByRole('dialog')).toBeNull();
+    expect(document.body.style.overflow).toBe('');
+  });
+
   it('starts with every theme on and draws a column for each', () => {
     renderView();
     const on = toggles().getAllByRole('button').filter(b => b.getAttribute('aria-pressed') === 'true');
@@ -162,6 +184,23 @@ describe('OrderView', () => {
       fireEvent.change(screen.getByLabelText('إلى سورة'), { target: { value: '55' } });
       const names = strip().getAllByRole('heading', { level: 2 }).map(h => h.textContent);
       expect(names).toHaveLength(6);
+    });
+
+    it('combines the juz and the surah range', () => {
+      const juzBySurah: Record<number, JuzRange> = Object.fromEntries(
+        chips.map(c => [c.number, c.number <= 46 ? { min: 25, max: 25 } : { min: 26, max: 26 }]),
+      );
+      renderView(juzBySurah);
+      fireEvent.change(screen.getByLabelText('الجزء'), { target: { value: '25' } });
+      fireEvent.change(screen.getByLabelText('من سورة'), { target: { value: '44' } });
+      expect(strip().getAllByRole('heading', { level: 2 })).toHaveLength(46 - 44 + 1);
+    });
+
+    it('drops a theme from the rail when no visible surah carries it', () => {
+      renderView();
+      const all = cells().length;
+      fireEvent.change(screen.getByLabelText('من سورة'), { target: { value: '114' } });
+      expect(cells().length).toBeLessThan(all);
     });
 
     it('resets both filters on clear', () => {
