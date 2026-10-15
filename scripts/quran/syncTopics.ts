@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { prisma } from '../../src/lib/prisma';
 import type { TopicRecord } from '../../src/lib/quran/topicTypes';
 
-const DATA_DIR = join(__dirname, '../../data/quran/topics');
+const DATA_DIR = process.env.QURAN_TOPICS_DIR ?? join(__dirname, '../../data/quran/topics');
 const RANGE_SPAN_WARNING = 15;
 const AYAH_TOPIC_COUNT_WARNING = 4;
 

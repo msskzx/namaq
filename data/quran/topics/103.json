@@ -1,0 +1,29 @@
+[
+  {
+    "slug": "oaths-103-1",
+    "labelAr": "والعصر",
+    "themeId": "oaths",
+    "ayahFrom": 1,
+    "ayahTo": 1,
+    "excerptAr": "بِسۡمِ ٱللَّهِ ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ وَٱلۡعَصۡرِ\n",
+    "alternativeOf": null
+  },
+  {
+    "slug": "human-103-2",
+    "labelAr": "إن الإنسان لفي خسر",
+    "themeId": "human",
+    "ayahFrom": 2,
+    "ayahTo": 2,
+    "excerptAr": "إِنَّ ٱلۡإِنسَـٰنَ لَفِی خُسۡرٍ\n",
+    "alternativeOf": null
+  },
+  {
+    "slug": "faith-103-3",
+    "labelAr": "إلا الذين آمنوا وعملوا الصالحات وتواصوا بالحق وتواصوا بالصبر",
+    "themeId": "faith",
+    "ayahFrom": 3,
+    "ayahTo": 3,
+    "excerptAr": "إِلَّا ٱلَّذِینَ ءَامَنُوا۟ وَعَمِلُوا۟ ٱلصَّـٰلِحَـٰتِ وَتَوَاصَوۡا۟ بِٱلۡحَقِّ وَتَوَاصَوۡا۟ بِٱلصَّبۡرِ\n",
+    "alternativeOf": null
+  }
+]
