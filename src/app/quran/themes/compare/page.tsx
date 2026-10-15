@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import { prisma } from '@/lib/prisma';
 import { ayahWords } from '@/lib/quran/normalize';
 import { getSharedTopics } from '@/lib/quran/topicEngine';
-import type { SharedTopic } from '@/lib/quran/topicTypes';
 import ThemesView from '../ThemesView';
+import { toThemeRows } from './toThemeRows';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,10 +14,6 @@ export const metadata: Metadata = {
 async function load(number: number) {
   const rows = await prisma.ayah.findMany({ where: { surah: { number } }, orderBy: { number: 'asc' }, select: { text: true } });
   return rows.map((r, i) => ayahWords(r.text, i === 0 && number !== 1 && number !== 9).display.join(' '));
-}
-
-export function toThemeRows(shared: SharedTopic[]) {
-  return shared.map(({ labelAr, a, b }) => ({ theme: labelAr, a, b }));
 }
 
 export default async function QuranThemesComparePage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
