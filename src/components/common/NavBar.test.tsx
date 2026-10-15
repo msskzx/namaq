@@ -25,7 +25,7 @@ describe('NavBar Quran links', () => {
     expect(hrefs).toContain('/quran/compare');
     expect(hrefs).toContain('/quran/iltifat');
     expect(hrefs).toContain('/quran/qiraat');
-    expect(hrefs).toContain('/quran/themes');
+    expect(hrefs).toContain('/quran/themes/compare');
     expect(hrefs).toContain('/quran/order');
     expect(hrefs).toContain('/quran/openings');
     expect(hrefs).toContain('/quran/oaths');
@@ -34,6 +34,6 @@ describe('NavBar Quran links', () => {
 
   it('keeps every page in the shared list for the mobile menu and graph menu', () => {
     const hrefs = getAllNavLinks('ar').map(l => l.href);
-    expect(hrefs).toEqual(expect.arrayContaining(['/quran', '/quran/compare', '/quran/iltifat', '/quran/qiraat', '/quran/themes', '/quran/order', '/quran/openings', '/quran/oaths', '/quran/musa']));
+    expect(hrefs).toEqual(expect.arrayContaining(['/quran', '/quran/compare', '/quran/iltifat', '/quran/qiraat', '/quran/themes/compare', '/quran/order', '/quran/openings', '/quran/oaths', '/quran/musa']));
   });
 });

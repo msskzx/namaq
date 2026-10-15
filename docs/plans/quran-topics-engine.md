@@ -84,31 +84,62 @@ files-are-authority pattern as `syncCanonicalPeople.ts`.
 New module `src/lib/quran/topicEngine.ts`:
 - `getSurahTopics(surah): TopicInstance[]` — reads from `QuranTopic` (Prisma), replacing the
   hardcoded `SURAH_TOPICS` table for 41-114.
-- `getSharedTopics(surahA, surahB): { slug, labelAr, a: Range, b: Range }[]` — joins
-  `QuranTopic` rows from both surahs on `slug`, producing exactly the shape
-  `themes/data/16-43.json` already uses, generically for any pair.
+- `getSharedTopics(surahA, surahB): { slug, labelAr, a: Range, b: Range }[]` — joins on
+  `themeId`, not `slug`: every topic's `slug` is scoped to its own surah by annotation
+  convention (`<theme>-<surah>-<index>`), so two surahs never share a slug by construction.
+  `themeId` (one of the 12 umbrella `THEMES` ids) is the only key both surahs can share.
+  Rows sharing a `themeId` within one surah are merged into a single min-to-max ayah span
+  before the cross-surah join. This is necessarily coarser than a hand-curated passage
+  pairing — see the Phase 3 note below on the An-Nahl↔Az-Zukhruf diff.
 
 ## `/quran/order` changes
 
+- [page.tsx](src/app/quran/order/page.tsx) becomes an async server component: for every
+  surah 41-114 call `getSurahTopics(n)` (Phase 1 engine) and pass the result into
+  `buildOrder` as a new `topicsBySurah: Record<number, TopicInstance[]>` argument.
+- [surahOrder.ts](src/lib/quran/surahOrder.ts): `buildOrder(data, topicsBySurah)` builds each
+  chip's `topics` from `topicsBySurah[n]` instead of the inline `TOPICS[n].topics` table.
+  `TopicView` becomes `{ slug, themeId: string | null, labelAr, ayahFrom, ayahTo, excerptAr }`.
+  The `TOPICS` table and `THEMES` map stay exactly as they are and keep powering the
+  **hops** feature (`الصلة بما بعدها`, `sharedThemes`, `common`) — that is a different,
+  already-shipped feature (surah-to-surah transition phrases) outside this plan's scope, not
+  a legacy thing being replaced. Only the per-surah topic *badges* and the rail/span tracking
+  derived from them move to the new engine. Rail `spans` computation changes from
+  `t.theme === id` to `t.themeId === id` (nullable now — a topic with no `themeId` just
+  never lights up a rail column, which is correct: the rail only ever tracked the 12 umbrella
+  themes).
 - [OrderView.tsx](src/app/quran/order/OrderView.tsx): badge label becomes the ayah excerpt
-  (`excerptAr`), badge is now a button; clicking opens a small popover/panel showing the
-  topic's `labelAr` (our own wording) plus the full ayah range it covers.
-- [surahOrder.ts](src/lib/quran/surahOrder.ts): `buildOrder` sources topics via
-  `getSurahTopics` instead of the inline `SURAH_TOPICS` table for surahs 41-114 (1-40 stay as
-  they are — out of scope, confirmed with owner).
+  (`excerptAr`); extend `Badge.tsx` with an optional `onClick` (renders a `<button>` instead
+  of a `<span>`/`Link` when passed, same classes) rather than adding a new component. Clicking
+  a topic badge toggles an inline expansion showing `labelAr` (our own wording) and the ayah
+  range, local `useState` per chip.
+- This changes the exact badge count/text/rail-span output that
+  `src/lib/quran/surahOrder.test.ts` and `src/app/quran/order/OrderView.test.tsx` currently
+  assert against the old `TOPICS` table — those assertions need rewriting against the new
+  per-ayah-range data, not preserving as regression tests for behavior that's intentionally
+  changing.
 
 ## `/quran/themes` changes
 
-- New generic route e.g. `/quran/themes/compare?a=&b=` (or extend existing `page.tsx`) calls
-  `getSharedTopics(a, b)` instead of the static `themes/data` map, for any two surahs that
-  have topic data (41-114 only, since that's what's annotated). Query-param only this
-  phase; no surah-picker UI — deferred until more of the book is annotated, so the picker
-  isn't offering pairs with no data behind them.
-- Move the existing hardcoded `16-43.json` view to `/quran/themes/legacy` (static, unchanged)
-  so the owner can open both pages side by side for An-Nahl↔Az-Zukhruf and compare the
-  engine's output against the hand-authored one.
-- If the engine's result for that pair diverges from the legacy one, call it out explicitly
-  in the PR description rather than silently reconciling.
+- **Surah 16 (An-Nahl) needs topics too.** It's outside the annotated 41-114 range, but the
+  owner's own comparison example is An-Nahl(16)↔Az-Zukhruf(43), and without data for 16
+  `getSharedTopics(16, 43)` returns nothing. Annotate surah 16 alone (same method as Phase 2:
+  `dumpAyat.ts`/`addTopic.ts`, byte-exact excerpts, `quran:topics:sync` dry run then
+  `--apply`) before building the comparison. One surah, one pass is enough here — this isn't
+  re-running the full two-agent process, just filling the one missing surah the owner's
+  example needs.
+- `src/app/quran/themes/ThemesView.tsx` is already generic (`{ a, b, themes: {theme, a, b}[] }`)
+  — no changes needed there. Map `SharedTopic.labelAr` to `theme` at the call site.
+- Move the current `src/app/quran/themes/page.tsx` (the static `pairs` map +
+  `data/16-43.json`/`70-80.json`) to `src/app/quran/themes/legacy/page.tsx`, unchanged.
+- New `src/app/quran/themes/compare/page.tsx` (`?a=&b=`, default `16-43` to match the
+  owner's example): loads both surahs' ayat the same way the current `page.tsx` does, calls
+  `getSharedTopics(a, b)` from the Phase 1 engine, maps each `SharedTopic` to
+  `{ theme: labelAr, a, b }`, and renders through the existing `ThemesView`. Query-param only
+  this phase; no surah-picker UI — deferred until more of the book is annotated.
+- Run `/quran/themes/compare?a=16&b=43` against `/quran/themes/legacy` and diff the two
+  lists of passage pairs. Call out any divergence explicitly in the PR description — do not
+  silently reconcile or hide a mismatch.
 
 ## Verification
 
