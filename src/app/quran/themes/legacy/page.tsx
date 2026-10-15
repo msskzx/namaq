@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { prisma } from '@/lib/prisma';
 import { ayahWords } from '@/lib/quran/normalize';
-import ThemesView from './ThemesView';
+import ThemesView from '../ThemesView';
 import pairs from './data/index';
 
 export const dynamic = 'force-dynamic';

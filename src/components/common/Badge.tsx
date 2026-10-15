@@ -4,6 +4,7 @@ import Link from 'next/link';
 interface BadgeProps {
   text: string;
   href?: string;
+  onClick?: () => void;
   color?: string; // Tailwind color, e.g., 'bg-indigo-900'
   size?: 'sm' | 'lg';
   className?: string;
@@ -19,7 +20,7 @@ function getColorClass(color: string) {
   return '';
 }
 
-function Badge({ text, href, color = 'indigo', size = 'lg', className = '' }: BadgeProps) {
+function Badge({ text, href, onClick, color = 'indigo', size = 'lg', className = '' }: BadgeProps) {
   const sizeClasses = size === 'sm' ? 'px-2 py-0.5 text-sm' : 'px-3 py-1 text-lg';
   const baseClasses = `${getColorClass(color)} border rounded text-gray-800 dark:text-gray-200 transition ${sizeClasses} ${className}`;
   if (href) {
@@ -27,6 +28,13 @@ function Badge({ text, href, color = 'indigo', size = 'lg', className = '' }: Ba
       <Link href={href} className="inline-block">
         <span className={baseClasses}>{text}</span>
       </Link>
+    );
+  }
+  if (onClick) {
+    return (
+      <button type="button" onClick={onClick} className={`inline-block ${baseClasses}`}>
+        {text}
+      </button>
     );
   }
   return <span className={`inline-block ${baseClasses}`}>{text}</span>;

@@ -1,5 +1,6 @@
 import { resolve, type Data, type Range, type Surah } from './curatedShifts';
 import { ayahWords, plainName } from './normalize';
+import type { TopicInstance } from './topicTypes';
 
 export type Source = { title: string; url: string };
 export type Hop = {
@@ -195,11 +196,11 @@ export const sharedThemes = (table: Record<number, SurahTopics>, n: number) =>
 
 export type OrderData = Data & { counts: Record<string, number> };
 export type Line = { ayah: number; text: string; slots?: Record<number, number> };
-export type TopicView = { theme: string; detail: string };
+export type TopicView = { slug: string; themeId: string | null; labelAr: string; ayahFrom: number; ayahTo: number; excerptAr: string };
 export type ChipView = Surah & { focus?: string; topics: TopicView[] };
 export type HopView = { hop: Hop; from: Surah; to: Surah; tail: Line[]; head: Line[]; words: string[]; common: string[] };
 
-export function buildOrder({ names, ayat }: OrderData): { chips: ChipView[]; hops: HopView[] } {
+export function buildOrder({ names, ayat }: OrderData, topicsBySurah: Record<number, TopicInstance[]>): { chips: ChipView[]; hops: HopView[] } {
   const surah = (number: number): Surah => ({ number, name: names[number] ?? '', plain: plainName(names[number] ?? '') });
   const lines = (n: number, [lo, hi]: Range, shared: NonNullable<Hop['shared']>, side: 1 | 2): Line[] =>
     Array.from({ length: hi - lo + 1 }, (_, k) => {
@@ -223,8 +224,9 @@ export function buildOrder({ names, ayat }: OrderData): { chips: ChipView[]; hop
   const [lo, hi] = [HOPS[0].from, HOPS[HOPS.length - 1].from + 1];
   const chips = Array.from({ length: hi - lo + 1 }, (_, k) => {
     const n = lo + k;
-    const { focus, topics } = TOPICS[n];
-    return { ...surah(n), focus, topics: topics.map(([theme, detail]) => ({ theme, detail })) };
+    const { focus } = TOPICS[n];
+    const topics = (topicsBySurah[n] ?? []).map(({ slug, themeId, labelAr, ayahFrom, ayahTo, excerptAr }) => ({ slug, themeId: themeId ?? null, labelAr, ayahFrom, ayahTo, excerptAr }));
+    return { ...surah(n), focus, topics };
   });
   return { chips, hops };
 }

@@ -82,8 +82,14 @@ function Link({ item: { hop, tail, head, words, common } }: { item: HopView }) {
 }
 
 export default function OrderView({ chips, hops }: { chips: ChipView[]; hops: HopView[] }) {
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  const toggleExpanded = (slug: string) => setExpanded(prev => {
+    const next = new Set(prev);
+    if (!next.delete(slug)) next.add(slug);
+    return next;
+  });
   const spans: RailSpan[] = IDS.map(id => {
-    const ns = chips.filter(c => c.topics.some(t => t.theme === id)).map(c => c.number);
+    const ns = chips.filter(c => c.topics.some(t => t.themeId === id)).map(c => c.number);
     return { id, first: ns[0], last: ns[ns.length - 1], has: new Set(ns) };
   });
   const [on, setOn] = useState<Set<string>>(() => new Set(spans.map(s => s.id)));
@@ -131,8 +137,17 @@ export default function OrderView({ chips, hops }: { chips: ChipView[]; hops: Ho
                   {s.focus && <p className={NOTE}>{`محور السورة: ${s.focus}`}</p>}
                   <ul className="flex flex-wrap gap-1" aria-label={`موضوعات ${s.plain}`}>
                     {s.topics.map(t => (
-                      <li key={t.theme}>
-                        <Badge text={t.detail} size="sm" color="" className={colorOf(t.theme).badge} />
+                      <li key={t.slug} className="flex flex-col gap-1">
+                        <Badge
+                          text={t.excerptAr}
+                          size="sm"
+                          color=""
+                          className={t.themeId ? colorOf(t.themeId).badge : NEUTRAL.badge}
+                          onClick={() => toggleExpanded(t.slug)}
+                        />
+                        {expanded.has(t.slug) && (
+                          <p className={NOTE}>{`${t.labelAr} (${num(t.ayahFrom)}${t.ayahFrom === t.ayahTo ? '' : `-${num(t.ayahTo)}`})`}</p>
+                        )}
                       </li>
                     ))}
                   </ul>

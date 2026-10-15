@@ -1,11 +1,21 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import data from '@/app/quran/order/ayat.json';
+import type { TopicInstance, TopicRecord } from './topicTypes';
 import { resolve } from './curatedShifts';
 import { ayahWords } from './normalize';
 import { buildOrder, HOPS, sharedThemes, THEMES, TOPICS, TOPICS_SRC, type SurahTopics } from './surahOrder';
 
 const count = (n: number) => data.counts[String(n) as keyof typeof data.counts];
 const norm = (key: string) => ayahWords(data.ayat[key as keyof typeof data.ayat], false).norm;
+
+const TOPICS_DATA_DIR = join(__dirname, '../../../data/quran/topics');
+const topicsBySurah: Record<number, TopicInstance[]> = {};
+for (let n = 41; n <= 114; n++) {
+  const records: TopicRecord[] = JSON.parse(readFileSync(join(TOPICS_DATA_DIR, `${n}.json`), 'utf8'));
+  topicsBySurah[n] = records.filter(r => !r.alternativeOf).map(r => ({ ...r, surah: n }));
+}
 
 describe('HOPS', () => {
   it('covers every neighbouring pair from 41 to 113 once, in order', () => {
@@ -89,11 +99,17 @@ describe('TOPICS', () => {
 });
 
 describe('buildOrder', () => {
-  const { chips, hops } = buildOrder(data);
+  const { chips, hops } = buildOrder(data, topicsBySurah);
 
   it('lists one chip per surah from 41 to 114 with its name', () => {
     expect(chips.map(c => c.number)).toEqual(Array.from({ length: 74 }, (_, k) => 41 + k));
     expect(chips.every(c => c.plain.length > 0)).toBe(true);
+  });
+
+  it('builds each chip\'s topics from the per-ayah-range engine data, not the inline TOPICS table', () => {
+    for (const chip of chips) {
+      expect(chip.topics).toEqual(topicsBySurah[chip.number].map(({ slug, themeId, labelAr, ayahFrom, ayahTo, excerptAr }) => ({ slug, themeId: themeId ?? null, labelAr, ayahFrom, ayahTo, excerptAr })));
+    }
   });
 
   it('colors the shared word on both sides with the same slot', () => {

@@ -1,8 +1,11 @@
 // @vitest-environment jsdom
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
-import { buildOrder, THEMES, TOPICS } from '@/lib/quran/surahOrder';
+import { buildOrder, THEMES } from '@/lib/quran/surahOrder';
+import type { TopicInstance, TopicRecord } from '@/lib/quran/topicTypes';
 import { OPENING_GROUPS } from '@/lib/quran/openings';
 import data from './ayat.json';
 import OrderView from './OrderView';
@@ -13,12 +16,19 @@ vi.mock('@/components/language/LanguageContext', () => ({
 
 afterEach(cleanup);
 
-const { chips, hops } = buildOrder(data);
+const TOPICS_DATA_DIR = join(__dirname, '../../../../data/quran/topics');
+const topicsBySurah: Record<number, TopicInstance[]> = {};
+for (let n = 41; n <= 114; n++) {
+  const records: TopicRecord[] = JSON.parse(readFileSync(join(TOPICS_DATA_DIR, `${n}.json`), 'utf8'));
+  topicsBySurah[n] = records.filter(r => !r.alternativeOf).map(r => ({ ...r, surah: n }));
+}
+
+const { chips, hops } = buildOrder(data, topicsBySurah);
 const renderView = () => render(<OrderView chips={chips} hops={hops} />);
 const strip = () => within(screen.getByRole('list', { name: 'ترتيب السور' }));
 const toggles = () => within(screen.getByRole('list', { name: 'المواضيع' }));
 const cells = (id?: string) => document.querySelectorAll(id ? `[data-rail-cell="${id}"]` : '[data-rail-cell]');
-const carriers = (id: string) => Object.keys(TOPICS).map(Number).filter(n => TOPICS[n].topics.some(([t]) => t === id));
+const carriers = (id: string) => Object.keys(topicsBySurah).map(Number).filter(n => topicsBySurah[n].some(t => t.themeId === id));
 const rowOf = (n: number) => strip().getAllByRole('heading', { level: 2 })[n - 41].closest('li')!;
 
 describe('OrderView', () => {
@@ -29,11 +39,23 @@ describe('OrderView', () => {
     expect(screen.getAllByRole('heading', { name: /النازعات/ })).toHaveLength(1);
   });
 
-  it('shows each topic of a surah once, as a badge', () => {
+  it('shows each topic of a surah once, as a badge of its ayah excerpt', () => {
     renderView();
     const list = within(screen.getByRole('list', { name: /موضوعات سورة النبإ/ }));
-    expect(list.getAllByRole('listitem')).toHaveLength(TOPICS[78].topics.length);
-    expect(list.getByText('اختلافهم في النبأ العظيم')).toBeTruthy();
+    expect(list.getAllByRole('listitem')).toHaveLength(topicsBySurah[78].length);
+    expect(list.getByRole('button', { name: new RegExp(topicsBySurah[78][0].excerptAr.split('\n')[0]) })).toBeTruthy();
+  });
+
+  it('expands a topic badge on click to show its own wording and ayah range', () => {
+    renderView();
+    const list = within(screen.getByRole('list', { name: /موضوعات سورة النبإ/ }));
+    const first = topicsBySurah[78][0];
+    const badge = list.getByRole('button', { name: new RegExp(first.excerptAr.split('\n')[0]) });
+    expect(screen.queryByText(new RegExp(first.labelAr))).toBeNull();
+    fireEvent.click(badge);
+    expect(screen.getByText(new RegExp(first.labelAr))).toBeTruthy();
+    fireEvent.click(badge);
+    expect(screen.queryByText(new RegExp(first.labelAr))).toBeNull();
   });
 
   it('starts with every theme on and draws a column for each', () => {

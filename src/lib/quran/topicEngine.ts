@@ -31,20 +31,38 @@ export async function getSurahTopics(surah: number): Promise<TopicInstance[]> {
   return rows.map(toInstance);
 }
 
+function spanByTheme(topics: TopicInstance[]): Map<string, { from: number; to: number; labelAr: string }> {
+  const byTheme = new Map<string, { from: number; to: number; labelAr: string }>();
+  for (const topic of topics) {
+    if (!topic.themeId) continue;
+    const existing = byTheme.get(topic.themeId);
+    if (!existing) {
+      byTheme.set(topic.themeId, { from: topic.ayahFrom, to: topic.ayahTo, labelAr: topic.labelAr });
+    } else {
+      existing.from = Math.min(existing.from, topic.ayahFrom);
+      existing.to = Math.max(existing.to, topic.ayahTo);
+    }
+  }
+  return byTheme;
+}
+
+// Topic slugs are per-surah (see docs/plans/quran-topics-engine.md), so they never
+// collide across surahs by construction. themeId is the only key both surahs can share.
 export function sharedTopicsFromInstances(
   a: TopicInstance[],
   b: TopicInstance[],
 ): SharedTopic[] {
-  const bySlugB = new Map(b.map((t) => [t.slug, t]));
+  const spansA = spanByTheme(a);
+  const spansB = spanByTheme(b);
   const shared: SharedTopic[] = [];
-  for (const topicA of a) {
-    const topicB = bySlugB.get(topicA.slug);
-    if (!topicB) continue;
+  for (const [themeId, spanA] of spansA) {
+    const spanB = spansB.get(themeId);
+    if (!spanB) continue;
     shared.push({
-      slug: topicA.slug,
-      labelAr: topicA.labelAr,
-      a: { from: topicA.ayahFrom, to: topicA.ayahTo },
-      b: { from: topicB.ayahFrom, to: topicB.ayahTo },
+      slug: themeId,
+      labelAr: spanA.labelAr,
+      a: { from: spanA.from, to: spanA.to },
+      b: { from: spanB.from, to: spanB.to },
     });
   }
   return shared;
