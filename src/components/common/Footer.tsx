@@ -44,7 +44,7 @@ function Footer() {
 
   return (
     <footer className="w-full bg-gray-50 dark:bg-black text-amber-600 dark:text-amber-400 border-t-2 border-amber-400">
-      <div className="container mx-auto px-4 py-8">
+      <div className="w-full px-4 py-8">
         <WorkInProgressBanner />
         {/* Main content with 4 columns */}
         <div dir={isRTL ? 'rtl' : 'ltr'} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">

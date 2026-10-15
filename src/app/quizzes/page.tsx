@@ -125,7 +125,7 @@ export default function QuizzesPage() {
   if (!started) {
     return (
       <div className="min-h-screen bg-white dark:bg-black">
-        <div className="container mx-auto max-w-2xl px-4 py-8" dir={ar ? "rtl" : "ltr"}>
+        <div className="mx-auto max-w-2xl px-4 py-8" dir={ar ? "rtl" : "ltr"}>
           <h1 className="mb-6 text-2xl font-bold text-gray-900 dark:text-gray-100">{ar ? "اختبار" : "Quiz"}</h1>
           <fieldset className="mb-6 flex flex-wrap gap-x-4 gap-y-2 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
             <legend className="mb-2 w-full text-sm font-semibold text-gray-700 dark:text-gray-300">{ar ? "المواضيع — اختر واحدًا أو أكثر" : "Topics — choose one or more"}</legend>
@@ -195,7 +195,7 @@ export default function QuizzesPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">
-      <div className="container mx-auto max-w-2xl px-4 py-8" dir="rtl">
+      <div className="mx-auto max-w-2xl px-4 py-8" dir="rtl">
         {error && <><ErrorMessage title={ar ? "تعذر إنشاء الاختبار" : "Failed to build the quiz"} /><Button className="mt-4" variant="outline" onClick={reset}><FontAwesomeIcon icon={faRotateLeft} />{ar ? "العودة للإعداد" : "Back to setup"}</Button></>}
         {isLoading || !data ? (
           <LoadingSpinner fill />

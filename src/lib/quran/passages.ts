@@ -16,6 +16,10 @@ export type Passage = {
 export const MIN_WORDS = 10;
 const MAX_SKIP = 4;
 const RESYNC = 3;
+// A gram repeating past this is ordinary diction, not a surprising shared
+// passage - capping it bounds the O(m^2) pairing below regardless of how
+// common the most frequent gram turns out to be.
+const MAX_OCC = 150;
 
 function flatten(ayat: AyahInput[]) {
   const norm: string[] = [];
@@ -78,25 +82,40 @@ export function findPassages(ayat: AyahInput[]): Passage[] {
     if (gram.some(w => w[0] === '#')) continue;
     const key = gram.join(' ');
     const at = seeds.get(key);
-    if (at) at.push(i);
-    else seeds.set(key, [i]);
+    if (at) { if (at.length < MAX_OCC) at.push(i); } else seeds.set(key, [i]);
   }
+
+  // A position already matched against a given surah is skipped against
+  // that same surah again - O(1) amortized per candidate instead of
+  // scanning every match found so far (found.some(...) used to re-check
+  // every candidate against the whole result list, which made the cost grow
+  // with the result list itself). Coverage is tracked per target surah
+  // rather than globally, so a position already connected to surah A can
+  // still branch out to surah B: dropping that would silently lose real
+  // connections whenever the same gram recurs across three or more surahs.
+  const covered: (Set<number> | undefined)[] = new Array(norm.length);
+  const sawSurah = (p: number, surah: number) => covered[p]?.has(surah) ?? false;
+  const markSurah = (from: number, to: number, surah: number) => {
+    for (let k = from; k <= to; k++) (covered[k] ??= new Set()).add(surah);
+  };
 
   const found: { a: [number, number]; b: [number, number]; matched: number; places: number }[] = [];
   for (const at of seeds.values()) {
     for (let x = 0; x < at.length; x++) {
+      const i = at[x];
+      const surahI = pos[i]!.surah;
       for (let y = x + 1; y < at.length; y++) {
-        const [i, j] = [at[x], at[y]];
-        if (pos[i]!.surah === pos[j]!.surah) continue;
-        if (found.some(f => i >= f.a[0] && i <= f.a[1] && j >= f.b[0] && j <= f.b[1])) continue;
+        const j = at[y];
+        const surahJ = pos[j]!.surah;
+        if (surahI === surahJ) continue;
+        if (sawSurah(i, surahJ) || sawSurah(j, surahI)) continue;
         const back = extend(norm, i - 1, j - 1, -1);
         const fwd = extend(norm, i, j, 1);
-        found.push({
-          a: [back.last?.[0] ?? i, fwd.last![0]],
-          b: [back.last?.[1] ?? j, fwd.last![1]],
-          matched: back.hits + fwd.hits,
-          places: at.length,
-        });
+        const a: [number, number] = [back.last?.[0] ?? i, fwd.last![0]];
+        const b: [number, number] = [back.last?.[1] ?? j, fwd.last![1]];
+        found.push({ a, b, matched: back.hits + fwd.hits, places: at.length });
+        markSurah(a[0], a[1], surahJ);
+        markSurah(b[0], b[1], surahI);
       }
     }
   }

@@ -9,7 +9,7 @@ export default function PrivacyPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">
-      <div className="container mx-auto px-4 py-8 bg-white dark:bg-black">
+      <div className="w-full px-4 py-8 bg-white dark:bg-black">
         <div className="mx-auto bg-white dark:bg-black">
           <div className={`rounded-lg shadow-lg p-8 ${language === 'ar' ? 'text-right' : 'text-left'}`} dir={language === 'ar' ? 'rtl' : 'ltr'}>
             <h1 className="text-3xl font-bold text-amber-400 mb-6">

@@ -9,7 +9,7 @@ import GraphCanvas from "@/components/graph/GraphCanvas";
 // URL (e.g. ?kind=person&kind=battle).
 export default function GraphPage() {
     return (
-        <div className="container mx-auto px-4 py-8">
+        <div className="w-full px-4 py-8">
             <GraphCanvas defaultFullscreen targetSlug="prophet-muhammad" nodesLabel="nodes" />
         </div>
     );

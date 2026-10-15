@@ -7,10 +7,14 @@ export function sideCards(
   side: { from: Pos; to: Pos },
   marks: number[],
   ayat: Record<string, string>,
-  { full = false, after = 0 } = {},
+  { full = false, after = 0, before = 0 } = {},
 ): Card[] {
   const cards: Card[] = [];
   const wordsOf = (ayah: number) => (ayat[`${side.from.surah}:${ayah}`] ?? '').split(' ');
+  for (let ayah = side.from.ayah - before; ayah <= side.from.ayah - 1 && ayat[`${side.from.surah}:${ayah}`]; ayah++) {
+    const words = wordsOf(ayah);
+    cards.push({ surah: side.from.surah, ayah, text: words.join(' '), marks: words.map((_, i) => i) });
+  }
   let offset = 0;
   for (let ayah = side.from.ayah; ayah <= side.to.ayah; ayah++) {
     const words = wordsOf(ayah);

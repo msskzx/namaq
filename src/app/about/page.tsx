@@ -11,7 +11,7 @@ export default function AboutPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-8" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <h1 className="text-3xl font-bold text-amber-400 text-center mb-4">
           {language === 'ar' ? 'عن نمَق' : 'About Namaq'}
         </h1>

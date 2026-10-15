@@ -6,10 +6,10 @@ import { num } from '@/lib/quran/arabicNumber';
 import { plainName } from '@/lib/quran/normalize';
 import type { Repetition } from '@/lib/quran/repetition';
 
-const CELL = 6;
+const CELL = 11;
 const N = 114;
 const SIZE = N * CELL;
-const BARS = 36;
+const BARS = 72;
 const TOP = BARS + 14;
 const TICKS = [1, 20, 40, 60, 80, 100, 114];
 
@@ -33,7 +33,7 @@ export function RepetitionMatrix({ data, totals, pick, onPick }: { data: Repetit
   const marked = (a: number, b: number) => pick !== null && (a === b ? pick.s === a && pick.t === null : (pick.s === a && pick.t === b) || (pick.s === b && pick.t === a));
   return (
     <div className="overflow-x-auto">
-      <svg viewBox={`-2 0 ${SIZE + 26} ${TOP + SIZE + 2}`} className="min-w-[640px] w-full max-w-3xl mx-auto" role="img" aria-label="مصفوفة السور: كل خلية عدد الكلمات المكررة بين سورتين">
+      <svg viewBox={`-2 0 ${SIZE + 26} ${TOP + SIZE + 2}`} className="min-w-[640px] w-full max-w-[min(85vh,800px)] mx-auto" role="img" aria-label="مصفوفة السور: كل خلية عدد الكلمات المكررة بين سورتين">
         {data.surahs.map(s => {
           const h = ((totals.get(s.number) ?? 0) / max) * BARS;
           return h > 0 ? (

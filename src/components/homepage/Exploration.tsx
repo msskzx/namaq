@@ -52,7 +52,7 @@ export default function Explore() {
   ];
 
   return (
-    <div className="container mt-12">
+    <div className="w-full mt-12">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {exploreCards.map((card) => (
           <ExplorationCard
