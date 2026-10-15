@@ -1,0 +1,29 @@
+[
+  {
+    "slug": "prophet-113-1",
+    "labelAr": "قل أعوذ برب الفلق",
+    "themeId": "prophet",
+    "ayahFrom": 1,
+    "ayahTo": 1,
+    "excerptAr": "بِسۡمِ ٱللَّهِ ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ قُلۡ أَعُوذُ بِرَبِّ ٱلۡفَلَقِ\n",
+    "alternativeOf": null
+  },
+  {
+    "slug": "creation-113-2",
+    "labelAr": "من شر ما خلق ومن شر غاسق إذا وقب",
+    "themeId": "creation",
+    "ayahFrom": 2,
+    "ayahTo": 3,
+    "excerptAr": "مِن شَرِّ مَا خَلَقَ\n وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ\n",
+    "alternativeOf": null
+  },
+  {
+    "slug": "human-113-3",
+    "labelAr": "ومن شر النفاثات في العقد ومن شر حاسد إذا حسد",
+    "themeId": "human",
+    "ayahFrom": 4,
+    "ayahTo": 5,
+    "excerptAr": "وَمِن شَرِّ ٱلنَّفَّـٰثَـٰتِ فِی ٱلۡعُقَدِ\n وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ\n",
+    "alternativeOf": null
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "slug": "prophet-108-1",
+    "labelAr": "إنا أعطيناك الكوثر فصل لربك وانحر",
+    "themeId": "prophet",
+    "ayahFrom": 1,
+    "ayahTo": 2,
+    "excerptAr": "بِسۡمِ ٱللَّهِ ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ إِنَّاۤ أَعۡطَیۡنَـٰكَ ٱلۡكَوۡثَرَ\n فَصَلِّ لِرَبِّكَ وَٱنۡحَرۡ\n",
+    "alternativeOf": null
+  },
+  {
+    "slug": "denial-108-1",
+    "labelAr": "إن شانئك هو الأبتر",
+    "themeId": "denial",
+    "ayahFrom": 3,
+    "ayahTo": 3,
+    "excerptAr": "إِنَّ شَانِئَكَ هُوَ ٱلۡأَبۡتَرُ\n",
+    "alternativeOf": null
+  }
+]
