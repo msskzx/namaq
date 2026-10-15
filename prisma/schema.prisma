@@ -780,3 +780,21 @@ model ModelUnitPerson {
   @@index([person])
   @@map("model_unit_people")
 }
+
+// docs/plans/quran-topics-engine.md
+model QuranTopic {
+  id            String   @id @default(cuid())
+  slug          String
+  labelAr       String
+  themeId       String?
+  surah         Int
+  ayahFrom      Int
+  ayahTo        Int
+  excerptAr     String
+  alternativeOf String?
+  createdAt     DateTime @default(now())
+
+  @@unique([surah, slug])
+  @@index([surah])
+  @@map("quran_topics")
+}

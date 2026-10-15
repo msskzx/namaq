@@ -19,6 +19,7 @@
     "db:studio": "prisma studio",
     "quran:iltifat": "tsx --env-file=.env scripts/quran/buildIltifat.ts",
     "quran:order": "tsx --env-file=.env scripts/quran/buildOrder.ts",
+    "quran:topics:sync": "tsx --env-file=.env scripts/quran/syncTopics.ts",
     "quran:oaths": "tsx --env-file=.env scripts/quran/buildOaths.ts",
     "quran:reader": "tsx --env-file=.env scripts/quran/buildReader.ts",
     "quran:musa": "tsx --env-file=.env scripts/quran/buildMusa.ts",
