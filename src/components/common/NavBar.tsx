@@ -72,7 +72,7 @@ export default function NavBar() {
     return (
       <>
         <nav className="bg-gray-50 dark:bg-black w-full border-b-2 border-amber-400 shadow-lg min-h-[72px] fixed top-0 left-0 right-0 z-50">
-          <div className="container mx-auto flex justify-between items-center py-4 px-4 min-h-[72px]">
+          <div className="w-full flex justify-between items-center py-4 px-4 min-h-[72px]">
             <span className="text-black dark:text-amber-400 text-2xl font-bold opacity-0">{translations[language]?.title || 'Namaq'}</span>
             <div className="hidden lg:flex space-x-4 items-center opacity-0">
               <span>Placeholder</span>
@@ -97,7 +97,7 @@ export default function NavBar() {
   return (
     <>
       <nav className="bg-gray-50 dark:bg-black w-full border-b-2 border-amber-400 shadow-lg fixed top-0 left-0 right-0 z-50 min-h-[72px]">
-        <div className="container mx-auto flex justify-between items-center py-4 px-4 min-h-[72px]">
+        <div className="w-full flex justify-between items-center py-4 px-4 min-h-[72px]">
           <Link
             href="/"
             className="text-amber-600 dark:text-amber-400 text-2xl font-bold hover:text-amber-300 transition-colors"

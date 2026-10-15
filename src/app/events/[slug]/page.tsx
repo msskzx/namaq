@@ -24,7 +24,7 @@ function EventPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-      <div className="container mx-auto px-4 py-8">
+      <div className="w-full px-4 py-8">
         {isLoading ? (
           <LoadingSpinner fill />
         ) : (

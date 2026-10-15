@@ -32,18 +32,23 @@ function Tile({ value, label }: { value: number; label: string }) {
 }
 
 function Ticks({ at, count, selected, onSelect, label }: { at: Occ[]; count: number; selected: number; onSelect: (k: number) => void; label: string }) {
-  const step = Math.min(14, Math.max(2, 640 / count));
+  const step = Math.min(28, Math.max(4, 960 / count));
+  const barH = 48;
+  const h = barH + 16;
   const xOf = (ayah: number) => (count - ayah) * step;
   return (
     <div className="overflow-x-auto">
-      <svg viewBox={`0 0 ${count * step} 22`} className="w-full" style={{ minWidth: Math.min(count * step, 640) }} role="group" aria-label={label}>
-        <line x1={0} x2={count * step} y1={21} y2={21} className="stroke-gray-300 dark:stroke-gray-700" />
+      <svg viewBox={`0 0 ${count * step} ${h}`} className="w-full" style={{ minWidth: Math.min(count * step, 960) }} role="group" aria-label={label}>
+        <line x1={0} x2={count * step} y1={barH} y2={barH} className="stroke-gray-300 dark:stroke-gray-700" />
         {at.map((o, k) => (
-          <rect key={k} x={xOf(o.ayah)} y={2} width={Math.max(step * 0.7, 2)} height={18} role="button" tabIndex={0} aria-label={`الآية ${num(o.ayah)}`} aria-pressed={k === selected}
-            className={`cursor-pointer outline-none focus-visible:stroke-2 focus-visible:stroke-gray-900 dark:focus-visible:stroke-white ${k === selected ? 'fill-amber-600 dark:fill-amber-300' : 'fill-amber-400 dark:fill-amber-600'}`}
-            onClick={() => onSelect(k)} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect(k); } }}>
-            <title>{`الآية ${num(o.ayah)}`}</title>
-          </rect>
+          <g key={k}>
+            <rect x={xOf(o.ayah)} y={2} width={Math.max(step * 0.7, 4)} height={barH - 2} role="button" tabIndex={0} aria-label={`الآية ${num(o.ayah)}`} aria-pressed={k === selected}
+              className={`cursor-pointer outline-none focus-visible:stroke-2 focus-visible:stroke-gray-900 dark:focus-visible:stroke-white ${k === selected ? 'fill-amber-600 dark:fill-amber-300' : 'fill-amber-400 dark:fill-amber-600'}`}
+              onClick={() => onSelect(k)} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect(k); } }}>
+              <title>{`الآية ${num(o.ayah)}`}</title>
+            </rect>
+            <text x={xOf(o.ayah) + Math.max(step * 0.7, 4) / 2} y={barH + 12} textAnchor="middle" fontSize={10} className="fill-gray-600 dark:fill-gray-400">{num(o.ayah)}</text>
+          </g>
         ))}
       </svg>
     </div>
@@ -155,7 +160,6 @@ function PairView({ data, s, t }: { data: Repetition; s: number; t: number }) {
             <PassageSide key={`a${at}`} title={plainName(first.name)} side={p.a} marks={p.marksA} ayat={data.ayat} count={first.ayat} surah={surahOf(s)} />
             <PassageSide key={`b${at}`} title={plainName(second.name)} side={p.b} marks={p.marksB} ayat={data.ayat} count={second.ayat} surah={surahOf(t)} />
           </div>
-          <p className={NOTE}>الكلمات المسطَّرة هي ما اختلف بين النصين.</p>
         </>
       )}
     </section>
@@ -164,17 +168,18 @@ function PairView({ data, s, t }: { data: Repetition; s: number; t: number }) {
 
 function Ranked({ data, totals, pick, onPick }: { data: Repetition; totals: Map<number, number>; pick: Pick | null; onPick: (p: Pick) => void }) {
   const [mode, setMode] = useState<'surahs' | 'pairs'>('surahs');
+  const [sort, setSort] = useState<'number' | 'count'>('count');
   const [all, setAll] = useState(false);
   const rows = useMemo(() => {
     if (mode === 'pairs') {
       return data.cells.filter(c => c.a !== c.b).sort((p, q) => q.words - p.words || p.a - q.a || p.b - q.b)
-        .map(c => ({ key: `${c.a}:${c.b}`, label: `${plainName(data.surahs[c.a - 1].name)} و${plainName(data.surahs[c.b - 1].name)}`, words: c.words, pick: { s: c.a, t: c.b } }));
+        .map(c => ({ key: `${c.a}:${c.b}`, label: `${plainName(data.surahs[c.a - 1].name)} و${plainName(data.surahs[c.b - 1].name)}`, words: c.words, number: c.a, pick: { s: c.a, t: c.b } }));
     }
     return data.surahs.filter(s => (totals.get(s.number) ?? 0) > 0)
-      .sort((p, q) => (totals.get(q.number) ?? 0) - (totals.get(p.number) ?? 0) || p.number - q.number)
-      .map(s => ({ key: String(s.number), label: plainName(s.name), words: totals.get(s.number) ?? 0, pick: { s: s.number, t: null } }));
+      .map(s => ({ key: String(s.number), label: plainName(s.name), words: totals.get(s.number) ?? 0, number: s.number, pick: { s: s.number, t: null } }));
   }, [data, totals, mode]);
-  const shown = all ? rows : rows.slice(0, VISIBLE);
+  const sorted = useMemo(() => [...rows].sort((p, q) => sort === 'count' ? q.words - p.words || p.number - q.number : p.number - q.number), [rows, sort]);
+  const shown = all ? sorted : sorted.slice(0, VISIBLE);
   return (
     <div className="flex flex-col gap-2">
       <div className="flex gap-2">
@@ -185,6 +190,14 @@ function Ranked({ data, totals, pick, onPick }: { data: Repetition; totals: Map<
         <Button size="sm" active={mode === 'pairs'} onClick={() => { setMode('pairs'); setAll(false); }}>
           <FontAwesomeIcon icon={faListOl} />
           الأزواج
+        </Button>
+      </div>
+      <div className="flex gap-2">
+        <Button size="sm" variant="outline" active={sort === 'count'} onClick={() => setSort('count')}>
+          ترتيب بالعدد
+        </Button>
+        <Button size="sm" variant="outline" active={sort === 'number'} onClick={() => setSort('number')}>
+          ترتيب بالرقم
         </Button>
       </div>
       <ol className="flex flex-col">
@@ -234,7 +247,7 @@ export default function RepetitionView({ data }: { data: Repetition }) {
   const crossSurahs = new Set(data.cells.filter(c => c.a !== c.b).flatMap(c => [c.a, c.b]));
 
   return (
-    <div dir="rtl" className="max-w-5xl mx-auto p-4 flex flex-col gap-6 text-gray-900 dark:text-gray-200">
+    <div dir="rtl" className="w-full p-4 flex flex-col gap-6 text-gray-900 dark:text-gray-200">
       <header>
         <h1 className="text-3xl mb-2">القرآن: تكرار العبارات</h1>
         <p className={NOTE}>

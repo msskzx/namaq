@@ -63,7 +63,7 @@ export default function QuestionBankReview() {
   };
 
   return (
-    <main className="container mx-auto px-4 py-8" dir={ar ? 'rtl' : 'ltr'}>
+    <main className="w-full px-4 py-8" dir={ar ? 'rtl' : 'ltr'}>
       <h1 className="mb-2 text-2xl font-bold text-gray-900 dark:text-gray-100">{ar ? 'بنك أسئلة الاختبار' : 'Quiz question bank'}</h1>
       <p className="mb-6 text-sm text-gray-600 dark:text-gray-400">{ar ? 'عرض تحريري عام للقراءة فقط.' : 'Public, read-only editorial review.'}</p>
       <div className="mb-6 grid gap-3 md:grid-cols-5">

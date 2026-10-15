@@ -13,7 +13,7 @@ export default function NotFound() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-      <div className="container mx-auto px-4 py-16">
+      <div className="w-full px-4 py-16">
         <ErrorMessage title={t.notFound.title} description={t.notFound.description} />
         <div className="flex justify-center mt-6">
           <Button href="/" variant="primary">

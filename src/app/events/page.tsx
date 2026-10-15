@@ -54,7 +54,7 @@ function EventsPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">
-      <div className="container mx-auto px-4 py-8" dir={ar ? "rtl" : "ltr"}>
+      <div className="w-full px-4 py-8" dir={ar ? "rtl" : "ltr"}>
         <div className="flex flex-col gap-3">
           <label className="relative block">
             <span className="sr-only">{ar ? "ابحث في الأحداث" : "Search events"}</span>

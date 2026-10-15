@@ -56,7 +56,7 @@ function CookieConsent() {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4 z-50 shadow-lg">
-      <div className="container mx-auto max-w-6xl">
+      <div className="mx-auto max-w-6xl">
         {showSettings ? (
           <div className="space-y-4">
             <div className="flex justify-between items-center">

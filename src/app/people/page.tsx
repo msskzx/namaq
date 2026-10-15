@@ -154,7 +154,7 @@ const PeoplePage = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8" dir={isArabic ? 'rtl' : 'ltr'} style={{ textAlign: isArabic ? 'right' : 'left' }}>
+    <div className="w-full px-4 py-8" dir={isArabic ? 'rtl' : 'ltr'} style={{ textAlign: isArabic ? 'right' : 'left' }}>
       <PeopleSearch
         titles={titles || []}
         selectedTitle={titleFilter}

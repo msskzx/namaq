@@ -37,7 +37,7 @@ function PersonDetailPage() {
   if (error) {
     return (
       <div className="min-h-screen bg-white dark:bg-black" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-        <div className="container mx-auto px-4 py-8">
+        <div className="w-full px-4 py-8">
           <ErrorMessage title={t.personLoadError} />
         </div>
       </div>
@@ -47,7 +47,7 @@ function PersonDetailPage() {
   if (isLoading || !person) {
     return (
       <div className="min-h-screen bg-white dark:bg-black" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-        <div className="container mx-auto px-4 py-8">
+        <div className="w-full px-4 py-8">
           <LoadingSpinner fill />
         </div>
       </div>
@@ -56,7 +56,7 @@ function PersonDetailPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-      <div className="container mx-auto px-4 py-8">
+      <div className="w-full px-4 py-8">
         <div className="flex flex-col items-center justify-center mb-4 gap-4">
           {person.picture && (
             <Image src={person.picture} alt={person.name} width={64} height={64} className="w-16 h-16 rounded-full object-cover border" />
