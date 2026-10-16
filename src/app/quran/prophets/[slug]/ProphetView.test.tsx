@@ -57,7 +57,22 @@ describe('ProphetView', () => {
     fireEvent.click(chip);
     expect(into).toHaveBeenCalledOnce();
     expect(into.mock.calls[0][0]).toMatchObject({ inline: 'center', block: 'start' });
-    expect(chip.getAttribute('aria-current')).toBe('true');
+    expect(chip.dataset.active).toBe('true');
+  });
+
+  it('drops the mark when the track is scrolled by the buttons', () => {
+    const { container } = view();
+    (container.querySelector('[data-event="3"]') as HTMLElement).scrollIntoView = vi.fn();
+    (container.querySelector('[data-timeline-track]') as HTMLElement).scrollBy = vi.fn();
+    const chip = screen.getByRole('button', { name: events[2].title });
+    fireEvent.click(chip);
+    fireEvent.click(screen.getByRole('button', { name: /التالي/ }));
+    expect(chip.dataset.active).toBeUndefined();
+  });
+
+  it('heads the timeline apart from the last phase', () => {
+    view();
+    expect(screen.getByRole('heading', { level: 2, name: 'أحداث قصة موسى' })).toBeTruthy();
   });
 
   it('scrolls the track with the buttons', () => {

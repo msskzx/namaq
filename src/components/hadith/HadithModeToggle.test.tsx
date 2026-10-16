@@ -42,6 +42,13 @@ describe('HadithModeToggle', () => {
     expect(onChange).toHaveBeenCalledWith('bubbles');
   });
 
+  it('switches by clicking a mode name', () => {
+    const onChange = vi.fn();
+    render(<HadithModeToggle mode="bubbles" onChange={onChange} />);
+    fireEvent.click(screen.getByText('النص كاملاً'));
+    expect(onChange).toHaveBeenCalledWith('text');
+  });
+
   it('names both modes in English', () => {
     (languageMock as { language: 'ar' | 'en' }).language = 'en';
     render(<HadithModeToggle mode="bubbles" onChange={() => {}} />);

@@ -25,7 +25,10 @@ const ref = ({ surah, name, range: [lo, hi] }: SegmentView) => `${num(surah)} ${
 export default function ProphetView({ name, phases, events }: { name: string; phases: readonly string[]; events: EventView[] }) {
   const track = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState<number>();
-  const scroll = (dir: 1 | -1) => track.current?.scrollBy({ left: dir * STEP, behavior: 'smooth' });
+  const scroll = (dir: 1 | -1) => {
+    setActive(undefined);
+    track.current?.scrollBy({ left: dir * STEP, behavior: 'smooth' });
+  };
   const jump = (n: number) => {
     setActive(n);
     track.current?.querySelector(`[data-event="${n}"]`)?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'start' });
@@ -54,9 +57,9 @@ export default function ProphetView({ name, phases, events }: { name: string; ph
                     key={e.n}
                     type="button"
                     aria-label={e.title}
-                    aria-current={active === e.n || undefined}
+                    data-active={active === e.n || undefined}
                     onClick={() => jump(e.n)}
-                    className="flex items-center gap-1.5 rounded-full border border-gray-200 bg-gray-50 py-0.5 pe-3 ps-0.5 text-xs transition hover:border-gray-400 hover:bg-gray-100 aria-[current=true]:border-amber-500 aria-[current=true]:bg-amber-50 dark:border-white/15 dark:bg-black dark:hover:bg-white/10 dark:aria-[current=true]:bg-amber-900/40"
+                    className="flex items-center gap-1.5 rounded-full border border-gray-200 bg-gray-50 py-0.5 pe-3 ps-0.5 text-xs transition hover:border-gray-400 hover:bg-gray-100 data-active:border-amber-500 data-active:bg-amber-50 dark:border-white/15 dark:bg-black dark:hover:bg-white/10 dark:data-active:bg-amber-900/40"
                   >
                     <span className={`flex h-5 min-w-5 items-center justify-center rounded-full text-[11px] text-white ${style(ph).dot}`}>{num(e.n)}</span>
                     {e.title}
@@ -67,7 +70,8 @@ export default function ProphetView({ name, phases, events }: { name: string; ph
           );
         })}
       </nav>
-      <section className="flex flex-col gap-3">
+      <section className="flex flex-col gap-3" aria-labelledby="timeline-heading">
+        <h2 id="timeline-heading" className="sr-only">{`أحداث قصة ${name}`}</h2>
         <div className="flex items-center justify-between gap-2">
           <Button size="sm" onClick={() => scroll(1)}>
             <FontAwesomeIcon icon={faArrowRight} aria-hidden />

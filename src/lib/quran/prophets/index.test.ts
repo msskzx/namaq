@@ -12,7 +12,9 @@ describe('PROPHETS', () => {
     expect(Object.keys(AYAT).sort()).toEqual([...slugs].sort());
   });
 
-  it.each(PROPHETS)('$slug has stored ayat for every event', ({ slug }) => {
+  it.each(PROPHETS)('$slug stores the ayat of its events and no others', ({ slug }) => {
+    const keys = STORIES[slug].events.flatMap(e => e.segments.flatMap(({ surah, range: [lo, hi] }) => Array.from({ length: hi - lo + 1 }, (_, k) => `${surah}:${lo + k}`)));
+    expect(Object.keys(AYAT[slug].ayat).sort()).toEqual([...new Set(keys)].sort());
     expect(buildStory(STORIES[slug].events, AYAT[slug])).toHaveLength(STORIES[slug].events.length);
   });
 

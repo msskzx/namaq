@@ -17,10 +17,10 @@ export default function HadithModeToggle({
 }) {
   const ar = useLanguage().language === 'ar';
   const bubbles = mode === 'bubbles';
-  const label = (on: boolean) => (on ? 'font-semibold text-amber-600 dark:text-amber-400' : 'text-gray-500 dark:text-gray-400');
+  const label = (on: boolean) => 'cursor-pointer ' + (on ? 'font-semibold text-amber-600 dark:text-amber-400' : 'text-gray-500 dark:text-gray-400');
   return (
     <div className="mb-4 flex items-center gap-2 text-sm">
-      <span className={label(!bubbles)}>{ar ? 'النص كاملاً' : 'Full text'}</span>
+      <button type="button" tabIndex={-1} aria-hidden className={label(!bubbles)} onClick={() => onChange('text')}>{ar ? 'النص كاملاً' : 'Full text'}</button>
       <Toggle
         label={ar ? 'الإسناد والفقاعات' : 'Isnad and bubbles'}
         checked={bubbles}
@@ -28,7 +28,7 @@ export default function HadithModeToggle({
         offIcon={<FontAwesomeIcon icon={faScroll} className="size-3" />}
         onIcon={<FontAwesomeIcon icon={faComments} className="size-3" />}
       />
-      <span className={label(bubbles)}>{ar ? 'الإسناد والفقاعات' : 'Isnad and bubbles'}</span>
+      <button type="button" tabIndex={-1} aria-hidden className={label(bubbles)} onClick={() => onChange('bubbles')}>{ar ? 'الإسناد والفقاعات' : 'Isnad and bubbles'}</button>
     </div>
   );
 }
