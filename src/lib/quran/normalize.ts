@@ -2,13 +2,13 @@
 const MARKS = /[ؐ-ًؚ-ٰٟۖ-ۭـ⁠࣓-ࣿ]/g;
 const BASMALA = 'بسم الله الرحمن الرحيم';
 
-export const bareWord = (token: string) => token.replace(MARKS, '').replace(/ٱ/g, 'ا').replace(/ی/g, 'ي').replace(/ک/g, 'ك');
-
 export function normalizeWord(token: string): string {
-  return bareWord(token)
-    .replace(/[أإآٲٳ]/g, 'ا')
-    .replace(/ى/g, 'ي')
-    .replace(/ة/g, 'ه');
+  return token
+    .replace(MARKS, '')
+    .replace(/[أإآٱٲٳ]/g, 'ا')
+    .replace(/[ىی]/g, 'ي')
+    .replace(/ة/g, 'ه')
+    .replace(/ک/g, 'ك');
 }
 
 export type AyahWords = { display: string[]; norm: string[] };

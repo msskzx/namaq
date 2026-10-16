@@ -24,6 +24,7 @@
     "quran:reader": "tsx --env-file=.env scripts/quran/buildReader.ts",
     "quran:musa": "tsx --env-file=.env scripts/quran/buildMusa.ts",
     "quran:openings": "tsx --env-file=.env scripts/quran/buildOpenings.ts",
+    "quran:lemmas": "tsx scripts/quran/buildLemmas.ts",
     "people:sync":"tsx scripts/people/syncCanonicalPeople.ts",
     "people:validate": "tsx scripts/people/syncCanonicalPeople.ts --strict",
     "people:sync-companions": "tsx scripts/people/syncCompanionRelations.ts",

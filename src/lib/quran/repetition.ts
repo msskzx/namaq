@@ -1,5 +1,5 @@
 // docs/plans/quran-repetition-merge.md
-import { ayahWords, bareWord } from './normalize';
+import { ayahWords } from './normalize';
 import { findPassages, type Passage } from './passages';
 import { groupPassages, type PassageGroup } from './passageGroups';
 import { findPhrases, type Occ } from './shifts';
@@ -12,18 +12,10 @@ export type Repetition = {
   across: PassageGroup[];
   passages: Passage[];
   ayat: Record<string, string>;
-  words: [word: string, count: number][];
 };
 
-const surahWords = (s: RepetitionInput[number]) => s.ayat.map((text, k) => ayahWords(text, k === 0 && s.number !== 1 && s.number !== 9));
-
-export function countWords(surahs: RepetitionInput): Repetition['words'] {
-  const counts = new Map<string, number>();
-  for (const word of surahs.flatMap(s => surahWords(s).flatMap(a => a.display.map(bareWord)))) counts.set(word, (counts.get(word) ?? 0) + 1);
-  return [...counts].sort((p, q) => q[1] - p[1] || p[0].localeCompare(q[0], 'ar'));
-}
-
 export function buildRepetition(surahs: RepetitionInput): Repetition {
+  const words = (s: RepetitionInput[number]) => s.ayat.map((text, k) => ayahWords(text, k === 0 && s.number !== 1 && s.number !== 9));
   const cells = new Map<string, { a: number; b: number; words: number; phrases: number }>();
   const bump = (a: number, b: number, n: number) => {
     const cell = cells.get(`${a}:${b}`) ?? { a, b, words: 0, phrases: 0 };
@@ -37,7 +29,7 @@ export function buildRepetition(surahs: RepetitionInput): Repetition {
   };
 
   const within = surahs.flatMap(s =>
-    findPhrases(surahWords(s)).map(p => {
+    findPhrases(words(s)).map(p => {
       bump(s.number, s.number, p.len * (p.at.length - 1));
       p.at.forEach(o => show(s, o.ayah));
       return { surah: s.number, ...p };
@@ -62,6 +54,5 @@ export function buildRepetition(surahs: RepetitionInput): Repetition {
     across: groupPassages(passages),
     passages,
     ayat: shown,
-    words: countWords(surahs),
   };
 }

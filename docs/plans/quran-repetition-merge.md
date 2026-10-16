@@ -214,35 +214,50 @@ the response is under 600 KB.
 
 ## Word counts
 
-Added after the merge. The response also carries `words`: every word of the
-text with the number of times it occurs, sorted by count and then by the word.
-`countWords` in `src/lib/quran/repetition.ts` builds it, and `/quran` shows it
-as a section below the detail.
+Added after the merge. `/quran` ends with a section that counts how often each
+word occurs, grouped by lemma: «والله», «بالله» and «لله» all count under
+«ٱللَّه», which comes to 2,699. The lemmas come from the Quranic Arabic Corpus
+morphology, version 0.4 (corpus.quran.com, University of Leeds), built on the
+Tanzil Uthmani text. The analysis is the corpus's, not ours, and no scholar
+has reviewed it.
 
-A word is a token between spaces, as `ayahWords` splits the ayah, with the
-basmala counted once, in Al-Fatiha. `bareWord` in `src/lib/quran/normalize.ts`
-strips the vowels and Quranic marks, writes alef wasla as a plain alef, and
-folds the Tanzil encodings of ya and kaf (ی, ک) into the usual letters. It
-keeps everything else as written:
+### Data
 
-- Attached letters and pronouns stay, so «والله», «لله» and «الله» are three
-  words. Splitting them needs a morphological analysis the app does not hold.
-- Hamza seats, alef maqsura and ta marbuta stay. `normalizeWord`, which the
-  phrase finders use, folds them, but for counting that would merge «إن» with
-  «أن» and «رحمة» with «رحمه».
+`data/quran/quranic-corpus-morphology-0.4.txt` is the corpus file, committed
+verbatim: its licence (GNU GPL with its own terms of use) allows verbatim
+copies only, and asks any site that uses it to name the corpus and link to
+corpus.quran.com. The section does both, and also links to Tanzil, whose
+notice is in the same file.
 
-The search on the page uses `normalizeWord`, so a reader finds a word with or
-without its vowels and hamza. The grouping is ours, and the section says so.
+`npm run quran:lemmas` runs `scripts/quran/buildLemmas.ts`, which reads the
+file with no database call and writes `src/app/quran/lemmas.json`: the file's
+copyright notice, every lemma as `[lemma, count, root]` sorted by count, and
+the number of words with no lemma. `countLemmas` in `src/lib/quran/lemmas.ts`
+does the counting and `fromBuckwalter` writes the corpus's extended Buckwalter
+transliteration in Arabic, using the corpus's own table. `npm test` recounts the
+file and fails if the JSON differs.
 
-Above the list, a bar chart compares chosen words. It starts with the ten most
-frequent, and the reader can empty it, remove a bar, or add a word through a
-search that suggests matching words by count. Bars keep the list's order, and
-the list is the chart's table view.
+### Counting rule
 
-Measured against the preview database: 77,442 words in 14,871 distinct forms,
-8,729 of which occur once (`normalizeWord` would give 14,655). The `words`
-list is about 260 KB of JSON before compression, which brings the whole
-response from about 570 KB to about 830 KB.
+- Every stem segment that carries a lemma counts once, as the corpus's own
+  dictionary counts, so «مما» counts once for «مِن» and once for «مَا».
+- The corpus gives no lemma to 3,307 words: separate pronouns, a preposition
+  joined to a pronoun such as «لهم», and the disjoined letters such as «الم».
+  The section states the number.
+- A lemma the corpus marks as a homograph with a trailing digit (`maE2`) shows
+  without it, beside its root, so the two entries stay apart.
+
+Measured: 4,832 lemmas over 74,608 counted segments, from 77,429 corpus words.
+The JSON is about 150 KB, and the page passes it from the server, so the
+repetition response stays as it was.
+
+### On the page
+
+The table lists lemmas by count, 60 to a page, with the root beside each, and a
+search that matches with or without vowels and hamza (`normalizeWord`). Above
+it, a bar chart compares chosen lemmas: it starts with the ten most frequent,
+and the reader can empty it, remove a bar, or add a lemma through a search that
+suggests matches by count. The table is the chart's table view.
 
 ## Next steps
 

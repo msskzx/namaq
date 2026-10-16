@@ -4,12 +4,11 @@
 import React, { useMemo, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAnglesDown, faArrowLeft, faArrowRight, faListOl, faMagnifyingGlass, faPlus, faRotateLeft, faShuffle, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faAnglesDown, faArrowLeft, faArrowRight, faListOl, faShuffle } from '@fortawesome/free-solid-svg-icons';
 import Badge from '@/components/common/Badge';
 import Button from '@/components/common/Button';
-import Pagination from '@/components/common/Pagination';
 import { num } from '@/lib/quran/arabicNumber';
-import { normalizeWord, plainName } from '@/lib/quran/normalize';
+import { plainName } from '@/lib/quran/normalize';
 import { MIN_WORDS } from '@/lib/quran/passages';
 import type { Repetition } from '@/lib/quran/repetition';
 import { ARC_MIN, REFRAIN_MANY, type Occ } from '@/lib/quran/shifts';
@@ -18,12 +17,9 @@ import { PassageSide } from './PassageSide';
 import { Legend, RepetitionMatrix, type Pick } from './RepetitionMatrix';
 import type { Ayah } from '@/types/quran';
 
-const PANEL = 'bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4';
-const NOTE = 'text-sm text-gray-600 dark:text-gray-400';
+export const PANEL = 'bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4';
+export const NOTE = 'text-sm text-gray-600 dark:text-gray-400';
 export const VISIBLE = 20;
-export const WORDS_PAGE = 60;
-export const CHART_TOP = 10;
-const SUGGESTIONS = 8;
 const run = (at: Occ, len: number) => Object.fromEntries(Array.from({ length: len }, (_, k) => [at.word + k, 0]));
 
 function Tile({ value, label }: { value: number; label: string }) {
@@ -218,114 +214,6 @@ function Ranked({ data, totals, pick, onPick }: { data: Repetition; totals: Map<
   );
 }
 
-type RankedWord = { word: string; count: number; rank: number; key: string };
-
-const SEARCH = 'w-full rounded border border-amber-400 bg-transparent py-2 ps-9 pe-3 text-gray-900 dark:text-gray-100';
-
-function WordChart({ ranked }: { ranked: RankedWord[] }) {
-  const top = () => ranked.slice(0, CHART_TOP).map(r => r.word);
-  const [chosen, setChosen] = useState<string[]>(top);
-  const [query, setQuery] = useState('');
-  const bars = ranked.filter(r => chosen.includes(r.word));
-  const max = Math.max(1, ...bars.map(b => b.count));
-  const needle = normalizeWord(query.trim());
-  const suggestions = needle ? ranked.filter(r => r.key.includes(needle) && !chosen.includes(r.word)).slice(0, SUGGESTIONS) : [];
-  const add = (word: string) => { setChosen([...chosen, word]); setQuery(''); };
-
-  return (
-    <div className="mb-6">
-      <h3 className="text-xl mb-2">رسم الكلمات المختارة</h3>
-      <div className="flex flex-wrap gap-2 mb-3">
-        <Button size="sm" onClick={() => setChosen([])} disabled={chosen.length === 0}>
-          <FontAwesomeIcon icon={faXmark} />
-          إفراغ الرسم
-        </Button>
-        <Button size="sm" onClick={() => setChosen(top())}>
-          <FontAwesomeIcon icon={faRotateLeft} />
-          {`أكثر ${num(CHART_TOP)} كلمات ورودًا`}
-        </Button>
-      </div>
-      <label className="relative block">
-        <span className="sr-only">أضف كلمة إلى الرسم</span>
-        <FontAwesomeIcon icon={faPlus} className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-        <input type="search" value={query} onChange={e => setQuery(e.target.value)} placeholder="أضف كلمة إلى الرسم"
-          onKeyDown={e => { if (e.key === 'Enter' && suggestions[0]) add(suggestions[0].word); }} className={SEARCH} />
-      </label>
-      {needle && (
-        <ul aria-label="كلمات مقترحة" className="mt-1 flex flex-col rounded border border-gray-200 dark:border-white/10">
-          {suggestions.length === 0 ? <li className={`${NOTE} px-2 py-1`}>لا كلمة تطابق البحث.</li> : suggestions.map(r => (
-            <li key={r.word}>
-              <button type="button" onClick={() => add(r.word)} className="w-full flex items-baseline gap-2 px-2 py-1 text-start hover:bg-amber-100 dark:hover:bg-white/10">
-                <span className="flex-1 text-lg font-arabic">{r.word}</span>
-                <span className="text-amber-700 dark:text-amber-300">{num(r.count)}</span>
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-      {bars.length === 0 ? <p className={`${NOTE} mt-3`}>الرسم فارغ. ابحث عن كلمة لإضافتها.</p> : (
-        <ol aria-label="عدد مرات ورود الكلمات المختارة" className="mt-3 flex flex-col gap-0.5">
-          {bars.map(b => (
-            <li key={b.word} className="grid grid-cols-[6rem_1fr_3.5rem_auto] sm:grid-cols-[8rem_1fr_4rem_auto] items-center gap-2" title={`${b.word}: ${num(b.count)}`}>
-              <span className="text-lg font-arabic truncate">{b.word}</span>
-              <span className="h-5 rounded-e bg-amber-400 dark:bg-amber-500" style={{ width: `${(b.count / max) * 100}%` }} />
-              <span className="text-sm text-gray-700 dark:text-gray-300">{num(b.count)}</span>
-              <Button size="icon" variant="outline" aria-label={`أزل «${b.word}» من الرسم`} onClick={() => setChosen(chosen.filter(w => w !== b.word))}>
-                <FontAwesomeIcon icon={faXmark} />
-              </Button>
-            </li>
-          ))}
-        </ol>
-      )}
-    </div>
-  );
-}
-
-function WordCounts({ words }: { words: Repetition['words'] }) {
-  const [query, setQuery] = useState('');
-  const [page, setPage] = useState(1);
-  const ranked = useMemo<RankedWord[]>(() => words.map(([word, count], i) => ({ word, count, rank: i + 1, key: normalizeWord(word) })), [words]);
-  const total = useMemo(() => words.reduce((n, [, count]) => n + count, 0), [words]);
-  const needle = normalizeWord(query.trim());
-  const found = needle ? ranked.filter(r => r.key.includes(needle)) : ranked;
-  const pages = Math.max(1, Math.ceil(found.length / WORDS_PAGE));
-  const from = (page - 1) * WORDS_PAGE;
-  const shown = found.slice(from, from + WORDS_PAGE);
-
-  return (
-    <section className={PANEL}>
-      <h2 className="text-2xl mb-1">عدد مرات ورود كل كلمة</h2>
-      <p className={`${NOTE} mb-2`}>
-        الكلمة هنا ما بين مسافتين في نص المصحف بعد حذف الحركات وعلامات الوقف، فتبقى حروفها كما رُسمت وما اتصل بها من حروف وضمائر: «والله» غير «الله»، و«إن» غير «أن». هذا التجميع من صنعنا وليس تقسيمًا لأهل العلم، والبسملة تُعدّ في الفاتحة وحدها.
-      </p>
-      <div className="flex flex-wrap gap-2 mb-3">
-        <Badge size="sm" color="gray" text={`${num(total)} كلمة في المصحف`} />
-        <Badge size="sm" color="gray" text={`${num(words.length)} كلمة مختلفة`} />
-      </div>
-      <WordChart ranked={ranked} />
-      <h3 className="text-xl mb-2">جدول الكلمات</h3>
-      <label className="relative block mb-3">
-        <span className="sr-only">ابحث عن كلمة</span>
-        <FontAwesomeIcon icon={faMagnifyingGlass} className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-        <input type="search" value={query} onChange={e => { setQuery(e.target.value); setPage(1); }} placeholder="ابحث عن كلمة، بالتشكيل أو دونه"
-          className={SEARCH} />
-      </label>
-      {found.length === 0 ? <p className={NOTE}>لا كلمة تطابق البحث.</p> : (
-        <ol aria-label="جدول الكلمات" className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4">
-          {shown.map(r => (
-            <li key={r.word} className="flex items-baseline gap-2 px-2 py-1 border-b border-gray-200 dark:border-white/10">
-              <span className={`${NOTE} w-10 shrink-0`}>{num(r.rank)}</span>
-              <span className="flex-1 text-lg font-arabic">{r.word}</span>
-              <span className="text-amber-700 dark:text-amber-300">{num(r.count)}</span>
-            </li>
-          ))}
-        </ol>
-      )}
-      <Pagination page={page} pageCount={pages} onChange={setPage} summary={`${num(from + 1)}–${num(from + shown.length)} من ${num(found.length)}`} />
-    </section>
-  );
-}
-
 export default function RepetitionView({ data }: { data: Repetition }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -390,8 +278,6 @@ export default function RepetitionView({ data }: { data: Repetition }) {
         </>
       )}
       {pick && pick.t !== null && <PairView key={`${pick.s}:${pick.t}`} data={data} s={pick.s} t={pick.t} />}
-
-      <WordCounts words={data.words} />
     </div>
   );
 }
