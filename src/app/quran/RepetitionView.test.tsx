@@ -2,7 +2,7 @@
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import RepetitionView, { VISIBLE } from './RepetitionView';
+import RepetitionView, { VISIBLE, WORDS_PAGE } from './RepetitionView';
 import RepetitionLoader from './RepetitionLoader';
 import { levelOf } from './RepetitionMatrix';
 import { buildRepetition, type Repetition, type RepetitionInput } from '@/lib/quran/repetition';
@@ -54,6 +54,7 @@ const many: Repetition = {
   across: [],
   passages: [],
   ayat: Object.fromEntries(Array.from({ length: 2 * (VISIBLE + 5) }, (_, i) => [`1:${i + 1}`, 'أ ب ت ث ج'])),
+  words: [],
 };
 
 const OVERVIEW = 'اختر سورة أو خلية لعرض المواضع.';
@@ -129,14 +130,14 @@ describe('RepetitionView', () => {
 
   it('selects a surah from the ranked list', () => {
     render(<RepetitionView data={data} />);
-    fireEvent.click(within(screen.getByRole('list')).getAllByRole('button')[0]);
+    fireEvent.click(within(screen.getAllByRole('list')[0]).getAllByRole('button')[0]);
     expect(nav.getUrl()).toMatch(/^\/quran\?s=\d+$/);
   });
 
   it('switches the ranked list to pairs', () => {
     render(<RepetitionView data={data} />);
     fireEvent.click(screen.getByRole('button', { name: 'الأزواج' }));
-    const rows = within(screen.getByRole('list')).getAllByRole('button');
+    const rows = within(screen.getAllByRole('list')[0]).getAllByRole('button');
     expect(rows).toHaveLength(1);
     fireEvent.click(rows[0]);
     expect(nav.getUrl()).toBe('/quran?s=1&t=2');
@@ -228,6 +229,39 @@ describe('RepetitionLoader', () => {
     vi.stubGlobal('fetch', vi.fn(async () => ({ ok: false, json: async () => ({}) })));
     render(<RepetitionLoader />);
     await waitFor(() => expect(screen.getByRole('alert').textContent).toBe('تعذر تحميل البيانات.'));
+  });
+});
+
+describe('WordCounts', () => {
+  const words: Repetition['words'] = [['الله', 9], ['والله', 4], ['رحمة', 3], ...Array.from({ length: WORDS_PAGE }, (_, i) => [`م${i}`, 1] as [string, number])];
+  const section = () => screen.getByRole('heading', { name: 'عدد مرات ورود كل كلمة' }).closest('section') as HTMLElement;
+  const rows = () => within(section()).getAllByRole('listitem').map(li => li.textContent);
+
+  it('lists words by count with their rank and says the grouping is ours', () => {
+    render(<RepetitionView data={{ ...many, words }} />);
+    expect(rows()[0]).toBe('١الله٩');
+    expect(rows()).toHaveLength(WORDS_PAGE);
+    expect(within(section()).getByText(/هذا التجميع من صنعنا/)).toBeTruthy();
+    expect(within(section()).getByText('٧٦ كلمة في المصحف')).toBeTruthy();
+    expect(within(section()).getByText('٦٣ كلمة مختلفة')).toBeTruthy();
+  });
+
+  it('pages through the rest', () => {
+    render(<RepetitionView data={{ ...many, words }} />);
+    fireEvent.click(within(section()).getByRole('button', { name: /التالي/ }));
+    expect(rows()).toHaveLength(3);
+    expect(rows()[0]?.startsWith('٦١')).toBe(true);
+  });
+
+  it('searches with or without vowels and hamza, keeping the full rank, and resets the page', () => {
+    render(<RepetitionView data={{ ...many, words }} />);
+    fireEvent.click(within(section()).getByRole('button', { name: /التالي/ }));
+    fireEvent.change(within(section()).getByRole('searchbox'), { target: { value: 'ٱللَّهِ' } });
+    expect(rows()).toEqual(['١الله٩', '٢والله٤']);
+    fireEvent.change(within(section()).getByRole('searchbox'), { target: { value: 'رحمه' } });
+    expect(rows()).toEqual(['٣رحمة٣']);
+    fireEvent.change(within(section()).getByRole('searchbox'), { target: { value: 'زكاة' } });
+    expect(within(section()).getByText('لا كلمة تطابق البحث.')).toBeTruthy();
   });
 });
 

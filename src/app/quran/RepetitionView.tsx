@@ -4,11 +4,12 @@
 import React, { useMemo, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAnglesDown, faArrowLeft, faArrowRight, faListOl, faShuffle } from '@fortawesome/free-solid-svg-icons';
+import { faAnglesDown, faArrowLeft, faArrowRight, faListOl, faMagnifyingGlass, faShuffle } from '@fortawesome/free-solid-svg-icons';
 import Badge from '@/components/common/Badge';
 import Button from '@/components/common/Button';
+import Pagination from '@/components/common/Pagination';
 import { num } from '@/lib/quran/arabicNumber';
-import { plainName } from '@/lib/quran/normalize';
+import { normalizeWord, plainName } from '@/lib/quran/normalize';
 import { MIN_WORDS } from '@/lib/quran/passages';
 import type { Repetition } from '@/lib/quran/repetition';
 import { ARC_MIN, REFRAIN_MANY, type Occ } from '@/lib/quran/shifts';
@@ -20,6 +21,7 @@ import type { Ayah } from '@/types/quran';
 const PANEL = 'bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4';
 const NOTE = 'text-sm text-gray-600 dark:text-gray-400';
 export const VISIBLE = 20;
+export const WORDS_PAGE = 60;
 const run = (at: Occ, len: number) => Object.fromEntries(Array.from({ length: len }, (_, k) => [at.word + k, 0]));
 
 function Tile({ value, label }: { value: number; label: string }) {
@@ -222,6 +224,49 @@ function Ranked({ data, totals, pick, onPick }: { data: Repetition; totals: Map<
   );
 }
 
+function WordCounts({ words }: { words: Repetition['words'] }) {
+  const [query, setQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const ranked = useMemo(() => words.map(([word, count], i) => ({ word, count, rank: i + 1, key: normalizeWord(word) })), [words]);
+  const total = useMemo(() => words.reduce((n, [, count]) => n + count, 0), [words]);
+  const needle = normalizeWord(query.trim());
+  const found = needle ? ranked.filter(r => r.key.includes(needle)) : ranked;
+  const pages = Math.max(1, Math.ceil(found.length / WORDS_PAGE));
+  const from = (page - 1) * WORDS_PAGE;
+  const shown = found.slice(from, from + WORDS_PAGE);
+
+  return (
+    <section className={PANEL}>
+      <h2 className="text-2xl mb-1">عدد مرات ورود كل كلمة</h2>
+      <p className={`${NOTE} mb-2`}>
+        الكلمة هنا ما بين مسافتين في نص المصحف بعد حذف الحركات وعلامات الوقف، فتبقى حروفها كما رُسمت وما اتصل بها من حروف وضمائر: «والله» غير «الله»، و«إن» غير «أن». هذا التجميع من صنعنا وليس تقسيمًا لأهل العلم، والبسملة تُعدّ في الفاتحة وحدها.
+      </p>
+      <div className="flex flex-wrap gap-2 mb-3">
+        <Badge size="sm" color="gray" text={`${num(total)} كلمة في المصحف`} />
+        <Badge size="sm" color="gray" text={`${num(words.length)} كلمة مختلفة`} />
+      </div>
+      <label className="relative block mb-3">
+        <span className="sr-only">ابحث عن كلمة</span>
+        <FontAwesomeIcon icon={faMagnifyingGlass} className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+        <input type="search" value={query} onChange={e => { setQuery(e.target.value); setPage(1); }} placeholder="ابحث عن كلمة، بالتشكيل أو دونه"
+          className="w-full rounded border border-amber-400 bg-transparent py-2 ps-9 pe-3 text-gray-900 dark:text-gray-100" />
+      </label>
+      {found.length === 0 ? <p className={NOTE}>لا كلمة تطابق البحث.</p> : (
+        <ol className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4">
+          {shown.map(r => (
+            <li key={r.word} className="flex items-baseline gap-2 px-2 py-1 border-b border-gray-200 dark:border-white/10">
+              <span className={`${NOTE} w-10 shrink-0`}>{num(r.rank)}</span>
+              <span className="flex-1 text-lg font-arabic">{r.word}</span>
+              <span className="text-amber-700 dark:text-amber-300">{num(r.count)}</span>
+            </li>
+          ))}
+        </ol>
+      )}
+      <Pagination page={page} pageCount={pages} onChange={setPage} summary={`${num(from + 1)}–${num(from + shown.length)} من ${num(found.length)}`} />
+    </section>
+  );
+}
+
 export default function RepetitionView({ data }: { data: Repetition }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -286,6 +331,8 @@ export default function RepetitionView({ data }: { data: Repetition }) {
         </>
       )}
       {pick && pick.t !== null && <PairView key={`${pick.s}:${pick.t}`} data={data} s={pick.s} t={pick.t} />}
+
+      <WordCounts words={data.words} />
     </div>
   );
 }

@@ -212,6 +212,33 @@ as the sibling routes do.
 against the preview database confirms 528 within phrases, 89 groups, and that
 the response is under 600 KB.
 
+## Word counts
+
+Added after the merge. The response also carries `words`: every word of the
+text with the number of times it occurs, sorted by count and then by the word.
+`countWords` in `src/lib/quran/repetition.ts` builds it, and `/quran` shows it
+as a section below the detail.
+
+A word is a token between spaces, as `ayahWords` splits the ayah, with the
+basmala counted once, in Al-Fatiha. `bareWord` in `src/lib/quran/normalize.ts`
+strips the vowels and Quranic marks, writes alef wasla as a plain alef, and
+folds the Tanzil encodings of ya and kaf (ی, ک) into the usual letters. It
+keeps everything else as written:
+
+- Attached letters and pronouns stay, so «والله», «لله» and «الله» are three
+  words. Splitting them needs a morphological analysis the app does not hold.
+- Hamza seats, alef maqsura and ta marbuta stay. `normalizeWord`, which the
+  phrase finders use, folds them, but for counting that would merge «إن» with
+  «أن» and «رحمة» with «رحمه».
+
+The search on the page uses `normalizeWord`, so a reader finds a word with or
+without its vowels and hamza. The grouping is ours, and the section says so.
+
+Measured against the preview database: 77,442 words in 14,871 distinct forms,
+8,729 of which occur once (`normalizeWord` would give 14,655). The `words`
+list is about 260 KB of JSON before compression, which brings the whole
+response from about 570 KB to about 830 KB.
+
 ## Next steps
 
 None. PR 3 moved `runs.json` and `ayat.json` to `src/lib/quran/passages.fixture.json`

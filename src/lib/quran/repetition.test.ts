@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import compare from './compare.fixture.json';
-import { buildRepetition, type RepetitionInput } from './repetition';
+import { buildRepetition, countWords, type RepetitionInput } from './repetition';
 import { findPassages, type AyahInput } from './passages';
 
 const fx = compare as Record<string, string[]>;
@@ -116,7 +116,7 @@ describe('buildRepetition edge cases', () => {
   });
 
   it('returns empty results for no surahs and for a surah with no ayat', () => {
-    expect(buildRepetition([])).toEqual({ surahs: [], cells: [], within: [], across: [], passages: [], ayat: {} });
+    expect(buildRepetition([])).toEqual({ surahs: [], cells: [], within: [], across: [], passages: [], ayat: {}, words: [] });
     const r = buildRepetition([{ number: 4, name: 'A', ayat: [] }]);
     expect(r.surahs).toEqual([{ number: 4, name: 'A', ayat: 0, words: 0 }]);
     expect(r.cells).toEqual([]);
@@ -126,5 +126,34 @@ describe('buildRepetition edge cases', () => {
     const r = buildRepetition([{ number: 7, name: 'A', ayat: [`${fx['7'][0].trim()} ${refrain.join(' ')}`, refrain.join(' ')] }]);
     expect(r.ayat['7:1']).not.toContain(fx['7'][0].trim().split(/\s+/)[0]);
     expect(r.ayat['7:1']).toContain(refrain.join(' '));
+  });
+});
+
+describe('countWords', () => {
+  const basmala = 'بِسۡمِ ٱللَّهِ ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ';
+  const counts = (surahs: RepetitionInput) => Object.fromEntries(countWords(surahs));
+
+  it('groups a word across its vowellings and keeps what is written apart', () => {
+    const c = counts([{ number: 2, name: 'B', ayat: ['إِنَّ ٱللَّهَ وَٱللَّهُ', 'أَنَّ إِنَّ لِلَّهِ ٱللَّهِ ۖ', 'رَحْمَةً رَحْمَةٌ رَحِمَهُ فِی'] }]);
+    expect(c).toEqual({ إن: 2, أن: 1, الله: 2, والله: 1, لله: 1, رحمة: 2, رحمه: 1, في: 1 });
+  });
+
+  it('counts the basmala in al-Fatiha alone and not at-Tawbah', () => {
+    const c = counts([
+      { number: 1, name: 'A', ayat: [basmala] },
+      { number: 3, name: 'C', ayat: [`${basmala} الۤمۤ`] },
+      { number: 9, name: 'D', ayat: ['بَرَاۤءَةࣱ'] },
+    ]);
+    expect(c['بسم']).toBe(1);
+    expect(c['الم']).toBe(1);
+    expect(Object.values(c).reduce((n, k) => n + k, 0)).toBe(6);
+  });
+
+  it('sorts by count, then by the word', () => {
+    expect(countWords([{ number: 2, name: 'B', ayat: ['ب أ ب ج ج ب'] }])).toEqual([['ب', 3], ['ج', 2], ['أ', 1]]);
+  });
+
+  it('is part of the repetition response', () => {
+    expect(buildRepetition(input).words).toEqual(countWords(input));
   });
 });
