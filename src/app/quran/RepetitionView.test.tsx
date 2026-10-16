@@ -134,6 +134,19 @@ describe('RepetitionView', () => {
     expect(nav.getUrl()).toMatch(/^\/quran\?s=\d+$/);
   });
 
+  it('lists every surah in the ranked list, with no cap', () => {
+    const n = VISIBLE + 5;
+    const wide: Repetition = {
+      ...many,
+      surahs: Array.from({ length: n }, (_, i) => ({ number: i + 1, name: `S${i}`, ayat: 1, words: 1 })),
+      cells: Array.from({ length: n }, (_, i) => ({ a: i + 1, b: i + 1, words: 1, phrases: 1 })),
+      within: [],
+    };
+    render(<RepetitionView data={wide} />);
+    expect(within(screen.getAllByRole('list')[0]).getAllByRole('button')).toHaveLength(n);
+    expect(screen.queryByRole('button', { name: /عرض الباقي/ })).toBeNull();
+  });
+
   it('switches the ranked list to pairs', () => {
     render(<RepetitionView data={data} />);
     fireEvent.click(screen.getByRole('button', { name: 'الأزواج' }));

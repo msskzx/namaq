@@ -171,7 +171,6 @@ function PairView({ data, s, t }: { data: Repetition; s: number; t: number }) {
 function Ranked({ data, totals, pick, onPick }: { data: Repetition; totals: Map<number, number>; pick: Pick | null; onPick: (p: Pick) => void }) {
   const [mode, setMode] = useState<'surahs' | 'pairs'>('surahs');
   const [sort, setSort] = useState<'number' | 'count'>('count');
-  const [all, setAll] = useState(false);
   const rows = useMemo(() => {
     if (mode === 'pairs') {
       return data.cells.filter(c => c.a !== c.b).sort((p, q) => q.words - p.words || p.a - q.a || p.b - q.b)
@@ -181,15 +180,14 @@ function Ranked({ data, totals, pick, onPick }: { data: Repetition; totals: Map<
       .map(s => ({ key: String(s.number), label: plainName(s.name), words: totals.get(s.number) ?? 0, number: s.number, pick: { s: s.number, t: null } }));
   }, [data, totals, mode]);
   const sorted = useMemo(() => [...rows].sort((p, q) => sort === 'count' ? q.words - p.words || p.number - q.number : p.number - q.number), [rows, sort]);
-  const shown = all ? sorted : sorted.slice(0, VISIBLE);
   return (
     <div className="flex flex-col gap-2">
       <div className="flex gap-2">
-        <Button size="sm" active={mode === 'surahs'} onClick={() => { setMode('surahs'); setAll(false); }}>
+        <Button size="sm" active={mode === 'surahs'} onClick={() => setMode('surahs')}>
           <FontAwesomeIcon icon={faListOl} />
           السور
         </Button>
-        <Button size="sm" active={mode === 'pairs'} onClick={() => { setMode('pairs'); setAll(false); }}>
+        <Button size="sm" active={mode === 'pairs'} onClick={() => setMode('pairs')}>
           <FontAwesomeIcon icon={faListOl} />
           الأزواج
         </Button>
@@ -202,8 +200,8 @@ function Ranked({ data, totals, pick, onPick }: { data: Repetition; totals: Map<
           ترتيب بالرقم
         </Button>
       </div>
-      <ol className="flex flex-col">
-        {shown.map((r, i) => (
+      <ol className="flex flex-col max-h-[min(70vh,40rem)] overflow-y-auto">
+        {sorted.map((r, i) => (
           <li key={r.key}>
             <button type="button" onClick={() => onPick(r.pick)} aria-current={pick?.s === r.pick.s && pick?.t === r.pick.t}
               className="w-full flex items-baseline gap-2 px-2 py-1 text-start rounded hover:bg-amber-100 dark:hover:bg-white/10 aria-[current=true]:bg-amber-100 dark:aria-[current=true]:bg-white/10">
@@ -214,12 +212,6 @@ function Ranked({ data, totals, pick, onPick }: { data: Repetition; totals: Map<
           </li>
         ))}
       </ol>
-      {rows.length > VISIBLE && !all && (
-        <Button size="sm" onClick={() => setAll(true)}>
-          <FontAwesomeIcon icon={faAnglesDown} />
-          {`عرض الباقي (${num(rows.length - VISIBLE)})`}
-        </Button>
-      )}
     </div>
   );
 }
