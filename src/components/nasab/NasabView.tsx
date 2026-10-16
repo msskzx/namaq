@@ -3,10 +3,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faArrowUp, faSitemap, faUser, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useLanguage } from '@/components/language/LanguageContext';
 import GraphSearch from '@/components/graph/GraphSearch';
 import Button from '@/components/common/Button';
+import Toggle from '@/components/common/Toggle';
 import NasabPlot from './NasabPlot';
 import { givenName, layoutNasab, type NasabPerson } from '@/lib/relationship/nasabLayout';
 
@@ -36,16 +37,17 @@ export default function NasabView() {
     () => (searchParams?.getAll('subject') ?? []).filter((id) => id.startsWith('person:')).map((id) => id.slice('person:'.length)),
     [searchParams],
   );
-  const key = subjects.join(',');
+  const descendants = searchParams?.get('descendants') === '1';
+  const key = `${subjects.join(',')}|${descendants}`;
   const [fetched, setFetched] = useState<Fetched | null>(null);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
-    if (!key) return;
+    if (subjects.length === 0) return;
     let cancelled = false;
     setFailed(false);
     const query = subjects.map((slug) => `person=${encodeURIComponent(slug)}`).join('&');
-    fetch(`/api/nasab?${query}`)
+    fetch(`/api/nasab?${query}${descendants ? '&descendants=1' : ''}`)
       .then((response) => (response.ok ? response.json() : Promise.reject(new Error(String(response.status)))))
       .then((data) => {
         if (cancelled) return;
@@ -56,18 +58,24 @@ export default function NasabView() {
     return () => {
       cancelled = true;
     };
-  }, [key, subjects]);
+  }, [key, subjects, descendants]);
 
   const current = fetched?.key === key ? fetched : null;
   const layout = useMemo(() => (current ? layoutNasab(current.people, current.subjects) : null), [current]);
   const names = useMemo(() => new Map(current?.people.map((person) => [person.slug, person.name])), [current]);
 
-  const setSubjects = (next: string[]) => {
+  const navigate = (change: (params: URLSearchParams) => void) => {
     const params = new URLSearchParams(searchParams?.toString() ?? '');
-    params.delete('subject');
-    next.forEach((slug) => params.append('subject', `person:${slug}`));
+    change(params);
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
   };
+  const setSubjects = (next: string[]) =>
+    navigate((params) => {
+      params.delete('subject');
+      next.forEach((slug) => params.append('subject', `person:${slug}`));
+    });
+  const setDescendants = (on: boolean) => navigate((params) => (on ? params.set('descendants', '1') : params.delete('descendants')));
+  const sideLabel = (on: boolean) => 'cursor-pointer ' + (on ? 'font-semibold text-amber-600 dark:text-amber-400' : 'text-gray-500 dark:text-gray-400');
   const toggle = (slug: string) => setSubjects(subjects.includes(slug) ? subjects.filter((s) => s !== slug) : [...subjects, slug]);
 
   const nameOf = (slug: string) => names.get(slug) ?? slug;
@@ -80,8 +88,8 @@ export default function NasabView() {
         <h1 className="text-3xl mb-1">{isArabic ? 'النسب' : 'Nasab'}</h1>
         <p className="text-sm text-gray-600 dark:text-gray-400">
           {isArabic
-            ? 'اختر شخصًا لترى سلسلة آبائه. إذا اخترت أكثر من واحد التقت السلسلتان عند أول جد مشترك.'
-            : 'Pick a person to see the line of their fathers. Pick several and their lines join at the first ancestor they share.'}
+            ? 'اختر شخصًا لترى سلسلة آبائه، وشغّل المفتاح لترى ذريته تحته. إذا اخترت أكثر من واحد التقت السلسلتان عند أول جد مشترك.'
+            : 'Pick a person to see the line of their fathers, and turn on the switch to see their descendants below them. Pick several and their lines join at the first ancestor they share.'}
         </p>
       </header>
 
@@ -94,6 +102,21 @@ export default function NasabView() {
               {isArabic ? pick.ar : pick.en}
             </Button>
           ))}
+        </div>
+        <div className="mt-3 flex items-center gap-2 text-sm">
+          <button type="button" tabIndex={-1} aria-hidden className={sideLabel(!descendants)} onClick={() => setDescendants(false)}>
+            {isArabic ? 'الآباء فقط' : 'Fathers only'}
+          </button>
+          <Toggle
+            label={isArabic ? 'مع الذرية' : 'With descendants'}
+            checked={descendants}
+            onChange={setDescendants}
+            offIcon={<FontAwesomeIcon icon={faArrowUp} className="size-3" />}
+            onIcon={<FontAwesomeIcon icon={faSitemap} className="size-3" />}
+          />
+          <button type="button" tabIndex={-1} aria-hidden className={sideLabel(descendants)} onClick={() => setDescendants(true)}>
+            {isArabic ? 'مع الذرية' : 'With descendants'}
+          </button>
         </div>
       </div>
 

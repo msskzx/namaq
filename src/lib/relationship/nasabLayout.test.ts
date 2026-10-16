@@ -168,6 +168,20 @@ describe('layoutNasab', () => {
     expect(result.nodes.every((n) => !n.isMeeting)).toBe(true);
   });
 
+  it('draws descendants below the subject without marking a meeting point or a subject', () => {
+    const result = layoutNasab(
+      [person('abu-talib', []), person('ali', ['abu-talib']), person('hasan', ['ali']), person('husayn', ['ali']), person('zayd', ['hasan'])],
+      ['ali'],
+    );
+
+    expect(['hasan', 'husayn'].map((slug) => node(result, slug).row)).toEqual([2, 2]);
+    expect(node(result, 'zayd').row).toBe(3);
+    expect(node(result, 'ali').col).toBe((node(result, 'hasan').col + node(result, 'husayn').col) / 2);
+    expect(result.nodes.filter((n) => n.isSubject).map((n) => n.slug)).toEqual(['ali']);
+    expect(result.nodes.some((n) => n.isMeeting)).toBe(false);
+    expect(result.chains).toEqual([{ subject: 'ali', slugs: ['ali', 'abu-talib'] }]);
+  });
+
   it('passes Arabic names through unchanged', () => {
     const name = 'عبد الله بن عبد المطلب';
     const result = layoutNasab(
@@ -181,8 +195,9 @@ describe('layoutNasab', () => {
 });
 
 describe('givenName', () => {
-  it('keeps what comes before the first بن', () => {
+  it('keeps what comes before the first بن or بنت', () => {
     expect(givenName('علي بن أبي طالب')).toBe('علي');
     expect(givenName('عدنان')).toBe('عدنان');
+    expect(givenName('زينب بنت علي')).toBe('زينب');
   });
 });

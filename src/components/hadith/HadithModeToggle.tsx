@@ -3,7 +3,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComments, faScroll } from '@fortawesome/free-solid-svg-icons';
-import Button from '@/components/common/Button';
+import Toggle from '@/components/common/Toggle';
 import { useLanguage } from '@/components/language/LanguageContext';
 
 export type HadithMode = 'text' | 'bubbles';
@@ -16,16 +16,19 @@ export default function HadithModeToggle({
   onChange: (mode: HadithMode) => void;
 }) {
   const ar = useLanguage().language === 'ar';
+  const bubbles = mode === 'bubbles';
+  const label = (on: boolean) => 'cursor-pointer ' + (on ? 'font-semibold text-amber-600 dark:text-amber-400' : 'text-gray-500 dark:text-gray-400');
   return (
-    <div className="mb-4 flex flex-wrap gap-2">
-      <Button active={mode === 'text'} onClick={() => onChange('text')}>
-        <FontAwesomeIcon icon={faScroll} />
-        {ar ? 'النص كاملاً' : 'Full text'}
-      </Button>
-      <Button active={mode === 'bubbles'} onClick={() => onChange('bubbles')}>
-        <FontAwesomeIcon icon={faComments} />
-        {ar ? 'الإسناد والفقاعات' : 'Isnad and bubbles'}
-      </Button>
+    <div className="mb-4 flex items-center gap-2 text-sm">
+      <button type="button" tabIndex={-1} aria-hidden className={label(!bubbles)} onClick={() => onChange('text')}>{ar ? 'النص كاملاً' : 'Full text'}</button>
+      <Toggle
+        label={ar ? 'الإسناد والفقاعات' : 'Isnad and bubbles'}
+        checked={bubbles}
+        onChange={(checked) => onChange(checked ? 'bubbles' : 'text')}
+        offIcon={<FontAwesomeIcon icon={faScroll} className="size-3" />}
+        onIcon={<FontAwesomeIcon icon={faComments} className="size-3" />}
+      />
+      <button type="button" tabIndex={-1} aria-hidden className={label(bubbles)} onClick={() => onChange('bubbles')}>{ar ? 'الإسناد والفقاعات' : 'Isnad and bubbles'}</button>
     </div>
   );
 }

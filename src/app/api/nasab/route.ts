@@ -5,9 +5,18 @@ import { apiError, CATALOG_CACHE_HEADERS } from '@/lib/apiError';
 import type { NasabPerson } from '@/lib/relationship/nasabLayout';
 
 // See docs/plans/nasab-plot.md. FATHER edges are stored father -> child.
-const ancestorsQuery = `
+const nasabQuery = `
   UNWIND $slugs AS slug
-  MATCH (:Person {slug: slug})<-[:FATHER*0..]-(a:Person)
+  CALL {
+    WITH slug
+    MATCH (:Person {slug: slug})<-[:FATHER*0..]-(a:Person)
+    RETURN a
+    UNION
+    WITH slug
+    MATCH (:Person {slug: slug})-[:FATHER*1..]->(a:Person)
+    WHERE $descendants
+    RETURN a
+  }
   WITH DISTINCT a
   OPTIONAL MATCH (f:Person)-[:FATHER]->(a)
   RETURN a.slug AS slug, a.name AS name, collect(f.slug) AS fathers
@@ -22,7 +31,8 @@ export async function GET(request: Request) {
     const session = getSession();
     if (!session) return NextResponse.json({ error: 'Database configuration is missing' }, { status: 500 });
 
-    const result = await session.run(ancestorsQuery, { slugs: subjects });
+    const descendants = searchParams.get('descendants') === '1';
+    const result = await session.run(nasabQuery, { slugs: subjects, descendants });
     const people: NasabPerson[] = result.records.map((record) => ({
       slug: record.get('slug'),
       name: record.get('name'),

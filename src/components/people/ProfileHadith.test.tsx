@@ -93,8 +93,7 @@ describe('ProfileHadith', () => {
 
   it('renders the mode toggle with bubbles as default', () => {
     render(<ProfileHadith slug="test-person" hadith={singleHadith} />);
-    const bubblesButton = screen.getByRole('button', { name: /الإسناد والفقاعات/ });
-    expect(bubblesButton.className).toContain('bg-amber-400');
+    expect((screen.getByRole('switch', { name: /الإسناد والفقاعات/ }) as HTMLInputElement).checked).toBe(true);
   });
 
   it('displays the place for the current hadith', () => {
@@ -123,21 +122,19 @@ describe('ProfileHadith', () => {
     expect(remarkHeading).toBeUndefined();
   });
 
-  it('switches to full text mode when the button is clicked', () => {
+  it('switches to full text mode when the switch is turned off', () => {
     render(<ProfileHadith slug="test-person" hadith={singleHadith} />);
-    const textButton = screen.getByRole('button', { name: /النص كاملاً/ });
-    fireEvent.click(textButton);
-    expect(textButton.className).toContain('bg-amber-400');
+    fireEvent.click((screen.getByRole('switch', { name: /الإسناد والفقاعات/ }) as HTMLInputElement));
+    expect((screen.getByRole('switch', { name: /الإسناد والفقاعات/ }) as HTMLInputElement).checked).toBe(false);
   });
 
   it('keeps mode when rendered again', () => {
     const { rerender } = render(<ProfileHadith slug="test-person" hadith={multipleHadith} />);
-    const textButton = screen.getByRole('button', { name: /النص كاملاً/ });
-    fireEvent.click(textButton);
-    expect(textButton.className).toContain('bg-amber-400');
+    fireEvent.click((screen.getByRole('switch', { name: /الإسناد والفقاعات/ }) as HTMLInputElement));
+    expect((screen.getByRole('switch', { name: /الإسناد والفقاعات/ }) as HTMLInputElement).checked).toBe(false);
 
     rerender(<ProfileHadith slug="test-person" hadith={multipleHadith} />);
-    expect(textButton.className).toContain('bg-amber-400');
+    expect((screen.getByRole('switch', { name: /الإسناد والفقاعات/ }) as HTMLInputElement).checked).toBe(false);
   });
 
   it('renders with multiple hadith', () => {
@@ -225,18 +222,13 @@ describe('ProfileHadith', () => {
 
   it('keeps the selected mode after navigating with pagination', () => {
     render(<ProfileHadith slug="test-person" hadith={multipleHadith} />);
-    const buttons = screen.getAllByRole('button');
-    const textButton = buttons.find((btn) => btn.textContent?.includes('النص كاملاً'));
-    fireEvent.click(textButton!);
-    expect(textButton!.className).toContain('bg-amber-400');
+    fireEvent.click((screen.getByRole('switch', { name: /الإسناد والفقاعات/ }) as HTMLInputElement));
+    expect((screen.getByRole('switch', { name: /الإسناد والفقاعات/ }) as HTMLInputElement).checked).toBe(false);
 
-    const nextButton = buttons.find((btn) => btn.textContent?.includes('التالي'));
+    const nextButton = screen.getAllByRole('button').find((btn) => btn.textContent?.includes('التالي'));
     fireEvent.click(nextButton!);
 
-    const textButtonAfter = screen.getAllByRole('button').find((btn) =>
-      btn.textContent?.includes('النص كاملاً'),
-    );
-    expect(textButtonAfter!.className).toContain('bg-amber-400');
+    expect((screen.getByRole('switch', { name: /الإسناد والفقاعات/ }) as HTMLInputElement).checked).toBe(false);
   });
 
   it('shows valid page labels when hadith list is shortened', () => {

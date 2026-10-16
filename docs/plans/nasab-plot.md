@@ -15,6 +15,7 @@ The force graph at `/graphs` pins every node to a precomputed global position, s
 - Subjects with no common ancestor are drawn side by side.
 - Arabic mirrors the horizontal order. Light and dark themes are supported. Every label has `en` and `ar`.
 - A text version of each chain sits under the drawing for screen readers.
+- A switch under the quick picks adds each subject's descendants, read down the same `FATHER` edges, below the subject. It is off by default and kept in the URL as `descendants=1`. Descendants are not subjects: they are not highlighted and get no chain in the text version.
 - The navbar's Graphs entry has a submenu with a link to `/nasab`.
 
 ## Layout contract (`src/lib/relationship/nasabLayout.ts`)
@@ -33,8 +34,10 @@ or repeated slugs are ignored.
 
 ## Data
 
-`GET /api/nasab?person=<slug>` (repeatable) returns `{ people, subjects }` from one Cypher query over `(:Person)-[:FATHER]->(:Person)`.
+`GET /api/nasab?person=<slug>` (repeatable) returns `{ people, subjects }` from one Cypher query over `(:Person)-[:FATHER]->(:Person)`. With `descendants=1` the same query also follows the edges downward from each subject.
 
 ## Not done
 
 Collapsing a long middle run of generations. The drawing scrolls instead.
+
+Bounding the descendants. A far ancestor with descendants on draws everyone below them: Adnan gives 247 people across 85 columns, which the drawing scrolls through. The text version under the drawing lists the subjects' chains only, not the descendants.

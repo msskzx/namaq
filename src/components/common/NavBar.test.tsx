@@ -28,11 +28,11 @@ describe('NavBar Quran links', () => {
     expect(hrefs).toContain('/quran/order');
     expect(hrefs).toContain('/quran/openings');
     expect(hrefs).toContain('/quran/oaths');
-    expect(hrefs).toContain('/quran/musa');
+    expect(hrefs).toContain('/quran/prophets/musa');
   });
 
   it('keeps every page in the shared list for the mobile menu and graph menu', () => {
     const hrefs = getAllNavLinks('ar').map(l => l.href);
-    expect(hrefs).toEqual(expect.arrayContaining(['/quran', '/quran/compare', '/quran/iltifat', '/quran/qiraat', '/quran/order', '/quran/openings', '/quran/oaths', '/quran/musa']));
+    expect(hrefs).toEqual(expect.arrayContaining(['/quran', '/quran/compare', '/quran/iltifat', '/quran/qiraat', '/quran/order', '/quran/openings', '/quran/oaths', '/quran/prophets/musa']));
   });
 });
