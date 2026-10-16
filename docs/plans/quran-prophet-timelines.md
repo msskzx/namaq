@@ -15,8 +15,9 @@ with a story so far; the rest of this document describes his.
 3. Run `npm run quran:prophets` and add the new JSON file to `AYAT` in
    `src/app/quran/prophets/ayat/index.ts`.
 
-`npm test` fails until all three agree on the slugs, and until the JSON holds exactly the ayat the story's ranges name. The page cycles five phase
-colors, so a story with more than five phases repeats them.
+`npm test` fails until all three agree on the slugs, and until the JSON holds
+exactly the ayat the story's ranges name. The page cycles five phase colors, so
+a story with more than five phases repeats them.
 
 ## Shape
 
