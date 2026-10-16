@@ -23,7 +23,7 @@ export interface NasabLayout {
   chains: { subject: string; slugs: string[] }[];
 }
 
-export const givenName = (name: string) => name.split(' بن ')[0];
+export const givenName = (name: string) => name.split(/ بنت? /)[0];
 
 export function layoutNasab(people: NasabPerson[], subjects: string[]): NasabLayout {
   const bySlug = new Map(people.map((person) => [person.slug, person]));
