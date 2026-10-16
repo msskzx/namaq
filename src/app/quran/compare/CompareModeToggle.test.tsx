@@ -11,13 +11,13 @@ describe('CompareModeToggle', () => {
 
   it('goes to the themes view when switched on', () => {
     render(<CompareModeToggle themes={false} textHref="/quran/compare?a=1" themesHref="/quran/compare?mode=themes&a=1" />);
-    fireEvent.click(screen.getByRole('checkbox', { name: 'المقارنة بالمواضيع' }));
+    fireEvent.click(screen.getByRole('switch', { name: 'المقارنة بالمواضيع' }));
     expect(push).toHaveBeenCalledWith('/quran/compare?mode=themes&a=1');
   });
 
   it('goes back to the text view when switched off', () => {
     render(<CompareModeToggle themes textHref="/quran/compare?a=1" themesHref="/quran/compare?mode=themes&a=1" />);
-    fireEvent.click(screen.getByRole('checkbox', { name: 'المقارنة بالمواضيع' }));
+    fireEvent.click(screen.getByRole('switch', { name: 'المقارنة بالمواضيع' }));
     expect(push).toHaveBeenCalledWith('/quran/compare?a=1');
   });
 });
