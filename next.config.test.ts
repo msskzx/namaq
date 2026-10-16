@@ -3,6 +3,10 @@ import nextConfig from './next.config';
 
 describe('redirects', () => {
   it('sends /quran/shifts permanently to /quran', async () => {
-    expect(await nextConfig.redirects!()).toEqual([{ source: '/quran/shifts', destination: '/quran', permanent: true }]);
+    expect(await nextConfig.redirects!()).toContainEqual({ source: '/quran/shifts', destination: '/quran', permanent: true });
+  });
+
+  it('sends /quran/musa permanently to its prophet page', async () => {
+    expect(await nextConfig.redirects!()).toContainEqual({ source: '/quran/musa', destination: '/quran/prophets/musa', permanent: true });
   });
 });
