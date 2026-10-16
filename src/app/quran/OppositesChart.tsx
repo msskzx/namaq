@@ -10,7 +10,7 @@ import { num } from '@/lib/quran/arabicNumber';
 import type { CountedSide, LemmaCount } from '@/lib/quran/lemmas';
 import { normalizeWord } from '@/lib/quran/normalize';
 import { NOTE, PANEL } from './RepetitionView';
-import { BAR, LINK, SEARCH, SUGGESTIONS } from './WordCounts';
+import { LINK, SEARCH, SUGGESTIONS } from './WordCounts';
 
 type Pair = [CountedSide, CountedSide];
 
@@ -92,8 +92,8 @@ export default function OppositesChart({ opposites, lemmas }: { opposites: Pair[
                 className="grid grid-cols-[minmax(4.5rem,auto)_2.5rem_1fr_1fr_2.5rem_minmax(4.5rem,auto)_auto] sm:grid-cols-[9rem_2.5rem_1fr_1fr_2.5rem_9rem_auto] items-center gap-x-1">
                 <SideLabel side={a} />
                 <span className="text-sm text-end text-gray-700 dark:text-gray-300">{num(a.count)}</span>
-                <span className="flex justify-end"><span className={`h-5 rounded-s ${BAR}`} style={{ width: `${(a.count / max) * 100}%` }} /></span>
-                <span className="flex justify-start"><span className={`h-5 rounded-e ${BAR}`} style={{ width: `${(b.count / max) * 100}%` }} /></span>
+                <span className="flex justify-end"><span className="h-5 rounded-s bg-[#413C58]" style={{ width: `${(a.count / max) * 100}%` }} /></span>
+                <span className="flex justify-start"><span className="h-5 rounded-e bg-[#a3c4bc]" style={{ width: `${(b.count / max) * 100}%` }} /></span>
                 <span className="text-sm text-start text-gray-700 dark:text-gray-300">{num(b.count)}</span>
                 <SideLabel side={b} />
                 <Button size="icon" variant="outline" aria-label={`أزل زوج «${a.label}» و«${b.label}»`} onClick={() => setPairs(pairs.filter((_, k) => k !== i))}>
