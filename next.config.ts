@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
     return [
       { source: '/quran/shifts', destination: '/quran', permanent: true },
       { source: '/quran/musa', destination: '/quran/prophets/musa', permanent: true },
+      { source: '/references', destination: '/attributions', permanent: true },
     ];
   },
 };

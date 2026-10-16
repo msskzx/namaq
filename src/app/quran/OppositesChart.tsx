@@ -56,15 +56,15 @@ export default function OppositesChart({ opposites, lemmas }: { opposites: Pair[
           أزواجنا
         </Button>
       </div>
-      {first && (
-        <p className="flex flex-wrap items-center gap-2 mb-2 text-sm" aria-live="polite">
-          {`الطرف الأول: ${first.label}. اختر مقابله.`}
+      <p role="status" className={first ? 'flex flex-wrap items-center gap-2 mb-2 text-sm' : 'sr-only'}>
+        {first && `الطرف الأول: ${first.label}. اختر مقابله.`}
+        {first && (
           <Button size="sm" onClick={() => setFirst(null)}>
             <FontAwesomeIcon icon={faXmark} />
             إلغاء
           </Button>
-        </p>
-      )}
+        )}
+      </p>
       <label className="relative block">
         <span className="sr-only">{first ? 'اختر الكلمة المقابلة' : 'أضف زوجًا: اختر الكلمة الأولى'}</span>
         <FontAwesomeIcon icon={faPlus} className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />

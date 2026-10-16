@@ -49,9 +49,10 @@ describe('OppositesChart', () => {
 
   it('builds a pair from two searched words, and cancels a half-built one', () => {
     show();
+    expect(within(section()).getByRole('status').textContent).toBe('');
     fireEvent.change(adder(), { target: { value: 'شمس' } });
     fireEvent.click(within(section()).getByRole('button', { name: /شَمْس/ }));
-    expect(within(section()).getByText('الطرف الأول: شَمْس. اختر مقابله.')).toBeTruthy();
+    expect(within(section()).getByRole('status').textContent).toMatch('الطرف الأول: شَمْس. اختر مقابله.');
     fireEvent.click(within(section()).getByRole('button', { name: /إلغاء/ }));
     expect(within(section()).queryByText(/الطرف الأول/)).toBeNull();
     fireEvent.change(adder(), { target: { value: 'شمس' } });
