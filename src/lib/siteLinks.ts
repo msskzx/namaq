@@ -30,5 +30,5 @@ export const getAllNavLinks = (language: 'en' | 'ar'): SiteLink[] => [
   { href: '/quran/openings', label: language === 'ar' ? 'افتتاح السور: الشرط وجوابه والتسبيح' : 'Surah openings: conditions and tasbih' },
   { href: '/quran/oaths', label: language === 'ar' ? 'الأقسام في القرآن' : 'Oaths in the Qur\'an' },
   ...PROPHETS.map(({ slug, name, nameEn }) => ({ href: `/quran/prophets/${slug}`, label: language === 'ar' ? `خط ${name} الزمني` : `${nameEn} timeline` })),
-  { href: '/references', label: language === 'ar' ? 'المراجع' : 'References' },
+  { href: '/attributions', label: language === 'ar' ? 'العزو' : 'Attributions' },
 ];

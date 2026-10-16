@@ -212,6 +212,100 @@ as the sibling routes do.
 against the preview database confirms 528 within phrases, 89 groups, and that
 the response is under 600 KB.
 
+## Word counts
+
+Added after the merge. `/quran` ends with a section that counts how often each
+word occurs, grouped by lemma: «والله», «بالله» and «لله» all count under
+«ٱللَّه», which comes to 2,699. The lemmas come from the Quranic Arabic Corpus
+morphology, version 0.4 (corpus.quran.com, University of Leeds), built on the
+Tanzil Uthmani text. The analysis is the corpus's, not ours, and no scholar
+has reviewed it.
+
+### Data
+
+`data/quran/quranic-corpus-morphology-0.4.txt` is the corpus file, committed
+verbatim: its licence (GNU GPL with its own terms of use) allows verbatim
+copies only, and asks any site that uses it to name the corpus and link to
+corpus.quran.com. `/attributions` does both and also links to Tanzil, whose
+notice is in the same file; the chart names the corpus and links there.
+
+`npm run quran:lemmas` runs `scripts/quran/buildLemmas.ts`, which reads the
+file with no database call and writes `src/app/quran/lemmas.json`: the file's
+copyright notice, every lemma as `[lemma, count, root]` sorted by count, and
+the number of words with no lemma. `countLemmas` in `src/lib/quran/lemmas.ts`
+does the counting and `fromBuckwalter` writes the corpus's extended Buckwalter
+transliteration in Arabic, using the corpus's own table. `npm test` recounts the
+file and fails if the JSON differs.
+
+### Counting rule
+
+- Every stem segment that carries a lemma counts once, as the corpus's own
+  dictionary counts, so «مما» counts once for «مِن» and once for «مَا».
+- The corpus gives no lemma to 3,307 words: separate pronouns, a preposition
+  joined to a pronoun such as «لهم», and the disjoined letters such as «الم».
+  The section states the number.
+- The corpus marks a homograph with a trailing digit (``Sa`liH2``). The root
+  does not tell homographs apart, since «صَٰلِح» the adjective and «صَٰلِح» the
+  prophet both have the root صلح, and the chart shows no root. So every lemma
+  whose Arabic spelling another lemma shares carries the corpus's number,
+  the undigited one as ١: «صَٰلِح ١» (65) and «صَٰلِح ٢» (9). Fifteen
+  spellings are numbered this way.
+- The reader fails on input it cannot place. `fromBuckwalter` throws on a
+  character outside the corpus table, and `countPairs` throws on a side whose
+  lemma, or form of it, the corpus does not hold, so a typo in
+  `opposites.ts` stops `npm run quran:lemmas` and `npm test` instead of
+  counting zero.
+
+Measured: 4,832 lemmas over 74,608 counted segments, from 77,429 corpus words.
+The JSON is about 150 KB, and the page passes it from the server, so the
+repetition response stays as it was.
+
+### On the page
+
+The section is a bar chart only. It starts with the ten most frequent lemmas,
+and the reader can empty it, remove a bar, or add a lemma through a search that
+matches with or without vowels and hamza (`normalizeWord`) and suggests matches
+by count. A table of every lemma came first and was removed at the owner's
+request.
+
+The counting rule, the corpus credit and the Tanzil credit are on
+`/attributions` (العزو), in the section `#quranic-arabic-corpus`, and the chart
+links there. `/attributions` credits the works and data the site relies on,
+while `/sources` is the reader for the books whose pages are cited; the corpus
+has no pages to read, so it is credited on `/attributions`. The page was called
+`/references` (المراجع) until this change.
+
+### Opposite words
+
+A second chart, `OppositesChart`, sets pairs of opposite words back to back:
+the first side grows toward the centre from the start of the row, the second
+from the centre outward, and each pair has its own scale, since the chart
+compares the two sides of a pair and not one pair with another. Below the `sm`
+breakpoint a row puts its two labels on one line and the counts and bars on the
+line under them. With all six on one line, a 375 px screen left each bar about
+16 px.
+
+Colours come from the owner's palette and were run through the dataviz palette
+validator against the panel surfaces (#f9fafb light, #000 dark). Both charts use
+#50808e, which clears 3:1 contrast in both themes (4.17 light, 4.82 dark): for
+every bar of the word chart and the first side of the pair chart. The pair
+chart uses #DDD8C4 for the second side: the two separate well under
+colour-vision deficiency (ΔE 32). #DDD8C4 falls to 1.37:1 on the light panel, so there its bar carries a
+faint inset outline, and every bar carries its count beside it.
+
+The eleven pairs in `src/lib/quran/opposites.ts` are our choice, at the
+owner's request, and the section says so; the reader can empty the chart,
+restore our pairs, remove one, or build a pair by picking two lemmas. Each side
+counts a corpus lemma, or one form of it where the lemma is wider than the
+word: «الآخرة» is a form of «آخِر», which also covers «آخر» and «آخرين», so
+the side counts the form alone (115, against 155 for the lemma). The label
+under each side says which it counts. `countPairs` in `src/lib/quran/lemmas.ts`
+counts the sides, a form being the stem with its vowels and marks removed, and
+`npm run quran:lemmas` writes them to `lemmas.json` beside the lemmas.
+
+The count is of the word, not its meaning: «الجنة» includes the gardens of this
+world and its plural, «النار» every fire, and «جهنم» is a lemma of its own.
+
 ## Next steps
 
 None. PR 3 moved `runs.json` and `ayat.json` to `src/lib/quran/passages.fixture.json`
