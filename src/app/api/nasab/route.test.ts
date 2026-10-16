@@ -27,7 +27,16 @@ describe('GET /api/nasab', () => {
     expect(run).toHaveBeenCalledTimes(1);
     expect(query).toContain('<-[:FATHER*0..]-');
     expect(query).not.toMatch(/MOTHER|SON|DAUGHTER/);
-    expect(params).toEqual({ slugs: ['ali', 'umar'] });
+    expect(params).toEqual({ slugs: ['ali', 'umar'], descendants: false });
+  });
+
+  it('also walks FATHER edges downward when descendants=1', async () => {
+    const run = vi.fn().mockResolvedValue({ records: [] });
+    getSession.mockReturnValue({ run });
+    await GET(request('?person=ali&descendants=1'));
+    const [query, params] = run.mock.calls[0];
+    expect(query).toContain('-[:FATHER*1..]->');
+    expect(params).toEqual({ slugs: ['ali'], descendants: true });
   });
 
   it('reports the people found and drops subjects the graph does not hold', async () => {
