@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import data from '@/app/quran/musa/ayat.json';
-import { buildMusa, MUSA_EVENTS } from './musa';
+import data from '@/app/quran/prophets/ayat/musa.json';
+import { MUSA } from './musa';
+import { buildStory } from './story';
+
+const MUSA_EVENTS = MUSA.events;
+const buildMusa = (d: Parameters<typeof buildStory>[1]) => buildStory(MUSA_EVENTS, d);
 
 const NAMED: Record<number, number[]> = {
   2: [51, 53, 54, 55, 60, 61, 67, 87, 92, 108, 136, 246, 248],
@@ -104,7 +108,7 @@ describe('MUSA_EVENTS', () => {
   });
 });
 
-describe('buildMusa', () => {
+describe('buildStory', () => {
   const events = buildMusa(data);
 
   it('numbers events in order and counts their ayat', () => {

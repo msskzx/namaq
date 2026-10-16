@@ -1,97 +1,119 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faArrowRight, faBookQuran } from '@fortawesome/free-solid-svg-icons';
 import Badge from '@/components/common/Badge';
 import Button from '@/components/common/Button';
 import AyatDisclosure from '@/components/quran/AyatDisclosure';
 import { num } from '@/lib/quran/arabicNumber';
-import { PHASES, type MusaEventView, type MusaSegmentView } from '@/lib/quran/musa';
+import type { EventView, SegmentView } from '@/lib/quran/prophets/story';
 
-// docs/plans/quran-musa-timeline.md
-const STEP = 360;
+// docs/plans/quran-prophet-timelines.md
+const STEP = 400;
 const PHASE_STYLE = [
-  { dot: 'bg-sky-500 border-sky-500', bar: '!border-t-sky-500', text: 'text-sky-600 dark:text-sky-400' },
-  { dot: 'bg-amber-500 border-amber-500', bar: '!border-t-amber-500', text: 'text-amber-600 dark:text-amber-400' },
-  { dot: 'bg-rose-500 border-rose-500', bar: '!border-t-rose-500', text: 'text-rose-600 dark:text-rose-400' },
-  { dot: 'bg-emerald-500 border-emerald-500', bar: '!border-t-emerald-500', text: 'text-emerald-600 dark:text-emerald-400' },
-  { dot: 'bg-violet-500 border-violet-500', bar: '!border-t-violet-500', text: 'text-violet-600 dark:text-violet-400' },
+  { dot: 'bg-sky-500', line: 'bg-sky-500', bar: '!border-t-sky-500', edge: '!border-s-sky-500', text: 'text-sky-600 dark:text-sky-400' },
+  { dot: 'bg-amber-500', line: 'bg-amber-500', bar: '!border-t-amber-500', edge: '!border-s-amber-500', text: 'text-amber-600 dark:text-amber-400' },
+  { dot: 'bg-rose-500', line: 'bg-rose-500', bar: '!border-t-rose-500', edge: '!border-s-rose-500', text: 'text-rose-600 dark:text-rose-400' },
+  { dot: 'bg-emerald-500', line: 'bg-emerald-500', bar: '!border-t-emerald-500', edge: '!border-s-emerald-500', text: 'text-emerald-600 dark:text-emerald-400' },
+  { dot: 'bg-violet-500', line: 'bg-violet-500', bar: '!border-t-violet-500', edge: '!border-s-violet-500', text: 'text-violet-600 dark:text-violet-400' },
 ];
+const style = (phase: number) => PHASE_STYLE[phase % PHASE_STYLE.length];
 
-const ref = ({ surah, name, range: [lo, hi] }: MusaSegmentView) => `${num(surah)} ${name} ${num(lo)}${hi > lo ? `-${num(hi)}` : ''}`;
+const ref = ({ surah, name, range: [lo, hi] }: SegmentView) => `${num(surah)} ${name} ${num(lo)}${hi > lo ? `-${num(hi)}` : ''}`;
 
-export default function MusaView({ events }: { events: MusaEventView[] }) {
+export default function ProphetView({ name, phases, events }: { name: string; phases: readonly string[]; events: EventView[] }) {
   const track = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState<number>();
   const scroll = (dir: 1 | -1) => track.current?.scrollBy({ left: dir * STEP, behavior: 'smooth' });
-  const jump = (n: number) => track.current?.querySelector(`[data-event="${n}"]`)?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'start' });
+  const jump = (n: number) => {
+    setActive(n);
+    track.current?.querySelector(`[data-event="${n}"]`)?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'start' });
+  };
   const ayat = events.reduce((t, e) => t + e.count, 0);
   const surahs = new Set(events.flatMap(e => e.segments.map(g => g.surah))).size;
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-6">
       <ul className="flex flex-wrap gap-2" aria-label="ملخص">
-        <li><Badge text={`${num(ayat)} آية`} color="indigo" /></li>
-        <li><Badge text={`${num(surahs)} سورة`} color="emerald" /></li>
+        <li><Badge text={`${num(events.length)} محطة`} color="amber" size="sm" /></li>
+        <li><Badge text={`${num(ayat)} آية`} color="indigo" size="sm" /></li>
+        <li><Badge text={`${num(surahs)} سورة`} color="emerald" size="sm" /></li>
       </ul>
-      <nav aria-label="فهرس المحطات" className="flex flex-col gap-2">
-        {PHASES.map((name, ph) => (
-          <div key={name} className="flex flex-wrap items-center gap-1.5">
-            <span className={`me-1 text-sm font-semibold ${PHASE_STYLE[ph].text}`}>{name}</span>
-            {events.filter(e => e.phase === ph).map(e => (
-              <button
-                key={e.n}
-                type="button"
-                aria-label={e.title}
-                onClick={() => jump(e.n)}
-                className={`flex items-center gap-1.5 rounded-full border border-gray-300 bg-white py-0.5 pe-3 ps-0.5 text-xs hover:bg-gray-100 dark:border-white/20 dark:bg-black dark:hover:bg-white/10`}
-              >
-                <span className={`flex h-5 min-w-5 items-center justify-center rounded-full text-[11px] text-white ${PHASE_STYLE[ph].dot}`}>{num(e.n)}</span>
-                {e.title}
-              </button>
-            ))}
-          </div>
-        ))}
+      <nav aria-label="فهرس المحطات" className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5">
+        {phases.map((phase, ph) => {
+          const inPhase = events.filter(e => e.phase === ph);
+          return (
+            <section key={phase} className={`flex flex-col gap-2 rounded-xl border border-s-4 border-gray-200 bg-white p-3 dark:border-white/10 dark:bg-white/5 ${style(ph).edge}`}>
+              <h2 className={`flex items-baseline justify-between gap-2 text-sm font-semibold ${style(ph).text}`}>
+                {phase}
+                <span className="text-xs font-normal text-gray-500 dark:text-gray-400">{`${num(inPhase.length)} محطة`}</span>
+              </h2>
+              <div className="flex flex-wrap gap-1.5">
+                {inPhase.map(e => (
+                  <button
+                    key={e.n}
+                    type="button"
+                    aria-label={e.title}
+                    aria-current={active === e.n || undefined}
+                    onClick={() => jump(e.n)}
+                    className="flex items-center gap-1.5 rounded-full border border-gray-200 bg-gray-50 py-0.5 pe-3 ps-0.5 text-xs transition hover:border-gray-400 hover:bg-gray-100 aria-[current=true]:border-amber-500 aria-[current=true]:bg-amber-50 dark:border-white/15 dark:bg-black dark:hover:bg-white/10 dark:aria-[current=true]:bg-amber-900/40"
+                  >
+                    <span className={`flex h-5 min-w-5 items-center justify-center rounded-full text-[11px] text-white ${style(ph).dot}`}>{num(e.n)}</span>
+                    {e.title}
+                  </button>
+                ))}
+              </div>
+            </section>
+          );
+        })}
       </nav>
-      <div className="flex gap-2">
-        <Button size="sm" onClick={() => scroll(1)}>
-          <FontAwesomeIcon icon={faArrowRight} aria-hidden />
-          السابق
-        </Button>
-        <Button size="sm" onClick={() => scroll(-1)}>
-          <FontAwesomeIcon icon={faArrowLeft} aria-hidden />
-          التالي
-        </Button>
-      </div>
-      <div ref={track} className="overflow-x-auto pb-4 snap-x snap-proximity scroll-px-4" data-timeline-track>
-        <ol className="relative flex w-max items-stretch gap-4 pt-14 px-1" aria-label="أحداث قصة موسى">
-          <span aria-hidden className="absolute inset-x-0 top-9 h-1 rounded bg-gradient-to-l from-sky-500 via-amber-500 via-40% to-emerald-500 opacity-60" />
-          {events.map((e, i) => {
-            const st = PHASE_STYLE[e.phase];
-            const starts = i === 0 || events[i - 1].phase !== e.phase;
-            return (
-              <li key={e.n} data-event={e.n} className="relative w-80 shrink-0 snap-center scroll-mt-40">
-                {starts && <span className={`absolute -top-12 start-0 text-sm font-semibold ${st.text}`}>{PHASES[e.phase]}</span>}
-                <span
-                  aria-hidden
-                  className={`absolute -top-[2.1rem] start-4 flex h-6 w-6 items-center justify-center rounded-full border-2 text-[11px] ${st.dot} text-white`}
-                >
-                  {num(e.n)}
-                </span>
-                <div className={`flex h-full flex-col gap-3 rounded-xl border border-gray-200 border-t-4 bg-gray-50 p-4 shadow-sm dark:border-white/10 dark:bg-black ${st.bar}`}>
-                  <h2 className="text-xl leading-snug">{e.title}</h2>
-                  <ul className="flex flex-wrap gap-1" aria-label="السور">
-                    {[...new Set(e.segments.map(g => g.name))].map(name => <li key={name}><Badge text={name} size="sm" color="" /></li>)}
-                  </ul>
-                  <div className="flex flex-col gap-2">
-                    {e.segments.map(g => <AyatDisclosure key={`${g.surah}:${g.range[0]}`} title={ref(g)} lines={g.lines} />)}
-                  </div>
-                  <p className="mt-auto text-xs text-gray-500 dark:text-gray-400">{`${num(e.count)} آية`}</p>
-                </div>
-              </li>
-            );
-          })}
-        </ol>
-      </div>
+      <section className="flex flex-col gap-3">
+        <div className="flex items-center justify-between gap-2">
+          <Button size="sm" onClick={() => scroll(1)}>
+            <FontAwesomeIcon icon={faArrowRight} aria-hidden />
+            السابق
+          </Button>
+          <Button size="sm" onClick={() => scroll(-1)}>
+            التالي
+            <FontAwesomeIcon icon={faArrowLeft} aria-hidden />
+          </Button>
+        </div>
+        <div ref={track} className="-mx-4 overflow-x-auto px-4 pb-4 snap-x snap-proximity scroll-px-4 sm:-mx-6 sm:px-6 lg:-mx-10 lg:px-10" data-timeline-track>
+          <ol className="flex w-max items-start gap-5 pt-[4.75rem]" aria-label={`أحداث قصة ${name}`}>
+            {events.map((e, i) => {
+              const st = style(e.phase);
+              const starts = i === 0 || events[i - 1].phase !== e.phase;
+              return (
+                <li key={e.n} data-event={e.n} className="relative w-80 shrink-0 snap-center scroll-mt-40 sm:w-96">
+                  <span aria-hidden className={`absolute -top-[2.4rem] h-1 opacity-70 ${st.line} ${i === 0 ? 'start-4' : '-start-2.5'} ${i === events.length - 1 ? 'end-[calc(100%-2.5rem)]' : '-end-2.5'}`} />
+                  {starts && <span className={`absolute -top-[4.75rem] start-0 text-sm font-semibold ${st.text}`}>{phases[e.phase]}</span>}
+                  <span
+                    aria-hidden
+                    className={`absolute -top-[3.1rem] start-4 flex h-7 w-7 items-center justify-center rounded-full text-xs text-white ring-4 ring-white dark:ring-black ${st.dot}`}
+                  >
+                    {num(e.n)}
+                  </span>
+                  <article
+                    className={`flex flex-col gap-3 rounded-2xl border border-t-4 border-gray-200 bg-white p-5 shadow-sm transition hover:shadow-md dark:border-white/10 dark:bg-white/5 ${st.bar} ${active === e.n ? 'ring-2 ring-amber-400' : ''}`}
+                  >
+                    <h3 className="text-xl font-semibold leading-snug">{e.title}</h3>
+                    <ul className="flex flex-wrap gap-1" aria-label="السور">
+                      {[...new Set(e.segments.map(g => g.name))].map(surah => <li key={surah}><Badge text={surah} size="sm" color="gray" /></li>)}
+                    </ul>
+                    <div className="flex flex-col gap-2">
+                      {e.segments.map(g => <AyatDisclosure key={`${g.surah}:${g.range[0]}`} title={ref(g)} lines={g.lines} />)}
+                    </div>
+                    <p className="flex items-center gap-1.5 pt-1 text-xs text-gray-500 dark:text-gray-400">
+                      <FontAwesomeIcon icon={faBookQuran} aria-hidden />
+                      {`${num(e.count)} آية في ${num(e.segments.length)} موضع`}
+                    </p>
+                  </article>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+      </section>
     </div>
   );
 }

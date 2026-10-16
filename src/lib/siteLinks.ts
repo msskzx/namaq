@@ -1,4 +1,5 @@
 import translations from '@/components/language/translations';
+import { PROPHETS } from '@/lib/quran/prophets';
 
 export interface SiteLink {
   href: string;
@@ -28,6 +29,6 @@ export const getAllNavLinks = (language: 'en' | 'ar'): SiteLink[] => [
   { href: '/quran/order', label: language === 'ar' ? 'ترتيب السور' : 'Surah order' },
   { href: '/quran/openings', label: language === 'ar' ? 'افتتاح السور: الشرط وجوابه والتسبيح' : 'Surah openings: conditions and tasbih' },
   { href: '/quran/oaths', label: language === 'ar' ? 'الأقسام في القرآن' : 'Oaths in the Qur\'an' },
-  { href: '/quran/musa', label: language === 'ar' ? 'خط موسى الزمني' : 'Musa timeline' },
+  ...PROPHETS.map(({ slug, name, nameEn }) => ({ href: `/quran/prophets/${slug}`, label: language === 'ar' ? `خط ${name} الزمني` : `${nameEn} timeline` })),
   { href: '/references', label: language === 'ar' ? 'المراجع' : 'References' },
 ];

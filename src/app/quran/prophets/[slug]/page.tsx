@@ -1,22 +1,38 @@
 import type { Metadata } from 'next';
-import { buildMusa } from '@/lib/quran/musa';
-import data from './ayat.json';
-import MusaView from './MusaView';
+import { notFound } from 'next/navigation';
+import { findProphet, PROPHETS } from '@/lib/quran/prophets';
+import { buildStory } from '@/lib/quran/prophets/story';
+import { STORIES } from '@/lib/quran/prophets/stories';
+import { AYAT } from '../ayat';
+import ProphetView from './ProphetView';
 
-export const metadata: Metadata = {
-  title: 'خط موسى عليه السلام الزمني في القرآن',
-};
+type Props = { params: Promise<{ slug: string }> };
 
-export default function QuranMusaPage() {
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return PROPHETS.map(({ slug }) => ({ slug }));
+}
+
+const title = (name: string) => `خط ${name} عليه السلام الزمني في القرآن`;
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const prophet = findProphet((await params).slug);
+  return prophet ? { title: title(prophet.name) } : {};
+}
+
+export default async function QuranProphetPage({ params }: Props) {
+  const prophet = findProphet((await params).slug);
+  if (!prophet) notFound();
+  const story = STORIES[prophet.slug];
   return (
-    <div dir="rtl" className="max-w-5xl mx-auto p-4 flex flex-col gap-6 text-gray-900 dark:text-gray-200">
-      <header>
-        <h1 className="text-3xl mb-2">خط موسى عليه السلام الزمني في القرآن</h1>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          لم يراجع هذا العرض أحد من أهل العلم. النص برواية حفص. لكل حدث محطة على الخط، تبدأ من اليمين، وفيها آياته من كل السور. المحطات في خمس مجموعات: النشأة، والرسالة، والخروج، وقومه بنو إسرائيل، وعلمه وكتابه. وفيها كل آية ذُكر فيها موسى أو فرعون أو هامان. وترتيب المحطات في كل مجموعة، وما لا تحدد الآيات موضعه كالبقرة وقارون، من عملنا. وكذلك تقسيم الآيات على الأحداث، وقد تدخل آية في حدث ولها صلة بغيره.
-        </p>
+    <div dir="rtl" className="w-full px-4 py-6 sm:px-6 lg:px-10 flex flex-col gap-8 text-gray-900 dark:text-gray-200">
+      <header className="flex flex-col gap-3">
+        <p className="text-sm font-semibold text-amber-600 dark:text-amber-400">قصص الأنبياء في القرآن</p>
+        <h1 className="text-3xl sm:text-4xl font-bold leading-tight">{title(prophet.name)}</h1>
+        <p className="max-w-4xl text-sm leading-7 text-gray-600 dark:text-gray-400">{story.intro}</p>
       </header>
-      <MusaView events={buildMusa(data)} />
+      <ProphetView name={prophet.name} phases={story.phases} events={buildStory(story.events, AYAT[prophet.slug])} />
     </div>
   );
 }

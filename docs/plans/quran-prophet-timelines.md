@@ -1,7 +1,22 @@
-# Timeline of Prophet Musa
+# Timelines of the prophets
 
-`/quran/musa` is a horizontal timeline of the story of Musa, with the ayat of
-every surah that tells each part of it.
+`/quran/prophets/[slug]` is a horizontal timeline of one prophet's story, with
+the ayat of every surah that tells each part of it. Musa is the only prophet
+with a story so far; the rest of this document describes his.
+
+## Adding a prophet
+
+1. Write the story in `src/lib/quran/prophets/<slug>.ts`: an intro, the phases
+   and the events, in the shape of `musa.ts`.
+2. Add the prophet's slug and names to `PROPHETS` in
+   `src/lib/quran/prophets/index.ts`, and the story to `STORIES` in
+   `stories.ts`. The nav reads `PROPHETS` alone, so the stories stay out of
+   every page's bundle.
+3. Run `npm run quran:prophets` and add the new JSON file to `AYAT` in
+   `src/app/quran/prophets/ayat/index.ts`.
+
+`npm test` fails until all three agree on the slugs. The page cycles five phase
+colors, so a story with more than five phases repeats them.
 
 ## Shape
 
@@ -30,8 +45,8 @@ every surah that tells each part of it.
   one station. A test fails when an ayah sits in two.
 - The grouping is ours and unreviewed. Ayat that tell one event twice (7:103-108
   and 26:18-33) sit in the station they open.
-- Pages hold no database call: `npm run quran:musa` reads the ranges in
-  `src/lib/quran/musa.ts` and writes `src/app/quran/musa/ayat.json`.
+- Pages hold no database call: `npm run quran:prophets` reads the ranges in
+  `src/lib/quran/prophets/` and writes `src/app/quran/prophets/ayat/<slug>.json`.
 
 ## Not done
 
