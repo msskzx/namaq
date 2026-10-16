@@ -136,7 +136,7 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   `href` to render a `next/link` that looks identical, so a link and a button
   sitting side by side match. Reach for `className` only for layout
   (`shrink-0`, width), never to restyle the button itself.
-- This covers controls that read as buttons. Switches (`SlideSwitch`, the
+- This covers controls that read as buttons. Switches (`Toggle`, `SlideSwitch`, the
   analytics pill), the icon switchers for theme and language, the cookie
   banner, and the slider's dot indicators are deliberately separate: they are
   different controls with their own semantics and design language, and folding

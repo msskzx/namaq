@@ -25,7 +25,6 @@ export const getAllNavLinks = (language: 'en' | 'ar'): SiteLink[] => [
   { href: '/quran/compare', label: language === 'ar' ? 'مقارنة سورتين' : 'Compare two surahs' },
   { href: '/quran/iltifat', label: language === 'ar' ? 'التفات: تحولات مختارة' : 'Iltifat: hand-picked shifts' },
   { href: '/quran/qiraat', label: language === 'ar' ? 'القراءات' : 'Readings' },
-  { href: '/quran/themes/compare', label: language === 'ar' ? 'مواضع متقابلة' : 'Matching topics' },
   { href: '/quran/order', label: language === 'ar' ? 'ترتيب السور' : 'Surah order' },
   { href: '/quran/openings', label: language === 'ar' ? 'افتتاح السور: الشرط وجوابه والتسبيح' : 'Surah openings: conditions and tasbih' },
   { href: '/quran/oaths', label: language === 'ar' ? 'الأقسام في القرآن' : 'Oaths in the Qur\'an' },
