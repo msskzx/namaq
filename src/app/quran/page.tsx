@@ -16,7 +16,7 @@ export default function QuranPage() {
         <RepetitionLoader />
       </Suspense>
       <div dir="rtl" className="w-full px-4 pb-4 text-gray-900 dark:text-gray-200">
-        <WordCounts lemmas={counts.lemmas as LemmaCount[]} unlemmatized={counts.unlemmatized} />
+        <WordCounts lemmas={counts.lemmas as LemmaCount[]} />
       </div>
     </>
   );

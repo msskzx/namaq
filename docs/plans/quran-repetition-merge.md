@@ -226,8 +226,8 @@ has reviewed it.
 `data/quran/quranic-corpus-morphology-0.4.txt` is the corpus file, committed
 verbatim: its licence (GNU GPL with its own terms of use) allows verbatim
 copies only, and asks any site that uses it to name the corpus and link to
-corpus.quran.com. The section does both, and also links to Tanzil, whose
-notice is in the same file.
+corpus.quran.com. `/attributions` does both and also links to Tanzil, whose
+notice is in the same file; the chart names the corpus and links there.
 
 `npm run quran:lemmas` runs `scripts/quran/buildLemmas.ts`, which reads the
 file with no database call and writes `src/app/quran/lemmas.json`: the file's
@@ -253,11 +253,18 @@ repetition response stays as it was.
 
 ### On the page
 
-The table lists lemmas by count, 60 to a page, with the root beside each, and a
-search that matches with or without vowels and hamza (`normalizeWord`). Above
-it, a bar chart compares chosen lemmas: it starts with the ten most frequent,
+The section is a bar chart only. It starts with the ten most frequent lemmas,
 and the reader can empty it, remove a bar, or add a lemma through a search that
-suggests matches by count. The table is the chart's table view.
+matches with or without vowels and hamza (`normalizeWord`) and suggests matches
+by count. A table of every lemma came first and was removed at the owner's
+request.
+
+The counting rule, the corpus credit and the Tanzil credit are on
+`/attributions` (العزو), in the section `#quranic-arabic-corpus`, and the chart
+links there. `/attributions` credits the works and data the site relies on,
+while `/sources` is the reader for the books whose pages are cited; the corpus
+has no pages to read, so it is credited on `/attributions`. The page was called
+`/references` (المراجع) until this change.
 
 ## Next steps
 

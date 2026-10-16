@@ -40,9 +40,9 @@ export default function AboutPage() {
                 : 'Information is added in batches, and a batch is published only after it is approved. Each claim carries a review status (Not reviewed, In review or Reviewed), so readers can see how far it has been checked. Some values came from earlier notes with no citations; they are marked, and they are checked against the book as new batches reach them.'}
             </p>
           </div>
-          <Button href="/references">
+          <Button href="/attributions">
             <FontAwesomeIcon icon={faBookmark} />
-            {language === 'ar' ? 'عرض المراجع' : 'View references'}
+            {language === 'ar' ? 'العزو' : 'Attributions'}
           </Button>
         </section>
       </div>
