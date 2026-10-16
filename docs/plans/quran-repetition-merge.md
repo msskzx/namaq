@@ -274,11 +274,11 @@ from the centre outward, and each pair has its own scale, since the chart
 compares the two sides of a pair and not one pair with another.
 
 Colours come from the owner's palette and were run through the dataviz palette
-validator against the panel surfaces (#f9fafb light, #000 dark). The word
-chart uses #838e83, the one colour above 3:1 contrast in both themes. The pair
-chart uses #50808e for the first side and #DDD8C4 for the second: they separate
-well under colour-vision deficiency (ΔE 32), and #50808e clears 3:1 in both
-themes. #DDD8C4 falls to 1.37:1 on the light panel, so there its bar carries a
+validator against the panel surfaces (#f9fafb light, #000 dark). Both charts use
+#50808e, which clears 3:1 contrast in both themes (4.17 light, 4.82 dark): for
+every bar of the word chart and the first side of the pair chart. The pair
+chart uses #DDD8C4 for the second side: the two separate well under
+colour-vision deficiency (ΔE 32). #DDD8C4 falls to 1.37:1 on the light panel, so there its bar carries a
 faint inset outline, and every bar carries its count beside it.
 
 The eleven pairs in `src/lib/quran/opposites.ts` are our choice, at the

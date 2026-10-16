@@ -15,7 +15,7 @@ export const CHART_TOP = 10;
 export const SUGGESTIONS = 8;
 export const SEARCH = 'w-full rounded border border-amber-400 bg-transparent py-2 ps-9 pe-3 text-gray-900 dark:text-gray-100';
 export const LINK = 'text-amber-700 dark:text-amber-300 underline';
-const BAR = 'bg-[#838e83]';
+const BAR = 'bg-[#50808e]';
 
 type Ranked = { word: string; count: number; root: string; rank: number; key: string };
 
