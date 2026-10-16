@@ -6,91 +6,46 @@ import HadithModeToggle from './HadithModeToggle';
 
 const languageMock = { language: 'ar' as const };
 
-vi.mock('next-themes', () => ({
-  ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
-}));
-
 vi.mock('@/components/language/LanguageContext', () => ({
   useLanguage: () => languageMock,
 }));
 
-vi.mock('@fortawesome/react-fontawesome', () => ({
-  FontAwesomeIcon: () => <div data-testid="icon" />,
-}));
-
 afterEach(() => {
   cleanup();
-  vi.clearAllMocks();
   (languageMock as { language: 'ar' | 'en' }).language = 'ar';
 });
 
+const toggle = (name: RegExp | string = 'الإسناد والفقاعات') => screen.getByRole('switch', { name }) as HTMLInputElement;
+
 describe('HadithModeToggle', () => {
-  it('renders two buttons with the correct labels in Arabic', () => {
-    const onChange = vi.fn();
-    render(<HadithModeToggle mode="bubbles" onChange={onChange} />);
-
-    expect(screen.getByRole('button', { name: /النص كاملاً/ })).toBeTruthy();
-    expect(screen.getByRole('button', { name: /الإسناد والفقاعات/ })).toBeTruthy();
+  it('is on in bubbles mode', () => {
+    render(<HadithModeToggle mode="bubbles" onChange={() => {}} />);
+    expect(toggle().checked).toBe(true);
   });
 
-  it('marks the active mode as pressed in bubbles mode', () => {
-    const onChange = vi.fn();
-    render(<HadithModeToggle mode="bubbles" onChange={onChange} />);
-
-    const bubblesButton = screen.getByRole('button', { name: /الإسناد والفقاعات/ });
-    const textButton = screen.getByRole('button', { name: /النص كاملاً/ });
-
-    expect(bubblesButton.className).toContain('bg-amber-400');
-    expect(textButton.className).not.toContain('bg-amber-400');
+  it('is off in text mode', () => {
+    render(<HadithModeToggle mode="text" onChange={() => {}} />);
+    expect(toggle().checked).toBe(false);
   });
 
-  it('marks the active mode as pressed in text mode', () => {
-    const onChange = vi.fn();
-    render(<HadithModeToggle mode="text" onChange={onChange} />);
-
-    const textButton = screen.getByRole('button', { name: /النص كاملاً/ });
-    const bubblesButton = screen.getByRole('button', { name: /الإسناد والفقاعات/ });
-
-    expect(textButton.className).toContain('bg-amber-400');
-    expect(bubblesButton.className).not.toContain('bg-amber-400');
-  });
-
-  it('calls onChange with the selected mode when clicking text button', () => {
+  it('switches to the full text when turned off', () => {
     const onChange = vi.fn();
     render(<HadithModeToggle mode="bubbles" onChange={onChange} />);
-
-    const textButton = screen.getByRole('button', { name: /النص كاملاً/ });
-    fireEvent.click(textButton);
-
+    fireEvent.click(toggle());
     expect(onChange).toHaveBeenCalledWith('text');
   });
 
-  it('calls onChange with the selected mode when clicking bubbles button', () => {
+  it('switches to the bubbles when turned on', () => {
     const onChange = vi.fn();
     render(<HadithModeToggle mode="text" onChange={onChange} />);
-
-    const bubblesButton = screen.getByRole('button', { name: /الإسناد والفقاعات/ });
-    fireEvent.click(bubblesButton);
-
+    fireEvent.click(toggle());
     expect(onChange).toHaveBeenCalledWith('bubbles');
   });
 
-  it('renders with English labels when language is English', () => {
+  it('names both modes in English', () => {
     (languageMock as { language: 'ar' | 'en' }).language = 'en';
-    const onChange = vi.fn();
-    render(<HadithModeToggle mode="bubbles" onChange={onChange} />);
-
-    expect(screen.getByRole('button', { name: /Full text/ })).toBeTruthy();
-    expect(screen.getByRole('button', { name: /Isnad and bubbles/ })).toBeTruthy();
-  });
-
-  it('does not call onChange when the current mode button is clicked again', () => {
-    const onChange = vi.fn();
-    render(<HadithModeToggle mode="bubbles" onChange={onChange} />);
-
-    const bubblesButton = screen.getByRole('button', { name: /الإسناد والفقاعات/ });
-    fireEvent.click(bubblesButton);
-
-    expect(onChange).toHaveBeenCalledWith('bubbles');
+    render(<HadithModeToggle mode="bubbles" onChange={() => {}} />);
+    expect(toggle('Isnad and bubbles')).toBeTruthy();
+    expect(screen.getByText('Full text')).toBeTruthy();
   });
 });
