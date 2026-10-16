@@ -14,9 +14,9 @@ import { LINK, SEARCH, SUGGESTIONS } from './WordCounts';
 
 type Pair = [CountedSide, CountedSide];
 
-function SideLabel({ side }: { side: CountedSide }) {
+function SideLabel({ side, className }: { side: CountedSide; className: string }) {
   return (
-    <span className="min-w-0">
+    <span className={`min-w-0 ${className}`}>
       <span className="block text-lg font-arabic">{side.label}</span>
       <span className={`${NOTE} block text-xs`}>{side.form ? `صيغة «${side.label}» وحدها من «${side.lemma}»` : `مدخل «${side.lemma}»`}</span>
     </span>
@@ -89,14 +89,14 @@ export default function OppositesChart({ opposites, lemmas }: { opposites: Pair[
             const max = Math.max(1, a.count, b.count);
             return (
               <li key={i} title={`${a.label}: ${num(a.count)} · ${b.label}: ${num(b.count)}`}
-                className="grid grid-cols-[minmax(4.5rem,auto)_2.5rem_1fr_1fr_2.5rem_minmax(4.5rem,auto)_auto] sm:grid-cols-[9rem_2.5rem_1fr_1fr_2.5rem_9rem_auto] items-center gap-x-1">
-                <SideLabel side={a} />
-                <span className="text-sm text-end text-gray-700 dark:text-gray-300">{num(a.count)}</span>
-                <span className="flex justify-end"><span className="h-5 rounded-s bg-[#50808e]" style={{ width: `${(a.count / max) * 100}%` }} /></span>
-                <span className="flex justify-start"><span className="h-5 rounded-e bg-[#DDD8C4] ring-1 ring-inset ring-black/15 dark:ring-0" style={{ width: `${(b.count / max) * 100}%` }} /></span>
-                <span className="text-sm text-start text-gray-700 dark:text-gray-300">{num(b.count)}</span>
-                <SideLabel side={b} />
-                <Button size="icon" variant="outline" aria-label={`أزل زوج «${a.label}» و«${b.label}»`} onClick={() => setPairs(pairs.filter((_, k) => k !== i))}>
+                className="grid grid-cols-[2.5rem_1fr_1fr_2.5rem_auto] sm:grid-cols-[9rem_2.5rem_1fr_1fr_2.5rem_9rem_auto] items-center gap-x-1">
+                <SideLabel side={a} className="col-span-2 row-start-1 sm:col-span-1" />
+                <span className="row-start-2 sm:row-start-1 text-sm text-end text-gray-700 dark:text-gray-300">{num(a.count)}</span>
+                <span className="row-start-2 sm:row-start-1 flex justify-end"><span className="h-5 rounded-s bg-[#50808e]" style={{ width: `${(a.count / max) * 100}%` }} /></span>
+                <span className="row-start-2 sm:row-start-1 flex justify-start"><span className="h-5 rounded-e bg-[#DDD8C4] ring-1 ring-inset ring-black/15 dark:ring-0" style={{ width: `${(b.count / max) * 100}%` }} /></span>
+                <span className="row-start-2 sm:row-start-1 text-sm text-start text-gray-700 dark:text-gray-300">{num(b.count)}</span>
+                <SideLabel side={b} className="col-start-3 col-span-2 row-start-1 text-end sm:col-start-6 sm:col-span-1 sm:text-start" />
+                <Button size="icon" className="col-start-5 row-start-1 row-span-2 sm:col-start-7 sm:row-span-1" variant="outline" aria-label={`أزل زوج «${a.label}» و«${b.label}»`} onClick={() => setPairs(pairs.filter((_, k) => k !== i))}>
                   <FontAwesomeIcon icon={faXmark} />
                 </Button>
               </li>

@@ -15,6 +15,11 @@ describe('fromBuckwalter', () => {
     expect(fromBuckwalter("<in~")).toBe('إِنّ');
     expect(fromBuckwalter('rHm')).toBe('رحم');
   });
+
+  it('fails on a character outside the corpus table', () => {
+    expect(() => fromBuckwalter('rHm2')).toThrow('Unknown Buckwalter character "2" in "rHm2"');
+    expect(() => fromBuckwalter('rCm')).toThrow(/"C"/);
+  });
 });
 
 describe('countLemmas', () => {
@@ -43,6 +48,18 @@ describe('countLemmas', () => {
     ]);
   });
 
+  it('numbers lemmas that share a spelling, as the corpus does, so they stay apart', () => {
+    const homographs = [
+      '(7:73:5:1)\tSa`liHFA\tPN\tSTEM|POS:PN|LEM:Sa`liH2|ROOT:SlH|ACC',
+      '(2:62:16:1)\tSa`liHFA\tADJ\tSTEM|POS:ADJ|LEM:Sa`liH|ROOT:SlH|MS|ACC',
+      '(2:25:5:1)\tS~a`liHa`ti\tN\tSTEM|POS:N|LEM:Sa`liH|ROOT:SlH|FP|GEN',
+    ];
+    expect(countLemmas([...lines, ...homographs].join('\n')).lemmas.filter(([, , root]) => root === 'صلح')).toEqual([
+      ['صَٰلِح ١', 2, 'صلح'],
+      ['صَٰلِح ٢', 1, 'صلح'],
+    ]);
+  });
+
   it('counts the words the corpus gives no lemma', () => {
     expect(result.unlemmatized).toBe(1);
   });
@@ -51,6 +68,7 @@ describe('countLemmas', () => {
     const fromFile = countLemmas(readFileSync(MORPHOLOGY, 'utf8'));
     expect(fromFile).toEqual({ lemmas: built.lemmas, unlemmatized: built.unlemmatized });
     expect(fromFile.lemmas.find(([lemma]) => lemma === 'ٱللَّه')?.[1]).toBe(2699);
+    expect(new Set(fromFile.lemmas.map(([lemma]) => lemma)).size).toBe(fromFile.lemmas.length);
     expect(built.notice).toMatch(/Quranic Arabic Corpus \(morphology, version 0\.4\)/);
   });
 
@@ -63,6 +81,12 @@ describe('countLemmas', () => {
     const [[lemma, form]] = countPairs([...lines, ...akhira].join('\n'), [[{ label: 'آخر', lemma: 'A^xir' }, { label: 'الآخرة', lemma: 'A^xir', form: "'Axrp" }]]);
     expect(lemma).toEqual({ label: 'آخر', lemma: 'آخِر', form: false, count: 3 });
     expect(form).toEqual({ label: 'الآخرة', lemma: 'آخِر', form: true, count: 2 });
+  });
+
+  it('fails on a pair side the corpus does not hold, rather than counting zero', () => {
+    const text = lines.join('\n');
+    expect(() => countPairs(text, [[{ label: 'اسم', lemma: '{som' }, { label: 'سم', lemma: '{sm' }]])).toThrow('No lemma {sm in the corpus for سم');
+    expect(() => countPairs(text, [[{ label: 'اسم', lemma: '{som', form: 'Asm' }, { label: 'الله', lemma: '{ll~ah' }]])).toThrow('No form Asm of lemma {som in the corpus for اسم');
   });
 
   it('builds every pair of opposites from the file, with no side left at zero', () => {

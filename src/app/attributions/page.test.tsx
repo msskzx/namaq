@@ -36,6 +36,14 @@ describe('AttributionsPage', () => {
     expect(within(corpus).getByRole('link', { name: 'corpus.quran.com' }).getAttribute('href')).toBe('https://corpus.quran.com');
     expect(within(corpus).getByRole('link', { name: 'Tanzil' }).getAttribute('href')).toBe('https://tanzil.net');
     expect(within(corpus).getByText(new RegExp(`no lemma to ${lemmas.unlemmatized.toLocaleString('en')} words`))).toBeTruthy();
+    expect(within(corpus).getByText(/share a spelling carry the corpus’s number/)).toBeTruthy();
+  });
+
+  it('names the opposite words and the side that counts one form', () => {
+    render(<AttributionsPage />);
+    const corpus = screen.getByRole('heading', { name: 'Quranic Arabic Corpus' }).closest('section') as HTMLElement;
+    expect(within(corpus).getByRole('link', { name: 'the opposite words' }).getAttribute('href')).toBe('/quran');
+    expect(within(corpus).getByText(/so that side counts the form «الآخرة» alone/)).toBeTruthy();
   });
 
   it('gives the corpus note in Arabic', () => {

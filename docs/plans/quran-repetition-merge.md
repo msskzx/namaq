@@ -244,8 +244,17 @@ file and fails if the JSON differs.
 - The corpus gives no lemma to 3,307 words: separate pronouns, a preposition
   joined to a pronoun such as «لهم», and the disjoined letters such as «الم».
   The section states the number.
-- A lemma the corpus marks as a homograph with a trailing digit (`maE2`) shows
-  without it, beside its root, so the two entries stay apart.
+- The corpus marks a homograph with a trailing digit (``Sa`liH2``). The root
+  does not tell homographs apart, since «صَٰلِح» the adjective and «صَٰلِح» the
+  prophet both have the root صلح, and the chart shows no root. So every lemma
+  whose Arabic spelling another lemma shares carries the corpus's number,
+  the undigited one as ١: «صَٰلِح ١» (65) and «صَٰلِح ٢» (9). Fifteen
+  spellings are numbered this way.
+- The reader fails on input it cannot place. `fromBuckwalter` throws on a
+  character outside the corpus table, and `countPairs` throws on a side whose
+  lemma, or form of it, the corpus does not hold, so a typo in
+  `opposites.ts` stops `npm run quran:lemmas` and `npm test` instead of
+  counting zero.
 
 Measured: 4,832 lemmas over 74,608 counted segments, from 77,429 corpus words.
 The JSON is about 150 KB, and the page passes it from the server, so the
@@ -271,7 +280,10 @@ has no pages to read, so it is credited on `/attributions`. The page was called
 A second chart, `OppositesChart`, sets pairs of opposite words back to back:
 the first side grows toward the centre from the start of the row, the second
 from the centre outward, and each pair has its own scale, since the chart
-compares the two sides of a pair and not one pair with another.
+compares the two sides of a pair and not one pair with another. Below the `sm`
+breakpoint a row puts its two labels on one line and the counts and bars on the
+line under them. With all six on one line, a 375 px screen left each bar about
+16 px.
 
 Colours come from the owner's palette and were run through the dataviz palette
 validator against the panel surfaces (#f9fafb light, #000 dark). Both charts use
