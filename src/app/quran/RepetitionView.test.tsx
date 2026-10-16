@@ -2,7 +2,7 @@
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import RepetitionView, { VISIBLE, WORDS_PAGE } from './RepetitionView';
+import RepetitionView, { CHART_TOP, VISIBLE, WORDS_PAGE } from './RepetitionView';
 import RepetitionLoader from './RepetitionLoader';
 import { levelOf } from './RepetitionMatrix';
 import { buildRepetition, type Repetition, type RepetitionInput } from '@/lib/quran/repetition';
@@ -125,7 +125,7 @@ describe('RepetitionView', () => {
     nav.setUrl('/quran?s=1&t=2');
     render(<RepetitionView data={data} />);
     expect(screen.getByText('١٢ كلمة متطابقة')).toBeTruthy();
-    expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(2);
+    expect(within(screen.getByRole('combobox', { name: 'اختر نصًا مشتركًا' }).closest('section')!).getAllByRole('heading', { level: 3 })).toHaveLength(2);
   });
 
   it('selects a surah from the ranked list', () => {
@@ -184,7 +184,7 @@ describe('RepetitionView pair and edge cases', () => {
   it('puts the surah named in s first, with its own ayah in the passage option', () => {
     nav.setUrl('/quran?s=2&t=1');
     render(<RepetitionView data={data} />);
-    expect(screen.getAllByRole('heading', { level: 3 }).map(h => h.textContent)).toEqual(['Beta', 'Alpha']);
+    expect(within(screen.getByRole('combobox', { name: 'اختر نصًا مشتركًا' }).closest('section')!).getAllByRole('heading', { level: 3 }).map(h => h.textContent)).toEqual(['Beta', 'Alpha']);
     expect(screen.getByRole('option').textContent).toMatch(/^٢ ← ٣/);
   });
 
@@ -248,7 +248,7 @@ describe('RepetitionLoader', () => {
 describe('WordCounts', () => {
   const words: Repetition['words'] = [['الله', 9], ['والله', 4], ['رحمة', 3], ...Array.from({ length: WORDS_PAGE }, (_, i) => [`م${i}`, 1] as [string, number])];
   const section = () => screen.getByRole('heading', { name: 'عدد مرات ورود كل كلمة' }).closest('section') as HTMLElement;
-  const rows = () => within(section()).getAllByRole('listitem').map(li => li.textContent);
+  const rows = () => within(within(section()).getByRole('list', { name: 'جدول الكلمات' })).getAllByRole('listitem').map(li => li.textContent);
 
   it('lists words by count with their rank and says the grouping is ours', () => {
     render(<RepetitionView data={{ ...many, words }} />);
@@ -269,12 +269,63 @@ describe('WordCounts', () => {
   it('searches with or without vowels and hamza, keeping the full rank, and resets the page', () => {
     render(<RepetitionView data={{ ...many, words }} />);
     fireEvent.click(within(section()).getByRole('button', { name: /التالي/ }));
-    fireEvent.change(within(section()).getByRole('searchbox'), { target: { value: 'ٱللَّهِ' } });
+    fireEvent.change(within(section()).getByPlaceholderText('ابحث عن كلمة، بالتشكيل أو دونه'), { target: { value: 'ٱللَّهِ' } });
     expect(rows()).toEqual(['١الله٩', '٢والله٤']);
-    fireEvent.change(within(section()).getByRole('searchbox'), { target: { value: 'رحمه' } });
+    fireEvent.change(within(section()).getByPlaceholderText('ابحث عن كلمة، بالتشكيل أو دونه'), { target: { value: 'رحمه' } });
     expect(rows()).toEqual(['٣رحمة٣']);
-    fireEvent.change(within(section()).getByRole('searchbox'), { target: { value: 'زكاة' } });
+    fireEvent.change(within(section()).getByPlaceholderText('ابحث عن كلمة، بالتشكيل أو دونه'), { target: { value: 'زكاة' } });
     expect(within(section()).getByText('لا كلمة تطابق البحث.')).toBeTruthy();
+  });
+});
+
+describe('WordChart', () => {
+  const words: Repetition['words'] = [['الله', 9], ['والله', 4], ['رحمة', 3], ...Array.from({ length: 20 }, (_, i) => [`م${i}`, 1] as [string, number])];
+  const section = () => screen.getByRole('heading', { name: 'عدد مرات ورود كل كلمة' }).closest('section') as HTMLElement;
+  const chart = () => within(section()).queryByRole('list', { name: 'عدد مرات ورود الكلمات المختارة' });
+  const bars = () => chart() ? within(chart()!).getAllByRole('listitem').map(li => li.getAttribute('title')) : [];
+  const adder = () => within(section()).getByPlaceholderText('أضف كلمة إلى الرسم');
+  const suggestions = () => within(section()).queryByRole('list', { name: 'كلمات مقترحة' });
+
+  it('starts with the top words, longest bar first', () => {
+    render(<RepetitionView data={{ ...many, words }} />);
+    expect(bars()).toHaveLength(CHART_TOP);
+    expect(bars().slice(0, 3)).toEqual(['الله: ٩', 'والله: ٤', 'رحمة: ٣']);
+  });
+
+  it('empties the plot, then restores the top words', () => {
+    render(<RepetitionView data={{ ...many, words }} />);
+    fireEvent.click(within(section()).getByRole('button', { name: /إفراغ الرسم/ }));
+    expect(chart()).toBeNull();
+    expect(within(section()).getByText('الرسم فارغ. ابحث عن كلمة لإضافتها.')).toBeTruthy();
+    expect((within(section()).getByRole('button', { name: /إفراغ الرسم/ }) as HTMLButtonElement).disabled).toBe(true);
+    fireEvent.click(within(section()).getByRole('button', { name: /أكثر ١٠ كلمات/ }));
+    expect(bars()).toHaveLength(CHART_TOP);
+  });
+
+  it('adds a searched word from the suggestions or with Enter, and keeps bars in count order', () => {
+    render(<RepetitionView data={{ ...many, words }} />);
+    fireEvent.click(within(section()).getByRole('button', { name: /إفراغ الرسم/ }));
+    fireEvent.change(adder(), { target: { value: 'رحمه' } });
+    fireEvent.click(within(suggestions()!).getByRole('button', { name: /رحمة/ }));
+    expect(bars()).toEqual(['رحمة: ٣']);
+    expect(suggestions()).toBeNull();
+    fireEvent.change(adder(), { target: { value: 'ٱللَّه' } });
+    expect(within(suggestions()!).getAllByRole('button').map(b => b.textContent)).toEqual(['الله٩', 'والله٤']);
+    fireEvent.keyDown(adder(), { key: 'Enter' });
+    expect(bars()).toEqual(['الله: ٩', 'رحمة: ٣']);
+  });
+
+  it('leaves chosen words out of the suggestions and says when nothing matches', () => {
+    render(<RepetitionView data={{ ...many, words }} />);
+    fireEvent.change(adder(), { target: { value: 'الله' } });
+    expect(within(suggestions()!).getByText('لا كلمة تطابق البحث.')).toBeTruthy();
+  });
+
+  it('removes one word from the plot', () => {
+    render(<RepetitionView data={{ ...many, words }} />);
+    fireEvent.click(within(section()).getByRole('button', { name: 'أزل «والله» من الرسم' }));
+    expect(bars()).toHaveLength(CHART_TOP - 1);
+    expect(bars()).not.toContain('والله: ٤');
   });
 });
 

@@ -234,6 +234,11 @@ keeps everything else as written:
 The search on the page uses `normalizeWord`, so a reader finds a word with or
 without its vowels and hamza. The grouping is ours, and the section says so.
 
+Above the list, a bar chart compares chosen words. It starts with the ten most
+frequent, and the reader can empty it, remove a bar, or add a word through a
+search that suggests matching words by count. Bars keep the list's order, and
+the list is the chart's table view.
+
 Measured against the preview database: 77,442 words in 14,871 distinct forms,
 8,729 of which occur once (`normalizeWord` would give 14,655). The `words`
 list is about 260 KB of JSON before compression, which brings the whole
