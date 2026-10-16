@@ -88,8 +88,8 @@ export default function NasabView() {
         <h1 className="text-3xl mb-1">{isArabic ? 'النسب' : 'Nasab'}</h1>
         <p className="text-sm text-gray-600 dark:text-gray-400">
           {isArabic
-            ? 'اختر شخصًا لترى سلسلة آبائه. إذا اخترت أكثر من واحد التقت السلسلتان عند أول جد مشترك.'
-            : 'Pick a person to see the line of their fathers. Pick several and their lines join at the first ancestor they share.'}
+            ? 'اختر شخصًا لترى سلسلة آبائه، وشغّل المفتاح لترى ذريته تحته. إذا اخترت أكثر من واحد التقت السلسلتان عند أول جد مشترك.'
+            : 'Pick a person to see the line of their fathers, and turn on the switch to see their descendants below them. Pick several and their lines join at the first ancestor they share.'}
         </p>
       </header>
 

@@ -39,3 +39,5 @@ or repeated slugs are ignored.
 ## Not done
 
 Collapsing a long middle run of generations. The drawing scrolls instead.
+
+Bounding the descendants. A far ancestor with descendants on draws everyone below them: Adnan gives 247 people across 85 columns, which the drawing scrolls through. The text version under the drawing lists the subjects' chains only, not the descendants.

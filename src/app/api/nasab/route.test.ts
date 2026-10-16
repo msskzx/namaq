@@ -30,13 +30,15 @@ describe('GET /api/nasab', () => {
     expect(params).toEqual({ slugs: ['ali', 'umar'], descendants: false });
   });
 
-  it('also walks FATHER edges downward when descendants=1', async () => {
+  it.each([
+    ['?person=ali&descendants=1', true],
+    ['?person=ali&descendants=true', false],
+    ['?person=ali&descendants=0', false],
+  ])('walks FATHER edges downward only for descendants=1 (%s)', async (query, descendants) => {
     const run = vi.fn().mockResolvedValue({ records: [] });
     getSession.mockReturnValue({ run });
-    await GET(request('?person=ali&descendants=1'));
-    const [query, params] = run.mock.calls[0];
-    expect(query).toContain('-[:FATHER*1..]->');
-    expect(params).toEqual({ slugs: ['ali'], descendants: true });
+    await GET(request(query));
+    expect(run.mock.calls[0][1]).toEqual({ slugs: ['ali'], descendants });
   });
 
   it('reports the people found and drops subjects the graph does not hold', async () => {

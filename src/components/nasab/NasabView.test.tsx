@@ -39,16 +39,16 @@ const fetchMock = vi.fn();
 
 beforeEach(() => {
   fetchMock.mockReset();
-  fetchMock.mockResolvedValue({
+  fetchMock.mockImplementation(async (url: string) => ({
     ok: true,
     json: async () => ({
       people: [
         { slug: 'ali', name: 'علي بن أبي طالب', fathers: [] },
-        { slug: 'hasan', name: 'الحسن بن علي', fathers: ['ali'] },
+        ...(url.includes('descendants=1') ? [{ slug: 'hasan', name: 'الحسن بن علي', fathers: ['ali'] }] : []),
       ],
       subjects: ['ali'],
     }),
-  });
+  }));
   vi.stubGlobal('fetch', fetchMock);
 });
 
@@ -65,6 +65,8 @@ describe('NasabView descendants toggle', () => {
     render(<NasabView />);
     expect(toggle().checked).toBe(false);
     await waitFor(() => expect(fetchMock).toHaveBeenCalledWith('/api/nasab?person=ali'));
+    expect(await screen.findByRole('img', { name: 'Nasab tree' })).toBeTruthy();
+    expect(screen.queryByText('الحسن')).toBeNull();
   });
 
   it('turning it on records it in the URL, keeps the subjects, and asks for descendants', async () => {
