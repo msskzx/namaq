@@ -12,9 +12,10 @@ import { normalizeWord } from '@/lib/quran/normalize';
 import { NOTE, PANEL } from './RepetitionView';
 
 export const CHART_TOP = 10;
-const SUGGESTIONS = 8;
-const SEARCH = 'w-full rounded border border-amber-400 bg-transparent py-2 ps-9 pe-3 text-gray-900 dark:text-gray-100';
-const LINK = 'text-amber-700 dark:text-amber-300 underline';
+export const SUGGESTIONS = 8;
+export const SEARCH = 'w-full rounded border border-amber-400 bg-transparent py-2 ps-9 pe-3 text-gray-900 dark:text-gray-100';
+export const LINK = 'text-amber-700 dark:text-amber-300 underline';
+export const BAR = 'bg-gray-400 dark:bg-gray-500';
 
 type Ranked = { word: string; count: number; root: string; rank: number; key: string };
 
@@ -69,7 +70,7 @@ export default function WordCounts({ lemmas }: Pick<LemmaCounts, 'lemmas'>) {
           {bars.map(b => (
             <li key={b.rank} className="grid grid-cols-[6rem_1fr_3.5rem_auto] sm:grid-cols-[8rem_1fr_4rem_auto] items-center gap-2" title={`${b.word}: ${num(b.count)}`}>
               <span className="text-lg font-arabic truncate">{b.word}</span>
-              <span className="h-5 rounded-e bg-amber-400 dark:bg-amber-500" style={{ width: `${(b.count / max) * 100}%` }} />
+              <span className={`h-5 rounded-e ${BAR}`} style={{ width: `${(b.count / max) * 100}%` }} />
               <span className="text-sm text-gray-700 dark:text-gray-300">{num(b.count)}</span>
               <Button size="icon" variant="outline" aria-label={`أزل «${b.word}» من الرسم`} onClick={() => setChosen(chosen.filter(rank => rank !== b.rank))}>
                 <FontAwesomeIcon icon={faXmark} />

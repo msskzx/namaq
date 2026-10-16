@@ -266,6 +266,27 @@ while `/sources` is the reader for the books whose pages are cited; the corpus
 has no pages to read, so it is credited on `/attributions`. The page was called
 `/references` (المراجع) until this change.
 
+### Opposite words
+
+A second chart, `OppositesChart`, sets pairs of opposite words back to back:
+the first side grows toward the centre from the start of the row, the second
+from the centre outward, and each pair has its own scale, since the chart
+compares the two sides of a pair and not one pair with another. Bars are
+neutral gray in both charts.
+
+The eleven pairs in `src/lib/quran/opposites.ts` are our choice, at the
+owner's request, and the section says so; the reader can empty the chart,
+restore our pairs, remove one, or build a pair by picking two lemmas. Each side
+counts a corpus lemma, or one form of it where the lemma is wider than the
+word: «الآخرة» is a form of «آخِر», which also covers «آخر» and «آخرين», so
+the side counts the form alone (115, against 155 for the lemma). The label
+under each side says which it counts. `countPairs` in `src/lib/quran/lemmas.ts`
+counts the sides, a form being the stem with its vowels and marks removed, and
+`npm run quran:lemmas` writes them to `lemmas.json` beside the lemmas.
+
+The count is of the word, not its meaning: «الجنة» includes the gardens of this
+world and its plural, «النار» every fire, and «جهنم» is a lemma of its own.
+
 ## Next steps
 
 None. PR 3 moved `runs.json` and `ayat.json` to `src/lib/quran/passages.fixture.json`
