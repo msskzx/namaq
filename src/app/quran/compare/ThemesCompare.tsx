@@ -60,6 +60,7 @@ export default async function ThemesCompare({ query }: { query: Record<string, s
     <div dir="rtl" className="max-w-5xl mx-auto px-4 flex flex-wrap items-center gap-2">
       {SUGGESTED_PAIRS.map(([p, q]) => (
         <Button key={`${p}-${q}`} size="sm" variant="outline" active={p === x && q === y} href={`/quran/compare?mode=themes&a=${p}&b=${q}`}>
+          <FontAwesomeIcon icon={faCodeCompare} />
           {name(p)} ↔ {name(q)}
         </Button>
       ))}

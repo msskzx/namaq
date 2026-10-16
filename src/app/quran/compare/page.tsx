@@ -19,11 +19,11 @@ export default async function QuranComparePage({ searchParams }: { searchParams:
   return (
     <>
       <div dir="rtl" role="group" aria-label="نوع المقارنة" className="max-w-5xl mx-auto px-4 pt-4 flex gap-2">
-        <Button size="sm" active={!themes} href={modeHref('text', query)}>
+        <Button size="sm" active={!themes} aria-current={themes ? undefined : 'page'} href={modeHref('text', query)}>
           <FontAwesomeIcon icon={faFont} />
           النص
         </Button>
-        <Button size="sm" active={themes} href={modeHref('themes', query)}>
+        <Button size="sm" active={themes} aria-current={themes ? 'page' : undefined} href={modeHref('themes', query)}>
           <FontAwesomeIcon icon={faLayerGroup} />
           المواضيع
         </Button>
