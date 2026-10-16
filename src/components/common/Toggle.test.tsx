@@ -21,4 +21,9 @@ describe('Toggle', () => {
     render(<Toggle label="Dark mode" checked={false} disabled onChange={() => {}} />);
     expect((screen.getByRole('switch', { name: 'Dark mode' }) as HTMLInputElement).disabled).toBe(true);
   });
+
+  it('draws a larger switch with icons when size is lg', () => {
+    const { container } = render(<Toggle label="Pairs" checked={false} onChange={() => {}} size="lg" offIcon={<i />} onIcon={<i />} />);
+    expect(container.querySelector('label')?.className).toContain('h-9 w-[68px]');
+  });
 });

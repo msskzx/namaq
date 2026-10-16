@@ -89,16 +89,12 @@ export default function OppositesChart({ opposites, lemmas }: { opposites: Pair[
             const max = Math.max(1, a.count, b.count);
             return (
               <li key={i} title={`${a.label}: ${num(a.count)} · ${b.label}: ${num(b.count)}`}
-                className="grid grid-cols-[minmax(4.5rem,auto)_1fr_1fr_minmax(4.5rem,auto)_auto] sm:grid-cols-[9rem_1fr_1fr_9rem_auto] items-center gap-2">
+                className="grid grid-cols-[minmax(4.5rem,auto)_2.5rem_1fr_1fr_2.5rem_minmax(4.5rem,auto)_auto] sm:grid-cols-[9rem_2.5rem_1fr_1fr_2.5rem_9rem_auto] items-center gap-x-1">
                 <SideLabel side={a} />
-                <span className="flex items-center justify-end gap-1">
-                  <span className="text-sm text-gray-700 dark:text-gray-300">{num(a.count)}</span>
-                  <span className={`h-5 rounded-s ${BAR}`} style={{ width: `${(a.count / max) * 100}%` }} />
-                </span>
-                <span className="flex items-center justify-start gap-1">
-                  <span className={`h-5 rounded-e ${BAR}`} style={{ width: `${(b.count / max) * 100}%` }} />
-                  <span className="text-sm text-gray-700 dark:text-gray-300">{num(b.count)}</span>
-                </span>
+                <span className="text-sm text-end text-gray-700 dark:text-gray-300">{num(a.count)}</span>
+                <span className="flex justify-end"><span className={`h-5 rounded-s ${BAR}`} style={{ width: `${(a.count / max) * 100}%` }} /></span>
+                <span className="flex justify-start"><span className={`h-5 rounded-e ${BAR}`} style={{ width: `${(b.count / max) * 100}%` }} /></span>
+                <span className="text-sm text-start text-gray-700 dark:text-gray-300">{num(b.count)}</span>
                 <SideLabel side={b} />
                 <Button size="icon" variant="outline" aria-label={`أزل زوج «${a.label}» و«${b.label}»`} onClick={() => setPairs(pairs.filter((_, k) => k !== i))}>
                   <FontAwesomeIcon icon={faXmark} />

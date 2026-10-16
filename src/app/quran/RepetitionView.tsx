@@ -4,9 +4,10 @@
 import React, { useMemo, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAnglesDown, faArrowLeft, faArrowRight, faListOl, faShuffle } from '@fortawesome/free-solid-svg-icons';
+import { faAnglesDown, faArrowDown19, faArrowDownWideShort, faArrowLeft, faArrowRight, faListOl, faShuffle, type IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import Badge from '@/components/common/Badge';
 import Button from '@/components/common/Button';
+import Toggle from '@/components/common/Toggle';
 import { num } from '@/lib/quran/arabicNumber';
 import { plainName } from '@/lib/quran/normalize';
 import { MIN_WORDS } from '@/lib/quran/passages';
@@ -166,6 +167,18 @@ function PairView({ data, s, t }: { data: Repetition; s: number; t: number }) {
   );
 }
 
+function Switch({ off, on, checked, onChange, offIcon, onIcon }: { off: string; on: string; checked: boolean; onChange: (on: boolean) => void; offIcon: IconDefinition; onIcon: IconDefinition }) {
+  const label = (active: boolean) => 'cursor-pointer ' + (active ? 'font-semibold text-amber-600 dark:text-amber-400' : 'text-gray-500 dark:text-gray-400');
+  return (
+    <>
+      <button type="button" tabIndex={-1} aria-hidden className={`${label(!checked)} justify-self-end`} onClick={() => onChange(false)}>{off}</button>
+      <Toggle label={on} checked={checked} onChange={onChange} size="lg"
+        offIcon={<FontAwesomeIcon icon={offIcon} className="size-4" />} onIcon={<FontAwesomeIcon icon={onIcon} className="size-4" />} />
+      <button type="button" tabIndex={-1} aria-hidden className={`${label(checked)} justify-self-start`} onClick={() => onChange(true)}>{on}</button>
+    </>
+  );
+}
+
 function Ranked({ data, totals, pick, onPick }: { data: Repetition; totals: Map<number, number>; pick: Pick | null; onPick: (p: Pick) => void }) {
   const [mode, setMode] = useState<'surahs' | 'pairs'>('surahs');
   const [sort, setSort] = useState<'number' | 'count'>('count');
@@ -180,23 +193,9 @@ function Ranked({ data, totals, pick, onPick }: { data: Repetition; totals: Map<
   const sorted = useMemo(() => [...rows].sort((p, q) => sort === 'count' ? q.words - p.words || p.number - q.number : p.number - q.number), [rows, sort]);
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex gap-2">
-        <Button size="sm" active={mode === 'surahs'} onClick={() => setMode('surahs')}>
-          <FontAwesomeIcon icon={faListOl} />
-          السور
-        </Button>
-        <Button size="sm" active={mode === 'pairs'} onClick={() => setMode('pairs')}>
-          <FontAwesomeIcon icon={faListOl} />
-          الأزواج
-        </Button>
-      </div>
-      <div className="flex gap-2">
-        <Button size="sm" variant="outline" active={sort === 'count'} onClick={() => setSort('count')}>
-          ترتيب بالعدد
-        </Button>
-        <Button size="sm" variant="outline" active={sort === 'number'} onClick={() => setSort('number')}>
-          ترتيب بالرقم
-        </Button>
+      <div className="grid w-fit grid-cols-[auto_auto_auto] items-center gap-x-2 gap-y-2 text-sm">
+        <Switch off="السور" on="الأزواج" checked={mode === 'pairs'} onChange={on => setMode(on ? 'pairs' : 'surahs')} offIcon={faListOl} onIcon={faShuffle} />
+        <Switch off="ترتيب بالعدد" on="ترتيب بالرقم" checked={sort === 'number'} onChange={on => setSort(on ? 'number' : 'count')} offIcon={faArrowDownWideShort} onIcon={faArrowDown19} />
       </div>
       <ol className="flex flex-col max-h-[min(70vh,40rem)] overflow-y-auto">
         {sorted.map((r, i) => (

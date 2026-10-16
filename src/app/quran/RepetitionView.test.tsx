@@ -146,9 +146,26 @@ describe('RepetitionView', () => {
     expect(screen.queryByRole('button', { name: /عرض الباقي/ })).toBeNull();
   });
 
+  it('sorts the ranked list by surah number with the sort switch, and back by clicking its label', () => {
+    const wide: Repetition = {
+      ...many,
+      surahs: [1, 2, 3].map(n => ({ number: n, name: `S${n}`, ayat: 1, words: n })),
+      cells: [1, 2, 3].map(n => ({ a: n, b: n, words: n, phrases: 1 })),
+      within: [],
+    };
+    render(<RepetitionView data={wide} />);
+    const labels = () => within(screen.getByRole('list')).getAllByRole('button').map(b => b.textContent?.replace(/[٠-٩]/g, ''));
+    expect(labels()).toEqual(['S3', 'S2', 'S1']);
+    fireEvent.click(screen.getByRole('switch', { name: 'ترتيب بالرقم' }));
+    expect((screen.getByRole('switch', { name: 'ترتيب بالرقم' }) as HTMLInputElement).checked).toBe(true);
+    expect(labels()).toEqual(['S1', 'S2', 'S3']);
+    fireEvent.click(screen.getByText('ترتيب بالعدد'));
+    expect(labels()).toEqual(['S3', 'S2', 'S1']);
+  });
+
   it('switches the ranked list to pairs', () => {
     render(<RepetitionView data={data} />);
-    fireEvent.click(screen.getByRole('button', { name: 'الأزواج' }));
+    fireEvent.click(screen.getByRole('switch', { name: 'الأزواج' }));
     const rows = within(screen.getByRole('list')).getAllByRole('button');
     expect(rows).toHaveLength(1);
     fireEvent.click(rows[0]);
