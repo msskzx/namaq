@@ -1,6 +1,6 @@
 # Relations within a single surah
 
-Status: built as the demo page `/quran/shifts`, since merged into `/quran` (see [quran-repetition-merge.md](quran-repetition-merge.md)), whose redirect keeps the old URL working; the section "Verdict after testing"
+Status: built as the demo page `/quran/shifts`, since merged into the repetition page, now part of `/quran/compare` (see [quran-repetition-merge.md](quran-repetition-merge.md)), whose redirect keeps the old URL working; the section "Verdict after testing"
 at the end overrides the ideas above where they differ. No citations yet.
 
 ## What the owner wants
