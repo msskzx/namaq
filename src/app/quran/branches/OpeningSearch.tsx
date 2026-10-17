@@ -18,12 +18,12 @@ const href = (id: string) => `/quran/branches?o=${encodeURIComponent(id)}`;
 
 export default function OpeningSearch({ openings, current }: { openings: Opening[]; current: string }) {
   const [query, setQuery] = useState('');
-  const needle = query.trim().split(/\s+/).map(normalizeWord).join(' ');
+  const needle = query.split(/\s+/).map(w => normalizeWord(w).trim()).filter(Boolean).join(' ');
   const suggestions = needle ? openings.filter(o => o.id.includes(needle)).slice(0, SUGGESTIONS) : [];
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex flex-wrap gap-2" aria-label="أكثر الفواتح تكرارًا">
+      <div role="group" className="flex flex-wrap gap-2" aria-label="أكثر الفواتح تكرارًا">
         {openings.slice(0, TOP).map(o => (
           <Button key={o.id} size="sm" href={href(o.id)} active={o.id === current} aria-current={o.id === current ? 'page' : undefined}>
             <FontAwesomeIcon icon={faCodeBranch} />

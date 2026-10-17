@@ -32,19 +32,26 @@ describe('sharedOpenings', () => {
     expect(openingId(ayah('1:3', 'قال'))).toBeNull();
   });
 
+  it('ignores the pause and section marks the reader keeps beside a word', () => {
+    const shared = sharedOpenings([ayah('1:1', 'إِنَّ ٱللَّهَ غفور'), { key: '1:2', page: 1, words: ['۞ إِنَّ', 'ٱللَّهَ ۖ', 'عليم'] }]);
+    expect([...shared.keys()]).toEqual(['ان الله']);
+    expect(shape(branch(shared.get('ان الله')!)).children).toHaveLength(2);
+  });
+
   it('matches what npm run quran:branches writes from the reader pages', () => {
     const pages = Array.from({ length: 604 }, (_, i) => JSON.parse(readFileSync(join(__dirname, '../../app/quran/read/data', `${i + 1}.json`), 'utf8')));
     expect([...sharedOpenings(readerAyat(pages)).values()].flat()).toEqual(all);
   });
 
   it('keeps every committed ayah in a group of two or more', () => {
-    expect(groups.size).toBe(769);
+    expect(groups.size).toBe(781);
+    expect([...groups.keys()].every(id => id === id.trim() && !id.includes('  '))).toBe(true);
     expect([...groups.values()].flat()).toHaveLength(all.length);
   });
 
   it('lists the largest openings first', () => {
     const list = listOpenings(groups);
-    expect(list[0]).toMatchObject({ id: 'يايها الذين', count: 85 });
+    expect(list[0]).toMatchObject({ id: 'يايها الذين', count: 90 });
     expect(list.every((o, i) => i === 0 || list[i - 1].count >= o.count)).toBe(true);
   });
 });
