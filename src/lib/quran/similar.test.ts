@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import built from '@/app/quran/compare/similar.json';
-import { findSimilar, readAyat, type SimilarPair, type Span } from './similar';
+import { findSimilar, readAyat, SAME_ROOT, SAME_WORD, type SimilarPair, type Span } from './similar';
 
 const MORPHOLOGY = join(__dirname, '../../../data/quran/quranic-corpus-morphology-0.4.txt');
 const JUZ_TABARAK_AND_AMMA = readFileSync(MORPHOLOGY, 'utf8').split(/\r?\n/)
@@ -29,15 +29,29 @@ describe('findSimilar', () => {
 
   it('pairs ayat that say the same thing in different words', () => {
     expect(has(pairs, [74, 54, 55], [80, 11, 12])).toBe(true);
-    expect(has(pairs, [73, 19, 19], [76, 29, 30])).toBe(true);
+    expect(has(pairs, [73, 19, 19], [76, 29, 29])).toBe(true);
     expect(has(pairs, [75, 20, 21], [76, 27, 27])).toBe(true);
   });
 
-  it('highlights the shared words on both sides', () => {
+  it('marks a word the other side repeats as the same word, and a different form of a shared root or particle apart', () => {
     const p = pairs.find(x => x.a.join() === '74,54,55' && x.b.join() === '80,11,12')!;
     expect(p.roots).toEqual(expect.arrayContaining(['ذكر']));
-    expect(p.marksA).toEqual(expect.arrayContaining([54002, 55001, 55002]));
-    expect(p.marksB).toEqual(expect.arrayContaining([11002, 12001, 12002]));
+    expect(p.marksA).toEqual([[54, 0, SAME_WORD], [54, 1, SAME_ROOT], [54, 2, SAME_WORD], [55, 0, SAME_WORD], [55, 1, SAME_WORD], [55, 2, SAME_WORD]]);
+    expect(p.marksB).toContainEqual([11, 1, SAME_ROOT]);
+  });
+
+  it('does not pad a match with a neighbouring ayah that shares nothing', () => {
+    const tail = findSimilar(readAyat(readFileSync(MORPHOLOGY, 'utf8').split(/\r?\n/)
+      .filter(line => /^\((56|69):/.test(line)).join('\n')));
+    expect(has(tail, [56, 74, 74], [69, 52, 52])).toBe(true);
+    expect(tail.some(p => p.b.join() === '69,51,52' || p.a.join() === '69,51,52')).toBe(false);
+  });
+
+  it('pairs ayat repeated word for word in two surahs, but not inside one', () => {
+    const tail = findSimilar(readAyat(readFileSync(MORPHOLOGY, 'utf8').split(/\r?\n/)
+      .filter(line => /^\((55|56|69):/.test(line)).join('\n')));
+    expect(has(tail, [56, 80, 80], [69, 43, 43])).toBe(true);
+    expect(tail.some(p => p.a[0] === 55 && p.b[0] === 55 && p.a[1] === p.a[2] && p.b[1] === p.b[2] && p.a[1] === 13 && p.b[1] === 16)).toBe(false);
   });
 
   it('keeps one pair where windows overlap on both sides', () => {
@@ -54,7 +68,9 @@ describe('similar.json', () => {
   it('holds the examples from the whole Qur\'an', () => {
     const all = built.pairs as SimilarPair[];
     expect(has(all, [74, 54, 55], [80, 11, 12])).toBe(true);
-    expect(has(all, [73, 19, 19], [76, 29, 30])).toBe(true);
+    expect(has(all, [73, 19, 19], [76, 29, 29])).toBe(true);
+    expect(has(all, [56, 74, 74], [69, 52, 52])).toBe(true);
+    expect(has(all, [56, 80, 80], [69, 43, 43])).toBe(true);
     expect(has(all, [75, 20, 21], [76, 27, 27])).toBe(true);
     expect(has(all, [74, 53, 53], [75, 20, 21])).toBe(true);
   });

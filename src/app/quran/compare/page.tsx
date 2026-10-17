@@ -39,8 +39,8 @@ export default async function QuranComparePage({ searchParams }: { searchParams:
             </div>
           ) : (
             <>
-              <CompareModeToggle themes={themes} textHref={modeHref('text', query)} themesHref={modeHref('themes', query)} />
-              {themes ? <ThemesCompare query={query} /> : <TextCompare query={query} shared={<><SharedPassages a={a} b={b} /><SimilarAyat surah={a} other={b} /></>} />}
+              <CompareModeToggle on={themes} offHref={modeHref('text', query)} onHref={modeHref('themes', query)} />
+              {themes ? <ThemesCompare query={query} /> : <TextCompare query={query} shared={<SharedPassages a={a} b={b} />} />}
             </>
           )}
         </div>

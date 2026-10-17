@@ -1,11 +1,14 @@
 import type { ReactNode } from 'react';
-import { faCodeCompare, faExpand, faLightbulb } from '@fortawesome/free-solid-svg-icons';
+import { faCodeCompare, faExpand, faLightbulb, faListOl, faWaveSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from '@/components/common/Button';
 import { prisma } from '@/lib/prisma';
 import { alignSurahs, clampRange, compareHref } from '@/lib/quran/compare';
 import { ayahWords } from '@/lib/quran/normalize';
 import CompareView from './CompareView';
+import CompareModeToggle from './CompareModeToggle';
+import SimilarAyat from './SimilarAyat';
+import { viewHref } from './modeHref';
 import { num } from '@/lib/quran/arabicNumber';
 
 const plainName = (name: string) => name.replace(/[ً-ٟـٰۖ-ۭ]/g, '').replace(/ٱ/g, 'ا');
@@ -47,9 +50,14 @@ export default async function TextCompare({ query, shared }: { query: Record<str
     </Button>
   );
 
+  const ayat = query.view === 'ayat';
+
   return (
     <div dir="rtl" className="max-w-5xl mx-auto p-4 flex flex-col gap-4 text-gray-900 dark:text-gray-200">
+      <CompareModeToggle on={ayat} offHref={viewHref(false, query)} onHref={viewHref(true, query)} offLabel="المتشابه" onLabel="آية بآية" label="المقارنة آية بآية"
+        offIcon={<FontAwesomeIcon icon={faWaveSquare} className="size-3" />} onIcon={<FontAwesomeIcon icon={faListOl} className="size-3" />} />
       <form method="get" className="flex flex-wrap items-center gap-2">
+        {ayat && <input type="hidden" name="view" value="ayat" />}
         <div className="flex w-full items-center gap-2">
           {select('a', a, 'السورة الأولى')}
           {ayahInput('af', ra.from, wordsA.length, 'من آية (الأولى)')}
@@ -72,7 +80,7 @@ export default async function TextCompare({ query, shared }: { query: Record<str
         </Button>
       </form>
       {shared}
-      {a === b && ra.from === rb.from && ra.to === rb.to ? <p className="text-sm text-gray-600 dark:text-gray-400">اختر مقطعين مختلفين.</p> : <CompareView
+      {!ayat ? <SimilarAyat surah={a} other={b} ranges={whole ? undefined : { a: ra, b: rb }} /> : a === b && ra.from === rb.from && ra.to === rb.to ? <p className="text-sm text-gray-600 dark:text-gray-400">اختر مقطعين مختلفين.</p> : <CompareView
         a={{ number: a, name: rawName(a), plain: nameOf(a), words: wordsA.map(w => w.display.join(' ')), range: whole ? undefined : ra }}
         b={{ number: b, name: rawName(b), plain: nameOf(b), words: wordsB.map(w => w.display.join(' ')), range: whole ? undefined : rb }}
         rows={alignSurahs(slice(wordsA, ra).map(w => w.norm), slice(wordsB, rb).map(w => w.norm), { a: ra.from, b: rb.from }, whole)}

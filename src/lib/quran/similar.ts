@@ -2,10 +2,14 @@
 import { fromBuckwalter } from './lemmas';
 
 export type Span = [surah: number, from: number, to: number];
-export type SimilarPair = { a: Span; b: Span; score: number; roots: string[]; marksA: number[]; marksB: number[] };
+export type Mark = [ayah: number, word: number, kind: typeof SAME_WORD | typeof SAME_ROOT];
+export type SimilarPair = { a: Span; b: Span; score: number; roots: string[]; marksA: Mark[]; marksB: Mark[] };
+
+export const SAME_WORD = 0;
+export const SAME_ROOT = 1;
 
 type Token = { key: string; word: number };
-type Ayah = { surah: number; ayah: number; tokens: Token[]; form: string };
+type Ayah = { surah: number; ayah: number; tokens: Token[]; words: string[] };
 
 const CONTENT = new Set(['N', 'V', 'ADJ', 'PN']);
 const DROPPED = new Set(['P', 'CONJ', 'DET', 'PRON', 'REM']);
@@ -15,6 +19,8 @@ const SEED = 0.3;
 export const MIN_SCORE = 0.5;
 const MIN_SHARED = 6.5;
 const OPENING = 0.1;
+const MARKS = /[aiuoFNK~`^#:@"[;,.!\-+%\]]/g;
+const bare = (form: string) => form.replace(MARKS, '').replace(/[{<>]/g, 'A');
 
 export function readAyat(morphology: string): Ayah[] {
   const ayat: Ayah[] = [];
@@ -23,8 +29,8 @@ export function readAyat(morphology: string): Ayah[] {
     const [location, form, tag, features] = line.split('\t');
     const [surah, ayah, word] = location.slice(1, -1).split(':').map(Number);
     let last = ayat[ayat.length - 1];
-    if (!last || last.surah !== surah || last.ayah !== ayah) ayat.push(last = { surah, ayah, tokens: [], form: '' });
-    last.form += form;
+    if (!last || last.surah !== surah || last.ayah !== ayah) ayat.push(last = { surah, ayah, tokens: [], words: [] });
+    last.words[word - 1] = (last.words[word - 1] ?? '') + bare(form);
     const root = /\|ROOT:([^|]+)/.exec(features)?.[1];
     const lemma = /\|LEM:([^|]+)/.exec(features)?.[1];
     const key = CONTENT.has(tag) && root ? `r:${root}` : lemma && !DROPPED.has(tag) ? `p:${lemma}` : null;
@@ -98,10 +104,12 @@ export function findSimilar(ayat: Ayah[]): SimilarPair[] {
         if (sa < sb + lb && sb < sa + la) continue;
         const [wa, wb] = [windowOf(sa, la), windowOf(sb, lb)];
         if (!wa || !wb) continue;
-        if (wa.map(a => a.form).join('|') === wb.map(a => a.form).join('|')) continue;
+        if (ayat[sa].surah === ayat[sb].surah && wa.map(a => a.words.join(' ')).join('|') === wb.map(a => a.words.join(' ')).join('|')) continue;
         const [x, y] = [keys(wa), keys(wb)];
         const [X, Y] = [new Set(x), new Set(y)];
         const common = new Set([...X].filter(key => Y.has(key)));
+        const loose = (win: Ayah[]) => [win[0], win[win.length - 1]].some(a => !a.tokens.some(t => common.has(t.key)));
+        if (loose(wa) || loose(wb)) continue;
         const sharedWeight = [...common].reduce((s, key) => s + w(key), 0);
         if (sharedWeight < MIN_SHARED) continue;
         const d = Math.sqrt([...X].reduce((s, key) => s + w(key), 0) * [...Y].reduce((s, key) => s + w(key), 0));
@@ -120,17 +128,21 @@ export function findSimilar(ayat: Ayah[]): SimilarPair[] {
   }
 
   const span = (start: number, len: number): Span => [ayat[start].surah, ayat[start].ayah, ayat[start + len - 1].ayah];
-  const marks = (start: number, len: number, common: Set<string>) =>
-    ayat.slice(start, start + len).flatMap(a => a.tokens.filter(t => common.has(t.key)).map(t => a.ayah * 1000 + t.word))
-      .filter((m, k, all) => all.indexOf(m) === k);
+  const marks = (start: number, len: number, otherStart: number, otherLen: number, common: Set<string>): Mark[] => {
+    const other = new Set(ayat.slice(otherStart, otherStart + otherLen).flatMap(a => a.words));
+    return ayat.slice(start, start + len).flatMap(a => a.words.flatMap((form, word): Mark[] => {
+      if (other.has(form)) return [[a.ayah, word, SAME_WORD]];
+      return a.tokens.some(t => t.word === word && common.has(t.key)) ? [[a.ayah, word, SAME_ROOT]] : [];
+    }));
+  };
   return kept
     .map(h => ({
       a: span(h.sa, h.la),
       b: span(h.sb, h.lb),
       score: Math.round(Math.min(h.score, 1) * 100) / 100,
       roots: [...h.common].filter(key => key.startsWith('r:')).map(key => fromBuckwalter(key.slice(2))),
-      marksA: marks(h.sa, h.la, h.common),
-      marksB: marks(h.sb, h.lb, h.common),
+      marksA: marks(h.sa, h.la, h.sb, h.lb, h.common),
+      marksB: marks(h.sb, h.lb, h.sa, h.la, h.common),
     }))
     .sort((p, q) => p.a[0] - q.a[0] || p.a[1] - q.a[1] || p.b[0] - q.b[0] || p.b[1] - q.b[1]);
 }

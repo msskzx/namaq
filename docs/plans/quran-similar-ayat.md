@@ -39,8 +39,11 @@ flowchart LR
    the same two tokens gain 0.1, since a memoriser goes wrong at the opening.
 5. **A pair is kept** when its score is at least 0.5 and the tokens it shares
    weigh at least 6.5, which rules out a match on one common root. Of overlapping
-   pairs only the best is kept. Pairs whose letters are identical are left to
-   the shared-passage finder.
+   pairs only the best is kept. A window whose first or last ayah shares no
+   token with the other side is dropped, so a match is never padded with a
+   neighbour. Pairs whose letters are identical are kept across surahs, since a
+   memoriser needs them too, and dropped inside one surah, where the
+   within-surah phrase list already shows them.
 6. Only ayah pairs that share a rare root (in fewer than about one ayah in
    twelve) are scored, and only where the shared weight is already near a match,
    which keeps the build to seconds.
@@ -51,8 +54,14 @@ The result is generated once with `npm run quran:similar` into
 `src/app/quran/compare/similar.json`, since scoring the whole text takes too
 long for a request. The text never changes, so the file only changes when the
 rules above do. The surah view (`?s=`) lists every similar pair touching that
-surah, and the pair view lists the pairs between its two surahs. Shared words
-are highlighted.
+surah. In the pair view the list of matches between the two surahs is the
+default, and a switch turns to the older ayah-by-ayah alignment (`view=ayat`),
+since both answer which ayat of the two surahs belong together.
+
+A word the other side has letter for letter is amber, as in the alignment. A
+word that shares only its root or particle with the other side, such as إنه
+against إنها, is sky blue, since that is the difference a memoriser has to
+learn.
 
 ## Later
 

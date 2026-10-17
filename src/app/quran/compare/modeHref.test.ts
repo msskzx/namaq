@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { modeHref } from './modeHref';
+import { modeHref, viewHref } from './modeHref';
 
 describe('modeHref', () => {
   it('keeps the chosen surahs and drops the ayah ranges when switching to themes', () => {
@@ -12,5 +12,12 @@ describe('modeHref', () => {
 
   it('links to the bare page when no surah is chosen', () => {
     expect(modeHref('text', {})).toBe('/quran/compare');
+  });
+});
+
+describe('viewHref', () => {
+  it('keeps the surahs and ayah ranges and switches the ayah-by-ayah view on or off', () => {
+    expect(viewHref(true, { a: '56', af: '70', at: '80', b: '69' })).toBe('/quran/compare?a=56&af=70&at=80&b=69&view=ayat');
+    expect(viewHref(false, { a: '56', b: '69', view: 'ayat' })).toBe('/quran/compare?a=56&b=69');
   });
 });

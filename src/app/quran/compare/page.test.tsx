@@ -47,7 +47,6 @@ describe('QuranComparePage', () => {
     cleanup();
     await page({ a: '10', b: '11' });
     expect(JSON.parse(within('text', 'shared'))).toEqual({ a: 10, b: 11 });
-    expect(JSON.parse(within('text', 'similar'))).toEqual({ surah: 10, other: 11 });
   });
 
   it('lists the similar ayat of the surah named in s', async () => {
