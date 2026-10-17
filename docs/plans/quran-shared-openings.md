@@ -5,7 +5,7 @@ A page at `/quran/branches` that draws, as a word tree read right to left, the a
 ## Data
 
 - `npm run quran:branches` reads the 604 reader pages under `src/app/quran/read/data/`, the same text `/quran/read` shows, and writes every ayah that shares its opening with another ayah to `src/app/quran/branches/ayat.json`. It needs no database. Each entry holds the ayah key, its mushaf page and its words.
-- A word is compared after `normalizeWord`, so diacritics, pause marks and the alif and ya spellings do not separate two words. A token that normalizes to nothing, such as a lone pause mark, is dropped.
+- The reader sets pause marks and the hizb sign ۞ beside a word, separated by a space. The build drops them, so the page shows words only. A word is compared after `normalizeWord`, so diacritics and the alif and ya spellings do not separate two words.
 - Two ayat share an opening when their first two words match. Every ayah has one opening, so the openings split the ayat into groups, and a group needs two ayat or more. The list is sorted by how many ayat a group holds.
 - Openings only. A shared phrase that starts inside an ayah is out of scope for now.
 

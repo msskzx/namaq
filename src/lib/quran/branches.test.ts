@@ -11,9 +11,9 @@ const shape = (node: Branch): unknown => ({ words: node.words.map(normalizeWord)
 const ayah = (key: string, text: string): BranchAyah => ({ key, page: 1, words: text.split(' ') });
 
 describe('readerAyat', () => {
-  it('reads the ayat in page order, skipping tokens that are only marks', () => {
+  it('reads the ayat in page order, dropping the marks the reader sets beside a word', () => {
     const read = readerAyat([
-      { juz: 1, items: [{ surah: 1 }, { line: ['بِسْمِ', 'ٱللَّهِ', 1, 'ٱلْحَمْدُ'] }] },
+      { juz: 1, items: [{ surah: 1 }, { line: ['۞ بِسْمِ', 'ٱللَّهِ ۖ', 1, 'ٱلْحَمْدُ'] }] },
       { juz: 1, items: [{ line: ['لِلَّهِ', 'ۛ', 2] }, { surah: 2 }, { line: ['الٓمٓ', 1] }] },
     ]);
     expect(read).toEqual([
@@ -33,9 +33,10 @@ describe('sharedOpenings', () => {
   });
 
   it('ignores the pause and section marks the reader keeps beside a word', () => {
-    const shared = sharedOpenings([ayah('1:1', 'إِنَّ ٱللَّهَ غفور'), { key: '1:2', page: 1, words: ['۞ إِنَّ', 'ٱللَّهَ ۖ', 'عليم'] }]);
-    expect([...shared.keys()]).toEqual(['ان الله']);
-    expect(branch(shared.get('ان الله')!).children).toHaveLength(2);
+    const read = readerAyat([{ juz: 1, items: [{ surah: 2 }, { line: ['۞ إِنَّ', 'ٱللَّهَ ۖ', 'عليم', 1, 'إِنَّ', 'ٱللَّهَ', 'غفور', 2] }] }]);
+    const shared = sharedOpenings(read);
+    expect(listOpenings(shared)).toEqual([{ id: 'ان الله', text: 'إِنَّ ٱللَّهَ', count: 2 }]);
+    expect(branch(shared.get('ان الله')!).words).toEqual(['إِنَّ', 'ٱللَّهَ']);
   });
 
   it('matches what npm run quran:branches writes from the reader pages', () => {

@@ -22,14 +22,17 @@ export function readerAyat(pages: ReaderPageData[]): BranchAyah[] {
         if (typeof token === 'number') {
           ayat.push({ key: `${surah}:${token}`, page: i + 1, words });
           words = [];
-        } else if (normalizeWord(token).trim() !== '') words.push(token);
+        } else {
+          const word = token.split(' ').filter(piece => normalizeWord(piece) !== '').join(' ');
+          if (word) words.push(word);
+        }
       }
     }
   });
   return ayat;
 }
 
-const norm = (ayah: BranchAyah) => ayah.words.map(word => normalizeWord(word).trim());
+const norm = (ayah: BranchAyah) => ayah.words.map(normalizeWord);
 
 export const openingId = (ayah: BranchAyah) =>
   ayah.words.length < OPENING_WORDS ? null : norm(ayah).slice(0, OPENING_WORDS).join(' ');
