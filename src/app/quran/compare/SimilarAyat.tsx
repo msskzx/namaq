@@ -16,10 +16,10 @@ export function similarFor(surah: number, other?: number): SimilarPair[] {
 }
 
 type Ranges = { a: { from: number; to: number }; b: { from: number; to: number } };
-const inside = ([, from, to]: Span, r: { from: number; to: number }) => from >= r.from && to <= r.to;
+const touches = ([, from, to]: Span, r: { from: number; to: number }) => from <= r.to && to >= r.from;
 
 export default async function SimilarAyat({ surah, other, ranges }: { surah: number; other?: number; ranges?: Ranges }) {
-  const pairs = similarFor(surah, other).filter(p => !ranges || (inside(p.a, ranges.a) && inside(p.b, ranges.b)));
+  const pairs = similarFor(surah, other).filter(p => !ranges || (touches(p.a, ranges.a) && touches(p.b, ranges.b)));
   const wanted = new Map<number, Set<number>>();
   for (const p of pairs) for (const [s, from, to] of [p.a, p.b]) for (let k = from; k <= to; k++) wanted.set(s, (wanted.get(s) ?? new Set()).add(k));
   const rows = wanted.size === 0 ? [] : await prisma.ayah.findMany({

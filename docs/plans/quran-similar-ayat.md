@@ -38,7 +38,9 @@ flowchart LR
    same order rank above the same words scattered. Two windows that open with
    the same two tokens gain 0.1, since a memoriser goes wrong at the opening.
 5. **A pair is kept** when its score is at least 0.5 and the tokens it shares
-   weigh at least 6.5, which rules out a match on one common root. Of overlapping
+   weigh at least 6.5, which rules out a match on one common root, unless the
+   score is 0.8 or more, as with الواقعة ١ and الحاقة ١٥, which share only the
+   root و ق ع but say the same thing. Of overlapping
    pairs only the best is kept. A window whose first or last ayah shares no
    token with the other side is dropped, so a match is never padded with a
    neighbour. Pairs whose letters are identical are kept across surahs, since a
@@ -54,7 +56,8 @@ The result is generated once with `npm run quran:similar` into
 `src/app/quran/compare/similar.json`, since scoring the whole text takes too
 long for a request. The text never changes, so the file only changes when the
 rules above do. The surah view (`?s=`) lists every similar pair touching that
-surah. In the pair view the list of matches between the two surahs is the
+surah. A pair view narrowed to ayah ranges lists every match that touches
+them. In the pair view the list of matches between the two surahs is the
 default, and a switch turns to the older ayah-by-ayah alignment (`view=ayat`),
 since both answer which ayat of the two surahs belong together.
 

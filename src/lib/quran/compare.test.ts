@@ -157,3 +157,10 @@ describe('compareHref', () => {
     expect(compareHref(70, { from: 1, to: 44 }, 80, { from: 33, to: 37 })).toBe('/quran/compare?a=70&af=1&at=44&b=80&bf=33&bt=37');
   });
 });
+
+describe('ayah ranges chosen by the reader', () => {
+  it('keeps a lone two-word match, as al-Waqi\'ah 1 with al-Haqqah 15', () => {
+    const rows = alignSurahs(norm(56).slice(0, 1), norm(69).slice(14, 15), { a: 1, b: 15 }, false);
+    expect(rows.flatMap(r => (r.type === 'block' ? r.block.pairs.map(p => [p.a, p.b, p.run]) : []))).toEqual([[1, 15, 2]]);
+  });
+});

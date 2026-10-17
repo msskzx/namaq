@@ -73,6 +73,7 @@ describe('similar.json', () => {
     expect(has(all, [56, 80, 80], [69, 43, 43])).toBe(true);
     expect(has(all, [75, 20, 21], [76, 27, 27])).toBe(true);
     expect(has(all, [74, 53, 53], [75, 20, 21])).toBe(true);
+    expect(has(all, [56, 1, 1], [69, 15, 15])).toBe(true);
   });
 
   it('counts a word as the same when only a leading wa or fa differs', () => {

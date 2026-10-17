@@ -138,7 +138,7 @@ export function alignSurahs(a: string[][], b: string[][], first = { a: 1, b: 1 }
   let used = { i: 0, j: 0 };
   const blocks: Block[] = groups
     .map(g => g.filter(x => x.i < tailA && x.j < tailB))
-    .filter(g => g.length >= 2 || (g.length === 1 && g[0].run >= KEEP_RUN))
+    .filter(g => g.length >= 2 || (g.length === 1 && g[0].run >= (withTail ? KEEP_RUN : MIN_RUN)))
     .map(g => {
       const at = (i: number, j: number) => pairOf(i + sa, j + sb, a[i - 1], b[j - 1]);
       const pairs: Pair[] = [at(g[0].i, g[0].j)];

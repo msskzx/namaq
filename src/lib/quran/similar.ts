@@ -18,6 +18,7 @@ const RARE = 2.5;
 const SEED = 0.3;
 export const MIN_SCORE = 0.5;
 const MIN_SHARED = 6.5;
+const STRONG = 0.8;
 const OPENING = 0.1;
 const MARKS = /[aiuoFNK~`^#:@"[;,.!\-+%\]]/g;
 const bare = (form: string) => form.replace(MARKS, '').replace(/[{<>]/g, 'A');
@@ -112,11 +113,10 @@ export function findSimilar(ayat: Ayah[]): SimilarPair[] {
         const loose = (win: Ayah[]) => [win[0], win[win.length - 1]].some(a => !a.tokens.some(t => common.has(t.key)));
         if (loose(wa) || loose(wb)) continue;
         const sharedWeight = [...common].reduce((s, key) => s + w(key), 0);
-        if (sharedWeight < MIN_SHARED) continue;
         const d = Math.sqrt([...X].reduce((s, key) => s + w(key), 0) * [...Y].reduce((s, key) => s + w(key), 0));
         const opening = x.length > 1 && x[0] === y[0] && x[1] === y[1] ? OPENING : 0;
         const score = 0.5 * sharedWeight / d + 0.5 * Math.min(lcs(x, y) / d, 1) + opening;
-        if (score >= MIN_SCORE) hits.push({ sa, la, sb, lb, score, common });
+        if (score >= MIN_SCORE && (sharedWeight >= MIN_SHARED || score >= STRONG)) hits.push({ sa, la, sb, lb, score, common });
       }
     }
   }
