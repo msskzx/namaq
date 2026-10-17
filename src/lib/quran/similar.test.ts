@@ -80,6 +80,12 @@ describe('similar.json', () => {
     const p = (built.pairs as SimilarPair[]).find(x => x.a.join() === '56,75,77' && x.b.join() === '69,38,40')!;
     expect(p.marksA).toContainEqual([76, 0, SAME_WORD]);
     expect(p.marksA).toContainEqual([76, 1, SAME_ROOT]);
-    expect(p.marksB).toContainEqual([39, 1, SAME_WORD]);
+    expect(p.marksB).toContainEqual([38, 0, SAME_WORD]);
+  });
+
+  it('leaves a particle unmarked when it stands alone, away from any other shared word', () => {
+    const p = (built.pairs as SimilarPair[]).find(x => x.a.join() === '56,75,77' && x.b.join() === '69,38,40')!;
+    expect(p.marksB.filter(([ayah]) => ayah === 39)).toEqual([]);
+    expect(p.marksB).not.toContainEqual([40, 0, SAME_WORD]);
   });
 });

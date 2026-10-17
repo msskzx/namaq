@@ -131,10 +131,20 @@ export function findSimilar(ayat: Ayah[]): SimilarPair[] {
   const span = (start: number, len: number): Span => [ayat[start].surah, ayat[start].ayah, ayat[start + len - 1].ayah];
   const marks = (start: number, len: number, otherStart: number, otherLen: number, common: Set<string>): Mark[] => {
     const other = new Set(ayat.slice(otherStart, otherStart + otherLen).flatMap(a => a.words));
-    return ayat.slice(start, start + len).flatMap(a => a.words.flatMap((form, word): Mark[] => {
-      if (other.has(form)) return [[a.ayah, word, SAME_WORD]];
-      return a.tokens.some(t => t.word === word && common.has(t.key)) ? [[a.ayah, word, SAME_ROOT]] : [];
-    }));
+    return ayat.slice(start, start + len).flatMap(a => {
+      const kind = a.words.map((form, word) => other.has(form) ? SAME_WORD : a.tokens.some(t => t.word === word && common.has(t.key)) ? SAME_ROOT : null);
+      const content = (word: number) => a.tokens.some(t => t.word === word && t.key.startsWith('r:'));
+      const out: Mark[] = [];
+      for (let from = 0; from < kind.length; from++) {
+        if (kind[from] === null) continue;
+        let to = from;
+        while (kind[to + 1] != null) to++;
+        const words = Array.from({ length: to - from + 1 }, (_, k) => from + k);
+        if (words.length > 1 || words.some(content)) for (const word of words) out.push([a.ayah, word, kind[word]!]);
+        from = to;
+      }
+      return out;
+    });
   };
   return kept
     .map(h => ({

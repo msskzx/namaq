@@ -62,7 +62,9 @@ default, and a switch turns to the older ayah-by-ayah alignment (`view=ayat`),
 since both answer which ayat of the two surahs belong together.
 
 A word the other side has letter for letter is amber, as in the alignment; a
-leading و or ف is ignored, so وإنه counts as إنه. A
+leading و or ف is ignored, so وإنه counts as إنه. A particle is marked only
+as part of a run of marked words that holds a content word or two words or
+more, so the لا of وما لا تبصرون stays plain against the فلا of an oath. A
 word that shares only its root or particle with the other side, such as إنه
 against إنها, is sky blue, since that is the difference a memoriser has to
 learn.
