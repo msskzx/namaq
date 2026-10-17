@@ -55,11 +55,18 @@ schema (`subjectKinds` in `src/lib/history/batchSchema.ts`) is not extended.
 
 - A genre `ULUM_QURAN` beside the existing `TAFSIR`, because a mutashabih work
   is not a running commentary.
-- `Unit LISTS_AYAH Ayah`. An entry of a mutashabih work is a Unit of that work,
-  and it lists the ayat it quotes or names. The basis is the quoted span.
-- `Unit EXPLAINS_SURAH Surah`, for a statement about a whole surah such as Ibn
-  Ashur's أغراض. It is not expanded into a link per ayah, because the author
-  said nothing about each ayah.
+- Two Unit kinds beside those in plan.md section 2.4: `entry`, one numbered or
+  headed entry of a mutashabih work, and `surah-intro`, the introduction a
+  tafsir prints before a surah.
+- Two link records shaped like `SharhLink` (plan.md section 2.4), not
+  Assertions, since an Assertion's subject is a Mention (section 2.7):
+  - `LISTS_AYAH {unit, surah, ayah, basis: SpanRef[]}`. An `entry` lists the
+    ayat it quotes or names. The basis is the quoted span.
+  - `EXPLAINS_SURAH {unit, surah, basis: SpanRef[]}`, for a passage about a
+    whole surah such as Ibn Ashur's أغراض, a span inside a `surah-intro`. It is
+    not expanded into a link per ayah, because the author said nothing about
+    each ayah. `surah` is the surah number, the key of the existing `Surah`
+    table.
 - No edge from one ayah to another. "These ayat are parallels" is derived as
   "listed in the same Unit of work W", and is shown as W's statement.
 
@@ -78,19 +85,25 @@ erDiagram
 
 Every link passes two checks, each with its own normalization:
 
-1. **The fragment is in the book.** `matchSpan` (plan.md:94) proves that the
-   fragment is on the book's page. It stays strict and unchanged.
+1. **The fragment is in the book.** A strict match proves that the fragment is
+   on the book's page. plan.md:94 specifies that match as `matchSpan`, which is
+   not built yet. Until it is, the pilot uses the strict check in
+   `scripts/history/verifyExcerpts.ts`, which `matchSpan` is meant to replace.
+   The pilot does not loosen either.
 2. **The fragment names one ayah.** The Qur'an normalizer in
    [normalize.ts](../../src/lib/quran/normalize.ts), extended with a documented
    and versioned mapping from imla'i to Uthmani spelling, finds the fragment in
-   the Ayah text of the surah the author names.
+   the Ayah text of the surah. The surah is the one the author names in the
+   entry. If the entry names none, it is the surah heading the work prints
+   over the entry, checked on the printed page rather than taken from
+   Shamela's contents. If there is neither, the whole Qur'an is searched.
 
-A link is made only when exactly one ayah in the named surah matches. Zero or
-several matches are flagged with no link, and the flags are counted. A flag
-caused by a gap in the spelling mapping is counted apart from a flag caused by
-an ambiguous fragment. Each link records the resolver version.
+A link is made only when exactly one ayah matches. Zero or several matches are
+flagged with no link, and the flags are counted by cause: a gap in the spelling
+mapping, an ambiguous fragment, no surah named or printed, or a possible other
+reading (below). Each link records the resolver version.
 
-Readings that need recording in the work's `summary.md`:
+Readings that need recording in the work's `summary.md` (see Files):
 
 - «وكذلك <surah>» applies the quoted fragment to each surah named, as the text
   says (ADR 0024).
@@ -100,30 +113,50 @@ Readings that need recording in the work's `summary.md`:
 - Shamela's own section headings are not the author's and are never cited as
   his division.
 
-Ayah keys use the Hafs count of the `Ayah` table. A quotation of another
-reading, such as 57:24 without هو, is counted separately.
+plan.md section 2.15 links a quotation to the ayah in each reading where it
+matches. Today the `Ayah` table holds Hafs only, so the pilot resolves against
+Hafs. A fragment that matches no Hafs ayah but could follow another reading,
+such as 57:24 without هو, is flagged as a possible other reading. Those flags
+are reported on their own, left out of the 95% rate, and re-resolved once the
+table holds every reading.
+
+## Files
+
+Files are the source of truth (ADR 0010); nothing is written to a database
+before step 7.
+
+- Page text: `data/history/sources/<edition>/v<n>/<page>.md` with
+  `<page>.notes.md` beside it, and the edition record in
+  `data/history/sources/<edition>/source.json`. This is the layout on disk
+  today (see `siyar-alam-al-nubala-risalah`). plan.md section 2.2 adds a
+  witness level that the store does not have yet; the pilot follows the store.
+- Units and links: `data/quran/groupings/<edition>/links.json`.
+- The work's report: `data/quran/groupings/<edition>/summary.md`, holding the
+  recorded readings, the flags by cause and the measurements of step 4.
 
 ## Targets
 
-- Mutashabih works: at least 95% of quoted fragments resolve to one ayah.
-  Coverage of the sample is reported, with no target. These works explain
-  ayat that have parallels; they do not tag every ayah.
+- Mutashabih works: at least 95% of quoted fragments resolve to one ayah,
+  leaving out the possible-other-reading flags. Coverage of the sample is
+  reported, with no target. These works explain ayat that have parallels; they
+  do not tag every ayah.
 - Surah 31 serves as a held-out check on the resolution rate.
 
 ## Steps
 
-Steps 2 to 6 are separate PRs through the review cycle in AGENTS.md. Each starts
-after the previous one has merged.
+Steps 1 and 2 ship together in one PR, the ADR marked proposed. Steps 3 to 6 are
+separate PRs through the review cycle in AGENTS.md, and each starts after the
+previous one has merged. No step after 2 starts until the owner has read this
+plan.
 
 1. This plan.
-2. The ADR: the genre, the two predicates, the two-step resolution and D7.
+2. The ADR: the genre, the two Unit kinds, the two link records, the two-step
+   resolution and D7.
    Drafted as [ADR 0030](../adr/0030-a-grouping-of-ayat-is-a-work-s-own-statement.md),
    status proposed until the owner has read this plan.
 3. Pilot, files only. Record al-Kirmani's edition, then extract every entry
    that quotes ayat of 57 or 64 (entry 503, and the al-Taghabun entries
-   including the one pairing 64:9 with 65:11). Page files go under
-   `data/history/sources/<edition>/<witness>/v<n>/<page>.md`, with footnotes in
-   `.notes.md` (plan.md, section 2.2).
+   including the one pairing 64:9 with 65:11). Files go where Files says.
 4. Measure: resolution rate, flags by cause, editor-bracket disagreements,
    coverage of 64:1-9 and 57:1-11, and the surah 31 check.
 5. If the target is met: al-Iskafi and Ibn al-Zubayr for the same surahs, each
