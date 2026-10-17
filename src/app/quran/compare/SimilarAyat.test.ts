@@ -11,7 +11,7 @@ describe('similarFor', () => {
     expect(pairs.map(p => p.a[1])).toEqual([...pairs.map(p => p.a[1])].sort((x, y) => x - y));
     const mudaththir = pairs.find(p => p.b.join() === '74,54,55')!;
     expect(mudaththir.a).toEqual([80, 11, 12]);
-    expect(mudaththir.marksA).toContainEqual([11, 1, 1]);
+    expect(mudaththir.marksA.map(m => m.slice(0, 3))).toContainEqual([11, 1, 1]);
   });
 
   it('keeps only the pairs between two surahs, in either order', () => {

@@ -22,6 +22,16 @@ describe('readAyat', () => {
     expect(ayah).toMatchObject({ surah: 74, ayah: 54 });
     expect(ayah.tokens).toEqual([{ key: 'p:kal~aA', word: 0 }, { key: 'p:<in~', word: 1 }, { key: 'r:*kr', word: 2 }]);
   });
+
+  it('drops a leading wa or fa from a word, so وإنه compares as إنه', () => {
+    const [ayah] = readAyat([
+      '(56:76:1:1)	wa	CONJ	PREFIX|w:CONJ+',
+      '(56:76:1:2)	<in~a	ACC	STEM|POS:ACC|LEM:<in~|SP:<in~',
+      '(56:76:1:3)	hu,	PRON	SUFFIX|PRON:3MS',
+    ].join('\n'));
+    const [plain] = readAyat(['(69:40:1:1)	<in~a	ACC	STEM|POS:ACC|LEM:<in~|SP:<in~', '(69:40:1:2)	hu,	PRON	SUFFIX|PRON:3MS'].join('\n'));
+    expect(ayah.words).toEqual(plain.words);
+  });
 });
 
 describe('findSimilar', () => {
@@ -36,8 +46,8 @@ describe('findSimilar', () => {
   it('marks a word the other side repeats as the same word, and a different form of a shared root or particle apart', () => {
     const p = pairs.find(x => x.a.join() === '74,54,55' && x.b.join() === '80,11,12')!;
     expect(p.roots).toEqual(expect.arrayContaining(['ذكر']));
-    expect(p.marksA).toEqual([[54, 0, SAME_WORD], [54, 1, SAME_ROOT], [54, 2, SAME_WORD], [55, 0, SAME_WORD], [55, 1, SAME_WORD], [55, 2, SAME_WORD]]);
-    expect(p.marksB).toContainEqual([11, 1, SAME_ROOT]);
+    expect(p.marksA.map(m => m.slice(0, 3))).toEqual([[54, 0, SAME_WORD], [54, 1, SAME_ROOT], [54, 2, SAME_WORD], [55, 0, SAME_WORD], [55, 1, SAME_WORD], [55, 2, SAME_WORD]]);
+    expect(p.marksB.map(x => x.slice(0, 3))).toContainEqual([11, 1, SAME_ROOT]);
   });
 
   it('does not pad a match with a neighbouring ayah that shares nothing', () => {
@@ -76,17 +86,20 @@ describe('similar.json', () => {
     expect(has(all, [56, 1, 1], [69, 15, 15])).toBe(true);
   });
 
-  it('counts a word as the same when only a leading wa or fa differs', () => {
-    const p = (built.pairs as SimilarPair[]).find(x => x.a.join() === '56,75,77' && x.b.join() === '69,38,40')!;
-    expect(p.marksA).toContainEqual([76, 0, SAME_WORD]);
-    expect(p.marksA).toContainEqual([76, 1, SAME_ROOT]);
-    expect(p.marksB).toContainEqual([38, 0, SAME_WORD]);
-  });
-
   it('marks a lone particle only where its counterpart ayah has it in the same place', () => {
     const p = (built.pairs as SimilarPair[]).find(x => x.a.join() === '56,75,77' && x.b.join() === '69,38,40')!;
     expect(p.marksB.filter(([ayah]) => ayah === 39)).toEqual([]);
-    expect(p.marksB).toContainEqual([40, 0, SAME_WORD]);
-    expect(p.marksA).toContainEqual([77, 0, SAME_WORD]);
+    expect(p.marksB.map(x => x.slice(0, 3))).toContainEqual([40, 0, SAME_WORD]);
+    expect(p.marksA.map(x => x.slice(0, 3))).toContainEqual([77, 0, SAME_WORD]);
+    expect(p.marksA.map(x => x.slice(0, 2))).not.toContainEqual([76, 0]);
+    expect(p.marksA.map(x => x.slice(0, 3))).toContainEqual([76, 1, SAME_ROOT]);
+  });
+
+  it('keeps a mark only when the other side marks a word of the same root or particle', () => {
+    for (const p of built.pairs as SimilarPair[]) {
+      const [inA, inB] = [new Set(p.marksA.map(m => m[3])), new Set(p.marksB.map(m => m[3]))];
+      for (const m of p.marksA) if (m[3]) expect(inB.has(m[3])).toBe(true);
+      for (const m of p.marksB) if (m[3]) expect(inA.has(m[3])).toBe(true);
+    }
   });
 });

@@ -62,12 +62,17 @@ default, and a switch turns to the older ayah-by-ayah alignment (`view=ayat`),
 since both answer which ayat of the two surahs belong together.
 
 A word the other side has letter for letter is amber, as in the alignment; a
-leading و or ف is ignored, so وإنه counts as إنه. A particle is marked only
-as part of a run of marked words that holds a content word or two words or
-more, or that sits in the same place in its counterpart ayah (two windows of
-equal length pair their ayat in order). So إنه opens both الواقعة ٧٧ and الحاقة
-٤٠ and is marked, while the لا of وما لا تبصرون stays plain against the فلا of
-an oath. A
+leading و or ف is ignored, so وإنه counts as إنه. When the two windows have the same number of ayat, ayah k of one is paired
+with ayah k of the other, and a particle is marked only against its paired
+ayah, so the وإنه of الواقعة ٧٦ stays plain against the إنه of الحاقة ٤٠.
+Otherwise a particle is marked only as part of a run of marked words that holds
+a content word or two words or more. A mark is kept only when the other side
+marks a word of the same root or particle, so no highlight lacks a partner.
+
+Each marked word names what it answers on the other side when the pointer
+rests on it. An amber word whose root also answers a blue word on the other
+side gets a dotted blue underline: أقسم in الحاقة ٣٨ is the same word as in
+الواقعة ٧٥ and the root of لقسم in الواقعة ٧٦. A
 word that shares only its root or particle with the other side, such as إنه
 against إنها, is sky blue, since that is the difference a memoriser has to
 learn.

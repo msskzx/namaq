@@ -2,7 +2,7 @@
 import { fromBuckwalter } from './lemmas';
 
 export type Span = [surah: number, from: number, to: number];
-export type Mark = [ayah: number, word: number, kind: typeof SAME_WORD | typeof SAME_ROOT];
+export type Mark = [ayah: number, word: number, kind: typeof SAME_WORD | typeof SAME_ROOT, key: string];
 export type SimilarPair = { a: Span; b: Span; score: number; roots: string[]; marksA: Mark[]; marksB: Mark[] };
 
 export const SAME_WORD = 0;
@@ -129,23 +129,42 @@ export function findSimilar(ayat: Ayah[]): SimilarPair[] {
   }
 
   const span = (start: number, len: number): Span => [ayat[start].surah, ayat[start].ayah, ayat[start + len - 1].ayah];
+  const label = (key: string) => fromBuckwalter(key.slice(2).replace(/\d+$/, ''));
   const marks = (start: number, len: number, otherStart: number, otherLen: number, common: Set<string>): Mark[] => {
-    const other = new Set(ayat.slice(otherStart, otherStart + otherLen).flatMap(a => a.words));
+    const others = ayat.slice(otherStart, otherStart + otherLen);
+    const other = new Set(others.flatMap(a => a.words));
     return ayat.slice(start, start + len).flatMap((a, offset) => {
-      const twin = len === otherLen ? ayat[otherStart + offset] : undefined;
-      const kind = a.words.map((form, word) => other.has(form) ? SAME_WORD : a.tokens.some(t => t.word === word && common.has(t.key)) ? SAME_ROOT : null);
-      const content = (word: number) => a.tokens.some(t => t.word === word && t.key.startsWith('r:'));
+      const twin = len === otherLen ? others[offset] : undefined;
+      const twinKeys = new Set(twin?.tokens.map(t => t.key));
+      const keyOf = (word: number) => {
+        const own = a.tokens.filter(t => t.word === word);
+        return (own.find(t => t.key.startsWith('r:')) ?? own[0])?.key;
+      };
+      const content = (word: number) => keyOf(word)?.startsWith('r:') ?? false;
+      const sameSpot = (word: number) => !!twin && (twin.words[word] === a.words[word] || twin.tokens.some(t => t.word === word && t.key === keyOf(word)));
+      const kind = a.words.map((form, word) => {
+        const key = keyOf(word);
+        if (twin && !content(word)) return twin.words.includes(form) ? SAME_WORD : key && twinKeys.has(key) ? SAME_ROOT : null;
+        return other.has(form) ? SAME_WORD : key && common.has(key) ? SAME_ROOT : null;
+      });
       const out: Mark[] = [];
       for (let from = 0; from < kind.length; from++) {
         if (kind[from] === null) continue;
         let to = from;
         while (kind[to + 1] != null) to++;
         const words = Array.from({ length: to - from + 1 }, (_, k) => from + k);
-        if (words.length > 1 || words.some(content) || words.some(word => twin?.words[word] === a.words[word])) for (const word of words) out.push([a.ayah, word, kind[word]!]);
+        if (words.length > 1 || words.some(content) || words.some(sameSpot)) {
+          for (const word of words) out.push([a.ayah, word, kind[word]!, keyOf(word) ? label(keyOf(word)!) : '']);
+        }
         from = to;
       }
       return out;
     });
+  };
+  const paired = (marksA: Mark[], marksB: Mark[]) => {
+    const keys = (m: Mark[]) => new Set(m.map(x => x[3]));
+    const [inA, inB] = [keys(marksA), keys(marksB)];
+    return { marksA: marksA.filter(x => !x[3] || inB.has(x[3])), marksB: marksB.filter(x => !x[3] || inA.has(x[3])) };
   };
   return kept
     .map(h => ({
@@ -153,8 +172,7 @@ export function findSimilar(ayat: Ayah[]): SimilarPair[] {
       b: span(h.sb, h.lb),
       score: Math.round(Math.min(h.score, 1) * 100) / 100,
       roots: [...h.common].filter(key => key.startsWith('r:')).map(key => fromBuckwalter(key.slice(2))),
-      marksA: marks(h.sa, h.la, h.sb, h.lb, h.common),
-      marksB: marks(h.sb, h.lb, h.sa, h.la, h.common),
+      ...paired(marks(h.sa, h.la, h.sb, h.lb, h.common), marks(h.sb, h.lb, h.sa, h.la, h.common)),
     }))
     .sort((p, q) => p.a[0] - q.a[0] || p.a[1] - q.a[1] || p.b[0] - q.b[0] || p.b[1] - q.b[1]);
 }
