@@ -122,6 +122,10 @@ export function clampRange(from: unknown, to: unknown, count: number): { from: n
 export function alignSurahs(a: string[][], b: string[][], first = { a: 1, b: 1 }, withTail = true): Row[] {
   const sa = first.a - 1;
   const sb = first.b - 1;
+  if (!withTail && a.length === b.length && a.length > 0) {
+    const pairs = a.map((x, k) => pairOf(k + first.a, k + first.b, x, b[k]));
+    return [{ type: 'block', block: { kind: 'words', anchors: pairs.filter(p => p.run >= MIN_RUN).length, pairs } }];
+  }
   const groups: Anchor[][] = [];
   for (const anchor of anchorsOf(a, b)) {
     const group = groups[groups.length - 1];

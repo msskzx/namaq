@@ -163,4 +163,10 @@ describe('ayah ranges chosen by the reader', () => {
     const rows = alignSurahs(norm(56).slice(0, 1), norm(69).slice(14, 15), { a: 1, b: 15 }, false);
     expect(rows.flatMap(r => (r.type === 'block' ? r.block.pairs.map(p => [p.a, p.b, p.run]) : []))).toEqual([[1, 15, 2]]);
   });
+
+  it('pairs two chosen ranges of the same length ayah by ayah, matches or not', () => {
+    const rows = alignSurahs(norm(56).slice(74, 77), norm(69).slice(37, 40), { a: 75, b: 38 }, false);
+    expect(rows).toHaveLength(1);
+    expect(rows[0].type === 'block' && rows[0].block.pairs.map(p => [p.a, p.b])).toEqual([[75, 38], [76, 39], [77, 40]]);
+  });
 });

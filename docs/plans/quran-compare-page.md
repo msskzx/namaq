@@ -31,7 +31,8 @@ it needs no table, migration or generated file.
    ayat between them and that number is five or fewer. A block stays if it has
    two anchors, or one anchor whose run is four words or more. When the reader
    has narrowed either side to an ayah range, one anchor of any run is enough,
-   since the reader asked about those ayat.
+   since the reader asked about those ayat. When the two chosen ranges are the
+   same length, every ayah is paired in step with its partner, matched or not.
 4. Every ayah between a block's first and last anchor is paired in step with its
    partner. A pair that shares no word says so. A block also takes the ayah
    just before its first anchor when it shares a word with its partner (55:46
