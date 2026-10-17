@@ -58,7 +58,8 @@ surah. In the pair view the list of matches between the two surahs is the
 default, and a switch turns to the older ayah-by-ayah alignment (`view=ayat`),
 since both answer which ayat of the two surahs belong together.
 
-A word the other side has letter for letter is amber, as in the alignment. A
+A word the other side has letter for letter is amber, as in the alignment; a
+leading و or ف is ignored, so وإنه counts as إنه. A
 word that shares only its root or particle with the other side, such as إنه
 against إنها, is sky blue, since that is the difference a memoriser has to
 learn.

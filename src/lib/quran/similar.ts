@@ -30,7 +30,8 @@ export function readAyat(morphology: string): Ayah[] {
     const [surah, ayah, word] = location.slice(1, -1).split(':').map(Number);
     let last = ayat[ayat.length - 1];
     if (!last || last.surah !== surah || last.ayah !== ayah) ayat.push(last = { surah, ayah, tokens: [], words: [] });
-    last.words[word - 1] = (last.words[word - 1] ?? '') + bare(form);
+    const joiner = features.startsWith('PREFIX|') && (tag === 'CONJ' || tag === 'REM');
+    last.words[word - 1] = (last.words[word - 1] ?? '') + (joiner ? '' : bare(form));
     const root = /\|ROOT:([^|]+)/.exec(features)?.[1];
     const lemma = /\|LEM:([^|]+)/.exec(features)?.[1];
     const key = CONTENT.has(tag) && root ? `r:${root}` : lemma && !DROPPED.has(tag) ? `p:${lemma}` : null;

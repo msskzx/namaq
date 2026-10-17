@@ -74,4 +74,11 @@ describe('similar.json', () => {
     expect(has(all, [75, 20, 21], [76, 27, 27])).toBe(true);
     expect(has(all, [74, 53, 53], [75, 20, 21])).toBe(true);
   });
+
+  it('counts a word as the same when only a leading wa or fa differs', () => {
+    const p = (built.pairs as SimilarPair[]).find(x => x.a.join() === '56,75,77' && x.b.join() === '69,38,40')!;
+    expect(p.marksA).toContainEqual([76, 0, SAME_WORD]);
+    expect(p.marksA).toContainEqual([76, 1, SAME_ROOT]);
+    expect(p.marksB).toContainEqual([39, 1, SAME_WORD]);
+  });
 });
