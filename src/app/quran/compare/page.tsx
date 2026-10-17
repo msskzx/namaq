@@ -5,6 +5,7 @@ import ThemesCompare from './ThemesCompare';
 import CompareModeToggle from './CompareModeToggle';
 import { modeHref } from './modeHref';
 import { RepetitionList, RepetitionProvider, SharedPassages, SurahRepetition } from './Repetition';
+import SimilarAyat from './SimilarAyat';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,10 +32,15 @@ export default async function QuranComparePage({ searchParams }: { searchParams:
       <div dir="rtl" className="w-full p-4 grid lg:grid-cols-[20rem_minmax(0,1fr)] gap-4 items-start text-gray-900 dark:text-gray-200">
         <RepetitionList a={a} b={b} surah={s} mode={themes ? 'themes' : 'text'} />
         <div className="min-w-0">
-          {s !== null ? <SurahRepetition surah={s} /> : (
+          {s !== null ? (
+            <div className="flex flex-col gap-6">
+              <SurahRepetition surah={s} />
+              <SimilarAyat surah={s} />
+            </div>
+          ) : (
             <>
               <CompareModeToggle themes={themes} textHref={modeHref('text', query)} themesHref={modeHref('themes', query)} />
-              {themes ? <ThemesCompare query={query} /> : <TextCompare query={query} shared={<SharedPassages a={a} b={b} />} />}
+              {themes ? <ThemesCompare query={query} /> : <TextCompare query={query} shared={<><SharedPassages a={a} b={b} /><SimilarAyat surah={a} other={b} /></>} />}
             </>
           )}
         </div>

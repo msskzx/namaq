@@ -7,6 +7,7 @@ import QuranComparePage from './page';
 const redirect = vi.hoisted(() => vi.fn((url: string) => { throw new Error(`redirect ${url}`); }));
 vi.mock('next/navigation', () => ({ redirect, useRouter: () => ({ push: () => {} }) }));
 vi.mock('./TextCompare', () => ({ default: ({ shared }: { shared: React.ReactNode }) => <div data-testid="text">{shared}</div> }));
+vi.mock('./SimilarAyat', () => ({ default: (p: object) => <div data-testid="similar">{JSON.stringify(p)}</div> }));
 vi.mock('./ThemesCompare', () => ({ default: () => <div data-testid="themes" /> }));
 vi.mock('./Repetition', () => ({
   RepetitionProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
@@ -46,6 +47,12 @@ describe('QuranComparePage', () => {
     cleanup();
     await page({ a: '10', b: '11' });
     expect(JSON.parse(within('text', 'shared'))).toEqual({ a: 10, b: 11 });
+    expect(JSON.parse(within('text', 'similar'))).toEqual({ surah: 10, other: 11 });
+  });
+
+  it('lists the similar ayat of the surah named in s', async () => {
+    await page({ s: '74' });
+    expect(JSON.parse(screen.getByTestId('similar').textContent!)).toEqual({ surah: 74 });
   });
 
   it('shows the topic comparison with no shared passages, and marks the list as topic mode', async () => {
