@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { faCodeCompare, faExpand, faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from '@/components/common/Button';
@@ -18,7 +19,7 @@ async function load(number: number) {
   return rows.map((r, i) => ayahWords(r.text, i === 0 && number !== 1 && number !== 9));
 }
 
-export default async function TextCompare({ query }: { query: Record<string, string | string[] | undefined> }) {
+export default async function TextCompare({ query, shared }: { query: Record<string, string | string[] | undefined>; shared?: ReactNode }) {
   const [a, b] = [pick(query.a, 56), pick(query.b, 69)];
   const surahs = await prisma.surah.findMany({ select: { number: true, name: true }, orderBy: { number: 'asc' } });
   const [wordsA, wordsB] = await Promise.all([load(a), load(b)]);
@@ -70,6 +71,7 @@ export default async function TextCompare({ query }: { query: Record<string, str
           مثال: الرحمن ٤٦–٦١ مقابل ٦٢–٧٧
         </Button>
       </form>
+      {shared}
       {a === b && ra.from === rb.from && ra.to === rb.to ? <p className="text-sm text-gray-600 dark:text-gray-400">اختر مقطعين مختلفين.</p> : <CompareView
         a={{ number: a, name: rawName(a), plain: nameOf(a), words: wordsA.map(w => w.display.join(' ')), range: whole ? undefined : ra }}
         b={{ number: b, name: rawName(b), plain: nameOf(b), words: wordsB.map(w => w.display.join(' ')), range: whole ? undefined : rb }}

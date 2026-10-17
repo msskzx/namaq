@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import built from '@/app/quran/lemmas.json';
+import built from '@/app/quran/words/lemmas.json';
 import { countLemmas, countPairs, fromBuckwalter } from './lemmas';
 import { OPPOSITES } from './opposites';
 

@@ -9,7 +9,7 @@ import Button from '@/components/common/Button';
 import { num } from '@/lib/quran/arabicNumber';
 import type { LemmaCounts } from '@/lib/quran/lemmas';
 import { normalizeWord } from '@/lib/quran/normalize';
-import { NOTE, PANEL } from './RepetitionView';
+import { NOTE, PANEL } from '../panel';
 
 export const CHART_TOP = 10;
 export const SUGGESTIONS = 8;

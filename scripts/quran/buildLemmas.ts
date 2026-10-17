@@ -4,7 +4,7 @@ import { countLemmas, countPairs } from '../../src/lib/quran/lemmas';
 import { OPPOSITES } from '../../src/lib/quran/opposites';
 
 const MORPHOLOGY = join(__dirname, '../../data/quran/quranic-corpus-morphology-0.4.txt');
-const OUT = join(__dirname, '../../src/app/quran/lemmas.json');
+const OUT = join(__dirname, '../../src/app/quran/words/lemmas.json');
 
 const text = readFileSync(MORPHOLOGY, 'utf8');
 const notice = text.split(/\r?\n/).filter(line => line.startsWith('#')).join('\n');

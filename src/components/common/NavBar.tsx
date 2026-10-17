@@ -15,7 +15,7 @@ import { PROPHETS } from '@/lib/quran/prophets';
 // A subset of getAllNavLinks, by href, so a dropdown never lists a link under
 // a different label than the mobile menu and the graph workspace menu give it.
 const HADITH_SUBMENU_HREFS = ['/hadith/bukhari-jibril', '/hadith/muslim-jibril', '/hadith/fath-iman-50'];
-const QURAN_SUBMENU_HREFS = ['/quran/read', '/quran', '/quran/compare', '/quran/iltifat', '/quran/qiraat', '/quran/order', '/quran/openings', '/quran/oaths', ...PROPHETS.map(({ slug }) => `/quran/prophets/${slug}`)];
+const QURAN_SUBMENU_HREFS = ['/quran/read', '/quran', '/quran/compare', '/quran/words', '/quran/iltifat', '/quran/qiraat', '/quran/order', '/quran/openings', '/quran/oaths', ...PROPHETS.map(({ slug }) => `/quran/prophets/${slug}`)];
 const GRAPHS_SUBMENU_HREFS = ['/graphs', '/nasab'];
 const PEOPLE_SUBMENU_HREFS = ['/people', '/people/prophet-muhammad', '/titles', '/events'];
 
