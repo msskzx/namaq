@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import ayat from '@/app/quran/branches/ayat.json';
-import { branch, listOpenings, openingId, readerAyat, sharedOpenings, type Branch, type BranchAyah } from './branches';
+import { branch, listOpenings, listPhrases, openingId, readerAyat, sharedOpenings, startingWith, type Branch, type BranchAyah } from './branches';
 import { normalizeWord } from './normalize';
 
 const all = ayat as BranchAyah[];
@@ -92,5 +92,31 @@ describe('branch', () => {
   it('places every ayah of a group on exactly one node', () => {
     const keys = (node: Branch): string[] => [...node.ayat, ...node.children.flatMap(keys)];
     for (const group of groups.values()) expect(keys(branch(group)).sort()).toEqual(group.map(a => a.key).sort());
+  });
+});
+
+describe('listPhrases', () => {
+  const phrases = listPhrases(groups);
+  const count = (id: string) => phrases.find(p => p.id === id)?.count;
+
+  it('lists every opening and every phrase two or more ayat share before they part', () => {
+    expect(count('الم تر')).toBe(31);
+    expect(count('الم تر كيف')).toBe(3);
+    expect(count('الم تر كيف فعل ربك')).toBe(2);
+    expect(count('ان المتقين في')).toBe(6);
+    expect(count('ان المتقين في جنت')).toBe(4);
+    expect(count('ان المتقين في جنت وعيون')).toBe(2);
+    expect(phrases.every(p => p.count >= 2)).toBe(true);
+    expect(new Set(phrases.map(p => p.id)).size).toBe(phrases.length);
+  });
+
+  it('agrees with startingWith on how many ayat each phrase opens', () => {
+    for (const p of phrases.filter((_, i) => i % 40 === 0)) expect(startingWith(all, p.id)).toHaveLength(p.count);
+  });
+});
+
+describe('startingWith', () => {
+  it('matches whole words only', () => {
+    expect(startingWith([ayah('1:1', 'الم تروا'), ayah('1:2', 'الم تر كيف')], 'الم تر').map(a => a.key)).toEqual(['1:2']);
   });
 });

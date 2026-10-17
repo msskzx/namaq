@@ -17,7 +17,9 @@ A page at `/quran/branches` that draws, as a word tree read right to left, the a
 
 ## Page
 
-- `?o=<two normalized words>` picks the group. An unknown or missing value shows إن المتقين.
-- Buttons for the eight largest groups, and a search box over all groups by normalized words.
+- A phrase is an opening, or the words two or more ayat share up to a node where they part (`listPhrases`). `?o=<normalized phrase>` draws the tree of the ayat that start with it, such as `?o=الم تر كيف`. An unknown or missing value shows إن المتقين.
+- Buttons for the eight largest openings. The one the shown phrase starts with is pressed.
+- A search box over every phrase by normalized words, listing phrases that start with the search before those that only contain it. Enter opens the first.
+- A branch in the tree links to its own phrase. Leaves and the root do not. Above a deeper tree, a button for each wider phrase it sits under leads back out.
 - Every ayah carries its surah name and number, linking to the reader page that holds it. Surah names come from the database, as on the reader.
 - The page says a match is shared wording only.

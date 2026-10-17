@@ -7,6 +7,9 @@ export type Branch = { words: string[]; ayat: string[]; children: Branch[] };
 export type Opening = { id: string; text: string; count: number };
 
 export const OPENING_WORDS = 2;
+export const TOP = 8;
+
+export const branchesHref = (id: string) => `/quran/branches?o=${encodeURIComponent(id)}`;
 
 export function readerAyat(pages: ReaderPageData[]): BranchAyah[] {
   const ayat: BranchAyah[] = [];
@@ -50,6 +53,26 @@ export function listOpenings(groups: Map<string, BranchAyah[]>): Opening[] {
   return [...groups]
     .map(([id, group]) => ({ id, text: group[0].words.slice(0, OPENING_WORDS).join(' '), count: group.length }))
     .sort((a, b) => b.count - a.count);
+}
+
+export const startsWith = (id: string, phrase: string) => `${id} `.startsWith(`${phrase} `);
+
+export const startingWith = (ayat: BranchAyah[], phrase: string) => ayat.filter(ayah => startsWith(norm(ayah).join(' '), phrase));
+
+export const size = (node: Branch): number => node.ayat.length + node.children.reduce((sum, child) => sum + size(child), 0);
+
+export function listPhrases(groups: Map<string, BranchAyah[]>): Opening[] {
+  const phrases = new Map(listOpenings(groups).map(o => [o.id, o]));
+  const walk = (node: Branch, path: string[]) => {
+    const words = [...path, ...node.words];
+    const count = size(node);
+    if (count < 2) return;
+    const id = words.map(normalizeWord).join(' ');
+    if (!phrases.has(id)) phrases.set(id, { id, text: words.join(' '), count });
+    node.children.forEach(child => walk(child, words));
+  };
+  groups.forEach(group => walk(branch(group), []));
+  return [...phrases.values()].sort((a, b) => b.count - a.count || a.id.length - b.id.length);
 }
 
 export function branch(ayat: BranchAyah[], from = 0): Branch {
