@@ -9,7 +9,7 @@ import Button from '@/components/common/Button';
 import { num } from '@/lib/quran/arabicNumber';
 import type { CountedSide, LemmaCount } from '@/lib/quran/lemmas';
 import { normalizeWord } from '@/lib/quran/normalize';
-import { NOTE, PANEL } from './RepetitionView';
+import { NOTE, PANEL } from '../panel';
 import { LINK, SEARCH, SUGGESTIONS } from './WordCounts';
 
 type Pair = [CountedSide, CountedSide];

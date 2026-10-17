@@ -5,7 +5,7 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import type { LemmaCount } from '@/lib/quran/lemmas';
 import WordCounts, { CHART_TOP } from './WordCounts';
 
-vi.mock('next/navigation', () => ({ useRouter: () => ({}), usePathname: () => '/quran', useSearchParams: () => new URLSearchParams() }));
+vi.mock('next/navigation', () => ({ useRouter: () => ({}), usePathname: () => '/quran/words', useSearchParams: () => new URLSearchParams() }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
 
 afterEach(cleanup);

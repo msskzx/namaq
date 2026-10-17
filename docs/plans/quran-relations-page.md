@@ -1,6 +1,6 @@
 # Quran relations demo page
 
-Status: first version built at `/quran`, since merged with `/quran/shifts` into one repetition page ([quran-repetition-merge.md](quran-repetition-merge.md)). The prophet-story section is the next PR.
+Status: first version built at `/quran`, since merged with `/quran/shifts` into one repetition page, now part of `/quran/compare` ([quran-repetition-merge.md](quran-repetition-merge.md)). The prophet-story section is the next PR.
 
 The owner wants one demo page with visualizations and numbers about the Quran,
 above all relations between ayat and stories about one prophet told in several

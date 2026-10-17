@@ -5,7 +5,7 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import type { CountedSide, LemmaCount } from '@/lib/quran/lemmas';
 import OppositesChart from './OppositesChart';
 
-vi.mock('next/navigation', () => ({ useRouter: () => ({}), usePathname: () => '/quran', useSearchParams: () => new URLSearchParams() }));
+vi.mock('next/navigation', () => ({ useRouter: () => ({}), usePathname: () => '/quran/words', useSearchParams: () => new URLSearchParams() }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
 
 afterEach(cleanup);

@@ -88,9 +88,9 @@ export default function AttributionsPage() {
             <div>
               <dt className="inline font-medium">{language === 'ar' ? 'يُستعمل في: ' : 'Used in: '}</dt>
               <dd className="inline">
-                <a className="underline" href="/quran">{language === 'ar' ? 'عدد مرات ورود كل كلمة في صفحة القرآن' : 'the word counts on the Quran page'}</a>
+                <a className="underline" href="/quran/words">{language === 'ar' ? 'عدد مرات ورود كل كلمة' : 'the word counts'}</a>
                 {language === 'ar' ? '، و' : ', and '}
-                <a className="underline" href="/quran">{language === 'ar' ? 'الكلمات المتقابلة' : 'the opposite words'}</a>
+                <a className="underline" href="/quran/words">{language === 'ar' ? 'الكلمات المتقابلة' : 'the opposite words'}</a>
               </dd>
             </div>
           </dl>

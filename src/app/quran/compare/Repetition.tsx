@@ -1,8 +1,8 @@
 'use client';
 
 // docs/plans/quran-repetition-merge.md
-import React, { useMemo, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAnglesDown, faArrowDown19, faArrowDownWideShort, faArrowLeft, faArrowRight, faListOl, faShuffle, type IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import Badge from '@/components/common/Badge';
@@ -13,14 +13,15 @@ import { plainName } from '@/lib/quran/normalize';
 import { MIN_WORDS } from '@/lib/quran/passages';
 import type { Repetition } from '@/lib/quran/repetition';
 import { ARC_MIN, REFRAIN_MANY, type Occ } from '@/lib/quran/shifts';
-import { Card } from './Card';
+import { Card } from '../Card';
 import { PassageSide } from './PassageSide';
-import { Legend, RepetitionMatrix, type Pick } from './RepetitionMatrix';
+import { NOTE, PANEL } from '../panel';
+import { modeHref } from './modeHref';
 import type { Ayah } from '@/types/quran';
 
-export const PANEL = 'bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4';
-export const NOTE = 'text-sm text-gray-600 dark:text-gray-400';
 export const VISIBLE = 20;
+type Pick = { s: number; t: number | null };
+type Mode = 'text' | 'themes';
 const run = (at: Occ, len: number) => Object.fromEntries(Array.from({ length: len }, (_, k) => [at.word + k, 0]));
 
 function Tile({ value, label }: { value: number; label: string }) {
@@ -136,7 +137,7 @@ function PairView({ data, s, t }: { data: Repetition; s: number; t: number }) {
 
   return (
     <section className={PANEL}>
-      <h2 className="text-2xl mb-3">{`${plainName(first.name)} و${plainName(second.name)}`}</h2>
+      <h2 className="text-2xl mb-3">{`نصوص مشتركة بين ${plainName(first.name)} و${plainName(second.name)}`}</h2>
       {!p ? <p className={NOTE}>لا نصوص مشتركة بين هاتين السورتين.</p> : (
         <>
           <div className="flex flex-wrap items-center gap-2 mb-3">
@@ -213,70 +214,87 @@ function Ranked({ data, totals, pick, onPick }: { data: Repetition; totals: Map<
   );
 }
 
-export default function RepetitionView({ data }: { data: Repetition }) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const params = useSearchParams();
-  const valid = (v: string | null) => {
-    const n = Number(v);
-    return v !== null && Number.isInteger(n) && n >= 1 && n <= data.surahs.length ? n : null;
-  };
-  const s = valid(params.get('s'));
-  const t = valid(params.get('t'));
-  const pick: Pick | null = s === null ? null : { s, t: t === s ? null : t };
+const RepetitionContext = createContext<{ data: Repetition | null; failed: boolean }>({ data: null, failed: false });
 
+export function RepetitionProvider({ children }: { children: React.ReactNode }) {
+  const [data, setData] = useState<Repetition | null>(null);
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    let live = true;
+    fetch('/api/quran/repetition')
+      .then(res => {
+        if (!res.ok) throw new Error(String(res.status));
+        return res.json() as Promise<Repetition>;
+      })
+      .then(body => { if (live) setData(body); })
+      .catch(() => { if (live) setFailed(true); });
+    return () => { live = false; };
+  }, []);
+
+  return <RepetitionContext.Provider value={{ data, failed }}>{children}</RepetitionContext.Provider>;
+}
+
+function Status() {
+  const { failed } = useContext(RepetitionContext);
+  return <p role={failed ? 'alert' : 'status'} className={NOTE}>{failed ? 'تعذر تحميل البيانات.' : 'جارٍ التحميل…'}</p>;
+}
+
+function useGo() {
+  const router = useRouter();
+  return (href: string) => router.push(href, { scroll: false });
+}
+
+const surahHref = (s: number) => `/quran/compare?s=${s}`;
+const pairHref = (mode: Mode, a: number, b: number) => modeHref(mode, { a: String(a), b: String(b) });
+
+export function RepetitionList({ a, b, surah, mode }: { a: number; b: number; surah: number | null; mode: Mode }) {
+  const { data } = useContext(RepetitionContext);
+  const go = useGo();
   const totals = useMemo(() => {
     const map = new Map<number, number>();
-    for (const c of data.cells) {
+    for (const c of data?.cells ?? []) {
       map.set(c.a, (map.get(c.a) ?? 0) + c.words);
       if (c.a !== c.b) map.set(c.b, (map.get(c.b) ?? 0) + c.words);
     }
     return map;
   }, [data]);
-
-  const go = (p: Pick) => router.replace(`${pathname}?s=${p.s}${p.t ? `&t=${p.t}` : ''}`, { scroll: false });
-  const crossSurahs = new Set(data.cells.filter(c => c.a !== c.b).flatMap(c => [c.a, c.b]));
+  const pick: Pick = surah !== null ? { s: surah, t: null } : { s: Math.min(a, b), t: Math.max(a, b) };
 
   return (
-    <div dir="rtl" className="w-full p-4 flex flex-col gap-6 text-gray-900 dark:text-gray-200">
-      <header>
-        <h1 className="text-3xl mb-2">القرآن: تكرار العبارات</h1>
-        <p className={NOTE}>
-          لم يراجع هذا العرض أحد من أهل العلم. النص برواية حفص. يدل التطابق على اشتراك اللفظ وحده. تُحصى العبارة المتكررة داخل السورة وما تشترك فيه السور من نصوص، والخلية تعدّ الكلمات المكررة.
-        </p>
-        <Button size="sm" variant="outline" href="/quran/order" className="mt-3">
-          <FontAwesomeIcon icon={faListOl} />
-          ترتيب السور: من النبأ إلى الناس
-        </Button>
-      </header>
-
-      <section className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <Tile value={data.surahs.length} label="سورة" />
-        <Tile value={data.within.length} label="عبارة تتكرر داخل سورة" />
-        <Tile value={data.across.length} label="نص مشترك بين سور" />
-        <Tile value={crossSurahs.size} label="سورة فيها نص مشترك" />
-      </section>
-
-      <section className={PANEL}>
-        <h2 className="text-2xl mb-1">مصفوفة السور</h2>
-        <p className={`${NOTE} mb-2`}>السور بترتيب المصحف. القطر لما تكرر داخل السورة نفسها، وما خارجه لما تشترك فيه سورتان. اضغط على خلية أو عمود، أو اختر من القائمة.</p>
-        <div className="grid lg:grid-cols-[1fr_18rem] gap-4">
-          <div className="flex flex-col gap-2">
-            <RepetitionMatrix data={data} totals={totals} pick={pick} onPick={go} />
-            <Legend />
-          </div>
-          <Ranked data={data} totals={totals} pick={pick} onPick={go} />
-        </div>
-      </section>
-
-      {!pick && <p className={NOTE}>اختر سورة أو خلية لعرض المواضع.</p>}
-      {pick && pick.t === null && (
+    <section className={`${PANEL} flex flex-col gap-3`}>
+      <h2 className="text-2xl">تكرار العبارات</h2>
+      <p className={NOTE}>السور والأزواج بعدد ما تكرر فيها من كلمات. اختر سورة لعرض ما يتكرر فيها، أو زوجًا لمقارنة سورتيه.</p>
+      {!data ? <Status /> : (
         <>
-          <Within key={pick.s} data={data} surah={data.surahs[pick.s - 1]} />
-          <Partners data={data} surah={pick.s} onPick={go} />
+          <div className="grid grid-cols-2 gap-2">
+            <Tile value={data.surahs.length} label="سورة" />
+            <Tile value={data.within.length} label="عبارة تتكرر داخل سورة" />
+            <Tile value={data.across.length} label="نص مشترك بين سور" />
+            <Tile value={new Set(data.cells.filter(c => c.a !== c.b).flatMap(c => [c.a, c.b])).size} label="سورة فيها نص مشترك" />
+          </div>
+          <Ranked data={data} totals={totals} pick={pick} onPick={p => go(p.t === null ? surahHref(p.s) : pairHref(mode, p.s, p.t))} />
         </>
       )}
-      {pick && pick.t !== null && <PairView key={`${pick.s}:${pick.t}`} data={data} s={pick.s} t={pick.t} />}
+    </section>
+  );
+}
+
+export function SurahRepetition({ surah }: { surah: number }) {
+  const { data } = useContext(RepetitionContext);
+  const go = useGo();
+  if (!data) return <Status />;
+  return (
+    <div className="flex flex-col gap-6">
+      <p className={NOTE}>لم يراجع هذا العرض أحد من أهل العلم. النص برواية حفص. يدل التطابق على اشتراك اللفظ وحده.</p>
+      <Within key={surah} data={data} surah={data.surahs[surah - 1]} />
+      <Partners data={data} surah={surah} onPick={p => go(pairHref('text', p.s, p.t!))} />
     </div>
   );
+}
+
+export function SharedPassages({ a, b }: { a: number; b: number }) {
+  const { data } = useContext(RepetitionContext);
+  if (!data || a === b || !data.passages.some(p => [p.a.from.surah, p.b.from.surah].sort().join() === [a, b].sort().join())) return null;
+  return <PairView key={`${a}:${b}`} data={data} s={a} t={b} />;
 }

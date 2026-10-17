@@ -230,7 +230,7 @@ corpus.quran.com. `/attributions` does both and also links to Tanzil, whose
 notice is in the same file; the chart names the corpus and links there.
 
 `npm run quran:lemmas` runs `scripts/quran/buildLemmas.ts`, which reads the
-file with no database call and writes `src/app/quran/lemmas.json`: the file's
+file with no database call and writes `src/app/quran/words/lemmas.json`: the file's
 copyright notice, every lemma as `[lemma, count, root]` sorted by count, and
 the number of words with no lemma. `countLemmas` in `src/lib/quran/lemmas.ts`
 does the counting and `fromBuckwalter` writes the corpus's extended Buckwalter
@@ -305,6 +305,24 @@ counts the sides, a form being the stem with its vowels and marks removed, and
 
 The count is of the word, not its meaning: «الجنة» includes the gardens of this
 world and its plural, «النار» every fire, and «جهنم» is a lemma of its own.
+
+## Moved into `/quran/compare`
+
+The owner asked on 2026-10-17 for `/quran` to become a page of cards linking to
+the other Quran pages, so the repetition view moved to `/quran/compare`, beside
+the two-surah comparison, and the matrix was removed. The ranked list keeps its
+two switches (surahs or pairs, by count or by number) and the four counts above
+it, and sits beside the comparison.
+
+- A surah picked from the list opens `/quran/compare?s=N`: its repeated phrases
+  and the surahs it shares passages with, in place of the comparison.
+- A pair opens `/quran/compare?a=N&b=M` in the view the reader is on. In the text
+  view the pair's shared passages come first, with the full comparison below.
+  The topic view shows only the comparison.
+- `?s=N&t=M`, the old pair link, redirects to `?a=N&b=M`, and `/quran?s=…` and
+  `/quran/shifts` redirect to `/quran/compare`, keeping the query.
+- The word counts and the opposite words moved to `/quran/words`, with
+  `lemmas.json` beside them.
 
 ## Next steps
 

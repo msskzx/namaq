@@ -3,7 +3,7 @@
 import React from 'react';
 import { useLanguage } from '../language/LanguageContext';
 import translations from '../language/translations';
-import ExplorationCard from './ExplorationCard';
+import ExplorationCard from '../common/ExplorationCard';
 
 interface ExploreCard {
   id: string;
