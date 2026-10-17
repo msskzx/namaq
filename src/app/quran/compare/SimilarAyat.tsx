@@ -18,8 +18,13 @@ export function similarFor(surah: number, other?: number): SimilarPair[] {
 type Ranges = { a: { from: number; to: number }; b: { from: number; to: number } };
 const touches = ([, from, to]: Span, r: { from: number; to: number }) => from <= r.to && to >= r.from;
 
+export function similarIn(surah: number, other?: number, ranges?: Ranges): SimilarPair[] {
+  const fits = (p: SimilarPair) => !ranges || (touches(p.a, ranges.a) && touches(p.b, ranges.b));
+  return similarFor(surah, other).flatMap(p => (fits(p) ? [p] : surah === other && fits(flip(p)) ? [flip(p)] : []));
+}
+
 export default async function SimilarAyat({ surah, other, ranges }: { surah: number; other?: number; ranges?: Ranges }) {
-  const pairs = similarFor(surah, other).filter(p => !ranges || (touches(p.a, ranges.a) && touches(p.b, ranges.b)));
+  const pairs = similarIn(surah, other, ranges);
   const wanted = new Map<number, Set<number>>();
   for (const p of pairs) for (const [s, from, to] of [p.a, p.b]) for (let k = from; k <= to; k++) wanted.set(s, (wanted.get(s) ?? new Set()).add(k));
   const rows = wanted.size === 0 ? [] : await prisma.ayah.findMany({

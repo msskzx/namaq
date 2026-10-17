@@ -83,7 +83,7 @@ export default async function TextCompare({ query, shared }: { query: Record<str
       {!ayat ? <SimilarAyat surah={a} other={b} ranges={whole ? undefined : { a: ra, b: rb }} /> : a === b && ra.from === rb.from && ra.to === rb.to ? <p className="text-sm text-gray-600 dark:text-gray-400">اختر مقطعين مختلفين.</p> : <CompareView
         a={{ number: a, name: rawName(a), plain: nameOf(a), words: wordsA.map(w => w.display.join(' ')), range: whole ? undefined : ra }}
         b={{ number: b, name: rawName(b), plain: nameOf(b), words: wordsB.map(w => w.display.join(' ')), range: whole ? undefined : rb }}
-        rows={alignSurahs(slice(wordsA, ra).map(w => w.norm), slice(wordsB, rb).map(w => w.norm), { a: ra.from, b: rb.from }, whole)}
+        rows={alignSurahs(slice(wordsA, ra).map(w => w.norm), slice(wordsB, rb).map(w => w.norm), { a: ra.from, b: rb.from }, whole, [ra.from > 1 || ra.to < wordsA.length, rb.from > 1 || rb.to < wordsB.length].every(Boolean))}
       />}
     </div>
   );
