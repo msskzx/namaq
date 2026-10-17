@@ -64,7 +64,10 @@ since both answer which ayat of the two surahs belong together.
 A word the other side has letter for letter is amber, as in the alignment; a
 leading و or ف is ignored, so وإنه counts as إنه. A particle is marked only
 as part of a run of marked words that holds a content word or two words or
-more, so the لا of وما لا تبصرون stays plain against the فلا of an oath. A
+more, or that sits in the same place in its counterpart ayah (two windows of
+equal length pair their ayat in order). So إنه opens both الواقعة ٧٧ and الحاقة
+٤٠ and is marked, while the لا of وما لا تبصرون stays plain against the فلا of
+an oath. A
 word that shares only its root or particle with the other side, such as إنه
 against إنها, is sky blue, since that is the difference a memoriser has to
 learn.

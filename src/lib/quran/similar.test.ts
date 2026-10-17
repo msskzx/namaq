@@ -83,9 +83,10 @@ describe('similar.json', () => {
     expect(p.marksB).toContainEqual([38, 0, SAME_WORD]);
   });
 
-  it('leaves a particle unmarked when it stands alone, away from any other shared word', () => {
+  it('marks a lone particle only where its counterpart ayah has it in the same place', () => {
     const p = (built.pairs as SimilarPair[]).find(x => x.a.join() === '56,75,77' && x.b.join() === '69,38,40')!;
     expect(p.marksB.filter(([ayah]) => ayah === 39)).toEqual([]);
-    expect(p.marksB).not.toContainEqual([40, 0, SAME_WORD]);
+    expect(p.marksB).toContainEqual([40, 0, SAME_WORD]);
+    expect(p.marksA).toContainEqual([77, 0, SAME_WORD]);
   });
 });
