@@ -30,6 +30,7 @@ describe('NavBar Quran links', () => {
     expect(hrefs).toContain('/quran/openings');
     expect(hrefs).toContain('/quran/oaths');
     expect(hrefs).toContain('/quran/prophets/musa');
+    for (const { href } of getAllNavLinks('en').filter(l => l.href.startsWith('/quran/'))) expect(hrefs).toContain(href);
   });
 
   it('keeps every page in the shared list for the mobile menu and graph menu', () => {
