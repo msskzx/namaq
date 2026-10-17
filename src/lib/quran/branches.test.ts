@@ -35,7 +35,7 @@ describe('sharedOpenings', () => {
   it('ignores the pause and section marks the reader keeps beside a word', () => {
     const shared = sharedOpenings([ayah('1:1', 'إِنَّ ٱللَّهَ غفور'), { key: '1:2', page: 1, words: ['۞ إِنَّ', 'ٱللَّهَ ۖ', 'عليم'] }]);
     expect([...shared.keys()]).toEqual(['ان الله']);
-    expect(shape(branch(shared.get('ان الله')!)).children).toHaveLength(2);
+    expect(branch(shared.get('ان الله')!).children).toHaveLength(2);
   });
 
   it('matches what npm run quran:branches writes from the reader pages', () => {
