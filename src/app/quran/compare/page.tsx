@@ -4,8 +4,13 @@ import TextCompare from './TextCompare';
 import ThemesCompare from './ThemesCompare';
 import CompareModeToggle from './CompareModeToggle';
 import { modeHref } from './modeHref';
-import { RepetitionList, RepetitionProvider, SharedPassages, SurahRepetition } from './Repetition';
-import SimilarAyat from './SimilarAyat';
+import { RepetitionProvider, SurahRepetition } from './Repetition';
+import SimilarAyat, { similarSurahPairs } from './SimilarAyat';
+import { SurahPairs } from './SurahPairs';
+import { prisma } from '@/lib/prisma';
+import { plainName } from '@/lib/quran/normalize';
+import { groupBySurah } from '@/lib/quran/surahPairs';
+import { getTopicSurahPairs } from '@/lib/quran/topicEngine';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,21 +31,28 @@ export default async function QuranComparePage({ searchParams }: { searchParams:
   if (s !== null && t !== null && s !== t) redirect(modeHref('text', { a: String(s), b: String(t) }));
   const a = surahOf(query.a) ?? (themes ? 16 : 56);
   const b = surahOf(query.b) ?? (themes ? 43 : 69);
+  const [surahs, pairs] = await Promise.all([
+    prisma.surah.findMany({ select: { number: true, name: true } }),
+    themes && s === null ? getTopicSurahPairs() : similarSurahPairs(),
+  ]);
+  const names = Object.fromEntries(surahs.map(x => [x.number, plainName(x.name)]));
 
   return (
     <RepetitionProvider>
       <div dir="rtl" className="w-full p-4 grid lg:grid-cols-[20rem_minmax(0,1fr)] gap-4 items-start text-gray-900 dark:text-gray-200">
-        <RepetitionList a={a} b={b} surah={s} mode={themes ? 'themes' : 'text'} />
-        <div className="min-w-0">
+        <div className="order-last lg:order-none">
+          <SurahPairs groups={groupBySurah(pairs, surahs.map(x => x.number))} names={names} mode={themes && s === null ? 'themes' : 'text'} surah={s} a={a} b={b} />
+        </div>
+        <div className="min-w-0 flex flex-col gap-4">
           {s !== null ? (
-            <div className="flex flex-col gap-6">
+            <>
               <SurahRepetition surah={s} />
               <SimilarAyat surah={s} />
-            </div>
+            </>
           ) : (
             <>
               <CompareModeToggle on={themes} offHref={modeHref('text', query)} onHref={modeHref('themes', query)} />
-              {themes ? <ThemesCompare query={query} /> : <TextCompare query={query} shared={<SharedPassages a={a} b={b} />} />}
+              {themes ? <ThemesCompare query={query} /> : <TextCompare query={query} />}
             </>
           )}
         </div>

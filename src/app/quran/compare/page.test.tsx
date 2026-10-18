@@ -6,14 +6,15 @@ import QuranComparePage from './page';
 
 const redirect = vi.hoisted(() => vi.fn((url: string) => { throw new Error(`redirect ${url}`); }));
 vi.mock('next/navigation', () => ({ redirect, useRouter: () => ({ push: () => {} }) }));
-vi.mock('./TextCompare', () => ({ default: ({ shared }: { shared: React.ReactNode }) => <div data-testid="text">{shared}</div> }));
-vi.mock('./SimilarAyat', () => ({ default: (p: object) => <div data-testid="similar">{JSON.stringify(p)}</div> }));
+vi.mock('./TextCompare', () => ({ default: () => <div data-testid="text" /> }));
+vi.mock('./SimilarAyat', () => ({ default: (p: object) => <div data-testid="similar">{JSON.stringify(p)}</div>, similarSurahPairs: () => [[56, 69], [56, 56]] }));
+vi.mock('@/lib/quran/topicEngine', () => ({ getTopicSurahPairs: async () => [[16, 43]] }));
+vi.mock('@/lib/prisma', () => ({ prisma: { surah: { findMany: async () => [{ number: 16, name: 'النحل' }, { number: 112, name: 'الإخلاص' }] } } }));
+vi.mock('./SurahPairs', () => ({ SurahPairs: ({ groups, ...p }: { groups: { surah: number }[] }) => <div data-testid="list">{JSON.stringify({ ...p, surahs: groups.map(g => g.surah) })}</div> }));
 vi.mock('./ThemesCompare', () => ({ default: () => <div data-testid="themes" /> }));
 vi.mock('./Repetition', () => ({
   RepetitionProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-  RepetitionList: (p: object) => <div data-testid="list">{JSON.stringify(p)}</div>,
   SurahRepetition: ({ surah }: { surah: number }) => <div data-testid="surah">{surah}</div>,
-  SharedPassages: (p: object) => <div data-testid="shared">{JSON.stringify(p)}</div>,
 }));
 
 afterEach(() => {
@@ -41,12 +42,10 @@ describe('QuranComparePage', () => {
     expect(screen.getByTestId('surah').textContent).toBe('3');
   });
 
-  it('puts the shared passages of the compared pair inside the text comparison, with the defaults when none is given', async () => {
+  it('lists surahs by their similar ayat in the text comparison, with the defaults when none is given', async () => {
     await page({});
-    expect(JSON.parse(within('text', 'shared'))).toEqual({ a: 56, b: 69 });
-    cleanup();
-    await page({ a: '10', b: '11' });
-    expect(JSON.parse(within('text', 'shared'))).toEqual({ a: 10, b: 11 });
+    expect(screen.getByTestId('text')).toBeTruthy();
+    expect(JSON.parse(screen.getByTestId('list').textContent!)).toMatchObject({ a: 56, b: 69, mode: 'text', surahs: [16, 56, 69, 112], names: { 16: 'النحل', 112: 'الإخلاص' } });
   });
 
   it('lists the similar ayat of the surah named in s', async () => {
@@ -54,14 +53,9 @@ describe('QuranComparePage', () => {
     expect(JSON.parse(screen.getByTestId('similar').textContent!)).toEqual({ surah: 74 });
   });
 
-  it('shows the topic comparison with no shared passages, and marks the list as topic mode', async () => {
+  it('shows the topic comparison and lists surahs by their shared topics', async () => {
     await page({ mode: 'themes' });
     expect(screen.getByTestId('themes')).toBeTruthy();
-    expect(screen.queryByTestId('shared')).toBeNull();
-    expect(JSON.parse(screen.getByTestId('list').textContent!)).toMatchObject({ a: 16, b: 43, mode: 'themes', surah: null });
+    expect(JSON.parse(screen.getByTestId('list').textContent!)).toMatchObject({ a: 16, b: 43, mode: 'themes', surah: null, surahs: [16, 43, 112] });
   });
 });
-
-function within(outer: string, inner: string) {
-  return screen.getByTestId(outer).querySelector(`[data-testid="${inner}"]`)!.textContent!;
-}

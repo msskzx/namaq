@@ -11,12 +11,20 @@ import { compareHref } from '@/lib/quran/compare';
 import { plainName } from '@/lib/quran/normalize';
 import type { WordNote } from '@/components/quran/AyahCard';
 import { SAME_ROOT, SAME_WORD, type Mark, type SimilarPair, type Span } from '@/lib/quran/similar';
+import type { Passage } from '@/lib/quran/passages';
 import { Card } from '../Card';
 import { NOTE, PANEL } from '../panel';
+import { useRepetition } from './Repetition';
 
 export const VISIBLE = 20;
 
 const range = ([, from, to]: Span) => (from === to ? num(from) : `${num(from)}–${num(to)}`);
+
+const meets = ([surah, from, to]: Span, side: Passage['a']) => surah === side.from.surah && from <= side.to.ayah && to >= side.from.ayah;
+
+export function passageOf(p: SimilarPair, passages: Passage[]) {
+  return passages.filter(x => (meets(p.a, x.a) && meets(p.b, x.b)) || (meets(p.a, x.b) && meets(p.b, x.a))).sort((x, y) => y.matched - x.matched)[0];
+}
 
 export const LINKED = 'underline decoration-sky-500 decoration-dotted decoration-2 underline-offset-[10px]';
 
@@ -47,6 +55,7 @@ function Side({ span, marks, other, otherSpan, ayat, names }: { span: Span; mark
 
 export function SimilarList({ pairs, ayat, names, pair }: { pairs: SimilarPair[]; ayat: Record<string, string>; names: Record<number, string>; pair: boolean }) {
   const [all, setAll] = useState(false);
+  const passages = useRepetition()?.passages ?? [];
   const shown = all ? pairs : pairs.slice(0, VISIBLE);
   const title = pair ? 'آيات متشابهة بين السورتين' : `آيات متشابهة في ${plainName(names[pairs[0]?.a[0]] ?? '')}`;
   return (
@@ -57,10 +66,14 @@ export function SimilarList({ pairs, ayat, names, pair }: { pairs: SimilarPair[]
       </p>
       {pairs.length === 0 ? <p className={NOTE}>{pair ? 'لا آيات متشابهة بين السورتين.' : 'لا آيات متشابهة في هذه السورة.'}</p> : (
         <ol className="flex flex-col gap-6">
-          {shown.map(p => (
+          {shown.map(p => {
+            const run = passageOf(p, passages);
+            return (
             <li key={`${p.a.join()}|${p.b.join()}`} className="border-t border-gray-200 dark:border-white/10 pt-4 first:border-t-0 first:pt-0">
               <div className="flex flex-wrap items-center gap-2 mb-3">
                 <Badge size="sm" color="gray" text={`تقارب ${num(Math.round(p.score * 100))}٪`} />
+                {run && <Badge size="sm" color="amber" text={`نص مشترك: ${num(run.matched)} كلمة`} />}
+                {run && run.places > 2 && <Badge size="sm" color="amber" text={`يرد في ${num(run.places)} مواضع`} />}
                 {p.roots.map(r => <Badge key={r} size="sm" color="gray" text={r} />)}
                 <Button size="sm" href={`${compareHref(p.a[0], { from: p.a[1], to: p.a[2] }, p.b[0], { from: p.b[1], to: p.b[2] })}&view=ayat`}>
                   <FontAwesomeIcon icon={faCodeCompare} />
@@ -72,7 +85,8 @@ export function SimilarList({ pairs, ayat, names, pair }: { pairs: SimilarPair[]
                 <Side span={p.b} marks={p.marksB} other={p.marksA} otherSpan={p.a} ayat={ayat} names={names} />
               </div>
             </li>
-          ))}
+            );
+          })}
         </ol>
       )}
       {pairs.length > VISIBLE && !all && (

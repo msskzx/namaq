@@ -16,9 +16,11 @@ const DROPPED = new Set(['P', 'CONJ', 'DET', 'PRON', 'REM']);
 const MAX_WINDOW = 3;
 const RARE = 2.5;
 const SEED = 0.3;
+const SEED_MASS = 9;
 export const MIN_SCORE = 0.5;
 const MIN_SHARED = 6.5;
 const STRONG = 0.8;
+const LONG = 32;
 const OPENING = 0.1;
 const MARKS = /[aiuoFNK~`^#:@"[;,.!\-+%\]]/g;
 const bare = (form: string) => form.replace(MARKS, '').replace(/[{<>]/g, 'A');
@@ -65,6 +67,7 @@ export function findSimilar(ayat: Ayah[]): SimilarPair[] {
   }
   const at = (k: number) => shared.get(k) ?? 0;
   const seeds: number[] = [];
+  const runOnly = new Set<number>();
   for (const [k, c] of shared) {
     const [i, j] = [Math.floor(k / n), k % n];
     const [wi, wj] = [weight[i], weight[j]];
@@ -76,6 +79,7 @@ export function findSimilar(ayat: Ayah[]): SimilarPair[] {
       (c + at(k + n) + at(k + 1) + at(k + n + 1)) / Math.sqrt(wi2 * wj2),
     );
     if (best >= SEED) seeds.push(k);
+    else if (c >= SEED_MASS) runOnly.add(k);
   }
 
   const windowOf = (start: number, len: number) => {
@@ -92,21 +96,37 @@ export function findSimilar(ayat: Ayah[]): SimilarPair[] {
     }
     return prev[y.length];
   };
+  const run = (x: string[], y: string[]) => {
+    let best = { weight: 0, roots: 0 };
+    let prev = Array.from({ length: y.length + 1 }, () => best);
+    for (let i = 1; i <= x.length; i++) {
+      const cur = Array.from({ length: y.length + 1 }, () => ({ weight: 0, roots: 0 }));
+      for (let j = 1; j <= y.length; j++) {
+        if (x[i - 1] !== y[j - 1]) continue;
+        cur[j] = { weight: prev[j - 1].weight + w(x[i - 1]), roots: prev[j - 1].roots + (x[i - 1].startsWith('r:') ? 1 : 0) };
+        if (cur[j].weight > best.weight) best = cur[j];
+      }
+      prev = cur;
+    }
+    return best;
+  };
 
   type Hit = { sa: number; la: number; sb: number; lb: number; score: number; common: Set<string> };
   const hits: Hit[] = [];
   const seen = new Set<string>();
-  for (const k of seeds) {
+  for (const k of [...seeds, ...runOnly]) {
     const [i, j] = [Math.floor(k / n), k % n];
-    for (let la = 1; la <= MAX_WINDOW; la++) for (let sa = i - la + 1; sa <= i; sa++) {
-      for (let lb = 1; lb <= MAX_WINDOW; lb++) for (let sb = j - lb + 1; sb <= j; sb++) {
+    const most = runOnly.has(k) ? 1 : MAX_WINDOW;
+    for (let la = 1; la <= most; la++) for (let sa = i - la + 1; sa <= i; sa++) {
+      for (let lb = 1; lb <= most; lb++) for (let sb = j - lb + 1; sb <= j; sb++) {
         const id = `${sa}.${la}.${sb}.${lb}`;
         if (seen.has(id)) continue;
         seen.add(id);
         if (sa < sb + lb && sb < sa + la) continue;
         const [wa, wb] = [windowOf(sa, la), windowOf(sb, lb)];
         if (!wa || !wb) continue;
-        if (ayat[sa].surah === ayat[sb].surah && wa.map(a => a.words.join(' ')).join('|') === wb.map(a => a.words.join(' ')).join('|')) continue;
+        const identical = wa.map(a => a.words.join(' ')).join('|') === wb.map(a => a.words.join(' ')).join('|');
+        if (identical && ayat[sa].surah === ayat[sb].surah) continue;
         const [x, y] = [keys(wa), keys(wb)];
         const [X, Y] = [new Set(x), new Set(y)];
         const common = new Set([...X].filter(key => Y.has(key)));
@@ -115,8 +135,12 @@ export function findSimilar(ayat: Ayah[]): SimilarPair[] {
         const sharedWeight = [...common].reduce((s, key) => s + w(key), 0);
         const d = Math.sqrt([...X].reduce((s, key) => s + w(key), 0) * [...Y].reduce((s, key) => s + w(key), 0));
         const opening = x.length > 1 && x[0] === y[0] && x[1] === y[1] ? OPENING : 0;
-        const score = 0.5 * sharedWeight / d + 0.5 * Math.min(lcs(x, y) / d, 1) + opening;
-        if (score >= MIN_SCORE && (sharedWeight >= MIN_SHARED || score >= STRONG)) hits.push({ sa, la, sb, lb, score, common });
+        const ratio = 0.5 * sharedWeight / d + 0.5 * Math.min(lcs(x, y) / d, 1) + opening;
+        const longest = run(x, y);
+        const content = [...common].filter(key => key.startsWith('r:')).length;
+        const kept = !runOnly.has(k) && (identical || sharedWeight >= MIN_SHARED || (ratio >= STRONG && (content >= 2 || longest.roots >= 2)));
+        const score = Math.max(kept ? ratio : 0, la === 1 && lb === 1 ? longest.weight / LONG : 0);
+        if (score >= MIN_SCORE) hits.push({ sa, la, sb, lb, score, common });
       }
     }
   }

@@ -86,6 +86,27 @@ describe('similar.json', () => {
     expect(has(all, [56, 1, 1], [69, 15, 15])).toBe(true);
   });
 
+  it('drops a short pair that shares a single root, however close the two ayat are in length', () => {
+    const all = built.pairs as SimilarPair[];
+    expect(has(all, [26, 125, 125], [36, 3, 3])).toBe(false);
+    expect(has(all, [37, 155, 155], [79, 43, 43])).toBe(false);
+    expect(has(all, [1, 3, 3], [55, 1, 1])).toBe(false);
+  });
+
+  it('keeps a short pair that shares two roots in the same words, or the same letters', () => {
+    const all = built.pairs as SimilarPair[];
+    expect(has(all, [7, 125, 125], [43, 14, 14])).toBe(true);
+    expect(has(all, [37, 154, 154], [68, 36, 36])).toBe(true);
+    expect(has(all, [56, 67, 67], [68, 27, 27])).toBe(true);
+  });
+
+  it('keeps two long ayat that share a long run of rare words, though most of each differs', () => {
+    const all = built.pairs as SimilarPair[];
+    expect(has(all, [2, 170, 170], [31, 21, 21])).toBe(true);
+    expect(has(all, [7, 54, 54], [57, 4, 4])).toBe(true);
+    expect(has(all, [12, 40, 40], [53, 23, 23])).toBe(true);
+  });
+
   it('marks a lone particle only where its counterpart ayah has it in the same place', () => {
     const p = (built.pairs as SimilarPair[]).find(x => x.a.join() === '56,75,77' && x.b.join() === '69,38,40')!;
     expect(p.marksB.filter(([ayah]) => ayah === 39)).toEqual([]);

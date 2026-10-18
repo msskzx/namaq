@@ -1,5 +1,4 @@
-import type { ReactNode } from 'react';
-import { faCodeCompare, faExpand, faLightbulb, faListOl, faWaveSquare } from '@fortawesome/free-solid-svg-icons';
+import { faCodeCompare, faExpand, faListOl, faWaveSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from '@/components/common/Button';
 import { prisma } from '@/lib/prisma';
@@ -10,6 +9,7 @@ import CompareModeToggle from './CompareModeToggle';
 import SimilarAyat from './SimilarAyat';
 import { viewHref } from './modeHref';
 import { num } from '@/lib/quran/arabicNumber';
+import { FIELD, NOTE, PANEL } from '../panel';
 
 const plainName = (name: string) => name.replace(/[ً-ٟـٰۖ-ۭ]/g, '').replace(/ٱ/g, 'ا');
 const pick = (value: string | string[] | undefined, fallback: number) => {
@@ -22,7 +22,7 @@ async function load(number: number) {
   return rows.map((r, i) => ayahWords(r.text, i === 0 && number !== 1 && number !== 9));
 }
 
-export default async function TextCompare({ query, shared }: { query: Record<string, string | string[] | undefined>; shared?: ReactNode }) {
+export default async function TextCompare({ query }: { query: Record<string, string | string[] | undefined> }) {
   const [a, b] = [pick(query.a, 56), pick(query.b, 69)];
   const surahs = await prisma.surah.findMany({ select: { number: true, name: true }, orderBy: { number: 'asc' } });
   const [wordsA, wordsB] = await Promise.all([load(a), load(b)]);
@@ -33,54 +33,47 @@ export default async function TextCompare({ query, shared }: { query: Record<str
   const nameOf = (n: number) => plainName(surahs.find(s => s.number === n)?.name ?? '');
   const rawName = (n: number) => surahs.find(s => s.number === n)?.name ?? '';
 
-  const select = (name: string, value: number, label: string) => (
-    <select name={name} aria-label={label} defaultValue={value} className="min-w-0 flex-1 rounded border border-amber-400 bg-white dark:bg-gray-900 px-2 py-1 text-sm">
-      {surahs.map(s => (
-        <option key={s.number} value={s.number}>{`${num(s.number)}. ${plainName(s.name)}`}</option>
-      ))}
-    </select>
+  const ayahInput = (name: string, value: number, max: number, label: string, text: string) => (
+    <label className={`${NOTE} flex items-center gap-1`}>
+      {text}
+      <input type="number" name={name} aria-label={label} defaultValue={value} min={1} max={max} className={`${FIELD} w-16 text-gray-900 dark:text-gray-200`} />
+    </label>
   );
-  const ayahInput = (name: string, value: number, max: number, label: string) => (
-    <input type="number" name={name} aria-label={label} defaultValue={value} min={1} max={max} className="w-20 rounded border border-amber-400 bg-white dark:bg-gray-900 px-2 py-1 text-sm" />
-  );
-  const allButton = (href: string, label: string) => (
-    <Button size="sm" href={href} aria-label={label} className="shrink-0">
-      <FontAwesomeIcon icon={faExpand} />
-      الكل
-    </Button>
+  const side = (key: 'a' | 'b', value: number, r: typeof ra, max: number, title: string, all: string) => (
+    <fieldset className="flex flex-wrap items-center gap-2">
+      <legend className="sr-only">{title}</legend>
+      <select name={key} aria-label={title} defaultValue={value} className={`${FIELD} min-w-48 flex-1`}>
+        {surahs.map(s => (
+          <option key={s.number} value={s.number}>{`${num(s.number)}. ${plainName(s.name)}`}</option>
+        ))}
+      </select>
+      <div className="flex items-center gap-2">
+        {ayahInput(`${key}f`, r.from, max, `من آية (${key === 'a' ? 'الأولى' : 'الثانية'})`, 'من')}
+        {ayahInput(`${key}t`, r.to, max, `إلى آية (${key === 'a' ? 'الأولى' : 'الثانية'})`, 'إلى')}
+        <Button size="sm" href={all} aria-label={`الكل: آيات ${title}`} className="shrink-0">
+          <FontAwesomeIcon icon={faExpand} />
+          الكل
+        </Button>
+      </div>
+    </fieldset>
   );
 
   const ayat = query.view === 'ayat';
 
   return (
-    <div dir="rtl" className="max-w-5xl mx-auto p-4 flex flex-col gap-4 text-gray-900 dark:text-gray-200">
-      <CompareModeToggle on={ayat} offHref={viewHref(false, query)} onHref={viewHref(true, query)} offLabel="المتشابه" onLabel="آية بآية" label="المقارنة آية بآية"
-        offIcon={<FontAwesomeIcon icon={faWaveSquare} className="size-3" />} onIcon={<FontAwesomeIcon icon={faListOl} className="size-3" />} />
-      <form method="get" className="flex flex-wrap items-center gap-2">
+    <div className="flex flex-col gap-4">
+      <form key={[a, ra.from, ra.to, b, rb.from, rb.to].join()} method="get" className={`${PANEL} flex flex-col gap-3`}>
+        <CompareModeToggle on={ayat} offHref={viewHref(false, query)} onHref={viewHref(true, query)} offLabel="المتشابه" onLabel="آية بآية" label="المقارنة آية بآية"
+          offIcon={<FontAwesomeIcon icon={faWaveSquare} className="size-3" />} onIcon={<FontAwesomeIcon icon={faListOl} className="size-3" />} />
         {ayat && <input type="hidden" name="view" value="ayat" />}
-        <div className="flex w-full items-center gap-2">
-          {select('a', a, 'السورة الأولى')}
-          {ayahInput('af', ra.from, wordsA.length, 'من آية (الأولى)')}
-          {ayahInput('at', ra.to, wordsA.length, 'إلى آية (الأولى)')}
-          {allButton(compareHref(a, { from: 1, to: wordsA.length }, b, rb), 'الكل: آيات السورة الأولى')}
-        </div>
-        <div className="flex w-full items-center gap-2">
-          {select('b', b, 'السورة الثانية')}
-          {ayahInput('bf', rb.from, wordsB.length, 'من آية (الثانية)')}
-          {ayahInput('bt', rb.to, wordsB.length, 'إلى آية (الثانية)')}
-          {allButton(compareHref(a, ra, b, { from: 1, to: wordsB.length }), 'الكل: آيات السورة الثانية')}
-        </div>
-        <Button type="submit" size="sm" variant="outline">
+        {side('a', a, ra, wordsA.length, 'السورة الأولى', compareHref(a, { from: 1, to: wordsA.length }, b, rb))}
+        {side('b', b, rb, wordsB.length, 'السورة الثانية', compareHref(a, ra, b, { from: 1, to: wordsB.length }))}
+        <Button type="submit" variant="primary" className="w-fit">
           <FontAwesomeIcon icon={faCodeCompare} />
           قارن
         </Button>
-        <Button size="sm" href="/quran/compare?a=55&af=46&at=61&b=55&bf=62&bt=77">
-          <FontAwesomeIcon icon={faLightbulb} />
-          مثال: الرحمن ٤٦–٦١ مقابل ٦٢–٧٧
-        </Button>
       </form>
-      {shared}
-      {!ayat ? <SimilarAyat surah={a} other={b} ranges={whole ? undefined : { a: ra, b: rb }} /> : a === b && ra.from === rb.from && ra.to === rb.to ? <p className="text-sm text-gray-600 dark:text-gray-400">اختر مقطعين مختلفين.</p> : <CompareView
+      {!ayat ? <SimilarAyat surah={a} other={b} ranges={whole ? undefined : { a: ra, b: rb }} /> : a === b && ra.from === rb.from && ra.to === rb.to ? <p className={NOTE}>اختر مقطعين مختلفين.</p> : <CompareView
         a={{ number: a, name: rawName(a), plain: nameOf(a), words: wordsA.map(w => w.display.join(' ')), range: whole ? undefined : ra }}
         b={{ number: b, name: rawName(b), plain: nameOf(b), words: wordsB.map(w => w.display.join(' ')), range: whole ? undefined : rb }}
         rows={alignSurahs(slice(wordsA, ra).map(w => w.norm), slice(wordsB, rb).map(w => w.norm), { a: ra.from, b: rb.from }, whole, [ra.from > 1 || ra.to < wordsA.length, rb.from > 1 || rb.to < wordsB.length].every(Boolean))}

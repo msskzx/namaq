@@ -25,5 +25,9 @@ export default async function QuranThemesPage({ searchParams }: { searchParams: 
     prisma.surah.findMany({ where: { number: { in: [x, y] } }, select: { number: true, name: true } }),
   ]);
   const name = (n: number) => surahs.find((s) => s.number === n)?.name ?? '';
-  return <ThemesView a={{ number: x, name: name(x), ayat: a }} b={{ number: y, name: name(y), ayat: b }} themes={pairs[`${x}-${y}`]} />;
+  return (
+    <div className="max-w-5xl mx-auto p-4">
+      <ThemesView a={{ number: x, name: name(x), ayat: a }} b={{ number: y, name: name(y), ayat: b }} themes={pairs[`${x}-${y}`]} />
+    </div>
+  );
 }
