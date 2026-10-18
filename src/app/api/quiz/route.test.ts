@@ -1,13 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { assembleQuiz, availableQuestionCount, historicalClaimFindMany, ayahFindMany } = vi.hoisted(() => ({
+const { assembleQuiz, availableQuestionCount, historicalClaimFindMany, ayahFindMany, surahFindMany } = vi.hoisted(() => ({
   assembleQuiz: vi.fn(),
   availableQuestionCount: vi.fn(),
   historicalClaimFindMany: vi.fn(),
   ayahFindMany: vi.fn(),
+  surahFindMany: vi.fn(),
 }));
 vi.mock('@/lib/quiz/assemble', () => ({ assembleQuiz, availableQuestionCount }));
-vi.mock('@/lib/prisma', () => ({ prisma: { historicalClaim: { findMany: historicalClaimFindMany }, ayah: { findMany: ayahFindMany } } }));
+vi.mock('@/lib/prisma', () => ({ prisma: { historicalClaim: { findMany: historicalClaimFindMany }, ayah: { findMany: ayahFindMany }, surah: { findMany: surahFindMany } } }));
 
 import { GET } from './route';
 
@@ -123,6 +124,20 @@ describe('GET /api/quiz', () => {
     await GET(request('?topic=BRANCHES&length=5&juzFrom=30&juzTo=29'));
     expect(availableQuestionCount).toHaveBeenCalledWith(['BRANCHES'], undefined, { from: 29, to: 30 });
     expect(assembleQuiz).toHaveBeenCalledWith(expect.objectContaining({ juz: { from: 29, to: 30 } }));
+  });
+
+  it('names the surahs a shared-opening question cites', async () => {
+    surahFindMany.mockResolvedValueOnce([{ number: 52, name: 'الطور' }]);
+    assembleQuiz.mockResolvedValueOnce([question({
+      key: 'AYAH_BRANCH:ويطوف عليهم',
+      family: 'AYAH_BRANCH',
+      choices: [],
+      evidence: { claimKeys: [] },
+      branches: [{ words: ['غِلْمَانٌۭ'], ayat: [{ key: '52:24', page: 524 }] }, { words: ['وِلْدَٰنٌۭ'], ayat: [{ key: '76:19', page: 580 }] }],
+    })]);
+    const body = await (await GET(request('?topic=BRANCHES&length=5'))).json();
+    expect(surahFindMany).toHaveBeenCalledWith(expect.objectContaining({ where: { number: { in: [52, 76] } } }));
+    expect(body.surahNames).toEqual({ 52: 'الطور' });
   });
 
   it('combines repeated and comma-separated topics without duplicates', async () => {

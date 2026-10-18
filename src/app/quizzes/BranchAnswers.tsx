@@ -11,18 +11,19 @@ import { branchesHref } from "@/lib/quran/branches";
 import { num } from "@/lib/quran/arabicNumber";
 
 type Question = { phrase?: string; branches?: BranchAnswer[] };
+type Names = Record<number, string>;
 
 export const branchesCorrect = (question: Question, typed: string[]) =>
   matchBranches(typed, (question.branches ?? []).map((branch) => branch.words)).every(Boolean);
 
-function Ayat({ branch }: { branch: BranchAnswer }) {
+function Ayat({ branch, names }: { branch: BranchAnswer; names: Names }) {
   return (
     <span className="flex flex-wrap gap-1">
       {branch.ayat.map(({ key, page }) => {
         const [surah, ayah] = key.split(":").map(Number);
         return (
           <Link key={key} href={`/quran/read/${page}`} className="rounded bg-amber-100 px-1.5 text-xs text-amber-800 hover:underline dark:bg-white/10 dark:text-amber-300">
-            {`${num(surah)}:${num(ayah)}`}
+            {names[surah] ? `${names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`}
           </Link>
         );
       })}
@@ -39,7 +40,7 @@ function Words({ branch, matched }: { branch: BranchAnswer; matched: number }) {
   );
 }
 
-export function BranchFeedback({ question, typed, ar }: { question: Question; typed: string[]; ar: boolean }) {
+export function BranchFeedback({ question, typed, names, ar }: { question: Question; typed: string[]; names: Names; ar: boolean }) {
   const branches = question.branches ?? [];
   const matches = matchBranches(typed, branches.map((branch) => branch.words));
   const missed = branches.filter((_, index) => !matches.some((hit) => hit?.branch === index));
@@ -55,7 +56,7 @@ export function BranchFeedback({ question, typed, ar }: { question: Question; ty
               {hit && (
                 <>
                   <Words branch={branches[hit.branch]} matched={hit.words} />
-                  <Ayat branch={branches[hit.branch]} />
+                  <Ayat branch={branches[hit.branch]} names={names} />
                 </>
               )}
             </div>
@@ -68,7 +69,7 @@ export function BranchFeedback({ question, typed, ar }: { question: Question; ty
           {missed.map((branch, index) => (
             <div key={index} className="flex flex-col gap-1">
               <Words branch={branch} matched={1} />
-              <Ayat branch={branch} />
+              <Ayat branch={branch} names={names} />
             </div>
           ))}
         </div>

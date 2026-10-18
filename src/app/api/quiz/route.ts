@@ -43,7 +43,12 @@ export async function GET(request: Request) {
     if (available < length) return NextResponse.json({ error: 'Not enough approved questions', available }, { status: 409 });
     const questions = await assembleQuiz({ topics: selectedTopics, personSlug: person, juz, length: length as QuizLength, random: Math.random });
     const claimKeys = [...new Set(questions.flatMap((question) => question.evidence.claimKeys))];
-    const [claims, details] = await Promise.all([referenceClaims(claimKeys), ayahDetails(questions)]);
+    const surahs = [...new Set(questions.flatMap((question) => (question.branches ?? []).flatMap((branch) => branch.ayat.map((ayah) => Number(ayah.key.split(':')[0])))))];
+    const [claims, details, names] = await Promise.all([
+      referenceClaims(claimKeys),
+      ayahDetails(questions),
+      surahs.length ? prisma.surah.findMany({ where: { number: { in: surahs } }, select: { number: true, name: true } }) : [],
+    ]);
     return NextResponse.json({
       questions: questions.map((question) => ({
         ...question,
@@ -52,6 +57,7 @@ export async function GET(request: Request) {
         ),
         evidence: { reference: selectQuizReference(question.evidence.claimKeys, claims) },
       })),
+      surahNames: Object.fromEntries(names.map((row) => [row.number, row.name])),
     });
   } catch (error) {
     console.error('Quiz API error:', error);

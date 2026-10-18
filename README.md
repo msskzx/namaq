@@ -29,9 +29,9 @@ Open the graph → explore and filter relationships → open a person's profile 
   an overlay that deep-links to the exact reader passage, and report a
   percentage with a pass mark at 50%.
 - The "Shared openings" quiz topic shows a phrase that ayat on
-  `/quran/branches` start with and asks for both branches they split into, as
-  free text. Ordinary spelling counts as correct and is shown back in the
-  mushaf text ([docs/quiz-ayah-branches.md](docs/quiz-ayah-branches.md)).
+  `/quran/branches` start with and asks for every branch they split into
+  within a chosen juz' range, as free text. Ordinary spelling counts as
+  correct and is shown back in the mushaf text ([docs/quiz-ayah-branches.md](docs/quiz-ayah-branches.md)).
 
 ### Hadith fixtures
 
