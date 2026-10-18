@@ -223,8 +223,8 @@ describe('QuizzesPage', () => {
       correctAnswer: 'ويطوف عليهم',
       phrase: 'ويطوف عليهم',
       branches: [
-        { words: ['غِلْمَانٌۭ', 'لَّهُمْ'], ayat: [{ key: '52:24', page: 524 }] },
-        { words: ['وِلْدَٰنٌۭ', 'مُّخَلَّدُونَ'], ayat: [{ key: '76:19', page: 580 }] },
+        { words: ['غِلْمَانٌۭ', 'لَّهُمْ'], ayat: [{ key: '52:24', page: 524, words: ['غِلْمَانٌۭ', 'لَّهُمْ'] }] },
+        { words: ['وِلْدَٰنٌۭ', 'مُّخَلَّدُونَ'], ayat: [{ key: '76:19', page: 580, words: ['وِلْدَٰنٌۭ', 'مُّخَلَّدُونَ'] }] },
       ],
     } as typeof original;
     try {
@@ -254,10 +254,12 @@ describe('QuizzesPage', () => {
       choices: [],
       correctAnswer: 'ويطوف عليهم',
       branches: [
-        { words: ['غِلْمَانٌۭ'], ayat: [{ key: '52:24', page: 524 }] },
-        { words: ['وِلْدَٰنٌۭ'], ayat: [{ key: '76:19', page: 580 }] },
+        { words: ['غِلْمَانٌۭ'], ayat: [{ key: '52:24', page: 524, words: ['غِلْمَانٌۭ'] }] },
+        { words: ['وِلْدَٰنٌۭ'], ayat: [{ key: '76:19', page: 580, words: ['وِلْدَٰنٌۭ'] }] },
       ],
     } as typeof original;
+    const second = questions[1];
+    questions[1] = { ...questions[0], key: 'second-branch' };
     try {
       nav.reset('/quizzes?topic=BRANCHES&length=5');
       render(<QuizzesPage />);
@@ -268,8 +270,15 @@ describe('QuizzesPage', () => {
       expect(screen.getByRole('button', { name: 'Question 1 - incorrect' })).toBeTruthy();
       expect(screen.getByText('Correct:')).toBeTruthy();
       expect(screen.getByText('وِلْدَٰنٌۭ')).toBeTruthy();
+      fireEvent.click(screen.getByRole('button', { name: 'Question 2 - unanswered' }));
+      fireEvent.change(screen.getByLabelText('Branch 1'), { target: { value: 'غلمان' } });
+      fireEvent.change(screen.getByLabelText('Branch 2'), { target: { value: 'ولدان' } });
+      fireEvent.click(screen.getByRole('button', { name: 'Question 5 - unanswered' }));
+      fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
+      expect(screen.getByText('Score: 1 / 5 (20%)')).toBeTruthy();
     } finally {
       questions[0] = original;
+      questions[1] = second;
     }
   });
 

@@ -13,8 +13,10 @@ import { num } from "@/lib/quran/arabicNumber";
 type Question = { phrase?: string; branches?: BranchAnswer[] };
 type Names = Record<number, string>;
 
+const continuations = (question: Question) => (question.branches ?? []).map((branch) => branch.ayat.map((ayah) => ayah.words));
+
 export const branchesCorrect = (question: Question, typed: string[]) =>
-  matchBranches(typed, (question.branches ?? []).map((branch) => branch.words)).every(Boolean);
+  matchBranches(typed, continuations(question)).every(Boolean);
 
 function Ayat({ branch, names }: { branch: BranchAnswer; names: Names }) {
   return (
@@ -42,7 +44,7 @@ function Words({ branch, matched }: { branch: BranchAnswer; matched: number }) {
 
 export function BranchFeedback({ question, typed, names, ar }: { question: Question; typed: string[]; names: Names; ar: boolean }) {
   const branches = question.branches ?? [];
-  const matches = matchBranches(typed, branches.map((branch) => branch.words));
+  const matches = matchBranches(typed, continuations(question));
   const missed = branches.filter((_, index) => !matches.some((hit) => hit?.branch === index));
   return (
     <div className="flex flex-col gap-3">

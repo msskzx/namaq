@@ -154,7 +154,7 @@ export default function QuizzesPage() {
               />
             ))}
           </fieldset>
-          {topics.includes("BRANCHES") && (
+          {topics.includes("BRANCHES") && !topics.includes("PERSON_CIRCLE") && (
             <fieldset className="mb-6 flex flex-wrap items-end gap-4">
               <legend className="mb-2 w-full text-sm font-semibold text-gray-700 dark:text-gray-300">{ar ? "أجزاء فواتح الآيات" : "Juz' for shared openings"}</legend>
               {([["juzFrom", juzFrom || "1", ar ? "من الجزء" : "From juz'"], ["juzTo", juzTo || "30", ar ? "إلى الجزء" : "To juz'"]] as const).map(([key, value, label]) => (
@@ -348,7 +348,13 @@ export default function QuizzesPage() {
                   <FontAwesomeIcon icon={ar ? faArrowLeft : faArrowRight} />
                 </Button>
               ) : (
-                <Button variant="primary" onClick={() => setSubmitted(true)}>
+                <Button variant="primary" onClick={() => {
+                  setAnswers((previous) => ({
+                    ...Object.fromEntries(Object.entries(typed).map(([index, value]) => [index, branchesCorrect(questions[Number(index)], value) ? questions[Number(index)].correctAnswer : ""])),
+                    ...previous,
+                  }));
+                  setSubmitted(true);
+                }}>
                   <FontAwesomeIcon icon={faPaperPlane} />
                   {ar ? "إرسال" : "Submit"}
                 </Button>
