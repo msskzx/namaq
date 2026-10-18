@@ -14,6 +14,8 @@ The rule that finally held came from a before/after diff of every mark in all
 (٧٥↔٣٨، ٧٦↔٣٩، ٧٧↔٤٠) changed 93 matches, against hundreds for the earlier rules,
 and the changed rows could be read one by one.
 
+The long form is [lesson 0006](../lessons/0006-the-ayah-next-door.html).
+
 **Evidence:** the commits on `claude/similar-ayat` from "ignore a leading wa or fa"
 to "link each similar-ayat highlight to its partner", and `src/lib/quran/similar.ts`
 (`marks` and `paired`).
