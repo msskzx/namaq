@@ -30,10 +30,13 @@ describe('NavBar Quran links', () => {
     expect(hrefs).toContain('/quran/openings');
     expect(hrefs).toContain('/quran/oaths');
     expect(hrefs).toContain('/quran/prophets/musa');
+    expect(screen.getByRole('link', { name: 'Prophets’ stories in the Quran' }).getAttribute('href')).toBe('/quran/prophets/musa');
+    expect(screen.queryByText('Musa timeline')).toBeNull();
     for (const { href } of getAllNavLinks('en').filter(l => l.href.startsWith('/quran/'))) expect(hrefs).toContain(href);
   });
 
   it('keeps every page in the shared list for the mobile menu and graph menu', () => {
+    expect(getAllNavLinks('ar').find(link => link.href === '/quran/prophets/musa')?.label).toBe('قصص الأنبياء في القرآن');
     const hrefs = getAllNavLinks('ar').map(l => l.href);
     expect(hrefs).toEqual(expect.arrayContaining(['/quran', '/quran/compare', '/quran/words', '/quran/iltifat', '/quran/qiraat', '/quran/order', '/quran/openings', '/quran/oaths', '/quran/prophets/musa']));
   });

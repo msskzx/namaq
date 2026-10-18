@@ -1,68 +1,37 @@
-"use client";
-
-import React from 'react';
+import Link from 'next/link';
 import { useLanguage } from '../language/LanguageContext';
-import translations from '../language/translations';
-import ExplorationCard from '../common/ExplorationCard';
+import styles from './Home.module.css';
 
-interface ExploreCard {
-  id: string;
-  title: string;
-  description: string;
-  href: string;
-}
-
-export default function Explore() {
+export default function Exploration() {
   const { language } = useLanguage();
-  const t = translations[language];
-
-  const exploreCards: ExploreCard[] = [
-    {
-      id: 'graph',
-      title: t.allGraph,
-      description: language === 'ar'
-        ? 'استكشف جميع الشبكات المتاحة'
-        : 'Explore all available network graphs',
-      href: '/graphs?kind=person'
-    },
-    {
-      id: 'people',
-      title: t.people,
-      description: language === 'ar'
-        ? 'اكتشف قصص الشخصيات البارزة في التاريخ الإسلامي'
-        : 'Discover the stories of remarkable individuals in Islamic history',
-      href: '/people'
-    },
-    {
-      id: 'historical-events',
-      title: t.events,
-      description: language === 'ar'
-        ? 'تعرف على الأحداث التاريخية والمعارك المهمة'
-        : 'Learn about historical events and important battles',
-      href: '/events'
-    },
-    {
-      id: 'sources',
-      title: t.sources,
-      description: language === 'ar'
-        ? 'اقرأ النصوص الأصلية التي بُنيت عليها المعلومات'
-        : 'Read the original texts the information is built on',
-      href: '/sources'
-    },
+  const ar = language === 'ar';
+  const entries = [
+    { href: '/people', title: ar ? 'الأشخاص' : 'People', description: ar ? 'السير والأسماء والأنساب' : 'Biographies, names and genealogies' },
+    { href: '/sources', title: ar ? 'المصادر' : 'Sources', description: ar ? 'اقرأ النصوص الأصلية وتتبّع الشواهد' : 'Read original texts and follow the evidence' },
+    { href: '/graphs?kind=person', title: ar ? 'الشبكة' : 'Graph', description: ar ? 'استكشف العلاقات بين الأشخاص' : 'Explore the relationships between people' },
+    { href: '/events', title: ar ? 'الأحداث' : 'Events', description: ar ? 'الأحداث والمعارك والمشاركون فيها' : 'Events, battles and the people involved' },
+    { href: '/quran', title: ar ? 'القرآن' : 'Quran', description: ar ? 'القراءة والموضوعات والمقارنات' : 'Reading, themes and comparisons' },
+    { href: '/hadith', title: ar ? 'الحديث' : 'Hadith', description: ar ? 'استكشف النصوص والأسانيد' : 'Explore texts and chains of transmission' },
+    { href: '/quizzes', title: ar ? 'اختبر معرفتك' : 'Test your knowledge', description: ar ? 'أسئلة مع إحالات إلى المصادر' : 'Questions with references to the sources' },
   ];
 
   return (
-    <div className="w-full mt-12">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {exploreCards.map((card) => (
-          <ExplorationCard
-            key={card.id}
-            title={card.title}
-            desc={card.description}
-            url={card.href}
-          />
-        ))}
+    <section className={styles.exploration} aria-labelledby="explore-title">
+      <div className={styles.sectionHeading}>
+        <h2 id="explore-title">{ar ? 'أبواب الاستكشاف' : 'Ways to explore'}</h2>
+        <span aria-hidden="true">✦</span>
       </div>
-    </div>
+      <ol className={styles.index}>
+        {entries.map((entry, index) => (
+          <li key={entry.href}>
+            <Link href={entry.href}>
+              <span className={styles.indexNumber}>{new Intl.NumberFormat(ar ? 'ar-u-nu-arab' : 'en', { minimumIntegerDigits: 2 }).format(index + 1)}</span>
+              <div><h3>{entry.title}</h3><p>{entry.description}</p></div>
+              <span className={styles.indexRule} aria-hidden="true" />
+            </Link>
+          </li>
+        ))}
+      </ol>
+    </section>
   );
 }
