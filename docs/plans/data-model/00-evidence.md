@@ -28,7 +28,7 @@ Value -> claim key -> claim in an approved batch -> citation -> anchor -> page. 
 - Approval gating: 8 batches pending approval before this work (abu-ubaydah-pilot, arwa-bint-abd-al-muttalib-siyar175, fatimah-bint-muhammad, qutaylah-bint-qais-al-kindiyyah, saad-ibn-abi-waqqas, safiyyah-bint-huyayy, talhah-ibn-ubaydullah, umm-shareek); `catalog:validate` fails with 110 issues on `main`; any batch edit lapses its approval wholesale.
 - `verifyExcerpts.ts` proves an excerpt is inside ONE paragraph; the authoring rules allow joined fragments and ellipses, so the verifier rejects legitimate citations and passes nothing about the catalog value.
 - Fixes by agents were mostly accepted by their own checks while a reviewer found meaning changes in ~65 of ~300 values (dropped clauses, speaker changed, a lineage link added or lost).
-- A repo lesson already records "a check that exists but doesn't run" (`docs/lessons/lessons/0003-...`) and "checks that don't rederive pass the wrong inputs".
+- A repo lesson already records "a check that exists but doesn't run" (distillate `content/lessons/text-to-evidence/0003-...`) and "checks that don't rederive pass the wrong inputs".
 - AGENTS.md rule today: "Transmission chains stay in the source text. A person mentioned only as a narrator does not become a graph node or an edge."
 
 ## Corrections after the lesson was verified against the repo
@@ -42,7 +42,7 @@ Value -> claim key -> claim in an approved batch -> citation -> anchor -> page. 
 
 ## Existing ADRs and docs that bound the model
 
-ADR 0008 (review separate from visibility), 0009 (citations independent of profiles), 0010 (author under data/), 0011 (role of cited evidence), 0013 (attendance vs outcome), 0014 (kunya is a name), 0015 (one record for what someone said), 0018 (page belongs to the edition), 0019 (contents list names chapters), 0020 (a virtue is one entry with one speaker); `docs/data-pipelines.md`, `docs/extraction-checklist.md`, `docs/plans/source-page-store.md`, `CONTEXT.md`, `docs/lessons/MISSION.md`.
+ADR 0008 (review separate from visibility), 0009 (citations independent of profiles), 0010 (author under data/), 0011 (role of cited evidence), 0013 (attendance vs outcome), 0014 (kunya is a name), 0015 (one record for what someone said), 0018 (page belongs to the edition), 0019 (contents list names chapters), 0020 (a virtue is one entry with one speaker); `docs/data-pipelines.md`, `docs/extraction-checklist.md`, `docs/plans/source-page-store.md`, `CONTEXT.md`, distillate `content/lessons/text-to-evidence/track.mdx`.
 
 ## Where the project is going (from the owner)
 

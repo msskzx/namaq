@@ -170,9 +170,7 @@ describe('validateBatch', () => {
     });
   });
 
-  // The database enforces its own enum at write time, but a bad value here
-  // passed validate/approve clean before and only failed on import, minutes
-  // into a bulk run -- see docs/lessons/lessons/0003-a-check-that-exists-but-doesnt-run.html.
+  // https://github.com/msskzx/distillate/blob/main/content/lessons/text-to-evidence/0003-a-check-that-exists-but-doesnt-run/index.mdx
   it('rejects a confidence value outside the enum', () => {
     const b = batch();
     b.claims[0].confidence = 'REPORTED' as never;
