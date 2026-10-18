@@ -119,9 +119,13 @@ export function clampRange(from: unknown, to: unknown, count: number): { from: n
   return { from: start, to: Math.max(start, pick(to, count)) };
 }
 
-export function alignSurahs(a: string[][], b: string[][], first = { a: 1, b: 1 }, withTail = true): Row[] {
+export function alignSurahs(a: string[][], b: string[][], first = { a: 1, b: 1 }, withTail = true, inStep = false): Row[] {
   const sa = first.a - 1;
   const sb = first.b - 1;
+  if (inStep && a.length === b.length && a.length > 0) {
+    const pairs = a.map((x, k) => pairOf(k + first.a, k + first.b, x, b[k]));
+    return [{ type: 'block', block: { kind: 'words', anchors: pairs.filter(p => p.run >= MIN_RUN).length, pairs } }];
+  }
   const groups: Anchor[][] = [];
   for (const anchor of anchorsOf(a, b)) {
     const group = groups[groups.length - 1];
@@ -138,7 +142,7 @@ export function alignSurahs(a: string[][], b: string[][], first = { a: 1, b: 1 }
   let used = { i: 0, j: 0 };
   const blocks: Block[] = groups
     .map(g => g.filter(x => x.i < tailA && x.j < tailB))
-    .filter(g => g.length >= 2 || (g.length === 1 && g[0].run >= KEEP_RUN))
+    .filter(g => g.length >= 2 || (g.length === 1 && g[0].run >= (withTail ? KEEP_RUN : MIN_RUN)))
     .map(g => {
       const at = (i: number, j: number) => pairOf(i + sa, j + sb, a[i - 1], b[j - 1]);
       const pairs: Pair[] = [at(g[0].i, g[0].j)];

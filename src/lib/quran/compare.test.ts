@@ -157,3 +157,21 @@ describe('compareHref', () => {
     expect(compareHref(70, { from: 1, to: 44 }, 80, { from: 33, to: 37 })).toBe('/quran/compare?a=70&af=1&at=44&b=80&bf=33&bt=37');
   });
 });
+
+describe('ayah ranges chosen by the reader', () => {
+  it('keeps a lone two-word match, as al-Waqi\'ah 1 with al-Haqqah 15', () => {
+    const rows = alignSurahs(norm(56).slice(0, 1), norm(69).slice(13, 15), { a: 1, b: 14 }, false);
+    expect(rows.flatMap(r => (r.type === 'block' ? r.block.pairs.map(p => [p.a, p.b, p.run]) : []))).toEqual([[1, 15, 2]]);
+  });
+
+  it('pairs two chosen ranges of the same length ayah by ayah, matches or not', () => {
+    const rows = alignSurahs(norm(56).slice(74, 77), norm(69).slice(37, 40), { a: 75, b: 38 }, false, true);
+    expect(rows).toHaveLength(1);
+    expect(rows[0].type === 'block' && rows[0].block.pairs.map(p => [p.a, p.b])).toEqual([[75, 38], [76, 39], [77, 40]]);
+  });
+
+  it('does not pair in step when only one side was narrowed', () => {
+    const rows = alignSurahs(norm(56).slice(74, 77), norm(69).slice(37, 40), { a: 75, b: 38 }, false, false);
+    expect(rows.flatMap(r => (r.type === 'block' ? r.block.pairs.map(p => [p.a, p.b]) : []))).not.toContainEqual([76, 39]);
+  });
+});
