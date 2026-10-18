@@ -30,19 +30,29 @@ function longestRun(x: string[], y: string[]): number {
   return best;
 }
 
-function pairOf(a: number, b: number, x: string[], y: string[], fx = x, fy = y): Pair {
+export function pairOf(a: number, b: number, x: string[], y: string[], fx = x, fy = y): Pair {
   const inY = new Set(y);
   const shared = [...new Set(fx.filter((_, k) => inY.has(x[k])))];
   const diff = shared.length === 0 ? { a: x.map((_, k) => k), b: y.map((_, k) => k) } : wordDiff(x, y);
   const kept = (w: string[], differing: number[]) => w.flatMap((_, k) => (differing.includes(k) ? [] : [k]));
   const [ka, kb] = [kept(x, diff.a), kept(y, diff.b)];
-  const apart = ka.flatMap((i, n) => (fx[i] === fy[kb[n]] ? [] : [n]));
-  return { a, b, run: longestRun(x, y), shared, marksA: diff.a, marksB: diff.b, rootsA: apart.map(n => ka[n]), rootsB: apart.map(n => kb[n]) };
+  const matched = ka.map((i, n) => [i, kb[n]]);
+  // A word the order-keeping diff left out still matches a free word with its key on the other side, so «قالوا» counts when it swaps places with «فرعون».
+  const freeB = [...diff.b];
+  const marksA = diff.a.filter(i => {
+    const at = freeB.findIndex(j => y[j] === x[i]);
+    if (at < 0) return true;
+    matched.push([i, freeB.splice(at, 1)[0]]);
+    return false;
+  });
+  const apart = matched.filter(([i, j]) => fx[i] !== fy[j]).sort((p, q) => p[0] - q[0]);
+  return { a, b, run: longestRun(x, y), shared, marksA, marksB: freeB, rootsA: apart.map(([i]) => i), rootsB: apart.map(([, j]) => j) };
 }
 
 export function wordTokens(norm: string[], keys: string | undefined): string[] {
   const k = keys?.split(' ');
-  return k?.length === norm.length ? norm.map((w, i) => k[i] || w) : norm;
+  // The corpus numbers homograph lemmas (إذا, إذا2); the letters are the same word here.
+  return k?.length === norm.length ? norm.map((w, i) => k[i]?.replace(/\d+$/, '') || w) : norm;
 }
 
 function anchorsOf(a: string[][], b: string[][]): Anchor[] {

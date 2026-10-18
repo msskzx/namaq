@@ -203,6 +203,16 @@ describe('matching words by root', () => {
     expect(p?.shared).toContain('ولاصلبنكم');
   });
 
+  it('matches a shared word that swaps places, as قالوا after فرعون in Al-A\'raf 113', () => {
+    const p = pairOf(ayah(26, 41, 'فلما جاء السحره قالوا لفرعون اين لنا لاجرا ان كنا نحن الغلبين'), ayah(7, 113, 'وجاء السحره فرعون قالوا ان لنا لاجرا ان كنا نحن الغلبين'));
+    expect(p?.marksA).toEqual([0]);
+    expect(p?.marksB).toEqual([]);
+  });
+
+  it('treats numbered lemmas of one word as the same word, as فإذا in Al-Shu\'ara 45 and Al-A\'raf 117', () => {
+    expect(wordTokens(['فاذا'], 'p:<i*aA2')).toEqual(['p:<i*aA']);
+  });
+
   it('keeps the word itself where the corpus gives no key, and every word when the counts differ', () => {
     expect(wordTokens(['من', 'خلف'], ' r:xlf')).toEqual(['من', 'r:xlf']);
     expect(wordTokens(['من', 'خلف'], 'r:xlf')).toEqual(['من', 'خلف']);
