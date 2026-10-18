@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import Badge from '@/components/common/Badge';
 import Button from '@/components/common/Button';
-import { AyahCard } from '@/components/quran/AyahCard';
+import { AyahCard, type WordNote } from '@/components/quran/AyahCard';
 import { groupPairs, KEEP_RUN, MAX_STEP_GAP, MIN_RUN, TAIL_COUNT, wordSlots, type Group, type Pair, type Range, type Row } from '@/lib/quran/compare';
 import type { Ayah } from '@/types/quran';
 import { num } from '@/lib/quran/arabicNumber';
@@ -19,6 +19,11 @@ const ayat = (n: number) => (n === 0 ? 'لا آيات' : n === 1 ? 'آية وا�
 const label = (s: Side, r: Range) => (r ? `${s.plain} ${span(r)}` : '—');
 
 const title = (s: Side) => (s.range ? label(s, s.range) : s.plain);
+const ROOT: WordNote = { className: 'underline decoration-dotted decoration-2 underline-offset-[10px]', title: 'من جذر مشترك بلفظ مختلف' };
+
+function rootNotes(group: Group, side: 'a' | 'b', ayah: number, slots: Record<number, number>): Record<number, WordNote> {
+  return Object.fromEntries(group.pairs.flatMap((p, k) => (p[side] === ayah ? (side === 'a' ? p.rootsA : p.rootsB).filter(i => slots[i] === k).map(i => [i, ROOT]) : [])));
+}
 
 function pairLabel(p: Pair) {
   if (p.run >= MIN_RUN) return `نص مشترك: ${num(p.run)} كلمات متتالية`;
@@ -26,9 +31,9 @@ function pairLabel(p: Pair) {
   return 'لا كلمات مشتركة';
 }
 
-function Card({ side, ayah, slots }: { side: Side; ayah: number; slots?: Record<number, number> }) {
+function Card({ side, ayah, slots, notes }: { side: Side; ayah: number; slots?: Record<number, number>; notes?: Record<number, WordNote> }) {
   const surah = { id: `s${side.number}`, number: side.number, name: side.name, nameTransliterated: null };
-  return <AyahCard ayah={{ id: `${side.number}:${ayah}`, number: ayah, text: side.words[ayah - 1], surah } as unknown as Ayah} slots={slots} />;
+  return <AyahCard ayah={{ id: `${side.number}:${ayah}`, number: ayah, text: side.words[ayah - 1], surah } as unknown as Ayah} slots={slots} notes={notes} />;
 }
 
 function Gap({ a, b, ra, rb }: { a: Side; b: Side; ra: Range; rb: Range }) {
@@ -60,7 +65,10 @@ function GroupRow({ a, b, group }: { a: Side; b: Side; group: Group }) {
   const many = group.pairs.length > 1;
   const column = (side: Side, key: 'a' | 'b', ayat: number[]) => (
     <div className="flex flex-col justify-center">
-      {ayat.map(n => <Card key={n} side={side} ayah={n} slots={wordSlots(group, key, n, side.words[n - 1].split(' ').length)} />)}
+      {ayat.map(n => {
+        const slots = wordSlots(group, key, n, side.words[n - 1].split(' ').length);
+        return <Card key={n} side={side} ayah={n} slots={slots} notes={rootNotes(group, key, n, slots)} />;
+      })}
     </div>
   );
   return (
@@ -86,9 +94,9 @@ export default function CompareView({ a, b, rows }: { a: Side; b: Side; rows: Ro
         </div>
         <p className={NOTE}>
           لم يراجع هذا العرض أحد من أهل العلم. النص برواية حفص. تُذكر آيتان معًا حين تشتركان في تتابع من {num(MIN_RUN)} كلمات فأكثر
-          بعد حذف التشكيل وتوحيد صور بعض الحروف. تُضم الأزواج في كتلة إن كانت الفجوة بينها واحدة في السورتين ولا تزيد على {num(MAX_STEP_GAP)} آيات،
+          بعد حذف التشكيل وتوحيد صور بعض الحروف، وتُقابل الكلمة بجذرها والأداة بأصلها، فتلتقي «ولأصلبنكم» و«لأصلبنكم» و«سحّار» و«ساحر». تُضم الأزواج في كتلة إن كانت الفجوة بينها واحدة في السورتين ولا تزيد على {num(MAX_STEP_GAP)} آيات،
           وتبقى الكتلة إن كان فيها زوجان فيهما نص مشترك أو زوج فيه تتابع {num(KEEP_RUN)} كلمات فأكثر، أو أي زوج إن اخترت آيات بعينها، وإن تساوى عدد الآيات المختارة في الجانبين قوبلت كل آية بنظيرتها. الصيغ المتكررة تُقرن بإحدى مواضعها اعتباطًا. إن وافقت آية أكثر من آية في السورة الأخرى عُرضت مرة واحدة وإلى جانبها مقابلاتها، ولكل مقابلة لون لكلماتها المشتركة.
-          الكلمات المسطَّرة هي ما اختلف بين الآيتين. يدل الاشتراك على اشتراك اللفظ وحده.
+          والمسطَّرة بنقاط كلمة من جذر مشترك بلفظ مختلف.
         </p>
         <p className={NOTE}>{`وُجدت ${num(words)} كتلة مبنية على النص.`}</p>
       </header>

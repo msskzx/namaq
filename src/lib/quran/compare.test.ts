@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import fixture from './compare.fixture.json';
-import { alignSurahs, clampRange, compareHref, groupPairs, wordSlots, type Block } from './compare';
+import wordKeys from '@/app/quran/compare/wordKeys.json';
+import { alignSurahs, clampRange, compareHref, groupPairs, wordSlots, wordTokens, type Block } from './compare';
 import { ayahWords } from './normalize';
 
 const fx = fixture as Record<string, string[]>;
@@ -86,7 +87,7 @@ describe('repeated counterparts', () => {
 });
 
 describe('groupPairs and wordSlots', () => {
-  const pair = (a: number, b: number, marksA: number[], marksB: number[]) => ({ a, b, run: 2, shared: [], marksA, marksB });
+  const pair = (a: number, b: number, marksA: number[], marksB: number[]) => ({ a, b, run: 2, shared: [], marksA, marksB, rootsA: [], rootsB: [] });
   const group = groupPairs([pair(1, 1, [0, 1], [2]), pair(2, 1, [3], [0, 3]), pair(3, 2, [], [])])[0];
 
   it('joins pairs that share an ayah and starts a new group when none is shared', () => {
@@ -173,5 +174,38 @@ describe('ayah ranges chosen by the reader', () => {
   it('does not pair in step when only one side was narrowed', () => {
     const rows = alignSurahs(norm(56).slice(74, 77), norm(69).slice(37, 40), { a: 75, b: 38 }, false, false);
     expect(rows.flatMap(r => (r.type === 'block' ? r.block.pairs.map(p => [p.a, p.b]) : []))).not.toContainEqual([76, 39]);
+  });
+});
+
+describe('matching words by root', () => {
+  const ayah = (surah: number, n: number, text: string) => {
+    const norm = text.split(' ');
+    return { norm, tokens: wordTokens(norm, wordKeys.surahs[surah - 1][n - 1]) };
+  };
+  const pairOf = (x: ReturnType<typeof ayah>, y: ReturnType<typeof ayah>) => {
+    const [row] = alignSurahs([x.tokens], [y.tokens], { a: 1, b: 1 }, false, true, { a: [x.norm], b: [y.norm] });
+    return row.type === 'block' ? row.block.pairs[0] : undefined;
+  };
+
+  it('pairs سحار with ساحر in Ash-Shu\'ara 37 and Al-A\'raf 112 as the same root', () => {
+    const p = pairOf(ayah(26, 37, 'ياتوك بكل سحار عليم'), ayah(7, 112, 'ياتوك بكل سحر عليم'));
+    expect(p).toMatchObject({ run: 4, marksA: [], marksB: [], rootsA: [2], rootsB: [2] });
+  });
+
+  it('pairs ولاصلبنكم with لاصلبنكم and leaves ثم unmatched', () => {
+    const p = pairOf(
+      ayah(26, 49, 'قال ءامنتم له قبل ان ءاذن لكم انه لكبيركم الذي علمكم السحر فلسوف تعلمون لاقطعن ايديكم وارجلكم من خلف ولاصلبنكم اجمعين'),
+      ayah(7, 124, 'لاقطعن ايديكم وارجلكم من خلف ثم لاصلبنكم اجمعين'),
+    );
+    expect(p?.rootsA).toEqual([19]);
+    expect(p?.rootsB).toEqual([6]);
+    expect(p?.marksB).toEqual([5]);
+    expect(p?.shared).toContain('ولاصلبنكم');
+  });
+
+  it('keeps the word itself where the corpus gives no key, and every word when the counts differ', () => {
+    expect(wordTokens(['من', 'خلف'], ' r:xlf')).toEqual(['من', 'r:xlf']);
+    expect(wordTokens(['من', 'خلف'], 'r:xlf')).toEqual(['من', 'خلف']);
+    expect(wordTokens(['من'], undefined)).toEqual(['من']);
   });
 });

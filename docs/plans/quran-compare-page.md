@@ -12,7 +12,14 @@ it needs no table, migration or generated file.
 
 ## How the pairs are found
 
-`src/lib/quran/compare.ts` works on normalized words (see `normalize.ts`).
+`src/lib/quran/compare.ts` works on one token per word. A word the morphology
+corpus tags as a noun, verb, adjective or proper noun is its root, any other word
+with a lemma is that lemma, and a word with neither (a bare preposition such as
+من, or له) is its normalized letters (see `normalize.ts`). So ولأصلبنكم meets
+لأصلبنكم and سحّار meets ساحر, as they do in the similar list. The tokens come
+from `wordKeys.json`, which `npm run quran:similar` writes beside `similar.json`
+with the same rules (`wordKey` in `similar.ts`). In the 13 ayat where the stored
+text splits words differently from the corpus, the ayah falls back to its letters.
 
 1. Each pair of ayat scores the square of its longest run of shared words, and
    only runs of two words or more score.
@@ -44,7 +51,9 @@ it needs no table, migration or generated file.
 6. Ayat between blocks collapse into one row with both counts.
 
 Words the two ayat share are colored, from the same word alignment the
-relations page uses. A pair with no shared word colors nothing.
+relations page uses, run on the tokens. A matched word whose letters differ from
+its partner's (ولأصلبنكم against لأصلبنكم) also gets a dotted underline. A pair
+with no shared word colors nothing.
 
 An ayah is shown once. When it has several counterparts, the pairs that share
 an ayah form a group: one card on that side, the counterparts stacked on the

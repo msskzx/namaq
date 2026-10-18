@@ -7,7 +7,7 @@ export const KEEP_RUN = 4;
 export const TAIL_COUNT = 5;
 export const DIAGONAL_BONUS = 32;
 
-export type Pair = { a: number; b: number; run: number; shared: string[]; marksA: number[]; marksB: number[] };
+export type Pair = { a: number; b: number; run: number; shared: string[]; marksA: number[]; marksB: number[]; rootsA: number[]; rootsB: number[] };
 export type Block = { kind: 'words' | 'count'; anchors: number; pairs: Pair[] };
 export type Range = { from: number; to: number } | null;
 export type Row = { type: 'block'; block: Block } | { type: 'gap'; a: Range; b: Range };
@@ -30,11 +30,19 @@ function longestRun(x: string[], y: string[]): number {
   return best;
 }
 
-function pairOf(a: number, b: number, x: string[], y: string[]): Pair {
+function pairOf(a: number, b: number, x: string[], y: string[], fx = x, fy = y): Pair {
   const inY = new Set(y);
-  const shared = [...new Set(x.filter(w => inY.has(w)))];
+  const shared = [...new Set(fx.filter((_, k) => inY.has(x[k])))];
   const diff = shared.length === 0 ? { a: x.map((_, k) => k), b: y.map((_, k) => k) } : wordDiff(x, y);
-  return { a, b, run: longestRun(x, y), shared, marksA: diff.a, marksB: diff.b };
+  const kept = (w: string[], differing: number[]) => w.flatMap((_, k) => (differing.includes(k) ? [] : [k]));
+  const [ka, kb] = [kept(x, diff.a), kept(y, diff.b)];
+  const apart = ka.flatMap((i, n) => (fx[i] === fy[kb[n]] ? [] : [n]));
+  return { a, b, run: longestRun(x, y), shared, marksA: diff.a, marksB: diff.b, rootsA: apart.map(n => ka[n]), rootsB: apart.map(n => kb[n]) };
+}
+
+export function wordTokens(norm: string[], keys: string | undefined): string[] {
+  const k = keys?.split(' ');
+  return k?.length === norm.length ? norm.map((w, i) => k[i] || w) : norm;
 }
 
 function anchorsOf(a: string[][], b: string[][]): Anchor[] {
@@ -119,11 +127,12 @@ export function clampRange(from: unknown, to: unknown, count: number): { from: n
   return { from: start, to: Math.max(start, pick(to, count)) };
 }
 
-export function alignSurahs(a: string[][], b: string[][], first = { a: 1, b: 1 }, withTail = true, inStep = false): Row[] {
+export function alignSurahs(a: string[][], b: string[][], first = { a: 1, b: 1 }, withTail = true, inStep = false, forms = { a, b }): Row[] {
   const sa = first.a - 1;
   const sb = first.b - 1;
+  const at = (i: number, j: number) => pairOf(i + sa, j + sb, a[i - 1] ?? [], b[j - 1] ?? [], forms.a[i - 1] ?? [], forms.b[j - 1] ?? []);
   if (inStep && a.length === b.length && a.length > 0) {
-    const pairs = a.map((x, k) => pairOf(k + first.a, k + first.b, x, b[k]));
+    const pairs = a.map((_, k) => at(k + 1, k + 1));
     return [{ type: 'block', block: { kind: 'words', anchors: pairs.filter(p => p.run >= MIN_RUN).length, pairs } }];
   }
   const groups: Anchor[][] = [];
@@ -144,20 +153,19 @@ export function alignSurahs(a: string[][], b: string[][], first = { a: 1, b: 1 }
     .map(g => g.filter(x => x.i < tailA && x.j < tailB))
     .filter(g => g.length >= 2 || (g.length === 1 && g[0].run >= (withTail ? KEEP_RUN : MIN_RUN)))
     .map(g => {
-      const at = (i: number, j: number) => pairOf(i + sa, j + sb, a[i - 1], b[j - 1]);
       const pairs: Pair[] = [at(g[0].i, g[0].j)];
       for (let n = 1; n < g.length; n++) {
         const step = g[n].i - g[n - 1].i;
         if (step === g[n].j - g[n - 1].j) for (let k = 1; k <= step; k++) pairs.push(at(g[n - 1].i + k, g[n - 1].j + k));
         else pairs.push(at(g[n].i, g[n].j));
       }
-      const lead = pairOf(g[0].i - 1 + sa, g[0].j - 1 + sb, a[g[0].i - 2] ?? [], b[g[0].j - 2] ?? []);
+      const lead = at(g[0].i - 1, g[0].j - 1);
       if (g[0].i - 1 > used.i && g[0].j - 1 > used.j && lead.shared.length > 0) pairs.unshift(lead);
       used = { i: g[g.length - 1].i, j: g[g.length - 1].j };
       return { kind: 'words' as const, anchors: g.length, pairs };
     });
   if (tail > 0) {
-    const pairs = Array.from({ length: tail }, (_, k) => pairOf(tailA + k + sa, tailB + k + sb, a[tailA + k - 1], b[tailB + k - 1]));
+    const pairs = Array.from({ length: tail }, (_, k) => at(tailA + k, tailB + k));
     blocks.push({ kind: 'count', anchors: 0, pairs });
   }
 
