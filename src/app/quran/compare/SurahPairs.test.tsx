@@ -68,4 +68,18 @@ describe('SurahPairs', () => {
     render(<SurahPairs groups={groupBySurah([], [106])} names={{ 106: 'قريش' }} mode="text" surah={null} a={106} b={108} />);
     expect(within(card('قريش')).getByText('لا آيات متشابهة.')).toBeTruthy();
   });
+
+  it('narrows the list to the surahs whose name or number matches the search', () => {
+    show();
+    const search = screen.getByRole('searchbox', { name: 'ابحث عن سورة' });
+    fireEvent.change(search, { target: { value: 'عمران' } });
+    expect(order()).toEqual(['آل عمران']);
+    fireEvent.change(search, { target: { value: '٥٥' } });
+    expect(order()).toEqual(['الرحمن']);
+    fireEvent.change(search, { target: { value: 'يوسف' } });
+    expect(order()).toEqual([]);
+    expect(screen.getByText('لا سورة بهذا الاسم.')).toBeTruthy();
+    fireEvent.change(search, { target: { value: '' } });
+    expect(order()).toEqual(['آل عمران', 'البقرة', 'الرحمن', 'الجمعة']);
+  });
 });
