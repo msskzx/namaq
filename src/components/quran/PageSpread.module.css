@@ -1,0 +1,25 @@
+.spread { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1.5rem; row-gap: 0.75rem; }
+.page { display: grid; grid-template-rows: subgrid; padding: 1.5rem; border: 4px double var(--home-rule); background: var(--home-paper-deep); color: var(--home-ink); }
+.page header { border-block: 1px solid var(--home-rule); text-align: center; padding: 0.5rem; margin-bottom: 1.5rem; }
+.page h3 { font-family: var(--font-amiri), serif; font-size: 1.5rem; }
+.page header p { color: var(--home-muted); font-size: 0.9375rem; }
+.lines { display: contents; font-family: var(--font-amiri), serif; font-size: 1.5rem; line-height: 2.5; text-align: center; }
+.lines > p { align-self: start; }
+.ruled .lines > p:not(:first-child) { border-top: 1px dotted var(--home-rule); padding-top: 0.75rem; }
+.spread mark, .legend mark { color: var(--home-accent); background: transparent; text-decoration: underline; text-decoration-color: var(--home-rule); text-underline-offset: 0.3em; }
+.spread mark.root, .legend mark.root { color: var(--home-root); text-decoration-style: dotted; text-decoration-color: var(--home-root); }
+.spread mark.slot1 { color: var(--home-slot-1); }
+.spread mark.slot2 { color: var(--home-slot-2); }
+.spread mark.slot3 { color: var(--home-slot-3); }
+.spread mark.slot4 { color: var(--home-slot-4); }
+.spread mark.linked { text-decoration-style: dotted; text-decoration-color: var(--home-root); }
+.verseEnd { white-space: nowrap; }
+.verseSeal { display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--home-rule); border-radius: 50%; min-width: 1.75rem; height: 1.75rem; padding-inline: 0.25rem; color: var(--home-muted); font-size: 0.9375rem; line-height: 1; vertical-align: middle; white-space: nowrap; }
+.legend { margin-block: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; font-size: 1rem; }
+
+@media (max-width: 600px) {
+  .spread { column-gap: 0.5rem; }
+  .page { padding: 0.5rem; }
+  .page h3 { font-size: 1.125rem; }
+  .lines { font-size: 1.125rem; line-height: 2.2; }
+}

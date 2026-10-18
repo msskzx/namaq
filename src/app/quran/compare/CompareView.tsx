@@ -5,9 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import Badge from '@/components/common/Badge';
 import Button from '@/components/common/Button';
-import { AyahCard, type WordNote } from '@/components/quran/AyahCard';
+import PageSpread, { MatchLegend, type SpreadAyah, type SpreadMark } from '@/components/quran/PageSpread';
 import { groupPairs, KEEP_RUN, MAX_STEP_GAP, MIN_RUN, TAIL_COUNT, wordSlots, type Group, type Pair, type Range, type Row } from '@/lib/quran/compare';
-import type { Ayah } from '@/types/quran';
 import { num } from '@/lib/quran/arabicNumber';
 
 type Side = { number: number; name: string; plain: string; words: string[]; range?: Range };
@@ -19,10 +18,11 @@ const ayat = (n: number) => (n === 0 ? 'لا آيات' : n === 1 ? 'آية وا�
 const label = (s: Side, r: Range) => (r ? `${s.plain} ${span(r)}` : '—');
 
 const title = (s: Side) => (s.range ? label(s, s.range) : s.plain);
-const ROOT: WordNote = { className: 'underline decoration-dotted decoration-2 underline-offset-[10px]', title: 'من جذر مشترك بلفظ مختلف' };
+const ROOT_TITLE = 'من جذر مشترك بلفظ مختلف';
 
-function rootNotes(group: Group, side: 'a' | 'b', ayah: number, slots: Record<number, number>): Record<number, WordNote> {
-  return Object.fromEntries(group.pairs.flatMap((p, k) => (p[side] === ayah ? (side === 'a' ? p.rootsA : p.rootsB).filter(i => slots[i] === k).map(i => [i, ROOT]) : [])));
+function marksOf(group: Group, side: 'a' | 'b', ayah: number, slots: Record<number, number>): Record<number, SpreadMark> {
+  const roots = new Set(group.pairs.flatMap((p, k) => (p[side] === ayah ? (side === 'a' ? p.rootsA : p.rootsB).filter(i => slots[i] === k) : [])));
+  return Object.fromEntries(Object.entries(slots).map(([i, slot]) => [i, roots.has(Number(i)) ? { kind: 'root', slot, title: ROOT_TITLE } : { kind: 'exact', slot }]));
 }
 
 function pairLabel(p: Pair) {
@@ -31,15 +31,13 @@ function pairLabel(p: Pair) {
   return 'لا كلمات مشتركة';
 }
 
-function Card({ side, ayah, slots, notes }: { side: Side; ayah: number; slots?: Record<number, number>; notes?: Record<number, WordNote> }) {
-  const surah = { id: `s${side.number}`, number: side.number, name: side.name, nameTransliterated: null };
-  return <AyahCard ayah={{ id: `${side.number}:${ayah}`, number: ayah, text: side.words[ayah - 1], surah } as unknown as Ayah} slots={slots} notes={notes} />;
-}
+const plainAyah = (side: Side, n: number): SpreadAyah => ({ number: n, words: side.words[n - 1].split(' ') });
+const page = (side: Side, r: NonNullable<Range>, rows: SpreadAyah[][]) => ({ title: side.name, subtitle: `${r.from === r.to ? 'الآية' : 'الآيات'} ${span(r)}`, label: label(side, r), rows });
 
 function Gap({ a, b, ra, rb }: { a: Side; b: Side; ra: Range; rb: Range }) {
   const [open, setOpen] = useState(false);
   const count = (r: Range) => (r ? r.to - r.from + 1 : 0);
-  const cards = (s: Side, r: Range) => (r ? Array.from({ length: count(r) }, (_, k) => r.from + k) : []).map(n => <Card key={n} side={s} ayah={n} />);
+  const pages = ([[a, ra], [b, rb]] as const).map(([s, r]) => (r ? page(s, r, [Array.from({ length: count(r) }, (_, k) => plainAyah(s, r.from + k))]) : null));
   return (
     <div className={PANEL}>
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -51,36 +49,27 @@ function Gap({ a, b, ra, rb }: { a: Side; b: Side; ra: Range; rb: Range }) {
           {open ? 'أخفِ' : 'اعرض'}
         </Button>
       </div>
-      {open && (
-        <div className="grid md:grid-cols-2 gap-x-4 mt-3">
-          <div>{cards(a, ra)}</div>
-          <div>{cards(b, rb)}</div>
-        </div>
-      )}
+      {open && <div className="mt-3"><PageSpread pages={pages} /></div>}
     </div>
   );
 }
 
-function GroupRow({ a, b, group }: { a: Side; b: Side; group: Group }) {
-  const many = group.pairs.length > 1;
-  const column = (side: Side, key: 'a' | 'b', ayat: number[]) => (
-    <div className="flex flex-col justify-center">
-      {ayat.map(n => {
-        const slots = wordSlots(group, key, n, side.words[n - 1].split(' ').length);
-        return <Card key={n} side={side} ayah={n} slots={slots} notes={rootNotes(group, key, n, slots)} />;
-      })}
-    </div>
-  );
+function BlockSpread({ a, b, pairs }: { a: Side; b: Side; pairs: Pair[] }) {
+  const groups = groupPairs(pairs);
+  const rows = (side: Side, key: 'a' | 'b') => groups.map(g => (key === 'a' ? g.as : g.bs).map(n => {
+    const slots = wordSlots(g, key, n, side.words[n - 1].split(' ').length);
+    return { ...plainAyah(side, n), marks: marksOf(g, key, n, slots) };
+  }));
+  const range = (key: 'a' | 'b') => ({ from: Math.min(...pairs.map(p => p[key])), to: Math.max(...pairs.map(p => p[key])) });
   return (
-    <div className="grid md:grid-cols-2 gap-x-4 border-t border-gray-200 dark:border-white/10 pt-3">
-      {column(a, 'a', group.as)}
-      {column(b, 'b', group.bs)}
-      <div className="md:col-span-2 -mt-2 mb-3 flex flex-wrap gap-2">
-        {group.pairs.map((p, k) => (
-          <Badge key={k} size="sm" color={p.run >= MIN_RUN ? 'amber' : 'gray'} text={many ? `${num(p.a)} و${num(p.b)}: ${pairLabel(p)}` : pairLabel(p)} />
+    <>
+      <PageSpread ruled pages={[page(a, range('a'), rows(a, 'a')), page(b, range('b'), rows(b, 'b'))]} />
+      <ul className="mt-3 flex flex-wrap gap-2">
+        {pairs.map((p, k) => (
+          <li key={k}><Badge size="sm" color={p.run >= MIN_RUN ? 'amber' : 'gray'} text={pairs.length > 1 ? `${num(p.a)} و${num(p.b)}: ${pairLabel(p)}` : pairLabel(p)} /></li>
         ))}
-      </div>
-    </div>
+      </ul>
+    </>
   );
 }
 
@@ -96,8 +85,9 @@ export default function CompareView({ a, b, rows }: { a: Side; b: Side; rows: Ro
           لم يراجع هذا العرض أحد من أهل العلم. النص برواية حفص. تُذكر آيتان معًا حين تشتركان في تتابع من {num(MIN_RUN)} كلمات فأكثر
           بعد حذف التشكيل وتوحيد صور بعض الحروف، وتُقابل الكلمة بجذرها والأداة بأصلها، فتلتقي «ولأصلبنكم» و«لأصلبنكم» و«سحّار» و«ساحر»، وتُعدّ الكلمة مشتركة ولو تغيّر موضعها في الآية. تُضم الأزواج في كتلة إن كانت الفجوة بينها واحدة في السورتين ولا تزيد على {num(MAX_STEP_GAP)} آيات،
           وتبقى الكتلة إن كان فيها زوجان فيهما نص مشترك أو زوج فيه تتابع {num(KEEP_RUN)} كلمات فأكثر، أو أي زوج إن اخترت آيات بعينها، وإن تساوى عدد الآيات المختارة في الجانبين قوبلت كل آية بنظيرتها. الصيغ المتكررة تُقرن بإحدى مواضعها اعتباطًا. إن وافقت آية أكثر من آية في السورة الأخرى عُرضت مرة واحدة وإلى جانبها مقابلاتها، ولكل مقابلة لون لكلماتها المشتركة.
-          والمسطَّرة بنقاط كلمة من جذر مشترك بلفظ مختلف.
+          والملوّنة بلون آخر مسطَّرة بنقاط كلمة من جذر مشترك بلفظ مختلف.
         </p>
+        <MatchLegend exact="كلمة مشتركة بلفظها" root={ROOT_TITLE} />
         <p className={NOTE}>{`وُجدت ${num(words)} كتلة مبنية على النص.`}</p>
       </header>
       {rows.map((row, i) => {
@@ -116,10 +106,10 @@ export default function CompareView({ a, b, rows }: { a: Side; b: Side; rows: Ro
             </div>
             {count && (
               <p className={`${NOTE} mb-3`}>
-                آخر {num(TAIL_COUNT)} آيات من كل سورة بالترتيب، من غير حساب على النص. ما تحت كل زوج يبيّن ما تشتركان فيه فعلًا.
+                آخر {num(TAIL_COUNT)} آيات من كل سورة بالترتيب، من غير حساب على النص. ما تحت الصفحتين يبيّن ما يشترك فيه كل زوج فعلًا.
               </p>
             )}
-            {groupPairs(block.pairs).map((g, k) => <GroupRow key={k} a={a} b={b} group={g} />)}
+            <BlockSpread a={a} b={b} pairs={block.pairs} />
           </section>
         );
       })}
