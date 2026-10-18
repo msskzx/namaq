@@ -205,7 +205,7 @@ a batch cites a month or day; PR B names the first batch that does.
   deploy`); until then the pages find no rows and show what they show today.
 - After PR A, rebuild the model's read tables with `npm run model:project` run from the
   checkout that holds the change
-  ([lesson 0009](../lessons/learning-records/0009-a-fix-in-the-code-does-not-fix-the-rows-built-before-it.md)).
+  ([lesson 0009](https://github.com/msskzx/distillate/blob/main/content/records/namaq/0009-a-fix-in-the-code-does-not-fix-the-rows-built-before-it.mdx)).
   After PR B and PR C, run `catalog:project`. If orderings are written to Neo4j, rerun
   `npm run graph:layout`, dry run first.
 - No existing value changes meaning.

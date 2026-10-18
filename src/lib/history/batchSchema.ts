@@ -294,10 +294,7 @@ export function validateBatch(
     if (!claim.assertion.trim()) issues.push({ path, message: 'assertion is required' });
     if (!claim.subjectSlug.trim()) issues.push({ path, message: 'subjectSlug is required' });
 
-    // Caught nothing before this: the database enforces its own enum at
-    // write time, but a batch with a bad value passed validate/approve
-    // clean and only failed on import, minutes into a bulk run -- see
-    // docs/lessons/lessons/0003-a-check-that-exists-but-doesnt-run.html.
+    // https://github.com/msskzx/distillate/blob/main/content/lessons/text-to-evidence/0003-a-check-that-exists-but-doesnt-run/index.mdx
     if (claim.confidence !== undefined && !confidences.includes(claim.confidence)) {
       issues.push({ path, message: `confidence "${claim.confidence}" is not one of ${confidences.join(', ')}` });
     }

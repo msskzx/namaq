@@ -56,7 +56,8 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   work is right; ask before, in the plan.
 - The skills `pr-cycle`, `blind-test-brief`, `review-brief`, `capture-lesson` and
   `expand-contract-migration` (kept in the distillate repo under `skill/`) carry the
-  steps and the subagent briefs for this cycle.
+  steps and the subagent briefs for this cycle. Records and lessons drawn from work
+  here live in distillate, not in this repo: `capture-lesson` says where.
 
 ## Quiz questions
 

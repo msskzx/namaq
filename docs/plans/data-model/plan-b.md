@@ -1,6 +1,6 @@
 # Plan B: from today's model to a model of attributed spans
 
-Method: start from today's stores, change the least that makes every displayed value traceable to exact source text, keep what works, then extend to hadith, tafsir and tarajem. Facts referenced from [00-evidence.md](00-evidence.md) and [lesson 0004](../../lessons/lessons/0004-what-the-model-holds.html).
+Method: start from today's stores, change the least that makes every displayed value traceable to exact source text, keep what works, then extend to hadith, tafsir and tarajem. Facts referenced from [00-evidence.md](00-evidence.md) and [lesson 0004](https://github.com/msskzx/distillate/blob/main/content/lessons/text-to-evidence/0004-what-the-model-holds/index.mdx).
 
 **Verdict up front.** The page store, the catalog-as-authority rule (ADR 0010), batches as the unit of work, and one-way projection survive. Three things cannot be patched and must be replaced:
 
