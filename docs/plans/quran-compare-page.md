@@ -19,7 +19,9 @@ the article or pronouns (من, له) is its normalized letters (see `normalize.t
 لأصلبنكم and سحّار meets ساحر, as they do in the similar list. The tokens come
 from `wordKeys.json`, which `npm run quran:similar` writes beside `similar.json`
 with the same rules (`wordKey` in `similar.ts`). In the 13 ayat where the stored
-text splits words differently from the corpus, the ayah falls back to its letters.
+text splits words differently from the corpus, the ayah falls back to its letters. A numbered
+lemma (إذا2) loses its number, since the corpus numbers homographs that are the
+same word here.
 
 1. Each pair of ayat scores the square of its longest run of shared words, and
    only runs of two words or more score.
@@ -51,7 +53,9 @@ text splits words differently from the corpus, the ayah falls back to its letter
 6. Ayat between blocks collapse into one row with both counts.
 
 Words the two ayat share are colored, from the same word alignment the
-relations page uses, run on the tokens. A matched word whose letters differ from
+relations page uses, run on the tokens. A word that alignment leaves out still
+matches a free word with the same token on the other side, so قالوا counts when
+it swaps places with فرعون (26:41 and 7:113). A matched word whose letters differ from
 its partner's (ولأصلبنكم against لأصلبنكم) also gets a dotted underline. A pair
 with no shared word colors nothing.
 

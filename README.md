@@ -2,15 +2,22 @@
 
 Namaq is an Arabic-first historical learning application for Muslims and students of Islamic knowledge. Its purpose is to make the people, relationships, and major events of early Islamic history easier to understand by exploring them visually rather than only as isolated entries in a text.
 
+The goal is a framework that draws knowledge out of the great classical sources and presents it so students of knowledge can learn and compare, with visuals and tools that make study fruitful. Every piece of information is backed by its evidence in the source.
+
 The central experience is a relationship graph: learners land directly on the graph, look around and filter by relationship type, and move from a graph node to that person's profile. Person profiles connect the graph to a growing historical record through names, titles, a life timeline, events, battles, and Qur'an references.
 
-The project is intentionally refocusing on this learning loop, and the homepage's job is to open straight into it:
+The project is intentionally refocusing on this learning loop. The homepage states the goal, then shows each feature with a working example. The core loop is:
 
 ```text
 Open the graph → explore and filter relationships → open a person's profile → place them in events and time
 ```
 
 ## What is implemented
+
+### Homepage
+
+- The bilingual homepage uses a paper, ink and terracotta theme in light and dark modes, with feature explanations followed by examples of shared Quran openings, page-style ayah comparisons, prophet timelines with distinct surah counts, an expanded relationship graph, the full Hadith Jibril in bubbles or text, complete paternal lineages and an approved question on one of Talha ibn Ubaydullah's virtues, plus a numbered subject index. The same theme now covers every page.
+- The navbar is the title band of a printed book: paper, double rules and the نَمَق wordmark. Its sections run from the texts to review (Quran, Hadith, Biographies, Relationships, Sources, Quizzes) and open shelves on hover, click or keyboard focus, where each page has a line saying what it is for and the current page is marked; Quran's eleven pages sit under Read, Words and Themes. The current section is marked, the phone menu groups the same shelves into collapsible sections and scrolls, and ع/EN switches language in one tap.
 
 ### Quizzes
 

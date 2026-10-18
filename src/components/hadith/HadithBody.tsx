@@ -33,6 +33,20 @@ export function sceneColours(scenes: HadithUnitView['reports'][number]['scenes']
   });
 }
 
+// A new speaker moves to the other side, so two people in a row never share one.
+export function bubbleSides(lines: Pick<SceneLine, 'kind' | 'speaker'>[]): boolean[] {
+  let previous: string | undefined;
+  let seen = false;
+  let start = false;
+  return lines.map((line) => {
+    if (line.kind !== 'turn') return start;
+    if (seen && line.speaker !== previous) start = !start;
+    seen = true;
+    previous = line.speaker;
+    return start;
+  });
+}
+
 function Bubbles({
   lines,
   colours,
@@ -42,7 +56,7 @@ function Bubbles({
   colours: Map<string, string>;
   highlight?: string;
 }) {
-  const first = lines.find((l) => l.kind === 'turn')?.speaker;
+  const sides = bubbleSides(lines);
   return (
     <div dir="rtl" className="flex flex-col gap-3">
       {lines.map((line, i) => {
@@ -56,7 +70,7 @@ function Bubbles({
             </div>
           );
         }
-        const mine = line.speaker === first;
+        const mine = !sides[i];
         const colour = colours.get(line.speaker ?? '') ?? BUBBLE_COLOURS[0];
         return (
           <div key={i} className={`flex ${mine ? 'justify-start' : 'justify-end'}`}>

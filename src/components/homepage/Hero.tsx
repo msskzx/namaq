@@ -1,39 +1,17 @@
-import Link from "next/link";
-import { useLanguage } from "../language/LanguageContext";
-import translations from "../language/translations";
-import HeroGraphPreview from "./HeroGraphPreview";
+import { useLanguage } from '../language/LanguageContext';
+import Logo from '../common/Logo';
+import styles from './Home.module.css';
 
 export default function Hero() {
   const { language } = useLanguage();
-  const t = translations[language];
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-6">
-      <div className="text-gray-900 dark:text-gray-200 flex flex-col justify-center">
-        <h1 className="text-5xl text-center font-Cairo">
-          {language === 'ar' ? (
-            <>
-              <span className="text-indigo-300">استكشف</span> التاريخ الإسلامي{' '}<br></br>
-              من خلال <span className="text-amber-400">التعلم التفاعلي</span><br></br>
-            </>
-          ) : (
-            <>
-              <span className="text-indigo-300">Explore</span> Islamic History{' '}
-              <br></br>
-              Through <span className="text-amber-400">interactive learning</span>
-            </>
-          )}
-        </h1>
-        <p className="text-center text-gray-800 dark:text-gray-200 text-2xl mt-8">{t.intro}</p>
-        <div className="text-center mt-8">
-          <Link href="/graphs" className="inline-flex items-center px-6 py-3 bg-amber-400 text-gray-950 font-semibold rounded-lg hover:bg-amber-300 transition-colors duration-200 shadow-lg hover:shadow-xl text-sm md:text-base">
-            {t.allGraph}
-          </Link>
-        </div>
-      </div>
-      <div className="flex items-center justify-center">
-        <HeroGraphPreview />
-      </div>
+  const ar = language === 'ar';
 
-    </div>
+  return (
+    <section className={styles.hero} aria-labelledby="home-title">
+      <h1 id="home-title" className={styles.wordmark} lang="ar" dir="rtl"><span className="sr-only">نَمَق</span><Logo className={styles.heroLogo} /></h1>
+      <p className={styles.description}>{ar
+        ? 'الهدف بناء إطار يعتمد على أمهات المصادر ويستخرج المعرفة منها بطريقة تساعد طلبة العلم على التعلّم والمقارنة، فتستكشف التاريخ الإسلامي من خلال السير والنصوص الأصلية والشبكات التفاعلية، وتجد رسومًا وأدوات تجعل الطلب مثمرًا، مع الحرص على أن تكون كل معلومة مدعومة بالدليل.'
+        : 'The goal is to build a framework that uses the great sources and extracts the knowledge from them in a way that helps students of knowledge learn and compare, so you can explore Islamic history through biographies, original texts and interactive graphs, with visuals and tools that make the process fruitful, while making sure every piece of information is backed by evidence.'}</p>
+    </section>
   );
 }

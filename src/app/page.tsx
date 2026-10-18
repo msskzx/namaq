@@ -1,24 +1,11 @@
-"use client";
+import { EB_Garamond } from 'next/font/google';
+import Homepage from '@/components/homepage/Homepage';
+import { getHomePreviews } from '@/lib/homePreviewData';
 
-import { useLanguage } from "@/components/language/LanguageContext";
-import Exploration from "@/components/homepage/Exploration";
-import Hero from "@/components/homepage/Hero";
-import WorkInProgressBanner from "@/components/homepage/WorkInProgressBanner";
+const garamond = EB_Garamond({ subsets: ['latin'], variable: '--font-home-serif', display: 'swap' });
 
-export default function Home() {
-  const { language } = useLanguage();
+export const dynamic = 'force-dynamic';
 
-  return (
-    <div className="min-h-screen bg-white dark:bg-black relative overflow-x-hidden">
-      <div className="relative w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 z-10" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-
-        <WorkInProgressBanner />
-
-        <Hero />
-
-        <Exploration />
-
-      </div>
-    </div>
-  );
+export default async function Home() {
+  return <Homepage data={await getHomePreviews()} fontClass={garamond.variable} />;
 }

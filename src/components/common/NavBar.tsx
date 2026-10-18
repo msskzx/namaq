@@ -1,221 +1,226 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useId } from 'react';
 import Link from 'next/link';
-import LanguageSwitcher from '../language/LanguageSwitcher';
+import { usePathname } from 'next/navigation';
 import { useLanguage } from '../language/LanguageContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faXmark, faGear } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faXmark, faGear, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import translations from '../language/translations';
 import ThemeSwitcher from '../theme/ThemeSwitcher';
-import Button from './Button';
-import { getAllNavLinks, type SiteLink } from '@/lib/siteLinks';
-import { PROPHETS } from '@/lib/quran/prophets';
+import { QURAN_CARDS } from '@/app/quran/QuranHub';
+import Logo from './Logo';
+import styles from './NavBar.module.css';
 
-// A subset of getAllNavLinks, by href, so a dropdown never lists a link under
-// a different label than the mobile menu and the graph workspace menu give it.
-const HADITH_SUBMENU_HREFS = ['/hadith/bukhari-jibril', '/hadith/muslim-jibril', '/hadith/fath-iman-50'];
-const QURAN_SUBMENU_HREFS = ['/quran/read', '/quran', '/quran/compare', '/quran/words', '/quran/branches', '/quran/iltifat', '/quran/qiraat', '/quran/order', '/quran/openings', '/quran/oaths', ...PROPHETS.map(({ slug }) => `/quran/prophets/${slug}`)];
-const GRAPHS_SUBMENU_HREFS = ['/graphs', '/nasab'];
-const PEOPLE_SUBMENU_HREFS = ['/people', '/people/prophet-muhammad', '/titles', '/events'];
+type Language = 'en' | 'ar';
+type Text = Record<Language, string>;
+export type NavItem = { href: string; label: Text; purpose: Text };
+export type NavSection = { href: string; label: Text; groups: { title?: Text; items: NavItem[] }[] };
 
-function submenuFrom(hrefs: string[], language: 'en' | 'ar'): SiteLink[] {
-  const all = getAllNavLinks(language);
-  return hrefs.map((wanted) => all.find((link) => link.href === wanted)).filter((link): link is SiteLink => link !== undefined);
-}
+const quran = (href: string, label: Text): NavItem => ({ href, label, purpose: QURAN_CARDS.find(card => card.href === href)!.desc });
 
-const getLinkItems = (href: string, language: 'en' | 'ar'): SiteLink[] => {
-  switch (href) {
-    case '/graphs':
-      return submenuFrom(GRAPHS_SUBMENU_HREFS, language);
-    case '/people':
-      return submenuFrom(PEOPLE_SUBMENU_HREFS, language);
-    case '/hadith':
-      return submenuFrom(HADITH_SUBMENU_HREFS, language);
-    case '/quran':
-      return submenuFrom(QURAN_SUBMENU_HREFS, language);
-    case '/quizzes':
-      // Solo today; party mode (docs/plans/quizzes.md) adds its own entry
-      // here once built, rather than a second top-level dropdown.
-      return [{ href: '/quizzes', label: translations[language].soloQuiz }];
-    default:
-      return [];
-  }
+// The chapters (أبواب) of the bar. Each opens a shelf whose tools say what they are for;
+// the phone menu lists the same shelves, so the two never drift apart.
+export const NAV_SECTIONS: NavSection[] = [
+  { href: '/quran', label: { ar: 'القرآن', en: 'Quran' }, groups: [
+    { title: { ar: 'القراءة', en: 'Read' }, items: [
+      quran('/quran/read', { ar: 'المصحف', en: 'The mushaf' }),
+      quran('/quran/qiraat', { ar: 'القراءات', en: 'Readings' }),
+    ] },
+    { title: { ar: 'الألفاظ', en: 'Words' }, items: [
+      quran('/quran/compare', { ar: 'مقارنة السور', en: 'Compare surahs' }),
+      quran('/quran/words', { ar: 'ألفاظ القرآن', en: 'Words of the Quran' }),
+      quran('/quran/branches', { ar: 'فواتح الآيات المشتركة', en: 'Shared ayah openings' }),
+    ] },
+    { title: { ar: 'الموضوعات', en: 'Themes' }, items: [
+      quran('/quran/prophets/musa', { ar: 'قصص الأنبياء', en: 'Prophets’ stories' }),
+      quran('/quran/iltifat', { ar: 'الالتفات', en: 'Iltifat' }),
+      quran('/quran/openings', { ar: 'افتتاح السور', en: 'Surah openings' }),
+      quran('/quran/oaths', { ar: 'الأقسام', en: 'Oaths' }),
+      quran('/quran/order', { ar: 'ترتيب السور', en: 'Surah order' }),
+    ] },
+  ] },
+  { href: '/hadith', label: { ar: 'الحديث', en: 'Hadith' }, groups: [{ items: [
+    { href: '/hadith/bukhari-jibril', label: { ar: 'صحيح البخاري', en: 'Sahih al-Bukhari' }, purpose: { ar: 'الحديث بإسناده وحواره', en: 'Hadith with their isnad and dialogue' } },
+    { href: '/hadith/muslim-jibril', label: { ar: 'صحيح مسلم', en: 'Sahih Muslim' }, purpose: { ar: 'الحديث بإسناده وحواره', en: 'Hadith with their isnad and dialogue' } },
+    { href: '/hadith/fath-iman-50', label: { ar: 'فتح الباري', en: 'Fath al-Bari' }, purpose: { ar: 'شرح ابن حجر لصحيح البخاري', en: 'Ibn Hajar’s commentary on Sahih al-Bukhari' } },
+  ] }] },
+  { href: '/people', label: { ar: 'التراجم', en: 'Biographies' }, groups: [{ items: [
+    { href: '/people', label: { ar: 'الأعلام', en: 'Notable people' }, purpose: { ar: 'الأسماء والأنساب والأحوال مع مصادرها', en: 'Names, lineage and lives, with their sources' } },
+    { href: '/titles', label: { ar: 'الألقاب', en: 'Titles' }, purpose: { ar: 'الألقاب ومن عُرف بها', en: 'Titles and the people known by them' } },
+    { href: '/events', label: { ar: 'الأحداث', en: 'Events' }, purpose: { ar: 'الأحداث والغزوات ومن شهدها', en: 'Events and battles, and who took part' } },
+  ] }] },
+  { href: '/graphs', label: { ar: 'شبكة العلاقات', en: 'Relationships' }, groups: [{ items: [
+    { href: '/graphs', label: { ar: 'استكشاف الشبكة', en: 'Explore the graph' }, purpose: { ar: 'استكشف الصلات بين الأشخاص وصفّها بحسب نوع العلاقة', en: 'Explore the connections between people and filter them by relationship' } },
+    { href: '/nasab', label: { ar: 'النسب', en: 'Lineage' }, purpose: { ar: 'تتبّع سلاسل الآباء وقارن أنساب عدة أشخاص', en: 'Trace paternal lines and compare several people’s ancestry' } },
+  ] }] },
+  { href: '/sources', label: { ar: 'المصادر', en: 'Sources' }, groups: [{ items: [
+    { href: '/sources', label: { ar: 'الكتب', en: 'Books' }, purpose: { ar: 'الكتب التي تُستخرج منها المعلومات، تُقرأ بنصها', en: 'The books the information comes from, readable in full' } },
+    { href: '/attributions', label: { ar: 'العزو', en: 'Attributions' }, purpose: { ar: 'مصادر البيانات وتراخيصها', en: 'Where the data comes from and its licences' } },
+  ] }] },
+  { href: '/quizzes', label: { ar: 'الاختبارات', en: 'Quizzes' }, groups: [] },
+];
+
+const owns = (section: NavSection, path: string) => {
+  const under = (href: string) => path === href || path.startsWith(`${href}/`);
+  return under(section.href) || section.groups.some(group => group.items.some(item => under(item.href)));
 };
 
+export function activeSection(path: string): string | undefined {
+  return NAV_SECTIONS.find(section => owns(section, path))?.href;
+}
+
+function Shelf({ section, language, id, path, onPick }: { section: NavSection; language: Language; id: string; path: string; onPick: () => void }) {
+  return (
+    <div id={id} className={styles.shelf}>
+      {section.groups.map((group, g) => (
+        <div key={g} className={styles.shelfGroup}>
+          {group.title && <h3>{group.title[language]}</h3>}
+          <ul>
+            {group.items.map(item => (
+              <li key={item.href}>
+                <Link href={item.href} onClick={onPick} aria-current={path === item.href ? 'page' : undefined}>
+                  <span className={styles.itemLabel}>{item.label[language]}</span>
+                  <span className={styles.itemPurpose}>{item.purpose[language]}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+      <Link href={section.href} className={styles.overview} onClick={onPick}>
+        {language === 'ar' ? `كل صفحات ${section.label.ar}` : `All ${section.label.en} pages`}
+      </Link>
+    </div>
+  );
+}
+
+// Hover opens a shelf in CSS, with no timers; the toggle opens it for touch and keyboard.
+function Chapter({ section, language, active, path }: { section: NavSection; language: Language; active: boolean; path: string }) {
+  const [open, setOpen] = useState(false);
+  // After a pick the shelf hides even under the pointer, until the pointer leaves.
+  const [dismissed, setDismissed] = useState(false);
+  const shelfId = useId();
+  const toggle = useRef<HTMLButtonElement>(null);
+  const label = section.label[language];
+  if (section.groups.length === 0) {
+    return <li className={styles.chapter}><Link href={section.href} aria-current={active ? 'page' : undefined}>{label}</Link></li>;
+  }
+  const pick = () => { setOpen(false); setDismissed(true); };
+  // The shelf opens under its chapter; near the edge of the screen it slides back inside.
+  const place = () => {
+    const shelf = document.getElementById(shelfId);
+    if (!shelf) return;
+    shelf.style.translate = '';
+    const { left, right } = shelf.getBoundingClientRect();
+    const edge = 8;
+    const shift = right > innerWidth - edge ? innerWidth - edge - right : left < edge ? edge - left : 0;
+    if (shift) shelf.style.translate = `${shift}px 0`;
+  };
+  return (
+    <li
+      className={styles.chapter}
+      data-open={open || undefined}
+      data-dismissed={dismissed || undefined}
+      onPointerEnter={place}
+      onPointerLeave={event => { setDismissed(false); if (event.pointerType === 'mouse') setOpen(false); }}
+      onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setOpen(false); }}
+      onKeyDown={event => { if (event.key === 'Escape' && open) { setOpen(false); toggle.current?.focus(); } }}
+    >
+      <Link href={section.href} aria-current={active ? 'page' : undefined} onClick={pick}>{label}</Link>
+      <button
+        ref={toggle}
+        type="button"
+        className={styles.toggle}
+        aria-expanded={open}
+        aria-controls={shelfId}
+        aria-label={language === 'ar' ? `صفحات ${label}` : `${label} pages`}
+        onClick={() => { place(); setDismissed(false); setOpen(value => !value); }}
+      >
+        <FontAwesomeIcon icon={faChevronDown} />
+      </button>
+      <Shelf section={section} language={language} id={shelfId} path={path} onPick={pick} />
+    </li>
+  );
+}
+
 export default function NavBar() {
-  const { language, languageLoaded } = useLanguage() as { language: 'en' | 'ar'; languageLoaded: boolean };
+  const { language, languageLoaded, toggleLanguage } = useLanguage() as { language: Language; languageLoaded: boolean; toggleLanguage: () => void };
+  const path = usePathname() ?? '/';
   const [menuOpen, setMenuOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const settingsRef = useRef<HTMLDivElement>(null);
-  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (settingsRef.current && !settingsRef.current.contains(event.target as Node)) {
-        setSettingsOpen(false);
-      }
+      if (settingsRef.current && !settingsRef.current.contains(event.target as Node)) setSettingsOpen(false);
     };
-
     document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      if (hoverTimeoutRef.current) {
-        clearTimeout(hoverTimeoutRef.current);
-      }
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // The stored language is only known on the client, so nothing language-specific renders before it loads.
   if (!languageLoaded) {
-    // Render placeholder with real title (invisible) to prevent hydration mismatch
     return (
       <>
-        <nav className="bg-gray-50 dark:bg-black w-full border-b-2 border-amber-400 shadow-lg min-h-[72px] fixed top-0 left-0 right-0 z-50">
-          <div className="w-full flex justify-between items-center py-4 px-4 min-h-[72px]">
-            <span className="text-black dark:text-amber-400 text-2xl font-bold opacity-0">{translations[language]?.title || 'Namaq'}</span>
-            <div className="hidden lg:flex space-x-4 items-center opacity-0">
-              <span>Placeholder</span>
-            </div>
-            <button className="lg:hidden text-black dark:text-amber-400 p-2 opacity-0" style={{ visibility: 'hidden' }} aria-hidden="true">&nbsp;</button>
-          </div>
-        </nav>
-        <div className="h-[72px]" />
+        <nav className={styles.bar}><div className={styles.band} /></nav>
+        <div className={styles.spacer} />
       </>
     );
   }
 
-  const mainLinkHrefs = ['/graphs', '/people', '/quizzes', '/sources'];
-  const mainLinks = mainLinkHrefs
-    .map((wanted) => getAllNavLinks(language).find((link) => link.href === wanted))
-    .filter((link): link is SiteLink => link !== undefined);
-  mainLinks.splice(3, 0, { href: '/hadith', label: language === 'ar' ? 'الأحاديث' : 'Hadith' });
-  mainLinks.splice(4, 0, { href: '/quran', label: language === 'ar' ? 'القرآن' : 'Quran' });
-
-  const allLinks = getAllNavLinks(language);
+  const active = activeSection(path);
+  const ar = language === 'ar';
 
   return (
     <>
-      <nav className="bg-gray-50 dark:bg-black w-full border-b-2 border-amber-400 shadow-lg fixed top-0 left-0 right-0 z-50 min-h-[72px]">
-        <div className="w-full flex justify-between items-center py-4 px-4 min-h-[72px]">
-          <Link
-            href="/"
-            className="text-amber-600 dark:text-amber-400 text-2xl font-bold hover:text-amber-300 transition-colors"
-            onClick={() => setMenuOpen(false)}
-          >
-            {translations[language].appName}
-          </Link>
-          {/* Desktop Nav */}
-          <div className="hidden lg:flex space-x-4 items-center">
-            {mainLinks.map((link) => {
-              const linkItems = getLinkItems(link.href, language);
-              const isHovered = hoveredLink === link.href;
-
+      <nav className={styles.bar} aria-label={ar ? 'الأبواب' : 'Main'} dir={ar ? 'rtl' : 'ltr'}>
+        <div className={styles.band}>
+          <Link href="/" className={styles.wordmark} onClick={() => setMenuOpen(false)} aria-label={translations[language].appName}><Logo small className={styles.logo} /></Link>
+          <ul className={styles.chapters}>
+            {NAV_SECTIONS.map(section => (
+              <Chapter key={section.href} section={section} language={language} active={section.href === active} path={path} />
+            ))}
+          </ul>
+          <div className={styles.actions}>
+            <button type="button" className={styles.language} onClick={toggleLanguage} lang={ar ? 'en' : 'ar'} aria-label={ar ? 'Switch to English' : 'التبديل إلى العربية'}>
+              {ar ? 'EN' : 'ع'}
+            </button>
+            <div className={styles.settings} ref={settingsRef}>
+              <button type="button" className={styles.iconButton} onClick={() => setSettingsOpen(open => !open)} aria-expanded={settingsOpen} aria-label={ar ? 'الإعدادات' : 'Settings'}>
+                <FontAwesomeIcon icon={faGear} />
+              </button>
+              {settingsOpen && <div className={styles.popover}><ThemeSwitcher /></div>}
+            </div>
+            <button
+              type="button"
+              className={`${styles.iconButton} ${styles.menuButton}`}
+              onClick={() => setMenuOpen(open => !open)}
+              aria-expanded={menuOpen}
+              aria-label={menuOpen ? (ar ? 'إغلاق القائمة' : 'Close menu') : (ar ? 'فتح القائمة' : 'Open menu')}
+            >
+              <FontAwesomeIcon icon={menuOpen ? faXmark : faBars} />
+            </button>
+          </div>
+        </div>
+        {menuOpen && (
+          <div className={styles.mobile}>
+            {NAV_SECTIONS.map(section => {
+              const current = section.href === active;
+              if (section.groups.length === 0) {
+                return <Link key={section.href} href={section.href} className={styles.mobileChapter} aria-current={current ? 'page' : undefined} onClick={() => setMenuOpen(false)}>{section.label[language]}</Link>;
+              }
               return (
-                <div
-                  key={link.href}
-                  className="relative"
-                  onMouseEnter={() => {
-                    if (hoverTimeoutRef.current) {
-                      clearTimeout(hoverTimeoutRef.current);
-                    }
-                    setHoveredLink(link.href);
-                  }}
-                  onMouseLeave={() => {
-                    hoverTimeoutRef.current = setTimeout(() => {
-                      setHoveredLink(null);
-                    }, 200);
-                  }}
-                >
-                  <Link
-                    href={link.href}
-                    className="text-black dark:text-gray-100 rounded-md transition-colors hover:text-gray-800 dark:hover:text-amber-300 font-medium px-3 py-2 flex items-center"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    {link.label}
-                  </Link>
-
-                  {linkItems.length > 0 && isHovered && (
-                    <div
-                      className="absolute top-full start-0 mt-1 bg-white dark:bg-gray-900 shadow-lg z-50 min-w-[200px] py-1"
-                      onMouseEnter={() => {
-                        if (hoverTimeoutRef.current) {
-                          clearTimeout(hoverTimeoutRef.current);
-                        }
-                        setHoveredLink(link.href);
-                      }}
-                      onMouseLeave={() => {
-                        hoverTimeoutRef.current = setTimeout(() => {
-                          setHoveredLink(null);
-                        }, 200);
-                      }}
-                    >
-                      {linkItems.map((item) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          className="block px-4 py-2 text-sm text-gray-800 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                          onClick={() => setHoveredLink(null)}
-                        >
-                          {item.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                <details key={section.href} open={current} className={styles.mobileSection}>
+                  <summary aria-current={current ? 'page' : undefined}>{section.label[language]}</summary>
+                  <Shelf section={section} language={language} id={`${section.href}-mobile`} path={path} onPick={() => setMenuOpen(false)} />
+                </details>
               );
             })}
           </div>
-
-          <div>
-            {/* Gear Icon for Settings */}
-            <div className="relative" ref={settingsRef}>
-              <Button size="icon" onClick={() => setSettingsOpen((open) => !open)} aria-expanded={settingsOpen} aria-label="Settings" className="ms-2">
-                <FontAwesomeIcon icon={faGear} className="w-5 h-5" />
-              </Button>
-              {settingsOpen && (
-                <div className="absolute top-full end-0 mt-2 bg-gray-50 dark:bg-black border border-amber-400 rounded-md shadow-lg z-50 p-4 flex flex-col gap-4">
-                  <div>
-                    <LanguageSwitcher />
-                  </div>
-                  <div>
-                    <ThemeSwitcher />
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-          {/* Hamburger Icon for Mobile */}
-          <Button
-            size="icon"
-            className="lg:hidden"
-            onClick={() => setMenuOpen((open) => !open)}
-            aria-expanded={menuOpen}
-            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-          >
-            <FontAwesomeIcon icon={menuOpen ? faXmark : faBars} className="w-5 h-5" />
-          </Button>
-        </div>
-        {/* Mobile Dropdown Menu */}
-        {menuOpen && (
-          <div className="lg:hidden fixed top-[72px] left-0 right-0 bg-gray-50 dark:bg-black border-t-2 border-amber-400 px-4 pb-4 animate-fade-in-down z-40">
-            <div className="flex flex-col gap-3 mt-2">
-              {allLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-black dark:text-amber-400 rounded-md transition-colors hover:text-gray-800 dark:hover:text-amber-300 font-medium px-3 py-2"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          </div>
         )}
       </nav>
-      <div className="h-[72px]" />
+      <div className={styles.spacer} />
     </>
   );
 }

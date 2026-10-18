@@ -1,14 +1,13 @@
 import translations from '@/components/language/translations';
-import { PROPHETS } from '@/lib/quran/prophets';
 
 export interface SiteLink {
   href: string;
   label: string;
 }
 
-// The full site nav link list, shared between NavBar's mobile dropdown and
-// the graph workspace's menu (src/components/graph/GraphCanvas.tsx) -- kept
-// here once so the two never drift apart.
+// The full list of site pages, for the graph workspace's menu
+// (src/components/graph/GraphCanvas.tsx) and page titles on hubs. NavBar's
+// NAV_SECTIONS must reach every href here; its test checks that.
 export const getAllNavLinks = (language: 'en' | 'ar'): SiteLink[] => [
   { href: '/graphs', label: translations[language].allGraph },
   { href: '/nasab', label: language === 'ar' ? 'النسب' : 'Nasab' },
@@ -31,6 +30,6 @@ export const getAllNavLinks = (language: 'en' | 'ar'): SiteLink[] => [
   { href: '/quran/order', label: language === 'ar' ? 'ترتيب السور' : 'Surah order' },
   { href: '/quran/openings', label: language === 'ar' ? 'افتتاح السور: الشرط وجوابه والتسبيح' : 'Surah openings: conditions and tasbih' },
   { href: '/quran/oaths', label: language === 'ar' ? 'الأقسام في القرآن' : 'Oaths in the Qur\'an' },
-  ...PROPHETS.map(({ slug, name, nameEn }) => ({ href: `/quran/prophets/${slug}`, label: language === 'ar' ? `خط ${name} الزمني` : `${nameEn} timeline` })),
+  { href: '/quran/prophets/musa', label: language === 'ar' ? 'قصص الأنبياء في القرآن' : 'Prophets’ stories in the Quran' },
   { href: '/attributions', label: language === 'ar' ? 'العزو' : 'Attributions' },
 ];

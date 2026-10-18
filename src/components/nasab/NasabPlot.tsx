@@ -21,11 +21,6 @@ export default function NasabPlot({ layout, isArabic }: { layout: NasabLayout; i
       },
     ]),
   );
-  const t = {
-    meeting: isArabic ? 'الجد المشترك' : 'Common ancestor',
-    unrecorded: isArabic ? 'الأب غير مسجل' : 'Father not recorded',
-    several: isArabic ? 'له أكثر من أب مسجل' : 'Several fathers recorded',
-  };
 
   return (
     <div tabIndex={0} role="region" aria-label={isArabic ? 'شجرة النسب' : 'Nasab tree'} className="overflow-auto rounded border border-amber-400 bg-gray-50 dark:bg-black">
@@ -46,10 +41,9 @@ export default function NasabPlot({ layout, isArabic }: { layout: NasabLayout; i
         })}
         {layout.nodes.map((node) => {
           const { x, y } = at.get(node.slug)!;
-          const tag = node.isMeeting ? t.meeting : node.otherFathers.length > 0 ? t.several : node.fatherUnrecorded ? t.unrecorded : null;
           return (
             <g key={node.slug} transform={`translate(${x - NODE_WIDTH / 2},${y - NODE_HEIGHT / 2})`}>
-              <title>{[node.name, tag, ...node.otherFathers].filter(Boolean).join(' · ')}</title>
+              <title>{node.name}</title>
               <rect
                 width={NODE_WIDTH}
                 height={NODE_HEIGHT}
@@ -57,14 +51,9 @@ export default function NasabPlot({ layout, isArabic }: { layout: NasabLayout; i
                 strokeWidth={node.isMeeting ? 3 : 1.5}
                 className={`${node.isSubject ? 'fill-amber-200 dark:fill-amber-800' : 'fill-white dark:fill-gray-900'} ${node.isMeeting ? 'stroke-amber-600 dark:stroke-amber-300' : 'stroke-amber-400'}`}
               />
-              <text x={NODE_WIDTH / 2} y={tag ? 21 : 29} textAnchor="middle" className="fill-gray-900 text-sm dark:fill-gray-100">
+              <text x={NODE_WIDTH / 2} y={29} textAnchor="middle" className="fill-gray-900 text-sm dark:fill-gray-100">
                 {givenName(node.name)}
               </text>
-              {tag && (
-                <text x={NODE_WIDTH / 2} y={39} textAnchor="middle" className="fill-gray-600 text-[10px] dark:fill-gray-300">
-                  {tag}
-                </text>
-              )}
             </g>
           );
         })}
