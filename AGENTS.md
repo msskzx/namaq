@@ -54,12 +54,14 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   owner applies is not a reason to hold the merge: write the change so the app
   works before the migration is applied. Do not open a PR to ask whether the
   work is right; ask before, in the plan.
-- The skills `pr-cycle`, `blind-test-brief`, `review-brief`, `capture-record`,
-  `write-lesson` and `expand-contract-migration` (kept in the distillate repo under
-  `skill/`) carry the steps and the subagent briefs for this cycle. Records and
-  lessons drawn from work here live in distillate, not in this repo. Search its
-  records before planning and after a first fix fails, and record challenges,
-  obstacles and detours as they happen: `capture-record` says how.
+- The skills `pr-cycle`, `blind-test-brief`, `review-brief` and
+  `expand-contract-migration` (kept in the distillate repo under `skill/`) carry the
+  steps and the subagent briefs for this cycle.
+- What work here teaches lives in Distillate (github.com/msskzx/distillate), not in
+  this repo. Search its records before planning and after a first fix fails, and
+  record challenges, obstacles and detours as they happen, with `capture-record`.
+  Write a lesson with `write-lesson`. These Distillate records are a different thing
+  from the historical records under `data/history/`.
 
 ## Quiz questions
 
