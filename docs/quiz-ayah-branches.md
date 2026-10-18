@@ -18,7 +18,8 @@ The quiz topic "Shared openings" (`BRANCHES`, فواتح الآيات) asks abou
 - The reader writes ordinary Arabic spelling, not the mushaf rasm. Each rasm word is turned into a pattern of the spellings a reader may use, and a typed answer must match it letter for letter after `normalizeWord`:
   - A dagger alif may be written or left out, so السماوات and الكتاب match, and so do هذا, ذلك and إله.
   - A waw or ya that only carries a dagger alif may be written as that alif, so الصلاة, الحياة and التوراة match.
-  - A hamza may be written on any seat or left out, so شيئا, آمنوا and امنوا match.
+  - A hamza may be written on any seat, alif included, or left out, so شيئا, آمنوا, امنوا and أرأيتم match.
+  - A small waw or ya in the rasm may be written as a full letter, so النبيين, إبراهيم and يستوون match.
   - An alif the rasm writes may not be dropped, and nothing else is loosened, so قل does not match قَالَ and لا does not match إِلَىٰ.
 - An answer may run past the next fork. It is matched against each whole ayah under its branch, from the end of the phrase, and must stop at the end of a word. Spaces are ignored, so يا أيها matches يَـٰٓأَيُّهَا.
 - A node is skipped when two of its branches start with words a reader would spell the same, such as بِظَلَّامٍ and بِظَلَّـٰمٍ.

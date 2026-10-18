@@ -4,6 +4,7 @@ import { normalizeWord } from '@/lib/quran/normalize';
 const DAGGER = 'ٰ';
 const HAMZA = /[ءئؤٕٔ]/;
 const SEATS = 'ويى';
+const SMALL: Record<string, string> = { 'ۥ': 'و?', 'ۦ': 'ي?', 'ۧ': 'ي?' };
 
 const letters = (text: string) => normalizeWord(text.replace(/آ/g, 'ءا').replace(/[ئؤ]/g, 'ء')).replace(/[^ء-ي]/g, '');
 
@@ -15,7 +16,9 @@ function pattern(word: string): string {
       if (SEATS.includes(previous)) pieces[pieces.length - 1] += '?';
       pieces.push('ا?');
     } else if (HAMZA.test(char)) {
-      pieces.push('ء?');
+      pieces.push('[ءا]?');
+    } else if (SMALL[char]) {
+      pieces.push(SMALL[char]);
     } else {
       const letter = letters(char);
       if (letter) pieces.push(letter);
