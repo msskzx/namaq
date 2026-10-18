@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render as rtlRender, screen } from '@testing-library/react';
+import { LanguageProvider } from '@/components/language/LanguageContext';
 import type { ReaderPageData } from '@/lib/quran/readerPage';
 import ReaderView from './ReaderView';
 import SurahIndex from './SurahIndex';
@@ -10,6 +11,8 @@ const push = vi.fn();
 vi.stubGlobal('ResizeObserver', class { observe() {} disconnect() {} });
 
 vi.mock('next/navigation', () => ({ useRouter: () => ({ push }) }));
+
+const render = (ui: React.ReactElement) => rtlRender(ui, { wrapper: LanguageProvider });
 
 afterEach(() => {
   cleanup();
@@ -80,6 +83,20 @@ describe('ReaderView', () => {
     expect(screen.getByText('الصفحة السابقة').closest('a')?.getAttribute('href')).toBe('/quran/read/603');
   });
 
+  it('heads a page with the surah it continues and its juz', () => {
+    const { container } = render(<ReaderView page={4} data={data({ line: ['مِن', 5] })} names={names} top={2} />);
+    expect(container.querySelector('section > div')?.textContent).toBe('البقرةالجزء ١');
+  });
+
+  it('labels the controls in English when English is chosen, keeping the mushaf right to left', () => {
+    localStorage.setItem('language', 'en');
+    const { container } = render(<ReaderView page={3} data={opening} names={names} />);
+    localStorage.removeItem('language');
+    expect(screen.getByText('Next page').closest('a')?.getAttribute('href')).toBe('/quran/read/4');
+    expect(screen.getByLabelText('Page number')).not.toBeNull();
+    expect(container.querySelector('article')?.getAttribute('dir')).toBe('rtl');
+  });
+
   it('jumps to a page by number and ignores one out of range', () => {
     render(<ReaderView page={3} data={opening} names={names} />);
     const input = screen.getByLabelText('رقم الصفحة');
@@ -93,8 +110,30 @@ describe('ReaderView', () => {
 });
 
 describe('SurahIndex', () => {
-  it('links every surah to the page it starts on', () => {
-    render(<SurahIndex surahs={[{ number: 1, name: 'الفاتحة', numberOfAyat: 7, page: 1 }, { number: 2, name: 'البقرة', numberOfAyat: 286, page: 2 }]} />);
-    expect(screen.getAllByRole('link').map(a => a.getAttribute('href'))).toEqual(['/quran/read/1', '/quran/read/2']);
+  const surahs = [
+    { number: 1, name: 'سُورَةُ ٱلْفَاتِحَةِ', nameTransliterated: 'Al-Faatiha', numberOfAyat: 7, page: 1 },
+    { number: 2, name: 'سُورَةُ ٱلْبَقَرَةِ', nameTransliterated: 'Al-Baqara', numberOfAyat: 286, page: 2 },
+    { number: 3, name: 'سُورَةُ آلِ عِمۡرَانَ', nameTransliterated: 'Aal-i-Imraan', numberOfAyat: 200, page: 50 },
+  ];
+  const hrefs = (root: ParentNode) => [...root.querySelectorAll('li a')].map(a => a.getAttribute('href'));
+
+  it('lists each surah under every juz it has ayat in, linking to where it opens there', () => {
+    render(<SurahIndex surahs={surahs} />);
+    expect(hrefs(screen.getByRole('region', { name: 'الجزء ١' }))).toEqual(['/quran/read/1', '/quran/read/2']);
+    expect(hrefs(screen.getByRole('region', { name: 'الجزء ٢' }))).toEqual(['/quran/read/22']);
+    expect(screen.getByRole('region', { name: 'الجزء ٢' }).textContent).toContain('من الآية ١٤٢');
+    expect(hrefs(screen.getByRole('region', { name: 'الجزء ٣' }))).toEqual(['/quran/read/42', '/quran/read/50']);
+  });
+
+  it('narrows the list to the surahs a search names, by name or number', () => {
+    render(<SurahIndex surahs={surahs} />);
+    const search = screen.getByLabelText('ابحث عن سورة');
+    fireEvent.change(search, { target: { value: 'عمران' } });
+    expect(screen.getAllByRole('region').map(section => section.getAttribute('aria-label'))).toEqual(['الجزء ٣', 'الجزء ٤']);
+    fireEvent.change(search, { target: { value: '٢' } });
+    expect(screen.getAllByRole('region')).toHaveLength(3);
+    fireEvent.change(search, { target: { value: 'كهف' } });
+    expect(screen.queryAllByRole('region')).toHaveLength(0);
+    expect(screen.getByText('لا توجد سورة بهذا الاسم أو الرقم.')).not.toBeNull();
   });
 });
