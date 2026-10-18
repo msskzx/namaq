@@ -44,5 +44,6 @@ describe('surahSearch', () => {
     expect(surahMatch('سورة البقرة', 2, stored[0].name)).toBe(0);
     expect(searchSurahs(stored, 'المائدة').map(s => s.number)).toEqual([5]);
     expect(searchSurahs(stored, 'س').map(s => s.number)).toEqual([34]);
+    expect(searchSurahs(stored, 'سورة ').map(s => s.number)).toEqual([2, 5, 34]);
   });
 });

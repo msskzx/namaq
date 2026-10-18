@@ -1,6 +1,6 @@
 import { normalizeSubjectSearch } from '@/lib/subjectSearch';
 
-const clean = (value: string) => normalizeSubjectSearch(value.replace(/ـ/g, '')).replace(/^سوره /, '');
+const clean = (value: string) => normalizeSubjectSearch(value.replace(/ـ/g, '')).replace(/^سوره( |$)/, '');
 const latinDigits = (value: string) => value.replace(/[٠-٩]/g, d => String(d.charCodeAt(0) - 0x660)).replace(/[۰-۹]/g, d => String(d.charCodeAt(0) - 0x6f0));
 
 export function surahMatch(query: string, number: number, name: string): number | null {

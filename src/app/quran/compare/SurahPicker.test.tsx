@@ -65,6 +65,12 @@ describe('SurahPicker', () => {
     fireEvent.click(screen.getByRole('option', { name: '٢. البقرة' }));
     fireEvent.change(box(), { target: { value: '٢. البقرةطه' } });
     expect(options()).toEqual(['٢٠. طه']);
+    fireEvent.click(screen.getByRole('option', { name: '٢٠. طه' }));
+    fireEvent.change(box(), { target: { value: 'بقر' } });
+    expect(options()).toEqual(['٢. البقرة']);
+    fireEvent.click(screen.getByRole('option', { name: '٢. البقرة' }));
+    fireEvent.change(box(), { target: { value: '٢. البقر' } });
+    expect(options()).toHaveLength(4);
   });
 
   it('lets Enter submit the form while the list is closed', () => {

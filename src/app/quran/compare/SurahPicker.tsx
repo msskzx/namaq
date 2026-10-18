@@ -57,13 +57,14 @@ export default function SurahPicker({ name, label, value, surahs }: { name: stri
   return (
     <div className="relative min-w-48 flex-1">
       <input type="hidden" name={name} value={selected} />
-      <input type="text" role="combobox" aria-label={label} aria-expanded={open} aria-controls={`${id}-list`} aria-autocomplete="list"
+      <input type="text" role="combobox" aria-label={label} aria-expanded={open && found.length > 0} aria-controls={`${id}-list`} aria-autocomplete="list"
         aria-activedescendant={open && found[active] ? `${id}-${found[active].number}` : undefined}
         placeholder="ابحث بالاسم أو الرقم" autoComplete="off" value={open ? query : current ? text(current) : ''}
         onFocus={begin} onClick={() => !open && begin()} onBlur={() => setQuery(null)} onKeyDown={onKeyDown}
         onChange={e => {
           const label = current ? text(current) : '';
-          setQuery(open ? e.target.value : e.target.value.startsWith(label) ? e.target.value.slice(label.length) : '');
+          const v = e.target.value;
+          setQuery(open ? v : v.startsWith(label) ? v.slice(label.length) : label.startsWith(v) ? '' : v);
           setActive(0);
         }}
         className={`${FIELD} w-full pe-7`} />
