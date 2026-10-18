@@ -5,6 +5,7 @@
   --home-muted: #6c5844;
   --home-rule: #c9b796;
   --home-accent: #9c3b22;
+  --logo-accent: var(--home-accent);
   --home-bubble-1: #e6d6e6;
   --home-bubble-2: #efd9c9;
   --home-bubble-3: #dfe0c9;
@@ -26,7 +27,7 @@
   --home-bubble-4: #1f1e1c;
 }
 
-.theme :is(nav, footer) {
+.theme footer {
   background: var(--home-paper);
   color: var(--home-ink);
   border-color: var(--home-rule);
@@ -34,17 +35,8 @@
   box-shadow: none;
 }
 
-.theme nav :is(a, button),
 .theme footer :is(a, h3) { color: var(--home-ink); }
-.theme nav a:hover,
-.theme footer a:hover,
-.theme nav a[href='/'] { color: var(--home-accent); }
-
-.theme nav :is(button, [class*='absolute'], [class*='fixed']) {
-  background-color: var(--home-paper);
-  border-color: var(--home-rule);
-  box-shadow: none;
-}
+.theme footer a:hover { color: var(--home-accent); }
 
 .theme footer > div {
   max-width: 76rem;
@@ -86,6 +78,7 @@
   line-height: 1.4;
   margin-block: 0.75rem 0;
 }
+.heroLogo { display: block; height: clamp(6.5rem, 11vw, 9.5rem); width: auto; }
 
 .description { max-width: 44rem; color: var(--home-muted); font-size: 1.1875rem; line-height: 1.6; margin-top: 1rem; }
 .page :is(a, button, input):focus-visible { outline: 2px solid var(--home-accent); outline-offset: 5px; }

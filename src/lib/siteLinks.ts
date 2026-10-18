@@ -5,9 +5,9 @@ export interface SiteLink {
   label: string;
 }
 
-// The full site nav link list, shared between NavBar's mobile dropdown and
-// the graph workspace's menu (src/components/graph/GraphCanvas.tsx) -- kept
-// here once so the two never drift apart.
+// The full list of site pages, for the graph workspace's menu
+// (src/components/graph/GraphCanvas.tsx) and page titles on hubs. NavBar's
+// NAV_SECTIONS must reach every href here; its test checks that.
 export const getAllNavLinks = (language: 'en' | 'ar'): SiteLink[] => [
   { href: '/graphs', label: translations[language].allGraph },
   { href: '/nasab', label: language === 'ar' ? 'النسب' : 'Nasab' },

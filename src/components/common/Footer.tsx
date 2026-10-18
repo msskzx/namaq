@@ -4,6 +4,7 @@ import React from 'react';
 import { useLanguage } from '../language/LanguageContext';
 import translations from '../language/translations';
 import WorkInProgressBanner from '../homepage/WorkInProgressBanner';
+import Logo from './Logo';
 
 const getLinkGroups = (language: 'en' | 'ar') => ({
   graph: {
@@ -51,7 +52,7 @@ function Footer() {
           {Object.entries(linkGroups).map(([key, group]) => (
             <div key={key} className="space-y-3">
               <h3 className={`text-lg font-semibold mb-3 dark:text-amber-300 ${isRTL ? 'text-right' : 'text-left'}`}>
-                {group.title}
+                {key === 'about' ? <><span className="sr-only">{group.title}</span><Logo small className="h-10 w-auto" /></> : group.title}
               </h3>
               <ul className={`space-y-2 ${isRTL ? 'text-right' : 'text-left'}`}>
                 {group.links.map((link) => (
