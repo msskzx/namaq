@@ -14,8 +14,8 @@ it needs no table, migration or generated file.
 
 `src/lib/quran/compare.ts` works on one token per word. A word the morphology
 corpus tags as a noun, verb, adjective or proper noun is its root, any other word
-with a lemma is that lemma, and a word with neither (a bare preposition such as
-من, or له) is its normalized letters (see `normalize.ts`). So ولأصلبنكم meets
+with a lemma is that lemma, and a word made only of prepositions, conjunctions,
+the article or pronouns (من, له) is its normalized letters (see `normalize.ts`). So ولأصلبنكم meets
 لأصلبنكم and سحّار meets ساحر, as they do in the similar list. The tokens come
 from `wordKeys.json`, which `npm run quran:similar` writes beside `similar.json`
 with the same rules (`wordKey` in `similar.ts`). In the 13 ayat where the stored
