@@ -4,6 +4,7 @@ import { assembleQuiz, availableQuestionCount } from '@/lib/quiz/assemble';
 import { ayahDetails } from '@/lib/quiz/ayahDetails';
 import { selectQuizReference } from '@/lib/quiz/quizReference';
 import { parseQuizTopics } from '@/lib/quiz/topics';
+import { parseJuzRange } from '@/lib/quran/juz';
 import { QUIZ_LENGTHS, QUIZ_TOPICS, type QuizLength, type QuizTopic } from '@/lib/quiz/types';
 
 async function referenceClaims(claimKeys: string[]) {
@@ -31,15 +32,16 @@ export async function GET(request: Request) {
   const topics = parseQuizTopics(searchParams);
   const length = Number(searchParams.get('length'));
   const person = searchParams.get('person') ?? undefined;
+  const juz = parseJuzRange(searchParams.get('juzFrom'), searchParams.get('juzTo'));
   if (!topics.length || topics.some((topic) => !QUIZ_TOPICS.includes(topic as QuizTopic))) return NextResponse.json({ error: 'Unknown topic', topics: QUIZ_TOPICS }, { status: 400 });
   if (!QUIZ_LENGTHS.includes(length as QuizLength)) return NextResponse.json({ error: 'Unknown length', lengths: QUIZ_LENGTHS }, { status: 400 });
   if (topics.includes('PERSON_CIRCLE') && !person) return NextResponse.json({ error: 'This topic needs a person' }, { status: 400 });
 
   try {
     const selectedTopics = topics as QuizTopic[];
-    const available = await availableQuestionCount(selectedTopics, person);
+    const available = await availableQuestionCount(selectedTopics, person, juz);
     if (available < length) return NextResponse.json({ error: 'Not enough approved questions', available }, { status: 409 });
-    const questions = await assembleQuiz({ topics: selectedTopics, personSlug: person, length: length as QuizLength, random: Math.random });
+    const questions = await assembleQuiz({ topics: selectedTopics, personSlug: person, juz, length: length as QuizLength, random: Math.random });
     const claimKeys = [...new Set(questions.flatMap((question) => question.evidence.claimKeys))];
     const [claims, details] = await Promise.all([referenceClaims(claimKeys), ayahDetails(questions)]);
     return NextResponse.json({
