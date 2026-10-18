@@ -43,6 +43,11 @@ export function readAyat(morphology: string): Ayah[] {
   return ayat;
 }
 
+export function wordKey(a: Ayah, word: number): string | undefined {
+  const own = a.tokens.filter(t => t.word === word);
+  return (own.find(t => t.key.startsWith('r:')) ?? own[0])?.key;
+}
+
 export function findSimilar(ayat: Ayah[]): SimilarPair[] {
   const n = ayat.length;
   const df = new Map<string, number>();
@@ -160,10 +165,7 @@ export function findSimilar(ayat: Ayah[]): SimilarPair[] {
     return ayat.slice(start, start + len).flatMap((a, offset) => {
       const twin = len === otherLen ? others[offset] : undefined;
       const twinKeys = new Set(twin?.tokens.map(t => t.key));
-      const keyOf = (word: number) => {
-        const own = a.tokens.filter(t => t.word === word);
-        return (own.find(t => t.key.startsWith('r:')) ?? own[0])?.key;
-      };
+      const keyOf = (word: number) => wordKey(a, word);
       const content = (word: number) => keyOf(word)?.startsWith('r:') ?? false;
       const sameSpot = (word: number) => !!twin && (twin.words[word] === a.words[word] || twin.tokens.some(t => t.word === word && t.key === keyOf(word)));
       const kind = a.words.map((form, word) => {

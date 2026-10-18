@@ -2,12 +2,13 @@ import { faCodeCompare, faExpand, faListOl, faWaveSquare } from '@fortawesome/fr
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from '@/components/common/Button';
 import { prisma } from '@/lib/prisma';
-import { alignSurahs, clampRange, compareHref } from '@/lib/quran/compare';
+import { alignSurahs, clampRange, compareHref, wordTokens } from '@/lib/quran/compare';
 import { ayahWords } from '@/lib/quran/normalize';
 import CompareView from './CompareView';
 import CompareModeToggle from './CompareModeToggle';
 import SimilarAyat from './SimilarAyat';
 import { viewHref } from './modeHref';
+import wordKeys from './wordKeys.json';
 import { num } from '@/lib/quran/arabicNumber';
 import { FIELD, NOTE, PANEL } from '../panel';
 
@@ -19,7 +20,10 @@ const pick = (value: string | string[] | undefined, fallback: number) => {
 
 async function load(number: number) {
   const rows = await prisma.ayah.findMany({ where: { surah: { number } }, orderBy: { number: 'asc' }, select: { text: true } });
-  return rows.map((r, i) => ayahWords(r.text, i === 0 && number !== 1 && number !== 9));
+  return rows.map((r, i) => {
+    const words = ayahWords(r.text, i === 0 && number !== 1 && number !== 9);
+    return { ...words, tokens: wordTokens(words.norm, wordKeys.surahs[number - 1]?.[i]) };
+  });
 }
 
 export default async function TextCompare({ query }: { query: Record<string, string | string[] | undefined> }) {
@@ -76,7 +80,8 @@ export default async function TextCompare({ query }: { query: Record<string, str
       {!ayat ? <SimilarAyat surah={a} other={b} ranges={whole ? undefined : { a: ra, b: rb }} /> : a === b && ra.from === rb.from && ra.to === rb.to ? <p className={NOTE}>اختر مقطعين مختلفين.</p> : <CompareView
         a={{ number: a, name: rawName(a), plain: nameOf(a), words: wordsA.map(w => w.display.join(' ')), range: whole ? undefined : ra }}
         b={{ number: b, name: rawName(b), plain: nameOf(b), words: wordsB.map(w => w.display.join(' ')), range: whole ? undefined : rb }}
-        rows={alignSurahs(slice(wordsA, ra).map(w => w.norm), slice(wordsB, rb).map(w => w.norm), { a: ra.from, b: rb.from }, whole, [ra.from > 1 || ra.to < wordsA.length, rb.from > 1 || rb.to < wordsB.length].every(Boolean))}
+        rows={alignSurahs(slice(wordsA, ra).map(w => w.tokens), slice(wordsB, rb).map(w => w.tokens), { a: ra.from, b: rb.from }, whole, [ra.from > 1 || ra.to < wordsA.length, rb.from > 1 || rb.to < wordsB.length].every(Boolean),
+          { a: slice(wordsA, ra).map(w => w.norm), b: slice(wordsB, rb).map(w => w.norm) })}
       />}
     </div>
   );
