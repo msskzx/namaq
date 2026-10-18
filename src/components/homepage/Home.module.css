@@ -1,4 +1,6 @@
 .theme {
+  --home-width: 88rem;
+  --home-gutter: clamp(1.25rem, 4vw, 4rem);
   --home-paper: #f4ecdb;
   --home-paper-deep: #ebe0c8;
   --home-ink: #2e2219;
@@ -39,9 +41,9 @@
 .theme footer a:hover { color: var(--home-accent); }
 
 .theme footer > div {
-  max-width: 76rem;
+  max-width: var(--home-width);
   margin-inline: auto;
-  padding-inline: 2rem;
+  padding-inline: var(--home-gutter);
 }
 
 .theme footer [class*='border-t'] { border-color: var(--home-rule); }
@@ -63,7 +65,7 @@
 
 .page { font-family: var(--font-home-serif), var(--font-amiri), Georgia, serif; }
 .page[dir='rtl'] { font-family: var(--font-amiri), Georgia, serif; }
-.content { max-width: 76rem; margin-inline: auto; padding: 4.5rem 2rem 2.5rem; }
+.content { max-width: var(--home-width); margin-inline: auto; padding: 4.5rem var(--home-gutter) 2.5rem; }
 .hero { display: flex; flex-wrap: wrap; align-items: center; column-gap: 2.5rem; padding-bottom: 1rem; }
 .hero .description { flex: 1 1 22rem; margin-top: 0; padding-inline-start: 2.5rem; border-inline-start: 1px solid var(--home-rule); }
 @media (max-width: 640px) { .hero .description { padding-inline-start: 0; border-inline-start: 0; } }
@@ -153,7 +155,7 @@
 .answer { min-height: 2.5rem; margin-top: 1rem; color: var(--home-ink); }
 
 @media (max-width: 800px) {
-  .content { padding: 2.5rem 1.25rem 2rem; }
+  .content { padding-block: 2.5rem 2rem; }
   .index { grid-template-columns: 1fr; gap: 1.5rem; }
   .exploration { margin-top: 2.5rem; }
   .featureHeading { gap: 0.75rem; }
