@@ -2,7 +2,8 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import ayat from '@/app/quran/branches/ayat.json';
-import { branch, listOpenings, listPhrases, openingId, readerAyat, sharedOpenings, startingWith, type Branch, type BranchAyah } from './branches';
+import { branch, branchesHref, conjunctions, DEFAULT_PHRASE, keys, linkId, pickPhrase, stem, widerPhrases, listOpenings, listPhrases, openingId, readerAyat, sharedOpenings, shown, startingWith, variants, withConjunctions, type Branch, type BranchAyah } from './branches';
+import { inJuzRange } from './juz';
 import { normalizeWord } from './normalize';
 
 const all = ayat as BranchAyah[];
@@ -41,11 +42,12 @@ describe('sharedOpenings', () => {
 
   it('matches what npm run quran:branches writes from the reader pages', () => {
     const pages = Array.from({ length: 604 }, (_, i) => JSON.parse(readFileSync(join(__dirname, '../../app/quran/read/data', `${i + 1}.json`), 'utf8')));
-    expect([...sharedOpenings(readerAyat(pages)).values()].flat()).toEqual(all);
+    const morphology = readFileSync(join(__dirname, '../../../data/quran/quranic-corpus-morphology-0.4.txt'), 'utf8');
+    expect([...sharedOpenings(withConjunctions(readerAyat(pages), morphology)).values()].flat()).toEqual(all);
   });
 
   it('keeps every committed ayah in a group of two or more', () => {
-    expect(groups.size).toBe(781);
+    expect(groups.size).toBe(818);
     expect([...groups.keys()].every(id => id === id.trim() && !id.includes('  '))).toBe(true);
     expect([...groups.values()].flat()).toHaveLength(all.length);
   });
@@ -118,5 +120,112 @@ describe('listPhrases', () => {
 describe('startingWith', () => {
   it('matches whole words only', () => {
     expect(startingWith([ayah('1:1', 'الم تروا'), ayah('1:2', 'الم تر كيف')], 'الم تر').map(a => a.key)).toEqual(['1:2']);
+  });
+});
+
+describe('conjunctions', () => {
+  const morphology = [
+    '(52:24:1:1)\twa\tCONJ\tPREFIX|w:CONJ+',
+    '(52:24:1:2)\tyaTuwfu\tV\tSTEM|POS:V',
+    '(56:75:1:1)\tfa\tREM\tPREFIX|f:REM+',
+    '(89:1:1:1)\twa\tP\tPREFIX|w:P+',
+    '(2:5:2:1)\twa\tCONJ\tPREFIX|w:CONJ+',
+  ].join('\n');
+
+  it('reads a و or ف prefixed to an ayah\'s first word, leaving out the و of an oath', () => {
+    expect([...conjunctions(morphology)]).toEqual([['52:24', 'و'], ['56:75', 'ف']]);
+  });
+
+  it('refuses a reader word that does not start with the letter the corpus gives', () => {
+    expect(() => withConjunctions([ayah('52:24', 'يطوف عليهم')], morphology)).toThrow('52:24');
+    expect(withConjunctions([ayah('52:24', 'وَيَطُوفُ عليهم')], morphology)[0].conj).toBe('و');
+  });
+});
+
+describe('an opening with and without و', () => {
+  const group = startingWith(all, 'يطوف عليهم');
+
+  it('groups يطوف عليهم with ويطوف عليهم and draws one tree from the shared word on', () => {
+    expect(group.map(a => a.key)).toEqual(['52:24', '56:17', '76:19']);
+    expect(shape(branch(shown(group)))).toEqual({
+      words: 'يطوف عليهم',
+      ayat: [],
+      children: [
+        { words: 'غلمان لهم كانهم لؤلؤ مكنون', ayat: ['52:24'], children: [] },
+        { words: 'ولدن مخلدون', ayat: ['56:17'], children: [{ words: 'اذا رايتهم حسبتهم لؤلؤا منثورا', ayat: ['76:19'], children: [] }] },
+      ],
+    });
+  });
+
+  it('names each first word, the ayat that open with it and the phrase that narrows to them', () => {
+    expect(variants(group).map(v => ({ ...v, word: normalizeWord(v.word) }))).toEqual([
+      { word: 'يطوف', conj: '', keys: ['56:17'], id: undefined },
+      { word: 'ويطوف', conj: 'و', keys: ['52:24', '76:19'], id: 'ويطوف عليهم' },
+    ]);
+    expect(variants(startingWith(all, 'ويطوف عليهم'))).toEqual([]);
+  });
+
+  it('lists the merged opening and each spelling two ayat share', () => {
+    const phrases = listPhrases(groups);
+    expect(phrases.find(p => p.id === 'يطوف عليهم')?.count).toBe(3);
+    expect(phrases.find(p => p.id === 'ويطوف عليهم')?.count).toBe(2);
+    expect(startingWith(all, 'ويطوف عليهم').map(a => a.key)).toEqual(['52:24', '76:19']);
+  });
+
+  it('does not merge a word whose و belongs to it', () => {
+    expect(openingId(ayah('1:1', 'وُجُوهٌ يَوْمَئِذٍ'))).toBe('وجوه يومئذ');
+  });
+});
+
+describe('a juz\' range', () => {
+  it('builds the groups from the ayat inside it only', () => {
+    const inRange = sharedOpenings(all.filter(a => inJuzRange(a.key, { from: 29, to: 30 })));
+    const shared = [...inRange.values()].flat();
+    expect(startingWith(shared, 'فلا اقسم').map(a => a.key)).toEqual(['69:38', '70:40', '81:15', '84:16']);
+    expect(startingWith(all, 'فلا اقسم').map(a => a.key)).toContain('56:75');
+  });
+
+  it('carries the range and the list view in the link', () => {
+    expect(branchesHref('فلا اقسم')).toBe(`/quran/branches?o=${encodeURIComponent('فلا اقسم').replace(/%20/g, '+')}`);
+    expect(branchesHref('الم تر', { from: 29, to: 30 }, true)).toBe(`/quran/branches?o=${encodeURIComponent('الم').replace(/%20/g, '+')}+${encodeURIComponent('تر')}&juzFrom=29&juzTo=30&v=list`);
+  });
+});
+
+describe('linkId', () => {
+  it('puts the joined letter back when every ayah under a branch carries it', () => {
+    const group = startingWith(all, 'اذ قال');
+    const musa = branch(shown(group)).children.find(child => normalizeWord(child.words[0]) === 'موسي')!;
+    const node = musa.children.find(child => normalizeWord(child.words[0]) === 'لقومه')!;
+    const id = linkId(['إِذْ', 'قَالَ', ...musa.words, ...node.words], keys(node).map(key => all.find(a => a.key === key)!.conj ?? ''));
+    expect(id.startsWith('واذ قال موسي لقومه')).toBe(true);
+    expect(listPhrases(groups).some(p => p.id === id)).toBe(true);
+    expect(linkId(['يَطُوفُ', 'عَلَيْهِمْ'], ['', 'و'])).toBe('يطوف عليهم');
+    expect(linkId(['قَالَ', 'رَبِّ'], [])).toBe('قال رب');
+  });
+});
+
+describe('stem', () => {
+  it('drops only the joined letter and its marks, even when the word goes on with the same letter', () => {
+    expect(stem({ key: '1:1', page: 1, words: ['وَوَصَّيْنَا', 'ٱلْإِنسَـٰنَ'], conj: 'و' }).words[0]).toBe('وَصَّيْنَا');
+    expect(stem(ayah('1:1', 'وَوَصَّيْنَا')).words[0]).toBe('وَوَصَّيْنَا');
+  });
+});
+
+describe('pickPhrase and widerPhrases', () => {
+  const phrases = listPhrases(groups);
+
+  it('keeps a known phrase, else the default, else the largest opening in range', () => {
+    expect(pickPhrase(phrases, 'ويطوف عليهم')).toBe('ويطوف عليهم');
+    expect(pickPhrase(phrases, 'لا شيء هنا')).toBe(DEFAULT_PHRASE);
+    const juz30 = listPhrases(sharedOpenings(all.filter(a => inJuzRange(a.key, { from: 30, to: 30 }))));
+    expect(juz30.some(p => p.id === DEFAULT_PHRASE)).toBe(false);
+    expect(pickPhrase(juz30, null)).toBe([...juz30].sort((a, b) => b.count - a.count)[0].id);
+    expect(pickPhrase([], null)).toBe('');
+  });
+
+  it('offers the merged opening as wider than one spelling of it, and shorter phrases above a deeper one', () => {
+    expect(widerPhrases(phrases, 'ويطوف عليهم', startingWith(all, 'ويطوف عليهم')).map(p => p.id)).toEqual(['يطوف عليهم']);
+    expect(widerPhrases(phrases, 'ان المتقين في جنت', startingWith(all, 'ان المتقين في جنت')).map(p => p.id)).toEqual(['ان المتقين', 'ان المتقين في']);
+    expect(widerPhrases(phrases, 'ان المتقين', startingWith(all, 'ان المتقين'))).toEqual([]);
   });
 });

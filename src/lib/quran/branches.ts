@@ -1,15 +1,23 @@
 // docs/plans/quran-shared-openings.md
+import type { JuzRange } from './juz';
 import { normalizeWord } from './normalize';
 import type { ReaderPageData } from './readerPage';
 
-export type BranchAyah = { key: string; page: number; words: string[] };
+export type BranchAyah = { key: string; page: number; words: string[]; conj?: string };
 export type Branch = { words: string[]; ayat: string[]; children: Branch[] };
 export type Opening = { id: string; text: string; count: number };
+export type Variant = { word: string; conj: string; keys: string[]; id?: string };
 
 export const OPENING_WORDS = 2;
 export const TOP = 8;
 
-export const branchesHref = (id: string) => `/quran/branches?o=${encodeURIComponent(id)}`;
+export function branchesHref(id: string, juz?: JuzRange, list = false) {
+  const params = new URLSearchParams({ o: id });
+  if (juz) params.set('juzFrom', `${juz.from}`);
+  if (juz) params.set('juzTo', `${juz.to}`);
+  if (list) params.set('v', 'list');
+  return `/quran/branches?${params}`;
+}
 
 export function readerAyat(pages: ReaderPageData[]): BranchAyah[] {
   const ayat: BranchAyah[] = [];
@@ -35,10 +43,40 @@ export function readerAyat(pages: ReaderPageData[]): BranchAyah[] {
   return ayat;
 }
 
+const CONJ: Record<string, string> = { w: 'و', f: 'ف' };
+
+export function conjunctions(morphology: string): Map<string, string> {
+  const found = new Map<string, string>();
+  for (const match of morphology.matchAll(/^\((\d+:\d+):1:1\)\t[^\t]*\t[^\t]*\tPREFIX\|([wf]):(?!P\+)/gm)) found.set(match[1], CONJ[match[2]]);
+  return found;
+}
+
+export function withConjunctions(ayat: BranchAyah[], morphology: string): BranchAyah[] {
+  const found = conjunctions(morphology);
+  return ayat.map(ayah => {
+    const conj = found.get(ayah.key);
+    if (!conj) return ayah;
+    if (!normalizeWord(ayah.words[0]).startsWith(conj)) throw new Error(`${ayah.key} opens with ${ayah.words[0]}, not ${conj}`);
+    return { ...ayah, conj };
+  });
+}
+
 const norm = (ayah: BranchAyah) => ayah.words.map(normalizeWord);
 
+export function stem(ayah: BranchAyah): BranchAyah {
+  if (!ayah.conj) return ayah;
+  const [first, ...rest] = ayah.words;
+  let i = 1;
+  while (i < first.length && normalizeWord(first[i]) === '') i++;
+  return { ...ayah, words: [first.slice(i), ...rest] };
+}
+
+export const mixed = (ayat: BranchAyah[]) => new Set(ayat.map(ayah => ayah.conj ?? '')).size > 1;
+
+export const shown = (ayat: BranchAyah[]) => (mixed(ayat) ? ayat.map(stem) : ayat);
+
 export const openingId = (ayah: BranchAyah) =>
-  ayah.words.length < OPENING_WORDS ? null : norm(ayah).slice(0, OPENING_WORDS).join(' ');
+  ayah.words.length < OPENING_WORDS ? null : norm(stem(ayah)).slice(0, OPENING_WORDS).join(' ');
 
 export function sharedOpenings(ayat: BranchAyah[]): Map<string, BranchAyah[]> {
   const groups = new Map<string, BranchAyah[]>();
@@ -51,27 +89,44 @@ export function sharedOpenings(ayat: BranchAyah[]): Map<string, BranchAyah[]> {
 
 export function listOpenings(groups: Map<string, BranchAyah[]>): Opening[] {
   return [...groups]
-    .map(([id, group]) => ({ id, text: group[0].words.slice(0, OPENING_WORDS).join(' '), count: group.length }))
+    .map(([, group]) => {
+      const words = shown(group)[0].words.slice(0, OPENING_WORDS);
+      return { id: words.map(normalizeWord).join(' '), text: words.join(' '), count: group.length };
+    })
     .sort((a, b) => b.count - a.count);
 }
 
 export const startsWith = (id: string, phrase: string) => `${id} `.startsWith(`${phrase} `);
 
-export const startingWith = (ayat: BranchAyah[], phrase: string) => ayat.filter(ayah => startsWith(norm(ayah).join(' '), phrase));
+export const opens = (ayah: BranchAyah, phrase: string) => startsWith(norm(ayah).join(' '), phrase) || startsWith(norm(stem(ayah)).join(' '), phrase);
+
+export const startingWith = (ayat: BranchAyah[], phrase: string) => ayat.filter(ayah => opens(ayah, phrase));
 
 export const size = (node: Branch): number => node.ayat.length + node.children.reduce((sum, child) => sum + size(child), 0);
 
+export const keys = (node: Branch): string[] => [...node.ayat, ...node.children.flatMap(keys)];
+
 export function listPhrases(groups: Map<string, BranchAyah[]>): Opening[] {
   const phrases = new Map(listOpenings(groups).map(o => [o.id, o]));
-  const walk = (node: Branch, path: string[]) => {
+  const conj = new Map([...groups.values()].flat().map(ayah => [ayah.key, ayah.conj ?? '']));
+  const walk = (node: Branch, path: string[], stemmed: boolean) => {
     const words = [...path, ...node.words];
-    const count = size(node);
-    if (count < 2) return;
+    const under = keys(node).map(key => conj.get(key));
+    if (under.length < 2) return;
     const id = words.map(normalizeWord).join(' ');
-    if (!phrases.has(id)) phrases.set(id, { id, text: words.join(' '), count });
-    node.children.forEach(child => walk(child, words));
+    if (!phrases.has(id) && (!stemmed || new Set(under).size > 1 || under[0] === '')) phrases.set(id, { id, text: words.join(' '), count: under.length });
+    node.children.forEach(child => walk(child, words, stemmed));
   };
-  groups.forEach(group => walk(branch(group), []));
+  groups.forEach(group => {
+    walk(branch(shown(group)), [], mixed(group));
+    if (!mixed(group)) return;
+    const exact = new Map<string, BranchAyah[]>();
+    for (const ayah of group) {
+      const id = norm(ayah).slice(0, OPENING_WORDS).join(' ');
+      exact.set(id, [...(exact.get(id) ?? []), ayah]);
+    }
+    exact.forEach(sub => walk(branch(sub), [], false));
+  });
   return [...phrases.values()].sort((a, b) => b.count - a.count || a.id.length - b.id.length);
 }
 
@@ -88,4 +143,35 @@ export function branch(ayat: BranchAyah[], from = 0): Branch {
     ayat: ayat.filter((_, i) => norms[i].length === to).map(ayah => ayah.key),
     children: [...children.values()].map(group => branch(group, to)),
   };
+}
+
+export const variants = (ayat: BranchAyah[]): Variant[] => !mixed(ayat) ? [] : ['', 'و', 'ف']
+  .map(conj => ayat.filter(ayah => (ayah.conj ?? '') === conj))
+  .filter(members => members.length > 0)
+  .map(members => ({
+    word: members[0].words[0],
+    conj: members[0].conj ?? '',
+    keys: members.map(ayah => ayah.key),
+    id: members.length > 1 ? branch(members).words.map(normalizeWord).join(' ') : undefined,
+  }));
+
+export function linkId(words: string[], conjs: string[]) {
+  const id = words.map(normalizeWord).join(' ');
+  return conjs.length > 0 && conjs[0] !== '' && conjs.every(conj => conj === conjs[0]) ? `${conjs[0]}${id}` : id;
+}
+
+export const DEFAULT_PHRASE = 'ان المتقين';
+
+export function pickPhrase(phrases: Opening[], wanted: string | null) {
+  const known = (id: string | null) => id !== null && phrases.some(phrase => phrase.id === id);
+  if (known(wanted)) return wanted!;
+  if (known(DEFAULT_PHRASE)) return DEFAULT_PHRASE;
+  return [...phrases].sort((a, b) => b.count - a.count || a.id.split(' ').length - b.id.split(' ').length)[0]?.id ?? '';
+}
+
+export function widerPhrases(phrases: Opening[], id: string, group: BranchAyah[]) {
+  const length = (phrase: string) => phrase.split(' ').length;
+  return phrases
+    .filter(phrase => phrase.id !== id && (length(phrase.id) < length(id) || (length(phrase.id) === length(id) && phrase.count > group.length)) && group.every(ayah => opens(ayah, phrase.id)))
+    .sort((a, b) => a.id.length - b.id.length);
 }
