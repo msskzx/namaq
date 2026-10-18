@@ -39,7 +39,7 @@ describe('SurahPicker', () => {
     fireEvent.click(screen.getByRole('option', { name: '٢. البقرة' }));
     expect(submitted()).toBe('2');
     expect(box().value).toBe('٢. البقرة');
-    fireEvent.change(box(), { target: { value: 'ال' } });
+    fireEvent.change(box(), { target: { value: '٢. البقرةال' } });
     fireEvent.keyDown(box(), { key: 'ArrowDown' });
     fireEvent.keyDown(box(), { key: 'ArrowDown' });
     expect(fireEvent.keyDown(box(), { key: 'Enter' })).toBe(false);
@@ -57,5 +57,18 @@ describe('SurahPicker', () => {
     fireEvent.blur(box());
     expect(box().value).toBe('٥٦. الواقعة');
     expect(submitted()).toBe('56');
+  });
+
+  it('starts a new search when the reader types after picking', () => {
+    show();
+    fireEvent.focus(box());
+    fireEvent.click(screen.getByRole('option', { name: '٢. البقرة' }));
+    fireEvent.change(box(), { target: { value: '٢. البقرةطه' } });
+    expect(options()).toEqual(['٢٠. طه']);
+  });
+
+  it('lets Enter submit the form while the list is closed', () => {
+    show();
+    expect(fireEvent.keyDown(box(), { key: 'Enter' })).toBe(true);
   });
 });

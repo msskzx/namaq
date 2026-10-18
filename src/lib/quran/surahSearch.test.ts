@@ -37,4 +37,12 @@ describe('surahSearch', () => {
     expect(names('  ')).toEqual([2, 3, 20, 23, 55, 56]);
     expect(names('يوسف')).toEqual([]);
   });
+
+  it('reads stored names that carry the word surah or a tatweel', () => {
+    const stored = [{ number: 2, name: 'سُورَةُ البَقَرَةِ' }, { number: 5, name: 'سُورَةُ المَائـِدَةِ' }, { number: 34, name: 'سُورَةُ سَبَإٍ' }];
+    expect(surahMatch('البقرة', 2, stored[0].name)).toBe(0);
+    expect(surahMatch('سورة البقرة', 2, stored[0].name)).toBe(0);
+    expect(searchSurahs(stored, 'المائدة').map(s => s.number)).toEqual([5]);
+    expect(searchSurahs(stored, 'س').map(s => s.number)).toEqual([34]);
+  });
 });
