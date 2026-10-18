@@ -7,18 +7,12 @@ import { getSharedTopics } from '@/lib/quran/topicEngine';
 import { num } from '@/lib/quran/arabicNumber';
 import ThemesView from '../themes/ThemesView';
 import { toThemeRows } from './toThemeRows';
+import { FIELD, NOTE, PANEL } from '../panel';
 
 const pick = (value: string | string[] | undefined, fallback: number) => {
   const n = Number(Array.isArray(value) ? value[0] : value);
   return Number.isInteger(n) && n >= 1 && n <= 114 ? n : fallback;
 };
-
-const SUGGESTED_PAIRS: [number, number][] = [
-  [16, 43],
-  [57, 64],
-  [55, 56],
-  [75, 76],
-];
 
 async function load(number: number) {
   const rows = await prisma.ayah.findMany({ where: { surah: { number } }, orderBy: { number: 'asc' }, select: { text: true } });
@@ -37,7 +31,7 @@ export default async function ThemesCompare({ query }: { query: Record<string, s
   const name = (n: number) => allSurahs.find((s) => s.number === n)?.name ?? '';
 
   const select = (fieldName: string, value: number, label: string) => (
-    <select name={fieldName} aria-label={label} defaultValue={value} className="min-w-0 flex-1 rounded border border-amber-400 bg-white dark:bg-gray-900 px-2 py-1 text-sm">
+    <select name={fieldName} aria-label={label} defaultValue={value} className={`${FIELD} min-w-48 flex-1`}>
       {allSurahs.map((s) => (
         <option key={s.number} value={s.number}>{`${num(s.number)}. ${s.name}`}</option>
       ))}
@@ -45,43 +39,30 @@ export default async function ThemesCompare({ query }: { query: Record<string, s
   );
 
   const form = (
-    <form method="get" dir="rtl" className="max-w-5xl mx-auto p-4 flex flex-wrap items-center gap-2">
+    <form key={`${x}-${y}`} method="get" className={`${PANEL} flex flex-wrap items-center gap-2`}>
       <input type="hidden" name="mode" value="themes" />
       {select('a', x, 'السورة الأولى')}
       {select('b', y, 'السورة الثانية')}
-      <Button type="submit" size="sm" variant="outline">
+      <Button type="submit" variant="primary">
         <FontAwesomeIcon icon={faCodeCompare} />
         قارن
       </Button>
     </form>
   );
 
-  const suggestions = (
-    <div dir="rtl" className="max-w-5xl mx-auto px-4 flex flex-wrap items-center gap-2">
-      {SUGGESTED_PAIRS.map(([p, q]) => (
-        <Button key={`${p}-${q}`} size="sm" variant="outline" active={p === x && q === y} href={`/quran/compare?mode=themes&a=${p}&b=${q}`}>
-          <FontAwesomeIcon icon={faCodeCompare} />
-          {name(p)} ↔ {name(q)}
-        </Button>
-      ))}
-    </div>
-  );
-
   if (x === y) {
     return (
-      <>
+      <div className="flex flex-col gap-4">
         {form}
-        {suggestions}
-        <p dir="rtl" className="max-w-5xl mx-auto p-4 text-sm text-gray-600 dark:text-gray-400">اختر سورتين مختلفتين.</p>
-      </>
+        <p className={NOTE}>اختر سورتين مختلفتين.</p>
+      </div>
     );
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-4">
       {form}
-      {suggestions}
       <ThemesView a={{ number: x, name: name(x), ayat: a }} b={{ number: y, name: name(y), ayat: b }} themes={toThemeRows(shared)} />
-    </>
+    </div>
   );
 }

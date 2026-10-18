@@ -72,3 +72,16 @@ export async function getSharedTopics(surahA: number, surahB: number): Promise<S
   const [a, b] = await Promise.all([getSurahTopics(surahA), getSurahTopics(surahB)]);
   return sharedTopicsFromInstances(a, b);
 }
+
+export function topicSurahPairs(rows: { surah: number; themeId: string | null }[]): [number, number][] {
+  const surahs = new Map<string, Set<number>>();
+  for (const { surah, themeId } of rows) if (themeId) surahs.set(themeId, (surahs.get(themeId) ?? new Set()).add(surah));
+  return [...surahs.values()].flatMap(set => {
+    const list = [...set].sort((a, b) => a - b);
+    return list.flatMap((a, i) => list.slice(i + 1).map(b => [a, b] as [number, number]));
+  });
+}
+
+export async function getTopicSurahPairs(): Promise<[number, number][]> {
+  return topicSurahPairs(await prisma.quranTopic.findMany({ where: { alternativeOf: null, themeId: { not: null } }, select: { surah: true, themeId: true } }));
+}

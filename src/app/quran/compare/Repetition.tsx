@@ -2,26 +2,18 @@
 
 // docs/plans/quran-repetition-merge.md
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAnglesDown, faArrowDown19, faArrowDownWideShort, faArrowLeft, faArrowRight, faListOl, faShuffle, type IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { faAnglesDown, faCodeCompare } from '@fortawesome/free-solid-svg-icons';
 import Badge from '@/components/common/Badge';
 import Button from '@/components/common/Button';
-import Toggle from '@/components/common/Toggle';
 import { num } from '@/lib/quran/arabicNumber';
 import { plainName } from '@/lib/quran/normalize';
-import { MIN_WORDS } from '@/lib/quran/passages';
 import type { Repetition } from '@/lib/quran/repetition';
 import { ARC_MIN, REFRAIN_MANY, type Occ } from '@/lib/quran/shifts';
 import { Card } from '../Card';
-import { PassageSide } from './PassageSide';
 import { NOTE, PANEL } from '../panel';
-import { modeHref } from './modeHref';
-import type { Ayah } from '@/types/quran';
 
 export const VISIBLE = 20;
-type Pick = { s: number; t: number | null };
-type Mode = 'text' | 'themes';
 const run = (at: Occ, len: number) => Object.fromEntries(Array.from({ length: len }, (_, k) => [at.word + k, 0]));
 
 function Tile({ value, label }: { value: number; label: string }) {
@@ -101,119 +93,6 @@ function Within({ data, surah }: { data: Repetition; surah: Repetition['surahs']
   );
 }
 
-function Partners({ data, surah, onPick }: { data: Repetition; surah: number; onPick: (p: Pick) => void }) {
-  const rows = data.cells
-    .filter(c => c.a !== c.b && (c.a === surah || c.b === surah))
-    .map(c => ({ other: c.a === surah ? c.b : c.a, words: c.words, phrases: c.phrases }))
-    .sort((p, q) => q.words - p.words || p.other - q.other);
-  return (
-    <section className={PANEL}>
-      <h2 className="text-2xl mb-1">نصوص مشتركة مع سور أخرى</h2>
-      <p className={`${NOTE} mb-2`}>تتابع من {num(MIN_WORDS)} كلمات فأكثر يتطابق في سورتين بعد حذف التشكيل، وقد يتخلله اختلاف في بعض الكلمات. اختر سورة لقراءة النصين متجاورين.</p>
-      {rows.length === 0 ? <p className={NOTE}>لا نصوص مشتركة بين هذه السورة وغيرها.</p> : (
-        <ul className="flex flex-wrap gap-2">
-          {rows.map(r => (
-            <li key={r.other}>
-              <Button size="sm" onClick={() => onPick({ s: surah, t: r.other })}>
-                <FontAwesomeIcon icon={faShuffle} />
-                {`${plainName(data.surahs[r.other - 1].name)} · ${num(r.words)}`}
-              </Button>
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
-  );
-}
-
-function PairView({ data, s, t }: { data: Repetition; s: number; t: number }) {
-  const [at, setAt] = useState(0);
-  const found = useMemo(() => data.passages
-    .filter(p => [p.a.from.surah, p.b.from.surah].sort().join() === [s, t].sort().join())
-    .map(p => (p.a.from.surah === s ? p : { ...p, a: p.b, b: p.a, marksA: p.marksB, marksB: p.marksA })), [data, s, t]);
-  const [first, second] = [data.surahs[s - 1], data.surahs[t - 1]];
-  const p = found[Math.min(at, found.length - 1)];
-  const surahOf = (n: number) => ({ id: `s${n}`, number: n, name: data.surahs[n - 1].name, nameTransliterated: null }) as unknown as Ayah['surah'];
-
-  return (
-    <section className={PANEL}>
-      <h2 className="text-2xl mb-3">{`نصوص مشتركة بين ${plainName(first.name)} و${plainName(second.name)}`}</h2>
-      {!p ? <p className={NOTE}>لا نصوص مشتركة بين هاتين السورتين.</p> : (
-        <>
-          <div className="flex flex-wrap items-center gap-2 mb-3">
-            <Button size="sm" disabled={at === 0} onClick={() => setAt(at - 1)}>
-              <FontAwesomeIcon icon={faArrowRight} />
-              السابق
-            </Button>
-            <select aria-label="اختر نصًا مشتركًا" value={at} onChange={e => setAt(Number(e.target.value))} className="min-w-0 flex-1 rounded border border-amber-400 bg-white dark:bg-gray-900 px-2 py-1 text-sm">
-              {found.map((x, i) => <option key={i} value={i}>{`${num(x.a.from.ayah)} ← ${num(x.b.from.ayah)} · ${num(x.matched)} كلمة`}</option>)}
-            </select>
-            <Button size="sm" disabled={at === found.length - 1} onClick={() => setAt(at + 1)}>
-              التالي
-              <FontAwesomeIcon icon={faArrowLeft} />
-            </Button>
-          </div>
-          <div className="flex flex-wrap gap-2 mb-3 text-sm">
-            <Badge size="sm" color="gray" text={`${num(p.matched)} كلمة متطابقة`} />
-            <Badge size="sm" color="gray" text={`يرد في ${num(p.places)} مواضع`} />
-            <Badge size="sm" color="gray" text={p.marksA.length + p.marksB.length === 0 ? 'لا اختلاف في الكلمات' : `${num(p.marksA.length)} كلمة مختلفة في الأول و${num(p.marksB.length)} في الثاني`} />
-          </div>
-          <div className="grid md:grid-cols-2 gap-4 mb-3">
-            <PassageSide key={`a${at}`} title={plainName(first.name)} side={p.a} marks={p.marksA} ayat={data.ayat} count={first.ayat} surah={surahOf(s)} />
-            <PassageSide key={`b${at}`} title={plainName(second.name)} side={p.b} marks={p.marksB} ayat={data.ayat} count={second.ayat} surah={surahOf(t)} />
-          </div>
-        </>
-      )}
-    </section>
-  );
-}
-
-function Switch({ off, on, checked, onChange, offIcon, onIcon }: { off: string; on: string; checked: boolean; onChange: (on: boolean) => void; offIcon: IconDefinition; onIcon: IconDefinition }) {
-  const label = (active: boolean) => 'cursor-pointer ' + (active ? 'font-semibold text-amber-600 dark:text-amber-400' : 'text-gray-500 dark:text-gray-400');
-  return (
-    <>
-      <button type="button" tabIndex={-1} aria-hidden className={`${label(!checked)} justify-self-end`} onClick={() => onChange(false)}>{off}</button>
-      <Toggle label={on} checked={checked} onChange={onChange} size="lg"
-        offIcon={<FontAwesomeIcon icon={offIcon} className="size-4" />} onIcon={<FontAwesomeIcon icon={onIcon} className="size-4" />} />
-      <button type="button" tabIndex={-1} aria-hidden className={`${label(checked)} justify-self-start`} onClick={() => onChange(true)}>{on}</button>
-    </>
-  );
-}
-
-function Ranked({ data, totals, pick, onPick }: { data: Repetition; totals: Map<number, number>; pick: Pick | null; onPick: (p: Pick) => void }) {
-  const [mode, setMode] = useState<'surahs' | 'pairs'>('surahs');
-  const [sort, setSort] = useState<'number' | 'count'>('count');
-  const rows = useMemo(() => {
-    if (mode === 'pairs') {
-      return data.cells.filter(c => c.a !== c.b).sort((p, q) => q.words - p.words || p.a - q.a || p.b - q.b)
-        .map(c => ({ key: `${c.a}:${c.b}`, label: `${plainName(data.surahs[c.a - 1].name)} و${plainName(data.surahs[c.b - 1].name)}`, words: c.words, number: c.a, pick: { s: c.a, t: c.b } }));
-    }
-    return data.surahs.filter(s => (totals.get(s.number) ?? 0) > 0)
-      .map(s => ({ key: String(s.number), label: plainName(s.name), words: totals.get(s.number) ?? 0, number: s.number, pick: { s: s.number, t: null } }));
-  }, [data, totals, mode]);
-  const sorted = useMemo(() => [...rows].sort((p, q) => sort === 'count' ? q.words - p.words || p.number - q.number : p.number - q.number), [rows, sort]);
-  return (
-    <div className="flex flex-col gap-2">
-      <div className="grid w-fit grid-cols-[auto_auto_auto] items-center gap-x-2 gap-y-2 text-sm">
-        <Switch off="السور" on="الأزواج" checked={mode === 'pairs'} onChange={on => setMode(on ? 'pairs' : 'surahs')} offIcon={faListOl} onIcon={faShuffle} />
-        <Switch off="ترتيب بالعدد" on="ترتيب بالرقم" checked={sort === 'number'} onChange={on => setSort(on ? 'number' : 'count')} offIcon={faArrowDownWideShort} onIcon={faArrowDown19} />
-      </div>
-      <ol className="flex flex-col max-h-[min(70vh,40rem)] overflow-y-auto">
-        {sorted.map((r, i) => (
-          <li key={r.key}>
-            <button type="button" onClick={() => onPick(r.pick)} aria-current={pick?.s === r.pick.s && pick?.t === r.pick.t}
-              className="w-full flex items-baseline gap-2 px-2 py-1 text-start rounded hover:bg-amber-100 dark:hover:bg-white/10 aria-[current=true]:bg-amber-100 dark:aria-[current=true]:bg-white/10">
-              <span className={`${NOTE} w-6 shrink-0`}>{num(i + 1)}</span>
-              <span className="flex-1">{r.label}</span>
-              <span className="text-amber-700 dark:text-amber-300">{num(r.words)}</span>
-            </button>
-          </li>
-        ))}
-      </ol>
-    </div>
-  );
-}
-
 const RepetitionContext = createContext<{ data: Repetition | null; failed: boolean }>({ data: null, failed: false });
 
 export function RepetitionProvider({ children }: { children: React.ReactNode }) {
@@ -235,66 +114,44 @@ export function RepetitionProvider({ children }: { children: React.ReactNode }) 
   return <RepetitionContext.Provider value={{ data, failed }}>{children}</RepetitionContext.Provider>;
 }
 
+export function useRepetition() {
+  return useContext(RepetitionContext).data;
+}
+
 function Status() {
   const { failed } = useContext(RepetitionContext);
   return <p role={failed ? 'alert' : 'status'} className={NOTE}>{failed ? 'تعذر تحميل البيانات.' : 'جارٍ التحميل…'}</p>;
 }
 
-function useGo() {
-  const router = useRouter();
-  return (href: string) => router.push(href, { scroll: false });
-}
-
-const surahHref = (s: number) => `/quran/compare?s=${s}`;
-const pairHref = (mode: Mode, a: number, b: number) => modeHref(mode, { a: String(a), b: String(b) });
-
-export function RepetitionList({ a, b, surah, mode }: { a: number; b: number; surah: number | null; mode: Mode }) {
+export function RepetitionStats() {
   const { data } = useContext(RepetitionContext);
-  const go = useGo();
-  const totals = useMemo(() => {
-    const map = new Map<number, number>();
-    for (const c of data?.cells ?? []) {
-      map.set(c.a, (map.get(c.a) ?? 0) + c.words);
-      if (c.a !== c.b) map.set(c.b, (map.get(c.b) ?? 0) + c.words);
-    }
-    return map;
-  }, [data]);
-  const pick: Pick = surah !== null ? { s: surah, t: null } : { s: Math.min(a, b), t: Math.max(a, b) };
-
   return (
     <section className={`${PANEL} flex flex-col gap-3`}>
       <h2 className="text-2xl">تكرار العبارات</h2>
-      <p className={NOTE}>السور والأزواج بعدد ما تكرر فيها من كلمات. اختر سورة لعرض ما يتكرر فيها، أو زوجًا لمقارنة سورتيه.</p>
+      <p className={NOTE}>عبارات تتكرر بلفظها داخل السورة الواحدة وبين السور.</p>
       {!data ? <Status /> : (
-        <>
-          <div className="grid grid-cols-2 gap-2">
-            <Tile value={data.surahs.length} label="سورة" />
-            <Tile value={data.within.length} label="عبارة تتكرر داخل سورة" />
-            <Tile value={data.across.length} label="نص مشترك بين سور" />
-            <Tile value={new Set(data.cells.filter(c => c.a !== c.b).flatMap(c => [c.a, c.b])).size} label="سورة فيها نص مشترك" />
-          </div>
-          <Ranked data={data} totals={totals} pick={pick} onPick={p => go(p.t === null ? surahHref(p.s) : pairHref(mode, p.s, p.t))} />
-        </>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <Tile value={data.surahs.length} label="سورة" />
+          <Tile value={data.within.length} label="عبارة تتكرر داخل سورة" />
+          <Tile value={data.across.length} label="نص مشترك بين سور" />
+          <Tile value={new Set(data.cells.filter(c => c.a !== c.b).flatMap(c => [c.a, c.b])).size} label="سورة فيها نص مشترك" />
+        </div>
       )}
+      <Button size="sm" href="/quran/compare" className="w-fit">
+        <FontAwesomeIcon icon={faCodeCompare} />
+        قارن السور
+      </Button>
     </section>
   );
 }
 
 export function SurahRepetition({ surah }: { surah: number }) {
   const { data } = useContext(RepetitionContext);
-  const go = useGo();
   if (!data) return <Status />;
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4">
       <p className={NOTE}>لم يراجع هذا العرض أحد من أهل العلم. النص برواية حفص. يدل التطابق على اشتراك اللفظ وحده.</p>
       <Within key={surah} data={data} surah={data.surahs[surah - 1]} />
-      <Partners data={data} surah={surah} onPick={p => go(pairHref('text', p.s, p.t!))} />
     </div>
   );
-}
-
-export function SharedPassages({ a, b }: { a: number; b: number }) {
-  const { data } = useContext(RepetitionContext);
-  if (!data || a === b || !data.passages.some(p => [p.a.from.surah, p.b.from.surah].sort().join() === [a, b].sort().join())) return null;
-  return <PairView key={`${a}:${b}`} data={data} s={a} t={b} />;
 }

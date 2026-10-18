@@ -8,6 +8,8 @@ import { SimilarList } from './SimilarList';
 const PAIRS = similar.pairs as SimilarPair[];
 const flip = (p: SimilarPair): SimilarPair => ({ ...p, a: p.b, b: p.a, marksA: p.marksB, marksB: p.marksA });
 
+export const similarSurahPairs = () => PAIRS.map((p): [number, number] => [p.a[0], p.b[0]]);
+
 export function similarFor(surah: number, other?: number): SimilarPair[] {
   return PAIRS
     .filter(p => other === undefined ? p.a[0] === surah || p.b[0] === surah : (p.a[0] === surah && p.b[0] === other) || (p.a[0] === other && p.b[0] === surah))

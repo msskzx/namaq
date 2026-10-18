@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { sharedTopicsFromInstances } from './topicEngine';
+import { sharedTopicsFromInstances, topicSurahPairs } from './topicEngine';
 import type { TopicInstance } from './topicTypes';
 
 function instance(overrides: Partial<TopicInstance>): TopicInstance {
@@ -69,5 +69,16 @@ describe('sharedTopicsFromInstances', () => {
     const b = [instance({ themeId: 'x', labelAr: 'تسمية ب' })];
 
     expect(sharedTopicsFromInstances(a, b)[0].labelAr).toBe('تسمية أ');
+  });
+});
+
+describe('topicSurahPairs', () => {
+  it('pairs every two surahs that hold a theme, once per theme, and skips topics with none', () => {
+    const rows = [
+      { surah: 16, themeId: 'revelation' }, { surah: 43, themeId: 'revelation' }, { surah: 16, themeId: 'revelation' },
+      { surah: 57, themeId: 'creation' }, { surah: 16, themeId: 'creation' }, { surah: 64, themeId: 'creation' },
+      { surah: 2, themeId: null },
+    ];
+    expect(topicSurahPairs(rows)).toEqual([[16, 43], [16, 57], [16, 64], [57, 64]]);
   });
 });

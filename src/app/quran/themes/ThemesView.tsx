@@ -23,11 +23,13 @@ function Cards({ side, range }: { side: Side; range: Span }) {
 
 export default function ThemesView({ a, b, themes }: { a: Side; b: Side; themes: Theme[] }) {
   return (
-    <div dir="rtl" className="max-w-5xl mx-auto p-4 flex flex-col gap-4 text-gray-900 dark:text-gray-200">
+    <div dir="rtl" className="flex flex-col gap-4 text-gray-900 dark:text-gray-200">
       <div className="flex flex-wrap items-center gap-2">
         <h1 className="text-2xl text-amber-600 dark:text-amber-400">{a.name} ↔ {b.name}</h1>
       </div>
-      <p className="text-sm text-gray-600 dark:text-gray-400">مواضع متقابلة بحسب الموضوع لا بحسب الألفاظ ({num(themes.length)} موضعًا).</p>
+      <p className="text-sm text-gray-600 dark:text-gray-400">
+        {themes.length === 0 ? 'لا مواضع متقابلة مسجلة بين هاتين السورتين.' : `مواضع متقابلة بحسب الموضوع لا بحسب الألفاظ (${num(themes.length)} موضعًا).`}
+      </p>
       {themes.map((row) => (
         <section key={`${row.a.from}-${row.b.from}-${row.theme}`} className={PANEL}>
           <div className="flex flex-wrap items-center gap-2 mb-3">

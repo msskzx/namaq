@@ -18,7 +18,7 @@ export default function CompareModeToggle({
   const [shown, setShown] = useOptimistic(on);
   const style = (active: boolean) => (active ? 'font-semibold text-amber-600 dark:text-amber-400' : 'text-gray-500 dark:text-gray-400');
   return (
-    <div dir="rtl" className="max-w-5xl mx-auto px-4 pt-4 flex items-center gap-2 text-sm">
+    <div className="flex items-center gap-2 text-sm">
       <span className={style(!shown)}>{offLabel}</span>
       <Toggle
         label={label}

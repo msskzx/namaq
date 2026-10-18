@@ -4,7 +4,8 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { LanguageProvider } from '@/components/language/LanguageContext';
 import type { SimilarPair } from '@/lib/quran/similar';
-import { SimilarList, VISIBLE } from './SimilarList';
+import type { Passage } from '@/lib/quran/passages';
+import { passageOf, SimilarList, VISIBLE } from './SimilarList';
 
 afterEach(cleanup);
 
@@ -49,5 +50,15 @@ describe('SimilarList', () => {
     cleanup();
     show([], true);
     expect(screen.getByText('لا آيات متشابهة بين السورتين.')).toBeTruthy();
+  });
+
+  it('finds the shared passage that overlaps both sides of a pair, in either order', () => {
+    const at = (surah: number, from: number, to: number) => ({ from: { surah, ayah: from, word: 0 }, to: { surah, ayah: to, word: 0 } });
+    const passage = (a: Passage['a'], b: Passage['b']): Passage => ({ a, b, matched: 12, places: 3, marksA: [], marksB: [] });
+    const flipped = passage(at(80, 12, 13), at(74, 55, 55));
+    expect(passageOf(pair, [passage(at(74, 54, 54), at(81, 1, 1)), flipped])).toBe(flipped);
+    expect(passageOf(pair, [passage(at(74, 56, 57), at(80, 11, 11))])).toBeUndefined();
+    const longer = { ...passage(at(74, 54, 55), at(80, 11, 12)), matched: 20 };
+    expect(passageOf(pair, [flipped, longer])).toBe(longer);
   });
 });
