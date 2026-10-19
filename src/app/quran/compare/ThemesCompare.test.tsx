@@ -14,7 +14,7 @@ vi.mock('../themes/ThemesView', () => ({ default: () => null }));
 
 afterEach(cleanup);
 
-const value = (label: string) => (screen.getByRole('combobox', { name: label }) as HTMLSelectElement).value;
+const value = (label: string) => (screen.getByRole('combobox', { name: label }).parentElement!.querySelector('input[type=hidden]') as HTMLInputElement).value;
 
 describe('ThemesCompare', () => {
   it('shows the newly chosen pair in its surah fields when the page moves to another pair', async () => {

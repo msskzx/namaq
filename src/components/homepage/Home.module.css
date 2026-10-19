@@ -1,10 +1,17 @@
 .theme {
+  --home-width: 88rem;
+  --home-gutter: clamp(1.25rem, 4vw, 4rem);
   --home-paper: #f4ecdb;
   --home-paper-deep: #ebe0c8;
   --home-ink: #2e2219;
   --home-muted: #6c5844;
   --home-rule: #c9b796;
   --home-accent: #9c3b22;
+  --home-root: #6a4c93;
+  --home-slot-1: #2c6a78;
+  --home-slot-2: #5d6a24;
+  --home-slot-3: #3f5a8f;
+  --home-slot-4: #6b5a3a;
   --logo-accent: var(--home-accent);
   --home-bubble-1: #e6d6e6;
   --home-bubble-2: #efd9c9;
@@ -21,6 +28,11 @@
   --home-muted: #c8b89f;
   --home-rule: #4b3f31;
   --home-accent: #eda183;
+  --home-root: #c4a8ec;
+  --home-slot-1: #8cc8d4;
+  --home-slot-2: #c0cc84;
+  --home-slot-3: #9fb4e6;
+  --home-slot-4: #cdb48a;
   --home-bubble-1: #34233a;
   --home-bubble-2: #282522;
   --home-bubble-3: #22241a;
@@ -39,9 +51,9 @@
 .theme footer a:hover { color: var(--home-accent); }
 
 .theme footer > div {
-  max-width: 76rem;
+  max-width: var(--home-width);
   margin-inline: auto;
-  padding-inline: 2rem;
+  padding-inline: var(--home-gutter);
 }
 
 .theme footer [class*='border-t'] { border-color: var(--home-rule); }
@@ -63,7 +75,7 @@
 
 .page { font-family: var(--font-home-serif), var(--font-amiri), Georgia, serif; }
 .page[dir='rtl'] { font-family: var(--font-amiri), Georgia, serif; }
-.content { max-width: 76rem; margin-inline: auto; padding: 4.5rem 2rem 2.5rem; }
+.content { max-width: var(--home-width); margin-inline: auto; padding: 4.5rem var(--home-gutter) 2.5rem; }
 .hero { display: flex; flex-wrap: wrap; align-items: center; column-gap: 2.5rem; padding-bottom: 1rem; }
 .hero .description { flex: 1 1 22rem; margin-top: 0; padding-inline-start: 2.5rem; border-inline-start: 1px solid var(--home-rule); }
 @media (max-width: 640px) { .hero .description { padding-inline-start: 0; border-inline-start: 0; } }
@@ -113,17 +125,6 @@
 .branchPreview [class*='bg-white'], .branchPreview [class*='bg-amber'] { background: var(--home-paper-deep); color: var(--home-ink); border-color: var(--home-rule); border-radius: 2px; }
 .branchPreview [class*='border-gray'] { border-color: var(--home-rule); }
 .branchPreview a:hover { color: var(--home-accent); }
-.pageSpread { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1.5rem; row-gap: 0.75rem; }
-.quranExcerpt { display: grid; grid-row: span 6; grid-template-rows: subgrid; padding: 1.5rem; border: 4px double var(--home-rule); background: var(--home-paper-deep); }
-.quranExcerpt header { border-block: 1px solid var(--home-rule); text-align: center; padding: 0.5rem; margin-bottom: 1.5rem; }
-.quranExcerpt h3 { font-family: var(--font-amiri), serif; font-size: 1.5rem; }
-.quranExcerpt header p { color: var(--home-muted); font-size: 0.9375rem; }
-.quranLines { display: contents; font-family: var(--font-amiri), serif; font-size: 1.5rem; line-height: 2.5; text-align: center; }
-.quranLines > p { align-self: start; }
-.quranLines mark { color: var(--home-accent); background: transparent; text-decoration: underline; text-decoration-color: var(--home-rule); text-underline-offset: 0.3em; }
-.quranLines mark.rooted { text-decoration-style: dotted; text-decoration-color: var(--home-accent); }
-.verseEnd { white-space: nowrap; }
-.verseSeal { display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--home-rule); border-radius: 50%; min-width: 1.75rem; height: 1.75rem; padding-inline: 0.25rem; color: var(--home-muted); font-size: 0.9375rem; vertical-align: middle; white-space: nowrap; }
 .timeline { overflow-x: auto; scrollbar-width: thin; scrollbar-color: var(--home-rule) transparent; padding-top: 1rem; }
 .timeline ol { display: flex; list-style: none; width: max-content; padding-block: 1rem; }
 .timeline li { position: relative; width: 15rem; border-top: 1px solid var(--home-rule); padding: 2rem 1.5rem 1rem 0; }
@@ -153,7 +154,7 @@
 .answer { min-height: 2.5rem; margin-top: 1rem; color: var(--home-ink); }
 
 @media (max-width: 800px) {
-  .content { padding: 2.5rem 1.25rem 2rem; }
+  .content { padding-block: 2.5rem 2rem; }
   .index { grid-template-columns: 1fr; gap: 1.5rem; }
   .exploration { margin-top: 2.5rem; }
   .featureHeading { gap: 0.75rem; }
@@ -161,9 +162,3 @@
   .choices { grid-template-columns: 1fr; }
 }
 
-@media (max-width: 600px) {
-  .pageSpread { column-gap: 0.5rem; }
-  .quranExcerpt { padding: 0.5rem; }
-  .quranExcerpt h3 { font-size: 1.125rem; }
-  .quranLines { font-size: 1.125rem; line-height: 2.2; }
-}

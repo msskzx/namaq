@@ -9,10 +9,9 @@ import Button from '@/components/common/Button';
 import { num } from '@/lib/quran/arabicNumber';
 import { compareHref } from '@/lib/quran/compare';
 import { plainName } from '@/lib/quran/normalize';
-import type { WordNote } from '@/components/quran/AyahCard';
+import PageSpread, { MatchLegend, type SpreadMark, type SpreadPage } from '@/components/quran/PageSpread';
 import { SAME_ROOT, SAME_WORD, type Mark, type SimilarPair, type Span } from '@/lib/quran/similar';
 import type { Passage } from '@/lib/quran/passages';
-import { Card } from '../Card';
 import { NOTE, PANEL } from '../panel';
 import { useRepetition } from './Repetition';
 
@@ -26,31 +25,29 @@ export function passageOf(p: SimilarPair, passages: Passage[]) {
   return passages.filter(x => (meets(p.a, x.a) && meets(p.b, x.b)) || (meets(p.a, x.b) && meets(p.b, x.a))).sort((x, y) => y.matched - x.matched)[0];
 }
 
-export const LINKED = 'underline decoration-sky-500 decoration-dotted decoration-2 underline-offset-[10px]';
-
-function notesFor(marks: Mark[], ayah: number, other: Mark[], otherSpan: Span, ayat: Record<string, string>, names: Record<number, string>): Record<number, WordNote> {
+function marksFor(marks: Mark[], ayah: number, other: Mark[], otherSpan: Span, ayat: Record<string, string>, names: Record<number, string>): Record<number, SpreadMark> {
   const [surah] = otherSpan;
   const word = ([at, index]: Mark) => (ayat[`${surah}:${at}`] ?? '').split(' ')[index] ?? '';
-  return Object.fromEntries(marks.filter(([at, , , key]) => at === ayah && key).map(([, index, kind, key]) => {
-    const partners = other.filter(m => m[3] === key);
-    const title = `يقابلها: ${partners.map(m => `${word(m)} (${plainName(names[surah] ?? '')} ${num(m[0])})`).join('، ')}`;
-    return [index, { title, className: kind === SAME_WORD && partners.some(m => m[2] === SAME_ROOT) ? LINKED : undefined }];
+  return Object.fromEntries(marks.filter(([at]) => at === ayah).map(([, index, kind, key]) => {
+    const partners = key ? other.filter(m => m[3] === key) : [];
+    const title = key ? `يقابلها: ${partners.map(m => `${word(m)} (${plainName(names[surah] ?? '')} ${num(m[0])})`).join('، ')}` : undefined;
+    return [index, { kind: kind === SAME_ROOT ? 'root' : 'exact', title, linked: kind === SAME_WORD && partners.some(m => m[2] === SAME_ROOT) }];
   }));
 }
 
-function Side({ span, marks, other, otherSpan, ayat, names }: { span: Span; marks: Mark[]; other: Mark[]; otherSpan: Span; ayat: Record<string, string>; names: Record<number, string> }) {
+function page(span: Span, marks: Mark[], other: Mark[], otherSpan: Span, ayat: Record<string, string>, names: Record<number, string>): SpreadPage {
   const [surah, from, to] = span;
   const name = names[surah] ?? '';
-  return (
-    <div>
-      <h3 className="text-lg mb-2 text-amber-600 dark:text-amber-400">{`${plainName(name)} ${range(span)}`}</h3>
-      {Array.from({ length: to - from + 1 }, (_, k) => from + k).map(ayah => (
-        <Card key={ayah} surah={{ number: surah, name, plain: plainName(name) }} ayah={ayah} text={ayat[`${surah}:${ayah}`] ?? ''}
-          slots={Object.fromEntries(marks.filter(([at]) => at === ayah).map(([, index, kind]) => [index, kind]))}
-          notes={notesFor(marks, ayah, other, otherSpan, ayat, names)} />
-      ))}
-    </div>
-  );
+  return {
+    title: name,
+    subtitle: `${from === to ? 'الآية' : 'الآيات'} ${range(span)}`,
+    label: `${plainName(name)} ${range(span)}`,
+    rows: [Array.from({ length: to - from + 1 }, (_, k) => from + k).map(ayah => ({
+      number: ayah,
+      words: (ayat[`${surah}:${ayah}`] ?? '').split(' '),
+      marks: marksFor(marks, ayah, other, otherSpan, ayat, names),
+    }))],
+  };
 }
 
 export function SimilarList({ pairs, ayat, names, pair }: { pairs: SimilarPair[]; ayat: Record<string, string>; names: Record<number, string>; pair: boolean }) {
@@ -62,8 +59,9 @@ export function SimilarList({ pairs, ayat, names, pair }: { pairs: SimilarPair[]
     <section className={PANEL}>
       <h2 className="text-2xl mb-1">{pairs.length === 0 ? 'آيات متشابهة' : title}</h2>
       <p className={`${NOTE} mb-3`}>
-        آيات تتقارب في المعنى أو في نظم الكلام أو تتطابق، كما يجمعها المتشابه اللفظي. تُقاس بالجذور والأدوات المشتركة وترتيبها. باللون <span className="text-amber-600 dark:text-amber-400">الأصفر</span> كلمة وردت بلفظها في الجانبين، وباللون <span className="text-sky-600 dark:text-sky-400">الأزرق</span> كلمة من جذر مشترك بلفظ مختلف، ويُسطَّر بالأزرق ما يقابل كلمة زرقاء في الجانب الآخر. مرّر المؤشر على كلمة لترى ما يقابلها. لم يراجع هذا العرض أحد من أهل العلم.
+        آيات تتقارب في المعنى أو في نظم الكلام أو تتطابق، كما يجمعها المتشابه اللفظي. تُقاس بالجذور والأدوات المشتركة وترتيبها. بلون كلمة وردت بلفظها في الجانبين، وبلون آخر كلمة من جذر مشترك بلفظ مختلف، ويُسطَّر بنقاط ما يقابل كلمة من جذر مشترك في الجانب الآخر. مرّر المؤشر على كلمة لترى ما يقابلها. لم يراجع هذا العرض أحد من أهل العلم.
       </p>
+      <MatchLegend exact="كلمة وردت بلفظها في الجانبين" root="كلمة من جذر مشترك بلفظ مختلف" />
       {pairs.length === 0 ? <p className={NOTE}>{pair ? 'لا آيات متشابهة بين السورتين.' : 'لا آيات متشابهة في هذه السورة.'}</p> : (
         <ol className="flex flex-col gap-6">
           {shown.map(p => {
@@ -80,10 +78,7 @@ export function SimilarList({ pairs, ayat, names, pair }: { pairs: SimilarPair[]
                   آية بآية
                 </Button>
               </div>
-              <div className="grid md:grid-cols-2 gap-4">
-                <Side span={p.a} marks={p.marksA} other={p.marksB} otherSpan={p.b} ayat={ayat} names={names} />
-                <Side span={p.b} marks={p.marksB} other={p.marksA} otherSpan={p.a} ayat={ayat} names={names} />
-              </div>
+              <PageSpread pages={[page(p.a, p.marksA, p.marksB, p.b, ayat, names), page(p.b, p.marksB, p.marksA, p.a, ayat, names)]} />
             </li>
             );
           })}

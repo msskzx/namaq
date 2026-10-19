@@ -1,12 +1,13 @@
 'use client';
 
-import { Fragment, useState, type ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookOpen, faCircle, faCircleCheck, faCircleXmark, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import { useLanguage } from '../language/LanguageContext';
 import Button from '../common/Button';
 import BranchTree from '@/app/quran/branches/BranchTree';
+import PageSpread, { MatchLegend } from '../quran/PageSpread';
 import HadithPreview from './HadithPreview';
 import FitDiagram from './FitDiagram';
 import type { HomePreviews } from '@/lib/homePreviewData';
@@ -69,20 +70,18 @@ export default function Homepage({ data, fontClass = '' }: { data: HomePreviews;
         <Feature id="openings" n={1} title={ar ? 'فواتح الآيات المشتركة' : 'Shared verse openings'} description={ar ? 'تتبّع الآيات التي تشترك في بدايتها، ثم شاهد كيف تتفرّع ألفاظها لتستكشف أوجه التشابه والاختلاف بينها.' : 'Follow verses that share an opening and see where their wording branches into different phrases.'} example={ar ? 'مثال: آيات تبدأ بعبارة «إن المتقين». تتبّع اختلاف الكلمات واختر فرعًا لاستكشافه.' : 'Example: verses beginning with “Indeed, the righteous”. Follow the words as they branch and select a phrase to explore.'} href={BRANCHES_HREF}>
           <div className={styles.branchPreview} dir="rtl"><FitDiagram><BranchTree tree={data.branches.tree} pages={data.branches.pages} names={{ 15: 'الحجر', 44: 'الدخان', 51: 'الذاريات', 52: 'الطور', 54: 'القمر', 77: 'المرسلات' }} /></FitDiagram></div>
         </Feature>
-        <Feature id="comparison" n={2} title={ar ? 'مقارنة الآيات' : 'Compare Quranic passages'} description={ar ? 'اقرأ مقطعين من القرآن جنبًا إلى جنب، مع محاذاة الآيات المتقابلة وتمييز الكلمات المشتركة لمقارنة ألفاظهما.' : 'Read two Quranic passages side by side, with corresponding verses aligned and shared words highlighted to help you compare their wording.'} example={ar ? 'مثال: الشعراء ٤١–٤٥ والأعراف ١١٣–١١٧. مقتطفان من قصة موسى، مع تمييز الكلمات المشتركة، وتحت الكلمة التي تشترك في جذرها بلفظ مختلف خط منقّط.' : 'Example: Al-Shu‘ara 41–45 and Al-A‘raf 113–117. Two excerpts from Musa’s story, with shared words highlighted and words that share only a root underlined with dots.'} href={COMPARE_HREF}>
-          <div className={styles.pageSpread} dir="rtl">
-            {(['a', 'b'] as const).map(side => <article key={side} className={styles.quranExcerpt} aria-label={side === 'a' ? 'الشعراء ٤١–٤٥' : 'الأعراف ١١٣–١١٧'}>
-              <header><h3>{side === 'a' ? 'سورة الشعراء' : 'سورة الأعراف'}</h3><p>{ar ? 'مقتطف · الآيات ' : 'Excerpt · verses '}{side === 'a' ? '٤١–٤٥' : '١١٣–١١٧'}</p></header>
-              <div className={styles.quranLines} lang="ar">
-                {data.comparisons.map(pair => <p key={pair[side].number}>
-                  {pair[side].display.map((word, index) => <Fragment key={index}>{index > 0 && ' '}<span className={index === pair[side].display.length - 1 ? styles.verseEnd : undefined}>
-                    {pair.different[side].includes(index) ? word : pair.rooted[side].includes(index) ? <mark className={styles.rooted} title={ar ? 'من جذر مشترك بلفظ مختلف' : 'Same root, different wording'}>{word}</mark> : <mark>{word}</mark>}
-                    {index === pair[side].display.length - 1 && <>{' '}<span className={styles.verseSeal}>{pair[side].number.toLocaleString('ar-u-nu-arab')}</span></>}
-                  </span></Fragment>)}
-                </p>)}
-              </div>
-            </article>)}
-          </div>
+        <Feature id="comparison" n={2} title={ar ? 'مقارنة الآيات' : 'Compare Quranic passages'} description={ar ? 'اقرأ مقطعين من القرآن جنبًا إلى جنب، مع محاذاة الآيات المتقابلة وتمييز الكلمات المشتركة لمقارنة ألفاظهما.' : 'Read two Quranic passages side by side, with corresponding verses aligned and shared words highlighted to help you compare their wording.'} example={ar ? 'مثال: الشعراء ٤١–٤٥ والأعراف ١١٣–١١٧. مقتطفان من قصة موسى، تُميَّز الكلمة المشتركة بلفظها بلون، والكلمة التي تشترك في جذرها بلفظ مختلف بلون آخر تحته خط منقّط.' : 'Example: Al-Shu‘ara 41–45 and Al-A‘raf 113–117. Two excerpts from Musa’s story, with words shared exactly in one colour and words that share only a root in another, underlined with dots.'} href={COMPARE_HREF}>
+          <PageSpread pages={(['a', 'b'] as const).map(side => ({
+            title: side === 'a' ? 'سورة الشعراء' : 'سورة الأعراف',
+            subtitle: ar ? `مقتطف · الآيات ${side === 'a' ? '٤١–٤٥' : '١١٣–١١٧'}` : `Excerpt · verses ${side === 'a' ? '41–45' : '113–117'}`,
+            label: side === 'a' ? 'الشعراء ٤١–٤٥' : 'الأعراف ١١٣–١١٧',
+            rows: data.comparisons.map(pair => [{
+              number: pair[side].number,
+              words: pair[side].display,
+              marks: Object.fromEntries(pair[side].display.flatMap((_, index) => pair.different[side].includes(index) ? [] : [[index, pair.rooted[side].includes(index) ? { kind: 'root' as const, title: ar ? 'من جذر مشترك بلفظ مختلف' : 'Same root, different wording' } : { kind: 'exact' as const }]])),
+            }]),
+          }))} />
+          <MatchLegend exact={ar ? 'كلمة مشتركة بلفظها' : 'Same word'} root={ar ? 'كلمة من جذر مشترك بلفظ مختلف' : 'Same root, different wording'} />
         </Feature>
         <Feature id="musa" n={3} title={ar ? 'قصص الأنبياء في القرآن' : 'Prophets’ stories in the Quran'} description={ar ? 'تتبّع أحداث قصص الأنبياء الواردة في سور مختلفة ضمن محطات متتابعة، واعرف عدد السور التي تذكر كل محطة.' : 'Follow events from prophets’ stories across different surahs in a sequence of milestones, and see how many surahs mention each one.'} example={ar ? 'مثال: محطات قصة موسى عليه السلام. اسحب أفقيًا لتتبّع القصة عبر السور.' : 'Example: milestones from Musa’s story. Scroll horizontally to follow the story across the surahs.'} href="/quran/prophets/musa">
           <div className={styles.timeline} tabIndex={0} role="region" aria-label={ar ? 'محطات قصة موسى' : 'Musa timeline'}>

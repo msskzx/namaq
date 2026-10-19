@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import Homepage from './Homepage';
+import spread from '../quran/PageSpread.module.css';
 import { getHomePreviews } from '@/lib/homePreviewData';
 
 const { language } = vi.hoisted(() => ({ language: { current: 'ar' as 'en' | 'ar' } }));
@@ -31,6 +32,11 @@ describe('homepage features', () => {
     expect(screen.getByRole('article', { name: 'الشعراء ٤١–٤٥' })).toBeTruthy();
     expect(screen.getByRole('article', { name: 'الأعراف ١١٣–١١٧' })).toBeTruthy();
     for (const article of screen.getAllByRole('article')) expect(article.querySelectorAll('div[lang=ar] > p')).toHaveLength(5);
+    const first = screen.getByRole('article', { name: 'الشعراء ٤١–٤٥' }).querySelector('div[lang=ar] > p')!;
+    const rooted = Array.from(first.querySelectorAll('mark')).filter(m => m.className.includes(spread.root)).map(m => m.textContent);
+    expect(rooted.slice(0, 2)).toEqual(['جَاۤءَ', 'لِفِرۡعَوۡنَ']);
+    expect(rooted).toHaveLength(3);
+    expect(first.querySelectorAll('mark').length).toBeGreaterThan(rooted.length);
     expect(headings.every(heading => heading.querySelector('svg') === null)).toBe(true);
     expect(screen.queryByText(/28:3/)).toBeNull();
     const milestones = within(screen.getByRole('region', { name: current === 'ar' ? 'محطات قصة موسى' : 'Musa timeline' })).getAllByRole('listitem');
