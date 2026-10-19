@@ -240,7 +240,7 @@ describe('QuizzesPage', () => {
       expect(screen.getByText('غِلْمَانٌۭ')).toBeTruthy();
       expect(screen.getByRole('link', { name: 'الطور ٢٤' }).getAttribute('href')).toBe('/quran/read/524');
       expect(screen.getByRole('link', { name: '٧٦:١٩' })).toBeTruthy();
-      expect(screen.getByRole('link', { name: 'Openings tree' }).getAttribute('href')).toBe('/quran/branches?o=%D9%88%D9%8A%D8%B7%D9%88%D9%81%20%D8%B9%D9%84%D9%8A%D9%87%D9%85');
+      expect(screen.getByRole('link', { name: 'Openings tree' }).getAttribute('href')).toBe('/quran/branches?o=%D9%88%D9%8A%D8%B7%D9%88%D9%81+%D8%B9%D9%84%D9%8A%D9%87%D9%85');
     } finally {
       questions[0] = original;
     }

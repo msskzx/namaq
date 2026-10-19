@@ -29,6 +29,7 @@ import type { QuizReference } from "@/lib/quiz/quizReference";
 import { QUIZ_TOPICS } from "@/lib/quiz/types";
 import type { BranchAnswer, BranchQuestion } from "@/lib/quiz/branchQuestions";
 import { num } from "@/lib/quran/arabicNumber";
+import { parseJuzRange } from "@/lib/quran/juz";
 import { BranchFeedback, BranchInputs, branchesCorrect } from "./BranchAnswers";
 
 interface QuizQuestionView {
@@ -64,6 +65,7 @@ export default function QuizzesPage() {
   const person = searchParams.get("person") ?? "";
   const juzFrom = topics.includes("BRANCHES") ? searchParams.get("juzFrom") ?? "" : "";
   const juzTo = topics.includes("BRANCHES") ? searchParams.get("juzTo") ?? "" : "";
+  const juz = useMemo(() => parseJuzRange(juzFrom || null, juzTo || null), [juzFrom, juzTo]);
   const topicQuery = topics.map((value) => `topic=${encodeURIComponent(value)}`).join("&");
   const scopeQuery = `${person ? `&person=${encodeURIComponent(person)}` : ""}${juzFrom ? `&juzFrom=${encodeURIComponent(juzFrom)}` : ""}${juzTo ? `&juzTo=${encodeURIComponent(juzTo)}` : ""}`;
   const canCheckAvailability = Boolean(topics.length && (!topics.includes("PERSON_CIRCLE") || person));
@@ -244,7 +246,7 @@ export default function QuizzesPage() {
                 return (
                   <li key={question.key} className="rounded-lg border border-gray-200 p-4 dark:border-white/10">
                     <p className="mb-3 font-semibold text-gray-900 dark:text-gray-100">{question.promptArabic}</p>
-                    {question.branches ? <BranchFeedback question={question} names={data?.surahNames ?? {}} typed={typed[index] ?? question.branches.map(() => "")} ar={ar} /> : <><div className="mb-2 flex items-center gap-2">
+                    {question.branches ? <BranchFeedback question={question} names={data?.surahNames ?? {}} juz={juz} typed={typed[index] ?? question.branches.map(() => "")} ar={ar} /> : <><div className="mb-2 flex items-center gap-2">
                       <FontAwesomeIcon icon={correct ? faCircleCheck : faCircleXmark} className={correct ? "text-green-600" : "text-red-500"} />
                       <span>{given ? answerContent(question, given) : ar ? "بدون إجابة" : "No answer"}</span>
                     </div>
@@ -291,7 +293,7 @@ export default function QuizzesPage() {
               <p className="mb-4 font-semibold text-gray-900 dark:text-gray-100">{questions[current].promptArabic}</p>
               {questions[current].branches ? (
                 answers[current] !== undefined ? (
-                  <BranchFeedback question={questions[current]} names={data?.surahNames ?? {}} typed={typed[current]} ar={ar} />
+                  <BranchFeedback question={questions[current]} names={data?.surahNames ?? {}} juz={juz} typed={typed[current]} ar={ar} />
                 ) : (
                   <BranchInputs
                     typed={typed[current] ?? questions[current].branches.map(() => "")}

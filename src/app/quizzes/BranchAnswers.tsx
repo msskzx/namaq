@@ -8,6 +8,7 @@ import Button from "@/components/common/Button";
 import { matchBranches } from "@/lib/quiz/branchAnswers";
 import type { BranchAnswer } from "@/lib/quiz/branchQuestions";
 import { branchesHref } from "@/lib/quran/branches";
+import type { JuzRange } from "@/lib/quran/juz";
 import { num } from "@/lib/quran/arabicNumber";
 
 type Question = { phrase?: string; branches?: BranchAnswer[] };
@@ -42,7 +43,7 @@ function Words({ branch, matched }: { branch: BranchAnswer; matched: number }) {
   );
 }
 
-export function BranchFeedback({ question, typed, names, ar }: { question: Question; typed: string[]; names: Names; ar: boolean }) {
+export function BranchFeedback({ question, typed, names, juz, ar }: { question: Question; typed: string[]; names: Names; juz: JuzRange | null; ar: boolean }) {
   const branches = question.branches ?? [];
   const matches = matchBranches(typed, continuations(question));
   const missed = branches.filter((_, index) => !matches.some((hit) => hit?.branch === index));
@@ -77,7 +78,7 @@ export function BranchFeedback({ question, typed, names, ar }: { question: Quest
         </div>
       )}
       {question.phrase && (
-        <Button className="self-start" size="sm" variant="outline" href={branchesHref(question.phrase)}>
+        <Button className="self-start" size="sm" variant="outline" href={branchesHref(question.phrase, juz ?? undefined)}>
           <FontAwesomeIcon icon={faCodeBranch} />
           {ar ? "شجرة الفواتح" : "Openings tree"}
         </Button>
