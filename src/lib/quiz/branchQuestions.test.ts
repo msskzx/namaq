@@ -20,7 +20,7 @@ describe('branchQuestions', () => {
     const answers = nodes.map(node => node.words.map(spelled).join(' '));
     expect(matchTreeAnswers(question.tree, answers).every(hit => hit?.correct)).toBe(true);
     expect(matchTreeAnswers(question.tree, answers.slice(0, 2)).every(hit => hit?.correct)).toBe(false);
-    expect(question.promptArabic).toContain('نهايات الفروع');
+    expect(question.promptArabic).toContain('أول كلمتين من نهاية كل فرع');
   });
 
   it('asks يطوف عليهم with both of its spellings in the prompt', () => {

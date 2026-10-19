@@ -66,7 +66,7 @@ export function BranchInputs({ question, typed, onChange, onCheck, ar }: { quest
       event.preventDefault();
       if (started) onCheck();
     }}>
-      <p className="text-sm text-[var(--home-muted)]">{ar ? "أكمل كل عقدة، بما فيها نهايات الفروع. يمكن تبديل الفروع المتشابهة في الشكل." : "Complete every node, including the leaves. Branches with the same shape can be entered in either order."}</p>
+      <p className="text-sm text-[var(--home-muted)]">{ar ? "أكمل كل عقدة، وتكفي أول كلمتين من نهاية كل فرع. يمكن تبديل الفروع المتشابهة في الشكل." : "Complete every node. For a leaf, its first two words are enough. Branches with the same shape can be entered in either order."}</p>
       <div dir="rtl">
         <BranchTree tree={question.tree} names={{}} pages={{}} label={ar ? "أكمل الشجرة" : "Complete the tree"} renderNode={(_, index) => (
           <label className="flex w-56 flex-col gap-1">

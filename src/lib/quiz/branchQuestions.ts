@@ -37,7 +37,7 @@ export function branchQuestions(all: BranchAyah[], range: JuzRange | null = null
     return [{
       key: `${BRANCH_FAMILY}:${phrase}`,
       family: BRANCH_FAMILY,
-      promptArabic: `تفترق الآيات التي تبدأ بـ ${opening} إلى ${COUNTS[tree.children.length]}. أكمل جميع عقد الشجرة بعد هذه العبارة، بما فيها نهايات الفروع.`,
+      promptArabic: `تفترق الآيات التي تبدأ بـ ${opening} إلى ${COUNTS[tree.children.length]}. أكمل جميع عقد الشجرة بعد هذه العبارة، وتكفي أول كلمتين من نهاية كل فرع.`,
       phrase: id,
       choices: [],
       correctAnswer: phrase,

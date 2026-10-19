@@ -14,8 +14,8 @@ The quiz topic "Shared openings" (`BRANCHES`, فواتح الآيات) asks abou
 
 ## Grading (`matchTreeAnswers` in `src/lib/quiz/branchAnswers.ts`)
 
-- Each non-root node has one field, in the tree's depth-first order. Checking is available after typing in any field and shows corrections for blank nodes. A question counts as correct only when every field contains all the words at its node. Filling only the first split, leaving a leaf blank, or supplying a word prefix does not complete the tree.
-- Sibling branches with the same shape can be entered in either order. Grading pairs whole subtrees, so a leaf must remain under its parent. Each expected subtree is used once. Feedback uses the pairing with the most correct nodes, displays the correct text at every node, and links terminal ayat to their reader pages.
+- Each non-root node has one field, in the tree's depth-first order. Checking is available after typing in any field and shows corrections for blank nodes. A question counts as correct only when every field is correct. A node that splits again needs all its words. A leaf needs its first two words, or all of them if it has fewer, because siblings always differ at their first word and the full ayah is a typing test on a phone. The words after those two are not graded, so a typo late in the ayah does not fail it. Filling only the first split or leaving a leaf blank does not complete the tree.
+- Sibling branches with the same shape can be entered in either order. Grading pairs whole subtrees, so a leaf must remain under its parent. Each expected subtree is used once. Feedback uses the pairing with the most correct nodes and, among those, the one whose answers get the most words right from the start, so a wrong answer is shown beside the leaf it starts like. It displays the correct text at every node, and links terminal ayat to their reader pages.
 - Inputs show only the supplied opening and the tree's shape. Answer words, surah labels and reader links appear after checking.
 - The reader writes ordinary Arabic spelling, not the mushaf rasm. Each rasm word is turned into a pattern of the spellings a reader may use, and a typed answer must match it letter for letter after `normalizeWord`:
   - A dagger alif may be written or left out, so السماوات and الكتاب match, and so do هذا, ذلك and إله.
@@ -23,7 +23,7 @@ The quiz topic "Shared openings" (`BRANCHES`, فواتح الآيات) asks abou
   - A hamza may be written on any seat, alif included, or left out, so شيئا, آمنوا, امنوا and أرأيتم match. A hamza on ya or waw may use the bare keyboard letter, so يوميذ and يومئذ match, and يومنون matches يؤمنون. شي matches شَىْءٍ.
   - A small waw or ya in the rasm may be written as a full letter, so النبيين, إبراهيم and يستوون match.
   - An alif the rasm writes may not be dropped, and nothing else is loosened, so قل does not match قَالَ and لا does not match إِلَىٰ.
-- Each answer matches the words of its own node in full. Spaces are ignored, so يا أيها matches يَـٰٓأَيُّهَا. There is no general edit-distance matching, so changing an unrelated consonant still fails.
+- An answer is read from its start and must stop at the end of a word. Spaces are ignored, so يا أيها matches يَـٰٓأَيُّهَا. There is no general edit-distance matching, so changing an unrelated consonant still fails.
 - A node is skipped when two of its branches start with words a reader would spell the same, such as بِظَلَّامٍ and بِظَلَّـٰمٍ.
 - Answers typed but not checked are graded when the quiz is submitted.
 - After checking, the complete tree shows each typed answer and its result beside the correct mushaf text. Terminal nodes link each ayah to its reader page. A link opens the phrase's tree on `/quran/branches`.

@@ -42,6 +42,21 @@ export function matchedWords(given: string, words: string[]): number {
   return 0;
 }
 
+export const LEAF_WORDS = 2;
+
+export function leadingWords(given: string, words: string[]): number {
+  const typed = given.trim().split(/\s+/);
+  for (let count = typed.length; count > 0; count--) {
+    const matched = matchedWords(typed.slice(0, count).join(' '), words);
+    if (matched) return matched;
+  }
+  return 0;
+}
+
+const nodeCorrect = (given: string, node: Branch) => node.children.length === 0
+  ? leadingWords(given, node.words) >= Math.min(LEAF_WORDS, node.words.length)
+  : matchedWords(given, node.words) === node.words.length;
+
 export type BranchMatch = { branch: number; words: number };
 
 function orders(n: number): number[][] {
@@ -73,7 +88,7 @@ export function matchTreeAnswers(tree: Branch, given: string[]): (TreeAnswerMatc
   const indices = new Map(nodes.map((node, index) => [node, index]));
   const pair = (slots: Branch[], expected: Branch[]): Map<number, TreeAnswerMatch> | null => {
     let best: Map<number, TreeAnswerMatch> | null = null;
-    let score = -1;
+    let score = [-1, -1];
     for (const order of orders(expected.length)) {
       const result = new Map<number, TreeAnswerMatch>();
       let possible = true;
@@ -84,15 +99,17 @@ export function matchTreeAnswers(tree: Branch, given: string[]): (TreeAnswerMatc
           return;
         }
         const index = indices.get(slot)!;
-        result.set(index, { node: answer, correct: matchedWords(given[index] ?? '', answer.words) === answer.words.length });
+        result.set(index, { node: answer, correct: nodeCorrect(given[index] ?? '', answer) });
         const children = pair(slot.children, answer.children);
         if (!children) possible = false;
         children?.forEach((value, key) => result.set(key, value));
       });
-      const count = [...result.values()].filter(hit => hit?.correct).length;
-      if (possible && count > score) {
+      const hits = [...result.entries()];
+      const correct = hits.filter(([, hit]) => hit.correct).length;
+      const words = hits.reduce((sum, [index, hit]) => sum + leadingWords(given[index] ?? '', hit.node.words), 0);
+      if (possible && (correct > score[0] || (correct === score[0] && words > score[1]))) {
         best = result;
-        score = count;
+        score = [correct, words];
       }
     }
     return best;

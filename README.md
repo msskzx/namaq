@@ -29,7 +29,7 @@ Open the graph → explore and filter relationships → open a person's profile 
   an overlay that deep-links to the exact reader passage, and report a
   percentage with a pass mark at 50%.
 - Quizzes and `/quran/branches` use the paper theme. Number controls across the app support direct typing, keyboard navigation and bounded increment buttons, including quiz length, juz' ranges, page jumps and ayah ranges.
-- The "Shared openings" quiz uses the same connected tree as `/quran/branches` and asks for every node after the opening, including the leaves. Feedback shows the complete tree. Ordinary Arabic keyboard variants, including ي in place of ئ and شي for شيء, count as correct ([docs/quiz-ayah-branches.md](docs/quiz-ayah-branches.md)).
+- The "Shared openings" quiz uses the same connected tree as `/quran/branches` and asks for every node after the opening. A leaf counts from its first two correct words. Feedback shows the complete tree. Ordinary Arabic keyboard variants, including ي in place of ئ and شي for شيء, count as correct ([docs/quiz-ayah-branches.md](docs/quiz-ayah-branches.md)).
 
 ### Hadith fixtures
 
