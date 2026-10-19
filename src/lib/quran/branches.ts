@@ -204,6 +204,16 @@ export function pieces(groups: Map<string, BranchAyah[]>): Piece[] {
         node.children.forEach(child => walk(child, words));
         return;
       }
+      const spellings = new Set(under.map(key => conj.get(key)));
+      if (under.length > PIECE_MAX && spellings.size > 1) {
+        spellings.forEach(spelling => {
+          const sub = group.filter(ayah => under.includes(ayah.key) && conj.get(ayah.key) === spelling);
+          if (sub.length < 2) return;
+          const own = branch(sub).words;
+          found.push({ id: own.map(normalizeWord).join(' '), text: own.join(' '), count: sub.length, shared: own.length, opening, keys: sub.map(ayah => ayah.key) });
+        });
+        return;
+      }
       found.push({ id: linkId(words, under.map(key => conj.get(key)!)), text: words.join(' '), count: under.length, shared: words.length, opening, keys: under });
     };
     walk(branch(shown(group)), []);

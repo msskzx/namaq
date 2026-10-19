@@ -238,7 +238,7 @@ describe('pieces', () => {
     const seen = list.flatMap(p => p.keys);
     expect(new Set(seen).size).toBe(seen.length);
     expect(list.every(p => p.keys.length === p.count)).toBe(true);
-    for (const p of list.filter((_, i) => i % 25 === 0)) expect(startingWith(all, p.id).map(a => a.key).sort()).toEqual([...p.keys].sort());
+    for (const p of list.filter((_, i) => i % 25 === 0)) expect(startingWith(all, p.id).map(a => a.key)).toEqual(expect.arrayContaining(p.keys));
     expect(list.some(p => p.id === 'يايها الذين')).toBe(false);
   });
 
@@ -248,9 +248,17 @@ describe('pieces', () => {
   });
 
   it('keeps a larger node whole where no two of its ayat go on together', () => {
-    expect(list.find(p => p.id === 'لا اقسم')).toMatchObject({ count: 8 });
+    expect(list.find(p => p.id === 'ويل يومئذ للمكذبين')).toMatchObject({ count: 11 });
     expect(list.find(p => p.id === 'فباي ءالاء ربكما تكذبان')).toMatchObject({ count: 31 });
     expect(list.filter(p => p.count > PIECE_MAX).every(p => p.count <= 8 || p.id === 'فباي ءالاء ربكما تكذبان' || p.id === 'ويل يومئذ للمكذبين')).toBe(true);
+  });
+
+  it('splits such a node by its first word when the ayat differ in a joined letter', () => {
+    expect(list.find(p => p.id === 'فلا اقسم')!.keys).toEqual(['56:75', '69:38', '70:40', '81:15', '84:16']);
+    expect(list.find(p => p.id === 'لا اقسم')!.keys).toEqual(['75:1', '90:1']);
+    expect(list.some(p => p.keys.includes('75:2'))).toBe(false);
+    const juz = pieces(sharedOpenings(all.filter(a => inJuzRange(a.key, { from: 29, to: 30 }))));
+    expect(juz.find(p => p.id === 'فلا اقسم')!.keys).toEqual(['69:38', '70:40', '81:15', '84:16']);
   });
 
   it('keeps a small opening whole and names the opening a piece was cut from', () => {
