@@ -43,8 +43,8 @@ beforeEach(() => {
     ok: true,
     json: async () => ({
       people: [
-        { slug: 'ali', name: 'علي بن أبي طالب', fathers: [] },
-        ...(url.includes('descendants=1') ? [{ slug: 'hasan', name: 'الحسن بن علي', fathers: ['ali'] }] : []),
+        { slug: 'ali', name: 'علي بن أبي طالب', fathers: [], isCompanion: true, sex: 'MALE' },
+        ...(url.includes('descendants=1') ? [{ slug: 'hasan', name: 'الحسن بن علي', fathers: ['ali'], isCompanion: true, sex: 'MALE' }] : []),
       ],
       subjects: ['ali'],
     }),
@@ -66,6 +66,9 @@ describe('NasabView descendants toggle', () => {
     expect(toggle().checked).toBe(false);
     await waitFor(() => expect(fetchMock).toHaveBeenCalledWith('/api/nasab?person=ali'));
     expect(await screen.findByRole('img', { name: 'Nasab tree' })).toBeTruthy();
+    expect(screen.getAllByText('علي ﵁')).toHaveLength(2);
+    expect(screen.getByRole('button', { name: 'Remove علي بن أبي طالب ﵁' })).toBeTruthy();
+    expect(screen.getAllByRole('listitem').every(item => item.textContent?.includes('علي'))).toBe(true);
     expect(screen.queryByText('الحسن')).toBeNull();
   });
 
@@ -76,7 +79,7 @@ describe('NasabView descendants toggle', () => {
     expect(nav.getUrl()).toBe('/nasab?subject=person%3Aali&descendants=1');
     expect(toggle().checked).toBe(true);
     await waitFor(() => expect(fetchMock).toHaveBeenCalledWith('/api/nasab?person=ali&descendants=1'));
-    expect(await screen.findByText('الحسن')).toBeTruthy();
+    expect(await screen.findByText('الحسن ﵁')).toBeTruthy();
   });
 
   it('turning it off drops the flag from the URL', () => {

@@ -1,4 +1,5 @@
-import { givenName, NasabLayout } from '@/lib/relationship/nasabLayout';
+import { givenName, nasabHonorific, NasabLayout } from '@/lib/relationship/nasabLayout';
+import styles from './Nasab.module.css';
 
 const COL_WIDTH = 150;
 const ROW_HEIGHT = 84;
@@ -23,7 +24,7 @@ export default function NasabPlot({ layout, isArabic }: { layout: NasabLayout; i
   );
 
   return (
-    <div tabIndex={0} role="region" aria-label={isArabic ? 'شجرة النسب' : 'Nasab tree'} className="overflow-auto rounded border border-amber-400 bg-gray-50 dark:bg-black">
+    <div tabIndex={0} role="region" aria-label={isArabic ? 'شجرة النسب' : 'Nasab tree'} className={styles.plot}>
       <svg role="img" aria-label={isArabic ? 'شجرة النسب' : 'Nasab tree'} width={width} height={height} className="mx-auto block">
         {layout.edges.map(({ from, to }) => {
           const a = at.get(from)!;
@@ -34,25 +35,26 @@ export default function NasabPlot({ layout, isArabic }: { layout: NasabLayout; i
               key={`${from}>${to}`}
               d={`M${a.x},${a.y + NODE_HEIGHT / 2} V${mid} H${b.x} V${b.y - NODE_HEIGHT / 2}`}
               fill="none"
-              className="stroke-gray-400 dark:stroke-gray-500"
+              className={styles.edge}
               strokeWidth={2}
             />
           );
         })}
         {layout.nodes.map((node) => {
           const { x, y } = at.get(node.slug)!;
+          const honorific = nasabHonorific(node);
           return (
             <g key={node.slug} transform={`translate(${x - NODE_WIDTH / 2},${y - NODE_HEIGHT / 2})`}>
-              <title>{node.name}</title>
+              <title>{node.name}{honorific && ` ${node.sex === 'FEMALE' ? 'رضي الله عنها' : 'رضي الله عنه'}`}</title>
               <rect
                 width={NODE_WIDTH}
                 height={NODE_HEIGHT}
                 rx={6}
                 strokeWidth={node.isMeeting ? 3 : 1.5}
-                className={`${node.isSubject ? 'fill-amber-200 dark:fill-amber-800' : 'fill-white dark:fill-gray-900'} ${node.isMeeting ? 'stroke-amber-600 dark:stroke-amber-300' : 'stroke-amber-400'}`}
+                className={`${styles.node} ${node.isSubject ? styles.subject : ''} ${node.isMeeting ? styles.meeting : ''}`}
               />
-              <text x={NODE_WIDTH / 2} y={29} textAnchor="middle" className="fill-gray-900 text-sm dark:fill-gray-100">
-                {givenName(node.name)}
+              <text x={NODE_WIDTH / 2} y={29} textAnchor="middle" direction="rtl" className={styles.name}>
+                {givenName(node.name)}{honorific && ` ${honorific}`}
               </text>
             </g>
           );

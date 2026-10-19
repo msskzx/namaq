@@ -4,11 +4,15 @@ export interface NasabPerson {
   slug: string;
   name: string;
   fathers: string[];
+  isCompanion?: boolean;
+  sex?: string | null;
 }
 
 export interface NasabNode {
   slug: string;
   name: string;
+  isCompanion?: boolean;
+  sex?: string | null;
   row: number;
   col: number;
   isSubject: boolean;
@@ -24,6 +28,11 @@ export interface NasabLayout {
 }
 
 export const givenName = (name: string) => name.split(/ بنت? /)[0];
+
+export function nasabHonorific(person: Pick<NasabPerson, 'isCompanion' | 'sex'>) {
+  if (!person.isCompanion) return '';
+  return person.sex === 'FEMALE' ? '﵂' : person.sex === 'MALE' ? '﵁' : '';
+}
 
 export function layoutNasab(people: NasabPerson[], subjects: string[]): NasabLayout {
   const bySlug = new Map(people.map((person) => [person.slug, person]));
@@ -69,6 +78,8 @@ export function layoutNasab(people: NasabPerson[], subjects: string[]): NasabLay
     placed.set(slug, {
       slug,
       name: bySlug.get(slug)!.name,
+      isCompanion: bySlug.get(slug)!.isCompanion,
+      sex: bySlug.get(slug)!.sex,
       row,
       col,
       isSubject: subjectOrder.includes(slug),

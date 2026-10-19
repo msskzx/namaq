@@ -1,17 +1,21 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { getSession } = vi.hoisted(() => ({ getSession: vi.fn() }));
+const { getSession, findMany } = vi.hoisted(() => ({ getSession: vi.fn(), findMany: vi.fn() }));
 vi.mock('@/lib/neo4j', () => ({ getSession }));
+vi.mock('@/lib/prisma', () => ({ prisma: { person: { findMany } } }));
 
 import { GET } from './route';
 
 const request = (query: string) => new Request(`http://localhost/api/nasab${query}`);
-const row = (slug: string, name: string, fathers: string[]) => ({
-  get: (key: string) => ({ slug, name, fathers })[key],
+const row = (slug: string, name: string, fathers: string[], isCompanion = false, sex: string | null = null) => ({
+  get: (key: string) => ({ slug, name, fathers, isCompanion, sex })[key],
 });
 
 describe('GET /api/nasab', () => {
-  beforeEach(() => getSession.mockReset());
+  beforeEach(() => {
+    getSession.mockReset();
+    findMany.mockReset().mockResolvedValue([]);
+  });
 
   it('returns nothing without a person, and does not touch the database', async () => {
     const response = await GET(request(''));
@@ -27,6 +31,7 @@ describe('GET /api/nasab', () => {
     expect(run).toHaveBeenCalledTimes(1);
     expect(query).toContain('<-[:FATHER*0..]-');
     expect(query).not.toMatch(/MOTHER|SON|DAUGHTER/);
+    expect(query).toContain("(a)-[:HOLDS_TITLE]->(:Title {slug: 'companion'})");
     expect(params).toEqual({ slugs: ['ali', 'umar'], descendants: false });
   });
 
@@ -47,8 +52,23 @@ describe('GET /api/nasab', () => {
     const body = await (await GET(request('?person=ali&person=nobody'))).json();
     expect(body.subjects).toEqual(['ali']);
     expect(body.people).toEqual([
-      { slug: 'ali', name: 'علي', fathers: ['abu-talib'] },
-      { slug: 'abu-talib', name: 'أبو طالب', fathers: [] },
+      { slug: 'ali', name: 'علي', fathers: ['abu-talib'], sex: null, isCompanion: false },
+      { slug: 'abu-talib', name: 'أبو طالب', fathers: [], sex: null, isCompanion: false },
+    ]);
+  });
+
+  it('uses profile sex before graph sex and keeps graph-only Companion metadata', async () => {
+    getSession.mockReturnValue({ run: vi.fn().mockResolvedValue({ records: [
+      row('ali', 'علي', [], true),
+      row('fatima', 'فاطمة', ['ali'], true, 'MALE'),
+      row('graph-only', 'امرأة', [], true, 'FEMALE'),
+    ] }) });
+    findMany.mockResolvedValue([{ slug: 'ali', sex: 'MALE' }, { slug: 'fatima', sex: 'FEMALE' }]);
+    const body = await (await GET(request('?person=ali&descendants=1'))).json();
+    expect(body.people).toMatchObject([
+      { sex: 'MALE', isCompanion: true },
+      { sex: 'FEMALE', isCompanion: true },
+      { sex: 'FEMALE', isCompanion: true },
     ]);
   });
 

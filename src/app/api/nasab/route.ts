@@ -3,8 +3,9 @@ import { getSession } from '@/lib/neo4j';
 import { clampSubjects } from '@/lib/apiParams';
 import { apiError, CATALOG_CACHE_HEADERS } from '@/lib/apiError';
 import type { NasabPerson } from '@/lib/relationship/nasabLayout';
+import { prisma } from '@/lib/prisma';
 
-// See docs/plans/nasab-plot.md. FATHER edges are stored father -> child.
+// See docs/plans/nasab-plot.md.
 const nasabQuery = `
   UNWIND $slugs AS slug
   CALL {
@@ -19,7 +20,9 @@ const nasabQuery = `
   }
   WITH DISTINCT a
   OPTIONAL MATCH (f:Person)-[:FATHER]->(a)
-  RETURN a.slug AS slug, a.name AS name, collect(f.slug) AS fathers
+  RETURN a.slug AS slug, a.name AS name, collect(f.slug) AS fathers,
+         a.sex AS sex,
+         EXISTS { MATCH (a)-[:HOLDS_TITLE]->(:Title {slug: 'companion'}) } AS isCompanion
 `;
 
 export async function GET(request: Request) {
@@ -33,10 +36,17 @@ export async function GET(request: Request) {
 
     const descendants = searchParams.get('descendants') === '1';
     const result = await session.run(nasabQuery, { slugs: subjects, descendants });
+    const profiles = result.records.length ? await prisma.person.findMany({
+      where: { slug: { in: result.records.map(record => record.get('slug')) } },
+      select: { slug: true, sex: true },
+    }) : [];
+    const sexes = new Map(profiles.map(person => [person.slug, person.sex]));
     const people: NasabPerson[] = result.records.map((record) => ({
       slug: record.get('slug'),
       name: record.get('name'),
       fathers: record.get('fathers'),
+      sex: sexes.get(record.get('slug')) ?? record.get('sex') ?? null,
+      isCompanion: record.get('isCompanion') === true,
     }));
     const found = new Set(people.map((person) => person.slug));
     return NextResponse.json(
