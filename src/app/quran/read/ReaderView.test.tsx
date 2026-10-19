@@ -16,6 +16,8 @@ const render = (ui: React.ReactElement) => rtlRender(ui, { wrapper: LanguageProv
 
 afterEach(() => {
   cleanup();
+  vi.unstubAllGlobals();
+  vi.stubGlobal('ResizeObserver', class { observe() {} disconnect() {} });
   push.mockClear();
 });
 
@@ -140,7 +142,7 @@ describe('SurahIndex', () => {
     expect(screen.getAllByRole('region').map(section => section.getAttribute('aria-label'))).toEqual(['الجزء ٣', 'الجزء ٤']);
     fireEvent.change(search, { target: { value: '٢' } });
     expect(screen.getAllByRole('region')).toHaveLength(3);
-    fireEvent.change(search, { target: { value: 'كهف' } });
+    fireEvent.change(search, { target: { value: 'kahf' } });
     expect(screen.queryAllByRole('region')).toHaveLength(0);
     expect(screen.getByText('لا توجد سورة بهذا الاسم أو الرقم.')).not.toBeNull();
   });
@@ -155,5 +157,45 @@ describe('SurahIndex', () => {
     expect(push).toHaveBeenCalledWith('/quran/read/ayah/2/255');
     fireEvent.change(search, { target: { value: '2:300' } });
     expect(screen.queryByText(/افتح/)).toBeNull();
+  });
+
+  it('lists the ayat whose words a search names, with the match marked, once the server answers', async () => {
+    const fetchMock = vi.fn(async () => ({
+      ok: true,
+      json: async () => ({ total: 2, hits: [{ key: '2:255', page: 42, words: ['ٱللَّهُ', 'لَآ', 'إِلَـٰهَ', 'إِلَّا', 'هُوَ', 'ٱلْحَىُّ', 'ٱلْقَيُّومُ'], from: 5, to: 6 }, { key: '3:2', page: 50, words: ['ٱلْحَىُّ', 'ٱلْقَيُّومُ'], from: 0, to: 1 }] }),
+    }));
+    vi.stubGlobal('fetch', fetchMock);
+    render(<SurahIndex surahs={surahs} />);
+    fireEvent.change(screen.getByLabelText('ابحث عن سورة أو آية'), { target: { value: 'الحي القيوم' } });
+    const results = await screen.findByRole('region', { name: 'آيات' });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock).toHaveBeenCalledWith(`/api/quran/search?q=${encodeURIComponent('الحي القيوم')}`, expect.anything());
+    expect([...results.querySelectorAll('a')].map(a => a.getAttribute('href'))).toEqual(['/quran/read/ayah/2/255', '/quran/read/ayah/3/2']);
+    expect([...results.querySelectorAll('mark')].map(mark => mark.textContent)).toEqual(['ٱلْحَىُّ', 'ٱلْقَيُّومُ', 'ٱلْحَىُّ', 'ٱلْقَيُّومُ']);
+    expect(results.textContent).toContain('البقرة ٢٥٥');
+    expect(screen.queryByText('لا توجد سورة بهذا الاسم أو الرقم.')).toBeNull();
+  });
+
+  it('says when no ayah matches, and when the search fails', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, json: async () => ({ total: 0, hits: [] }) })));
+    render(<SurahIndex surahs={surahs} />);
+    const search = screen.getByLabelText('ابحث عن سورة أو آية');
+    fireEvent.change(search, { target: { value: 'كلمة غائبة' } });
+    expect(screen.getByText('يبحث في الآيات…')).not.toBeNull();
+    expect(await screen.findByText('لا توجد سورة ولا آية بهذا النص.')).not.toBeNull();
+    vi.stubGlobal('fetch', vi.fn(async () => ({ ok: false, status: 500 })));
+    fireEvent.change(search, { target: { value: 'كلمة أخرى' } });
+    expect(await screen.findByText('تعذّر البحث في الآيات الآن.')).not.toBeNull();
+  });
+
+  it('does not search ayat for a reference or a single letter', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+    render(<SurahIndex surahs={surahs} />);
+    const search = screen.getByLabelText('ابحث عن سورة أو آية');
+    fireEvent.change(search, { target: { value: '2:255' } });
+    fireEvent.change(search, { target: { value: 'ق' } });
+    await new Promise(resolve => setTimeout(resolve, 300));
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 });
