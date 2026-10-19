@@ -17,7 +17,7 @@ Open the graph → explore and filter relationships → open a person's profile 
 ### Homepage
 
 - The bilingual homepage uses a paper, ink and terracotta theme in light and dark modes, with feature explanations followed by examples of shared Quran openings, page-style ayah comparisons, prophet timelines with distinct surah counts, an expanded relationship graph, the full Hadith Jibril in bubbles or text, complete paternal lineages and an approved question on one of Talha ibn Ubaydullah's virtues, plus a numbered subject index. The same theme now covers every page.
-- The navbar is the title band of a printed book: paper, double rules and the نَمَق wordmark. Its sections run from the texts to review (Quran, Hadith, Biographies, Relationships, Sources, Quizzes) and open shelves on hover, click or keyboard focus, where each page has a line saying what it is for and the current page is marked; Quran's eleven pages sit under Read, Words and Themes. The current section is marked, the phone menu groups the same shelves into collapsible sections and scrolls, and ع/EN switches language in one tap.
+- The navbar is the title band of a printed book: paper, double rules and the نَمَق wordmark. An icon-only sun and moon toggle switches the theme directly from the bar. Its sections run from the texts to review (Quran, Hadith, Biographies, Relationships, Sources, Quizzes) and open shelves on hover, click or keyboard focus, where each page has a line saying what it is for and the current page is marked; Quran's eleven pages sit under Read, Words and Themes. The current section is marked, the phone menu groups the same shelves into collapsible sections and scrolls, and ع/EN switches language in one tap.
 
 ### Quizzes
 
