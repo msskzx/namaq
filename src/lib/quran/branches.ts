@@ -11,11 +11,15 @@ export type Variant = { word: string; conj: string; keys: string[]; id?: string 
 export const OPENING_WORDS = 2;
 export const TOP = 8;
 
-export function branchesHref(id: string, juz?: JuzRange, list = false) {
+export type BranchesView = { list?: boolean; grouped?: boolean; page?: number };
+
+export function branchesHref(id: string, juz?: JuzRange, view: BranchesView = {}) {
   const params = new URLSearchParams({ o: id });
   if (juz) params.set('juzFrom', `${juz.from}`);
   if (juz) params.set('juzTo', `${juz.to}`);
-  if (list) params.set('v', 'list');
+  if (view.list) params.set('v', 'list');
+  if (view.list && view.grouped) params.set('g', 'opening');
+  if (view.list && view.page && view.page > 1) params.set('p', `${view.page}`);
   return `/quran/branches?${params}`;
 }
 
@@ -188,7 +192,7 @@ const mushafOrder = (key: string) => {
 };
 
 export function pieces(groups: Map<string, BranchAyah[]>): Piece[] {
-  const found: (Piece & { first: number })[] = [];
+  const found: Piece[] = [];
   groups.forEach(group => {
     const opening = openingOf(group);
     const conj = new Map(group.map(ayah => [ayah.key, mixed(group) ? (ayah.conj ?? '') : '']));
@@ -196,15 +200,14 @@ export function pieces(groups: Map<string, BranchAyah[]>): Piece[] {
       const words = [...path, ...node.words];
       const under = keys(node);
       if (under.length < 2) return;
-      if (under.length > PIECE_MAX) {
+      if (under.length > PIECE_MAX && node.children.some(child => keys(child).length > 1)) {
         node.children.forEach(child => walk(child, words));
         return;
       }
-      found.push({ id: linkId(words, under.map(key => conj.get(key)!)), text: words.join(' '), count: under.length, shared: words.length, opening, keys: under, first: Math.min(...under.map(mushafOrder)) });
+      found.push({ id: linkId(words, under.map(key => conj.get(key)!)), text: words.join(' '), count: under.length, shared: words.length, opening, keys: under });
     };
     walk(branch(shown(group)), []);
   });
-  return found
-    .sort((a, b) => b.shared - a.shared || a.count - b.count || a.first - b.first)
-    .map(({ first: _, ...piece }) => piece);
+  const first = (piece: Piece) => Math.min(...piece.keys.map(mushafOrder));
+  return found.sort((a, b) => b.shared - a.shared || a.count - b.count || first(a) - first(b));
 }

@@ -187,7 +187,7 @@ describe('a juz\' range', () => {
 
   it('carries the range and the list view in the link', () => {
     expect(branchesHref('فلا اقسم')).toBe(`/quran/branches?o=${encodeURIComponent('فلا اقسم').replace(/%20/g, '+')}`);
-    expect(branchesHref('الم تر', { from: 29, to: 30 }, true)).toBe(`/quran/branches?o=${encodeURIComponent('الم').replace(/%20/g, '+')}+${encodeURIComponent('تر')}&juzFrom=29&juzTo=30&v=list`);
+    expect(branchesHref('الم تر', { from: 29, to: 30 }, { list: true })).toBe(`/quran/branches?o=${encodeURIComponent('الم').replace(/%20/g, '+')}+${encodeURIComponent('تر')}&juzFrom=29&juzTo=30&v=list`);
   });
 });
 
@@ -234,7 +234,7 @@ describe('pieces', () => {
   const list = pieces(groups);
 
   it('cuts every opening at the first node of six ayat or fewer, so each ayah lands in at most one piece', () => {
-    expect(list.every(p => p.count >= 2 && p.count <= PIECE_MAX)).toBe(true);
+    expect(list.every(p => p.count >= 2)).toBe(true);
     const seen = list.flatMap(p => p.keys);
     expect(new Set(seen).size).toBe(seen.length);
     expect(list.every(p => p.keys.length === p.count)).toBe(true);
@@ -245,6 +245,12 @@ describe('pieces', () => {
   it('sorts by how many words the ayat share, then by fewer ayat', () => {
     expect(list.every((p, i) => i === 0 || list[i - 1].shared > p.shared || (list[i - 1].shared === p.shared && list[i - 1].count <= p.count))).toBe(true);
     expect(list[0].shared).toBe(18);
+  });
+
+  it('keeps a larger node whole where no two of its ayat go on together', () => {
+    expect(list.find(p => p.id === 'لا اقسم')).toMatchObject({ count: 8 });
+    expect(list.find(p => p.id === 'فباي ءالاء ربكما تكذبان')).toMatchObject({ count: 31 });
+    expect(list.filter(p => p.count > PIECE_MAX).every(p => p.count <= 8 || p.id === 'فباي ءالاء ربكما تكذبان' || p.id === 'ويل يومئذ للمكذبين')).toBe(true);
   });
 
   it('keeps a small opening whole and names the opening a piece was cut from', () => {
