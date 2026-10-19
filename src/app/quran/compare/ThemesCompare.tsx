@@ -4,10 +4,10 @@ import Button from '@/components/common/Button';
 import { prisma } from '@/lib/prisma';
 import { ayahWords } from '@/lib/quran/normalize';
 import { getSharedTopics } from '@/lib/quran/topicEngine';
-import { num } from '@/lib/quran/arabicNumber';
 import ThemesView from '../themes/ThemesView';
+import SurahPicker from './SurahPicker';
 import { toThemeRows } from './toThemeRows';
-import { FIELD, NOTE, PANEL } from '../panel';
+import { NOTE, PANEL } from '../panel';
 
 const pick = (value: string | string[] | undefined, fallback: number) => {
   const n = Number(Array.isArray(value) ? value[0] : value);
@@ -30,13 +30,7 @@ export default async function ThemesCompare({ query }: { query: Record<string, s
   ]);
   const name = (n: number) => allSurahs.find((s) => s.number === n)?.name ?? '';
 
-  const select = (fieldName: string, value: number, label: string) => (
-    <select name={fieldName} aria-label={label} defaultValue={value} className={`${FIELD} min-w-48 flex-1`}>
-      {allSurahs.map((s) => (
-        <option key={s.number} value={s.number}>{`${num(s.number)}. ${s.name}`}</option>
-      ))}
-    </select>
-  );
+  const select = (fieldName: string, value: number, label: string) => <SurahPicker name={fieldName} label={label} value={value} surahs={allSurahs} />;
 
   const form = (
     <form key={`${x}-${y}`} method="get" className={`${PANEL} flex flex-wrap items-center gap-2`}>

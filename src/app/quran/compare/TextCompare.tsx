@@ -7,9 +7,9 @@ import { ayahWords } from '@/lib/quran/normalize';
 import CompareView from './CompareView';
 import CompareModeToggle from './CompareModeToggle';
 import SimilarAyat from './SimilarAyat';
+import SurahPicker from './SurahPicker';
 import { viewHref } from './modeHref';
 import wordKeys from './wordKeys.json';
-import { num } from '@/lib/quran/arabicNumber';
 import { FIELD, NOTE, PANEL } from '../panel';
 
 const plainName = (name: string) => name.replace(/[ً-ٟـٰۖ-ۭ]/g, '').replace(/ٱ/g, 'ا');
@@ -46,11 +46,7 @@ export default async function TextCompare({ query }: { query: Record<string, str
   const side = (key: 'a' | 'b', value: number, r: typeof ra, max: number, title: string, all: string) => (
     <fieldset className="flex flex-wrap items-center gap-2">
       <legend className="sr-only">{title}</legend>
-      <select name={key} aria-label={title} defaultValue={value} className={`${FIELD} min-w-48 flex-1`}>
-        {surahs.map(s => (
-          <option key={s.number} value={s.number}>{`${num(s.number)}. ${plainName(s.name)}`}</option>
-        ))}
-      </select>
+      <SurahPicker name={key} label={title} value={value} surahs={surahs.map(s => ({ number: s.number, name: plainName(s.name) }))} />
       <div className="flex items-center gap-2">
         {ayahInput(`${key}f`, r.from, max, `من آية (${key === 'a' ? 'الأولى' : 'الثانية'})`, 'من')}
         {ayahInput(`${key}t`, r.to, max, `إلى آية (${key === 'a' ? 'الأولى' : 'الثانية'})`, 'إلى')}

@@ -4,12 +4,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDown19, faArrowDownWideShort, faChevronDown, faLightbulb, type IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown19, faArrowDownWideShort, faChevronDown, faLightbulb, faMagnifyingGlass, type IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import Button from '@/components/common/Button';
 import Toggle from '@/components/common/Toggle';
 import { num } from '@/lib/quran/arabicNumber';
 import type { SurahGroup } from '@/lib/quran/surahPairs';
-import { NOTE, PANEL } from '../panel';
+import { surahMatch } from '@/lib/quran/surahSearch';
+import { FIELD, NOTE, PANEL } from '../panel';
 import { modeHref } from './modeHref';
 
 type Mode = 'text' | 'themes';
@@ -32,14 +33,16 @@ const COUNT = 'text-amber-700 dark:text-amber-300 tabular-nums';
 export function SurahPairs({ groups, names, mode, surah, a, b }: { groups: SurahGroup[]; names: Record<number, string>; mode: Mode; surah: number | null; a: number; b: number }) {
   const router = useRouter();
   const [byNumber, setByNumber] = useState(false);
+  const [query, setQuery] = useState('');
   const list = useRef<HTMLUListElement>(null);
   useEffect(() => {
     const box = list.current;
     const row = box?.querySelector<HTMLElement>('[aria-current="true"]');
-    if (box && row) box.scrollTop = row.getBoundingClientRect().top - box.getBoundingClientRect().top + box.scrollTop - box.clientHeight / 3;
-  }, [surah, a, b, mode]);
+    if (box && query) box.scrollTop = 0;
+    else if (box && row) box.scrollTop = row.getBoundingClientRect().top - box.getBoundingClientRect().top + box.scrollTop - box.clientHeight / 3;
+  }, [surah, a, b, mode, query]);
   const go = (href: string) => router.push(href, { scroll: false });
-  const sorted = byNumber ? groups : [...groups].sort((p, q) => q.total - p.total || p.surah - q.surah);
+  const sorted = (byNumber ? groups : [...groups].sort((p, q) => q.total - p.total || p.surah - q.surah)).filter(g => surahMatch(query, g.surah, names[g.surah] ?? '') !== null);
   const open = (s: number) => (surah === null ? s === a || s === b : s === surah);
   const unit = mode === 'themes' ? 'موضوع مشترك' : 'آية متشابهة';
 
@@ -54,7 +57,11 @@ export function SurahPairs({ groups, names, mode, surah, a, b }: { groups: Surah
         </Button>
       )}
       <Switch off={mode === 'themes' ? 'الأكثر مواضيع مشتركة أولًا' : 'الأكثر آيات متشابهة أولًا'} on="بترتيب المصحف" checked={byNumber} onChange={setByNumber} offIcon={faArrowDownWideShort} onIcon={faArrowDown19} />
-      {groups.length === 0 ? <p className={NOTE}>لا سور.</p> : (
+      <label className="relative">
+        <FontAwesomeIcon icon={faMagnifyingGlass} className="absolute start-2.5 top-1/2 -translate-y-1/2 size-3 text-gray-400" />
+        <input type="search" aria-label="ابحث عن سورة" placeholder="ابحث عن سورة بالاسم أو الرقم" value={query} onChange={e => setQuery(e.target.value)} className={`${FIELD} w-full ps-8`} />
+      </label>
+      {sorted.length === 0 ? <p className={NOTE}>{groups.length === 0 ? 'لا سور.' : 'لا سورة بهذا الاسم.'}</p> : (
         <ul ref={list} className="flex flex-col gap-2 max-h-[min(75vh,48rem)] overflow-y-auto">
           {sorted.map(g => (
             <li key={g.surah}>

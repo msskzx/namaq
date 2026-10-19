@@ -14,7 +14,9 @@ vi.mock('./SimilarAyat', () => ({ default: () => null }));
 
 afterEach(cleanup);
 
-const value = (label: string) => (screen.getByRole(label.startsWith('السورة') ? 'combobox' : 'spinbutton', { name: label }) as HTMLInputElement).value;
+const value = (label: string) => label.startsWith('السورة')
+  ? (screen.getByRole('combobox', { name: label }).parentElement!.querySelector('input[type=hidden]') as HTMLInputElement).value
+  : (screen.getByRole('spinbutton', { name: label }) as HTMLInputElement).value;
 
 describe('TextCompare', () => {
   it('shows the newly chosen surahs and ranges in its fields when the page moves to another comparison', async () => {
