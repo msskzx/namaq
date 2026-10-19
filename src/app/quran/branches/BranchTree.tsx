@@ -4,11 +4,11 @@ import { num } from '@/lib/quran/arabicNumber';
 import { branchesHref, keys, linkId, type Branch, type Variant } from '@/lib/quran/branches';
 import type { JuzRange } from '@/lib/quran/juz';
 
-type Props = { tree: Branch; names: Record<number, string>; pages: Record<string, number>; variants?: Variant[]; juz?: JuzRange | null; renderNode?: (node: Branch, index: number) => React.ReactNode; label?: string };
+type Props = { tree: Branch; names: Record<number, string>; pages: Record<string, number>; variants?: Variant[]; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string };
 type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz'> & { node: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
 
 const LINE = 'border-[var(--home-rule)]';
-const TONE: Record<string, string> = {
+export const TONE: Record<string, string> = {
   '': 'border-sky-500 text-sky-800 dark:text-sky-300',
   و: 'border-purple-500 text-purple-800 dark:text-purple-300',
   ف: 'border-teal-500 text-teal-800 dark:text-teal-300',
@@ -21,7 +21,7 @@ function Node({ node, path, names, pages, tags, lead, juz, renderNode, indices }
   return (
     <div className="flex items-center">
       <div className={`shrink-0 rounded border px-3 py-1.5 ${node.children.length === 0 ? 'max-w-sm' : 'max-w-xs'} ${root ? 'border-[var(--home-accent)] bg-[var(--home-paper-deep)] text-xl' : 'border-[var(--home-rule)] bg-[var(--home-paper)] text-lg'}`}>
-        {renderNode && !root ? renderNode(node, indices.get(node)!) : <>{root || node.children.length === 0 ? <span className="font-arabic leading-loose">{shownWords.join(' ')}</span> : (
+        {renderNode && !root ? renderNode(node, indices.get(node)!, tags) : <>{root || node.children.length === 0 ? <span className="font-arabic leading-loose">{shownWords.join(' ')}</span> : (
           <Link href={branchesHref(linkId(words, keys(node).flatMap(key => (tags[key] ? [tags[key].conj] : []))), juz)} className="font-arabic leading-loose hover:text-[var(--home-accent)] hover:underline">{node.words.join(' ')}</Link>
         )}
         {node.ayat.length > 0 && (
@@ -80,7 +80,7 @@ export default function BranchTree({ tree, names, pages, variants = [], juz = nu
                   <span aria-hidden className={`absolute end-0 top-1/2 w-6 border-t-2 ${LINE}`} />
                   <span aria-hidden className={`absolute end-0 border-e-2 ${LINE} ${i === 0 ? 'top-1/2' : 'top-0'} ${i === variants.length - 1 ? 'bottom-1/2' : 'bottom-0'}`} />
                   <span className={`shrink-0 rounded border-2 bg-[var(--home-paper)] px-3 py-1.5 text-xl font-arabic leading-loose ${TONE[variant.conj]}`}>
-                    {variant.id ? <Link href={branchesHref(variant.id, juz ?? undefined)} className="hover:underline">{variant.word}</Link> : variant.word}
+                    {variant.id && !renderNode ? <Link href={branchesHref(variant.id, juz ?? undefined)} className="hover:underline">{variant.word}</Link> : variant.word}
                   </span>
                 </li>
               ))}

@@ -79,4 +79,14 @@ describe('complete branch tree answers', () => {
     expect(screen.getByRole('link', { name: 'الطور ٢٤' }).getAttribute('href')).toBe('/quran/read/524');
     expect(screen.getByRole('link', { name: '٥٦:١٧' }).getAttribute('href')).toBe('/quran/read/535');
   });
+
+  it('draws each joined spelling without a link before checking, and tags each ayah with it after', () => {
+    const variants = [{ word: 'يَطُوفُ', conj: '', keys: ['52:24'] }, { word: 'وَيَطُوفُ', conj: 'و', keys: ['56:17', '76:19'], id: 'ويطوف عليهم' }];
+    const { unmount } = render(<BranchInputs question={{ ...question, variants }} typed={emptyBranchAnswers(question)} onChange={vi.fn()} onCheck={vi.fn()} ar={false} />);
+    expect(screen.getByText('وَيَطُوفُ')).toBeTruthy();
+    expect(screen.queryAllByRole('link')).toHaveLength(0);
+    unmount();
+    render(<BranchFeedback question={{ ...question, variants }} typed={typed} names={{}} juz={null} ar={false} />);
+    expect(screen.getAllByText('وَيَطُوفُ')).toHaveLength(3);
+  });
 });
