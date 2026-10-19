@@ -65,7 +65,11 @@ export function withConjunctions(ayat: BranchAyah[], morphology: string): Branch
   });
 }
 
-const norm = (ayah: BranchAyah) => ayah.words.map(normalizeWord);
+export const branchWord = (token: string) => normalizeWord(token.replace(/إ/g, '\uE000')).replace(/\uE000/g, 'إ');
+
+export const loose = (id: string) => id.split(' ').map(normalizeWord).join(' ');
+
+const norm = (ayah: BranchAyah) => ayah.words.map(branchWord);
 
 export function stem(ayah: BranchAyah): BranchAyah {
   if (!ayah.conj) return ayah;
@@ -93,7 +97,7 @@ export function sharedOpenings(ayat: BranchAyah[]): Map<string, BranchAyah[]> {
 
 function openingOf(group: BranchAyah[]): Opening {
   const words = shown(group)[0].words.slice(0, OPENING_WORDS);
-  return { id: words.map(normalizeWord).join(' '), text: words.join(' '), count: group.length };
+  return { id: words.map(branchWord).join(' '), text: words.join(' '), count: group.length };
 }
 
 export function listOpenings(groups: Map<string, BranchAyah[]>): Opening[] {
@@ -119,7 +123,7 @@ export function listPhrases(groups: Map<string, BranchAyah[]>): Opening[] {
     const words = [...path, ...node.words];
     const under = keys(node).map(key => conj.get(key));
     if (under.length < 2) return;
-    const id = words.map(normalizeWord).join(' ');
+    const id = words.map(branchWord).join(' ');
     if (!phrases.has(id) && (!stemmed || new Set(under).size > 1 || under[0] === '')) phrases.set(id, { id, text: words.join(' '), count: under.length });
     node.children.forEach(child => walk(child, words, stemmed));
   };
@@ -158,19 +162,21 @@ export const variants = (ayat: BranchAyah[]): Variant[] => !mixed(ayat) ? [] : [
     word: members[0].words[0],
     conj: members[0].conj ?? '',
     keys: members.map(ayah => ayah.key),
-    id: members.length > 1 ? branch(members).words.map(normalizeWord).join(' ') : undefined,
+    id: members.length > 1 ? branch(members).words.map(branchWord).join(' ') : undefined,
   }));
 
 export function linkId(words: string[], conjs: string[]) {
-  const id = words.map(normalizeWord).join(' ');
+  const id = words.map(branchWord).join(' ');
   return conjs.length > 0 && conjs[0] !== '' && conjs.every(conj => conj === conjs[0]) ? `${conjs[0]}${id}` : id;
 }
 
-export const DEFAULT_PHRASE = 'ان المتقين';
+export const DEFAULT_PHRASE = 'إن المتقين';
 
 export function pickPhrase(phrases: Opening[], wanted: string | null) {
   const known = (id: string | null) => id !== null && phrases.some(phrase => phrase.id === id);
   if (known(wanted)) return wanted!;
+  const spelled = wanted ? phrases.filter(phrase => loose(phrase.id) === loose(wanted)).sort((a, b) => b.count - a.count)[0] : undefined;
+  if (spelled) return spelled.id;
   if (known(DEFAULT_PHRASE)) return DEFAULT_PHRASE;
   return [...phrases].sort((a, b) => b.count - a.count || a.id.split(' ').length - b.id.split(' ').length)[0]?.id ?? '';
 }
@@ -210,7 +216,7 @@ export function pieces(groups: Map<string, BranchAyah[]>): Piece[] {
           const sub = group.filter(ayah => under.includes(ayah.key) && conj.get(ayah.key) === spelling);
           if (sub.length < 2) return;
           const own = branch(sub).words;
-          found.push({ id: own.map(normalizeWord).join(' '), text: own.join(' '), count: sub.length, shared: own.length, opening, keys: sub.map(ayah => ayah.key) });
+          found.push({ id: own.map(branchWord).join(' '), text: own.join(' '), count: sub.length, shared: own.length, opening, keys: sub.map(ayah => ayah.key) });
         });
         return;
       }

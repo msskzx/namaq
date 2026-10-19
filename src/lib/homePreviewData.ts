@@ -1,7 +1,7 @@
 import sharedAyat from '@/app/quran/branches/ayat.json';
 import musaAyat from '@/app/quran/prophets/ayat/musa.json';
 import bank from '../../data/quiz/questions.json';
-import { branch, startingWith, type BranchAyah } from '@/lib/quran/branches';
+import { branch, DEFAULT_PHRASE, startingWith, type BranchAyah } from '@/lib/quran/branches';
 import { ayahWords } from '@/lib/quran/normalize';
 import { pairOf, wordTokens } from '@/lib/quran/compare';
 import wordKeys from '@/app/quran/compare/wordKeys.json';
@@ -24,7 +24,7 @@ const MUSA_EVENT_EN = [
 const MUSA_PHASE_EN = ['Early life', 'The mission', 'The exodus', 'The Children of Israel', 'Knowledge and scripture'];
 
 export async function getHomePreviews() {
-  const group = startingWith(sharedAyat as BranchAyah[], 'ان المتقين');
+  const group = startingWith(sharedAyat as BranchAyah[], DEFAULT_PHRASE);
   const comparisons = Array.from({ length: 5 }, (_, index) => {
     const a = ayahWords(musaAyat.ayat[`26:${41 + index}` as keyof typeof musaAyat.ayat], false);
     const b = ayahWords(musaAyat.ayat[`7:${113 + index}` as keyof typeof musaAyat.ayat], false);

@@ -88,9 +88,13 @@ describe('matchTreeAnswers', () => {
   };
   const results = (typed: string[]) => matchTreeAnswers(prophet, typed).map((hit) => [hit?.node.ayat[0], hit?.correct]);
 
-  it('accepts a leaf from its first two correct words, whatever follows them', () => {
+  it('accepts a leaf from its first two words when every word typed is right', () => {
     expect(results(['لم تحرم', 'جاهد الكفار', 'قل'])).toEqual([['66:1', true], ['66:9', true], ['33:28', true]]);
-    expect(results(['لم تحرم ما أحل الله لك تبتغي ممرضات ازواجك', 'جاهد الكفار و اغلظ', 'قل لهم'])).toEqual([['66:1', true], ['66:9', true], ['33:28', true]]);
+    expect(results(['لم تحرم ما أحل الله لك تبتغي مرضات ازواجك', 'جاهد الكفار و المنافقين و اغلظ', 'قل'])).toEqual([['66:1', true], ['66:9', true], ['33:28', true]]);
+  });
+
+  it('rejects a leaf with a wrong or missing word after the first two', () => {
+    expect(results(['لم تحرم ما أحل الله لك تبتغي ممرضات', 'جاهد الكفار و اغلظ', 'قل لهم'])).toEqual([['66:1', false], ['66:9', false], ['33:28', false]]);
   });
 
   it('rejects a leaf with fewer than two correct opening words', () => {

@@ -1,7 +1,6 @@
 // docs/quiz-ayah-branches.md
-import { branch, keys, PIECE_MAX, pieces, sharedOpenings, shown, variants, type Branch, type BranchAyah } from '@/lib/quran/branches';
+import { branch, branchWord, keys, PIECE_MAX, pieces, sharedOpenings, shown, variants, type Branch, type BranchAyah, type Variant } from '@/lib/quran/branches';
 import { inJuzRange, type JuzRange } from '@/lib/quran/juz';
-import { normalizeWord } from '@/lib/quran/normalize';
 import { matchedWords, spelled } from './branchAnswers';
 
 export const BRANCH_FAMILY = 'AYAH_BRANCH';
@@ -18,6 +17,7 @@ export interface BranchQuestion {
   correctAnswer: string;
   branches: BranchAnswer[];
   tree: Branch;
+  variants: Variant[];
   evidence: { claimKeys: string[] };
 }
 
@@ -31,17 +31,18 @@ export function branchQuestions(all: BranchAyah[], range: JuzRange | null = null
     const firsts = tree.children.map((child) => child.words[0]);
     const distinct = firsts.every((word, i) => firsts.every((other, j) => i === j || !matchedWords(spelled(other), [word])));
     if (!distinct || tree.children.length < 2 || tree.ayat.length > 0) return [];
-    const phrase = tree.words.map(normalizeWord).join(' ');
+    const phrase = tree.words.map(branchWord).join(' ');
     const forms = variants(original).map((variant) => [variant.word, ...tree.words.slice(1)].join(' '));
     const opening = (forms.length > 0 ? forms : [tree.words.join(' ')]).map((form) => `«${form}»`).join(' أو ');
     return [{
       key: `${BRANCH_FAMILY}:${phrase}`,
       family: BRANCH_FAMILY,
-      promptArabic: `تفترق الآيات التي تبدأ بـ ${opening} إلى ${COUNTS[tree.children.length]}. أكمل جميع عقد الشجرة بعد هذه العبارة، وتكفي أول كلمتين من نهاية كل فرع.`,
+      promptArabic: `تفترق الآيات التي تبدأ بـ ${opening} إلى ${COUNTS[tree.children.length]}. أكمل جميع عقد الشجرة بعد هذه العبارة، وفي نهاية كل فرع تكفي كلمتاه الأوليان.`,
       phrase: id,
       choices: [],
       correctAnswer: phrase,
       tree,
+      variants: variants(original),
       branches: tree.children.map((child) => ({
         words: child.words,
         ayat: keys(child).map((key) => {

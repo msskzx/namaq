@@ -55,6 +55,12 @@ describe('OpeningSearch', () => {
     expect(suggested()).toEqual([branchesHref('يايها الذين'), branchesHref('ان الذين')]);
   });
 
+  it('finds an opening with a hamza below the alif when it is typed without one', () => {
+    render(<OpeningSearch top={top} phrases={[...phrases, { id: 'إن الله', text: 'إِنَّ ٱللَّهَ', count: 2 }]} current="ان الذين" />);
+    fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'ان الله' } });
+    expect(suggested()).toEqual([branchesHref('إن الله')]);
+  });
+
   it('opens the first suggestion on Enter', () => {
     render(<OpeningSearch top={top} phrases={phrases} current="ان الذين" />);
     const box = screen.getByRole('searchbox');

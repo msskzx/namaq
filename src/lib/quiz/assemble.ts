@@ -1,7 +1,7 @@
 import type { Prisma } from '@/generated/prisma';
 import { prisma } from '@/lib/prisma';
 import ayat from '@/app/quran/branches/ayat.json';
-import type { Branch, BranchAyah } from '@/lib/quran/branches';
+import type { Branch, BranchAyah, Variant } from '@/lib/quran/branches';
 import type { JuzRange } from '@/lib/quran/juz';
 import { branchQuestions, type BranchAnswer, type BranchQuestion } from './branchQuestions';
 import { shuffle, type Random } from './random';
@@ -16,6 +16,7 @@ export interface AssembledQuestion {
   phrase?: string;
   branches?: BranchAnswer[];
   tree?: Branch;
+  variants?: Variant[];
   evidence: { claimKeys: string[] };
 }
 

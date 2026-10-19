@@ -20,7 +20,7 @@ describe('branchQuestions', () => {
     const answers = nodes.map(node => node.words.map(spelled).join(' '));
     expect(matchTreeAnswers(question.tree, answers).every(hit => hit?.correct)).toBe(true);
     expect(matchTreeAnswers(question.tree, answers.slice(0, 2)).every(hit => hit?.correct)).toBe(false);
-    expect(question.promptArabic).toContain('أول كلمتين من نهاية كل فرع');
+    expect(question.promptArabic).toContain('تكفي كلمتاه الأوليان');
   });
 
   it('asks يطوف عليهم with both of its spellings in the prompt', () => {
@@ -47,5 +47,24 @@ describe('branchQuestions', () => {
       expect(question.branches.length).toBeGreaterThanOrEqual(2);
       expect(question.branches.flatMap((branch) => branch.ayat).length).toBeLessThanOrEqual(PIECE_MAX);
     }
+  });
+});
+
+describe('grading the largest questions', () => {
+  it('checks a six-branch tree of whole ayat with late typos quickly', () => {
+    const question = questions.find((candidate) => candidate.phrase === 'يايها الذين ءامنوا لا تتخذوا')!;
+    const typed = branchNodes(question.tree).map((node) => `${node.words.map(spelled).join(' ')}ق`);
+    const started = performance.now();
+    matchTreeAnswers(question.tree, typed);
+    expect(performance.now() - started).toBeLessThan(1000);
+  });
+});
+
+describe('openings with a hamza below the alif', () => {
+  it('asks فإن كان with وإن كان, draws each spelling, and leaves أن كان out', () => {
+    const question = asked(questions, '77:39')!;
+    expect(question.phrase).toBe('إن كان');
+    expect(question.variants.map((variant) => [normalizeWord(variant.word), variant.keys])).toEqual([['وان', ['2:280', '6:35', '7:87', '12:27', '15:78']], ['فان', ['77:39']]]);
+    expect(keysOf(question)!.flat()).not.toContain('68:14');
   });
 });

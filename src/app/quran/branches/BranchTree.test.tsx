@@ -34,7 +34,7 @@ describe('BranchTree', () => {
   it('links a branch to the tree of its own phrase, but not the root or a leaf', () => {
     const deep = { ...tree, children: [{ words: ['جَنَّـٰتٍۢ'], ayat: [], children: tree.children }] };
     render(<BranchTree tree={deep} names={{}} pages={{}} />);
-    expect(screen.getByRole('link', { name: 'جَنَّـٰتٍۢ' }).getAttribute('href')).toBe(branchesHref('ان المتقين في جنت'));
+    expect(screen.getByRole('link', { name: 'جَنَّـٰتٍۢ' }).getAttribute('href')).toBe(branchesHref('إن المتقين في جنت'));
     expect(screen.queryByRole('link', { name: 'إِنَّ ٱلْمُتَّقِينَ فِى' })).toBeNull();
     expect(screen.queryByRole('link', { name: 'جَنَّـٰتٍۢ وَعُيُونٍ' })).toBeNull();
   });

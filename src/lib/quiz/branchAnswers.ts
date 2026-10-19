@@ -54,7 +54,7 @@ export function leadingWords(given: string, words: string[]): number {
 }
 
 const nodeCorrect = (given: string, node: Branch) => node.children.length === 0
-  ? leadingWords(given, node.words) >= Math.min(LEAF_WORDS, node.words.length)
+  ? matchedWords(given, node.words) >= Math.min(LEAF_WORDS, node.words.length)
   : matchedWords(given, node.words) === node.words.length;
 
 export type BranchMatch = { branch: number; words: number };
@@ -86,34 +86,40 @@ export type TreeAnswerMatch = { node: Branch; correct: boolean };
 export function matchTreeAnswers(tree: Branch, given: string[]): (TreeAnswerMatch | null)[] {
   const nodes = branchNodes(tree);
   const indices = new Map(nodes.map((node, index) => [node, index]));
-  const pair = (slots: Branch[], expected: Branch[]): Map<number, TreeAnswerMatch> | null => {
-    let best: Map<number, TreeAnswerMatch> | null = null;
-    let score = [-1, -1];
+  const graded = new Map<number, { correct: boolean; words: number }>();
+  const grade = (index: number, node: Branch) => {
+    const key = index * nodes.length + indices.get(node)!;
+    if (!graded.has(key)) graded.set(key, { correct: nodeCorrect(given[index] ?? '', node), words: leadingWords(given[index] ?? '', node.words) });
+    return graded.get(key)!;
+  };
+  type Paired = { result: Map<number, TreeAnswerMatch>; correct: number; words: number } | null;
+  const paired = new Map<string, Paired>();
+  const pair = (slots: Branch[], expected: Branch[]): Paired => {
+    const key = `${slots.map(slot => indices.get(slot)).join(',')}|${expected.map(node => indices.get(node)).join(',')}`;
+    if (paired.has(key)) return paired.get(key)!;
+    let best: Paired = null;
     for (const order of orders(expected.length)) {
       const result = new Map<number, TreeAnswerMatch>();
-      let possible = true;
-      slots.forEach((slot, at) => {
+      let correct = 0;
+      let words = 0;
+      const possible = slots.every((slot, at) => {
         const answer = expected[order[at]];
-        if (slot.children.length !== answer.children.length) {
-          possible = false;
-          return;
-        }
+        if (slot.children.length !== answer.children.length) return false;
         const index = indices.get(slot)!;
-        result.set(index, { node: answer, correct: nodeCorrect(given[index] ?? '', answer) });
+        const own = grade(index, answer);
+        result.set(index, { node: answer, correct: own.correct });
         const children = pair(slot.children, answer.children);
-        if (!children) possible = false;
-        children?.forEach((value, key) => result.set(key, value));
+        if (!children) return false;
+        children.result.forEach((value, child) => result.set(child, value));
+        correct += Number(own.correct) + children.correct;
+        words += own.words + children.words;
+        return true;
       });
-      const hits = [...result.entries()];
-      const correct = hits.filter(([, hit]) => hit.correct).length;
-      const words = hits.reduce((sum, [index, hit]) => sum + leadingWords(given[index] ?? '', hit.node.words), 0);
-      if (possible && (correct > score[0] || (correct === score[0] && words > score[1]))) {
-        best = result;
-        score = [correct, words];
-      }
+      if (possible && (!best || correct > best.correct || (correct === best.correct && words > best.words))) best = { result, correct, words };
     }
+    paired.set(key, best);
     return best;
   };
   const matched = pair(tree.children, tree.children);
-  return nodes.map((_, index) => matched?.get(index) ?? null);
+  return nodes.map((_, index) => matched?.result.get(index) ?? null);
 }
