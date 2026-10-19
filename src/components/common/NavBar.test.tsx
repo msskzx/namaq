@@ -35,7 +35,7 @@ describe('NavBar shelves', () => {
     const shelf = document.getElementById(toggle.getAttribute('aria-controls')!)!;
     const hrefs = within(shelf).getAllByRole('link').map(a => a.getAttribute('href'));
     for (const { href } of getAllNavLinks('en').filter(l => l.href.startsWith('/quran/'))) expect(hrefs).toContain(href);
-    expect(within(shelf).getByRole('link', { name: /Prophets’ stories/ }).textContent).toContain('The story of Musa');
+    expect(within(shelf).getByRole('link', { name: /Prophets’ stories/ }).textContent).toContain('The prophets’ stories in the Quran on a timeline');
     expect(within(shelf).getAllByRole('heading').map(h => h.textContent)).toEqual(['Read', 'Words', 'Themes']);
     expect(NAV_SECTIONS[0].groups[1].items[0].href).toBe('/quran/branches');
   });
