@@ -9,7 +9,11 @@ import { useLanguage } from '@/components/language/LanguageContext';
 interface PaginationProps {
   page: number;
   pageCount: number;
-  onChange: (page: number) => void;
+  onChange?: (page: number) => void;
+  /** Links to each page, in order. With them the controls are links rather than buttons. */
+  hrefs?: string[];
+  /** The page's own language, where it differs from the site's. */
+  language?: 'ar' | 'en';
   /** Offers a jump to any page. Useful when pages are addressable, as printed pages are. */
   showSelect?: boolean;
   /** What is on screen, such as a range of items. Replaces the default page count. */
@@ -32,14 +36,19 @@ export default function Pagination({
   summary,
   selectLabel,
   pageLabels,
+  hrefs,
+  language: pageLanguage,
 }: PaginationProps) {
-  const { language } = useLanguage();
+  const { language: siteLanguage } = useLanguage();
+  const language = pageLanguage ?? siteLanguage;
 
   if (pageCount <= 1) return null;
 
   const rightToLeft = language === 'ar';
   const backIcon = rightToLeft ? faArrowRight : faArrowLeft;
   const forwardIcon = rightToLeft ? faArrowLeft : faArrowRight;
+  const step = (target: number, disabled: boolean) =>
+    hrefs && !disabled ? { href: hrefs[target - 1] } : { disabled, onClick: () => onChange?.(target) };
   const label = summary ?? (rightToLeft ? `صفحة ${page} من ${pageCount}` : `Page ${page} of ${pageCount}`);
 
   return (
@@ -51,8 +60,7 @@ export default function Pagination({
         variant="outline"
         size="sm"
         className="shrink-0"
-        disabled={page <= 1}
-        onClick={() => onChange(page - 1)}
+        {...step(page - 1, page <= 1)}
       >
         <FontAwesomeIcon icon={backIcon} className="w-3 h-3" />
         {rightToLeft ? 'السابق' : 'Previous'}
@@ -68,7 +76,7 @@ export default function Pagination({
             aria-label={selectLabel ?? (rightToLeft ? 'انتقل إلى صفحة' : 'Go to page')}
             className="cursor-pointer appearance-none rounded border border-amber-400 bg-transparent px-2.5 py-1 text-center text-xs text-gray-800 transition hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800"
             value={page}
-            onChange={(changed) => onChange(Number(changed.target.value))}
+            onChange={(changed) => onChange?.(Number(changed.target.value))}
           >
             {Array.from({ length: pageCount }, (_, index) => index + 1).map((option) => (
               <option key={option} value={option}>
@@ -85,8 +93,7 @@ export default function Pagination({
         variant="outline"
         size="sm"
         className="shrink-0"
-        disabled={page >= pageCount}
-        onClick={() => onChange(page + 1)}
+        {...step(page + 1, page >= pageCount)}
       >
         {rightToLeft ? 'التالي' : 'Next'}
         <FontAwesomeIcon icon={forwardIcon} className="w-3 h-3" />

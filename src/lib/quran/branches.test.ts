@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import ayat from '@/app/quran/branches/ayat.json';
-import { branch, branchesHref, conjunctions, PIECE_MAX, pieces, DEFAULT_PHRASE, keys, linkId, pickPhrase, stem, widerPhrases, listOpenings, listPhrases, openingId, readerAyat, sharedOpenings, shown, startingWith, variants, withConjunctions, type Branch, type BranchAyah } from './branches';
+import { branch, branchesHref, conjunctions, listPage, PIECE_MAX, pieces, DEFAULT_PHRASE, keys, linkId, pickPhrase, stem, widerPhrases, listOpenings, listPhrases, openingId, readerAyat, sharedOpenings, shown, startingWith, variants, withConjunctions, type Branch, type BranchAyah } from './branches';
 import { inJuzRange } from './juz';
 import { normalizeWord } from './normalize';
 
@@ -269,5 +269,29 @@ describe('pieces', () => {
 
   it('names a piece whose ayat all carry the joined letter by its own spelling', () => {
     expect(list.some(p => p.id.startsWith('واذ قال موسي لقومه'))).toBe(true);
+  });
+});
+
+describe('the list\'s pages', () => {
+  it('reads the page number, keeping it inside the list', () => {
+    expect(listPage(null, 45, 20)).toEqual({ page: 1, pageCount: 3 });
+    expect(listPage('2', 45, 20).page).toBe(2);
+    expect(listPage('9', 45, 20).page).toBe(3);
+    expect(listPage('0', 45, 20).page).toBe(1);
+    expect(listPage('abc', 45, 20).page).toBe(1);
+    expect(listPage('3', 0, 20)).toEqual({ page: 1, pageCount: 1 });
+  });
+
+  it('puts the page in the link only past the first page of a list', () => {
+    expect(branchesHref('ان الذين', undefined, { list: true, page: 1 })).not.toContain('p=');
+    expect(branchesHref('ان الذين', undefined, { list: true, grouped: true, page: 3 })).toContain('v=list&g=opening&p=3');
+    expect(branchesHref('ان الذين', undefined, { page: 3 })).not.toContain('p=');
+  });
+
+  it('breaks a tie in shared words and ayat by mushaf order', () => {
+    const list = pieces(groups);
+    const order = (key: string) => key.split(':').map(Number).reduce((s, n) => s * 1000 + n);
+    const first = (p: { keys: string[] }) => Math.min(...p.keys.map(order));
+    expect(list.every((p, i) => i === 0 || list[i - 1].shared !== p.shared || list[i - 1].count !== p.count || first(list[i - 1]) < first(p))).toBe(true);
   });
 });

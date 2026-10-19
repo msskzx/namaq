@@ -221,3 +221,8 @@ export function pieces(groups: Map<string, BranchAyah[]>): Piece[] {
   const first = (piece: Piece) => Math.min(...piece.keys.map(mushafOrder));
   return found.sort((a, b) => b.shared - a.shared || a.count - b.count || first(a) - first(b));
 }
+
+export function listPage(value: string | null, total: number, perPage: number) {
+  const pageCount = Math.max(1, Math.ceil(total / perPage));
+  return { page: Math.min(pageCount, Math.max(1, Number.parseInt(value ?? '1', 10) || 1)), pageCount };
+}

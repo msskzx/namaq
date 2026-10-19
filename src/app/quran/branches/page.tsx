@@ -3,12 +3,12 @@ import { prisma } from '@/lib/prisma';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDownWideShort, faCodeBranch, faLayerGroup, faList, faMagnifyingGlassMinus } from '@fortawesome/free-solid-svg-icons';
 import Button from '@/components/common/Button';
-import { branch, branchesHref, PIECE_MAX, listOpenings, listPhrases, pickPhrase, pieces, sharedOpenings, shown, startingWith, TOP, variants, widerPhrases, type BranchAyah } from '@/lib/quran/branches';
+import { branch, branchesHref, PIECE_MAX, listOpenings, listPage, listPhrases, pickPhrase, pieces, sharedOpenings, shown, startingWith, TOP, variants, widerPhrases, type BranchAyah } from '@/lib/quran/branches';
 import { inJuzRange, parseJuzRange, type JuzRange } from '@/lib/quran/juz';
 import ayat from './ayat.json';
 import BranchTree from './BranchTree';
 import JuzFilter from './JuzFilter';
-import PageLinks from './PageLinks';
+import Pagination from '@/components/common/Pagination';
 import PieceList, { PER_PAGE } from './PieceList';
 import OpeningSearch from './OpeningSearch';
 import { num } from '@/lib/quran/arabicNumber';
@@ -48,8 +48,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const numbers = list ? undefined : [...new Set(group.map(ayah => Number(ayah.key.split(':')[0])))];
   const rows = await prisma.surah.findMany({ where: numbers ? { number: { in: numbers } } : undefined, select: { number: true, name: true } });
   const names = Object.fromEntries(rows.map(row => [row.number, row.name]));
-  const pageCount = Math.max(1, Math.ceil((grouped ? openings.length : cut.length) / PER_PAGE));
-  const page = Math.min(pageCount, Math.max(1, Number.parseInt(first(params.p) ?? '1', 10) || 1));
+  const { page, pageCount } = listPage(first(params.p), grouped ? openings.length : cut.length, PER_PAGE);
   const listHref = (options: { grouped: boolean; page?: number }) => branchesHref(id, juz, { list: true, ...options });
 
   return (
@@ -95,7 +94,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
             names={names}
             juz={range}
           />
-          <PageLinks page={page} pageCount={pageCount} hrefs={Array.from({ length: pageCount }, (_, i) => listHref({ grouped, page: i + 1 }))} />
+          <Pagination language="ar" page={page} pageCount={pageCount} hrefs={Array.from({ length: pageCount }, (_, i) => listHref({ grouped, page: i + 1 }))} />
         </>
       ) : (
         <>

@@ -107,4 +107,13 @@ describe('Pagination', () => {
     expect(screen.getByText('صفحة 2 من 5')).toBeTruthy();
     expect(screen.getByText('التالي')).toBeTruthy();
   });
+
+  it('links to the pages when given their addresses, in the page\'s own language', () => {
+    render(<Pagination page={1} pageCount={3} hrefs={['/a', '/b', '/c']} language="ar" />);
+
+    expect(screen.getByText('صفحة 1 من 3')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'السابق' }).hasAttribute('disabled')).toBe(true);
+    expect(screen.getByRole('link', { name: 'التالي' }).getAttribute('href')).toBe('/b');
+  });
 });
+
