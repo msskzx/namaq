@@ -7,6 +7,7 @@ A page at `/quran/branches` that draws, as a word tree read right to left, the a
 - `npm run quran:branches` reads the 604 reader pages under `src/app/quran/read/data/`, the same text `/quran/read` shows, and writes every ayah that shares its opening with another ayah to `src/app/quran/branches/ayat.json`. It needs no database. Each entry holds the ayah key, its mushaf page and its words.
 - The reader sets pause marks and the hizb sign ۞ beside a word, separated by a space. The build drops them, so the page shows words only. A word is compared after `normalizeWord`, so diacritics and the alif and ya spellings do not separate two words.
 - Two ayat share an opening when their first two words match. Every ayah has one opening, so the openings split the ayat into groups, and a group needs two ayat or more. The list is sorted by how many ayat a group holds.
+- A و or ف joined to an ayah's first word does not separate its opening from the same opening without it, so يَطُوفُ عَلَيْهِمْ (56:17) and وَيَطُوفُ عَلَيْهِمْ (52:24, 76:19) form one group. The Quranic Arabic Corpus morphology (`data/quran/quranic-corpus-morphology-0.4.txt`) decides which letter is a prefix: the build marks an ayah `conj` when the corpus splits a `w:` or `f:` prefix off its first word, and stops if the reader's word does not start with that letter. The و of an oath (`w:P`, as in وَٱلْفَجْرِ) stays part of the word, and so does a letter that belongs to the word, as in وُجُوهٌ.
 - Openings only. A shared phrase that starts inside an ayah is out of scope for now.
 
 ## Tree (`branch` in `src/lib/quran/branches.ts`)
@@ -14,12 +15,20 @@ A page at `/quran/branches` that draws, as a word tree read right to left, the a
 - A node holds the words that every ayah under it shares from where its parent stopped. It stops at the first word where the ayat differ or where one of them ends.
 - An ayah that ends at a node is listed on that node. Two identical ayat, such as 15:45 and 51:15, end at the same leaf and share it.
 - Children keep mushaf order.
+- In a group whose ayat differ in that joined letter, the tree is built from the words without it. The page draws each first word (يَطُوفُ, وَيَطُوفُ) as its own node before the shared words, joined into them, and every ayah carries a tag with its first word in that node's colour, since one branch can hold ayat of both kinds. A first word two ayat share links to the tree of those ayat alone, and so does a branch whose ayat all carry the letter (واذ قال موسى لقومه inside the إذ قال tree). A group whose ayat all have the letter, or all lack it, is drawn as before.
 
 ## Page
 
-- A phrase is an opening, or the words two or more ayat share up to a node where they part (`listPhrases`). `?o=<normalized phrase>` draws the tree of the ayat that start with it, such as `?o=الم تر كيف`. An unknown or missing value shows إن المتقين.
+- A phrase is an opening, or the words two or more ayat share up to a node where they part (`listPhrases`). Both the merged phrase (يطوف عليهم) and each spelling two ayat share (ويطوف عليهم) are phrases. `?o=<normalized phrase>` draws the tree of the ayat that start with it, such as `?o=الم تر كيف`. An unknown or missing value shows إن المتقين.
 - Buttons for the eight largest openings. The one the shown phrase starts with is pressed.
 - A search box over every phrase by normalized words, listing phrases that start with the search before those that only contain it. Enter opens the first.
 - A branch in the tree links to its own phrase. Leaves and the root do not. Above a deeper tree, a button for each wider phrase it sits under leads back out.
 - Every ayah carries its surah name and number, linking to the reader page that holds it. Surah names come from the database, as on the reader.
 - The page says a match is shared wording only.
+
+## Juz' range and list
+
+- `?juzFrom=&juzTo=` limits the page to the ayat inside those juz'. The groups, phrases, buttons, search and tree are rebuilt from those ayat alone, so an opening shared only with an ayah outside the range is not offered: with juz' 29 to 30, فلا أقسم opens four ayat and leaves out al-Waqi'ah 75. `src/lib/quran/juz.ts` places an ayah in its juz' by the juz' starting ayat, since four juz' start inside a page. The quiz on these openings uses the same file and the same parameters.
+- `?v=list` lists pieces (`pieces` in `src/lib/quran/branches.ts`). A large tree is hard to ask about but its small branches are not, so each opening's tree is cut at the first node that holds six ayat or fewer (`PIECE_MAX`), and that node with everything under it is one piece. A node with more ayat is still one piece when no two of its ayat go on together past it (ويل يومئذ للمكذبين, eleven identical ayat). If those ayat differ in a joined و or ف, each spelling two ayat share is a piece of its own instead: فلا أقسم (five ayat) and لا أقسم (75:1, 90:1), leaving ولا أقسم (75:2) alone. A piece's `keys` are its ayat; its `id` is the phrase whose tree holds them, which for the bare spelling also takes in the others. Each ayah lands in at most one piece; an ayah that parts alone from a larger node is left to its opening's tree.
+- Pieces are ordered by how many words their ayat share before they part, longest first, then by fewer ayat, then mushaf order. Each piece is drawn as its tree, and a piece cut from a larger opening names that opening and links to its whole tree. Twenty pieces to a page (`?p=`).
+- `?g=opening` folds the pieces under their openings instead, largest opening first, each with a link to its whole tree.
