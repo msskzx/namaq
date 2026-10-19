@@ -87,12 +87,14 @@ export function sharedOpenings(ayat: BranchAyah[]): Map<string, BranchAyah[]> {
   return new Map([...groups].filter(([, group]) => group.length > 1));
 }
 
+function openingOf(group: BranchAyah[]): Opening {
+  const words = shown(group)[0].words.slice(0, OPENING_WORDS);
+  return { id: words.map(normalizeWord).join(' '), text: words.join(' '), count: group.length };
+}
+
 export function listOpenings(groups: Map<string, BranchAyah[]>): Opening[] {
   return [...groups]
-    .map(([, group]) => {
-      const words = shown(group)[0].words.slice(0, OPENING_WORDS);
-      return { id: words.map(normalizeWord).join(' '), text: words.join(' '), count: group.length };
-    })
+    .map(([, group]) => openingOf(group))
     .sort((a, b) => b.count - a.count);
 }
 
@@ -174,4 +176,35 @@ export function widerPhrases(phrases: Opening[], id: string, group: BranchAyah[]
   return phrases
     .filter(phrase => phrase.id !== id && (length(phrase.id) < length(id) || (length(phrase.id) === length(id) && phrase.count > group.length)) && group.every(ayah => opens(ayah, phrase.id)))
     .sort((a, b) => a.id.length - b.id.length);
+}
+
+export const PIECE_MAX = 6;
+
+export type Piece = { id: string; text: string; count: number; shared: number; opening: Opening; keys: string[] };
+
+const mushafOrder = (key: string) => {
+  const [surah, ayah] = key.split(':').map(Number);
+  return surah * 1000 + ayah;
+};
+
+export function pieces(groups: Map<string, BranchAyah[]>): Piece[] {
+  const found: (Piece & { first: number })[] = [];
+  groups.forEach(group => {
+    const opening = openingOf(group);
+    const conj = new Map(group.map(ayah => [ayah.key, mixed(group) ? (ayah.conj ?? '') : '']));
+    const walk = (node: Branch, path: string[]) => {
+      const words = [...path, ...node.words];
+      const under = keys(node);
+      if (under.length < 2) return;
+      if (under.length > PIECE_MAX) {
+        node.children.forEach(child => walk(child, words));
+        return;
+      }
+      found.push({ id: linkId(words, under.map(key => conj.get(key)!)), text: words.join(' '), count: under.length, shared: words.length, opening, keys: under, first: Math.min(...under.map(mushafOrder)) });
+    };
+    walk(branch(shown(group)), []);
+  });
+  return found
+    .sort((a, b) => b.shared - a.shared || a.count - b.count || a.first - b.first)
+    .map(({ first: _, ...piece }) => piece);
 }

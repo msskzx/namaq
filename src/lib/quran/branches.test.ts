@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import ayat from '@/app/quran/branches/ayat.json';
-import { branch, branchesHref, conjunctions, DEFAULT_PHRASE, keys, linkId, pickPhrase, stem, widerPhrases, listOpenings, listPhrases, openingId, readerAyat, sharedOpenings, shown, startingWith, variants, withConjunctions, type Branch, type BranchAyah } from './branches';
+import { branch, branchesHref, conjunctions, PIECE_MAX, pieces, DEFAULT_PHRASE, keys, linkId, pickPhrase, stem, widerPhrases, listOpenings, listPhrases, openingId, readerAyat, sharedOpenings, shown, startingWith, variants, withConjunctions, type Branch, type BranchAyah } from './branches';
 import { inJuzRange } from './juz';
 import { normalizeWord } from './normalize';
 
@@ -227,5 +227,33 @@ describe('pickPhrase and widerPhrases', () => {
     expect(widerPhrases(phrases, 'ويطوف عليهم', startingWith(all, 'ويطوف عليهم')).map(p => p.id)).toEqual(['يطوف عليهم']);
     expect(widerPhrases(phrases, 'ان المتقين في جنت', startingWith(all, 'ان المتقين في جنت')).map(p => p.id)).toEqual(['ان المتقين', 'ان المتقين في']);
     expect(widerPhrases(phrases, 'ان المتقين', startingWith(all, 'ان المتقين'))).toEqual([]);
+  });
+});
+
+describe('pieces', () => {
+  const list = pieces(groups);
+
+  it('cuts every opening at the first node of six ayat or fewer, so each ayah lands in at most one piece', () => {
+    expect(list.every(p => p.count >= 2 && p.count <= PIECE_MAX)).toBe(true);
+    const seen = list.flatMap(p => p.keys);
+    expect(new Set(seen).size).toBe(seen.length);
+    expect(list.every(p => p.keys.length === p.count)).toBe(true);
+    for (const p of list.filter((_, i) => i % 25 === 0)) expect(startingWith(all, p.id).map(a => a.key).sort()).toEqual([...p.keys].sort());
+    expect(list.some(p => p.id === 'يايها الذين')).toBe(false);
+  });
+
+  it('sorts by how many words the ayat share, then by fewer ayat', () => {
+    expect(list.every((p, i) => i === 0 || list[i - 1].shared > p.shared || (list[i - 1].shared === p.shared && list[i - 1].count <= p.count))).toBe(true);
+    expect(list[0].shared).toBe(18);
+  });
+
+  it('keeps a small opening whole and names the opening a piece was cut from', () => {
+    expect(list.find(p => p.id === 'يطوف عليهم')).toMatchObject({ count: 3, opening: { id: 'يطوف عليهم', count: 3 } });
+    const cut = list.find(p => p.id.startsWith('يايها الذين ءامنوا'))!;
+    expect(cut.opening).toMatchObject({ id: 'يايها الذين', count: 90 });
+  });
+
+  it('names a piece whose ayat all carry the joined letter by its own spelling', () => {
+    expect(list.some(p => p.id.startsWith('واذ قال موسي لقومه'))).toBe(true);
   });
 });
