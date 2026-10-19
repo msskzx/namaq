@@ -19,8 +19,8 @@ export default function Toggle({ checked, label, disabled = false, describedBy, 
   const iconBox = lg ? 'size-7' : 'size-5';
   const site = palette === 'site';
   const track = site ? 'border-[var(--home-rule)] bg-[var(--home-paper-deep)]' : 'border-gray-300 bg-white peer-checked:bg-amber-100 dark:border-gray-600 dark:bg-gray-900 dark:peer-checked:bg-amber-900/60';
-  const thumb = site ? 'bg-[var(--home-paper)] peer-checked:bg-[var(--home-accent)] peer-focus-visible:ring-[var(--home-accent)] peer-focus-visible:ring-offset-[var(--home-paper)]' : 'bg-white peer-checked:bg-amber-500 peer-focus-visible:ring-amber-500 dark:bg-gray-300 dark:peer-checked:bg-amber-500 dark:peer-focus-visible:ring-offset-gray-900';
-  const offColour = site ? 'text-[var(--home-ink)] peer-checked:text-[var(--home-muted)]' : 'text-black peer-checked:text-gray-500 dark:peer-checked:text-gray-400';
+  const thumb = site ? 'bg-[var(--home-accent)] peer-focus-visible:ring-[var(--home-accent)] peer-focus-visible:ring-offset-[var(--home-paper)]' : 'bg-white peer-checked:bg-amber-500 peer-focus-visible:ring-amber-500 dark:bg-gray-300 dark:peer-checked:bg-amber-500 dark:peer-focus-visible:ring-offset-gray-900';
+  const offColour = site ? 'text-[var(--home-paper)] peer-checked:text-[var(--home-muted)]' : 'text-black peer-checked:text-gray-500 dark:peer-checked:text-gray-400';
   const onColour = site ? 'text-[var(--home-muted)] peer-checked:text-[var(--home-paper)]' : 'text-gray-500 peer-checked:text-white dark:text-gray-400 dark:peer-checked:text-white';
   return (
     <label className={`relative inline-block shrink-0 ${lg ? 'h-9 w-[68px]' : hasIcons ? 'h-7 w-[52px]' : 'h-5 w-9'} ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}>

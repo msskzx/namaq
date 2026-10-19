@@ -12,7 +12,7 @@ export default function ThemeSwitcher({ palette = 'default' }: { palette?: 'defa
   const { language } = useLanguage();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
-  if (!mounted) return null;
+  if (!mounted) return <span className="inline-block h-7 w-[52px] shrink-0" aria-hidden="true" />;
   return (
     <Toggle
       palette={palette}
