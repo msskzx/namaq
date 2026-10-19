@@ -27,12 +27,18 @@ import { fetcher } from "@/lib/swr";
 import type { QuestionChoice, QuestionFamily, QuizLength, QuizTopic } from "@/lib/quiz/types";
 import type { QuizReference } from "@/lib/quiz/quizReference";
 import { QUIZ_TOPICS } from "@/lib/quiz/types";
+import type { BranchAnswer, BranchQuestion } from "@/lib/quiz/branchQuestions";
+import { num } from "@/lib/quran/arabicNumber";
+import { parseJuzRange } from "@/lib/quran/juz";
+import { BranchFeedback, BranchInputs, branchesCorrect } from "./BranchAnswers";
 
 interface QuizQuestionView {
   key: string;
-  family: QuestionFamily;
+  family: QuestionFamily | BranchQuestion["family"];
   promptArabic: string;
   choices: QuestionChoice[];
+  phrase?: string;
+  branches?: BranchAnswer[];
   choiceDetails: Record<string, { text: string; reference: string }>;
   correctAnswer: string;
   evidence: { reference: QuizReference | null };
@@ -45,6 +51,7 @@ const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
   AYAT: { en: "Ayat", ar: "آيات" },
   EVENTS: { en: "Events", ar: "أحداث" },
   PERSON_CIRCLE: { en: "A person's circle", ar: "دائرة شخص" },
+  BRANCHES: { en: "Shared openings", ar: "فواتح الآيات" },
 };
 
 export default function QuizzesPage() {
@@ -56,23 +63,28 @@ export default function QuizzesPage() {
   const topics = useMemo(() => parseQuizTopics(searchParams) as QuizTopic[], [searchParams]);
   const length = Number(searchParams.get("length")) as QuizLength | 0;
   const person = searchParams.get("person") ?? "";
+  const juzFrom = topics.includes("BRANCHES") ? searchParams.get("juzFrom") ?? "" : "";
+  const juzTo = topics.includes("BRANCHES") ? searchParams.get("juzTo") ?? "" : "";
+  const juz = useMemo(() => parseJuzRange(juzFrom || null, juzTo || null), [juzFrom, juzTo]);
   const topicQuery = topics.map((value) => `topic=${encodeURIComponent(value)}`).join("&");
+  const scopeQuery = `${person ? `&person=${encodeURIComponent(person)}` : ""}${juzFrom ? `&juzFrom=${encodeURIComponent(juzFrom)}` : ""}${juzTo ? `&juzTo=${encodeURIComponent(juzTo)}` : ""}`;
   const canCheckAvailability = Boolean(topics.length && (!topics.includes("PERSON_CIRCLE") || person));
   const availabilityQuery = canCheckAvailability
-    ? `/api/quiz/availability?${topicQuery}${person ? `&person=${encodeURIComponent(person)}` : ""}`
+    ? `/api/quiz/availability?${topicQuery}${scopeQuery}`
     : null;
   const { data: availability } = useSWR<{ available: number; lengths: QuizLength[] }>(availabilityQuery, fetcher);
   const started = Boolean(topics.length && length && availability?.lengths.includes(length) && (!topics.includes("PERSON_CIRCLE") || person));
   const query = started
-    ? `/api/quiz?${topicQuery}&length=${length}${person ? `&person=${encodeURIComponent(person)}` : ""}`
+    ? `/api/quiz?${topicQuery}&length=${length}${scopeQuery}`
     : null;
-  const { data, error, isLoading } = useSWR<{ questions: QuizQuestionView[] }>(query, fetcher, {
+  const { data, error, isLoading } = useSWR<{ questions: QuizQuestionView[]; surahNames?: Record<number, string> }>(query, fetcher, {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
     revalidateIfStale: false,
   });
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
+  const [typed, setTyped] = useState<Record<number, string[]>>({});
   const [submitted, setSubmitted] = useState(false);
   const [referenceIndex, setReferenceIndex] = useState<number | null>(null);
   const [personInput, setPersonInput] = useState(person);
@@ -81,6 +93,7 @@ export default function QuizzesPage() {
   useEffect(() => {
     setCurrent(0);
     setAnswers({});
+    setTyped({});
     setSubmitted(false);
     setReferenceIndex(null);
   }, [query]);
@@ -97,6 +110,7 @@ export default function QuizzesPage() {
   const reset = useCallback(() => {
     setCurrent(0);
     setAnswers({});
+    setTyped({});
     setSubmitted(false);
     setReferenceIndex(null);
     router.push(pathname);
@@ -142,6 +156,23 @@ export default function QuizzesPage() {
               />
             ))}
           </fieldset>
+          {topics.includes("BRANCHES") && !topics.includes("PERSON_CIRCLE") && (
+            <fieldset className="mb-6 flex flex-wrap items-end gap-4">
+              <legend className="mb-2 w-full text-sm font-semibold text-gray-700 dark:text-gray-300">{ar ? "أجزاء فواتح الآيات" : "Juz' for shared openings"}</legend>
+              {([["juzFrom", juzFrom || "1", ar ? "من الجزء" : "From juz'"], ["juzTo", juzTo || "30", ar ? "إلى الجزء" : "To juz'"]] as const).map(([key, value, label]) => (
+                <label key={key} className="flex flex-col gap-1 text-sm text-gray-700 dark:text-gray-300">
+                  {label}
+                  <select
+                    value={value}
+                    onChange={(event) => setParam({ [key]: event.target.value, length: undefined })}
+                    className="rounded border border-amber-400 bg-transparent px-3 py-2 text-gray-900 dark:bg-black dark:text-gray-100"
+                  >
+                    {Array.from({ length: 30 }, (_, index) => <option key={index} value={index + 1}>{ar ? num(index + 1) : index + 1}</option>)}
+                  </select>
+                </label>
+              ))}
+            </fieldset>
+          )}
           {topics.includes("PERSON_CIRCLE") && (
             <label className="mb-6 block">
               <span className="mb-1 block text-sm font-semibold text-gray-700 dark:text-gray-300">{ar ? "الشخص" : "Person"}</span>
@@ -215,11 +246,11 @@ export default function QuizzesPage() {
                 return (
                   <li key={question.key} className="rounded-lg border border-gray-200 p-4 dark:border-white/10">
                     <p className="mb-3 font-semibold text-gray-900 dark:text-gray-100">{question.promptArabic}</p>
-                    <div className="mb-2 flex items-center gap-2">
+                    {question.branches ? <BranchFeedback question={question} names={data?.surahNames ?? {}} juz={juz} typed={typed[index] ?? question.branches.map(() => "")} ar={ar} /> : <><div className="mb-2 flex items-center gap-2">
                       <FontAwesomeIcon icon={correct ? faCircleCheck : faCircleXmark} className={correct ? "text-green-600" : "text-red-500"} />
                       <span>{given ? answerContent(question, given) : ar ? "بدون إجابة" : "No answer"}</span>
                     </div>
-                    {!correct && <p className="text-sm text-gray-600 dark:text-gray-400">{ar ? "الصحيح: " : "Correct: "}{answerContent(question, question.correctAnswer)}</p>}
+                    {!correct && <p className="text-sm text-gray-600 dark:text-gray-400">{ar ? "الصحيح: " : "Correct: "}{answerContent(question, question.correctAnswer)}</p>}</>}
                     {question.evidence.reference && (
                       <Button className="mt-2" size="sm" variant="outline" onClick={() => setReferenceIndex(index)}>
                         <FontAwesomeIcon icon={faBookOpen} />
@@ -260,7 +291,21 @@ export default function QuizzesPage() {
             </div>
             <div className="rounded-lg border border-gray-200 p-6 dark:border-white/10">
               <p className="mb-4 font-semibold text-gray-900 dark:text-gray-100">{questions[current].promptArabic}</p>
-              <div className="flex flex-col gap-2">
+              {questions[current].branches ? (
+                answers[current] !== undefined ? (
+                  <BranchFeedback question={questions[current]} names={data?.surahNames ?? {}} juz={juz} typed={typed[current]} ar={ar} />
+                ) : (
+                  <BranchInputs
+                    typed={typed[current] ?? questions[current].branches.map(() => "")}
+                    onChange={(value) => setTyped((previous) => ({ ...previous, [current]: value }))}
+                    onCheck={() => {
+                      const value = typed[current] ?? [];
+                      setAnswers((previous) => ({ ...previous, [current]: branchesCorrect(questions[current], value) ? questions[current].correctAnswer : "" }));
+                    }}
+                    ar={ar}
+                  />
+                )
+              ) : <div className="flex flex-col gap-2">
                 {questions[current].choices.map((choice) => {
                   const locked = answers[current] !== undefined;
                   const isAnswer = choice.value === questions[current].correctAnswer;
@@ -286,7 +331,7 @@ export default function QuizzesPage() {
                     </Button>
                   );
                 })}
-              </div>
+              </div>}
               {answers[current] !== undefined && questions[current].evidence.reference && (
                 <Button className="mt-3" size="sm" variant="outline" onClick={() => setReferenceIndex(current)}>
                   <FontAwesomeIcon icon={faBookOpen} />
@@ -305,7 +350,13 @@ export default function QuizzesPage() {
                   <FontAwesomeIcon icon={ar ? faArrowLeft : faArrowRight} />
                 </Button>
               ) : (
-                <Button variant="primary" onClick={() => setSubmitted(true)}>
+                <Button variant="primary" onClick={() => {
+                  setAnswers((previous) => ({
+                    ...Object.fromEntries(Object.entries(typed).map(([index, value]) => [index, branchesCorrect(questions[Number(index)], value) ? questions[Number(index)].correctAnswer : ""])),
+                    ...previous,
+                  }));
+                  setSubmitted(true);
+                }}>
                   <FontAwesomeIcon icon={faPaperPlane} />
                   {ar ? "إرسال" : "Submit"}
                 </Button>

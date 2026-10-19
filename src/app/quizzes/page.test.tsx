@@ -59,13 +59,16 @@ const questions = Array.from({ length: 5 }, (_, index) => ({
   evidence: { reference: null as typeof reference | null },
 }));
 
+const availabilityKeys: string[] = [];
+
 vi.mock('swr', () => ({
   default: (key: string | null) => {
+    if (key?.startsWith('/api/quiz/availability')) availabilityKeys.push(key);
     if (key?.startsWith('/api/quiz/availability')) {
       const available = nav.getUrl().includes('topic=AYAT') ? 2 : 5;
       return { data: { available, lengths: available >= 5 ? [5] : [] }, error: null, isLoading: false };
     }
-    if (key?.startsWith('/api/quiz?')) return { data: { questions }, error: null, isLoading: false };
+    if (key?.startsWith('/api/quiz?')) return { data: { questions, surahNames: { 52: 'الطور' } }, error: null, isLoading: false };
     return { data: undefined, error: null, isLoading: false };
   },
 }));
@@ -208,5 +211,84 @@ describe('QuizzesPage', () => {
 
     expect(screen.getByText('Score: 3 / 5 (60%)')).toBeTruthy();
     expect(screen.getByText('Passed')).toBeTruthy();
+  });
+
+  it('checks two typed branches against the Quran text and shows its rasm', () => {
+    const original = questions[0];
+    questions[0] = {
+      ...original,
+      family: 'AYAH_BRANCH',
+      promptArabic: 'تفترق الآيات التي تبدأ بـ «وَيَطُوفُ عَلَيْهِمْ» إلى فرعين.',
+      choices: [],
+      correctAnswer: 'ويطوف عليهم',
+      phrase: 'ويطوف عليهم',
+      branches: [
+        { words: ['غِلْمَانٌۭ', 'لَّهُمْ'], ayat: [{ key: '52:24', page: 524, words: ['غِلْمَانٌۭ', 'لَّهُمْ'] }] },
+        { words: ['وِلْدَٰنٌۭ', 'مُّخَلَّدُونَ'], ayat: [{ key: '76:19', page: 580, words: ['وِلْدَٰنٌۭ', 'مُّخَلَّدُونَ'] }] },
+      ],
+    } as typeof original;
+    try {
+      nav.reset('/quizzes?topic=BRANCHES&length=5');
+      render(<QuizzesPage />);
+
+      fireEvent.change(screen.getByLabelText('Branch 1'), { target: { value: 'ولدان مخلدون' } });
+      fireEvent.change(screen.getByLabelText('Branch 2'), { target: { value: 'غلمان' } });
+      fireEvent.click(screen.getByRole('button', { name: 'Check' }));
+
+      expect(screen.getByRole('button', { name: 'Question 1 - correct' })).toBeTruthy();
+      expect(screen.getByText('وِلْدَٰنٌۭ مُّخَلَّدُونَ')).toBeTruthy();
+      expect(screen.getByText('غِلْمَانٌۭ')).toBeTruthy();
+      expect(screen.getByRole('link', { name: 'الطور ٢٤' }).getAttribute('href')).toBe('/quran/read/524');
+      expect(screen.getByRole('link', { name: '٧٦:١٩' })).toBeTruthy();
+      expect(screen.getByRole('link', { name: 'Openings tree' }).getAttribute('href')).toBe('/quran/branches?o=%D9%88%D9%8A%D8%B7%D9%88%D9%81+%D8%B9%D9%84%D9%8A%D9%87%D9%85');
+    } finally {
+      questions[0] = original;
+    }
+  });
+
+  it('marks a branch question wrong when one branch is missed and shows that branch', () => {
+    const original = questions[0];
+    questions[0] = {
+      ...original,
+      family: 'AYAH_BRANCH',
+      choices: [],
+      correctAnswer: 'ويطوف عليهم',
+      branches: [
+        { words: ['غِلْمَانٌۭ'], ayat: [{ key: '52:24', page: 524, words: ['غِلْمَانٌۭ'] }] },
+        { words: ['وِلْدَٰنٌۭ'], ayat: [{ key: '76:19', page: 580, words: ['وِلْدَٰنٌۭ'] }] },
+      ],
+    } as typeof original;
+    const second = questions[1];
+    questions[1] = { ...questions[0], key: 'second-branch' };
+    try {
+      nav.reset('/quizzes?topic=BRANCHES&length=5');
+      render(<QuizzesPage />);
+
+      fireEvent.change(screen.getByLabelText('Branch 1'), { target: { value: 'غلمان' } });
+      fireEvent.click(screen.getByRole('button', { name: 'Check' }));
+
+      expect(screen.getByRole('button', { name: 'Question 1 - incorrect' })).toBeTruthy();
+      expect(screen.getByText('Correct:')).toBeTruthy();
+      expect(screen.getByText('وِلْدَٰنٌۭ')).toBeTruthy();
+      fireEvent.click(screen.getByRole('button', { name: 'Question 2 - unanswered' }));
+      fireEvent.change(screen.getByLabelText('Branch 1'), { target: { value: 'غلمان' } });
+      fireEvent.change(screen.getByLabelText('Branch 2'), { target: { value: 'ولدان' } });
+      fireEvent.click(screen.getByRole('button', { name: 'Question 5 - unanswered' }));
+      fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
+      expect(screen.getByText('Score: 1 / 5 (20%)')).toBeTruthy();
+    } finally {
+      questions[0] = original;
+      questions[1] = second;
+    }
+  });
+
+  it('offers a juz range for shared openings and sends it with the count', () => {
+    nav.reset('/quizzes?topic=BRANCHES');
+    render(<QuizzesPage />);
+
+    expect((screen.getByLabelText("From juz'") as HTMLSelectElement).value).toBe('1');
+    fireEvent.change(screen.getByLabelText("From juz'"), { target: { value: '29' } });
+    expect(new URLSearchParams(nav.getUrl().split('?')[1]).get('juzFrom')).toBe('29');
+    expect(availabilityKeys.at(-1)).toBe('/api/quiz/availability?topic=BRANCHES&juzFrom=29');
   });
 });
