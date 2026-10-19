@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,9 +10,12 @@ import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@/lib/quran/arabicNumber';
 import { plainName } from '@/lib/quran/normalize';
 import { juzGroups, matchesSurah, parseReference, type IndexSurah } from '@/lib/quran/juzIndex';
+import { searchable, type AyahSearch } from '@/lib/quran/ayahSearch';
 import styles from '@/components/homepage/Home.module.css';
 
 const MUTED = 'text-[var(--home-muted)]';
+const AROUND = 6;
+const DELAY = 250;
 
 export default function SurahIndex({ surahs, fontClass }: { surahs: IndexSurah[]; fontClass?: string }) {
   const { language, languageLoaded } = useLanguage();
@@ -29,6 +32,26 @@ export default function SurahIndex({ surahs, fontClass }: { surahs: IndexSurah[]
     .filter(group => group.entries.length > 0);
   const found = new Set(shown.flatMap(group => group.entries.map(entry => entry.surah.number))).size;
   const name = (surah: IndexSurah) => plainName(surah.name).replace(/^سورة\s*/, '');
+  const wordSearch = !reference && searchable(query) ? query.trim() : '';
+  const [ayat, setAyat] = useState<AyahSearch & { query: string; failed?: boolean }>({ query: '', total: 0, hits: [] });
+  useEffect(() => {
+    if (!wordSearch) return;
+    const controller = new AbortController();
+    const timer = setTimeout(() => {
+      fetch(`/api/quran/search?q=${encodeURIComponent(wordSearch)}`, { signal: controller.signal })
+        .then(response => (response.ok ? response.json() : Promise.reject(response.status)))
+        .then((result: AyahSearch) => setAyat({ ...result, query: wordSearch }))
+        .catch(() => {
+          if (!controller.signal.aborted) setAyat({ query: wordSearch, total: 0, hits: [], failed: true });
+        });
+    }, DELAY);
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
+  }, [wordSearch]);
+  const ayahHits = wordSearch && ayat.query === wordSearch ? ayat : null;
+  const byNumber = new Map(surahs.map(surah => [surah.number, surah]));
 
   return (
     <div dir={ar ? 'rtl' : 'ltr'} lang={ar ? 'ar' : 'en'} className={`${styles.page} ${fontClass ?? ''} max-w-6xl mx-auto px-4 py-8 sm:px-8`}>
@@ -53,7 +76,7 @@ export default function SurahIndex({ surahs, fontClass }: { surahs: IndexSurah[]
               type="search"
               value={query}
               onChange={event => setQuery(event.target.value)}
-              placeholder={ar ? 'سورة باسمها أو رقمها، أو آية مثل البقرة ٢٥٥' : 'A surah by name or number, or an ayah like 2:255'}
+              placeholder={ar ? 'سورة باسمها أو رقمها، أو آية برقمها (٢:٢٥٥) أو بكلماتها' : 'A surah by name or number, or an ayah by number (2:255) or Arabic words'}
               aria-label={ar ? 'ابحث عن سورة أو آية' : 'Search surahs or ayat'}
               className="w-full bg-transparent py-1 text-lg outline-none placeholder:text-[var(--home-muted)]"
             />
@@ -65,7 +88,18 @@ export default function SurahIndex({ surahs, fontClass }: { surahs: IndexSurah[]
             {ar ? `افتح ${name(reference.surah)} ${num(reference.ayah)}` : `Open ${reference.surah.nameTransliterated || name(reference.surah)} ${reference.ayah}`}
           </Button>
         )}
-        {query.trim() && !reference && (
+        {wordSearch && found === 0 && (
+          <p className={`${MUTED} mt-2 text-sm`} aria-live="polite">
+            {!ayahHits
+              ? ar ? 'يبحث في الآيات…' : 'Searching the ayat…'
+              : ayahHits.failed
+                ? ar ? 'تعذّر البحث في الآيات الآن.' : 'The ayat could not be searched just now.'
+                : ayahHits.total === 0
+                  ? ar ? 'لا توجد سورة ولا آية بهذا النص.' : 'No surah or ayah matches that text.'
+                  : null}
+          </p>
+        )}
+        {query.trim() && !reference && !(wordSearch && found === 0) && (
           <p className={`${MUTED} mt-2 text-sm`} aria-live="polite">
             {found === 0
               ? ar ? 'لا توجد سورة بهذا الاسم أو الرقم.' : 'No surah matches that name or number.'
@@ -73,6 +107,47 @@ export default function SurahIndex({ surahs, fontClass }: { surahs: IndexSurah[]
           </p>
         )}
       </header>
+      {ayahHits && ayahHits.total > 0 && (
+        <section aria-label={ar ? 'آيات' : 'Ayat'} className="mb-8">
+          <h2 className={`${MUTED} mb-2`} aria-live="polite">
+            {ar ? `${num(ayahHits.total)} آية فيها «` : `${ayahHits.total} ayat contain "`}
+            <bdi lang="ar">{wordSearch}</bdi>
+            {ar
+              ? `»${ayahHits.total > ayahHits.hits.length ? `، أول ${num(ayahHits.hits.length)} منها` : ''}`
+              : `"${ayahHits.total > ayahHits.hits.length ? `, the first ${ayahHits.hits.length} shown` : ''}`}
+          </h2>
+          <ol className="divide-y divide-[var(--home-rule)] border-y border-[var(--home-rule)]">
+            {ayahHits.hits.map(hit => {
+              const [surah, ayah] = hit.key.split(':').map(Number);
+              const start = Math.max(0, hit.from - AROUND);
+              const end = Math.min(hit.words.length, hit.to + 1 + AROUND);
+              const owner = byNumber.get(surah);
+              return (
+                <li key={hit.key}>
+                  <Link href={`/quran/read/ayah/${surah}/${ayah}`} className="group flex flex-wrap items-baseline gap-x-4 py-2">
+                    <span className="w-28 shrink-0 text-sm text-[var(--home-accent)]">
+                      {owner ? (ar ? name(owner) : owner.nameTransliterated || name(owner)) : n(surah)} {n(ayah)}
+                    </span>
+                    <span dir="rtl" lang="ar" className="min-w-0 flex-1 text-xl leading-loose group-hover:underline underline-offset-8 decoration-[var(--home-rule)]">
+                      {start > 0 && '… '}
+                      {hit.words.slice(start, end).map((word, at) => {
+                        const index = start + at;
+                        const inside = index >= hit.from && index <= hit.to;
+                        return (
+                          <React.Fragment key={index}>
+                            {inside ? <mark className="bg-transparent text-[var(--home-accent)]">{word}</mark> : word}{' '}
+                          </React.Fragment>
+                        );
+                      })}
+                      {end < hit.words.length && '…'}
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ol>
+        </section>
+      )}
       <div className="columns-1 gap-10 sm:columns-2 lg:columns-3">
         {shown.map(group => (
           <section key={group.juz} aria-label={ar ? `الجزء ${num(group.juz)}` : `Juz' ${group.juz}`} className="mb-6 break-inside-avoid">
