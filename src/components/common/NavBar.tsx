@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useId } from 'react';
+import React, { useState, useRef, useId } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useLanguage } from '../language/LanguageContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faXmark, faGear, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faXmark, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import translations from '../language/translations';
 import ThemeSwitcher from '../theme/ThemeSwitcher';
 import { QURAN_CARDS } from '@/app/quran/QuranHub';
@@ -148,17 +148,6 @@ export default function NavBar() {
   const { language, languageLoaded, toggleLanguage } = useLanguage() as { language: Language; languageLoaded: boolean; toggleLanguage: () => void };
   const path = usePathname() ?? '/';
   const [menuOpen, setMenuOpen] = useState(false);
-  const [settingsOpen, setSettingsOpen] = useState(false);
-  const settingsRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (settingsRef.current && !settingsRef.current.contains(event.target as Node)) setSettingsOpen(false);
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
   // The stored language is only known on the client, so nothing language-specific renders before it loads.
   if (!languageLoaded) {
     return (
@@ -186,12 +175,7 @@ export default function NavBar() {
             <button type="button" className={styles.language} onClick={toggleLanguage} lang={ar ? 'en' : 'ar'} aria-label={ar ? 'Switch to English' : 'التبديل إلى العربية'}>
               {ar ? 'EN' : 'ع'}
             </button>
-            <div className={styles.settings} ref={settingsRef}>
-              <button type="button" className={styles.iconButton} onClick={() => setSettingsOpen(open => !open)} aria-expanded={settingsOpen} aria-label={ar ? 'الإعدادات' : 'Settings'}>
-                <FontAwesomeIcon icon={faGear} />
-              </button>
-              {settingsOpen && <div className={styles.popover}><ThemeSwitcher /></div>}
-            </div>
+            <ThemeSwitcher palette="site" />
             <button
               type="button"
               className={`${styles.iconButton} ${styles.menuButton}`}

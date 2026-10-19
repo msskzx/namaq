@@ -14,6 +14,7 @@ The force graph at `/graphs` pins every node to a precomputed global position, s
 - A person with several recorded fathers is drawn under the first by slug, with the others listed on the node.
 - Subjects with no common ancestor are drawn side by side.
 - Arabic mirrors the horizontal order. Light and dark themes are supported. Every label has `en` and `ar`.
+- The page and SVG use the shared paper, ink and terracotta theme. Companion names in the plot, selected subjects and text chains carry ﵁ for men or ﵂ for women. SVG tooltips spell out the honorific. The homepage uses the same plot.
 - A text version of each chain sits under the drawing for screen readers.
 - A switch under the quick picks adds each subject's descendants, read down the same `FATHER` edges, below the subject. It is off by default and kept in the URL as `descendants=1`. Descendants are not subjects: they are not highlighted and get no chain in the text version.
 - The navbar's Graphs entry has a submenu with a link to `/nasab`.
@@ -35,6 +36,10 @@ or repeated slugs are ignored.
 ## Data
 
 `GET /api/nasab?person=<slug>` (repeatable) returns `{ people, subjects }` from one Cypher query over `(:Person)-[:FATHER]->(:Person)`. With `descendants=1` the same query also follows the edges downward from each subject.
+
+Each person includes `isCompanion`, read from `HOLDS_TITLE` to the `companion` title, and `sex`. Profile sex comes from PostgreSQL; graph-only sex comes from Neo4j. A missing sex leaves the honorific unset.
+
+Amiri does not supply U+FD41 and U+FD42. `public/fonts/namaq-honorifics.woff` contains just those two glyphs, subset from [Kitab](https://github.com/nuqayah/kitab-font) and renamed Namaq Honorifics. Its SIL Open Font License is alongside it. `Nasab.module.css` limits this font to those code points, keeping Amiri for names. To rebuild, subset `Kitab-Regular.ttf` with FontTools to `U+FD41,U+FD42`, rename the family to Namaq Honorifics, and save as WOFF.
 
 ## Not done
 

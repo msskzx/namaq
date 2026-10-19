@@ -10,7 +10,7 @@ vi.mock('next/navigation', () => ({ usePathname: () => state.path }));
 vi.mock('@/components/language/LanguageContext', () => ({
   useLanguage: () => ({ language: 'en', languageLoaded: true, toggleLanguage: state.toggleLanguage }),
 }));
-vi.mock('../theme/ThemeSwitcher', () => ({ default: () => null }));
+vi.mock('next-themes', () => ({ useTheme: () => ({ resolvedTheme: 'light', setTheme: vi.fn() }) }));
 
 afterEach(() => { cleanup(); state.path = '/'; });
 
@@ -22,6 +22,11 @@ class TestPointerEvent extends MouseEvent {
 if (!('PointerEvent' in window)) Object.assign(window, { PointerEvent: TestPointerEvent });
 
 describe('NavBar shelves', () => {
+  it('shows the theme switch directly in the navbar without a settings menu', () => {
+    render(<NavBar />);
+    expect(within(screen.getByRole('navigation')).getByRole('switch', { name: 'Dark mode' })).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Settings' })).toBeNull();
+  });
   it('opens the Quran shelf from its toggle, listing every Quran page with what it is for', () => {
     render(<NavBar />);
     const toggle = screen.getByRole('button', { name: 'Quran pages' });

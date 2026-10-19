@@ -9,14 +9,15 @@ import GraphSearch from '@/components/graph/GraphSearch';
 import Button from '@/components/common/Button';
 import Toggle from '@/components/common/Toggle';
 import NasabPlot from './NasabPlot';
-import { givenName, layoutNasab, type NasabPerson } from '@/lib/relationship/nasabLayout';
+import { givenName, layoutNasab, nasabHonorific, type NasabPerson } from '@/lib/relationship/nasabLayout';
+import styles from './Nasab.module.css';
 
 const QUICK_PICKS = [
   { slug: 'prophet-muhammad', en: 'The Prophet ﷺ', ar: 'النبي ﷺ' },
-  { slug: 'abu-bakr-as-siddiq', en: 'Abu Bakr', ar: 'أبو بكر' },
-  { slug: 'umar-ibn-al-khattab', en: 'Umar', ar: 'عمر' },
-  { slug: 'uthman-ibn-affan', en: 'Uthman', ar: 'عثمان' },
-  { slug: 'ali-ibn-abi-talib', en: 'Ali', ar: 'علي' },
+  { slug: 'abu-bakr-as-siddiq', en: 'Abu Bakr ﵁', ar: 'أبو بكر ﵁' },
+  { slug: 'umar-ibn-al-khattab', en: 'Umar ﵁', ar: 'عمر ﵁' },
+  { slug: 'uthman-ibn-affan', en: 'Uthman ﵁', ar: 'عثمان ﵁' },
+  { slug: 'ali-ibn-abi-talib', en: 'Ali ﵁', ar: 'علي ﵁' },
 ];
 
 interface Fetched {
@@ -62,7 +63,7 @@ export default function NasabView() {
 
   const current = fetched?.key === key ? fetched : null;
   const layout = useMemo(() => (current ? layoutNasab(current.people, current.subjects) : null), [current]);
-  const names = useMemo(() => new Map(current?.people.map((person) => [person.slug, person.name])), [current]);
+  const people = useMemo(() => new Map(current?.people.map((person) => [person.slug, person])), [current]);
 
   const navigate = (change: (params: URLSearchParams) => void) => {
     const params = new URLSearchParams(searchParams?.toString() ?? '');
@@ -75,27 +76,31 @@ export default function NasabView() {
       next.forEach((slug) => params.append('subject', `person:${slug}`));
     });
   const setDescendants = (on: boolean) => navigate((params) => (on ? params.set('descendants', '1') : params.delete('descendants')));
-  const sideLabel = (on: boolean) => 'cursor-pointer ' + (on ? 'font-semibold text-amber-600 dark:text-amber-400' : 'text-gray-500 dark:text-gray-400');
+  const sideLabel = (on: boolean) => `${styles.sideLabel} ${on ? styles.activeLabel : ''}`;
   const toggle = (slug: string) => setSubjects(subjects.includes(slug) ? subjects.filter((s) => s !== slug) : [...subjects, slug]);
 
-  const nameOf = (slug: string) => names.get(slug) ?? slug;
+  const nameOf = (slug: string, short = false) => {
+    const person = people.get(slug);
+    if (!person) return slug;
+    return [short ? givenName(person.name) : person.name, nasabHonorific(person)].filter(Boolean).join(' ');
+  };
   const missing = current ? subjects.filter((slug) => !current.subjects.includes(slug)) : [];
   const joiner = isArabic ? ' بن ' : ' ibn ';
 
   return (
-    <div dir={isArabic ? 'rtl' : 'ltr'} className="flex flex-col gap-4 text-gray-900 dark:text-gray-200">
-      <header>
-        <h1 className="text-3xl mb-1">{isArabic ? 'النسب' : 'Nasab'}</h1>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
+    <div dir={isArabic ? 'rtl' : 'ltr'} className={styles.view}>
+      <header className={styles.heading}>
+        <h1>{isArabic ? 'النسب' : 'Nasab'}</h1>
+        <p>
           {isArabic
             ? 'اختر شخصًا لترى سلسلة آبائه، وشغّل المفتاح لترى ذريته تحته. إذا اخترت أكثر من واحد التقت السلسلتان عند أول جد مشترك.'
             : 'Pick a person to see the line of their fathers, and turn on the switch to see their descendants below them. Pick several and their lines join at the first ancestor they share.'}
         </p>
       </header>
 
-      <div>
+      <div className={styles.controls}>
         <GraphSearch personOnly hint={isArabic ? 'اختر لعرض النسب' : 'Select to show the nasab'} />
-        <div className="flex flex-wrap gap-2" aria-label={isArabic ? 'اختيارات سريعة' : 'Quick picks'}>
+        <div className={styles.picks} aria-label={isArabic ? 'اختيارات سريعة' : 'Quick picks'}>
           {QUICK_PICKS.map((pick) => (
             <Button key={pick.slug} size="sm" active={subjects.includes(pick.slug)} aria-pressed={subjects.includes(pick.slug)} onClick={() => toggle(pick.slug)}>
               <FontAwesomeIcon icon={faUser} />
@@ -121,7 +126,7 @@ export default function NasabView() {
       </div>
 
       {subjects.length > 0 && (
-        <ul className="flex flex-wrap gap-2">
+        <ul className={styles.subjects}>
           {subjects.map((slug) => (
             <li key={slug}>
               <Button size="sm" onClick={() => toggle(slug)} aria-label={`${isArabic ? 'إزالة' : 'Remove'} ${nameOf(slug)}`}>
@@ -144,13 +149,13 @@ export default function NasabView() {
         <>
           <NasabPlot layout={layout} isArabic={isArabic} />
           {!layout.nodes.some((node) => node.isMeeting) && layout.chains.length > 1 && (
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className={styles.muted}>
               {isArabic ? 'لا جد مشترك مسجل بين هؤلاء.' : 'No common ancestor is recorded for these people.'}
             </p>
           )}
-          <ol className="list-decimal ps-6 text-sm">
+          <ol className={styles.chains}>
             {layout.chains.map((chain) => (
-              <li key={chain.subject}>{chain.slugs.map((slug) => givenName(nameOf(slug))).join(joiner)}</li>
+              <li key={chain.subject}>{chain.slugs.map((slug) => nameOf(slug, true)).join(joiner)}</li>
             ))}
           </ol>
         </>

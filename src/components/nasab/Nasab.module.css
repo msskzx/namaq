@@ -1,0 +1,36 @@
+@font-face {
+  font-family: 'Namaq Honorifics';
+  src: url('/fonts/namaq-honorifics.woff') format('woff');
+  font-display: swap;
+  unicode-range: U+FD41-FD42;
+}
+.page { max-width: var(--home-width); margin-inline: auto; padding: 3rem var(--home-gutter); }
+.view { display: flex; flex-direction: column; gap: 1.5rem; color: var(--home-ink); font-family: 'Namaq Honorifics', var(--font-amiri), serif; }
+.heading { padding-bottom: 1.5rem; border-bottom: 1px solid var(--home-rule); }
+.heading h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+.heading p, .muted { color: var(--home-muted); }
+.controls { padding: 1.5rem; border: 1px solid var(--home-rule); background: var(--home-paper-deep); }
+.picks, .subjects { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.picks button, .subjects button { border-color: var(--home-rule); color: var(--home-ink); background: var(--home-paper); }
+.picks button:hover, .subjects button:hover { border-color: var(--home-accent); }
+.picks button[aria-pressed='true'] { background: var(--home-accent); border-color: var(--home-accent); color: var(--home-paper); }
+.controls input, .controls [class*='bg-white'] { background: var(--home-paper); color: var(--home-ink); border-color: var(--home-rule); }
+.controls [class*='border-amber-'] { border-color: var(--home-rule); }
+.controls [class*='bg-gray-50'] { background: var(--home-paper); }
+.controls input::placeholder { color: var(--home-muted); }
+.controls button[type='submit'] { background: var(--home-accent); color: var(--home-paper); }
+.controls [class*='text-gray-'] { color: var(--home-muted); }
+.controls input[type='text']:focus { outline-color: var(--home-accent); border-color: var(--home-accent); }
+.sideLabel { cursor: pointer; color: var(--home-muted); }
+.activeLabel { font-weight: 600; color: var(--home-accent); }
+.chains { list-style: decimal; padding-inline-start: 1.5rem; color: var(--home-muted); line-height: 2; }
+.plot { overflow: auto; border: 1px solid var(--home-rule); background: var(--home-paper); }
+.edge { stroke: var(--home-rule); }
+.node { fill: var(--home-paper); stroke: var(--home-rule); }
+.subject { fill: var(--home-paper-deep); stroke: var(--home-accent); }
+.meeting { stroke: var(--home-accent); }
+.name { fill: var(--home-ink); font-size: 0.9375rem; font-family: 'Namaq Honorifics', var(--font-amiri), serif; }
+@media (max-width: 640px) {
+  .page { padding-block: 2rem; }
+  .controls { padding: 1rem; }
+}
