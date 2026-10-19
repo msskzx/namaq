@@ -6,6 +6,7 @@ import { LanguageProvider } from '@/components/language/LanguageContext';
 import type { SimilarPair } from '@/lib/quran/similar';
 import type { Passage } from '@/lib/quran/passages';
 import { passageOf, SimilarList, VISIBLE } from './SimilarList';
+import spread from '@/components/quran/PageSpread.module.css';
 
 afterEach(cleanup);
 
@@ -17,23 +18,23 @@ const show = (pairs: SimilarPair[], pair = false) => render(<LanguageProvider><S
 describe('SimilarList', () => {
   it('shows both sides with the shared words marked and a link to compare them', () => {
     show([pair]);
-    expect(screen.getByText('المدثر ٥٤–٥٥')).toBeTruthy();
-    expect(screen.getByText('عبس ١١–١٢')).toBeTruthy();
-    const marks = [...document.querySelectorAll('mark')];
-    expect(marks.find(m => m.textContent === 'تَذۡكِرَةࣱ')!.className).toContain('text-amber-600');
-    expect(marks.find(m => m.textContent === 'إِنَّهَا')!.className).toContain('text-sky-600');
+    expect(screen.getByRole('article', { name: 'المدثر ٥٤–٥٥' })).toBeTruthy();
+    expect(screen.getByRole('article', { name: 'عبس ١١–١٢' })).toBeTruthy();
+    const marks = [...document.querySelectorAll('article mark')];
+    expect(marks.find(m => m.textContent === 'تَذۡكِرَةࣱ')!.className).not.toContain(spread.root);
+    expect(marks.find(m => m.textContent === 'إِنَّهَا')!.className).toContain(spread.root);
     expect(screen.getByRole('link', { name: /آية بآية/ }).getAttribute('href')).toBe('/quran/compare?a=74&af=54&at=55&b=80&bf=11&bt=12&view=ayat');
     expect(screen.getByText('تقارب ١٠٠٪')).toBeTruthy();
   });
 
-  it('names what a marked word answers on the other side, and underlines a same word whose partner is blue', () => {
+  it('names what a marked word answers on the other side, and underlines a same word whose partner shares only its root', () => {
     const linked: SimilarPair = { ...pair, marksA: [[54, 2, 0, 'ذكر']], marksB: [[11, 2, 0, 'ذكر'], [12, 2, 1, 'ذكر']] };
     show([linked]);
     const marks = [...document.querySelectorAll('mark')];
     const a = marks.find(m => m.textContent === 'تَذۡكِرَةࣱ' && m.title.includes('عبس'))!;
     expect(a.title).toBe('يقابلها: تَذۡكِرَةࣱ (عبس ١١)، ذَكَرَهُۥ (عبس ١٢)');
-    expect(a.className).toContain('decoration-sky-500');
-    expect(marks.find(m => m.title.includes('المدثر'))!.className).not.toContain('decoration-sky-500');
+    expect(a.className).toContain(spread.linked);
+    expect(marks.find(m => m.title.includes('المدثر'))!.className ?? '').not.toContain(spread.linked);
   });
 
   it('shows the first rows and the rest on request', () => {
