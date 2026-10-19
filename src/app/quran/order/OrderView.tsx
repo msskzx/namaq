@@ -2,9 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDown, faRoute, faTableColumns, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown, faLayerGroup, faRoute, faTableColumns, faXmark } from '@fortawesome/free-solid-svg-icons';
 import Badge from '@/components/common/Badge';
 import Button from '@/components/common/Button';
+import NumberInput from '@/components/common/NumberInput';
 import { num } from '@/lib/quran/arabicNumber';
 import { OPENING_GROUPS, TASBIH_SURAHS } from '@/lib/quran/openings';
 import { THEMES, TOPICS_SRC, type ChipView, type HopView, type TopicView } from '@/lib/quran/surahOrder';
@@ -141,7 +142,6 @@ function Link({ item: { hop, tail, head, words, common } }: { item: HopView }) {
 
 export type JuzRange = { min: number; max: number };
 
-const JUZS = [25, 26, 27, 28, 29, 30];
 const SURAH_MIN = 41;
 const SURAH_MAX = 114;
 
@@ -176,17 +176,14 @@ export default function OrderView({ chips, hops, juzBySurah }: { chips: ChipView
         {'. اضغط «الصلة بما بعدها» تحت كل سورة لترى موضوعاتها المشتركة مع التالية وآخر آياتها وأول آيات التالية. «بلا مصدر» تعني أن الربط قراءة لنص السورتين لم تُنسب إلى كتاب.'}
       </p>
       <div className="flex flex-wrap items-center gap-3" role="group" aria-label="تصفية السور">
-        <label className="flex items-center gap-1.5 text-sm">
+        <span className="flex items-center gap-1.5 text-sm">
           الجزء
-          <select
-            className="rounded border border-gray-300 bg-white px-2 py-1 dark:border-white/10 dark:bg-black"
-            value={juzFilter ?? ''}
-            onChange={e => setJuzFilter(e.target.value === '' ? null : Number(e.target.value))}
-          >
-            <option value="">الكل</option>
-            {JUZS.map(j => <option key={j} value={j}>{num(j)}</option>)}
-          </select>
-        </label>
+          <Button size="sm" active={juzFilter === null} aria-pressed={juzFilter === null} onClick={() => setJuzFilter(null)}>
+            <FontAwesomeIcon icon={faLayerGroup} aria-hidden />
+            الكل
+          </Button>
+          <NumberInput label="الجزء" value={juzFilter ?? undefined} defaultValue={25} min={25} max={30} onChange={setJuzFilter} />
+        </span>
         <label className="flex items-center gap-1.5 text-sm">
           من سورة
           <select

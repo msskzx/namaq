@@ -12,7 +12,9 @@ import Pagination from '@/components/common/Pagination';
 import PieceList, { PER_PAGE } from './PieceList';
 import OpeningSearch from './OpeningSearch';
 import { num } from '@/lib/quran/arabicNumber';
-import { NOTE } from '../panel';
+import styles from '@/components/common/PaperPage.module.css';
+
+const NOTE = 'text-sm text-[var(--home-muted)]';
 
 export const metadata: Metadata = {
   title: 'القرآن: فواتح الآيات المشتركة',
@@ -52,9 +54,10 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const listHref = (options: { grouped: boolean; page?: number }) => branchesHref(id, juz, { list: true, ...options });
 
   return (
-    <div dir="rtl" className="w-full max-w-6xl mx-auto p-4 flex flex-col gap-4 text-gray-900 dark:text-gray-200">
-      <header>
-        <h1 className="text-3xl mb-2">فواتح الآيات المشتركة</h1>
+    <div dir="rtl" className={`${styles.page} w-full max-w-6xl mx-auto px-4 py-8 flex flex-col gap-4`}>
+      <header className={styles.heading}>
+        <p className={styles.eyebrow}>نمق · القرآن الكريم</p>
+        <h1>فواتح الآيات المشتركة</h1>
         <p className={NOTE}>
           آيات تبدأ بالكلمتين نفسيهما، تتفرع حيث تختلف كلماتها حتى تنتهي كل آية. اضغط عبارة في الشجرة لترى ما يتفرع منها وحده. تُجمع الآية المبدوءة بواو أو فاء عاطفة مع التي تبدأ بالكلمة نفسها دونها، وتظهر الصيغتان قبل الشجرة. تُقارن الكلمات بلا تشكيل ولا علامات وقف، والنص برواية حفص كما في صفحة القراءة. هذا تطابق في اللفظ وحده.
         </p>

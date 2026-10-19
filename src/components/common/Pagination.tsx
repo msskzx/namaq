@@ -4,30 +4,21 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import Button from '@/components/common/Button';
+import NumberInput from './NumberInput';
 import { useLanguage } from '@/components/language/LanguageContext';
 
 interface PaginationProps {
   page: number;
   pageCount: number;
   onChange?: (page: number) => void;
-  /** Links to each page, in order. With them the controls are links rather than buttons. */
   hrefs?: string[];
-  /** The page's own language, where it differs from the site's. */
   language?: 'ar' | 'en';
-  /** Offers a jump to any page. Useful when pages are addressable, as printed pages are. */
   showSelect?: boolean;
-  /** What is on screen, such as a range of items. Replaces the default page count. */
   summary?: string;
-  /** Visible text beside the jump control. Without it the control is still named, just not labelled on screen. */
   selectLabel?: string;
   pageLabels?: string[];
 }
 
-/**
- * Moves through a paged list: previous on the leading side, next on the
- * trailing side, what you are looking at between them. The arrows swap with the
- * writing direction so each keeps pointing the way the reader is travelling.
- */
 export default function Pagination({
   page,
   pageCount,
@@ -67,24 +58,25 @@ export default function Pagination({
       </Button>
 
       {showSelect ? (
-        <label className="flex items-center gap-2 text-xs text-gray-700 dark:text-gray-300">
+        <span className="flex items-center gap-2 text-xs text-gray-700 dark:text-gray-300">
           {selectLabel}
-          {/* Matches the outline button beside it: same border, padding and type
-              size, with the platform's own control chrome removed so the three
-              sit at one height. */}
-          <select
-            aria-label={selectLabel ?? (rightToLeft ? 'انتقل إلى صفحة' : 'Go to page')}
-            className="cursor-pointer appearance-none rounded border border-amber-400 bg-transparent px-2.5 py-1 text-center text-xs text-gray-800 transition hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800"
-            value={page}
-            onChange={(changed) => onChange?.(Number(changed.target.value))}
-          >
-            {Array.from({ length: pageCount }, (_, index) => index + 1).map((option) => (
-              <option key={option} value={option}>
-                {pageLabels?.[option - 1] ?? option}
-              </option>
-            ))}
-          </select>
-        </label>
+          {pageLabels ? (
+            <select
+              aria-label={selectLabel ?? (rightToLeft ? 'انتقل إلى صفحة' : 'Go to page')}
+              className="cursor-pointer appearance-none rounded border border-amber-400 bg-transparent px-2.5 py-1 text-center text-xs text-gray-800 transition hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800"
+              value={page}
+              onChange={(changed) => onChange?.(Number(changed.target.value))}
+            >
+              {Array.from({ length: pageCount }, (_, index) => index + 1).map((option) => (
+                <option key={option} value={option}>
+                  {pageLabels?.[option - 1] ?? option}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <NumberInput label={selectLabel ?? (rightToLeft ? 'انتقل إلى صفحة' : 'Go to page')} value={page} min={1} max={pageCount} onChange={onChange} />
+          )}
+        </span>
       ) : (
         <span className="text-sm text-gray-600 dark:text-gray-400">{label}</span>
       )}

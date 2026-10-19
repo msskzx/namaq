@@ -10,6 +10,7 @@ import { faBars, faCompress, faExpand, faList, faGear, faXmark, faFont, faSun, f
 import ErrorMessage from '@/components/common/ErrorMessage';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import Button from '@/components/common/Button';
+import NumberInput from '@/components/common/NumberInput';
 import LanguageSwitcher from '@/components/language/LanguageSwitcher';
 import ThemeSwitcher from '@/components/theme/ThemeSwitcher';
 import { useLanguage } from '@/components/language/LanguageContext';
@@ -328,11 +329,8 @@ export default function SourceAccountReader({
   const t = language === 'ar';
   const backIcon = t ? faArrowRight : faArrowLeft;
   const forwardIcon = t ? faArrowLeft : faArrowRight;
-  const pageOptions = Array.from({ length: account.pageCount }, (_, index) => {
-    const entry = data.pageNumbers?.[index];
-    if (!entry) return String(index + 1);
-    return [entry.printedPage ?? entry.sequence, entry.volume && (t ? `ج${entry.volume.number}` : `vol. ${entry.volume.number}`)].filter(Boolean).join(' · ');
-  });
+  const pageNumber = data.pageNumbers?.find(entry => entry.sequence === current.sequence);
+  const pageLabel = [pageNumber?.printedPage ?? printed, pageNumber?.volume && (t ? `ج${pageNumber.volume.number}` : `vol. ${pageNumber.volume.number}`)].filter(Boolean).join(' · ');
   const headerCollapsed = fullscreen && headerHidden && !indexOpen && !settingsOpen && !menuOpen;
   const pageContentStyle = {
     ...backgroundStyles[background],
@@ -367,14 +365,12 @@ export default function SourceAccountReader({
           <p className="min-w-0 flex-1 truncate text-sm text-gray-700 dark:text-gray-200">{labelAccount(account)}</p>
           <div className="flex shrink-0 items-center gap-1">
             <Button variant="outline" size="icon" disabled={current.sequence <= 1} onClick={() => turnPage(-1)} aria-label={t ? 'الصفحة السابقة' : 'Previous page'}><FontAwesomeIcon icon={backIcon} /></Button>
-            <select
-              aria-label={t ? 'انتقل إلى صفحة' : 'Go to page'}
-              className="max-w-[7.5rem] cursor-pointer self-stretch appearance-none rounded border border-amber-400 bg-transparent px-2 text-center text-sm text-gray-800 dark:text-gray-100"
-              value={current.sequence}
-              onChange={(event) => setSelection(account.id, Number(event.target.value))}
-            >
-              {pageOptions.map((label, index) => <option key={index + 1} value={index + 1} className="text-gray-900">{label}</option>)}
-            </select>
+            <span className="flex flex-col items-center gap-0.5">
+              <span className="text-xs text-gray-600 dark:text-gray-400">{t ? 'صفحة المقتطف' : 'Page within entry'}</span>
+              <NumberInput label={t ? 'انتقل إلى صفحة' : 'Go to page'} value={current.sequence} min={1} max={account.pageCount}
+                onChange={(sequence) => setSelection(account.id, sequence)} />
+              <span className="text-xs text-gray-600 dark:text-gray-400">{pageLabel}</span>
+            </span>
             <Button variant="outline" size="icon" disabled={current.sequence >= account.pageCount} onClick={() => turnPage(1)} aria-label={t ? 'الصفحة التالية' : 'Next page'}><FontAwesomeIcon icon={forwardIcon} /></Button>
           </div>
           <Button size="icon" active={indexOpen} onClick={() => { setIndexOpen((open) => !open); setSettingsOpen(false); }} aria-label={t ? 'فتح الفهرس' : 'Open index'} aria-pressed={indexOpen}><FontAwesomeIcon icon={indexOpen ? faXmark : faList} /></Button>

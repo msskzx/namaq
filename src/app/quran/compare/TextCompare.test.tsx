@@ -12,6 +12,8 @@ vi.mock('@/lib/prisma', () => ({
 }));
 vi.mock('./SimilarAyat', () => ({ default: () => null }));
 
+vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
+
 afterEach(cleanup);
 
 const value = (label: string) => label.startsWith('السورة')

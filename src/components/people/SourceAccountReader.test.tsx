@@ -265,13 +265,17 @@ describe('SourceAccountReader', () => {
       ],
     });
 
-    const { container } = renderReader();
+    renderReader();
     await screen.findByText('الفقرة الأولى');
 
-    const select = container.querySelector('select[aria-label="Go to page"]') as HTMLSelectElement;
-    expect(select.selectedOptions[0].textContent).toBe('158 · vol. 1');
+    expect(screen.getByText('Page within entry')).toBeTruthy();
+    expect(screen.getByText('158 · vol. 1')).toBeTruthy();
+    const jump = screen.getByRole('spinbutton', { name: 'Go to page' });
+    expect((jump as HTMLInputElement).value).toBe('1');
+    expect(jump.getAttribute('max')).toBe('2');
     expect((screen.getByRole('button', { name: 'Previous page' })).hasAttribute('disabled')).toBe(true);
-    fireEvent.click(screen.getByRole('button', { name: 'Next page' }));
+    fireEvent.change(jump, { target: { value: '2' } });
+    fireEvent.blur(jump);
     await waitFor(() => expect(nav.replaceCalls.at(-1)).toContain('page=2'));
     expect(scrollIntoView).toHaveBeenCalled();
   });

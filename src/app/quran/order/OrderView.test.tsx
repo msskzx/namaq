@@ -175,6 +175,7 @@ describe('OrderView', () => {
       );
       renderView(juzBySurah);
       fireEvent.change(screen.getByLabelText('الجزء'), { target: { value: '25' } });
+      fireEvent.blur(screen.getByLabelText('الجزء'));
       expect(strip().getAllByRole('heading', { level: 2 })).toHaveLength(46 - 41 + 1);
     });
 
@@ -192,6 +193,7 @@ describe('OrderView', () => {
       );
       renderView(juzBySurah);
       fireEvent.change(screen.getByLabelText('الجزء'), { target: { value: '25' } });
+      fireEvent.blur(screen.getByLabelText('الجزء'));
       fireEvent.change(screen.getByLabelText('من سورة'), { target: { value: '44' } });
       expect(strip().getAllByRole('heading', { level: 2 })).toHaveLength(46 - 44 + 1);
     });

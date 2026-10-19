@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useSWR from "swr";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,10 +12,11 @@ import {
   faCircleCheck,
   faCircleQuestion,
   faCircleXmark,
-  faListOl,
   faPaperPlane,
   faRotateLeft,
 } from "@fortawesome/free-solid-svg-icons";
+import styles from "@/components/common/PaperPage.module.css";
+import NumberInput from "@/components/common/NumberInput";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import Button from "@/components/common/Button";
@@ -28,9 +29,9 @@ import type { QuestionChoice, QuestionFamily, QuizLength, QuizTopic } from "@/li
 import type { QuizReference } from "@/lib/quiz/quizReference";
 import { QUIZ_TOPICS } from "@/lib/quiz/types";
 import type { BranchAnswer, BranchQuestion } from "@/lib/quiz/branchQuestions";
-import { num } from "@/lib/quran/arabicNumber";
 import { parseJuzRange } from "@/lib/quran/juz";
-import { BranchFeedback, BranchInputs, branchesCorrect } from "./BranchAnswers";
+import type { Branch } from "@/lib/quran/branches";
+import { BranchFeedback, BranchInputs, branchesCorrect, emptyBranchAnswers } from "./BranchAnswers";
 
 interface QuizQuestionView {
   key: string;
@@ -39,6 +40,7 @@ interface QuizQuestionView {
   choices: QuestionChoice[];
   phrase?: string;
   branches?: BranchAnswer[];
+  tree?: Branch;
   choiceDetails: Record<string, { text: string; reference: string }>;
   correctAnswer: string;
   evidence: { reference: QuizReference | null };
@@ -82,6 +84,7 @@ export default function QuizzesPage() {
     revalidateOnReconnect: false,
     revalidateIfStale: false,
   });
+  const [chosenLength, setChosenLength] = useState(5);
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [typed, setTyped] = useState<Record<number, string[]>>({});
@@ -98,14 +101,18 @@ export default function QuizzesPage() {
     setReferenceIndex(null);
   }, [query]);
 
+  const pendingParams = useRef(searchParams.toString());
+  useEffect(() => { pendingParams.current = searchParams.toString(); }, [searchParams]);
+
   const setParam = useCallback((changes: Record<string, string | undefined>) => {
-    const next = new URLSearchParams(searchParams.toString());
+    const next = new URLSearchParams(pendingParams.current);
     for (const [key, value] of Object.entries(changes)) {
       if (value) next.set(key, value);
       else next.delete(key);
     }
+    pendingParams.current = next.toString();
     router.push(`${pathname}?${next.toString()}`);
-  }, [pathname, router, searchParams]);
+  }, [pathname, router]);
 
   const reset = useCallback(() => {
     setCurrent(0);
@@ -133,16 +140,16 @@ export default function QuizzesPage() {
     if (!choice) return null;
     const detail = question.choiceDetails?.[choice.value];
     if (!detail) return choice.labelArabic;
-    return <span><span className="block leading-relaxed">{detail.text}</span><span className="text-xs text-gray-500 dark:text-gray-400">{detail.reference}</span></span>;
+    return <span><span className="block leading-relaxed">{detail.text}</span><span className="text-xs text-[var(--home-muted)]">{detail.reference}</span></span>;
   };
 
   if (!started) {
     return (
-      <div className="min-h-screen bg-white dark:bg-black">
-        <div className="mx-auto max-w-2xl px-4 py-8" dir={ar ? "rtl" : "ltr"}>
-          <h1 className="mb-6 text-2xl font-bold text-gray-900 dark:text-gray-100">{ar ? "اختبار" : "Quiz"}</h1>
-          <fieldset className="mb-6 flex flex-wrap gap-x-4 gap-y-2 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
-            <legend className="mb-2 w-full text-sm font-semibold text-gray-700 dark:text-gray-300">{ar ? "المواضيع — اختر واحدًا أو أكثر" : "Topics — choose one or more"}</legend>
+      <div className={styles.page}>
+        <div className="mx-auto max-w-3xl px-4 py-8" dir={ar ? "rtl" : "ltr"}>
+          <header className={styles.heading}><p className={styles.eyebrow}>{ar ? "نمق · اختبر معرفتك" : "Namaq · Test your knowledge"}</p><h1>{ar ? "الاختبارات" : "Quizzes"}</h1><p>{ar ? "اختر المواضيع وعدد الأسئلة، ثم ابدأ الاختبار." : "Choose your topics and question count, then start a quiz."}</p></header>
+          <fieldset className={`mb-6 flex flex-wrap gap-x-6 gap-y-4 ${styles.panel}`}>
+            <legend className="mb-2 w-full text-sm font-semibold text-[var(--home-ink)]">{ar ? "المواضيع، اختر واحدًا أو أكثر" : "Topics, choose one or more"}</legend>
             {QUIZ_TOPICS.map((value) => (
               <SlideSwitch
                 key={value}
@@ -152,30 +159,26 @@ export default function QuizzesPage() {
                   length: undefined,
                   person: value === "PERSON_CIRCLE" || topics.includes("PERSON_CIRCLE") ? person || undefined : undefined,
                 })}
+                color="var(--home-accent)"
                 label={TOPIC_LABELS[value][ar ? "ar" : "en"]}
               />
             ))}
           </fieldset>
           {topics.includes("BRANCHES") && !topics.includes("PERSON_CIRCLE") && (
             <fieldset className="mb-6 flex flex-wrap items-end gap-4">
-              <legend className="mb-2 w-full text-sm font-semibold text-gray-700 dark:text-gray-300">{ar ? "أجزاء فواتح الآيات" : "Juz' for shared openings"}</legend>
+              <legend className="mb-2 w-full text-sm font-semibold text-[var(--home-ink)]">{ar ? "أجزاء فواتح الآيات" : "Juz' for shared openings"}</legend>
               {([["juzFrom", juzFrom || "1", ar ? "من الجزء" : "From juz'"], ["juzTo", juzTo || "30", ar ? "إلى الجزء" : "To juz'"]] as const).map(([key, value, label]) => (
-                <label key={key} className="flex flex-col gap-1 text-sm text-gray-700 dark:text-gray-300">
-                  {label}
-                  <select
-                    value={value}
-                    onChange={(event) => setParam({ [key]: event.target.value, length: undefined })}
-                    className="rounded border border-amber-400 bg-transparent px-3 py-2 text-gray-900 dark:bg-black dark:text-gray-100"
-                  >
-                    {Array.from({ length: 30 }, (_, index) => <option key={index} value={index + 1}>{ar ? num(index + 1) : index + 1}</option>)}
-                  </select>
-                </label>
+                <div key={key} className="flex flex-col gap-1 text-sm text-[var(--home-ink)]">
+                  <span>{label}</span>
+                  <NumberInput label={label} value={Number(value)} min={1} max={30}
+                    onChange={(next) => setParam({ [key]: String(next), length: undefined })} />
+                </div>
               ))}
             </fieldset>
           )}
           {topics.includes("PERSON_CIRCLE") && (
             <label className="mb-6 block">
-              <span className="mb-1 block text-sm font-semibold text-gray-700 dark:text-gray-300">{ar ? "الشخص" : "Person"}</span>
+              <span className="mb-1 block text-sm font-semibold text-[var(--home-ink)]">{ar ? "الشخص" : "Person"}</span>
               <input
                 type="text"
                 value={personInput}
@@ -192,7 +195,7 @@ export default function QuizzesPage() {
                 onBlur={() => setParam({ person: personInput || undefined, length: undefined })}
                 list="quiz-people"
                 placeholder={ar ? "ابحث عن شخص" : "Search for a person"}
-                className="w-full rounded border border-amber-400 bg-transparent px-3 py-2 text-gray-900 dark:text-gray-100"
+                className="w-full rounded border border-[var(--home-rule)] bg-transparent px-3 py-2 text-[var(--home-ink)]"
               />
               <datalist id="quiz-people">
                 {personSuggestions.map((suggestion) => <option key={suggestion.slug} value={suggestion.slug}>{suggestion.nameTransliterated ?? suggestion.name}</option>)}
@@ -201,21 +204,23 @@ export default function QuizzesPage() {
           )}
           {availability && (
             <>
-              <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">
+              <p className="mb-3 text-sm text-[var(--home-muted)]">
                 {ar ? `${availability.available} سؤالًا متاحًا` : `${availability.available} questions available`}
               </p>
               {availability.lengths.length > 0 ? (
                 <fieldset className="mb-6 flex flex-wrap gap-2">
-                  <legend className="mb-2 w-full text-sm font-semibold text-gray-700 dark:text-gray-300">{ar ? "عدد الأسئلة" : "Length"}</legend>
-                  {availability.lengths.map((value) => (
-                    <Button key={value} variant="outline" onClick={() => setParam({ length: String(value) })}>
-                      <FontAwesomeIcon icon={faListOl} />
-                      {value}
-                    </Button>
-                  ))}
+                  <legend className="mb-2 w-full text-sm font-semibold text-[var(--home-ink)]">{ar ? "عدد الأسئلة" : "Length"}</legend>
+                  <NumberInput label={ar ? "عدد الأسئلة" : "Question count"}
+                    value={availability.lengths.includes(chosenLength as QuizLength) ? chosenLength : availability.lengths[0]}
+                    min={availability.lengths[0]} max={availability.lengths[availability.lengths.length - 1]} step={5}
+                    onChange={setChosenLength} />
+                  <Button variant="primary" onClick={() => setParam({ length: String(availability.lengths.includes(chosenLength as QuizLength) ? chosenLength : availability.lengths[0]) })}>
+                    <FontAwesomeIcon icon={ar ? faArrowLeft : faArrowRight} />
+                    {ar ? "ابدأ الاختبار" : "Start quiz"}
+                  </Button>
                 </fieldset>
               ) : (
-                <p className="text-gray-600 dark:text-gray-400">{ar ? "لا توجد خمسة أسئلة معتمدة لهذا الاختيار بعد." : "Fewer than five approved questions are available."}</p>
+                <p className="text-[var(--home-muted)]">{ar ? "لا توجد خمسة أسئلة معتمدة لهذا الاختيار بعد." : "Fewer than five approved questions are available."}</p>
               )}
             </>
           )}
@@ -225,16 +230,16 @@ export default function QuizzesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black">
-      <div className="mx-auto max-w-2xl px-4 py-8" dir="rtl">
+    <div className={styles.page}>
+      <div className="mx-auto max-w-6xl px-4 py-8" dir={ar ? "rtl" : "ltr"}>
         {error && <><ErrorMessage title={ar ? "تعذر إنشاء الاختبار" : "Failed to build the quiz"} /><Button className="mt-4" variant="outline" onClick={reset}><FontAwesomeIcon icon={faRotateLeft} />{ar ? "العودة للإعداد" : "Back to setup"}</Button></>}
         {isLoading || !data ? (
           <LoadingSpinner fill />
         ) : questions.length === 0 ? (
-          <div className="text-center text-gray-600 dark:text-gray-400"><p>{ar ? "لا توجد أسئلة كافية لهذا الاختيار." : "Not enough approved questions for this choice."}</p><Button className="mt-4" variant="outline" onClick={reset}><FontAwesomeIcon icon={faRotateLeft} />{ar ? "العودة للإعداد" : "Back to setup"}</Button></div>
+          <div className="text-center text-[var(--home-muted)]"><p>{ar ? "لا توجد أسئلة كافية لهذا الاختيار." : "Not enough approved questions for this choice."}</p><Button className="mt-4" variant="outline" onClick={reset}><FontAwesomeIcon icon={faRotateLeft} />{ar ? "العودة للإعداد" : "Back to setup"}</Button></div>
         ) : submitted ? (
           <div>
-            <h2 className="mb-2 text-xl font-bold text-gray-900 dark:text-gray-100">{ar ? `النتيجة: ${score} من ${questions.length} (${percent}٪)` : `Score: ${score} / ${questions.length} (${percent}%)`}</h2>
+            <h2 className="mb-2 text-xl font-bold text-[var(--home-ink)]">{ar ? `النتيجة: ${score} من ${questions.length} (${percent}٪)` : `Score: ${score} / ${questions.length} (${percent}%)`}</h2>
             <p className={`mb-4 flex items-center gap-2 font-semibold ${passed ? 'text-green-700 dark:text-green-300' : 'text-red-600 dark:text-red-400'}`}>
               <FontAwesomeIcon icon={passed ? faCircleCheck : faCircleXmark} />
               {ar ? (passed ? 'ناجح' : 'راسب') : passed ? 'Passed' : 'Not passed'}
@@ -244,13 +249,13 @@ export default function QuizzesPage() {
                 const given = answers[index];
                 const correct = given === question.correctAnswer;
                 return (
-                  <li key={question.key} className="rounded-lg border border-gray-200 p-4 dark:border-white/10">
-                    <p className="mb-3 font-semibold text-gray-900 dark:text-gray-100">{question.promptArabic}</p>
-                    {question.branches ? <BranchFeedback question={question} names={data?.surahNames ?? {}} juz={juz} typed={typed[index] ?? question.branches.map(() => "")} ar={ar} /> : <><div className="mb-2 flex items-center gap-2">
+                  <li key={question.key} className={styles.panel}>
+                    <p className="mb-3 font-semibold text-[var(--home-ink)]">{question.promptArabic}</p>
+                    {question.branches ? <BranchFeedback question={question} names={data?.surahNames ?? {}} juz={juz} typed={typed[index] ?? emptyBranchAnswers(question)} ar={ar} /> : <><div className="mb-2 flex items-center gap-2">
                       <FontAwesomeIcon icon={correct ? faCircleCheck : faCircleXmark} className={correct ? "text-green-600" : "text-red-500"} />
                       <span>{given ? answerContent(question, given) : ar ? "بدون إجابة" : "No answer"}</span>
                     </div>
-                    {!correct && <p className="text-sm text-gray-600 dark:text-gray-400">{ar ? "الصحيح: " : "Correct: "}{answerContent(question, question.correctAnswer)}</p>}</>}
+                    {!correct && <p className="text-sm text-[var(--home-muted)]">{ar ? "الصحيح: " : "Correct: "}{answerContent(question, question.correctAnswer)}</p>}</>}
                     {question.evidence.reference && (
                       <Button className="mt-2" size="sm" variant="outline" onClick={() => setReferenceIndex(index)}>
                         <FontAwesomeIcon icon={faBookOpen} />
@@ -289,17 +294,18 @@ export default function QuizzesPage() {
                 );
               })}
             </div>
-            <div className="rounded-lg border border-gray-200 p-6 dark:border-white/10">
-              <p className="mb-4 font-semibold text-gray-900 dark:text-gray-100">{questions[current].promptArabic}</p>
+            <div className={styles.panel}>
+              <p dir="rtl" lang="ar" className="mb-4 text-xl leading-loose font-semibold">{questions[current].promptArabic}</p>
               {questions[current].branches ? (
                 answers[current] !== undefined ? (
-                  <BranchFeedback question={questions[current]} names={data?.surahNames ?? {}} juz={juz} typed={typed[current]} ar={ar} />
+                  <BranchFeedback question={questions[current]} names={data?.surahNames ?? {}} juz={juz} typed={typed[current] ?? emptyBranchAnswers(questions[current])} ar={ar} />
                 ) : (
                   <BranchInputs
-                    typed={typed[current] ?? questions[current].branches.map(() => "")}
+                    question={questions[current]}
+                    typed={typed[current] ?? emptyBranchAnswers(questions[current])}
                     onChange={(value) => setTyped((previous) => ({ ...previous, [current]: value }))}
                     onCheck={() => {
-                      const value = typed[current] ?? [];
+                      const value = typed[current] ?? emptyBranchAnswers(questions[current]);
                       setAnswers((previous) => ({ ...previous, [current]: branchesCorrect(questions[current], value) ? questions[current].correctAnswer : "" }));
                     }}
                     ar={ar}
@@ -319,7 +325,6 @@ export default function QuizzesPage() {
                         if (answers[current] !== undefined) return;
                         setAnswers((previous) => ({ ...previous, [current]: choice.value }));
                       }}
-                      className={locked && isAnswer ? 'border-green-600 bg-green-50 dark:bg-green-950/30' : locked && isGiven ? 'border-red-500 bg-red-50 dark:bg-red-950/30' : undefined}
                     >
                       <FontAwesomeIcon
                         icon={locked && (isAnswer || isGiven) ? (isAnswer ? faCircleCheck : faCircleXmark) : isGiven ? faCircleCheck : faCircle}

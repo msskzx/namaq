@@ -67,3 +67,13 @@ describe('matchBranches', () => {
     expect(matchBranches(['لا تقاتلون', 'ألا'], [[['لَا', 'تُقَـٰتِلُونَ'], ['لَا', 'تُؤْمِنُونَ']], [['أَلَّا', 'تَأْكُلُوا۟']]])).toEqual([{ branch: 0, words: 2 }, { branch: 1, words: 1 }]);
   });
 });
+
+describe('keyboard spelling variants', () => {
+  it('accepts common hamza seat keyboard substitutions without changing other consonants', () => {
+    expect(matchedWords('علي كل شي شهيد', ['عَلَىٰ', 'كُلِّ', 'شَىْءٍ', 'شَهِيدٌ'])).toBe(4);
+    expect(matchedWords('يوم يذ', ['يَوْمَئِذٍ'])).toBe(1);
+    expect(matchedWords('يومنون', ['يُؤْمِنُونَ'])).toBe(1);
+    expect(matchedWords('علي كل حي شهيد', ['عَلَىٰ', 'كُلِّ', 'شَىْءٍ', 'شَهِيدٌ'])).toBe(0);
+    expect(matchedWords('شهيد', ['شَىْءٍ'])).toBe(0);
+  });
+});

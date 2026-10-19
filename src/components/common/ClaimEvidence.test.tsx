@@ -121,12 +121,15 @@ describe('ClaimEvidence', () => {
       claim({ id: `claim-${index}`, assertion: `دعوى ${index}`, field: `field${index}` } as Partial<ClaimWithCitations>),
     );
 
-    const { container } = render(<ClaimEvidence title="Sources" claims={many} />);
+    render(<ClaimEvidence title="Sources" claims={many} />);
 
     expect(screen.getByText('field0')).toBeTruthy();
     expect(screen.queryByText('field5')).toBeNull();
-    // The same control the source reader uses: previous, a page selector, next.
-    expect(container.querySelectorAll('select option')).toHaveLength(5);
+    const page = screen.getByRole('spinbutton', { name: 'Go to page' });
+    expect(page.getAttribute('max')).toBe('5');
+    fireEvent.change(page, { target: { value: '5' } });
+    fireEvent.blur(page);
+    expect(screen.getByText('field20')).toBeTruthy();
   });
 
   it('pages forward and back through the claims', () => {

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { num } from '@/lib/quran/arabicNumber';
 import { branch, branchesHref, shown, variants, type BranchAyah, type Opening, type Piece } from '@/lib/quran/branches';
 import type { JuzRange } from '@/lib/quran/juz';
-import { NOTE } from '../panel';
+const NOTE = 'text-sm text-[var(--home-muted)]';
 import BranchTree from './BranchTree';
 
 export const PER_PAGE = 20;
@@ -22,7 +22,7 @@ function Entry({ piece, names, ayat, juz, partOf }: Props & { piece: Piece; part
         {partOf && piece.opening.count > piece.count && (
           <>
             {' · من: '}
-            <Link href={branchesHref(piece.opening.id, juz ?? undefined)} className="font-arabic text-amber-700 dark:text-amber-300 hover:underline">
+            <Link href={branchesHref(piece.opening.id, juz ?? undefined)} className="font-arabic text-[var(--home-accent)] hover:underline">
               {`${piece.opening.text} (${num(piece.opening.count)})`}
             </Link>
           </>
@@ -54,12 +54,12 @@ export default function PieceList({ pieces, openings, juz, ...props }: Props & {
         const inside = pieces.filter(piece => piece.opening.id === opening.id);
         return (
           <li key={opening.id}>
-            <details className="rounded-lg border border-amber-400 px-3 py-2">
+            <details className="rounded-sm border border-[var(--home-rule)] px-3 py-2">
               <summary className="cursor-pointer">
                 <span className="text-xl font-arabic leading-loose">{opening.text}</span>
                 <span className={`${NOTE} ms-2`}>{`${ayatCount(opening.count)} · ${counted(inside.length, ['مجموعة', 'مجموعتان', 'مجموعات'])}`}</span>
               </summary>
-              <Link href={branchesHref(opening.id, juz ?? undefined)} className="text-sm text-amber-700 dark:text-amber-300 hover:underline">الشجرة كاملة</Link>
+              <Link href={branchesHref(opening.id, juz ?? undefined)} className="text-sm text-[var(--home-accent)] hover:underline">الشجرة كاملة</Link>
               <ul className="flex flex-col gap-4 mt-2">
                 {inside.map(piece => <Entry key={piece.id} piece={piece} partOf={false} juz={juz} {...props} />)}
               </ul>
