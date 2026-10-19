@@ -37,6 +37,7 @@ describe('NavBar shelves', () => {
     for (const { href } of getAllNavLinks('en').filter(l => l.href.startsWith('/quran/'))) expect(hrefs).toContain(href);
     expect(within(shelf).getByRole('link', { name: /Prophets’ stories/ }).textContent).toContain('The story of Musa');
     expect(within(shelf).getAllByRole('heading').map(h => h.textContent)).toEqual(['Read', 'Words', 'Themes']);
+    expect(NAV_SECTIONS[0].groups[1].items[0].href).toBe('/quran/branches');
   });
 
   it('closes the shelf with Escape and when focus leaves the chapter', () => {
@@ -55,7 +56,7 @@ describe('NavBar shelves', () => {
 
   it('orders the chapters from the texts to review, with Quizzes as a plain link', () => {
     render(<NavBar />);
-    expect(NAV_SECTIONS.map(s => s.label.en)).toEqual(['Quran', 'Hadith', 'Biographies', 'Relationships', 'Sources', 'Quizzes']);
+    expect(NAV_SECTIONS.map(s => s.label.en)).toEqual(['Quran', 'Hadith', 'Biographies', 'Sources', 'Quizzes']);
     expect(screen.getByRole('link', { name: 'Quizzes' }).getAttribute('href')).toBe('/quizzes');
     expect(screen.queryByRole('button', { name: 'Quizzes pages' })).toBeNull();
   });
@@ -75,7 +76,8 @@ describe('NavBar shelves', () => {
     render(<NavBar />);
     expect(screen.getAllByRole('link', { name: 'Quran' })[0].getAttribute('aria-current')).toBe('page');
     expect(activeSection('/people/prophet-muhammad')).toBe('/people');
-    expect(activeSection('/nasab')).toBe('/graphs');
+    expect(activeSection('/nasab')).toBe('/people');
+    expect(activeSection('/graphs')).toBe('/people');
     expect(activeSection('/attributions')).toBe('/sources');
     expect(activeSection('/')).toBeUndefined();
   });
