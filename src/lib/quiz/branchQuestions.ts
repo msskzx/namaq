@@ -50,11 +50,7 @@ export function branchQuestions(all: BranchAyah[], range: JuzRange | null = null
       evidence: { claimKeys: [] },
     }];
   };
-  return pieces(sharedOpenings(ayat)).flatMap((piece) => {
-    const original = piece.keys.map((key) => byKey.get(key) as BranchAyah);
-    if (piece.count <= PIECE_MAX) return ask(original, piece.id);
-    return variants(original)
-      .filter((variant) => variant.keys.length >= 2 && variant.keys.length <= PIECE_MAX)
-      .flatMap((variant) => ask(variant.keys.map((key) => byKey.get(key) as BranchAyah), variant.id as string));
-  });
+  return pieces(sharedOpenings(ayat))
+    .filter((piece) => piece.count <= PIECE_MAX)
+    .flatMap((piece) => ask(piece.keys.map((key) => byKey.get(key) as BranchAyah), piece.id));
 }
