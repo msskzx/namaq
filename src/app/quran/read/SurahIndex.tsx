@@ -2,12 +2,14 @@
 
 import React, { useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faBookOpen, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@/lib/quran/arabicNumber';
 import { plainName } from '@/lib/quran/normalize';
-import { juzGroups, matchesSurah, type IndexSurah } from '@/lib/quran/juzIndex';
+import { juzGroups, matchesSurah, parseReference, type IndexSurah } from '@/lib/quran/juzIndex';
 import styles from '@/components/homepage/Home.module.css';
 
 const MUTED = 'text-[var(--home-muted)]';
@@ -16,10 +18,14 @@ export default function SurahIndex({ surahs, fontClass }: { surahs: IndexSurah[]
   const { language, languageLoaded } = useLanguage();
   const ar = !languageLoaded || language === 'ar';
   const n = (value: number) => (ar ? num(value) : String(value));
+  const router = useRouter();
   const [query, setQuery] = useState('');
   const groups = useMemo(() => juzGroups(surahs), [surahs]);
+  const reference = parseReference(query, surahs);
+  const referenceHref = reference && `/quran/read/ayah/${reference.surah.number}/${reference.ayah}`;
+  const keep = (surah: IndexSurah) => (reference ? surah.number === reference.surah.number : matchesSurah(surah, query));
   const shown = groups
-    .map(group => ({ ...group, entries: group.entries.filter(entry => matchesSurah(entry.surah, query)) }))
+    .map(group => ({ ...group, entries: group.entries.filter(entry => keep(entry.surah)) }))
     .filter(group => group.entries.length > 0);
   const found = new Set(shown.flatMap(group => group.entries.map(entry => entry.surah.number))).size;
   const name = (surah: IndexSurah) => plainName(surah.name).replace(/^سورة\s*/, '');
@@ -34,18 +40,32 @@ export default function SurahIndex({ surahs, fontClass }: { surahs: IndexSurah[]
             ? `السور الـ${num(surahs.length)} مرتبة في أجزائها الثلاثين. تظهر السورة في كل جزء لها فيه آيات. النص برواية حفص.`
             : `The ${surahs.length} surahs in their thirty juz'. A surah is listed under every juz' it has ayat in. The text is in Hafs.`}
         </p>
-        <label className="flex max-w-md items-center gap-3 border-b border-[var(--home-rule)] pb-1 focus-within:border-[var(--home-accent)]">
-          <FontAwesomeIcon icon={faMagnifyingGlass} className="text-[var(--home-accent)]" aria-hidden />
-          <input
-            type="search"
-            value={query}
-            onChange={event => setQuery(event.target.value)}
-            placeholder={ar ? 'ابحث باسم السورة أو رقمها' : 'Search by surah name or number'}
-            aria-label={ar ? 'ابحث عن سورة' : 'Search surahs'}
-            className="w-full bg-transparent py-1 text-lg outline-none placeholder:text-[var(--home-muted)]"
-          />
-        </label>
-        {query.trim() && (
+        <form
+          role="search"
+          onSubmit={event => {
+            event.preventDefault();
+            if (referenceHref) router.push(referenceHref);
+          }}
+        >
+          <label className="flex max-w-md items-center gap-3 border-b border-[var(--home-rule)] pb-1 focus-within:border-[var(--home-accent)]">
+            <FontAwesomeIcon icon={faMagnifyingGlass} className="text-[var(--home-accent)]" aria-hidden />
+            <input
+              type="search"
+              value={query}
+              onChange={event => setQuery(event.target.value)}
+              placeholder={ar ? 'سورة باسمها أو رقمها، أو آية مثل البقرة ٢٥٥' : 'A surah by name or number, or an ayah like 2:255'}
+              aria-label={ar ? 'ابحث عن سورة أو آية' : 'Search surahs or ayat'}
+              className="w-full bg-transparent py-1 text-lg outline-none placeholder:text-[var(--home-muted)]"
+            />
+          </label>
+        </form>
+        {reference && referenceHref && (
+          <Button href={referenceHref} className="mt-3">
+            <FontAwesomeIcon icon={faBookOpen} aria-hidden />
+            {ar ? `افتح ${name(reference.surah)} ${num(reference.ayah)}` : `Open ${reference.surah.nameTransliterated || name(reference.surah)} ${reference.ayah}`}
+          </Button>
+        )}
+        {query.trim() && !reference && (
           <p className={`${MUTED} mt-2 text-sm`} aria-live="polite">
             {found === 0
               ? ar ? 'لا توجد سورة بهذا الاسم أو الرقم.' : 'No surah matches that name or number.'

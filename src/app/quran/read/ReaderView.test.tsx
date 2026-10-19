@@ -97,6 +97,14 @@ describe('ReaderView', () => {
     expect(container.querySelector('article')?.getAttribute('dir')).toBe('rtl');
   });
 
+  it('marks the words and end of the ayah it was opened at', () => {
+    const page = data({ line: ['مِن', 5, 'إِنَّ', 'ٱلَّذِينَ'] }, { line: ['كَفَرُوا۟', 6, 'خَتَمَ'] });
+    const { container } = render(<ReaderView page={3} data={page} names={names} top={2} mark={{ surah: 2, ayah: 6 }} />);
+    expect([...container.querySelectorAll('[data-marked]')].map(span => span.textContent)).toEqual(['إِنَّ', 'ٱلَّذِينَ', 'كَفَرُوا۟٦']);
+    expect(screen.getByText('٦').className).toContain('bg-[var(--home-accent)]');
+    expect(screen.getByText('٥').className).not.toContain('bg-[var(--home-accent)]');
+  });
+
   it('jumps to a page by number and ignores one out of range', () => {
     render(<ReaderView page={3} data={opening} names={names} />);
     const input = screen.getByLabelText('رقم الصفحة');
@@ -127,7 +135,7 @@ describe('SurahIndex', () => {
 
   it('narrows the list to the surahs a search names, by name or number', () => {
     render(<SurahIndex surahs={surahs} />);
-    const search = screen.getByLabelText('ابحث عن سورة');
+    const search = screen.getByLabelText('ابحث عن سورة أو آية');
     fireEvent.change(search, { target: { value: 'عمران' } });
     expect(screen.getAllByRole('region').map(section => section.getAttribute('aria-label'))).toEqual(['الجزء ٣', 'الجزء ٤']);
     fireEvent.change(search, { target: { value: '٢' } });
@@ -135,5 +143,17 @@ describe('SurahIndex', () => {
     fireEvent.change(search, { target: { value: 'كهف' } });
     expect(screen.queryAllByRole('region')).toHaveLength(0);
     expect(screen.getByText('لا توجد سورة بهذا الاسم أو الرقم.')).not.toBeNull();
+  });
+
+  it('offers to open an ayah typed as a reference, and opens it on Enter', () => {
+    render(<SurahIndex surahs={surahs} />);
+    const search = screen.getByLabelText('ابحث عن سورة أو آية');
+    fireEvent.change(search, { target: { value: 'البقرة ٢٥٥' } });
+    expect(screen.getByText('افتح البقرة ٢٥٥').closest('a')?.getAttribute('href')).toBe('/quran/read/ayah/2/255');
+    expect(screen.getAllByRole('region').map(section => section.getAttribute('aria-label'))).toEqual(['الجزء ١', 'الجزء ٢', 'الجزء ٣']);
+    fireEvent.submit(search.closest('form')!);
+    expect(push).toHaveBeenCalledWith('/quran/read/ayah/2/255');
+    fireEvent.change(search, { target: { value: '2:300' } });
+    expect(screen.queryByText(/افتح/)).toBeNull();
   });
 });

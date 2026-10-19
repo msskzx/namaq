@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import type { ReaderPageData } from './readerPage';
-import { JUZ_INDEX, juzGroups, matchesSurah, type IndexSurah } from './juzIndex';
+import { JUZ_INDEX, juzGroups, matchesSurah, parseReference, type IndexSurah } from './juzIndex';
 
 const pages: ReaderPageData[] = Array.from({ length: 604 }, (_, i) =>
   JSON.parse(readFileSync(join(__dirname, '../../app/quran/read/data', `${i + 1}.json`), 'utf8')),
@@ -105,5 +105,43 @@ describe('matchesSurah', () => {
 
   it('keeps every surah when the query is empty', () => {
     expect(matchesSurah(baqarah, '  ')).toBe(true);
+  });
+});
+
+describe('parseReference', () => {
+  const list: IndexSurah[] = [
+    { number: 1, name: 'سُورَةُ ٱلْفَاتِحَةِ', nameTransliterated: 'Al-Faatiha', numberOfAyat: 7, page: 1 },
+    { number: 2, name: 'سُورَةُ ٱلْبَقَرَةِ', nameTransliterated: 'Al-Baqara', numberOfAyat: 286, page: 2 },
+  ];
+  const ref = (query: string) => {
+    const found = parseReference(query, list);
+    return found && [found.surah.number, found.ayah];
+  };
+
+  it('reads a surah number or name followed by an ayah number', () => {
+    for (const query of ['2:255', '2 255', '٢:٢٥٥', 'البقرة ٢٥٥', 'البقرة: 255', 'baqara 255', 'Al-Baqarah 255']) expect(ref(query), query).toEqual([2, 255]);
+    expect(ref('1:7')).toEqual([1, 7]);
+  });
+
+  it('prefers the surah whose whole name was typed over one that contains it', () => {
+    const named: IndexSurah[] = [
+      { number: 2, name: 'سُورَةُ ٱلْبَقَرَةِ', nameTransliterated: 'Al-Baqara', numberOfAyat: 286, page: 2 },
+      { number: 15, name: 'سُورَةُ ٱلْحِجْرِ', nameTransliterated: 'Al-Hijr', numberOfAyat: 99, page: 262 },
+      { number: 22, name: 'سُورَةُ ٱلْحَجِّ', nameTransliterated: 'Al-Hajj', numberOfAyat: 78, page: 332 },
+      { number: 28, name: 'سُورَةُ ٱلْقَصَصِ', nameTransliterated: 'Al-Qasas', numberOfAyat: 88, page: 385 },
+      { number: 38, name: 'سُورَةُ صٓ', nameTransliterated: 'Saad', numberOfAyat: 88, page: 453 },
+      { number: 50, name: 'سُورَةُ قٓ', nameTransliterated: 'Qaaf', numberOfAyat: 45, page: 518 },
+    ];
+    const pick = (query: string) => parseReference(query, named)?.surah.number;
+    expect(pick('الحج ٥')).toBe(22);
+    expect(pick('Al-Hajj 5')).toBe(22);
+    expect(pick('hajj 5')).toBe(22);
+    expect(pick('الحجر ٥')).toBe(15);
+    expect(pick('ق ١٠')).toBe(50);
+    expect(pick('ص ١')).toBe(38);
+  });
+
+  it('reads nothing from a bare surah or an ayah outside the surah', () => {
+    for (const query of ['2', 'البقرة', '1:8', '2:0', '3:1', 'كهف 10']) expect(ref(query), query).toBeNull();
   });
 });

@@ -37,4 +37,11 @@ describe('/quran/read/[page]', () => {
     expect(first.props.top).toBeUndefined();
     expect(first.props.names[1]).toBe('سورة 1');
   });
+
+  it('marks the ayah named in the query, and ignores a repeated one', async () => {
+    const open = (a: string | string[]) => QuranReadPage({ params: Promise.resolve({ page: '42' }), searchParams: Promise.resolve({ a }) }) as Promise<React.ReactElement<{ mark?: { surah: number; ayah: number } }>>;
+    expect((await open('2:255')).props.mark).toEqual({ surah: 2, ayah: 255 });
+    expect((await open(['2:255', '1:1'])).props.mark).toEqual({ surah: 2, ayah: 255 });
+    expect((await open('x')).props.mark).toBeUndefined();
+  });
 });
