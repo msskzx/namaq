@@ -10,8 +10,8 @@ import { num } from '@/lib/quran/arabicNumber';
 import { branchesHref, startsWith, type Opening } from '@/lib/quran/branches';
 import type { JuzRange } from '@/lib/quran/juz';
 import { normalizeWord } from '@/lib/quran/normalize';
-import { NOTE } from '../panel';
-import { SEARCH } from '../words/WordCounts';
+const NOTE = 'text-sm text-[var(--home-muted)]';
+const SEARCH = 'w-full rounded-sm border border-[var(--home-rule)] bg-transparent ps-10 pe-3 py-2 text-[var(--home-ink)] placeholder:text-[var(--home-muted)]';
 
 export const SUGGESTIONS = 10;
 
@@ -35,17 +35,17 @@ export default function OpeningSearch({ top, phrases, current, juz = null }: { t
       </div>
       <label className="relative block">
         <span className="sr-only">ابحث عن عبارة تبدأ بها آيتان أو أكثر</span>
-        <FontAwesomeIcon icon={faMagnifyingGlass} className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+        <FontAwesomeIcon icon={faMagnifyingGlass} className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--home-muted)]" />
         <input type="search" value={query} onChange={e => setQuery(e.target.value)} placeholder={`ابحث بين ${num(phrases.length)} عبارة تبدأ بها آيتان أو أكثر`}
           onKeyDown={e => { if (e.key === 'Enter' && suggestions[0]) { setQuery(''); router.push(branchesHref(suggestions[0].id, juz ?? undefined)); } }} className={SEARCH} />
       </label>
       {needle && (
-        <ul aria-label="عبارات مقترحة" className="flex flex-col rounded border border-gray-200 dark:border-white/10">
+        <ul aria-label="عبارات مقترحة" className="flex flex-col rounded border border-[var(--home-rule)]">
           {suggestions.length === 0 ? <li className={`${NOTE} px-2 py-1`}>لا عبارة مشتركة تطابق البحث.</li> : suggestions.map(o => (
             <li key={o.id}>
-              <Link href={branchesHref(o.id, juz ?? undefined)} onClick={() => setQuery('')} className="flex items-baseline gap-2 px-2 py-1 hover:bg-amber-100 dark:hover:bg-white/10">
+              <Link href={branchesHref(o.id, juz ?? undefined)} onClick={() => setQuery('')} className="flex items-baseline gap-2 px-2 py-1 hover:bg-[var(--home-paper-deep)]">
                 <span className="text-lg font-arabic flex-1">{o.text}</span>
-                <span className="text-amber-700 dark:text-amber-300">{num(o.count)}</span>
+                <span className="text-[var(--home-accent)]">{num(o.count)}</span>
               </Link>
             </li>
           ))}
