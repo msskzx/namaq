@@ -1,5 +1,5 @@
 // docs/quiz-ayah-branches.md
-import { branch, keys, PIECE_MAX, pieces, sharedOpenings, shown, variants, type BranchAyah } from '@/lib/quran/branches';
+import { branch, keys, PIECE_MAX, pieces, sharedOpenings, shown, variants, type Branch, type BranchAyah } from '@/lib/quran/branches';
 import { inJuzRange, type JuzRange } from '@/lib/quran/juz';
 import { normalizeWord } from '@/lib/quran/normalize';
 import { matchedWords, spelled } from './branchAnswers';
@@ -17,6 +17,7 @@ export interface BranchQuestion {
   choices: [];
   correctAnswer: string;
   branches: BranchAnswer[];
+  tree: Branch;
   evidence: { claimKeys: string[] };
 }
 
@@ -36,10 +37,11 @@ export function branchQuestions(all: BranchAyah[], range: JuzRange | null = null
     return [{
       key: `${BRANCH_FAMILY}:${phrase}`,
       family: BRANCH_FAMILY,
-      promptArabic: `تفترق الآيات التي تبدأ بـ ${opening} إلى ${COUNTS[tree.children.length]}. اكتب ما يلي هذه العبارة في كل فرع.`,
+      promptArabic: `تفترق الآيات التي تبدأ بـ ${opening} إلى ${COUNTS[tree.children.length]}. أكمل جميع عقد الشجرة بعد هذه العبارة، بما فيها نهايات الفروع.`,
       phrase: id,
       choices: [],
       correctAnswer: phrase,
+      tree,
       branches: tree.children.map((child) => ({
         words: child.words,
         ayat: keys(child).map((key) => {

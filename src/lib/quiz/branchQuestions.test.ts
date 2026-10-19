@@ -3,6 +3,7 @@ import ayat from '@/app/quran/branches/ayat.json';
 import { PIECE_MAX, type BranchAyah } from '@/lib/quran/branches';
 import { normalizeWord } from '@/lib/quran/normalize';
 import { branchQuestions } from './branchQuestions';
+import { branchNodes, matchTreeAnswers, spelled } from './branchAnswers';
 
 const all = ayat as BranchAyah[];
 const questions = branchQuestions(all);
@@ -11,6 +12,17 @@ const asked = (list: typeof questions, key: string) => list.find((question) => q
 const keysOf = (question: (typeof questions)[number] | undefined) => question?.branches.map((branch) => branch.ayat.map((ayah) => ayah.key));
 
 describe('branchQuestions', () => {
+  it('preserves the complete explorer tree, including the second split and terminal leaves', () => {
+    const question = asked(questions, '52:24')!;
+    const nodes = branchNodes(question.tree);
+    expect(nodes.length).toBeGreaterThan(question.branches.length);
+    expect(nodes.flatMap(node => node.ayat).sort()).toEqual(['52:24', '56:17', '76:19']);
+    const answers = nodes.map(node => node.words.map(spelled).join(' '));
+    expect(matchTreeAnswers(question.tree, answers).every(hit => hit?.correct)).toBe(true);
+    expect(matchTreeAnswers(question.tree, answers.slice(0, 2)).every(hit => hit?.correct)).toBe(false);
+    expect(question.promptArabic).toContain('نهايات الفروع');
+  });
+
   it('asks يطوف عليهم with both of its spellings in the prompt', () => {
     const question = asked(questions, '52:24');
     expect(question?.promptArabic).toContain('«يَطُوفُ عَلَيْهِمْ» أو «وَيَطُوفُ عَلَيْهِمْ» إلى فرعين');

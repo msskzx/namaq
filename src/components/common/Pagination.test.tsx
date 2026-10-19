@@ -67,10 +67,10 @@ describe('Pagination', () => {
 
   it('jumps to a chosen page when a selector is offered', () => {
     const onChange = vi.fn();
-    const { container } = render(<Pagination page={1} pageCount={19} onChange={onChange} showSelect />);
-    expect(container.querySelector('span')).toBeNull();
-
-    fireEvent.change(container.querySelector('select')!, { target: { value: '7' } });
+    render(<Pagination page={1} pageCount={19} onChange={onChange} showSelect />);
+    const input = screen.getByRole('spinbutton', { name: 'Go to page' });
+    fireEvent.change(input, { target: { value: '7' } });
+    fireEvent.blur(input);
 
     expect(onChange).toHaveBeenCalledWith(7);
   });
@@ -90,8 +90,7 @@ describe('Pagination', () => {
   it('names the jump control even with no visible label', () => {
     const { container } = render(<Pagination page={1} pageCount={19} onChange={vi.fn()} showSelect />);
 
-    expect(container.querySelector('select')?.getAttribute('aria-label')).toBe('Go to page');
-    expect(container.querySelector('label')?.firstElementChild?.tagName).toBe('SELECT');
+    expect(container.querySelector('input')?.getAttribute('aria-label')).toBe('Go to page');
   });
 
   it('offers no selector unless asked', () => {

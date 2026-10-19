@@ -59,14 +59,43 @@ const questions = Array.from({ length: 5 }, (_, index) => ({
   evidence: { reference: null as typeof reference | null },
 }));
 
+const branchQuestion = {
+  ...questions[0],
+  family: 'AYAH_BRANCH',
+  promptArabic: 'أكمل جميع عقد الشجرة',
+  choices: [],
+  correctAnswer: 'يوم يبعثهم الله جميعا',
+  phrase: 'يوم يبعثهم الله جميعا',
+  branches: [
+    { words: ['فَيُنَبِّئُهُمْ'], ayat: [{ key: '58:6', page: 542, words: ['فَيُنَبِّئُهُمْ', 'بِمَا', 'عَمِلُوا'] }] },
+    { words: ['فَيَحْلِفُونَ', 'لَهُ'], ayat: [{ key: '58:18', page: 544, words: ['فَيَحْلِفُونَ', 'لَهُ'] }] },
+  ],
+  tree: {
+    words: ['يَوْمَ', 'يَبْعَثُهُمُ', 'اللَّهُ', 'جَمِيعًا'],
+    ayat: [],
+    children: [
+      {
+        words: ['فَيُنَبِّئُهُمْ'],
+        ayat: [],
+        children: [
+          { words: ['بِمَا', 'عَمِلُوا'], ayat: ['58:6'], children: [] },
+          { words: ['عَلَى', 'كُلِّ', 'شَيْءٍ', 'شَهِيدٌ'], ayat: ['58:7'], children: [] },
+        ],
+      },
+      { words: ['فَيَحْلِفُونَ', 'لَهُ'], ayat: ['58:18'], children: [] },
+    ],
+  },
+} as typeof questions[number];
+
 const availabilityKeys: string[] = [];
+let availableSupply = 5;
 
 vi.mock('swr', () => ({
   default: (key: string | null) => {
     if (key?.startsWith('/api/quiz/availability')) availabilityKeys.push(key);
     if (key?.startsWith('/api/quiz/availability')) {
-      const available = nav.getUrl().includes('topic=AYAT') ? 2 : 5;
-      return { data: { available, lengths: available >= 5 ? [5] : [] }, error: null, isLoading: false };
+      const available = nav.getUrl().includes('topic=AYAT') ? 2 : availableSupply;
+      return { data: { available, lengths: [5, 10, 15].filter((length) => length <= available) }, error: null, isLoading: false };
     }
     if (key?.startsWith('/api/quiz?')) return { data: { questions, surahNames: { 52: 'الطور' } }, error: null, isLoading: false };
     return { data: undefined, error: null, isLoading: false };
@@ -79,6 +108,8 @@ import QuizzesPage from './page';
 
 beforeEach(() => {
   nav.reset('/quizzes');
+  availableSupply = 5;
+  availabilityKeys.length = 0;
 });
 
 afterEach(() => {
@@ -86,6 +117,22 @@ afterEach(() => {
 });
 
 describe('QuizzesPage', () => {
+  it('keeps a typed juz range when Start is clicked before navigation completes', () => {
+    nav.reset('/quizzes?topic=BRANCHES');
+    const pushes: string[] = [];
+    const pending = vi.spyOn(nav, 'push').mockImplementation((url) => { pushes.push(url); });
+    render(<QuizzesPage />);
+    const from = screen.getByRole('spinbutton', { name: "From juz'" });
+    fireEvent.change(from, { target: { value: '25' } });
+    fireEvent.blur(from);
+    fireEvent.click(screen.getByRole('button', { name: 'Start quiz' }));
+    const final = new URLSearchParams(pushes.at(-1)?.split('?')[1]);
+    expect(final.get('juzFrom')).toBe('25');
+    expect(final.get('length')).toBe('5');
+    expect(final.get('topic')).toBe('BRANCHES');
+    pending.mockRestore();
+  });
+
   it('renders reviewed Arabic content and only shows Submit on the final question', () => {
     nav.reset('/quizzes?topic=PEOPLE&length=5');
     render(<QuizzesPage />);
@@ -213,82 +260,90 @@ describe('QuizzesPage', () => {
     expect(screen.getByText('Passed')).toBeTruthy();
   });
 
-  it('checks two typed branches against the Quran text and shows its rasm', () => {
+  it('marks a partial tree answer wrong and reveals the intermediate split and every leaf', () => {
     const original = questions[0];
-    questions[0] = {
-      ...original,
-      family: 'AYAH_BRANCH',
-      promptArabic: 'تفترق الآيات التي تبدأ بـ «وَيَطُوفُ عَلَيْهِمْ» إلى فرعين.',
-      choices: [],
-      correctAnswer: 'ويطوف عليهم',
-      phrase: 'ويطوف عليهم',
-      branches: [
-        { words: ['غِلْمَانٌۭ', 'لَّهُمْ'], ayat: [{ key: '52:24', page: 524, words: ['غِلْمَانٌۭ', 'لَّهُمْ'] }] },
-        { words: ['وِلْدَٰنٌۭ', 'مُّخَلَّدُونَ'], ayat: [{ key: '76:19', page: 580, words: ['وِلْدَٰنٌۭ', 'مُّخَلَّدُونَ'] }] },
-      ],
-    } as typeof original;
+    questions[0] = branchQuestion;
     try {
       nav.reset('/quizzes?topic=BRANCHES&length=5');
       render(<QuizzesPage />);
 
-      fireEvent.change(screen.getByLabelText('Branch 1'), { target: { value: 'ولدان مخلدون' } });
-      fireEvent.change(screen.getByLabelText('Branch 2'), { target: { value: 'غلمان' } });
+      expect(screen.getAllByRole('textbox')).toHaveLength(4);
+      fireEvent.change(screen.getByLabelText('Node 1'), { target: { value: 'فينبئهم' } });
+      fireEvent.change(screen.getByLabelText('Node 4'), { target: { value: 'فيحلفون له' } });
       fireEvent.click(screen.getByRole('button', { name: 'Check' }));
 
-      expect(screen.getByRole('button', { name: 'Question 1 - correct' })).toBeTruthy();
-      expect(screen.getByText('وِلْدَٰنٌۭ مُّخَلَّدُونَ')).toBeTruthy();
-      expect(screen.getByText('غِلْمَانٌۭ')).toBeTruthy();
-      expect(screen.getByRole('link', { name: 'الطور ٢٤' }).getAttribute('href')).toBe('/quran/read/524');
-      expect(screen.getByRole('link', { name: '٧٦:١٩' })).toBeTruthy();
-      expect(screen.getByRole('link', { name: 'Openings tree' }).getAttribute('href')).toBe('/quran/branches?o=%D9%88%D9%8A%D8%B7%D9%88%D9%81+%D8%B9%D9%84%D9%8A%D9%87%D9%85');
+      expect(screen.getByRole('button', { name: 'Question 1 - incorrect' })).toBeTruthy();
+      for (const words of ['فَيُنَبِّئُهُمْ', 'بِمَا عَمِلُوا', 'عَلَى كُلِّ شَيْءٍ شَهِيدٌ', 'فَيَحْلِفُونَ لَهُ']) {
+        expect(screen.getAllByText(words).length).toBeGreaterThan(0);
+      }
     } finally {
       questions[0] = original;
     }
   });
 
-  it('marks a branch question wrong when one branch is missed and shows that branch', () => {
+  it('accepts every tree node with ordinary Arabic typing and keeps feedback and scoring across navigation', () => {
     const original = questions[0];
-    questions[0] = {
-      ...original,
-      family: 'AYAH_BRANCH',
-      choices: [],
-      correctAnswer: 'ويطوف عليهم',
-      branches: [
-        { words: ['غِلْمَانٌۭ'], ayat: [{ key: '52:24', page: 524, words: ['غِلْمَانٌۭ'] }] },
-        { words: ['وِلْدَٰنٌۭ'], ayat: [{ key: '76:19', page: 580, words: ['وِلْدَٰنٌۭ'] }] },
-      ],
-    } as typeof original;
-    const second = questions[1];
-    questions[1] = { ...questions[0], key: 'second-branch' };
+    questions[0] = branchQuestion;
     try {
       nav.reset('/quizzes?topic=BRANCHES&length=5');
       render(<QuizzesPage />);
-
-      fireEvent.change(screen.getByLabelText('Branch 1'), { target: { value: 'غلمان' } });
+      for (const [index, value] of ['فينبئهم', 'بما عملوا', 'على كل شي شهيد', 'فيحلفون له'].entries()) {
+        fireEvent.change(screen.getByLabelText(`Node ${index + 1}`), { target: { value } });
+      }
       fireEvent.click(screen.getByRole('button', { name: 'Check' }));
-
-      expect(screen.getByRole('button', { name: 'Question 1 - incorrect' })).toBeTruthy();
-      expect(screen.getByText('Correct:')).toBeTruthy();
-      expect(screen.getByText('وِلْدَٰنٌۭ')).toBeTruthy();
-      fireEvent.click(screen.getByRole('button', { name: 'Question 2 - unanswered' }));
-      fireEvent.change(screen.getByLabelText('Branch 1'), { target: { value: 'غلمان' } });
-      fireEvent.change(screen.getByLabelText('Branch 2'), { target: { value: 'ولدان' } });
+      expect(screen.getByRole('button', { name: 'Question 1 - correct' })).toBeTruthy();
+      fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+      fireEvent.click(screen.getByRole('button', { name: 'Question 1 - correct' }));
+      expect(screen.queryByRole('textbox')).toBeNull();
+      for (const words of ['فَيُنَبِّئُهُمْ', 'بِمَا عَمِلُوا', 'عَلَى كُلِّ شَيْءٍ شَهِيدٌ', 'فَيَحْلِفُونَ لَهُ']) {
+        expect(screen.getAllByText(words).length).toBeGreaterThan(0);
+      }
       fireEvent.click(screen.getByRole('button', { name: 'Question 5 - unanswered' }));
       fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
       expect(screen.getByText('Score: 1 / 5 (20%)')).toBeTruthy();
     } finally {
       questions[0] = original;
-      questions[1] = second;
     }
   });
 
-  it('offers a juz range for shared openings and sends it with the count', () => {
-    nav.reset('/quizzes?topic=BRANCHES');
+  it('commits a typed juz range on blur and preserves the other URL options', () => {
+    nav.reset('/quizzes?topic=BRANCHES&juzFrom=1&juzTo=30&view=tree');
     render(<QuizzesPage />);
 
-    expect((screen.getByLabelText("From juz'") as HTMLSelectElement).value).toBe('1');
-    fireEvent.change(screen.getByLabelText("From juz'"), { target: { value: '29' } });
-    expect(new URLSearchParams(nav.getUrl().split('?')[1]).get('juzFrom')).toBe('29');
-    expect(availabilityKeys.at(-1)).toBe('/api/quiz/availability?topic=BRANCHES&juzFrom=29');
+    const from = screen.getByRole('spinbutton', { name: "From juz'" });
+    const to = screen.getByRole('spinbutton', { name: "To juz'" });
+    expect((from as HTMLInputElement).value).toBe('1');
+    expect((to as HTMLInputElement).value).toBe('30');
+    fireEvent.change(from, { target: { value: '25' } });
+    expect(new URLSearchParams(nav.getUrl().split('?')[1]).get('juzFrom')).toBe('1');
+    fireEvent.blur(from);
+    const params = new URLSearchParams(nav.getUrl().split('?')[1]);
+    expect(params.get('juzFrom')).toBe('25');
+    expect(params.get('juzTo')).toBe('30');
+    expect(params.get('topic')).toBe('BRANCHES');
+    expect(params.get('view')).toBe('tree');
+    expect(params.has('length')).toBe(false);
+    expect(availabilityKeys.at(-1)).toBe('/api/quiz/availability?topic=BRANCHES&juzFrom=25&juzTo=30');
+  });
+
+  it('selects an available question count and starts only after the explicit action', () => {
+    availableSupply = 15;
+    nav.reset('/quizzes?topic=BRANCHES&juzFrom=25&view=tree');
+    render(<QuizzesPage />);
+
+    const count = screen.getByRole('spinbutton', { name: 'Question count' });
+    expect((count as HTMLInputElement).value).toBe('5');
+    fireEvent.click(screen.getByRole('button', { name: 'Increase Question count' }));
+    expect((count as HTMLInputElement).value).toBe('10');
+    fireEvent.click(screen.getByRole('button', { name: 'Increase Question count' }));
+    expect((count as HTMLInputElement).value).toBe('15');
+    expect((screen.getByRole('button', { name: 'Increase Question count' }) as HTMLButtonElement).disabled).toBe(true);
+    expect(new URLSearchParams(nav.getUrl().split('?')[1]).has('length')).toBe(false);
+    fireEvent.click(screen.getByRole('button', { name: 'Start quiz' }));
+    const params = new URLSearchParams(nav.getUrl().split('?')[1]);
+    expect(params.get('length')).toBe('15');
+    expect(params.get('juzFrom')).toBe('25');
+    expect(params.get('view')).toBe('tree');
+    expect(screen.getByText('السؤال العربي 1؟')).toBeTruthy();
   });
 });

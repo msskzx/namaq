@@ -1,0 +1,82 @@
+// @vitest-environment jsdom
+import React from 'react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { BranchFeedback, BranchInputs, branchesCorrect, emptyBranchAnswers } from './BranchAnswers';
+
+const tree = {
+  words: ['يَطُوفُ', 'عَلَيْهِمْ'], ayat: [], children: [
+    { words: ['غِلْمَانٌ', 'لَهُمْ'], ayat: ['52:24'], children: [] },
+    { words: ['وِلْدَانٌ', 'مُخَلَّدُونَ'], ayat: [], children: [
+      { words: ['بِأَكْوَابٍ'], ayat: ['56:17'], children: [] },
+      { words: ['إِذَا', 'رَأَيْتَهُمْ'], ayat: ['76:19'], children: [] },
+    ] },
+  ],
+};
+const question = { tree, phrase: 'يطوف عليهم', branches: [{ words: [], ayat: [{ key: '52:24', page: 524, words: [] }, { key: '56:17', page: 535, words: [] }, { key: '76:19', page: 579, words: [] }] }] };
+const typed = ['غلمان لهم', 'ولدان مخلدون', 'بأكواب', 'إذا رأيتهم'];
+afterEach(cleanup);
+
+describe('complete branch tree answers', () => {
+  it('requires intermediate nodes and every leaf, with every word in each node', () => {
+    expect(emptyBranchAnswers(question)).toEqual(['', '', '', '']);
+    expect(branchesCorrect(question, typed)).toBe(true);
+    expect(branchesCorrect(question, ['غلمان لهم', 'ولدان مخلدون'])).toBe(false);
+    expect(branchesCorrect(question, ['', ...typed.slice(1)])).toBe(false);
+    expect(branchesCorrect(question, [typed[0], typed[1], '', typed[3]])).toBe(false);
+    expect(branchesCorrect(question, ['غلمان', ...typed.slice(1)])).toBe(false);
+    expect(branchesCorrect(question, [])).toBe(false);
+    expect(branchesCorrect(question, [...typed, 'extra'])).toBe(false);
+  });
+
+  it('accepts sibling leaves in either order but preserves their parent', () => {
+    expect(branchesCorrect(question, [typed[0], typed[1], typed[3], typed[2]])).toBe(true);
+    expect(branchesCorrect(question, [typed[2], typed[1], typed[0], typed[3]])).toBe(false);
+  });
+
+  it('shows fields at every non-root node without leaking their text or citations', () => {
+    const onChange = vi.fn();
+    const onCheck = vi.fn();
+    render(<BranchInputs question={question} typed={emptyBranchAnswers(question)} onChange={onChange} onCheck={onCheck} ar={false} />);
+    expect(screen.getAllByRole('textbox')).toHaveLength(4);
+    expect(screen.getByText('يَطُوفُ عَلَيْهِمْ')).toBeTruthy();
+    expect(screen.queryByText('غِلْمَانٌ لَهُمْ')).toBeNull();
+    expect(screen.queryAllByRole('link')).toHaveLength(0);
+    expect(screen.getByRole('button', { name: 'Check' }).hasAttribute('disabled')).toBe(true);
+    fireEvent.change(screen.getByRole('textbox', { name: 'Node 4' }), { target: { value: 'إذا رأيتهم' } });
+    expect(onChange).toHaveBeenCalledWith(['', '', '', 'إذا رأيتهم']);
+    fireEvent.submit(screen.getByRole('button', { name: 'Check' }).closest('form')!);
+    expect(onCheck).not.toHaveBeenCalled();
+  });
+
+  it('allows checking a partial tree and marks its empty leaves incorrect', () => {
+    const onCheck = vi.fn();
+    const partial = [typed[0], typed[1], '', ''];
+    const { unmount } = render(<BranchInputs question={question} typed={partial} onChange={vi.fn()} onCheck={onCheck} ar={false} />);
+    expect(screen.getByRole('button', { name: 'Check' }).hasAttribute('disabled')).toBe(false);
+    fireEvent.submit(screen.getByRole('button', { name: 'Check' }).closest('form')!);
+    expect(onCheck).toHaveBeenCalledOnce();
+    unmount();
+    render(<BranchFeedback question={question} typed={partial} names={{}} juz={null} ar={false} />);
+    expect(screen.getAllByText('No answer')).toHaveLength(2);
+    expect(screen.getAllByText('Incorrect')).toHaveLength(2);
+  });
+
+  it('checks a completed tree through form submission', () => {
+    const onCheck = vi.fn();
+    render(<BranchInputs question={question} typed={typed} onChange={vi.fn()} onCheck={onCheck} ar={true} />);
+    fireEvent.submit(screen.getByRole('button', { name: 'تحقق' }).closest('form')!);
+    expect(onCheck).toHaveBeenCalledOnce();
+  });
+
+  it('shows corrections and reader citations on the complete feedback tree', () => {
+    render(<BranchFeedback question={question} typed={[typed[0], typed[1], typed[3], 'wrong']} names={{ 52: 'الطور' }} juz={null} ar={false} />);
+    expect(screen.getByRole('region', { name: 'Answer tree' })).toBeTruthy();
+    expect(screen.getAllByText('Correct', { exact: true })).toHaveLength(3);
+    expect(screen.getByText('Incorrect')).toBeTruthy();
+    expect(screen.getByText('بِأَكْوَابٍ')).toBeTruthy();
+    expect(screen.getByText('إِذَا رَأَيْتَهُمْ')).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'الطور ٢٤' }).getAttribute('href')).toBe('/quran/read/524');
+    expect(screen.getByRole('link', { name: '٥٦:١٧' }).getAttribute('href')).toBe('/quran/read/535');
+  });
+});

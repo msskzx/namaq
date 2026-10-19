@@ -17,9 +17,6 @@ const SIZE_CLASSES: Record<ButtonSize, string> = {
 
 const BASE_CLASSES = 'inline-flex items-center gap-2 rounded transition disabled:opacity-50';
 
-// `active` is the pressed look for a control that stays on, so an outline
-// button can show state without swapping to the primary variant's larger
-// weight.
 const ACTIVE_CLASSES = 'bg-amber-400 text-gray-950 hover:bg-amber-300';
 
 function classesFor(variant: ButtonVariant, size: ButtonSize, active: boolean, className?: string) {
@@ -47,8 +44,8 @@ export default function Button(props: ButtonProps | LinkButtonProps) {
   const classes = classesFor(variant, size, active, className);
   if (rest.href !== undefined) {
     const { href, ...linkRest } = rest as LinkButtonProps;
-    return <Link href={href} className={classes} {...linkRest}>{children}</Link>;
+    return <Link data-button data-variant={variant} data-active={active || undefined} href={href} className={classes} {...linkRest}>{children}</Link>;
   }
   const { type = 'button', ...buttonRest } = rest as ButtonProps;
-  return <button type={type} className={classes} {...buttonRest}>{children}</button>;
+  return <button data-button data-variant={variant} data-active={active || undefined} type={type} className={classes} {...buttonRest}>{children}</button>;
 }

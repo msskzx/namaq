@@ -28,10 +28,8 @@ Open the graph → explore and filter relationships → open a person's profile 
   answer for immediate feedback, expose one source reference per question in
   an overlay that deep-links to the exact reader passage, and report a
   percentage with a pass mark at 50%.
-- The "Shared openings" quiz topic shows a phrase that ayat on
-  `/quran/branches` start with and asks for every branch they split into
-  within a chosen juz' range, as free text. Ordinary spelling counts as
-  correct and is shown back in the mushaf text ([docs/quiz-ayah-branches.md](docs/quiz-ayah-branches.md)).
+- Quizzes and `/quran/branches` use the paper theme. Number controls across the app support direct typing, keyboard navigation and bounded increment buttons, including quiz length, juz' ranges, page jumps and ayah ranges.
+- The "Shared openings" quiz uses the same connected tree as `/quran/branches` and asks for every node after the opening, including the leaves. Feedback shows the complete tree. Ordinary Arabic keyboard variants, including ي in place of ئ and شي for شيء, count as correct ([docs/quiz-ayah-branches.md](docs/quiz-ayah-branches.md)).
 
 ### Hadith fixtures
 

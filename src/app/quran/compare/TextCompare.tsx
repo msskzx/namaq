@@ -1,6 +1,7 @@
 import { faCodeCompare, faExpand, faListOl, faWaveSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from '@/components/common/Button';
+import NumberInput from '@/components/common/NumberInput';
 import { prisma } from '@/lib/prisma';
 import { alignSurahs, clampRange, compareHref, wordTokens } from '@/lib/quran/compare';
 import { ayahWords } from '@/lib/quran/normalize';
@@ -10,7 +11,7 @@ import SimilarAyat from './SimilarAyat';
 import SurahPicker from './SurahPicker';
 import { viewHref } from './modeHref';
 import wordKeys from './wordKeys.json';
-import { FIELD, NOTE, PANEL } from '../panel';
+import { NOTE, PANEL } from '../panel';
 
 const plainName = (name: string) => name.replace(/[ً-ٟـٰۖ-ۭ]/g, '').replace(/ٱ/g, 'ا');
 const pick = (value: string | string[] | undefined, fallback: number) => {
@@ -38,10 +39,10 @@ export default async function TextCompare({ query }: { query: Record<string, str
   const rawName = (n: number) => surahs.find(s => s.number === n)?.name ?? '';
 
   const ayahInput = (name: string, value: number, max: number, label: string, text: string) => (
-    <label className={`${NOTE} flex items-center gap-1`}>
+    <span className={`${NOTE} flex items-center gap-1`}>
       {text}
-      <input type="number" name={name} aria-label={label} defaultValue={value} min={1} max={max} className={`${FIELD} w-16 text-gray-900 dark:text-gray-200`} />
-    </label>
+      <NumberInput name={name} label={label} defaultValue={value} min={1} max={max} />
+    </span>
   );
   const side = (key: 'a' | 'b', value: number, r: typeof ra, max: number, title: string, all: string) => (
     <fieldset className="flex flex-wrap items-center gap-2">

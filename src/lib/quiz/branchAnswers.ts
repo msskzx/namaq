@@ -1,4 +1,5 @@
 // docs/quiz-ayah-branches.md
+import type { Branch } from '@/lib/quran/branches';
 import { normalizeWord } from '@/lib/quran/normalize';
 
 const DAGGER = 'ٰ';
@@ -16,7 +17,7 @@ function pattern(word: string): string {
       if (SEATS.includes(previous)) pieces[pieces.length - 1] += '?';
       pieces.push('ا?');
     } else if (HAMZA.test(char)) {
-      pieces.push('[ءا]?');
+      pieces.push(char === 'ئ' ? '[ءاي]?' : char === 'ؤ' ? '[ءاو]?' : '[ءا]?');
     } else if (SMALL[char]) {
       pieces.push(SMALL[char]);
     } else {
@@ -61,4 +62,41 @@ export function matchBranches(given: string[], branches: string[][][]): (BranchM
     }
   }
   return best;
+}
+
+export const branchNodes = (tree: Branch): Branch[] => tree.children.flatMap((child) => [child, ...branchNodes(child)]);
+
+export type TreeAnswerMatch = { node: Branch; correct: boolean };
+
+export function matchTreeAnswers(tree: Branch, given: string[]): (TreeAnswerMatch | null)[] {
+  const nodes = branchNodes(tree);
+  const indices = new Map(nodes.map((node, index) => [node, index]));
+  const pair = (slots: Branch[], expected: Branch[]): Map<number, TreeAnswerMatch> | null => {
+    let best: Map<number, TreeAnswerMatch> | null = null;
+    let score = -1;
+    for (const order of orders(expected.length)) {
+      const result = new Map<number, TreeAnswerMatch>();
+      let possible = true;
+      slots.forEach((slot, at) => {
+        const answer = expected[order[at]];
+        if (slot.children.length !== answer.children.length) {
+          possible = false;
+          return;
+        }
+        const index = indices.get(slot)!;
+        result.set(index, { node: answer, correct: matchedWords(given[index] ?? '', answer.words) === answer.words.length });
+        const children = pair(slot.children, answer.children);
+        if (!children) possible = false;
+        children?.forEach((value, key) => result.set(key, value));
+      });
+      const count = [...result.values()].filter(hit => hit?.correct).length;
+      if (possible && count > score) {
+        best = result;
+        score = count;
+      }
+    }
+    return best;
+  };
+  const matched = pair(tree.children, tree.children);
+  return nodes.map((_, index) => matched?.get(index) ?? null);
 }
