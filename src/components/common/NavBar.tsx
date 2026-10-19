@@ -175,7 +175,7 @@ export default function NavBar() {
             <button type="button" className={styles.language} onClick={toggleLanguage} lang={ar ? 'en' : 'ar'} aria-label={ar ? 'Switch to English' : 'التبديل إلى العربية'}>
               {ar ? 'EN' : 'ع'}
             </button>
-            <ThemeSwitcher />
+            <ThemeSwitcher palette="site" />
             <button
               type="button"
               className={`${styles.iconButton} ${styles.menuButton}`}
