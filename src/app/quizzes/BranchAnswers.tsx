@@ -70,7 +70,7 @@ export function BranchInputs({ question, typed, onChange, onCheck, ar }: { quest
       <div dir="rtl">
         <BranchTree tree={question.tree} names={{}} pages={{}} label={ar ? "أكمل الشجرة" : "Complete the tree"} renderNode={(_, index) => (
           <label className="flex w-56 flex-col gap-1">
-            <span className="text-sm text-[var(--home-muted)]">{ar ? `العقدة ${num(index + 1)}` : `Node ${index + 1}`}</span>
+            <span className="sr-only">{ar ? `العقدة ${num(index + 1)}` : `Node ${index + 1}`}</span>
             <input type="text" dir="rtl" lang="ar" autoComplete="off" spellCheck={false} value={values[index]}
               onChange={(event) => onChange(values.map((value, at) => at === index ? event.target.value : value))}
               className="w-full rounded-sm border border-[var(--home-rule)] bg-transparent px-3 py-2 font-arabic text-lg text-[var(--home-ink)] focus:border-[var(--home-accent)]" />
