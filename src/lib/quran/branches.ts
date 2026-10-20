@@ -1,17 +1,18 @@
 // docs/plans/quran-shared-openings.md
+import { num } from './arabicNumber';
 import type { JuzRange } from './juz';
 import { normalizeWord } from './normalize';
 import type { ReaderPageData } from './readerPage';
 
-export type BranchAyah = { key: string; page: number; words: string[]; conj?: string };
+export type BranchAyah = { key: string; page: number; words: string[]; conj?: string; next?: string[] };
 export type Branch = { words: string[]; ayat: string[]; children: Branch[] };
 export type Opening = { id: string; text: string; count: number };
-export type Variant = { word: string; conj: string; keys: string[]; id?: string };
+export type Variant = { word: string; conj: string; keys: string[]; id: string };
 
 export const OPENING_WORDS = 2;
 export const TOP = 8;
 
-export type BranchesView = { list?: boolean; grouped?: boolean; page?: number };
+export type BranchesView = { list?: boolean; grouped?: boolean; page?: number; spelling?: string };
 
 export function branchesHref(id: string, juz?: JuzRange, view: BranchesView = {}) {
   const params = new URLSearchParams({ o: id });
@@ -20,6 +21,7 @@ export function branchesHref(id: string, juz?: JuzRange, view: BranchesView = {}
   if (view.list) params.set('v', 'list');
   if (view.list && view.grouped) params.set('g', 'opening');
   if (view.list && view.page && view.page > 1) params.set('p', `${view.page}`);
+  if (view.spelling) params.set('w', view.spelling);
   return `/quran/branches?${params}`;
 }
 
@@ -67,6 +69,14 @@ export function withConjunctions(ayat: BranchAyah[], morphology: string): Branch
 
 const norm = (ayah: BranchAyah) => ayah.words.map(normalizeWord);
 
+const bySpelling = (ayat: BranchAyah[]) => {
+  const found = new Map<string, BranchAyah[]>();
+  for (const ayah of ayat) found.set(spell(ayah.words[0]), [...(found.get(spell(ayah.words[0])) ?? []), ayah]);
+  return found;
+};
+
+export const spell = (word: string) => word.replace(/[\u0640\u2060]/g, '').normalize('NFC');
+
 export function stem(ayah: BranchAyah): BranchAyah {
   if (!ayah.conj) return ayah;
   const [first, ...rest] = ayah.words;
@@ -77,7 +87,13 @@ export function stem(ayah: BranchAyah): BranchAyah {
 
 export const mixed = (ayat: BranchAyah[]) => new Set(ayat.map(ayah => ayah.conj ?? '')).size > 1;
 
-export const shown = (ayat: BranchAyah[]) => (mixed(ayat) ? ayat.map(stem) : ayat);
+export const split = (ayat: BranchAyah[]) => new Set(ayat.map(ayah => spell(ayah.words[0]))).size > 1;
+
+export function shown(ayat: BranchAyah[]): BranchAyah[] {
+  if (!split(ayat)) return ayat;
+  const first = stem(ayat[0]).words[0];
+  return ayat.map(ayah => ({ ...ayah, words: [first, ...ayah.words.slice(1)] }));
+}
 
 export const openingId = (ayah: BranchAyah) =>
   ayah.words.length < OPENING_WORDS ? null : norm(stem(ayah)).slice(0, OPENING_WORDS).join(' ');
@@ -124,20 +140,46 @@ export function listPhrases(groups: Map<string, BranchAyah[]>): Opening[] {
     node.children.forEach(child => walk(child, words, stemmed));
   };
   groups.forEach(group => {
-    walk(branch(shown(group)), [], mixed(group));
+    walk(phraseTree(group), [], mixed(group));
     if (!mixed(group)) return;
     const exact = new Map<string, BranchAyah[]>();
     for (const ayah of group) {
       const id = norm(ayah).slice(0, OPENING_WORDS).join(' ');
       exact.set(id, [...(exact.get(id) ?? []), ayah]);
     }
-    exact.forEach(sub => walk(branch(sub), [], false));
+    exact.forEach(sub => walk(phraseTree(sub), [], false));
+  });
+  groups.forEach(group => {
+    const linked = (node: Branch, path: string[], tagged: boolean) => {
+      const words = [...path, ...node.words];
+      if (path.length > 0 && node.children.length > 0) {
+        const id = linkId(words, tagged ? keys(node).map(key => conj.get(key)!) : []);
+        if (!phrases.has(id)) phrases.set(id, { id, text: words.join(' '), count: startingWith(group, id).length });
+      }
+      node.children.forEach(child => linked(child, words, tagged));
+    };
+    linked(branch(group), [], split(group));
+    if (split(group)) bySpelling(group).forEach(sub => sub.length > 1 && linked(branch(sub), [], false));
   });
   return [...phrases.values()].sort((a, b) => b.count - a.count || a.id.length - b.id.length);
 }
 
-export function branch(ayat: BranchAyah[], from = 0): Branch {
-  const norms = ayat.map(norm);
+const continues = (ayah: BranchAyah, ayat: BranchAyah[]) => ayat.some(other => other !== ayah && other.words.length > ayah.words.length && ayah.words.every((word, i) => spell(word) === spell(other.words[i])));
+
+const ayahEnd = (key: string) => `﴿${num(Number(key.split(':')[1]))}﴾`;
+
+export const grown = (ayat: BranchAyah[]) => ayat.map(ayah => (ayah.next && continues(ayah, ayat) ? { ...ayah, words: [...ayah.words, ayahEnd(ayah.key), ...ayah.next] } : ayah));
+
+export function withNext(groups: Map<string, BranchAyah[]>, all: BranchAyah[]): BranchAyah[] {
+  const after = new Map(all.map((ayah, i) => [ayah.key, all[i + 1]?.key.split(':')[0] === ayah.key.split(':')[0] ? all[i + 1].words : undefined]));
+  return [...groups.values()].flatMap(group => {
+    const own = shown(group);
+    return group.map((ayah, i) => (continues(own[i], own) && after.get(ayah.key) ? { ...ayah, next: after.get(ayah.key) } : ayah));
+  });
+}
+
+function grow(ayat: BranchAyah[], from: number, word: (word: string) => string): Branch {
+  const norms = ayat.map(ayah => ayah.words.map(word));
   let to = from;
   while (norms.every(n => n.length > to) && new Set(norms.map(n => n[to])).size === 1) to++;
   const children = new Map<string, BranchAyah[]>();
@@ -147,19 +189,26 @@ export function branch(ayat: BranchAyah[], from = 0): Branch {
   return {
     words: ayat[0].words.slice(from, to),
     ayat: ayat.filter((_, i) => norms[i].length === to).map(ayah => ayah.key),
-    children: [...children.values()].map(group => branch(group, to)),
+    children: [...children.values()].map(group => grow(group, to, word)),
   };
 }
 
-export const variants = (ayat: BranchAyah[]): Variant[] => !mixed(ayat) ? [] : ['', 'و', 'ف']
-  .map(conj => ayat.filter(ayah => (ayah.conj ?? '') === conj))
-  .filter(members => members.length > 0)
+export const branch = (ayat: BranchAyah[]) => grow(grown(shown(ayat)), 0, spell);
+
+export const phraseTree = (ayat: BranchAyah[]) => grow(shown(ayat), 0, normalizeWord);
+
+const CONJ_ORDER = ['', 'و', 'ف'];
+
+export const variants = (ayat: BranchAyah[]): Variant[] => !split(ayat) ? [] : [...bySpelling(ayat).values()]
+  .sort((a, b) => CONJ_ORDER.indexOf(a[0].conj ?? '') - CONJ_ORDER.indexOf(b[0].conj ?? ''))
   .map(members => ({
     word: members[0].words[0],
     conj: members[0].conj ?? '',
     keys: members.map(ayah => ayah.key),
-    id: members.length > 1 ? branch(members).words.map(normalizeWord).join(' ') : undefined,
+    id: phraseTree(ayat).words.map(normalizeWord).join(' '),
   }));
+
+export const spelledAs = (ayat: BranchAyah[], spelling: string | null) => (spelling ? ayat.filter(ayah => spell(ayah.words[0]) === spell(spelling)) : []);
 
 export function linkId(words: string[], conjs: string[]) {
   const id = words.map(normalizeWord).join(' ');
@@ -209,14 +258,14 @@ export function pieces(groups: Map<string, BranchAyah[]>): Piece[] {
         spellings.forEach(spelling => {
           const sub = group.filter(ayah => under.includes(ayah.key) && conj.get(ayah.key) === spelling);
           if (sub.length < 2) return;
-          const own = branch(sub).words;
+          const own = phraseTree(sub).words;
           found.push({ id: own.map(normalizeWord).join(' '), text: own.join(' '), count: sub.length, shared: own.length, opening, keys: sub.map(ayah => ayah.key) });
         });
         return;
       }
       found.push({ id: linkId(words, under.map(key => conj.get(key)!)), text: words.join(' '), count: under.length, shared: words.length, opening, keys: under });
     };
-    walk(branch(shown(group)), []);
+    walk(phraseTree(group), []);
   });
   const first = (piece: Piece) => Math.min(...piece.keys.map(mushafOrder));
   return found.sort((a, b) => b.shared - a.shared || a.count - b.count || first(a) - first(b));

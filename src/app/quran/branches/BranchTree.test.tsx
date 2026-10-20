@@ -46,14 +46,15 @@ describe('BranchTree', () => {
       children: [{ words: ['وِلْدَٰنٌ', 'مُّخَلَّدُونَ'], ayat: ['56:17', '76:19'], children: [] }],
     };
     const variants = [
-      { word: 'يَطُوفُ', conj: '', keys: ['56:17'] },
-      { word: 'وَيَطُوفُ', conj: 'و', keys: ['76:19'], id: 'ويطوف عليهم' },
+      { word: 'يَطُوفُ', conj: '', keys: ['56:17'], id: 'يطوف عليهم' },
+      { word: 'وَيَطُوفُ', conj: 'و', keys: ['76:19'], id: 'يطوف عليهم' },
     ];
     render(<BranchTree tree={merged} variants={variants} names={{ 56: 'الواقعة', 76: 'الإنسان' }} pages={{ '56:17': 535, '76:19': 579 }} juz={{ from: 26, to: 30 }} />);
     const firstWords = screen.getByRole('list', { name: 'صيغ الكلمة الأولى' });
     expect(firstWords.textContent).toBe('يَطُوفُوَيَطُوفُ');
     expect(screen.getByText('عَلَيْهِمْ')).toBeTruthy();
-    expect(screen.getByRole('link', { name: 'وَيَطُوفُ' }).getAttribute('href')).toBe(branchesHref('ويطوف عليهم', { from: 26, to: 30 }));
+    expect(screen.getByRole('link', { name: 'وَيَطُوفُ' }).getAttribute('href')).toBe(branchesHref('يطوف عليهم', { from: 26, to: 30 }, { spelling: 'وَيَطُوفُ' }));
+    expect(screen.getByRole('link', { name: 'يَطُوفُ' }).getAttribute('href')).toBe(branchesHref('يطوف عليهم', { from: 26, to: 30 }, { spelling: 'يَطُوفُ' }));
     expect(screen.getByRole('link', { name: 'الإنسان ١٩' }).nextElementSibling?.textContent).toBe('وَيَطُوفُ');
     expect(screen.getByRole('link', { name: 'الواقعة ١٧' }).nextElementSibling?.textContent).toBe('يَطُوفُ');
   });

@@ -30,7 +30,7 @@ import type { QuizReference } from "@/lib/quiz/quizReference";
 import { QUIZ_TOPICS } from "@/lib/quiz/types";
 import type { BranchAnswer, BranchQuestion } from "@/lib/quiz/branchQuestions";
 import { parseJuzRange } from "@/lib/quran/juz";
-import type { Branch } from "@/lib/quran/branches";
+import type { Branch, Variant } from "@/lib/quran/branches";
 import { BranchFeedback, BranchInputs, branchesCorrect, emptyBranchAnswers } from "./BranchAnswers";
 
 interface QuizQuestionView {
@@ -41,6 +41,7 @@ interface QuizQuestionView {
   phrase?: string;
   branches?: BranchAnswer[];
   tree?: Branch;
+  variants?: Variant[];
   choiceDetails: Record<string, { text: string; reference: string }>;
   correctAnswer: string;
   evidence: { reference: QuizReference | null };

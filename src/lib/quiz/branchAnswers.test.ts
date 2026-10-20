@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { matchBranches, matchedWords } from './branchAnswers';
+import { leadingWords, matchBranches, matchedWords, matchTreeAnswers } from './branchAnswers';
 
 const one = (...branches: string[][]) => branches.map((words) => [words]);
 const heavens = one(['ٱلسَّمَـٰوَٰتِ', 'وَٱلْأَرْضَ'], ['ٱلْأَرْضِ', 'جَمِيعًۭا']);
@@ -75,5 +75,55 @@ describe('keyboard spelling variants', () => {
     expect(matchedWords('يومنون', ['يُؤْمِنُونَ'])).toBe(1);
     expect(matchedWords('علي كل حي شهيد', ['عَلَىٰ', 'كُلِّ', 'شَىْءٍ', 'شَهِيدٌ'])).toBe(0);
     expect(matchedWords('شهيد', ['شَىْءٍ'])).toBe(0);
+  });
+});
+
+describe('matchTreeAnswers', () => {
+  const prophet = {
+    words: ['يَـٰٓأَيُّهَا', 'ٱلنَّبِىُّ'], ayat: [], children: [
+      { words: 'لِمَ تُحَرِّمُ مَآ أَحَلَّ ٱللَّهُ لَكَ تَبْتَغِى مَرْضَاتَ أَزْوَٰجِكَ وَٱللَّهُ غَفُورٌۭ رَّحِيمٌۭ'.split(' '), ayat: ['66:1'], children: [] },
+      { words: 'جَـٰهِدِ ٱلْكُفَّارَ وَٱلْمُنَـٰفِقِينَ وَٱغْلُظْ عَلَيْهِمْ وَمَأْوَىٰهُمْ جَهَنَّمُ وَبِئْسَ ٱلْمَصِيرُ'.split(' '), ayat: ['66:9'], children: [] },
+      { words: ['قُل'], ayat: ['33:28'], children: [] },
+    ],
+  };
+  const results = (typed: string[]) => matchTreeAnswers(prophet, typed).map((hit) => [hit?.node.ayat[0], hit?.correct]);
+
+  it('accepts a leaf from its first two words when every word typed is right', () => {
+    expect(results(['لم تحرم', 'جاهد الكفار', 'قل'])).toEqual([['66:1', true], ['66:9', true], ['33:28', true]]);
+    expect(results(['لم تحرم ما أحل الله لك تبتغي مرضات ازواجك', 'جاهد الكفار و المنافقين و اغلظ', 'قل'])).toEqual([['66:1', true], ['66:9', true], ['33:28', true]]);
+  });
+
+  it('rejects a leaf with a wrong or missing word after the first two', () => {
+    expect(results(['لم تحرم ما أحل الله لك تبتغي ممرضات', 'جاهد الكفار و اغلظ', 'قل لهم'])).toEqual([['66:1', false], ['66:9', false], ['33:28', false]]);
+  });
+
+  it('rejects a leaf with fewer than two correct opening words', () => {
+    expect(results(['لم', 'جاهد الكافرين', 'قال'])).toEqual([['66:1', false], ['66:9', false], ['33:28', false]]);
+  });
+
+  it('shows each answer beside the leaf it starts like, even when it is wrong', () => {
+    expect(results(['جاهد', 'لم', ''])).toEqual([['66:9', false], ['66:1', false], ['33:28', false]]);
+  });
+
+  it('still requires every word at a node that splits again', () => {
+    const tree = { words: ['يَطُوفُ', 'عَلَيْهِمْ'], ayat: [], children: [
+      { words: ['غِلْمَانٌ', 'لَهُمْ'], ayat: ['52:24'], children: [] },
+      { words: ['وِلْدَانٌ', 'مُخَلَّدُونَ'], ayat: [], children: [
+        { words: ['بِأَكْوَابٍ'], ayat: ['56:17'], children: [] },
+        { words: ['إِذَا', 'رَأَيْتَهُمْ'], ayat: ['76:19'], children: [] },
+      ] },
+    ] };
+    expect(matchTreeAnswers(tree, ['غلمان لهم', 'ولدان', 'بأكواب', 'إذا رأيتهم']).map((hit) => hit?.correct)).toEqual([true, false, true, true]);
+    expect(matchTreeAnswers(tree, ['غلمان لهم', 'ولدان مخلدون', 'بأكواب', 'إذا رأيتهم']).every((hit) => hit?.correct)).toBe(true);
+  });
+});
+
+describe('leadingWords', () => {
+  it('counts the words an answer gets right from the start, up to its first mistake', () => {
+    const words = 'لِمَ تُحَرِّمُ مَآ أَحَلَّ ٱللَّهُ'.split(' ');
+    expect(leadingWords('لم تحرم ما احل الله', words)).toBe(5);
+    expect(leadingWords('لم تحرم ما احل الرب', words)).toBe(4);
+    expect(leadingWords('لن تحرم', words)).toBe(0);
+    expect(leadingWords('', words)).toBe(0);
   });
 });

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import ayat from '@/app/quran/branches/ayat.json';
-import { PIECE_MAX, type BranchAyah } from '@/lib/quran/branches';
+import { PIECE_MAX, spell, type BranchAyah } from '@/lib/quran/branches';
 import { normalizeWord } from '@/lib/quran/normalize';
 import { branchQuestions } from './branchQuestions';
 import { branchNodes, matchTreeAnswers, spelled } from './branchAnswers';
@@ -20,7 +20,7 @@ describe('branchQuestions', () => {
     const answers = nodes.map(node => node.words.map(spelled).join(' '));
     expect(matchTreeAnswers(question.tree, answers).every(hit => hit?.correct)).toBe(true);
     expect(matchTreeAnswers(question.tree, answers.slice(0, 2)).every(hit => hit?.correct)).toBe(false);
-    expect(question.promptArabic).toContain('نهايات الفروع');
+    expect(question.promptArabic).toContain('تكفي كلمتاه الأوليان');
   });
 
   it('asks يطوف عليهم with both of its spellings in the prompt', () => {
@@ -47,5 +47,36 @@ describe('branchQuestions', () => {
       expect(question.branches.length).toBeGreaterThanOrEqual(2);
       expect(question.branches.flatMap((branch) => branch.ayat).length).toBeLessThanOrEqual(PIECE_MAX);
     }
+  });
+});
+
+describe('grading the largest questions', () => {
+  it('checks a six-branch tree of whole ayat with late typos quickly', () => {
+    const question = questions.find((candidate) => candidate.phrase === 'يايها الذين ءامنوا لا تتخذوا')!;
+    const typed = branchNodes(question.tree).map((node) => `${node.words.map(spelled).join(' ')}ق`);
+    const started = performance.now();
+    matchTreeAnswers(question.tree, typed);
+    expect(performance.now() - started).toBeLessThan(1000);
+  });
+});
+
+describe('openings with a hamza below the alif', () => {
+  it('keeps أن كان out of the question that asks وإن كان', () => {
+    const question = asked(questions, '2:280')!;
+    expect(question.variants).toEqual([]);
+    expect(keysOf(question)!.flat()).toEqual(['2:280', '6:35', '7:87', '12:27', '15:78']);
+    expect(asked(questions, '68:14')).toBeUndefined();
+  });
+});
+
+describe('branches that differ only in their marks', () => {
+  it('asks each as its own node, as the branches page draws it', () => {
+    const question = questions.find((candidate) => candidate.phrase === 'يايها الذين ءامنوا لا تتخذوا')!;
+    expect(question.tree.words.map(normalizeWord)).toEqual(['يايها', 'الذين', 'ءامنوا', 'لا']);
+    const firsts = question.tree.children.map((child) => child.words[0]);
+    expect(firsts.map(normalizeWord)).toEqual(['تتخذوا', 'تتخذوا']);
+    expect(spell(firsts[0])).not.toBe(spell(firsts[1]));
+    const answers = branchNodes(question.tree).map((node) => node.words.map(spelled).join(' '));
+    expect(matchTreeAnswers(question.tree, answers).every((hit) => hit?.correct)).toBe(true);
   });
 });
