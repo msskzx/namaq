@@ -20,11 +20,12 @@ describe('PieceList', () => {
   it('draws each piece as its tree, naming the opening only when the piece was cut from a larger one', () => {
     const { container } = render(<PieceList pieces={[yatuf, piece]} ayat={byKey} names={{}} juz={{ from: 1, to: 30 }} />);
     const [first, second] = [...container.querySelectorAll<HTMLElement>('ul[aria-label="المتشابهات"] > li')];
-    expect(first.textContent).toContain('٣ آيات');
+    expect(within(first).getByRole('region', { name: 'شجرة الفواتح' }).textContent).toContain('٣ آيات');
     expect(within(first).queryByRole('link', { name: /^يَـٰٓأَيُّهَا/ })).toBeNull();
     expect(within(first).getByRole('list', { name: 'صيغ الكلمة الأولى' })).toBeTruthy();
-    expect(second.textContent).toContain('آيتان');
-    expect(within(second).getByRole('link', { name: /\(٩٠\)$/ }).getAttribute('href')).toBe(branchesHref('يايها الذين', { from: 1, to: 30 }));
+    const card = within(second).getByRole('region', { name: 'شجرة الفواتح' });
+    expect(card.textContent).toContain('آيتان');
+    expect(within(card).getByRole('link', { name: /\(٩٠\)$/ }).getAttribute('href')).toBe(branchesHref('يايها الذين', { from: 1, to: 30 }));
   });
 
   it('names no opening when the piece holds all of its ayat', () => {
@@ -35,6 +36,7 @@ describe('PieceList', () => {
   it('folds the pieces under their openings, each with a link to the whole tree', () => {
     const opening = cut.find(p => p.id === 'يطوف عليهم')!.opening;
     const { container } = render(<PieceList pieces={cut} openings={[opening]} ayat={byKey} names={{}} juz={null} />);
+    expect(within(screen.getByRole('region', { name: 'شجرة الفواتح', hidden: true })).getByText('٣ آيات')).toBeTruthy();
     expect(container.querySelector('summary')!.textContent).toContain('٣ آيات · مجموعة');
     expect(screen.getByRole('link', { name: 'الشجرة كاملة' }).getAttribute('href')).toBe(branchesHref('يطوف عليهم'));
   });

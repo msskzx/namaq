@@ -24,11 +24,16 @@ describe('BranchTree', () => {
     expect(screen.getByText('مَقَامٍ أَمِينٍۢ')).toBeTruthy();
   });
 
-  it('links every ayah to its reader page under its surah name and number', () => {
+  it('links every ayah to its exact position on the reader page', () => {
     render(<BranchTree tree={tree} names={{ 15: 'سُورَةُ الحِجۡرِ', 51: 'سُورَةُ الذَّارِيَاتِ' }} pages={{ '15:45': 265, '44:51': 498, '51:15': 521 }} />);
-    expect(screen.getByRole('link', { name: 'سُورَةُ الذَّارِيَاتِ ١٥' }).getAttribute('href')).toBe('/quran/read/521');
-    expect(screen.getByRole('link', { name: 'سُورَةُ الحِجۡرِ ٤٥' }).getAttribute('href')).toBe('/quran/read/265');
-    expect(screen.getByRole('link', { name: '٤٤ ٥١' }).getAttribute('href')).toBe('/quran/read/498');
+    expect(screen.getByRole('link', { name: 'سُورَةُ الذَّارِيَاتِ ١٥' }).getAttribute('href')).toBe('/quran/read/521?a=51:15');
+    expect(screen.getByRole('link', { name: 'سُورَةُ الحِجۡرِ ٤٥' }).getAttribute('href')).toBe('/quran/read/265?a=15:45');
+    expect(screen.getByRole('link', { name: '٤٤ ٥١' }).getAttribute('href')).toBe('/quran/read/498?a=44:51');
+  });
+
+  it('targets al-Qamar ayah 54 on page 531', () => {
+    render(<BranchTree tree={{ words: ['إِنَّ', 'ٱلْمُتَّقِينَ'], ayat: ['54:54'], children: [] }} names={{ 54: 'سُورَةُ القَمَرِ' }} pages={{ '54:54': 531 }} />);
+    expect(screen.getByRole('link', { name: 'سُورَةُ القَمَرِ ٥٤' }).getAttribute('href')).toBe('/quran/read/531?a=54:54');
   });
 
   it('links a branch to the tree of its own phrase, but not the root or a leaf', () => {
