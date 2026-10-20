@@ -4,8 +4,8 @@ import { num } from '@/lib/quran/arabicNumber';
 import { branchesHref, keys, linkId, spell, type Branch, type Variant } from '@/lib/quran/branches';
 import type { JuzRange } from '@/lib/quran/juz';
 
-type Props = { tree: Branch; names: Record<number, string>; pages: Record<string, number>; variants?: Variant[]; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string };
-type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz'> & { node: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
+type Props = { tree: Branch; names: Record<number, string>; pages: Record<string, number>; variants?: Variant[]; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode };
+type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header'> & { node: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
 
 const LINE = 'border-[var(--home-rule)]';
 export const TONE: Record<string, string> = {
@@ -30,7 +30,7 @@ function Node({ node, path, names, pages, tags, lead, juz, renderNode, indices }
               const [surah, ayah] = key.split(':').map(Number);
               return (
                 <span key={key} className="inline-flex items-center gap-1">
-                  <Link href={`/quran/read/${pages[key]}`} className="rounded bg-[var(--home-paper-deep)] px-1.5 text-xs text-[var(--home-accent)] hover:underline">
+                  <Link href={`/quran/read/${pages[key]}?a=${key}`} className="rounded bg-[var(--home-paper-deep)] px-1.5 text-xs text-[var(--home-accent)] hover:underline">
                     {`${names[surah] ?? num(surah)} ${num(ayah)}`}
                   </Link>
                   {tags[key] && <span className={`rounded-full border px-1.5 text-xs font-arabic ${TONE[tags[key].conj]}`}>{tags[key].word}</span>}
@@ -61,7 +61,7 @@ function Node({ node, path, names, pages, tags, lead, juz, renderNode, indices }
 }
 
 // docs/plans/quran-shared-openings.md
-export default function BranchTree({ tree, names, pages, variants = [], juz = null, renderNode, label = 'شجرة الفواتح' }: Props) {
+export default function BranchTree({ tree, names, pages, variants = [], juz = null, renderNode, label = 'شجرة الفواتح', header }: Props) {
   const indices = new Map<Branch, number>();
   const visit = (node: Branch) => {
     indices.set(node, indices.size - 1);
@@ -71,6 +71,7 @@ export default function BranchTree({ tree, names, pages, variants = [], juz = nu
   const tags = Object.fromEntries(variants.flatMap(variant => variant.keys.map(key => [key, variant])));
   return (
     <div tabIndex={0} role="region" aria-label={label} className="overflow-auto rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] p-4 text-[var(--home-ink)]">
+      {header && <div className="mb-3">{header}</div>}
       <div className="flex items-center">
         {variants.length > 0 && (
           <>

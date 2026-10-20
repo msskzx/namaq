@@ -16,19 +16,21 @@ const ayatCount = (n: number) => counted(n, ['آية', 'آيتان', 'آيات']
 function Entry({ piece, names, ayat, juz, partOf }: Props & { piece: Piece; partOf: boolean }) {
   const group = piece.keys.map(key => ayat.get(key)!);
   return (
-    <li className="flex flex-col gap-1">
-      <p className={NOTE}>
-        {ayatCount(piece.count)}
-        {partOf && piece.opening.count > piece.count && (
-          <>
-            {' · من: '}
-            <Link href={branchesHref(piece.opening.id, juz ?? undefined)} className="font-arabic text-[var(--home-accent)] hover:underline">
-              {`${piece.opening.text} (${num(piece.opening.count)})`}
-            </Link>
-          </>
-        )}
-      </p>
+    <li>
       <BranchTree
+        header={
+          <p className={NOTE}>
+            {ayatCount(piece.count)}
+            {partOf && piece.opening.count > piece.count && (
+              <>
+                {' · من: '}
+                <Link href={branchesHref(piece.opening.id, juz ?? undefined)} className="font-arabic text-[var(--home-accent)] hover:underline">
+                  {`${piece.opening.text} (${num(piece.opening.count)})`}
+                </Link>
+              </>
+            )}
+          </p>
+        }
         tree={branch(group)}
         variants={variants(group)}
         names={names}
