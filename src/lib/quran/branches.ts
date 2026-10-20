@@ -69,6 +69,12 @@ export function withConjunctions(ayat: BranchAyah[], morphology: string): Branch
 
 const norm = (ayah: BranchAyah) => ayah.words.map(normalizeWord);
 
+const bySpelling = (ayat: BranchAyah[]) => {
+  const found = new Map<string, BranchAyah[]>();
+  for (const ayah of ayat) found.set(spell(ayah.words[0]), [...(found.get(spell(ayah.words[0])) ?? []), ayah]);
+  return found;
+};
+
 export const spell = (word: string) => word.replace(/[\u0640\u2060]/g, '').normalize('NFC');
 
 export function stem(ayah: BranchAyah): BranchAyah {
@@ -153,7 +159,7 @@ export function listPhrases(groups: Map<string, BranchAyah[]>): Opening[] {
       node.children.forEach(child => linked(child, words, tagged));
     };
     linked(branch(group), [], split(group));
-    if (split(group)) Map.groupBy(group, ayah => spell(ayah.words[0])).forEach(sub => sub.length > 1 && linked(branch(sub), [], false));
+    if (split(group)) bySpelling(group).forEach(sub => sub.length > 1 && linked(branch(sub), [], false));
   });
   return [...phrases.values()].sort((a, b) => b.count - a.count || a.id.length - b.id.length);
 }
@@ -193,7 +199,7 @@ export const phraseTree = (ayat: BranchAyah[]) => grow(shown(ayat), 0, normalize
 
 const CONJ_ORDER = ['', 'و', 'ف'];
 
-export const variants = (ayat: BranchAyah[]): Variant[] => !split(ayat) ? [] : [...Map.groupBy(ayat, ayah => spell(ayah.words[0])).values()]
+export const variants = (ayat: BranchAyah[]): Variant[] => !split(ayat) ? [] : [...bySpelling(ayat).values()]
   .sort((a, b) => CONJ_ORDER.indexOf(a[0].conj ?? '') - CONJ_ORDER.indexOf(b[0].conj ?? ''))
   .map(members => ({
     word: members[0].words[0],
