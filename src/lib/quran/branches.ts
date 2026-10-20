@@ -197,16 +197,14 @@ export const branch = (ayat: BranchAyah[]) => grow(grown(shown(ayat)), 0, spell)
 
 export const phraseTree = (ayat: BranchAyah[]) => grow(shown(ayat), 0, normalizeWord);
 
-const CONJ_ORDER = ['', 'و', 'ف'];
-
 export const variants = (ayat: BranchAyah[]): Variant[] => !split(ayat) ? [] : [...bySpelling(ayat).values()]
-  .sort((a, b) => CONJ_ORDER.indexOf(a[0].conj ?? '') - CONJ_ORDER.indexOf(b[0].conj ?? ''))
   .map(members => ({
     word: members[0].words[0],
     conj: members[0].conj ?? '',
     keys: members.map(ayah => ayah.key),
     id: phraseTree(ayat).words.map(normalizeWord).join(' '),
-  }));
+  }))
+  .sort((a, b) => Math.min(...a.keys.map(mushafOrder)) - Math.min(...b.keys.map(mushafOrder)));
 
 export const spelledAs = (ayat: BranchAyah[], spelling: string | null) => (spelling ? ayat.filter(ayah => spell(ayah.words[0]) === spell(spelling)) : []);
 

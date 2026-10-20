@@ -25,7 +25,7 @@ describe('branchQuestions', () => {
 
   it('asks يطوف عليهم with both of its spellings in the prompt', () => {
     const question = asked(questions, '52:24');
-    expect(question?.promptArabic).toContain('«يَطُوفُ عَلَيْهِمْ» أو «وَيَطُوفُ عَلَيْهِمْ» إلى فرعين');
+    expect(question?.promptArabic).toContain('«وَيَطُوفُ عَلَيْهِمْ» أو «يَطُوفُ عَلَيْهِمْ» إلى فرعين');
     expect(question?.branches.map((branch) => branch.words[0])).toEqual(['غِلْمَانٌۭ', 'وِلْدَٰنٌۭ']);
     expect(keysOf(question)).toEqual([['52:24'], ['56:17', '76:19']]);
     expect(question?.branches[0].ayat[0].page).toBe(524);
