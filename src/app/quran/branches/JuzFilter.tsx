@@ -21,7 +21,7 @@ export default function JuzFilter({ range, phrase, view }: { range: JuzRange | n
       {view.spelling && <input type="hidden" name="w" value={view.spelling} />}
       {select('juzFrom', 'من الجزء', range?.from ?? 1)}
       {select('juzTo', 'إلى الجزء', range?.to ?? JUZ_STARTS.length)}
-      <Button type="submit" size="sm">
+      <Button type="submit" size="sm" name="apply" value="juz">
         <FontAwesomeIcon icon={faFilter} />
         تطبيق
       </Button>

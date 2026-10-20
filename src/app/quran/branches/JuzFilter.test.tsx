@@ -12,6 +12,8 @@ afterEach(cleanup);
 describe('JuzFilter', () => {
   it('submits the range with the phrase and view kept', () => {
     const { container } = render(<JuzFilter range={{ from: 25, to: 30 }} phrase="فلا اقسم" view={{ list: true, grouped: true }} />);
+    expect(screen.getByRole('button', { name: 'تطبيق' }).getAttribute('name')).toBe('apply');
+    expect(screen.getByRole('button', { name: 'تطبيق' }).getAttribute('value')).toBe('juz');
     expect((screen.getByLabelText('من الجزء') as HTMLInputElement).value).toBe('25');
     expect((screen.getByLabelText('إلى الجزء') as HTMLInputElement).value).toBe('30');
     expect([...container.querySelectorAll('input[type=hidden]')].map(i => `${i.getAttribute('name')}=${i.getAttribute('value')}`)).toEqual(['o=فلا اقسم', 'v=list', 'g=opening']);

@@ -39,12 +39,13 @@ export function BranchFeedback({ question, typed, names, juz, ar }: { question: 
             </span>
             <span className="font-arabic text-lg leading-loose">{answer.words.join(" ")}</span>
             <span className="flex flex-wrap gap-1">
-              {answer.ayat.map(key => {
+              {answer.ayat.map((key, index) => {
                 const [surah, ayah] = key.split(":").map(Number);
                 return (
                   <span key={key} className="inline-flex items-center gap-1">
-                    <Link href={`/quran/read/${pages[key]}`} className="rounded bg-[var(--home-paper-deep)] px-1.5 text-xs text-[var(--home-accent)] hover:underline">{names[surah] ? `${names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`}</Link>
-                    {tags[key] && <span className={`rounded-full border px-1.5 text-xs font-arabic ${TONE[tags[key].conj]}`}>{tags[key].word}</span>}
+                    {index > 0 && <span aria-hidden className="text-xs text-[var(--home-muted)]">·</span>}
+                    <Link href={`/quran/read/${pages[key]}`} className="text-xs text-[var(--home-accent)] hover:underline">{names[surah] ? `${names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`}</Link>
+                    {tags[key] && <span className={`text-xs font-arabic ${TONE[tags[key].conj]}`}>{tags[key].word}</span>}
                   </span>
                 );
               })}

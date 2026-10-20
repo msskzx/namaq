@@ -5,12 +5,16 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import { branchesHref, TOP } from '@/lib/quran/branches';
 import OpeningSearch from './OpeningSearch';
 
+const language = vi.hoisted(() => ({ value: 'ar' }));
+vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: language.value }) }));
+
 const router = vi.hoisted(() => ({ push: vi.fn() }));
 vi.mock('next/navigation', () => ({ useRouter: () => router }));
 
 afterEach(() => {
   cleanup();
   router.push.mockClear();
+  language.value = 'ar';
 });
 
 const top = [
@@ -29,6 +33,13 @@ const phrases = [
 const suggested = () => within(screen.getByLabelText('عبارات مقترحة')).getAllByRole('link').map(a => a.getAttribute('href'));
 
 describe('OpeningSearch', () => {
+  it.each(['ar', 'en'])('explains an unavailable requested opening in %s', lang => {
+    language.value = lang;
+    render(<OpeningSearch top={top} phrases={phrases} current="unknown" unavailable />);
+    expect(screen.getByRole('status').textContent).toContain(lang === 'ar' ? 'لا تطابق العبارة المطلوبة' : 'No two ayat share the requested opening');
+    expect(screen.getByRole('searchbox')).toBeTruthy();
+  });
+
   it('offers the largest openings as buttons and marks the one a deeper phrase sits under', () => {
     render(<OpeningSearch top={top} phrases={phrases} current="الم تر كيف" />);
     const picks = within(screen.getByLabelText('أكثر الفواتح تكرارًا')).getAllByRole('link');
