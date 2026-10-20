@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCodeBranch, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import Button from '@/components/common/Button';
+import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@/lib/quran/arabicNumber';
 import { branchesHref, startsWith, type Opening } from '@/lib/quran/branches';
 import type { JuzRange } from '@/lib/quran/juz';
@@ -15,8 +16,9 @@ const SEARCH = 'w-full rounded-sm border border-[var(--home-rule)] bg-transparen
 
 export const SUGGESTIONS = 10;
 
-export default function OpeningSearch({ top, phrases, current, juz = null }: { top: Opening[]; phrases: Opening[]; current: string; juz?: JuzRange | null }) {
+export default function OpeningSearch({ top, phrases, current, juz = null, unavailable = false }: { top: Opening[]; phrases: Opening[]; current: string; juz?: JuzRange | null; unavailable?: boolean }) {
   const router = useRouter();
+  const { language } = useLanguage();
   const [query, setQuery] = useState('');
   const needle = query.split(/\s+/).map(w => normalizeWord(w).trim()).filter(Boolean).join(' ');
   const suggestions = needle
@@ -39,6 +41,9 @@ export default function OpeningSearch({ top, phrases, current, juz = null }: { t
         <input type="search" value={query} onChange={e => setQuery(e.target.value)} placeholder={`ابحث بين ${num(phrases.length)} عبارة تبدأ بها آيتان أو أكثر`}
           onKeyDown={e => { if (e.key === 'Enter' && suggestions[0]) { setQuery(''); router.push(branchesHref(suggestions[0].id, juz ?? undefined)); } }} className={SEARCH} />
       </label>
+      {unavailable && <p role="status" className={NOTE}>{language === 'en'
+        ? 'No two ayat share the requested opening in these juz’. Choose another opening or change the range.'
+        : 'لا تطابق العبارة المطلوبة آيتان أو أكثر داخل هذه الأجزاء. اختر فاتحة أخرى أو غيّر النطاق.'}</p>}
       {needle && (
         <ul aria-label="عبارات مقترحة" className="flex flex-col rounded border border-[var(--home-rule)]">
           {suggestions.length === 0 ? <li className={`${NOTE} px-2 py-1`}>لا عبارة مشتركة تطابق البحث.</li> : suggestions.map(o => (

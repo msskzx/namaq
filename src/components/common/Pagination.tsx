@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import Button from '@/components/common/Button';
@@ -17,6 +17,7 @@ interface PaginationProps {
   summary?: string;
   selectLabel?: string;
   pageLabels?: string[];
+  scrollTarget?: string;
 }
 
 export default function Pagination({
@@ -28,10 +29,17 @@ export default function Pagination({
   selectLabel,
   pageLabels,
   hrefs,
+  scrollTarget,
   language: pageLanguage,
 }: PaginationProps) {
   const { language: siteLanguage } = useLanguage();
   const language = pageLanguage ?? siteLanguage;
+
+  const previousPage = useRef(page);
+  useEffect(() => {
+    if (previousPage.current !== page && scrollTarget) document.getElementById(scrollTarget)?.scrollIntoView({ block: 'start' });
+    previousPage.current = page;
+  }, [page, scrollTarget]);
 
   if (pageCount <= 1) return null;
 

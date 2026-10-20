@@ -20,26 +20,27 @@ function Node({ node, path, names, pages, tags, lead, juz, renderNode, indices }
   const shownWords = node.words.slice(root ? lead : 0);
   return (
     <div className="flex items-center">
-      <div className={`shrink-0 rounded border px-3 py-1.5 ${node.children.length === 0 ? 'max-w-sm' : 'max-w-xs'} ${root ? 'border-[var(--home-accent)] bg-[var(--home-paper-deep)] text-xl' : 'border-[var(--home-rule)] bg-[var(--home-paper)] text-lg'}`}>
+      {(!root || shownWords.length > 0 || node.ayat.length > 0) && <div className={`shrink-0 rounded border px-3 py-1.5 ${node.children.length === 0 ? 'max-w-sm' : 'max-w-xs'} ${root ? 'border-[var(--home-accent)] bg-[var(--home-paper-deep)] text-xl' : 'border-[var(--home-rule)] bg-[var(--home-paper)] text-lg'}`}>
         {renderNode && !root ? renderNode(node, indices.get(node)!, tags) : <>{root || node.children.length === 0 ? <span className="font-arabic leading-loose">{shownWords.join(' ')}</span> : (
           <Link href={branchesHref(linkId(words, keys(node).flatMap(key => (tags[key] ? [tags[key].conj] : []))), juz)} className="font-arabic leading-loose hover:text-[var(--home-accent)] hover:underline">{node.words.join(' ')}</Link>
         )}
         {node.ayat.length > 0 && (
           <span className="flex flex-wrap gap-1 mt-1">
-            {node.ayat.map(key => {
+            {node.ayat.map((key, index) => {
               const [surah, ayah] = key.split(':').map(Number);
               return (
                 <span key={key} className="inline-flex items-center gap-1">
-                  <Link href={`/quran/read/${pages[key]}?a=${key}`} className="rounded bg-[var(--home-paper-deep)] px-1.5 text-xs text-[var(--home-accent)] hover:underline">
+                  {index > 0 && <span aria-hidden className="text-xs text-[var(--home-muted)]">·</span>}
+                  <Link href={`/quran/read/${pages[key]}?a=${key}`} className="text-xs text-[var(--home-accent)] hover:underline">
                     {`${names[surah] ?? num(surah)} ${num(ayah)}`}
                   </Link>
-                  {tags[key] && <span className={`rounded-full border px-1.5 text-xs font-arabic ${TONE[tags[key].conj]}`}>{tags[key].word}</span>}
+                  {tags[key] && <span className={`text-xs font-arabic ${TONE[tags[key].conj]}`}>{tags[key].word}</span>}
                 </span>
               );
             })}
           </span>
         )}</>}
-      </div>
+      </div>}
       {node.children.length > 0 && (
         <>
           <span aria-hidden className={`w-4 shrink-0 border-t-2 ${LINE}`} />

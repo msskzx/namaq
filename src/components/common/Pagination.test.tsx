@@ -15,6 +15,21 @@ afterEach(() => {
 });
 
 describe('Pagination', () => {
+  it('scrolls to the requested target after a page change, without scrolling on first render', () => {
+    const into = vi.fn();
+    const target = document.createElement('div');
+    target.id = 'results';
+    target.scrollIntoView = into;
+    document.body.append(target);
+    const { rerender } = render(<Pagination page={1} pageCount={3} scrollTarget="results" />);
+    expect(into).not.toHaveBeenCalled();
+    rerender(<Pagination page={2} pageCount={3} scrollTarget="results" />);
+    expect(into).toHaveBeenCalledWith({ block: 'start' });
+    rerender(<Pagination page={1} pageCount={3} scrollTarget="results" />);
+    expect(into).toHaveBeenCalledTimes(2);
+    target.remove();
+  });
+
   it('reports where the reader is', () => {
     render(<Pagination page={2} pageCount={5} onChange={vi.fn()} />);
 

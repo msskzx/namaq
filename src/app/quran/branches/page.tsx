@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDownWideShort, faCodeBranch, faLayerGroup, faList, faMagnifyingGlassMinus } from '@fortawesome/free-solid-svg-icons';
@@ -44,12 +45,15 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const list = params.v === 'list';
   const grouped = list && params.g === 'opening';
   const { shared, byKey, openings, phrases, pieces: cut } = view(range);
-  const id = pickPhrase(phrases, first(params.o));
-  const group = id ? startingWith(shared, id) : [];
+  const requested = first(params.o) ?? '';
+  const unavailable = !!requested && !phrases.some(phrase => phrase.id === requested) && params.apply !== 'juz';
+  const id = unavailable ? requested : pickPhrase(phrases, requested);
+  const group = id && !unavailable ? startingWith(shared, id) : [];
   const own = spelledAs(group, first(params.w));
   const drawn = own.length > 0 ? own : group;
   const spelling = own.length > 0 ? first(params.w)! : undefined;
-  const wider = [...(own.length > 0 ? phrases.filter(phrase => phrase.id === id) : []), ...widerPhrases(phrases, id, group)];
+  if (params.apply === 'juz') redirect(branchesHref(id, juz, { list, grouped, spelling }));
+  const wider = unavailable ? [] : [...(own.length > 0 ? phrases.filter(phrase => phrase.id === id) : []), ...widerPhrases(phrases, id, group)];
   const numbers = list ? undefined : [...new Set(group.map(ayah => Number(ayah.key.split(':')[0])))];
   const rows = await prisma.surah.findMany({ where: numbers ? { number: { in: numbers } } : undefined, select: { number: true, name: true } });
   const names = Object.fromEntries(rows.map(row => [row.number, row.name]));
@@ -57,7 +61,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const listHref = (options: { grouped: boolean; page?: number }) => branchesHref(id, juz, { list: true, ...options });
 
   return (
-    <div dir="rtl" className={`${styles.page} w-full max-w-6xl mx-auto px-4 py-8 flex flex-col gap-4`}>
+    <div id="quran-branches" dir="rtl" className={`${styles.page} w-full max-w-6xl mx-auto px-4 py-8 flex flex-col gap-4`}>
       <header className={styles.heading}>
         <p className={styles.eyebrow}>نمق · القرآن الكريم</p>
         <h1>فواتح الآيات المشتركة</h1>
@@ -100,11 +104,11 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
             names={names}
             juz={range}
           />
-          <Pagination language="ar" page={page} pageCount={pageCount} hrefs={Array.from({ length: pageCount }, (_, i) => listHref({ grouped, page: i + 1 }))} />
+          <Pagination language="ar" scrollTarget="quran-branches" page={page} pageCount={pageCount} hrefs={Array.from({ length: pageCount }, (_, i) => listHref({ grouped, page: i + 1 }))} />
         </>
       ) : (
         <>
-          <OpeningSearch top={openings.slice(0, TOP)} phrases={phrases} current={id} juz={range} />
+          <OpeningSearch top={openings.slice(0, TOP)} phrases={phrases} current={id} juz={range} unavailable={unavailable} />
           {wider.length > 0 && (
             <nav aria-label="عبارات أعم" className="flex flex-wrap items-center gap-2">
               {wider.map(phrase => (
@@ -115,13 +119,13 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
               ))}
             </nav>
           )}
-          <BranchTree
+          {!unavailable && <BranchTree
             tree={branch(drawn)}
             variants={variants(drawn)}
             names={names}
             pages={Object.fromEntries(drawn.map(ayah => [ayah.key, ayah.page]))}
             juz={range}
-          />
+          />}
         </>
       )}
     </div>

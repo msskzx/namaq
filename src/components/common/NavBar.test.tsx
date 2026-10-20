@@ -22,9 +22,9 @@ class TestPointerEvent extends MouseEvent {
 if (!('PointerEvent' in window)) Object.assign(window, { PointerEvent: TestPointerEvent });
 
 describe('NavBar shelves', () => {
-  it('shows the theme switch directly in the navbar without a settings menu', () => {
+  it('shows the theme button directly in the navbar without a settings menu', () => {
     render(<NavBar />);
-    expect(within(screen.getByRole('navigation')).getByRole('switch', { name: 'Dark mode' })).toBeTruthy();
+    expect(within(screen.getByRole('navigation')).getByRole('button', { name: 'Switch to dark mode' })).toBeTruthy();
     expect(screen.queryByRole('button', { name: 'Settings' })).toBeNull();
   });
   it('opens the Quran shelf from its toggle, listing every Quran page with what it is for', () => {
