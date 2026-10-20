@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCodeBranch, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import Button from '@/components/common/Button';
 import { num } from '@/lib/quran/arabicNumber';
-import { branchesHref, loose, startsWith, type Opening } from '@/lib/quran/branches';
+import { branchesHref, startsWith, type Opening } from '@/lib/quran/branches';
 import type { JuzRange } from '@/lib/quran/juz';
 import { normalizeWord } from '@/lib/quran/normalize';
 const NOTE = 'text-sm text-[var(--home-muted)]';
@@ -20,7 +20,7 @@ export default function OpeningSearch({ top, phrases, current, juz = null }: { t
   const [query, setQuery] = useState('');
   const needle = query.split(/\s+/).map(w => normalizeWord(w).trim()).filter(Boolean).join(' ');
   const suggestions = needle
-    ? [...phrases.filter(p => loose(p.id).startsWith(needle)), ...phrases.filter(p => !loose(p.id).startsWith(needle) && loose(p.id).includes(needle))].slice(0, SUGGESTIONS)
+    ? [...phrases.filter(p => p.id.startsWith(needle)), ...phrases.filter(p => !p.id.startsWith(needle) && p.id.includes(needle))].slice(0, SUGGESTIONS)
     : [];
 
   return (

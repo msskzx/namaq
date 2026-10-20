@@ -1,4 +1,4 @@
-export const BRANCHES_HREF = '/quran/branches?o=%D8%A5%D9%86%20%D8%A7%D9%84%D9%85%D8%AA%D9%82%D9%8A%D9%86';
+export const BRANCHES_HREF = '/quran/branches?o=%D8%A7%D9%86%20%D8%A7%D9%84%D9%85%D8%AA%D9%82%D9%8A%D9%86';
 export const COMPARE_HREF = '/quran/compare?a=26&af=41&at=45&b=7&bf=113&bt=117&view=ayat';
 export const NASAB_SUBJECTS = ['ali-ibn-abi-talib', 'uthman-ibn-affan', 'umar-ibn-al-khattab', 'abu-bakr-as-siddiq', 'prophet-muhammad'];
 export const NASAB_HREF = `/nasab?${new URLSearchParams(NASAB_SUBJECTS.map(slug => ['subject', `person:${slug}`]))}`;

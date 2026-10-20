@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import ayat from '@/app/quran/branches/ayat.json';
-import { branch, branchesHref, conjunctions, listPage, PIECE_MAX, pieces, DEFAULT_PHRASE, keys, linkId, pickPhrase, stem, widerPhrases, listOpenings, listPhrases, openingId, readerAyat, sharedOpenings, shown, startingWith, variants, withConjunctions, type Branch, type BranchAyah } from './branches';
+import { branch, branchesHref, conjunctions, listPage, PIECE_MAX, pieces, DEFAULT_PHRASE, keys, linkId, pickPhrase, stem, widerPhrases, listOpenings, listPhrases, openingId, readerAyat, sharedOpenings, spelledAs, startingWith, variants, withConjunctions, withNext, type Branch, type BranchAyah } from './branches';
 import { inJuzRange } from './juz';
 import { normalizeWord } from './normalize';
 
@@ -36,18 +36,19 @@ describe('sharedOpenings', () => {
   it('ignores the pause and section marks the reader keeps beside a word', () => {
     const read = readerAyat([{ juz: 1, items: [{ surah: 2 }, { line: ['۞ إِنَّ', 'ٱللَّهَ ۖ', 'عليم', 1, 'إِنَّ', 'ٱللَّهَ', 'غفور', 2] }] }]);
     const shared = sharedOpenings(read);
-    expect(listOpenings(shared)).toEqual([{ id: 'إن الله', text: 'إِنَّ ٱللَّهَ', count: 2 }]);
-    expect(branch(shared.get('إن الله')!).words).toEqual(['إِنَّ', 'ٱللَّهَ']);
+    expect(listOpenings(shared)).toEqual([{ id: 'ان الله', text: 'إِنَّ ٱللَّهَ', count: 2 }]);
+    expect(branch(shared.get('ان الله')!).words).toEqual(['إِنَّ', 'ٱللَّهَ']);
   });
 
   it('matches what npm run quran:branches writes from the reader pages', () => {
     const pages = Array.from({ length: 604 }, (_, i) => JSON.parse(readFileSync(join(__dirname, '../../app/quran/read/data', `${i + 1}.json`), 'utf8')));
     const morphology = readFileSync(join(__dirname, '../../../data/quran/quranic-corpus-morphology-0.4.txt'), 'utf8');
-    expect([...sharedOpenings(withConjunctions(readerAyat(pages), morphology)).values()].flat()).toEqual(all);
+    const read = withConjunctions(readerAyat(pages), morphology);
+    expect(withNext(sharedOpenings(read), read)).toEqual(all);
   });
 
   it('keeps every committed ayah in a group of two or more', () => {
-    expect(groups.size).toBe(816);
+    expect(groups.size).toBe(818);
     expect([...groups.keys()].every(id => id === id.trim() && !id.includes('  '))).toBe(true);
     expect([...groups.values()].flat()).toHaveLength(all.length);
   });
@@ -61,7 +62,7 @@ describe('sharedOpenings', () => {
 
 describe('branch', () => {
   it('splits the six ayat that open with إن المتقين where their wording parts', () => {
-    expect(shape(branch(groups.get('إن المتقين')!))).toEqual({
+    expect(shape(branch(groups.get('ان المتقين')!))).toEqual({
       words: 'ان المتقين في',
       ayat: [],
       children: [
@@ -105,11 +106,33 @@ describe('listPhrases', () => {
     expect(count('الم تر')).toBe(31);
     expect(count('الم تر كيف')).toBe(3);
     expect(count('الم تر كيف فعل ربك')).toBe(2);
-    expect(count('إن المتقين في')).toBe(6);
-    expect(count('إن المتقين في جنت')).toBe(4);
-    expect(count('إن المتقين في جنت وعيون')).toBe(2);
+    expect(count('ان المتقين في')).toBe(6);
+    expect(count('ان المتقين في جنت')).toBe(4);
+    expect(count('ان المتقين في جنت وعيون')).toBe(2);
     expect(phrases.every(p => p.count >= 2)).toBe(true);
     expect(new Set(phrases.map(p => p.id)).size).toBe(phrases.length);
+  });
+
+  it('lists the phrase every inner node of a drawn tree links to', () => {
+    const ids = new Set(phrases.map(p => p.id));
+    for (const group of groups.values()) {
+      const merged = Object.fromEntries(variants(group).flatMap(v => v.keys.map(key => [key, v.conj])));
+      const visit = (node: Branch, path: string[], tags: Record<string, string>) => {
+        const words = [...path, ...node.words];
+        if (path.length > 0 && node.children.length > 0) {
+          const id = linkId(words, keys(node).flatMap(key => (tags[key] !== undefined ? [tags[key]] : [])));
+          expect([id, ids.has(id)]).toEqual([id, true]);
+        }
+        node.children.forEach(child => visit(child, words, tags));
+      };
+      visit(branch(group), [], merged);
+      for (const variant of variants(group)) {
+        const own = spelledAs(group, variant.word);
+        expect(own.map(a => a.key)).toEqual(variant.keys);
+        if (own.length > 1) visit(branch(own), [], {});
+      }
+    }
+    expect(count('يايها الناس اتقوا')).toBe(startingWith(all, 'يايها الناس اتقوا').length);
   });
 
   it('agrees with startingWith on how many ayat each phrase opens', () => {
@@ -147,21 +170,32 @@ describe('an opening with and without و', () => {
 
   it('groups يطوف عليهم with ويطوف عليهم and draws one tree from the shared word on', () => {
     expect(group.map(a => a.key)).toEqual(['52:24', '56:17', '76:19']);
-    expect(shape(branch(shown(group)))).toEqual({
+    expect(shape(branch(group))).toEqual({
       words: 'يطوف عليهم',
       ayat: [],
       children: [
         { words: 'غلمان لهم كانهم لؤلؤ مكنون', ayat: ['52:24'], children: [] },
-        { words: 'ولدن مخلدون', ayat: ['56:17'], children: [{ words: 'اذا رايتهم حسبتهم لؤلؤا منثورا', ayat: ['76:19'], children: [] }] },
+        {
+          words: 'ولدن مخلدون',
+          ayat: [],
+          children: [
+            { words: '﴿١٧﴾ باكواب واباريق وكاس من معين', ayat: ['56:17'], children: [] },
+            { words: 'اذا رايتهم حسبتهم لؤلؤا منثورا', ayat: ['76:19'], children: [] },
+          ],
+        },
       ],
     });
   });
 
-  it('names each first word, the ayat that open with it and the phrase that narrows to them', () => {
+  it('names each first word, the ayat that open with it and the phrase they share', () => {
     expect(variants(group).map(v => ({ ...v, word: normalizeWord(v.word) }))).toEqual([
-      { word: 'يطوف', conj: '', keys: ['56:17'], id: undefined },
-      { word: 'ويطوف', conj: 'و', keys: ['52:24', '76:19'], id: 'ويطوف عليهم' },
+      { word: 'يطوف', conj: '', keys: ['56:17'], id: 'يطوف عليهم' },
+      { word: 'ويطوف', conj: 'و', keys: ['52:24', '76:19'], id: 'يطوف عليهم' },
     ]);
+    expect(branchesHref('يطوف عليهم', undefined, { spelling: 'يَطُوفُ' })).toContain('&w=');
+    expect(spelledAs(group, 'يَطُوفُ').map(a => a.key)).toEqual(['56:17']);
+    expect(spelledAs(group, 'وَيَطُوفُ').map(a => a.key)).toEqual(['52:24', '76:19']);
+    expect(spelledAs(group, null)).toEqual([]);
     expect(variants(startingWith(all, 'ويطوف عليهم'))).toEqual([]);
   });
 
@@ -193,11 +227,11 @@ describe('a juz\' range', () => {
 
 describe('linkId', () => {
   it('puts the joined letter back when every ayah under a branch carries it', () => {
-    const group = startingWith(all, 'إذ قال');
-    const musa = branch(shown(group)).children.find(child => normalizeWord(child.words[0]) === 'موسي')!;
+    const group = startingWith(all, 'اذ قال');
+    const musa = branch(group).children.find(child => normalizeWord(child.words[0]) === 'موسي')!;
     const node = musa.children.find(child => normalizeWord(child.words[0]) === 'لقومه')!;
     const id = linkId(['إِذْ', 'قَالَ', ...musa.words, ...node.words], keys(node).map(key => all.find(a => a.key === key)!.conj ?? ''));
-    expect(id.startsWith('وإذ قال موسي لقومه')).toBe(true);
+    expect(id.startsWith('واذ قال موسي لقومه')).toBe(true);
     expect(listPhrases(groups).some(p => p.id === id)).toBe(true);
     expect(linkId(['يَطُوفُ', 'عَلَيْهِمْ'], ['', 'و'])).toBe('يطوف عليهم');
     expect(linkId(['قَالَ', 'رَبِّ'], [])).toBe('قال رب');
@@ -225,8 +259,8 @@ describe('pickPhrase and widerPhrases', () => {
 
   it('offers the merged opening as wider than one spelling of it, and shorter phrases above a deeper one', () => {
     expect(widerPhrases(phrases, 'ويطوف عليهم', startingWith(all, 'ويطوف عليهم')).map(p => p.id)).toEqual(['يطوف عليهم']);
-    expect(widerPhrases(phrases, 'إن المتقين في جنت', startingWith(all, 'إن المتقين في جنت')).map(p => p.id)).toEqual(['إن المتقين', 'إن المتقين في']);
-    expect(widerPhrases(phrases, 'إن المتقين', startingWith(all, 'إن المتقين'))).toEqual([]);
+    expect(widerPhrases(phrases, 'ان المتقين في جنت', startingWith(all, 'ان المتقين في جنت')).map(p => p.id)).toEqual(['ان المتقين', 'ان المتقين في']);
+    expect(widerPhrases(phrases, 'ان المتقين', startingWith(all, 'ان المتقين'))).toEqual([]);
   });
 });
 
@@ -268,7 +302,7 @@ describe('pieces', () => {
   });
 
   it('names a piece whose ayat all carry the joined letter by its own spelling', () => {
-    expect(list.some(p => p.id.startsWith('وإذ قال موسي لقومه'))).toBe(true);
+    expect(list.some(p => p.id.startsWith('واذ قال موسي لقومه'))).toBe(true);
   });
 });
 
@@ -296,25 +330,26 @@ describe('the list\'s pages', () => {
   });
 });
 
-describe('hamza below an alif', () => {
-  const groupOf = (key: string) => [...groups.values()].find(group => group.some(a => a.key === key))?.map(a => a.key) ?? [];
-
-  it('keeps إن and أن apart, with or without a joined و or ف', () => {
-    expect(groupOf('68:14')).not.toContain('77:39');
-    expect(groupOf('77:39')).not.toContain('68:14');
-    expect(shown(groups.get('إن الذين')!).every(a => a.words[0].startsWith('إ'))).toBe(true);
+describe('spellings and marks', () => {
+  it('draws أن, وإن and فإن as separate first words of ان كان', () => {
+    const group = startingWith(all, 'ان كان');
+    expect(variants(group).map(v => [v.word, v.keys])).toEqual([
+      ['أَن', ['68:14']],
+      ['وَإِن', ['2:280', '6:35', '7:87', '12:27', '15:78']],
+      ['فَإِن', ['77:39']],
+    ]);
   });
 
-  it('parts وأدبار السجود from وإدبار النجوم', () => {
-    const find = (node: Branch): Branch | undefined => keys(node).includes('50:40') && keys(node).includes('52:49') && node.children.every(child => !(keys(child).includes('50:40') && keys(child).includes('52:49'))) ? node : node.children.map(find).find(Boolean);
-    const node = find(branch(shown(groups.get('من اليل')!)))!;
-    expect(node.children).toHaveLength(2);
-    expect(node.children.map(child => child.words[0])).toEqual(expect.arrayContaining(['وَأَدْبَـٰرَ', 'وَإِدْبَـٰرَ']));
+  it('splits words that differ only in their marks into separate nodes', () => {
+    const tree = branch([ayah('1:1', 'قال لَهُمْ ربهم'), ayah('1:2', 'قال لَهُم موسى')]);
+    expect(tree.words).toEqual(['قال']);
+    expect(tree.children.map(child => child.words[0])).toEqual(['لَهُمْ', 'لَهُم']);
   });
 
-  it('opens an old link spelled without the hamza on the tree it meant', () => {
-    const phrases = listPhrases(groups);
-    expect(pickPhrase(phrases, 'ان المتقين')).toBe('إن المتقين');
-    expect(DEFAULT_PHRASE).toBe('إن المتقين');
+  it('carries an ayah that ends mid-tree into the next one, marked with its number', () => {
+    const tree = branch(startingWith(all, 'يطوف عليهم'));
+    const leaf = tree.children[1].children[0];
+    expect(leaf.ayat).toEqual(['56:17']);
+    expect(leaf.words[0]).toBe('﴿١٧﴾');
   });
 });

@@ -81,7 +81,7 @@ describe('complete branch tree answers', () => {
   });
 
   it('draws each joined spelling without a link before checking, and tags each ayah with it after', () => {
-    const variants = [{ word: 'يَطُوفُ', conj: '', keys: ['52:24'] }, { word: 'وَيَطُوفُ', conj: 'و', keys: ['56:17', '76:19'], id: 'ويطوف عليهم' }];
+    const variants = [{ word: 'يَطُوفُ', conj: '', keys: ['52:24'], id: 'يطوف عليهم' }, { word: 'وَيَطُوفُ', conj: 'و', keys: ['56:17', '76:19'], id: 'يطوف عليهم' }];
     const { unmount } = render(<BranchInputs question={{ ...question, variants }} typed={emptyBranchAnswers(question)} onChange={vi.fn()} onCheck={vi.fn()} ar={false} />);
     expect(screen.getByText('وَيَطُوفُ')).toBeTruthy();
     expect(screen.queryAllByRole('link')).toHaveLength(0);

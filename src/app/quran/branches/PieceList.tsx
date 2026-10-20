@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { num } from '@/lib/quran/arabicNumber';
-import { branch, branchesHref, shown, variants, type BranchAyah, type Opening, type Piece } from '@/lib/quran/branches';
+import { branch, branchesHref, variants, type BranchAyah, type Opening, type Piece } from '@/lib/quran/branches';
 import type { JuzRange } from '@/lib/quran/juz';
 const NOTE = 'text-sm text-[var(--home-muted)]';
 import BranchTree from './BranchTree';
@@ -29,7 +29,7 @@ function Entry({ piece, names, ayat, juz, partOf }: Props & { piece: Piece; part
         )}
       </p>
       <BranchTree
-        tree={branch(shown(group))}
+        tree={branch(group)}
         variants={variants(group)}
         names={names}
         pages={Object.fromEntries(group.map(ayah => [ayah.key, ayah.page]))}

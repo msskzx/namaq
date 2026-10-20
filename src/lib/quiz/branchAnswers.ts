@@ -53,9 +53,12 @@ export function leadingWords(given: string, words: string[]): number {
   return 0;
 }
 
-const nodeCorrect = (given: string, node: Branch) => node.children.length === 0
-  ? matchedWords(given, node.words) >= Math.min(LEAF_WORDS, node.words.length)
-  : matchedWords(given, node.words) === node.words.length;
+const spoken = (words: string[]) => words.filter(word => letters(word) !== '');
+
+const nodeCorrect = (given: string, node: Branch) => {
+  const words = spoken(node.words);
+  return node.children.length === 0 ? matchedWords(given, words) >= Math.min(LEAF_WORDS, words.length) : matchedWords(given, words) === words.length;
+};
 
 export type BranchMatch = { branch: number; words: number };
 
@@ -89,7 +92,7 @@ export function matchTreeAnswers(tree: Branch, given: string[]): (TreeAnswerMatc
   const graded = new Map<number, { correct: boolean; words: number }>();
   const grade = (index: number, node: Branch) => {
     const key = index * nodes.length + indices.get(node)!;
-    if (!graded.has(key)) graded.set(key, { correct: nodeCorrect(given[index] ?? '', node), words: leadingWords(given[index] ?? '', node.words) });
+    if (!graded.has(key)) graded.set(key, { correct: nodeCorrect(given[index] ?? '', node), words: leadingWords(given[index] ?? '', spoken(node.words)) });
     return graded.get(key)!;
   };
   type Paired = { result: Map<number, TreeAnswerMatch>; correct: number; words: number } | null;

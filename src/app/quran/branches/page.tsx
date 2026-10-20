@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDownWideShort, faCodeBranch, faLayerGroup, faList, faMagnifyingGlassMinus } from '@fortawesome/free-solid-svg-icons';
 import Button from '@/components/common/Button';
-import { branch, branchesHref, PIECE_MAX, listOpenings, listPage, listPhrases, pickPhrase, pieces, sharedOpenings, shown, startingWith, TOP, variants, widerPhrases, type BranchAyah } from '@/lib/quran/branches';
+import { branch, branchesHref, PIECE_MAX, listOpenings, listPage, listPhrases, pickPhrase, pieces, sharedOpenings, spelledAs, startingWith, TOP, variants, widerPhrases, type BranchAyah } from '@/lib/quran/branches';
 import { inJuzRange, parseJuzRange, type JuzRange } from '@/lib/quran/juz';
 import ayat from './ayat.json';
 import BranchTree from './BranchTree';
@@ -46,7 +46,10 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const { shared, byKey, openings, phrases, pieces: cut } = view(range);
   const id = pickPhrase(phrases, first(params.o));
   const group = id ? startingWith(shared, id) : [];
-  const wider = widerPhrases(phrases, id, group);
+  const own = spelledAs(group, first(params.w));
+  const drawn = own.length > 0 ? own : group;
+  const spelling = own.length > 0 ? first(params.w)! : undefined;
+  const wider = [...(own.length > 0 ? phrases.filter(phrase => phrase.id === id) : []), ...widerPhrases(phrases, id, group)];
   const numbers = list ? undefined : [...new Set(group.map(ayah => Number(ayah.key.split(':')[0])))];
   const rows = await prisma.surah.findMany({ where: numbers ? { number: { in: numbers } } : undefined, select: { number: true, name: true } });
   const names = Object.fromEntries(rows.map(row => [row.number, row.name]));
@@ -59,12 +62,12 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
         <p className={styles.eyebrow}>نمق · القرآن الكريم</p>
         <h1>فواتح الآيات المشتركة</h1>
         <p className={NOTE}>
-          آيات تبدأ بالكلمتين نفسيهما، تتفرع حيث تختلف كلماتها حتى تنتهي كل آية. اضغط عبارة في الشجرة لترى ما يتفرع منها وحده. تُجمع الآية المبدوءة بواو أو فاء عاطفة مع التي تبدأ بالكلمة نفسها دونها، وتظهر الصيغتان قبل الشجرة. تُقارن الكلمات بلا تشكيل ولا علامات وقف، والنص برواية حفص كما في صفحة القراءة. هذا تطابق في اللفظ وحده.
+          آيات تبدأ بالكلمتين نفسيهما، تتفرع حيث تختلف كلماتها حتى تنتهي كل آية. اضغط عبارة في الشجرة لترى ما يتفرع منها وحده. تُجمع الآية المبدوءة بواو أو فاء عاطفة مع التي تبدأ بالكلمة نفسها دونها، وتظهر الصيغتان قبل الشجرة. تُجمع الفواتح بلا تشكيل ولا علامات وقف، وفي الشجرة تصير الكلمة التي يختلف تشكيلها عقدة مستقلة، والنص برواية حفص كما في صفحة القراءة. هذا تطابق في اللفظ وحده.
         </p>
       </header>
-      <JuzFilter range={range} phrase={id} view={{ list, grouped }} />
+      <JuzFilter range={range} phrase={id} view={{ list, grouped, spelling }} />
       <div role="group" aria-label="طريقة العرض" className="flex flex-wrap gap-2">
-        <Button size="sm" href={branchesHref(id, juz)} active={!list} aria-current={!list ? 'page' : undefined}>
+        <Button size="sm" href={branchesHref(id, juz, { spelling: spelling })} active={!list} aria-current={!list ? 'page' : undefined}>
           <FontAwesomeIcon icon={faCodeBranch} />
           الشجرة
         </Button>
@@ -113,10 +116,10 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
             </nav>
           )}
           <BranchTree
-            tree={branch(shown(group))}
-            variants={variants(group)}
+            tree={branch(drawn)}
+            variants={variants(drawn)}
             names={names}
-            pages={Object.fromEntries(group.map(ayah => [ayah.key, ayah.page]))}
+            pages={Object.fromEntries(drawn.map(ayah => [ayah.key, ayah.page]))}
             juz={range}
           />
         </>

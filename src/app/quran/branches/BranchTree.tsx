@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { num } from '@/lib/quran/arabicNumber';
-import { branchesHref, keys, linkId, type Branch, type Variant } from '@/lib/quran/branches';
+import { branchesHref, keys, linkId, spell, type Branch, type Variant } from '@/lib/quran/branches';
 import type { JuzRange } from '@/lib/quran/juz';
 
 type Props = { tree: Branch; names: Record<number, string>; pages: Record<string, number>; variants?: Variant[]; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string };
@@ -76,11 +76,11 @@ export default function BranchTree({ tree, names, pages, variants = [], juz = nu
           <>
             <ul aria-label="صيغ الكلمة الأولى" className="flex flex-col">
               {variants.map((variant, i) => (
-                <li key={variant.conj} className="relative flex items-center py-1 pe-6">
+                <li key={variant.word} className="relative flex items-center py-1 pe-6">
                   <span aria-hidden className={`absolute end-0 top-1/2 w-6 border-t-2 ${LINE}`} />
                   <span aria-hidden className={`absolute end-0 border-e-2 ${LINE} ${i === 0 ? 'top-1/2' : 'top-0'} ${i === variants.length - 1 ? 'bottom-1/2' : 'bottom-0'}`} />
                   <span className={`shrink-0 rounded border-2 bg-[var(--home-paper)] px-3 py-1.5 text-xl font-arabic leading-loose ${TONE[variant.conj]}`}>
-                    {variant.id && !renderNode ? <Link href={branchesHref(variant.id, juz ?? undefined)} className="hover:underline">{variant.word}</Link> : variant.word}
+                    {!renderNode ? <Link href={branchesHref(variant.id, juz ?? undefined, { spelling: spell(variant.word) })} className="hover:underline">{variant.word}</Link> : variant.word}
                   </span>
                 </li>
               ))}

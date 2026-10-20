@@ -18,6 +18,7 @@ export default function JuzFilter({ range, phrase, view }: { range: JuzRange | n
       <input type="hidden" name="o" value={phrase} />
       {view.list && <input type="hidden" name="v" value="list" />}
       {view.list && view.grouped && <input type="hidden" name="g" value="opening" />}
+      {view.spelling && <input type="hidden" name="w" value={view.spelling} />}
       {select('juzFrom', 'من الجزء', range?.from ?? 1)}
       {select('juzTo', 'إلى الجزء', range?.to ?? JUZ_STARTS.length)}
       <Button type="submit" size="sm">
@@ -25,7 +26,7 @@ export default function JuzFilter({ range, phrase, view }: { range: JuzRange | n
         تطبيق
       </Button>
       {range && (
-        <Button size="sm" href={branchesHref(phrase, undefined, { list: view.list, grouped: view.grouped })}>
+        <Button size="sm" href={branchesHref(phrase, undefined, { list: view.list, grouped: view.grouped, spelling: view.spelling })}>
           <FontAwesomeIcon icon={faRotateLeft} />
           كل الأجزاء
         </Button>
