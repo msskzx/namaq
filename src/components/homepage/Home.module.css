@@ -1,13 +1,15 @@
+/* docs/palette.md */
 .theme {
   --home-width: 88rem;
   --home-gutter: clamp(1.25rem, 4vw, 4rem);
   --home-paper: #f4ecdb;
   --home-paper-deep: #ebe0c8;
   --home-ink: #2e2219;
-  --home-muted: #6c5844;
+  --home-muted: #6b5a4a;
   --home-rule: #c9b796;
   --home-accent: #9c3b22;
-  --home-root: #6a4c93;
+  --home-root: #5e4689;
+  --home-green: #4b644a;
   --home-slot-1: #2c6a78;
   --home-slot-2: #5d6a24;
   --home-slot-3: #3f5a8f;
@@ -23,12 +25,13 @@
 
 :global(.dark) .theme {
   --home-paper: #0b0b0b;
-  --home-paper-deep: #181818;
-  --home-ink: #f5eddf;
-  --home-muted: #c8b89f;
+  --home-paper-deep: #1d1b19;
+  --home-ink: #f2eadc;
+  --home-muted: #b8ab98;
   --home-rule: #4b3f31;
-  --home-accent: #eda183;
-  --home-root: #c4a8ec;
+  --home-accent: #e8876c;
+  --home-root: #b9a3dc;
+  --home-green: #9bb59a;
   --home-slot-1: #8cc8d4;
   --home-slot-2: #c0cc84;
   --home-slot-3: #9fb4e6;

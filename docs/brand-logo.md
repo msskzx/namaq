@@ -12,7 +12,7 @@
 | Manifest | `icon-192.png`, `icon-512.png` | Transparent. |
 | Seal (optional) | `namaq-seal-light.svg`, `namaq-seal-dark.svg` | The mark in a double ring, for a stamp-style use such as a social card or the about page. |
 
-Colors are #405's: ink #2e2219 / #f5eddf, accent #9c3b22 / #eda183, paper #f4ecdb.
+Colors follow [palette.md](palette.md). The dark logo and seal files keep the earlier dark ink #f5eddf and accent #eda183, since their content credentials sign each file.
 Every file has a transparent background.
 
 Files live in `public/brand/`.

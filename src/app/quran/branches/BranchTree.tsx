@@ -9,9 +9,9 @@ type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz'> & { node: Branch; path
 
 const LINE = 'border-[var(--home-rule)]';
 export const TONE: Record<string, string> = {
-  '': 'border-sky-500 text-sky-800 dark:text-sky-300',
-  و: 'border-purple-500 text-purple-800 dark:text-purple-300',
-  ف: 'border-teal-500 text-teal-800 dark:text-teal-300',
+  '': 'border-[var(--home-muted)] text-[var(--home-ink)]',
+  و: 'border-[var(--home-green)] text-[var(--home-green)]',
+  ف: 'border-[var(--home-accent)] text-[var(--home-accent)]',
 };
 
 function Node({ node, path, names, pages, tags, lead, juz, renderNode, indices }: NodeProps) {
