@@ -189,8 +189,8 @@ describe('an opening with and without و', () => {
 
   it('names each first word, the ayat that open with it and the phrase they share', () => {
     expect(variants(group).map(v => ({ ...v, word: normalizeWord(v.word) }))).toEqual([
-      { word: 'يطوف', conj: '', keys: ['56:17'], id: 'يطوف عليهم' },
       { word: 'ويطوف', conj: 'و', keys: ['52:24', '76:19'], id: 'يطوف عليهم' },
+      { word: 'يطوف', conj: '', keys: ['56:17'], id: 'يطوف عليهم' },
     ]);
     expect(branchesHref('يطوف عليهم', undefined, { spelling: 'يَطُوفُ' })).toContain('&w=');
     expect(spelledAs(group, 'يَطُوفُ').map(a => a.key)).toEqual(['56:17']);
@@ -334,8 +334,8 @@ describe('spellings and marks', () => {
   it('draws أن, وإن and فإن as separate first words of ان كان', () => {
     const group = startingWith(all, 'ان كان');
     expect(variants(group).map(v => [v.word, v.keys])).toEqual([
-      ['أَن', ['68:14']],
       ['وَإِن', ['2:280', '6:35', '7:87', '12:27', '15:78']],
+      ['أَن', ['68:14']],
       ['فَإِن', ['77:39']],
     ]);
   });
@@ -351,5 +351,26 @@ describe('spellings and marks', () => {
     const leaf = tree.children[1].children[0];
     expect(leaf.ayat).toEqual(['56:17']);
     expect(leaf.words[0]).toBe('﴿١٧﴾');
+  });
+});
+
+describe('variant Quran order', () => {
+  it('places the al-Shura opening before the al-Najm opening', () => {
+    const group = startingWith(all, 'الذين يجتنبون').filter(a => inJuzRange(a.key, { from: 25, to: 30 }));
+    expect(variants(group).map(v => v.keys)).toEqual([['42:37'], ['53:32']]);
+  });
+
+  it('uses the earliest ayah in each spelling, comparing surah and ayah numerically', () => {
+    const group = [ayah('10:1', 'قال رب'), ayah('2:100', 'وقال رب'), ayah('2:10', 'قال رب'), ayah('2:9', 'وقال رب')];
+    expect(variants(group).map(v => v.keys)).toEqual([['2:100', '2:9'], ['10:1', '2:10']]);
+    expect(group.map(a => a.key)).toEqual(['10:1', '2:100', '2:10', '2:9']);
+  });
+
+  it('orders every committed opening group by its earliest Quran reference', () => {
+    const order = (key: string) => key.split(':').map(Number).reduce((s, n) => s * 1000 + n);
+    for (const group of groups.values()) {
+      const first = variants(group).map(v => Math.min(...v.keys.map(order)));
+      expect(first).toEqual([...first].sort((a, b) => a - b));
+    }
   });
 });
