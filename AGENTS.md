@@ -73,9 +73,9 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 
 ## Local verification
 
-- Local dev requires a running PostgreSQL **and** Neo4j instance (see
-  README "Local setup"). Real credentials for both live in `.env` at the
-  repo root; each git worktree needs its own `.env` symlinked to that
+- For local dev, follow [docs/local-setup.md](docs/local-setup.md). It requires
+  running PostgreSQL **and** Neo4j instances. Real credentials for both live in
+  `.env` at the repo root; each git worktree needs its own `.env` symlinked to that
   file (`ln -s <main-checkout>/.env .env`, where `<main-checkout>` is the
   absolute path of the primary clone) — check for this symlink before
   assuming infra is unavailable. Seed/sync commands
@@ -376,5 +376,6 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 
 ## Documentation
 
-- New features get a line in `README.md` under "What is implemented",
-  in the relevant existing subsection (or a new one if it doesn't fit).
+- Update the relevant documentation when behavior or procedures change. Update
+  `README.md` when the project purpose or documentation links change; keep setup
+  instructions in `docs/local-setup.md` and feature details in their own docs.

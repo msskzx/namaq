@@ -1,301 +1,65 @@
 # Namaq
 
-Namaq is an Arabic-first historical learning application for Muslims and students of Islamic knowledge. Its purpose is to make the people, relationships, and major events of early Islamic history easier to understand by exploring them visually rather than only as isolated entries in a text.
+نَمَق تطبيق تعليمي موجّه للمسلمين وطلاب العلم، والعربية لغته الأساسية.
+يعين على دراسة القرآن الكريم والحديث النبوي وتاريخ صدر الإسلام من خلال
+نصوص المصادر والمقارنة بينها، واستكشاف الشخصيات والعلاقات بينها بصريًا.
 
-The goal is a framework that draws knowledge out of the great classical sources and presents it so students of knowledge can learn and compare, with visuals and tools that make study fruitful. Every piece of information is backed by its evidence in the source.
+[افتح نَمَق](https://namaq.app).
 
-The central experience is a relationship graph: learners land directly on the graph, look around and filter by relationship type, and move from a graph node to that person's profile. Person profiles connect the graph to a growing historical record through names, titles, a life timeline, events, battles, and Qur'an references.
+Namaq is an Arabic-first learning application for Muslims and students of Islamic
+knowledge. It helps readers study the Quran, Hadith, and early Islamic history
+through source texts, comparisons, and visual exploration of people and their
+relationships.
 
-The project is intentionally refocusing on this learning loop. The homepage states the goal, then shows each feature with a working example. The core loop is:
+[Open Namaq](https://namaq.app).
 
-```text
-Open the graph → explore and filter relationships → open a person's profile → place them in events and time
-```
+## Documentation
 
-## What is implemented
+- [Local setup and verification](docs/local-setup.md).
+- Data architecture and design: [data pipelines](docs/data-pipelines.md),
+  [the data-model plan](docs/plans/data-model/plan.md), and
+  [architecture decisions](docs/adr/).
+- Graph design: [exploration](docs/graph-exploration.md),
+  [search](docs/graph-search.md), and [layout](docs/graph-layout.md).
+- [Contribution rules](AGENTS.md).
 
-### Homepage
+## Data and evidence
 
-- The bilingual homepage uses a paper, ink and terracotta theme in light and dark modes, with feature explanations followed by examples of shared Quran openings, page-style ayah comparisons, prophet timelines with distinct surah counts, an expanded relationship graph, the full Hadith Jibril in bubbles or text, complete paternal lineages and an approved question on one of Talha ibn Ubaydullah's virtues, plus a numbered subject index. The same theme now covers every page.
-- The navbar is the title band of a printed book: paper, double rules and the نَمَق wordmark. An icon-only sun and moon toggle switches the theme directly from the bar. Its sections run from the texts to review (Quran, Hadith, Biographies, Relationships, Sources, Quizzes) and open shelves on hover, click or keyboard focus, where each page has a line saying what it is for and the current page is marked; Quran's eleven pages sit under Read, Words and Themes. The current section is marked, the phone menu groups the same shelves into collapsible sections and scrolls, and ع/EN switches language in one tap.
+[Data pipelines](docs/data-pipelines.md) explains how source pages, claims, and
+catalog records build the data served by the app. The
+[extraction checklist](docs/extraction-checklist.md) describes how to check an
+entry's completeness and account for values whose evidence is still owed.
+[Quiz question review](docs/quiz-question-review.md) covers the question bank's
+evidence and publication checks.
 
-### Quizzes
+Source text, attributed claims, editorial analysis, and review status have
+separate roles. The [attribution rules](docs/adr/0022-a-shown-value-rests-on-an-attributed-statement.md)
+and [data-model plan](docs/plans/data-model/plan.md) describe the intended model
+for those distinctions. Its [progress record](docs/plans/data-model/progress.md)
+tracks implementation.
 
-- The quiz picker can combine several reviewed scopes in one quiz. Question
-  content is Arabic; ayah choices show their stored Qur'an text and reference.
-  Every catalog person has recorded sex, so gender-constrained relationship
-  questions offer only choices of the required sex. Solo quizzes lock each
-  answer for immediate feedback, expose one source reference per question in
-  an overlay that deep-links to the exact reader passage, and report a
-  percentage with a pass mark at 50%.
-- Quizzes and `/quran/branches` use the paper theme. Number controls across the app support direct typing, keyboard navigation and bounded increment buttons, including quiz length, juz' ranges, page jumps and ayah ranges.
-- The "Shared openings" quiz uses the same connected tree as `/quran/branches` and asks for every node after the opening. A leaf counts from its first two words, as long as every word typed is right. Feedback shows the complete tree. Ordinary Arabic keyboard variants, including ي in place of ئ and شي for شيء, count as correct ([docs/quiz-ayah-branches.md](docs/quiz-ayah-branches.md)).
+The reasoning and lessons from building Namaq live in
+[Distillate](https://distillate-kappa.vercel.app/):
 
-### Hadith fixtures
+- [Text to evidence](https://distillate-kappa.vercel.app/text-to-evidence)
+  follows the design of turning printed sources into cited claims.
+- [Where text becomes citable](https://distillate-kappa.vercel.app/text-to-evidence/0001-where-text-becomes-citable)
+  explains the connection between source text and evidence.
+- [Who owns a page](https://distillate-kappa.vercel.app/text-to-evidence/0002-who-owns-a-page)
+  explains why source pages belong to the book rather than to a reader or claim.
+- [A check that exists but doesn't run](https://distillate-kappa.vercel.app/text-to-evidence/0003-a-check-that-exists-but-doesnt-run)
+  examines failures in verification.
+- [Namaq records](https://distillate-kappa.vercel.app/records?project=namaq)
+  collect challenges, decisions, and findings from the project.
 
-- `/hadith` lists the Jibril test fixtures (Bukhari, Muslim and the Fath al-Bari
-  note); `/hadith/<unit>` shows each one's isnad chains, tahwil, scenes and
-  turns with their speakers, the commentary link in both directions, and a link between the two hadith as the same event on Ibn Hajar's wording. The
-  data is test fixtures under `src/lib/model/fixtures/jibril`, not a source. The
-  pages read `model_units` and fall back to the files; `npm run model:project -- --units`
-  fills the tables ([plan](docs/plans/hadith-in-the-database.md)).
-- A hadith page has two modes: the book's full text, or the isnad diagram above
-  the conversation as bubbles. The diagram puts the collector first, with each
-  teller below the one who heard from them and arrows pointing up to the hearer.
-  It is static SVG ([plan](docs/plans/hadith-on-profiles.md)). For the two
-  Jibril hadith the rows are Ibn Hajar's ṭabaqāt from تقريب التهذيب, with the
-  collector on top and a narrator who reports from someone of the same ṭabaqa
-  beside them; a person on both routes is one node. The ranks are hand-written
-  demo data in `src/lib/model/tabaqa.ts`
-  ([plan](docs/plans/hadith-chain-rows.md)).
-- A profile lists the hadith a person has a role in (in the isnad, speaking, or
-  mentioned), one per page, with the same two modes and the person's own bubbles
-  highlighted. The roles come from the new `model_unit_people` table, which
-  `npm run model:project -- --units` fills once the migration is applied
-  ([plan](docs/plans/hadith-on-profiles.md)).
+## License and source rights
 
-### Relationship graph
+The [MIT license](LICENSE) covers this repository's files, including the
+structured data under `data/`.
 
-- The **Nodes in view** list can be hidden and shown; every action button in the graph UI comes from the shared `Button` component, and a selected person's titles render as the same badges the profile page uses.
-- One Filters panel holds node kinds, the scope slider, and the relationship types. The slider carries both scopes and highlights the one in force, in the shape of the theme and language switchers: **Selected subject** (the default) expands that one subject, **Entire graph** filters the whole graph. Node kinds sit above it, since they are a server-side whitelist for the whole view rather than a scoped choice. Battle participation statuses sit inside the battles group, under the relation they qualify. With nothing selected the local controls are disabled rather than silently acting globally. The selected-subject panel is divided into groups: where the subject leads (**View profile**), what it reveals (**Explore**, which expands the selection along the relationship types currently switched on, or all of them but companionship when none are, plus Ancestors and Descendants), what it removes (**Collapse branch**, **Hide node**, **Keep only this node**, **Deselect**), and what acts on the whole exploration (**Show full graph**, **Start over**). Show full graph (`full=1`) adds the enabled dataset, respecting hidden nodes, and switches the relationship types on with it so the subjects arrive connected; companionship stays where its own switch left it. Start over returns to a fresh visit. All of them support browser Back/Forward. The **List of Nodes** panel starts collapsed.
-- Global filters start off. A fresh visit and **Start over** open on the Prophet with every direct relation he has plus his ancestors and descendants, seeded as his own expansions, so nothing global has to be on to see them. That is Explore, Ancestors and Descendants applied without the reader pressing them. A person's profile graph opens on that person under the same rule. Companionship stays off, and neither line is capped. Bulk and group switches leave companionship in whatever state its own switch set, in both directions. Battle participation gains status switches (martyred, died, injured, captured, was captured, absent, and status not recorded) that match with OR; a participation that does not match disappears while the person stays if another relation supports them. Whether someone was at a battle is the relation's job rather than a status: `PARTICIPATED_IN` and `ABSENT_FROM` are separate switches under the battles group, so "who was at Badr" needs no status filter to be right.
-
-- `/graphs` is a single page and a single dataset (`GET /api/graph`) for every kind of node — there is no separate "people graph" / "titles graph" / "battles graph" page or route to keep in sync. `/graphs/people`, `/graphs/titles`, and `/graphs/battles` still work as redirects to `/graphs` with the equivalent `kind` filter already applied (see below), for old links/bookmarks.
-- Graph links have typed, directed relationship labels such as `FATHER`, `SON`, `WIFE`, and `PATERNAL_UNCLE`.
-- A `kind` query param (repeatable: `person`/`title`/`battle`/`event`) is a server-side **whitelist** on `/api/graph` — e.g. `?kind=person&kind=battle` returns only those two kinds and the links directly between them. It's absent by default, meaning every kind. The Node Kinds toggle switches on `/graphs` always offer all four kinds regardless of what's currently loaded (not just whichever kinds happen to be in the current, possibly-narrowed response), so toggling a kind back on triggers a fresh, correctly-scoped fetch rather than trying to reveal data that was never fetched in the first place.
-- `/graphs` has a single search box with no mode dropdown, backed by one endpoint (`GET /api/graph/suggest`) covering every historical subject — person, title, battle, or event — whether or not it is already on screen. Picking any of them adds it as an additional `subject` root in the current exploration and selects it; existing subjects, expansions, and filters are preserved, and nothing is expanded implicitly. A result whose kind is switched off is shown with an explanation instead of being added, since adding it would silently change a filter; searching a subject again lifts an earlier removal without clearing its caps. Ancestors/Paternal lineage/Descendants are exploration actions on the selected subject (see the selected-subject panel), not search modes.
-- The two search endpoints answer different questions and neither result set is a subset of the other. `/api/graph/suggest` searches the graph: Neo4j is its candidate source for all four kinds, since it is the only store with complete coverage, ranked by match quality then `graphRank` then name, with an explicit `kind` and `hasProfile` on every result. `/api/people/suggest` searches profiles for the `/people` directory, where every suggestion opens `/people/<slug>`, so it stays PostgreSQL-only. A graph-only person (present in Neo4j, e.g. a deep lineage-only ancestor, no PostgreSQL row — see `CONTEXT.md`) is therefore findable in the workspace but not in the directory, and their suggestion and selected-subject panel both omit the "View profile" link rather than linking to a page that doesn't exist.
-- Every companion (a Person holding the `صحابي`/companion title) has a direct, non-family `COMPANION_OF`/`ACCOMPANIED_BY` edge to the Prophet in Neo4j, kept in sync from PostgreSQL by `npm run people:sync-companions` (`-- --apply` to write) — distinct from the pre-existing `HOLDS_TITLE` edge to the shared companion Title node, and from the handful of companions who are also blood/marriage relatives with their own family relation. `ACCOMPANIED_BY` (companion-of's inverse edge) is always shown rather than getting its own filter toggle, same relationship as `COMPANION_OF` just viewed from the other side.
-- `PACT_BROTHER` records the المؤاخاة, the brotherhood the Prophet declared between a Muhajir and an Ansari on the arrival in Medina. It is its own reciprocal, the way `PATERNAL_COUSIN` is, and it shares `COMPANION_OF`'s colour rather than the sibling one, so the graph does not read a pact as a blood tie. Its first use is Abd al-Rahman ibn Awf, whose entry names two different pact brothers and reconciles neither.
-- `PATRON` is `MAWLA`'s other side, so a manumission reaches the graph in both directions like every other person relation. `MAWLA` points from the freedman to the man who freed him, the way `salim-mawla-abi-hudhayfah`'s name reads, and `PATRON` points back; both sit in the household colour. Its first use is the Prophet and Zayd ibn Harithah, whom Khadijah gave him and he freed.
-- A battle record carries an `engagement`, which separates a غزوة the Prophet led in person from a سرية he sent a detachment on, and both from a معركة outside his campaigns. It is a string column rather than an enum so a new kind needs no migration; `ENGAGEMENTS` in `src/lib/catalog/types.ts` holds the vocabulary and `npm run catalog:validate` rejects anything outside it. The value is cited rather than assigned, because the sira labels its own chapters that way. This is what lets an expedition that met no fighting be recorded at all: ten of them from years one and two are in the catalog, and `catalog:project` creates the rows, since the old seed never had them. A battle page shows it as a chip beside the title.
-- An `Utterance` is something someone said, in verse or in prose, with a `kind` of `POETRY` or `SAYING`. A profile field held what is said about a person; this holds what a person said, which the sira is full of and the model had nowhere for. The speaker is a link when the app has a subject and plain text otherwise, so a poet the chapter names once stays out of the graph, the way a narrator does. `grading` carries the source's own words about its own report (أخرجه مسلم, إسناده حسن) and the app grades nothing itself. It is PostgreSQL only: a poem is not a connection between two people. See [ADR 0015](docs/adr/0015-one-record-for-what-someone-said.md).
-- Utterances read on three pages. A profile carries two sections, what the person said and what was said about them; a battle and an event carry what was said there. Verse prints line by line, because a poem run together is not a poem, and prose prints as a paragraph. A speaker the app holds is a link to their profile and one it does not is plain text. A grading is never shown bare: it is labelled قال المصدر / "The source says", so a verdict reads as the source's and not the app's. The Arabic heading takes the person's `sex`, since Arabic has no neutral pronoun and the masculine would misname Umm Salamah and Atikah; English needs no such thing.
-- A year before the hijra is negative, and there is no year zero: `-1` is the year the sira writes قبل الهجرة بسنة, the one the hijra came at the end of. `npm run catalog:validate` rejects a zero, and `formatHijriYear` in `src/lib/hijriYear.ts` is the one place it becomes something a reader sees, as `1 ق.هـ` or `1 BH` beside `3 هـ` and `3 AH`. `compareHijriYear` orders a timeline with them, keeping undated entries first, which the old subtraction did only while every year was positive. It is what lets four events be dated at all: the Isra' at -1, and the exit from the shi'b with Abu Talib's and Khadijah's deaths at -3.
-- Source material has a shelf of its own at `/sources`: every work the evidence is read from, with its author, editor and edition, and how many entries and printed pages of it have been read. A source records its edition's volumes whether or not anything has been read from one, so the contents show the whole work -- this edition's twenty-eight, of which three are read -- rather than only the parts some entry sits in. The volume is recorded on each page rather than on the entry, because an entry can cross a binding: the sira is 497 pages of one volume and 491 of the next, and appears under both with only its own pages and chapters in each. Opening one opens the book at its contents: its volumes, one open at a time, each listing the chapters and sections the work's own pages declare, the way a printed فهرس does, so a heading opens directly at the printed page it starts on. A page with no heading of its own contributes nothing to this list -- nearly every biographical entry's title line is read as its heading already -- except the rare entry that opens with none, which falls back to its own label so it stays reachable. Choosing one opens the same reader the profile uses, paging through the work's entries rather than a person's books — a source is one edition of one work, so two editions of a book stand as two shelf entries. The reader is one component either way (`src/components/people/SourceAccountReader.tsx`); only the accounts it may page through differ, which is why a profile showing a subject read from several works gets the book selector for free.
-  Fullscreen mode adds swipe and desktop arrow-key navigation in the source's language direction, an account and section index, and local font, size, and background settings. The text stays within its printed page as its size changes, so citation page numbers remain stable. `/attributions` lists the works and data the site relies on and credits each: the historical work and digital edition used for sourced biographies, and the Quranic Arabic Corpus.
-- A battle record carries four counts: `muslimForceCount`, `nonMuslimForceCount`, `muslimDeathCount` and `nonMuslimDeathCount`. They are separate columns because the sources count the two sides separately, and each is cited like any other value, so a battle whose numbers nobody states carries none. Where readings compete, the module takes one and the others stay as `DISPUTED` claims in the batch rather than being averaged or dropped: Badr is 313 against 950 with 14 and 70 dead, and Uhud is 700 against 3000 with 70 dead, which is the count chapter five had to leave on the page for want of a column. A battle page shows the counts it has and leaves out the ones it does not, because a side nobody counted is the ordinary case and a zero would read as a finding.
-- `MILK_BROTHER` and `MILK_SISTER` record رضاع, which is kinship in its own right and was not expressible before. They sit in the sibling colour and are each other's reciprocal, resolved by the far end's sex the way `FATHER` and `SON` are. The wet nurse needs no subject for the tie to exist: Thuwaybah nursed the Prophet with Hamzah and with Abu Salamah, and the edges run between the three nurslings.
-- `CALLED_TO_ISLAM` and `ANSWERED_CALL_OF` record who brought whom in. The direction is the source's: Ibn Ishaq writes فأسلم بدعائه, so the edge runs from the man who called to the man who answered. Its first use is Abu Bakr and the five he brought to the Prophet -- Uthman, al-Zubayr, Abd al-Rahman ibn Awf, Talhah and Sa'd -- which the graph had no way to show.
-- A person carries a `tribalAffiliation`: how the source places them among the clans, in its own words (النمري, حليف بني زهرة, حليف آل الخطاب). **It is text, and deliberately not a relationship.** Ibn Ishaq uses a حلف the way he uses a nisba, to tell forty names apart in one roster, which makes it a name -- the same call [ADR 0014](docs/adr/0014-a-kunya-is-a-name.md) made for a kunya. A relationship would need a Tribe node on the far end, and then every person in the app would need one, since every one of them has a nasab; `npm run graph:layout` computes centrality over every edge regardless of type, so a few hub clans would outrank the people the graph exists to show. It renders on a profile beside the kunya.
-- A person carries a `sex`, `MALE` or `FEMALE`, as a string column with its vocabulary in `SEXES` and `npm run catalog:validate` enforcing it. It is what settles a reciprocal relation the vocabulary leaves open: `FATHER` reverses to `SON` or `DAUGHTER` depending on the sex of the person the inverse edge points at, so `src/lib/catalog/relations.ts` no longer needs every such relation to state its `inverse` by hand. The value is cited like any other, so it is set only where a source says it plainly (بن، بنت، زوجته, or a roster counted as أربعة عشر رجلا) and left unset otherwise rather than inferred.
-- A subject a global filter introduced keeps that filter's cap for the life of the exploration, recorded in the URL, so searching, toggling, or removing and reintroducing it never re-arms the same filter; **Start over** clears the history. A failed fetch keeps the exploration on screen with a Retry beside it, and fetching continues until the exploration stops growing rather than after a fixed number of rounds.
-- The Filters panel uses the same `filter` include set as global exploration controls. Switching a relation on reveals matching neighbors and fetches their neighborhoods; switching it off removes that filter's contribution. Independently searched or expanded branches remain, with all recorded links between retained subjects. Individual, family-group, all-relations, and node-kind switches share this state; `COMPANION_OF` controls both stored companionship directions, and is the one relation whose edges are hidden with it rather than staying drawn between retained subjects — both directions would otherwise clutter the graph in bulk. Old `relation` links fall back to defaults. Embedded profile graphs apply the same include set to their API responses.
-- `/graphs` opens filling the screen, and leaving fullscreen returns a normal page: navbar, footer, and the graph framed in a card, the same shape a profile uses. While it fills the screen a collapsible panel holds search, the selected subject's controls, the filters, and the node list, docked to its leading side on desktop and as a bottom sheet on phone, collapsing to small Search/Menu icons when hidden. That Menu exists because fullscreen covers the site navbar; out of fullscreen the navbar itself does the job.
-- Every subject has a fixed, precomputed position shared across the whole graph (`npm run graph:layout`, applied to both PostgreSQL and Neo4j — see below), so selecting, expanding, or filtering never rearranges anything already on screen; only an explicit **Fit graph** button (frames everything currently visible) or **Show additions** (frames what an expansion/global filter just revealed, alongside whatever it connects to) moves the camera on their own. Selecting an already-visible subject also leaves the camera alone; one hidden behind the panel gets a minimal pan to reveal it, without changing zoom. Node dragging is disabled, since a position can't be usefully moved this way.
-- `/graphs` and a profile's graph are the same component with the same layout. Only two things differ: `/graphs` opens filling the screen on the Prophet, a profile opens in place on its own person. Out of fullscreen a graph is its canvas and the button back in; in fullscreen it carries search, the selected-subject controls, the filters and the node list, and a button to leave again. The fullscreen layer renders into the document body, so a page section around it cannot paint over the graph.
-- Selecting a node takes the learner to `/people/[slug]`.
-- `/nasab` draws the line of fathers of one or more people as an SVG tree, read from the `FATHER` edges in Neo4j through `/api/nasab`. One person gives a straight line; several people share one tree and the first ancestor they have in common is marked. It has the graph's search, plus quick picks for the Prophet and the four caliphs and a switch that adds each subject's descendants, and is linked under Graphs in the navbar ([plan](docs/plans/nasab-plot.md)). The page and plot use the shared paper and terracotta theme, and Companion names carry the appropriate honorific glyph in both the homepage preview and `/nasab`.
-- Person pages embed that same component, opened on that person under the shared rule above: every direct relation they have, plus their ancestors and descendants. Its exploration lives in the page URL exactly as the workspace's does, so it is equally shareable and undoable with browser Back.
-- Graph seed data is deduplicated by person slug and by source/type/target relationship; the seeder uses Cypher `MERGE` so repeat runs do not add duplicate graph entities.
-- With Neo4j credentials configured, `npm test` compares deployed person-to-person relationships against the graph seed, reporting missing and unexpected directed edges while excluding sync-owned relation types. Without credentials, live checks skip; pure tests still cover missing inverses and reversed parent edges.
-- `npm run graph:layout` computes a cross-type prominence rank (`graphRank`), a Louvain community (`clusterId`), and a precomputed 2D layout position (`layoutX`/`layoutY`) over the *entire* unified Person+Battle+Title+Event graph — every subject, not just ones with a PostgreSQL row. All four are stored on each entity's Postgres row; `graphRank` and `layoutX`/`layoutY` are additionally written to every matching Neo4j node (including PostgreSQL-less, graph-only subjects, e.g. deep lineage-only ancestors), which is what `/api/graph` reads, ranks by, and pins every node to — no live force layout runs in the browser at all. `clusterId` stays PostgreSQL-only because no response returns it; its only consumer is the next layout run, which seeds cluster centres from it. Zoom-based level-of-detail (thinning low-rank nodes as you zoom out) is a further follow-up.
-
-### People and timelines
-
-- `/people` is a searchable, paginated directory with title filtering.
-- `/people/[slug]` shows available names, titles, appearance, Qur'an references, battle participations, events, and a chronological timeline.
-- `/quran` is a page of cards, one per Quran page, each with its menu label and a line on what it holds, in Arabic and English. The cards are the homepage's `ExplorationCard`, now under `src/components/common/`.
-- `/quran/compare` lists the surahs beside the comparison, each with the surahs it shares similar ayat with (or shared topics, in the topic view), so a pair appears under both of its surahs, sorted by count or by surah number. A surah opens `?s=N`: its repeated phrases as rows with a tick per place (20 shown, a button for the rest; pressing a tick shows the ayah with the phrase coloured), and its similar ayat. Shared wording only, and the page says so. The old links redirect: `?s=N&t=M` to `?a=N&b=M`, and `/quran?s=…` and `/quran/shifts` here. The plan is `docs/plans/quran-repetition-merge.md`.
-- On `/quran/compare` both surah fields and the surah list beside the comparison can be searched. Typing a name finds the surah without its diacritics, hamzah forms, tatweel, article or the word سورة, and typing a number in Arabic or Latin digits finds it by number (`src/lib/quran/surahSearch.ts`). The fields take the arrow keys, Enter and Escape.
-- `/quran/compare` also lists similar ayat: passages of one to three ayat that say nearly the same thing in different words, such as المدثر ٥٤–٥٥ and عبس ١١–١٢, close to what the books of متشابه القرآن collect. A match counts shared roots and particles from the Quranic Arabic Corpus, weighted by rarity and by order, so particles alone or one shared root never make a match while a long run of rare words does, even inside two long ayat. It colours a word repeated letter for letter apart from one that only shares its root, and a match that holds a passage of ten words or more shared between surahs says how many words. A surah shows every match it takes part in, and a pair of surahs shows the matches between them by default, with a switch to the ayah-by-ayah alignment. `npm run quran:similar` writes the matches to a JSON file; the plan is `docs/plans/quran-similar-ayat.md`.
-- `/quran/words` counts how often each word occurs, grouped by lemma (so «والله» and «لله» count under «ٱللَّه»), from the Quranic Arabic Corpus morphology committed under `data/quran/`. A bar chart starts with the ten most frequent lemmas and lets the reader empty it, remove words and add them by search. A second chart sets eleven pairs of opposite words side by side (the heaven and the earth, the garden and the fire, this world and the hereafter, and others), each pair on its own scale; the pairs are ours and the page says so, and the reader can empty the chart or build pairs of their own. `/attributions` credits the corpus and Tanzil, explains the counting and says the analysis is not ours. The page also counts the Quran's repeated phrases: surahs, phrases repeated inside a surah, passages shared between surahs and the surahs that share one.
-- `/quran/branches` draws the ayat that open with the same two words as a word tree read right to left, branching where their wording parts until each ayah ends (إن المتقين opens six ayat, which split after «في» into جنات, مقام أمين and ظلال وعيون). Buttons pick the eight largest of the 818 shared openings, a search box finds any of the 1788 phrases two or more ayat share (such as «ألم تر كيف»), and pressing a branch shows the tree of its phrase alone, with buttons back out to the wider phrases; every ayah links to its exact position on the reader page, highlighted and scrolled into view, under its surah name and number. Openings match without diacritics or pause marks, and only at the start of an ayah; an opening with a joined و or ف shares a group with the same opening without it. Inside the tree a word that differs in any mark is its own node, each first word is drawn before the shared words in the order of its earliest surah and ayah and opens a tree of its own ayat (يطوف and ويطوف before عليهم), and an ayah that ends where another goes on continues into its next ayah. A juz' range limits the openings, search and tree to the ayat inside it, and a list view cuts every opening's tree into pieces of six ayat or fewer, sorted by how many words their ayat share before they part, or folded under their openings. Each card contains its ayah count and, when applicable, a link to its broader opening above the tree. `npm run quran:branches` writes the ayat from the reader's page files, so the page reads no stored ayat; surah names come from the database. The plan is `docs/plans/quran-shared-openings.md`.
-- `/quran/read` is an index of the 114 surahs grouped by their thirty juz' on the paper theme. A surah appears under every juz' it has ayat in, a continued one with the ayah it resumes at, and each entry links to the page where it opens in that juz'. A search box narrows the index by surah name (without tashkeel or the word سورة), number in either numeral set, or transliteration. Typing an ayah reference such as `2:255` or `البقرة ٢٥٥` offers to open it, and Enter does: `/quran/read/ayah/<surah>/<ayah>` finds the page the ayah starts on and opens it with that ayah's words and end mark in the accent colour, scrolled into view. Arabic words search the ayat themselves through `/api/quran/search`, which reads the reader's 604 page files once: the phrase may be typed without tashkeel and may start or end mid-word, a spelling like السماوات falls back to matching the mushaf's ٱلسَّمَـٰوَٰتِ by ignoring alif and hamza, and the first 30 matches are listed in mushaf order with the matched words in the accent colour, each opening its page with the ayah marked. `/quran/read/<n>` reads one printed page (1 to 604) of the Madinah mushaf in Arabic, right to left, in Hafs, with every line where the printed page breaks it and each line spread to the full width. The lines and the text come from the Quran.com API, written by `npm run quran:reader` to one file per page under `src/app/quran/read/data/`, so the reader does not read the stored ayat; only surah names come from the database. Pages 1 and 2 are small, round and centered as printed, and a line that closes a surah is centered rather than spread. A surah that begins on the page gets its name and basmala as a header (none above At-Tawbah, and in Al-Fatihah the basmala stays ayah 1); ayat end with circled marks, and the sajda sign shows in the word, as in the API's text, at all 15 places. Previous and next page are links, and a box jumps to any page number. The page sits in a double-ruled frame with a running head naming the surah and juz' it is in, and the controls follow the site language while the mushaf stays right to left. It is the first entry of the Quran menu. `npm test` checks the files hold 604 pages of at most 15 lines, 6236 ayat and 114 surahs. Not yet: a reading switcher, translation.
-- `GET /api/quran/repetition` returns, in one response, every repeated phrase of the Quran: the phrases each surah repeats inside itself (4 words or more, or 3 words seen 5 times), the passages of ten words or more that surahs share, those passages grouped into one phrase wherever their ranges overlap, a surah-by-surah table of repeated words (a surah against itself is its own repetition) and the text of every ayah involved. It reads the stored ayat with no new table and is cached for a day. `/quran/compare` is its client; `docs/plans/quran-repetition-merge.md` describes the merge.
-- `/quran/iltifat` shows seven hand-picked shifts of address (12:80-83, 1:2-7, 35:9 and others), with no citations yet. Words whose person is plain from their form are colored by mode, one color each for third person, first person and second person on every example, with a legend at the top. The page is static: `npm run quran:iltifat` writes the curated ayat to a JSON file that Next prerenders.
-- `/quran/order` lists the 74 surahs of juz' 25 to 30 (Fussilat to An-Nas; juz' 25 starts at 41:47 and the list holds the whole surah) in mushaf order, each named once, with the surah's focus (محور) from Tafsir Fayd al-Rahman fi Juz' 'Amma (juz' 30 only; surahs 41 to 77 show none) and one colored badge per theme it carries; clicking a badge opens an overlay listing the ayat of that surah on the theme, each with our wording, its ayah range and its text. A filter above the list narrows it to one juz' or to a range of surahs. The topics come from `QuranTopic` rows (one per surah, ayah range and topic, annotated from the text and projected from `data/quran/topics/<surah>.json` by `npm run quran:topics:sync`), so one ayah can carry more than one topic. Twelve themes (the resurrection, creation and blessings, the Prophet, and others) each have a color; chips above the list turn them on and off, all on by default, and a rail of narrow columns at the start side draws one colored line per active theme from the first surah that carries it to the last, with a dot on every carrier and an arrow at the end. An arrow under each surah opens the step to the next: how the topics of the two surahs join, the topics they share, the last ayat of one beside the first ayat of the next, a short note, and any shared wording colored on both sides. The surahs that open alike (81, 82, 84, and 87 among the tasbih surahs) link to `/quran/openings`. A step shows its source link, or the label «بلا مصدر» where it is only a reading of the two texts; four steps (93-94, 105-106, 107-108, 113-114) cite a page read for it and none is reviewed. The oath topic is drawn in gray; a shared gray can read as a link between oaths by different things, and `/quran/oaths` splits them. The surah-to-surah steps, their shared themes and the ayat shown with them stay static: `npm run quran:order` writes the ayat to a JSON file that Next prerenders; the per-surah topic badges come from the database on each request.
-- `/quran/oaths` lists the 30 oaths of juz' 25 to 30 (surahs 43 to 103) in mushaf order, each with its ayat and the words sworn by. A metro line is drawn for each sworn-by word that two or more oaths repeat (the night, the heaven, the moon, the day, the dawn, the land and the town, the Lord, «ما», the Book), with a dot on every oath that carries it and an arrow at the last; chips turn lines on and off, all on by default. A line comes from the repeated word, never from what the word is taken to mean; oaths by a participle with no noun (والذاريات, والمرسلات, والنازعات, والعاديات) keep their own words and join no line, and the page names none of them. The list is ours and unreviewed; `npm test` checks every sworn-by word against the stored text of its range. The page is static: `npm run quran:oaths` writes the ayat to a JSON file that Next prerenders.
-- `/quran/prophets/[slug]` is a horizontal timeline of a prophet's story in the Qur'an. Each prophet has a story of phases and stations under `src/lib/quran/prophets/` and its own entry in the Qur'an menu; only Musa (peace be upon him) has one so far, at `/quran/prophets/musa` (`/quran/musa` redirects there). His has 25 stations, each carrying its ayat from every surah that tells it (every ayah that names Musa, Pharaoh or Haman, and the ayat of his story told without a name): the mother of Musa and the infant in the river (opening with Pharaoh's killing of the sons, 28:3-6), Midian, the call at the Tur, the signs, the magicians, the drowning, the calf, the tablets, the holy land. The line starts at the start side and scrolls sideways, with previous and next buttons and an index of every station by topic, grouped under its phase, that scrolls the line into view and centers the station; every station belongs to one of five colored phases (upbringing, the mission, the exodus, his people Bani Israil, his knowledge and book), and each station folds its ayat under the surah and range, closed until opened. Stations follow the story's order where the ayat give one; the cow, Qarun and the harm done to him sit with his people, and the righteous servant, his name among the prophets and the book he was given close the line, in an order that is ours where the ayat fix none. Which ayah belongs to which station is our grouping and unreviewed, and `npm test` checks that no ayah sits in two stations and that every one has stored text. The page is static: `npm run quran:prophets` writes each prophet's ayat to a JSON file that Next prerenders.
-- `/quran/openings` compares how surahs begin, in two groups. The first sets At-Takwir, Al-Infitar and Al-Inshiqaq (81, 82, 84) side by side from ayah 1 to the end of their «إذا» clauses (81:1-14, 82:1-5, 84:1-6), each ayah colored by its role with a legend: the condition, the answer, and the place where the answer is disputed. Al-Tabari and al-Qurtubi call 81:14 the answer; the 82:5 answer is labelled as our reading, and the answer in 84 is disputed, so the page lists six views with their holders and marks no ayah. The second group shows the first ayah of the seven surahs that open with tasbih (17, 57, 59, 61, 62, 64, 87), the musabbihat, with the tasbih word, the one glorified and those who glorify, and the closing names each in a color of their own, plus notes on what they share. Notes are ours and unreviewed; the three source links are pages from quran.ksu.edu.sa and mawdoo3.com. The page is static: `npm run quran:openings` writes the ayat to a JSON file that Next prerenders.
-- `/quran/compare` sets two surahs side by side (Al-Waqi'ah and Al-Haqqah by default, any pair with `?a=&b=`, and an ayah range per side with `af`, `at`, `bf`, `bt`, which can be two ranges of one surah, as in `?a=55&af=46&at=61&b=55&bf=62&bt=77`; a button beside each range sets it to the whole surah). Its ayah-by-ayah view (`view=ayat`) lists ayat that share a run of two words or more, keeps the pairs in surah order, groups them into blocks, and collapses the ayat between blocks into rows that expand. An ayah that matches several ayat on the other side appears once, with its counterparts stacked beside it and a text color for each link. The last five ayat of each surah are laid out by count in a block labelled as such, when both sides are whole surahs. Both views draw each passage as two facing printed pages with numbered verse seals, the layout of the homepage's comparison example (`src/components/quran/PageSpread.tsx`), and colour a word shared letter for letter apart from one that shares only its root. It reads the stored ayat on each request, with no new table; the page lists its thresholds and says a match is shared wording only.
-- `/quran/qiraat` is an Arabic-only demo of 43 hand-picked places where the ten readings differ, from Al-Fatiha to Al-Masad, keyed to the Hafs (Kufi) ayah numbering. An index picks a surah from a list (juz' 30 in its own group), then an ayah of that surah. Each place shows the Hafs ayah, then one card per reading, coloring only the words that differ, (two to four) with the variant word, the riwat who take it and the ayah snippet, aligned across cards (a word-level difference, never a constructed mushaf text). Below them, a list of the ten imams with their two riwat nested under each, and a meaning line that is either a quotation with its source URL or plain text. The reader lists come from Quranpedia (ayah pages for the first places, its official `qiraat.json` data dump for juz' 30), source book not named, to be checked against al-Nashr; most juz' 30 places carry no meaning line yet. It reads one static file under `src/app/quran/qiraat/data/` and the stored Hafs ayat, with no new table.
-- `/quran/compare?mode=themes` (`?a=&b=`, default An-Nahl and Az-Zukhruf), the topic view of the same page, which a switch at the top toggles with the wording view, lays two surahs side by side by topic, not by wording, computed from `QuranTopic` rows on the two surahs that share one of the twelve umbrella themes (`getSharedTopics` in `src/lib/quran/topicEngine.ts`; a topic's own slug is scoped to its surah, so themeId is the key that can actually match across surahs). This is coarser than a hand-paired comparison — An-Nahl/Az-Zukhruf comes out to 6 shared themes this way, against the legacy page's 40 hand-matched passage pairs. `/quran/themes/legacy` keeps the original hand-paired An-Nahl/Az-Zukhruf (40 pairs) and Al-Ma'arij/'Abasa comparisons for reference. `/quran/themes/compare` redirects to `/quran/compare?mode=themes`, keeping `a` and `b`. Surah 16 (An-Nahl) was annotated for this comparison even though it falls outside the 41-114 range the topic engine otherwise covers.
-- Profiles show the evidence behind what they state: each claim with its citations, review status and a short Arabic excerpt, and the complete entry from the source work, one printed page at a time with the edition's footnotes kept apart from the author's text. The book and page are in the URL, so a citation links to the page it cites. Review status is shown to the reader and never decides what is served, so a Not reviewed claim is visible and labelled.
-- The References page links to the Archive.org scan of the third edition and its two searchable OCR text files, labeled as aids whose footnotes should be checked against the scan.
-- Evidence attaches to a subject's kind and slug rather than to a profile row, so titles, battles, events and graph-only people can carry citations. `GET /api/subjects/[kind]/[slug]/references` serves them; in the graph workspace a subject with a profile shows no evidence control (its evidence is on the profile), and a subject without one expands a compact list in the panel, or says it has no evidence.
-- `data/catalog/orderings/` holds a stated ordering between two events or battles (`earlier`, `later`, the work it is stated in, and the claim or `unit#span` citing it). `catalog:validate` rejects an unknown event, a cycle inside one work and a contradiction with the same work's years; a cycle or contradiction between works is kept as a dispute and computed by `orderingProblems`. `catalog:project` writes them to `catalog_orderings` (owner applies the migration). Badr before the death of Uthman ibn Mazun is the first ([plan](docs/plans/time-layer.md)).
-- An event or battle may carry `dateParts` (a hijri month and day, each cited); `npm run catalog:validate` checks the ranges and `catalog:project` writes them to the `catalog_date_parts` table, which the owner creates with `npx prisma migrate deploy` ([plan](docs/plans/time-layer.md)). Hijra to Medina carries Rabi al-Awwal.
-- Every person, title, battle and event is authored in `data/catalog/`: fields, virtue entries, title assignments, battle participations, Qur'an links, and person relations, written to PostgreSQL and Neo4j by `npm run catalog:project` and `npm run catalog:project-graph`. There are no seed files left under `prisma/` or `neo4j/`.
-- Historical source text lives once per edition under `data/history/sources/<source>/`, page by page (`v<N>/<printedPage>.md`), independent of who cites it. Batches under `data/history/batches/` author claims and citations against it, each account naming the span of pages its entry covers. `npm run history:validate` checks that every citation names a declared source, carries a working extraction link and an Arabic excerpt, and points at a real paragraph on the page it names. `npm run history:import` refuses to write unless the files match the revision that was approved, and upserts so a retry cannot duplicate anything. `npm run history:extract` pulls an entry from Shamela into that shape, and `npm run history:search -- <term>` finds which page to extract from in the first place, searching a partial, hand-discovered subset of the book's فهرس الموضوعات.
-- Person records use stable slugs, making graph nodes, search results, and detail pages linkable.
-- `npm run model:coverage -- <unit>` finds a Siyar entry in its page files, counts its sentences, and lists the ones no span covers (a date sentence is tagged `time-layer`) and the people and events no identification covers (a battle a participation names is identified as a catalog event, [ADR 0029](docs/adr/0029-an-identification-names-an-agent-or-an-event.md)); a test runs the same count over every entry and fails when a span lies outside it. `model:check` also fails a span whose volume the source manifest does not declare.
-- `npm run model:check` reads each stored year, month, day and age (of Islam or at death) from its quote (Arabic number words, Hijri month names, `قبل الهجرة بسنة` as -1) and fails when the number differs; a sentence the reader cannot read stays not modeled ([ADR 0027](docs/adr/0027-a-date-is-read-from-its-quote-and-the-number-is-checked.md), [plan](docs/plans/time-layer.md)).
-- `model:check` accepts an `office` assertion (`caliph` or `amir`) whose span carries the scope and any stated date, and rejects an unknown kind ([ADR 0025](docs/adr/0025-title-status-and-office-are-separate-predicates.md)).
-- A person's page shows a section, "From the text of the book (experimental)", for a person the span-based model holds values for. Each value is read straight from the Siyar's text through a span, with who said it, its citation and a "not reviewed" badge. It reads the `model_profile_entries` table through `/api/people/[slug]` (see `docs/plans/data-model/plan.md`).
-
-### Events and battles
-
-- `/events` presents events, battles and expeditions on one chronological timeline (`/api/timeline`). A search box matches Arabic and transliterated names and location, ignoring diacritics, and four type filters (Event, Battle, Ghazwah, Sariyyah) combine as a union; both live in the URL as `?type=ghazwah,sariyyah&q=...`. Individual event pages show dates, location, description, and participating people.
-- Battle detail pages (`/battles/[slug]`) are available for battle-specific context, participants, timelines, and map data where it has been recorded. There is no `/battles` list; it is part of `/events`.
-- Battle rosters are also synced into Neo4j (`:Battle` nodes, and `PARTICIPATED_IN` or `ABSENT_FROM` relationships carrying each participant's status — injured, killed, captured, or excused for an absence — and a `summary` of what they did there in the source's own wording) via `npm run battles:sync`. Attendance belongs to the relation and the outcome to the status, and the two relations admit disjoint status sets, which `npm run catalog:validate` enforces ([ADR 0013](docs/adr/0013-separate-attendance-from-outcome.md), [the model](docs/battle-participation-model.md)). Battle detail pages embed a small graph view of participants, color-coded by status, and `/graphs?kind=person&kind=battle` shows every battle and its participants in one bipartite graph.
-- Titles and events are synced into Neo4j the same way: `npm run titles:sync` creates `:Title` nodes and `HOLDS_TITLE` relationships from each title's holders, and `npm run events:sync` creates `:Event` nodes, `INVOLVED_IN` relationships from participating people, and a `PART_OF` relationship to the linked `:Battle` when an event has one. Both are one-way, PostgreSQL-authoritative, and safe to re-run (`MERGE`, never delete).
-
-### Application experience
-
-- Arabic and English UI support, plus light and dark themes.
-- One palette for the paper theme, held as CSS variables: terracotta, purple and green accents on warm paper in light mode and on near-black in dark mode ([docs/palette.md](docs/palette.md)).
-- Bilingual, themed `not-found.tsx`, `error.tsx`, and `loading.tsx` pages at the app root, using the shared `ErrorMessage`, `LoadingSpinner`, and `Button` components instead of Next.js's default unstyled fallback.
-- Client-side data fetching and pagination through SWR.
-- PostgreSQL/Prisma is used for people, events, battles, titles, and supporting content; Neo4j is used for relationship traversal and graph rendering.
-- Solo quizzes draw Arabic multiple-choice questions from an agent-reviewed,
-  file-authored bank projected into PostgreSQL. People, battles,
-  relationships, ayat, events and one-person circles have separate scopes;
-  `/quizzes/questions` exposes the paginated read-only review inventory.
-- `/robots.txt`, `/sitemap.xml`, and a web app manifest are generated by
-  `src/app/robots.ts`, `src/app/sitemap.ts`, and `src/app/manifest.ts`. The
-  sitemap lists every person, event, battle, and source alongside the static
-  routes, built from `NEXT_PUBLIC_SITE_URL` (default `https://namaq.app`).
-
-## Architecture
-
-| Area | Implementation | Responsibility |
-| --- | --- | --- |
-| Web application | Next.js App Router, React, TypeScript, Tailwind CSS | Pages, API routes, localisation, and interaction |
-| Relationship graph | Neo4j and `react-force-graph-2d` | Person nodes, typed relationships, graph queries, and visualisation |
-| Historical content | PostgreSQL and Prisma | Person profiles, titles, events, battles, Qur'an references, and timelines |
-| Search | Next.js API routes over Prisma and Neo4j | Person-directory filters and graph-search autocomplete |
-
-`GET /api/graph` is the single graph endpoint behind `/graphs` — there is no separate `/api/graph/all`, `/api/graph/battles`, or `/api/graph/titles` to keep in sync with it. With no query parameters it runs one unified Neo4j query across every Person/Battle/Title/Event node and relationship, then attaches each node's `graphRank`/`layoutX`/`layoutY` in one further batched Neo4j lookup. Those come from Neo4j rather than PostgreSQL so that a graph-only person is ranked and placed like any other subject instead of sorting last for want of a row to join against — see [ADR 0006](docs/adr/0006-persist-offline-computed-properties-to-neo4j.md). From there:
-  - `kind` (repeatable) is a server-side whitelist over that same unified query's result — `?kind=person&kind=battle` returns only those two kinds and the links directly between them.
-  - `person` scopes to a local relation view (1 hop) around one or more people; `ancestorsOf` walks `SON|DAUGHTER` edges upward (paternal/maternal ancestry); `descendantsOf` walks the same chain downward to every descendant; `battle` returns one or more battles and their participants (`PARTICIPATED_IN` links carry the participant's `status`). These four combine with each other (UNION'd server-side) and repeat (multiple selected people/roots), but don't currently combine with `kind` — they're already inherently scoped to the kinds their own semantics produce (e.g. `ancestorsOf` only ever returns people).
-  - `focus` is a deliberately narrower single-hop view around one person, used when neither of the above is present.
-
-`GET /api/graph/suggest` backs the `/graphs` search box, covering all four kinds from Neo4j in one ranked list. The whole searchable set is 659 subjects, loaded and ranked in memory on each query — a considered choice at this size, not a missing index.
-
-## Local setup
-
-### Requirements
-
-- Node.js 20 or later
-- PostgreSQL
-- Neo4j
-
-### Environment
-
-Create a `.env` file in the project root:
-
-```bash
-# Pooled connection (PgBouncer or the provider's pooler) — used by the app itself.
-DATABASE_URL="postgresql://USER:PASSWORD@HOST:6543/namaq?pgbouncer=true"
-# Direct connection — used by Prisma migrations, which a pooler can't run.
-DATABASE_URL_UNPOOLED="postgresql://USER:PASSWORD@HOST:5432/namaq"
-
-NEO4J_URI="neo4j+s://YOUR-INSTANCE.databases.neo4j.io"
-NEO4J_USERNAME="neo4j"
-NEO4J_PASSWORD="YOUR_PASSWORD"
-# Optional; defaults to neo4j
-NEO4J_DATABASE="neo4j"
-```
-
-### Install and run
-
-`src/generated/prisma` is gitignored and only exists after `prisma generate`,
-which `npm install`'s `postinstall` hook runs. A checkout that skips
-`npm install` — a git worktree sharing another checkout's `node_modules`, for
-example — needs `npm run db:generate` run by hand before `tsc` or the app will
-resolve `@prisma/client`.
-
-```bash
-npm install
-npm run db:generate
-npm run db:push
-
-# Seed PostgreSQL content. People, titles, battles and events have no seed
-# files of their own any more — catalog:project creates or updates every one
-# of them from data/catalog/ outright.
-npm run catalog:project -- --apply
-
-# Create Neo4j nodes for any Postgres-only profiles before writing the
-# relationship graph, which reads them by slug.
-npm run people:sync -- --apply
-
-# Write every catalog person's node and relations into Neo4j.
-npm run catalog:project-graph -- --apply
-# Create Neo4j :Battle/:Title/:Event nodes and their relationships from the
-# PostgreSQL rosters.
-npm run battles:sync -- --apply
-npm run titles:sync -- --apply
-npm run events:sync -- --apply
-
-# Compute cross-type rank, Louvain clusters, and a precomputed layout over
-# the unified Person+Battle+Title+Event graph. All four are stored on
-# Postgres; graphRank and the layout coordinates are also written to every
-# Neo4j subject, which is what /graphs actually reads. Rerun after any
-# relationship-changing data update.
-npm run graph:layout -- --apply
-
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000). Use `npm run build` for a production build and `npx tsc --noEmit` for a TypeScript check.
-
-The graph has no seed files of its own; every Person node and relation comes
-from `data/catalog/` via `catalog:project-graph`, and `neo4j/` holds the sync
-and drift-checking scripts that keep Neo4j matching PostgreSQL and the
-catalog.
-
-## Removed from scope
-
-The app previously had working models, seed data, API routes, and pages for **articles, categories, charities/charity categories, and books/pages** (see git history for `feat: added articles, categories...`, `feat: added charities categories pages and routes`, `feat: added book pages, routes`). These were deliberately removed to narrow the app back down to the person → graph → profile → events learning loop described at the top of this document, so that scope doesn't drift before that core loop is solid. The Prisma models, migrations, and seed scripts for these have been deleted (`UserProgress` went with `Article`, since it only tracked per-article progress). Reintroducing any of them should go through a fresh design pass rather than restoring the old code, since the data model and product direction have moved on.
-
-Two client hooks, `useUserPreferences` and `useAnalytics` (in [`src/hooks/useData.ts`](src/hooks/useData.ts)), point at `/api/user/preferences` and `/api/analytics` routes that were never built. They also aren't called anywhere in the app. They look like agent-generated scaffolding from early on; since there are no users yet and no concrete plan for what they should do, they've been left in place rather than removed or built out. Revisit them once there's an actual user-accounts/analytics need.
-
-## Current scope and limitations
-
-This is an early learning product and its historical data is incomplete. The graph and profile information should therefore be treated as a navigational aid, not as a scholarly reference or a substitute for checking primary and established secondary sources.
-
-The code review identified the following practical limitations:
-
-- **Two sources of truth for people.** Neo4j stores graph people while PostgreSQL stores profiles and powers autocomplete. They share slugs but are seeded separately, so a graph node can exist without a corresponding profile or searchable record.
-- **Graph scale will need deliberate handling.** The default (unscoped) `/api/graph` response returns all nodes and links in one payload. This is appropriate for the present dataset, but a single large response will become slow and visually crowded as coverage grows; the fixed-position rendering itself no longer runs a live force simulation, so this is now purely a data-volume/visual-density concern, not also a physics one.
-- **Relationship coverage and modelling are incomplete.** Current data emphasises genealogy and a selection of family relations. It does not yet express uncertainty, competing reports, date ranges, sources, or richer historical relationships.
-- **Search is functional but narrow.** Autocomplete searches PostgreSQL `name`, `fullName`, and `slug`; it does not yet search transliterated names or guarantee graph/profile coverage matches.
-- **Quality safeguards cover the graph and API routes, but not the full journey.** The graph query builder and person search/ranking have unit tests, and every Prisma-backed API route (`people`, `events`, `battles`, `titles`, `quran`) now has route-level tests covering its success, not-found, validation, and error-handling paths. Seed integrity has static checks and a live drift check; key end-to-end user journeys still need coverage.
-- **Historical evidence has been built but barely gathered.** Claims, citations, editions and complete source accounts are modelled and displayed, and the first batch covers one Companion. Almost every person on record still carries no evidence at all, and their profiles say so.
-
-## Future improvements
-
-The next work should protect and deepen the main graph-and-search experience before expanding into unrelated features.
-
-1. **Establish one canonical people pipeline.** Keep a single source record per person and generate/synchronise both PostgreSQL profiles and Neo4j nodes from it. Validate that every graph slug resolves to a person page and every searchable person has the intended graph presence.
-2. **Make graph data scholarly usable.** Add sources, citations, confidence/ambiguity notes, and editorial review status to people and relationships. Begin the richer biographies with clearly attributed material, including the planned use of *Siyar A'lam al-Nubala'*, while distinguishing quoted source text from editorial summaries.
-3. **Improve graph exploration.** Add relationship-type filters, a legend, selected-node details, “expand neighbours” controls, reset/shareable views, keyboard access, and mobile-friendly navigation. For growth, load subgraphs progressively instead of drawing the entire database at once.
-4. **Strengthen search and discovery.** Search Arabic names, full names, transliterations, aliases, and common spelling variants; rank exact matches first; show relationship context in results; and offer direct navigation to a person or a focused graph view.
-5. **Model historical time more faithfully.** Support approximate and contested dates, Hijri/Gregorian conversions with uncertainty, event ordering, and links from timeline entries back to their sources.
-6. **Add data and product quality checks.** Test duplicate prevention, broken slug links, invalid relationship types, empty source fields, graph API responses, search results, and the node-to-profile navigation journey. Add a CI build and test workflow before broadening the dataset.
-7. **Curate a small, excellent core dataset first.** Prioritise the Prophet Muhammad ﷺ, the Companions most relevant to the initial learning journeys, their well-sourced relationships, and a concise set of major events and battles. Expand breadth only after those paths are accurate and pleasant to explore.
-
-## License
-
-The code is released under the [MIT license](LICENSE). That covers this
-repository's files, including the structured data under `data/`.
-
-The source texts are separate. Entries are taken from *Siyar A'lam al-Nubala'*
-by al-Dhahabi, read from published digital editions and a scanned printed
-edition (see the References section on the About page). The MIT license does not
-grant rights in an editor's or publisher's own work on those editions, such as
-footnotes, typography or scans. Check the terms of an edition before
-republishing its pages.
-
-## Useful commands
-
-| Command | Purpose |
-| --- | --- |
-| `npm run dev` | Start the local Next.js development server |
-| `npm run build` | Create a production build |
-| `npm run db:generate` | Generate the Prisma client |
-| `npm run db:push` | Apply the Prisma schema to the configured database |
-| `npm run people:sync` / `-- --apply` | Report (or apply) PostgreSQL → Neo4j drift for people |
-| `npm run people:sync-companions` / `-- --apply` | Report (or create) missing `COMPANION_OF`/`ACCOMPANIED_BY` edges from every companion to the Prophet |
-| `npm run battles:sync` / `-- --apply` | Report (or apply) PostgreSQL → Neo4j drift for battles and participations |
-| `npm run titles:sync` / `-- --apply` | Report (or apply) PostgreSQL → Neo4j drift for titles and their holders |
-| `npm run events:sync` / `-- --apply` | Report (or apply) PostgreSQL → Neo4j drift for events, participants, and battle links |
-| `npm run catalog:project` / `-- --apply` | Report (or write) catalog values into PostgreSQL: person fields, title assignments, participations, events |
-| `npm run catalog:project-graph` / `-- --apply` | Report (or write) catalog person relations, both directions, into Neo4j |
-| `npm run graph:layout` / `-- --apply` | Report (or persist) cross-type rank, Louvain clusters, and layout positions over the unified graph |
-| `npm run sync:all` | Run the full catalog → PostgreSQL/Neo4j sync, recompute the graph layout, and generate quiz questions, stopping at `quiz:project`'s dry run for manual review |
-| `npm run model:check` | Check the span-based data model under `data/works/` against the page text (in development; see `docs/plans/data-model/progress.md`) |
-| `npm run model:diff -- <person-slug>` | List how the span-based model's profile differs from the catalog's values for one person (in development) |
-| `npm run model:project` / `-- --env preview\|prod --apply` | Dry-run (or write) the span-based model into the `model_spans` and `model_profile_entries` tables; `--env prod` projects only reviewed records (in development) |
-| `npm run history:review -- <batch dir>` / `-- --apply` | Preview or mark every claim in a batch as Reviewed |
+Source editions have separate rights. Historical entries draw on
+*Siyar A'lam al-Nubala'* by al-Dhahabi, consulted through published digital
+editions and a scanned printed edition. The MIT license does not grant rights
+in an editor's or publisher's footnotes, typography, or scans. See the site's
+[attributions](https://namaq.app/attributions) and check an edition's terms
+before republishing its pages.
