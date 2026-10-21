@@ -2,6 +2,7 @@
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { branch, variants, type BranchAyah } from '@/lib/quran/branches';
 import { BranchFeedback, BranchInputs, branchesCorrect, emptyBranchAnswers } from './BranchAnswers';
 
 const tree = {
@@ -15,9 +16,32 @@ const tree = {
 };
 const question = { tree, phrase: 'يطوف عليهم', branches: [{ words: [], ayat: [{ key: '52:24', page: 524, words: [] }, { key: '56:17', page: 535, words: [] }, { key: '76:19', page: 579, words: [] }] }] };
 const typed = ['غلمان لهم', 'ولدان مخلدون', 'بأكواب', 'إذا رأيتهم'];
+vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
 afterEach(cleanup);
 
 describe('complete branch tree answers', () => {
+  it('uses the same original-spelling disclosure in answer feedback', () => {
+    const merged = { words: ['مِنْ', 'رب'], ayat: ['1:1', '1:2'], forms: { '1:1': ['مِّنْ', 'رب'], '1:2': ['مِنْ', 'رب'] }, children: [] };
+    const own = { tree: { words: ['قال'], ayat: [], children: [merged] }, branches: [{ words: [], ayat: [{ key: '1:1', page: 1, words: [] }, { key: '1:2', page: 1, words: [] }] }] };
+    render(<BranchFeedback question={own} typed={['من رب']} names={{}} juz={null} ar />);
+    fireEvent.click(screen.getByRole('button', { name: 'عرض صيغ الكتابة الأصلية' }));
+    expect(screen.getByText('مِّنْ رب').closest('li')?.textContent).toContain('١:١');
+    expect(screen.getAllByText('مِنْ رب').some(text => text.closest('li')?.textContent?.includes('١:٢'))).toBe(true);
+  });
+
+  it('keeps original spelling references out of the unanswered quiz tree', () => {
+    const group: BranchAyah[] = [
+      { key: '1:1', page: 1, words: ['مِّنْ', 'ربْ', 'زيد'] },
+      { key: '1:2', page: 1, words: ['مِن', 'رب', 'عمر'] },
+      { key: '1:3', page: 1, words: ['وَمِن', 'رب', 'علي'] },
+    ];
+    const own = { tree: branch(group), variants: variants(group) };
+    render(<BranchInputs question={own} typed={[]} onChange={vi.fn()} onCheck={vi.fn()} ar />);
+    expect(screen.queryByRole('button', { name: 'عرض صيغ الكتابة الأصلية' })).toBeNull();
+    expect(screen.queryByRole('link')).toBeNull();
+    expect(screen.getAllByRole('textbox')).toHaveLength(3);
+  });
+
   it('requires intermediate nodes and every leaf, with every word in each node', () => {
     expect(emptyBranchAnswers(question)).toEqual(['', '', '', '']);
     expect(branchesCorrect(question, typed)).toBe(true);

@@ -1,11 +1,13 @@
 // @vitest-environment jsdom
 import React from 'react';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { branch, branchesHref, startingWith, variants, type BranchAyah } from '@/lib/quran/branches';
 import BranchTree from './BranchTree';
 import ayat from './ayat.json';
 import { inJuzRange } from '@/lib/quran/juz';
+
+vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
 
 afterEach(cleanup);
 
@@ -85,24 +87,44 @@ describe('BranchTree', () => {
     expect(screen.getByRole('link', { name: 'الواقعة ١٧' }).nextElementSibling?.textContent).toBe('يَطُوفُ');
   });
 
-  it('shows an ayah\'s own spelling beside its reference where a merged node shows another', () => {
-    const group = startingWith(ayat as BranchAyah[], 'متعا لكم');
-    render(<BranchTree tree={branch(group)} variants={variants(group)} names={{ 79: 'النازعات', 80: 'عبس' }} pages={Object.fromEntries(group.map(a => [a.key, a.page]))} />);
-    expect(screen.getByRole('link', { name: 'عبس ٣٢' }).nextElementSibling?.textContent).toBe(group.find(a => a.key === '80:32')!.words[0]);
-    expect(screen.getByRole('link', { name: 'النازعات ٣٣' }).nextElementSibling).toBeNull();
+  it('hides leaf alternatives until expanded and lists every complete original in its own row', () => {
+    const group = startingWith(ayat as BranchAyah[], 'ان مع العسر');
+    render(<BranchTree tree={branch(group)} variants={variants(group)} names={{ 94: 'الشرح' }} pages={Object.fromEntries(group.map(a => [a.key, a.page]))} />);
+    const toggle = screen.getByRole('button', { name: 'عرض صيغ الكتابة الأصلية' });
+    expect(toggle.getAttribute('aria-expanded')).toBe('false');
+    fireEvent.click(toggle);
+    expect(toggle.getAttribute('aria-expanded')).toBe('true');
+    for (const a of group) {
+      const list = document.getElementById(toggle.getAttribute('aria-controls')!)!;
+      const row = within(list).getByText(a.words.slice(1).join(' ')).closest('li')!;
+      expect(within(row).getByRole('link').getAttribute('href')).toBe(`/quran/read/${a.page}?a=${a.key}`);
+    }
+    expect(within(document.getElementById(toggle.getAttribute('aria-controls')!)!).getAllByRole('listitem')).toHaveLength(2);
+    fireEvent.click(toggle);
+    expect(document.getElementById(toggle.getAttribute('aria-controls')!)).toBeNull();
   });
 
-  it('lists each ayah\'s spelling of an inner node behind a closed toggle', () => {
-    const merged = { words: ['قال', 'نُوحًا'], ayat: [], forms: { '57:26': ['نُوحًۭا'] }, children: [
+  it('lists both complete originals of an inner node including the displayed original', () => {
+    const merged = { words: ['قال', 'نُوحًا'], ayat: [], forms: { '57:26': ['قال', 'نُوحًۭا'], '7:59': ['قال', 'نُوحًا'] }, children: [
       { words: ['رب'], ayat: ['7:59'], children: [] },
       { words: ['يا'], ayat: ['57:26'], children: [] },
     ] };
     render(<BranchTree tree={{ words: [], ayat: [], children: [merged, { words: ['موسى'], ayat: ['2:54'], children: [] }] }} names={{ 57: 'الحديد' }} pages={{ '7:59': 158, '57:26': 541, '2:54': 8 }} />);
-    const toggle = screen.getByRole('button', { name: 'تشكيل الكلمات في كل آية' });
-    expect(toggle.getAttribute('aria-expanded')).toBe('false');
-    expect(screen.queryByText('نُوحًۭا')).toBeNull();
-    fireEvent.click(toggle);
-    expect(toggle.getAttribute('aria-expanded')).toBe('true');
-    expect(screen.getByText('نُوحًۭا').closest('li')?.textContent).toContain('الحديد ٢٦');
+    fireEvent.click(screen.getByRole('button', { name: 'عرض صيغ الكتابة الأصلية' }));
+    const rows = screen.getByText('قال نُوحًۭا').closest('ul')!;
+    expect([...rows.children].map(row => row.textContent)).toEqual(['قال نُوحًا٧:٥٩', 'قال نُوحًۭاالحديد ٢٦']);
+  });
+
+  it('shows opening-box originals separately without repeating the hidden first word at the root', () => {
+    const group: BranchAyah[] = [
+      { key: '1:1', page: 1, words: ['مِّنْ', 'رب'] },
+      { key: '1:2', page: 1, words: ['مِن', 'رب'] },
+      { key: '1:3', page: 1, words: ['وَمِن', 'رب'] },
+    ];
+    render(<BranchTree tree={branch(group)} variants={variants(group)} names={{}} pages={{ '1:1': 1, '1:2': 1, '1:3': 1 }} />);
+    const firstWords = screen.getByRole('list', { name: 'صيغ الكلمة الأولى' });
+    fireEvent.click(within(firstWords).getByRole('button', { name: 'عرض صيغ الكتابة الأصلية' }));
+    expect(within(firstWords).getByText('مِّنْ')).toBeTruthy();
+    expect(screen.getAllByRole('button')).toHaveLength(1);
   });
 });

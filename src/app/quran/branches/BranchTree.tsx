@@ -5,7 +5,7 @@ import { branchesHref, keys, linkId, spell, type Branch, type Variant } from '@/
 import type { JuzRange } from '@/lib/quran/juz';
 import Spellings from './Spellings';
 
-type Props = { tree: Branch; names: Record<number, string>; pages: Record<string, number>; variants?: Variant[]; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode };
+type Props = { tree: Branch; names: Record<number, string>; pages: Record<string, number>; variants?: Variant[]; showSpellings?: boolean; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode };
 type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header'> & { node: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
 
 const LINE = 'border-[var(--home-rule)]';
@@ -15,9 +15,9 @@ export const TONE: Record<string, string> = {
   ف: 'border-[var(--home-root)] text-[var(--home-root)]',
 };
 
-type Refs = { keys: string[]; names: Record<number, string>; pages: Record<string, number>; tags?: Record<string, Variant>; forms?: Record<string, string[]> };
+type Refs = { keys: string[]; names: Record<number, string>; pages: Record<string, number>; tags?: Record<string, Variant> };
 
-export function AyahRefs({ keys, names, pages, tags = {}, forms = {}, className = 'mt-1' }: Refs & { className?: string }) {
+export function AyahRefs({ keys, names, pages, tags = {}, className = 'mt-1' }: Refs & { className?: string }) {
   return (
     <span className={`flex flex-wrap gap-1 ${className}`}>
       {keys.map((key, index) => {
@@ -29,7 +29,6 @@ export function AyahRefs({ keys, names, pages, tags = {}, forms = {}, className 
               {names[surah] ? `${names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`}
             </Link>
             {tags[key] && <span className={`text-xs font-arabic ${TONE[tags[key].conj]}`}>{tags[key].word}</span>}
-            {forms[key] && <span className="text-xs font-arabic text-[var(--home-muted)]">{forms[key].join(' ')}</span>}
           </span>
         );
       })}
@@ -37,13 +36,22 @@ export function AyahRefs({ keys, names, pages, tags = {}, forms = {}, className 
   );
 }
 
-export function Marked({ node, names, pages, children }: { node: Branch; names: Record<number, string>; pages: Record<string, number>; children: React.ReactNode }) {
-  if (!node.forms || node.children.length === 0) return children;
+export function Marked({ node, names, pages, children, skip = 0, enabled = true }: { enabled?: boolean; node: Pick<Branch, 'forms'>; skip?: number; names: Record<number, string>; pages: Record<string, number>; children: React.ReactNode }) {
+  if (!enabled || !node.forms) return children;
   const bySpelling = new Map<string, string[]>();
-  Object.entries(node.forms).forEach(([key, words]) => bySpelling.set(words.join(' '), [...(bySpelling.get(words.join(' ')) ?? []), key]));
+  const ordered = Object.entries(node.forms).sort(([a], [b]) => {
+    const [as, aa] = a.split(':').map(Number);
+    const [bs, ba] = b.split(':').map(Number);
+    return as - bs || aa - ba;
+  });
+  ordered.forEach(([key, words]) => {
+    const spelling = words.slice(skip).join(' ');
+    bySpelling.set(spelling, [...(bySpelling.get(spelling) ?? []), key]);
+  });
+  if (bySpelling.size < 2) return children;
   return (
     <Spellings list={
-      <ul key="spellings" className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+      <ul key="spellings" className="flex flex-col gap-2 text-sm">
         {[...bySpelling].map(([spelling, keys]) => (
           <li key={spelling} className="flex flex-wrap items-center gap-2">
             <span className="font-arabic">{spelling}</span>
@@ -55,17 +63,17 @@ export function Marked({ node, names, pages, children }: { node: Branch; names: 
   );
 }
 
-function Node({ node, path, names, pages, tags, lead, juz, renderNode, indices }: NodeProps) {
+function Node({ node, path, names, pages, tags, lead, juz, renderNode, indices, showSpellings }: NodeProps) {
   const root = path.length === 0;
   const words = [...path, ...node.words];
   const shownWords = node.words.slice(root ? lead : 0);
   return (
     <div className="flex items-center">
       {(!root || shownWords.length > 0 || node.ayat.length > 0) && <div className={`shrink-0 rounded border px-3 py-1.5 ${node.children.length === 0 ? 'max-w-sm' : 'max-w-xs'} ${root ? 'border-[var(--home-accent)] bg-[var(--home-paper-deep)] text-xl' : 'border-[var(--home-rule)] bg-[var(--home-paper)] text-lg'}`}>
-        {renderNode && !root ? renderNode(node, indices.get(node)!, tags) : <><Marked node={node} names={names} pages={pages}>{root || node.children.length === 0 ? <span className="font-arabic leading-loose">{shownWords.join(' ')}</span> : (
+        {renderNode && !root ? renderNode(node, indices.get(node)!, tags) : <><Marked node={node} names={names} pages={pages} skip={root ? lead : 0} enabled={showSpellings}>{root || node.children.length === 0 ? <span className="font-arabic leading-loose">{shownWords.join(' ')}</span> : (
           <Link href={branchesHref(linkId(words, keys(node).flatMap(key => (tags[key] ? [tags[key].conj] : []))), juz)} className="font-arabic leading-loose hover:text-[var(--home-accent)] hover:underline">{node.words.join(' ')}</Link>
         )}</Marked>
-        {node.ayat.length > 0 && <AyahRefs keys={node.ayat} names={names} pages={pages} tags={tags} forms={node.forms} />}</>}
+        {node.ayat.length > 0 && <AyahRefs keys={node.ayat} names={names} pages={pages} tags={tags} />}</>}
       </div>}
       {node.children.length > 0 && (
         <>
@@ -77,7 +85,7 @@ function Node({ node, path, names, pages, tags, lead, juz, renderNode, indices }
                 {node.children.length > 1 && (
                   <span aria-hidden className={`absolute start-0 border-s-2 ${LINE} ${i === 0 ? 'top-1/2' : 'top-0'} ${i === node.children.length - 1 ? 'bottom-1/2' : 'bottom-0'}`} />
                 )}
-                <Node node={child} path={words} names={names} pages={pages} tags={tags} lead={lead} juz={juz} renderNode={renderNode} indices={indices} />
+                <Node node={child} path={words} names={names} pages={pages} tags={tags} lead={lead} juz={juz} renderNode={renderNode} indices={indices} showSpellings={showSpellings} />
               </li>
             ))}
           </ul>
@@ -88,7 +96,7 @@ function Node({ node, path, names, pages, tags, lead, juz, renderNode, indices }
 }
 
 // docs/plans/quran-shared-openings.md
-export default function BranchTree({ tree, names, pages, variants = [], juz = null, renderNode, label = 'شجرة الفواتح', header }: Props) {
+export default function BranchTree({ tree, names, pages, variants = [], showSpellings = true, juz = null, renderNode, label = 'شجرة الفواتح', header }: Props) {
   const indices = new Map<Branch, number>();
   const visit = (node: Branch) => {
     indices.set(node, indices.size - 1);
@@ -108,7 +116,9 @@ export default function BranchTree({ tree, names, pages, variants = [], juz = nu
                   <span aria-hidden className={`absolute end-0 top-1/2 w-6 border-t-2 ${LINE}`} />
                   <span aria-hidden className={`absolute end-0 border-e-2 ${LINE} ${i === 0 ? 'top-1/2' : 'top-0'} ${i === variants.length - 1 ? 'bottom-1/2' : 'bottom-0'}`} />
                   <span className={`shrink-0 rounded border-2 bg-[var(--home-paper)] px-3 py-1.5 text-xl font-arabic leading-loose ${TONE[variant.conj]}`}>
-                    {!renderNode ? <Link href={branchesHref(variant.id, juz ?? undefined, { spelling: spell(variant.word) })} className="hover:underline">{variant.word}</Link> : variant.word}
+                    <Marked node={variant} names={names} pages={pages} enabled={showSpellings}>
+                      {!renderNode ? <Link href={branchesHref(variant.id, juz ?? undefined, { spelling: spell(variant.word) })} className="hover:underline">{variant.word}</Link> : variant.word}
+                    </Marked>
                   </span>
                 </li>
               ))}
@@ -116,7 +126,7 @@ export default function BranchTree({ tree, names, pages, variants = [], juz = nu
             <span aria-hidden className={`w-4 shrink-0 border-t-2 ${LINE}`} />
           </>
         )}
-        <Node node={tree} path={[]} names={names} pages={pages} tags={tags} lead={variants.length > 0 ? 1 : 0} juz={juz ?? undefined} renderNode={renderNode} indices={indices} />
+        <Node node={tree} path={[]} names={names} pages={pages} tags={tags} lead={variants.length > 0 ? 1 : 0} juz={juz ?? undefined} renderNode={renderNode} indices={indices} showSpellings={showSpellings} />
       </div>
     </div>
   );

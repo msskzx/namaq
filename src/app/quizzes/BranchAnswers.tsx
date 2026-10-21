@@ -37,7 +37,7 @@ export function BranchFeedback({ question, typed, names, juz, ar }: { question: 
               {typed[index]?.trim() || (ar ? "بدون إجابة" : "No answer")}
             </span>
             <Marked node={answer} names={names} pages={pages}><span className="font-arabic text-lg leading-loose">{answer.words.join(" ")}</span></Marked>
-            <AyahRefs keys={answer.ayat} names={names} pages={pages} tags={tags} forms={answer.forms} className="" />
+            <AyahRefs keys={answer.ayat} names={names} pages={pages} tags={tags} className="" />
           </div>
         );
       }} />
@@ -62,7 +62,7 @@ export function BranchInputs({ question, typed, onChange, onCheck, ar }: { quest
     }}>
       <p className="text-sm text-[var(--home-muted)]">{ar ? "أكمل كل عقدة. وفي نهاية كل فرع تكفي كلمتاه الأوليان، على أن تصح كل كلمة تكتبها. يمكن تبديل الفروع المتشابهة في الشكل." : "Complete every node. For a leaf, its first two words are enough, and every word you type must be right. Branches with the same shape can be entered in either order."}</p>
       <div dir="rtl">
-        <BranchTree tree={question.tree} variants={question.variants} names={{}} pages={{}} label={ar ? "أكمل الشجرة" : "Complete the tree"} renderNode={(_, index) => (
+        <BranchTree tree={question.tree} variants={question.variants} names={{}} pages={{}} showSpellings={false} label={ar ? "أكمل الشجرة" : "Complete the tree"} renderNode={(_, index) => (
           <label className="flex w-56 flex-col gap-1">
             <span className="sr-only">{ar ? `العقدة ${num(index + 1)}` : `Node ${index + 1}`}</span>
             <input type="text" dir="rtl" lang="ar" autoComplete="off" spellCheck={false} value={values[index]}

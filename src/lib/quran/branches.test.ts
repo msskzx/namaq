@@ -356,17 +356,17 @@ describe('spellings and marks', () => {
   it('ignores the shadda an ayah\'s first letter carries over from the ayah before', () => {
     const group = startingWith(all, 'متعا لكم');
     expect(variants(group)).toEqual([]);
-    expect(branch(group).words[0]).toBe('مَتَـٰعًۭا');
+    expect(branch(group).words[0]).toBe('مَتَٰعًۭا');
   });
 
-  it('names a phrase by its first ayah\'s spelling where the ayat differ in their vowels', () => {
+  it('uses the shared display in phrase names when only context marks differ', () => {
     const phrases = listPhrases(sharedOpenings(all.filter(a => inJuzRange(a.key, { from: 25, to: 30 }))));
-    expect(phrases.find(p => p.id === 'قل ارءيتم ان')?.text).toBe('قُلْ أَرَءَيْتُمْ إِن');
+    expect(phrases.find(p => p.id === 'قل ارءيتم ان')?.text).toBe('قُلْ أَرَءَيْتُم إِن');
   });
 
-  it('reads a word with or without a sukun on its last letter as one word, shown as most ayat spell it', () => {
+  it('drops a differing final sukun even when most ayat carry it', () => {
     const tree = branch([ayah('1:1', 'قُلْ أَرَءَيْتُمْ إِنْ'), ayah('1:2', 'قُلْ أَرَءَيْتُمْ إِن'), ayah('1:3', 'قُلْ أَرَءَيْتُم مَّا')]);
-    expect(tree.words).toEqual(['قُلْ', 'أَرَءَيْتُمْ']);
+    expect(tree.words).toEqual(['قُلْ', 'أَرَءَيْتُم']);
     expect(tree.children[0].words[0]).toBe('إِن');
     expect(branch([ayah('1:3', 'قال لَهُمُ موسى'), ayah('1:4', 'قال لَهُمْ ربهم')]).children.map(child => child.words[0])).toEqual(['لَهُمُ', 'لَهُمْ']);
   });
@@ -374,6 +374,54 @@ describe('spellings and marks', () => {
   it('keeps an annotation sign every ayah under a node carries', () => {
     const tree = branch([ayah('1:1', 'إن الذين كَفَرُوا۟ ربهم'), ayah('1:2', 'إن الذين كَفَرُوا۟ موسى')]);
     expect(tree.words).toEqual(['إن', 'الذين', 'كَفَرُوا۟']);
+  });
+
+  it('keeps only shared marks across several words and preserves every complete original', () => {
+    const group = [ayah('3:1', 'مِنْ أَرَءَيْتُمْ'), ayah('4:1', 'مِّنْ أَرَءَيْتُم'), ayah('5:1', 'مِّن أَرَءَيْتُمْ'), ayah('6:1', 'مِن أَرَءَيْتُم')];
+    const tree = branch(group);
+    expect(tree.words).toEqual(['مِن', 'أَرَءَيْتُم']);
+    expect(tree.forms).toEqual(Object.fromEntries(group.map(a => [a.key, a.words])));
+    expect(tree.ayat).toEqual(group.map(a => a.key));
+    expect(tree.children).toEqual([]);
+  });
+
+  it('removes multiple differing annotation signs at their own letters', () => {
+    const tree = branch([ayah('1:1', 'قال مِّۢنْۭ'), ayah('1:2', 'قال مِـنْ')]);
+    expect(tree.words).toEqual(['قال', 'مِنْ']);
+    expect(tree.forms).toEqual({ '1:1': ['قال', 'مِّۢنْۭ'], '1:2': ['قال', 'مِـنْ'] });
+    const swapped = branch([ayah('1:1', 'قال مِۢنْ'), ayah('1:2', 'قال مِـنْۢ')]);
+    expect(swapped.words).toEqual(['قال', 'مِنْ']);
+  });
+
+  it('preserves all originals even when the shared display matches none of them', () => {
+    const group = [ayah('1:1', 'مِّنْ رب'), ayah('1:2', 'مِنۢ رب')];
+    expect(branch(group).words).toEqual(['مِن', 'رب']);
+    expect(branch(group).forms).toEqual(Object.fromEntries(group.map(a => [a.key, a.words])));
+  });
+
+  it('retains original first-word forms in each opening box', () => {
+    const group = [ayah('1:1', 'مِّنْ رب'), ayah('1:2', 'مِن رب'), ayah('1:3', 'وَمِن رب')];
+    expect(variants(group)[0]).toMatchObject({ word: 'مِن', forms: { '1:1': ['مِّنْ'], '1:2': ['مِن'] } });
+    expect(branch(group).forms).toEqual(Object.fromEntries(group.map(a => [a.key, a.words])));
+  });
+
+  it('keeps corpus membership and exact source phrases for every merged node', () => {
+    for (const group of groups.values()) {
+      const original = new Map(group.map(a => [a.key, a.words]));
+      const tree = branch(group);
+      expect(keys(tree).sort()).toEqual(group.map(a => a.key).sort());
+      const visit = (node: Branch, offset: number) => {
+        if (node.forms) {
+          expect(Object.keys(node.forms).sort()).toEqual(keys(node).sort());
+          for (const [key, words] of Object.entries(node.forms)) {
+            const source = original.get(key)!;
+            if (offset + words.length <= source.length) expect(words).toEqual(source.slice(offset, offset + words.length));
+          }
+        }
+        node.children.forEach(child => visit(child, offset + node.words.length));
+      };
+      visit(tree, 0);
+    }
   });
 
   it('carries an ayah that ends mid-tree into the next one, marked with its number', () => {
