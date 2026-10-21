@@ -1,11 +1,10 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck, faCircleXmark, faCodeBranch, faSpellCheck } from "@fortawesome/free-solid-svg-icons";
 import Button from "@/components/common/Button";
-import BranchTree, { TONE } from "@/app/quran/branches/BranchTree";
+import BranchTree, { AyahRefs, Marked } from "@/app/quran/branches/BranchTree";
 import { branchNodes, matchTreeAnswers } from "@/lib/quiz/branchAnswers";
 import type { BranchAnswer } from "@/lib/quiz/branchQuestions";
 import { branchesHref, type Branch, type Variant } from "@/lib/quran/branches";
@@ -37,19 +36,8 @@ export function BranchFeedback({ question, typed, names, juz, ar }: { question: 
               <span className="sr-only">{hit ? (ar ? "صحيح" : "Correct") : (ar ? "غير صحيح" : "Incorrect")}</span>
               {typed[index]?.trim() || (ar ? "بدون إجابة" : "No answer")}
             </span>
-            <span className="font-arabic text-lg leading-loose">{answer.words.join(" ")}</span>
-            <span className="flex flex-wrap gap-1">
-              {answer.ayat.map((key, index) => {
-                const [surah, ayah] = key.split(":").map(Number);
-                return (
-                  <span key={key} className="inline-flex items-center gap-1">
-                    {index > 0 && <span aria-hidden className="text-xs text-[var(--home-muted)]">·</span>}
-                    <Link href={`/quran/read/${pages[key]}`} className="text-xs text-[var(--home-accent)] hover:underline">{names[surah] ? `${names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`}</Link>
-                    {tags[key] && <span className={`text-xs font-arabic ${TONE[tags[key].conj]}`}>{tags[key].word}</span>}
-                  </span>
-                );
-              })}
-            </span>
+            <Marked node={answer} names={names} pages={pages}><span className="font-arabic text-lg leading-loose">{answer.words.join(" ")}</span></Marked>
+            <AyahRefs keys={answer.ayat} names={names} pages={pages} tags={tags} forms={answer.forms} className="" />
           </div>
         );
       }} />

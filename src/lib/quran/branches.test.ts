@@ -341,9 +341,39 @@ describe('spellings and marks', () => {
   });
 
   it('splits words that differ only in their marks into separate nodes', () => {
-    const tree = branch([ayah('1:1', 'قال لَهُمْ ربهم'), ayah('1:2', 'قال لَهُم موسى')]);
+    const tree = branch([ayah('1:1', 'قال لَهُمْ ربهم'), ayah('1:2', 'قال لَهُمُ موسى')]);
     expect(tree.words).toEqual(['قال']);
-    expect(tree.children.map(child => child.words[0])).toEqual(['لَهُمْ', 'لَهُم']);
+    expect(tree.children.map(child => child.words[0])).toEqual(['لَهُمْ', 'لَهُمُ']);
+  });
+
+  it('keeps one node for words that differ only in a Quranic annotation sign, shown without it', () => {
+    const tree = branch(startingWith(all, 'ان مع العسر'));
+    expect(tree.children).toEqual([]);
+    expect(tree.ayat).toEqual(['94:5', '94:6']);
+    expect(tree.words.at(-1)).toBe('يُسْرًا');
+  });
+
+  it('ignores the shadda an ayah\'s first letter carries over from the ayah before', () => {
+    const group = startingWith(all, 'متعا لكم');
+    expect(variants(group)).toEqual([]);
+    expect(branch(group).words[0]).toBe('مَتَـٰعًۭا');
+  });
+
+  it('names a phrase by its first ayah\'s spelling where the ayat differ in their vowels', () => {
+    const phrases = listPhrases(sharedOpenings(all.filter(a => inJuzRange(a.key, { from: 25, to: 30 }))));
+    expect(phrases.find(p => p.id === 'قل ارءيتم ان')?.text).toBe('قُلْ أَرَءَيْتُمْ إِن');
+  });
+
+  it('reads a word with or without a sukun on its last letter as one word, shown as most ayat spell it', () => {
+    const tree = branch([ayah('1:1', 'قُلْ أَرَءَيْتُمْ إِنْ'), ayah('1:2', 'قُلْ أَرَءَيْتُمْ إِن'), ayah('1:3', 'قُلْ أَرَءَيْتُم مَّا')]);
+    expect(tree.words).toEqual(['قُلْ', 'أَرَءَيْتُمْ']);
+    expect(tree.children[0].words[0]).toBe('إِن');
+    expect(branch([ayah('1:3', 'قال لَهُمُ موسى'), ayah('1:4', 'قال لَهُمْ ربهم')]).children.map(child => child.words[0])).toEqual(['لَهُمُ', 'لَهُمْ']);
+  });
+
+  it('keeps an annotation sign every ayah under a node carries', () => {
+    const tree = branch([ayah('1:1', 'إن الذين كَفَرُوا۟ ربهم'), ayah('1:2', 'إن الذين كَفَرُوا۟ موسى')]);
+    expect(tree.words).toEqual(['إن', 'الذين', 'كَفَرُوا۟']);
   });
 
   it('carries an ayah that ends mid-tree into the next one, marked with its number', () => {

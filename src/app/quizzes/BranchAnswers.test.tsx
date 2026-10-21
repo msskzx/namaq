@@ -76,8 +76,8 @@ describe('complete branch tree answers', () => {
     expect(screen.getByText('Incorrect')).toBeTruthy();
     expect(screen.getByText('بِأَكْوَابٍ')).toBeTruthy();
     expect(screen.getByText('إِذَا رَأَيْتَهُمْ')).toBeTruthy();
-    expect(screen.getByRole('link', { name: 'الطور ٢٤' }).getAttribute('href')).toBe('/quran/read/524');
-    expect(screen.getByRole('link', { name: '٥٦:١٧' }).getAttribute('href')).toBe('/quran/read/535');
+    expect(screen.getByRole('link', { name: 'الطور ٢٤' }).getAttribute('href')).toBe('/quran/read/524?a=52:24');
+    expect(screen.getByRole('link', { name: '٥٦:١٧' }).getAttribute('href')).toBe('/quran/read/535?a=56:17');
   });
 
   it('draws each joined spelling without a link before checking, and tags each ayah with it after', () => {

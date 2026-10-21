@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { num } from '@/lib/quran/arabicNumber';
 import { branchesHref, keys, linkId, spell, type Branch, type Variant } from '@/lib/quran/branches';
 import type { JuzRange } from '@/lib/quran/juz';
+import Spellings from './Spellings';
 
 type Props = { tree: Branch; names: Record<number, string>; pages: Record<string, number>; variants?: Variant[]; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode };
 type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header'> & { node: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
@@ -11,8 +12,48 @@ const LINE = 'border-[var(--home-rule)]';
 export const TONE: Record<string, string> = {
   '': 'border-[var(--home-muted)] text-[var(--home-ink)]',
   و: 'border-[var(--home-green)] text-[var(--home-green)]',
-  ف: 'border-[var(--home-accent)] text-[var(--home-accent)]',
+  ف: 'border-[var(--home-root)] text-[var(--home-root)]',
 };
+
+type Refs = { keys: string[]; names: Record<number, string>; pages: Record<string, number>; tags?: Record<string, Variant>; forms?: Record<string, string[]> };
+
+export function AyahRefs({ keys, names, pages, tags = {}, forms = {}, className = 'mt-1' }: Refs & { className?: string }) {
+  return (
+    <span className={`flex flex-wrap gap-1 ${className}`}>
+      {keys.map((key, index) => {
+        const [surah, ayah] = key.split(':').map(Number);
+        return (
+          <span key={key} className="inline-flex items-center gap-1">
+            {index > 0 && <span aria-hidden className="text-xs text-[var(--home-muted)]">·</span>}
+            <Link href={`/quran/read/${pages[key]}?a=${key}`} className="text-xs text-[var(--home-accent)] hover:underline">
+              {names[surah] ? `${names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`}
+            </Link>
+            {tags[key] && <span className={`text-xs font-arabic ${TONE[tags[key].conj]}`}>{tags[key].word}</span>}
+            {forms[key] && <span className="text-xs font-arabic text-[var(--home-muted)]">{forms[key].join(' ')}</span>}
+          </span>
+        );
+      })}
+    </span>
+  );
+}
+
+export function Marked({ node, names, pages, children }: { node: Branch; names: Record<number, string>; pages: Record<string, number>; children: React.ReactNode }) {
+  if (!node.forms || node.children.length === 0) return children;
+  const bySpelling = new Map<string, string[]>();
+  Object.entries(node.forms).forEach(([key, words]) => bySpelling.set(words.join(' '), [...(bySpelling.get(words.join(' ')) ?? []), key]));
+  return (
+    <Spellings list={
+      <ul key="spellings" className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+        {[...bySpelling].map(([spelling, keys]) => (
+          <li key={spelling} className="flex flex-wrap items-center gap-2">
+            <span className="font-arabic">{spelling}</span>
+            <AyahRefs keys={keys} names={names} pages={pages} className="" />
+          </li>
+        ))}
+      </ul>
+    }>{children}</Spellings>
+  );
+}
 
 function Node({ node, path, names, pages, tags, lead, juz, renderNode, indices }: NodeProps) {
   const root = path.length === 0;
@@ -21,25 +62,10 @@ function Node({ node, path, names, pages, tags, lead, juz, renderNode, indices }
   return (
     <div className="flex items-center">
       {(!root || shownWords.length > 0 || node.ayat.length > 0) && <div className={`shrink-0 rounded border px-3 py-1.5 ${node.children.length === 0 ? 'max-w-sm' : 'max-w-xs'} ${root ? 'border-[var(--home-accent)] bg-[var(--home-paper-deep)] text-xl' : 'border-[var(--home-rule)] bg-[var(--home-paper)] text-lg'}`}>
-        {renderNode && !root ? renderNode(node, indices.get(node)!, tags) : <>{root || node.children.length === 0 ? <span className="font-arabic leading-loose">{shownWords.join(' ')}</span> : (
+        {renderNode && !root ? renderNode(node, indices.get(node)!, tags) : <><Marked node={node} names={names} pages={pages}>{root || node.children.length === 0 ? <span className="font-arabic leading-loose">{shownWords.join(' ')}</span> : (
           <Link href={branchesHref(linkId(words, keys(node).flatMap(key => (tags[key] ? [tags[key].conj] : []))), juz)} className="font-arabic leading-loose hover:text-[var(--home-accent)] hover:underline">{node.words.join(' ')}</Link>
-        )}
-        {node.ayat.length > 0 && (
-          <span className="flex flex-wrap gap-1 mt-1">
-            {node.ayat.map((key, index) => {
-              const [surah, ayah] = key.split(':').map(Number);
-              return (
-                <span key={key} className="inline-flex items-center gap-1">
-                  {index > 0 && <span aria-hidden className="text-xs text-[var(--home-muted)]">·</span>}
-                  <Link href={`/quran/read/${pages[key]}?a=${key}`} className="text-xs text-[var(--home-accent)] hover:underline">
-                    {`${names[surah] ?? num(surah)} ${num(ayah)}`}
-                  </Link>
-                  {tags[key] && <span className={`text-xs font-arabic ${TONE[tags[key].conj]}`}>{tags[key].word}</span>}
-                </span>
-              );
-            })}
-          </span>
-        )}</>}
+        )}</Marked>
+        {node.ayat.length > 0 && <AyahRefs keys={node.ayat} names={names} pages={pages} tags={tags} forms={node.forms} />}</>}
       </div>}
       {node.children.length > 0 && (
         <>

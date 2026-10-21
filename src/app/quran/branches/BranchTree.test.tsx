@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import React from 'react';
 import { afterEach, describe, expect, it } from 'vitest';
-import { cleanup, render, screen, within } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { branch, branchesHref, startingWith, variants, type BranchAyah } from '@/lib/quran/branches';
 import BranchTree from './BranchTree';
 import ayat from './ayat.json';
@@ -38,14 +38,14 @@ describe('BranchTree', () => {
 
   it('keeps an ayah reference when all root words are shown as variants', () => {
     render(<BranchTree tree={{ words: ['قال'], ayat: ['1:1'], children: [] }} variants={[{ word: 'قال', conj: '', keys: ['1:1'], id: 'قال' }]} names={{}} pages={{ '1:1': 1 }} />);
-    expect(screen.getByRole('link', { name: '١ ١' }).getAttribute('href')).toBe('/quran/read/1?a=1:1');
+    expect(screen.getByRole('link', { name: '١:١' }).getAttribute('href')).toBe('/quran/read/1?a=1:1');
   });
 
   it('links every ayah to its exact position on the reader page', () => {
     render(<BranchTree tree={tree} names={{ 15: 'سُورَةُ الحِجۡرِ', 51: 'سُورَةُ الذَّارِيَاتِ' }} pages={{ '15:45': 265, '44:51': 498, '51:15': 521 }} />);
     expect(screen.getByRole('link', { name: 'سُورَةُ الذَّارِيَاتِ ١٥' }).getAttribute('href')).toBe('/quran/read/521?a=51:15');
     expect(screen.getByRole('link', { name: 'سُورَةُ الحِجۡرِ ٤٥' }).getAttribute('href')).toBe('/quran/read/265?a=15:45');
-    expect(screen.getByRole('link', { name: '٤٤ ٥١' }).getAttribute('href')).toBe('/quran/read/498?a=44:51');
+    expect(screen.getByRole('link', { name: '٤٤:٥١' }).getAttribute('href')).toBe('/quran/read/498?a=44:51');
     const references = screen.getByRole('link', { name: 'سُورَةُ الحِجۡرِ ٤٥' }).parentElement!.parentElement!;
     expect(within(references).getAllByText('·')).toHaveLength(1);
     expect(references.textContent?.startsWith('·')).toBe(false);
@@ -83,5 +83,26 @@ describe('BranchTree', () => {
     expect(screen.getByRole('link', { name: 'يَطُوفُ' }).getAttribute('href')).toBe(branchesHref('يطوف عليهم', { from: 26, to: 30 }, { spelling: 'يَطُوفُ' }));
     expect(screen.getByRole('link', { name: 'الإنسان ١٩' }).nextElementSibling?.textContent).toBe('وَيَطُوفُ');
     expect(screen.getByRole('link', { name: 'الواقعة ١٧' }).nextElementSibling?.textContent).toBe('يَطُوفُ');
+  });
+
+  it('shows an ayah\'s own spelling beside its reference where a merged node shows another', () => {
+    const group = startingWith(ayat as BranchAyah[], 'متعا لكم');
+    render(<BranchTree tree={branch(group)} variants={variants(group)} names={{ 79: 'النازعات', 80: 'عبس' }} pages={Object.fromEntries(group.map(a => [a.key, a.page]))} />);
+    expect(screen.getByRole('link', { name: 'عبس ٣٢' }).nextElementSibling?.textContent).toBe(group.find(a => a.key === '80:32')!.words[0]);
+    expect(screen.getByRole('link', { name: 'النازعات ٣٣' }).nextElementSibling).toBeNull();
+  });
+
+  it('lists each ayah\'s spelling of an inner node behind a closed toggle', () => {
+    const merged = { words: ['قال', 'نُوحًا'], ayat: [], forms: { '57:26': ['نُوحًۭا'] }, children: [
+      { words: ['رب'], ayat: ['7:59'], children: [] },
+      { words: ['يا'], ayat: ['57:26'], children: [] },
+    ] };
+    render(<BranchTree tree={{ words: [], ayat: [], children: [merged, { words: ['موسى'], ayat: ['2:54'], children: [] }] }} names={{ 57: 'الحديد' }} pages={{ '7:59': 158, '57:26': 541, '2:54': 8 }} />);
+    const toggle = screen.getByRole('button', { name: 'تشكيل الكلمات في كل آية' });
+    expect(toggle.getAttribute('aria-expanded')).toBe('false');
+    expect(screen.queryByText('نُوحًۭا')).toBeNull();
+    fireEvent.click(toggle);
+    expect(toggle.getAttribute('aria-expanded')).toBe('true');
+    expect(screen.getByText('نُوحًۭا').closest('li')?.textContent).toContain('الحديد ٢٦');
   });
 });
