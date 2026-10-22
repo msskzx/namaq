@@ -5,9 +5,9 @@ import { normalizeWord } from './normalize';
 import type { ReaderPageData } from './readerPage';
 
 export type BranchAyah = { key: string; page: number; words: string[]; conj?: string; next?: string[] };
-export type Branch = { words: string[]; ayat: string[]; children: Branch[] };
+export type Branch = { words: string[]; ayat: string[]; children: Branch[]; forms?: Record<string, string[]> };
 export type Opening = { id: string; text: string; count: number };
-export type Variant = { word: string; conj: string; keys: string[]; id: string };
+export type Variant = { word: string; conj: string; keys: string[]; id: string; forms?: Record<string, string[]> };
 
 export const OPENING_WORDS = 2;
 export const TOP = 8;
@@ -75,7 +75,19 @@ const bySpelling = (ayat: BranchAyah[]) => {
   return found;
 };
 
-export const spell = (word: string) => word.replace(/[\u0640\u2060]/g, '').normalize('NFC');
+const SIGNS = /[\u06D6-\u06ED]/g;
+
+export const spell = (word: string) => word.replace(/[\u0640\u2060]/g, '').replace(SIGNS, '').replace(/^(\p{L}[\u064B-\u0650]?)\u0651/u, '$1').replace(/\u0652$/u, '').normalize('NFC');
+
+const plain = (forms: string[]) => {
+  if (forms.every(form => form === forms[0]) || forms.some(form => spell(form) !== spell(forms[0]))) return forms[0];
+  const letters = forms.map(form => form.replace(/[\u0640\u2060]/g, '').normalize('NFC').match(/[^\p{M}\u06D6-\u06ED][\p{M}\u06D6-\u06ED]*/gu) ?? []);
+  return letters[0].map((letter, i) => [...letter].filter((mark, at) => at === 0 || letters.every(other => other[i]?.includes(mark))).join('')).join('');
+};
+
+const originalForms = (entries: [string, string[]][]) => new Set(entries.map(([, words]) => words.join(' '))).size > 1
+  ? Object.fromEntries(entries)
+  : undefined;
 
 export function stem(ayah: BranchAyah): BranchAyah {
   if (!ayah.conj) return ayah;
@@ -178,7 +190,7 @@ export function withNext(groups: Map<string, BranchAyah[]>, all: BranchAyah[]): 
   });
 }
 
-function grow(ayat: BranchAyah[], from: number, word: (word: string) => string): Branch {
+function grow(ayat: BranchAyah[], from: number, word: (word: string) => string, firstWords?: Map<string, string>): Branch {
   const norms = ayat.map(ayah => ayah.words.map(word));
   let to = from;
   while (norms.every(n => n.length > to) && new Set(norms.map(n => n[to])).size === 1) to++;
@@ -186,23 +198,27 @@ function grow(ayat: BranchAyah[], from: number, word: (word: string) => string):
   ayat.forEach((ayah, i) => {
     if (norms[i].length > to) children.set(norms[i][to], [...(children.get(norms[i][to]) ?? []), ayah]);
   });
+  const words = ayat[0].words.slice(from, to).map((_, i) => plain(ayat.map(ayah => ayah.words[from + i])));
+  const forms = originalForms(ayat.map(ayah => [ayah.key, ayah.words.slice(from, to).map((word, i) => from + i === 0 ? firstWords?.get(ayah.key) ?? word : word)]));
   return {
-    words: ayat[0].words.slice(from, to),
+    words,
     ayat: ayat.filter((_, i) => norms[i].length === to).map(ayah => ayah.key),
     children: [...children.values()].map(group => grow(group, to, word)),
+    ...(forms && { forms }),
   };
 }
 
-export const branch = (ayat: BranchAyah[]) => grow(grown(shown(ayat)), 0, spell);
+export const branch = (ayat: BranchAyah[]) => grow(grown(shown(ayat)), 0, spell, new Map(ayat.map(ayah => [ayah.key, ayah.words[0]])));
 
 export const phraseTree = (ayat: BranchAyah[]) => grow(shown(ayat), 0, normalizeWord);
 
 export const variants = (ayat: BranchAyah[]): Variant[] => !split(ayat) ? [] : [...bySpelling(ayat).values()]
   .map(members => ({
-    word: members[0].words[0],
+    word: plain(members.map(ayah => ayah.words[0])),
     conj: members[0].conj ?? '',
     keys: members.map(ayah => ayah.key),
     id: phraseTree(ayat).words.map(normalizeWord).join(' '),
+    forms: originalForms(members.map(ayah => [ayah.key, [ayah.words[0]]])),
   }))
   .sort((a, b) => Math.min(...a.keys.map(mushafOrder)) - Math.min(...b.keys.map(mushafOrder)));
 

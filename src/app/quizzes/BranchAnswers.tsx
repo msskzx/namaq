@@ -1,14 +1,13 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck, faCircleXmark, faCodeBranch, faSpellCheck } from "@fortawesome/free-solid-svg-icons";
 import Button from "@/components/common/Button";
-import BranchTree, { TONE } from "@/app/quran/branches/BranchTree";
+import BranchTree, { AyahRefs, Marked } from "@/app/quran/branches/BranchTree";
 import { branchNodes, matchTreeAnswers } from "@/lib/quiz/branchAnswers";
 import type { BranchAnswer } from "@/lib/quiz/branchQuestions";
-import { branchesHref, type Branch, type Variant } from "@/lib/quran/branches";
+import { branchesHref, keys, type Branch, type Variant } from "@/lib/quran/branches";
 import type { JuzRange } from "@/lib/quran/juz";
 import { num } from "@/lib/quran/arabicNumber";
 
@@ -23,6 +22,12 @@ export const branchesCorrect = (question: Question, typed: string[]) => Boolean(
 export function BranchFeedback({ question, typed, names, juz, ar }: { question: Question; typed: string[]; names: Names; juz: JuzRange | null; ar: boolean }) {
   if (!question.tree) return null;
   const matches = matchTreeAnswers(question.tree, typed);
+  const offsets = new Map<Branch, number>();
+  const visit = (node: Branch, offset: number) => {
+    offsets.set(node, offset);
+    node.children.forEach(child => visit(child, offset + node.words.length));
+  };
+  visit(question.tree, 0);
   const pages = Object.fromEntries((question.branches ?? []).flatMap(branch => branch.ayat.map(ayah => [ayah.key, ayah.page])));
   return (
     <div className="flex flex-col gap-3" dir="rtl">
@@ -37,19 +42,7 @@ export function BranchFeedback({ question, typed, names, juz, ar }: { question: 
               <span className="sr-only">{hit ? (ar ? "صحيح" : "Correct") : (ar ? "غير صحيح" : "Incorrect")}</span>
               {typed[index]?.trim() || (ar ? "بدون إجابة" : "No answer")}
             </span>
-            <span className="font-arabic text-lg leading-loose">{answer.words.join(" ")}</span>
-            <span className="flex flex-wrap gap-1">
-              {answer.ayat.map((key, index) => {
-                const [surah, ayah] = key.split(":").map(Number);
-                return (
-                  <span key={key} className="inline-flex items-center gap-1">
-                    {index > 0 && <span aria-hidden className="text-xs text-[var(--home-muted)]">·</span>}
-                    <Link href={`/quran/read/${pages[key]}`} className="text-xs text-[var(--home-accent)] hover:underline">{names[surah] ? `${names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`}</Link>
-                    {tags[key] && <span className={`text-xs font-arabic ${TONE[tags[key].conj]}`}>{tags[key].word}</span>}
-                  </span>
-                );
-              })}
-            </span>
+            <Marked node={answer} ayahKeys={keys(answer)} names={names} offset={offsets.get(answer)} leaf={answer.children.length === 0} references={<AyahRefs keys={answer.ayat} names={names} pages={pages} tags={tags} linked={answer.children.length > 0} className="" />}><span className="font-arabic text-lg leading-loose">{answer.words.join(" ")}</span></Marked>
           </div>
         );
       }} />
@@ -74,7 +67,7 @@ export function BranchInputs({ question, typed, onChange, onCheck, ar }: { quest
     }}>
       <p className="text-sm text-[var(--home-muted)]">{ar ? "أكمل كل عقدة. وفي نهاية كل فرع تكفي كلمتاه الأوليان، على أن تصح كل كلمة تكتبها. يمكن تبديل الفروع المتشابهة في الشكل." : "Complete every node. For a leaf, its first two words are enough, and every word you type must be right. Branches with the same shape can be entered in either order."}</p>
       <div dir="rtl">
-        <BranchTree tree={question.tree} variants={question.variants} names={{}} pages={{}} label={ar ? "أكمل الشجرة" : "Complete the tree"} renderNode={(_, index) => (
+        <BranchTree tree={question.tree} variants={question.variants} names={{}} pages={{}} showSpellings={false} label={ar ? "أكمل الشجرة" : "Complete the tree"} renderNode={(_, index) => (
           <label className="flex w-56 flex-col gap-1">
             <span className="sr-only">{ar ? `العقدة ${num(index + 1)}` : `Node ${index + 1}`}</span>
             <input type="text" dir="rtl" lang="ar" autoComplete="off" spellCheck={false} value={values[index]}

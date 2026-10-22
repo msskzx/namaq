@@ -2,6 +2,7 @@
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { branch, variants, type BranchAyah } from '@/lib/quran/branches';
 import { BranchFeedback, BranchInputs, branchesCorrect, emptyBranchAnswers } from './BranchAnswers';
 
 const tree = {
@@ -15,9 +16,32 @@ const tree = {
 };
 const question = { tree, phrase: 'يطوف عليهم', branches: [{ words: [], ayat: [{ key: '52:24', page: 524, words: [] }, { key: '56:17', page: 535, words: [] }, { key: '76:19', page: 579, words: [] }] }] };
 const typed = ['غلمان لهم', 'ولدان مخلدون', 'بأكواب', 'إذا رأيتهم'];
+vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
 afterEach(cleanup);
 
 describe('complete branch tree answers', () => {
+  it('offers context for every feedback leaf and distinguishes differing marks', () => {
+    const merged = { words: ['مِنْ', 'رب'], ayat: ['1:1', '1:2'], forms: { '1:1': ['مِّنْ', 'رب'], '1:2': ['مِنْ', 'رب'] }, children: [] };
+    const own = { tree: { words: ['قال'], ayat: [], children: [merged, { words: ['يا'], ayat: ['1:3'], children: [] }] }, branches: [{ words: [], ayat: [{ key: '1:1', page: 1, words: [] }, { key: '1:2', page: 1, words: [] }, { key: '1:3', page: 1, words: [] }] }] };
+    render(<BranchFeedback question={own} typed={['من رب', 'يا']} names={{}} juz={null} ar />);
+    expect(screen.getByRole('button', { name: /عرض اختلافات الضبط والسياق/ }).querySelector('[data-differing]')).toBeTruthy();
+    expect(screen.getByRole('button', { name: /عرض الآيات في سياقها/ }).getAttribute('data-variant')).toBe('ghost');
+  });
+
+  it('keeps original spelling references out of the unanswered quiz tree', () => {
+    const group: BranchAyah[] = [
+      { key: '1:1', page: 1, words: ['مِّنْ', 'ربْ', 'زيد'] },
+      { key: '1:2', page: 1, words: ['مِن', 'رب', 'عمر'] },
+      { key: '1:3', page: 1, words: ['وَمِن', 'رب', 'علي'] },
+    ];
+    const own = { tree: branch(group), variants: variants(group) };
+    render(<BranchInputs question={own} typed={[]} onChange={vi.fn()} onCheck={vi.fn()} ar />);
+    expect(screen.queryByRole('button', { name: /عرض اختلافات الضبط والسياق/ })).toBeNull();
+    expect(screen.queryByRole('button', { name: /عرض الآيات في سياقها/ })).toBeNull();
+    expect(screen.queryByRole('link')).toBeNull();
+    expect(screen.getAllByRole('textbox')).toHaveLength(3);
+  });
+
   it('requires intermediate nodes and every leaf, with every word in each node', () => {
     expect(emptyBranchAnswers(question)).toEqual(['', '', '', '']);
     expect(branchesCorrect(question, typed)).toBe(true);
@@ -69,15 +93,16 @@ describe('complete branch tree answers', () => {
     expect(onCheck).toHaveBeenCalledOnce();
   });
 
-  it('shows corrections and reader citations on the complete feedback tree', () => {
+  it('shows corrections and combines each leaf reference with its context control', () => {
     render(<BranchFeedback question={question} typed={[typed[0], typed[1], typed[3], 'wrong']} names={{ 52: 'الطور' }} juz={null} ar={false} />);
     expect(screen.getByRole('region', { name: 'Answer tree' })).toBeTruthy();
     expect(screen.getAllByText('Correct', { exact: true })).toHaveLength(3);
     expect(screen.getByText('Incorrect')).toBeTruthy();
     expect(screen.getByText('بِأَكْوَابٍ')).toBeTruthy();
     expect(screen.getByText('إِذَا رَأَيْتَهُمْ')).toBeTruthy();
-    expect(screen.getByRole('link', { name: 'الطور ٢٤' }).getAttribute('href')).toBe('/quran/read/524');
-    expect(screen.getByRole('link', { name: '٥٦:١٧' }).getAttribute('href')).toBe('/quran/read/535');
+    expect(screen.getByText('الطور ٢٤').closest('button')).toBeTruthy();
+    expect(screen.getByText('٥٦:١٧').closest('button')).toBeTruthy();
+    expect(document.querySelector('a[href^="/quran/read/"]')).toBeNull();
   });
 
   it('draws each joined spelling without a link before checking, and tags each ayah with it after', () => {

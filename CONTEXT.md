@@ -5,6 +5,17 @@ relationships and historical context.
 
 ## Language
 
+### Shared Quran wording
+
+**Original spelling**:
+The exact spelling of a word or phrase in a particular ayah in Namaq's Quran
+reader, including its marks.
+
+**Shared display**:
+The wording common to original spellings grouped together, retaining their
+shared marks and omitting the marks that differ. It can differ from every
+original spelling in the group.
+
 ### Graph exploration
 
 **Exploration**:
