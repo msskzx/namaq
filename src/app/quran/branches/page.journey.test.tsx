@@ -38,7 +38,8 @@ describe('Quran branches page journey', () => {
     const entries = container.querySelectorAll('ul[aria-label="المتشابهات"] > li');
 
     expect(entries).toHaveLength(10);
-    expect(container.querySelectorAll('details:not([open])')).toHaveLength(0);
+    expect(screen.getByText('قواعد المطابقة')).toBeTruthy();
+    expect(screen.getByText('فواتح شائعة')).toBeTruthy();
     expect(screen.queryByLabelText(/طريقة العرض|view mode/i)).toBeNull();
     expect(container.querySelector('.svg-inline--fa')).toBeNull();
     expect(container.querySelector('svg.lucide')).toBeTruthy();

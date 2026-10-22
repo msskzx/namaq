@@ -38,14 +38,6 @@ export default function OpeningSearch({ top, phrases, current, juz = null, unava
   };
   return (
     <div className="flex flex-col gap-3">
-      <div role="group" className="flex flex-wrap gap-2" aria-label={ar ? 'أكثر الفواتح تكرارًا' : 'Most frequent openings'}>
-        {top.map(opening => (
-          <Button key={`${opening.id}:${opening.partition ?? ''}`} size="sm" href={href(opening)} onClick={() => { setQuery(''); setSelected(-1); }} active={startsWith(current, opening.id) && (!opening.partition || opening.partition === view.partition)} aria-current={opening.id === current && opening.partition === view.partition ? 'page' : undefined}>
-            <GitBranch size={16} aria-hidden />
-            {`${opening.text} (${ar ? num(opening.count) : opening.count})`}
-          </Button>
-        ))}
-      </div>
       <label className="relative block">
         <span className="sr-only">{ar ? 'ابحث عن عبارة تبدأ بها آيتان أو أكثر' : 'Search phrases shared by two or more ayat'}</span>
         <Search aria-hidden className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--home-muted)]" />
@@ -87,6 +79,17 @@ export default function OpeningSearch({ top, phrases, current, juz = null, unava
           <span>{ar ? num(phrase.count) : phrase.count}</span>
         </Button>)}
       </div>}
+      {top.length > 0 && <details className="rounded border border-[var(--home-rule)] px-3 py-2">
+        <summary className="cursor-pointer select-none text-sm text-[var(--home-ink)]">{ar ? 'فواتح شائعة' : 'Popular openings'}</summary>
+        <div role="group" aria-label={ar ? 'أكثر الفواتح تكرارًا' : 'Most frequent openings'} className="mt-2 flex flex-wrap gap-2">
+          {top.map(opening => (
+            <Button key={`${opening.id}:${opening.partition ?? ''}`} size="sm" href={href(opening)} onClick={() => { setQuery(''); setSelected(-1); }} active={startsWith(current, opening.id) && (!opening.partition || opening.partition === view.partition)} aria-current={opening.id === current && opening.partition === view.partition ? 'page' : undefined}>
+              <GitBranch size={16} aria-hidden />
+              {`${opening.text} (${ar ? num(opening.count) : opening.count})`}
+            </Button>
+          ))}
+        </div>
+      </details>}
     </div>
   );
 }
