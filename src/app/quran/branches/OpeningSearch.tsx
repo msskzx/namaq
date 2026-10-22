@@ -6,7 +6,7 @@ import { ArrowLeft, ArrowRight, GitBranch, Search } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@/lib/quran/arabicNumber';
-import { branchesHref, startsWith, type BranchesView, type Opening } from '@/lib/quran/branches';
+import { branchesHref, type BranchesView, type Opening } from '@/lib/quran/branches';
 import type { JuzRange } from '@/lib/quran/juz';
 import { normalizeWord } from '@/lib/quran/normalize';
 const NOTE = 'text-sm text-[var(--home-muted)]';
@@ -15,7 +15,7 @@ const SEARCH = 'w-full rounded-sm border border-[var(--home-rule)] bg-transparen
 export const SUGGESTIONS = 10;
 const comparison = (value: string) => normalizeWord(value.normalize('NFC')).replace(/[ؤئء]/g, 'ا').trim().split(/\s+/).join(' ');
 
-export default function OpeningSearch({ top, phrases, current, juz = null, unavailable = false, view = {}, alternatives = [] }: { top: Opening[]; phrases: Opening[]; current: string; juz?: JuzRange | null; unavailable?: boolean; view?: BranchesView; alternatives?: Opening[] }) {
+export default function OpeningSearch({ phrases, current, juz = null, unavailable = false, view = {}, alternatives = [] }: { top: Opening[]; phrases: Opening[]; current: string; juz?: JuzRange | null; unavailable?: boolean; view?: BranchesView; alternatives?: Opening[] }) {
   const router = useRouter();
   const { language } = useLanguage();
   const ar = language === 'ar';
@@ -79,17 +79,6 @@ export default function OpeningSearch({ top, phrases, current, juz = null, unava
           <span>{ar ? num(phrase.count) : phrase.count}</span>
         </Button>)}
       </div>}
-      {top.length > 0 && <details className="rounded border border-[var(--home-rule)] px-3 py-2">
-        <summary className="cursor-pointer select-none text-sm text-[var(--home-ink)]">{ar ? 'فواتح شائعة' : 'Popular openings'}</summary>
-        <div role="group" aria-label={ar ? 'أكثر الفواتح تكرارًا' : 'Most frequent openings'} className="mt-2 flex flex-wrap gap-2">
-          {top.map(opening => (
-            <Button key={`${opening.id}:${opening.partition ?? ''}`} size="sm" href={href(opening)} onClick={() => { setQuery(''); setSelected(-1); }} active={startsWith(current, opening.id) && (!opening.partition || opening.partition === view.partition)} aria-current={opening.id === current && opening.partition === view.partition ? 'page' : undefined}>
-              <GitBranch size={16} aria-hidden />
-              {`${opening.text} (${ar ? num(opening.count) : opening.count})`}
-            </Button>
-          ))}
-        </div>
-      </details>}
     </div>
   );
 }

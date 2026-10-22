@@ -40,16 +40,6 @@ describe('OpeningSearch', () => {
     expect(screen.getByRole('combobox')).toBeTruthy();
   });
 
-  it('offers the largest openings as buttons and marks the one a deeper phrase sits under', () => {
-    render(<OpeningSearch top={top} phrases={phrases} current="الم تر كيف" />);
-    const picks = within(screen.getByLabelText('أكثر الفواتح تكرارًا')).getAllByRole('link');
-    expect(picks).toHaveLength(TOP);
-    expect(picks[2].getAttribute('href')).toBe(branchesHref('الم تر'));
-    expect(picks[2].className).toContain('bg-amber-400');
-    expect(picks[2].getAttribute('aria-current')).toBeNull();
-    expect(picks[1].className).not.toContain('bg-amber-400');
-  });
-
   it('finds a phrase longer than two words, typed with or without diacritics', () => {
     render(<OpeningSearch top={top} phrases={phrases} current="ان الذين" />);
     fireEvent.change(screen.getByRole('combobox'), { target: { value: 'أَلَمْ تَرَ كيف' } });
