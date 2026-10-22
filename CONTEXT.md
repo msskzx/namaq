@@ -403,3 +403,20 @@ The single citation a quiz surface presents for an answer. It shows the cited
 excerpt in an overlay and links onward to the same passage in the person's
 source reader; other supporting citations remain part of the historical claim.
 _Avoid_: Evidence set (the complete support may contain several citations)
+
+### Shared ayah openings
+
+**Shared opening**:
+The first two words shared by at least two ayat, allowing equivalent spellings,
+diacritic differences, and an initial conjunction as identified by its morphology.
+Corresponding words must also have the same root, or both have no root.
+
+**Shared phrase**:
+An opening or a longer sequence of words shared from the start of at least two
+ayat under the same wording and root conditions. A phrase can contain several
+smaller groups of ayat; rootless particles match by wording alone.
+
+**Opening entry**:
+A group of ayat cut from an opening's tree for browsing together. An opening may
+contain several entries; a searchable shared phrase need not be one entry.
+_Avoid_: Opening (the broader group), search result (a shared phrase)

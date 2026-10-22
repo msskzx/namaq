@@ -3,6 +3,7 @@
 import React, { useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import Button from '@/components/common/Button';
 import NumberInput from './NumberInput';
 import { useLanguage } from '@/components/language/LanguageContext';
@@ -18,6 +19,7 @@ interface PaginationProps {
   selectLabel?: string;
   pageLabels?: string[];
   scrollTarget?: string;
+  iconFamily?: 'fontawesome' | 'lucide';
 }
 
 export default function Pagination({
@@ -31,6 +33,7 @@ export default function Pagination({
   hrefs,
   scrollTarget,
   language: pageLanguage,
+  iconFamily = 'fontawesome',
 }: PaginationProps) {
   const { language: siteLanguage } = useLanguage();
   const language = pageLanguage ?? siteLanguage;
@@ -46,6 +49,8 @@ export default function Pagination({
   const rightToLeft = language === 'ar';
   const backIcon = rightToLeft ? faArrowRight : faArrowLeft;
   const forwardIcon = rightToLeft ? faArrowLeft : faArrowRight;
+  const BackArrow = rightToLeft ? ArrowRight : ArrowLeft;
+  const ForwardArrow = rightToLeft ? ArrowLeft : ArrowRight;
   const step = (target: number, disabled: boolean) =>
     hrefs && !disabled ? { href: hrefs[target - 1] } : { disabled, onClick: () => onChange?.(target) };
   const label = summary ?? (rightToLeft ? `صفحة ${page} من ${pageCount}` : `Page ${page} of ${pageCount}`);
@@ -61,7 +66,7 @@ export default function Pagination({
         className="shrink-0"
         {...step(page - 1, page <= 1)}
       >
-        <FontAwesomeIcon icon={backIcon} className="w-3 h-3" />
+        {iconFamily === 'lucide' ? <BackArrow className="size-3" aria-hidden /> : <FontAwesomeIcon icon={backIcon} className="w-3 h-3" />}
         {rightToLeft ? 'السابق' : 'Previous'}
       </Button>
 
@@ -82,7 +87,7 @@ export default function Pagination({
               ))}
             </select>
           ) : (
-            <NumberInput label={selectLabel ?? (rightToLeft ? 'انتقل إلى صفحة' : 'Go to page')} value={page} min={1} max={pageCount} onChange={onChange} />
+            <NumberInput label={selectLabel ?? (rightToLeft ? 'انتقل إلى صفحة' : 'Go to page')} value={page} min={1} max={pageCount} onChange={onChange} iconFamily={iconFamily} />
           )}
         </span>
       ) : (
@@ -96,7 +101,7 @@ export default function Pagination({
         {...step(page + 1, page >= pageCount)}
       >
         {rightToLeft ? 'التالي' : 'Next'}
-        <FontAwesomeIcon icon={forwardIcon} className="w-3 h-3" />
+        {iconFamily === 'lucide' ? <ForwardArrow className="size-3" aria-hidden /> : <FontAwesomeIcon icon={forwardIcon} className="w-3 h-3" />}
       </Button>
     </nav>
   );

@@ -122,6 +122,15 @@ describe('Pagination', () => {
     expect(screen.getByText('التالي')).toBeTruthy();
   });
 
+  it.each(['ar', 'en'] as const)('uses Lucide arrows in reading direction for %s', language => {
+    render(<Pagination page={2} pageCount={3} language={language} iconFamily="lucide" onChange={vi.fn()} />);
+    const previous = screen.getByRole('button', { name: language === 'ar' ? 'السابق' : 'Previous' });
+    const next = screen.getByRole('button', { name: language === 'ar' ? 'التالي' : 'Next' });
+    expect(previous.querySelector(language === 'ar' ? '.lucide-arrow-right' : '.lucide-arrow-left')).toBeTruthy();
+    expect(next.querySelector(language === 'ar' ? '.lucide-arrow-left' : '.lucide-arrow-right')).toBeTruthy();
+    expect(previous.querySelector('[data-prefix]')).toBeNull();
+  });
+
   it('links to the pages when given their addresses, in the page\'s own language', () => {
     render(<Pagination page={1} pageCount={3} hrefs={['/a', '/b', '/c']} language="ar" />);
 

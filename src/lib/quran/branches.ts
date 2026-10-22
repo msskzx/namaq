@@ -4,25 +4,26 @@ import type { JuzRange } from './juz';
 import { normalizeWord } from './normalize';
 import type { ReaderPageData } from './readerPage';
 
-export type BranchAyah = { key: string; page: number; words: string[]; conj?: string; next?: string[] };
-export type Branch = { words: string[]; ayat: string[]; children: Branch[]; forms?: Record<string, string[]> };
-export type Opening = { id: string; text: string; count: number };
-export type Variant = { word: string; conj: string; keys: string[]; id: string; forms?: Record<string, string[]> };
+export type BranchAyah = { key: string; page: number; words: string[]; roots?: (string | null)[]; conj?: string; next?: string[]; nextRoots?: (string | null)[] };
+export type Branch = { words: string[]; ayat: string[]; children: Branch[]; forms?: Record<string, string[]>; partition?: string };
+export type Opening = { id: string; text: string; count: number; partition?: string };
+export type Variant = { word: string; conj: string; keys: string[]; id: string; forms?: Record<string, string[]>; partition?: string };
 
 export const OPENING_WORDS = 2;
 export const TOP = 8;
 
-export type BranchesView = { list?: boolean; grouped?: boolean; page?: number; spelling?: string };
+export type BranchesView = { grouped?: boolean; page?: number; spelling?: string; partition?: string };
 
 export function branchesHref(id: string, juz?: JuzRange, view: BranchesView = {}) {
-  const params = new URLSearchParams({ o: id });
+  const params = new URLSearchParams();
+  if (id) params.set('o', id);
   if (juz) params.set('juzFrom', `${juz.from}`);
   if (juz) params.set('juzTo', `${juz.to}`);
-  if (view.list) params.set('v', 'list');
-  if (view.list && view.grouped) params.set('g', 'opening');
-  if (view.list && view.page && view.page > 1) params.set('p', `${view.page}`);
-  if (view.spelling) params.set('w', view.spelling);
-  return `/quran/branches?${params}`;
+  if (view.grouped) params.set('g', 'opening');
+  if (view.page && view.page > 1) params.set('p', `${view.page}`);
+  if (id && view.spelling) params.set('w', view.spelling);
+  if (id && view.partition) params.set('r', view.partition);
+  return `/quran/branches${params.size ? `?${params}` : ''}`;
 }
 
 export function readerAyat(pages: ReaderPageData[]): BranchAyah[] {
@@ -66,6 +67,23 @@ export function withConjunctions(ayat: BranchAyah[], morphology: string): Branch
     return { ...ayah, conj };
   });
 }
+
+export function withRoots(ayat: BranchAyah[], morphology: string): BranchAyah[] {
+  const roots = new Map<string, string | null>();
+  for (const match of morphology.matchAll(/^\((\d+:\d+:\d+):\d+\)\t[^\t]*\t[^\t]*\t(STEM[^\r\n]*)/gm)) {
+    const root = match[2].match(/(?:^|\|)ROOT:([^|\r\n]+)/)?.[1] ?? null;
+    const previous = roots.get(match[1]);
+    roots.set(match[1], previous && root ? `${previous}+${root}` : previous ?? root);
+  }
+  return ayat.map(ayah => ({ ...ayah, roots: ayah.words.map((_, i) => {
+    const location = `${ayah.key}:${i + 1}`;
+    if (!roots.has(location)) throw new Error(`Missing STEM annotation at ${location}`);
+    return roots.get(location)!;
+  }) }));
+}
+
+export const rootPartition = (ayah: BranchAyah, length: number) => JSON.stringify(Array.from({ length }, (_, i) => ayah.roots?.[i] ?? null));
+const wordKey = (ayah: BranchAyah, index: number, word: (value: string) => string) => JSON.stringify([word(ayah.words[index]), ayah.roots?.[index] ?? null]);
 
 const norm = (ayah: BranchAyah) => ayah.words.map(normalizeWord);
 
@@ -114,9 +132,13 @@ export function sharedOpenings(ayat: BranchAyah[]): Map<string, BranchAyah[]> {
   const groups = new Map<string, BranchAyah[]>();
   for (const ayah of ayat) {
     const id = openingId(ayah);
-    if (id) groups.set(id, [...(groups.get(id) ?? []), ayah]);
+    const key = `${id}\u0000${rootPartition(ayah, OPENING_WORDS)}`;
+    if (id) groups.set(key, [...(groups.get(key) ?? []), ayah]);
   }
-  return new Map([...groups].filter(([, group]) => group.length > 1));
+  const shared = [...groups].filter(([, group]) => group.length > 1);
+  const counts = new Map<string, number>();
+  shared.forEach(([, group]) => counts.set(openingId(group[0])!, (counts.get(openingId(group[0])!) ?? 0) + 1));
+  return new Map(shared.map(([key, group]) => [counts.get(openingId(group[0])!) === 1 ? openingId(group[0])! : key, group]));
 }
 
 function openingOf(group: BranchAyah[]): Opening {
@@ -124,9 +146,19 @@ function openingOf(group: BranchAyah[]): Opening {
   return { id: words.map(normalizeWord).join(' '), text: words.join(' '), count: group.length };
 }
 
+function distinguish<T extends Opening>(entries: T[]): T[] {
+  const counts = new Map<string, number>();
+  entries.forEach(entry => counts.set(entry.id, (counts.get(entry.id) ?? 0) + 1));
+  return entries.map(entry => {
+    if (counts.get(entry.id)! > 1) return entry;
+    const plain = { ...entry };
+    delete plain.partition;
+    return plain;
+  });
+}
+
 export function listOpenings(groups: Map<string, BranchAyah[]>): Opening[] {
-  return [...groups]
-    .map(([, group]) => openingOf(group))
+  return distinguish([...groups.values()].map(group => ({ ...openingOf(group), partition: rootPartition(group[0], OPENING_WORDS) })))
     .sort((a, b) => b.count - a.count);
 }
 
@@ -134,21 +166,33 @@ export const startsWith = (id: string, phrase: string) => `${id} `.startsWith(`$
 
 export const opens = (ayah: BranchAyah, phrase: string) => startsWith(norm(ayah).join(' '), phrase) || startsWith(norm(stem(ayah)).join(' '), phrase);
 
-export const startingWith = (ayat: BranchAyah[], phrase: string) => ayat.filter(ayah => opens(ayah, phrase));
+export const startingWith = (ayat: BranchAyah[], phrase: string, partition?: string) => ayat.filter(ayah => opens(ayah, phrase) && (!partition || rootPartition(ayah, phrase.split(' ').length) === partition));
 
 export const size = (node: Branch): number => node.ayat.length + node.children.reduce((sum, child) => sum + size(child), 0);
 
 export const keys = (node: Branch): string[] => [...node.ayat, ...node.children.flatMap(keys)];
 
 export function listPhrases(groups: Map<string, BranchAyah[]>): Opening[] {
-  const phrases = new Map(listOpenings(groups).map(o => [o.id, o]));
-  const conj = new Map([...groups.values()].flat().map(ayah => [ayah.key, ayah.conj ?? '']));
+  const phrases = new Map<string, Opening>();
+  const all = [...groups.values()].flat();
+  const byKey = new Map(all.map(ayah => [ayah.key, ayah]));
+  const conj = new Map(all.map(ayah => [ayah.key, ayah.conj ?? '']));
+  const add = (id: string, text: string, members: BranchAyah[]) => {
+    const partition = rootPartition(members[0], id.split(' ').length);
+    const key = `${id}\u0000${partition}`;
+    if (!phrases.has(key)) phrases.set(key, { id, text, count: members.length, partition });
+  };
+  groups.forEach(group => {
+    const opening = openingOf(group);
+    add(opening.id, opening.text, group);
+  });
   const walk = (node: Branch, path: string[], stemmed: boolean) => {
     const words = [...path, ...node.words];
-    const under = keys(node).map(key => conj.get(key));
+    const under = keys(node);
+    const conjs = under.map(key => conj.get(key));
     if (under.length < 2) return;
     const id = words.map(normalizeWord).join(' ');
-    if (!phrases.has(id) && (!stemmed || new Set(under).size > 1 || under[0] === '')) phrases.set(id, { id, text: words.join(' '), count: under.length });
+    if (!stemmed || new Set(conjs).size > 1 || conjs[0] === '') add(id, words.join(' '), under.map(key => byKey.get(key)!));
     node.children.forEach(child => walk(child, words, stemmed));
   };
   groups.forEach(group => {
@@ -166,32 +210,58 @@ export function listPhrases(groups: Map<string, BranchAyah[]>): Opening[] {
       const words = [...path, ...node.words];
       if (path.length > 0 && node.children.length > 0) {
         const id = linkId(words, tagged ? keys(node).map(key => conj.get(key)!) : []);
-        if (!phrases.has(id)) phrases.set(id, { id, text: words.join(' '), count: startingWith(group, id).length });
+        add(id, words.join(' '), keys(node).map(key => byKey.get(key)!));
       }
       node.children.forEach(child => linked(child, words, tagged));
     };
     linked(branch(group), [], split(group));
     if (split(group)) bySpelling(group).forEach(sub => sub.length > 1 && linked(branch(sub), [], false));
   });
-  return [...phrases.values()].sort((a, b) => b.count - a.count || a.id.length - b.id.length);
+  const ids = new Set([...phrases.values()].map(phrase => phrase.id));
+  const matches = new Map<string, Map<string, BranchAyah[]>>();
+  for (const ayah of all) {
+    const seen = new Set<string>();
+    for (const words of [norm(ayah), norm(stem(ayah))]) {
+      for (let length = OPENING_WORDS; length <= words.length; length++) {
+        const id = words.slice(0, length).join(' ');
+        if (!ids.has(id) || seen.has(id)) continue;
+        seen.add(id);
+        const partition = rootPartition(ayah, length);
+        const partitions = matches.get(id) ?? new Map<string, BranchAyah[]>();
+        partitions.set(partition, [...(partitions.get(partition) ?? []), ayah]);
+        matches.set(id, partitions);
+      }
+    }
+  }
+  matches.forEach((partitions, id) => {
+    if (partitions.size < 2) return;
+    partitions.forEach(members => {
+      if (members.length < 2) return;
+      const length = id.split(' ').length;
+      const source = members.map(ayah => startsWith(norm(ayah).join(' '), id) ? ayah : stem(ayah));
+      const text = source[0].words.slice(0, length).map((_, i) => plain(source.map(ayah => ayah.words[i]))).join(' ');
+      add(id, text, members);
+    });
+  });
+  return distinguish([...phrases.values()]).sort((a, b) => b.count - a.count || a.id.length - b.id.length);
 }
 
-const continues = (ayah: BranchAyah, ayat: BranchAyah[]) => ayat.some(other => other !== ayah && other.words.length > ayah.words.length && ayah.words.every((word, i) => spell(word) === spell(other.words[i])));
+const continues = (ayah: BranchAyah, ayat: BranchAyah[]) => ayat.some(other => other !== ayah && other.words.length > ayah.words.length && ayah.words.every((word, i) => wordKey(ayah, i, spell) === wordKey(other, i, spell)));
 
 const ayahEnd = (key: string) => `﴿${num(Number(key.split(':')[1]))}﴾`;
 
-export const grown = (ayat: BranchAyah[]) => ayat.map(ayah => (ayah.next && continues(ayah, ayat) ? { ...ayah, words: [...ayah.words, ayahEnd(ayah.key), ...ayah.next] } : ayah));
+export const grown = (ayat: BranchAyah[]) => ayat.map(ayah => (ayah.next && continues(ayah, ayat) ? { ...ayah, words: [...ayah.words, ayahEnd(ayah.key), ...ayah.next], ...(ayah.roots && { roots: [...ayah.roots, null, ...(ayah.nextRoots ?? ayah.next.map(() => null))] }) } : ayah));
 
 export function withNext(groups: Map<string, BranchAyah[]>, all: BranchAyah[]): BranchAyah[] {
-  const after = new Map(all.map((ayah, i) => [ayah.key, all[i + 1]?.key.split(':')[0] === ayah.key.split(':')[0] ? all[i + 1].words : undefined]));
+  const after = new Map(all.map((ayah, i) => [ayah.key, all[i + 1]?.key.split(':')[0] === ayah.key.split(':')[0] ? all[i + 1] : undefined]));
   return [...groups.values()].flatMap(group => {
     const own = shown(group);
-    return group.map((ayah, i) => (continues(own[i], own) && after.get(ayah.key) ? { ...ayah, next: after.get(ayah.key) } : ayah));
+    return group.map((ayah, i) => (continues(own[i], own) && after.get(ayah.key) ? { ...ayah, next: after.get(ayah.key)!.words, ...(after.get(ayah.key)!.roots && { nextRoots: after.get(ayah.key)!.roots }) } : ayah));
   });
 }
 
 function grow(ayat: BranchAyah[], from: number, word: (word: string) => string, firstWords?: Map<string, string>): Branch {
-  const norms = ayat.map(ayah => ayah.words.map(word));
+  const norms = ayat.map(ayah => ayah.words.map((_, i) => wordKey(ayah, i, word)));
   let to = from;
   while (norms.every(n => n.length > to) && new Set(norms.map(n => n[to])).size === 1) to++;
   const children = new Map<string, BranchAyah[]>();
@@ -202,6 +272,7 @@ function grow(ayat: BranchAyah[], from: number, word: (word: string) => string, 
   const forms = originalForms(ayat.map(ayah => [ayah.key, ayah.words.slice(from, to).map((word, i) => from + i === 0 ? firstWords?.get(ayah.key) ?? word : word)]));
   return {
     words,
+    ...(ayat[0].roots && { partition: rootPartition(ayat[0], to) }),
     ayat: ayat.filter((_, i) => norms[i].length === to).map(ayah => ayah.key),
     children: [...children.values()].map(group => grow(group, to, word)),
     ...(forms && { forms }),
@@ -219,6 +290,7 @@ export const variants = (ayat: BranchAyah[]): Variant[] => !split(ayat) ? [] : [
     keys: members.map(ayah => ayah.key),
     id: phraseTree(ayat).words.map(normalizeWord).join(' '),
     forms: originalForms(members.map(ayah => [ayah.key, [ayah.words[0]]])),
+    ...(members[0].roots && { partition: rootPartition(members[0], phraseTree(ayat).words.length) }),
   }))
   .sort((a, b) => Math.min(...a.keys.map(mushafOrder)) - Math.min(...b.keys.map(mushafOrder)));
 
@@ -241,13 +313,13 @@ export function pickPhrase(phrases: Opening[], wanted: string | null) {
 export function widerPhrases(phrases: Opening[], id: string, group: BranchAyah[]) {
   const length = (phrase: string) => phrase.split(' ').length;
   return phrases
-    .filter(phrase => phrase.id !== id && (length(phrase.id) < length(id) || (length(phrase.id) === length(id) && phrase.count > group.length)) && group.every(ayah => opens(ayah, phrase.id)))
+    .filter(phrase => phrase.id !== id && (length(phrase.id) < length(id) || (length(phrase.id) === length(id) && phrase.count > group.length)) && group.every(ayah => opens(ayah, phrase.id) && (!phrase.partition || rootPartition(ayah, length(phrase.id)) === phrase.partition)))
     .sort((a, b) => a.id.length - b.id.length);
 }
 
 export const PIECE_MAX = 6;
 
-export type Piece = { id: string; text: string; count: number; shared: number; opening: Opening; keys: string[] };
+export type Piece = { partition?: string; id: string; text: string; count: number; shared: number; opening: Opening; keys: string[] };
 
 const mushafOrder = (key: string) => {
   const [surah, ayah] = key.split(':').map(Number);
@@ -256,8 +328,10 @@ const mushafOrder = (key: string) => {
 
 export function pieces(groups: Map<string, BranchAyah[]>): Piece[] {
   const found: Piece[] = [];
+  const openings = listOpenings(groups);
   groups.forEach(group => {
-    const opening = openingOf(group);
+    const base = openingOf(group);
+    const opening = openings.find(candidate => candidate.id === base.id && (!candidate.partition || candidate.partition === rootPartition(group[0], OPENING_WORDS)))!;
     const conj = new Map(group.map(ayah => [ayah.key, mixed(group) ? (ayah.conj ?? '') : '']));
     const walk = (node: Branch, path: string[]) => {
       const words = [...path, ...node.words];
@@ -273,16 +347,22 @@ export function pieces(groups: Map<string, BranchAyah[]>): Piece[] {
           const sub = group.filter(ayah => under.includes(ayah.key) && conj.get(ayah.key) === spelling);
           if (sub.length < 2) return;
           const own = phraseTree(sub).words;
-          found.push({ id: own.map(normalizeWord).join(' '), text: own.join(' '), count: sub.length, shared: own.length, opening, keys: sub.map(ayah => ayah.key) });
+          found.push({ partition: rootPartition(sub[0], own.length), id: own.map(normalizeWord).join(' '), text: own.join(' '), count: sub.length, shared: own.length, opening, keys: sub.map(ayah => ayah.key) });
         });
         return;
       }
-      found.push({ id: linkId(words, under.map(key => conj.get(key)!)), text: words.join(' '), count: under.length, shared: words.length, opening, keys: under });
+      found.push({ partition: rootPartition(group.find(ayah => ayah.key === under[0])!, words.length), id: linkId(words, under.map(key => conj.get(key)!)), text: words.join(' '), count: under.length, shared: words.length, opening, keys: under });
     };
     walk(phraseTree(group), []);
   });
   const first = (piece: Piece) => Math.min(...piece.keys.map(mushafOrder));
-  return found.sort((a, b) => b.shared - a.shared || a.count - b.count || first(a) - first(b));
+  const ambiguous = new Set(listPhrases(groups).filter(phrase => phrase.partition).map(phrase => phrase.id));
+  return found.map(piece => {
+    if (ambiguous.has(piece.id)) return piece;
+    const plain = { ...piece };
+    delete plain.partition;
+    return plain;
+  }).sort((a, b) => b.shared - a.shared || a.count - b.count || first(a) - first(b));
 }
 
 export function listPage(value: string | null, total: number, perPage: number) {

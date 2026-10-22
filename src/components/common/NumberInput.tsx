@@ -1,5 +1,6 @@
 'use client';
 
+import { Minus, Plus } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -9,11 +10,14 @@ import { useLanguage } from '@/components/language/LanguageContext';
 
 type NumberInputProps = {
   label: string;
+  iconFamily?: 'fontawesome' | 'lucide';
   min: number;
   max: number;
   step?: number;
   value?: number;
   defaultValue?: number;
+  draftValue?: string;
+  onDraftChange?: (value: string) => void;
   onChange?: (value: number) => void;
   name?: string;
   id?: string;
@@ -21,14 +25,15 @@ type NumberInputProps = {
   className?: string;
 };
 
-export default function NumberInput({ label, min, max, step = 1, value, defaultValue, onChange, name, id, disabled, className }: NumberInputProps) {
+export default function NumberInput({ label, iconFamily = 'fontawesome', min, max, step = 1, value, defaultValue, draftValue, onDraftChange, onChange, name, id, disabled, className }: NumberInputProps) {
   const { language } = useLanguage();
-  const initial = value ?? defaultValue ?? min;
+  const initial = draftValue ?? value ?? defaultValue ?? min;
   const [draft, setDraft] = useState(String(initial));
   const input = useRef<HTMLInputElement>(null);
   useEffect(() => {
-    if (value !== undefined) setDraft(String(value));
-  }, [value]);
+    if (draftValue !== undefined) setDraft(draftValue);
+    else if (value !== undefined) setDraft(String(value));
+  }, [value, draftValue]);
   const ceiling = min + Math.floor((max - min) / step) * step;
   const bounded = (next: number) => Math.min(ceiling, Math.max(min, min + Math.round((next - min) / step) * step));
   const current = draft.trim() && Number.isFinite(Number(draft)) ? Number(draft) : value ?? defaultValue ?? min;
@@ -36,13 +41,14 @@ export default function NumberInput({ label, min, max, step = 1, value, defaultV
     const result = bounded(next);
     setDraft(String(result));
     if (input.current) input.current.value = String(result);
+    onDraftChange?.(String(result));
     if (result !== value) onChange?.(result);
   };
   const ar = language === 'ar';
   return (
     <span className={`${styles.controls} inline-flex items-center gap-1 ${className ?? ''}`} dir="ltr">
       <Button size="icon" disabled={disabled || current <= min} aria-label={ar ? `تقليل ${label}` : `Decrease ${label}`} onClick={() => commit(current - step)}>
-        <FontAwesomeIcon icon={faMinus} aria-hidden />
+        {iconFamily === 'lucide' ? <Minus size={16} aria-hidden /> : <FontAwesomeIcon icon={faMinus} aria-hidden />}
       </Button>
       <input
         ref={input}
@@ -58,10 +64,10 @@ export default function NumberInput({ label, min, max, step = 1, value, defaultV
         value={draft}
         aria-label={label}
         className="w-16 rounded border border-[var(--home-rule)] bg-[var(--home-paper)] px-1 py-1.5 text-center text-sm tabular-nums text-[var(--home-ink)] [appearance:textfield] focus:outline-2 focus:outline-[var(--home-accent)] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-        onChange={(event) => setDraft(event.target.value)}
-        onBlur={() => commit(current)}
+        onChange={(event) => { setDraft(event.target.value); onDraftChange?.(event.target.value); }}
+        onBlur={() => { if (!onDraftChange) commit(current); }}
         onKeyDown={(event) => {
-          if (event.key === 'Enter') commit(current);
+          if (event.key === 'Enter' && !onDraftChange) commit(current);
           const next = { ArrowUp: current + step, ArrowDown: current - step, Home: min, End: max }[event.key];
           if (next !== undefined) {
             event.preventDefault();
@@ -70,7 +76,7 @@ export default function NumberInput({ label, min, max, step = 1, value, defaultV
         }}
       />
       <Button size="icon" disabled={disabled || current >= ceiling} aria-label={ar ? `زيادة ${label}` : `Increase ${label}`} onClick={() => commit(current + step)}>
-        <FontAwesomeIcon icon={faPlus} aria-hidden />
+        {iconFamily === 'lucide' ? <Plus size={16} aria-hidden /> : <FontAwesomeIcon icon={faPlus} aria-hidden />}
       </Button>
     </span>
   );

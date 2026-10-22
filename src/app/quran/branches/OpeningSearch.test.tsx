@@ -30,14 +30,14 @@ const phrases = [
   { id: 'الم تر كيف', text: 'أَلَمْ تَرَ كَيْفَ', count: 3 },
   { id: 'الم تر كيف فعل ربك', text: 'أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ', count: 2 },
 ];
-const suggested = () => within(screen.getByLabelText('عبارات مقترحة')).getAllByRole('link').map(a => a.getAttribute('href'));
+const suggested = () => within(screen.getByLabelText('عبارات مقترحة')).getAllByRole('option').map(a => a.textContent);
 
 describe('OpeningSearch', () => {
   it.each(['ar', 'en'])('explains an unavailable requested opening in %s', lang => {
     language.value = lang;
     render(<OpeningSearch top={top} phrases={phrases} current="unknown" unavailable />);
-    expect(screen.getByRole('status').textContent).toContain(lang === 'ar' ? 'لا تطابق العبارة المطلوبة' : 'No two ayat share the requested opening');
-    expect(screen.getByRole('searchbox')).toBeTruthy();
+    expect(screen.getByRole('status').textContent).toContain(lang === 'ar' ? 'لا تطابق العبارة المطلوبة' : 'No two ayat share the requested phrase');
+    expect(screen.getByRole('combobox')).toBeTruthy();
   });
 
   it('offers the largest openings as buttons and marks the one a deeper phrase sits under', () => {
@@ -52,23 +52,23 @@ describe('OpeningSearch', () => {
 
   it('finds a phrase longer than two words, typed with or without diacritics', () => {
     render(<OpeningSearch top={top} phrases={phrases} current="ان الذين" />);
-    fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'أَلَمْ تَرَ كيف' } });
-    expect(suggested()).toEqual([branchesHref('الم تر كيف'), branchesHref('الم تر كيف فعل ربك')]);
-    fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'كهيعص' } });
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'أَلَمْ تَرَ كيف' } });
+    expect(suggested()).toEqual(['أَلَمْ تَرَ كَيْفَ٣', 'أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ٢']);
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'كهيعص' } });
     expect(screen.getByText('لا عبارة مشتركة تطابق البحث.')).toBeTruthy();
   });
 
   it('lists phrases that start with the search before those that only contain it', () => {
     render(<OpeningSearch top={top} phrases={phrases} current="ان الذين" />);
-    fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'تر' } });
-    expect(suggested()[0]).toBe(branchesHref('الم تر'));
-    fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'الذين' } });
-    expect(suggested()).toEqual([branchesHref('يايها الذين'), branchesHref('ان الذين')]);
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'تر' } });
+    expect(suggested()[0]).toBe('أَلَمْ تَرَ٣١');
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'الذين' } });
+    expect(suggested()).toEqual(['يَـٰٓأَيُّهَا ٱلَّذِينَ٩٠', 'إِنَّ ٱلَّذِينَ٧٣']);
   });
 
   it('opens the first suggestion on Enter', () => {
     render(<OpeningSearch top={top} phrases={phrases} current="ان الذين" />);
-    const box = screen.getByRole('searchbox');
+    const box = screen.getByRole('combobox');
     fireEvent.change(box, { target: { value: 'الم تر كيف' } });
     fireEvent.keyDown(box, { key: 'Enter' });
     expect(router.push).toHaveBeenCalledWith(branchesHref('الم تر كيف'));

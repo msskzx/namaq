@@ -36,11 +36,13 @@ describe('PieceList', () => {
     expect(screen.queryByText(/من:/)).toBeNull();
   });
 
-  it('folds the pieces under their openings, each with a link to the whole tree', () => {
+  it('expands pieces under their opening headings with a link to the whole tree', () => {
     const opening = cut.find(p => p.id === 'يطوف عليهم')!.opening;
     const { container } = render(<PieceList pieces={cut} openings={[opening]} ayat={byKey} names={{}} juz={null} />);
     expect(within(screen.getByRole('region', { name: 'شجرة الفواتح', hidden: true })).getByText('٣ آيات')).toBeTruthy();
-    expect(container.querySelector('summary')!.textContent).toContain('٣ آيات · مجموعة');
+    expect(screen.getByRole('heading', { level: 2 }).textContent).toBe(opening.text);
+    expect(container.querySelector('details')).toBeNull();
+    expect(screen.getByText('٣ آيات · مجموعة في هذه الصفحة')).toBeTruthy();
     expect(screen.getByRole('link', { name: 'الشجرة كاملة' }).getAttribute('href')).toBe(branchesHref('يطوف عليهم'));
   });
 });

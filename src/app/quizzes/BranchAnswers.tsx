@@ -11,7 +11,7 @@ import { branchesHref, keys, type Branch, type Variant } from "@/lib/quran/branc
 import type { JuzRange } from "@/lib/quran/juz";
 import { num } from "@/lib/quran/arabicNumber";
 
-type Question = { phrase?: string; branches?: BranchAnswer[]; tree?: Branch; variants?: Variant[] };
+type Question = { phrase?: string; partition?: string; branches?: BranchAnswer[]; tree?: Branch; variants?: Variant[] };
 type Names = Record<number, string>;
 
 export const emptyBranchAnswers = (question: Question) => question.tree ? branchNodes(question.tree).map(() => "") : [];
@@ -47,7 +47,7 @@ export function BranchFeedback({ question, typed, names, juz, ar }: { question: 
         );
       }} />
       {question.phrase && (
-        <Button className="self-start" size="sm" variant="outline" href={branchesHref(question.phrase, juz ?? undefined)}>
+        <Button className="self-start" size="sm" variant="outline" href={branchesHref(question.phrase, juz ?? undefined, { partition: question.partition })}>
           <FontAwesomeIcon icon={faCodeBranch} />
           {ar ? "شجرة الفواتح" : "Openings tree"}
         </Button>
