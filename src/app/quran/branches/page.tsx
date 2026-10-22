@@ -67,10 +67,12 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   return (
     <div id="quran-branches" dir="rtl" className={`${styles.page} w-full max-w-6xl mx-auto px-4 py-8 flex flex-col gap-4`}>
       <BranchHeading />
-      <JuzFilter range={range} phrase={id} view={state} />
       <OpeningSearch top={openings.slice(0, TOP)} phrases={phrases} current={id} juz={range} unavailable={unavailable} view={state} alternatives={ambiguous ? matches : []} />
+      <div className="flex flex-wrap items-center gap-3">
+        <JuzFilter range={range} phrase={id} view={state} />
+        {!id && <BranchOrdering grouped={grouped} juz={range} view={state} />}
+      </div>
       {!id ? <>
-        <BranchOrdering grouped={grouped} juz={range} view={state} />
         <PieceList pieces={shown} openings={grouped ? openings : undefined} ayat={shownAyat} names={names} juz={range} view={state} />
         <Pagination iconFamily="lucide" scrollTarget="quran-branches" page={page} pageCount={pageCount} hrefs={Array.from({ length: pageCount }, (_, i) => branchesHref('', juz, { grouped, page: i + 1 }))} />
       </> : <>

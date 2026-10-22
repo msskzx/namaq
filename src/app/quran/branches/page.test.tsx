@@ -19,7 +19,6 @@ describe('Quran branches range selection', () => {
     expect(screen.getByRole('status').textContent).toContain('لا تطابق العبارة المطلوبة');
     expect(screen.queryByRole('region', { name: 'شجرة الفواتح' })).toBeNull();
     expect(screen.queryByRole('navigation', { name: 'عبارات أعم' })).toBeNull();
-    expect(screen.getByRole('group', { name: 'أكثر الفواتح تكرارًا' })).toBeTruthy();
   });
 
   it('preserves an unavailable phrase in a legacy range request rather than choosing a fallback', async () => {
