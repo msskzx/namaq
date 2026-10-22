@@ -20,13 +20,12 @@ vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ 
 afterEach(cleanup);
 
 describe('complete branch tree answers', () => {
-  it('uses the same original-spelling disclosure in answer feedback', () => {
+  it('offers context for every feedback leaf and distinguishes differing marks', () => {
     const merged = { words: ['مِنْ', 'رب'], ayat: ['1:1', '1:2'], forms: { '1:1': ['مِّنْ', 'رب'], '1:2': ['مِنْ', 'رب'] }, children: [] };
-    const own = { tree: { words: ['قال'], ayat: [], children: [merged] }, branches: [{ words: [], ayat: [{ key: '1:1', page: 1, words: [] }, { key: '1:2', page: 1, words: [] }] }] };
-    render(<BranchFeedback question={own} typed={['من رب']} names={{}} juz={null} ar />);
-    fireEvent.click(screen.getByRole('button', { name: 'عرض صيغ الكتابة الأصلية' }));
-    expect(screen.getByText('مِّنْ رب').closest('li')?.textContent).toContain('١:١');
-    expect(screen.getAllByText('مِنْ رب').some(text => text.closest('li')?.textContent?.includes('١:٢'))).toBe(true);
+    const own = { tree: { words: ['قال'], ayat: [], children: [merged, { words: ['يا'], ayat: ['1:3'], children: [] }] }, branches: [{ words: [], ayat: [{ key: '1:1', page: 1, words: [] }, { key: '1:2', page: 1, words: [] }, { key: '1:3', page: 1, words: [] }] }] };
+    render(<BranchFeedback question={own} typed={['من رب', 'يا']} names={{}} juz={null} ar />);
+    expect(screen.getByRole('button', { name: /عرض اختلافات الضبط والسياق/ }).querySelector('[data-differing]')).toBeTruthy();
+    expect(screen.getByRole('button', { name: /عرض الآيات في سياقها/ }).getAttribute('data-variant')).toBe('ghost');
   });
 
   it('keeps original spelling references out of the unanswered quiz tree', () => {
@@ -37,7 +36,8 @@ describe('complete branch tree answers', () => {
     ];
     const own = { tree: branch(group), variants: variants(group) };
     render(<BranchInputs question={own} typed={[]} onChange={vi.fn()} onCheck={vi.fn()} ar />);
-    expect(screen.queryByRole('button', { name: 'عرض صيغ الكتابة الأصلية' })).toBeNull();
+    expect(screen.queryByRole('button', { name: /عرض اختلافات الضبط والسياق/ })).toBeNull();
+    expect(screen.queryByRole('button', { name: /عرض الآيات في سياقها/ })).toBeNull();
     expect(screen.queryByRole('link')).toBeNull();
     expect(screen.getAllByRole('textbox')).toHaveLength(3);
   });
@@ -93,15 +93,16 @@ describe('complete branch tree answers', () => {
     expect(onCheck).toHaveBeenCalledOnce();
   });
 
-  it('shows corrections and reader citations on the complete feedback tree', () => {
+  it('shows corrections and combines each leaf reference with its context control', () => {
     render(<BranchFeedback question={question} typed={[typed[0], typed[1], typed[3], 'wrong']} names={{ 52: 'الطور' }} juz={null} ar={false} />);
     expect(screen.getByRole('region', { name: 'Answer tree' })).toBeTruthy();
     expect(screen.getAllByText('Correct', { exact: true })).toHaveLength(3);
     expect(screen.getByText('Incorrect')).toBeTruthy();
     expect(screen.getByText('بِأَكْوَابٍ')).toBeTruthy();
     expect(screen.getByText('إِذَا رَأَيْتَهُمْ')).toBeTruthy();
-    expect(screen.getByRole('link', { name: 'الطور ٢٤' }).getAttribute('href')).toBe('/quran/read/524?a=52:24');
-    expect(screen.getByRole('link', { name: '٥٦:١٧' }).getAttribute('href')).toBe('/quran/read/535?a=56:17');
+    expect(screen.getByText('الطور ٢٤').closest('button')).toBeTruthy();
+    expect(screen.getByText('٥٦:١٧').closest('button')).toBeTruthy();
+    expect(document.querySelector('a[href^="/quran/read/"]')).toBeNull();
   });
 
   it('draws each joined spelling without a link before checking, and tags each ayah with it after', () => {

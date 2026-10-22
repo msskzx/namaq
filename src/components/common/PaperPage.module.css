@@ -19,3 +19,6 @@
 :is(.page, .controls) [data-button][data-active] { background: var(--home-accent); color: var(--home-paper); }
 :is(.page, .controls) [data-button]:disabled { cursor: not-allowed; }
 .page :is(a, button, input, summary):focus-visible { outline: 2px solid var(--home-accent); outline-offset: 3px; }
+
+:is(.page, .controls) [data-button][data-variant='highlight'] { background: var(--home-highlight); color: var(--home-on-highlight); border-color: var(--home-highlight-border); }
+:is(.page, .controls) [data-button][data-variant='highlight']:hover { background: color-mix(in srgb, var(--home-highlight), white 20%); }

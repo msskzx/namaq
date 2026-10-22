@@ -2,88 +2,84 @@
 
 ## PR 422 follow-up handoff
 
-Status: the owner confirmed the implementation handoff. This section records
-the follow-up to PR 422; the sections below describe the feature. Terms are defined in [CONTEXT.md](../../CONTEXT.md#shared-quran-wording).
+Status: the owner accepted the context overlay design and authorized
+implementation. The accepted prototype is preserved on
+`codex/context-overlay-prototype`, commit `8a8ca193`. Terms are defined in
+[CONTEXT.md](../../CONTEXT.md#shared-quran-wording).
 
-### Settled behavior and scope
+### Behavior and acceptance criteria
 
-- Replace majority spelling selection with the shared display. At each aligned
-  letter, retain only marks common to every original spelling. Remove every
-  differing mark, including multiple differing marks on one letter or across
-  several words. Keep shared marks. For example, أَرَءَيْتُمْ and أَرَءَيْتُم
-  display as أَرَءَيْتُم; مِنْ and مِّنْ display as مِنْ.
-- Preserve PR 422's comparison rules. This change concerns presentation within
-  existing groups; it does not merge distinct vowels, letters, or joined prefixes.
-- Every node with multiple original spellings offers a disclosure, including
-  opening boxes and leaves, in tree view, list view, and quiz answer displays.
-  Unanswered quiz trees keep these disclosures hidden.
-- The disclosure includes every original spelling as a complete node phrase,
-  including any original that matches the shared display. Give each variant its
-  own row, with its surah and ayah references. Support more than two variants.
-  A shared display absent from the source is not an extra original variant.
-- Keep the source reader text and original spellings intact. Hamza normalization
-  in opening search and the wider Lucide migration are outside this follow-up.
+- Keep the shared display rule. At each aligned letter, retain marks common to
+  every original and remove differing marks, including several differences in
+  one word or node. أَرَءَيْتُمْ and أَرَءَيْتُم display as أَرَءَيْتُم;
+  مِنْ and مِّنْ display as مِنْ. Significant vowels, letters, grouping, and
+  ayah membership keep their existing meaning.
+- Each leaf combines its references and a Lucide TextSearch icon into one
+  borderless context button. The icon is on the right; references are plain
+  text inside the button, with no separate reader links. Differing original
+  marks give the leaf icon an amber background. Inner nodes and first-word
+  boxes with differing marks use a filled amber icon button. Both treatments
+  have translated accessible names and titles.
+- The button opens a native modal dialog. It replaces the repeated inline
+  variant list, while the compact node retains its shared phrase and combined reference control.
+  The dialog has one card per represented ayah, ordered numerically by surah
+  and ayah. An original matching the shared display is included like every other
+  original. A display absent from the source creates no additional card.
+- Each card uses the comparison page's PageSpread presentation. It shows the
+  preceding ayah, the target ayah, and the following ayah from the same surah.
+  At a surah boundary, omit the unavailable neighbor. Context can extend outside
+  the selected juz' range. Original reader text and marks stay intact.
+- Emphasize the target ayah and highlight words whose marks differ in this node.
+  Word offsets must account for the first-word boxes and for leaves continuing
+  after an ayah marker. Each card links to its target ayah in the reader.
+- Use two columns on wide screens and stacked cards on narrow screens. Keep
+  the dialog scrollable. Lock background scrolling while it is open and restore
+  previous scroll settings on closing or unmounting. Native dialog focus,
+  Escape, the close button, and backdrop dismissal must work.
+- Load context only on opening. Show loading and failure states with a retry
+  action. Apply the same behavior in tree view, list view, and quiz feedback.
+  Keep all context buttons hidden while answering a quiz.
 
 ### Affected components and dependencies
 
-These paths were inspected on PR 422's head, fa396d6.
+- `src/lib/quran/branches.ts` retains complete original node phrases and their
+  ayah membership separately from the shared display.
+- `src/lib/quran/ayahContext.ts` loads and caches the 604 source reader pages
+  and selects immediate same-surah neighbors. `/api/quran/context` validates
+  requested keys and returns the context, independently of database text.
+- `src/app/quran/branches/BranchTree.tsx` computes node offsets and button
+  variants. `AyahContext.tsx` replaces the previous Spellings disclosure, loads
+  on demand, and presents the dialog. `AyahContext.module.css` styles its cards.
+- `src/app/quizzes/BranchAnswers.tsx` preserves the correct offsets when feedback
+  pairs an answer with a different subtree. Input trees suppress context.
+- `src/components/quran/PageSpread.tsx` supports an optional current-ayah row.
+  The shared Button `highlight` variant and paper palette supply amber styling.
+  The existing Lucide dependency supplies the icons.
 
-1. `src/lib/quran/branches.ts` and its colocated test: compute the shared display
-   from aligned letters and marks. Preserve complete original node phrases with
-   their ayah membership. Current `forms` omits matching originals and word
-   positions, so the UI cannot recover all phrases from it. Handle first-word
-   representatives as well as compressed nodes.
-2. `src/app/quran/branches/BranchTree.tsx` and its test: consume the complete
-   variant groups in opening boxes, inner nodes, and leaves.
-   `src/app/quran/branches/Spellings.tsx` owns the interactive disclosure.
-   `Spellings.test.tsx` covers the interaction and translated labels.
-3. `src/app/quizzes/BranchAnswers.tsx` and its test reuse the tree display.
-   Check `src/lib/quiz/branchQuestions.ts` and its test because generated prompts
-   and expected trees also consume branch display text. Quiz inputs must keep
-   their existing answering behavior.
-4. Update the existing behavior section of this document after implementation.
-   Add `lucide-react` for this control; the wider icon migration is separate.
+### Validation
 
-### Acceptance and validation
+- Keep unit coverage for shared marks, several differing marks and words,
+  canonical combining-mark order, tatweel, more than two originals, and a
+  display matching none of the originals. Verify unchanged grouping across the
+  corpus, following Distillate record `namaq/0019-fixing-the-example-broke-the-ayah-next-door`.
+- Independent source/API tests cover all 6,236 ayat, exact annotation marks,
+  missing ayat, invalid keys, numeric ordering and deduplication, page boundaries,
+  and both ends of surahs. Context loading must not query PostgreSQL or Neo4j.
+- Component tests cover ordinary leaves, differing inner/opening/leaf nodes,
+  all represented ayat, word offsets, next-ayah continuations, quiz input and
+  feedback, translated labels, lazy loading, failures/retry, and scroll locking.
+- Verify RTL layout, two-column and stacked cards, both themes, keyboard and
+  backdrop dismissal, focus restoration, and background scroll lock in a browser.
+- Run lint, TypeScript checking, the full Vitest suite, and the Next.js build.
+  Complete the independent review cycle before updating PR 422.
 
-- Unit tests cover the two examples above, more than two originals such as
-  مِنْ / مِّنْ / مِّن / مِن, several differing marks, several word positions,
-  shared marks, canonical combining-mark order, and tatweel alignment.
-- Assert complete phrase and ayah membership for every variant. Include the
-  spelling matching the shared display and a case where no original matches it.
-  Preserve significant distinctions such as لَهُمُ versus لَهُمْ.
-- Check all generated opening groups for unchanged membership and branch
-  structure. The Distillate lesson from the prior Quran fix was to verify the
-  corpus rather than only the reported example.
-- Component tests cover opening, inner, and leaf disclosures across the shared
-  consumers, separate variant rows, references, keyboard activation, expanded
-  state, and Arabic and English accessible labels.
-- Visually verify RTL layout, narrow-screen wrapping, light and dark themes,
-  and distinct rows after expansion. Icon selection must leave the control
-  recognizable as a button.
-- Before updating the PR, run lint, TypeScript checking, the full Vitest suite,
-  and the Next.js build. Follow the repository's independent review cycle.
+### Data and scope
 
-### Data and operations
-
-The branch input is file-authored Quran text. This follow-up requires no
-database migration, PostgreSQL or Neo4j synchronization, or graph layout
-recomputation. Validate that rebuilding `ayat.json` leaves its contents unchanged.
-Update PR 422 after confirmation rather than opening a separate feature PR.
-
-### Confirmed disclosure presentation
-
-Use Lucide `TextSearch` in the shared small outlined button, with translated
-show/hide-original-spellings labels. Expansion stays inline below the node,
-with one row per original, and replaces the previous alternative spellings
-beside leaf references. Keep the references themselves.
-
-Order variant rows by their earliest surah and ayah; order their references
-the same way. Nodes with one original spelling need no disclosure. Each
-disclosure opens independently and starts closed.
-
-There are no unresolved design blockers. Site-wide icon migration and
-opening-search hamza normalization remain deferred.
+No database migration, store synchronization, source-text change, or graph
+layout recomputation is required. Rebuilding `ayat.json` must remain identical.
+The source is cached on the server, and the browser fetches only requested
+context. The wider Lucide migration and opening-search hamza normalization remain
+separate. No design blockers remain.
 
 A page at `/quran/branches` that draws, as a word tree read right to left, the ayat that open with the same words and where their wording parts. إِنَّ ٱلۡمُتَّقِینَ is the example the owner gave: six ayat open with it, all continue with فِي, then three go on to جنات and split again.
 
@@ -98,7 +94,7 @@ A page at `/quran/branches` that draws, as a word tree read right to left, the a
 ## Tree (`branch` in `src/lib/quran/branches.ts`)
 
 - A node holds the words that every ayah under it shares from where its parent stopped. It stops at the first word where the ayat differ or where one of them ends.
-- Two words are the same in the tree only when they carry the same marks. A word that differs in a mark starts its own node, such as لَهُمْ and لَهُمُ, or تَتَّخِذُوا۟ and تَتَّخِذُوٓا۟. The Quranic annotation signs U+06D6 to U+06ED (small high and low letters and pause signs, such as the low meem of iqlab in يُسْرًۭا, 94:6) are not marks for this purpose: Neither is a shadda on a word's first letter, which a word only carries over from the word or ayah before it, as مَّتَـٰعًۭا (80:32) after وَأَبًّۭا. Nor is a sukun on a word's last letter, which the text leaves out only where the next word assimilates it, as أَرَءَيْتُم before مَّا (46:4) and إِن before كَانَ, so لَهُمْ and لَهُم share a node while لَهُمُ keeps its own. يُسْرًا and يُسْرًۭا share a node. The shared display keeps marks common to every spelling at each letter and omits differing marks. Every node with multiple originals, including opening boxes and leaves, offers a TextSearch button. It expands a separate row for every complete original node phrase and its ayah references, including a spelling matching the display. Rows and references follow surah and ayah order. Quiz answer displays use the same disclosure. The phrases, their ids and the pieces still use normalized words, so `listPhrases` and `pieces` group on `phraseTree`, which splits only where the letters differ.
+- Two words are the same in the tree only when they carry the same marks. A word that differs in a mark starts its own node, such as لَهُمْ and لَهُمُ, or تَتَّخِذُوا۟ and تَتَّخِذُوٓا۟. The Quranic annotation signs U+06D6 to U+06ED (small high and low letters and pause signs, such as the low meem of iqlab in يُسْرًۭا, 94:6) are not marks for this purpose: Neither is a shadda on a word's first letter, which a word only carries over from the word or ayah before it, as مَّتَـٰعًۭا (80:32) after وَأَبًّۭا. Nor is a sukun on a word's last letter, which the text leaves out only where the next word assimilates it, as أَرَءَيْتُم before مَّا (46:4) and إِن before كَانَ, so لَهُمْ and لَهُم share a node while لَهُمُ keeps its own. يُسْرًا and يُسْرًۭا share a node. The shared display keeps marks common to every spelling at each letter and omits differing marks. Each leaf combines a TextSearch icon on the right with its references in one borderless context button. Its reference labels have no separate reader links. Nodes with multiple original spellings, including opening boxes, use amber on the context icon. Inner nodes use a filled amber button. The modal shows each represented ayah with its preceding and following ayat from the same surah. It preserves original marks, highlights differing words, orders cards by surah and ayah, and locks background scrolling. Quiz feedback uses the same overlay; quiz inputs keep it hidden. The phrases, their ids and the pieces still use normalized words, so `listPhrases` and `pieces` group on `phraseTree`, which splits only where the letters differ.
 - An ayah that ends where another ayah of the group goes on continues into the next ayah of its surah, after a ﴿n﴾ marker, so it ends at a leaf. 56:17 ends after ولدان مخلدون while 76:19 goes on, so its leaf reads ﴿١٧﴾ بأكواب وأباريق وكأس من معين. The build writes the next ayah's words as `next` on the ayat that need it.
 - An ayah that ends at a node is listed on that node. Two identical ayat, such as 15:45 and 51:15, end at the same leaf and share it.
 - When the first-word variants use all the root’s words and the root holds no ayah references, omit its empty box and keep the connecting lines.

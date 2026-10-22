@@ -1,10 +1,12 @@
 import React from 'react';
 import Link from 'next/link';
 
-export type ButtonVariant = 'primary' | 'outline';
+export type ButtonVariant = 'primary' | 'outline' | 'highlight' | 'ghost';
 export type ButtonSize = 'sm' | 'md' | 'icon';
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
+  ghost: 'text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800',
+  highlight: 'bg-amber-400 text-gray-950 hover:bg-amber-300',
   primary: 'bg-amber-400 text-gray-950 hover:bg-amber-300',
   outline: 'border border-amber-400 text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800',
 };

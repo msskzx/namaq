@@ -7,7 +7,7 @@ import Button from "@/components/common/Button";
 import BranchTree, { AyahRefs, Marked } from "@/app/quran/branches/BranchTree";
 import { branchNodes, matchTreeAnswers } from "@/lib/quiz/branchAnswers";
 import type { BranchAnswer } from "@/lib/quiz/branchQuestions";
-import { branchesHref, type Branch, type Variant } from "@/lib/quran/branches";
+import { branchesHref, keys, type Branch, type Variant } from "@/lib/quran/branches";
 import type { JuzRange } from "@/lib/quran/juz";
 import { num } from "@/lib/quran/arabicNumber";
 
@@ -22,6 +22,12 @@ export const branchesCorrect = (question: Question, typed: string[]) => Boolean(
 export function BranchFeedback({ question, typed, names, juz, ar }: { question: Question; typed: string[]; names: Names; juz: JuzRange | null; ar: boolean }) {
   if (!question.tree) return null;
   const matches = matchTreeAnswers(question.tree, typed);
+  const offsets = new Map<Branch, number>();
+  const visit = (node: Branch, offset: number) => {
+    offsets.set(node, offset);
+    node.children.forEach(child => visit(child, offset + node.words.length));
+  };
+  visit(question.tree, 0);
   const pages = Object.fromEntries((question.branches ?? []).flatMap(branch => branch.ayat.map(ayah => [ayah.key, ayah.page])));
   return (
     <div className="flex flex-col gap-3" dir="rtl">
@@ -36,8 +42,7 @@ export function BranchFeedback({ question, typed, names, juz, ar }: { question: 
               <span className="sr-only">{hit ? (ar ? "صحيح" : "Correct") : (ar ? "غير صحيح" : "Incorrect")}</span>
               {typed[index]?.trim() || (ar ? "بدون إجابة" : "No answer")}
             </span>
-            <Marked node={answer} names={names} pages={pages}><span className="font-arabic text-lg leading-loose">{answer.words.join(" ")}</span></Marked>
-            <AyahRefs keys={answer.ayat} names={names} pages={pages} tags={tags} className="" />
+            <Marked node={answer} ayahKeys={keys(answer)} names={names} offset={offsets.get(answer)} leaf={answer.children.length === 0} references={<AyahRefs keys={answer.ayat} names={names} pages={pages} tags={tags} linked={answer.children.length > 0} className="" />}><span className="font-arabic text-lg leading-loose">{answer.words.join(" ")}</span></Marked>
           </div>
         );
       }} />

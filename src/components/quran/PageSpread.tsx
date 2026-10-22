@@ -3,7 +3,7 @@ import { num } from '@/lib/quran/arabicNumber';
 import styles from './PageSpread.module.css';
 
 export type SpreadMark = { kind: 'exact' | 'root'; slot?: number; linked?: boolean; title?: string };
-export type SpreadAyah = { number: number; words: string[]; marks?: Record<number, SpreadMark> };
+export type SpreadAyah = { number: number; words: string[]; marks?: Record<number, SpreadMark>; current?: boolean };
 export type SpreadPage = { title: string; subtitle?: string; label?: string; rows: SpreadAyah[][] };
 
 const markClass = (mark: SpreadMark) => [mark.kind === 'root' && styles.root, mark.slot && styles[`slot${((mark.slot - 1) % 4) + 1}`], mark.linked && styles.linked].filter(Boolean).join(' ') || undefined;
@@ -35,7 +35,7 @@ export default function PageSpread({ pages, ruled = false }: { pages: (SpreadPag
           <header><h3>{page.title}</h3>{page.subtitle && <p dir="auto">{page.subtitle}</p>}</header>
           <div className={styles.lines} lang="ar">
             {Array.from({ length: rows }, (_, row) => (
-              <p key={row}>{(page.rows[row] ?? []).map((ayah, i) => <Fragment key={ayah.number}>{i > 0 && ' '}<Ayah ayah={ayah} /></Fragment>)}</p>
+              <p key={row} data-current={page.rows[row]?.some(ayah => ayah.current) || undefined}>{(page.rows[row] ?? []).map((ayah, i) => <Fragment key={ayah.number}>{i > 0 && ' '}<Ayah ayah={ayah} /></Fragment>)}</p>
             ))}
           </div>
         </article>

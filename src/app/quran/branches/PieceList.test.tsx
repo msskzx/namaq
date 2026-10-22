@@ -1,10 +1,12 @@
 // @vitest-environment jsdom
 import React from 'react';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen, within } from '@testing-library/react';
 import ayat from './ayat.json';
 import { branchesHref, pieces, sharedOpenings, type BranchAyah } from '@/lib/quran/branches';
 import PieceList from './PieceList';
+
+vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
 
 afterEach(cleanup);
 
@@ -23,6 +25,7 @@ describe('PieceList', () => {
     expect(within(first).getByRole('region', { name: 'شجرة الفواتح' }).textContent).toContain('٣ آيات');
     expect(within(first).queryByRole('link', { name: /^يَـٰٓأَيُّهَا/ })).toBeNull();
     expect(within(first).getByRole('list', { name: 'صيغ الكلمة الأولى' })).toBeTruthy();
+    expect(within(first).getAllByRole('button', { name: /عرض الآيات في سياقها/ }).length).toBeGreaterThan(0);
     const card = within(second).getByRole('region', { name: 'شجرة الفواتح' });
     expect(card.textContent).toContain('آيتان');
     expect(within(card).getByRole('link', { name: /\(٩٠\)$/ }).getAttribute('href')).toBe(branchesHref('يايها الذين', { from: 1, to: 30 }));
