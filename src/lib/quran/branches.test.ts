@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import ayat from '@/app/quran/branches/ayat.json';
-import { branch, branchesHref, conjunctions, listPage, PIECE_MAX, pieces, DEFAULT_PHRASE, keys, linkId, pickPhrase, stem, widerPhrases, listOpenings, listPhrases, openingId, readerAyat, sharedOpenings, spelledAs, startingWith, variants, withConjunctions, withNext, type Branch, type BranchAyah } from './branches';
+import { branch, branchesHref, conjunctions, listPage, PIECE_MAX, pieces, DEFAULT_PHRASE, keys, linkId, pickPhrase, stem, widerPhrases, listOpenings, listPhrases, openingId, readerAyat, sharedOpenings, spelledAs, startingWith, variants, withConjunctions, withRoots, withNext, type Branch, type BranchAyah } from './branches';
 import { inJuzRange } from './juz';
 import { normalizeWord } from './normalize';
 
@@ -43,12 +43,12 @@ describe('sharedOpenings', () => {
   it('matches what npm run quran:branches writes from the reader pages', () => {
     const pages = Array.from({ length: 604 }, (_, i) => JSON.parse(readFileSync(join(__dirname, '../../app/quran/read/data', `${i + 1}.json`), 'utf8')));
     const morphology = readFileSync(join(__dirname, '../../../data/quran/quranic-corpus-morphology-0.4.txt'), 'utf8');
-    const read = withConjunctions(readerAyat(pages), morphology);
+    const read = withRoots(withConjunctions(readerAyat(pages), morphology), morphology);
     expect(withNext(sharedOpenings(read), read)).toEqual(all);
   });
 
   it('keeps every committed ayah in a group of two or more', () => {
-    expect(groups.size).toBe(818);
+    expect(groups.size).toBe(816);
     expect([...groups.keys()].every(id => id === id.trim() && !id.includes('  '))).toBe(true);
     expect([...groups.values()].flat()).toHaveLength(all.length);
   });
@@ -110,18 +110,22 @@ describe('listPhrases', () => {
     expect(count('ان المتقين في جنت')).toBe(4);
     expect(count('ان المتقين في جنت وعيون')).toBe(2);
     expect(phrases.every(p => p.count >= 2)).toBe(true);
-    expect(new Set(phrases.map(p => p.id)).size).toBe(phrases.length);
+    expect(new Set(phrases.map(p => `${p.id}:${p.partition ?? ""}`)).size).toBe(phrases.length);
   });
 
-  it('lists the phrase every inner node of a drawn tree links to', () => {
-    const ids = new Set(phrases.map(p => p.id));
+  it('resolves every inner-node link to its known phrase and root partition', () => {
     for (const group of groups.values()) {
       const merged = Object.fromEntries(variants(group).flatMap(v => v.keys.map(key => [key, v.conj])));
       const visit = (node: Branch, path: string[], tags: Record<string, string>) => {
         const words = [...path, ...node.words];
         if (path.length > 0 && node.children.length > 0) {
           const id = linkId(words, keys(node).flatMap(key => (tags[key] !== undefined ? [tags[key]] : [])));
-          expect([id, ids.has(id)]).toEqual([id, true]);
+          const url = new URL(branchesHref(id, undefined, { partition: node.partition }), 'https://namaq.test');
+          const partition = url.searchParams.get('r') ?? undefined;
+          const selected = startingWith(group, id, partition);
+          const matches = phrases.filter(phrase => phrase.id === id && (!partition || phrase.partition === partition || (!phrase.partition && selected.length >= 2)));
+          expect([id, matches.length]).toEqual([id, 1]);
+          expect(selected.map(ayah => ayah.key)).toEqual(expect.arrayContaining(keys(node)));
         }
         node.children.forEach(child => visit(child, words, tags));
       };
@@ -188,7 +192,7 @@ describe('an opening with and without و', () => {
   });
 
   it('names each first word, the ayat that open with it and the phrase they share', () => {
-    expect(variants(group).map(v => ({ ...v, word: normalizeWord(v.word) }))).toEqual([
+    expect(variants(group).map(v => ({ word: normalizeWord(v.word), conj: v.conj, keys: v.keys, id: v.id }))).toEqual([
       { word: 'ويطوف', conj: 'و', keys: ['52:24', '76:19'], id: 'يطوف عليهم' },
       { word: 'يطوف', conj: '', keys: ['56:17'], id: 'يطوف عليهم' },
     ]);
@@ -219,9 +223,9 @@ describe('a juz\' range', () => {
     expect(startingWith(all, 'فلا اقسم').map(a => a.key)).toContain('56:75');
   });
 
-  it('carries the range and the list view in the link', () => {
+  it('carries the range without a list view parameter', () => {
     expect(branchesHref('فلا اقسم')).toBe(`/quran/branches?o=${encodeURIComponent('فلا اقسم').replace(/%20/g, '+')}`);
-    expect(branchesHref('الم تر', { from: 29, to: 30 }, { list: true })).toBe(`/quran/branches?o=${encodeURIComponent('الم').replace(/%20/g, '+')}+${encodeURIComponent('تر')}&juzFrom=29&juzTo=30&v=list`);
+    expect(branchesHref('الم تر', { from: 29, to: 30 })).toBe(`/quran/branches?o=${encodeURIComponent('الم').replace(/%20/g, '+')}+${encodeURIComponent('تر')}&juzFrom=29&juzTo=30`);
   });
 });
 
@@ -266,6 +270,30 @@ describe('pickPhrase and widerPhrases', () => {
 
 describe('pieces', () => {
   const list = pieces(groups);
+
+  it('retains both rooted opening partitions when pieces are grouped under their headings', () => {
+    const source: BranchAyah[] = [
+      { ...ayah('1:1', 'مِنَ الله نور'), roots: [null, 'Alh', 'nwr'] },
+      { ...ayah('1:2', 'مِنَ الله رحمة'), roots: [null, 'Alh', 'rHm'] },
+      { ...ayah('1:3', 'مَنَّ الله عليهم'), roots: ['mnn', 'Alh', null] },
+      { ...ayah('1:4', 'مَنَّ الله علينا'), roots: ['mnn', 'Alh', null] },
+    ];
+    const shared = sharedOpenings(source);
+    const openings = listOpenings(shared);
+    const entries = pieces(shared);
+
+    expect(openings).toHaveLength(2);
+    expect(new Set(openings.map(opening => opening.partition)).size).toBe(2);
+    expect(entries).toHaveLength(2);
+    const grouped = openings.flatMap(opening => {
+      const inside = entries.filter(piece => piece.opening.id === opening.id && piece.opening.partition === opening.partition);
+      expect(inside).toHaveLength(1);
+      expect(inside[0].opening).toEqual(opening);
+      expect(inside[0].keys).toEqual(startingWith(source, opening.id, opening.partition).map(ayah => ayah.key));
+      return inside;
+    });
+    expect(grouped.flatMap(piece => piece.keys).sort()).toEqual(source.map(ayah => ayah.key));
+  });
 
   it('cuts every opening at the first node of six ayat or fewer, so each ayah lands in at most one piece', () => {
     expect(list.every(p => p.count >= 2)).toBe(true);
@@ -316,10 +344,10 @@ describe('the list\'s pages', () => {
     expect(listPage('3', 0, 20)).toEqual({ page: 1, pageCount: 1 });
   });
 
-  it('puts the page in the link only past the first page of a list', () => {
-    expect(branchesHref('ان الذين', undefined, { list: true, page: 1 })).not.toContain('p=');
-    expect(branchesHref('ان الذين', undefined, { list: true, grouped: true, page: 3 })).toContain('v=list&g=opening&p=3');
-    expect(branchesHref('ان الذين', undefined, { page: 3 })).not.toContain('p=');
+  it('preserves a nonfirst browsing page while a phrase is focused', () => {
+    expect(branchesHref('ان الذين', undefined, { page: 1 })).not.toContain('p=');
+    expect(branchesHref('ان الذين', undefined, { grouped: true, page: 3 })).toContain('g=opening&p=3');
+    expect(branchesHref('ان الذين', undefined, { page: 3 })).toContain('p=3');
   });
 
   it('breaks a tie in shared words and ayat by mushaf order', () => {

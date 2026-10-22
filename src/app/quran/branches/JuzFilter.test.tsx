@@ -5,31 +5,31 @@ import { cleanup, render, screen } from '@testing-library/react';
 import { branchesHref } from '@/lib/quran/branches';
 import JuzFilter from './JuzFilter';
 
+const params = new URLSearchParams();
+const router = { push: vi.fn(), replace: vi.fn() };
+vi.mock('next/navigation', () => ({ useRouter: () => router, usePathname: () => '/quran/branches', useSearchParams: () => params }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
-
 afterEach(cleanup);
 
 describe('JuzFilter', () => {
-  it('submits the range with the phrase and view kept', () => {
-    const { container } = render(<JuzFilter range={{ from: 25, to: 30 }} phrase="فلا اقسم" view={{ list: true, grouped: true }} />);
-    expect(screen.getByRole('button', { name: 'تطبيق' }).getAttribute('name')).toBe('apply');
-    expect(screen.getByRole('button', { name: 'تطبيق' }).getAttribute('value')).toBe('juz');
-    expect((screen.getByLabelText('من الجزء') as HTMLInputElement).value).toBe('25');
-    expect((screen.getByLabelText('إلى الجزء') as HTMLInputElement).value).toBe('30');
-    expect([...container.querySelectorAll('input[type=hidden]')].map(i => `${i.getAttribute('name')}=${i.getAttribute('value')}`)).toEqual(['o=فلا اقسم', 'v=list', 'g=opening']);
-    expect(screen.getByRole('link', { name: 'كل الأجزاء' }).getAttribute('href')).toBe(branchesHref('فلا اقسم', undefined, { list: true, grouped: true }));
+  it('shows the applied range and clears it without losing the selected phrase or ordering', () => {
+    render(<JuzFilter range={{ from: 25, to: 30 }} phrase="فلا اقسم" view={{ grouped: true, page: 4 }} />);
+    expect((screen.getByRole('spinbutton', { name: 'من الجزء' }) as HTMLInputElement).value).toBe('25');
+    expect((screen.getByRole('spinbutton', { name: 'إلى الجزء' }) as HTMLInputElement).value).toBe('30');
+    expect(screen.queryByRole('button', { name: 'تطبيق' })).toBeNull();
+    expect(screen.getByRole('link', { name: 'كل الأجزاء' }).getAttribute('href')).toBe(branchesHref('فلا اقسم', undefined, { grouped: true }));
   });
 
   it('starts on the whole mushaf with nothing to reset', () => {
-    render(<JuzFilter range={null} phrase="ان المتقين" view={{}} />);
-    expect((screen.getByLabelText('من الجزء') as HTMLInputElement).value).toBe('1');
-    expect((screen.getByLabelText('إلى الجزء') as HTMLInputElement).value).toBe('30');
+    render(<JuzFilter range={null} phrase="" view={{}} />);
+    expect((screen.getByRole('spinbutton', { name: 'من الجزء' }) as HTMLInputElement).value).toBe('1');
+    expect((screen.getByRole('spinbutton', { name: 'إلى الجزء' }) as HTMLInputElement).value).toBe('30');
     expect(screen.queryByRole('link', { name: 'كل الأجزاء' })).toBeNull();
   });
 
   it('shows the whole mushaf again once the range is cleared', () => {
     const { rerender } = render(<JuzFilter range={{ from: 25, to: 30 }} phrase="ان المتقين" view={{}} />);
     rerender(<JuzFilter range={null} phrase="ان المتقين" view={{}} />);
-    expect((screen.getByLabelText('من الجزء') as HTMLInputElement).value).toBe('1');
+    expect((screen.getByRole('spinbutton', { name: 'من الجزء' }) as HTMLInputElement).value).toBe('1');
   });
 });

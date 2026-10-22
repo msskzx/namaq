@@ -16,6 +16,7 @@ relationships.
 ## Documentation
 
 - [Local setup and verification](docs/local-setup.md).
+- [Shared ayah openings](docs/plans/quran-shared-openings.md): ten expanded entries per page, live phrase suggestions, automatic juz filtering, and wording matches checked against word roots.
 - Data architecture and design: [data pipelines](docs/data-pipelines.md),
   [the data-model plan](docs/plans/data-model/plan.md), and
   [architecture decisions](docs/adr/).
