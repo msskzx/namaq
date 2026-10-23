@@ -383,6 +383,21 @@ describe('spellings and marks', () => {
     expect(tree.children.map(child => child.words[0])).toEqual(['إِن', 'إِنَّ']);
   });
 
+  it('joins a spelling to a lemma through either link, and shows a madda the spellings share', () => {
+    const lemma = (key: string, text: string, lemmas: string[]) => ({ ...ayah(key, text), lemmas });
+    const tree = branch([lemma('1:1', 'قال مَآ هذا', ['qaAla', 'maA', 'ha*aA']), lemma('1:2', 'قال مَآ ذلك', ['qaAla', 'maA2', '*a`lik']), lemma('1:3', 'قال مَا هم', ['qaAla', 'maA2', 'hum'])]);
+    expect(tree.words).toEqual(['قال', 'مَا']);
+    expect(tree.children).toHaveLength(3);
+    expect(branch([ayah('1:1', 'قال ءَامَنَّا به'), ayah('1:2', 'قال ءَامَنَّا بكم')]).words).toEqual(['قال', 'ءَامَنَّا']);
+  });
+
+  it('opens a first-word spelling from its marks, or from its letters when typed by hand', () => {
+    const lemma = (key: string, text: string, lemmas: string[]) => ({ ...ayah(key, text), lemmas });
+    const group = [lemma('1:1', 'وَإِنَّ منكم', ['<in~', 'min']), lemma('1:2', 'وَإِن منكم', ['<in', 'min'])];
+    expect(spelledAs(group, 'وَإِنَّ').map(a => a.key)).toEqual(['1:1']);
+    expect(spelledAs(group, 'وان').map(a => a.key)).toEqual(['1:1', '1:2']);
+  });
+
   it('keeps identical words together even when the corpus gives them different lemmas', () => {
     const lemma = (key: string, text: string, lemmas: string[]) => ({ ...ayah(key, text), lemmas });
     const tree = branch([lemma('1:1', 'فَإِذَا جاء', ['<i*aA', 'jaA^a']), lemma('1:2', 'فَإِذَا هم', ['<i*aA2', 'hum'])]);

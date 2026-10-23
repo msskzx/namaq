@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import ayat from '@/app/quran/branches/ayat.json';
-import { PIECE_MAX, type BranchAyah } from '@/lib/quran/branches';
+import { keys, PIECE_MAX, type BranchAyah } from '@/lib/quran/branches';
 import { normalizeWord } from '@/lib/quran/normalize';
 import { branchQuestions } from './branchQuestions';
 import { branchNodes, matchTreeAnswers, spelled } from './branchAnswers';
@@ -78,8 +78,23 @@ describe('words with the same letters, root and lemma', () => {
     expect(matchTreeAnswers(question.tree, answers).every((hit) => hit?.correct)).toBe(true);
   });
 
-  it('never asks the same letters twice at a split unless the lemmas differ', () => {
-    const repeated = questions.filter((question) => new Set(question.tree.children.map((child) => normalizeWord(child.words[0]))).size < question.tree.children.length);
-    expect(repeated.length).toBeLessThan(20);
+  it('asks the same letters twice at a split only where the lemmas differ', () => {
+    const lemmas = new Map((ayat as BranchAyah[]).map((ayah) => [ayah.key, ayah.lemmas]));
+    for (const question of questions) {
+      const at = question.tree.words.length;
+      const seen = new Map<string, Set<string>>();
+      for (const child of question.tree.children) {
+        const own = new Set(keys(child).map((key) => String(lemmas.get(key)?.[at])));
+        const letters = normalizeWord(child.words[0]);
+        if (seen.has(letters)) expect([...own].some((lemma) => seen.get(letters)!.has(lemma))).toBe(false);
+        seen.set(letters, new Set([...(seen.get(letters) ?? []), ...own]));
+      }
+    }
+  });
+
+  it('keeps question keys unique when two pieces share a phrase', () => {
+    const shared = questions.filter((question) => question.phrase === 'يايها الذين ءامنوا ان');
+    expect(shared).toHaveLength(2);
+    expect(new Set(shared.map((question) => question.key)).size).toBe(2);
   });
 });

@@ -88,18 +88,33 @@ export function withRoots(ayat: BranchAyah[], morphology: string): BranchAyah[] 
 }
 
 export const rootPartition = (ayah: BranchAyah, length: number) => JSON.stringify(Array.from({ length }, (_, i) => ayah.roots?.[i] ?? null));
-export const spell = (word: string) => word.replace(/[\u0640\u2060]/g, '').replace(/[\u06D6-\u06ED]/g, '').replace(/^(\p{L}[\u064B-\u0650]?)\u0651/u, '$1').replace(/\u0652$/u, '').normalize('NFC');
+const memo = (f: (word: string) => string) => {
+  const seen = new Map<string, string>();
+  return (word: string) => seen.get(word) ?? seen.set(word, f(word)).get(word)!;
+};
 
-const sameWord = (a: BranchAyah, i: number, b: BranchAyah, j: number) => normalizeWord(a.words[i]) === normalizeWord(b.words[j])
+export const spell = memo(word => word.replace(/[\u0640\u2060]/g, '').replace(/[\u06D6-\u06ED]/g, '').replace(/^(\p{L}[\u064B-\u0650]?)\u0651/u, '$1').replace(/\u0652$/u, '').normalize('NFC'));
+
+const lettersOf = memo(normalizeWord);
+
+const sameWord = (a: BranchAyah, i: number, b: BranchAyah, j: number) => lettersOf(a.words[i]) === lettersOf(b.words[j])
   && (a.roots?.[i] ?? null) === (b.roots?.[j] ?? null)
   && (spell(a.words[i]) === spell(b.words[j]) || (a.lemmas?.[i] ?? null) === (b.lemmas?.[j] ?? null));
 
 const wordClasses = (ayat: BranchAyah[], at: number) => {
   const parent = ayat.map((_, i) => i);
   const find = (i: number): number => (parent[i] === i ? i : (parent[i] = find(parent[i])));
-  ayat.forEach((a, i) => ayat.forEach((b, j) => {
-    if (j > i && a.words.length > at && b.words.length > at && sameWord(a, at, b, at)) parent[find(j)] = find(i);
-  }));
+  const first = new Map<string, number>();
+  const join = (key: string, i: number) => {
+    if (first.has(key)) parent[find(i)] = find(first.get(key)!);
+    else first.set(key, i);
+  };
+  ayat.forEach((ayah, i) => {
+    if (ayah.words.length <= at) return;
+    const letters = JSON.stringify([lettersOf(ayah.words[at]), ayah.roots?.[at] ?? null]);
+    join(`${letters}\u0000s${spell(ayah.words[at])}`, i);
+    join(`${letters}\u0000l${ayah.lemmas?.[at] ?? null}`, i);
+  });
   return ayat.map((ayah, i) => (ayah.words.length > at ? find(i) : -1));
 };
 
@@ -111,8 +126,6 @@ const bySpelling = (ayat: BranchAyah[]) => {
 };
 
 const norm = (ayah: BranchAyah) => ayah.words.map(normalizeWord);
-
-
 
 const plain = (forms: string[]) => {
   if (forms.every(form => form === forms[0])) return forms[0];
