@@ -18,7 +18,7 @@ The paper theme's colors are CSS variables on `.theme` in `src/components/homepa
 
 Body text colors read at a contrast of at least 4.9 on either paper, above the 4.5 the web guidelines ask for.
 
-Within the branches tree each color means one thing. A first word with و is green, one with ف is purple, so it does not read as a terracotta ayah link beside it, and a bare first word is neutral, a muted border around ink. A first word that differs only in its marks stays neutral, since the marks show the difference.
+Within the branches tree each color means one thing. A first word with و is green, one with ف is purple, so it does not read as a terracotta ayah link beside it, and a bare first word is neutral, a muted border around ink. A first word that differs by its lemma, not by و or ف, stays neutral, since its marks show the difference.
 
 The dark logo and seal files in `public/brand/` keep the earlier dark colors (#f5eddf, #eda183): their content credentials sign each file, so editing a color would break them. The site draws its logo from `Logo.tsx`, which follows the variables.
 
