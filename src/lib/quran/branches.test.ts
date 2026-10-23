@@ -136,7 +136,7 @@ describe('listPhrases', () => {
         if (own.length > 1) visit(branch(own), [], {});
       }
     }
-    expect(count('يايها الناس اتقوا')).toBe(startingWith(all, 'يايها الناس اتقوا').length);
+    expect(count('يايها الناس اتقوا ربكم')).toBe(startingWith(all, 'يايها الناس اتقوا ربكم').length);
   });
 
   it('agrees with startingWith on how many ayat each phrase opens', () => {
@@ -368,10 +368,25 @@ describe('spellings and marks', () => {
     ]);
   });
 
-  it('splits words that differ only in their marks into separate nodes', () => {
+  it('joins words with the same letters, root and lemma, showing only the marks they share', () => {
     const tree = branch([ayah('1:1', 'قال لَهُمْ ربهم'), ayah('1:2', 'قال لَهُمُ موسى')]);
-    expect(tree.words).toEqual(['قال']);
-    expect(tree.children.map(child => child.words[0])).toEqual(['لَهُمْ', 'لَهُمُ']);
+    expect(tree.words).toEqual(['قال', 'لَهُم']);
+    expect(tree.children.map(child => child.words[0])).toEqual(['ربهم', 'موسى']);
+    expect(branch(startingWith(all, 'قال رب')).words).toEqual(['قَالَ', 'رَبّ']);
+    expect(branch(startingWith(all, 'قال موسي')).words).toEqual(['قَالَ', 'مُوسَىٰ']);
+  });
+
+  it('keeps words with the same letters apart when their lemmas differ', () => {
+    const lemma = (key: string, text: string, lemmas: string[]) => ({ ...ayah(key, text), lemmas });
+    const tree = branch([lemma('1:1', 'قل إِن كان', ['qaAla', '<in', 'kaAna']), lemma('1:2', 'قل إِنَّ ربي', ['qaAla', '<in~', 'rab~'])]);
+    expect(tree.words).toEqual(['قل']);
+    expect(tree.children.map(child => child.words[0])).toEqual(['إِن', 'إِنَّ']);
+  });
+
+  it('keeps identical words together even when the corpus gives them different lemmas', () => {
+    const lemma = (key: string, text: string, lemmas: string[]) => ({ ...ayah(key, text), lemmas });
+    const tree = branch([lemma('1:1', 'فَإِذَا جاء', ['<i*aA', 'jaA^a']), lemma('1:2', 'فَإِذَا هم', ['<i*aA2', 'hum'])]);
+    expect(tree.words).toEqual(['فَإِذَا']);
   });
 
   it('keeps one node for words that differ only in a Quranic annotation sign, shown without it', () => {
@@ -396,7 +411,6 @@ describe('spellings and marks', () => {
     const tree = branch([ayah('1:1', 'قُلْ أَرَءَيْتُمْ إِنْ'), ayah('1:2', 'قُلْ أَرَءَيْتُمْ إِن'), ayah('1:3', 'قُلْ أَرَءَيْتُم مَّا')]);
     expect(tree.words).toEqual(['قُلْ', 'أَرَءَيْتُم']);
     expect(tree.children[0].words[0]).toBe('إِن');
-    expect(branch([ayah('1:3', 'قال لَهُمُ موسى'), ayah('1:4', 'قال لَهُمْ ربهم')]).children.map(child => child.words[0])).toEqual(['لَهُمُ', 'لَهُمْ']);
   });
 
   it('keeps an annotation sign every ayah under a node carries', () => {

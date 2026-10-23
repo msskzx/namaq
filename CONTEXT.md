@@ -11,6 +11,12 @@ relationships and historical context.
 The exact spelling of a word or phrase in a particular ayah in Namaq's Quran
 reader, including its marks.
 
+**Same word**:
+Two words in shared wording are the same word when they have the same letters,
+the same root, and the same lemma or the same spelling. Their marks do not
+decide it; the shared display shows the marks they have in common.
+_Avoid_: same spelling (spellings that differ only in marks are still the same word)
+
 **Shared display**:
 The wording common to original spellings grouped together, retaining their
 shared marks and omitting the marks that differ. It can differ from every

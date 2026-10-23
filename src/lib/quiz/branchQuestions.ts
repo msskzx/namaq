@@ -25,7 +25,7 @@ export interface BranchQuestion {
 export function branchQuestions(all: BranchAyah[], range: JuzRange | null = null): BranchQuestion[] {
   const ayat = range ? all.filter((ayah) => inJuzRange(ayah.key, range)) : all;
   const byKey = new Map(ayat.map((ayah) => [ayah.key, ayah]));
-  const ask = (original: BranchAyah[], id: string, partition?: string): BranchQuestion[] => {
+  const ask = (original: BranchAyah[], id: string, partition?: string, apart?: string): BranchQuestion[] => {
     const sub = shown(original);
     const subByKey = new Map(sub.map((ayah) => [ayah.key, ayah]));
     const tree = branch(original);
@@ -34,7 +34,7 @@ export function branchQuestions(all: BranchAyah[], range: JuzRange | null = null
     const forms = variants(original).map((variant) => [variant.word, ...tree.words.slice(1)].join(' '));
     const opening = (forms.length > 0 ? forms : [tree.words.join(' ')]).map((form) => `«${form}»`).join(' أو ');
     return [{
-      key: `${BRANCH_FAMILY}:${id}${partition ? `:${partition}` : ''}`,
+      key: `${BRANCH_FAMILY}:${id}${partition ? `:${partition}` : ''}${apart ? `:${apart}` : ''}`,
       family: BRANCH_FAMILY,
       promptArabic: `تفترق الآيات التي تبدأ بـ ${opening} إلى ${COUNTS[tree.children.length]}. أكمل جميع عقد الشجرة بعد هذه العبارة، وفي نهاية كل فرع تكفي كلمتاه الأوليان.`,
       phrase: id,
@@ -53,7 +53,8 @@ export function branchQuestions(all: BranchAyah[], range: JuzRange | null = null
       evidence: { claimKeys: [] },
     }];
   };
-  return pieces(sharedOpenings(ayat))
-    .filter((piece) => piece.count <= PIECE_MAX)
-    .flatMap((piece) => ask(piece.keys.map((key) => byKey.get(key) as BranchAyah), piece.id, piece.partition));
+  const asked = pieces(sharedOpenings(ayat)).filter((piece) => piece.count <= PIECE_MAX);
+  const ids = new Map<string, number>();
+  asked.forEach((piece) => ids.set(`${piece.id}:${piece.partition ?? ''}`, (ids.get(`${piece.id}:${piece.partition ?? ''}`) ?? 0) + 1));
+  return asked.flatMap((piece) => ask(piece.keys.map((key) => byKey.get(key) as BranchAyah), piece.id, piece.partition, ids.get(`${piece.id}:${piece.partition ?? ''}`)! > 1 ? piece.keys[0] : undefined));
 }

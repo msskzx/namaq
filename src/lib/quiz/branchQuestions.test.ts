@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import ayat from '@/app/quran/branches/ayat.json';
-import { PIECE_MAX, spell, type BranchAyah } from '@/lib/quran/branches';
+import { PIECE_MAX, type BranchAyah } from '@/lib/quran/branches';
 import { normalizeWord } from '@/lib/quran/normalize';
 import { branchQuestions } from './branchQuestions';
 import { branchNodes, matchTreeAnswers, spelled } from './branchAnswers';
@@ -69,14 +69,17 @@ describe('openings with a hamza below the alif', () => {
   });
 });
 
-describe('branches that differ only in their marks', () => {
-  it('asks each as its own node, as the branches page draws it', () => {
+describe('words with the same letters, root and lemma', () => {
+  it('asks them as one node, as the branches page draws it', () => {
     const question = questions.find((candidate) => candidate.phrase === 'يايها الذين ءامنوا لا تتخذوا')!;
-    expect(question.tree.words.map(normalizeWord)).toEqual(['يايها', 'الذين', 'ءامنوا', 'لا']);
-    const firsts = question.tree.children.map((child) => child.words[0]);
-    expect(firsts.map(normalizeWord)).toEqual(['تتخذوا', 'تتخذوا']);
-    expect(spell(firsts[0])).not.toBe(spell(firsts[1]));
+    expect(question.tree.words.map(normalizeWord)).toEqual(['يايها', 'الذين', 'ءامنوا', 'لا', 'تتخذوا']);
+    expect(new Set(question.tree.children.map((child) => normalizeWord(child.words[0]))).size).toBe(question.tree.children.length);
     const answers = branchNodes(question.tree).map((node) => node.words.map(spelled).join(' '));
     expect(matchTreeAnswers(question.tree, answers).every((hit) => hit?.correct)).toBe(true);
+  });
+
+  it('never asks the same letters twice at a split unless the lemmas differ', () => {
+    const repeated = questions.filter((question) => new Set(question.tree.children.map((child) => normalizeWord(child.words[0]))).size < question.tree.children.length);
+    expect(repeated.length).toBeLessThan(20);
   });
 });
