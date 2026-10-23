@@ -93,13 +93,15 @@ const memo = (f: (word: string) => string) => {
   return (word: string) => seen.get(word) ?? seen.set(word, f(word)).get(word)!;
 };
 
-export const spell = memo(word => word.replace(/[\u0640\u2060]/g, '').replace(/[\u06D6-\u06ED]/g, '').replace(/^(\p{L}[\u064B-\u0650]?)\u0651/u, '$1').replace(/\u0652$/u, '').normalize('NFC'));
+export const spell = (word: string) => word.replace(/[\u0640\u2060]/g, '').replace(/[\u06D6-\u06ED]/g, '').replace(/^(\p{L}[\u064B-\u0650]?)\u0651/u, '$1').replace(/\u0652$/u, '').normalize('NFC');
+
+const spellingOf = memo(spell);
 
 const lettersOf = memo(normalizeWord);
 
 const sameWord = (a: BranchAyah, i: number, b: BranchAyah, j: number) => lettersOf(a.words[i]) === lettersOf(b.words[j])
   && (a.roots?.[i] ?? null) === (b.roots?.[j] ?? null)
-  && (spell(a.words[i]) === spell(b.words[j]) || (a.lemmas?.[i] ?? null) === (b.lemmas?.[j] ?? null));
+  && (spellingOf(a.words[i]) === spellingOf(b.words[j]) || (a.lemmas?.[i] ?? null) === (b.lemmas?.[j] ?? null));
 
 const wordClasses = (ayat: BranchAyah[], at: number) => {
   const parent = ayat.map((_, i) => i);
@@ -112,7 +114,7 @@ const wordClasses = (ayat: BranchAyah[], at: number) => {
   ayat.forEach((ayah, i) => {
     if (ayah.words.length <= at) return;
     const letters = JSON.stringify([lettersOf(ayah.words[at]), ayah.roots?.[at] ?? null]);
-    join(`${letters}\u0000s${spell(ayah.words[at])}`, i);
+    join(`${letters}\u0000s${spellingOf(ayah.words[at])}`, i);
     join(`${letters}\u0000l${ayah.lemmas?.[at] ?? null}`, i);
   });
   return ayat.map((ayah, i) => (ayah.words.length > at ? find(i) : -1));
