@@ -15,7 +15,9 @@ describe('Tuhfat al-Atfal', () => {
 
   it('holds each verse as exactly two halves, and lists corrected verses that exist', () => {
     for (const chapter of poem.chapters) for (const verse of chapter.verses) expect(verse).toHaveLength(2);
-    for (const n of poem.corrected) expect(n).toBeLessThanOrEqual(verses.length);
+    expect(poem.corrected).toEqual([...new Set(poem.corrected)].sort((a, b) => a - b));
+    expect(Math.min(...poem.corrected)).toBeGreaterThanOrEqual(1);
+    expect(Math.max(...poem.corrected)).toBeLessThanOrEqual(verses.length);
   });
 
   it('keeps both halves of every verse, vowelled', () => {

@@ -23,7 +23,7 @@ export default function TuhfatAlAtfalPage() {
         <p className="text-sm">
           {edition.checked
             ? <>الضبط: <a className="underline" href={edition.url}>{edition.name}</a></>
-            : <>النص منقول من <a className="underline" href={transcription}>نسخة رقمية</a> صُحّحت فيه الأبيات {corrected.map(num).join('، ')}، ولم يُقابل بعد بـ<a className="underline" href={edition.url}>{edition.name}</a>.</>}
+            : <>النص منقول من <a className="underline" href={transcription}>نسخة رقمية</a> صُحّحت فيها الأبيات {corrected.map(num).join('، ')}، ولم يُقابل بعد بـ<a className="underline" href={edition.url}>{edition.name}</a>.</>}
         </p>
       </header>
       <div className={styles.layout}>
