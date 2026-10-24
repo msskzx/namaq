@@ -45,10 +45,13 @@ implementation. The accepted prototype is preserved on
 The owner chose these rules after PR 427.
 
 - Every node and every first-word box has a context button. An inner node opens
-  every ayah under it. A leaf opens its own ayat first, then a section with every
-  other ayah under the same parent.
-- The dialog uses the compare page's marks and no other style. Words of the
-  opened node take the accent mark in each of its own cards. Words that differ
+  every ayah under it. A leaf opens its own ayat first, then every other ayah
+  under the same parent, all in one grid. A first-word box does the same with
+  the ayat of the other first words, since they share its child. The cards of
+  the opened branch say so in their subtitle.
+- The dialog uses the compare page's marks and no other style. In each of its
+  own cards, the words from the start of the ayah to the end of the opened node
+  take the accent mark. Words that differ
   only in their marks take the purple root mark, since they are the same word
   in another form.
 - When the originals of a node differ in their marks, the dialog lists each

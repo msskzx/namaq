@@ -84,16 +84,15 @@ it('highlights differing words in the next ayah when the leaf continues beyond a
   expect(screen.getAllByTitle('Differing marks').map(word => word.textContent)).toEqual(['إِنَّ']);
 });
 
-it('shows the node\'s own ayat first, highlights only them, and puts sibling branches in their own section', async () => {
+it('shows the node\'s own ayat first with a branch label, then its siblings in the same grid, with mark differences only on its own', async () => {
   render(wrap(<AyahContextButton ayahKeys={['94:6']} siblings={['94:5']} differentWords={[3]} names={{ 94: 'الشرح' }} leaf>Leaf</AyahContextButton>));
   fireEvent.click(screen.getByRole('button', { name: 'View spelling differences and context' }));
   const dialog = screen.getByRole('dialog');
   await within(dialog).findAllByRole('article');
   expect(new URL(vi.mocked(fetch).mock.calls[0][0] as string, 'http://localhost').searchParams.get('q')).toBe('94:6,94:5');
   expect(within(dialog).getAllByRole('article', { name: /\d/ }).map(card => card.getAttribute('aria-label'))).toEqual(['الشرح 6', 'الشرح 5']);
-  const siblings = within(dialog).getByRole('region', { name: 'Sibling branches' });
-  expect(within(siblings).getAllByRole('article', { name: /\d/ }).map(card => card.getAttribute('aria-label'))).toEqual(['الشرح 5']);
-  expect(within(siblings).queryAllByTitle('Differing marks')).toHaveLength(0);
+  expect(within(dialog).queryByRole('region')).toBeNull();
+  expect(within(dialog).getAllByText(/this branch/).map(label => label.textContent)).toEqual(['Ayah 6 · this branch']);
   expect(within(dialog).getAllByTitle('Differing marks').map(word => word.textContent)).toEqual(['يُسْرًۭا']);
 });
 
@@ -103,7 +102,7 @@ it('marks the node words in the leaf\'s own card and only the comparison with th
   fireEvent.click(screen.getByRole('button', { name: 'View ayat in context' }));
   const dialog = screen.getByRole('dialog');
   expect(new URL(vi.mocked(fetch).mock.calls[0][0] as string, 'http://localhost').searchParams.get('vs')).toBe('94:6');
-  const siblings = await within(dialog).findByRole('region', { name: 'Sibling branches' });
+  const siblings = (await within(dialog).findByRole('article', { name: 'الشرح 5' })).parentElement!;
   expect(within(siblings).getAllByTitle('Not in the branch ayah').map(word => word.textContent)).toEqual([source[0].ayah.words[0]]);
   expect(within(siblings).getAllByTitle('Same root in the branch ayah').map(word => word.textContent)).toEqual([source[0].ayah.words[3]]);
   const current = [...dialog.querySelectorAll('[data-current]')];
