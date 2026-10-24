@@ -131,7 +131,7 @@ function Chapter({ section, language, active, path }: { section: NavSection; lan
         aria-label={language === 'ar' ? `صفحات ${label}` : `${label} pages`}
         onClick={() => { place(); setDismissed(false); setOpen(value => !value); }}
       >
-        <ChevronDown />
+        <ChevronDown size={12} aria-hidden />
       </button>
       <Shelf section={section} language={language} id={shelfId} path={path} onPick={pick} />
     </li>

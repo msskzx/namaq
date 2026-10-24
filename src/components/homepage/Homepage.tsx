@@ -53,8 +53,8 @@ function QuizPreview({ question }: { question: NonNullable<HomePreviews['questio
         {answer !== null && <p>{correct ? (ar ? 'إجابة صحيحة.' : 'Correct.') : (ar ? 'الإجابة الصحيحة: ' : 'The correct answer is: ')}{!correct && <span lang="ar" dir="rtl">{question.choices.find(choice => choice.value === question.answer)?.labelArabic}</span>}</p>}
       </div>
       <div className={styles.previewActions}>
-        {answer !== null && <Button size="sm" onClick={() => setAnswer(null)}><RotateCcw />{ar ? 'حاول مجددًا' : 'Try again'}</Button>}
-        <Button size="sm" href={question.profile}><BookOpen />{ar ? 'السيرة والمصادر' : 'Biography and sources'}</Button>
+        {answer !== null && <Button size="sm" onClick={() => setAnswer(null)}><RotateCcw size={16} aria-hidden />{ar ? 'حاول مجددًا' : 'Try again'}</Button>}
+        <Button size="sm" href={question.profile}><BookOpen size={16} aria-hidden />{ar ? 'السيرة والمصادر' : 'Biography and sources'}</Button>
       </div>
     </div>
   );
