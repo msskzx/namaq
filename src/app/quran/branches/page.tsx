@@ -82,7 +82,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
             {`${phrase.text} (${num(phrase.count)})`}
           </Button>)}
         </nav>}
-        {!unavailable && !ambiguous && <BranchTree tree={branch(drawn)} variants={variants(drawn)} names={names} pages={Object.fromEntries(drawn.map(ayah => [ayah.key, ayah.page]))} juz={range} view={state} surround={{ on: state.context, sync: true }} />}
+        {!unavailable && !ambiguous && <BranchTree key={String(state.context)} tree={branch(drawn)} variants={variants(drawn)} names={names} pages={Object.fromEntries(drawn.map(ayah => [ayah.key, ayah.page]))} juz={range} view={state} surround={{ on: state.context, sync: true }} />}
       </>}
     </div>
   );

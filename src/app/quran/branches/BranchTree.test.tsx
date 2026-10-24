@@ -254,11 +254,30 @@ describe('BranchTree', () => {
       expect([...container.querySelectorAll('[data-keys~="44:51"]')].map(node => node.textContent)).toEqual(expect.arrayContaining([expect.stringContaining('إِنَّ ٱلْمُتَّقِينَ فِى'), expect.stringContaining('مَقَامٍ أَمِينٍۢ'), expect.stringContaining('إِنَّ هَـٰذَا')]));
     });
 
+    it('shows, after a leaf that runs into the next ayah, the ayah after that one', async () => {
+      const group = startingWith(ayat as BranchAyah[], 'يطوف عليهم');
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({ before: {}, after: { '56:18': { key: '56:19', page: 535, words: ['لَّا', 'يُصَدَّعُونَ'] } } }) }));
+      render(<BranchTree tree={branch(group)} variants={variants(group)} names={{ 56: 'الواقعة' }} pages={Object.fromEntries(group.map(a => [a.key, a.page]))} surround={{ on: true }} />);
+      const box = (await screen.findByText('لَّا يُصَدَّعُونَ')).closest('[data-ctx]')!;
+      expect(box.getAttribute('data-ctx')).toBe('56:17');
+      expect(new URL(vi.mocked(fetch).mock.calls[0][0] as string, 'http://localhost').searchParams.get('after')!.split(',')).toEqual(expect.arrayContaining(['56:18', '52:24', '76:19']));
+      expect(box.closest('li')!.parentElement!.closest('li')!.textContent).toContain('﴿١٧﴾');
+    });
+
+    it('turns on from its visible label too', () => {
+      render(<BranchTree tree={tree} names={names} pages={pages} surround={{ on: false }} />);
+      fireEvent.click(screen.getByText('الآيات المحيطة'));
+      expect((screen.getByRole('switch') as HTMLInputElement).checked).toBe(true);
+    });
+
     it('keeps the switch in the address when the page asks', () => {
       window.history.replaceState(null, '', '/quran/branches?o=x');
       render(<BranchTree tree={tree} names={names} pages={pages} surround={{ on: false, sync: true }} />);
       fireEvent.click(screen.getByRole('switch'));
       expect(replace).toHaveBeenCalledWith('/quran/branches?o=x&c=1', { scroll: false });
+      window.history.replaceState(null, '', '/quran/branches?o=x&c=1');
+      fireEvent.click(screen.getByRole('switch'));
+      expect(replace).toHaveBeenLastCalledWith('/quran/branches?o=x', { scroll: false });
     });
   });
 });

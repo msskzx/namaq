@@ -8,6 +8,11 @@ export type AyahContext = { ayah: BranchAyah; before: BranchAyah | null; after: 
 
 let source: Promise<BranchAyah[]> | undefined;
 
+export function isAyahKey(key: string) {
+  const [surah, ayah] = key.split(':').map(Number);
+  return /^[1-9]\d*:[1-9]\d*$/.test(key) && Number.isSafeInteger(surah) && surah <= 114 && Number.isSafeInteger(ayah);
+}
+
 export function loadReaderAyat(): Promise<BranchAyah[]> {
   return source ??= Promise.all(Array.from({ length: 604 }, (_, i) => import(`../../app/quran/read/data/${i + 1}.json`)))
     .then(pages => readerAyat(pages.map(page => page.default)))

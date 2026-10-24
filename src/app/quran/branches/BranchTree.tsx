@@ -9,7 +9,7 @@ import AyahContextButton from './AyahContext';
 import { anchorOf, NeighbourBox, SurroundToggle, surroundStyle, useSurrounding, type Around } from './Surroundings';
 
 type Props = { view?: BranchesView; tree: Branch; names: Record<number, string>; pages: Record<string, number>; variants?: Variant[]; showSpellings?: boolean; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; surround?: { on: boolean; sync?: boolean } };
-type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header' | 'surround'> & { around?: Around; node: Branch; parent?: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
+type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header' | 'surround'> & { around?: Around; anchors?: string; node: Branch; parent?: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
 
 const LINE = 'border-[var(--home-rule)]';
 export const TONE: Record<string, string> = {
@@ -58,7 +58,7 @@ export function Marked({ node, ayahKeys, subject, siblings, spans, names, childr
   return <AyahContextButton ayahKeys={ayahKeys} subject={subject} siblings={others} spans={spans} spellings={spellings(node, skip)} spellingAt={offset + skip} differentWords={differentWords} names={names} leaf={leaf} references={references}>{children}</AyahContextButton>;
 }
 
-function Node({ node, parent, path, names, pages, tags, lead, juz, renderNode, indices, showSpellings, view, around }: NodeProps) {
+function Node({ node, parent, path, names, pages, tags, lead, juz, renderNode, indices, showSpellings, view, around, anchors }: NodeProps) {
   const root = path.length === 0;
   const words = [...path, ...node.words];
   const shownWords = node.words.slice(root ? lead : 0);
@@ -69,7 +69,7 @@ function Node({ node, parent, path, names, pages, tags, lead, juz, renderNode, i
   return (
     <div className="flex items-center">
       {(!root || shownWords.length > 0 || node.ayat.length > 0) && <div data-keys={around ? keys(node).join(' ') : undefined} className={`shrink-0 rounded border px-3 py-1.5 ${node.children.length === 0 ? 'max-w-sm' : 'max-w-xs'} ${root ? 'border-[var(--home-accent)] bg-[var(--home-paper-deep)] text-xl' : 'border-[var(--home-rule)] bg-[var(--home-paper)] text-lg'}`}>
-        {around && node.ayat.map(key => <span key={key} data-anchor id={anchorOf(around.tree, key)} />)}
+        {anchors && node.ayat.map(key => <span key={key} data-anchor id={anchorOf(anchors, key)} />)}
         {renderNode && !root ? renderNode(node, indices.get(node)!, tags) : <><Marked node={node} ayahKeys={keys(node)} subject={(root ? shownWords : node.words).join(' ')} siblings={node.children.length === 0 && parent ? keys(parent) : undefined} spans={nodeSpans(keys(node), path.length + node.words.length)} names={names} offset={path.length} leaf={node.children.length === 0} skip={root ? lead : 0} enabled={showSpellings} references={node.ayat.length > 0 && <AyahRefs keys={node.ayat} names={names} pages={pages} tags={tags} linked={node.children.length > 0} className="" />}>{root || node.children.length === 0 ? <span className="font-arabic leading-loose">{shownWords.join(' ')}</span> : (
           <Link href={branchesHref(linkId(words, keys(node).flatMap(key => (tags[key] ? [tags[key].conj] : []))), juz, { ...view, partition: node.partition })} className="font-arabic leading-loose hover:text-[var(--home-accent)] hover:underline">{node.words.join(' ')}</Link>
         )}</Marked></>}
@@ -78,7 +78,7 @@ function Node({ node, parent, path, names, pages, tags, lead, juz, renderNode, i
         <>
           <span aria-hidden data-line data-keys={around ? keys(node).join(' ') : undefined} className={`w-4 shrink-0 border-t-2 ${LINE}`} />
           <ul className="flex flex-col">
-            {[...node.children.map((child, i) => ({ key: `n${i}`, keys: keys(child), item: <Node node={child} parent={node} path={words} names={names} pages={pages} tags={tags} lead={lead} juz={juz} renderNode={renderNode} indices={indices} showSpellings={showSpellings} view={view} around={around} /> })), ...nexts].map((entry, i, all) => (
+            {[...node.children.map((child, i) => ({ key: `n${i}`, keys: keys(child), item: <Node node={child} parent={node} path={words} names={names} pages={pages} tags={tags} lead={lead} juz={juz} renderNode={renderNode} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={anchors} /> })), ...nexts].map((entry, i, all) => (
               <li key={entry.key} className="relative flex items-center py-1 ps-6">
                 <span aria-hidden data-line data-keys={around ? entry.keys.join(' ') : undefined} className={`absolute start-0 top-1/2 w-6 border-t-2 ${LINE}`} />
                 {all.length > 1 && (
@@ -155,7 +155,7 @@ export default function BranchTree({ tree, names, pages, variants = [], showSpel
             <span aria-hidden data-line data-keys={around ? all.join(' ') : undefined} className={`w-4 shrink-0 border-t-2 ${LINE}`} />
           </>
         ) : <BeforeFan ayahKeys={all} around={around} />}
-        <Node node={tree} path={[]} names={names} pages={pages} tags={tags} lead={variants.length > 0 ? 1 : 0} juz={juz ?? undefined} renderNode={renderNode} indices={indices} showSpellings={showSpellings} view={view} around={around} />
+        <Node node={tree} path={[]} names={names} pages={pages} tags={tags} lead={variants.length > 0 ? 1 : 0} juz={juz ?? undefined} renderNode={renderNode} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={surround ? id : undefined} />
       </div>
     </div>
   );

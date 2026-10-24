@@ -1,9 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { useId } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import useSWR from 'swr';
+import { fetcher } from '@/lib/swr';
 import Toggle from '@/components/common/Toggle';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@/lib/quran/arabicNumber';
@@ -13,15 +14,9 @@ export type Around = { data: Surrounding; ends: Record<string, string>; inTree: 
 
 export const anchorOf = (tree: string, key: string) => `${tree}-${key.replace(':', '-')}`;
 
-async function load(url: string): Promise<Surrounding> {
-  const response = await fetch(url);
-  if (!response.ok) throw new Error('Could not load surrounding ayat');
-  return response.json();
-}
-
 export function useSurrounding(on: boolean, keys: string[], ends: Record<string, string>) {
   const url = `/api/quran/surrounding?${new URLSearchParams({ before: keys.join(','), after: [...new Set(Object.values(ends))].join(',') })}`;
-  return useSWR<Surrounding>(on && keys.length > 0 ? url : null, load, { revalidateOnFocus: false });
+  return useSWR<Surrounding>(on && keys.length > 0 ? url : null, fetcher, { revalidateOnFocus: false });
 }
 
 type ToggleProps = { on: boolean; onChange(on: boolean): void; loading?: boolean; failed?: boolean };
@@ -38,13 +33,14 @@ function AddressToggle({ onChange, ...props }: ToggleProps) {
 }
 
 function SurroundSwitch({ on, onChange, loading = false, failed = false }: ToggleProps) {
+  const id = useId();
   const { language } = useLanguage();
   const ar = language === 'ar';
   const label = ar ? 'الآيات المحيطة' : 'Surrounding ayat';
   return (
     <span className="inline-flex items-center gap-2 text-sm text-[var(--home-ink)]">
-      <Toggle checked={on} label={label} onChange={onChange} />
-      <span aria-hidden>{label}</span>
+      <Toggle id={id} checked={on} label={label} onChange={onChange} />
+      <label htmlFor={id} className="cursor-pointer">{label}</label>
       {on && loading && <span role="status" className="text-xs text-[var(--home-muted)]">{ar ? 'جارٍ التحميل…' : 'Loading…'}</span>}
       {on && failed && <span role="alert" className="text-xs text-[var(--home-accent)]">{ar ? 'تعذّر تحميل الآيات.' : 'Could not load the ayat.'}</span>}
     </span>
