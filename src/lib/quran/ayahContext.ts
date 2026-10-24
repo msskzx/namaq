@@ -1,7 +1,7 @@
 // docs/plans/quran-shared-openings.md
 import wordKeys from '@/app/quran/compare/wordKeys.json';
-import { readerAyat, type BranchAyah } from './branches';
-import { pairOf, wordTokens } from './compare';
+import { readerAyat, spell, type BranchAyah } from './branches';
+import { wordTokens } from './compare';
 import { normalizeWord } from './normalize';
 
 export type AyahContext = { ayah: BranchAyah; before: BranchAyah | null; after: BranchAyah | null; match?: { exact: number[]; rooted: number[] } };
@@ -34,18 +34,28 @@ const tokens = (ayah: BranchAyah) => {
   return { norm, keys: wordTokens(norm, wordKeys.surahs[surah - 1]?.[number - 1]) };
 };
 
-export function comparedTo(contexts: AyahContext[], base: BranchAyah): AyahContext[] {
-  const b = tokens(base);
-  const shared = { exact: new Set<number>(), rooted: new Set<number>() };
-  const rest = (count: number, ...apart: number[][]) => Array.from({ length: count }, (_, i) => i).filter(i => apart.every(list => !list.includes(i)));
-  const compared = contexts.map(context => {
-    if (context.ayah.key === base.key) return context;
-    const a = tokens(context.ayah);
-    const pair = pairOf(0, 0, a.keys, b.keys, a.norm, b.norm);
-    rest(b.norm.length, pair.marksB, pair.rootsB).forEach(i => shared.exact.add(i));
-    pair.rootsB.forEach(i => shared.rooted.add(i));
-    return { ...context, match: { exact: rest(a.norm.length, pair.marksA, pair.rootsA), rooted: pair.rootsA } };
+export function sharedByAll(contexts: AyahContext[]): AyahContext[] {
+  if (contexts.length < 2) return contexts;
+  const all = contexts.map(context => {
+    const { keys } = tokens(context.ayah);
+    const forms = context.ayah.words.map(spell);
+    const byKey = new Map<string, number[]>();
+    keys.forEach((key, i) => byKey.set(key, [...(byKey.get(key) ?? []), i]));
+    return { forms, byKey };
   });
-  const own = { exact: [...shared.exact].sort((x, y) => x - y), rooted: [...shared.rooted].filter(i => !shared.exact.has(i)).sort((x, y) => x - y) };
-  return compared.map(context => (context.ayah.key === base.key ? { ...context, match: own } : context));
+  const shared = [...all[0].byKey.keys()].flatMap(key => {
+    const lists = all.map(ayah => ayah.byKey.get(key) ?? []);
+    const count = Math.min(...lists.map(list => list.length));
+    return count === 0 ? [] : [{ key, count, common: lists.map((list, n) => new Set(list.map(i => all[n].forms[i]))).reduce((a, b) => new Set([...a].filter(form => b.has(form)))) }];
+  });
+  return contexts.map((context, n) => {
+    const exact: number[] = [];
+    const rooted: number[] = [];
+    shared.forEach(({ key, count, common }) => {
+      const list = all[n].byKey.get(key)!;
+      const chosen = [...list.filter(i => common.has(all[n].forms[i])), ...list.filter(i => !common.has(all[n].forms[i]))].slice(0, count);
+      chosen.forEach(i => (common.has(all[n].forms[i]) ? exact : rooted).push(i));
+    });
+    return { ...context, match: { exact: exact.sort((x, y) => x - y), rooted: rooted.sort((x, y) => x - y) } };
+  });
 }

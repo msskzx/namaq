@@ -4,7 +4,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck, faCircleXmark, faCodeBranch, faSpellCheck } from "@fortawesome/free-solid-svg-icons";
 import Button from "@/components/common/Button";
-import BranchTree, { AyahRefs, Marked, nodeSpans } from "@/app/quran/branches/BranchTree";
+import BranchTree, { AyahRefs, Marked } from "@/app/quran/branches/BranchTree";
 import { askedNodes, branchNodes, givenAnswer, LEAF_WORDS, matchTreeAnswers } from "@/lib/quiz/branchAnswers";
 import type { BranchAnswer } from "@/lib/quiz/branchQuestions";
 import { branchesHref, keys, type Branch, type Variant } from "@/lib/quran/branches";
@@ -54,7 +54,7 @@ export function BranchFeedback({ question, typed, names, juz, ar }: { question: 
         const match = matches[index];
         const hit = match?.correct;
         const answer = match?.node ?? node;
-        const context = { subject: answer.words.join(" "), siblings: answer.children.length === 0 && parents.has(answer) ? keys(parents.get(answer)!) : undefined, spans: nodeSpans(keys(answer), (offsets.get(answer) ?? 0) + answer.words.length) };
+        const context = { subject: answer.words.join(" "), siblings: answer.children.length === 0 && parents.has(answer) ? keys(parents.get(answer)!) : undefined };
         if (!isAsked(question, index)) return <Marked node={answer} ayahKeys={keys(answer)} {...context} names={names} offset={offsets.get(answer)} leaf={answer.children.length === 0} references={answer.ayat.length > 0 && <AyahRefs keys={answer.ayat} names={names} pages={pages} tags={tags} linked={answer.children.length > 0} className="" />}><span className="font-arabic text-lg leading-loose">{answer.words.join(" ")}</span></Marked>;
         return (
           <div className="flex flex-col gap-1" data-answer={hit ? "correct" : "incorrect"}>
