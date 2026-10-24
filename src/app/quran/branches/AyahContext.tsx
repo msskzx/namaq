@@ -47,7 +47,7 @@ export default function AyahContextButton({ children, ayahKeys, subject, sibling
     const [surah, number] = context.ayah.key.split(':').map(Number);
     const name = names[surah] ?? (ar ? `سورة ${num(surah)}` : `Surah ${surah}`);
     const rows = [context.before, context.ayah, context.after].flatMap(ayah => {
-      if (!ayah) return [];
+      if (!ayah) return [[]];
       const offset = ayah === context.ayah ? 0 : ayah === context.after ? context.ayah.words.length + 1 : -Infinity;
       const span = spans[context.ayah.key];
       const target = compare && ayah === context.ayah;

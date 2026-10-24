@@ -62,7 +62,7 @@ it('uses borderless translated leaf controls alongside references and handles co
   fireEvent.click(trigger);
   const card = await screen.findByRole('article', { name: 'سورة ١ ١' });
   expect(card.querySelectorAll('[data-current]')).toHaveLength(1);
-  expect(card.querySelectorAll('p').length).toBe(2);
+  expect([...card.querySelectorAll('p')].filter(p => p.textContent?.trim()).length).toBe(2);
   expect(screen.getByRole('button', { name: 'إغلاق' })).toBeTruthy();
 });
 
