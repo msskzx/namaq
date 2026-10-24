@@ -317,7 +317,7 @@ export function revealedAboutQuestions(people: readonly CatalogPerson[], eligibl
     const question = candidate({
       family: 'AYAH_REVEALED_ABOUT', topic: 'AYAT', subject: { kind: 'PERSON', slug: person.slug }, attribute: key,
       personSlugs: [person.slug], promptArabic: 'في من نزلت هذه الآية؟', answer: named(person),
-      pool: people.filter((other) => other.fields.sex?.value === sex).map(named),
+      pool: people.filter((other) => other.fields.sex?.value === sex && other.slug !== 'prophet-muhammad').map(named),
       excludedValues: about.get(key), evidence: { claimKeys: cited(ayah.claims, eligible) },
     });
     return question ? [question] : [];

@@ -220,6 +220,15 @@ describe('question candidate generation', () => {
     expect(questions.map((question) => question.correctAnswer).sort()).toEqual(['aisha', 'hafsa']);
   });
 
+  it('never offers the Prophet as a distractor', () => {
+    const man = (slug: string, ayah?: number) => ({
+      kind: 'PERSON' as const, slug, name: slug, hasProfile: true, fields: { sex: { value: 'MALE', claims: ['c'] } }, titles: [], relations: [],
+      ayat: ayah ? [{ surah: 29, ayah, claims: ['c'], revealedAbout: {} }] : [],
+    });
+    const [question] = revealedAboutQuestions([man('saad', 8), man('prophet-muhammad'), man('a'), man('b'), man('c')] as never, new Set(['c']));
+    expect(question.choices.map((choice) => choice.value).sort()).toEqual(['a', 'b', 'c', 'saad']);
+  });
+
   it('asks one question per virtue entry, naming the speaker where there is one', async () => {
     const questions = (await generateQuestionCandidates()).filter((question) => question.family === 'VIRTUE_HOLDER');
     expect(questions.map((question) => question.promptArabic).sort()).toEqual([
