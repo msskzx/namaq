@@ -1,7 +1,7 @@
 .layout { display: flex; flex-direction: column; gap: 1rem; }
 
 .contents { width: 100%; max-width: 46rem; margin-inline: auto; padding-bottom: 1.5rem; border-bottom: 3px double var(--home-rule); }
-.contents .label { text-align: center; color: var(--home-accent); font-size: 1.25rem; margin-bottom: 0.75rem; }
+.contents .label { text-align: center; color: var(--home-muted); font-size: 1.25rem; margin-bottom: 0.75rem; }
 .contents a { display: flex; align-items: baseline; gap: 0.5rem; padding-block: 0.25rem; color: var(--home-ink); }
 .contents a:hover { color: var(--home-accent); }
 .leader { flex: 1; border-bottom: 1px dotted var(--home-muted); }
@@ -10,7 +10,7 @@
 .poem { display: grid; grid-template-columns: 2rem fit-content(100%); column-gap: 0.75rem; justify-content: center; }
 .chapter, .bayt { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; }
 .chapter { scroll-margin-top: 5rem; }
-.chapter h2 { grid-column: 1 / -1; text-align: center; color: var(--home-accent); font-size: 1.5rem; margin-block: 2rem 0.75rem; }
+.chapter h2 { grid-column: 1 / -1; text-align: center; color: var(--home-ink); font-size: 1.5rem; margin-block: 2rem 0.75rem; }
 
 .bayt {
   align-items: baseline;
@@ -36,3 +36,9 @@
   .poem, .chapter, .bayt { column-gap: 4rem; }
   .bayt { font-size: 1.5625rem; line-height: 2.1; }
 }
+
+.sources { margin-top: 0.75rem; max-width: 52rem; font-size: 0.9375rem; color: var(--home-muted); }
+.sources summary { width: fit-content; cursor: pointer; color: var(--home-accent); }
+.sources p { margin-top: 0.5rem; }
+.sources a { text-decoration: underline; text-underline-offset: 0.2em; }
+.sources a:hover { color: var(--home-accent); }
