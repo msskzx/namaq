@@ -5,26 +5,18 @@ export type ButtonVariant = 'primary' | 'outline' | 'highlight' | 'ghost';
 export type ButtonSize = 'sm' | 'md' | 'icon';
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
-  ghost: 'text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800',
-  highlight: 'bg-amber-400 text-gray-950 hover:bg-amber-300',
-  primary: 'bg-amber-400 text-gray-950 hover:bg-amber-300',
-  outline: 'border border-amber-400 text-gray-800 hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800',
+  ghost: 'text-[var(--home-accent)] hover:bg-[var(--home-paper-deep)]',
+  highlight: 'bg-[var(--home-highlight)] text-[var(--home-on-highlight)] hover:opacity-90',
+  primary: 'bg-[var(--home-accent)] text-[var(--home-paper)] hover:opacity-90',
+  outline: 'border border-[var(--home-rule)] text-[var(--home-accent)] hover:bg-[var(--home-paper-deep)]',
 };
-
 const SIZE_CLASSES: Record<ButtonSize, string> = {
   sm: 'px-2.5 py-1 text-xs',
   md: 'px-3 py-1.5 text-sm',
-  icon: 'px-2 py-1.5',
+  icon: 'p-2',
 };
-
-const BASE_CLASSES = 'inline-flex items-center gap-2 rounded transition disabled:opacity-50';
-
-const ACTIVE_CLASSES = 'bg-amber-400 text-gray-950 hover:bg-amber-300';
-
 function classesFor(variant: ButtonVariant, size: ButtonSize, active: boolean, className?: string) {
-  const look = active ? ACTIVE_CLASSES : VARIANT_CLASSES[variant];
-  const border = active && variant === 'outline' ? 'border border-amber-400' : '';
-  return [BASE_CLASSES, SIZE_CLASSES[size], look, border, className].filter(Boolean).join(' ');
+  return ['inline-flex items-center justify-center gap-2 rounded-sm transition disabled:opacity-50 disabled:cursor-not-allowed', SIZE_CLASSES[size], VARIANT_CLASSES[active ? 'primary' : variant], active && variant === 'outline' ? 'border border-[var(--home-accent)]' : '', className].filter(Boolean).join(' ');
 }
 
 type CommonProps = {

@@ -1,5 +1,4 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { TriangleAlert } from 'lucide-react';
 import { useLanguage } from '../language/LanguageContext';
 import translations from '../language/translations';
 
@@ -10,12 +9,11 @@ export default function WorkInProgressBanner() {
   return (
     <div
       role="note"
-      className="mb-8 flex items-start gap-3 rounded-lg border border-amber-400 bg-amber-50 p-4 text-start text-sm leading-relaxed text-amber-900 sm:text-base dark:border-amber-700 dark:bg-amber-950/60 dark:text-amber-100"
+      className="mb-8 flex items-start gap-3 border-s-2 border-[var(--home-rule)] ps-3 text-start text-sm leading-relaxed text-[var(--home-muted)]"
     >
-      <FontAwesomeIcon
-        icon={faTriangleExclamation}
+      <TriangleAlert
         aria-hidden="true"
-        className="mt-1 shrink-0 text-base text-amber-600 dark:text-amber-400 sm:text-lg"
+        className="mt-1 size-4 shrink-0 text-[var(--home-accent)]"
       />
       <p className="font-Cairo">{t.workInProgress}</p>
     </div>

@@ -2,8 +2,7 @@
 
 import { useState, type ReactNode } from 'react';
 import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookOpen, faCircle, faCircleCheck, faCircleXmark, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
+import { BookOpen, Circle, CircleCheck, CircleX, RotateCcw } from 'lucide-react';
 import { useLanguage } from '../language/LanguageContext';
 import Button from '../common/Button';
 import BranchTree from '@/app/quran/branches/BranchTree';
@@ -45,7 +44,7 @@ function QuizPreview({ question }: { question: NonNullable<HomePreviews['questio
       <div className={styles.choices}>
         {question.choices.map(choice => (
           <Button key={choice.value} onClick={() => answer === null && setAnswer(choice.value)} aria-pressed={answer === choice.value} aria-disabled={answer !== null}>
-            <FontAwesomeIcon icon={answer !== null && choice.value === question.answer ? faCircleCheck : answer === choice.value ? faCircleXmark : faCircle} />
+            {answer !== null && choice.value === question.answer ? <CircleCheck size={16} aria-hidden /> : answer === choice.value ? <CircleX size={16} aria-hidden /> : <Circle size={16} aria-hidden />}
             <span lang="ar" dir="rtl">{choice.labelArabic}</span>
           </Button>
         ))}
@@ -54,8 +53,8 @@ function QuizPreview({ question }: { question: NonNullable<HomePreviews['questio
         {answer !== null && <p>{correct ? (ar ? 'إجابة صحيحة.' : 'Correct.') : (ar ? 'الإجابة الصحيحة: ' : 'The correct answer is: ')}{!correct && <span lang="ar" dir="rtl">{question.choices.find(choice => choice.value === question.answer)?.labelArabic}</span>}</p>}
       </div>
       <div className={styles.previewActions}>
-        {answer !== null && <Button size="sm" onClick={() => setAnswer(null)}><FontAwesomeIcon icon={faRotateLeft} />{ar ? 'حاول مجددًا' : 'Try again'}</Button>}
-        <Button size="sm" href={question.profile}><FontAwesomeIcon icon={faBookOpen} />{ar ? 'السيرة والمصادر' : 'Biography and sources'}</Button>
+        {answer !== null && <Button size="sm" onClick={() => setAnswer(null)}><RotateCcw />{ar ? 'حاول مجددًا' : 'Try again'}</Button>}
+        <Button size="sm" href={question.profile}><BookOpen />{ar ? 'السيرة والمصادر' : 'Biography and sources'}</Button>
       </div>
     </div>
   );

@@ -8,7 +8,6 @@ function AnalyticsOptOut() {
   const { language } = useLanguage();
 
   useEffect(() => {
-    // Only run on client side
     if (typeof window === 'undefined') return;
     
     const consent = localStorage.getItem('cookie-consent');
@@ -16,7 +15,6 @@ function AnalyticsOptOut() {
   }, []);
 
   const handleToggleAnalytics = (enabled: boolean) => {
-    // Only run on client side
     if (typeof window === 'undefined') return;
     
     if (enabled) {
@@ -32,13 +30,13 @@ function AnalyticsOptOut() {
   if (analyticsEnabled === null) return null;
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 mx-auto">
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+    <div className="bg-[var(--home-paper-deep)] rounded-lg shadow-lg p-6 mx-auto">
+      <h3 className="text-lg font-semibold text-[var(--home-ink)] mb-4">
         {language === 'ar' ? 'إعدادات التحليلات' : 'Analytics Settings'}
       </h3>
       
       <div className="space-y-4">
-        <p className="text-sm text-gray-600 dark:text-gray-400">
+        <p className="text-sm text-[var(--home-ink)]">
           {language === 'ar' 
             ? 'يمكنك التحكم في جمع بيانات التحليلات لتحسين تجربتك.'
             : 'You can control the collection of analytics data to improve your experience.'
@@ -46,26 +44,15 @@ function AnalyticsOptOut() {
         </p>
         
         <div className="flex items-center justify-between">
-          <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
+          <span className="text-sm font-medium text-[var(--home-ink)]">
             {language === 'ar' ? 'تفعيل التحليلات' : 'Enable Analytics'}
           </span>
-          <button
-            onClick={() => handleToggleAnalytics(!analyticsEnabled)}
-            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-              analyticsEnabled 
-                ? 'bg-indigo-600' 
-                : 'bg-gray-200 dark:bg-gray-700'
-            }`}
-          >
-            <span
-              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                analyticsEnabled ? 'translate-x-6' : 'translate-x-1'
-              }`}
-            />
+          <button type="button" role="switch" aria-checked={analyticsEnabled} aria-label={language === 'ar' ? 'تفعيل التحليلات' : 'Enable Analytics'} onClick={() => handleToggleAnalytics(!analyticsEnabled)} className={`relative inline-flex h-6 w-11 items-center rounded-full border border-[var(--home-rule)] transition-colors ${analyticsEnabled ? 'bg-[var(--home-accent)]' : 'bg-[var(--home-paper-deep)]'}`}>
+            <span aria-hidden className={`inline-block size-4 transform rounded-full transition-transform ${analyticsEnabled ? 'translate-x-6 bg-[var(--home-paper)]' : 'translate-x-1 bg-[var(--home-muted)]'}`} />
           </button>
         </div>
         
-        <div className="text-xs text-gray-500 dark:text-gray-400">
+        <div className="text-xs text-[var(--home-ink)]">
           {language === 'ar' 
             ? 'التحليلات تساعدنا في تحسين الموقع وتقديم محتوى أفضل.'
             : 'Analytics help us improve the website and provide better content.'

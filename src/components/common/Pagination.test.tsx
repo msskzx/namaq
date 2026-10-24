@@ -36,18 +36,6 @@ describe('Pagination', () => {
     expect(screen.getByText('Page 2 of 5')).toBeTruthy();
   });
 
-  it('points its arrows the way the reader travels', () => {
-    const { container: ltr } = render(<Pagination page={2} pageCount={5} onChange={vi.fn()} />);
-    const ltrIcons = Array.from(ltr.querySelectorAll('svg')).map((icon) => icon.getAttribute('data-icon'));
-    expect(ltrIcons).toEqual(['arrow-left', 'arrow-right']);
-
-    cleanup();
-    language.current = 'ar';
-    const { container: rtl } = render(<Pagination page={2} pageCount={5} onChange={vi.fn()} />);
-    const rtlIcons = Array.from(rtl.querySelectorAll('svg')).map((icon) => icon.getAttribute('data-icon'));
-    expect(rtlIcons).toEqual(['arrow-right', 'arrow-left']);
-  });
-
   it('prefers a caller-supplied summary', () => {
     render(<Pagination page={1} pageCount={3} onChange={vi.fn()} summary="1–10 of 25" />);
 

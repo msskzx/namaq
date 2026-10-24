@@ -14,9 +14,6 @@ import { SITE_URL } from "@/lib/siteUrl";
 
 config.autoAddCss = false;
 
-// Amiri is a naskh revival drawn for vocalized classical Arabic, which is what
-// the source accounts are. Its Latin comes along for the interface, so one
-// family covers both scripts.
 const amiri = Amiri({
   variable: "--font-amiri",
   weight: ["400", "700"],
@@ -42,7 +39,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${amiri.variable} ${geistMono.variable} antialiased bg-white dark:bg-black`}>
+      <body className={`${amiri.variable} ${geistMono.variable} antialiased`}>
         <CustomThemeProvider>
           <LanguageProvider>
             <SWRProvider>

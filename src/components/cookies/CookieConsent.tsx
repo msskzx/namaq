@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/components/language/LanguageContext';
+import { Check, Settings, X } from 'lucide-react';
+import Button from '../common/Button';
 import AnalyticsOptOut from '@/components/cookies/AnalyticsOptOut';
-
-// Extend Window interface for gtag
 declare global {
   interface Window {
     gtag?: (...args: unknown[]) => void;
@@ -17,7 +17,6 @@ function CookieConsent() {
   const { language } = useLanguage();
 
   useEffect(() => {
-    // Only run on client side
     if (typeof window === 'undefined') return;
     
     const consent = localStorage.getItem('cookie-consent');
@@ -27,24 +26,20 @@ function CookieConsent() {
   }, []);
 
   const handleAccept = () => {
-    // Only run on client side
     if (typeof window === 'undefined') return;
     
     localStorage.setItem('cookie-consent', 'accepted');
     setShowBanner(false);
     setShowSettings(false);
-    // Enable analytics
     window.gtag = window.gtag || function() {};
   };
 
   const handleDecline = () => {
-    // Only run on client side
     if (typeof window === 'undefined') return;
     
     localStorage.setItem('cookie-consent', 'declined');
     setShowBanner(false);
     setShowSettings(false);
-    // Disable analytics
     window.gtag = function() {};
   };
 
@@ -55,52 +50,50 @@ function CookieConsent() {
   if (!showBanner && !showSettings) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4 z-50 shadow-lg">
+    <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="fixed bottom-0 left-0 right-0 bg-[var(--home-paper)] border-t border-[var(--home-rule)] p-4 z-50 shadow-lg">
       <div className="mx-auto max-w-6xl">
         {showSettings ? (
           <div className="space-y-4">
             <div className="flex justify-between items-center">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              <h3 className="text-lg font-semibold text-[var(--home-ink)]">
                 {language === 'ar' ? 'إعدادات ملفات تعريف الارتباط' : 'Cookie Settings'}
               </h3>
-              <button
+              <Button variant="ghost" size="icon"
+                aria-label={language === 'ar' ? 'إغلاق الإعدادات' : 'Close settings'}
                 onClick={() => setShowSettings(false)}
-                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
               >
-                ✕
-              </button>
+                <X size={16} aria-hidden />
+              </Button>
             </div>
             <AnalyticsOptOut />
             <div className="flex gap-3 pt-4">
-              <button
+              <Button
                 onClick={handleDecline}
-                className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
               >
-                {language === 'ar' ? 'رفض الكل' : 'Decline All'}
-              </button>
-              <button
+                <X size={16} aria-hidden />{language === 'ar' ? 'رفض الكل' : 'Decline All'}
+              </Button>
+              <Button variant="primary"
                 onClick={handleAccept}
-                className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-950 transition-colors"
               >
-                {language === 'ar' ? 'قبول الكل' : 'Accept All'}
-              </button>
+                <Check size={16} aria-hidden />{language === 'ar' ? 'قبول الكل' : 'Accept All'}
+              </Button>
             </div>
           </div>
         ) : (
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex-1">
-              <p className="text-sm text-gray-700 dark:text-gray-200 mb-2">
+              <p className="text-sm text-[var(--home-ink)] mb-2">
                 {language === 'ar' ? (
                   <>
                     نستخدم ملفات تعريف الارتباط لتحسين تجربتك وتحليل حركة المرور. 
-                    <a href="/privacy" className="text-indigo-600 dark:text-indigo-400 hover:underline ms-1">
+                    <a href="/privacy" className="text-[var(--home-accent)] hover:underline ms-1">
                       سياسة الخصوصية
                     </a>
                   </>
                 ) : (
                   <>
                     We use cookies to improve your experience and analyze traffic. 
-                    <a href="/privacy" className="text-indigo-600 dark:text-indigo-400 hover:underline ms-1">
+                    <a href="/privacy" className="text-[var(--home-accent)] hover:underline ms-1">
                       Privacy Policy
                     </a>
                   </>
@@ -108,24 +101,21 @@ function CookieConsent() {
               </p>
             </div>
             <div className="flex gap-3">
-              <button
+              <Button
                 onClick={handleSettings}
-                className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
               >
-                {language === 'ar' ? 'الإعدادات' : 'Settings'}
-              </button>
-              <button
+                <Settings size={16} aria-hidden />{language === 'ar' ? 'الإعدادات' : 'Settings'}
+              </Button>
+              <Button
                 onClick={handleDecline}
-                className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
               >
-                {language === 'ar' ? 'رفض' : 'Decline'}
-              </button>
-              <button
+                <X size={16} aria-hidden />{language === 'ar' ? 'رفض' : 'Decline'}
+              </Button>
+              <Button variant="primary"
                 onClick={handleAccept}
-                className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-950 transition-colors"
               >
-                {language === 'ar' ? 'قبول' : 'Accept'}
-              </button>
+                <Check size={16} aria-hidden />{language === 'ar' ? 'قبول' : 'Accept'}
+              </Button>
             </div>
           </div>
         )}

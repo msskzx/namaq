@@ -1,0 +1,49 @@
+/* docs/palette.md */
+:root {
+  --home-width: 88rem;
+  --home-gutter: clamp(1.25rem, 4vw, 4rem);
+  --home-paper: #f4ecdb;
+  --home-paper-deep: #ebe0c8;
+  --home-ink: #2e2219;
+  --home-muted: #6b5a4a;
+  --home-rule: #c9b796;
+  --home-accent: #9c3b22;
+  --home-highlight: #fbbf24;
+  --home-on-highlight: #1c1917;
+  --home-highlight-border: #d97706;
+  --home-root: #5e4689;
+  --home-green: #4b644a;
+  --home-slot-1: #2c6a78;
+  --home-slot-2: #5d6a24;
+  --home-slot-3: #3f5a8f;
+  --home-slot-4: #6b5a3a;
+  --home-backdrop: color-mix(in srgb, var(--home-ink) 60%, transparent);
+  --home-shadow: color-mix(in srgb, var(--home-ink) 25%, transparent);
+  --logo-accent: var(--home-accent);
+  --home-bubble-1: #e6d6e6;
+  --home-bubble-2: #efd9c9;
+  --home-bubble-3: #dfe0c9;
+  --home-bubble-4: #e4dccd;
+}
+
+.dark {
+  --home-backdrop: color-mix(in srgb, var(--home-paper) 75%, transparent);
+  --home-shadow: color-mix(in srgb, var(--home-paper) 40%, transparent);
+  --home-paper: #0b0b0b;
+  --home-paper-deep: #1d1b19;
+  --home-ink: #f2eadc;
+  --home-muted: #b8ab98;
+  --home-rule: #4b3f31;
+  --home-accent: #e8876c;
+  --home-root: #b9a3dc;
+  --home-green: #9bb59a;
+  --home-slot-1: #8cc8d4;
+  --home-slot-2: #c0cc84;
+  --home-slot-3: #9fb4e6;
+  --home-slot-4: #cdb48a;
+  --home-bubble-1: #34233a;
+  --home-bubble-2: #282522;
+  --home-bubble-3: #22241a;
+  --home-bubble-4: #1f1e1c;
+}
+

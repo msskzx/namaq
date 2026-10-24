@@ -1,25 +1,14 @@
-# Palette
+# Paper and ink theme
 
-The paper theme's colors are CSS variables on `.theme` in `src/components/homepage/Home.module.css`. Pages and components read the variables and never write a hex of their own.
+Namaq gives the source text the most space and contrast. Warm paper, ink, fine rules and restrained typography borrow from a printed reference book. Color draws attention to an action, a selection or a meaningful distinction in the content. Secondary information stays quiet and can be disclosed when needed.
 
-| Variable | Light | Dark | Use |
-|---|---|---|---|
-| `--home-paper` | #f4ecdb | #0b0b0b | Page background. Dark mode keeps near-black for large reading surfaces, which gives the most contrast and the least strain in low light. |
-| `--home-paper-deep` | #ebe0c8 | #1d1b19 | Small panels and cards, the root node of a word tree, and the ayah chips. |
-| `--home-ink` | #2e2219 | #f2eadc | Text. |
-| `--home-muted` | #6b5a4a | #b8ab98 | Secondary text, and the border of a neutral tag. |
-| `--home-rule` | #c9b796 | #4b3f31 | Lines and borders. |
-| `--home-highlight` | #fbbf24 | #fbbf24 | Amber. A context button whose node combines differing marks. |
-| `--home-on-highlight` | #1c1917 | #1c1917 | Text on the amber context button. |
-| `--home-highlight-border` | #d97706 | #d97706 | Selected ayah indicator in context cards. |
-| `--home-accent` | #9c3b22 | #e8876c | Terracotta. Links, buttons, the logo's dots, an exact match. |
-| `--home-root` | #5e4689 | #b9a3dc | Purple. A root match on the compare pages, and a first word with a joined ف in the branches tree. |
-| `--home-green` | #4b644a | #9bb59a | Green. A first word with a joined و in the branches tree. |
+`src/app/theme.css` owns the palette for light and dark modes. Read the values there. Use its `--home-*` variables in pages, portals, SVGs, charts and graphs. Derive transparency from those tokens instead of adding colors. The signed brand files in `public/brand/` retain their original colors because editing them breaks their content credentials.
 
-Body text colors read at a contrast of at least 4.9 on either paper, above the 4.5 the web guidelines ask for.
+- Paper and deeper paper distinguish reading surfaces. Ink is primary text, muted ink is secondary text, and rules separate content.
+- Terracotta identifies actions and exact word matches. Purple identifies root matches. In branches, joined ف is purple and joined و is green. Keep the text or symbol that explains each distinction.
+- Amber highlights differing marks that need inspection. It is not the default button color. Slot and bubble colors distinguish content groups, without assigning new meanings to those colors.
+- Use the shared Button, Badge, Toggle and ExplorationCard. Homepage and hub navigation share ExplorationCard. Lucide icons use a consistent stroke, an action label and an accessible name when the label is hidden. Mirror directional arrows in RTL.
+- Keep existing routes and essential information. Prefer clear headings, restrained borders and space over nested cards. Collapse secondary details when they compete with the main reading task.
+- Support Arabic and English, both directions, both themes, visible keyboard focus and reduced motion. Restore focus after overlays close; use `:focus-visible` so mouse clicks do not leave a keyboard ring.
 
-Within the branches tree each color means one thing. A first word with و is green, one with ف is purple, so it does not read as a terracotta ayah link beside it, and a bare first word is neutral, a muted border around ink. A first word that differs by its lemma, not by و or ف, stays neutral, since its marks show the difference.
-
-The dark logo and seal files in `public/brand/` keep the earlier dark colors (#f5eddf, #eda183): their content credentials sign each file, so editing a color would break them. The site draws its logo from `Logo.tsx`, which follows the variables.
-
-The shared button variant `highlight` keeps its amber background in the paper theme. It signals differing marks on a context button; ordinary leaves use the borderless ghost variant. Leaf references and the icon form one borderless button. Differing-mark leaves fill the icon background with amber, so the reference text keeps its paper background. Inner nodes use the filled amber button. The icon and accessible label distinguish the action as well as its color.
+Amiri gives vocalized Arabic room to read. Its type scale is larger because its letters occupy less of the em than a UI sans. Source passages use double leading so vowel marks do not collide. English homepage headings retain the existing serif face.

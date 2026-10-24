@@ -13,12 +13,4 @@
 .heading p { max-width: 52rem; color: var(--home-muted); line-height: 1.8; }
 .heading .eyebrow { color: var(--home-accent); font-size: 0.9375rem; }
 .panel { padding: clamp(1rem, 3vw, 2rem); border: 1px solid var(--home-rule); border-radius: 2px; }
-:is(.page, .controls) [data-button] { border-color: var(--home-rule); border-radius: 2px; color: var(--home-accent); background: transparent; }
-:is(.page, .controls) [data-button]:hover { background: var(--home-paper-deep); }
-:is(.page, .controls) [data-button][data-variant='primary'],
-:is(.page, .controls) [data-button][data-active] { background: var(--home-accent); color: var(--home-paper); }
-:is(.page, .controls) [data-button]:disabled { cursor: not-allowed; }
-.page :is(a, button, input, summary):focus-visible { outline: 2px solid var(--home-accent); outline-offset: 3px; }
-
-:is(.page, .controls) [data-button][data-variant='highlight'] { background: var(--home-highlight); color: var(--home-on-highlight); border-color: var(--home-highlight-border); }
-:is(.page, .controls) [data-button][data-variant='highlight']:hover { background: color-mix(in srgb, var(--home-highlight), white 20%); }
+.controls { color: var(--home-ink); }
