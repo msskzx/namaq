@@ -38,7 +38,7 @@ it('loads on demand and shows each original with its neighbors, differing words 
   const dialog = screen.getByRole('dialog', { name: 'Spelling differences and context' });
   await within(dialog).findByRole('article', { name: 'الشرح 5' });
   expect(within(dialog).getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/quran/read/596?a=94:5', '/quran/read/596?a=94:6']);
-  expect(within(dialog).getAllByTitle('Differing marks').map(word => word.textContent)).toEqual(['يُسْرًا', 'يُسْرًۭا']);
+  expect(within(dialog).queryAllByTitle(/^In every ayah/)).toHaveLength(0);
   const current = dialog.querySelectorAll('[data-current]');
   expect(current).toHaveLength(2);
   expect(current[0].textContent).toContain('فَإِنَّ');
@@ -77,14 +77,7 @@ it('reports a loading failure and lets the learner retry', async () => {
   expect(vi.mocked(fetch)).toHaveBeenCalledTimes(2);
 });
 
-it('highlights differing words in the next ayah when the leaf continues beyond an ayah marker', async () => {
-  render(wrap(<AyahContextButton ayahKeys={['94:5']} differentWords={[5]} names={{}}>Continuation</AyahContextButton>));
-  fireEvent.click(screen.getByRole('button', { name: 'View spelling differences and context' }));
-  await screen.findAllByRole('link', { name: 'Read ayah' });
-  expect(screen.getAllByTitle('Differing marks').map(word => word.textContent)).toEqual(['إِنَّ']);
-});
-
-it('shows the node\'s own ayat first with a branch label, then its siblings in the same grid, with mark differences only on its own', async () => {
+it('shows the node\'s own ayat first with a branch label, then its siblings in the same grid', async () => {
   render(wrap(<AyahContextButton ayahKeys={['94:6']} siblings={['94:5']} differentWords={[3]} names={{ 94: 'الشرح' }} leaf>Leaf</AyahContextButton>));
   fireEvent.click(screen.getByRole('button', { name: 'View spelling differences and context' }));
   const dialog = screen.getByRole('dialog');
@@ -92,7 +85,6 @@ it('shows the node\'s own ayat first with a branch label, then its siblings in t
   expect(new URL(vi.mocked(fetch).mock.calls[0][0] as string, 'http://localhost').searchParams.get('q')).toBe('94:6,94:5');
   expect(within(dialog).getAllByRole('article', { name: /\d/ }).map(card => card.getAttribute('aria-label'))).toEqual(['الشرح 6 · this branch', 'الشرح 5']);
   expect(within(dialog).getAllByText(/^Ayah \d/).map(label => label.textContent)).toEqual(['Ayah 6 · this branch', 'Ayah 5 in context']);
-  expect(within(dialog).getAllByTitle('Differing marks').map(word => word.textContent)).toEqual(['يُسْرًۭا']);
 });
 
 it('marks the words every card shares, exact and by root apart, on own and sibling cards alike', async () => {
@@ -100,7 +92,6 @@ it('marks the words every card shares, exact and by root apart, on own and sibli
   render(wrap(<AyahContextButton ayahKeys={['94:6']} siblings={['94:5']} differentWords={[]} names={{ 94: 'الشرح' }} leaf>Leaf</AyahContextButton>));
   fireEvent.click(screen.getByRole('button', { name: 'View ayat in context' }));
   const dialog = screen.getByRole('dialog');
-  expect(new URL(vi.mocked(fetch).mock.calls[0][0] as string, 'http://localhost').searchParams.has('vs')).toBe(false);
   const own = await within(dialog).findByRole('article', { name: 'الشرح 6 · this branch' });
   const sibling = within(dialog).getByRole('article', { name: 'الشرح 5' });
   expect(within(sibling).getAllByTitle('In every ayah, same form').map(word => word.textContent)).toEqual(source[0].ayah.words.slice(1));

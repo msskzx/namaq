@@ -1,7 +1,7 @@
 // docs/plans/quran-shared-openings.md
 import wordKeys from '@/app/quran/compare/wordKeys.json';
 import { readerAyat, spell, type BranchAyah } from './branches';
-import { pairOf, wordTokens } from './compare';
+import { wordTokens } from './compare';
 import { normalizeWord } from './normalize';
 
 export type AyahContext = { ayah: BranchAyah; before: BranchAyah | null; after: BranchAyah | null; match?: { exact: number[]; rooted: number[] } };
@@ -36,19 +36,26 @@ const tokens = (ayah: BranchAyah) => {
 
 export function sharedByAll(contexts: AyahContext[]): AyahContext[] {
   if (contexts.length < 2) return contexts;
-  const all = contexts.map(context => ({ ...tokens(context.ayah), forms: context.ayah.words.map(spell) }));
+  const all = contexts.map(context => {
+    const { keys } = tokens(context.ayah);
+    const forms = context.ayah.words.map(spell);
+    const byKey = new Map<string, number[]>();
+    keys.forEach((key, i) => byKey.set(key, [...(byKey.get(key) ?? []), i]));
+    return { forms, byKey };
+  });
+  const shared = [...all[0].byKey.keys()].flatMap(key => {
+    const lists = all.map(ayah => ayah.byKey.get(key) ?? []);
+    const count = Math.min(...lists.map(list => list.length));
+    return count === 0 ? [] : [{ key, count, common: lists.map((list, n) => new Set(list.map(i => all[n].forms[i]))).reduce((a, b) => new Set([...a].filter(form => b.has(form)))) }];
+  });
   return contexts.map((context, n) => {
-    const a = all[n];
-    const found = a.norm.map(() => ({ shared: true, exact: true }));
-    all.forEach((b, m) => {
-      if (m === n || found.every(word => !word.shared)) return;
-      const pair = pairOf(0, 0, a.keys, b.keys, a.forms, b.forms);
-      found.forEach((word, i) => {
-        if (pair.marksA.includes(i)) word.shared = false;
-        else if (pair.rootsA.includes(i)) word.exact = false;
-      });
+    const exact: number[] = [];
+    const rooted: number[] = [];
+    shared.forEach(({ key, count, common }) => {
+      const list = all[n].byKey.get(key)!;
+      const chosen = [...list.filter(i => common.has(all[n].forms[i])), ...list.filter(i => !common.has(all[n].forms[i]))].slice(0, count);
+      chosen.forEach(i => (common.has(all[n].forms[i]) ? exact : rooted).push(i));
     });
-    const at = (exact: boolean) => found.flatMap((word, i) => (word.shared && word.exact === exact ? [i] : []));
-    return { ...context, match: { exact: at(true), rooted: at(false) } };
+    return { ...context, match: { exact: exact.sort((x, y) => x - y), rooted: rooted.sort((x, y) => x - y) } };
   });
 }

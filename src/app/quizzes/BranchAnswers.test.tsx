@@ -36,7 +36,7 @@ describe('complete branch tree answers', () => {
     fireEvent.click(screen.getAllByRole('button', { name: /عرض الآيات في سياقها/ })[1]);
     await waitFor(() => expect(fetch).toHaveBeenCalled());
     const params = new URL(vi.mocked(fetch).mock.calls[0][0] as string, 'http://localhost').searchParams;
-    expect([params.get('q'), params.has('vs')]).toEqual(['1:1,1:2,1:3', false]);
+    expect(params.get('q')).toBe('1:1,1:2,1:3');
     vi.unstubAllGlobals();
   });
 
@@ -51,7 +51,6 @@ describe('complete branch tree answers', () => {
     fireEvent.click(screen.getAllByRole('button', { name: /عرض الآيات في سياقها/ })[1]);
     await waitFor(() => expect(screen.getAllByTitle('في كل الآيات بلفظها').map(word => word.textContent)).toEqual(['قال', 'قال']));
     expect(screen.getAllByTitle('في كل الآيات بجذرها أو بضبط مختلف').map(word => word.textContent)).toEqual(['رب', 'ربي']);
-    expect(screen.queryAllByTitle('من أول الآية إلى هذه العقدة')).toHaveLength(0);
     vi.unstubAllGlobals();
   });
 

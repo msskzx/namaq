@@ -66,7 +66,18 @@ describe('sharedByAll', () => {
   it('marks words differing only in tashkeel by root, and every word exact when all ayat agree', async () => {
     const all = await loadReaderAyat();
     expect(sharedByAll(ayahContexts(all, ['94:5', '94:6'])).map(context => context.match)).toEqual([{ exact: [1, 2, 3], rooted: [0] }, { exact: [1, 2, 3], rooted: [0] }]);
-    expect(sharedByAll(ayahContexts(all, ['23:26', '23:39', '29:30'])).map(context => context.match?.exact.slice(0, 3))).toEqual([[0, 1, 2], [0, 1, 2], [0, 1, 2]]);
+    expect(sharedByAll(ayahContexts(all, ['23:26', '23:39', '29:30'])).map(context => context.match?.exact)).toEqual([[0, 1, 2], [0, 1, 2], [0, 1, 2]]);
+  });
+
+  it('marks the same number of each shared word in every ayah, even when one ayah repeats it', async () => {
+    const all = await loadReaderAyat();
+    for (const keys of [['28:16', '7:23', '71:28'], ['2:255', '3:2', '2:6']]) {
+      const marked = sharedByAll(ayahContexts(all, keys)).map(context => [...context.match!.exact, ...context.match!.rooted].length);
+      expect(new Set(marked).size).toBe(1);
+      expect(marked[0]).toBeGreaterThan(0);
+    }
+    const [own] = sharedByAll(ayahContexts(all, ['28:16', '7:23', '71:28']));
+    expect(own.match!.rooted.some(i => own.ayah.words[i].includes('غْفِر'))).toBe(true);
   });
 
   it('leaves a single ayah unmarked', async () => {

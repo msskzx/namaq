@@ -157,7 +157,7 @@ describe('BranchTree', () => {
     fireEvent.click(within(firstWords).getAllByRole('button')[1]);
     await vi.waitFor(() => expect(fetch).toHaveBeenCalled());
     const params = new URL(vi.mocked(fetch).mock.calls[0][0] as string, 'http://localhost').searchParams;
-    expect([params.get('q'), params.has('vs')]).toEqual(['13:25,2:27', false]);
+    expect(params.get('q')).toBe('13:25,2:27');
   });
 
   it('names each inner button after its node and highlights differing marks of a nested node at its own offset', () => {

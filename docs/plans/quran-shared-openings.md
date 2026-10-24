@@ -58,13 +58,14 @@ The owner chose these rules after PR 427.
   version at the top with its ayah count, before any card, with the differing
   words in the purple root mark.
 - Every dialog with two or more ayat marks the intersection: only words found
-  in every ayah it shows (2026-10-24, owner's rule). Each ayah is compared with
-  every other one by the compare page's rule (`pairOf` with `wordKeys.json`),
-  wherever the words fall. A word matched in all of them with the same
-  spelling (`spell`) takes the accent mark. A word found in all of them, but in
-  at least one only by root or with other marks (رَبِّ and رَبُّ), takes the
-  purple mark. A word missing from any ayah stays plain. Only the target ayah
-  is compared, so the rows before and after stay unmarked.
+  in every ayah it shows (2026-10-24, owner's rule). Words are matched by the
+  compare page's keys (`wordKeys.json`), wherever they fall. A word repeated in
+  one ayah counts as many times as the ayah that has it least. A shared word
+  with the same spelling (`spell`) in every ayah takes the accent mark. A word
+  found in all of them, but in at least one only by root or with other marks
+  (رَبِّ and رَبُّ), takes the purple mark. A word missing from any ayah
+  stays plain. Only the target ayah is marked, so the rows before and after
+  stay unmarked.
   `/api/quran/context` adds this to every request with two or more keys. A
   request holds at most 200 keys (the largest opening group has 90 ayat).
 - Each context button is named after its node's words.
