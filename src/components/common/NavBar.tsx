@@ -39,6 +39,9 @@ export const NAV_SECTIONS: NavSection[] = [
       quran('/quran/oaths', { ar: 'الأقسام', en: 'Oaths' }),
       quran('/quran/order', { ar: 'ترتيب السور', en: 'Surah order' }),
     ] },
+    { title: { ar: 'التجويد', en: 'Tajwid' }, items: [
+      quran('/quran/tajwid/tuhfat-al-atfal', { ar: 'تحفة الأطفال', en: 'Tuhfat al-Atfal' }),
+    ] },
   ] },
   { href: '/hadith', label: { ar: 'الحديث', en: 'Hadith' }, groups: [{ items: [
     { href: '/hadith/bukhari-jibril', label: { ar: 'صحيح البخاري', en: 'Sahih al-Bukhari' }, purpose: { ar: 'الحديث بإسناده وحواره', en: 'Hadith with their isnad and dialogue' } },
