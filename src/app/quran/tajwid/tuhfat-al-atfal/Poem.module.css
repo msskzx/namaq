@@ -7,29 +7,32 @@
 .leader { flex: 1; border-bottom: 1px dotted var(--home-muted); }
 @media (min-width: 48rem) { .contents ol { columns: 2; column-gap: 3rem; } .contents li { break-inside: avoid; } }
 
+.poem { display: grid; grid-template-columns: 2rem fit-content(100%); column-gap: 0.75rem; justify-content: center; }
+.chapter, .bayt { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; }
 .chapter { scroll-margin-top: 5rem; }
-.chapter h2 { text-align: center; color: var(--home-accent); font-size: 1.5rem; margin-block: 2rem 0.75rem; }
+.chapter h2 { grid-column: 1 / -1; text-align: center; color: var(--home-accent); font-size: 1.5rem; margin-block: 2rem 0.75rem; }
 
 .bayt {
-  display: grid;
-  grid-template-columns: 2rem 1fr;
-  column-gap: 0.75rem;
   align-items: baseline;
-  max-width: 50rem;
-  margin-inline: auto;
   padding-block: 0.375rem;
   border-bottom: 1px dashed var(--home-rule);
   font-size: 1.3125rem;
   line-height: 1.9;
 }
 .bayt .number { font-size: 0.9375rem; color: var(--home-muted); }
+.bayt .shatr { text-align: justify; text-align-last: justify; }
 .bayt .shatr + .shatr { grid-column: 2; padding-inline-start: 1.75rem; }
 
-@media (min-width: 64rem) {
-  .poem { display: grid; grid-template-columns: 2.5rem max-content max-content; column-gap: 4rem; justify-content: center; }
-  .chapter, .bayt { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; column-gap: 4rem; }
+@media (min-width: 48rem) {
+  .poem, .chapter, .bayt { column-gap: 2.5rem; }
+  .poem { grid-template-columns: 2.5rem max-content max-content; }
   .chapter h2 { grid-column: 2 / -1; }
-  .bayt { max-width: none; margin-inline: 0; padding-block: 0.125rem; font-size: 1.5625rem; line-height: 2.1; }
-  .bayt .shatr { white-space: nowrap; text-align: justify; text-align-last: justify; }
+  .bayt { padding-block: 0.125rem; }
+  .bayt .shatr { white-space: nowrap; }
   .bayt .shatr + .shatr { grid-column: auto; padding-inline-start: 0; }
+}
+
+@media (min-width: 64rem) {
+  .poem, .chapter, .bayt { column-gap: 4rem; }
+  .bayt { font-size: 1.5625rem; line-height: 2.1; }
 }
