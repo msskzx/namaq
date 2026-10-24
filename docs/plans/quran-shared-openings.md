@@ -49,7 +49,7 @@ The owner chose these rules after PR 427.
   under the same parent, all in one grid. A first-word box does the same with
   the ayat of the other first words, since they share its child. The cards of
   the opened branch say so in their subtitle. Cards side by side share their
-  rows like the compare page's facing pages, so the target ayat line up; a
+  rows like the compare page's facing pages, so the target ayat line up. A
   missing neighbour keeps its empty row.
 - The dialog uses the compare page's marks and no other style. In each of its
   own cards, the words from the start of the ayah to the end of the opened node
