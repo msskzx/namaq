@@ -10,6 +10,8 @@ import { ayatCount, num } from '@/lib/quran/arabicNumber';
 import type { AyahContext } from '@/lib/quran/ayahContext';
 import styles from './AyahContext.module.css';
 
+const MAX_KEYS = 200;
+
 async function loadContext(url: string): Promise<AyahContext[]> {
   const response = await fetch(url);
   if (!response.ok) throw new Error('Could not load ayah context');
@@ -26,7 +28,7 @@ export default function AyahContextButton({ children, ayahKeys, subject, sibling
   const differing = differentWords.length > 0;
   const label = differing ? (ar ? 'عرض اختلافات الضبط والسياق' : 'View spelling differences and context') : (ar ? 'عرض الآيات في سياقها' : 'View ayat in context');
   const title = differing ? (ar ? 'اختلافات الضبط والسياق' : 'Spelling differences and context') : (ar ? 'الآيات في سياقها' : 'Ayat in context');
-  const url = `/api/quran/context?${new URLSearchParams({ q: [...ayahKeys, ...siblings].join(','), ...(siblings.length > 0 && { vs: ayahKeys[0] }) })}`;
+  const url = `/api/quran/context?${new URLSearchParams({ q: [...ayahKeys, ...siblings].slice(0, MAX_KEYS).join(','), ...(siblings.length > 0 && { vs: ayahKeys[0] }) })}`;
   const { data, error, isLoading, mutate } = useSWR<AyahContext[]>(open ? url : null, loadContext, { revalidateOnFocus: false });
 
   useEffect(() => {
@@ -66,9 +68,9 @@ export default function AyahContextButton({ children, ayahKeys, subject, sibling
 
   return (
     <>
-      {children}
+      <span id={`${titleId}-subject`} className="contents">{children}</span>
       <span className="mt-1 flex flex-wrap items-center gap-2" dir="rtl">
-        <Button size="sm" className="max-w-full" variant={leaf ? 'ghost' : differing ? 'highlight' : 'outline'} aria-label={leaf && references ? undefined : subject ? `${label}: ${subject}` : label} aria-labelledby={leaf && references ? `${titleId}-action ${titleId}-refs` : undefined} title={label} aria-haspopup="dialog" onClick={() => { setOpen(true); dialog.current?.showModal(); }}>
+        <Button size="sm" className="max-w-full" variant={leaf ? 'ghost' : differing ? 'highlight' : 'outline'} aria-label={leaf && references ? undefined : subject ? `${label}: ${subject}` : label} aria-labelledby={leaf && references ? `${titleId}-action ${titleId}-subject ${titleId}-refs` : undefined} title={label} aria-haspopup="dialog" onClick={() => { setOpen(true); dialog.current?.showModal(); }}>
           {leaf && references && <span id={`${titleId}-action`} className="sr-only">{label}</span>}
           {leaf && differing ? <span data-differing className={styles.differenceIcon}><TextSearch size={16} aria-hidden /></span> : <TextSearch size={16} aria-hidden />}
           {leaf && references && <span id={`${titleId}-refs`}>{references}</span>}
@@ -80,7 +82,7 @@ export default function AyahContextButton({ children, ayahKeys, subject, sibling
         if (event.target === event.currentTarget && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) dialog.current?.close();
       }}>
         <div className={styles.header}>
-          <div><h2 id={titleId}>{title}</h2><p className={styles.note}>{ar ? 'الآية المقصودة بارزة، وقبلها آية وبعدها آية من السورة نفسها، إن وُجدتا.' : 'The matching ayah is emphasized, with the preceding and following ayat from the same surah when available.'}</p>{differing && <p className={styles.note}>{ar ? 'النص كما ورد في كل آية.' : 'Each ayah keeps its original text.'}</p>}{Object.keys(spans).length > 0 && <MatchLegend exact={ar ? 'من كلمات هذه العقدة' : 'In this node'} root={differing ? (ar ? 'اختلاف في علامات الضبط' : 'Differing marks') : undefined} />}</div>
+          <div><h2 id={titleId}>{title}</h2><p className={styles.note}>{ar ? 'الآية المقصودة بارزة، وقبلها آية وبعدها آية من السورة نفسها، إن وُجدتا.' : 'The matching ayah is emphasized, with the preceding and following ayat from the same surah when available.'}</p>{differing && <p className={styles.note}>{ar ? 'النص كما ورد في كل آية.' : 'Each ayah keeps its original text.'}</p>}{(Object.keys(spans).length > 0 || differing) && <MatchLegend exact={Object.keys(spans).length > 0 ? (ar ? 'من كلمات هذه العقدة' : 'In this node') : undefined} root={differing ? (ar ? 'اختلاف في علامات الضبط' : 'Differing marks') : undefined} />}</div>
           <Button size="icon" aria-label={ar ? 'إغلاق' : 'Close'} onClick={() => dialog.current?.close()}><X size={18} aria-hidden /></Button>
         </div>
         {open && isLoading && <p role="status">{ar ? 'جارٍ تحميل الآيات…' : 'Loading ayat…'}</p>}

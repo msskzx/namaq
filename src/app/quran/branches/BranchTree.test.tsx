@@ -99,6 +99,7 @@ describe('BranchTree', () => {
     const buttons = screen.getAllByRole('button', { name: /عرض الآيات في سياقها/ });
     expect(buttons.map(button => button.getAttribute('data-variant'))).toEqual(['outline', 'ghost', 'ghost']);
     expect(buttons.slice(1).every(button => button.textContent?.trim())).toBe(true);
+    expect(screen.getByRole('button', { name: /عرض الآيات في سياقها مَقَامٍ أَمِينٍۢ/ })).toBeTruthy();
     expect(screen.queryByRole('link')).toBeNull();
     expect(fetch).not.toHaveBeenCalled();
   });
