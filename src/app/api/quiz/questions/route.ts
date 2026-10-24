@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { Prisma } from '@/generated/prisma';
 import { prisma } from '@/lib/prisma';
-import { ayahDetails } from '@/lib/quiz/ayahDetails';
+import { askedAyah, ayahDetails } from '@/lib/quiz/ayahDetails';
 import { selectQuizReference } from '@/lib/quiz/quizReference';
 import { QUESTION_FAMILIES, QUESTION_STATUSES } from '@/lib/quiz/types';
 
@@ -58,6 +58,7 @@ export async function GET(request: Request) {
   }) : [];
   const details = await ayahDetails(questions.map((question) => ({
     family: question.family,
+    attribute: question.attribute,
     choices: question.choices as { value: string }[],
   })));
   return NextResponse.json({
@@ -70,6 +71,7 @@ export async function GET(request: Request) {
         choiceDetails: Object.fromEntries(
           choices.map((choice) => [choice.value, details.get(choice.value)]).filter((entry) => entry[1]),
         ),
+        ayah: details.get(askedAyah(question) ?? '') ?? null,
         evidence: { claimKeys: keys, reference: selectQuizReference(keys, claims) },
       };
     }),

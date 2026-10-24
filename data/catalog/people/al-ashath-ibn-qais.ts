@@ -44,7 +44,7 @@ const alAshathIbnQais = {
       claims: ['al-ashath-ibn-qais-siyar8/companion'],
     },
   ],
-  ayat: [{ surah: 3, ayah: 77, claims: ['al-ashath-ibn-qais-siyar8/ayah-al-imran'] }],
+  ayat: [{ surah: 3, ayah: 77, claims: ['al-ashath-ibn-qais-siyar8/ayah-al-imran'], revealedAbout: {} }],
   relations: [
     {
       type: 'SON',

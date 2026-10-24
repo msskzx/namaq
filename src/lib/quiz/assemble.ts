@@ -12,6 +12,7 @@ import type { QuestionChoice, QuestionFamily, QuizLength, QuizTopics } from './t
 export interface AssembledQuestion {
   key: string;
   family: QuestionFamily | BranchQuestion['family'];
+  attribute?: string | null;
   promptArabic: string;
   choices: QuestionChoice[];
   correctAnswer: string;
@@ -63,6 +64,7 @@ export async function assembleQuiz({ topics, personSlug, juz = null, leaves = DE
     select: {
       key: true,
       family: true,
+      attribute: true,
       generatedPromptArabic: true,
       promptArabicOverride: true,
       choices: true,
@@ -73,6 +75,7 @@ export async function assembleQuiz({ topics, personSlug, juz = null, leaves = DE
   const bank: AssembledQuestion[] = rows.map((row) => ({
     key: row.key,
     family: row.family as QuestionFamily,
+    attribute: row.attribute,
     promptArabic: row.promptArabicOverride ?? row.generatedPromptArabic,
     choices: row.choices as unknown as QuestionChoice[],
     correctAnswer: row.correctAnswer,

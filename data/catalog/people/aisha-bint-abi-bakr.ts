@@ -32,7 +32,7 @@ const aishaBintAbiBakr = {
     },
   ],
   ayat: [
-    { surah: 24, ayah: 11, claims: ['aisha-siyar/ayah-an-nur-eleven'] },
+    { surah: 24, ayah: 11, claims: ['aisha-siyar/ayah-an-nur-eleven'], revealedAbout: {} },
     { surah: 33, ayah: 33, claims: ['aisha-siyar/ayah-al-ahzab-thirty-three'] },
   ],
   relations: [

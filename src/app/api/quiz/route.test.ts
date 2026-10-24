@@ -41,6 +41,13 @@ beforeEach(() => {
 });
 
 describe('GET /api/quiz', () => {
+  it('shows the asked ayah under an in-whom-revealed question', async () => {
+    assembleQuiz.mockResolvedValue(Array.from({ length: 5 }, () => question({ family: 'AYAH_REVEALED_ABOUT', attribute: '66:4', evidence: { claimKeys: [] } })));
+    ayahFindMany.mockResolvedValue([{ number: 4, text: 'إِن تَتُوبَا إِلَى ٱللَّهِ', surah: { number: 66, name: 'التحريم' } }]);
+    const body = await (await GET(request('?topic=AYAT&length=5'))).json();
+    expect(body.questions[0].ayah).toEqual({ text: 'إِن تَتُوبَا إِلَى ٱللَّهِ', reference: 'التحريم 66:4' });
+  });
+
   it('rejects an unknown topic', async () => {
     const response = await GET(request('?topic=NOT_A_TOPIC&length=5'));
     expect(response.status).toBe(400);

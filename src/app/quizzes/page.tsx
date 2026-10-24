@@ -43,6 +43,7 @@ interface QuizQuestionView {
   tree?: Branch;
   variants?: Variant[];
   asked?: number[];
+  ayah?: { text: string; reference: string } | null;
   choiceDetails: Record<string, { text: string; reference: string }>;
   correctAnswer: string;
   evidence: { reference: QuizReference | null };
@@ -52,7 +53,7 @@ const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
   PEOPLE: { en: "People", ar: "أشخاص" },
   BATTLES: { en: "Battles", ar: "معارك" },
   RELATIONSHIPS: { en: "Relationships", ar: "علاقات" },
-  AYAT: { en: "Ayat", ar: "آيات" },
+  AYAT: { en: "Revealed about whom", ar: "في من نزلت" },
   EVENTS: { en: "Events", ar: "أحداث" },
   PERSON_CIRCLE: { en: "A person's circle", ar: "دائرة شخص" },
   BRANCHES: { en: "Shared openings", ar: "فواتح الآيات" },
@@ -67,6 +68,15 @@ const LEAF_LEVELS: Record<number, { en: string; ar: string }> = {
   3: { en: "easy", ar: "سهل" },
   6: { en: "hard", ar: "صعب" },
 };
+
+function AskedAyah({ ayah }: { ayah: { text: string; reference: string } }) {
+  return (
+    <blockquote dir="rtl" lang="ar" className="mb-4 border-s-2 border-[var(--home-accent)] ps-4">
+      <p className="font-arabic text-xl leading-loose text-[var(--home-ink)]">{ayah.text}</p>
+      <p className="text-sm text-[var(--home-muted)]">{ayah.reference}</p>
+    </blockquote>
+  );
+}
 
 export default function QuizzesPage() {
   const { language } = useLanguage();
@@ -312,6 +322,7 @@ export default function QuizzesPage() {
                 return (
                   <li key={question.key} className={styles.panel}>
                     <p className="mb-3 font-semibold text-[var(--home-ink)]">{question.promptArabic}</p>
+                    {question.ayah && <AskedAyah ayah={question.ayah} />}
                     {question.branches ? <BranchFeedback question={question} names={data?.surahNames ?? {}} juz={juz} typed={typed[index] ?? emptyBranchAnswers(question)} ar={ar} /> : <><div className="mb-2 flex items-center gap-2">
                       <FontAwesomeIcon icon={correct ? faCircleCheck : faCircleXmark} className={correct ? "text-green-600" : "text-red-500"} />
                       <span>{given ? answerContent(question, given) : ar ? "بدون إجابة" : "No answer"}</span>
@@ -357,6 +368,7 @@ export default function QuizzesPage() {
             </div>
             <div className={styles.panel}>
               <p dir="rtl" lang="ar" className="mb-4 text-xl leading-loose font-semibold">{questions[current].promptArabic}</p>
+              {questions[current].ayah && <AskedAyah ayah={questions[current].ayah} />}
               {questions[current].branches ? (
                 answers[current] !== undefined ? (
                   <BranchFeedback question={questions[current]} names={data?.surahNames ?? {}} juz={juz} typed={typed[current] ?? emptyBranchAnswers(questions[current])} ar={ar} />

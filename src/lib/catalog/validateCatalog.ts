@@ -95,6 +95,10 @@ export function validateCatalog(catalog: Catalog, known: KnownSlugs): CatalogIss
       checkProvenance(ayah.claims, known, at_, issues);
       if (ayah.surah < 1 || ayah.surah > 114) issues.push({ path: at_, message: `no surah ${ayah.surah}` });
       if (ayah.ayah < 1) issues.push({ path: at_, message: `no ayah ${ayah.ayah}` });
+      if (ayah.revealedAbout && ayah.claims === legacyUnreviewed) issues.push({ path: at_, message: 'revealedAbout needs cited claims' });
+      (ayah.revealedAbout?.with ?? []).forEach((slug) => {
+        if (!person(slug)) issues.push({ path: at_, message: `unknown person ${slug}` });
+      });
     });
     (subject.virtues ?? []).forEach((virtue, index) => {
       const where = `${at}.virtues[${index}]`;

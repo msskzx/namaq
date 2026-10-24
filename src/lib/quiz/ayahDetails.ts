@@ -2,11 +2,14 @@ import { prisma } from '@/lib/prisma';
 
 export type AyahDetails = Map<string, { text: string; reference: string }>;
 
-/** The batched ayah resolver for AYAH_LINK choices, shared by the learner and review quiz routes. */
+// docs/quiz-ayah-revealed.md
+export const askedAyah = (question: { family: string; attribute?: string | null }) =>
+  question.family === 'AYAH_REVEALED_ABOUT' ? question.attribute ?? undefined : undefined;
+
 export async function ayahDetails(
-  questions: readonly { family: string; choices: readonly { value: string }[] }[],
+  questions: readonly { family: string; attribute?: string | null; choices: readonly { value: string }[] }[],
 ): Promise<AyahDetails> {
-  const keys = [...new Set(questions.filter((question) => question.family === 'AYAH_LINK').flatMap((question) => question.choices.map((choice) => choice.value)))];
+  const keys = [...new Set(questions.flatMap((question) => question.family === 'AYAH_LINK' ? question.choices.map((choice) => choice.value) : [askedAyah(question) ?? []].flat()))];
   const pairs = keys.flatMap((key) => {
     const [surah, number] = key.split(':').map(Number);
     return Number.isInteger(surah) && Number.isInteger(number) ? [{ surah, number }] : [];
