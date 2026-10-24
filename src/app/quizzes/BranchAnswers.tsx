@@ -40,13 +40,13 @@ function nodeOffsets(tree: Branch) {
     });
   };
   visit(tree, 0);
-  return offsets;
+  return { offsets, parents };
 }
 
 export function BranchFeedback({ question, typed, names, juz, ar }: { question: Question; typed: string[]; names: Names; juz: JuzRange | null; ar: boolean }) {
   if (!question.tree) return null;
   const matches = matchTreeAnswers(question.tree, typed, given(question));
-  const offsets = nodeOffsets(question.tree);
+  const { offsets, parents } = nodeOffsets(question.tree);
   const pages = Object.fromEntries((question.branches ?? []).flatMap(branch => branch.ayat.map(ayah => [ayah.key, ayah.page])));
   return (
     <div className="flex flex-col gap-3" dir="rtl">
@@ -54,7 +54,8 @@ export function BranchFeedback({ question, typed, names, juz, ar }: { question: 
         const match = matches[index];
         const hit = match?.correct;
         const answer = match?.node ?? node;
-        if (!isAsked(question, index)) return <Marked node={answer} ayahKeys={keys(answer)} names={names} offset={offsets.get(answer)} leaf={answer.children.length === 0} references={answer.ayat.length > 0 && <AyahRefs keys={answer.ayat} names={names} pages={pages} tags={tags} linked={answer.children.length > 0} className="" />}><span className="font-arabic text-lg leading-loose">{answer.words.join(" ")}</span></Marked>;
+        const context = { subject: answer.words.join(" "), siblings: parents.has(answer) ? keys(parents.get(answer)!) : undefined, spans: nodeSpans(answer, offsets.get(answer) ?? 0) };
+        if (!isAsked(question, index)) return <Marked node={answer} ayahKeys={keys(answer)} {...context} names={names} offset={offsets.get(answer)} leaf={answer.children.length === 0} references={answer.ayat.length > 0 && <AyahRefs keys={answer.ayat} names={names} pages={pages} tags={tags} linked={answer.children.length > 0} className="" />}><span className="font-arabic text-lg leading-loose">{answer.words.join(" ")}</span></Marked>;
         return (
           <div className="flex flex-col gap-1" data-answer={hit ? "correct" : "incorrect"}>
             <span className="flex items-center gap-2 text-sm text-[var(--home-muted)]">
@@ -62,7 +63,7 @@ export function BranchFeedback({ question, typed, names, juz, ar }: { question: 
               <span className="sr-only">{hit ? (ar ? "صحيح" : "Correct") : (ar ? "غير صحيح" : "Incorrect")}</span>
               {typed[index]?.trim() || (ar ? "بدون إجابة" : "No answer")}
             </span>
-            <Marked node={answer} ayahKeys={keys(answer)} subject={answer.words.join(" ")} siblings={parents.has(answer) ? keys(parents.get(answer)!) : undefined} spans={nodeSpans(answer, offsets.get(answer) ?? 0)} names={names} offset={offsets.get(answer)} leaf={answer.children.length === 0} references={<AyahRefs keys={answer.ayat} names={names} pages={pages} tags={tags} linked={answer.children.length > 0} className="" />}><span className="font-arabic text-lg leading-loose">{answer.words.join(" ")}</span></Marked>
+            <Marked node={answer} ayahKeys={keys(answer)} {...context} names={names} offset={offsets.get(answer)} leaf={answer.children.length === 0} references={<AyahRefs keys={answer.ayat} names={names} pages={pages} tags={tags} linked={answer.children.length > 0} className="" />}><span className="font-arabic text-lg leading-loose">{answer.words.join(" ")}</span></Marked>
           </div>
         );
       }} />
