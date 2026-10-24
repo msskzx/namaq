@@ -45,7 +45,7 @@ describe('GET /api/quran/context', () => {
 
   it('compares every other ayah with the one named by vs, which must be among the requested keys', async () => {
     const body = await (await GET(new Request('http://localhost/api/quran/context?q=94:5,94:6&vs=94:6'))).json();
-    expect(body.map((context: { match?: unknown }) => context.match)).toEqual([{ different: [], rooted: [0] }, undefined]);
+    expect(body.map((context: { match?: unknown }) => context.match)).toEqual([{ exact: [1, 2, 3], rooted: [0] }, { exact: [1, 2, 3], rooted: [0] }]);
     expect((await GET(new Request('http://localhost/api/quran/context?q=94:5&vs=94:6'))).status).toBe(400);
   });
 
