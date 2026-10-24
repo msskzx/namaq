@@ -59,13 +59,15 @@ The owner chose these rules after PR 427.
 - When the originals of a node differ in their marks, the dialog lists each
   version at the top with its ayah count, before any card, with the differing
   words in the purple root mark.
-- In a leaf or first-word dialog the cards mark shared words instead, from the
-  start of the ayah. Each other ayah is compared with the branch's first ayah
-  by the compare page's rule (`pairOf` with `wordKeys.json`). Its words found
-  in that ayah in the same form take the accent mark, and words matched by root
-  in another form take the purple mark. The branch's first ayah marks every
-  word it shares with any of the others, exact before root. So the dialog has
-  two colours: exact, which covers the shared opening, and same root.
+- In a leaf or first-word dialog the cards mark shared words instead. Each
+  other ayah is compared with the branch's first ayah by the compare page's
+  rule (`pairOf` with `wordKeys.json`), wherever the words fall in the ayah.
+  Words found in that ayah with the same letters take the accent mark, and
+  words matched by root in another form take the purple mark. The branch's
+  first ayah marks every word it shares with any of the others, exact before
+  root. So the dialog has two colours: exact, which includes the shared
+  opening, and same root. Only the target ayah is compared. The next-ayah row
+  of a leaf that continues past an ayah stays unmarked.
   `/api/quran/context?vs=<key>` adds this comparison. `vs` must be one of the
   requested keys, and a request holds at most 200 keys (the largest opening
   group has 90 ayat).

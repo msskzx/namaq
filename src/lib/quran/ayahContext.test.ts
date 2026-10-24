@@ -63,4 +63,14 @@ describe('comparedTo', () => {
     expect(second.match).toEqual({ exact: [0, 1, 2], rooted: [] });
     expect(base.match).toEqual({ exact: [0, 1, 2], rooted: [] });
   });
+
+  it('marks a branch word exact when any other ayah shares its form, even if another matches it only by root', async () => {
+    const all = await loadReaderAyat();
+    const contexts = ayahContexts(all, ['2:6', '94:5', '94:6']);
+    const [exact, rooted, base] = comparedTo(contexts, contexts[2].ayah);
+    expect(exact.match?.exact).toContain(0);
+    expect(rooted.match?.rooted).toEqual([0]);
+    expect(base.match?.exact).toContain(0);
+    expect(base.match?.rooted).not.toContain(0);
+  });
 });
