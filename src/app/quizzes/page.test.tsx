@@ -1,6 +1,6 @@
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 
 const nav = vi.hoisted(() => {
   let url = '/quizzes';
@@ -85,7 +85,7 @@ const branchQuestion = {
       { words: ['فَيَحْلِفُونَ', 'لَهُ'], ayat: ['58:18'], children: [] },
     ],
   },
-} as typeof questions[number];
+} as typeof questions[number] & { asked?: number[] };
 
 const availabilityKeys: string[] = [];
 let availableSupply = 5;
@@ -171,9 +171,9 @@ describe('QuizzesPage', () => {
     render(<QuizzesPage />);
 
     for (const name of ['People', 'Battles', 'Relationships']) {
-      expect(screen.getByRole('switch', { name }).getAttribute('aria-checked')).toBe('true');
+      expect(screen.getByRole('button', { name }).getAttribute('aria-pressed')).toBe('true');
     }
-    fireEvent.click(screen.getByRole('switch', { name: 'Battles' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Battles' }));
     expect(new URLSearchParams(nav.getUrl().split('?')[1]).get('topic')).toBe('PEOPLE,RELATIONSHIPS');
   });
 
@@ -324,6 +324,54 @@ describe('QuizzesPage', () => {
     expect(params.get('view')).toBe('tree');
     expect(params.has('length')).toBe(false);
     expect(availabilityKeys.at(-1)).toBe('/api/quiz/availability?topic=BRANCHES&juzFrom=25&juzTo=30');
+  });
+
+  it('keeps the juz range beside a person circle and never lets from pass to', () => {
+    nav.reset('/quizzes?topic=BRANCHES,PERSON_CIRCLE&person=abu-ubaydah&juzFrom=20&juzTo=25');
+    render(<QuizzesPage />);
+    const from = screen.getByRole('spinbutton', { name: "From juz'" });
+    fireEvent.change(from, { target: { value: '28' } });
+    fireEvent.blur(from);
+    const params = new URLSearchParams(nav.getUrl().split('?')[1]);
+    expect(params.get('juzFrom')).toBe('28');
+    expect(params.get('juzTo')).toBe('28');
+  });
+
+  it('offers one to six answers per tree, defaulting to three, and sends the choice with the quiz', () => {
+    nav.reset('/quizzes?topic=BRANCHES');
+    render(<QuizzesPage />);
+    const group = screen.getByRole('group', { name: 'Answers per tree' });
+    expect(within(group).getAllByRole('button').map((button) => button.textContent)).toEqual(['1', '2', '3', '4', '5', '6']);
+    expect(within(group).getByRole('button', { name: '3' }).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getAllByText('You type this')).toHaveLength(3);
+    fireEvent.click(within(group).getByRole('button', { name: '5' }));
+    expect(new URLSearchParams(nav.getUrl().split('?')[1]).get('leaves')).toBe('5');
+    expect(screen.getAllByText('You type this')).toHaveLength(5);
+  });
+
+  it('keeps the setup example free of buttons that would open ayat', () => {
+    nav.reset('/quizzes?topic=BRANCHES');
+    render(<QuizzesPage />);
+    const tree = screen.getByRole('region', { name: 'Example tree' });
+    expect(within(tree).queryAllByRole('button')).toHaveLength(0);
+    expect(within(tree).queryAllByRole('link')).toHaveLength(0);
+    expect(tree.querySelector('[data-differing]')).toBeTruthy();
+  });
+
+  it('types only the asked leaves and gives the rest of the tree', () => {
+    const original = questions[0];
+    questions[0] = { ...branchQuestion, asked: [3] } as typeof questions[number];
+    try {
+      nav.reset('/quizzes?topic=BRANCHES&length=5');
+      render(<QuizzesPage />);
+      expect(screen.getAllByRole('textbox')).toHaveLength(1);
+      expect(screen.getByText('فَيُنَبِّئُهُمْ')).toBeTruthy();
+      fireEvent.change(screen.getByLabelText('Node 4'), { target: { value: 'فيحلفون له' } });
+      fireEvent.click(screen.getByRole('button', { name: 'Check' }));
+      expect(screen.getByRole('button', { name: 'Question 1 - correct' })).toBeTruthy();
+    } finally {
+      questions[0] = original;
+    }
   });
 
   it('selects an available question count and starts only after the explicit action', () => {

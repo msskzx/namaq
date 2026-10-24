@@ -5,7 +5,7 @@ import { ayahDetails } from '@/lib/quiz/ayahDetails';
 import { selectQuizReference } from '@/lib/quiz/quizReference';
 import { parseQuizTopics } from '@/lib/quiz/topics';
 import { parseJuzRange } from '@/lib/quran/juz';
-import { QUIZ_LENGTHS, QUIZ_TOPICS, type QuizLength, type QuizTopic } from '@/lib/quiz/types';
+import { parseLeaves, QUIZ_LENGTHS, QUIZ_TOPICS, type QuizLength, type QuizTopic } from '@/lib/quiz/types';
 
 async function referenceClaims(claimKeys: string[]) {
   if (claimKeys.length === 0) return [];
@@ -33,6 +33,7 @@ export async function GET(request: Request) {
   const length = Number(searchParams.get('length'));
   const person = searchParams.get('person') ?? undefined;
   const juz = parseJuzRange(searchParams.get('juzFrom'), searchParams.get('juzTo'));
+  const leaves = parseLeaves(searchParams.get('leaves'));
   if (!topics.length || topics.some((topic) => !QUIZ_TOPICS.includes(topic as QuizTopic))) return NextResponse.json({ error: 'Unknown topic', topics: QUIZ_TOPICS }, { status: 400 });
   if (!QUIZ_LENGTHS.includes(length as QuizLength)) return NextResponse.json({ error: 'Unknown length', lengths: QUIZ_LENGTHS }, { status: 400 });
   if (topics.includes('PERSON_CIRCLE') && !person) return NextResponse.json({ error: 'This topic needs a person' }, { status: 400 });
@@ -41,7 +42,7 @@ export async function GET(request: Request) {
     const selectedTopics = topics as QuizTopic[];
     const available = await availableQuestionCount(selectedTopics, person, juz);
     if (available < length) return NextResponse.json({ error: 'Not enough approved questions', available }, { status: 409 });
-    const questions = await assembleQuiz({ topics: selectedTopics, personSlug: person, juz, length: length as QuizLength, random: Math.random });
+    const questions = await assembleQuiz({ topics: selectedTopics, personSlug: person, juz, leaves, length: length as QuizLength, random: Math.random });
     const claimKeys = [...new Set(questions.flatMap((question) => question.evidence.claimKeys))];
     const surahs = [...new Set(questions.flatMap((question) => (question.branches ?? []).flatMap((branch) => branch.ayat.map((ayah) => Number(ayah.key.split(':')[0])))))];
     const [claims, details, names] = await Promise.all([

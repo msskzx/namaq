@@ -4,6 +4,7 @@ const { count, findMany } = vi.hoisted(() => ({ count: vi.fn(), findMany: vi.fn(
 vi.mock('@/lib/prisma', () => ({ prisma: { quizQuestion: { count, findMany } } }));
 
 import { assembleQuiz, availableQuestionCount } from './assemble';
+import { branchNodes } from './branchAnswers';
 
 const rows = [{
   key: 'one',
@@ -51,11 +52,29 @@ describe('approved quiz assembly', () => {
     expect(questions[0].branches?.length).toBeGreaterThanOrEqual(2);
   });
 
-  it('counts shared openings on top of the bank and leaves them out of a person circle', async () => {
+  it('counts shared openings on top of the bank and beside a person circle', async () => {
     const both = await availableQuestionCount(['AYAT', 'BRANCHES']);
     expect(both).toBeGreaterThan(500);
     expect(count).toHaveBeenCalledWith({ where: { status: 'APPROVED', topic: { in: ['AYAT'] } } });
-    expect(await availableQuestionCount(['PERSON_CIRCLE', 'BRANCHES'], 'abu-ubaydah')).toBe(1);
+    expect(await availableQuestionCount(['PERSON_CIRCLE', 'BRANCHES'], 'abu-ubaydah')).toBeGreaterThan(500);
+    expect(count).toHaveBeenLastCalledWith({ where: { status: 'APPROVED', personSlugs: { has: 'abu-ubaydah' } } });
+  });
+
+  it('adds a person circle to the other chosen topics instead of replacing them', async () => {
+    await assembleQuiz({ topics: ['PEOPLE', 'PERSON_CIRCLE'], personSlug: 'abu-ubaydah', length: 5, random: () => 0 });
+    expect(findMany).toHaveBeenCalledWith(expect.objectContaining({
+      where: { status: 'APPROVED', OR: [{ topic: { in: ['PEOPLE'] } }, { personSlugs: { has: 'abu-ubaydah' } }] },
+    }));
+  });
+
+  it('asks the chosen number of leaves and gives every other node', async () => {
+    const questions = await assembleQuiz({ topics: ['BRANCHES'], leaves: 2, length: 15, random: () => 0.3 });
+    for (const question of questions) {
+      const nodes = branchNodes(question.tree!);
+      const leafCount = nodes.filter((node) => node.children.length === 0).length;
+      expect(question.asked).toHaveLength(Math.min(2, leafCount));
+      for (const index of question.asked!) expect(nodes[index].children).toHaveLength(0);
+    }
   });
 
   it('builds shared-opening questions from the chosen juz only', async () => {

@@ -21,17 +21,17 @@ import LoadingSpinner from "@/components/common/LoadingSpinner";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import Button from "@/components/common/Button";
 import QuizReferenceDialog from "@/components/common/QuizReferenceDialog";
-import SlideSwitch from "@/components/graph/SlideSwitch";
 import { useLanguage } from "@/components/language/LanguageContext";
 import { parseQuizTopics } from "@/lib/quiz/topics";
 import { fetcher } from "@/lib/swr";
 import type { QuestionChoice, QuestionFamily, QuizLength, QuizTopic } from "@/lib/quiz/types";
 import type { QuizReference } from "@/lib/quiz/quizReference";
-import { QUIZ_TOPICS } from "@/lib/quiz/types";
+import { DEFAULT_LEAVES, parseLeaves, QUIZ_LEAVES } from "@/lib/quiz/types";
+import { num } from "@/lib/quran/arabicNumber";
 import type { BranchAnswer, BranchQuestion } from "@/lib/quiz/branchQuestions";
 import { parseJuzRange } from "@/lib/quran/juz";
 import type { Branch, Variant } from "@/lib/quran/branches";
-import { BranchFeedback, BranchInputs, branchesCorrect, emptyBranchAnswers } from "./BranchAnswers";
+import { BranchFeedback, BranchInputs, BranchPreview, branchesCorrect, emptyBranchAnswers } from "./BranchAnswers";
 
 interface QuizQuestionView {
   key: string;
@@ -42,6 +42,7 @@ interface QuizQuestionView {
   branches?: BranchAnswer[];
   tree?: Branch;
   variants?: Variant[];
+  asked?: number[];
   choiceDetails: Record<string, { text: string; reference: string }>;
   correctAnswer: string;
   evidence: { reference: QuizReference | null };
@@ -57,6 +58,16 @@ const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
   BRANCHES: { en: "Shared openings", ar: "فواتح الآيات" },
 };
 
+const TOPIC_GROUPS: { en: string; ar: string; topics: QuizTopic[] }[] = [
+  { en: "Quran", ar: "القرآن", topics: ["BRANCHES", "AYAT"] },
+  { en: "Seerah and biographies", ar: "السيرة والتراجم", topics: ["PEOPLE", "BATTLES", "RELATIONSHIPS", "EVENTS", "PERSON_CIRCLE"] },
+];
+
+const LEAF_LEVELS: Record<number, { en: string; ar: string }> = {
+  3: { en: "easy", ar: "سهل" },
+  6: { en: "hard", ar: "صعب" },
+};
+
 export default function QuizzesPage() {
   const { language } = useLanguage();
   const ar = language === "ar";
@@ -68,6 +79,7 @@ export default function QuizzesPage() {
   const person = searchParams.get("person") ?? "";
   const juzFrom = topics.includes("BRANCHES") ? searchParams.get("juzFrom") ?? "" : "";
   const juzTo = topics.includes("BRANCHES") ? searchParams.get("juzTo") ?? "" : "";
+  const leaves = parseLeaves(searchParams.get("leaves"));
   const juz = useMemo(() => parseJuzRange(juzFrom || null, juzTo || null), [juzFrom, juzTo]);
   const topicQuery = topics.map((value) => `topic=${encodeURIComponent(value)}`).join("&");
   const scopeQuery = `${person ? `&person=${encodeURIComponent(person)}` : ""}${juzFrom ? `&juzFrom=${encodeURIComponent(juzFrom)}` : ""}${juzTo ? `&juzTo=${encodeURIComponent(juzTo)}` : ""}`;
@@ -78,7 +90,7 @@ export default function QuizzesPage() {
   const { data: availability } = useSWR<{ available: number; lengths: QuizLength[] }>(availabilityQuery, fetcher);
   const started = Boolean(topics.length && length && availability?.lengths.includes(length) && (!topics.includes("PERSON_CIRCLE") || person));
   const query = started
-    ? `/api/quiz?${topicQuery}&length=${length}${scopeQuery}`
+    ? `/api/quiz?${topicQuery}&length=${length}${scopeQuery}${topics.includes("BRANCHES") ? `&leaves=${leaves}` : ""}`
     : null;
   const { data, error, isLoading } = useSWR<{ questions: QuizQuestionView[]; surahNames?: Record<number, string> }>(query, fetcher, {
     revalidateOnFocus: false,
@@ -145,63 +157,111 @@ export default function QuizzesPage() {
   };
 
   if (!started) {
+    const hasBranches = topics.includes("BRANCHES");
+    const toggleTopic = (value: QuizTopic) => setParam({
+      topic: topics.includes(value) ? topics.filter((item) => item !== value).join(",") || undefined : [...topics, value].join(","),
+      length: undefined,
+      person: value === "PERSON_CIRCLE" || topics.includes("PERSON_CIRCLE") ? person || undefined : undefined,
+    });
+    const optionValue = (suggestion: (typeof personSuggestions)[number]) =>
+      personSuggestions.filter((other) => other.name === suggestion.name).length > 1 ? `${suggestion.name} (${suggestion.nameTransliterated ?? suggestion.slug})` : suggestion.name;
+    const commitPerson = () => {
+      const typedName = personInput.trim();
+      const match = personSuggestions.find((suggestion) => [optionValue(suggestion), suggestion.slug].includes(typedName));
+      setParam({ person: match?.slug ?? (typedName || undefined), length: undefined });
+    };
     return (
       <div className={styles.page}>
         <div className="mx-auto max-w-3xl px-4 py-8" dir={ar ? "rtl" : "ltr"}>
           <header className={styles.heading}><p className={styles.eyebrow}>{ar ? "نمق · اختبر معرفتك" : "Namaq · Test your knowledge"}</p><h1>{ar ? "الاختبارات" : "Quizzes"}</h1><p>{ar ? "اختر المواضيع وعدد الأسئلة، ثم ابدأ الاختبار." : "Choose your topics and question count, then start a quiz."}</p></header>
-          <fieldset className={`mb-6 flex flex-wrap gap-x-6 gap-y-4 ${styles.panel}`}>
-            <legend className="mb-2 w-full text-sm font-semibold text-[var(--home-ink)]">{ar ? "المواضيع، اختر واحدًا أو أكثر" : "Topics, choose one or more"}</legend>
-            {QUIZ_TOPICS.map((value) => (
-              <SlideSwitch
-                key={value}
-                checked={topics.includes(value)}
-                onChange={() => setParam({
-                  topic: topics.includes(value) ? topics.filter((item) => item !== value).join(",") || undefined : [...topics, value].join(","),
-                  length: undefined,
-                  person: value === "PERSON_CIRCLE" || topics.includes("PERSON_CIRCLE") ? person || undefined : undefined,
-                })}
-                color="var(--home-accent)"
-                label={TOPIC_LABELS[value][ar ? "ar" : "en"]}
-              />
-            ))}
-          </fieldset>
-          {topics.includes("BRANCHES") && !topics.includes("PERSON_CIRCLE") && (
-            <fieldset className="mb-6 flex flex-wrap items-end gap-4">
-              <legend className="mb-2 w-full text-sm font-semibold text-[var(--home-ink)]">{ar ? "أجزاء فواتح الآيات" : "Juz' for shared openings"}</legend>
-              {([["juzFrom", juzFrom || "1", ar ? "من الجزء" : "From juz'"], ["juzTo", juzTo || "30", ar ? "إلى الجزء" : "To juz'"]] as const).map(([key, value, label]) => (
-                <div key={key} className="flex flex-col gap-1 text-sm text-[var(--home-ink)]">
-                  <span>{label}</span>
-                  <NumberInput label={label} value={Number(value)} min={1} max={30}
-                    onChange={(next) => setParam({ [key]: String(next), length: undefined })} />
+          <fieldset className={`mb-6 min-w-0 ${styles.panel}`}>
+            <legend className="mb-2 text-sm font-semibold text-[var(--home-ink)]">{ar ? "المواضيع، اختر واحدًا أو أكثر" : "Topics, choose one or more"}</legend>
+            {TOPIC_GROUPS.map((group) => (
+              <div key={group.en} className="mb-3 last:mb-0">
+                <p className="mb-1.5 text-sm text-[var(--home-muted)]">{group[ar ? "ar" : "en"]}</p>
+                <div className="flex flex-wrap gap-2">
+                  {group.topics.map((value) => (
+                    <Button key={value} active={topics.includes(value)} aria-pressed={topics.includes(value)} onClick={() => toggleTopic(value)}>
+                      {TOPIC_LABELS[value][ar ? "ar" : "en"]}
+                    </Button>
+                  ))}
                 </div>
-              ))}
+              </div>
+            ))}
+            {topics.includes("PERSON_CIRCLE") && (
+              <label className="mt-4 block">
+                <span className="mb-1 block text-sm font-semibold text-[var(--home-ink)]">{ar ? "الشخص" : "Person"}</span>
+                <input
+                  type="text"
+                  value={personInput}
+                  onChange={async (event) => {
+                    const value = event.target.value;
+                    setPersonInput(value);
+                    if (!value.trim()) {
+                      setPersonSuggestions([]);
+                      return;
+                    }
+                    const response = await fetch(`/api/people/suggest?q=${encodeURIComponent(value)}`);
+                    if (response.ok) setPersonSuggestions((await response.json()).data ?? []);
+                  }}
+                  onBlur={commitPerson}
+                  list="quiz-people"
+                  placeholder={ar ? "ابحث عن شخص" : "Search for a person"}
+                  className="w-full rounded border border-[var(--home-rule)] bg-transparent px-3 py-2 text-[var(--home-ink)]"
+                />
+                <datalist id="quiz-people">
+                  {personSuggestions.map((suggestion) => <option key={suggestion.slug} value={optionValue(suggestion)}>{suggestion.nameTransliterated ?? suggestion.name}</option>)}
+                </datalist>
+                <span className="mt-1 block text-xs text-[var(--home-muted)]">{ar ? "تُضاف أسئلة هذا الشخص إلى المواضيع الأخرى المختارة." : "This person's questions are added to the other topics you chose."}</span>
+              </label>
+            )}
+          </fieldset>
+          {hasBranches && (
+            <fieldset className={`mb-6 min-w-0 ${styles.panel}`}>
+              <legend className="mb-2 text-sm font-semibold text-[var(--home-ink)]">{ar ? "فواتح الآيات" : "Shared openings"}</legend>
+              <div className="mb-5 flex flex-wrap items-end gap-4">
+                {([["juzFrom", juz?.from ?? 1, ar ? "من الجزء" : "From juz'"], ["juzTo", juz?.to ?? 30, ar ? "إلى الجزء" : "To juz'"]] as const).map(([key, value, label]) => (
+                  <div key={key} className="flex flex-col gap-1 text-sm text-[var(--home-ink)]">
+                    <span>{label}</span>
+                    <NumberInput label={label} value={value} min={1} max={30}
+                      onChange={(next) => {
+                        const other = key === "juzFrom" ? juz?.to ?? 30 : juz?.from ?? 1;
+                        const crossed = key === "juzFrom" ? next > other : next < other;
+                        setParam({ [key]: String(next), ...(crossed && { [key === "juzFrom" ? "juzTo" : "juzFrom"]: String(next) }), length: undefined });
+                      }} />
+                  </div>
+                ))}
+              </div>
+              <div role="group" aria-labelledby="quiz-leaves" className="mb-2">
+                <p id="quiz-leaves" className="mb-1.5 text-sm font-semibold text-[var(--home-ink)]">{ar ? "عدد الإجابات في كل شجرة" : "Answers per tree"}</p>
+                <div className="flex flex-wrap items-start gap-2">
+                  {QUIZ_LEAVES.map((value) => (
+                    <div key={value} className="flex flex-col items-center gap-0.5">
+                      <Button size="icon" className="min-w-10 justify-center" active={leaves === value} aria-pressed={leaves === value}
+                        onClick={() => setParam({ leaves: value === DEFAULT_LEAVES ? undefined : String(value) })}>
+                        {ar ? num(value) : value}
+                      </Button>
+                      {LEAF_LEVELS[value] && <span className="text-xs text-[var(--home-muted)]">{LEAF_LEVELS[value][ar ? "ar" : "en"]}</span>}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <p className="mb-4 text-sm leading-relaxed text-[var(--home-muted)]">{ar
+                ? `تكتب ${num(leaves)} من أطراف الشجرة، ويُعرض باقيها مكتوبًا. الشجرة التي أطرافها أقل تُطلب كل أطرافها.`
+                : `You type ${leaves} of the tree's leaves, and the rest of the tree is shown. A tree with fewer leaves asks for all of them.`}</p>
+              <BranchPreview leaves={leaves} ar={ar} />
+              <dl className="mt-4 space-y-2 text-sm leading-relaxed text-[var(--home-ink)]">
+                <div><dt className="inline font-semibold">{ar ? "التصحيح: " : "Grading: "}</dt><dd className="inline">{ar
+                  ? "تكفي من كل طرف كلمتاه الأوليان، ويجب أن تصح كل كلمة تكتبها وبترتيبها. اكتب بالإملاء المعتاد لا برسم المصحف، والهمزة على أي كرسي. يُحسب السؤال صحيحًا إذا صحت كل الأطراف المطلوبة، والأطراف المتشابهة في الشكل تقبل أي ترتيب."
+                  : "A leaf's first two words are enough, and every word you type must be right and in order. Type ordinary spelling, not the mushaf script; a hamza may sit on any seat. A question is correct when every asked leaf is correct, and leaves of the same shape can go in either order."}</dd></div>
+                <div><dt className="inline font-semibold">{ar ? "الزر الملوّن: " : "Coloured button: "}</dt><dd className="inline">{ar
+                  ? "يظهر بعد التحقق على عقدة تجمع آيات تختلف كلماتها في علامات الضبط، مثل «إِن» و«إِنْ» أعلاه. اضغطه لترى كل آية في سياقها والكلمات المختلفة بارزة."
+                  : "After checking, it marks a node whose ayat differ in the marks of its words, like «إِن» and «إِنْ» above. Press it to see each ayah in context with the differing words highlighted."}</dd></div>
+                <div><dt className="inline font-semibold">{ar ? "الكلمة الأولى: " : "First word: "}</dt><dd className="inline">{ar
+                  ? "إذا بدأت بعض الآيات بالواو أو الفاء رُسمت كل صيغة وحدها، الخضراء بالواو والبنفسجية بالفاء."
+                  : "When some ayat open with و or ف, each spelling is drawn on its own: green with و, purple with ف."}</dd></div>
+              </dl>
             </fieldset>
-          )}
-          {topics.includes("PERSON_CIRCLE") && (
-            <label className="mb-6 block">
-              <span className="mb-1 block text-sm font-semibold text-[var(--home-ink)]">{ar ? "الشخص" : "Person"}</span>
-              <input
-                type="text"
-                value={personInput}
-                onChange={async (event) => {
-                  const value = event.target.value;
-                  setPersonInput(value);
-                  if (!value.trim()) {
-                    setPersonSuggestions([]);
-                    return;
-                  }
-                  const response = await fetch(`/api/people/suggest?q=${encodeURIComponent(value)}`);
-                  if (response.ok) setPersonSuggestions((await response.json()).data ?? []);
-                }}
-                onBlur={() => setParam({ person: personInput || undefined, length: undefined })}
-                list="quiz-people"
-                placeholder={ar ? "ابحث عن شخص" : "Search for a person"}
-                className="w-full rounded border border-[var(--home-rule)] bg-transparent px-3 py-2 text-[var(--home-ink)]"
-              />
-              <datalist id="quiz-people">
-                {personSuggestions.map((suggestion) => <option key={suggestion.slug} value={suggestion.slug}>{suggestion.nameTransliterated ?? suggestion.name}</option>)}
-              </datalist>
-            </label>
           )}
           {availability && (
             <>
