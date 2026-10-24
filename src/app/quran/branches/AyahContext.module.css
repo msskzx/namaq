@@ -18,4 +18,4 @@
 .section { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--home-rule); }
 .spellings ul { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; }
 .spellings li { display: flex; align-items: baseline; gap: 0.5rem; font-size: 1.5rem; line-height: 2; }
-.differing { background: var(--home-highlight); color: var(--home-on-highlight); padding: 0 0.15em; border-radius: 2px; }
+.spellings mark { background: transparent; color: var(--home-root); text-decoration: underline dotted var(--home-root); text-underline-offset: 0.3em; }

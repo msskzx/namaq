@@ -49,6 +49,12 @@ describe('GET /api/quran/context', () => {
     expect((await GET(new Request('http://localhost/api/quran/context?q=94:5&vs=94:6'))).status).toBe(400);
   });
 
+  it('rejects more than 200 keys before loading the corpus', async () => {
+    const keys = Array.from({ length: 201 }, (_, i) => `2:${i + 1}`).join(',');
+    expect((await GET(request(keys))).status).toBe(400);
+    expect(loadReaderAyat).not.toHaveBeenCalled();
+  });
+
   it('returns 404 if any requested ayah is absent instead of returning partial cards', async () => {
     const response = await GET(request('94:5,94:999'));
 

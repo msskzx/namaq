@@ -47,17 +47,21 @@ The owner chose these rules after PR 427.
 - Every node and every first-word box has a context button. An inner node opens
   every ayah under it. A leaf opens its own ayat first, then a section with every
   other ayah under the same parent.
+- The dialog uses the compare page's marks and no other style. Words of the
+  opened node take the accent mark in each of its own cards. Words that differ
+  only in their marks take the purple root mark, since they are the same word
+  in another form.
 - When the originals of a node differ in their marks, the dialog lists each
-  version at the top with its ayah count, before any card, and highlights the
-  differing words in amber.
-- Each card shades the words of the opened node. In a leaf dialog each sibling
-  card shades that sibling's own branch words, so the split from the leaf shows.
+  version at the top with its ayah count, before any card, with the differing
+  words in the purple root mark.
 - In a leaf dialog each sibling ayah is compared with the leaf's first ayah by
   the compare page's rule (`pairOf` with `wordKeys.json`). Words the leaf ayah
-  lacks take the accent colour and same-root words take purple, with the
-  compare legend. `/api/quran/context?vs=<key>` adds this comparison, and `vs`
-  must be one of the requested keys. Inner-node dialogs skip it, since a root
-  node can hold dozens of ayat.
+  lacks take the accent mark and same-root words the purple mark, with the
+  compare legend. Sibling cards carry no node marks. `/api/quran/context?vs=<key>`
+  adds this comparison. `vs` must be one of the requested keys, and a request
+  holds at most 200 keys. The leaf's own ayat are never compared. Inner-node
+  dialogs skip the comparison, since a root node can hold dozens of ayat.
+- Each context button is named after its node's words.
 - قَالَ رَبِّى stays out of the قال رب tree. The ي is a written letter, so it
   fails the same-letters rule.
 

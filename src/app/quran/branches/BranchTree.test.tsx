@@ -149,9 +149,23 @@ describe('BranchTree', () => {
     await vi.waitFor(() => expect(asked()).toBe('44:51,15:45,51:15'));
   });
 
-  it('spans a node over its own words and a leaf over each sibling branch under the same parent', () => {
+  it('spans each node over its own words in every ayah under it', () => {
     expect(nodeSpans(tree, 0)).toEqual({ '15:45': [0, 3], '51:15': [0, 3], '44:51': [0, 3] });
-    expect(nodeSpans(tree.children[1], 3, tree)).toEqual({ '15:45': [3, 5], '51:15': [3, 5], '44:51': [3, 5] });
+    expect(nodeSpans(tree.children[1], 3)).toEqual({ '44:51': [3, 5] });
+  });
+
+  it('names each inner button after its node and highlights differing marks of a nested node at its own offset', () => {
+    const merged = { words: ['قال', 'نُوحًا'], ayat: [], forms: { '57:26': ['قال', 'نُوحًۭا'], '7:59': ['قال', 'نُوحًا'] }, children: [
+      { words: ['رب'], ayat: ['7:59'], children: [] },
+      { words: ['يا'], ayat: ['57:26'], children: [] },
+    ] };
+    render(<BranchTree tree={{ words: ['إذ'], ayat: [], children: [merged, { words: ['هو'], ayat: ['1:1'], children: [] }] }} names={{}} pages={{}} />);
+    expect(screen.getByRole('button', { name: 'عرض الآيات في سياقها: إذ' })).toBeTruthy();
+    const nested = screen.getByRole('button', { name: 'عرض اختلافات الضبط والسياق: قال نُوحًا' });
+    expect(nested).toBeTruthy();
+    const marks = screen.getAllByRole('region', { name: 'الضبط في هذه العقدة', hidden: true });
+    expect(marks).toHaveLength(1);
+    expect([...marks[0].querySelectorAll('mark')].map(mark => mark.textContent)).toEqual(['نُوحًۭا', 'نُوحًا']);
   });
 
   it('lists the differing marks of a merged node at the top of its overlay with the differing word highlighted', () => {

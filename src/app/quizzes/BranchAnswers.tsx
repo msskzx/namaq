@@ -62,7 +62,7 @@ export function BranchFeedback({ question, typed, names, juz, ar }: { question: 
               <span className="sr-only">{hit ? (ar ? "صحيح" : "Correct") : (ar ? "غير صحيح" : "Incorrect")}</span>
               {typed[index]?.trim() || (ar ? "بدون إجابة" : "No answer")}
             </span>
-            <Marked node={answer} ayahKeys={keys(answer)} siblings={parents.has(answer) ? keys(parents.get(answer)!) : undefined} spans={nodeSpans(answer, offsets.get(answer) ?? 0, parents.get(answer))} names={names} offset={offsets.get(answer)} leaf={answer.children.length === 0} references={<AyahRefs keys={answer.ayat} names={names} pages={pages} tags={tags} linked={answer.children.length > 0} className="" />}><span className="font-arabic text-lg leading-loose">{answer.words.join(" ")}</span></Marked>
+            <Marked node={answer} ayahKeys={keys(answer)} subject={answer.words.join(" ")} siblings={parents.has(answer) ? keys(parents.get(answer)!) : undefined} spans={nodeSpans(answer, offsets.get(answer) ?? 0)} names={names} offset={offsets.get(answer)} leaf={answer.children.length === 0} references={<AyahRefs keys={answer.ayat} names={names} pages={pages} tags={tags} linked={answer.children.length > 0} className="" />}><span className="font-arabic text-lg leading-loose">{answer.words.join(" ")}</span></Marked>
           </div>
         );
       }} />
