@@ -51,23 +51,24 @@ The owner chose these rules after PR 427.
   the opened branch say so in their subtitle. Cards side by side share their
   rows like the compare page's facing pages, so the target ayat line up. A
   missing neighbour keeps its empty row.
-- The dialog uses the compare page's marks and no other style. In each of its
-  own cards, the words from the start of the ayah to the end of the opened node
-  take the accent mark. Words that differ
-  only in their marks take the purple root mark, since they are the same word
-  in another form.
+- The dialog uses the compare page's marks and no other style. Words that
+  differ only in their marks take the purple root mark, since they are the
+  same word in another form.
+- In an inner-node dialog, the words from the start of each ayah to the end of
+  the opened node take the accent mark.
 - When the originals of a node differ in their marks, the dialog lists each
   version at the top with its ayah count, before any card, with the differing
   words in the purple root mark.
-- In a leaf or first-word dialog each other ayah is compared with the branch's
-  first ayah by the compare page's rule (`pairOf` with `wordKeys.json`). Words the leaf ayah
-  lacks take the accent mark and same-root words the purple mark, with the
-  compare legend. Sibling cards carry no node marks. `/api/quran/context?vs=<key>`
-  adds this comparison. `vs` must be one of the requested keys, and a request
-  holds at most 200 keys (the largest opening group has 90 ayat). The branch's
-  own ayat are never compared. Each card is compared with one ayah only, so a
-  first-word box on a large tree stays readable. Inner-node dialogs skip the
-  comparison, since all their ayat are the branch's own.
+- In a leaf or first-word dialog the cards mark shared words instead, from the
+  start of the ayah. Each other ayah is compared with the branch's first ayah
+  by the compare page's rule (`pairOf` with `wordKeys.json`). Its words found
+  in that ayah in the same form take the accent mark, and words matched by root
+  in another form take the purple mark. The branch's first ayah marks every
+  word it shares with any of the others, exact before root. So the dialog has
+  two colours: exact, which covers the shared opening, and same root.
+  `/api/quran/context?vs=<key>` adds this comparison. `vs` must be one of the
+  requested keys, and a request holds at most 200 keys (the largest opening
+  group has 90 ayat).
 - Each context button is named after its node's words.
 - قَالَ رَبِّى stays out of the قال رب tree. The ي is a written letter, so it
   fails the same-letters rule.

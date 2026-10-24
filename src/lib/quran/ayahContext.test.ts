@@ -55,11 +55,12 @@ describe('loadReaderAyat', () => {
 });
 
 describe('comparedTo', () => {
-  it('marks the words of each sibling that the branch ayah lacks, as the compare page does, and leaves the branch ayah unmarked', async () => {
+  it('marks every word a sibling shares with the branch ayah, from the start, and the branch ayah\'s words shared with any sibling', async () => {
     const all = await loadReaderAyat();
-    const contexts = ayahContexts(all, ['23:26', '29:30']);
-    const [sibling, base] = comparedTo(contexts, contexts[1].ayah);
-    expect(base.match).toBeUndefined();
-    expect(sibling.match).toEqual({ different: [3, 4], rooted: [] });
+    const contexts = ayahContexts(all, ['23:26', '23:39', '29:30']);
+    const [first, second, base] = comparedTo(contexts, contexts[2].ayah);
+    expect(first.match).toEqual({ exact: [0, 1, 2], rooted: [] });
+    expect(second.match).toEqual({ exact: [0, 1, 2], rooted: [] });
+    expect(base.match).toEqual({ exact: [0, 1, 2], rooted: [] });
   });
 });
