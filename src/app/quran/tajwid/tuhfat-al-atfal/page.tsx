@@ -8,7 +8,7 @@ import styles from './Poem.module.css';
 export const metadata: Metadata = { title: 'تحفة الأطفال والغلمان' };
 
 export default function TuhfatAlAtfalPage() {
-  const { title, author, composed, transcription, corrected, edition } = poem as Poem;
+  const { title, author, composed, transcription, edition } = poem as Poem;
   const chapters = numberVerses(poem as Poem);
   const contents = chapters.map((chapter, i) => (
     <li key={chapter.title}><a href={`#bab-${i + 1}`}><span>{chapter.title}</span><span>{num(chapter.verses[0].number)}</span></a></li>
@@ -21,9 +21,7 @@ export default function TuhfatAlAtfalPage() {
         <h1>{title}</h1>
         <p>{author}، نظمها سنة {num(composed)}هـ، وأبياتها {num(count)}</p>
         <p className="text-sm">
-          {edition.checked
-            ? <>الضبط: <a className="underline" href={edition.url}>{edition.name}</a></>
-            : <>النص منقول من <a className="underline" href={transcription}>نسخة رقمية</a> صُحّحت فيها الأبيات {corrected.map(num).join('، ')}، ولم يُقابل بعد بـ<a className="underline" href={edition.url}>{edition.name}</a>.</>}
+          الضبط: <a className="underline" href={edition.url}>{edition.name}</a>، قوبل به كل بيت من <a className="underline" href={transcription}>نسخة رقمية</a>.
         </p>
       </header>
       <div className={styles.layout}>

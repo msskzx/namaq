@@ -33,5 +33,5 @@
 @media (min-width: 48rem) {
   .bayt { grid-template-columns: 2.5rem 1fr 1fr; column-gap: 2.5rem; padding-block: 0.125rem; font-size: 1.5625rem; line-height: 2.1; }
   .bayt .shatr { text-align: justify; text-align-last: justify; }
-  .bayt .shatr + .shatr { grid-column: auto; padding-inline-start: 0; }
+  .bayt .shatr + .shatr { grid-column: auto; padding-inline-start: 2.5rem; }
 }
