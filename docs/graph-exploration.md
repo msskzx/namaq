@@ -1,11 +1,5 @@
 # Graph exploration
 
-Status: **implemented**, in five phases on top of the rules below. This
-merges what were three separate documents from the discovery interview,
-the confirmed rules, and the implementation audit into one: the interview's
-back-and-forth ("round one" through "round seven") is dropped as superseded
-scaffolding, and what follows is the settled spec plus how it was built.
-
 ## Confirmed rules
 
 1. Support separate local (selected subject) and global relationship filtering.
@@ -63,7 +57,7 @@ scaffolding, and what follows is the settled spec plus how it was built.
    selected subject and all its incident connections and collapses its
    branch. Independently supported descendants remain. Active global filters
    cannot immediately reintroduce the explicitly removed subject; explicitly
-   searching it restores its eligibility. Both removal actions affect
+   searching it or explicitly expanding a local relationship restores its eligibility. Show full graph respects removals. Both removal actions affect
    exploration state, not historical data, and browser Back can undo them.
 10. Keep only selected subject and direct relations (renamed **Keep only this
     node**) replaces the visible exploration with that subject and its
@@ -105,87 +99,3 @@ the slider, since they are not a scoped choice.
 Rule 1 revises the scope model in [ADR 0004](adr/0004-merge-overview-into-exploration.md).
 Rule 2 revises [ADR 0001](adr/0001-separate-expansion-from-connection-visibility.md)'s
 unconditional connection visibility. Terms remain in [CONTEXT.md](../CONTEXT.md).
-
-## Acceptance criteria
-
-| Rule | Acceptance criterion |
-| --- | --- |
-| Selected scope | With Muhammad and his wives present, select Aisha and enable Father: that action introduces only Aisha's father. |
-| Global scope | Global filters start off. Enabling global Father permits father connections between existing subjects. It also introduces missing fathers with the one-hop cap; toggling does not advance the cap. |
-| Contribution removal | Collapse Muhammad's Wives contribution while Aisha has an independent Parents expansion: retain Aisha and her parents. |
-| Connection visibility | Connections between retained subjects appear only when allowed by current filters, including inverse-pair presentation. |
-| Filter preservation | Search, Explore, and ordinary resets preserve on/off filter choices; companionship starts off. Start over restores defaults. |
-| Start over | After companionship is manually enabled and other filters changed, Start over restores every filter default, including companionship off, clears previous contributions and cap history, and reveals Muhammad with every direct relation and his line in both directions. |
-| Bulk and group toggles | With companionship off, group/all-on leaves it off; with companionship on, group/all-off leaves it on. Both recorded directions retain the same state. |
-| Companion expansion | Explore includes companions only when their filter is enabled, without changing that state. |
-| Companion directions | The dedicated toggle handles both COMPANION_OF and ACCOMPANIED_BY under the chosen subject/global scope. |
-| Persistent cap | Searching or removing/reintroducing a Father-introduced subject does not make it trigger global Father; manual expansion still works. Start over clears history. |
-| Search contribution removal | Removing a searched subject preserves it if another contribution supports it, including its own active expansion. |
-| Battle participation status | Battle node type defaults off. Manually enabling it initially includes all statuses and unrecorded status. Selecting injured and captured matches either. |
-| Battle retention | A nonmatching participation connection disappears, while its person remains if another eligible contribution supports them. Status in one battle does not determine status in another. |
-| Collapse branch | In Muhammad → Aisha → Abu Bakr, collapsing Aisha's branch keeps Aisha and removes Abu Bakr unless independently supported. |
-| Remove from exploration | Removing Aisha hides her and all incident connections, collapses her branch, retains independently supported descendants, and blocks immediate global-filter reintroduction. Explicit search can restore her. |
-| Keep only selected | Retain the selected subject and its eligible direct neighbors; reset global filters to defaults (off), preserve selected-local choices, discard other subjects and contributions. |
-| Fresh view | Show the subject with every direct relation it has, seeded as its own expansions; companionship, battles, and global relationship filters off. The workspace's subject is Muhammad, a profile's is that profile's person. |
-| Hidden hover targets | After filtering, collapsing, removal, or Keep only selected, hidden nodes and edges produce no hover highlight or tooltip. |
-| Default control scope | Exploration opens with local controls; global controls are entered deliberately rather than used by default. |
-| Removal restoration | Refresh/shared links preserve removals; search or explicit local expansion restores a removed subject; Start over clears removals; Show full graph respects them. |
-| Disabled-kind search | Results explain disabled kinds and require manual enablement before adding a subject. |
-| Loading and failure | Loading is visible; failure offers retry and retains the graph; empty results are explicit; full-depth results are not silently truncated. |
-| Direct/lineage overlap | Collapsing either contribution preserves subjects still supported by the other. |
-
-## How it was built
-
-Built in five phases on top of the confirmed rules above, one commit each,
-audited against application commit `53baccd`:
-
-```mermaid
-flowchart TD
-    URL["URL params: subject, expand, filter, status, cap, removed"]
-    STATE["ExplorationInput"]
-    SUPPORT["Node support: which contributions justify each subject"]
-    ALLOWED["Allowed connections: which logical connections a contribution or global filter permits"]
-    FETCH["useExplorationGraph: fetch rounds until closure"]
-    RENDER["mapExplorationToGraphData"]
-    SURFACE["GraphSurface: one eligible graph for drawing and hit testing"]
-
-    URL --> STATE
-    STATE --> SUPPORT
-    STATE --> ALLOWED
-    SUPPORT --> FETCH
-    FETCH --> SUPPORT
-    SUPPORT --> RENDER
-    ALLOWED --> RENDER
-    RENDER --> SURFACE
-```
-
-Node support and allowed connections are computed in one pass (`exploration.ts`,
-`expansion.ts`, `lineageExpansion.ts`), replacing the earlier two-pass model
-where `buildExploration` admitted every edge between visible subjects and
-`filterVisibleGraph` subtracted excluded labels afterward — a hidden
-connection is now one no contribution allows, not one a second pass removed.
-
-`ExplorationInput` (`src/lib/relationship/exploration.ts`) carries `roots`,
-`expansions`, `globalFilters`, `statuses`, `caps`, and `removed`, all
-round-tripped through the URL (`urlState.ts`) for refresh, sharing, and
-Back/Forward.
-
-Key files: `src/lib/relationship/exploration.ts`, `expansion.ts`,
-`lineageExpansion.ts`, `renderExploration.ts`, `status.ts`,
-`src/components/graph/useExplorationGraph.ts`, `GraphCanvas.tsx`,
-`ExpansionControls.tsx`, `RelationFilterPanel.tsx`, `GraphSearch.tsx`,
-`GraphSurface.tsx`, and `src/components/common/Button.tsx` (added for the
-shared icon-capable button graph actions now use).
-
-Baseline at the audit versus after phase five:
-
-| Check | At the audit | After phase five |
-| --- | --- | --- |
-| `npm test` | 46 files, 343 tests | 50 files, 421 tests |
-| `npx tsc --noEmit` | clean | clean |
-| `npm run lint` | one warning at GraphSurface.tsx:128 | clean |
-
-Data and rollout: no schema migration or historical data change was needed.
-PostgreSQL/Neo4j synchronization and fixed node positions are unchanged; any
-graph structure change still needs a layout dry run, review, then `--apply`,
-per `AGENTS.md`.
