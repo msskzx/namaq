@@ -15,7 +15,7 @@ export default function TuhfatAlAtfalPage() {
   ));
   const count = chapters.reduce((sum, chapter) => sum + chapter.verses.length, 0);
   return (
-    <div dir="rtl" className={`${paper.page} w-full max-w-6xl mx-auto px-4 py-8`}>
+    <div dir="rtl" className={`${paper.page} w-full max-w-7xl mx-auto px-4 py-8`}>
       <header className={paper.heading}>
         <p className={paper.eyebrow}>نمق · التجويد</p>
         <h1>{title}</h1>
@@ -29,7 +29,7 @@ export default function TuhfatAlAtfalPage() {
           <p className={styles.label}>الأبواب</p>
           <ol>{contents}</ol>
         </nav>
-        <div>
+        <div className={styles.poem}>
           {chapters.map((chapter, i) => (
             <section key={chapter.title} id={`bab-${i + 1}`} className={styles.chapter}>
               <h2>{chapter.title}</h2>
