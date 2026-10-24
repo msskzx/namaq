@@ -76,7 +76,7 @@ describe('QiraatView', () => {
   it('colors the riwaya pills below by reading and leaves the names above the ayah plain', () => {
     const { container } = render(<QiraatView entries={entries} />);
     const hafs = screen.getByText('حفص', { selector: 'li[data-state] *' }).closest('li')!;
-    expect(hafs.className + hafs.innerHTML).toContain('amber');
+    expect(hafs.className + hafs.innerHTML).toContain('var(--home-highlight-border)');
     expect(container.querySelector('.row-span-2 p')!.className).not.toMatch(/amber|sky|emerald|rose/);
   });
 

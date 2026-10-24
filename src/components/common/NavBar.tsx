@@ -4,8 +4,7 @@ import React, { useState, useRef, useId } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useLanguage } from '../language/LanguageContext';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faXmark, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { ChevronDown, X, Menu } from 'lucide-react';
 import translations from '../language/translations';
 import ThemeSwitcher from '../theme/ThemeSwitcher';
 import { QURAN_CARDS } from '@/app/quran/QuranHub';
@@ -18,9 +17,6 @@ export type NavItem = { href: string; label: Text; purpose: Text };
 export type NavSection = { href: string; label: Text; groups: { title?: Text; items: NavItem[] }[] };
 
 const quran = (href: string, label: Text): NavItem => ({ href, label, purpose: QURAN_CARDS.find(card => card.href === href)!.desc });
-
-// The chapters (أبواب) of the bar. Each opens a shelf whose tools say what they are for;
-// the phone menu lists the same shelves, so the two never drift apart.
 export const NAV_SECTIONS: NavSection[] = [
   { href: '/quran', label: { ar: 'القرآن', en: 'Quran' }, groups: [
     { title: { ar: 'القراءة', en: 'Read' }, items: [
@@ -96,11 +92,8 @@ function Shelf({ section, language, id, path, onPick }: { section: NavSection; l
     </div>
   );
 }
-
-// Hover opens a shelf in CSS, with no timers; the toggle opens it for touch and keyboard.
 function Chapter({ section, language, active, path }: { section: NavSection; language: Language; active: boolean; path: string }) {
   const [open, setOpen] = useState(false);
-  // After a pick the shelf hides even under the pointer, until the pointer leaves.
   const [dismissed, setDismissed] = useState(false);
   const shelfId = useId();
   const toggle = useRef<HTMLButtonElement>(null);
@@ -109,7 +102,6 @@ function Chapter({ section, language, active, path }: { section: NavSection; lan
     return <li className={styles.chapter}><Link href={section.href} aria-current={active ? 'page' : undefined}>{label}</Link></li>;
   }
   const pick = () => { setOpen(false); setDismissed(true); };
-  // The shelf opens under its chapter; near the edge of the screen it slides back inside.
   const place = () => {
     const shelf = document.getElementById(shelfId);
     if (!shelf) return;
@@ -139,7 +131,7 @@ function Chapter({ section, language, active, path }: { section: NavSection; lan
         aria-label={language === 'ar' ? `صفحات ${label}` : `${label} pages`}
         onClick={() => { place(); setDismissed(false); setOpen(value => !value); }}
       >
-        <FontAwesomeIcon icon={faChevronDown} />
+        <ChevronDown size={12} aria-hidden />
       </button>
       <Shelf section={section} language={language} id={shelfId} path={path} onPick={pick} />
     </li>
@@ -150,7 +142,6 @@ export default function NavBar() {
   const { language, languageLoaded, toggleLanguage } = useLanguage() as { language: Language; languageLoaded: boolean; toggleLanguage: () => void };
   const path = usePathname() ?? '/';
   const [menuOpen, setMenuOpen] = useState(false);
-  // The stored language is only known on the client, so nothing language-specific renders before it loads.
   if (!languageLoaded) {
     return (
       <>
@@ -185,7 +176,7 @@ export default function NavBar() {
               aria-expanded={menuOpen}
               aria-label={menuOpen ? (ar ? 'إغلاق القائمة' : 'Close menu') : (ar ? 'فتح القائمة' : 'Open menu')}
             >
-              <FontAwesomeIcon icon={menuOpen ? faXmark : faBars} />
+              {menuOpen ? <X size={16} aria-hidden /> : <Menu size={16} aria-hidden />}
             </button>
           </div>
         </div>

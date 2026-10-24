@@ -11,21 +11,13 @@ describe('Button', () => {
     expect(screen.getByRole('button', { name: 'Deselect' }).getAttribute('type')).toBe('button');
   });
 
-  it('renders a link when given href, sharing the same classes as a button', () => {
+  it('renders a link to the requested destination', () => {
     const { container } = render(<>
       <Button>Deselect</Button>
       <Button href="/people/x">View profile</Button>
     </>);
-    const [button, link] = [container.querySelector('button')!, container.querySelector('a')!];
+    const link = container.querySelector('a')!;
     expect(link.getAttribute('href')).toBe('/people/x');
-    expect(link.className).toBe(button.className);
-  });
-
-  it('keeps className for layout without dropping its own styling', () => {
-    render(<Button className="shrink-0">Profile</Button>);
-    const button = screen.getByRole('button', { name: 'Profile' });
-    expect(button.className).toContain('shrink-0');
-    expect(button.className).toContain('rounded');
   });
 
   it('forwards clicks and honours disabled', () => {

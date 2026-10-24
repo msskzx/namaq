@@ -13,15 +13,14 @@ interface ToggleProps {
   palette?: 'default' | 'site';
 }
 
-export default function Toggle({ checked, label, disabled = false, describedBy, id, onChange, onIcon, offIcon, size = 'md', palette = 'default' }: ToggleProps) {
+export default function Toggle({ checked, label, disabled = false, describedBy, id, onChange, onIcon, offIcon, size = 'md' }: ToggleProps) {
   const hasIcons = onIcon !== undefined || offIcon !== undefined;
   const lg = hasIcons && size === 'lg';
   const iconBox = lg ? 'size-7' : 'size-5';
-  const site = palette === 'site';
-  const track = site ? 'border-[var(--home-rule)] bg-[var(--home-paper-deep)]' : 'border-gray-300 bg-white peer-checked:bg-amber-100 dark:border-gray-600 dark:bg-gray-900 dark:peer-checked:bg-amber-900/60';
-  const thumb = site ? 'bg-[var(--home-accent)] peer-focus-visible:ring-[var(--home-accent)] peer-focus-visible:ring-offset-[var(--home-paper)]' : 'bg-white peer-checked:bg-amber-500 peer-focus-visible:ring-amber-500 dark:bg-gray-300 dark:peer-checked:bg-amber-500 dark:peer-focus-visible:ring-offset-gray-900';
-  const offColour = site ? 'text-[var(--home-paper)] peer-checked:text-[var(--home-muted)]' : 'text-black peer-checked:text-gray-500 dark:peer-checked:text-gray-400';
-  const onColour = site ? 'text-[var(--home-muted)] peer-checked:text-[var(--home-paper)]' : 'text-gray-500 peer-checked:text-white dark:text-gray-400 dark:peer-checked:text-white';
+  const track = 'border-[var(--home-rule)] bg-[var(--home-paper-deep)]';
+  const thumb = 'bg-[var(--home-accent)] peer-focus-visible:ring-[var(--home-accent)] peer-focus-visible:ring-offset-[var(--home-paper)]';
+  const offColour = 'text-[var(--home-paper)] peer-checked:text-[var(--home-muted)]';
+  const onColour = 'text-[var(--home-muted)] peer-checked:text-[var(--home-paper)]';
   return (
     <label className={`relative inline-block shrink-0 ${lg ? 'h-9 w-[68px]' : hasIcons ? 'h-7 w-[52px]' : 'h-5 w-9'} ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
       <input id={id} className="peer sr-only" type="checkbox" role="switch" checked={checked} aria-label={label} aria-describedby={describedBy} disabled={disabled} onChange={(event) => onChange(event.currentTarget.checked)} />

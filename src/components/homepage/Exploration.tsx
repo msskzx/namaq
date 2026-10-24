@@ -1,4 +1,5 @@
-import Link from 'next/link';
+import ExplorationCard from '../common/ExplorationCard';
+import cards from '../common/ExplorationCard.module.css';
 import { useLanguage } from '../language/LanguageContext';
 import styles from './Home.module.css';
 
@@ -21,14 +22,10 @@ export default function Exploration() {
         <h2 id="explore-title">{ar ? 'أبواب الاستكشاف' : 'Ways to explore'}</h2>
         <span aria-hidden="true">✦</span>
       </div>
-      <ol className={styles.index}>
+      <ol className={cards.grid}>
         {entries.map((entry, index) => (
           <li key={entry.href}>
-            <Link href={entry.href}>
-              <span className={styles.indexNumber}>{new Intl.NumberFormat(ar ? 'ar-u-nu-arab' : 'en', { minimumIntegerDigits: 2 }).format(index + 1)}</span>
-              <div><h3>{entry.title}</h3><p>{entry.description}</p></div>
-              <span className={styles.indexRule} aria-hidden="true" />
-            </Link>
+            <ExplorationCard url={entry.href} title={entry.title} desc={entry.description} number={index + 1} language={language} />
           </li>
         ))}
       </ol>

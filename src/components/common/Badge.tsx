@@ -5,24 +5,23 @@ interface BadgeProps {
   text: string;
   href?: string;
   onClick?: () => void;
-  color?: string; // Tailwind color, e.g., 'bg-indigo-900'
+  color?: string;
   size?: 'sm' | 'lg';
   className?: string;
 }
 
-function getColorClass(color: string) {
-  if (color.includes('indigo')) return 'bg-indigo-50 dark:bg-indigo-900 hover:bg-indigo-200 dark:hover:bg-indigo-800 border-indigo-400';
-  if (color.includes('gray')) return 'bg-gray-50 dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 border-gray-400';
-  if (color.includes('amber')) return 'bg-amber-50 dark:bg-amber-900 hover:bg-amber-200 dark:hover:bg-amber-800 border-amber-400';
-  if (color.includes('blue')) return 'bg-blue-50 dark:bg-blue-900 hover:bg-blue-200 dark:hover:bg-blue-800 border-blue-400';
-  if (color.includes('emerald')) return 'bg-emerald-50 dark:bg-emerald-900 hover:bg-emerald-200 dark:hover:bg-emerald-800 border-emerald-400';
-  if (color.includes('rose')) return 'bg-rose-50 dark:bg-rose-900 hover:bg-rose-200 dark:hover:bg-rose-800 border-rose-400';
-  return '';
-}
+const COLORS: Record<string, string> = {
+  gray: 'border-[var(--home-rule)] text-[var(--home-ink)]',
+  amber: 'border-[var(--home-highlight-border)] text-[var(--home-ink)]',
+  indigo: 'border-[var(--home-root)] text-[var(--home-root)]',
+  blue: 'border-[var(--home-slot-1)] text-[var(--home-slot-1)]',
+  emerald: 'border-[var(--home-green)] text-[var(--home-green)]',
+  rose: 'border-[var(--home-accent)] text-[var(--home-accent)]',
+};
 
-function Badge({ text, href, onClick, color = 'indigo', size = 'lg', className = '' }: BadgeProps) {
+function Badge({ text, href, onClick, color = 'gray', size = 'lg', className = '' }: BadgeProps) {
   const sizeClasses = size === 'sm' ? 'px-2 py-0.5 text-sm' : 'px-3 py-1 text-lg';
-  const baseClasses = `${getColorClass(color)} border rounded text-gray-800 dark:text-gray-200 transition ${sizeClasses} ${className}`;
+  const baseClasses = `${COLORS[color] ?? COLORS.gray} border rounded-sm bg-[var(--home-paper-deep)] transition ${sizeClasses} ${className}`;
   if (href) {
     return (
       <Link href={href} className="inline-block">

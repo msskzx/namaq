@@ -2,8 +2,6 @@
 
 import { Minus, Plus } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import Button from './Button';
 import styles from './PaperPage.module.css';
 import { useLanguage } from '@/components/language/LanguageContext';
@@ -25,7 +23,7 @@ type NumberInputProps = {
   className?: string;
 };
 
-export default function NumberInput({ label, iconFamily = 'fontawesome', min, max, step = 1, value, defaultValue, draftValue, onDraftChange, onChange, name, id, disabled, className }: NumberInputProps) {
+export default function NumberInput({ label, min, max, step = 1, value, defaultValue, draftValue, onDraftChange, onChange, name, id, disabled, className }: NumberInputProps) {
   const { language } = useLanguage();
   const initial = draftValue ?? value ?? defaultValue ?? min;
   const [draft, setDraft] = useState(String(initial));
@@ -48,7 +46,7 @@ export default function NumberInput({ label, iconFamily = 'fontawesome', min, ma
   return (
     <span className={`${styles.controls} inline-flex items-center gap-1 ${className ?? ''}`} dir="ltr">
       <Button size="icon" disabled={disabled || current <= min} aria-label={ar ? `تقليل ${label}` : `Decrease ${label}`} onClick={() => commit(current - step)}>
-        {iconFamily === 'lucide' ? <Minus size={16} aria-hidden /> : <FontAwesomeIcon icon={faMinus} aria-hidden />}
+        <Minus size={16} aria-hidden />
       </Button>
       <input
         ref={input}
@@ -76,7 +74,7 @@ export default function NumberInput({ label, iconFamily = 'fontawesome', min, ma
         }}
       />
       <Button size="icon" disabled={disabled || current >= ceiling} aria-label={ar ? `زيادة ${label}` : `Increase ${label}`} onClick={() => commit(current + step)}>
-        {iconFamily === 'lucide' ? <Plus size={16} aria-hidden /> : <FontAwesomeIcon icon={faPlus} aria-hidden />}
+        <Plus size={16} aria-hidden />
       </Button>
     </span>
   );

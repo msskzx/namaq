@@ -8,11 +8,8 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   descriptions. It lives in `.claude/skills/unslop/`, so it is in the repo and
   needs no install, and it applies to every change rather than to documentation
   work alone.
-- Code carries no comments except a reference to the document that holds the
-  rule: name the ADR or the file under `docs/` and stop there. Explanation
-  belongs in the document, since a comment that explains goes stale the moment
-  the document changes, and nothing catches it. When you touch a comment that
-  explains, replace it with the reference, or delete it if the code says enough.
+- Leave clear code uncommented. When unclear code needs context, add only a
+  reference to the relevant doc or ADR. Keep functional annotations.
 - Invoke the `ponytail` skill before writing or reviewing code: reuse what the
   codebase already has, reach for stdlib and native platform features before a
   dependency, and stop at the shortest diff that works. It is not vendored
@@ -136,7 +133,7 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 
 - Every action button goes through `src/components/common/Button.tsx` rather
   than repeating Tailwind classes inline. Pick `variant` (`primary` for the
-  filled amber call to action, `outline` for everything else), `size`
+  filled terracotta call to action, `outline` for everything else), `size`
   (`sm`/`md`/`icon`), and `active` for a control that stays pressed; pass
   `href` to render a `next/link` that looks identical, so a link and a button
   sitting side by side match. Reach for `className` only for layout
@@ -149,8 +146,7 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 - Rows in a suggestion or node list are buttons for the keyboard, not controls
   that read as buttons: they stack multiple lines, fill their row, and carry no
   border. Leave them as plain `button` elements.
-- Every button carries an icon beside its label, from Font Awesome's free solid
-  set. Pick one that names the action rather than decorating it, and reuse the
+- Every button carries an icon beside its label, from `lucide-react`. Pick one that names the action rather than decorating it, and reuse the
   icon an action already has elsewhere (Start over and Reset share the rotate
   arrow, View profile shares the person). A horizontal arrow has to be mirrored
   by writing direction, so that back points the way the reader came in Arabic as
@@ -376,6 +372,16 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 
 ## Documentation
 
-- Update the relevant documentation when behavior or procedures change. Update
-  `README.md` when the project purpose or documentation links change; keep setup
-  instructions in `docs/local-setup.md` and feature details in their own docs.
+- Code owns implementation details. Keep ADRs and decisions, provenance, and
+  necessary operational instructions. Give each rule one authoritative home
+  and link to it. Remove stale or duplicated narration when changing an area.
+- Read [docs/palette.md](docs/palette.md) before changing the theme or UI.
+  Palette values belong only in `src/app/theme.css`.
+- Put reusable engineering lessons in Distillate when warranted. Keep Namaq
+  decisions needed by contributors in this repository.
+- Audit affected frontend tests as keep, rewrite or remove. Protect important
+  behavior against plausible regressions, including navigation, input, error
+  recovery and accessibility. Remove incidental styling assertions and
+  redundant tests only after identifying the coverage they provided.
+- Update `README.md` when project purpose or documentation links change.
+  Keep setup instructions in `docs/local-setup.md`.

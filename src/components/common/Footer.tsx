@@ -44,14 +44,13 @@ function Footer() {
   const linkGroups = getLinkGroups(currentLanguage as 'en' | 'ar');
 
   return (
-    <footer className="w-full bg-gray-50 dark:bg-black text-amber-600 dark:text-amber-400 border-t-2 border-amber-400">
-      <div className="w-full px-4 py-8">
+    <footer className="w-full bg-[var(--home-paper)] text-[var(--home-ink)] border-t border-[var(--home-rule)]">
+      <div className="w-full max-w-[var(--home-width)] mx-auto px-[var(--home-gutter)] py-8">
         <WorkInProgressBanner />
-        {/* Main content with 4 columns */}
         <div dir={isRTL ? 'rtl' : 'ltr'} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {Object.entries(linkGroups).map(([key, group]) => (
             <div key={key} className="space-y-3">
-              <h3 className={`text-lg font-semibold mb-3 dark:text-amber-300 ${isRTL ? 'text-right' : 'text-left'}`}>
+              <h3 className={`text-lg font-semibold mb-3 text-[var(--home-ink)] ${isRTL ? 'text-right' : 'text-left'}`}>
                 {key === 'about' ? <><span className="sr-only">{group.title}</span><Logo small className="h-10 w-auto" /></> : group.title}
               </h3>
               <ul className={`space-y-2 ${isRTL ? 'text-right' : 'text-left'}`}>
@@ -59,7 +58,7 @@ function Footer() {
                   <li key={link.href}>
                     <a
                       href={link.href}
-                      className="text-gray-700 dark:text-gray-200 hover:text-amber-500 dark:hover:text-amber-300 transition-colors"
+                      className="text-[var(--home-ink)] hover:text-[var(--home-accent)] transition-colors"
                       dir={isRTL ? 'rtl' : 'ltr'}
                     >
                       {link.label}
@@ -70,13 +69,11 @@ function Footer() {
             </div>
           ))}
         </div>
-
-        {/* Copyright and tagline */}
-        <div className="pt-6 border-t border-amber-400">
+        <div className="pt-6 border-t border-[var(--home-rule)]">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
               <div className={`${isRTL ? 'text-right' : 'text-left'}`}>
-                <div className="text-sm opacity-90 text-gray-700 dark:text-gray-200">
+                <div className="text-sm opacity-90 text-[var(--home-ink)]">
                   &copy; {new Date().getFullYear()} {translations[currentLanguage as 'en' | 'ar'].appName}
                 </div>
               </div>

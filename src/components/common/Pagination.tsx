@@ -1,8 +1,6 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import Button from '@/components/common/Button';
 import NumberInput from './NumberInput';
@@ -33,7 +31,6 @@ export default function Pagination({
   hrefs,
   scrollTarget,
   language: pageLanguage,
-  iconFamily = 'fontawesome',
 }: PaginationProps) {
   const { language: siteLanguage } = useLanguage();
   const language = pageLanguage ?? siteLanguage;
@@ -47,8 +44,6 @@ export default function Pagination({
   if (pageCount <= 1) return null;
 
   const rightToLeft = language === 'ar';
-  const backIcon = rightToLeft ? faArrowRight : faArrowLeft;
-  const forwardIcon = rightToLeft ? faArrowLeft : faArrowRight;
   const BackArrow = rightToLeft ? ArrowRight : ArrowLeft;
   const ForwardArrow = rightToLeft ? ArrowLeft : ArrowRight;
   const step = (target: number, disabled: boolean) =>
@@ -58,7 +53,7 @@ export default function Pagination({
   return (
     <nav
       aria-label={rightToLeft ? 'التنقل بين الصفحات' : 'Pagination'}
-      className="mt-4 flex flex-wrap items-center justify-center gap-3 border-t border-gray-200 pt-3 dark:border-gray-700"
+      className="mt-4 flex flex-wrap items-center justify-center gap-3 border-t border-[var(--home-rule)] pt-3"
     >
       <Button
         variant="outline"
@@ -66,17 +61,17 @@ export default function Pagination({
         className="shrink-0"
         {...step(page - 1, page <= 1)}
       >
-        {iconFamily === 'lucide' ? <BackArrow className="size-3" aria-hidden /> : <FontAwesomeIcon icon={backIcon} className="w-3 h-3" />}
+        <BackArrow className="size-3" aria-hidden />
         {rightToLeft ? 'السابق' : 'Previous'}
       </Button>
 
       {showSelect ? (
-        <span className="flex items-center gap-2 text-xs text-gray-700 dark:text-gray-300">
+        <span className="flex items-center gap-2 text-xs text-[var(--home-ink)]">
           {selectLabel}
           {pageLabels ? (
             <select
               aria-label={selectLabel ?? (rightToLeft ? 'انتقل إلى صفحة' : 'Go to page')}
-              className="cursor-pointer appearance-none rounded border border-amber-400 bg-transparent px-2.5 py-1 text-center text-xs text-gray-800 transition hover:bg-amber-50 dark:text-gray-100 dark:hover:bg-gray-800"
+              className="cursor-pointer appearance-none rounded border border-[var(--home-rule)] bg-transparent px-2.5 py-1 text-center text-xs text-[var(--home-ink)] transition hover:bg-[var(--home-paper-deep)]"
               value={page}
               onChange={(changed) => onChange?.(Number(changed.target.value))}
             >
@@ -87,11 +82,11 @@ export default function Pagination({
               ))}
             </select>
           ) : (
-            <NumberInput label={selectLabel ?? (rightToLeft ? 'انتقل إلى صفحة' : 'Go to page')} value={page} min={1} max={pageCount} onChange={onChange} iconFamily={iconFamily} />
+            <NumberInput label={selectLabel ?? (rightToLeft ? 'انتقل إلى صفحة' : 'Go to page')} value={page} min={1} max={pageCount} onChange={onChange} />
           )}
         </span>
       ) : (
-        <span className="text-sm text-gray-600 dark:text-gray-400">{label}</span>
+        <span className="text-sm text-[var(--home-ink)]">{label}</span>
       )}
 
       <Button
@@ -101,7 +96,7 @@ export default function Pagination({
         {...step(page + 1, page >= pageCount)}
       >
         {rightToLeft ? 'التالي' : 'Next'}
-        {iconFamily === 'lucide' ? <ForwardArrow className="size-3" aria-hidden /> : <FontAwesomeIcon icon={forwardIcon} className="w-3 h-3" />}
+        <ForwardArrow className="size-3" aria-hidden />
       </Button>
     </nav>
   );
