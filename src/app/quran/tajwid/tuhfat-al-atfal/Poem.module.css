@@ -1,34 +1,37 @@
-.layout { display: grid; gap: 2.5rem; }
-@media (min-width: 64rem) { .layout { grid-template-columns: 15rem 1fr; } }
+.layout { display: grid; gap: 1.5rem; }
+@media (min-width: 64rem) { .layout { grid-template-columns: 15rem 1fr; gap: 2.5rem; } }
 
-.contents { display: none; }
-@media (min-width: 64rem) {
-  .contents { display: block; position: sticky; top: 5rem; align-self: start; }
-}
+.contents summary { cursor: pointer; color: var(--home-muted); margin-bottom: 0.5rem; }
+.wide { display: none; }
 .contents ol { border-inline-start: 2px solid var(--home-rule); }
 .contents a { display: flex; justify-content: space-between; gap: 1rem; padding: 0.375rem 0.75rem; color: var(--home-muted); }
 .contents a:hover { color: var(--home-accent); }
+@media (min-width: 64rem) {
+  .contents { position: sticky; top: 5rem; align-self: start; }
+  .wide { display: block; }
+  .narrow { display: none; }
+}
 
 .chapter { scroll-margin-top: 5rem; }
 .chapter h2 { text-align: center; color: var(--home-accent); font-size: 1.5rem; margin-block: 2rem 0.75rem; }
 
 .bayt {
   display: grid;
-  grid-template-columns: 2.5rem 1fr 1fr;
-  column-gap: 2.5rem;
+  grid-template-columns: 2rem 1fr;
+  column-gap: 0.75rem;
   align-items: baseline;
   max-width: 50rem;
   margin-inline: auto;
-  padding-block: 0.125rem;
+  padding-block: 0.375rem;
   border-bottom: 1px dashed var(--home-rule);
-  font-size: 1.5625rem;
-  line-height: 2.1;
+  font-size: 1.3125rem;
+  line-height: 1.9;
 }
 .bayt .number { font-size: 0.9375rem; color: var(--home-muted); }
-.bayt .shatr { text-align: justify; text-align-last: justify; }
+.bayt .shatr + .shatr { grid-column: 2; padding-inline-start: 1.75rem; }
 
-@media (max-width: 40rem) {
-  .bayt { grid-template-columns: 2rem 1fr; column-gap: 0.75rem; font-size: 1.3125rem; line-height: 1.9; padding-block: 0.375rem; }
-  .bayt .shatr { text-align: start; text-align-last: auto; }
-  .bayt .shatr + .shatr { grid-column: 2; padding-inline-start: 1.75rem; }
+@media (min-width: 48rem) {
+  .bayt { grid-template-columns: 2.5rem 1fr 1fr; column-gap: 2.5rem; padding-block: 0.125rem; font-size: 1.5625rem; line-height: 2.1; }
+  .bayt .shatr { text-align: justify; text-align-last: justify; }
+  .bayt .shatr + .shatr { grid-column: auto; padding-inline-start: 0; }
 }

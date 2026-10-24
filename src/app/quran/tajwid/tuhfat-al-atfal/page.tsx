@@ -8,8 +8,11 @@ import styles from './Poem.module.css';
 export const metadata: Metadata = { title: 'تحفة الأطفال والغلمان' };
 
 export default function TuhfatAlAtfalPage() {
-  const { title, author, composed, transcription, edition } = poem as Poem;
+  const { title, author, composed, transcription, corrected, edition } = poem as Poem;
   const chapters = numberVerses(poem as Poem);
+  const contents = chapters.map((chapter, i) => (
+    <li key={chapter.title}><a href={`#bab-${i + 1}`}><span>{chapter.title}</span><span>{num(chapter.verses[0].number)}</span></a></li>
+  ));
   const count = chapters.reduce((sum, chapter) => sum + chapter.verses.length, 0);
   return (
     <div dir="rtl" className={`${paper.page} w-full max-w-6xl mx-auto px-4 py-8`}>
@@ -20,18 +23,18 @@ export default function TuhfatAlAtfalPage() {
         <p className="text-sm">
           {edition.checked
             ? <>الضبط: <a className="underline" href={edition.url}>{edition.name}</a></>
-            : <>النص منقول من <a className="underline" href={transcription}>نسخة رقمية</a>، ولم يُقابل بعد بـ<a className="underline" href={edition.url}>{edition.name}</a>.</>}
+            : <>النص منقول من <a className="underline" href={transcription}>نسخة رقمية</a> صُحّحت فيه الأبيات {corrected.map(num).join('، ')}، ولم يُقابل بعد بـ<a className="underline" href={edition.url}>{edition.name}</a>.</>}
         </p>
       </header>
       <div className={styles.layout}>
-        <nav aria-label="الأبواب" className={styles.contents}>
-          <ol>
-            {chapters.map((chapter, i) => (
-              <li key={chapter.title}><a href={`#bab-${i + 1}`}><span>{chapter.title}</span><span>{num(chapter.verses[0].number)}</span></a></li>
-            ))}
-          </ol>
+        <nav aria-label="أبواب المنظومة" className={styles.contents}>
+          <ol className={styles.wide}>{contents}</ol>
+          <details className={styles.narrow}>
+            <summary>الأبواب</summary>
+            <ol>{contents}</ol>
+          </details>
         </nav>
-        <main>
+        <div>
           {chapters.map((chapter, i) => (
             <section key={chapter.title} id={`bab-${i + 1}`} className={styles.chapter}>
               <h2>{chapter.title}</h2>
@@ -44,7 +47,7 @@ export default function TuhfatAlAtfalPage() {
               ))}
             </section>
           ))}
-        </main>
+        </div>
       </div>
     </div>
   );

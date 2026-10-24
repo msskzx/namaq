@@ -3,6 +3,7 @@ export type Poem = {
   author: string;
   composed: number;
   transcription: string;
+  corrected: number[];
   edition: { name: string; url: string; checked: boolean };
   chapters: { title: string; verses: [string, string][] }[];
 };
