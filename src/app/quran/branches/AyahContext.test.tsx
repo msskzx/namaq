@@ -95,26 +95,27 @@ it('shows the node\'s own ayat first with a branch label, then its siblings in t
   expect(within(dialog).getAllByTitle('Differing marks').map(word => word.textContent)).toEqual(['يُسْرًۭا']);
 });
 
-it('marks shared words from the start in every card of a leaf dialog, exact and same-root apart, with no separate prefix mark', async () => {
-  vi.mocked(fetch).mockResolvedValue({ ok: true, json: async () => [{ ...source[0], match: { exact: [1, 2, 3], rooted: [0] } }, { ...source[1], match: { exact: [1, 2], rooted: [0] } }] } as Response);
-  render(wrap(<AyahContextButton ayahKeys={['94:6']} siblings={['94:5']} spans={{ '94:6': [0, 1] }} differentWords={[]} names={{ 94: 'الشرح' }} leaf>Leaf</AyahContextButton>));
+it('marks the words every card shares, exact and by root apart, on own and sibling cards alike', async () => {
+  vi.mocked(fetch).mockResolvedValue({ ok: true, json: async () => [{ ...source[0], match: { exact: [1, 2, 3], rooted: [0] } }, { ...source[1], match: { exact: [1, 2, 3], rooted: [0] } }] } as Response);
+  render(wrap(<AyahContextButton ayahKeys={['94:6']} siblings={['94:5']} differentWords={[]} names={{ 94: 'الشرح' }} leaf>Leaf</AyahContextButton>));
   fireEvent.click(screen.getByRole('button', { name: 'View ayat in context' }));
   const dialog = screen.getByRole('dialog');
-  expect(new URL(vi.mocked(fetch).mock.calls[0][0] as string, 'http://localhost').searchParams.get('vs')).toBe('94:6');
+  expect(new URL(vi.mocked(fetch).mock.calls[0][0] as string, 'http://localhost').searchParams.has('vs')).toBe(false);
   const own = await within(dialog).findByRole('article', { name: 'الشرح 6 · this branch' });
   const sibling = within(dialog).getByRole('article', { name: 'الشرح 5' });
-  expect(within(sibling).getAllByTitle('Shared word').map(word => word.textContent)).toEqual(source[0].ayah.words.slice(1));
-  expect(within(sibling).getAllByTitle('Shared root').map(word => word.textContent)).toEqual([source[0].ayah.words[0]]);
-  expect(within(own).getAllByTitle('Shared word').map(word => word.textContent)).toEqual(source[1].ayah.words.slice(1, 3));
-  expect(within(own).getAllByTitle('Shared root').map(word => word.textContent)).toEqual([source[1].ayah.words[0]]);
-  expect(within(dialog).queryAllByTitle('From the ayah start to this node')).toHaveLength(0);
+  expect(within(sibling).getAllByTitle('In every ayah, same form').map(word => word.textContent)).toEqual(source[0].ayah.words.slice(1));
+  expect(within(sibling).getAllByTitle('In every ayah, by root or other marks').map(word => word.textContent)).toEqual([source[0].ayah.words[0]]);
+  expect(within(own).getAllByTitle('In every ayah, same form').map(word => word.textContent)).toEqual(source[1].ayah.words.slice(1));
+  expect(within(own).getAllByTitle('In every ayah, by root or other marks').map(word => word.textContent)).toEqual([source[1].ayah.words[0]]);
+  expect(within(dialog).getByText(/Only words found in every ayah shown here are marked/)).toBeTruthy();
 });
 
-it('carries the mark from the ayah start across the ayah-end marker into the next ayah for a leaf that continues', async () => {
-  render(wrap(<AyahContextButton ayahKeys={['94:5']} spans={{ '94:5': [0, 6] }} differentWords={[]} names={{}} leaf>Leaf</AyahContextButton>));
+it('marks shared words in an inner-node dialog too, and nothing in the neighbouring ayat', async () => {
+  vi.mocked(fetch).mockResolvedValue({ ok: true, json: async () => [{ ...source[0], match: { exact: [1, 2], rooted: [] } }, { ...source[1], match: { exact: [1, 2], rooted: [] } }] } as Response);
+  render(wrap(<AyahContextButton ayahKeys={['94:5', '94:6']} differentWords={[]} names={{}}>Node</AyahContextButton>));
   fireEvent.click(screen.getByRole('button', { name: 'View ayat in context' }));
   await screen.findAllByRole('link', { name: 'Read ayah' });
-  expect(screen.getAllByTitle('From the ayah start to this node').map(word => word.textContent)).toEqual([...source[0].ayah.words, source[0].after!.words[0]]);
+  expect(screen.getAllByTitle('In every ayah, same form').map(word => word.textContent)).toEqual(['مَعَ', 'ٱلْعُسْرِ', 'مَعَ', 'ٱلْعُسْرِ']);
 });
 
 it('locks background scrolling until the dialog closes and restores existing styles on unmount', () => {

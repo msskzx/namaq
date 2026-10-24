@@ -1,6 +1,6 @@
 // docs/plans/quran-shared-openings.md
 import wordKeys from '@/app/quran/compare/wordKeys.json';
-import { readerAyat, type BranchAyah } from './branches';
+import { readerAyat, spell, type BranchAyah } from './branches';
 import { pairOf, wordTokens } from './compare';
 import { normalizeWord } from './normalize';
 
@@ -34,18 +34,21 @@ const tokens = (ayah: BranchAyah) => {
   return { norm, keys: wordTokens(norm, wordKeys.surahs[surah - 1]?.[number - 1]) };
 };
 
-export function comparedTo(contexts: AyahContext[], base: BranchAyah): AyahContext[] {
-  const b = tokens(base);
-  const shared = { exact: new Set<number>(), rooted: new Set<number>() };
-  const rest = (count: number, ...apart: number[][]) => Array.from({ length: count }, (_, i) => i).filter(i => apart.every(list => !list.includes(i)));
-  const compared = contexts.map(context => {
-    if (context.ayah.key === base.key) return context;
-    const a = tokens(context.ayah);
-    const pair = pairOf(0, 0, a.keys, b.keys, a.norm, b.norm);
-    rest(b.norm.length, pair.marksB, pair.rootsB).forEach(i => shared.exact.add(i));
-    pair.rootsB.forEach(i => shared.rooted.add(i));
-    return { ...context, match: { exact: rest(a.norm.length, pair.marksA, pair.rootsA), rooted: pair.rootsA } };
+export function sharedByAll(contexts: AyahContext[]): AyahContext[] {
+  if (contexts.length < 2) return contexts;
+  const all = contexts.map(context => ({ ...tokens(context.ayah), forms: context.ayah.words.map(spell) }));
+  return contexts.map((context, n) => {
+    const a = all[n];
+    const found = a.norm.map(() => ({ shared: true, exact: true }));
+    all.forEach((b, m) => {
+      if (m === n || found.every(word => !word.shared)) return;
+      const pair = pairOf(0, 0, a.keys, b.keys, a.forms, b.forms);
+      found.forEach((word, i) => {
+        if (pair.marksA.includes(i)) word.shared = false;
+        else if (pair.rootsA.includes(i)) word.exact = false;
+      });
+    });
+    const at = (exact: boolean) => found.flatMap((word, i) => (word.shared && word.exact === exact ? [i] : []));
+    return { ...context, match: { exact: at(true), rooted: at(false) } };
   });
-  const own = { exact: [...shared.exact].sort((x, y) => x - y), rooted: [...shared.rooted].filter(i => !shared.exact.has(i)).sort((x, y) => x - y) };
-  return compared.map(context => (context.ayah.key === base.key ? { ...context, match: own } : context));
 }
