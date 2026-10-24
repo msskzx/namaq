@@ -85,13 +85,11 @@ export function matchBranches(given: string[], branches: string[][][]): (BranchM
 
 export const branchNodes = (tree: Branch): Branch[] => tree.children.flatMap((child) => [child, ...branchNodes(child)]);
 
-/** The leaves the reader types, as indices into branchNodes: `count` of them at random, or every leaf of a smaller tree. */
 export function askedNodes(tree: Branch, count: number, random: Random): number[] {
   const leaves = branchNodes(tree).flatMap((node, index) => node.children.length === 0 ? [index] : []);
   return shuffle(leaves, random).slice(0, count).sort((a, b) => a - b);
 }
 
-/** A node the reader does not type is filled with its own words. */
 export const givenAnswer = (node: Branch) => node.words.join(' ');
 
 export type TreeAnswerMatch = { node: Branch; correct: boolean };

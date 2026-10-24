@@ -163,9 +163,11 @@ export default function QuizzesPage() {
       length: undefined,
       person: value === "PERSON_CIRCLE" || topics.includes("PERSON_CIRCLE") ? person || undefined : undefined,
     });
+    const optionValue = (suggestion: (typeof personSuggestions)[number]) =>
+      personSuggestions.filter((other) => other.name === suggestion.name).length > 1 ? `${suggestion.name} (${suggestion.nameTransliterated ?? suggestion.slug})` : suggestion.name;
     const commitPerson = () => {
       const typedName = personInput.trim();
-      const match = personSuggestions.find((suggestion) => [suggestion.name, suggestion.nameTransliterated, suggestion.slug].includes(typedName));
+      const match = personSuggestions.find((suggestion) => [optionValue(suggestion), suggestion.slug].includes(typedName));
       setParam({ person: match?.slug ?? (typedName || undefined), length: undefined });
     };
     return (
@@ -208,7 +210,7 @@ export default function QuizzesPage() {
                   className="w-full rounded border border-[var(--home-rule)] bg-transparent px-3 py-2 text-[var(--home-ink)]"
                 />
                 <datalist id="quiz-people">
-                  {personSuggestions.map((suggestion) => <option key={suggestion.slug} value={suggestion.name}>{suggestion.nameTransliterated ?? suggestion.name}</option>)}
+                  {personSuggestions.map((suggestion) => <option key={suggestion.slug} value={optionValue(suggestion)}>{suggestion.nameTransliterated ?? suggestion.name}</option>)}
                 </datalist>
                 <span className="mt-1 block text-xs text-[var(--home-muted)]">{ar ? "تُضاف أسئلة هذا الشخص إلى المواضيع الأخرى المختارة." : "This person's questions are added to the other topics you chose."}</span>
               </label>

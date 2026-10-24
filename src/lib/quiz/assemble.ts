@@ -40,7 +40,7 @@ function branchesFor(topics: QuizTopics, juz: JuzRange | null = null) {
   return branchPools.get(id) as BranchQuestion[];
 }
 
-// A person's circle adds that person's questions to the other topics chosen beside it.
+// docs/quiz-ayah-branches.md
 function whereFor(topics: QuizTopics, personSlug?: string): Prisma.QuizQuestionWhereInput | null {
   const bank = topics.filter((topic) => topic !== 'BRANCHES' && topic !== 'PERSON_CIRCLE');
   const scopes: Prisma.QuizQuestionWhereInput[] = [

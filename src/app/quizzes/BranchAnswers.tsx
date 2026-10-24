@@ -15,7 +15,6 @@ import example from "./example.json";
 type Question = { phrase?: string; partition?: string; branches?: BranchAnswer[]; tree?: Branch; variants?: Variant[]; asked?: number[] };
 type Names = Record<number, string>;
 
-// Without `asked` the reader types every node.
 const isAsked = (question: Question, index: number) => !question.asked || question.asked.includes(index);
 const given = (question: Question) => new Set(question.tree ? branchNodes(question.tree).flatMap((_, index) => isAsked(question, index) ? [] : [index]) : []);
 
@@ -24,7 +23,6 @@ export const emptyBranchAnswers = (question: Question) => question.tree ? branch
 export const branchesCorrect = (question: Question, typed: string[]) => Boolean(question.tree &&
   typed.length === branchNodes(question.tree).length && typed.length > 0 && matchTreeAnswers(question.tree, typed, given(question)).every(hit => hit?.correct));
 
-// Each node's first word, counted from the start of its ayat.
 function nodeOffsets(tree: Branch) {
   const offsets = new Map<Branch, number>();
   const visit = (node: Branch, offset: number) => {
@@ -100,7 +98,7 @@ export function BranchInputs({ question, typed, onChange, onCheck, ar }: { quest
   );
 }
 
-// A real tree from the quiz pool (example.json), showing which nodes a setting leaves to type.
+// docs/quiz-ayah-branches.md
 export function BranchPreview({ leaves, ar }: { leaves: number; ar: boolean }) {
   const tree = example.tree as Branch;
   const asked = askedNodes(tree, leaves, () => 0.5);

@@ -57,6 +57,7 @@ describe('approved quiz assembly', () => {
     expect(both).toBeGreaterThan(500);
     expect(count).toHaveBeenCalledWith({ where: { status: 'APPROVED', topic: { in: ['AYAT'] } } });
     expect(await availableQuestionCount(['PERSON_CIRCLE', 'BRANCHES'], 'abu-ubaydah')).toBeGreaterThan(500);
+    expect(count).toHaveBeenLastCalledWith({ where: { status: 'APPROVED', personSlugs: { has: 'abu-ubaydah' } } });
   });
 
   it('adds a person circle to the other chosen topics instead of replacing them', async () => {
