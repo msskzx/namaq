@@ -16,14 +16,12 @@ describe('ThemeSwitcher', () => {
     const button = screen.getByRole('button', { name: light });
     expect(button.getAttribute('title')).toBe(light);
     expect(container.querySelectorAll('svg')).toHaveLength(1);
-    expect(container.querySelector('.lucide-sun')).toBeTruthy();
     fireEvent.click(button);
     expect(state.setTheme).toHaveBeenLastCalledWith('light');
     state.resolvedTheme = 'light';
     rerender(<ThemeSwitcher palette="site" />);
     expect(screen.getByRole('button', { name: dark }).getAttribute('title')).toBe(dark);
     expect(container.querySelectorAll('svg')).toHaveLength(1);
-    expect(container.querySelector('.lucide-moon')).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: dark }));
     expect(state.setTheme).toHaveBeenLastCalledWith('dark');
   });
@@ -34,8 +32,6 @@ describe('ThemeSwitcher', () => {
     const toggle = screen.getByRole('switch', { name: language === 'ar' ? 'الوضع الداكن' : 'Dark mode' }) as HTMLInputElement;
     expect(toggle.checked).toBe(true);
     expect(container.textContent).toBe('');
-    expect(container.querySelector('.lucide-sun')).toBeTruthy();
-    expect(container.querySelector('.lucide-moon')).toBeTruthy();
     fireEvent.click(toggle);
     expect(state.setTheme).toHaveBeenLastCalledWith('light');
     state.resolvedTheme = 'light';

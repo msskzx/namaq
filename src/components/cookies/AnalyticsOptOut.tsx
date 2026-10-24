@@ -47,7 +47,7 @@ function AnalyticsOptOut() {
           <span className="text-sm font-medium text-[var(--home-ink)]">
             {language === 'ar' ? 'تفعيل التحليلات' : 'Enable Analytics'}
           </span>
-          <button type="button" role="switch" aria-checked={analyticsEnabled} aria-label={language === 'ar' ? 'تفعيل التحليلات' : 'Enable Analytics'} onClick={() => handleToggleAnalytics(!analyticsEnabled)} className={`relative inline-flex h-6 w-11 items-center rounded-full border border-[var(--home-rule)] transition-colors ${analyticsEnabled ? 'bg-[var(--home-accent)]' : 'bg-[var(--home-paper-deep)]'}`}>
+          <button dir="ltr" type="button" role="switch" aria-checked={analyticsEnabled} aria-label={language === 'ar' ? 'تفعيل التحليلات' : 'Enable Analytics'} onClick={() => handleToggleAnalytics(!analyticsEnabled)} className={`relative inline-flex h-6 w-11 items-center rounded-full border border-[var(--home-rule)] transition-colors ${analyticsEnabled ? 'bg-[var(--home-accent)]' : 'bg-[var(--home-paper-deep)]'}`}>
             <span aria-hidden className={`inline-block size-4 transform rounded-full transition-transform ${analyticsEnabled ? 'translate-x-6 bg-[var(--home-paper)]' : 'translate-x-1 bg-[var(--home-muted)]'}`} />
           </button>
         </div>
