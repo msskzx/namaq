@@ -86,7 +86,7 @@ describe('BranchTree', () => {
     ];
     render(<BranchTree tree={merged} variants={variants} names={{ 56: 'الواقعة', 76: 'الإنسان' }} pages={{ '56:17': 535, '76:19': 579 }} juz={{ from: 26, to: 30 }} />);
     const firstWords = screen.getByRole('list', { name: 'صيغ الكلمة الأولى' });
-    expect(firstWords.textContent).toBe('يَطُوفُوَيَطُوفُ');
+    expect(within(firstWords).getAllByRole('link').map(link => link.textContent)).toEqual(['يَطُوفُ', 'وَيَطُوفُ']);
     expect(screen.getByText('عَلَيْهِمْ')).toBeTruthy();
     expect(screen.getByRole('link', { name: 'وَيَطُوفُ' }).getAttribute('href')).toBe(branchesHref('يطوف عليهم', { from: 26, to: 30 }, { spelling: 'وَيَطُوفُ' }));
     expect(screen.getByRole('link', { name: 'يَطُوفُ' }).getAttribute('href')).toBe(branchesHref('يطوف عليهم', { from: 26, to: 30 }, { spelling: 'يَطُوفُ' }));
@@ -94,12 +94,11 @@ describe('BranchTree', () => {
     expect(screen.getByText('الواقعة ١٧').nextElementSibling?.textContent).toBe('يَطُوفُ');
   });
 
-  it('gives every ordinary leaf a borderless context button beside its references without adding one to ordinary inner nodes', () => {
+  it('gives every leaf a borderless context button beside its references and every inner node an outline one', () => {
     render(<BranchTree tree={tree} names={{}} pages={{}} />);
     const buttons = screen.getAllByRole('button', { name: /عرض الآيات في سياقها/ });
-    expect(buttons).toHaveLength(2);
-    expect(buttons.every(button => button.getAttribute('data-variant') === 'ghost')).toBe(true);
-    expect(buttons.every(button => button.textContent?.trim())).toBe(true);
+    expect(buttons.map(button => button.getAttribute('data-variant'))).toEqual(['outline', 'ghost', 'ghost']);
+    expect(buttons.slice(1).every(button => button.textContent?.trim())).toBe(true);
     expect(screen.queryByRole('link')).toBeNull();
     expect(fetch).not.toHaveBeenCalled();
   });
@@ -137,6 +136,24 @@ describe('BranchTree', () => {
     render(<BranchTree tree={branch(group)} variants={variants(group)} names={{}} pages={{ '1:1': 1, '1:2': 1, '1:3': 1 }} />);
     const firstWords = screen.getByRole('list', { name: 'صيغ الكلمة الأولى' });
     expect(within(firstWords).getAllByRole('button', { name: /عرض اختلافات الضبط والسياق/ })).toHaveLength(1);
-    expect(screen.getAllByRole('button', { name: /عرض الآيات في سياقها/ })).toHaveLength(1);
+    expect(screen.getAllByRole('button', { name: /عرض الآيات في سياقها/ })).toHaveLength(2);
+  });
+
+  it('opens every inner node on all its ayat and every leaf on its siblings under the same parent', async () => {
+    render(<BranchTree tree={tree} names={{}} pages={{}} />);
+    const [inner, , leaf] = screen.getAllByRole('button', { name: /عرض الآيات في سياقها/ });
+    const asked = () => new URL(vi.mocked(fetch).mock.calls.at(-1)![0] as string, 'http://localhost').searchParams.get('q');
+    fireEvent.click(inner);
+    await vi.waitFor(() => expect(asked()).toBe('15:45,51:15,44:51'));
+    fireEvent.click(leaf);
+    await vi.waitFor(() => expect(asked()).toBe('44:51,15:45,51:15'));
+  });
+
+  it('lists the differing marks of a merged node at the top of its overlay with the differing word highlighted', () => {
+    const group = startingWith(ayat as BranchAyah[], 'قال رب').filter(a => ['26:24', '26:28', '28:16'].includes(a.key));
+    render(<BranchTree tree={branch(group)} names={{}} pages={{}} />);
+    const marks = screen.getByRole('region', { name: 'الضبط في هذه العقدة', hidden: true });
+    expect(within(marks).getAllByRole('listitem', { hidden: true }).map(item => item.textContent)).toEqual([`${group[0].words.slice(0, 2).join(' ')}آيتان`, `${group[2].words.slice(0, 2).join(' ')}آية`]);
+    expect([...marks.querySelectorAll('mark')].map(mark => mark.textContent)).toEqual([group[0].words[1], group[2].words[1]]);
   });
 });

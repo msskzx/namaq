@@ -6,7 +6,7 @@ import type { JuzRange } from '@/lib/quran/juz';
 import AyahContextButton from './AyahContext';
 
 type Props = { view?: BranchesView; tree: Branch; names: Record<number, string>; pages: Record<string, number>; variants?: Variant[]; showSpellings?: boolean; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode };
-type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header'> & { node: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
+type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header'> & { node: Branch; parent?: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
 
 const LINE = 'border-[var(--home-rule)]';
 export const TONE: Record<string, string> = {
@@ -36,22 +36,31 @@ export function AyahRefs({ keys, names, pages, tags = {}, linked = true, classNa
   );
 }
 
-export function Marked({ node, ayahKeys, names, children, skip = 0, offset = 0, leaf = false, enabled = true, references }: { references?: React.ReactNode; enabled?: boolean; node: Pick<Branch, 'forms'>; ayahKeys: string[]; skip?: number; offset?: number; leaf?: boolean; names: Record<number, string>; children: React.ReactNode }) {
+export function spellings(node: Pick<Branch, 'forms'>, skip = 0) {
+  const found = new Map<string, { words: string[]; keys: string[] }>();
+  Object.entries(node.forms ?? {}).forEach(([key, words]) => {
+    const text = JSON.stringify(words.slice(skip));
+    found.set(text, { words: words.slice(skip), keys: [...(found.get(text)?.keys ?? []), key] });
+  });
+  return found.size > 1 ? [...found.values()].sort((a, b) => b.keys.length - a.keys.length) : [];
+}
+
+export function Marked({ node, ayahKeys, siblings, names, children, skip = 0, offset = 0, leaf = false, enabled = true, references }: { references?: React.ReactNode; enabled?: boolean; node: Pick<Branch, 'forms'>; ayahKeys: string[]; siblings?: string[]; skip?: number; offset?: number; leaf?: boolean; names: Record<number, string>; children: React.ReactNode }) {
   if (!enabled) return <>{children}{references}</>;
   const forms = Object.values(node.forms ?? {}).map(words => words.slice(skip));
   const differentWords = (forms[0] ?? []).flatMap((_, i) => new Set(forms.map(words => words[i])).size > 1 ? [offset + skip + i] : []);
-  if (!leaf && differentWords.length === 0) return <>{children}{references}</>;
-  return <AyahContextButton ayahKeys={ayahKeys} differentWords={differentWords} names={names} leaf={leaf} references={references}>{children}</AyahContextButton>;
+  const others = leaf ? (siblings ?? []).filter(key => !ayahKeys.includes(key)) : [];
+  return <AyahContextButton ayahKeys={ayahKeys} siblings={others} spellings={spellings(node, skip)} spellingAt={offset + skip} differentWords={differentWords} names={names} leaf={leaf} references={references}>{children}</AyahContextButton>;
 }
 
-function Node({ node, path, names, pages, tags, lead, juz, renderNode, indices, showSpellings, view }: NodeProps) {
+function Node({ node, parent, path, names, pages, tags, lead, juz, renderNode, indices, showSpellings, view }: NodeProps) {
   const root = path.length === 0;
   const words = [...path, ...node.words];
   const shownWords = node.words.slice(root ? lead : 0);
   return (
     <div className="flex items-center">
       {(!root || shownWords.length > 0 || node.ayat.length > 0) && <div className={`shrink-0 rounded border px-3 py-1.5 ${node.children.length === 0 ? 'max-w-sm' : 'max-w-xs'} ${root ? 'border-[var(--home-accent)] bg-[var(--home-paper-deep)] text-xl' : 'border-[var(--home-rule)] bg-[var(--home-paper)] text-lg'}`}>
-        {renderNode && !root ? renderNode(node, indices.get(node)!, tags) : <><Marked node={node} ayahKeys={keys(node)} names={names} offset={path.length} leaf={node.children.length === 0} skip={root ? lead : 0} enabled={showSpellings} references={node.ayat.length > 0 && <AyahRefs keys={node.ayat} names={names} pages={pages} tags={tags} linked={node.children.length > 0} className="" />}>{root || node.children.length === 0 ? <span className="font-arabic leading-loose">{shownWords.join(' ')}</span> : (
+        {renderNode && !root ? renderNode(node, indices.get(node)!, tags) : <><Marked node={node} ayahKeys={keys(node)} siblings={parent && keys(parent)} names={names} offset={path.length} leaf={node.children.length === 0} skip={root ? lead : 0} enabled={showSpellings} references={node.ayat.length > 0 && <AyahRefs keys={node.ayat} names={names} pages={pages} tags={tags} linked={node.children.length > 0} className="" />}>{root || node.children.length === 0 ? <span className="font-arabic leading-loose">{shownWords.join(' ')}</span> : (
           <Link href={branchesHref(linkId(words, keys(node).flatMap(key => (tags[key] ? [tags[key].conj] : []))), juz, { ...view, partition: node.partition })} className="font-arabic leading-loose hover:text-[var(--home-accent)] hover:underline">{node.words.join(' ')}</Link>
         )}</Marked></>}
       </div>}
@@ -65,7 +74,7 @@ function Node({ node, path, names, pages, tags, lead, juz, renderNode, indices, 
                 {node.children.length > 1 && (
                   <span aria-hidden className={`absolute start-0 border-s-2 ${LINE} ${i === 0 ? 'top-1/2' : 'top-0'} ${i === node.children.length - 1 ? 'bottom-1/2' : 'bottom-0'}`} />
                 )}
-                <Node node={child} path={words} names={names} pages={pages} tags={tags} lead={lead} juz={juz} renderNode={renderNode} indices={indices} showSpellings={showSpellings} view={view} />
+                <Node node={child} parent={node} path={words} names={names} pages={pages} tags={tags} lead={lead} juz={juz} renderNode={renderNode} indices={indices} showSpellings={showSpellings} view={view} />
               </li>
             ))}
           </ul>

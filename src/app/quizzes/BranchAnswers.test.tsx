@@ -25,7 +25,7 @@ describe('complete branch tree answers', () => {
     const own = { tree: { words: ['قال'], ayat: [], children: [merged, { words: ['يا'], ayat: ['1:3'], children: [] }] }, branches: [{ words: [], ayat: [{ key: '1:1', page: 1, words: [] }, { key: '1:2', page: 1, words: [] }, { key: '1:3', page: 1, words: [] }] }] };
     render(<BranchFeedback question={own} typed={['من رب', 'يا']} names={{}} juz={null} ar />);
     expect(screen.getByRole('button', { name: /عرض اختلافات الضبط والسياق/ }).querySelector('[data-differing]')).toBeTruthy();
-    expect(screen.getByRole('button', { name: /عرض الآيات في سياقها/ }).getAttribute('data-variant')).toBe('ghost');
+    expect(screen.getAllByRole('button', { name: /عرض الآيات في سياقها/ }).map(button => button.getAttribute('data-variant'))).toEqual(['outline', 'ghost']);
   });
 
   it('keeps original spelling references out of the unanswered quiz tree', () => {
