@@ -2,6 +2,8 @@
 
 import React from 'react';
 import ExplorationCard from '@/components/common/ExplorationCard';
+import cards from '@/components/common/ExplorationCard.module.css';
+import styles from '@/components/common/PaperPage.module.css';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { getAllNavLinks } from '@/lib/siteLinks';
 import { PROPHETS } from '@/lib/quran/prophets';
@@ -29,13 +31,17 @@ export default function QuranHub() {
   const { language } = useLanguage() as { language: Language };
   const links = getAllNavLinks(language);
   return (
-    <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="w-full max-w-5xl mx-auto p-4 text-gray-900 dark:text-gray-200">
-      <h1 className="text-3xl mb-6">{language === 'ar' ? 'القرآن' : 'Quran'}</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {QURAN_CARDS.map(({ href, desc }) => (
-          <ExplorationCard key={href} url={href} title={links.find(l => l.href === href)?.label ?? href} desc={desc[language]} />
+    <div dir={language === 'ar' ? 'rtl' : 'ltr'} className={`${styles.page} w-full max-w-5xl mx-auto p-4`}>
+      <header className={styles.heading}>
+        <h1>{language === 'ar' ? 'القرآن' : 'Quran'}</h1>
+      </header>
+      <ol className={cards.grid}>
+        {QURAN_CARDS.map(({ href, desc }, index) => (
+          <li key={href}>
+            <ExplorationCard url={href} title={links.find(l => l.href === href)?.label ?? href} desc={desc[language]} number={index + 1} language={language} />
+          </li>
         ))}
-      </div>
+      </ol>
     </div>
   );
 }

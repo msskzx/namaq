@@ -3,7 +3,6 @@ import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
 import QuranHub from './QuranHub';
-import { getAllNavLinks } from '@/lib/siteLinks';
 
 const lang = vi.hoisted(() => ({ language: 'ar' as 'ar' | 'en' }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => lang }));
@@ -13,16 +12,26 @@ afterEach(() => {
   lang.language = 'ar';
 });
 
-const quranPages = (language: 'ar' | 'en') => getAllNavLinks(language).filter(l => l.href.startsWith('/quran/'));
+const routes = [
+  '/quran/read', '/quran/compare', '/quran/words', '/quran/branches',
+  '/quran/iltifat', '/quran/qiraat', '/quran/order', '/quran/openings',
+  '/quran/oaths', '/quran/tajwid/tuhfat-al-atfal', '/quran/prophets/musa',
+];
 
 describe('QuranHub', () => {
-  it('links a card to every Quran page in the menu, under the menu label', () => {
+  it.each(['ar', 'en'] as const)('preserves every Quran destination in %s', language => {
+    lang.language = language;
     render(<QuranHub />);
-    const cards = screen.getAllByRole('link');
-    expect(cards.map(c => c.getAttribute('href'))).toEqual(quranPages('ar').map(l => l.href));
-    for (const { href, label } of quranPages('ar')) {
-      expect(screen.getByRole('heading', { name: label }).closest('a')?.getAttribute('href')).toBe(href);
-    }
+    const links = screen.getAllByRole('link');
+    expect(links.map(link => link.getAttribute('href'))).toEqual(routes);
+    expect(links.every(link => link.textContent && !link.textContent.includes('/quran/'))).toBe(true);
+  });
+
+  it('identifies the Arabic reading and prophet destinations', () => {
+    render(<QuranHub />);
+    expect(screen.getByRole('heading', { level: 1, name: 'القرآن' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'قراءة القرآن' }).closest('a')?.getAttribute('href')).toBe('/quran/read');
+    expect(screen.getByRole('heading', { name: 'قصص الأنبياء في القرآن' }).closest('a')?.getAttribute('href')).toBe('/quran/prophets/musa');
   });
 
   it('writes the titles and descriptions in English', () => {
