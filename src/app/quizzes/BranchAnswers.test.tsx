@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { branch, variants, type BranchAyah } from '@/lib/quran/branches';
 import { BranchFeedback, BranchInputs, branchesCorrect, emptyBranchAnswers } from './BranchAnswers';
 
@@ -25,7 +25,19 @@ describe('complete branch tree answers', () => {
     const own = { tree: { words: ['قال'], ayat: [], children: [merged, { words: ['يا'], ayat: ['1:3'], children: [] }] }, branches: [{ words: [], ayat: [{ key: '1:1', page: 1, words: [] }, { key: '1:2', page: 1, words: [] }, { key: '1:3', page: 1, words: [] }] }] };
     render(<BranchFeedback question={own} typed={['من رب', 'يا']} names={{}} juz={null} ar />);
     expect(screen.getByRole('button', { name: /عرض اختلافات الضبط والسياق/ }).querySelector('[data-differing]')).toBeTruthy();
-    expect(screen.getByRole('button', { name: /عرض الآيات في سياقها/ }).getAttribute('data-variant')).toBe('ghost');
+    expect(screen.getAllByRole('button', { name: /عرض الآيات في سياقها/ }).map(button => button.getAttribute('data-variant'))).toEqual(['outline', 'ghost']);
+  });
+
+  it('opens a feedback leaf on its siblings under the same parent', async () => {
+    HTMLDialogElement.prototype.showModal = function () { this.open = true; };
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => [] }));
+    const own = { tree: { words: ['قال'], ayat: [], children: [{ words: ['رب'], ayat: ['1:1'], children: [] }, { words: ['يا'], ayat: ['1:2', '1:3'], children: [] }] }, branches: [] };
+    render(<BranchFeedback question={own} typed={['رب', 'يا']} names={{}} juz={null} ar />);
+    fireEvent.click(screen.getAllByRole('button', { name: /عرض الآيات في سياقها/ })[1]);
+    await waitFor(() => expect(fetch).toHaveBeenCalled());
+    const params = new URL(vi.mocked(fetch).mock.calls[0][0] as string, 'http://localhost').searchParams;
+    expect([params.get('q'), params.get('vs')]).toEqual(['1:1,1:2,1:3', '1:1']);
+    vi.unstubAllGlobals();
   });
 
   it('keeps original spelling references out of the unanswered quiz tree', () => {

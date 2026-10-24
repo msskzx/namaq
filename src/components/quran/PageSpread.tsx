@@ -17,11 +17,11 @@ function Ayah({ ayah }: { ayah: SpreadAyah }) {
   });
 }
 
-export function MatchLegend({ exact, root }: { exact: string; root: string }) {
+export function MatchLegend({ exact, root }: { exact?: string; root?: string }) {
   return (
     <p className={styles.legend}>
-      <span><mark>{exact}</mark></span>
-      <span><mark className={styles.root}>{root}</mark></span>
+      {exact && <span><mark>{exact}</mark></span>}
+      {root && <span><mark className={styles.root}>{root}</mark></span>}
     </p>
   );
 }

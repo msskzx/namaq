@@ -12,3 +12,10 @@
 @media (max-width: 700px) { .cards { grid-template-columns: minmax(0, 1fr); } }
 
 .differenceIcon { background: var(--home-highlight); color: var(--home-on-highlight); padding: 0.25rem; border-radius: 2px; }
+
+.spellings { margin-bottom: 1.5rem; padding: 0.75rem 1rem; border: 1px solid var(--home-rule); background: var(--home-paper-deep); }
+.spellings h3, .section { font-size: 1rem; color: var(--home-muted); margin-bottom: 0.5rem; }
+.section { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--home-rule); }
+.spellings ul { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; }
+.spellings li { display: flex; align-items: baseline; gap: 0.5rem; font-size: 1.5rem; line-height: 2; }
+.spellings mark { background: transparent; color: var(--home-root); text-decoration: underline dotted var(--home-root); text-underline-offset: 0.3em; }

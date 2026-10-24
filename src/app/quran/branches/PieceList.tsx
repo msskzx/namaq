@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useLanguage } from '@/components/language/LanguageContext';
-import { num } from '@/lib/quran/arabicNumber';
+import { ayatCount, counted, num } from '@/lib/quran/arabicNumber';
 import { branch, branchesHref, variants, type BranchAyah, type BranchesView, type Opening, type Piece } from '@/lib/quran/branches';
 import type { JuzRange } from '@/lib/quran/juz';
 import BranchTree from './BranchTree';
@@ -13,8 +13,6 @@ export const PER_PAGE = 10;
 
 type Props = { names: Record<number, string>; ayat: Map<string, BranchAyah>; juz: JuzRange | null; view?: BranchesView };
 
-const counted = (n: number, [one, two, few]: [string, string, string]) => (n === 1 ? one : n === 2 ? two : `${num(n)} ${n <= 10 ? few : one}`);
-const ayatCount = (n: number) => counted(n, ['آية', 'آيتان', 'آيات']);
 
 function Entry({ piece, names, ayat, juz, partOf, view }: Props & { piece: Piece; partOf: boolean }) {
   const { language } = useLanguage();

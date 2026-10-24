@@ -84,6 +84,40 @@ it('highlights differing words in the next ayah when the leaf continues beyond a
   expect(screen.getAllByTitle('Differing marks').map(word => word.textContent)).toEqual(['إِنَّ']);
 });
 
+it('shows the node\'s own ayat first, highlights only them, and puts sibling branches in their own section', async () => {
+  render(wrap(<AyahContextButton ayahKeys={['94:6']} siblings={['94:5']} differentWords={[3]} names={{ 94: 'الشرح' }} leaf>Leaf</AyahContextButton>));
+  fireEvent.click(screen.getByRole('button', { name: 'View spelling differences and context' }));
+  const dialog = screen.getByRole('dialog');
+  await within(dialog).findAllByRole('article');
+  expect(new URL(vi.mocked(fetch).mock.calls[0][0] as string, 'http://localhost').searchParams.get('q')).toBe('94:6,94:5');
+  expect(within(dialog).getAllByRole('article', { name: /\d/ }).map(card => card.getAttribute('aria-label'))).toEqual(['الشرح 6', 'الشرح 5']);
+  const siblings = within(dialog).getByRole('region', { name: 'Sibling branches' });
+  expect(within(siblings).getAllByRole('article', { name: /\d/ }).map(card => card.getAttribute('aria-label'))).toEqual(['الشرح 5']);
+  expect(within(siblings).queryAllByTitle('Differing marks')).toHaveLength(0);
+  expect(within(dialog).getAllByTitle('Differing marks').map(word => word.textContent)).toEqual(['يُسْرًۭا']);
+});
+
+it('marks the node words in the leaf\'s own card and only the comparison with the branch ayah in sibling cards', async () => {
+  vi.mocked(fetch).mockResolvedValue({ ok: true, json: async () => [{ ...source[0], match: { different: [0], rooted: [3] } }, source[1]] } as Response);
+  render(wrap(<AyahContextButton ayahKeys={['94:6']} siblings={['94:5']} spans={{ '94:5': [0, 2], '94:6': [0, 2] }} differentWords={[]} names={{ 94: 'الشرح' }} leaf>Leaf</AyahContextButton>));
+  fireEvent.click(screen.getByRole('button', { name: 'View ayat in context' }));
+  const dialog = screen.getByRole('dialog');
+  expect(new URL(vi.mocked(fetch).mock.calls[0][0] as string, 'http://localhost').searchParams.get('vs')).toBe('94:6');
+  const siblings = await within(dialog).findByRole('region', { name: 'Sibling branches' });
+  expect(within(siblings).getAllByTitle('Not in the branch ayah').map(word => word.textContent)).toEqual([source[0].ayah.words[0]]);
+  expect(within(siblings).getAllByTitle('Same root in the branch ayah').map(word => word.textContent)).toEqual([source[0].ayah.words[3]]);
+  const current = [...dialog.querySelectorAll('[data-current]')];
+  expect(current.map(row => [...row.querySelectorAll('mark')].map(mark => mark.textContent))).toEqual([source[1].ayah.words.slice(0, 2), [source[0].ayah.words[0], source[0].ayah.words[3]]]);
+});
+
+it('keeps comparison colours off a leaf\'s own ayat even when the server sends a match for them', async () => {
+  vi.mocked(fetch).mockResolvedValue({ ok: true, json: async () => [{ ...source[0], match: { different: [0], rooted: [] } }, source[1]] } as Response);
+  render(wrap(<AyahContextButton ayahKeys={['94:6', '94:5']} siblings={['94:7']} subject="إِنَّ" differentWords={[]} names={{}} leaf>Leaf</AyahContextButton>));
+  fireEvent.click(screen.getByRole('button', { name: 'View ayat in context: إِنَّ' }));
+  await screen.findAllByRole('link', { name: 'Read ayah' });
+  expect(screen.queryAllByTitle('Not in the branch ayah')).toHaveLength(0);
+});
+
 it('locks background scrolling until the dialog closes and restores existing styles on unmount', () => {
   document.body.style.overflow = 'scroll';
   document.documentElement.style.overflow = 'auto';

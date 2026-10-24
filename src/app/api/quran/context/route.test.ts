@@ -43,6 +43,18 @@ describe('GET /api/quran/context', () => {
     },
   );
 
+  it('compares every other ayah with the one named by vs, which must be among the requested keys', async () => {
+    const body = await (await GET(new Request('http://localhost/api/quran/context?q=94:5,94:6&vs=94:6'))).json();
+    expect(body.map((context: { match?: unknown }) => context.match)).toEqual([{ different: [], rooted: [0] }, undefined]);
+    expect((await GET(new Request('http://localhost/api/quran/context?q=94:5&vs=94:6'))).status).toBe(400);
+  });
+
+  it('rejects more than 200 keys before loading the corpus', async () => {
+    const keys = Array.from({ length: 201 }, (_, i) => `2:${i + 1}`).join(',');
+    expect((await GET(request(keys))).status).toBe(400);
+    expect(loadReaderAyat).not.toHaveBeenCalled();
+  });
+
   it('returns 404 if any requested ayah is absent instead of returning partial cards', async () => {
     const response = await GET(request('94:5,94:999'));
 
