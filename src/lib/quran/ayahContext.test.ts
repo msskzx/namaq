@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { BranchAyah } from './branches';
-import { ayahContexts, comparedTo, loadReaderAyat } from './ayahContext';
+import { normalizeWord } from './normalize';
+import { ayahContexts, comparedTo, loadReaderAyat, surrounding } from './ayahContext';
 
 const ayah = (key: string, page = 1, words = ['قَالَ']): BranchAyah => ({ key, page, words });
 
@@ -72,5 +73,35 @@ describe('comparedTo', () => {
     expect(rooted.match?.rooted).toEqual([0]);
     expect(base.match?.exact).toContain(0);
     expect(base.match?.rooted).not.toContain(0);
+  });
+});
+
+describe('surrounding', () => {
+  it('crosses into the neighbouring surah with the basmala between, except before at-Tawbah', async () => {
+    const all = await loadReaderAyat();
+    const basmala = all[0].words;
+    const { before, after } = surrounding(all, ['2:27', '4:1', '9:1', '1:1'], ['2:27', '3:200', '8:75', '114:6']);
+
+    expect(before['2:27']).toMatchObject({ key: '2:26' });
+    expect(before['2:27']).not.toHaveProperty('basmala');
+    expect(before['4:1']).toMatchObject({ key: '3:200', basmala });
+    expect(before['9:1']).toMatchObject({ key: '8:75' });
+    expect(before['9:1']).not.toHaveProperty('basmala');
+    expect(before['1:1']).toBeNull();
+    expect(after['2:27']).toMatchObject({ key: '2:28' });
+    expect(after['3:200']).toMatchObject({ key: '4:1', basmala });
+    expect(after['8:75']).not.toHaveProperty('basmala');
+    expect(after['8:75']).toMatchObject({ key: '9:1' });
+    expect(after['114:6']).toBeNull();
+    expect(basmala.map(normalizeWord).join(' ')).toBe('بسم الله الرحمن الرحيم');
+  });
+
+  it('crosses from al-Fatiha into al-Baqarah after the basmala ayah ends the surah', async () => {
+    const all = await loadReaderAyat();
+    expect(surrounding(all, ['2:1'], []).before['2:1']).toMatchObject({ key: '1:7', basmala: all[0].words });
+  });
+
+  it('gives no neighbour for an unknown ayah', () => {
+    expect(surrounding([ayah('2:1'), ayah('2:2')], ['2:9'], ['2:2'])).toEqual({ before: { '2:9': null }, after: { '2:2': null } });
   });
 });

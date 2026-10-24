@@ -49,3 +49,26 @@ export function comparedTo(contexts: AyahContext[], base: BranchAyah): AyahConte
   const own = { exact: [...shared.exact].sort((x, y) => x - y), rooted: [...shared.rooted].filter(i => !shared.exact.has(i)).sort((x, y) => x - y) };
   return compared.map(context => (context.ayah.key === base.key ? { ...context, match: own } : context));
 }
+
+export type Neighbour = { key: string; page: number; words: string[]; basmala?: string[] };
+export type Surrounding = { before: Record<string, Neighbour | null>; after: Record<string, Neighbour | null> };
+
+const NO_BASMALA = 9;
+
+export function surrounding(all: BranchAyah[], before: string[], after: string[]): Surrounding {
+  const at = new Map(all.map((ayah, i) => [ayah.key, i]));
+  const basmala = all.find(ayah => ayah.key === '1:1')?.words;
+  const neighbour = (key: string, step: 1 | -1): Neighbour | null => {
+    const i = at.get(key);
+    const found = i === undefined ? undefined : all[i + step];
+    if (!found) return null;
+    const { page, words } = found;
+    const crossed = found.key.split(':')[0] !== key.split(':')[0];
+    const opened = Number((step === 1 ? found.key : key).split(':')[0]);
+    return { key: found.key, page, words, ...(crossed && basmala && opened !== NO_BASMALA && { basmala }) };
+  };
+  return {
+    before: Object.fromEntries(before.map(key => [key, neighbour(key, -1)])),
+    after: Object.fromEntries(after.map(key => [key, neighbour(key, 1)])),
+  };
+}

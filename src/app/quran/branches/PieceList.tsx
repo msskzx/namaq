@@ -31,7 +31,7 @@ function Entry({ piece, names, ayat, juz, partOf, view }: Props & { piece: Piece
           </>}
         </p>}
         tree={branch(group)} variants={variants(group)} names={names}
-        pages={Object.fromEntries(group.map(ayah => [ayah.key, ayah.page]))} juz={juz} view={view}
+        pages={Object.fromEntries(group.map(ayah => [ayah.key, ayah.page]))} juz={juz} view={view} surround={{ on: false }}
       />
     </li>
   );

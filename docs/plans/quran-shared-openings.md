@@ -75,6 +75,32 @@ The owner chose these rules after PR 427.
 - قَالَ رَبِّى stays out of the قال رب tree. The ي is a written letter, so it
   fails the same-letters rule.
 
+### Surrounding ayat (2026-10-24)
+
+The owner chose these rules from a sketch.
+
+- Each tree on `/quran/branches` has a switch, «الآيات المحيطة», off by
+  default. On the single tree page it is kept in the address as `c=1`, and tree
+  links keep it. Trees in the list keep their own switch and leave the address
+  alone. The quiz has no switch yet; it may come later as a hint.
+- With the switch on, every ayah of the tree gets the ayah before it, in a box
+  before the first-word boxes (or before the root when there are none), and the
+  ayah after it, in a box after the node where the ayah ends. The whole ayah is
+  shown, with its own reference and nothing else.
+- When a leaf already runs into the next ayah (56:17 into 56:18), the next box
+  shows the ayah after that one (56:19).
+- The boxes cross into the neighbouring surah. Hafs is the reading, so the
+  basmala sits between the two surahs in the same box: after the previous
+  surah's last ayah, or before the next surah's first ayah. At-Tawbah has no
+  basmala. Nothing comes before 1:1 or after 114:6.
+- A neighbour that is itself an ayah of the tree carries «في هذه الشجرة», a
+  link to its node. The tree is not redrawn as a chain.
+- The boxes are dashed and muted. Hovering or focusing one lights its path in
+  the accent colour: its first-word box, the nodes down to its ayah, the lines
+  between them, and its other box.
+- `/api/quran/surrounding?before=<keys>&after=<keys>` returns the neighbours
+  from the reader corpus, at most 400 keys per request.
+
 ### Affected components and dependencies
 
 - `src/lib/quran/branches.ts` retains complete original node phrases and their

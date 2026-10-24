@@ -1,13 +1,15 @@
 // @vitest-environment jsdom
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { branch, branchesHref, startingWith, variants, type BranchAyah } from '@/lib/quran/branches';
 import BranchTree, { nodeSpans } from './BranchTree';
 import ayat from './ayat.json';
 import { inJuzRange } from '@/lib/quran/juz';
 
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
+const { replace } = vi.hoisted(() => ({ replace: vi.fn() }));
+vi.mock('next/navigation', () => ({ useRouter: () => ({ replace }) }));
 
 beforeEach(() => {
   HTMLDialogElement.prototype.showModal = function () { this.open = true; };
@@ -184,5 +186,79 @@ describe('BranchTree', () => {
     const marks = screen.getByRole('region', { name: 'الضبط في هذه العقدة', hidden: true });
     expect(within(marks).getAllByRole('listitem', { hidden: true }).map(item => item.textContent)).toEqual([`${group[0].words.slice(0, 2).join(' ')}آيتان`, `${group[2].words.slice(0, 2).join(' ')}آية`]);
     expect([...marks.querySelectorAll('mark')].map(mark => mark.textContent)).toEqual([group[0].words[1], group[2].words[1]]);
+  });
+
+  describe('surrounding ayat', () => {
+    const basmala = ['بِسْمِ', 'ٱللَّهِ', 'ٱلرَّحْمَـٰنِ', 'ٱلرَّحِيمِ'];
+    const around = {
+      before: {
+        '15:45': { key: '15:44', page: 265, words: ['لَهَا', 'سَبْعَةُ', 'أَبْوَٰبٍ'] },
+        '51:15': { key: '51:14', page: 521, words: ['ذُوقُوا۟', 'فِتْنَتَكُمْ'] },
+        '44:51': { key: '44:50', page: 498, words: ['إِنَّ', 'هَـٰذَا'], basmala },
+      },
+      after: {
+        '15:45': { key: '15:46', page: 265, words: ['ٱدْخُلُوهَا', 'بِسَلَـٰمٍ'] },
+        '51:15': null,
+        '44:51': { key: '51:15', page: 521, words: ['إِنَّ', 'ٱلْمُتَّقِينَ'] },
+      },
+    };
+    const names = { 15: 'الحجر', 44: 'الدخان', 51: 'الذاريات' };
+    const pages = { '15:45': 265, '44:51': 498, '51:15': 521 };
+
+    beforeEach(() => {
+      replace.mockReset();
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => around }));
+    });
+
+    it('has no switch unless the page asks for one', () => {
+      render(<BranchTree tree={tree} names={names} pages={pages} />);
+      expect(screen.queryByRole('switch')).toBeNull();
+    });
+
+    it('loads nothing until the switch is turned on, then draws the ayah before and after every branch', async () => {
+      const { container } = render(<BranchTree tree={tree} names={names} pages={pages} surround={{ on: false }} />);
+      expect(fetch).not.toHaveBeenCalled();
+      expect(container.querySelector('[data-ctx]')).toBeNull();
+
+      fireEvent.click(screen.getByRole('switch', { name: 'الآيات المحيطة' }));
+      await waitFor(() => expect(container.querySelectorAll('[data-ctx]')).toHaveLength(5));
+      const url = new URL(vi.mocked(fetch).mock.calls[0][0] as string, 'http://localhost');
+      expect(url.pathname).toBe('/api/quran/surrounding');
+      expect(url.searchParams.get('before')).toBe('15:45,51:15,44:51');
+      expect(url.searchParams.get('after')).toBe('15:45,51:15,44:51');
+      expect(within(screen.getByRole('list', { name: 'الآيات السابقة' })).getByText('لَهَا سَبْعَةُ أَبْوَٰبٍ')).toBeTruthy();
+      expect(screen.getByText('ٱدْخُلُوهَا بِسَلَـٰمٍ').closest('[data-ctx]')?.getAttribute('data-ctx')).toBe('15:45');
+      expect(replace).not.toHaveBeenCalled();
+    });
+
+    it('puts the basmala after the previous surah\'s last ayah, in the same box', async () => {
+      render(<BranchTree tree={tree} names={names} pages={pages} surround={{ on: true }} />);
+      const box = (await screen.findByText('إِنَّ هَـٰذَا')).closest('[data-ctx]')!;
+      expect(box.textContent?.indexOf('إِنَّ هَـٰذَا')).toBeLessThan(box.textContent!.indexOf(basmala.join(' ')));
+      expect(within(box as HTMLElement).getByRole('link', { name: 'الدخان ٥٠' }).getAttribute('href')).toBe('/quran/read/498?a=44:50');
+    });
+
+    it('tags a neighbour that is itself in the tree and links to its branch', async () => {
+      const { container } = render(<BranchTree tree={tree} names={names} pages={pages} surround={{ on: true }} />);
+      const tag = await screen.findByRole('link', { name: 'في هذه الشجرة' });
+      const target = container.querySelector(`[id="${tag.getAttribute('href')!.slice(1)}"]`);
+      expect(target?.closest('[data-keys]')?.textContent).toContain('جَنَّـٰتٍۢ وَعُيُونٍ');
+    });
+
+    it('lights the whole path of the hovered neighbour', async () => {
+      const { container } = render(<BranchTree tree={tree} names={names} pages={pages} surround={{ on: true }} />);
+      await screen.findByText('لَهَا سَبْعَةُ أَبْوَٰبٍ');
+      const css = container.querySelector('style')!.textContent!;
+      expect(css).toContain('[data-ctx="44:51"]:hover');
+      expect(css).toContain('[data-keys~="44:51"]');
+      expect([...container.querySelectorAll('[data-keys~="44:51"]')].map(node => node.textContent)).toEqual(expect.arrayContaining([expect.stringContaining('إِنَّ ٱلْمُتَّقِينَ فِى'), expect.stringContaining('مَقَامٍ أَمِينٍۢ'), expect.stringContaining('إِنَّ هَـٰذَا')]));
+    });
+
+    it('keeps the switch in the address when the page asks', () => {
+      window.history.replaceState(null, '', '/quran/branches?o=x');
+      render(<BranchTree tree={tree} names={names} pages={pages} surround={{ on: false, sync: true }} />);
+      fireEvent.click(screen.getByRole('switch'));
+      expect(replace).toHaveBeenCalledWith('/quran/branches?o=x&c=1', { scroll: false });
+    });
   });
 });

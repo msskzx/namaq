@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import ayat from '@/app/quran/branches/ayat.json';
-import { branch, branchesHref, conjunctions, listPage, PIECE_MAX, pieces, DEFAULT_PHRASE, keys, linkId, pickPhrase, stem, widerPhrases, listOpenings, listPhrases, openingId, readerAyat, sharedOpenings, spelledAs, startingWith, variants, withConjunctions, withRoots, withNext, type Branch, type BranchAyah } from './branches';
+import { ayahEnds, branch, branchesHref, conjunctions, listPage, PIECE_MAX, pieces, DEFAULT_PHRASE, keys, linkId, pickPhrase, stem, widerPhrases, listOpenings, listPhrases, openingId, readerAyat, sharedOpenings, spelledAs, startingWith, variants, withConjunctions, withRoots, withNext, type Branch, type BranchAyah } from './branches';
 import { inJuzRange } from './juz';
 import { normalizeWord } from './normalize';
 
@@ -189,6 +189,15 @@ describe('an opening with and without و', () => {
         },
       ],
     });
+  });
+
+  it('ends each ayah at the one its leaf runs into, so its next ayah comes after that', () => {
+    expect(ayahEnds(branch(group))).toEqual({ '52:24': '52:24', '56:17': '56:18', '76:19': '76:19' });
+  });
+
+  it('keeps the surrounding-ayat switch in tree links, but not on the list', () => {
+    expect(branchesHref('يطوف عليهم', undefined, { context: true })).toBe(`/quran/branches?${new URLSearchParams({ o: 'يطوف عليهم', c: '1' })}`);
+    expect(branchesHref('', undefined, { context: true })).toBe('/quran/branches');
   });
 
   it('names each first word, the ayat that open with it and the phrase they share', () => {
