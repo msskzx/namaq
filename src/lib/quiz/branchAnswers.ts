@@ -1,6 +1,7 @@
 // docs/quiz-ayah-branches.md
 import type { Branch } from '@/lib/quran/branches';
 import { normalizeWord } from '@/lib/quran/normalize';
+import { shuffle, type Random } from './random';
 
 const DAGGER = 'ٰ';
 const HAMZA = /[ءئؤٕٔ]/;
@@ -84,9 +85,18 @@ export function matchBranches(given: string[], branches: string[][][]): (BranchM
 
 export const branchNodes = (tree: Branch): Branch[] => tree.children.flatMap((child) => [child, ...branchNodes(child)]);
 
+/** The leaves the reader types, as indices into branchNodes: `count` of them at random, or every leaf of a smaller tree. */
+export function askedNodes(tree: Branch, count: number, random: Random): number[] {
+  const leaves = branchNodes(tree).flatMap((node, index) => node.children.length === 0 ? [index] : []);
+  return shuffle(leaves, random).slice(0, count).sort((a, b) => a - b);
+}
+
+/** A node the reader does not type is filled with its own words. */
+export const givenAnswer = (node: Branch) => node.words.join(' ');
+
 export type TreeAnswerMatch = { node: Branch; correct: boolean };
 
-export function matchTreeAnswers(tree: Branch, given: string[]): (TreeAnswerMatch | null)[] {
+export function matchTreeAnswers(tree: Branch, given: string[], fixed: ReadonlySet<number> = new Set()): (TreeAnswerMatch | null)[] {
   const nodes = branchNodes(tree);
   const indices = new Map(nodes.map((node, index) => [node, index]));
   const graded = new Map<number, { correct: boolean; words: number }>();
@@ -109,6 +119,7 @@ export function matchTreeAnswers(tree: Branch, given: string[]): (TreeAnswerMatc
         const answer = expected[order[at]];
         if (slot.children.length !== answer.children.length) return false;
         const index = indices.get(slot)!;
+        if (fixed.has(index) && answer !== slot) return false;
         const own = grade(index, answer);
         result.set(index, { node: answer, correct: own.correct });
         const children = pair(slot.children, answer.children);

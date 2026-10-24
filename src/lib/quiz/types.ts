@@ -22,6 +22,14 @@ export type QuestionTopic = Exclude<QuizTopic, 'PERSON_CIRCLE' | 'BRANCHES'>;
 export const QUIZ_LENGTHS = [5, 10, 15] as const;
 export type QuizLength = (typeof QUIZ_LENGTHS)[number];
 
+/** How many leaves of a shared-opening tree the reader types; the rest of the tree is given. */
+export const QUIZ_LEAVES = [1, 2, 3, 4, 5, 6] as const;
+export const DEFAULT_LEAVES = 3;
+export const parseLeaves = (value: string | null) => {
+  const n = Number(value);
+  return (QUIZ_LEAVES as readonly number[]).includes(n) ? n : DEFAULT_LEAVES;
+};
+
 export const QUESTION_STATUSES = ['PENDING', 'APPROVED', 'REJECTED', 'RETIRED'] as const;
 export type QuestionStatus = (typeof QUESTION_STATUSES)[number];
 

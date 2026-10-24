@@ -4,6 +4,7 @@ import { keys, PIECE_MAX, type BranchAyah } from '@/lib/quran/branches';
 import { normalizeWord } from '@/lib/quran/normalize';
 import { branchQuestions } from './branchQuestions';
 import { branchNodes, matchTreeAnswers, spelled } from './branchAnswers';
+import example from '@/app/quizzes/example.json';
 
 const all = ayat as BranchAyah[];
 const questions = branchQuestions(all);
@@ -12,6 +13,12 @@ const asked = (list: typeof questions, key: string) => list.find((question) => q
 const keysOf = (question: (typeof questions)[number] | undefined) => question?.branches.map((branch) => branch.ayat.map((ayah) => ayah.key));
 
 describe('branchQuestions', () => {
+  it('keeps the setup example equal to its question in the pool', () => {
+    const question = questions.find((item) => item.key === example.key)!;
+    expect(JSON.parse(JSON.stringify({ key: question.key, tree: question.tree, variants: question.variants }))).toEqual(example);
+  });
+
+
   it('preserves the complete explorer tree, including the second split and terminal leaves', () => {
     const question = asked(questions, '52:24')!;
     const nodes = branchNodes(question.tree);
@@ -20,7 +27,7 @@ describe('branchQuestions', () => {
     const answers = nodes.map(node => node.words.map(spelled).join(' '));
     expect(matchTreeAnswers(question.tree, answers).every(hit => hit?.correct)).toBe(true);
     expect(matchTreeAnswers(question.tree, answers.slice(0, 2)).every(hit => hit?.correct)).toBe(false);
-    expect(question.promptArabic).toContain('تكفي كلمتاه الأوليان');
+    expect(question.promptArabic).toContain('تكفي من كل طرف كلمتاه الأوليان');
   });
 
   it('asks يطوف عليهم with both of its spellings in the prompt', () => {
