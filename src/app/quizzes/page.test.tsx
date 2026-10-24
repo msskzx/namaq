@@ -349,6 +349,15 @@ describe('QuizzesPage', () => {
     expect(screen.getAllByText('You type this')).toHaveLength(5);
   });
 
+  it('keeps the setup example free of buttons that would open ayat', () => {
+    nav.reset('/quizzes?topic=BRANCHES');
+    render(<QuizzesPage />);
+    const tree = screen.getByRole('region', { name: 'Example tree' });
+    expect(within(tree).queryAllByRole('button')).toHaveLength(0);
+    expect(within(tree).queryAllByRole('link')).toHaveLength(0);
+    expect(tree.querySelector('[data-differing]')).toBeTruthy();
+  });
+
   it('types only the asked leaves and gives the rest of the tree', () => {
     const original = questions[0];
     questions[0] = { ...branchQuestion, asked: [3] } as typeof questions[number];

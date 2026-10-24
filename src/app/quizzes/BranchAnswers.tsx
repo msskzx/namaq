@@ -10,7 +10,13 @@ import type { BranchAnswer } from "@/lib/quiz/branchQuestions";
 import { branchesHref, keys, type Branch, type Variant } from "@/lib/quran/branches";
 import type { JuzRange } from "@/lib/quran/juz";
 import { num } from "@/lib/quran/arabicNumber";
+import { TextSearch } from "lucide-react";
 import example from "./example.json";
+
+const differs = (node: Branch) => {
+  const forms = Object.values(node.forms ?? {});
+  return (forms[0] ?? []).some((_, i) => new Set(forms.map(words => words[i])).size > 1);
+};
 
 type Question = { phrase?: string; partition?: string; branches?: BranchAnswer[]; tree?: Branch; variants?: Variant[]; asked?: number[] };
 type Names = Record<number, string>;
@@ -102,12 +108,14 @@ export function BranchInputs({ question, typed, onChange, onCheck, ar }: { quest
 export function BranchPreview({ leaves, ar }: { leaves: number; ar: boolean }) {
   const tree = example.tree as Branch;
   const asked = askedNodes(tree, leaves, () => 0.5);
-  const offsets = nodeOffsets(tree);
   return (
     <div dir="rtl">
-      <BranchTree tree={tree} variants={example.variants as Variant[]} names={{}} pages={{}} label={ar ? "مثال على الشجرة" : "Example tree"} renderNode={(node, index) => {
+      <BranchTree tree={tree} variants={example.variants as Variant[]} names={{}} pages={{}} showSpellings={false} label={ar ? "مثال على الشجرة" : "Example tree"} renderNode={(node, index) => {
         if (asked.includes(index)) return <span data-asked className="block h-8 w-28 rounded-sm border border-dashed border-[var(--home-accent)]"><span className="sr-only">{ar ? "تكتبه أنت" : "You type this"}</span></span>;
-        if (node.children.length > 0) return <Marked node={node} ayahKeys={keys(node)} names={{}} offset={offsets.get(node)}><span className="font-arabic leading-loose">{node.words.join(" ")}</span></Marked>;
+        if (node.children.length > 0) return <span className="flex flex-col items-start">
+          <span className="font-arabic leading-loose">{node.words.join(" ")}</span>
+          {differs(node) && <span data-differing className="mt-1 inline-flex items-center rounded border border-[var(--home-highlight-border)] bg-[var(--home-highlight)] px-2.5 py-1 text-[var(--home-on-highlight)]"><TextSearch size={16} aria-hidden /><span className="sr-only">{ar ? "زر اختلافات الضبط، يظهر بعد التحقق" : "Spelling differences button, shown after checking"}</span></span>}
+        </span>;
         const shown = node.words.slice(0, LEAF_WORDS + 1);
         return <span className="font-arabic leading-loose text-[var(--home-muted)]">{shown.join(" ")}{shown.length < node.words.length ? " …" : ""}</span>;
       }} />
