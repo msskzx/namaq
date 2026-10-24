@@ -54,10 +54,10 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const drawn = own.length > 0 ? own : group;
   const spelling = own.length > 0 ? first(params.w)! : undefined;
   const { page, pageCount } = listPage(first(params.p), cut.length, PER_PAGE);
-  const state = { grouped, page, spelling, partition: matches.length === 1 ? (matches[0].partition ?? partition) : partition };
+  const state = { grouped, page, spelling, context: params.c === '1', partition: matches.length === 1 ? (matches[0].partition ?? partition) : partition };
   if (params.apply === 'juz') redirect(branchesHref(id, juz, state));
   const wider = !group.length ? [] : [...(own.length > 0 ? matches : []), ...widerPhrases(phrases, id, group)];
-  const numbers = id ? [...new Set(group.map(ayah => Number(ayah.key.split(':')[0])))] : undefined;
+  const numbers = id ? [...new Set(group.flatMap(ayah => { const surah = Number(ayah.key.split(':')[0]); return [surah - 1, surah, surah + 1]; }))] : undefined;
   const rows = await prisma.surah.findMany({ where: numbers ? { number: { in: numbers } } : undefined, select: { number: true, name: true } });
   const names = Object.fromEntries(rows.map(row => [row.number, row.name]));
   const ordered = grouped ? openings.flatMap(opening => cut.filter(piece => piece.opening.id === opening.id && piece.opening.partition === opening.partition)) : cut;
@@ -82,7 +82,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
             {`${phrase.text} (${num(phrase.count)})`}
           </Button>)}
         </nav>}
-        {!unavailable && !ambiguous && <BranchTree tree={branch(drawn)} variants={variants(drawn)} names={names} pages={Object.fromEntries(drawn.map(ayah => [ayah.key, ayah.page]))} juz={range} view={state} />}
+        {!unavailable && !ambiguous && <BranchTree key={String(state.context)} tree={branch(drawn)} variants={variants(drawn)} names={names} pages={Object.fromEntries(drawn.map(ayah => [ayah.key, ayah.page]))} juz={range} view={state} surround={{ on: state.context, sync: true }} />}
       </>}
     </div>
   );

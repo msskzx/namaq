@@ -12,7 +12,7 @@ export type Variant = { word: string; conj: string; keys: string[]; id: string; 
 export const OPENING_WORDS = 2;
 export const TOP = 8;
 
-export type BranchesView = { grouped?: boolean; page?: number; spelling?: string; partition?: string };
+export type BranchesView = { grouped?: boolean; page?: number; spelling?: string; partition?: string; context?: boolean };
 
 export function branchesHref(id: string, juz?: JuzRange, view: BranchesView = {}) {
   const params = new URLSearchParams();
@@ -23,6 +23,7 @@ export function branchesHref(id: string, juz?: JuzRange, view: BranchesView = {}
   if (view.page && view.page > 1) params.set('p', `${view.page}`);
   if (id && view.spelling) params.set('w', view.spelling);
   if (id && view.partition) params.set('r', view.partition);
+  if (id && view.context) params.set('c', '1');
   return `/quran/branches${params.size ? `?${params}` : ''}`;
 }
 
@@ -409,4 +410,14 @@ export function pieces(groups: Map<string, BranchAyah[]>): Piece[] {
 export function listPage(value: string | null, total: number, perPage: number) {
   const pageCount = Math.max(1, Math.ceil(total / perPage));
   return { page: Math.min(pageCount, Math.max(1, Number.parseInt(value ?? '1', 10) || 1)), pageCount };
+}
+
+export function ayahEnds(node: Branch, path: string[] = []): Record<string, string> {
+  const words = [...path, ...node.words];
+  const grownPast = words.some(word => word.startsWith('﴿'));
+  const own = node.ayat.map(key => {
+    const [surah, ayah] = key.split(':').map(Number);
+    return [key, grownPast ? `${surah}:${ayah + 1}` : key];
+  });
+  return Object.assign(Object.fromEntries(own), ...node.children.map(child => ayahEnds(child, words)));
 }
