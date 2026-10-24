@@ -11,7 +11,7 @@ export default function TuhfatAlAtfalPage() {
   const { title, author, composed, transcription, edition } = poem as Poem;
   const chapters = numberVerses(poem as Poem);
   const contents = chapters.map((chapter, i) => (
-    <li key={chapter.title}><a href={`#bab-${i + 1}`}><span>{chapter.title}</span><span>{num(chapter.verses[0].number)}</span></a></li>
+    <li key={chapter.title}><a href={`#bab-${i + 1}`}><span>{chapter.title}</span><span className={styles.leader} /><span>{num(chapter.verses[0].number)}</span></a></li>
   ));
   const count = chapters.reduce((sum, chapter) => sum + chapter.verses.length, 0);
   return (
@@ -26,11 +26,8 @@ export default function TuhfatAlAtfalPage() {
       </header>
       <div className={styles.layout}>
         <nav aria-label="أبواب المنظومة" className={styles.contents}>
-          <ol className={styles.wide}>{contents}</ol>
-          <details className={styles.narrow}>
-            <summary>الأبواب</summary>
-            <ol>{contents}</ol>
-          </details>
+          <p className={styles.label}>الأبواب</p>
+          <ol>{contents}</ol>
         </nav>
         <div>
           {chapters.map((chapter, i) => (
