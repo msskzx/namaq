@@ -40,6 +40,16 @@ describe('complete branch tree answers', () => {
     vi.unstubAllGlobals();
   });
 
+  it('marks a feedback leaf from the ayah start to its end', async () => {
+    HTMLDialogElement.prototype.showModal = function () { this.open = true; };
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => [{ ayah: { key: '1:1', page: 1, words: ['قال', 'رب', 'اغفر', 'لي'] }, before: null, after: null }] }));
+    const own = { tree: { words: ['قال'], ayat: [], children: [{ words: ['رب', 'اغفر'], ayat: ['1:1'], children: [] }] }, branches: [] };
+    render(<BranchFeedback question={own} typed={['رب اغفر']} names={{}} juz={null} ar />);
+    fireEvent.click(screen.getAllByRole('button', { name: /عرض الآيات في سياقها/ })[1]);
+    await waitFor(() => expect(screen.getAllByTitle('من أول الآية إلى هذه العقدة').map(word => word.textContent)).toEqual(['قال', 'رب', 'اغفر']));
+    vi.unstubAllGlobals();
+  });
+
   it('keeps original spelling references out of the unanswered quiz tree', () => {
     const group: BranchAyah[] = [
       { key: '1:1', page: 1, words: ['مِّنْ', 'ربْ', 'زيد'] },

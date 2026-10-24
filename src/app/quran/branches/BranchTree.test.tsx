@@ -150,9 +150,18 @@ describe('BranchTree', () => {
     await vi.waitFor(() => expect(asked()).toBe('44:51,15:45,51:15'));
   });
 
-  it('spans each node over its own words in every ayah under it', () => {
-    expect(nodeSpans(tree, 0)).toEqual({ '15:45': [0, 3], '51:15': [0, 3], '44:51': [0, 3] });
-    expect(nodeSpans(tree.children[1], 3)).toEqual({ '44:51': [3, 5] });
+  it('spans every ayah of a node from its start to the end of the node', () => {
+    expect(nodeSpans(['15:45', '51:15'], 5)).toEqual({ '15:45': [0, 5], '51:15': [0, 5] });
+  });
+
+  it('opens a first-word box on its own ayat and then the other first words that share its child', async () => {
+    const group = startingWith(ayat as BranchAyah[], 'الذين ينقضون');
+    render(<BranchTree tree={branch(group)} variants={variants(group)} names={{}} pages={Object.fromEntries(group.map(a => [a.key, a.page]))} />);
+    const firstWords = screen.getByRole('list', { name: 'صيغ الكلمة الأولى' });
+    fireEvent.click(within(firstWords).getAllByRole('button')[1]);
+    await vi.waitFor(() => expect(fetch).toHaveBeenCalled());
+    const params = new URL(vi.mocked(fetch).mock.calls[0][0] as string, 'http://localhost').searchParams;
+    expect([params.get('q'), params.get('vs')]).toEqual(['13:25,2:27', '13:25']);
   });
 
   it('names each inner button after its node and highlights differing marks of a nested node at its own offset', () => {
