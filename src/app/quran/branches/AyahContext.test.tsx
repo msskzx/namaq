@@ -90,9 +90,8 @@ it('shows the node\'s own ayat first with a branch label, then its siblings in t
   const dialog = screen.getByRole('dialog');
   await within(dialog).findAllByRole('article');
   expect(new URL(vi.mocked(fetch).mock.calls[0][0] as string, 'http://localhost').searchParams.get('q')).toBe('94:6,94:5');
-  expect(within(dialog).getAllByRole('article', { name: /\d/ }).map(card => card.getAttribute('aria-label'))).toEqual(['الشرح 6', 'الشرح 5']);
-  expect(within(dialog).queryByRole('region')).toBeNull();
-  expect(within(dialog).getAllByText(/this branch/).map(label => label.textContent)).toEqual(['Ayah 6 · this branch']);
+  expect(within(dialog).getAllByRole('article', { name: /\d/ }).map(card => card.getAttribute('aria-label'))).toEqual(['الشرح 6 · this branch', 'الشرح 5']);
+  expect(within(dialog).getAllByText(/^Ayah \d/).map(label => label.textContent)).toEqual(['Ayah 6 · this branch', 'Ayah 5 in context']);
   expect(within(dialog).getAllByTitle('Differing marks').map(word => word.textContent)).toEqual(['يُسْرًۭا']);
 });
 
@@ -115,6 +114,13 @@ it('keeps comparison colours off a leaf\'s own ayat even when the server sends a
   fireEvent.click(screen.getByRole('button', { name: 'View ayat in context: إِنَّ' }));
   await screen.findAllByRole('link', { name: 'Read ayah' });
   expect(screen.queryAllByTitle('Not in the branch ayah')).toHaveLength(0);
+});
+
+it('carries the mark from the ayah start across the ayah-end marker into the next ayah for a leaf that continues', async () => {
+  render(wrap(<AyahContextButton ayahKeys={['94:5']} spans={{ '94:5': [0, 6] }} differentWords={[]} names={{}} leaf>Leaf</AyahContextButton>));
+  fireEvent.click(screen.getByRole('button', { name: 'View ayat in context' }));
+  await screen.findAllByRole('link', { name: 'Read ayah' });
+  expect(screen.getAllByTitle('From the ayah start to this node').map(word => word.textContent)).toEqual([...source[0].ayah.words, source[0].after!.words[0]]);
 });
 
 it('locks background scrolling until the dialog closes and restores existing styles on unmount', () => {
