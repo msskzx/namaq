@@ -92,7 +92,7 @@ export default function AyahContextButton({ children, ayahKeys, subject, sibling
           <ul>{spellings.map(spelling => <li key={spelling.words.join(' ')}><span className="font-arabic">{spelling.words.map((word, i) => <React.Fragment key={i}>{i > 0 && ' '}{differentWords.includes(spellingAt + i) ? <mark>{word}</mark> : word}</React.Fragment>)}</span><span className={styles.note}>{ar ? ayatCount(spelling.keys.length) : `${spelling.keys.length} ${spelling.keys.length === 1 ? 'ayah' : 'ayat'}`}</span></li>)}</ul>
         </section>}
         {open && data && siblings.length > 0 && <>
-          <p className={styles.note}>{ar ? 'آية هذا الفرع أولًا، ثم الآيات التي تلتقي معها في العقدة نفسها، كلٌّ منها مقارنةٌ بها كما في صفحة المقارنة.' : 'This branch\'s ayah comes first, then the ayat that meet it at the same node, each compared with it as on the compare page.'}</p>
+          <p className={styles.note}>{ar ? 'آيات هذا الفرع أولًا، ثم الآيات التي تلتقي معها في العقدة نفسها، كلٌّ منها مقارنةٌ بأولى آيات الفرع كما في صفحة المقارنة.' : 'This branch\'s ayat come first, then the ayat that meet it at the same node, each compared with the branch\'s first ayah as on the compare page.'}</p>
           <MatchLegend exact={ar ? 'في الآيات الأخرى: ليست في آية الفرع' : 'In the other ayat: not in the branch ayah'} root={ar ? 'الجذر نفسه' : 'Same root'} />
         </>}
         {open && data && <div className={styles.cards}>
