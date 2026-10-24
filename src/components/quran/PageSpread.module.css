@@ -12,6 +12,8 @@
 .spread mark.slot2 { color: var(--home-slot-2); }
 .spread mark.slot3 { color: var(--home-slot-3); }
 .spread mark.slot4 { color: var(--home-slot-4); }
+.spread mark.node { background: color-mix(in srgb, var(--home-accent) 14%, transparent); border-radius: 2px; padding: 0 0.1em; }
+.spread mark.plain { color: inherit; text-decoration: none; }
 .spread mark.linked { text-decoration-style: dotted; text-decoration-color: var(--home-root); }
 .verseEnd { white-space: nowrap; }
 .verseSeal { display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--home-rule); border-radius: 50%; min-width: 1.75rem; height: 1.75rem; padding-inline: 0.25rem; color: var(--home-muted); font-size: 0.9375rem; line-height: 1; vertical-align: middle; white-space: nowrap; }

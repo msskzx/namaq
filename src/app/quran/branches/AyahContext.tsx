@@ -5,7 +5,7 @@ import useSWR from 'swr';
 import { BookOpen, RotateCcw, TextSearch, X } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
-import PageSpread, { type SpreadMark } from '@/components/quran/PageSpread';
+import PageSpread, { MatchLegend, type SpreadMark } from '@/components/quran/PageSpread';
 import { ayatCount, num } from '@/lib/quran/arabicNumber';
 import type { AyahContext } from '@/lib/quran/ayahContext';
 import styles from './AyahContext.module.css';
@@ -17,7 +17,7 @@ async function loadContext(url: string): Promise<AyahContext[]> {
 }
 
 // docs/plans/quran-shared-openings.md
-export default function AyahContextButton({ children, ayahKeys, siblings = [], spellings = [], spellingAt = 0, differentWords, names, references, leaf = false }: { leaf?: boolean; references?: React.ReactNode; children: React.ReactNode; ayahKeys: string[]; siblings?: string[]; spellings?: { words: string[]; keys: string[] }[]; spellingAt?: number; differentWords: number[]; names: Record<number, string> }) {
+export default function AyahContextButton({ children, ayahKeys, siblings = [], spans = {}, spellings = [], spellingAt = 0, differentWords, names, references, leaf = false }: { leaf?: boolean; references?: React.ReactNode; children: React.ReactNode; ayahKeys: string[]; siblings?: string[]; spans?: Record<string, [number, number]>; spellings?: { words: string[]; keys: string[] }[]; spellingAt?: number; differentWords: number[]; names: Record<number, string> }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const titleId = useId();
   const [open, setOpen] = useState(false);
@@ -26,7 +26,7 @@ export default function AyahContextButton({ children, ayahKeys, siblings = [], s
   const differing = differentWords.length > 0;
   const label = differing ? (ar ? 'عرض اختلافات الضبط والسياق' : 'View spelling differences and context') : (ar ? 'عرض الآيات في سياقها' : 'View ayat in context');
   const title = differing ? (ar ? 'اختلافات الضبط والسياق' : 'Spelling differences and context') : (ar ? 'الآيات في سياقها' : 'Ayat in context');
-  const url = `/api/quran/context?${new URLSearchParams({ q: [...ayahKeys, ...siblings].join(',') })}`;
+  const url = `/api/quran/context?${new URLSearchParams({ q: [...ayahKeys, ...siblings].join(','), ...(siblings.length > 0 && { vs: ayahKeys[0] }) })}`;
   const { data, error, isLoading, mutate } = useSWR<AyahContext[]>(open ? url : null, loadContext, { revalidateOnFocus: false });
 
   useEffect(() => {
@@ -47,7 +47,16 @@ export default function AyahContextButton({ children, ayahKeys, siblings = [], s
     const rows = [context.before, context.ayah, context.after].flatMap(ayah => {
       if (!ayah) return [];
       const offset = ayah === context.ayah ? 0 : ayah === context.after ? context.ayah.words.length + 1 : -Infinity;
-      const marks: Record<number, SpreadMark> = Object.fromEntries(ayah.words.flatMap((_, i) => highlighted.includes(offset + i) ? [[i, { kind: 'exact', title: ar ? 'اختلاف في علامات الضبط' : 'Differing marks' }]] : []));
+      const span = spans[context.ayah.key];
+      const target = ayah === context.ayah;
+      const markAt = (i: number): SpreadMark | null => {
+        const node = !!span && offset + i >= span[0] && offset + i < span[1];
+        if (highlighted.includes(offset + i)) return { kind: 'exact', node, title: ar ? 'اختلاف في علامات الضبط' : 'Differing marks' };
+        if (target && context.match?.rooted.includes(i)) return { kind: 'root', node, title: ar ? 'من الجذر نفسه في آية الفرع' : 'Same root in the branch ayah' };
+        if (target && context.match?.different.includes(i)) return { kind: 'exact', node, title: ar ? 'ليست في آية الفرع' : 'Not in the branch ayah' };
+        return node ? { kind: 'node' } : null;
+      };
+      const marks: Record<number, SpreadMark> = Object.fromEntries(ayah.words.flatMap((_, i) => { const mark = markAt(i); return mark ? [[i, mark]] : []; }));
       return [[{ number: Number(ayah.key.split(':')[1]), words: ayah.words, current: ayah === context.ayah, marks }]];
     });
     return <article key={context.ayah.key} className={styles.card} aria-label={`${name} ${ar ? num(number) : number}`}>
@@ -72,7 +81,7 @@ export default function AyahContextButton({ children, ayahKeys, siblings = [], s
         if (event.target === event.currentTarget && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) dialog.current?.close();
       }}>
         <div className={styles.header}>
-          <div><h2 id={titleId}>{title}</h2><p className={styles.note}>{ar ? 'الآية المقصودة بارزة، وقبلها آية وبعدها آية من السورة نفسها، إن وُجدتا.' : 'The matching ayah is emphasized, with the preceding and following ayat from the same surah when available.'}</p>{differing && <p className={styles.note}>{ar ? 'الكلمات الملوّنة تختلف في علامات الضبط. النص كما ورد في كل آية.' : 'Highlighted words differ in their marks. Each ayah keeps its original text.'}</p>}</div>
+          <div><h2 id={titleId}>{title}</h2><p className={styles.note}>{ar ? 'الآية المقصودة بارزة، وقبلها آية وبعدها آية من السورة نفسها، إن وُجدتا.' : 'The matching ayah is emphasized, with the preceding and following ayat from the same surah when available.'}</p>{Object.keys(spans).length > 0 && <p className={styles.note}>{ar ? 'الكلمات المظلّلة كلمات هذه العقدة في كل آية.' : 'Shaded words are this node\'s words in each ayah.'}</p>}{differing && <p className={styles.note}>{ar ? 'الكلمات الملوّنة تختلف في علامات الضبط. النص كما ورد في كل آية.' : 'Highlighted words differ in their marks. Each ayah keeps its original text.'}</p>}</div>
           <Button size="icon" aria-label={ar ? 'إغلاق' : 'Close'} onClick={() => dialog.current?.close()}><X size={18} aria-hidden /></Button>
         </div>
         {open && isLoading && <p role="status">{ar ? 'جارٍ تحميل الآيات…' : 'Loading ayat…'}</p>}
@@ -84,6 +93,8 @@ export default function AyahContextButton({ children, ayahKeys, siblings = [], s
         {open && data && <div className={styles.cards}>{data.filter(context => ayahKeys.includes(context.ayah.key)).map(context => card(context, differentWords))}</div>}
         {open && data && siblings.length > 0 && <section aria-label={ar ? 'الفروع الأخرى من العقدة نفسها' : 'Sibling branches'}>
           <h3 className={styles.section}>{ar ? 'الفروع الأخرى من العقدة نفسها' : 'Sibling branches'}</h3>
+          <p className={styles.note}>{ar ? 'كل آية مقارنة بآية هذا الفرع، كما في صفحة المقارنة.' : 'Each ayah is compared with this branch\'s ayah, as on the compare page.'}</p>
+          <MatchLegend exact={ar ? 'ليست في آية الفرع' : 'Not in the branch ayah'} root={ar ? 'الجذر نفسه' : 'Same root'} />
           <div className={styles.cards}>{data.filter(context => siblings.includes(context.ayah.key)).map(context => card(context, []))}</div>
         </section>}
       </dialog>

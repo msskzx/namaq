@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { BranchAyah } from './branches';
-import { ayahContexts, loadReaderAyat } from './ayahContext';
+import { ayahContexts, comparedTo, loadReaderAyat } from './ayahContext';
 
 const ayah = (key: string, page = 1, words = ['قَالَ']): BranchAyah => ({ key, page, words });
 
@@ -51,5 +51,15 @@ describe('loadReaderAyat', () => {
     expect(second.ayah).toEqual({ key: '94:6', page: 596, words: ['إِنَّ', 'مَعَ', 'ٱلْعُسْرِ', 'يُسْرًۭا'] });
     expect(first.after).toEqual(second.ayah);
     expect(second.before).toEqual(first.ayah);
+  });
+});
+
+describe('comparedTo', () => {
+  it('marks the words of each sibling that the branch ayah lacks, as the compare page does, and leaves the branch ayah unmarked', async () => {
+    const all = await loadReaderAyat();
+    const contexts = ayahContexts(all, ['23:26', '29:30']);
+    const [sibling, base] = comparedTo(contexts, contexts[1].ayah);
+    expect(base.match).toBeUndefined();
+    expect(sibling.match).toEqual({ different: [3, 4], rooted: [] });
   });
 });

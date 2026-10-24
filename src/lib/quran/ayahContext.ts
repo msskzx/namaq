@@ -1,7 +1,10 @@
 // docs/plans/quran-shared-openings.md
+import wordKeys from '@/app/quran/compare/wordKeys.json';
 import { readerAyat, type BranchAyah } from './branches';
+import { pairOf, wordTokens } from './compare';
+import { normalizeWord } from './normalize';
 
-export type AyahContext = { ayah: BranchAyah; before: BranchAyah | null; after: BranchAyah | null };
+export type AyahContext = { ayah: BranchAyah; before: BranchAyah | null; after: BranchAyah | null; match?: { different: number[]; rooted: number[] } };
 
 let source: Promise<BranchAyah[]> | undefined;
 
@@ -22,5 +25,21 @@ export function ayahContexts(all: BranchAyah[], wanted: string[]): AyahContext[]
     const [as, aa] = a.ayah.key.split(':').map(Number);
     const [bs, ba] = b.ayah.key.split(':').map(Number);
     return as - bs || aa - ba;
+  });
+}
+
+const tokens = (ayah: BranchAyah) => {
+  const [surah, number] = ayah.key.split(':').map(Number);
+  const norm = ayah.words.map(normalizeWord);
+  return { norm, keys: wordTokens(norm, wordKeys.surahs[surah - 1]?.[number - 1]) };
+};
+
+export function comparedTo(contexts: AyahContext[], base: BranchAyah): AyahContext[] {
+  const b = tokens(base);
+  return contexts.map(context => {
+    if (context.ayah.key === base.key) return context;
+    const a = tokens(context.ayah);
+    const pair = pairOf(0, 0, a.keys, b.keys, a.norm, b.norm);
+    return { ...context, match: { different: pair.marksA, rooted: pair.rootsA } };
   });
 }

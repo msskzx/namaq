@@ -3,7 +3,7 @@ import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { branch, branchesHref, startingWith, variants, type BranchAyah } from '@/lib/quran/branches';
-import BranchTree from './BranchTree';
+import BranchTree, { nodeSpans } from './BranchTree';
 import ayat from './ayat.json';
 import { inJuzRange } from '@/lib/quran/juz';
 
@@ -147,6 +147,11 @@ describe('BranchTree', () => {
     await vi.waitFor(() => expect(asked()).toBe('15:45,51:15,44:51'));
     fireEvent.click(leaf);
     await vi.waitFor(() => expect(asked()).toBe('44:51,15:45,51:15'));
+  });
+
+  it('spans a node over its own words and a leaf over each sibling branch under the same parent', () => {
+    expect(nodeSpans(tree, 0)).toEqual({ '15:45': [0, 3], '51:15': [0, 3], '44:51': [0, 3] });
+    expect(nodeSpans(tree.children[1], 3, tree)).toEqual({ '15:45': [3, 5], '51:15': [3, 5], '44:51': [3, 5] });
   });
 
   it('lists the differing marks of a merged node at the top of its overlay with the differing word highlighted', () => {

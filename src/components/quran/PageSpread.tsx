@@ -2,11 +2,11 @@ import { Fragment } from 'react';
 import { num } from '@/lib/quran/arabicNumber';
 import styles from './PageSpread.module.css';
 
-export type SpreadMark = { kind: 'exact' | 'root'; slot?: number; linked?: boolean; title?: string };
+export type SpreadMark = { kind: 'exact' | 'root' | 'node'; node?: boolean; slot?: number; linked?: boolean; title?: string };
 export type SpreadAyah = { number: number; words: string[]; marks?: Record<number, SpreadMark>; current?: boolean };
 export type SpreadPage = { title: string; subtitle?: string; label?: string; rows: SpreadAyah[][] };
 
-const markClass = (mark: SpreadMark) => [mark.kind === 'root' && styles.root, mark.slot && styles[`slot${((mark.slot - 1) % 4) + 1}`], mark.linked && styles.linked].filter(Boolean).join(' ') || undefined;
+const markClass = (mark: SpreadMark) => [mark.kind === 'root' && styles.root, mark.kind === 'node' && styles.plain, (mark.node || mark.kind === 'node') && styles.node, mark.slot && styles[`slot${((mark.slot - 1) % 4) + 1}`], mark.linked && styles.linked].filter(Boolean).join(' ') || undefined;
 
 function Ayah({ ayah }: { ayah: SpreadAyah }) {
   const last = ayah.words.length - 1;

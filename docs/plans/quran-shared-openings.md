@@ -40,6 +40,27 @@ implementation. The accepted prototype is preserved on
   action. Apply the same behavior in tree view, list view, and quiz feedback.
   Keep all context buttons hidden while answering a quiz.
 
+### Context on every node (2026-10-24)
+
+The owner chose these rules after PR 427.
+
+- Every node and every first-word box has a context button. An inner node opens
+  every ayah under it. A leaf opens its own ayat first, then a section with every
+  other ayah under the same parent.
+- When the originals of a node differ in their marks, the dialog lists each
+  version at the top with its ayah count, before any card, and highlights the
+  differing words in amber.
+- Each card shades the words of the opened node. In a leaf dialog each sibling
+  card shades that sibling's own branch words, so the split from the leaf shows.
+- In a leaf dialog each sibling ayah is compared with the leaf's first ayah by
+  the compare page's rule (`pairOf` with `wordKeys.json`). Words the leaf ayah
+  lacks take the accent colour and same-root words take purple, with the
+  compare legend. `/api/quran/context?vs=<key>` adds this comparison, and `vs`
+  must be one of the requested keys. Inner-node dialogs skip it, since a root
+  node can hold dozens of ayat.
+- قَالَ رَبِّى stays out of the قال رب tree. The ي is a written letter, so it
+  fails the same-letters rule.
+
 ### Affected components and dependencies
 
 - `src/lib/quran/branches.ts` retains complete original node phrases and their
