@@ -36,17 +36,21 @@ describe('complete branch tree answers', () => {
     fireEvent.click(screen.getAllByRole('button', { name: /عرض الآيات في سياقها/ })[1]);
     await waitFor(() => expect(fetch).toHaveBeenCalled());
     const params = new URL(vi.mocked(fetch).mock.calls[0][0] as string, 'http://localhost').searchParams;
-    expect([params.get('q'), params.get('vs')]).toEqual(['1:1,1:2,1:3', '1:1']);
+    expect(params.get('q')).toBe('1:1,1:2,1:3');
     vi.unstubAllGlobals();
   });
 
-  it('marks a feedback leaf from the ayah start to its end', async () => {
+  it('marks only the words every ayah of a feedback dialog shares', async () => {
     HTMLDialogElement.prototype.showModal = function () { this.open = true; };
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => [{ ayah: { key: '1:1', page: 1, words: ['قال', 'رب', 'اغفر', 'لي'] }, before: null, after: null }] }));
-    const own = { tree: { words: ['قال'], ayat: [], children: [{ words: ['رب', 'اغفر'], ayat: ['1:1'], children: [] }] }, branches: [] };
-    render(<BranchFeedback question={own} typed={['رب اغفر']} names={{}} juz={null} ar />);
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => [
+      { ayah: { key: '1:1', page: 1, words: ['قال', 'رب', 'اغفر', 'لي'] }, before: null, after: null, match: { exact: [0], rooted: [1] } },
+      { ayah: { key: '1:2', page: 1, words: ['قال', 'ربي', 'يا'] }, before: null, after: null, match: { exact: [0], rooted: [1] } },
+    ] }));
+    const own = { tree: { words: ['قال'], ayat: [], children: [{ words: ['رب', 'اغفر'], ayat: ['1:1'], children: [] }, { words: ['ربي', 'يا'], ayat: ['1:2'], children: [] }] }, branches: [] };
+    render(<BranchFeedback question={own} typed={['رب اغفر', 'ربي يا']} names={{}} juz={null} ar />);
     fireEvent.click(screen.getAllByRole('button', { name: /عرض الآيات في سياقها/ })[1]);
-    await waitFor(() => expect(screen.getAllByTitle('من أول الآية إلى هذه العقدة').map(word => word.textContent)).toEqual(['قال', 'رب', 'اغفر']));
+    await waitFor(() => expect(screen.getAllByTitle('في كل الآيات بلفظها').map(word => word.textContent)).toEqual(['قال', 'قال']));
+    expect(screen.getAllByTitle('في كل الآيات بجذرها أو بضبط مختلف').map(word => word.textContent)).toEqual(['رب', 'ربي']);
     vi.unstubAllGlobals();
   });
 

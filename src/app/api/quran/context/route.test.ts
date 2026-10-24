@@ -29,8 +29,8 @@ describe('GET /api/quran/context', () => {
 
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual([
-      { ayah: all[1], before: all[0], after: all[2] },
-      { ayah: all[2], before: all[1], after: all[3] },
+      { ayah: all[1], before: all[0], after: all[2], match: { exact: [1, 2, 3], rooted: [0] } },
+      { ayah: all[2], before: all[1], after: all[3], match: { exact: [1, 2, 3], rooted: [0] } },
     ]);
   });
 
@@ -43,10 +43,9 @@ describe('GET /api/quran/context', () => {
     },
   );
 
-  it('compares every other ayah with the one named by vs, which must be among the requested keys', async () => {
-    const body = await (await GET(new Request('http://localhost/api/quran/context?q=94:5,94:6&vs=94:6'))).json();
-    expect(body.map((context: { match?: unknown }) => context.match)).toEqual([{ exact: [1, 2, 3], rooted: [0] }, { exact: [1, 2, 3], rooted: [0] }]);
-    expect((await GET(new Request('http://localhost/api/quran/context?q=94:5&vs=94:6'))).status).toBe(400);
+  it('leaves a single requested ayah without marks', async () => {
+    const body = await (await GET(request('94:5'))).json();
+    expect(body).toEqual([{ ayah: all[1], before: all[0], after: all[2] }]);
   });
 
   it('rejects more than 200 keys before loading the corpus', async () => {

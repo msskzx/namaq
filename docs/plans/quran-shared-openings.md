@@ -54,23 +54,20 @@ The owner chose these rules after PR 427.
 - The dialog uses the compare page's marks and no other style. Words that
   differ only in their marks take the purple root mark, since they are the
   same word in another form.
-- In an inner-node dialog, the words from the start of each ayah to the end of
-  the opened node take the accent mark.
 - When the originals of a node differ in their marks, the dialog lists each
   version at the top with its ayah count, before any card, with the differing
   words in the purple root mark.
-- In a leaf or first-word dialog the cards mark shared words instead. Each
-  other ayah is compared with the branch's first ayah by the compare page's
-  rule (`pairOf` with `wordKeys.json`), wherever the words fall in the ayah.
-  Words found in that ayah with the same letters take the accent mark, and
-  words matched by root in another form take the purple mark. The branch's
-  first ayah marks every word it shares with any of the others, exact before
-  root. So the dialog has two colours: exact, which includes the shared
-  opening, and same root. Only the target ayah is compared. The next-ayah row
-  of a leaf that continues past an ayah stays unmarked.
-  `/api/quran/context?vs=<key>` adds this comparison. `vs` must be one of the
-  requested keys, and a request holds at most 200 keys (the largest opening
-  group has 90 ayat).
+- Every dialog with two or more ayat marks the intersection: only words found
+  in every ayah it shows (2026-10-24, owner's rule). Words are matched by the
+  compare page's keys (`wordKeys.json`), wherever they fall. A word repeated in
+  one ayah counts as many times as the ayah that has it least. A shared word
+  with the same spelling (`spell`) in every ayah takes the accent mark. A word
+  found in all of them, but in at least one only by root or with other marks
+  (رَبِّ and رَبُّ), takes the purple mark. A word missing from any ayah
+  stays plain. Only the target ayah is marked, so the rows before and after
+  stay unmarked.
+  `/api/quran/context` adds this to every request with two or more keys. A
+  request holds at most 200 keys (the largest opening group has 90 ayat).
 - Each context button is named after its node's words.
 - قَالَ رَبِّى stays out of the قال رب tree. The ي is a written letter, so it
   fails the same-letters rule.

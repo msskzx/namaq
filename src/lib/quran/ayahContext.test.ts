@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { BranchAyah } from './branches';
 import { normalizeWord } from './normalize';
-import { ayahContexts, comparedTo, loadReaderAyat, surrounding } from './ayahContext';
+import { ayahContexts, sharedByAll, loadReaderAyat, surrounding } from './ayahContext';
 
 const ayah = (key: string, page = 1, words = ['قَالَ']): BranchAyah => ({ key, page, words });
 
@@ -55,24 +55,35 @@ describe('loadReaderAyat', () => {
   });
 });
 
-describe('comparedTo', () => {
-  it('marks every word a sibling shares with the branch ayah, from the start, and the branch ayah\'s words shared with any sibling', async () => {
+describe('sharedByAll', () => {
+  it('marks only the words found in every ayah: the same form exact, otherwise by root', async () => {
     const all = await loadReaderAyat();
-    const contexts = ayahContexts(all, ['23:26', '23:39', '29:30']);
-    const [first, second, base] = comparedTo(contexts, contexts[2].ayah);
-    expect(first.match).toEqual({ exact: [0, 1, 2], rooted: [] });
-    expect(second.match).toEqual({ exact: [0, 1, 2], rooted: [] });
-    expect(base.match).toEqual({ exact: [0, 1, 2], rooted: [] });
+    const [first, second, third] = sharedByAll(ayahContexts(all, ['2:6', '94:5', '94:6']));
+    expect(first.match).toEqual({ exact: [], rooted: [0] });
+    expect(second.match).toEqual({ exact: [], rooted: [0] });
+    expect(third.match).toEqual({ exact: [], rooted: [0] });
   });
 
-  it('marks a branch word exact when any other ayah shares its form, even if another matches it only by root', async () => {
+  it('marks words differing only in tashkeel by root, and every word exact when all ayat agree', async () => {
     const all = await loadReaderAyat();
-    const contexts = ayahContexts(all, ['2:6', '94:5', '94:6']);
-    const [exact, rooted, base] = comparedTo(contexts, contexts[2].ayah);
-    expect(exact.match?.exact).toContain(0);
-    expect(rooted.match?.rooted).toEqual([0]);
-    expect(base.match?.exact).toContain(0);
-    expect(base.match?.rooted).not.toContain(0);
+    expect(sharedByAll(ayahContexts(all, ['94:5', '94:6'])).map(context => context.match)).toEqual([{ exact: [1, 2, 3], rooted: [0] }, { exact: [1, 2, 3], rooted: [0] }]);
+    expect(sharedByAll(ayahContexts(all, ['23:26', '23:39', '29:30'])).map(context => context.match?.exact)).toEqual([[0, 1, 2], [0, 1, 2], [0, 1, 2]]);
+  });
+
+  it('marks the same number of each shared word in every ayah, even when one ayah repeats it', async () => {
+    const all = await loadReaderAyat();
+    for (const keys of [['28:16', '7:23', '71:28'], ['2:255', '3:2', '2:6']]) {
+      const marked = sharedByAll(ayahContexts(all, keys)).map(context => [...context.match!.exact, ...context.match!.rooted].length);
+      expect(new Set(marked).size).toBe(1);
+      expect(marked[0]).toBeGreaterThan(0);
+    }
+    const [own] = sharedByAll(ayahContexts(all, ['28:16', '7:23', '71:28']));
+    expect(own.match!.rooted.some(i => own.ayah.words[i].includes('غْفِر'))).toBe(true);
+  });
+
+  it('leaves a single ayah unmarked', async () => {
+    const all = await loadReaderAyat();
+    expect(sharedByAll(ayahContexts(all, ['1:1']))[0].match).toBeUndefined();
   });
 });
 
