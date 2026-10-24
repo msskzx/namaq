@@ -27,8 +27,7 @@
 
 @media (min-width: 48rem) {
   .bayt { grid-template-columns: 2.5rem 1fr 1fr; column-gap: 2.5rem; padding-block: 0.125rem; font-size: 1.5625rem; line-height: 2.1; }
-  .bayt .shatr { text-align: justify; text-align-last: justify; }
-  .bayt .shatr:first-of-type { padding-inline-end: 1.25rem; }
-  .bayt .shatr + .shatr { grid-column: auto; padding-inline-start: 1.25rem; }
+  .bayt .shatr { text-align: center; }
+  .bayt .shatr + .shatr { grid-column: auto; padding-inline-start: 0; }
   .chapter h2 { max-width: 50rem; margin-inline: auto; padding-inline-start: 5rem; }
 }
