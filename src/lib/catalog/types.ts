@@ -70,10 +70,12 @@ export interface CatalogRelation {
 }
 
 /** A Qur'an verse the source ties to this person, by surah and ayah number. */
+// docs/quiz-ayah-revealed.md
 export interface CatalogAyah {
   readonly surah: number;
   readonly ayah: number;
   readonly claims: Provenance;
+  readonly revealedAbout?: { readonly with?: readonly string[]; readonly alsoUnnamed?: true };
 }
 
 /** One virtue, in one speaker's exact words -- see docs/adr/0020-a-virtue-is-one-entry-with-one-speaker.md. */

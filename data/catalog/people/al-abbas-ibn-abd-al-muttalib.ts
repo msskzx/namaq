@@ -65,7 +65,7 @@ const alAbbasIbnAbdAlMuttalib = {
       claims: ['al-abbas-ibn-abd-al-muttalib-siyar11/nephew-aqil'],
     },
   ],
-  ayat: [{ surah: 8, ayah: 70, claims: ['al-abbas-ibn-abd-al-muttalib-siyar11/ayah-anfal'] }],
+  ayat: [{ surah: 8, ayah: 70, claims: ['al-abbas-ibn-abd-al-muttalib-siyar11/ayah-anfal'], revealedAbout: { alsoUnnamed: true } }],
 } satisfies CatalogPerson;
 
 export default alAbbasIbnAbdAlMuttalib;

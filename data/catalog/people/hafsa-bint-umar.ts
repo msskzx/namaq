@@ -32,7 +32,7 @@ const hafsaBintUmar = {
     },
   ],
   ayat: [
-    { surah: 66, ayah: 4, claims: ['hafsa-bint-umar-siyar25/ayah-at-tahrim'] },
+    { surah: 66, ayah: 4, claims: ['hafsa-bint-umar-siyar25/ayah-at-tahrim'], revealedAbout: { with: ['aisha-bint-abi-bakr'] } },
     { surah: 66, ayah: 5, claims: legacyUnreviewed },
   ],
   relations: [

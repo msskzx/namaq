@@ -91,9 +91,9 @@ const saadIbnAbiWaqqas = {
 
   ayat: [
     // He names himself among the six the verse was revealed about.
-    { surah: 6, ayah: 52, claims: ['saad/ayah-al-anam'] },
+    { surah: 6, ayah: 52, claims: ['saad/ayah-al-anam'], revealedAbout: { with: ['abdullah-ibn-masud'], alsoUnnamed: true } },
     // نزلت هذه الآية فيّ, over his mother's hunger strike against his Islam.
-    { surah: 29, ayah: 8, claims: ['saad/ayah-al-ankabut'] },
+    { surah: 29, ayah: 8, claims: ['saad/ayah-al-ankabut'], revealedAbout: {} },
     // Carried from the old seed, which gave him الأنعام 124 uncited. The entry
     // reaches for two other verses and never this one.
     { surah: 6, ayah: 124, claims: legacyUnreviewed },

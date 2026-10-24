@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { assembleQuiz, availableQuestionCount } from '@/lib/quiz/assemble';
-import { ayahDetails } from '@/lib/quiz/ayahDetails';
+import { askedAyah, ayahDetails } from '@/lib/quiz/ayahDetails';
 import { selectQuizReference } from '@/lib/quiz/quizReference';
 import { parseQuizTopics } from '@/lib/quiz/topics';
 import { parseJuzRange } from '@/lib/quran/juz';
@@ -56,6 +56,7 @@ export async function GET(request: Request) {
         choiceDetails: Object.fromEntries(
           question.choices.map((choice) => [choice.value, details.get(choice.value)]).filter((entry) => entry[1]),
         ),
+        ayah: details.get(askedAyah(question) ?? '') ?? null,
         evidence: { reference: selectQuizReference(question.evidence.claimKeys, claims) },
       })),
       surahNames: Object.fromEntries(names.map((row) => [row.number, row.name])),

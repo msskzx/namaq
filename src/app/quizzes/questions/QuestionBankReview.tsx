@@ -24,6 +24,7 @@ interface ReviewQuestion {
   promptArabicOverride: string | null;
   choices: QuestionChoice[];
   choiceDetails: Record<string, { text: string; reference: string }>;
+  ayah?: { text: string; reference: string } | null;
   correctAnswer: string;
   evidence: { claimKeys: string[]; reference: QuizReference | null };
   status: string;
@@ -93,6 +94,12 @@ export default function QuestionBankReview() {
                     <span>{question.status}</span><span>{question.topic}</span><span>{question.family}</span>
                   </div>
                   <p className="mb-3 font-semibold" dir="rtl">{prompt}</p>
+                  {question.ayah ? (
+                    <blockquote className="mb-3 border-s-2 border-amber-400 ps-3" dir="rtl">
+                      <p className="leading-relaxed">{question.ayah.text}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{question.ayah.reference}</p>
+                    </blockquote>
+                  ) : null}
                   {question.promptArabicOverride && question.promptArabicOverride !== question.generatedPromptArabic ? (
                     <p className="mb-3 text-sm text-gray-500" dir="rtl">المولّد: {question.generatedPromptArabic}</p>
                   ) : null}

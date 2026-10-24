@@ -4,12 +4,12 @@ const { loadCatalog, personFindMany, titleFindMany } = vi.hoisted(() => ({ loadC
 vi.mock('@/lib/catalog/loadCatalog', () => ({ loadCatalog }));
 vi.mock('@/lib/prisma', () => ({ prisma: { person: { findMany: personFindMany }, title: { findMany: titleFindMany } } }));
 
-import { generateQuestionCandidates } from './generate';
+import { generateQuestionCandidates, revealedAboutQuestions } from './generate';
 
 const basePerson = (slug: string, name: string, kunya: string) => ({
   kind: 'PERSON', slug, name, hasProfile: true,
-  fields: { kunya: { value: kunya, claims: ['abu-ubaydah/kunya'] } },
-  titles: [], relations: [], ayat: [{ surah: 1, ayah: Number(slug.slice(1)), claims: ['awf/ayah-al-fath'] }],
+  fields: { kunya: { value: kunya, claims: ['abu-ubaydah/kunya'] }, sex: { value: 'MALE', claims: ['abu-ubaydah/kunya'] } },
+  titles: [], relations: [], ayat: [{ surah: 1, ayah: Number(slug.slice(1)), claims: ['awf/ayah-al-fath'], revealedAbout: {} }],
 });
 
 beforeEach(() => {
@@ -196,11 +196,28 @@ describe('question candidate generation', () => {
       'TITLE_HOLDER',
       'VIRTUE_HOLDER',
       'RELATION',
-      'AYAH_LINK',
+      'AYAH_REVEALED_ABOUT',
       'BATTLE_HIJRI_YEAR',
       'EXCUSED_ABSENCE_REASON',
       'EVENT_HIJRI_YEAR',
     ]));
+  });
+
+  it('asks in whom an ayah was revealed, with same-sex distractors and no one else it was revealed about', () => {
+    const person = (slug: string, sex: string, ayah: number, revealedAbout?: { with?: string[]; alsoUnnamed?: true }) => ({
+      kind: 'PERSON' as const, slug, name: `حَفْصَةُ ${slug}`, hasProfile: true, fields: { sex: { value: sex, claims: ['c'] } }, titles: [], relations: [],
+      ayat: [{ surah: 66, ayah, claims: ['c'], ...(revealedAbout && { revealedAbout }) }],
+    });
+    const people = [
+      person('hafsa', 'FEMALE', 4, { with: ['aisha'] }), person('aisha', 'FEMALE', 11, {}), person('w1', 'FEMALE', 1), person('w2', 'FEMALE', 2), person('w3', 'FEMALE', 3),
+      person('m1', 'MALE', 5, { alsoUnnamed: true }), person('m2', 'MALE', 6), person('m3', 'MALE', 7),
+    ];
+    const questions = revealedAboutQuestions(people as never, new Set(['c']));
+    const hafsa = questions.find((question) => question.correctAnswer === 'hafsa')!;
+    expect(hafsa).toMatchObject({ family: 'AYAH_REVEALED_ABOUT', topic: 'AYAT', attribute: '66:4', promptArabic: 'في من نزلت هذه الآية؟' });
+    expect(hafsa.choices.map((choice) => choice.value).sort()).toEqual(['hafsa', 'w1', 'w2', 'w3']);
+    expect(hafsa.choices[0].labelArabic).toBe('حفصة hafsa');
+    expect(questions.map((question) => question.correctAnswer).sort()).toEqual(['aisha', 'hafsa']);
   });
 
   it('asks one question per virtue entry, naming the speaker where there is one', async () => {

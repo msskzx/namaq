@@ -32,6 +32,7 @@ describe('GET /api/quiz/questions', () => {
         correctAnswer: 'answer',
         choices: [{ value: 'answer', labelArabic: 'الإجابة' }],
         choiceDetails: {},
+        ayah: null,
         evidence: { claimKeys: ['person/claim'], reference: null },
       }],
       pagination: { page: 2, limit: 50, total: 51, totalPages: 2, hasNextPage: false, hasPreviousPage: true },

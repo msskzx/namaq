@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { loadCatalog } from '@/lib/catalog/loadCatalog';
-import { legacyUnreviewed, type Provenance } from '@/lib/catalog/types';
+import { legacyUnreviewed, type CatalogPerson, type Provenance } from '@/lib/catalog/types';
 import { formatHijriYear } from '@/lib/hijriYear';
 import { prisma } from '@/lib/prisma';
 import type { GeneratedQuestion, QuestionChoice } from './types';
@@ -171,19 +171,12 @@ export async function generateQuestionCandidates(): Promise<GeneratedQuestion[]>
     catalogTitlesByPerson.get(person.slug)?.forEach((title) => titles.add(title));
     titlesBySex.set(person.sex, titles);
   }
-  const catalogAyatByPerson = new Map(catalog.people.map((person) => [person.slug, new Set((person.ayat ?? []).map((ayah) => `${ayah.surah}:${ayah.ayah}`))]));
   const candidates: GeneratedQuestion[] = [];
   const add = (value: GeneratedQuestion | null) => value && candidates.push(value);
   const eligibleKunyas = catalog.people.flatMap((person) => {
     const field = person.fields.kunya;
     return field && cited(field.claims, eligible).length > 0 ? [choice(field.value, field.value)] : [];
   });
-  const ayahPool = catalog.people.flatMap((person) =>
-    (person.ayat ?? []).flatMap((ayah) => cited(ayah.claims, eligible).length > 0
-      ? [choice(`${ayah.surah}:${ayah.ayah}`, `${ayah.surah}:${ayah.ayah}`)]
-      : []),
-  );
-
   for (const person of catalog.people) {
     const dbPerson = peopleBySlug.get(person.slug);
     if (!dbPerson) continue;
@@ -230,16 +223,6 @@ export async function generateQuestionCandidates(): Promise<GeneratedQuestion[]>
         family: 'TITLE_HOLDER', topic: 'PEOPLE', subject: { kind: 'TITLE', slug: title.slug }, attribute: 'titles',
         personSlugs: [person.slug], promptArabic: `من ${dbPerson.sex === 'FEMALE' ? 'حملت' : 'حمل'} لقب «${title.name}»؟`, answer: choice(person.slug, person.name),
         pool: holderPool, excludedValues: holders, evidence,
-      }));
-    }
-
-    const linkedAyat = new Set([...dbPerson.ayat.map((ayah) => `${ayah.surah.number}:${ayah.number}`), ...(catalogAyatByPerson.get(person.slug) ?? [])]);
-    for (const ayah of person.ayat ?? []) {
-      const value = `${ayah.surah}:${ayah.ayah}`;
-      add(candidate({
-        family: 'AYAH_LINK', topic: 'AYAT', subject: { kind: 'PERSON', slug: person.slug }, attribute: 'ayat',
-        personSlugs: [person.slug], promptArabic: `أي آية ربطتها المصادر بسيرة «${person.name}»؟`, answer: choice(value, value),
-        pool: ayahPool, excludedValues: linkedAyat, evidence: { claimKeys: cited(ayah.claims, eligible) },
       }));
     }
 
@@ -313,5 +296,30 @@ export async function generateQuestionCandidates(): Promise<GeneratedQuestion[]>
     }));
   }
 
+  candidates.push(...revealedAboutQuestions(catalog.people, eligible));
   return mergeCandidates(candidates);
+}
+
+// docs/quiz-ayah-revealed.md
+export function revealedAboutQuestions(people: readonly CatalogPerson[], eligible: Set<string>): GeneratedQuestion[] {
+  const named = (person: CatalogPerson) => choice(person.slug, person.name.replace(/[\u064B-\u0652\u0670]/g, ''));
+  const links = people.flatMap((person) => (person.ayat ?? []).flatMap((ayah) =>
+    ayah.revealedAbout && cited(ayah.claims, eligible).length > 0 ? [{ person, ayah, key: `${ayah.surah}:${ayah.ayah}` }] : []));
+  const about = new Map<string, Set<string>>();
+  for (const { person, ayah, key } of links) {
+    const slugs = about.get(key) ?? new Set<string>();
+    [person.slug, ...(ayah.revealedAbout?.with ?? [])].forEach((slug) => slugs.add(slug));
+    about.set(key, slugs);
+  }
+  return links.flatMap(({ person, ayah, key }) => {
+    const sex = person.fields.sex?.value;
+    if (!sex || ayah.revealedAbout?.alsoUnnamed) return [];
+    const question = candidate({
+      family: 'AYAH_REVEALED_ABOUT', topic: 'AYAT', subject: { kind: 'PERSON', slug: person.slug }, attribute: key,
+      personSlugs: [person.slug], promptArabic: 'في من نزلت هذه الآية؟', answer: named(person),
+      pool: people.filter((other) => other.fields.sex?.value === sex).map(named),
+      excludedValues: about.get(key), evidence: { claimKeys: cited(ayah.claims, eligible) },
+    });
+    return question ? [question] : [];
+  });
 }

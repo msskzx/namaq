@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-10-03T11:03:06.105Z",
+  "generatedAt": "2026-10-24T11:28:24.650Z",
   "questions": [
     {
       "key": "AYAH_LINK:PERSON:abdur-rahman-ibn-awf:ayat:48:18",
@@ -41,8 +41,8 @@
       },
       "fingerprint": "6aa048235b3b5ac4ef0f3b45cc5d74a531b23cb278d8907bfa51ef268237669a",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
+      "status": "RETIRED",
+      "rejectionReason": "لم يعد السؤال يُولَّد من البيانات الحالية.",
       "reviewedAt": "2026-09-28T07:04:21.495Z",
       "reviewedBy": "Codex"
     },
@@ -85,8 +85,8 @@
       },
       "fingerprint": "6efa85c9d1ae23fd60c6d6a06ca2210bc1e2a50157a2ba09dd965d171b972ffe",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
+      "status": "RETIRED",
+      "rejectionReason": "لم يعد السؤال يُولَّد من البيانات الحالية.",
       "reviewedAt": "2026-09-28T07:04:21.496Z",
       "reviewedBy": "Codex"
     },
@@ -129,8 +129,8 @@
       },
       "fingerprint": "99bcbc068f3f1c6efda1122af3697dca9102c46243860f6bea3050a66dccb38d",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
+      "status": "RETIRED",
+      "rejectionReason": "لم يعد السؤال يُولَّد من البيانات الحالية.",
       "reviewedAt": "2026-09-28T07:04:21.496Z",
       "reviewedBy": "Codex"
     },
@@ -173,8 +173,8 @@
       },
       "fingerprint": "770a31f525b5e6138e56f69742d9f9efe6fe06d9a1b8e4e8e67b5db1a9b64204",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
+      "status": "RETIRED",
+      "rejectionReason": "لم يعد السؤال يُولَّد من البيانات الحالية.",
       "reviewedAt": "2026-09-28T07:04:21.496Z",
       "reviewedBy": "Codex"
     },
@@ -217,8 +217,8 @@
       },
       "fingerprint": "6a9dc1cb1bd3a207159f54d1ce6fc0dabbbc44d871f3e4a191b8d69b2c99f484",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
+      "status": "RETIRED",
+      "rejectionReason": "لم يعد السؤال يُولَّد من البيانات الحالية.",
       "reviewedAt": "2026-09-28T07:04:21.496Z",
       "reviewedBy": "Codex"
     },
@@ -261,8 +261,8 @@
       },
       "fingerprint": "103db0319374766f97d78bb4549acda48691b3d134ddf10efdc71d8e3954b7d4",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
+      "status": "RETIRED",
+      "rejectionReason": "لم يعد السؤال يُولَّد من البيانات الحالية.",
       "reviewedAt": "2026-09-28T07:04:21.496Z",
       "reviewedBy": "Codex"
     },
@@ -305,8 +305,8 @@
       },
       "fingerprint": "563aa2cd29279a8b7abf915e612649f1e3032bd8e490f10a3ff270feece8af8d",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
+      "status": "RETIRED",
+      "rejectionReason": "لم يعد السؤال يُولَّد من البيانات الحالية.",
       "reviewedAt": "2026-09-28T07:04:21.496Z",
       "reviewedBy": "Codex"
     },
@@ -349,8 +349,8 @@
       },
       "fingerprint": "8001bc3ff8365c5d1eb02a63003c61e35d6009e98a81a675136922307e38f1de",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
+      "status": "RETIRED",
+      "rejectionReason": "لم يعد السؤال يُولَّد من البيانات الحالية.",
       "reviewedAt": "2026-09-28T07:04:21.496Z",
       "reviewedBy": "Codex"
     },
@@ -393,8 +393,8 @@
       },
       "fingerprint": "d6961289ed9b92d5a5b22a5cd513b6f0f16c8886cb6f6ae9e3a7482b9a2fe885",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
+      "status": "RETIRED",
+      "rejectionReason": "لم يعد السؤال يُولَّد من البيانات الحالية.",
       "reviewedAt": "2026-09-28T07:04:21.496Z",
       "reviewedBy": "Codex"
     },
@@ -437,8 +437,8 @@
       },
       "fingerprint": "6e695d5d231cb283226e4080ec431998c26afb0b9005ec647aa6df307e17fe74",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
+      "status": "RETIRED",
+      "rejectionReason": "لم يعد السؤال يُولَّد من البيانات الحالية.",
       "reviewedAt": "2026-09-28T07:04:21.496Z",
       "reviewedBy": "Codex"
     },
@@ -481,8 +481,8 @@
       },
       "fingerprint": "3f222f5396704b64b7c7dedbf9b121d229ca95e57952e5c0dd4d9d57e817f37b",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
+      "status": "RETIRED",
+      "rejectionReason": "لم يعد السؤال يُولَّد من البيانات الحالية.",
       "reviewedAt": "2026-09-28T07:04:21.496Z",
       "reviewedBy": "Codex"
     },
@@ -525,8 +525,8 @@
       },
       "fingerprint": "c77da7c417dfac27a10b4d586894f4552a9c77f6cd3aa565e5bfee70d2475906",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
+      "status": "RETIRED",
+      "rejectionReason": "لم يعد السؤال يُولَّد من البيانات الحالية.",
       "reviewedAt": "2026-09-28T07:04:21.496Z",
       "reviewedBy": "Codex"
     },
@@ -569,8 +569,8 @@
       },
       "fingerprint": "ef44f4f3d6d734da9d4d8b015f5d3a01c8651388650aeac738c9aadc7bca81f6",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
+      "status": "RETIRED",
+      "rejectionReason": "لم يعد السؤال يُولَّد من البيانات الحالية.",
       "reviewedAt": "2026-09-28T07:04:21.496Z",
       "reviewedBy": "Codex"
     },
@@ -613,8 +613,8 @@
       },
       "fingerprint": "e771b24337eab62167dd25ea650ff5ad52eb18bd7ebcfdc1fcbe625d222cf0c9",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
+      "status": "RETIRED",
+      "rejectionReason": "لم يعد السؤال يُولَّد من البيانات الحالية.",
       "reviewedAt": "2026-09-28T07:04:21.496Z",
       "reviewedBy": "Codex"
     },
@@ -657,8 +657,8 @@
       },
       "fingerprint": "02ea01eaa18f79f760fec0bb9a3daddcbde225beac6e792e5a6281f8ea13492b",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
+      "status": "RETIRED",
+      "rejectionReason": "لم يعد السؤال يُولَّد من البيانات الحالية.",
       "reviewedAt": "2026-09-28T07:04:21.496Z",
       "reviewedBy": "Codex"
     },
@@ -701,8 +701,8 @@
       },
       "fingerprint": "caa7475958837d3d08764d5b9962542a8fe8d22e00d46e977b6f3ab73ce012b8",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
+      "status": "RETIRED",
+      "rejectionReason": "لم يعد السؤال يُولَّد من البيانات الحالية.",
       "reviewedAt": "2026-09-28T07:04:21.496Z",
       "reviewedBy": "Codex"
     },
@@ -745,8 +745,8 @@
       },
       "fingerprint": "fae05b775d2bc77e0a0c95bf77ee95d4df142a48296f3cceff69c84f8eec66a1",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
+      "status": "RETIRED",
+      "rejectionReason": "لم يعد السؤال يُولَّد من البيانات الحالية.",
       "reviewedAt": "2026-09-28T07:04:21.496Z",
       "reviewedBy": "Codex"
     },
@@ -789,8 +789,8 @@
       },
       "fingerprint": "ff8ae69944a8143accdfb1ba29609dfaef091d172b69ca60d02e9c12bb84d43d",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
+      "status": "RETIRED",
+      "rejectionReason": "لم يعد السؤال يُولَّد من البيانات الحالية.",
       "reviewedAt": "2026-09-28T07:04:21.496Z",
       "reviewedBy": "Codex"
     },
@@ -833,8 +833,8 @@
       },
       "fingerprint": "0400db14c674ef0f6c8d417c05809f742d81b1f0c6dff6d221537cb1fe4d9354",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
+      "status": "RETIRED",
+      "rejectionReason": "لم يعد السؤال يُولَّد من البيانات الحالية.",
       "reviewedAt": "2026-09-28T07:04:21.496Z",
       "reviewedBy": "Codex"
     },
@@ -877,8 +877,8 @@
       },
       "fingerprint": "bfc7da808403e6ea8d286af93c9070fccde9648799bcc3b6ea3b5e435c785a6b",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
+      "status": "RETIRED",
+      "rejectionReason": "لم يعد السؤال يُولَّد من البيانات الحالية.",
       "reviewedAt": "2026-09-28T07:04:21.496Z",
       "reviewedBy": "Codex"
     },
@@ -921,8 +921,8 @@
       },
       "fingerprint": "73937a3da52f0603ea167c94d1f61d6fcf63bf8d81dd21ded2c06bd04feab39e",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
+      "status": "RETIRED",
+      "rejectionReason": "لم يعد السؤال يُولَّد من البيانات الحالية.",
       "reviewedAt": "2026-09-28T07:04:21.496Z",
       "reviewedBy": "Codex"
     },
@@ -965,10 +965,230 @@
       },
       "fingerprint": "5041f6e2cd574c936bebf01356d1a66a86c6d789a441b5c981c228708267677f",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
+      "status": "RETIRED",
+      "rejectionReason": "لم يعد السؤال يُولَّد من البيانات الحالية.",
       "reviewedAt": "2026-09-28T07:04:21.496Z",
       "reviewedBy": "Codex"
+    },
+    {
+      "key": "AYAH_REVEALED_ABOUT:PERSON:aisha-bint-abi-bakr:24:11:aisha-bint-abi-bakr",
+      "family": "AYAH_REVEALED_ABOUT",
+      "topic": "AYAT",
+      "subject": {
+        "kind": "PERSON",
+        "slug": "aisha-bint-abi-bakr"
+      },
+      "attribute": "24:11",
+      "personSlugs": [
+        "aisha-bint-abi-bakr"
+      ],
+      "promptArabic": "في من نزلت هذه الآية؟",
+      "choices": [
+        {
+          "value": "aisha-bint-abi-bakr",
+          "labelArabic": "عائشة بنت أبي بكر"
+        },
+        {
+          "value": "asma-bint-al-numan-al-kindiyyah",
+          "labelArabic": "أسماء بنت النعمان"
+        },
+        {
+          "value": "umaymah-bint-abd-al-muttalib",
+          "labelArabic": "أميمة بنت عبد المطلب"
+        },
+        {
+          "value": "khawlah-bint-hakim",
+          "labelArabic": "خولة بنت حكيم"
+        }
+      ],
+      "correctAnswer": "aisha-bint-abi-bakr",
+      "evidence": {
+        "claimKeys": [
+          "aisha-siyar/ayah-an-nur-eleven"
+        ]
+      },
+      "fingerprint": "acf4bc2955021c6b7dac195d411beec4dac453eb7ea32e3df6669959f2ac48f7",
+      "promptArabicOverride": null,
+      "status": "APPROVED",
+      "rejectionReason": null,
+      "reviewedAt": "2026-10-24T11:28:39.065Z",
+      "reviewedBy": "Claude"
+    },
+    {
+      "key": "AYAH_REVEALED_ABOUT:PERSON:al-ashath-ibn-qais:3:77:al-ashath-ibn-qais",
+      "family": "AYAH_REVEALED_ABOUT",
+      "topic": "AYAT",
+      "subject": {
+        "kind": "PERSON",
+        "slug": "al-ashath-ibn-qais"
+      },
+      "attribute": "3:77",
+      "personSlugs": [
+        "al-ashath-ibn-qais"
+      ],
+      "promptArabic": "في من نزلت هذه الآية؟",
+      "choices": [
+        {
+          "value": "al-ashath-ibn-qais",
+          "labelArabic": "الأشعث بن قيس"
+        },
+        {
+          "value": "uthman-al-hijabi-ibn-abdullah",
+          "labelArabic": "عثمان بن عبد الله"
+        },
+        {
+          "value": "abd-manaf-ibn-qusay",
+          "labelArabic": "عبد مناف بن قصي"
+        },
+        {
+          "value": "niyar-ibn-amr-al-balawi",
+          "labelArabic": "نيار بن عمرو"
+        }
+      ],
+      "correctAnswer": "al-ashath-ibn-qais",
+      "evidence": {
+        "claimKeys": [
+          "al-ashath-ibn-qais-siyar8/ayah-al-imran"
+        ]
+      },
+      "fingerprint": "f40b59202af6d3b64f6f3795827b0d0f47318092e41a133ea4ad975625330b2c",
+      "promptArabicOverride": null,
+      "status": "APPROVED",
+      "rejectionReason": null,
+      "reviewedAt": "2026-10-24T11:28:39.065Z",
+      "reviewedBy": "Claude"
+    },
+    {
+      "key": "AYAH_REVEALED_ABOUT:PERSON:hafsa-bint-umar:66:4:hafsa-bint-umar",
+      "family": "AYAH_REVEALED_ABOUT",
+      "topic": "AYAT",
+      "subject": {
+        "kind": "PERSON",
+        "slug": "hafsa-bint-umar"
+      },
+      "attribute": "66:4",
+      "personSlugs": [
+        "hafsa-bint-umar"
+      ],
+      "promptArabic": "في من نزلت هذه الآية؟",
+      "choices": [
+        {
+          "value": "hafsa-bint-umar",
+          "labelArabic": "حفصة بنت عمر"
+        },
+        {
+          "value": "umm-musab-al-kalbiyyah",
+          "labelArabic": "أم مصعب الكلبية"
+        },
+        {
+          "value": "asma-bint-abi-bakr",
+          "labelArabic": "أسماء بنت أبي بكر"
+        },
+        {
+          "value": "maymunah-bint-al-harith",
+          "labelArabic": "ميمونة بنت الحارث"
+        }
+      ],
+      "correctAnswer": "hafsa-bint-umar",
+      "evidence": {
+        "claimKeys": [
+          "hafsa-bint-umar-siyar25/ayah-at-tahrim"
+        ]
+      },
+      "fingerprint": "89e663c7b3cc694e86af77626ce7888cc34f6f2fa49a0cc8cd15975a6322db0d",
+      "promptArabicOverride": null,
+      "status": "APPROVED",
+      "rejectionReason": null,
+      "reviewedAt": "2026-10-24T11:28:39.065Z",
+      "reviewedBy": "Claude"
+    },
+    {
+      "key": "AYAH_REVEALED_ABOUT:PERSON:saad-ibn-abi-waqqas:29:8:saad-ibn-abi-waqqas",
+      "family": "AYAH_REVEALED_ABOUT",
+      "topic": "AYAT",
+      "subject": {
+        "kind": "PERSON",
+        "slug": "saad-ibn-abi-waqqas"
+      },
+      "attribute": "29:8",
+      "personSlugs": [
+        "saad-ibn-abi-waqqas"
+      ],
+      "promptArabic": "في من نزلت هذه الآية؟",
+      "choices": [
+        {
+          "value": "saad-ibn-abi-waqqas",
+          "labelArabic": "سعد بن أبي وقاص"
+        },
+        {
+          "value": "adi-ibn-al-jidd",
+          "labelArabic": "عدي بن الجد"
+        },
+        {
+          "value": "al-jarrah-ibn-hilal",
+          "labelArabic": "الجراح بن هلال"
+        },
+        {
+          "value": "aws-ibn-thabit",
+          "labelArabic": "أوس بن ثابت"
+        }
+      ],
+      "correctAnswer": "saad-ibn-abi-waqqas",
+      "evidence": {
+        "claimKeys": [
+          "saad/ayah-al-ankabut"
+        ]
+      },
+      "fingerprint": "599ae1a0b303e6bd9b3b42db59c378b7a242466da0fdbf912a69729e87642e92",
+      "promptArabicOverride": null,
+      "status": "APPROVED",
+      "rejectionReason": null,
+      "reviewedAt": "2026-10-24T11:28:39.065Z",
+      "reviewedBy": "Claude"
+    },
+    {
+      "key": "AYAH_REVEALED_ABOUT:PERSON:zaynab-bint-jahsh:33:37:zaynab-bint-jahsh",
+      "family": "AYAH_REVEALED_ABOUT",
+      "topic": "AYAT",
+      "subject": {
+        "kind": "PERSON",
+        "slug": "zaynab-bint-jahsh"
+      },
+      "attribute": "33:37",
+      "personSlugs": [
+        "zaynab-bint-jahsh"
+      ],
+      "promptArabic": "في من نزلت هذه الآية؟",
+      "choices": [
+        {
+          "value": "zaynab-bint-jahsh",
+          "labelArabic": "زينب بنت جحش"
+        },
+        {
+          "value": "zaynab-bint-muhammad",
+          "labelArabic": "زينب بنت محمد"
+        },
+        {
+          "value": "juwayriyah-bint-al-harith",
+          "labelArabic": "جويرية بنت الحارث"
+        },
+        {
+          "value": "umm-hani-bint-abi-talib",
+          "labelArabic": "أم هانئ"
+        }
+      ],
+      "correctAnswer": "zaynab-bint-jahsh",
+      "evidence": {
+        "claimKeys": [
+          "zaynab-jahsh/ayah-al-ahzab"
+        ]
+      },
+      "fingerprint": "75782adeb1b1fba8fbb18375d15e429f967016b3ded2bafe965dd1e16d2b4749",
+      "promptArabicOverride": null,
+      "status": "APPROVED",
+      "rejectionReason": null,
+      "reviewedAt": "2026-10-24T11:28:39.065Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "BATTLE_HIJRI_YEAR:BATTLE:badr-al-ula:hijriYear:2",
