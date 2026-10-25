@@ -60,7 +60,7 @@ export function SurahPairs({ groups, names, tab, query, surah, a, b }: { groups:
                 <ul className="border-t border-[var(--home-rule)] p-1">
                   {g.self > 0 && mode === 'text' && (
                     <li>
-                      <button type="button" className={ROW} aria-current={surah === g.surah} onClick={() => go(surahHref(g.surah, query))}>
+                      <button type="button" data-range-navigation className={ROW} aria-current={surah === g.surah} onClick={() => go(surahHref(g.surah, query))}>
                         <span className="flex-1">داخل السورة</span>
                         <span className={COUNT}>{num(g.self)}</span>
                       </button>
@@ -69,7 +69,7 @@ export function SurahPairs({ groups, names, tab, query, surah, a, b }: { groups:
                   {g.total === 0 && <li className={`${NOTE} px-2 py-1`}>{mode === 'themes' ? 'لا مواضيع مشتركة مع سورة أخرى.' : 'لا آيات متشابهة.'}</li>}
                   {g.partners.map(p => (
                     <li key={p.other}>
-                      <button type="button" className={ROW} aria-current={surah === null && ((g.surah === a && p.other === b) || (g.surah === b && p.other === a))}
+                      <button type="button" data-range-navigation className={ROW} aria-current={surah === null && ((g.surah === a && p.other === b) || (g.surah === b && p.other === a))}
                         onClick={() => go(pairHref(tab, g.surah, p.other, query))}>
                         <span className="flex-1">{`و${names[p.other]}`}</span>
                         <span className={COUNT}>{num(p.count)}</span>

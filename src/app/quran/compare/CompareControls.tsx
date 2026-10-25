@@ -17,9 +17,9 @@ const TABS: { tab: CompareTab; label: string; icon: React.ReactNode }[] = [
   { tab: 'themes', label: 'المواضيع', icon: <Layers3 size={16} aria-hidden /> },
 ];
 
-const LABELS: Record<RangeUnit, { from: string; to: string; all: string; form: string; name: string }> = {
-  juz: { from: 'من الجزء', to: 'إلى الجزء', all: 'كل الأجزاء', form: 'نطاق الأجزاء', name: 'الأجزاء' },
-  surah: { from: 'من السورة', to: 'إلى السورة', all: 'كل السور', form: 'نطاق السور', name: 'السور' },
+const LABELS: Record<RangeUnit, { from: string; to: string; all: string; form: string; of: string }> = {
+  juz: { from: 'من الجزء', to: 'إلى الجزء', all: 'كل الأجزاء', form: 'نطاق الأجزاء', of: 'للأجزاء' },
+  surah: { from: 'من السورة', to: 'إلى السورة', all: 'كل السور', form: 'نطاق السور', of: 'للسور' },
 };
 
 export function rangeHref(query: Query, range: CompareRange) {
@@ -36,9 +36,9 @@ export default function CompareControls({ tab, query, range, summary }: { tab: C
       <Segmented label="طريقة المقارنة" options={TABS.map(t => ({ key: t.tab, label: t.label, icon: t.icon, current: t.tab === tab, href: tabHref(t.tab, query) }))} />
       <div className="flex flex-wrap items-center gap-3">
         <span className="text-sm text-[var(--home-muted)]">النطاق</span>
-        <Segmented label="النطاق بالأجزاء أو بالسور" options={(['juz', 'surah'] as const).map(u => ({ key: u, label: u === 'juz' ? 'بالأجزاء' : 'بالسور', current: u === unit, href: rangeHref(query, { unit: u, range: null }) }))} />
+        <Segmented label="النطاق بالأجزاء أو بالسور" options={(['juz', 'surah'] as const).map(u => ({ key: u, label: u === 'juz' ? 'بالأجزاء' : 'بالسور', current: u === unit, href: rangeHref(query, u === unit ? range : { unit: u, range: null }) }))} />
         <RangeFilter key={unit} range={range.range} max={RANGE_MAX[unit]} names={[`${unit}From`, `${unit}To`]} href={(next?: JuzRange) => rangeHref(query, { unit, range: next ?? null })}
-          labels={{ ...labels, invalid: shown => `أدخل رقمين من ١ إلى ${num(RANGE_MAX[unit])}، على أن تكون البداية قبل النهاية أو مساوية لها. النتائج المعروضة ما زالت لـ${labels.name} ${num(shown.from)}–${num(shown.to)}.` }} />
+          labels={{ ...labels, invalid: shown => `أدخل رقمين من ١ إلى ${num(RANGE_MAX[unit])}، على أن تكون البداية قبل النهاية أو مساوية لها. النتائج المعروضة ما زالت ${labels.of} ${num(shown.from)}–${num(shown.to)}.` }} />
       </div>
       <p role="status" className="text-sm text-[var(--home-muted)] lg:ms-auto">{summary}</p>
     </div>

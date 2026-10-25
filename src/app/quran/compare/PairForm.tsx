@@ -40,9 +40,9 @@ export default function PairForm({ surahs, a, b, ayat, keep }: { surahs: Surah[]
     const s = pair[key];
     const set = (patch: Partial<Side>, whole = false) => apply({ ...pair, [key]: { ...s, ...patch } }, { [key]: whole });
     return (
-      <fieldset className="flex flex-wrap items-center gap-2">
+      <fieldset data-range-navigation className="flex flex-wrap items-center gap-2">
         <legend className="sr-only">{title}</legend>
-        <SurahPicker key={s.surah} name={key} label={title} value={s.surah} surahs={surahs.map(x => ({ number: x.number, name: x.name }))} onChange={surah => set({ surah }, true)} />
+        <SurahPicker name={key} label={title} value={s.surah} surahs={surahs.map(x => ({ number: x.number, name: x.name }))} onChange={surah => set({ surah }, true)} />
         {ayat && (
           <div className="flex flex-wrap items-center gap-2 text-sm text-[var(--home-muted)]">
             <span className="flex items-center gap-2">

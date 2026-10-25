@@ -12,7 +12,7 @@ vi.mock('@/lib/prisma', () => ({
 }));
 vi.mock('@/lib/quran/topicEngine', () => ({ getSharedTopics: async () => [] }));
 vi.mock('../themes/ThemesView', () => ({ default: ({ controls }: { controls: React.ReactNode }) => <>{controls}</> }));
-vi.mock('next/navigation', () => ({ useRouter: () => ({ push: () => {}, range: { unit: 'juz', range: null } }) }));
+vi.mock('next/navigation', () => ({ useRouter: () => ({ push: () => {} }) }));
 
 afterEach(cleanup);
 

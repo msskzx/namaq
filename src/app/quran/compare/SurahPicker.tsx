@@ -12,6 +12,11 @@ type Surah = { number: number; name: string };
 export default function SurahPicker({ name, label, value, surahs, onChange }: { name: string; label: string; value: number; surahs: Surah[]; onChange?: (surah: number) => void }) {
   const id = useId();
   const [selected, setSelected] = useState(value);
+  const [given, setGiven] = useState(value);
+  if (given !== value) {
+    setGiven(value);
+    setSelected(value);
+  }
   const [query, setQuery] = useState<string | null>(null);
   const [active, setActive] = useState(0);
   const list = useRef<HTMLUListElement>(null);

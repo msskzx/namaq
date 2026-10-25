@@ -45,7 +45,7 @@ export default async function QuranComparePage({ searchParams }: { searchParams:
     prisma.surah.findMany({ select: { number: true, name: true } }),
     tab === 'themes' ? getTopicSurahPairs((surah, ayah) => ayahInRange(surah, ayah, range)) : similarSurahPairs(range),
   ]);
-  const [topA, topB] = range.range ? topPair(pairs) ?? [] : [];
+  const [topA, topB] = range.range && query.a === undefined && query.b === undefined ? topPair(pairs) ?? [] : [];
   const a = surahOf(query.a) ?? topA ?? (themes ? 16 : 56);
   const b = surahOf(query.b) ?? topB ?? (themes ? 43 : 69);
   const shown = { ...query, a: String(a), b: String(b) };

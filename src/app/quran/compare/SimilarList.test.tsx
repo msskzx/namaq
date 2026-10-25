@@ -5,7 +5,7 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { LanguageProvider } from '@/components/language/LanguageContext';
 import type { SimilarPair } from '@/lib/quran/similar';
 import type { Passage } from '@/lib/quran/passages';
-import { passageOf, SimilarList, VISIBLE } from './SimilarList';
+import { passageOf, places, SimilarList, VISIBLE } from './SimilarList';
 import spread from '@/components/quran/PageSpread.module.css';
 
 afterEach(cleanup);
@@ -52,6 +52,13 @@ describe('SimilarList', () => {
     expect(screen.getByText('موضع متشابه واحد')).toBeTruthy();
     expect(screen.getByRole('link', { name: /آية بآية/ }).getAttribute('href')).toBe('/quran/compare?a=74&af=54&at=55&b=80&bf=11&bt=12&view=ayat&juzFrom=29&juzTo=30');
     expect(screen.getByText('كيف نقارن؟').closest('details')!.open).toBe(false);
+  });
+
+  it('counts places in Arabic agreement, past one hundred too', () => {
+    expect([1, 2, 3, 10, 11, 99, 100, 101, 103, 111, 200].map(places)).toEqual([
+      'موضع متشابه واحد', 'موضعان متشابهان', '٣ مواضع متشابهة', '١٠ مواضع متشابهة', '١١ موضعًا متشابهًا', '٩٩ موضعًا متشابهًا',
+      '١٠٠ موضعٍ متشابه', '١٠١ موضع متشابه', '١٠٣ مواضع متشابهة', '١١١ موضعًا متشابهًا', '٢٠٠ موضعٍ متشابه',
+    ]);
   });
 
   it('says when nothing is left in the chosen range', () => {

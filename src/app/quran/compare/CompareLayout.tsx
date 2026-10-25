@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useId, useState, useSyncExternalStore } from 'react';
+import React, { useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { ChevronDown, PanelRightClose, PanelRightOpen } from 'lucide-react';
 import Button from '@/components/common/Button';
@@ -32,6 +32,18 @@ export default function CompareLayout({ title, current, pane, children }: { titl
   const hidden = useSyncExternalStore(subscribe, read, () => false);
   const [openAt, setOpenAt] = useState<string | null>(null);
   const open = openAt === search;
+  const hide = useRef<HTMLSpanElement>(null);
+  const show = useRef<HTMLSpanElement>(null);
+  const moved = useRef(false);
+  useEffect(() => {
+    if (!moved.current) return;
+    moved.current = false;
+    (hidden ? show : hide).current?.querySelector('button')?.focus();
+  }, [hidden]);
+  const toggle = (next: boolean) => {
+    moved.current = true;
+    write(next);
+  };
   return (
     <div className={`flex flex-col gap-4 lg:grid lg:items-start ${hidden ? '' : 'lg:grid-cols-[19rem_minmax(0,1fr)]'}`}>
       <button type="button" aria-expanded={open} aria-controls={id} onClick={() => setOpenAt(open ? null : search)}
@@ -45,10 +57,10 @@ export default function CompareLayout({ title, current, pane, children }: { titl
       <aside id={id} aria-label={title} className={`${PANEL} min-w-0 flex-col gap-3 ${open ? 'flex' : 'hidden'} ${hidden ? 'lg:hidden' : 'lg:flex'}`}>
         <div className="flex items-center justify-between gap-2">
           <h2 className="text-xl">{title}</h2>
-          <span className="hidden lg:block">
-            <Button size="sm" onClick={() => write(true)} aria-label="أخفِ قائمة السور">
+          <span ref={hide} className="hidden lg:block">
+            <Button size="sm" onClick={() => toggle(true)}>
               <PanelRightClose size={14} aria-hidden />
-              إخفاء
+              إخفاء القائمة
             </Button>
           </span>
         </div>
@@ -56,8 +68,8 @@ export default function CompareLayout({ title, current, pane, children }: { titl
       </aside>
       <div className="min-w-0 flex flex-col gap-4">
         {hidden && (
-          <span className="hidden lg:block">
-            <Button size="sm" onClick={() => write(false)}>
+          <span ref={show} className="hidden lg:block">
+            <Button size="sm" onClick={() => toggle(false)}>
               <PanelRightOpen size={14} aria-hidden />
               اعرض قائمة السور
             </Button>

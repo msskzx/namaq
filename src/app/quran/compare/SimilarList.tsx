@@ -53,7 +53,15 @@ function page(span: Span, marks: Mark[], other: Mark[], otherSpan: Span, ayat: R
   };
 }
 
-const places = (n: number) => (n === 1 ? 'موضع متشابه واحد' : n === 2 ? 'موضعان متشابهان' : n <= 10 ? `${num(n)} مواضع متشابهة` : `${num(n)} موضعًا متشابهًا`);
+export function places(n: number) {
+  if (n === 1) return 'موضع متشابه واحد';
+  if (n === 2) return 'موضعان متشابهان';
+  const r = n % 100;
+  if (r === 0) return `${num(n)} موضعٍ متشابه`;
+  if (n > 100 && r <= 2) return `${num(n)} موضع متشابه`;
+  if (r <= 10) return `${num(n)} مواضع متشابهة`;
+  return `${num(n)} موضعًا متشابهًا`;
+}
 
 export function SimilarList({ pairs, ayat, names, pair, controls, query = {}, filtered = false, surahs }: { pairs: SimilarPair[]; ayat: Record<string, string>; names: Record<number, string>; pair: boolean; controls?: ReactNode; query?: Record<string, string>; filtered?: boolean; surahs?: [number, number] }) {
   const [all, setAll] = useState(false);
