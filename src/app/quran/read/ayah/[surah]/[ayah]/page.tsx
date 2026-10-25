@@ -1,10 +1,10 @@
 import { notFound, redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
-import { pageOfAyah, type ReaderPageData } from '@/lib/quran/readerPage';
+import { pageOfAyah, type MushafPage } from '@/lib/quran/readerPage';
 
 export const dynamic = 'force-dynamic';
 
-const load = async (page: number): Promise<ReaderPageData> => (await import(`../../../data/${page}.json`)).default;
+const load = async (page: number): Promise<MushafPage> => (await import(`../../../mushaf/${page}.json`)).default;
 
 export default async function AyahRedirect({ params }: { params: Promise<{ surah: string; ayah: string }> }) {
   const { surah, ayah } = await params;

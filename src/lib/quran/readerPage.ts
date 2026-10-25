@@ -3,6 +3,17 @@ export type ReaderItem = { surah: number } | { line: (string | number)[]; short?
 
 export type ReaderPageData = { juz: number; items: ReaderItem[] };
 
+export type MushafItem = { surah: number } | { basmala: true } | { line: (string | number)[]; quarter?: number };
+
+export type MushafPage = { juz: number; items: MushafItem[] };
+
+export const spreadOf = (page: number) => (page % 2 ? [page, Math.min(604, page + 1)] : [page - 1, page]);
+
+export function turn(page: number, spread: boolean, step: 1 | -1) {
+  const from = spread ? spreadOf(page)[0] : page;
+  return Math.min(604, Math.max(1, from + step * (spread ? 2 : 1)));
+}
+
 export type WordGroup = { word: string; marks: number[]; surah?: number; ayah?: number };
 
 export const lineGroups = (tokens: (string | number)[]) =>
@@ -13,8 +24,8 @@ export const lineGroups = (tokens: (string | number)[]) =>
     return all;
   }, []);
 
-export function pageGroups(items: ReaderItem[], top?: number): (WordGroup[] | null)[] {
-  const lines = items.map(item => ('surah' in item ? null : lineGroups(item.line)));
+export function pageGroups(items: (ReaderItem | MushafItem)[], top?: number): (WordGroup[] | null)[] {
+  const lines = items.map(item => ('line' in item ? lineGroups(item.line) : null));
   let surah = top;
   let last = 0;
   lines.forEach((line, at) => {
@@ -41,7 +52,7 @@ export async function pageOfAyah(
   surah: number,
   ayah: number,
   from: number,
-  load: (page: number) => Promise<ReaderPageData>,
+  load: (page: number) => Promise<{ items: (ReaderItem | MushafItem)[] }>,
 ): Promise<number | null> {
   let current = 0;
   let next = 1;
@@ -53,6 +64,7 @@ export async function pageOfAyah(
         [current, next, open] = [item.surah, 1, true];
         continue;
       }
+      if (!('line' in item)) continue;
       for (const token of item.line) {
         if (typeof token === 'number') [next, open] = [token + 1, true];
         else if (open) {

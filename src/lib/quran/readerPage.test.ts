@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { pageGroups, pageOfAyah, type ReaderPageData } from './readerPage';
+import { pageGroups, pageOfAyah, spreadOf, turn, type MushafPage, type ReaderPageData } from './readerPage';
 
 const load = async (page: number): Promise<ReaderPageData> =>
   JSON.parse(readFileSync(join(__dirname, '../../app/quran/read/data', `${page}.json`), 'utf8'));
@@ -14,6 +14,13 @@ describe('pageOfAyah', () => {
     await expect(pageOfAyah(2, 255, 2, load)).resolves.toBe(42);
     await expect(pageOfAyah(18, 1, 293, load)).resolves.toBe(293);
     await expect(pageOfAyah(114, 6, 604, load)).resolves.toBe(604);
+  });
+
+  it('finds pages in the mushaf layout, stepping over basmala rows', async () => {
+    const mushaf = async (page: number): Promise<MushafPage> => JSON.parse(readFileSync(join(__dirname, '../../app/quran/read/mushaf', `${page}.json`), 'utf8'));
+    await expect(pageOfAyah(23, 1, 342, mushaf)).resolves.toBe(342);
+    await expect(pageOfAyah(43, 59, 489, mushaf)).resolves.toBe(493);
+    await expect(pageOfAyah(5, 78, 106, mushaf)).resolves.toBe(121);
   });
 
   it('gives no page for an ayah past the end of its surah', async () => {
@@ -42,5 +49,21 @@ describe('pageGroups', () => {
     const words = lines.flatMap(line => line ?? []).filter(group => group.ayah === 255);
     expect(words.length).toBeGreaterThan(40);
     expect(words.at(-1)?.marks).toEqual([255]);
+  });
+});
+
+describe('spreadOf and turn', () => {
+  it('pairs each page with its facing page, the odd one first', () => {
+    expect(spreadOf(1)).toEqual([1, 2]);
+    expect(spreadOf(342)).toEqual([341, 342]);
+    expect(spreadOf(603)).toEqual([603, 604]);
+  });
+
+  it('turns one page or one spread, staying within the mushaf', () => {
+    expect(turn(341, false, 1)).toBe(342);
+    expect(turn(342, true, 1)).toBe(343);
+    expect(turn(342, true, -1)).toBe(339);
+    expect(turn(1, true, -1)).toBe(1);
+    expect(turn(604, false, 1)).toBe(604);
   });
 });

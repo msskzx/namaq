@@ -1,130 +1,174 @@
 'use client';
 
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faArrowRight, faList } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faArrowRight, faChevronDown, faChevronUp, faList } from '@fortawesome/free-solid-svg-icons';
 import Button from '@/components/common/Button';
-import { pageGroups, type ReaderPageData } from '@/lib/quran/readerPage';
-import { num } from '@/lib/quran/arabicNumber';
-import { plainName } from '@/lib/quran/normalize';
+import Segmented from '@/components/common/Segmented';
+import { useNavigatingRouter } from '@/components/common/NavigationLoader';
+import { spreadOf, turn, type MushafPage as MushafPageData } from '@/lib/quran/readerPage';
 import { useLanguage } from '@/components/language/LanguageContext';
 import styles from '@/components/homepage/Home.module.css';
-import FitLines from './FitLines';
+import mushaf from './Mushaf.module.css';
+import MushafPage from './MushafPage';
 import JumpForm from './JumpForm';
 
-const BASMALA = 'بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ';
+export type ReaderPage = { page: number; data: MushafPageData; top?: number };
 
-const hasBasmala = (surah: number) => surah !== 1 && surah !== 9;
+const SPREAD_KEY = 'quran-reader-spread';
+const BAR_KEY = 'quran-reader-bar';
+const WIDE = '(min-width: 1024px) and (orientation: landscape)';
+const PHONE = '(max-width: 640px)';
 
-const MARK =
-  'mx-1 inline-flex h-[2.4em] w-[2.4em] items-center justify-center rounded-full border border-[var(--home-rule)] align-middle text-[0.5em] text-[var(--home-muted)]';
+const read = (key: string) => {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+};
+const write = (key: string, value: string) => {
+  try {
+    localStorage.setItem(key, value);
+  } catch {}
+};
 
 export default function ReaderView({
   page,
-  data,
+  pages,
   names,
-  top,
   mark,
   fontClass,
 }: {
   page: number;
-  data: ReaderPageData;
+  pages: ReaderPage[];
   names: Record<number, string>;
-  top?: number;
   mark?: { surah: number; ayah: number };
   fontClass?: string;
 }) {
   const { language, languageLoaded } = useLanguage();
   const ar = !languageLoaded || language === 'ar';
-  const small = page <= 2;
-  const opens = 'surah' in (data.items[0] ?? {});
-  const current = opens ? (data.items[0] as { surah: number }).surah : top;
-  const title = current && names[current] ? plainName(names[current]).replace(/^سورة\s*/, '') : '';
-  const lines = useMemo(() => pageGroups(data.items, top), [data, top]);
-  const marked = (surah?: number, ayah?: number) => !!mark && surah === mark.surah && ayah === mark.ayah;
+  const router = useNavigatingRouter();
+  const frame = useRef<HTMLDivElement>(null);
+  const [spread, setSpread] = useState(false);
+  const [phone, setPhone] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const two = spread && !phone;
+  const shown = two ? pages.filter(entry => spreadOf(page).includes(entry.page)) : pages.filter(entry => entry.page === page);
+  const go = useCallback(
+    (step: 1 | -1) => {
+      const target = turn(page, two, step);
+      if (two ? spreadOf(target)[0] !== spreadOf(page)[0] : target !== page) router.push(`/quran/read/${target}`);
+    },
+    [page, two, router],
+  );
+  const chooseSpread = useCallback((next: boolean) => {
+    setSpread(next);
+    write(SPREAD_KEY, next ? 'two' : 'one');
+  }, []);
+  const hide = (next: boolean) => {
+    setHidden(next);
+    write(BAR_KEY, next ? 'hidden' : 'shown');
+  };
+
+  useEffect(() => {
+    const stored = read(SPREAD_KEY);
+    setSpread(stored ? stored === 'two' : !!window.matchMedia?.(WIDE).matches);
+    setHidden(read(BAR_KEY) === 'hidden');
+    const query = window.matchMedia?.(PHONE);
+    if (!query) return;
+    const update = () => setPhone(query.matches);
+    update();
+    query.addEventListener?.('change', update);
+    return () => query.removeEventListener?.('change', update);
+  }, []);
+
+  useLayoutEffect(() => {
+    const element = frame.current;
+    if (!element) return;
+    const size = () => {
+      element.style.height = `calc(100dvh - ${Math.max(0, element.getBoundingClientRect().top + window.scrollY)}px)`;
+    };
+    size();
+    window.addEventListener('resize', size);
+    return () => window.removeEventListener('resize', size);
+  }, []);
+
   useEffect(() => {
     document.querySelector('[data-marked]')?.scrollIntoView?.({ block: 'center' });
   }, [mark?.surah, mark?.ayah]);
+
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.altKey || event.ctrlKey || event.metaKey) return;
+      if (event.target instanceof Element && event.target.closest('input, textarea, select, [contenteditable="true"]')) return;
+      if (event.key === 'ArrowLeft') go(1);
+      else if (event.key === 'ArrowRight') go(-1);
+      else if (event.key.toLowerCase() === 'd') chooseSpread(!spread);
+      else if (event.key.toLowerCase() === 'g') {
+        setHidden(false);
+        requestAnimationFrame(() => frame.current?.querySelector<HTMLInputElement>('input[name="page"]')?.select());
+      } else return;
+      event.preventDefault();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [go, chooseSpread, spread]);
+
+  const kbd = 'rounded border border-b-2 border-[var(--home-rule)] px-1.5 text-[0.7rem]';
   return (
-    <div dir={ar ? 'rtl' : 'ltr'} lang={ar ? 'ar' : 'en'} className={`${styles.page} ${fontClass ?? ''} max-w-3xl mx-auto px-4 py-6`}>
-      <header className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-[var(--home-muted)]">
-          {ar ? 'برواية حفص' : 'In the reading of Hafs'}
-        </p>
-        <JumpForm />
-      </header>
-      <article dir="rtl" lang="ar">
-        <section
-          aria-label={ar ? `الصفحة ${num(page)}` : `Page ${page}`}
-          className={`[container-type:inline-size] border-4 border-double border-[var(--home-rule)] bg-[var(--home-paper-deep)] px-5 pt-3 pb-3 ${
-            small ? 'mx-auto max-w-md rounded-[2rem]' : ''
-          }`}
-        >
-          <div className="mb-2 flex justify-between border-b border-[var(--home-rule)] pb-1 text-sm text-[var(--home-muted)]">
-            <span>{title}</span>
-            <span>الجزء {num(data.juz)}</span>
+    <div ref={frame} dir={ar ? 'rtl' : 'ltr'} lang={ar ? 'ar' : 'en'} className={`${styles.page} ${fontClass ?? ''} flex flex-col`}>
+      {hidden ? (
+        <div className="flex justify-end px-3 pt-1">
+          <Button size="sm" variant="ghost" onClick={() => hide(false)} aria-expanded={false}>
+            <FontAwesomeIcon icon={faChevronDown} aria-hidden />
+            {ar ? 'إظهار الأدوات' : 'Show tools'}
+          </Button>
+        </div>
+      ) : (
+        <nav aria-label={ar ? 'أدوات القراءة' : 'Reading tools'} className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--home-rule)] px-3 py-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <Button size="sm" onClick={() => go(-1)} disabled={(two ? spreadOf(page)[0] : page) === 1}>
+              <FontAwesomeIcon icon={ar ? faArrowRight : faArrowLeft} aria-hidden />
+              <span className="max-sm:sr-only">{ar ? 'الصفحة السابقة' : 'Previous page'}</span>
+            </Button>
+            <Button size="sm" onClick={() => go(1)} disabled={(two ? spreadOf(page)[1] : page) === 604}>
+              <span className="max-sm:sr-only">{ar ? 'الصفحة التالية' : 'Next page'}</span>
+              <FontAwesomeIcon icon={ar ? faArrowLeft : faArrowRight} aria-hidden />
+            </Button>
+            <JumpForm page={page} />
+            <Button size="sm" href="/quran/read">
+              <FontAwesomeIcon icon={faList} aria-hidden />
+              <span className="max-sm:sr-only">{ar ? 'فهرس السور' : 'Index of surahs'}</span>
+            </Button>
           </div>
-          <FitLines key={page}>
-            {data.items.map((item, index) =>
-              'surah' in item ? (
-                <div key={index} className="my-2 border-y border-[var(--home-rule)] py-1 text-center">
-                  <h2 className="text-xl text-[var(--home-accent)]">{names[item.surah]}</h2>
-                  {hasBasmala(item.surah) && <p className="text-2xl leading-loose">{BASMALA}</p>}
-                </div>
-              ) : (
-                <p
-                  key={index}
-                  data-line
-                  className={`flex whitespace-nowrap leading-[2.2] ${
-                    small || item.short ? 'justify-center gap-x-[0.4em]' : 'justify-between'
-                  }`}
-                >
-                  {lines[index]?.map((group, at) => {
-                    const on = marked(group.surah, group.ayah);
-                    return (
-                      <span key={at} data-marked={on || undefined} className={on ? 'text-[var(--home-accent)]' : undefined}>
-                        {group.word}
-                        {group.marks.map((end) => (
-                          <span
-                            key={end}
-                            className={`${MARK} ${marked(group.surah, end) ? 'bg-[var(--home-accent)] text-[var(--home-paper)]!' : ''}`}
-                          >
-                            {num(end)}
-                          </span>
-                        ))}
-                      </span>
-                    );
-                  })}
-                </p>
-              ),
+          <div className="flex flex-wrap items-center gap-3">
+            {!phone && (
+              <Segmented
+                label={ar ? 'عدد الصفحات' : 'Pages shown'}
+                options={[
+                  { key: 'one', label: ar ? 'صفحة' : 'One page', current: !spread, onClick: () => chooseSpread(false) },
+                  { key: 'two', label: ar ? 'صفحتان' : 'Two pages', current: spread, onClick: () => chooseSpread(true) },
+                ]}
+              />
             )}
-          </FitLines>
-          <p className="mt-3 border-t border-[var(--home-rule)] pt-2 text-center text-sm text-[var(--home-muted)]">
-            {num(page)}
-          </p>
-        </section>
+            <p className="hidden items-center gap-1.5 text-xs text-[var(--home-muted)] lg:flex">
+              <kbd className={kbd}>←</kbd>
+              <kbd className={kbd}>→</kbd>
+              {ar ? 'للتقليب' : 'turn'} · <kbd className={kbd}>D</kbd> {ar ? 'صفحة/صفحتان' : 'one/two'} · <kbd className={kbd}>G</kbd> {ar ? 'انتقال' : 'go to'}
+            </p>
+            <Button size="sm" variant="ghost" onClick={() => hide(true)} aria-expanded>
+              <FontAwesomeIcon icon={faChevronUp} aria-hidden />
+              <span className="max-sm:sr-only">{ar ? 'إخفاء الأدوات' : 'Hide tools'}</span>
+            </Button>
+          </div>
+        </nav>
+      )}
+      <article dir="rtl" lang="ar" className={`${mushaf.stage} ${two ? mushaf.spread : ''}`}>
+        {shown.map(entry => (
+          <MushafPage key={entry.page} page={entry.page} data={entry.data} names={names} top={entry.top} mark={mark} />
+        ))}
       </article>
-      <nav
-        aria-label={ar ? 'التنقل بين الصفحات' : 'Page navigation'}
-        className="mt-4 flex flex-wrap items-center justify-center gap-3"
-      >
-        {page > 1 && (
-          <Button size="sm" href={`/quran/read/${page - 1}`}>
-            <FontAwesomeIcon icon={ar ? faArrowRight : faArrowLeft} aria-hidden />
-            {ar ? 'الصفحة السابقة' : 'Previous page'}
-          </Button>
-        )}
-        <Button size="sm" href="/quran/read">
-          <FontAwesomeIcon icon={faList} aria-hidden />
-          {ar ? 'فهرس السور' : 'Index of surahs'}
-        </Button>
-        {page < 604 && (
-          <Button size="sm" href={`/quran/read/${page + 1}`}>
-            {ar ? 'الصفحة التالية' : 'Next page'}
-            <FontAwesomeIcon icon={ar ? faArrowLeft : faArrowRight} aria-hidden />
-          </Button>
-        )}
-      </nav>
     </div>
   );
 }

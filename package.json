@@ -22,6 +22,7 @@
     "quran:topics:sync": "tsx --env-file=.env scripts/quran/syncTopics.ts",
     "quran:oaths": "tsx --env-file=.env scripts/quran/buildOaths.ts",
     "quran:reader": "tsx --env-file=.env scripts/quran/buildReader.ts",
+    "quran:mushaf": "tsx scripts/quran/buildMushaf.ts",
     "quran:prophets": "tsx --env-file=.env scripts/quran/buildProphets.ts",
     "quran:openings": "tsx --env-file=.env scripts/quran/buildOpenings.ts",
     "quran:lemmas": "tsx scripts/quran/buildLemmas.ts",

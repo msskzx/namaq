@@ -366,13 +366,37 @@ becomes a node or an edge.
 
 ## The Quran reader
 
-`npm run quran:reader` fetches the 604 pages of the Madinah mushaf from the
+`npm run quran:reader` fetches the 604 pages of the 1421 Madinah mushaf from the
 Quran.com API (`verses/by_page`, `mushaf=2`) and writes one file per page under
 `src/app/quran/read/data/`: the words of each printed line, a circled number
 for each ayah end, and a surah header where a surah begins. The sajda sign is part of the word's text, as the API
-gives it, at all 15 places. The API leaves out the title and basmala lines, so the
-reader draws them. The reader reads these files and the stored surah names, not
+gives it, at all 15 places. Branches, ayah search and the surrounding-ayat cards read these files and the stored surah names, not
 the stored ayat. Nothing syncs to Neo4j. `npm test` checks the files.
+
+The reader at `/quran/read` draws the 1441 Madinah mushaf instead, the edition
+in print today, from `src/app/quran/read/mushaf/`. `npm run quran:mushaf --
+<pages dir> <hafsData_v18.json>` builds those files from two downloads:
+
+- the `pages/` folder of the npm package `quran-qcf4` (MIT data), which gives
+  each printed line of the 1441 edition as ayah keys and word positions, with
+  the surah headers, basmala rows and ۞ hizb quarter marks;
+- `hafsData_v18.json` from the King Fahd Complex's Hafs data
+  (https://github.com/thetruetruth/quran-data-kfgqpc, `hafs/data/`), whose
+  words are in the encoding the Complex's font expects.
+
+The script places each word of the Complex's text at its line. The layout
+counts each sajda sign and three joined words (15:7, 27:20, 36:22) as one word
+more than the text, and the script lines those up. A line that opens a hizb
+quarter carries its number (1 to 240). Surah openings that start a quarter
+have no ۞ in print, so the script lists them. Each page records the juz it
+ends in, which is the juz its header names.
+
+The reader sets the text in the Complex's KFGQPC HAFS Uthmanic Script font,
+version 18 (`public/fonts/UthmanicHafs1Ver18.ttf`). Its licence
+(`public/fonts/kfgqpc-hafs-EULA.txt`) allows using, copying and distributing
+the file free of charge but not selling or changing it, so ship the file as it
+is: no subsetting and no conversion. [Quran mushaf fonts](quran-mushaf-fonts.md)
+explains why the reader does not use the page fonts that copy the print exactly.
 
 ## Layout
 
