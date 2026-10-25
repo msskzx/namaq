@@ -12,6 +12,7 @@ import type { Repetition } from '@/lib/quran/repetition';
 import { ARC_MIN, REFRAIN_MANY, type Occ } from '@/lib/quran/shifts';
 import { Card } from '../Card';
 import { NOTE, PANEL } from '../panel';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 export const VISIBLE = 20;
 const run = (at: Occ, len: number) => Object.fromEntries(Array.from({ length: len }, (_, k) => [at.word + k, 0]));
@@ -120,7 +121,7 @@ export function useRepetition() {
 
 function Status() {
   const { failed } = useContext(RepetitionContext);
-  return <p role={failed ? 'alert' : 'status'} className={NOTE}>{failed ? 'تعذر تحميل البيانات.' : 'جارٍ التحميل…'}</p>;
+  return failed ? <p role="alert" className={NOTE}>تعذر تحميل البيانات.</p> : <LoadingSpinner />;
 }
 
 export function RepetitionStats() {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp, faSitemap, faUser, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useLanguage } from '@/components/language/LanguageContext';
@@ -11,6 +11,8 @@ import Toggle from '@/components/common/Toggle';
 import NasabPlot from './NasabPlot';
 import { givenName, layoutNasab, nasabHonorific, type NasabPerson } from '@/lib/relationship/nasabLayout';
 import styles from './Nasab.module.css';
+import { useNavigatingRouter } from '@/components/common/NavigationLoader';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 const QUICK_PICKS = [
   { slug: 'prophet-muhammad', en: 'The Prophet ﷺ', ar: 'النبي ﷺ' },
@@ -28,7 +30,7 @@ interface Fetched {
 
 // See docs/plans/nasab-plot.md.
 export default function NasabView() {
-  const router = useRouter();
+  const router = useNavigatingRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { language } = useLanguage();
@@ -140,7 +142,7 @@ export default function NasabView() {
 
       {subjects.length === 0 && <p>{isArabic ? 'لم تختر أحدًا بعد.' : 'Nobody picked yet.'}</p>}
       {failed && subjects.length > 0 && <p role="alert">{isArabic ? 'تعذر تحميل النسب.' : 'Could not load the nasab.'}</p>}
-      {subjects.length > 0 && !current && !failed && <p>{isArabic ? 'جارٍ التحميل…' : 'Loading…'}</p>}
+      {subjects.length > 0 && !current && !failed && <LoadingSpinner />}
       {missing.length > 0 && (
         <p>{isArabic ? 'لا سجل لهؤلاء في الشبكة: ' : 'Not in the graph: '}{missing.join(', ')}</p>
       )}

@@ -9,6 +9,7 @@ import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { fetcher } from '@/lib/swr';
 import { reviewStatusLabel, type ClaimWithCitations } from '@/types/provenance';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 interface SubjectEvidenceAccessProps {
   kind: string;
@@ -44,7 +45,7 @@ export default function SubjectEvidenceAccess({
 
   const claims = (data?.claims ?? []).filter((claim) => !claim.field || identityFields.has(claim.field));
 
-  if (!data) return null;
+  if (!data) return <LoadingSpinner size="sm" variant="graph" className="mt-2 justify-start" />;
   if (claims.length === 0) {
     return <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">{noEvidence}</p>;
   }

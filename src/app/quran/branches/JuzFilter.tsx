@@ -1,17 +1,18 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { RotateCcw } from 'lucide-react';
 import Button from '@/components/common/Button';
 import NumberInput from '@/components/common/NumberInput';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { branchesHref, type BranchesView } from '@/lib/quran/branches';
 import { JUZ_STARTS, type JuzRange } from '@/lib/quran/juz';
+import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 
 export default function JuzFilter({ range, phrase, view }: { range: JuzRange | null; phrase: string; view: BranchesView }) {
   const { language } = useLanguage();
-  const router = useRouter();
+  const router = useNavigatingRouter();
   const pathname = usePathname();
   const params = useSearchParams();
   const route = `${pathname}?${params.toString()}`;

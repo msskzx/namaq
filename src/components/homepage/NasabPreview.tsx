@@ -9,6 +9,7 @@ import { useLanguage } from '../language/LanguageContext';
 import { NASAB_SUBJECTS } from './homeLinks';
 import styles from './Home.module.css';
 import FitDiagram from './FitDiagram';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 const FADE_ROWS = 2;
 const URL = `/api/nasab?${new URLSearchParams(NASAB_SUBJECTS.map(slug => ['person', slug]))}`;
@@ -31,7 +32,7 @@ export default function NasabPreview() {
   const crop = useMemo(() => layout && nasabCrop(layout), [layout]);
   return (
     <div className={styles.nasab}>
-      {isLoading && <p role="status">{ar ? 'جارٍ تحميل النسب…' : 'Loading the lineages…'}</p>}
+      {isLoading && <LoadingSpinner />}
       {error && <p role="alert">{ar ? 'تعذر تحميل النسب.' : 'Could not load the lineages.'}</p>}
       {layout && layout.nodes.length > 0 && (
         <div className={styles.fadeTop} style={crop ? { '--fade': `${crop.fade * 100}%` } as CSSProperties : undefined}>

@@ -1,31 +1,33 @@
 'use client';
 
 import React from 'react';
-import { LoaderCircle } from 'lucide-react';
 import { useLanguage } from '../language/LanguageContext';
+import InkLoader, { type InkLoaderVariant } from './InkLoader';
 
 interface LoadingSpinnerProps {
   size?: 'sm' | 'md' | 'lg';
   className?: string;
   fill?: boolean;
+  variant?: InkLoaderVariant;
 }
 
 function LoadingSpinner({ 
   size = 'md', 
   className = '',
   fill = false,
+  variant = 'tree',
 }: LoadingSpinnerProps) {
   const { language } = useLanguage();
   const sizeClasses = {
-    sm: 'w-4 h-4',
-    md: 'w-6 h-6',
-    lg: 'w-8 h-8',
+    sm: 'h-12',
+    md: 'h-24',
+    lg: 'h-32',
   };
 
   return (
     <div className={`flex justify-center items-center ${fill ? 'min-h-[60vh] w-full' : ''} ${className}`}>
-      <span role="status" className="text-[var(--home-accent)]">
-        <LoaderCircle aria-hidden className={`${sizeClasses[size]} motion-safe:animate-spin`} />
+      <span role="status">
+        <InkLoader variant={variant} className={fill ? 'h-56 w-auto' : `${sizeClasses[size]} w-auto`} />
         <span className="sr-only">{language === 'ar' ? 'جارٍ التحميل' : 'Loading'}</span>
       </span>
     </div>

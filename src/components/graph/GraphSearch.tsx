@@ -1,16 +1,18 @@
 'use client';
 
 import React from 'react';
-import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import { useSearchParams, usePathname } from 'next/navigation';
 import { useLanguage } from '@/components/language/LanguageContext';
 import translations from '@/components/language/translations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass, faSpinner, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faUser } from '@fortawesome/free-solid-svg-icons';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { COMPANION_TITLE_SLUG } from '@/lib/graphFilter';
 import { profilePath } from '@/lib/nodeProfile';
 import { DEFAULT_KINDS, NodeKind, subjectId } from '@/lib/relationship/types';
 import Button from '@/components/common/Button';
+import { useNavigatingRouter } from '@/components/common/NavigationLoader';
+import InkLoader from '@/components/common/InkLoader';
 
 interface Suggestion {
   id: string;
@@ -24,7 +26,7 @@ interface Suggestion {
 }
 
 export default function GraphSearch({ personOnly = false, hint }: { personOnly?: boolean; hint?: string } = {}) {
-  const router = useRouter();
+  const router = useNavigatingRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { language } = useLanguage();
@@ -167,10 +169,9 @@ export default function GraphSearch({ personOnly = false, hint }: { personOnly?:
               className="flex-1 min-w-[100px] bg-transparent border-none focus:ring-0 focus:outline-none text-gray-800 dark:text-gray-300 placeholder-gray-400 dark:placeholder-gray-200"
             />
 
-            {/* TODO Loading Spinner should show in the dropdown not in the input */}
             {isLoading && (
               <div className="absolute inset-y-0 right-3 flex items-center">
-                <FontAwesomeIcon icon={faSpinner} spin className="text-amber-500" />
+                <InkLoader variant="graph" className="h-8 w-auto" />
               </div>
             )}
           </div>

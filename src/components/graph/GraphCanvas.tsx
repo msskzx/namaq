@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState, RefObject } f
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
-import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import { useSearchParams, usePathname } from 'next/navigation';
 import type { ForceGraphMethods, NodeObject, LinkObject } from 'react-force-graph-2d';
 import { GraphNode, GraphNodeFull, GraphLink } from '@/types/graph';
 import useSWR from 'swr';
@@ -42,6 +42,7 @@ import { ALL_KINDS, DEFAULT_KINDS, NodeKind, RelationType, subjectId } from '@/l
 import { ExpansionRelationId, directRelationCounts } from '@/lib/relationship/expansion';
 import { useExplorationGraph } from './useExplorationGraph';
 import { centerTargetForReveal, isComfortablyVisible, usableRect } from '@/lib/graphCamera';
+import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 
 interface GraphCanvasProps {
   targetSlug?: string;
@@ -79,7 +80,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
   const { language } = useLanguage();
   const isDark = useTheme().resolvedTheme === 'dark';
   const t = translations[language];
-  const router = useRouter();
+  const router = useNavigatingRouter();
   const pathname = usePathname();
   // Filling the screen is what brings the controls with it: search, the
   // selected-subject actions, the filters and the node list. Out of it, a graph
@@ -643,7 +644,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
     fgRef.current.centerAt(target.x, target.y, 500);
   }, [isFullscreen, graphData, selectedSlug, viewportSize]);
 
-  if (graphLoading && !graphData) return <div className="flex items-center justify-center min-h-screen"><LoadingSpinner size="lg" /></div>;
+  if (graphLoading && !graphData) return <div className="flex items-center justify-center min-h-screen"><LoadingSpinner size="lg" variant="graph" /></div>;
   // A failed fetch leaves the exploration on screen and offers a retry beside
   // it; only a failure with nothing to show takes over the page.
   if (hasGraphError && !graphData) return <div className="flex items-center justify-center min-h-screen"><ErrorMessage title={t.graph.loadError} description={String(graphError)} /></div>;
@@ -678,7 +679,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
 
   const updatingNotice = exploration.isFetching && (
     <div role="status" className="mt-3 flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300">
-      <LoadingSpinner size="sm" />
+      <LoadingSpinner size="sm" variant="graph" />
     </div>
   );
 

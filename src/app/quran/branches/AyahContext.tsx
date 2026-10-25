@@ -9,6 +9,7 @@ import PageSpread, { MatchLegend, type SpreadMark } from '@/components/quran/Pag
 import { ayatCount, num } from '@/lib/quran/arabicNumber';
 import type { AyahContext } from '@/lib/quran/ayahContext';
 import styles from './AyahContext.module.css';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 const MAX_KEYS = 200;
 
@@ -85,7 +86,7 @@ export default function AyahContextButton({ children, ayahKeys, subject, sibling
           <div><h2 id={titleId}>{title}</h2><p className={styles.note}>{ar ? 'الآية المقصودة بارزة، وقبلها آية وبعدها آية من السورة نفسها، إن وُجدتا.' : 'The matching ayah is emphasized, with the preceding and following ayat from the same surah when available.'}</p>{differing && <p className={styles.note}>{ar ? 'النص كما ورد في كل آية.' : 'Each ayah keeps its original text.'}</p>}{several && <MatchLegend exact={exactLabel} root={rootLabel} />}</div>
           <Button size="icon" aria-label={ar ? 'إغلاق' : 'Close'} onClick={() => dialog.current?.close()}><X size={18} aria-hidden /></Button>
         </div>
-        {open && isLoading && <p role="status">{ar ? 'جارٍ تحميل الآيات…' : 'Loading ayat…'}</p>}
+        {open && isLoading && <LoadingSpinner />}
         {open && error && <div role="alert"><p>{ar ? 'تعذّر تحميل الآيات.' : 'Could not load the ayat.'}</p><Button size="sm" onClick={() => void mutate()}><RotateCcw size={16} aria-hidden />{ar ? 'إعادة المحاولة' : 'Try again'}</Button></div>}
         {spellings.length > 0 && <section className={styles.spellings} aria-labelledby={`${titleId}-marks`}>
           <h3 id={`${titleId}-marks`}>{ar ? 'الضبط في هذه العقدة' : 'Marks in this node'}</h3>

@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useSWR from "swr";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowLeft,
@@ -32,6 +32,7 @@ import type { BranchAnswer, BranchQuestion } from "@/lib/quiz/branchQuestions";
 import { parseJuzRange } from "@/lib/quran/juz";
 import type { Branch, Variant } from "@/lib/quran/branches";
 import { BranchFeedback, BranchInputs, BranchPreview, branchesCorrect, emptyBranchAnswers } from "./BranchAnswers";
+import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 
 interface QuizQuestionView {
   key: string;
@@ -81,7 +82,7 @@ function AskedAyah({ ayah }: { ayah: { text: string; reference: string } }) {
 export default function QuizzesPage() {
   const { language } = useLanguage();
   const ar = language === "ar";
-  const router = useRouter();
+  const router = useNavigatingRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const topics = useMemo(() => parseQuizTopics(searchParams) as QuizTopic[], [searchParams]);

@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
+
 import translations from '@/components/language/translations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass, faSpinner, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faUser } from '@fortawesome/free-solid-svg-icons';
 import type { Title } from '@/generated/prisma';
 import Button from '@/components/common/Button';
+import { useNavigatingRouter } from '@/components/common/NavigationLoader';
+import InkLoader from '@/components/common/InkLoader';
 
 interface PeopleSearchProps {
   titles: Title[];
@@ -33,7 +35,7 @@ export default function PeopleSearch({
   language,
 }: PeopleSearchProps) {
   const isArabic = language === 'ar';
-  const router = useRouter();
+  const router = useNavigatingRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = React.useState(search);
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
@@ -142,7 +144,7 @@ export default function PeopleSearch({
 
           {isLoading && (
             <div className="absolute inset-y-0 end-3 flex items-center">
-              <FontAwesomeIcon icon={faSpinner} spin className="text-amber-500" />
+              <InkLoader className="h-8 w-auto" />
             </div>
           )}
 
