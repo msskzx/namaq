@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render } from '@testing-library/react';
 import { branchesHref } from '@/lib/quran/branches';
 import JuzFilter from './JuzFilter';
+import { announceNavigation } from '@/components/quran/RangeFilter';
 import OpeningSearch from './OpeningSearch';
 
 const navigation = vi.hoisted(() => ({
@@ -60,6 +61,16 @@ describe('automatic juz range updates', () => {
     const explanation = container.querySelector<HTMLElement>('[role="status"], [role="alert"]');
     expect(explanation?.textContent).toMatch(/25|٢٥/);
     expect(explanation?.textContent).toMatch(/30|٣٠/);
+  });
+
+  it('drops a pending range edit when another control announces a navigation', async () => {
+    vi.useFakeTimers();
+    const { container } = render(<JuzFilter range={{ from: 25, to: 30 }} phrase="قال رب اني" view={{ grouped: true, page: 3 }} />);
+    fireEvent.change(input(container, 'juzFrom'), { target: { value: '27' } });
+    announceNavigation();
+    await vi.advanceTimersByTimeAsync(500);
+
+    expect(navigation.replace).not.toHaveBeenCalled();
   });
 
   it('uses only the latest valid range after rapid edits', async () => {

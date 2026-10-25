@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { ArrowDown01, ArrowDownWideNarrow } from 'lucide-react';
 import Segmented from '@/components/common/Segmented';
+import { announceNavigation } from '@/components/quran/RangeFilter';
 import { num } from '@/lib/quran/arabicNumber';
 import type { SurahGroup } from '@/lib/quran/surahPairs';
 import { surahMatch } from '@/lib/quran/surahSearch';
@@ -30,7 +31,10 @@ export function SurahPairs({ groups, names, tab, query, surah, a, b }: { groups:
     if (box && search) box.scrollTop = 0;
     else if (box && row) box.scrollTop = row.getBoundingClientRect().top - box.getBoundingClientRect().top + box.scrollTop - box.clientHeight / 3;
   }, [surah, a, b, mode, search]);
-  const go = (href: string) => router.push(href, { scroll: false });
+  const go = (href: string) => {
+    announceNavigation();
+    router.push(href, { scroll: false });
+  };
   const sorted = (byNumber ? groups : [...groups].sort((p, q) => q.total - p.total || p.surah - q.surah)).filter(g => surahMatch(search, g.surah, names[g.surah] ?? '') !== null);
   const open = (s: number) => (surah === null ? s === a || s === b : s === surah);
   const unit = mode === 'themes' ? 'موضوع مشترك' : 'آية متشابهة';
@@ -60,7 +64,7 @@ export function SurahPairs({ groups, names, tab, query, surah, a, b }: { groups:
                 <ul className="border-t border-[var(--home-rule)] p-1">
                   {g.self > 0 && mode === 'text' && (
                     <li>
-                      <button type="button" data-range-navigation className={ROW} aria-current={surah === g.surah} onClick={() => go(surahHref(g.surah, query))}>
+                      <button type="button" className={ROW} aria-current={surah === g.surah} onClick={() => go(surahHref(g.surah, query))}>
                         <span className="flex-1">داخل السورة</span>
                         <span className={COUNT}>{num(g.self)}</span>
                       </button>
@@ -69,7 +73,7 @@ export function SurahPairs({ groups, names, tab, query, surah, a, b }: { groups:
                   {g.total === 0 && <li className={`${NOTE} px-2 py-1`}>{mode === 'themes' ? 'لا مواضيع مشتركة مع سورة أخرى.' : 'لا آيات متشابهة.'}</li>}
                   {g.partners.map(p => (
                     <li key={p.other}>
-                      <button type="button" data-range-navigation className={ROW} aria-current={surah === null && ((g.surah === a && p.other === b) || (g.surah === b && p.other === a))}
+                      <button type="button" className={ROW} aria-current={surah === null && ((g.surah === a && p.other === b) || (g.surah === b && p.other === a))}
                         onClick={() => go(pairHref(tab, g.surah, p.other, query))}>
                         <span className="flex-1">{`و${names[p.other]}`}</span>
                         <span className={COUNT}>{num(p.count)}</span>

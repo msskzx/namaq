@@ -2,6 +2,7 @@
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { NAVIGATING } from '@/components/quran/RangeFilter';
 import PairForm from './PairForm';
 
 const push = vi.fn();
@@ -17,10 +18,14 @@ const a = { surah: 56, from: 1, to: 96, max: 96 };
 const b = { surah: 69, from: 1, to: 52, max: 52 };
 
 describe('PairForm', () => {
-  it('goes to the new ayah range at once, keeping the tab and range', () => {
+  it('goes to the new ayah range at once, keeping the tab and range, and tells a pending range edit to stand down', () => {
+    const heard = vi.fn();
+    document.addEventListener(NAVIGATING, heard);
     render(<PairForm surahs={surahs} a={a} b={b} ayat keep={{ view: 'ayat', juzFrom: '25' }} />);
     fireEvent.click(screen.getByRole('button', { name: 'زيادة من آية (الأولى)' }));
     expect(push).toHaveBeenCalledWith('/quran/compare?a=56&b=69&af=2&at=96&bf=1&bt=52&view=ayat&juzFrom=25', { scroll: false });
+    expect(heard).toHaveBeenCalledTimes(1);
+    document.removeEventListener(NAVIGATING, heard);
   });
 
   it('drops the old ayah range of a side whose surah changes, and of a side set to all', () => {
@@ -40,6 +45,8 @@ describe('PairForm', () => {
     expect(screen.queryByRole('spinbutton')).toBeNull();
     expect(screen.getByText('سورة 56 · سورة 69')).toBeTruthy();
     rerender(<PairForm surahs={surahs} a={{ ...a, surah: 16 }} b={{ ...b, surah: 43 }} ayat={false} keep={{ mode: 'themes' }} />);
-    expect((screen.getByRole('combobox', { name: 'السورة الأولى' }).parentElement!.querySelector('input[type=hidden]') as HTMLInputElement).value).toBe('16');
+    const combo = screen.getByRole('combobox', { name: 'السورة الأولى' }) as HTMLInputElement;
+    expect((combo.parentElement!.querySelector('input[type=hidden]') as HTMLInputElement).value).toBe('16');
+    expect(combo.value).toBe('١٦. سورة 16');
   });
 });

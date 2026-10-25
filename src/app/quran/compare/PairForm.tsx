@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { ChevronDown, Expand } from 'lucide-react';
 import Button from '@/components/common/Button';
 import NumberInput from '@/components/common/NumberInput';
+import { announceNavigation } from '@/components/quran/RangeFilter';
 import { num } from '@/lib/quran/arabicNumber';
 import { NOTE } from '../panel';
 import SurahPicker from './SurahPicker';
@@ -34,13 +35,14 @@ export default function PairForm({ surahs, a, b, ayat, keep }: { surahs: Surah[]
       params.set(`${key}t`, String(next[key].to));
     }
     for (const [key, value] of Object.entries(keep)) params.set(key, value);
+    announceNavigation();
     router.push(`/quran/compare?${params}`, { scroll: false });
   };
   const side = (key: 'a' | 'b', title: string, which: string) => {
     const s = pair[key];
     const set = (patch: Partial<Side>, whole = false) => apply({ ...pair, [key]: { ...s, ...patch } }, { [key]: whole });
     return (
-      <fieldset data-range-navigation className="flex flex-wrap items-center gap-2">
+      <fieldset className="flex flex-wrap items-center gap-2">
         <legend className="sr-only">{title}</legend>
         <SurahPicker name={key} label={title} value={s.surah} surahs={surahs.map(x => ({ number: x.number, name: x.name }))} onChange={surah => set({ surah }, true)} />
         {ayat && (

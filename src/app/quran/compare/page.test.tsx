@@ -71,6 +71,12 @@ describe('QuranComparePage', () => {
     cleanup();
     await page({ juzFrom: '27', juzTo: '29', a: '56' });
     expect(JSON.parse(screen.getByTestId('list').textContent!)).toMatchObject({ a: 56, b: 69 });
+    cleanup();
+    await page({ a: '69' });
+    expect(JSON.parse(screen.getByTestId('list').textContent!)).toMatchObject({ a: 69, b: 56 });
+    cleanup();
+    await page({ b: '56' });
+    expect(JSON.parse(screen.getByTestId('list').textContent!)).toMatchObject({ a: 69, b: 56 });
   });
 
   it('marks the ayah-by-ayah tab, and no tab inside one surah', async () => {

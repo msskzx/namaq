@@ -7,6 +7,9 @@ import Button from '@/components/common/Button';
 import NumberInput from '@/components/common/NumberInput';
 import type { JuzRange } from '@/lib/quran/juz';
 
+export const NAVIGATING = 'range-filter:navigating';
+export const announceNavigation = () => document.dispatchEvent(new Event(NAVIGATING));
+
 export type RangeLabels = { from: string; to: string; all: string; form: string; invalid: (range: JuzRange) => string };
 
 export default function RangeFilter({ range, max, names, href, labels }: { range: JuzRange | null; max: number; names: [string, string]; href: (range?: JuzRange) => string; labels: RangeLabels }) {
@@ -70,8 +73,13 @@ export default function RangeFilter({ range, max, names, href, labels }: { range
     };
     document.addEventListener('keydown', keyboardNavigation, true);
     document.addEventListener('click', navigating, true);
+    const elsewhere = () => {
+      cancel();
+      editedAt.current = null;
+    };
     window.addEventListener('popstate', cancel);
-    return () => { document.removeEventListener('keydown', keyboardNavigation, true); document.removeEventListener('click', navigating, true); window.removeEventListener('popstate', cancel); cancel(); };
+    document.addEventListener(NAVIGATING, elsewhere);
+    return () => { document.removeEventListener('keydown', keyboardNavigation, true); document.removeEventListener('click', navigating, true); window.removeEventListener('popstate', cancel); document.removeEventListener(NAVIGATING, elsewhere); cancel(); };
   }, []);
 
   const update = (index: number, value: string) => {

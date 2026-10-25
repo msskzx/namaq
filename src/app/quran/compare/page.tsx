@@ -46,8 +46,9 @@ export default async function QuranComparePage({ searchParams }: { searchParams:
     tab === 'themes' ? getTopicSurahPairs((surah, ayah) => ayahInRange(surah, ayah, range)) : similarSurahPairs(range),
   ]);
   const [topA, topB] = range.range && query.a === undefined && query.b === undefined ? topPair(pairs) ?? [] : [];
-  const a = surahOf(query.a) ?? topA ?? (themes ? 16 : 56);
-  const b = surahOf(query.b) ?? topB ?? (themes ? 43 : 69);
+  const [first, second] = themes ? [16, 43] : [56, 69];
+  const a = surahOf(query.a) ?? topA ?? (surahOf(query.b) === first ? second : first);
+  const b = surahOf(query.b) ?? topB ?? (a === second ? first : second);
   const shown = { ...query, a: String(a), b: String(b) };
   const names = Object.fromEntries(surahs.map(x => [x.number, plainName(x.name)]));
   const strings = Object.fromEntries(Object.entries(query).flatMap(([key, value]) => (typeof value === 'string' ? [[key, value]] : [])));
