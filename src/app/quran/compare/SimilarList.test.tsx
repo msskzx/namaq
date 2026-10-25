@@ -6,7 +6,6 @@ import { LanguageProvider } from '@/components/language/LanguageContext';
 import type { SimilarPair } from '@/lib/quran/similar';
 import type { Passage } from '@/lib/quran/passages';
 import { passageOf, SimilarList, VISIBLE } from './SimilarList';
-import spread from '@/components/quran/PageSpread.module.css';
 
 afterEach(cleanup);
 
@@ -21,20 +20,19 @@ describe('SimilarList', () => {
     expect(screen.getByRole('article', { name: 'المدثر ٥٤–٥٥' })).toBeTruthy();
     expect(screen.getByRole('article', { name: 'عبس ١١–١٢' })).toBeTruthy();
     const marks = [...document.querySelectorAll('article mark')];
-    expect(marks.find(m => m.textContent === 'تَذۡكِرَةࣱ')!.className).not.toContain(spread.root);
-    expect(marks.find(m => m.textContent === 'إِنَّهَا')!.className).toContain(spread.root);
+    expect(marks.find(m => m.textContent === 'تَذۡكِرَةࣱ')!.getAttribute('title')).toContain('يقابلها:');
+    expect(marks.find(m => m.textContent === 'إِنَّهَا')!.getAttribute('title')).toContain('من جذر مشترك بلفظ مختلف');
     expect(screen.getByRole('link', { name: /آية بآية/ }).getAttribute('href')).toBe('/quran/compare?a=74&af=54&at=55&b=80&bf=11&bt=12&view=ayat');
     expect(screen.getByText('تقارب ١٠٠٪')).toBeTruthy();
   });
 
-  it('names what a marked word answers on the other side, and underlines a same word whose partner shares only its root', () => {
+  it('names all counterparts, including a partner with different wording from the same root', () => {
     const linked: SimilarPair = { ...pair, marksA: [[54, 2, 0, 'ذكر']], marksB: [[11, 2, 0, 'ذكر'], [12, 2, 1, 'ذكر']] };
     show([linked]);
     const marks = [...document.querySelectorAll('mark')];
     const a = marks.find(m => m.textContent === 'تَذۡكِرَةࣱ' && m.title.includes('عبس'))!;
     expect(a.title).toBe('يقابلها: تَذۡكِرَةࣱ (عبس ١١)، ذَكَرَهُۥ (عبس ١٢)');
-    expect(a.className).toContain(spread.linked);
-    expect(marks.find(m => m.title.includes('المدثر'))!.className ?? '').not.toContain(spread.linked);
+    expect(marks.find(m => m.textContent === 'ذَكَرَهُۥ')!.title).toContain('من جذر مشترك بلفظ مختلف');
   });
 
   it('shows the first rows and the rest on request', () => {

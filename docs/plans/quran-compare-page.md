@@ -1,89 +1,19 @@
-# Quran compare page
+# Quran comparison decisions
 
-Status: built at `/quran/compare`. Builds on [the relations page](quran-relations-page.md).
+`/quran/compare` compares wording or topics. Similar ayat are the default text view; `view=ayat` requests positional alignment. [Similar ayat](quran-similar-ayat.md) records why those views remain distinct.
 
-The page sets two surahs side by side, Al-Waqi'ah and Al-Haqqah by default, and
-`?a=7&b=26` picks any pair. `af`, `at`, `bf` and `bt` pick the first and last
-ayah of each side (the whole surah by default, clamped to the surah and with
-from at or below to), so one surah can be compared with itself, as in
-`?a=55&af=46&at=61&b=55&bf=62&bt=77`. Alignment runs on the two slices and every
-card keeps its real ayah number. It reads the stored `Ayah` rows on each request, so
-it needs no table, migration or generated file.
+## Alignment
 
-## How the pairs are found
+- Use the stored Hafs text for display. Morphology supplies comparison keys, not replacement text. Where corpus and stored word boundaries disagree, fall back to the ayah's normalized letters.
+- A root match can connect different wording; preserve that distinction from an exact word match. A shared word can change position without ceasing to be shared.
+- Preserve order when aligning ayat. Repeated formulas can produce ambiguous pairings; the diagonal preference preserves parallel refrains instead of chasing an isolated longer phrase. Its weight is a heuristic, not an interpretation.
+- Selected equal-length ranges align positionally, even where the text does not match. The separate end-of-surah alignment also counts positions and must say so. A single shared word is visible but cannot establish an anchor.
+- Render an ayah once beside all its counterparts. Distinguish the links and retain the root-match cue. Unmatched passages remain available through disclosure.
 
-`src/lib/quran/compare.ts` works on one token per word. A word the morphology
-corpus tags as a noun, verb, adjective or proper noun is its root, any other word
-with a lemma is that lemma, and a word made only of prepositions, conjunctions,
-the article or pronouns (من, له) is its normalized letters (see `normalize.ts`). So ولأصلبنكم meets
-لأصلبنكم and سحّار meets ساحر, as they do in the similar list. The tokens come
-from `wordKeys.json`, which `npm run quran:similar` writes beside `similar.json`
-with the same rules (`wordKey` in `similar.ts`). In the 13 ayat where the stored
-text splits words differently from the corpus, the ayah falls back to its letters. A numbered
-lemma (إذا2) loses its number, since the corpus numbers homographs that are the
-same word here.
+Numerical thresholds, scoring and grouping belong in `src/lib/quran/compare.ts`, with regression examples beside it. Do not maintain a second algorithm specification here.
 
-1. Each pair of ayat scores the square of its longest run of shared words, and
-   only runs of two words or more score.
-2. An order-preserving dynamic program picks the highest-scoring set of pairs
-   that never crosses itself. These are the anchors. An anchor with a run of
-   four words or more that sits within five ayat of an earlier anchor on the
-   same diagonal (same offset between the two surahs) scores 32 extra, so a
-   refrain repeated at a fixed offset keeps its parallel alignment instead of
-   shifting to chase one longer shared phrase. Al-Rahman 46-61 against 62-77
-   comes out as sixteen pairs in step; without the bonus it shifted by two.
-   Afterwards, a pair with a run of four or more that is next to an anchor on
-   one side (the same ayah on one side, the neighbouring ayah on the other) and
-   keeps the order is added as a second link, so 57:1 and 57:2 both pair with
-   64:1.
-3. Consecutive anchors join one block when both surahs step the same number of
-   ayat between them and that number is five or fewer. A block stays if it has
-   two anchors, or one anchor whose run is four words or more. When the reader
-   has narrowed either side to an ayah range, one anchor of any run is enough,
-   since the reader asked about those ayat. When the reader has narrowed both
-   sides and the two ranges are the same length, every ayah is paired in step with its partner, matched or not.
-4. Every ayah between a block's first and last anchor is paired in step with its
-   partner. A pair that shares no word says so. A block also takes the ayah
-   just before its first anchor when it shares a word with its partner (55:46
-   with 55:62 share «جنتان»), unless an earlier block already holds it.
-5. The last five ayat of each surah form a separate block aligned by count. It
-   claims nothing from the text, and each pair in it shows what it shares. Anchors
-   that fall in those ayat belong to it, and the rest of their block stays. When
-   either side is a range the count block is left out.
-6. Ayat between blocks collapse into one row with both counts.
+## Reading and state
 
-Words the two ayat share are colored, from the same word alignment the
-relations page uses, run on the tokens. A word that alignment leaves out still
-matches a free word with the same token on the other side, so قالوا counts when
-it swaps places with فرعون (26:41 and 7:113). A matched word whose letters differ from
-its partner's (ولأصلبنكم against لأصلبنكم) also gets a dotted underline. A pair
-with no shared word colors nothing.
+The URL owns the selected surahs, ayah ranges and comparison view. Resetting one range preserves the other range and current view. Choosing a range within one surah is valid; an identical selection on both sides asks the reader to choose different passages.
 
-An ayah is shown once. When it has several counterparts, the pairs that share
-an ayah form a group: one card on that side, the counterparts stacked on the
-other (side by side on a wide screen, one after the other on a phone). Each link
-gets a text color (amber, sky, emerald, rose, violet), used for the shared words
-on both the single card and the counterpart; a word shared with two links takes
-the first link's color. A group of one link is amber, as before.
-
-## Known limits
-
-- A repeated formula pairs with one of its occurrences. The diagonal bonus keeps a
-  steady offset but the constant 32 was set by hand on three pairs of surahs.
-- Aligning 2 with 3 (286 by 200 ayat) takes about 140 ms, almost all of it the
-  run table, which the extra links and the bonus barely touch.
-- The thresholds (two words, five ayat, four-word run) are per pair of ayat and
-  are printed on the page.
-- A single shared word is shown but never anchors a pair.
-
-## Pinned results
-
-On the stored text: 56:75-80 with 69:38-43 (56:80 and 69:43 share
-«تنزيل من رب العالمين»), and the count block 56:92-96 with 69:48-52, where only
-56:96 and 69:52 share a phrase («فسبح باسم ربك العظيم»). A fixture of surahs 56,
-69, 15 and 38 sits beside the tests; 15:28-40 with 38:71-83 comes out as a block.
-
-Also pinned: 57:1 and 57:2 both pair with 64:1 and 64:1 is shown once; 7 with 26
-gains only 7:123 and 7:124 against 26:49; 15 with 38 gains nothing; 55:46-61 with
-55:62-77 gives sixteen pairs in step, 46 with 62 through 61 with 77. The fixture
-also holds surahs 7, 26, 55, 57 and 64.
+Keep the original Arabic text when interface language changes. Share PageSpread with other Quran views. Matching explanations can collapse; the unreviewed status stays visible. The [theme guide](../palette.md) owns color meanings.

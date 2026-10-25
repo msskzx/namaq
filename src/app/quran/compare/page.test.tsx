@@ -4,6 +4,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
 import QuranComparePage from './page';
 
+vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
+
 const redirect = vi.hoisted(() => vi.fn((url: string) => { throw new Error(`redirect ${url}`); }));
 vi.mock('next/navigation', () => ({ redirect, useRouter: () => ({ push: () => {} }) }));
 vi.mock('./TextCompare', () => ({ default: () => <div data-testid="text" /> }));

@@ -11,6 +11,7 @@ import { prisma } from '@/lib/prisma';
 import { plainName } from '@/lib/quran/normalize';
 import { groupBySurah } from '@/lib/quran/surahPairs';
 import { getTopicSurahPairs } from '@/lib/quran/topicEngine';
+import styles from '@/components/common/PaperPage.module.css';
 
 export const dynamic = 'force-dynamic';
 
@@ -39,7 +40,7 @@ export default async function QuranComparePage({ searchParams }: { searchParams:
 
   return (
     <RepetitionProvider>
-      <div dir="rtl" className="w-full p-4 grid lg:grid-cols-[20rem_minmax(0,1fr)] gap-4 items-start text-gray-900 dark:text-gray-200">
+      <div dir="rtl" className={`${styles.page} w-full max-w-[100rem] mx-auto p-4 grid lg:grid-cols-[18rem_minmax(0,1fr)] gap-6 items-start`}>
         <div className="order-last lg:order-none">
           <SurahPairs groups={groupBySurah(pairs, surahs.map(x => x.number))} names={names} mode={themes && s === null ? 'themes' : 'text'} surah={s} a={a} b={b} />
         </div>

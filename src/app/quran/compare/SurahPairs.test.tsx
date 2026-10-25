@@ -5,6 +5,8 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import { groupBySurah } from '@/lib/quran/surahPairs';
 import { SurahPairs } from './SurahPairs';
 
+vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
+
 const push = vi.fn();
 vi.mock('next/navigation', () => ({ useRouter: () => ({ push }) }));
 

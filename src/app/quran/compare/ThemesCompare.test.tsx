@@ -3,6 +3,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
 import ThemesCompare from './ThemesCompare';
 
+vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
+
 vi.mock('@/lib/prisma', () => ({
   prisma: {
     ayah: { findMany: async () => [] },

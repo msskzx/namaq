@@ -1,17 +1,10 @@
-import { faCodeCompare, faExpand, faListOl, faWaveSquare } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Button from '@/components/common/Button';
-import NumberInput from '@/components/common/NumberInput';
 import { prisma } from '@/lib/prisma';
-import { alignSurahs, clampRange, compareHref, wordTokens } from '@/lib/quran/compare';
+import { alignSurahs, clampRange, wordTokens } from '@/lib/quran/compare';
 import { ayahWords } from '@/lib/quran/normalize';
 import CompareView from './CompareView';
-import CompareModeToggle from './CompareModeToggle';
+import CompareControls, { DifferentSelection } from './CompareControls';
 import SimilarAyat from './SimilarAyat';
-import SurahPicker from './SurahPicker';
-import { viewHref } from './modeHref';
 import wordKeys from './wordKeys.json';
-import { NOTE, PANEL } from '../panel';
 
 const plainName = (name: string) => name.replace(/[ً-ٟـٰۖ-ۭ]/g, '').replace(/ٱ/g, 'ا');
 const pick = (value: string | string[] | undefined, fallback: number) => {
@@ -38,43 +31,12 @@ export default async function TextCompare({ query }: { query: Record<string, str
   const nameOf = (n: number) => plainName(surahs.find(s => s.number === n)?.name ?? '');
   const rawName = (n: number) => surahs.find(s => s.number === n)?.name ?? '';
 
-  const ayahInput = (name: string, value: number, max: number, label: string, text: string) => (
-    <span className={`${NOTE} flex items-center gap-1`}>
-      {text}
-      <NumberInput name={name} label={label} defaultValue={value} min={1} max={max} />
-    </span>
-  );
-  const side = (key: 'a' | 'b', value: number, r: typeof ra, max: number, title: string, all: string) => (
-    <fieldset className="flex flex-wrap items-center gap-2">
-      <legend className="sr-only">{title}</legend>
-      <SurahPicker name={key} label={title} value={value} surahs={surahs.map(s => ({ number: s.number, name: plainName(s.name) }))} />
-      <div className="flex items-center gap-2">
-        {ayahInput(`${key}f`, r.from, max, `من آية (${key === 'a' ? 'الأولى' : 'الثانية'})`, 'من')}
-        {ayahInput(`${key}t`, r.to, max, `إلى آية (${key === 'a' ? 'الأولى' : 'الثانية'})`, 'إلى')}
-        <Button size="sm" href={all} aria-label={`الكل: آيات ${title}`} className="shrink-0">
-          <FontAwesomeIcon icon={faExpand} />
-          الكل
-        </Button>
-      </div>
-    </fieldset>
-  );
-
   const ayat = query.view === 'ayat';
 
   return (
     <div className="flex flex-col gap-4">
-      <form key={[a, ra.from, ra.to, b, rb.from, rb.to].join()} method="get" className={`${PANEL} flex flex-col gap-3`}>
-        <CompareModeToggle on={ayat} offHref={viewHref(false, query)} onHref={viewHref(true, query)} offLabel="المتشابه" onLabel="آية بآية" label="المقارنة آية بآية"
-          offIcon={<FontAwesomeIcon icon={faWaveSquare} className="size-3" />} onIcon={<FontAwesomeIcon icon={faListOl} className="size-3" />} />
-        {ayat && <input type="hidden" name="view" value="ayat" />}
-        {side('a', a, ra, wordsA.length, 'السورة الأولى', compareHref(a, { from: 1, to: wordsA.length }, b, rb))}
-        {side('b', b, rb, wordsB.length, 'السورة الثانية', compareHref(a, ra, b, { from: 1, to: wordsB.length }))}
-        <Button type="submit" variant="primary" className="w-fit">
-          <FontAwesomeIcon icon={faCodeCompare} />
-          قارن
-        </Button>
-      </form>
-      {!ayat ? <SimilarAyat surah={a} other={b} ranges={whole ? undefined : { a: ra, b: rb }} /> : a === b && ra.from === rb.from && ra.to === rb.to ? <p className={NOTE}>اختر مقطعين مختلفين.</p> : <CompareView
+      <CompareControls surahs={surahs.map(s => ({ number: s.number, name: plainName(s.name) }))} a={{ number: a, range: ra, count: wordsA.length }} b={{ number: b, range: rb, count: wordsB.length }} query={query} />
+      {!ayat ? <SimilarAyat surah={a} other={b} ranges={whole ? undefined : { a: ra, b: rb }} /> : a === b && ra.from === rb.from && ra.to === rb.to ? <DifferentSelection /> : <CompareView
         a={{ number: a, name: rawName(a), plain: nameOf(a), words: wordsA.map(w => w.display.join(' ')), range: whole ? undefined : ra }}
         b={{ number: b, name: rawName(b), plain: nameOf(b), words: wordsB.map(w => w.display.join(' ')), range: whole ? undefined : rb }}
         rows={alignSurahs(slice(wordsA, ra).map(w => w.tokens), slice(wordsB, rb).map(w => w.tokens), { a: ra.from, b: rb.from }, whole, [ra.from > 1 || ra.to < wordsA.length, rb.from > 1 || rb.to < wordsB.length].every(Boolean),
