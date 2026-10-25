@@ -4,6 +4,7 @@ import React, { useId } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import useSWR from 'swr';
+import { ArrowLeftRight } from 'lucide-react';
 import { fetcher } from '@/lib/swr';
 import Toggle from '@/components/common/Toggle';
 import { useLanguage } from '@/components/language/LanguageContext';
@@ -39,8 +40,8 @@ function SurroundSwitch({ on, onChange, loading = false, failed = false }: Toggl
   const label = ar ? 'الآيات المحيطة' : 'Surrounding ayat';
   return (
     <span className="inline-flex items-center gap-2 text-sm text-[var(--home-ink)]">
-      <Toggle id={id} checked={on} label={label} onChange={onChange} />
-      <label htmlFor={id} className="cursor-pointer">{label}</label>
+      <Toggle id={id} checked={on} label={label} onChange={onChange} onIcon={<ArrowLeftRight className="size-3" />} />
+      <label htmlFor={id} className={`cursor-pointer ${on ? 'font-semibold text-[var(--home-accent)]' : 'text-[var(--home-muted)]'}`}>{label}</label>
       {on && loading && <span role="status" className="text-xs text-[var(--home-muted)]">{ar ? 'جارٍ التحميل…' : 'Loading…'}</span>}
       {on && failed && <span role="alert" className="text-xs text-[var(--home-accent)]">{ar ? 'تعذّر تحميل الآيات.' : 'Could not load the ayat.'}</span>}
     </span>

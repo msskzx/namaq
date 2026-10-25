@@ -162,6 +162,32 @@ describe('BranchTree', () => {
     expect(params.get('q')).toBe('13:25,2:27');
   });
 
+  it('opens the overlay from anywhere in a node box, but not from its links, the overlay itself or selected text', () => {
+    render(<BranchTree tree={tree} names={{}} pages={{ '15:45': 265, '44:51': 498, '51:15': 521 }} />);
+    const leafText = screen.getByText('مَقَامٍ أَمِينٍۢ');
+    const box = leafText.closest('div')!;
+    const dialog = box.querySelector('dialog')!;
+    fireEvent.click(dialog);
+    expect(dialog.open).toBe(false);
+    vi.spyOn(window, 'getSelection').mockReturnValueOnce({ toString: () => 'مَقَامٍ' } as Selection);
+    fireEvent.click(leafText);
+    expect(dialog.open).toBe(false);
+    fireEvent.click(leafText);
+    expect(dialog.open).toBe(true);
+    const rootBox = screen.getByText('إِنَّ ٱلْمُتَّقِينَ فِى').closest('div')!;
+    fireEvent.click(rootBox);
+    expect(rootBox.querySelector('dialog')!.open).toBe(true);
+  });
+
+  it('follows a subtree link instead of opening the overlay', () => {
+    const nested = { words: ['إِنَّ'], ayat: [], children: [{ ...tree, words: ['ٱلْمُتَّقِينَ'] }, { words: ['ٱللَّهَ'], ayat: ['2:20'], children: [] }] };
+    render(<BranchTree tree={nested} names={{}} pages={{}} />);
+    const link = screen.getByRole('link', { name: 'ٱلْمُتَّقِينَ' });
+    link.addEventListener('click', event => event.preventDefault());
+    fireEvent.click(link);
+    expect(link.closest('div')!.querySelector('dialog')!.open).toBe(false);
+  });
+
   it('names each inner button after its node and highlights differing marks of a nested node at its own offset', () => {
     const merged = { words: ['قال', 'نُوحًا'], ayat: [], forms: { '57:26': ['قال', 'نُوحًۭا'], '7:59': ['قال', 'نُوحًا'] }, children: [
       { words: ['رب'], ayat: ['7:59'], children: [] },
@@ -204,6 +230,13 @@ describe('BranchTree', () => {
     beforeEach(() => {
       replace.mockReset();
       vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => around }));
+    });
+
+    it('draws the switch with one icon and one label', () => {
+      render(<BranchTree tree={tree} names={names} pages={pages} surround={{ on: false }} />);
+      const toggle = screen.getByRole('switch', { name: 'الآيات المحيطة' }).closest('label')!;
+      expect(toggle.querySelectorAll('svg')).toHaveLength(1);
+      expect(screen.getAllByText('الآيات المحيطة')).toHaveLength(1);
     });
 
     it('has no switch unless the page asks for one', () => {

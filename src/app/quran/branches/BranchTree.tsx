@@ -5,13 +5,14 @@ import Link from 'next/link';
 import { num } from '@/lib/quran/arabicNumber';
 import { ayahEnds, branchesHref, keys, linkId, spell, type Branch, type BranchesView, type Variant } from '@/lib/quran/branches';
 import type { JuzRange } from '@/lib/quran/juz';
-import AyahContextButton from './AyahContext';
+import AyahContextButton, { openFromNode } from './AyahContext';
 import { anchorOf, NeighbourBox, SurroundToggle, surroundStyle, useSurrounding, type Around } from './Surroundings';
 
 type Props = { view?: BranchesView; tree: Branch; names: Record<number, string>; pages: Record<string, number>; variants?: Variant[]; showSpellings?: boolean; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; surround?: { on: boolean; sync?: boolean } };
 type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header' | 'surround'> & { around?: Around; anchors?: string; node: Branch; parent?: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
 
 const LINE = 'border-[var(--home-rule)]';
+const OPENS = 'has-[[data-context-open]]:cursor-pointer';
 export const TONE: Record<string, string> = {
   '': 'border-[var(--home-muted)] text-[var(--home-ink)]',
   و: 'border-[var(--home-green)] text-[var(--home-green)]',
@@ -66,7 +67,7 @@ function Node({ node, parent, path, names, pages, tags, lead, juz, renderNode, i
   });
   return (
     <div className="flex items-center">
-      {(!root || shownWords.length > 0 || node.ayat.length > 0) && <div data-keys={around ? keys(node).join(' ') : undefined} className={`shrink-0 rounded border px-3 py-1.5 ${node.children.length === 0 ? 'max-w-sm' : 'max-w-xs'} ${root ? 'border-[var(--home-accent)] bg-[var(--home-paper-deep)] text-xl' : 'border-[var(--home-rule)] bg-[var(--home-paper)] text-lg'}`}>
+      {(!root || shownWords.length > 0 || node.ayat.length > 0) && <div data-keys={around ? keys(node).join(' ') : undefined} onClick={openFromNode} className={`${OPENS} shrink-0 rounded border px-3 py-1.5 ${node.children.length === 0 ? 'max-w-sm' : 'max-w-xs'} ${root ? 'border-[var(--home-accent)] bg-[var(--home-paper-deep)] text-xl' : 'border-[var(--home-rule)] bg-[var(--home-paper)] text-lg'}`}>
         {anchors && node.ayat.map(key => <span key={key} data-anchor id={anchorOf(anchors, key)} />)}
         {renderNode && !root ? renderNode(node, indices.get(node)!, tags) : <><Marked node={node} ayahKeys={keys(node)} subject={(root ? shownWords : node.words).join(' ')} siblings={node.children.length === 0 && parent ? keys(parent) : undefined} names={names} offset={path.length} leaf={node.children.length === 0} skip={root ? lead : 0} enabled={showSpellings} references={node.ayat.length > 0 && <AyahRefs keys={node.ayat} names={names} pages={pages} tags={tags} linked={node.children.length > 0} className="" />}>{root || node.children.length === 0 ? <span className="font-arabic leading-loose">{shownWords.join(' ')}</span> : (
           <Link href={branchesHref(linkId(words, keys(node).flatMap(key => (tags[key] ? [tags[key].conj] : []))), juz, { ...view, partition: node.partition })} className="font-arabic leading-loose hover:text-[var(--home-accent)] hover:underline">{node.words.join(' ')}</Link>
@@ -142,7 +143,7 @@ export default function BranchTree({ tree, names, pages, variants = [], showSpel
                   <span aria-hidden data-line data-keys={around ? variant.keys.join(' ') : undefined} className={`absolute end-0 top-1/2 w-6 border-t-2 ${LINE}`} />
                   <span aria-hidden className={`absolute end-0 border-e-2 ${LINE} ${i === 0 ? 'top-1/2' : 'top-0'} ${i === variants.length - 1 ? 'bottom-1/2' : 'bottom-0'}`} />
                   <BeforeFan ayahKeys={variant.keys} around={around} />
-                  <div data-keys={around ? variant.keys.join(' ') : undefined} className={`shrink-0 rounded border-2 bg-[var(--home-paper)] px-3 py-1.5 text-xl font-arabic leading-loose ${TONE[variant.conj]}`}>
+                  <div data-keys={around ? variant.keys.join(' ') : undefined} onClick={openFromNode} className={`${OPENS} shrink-0 rounded border-2 bg-[var(--home-paper)] px-3 py-1.5 text-xl font-arabic leading-loose ${TONE[variant.conj]}`}>
                     <Marked node={variant} ayahKeys={variant.keys} subject={variant.word} siblings={variants.flatMap(other => other.keys)} names={names} enabled={showSpellings}>
                       {!renderNode ? <Link href={branchesHref(variant.id, juz ?? undefined, { ...view, spelling: spell(variant.word), partition: variant.partition })} className="hover:underline">{variant.word}</Link> : variant.word}
                     </Marked>
