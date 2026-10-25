@@ -1,6 +1,7 @@
 // docs/plans/quran-shared-openings.md
 import wordKeys from '@/app/quran/compare/wordKeys.json';
 import { readerAyat, spell, type BranchAyah } from './branches';
+import { mushafPages } from './readerPage';
 import { wordTokens } from './compare';
 import { normalizeWord } from './normalize';
 
@@ -14,8 +15,9 @@ export function isAyahKey(key: string) {
 }
 
 export function loadReaderAyat(): Promise<BranchAyah[]> {
-  return source ??= Promise.all(Array.from({ length: 604 }, (_, i) => import(`../../app/quran/read/data/${i + 1}.json`)))
-    .then(pages => readerAyat(pages.map(page => page.default)))
+  const all = <T,>(load: (page: number) => Promise<T>) => Promise.all(Array.from({ length: 604 }, (_, i) => load(i + 1)));
+  return source ??= Promise.all([all(page => import(`../../app/quran/read/data/${page}.json`)), all(page => import(`../../app/quran/read/mushaf/${page}.json`))])
+    .then(([pages, mushaf]) => readerAyat(pages.map(page => page.default), mushafPages(mushaf.map(page => page.default))))
     .catch(error => { source = undefined; throw error; });
 }
 

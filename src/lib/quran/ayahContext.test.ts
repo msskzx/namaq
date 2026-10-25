@@ -48,8 +48,8 @@ describe('loadReaderAyat', () => {
     expect(crossPage.ayah).toMatchObject({ key: '2:142', page: 22 });
     expect(crossPage.after).toMatchObject({ key: '2:143', page: 22 });
     const [first, second] = ayahContexts(all, ['94:6', '94:5']);
-    expect(first.ayah).toEqual({ key: '94:5', page: 596, words: ['فَإِنَّ', 'مَعَ', 'ٱلْعُسْرِ', 'يُسْرًا'] });
-    expect(second.ayah).toEqual({ key: '94:6', page: 596, words: ['إِنَّ', 'مَعَ', 'ٱلْعُسْرِ', 'يُسْرًۭا'] });
+    expect(first.ayah).toEqual({ key: '94:5', page: 597, words: ['فَإِنَّ', 'مَعَ', 'ٱلْعُسْرِ', 'يُسْرًا'] });
+    expect(second.ayah).toEqual({ key: '94:6', page: 597, words: ['إِنَّ', 'مَعَ', 'ٱلْعُسْرِ', 'يُسْرًۭا'] });
     expect(first.after).toEqual(second.ayah);
     expect(second.before).toEqual(first.ayah);
   });

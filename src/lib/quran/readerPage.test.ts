@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { pageGroups, pageOfAyah, spreadOf, turn, type MushafPage, type ReaderPageData } from './readerPage';
+import { mushafPages, pageGroups, pageOfAyah, spreadOf, turn, type MushafPage, type ReaderPageData } from './readerPage';
 
 const load = async (page: number): Promise<ReaderPageData> =>
   JSON.parse(readFileSync(join(__dirname, '../../app/quran/read/data', `${page}.json`), 'utf8'));
@@ -65,5 +65,24 @@ describe('spreadOf and turn', () => {
     expect(turn(342, true, -1)).toBe(339);
     expect(turn(1, true, -1)).toBe(1);
     expect(turn(604, false, 1)).toBe(604);
+  });
+});
+
+describe('mushafPages', () => {
+  const pages: MushafPage[] = Array.from({ length: 604 }, (_, i) => JSON.parse(readFileSync(join(__dirname, '../../app/quran/read/mushaf', `${i + 1}.json`), 'utf8')));
+  const starts = mushafPages(pages);
+
+  it('gives every ayah the 1441 page its first word is on', () => {
+    expect(starts.size).toBe(6236);
+    expect(starts.get('1:1')).toBe(1);
+    expect(starts.get('2:1')).toBe(2);
+    expect(starts.get('43:59')).toBe(493);
+    expect(starts.get('94:5')).toBe(597);
+    expect(starts.get('114:1')).toBe(604);
+  });
+
+  it('moves the ayat the 1441 edition placed on another page', () => {
+    expect(starts.get('5:77')).toBe(120);
+    expect(starts.get('98:6')).toBe(599);
   });
 });

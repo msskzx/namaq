@@ -6,6 +6,7 @@ import { ayahEnds, branch, branchesHref, conjunctions, listPage, PIECE_MAX, piec
 import { chapterFamilies } from './chapterFamilies';
 import { inJuzRange } from './juz';
 import { normalizeWord } from './normalize';
+import { mushafPages } from './readerPage';
 
 const all = ayat as BranchAyah[];
 const groups = sharedOpenings(all);
@@ -75,8 +76,9 @@ describe('sharedOpenings', () => {
 
   it('matches what npm run quran:branches writes from the reader pages', () => {
     const pages = Array.from({ length: 604 }, (_, i) => JSON.parse(readFileSync(join(__dirname, '../../app/quran/read/data', `${i + 1}.json`), 'utf8')));
+    const mushaf = Array.from({ length: 604 }, (_, i) => JSON.parse(readFileSync(join(__dirname, '../../app/quran/read/mushaf', `${i + 1}.json`), 'utf8')));
     const morphology = readFileSync(join(__dirname, '../../../data/quran/quranic-corpus-morphology-0.4.txt'), 'utf8');
-    const read = withRoots(withConjunctions(readerAyat(pages), morphology), morphology);
+    const read = withRoots(withConjunctions(readerAyat(pages, mushafPages(mushaf)), morphology), morphology);
     const byKey = new Map(read.map(ayah => [ayah.key, ayah]));
     const families = chapterFamilies(read).map(family => [family.id, family.keys.map(key => byKey.get(key)!)] as const);
     expect(withNext(new Map([...sharedOpenings(read), ...families]), read)).toEqual(all);

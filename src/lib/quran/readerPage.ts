@@ -14,6 +14,23 @@ export function turn(page: number, spread: boolean, step: 1 | -1) {
   return Math.min(604, Math.max(1, from + step * (spread ? 2 : 1)));
 }
 
+export function mushafPages(pages: { items: MushafItem[] }[]): Map<string, number> {
+  const starts = new Map<string, number>();
+  let surah = 0;
+  let next = 1;
+  pages.forEach((data, at) => {
+    for (const item of data.items) {
+      if ('surah' in item) [surah, next] = [item.surah, 1];
+      if (!('line' in item)) continue;
+      for (const token of item.line) {
+        if (typeof token === 'number') next = token + 1;
+        else if (!starts.has(`${surah}:${next}`)) starts.set(`${surah}:${next}`, at + 1);
+      }
+    }
+  });
+  return starts;
+}
+
 export type WordGroup = { word: string; marks: number[]; surah?: number; ayah?: number };
 
 export const lineGroups = (tokens: (string | number)[]) =>

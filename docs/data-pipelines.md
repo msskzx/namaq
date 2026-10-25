@@ -370,8 +370,8 @@ becomes a node or an edge.
 Quran.com API (`verses/by_page`, `mushaf=2`) and writes one file per page under
 `src/app/quran/read/data/`: the words of each printed line, a circled number
 for each ayah end, and a surah header where a surah begins. The sajda sign is part of the word's text, as the API
-gives it, at all 15 places. Branches, ayah search and the surrounding-ayat cards read these files and the stored surah names, not
-the stored ayat. Nothing syncs to Neo4j. `npm test` checks the files.
+gives it, at all 15 places. Branches, ayah search and the surrounding-ayat cards read their words from these files and the stored surah names, not
+the stored ayat. Their page numbers come from the 1441 pages below (`mushafPages`, the page each ayah's first word is on), so their links open the page the reader shows. Nothing syncs to Neo4j. `npm test` checks the files.
 
 The reader at `/quran/read` draws the 1441 Madinah mushaf instead, the edition
 in print today, from `src/app/quran/read/mushaf/`. `npm run quran:mushaf --

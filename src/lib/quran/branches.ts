@@ -50,7 +50,7 @@ export function branchesHref(id: string, juz?: JuzRange, view: BranchesView = {}
   return `/quran/branches${params.size ? `?${params}` : ''}`;
 }
 
-export function readerAyat(pages: ReaderPageData[]): BranchAyah[] {
+export function readerAyat(pages: ReaderPageData[], pageOf?: Map<string, number>): BranchAyah[] {
   const ayat: BranchAyah[] = [];
   let surah = 0;
   let words: string[] = [];
@@ -62,7 +62,7 @@ export function readerAyat(pages: ReaderPageData[]): BranchAyah[] {
       }
       for (const token of item.line) {
         if (typeof token === 'number') {
-          ayat.push({ key: `${surah}:${token}`, page: i + 1, words });
+          ayat.push({ key: `${surah}:${token}`, page: pageOf?.get(`${surah}:${token}`) ?? i + 1, words });
           words = [];
         } else {
           const word = token.split(' ').filter(piece => normalizeWord(piece) !== '').join(' ');

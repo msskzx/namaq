@@ -11,6 +11,11 @@ describe('/api/quran/search', () => {
     expect(result.hits.map((hit: { key: string }) => hit.key)).toEqual(['2:255', '3:2']);
   });
 
+  it('gives each hit its page in the 1441 mushaf the reader shows', async () => {
+    const result = await search('لا تغلوا في دينكم غير الحق');
+    expect(result.hits.find((hit: { key: string }) => hit.key === '5:77')).toMatchObject({ page: 120 });
+  });
+
   it('answers an empty result to a query too short to search', async () => {
     expect(await search('ق')).toEqual({ total: 0, hits: [] });
   });
