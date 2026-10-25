@@ -15,12 +15,15 @@ vi.mock('@/lib/modelUnits', () => ({ loadUnitView: async (id: string) => {
 afterEach(() => { cleanup(); language.current = 'ar'; });
 
 describe('homepage features', () => {
-  it.each(['ar', 'en'] as const)('shows all seven linked previews in %s without the search or body notice', async current => {
+  it.each(['ar', 'en'] as const)('gives each of seven previews an explicit action and an unlinked heading in %s', async current => {
     language.current = current;
     render(<Homepage data={await getHomePreviews()} />);
     const headings = screen.getAllByRole('heading', { level: 2 });
     expect(headings).toHaveLength(8);
-    const hrefs = headings.slice(0, 7).map(heading => within(heading).getByRole('link').getAttribute('href'));
+    const hrefs = headings.slice(0, 7).map(heading => {
+      expect(within(heading).queryByRole('link')).toBeNull();
+      return within(heading.closest('section')!).getByRole('link', { name: `${current === 'ar' ? 'افتح' : 'Open'} ${heading.textContent}` }).getAttribute('href');
+    });
     expect(hrefs[0]).toContain('/quran/branches?o=');
     expect(hrefs[1]).toContain('af=41&at=45');
     expect(hrefs[2]).toBe('/quran/prophets/musa');
@@ -31,7 +34,7 @@ describe('homepage features', () => {
     expect(screen.queryByRole('table')).toBeNull();
     expect(screen.getByRole('article', { name: 'الشعراء ٤١–٤٥' })).toBeTruthy();
     expect(screen.getByRole('article', { name: 'الأعراف ١١٣–١١٧' })).toBeTruthy();
-    for (const article of screen.getAllByRole('article')) expect(article.querySelectorAll('div[lang=ar] > p')).toHaveLength(5);
+    for (const article of within(screen.getByRole('region', { name: current === 'ar' ? 'مقارنة الآيات' : 'Compare Quranic passages' })).getAllByRole('article')) expect(article.querySelectorAll('div[lang=ar] > p')).toHaveLength(5);
     const first = screen.getByRole('article', { name: 'الشعراء ٤١–٤٥' }).querySelector('div[lang=ar] > p')!;
     const rooted = Array.from(first.querySelectorAll('mark')).filter(m => m.className.includes(spread.root)).map(m => m.textContent);
     expect(rooted.slice(0, 2)).toEqual(['جَاۤءَ', 'لِفِرۡعَوۡنَ']);
@@ -69,11 +72,18 @@ describe('homepage features', () => {
     fireEvent.click(picked);
     expect(screen.getByRole('status').textContent).toContain(`الإجابة الصحيحة: ${correct.labelArabic}`);
     expect(document.activeElement).toBe(picked);
+    expect(picked.getAttribute('data-result')).toBe('incorrect');
+    expect(screen.getByRole('button', { name: correct.labelArabic }).getAttribute('data-result')).toBe('correct');
+    expect(screen.getByRole('status').getAttribute('data-result')).toBe('incorrect');
     expect(screen.getByRole('button', { name: correct.labelArabic }).getAttribute('aria-disabled')).toBe('true');
     fireEvent.click(screen.getByRole('button', { name: correct.labelArabic }));
     expect(screen.getByRole('status').textContent).toContain(`الإجابة الصحيحة: ${correct.labelArabic}`);
     fireEvent.click(screen.getByRole('button', { name: 'حاول مجددًا' }));
+    expect(picked.hasAttribute('data-result')).toBe(false);
+    expect(screen.getByRole('button', { name: correct.labelArabic }).hasAttribute('data-result')).toBe(false);
+    expect(screen.getByRole('status').hasAttribute('data-result')).toBe(false);
     fireEvent.click(screen.getByRole('button', { name: correct.labelArabic }));
     expect(screen.getByRole('status').textContent).toBe('إجابة صحيحة.');
+    expect(screen.getByRole('status').getAttribute('data-result')).toBe('correct');
   });
 });

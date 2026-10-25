@@ -15,7 +15,7 @@ export default function PoemView({ poem }: { poem: Poem }) {
     <div dir={ar ? 'rtl' : 'ltr'} className={`${paper.page} w-full max-w-7xl mx-auto px-4 py-8`}>
       <header className={paper.heading}>
         <p className={paper.eyebrow}>{ar ? 'نمق · التجويد' : 'Namaq · Tajwid'}</p>
-        <h1 lang="ar" dir="rtl">{title}</h1>
+        <h1 className={styles.title} lang="ar" dir="rtl">{title}</h1>
         <p>{ar
           ? <>{author}، نظمها سنة {num(composed)}هـ، وأبياتها {num(count)}</>
           : <>By <span lang="ar" dir="rtl">{author}</span>. Composed in {composed} AH · {count} verses</>}</p>

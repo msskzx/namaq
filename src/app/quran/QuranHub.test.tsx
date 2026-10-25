@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, render, screen, within } from '@testing-library/react';
 import QuranHub from './QuranHub';
 
 const lang = vi.hoisted(() => ({ language: 'ar' as 'ar' | 'en' }));
@@ -30,8 +30,8 @@ describe('QuranHub', () => {
   it('identifies the Arabic reading and prophet destinations', () => {
     render(<QuranHub />);
     expect(screen.getByRole('heading', { level: 1, name: 'القرآن' })).toBeTruthy();
-    expect(screen.getByRole('heading', { name: 'قراءة القرآن' }).closest('a')?.getAttribute('href')).toBe('/quran/read');
-    expect(screen.getByRole('heading', { name: 'قصص الأنبياء في القرآن' }).closest('a')?.getAttribute('href')).toBe('/quran/prophets/musa');
+    expect(within(screen.getByRole('heading', { name: 'قراءة القرآن' }).closest('article')!).getByRole('link', { name: 'افتح قراءة القرآن' }).getAttribute('href')).toBe('/quran/read');
+    expect(within(screen.getByRole('heading', { name: 'قصص الأنبياء في القرآن' }).closest('article')!).getByRole('link', { name: 'افتح قصص الأنبياء في القرآن' }).getAttribute('href')).toBe('/quran/prophets/musa');
   });
 
   it('writes the titles and descriptions in English', () => {
