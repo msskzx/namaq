@@ -20,7 +20,7 @@ type Query = Record<string, string>;
 const ROW = 'w-full flex items-baseline gap-2 px-2 py-1 text-start rounded hover:bg-[color-mix(in_srgb,var(--home-accent)_10%,transparent)] aria-[current=true]:bg-[color-mix(in_srgb,var(--home-accent)_16%,transparent)] aria-[current=true]:font-semibold';
 const COUNT = 'text-[var(--home-accent)] tabular-nums';
 
-export function SurahPairs({ groups, names, tab, query, surah, a, b }: { groups: SurahGroup[]; names: Record<number, string>; tab: CompareTab; query: Query; surah: number | null; a: number; b: number }) {
+export function SurahPairs({ groups, names, tab, query, surah, within = false, a, b }: { groups: SurahGroup[]; names: Record<number, string>; tab: CompareTab; query: Query; surah: number | null; within?: boolean; a: number; b: number }) {
   const mode = tab === 'themes' ? 'themes' : 'text';
   const router = useNavigatingRouter();
   const [byNumber, setByNumber] = useState(false);
@@ -31,7 +31,7 @@ export function SurahPairs({ groups, names, tab, query, surah, a, b }: { groups:
     const row = box?.querySelector<HTMLElement>('[aria-current="true"]');
     if (box && search) box.scrollTop = 0;
     else if (box && row) box.scrollTop = row.getBoundingClientRect().top - box.getBoundingClientRect().top + box.scrollTop - box.clientHeight / 3;
-  }, [surah, a, b, mode, search]);
+  }, [surah, within, a, b, mode, search]);
   const go = (href: string) => {
     announceNavigation();
     router.push(href, { scroll: false });
@@ -55,7 +55,7 @@ export function SurahPairs({ groups, names, tab, query, surah, a, b }: { groups:
         <ul ref={list} className="flex flex-col gap-2 max-h-[min(75vh,48rem)] overflow-y-auto">
           {sorted.map(g => (
             <li key={g.surah}>
-              <details key={`${mode}:${surah}:${a}:${b}`} open={open(g.surah)} className="group rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] open:border-[var(--home-accent)]">
+              <details key={`${mode}:${surah}:${within}:${a}:${b}`} open={open(g.surah)} className="group rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] open:border-[var(--home-accent)]">
                 <summary className="flex items-center gap-2 px-3 py-2 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
                   <span className={`${NOTE} w-7 shrink-0 tabular-nums`}>{num(g.surah)}</span>
                   <span className="flex-1">{names[g.surah]}</span>
@@ -63,9 +63,17 @@ export function SurahPairs({ groups, names, tab, query, surah, a, b }: { groups:
                   <FontAwesomeIcon icon={faChevronDown} className="size-3 text-[var(--home-muted)] transition-transform group-open:rotate-180" />
                 </summary>
                 <ul className="border-t border-[var(--home-rule)] p-1">
+                  {g.total > 0 && mode === 'text' && (
+                    <li>
+                      <button type="button" className={ROW} aria-current={surah === g.surah && !within} onClick={() => go(surahHref(g.surah, query))}>
+                        <span className="flex-1">كل المواضع</span>
+                        <span className={COUNT}>{num(g.total)}</span>
+                      </button>
+                    </li>
+                  )}
                   {g.self > 0 && mode === 'text' && (
                     <li>
-                      <button type="button" className={ROW} aria-current={surah === g.surah} onClick={() => go(surahHref(g.surah, query))}>
+                      <button type="button" className={ROW} aria-current={surah === g.surah && within} onClick={() => go(surahHref(g.surah, query, true))}>
                         <span className="flex-1">داخل السورة</span>
                         <span className={COUNT}>{num(g.self)}</span>
                       </button>

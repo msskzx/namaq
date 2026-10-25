@@ -79,12 +79,23 @@ describe('QuranComparePage', () => {
     expect(JSON.parse(screen.getByTestId('list').textContent!)).toMatchObject({ a: 69, b: 56 });
   });
 
-  it('marks the ayah-by-ayah tab, and no tab inside one surah', async () => {
+  it('marks the ayah-by-ayah tab, and the similar tab inside one surah', async () => {
     await page({ view: 'ayat' });
     expect(JSON.parse(screen.getByTestId('controls').textContent!)).toMatchObject({ tab: 'ayat' });
     cleanup();
     await page({ s: '56' });
-    expect(JSON.parse(screen.getByTestId('controls').textContent!).tab).toBeNull();
+    expect(JSON.parse(screen.getByTestId('controls').textContent!).tab).toBe('similar');
+  });
+
+  it('shows every place of a surah, or only those inside it with within=1', async () => {
+    await page({ s: '56' });
+    expect(JSON.parse(screen.getByTestId('similar').textContent!)).toMatchObject({ surah: 56, within: false });
+    expect(screen.getByTestId('current').textContent).toBe('سورة الواقعة');
+    cleanup();
+    await page({ s: '56', within: '1' });
+    expect(JSON.parse(screen.getByTestId('similar').textContent!)).toMatchObject({ surah: 56, within: true });
+    expect(JSON.parse(screen.getByTestId('list').textContent!)).toMatchObject({ surah: 56, within: true });
+    expect(screen.getByTestId('current').textContent).toBe('داخل سورة الواقعة');
   });
 
   it('shows the topic comparison and lists surahs by their shared topics', async () => {

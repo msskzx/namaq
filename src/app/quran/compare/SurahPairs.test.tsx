@@ -34,10 +34,17 @@ describe('SurahPairs', () => {
     expect(push).toHaveBeenCalledWith('/quran/compare?mode=themes&a=62&b=3', { scroll: false });
   });
 
-  it('offers the pairs inside a surah only when comparing text', () => {
+  it('offers every place of a surah and the pairs inside it only when comparing text', () => {
     show({ surah: 55 });
+    expect(within(card('الرحمن')).getByRole('button', { name: /كل المواضع/ }).getAttribute('aria-current')).toBe('true');
+    expect(within(card('الرحمن')).getByRole('button', { name: /داخل السورة/ }).getAttribute('aria-current')).toBe('false');
     fireEvent.click(within(card('الرحمن')).getByRole('button', { name: /داخل السورة/ }));
-    expect(push).toHaveBeenCalledWith('/quran/compare?s=55', { scroll: false });
+    expect(push).toHaveBeenCalledWith('/quran/compare?s=55&within=1', { scroll: false });
+    fireEvent.click(within(card('الرحمن')).getByRole('button', { name: /كل المواضع/ }));
+    expect(push).toHaveBeenLastCalledWith('/quran/compare?s=55', { scroll: false });
+    cleanup();
+    show({ surah: 55, within: true });
+    expect(within(card('الرحمن')).getByRole('button', { name: /داخل السورة/ }).getAttribute('aria-current')).toBe('true');
     expect(screen.queryByRole('link', { name: /مثال/ })).toBeNull();
     cleanup();
     show({ tab: 'themes' });
