@@ -16,7 +16,7 @@ afterEach(() => {
 const names = { 2: 'البقرة', 3: 'آل عمران', 55: 'الرحمن', 62: 'الجمعة' };
 const groups = groupBySurah([[2, 3], [2, 3], [2, 3], [3, 62], [62, 3], [55, 55], [55, 2]]);
 const show = (props: Partial<React.ComponentProps<typeof SurahPairs>> = {}) =>
-  render(<SurahPairs groups={groups} names={names} mode="text" surah={null} a={3} b={62} {...props} />);
+  render(<SurahPairs groups={groups} names={names} tab="similar" query={{}} surah={null} a={3} b={62} {...props} />);
 const card = (name: string) => screen.getByText(name, { selector: 'summary span' }).closest('details')!;
 const order = () => [...document.querySelectorAll('summary')].map(s => s.querySelector('span:nth-child(2)')!.textContent);
 
@@ -29,43 +29,50 @@ describe('SurahPairs', () => {
   });
 
   it('opens a pair from either surah, keeping the mode', () => {
-    show({ mode: 'themes' });
+    show({ tab: 'themes' });
     fireEvent.click(within(card('الجمعة')).getByRole('button', { name: /آل عمران/ }));
     expect(push).toHaveBeenCalledWith('/quran/compare?mode=themes&a=62&b=3', { scroll: false });
   });
 
-  it('offers the pairs inside a surah, and the example, only when comparing text', () => {
+  it('offers the pairs inside a surah only when comparing text', () => {
     show({ surah: 55 });
     fireEvent.click(within(card('الرحمن')).getByRole('button', { name: /داخل السورة/ }));
     expect(push).toHaveBeenCalledWith('/quran/compare?s=55', { scroll: false });
-    expect(screen.getByRole('link', { name: /مثال/ })).toBeTruthy();
-    cleanup();
-    show({ mode: 'themes' });
-    expect(within(card('الرحمن')).queryByRole('button', { name: /داخل السورة/ })).toBeNull();
     expect(screen.queryByRole('link', { name: /مثال/ })).toBeNull();
+    cleanup();
+    show({ tab: 'themes' });
+    expect(within(card('الرحمن')).queryByRole('button', { name: /داخل السورة/ })).toBeNull();
   });
 
-  it('orders surahs by their count, or by number with the switch', () => {
+  it('keeps the juz or surah range and the ayah-by-ayah tab when opening a pair', () => {
+    show({ tab: 'ayat', query: { a: '3', af: '5', juzFrom: '25', juzTo: '30' } });
+    fireEvent.click(within(card('الجمعة')).getByRole('button', { name: /آل عمران/ }));
+    expect(push).toHaveBeenCalledWith('/quran/compare?a=62&b=3&juzFrom=25&juzTo=30&view=ayat', { scroll: false });
+    fireEvent.click(within(card('آل عمران')).getByRole('button', { name: /البقرة/ }));
+    expect(push).toHaveBeenLastCalledWith('/quran/compare?a=3&b=2&juzFrom=25&juzTo=30&view=ayat', { scroll: false });
+  });
+
+  it('orders surahs by their count, or by number', () => {
     show();
     expect(order()).toEqual(['آل عمران', 'البقرة', 'الرحمن', 'الجمعة']);
-    fireEvent.click(screen.getByRole('switch', { name: 'بترتيب المصحف' }));
+    fireEvent.click(screen.getByRole('button', { name: 'ترتيب المصحف' }));
     expect(order()).toEqual(['البقرة', 'آل عمران', 'الرحمن', 'الجمعة']);
-    fireEvent.click(screen.getByText('الأكثر آيات متشابهة أولًا'));
+    fireEvent.click(screen.getByRole('button', { name: 'الأكثر تشابهًا' }));
     expect(order()).toEqual(['آل عمران', 'البقرة', 'الرحمن', 'الجمعة']);
   });
 
   it('reopens a compared surah that the reader closed when the comparison moves to another pair of it', () => {
     const { rerender } = show();
     card('آل عمران').open = false;
-    rerender(<SurahPairs groups={groups} names={names} mode="text" surah={null} a={62} b={3} />);
+    rerender(<SurahPairs groups={groups} names={names} tab="similar" query={{}} surah={null} a={62} b={3} />);
     expect(card('آل عمران').open).toBe(true);
     card('آل عمران').open = false;
-    rerender(<SurahPairs groups={groups} names={names} mode="themes" surah={null} a={62} b={3} />);
+    rerender(<SurahPairs groups={groups} names={names} tab="themes" query={{}} surah={null} a={62} b={3} />);
     expect(card('آل عمران').open).toBe(true);
   });
 
   it('says so under a surah with nothing to pair', () => {
-    render(<SurahPairs groups={groupBySurah([], [106])} names={{ 106: 'قريش' }} mode="text" surah={null} a={106} b={108} />);
+    render(<SurahPairs groups={groupBySurah([], [106])} names={{ 106: 'قريش' }} tab="similar" query={{}} surah={null} a={106} b={108} />);
     expect(within(card('قريش')).getByText('لا آيات متشابهة.')).toBeTruthy();
   });
 
