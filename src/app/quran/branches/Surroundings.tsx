@@ -2,7 +2,7 @@
 
 import React, { useId } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+
 import useSWR from 'swr';
 import { ArrowLeftRight } from 'lucide-react';
 import { fetcher } from '@/lib/swr';
@@ -10,6 +10,8 @@ import Toggle from '@/components/common/Toggle';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@/lib/quran/arabicNumber';
 import type { Neighbour, Surrounding } from '@/lib/quran/ayahContext';
+import { useNavigatingRouter } from '@/components/common/NavigationLoader';
+import InkLoader from '@/components/common/InkLoader';
 
 export type Around = { data: Surrounding; ends: Record<string, string>; inTree: Set<string>; names: Record<number, string>; tree: string };
 
@@ -23,7 +25,7 @@ export function useSurrounding(on: boolean, keys: string[], ends: Record<string,
 type ToggleProps = { on: boolean; onChange(on: boolean): void; loading?: boolean; failed?: boolean };
 
 function AddressToggle({ onChange, ...props }: ToggleProps) {
-  const router = useRouter();
+  const router = useNavigatingRouter();
   return <SurroundSwitch {...props} onChange={checked => {
     onChange(checked);
     const url = new URL(window.location.href);
@@ -42,7 +44,7 @@ function SurroundSwitch({ on, onChange, loading = false, failed = false }: Toggl
     <span className="inline-flex items-center gap-2 text-sm text-[var(--home-ink)]">
       <Toggle id={id} checked={on} label={label} onChange={onChange} onIcon={<ArrowLeftRight className="size-3" />} />
       <label htmlFor={id} className={`cursor-pointer ${on ? 'font-semibold text-[var(--home-accent)]' : 'text-[var(--home-muted)]'}`}>{label}</label>
-      {on && loading && <span role="status" className="text-xs text-[var(--home-muted)]">{ar ? 'جارٍ التحميل…' : 'Loading…'}</span>}
+      {on && loading && <span role="status"><InkLoader className="inline-block h-5 w-auto" /><span className="sr-only">{ar ? 'جارٍ التحميل' : 'Loading'}</span></span>}
       {on && failed && <span role="alert" className="text-xs text-[var(--home-accent)]">{ar ? 'تعذّر تحميل الآيات.' : 'Could not load the ayat.'}</span>}
     </span>
   );

@@ -148,4 +148,15 @@ describe('SubjectEvidenceAccess', () => {
       expect(fetchJson).toHaveBeenCalledWith('/api/subjects/battle/yarmuk/references'),
     );
   });
+
+  it('shows the loader while the references load, and nothing once they fail', async () => {
+    let fail: (error: Error) => void = () => {};
+    fetchJson.mockReturnValue(new Promise((_, reject) => { fail = reject; }));
+
+    const { container } = renderAccess({ hasProfile: false, slug: 'failing' });
+
+    expect(screen.getByRole('status')).toBeTruthy();
+    fail(new Error('500'));
+    await waitFor(() => expect(container.innerHTML).toBe(''));
+  });
 });

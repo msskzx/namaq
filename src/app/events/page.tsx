@@ -2,7 +2,7 @@
 
 import React, { useCallback, useMemo } from "react";
 import useSWR from "swr";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarAlt, faFlag, faMagnifyingGlass, faRoute, faShieldAlt } from "@fortawesome/free-solid-svg-icons";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
@@ -13,6 +13,7 @@ import { useLanguage } from "@/components/language/LanguageContext";
 import translations from "@/components/language/translations";
 import { fetcher } from "@/lib/swr";
 import { filterTimeline, parseKinds, TIMELINE_KINDS, type TimelineItem, type TimelineKind } from "@/lib/timeline";
+import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 
 const KIND_LABELS: Record<TimelineKind, { ar: string; en: string }> = {
   event: { ar: "حدث", en: "Event" },
@@ -26,7 +27,7 @@ function EventsPage() {
   const { language } = useLanguage();
   const t = translations[language];
   const ar = language === "ar";
-  const router = useRouter();
+  const router = useNavigatingRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { data: items, error, isLoading } = useSWR<TimelineItem[]>("/api/timeline", fetcher);

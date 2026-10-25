@@ -1,15 +1,16 @@
 'use client';
 
 import React from 'react';
-import { useRouter } from 'next/navigation';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationArrow } from '@fortawesome/free-solid-svg-icons';
 import Button from '@/components/common/Button';
 import NumberInput from '@/components/common/NumberInput';
 import { useLanguage } from '@/components/language/LanguageContext';
+import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 
 export default function JumpForm() {
-  const router = useRouter();
+  const router = useNavigatingRouter();
   const { language, languageLoaded } = useLanguage();
   const ar = !languageLoaded || language === 'ar';
   return (

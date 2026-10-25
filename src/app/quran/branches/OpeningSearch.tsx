@@ -1,20 +1,21 @@
 'use client';
 
 import React, { useEffect, useId, useState } from 'react';
-import { useRouter } from 'next/navigation';
+
 import { ArrowLeft, ArrowRight, GitBranch, Search } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@/lib/quran/arabicNumber';
 import { branchesHref, searchPhrases, type BranchesView, type Opening } from '@/lib/quran/branches';
 import type { JuzRange } from '@/lib/quran/juz';
+import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 const NOTE = 'text-sm text-[var(--home-muted)]';
 const SEARCH = 'w-full rounded-sm border border-[var(--home-rule)] bg-transparent ps-10 pe-3 py-2 text-[var(--home-ink)] placeholder:text-[var(--home-muted)]';
 
 export const SUGGESTIONS = 10;
 
 export default function OpeningSearch({ phrases, current, query: submitted = '', juz = null, unavailable = false, view = {}, alternatives = [] }: { top: Opening[]; phrases: Opening[]; current: string; query?: string; juz?: JuzRange | null; unavailable?: boolean; view?: BranchesView; alternatives?: Opening[] }) {
-  const router = useRouter();
+  const router = useNavigatingRouter();
   const { language } = useLanguage();
   const ar = language === 'ar';
   const listId = useId();

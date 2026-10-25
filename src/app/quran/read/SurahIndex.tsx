@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookOpen, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import Button from '@/components/common/Button';
@@ -12,6 +12,8 @@ import { plainName } from '@/lib/quran/normalize';
 import { juzGroups, matchesSurah, parseReference, type IndexSurah } from '@/lib/quran/juzIndex';
 import { searchable, type AyahSearch } from '@/lib/quran/ayahSearch';
 import styles from '@/components/homepage/Home.module.css';
+import { useNavigatingRouter } from '@/components/common/NavigationLoader';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 const MUTED = 'text-[var(--home-muted)]';
 const AROUND = 6;
@@ -21,7 +23,7 @@ export default function SurahIndex({ surahs, fontClass }: { surahs: IndexSurah[]
   const { language, languageLoaded } = useLanguage();
   const ar = !languageLoaded || language === 'ar';
   const n = (value: number) => (ar ? num(value) : String(value));
-  const router = useRouter();
+  const router = useNavigatingRouter();
   const [query, setQuery] = useState('');
   const groups = useMemo(() => juzGroups(surahs), [surahs]);
   const reference = parseReference(query, surahs);
@@ -88,11 +90,10 @@ export default function SurahIndex({ surahs, fontClass }: { surahs: IndexSurah[]
             {ar ? `افتح ${name(reference.surah)} ${num(reference.ayah)}` : `Open ${reference.surah.nameTransliterated || name(reference.surah)} ${reference.ayah}`}
           </Button>
         )}
-        {wordSearch && found === 0 && (
+        {wordSearch && found === 0 && !ayahHits && <LoadingSpinner size="sm" className="mt-2 justify-start" />}
+        {wordSearch && found === 0 && ayahHits && (
           <p className={`${MUTED} mt-2 text-sm`} aria-live="polite">
-            {!ayahHits
-              ? ar ? 'يبحث في الآيات…' : 'Searching the ayat…'
-              : ayahHits.failed
+            {ayahHits.failed
                 ? ar ? 'تعذّر البحث في الآيات الآن.' : 'The ayat could not be searched just now.'
                 : ayahHits.total === 0
                   ? ar ? 'لا توجد سورة ولا آية بهذا النص.' : 'No surah or ayah matches that text.'

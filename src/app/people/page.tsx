@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useLanguage } from '@/components/language/LanguageContext';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useInView } from 'react-intersection-observer';
 import translations from '@/components/language/translations';
 import PeopleSearch from '@/components/people/PeopleSearch';
@@ -15,6 +15,7 @@ import useSWRInfinite from 'swr/infinite';
 import type { Pagination } from '@/types/pagination';
 import { fetcher } from '@/lib/swr';
 import ErrorMessage from '@/components/common/ErrorMessage';
+import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 
 const PAGE_SIZE = 12;
 
@@ -40,7 +41,7 @@ const getKey = (
 const PeoplePage = () => {
   const { language } = useLanguage();
   const searchParams = useSearchParams();
-  const router = useRouter();
+  const router = useNavigatingRouter();
   const { ref: loadMoreRef, inView } = useInView({
     threshold: 0.1,
     triggerOnce: false,

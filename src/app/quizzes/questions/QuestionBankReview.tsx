@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight, faBookOpen, faFilter, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import useSWR from 'swr';
@@ -14,6 +14,7 @@ import type { QuestionChoice } from '@/lib/quiz/types';
 import type { QuizReference } from '@/lib/quiz/quizReference';
 import { fetcher } from '@/lib/swr';
 import { useState } from 'react';
+import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 
 interface ReviewQuestion {
   key: string;
@@ -41,7 +42,7 @@ const TOPICS = ['PEOPLE', 'BATTLES', 'RELATIONSHIPS', 'AYAT', 'EVENTS'] as const
 export default function QuestionBankReview() {
   const { language } = useLanguage();
   const ar = language === 'ar';
-  const router = useRouter();
+  const router = useNavigatingRouter();
   const searchParams = useSearchParams();
   const query = searchParams.toString();
   const { data, error, isLoading } = useSWR<ReviewResponse>(`/api/quiz/questions${query ? `?${query}` : ''}`, fetcher);

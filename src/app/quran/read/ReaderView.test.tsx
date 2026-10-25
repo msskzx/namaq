@@ -181,7 +181,7 @@ describe('SurahIndex', () => {
     render(<SurahIndex surahs={surahs} />);
     const search = screen.getByLabelText('ابحث عن سورة أو آية');
     fireEvent.change(search, { target: { value: 'كلمة غائبة' } });
-    expect(screen.getByText('يبحث في الآيات…')).not.toBeNull();
+    expect(screen.getByRole('status')).not.toBeNull();
     expect(await screen.findByText('لا توجد سورة ولا آية بهذا النص.')).not.toBeNull();
     vi.stubGlobal('fetch', vi.fn(async () => ({ ok: false, status: 500 })));
     fireEvent.change(search, { target: { value: 'كلمة أخرى' } });

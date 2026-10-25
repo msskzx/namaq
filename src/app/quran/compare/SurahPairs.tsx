@@ -2,7 +2,7 @@
 
 // docs/plans/quran-similar-ayat.md
 import React, { useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { ArrowDown01, ArrowDownWideNarrow } from 'lucide-react';
@@ -13,6 +13,7 @@ import type { SurahGroup } from '@/lib/quran/surahPairs';
 import { surahMatch } from '@/lib/quran/surahSearch';
 import { FIELD, NOTE } from '../panel';
 import { pairHref, surahHref, type CompareTab } from './modeHref';
+import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 
 type Query = Record<string, string>;
 
@@ -21,7 +22,7 @@ const COUNT = 'text-[var(--home-accent)] tabular-nums';
 
 export function SurahPairs({ groups, names, tab, query, surah, a, b }: { groups: SurahGroup[]; names: Record<number, string>; tab: CompareTab; query: Query; surah: number | null; a: number; b: number }) {
   const mode = tab === 'themes' ? 'themes' : 'text';
-  const router = useRouter();
+  const router = useNavigatingRouter();
   const [byNumber, setByNumber] = useState(false);
   const [search, setSearch] = useState('');
   const list = useRef<HTMLUListElement>(null);

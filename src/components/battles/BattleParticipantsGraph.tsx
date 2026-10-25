@@ -1,16 +1,17 @@
 'use client';
 
 import React from 'react';
-import { useRouter } from 'next/navigation';
+
 import GraphSurface from '@/components/graph/LazyGraphSurface';
 import { useLanguage } from '@/components/language/LanguageContext';
+import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 
 interface BattleParticipantsGraphProps {
   slug: string;
 }
 
 export default function BattleParticipantsGraph({ slug }: BattleParticipantsGraphProps) {
-  const router = useRouter();
+  const router = useNavigatingRouter();
   const { language } = useLanguage();
 
   return (

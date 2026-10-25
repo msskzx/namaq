@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { RotateCcw } from 'lucide-react';
 import Button from '@/components/common/Button';
 import NumberInput from '@/components/common/NumberInput';
 import type { JuzRange } from '@/lib/quran/juz';
+import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 
 export const NAVIGATING = 'range-filter:navigating';
 export const announceNavigation = () => document.dispatchEvent(new Event(NAVIGATING));
@@ -13,7 +14,7 @@ export const announceNavigation = () => document.dispatchEvent(new Event(NAVIGAT
 export type RangeLabels = { from: string; to: string; all: string; form: string; invalid: (range: JuzRange) => string };
 
 export default function RangeFilter({ range, max, names, href, labels }: { range: JuzRange | null; max: number; names: [string, string]; href: (range?: JuzRange) => string; labels: RangeLabels }) {
-  const router = useRouter();
+  const router = useNavigatingRouter();
   const pathname = usePathname();
   const params = useSearchParams();
   const route = `${pathname}?${params.toString()}`;

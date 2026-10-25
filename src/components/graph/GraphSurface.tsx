@@ -134,7 +134,7 @@ const GraphSurface = forwardRef<Methods, GraphSurfaceProps>(function GraphSurfac
   if (isLoading) {
     return (
       <div className="flex items-center justify-center" style={{ width: width ?? '100%', height: height ?? '100%' }}>
-        <LoadingSpinner />
+        <LoadingSpinner variant="graph" />
       </div>
     );
   }

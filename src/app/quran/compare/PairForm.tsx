@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+
 import { ChevronDown, Expand } from 'lucide-react';
 import Button from '@/components/common/Button';
 import NumberInput from '@/components/common/NumberInput';
@@ -9,6 +9,7 @@ import { announceNavigation } from '@/components/quran/RangeFilter';
 import { num } from '@/lib/quran/arabicNumber';
 import { NOTE } from '../panel';
 import SurahPicker from './SurahPicker';
+import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 
 type Surah = { number: number; name: string };
 type Side = { surah: number; from: number; to: number; max: number };
@@ -17,7 +18,7 @@ type Pair = { a: Side; b: Side };
 const span = (s: Side) => (s.from === s.to ? num(s.from) : `${num(s.from)}–${num(s.to)}`);
 
 export default function PairForm({ surahs, a, b, ayat, keep }: { surahs: Surah[]; a: Side; b: Side; ayat: boolean; keep: Record<string, string> }) {
-  const router = useRouter();
+  const router = useNavigatingRouter();
   const [pair, setPair] = useState<Pair>({ a, b });
   const shown = JSON.stringify({ a, b });
   const [seen, setSeen] = useState(shown);
