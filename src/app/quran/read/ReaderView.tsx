@@ -97,7 +97,8 @@ export default function ReaderView({
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.isComposing || event.defaultPrevented) return;
+      if (event.altKey || event.ctrlKey || event.metaKey || event.isComposing || event.defaultPrevented) return;
+      if (event.shiftKey && event.key.startsWith('Arrow')) return;
       if (event.target instanceof Element && event.target.closest('input, textarea, select, [contenteditable]:not([contenteditable="false"])')) return;
       if (event.key === 'ArrowLeft') go(1);
       else if (event.key === 'ArrowRight') go(-1);
