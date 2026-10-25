@@ -1,6 +1,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { readerAyat, sharedOpenings, withConjunctions, withNext, withRoots } from '../../src/lib/quran/branches';
+import { chapterFamilies } from '../../src/lib/quran/chapterFamilies';
 import type { ReaderPageData } from '../../src/lib/quran/readerPage';
 
 // docs/plans/quran-shared-openings.md
@@ -12,6 +13,8 @@ const pages: ReaderPageData[] = Array.from({ length: 604 }, (_, i) => JSON.parse
 const morphology = readFileSync(MORPHOLOGY, 'utf8');
 const read = withRoots(withConjunctions(readerAyat(pages), morphology), morphology);
 const groups = sharedOpenings(read);
-const ayat = withNext(groups, read);
+const byKey = new Map(read.map(ayah => [ayah.key, ayah]));
+const families = chapterFamilies(read).map(family => [family.id, family.keys.map(key => byKey.get(key)!)] as const);
+const ayat = withNext(new Map([...groups, ...families]), read);
 writeFileSync(OUT, `${JSON.stringify(ayat)}\n`);
 console.log(`openings ${groups.size}, ayat ${ayat.length}`);

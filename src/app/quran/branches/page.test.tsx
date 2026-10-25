@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { normalizeWord } from '@/lib/quran/normalize';
 import { branchesHref } from '@/lib/quran/branches';
 import QuranBranchesPage from './page';
 
@@ -19,6 +20,24 @@ const open = (params: Record<string, string>) => {
 };
 
 describe('Quran branches range selection', () => {
+  it('opens a named family from navigation and keeps its name outside Quran tree nodes', async () => {
+    render(await open({ o: 'family:musabbihat' }));
+    const navigation = screen.getByRole('navigation', { name: 'مجموعات فواتح السور' });
+    expect(navigation.textContent).toContain('الحواميم');
+    expect(navigation.textContent).toContain('المسبحات');
+    expect(screen.getByRole('link', { name: 'المسبحات' }).getAttribute('href')).toBe(branchesHref('family:musabbihat'));
+    const tree = screen.getByRole('region', { name: 'شجرة الفواتح' });
+    expect(tree.textContent).not.toContain('المسبحات');
+    expect(tree.textContent).toContain('سُبْحَـٰنَ');
+    expect(normalizeWord(tree.textContent ?? '')).toContain('يسبح');
+  });
+
+  it('returns the complete named family when its name is submitted as a search', async () => {
+    render(await open({ q: 'الحواميم' }));
+    expect(screen.getByRole('link', { name: /الشجرة كاملة: الحواميم/ }).getAttribute('href')).toBe(branchesHref('family:hawamim'));
+    expect(screen.getByRole('region', { name: 'شجرة الفواتح' }).textContent).toContain('عٓسٓقٓ');
+  });
+
   it('sends the surrounding ayat with a tree that opens with the switch on, and loads nothing for it otherwise', async () => {
     const fetch = vi.fn();
     vi.stubGlobal('fetch', fetch);

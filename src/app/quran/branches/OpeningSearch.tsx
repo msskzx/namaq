@@ -58,7 +58,7 @@ export default function OpeningSearch({ phrases, current, query: submitted = '',
         {suggestions.length === 0 ? <li role="presentation" className={`${NOTE} px-3 py-2`}><span role="status">{ar ? 'لا عبارة مشتركة تطابق البحث.' : 'No shared phrase matches your search.'}</span></li> : suggestions.map((opening, index) => (
           <li key={`${opening.id}:${opening.partition ?? ''}`} role="presentation">
             <button id={`${listId}-${index}`} data-branch-navigation type="button" role="option" aria-selected={selected === index} onClick={() => open(opening)} className={`flex w-full items-baseline gap-2 px-3 py-2 text-start hover:bg-[var(--home-paper-deep)] ${selected === index ? 'bg-[var(--home-paper-deep)]' : ''}`}>
-              <span className="text-lg font-arabic flex-1" dir="rtl">{opening.text}</span>
+              <span className="text-lg font-arabic flex-1" dir="rtl">{ar ? opening.text : opening.textEn ?? opening.text}</span>
               <span className="text-[var(--home-accent)]">{ar ? num(opening.count) : opening.count}</span>
             </button>
           </li>

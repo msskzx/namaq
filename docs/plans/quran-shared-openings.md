@@ -98,6 +98,36 @@ The owner chose these rules from a sketch.
 - `/api/quran/surrounding?before=<keys>&after=<keys>` returns the neighbours
   from the reader corpus, at most 400 keys per request.
 
+### Chapter opening families (2026-10-25)
+
+Known chapter letter openings can form a shared opening even when they are
+one word. The حم group includes الشورى, one of the seven الحواميم.
+Standalone letter ayat continue into the next ayah in the tree, retaining
+both references. Ordinary أَلَمْ verses keep the usual two-word rule.
+
+Named families are available through navigation, search suggestions, search
+results and the opening list. Their membership is explicit in
+`src/lib/quran/chapterFamilies.ts`: الحواميم، الطواسين، الميمات، الراءات،
+الحامدات and المسبحات. A separate broader الم prefix group includes الأعراف
+and الرعد; it does not redefine membership of الميمات or الراءات.
+الحامدات starts الفاتحة at 1:2, after its basmala. Membership is filtered
+by the selected juz range, and at least two members are required.
+
+المسبحات uses the seven-surah definition, including الإسراء and الأعلى.
+[The six- and seven-surah definitions are discussed here](https://www.shuwaier.com/storage/contents/books/nSOSjbOdz5SyhIVN9zb5fTeoueGmPKg2b5ojks4r.pdf).
+The [الطواسين family](https://audio.islamweb.net/audio/Fulltxt.php?audioid=182170)
+includes النمل's طس alongside طسم. The names الميمات and الراءات are used
+[in tafsir discussions](https://dohaini.com/?tag=فواتح-السور), with الرعد
+included in الراءات despite its المر opening.
+
+Family names label navigation and entries, never Quran tree nodes. Family
+trees retain their actual first words and significant vowels, so سَبَّحَ
+and سَبِّحِ form separate branches even when their morphology shares a lemma.
+A family with no common first word begins directly with its Quran branches.
+The generated corpus includes each family's opening ayat once, even when
+families overlap. Ordinary shared wording and quiz selection retain their
+existing matching rules.
+
 ### Affected components and dependencies
 
 - `src/lib/quran/branches.ts` retains complete original node phrases and their
