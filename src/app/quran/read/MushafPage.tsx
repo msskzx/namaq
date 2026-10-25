@@ -86,7 +86,7 @@ export default function MushafPage({
       <div className={styles.frame}>
         <div ref={body} className={styles.body} style={{ gridTemplateRows: `repeat(${data.items.length}, minmax(0, 1fr))` }}>
           {data.items.map((item, index) => (
-            <div key={index} className={styles.row}>
+            <div key={index} className={`${styles.row} ${'surah' in item ? styles.titleRow : ''}`}>
               {'surah' in item ? (
                 <h2 className={styles.title}>{names[item.surah]}</h2>
               ) : 'basmala' in item ? (
