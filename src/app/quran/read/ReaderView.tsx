@@ -2,7 +2,8 @@
 
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faArrowRight, faChevronDown, faChevronUp, faList } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faArrowRight, faList } from '@fortawesome/free-solid-svg-icons';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import Button from '@/components/common/Button';
 import Segmented from '@/components/common/Segmented';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
@@ -95,25 +96,25 @@ export default function ReaderView({
   }, []);
 
   useEffect(() => {
-    document.querySelector('[data-marked]')?.scrollIntoView?.({ block: 'center' });
-  }, [mark?.surah, mark?.ayah]);
-
-  useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      if (event.altKey || event.ctrlKey || event.metaKey) return;
-      if (event.target instanceof Element && event.target.closest('input, textarea, select, [contenteditable="true"]')) return;
+      if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.isComposing || event.defaultPrevented) return;
+      if (event.target instanceof Element && event.target.closest('input, textarea, select, [contenteditable]:not([contenteditable="false"])')) return;
       if (event.key === 'ArrowLeft') go(1);
       else if (event.key === 'ArrowRight') go(-1);
-      else if (event.key.toLowerCase() === 'd') chooseSpread(!spread);
+      else if (event.key.toLowerCase() === 'd' && !phone) chooseSpread(!spread);
       else if (event.key.toLowerCase() === 'g') {
         setHidden(false);
-        requestAnimationFrame(() => frame.current?.querySelector<HTMLInputElement>('input[name="page"]')?.select());
+        requestAnimationFrame(() => {
+          const input = frame.current?.querySelector<HTMLInputElement>('input[name="page"]');
+          input?.focus();
+          input?.select();
+        });
       } else return;
       event.preventDefault();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [go, chooseSpread, spread]);
+  }, [go, chooseSpread, spread, phone]);
 
   const kbd = 'rounded border border-b-2 border-[var(--home-rule)] px-1.5 text-[0.7rem]';
   return (
@@ -121,7 +122,7 @@ export default function ReaderView({
       {hidden ? (
         <div className="flex justify-end px-3 pt-1">
           <Button size="sm" variant="ghost" onClick={() => hide(false)} aria-expanded={false}>
-            <FontAwesomeIcon icon={faChevronDown} aria-hidden />
+            <ChevronDown size={16} aria-hidden />
             {ar ? 'إظهار الأدوات' : 'Show tools'}
           </Button>
         </div>
@@ -158,7 +159,7 @@ export default function ReaderView({
               {ar ? 'للتقليب' : 'turn'} · <kbd className={kbd}>D</kbd> {ar ? 'صفحة/صفحتان' : 'one/two'} · <kbd className={kbd}>G</kbd> {ar ? 'انتقال' : 'go to'}
             </p>
             <Button size="sm" variant="ghost" onClick={() => hide(true)} aria-expanded>
-              <FontAwesomeIcon icon={faChevronUp} aria-hidden />
+              <ChevronUp size={16} aria-hidden />
               <span className="max-sm:sr-only">{ar ? 'إخفاء الأدوات' : 'Hide tools'}</span>
             </Button>
           </div>

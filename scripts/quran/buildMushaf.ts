@@ -29,7 +29,9 @@ const words = new Map<string, string[]>();
 for (const [key, slots] of layoutWords) {
   const text = [...hafs.get(key)!];
   if (slots.length === text.length + 1) {
-    const at = slots.at(-1)!.startsWith('#') ? text.length : text.findIndex((word, i) => bare(slots[i] + slots[i + 1]) === bare(word)) + 1;
+    const joined = text.findIndex((word, i) => bare(slots[i] + slots[i + 1]) === bare(word));
+    if (!slots.at(-1)!.startsWith('#') && joined < 0) throw new Error(`${key}: no layout words join into one word of text`);
+    const at = slots.at(-1)!.startsWith('#') ? text.length : joined + 1;
     text.splice(at, 0, '');
   }
   if (slots.length !== text.length) throw new Error(`${key}: ${slots.length} layout words, ${text.length} words of text`);
@@ -53,7 +55,8 @@ layout.forEach((page, index) => {
         const opens = (word.type === 'quarter') || (word.type === 'word' && word.position === 1 && ayah === 1 && SURAHS_OPENING_A_QUARTER.includes(surah));
         if (opens && !(word.type === 'word' && tokens.at(-1) === '۞')) {
           quarter++;
-          starts ||= quarter;
+          if (starts) throw new Error(`a line opens quarters ${starts} and ${quarter}`);
+          starts = quarter;
           if ((quarter - 1) % 8 === 0) juz = (quarter - 1) / 8 + 1;
         }
         if (word.type === 'quarter') tokens.push('۞');

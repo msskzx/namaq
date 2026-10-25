@@ -98,6 +98,45 @@ describe('ReaderView', () => {
     localStorage.removeItem('quran-reader-spread');
   });
 
+  it('leaves arrow keys with a modifier to the browser', () => {
+    media(false);
+    render(<ReaderView page={3} pages={one(3, opening)} names={names} />);
+    for (const modifier of ['ctrlKey', 'metaKey', 'altKey', 'shiftKey']) fireEvent.keyDown(window, { key: 'ArrowLeft', [modifier]: true });
+    expect(push).not.toHaveBeenCalled();
+  });
+
+  it('opens hidden tools and selects the page box on G', async () => {
+    localStorage.setItem('quran-reader-bar', 'hidden');
+    render(<ReaderView page={3} pages={one(3, opening)} names={names} />);
+    localStorage.removeItem('quran-reader-bar');
+    expect(screen.queryByLabelText('رقم الصفحة')).toBeNull();
+    fireEvent.keyDown(window, { key: 'g' });
+    const input = screen.getByLabelText('رقم الصفحة');
+    await new Promise(resolve => requestAnimationFrame(resolve));
+    expect(document.activeElement).toBe(input);
+  });
+
+  it('restores two pages when chosen before, and stops at both ends of the mushaf', () => {
+    media(false);
+    localStorage.setItem('quran-reader-spread', 'two');
+    const { rerender, container } = render(<ReaderView page={2} pages={[...one(1, opening), ...one(2, opening)]} names={names} />);
+    expect(container.querySelectorAll('section[data-side]')).toHaveLength(2);
+    fireEvent.keyDown(window, { key: 'ArrowRight' });
+    expect(screen.getByRole('button', { name: 'الصفحة السابقة' }).hasAttribute('disabled')).toBe(true);
+    rerender(<ReaderView page={603} pages={[...one(603, opening), ...one(604, opening)]} names={names} />);
+    fireEvent.keyDown(window, { key: 'ArrowLeft' });
+    expect(screen.getByRole('button', { name: 'الصفحة التالية' }).hasAttribute('disabled')).toBe(true);
+    expect(push).not.toHaveBeenCalled();
+    localStorage.removeItem('quran-reader-spread');
+  });
+
+  it('keeps D from changing the saved choice on a phone', () => {
+    media(true, true);
+    render(<ReaderView page={3} pages={one(3, opening)} names={names} />);
+    fireEvent.keyDown(window, { key: 'd' });
+    expect(localStorage.getItem('quran-reader-spread')).toBeNull();
+  });
+
   it('ignores the arrow keys while typing in the page box', () => {
     render(<ReaderView page={3} pages={one(3, opening)} names={names} />);
     fireEvent.keyDown(screen.getByLabelText('رقم الصفحة'), { key: 'ArrowLeft' });

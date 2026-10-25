@@ -26,7 +26,7 @@ function fit(body: HTMLElement, centred: boolean) {
   const width = body.clientWidth;
   const sorted = [...natural].sort((a, b) => a - b);
   const typical = sorted[Math.floor(sorted.length * 0.6)] ?? 1;
-  const size = Math.max(1, Math.min((100 * width) / typical, (100 * width) / (Math.max(...natural, 1) * SQUEEZE), (body.clientHeight / Math.max(1, body.children.length)) * 0.72));
+  const size = Math.max(1, Math.min((100 * width) / typical, (100 * width) / (Math.max(...natural, 1) * (centred ? 1 : SQUEEZE)), (body.clientHeight / Math.max(1, body.children.length)) * 0.72));
   body.style.fontSize = `${size}px`;
   lines.forEach((line, at) => {
     const drawn = (natural[at] * size) / 100;
