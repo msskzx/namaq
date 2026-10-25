@@ -6,6 +6,7 @@ import { Search } from 'lucide-react';
 import { num } from '@/lib/quran/arabicNumber';
 import { branchesHref, type BranchesView } from '@/lib/quran/branches';
 import type { JuzRange } from '@/lib/quran/juz';
+import { surahInRange } from '@/lib/quran/compareRange';
 import { surahMatch } from '@/lib/quran/surahSearch';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { FIELD, NOTE } from '../panel';
@@ -26,7 +27,7 @@ export default function SurahPane({ counts, total, names, surah, juz, view, fami
   const ar = language === 'ar';
   const label = ar ? 'ابحث عن سورة' : 'Find a surah';
   const href = (next?: number) => branchesHref('', juz ?? undefined, inTree ? { grouped: view.grouped, surah: next } : { ...view, page: 1, surah: next });
-  const shown = Object.keys(names).map(Number).sort((a, b) => a - b).filter(n => (!inTree || counts[n]) && surahMatch(search, n, names[n]) !== null);
+  const shown = Object.keys(names).map(Number).sort((a, b) => a - b).filter(n => (inTree ? counts[n] : surahInRange(n, { unit: 'juz', range: juz })) && surahMatch(search, n, names[n]) !== null);
   return (
     <>
       {families && <section aria-labelledby={`${titleId}-families`} className="flex flex-col gap-2 border-b border-[var(--home-rule)] pb-3">

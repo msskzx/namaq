@@ -381,11 +381,13 @@ describe('QuizzesPage', () => {
 
     const count = screen.getByRole('spinbutton', { name: 'Question count' });
     expect((count as HTMLInputElement).value).toBe('5');
-    fireEvent.click(screen.getByRole('button', { name: 'Increase Question count' }));
+    expect(screen.queryByRole('button', { name: 'Increase Question count' })).toBeNull();
+    fireEvent.keyDown(count, { key: 'ArrowUp' });
     expect((count as HTMLInputElement).value).toBe('10');
-    fireEvent.click(screen.getByRole('button', { name: 'Increase Question count' }));
+    fireEvent.keyDown(count, { key: 'ArrowUp' });
     expect((count as HTMLInputElement).value).toBe('15');
-    expect((screen.getByRole('button', { name: 'Increase Question count' }) as HTMLButtonElement).disabled).toBe(true);
+    fireEvent.keyDown(count, { key: 'ArrowUp' });
+    expect((count as HTMLInputElement).value).toBe('15');
     expect(new URLSearchParams(nav.getUrl().split('?')[1]).has('length')).toBe(false);
     fireEvent.click(screen.getByRole('button', { name: 'Start quiz' }));
     const params = new URLSearchParams(nav.getUrl().split('?')[1]);

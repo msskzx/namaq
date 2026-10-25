@@ -96,7 +96,7 @@ export default function RangeFilter({ range, max, names, href, labels }: { range
       {[0, 1].map(index => (
         <span key={index} className="flex items-center gap-2">
           {label(index)}
-          <NumberInput name={names[index]} label={label(index)} iconFamily="lucide" draftValue={draft[index]} onDraftChange={value => update(index, value)} min={1} max={max} />
+          <NumberInput name={names[index]} label={label(index)} iconFamily="lucide" draftValue={draft[index]} onDraftChange={value => update(index, value)} min={1} max={max} steppers={false} />
         </span>
       ))}
       {range && <Button size="sm" href={href()} onClick={cancel}>

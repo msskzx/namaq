@@ -234,7 +234,7 @@ export default function QuizzesPage() {
                 {([["juzFrom", juz?.from ?? 1, ar ? "من الجزء" : "From juz'"], ["juzTo", juz?.to ?? 30, ar ? "إلى الجزء" : "To juz'"]] as const).map(([key, value, label]) => (
                   <div key={key} className="flex flex-col gap-1 text-sm text-[var(--home-ink)]">
                     <span>{label}</span>
-                    <NumberInput label={label} value={value} min={1} max={30}
+                    <NumberInput label={label} value={value} min={1} max={30} steppers={false}
                       onChange={(next) => {
                         const other = key === "juzFrom" ? juz?.to ?? 30 : juz?.from ?? 1;
                         const crossed = key === "juzFrom" ? next > other : next < other;
@@ -284,7 +284,7 @@ export default function QuizzesPage() {
                   <legend className="mb-2 w-full text-sm font-semibold text-[var(--home-ink)]">{ar ? "عدد الأسئلة" : "Length"}</legend>
                   <NumberInput label={ar ? "عدد الأسئلة" : "Question count"}
                     value={availability.lengths.includes(chosenLength as QuizLength) ? chosenLength : availability.lengths[0]}
-                    min={availability.lengths[0]} max={availability.lengths[availability.lengths.length - 1]} step={5}
+                    min={availability.lengths[0]} max={availability.lengths[availability.lengths.length - 1]} step={5} steppers={false}
                     onChange={setChosenLength} />
                   <Button variant="primary" onClick={() => setParam({ length: String(availability.lengths.includes(chosenLength as QuizLength) ? chosenLength : availability.lengths[0]) })}>
                     <FontAwesomeIcon icon={ar ? faArrowLeft : faArrowRight} />
