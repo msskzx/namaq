@@ -174,6 +174,9 @@ describe('BranchTree', () => {
     expect(dialog.open).toBe(false);
     fireEvent.click(leafText);
     expect(dialog.open).toBe(true);
+    dialog.open = false;
+    fireEvent.click(dialog.querySelector('button')!);
+    expect(dialog.open).toBe(false);
     const rootBox = screen.getByText('إِنَّ ٱلْمُتَّقِينَ فِى').closest('div')!;
     fireEvent.click(rootBox);
     expect(rootBox.querySelector('dialog')!.open).toBe(true);
@@ -185,6 +188,10 @@ describe('BranchTree', () => {
     const link = screen.getByRole('link', { name: 'ٱلْمُتَّقِينَ' });
     link.addEventListener('click', event => event.preventDefault());
     fireEvent.click(link);
+    expect(link.closest('div')!.querySelector('dialog')!.open).toBe(false);
+    const leaf = screen.getByText('مَقَامٍ أَمِينٍۢ');
+    fireEvent.click(leaf);
+    expect(leaf.closest('div')!.querySelector('dialog')!.open).toBe(true);
     expect(link.closest('div')!.querySelector('dialog')!.open).toBe(false);
   });
 
@@ -265,6 +272,12 @@ describe('BranchTree', () => {
       const box = (await screen.findByText('إِنَّ هَـٰذَا')).closest('[data-ctx]')!;
       expect(box.textContent?.indexOf('إِنَّ هَـٰذَا')).toBeLessThan(box.textContent!.indexOf(basmala.join(' ')));
       expect(within(box as HTMLElement).getByRole('link', { name: 'الدخان ٥٠' }).getAttribute('href')).toBe('/quran/read/498?a=44:50');
+    });
+
+    it('puts the reference under the ayah text, like the tree\'s own leaves', async () => {
+      render(<BranchTree tree={tree} names={names} pages={pages} surround={{ on: true }} />);
+      const box = (await screen.findByText('ٱدْخُلُوهَا بِسَلَـٰمٍ')).closest('[data-ctx]')!;
+      expect(box.textContent!.indexOf('ٱدْخُلُوهَا')).toBeLessThan(box.textContent!.indexOf('الحجر ٤٦'));
     });
 
     it('tags a neighbour that is itself in the tree and links to its branch', async () => {

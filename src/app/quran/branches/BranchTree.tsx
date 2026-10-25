@@ -76,10 +76,10 @@ function Node({ node, parent, path, names, pages, tags, lead, juz, renderNode, i
       {(node.children.length > 0 || nexts.length > 0) && (
         <>
           <span aria-hidden data-line data-keys={around ? keys(node).join(' ') : undefined} className={`w-4 shrink-0 border-t-2 ${LINE}`} />
-          <ul className="flex flex-col">
+          <ul className="flex shrink-0 flex-col">
             {[...node.children.map((child, i) => ({ key: `n${i}`, keys: keys(child), item: <Node node={child} parent={node} path={words} names={names} pages={pages} tags={tags} lead={lead} juz={juz} renderNode={renderNode} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={anchors} /> })), ...nexts].map((entry, i, all) => (
               <li key={entry.key} className="relative flex items-center py-1 ps-6">
-                <span aria-hidden data-line data-keys={around ? entry.keys.join(' ') : undefined} className={`absolute start-0 top-1/2 w-6 border-t-2 ${LINE}`} />
+                <span aria-hidden data-line data-keys={around ? entry.keys.join(' ') : undefined} className={`absolute start-0 top-1/2 w-6 -translate-y-1/2 border-t-2 ${LINE}`} />
                 {all.length > 1 && (
                   <span aria-hidden className={`absolute start-0 border-s-2 ${LINE} ${i === 0 ? 'top-1/2' : 'top-0'} ${i === all.length - 1 ? 'bottom-1/2' : 'bottom-0'}`} />
                 )}
@@ -98,10 +98,10 @@ function BeforeFan({ ayahKeys, around }: { ayahKeys: string[]; around?: Around }
   if (!around || boxes.length === 0) return null;
   return (
     <>
-      <ul aria-label="الآيات السابقة" className="flex flex-col">
+      <ul aria-label="الآيات السابقة" className="flex shrink-0 flex-col">
         {boxes.map(({ key, neighbour }, i) => (
           <li key={key} className="relative flex items-center py-1 pe-6">
-            <span aria-hidden data-line data-keys={key} className={`absolute end-0 top-1/2 w-6 border-t-2 ${LINE}`} />
+            <span aria-hidden data-line data-keys={key} className={`absolute end-0 top-1/2 w-6 -translate-y-1/2 border-t-2 ${LINE}`} />
             {boxes.length > 1 && <span aria-hidden className={`absolute end-0 border-e-2 ${LINE} ${i === 0 ? 'top-1/2' : 'top-0'} ${i === boxes.length - 1 ? 'bottom-1/2' : 'bottom-0'}`} />}
             <NeighbourBox neighbour={neighbour} of={key} side="before" around={around} />
           </li>
@@ -134,13 +134,13 @@ export default function BranchTree({ tree, names, pages, variants = [], showSpel
         {header}
         {surround && <SurroundToggle on={on} onChange={setOn} sync={surround.sync} loading={isLoading} failed={!!error} />}
       </div>}
-      <div className="flex items-center">
+      <div className="flex w-max items-center">
         {variants.length > 0 ? (
           <>
-            <ul aria-label="صيغ الكلمة الأولى" className="flex flex-col">
+            <ul aria-label="صيغ الكلمة الأولى" className="flex shrink-0 flex-col">
               {variants.map((variant, i) => (
                 <li key={variant.word} className="relative flex items-center py-1 pe-6">
-                  <span aria-hidden data-line data-keys={around ? variant.keys.join(' ') : undefined} className={`absolute end-0 top-1/2 w-6 border-t-2 ${LINE}`} />
+                  <span aria-hidden data-line data-keys={around ? variant.keys.join(' ') : undefined} className={`absolute end-0 top-1/2 w-6 -translate-y-1/2 border-t-2 ${LINE}`} />
                   <span aria-hidden className={`absolute end-0 border-e-2 ${LINE} ${i === 0 ? 'top-1/2' : 'top-0'} ${i === variants.length - 1 ? 'bottom-1/2' : 'bottom-0'}`} />
                   <BeforeFan ayahKeys={variant.keys} around={around} />
                   <div data-keys={around ? variant.keys.join(' ') : undefined} onClick={openFromNode} className={`${OPENS} shrink-0 rounded border-2 bg-[var(--home-paper)] px-3 py-1.5 text-xl font-arabic leading-loose ${TONE[variant.conj]}`}>
