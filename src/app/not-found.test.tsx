@@ -17,4 +17,11 @@ describe('NotFound', () => {
     const link = screen.getByRole('link', { name: /go home/i });
     expect(link.getAttribute('href')).toBe('/');
   });
+
+  it('heads the page with its title and draws 404 as nodes with an open zero', () => {
+    const { container } = render(<NotFound />);
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Page not found');
+    expect(container.querySelectorAll('svg circle')).toHaveLength(17);
+    expect(container.querySelectorAll('svg line[stroke-dasharray], svg g[stroke-dasharray] line')).toHaveLength(2);
+  });
 });
