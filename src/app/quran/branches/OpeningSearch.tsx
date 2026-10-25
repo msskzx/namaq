@@ -34,7 +34,7 @@ export default function OpeningSearch({ phrases, current, query: submitted = '',
   const search = () => {
     setDismissed(true);
     setSelected(-1);
-    router.push(branchesHref('', juz ?? undefined, { grouped: view.grouped, query: query.trim() }));
+    router.push(branchesHref('', juz ?? undefined, { grouped: view.grouped, surah: view.surah, query: query.trim() }));
   };
   return (
     <div className="flex flex-col gap-3">

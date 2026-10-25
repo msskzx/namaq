@@ -162,6 +162,14 @@ describe('BranchTree', () => {
     expect(params.get('q')).toBe('13:25,2:27');
   });
 
+  it('keeps a node unlit while the pointer is inside its own overlay', () => {
+    const { container } = render(<BranchTree tree={tree} names={{}} />);
+    const leaf = screen.getByText('مَقَامٍ أَمِينٍۢ').closest('[data-node]')!;
+    fireEvent.mouseEnter(leaf.querySelector('dialog')!);
+    fireEvent.focus(within(leaf.querySelector('dialog') as HTMLElement).getByRole('button', { name: 'إغلاق', hidden: true }));
+    expect(container.querySelector('[data-lit]')).toBeNull();
+  });
+
   it('opens the overlay only from its button, never from the node text or box', () => {
     render(<BranchTree tree={tree} names={{}} />);
     const leafText = screen.getByText('مَقَامٍ أَمِينٍۢ');
@@ -180,8 +188,12 @@ describe('BranchTree', () => {
     const leaf = screen.getByText('مَقَامٍ أَمِينٍۢ').closest('[data-node]')!;
     fireEvent.mouseEnter(leaf);
     expect(lit()).toEqual(['إِنَّ ٱلْمُتَّقِينَ فِى', 'مَقَامٍ أَمِينٍۢ']);
+    expect(leaf.className).toContain('border-[var(--home-accent)]');
+    expect(leaf.className).not.toContain('border-[var(--home-rule)]');
     fireEvent.mouseLeave(leaf);
     expect(lit()).toEqual([]);
+    expect(leaf.className).toContain('border-[var(--home-rule)]');
+    expect(leaf.className).not.toContain('border-[var(--home-accent)]');
     const pin = screen.getByRole('button', { name: 'إظهار المسار: جَنَّـٰتٍۢ وَعُيُونٍ' });
     fireEvent.click(pin);
     expect(pin.getAttribute('aria-pressed')).toBe('true');

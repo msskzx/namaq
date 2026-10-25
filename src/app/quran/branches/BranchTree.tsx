@@ -14,7 +14,7 @@ import { anchorOf, NeighbourBox, SurroundToggle, targetStyle, useSurrounding, ty
 type Props = { view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; surround?: { on: boolean; sync?: boolean } };
 type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header' | 'surround'> & { around?: Around; anchors?: string; node: Branch; parent?: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
 
-const LIT = 'border-[var(--home-accent)]';
+const LIT = 'border-[var(--home-accent)] text-[var(--home-ink)]';
 export const TONE: Record<string, string> = {
   '': 'border-[var(--home-muted)] text-[var(--home-ink)]',
   و: 'border-[var(--home-green)] text-[var(--home-green)]',
@@ -78,7 +78,7 @@ function Node({ node, parent, path, names, tags, lead, juz, renderNode, indices,
   const entries: FanEntry[] = [...node.children.map((child, i) => ({ key: `n${i}`, keys: keys(child), item: <Node node={child} parent={node} path={words} names={names} tags={tags} lead={lead} juz={juz} renderNode={renderNode} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={anchors} /> })), ...nexts];
   return (
     <div className="flex items-center">
-      {(!root || shownWords.length > 0 || node.ayat.length > 0) && <PathBox id={id} keys={keys(node)} lit={LIT} className={`shrink-0 rounded border px-3 py-1.5 ${node.children.length === 0 ? 'max-w-sm' : 'max-w-xs'} ${root ? 'border-[var(--home-accent)] bg-[var(--home-paper-deep)] text-xl' : 'border-[var(--home-rule)] bg-[var(--home-paper)] text-lg'}`}>
+      {(!root || shownWords.length > 0 || node.ayat.length > 0) && <PathBox id={id} keys={keys(node)} lit={LIT} tone={root ? 'border-[var(--home-accent)]' : 'border-[var(--home-rule)]'} className={`shrink-0 rounded border px-3 py-1.5 ${node.children.length === 0 ? 'max-w-sm' : 'max-w-xs'} ${root ? 'bg-[var(--home-paper-deep)] text-xl' : 'bg-[var(--home-paper)] text-lg'}`}>
         {anchors && node.ayat.map(key => <span key={key} data-anchor id={anchorOf(anchors, key)} />)}
         {renderNode && !root ? renderNode(node, indices.get(node)!, tags) : <Marked node={node} ayahKeys={keys(node)} subject={subject} siblings={node.children.length === 0 && parent ? keys(parent) : undefined} names={names} offset={path.length} skip={root ? lead : 0} enabled={showSpellings}
           references={node.ayat.length > 0 && <AyahRefs keys={node.ayat} names={names} tags={tags} />}
@@ -133,7 +133,7 @@ export default function BranchTree({ tree, names, variants = [], showSpellings =
           {variants.length > 0 ? <>
             <Fan side="end" label="صيغ الكلمة الأولى" entries={variants.map((variant, i) => ({ key: variant.word, keys: variant.keys, item: <>
               <BeforeFan ayahKeys={variant.keys} around={around} opens={`v${i}`} />
-              <PathBox id={`v${i}`} keys={variant.keys} lit={LIT} className={`shrink-0 rounded border-2 bg-[var(--home-paper)] px-3 py-1.5 text-xl font-arabic leading-loose ${TONE[variant.conj]}`}>
+              <PathBox id={`v${i}`} keys={variant.keys} lit={LIT} tone={TONE[variant.conj]} className="shrink-0 rounded border-2 bg-[var(--home-paper)] px-3 py-1.5 text-xl font-arabic leading-loose">
                 <Marked node={variant} ayahKeys={variant.keys} subject={variant.word} siblings={variants.flatMap(other => other.keys)} names={names} enabled={showSpellings}
                   before={<PathButton id={`v${i}`} keys={variant.keys} subject={variant.word} />}
                   after={!renderNode && <SubtreeButton href={branchesHref(variant.id, juz ?? undefined, { ...view, spelling: spell(variant.word), partition: variant.partition })} />}>

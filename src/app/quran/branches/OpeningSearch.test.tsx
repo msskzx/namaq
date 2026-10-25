@@ -65,6 +65,14 @@ describe('OpeningSearch', () => {
     expect(screen.queryByLabelText('عبارات مقترحة')).toBeNull();
   });
 
+  it('keeps the picked surah when searching', () => {
+    render(<OpeningSearch top={top} phrases={phrases} current="" view={{ surah: 14 }} />);
+    const box = screen.getByRole('combobox');
+    fireEvent.change(box, { target: { value: 'الم تر' } });
+    fireEvent.keyDown(box, { key: 'Enter' });
+    expect(router.push).toHaveBeenCalledWith(branchesHref('', undefined, { surah: 14, query: 'الم تر' }));
+  });
+
   it('leaves a suggestion under the mouse out of Enter', () => {
     render(<OpeningSearch top={top} phrases={phrases} current="" />);
     const box = screen.getByRole('combobox');

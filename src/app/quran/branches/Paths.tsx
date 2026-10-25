@@ -33,12 +33,12 @@ export function useIsLit() {
   return (keys: string[]) => !!paths && keys.some(key => paths.lit.has(key));
 }
 
-export function PathBox({ id, keys, className, lit, ctx, children }: { id: string; keys: string[]; className: string; lit: string; ctx?: string; children: React.ReactNode }) {
+export function PathBox({ id, keys, className, tone, lit, ctx, children }: { id: string; keys: string[]; className: string; tone: string; lit: string; ctx?: string; children: React.ReactNode }) {
   const paths = useContext(PathContext);
   const on = useIsLit()(keys);
-  const enter = () => paths?.hover(keys);
+  const enter = (event: React.SyntheticEvent) => { if (!(event.target as Element).closest('dialog')) paths?.hover(keys); };
   const leave = () => paths?.hover(null);
-  return <div data-node={id} data-ctx={ctx} data-keys={keys.join(' ')} data-lit={on || undefined} onMouseEnter={enter} onMouseLeave={leave} onFocus={enter} onBlur={leave} className={`${className} ${on ? lit : ''}`}>{children}</div>;
+  return <div data-node={id} data-ctx={ctx} data-keys={keys.join(' ')} data-lit={on || undefined} onMouseEnter={enter} onMouseLeave={leave} onFocus={enter} onBlur={leave} className={`${className} ${on ? lit : tone}`}>{children}</div>;
 }
 
 export function PathButton({ id, keys, subject }: { id: string; keys: string[]; subject?: string }) {
