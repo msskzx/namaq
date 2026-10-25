@@ -5,7 +5,7 @@ import ThemesCompare from './ThemesCompare';
 import CompareControls from './CompareControls';
 import CompareLayout from './CompareLayout';
 import { modeHref, type CompareTab } from './modeHref';
-import { RepetitionProvider, SurahRepetition } from './Repetition';
+import { RepetitionProvider } from './Repetition';
 import SimilarAyat, { similarSurahPairs } from './SimilarAyat';
 import { SurahPairs } from './SurahPairs';
 import { prisma } from '@/lib/prisma';
@@ -68,10 +68,7 @@ export default async function QuranComparePage({ searchParams }: { searchParams:
         <CompareLayout title={tab === 'themes' ? 'السور بالمواضيع المشتركة' : 'السور بالآيات المتشابهة'} current={current}
           pane={<SurahPairs key="pane" groups={groupBySurah(pairs, surahs.map(x => x.number).filter(n => surahInRange(n, range)))} names={names} tab={tab} query={strings} surah={s} within={within} a={a} b={b} />}>
           {s !== null ? (
-            <>
-              <SimilarAyat surah={s} within={within} range={range} query={strings} />
-              <SurahRepetition surah={s} />
-            </>
+            <SimilarAyat surah={s} within={within} range={range} query={strings} />
           ) : themes ? <ThemesCompare query={shown} range={range} /> : <TextCompare query={shown} range={range} />}
         </CompareLayout>
       </div>

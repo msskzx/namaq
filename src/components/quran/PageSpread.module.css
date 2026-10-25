@@ -18,6 +18,7 @@
 
 @media (max-width: 600px) {
   .spread { column-gap: 0.5rem; }
+  .stackOnMobile > .page { grid-column: 1 / -1; }
   .page { padding: 0.5rem; }
   .page h3 { font-size: 1.125rem; }
   .lines { font-size: 1.125rem; line-height: 2.2; }
