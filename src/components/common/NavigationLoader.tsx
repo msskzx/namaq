@@ -54,8 +54,8 @@ export function NavigationLoaderProvider({ children }: { children: React.ReactNo
       {children}
       <Suspense fallback={null}><UrlWatcher onChange={stop} /></Suspense>
       {shown && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
-          <div className="rounded-md border border-[var(--home-rule)] bg-[var(--home-paper-deep)] px-5 py-2 shadow-[0_4px_16px_var(--home-shadow)]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none [:root:has([data-route-loading])_&]:hidden">
+          <div className="rounded-md border border-[var(--home-rule)] bg-[var(--home-paper-deep)] px-5 py-4 shadow-[0_4px_16px_var(--home-shadow)]">
             <LoadingSpinner size="lg" variant={pathname.startsWith('/graphs') ? 'graph' : 'tree'} />
           </div>
         </div>
