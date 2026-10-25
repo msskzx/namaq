@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { branchesHref } from '@/lib/quran/branches';
 import QuranBranchesPage from './page';
 
@@ -28,6 +28,18 @@ describe('Quran branches range selection', () => {
     render(await open({ o: 'ان المتقين' }));
     expect(loadReaderAyat).not.toHaveBeenCalled();
     expect(container.querySelector('[data-ctx]')).toBeNull();
+    vi.unstubAllGlobals();
+  });
+
+  it('draws the switch from the address again when the page moves to another phrase', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({ before: {}, after: {} }) }));
+    const { rerender } = render(await open({ o: 'ان المتقين' }));
+    fireEvent.click(screen.getByRole('switch'));
+    expect((screen.getByRole('switch') as HTMLInputElement).checked).toBe(true);
+    rerender(await open({ o: 'قال رب' }));
+    expect((screen.getByRole('switch') as HTMLInputElement).checked).toBe(false);
+    rerender(await open({ o: 'ان المتقين', c: '1' }));
+    expect((screen.getByRole('switch') as HTMLInputElement).checked).toBe(true);
     vi.unstubAllGlobals();
   });
 
