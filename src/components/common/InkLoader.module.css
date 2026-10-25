@@ -12,7 +12,7 @@
 .bead { transform-origin: center top; }
 
 @media (prefers-reduced-motion: no-preference) {
-  .loader { --ink-loop: 4.2s; }
+  .loader { --ink-loop: 1s; }
   .loop { animation: fade var(--ink-loop) infinite linear; }
   .quill { animation: quill var(--ink-loop) infinite ease-in-out; }
   .bead { animation: bead var(--ink-loop) infinite; }
