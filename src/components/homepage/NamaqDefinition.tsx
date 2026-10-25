@@ -2,57 +2,26 @@
 
 import { useLanguage } from "../language/LanguageContext";
 import translations from "../language/translations";
-import NamaqSlider from "./NamaqSlider";
+
+const words = ['نَمَق', 'يَنمُق', 'نَمْقًا', 'نامِق', 'مَنْموق', 'نَمَّقَ', 'ينمِّق', 'تنميقًا', 'مُنمِّق', 'نَمْق', 'نَمَق'];
 
 export default function NamaqDefinition() {
   const { language } = useLanguage();
   const t = translations[language];
+  const ar = language === 'ar';
   return (
-    <div className="bg-white dark:bg-black rounded-2xl shadow-lg mb-12">
-      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-8">
-
-        <div className="col-span-1">
-          <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-lg border-s-4 border-rose-800 p-6 h-full flex flex-col">
-            <h4 className="font-arabicDisplay text-amber-400 text-xl md:text-2xl font-bold mb-3 text-center" dir="rtl">
-              {t.verbNamaq.title}
-            </h4>
-            <p className="font-arabic text-gray-900 dark:text-gray-200 text-base md:text-lg leading-relaxed text-center mb-4 flex-grow" dir="rtl">
-              {t.verbNamaq.definition}
-            </p>
-            <div className="space-y-2 mt-2">
-              {t.verbNamaq.forms.map((form, index) => (
-                <p key={index} className="font-arabic text-gray-700 dark:text-gray-200 text-sm md:text-base text-center" dir="rtl">
-                  {form}
-                </p>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="col-span-1">
-          <NamaqSlider />
-        </div>
-
-        <div className="col-span-1">
-          <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-lg border-s-4 border-rose-800 p-6 h-full flex flex-col">
-            <h4 className="font-arabicDisplay text-amber-400 text-xl md:text-2xl font-bold mb-3 text-center" dir="rtl">
-              {t.nounNamaq.title}
-            </h4>
-            <p className="font-arabic text-gray-900 dark:text-gray-200 text-base md:text-lg leading-relaxed text-center mb-4 flex-grow" dir="rtl">
-              {t.nounNamaq.definition}
-            </p>
-            <div className="space-y-2 mt-2">
-              {t.nounNamaq.forms.map((form, index) => (
-                <p key={index} className="font-arabic text-gray-700 dark:text-gray-200 text-sm md:text-base text-center" dir="rtl">
-                  {form}
-                </p>
-              ))}
-            </div>
-          </div>
-        </div>
-
+    <details className="mt-8 border-t border-[var(--home-rule)] pt-4">
+      <summary className="cursor-pointer text-lg">{ar ? 'اسم نمق' : 'The name Namaq'}</summary>
+      <div className="mt-4 grid gap-6 sm:grid-cols-2">
+        {[t.verbNamaq, t.nounNamaq].map(entry => (
+          <section key={entry.title} className="space-y-3 leading-loose">
+            <h2 className="text-xl">{entry.title}</h2>
+            <p>{entry.definition}</p>
+            {entry.forms.filter(form => form !== entry.definition).map(form => <p key={form} className="text-[var(--home-muted)]">{form}</p>)}
+          </section>
+        ))}
       </div>
-    </div >
-
+      <p className="mt-6 font-arabic text-lg leading-loose text-[var(--home-muted)]" dir="rtl" lang="ar">{words.join(' · ')}</p>
+    </details>
   );
 }
