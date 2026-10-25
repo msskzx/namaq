@@ -678,7 +678,7 @@ export default function GraphCanvas({ targetSlug = 'prophet-muhammad', defaultFu
   };
 
   const updatingNotice = exploration.isFetching && (
-    <div role="status" className="mt-3 flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300">
+    <div className="mt-3 flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300">
       <LoadingSpinner size="sm" variant="graph" />
     </div>
   );

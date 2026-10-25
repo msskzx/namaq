@@ -10,7 +10,7 @@ import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@/lib/quran/arabicNumber';
 import type { Neighbour, Surrounding } from '@/lib/quran/ayahContext';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
+import InkLoader from '@/components/common/InkLoader';
 
 export type Around = { data: Surrounding; ends: Record<string, string>; inTree: Set<string>; names: Record<number, string>; tree: string };
 
@@ -43,7 +43,7 @@ function SurroundSwitch({ on, onChange, loading = false, failed = false }: Toggl
     <span className="inline-flex items-center gap-2 text-sm text-[var(--home-ink)]">
       <Toggle id={id} checked={on} label={label} onChange={onChange} />
       <label htmlFor={id} className="cursor-pointer">{label}</label>
-      {on && loading && <LoadingSpinner size="sm" />}
+      {on && loading && <span role="status"><InkLoader className="inline-block h-5 w-auto" /><span className="sr-only">{ar ? 'جارٍ التحميل' : 'Loading'}</span></span>}
       {on && failed && <span role="alert" className="text-xs text-[var(--home-accent)]">{ar ? 'تعذّر تحميل الآيات.' : 'Could not load the ayat.'}</span>}
     </span>
   );

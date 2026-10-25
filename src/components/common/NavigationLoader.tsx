@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import LoadingSpinner from './LoadingSpinner';
 
 const SHOW_AFTER_MS = 150;
-const GIVE_UP_MS = 15000;
+const GIVE_UP_MS = 8000;
 
 const NavigationContext = createContext<(href: string) => void>(() => {});
 

@@ -25,7 +25,7 @@ function Search() {
 
 const view = () => (
   <NavigationLoaderProvider>
-    <a href="/quran/compare" onClick={event => event.preventDefault()}>compare</a>
+    <a href="/quran/compare" onClick={event => event.preventDefault() /* as next/link does */}>compare</a>
     <a href="/quran/branches#top" onClick={event => event.preventDefault()}>here</a>
     <Search />
   </NavigationLoaderProvider>
@@ -60,6 +60,6 @@ it('ignores a link to the page already open', () => {
 it('gives up after a navigation that never lands', () => {
   render(view());
   fireEvent.click(screen.getByText('compare'));
-  act(() => vi.advanceTimersByTime(16000));
+  act(() => vi.advanceTimersByTime(9000));
   expect(screen.queryByRole('status')).toBeNull();
 });

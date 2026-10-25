@@ -34,7 +34,7 @@ export default function SubjectEvidenceAccess({
   const { language } = useLanguage();
   const [expanded, setExpanded] = useState(false);
 
-  const { data } = useSWR<ReferencesResponse>(
+  const { data, error } = useSWR<ReferencesResponse>(
     hasProfile ? null : `/api/subjects/${kind}/${slug}/references`,
     fetcher,
   );
@@ -45,6 +45,7 @@ export default function SubjectEvidenceAccess({
 
   const claims = (data?.claims ?? []).filter((claim) => !claim.field || identityFields.has(claim.field));
 
+  if (error) return null;
   if (!data) return <LoadingSpinner size="sm" variant="graph" className="mt-2 justify-start" />;
   if (claims.length === 0) {
     return <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">{noEvidence}</p>;

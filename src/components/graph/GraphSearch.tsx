@@ -170,7 +170,7 @@ export default function GraphSearch({ personOnly = false, hint }: { personOnly?:
             />
 
             {isLoading && (
-              <div className="absolute inset-y-0 right-3 flex items-center">
+              <div className="absolute inset-y-0 end-3 flex items-center">
                 <InkLoader variant="graph" className="h-8 w-auto" />
               </div>
             )}
