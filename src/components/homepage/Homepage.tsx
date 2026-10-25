@@ -16,7 +16,7 @@ import NasabPreview from './NasabPreview';
 import { BRANCHES_HREF, COMPARE_HREF, NASAB_HREF, PROPHET_GRAPH_HREF } from './homeLinks';
 import styles from './Home.module.css';
 
-function Feature({ id, n, title, description, example, href, children }: { id: string; n: number; title: string; description: string; example: string; href: string; children: ReactNode }) {
+function Feature({ id, n, title, description, example, href, action, children }: { id: string; n: number; title: string; description: string; example: string; href: string; action: string; children: ReactNode }) {
   const ar = useLanguage().language === 'ar';
   const Forward = ar ? ArrowLeft : ArrowRight;
   return (
@@ -27,8 +27,8 @@ function Feature({ id, n, title, description, example, href, children }: { id: s
           <h2 id={`${id}-title`}>{title}</h2>
           <p>{description}</p>
           <p className={styles.exampleCaption}>{example}</p>
-          <Button href={href} aria-label={`${ar ? 'افتح' : 'Open'} ${title}`} className={styles.featureAction}>
-            {ar ? 'افتح' : 'Open'}<Forward size={16} aria-hidden />
+          <Button href={href} className={styles.featureAction}>
+            {action}<Forward size={16} aria-hidden />
           </Button>
         </div>
       </header>
@@ -69,10 +69,10 @@ export default function Homepage({ data, fontClass = '' }: { data: HomePreviews;
     <div className={`${styles.page} ${fontClass}`} dir={ar ? 'rtl' : 'ltr'}>
       <div className={styles.content}>
         <Hero />
-        <Feature id="openings" n={1} title={ar ? 'فواتح الآيات المشتركة' : 'Shared verse openings'} description={ar ? 'تتبّع الآيات التي تشترك في بدايتها، ثم شاهد كيف تتفرّع ألفاظها لتستكشف أوجه التشابه والاختلاف بينها.' : 'Follow verses that share an opening and see where their wording branches into different phrases.'} example={ar ? 'مثال: آيات تبدأ بعبارة «إن المتقين». تتبّع اختلاف الكلمات واختر فرعًا لاستكشافه.' : 'Example: verses beginning with “Indeed, the righteous”. Follow the words as they branch and select a phrase to explore.'} href={BRANCHES_HREF}>
+        <Feature id="openings" n={1} title={ar ? 'فواتح الآيات المشتركة' : 'Shared verse openings'} description={ar ? 'تتبّع الآيات التي تشترك في بدايتها، ثم شاهد كيف تتفرّع ألفاظها لتستكشف أوجه التشابه والاختلاف بينها.' : 'Follow verses that share an opening and see where their wording branches into different phrases.'} example={ar ? 'مثال: آيات تبدأ بعبارة «إن المتقين». تتبّع اختلاف الكلمات واختر فرعًا لاستكشافه.' : 'Example: verses beginning with “Indeed, the righteous”. Follow the words as they branch and select a phrase to explore.'} action={ar ? 'تتبّع الفواتح' : 'Follow the openings'} href={BRANCHES_HREF}>
           <div className={styles.branchPreview} dir="rtl"><FitDiagram><BranchTree tree={data.branches.tree} pages={data.branches.pages} names={{ 15: 'الحجر', 44: 'الدخان', 51: 'الذاريات', 52: 'الطور', 54: 'القمر', 77: 'المرسلات' }} /></FitDiagram></div>
         </Feature>
-        <Feature id="comparison" n={2} title={ar ? 'مقارنة الآيات' : 'Compare Quranic passages'} description={ar ? 'اقرأ مقطعين من القرآن جنبًا إلى جنب، مع محاذاة الآيات المتقابلة وتمييز الكلمات المشتركة لمقارنة ألفاظهما.' : 'Read two Quranic passages side by side, with corresponding verses aligned and shared words highlighted to help you compare their wording.'} example={ar ? 'مثال: الشعراء ٤١–٤٥ والأعراف ١١٣–١١٧. مقتطفان من قصة موسى، تُميَّز الكلمة المشتركة بلفظها بلون، والكلمة التي تشترك في جذرها بلفظ مختلف بلون آخر تحته خط منقّط.' : 'Example: Al-Shu‘ara 41–45 and Al-A‘raf 113–117. Two excerpts from Musa’s story, with words shared exactly in one colour and words that share only a root in another, underlined with dots.'} href={COMPARE_HREF}>
+        <Feature id="comparison" n={2} title={ar ? 'مقارنة الآيات' : 'Compare Quranic passages'} description={ar ? 'اقرأ مقطعين من القرآن جنبًا إلى جنب، مع محاذاة الآيات المتقابلة وتمييز الكلمات المشتركة لمقارنة ألفاظهما.' : 'Read two Quranic passages side by side, with corresponding verses aligned and shared words highlighted to help you compare their wording.'} example={ar ? 'مثال: الشعراء ٤١–٤٥ والأعراف ١١٣–١١٧. مقتطفان من قصة موسى، تُميَّز الكلمة المشتركة بلفظها بلون، والكلمة التي تشترك في جذرها بلفظ مختلف بلون آخر تحته خط منقّط.' : 'Example: Al-Shu‘ara 41–45 and Al-A‘raf 113–117. Two excerpts from Musa’s story, with words shared exactly in one colour and words that share only a root in another, underlined with dots.'} action={ar ? 'قارن الآيات' : 'Compare passages'} href={COMPARE_HREF}>
           <PageSpread pages={(['a', 'b'] as const).map(side => ({
             title: side === 'a' ? 'سورة الشعراء' : 'سورة الأعراف',
             subtitle: ar ? `مقتطف · الآيات ${side === 'a' ? '٤١–٤٥' : '١١٣–١١٧'}` : `Excerpt · verses ${side === 'a' ? '41–45' : '113–117'}`,
@@ -85,7 +85,7 @@ export default function Homepage({ data, fontClass = '' }: { data: HomePreviews;
           }))} />
           <MatchLegend exact={ar ? 'كلمة مشتركة بلفظها' : 'Same word'} root={ar ? 'كلمة من جذر مشترك بلفظ مختلف' : 'Same root, different wording'} />
         </Feature>
-        <Feature id="musa" n={3} title={ar ? 'قصص الأنبياء في القرآن' : 'Prophets’ stories in the Quran'} description={ar ? 'تتبّع أحداث قصص الأنبياء الواردة في سور مختلفة ضمن محطات متتابعة، واعرف عدد السور التي تذكر كل محطة.' : 'Follow events from prophets’ stories across different surahs in a sequence of milestones, and see how many surahs mention each one.'} example={ar ? 'مثال: محطات قصة موسى عليه السلام. اسحب أفقيًا لتتبّع القصة عبر السور.' : 'Example: milestones from Musa’s story. Scroll horizontally to follow the story across the surahs.'} href="/quran/prophets/musa">
+        <Feature id="musa" n={3} title={ar ? 'قصص الأنبياء في القرآن' : 'Prophets’ stories in the Quran'} description={ar ? 'تتبّع أحداث قصص الأنبياء الواردة في سور مختلفة ضمن محطات متتابعة، واعرف عدد السور التي تذكر كل محطة.' : 'Follow events from prophets’ stories across different surahs in a sequence of milestones, and see how many surahs mention each one.'} example={ar ? 'مثال: محطات قصة موسى عليه السلام. اسحب أفقيًا لتتبّع القصة عبر السور.' : 'Example: milestones from Musa’s story. Scroll horizontally to follow the story across the surahs.'} action={ar ? 'تتبّع القصة' : 'Follow the story'} href="/quran/prophets/musa">
           <div className={styles.timeline} tabIndex={0} role="region" aria-label={ar ? 'محطات قصة موسى' : 'Musa timeline'}>
             <ol>{data.timeline.map(event => <li key={event.n}>
               <span className={styles.timelineDot}>{event.n.toLocaleString(ar ? 'ar-u-nu-arab' : 'en')}</span>
@@ -98,16 +98,16 @@ export default function Homepage({ data, fontClass = '' }: { data: HomePreviews;
             </li>)}</ol>
           </div>
         </Feature>
-        <Feature id="family" n={4} title={ar ? 'استكشاف العلاقات' : 'Explore relationships'} description={ar ? 'استكشف الصلات بين الأشخاص في شبكة تفاعلية، ثم انتقل إلى سيرهم للتعرّف على حياتهم ومصادر المعلومات عنهم.' : 'Explore connections between people in an interactive graph, then open their biographies to read about their lives and the sources behind them.'} example={ar ? 'مثال: شبكة النبي محمد ﷺ مع أسرته وأصهاره. اختر شخصًا لاستكشاف صلاته.' : 'Example: Prophet Muhammad ﷺ, his family and his in-laws. Select a person to explore their connections.'} href={PROPHET_GRAPH_HREF}>
+        <Feature id="family" n={4} title={ar ? 'استكشاف العلاقات' : 'Explore relationships'} description={ar ? 'استكشف الصلات بين الأشخاص في شبكة تفاعلية، ثم انتقل إلى سيرهم للتعرّف على حياتهم ومصادر المعلومات عنهم.' : 'Explore connections between people in an interactive graph, then open their biographies to read about their lives and the sources behind them.'} example={ar ? 'مثال: شبكة النبي محمد ﷺ مع أسرته وأصهاره. اختر شخصًا لاستكشاف صلاته.' : 'Example: Prophet Muhammad ﷺ, his family and his in-laws. Select a person to explore their connections.'} action={ar ? 'استكشف الشبكة' : 'Explore the graph'} href={PROPHET_GRAPH_HREF}>
           <HeroGraphPreview />
         </Feature>
-        <Feature id="jibril" n={5} title={ar ? 'الحديث نصًا وحوارًا' : 'Hadith as text and conversation'} description={ar ? 'اقرأ الحديث مع فصل الإسناد عن المتن وإظهار المتحدثين في الحوار، وبدّل بين الفقاعات والنص الكامل.' : 'Read a hadith with its chain of narration separated from the main text and its speakers identified. Switch between conversation bubbles and the full text.'} example={ar ? 'مثال: حديث جبريل في صحيح مسلم. شاهد الإسناد والحوار بالفقاعات، أو بدّل إلى النص الكامل.' : 'Example: Hadith Jibril in Sahih Muslim. View its isnad and conversation bubbles, or switch to the full text.'} href="/hadith/muslim-jibril">
+        <Feature id="jibril" n={5} title={ar ? 'الحديث نصًا وحوارًا' : 'Hadith as text and conversation'} description={ar ? 'اقرأ الحديث مع فصل الإسناد عن المتن وإظهار المتحدثين في الحوار، وبدّل بين الفقاعات والنص الكامل.' : 'Read a hadith with its chain of narration separated from the main text and its speakers identified. Switch between conversation bubbles and the full text.'} example={ar ? 'مثال: حديث جبريل في صحيح مسلم. شاهد الإسناد والحوار بالفقاعات، أو بدّل إلى النص الكامل.' : 'Example: Hadith Jibril in Sahih Muslim. View its isnad and conversation bubbles, or switch to the full text.'} action={ar ? 'اقرأ الحديث' : 'Read the hadith'} href="/hadith/muslim-jibril">
           {data.hadith && <HadithPreview view={data.hadith} />}
         </Feature>
-        <Feature id="lineage" n={6} title={ar ? 'شجرة النسب' : 'Explore family lineages'} description={ar ? 'تتبّع سلاسل الآباء في شجرة واحدة، وقارن أنساب عدة أشخاص لترى مواضع التقاء سلاسلهم.' : 'Trace paternal lines in one tree and compare several people’s ancestry to see where their lines meet.'} example={ar ? 'مثال: نسب النبي ﷺ وأبي بكر وعمر وعثمان وعلي. تتبّع سلاسل الآباء كاملة.' : 'Example: the complete paternal lines of the Prophet ﷺ, Abu Bakr, Umar, Uthman and Ali.'} href={NASAB_HREF}>
+        <Feature id="lineage" n={6} title={ar ? 'شجرة النسب' : 'Explore family lineages'} description={ar ? 'تتبّع سلاسل الآباء في شجرة واحدة، وقارن أنساب عدة أشخاص لترى مواضع التقاء سلاسلهم.' : 'Trace paternal lines in one tree and compare several people’s ancestry to see where their lines meet.'} example={ar ? 'مثال: نسب النبي ﷺ وأبي بكر وعمر وعثمان وعلي. تتبّع سلاسل الآباء كاملة.' : 'Example: the complete paternal lines of the Prophet ﷺ, Abu Bakr, Umar, Uthman and Ali.'} action={ar ? 'تتبّع الأنساب' : 'Trace the lineages'} href={NASAB_HREF}>
           <NasabPreview />
         </Feature>
-        <Feature id="practice" n={7} title={ar ? 'اختبر معرفتك' : 'Test your knowledge'} description={ar ? 'راجع ما تعلّمته بأسئلة تفاعلية، وتعرّف على الإجابة الصحيحة ثم ارجع إلى السيرة والمصادر لمزيد من القراءة.' : 'Review what you have learned with interactive questions, check the correct answer, and open the biography and sources to read further.'} example={ar ? 'مثال: سؤال عن منقبة من مناقب طلحة بن عبيد الله يوم أحد. اختر إجابتك، أو افتح الاختبارات لاختيار موضوع آخر.' : 'Example: a question about one of Talha ibn Ubaydullah’s virtues at Uhud. Choose an answer, or open the quizzes to pick another topic.'} href="/quizzes">
+        <Feature id="practice" n={7} title={ar ? 'اختبر معرفتك' : 'Test your knowledge'} description={ar ? 'راجع ما تعلّمته بأسئلة تفاعلية، وتعرّف على الإجابة الصحيحة ثم ارجع إلى السيرة والمصادر لمزيد من القراءة.' : 'Review what you have learned with interactive questions, check the correct answer, and open the biography and sources to read further.'} example={ar ? 'مثال: سؤال عن منقبة من مناقب طلحة بن عبيد الله يوم أحد. اختر إجابتك، أو افتح الاختبارات لاختيار موضوع آخر.' : 'Example: a question about one of Talha ibn Ubaydullah’s virtues at Uhud. Choose an answer, or open the quizzes to pick another topic.'} action={ar ? 'جميع الاختبارات' : 'All quizzes'} href="/quizzes">
           {data.question && <QuizPreview question={data.question} />}
         </Feature>
         <Exploration />

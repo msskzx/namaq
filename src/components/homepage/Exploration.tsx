@@ -1,4 +1,5 @@
 import ExplorationCard from '../common/ExplorationCard';
+import { NAV_SECTIONS } from '../common/NavBar';
 import cards from '../common/ExplorationCard.module.css';
 import { useLanguage } from '../language/LanguageContext';
 import styles from './Home.module.css';
@@ -6,15 +7,14 @@ import styles from './Home.module.css';
 export default function Exploration() {
   const { language } = useLanguage();
   const ar = language === 'ar';
-  const entries = [
-    { href: '/people', title: ar ? 'الأشخاص' : 'People', description: ar ? 'السير والأسماء والأنساب' : 'Biographies, names and genealogies' },
-    { href: '/sources', title: ar ? 'المصادر' : 'Sources', description: ar ? 'اقرأ النصوص الأصلية وتتبّع الشواهد' : 'Read original texts and follow the evidence' },
-    { href: '/graphs?kind=person', title: ar ? 'الشبكة' : 'Graph', description: ar ? 'استكشف العلاقات بين الأشخاص' : 'Explore the relationships between people' },
-    { href: '/events', title: ar ? 'الأحداث' : 'Events', description: ar ? 'الأحداث والمعارك والمشاركون فيها' : 'Events, battles and the people involved' },
-    { href: '/quran', title: ar ? 'القرآن' : 'Quran', description: ar ? 'القراءة والموضوعات والمقارنات' : 'Reading, themes and comparisons' },
-    { href: '/hadith', title: ar ? 'الحديث' : 'Hadith', description: ar ? 'استكشف النصوص والأسانيد' : 'Explore texts and chains of transmission' },
-    { href: '/quizzes', title: ar ? 'اختبر معرفتك' : 'Test your knowledge', description: ar ? 'أسئلة مع إحالات إلى المصادر' : 'Questions with references to the sources' },
-  ];
+  const descriptions: Record<string, string> = {
+    '/quran': ar ? 'القراءة والموضوعات والمقارنات' : 'Reading, themes and comparisons',
+    '/hadith': ar ? 'استكشف النصوص والأسانيد' : 'Explore texts and chains of transmission',
+    '/people': ar ? 'السير والأنساب والأحداث وشبكة العلاقات' : 'Biographies, lineages, events and the relationship graph',
+    '/sources': ar ? 'اقرأ النصوص الأصلية وتتبّع الشواهد' : 'Read original texts and follow the evidence',
+    '/quizzes': ar ? 'أسئلة مع إحالات إلى المصادر' : 'Questions with references to the sources',
+  };
+  const entries = NAV_SECTIONS.map(section => ({ href: section.href, title: section.label[language], description: descriptions[section.href] }));
 
   return (
     <section className={styles.exploration} aria-labelledby="explore-title">

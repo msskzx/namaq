@@ -20,9 +20,12 @@ describe('homepage features', () => {
     render(<Homepage data={await getHomePreviews()} />);
     const headings = screen.getAllByRole('heading', { level: 2 });
     expect(headings).toHaveLength(8);
-    const hrefs = headings.slice(0, 7).map(heading => {
+    const actions = current === 'ar'
+      ? ['تتبّع الفواتح', 'قارن الآيات', 'تتبّع القصة', 'استكشف الشبكة', 'اقرأ الحديث', 'تتبّع الأنساب', 'جميع الاختبارات']
+      : ['Follow the openings', 'Compare passages', 'Follow the story', 'Explore the graph', 'Read the hadith', 'Trace the lineages', 'All quizzes'];
+    const hrefs = headings.slice(0, 7).map((heading, index) => {
       expect(within(heading).queryByRole('link')).toBeNull();
-      const action = within(heading.closest('section')!).getByRole('link', { name: `${current === 'ar' ? 'افتح' : 'Open'} ${heading.textContent}` });
+      const action = within(heading.closest('section')!).getByRole('link', { name: actions[index] });
       expect(action.previousElementSibling?.tagName).toBe('P');
       return action.getAttribute('href');
     });
