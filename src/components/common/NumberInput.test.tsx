@@ -21,6 +21,14 @@ describe('NumberInput', () => {
     expect(number().value).toBe('25');
   });
 
+  it('leaves out the + and − buttons when asked, keeping the arrow keys', () => {
+    const onChange = vi.fn();
+    render(<NumberInput label="Page" value={5} min={1} max={30} onChange={onChange} steppers={false} />);
+    expect(screen.queryByRole('button')).toBeNull();
+    fireEvent.keyDown(number(), { key: 'ArrowUp' });
+    expect(onChange).toHaveBeenCalledWith(6);
+  });
+
   it('increments and stops at both bounds without submitting the form', () => {
     const submit = vi.fn();
     render(<form onSubmit={submit}><NumberInput label="Page" defaultValue={1} min={1} max={2} /></form>);

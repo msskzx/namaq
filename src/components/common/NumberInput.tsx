@@ -21,9 +21,10 @@ type NumberInputProps = {
   id?: string;
   disabled?: boolean;
   className?: string;
+  steppers?: boolean;
 };
 
-export default function NumberInput({ label, min, max, step = 1, value, defaultValue, draftValue, onDraftChange, onChange, name, id, disabled, className }: NumberInputProps) {
+export default function NumberInput({ label, min, max, step = 1, value, defaultValue, draftValue, onDraftChange, onChange, name, id, disabled, className, steppers = true }: NumberInputProps) {
   const { language } = useLanguage();
   const initial = draftValue ?? value ?? defaultValue ?? min;
   const [draft, setDraft] = useState(String(initial));
@@ -45,9 +46,11 @@ export default function NumberInput({ label, min, max, step = 1, value, defaultV
   const ar = language === 'ar';
   return (
     <span className={`${styles.controls} inline-flex items-center gap-1 ${className ?? ''}`} dir="ltr">
-      <Button size="icon" disabled={disabled || current <= min} aria-label={ar ? `تقليل ${label}` : `Decrease ${label}`} onClick={() => commit(current - step)}>
-        <Minus size={16} aria-hidden />
-      </Button>
+      {steppers && (
+        <Button size="icon" disabled={disabled || current <= min} aria-label={ar ? `تقليل ${label}` : `Decrease ${label}`} onClick={() => commit(current - step)}>
+          <Minus size={16} aria-hidden />
+        </Button>
+      )}
       <input
         ref={input}
         id={id}
@@ -73,9 +76,11 @@ export default function NumberInput({ label, min, max, step = 1, value, defaultV
           }
         }}
       />
-      <Button size="icon" disabled={disabled || current >= ceiling} aria-label={ar ? `زيادة ${label}` : `Increase ${label}`} onClick={() => commit(current + step)}>
-        <Plus size={16} aria-hidden />
-      </Button>
+      {steppers && (
+        <Button size="icon" disabled={disabled || current >= ceiling} aria-label={ar ? `زيادة ${label}` : `Increase ${label}`} onClick={() => commit(current + step)}>
+          <Plus size={16} aria-hidden />
+        </Button>
+      )}
     </span>
   );
 }
