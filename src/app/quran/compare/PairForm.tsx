@@ -50,11 +50,11 @@ export default function PairForm({ surahs, a, b, ayat, keep }: { surahs: Surah[]
           <div className="flex flex-wrap items-center gap-2 text-sm text-[var(--home-muted)]">
             <span className="flex items-center gap-2">
               من
-              <NumberInput label={`من آية (${which})`} value={s.from} min={1} max={s.max} onChange={from => set({ from, to: Math.max(from, s.to) })} />
+              <NumberInput label={`من آية (${which})`} value={s.from} min={1} max={s.max} steppers={false} onChange={from => set({ from, to: Math.max(from, s.to) })} />
             </span>
             <span className="flex items-center gap-2">
               إلى
-              <NumberInput label={`إلى آية (${which})`} value={s.to} min={1} max={s.max} onChange={to => set({ to, from: Math.min(to, s.from) })} />
+              <NumberInput label={`إلى آية (${which})`} value={s.to} min={1} max={s.max} steppers={false} onChange={to => set({ to, from: Math.min(to, s.from) })} />
             </span>
             <Button size="sm" aria-label={`الكل: آيات ${title}`} className="shrink-0" onClick={() => set({ from: 1, to: s.max }, true)}>
               <Expand size={14} aria-hidden />

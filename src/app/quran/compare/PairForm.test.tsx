@@ -22,7 +22,8 @@ describe('PairForm', () => {
     const heard = vi.fn();
     document.addEventListener(NAVIGATING, heard);
     render(<PairForm surahs={surahs} a={a} b={b} ayat keep={{ view: 'ayat', juzFrom: '25' }} />);
-    fireEvent.click(screen.getByRole('button', { name: 'زيادة من آية (الأولى)' }));
+    expect(screen.queryByRole('button', { name: 'زيادة من آية (الأولى)' })).toBeNull();
+    fireEvent.keyDown(screen.getByRole('spinbutton', { name: 'من آية (الأولى)' }), { key: 'ArrowUp' });
     expect(push).toHaveBeenCalledWith('/quran/compare?a=56&b=69&af=2&at=96&bf=1&bt=52&view=ayat&juzFrom=25', { scroll: false });
     expect(heard).toHaveBeenCalledTimes(1);
     document.removeEventListener(NAVIGATING, heard);
