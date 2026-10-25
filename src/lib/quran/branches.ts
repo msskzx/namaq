@@ -129,7 +129,7 @@ const bySpelling = (ayat: BranchAyah[]) => {
   return found;
 };
 
-const norm = (ayah: BranchAyah) => ayah.words.map(normalizeWord);
+const norm = (ayah: BranchAyah) => ayah.words.map(lettersOf);
 
 const plain = (forms: string[]) => {
   if (forms.every(form => form === forms[0])) return forms[0];
@@ -308,7 +308,7 @@ export function withNext(groups: Map<string, BranchAyah[]>, all: BranchAyah[]): 
 }
 
 function grow(ayat: BranchAyah[], from: number, firstWords?: Map<string, string>): Branch {
-  let to = from;
+  let to = ayat.length === 1 ? ayat[0].words.length : from;
   let classes = wordClasses(ayat, to);
   while (classes.every(id => id === classes[0] && id >= 0)) classes = wordClasses(ayat, ++to);
   const children = new Map<number, BranchAyah[]>();
@@ -328,7 +328,9 @@ function grow(ayat: BranchAyah[], from: number, firstWords?: Map<string, string>
 
 export const branch = (ayat: BranchAyah[]) => grow(grown(shown(ayat)), 0, new Map(ayat.map(ayah => [ayah.key, ayah.words[0]])));
 
-export const phraseTree = (ayat: BranchAyah[]) => grow(shown(ayat), 0);
+const trees = new WeakMap<BranchAyah[], Branch>();
+
+export const phraseTree = (ayat: BranchAyah[]) => trees.get(ayat) ?? trees.set(ayat, grow(shown(ayat), 0)).get(ayat)!;
 
 export const variants = (ayat: BranchAyah[]): Variant[] => !split(ayat) ? [] : [...bySpelling(ayat).values()]
   .map(members => ({
@@ -378,7 +380,7 @@ const mushafOrder = (key: string) => {
   return surah * 1000 + ayah;
 };
 
-export function pieces(groups: Map<string, BranchAyah[]>): Piece[] {
+export function pieces(groups: Map<string, BranchAyah[]>, phrases = listPhrases(groups)): Piece[] {
   const found: Piece[] = [];
   const openings = listOpenings(groups);
   groups.forEach(group => {
@@ -408,7 +410,7 @@ export function pieces(groups: Map<string, BranchAyah[]>): Piece[] {
     walk(phraseTree(group), []);
   });
   const first = (piece: Piece) => Math.min(...piece.keys.map(mushafOrder));
-  const ambiguous = new Set(listPhrases(groups).filter(phrase => phrase.partition).map(phrase => phrase.id));
+  const ambiguous = new Set(phrases.filter(phrase => phrase.partition).map(phrase => phrase.id));
   return found.map(piece => {
     if (ambiguous.has(piece.id)) return piece;
     const plain = { ...piece };

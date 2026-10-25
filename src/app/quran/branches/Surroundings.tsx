@@ -10,28 +10,27 @@ import Toggle from '@/components/common/Toggle';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@/lib/quran/arabicNumber';
 import type { Neighbour, Surrounding } from '@/lib/quran/ayahContext';
-import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import InkLoader from '@/components/common/InkLoader';
 
 export type Around = { data: Surrounding; ends: Record<string, string>; inTree: Set<string>; names: Record<number, string>; tree: string };
 
 export const anchorOf = (tree: string, key: string) => `${tree}-${key.replace(':', '-')}`;
 
-export function useSurrounding(on: boolean, keys: string[], ends: Record<string, string>) {
+export function useSurrounding(on: boolean, keys: string[], ends: Record<string, string>, given?: Surrounding) {
   const url = `/api/quran/surrounding?${new URLSearchParams({ before: keys.join(','), after: [...new Set(Object.values(ends))].join(',') })}`;
-  return useSWR<Surrounding>(on && keys.length > 0 ? url : null, fetcher, { revalidateOnFocus: false });
+  const fetched = useSWR<Surrounding>(on && !given && keys.length > 0 ? url : null, fetcher, { revalidateOnFocus: false });
+  return given ? { data: given, isLoading: false, error: undefined } : fetched;
 }
 
 type ToggleProps = { on: boolean; onChange(on: boolean): void; loading?: boolean; failed?: boolean };
 
 function AddressToggle({ onChange, ...props }: ToggleProps) {
-  const router = useNavigatingRouter();
   return <SurroundSwitch {...props} onChange={checked => {
     onChange(checked);
     const url = new URL(window.location.href);
     if (checked) url.searchParams.set('c', '1');
     else url.searchParams.delete('c');
-    router.replace(`${url.pathname}${url.search}`, { scroll: false });
+    window.history.replaceState(window.history.state, '', `${url.pathname}${url.search}${url.hash}`);
   }} />;
 }
 
@@ -65,7 +64,7 @@ export function NeighbourBox({ neighbour, of, side, around }: { neighbour: Neigh
         {side === 'before' && basmala}
       </span>
       <span className="mt-1 flex flex-wrap items-center gap-2">
-        <Link href={`/quran/read/${neighbour.page}?a=${neighbour.key}`} className="text-xs text-[var(--home-accent)] hover:underline">
+        <Link href={`/quran/read/${neighbour.page}?a=${neighbour.key}`} prefetch={false} className="text-xs text-[var(--home-accent)] hover:underline">
           {around.names[surah] ? `${around.names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`}
         </Link>
         {around.inTree.has(neighbour.key) && <a href={`#${anchorOf(around.tree, neighbour.key)}`} className="rounded-sm border border-[var(--home-root)] px-1 text-xs text-[var(--home-root)] hover:underline">

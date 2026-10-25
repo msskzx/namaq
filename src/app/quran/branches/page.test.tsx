@@ -8,12 +8,29 @@ const params = new URLSearchParams();
 const router = { push: vi.fn(), replace: vi.fn() };
 vi.mock('next/navigation', () => ({ useRouter: () => router, usePathname: () => '/quran/branches', useSearchParams: () => params, redirect: (url: string) => { throw new Error(`REDIRECT ${url}`); } }));
 vi.mock('@/lib/prisma', () => ({ prisma: { surah: { findMany: async () => [] } } }));
+const { loadReaderAyat } = vi.hoisted(() => ({ loadReaderAyat: vi.fn(async () => [{ key: '15:44', page: 265, words: ['لَهَا', 'سَبْعَةُ', 'أَبْوَٰبٍ'] }, { key: '15:45', page: 265, words: ['إِنَّ', 'ٱلْمُتَّقِينَ'] }, { key: '15:46', page: 265, words: ['ٱدْخُلُوهَا', 'بِسَلَـٰمٍ'] }]) }));
+vi.mock('@/lib/quran/ayahContext', async importOriginal => ({ ...await importOriginal<typeof import('@/lib/quran/ayahContext')>(), loadReaderAyat }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar', languageLoaded: true }) }));
 
 afterEach(cleanup);
 const open = (params: Record<string, string>) => QuranBranchesPage({ searchParams: Promise.resolve(params) });
 
 describe('Quran branches range selection', () => {
+  it('sends the surrounding ayat with a tree that opens with the switch on, and loads nothing for it otherwise', async () => {
+    const fetch = vi.fn();
+    vi.stubGlobal('fetch', fetch);
+    const { container, unmount } = render(await open({ o: 'ان المتقين', c: '1' }));
+    expect(screen.getByText('لَهَا سَبْعَةُ أَبْوَٰبٍ').closest('[data-ctx]')?.getAttribute('data-ctx')).toBe('15:45');
+    expect(screen.getByText('ٱدْخُلُوهَا بِسَلَـٰمٍ')).toBeTruthy();
+    expect(fetch).not.toHaveBeenCalled();
+    unmount();
+    loadReaderAyat.mockClear();
+    render(await open({ o: 'ان المتقين' }));
+    expect(loadReaderAyat).not.toHaveBeenCalled();
+    expect(container.querySelector('[data-ctx]')).toBeNull();
+    vi.unstubAllGlobals();
+  });
+
   it('shows no matches instead of another opening for an explicit unavailable phrase', async () => {
     render(await open({ o: 'ان المتقين', juzFrom: '30', juzTo: '30' }));
     expect(screen.getByRole('status').textContent).toContain('لا تطابق العبارة المطلوبة');

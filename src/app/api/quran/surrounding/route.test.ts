@@ -28,6 +28,7 @@ describe('GET /api/quran/surrounding', () => {
     const response = await GET(request('before=2:1,1:1&after=1:7'));
 
     expect(response.status).toBe(200);
+    expect(response.headers.get('Cache-Control')).toBe('public, s-maxage=86400, stale-while-revalidate=604800');
     expect(await response.json()).toEqual({
       before: { '2:1': { key: '1:7', page: 1, words: all[1].words, basmala: all[0].words }, '1:1': null },
       after: { '1:7': { key: '2:1', page: 2, words: all[2].words, basmala: all[0].words } },

@@ -3,8 +3,9 @@ import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { ZoomOut } from 'lucide-react';
 import Button from '@/components/common/Button';
-import { branch, branchesHref, listOpenings, listPage, listPhrases, pieces, searchKey, searchPieces, sharedOpenings, spelledAs, startingWith, TOP, variants, widerPhrases, type BranchAyah, type Piece } from '@/lib/quran/branches';
+import { ayahEnds, branch, branchesHref, keys, listOpenings, listPage, listPhrases, pieces, searchKey, searchPieces, sharedOpenings, spelledAs, startingWith, TOP, variants, widerPhrases, type BranchAyah, type Piece } from '@/lib/quran/branches';
 import { inJuzRange, parseJuzRange, type JuzRange } from '@/lib/quran/juz';
+import { loadReaderAyat, surrounding } from '@/lib/quran/ayahContext';
 import ayat from './ayat.json';
 import BranchTree from './BranchTree';
 import JuzFilter from './JuzFilter';
@@ -28,7 +29,9 @@ function build(range: JuzRange | null) {
   const groups = sharedOpenings(range ? (ayat as BranchAyah[]).filter(ayah => inJuzRange(ayah.key, range)) : (ayat as BranchAyah[]));
   const openings = listOpenings(groups);
   const shared = [...groups.values()].flat();
-  return { shared, byKey: new Map(shared.map(ayah => [ayah.key, ayah])), openings, phrases: listPhrases(groups), pieces: pieces(groups), searches: new Map<string, Piece[]>() };
+  const phrases = listPhrases(groups);
+  let cut: Piece[] | undefined;
+  return { shared, byKey: new Map(shared.map(ayah => [ayah.key, ayah])), openings, phrases, get pieces() { return cut ??= pieces(groups, phrases); }, searches: new Map<string, Piece[]>() };
 }
 
 function view(range: JuzRange | null) {
@@ -45,15 +48,16 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const juz = range ?? undefined;
   const grouped = params.g === 'opening';
   if (params.v === 'list') redirect(branchesHref('', juz, { grouped, page: Number(first(params.p)) || 1 }));
-  const { shared, byKey, openings, phrases, pieces: all, searches } = view(range);
+  const built = view(range);
+  const { shared, byKey, openings, phrases, searches } = built;
   const id = first(params.o) ?? '';
   const query = id ? '' : (first(params.q) ?? '').trim();
   const needle = searchKey(query);
   if (needle && !searches.has(needle)) {
     if (searches.size >= SEARCHES) searches.delete(searches.keys().next().value!);
-    searches.set(needle, searchPieces(all, phrases, shared, query));
+    searches.set(needle, searchPieces(built.pieces, phrases, shared, query));
   }
-  const cut = needle ? searches.get(needle)! : all;
+  const cut = id ? [] : needle ? searches.get(needle)! : built.pieces;
   const exact = needle ? phrases.filter(phrase => searchKey(phrase.id) === needle) : [];
   const partition = first(params.r) ?? undefined;
   const matches = phrases.filter(phrase => phrase.id === id && (partition === undefined || phrase.partition === partition || (!phrase.partition && startingWith(shared, id, partition).length >= 2)));
@@ -63,13 +67,15 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const own = spelledAs(group, first(params.w));
   const drawn = own.length > 0 ? own : group;
   const spelling = own.length > 0 ? first(params.w)! : undefined;
-  const { page, pageCount } = listPage(first(params.p), cut.length, PER_PAGE);
+  const { page, pageCount } = listPage(first(params.p), id ? Number.MAX_SAFE_INTEGER : cut.length, PER_PAGE);
   const state = { grouped, page, spelling, query: query || undefined, context: params.c === '1', partition: matches.length === 1 ? (matches[0].partition ?? partition) : partition };
   if (params.apply === 'juz') redirect(branchesHref(id, juz, state));
   const wider = !group.length ? [] : [...(own.length > 0 ? matches : []), ...widerPhrases(phrases, id, group)];
   const numbers = id ? [...new Set(group.flatMap(ayah => { const surah = Number(ayah.key.split(':')[0]); return [surah - 1, surah, surah + 1]; }))] : undefined;
   const rows = await prisma.surah.findMany({ where: numbers ? { number: { in: numbers } } : undefined, select: { number: true, name: true } });
   const names = Object.fromEntries(rows.map(row => [row.number, row.name]));
+  const tree = !unavailable && !ambiguous && drawn.length > 0 ? branch(drawn) : null;
+  const around = tree && state.context ? surrounding(await loadReaderAyat(), keys(tree), [...new Set(Object.values(ayahEnds(tree)))]) : undefined;
   const heads = needle ? [...new Map(cut.map(piece => [`${piece.opening.id}:${piece.opening.partition ?? ''}`, piece.opening])).values()] : openings;
   const ordered = grouped ? heads.flatMap(opening => cut.filter(piece => piece.opening.id === opening.id && piece.opening.partition === opening.partition)) : cut;
   const shown = ordered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
@@ -94,7 +100,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
             {`${phrase.text} (${num(phrase.count)})`}
           </Button>)}
         </nav>}
-        {!unavailable && !ambiguous && <BranchTree key={String(state.context)} tree={branch(drawn)} variants={variants(drawn)} names={names} pages={Object.fromEntries(drawn.map(ayah => [ayah.key, ayah.page]))} juz={range} view={state} surround={{ on: state.context, sync: true }} />}
+        {tree && <BranchTree tree={tree} variants={variants(drawn)} names={names} pages={Object.fromEntries(drawn.map(ayah => [ayah.key, ayah.page]))} juz={range} view={state} surround={{ on: state.context, sync: true, data: around }} />}
       </>}
     </div>
   );

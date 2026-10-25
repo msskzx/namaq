@@ -6,9 +6,10 @@ import { num } from '@/lib/quran/arabicNumber';
 import { ayahEnds, branchesHref, keys, linkId, spell, type Branch, type BranchesView, type Variant } from '@/lib/quran/branches';
 import type { JuzRange } from '@/lib/quran/juz';
 import AyahContextButton, { openFromNode } from './AyahContext';
+import type { Surrounding } from '@/lib/quran/ayahContext';
 import { anchorOf, NeighbourBox, SurroundToggle, surroundStyle, useSurrounding, type Around } from './Surroundings';
 
-type Props = { view?: BranchesView; tree: Branch; names: Record<number, string>; pages: Record<string, number>; variants?: Variant[]; showSpellings?: boolean; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; surround?: { on: boolean; sync?: boolean } };
+type Props = { view?: BranchesView; tree: Branch; names: Record<number, string>; pages: Record<string, number>; variants?: Variant[]; showSpellings?: boolean; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
 type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header' | 'surround'> & { around?: Around; anchors?: string; node: Branch; parent?: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
 
 const LINE = 'border-[var(--home-rule)]';
@@ -29,7 +30,7 @@ export function AyahRefs({ keys, names, pages, tags = {}, linked = true, classNa
         return (
           <span key={key} className="inline-flex items-center gap-1">
             {index > 0 && <span aria-hidden className="text-xs text-[var(--home-muted)]">·</span>}
-            {linked ? <Link href={`/quran/read/${pages[key]}?a=${key}`} className="text-xs text-[var(--home-accent)] hover:underline">
+            {linked ? <Link href={`/quran/read/${pages[key]}?a=${key}`} prefetch={false} className="text-xs text-[var(--home-accent)] hover:underline">
               {names[surah] ? `${names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`}
             </Link> : <span className="text-xs">{names[surah] ? `${names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`}</span>}
             {tags[key] && <span className={`text-xs font-arabic ${TONE[tags[key].conj]}`}>{tags[key].word}</span>}
@@ -113,12 +114,13 @@ function BeforeFan({ ayahKeys, around }: { ayahKeys: string[]; around?: Around }
 }
 
 // docs/plans/quran-shared-openings.md
-export default function BranchTree({ tree, names, pages, variants = [], showSpellings = true, juz = null, renderNode, label = 'شجرة الفواتح', header, view, surround }: Props) {
+export default function BranchTree({ tree, names, pages, variants = [], showSpellings = true, juz = null, renderNode, label = 'شجرة الفواتح', header, view: given, surround }: Props) {
   const id = useId();
   const [on, setOn] = useState(surround?.on ?? false);
+  const view = surround?.sync && given ? { ...given, context: on } : given;
   const all = keys(tree);
   const ends = ayahEnds(tree);
-  const { data, isLoading, error } = useSurrounding(!!surround && on, all, ends);
+  const { data, isLoading, error } = useSurrounding(!!surround && on, all, ends, surround?.data);
   const around: Around | undefined = surround && on && data ? { data, ends, inTree: new Set(all), names, tree: id } : undefined;
   const indices = new Map<Branch, number>();
   const visit = (node: Branch) => {

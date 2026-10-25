@@ -13,7 +13,7 @@ export async function GET(request: Request) {
   const all = [...before, ...after];
   if (all.length === 0 || all.length > MAX_KEYS || !all.every(isAyahKey)) return NextResponse.json({ error: 'Provide valid surah:ayah keys' }, { status: 400 });
   try {
-    return NextResponse.json(surrounding(await loadReaderAyat(), before, after));
+    return NextResponse.json(surrounding(await loadReaderAyat(), before, after), { headers: { 'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=604800' } });
   } catch {
     return NextResponse.json({ error: 'Could not load ayat' }, { status: 500 });
   }
