@@ -4,6 +4,7 @@ import React, { useId } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import useSWR from 'swr';
+import { ArrowLeftRight } from 'lucide-react';
 import { fetcher } from '@/lib/swr';
 import Toggle from '@/components/common/Toggle';
 import { useLanguage } from '@/components/language/LanguageContext';
@@ -39,8 +40,8 @@ function SurroundSwitch({ on, onChange, loading = false, failed = false }: Toggl
   const label = ar ? 'الآيات المحيطة' : 'Surrounding ayat';
   return (
     <span className="inline-flex items-center gap-2 text-sm text-[var(--home-ink)]">
-      <Toggle id={id} checked={on} label={label} onChange={onChange} />
-      <label htmlFor={id} className="cursor-pointer">{label}</label>
+      <Toggle id={id} checked={on} label={label} onChange={onChange} onIcon={<ArrowLeftRight className="size-3" />} />
+      <label htmlFor={id} className={`cursor-pointer ${on ? 'font-semibold text-[var(--home-accent)]' : 'text-[var(--home-muted)]'}`}>{label}</label>
       {on && loading && <span role="status" className="text-xs text-[var(--home-muted)]">{ar ? 'جارٍ التحميل…' : 'Loading…'}</span>}
       {on && failed && <span role="alert" className="text-xs text-[var(--home-accent)]">{ar ? 'تعذّر تحميل الآيات.' : 'Could not load the ayat.'}</span>}
     </span>
@@ -55,19 +56,19 @@ export function NeighbourBox({ neighbour, of, side, around }: { neighbour: Neigh
   const [surah, ayah] = neighbour.key.split(':').map(Number);
   const basmala = neighbour.basmala && <span className="block border-[var(--home-rule)] text-center first:border-b last:border-t first:pb-1 last:pt-1 border-dotted">{neighbour.basmala.join(' ')}</span>;
   return (
-    <div data-ctx={of} data-keys={of} className="w-64 max-w-[70vw] shrink-0 rounded border border-dashed border-[var(--home-muted)] bg-[var(--home-paper)] px-3 py-1.5 text-[var(--home-muted)]">
-      <span className="flex flex-wrap items-center gap-2">
+    <div data-ctx={of} data-keys={of} className="w-64 max-w-[70vw] shrink-0 rounded border border-dashed text-lg border-[var(--home-muted)] bg-[var(--home-paper)] px-3 py-1.5 text-[var(--home-muted)]">
+      <span className="block font-arabic leading-loose">
+        {side === 'after' && basmala}
+        <span className="block">{neighbour.words.join(' ')}</span>
+        {side === 'before' && basmala}
+      </span>
+      <span className="mt-1 flex flex-wrap items-center gap-2">
         <Link href={`/quran/read/${neighbour.page}?a=${neighbour.key}`} className="text-xs text-[var(--home-accent)] hover:underline">
           {around.names[surah] ? `${around.names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`}
         </Link>
         {around.inTree.has(neighbour.key) && <a href={`#${anchorOf(around.tree, neighbour.key)}`} className="rounded-sm border border-[var(--home-root)] px-1 text-xs text-[var(--home-root)] hover:underline">
           {ar ? 'في هذه الشجرة' : 'In this tree'}
         </a>}
-      </span>
-      <span className="block font-arabic leading-loose">
-        {side === 'after' && basmala}
-        <span className="block">{neighbour.words.join(' ')}</span>
-        {side === 'before' && basmala}
       </span>
     </div>
   );
