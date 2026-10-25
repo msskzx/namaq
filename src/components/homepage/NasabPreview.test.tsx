@@ -21,4 +21,11 @@ describe('complete lineage example', () => {
     expect(plot.textContent).not.toContain('الجد المشترك');
     expect(plot.textContent).not.toContain('الأب غير مسجل');
   });
+
+  it('fades the ancestors above the one every line shares', () => {
+    const { container } = render(<NasabPreview />);
+    const fade = container.querySelector<HTMLElement>('[style*="--fade"]')!.style.getPropertyValue('--fade');
+    expect(parseFloat(fade)).toBeGreaterThan(0);
+    expect(parseFloat(fade)).toBeLessThan(100);
+  });
 });
