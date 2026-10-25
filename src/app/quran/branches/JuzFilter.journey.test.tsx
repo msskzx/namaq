@@ -89,7 +89,7 @@ describe('automatic juz range updates', () => {
     expect(input(container, 'juzFrom').value).toBe('25');
   });
 
-  it('lets Enter select a phrase before a pending range update can overwrite it', async () => {
+  it('lets Enter search before a pending range update can overwrite it', async () => {
     vi.useFakeTimers();
     const view = { grouped: true, page: 3 };
     const juz = { from: 25, to: 30 };
@@ -104,7 +104,7 @@ describe('automatic juz range updates', () => {
 
     await vi.advanceTimersByTimeAsync(500);
 
-    expect(navigation.push).toHaveBeenCalledWith(branchesHref('ارءيتم', juz, view));
+    expect(navigation.push).toHaveBeenCalledWith(branchesHref('', juz, { grouped: true, query: 'ارءيتم' }));
     expect(navigation.replace).not.toHaveBeenCalled();
   });
 });

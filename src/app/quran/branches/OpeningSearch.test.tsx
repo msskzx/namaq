@@ -56,11 +56,37 @@ describe('OpeningSearch', () => {
     expect(suggested()).toEqual(['يَـٰٓأَيُّهَا ٱلَّذِينَ٩٠', 'إِنَّ ٱلَّذِينَ٧٣']);
   });
 
-  it('opens the first suggestion on Enter', () => {
-    render(<OpeningSearch top={top} phrases={phrases} current="ان الذين" />);
+  it('shows every result on Enter when no suggestion is highlighted', () => {
+    render(<OpeningSearch top={top} phrases={phrases} current="ان الذين" view={{ grouped: true, page: 3 }} />);
+    const box = screen.getByRole('combobox');
+    fireEvent.change(box, { target: { value: ' الم تر ' } });
+    fireEvent.keyDown(box, { key: 'Enter' });
+    expect(router.push).toHaveBeenCalledWith(branchesHref('', undefined, { grouped: true, query: 'الم تر' }));
+    expect(screen.queryByLabelText('عبارات مقترحة')).toBeNull();
+  });
+
+  it('leaves a suggestion under the mouse out of Enter', () => {
+    render(<OpeningSearch top={top} phrases={phrases} current="" />);
+    const box = screen.getByRole('combobox');
+    fireEvent.change(box, { target: { value: 'الم تر' } });
+    fireEvent.mouseEnter(screen.getAllByRole('option')[1]);
+    fireEvent.keyDown(box, { key: 'Enter' });
+    expect(router.push).toHaveBeenCalledWith(branchesHref('', undefined, { query: 'الم تر' }));
+  });
+
+  it('opens the highlighted suggestion on Enter', () => {
+    render(<OpeningSearch top={top} phrases={phrases} current="" />);
     const box = screen.getByRole('combobox');
     fireEvent.change(box, { target: { value: 'الم تر كيف' } });
+    fireEvent.keyDown(box, { key: 'ArrowDown' });
     fireEvent.keyDown(box, { key: 'Enter' });
     expect(router.push).toHaveBeenCalledWith(branchesHref('الم تر كيف'));
+  });
+
+  it('keeps the search in the box on the results, with a way back to the list', () => {
+    render(<OpeningSearch top={top} phrases={phrases} current="" query="الم تر" view={{ page: 2, query: 'الم تر' }} />);
+    expect((screen.getByRole('combobox') as HTMLInputElement).value).toBe('الم تر');
+    expect(screen.queryByLabelText('عبارات مقترحة')).toBeNull();
+    expect(screen.getByRole('link', { name: /العودة إلى القائمة/ }).getAttribute('href')).toBe(branchesHref(''));
   });
 });

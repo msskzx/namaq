@@ -35,7 +35,7 @@ const phrase = (id: string, text: string, count: number, partition?: string) => 
 const suggestionOptions = () => within(screen.getByLabelText('عبارات مقترحة')).getAllByRole('option');
 
 describe('opening search journey', () => {
-  it('opens a valid suggestion after a range update removes the highlighted candidate', () => {
+  it('shows the results, not a stale suggestion, after a range update removes the highlighted candidate', () => {
     const first = phrase('قال رب', 'قَالَ رَبِّ', 4);
     const second = phrase('قال رب اني', 'قَالَ رَبِّ إِنِّي', 2);
     const { rerender } = render(<OpeningSearch top={[]} phrases={[first, second]} current="" />);
@@ -46,7 +46,7 @@ describe('opening search journey', () => {
     expect(suggestionOptions()[1].getAttribute('aria-selected')).toBe('true');
     rerender(<OpeningSearch top={[]} phrases={[first]} current="" juz={{ from: 25, to: 30 }} />);
     fireEvent.keyDown(box, { key: 'Enter' });
-    expect(navigation.push).toHaveBeenCalledWith(branchesHref(first.id, { from: 25, to: 30 }));
+    expect(navigation.push).toHaveBeenCalledWith(branchesHref('', { from: 25, to: 30 }, { query: 'قال' }));
   });
 
   it.each([
