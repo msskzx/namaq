@@ -13,7 +13,10 @@ vi.mock('@/lib/quran/ayahContext', async importOriginal => ({ ...await importOri
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar', languageLoaded: true }) }));
 
 afterEach(cleanup);
-const open = (params: Record<string, string>) => QuranBranchesPage({ searchParams: Promise.resolve(params) });
+const open = (params: Record<string, string>) => {
+  window.history.replaceState(null, '', `/quran/branches?${new URLSearchParams(params)}`);
+  return QuranBranchesPage({ searchParams: Promise.resolve(params) });
+};
 
 describe('Quran branches range selection', () => {
   it('sends the surrounding ayat with a tree that opens with the switch on, and loads nothing for it otherwise', async () => {

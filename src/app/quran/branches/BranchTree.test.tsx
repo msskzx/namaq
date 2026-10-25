@@ -322,6 +322,14 @@ describe('BranchTree', () => {
       expect(replace).not.toHaveBeenCalled();
     });
 
+    it('follows the address over a cached page when the browser goes back to a tree it switched on', async () => {
+      window.history.replaceState(null, '', '/quran/branches?o=x&c=1');
+      const { container } = render(<BranchTree tree={tree} names={names} pages={pages} surround={{ on: false, sync: true }} />);
+      expect((screen.getByRole('switch') as HTMLInputElement).checked).toBe(true);
+      await waitFor(() => expect(container.querySelectorAll('[data-ctx]')).toHaveLength(5));
+      window.history.replaceState(null, '', '/');
+    });
+
     it('carries the switch into the branch links once it is turned on', () => {
       const group = startingWith(ayat as BranchAyah[], 'ان المتقين');
       render(<BranchTree tree={branch(group)} names={names} pages={Object.fromEntries(group.map(a => [a.key, a.page]))} view={{}} surround={{ on: false, sync: true }} />);

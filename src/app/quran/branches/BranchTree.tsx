@@ -116,7 +116,7 @@ function BeforeFan({ ayahKeys, around }: { ayahKeys: string[]; around?: Around }
 // docs/plans/quran-shared-openings.md
 export default function BranchTree({ tree, names, pages, variants = [], showSpellings = true, juz = null, renderNode, label = 'شجرة الفواتح', header, view: given, surround }: Props) {
   const id = useId();
-  const [on, setOn] = useState(surround?.on ?? false);
+  const [on, setOn] = useState(() => (surround?.sync && typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('c') === '1' : surround?.on ?? false));
   const view = surround?.sync && given ? { ...given, context: on } : given;
   const all = keys(tree);
   const ends = ayahEnds(tree);
