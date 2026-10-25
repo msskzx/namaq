@@ -24,14 +24,12 @@ function Feature({ id, n, title, description, example, href, children }: { id: s
       <header className={styles.featureHeading}>
         <span className={styles.indexNumber}>{n.toLocaleString(ar ? 'ar-u-nu-arab' : 'en', { minimumIntegerDigits: 2 })}</span>
         <div>
-          <div className={styles.featureTitle}>
-            <h2 id={`${id}-title`}>{title}</h2>
-            <Button size="sm" variant="ghost" href={href} aria-label={`${ar ? 'افتح' : 'Open'} ${title}`} className="shrink-0">
-              {ar ? 'افتح' : 'Open'}<Forward size={16} aria-hidden />
-            </Button>
-          </div>
+          <h2 id={`${id}-title`}>{title}</h2>
           <p>{description}</p>
           <p className={styles.exampleCaption}>{example}</p>
+          <Button href={href} aria-label={`${ar ? 'افتح' : 'Open'} ${title}`} className={styles.featureAction}>
+            {ar ? 'افتح' : 'Open'}<Forward size={16} aria-hidden />
+          </Button>
         </div>
       </header>
       {children}

@@ -15,14 +15,16 @@ vi.mock('@/lib/modelUnits', () => ({ loadUnitView: async (id: string) => {
 afterEach(() => { cleanup(); language.current = 'ar'; });
 
 describe('homepage features', () => {
-  it.each(['ar', 'en'] as const)('gives each of seven previews an explicit action and an unlinked heading in %s', async current => {
+  it.each(['ar', 'en'] as const)('gives each of seven previews an action after its text and an unlinked heading in %s', async current => {
     language.current = current;
     render(<Homepage data={await getHomePreviews()} />);
     const headings = screen.getAllByRole('heading', { level: 2 });
     expect(headings).toHaveLength(8);
     const hrefs = headings.slice(0, 7).map(heading => {
       expect(within(heading).queryByRole('link')).toBeNull();
-      return within(heading.closest('section')!).getByRole('link', { name: `${current === 'ar' ? 'افتح' : 'Open'} ${heading.textContent}` }).getAttribute('href');
+      const action = within(heading.closest('section')!).getByRole('link', { name: `${current === 'ar' ? 'افتح' : 'Open'} ${heading.textContent}` });
+      expect(action.previousElementSibling?.tagName).toBe('P');
+      return action.getAttribute('href');
     });
     expect(hrefs[0]).toContain('/quran/branches?o=');
     expect(hrefs[1]).toContain('af=41&at=45');

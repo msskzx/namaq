@@ -28,7 +28,7 @@
 
 .feature { padding-block: 2.5rem; border-top: 1px solid var(--home-rule); scroll-margin-top: 6rem; }
 .featureHeading { display: flex; gap: 1.25rem; align-items: baseline; margin-bottom: 1.5rem; }
-.featureTitle { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem 1rem; }
+.featureAction { margin-top: 1rem; }
 .featureHeading h2 { font-size: 1.875rem; line-height: 1.5; color: var(--home-accent); }
 .featureHeading .exampleCaption { font-size: 1rem; margin-top: 0.5rem; }
 .featureHeading p { color: var(--home-muted); max-width: 50rem; font-size: 1.125rem; line-height: 1.7; margin-top: 0.25rem; }
