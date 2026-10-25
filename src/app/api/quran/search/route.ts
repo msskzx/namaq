@@ -1,18 +1,10 @@
 import { NextResponse } from 'next/server';
-import { readerAyat } from '@/lib/quran/branches';
+import { loadReaderAyat } from '@/lib/quran/ayahContext';
 import { indexAyat, searchAyat } from '@/lib/quran/ayahSearch';
-import type { ReaderPageData } from '@/lib/quran/readerPage';
 
 let ayat: ReturnType<typeof indexAyat> | Promise<ReturnType<typeof indexAyat>> | null = null;
 
-const load = async () =>
-  indexAyat(
-    readerAyat(
-      await Promise.all(
-        Array.from({ length: 604 }, async (_, i): Promise<ReaderPageData> => (await import(`@/app/quran/read/data/${i + 1}.json`)).default),
-      ),
-    ),
-  );
+const load = async () => indexAyat(await loadReaderAyat());
 
 export async function GET(request: Request) {
   const query = new URL(request.url).searchParams.get('q') ?? '';
