@@ -6,13 +6,12 @@
 .lines { display: contents; font-family: var(--font-amiri), serif; font-size: 1.5rem; line-height: 2.5; text-align: center; }
 .lines > p { align-self: start; }
 .ruled .lines > p:not(:first-child) { border-top: 1px dotted var(--home-rule); padding-top: 0.75rem; }
-.spread mark, .legend mark { color: var(--home-accent); background: transparent; text-decoration: underline; text-decoration-color: var(--home-rule); text-underline-offset: 0.3em; }
-.spread mark.root, .legend mark.root { color: var(--home-root); text-decoration-style: dotted; text-decoration-color: var(--home-root); }
+.spread mark, .legend mark { color: var(--home-accent); background: transparent; }
 .spread mark.slot1 { color: var(--home-slot-1); }
 .spread mark.slot2 { color: var(--home-slot-2); }
 .spread mark.slot3 { color: var(--home-slot-3); }
 .spread mark.slot4 { color: var(--home-slot-4); }
-.spread mark.linked { text-decoration-style: dotted; text-decoration-color: var(--home-root); }
+.spread mark.root, .legend mark.root { color: var(--home-root); }
 .verseEnd { white-space: nowrap; }
 .verseSeal { display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--home-rule); border-radius: 50%; min-width: 1.75rem; height: 1.75rem; padding-inline: 0.25rem; color: var(--home-muted); font-size: 0.9375rem; line-height: 1; vertical-align: middle; white-space: nowrap; }
 .legend { margin-block: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; font-size: 1rem; }

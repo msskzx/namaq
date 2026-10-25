@@ -28,12 +28,12 @@ export function rangeHref(query: Query, range: CompareRange) {
   return search ? `/quran/compare?${search}` : '/quran/compare';
 }
 
-export default function CompareControls({ tab, query, range, summary }: { tab: CompareTab | null; query: Query; range: CompareRange; summary: string }) {
+export default function CompareControls({ tab, query, range, summary }: { tab: CompareTab; query: Query; range: CompareRange; summary: string }) {
   const { unit } = range;
   const labels = LABELS[unit];
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-3 rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper-deep)] p-3">
-      <Segmented label="طريقة المقارنة" options={TABS.map(t => ({ key: t.tab, label: t.label, icon: t.icon, current: t.tab === tab, href: tabHref(t.tab, query) }))} />
+      <Segmented label="طريقة المقارنة" options={TABS.map(t => ({ key: t.tab, label: t.label, icon: t.icon, current: t.tab === tab, href: t.tab === tab ? rangeHref(query, range) : tabHref(t.tab, query) }))} />
       <div className="flex flex-wrap items-center gap-3">
         <span className="text-sm text-[var(--home-muted)]">النطاق</span>
         <Segmented label="النطاق بالأجزاء أو بالسور" options={(['juz', 'surah'] as const).map(u => ({ key: u, label: u === 'juz' ? 'بالأجزاء' : 'بالسور', current: u === unit, href: rangeHref(query, u === unit ? range : { unit: u, range: null }) }))} />

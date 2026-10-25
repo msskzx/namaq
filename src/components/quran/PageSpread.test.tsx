@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import { readFileSync } from 'node:fs';
 import React from 'react';
 import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
@@ -26,14 +27,18 @@ describe('PageSpread', () => {
     expect(root.title).toBe('جذر');
   });
 
-  it('gives a partner after the first its own colour, and keeps the root cue on a root word of that partner', () => {
-    render(<PageSpread pages={[{ title: 'أ', rows: [[{ number: 1, words: ['ا', 'ب', 'ج'], marks: { 0: { kind: 'exact', slot: 1 }, 1: { kind: 'root', slot: 1 }, 2: { kind: 'exact', slot: 5, linked: true } } }]] }]} />);
+  it('gives a partner after the first its own colour, and keeps the root colour on a root word of that partner', () => {
+    render(<PageSpread pages={[{ title: 'أ', rows: [[{ number: 1, words: ['ا', 'ب', 'ج'], marks: { 0: { kind: 'exact', slot: 1 }, 1: { kind: 'root', slot: 1 }, 2: { kind: 'exact', slot: 5 } } }]] }]} />);
     const [one, root, five] = Array.from(document.querySelectorAll('mark')).map(m => m.className);
     expect(one).toBe(styles.slot1);
     expect(root).toContain(styles.root);
     expect(root).toContain(styles.slot1);
     expect(five).toContain(styles.slot1);
-    expect(five).toContain(styles.linked);
+  });
+
+  it('marks words by colour alone, with no underline', () => {
+    const css = readFileSync('src/components/quran/PageSpread.module.css', 'utf8');
+    expect(css.split('\n').filter(line => line.includes(' mark') && line.includes('text-decoration'))).toEqual([]);
   });
 
   it('leaves the column of a missing page empty', () => {

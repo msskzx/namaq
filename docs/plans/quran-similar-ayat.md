@@ -86,8 +86,9 @@ the two.
 Beside the comparison, the surahs are listed by how many similar pairs they
 take part in, or in the topic view by how many topics they share with another
 surah. Each surah opens to the surahs it pairs with, so a pair is listed under
-both of its surahs, and in the text view to the count of pairs inside the
-surah itself, which opens the surah view. The two surahs being compared start
+both of its surahs. It also opens to a كل المواضع row, which opens the surah
+view with every pair touching the surah, and a داخل السورة row, which narrows
+that view to pairs inside the surah (`within=1`). The two surahs being compared start
 open with the pair marked.
 
 A word the other side has letter for letter is amber, as in the alignment; a
@@ -99,12 +100,16 @@ a content word or two words or more. A mark is kept only when the other side
 marks a word of the same root or particle, so no highlight lacks a partner.
 
 Each marked word names what it answers on the other side when the pointer
-rests on it. An amber word whose root also answers a blue word on the other
-side gets a dotted blue underline: أقسم in الحاقة ٣٨ is the same word as in
-الواقعة ٧٥ and the root of لقسم in الواقعة ٧٦. A
+rests on it. Marks are colour only, with no underline. A
 word that shares only its root or particle with the other side, such as إنه
 against إنها, is sky blue, since that is the difference a memoriser has to
 learn.
+
+Cards whose two sides have the same text are shown once. The refrain فبأي آلاء
+ربكما تكذبان of الرحمن matches النجم ٥٥ in 31 places, so النجم ٥٥ with الرحمن
+١٣ is one card that says the text recurs in 31 places and lists them, each a
+link to that pair. Only identical text on both sides folds, so no different
+wording is hidden: 604 of the 5774 pairs fold into 217 cards.
 
 ## Later
 

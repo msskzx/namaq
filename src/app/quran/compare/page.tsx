@@ -54,7 +54,8 @@ export default async function QuranComparePage({ searchParams }: { searchParams:
   const strings = Object.fromEntries(Object.entries(query).flatMap(([key, value]) => (typeof value === 'string' ? [[key, value]] : [])));
   const where = range.range ? `${range.unit === 'juz' ? 'الأجزاء' : 'السور'} ${num(range.range.from)}–${num(range.range.to)}` : 'المصحف كله';
   const summary = `${where} · ${tab === 'themes' ? 'المواضيع المشتركة' : 'أزواج الآيات المتشابهة'}: ${num(pairs.length)}`;
-  const current = s !== null ? `داخل سورة ${names[s]}` : `${names[a]} و${names[b]}`;
+  const within = s !== null && query.within === '1';
+  const current = s !== null ? `${within ? 'داخل سورة' : 'سورة'} ${names[s]}` : `${names[a]} و${names[b]}`;
 
   return (
     <RepetitionProvider>
@@ -63,12 +64,12 @@ export default async function QuranComparePage({ searchParams }: { searchParams:
           <h1 className="text-4xl text-[var(--home-accent)]">مقارنة السور</h1>
           <p className="text-sm text-[var(--home-muted)]">قارن بين سورتين بالآيات المتشابهة، أو آية بآية، أو بالمواضيع المشتركة.</p>
         </header>
-        <CompareControls tab={s === null ? tab : null} query={strings} range={range} summary={summary} />
+        <CompareControls tab={tab} query={strings} range={range} summary={summary} />
         <CompareLayout title={tab === 'themes' ? 'السور بالمواضيع المشتركة' : 'السور بالآيات المتشابهة'} current={current}
-          pane={<SurahPairs key="pane" groups={groupBySurah(pairs, surahs.map(x => x.number).filter(n => surahInRange(n, range)))} names={names} tab={tab} query={strings} surah={s} a={a} b={b} />}>
+          pane={<SurahPairs key="pane" groups={groupBySurah(pairs, surahs.map(x => x.number).filter(n => surahInRange(n, range)))} names={names} tab={tab} query={strings} surah={s} within={within} a={a} b={b} />}>
           {s !== null ? (
             <>
-              <SimilarAyat surah={s} range={range} query={strings} />
+              <SimilarAyat surah={s} within={within} range={range} query={strings} />
               <SurahRepetition surah={s} />
             </>
           ) : themes ? <ThemesCompare query={shown} range={range} /> : <TextCompare query={shown} range={range} />}
