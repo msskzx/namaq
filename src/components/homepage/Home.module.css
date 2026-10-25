@@ -40,7 +40,7 @@
 .branchPreview [class*='bg-white'], .branchPreview [class*='bg-amber'] { background: var(--home-paper-deep); color: var(--home-ink); border-color: var(--home-rule); border-radius: 2px; }
 .branchPreview [class*='border-gray'] { border-color: var(--home-rule); }
 .branchPreview a:hover { color: var(--home-accent); }
-.timeline { overflow-x: auto; scrollbar-width: thin; scrollbar-color: var(--home-rule) transparent; padding-top: 1rem; }
+.timeline { overflow-x: auto; padding-top: 1rem; }
 .timeline ol { display: flex; list-style: none; width: max-content; padding-block: 1rem; }
 .timeline li { position: relative; width: 15rem; border-top: 1px solid var(--home-rule); padding: 2rem 1.5rem 1rem 0; }
 .page[dir='rtl'] .timeline li { padding-inline: 0 1.5rem; }
