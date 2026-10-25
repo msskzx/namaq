@@ -21,7 +21,10 @@ describe('NotFound', () => {
   it('heads the page with its title and draws 404 as nodes with an open zero', () => {
     const { container } = render(<NotFound />);
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Page not found');
-    expect(container.querySelectorAll('svg circle')).toHaveLength(17);
-    expect(container.querySelectorAll('svg line[stroke-dasharray], svg g[stroke-dasharray] line')).toHaveLength(2);
+    const svg = container.querySelector('svg')!;
+    expect(svg.getAttribute('aria-hidden')).toBe('true');
+    expect(svg.querySelectorAll('circle')).toHaveLength(17);
+    expect(svg.querySelectorAll('g[stroke-dasharray] line')).toHaveLength(2);
+    expect(svg.querySelectorAll('g:not([stroke-dasharray]) > line')).toHaveLength(14);
   });
 });
