@@ -441,7 +441,8 @@ export default function SourceAccountReader({
       <div className={fullscreen ? 'flex min-h-0 flex-1 flex-col px-3 pb-2 sm:px-6' : 'flex flex-col'}>
         <div
           ref={content}
-          className={fullscreen ? 'muted-scrollbar min-h-0 flex-1 overflow-y-auto overscroll-contain rounded-lg border border-black/10 px-4 pb-3 dark:border-white/10 sm:px-8' : 'muted-scrollbar max-h-[75vh] overflow-y-auto overscroll-contain rounded-lg border border-gray-200 px-4 py-3 dark:border-white/10'}
+          data-testid="source-reader-content"
+          className={fullscreen ? 'min-h-0 flex-1 overflow-y-auto overscroll-contain rounded-lg border border-black/10 px-4 pb-3 dark:border-white/10 sm:px-8' : 'max-h-[75vh] overflow-y-auto overscroll-contain rounded-lg border border-gray-200 px-4 py-3 dark:border-white/10'}
           style={pageContentStyle}
           onScroll={(event) => {
             const node = event.currentTarget;

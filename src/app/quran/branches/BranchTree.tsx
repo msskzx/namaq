@@ -9,9 +9,10 @@ import { ayahEnds, branchesHref, keys, linkId, spell, type Branch, type Branches
 import type { JuzRange } from '@/lib/quran/juz';
 import AyahContextButton from './AyahContext';
 import { Fan, PathBox, PathButton, PathProvider, Stub, usePaths, type FanEntry } from './Paths';
+import type { Surrounding } from '@/lib/quran/ayahContext';
 import { anchorOf, NeighbourBox, SurroundToggle, targetStyle, useSurrounding, type Around } from './Surroundings';
 
-type Props = { view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; surround?: { on: boolean; sync?: boolean } };
+type Props = { view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
 type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header' | 'surround'> & { around?: Around; anchors?: string; node: Branch; parent?: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
 
 const LIT = 'border-[var(--home-accent)] text-[var(--home-ink)]';
@@ -105,13 +106,14 @@ function BeforeFan({ ayahKeys, around, opens }: { ayahKeys: string[]; around?: A
 }
 
 // docs/plans/quran-shared-openings.md
-export default function BranchTree({ tree, names, variants = [], showSpellings = true, juz = null, renderNode, label = 'شجرة الفواتح', header, view, surround }: Props) {
+export default function BranchTree({ tree, names, variants = [], showSpellings = true, juz = null, renderNode, label = 'شجرة الفواتح', header, view: given, surround }: Props) {
   const id = useId();
-  const [on, setOn] = useState(surround?.on ?? false);
+  const [on, setOn] = useState(() => (surround?.sync && typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('c') === '1' : surround?.on ?? false));
+  const view = surround?.sync && given ? { ...given, context: on } : given;
   const paths = usePaths();
   const all = keys(tree);
   const ends = ayahEnds(tree);
-  const { data, isLoading, error } = useSurrounding(!!surround && on, all, ends);
+  const { data, isLoading, error } = useSurrounding(!!surround && on, all, ends, surround?.data);
   const around: Around | undefined = surround && on && data ? { data, ends, inTree: new Set(all), names, tree: id } : undefined;
   const indices = new Map<Branch, number>();
   const visit = (node: Branch) => {

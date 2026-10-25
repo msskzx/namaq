@@ -22,6 +22,7 @@ function Entry({ piece, names, ayat, juz, partOf, view }: Props & { piece: Piece
     <li>
       <BranchTree
         header={<p className={NOTE}>
+          {piece.family && <>{ar ? piece.opening.text : piece.opening.textEn} · </>}
           {ar ? ayatCount(piece.count) : `${piece.count} ayat`}
           {partOf && piece.opening.count > piece.count && <>
             {ar ? ' · من: ' : ' · From: '}
@@ -30,7 +31,7 @@ function Entry({ piece, names, ayat, juz, partOf, view }: Props & { piece: Piece
             </Link>
           </>}
         </p>}
-        tree={branch(group)} variants={variants(group)} names={names}
+        tree={branch(group, piece.family)} variants={piece.family ? [] : variants(group)} names={names}
         juz={juz} view={view} surround={{ on: false }}
       />
     </li>
@@ -50,7 +51,7 @@ export default function PieceList({ pieces, openings, juz, ...props }: Props & {
         const inside = pieces.filter(piece => piece.opening.id === opening.id && piece.opening.partition === opening.partition);
         if (!inside.length) return null;
         return <li key={`${opening.id}:${opening.partition ?? ''}`} className="rounded-sm border border-[var(--home-rule)] px-3 py-3">
-          <h2 className="text-xl font-arabic leading-loose">{opening.text}</h2>
+          <h2 className="text-xl font-arabic leading-loose">{ar ? opening.text : opening.textEn ?? opening.text}</h2>
           <p className={NOTE}>{ar ? `${ayatCount(opening.count)} · ${counted(inside.length, ['مجموعة', 'مجموعتان', 'مجموعات'])} في هذه الصفحة` : `${opening.count} ayat · ${inside.length} entries on this page`}</p>
           <Link href={branchesHref(opening.id, juz ?? undefined, { ...props.view, spelling: undefined, partition: opening.partition })} className="text-sm text-[var(--home-accent)] hover:underline">{ar ? 'الشجرة كاملة' : 'Complete tree'}</Link>
           <ul className="flex flex-col gap-4 mt-3">{inside.map((piece, index) => <Entry key={`${piece.id}:${index}`} piece={piece} partOf={false} juz={juz} {...props} />)}</ul>

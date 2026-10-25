@@ -10,8 +10,8 @@ export default function BranchHeading() {
     <p className={styles.eyebrow}>{ar ? 'نمق · القرآن الكريم' : 'Namaq · Quran'}</p>
     <h1>{ar ? 'فواتح الآيات المشتركة' : 'Shared ayah openings'}</h1>
     <p className="text-sm text-[var(--home-muted)]">{ar
-      ? 'آيات تبدأ بالكلمتين نفسيهما، تتفرع حيث تختلف كلماتها.'
-      : 'Explore ayat that share their first two words, branching where their wording differs.'}</p>
+      ? 'آيات تبدأ بالكلمتين نفسيهما، ومجموعات من فواتح السور، تتفرع حيث تختلف كلماتها.'
+      : 'Explore ayat that share their first two words and families of chapter openings, branching where their wording differs.'}</p>
     <details className="text-sm text-[var(--home-muted)]">
       <summary className="cursor-pointer select-none text-[var(--home-ink)]">{ar ? 'قواعد المطابقة' : 'Matching rules'}</summary>
       <p className="mt-2">{ar

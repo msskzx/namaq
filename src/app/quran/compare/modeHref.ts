@@ -30,8 +30,8 @@ export function pairHref(tab: CompareTab, a: number, b: number, query: Query) {
   return tabHref(tab, { ...Object.fromEntries(RANGE_KEYS.map(key => [key, query[key]])), a: String(a), b: String(b) });
 }
 
-export function surahHref(surah: number, query: Query) {
-  return href({ s: String(surah) }, query, []);
+export function surahHref(surah: number, query: Query, within = false) {
+  return href({ s: String(surah), ...(within ? { within: '1' } : {}) }, query, []);
 }
 
 export function withRange(link: string, query: Query) {

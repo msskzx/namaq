@@ -24,6 +24,7 @@ describe('CompareControls', () => {
   it('marks the current tab and links the others with the pair and range', () => {
     render(<CompareControls tab="ayat" query={{ a: '56', b: '69', view: 'ayat', juzFrom: '25', juzTo: '30' }} range={{ unit: 'juz', range: { from: 25, to: 30 } }} summary="s" />);
     expect(screen.getByRole('link', { name: 'آية بآية' }).getAttribute('aria-current')).toBe('page');
+    expect(href('آية بآية')).toBe('/quran/compare?a=56&b=69&view=ayat&juzFrom=25&juzTo=30');
     expect(href('المتشابه')).toBe('/quran/compare?a=56&b=69&juzFrom=25&juzTo=30');
     expect(href('المواضيع')).toBe('/quran/compare?mode=themes&a=56&b=69&juzFrom=25&juzTo=30');
   });
@@ -34,6 +35,12 @@ describe('CompareControls', () => {
     expect(href('بالأجزاء')).toBe('/quran/compare?a=56&b=69&juzFrom=25&juzTo=30');
     expect(href('بالسور')).toBe('/quran/compare?a=56&b=69&by=surah');
     expect(href('كل الأجزاء')).toBe('/quran/compare?a=56&b=69');
+  });
+
+  it('keeps the open surah when its current tab is pressed', () => {
+    render(<CompareControls tab="similar" query={{ s: '43', within: '1' }} range={{ unit: 'juz', range: null }} summary="s" />);
+    expect(screen.getByRole('link', { name: 'المتشابه' }).getAttribute('aria-current')).toBe('page');
+    expect(href('المتشابه')).toBe('/quran/compare?s=43&within=1');
   });
 
   it('offers surah numbers up to 114 in the surah unit', () => {

@@ -2,11 +2,11 @@ import { Fragment } from 'react';
 import { num } from '@/lib/quran/arabicNumber';
 import styles from './PageSpread.module.css';
 
-export type SpreadMark = { kind: 'exact' | 'root'; slot?: number; linked?: boolean; title?: string };
+export type SpreadMark = { kind: 'exact' | 'root'; slot?: number; title?: string };
 export type SpreadAyah = { number: number; words: string[]; marks?: Record<number, SpreadMark>; current?: boolean };
 export type SpreadPage = { title: string; subtitle?: string; label?: string; rows: SpreadAyah[][] };
 
-const markClass = (mark: SpreadMark) => [mark.kind === 'root' && styles.root, mark.slot && styles[`slot${((mark.slot - 1) % 4) + 1}`], mark.linked && styles.linked].filter(Boolean).join(' ') || undefined;
+const markClass = (mark: SpreadMark) => [mark.kind === 'root' && styles.root, mark.slot && styles[`slot${((mark.slot - 1) % 4) + 1}`]].filter(Boolean).join(' ') || undefined;
 
 function Ayah({ ayah }: { ayah: SpreadAyah }) {
   const last = ayah.words.length - 1;
@@ -26,10 +26,10 @@ export function MatchLegend({ exact, root }: { exact?: string; root?: string }) 
   );
 }
 
-export default function PageSpread({ pages, ruled = false }: { pages: (SpreadPage | null)[]; ruled?: boolean }) {
+export default function PageSpread({ pages, ruled = false, stackOnMobile = false }: { pages: (SpreadPage | null)[]; ruled?: boolean; stackOnMobile?: boolean }) {
   const rows = Math.max(...pages.map(page => page?.rows.length ?? 0));
   return (
-    <div className={`${styles.spread} ${ruled ? styles.ruled : ''}`} dir="rtl">
+    <div className={`${styles.spread} ${ruled ? styles.ruled : ''} ${stackOnMobile ? styles.stackOnMobile : ''}`} dir="rtl">
       {pages.map((page, k) => !page ? <div key={k} /> : (
         <article key={k} className={styles.page} style={{ gridRow: `span ${rows + 1}` }} aria-label={page.label ?? page.title}>
           <header><h3>{page.title}</h3>{page.subtitle && <p dir="auto">{page.subtitle}</p>}</header>

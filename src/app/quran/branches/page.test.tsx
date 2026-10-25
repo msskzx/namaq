@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, render, screen, within } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
+import { normalizeWord } from '@/lib/quran/normalize';
 import { branchesHref } from '@/lib/quran/branches';
 import { prisma } from '@/lib/prisma';
 import QuranBranchesPage from './page';
@@ -9,12 +10,65 @@ const params = new URLSearchParams();
 const router = { push: vi.fn(), replace: vi.fn() };
 vi.mock('next/navigation', () => ({ useRouter: () => router, usePathname: () => '/quran/branches', useSearchParams: () => params, redirect: (url: string) => { throw new Error(`REDIRECT ${url}`); } }));
 vi.mock('@/lib/prisma', () => ({ prisma: { surah: { findMany: vi.fn(async () => []) } } }));
+const { loadReaderAyat } = vi.hoisted(() => ({ loadReaderAyat: vi.fn(async () => [{ key: '15:44', page: 265, words: ['لَهَا', 'سَبْعَةُ', 'أَبْوَٰبٍ'] }, { key: '15:45', page: 265, words: ['إِنَّ', 'ٱلْمُتَّقِينَ'] }, { key: '15:46', page: 265, words: ['ٱدْخُلُوهَا', 'بِسَلَـٰمٍ'] }]) }));
+vi.mock('@/lib/quran/ayahContext', async importOriginal => ({ ...await importOriginal<typeof import('@/lib/quran/ayahContext')>(), loadReaderAyat }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar', languageLoaded: true }) }));
 
 afterEach(cleanup);
-const open = (params: Record<string, string>) => QuranBranchesPage({ searchParams: Promise.resolve(params) });
+const open = (params: Record<string, string>) => {
+  window.history.replaceState(null, '', `/quran/branches?${new URLSearchParams(params)}`);
+  return QuranBranchesPage({ searchParams: Promise.resolve(params) });
+};
 
 describe('Quran branches range selection', () => {
+  it('opens a named family from navigation and keeps its name outside Quran tree nodes', async () => {
+    render(await open({ o: 'family:musabbihat' }));
+    const navigation = screen.getByRole('navigation', { name: 'مجموعات فواتح السور' });
+    expect(navigation.textContent).toContain('الحواميم');
+    expect(navigation.textContent).toContain('المسبحات');
+    expect(screen.getByRole('link', { name: 'المسبحات' }).getAttribute('href')).toBe(branchesHref('family:musabbihat'));
+    const tree = screen.getByRole('region', { name: 'شجرة الفواتح' });
+    expect(tree.textContent).not.toContain('المسبحات');
+    expect(tree.textContent).toContain('سُبْحَـٰنَ');
+    expect(normalizeWord(tree.textContent ?? '')).toContain('يسبح');
+  });
+
+  it('returns the complete named family when its name is submitted as a search', async () => {
+    render(await open({ q: 'الحواميم' }));
+    expect(screen.getByRole('link', { name: /الشجرة كاملة: الحواميم/ }).getAttribute('href')).toBe(branchesHref('family:hawamim'));
+    expect(screen.getByRole('region', { name: 'شجرة الفواتح' }).textContent).toContain('عٓسٓقٓ');
+  });
+
+  it('sends the surrounding ayat with a tree that opens with the switch on, and loads nothing for it otherwise', async () => {
+    const fetch = vi.fn();
+    vi.stubGlobal('fetch', fetch);
+    const { container, unmount } = render(await open({ o: 'ان المتقين', c: '1' }));
+    expect(screen.getByText('لَهَا سَبْعَةُ أَبْوَٰبٍ').closest('[data-ctx]')?.getAttribute('data-ctx')).toBe('15:45');
+    expect(screen.getByText('ٱدْخُلُوهَا بِسَلَـٰمٍ')).toBeTruthy();
+    expect(fetch).not.toHaveBeenCalled();
+    unmount();
+    loadReaderAyat.mockClear();
+    render(await open({ o: 'ان المتقين' }));
+    expect(loadReaderAyat).not.toHaveBeenCalled();
+    expect(container.querySelector('[data-ctx]')).toBeNull();
+    vi.unstubAllGlobals();
+  });
+
+  it('draws the switch from the address again when the page moves to another phrase', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({ before: {}, after: {} }) }));
+    const { rerender } = render(await open({ o: 'ان المتقين' }));
+    fireEvent.click(screen.getByRole('switch'));
+    expect((screen.getByRole('switch') as HTMLInputElement).checked).toBe(true);
+    rerender(await open({ o: 'قال رب' }));
+    expect((screen.getByRole('switch') as HTMLInputElement).checked).toBe(false);
+    rerender(await open({ o: 'ان المتقين', c: '1' }));
+    expect((screen.getByRole('switch') as HTMLInputElement).checked).toBe(true);
+    fireEvent.click(screen.getByRole('switch'));
+    rerender(await open({ o: 'ان المتقين', c: '1', juzFrom: '1', juzTo: '29' }));
+    expect((screen.getByRole('switch') as HTMLInputElement).checked).toBe(true);
+    vi.unstubAllGlobals();
+  });
+
   it('shows no matches instead of another opening for an explicit unavailable phrase', async () => {
     render(await open({ o: 'ان المتقين', juzFrom: '30', juzTo: '30' }));
     expect(screen.getByRole('status').textContent).toContain('لا تطابق العبارة المطلوبة');

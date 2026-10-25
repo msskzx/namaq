@@ -1,49 +1,48 @@
+'use client';
+
 import React from 'react';
-import { AyahCard } from '@/components/quran/AyahCard';
-import type { Ayah } from '@/types/quran';
+import { useLanguage } from '@/components/language/LanguageContext';
+import PageSpread, { type SpreadPage } from '@/components/quran/PageSpread';
 import { num } from '@/lib/quran/arabicNumber';
+import { NOTE } from '../panel';
 
 type Span = { from: number; to: number };
 type Theme = { theme: string; a: Span; b: Span };
 type Side = { number: number; name: string; ayat: string[] };
 
-const PANEL = 'bg-[var(--home-paper-deep)] border border-[var(--home-rule)] rounded-lg p-4';
-const NOTE = 'text-sm text-[var(--home-muted)]';
 const span = (r: Span) => (r.from === r.to ? num(r.from) : `${num(r.from)}–${num(r.to)}`);
 
-function Cards({ side, range }: { side: Side; range: Span }) {
-  const surah = { id: `s${side.number}`, number: side.number, name: side.name, nameTransliterated: null };
-  return (
-    <div>
-      {Array.from({ length: range.to - range.from + 1 }, (_, k) => range.from + k).map((n) => (
-        <AyahCard key={n} ayah={{ id: `${side.number}:${n}`, number: n, text: side.ayat[n - 1], surah } as unknown as Ayah} />
-      ))}
-    </div>
-  );
+function passage(side: Side, range: Span, ar: boolean): SpreadPage {
+  return {
+    title: side.name,
+    subtitle: `${ar ? (range.from === range.to ? 'الآية' : 'الآيات') : (range.from === range.to ? 'Ayah' : 'Ayat')} ${span(range)}`,
+    label: `${side.name} ${span(range)}`,
+    rows: [Array.from({ length: range.to - range.from + 1 }, (_, k) => {
+      const number = range.from + k;
+      return { number, words: side.ayat[number - 1].split(' ') };
+    })],
+  };
 }
 
 export default function ThemesView({ a, b, themes, controls, level = 1 }: { a: Side; b: Side; themes: Theme[]; controls?: React.ReactNode; level?: 1 | 2 }) {
+  const ar = useLanguage().language === 'ar';
   const Title = level === 1 ? 'h1' : 'h2';
   const Row = level === 1 ? 'h2' : 'h3';
   return (
-    <div dir="rtl" className="flex flex-col gap-4 text-[var(--home-ink)]">
-      <div className="flex flex-wrap items-center gap-2">
-        <Title className="text-3xl text-[var(--home-accent)]">{a.name} ↔ {b.name}</Title>
-      </div>
-      <p className={NOTE}>
-        {themes.length === 0 ? 'لا مواضع متقابلة مسجلة بين هاتين السورتين.' : `مواضع متقابلة بحسب الموضوع لا بحسب الألفاظ (${num(themes.length)} موضعًا).`}
-      </p>
+    <div dir={ar ? 'rtl' : 'ltr'} className="flex flex-col gap-4 text-[var(--home-ink)]">
+      <header className="flex flex-col gap-2">
+        <Title className="text-3xl text-[var(--home-accent)]">{a.name} {ar ? 'و' : 'and'}{ar ? '' : ' '}{b.name}</Title>
+        <p className={NOTE}>
+          {themes.length === 0
+            ? (ar ? 'لا مواضع متقابلة مسجلة بين هاتين السورتين.' : 'No shared topics are recorded for these two surahs.')
+            : (ar ? `مواضع متقابلة بحسب الموضوع لا بحسب الألفاظ (${num(themes.length)} موضعًا).` : `Passages grouped by shared topic, not wording (${themes.length}).`)}
+        </p>
+      </header>
       {controls}
       {themes.map((row) => (
-        <section key={`${row.a.from}-${row.b.from}-${row.theme}`} className={PANEL}>
-          <div className="flex flex-wrap items-center gap-2 mb-3">
-            <Row className="text-lg text-[var(--home-accent)]">{row.theme}</Row>
-            <span className={NOTE}>{a.name} {span(row.a)} · {b.name} {span(row.b)}</span>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2">
-            <Cards side={a} range={row.a} />
-            <Cards side={b} range={row.b} />
-          </div>
+        <section key={`${row.a.from}-${row.b.from}-${row.theme}`} aria-label={row.theme} className="flex flex-col gap-3">
+          <Row className="text-xl text-[var(--home-accent)]" dir="rtl" lang="ar">{row.theme}</Row>
+          <PageSpread stackOnMobile pages={[passage(a, row.a, ar), passage(b, row.b, ar)]} />
         </section>
       ))}
     </div>

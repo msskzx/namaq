@@ -5,7 +5,7 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { LanguageProvider } from '@/components/language/LanguageContext';
 import type { SimilarPair } from '@/lib/quran/similar';
 import type { Passage } from '@/lib/quran/passages';
-import { passageOf, places, SimilarList, VISIBLE } from './SimilarList';
+import { collapse, passageOf, places, repeats, SimilarList, VISIBLE } from './SimilarList';
 import spread from '@/components/quran/PageSpread.module.css';
 
 afterEach(cleanup);
@@ -28,19 +28,18 @@ describe('SimilarList', () => {
     expect(screen.queryByText(/أهل العلم/)).toBeNull();
   });
 
-  it('names what a marked word answers on the other side, and underlines a same word whose partner shares only its root', () => {
+  it('names what a marked word answers on the other side, without underlines', () => {
     const linked: SimilarPair = { ...pair, marksA: [[54, 2, 0, 'ذكر']], marksB: [[11, 2, 0, 'ذكر'], [12, 2, 1, 'ذكر']] };
     show([linked]);
     const marks = [...document.querySelectorAll('mark')];
     const a = marks.find(m => m.textContent === 'تَذۡكِرَةࣱ' && m.title.includes('عبس'))!;
     expect(a.title).toBe('يقابلها: تَذۡكِرَةࣱ (عبس ١١)، ذَكَرَهُۥ (عبس ١٢)');
-    expect(a.className).toContain(spread.linked);
-    expect(marks.find(m => m.title.includes('المدثر'))!.className ?? '').not.toContain(spread.linked);
   });
 
   it('shows the first rows and the rest on request', () => {
     const many = Array.from({ length: VISIBLE + 3 }, (_, k) => ({ ...pair, a: [74, k + 1, k + 1] as SimilarPair['a'] }));
-    show(many);
+    const distinct = { ...ayat, ...Object.fromEntries(many.map((_, k) => [`74:${k + 1}`, `آية ${k + 1}`])) };
+    render(<LanguageProvider><SimilarList pairs={many} ayat={distinct} names={names} pair={false} /></LanguageProvider>);
     expect(screen.getAllByRole('link', { name: /آية بآية/ })).toHaveLength(VISIBLE);
     fireEvent.click(screen.getByRole('button', { name: /عرض الباقي/ }));
     expect(screen.getAllByRole('link', { name: /آية بآية/ })).toHaveLength(VISIBLE + 3);
@@ -55,10 +54,43 @@ describe('SimilarList', () => {
   });
 
   it('counts places in Arabic agreement, past one hundred too', () => {
-    expect([1, 2, 3, 10, 11, 99, 100, 101, 103, 111, 200].map(places)).toEqual([
+    expect([1, 2, 3, 10, 11, 99, 100, 101, 103, 111, 200].map(n => places(n))).toEqual([
       'موضع متشابه واحد', 'موضعان متشابهان', '٣ مواضع متشابهة', '١٠ مواضع متشابهة', '١١ موضعًا متشابهًا', '٩٩ موضعًا متشابهًا',
       '١٠٠ موضعٍ متشابه', '١٠١ موضع متشابه', '١٠٣ مواضع متشابهة', '١١١ موضعًا متشابهًا', '٢٠٠ موضعٍ متشابه',
     ]);
+  });
+
+  it('shows the same text met again on the other side once, naming every place', () => {
+    const refrain = { '55:13': 'فبأي آلاء ربكما تكذبان', '55:16': 'فبأي آلاء ربكما تكذبان', '55:18': 'فبأي آلاء ربكما تكذبان', '53:55': 'فبأي آلاء ربك تتمارى', '55:2': 'علم القرآن' };
+    const at = (b: number): SimilarPair => ({ ...pair, a: [53, 55, 55], b: [55, b, b] });
+    const pairs = [at(13), at(16), at(2), at(18)];
+    const cards = collapse(pairs, refrain);
+    expect(cards.map(c => [c.pair.b[1], c.also.map(p => p.b[1])])).toEqual([[13, [16, 18]], [2, []]]);
+    const sura = { 53: 'النجم', 55: 'الرحمن' };
+    expect(repeats(cards[0], sura).map(g => [g.surah, g.places.map(x => x.text)])).toEqual([['الرحمن', ['١٣', '١٦', '١٨']]]);
+    render(<LanguageProvider><SimilarList pairs={pairs} ayat={refrain} names={sura} pair surahs={[53, 55]} /></LanguageProvider>);
+    expect(screen.getAllByRole('link', { name: /آية بآية/ })).toHaveLength(2);
+    expect(screen.getByText('النص نفسه في ٣ مواضع')).toBeTruthy();
+    expect(screen.getByText(/^المواضع:/).textContent).toBe('المواضع: الرحمن ١٣، ١٦، ١٨');
+    expect(screen.getByRole('link', { name: '١٦' }).getAttribute('href')).toBe('/quran/compare?a=53&af=55&at=55&b=55&bf=16&bt=16&view=ayat');
+    expect(screen.getByText('٤ مواضع متشابهة')).toBeTruthy();
+  });
+
+  it('names both sides when both move, and keeps texts that differ apart', () => {
+    const text = { '10:48': 'متى هذا الوعد', '21:38': 'متى هذا الوعد', '27:71': 'متى هذا الوعد', '10:49': 'متى هذا الوعد' };
+    const p = (a: number, s: number, b: number): SimilarPair => ({ ...pair, a: [10, a, a], b: [s, b, b] });
+    const [card] = collapse([p(48, 21, 38), p(49, 27, 71)], text);
+    expect(repeats(card, { 10: 'يونس', 21: 'الأنبياء', 27: 'النمل' }).flatMap(g => g.places.map(x => x.text))).toEqual(['يونس ٤٨ والأنبياء ٣٨', 'يونس ٤٩ والنمل ٧١']);
+    expect(collapse([p(48, 21, 38), p(48, 27, 72)], text)).toHaveLength(2);
+    const [other] = collapse([p(48, 21, 38), p(48, 27, 71)], text);
+    expect(repeats(other, { 10: 'يونس', 21: 'الأنبياء', 27: 'النمل' }).map(g => [g.surah, g.places.map(x => x.text)])).toEqual([['الأنبياء', ['٣٨']], ['النمل', ['٧١']]]);
+    expect(collapse([{ ...pair, a: [10, 48, 48], b: [21, 38, 38] }, { ...pair, a: [10, 48, 49], b: [21, 38, 38] }], { ...text, '10:48': 'متى', '10:49': 'هذا الوعد', '21:38': 'متى هذا الوعد' })).toHaveLength(2);
+  });
+
+  it('titles the view inside one surah', () => {
+    show([], true, { within: true, surahs: [74, 74] });
+    expect(screen.getByRole('heading', { name: 'آيات متشابهة داخل المدثر' })).toBeTruthy();
+    expect(screen.getByText('لا آيات متشابهة داخل هذه السورة.')).toBeTruthy();
   });
 
   it('says when nothing is left in the chosen range', () => {

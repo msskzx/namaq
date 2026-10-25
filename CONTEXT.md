@@ -416,6 +416,12 @@ _Avoid_: Evidence set (the complete support may contain several citations)
 The first two words shared by at least two ayat, allowing equivalent spellings,
 diacritic differences, and an initial conjunction as identified by its morphology.
 Corresponding words must also have the same root, or both have no root.
+A shared initial الحروف المقطعة sequence is also a shared opening, even when
+it is one word.
+
+**Chapter opening family**:
+A named collection of chapter openings, such as الحواميم or المسبحات, whose
+membership can span different opening words or letter sequences.
 
 **Shared phrase**:
 An opening or a longer sequence of words shared from the start of at least two

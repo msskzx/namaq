@@ -44,6 +44,7 @@ describe('tabHref and pairHref', () => {
 describe('surahHref and withRange', () => {
   it('carries the range to one surah and to a pair link', () => {
     expect(surahHref(74, { a: '1', by: 'surah', surahFrom: '70' })).toBe('/quran/compare?s=74&by=surah&surahFrom=70');
+    expect(surahHref(74, {}, true)).toBe('/quran/compare?s=74&within=1');
     expect(withRange('/quran/compare?a=1&b=2', { juzFrom: '30' })).toBe('/quran/compare?a=1&b=2&juzFrom=30');
     expect(withRange('/quran/compare?a=1&b=2', {})).toBe('/quran/compare?a=1&b=2');
   });

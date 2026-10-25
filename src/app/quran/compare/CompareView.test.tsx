@@ -40,7 +40,7 @@ describe('CompareView on Al-Hadid and At-Taghabun', () => {
 });
 
 describe('CompareView with words matched by root', () => {
-  it('underlines a word that shares only its root with its partner, with a title saying so', () => {
+  it('colours a word that shares only its root with its partner in the root colour, with a title saying so', () => {
     const one = (number: number, text: string) => ({ number, name: '', plain: '', words: [text] });
     const rows = alignSurahs([['ياتوك', 'بكل', 'r:sHr', 'r:Elm']], [['ياتوك', 'بكل', 'r:sHr', 'r:Elm']], { a: 1, b: 1 }, false, true,
       { a: [['ياتوك', 'بكل', 'سحار', 'عليم']], b: [['ياتوك', 'بكل', 'سحر', 'عليم']] });

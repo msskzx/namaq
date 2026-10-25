@@ -3,6 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import ayat from '@/app/quran/branches/ayat.json';
 import { ayahEnds, branch, branchesHref, conjunctions, listPage, PIECE_MAX, pieces, DEFAULT_PHRASE, keys, linkId, pickPhrase, stem, widerPhrases, listOpenings, listPhrases, openingId, readerAyat, searchKey, searchPieces, searchPhrases, sharedOpenings, spelledAs, startingWith, variants, withConjunctions, withRoots, withNext, type Branch, type BranchAyah } from './branches';
+import { chapterFamilies } from './chapterFamilies';
 import { inJuzRange } from './juz';
 import { normalizeWord } from './normalize';
 
@@ -33,6 +34,38 @@ describe('sharedOpenings', () => {
     expect(openingId(ayah('1:3', 'قال'))).toBeNull();
   });
 
+  it('groups the known chapter letter openings, including all seven الحواميم', () => {
+    const expected = {
+      'الم': ['2:1', '3:1', '29:1', '30:1', '31:1', '32:1'],
+      'الر': ['10:1', '11:1', '12:1', '14:1', '15:1'],
+      'طسم': ['26:1', '28:1'],
+      'حم': ['40:1', '41:1', '42:1', '43:1', '44:1', '45:1', '46:1'],
+    };
+    const phrases = listPhrases(groups);
+    const entries = pieces(groups, phrases);
+    for (const [id, members] of Object.entries(expected)) {
+      expect(groups.get(id)?.map(ayah => ayah.key)).toEqual(members);
+      expect(startingWith(all, id).map(ayah => ayah.key)).toEqual(members);
+      expect(phrases.find(phrase => phrase.id === id)?.count).toBe(members.length);
+      expect(searchPieces(entries, phrases, all, id).flatMap(piece => piece.keys)).toEqual(expect.arrayContaining(members));
+    }
+    expect(openingId(ayah('7:1', 'المص'))).toBe('المص');
+    expect(openingId(ayah('42:1', 'حم'))).toBe('حم');
+    expect(startingWith([ayah('42:1', 'حم'), ayah('2:1', 'الم'), ayah('105:1', 'أَلَمْ تر كيف')], 'الم').map(ayah => ayah.key)).toEqual(['2:1']);
+    expect(startingWith(all, 'الم تر').length).toBe(31);
+  });
+
+  it('continues standalone letter openings into their next ayah without losing references', () => {
+    for (const id of ['الم', 'طسم', 'حم']) {
+      const group = groups.get(id)!;
+      const tree = branch(group);
+      expect(keys(tree).sort()).toEqual(group.map(ayah => ayah.key).sort());
+      expect(group.every(ayah => ayah.next && ayah.next.length > 0)).toBe(true);
+      expect(tree.words.join(' ')).toContain('﴿١﴾');
+      expect(ayahEnds(tree)).toEqual(Object.fromEntries(group.map(ayah => [ayah.key, ayah.key.replace(':1', ':2')])));
+    }
+  });
+
   it('ignores the pause and section marks the reader keeps beside a word', () => {
     const read = readerAyat([{ juz: 1, items: [{ surah: 2 }, { line: ['۞ إِنَّ', 'ٱللَّهَ ۖ', 'عليم', 1, 'إِنَّ', 'ٱللَّهَ', 'غفور', 2] }] }]);
     const shared = sharedOpenings(read);
@@ -44,13 +77,15 @@ describe('sharedOpenings', () => {
     const pages = Array.from({ length: 604 }, (_, i) => JSON.parse(readFileSync(join(__dirname, '../../app/quran/read/data', `${i + 1}.json`), 'utf8')));
     const morphology = readFileSync(join(__dirname, '../../../data/quran/quranic-corpus-morphology-0.4.txt'), 'utf8');
     const read = withRoots(withConjunctions(readerAyat(pages), morphology), morphology);
-    expect(withNext(sharedOpenings(read), read)).toEqual(all);
+    const byKey = new Map(read.map(ayah => [ayah.key, ayah]));
+    const families = chapterFamilies(read).map(family => [family.id, family.keys.map(key => byKey.get(key)!)] as const);
+    expect(withNext(new Map([...sharedOpenings(read), ...families]), read)).toEqual(all);
   });
 
   it('keeps every committed ayah in a group of two or more', () => {
-    expect(groups.size).toBe(816);
+    expect(groups.size).toBe(818);
     expect([...groups.keys()].every(id => id === id.trim() && !id.includes('  '))).toBe(true);
-    expect([...groups.values()].flat()).toHaveLength(all.length);
+    expect(new Set([...groups.values()].flat().map(ayah => ayah.key).concat(chapterFamilies(all).flatMap(family => family.keys))).size).toBe(all.length);
   });
 
   it('lists the largest openings first', () => {

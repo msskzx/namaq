@@ -336,14 +336,41 @@ describe('BranchTree', () => {
       expect((screen.getByRole('switch') as HTMLInputElement).checked).toBe(true);
     });
 
-    it('keeps the switch in the address when the page asks', () => {
+    it('keeps the switch in the address without asking the server for the page again', () => {
       window.history.replaceState(null, '', '/quran/branches?o=x');
       render(<BranchTree tree={tree} names={names} surround={{ on: false, sync: true }} />);
       fireEvent.click(screen.getByRole('switch'));
-      expect(replace).toHaveBeenCalledWith('/quran/branches?o=x&c=1', { scroll: false });
-      window.history.replaceState(null, '', '/quran/branches?o=x&c=1');
+      expect(`${window.location.pathname}${window.location.search}`).toBe('/quran/branches?o=x&c=1');
       fireEvent.click(screen.getByRole('switch'));
-      expect(replace).toHaveBeenLastCalledWith('/quran/branches?o=x', { scroll: false });
+      expect(`${window.location.pathname}${window.location.search}`).toBe('/quran/branches?o=x');
+      expect(replace).not.toHaveBeenCalled();
     });
+
+    it('follows the address over a cached page when the browser goes back to a tree it switched on', async () => {
+      window.history.replaceState(null, '', '/quran/branches?o=x&c=1');
+      const { container } = render(<BranchTree tree={tree} names={names} surround={{ on: false, sync: true }} />);
+      expect((screen.getByRole('switch') as HTMLInputElement).checked).toBe(true);
+      await waitFor(() => expect(container.querySelectorAll('[data-ctx]')).toHaveLength(5));
+      window.history.replaceState(null, '', '/');
+    });
+
+    it('carries the switch into the branch links once it is turned on', () => {
+      const group = startingWith(ayat as BranchAyah[], 'ان المتقين');
+      render(<BranchTree tree={branch(group)} names={names} view={{}} surround={{ on: false, sync: true }} />);
+      const link = () => screen.getAllByRole('link').find(a => a.getAttribute('href')!.startsWith('/quran/branches?'))!;
+      expect(new URL(link().getAttribute('href')!, 'http://localhost').searchParams.has('c')).toBe(false);
+      fireEvent.click(screen.getByRole('switch'));
+      expect(new URL(link().getAttribute('href')!, 'http://localhost').searchParams.get('c')).toBe('1');
+    });
+
+    it('draws the ayat the page already loaded without fetching them', () => {
+      const { container } = render(<BranchTree tree={tree} names={names} surround={{ on: true, sync: true, data: around }} />);
+      expect(container.querySelectorAll('[data-ctx]')).toHaveLength(5);
+      fireEvent.click(screen.getByRole('switch'));
+      fireEvent.click(screen.getByRole('switch'));
+      expect(container.querySelectorAll('[data-ctx]')).toHaveLength(5);
+      expect(fetch).not.toHaveBeenCalled();
+    });
+
   });
 });
