@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
@@ -16,6 +17,7 @@ import BranchHeading from './BranchHeading';
 import OpeningSearch from './OpeningSearch';
 import SearchSummary from './SearchSummary';
 import SurahPane from './SurahPane';
+import { PathScope } from './Paths';
 import CompareLayout from '../compare/CompareLayout';
 import { chapterFamilies } from '@/lib/quran/chapterFamilies';
 import ChapterFamilies from './ChapterFamilies';
@@ -93,16 +95,21 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const around = tree && state.context ? surrounding(await loadReaderAyat(), keys(tree), [...new Set(Object.values(ayahEnds(tree)))]) : undefined;
   const heads = needle ? [...new Map(cut.map(piece => [`${piece.opening.id}:${piece.opening.partition ?? ''}`, piece.opening])).values()] : openings;
   const ordered = grouped ? heads.flatMap(opening => cut.filter(piece => piece.opening.id === opening.id && piece.opening.partition === opening.partition)) : cut;
+  const ayatBySurah: Record<number, number> = {};
+  drawn.forEach(ayah => { ayatBySurah[surahOf(ayah.key)] = (ayatBySurah[surahOf(ayah.key)] ?? 0) + 1; });
   const shown = ordered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
   const shownAyat = new Map(shown.flatMap(piece => piece.keys.map(key => [key, byKey.get(key)!] as const)));
 
+  const Scope = id ? PathScope : Fragment;
   return (
     <div id="quran-branches" dir="rtl" className={`${styles.page} w-full max-w-6xl mx-auto px-4 py-8 flex flex-col gap-4`}>
       <BranchHeading />
-      <ChapterFamilies families={built.families} juz={range} view={state} current={id} />
       <OpeningSearch key={query} query={query} top={openings.slice(0, TOP)} phrases={phrases} current={id} juz={range} unavailable={unavailable} view={state} alternatives={ambiguous ? matches : []} />
-      {!id ? <CompareLayout title="السور" current={surah ? names[surah] : 'كل السور'} change="اختر سورة" storageKey="branches-pane-hidden"
-        pane={<SurahPane counts={counts} total={found.length} names={names} surah={surah} juz={range} view={state} />}>
+      <Scope>
+      <CompareLayout title="السور" current={id ? 'سور هذه الشجرة' : surah ? names[surah] : 'كل السور'} change="اختر سورة" storageKey="branches-pane-hidden"
+        pane={<SurahPane counts={id ? ayatBySurah : counts} total={id ? drawn.length : found.length} names={names} surah={surah} juz={range} view={state} inTree={!!id} treeKeys={drawn.map(ayah => ayah.key)}
+          families={<ChapterFamilies families={built.families} juz={range} view={state} current={id} />} />}>
+      {!id ? <>
         <div className="flex flex-wrap items-center gap-3">
           <JuzFilter range={range} phrase={id} view={state} />
           <BranchOrdering grouped={grouped} juz={range} view={state} />
@@ -110,7 +117,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
         {needle && <SearchSummary query={query} count={cut.length} complete={exact.map(phrase => ({ phrase, href: branchesHref(phrase.id, juz, { ...state, spelling: undefined, partition: phrase.partition }) }))} />}
         {(!needle || cut.length > 0) && <PieceList pieces={shown} openings={grouped ? heads : undefined} ayat={shownAyat} names={names} juz={range} view={state} />}
         <Pagination iconFamily="lucide" scrollTarget="quran-branches" page={page} pageCount={pageCount} hrefs={Array.from({ length: pageCount }, (_, i) => branchesHref('', juz, { grouped, query, surah, page: i + 1 }))} />
-      </CompareLayout> : <>
+      </> : <>
         <JuzFilter range={range} phrase={id} view={state} />
         {wider.length > 0 && <nav aria-label="عبارات أعم" className="flex flex-wrap items-center gap-2">
           {wider.map(phrase => <Button key={`${phrase.id}:${phrase.partition ?? ''}`} size="sm" href={branchesHref(phrase.id, juz, { ...state, spelling: undefined, partition: phrase.partition })}>
@@ -120,6 +127,8 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
         </nav>}
         {tree && <BranchTree key={`${id}:${state.partition ?? ''}:${spelling ?? ''}:${range?.from}-${range?.to}:${state.context}`} tree={tree} variants={family ? [] : variants(drawn)} names={names} juz={range} view={state} surround={{ on: state.context, sync: true, data: around }} />}
       </>}
+      </CompareLayout>
+      </Scope>
     </div>
   );
 }

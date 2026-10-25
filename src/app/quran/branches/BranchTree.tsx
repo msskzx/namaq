@@ -8,7 +8,7 @@ import { num } from '@/lib/quran/arabicNumber';
 import { ayahEnds, branchesHref, keys, linkId, spell, type Branch, type BranchesView, type Variant } from '@/lib/quran/branches';
 import type { JuzRange } from '@/lib/quran/juz';
 import AyahContextButton from './AyahContext';
-import { Fan, PathBox, PathButton, PathProvider, Stub, usePaths, type FanEntry } from './Paths';
+import { Fan, PathBox, PathButton, PathProvider, Stub, useOuterPaths, usePaths, type FanEntry } from './Paths';
 import type { Surrounding } from '@/lib/quran/ayahContext';
 import { anchorOf, NeighbourBox, SurroundToggle, targetStyle, useSurrounding, type Around } from './Surroundings';
 
@@ -110,7 +110,9 @@ export default function BranchTree({ tree, names, variants = [], showSpellings =
   const id = useId();
   const [on, setOn] = useState(() => (surround?.sync && typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('c') === '1' : surround?.on ?? false));
   const view = surround?.sync && given ? { ...given, context: on } : given;
-  const paths = usePaths();
+  const outer = useOuterPaths();
+  const own = usePaths();
+  const paths = outer ?? own;
   const all = keys(tree);
   const ends = ayahEnds(tree);
   const { data, isLoading, error } = useSurrounding(!!surround && on, all, ends, surround?.data);

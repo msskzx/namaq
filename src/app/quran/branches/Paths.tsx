@@ -27,6 +27,11 @@ export function usePaths() {
 }
 
 export const PathProvider = PathContext.Provider;
+export const useOuterPaths = () => useContext(PathContext);
+
+export function PathScope({ children }: { children: React.ReactNode }) {
+  return <PathProvider value={usePaths()}>{children}</PathProvider>;
+}
 
 export function useIsLit() {
   const paths = useContext(PathContext);

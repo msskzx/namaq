@@ -149,11 +149,29 @@ describe('Quran branches range selection', () => {
     expect(pages.every(link => new URL(link.href).searchParams.get('s') === '2')).toBe(true);
   });
 
-  it('ignores a surah outside the mushaf and leaves the single tree page without the pane', async () => {
+  it('ignores a surah outside the mushaf', async () => {
     render(await open({ s: '200' }));
     expect(screen.getByRole('list', { name: 'المتشابهات' }).children).toHaveLength(10);
-    cleanup();
-    render(await open({ o: 'ان المتقين' }));
-    expect(screen.queryByRole('complementary', { name: 'السور' })).toBeNull();
+  });
+
+  it('keeps the chapter families in the pane on every page', async () => {
+    render(await open({}));
+    expect(within(screen.getByRole('complementary', { name: 'السور' })).getByRole('navigation', { name: 'مجموعات فواتح السور' })).toBeTruthy();
+  });
+
+  it('lists only the tree\'s own surahs on a tree page, each lighting its ayat and linking to its trees', async () => {
+    vi.mocked(prisma.surah.findMany).mockResolvedValueOnce([14, 15, 16, 43, 44, 45, 50, 51, 52, 53, 54, 55, 76, 77, 78].map(number => ({ number, name: `س${number}` })) as never);
+    const { container } = render(await open({ o: 'ان المتقين' }));
+    const pane = screen.getByRole('complementary', { name: 'السور' });
+    const surahs = within(pane).getAllByRole('link', { name: /س\d+/ }).map(link => link.textContent!.match(/س(\d+)/)![1]);
+    const inTree = new Set([...container.querySelectorAll('[data-tree] [data-node]')].flatMap(node => node.getAttribute('data-keys')!.split(' ')).map(key => key.split(':')[0]));
+    expect(new Set(surahs)).toEqual(inTree);
+    const link = within(pane).getAllByRole('link', { name: /س\d+/ })[0];
+    expect(new URL(link.getAttribute('href')!, 'http://x').searchParams.get('s')).toBe(surahs[0]);
+    expect(new URL(link.getAttribute('href')!, 'http://x').searchParams.has('o')).toBe(false);
+    fireEvent.click(within(pane).getByRole('button', { name: `إظهار المسار: س${surahs[0]}` }));
+    const lit = [...container.querySelectorAll('[data-tree] [data-lit]')];
+    expect(lit.length).toBeGreaterThan(1);
+    expect(lit.every(node => node.getAttribute('data-keys')!.split(' ').some(key => key.startsWith(`${surahs[0]}:`)))).toBe(true);
   });
 });
