@@ -22,7 +22,7 @@ export default function JumpForm({ page }: { page?: number }) {
         if (Number.isInteger(page) && page >= 1 && page <= 604) router.push(`/quran/read/${page}`);
       }}
     >
-      <NumberInput key={page} name="page" label={ar ? 'رقم الصفحة' : 'Page number'} min={1} max={604} defaultValue={page} />
+      <NumberInput key={page} name="page" label={ar ? 'رقم الصفحة' : 'Page number'} min={1} max={604} defaultValue={page} steppers={false} />
       <Button size="sm" type="submit">
         <FontAwesomeIcon icon={faLocationArrow} aria-hidden />
         <span className="max-sm:sr-only">{ar ? 'اذهب إلى الصفحة' : 'Go to page'}</span>
