@@ -2,12 +2,15 @@ import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import TextCompare from './TextCompare';
 import ThemesCompare from './ThemesCompare';
-import CompareModeToggle from './CompareModeToggle';
-import { modeHref } from './modeHref';
+import CompareControls from './CompareControls';
+import CompareLayout from './CompareLayout';
+import { modeHref, type CompareTab } from './modeHref';
 import { RepetitionProvider, SurahRepetition } from './Repetition';
 import SimilarAyat, { similarSurahPairs } from './SimilarAyat';
 import { SurahPairs } from './SurahPairs';
 import { prisma } from '@/lib/prisma';
+import { num } from '@/lib/quran/arabicNumber';
+import { ayahInRange, parseCompareRange, surahInRange } from '@/lib/quran/compareRange';
 import { plainName } from '@/lib/quran/normalize';
 import { groupBySurah } from '@/lib/quran/surahPairs';
 import { getTopicSurahPairs } from '@/lib/quran/topicEngine';
@@ -17,6 +20,13 @@ export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
   title: 'القرآن: مقارنة السور وتكرار العبارات',
 };
+
+function topPair(pairs: [number, number][]) {
+  const counts = new Map<string, number>();
+  for (const [x, y] of pairs) if (x !== y) counts.set(`${Math.min(x, y)}:${Math.max(x, y)}`, (counts.get(`${Math.min(x, y)}:${Math.max(x, y)}`) ?? 0) + 1);
+  const best = [...counts].sort((p, q) => q[1] - p[1])[0];
+  return best ? best[0].split(':').map(Number) : null;
+}
 
 const surahOf = (value: string | string[] | undefined) => {
   const n = Number(Array.isArray(value) ? value[0] : value);
@@ -29,33 +39,40 @@ export default async function QuranComparePage({ searchParams }: { searchParams:
   const s = surahOf(query.s);
   const t = surahOf(query.t);
   if (s !== null && t !== null && s !== t) redirect(modeHref('text', { a: String(s), b: String(t) }));
-  const a = surahOf(query.a) ?? (themes ? 16 : 56);
-  const b = surahOf(query.b) ?? (themes ? 43 : 69);
+  const range = parseCompareRange(query);
+  const tab: CompareTab = themes && s === null ? 'themes' : query.view === 'ayat' && s === null ? 'ayat' : 'similar';
   const [surahs, pairs] = await Promise.all([
     prisma.surah.findMany({ select: { number: true, name: true } }),
-    themes && s === null ? getTopicSurahPairs() : similarSurahPairs(),
+    tab === 'themes' ? getTopicSurahPairs((surah, ayah) => ayahInRange(surah, ayah, range)) : similarSurahPairs(range),
   ]);
+  const [topA, topB] = range.range && query.a === undefined && query.b === undefined ? topPair(pairs) ?? [] : [];
+  const [first, second] = themes ? [16, 43] : [56, 69];
+  const a = surahOf(query.a) ?? topA ?? (surahOf(query.b) === first ? second : first);
+  const b = surahOf(query.b) ?? topB ?? (a === second ? first : second);
+  const shown = { ...query, a: String(a), b: String(b) };
   const names = Object.fromEntries(surahs.map(x => [x.number, plainName(x.name)]));
+  const strings = Object.fromEntries(Object.entries(query).flatMap(([key, value]) => (typeof value === 'string' ? [[key, value]] : [])));
+  const where = range.range ? `${range.unit === 'juz' ? 'الأجزاء' : 'السور'} ${num(range.range.from)}–${num(range.range.to)}` : 'المصحف كله';
+  const summary = `${where} · ${tab === 'themes' ? 'المواضيع المشتركة' : 'أزواج الآيات المتشابهة'}: ${num(pairs.length)}`;
+  const current = s !== null ? `داخل سورة ${names[s]}` : `${names[a]} و${names[b]}`;
 
   return (
     <RepetitionProvider>
-      <div dir="rtl" className="w-full p-4 grid lg:grid-cols-[20rem_minmax(0,1fr)] gap-4 items-start text-gray-900 dark:text-gray-200">
-        <div className="order-last lg:order-none">
-          <SurahPairs groups={groupBySurah(pairs, surahs.map(x => x.number))} names={names} mode={themes && s === null ? 'themes' : 'text'} surah={s} a={a} b={b} />
-        </div>
-        <div className="min-w-0 flex flex-col gap-4">
+      <div dir="rtl" className="w-full p-4 flex flex-col gap-4 text-[var(--home-ink)]">
+        <header>
+          <h1 className="text-4xl text-[var(--home-accent)]">مقارنة السور</h1>
+          <p className="text-sm text-[var(--home-muted)]">قارن بين سورتين بالآيات المتشابهة، أو آية بآية، أو بالمواضيع المشتركة.</p>
+        </header>
+        <CompareControls tab={s === null ? tab : null} query={strings} range={range} summary={summary} />
+        <CompareLayout title={tab === 'themes' ? 'السور بالمواضيع المشتركة' : 'السور بالآيات المتشابهة'} current={current}
+          pane={<SurahPairs key="pane" groups={groupBySurah(pairs, surahs.map(x => x.number).filter(n => surahInRange(n, range)))} names={names} tab={tab} query={strings} surah={s} a={a} b={b} />}>
           {s !== null ? (
             <>
+              <SimilarAyat surah={s} range={range} query={strings} />
               <SurahRepetition surah={s} />
-              <SimilarAyat surah={s} />
             </>
-          ) : (
-            <>
-              <CompareModeToggle on={themes} offHref={modeHref('text', query)} onHref={modeHref('themes', query)} />
-              {themes ? <ThemesCompare query={query} /> : <TextCompare query={query} />}
-            </>
-          )}
-        </div>
+          ) : themes ? <ThemesCompare query={shown} range={range} /> : <TextCompare query={shown} range={range} />}
+        </CompareLayout>
       </div>
     </RepetitionProvider>
   );

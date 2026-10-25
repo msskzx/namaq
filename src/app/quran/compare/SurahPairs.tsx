@@ -4,78 +4,67 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDown19, faArrowDownWideShort, faChevronDown, faLightbulb, faMagnifyingGlass, type IconDefinition } from '@fortawesome/free-solid-svg-icons';
-import Button from '@/components/common/Button';
-import Toggle from '@/components/common/Toggle';
+import { faChevronDown, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { ArrowDown01, ArrowDownWideNarrow } from 'lucide-react';
+import Segmented from '@/components/common/Segmented';
+import { announceNavigation } from '@/components/quran/RangeFilter';
 import { num } from '@/lib/quran/arabicNumber';
 import type { SurahGroup } from '@/lib/quran/surahPairs';
 import { surahMatch } from '@/lib/quran/surahSearch';
-import { FIELD, NOTE, PANEL } from '../panel';
-import { modeHref } from './modeHref';
+import { FIELD, NOTE } from '../panel';
+import { pairHref, surahHref, type CompareTab } from './modeHref';
 
-type Mode = 'text' | 'themes';
+type Query = Record<string, string>;
 
-function Switch({ off, on, checked, onChange, offIcon, onIcon }: { off: string; on: string; checked: boolean; onChange: (on: boolean) => void; offIcon: IconDefinition; onIcon: IconDefinition }) {
-  const label = (active: boolean) => 'cursor-pointer ' + (active ? 'font-semibold text-amber-600 dark:text-amber-400' : 'text-gray-500 dark:text-gray-400');
-  return (
-    <div className="flex items-center gap-2 text-sm">
-      <button type="button" tabIndex={-1} aria-hidden className={label(!checked)} onClick={() => onChange(false)}>{off}</button>
-      <Toggle label={on} checked={checked} onChange={onChange}
-        offIcon={<FontAwesomeIcon icon={offIcon} className="size-3" />} onIcon={<FontAwesomeIcon icon={onIcon} className="size-3" />} />
-      <button type="button" tabIndex={-1} aria-hidden className={label(checked)} onClick={() => onChange(true)}>{on}</button>
-    </div>
-  );
-}
+const ROW = 'w-full flex items-baseline gap-2 px-2 py-1 text-start rounded hover:bg-[color-mix(in_srgb,var(--home-accent)_10%,transparent)] aria-[current=true]:bg-[color-mix(in_srgb,var(--home-accent)_16%,transparent)] aria-[current=true]:font-semibold';
+const COUNT = 'text-[var(--home-accent)] tabular-nums';
 
-const ROW = 'w-full flex items-baseline gap-2 px-2 py-1 text-start rounded hover:bg-amber-100 dark:hover:bg-white/10 aria-[current=true]:bg-amber-100 aria-[current=true]:font-semibold dark:aria-[current=true]:bg-white/10';
-const COUNT = 'text-amber-700 dark:text-amber-300 tabular-nums';
-
-export function SurahPairs({ groups, names, mode, surah, a, b }: { groups: SurahGroup[]; names: Record<number, string>; mode: Mode; surah: number | null; a: number; b: number }) {
+export function SurahPairs({ groups, names, tab, query, surah, a, b }: { groups: SurahGroup[]; names: Record<number, string>; tab: CompareTab; query: Query; surah: number | null; a: number; b: number }) {
+  const mode = tab === 'themes' ? 'themes' : 'text';
   const router = useRouter();
   const [byNumber, setByNumber] = useState(false);
-  const [query, setQuery] = useState('');
+  const [search, setSearch] = useState('');
   const list = useRef<HTMLUListElement>(null);
   useEffect(() => {
     const box = list.current;
     const row = box?.querySelector<HTMLElement>('[aria-current="true"]');
-    if (box && query) box.scrollTop = 0;
+    if (box && search) box.scrollTop = 0;
     else if (box && row) box.scrollTop = row.getBoundingClientRect().top - box.getBoundingClientRect().top + box.scrollTop - box.clientHeight / 3;
-  }, [surah, a, b, mode, query]);
-  const go = (href: string) => router.push(href, { scroll: false });
-  const sorted = (byNumber ? groups : [...groups].sort((p, q) => q.total - p.total || p.surah - q.surah)).filter(g => surahMatch(query, g.surah, names[g.surah] ?? '') !== null);
+  }, [surah, a, b, mode, search]);
+  const go = (href: string) => {
+    announceNavigation();
+    router.push(href, { scroll: false });
+  };
+  const sorted = (byNumber ? groups : [...groups].sort((p, q) => q.total - p.total || p.surah - q.surah)).filter(g => surahMatch(search, g.surah, names[g.surah] ?? '') !== null);
   const open = (s: number) => (surah === null ? s === a || s === b : s === surah);
   const unit = mode === 'themes' ? 'موضوع مشترك' : 'آية متشابهة';
 
   return (
-    <section className={`${PANEL} flex flex-col gap-3`}>
-      <h2 className="text-xl">{mode === 'themes' ? 'السور بالمواضيع المشتركة' : 'السور بالآيات المتشابهة'}</h2>
+    <>
       <p className={NOTE}>{`كل سورة بعدد ما يجمعها بغيرها (${unit}). افتح سورة لترى ما يقابلها، واختر واحدة لمقارنتهما.`}</p>
-      {mode === 'text' && (
-        <Button size="sm" href="/quran/compare?a=55&af=46&at=61&b=55&bf=62&bt=77" className="w-fit">
-          <FontAwesomeIcon icon={faLightbulb} />
-          مثال: الرحمن ٤٦–٦١ مقابل ٦٢–٧٧
-        </Button>
-      )}
-      <Switch off={mode === 'themes' ? 'الأكثر مواضيع مشتركة أولًا' : 'الأكثر آيات متشابهة أولًا'} on="بترتيب المصحف" checked={byNumber} onChange={setByNumber} offIcon={faArrowDownWideShort} onIcon={faArrowDown19} />
+      <Segmented label="ترتيب السور" options={[
+        { key: 'count', label: mode === 'themes' ? 'الأكثر مواضيع' : 'الأكثر تشابهًا', icon: <ArrowDownWideNarrow size={16} aria-hidden />, current: !byNumber, onClick: () => setByNumber(false) },
+        { key: 'number', label: 'ترتيب المصحف', icon: <ArrowDown01 size={16} aria-hidden />, current: byNumber, onClick: () => setByNumber(true) },
+      ]} />
       <label className="relative">
-        <FontAwesomeIcon icon={faMagnifyingGlass} className="absolute start-2.5 top-1/2 -translate-y-1/2 size-3 text-gray-400" />
-        <input type="search" aria-label="ابحث عن سورة" placeholder="ابحث عن سورة بالاسم أو الرقم" value={query} onChange={e => setQuery(e.target.value)} className={`${FIELD} w-full ps-8`} />
+        <FontAwesomeIcon icon={faMagnifyingGlass} className="absolute start-2.5 top-1/2 -translate-y-1/2 size-3 text-[var(--home-muted)]" />
+        <input type="search" aria-label="ابحث عن سورة" placeholder="ابحث عن سورة بالاسم أو الرقم" value={search} onChange={e => setSearch(e.target.value)} className={`${FIELD} w-full ps-8`} />
       </label>
-      {sorted.length === 0 ? <p className={NOTE}>{groups.length === 0 ? 'لا سور.' : 'لا سورة بهذا الاسم.'}</p> : (
+      {sorted.length === 0 ? <p className={NOTE}>{groups.length === 0 ? 'لا سور في هذا النطاق.' : 'لا سورة بهذا الاسم.'}</p> : (
         <ul ref={list} className="flex flex-col gap-2 max-h-[min(75vh,48rem)] overflow-y-auto">
           {sorted.map(g => (
             <li key={g.surah}>
-              <details key={`${mode}:${surah}:${a}:${b}`} open={open(g.surah)} className="group rounded-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 open:border-amber-400 dark:open:border-amber-600">
+              <details key={`${mode}:${surah}:${a}:${b}`} open={open(g.surah)} className="group rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] open:border-[var(--home-accent)]">
                 <summary className="flex items-center gap-2 px-3 py-2 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
                   <span className={`${NOTE} w-7 shrink-0 tabular-nums`}>{num(g.surah)}</span>
                   <span className="flex-1">{names[g.surah]}</span>
                   <span className={COUNT}>{num(g.total)}</span>
-                  <FontAwesomeIcon icon={faChevronDown} className="size-3 text-gray-400 transition-transform group-open:rotate-180" />
+                  <FontAwesomeIcon icon={faChevronDown} className="size-3 text-[var(--home-muted)] transition-transform group-open:rotate-180" />
                 </summary>
-                <ul className="border-t border-gray-200 dark:border-white/10 p-1">
+                <ul className="border-t border-[var(--home-rule)] p-1">
                   {g.self > 0 && mode === 'text' && (
                     <li>
-                      <button type="button" className={ROW} aria-current={surah === g.surah} onClick={() => go(`/quran/compare?s=${g.surah}`)}>
+                      <button type="button" className={ROW} aria-current={surah === g.surah} onClick={() => go(surahHref(g.surah, query))}>
                         <span className="flex-1">داخل السورة</span>
                         <span className={COUNT}>{num(g.self)}</span>
                       </button>
@@ -85,7 +74,7 @@ export function SurahPairs({ groups, names, mode, surah, a, b }: { groups: Surah
                   {g.partners.map(p => (
                     <li key={p.other}>
                       <button type="button" className={ROW} aria-current={surah === null && ((g.surah === a && p.other === b) || (g.surah === b && p.other === a))}
-                        onClick={() => go(modeHref(mode, { a: String(g.surah), b: String(p.other) }))}>
+                        onClick={() => go(pairHref(tab, g.surah, p.other, query))}>
                         <span className="flex-1">{`و${names[p.other]}`}</span>
                         <span className={COUNT}>{num(p.count)}</span>
                       </button>
@@ -97,6 +86,6 @@ export function SurahPairs({ groups, names, mode, surah, a, b }: { groups: Surah
           ))}
         </ul>
       )}
-    </section>
+    </>
   );
 }

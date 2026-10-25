@@ -8,12 +8,15 @@ import Badge from '@/components/common/Badge';
 import Button from '@/components/common/Button';
 import { num } from '@/lib/quran/arabicNumber';
 import { compareHref } from '@/lib/quran/compare';
+import type { ReactNode } from 'react';
 import { plainName } from '@/lib/quran/normalize';
 import PageSpread, { MatchLegend, type SpreadMark, type SpreadPage } from '@/components/quran/PageSpread';
 import { SAME_ROOT, SAME_WORD, type Mark, type SimilarPair, type Span } from '@/lib/quran/similar';
 import type { Passage } from '@/lib/quran/passages';
-import { NOTE, PANEL } from '../panel';
+import { NOTE } from '../panel';
+import { withRange } from './modeHref';
 import { useRepetition } from './Repetition';
+import ViewHeader from './ViewHeader';
 
 export const VISIBLE = 20;
 
@@ -50,30 +53,42 @@ function page(span: Span, marks: Mark[], other: Mark[], otherSpan: Span, ayat: R
   };
 }
 
-export function SimilarList({ pairs, ayat, names, pair }: { pairs: SimilarPair[]; ayat: Record<string, string>; names: Record<number, string>; pair: boolean }) {
+export function places(n: number) {
+  if (n === 1) return 'موضع متشابه واحد';
+  if (n === 2) return 'موضعان متشابهان';
+  const r = n % 100;
+  if (r === 0) return `${num(n)} موضعٍ متشابه`;
+  if (n > 100 && r <= 2) return `${num(n)} موضع متشابه`;
+  if (r <= 10) return `${num(n)} مواضع متشابهة`;
+  return `${num(n)} موضعًا متشابهًا`;
+}
+
+export function SimilarList({ pairs, ayat, names, pair, controls, query = {}, filtered = false, surahs }: { pairs: SimilarPair[]; ayat: Record<string, string>; names: Record<number, string>; pair: boolean; controls?: ReactNode; query?: Record<string, string>; filtered?: boolean; surahs?: [number, number] }) {
   const [all, setAll] = useState(false);
   const passages = useRepetition()?.passages ?? [];
   const shown = all ? pairs : pairs.slice(0, VISIBLE);
-  const title = pair ? 'آيات متشابهة بين السورتين' : `آيات متشابهة في ${plainName(names[pairs[0]?.a[0]] ?? '')}`;
+  const [x, y] = surahs ?? [pairs[0]?.a[0], pairs[0]?.b[0]];
+  const name = (n: number | undefined) => plainName(names[n ?? 0] ?? '');
+  const title = pair ? `${name(x)} و${name(y)}` : `آيات متشابهة في ${name(x)}`;
+  const none = pair ? 'لا آيات متشابهة بين السورتين' : 'لا آيات متشابهة في هذه السورة';
   return (
-    <section className={PANEL}>
-      <h2 className="text-2xl mb-1">{pairs.length === 0 ? 'آيات متشابهة' : title}</h2>
-      <p className={`${NOTE} mb-3`}>
-        آيات تتقارب في المعنى أو في نظم الكلام أو تتطابق، كما يجمعها المتشابه اللفظي. تُقاس بالجذور والأدوات المشتركة وترتيبها. بلون كلمة وردت بلفظها في الجانبين، وبلون آخر كلمة من جذر مشترك بلفظ مختلف، ويُسطَّر بنقاط ما يقابل كلمة من جذر مشترك في الجانب الآخر. مرّر المؤشر على كلمة لترى ما يقابلها. لم يراجع هذا العرض أحد من أهل العلم.
-      </p>
+    <section className="flex flex-col gap-3">
+      <ViewHeader title={title} sub={pairs.length === 0 ? undefined : places(pairs.length)}
+        method="آيات تتقارب في المعنى أو في نظم الكلام أو تتطابق، كما يجمعها المتشابه اللفظي. تُقاس بالجذور والأدوات المشتركة وترتيبها. بلون كلمة وردت بلفظها في الجانبين، وبلون آخر كلمة من جذر مشترك بلفظ مختلف، ويُسطَّر بنقاط ما يقابل كلمة من جذر مشترك في الجانب الآخر. مرّر المؤشر على كلمة لترى ما يقابلها. وتُرتَّب بحسب مواضعها في السورة، والأقرب تشابهًا أولًا في الموضع الواحد.">
+        {controls}
+      </ViewHeader>
       <MatchLegend exact="كلمة وردت بلفظها في الجانبين" root="كلمة من جذر مشترك بلفظ مختلف" />
-      {pairs.length === 0 ? <p className={NOTE}>{pair ? 'لا آيات متشابهة بين السورتين.' : 'لا آيات متشابهة في هذه السورة.'}</p> : (
+      {pairs.length === 0 ? <p className={NOTE}>{`${none}${filtered ? ' في هذا النطاق' : ''}.`}</p> : (
         <ol className="flex flex-col gap-6">
           {shown.map(p => {
             const run = passageOf(p, passages);
             return (
-            <li key={`${p.a.join()}|${p.b.join()}`} className="border-t border-gray-200 dark:border-white/10 pt-4 first:border-t-0 first:pt-0">
+            <li key={`${p.a.join()}|${p.b.join()}`} className="border-t border-[var(--home-rule)] pt-4 first:border-t-0 first:pt-0">
               <div className="flex flex-wrap items-center gap-2 mb-3">
-                <Badge size="sm" color="gray" text={`تقارب ${num(Math.round(p.score * 100))}٪`} />
-                {run && <Badge size="sm" color="amber" text={`نص مشترك: ${num(run.matched)} كلمة`} />}
-                {run && run.places > 2 && <Badge size="sm" color="amber" text={`يرد في ${num(run.places)} مواضع`} />}
+                {run && <Badge size="sm" color="rose" text={`نص مشترك: ${num(run.matched)} كلمة`} />}
+                {run && run.places > 2 && <Badge size="sm" color="rose" text={`يرد في ${num(run.places)} مواضع`} />}
                 {p.roots.map(r => <Badge key={r} size="sm" color="gray" text={r} />)}
-                <Button size="sm" href={`${compareHref(p.a[0], { from: p.a[1], to: p.a[2] }, p.b[0], { from: p.b[1], to: p.b[2] })}&view=ayat`}>
+                <Button size="sm" href={withRange(`${compareHref(p.a[0], { from: p.a[1], to: p.a[2] }, p.b[0], { from: p.b[1], to: p.b[2] })}&view=ayat`, query)}>
                   <FontAwesomeIcon icon={faCodeCompare} />
                   آية بآية
                 </Button>

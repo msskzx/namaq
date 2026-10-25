@@ -1,13 +1,11 @@
-import { faCodeCompare } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Button from '@/components/common/Button';
 import { prisma } from '@/lib/prisma';
-import { ayahWords } from '@/lib/quran/normalize';
+import { rangeParams, type CompareRange } from '@/lib/quran/compareRange';
+import { ayahWords, plainName } from '@/lib/quran/normalize';
 import { getSharedTopics } from '@/lib/quran/topicEngine';
 import ThemesView from '../themes/ThemesView';
-import SurahPicker from './SurahPicker';
+import PairForm from './PairForm';
 import { toThemeRows } from './toThemeRows';
-import { NOTE, PANEL } from '../panel';
+import { NOTE } from '../panel';
 
 const pick = (value: string | string[] | undefined, fallback: number) => {
   const n = Number(Array.isArray(value) ? value[0] : value);
@@ -19,7 +17,7 @@ async function load(number: number) {
   return rows.map((r, i) => ayahWords(r.text, i === 0 && number !== 1 && number !== 9).display.join(' '));
 }
 
-export default async function ThemesCompare({ query }: { query: Record<string, string | string[] | undefined> }) {
+export default async function ThemesCompare({ query, range }: { query: Record<string, string | string[] | undefined>; range: CompareRange }) {
   const x = pick(query.a, 16);
   const y = pick(query.b, 43);
   const [a, b, allSurahs, shared] = await Promise.all([
@@ -30,18 +28,9 @@ export default async function ThemesCompare({ query }: { query: Record<string, s
   ]);
   const name = (n: number) => allSurahs.find((s) => s.number === n)?.name ?? '';
 
-  const select = (fieldName: string, value: number, label: string) => <SurahPicker name={fieldName} label={label} value={value} surahs={allSurahs} />;
-
+  const side = (surah: number, ayat: string[]) => ({ surah, from: 1, to: ayat.length, max: ayat.length });
   const form = (
-    <form key={`${x}-${y}`} method="get" className={`${PANEL} flex flex-wrap items-center gap-2`}>
-      <input type="hidden" name="mode" value="themes" />
-      {select('a', x, 'السورة الأولى')}
-      {select('b', y, 'السورة الثانية')}
-      <Button type="submit" variant="primary">
-        <FontAwesomeIcon icon={faCodeCompare} />
-        قارن
-      </Button>
-    </form>
+    <PairForm surahs={allSurahs.map(s => ({ number: s.number, name: plainName(s.name) }))} ayat={false} keep={{ mode: 'themes', ...rangeParams(range) }} a={side(x, a)} b={side(y, b)} />
   );
 
   if (x === y) {
@@ -54,9 +43,6 @@ export default async function ThemesCompare({ query }: { query: Record<string, s
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      {form}
-      <ThemesView a={{ number: x, name: name(x), ayat: a }} b={{ number: y, name: name(y), ayat: b }} themes={toThemeRows(shared)} />
-    </div>
+    <ThemesView level={2} controls={form} a={{ number: x, name: name(x), ayat: a }} b={{ number: y, name: name(y), ayat: b }} themes={toThemeRows(shared)} />
   );
 }
