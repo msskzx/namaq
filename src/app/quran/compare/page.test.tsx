@@ -33,7 +33,8 @@ describe('QuranComparePage', () => {
 
   it('shows the surah named in s instead of a comparison', async () => {
     await page({ s: '7' });
-    expect(screen.getByTestId('surah').textContent).toBe('7');
+    expect(JSON.parse(screen.getByTestId('similar').textContent!)).toMatchObject({ surah: 7 });
+    expect(screen.queryByTestId('surah')).toBeNull();
     expect(screen.queryByTestId('text')).toBeNull();
     expect(JSON.parse(screen.getByTestId('list').textContent!)).toMatchObject({ surah: 7 });
   });
@@ -41,7 +42,8 @@ describe('QuranComparePage', () => {
   it('treats s equal to t as that surah', async () => {
     await page({ s: '3', t: '3' });
     expect(redirect).not.toHaveBeenCalled();
-    expect(screen.getByTestId('surah').textContent).toBe('3');
+    expect(JSON.parse(screen.getByTestId('similar').textContent!)).toMatchObject({ surah: 3 });
+    expect(screen.queryByTestId('surah')).toBeNull();
   });
 
   it('lists surahs by their similar ayat in the text comparison, with the defaults when none is given', async () => {
