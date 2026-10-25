@@ -111,7 +111,7 @@ function renderReader(slug = 'abu-ubaydah-ibn-al-jarrah') {
 // be supplied by hand before a scroll event means anything.
 async function scrollContainer() {
   const node = await waitFor(() => {
-    const found = document.querySelector('.muted-scrollbar') as HTMLDivElement | null;
+    const found = document.querySelector('[data-testid="source-reader-content"]') as HTMLDivElement | null;
     if (!found) throw new Error('reader not mounted');
     return found;
   });
