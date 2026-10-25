@@ -55,8 +55,7 @@ same word here.
 Words the two ayat share are colored, from the same word alignment the
 relations page uses, run on the tokens. A word that alignment leaves out still
 matches a free word with the same token on the other side, so قالوا counts when
-it swaps places with فرعون (26:41 and 7:113). A matched word whose letters differ from
-its partner's (ولأصلبنكم against لأصلبنكم) also gets a dotted underline. A pair
+it swaps places with فرعون (26:41 and 7:113). Marks are colour only. A pair
 with no shared word colors nothing.
 
 An ayah is shown once. When it has several counterparts, the pairs that share

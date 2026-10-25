@@ -2,6 +2,7 @@
 
 // docs/plans/quran-similar-ayat.md
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAnglesDown, faCodeCompare } from '@fortawesome/free-solid-svg-icons';
 import Badge from '@/components/common/Badge';
@@ -68,7 +69,7 @@ export function places(n: number, similar = true) {
 
 export type Card = { pair: SimilarPair; also: SimilarPair[] };
 
-const textOf = ([surah, from, to]: Span, ayat: Record<string, string>) => Array.from({ length: to - from + 1 }, (_, k) => ayat[`${surah}:${from + k}`] ?? '').join(' ');
+const textOf = ([surah, from, to]: Span, ayat: Record<string, string>) => Array.from({ length: to - from + 1 }, (_, k) => ayat[`${surah}:${from + k}`] ?? `${surah}:${from + k}`).join('\n');
 
 export function collapse(pairs: SimilarPair[], ayat: Record<string, string>): Card[] {
   const cards = new Map<string, Card>();
@@ -81,15 +82,21 @@ export function collapse(pairs: SimilarPair[], ayat: Record<string, string>): Ca
   return [...cards.values()];
 }
 
-export function repeats({ pair, also }: Card, names: Record<number, string>) {
-  const ref = ([surah, from, to]: Span) => `${plainName(names[surah] ?? '')} ${from === to ? num(from) : `${num(from)}–${num(to)}`}`;
+export type Place = { text: string; pair: SimilarPair };
+
+export function repeats({ pair, also }: Card, names: Record<number, string>): { surah: string; places: Place[] }[] {
+  const span = ([, from, to]: Span) => (from === to ? num(from) : `${num(from)}–${num(to)}`);
+  const surah = (n: number) => plainName(names[n] ?? '');
   const all = [pair, ...also];
   const same = (side: 'a' | 'b') => all.every(p => p[side].join() === pair[side].join());
-  const bySurah = (spans: Span[]) => [...spans.reduce((groups, span) => groups.set(span[0], [...(groups.get(span[0]) ?? []), span]), new Map<number, Span[]>())].map(([surah, list]) => `${plainName(names[surah] ?? '')} ${list.map(([, from, to]) => (from === to ? num(from) : `${num(from)}–${num(to)}`)).join('، ')}`).join('؛ ');
-  if (same('a')) return bySurah(all.map(p => p.b));
-  if (same('b')) return bySurah(all.map(p => p.a));
-  return all.map(p => `${ref(p.a)} و${ref(p.b)}`).join('؛ ');
+  const varying = same('a') ? 'b' : same('b') ? 'a' : null;
+  if (!varying) return [{ surah: '', places: all.map(p => ({ text: `${surah(p.a[0])} ${span(p.a)} و${surah(p.b[0])} ${span(p.b)}`, pair: p })) }];
+  const groups = new Map<number, Place[]>();
+  for (const p of all) groups.set(p[varying][0], [...(groups.get(p[varying][0]) ?? []), { text: span(p[varying]), pair: p }]);
+  return [...groups].map(([n, places]) => ({ surah: surah(n), places }));
 }
+
+const ayatHref = (p: SimilarPair, query: Record<string, string>) => withRange(`${compareHref(p.a[0], { from: p.a[1], to: p.a[2] }, p.b[0], { from: p.b[1], to: p.b[2] })}&view=ayat`, query);
 
 export function SimilarList({ pairs, ayat, names, pair, within = false, controls, query = {}, filtered = false, surahs }: { pairs: SimilarPair[]; ayat: Record<string, string>; names: Record<number, string>; pair: boolean; within?: boolean; controls?: ReactNode; query?: Record<string, string>; filtered?: boolean; surahs?: [number, number] }) {
   const [all, setAll] = useState(false);
@@ -111,7 +118,7 @@ export function SimilarList({ pairs, ayat, names, pair, within = false, controls
         <ol className="flex flex-col gap-6">
           {shown.map(card => {
             const p = card.pair;
-            const run = passageOf(p, passages);
+            const run = [p, ...card.also].map(x => passageOf(x, passages)).filter(Boolean).sort((m, n) => n!.matched - m!.matched)[0];
             return (
             <li key={`${p.a.join()}|${p.b.join()}`} className="border-t border-[var(--home-rule)] pt-4 first:border-t-0 first:pt-0">
               <div className="flex flex-wrap items-center gap-2 mb-3">
@@ -119,12 +126,28 @@ export function SimilarList({ pairs, ayat, names, pair, within = false, controls
                 {run && run.places > 2 && <Badge size="sm" color="rose" text={`يرد في ${num(run.places)} مواضع`} />}
                 {card.also.length > 0 && <Badge size="sm" color="rose" text={`النص نفسه في ${places(card.also.length + 1, false)}`} />}
                 {p.roots.map(r => <Badge key={r} size="sm" color="gray" text={r} />)}
-                <Button size="sm" href={withRange(`${compareHref(p.a[0], { from: p.a[1], to: p.a[2] }, p.b[0], { from: p.b[1], to: p.b[2] })}&view=ayat`, query)}>
+                <Button size="sm" href={ayatHref(p, query)}>
                   <FontAwesomeIcon icon={faCodeCompare} />
                   آية بآية
                 </Button>
               </div>
-              {card.also.length > 0 && <p className={`${NOTE} mb-3`}>{`المواضع: ${repeats(card, names)}`}</p>}
+              {card.also.length > 0 && (
+                <p className={`${NOTE} mb-3`}>
+                  {'المواضع: '}
+                  {repeats(card, names).map((group, g) => (
+                    <React.Fragment key={g}>
+                      {g > 0 && '؛ '}
+                      {group.surah && `${group.surah} `}
+                      {group.places.map((place, k) => (
+                        <React.Fragment key={k}>
+                          {k > 0 && (group.surah ? '، ' : '؛ ')}
+                          <Link href={ayatHref(place.pair, query)} className="text-[var(--home-accent)] hover:underline">{place.text}</Link>
+                        </React.Fragment>
+                      ))}
+                    </React.Fragment>
+                  ))}
+                </p>
+              )}
               <PageSpread pages={[page(p.a, p.marksA, p.marksB, p.b, ayat, names), page(p.b, p.marksB, p.marksA, p.a, ayat, names)]} />
             </li>
             );

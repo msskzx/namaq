@@ -67,11 +67,12 @@ describe('SimilarList', () => {
     const cards = collapse(pairs, refrain);
     expect(cards.map(c => [c.pair.b[1], c.also.map(p => p.b[1])])).toEqual([[13, [16, 18]], [2, []]]);
     const sura = { 53: 'النجم', 55: 'الرحمن' };
-    expect(repeats(cards[0], sura)).toBe('الرحمن ١٣، ١٦، ١٨');
+    expect(repeats(cards[0], sura).map(g => [g.surah, g.places.map(x => x.text)])).toEqual([['الرحمن', ['١٣', '١٦', '١٨']]]);
     render(<LanguageProvider><SimilarList pairs={pairs} ayat={refrain} names={sura} pair surahs={[53, 55]} /></LanguageProvider>);
     expect(screen.getAllByRole('link', { name: /آية بآية/ })).toHaveLength(2);
     expect(screen.getByText('النص نفسه في ٣ مواضع')).toBeTruthy();
-    expect(screen.getByText('المواضع: الرحمن ١٣، ١٦، ١٨')).toBeTruthy();
+    expect(screen.getByText(/^المواضع:/).textContent).toBe('المواضع: الرحمن ١٣، ١٦، ١٨');
+    expect(screen.getByRole('link', { name: '١٦' }).getAttribute('href')).toBe('/quran/compare?a=53&af=55&at=55&b=55&bf=16&bt=16&view=ayat');
     expect(screen.getByText('٤ مواضع متشابهة')).toBeTruthy();
   });
 
@@ -79,10 +80,11 @@ describe('SimilarList', () => {
     const text = { '10:48': 'متى هذا الوعد', '21:38': 'متى هذا الوعد', '27:71': 'متى هذا الوعد', '10:49': 'متى هذا الوعد' };
     const p = (a: number, s: number, b: number): SimilarPair => ({ ...pair, a: [10, a, a], b: [s, b, b] });
     const [card] = collapse([p(48, 21, 38), p(49, 27, 71)], text);
-    expect(repeats(card, { 10: 'يونس', 21: 'الأنبياء', 27: 'النمل' })).toBe('يونس ٤٨ والأنبياء ٣٨؛ يونس ٤٩ والنمل ٧١');
+    expect(repeats(card, { 10: 'يونس', 21: 'الأنبياء', 27: 'النمل' }).flatMap(g => g.places.map(x => x.text))).toEqual(['يونس ٤٨ والأنبياء ٣٨', 'يونس ٤٩ والنمل ٧١']);
     expect(collapse([p(48, 21, 38), p(48, 27, 72)], text)).toHaveLength(2);
     const [other] = collapse([p(48, 21, 38), p(48, 27, 71)], text);
-    expect(repeats(other, { 10: 'يونس', 21: 'الأنبياء', 27: 'النمل' })).toBe('الأنبياء ٣٨؛ النمل ٧١');
+    expect(repeats(other, { 10: 'يونس', 21: 'الأنبياء', 27: 'النمل' }).map(g => [g.surah, g.places.map(x => x.text)])).toEqual([['الأنبياء', ['٣٨']], ['النمل', ['٧١']]]);
+    expect(collapse([{ ...pair, a: [10, 48, 48], b: [21, 38, 38] }, { ...pair, a: [10, 48, 49], b: [21, 38, 38] }], { ...text, '10:48': 'متى', '10:49': 'هذا الوعد', '21:38': 'متى هذا الوعد' })).toHaveLength(2);
   });
 
   it('titles the view inside one surah', () => {
