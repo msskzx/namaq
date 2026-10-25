@@ -7,7 +7,7 @@ const FAMILIES = [
   { id: 'raat', text: 'الراءات', textEn: 'Raat', chapters: [10, 11, 12, 13, 14, 15] },
   { id: 'hamidat', text: 'الحامدات', textEn: 'Hamidat', chapters: [1, 6, 18, 34, 35] },
   { id: 'musabbihat', text: 'المسبحات', textEn: 'Musabbihat', chapters: [17, 57, 59, 61, 62, 64, 87] },
-  { id: 'alif-lam-mim', text: 'الم…', textEn: 'Alif lam mim openings', chapters: [2, 3, 7, 13, 29, 30, 31, 32] },
+  { id: 'alif-lam-mim', text: 'الم · المص · المر', textEn: 'Alif lam mim · alif lam mim sad · alif lam mim ra', chapters: [2, 3, 7, 13, 29, 30, 31, 32] },
 ];
 
 export type ChapterFamily = Opening & { textEn: string; keys: string[] };

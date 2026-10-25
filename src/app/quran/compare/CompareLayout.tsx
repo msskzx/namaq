@@ -4,7 +4,7 @@ import React, { useEffect, useId, useRef, useState, useSyncExternalStore } from 
 import { useSearchParams } from 'next/navigation';
 import { ChevronDown, PanelRightClose, PanelRightOpen } from 'lucide-react';
 import Button from '@/components/common/Button';
-import { PANEL } from '../panel';
+import { PANE } from '../panel';
 
 const listeners = new Set<() => void>();
 const read = (key: string) => {
@@ -53,7 +53,7 @@ export default function CompareLayout({ title, current, pane, children, storageK
           <ChevronDown size={16} aria-hidden className={`transition-transform ${open ? 'rotate-180' : ''}`} />
         </span>
       </button>
-      <aside id={id} aria-label={title} className={`${PANEL} min-w-0 flex-col gap-3 ${open ? 'flex' : 'hidden'} ${hidden ? 'lg:hidden' : 'lg:flex'}`}>
+      <aside id={id} aria-label={title} className={`${PANE} min-w-0 flex-col gap-3 ${open ? 'flex' : 'hidden'} ${hidden ? 'lg:hidden' : 'lg:flex'}`}>
         <div className="flex items-center justify-between gap-2">
           <h2 className="text-xl">{title}</h2>
           <span ref={hide} className="hidden lg:block">
