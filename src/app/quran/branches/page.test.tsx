@@ -49,4 +49,33 @@ describe('Quran branches range selection', () => {
     expect(screen.queryByRole('status')).toBeNull();
     expect(screen.queryByRole('link', { name: 'العودة إلى القائمة' })).toBeNull();
   });
+
+  it('shows the trees matching a search ten to a page, keeping it in the page links', async () => {
+    render(await open({ q: 'قال' }));
+    expect(screen.getByRole('list', { name: 'المتشابهات' }).children).toHaveLength(10);
+    expect(screen.getByText(/مجموعة تطابق «قال»/)).toBeTruthy();
+    const links = [...screen.getByRole('navigation', { name: 'التنقل بين الصفحات' }).querySelectorAll('a')];
+    expect(links.every(link => new URL(link.href).searchParams.get('q') === 'قال')).toBe(true);
+  });
+
+  it('links the whole tree when the search is itself a shared phrase', async () => {
+    render(await open({ q: 'قال رب', g: 'opening' }));
+    const href = new URL(screen.getAllByRole('link', { name: /الشجرة كاملة: / })[0].getAttribute('href')!, 'http://x');
+    expect(href.searchParams.get('o')).toBe('قال رب');
+    expect(href.searchParams.get('g')).toBe('opening');
+    expect(href.searchParams.has('q')).toBe(false);
+  });
+
+  it('says so when nothing matches, without the list', async () => {
+    render(await open({ q: 'كهيعص' }));
+    expect(screen.getByText('لا مجموعة تطابق «كهيعص».')).toBeTruthy();
+    expect(screen.queryByRole('list', { name: 'المتشابهات' })).toBeNull();
+  });
+
+  it('keeps start matches first when the results are grouped by opening', async () => {
+    render(await open({ q: 'قال', g: 'opening' }));
+    const headings = screen.getAllByRole('heading', { level: 2 }).map(heading => heading.textContent ?? '');
+    expect(headings.length).toBeGreaterThan(0);
+    expect(headings[0]).toMatch(/^قَالَ|^قَالُ/);
+  });
 });

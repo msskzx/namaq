@@ -6,35 +6,34 @@ import { ArrowLeft, ArrowRight, GitBranch, Search } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@/lib/quran/arabicNumber';
-import { branchesHref, type BranchesView, type Opening } from '@/lib/quran/branches';
+import { branchesHref, searchPhrases, type BranchesView, type Opening } from '@/lib/quran/branches';
 import type { JuzRange } from '@/lib/quran/juz';
-import { normalizeWord } from '@/lib/quran/normalize';
 const NOTE = 'text-sm text-[var(--home-muted)]';
 const SEARCH = 'w-full rounded-sm border border-[var(--home-rule)] bg-transparent ps-10 pe-3 py-2 text-[var(--home-ink)] placeholder:text-[var(--home-muted)]';
 
 export const SUGGESTIONS = 10;
-const comparison = (value: string) => normalizeWord(value.normalize('NFC')).replace(/[ؤئء]/g, 'ا').trim().split(/\s+/).join(' ');
 
-export default function OpeningSearch({ phrases, current, juz = null, unavailable = false, view = {}, alternatives = [] }: { top: Opening[]; phrases: Opening[]; current: string; juz?: JuzRange | null; unavailable?: boolean; view?: BranchesView; alternatives?: Opening[] }) {
+export default function OpeningSearch({ phrases, current, query: submitted = '', juz = null, unavailable = false, view = {}, alternatives = [] }: { top: Opening[]; phrases: Opening[]; current: string; query?: string; juz?: JuzRange | null; unavailable?: boolean; view?: BranchesView; alternatives?: Opening[] }) {
   const router = useRouter();
   const { language } = useLanguage();
   const ar = language === 'ar';
   const listId = useId();
-  const [query, setQuery] = useState('');
-  const [dismissed, setDismissed] = useState(false);
+  const [query, setQuery] = useState(submitted);
+  const [dismissed, setDismissed] = useState(!!submitted);
   const [selected, setSelected] = useState(-1);
   useEffect(() => setSelected(-1), [phrases]);
-  const needle = comparison(query);
-  const candidates = phrases.map(phrase => ({ phrase, value: comparison(phrase.id) }));
-  const suggestions = needle
-    ? [...candidates.filter(candidate => candidate.value.startsWith(needle)), ...candidates.filter(candidate => !candidate.value.startsWith(needle) && candidate.value.includes(needle))].slice(0, SUGGESTIONS).map(candidate => candidate.phrase)
-    : [];
-  const visible = !!needle && !dismissed;
+  const suggestions = searchPhrases(phrases, query).slice(0, SUGGESTIONS);
+  const visible = !!query.trim() && !dismissed;
   const href = (phrase: Opening) => branchesHref(phrase.id, juz ?? undefined, { ...view, spelling: undefined, partition: phrase.partition });
   const open = (phrase: Opening) => {
     setQuery('');
     setSelected(-1);
     router.push(href(phrase));
+  };
+  const search = () => {
+    setDismissed(true);
+    setSelected(-1);
+    router.push(branchesHref('', juz ?? undefined, { grouped: view.grouped, query: query.trim() }));
   };
   return (
     <div className="flex flex-col gap-3">
@@ -51,20 +50,20 @@ export default function OpeningSearch({ phrases, current, juz = null, unavailabl
               setDismissed(false);
               setSelected(index => event.key === 'ArrowDown' ? (index + 1) % suggestions.length : (index <= 0 ? suggestions.length - 1 : index - 1));
             }
-            if (event.key === 'Enter' && visible && suggestions.length) { event.preventDefault(); open(suggestions[selected] ?? suggestions[0]); }
+            if (event.key === 'Enter' && query.trim()) { event.preventDefault(); if (visible && suggestions[selected]) open(suggestions[selected]); else search(); }
           }} className={SEARCH} />
       </label>
       {visible && <ul id={listId} role="listbox" aria-label={ar ? 'عبارات مقترحة' : 'Suggested phrases'} className="flex flex-col rounded border border-[var(--home-rule)]">
         {suggestions.length === 0 ? <li role="presentation" className={`${NOTE} px-3 py-2`}><span role="status">{ar ? 'لا عبارة مشتركة تطابق البحث.' : 'No shared phrase matches your search.'}</span></li> : suggestions.map((opening, index) => (
           <li key={`${opening.id}:${opening.partition ?? ''}`} role="presentation">
-            <button id={`${listId}-${index}`} data-branch-navigation type="button" role="option" aria-selected={selected === index} onClick={() => open(opening)} onMouseEnter={() => setSelected(index)} className={`flex w-full items-baseline gap-2 px-3 py-2 text-start hover:bg-[var(--home-paper-deep)] ${selected === index ? 'bg-[var(--home-paper-deep)]' : ''}`}>
+            <button id={`${listId}-${index}`} data-branch-navigation type="button" role="option" aria-selected={selected === index} onClick={() => open(opening)} className={`flex w-full items-baseline gap-2 px-3 py-2 text-start hover:bg-[var(--home-paper-deep)] ${selected === index ? 'bg-[var(--home-paper-deep)]' : ''}`}>
               <span className="text-lg font-arabic flex-1" dir="rtl">{opening.text}</span>
               <span className="text-[var(--home-accent)]">{ar ? num(opening.count) : opening.count}</span>
             </button>
           </li>
         ))}
       </ul>}
-      {current && <Button size="sm" className="self-start" href={branchesHref('', juz ?? undefined, { grouped: view.grouped, page: view.page })}>
+      {(current || submitted) && <Button size="sm" className="self-start" href={branchesHref('', juz ?? undefined, { grouped: view.grouped, page: submitted ? undefined : view.page })}>
         {ar ? <ArrowRight size={16} aria-hidden /> : <ArrowLeft size={16} aria-hidden />}
         {ar ? 'العودة إلى القائمة' : 'Return to list'}
       </Button>}

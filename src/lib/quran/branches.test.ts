@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import ayat from '@/app/quran/branches/ayat.json';
-import { ayahEnds, branch, branchesHref, conjunctions, listPage, PIECE_MAX, pieces, DEFAULT_PHRASE, keys, linkId, pickPhrase, stem, widerPhrases, listOpenings, listPhrases, openingId, readerAyat, sharedOpenings, spelledAs, startingWith, variants, withConjunctions, withRoots, withNext, type Branch, type BranchAyah } from './branches';
+import { ayahEnds, branch, branchesHref, conjunctions, listPage, PIECE_MAX, pieces, DEFAULT_PHRASE, keys, linkId, pickPhrase, stem, widerPhrases, listOpenings, listPhrases, openingId, readerAyat, searchKey, searchPieces, searchPhrases, sharedOpenings, spelledAs, startingWith, variants, withConjunctions, withRoots, withNext, type Branch, type BranchAyah } from './branches';
 import { inJuzRange } from './juz';
 import { normalizeWord } from './normalize';
 
@@ -516,5 +516,59 @@ describe('variant Quran order', () => {
       const first = variants(group).map(v => Math.min(...v.keys.map(order)));
       expect(first).toEqual([...first].sort((a, b) => a - b));
     }
+  });
+});
+
+describe('search', () => {
+  const phrases = listPhrases(groups);
+  const list = pieces(groups);
+  const shared = [...groups.values()].flat();
+
+  it('reads يا apart and ءا as one alif, as the text joins them', () => {
+    expect(searchKey('يا أيها الذين آمنوا')).toBe(searchKey('يايها الذين ءامنوا'));
+    expect(searchPhrases(phrases, 'يا أيها الذين آمنوا').map(phrase => phrase.id)).toContain('يايها الذين ءامنوا');
+  });
+
+  it('reads يا قوم and يا بني as the text writes them', () => {
+    expect(searchPhrases(phrases, 'يا قوم').length).toBeGreaterThan(0);
+    expect(searchPhrases(phrases, 'يا بني').length).toBeGreaterThan(0);
+  });
+
+  it('keeps every shared phrase apart after reading its spelling', () => {
+    const seen = new Set(phrases.map(phrase => `${phrase.id}:${phrase.partition ?? ''}`));
+    const read = new Set(phrases.map(phrase => `${searchKey(phrase.id)}:${phrase.partition ?? ''}`));
+    expect(read.size).toBe(seen.size);
+  });
+
+  it('lists phrases that start with the search before those that only contain it', () => {
+    const found = searchPhrases(phrases, 'قال رب').map(phrase => searchKey(phrase.id));
+    const starts = found.findIndex(id => !id.startsWith('قال رب'));
+    expect(starts).toBeGreaterThan(0);
+    expect(found.slice(starts).every(id => !id.startsWith('قال رب') && id.includes('قال رب'))).toBe(true);
+  });
+
+  it('finds each piece holding two ayat of a matching phrase once, start matches first', () => {
+    const found = searchPieces(list, phrases, shared, 'قال رب');
+    expect(new Set(found).size).toBe(found.length);
+    expect(found.every(piece => list.includes(piece))).toBe(true);
+    const opened = (piece: typeof list[number], id: string) => startingWith(piece.keys.map(key => shared.find(ayah => ayah.key === key)!), id).length >= 2;
+    expect(list.filter(piece => opened(piece, 'قال رب')).every(piece => found.includes(piece))).toBe(true);
+    const first = found.findIndex(piece => !searchPhrases(phrases, 'قال رب').some(phrase => searchKey(phrase.id).startsWith('قال رب') && opened(piece, phrase.id)));
+    expect(first === -1 || found.slice(first).every(piece => !opened(piece, 'قال رب'))).toBe(true);
+  });
+
+  it('finds a phrase deeper than the piece it sits in', () => {
+    const found = searchPieces(list, phrases, shared, 'انى يكون لى غلم');
+    expect(found.length).toBeGreaterThan(0);
+    expect(found.every(piece => searchKey(piece.text).startsWith('قال رب'))).toBe(true);
+  });
+
+  it('finds nothing for a phrase no two ayat share', () => {
+    expect(searchPieces(list, phrases, shared, 'كهيعص')).toEqual([]);
+  });
+
+  it('carries the search on the list only', () => {
+    expect(branchesHref('', undefined, { query: 'قال', page: 2 })).toBe('/quran/branches?p=2&q=%D9%82%D8%A7%D9%84');
+    expect(branchesHref('قال رب', undefined, { query: 'قال' })).not.toContain('q=');
   });
 });

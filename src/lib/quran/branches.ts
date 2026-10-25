@@ -12,7 +12,7 @@ export type Variant = { word: string; conj: string; keys: string[]; id: string; 
 export const OPENING_WORDS = 2;
 export const TOP = 8;
 
-export type BranchesView = { grouped?: boolean; page?: number; spelling?: string; partition?: string; context?: boolean };
+export type BranchesView = { grouped?: boolean; page?: number; spelling?: string; partition?: string; context?: boolean; query?: string };
 
 export function branchesHref(id: string, juz?: JuzRange, view: BranchesView = {}) {
   const params = new URLSearchParams();
@@ -24,6 +24,7 @@ export function branchesHref(id: string, juz?: JuzRange, view: BranchesView = {}
   if (id && view.spelling) params.set('w', view.spelling);
   if (id && view.partition) params.set('r', view.partition);
   if (id && view.context) params.set('c', '1');
+  if (!id && view.query) params.set('q', view.query);
   return `/quran/branches${params.size ? `?${params}` : ''}`;
 }
 
@@ -199,6 +200,15 @@ export function listOpenings(groups: Map<string, BranchAyah[]>): Opening[] {
 export const startsWith = (id: string, phrase: string) => `${id} `.startsWith(`${phrase} `);
 
 export const opens = (ayah: BranchAyah, phrase: string) => startsWith(norm(ayah).join(' '), phrase) || startsWith(norm(stem(ayah)).join(' '), phrase);
+
+export const searchKey = (value: string) => normalizeWord(value.normalize('NFC')).replace(/[ؤئء]/g, 'ا').trim().split(/\s+/).join(' ').replace(/(^| )يا (?=\S)/g, '$1ي').replace(/ا+/g, 'ا');
+
+export function searchPhrases(phrases: Opening[], query: string) {
+  const needle = searchKey(query);
+  if (!needle) return [];
+  const keyed = phrases.map(phrase => ({ phrase, value: searchKey(phrase.id) }));
+  return [...keyed.filter(candidate => candidate.value.startsWith(needle)), ...keyed.filter(candidate => !candidate.value.startsWith(needle) && candidate.value.includes(needle))].map(candidate => candidate.phrase);
+}
 
 export const startingWith = (ayat: BranchAyah[], phrase: string, partition?: string) => ayat.filter(ayah => opens(ayah, phrase) && (!partition || rootPartition(ayah, phrase.split(' ').length) === partition));
 
@@ -420,4 +430,21 @@ export function ayahEnds(node: Branch, path: string[] = []): Record<string, stri
     return [key, grownPast ? `${surah}:${ayah + 1}` : key];
   });
   return Object.assign(Object.fromEntries(own), ...node.children.map(child => ayahEnds(child, words)));
+}
+
+export function searchPieces(found: Piece[], phrases: Opening[], ayat: BranchAyah[], query: string) {
+  const needle = searchKey(query);
+  const owner = new Map(found.flatMap((piece, index) => piece.keys.map(key => [key, index] as const)));
+  const byFirst = new Map<string, Set<BranchAyah>>();
+  ayat.forEach(ayah => [norm(ayah)[0], norm(stem(ayah))[0]].forEach(word => byFirst.set(word, (byFirst.get(word) ?? new Set()).add(ayah))));
+  const rank = new Map<number, number>();
+  searchPhrases(phrases, query).forEach(phrase => {
+    const hits = new Map<number, number>();
+    startingWith([...byFirst.get(phrase.id.split(' ')[0]) ?? []], phrase.id, phrase.partition).forEach(ayah => {
+      const index = owner.get(ayah.key);
+      if (index !== undefined) hits.set(index, (hits.get(index) ?? 0) + 1);
+    });
+    hits.forEach((count, index) => { if (count >= 2 && !rank.has(index)) rank.set(index, Number(!searchKey(phrase.id).startsWith(needle))); });
+  });
+  return [0, 1].flatMap(level => found.filter((_, index) => rank.get(index) === level));
 }
