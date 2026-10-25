@@ -174,9 +174,9 @@ describe('BranchTree', () => {
     expect(dialog.open).toBe(false);
     fireEvent.click(leafText);
     expect(dialog.open).toBe(true);
-    dialog.open = false;
-    fireEvent.click(dialog.querySelector('button')!);
-    expect(dialog.open).toBe(false);
+    const showModal = vi.spyOn(HTMLDialogElement.prototype, 'showModal');
+    fireEvent.click(dialog.querySelector('h2')!);
+    expect(showModal).not.toHaveBeenCalled();
     const rootBox = screen.getByText('إِنَّ ٱلْمُتَّقِينَ فِى').closest('div')!;
     fireEvent.click(rootBox);
     expect(rootBox.querySelector('dialog')!.open).toBe(true);
