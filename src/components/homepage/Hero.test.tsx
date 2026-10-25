@@ -28,8 +28,9 @@ describe('homepage introduction', () => {
     language.current = current;
     render(<Exploration />);
     expect(screen.getByRole('heading', { name: current === 'ar' ? 'أبواب الاستكشاف' : 'Ways to explore' })).toBeTruthy();
-    expect(screen.getAllByRole('link').map(link => link.getAttribute('href'))).toEqual([
-      '/people', '/sources', '/graphs?kind=person', '/events', '/quran', '/hadith', '/quizzes',
-    ]);
+    expect(screen.getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/quran', '/hadith', '/people', '/sources', '/quizzes']);
+    expect(screen.getAllByRole('heading', { level: 3 }).map(heading => heading.textContent)).toEqual(current === 'ar'
+      ? ['القرآن', 'الحديث', 'التراجم', 'المصادر', 'الاختبارات']
+      : ['Quran', 'Hadith', 'Biographies', 'Sources', 'Quizzes']);
   });
 });

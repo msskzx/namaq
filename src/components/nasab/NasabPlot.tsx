@@ -7,12 +7,14 @@ const NODE_WIDTH = 132;
 const NODE_HEIGHT = 48;
 const PAD = 12;
 
+export const nasabRowTop = (row: number) => PAD + row * ROW_HEIGHT;
+export const nasabPlotHeight = (layout: NasabLayout) => nasabRowTop(Math.max(...layout.nodes.map((node) => node.row))) + NODE_HEIGHT + PAD;
+
 // See docs/plans/nasab-plot.md.
 export default function NasabPlot({ layout, isArabic }: { layout: NasabLayout; isArabic: boolean }) {
   const maxCol = Math.max(...layout.nodes.map((node) => node.col));
-  const maxRow = Math.max(...layout.nodes.map((node) => node.row));
   const width = maxCol * COL_WIDTH + NODE_WIDTH + PAD * 2;
-  const height = maxRow * ROW_HEIGHT + NODE_HEIGHT + PAD * 2;
+  const height = nasabPlotHeight(layout);
   const at = new Map(
     layout.nodes.map((node) => [
       node.slug,

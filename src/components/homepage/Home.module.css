@@ -28,7 +28,7 @@
 
 .feature { padding-block: 2.5rem; border-top: 1px solid var(--home-rule); scroll-margin-top: 6rem; }
 .featureHeading { display: flex; gap: 1.25rem; align-items: baseline; margin-bottom: 1.5rem; }
-.featureTitle { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem 1rem; }
+.featureAction { margin-top: 1rem; }
 .featureHeading h2 { font-size: 1.875rem; line-height: 1.5; color: var(--home-accent); }
 .featureHeading .exampleCaption { font-size: 1rem; margin-top: 0.5rem; }
 .featureHeading p { color: var(--home-muted); max-width: 50rem; font-size: 1.125rem; line-height: 1.7; margin-top: 0.25rem; }
@@ -57,6 +57,9 @@
 .hadithExample [class*='bg-teal-'] { background: var(--home-bubble-3); }
 .hadithExample :is([class*='bg-gray-'], [class*='bg-blue-']) { background: var(--home-bubble-4); }
 .hadithExample [class*='text-amber'] { color: var(--home-accent); }
+.fadeBottom { mask-image: linear-gradient(to bottom, black max(0%, calc(100% - 8rem)), transparent); }
+.capped { max-height: 32rem; overflow: hidden; }
+.fadeTop { mask-image: linear-gradient(to bottom, transparent, black var(--fade, 0%)); }
 .nasab [role='region'] { background: transparent; overflow: visible; border: 0; }
 .quiz { max-width: 46rem; margin-inline: auto; padding: 1.5rem; background: var(--home-paper-deep); border: 1px solid var(--home-rule); }
 .quizPrompt { font-family: var(--font-amiri), serif; font-size: 1.75rem; margin-bottom: 1.5rem; }

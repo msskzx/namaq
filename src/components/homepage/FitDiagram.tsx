@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import styles from './Home.module.css';
 
-export default function FitDiagram({ children }: { children: ReactNode }) {
+export default function FitDiagram({ children, keepBottom = 1 }: { children: ReactNode; keepBottom?: number }) {
   const container = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState<{ width: number; height: number; available: number } | null>(null);
@@ -27,8 +27,8 @@ export default function FitDiagram({ children }: { children: ReactNode }) {
 
   const scale = size ? Math.min(1, size.available / size.width) : 1;
   return (
-    <div ref={container} className={styles.fitDiagram} style={size ? { height: size.height * scale } : undefined}>
-      <div ref={content} className={styles.fitContent} style={{ position: size ? 'absolute' : 'relative', insetInlineStart: size ? (size.available - size.width * scale) / 2 : 0, transform: `scale(${scale})` }}>{children}</div>
+    <div ref={container} className={styles.fitDiagram} style={size ? { height: size.height * scale * keepBottom } : undefined}>
+      <div ref={content} className={styles.fitContent} style={{ position: size ? 'absolute' : 'relative', insetInlineStart: size ? (size.available - size.width * scale) / 2 : 0, top: size ? -size.height * scale * (1 - keepBottom) : 0, transform: `scale(${scale})` }}>{children}</div>
     </div>
   );
 }
