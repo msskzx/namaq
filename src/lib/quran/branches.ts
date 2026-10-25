@@ -12,7 +12,7 @@ export type Variant = { word: string; conj: string; keys: string[]; id: string; 
 export const OPENING_WORDS = 2;
 export const TOP = 8;
 
-export type BranchesView = { grouped?: boolean; page?: number; spelling?: string; partition?: string; context?: boolean; query?: string };
+export type BranchesView = { grouped?: boolean; page?: number; spelling?: string; partition?: string; context?: boolean; query?: string; surah?: number };
 
 export function branchesHref(id: string, juz?: JuzRange, view: BranchesView = {}) {
   const params = new URLSearchParams();
@@ -25,6 +25,7 @@ export function branchesHref(id: string, juz?: JuzRange, view: BranchesView = {}
   if (id && view.partition) params.set('r', view.partition);
   if (id && view.context) params.set('c', '1');
   if (!id && view.query) params.set('q', view.query);
+  if (!id && view.surah) params.set('s', `${view.surah}`);
   return `/quran/branches${params.size ? `?${params}` : ''}`;
 }
 

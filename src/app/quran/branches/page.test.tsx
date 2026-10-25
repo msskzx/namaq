@@ -1,13 +1,14 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, render, screen, within } from '@testing-library/react';
 import { branchesHref } from '@/lib/quran/branches';
+import { prisma } from '@/lib/prisma';
 import QuranBranchesPage from './page';
 
 const params = new URLSearchParams();
 const router = { push: vi.fn(), replace: vi.fn() };
 vi.mock('next/navigation', () => ({ useRouter: () => router, usePathname: () => '/quran/branches', useSearchParams: () => params, redirect: (url: string) => { throw new Error(`REDIRECT ${url}`); } }));
-vi.mock('@/lib/prisma', () => ({ prisma: { surah: { findMany: async () => [] } } }));
+vi.mock('@/lib/prisma', () => ({ prisma: { surah: { findMany: vi.fn(async () => []) } } }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar', languageLoaded: true }) }));
 
 afterEach(cleanup);
@@ -74,8 +75,31 @@ describe('Quran branches range selection', () => {
 
   it('keeps start matches first when the results are grouped by opening', async () => {
     render(await open({ q: 'قال', g: 'opening' }));
-    const headings = screen.getAllByRole('heading', { level: 2 }).map(heading => heading.textContent ?? '');
+    const headings = within(screen.getByRole('list', { name: 'الفواتح' })).getAllByRole('heading', { level: 2 }).map(heading => heading.textContent ?? '');
     expect(headings.length).toBeGreaterThan(0);
     expect(headings[0]).toMatch(/^قَالَ|^قَالُ/);
+  });
+
+  it('lists the surahs beside the trees and keeps only the trees with an ayah from the picked one', async () => {
+    vi.mocked(prisma.surah.findMany).mockResolvedValueOnce([{ number: 1, name: 'الفاتحة' }, { number: 2, name: 'البقرة' }, { number: 112, name: 'الإخلاص' }] as never);
+    const { container } = render(await open({ s: '2', g: 'opening' }));
+    const pane = screen.getByRole('complementary', { name: 'السور' });
+    const current = within(pane).getByRole('link', { current: 'page' });
+    expect(current.textContent).toContain('البقرة');
+    expect(new URL(current.getAttribute('href')!, 'http://x').searchParams.get('s')).toBe('2');
+    expect(within(pane).getByRole('link', { name: /كل السور/ }).getAttribute('href')).toBe(branchesHref('', undefined, { grouped: true }));
+    const trees = [...container.querySelectorAll('[data-tree]')];
+    expect(trees.length).toBeGreaterThan(0);
+    expect(trees.every(tree => [...tree.querySelectorAll('[data-keys]')].some(node => node.getAttribute('data-keys')!.split(' ').some(key => key.startsWith('2:'))))).toBe(true);
+    const pages = [...screen.getByRole('navigation', { name: 'التنقل بين الصفحات' }).querySelectorAll('a')];
+    expect(pages.every(link => new URL(link.href).searchParams.get('s') === '2')).toBe(true);
+  });
+
+  it('ignores a surah outside the mushaf and leaves the single tree page without the pane', async () => {
+    render(await open({ s: '200' }));
+    expect(screen.getByRole('list', { name: 'المتشابهات' }).children).toHaveLength(10);
+    cleanup();
+    render(await open({ o: 'ان المتقين' }));
+    expect(screen.queryByRole('complementary', { name: 'السور' })).toBeNull();
   });
 });

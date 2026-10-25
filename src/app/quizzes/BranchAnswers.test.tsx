@@ -24,8 +24,9 @@ describe('complete branch tree answers', () => {
     const merged = { words: ['مِنْ', 'رب'], ayat: ['1:1', '1:2'], forms: { '1:1': ['مِّنْ', 'رب'], '1:2': ['مِنْ', 'رب'] }, children: [] };
     const own = { tree: { words: ['قال'], ayat: [], children: [merged, { words: ['يا'], ayat: ['1:3'], children: [] }] }, branches: [{ words: [], ayat: [{ key: '1:1', page: 1, words: [] }, { key: '1:2', page: 1, words: [] }, { key: '1:3', page: 1, words: [] }] }] };
     render(<BranchFeedback question={own} typed={['من رب', 'يا']} names={{}} juz={null} ar />);
-    expect(screen.getByRole('button', { name: /عرض اختلافات الضبط والسياق/ }).querySelector('[data-differing]')).toBeTruthy();
-    expect(screen.getAllByRole('button', { name: /عرض الآيات في سياقها/ }).map(button => button.getAttribute('data-variant'))).toEqual(['outline', 'ghost']);
+    expect(screen.getByRole('button', { name: /عرض اختلافات الضبط والسياق/ }).getAttribute('data-variant')).toBe('highlight');
+    expect(screen.getAllByRole('button', { name: /عرض الآيات في سياقها/ }).map(button => button.getAttribute('data-variant'))).toEqual(['outline', 'outline']);
+    expect(screen.getAllByRole('button', { name: /إظهار المسار/ })).toHaveLength(3);
   });
 
   it('opens a feedback leaf on its siblings under the same parent', async () => {
@@ -119,15 +120,15 @@ describe('complete branch tree answers', () => {
     expect(onCheck).toHaveBeenCalledOnce();
   });
 
-  it('shows corrections and combines each leaf reference with its context control', () => {
+  it('shows corrections and each leaf reference as plain text', () => {
     render(<BranchFeedback question={question} typed={[typed[0], typed[1], typed[3], 'wrong']} names={{ 52: 'الطور' }} juz={null} ar={false} />);
     expect(screen.getByRole('region', { name: 'Answer tree' })).toBeTruthy();
     expect(screen.getAllByText('Correct', { exact: true })).toHaveLength(3);
     expect(screen.getByText('Incorrect')).toBeTruthy();
     expect(screen.getByText('بِأَكْوَابٍ')).toBeTruthy();
     expect(screen.getByText('إِذَا رَأَيْتَهُمْ')).toBeTruthy();
-    expect(screen.getByText('الطور ٢٤').closest('button')).toBeTruthy();
-    expect(screen.getByText('٥٦:١٧').closest('button')).toBeTruthy();
+    expect(screen.getByText('الطور ٢٤').closest('button, a')).toBeNull();
+    expect(screen.getByText('٥٦:١٧').closest('button, a')).toBeNull();
     expect(document.querySelector('a[href^="/quran/read/"]')).toBeNull();
   });
 

@@ -6,18 +6,17 @@ import { ChevronDown, PanelRightClose, PanelRightOpen } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { PANEL } from '../panel';
 
-const KEY = 'compare-pane-hidden';
 const listeners = new Set<() => void>();
-const read = () => {
+const read = (key: string) => {
   try {
-    return localStorage.getItem(KEY) === '1';
+    return localStorage.getItem(key) === '1';
   } catch {
     return false;
   }
 };
-const write = (hidden: boolean) => {
+const write = (key: string, hidden: boolean) => {
   try {
-    localStorage.setItem(KEY, hidden ? '1' : '0');
+    localStorage.setItem(key, hidden ? '1' : '0');
   } catch {}
   listeners.forEach(listener => listener());
 };
@@ -26,10 +25,10 @@ const subscribe = (listener: () => void) => {
   return () => listeners.delete(listener);
 };
 
-export default function CompareLayout({ title, current, pane, children }: { title: string; current: string; pane: React.ReactNode; children: React.ReactNode }) {
+export default function CompareLayout({ title, current, pane, children, storageKey = 'compare-pane-hidden', change = 'تغيير السورتين' }: { title: string; current: string; pane: React.ReactNode; children: React.ReactNode; storageKey?: string; change?: string }) {
   const id = useId();
   const search = useSearchParams().toString();
-  const hidden = useSyncExternalStore(subscribe, read, () => false);
+  const hidden = useSyncExternalStore(subscribe, () => read(storageKey), () => false);
   const [openAt, setOpenAt] = useState<string | null>(null);
   const open = openAt === search;
   const hide = useRef<HTMLSpanElement>(null);
@@ -42,7 +41,7 @@ export default function CompareLayout({ title, current, pane, children }: { titl
   }, [hidden]);
   const toggle = (next: boolean) => {
     moved.current = true;
-    write(next);
+    write(storageKey, next);
   };
   return (
     <div className={`flex flex-col gap-4 lg:grid lg:items-start ${hidden ? '' : 'lg:grid-cols-[19rem_minmax(0,1fr)]'}`}>
@@ -50,7 +49,7 @@ export default function CompareLayout({ title, current, pane, children }: { titl
         className="lg:hidden flex items-center justify-between gap-3 rounded-lg border border-[var(--home-accent)] px-3 py-2 text-start text-[var(--home-accent)]">
         <span className="min-w-0 truncate">{current}</span>
         <span className="flex shrink-0 items-center gap-1 text-sm">
-          {open ? 'إخفاء السور' : 'تغيير السورتين'}
+          {open ? 'إخفاء السور' : change}
           <ChevronDown size={16} aria-hidden className={`transition-transform ${open ? 'rotate-180' : ''}`} />
         </span>
       </button>
