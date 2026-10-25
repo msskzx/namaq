@@ -57,7 +57,7 @@
 .hadithExample [class*='bg-teal-'] { background: var(--home-bubble-3); }
 .hadithExample :is([class*='bg-gray-'], [class*='bg-blue-']) { background: var(--home-bubble-4); }
 .hadithExample [class*='text-amber'] { color: var(--home-accent); }
-.fadeBottom { mask-image: linear-gradient(to bottom, black calc(100% - 8rem), transparent); }
+.fadeBottom { mask-image: linear-gradient(to bottom, black max(0%, calc(100% - 8rem)), transparent); }
 .capped { max-height: 32rem; overflow: hidden; }
 .fadeTop { mask-image: linear-gradient(to bottom, transparent, black var(--fade, 0%)); }
 .nasab [role='region'] { background: transparent; overflow: visible; border: 0; }
