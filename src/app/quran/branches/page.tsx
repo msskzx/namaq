@@ -100,7 +100,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
             {`${phrase.text} (${num(phrase.count)})`}
           </Button>)}
         </nav>}
-        {tree && <BranchTree key={`${id}:${state.partition ?? ''}:${spelling ?? ''}:${state.context}`} tree={tree} variants={variants(drawn)} names={names} pages={Object.fromEntries(drawn.map(ayah => [ayah.key, ayah.page]))} juz={range} view={state} surround={{ on: state.context, sync: true, data: around }} />}
+        {tree && <BranchTree key={`${id}:${state.partition ?? ''}:${spelling ?? ''}:${range?.from}-${range?.to}:${state.context}`} tree={tree} variants={variants(drawn)} names={names} pages={Object.fromEntries(drawn.map(ayah => [ayah.key, ayah.page]))} juz={range} view={state} surround={{ on: state.context, sync: true, data: around }} />}
       </>}
     </div>
   );

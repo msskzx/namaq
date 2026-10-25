@@ -40,6 +40,9 @@ describe('Quran branches range selection', () => {
     expect((screen.getByRole('switch') as HTMLInputElement).checked).toBe(false);
     rerender(await open({ o: 'ان المتقين', c: '1' }));
     expect((screen.getByRole('switch') as HTMLInputElement).checked).toBe(true);
+    fireEvent.click(screen.getByRole('switch'));
+    rerender(await open({ o: 'ان المتقين', c: '1', juzFrom: '1', juzTo: '29' }));
+    expect((screen.getByRole('switch') as HTMLInputElement).checked).toBe(true);
     vi.unstubAllGlobals();
   });
 
