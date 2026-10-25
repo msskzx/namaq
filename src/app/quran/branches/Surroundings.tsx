@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useId } from 'react';
-import Link from 'next/link';
-
 import useSWR from 'swr';
-import { ArrowLeftRight } from 'lucide-react';
+import { ArrowLeftRight, TextSearch } from 'lucide-react';
+import Button from '@/components/common/Button';
+import { PathBox, PathButton } from './Paths';
 import { fetcher } from '@/lib/swr';
 import Toggle from '@/components/common/Toggle';
 import { useLanguage } from '@/components/language/LanguageContext';
@@ -51,37 +51,33 @@ function SurroundSwitch({ on, onChange, loading = false, failed = false }: Toggl
 
 export const SurroundToggle = ({ sync = false, ...props }: ToggleProps & { sync?: boolean }) => (sync ? <AddressToggle {...props} /> : <SurroundSwitch {...props} />);
 
-export function NeighbourBox({ neighbour, of, side, around }: { neighbour: Neighbour; of: string; side: 'before' | 'after'; around: Around }) {
+export function NeighbourBox({ neighbour, of, side, around, opens }: { neighbour: Neighbour; of: string; side: 'before' | 'after'; around: Around; opens: string }) {
   const { language } = useLanguage();
   const ar = language === 'ar';
   const [surah, ayah] = neighbour.key.split(':').map(Number);
+  const id = `${side}${of}`;
+  const ref = around.names[surah] ? `${around.names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`;
+  const label = ar ? 'عرض الآيات في سياقها' : 'View ayat in context';
   const basmala = neighbour.basmala && <span className="block border-[var(--home-rule)] text-center first:border-b last:border-t first:pb-1 last:pt-1 border-dotted">{neighbour.basmala.join(' ')}</span>;
   return (
-    <div data-ctx={of} data-keys={of} className="w-64 max-w-[70vw] shrink-0 rounded border border-dashed text-lg border-[var(--home-muted)] bg-[var(--home-paper)] px-3 py-1.5 text-[var(--home-muted)]">
+    <PathBox id={id} ctx={of} keys={[of]} lit="border-solid border-[var(--home-accent)] text-[var(--home-ink)]" tone="border-dashed border-[var(--home-muted)] text-[var(--home-muted)]" className="w-64 max-w-[70vw] shrink-0 rounded border text-lg bg-[var(--home-paper)] px-3 py-1.5">
       <span className="block font-arabic leading-loose">
         {side === 'after' && basmala}
         <span className="block">{neighbour.words.join(' ')}</span>
         {side === 'before' && basmala}
       </span>
+      <span className="mt-1 block text-xs">{ref}</span>
       <span className="mt-1 flex flex-wrap items-center gap-2">
-        <Link href={`/quran/read/${neighbour.page}?a=${neighbour.key}`} prefetch={false} className="text-xs text-[var(--home-accent)] hover:underline">
-          {around.names[surah] ? `${around.names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`}
-        </Link>
-        {around.inTree.has(neighbour.key) && <a href={`#${anchorOf(around.tree, neighbour.key)}`} className="rounded-sm border border-[var(--home-root)] px-1 text-xs text-[var(--home-root)] hover:underline">
+        <PathButton id={id} keys={[of]} subject={ref} />
+        <Button size="sm" aria-haspopup="dialog" aria-label={`${label}: ${ref}`} title={label} onClick={event => event.currentTarget.closest('[data-tree]')?.querySelector<HTMLButtonElement>(`[data-node="${opens}"] [data-context-open]`)?.click()}>
+          <TextSearch size={16} aria-hidden />
+        </Button>
+        {around.inTree.has(neighbour.key) && <Button size="sm" href={`#${anchorOf(around.tree, neighbour.key)}`}>
           {ar ? 'في هذه الشجرة' : 'In this tree'}
-        </a>}
+        </Button>}
       </span>
-    </div>
+    </PathBox>
   );
 }
 
-export function surroundStyle(tree: string, keys: string[]) {
-  const scope = `[data-tree="${tree}"]`;
-  return [
-    `${scope} :has(> [data-anchor]:target){outline:2px solid var(--home-accent);outline-offset:2px}`,
-    ...keys.map(key => {
-      const lit = `${scope}:has([data-ctx="${key}"]:hover,[data-ctx="${key}"]:focus-within)`;
-      return `${lit} [data-keys~="${key}"]:not([data-line]){border-color:var(--home-accent);border-style:solid;color:var(--home-ink)}${lit} [data-line][data-keys~="${key}"]{border-color:var(--home-accent)}`;
-    }),
-  ].join('\n');
-}
+export const targetStyle = (tree: string) => `[data-tree="${tree}"] :has(> [data-anchor]:target){outline:2px solid var(--home-accent);outline-offset:2px}`;

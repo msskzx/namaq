@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { getHomePreviews } from './homePreviewData';
-import { size } from './quran/branches';
+import { keys, size } from './quran/branches';
 
 vi.mock('@/lib/modelUnits', () => ({ loadUnitView: async (id: string) => {
   const { hadithView } = await import('./model/hadithView');
@@ -11,7 +11,7 @@ describe('homepage preview data', () => {
   it('keeps all six branches and the exact requested comparison ranges', async () => {
     const data = await getHomePreviews();
     expect(size(data.branches.tree)).toBe(6);
-    expect(Object.keys(data.branches.pages)).toEqual(['15:45', '44:51', '51:15', '52:17', '54:54', '77:41']);
+    expect(keys(data.branches.tree).sort()).toEqual(['15:45', '44:51', '51:15', '52:17', '54:54', '77:41']);
     expect(data.comparisons.map(pair => [pair.a.number, pair.b.number])).toEqual([[41, 113], [42, 114], [43, 115], [44, 116], [45, 117]]);
     expect(data.comparisons.every(pair => pair.a.display.length > 0 && pair.b.display.length > 0)).toBe(true);
     expect(data.comparisons.some(pair => pair.different.a.length > 0)).toBe(true);

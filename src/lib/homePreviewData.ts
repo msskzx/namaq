@@ -35,7 +35,7 @@ export async function getHomePreviews() {
   const question = bank.questions.find(question => question.status === 'APPROVED' && question.key === 'VIRTUE_HOLDER:PERSON:talhah-ibn-ubaydullah:virtues:talhah-ibn-ubaydullah');
 
   return {
-    branches: { tree: branch(group), pages: Object.fromEntries(group.map(ayah => [ayah.key, ayah.page])) },
+    branches: { tree: branch(group) },
     comparisons,
     timeline: MUSA.events.map((event, index) => ({
       n: index + 1, surahCount: new Set(event.segments.map(segment => segment.surah)).size, title: event.title, titleEn: MUSA_EVENT_EN[index], phase: MUSA.phases[event.phase], phaseEn: MUSA_PHASE_EN[event.phase],

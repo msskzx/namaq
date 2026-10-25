@@ -50,15 +50,15 @@ it('loads on demand and shows each original with its neighbors, differing words 
   expect(screen.getByRole('dialog')).toBeTruthy();
 });
 
-it('uses borderless translated leaf controls alongside references and handles context labels and handles the first ayah without inventing a predecessor', async () => {
+it('puts references above its row of buttons, outside the context button, and handles the first ayah without inventing a predecessor', async () => {
   language.current = 'ar';
   vi.mocked(fetch).mockResolvedValue({ ok: true, json: async () => [{ ayah: { key: '1:1', page: 1, words: ['بِسْمِ', 'ٱللَّهِ'] }, before: null, after: null }] } as Response);
-  render(wrap(<AyahContextButton ayahKeys={['1:1']} differentWords={[]} names={{}} leaf references={<span>١:١</span>}>Opening</AyahContextButton>));
-  const trigger = screen.getByRole('button', { name: /عرض الآيات في سياقها.*١:١/ });
-  expect(trigger.getAttribute('data-variant')).toBe('ghost');
-  expect(trigger.textContent).toContain('١:١');
-  expect(trigger.querySelector('a')).toBeNull();
-  expect(trigger.querySelector('svg')?.nextElementSibling?.textContent).toBe('١:١');
+  render(wrap(<AyahContextButton ayahKeys={['1:1']} differentWords={[]} names={{}} references={<span>١:١</span>} before={<button>before</button>} after={<button>after</button>}>Opening</AyahContextButton>));
+  const trigger = screen.getByRole('button', { name: 'عرض الآيات في سياقها' });
+  expect(trigger.getAttribute('data-variant')).toBe('outline');
+  expect(trigger.textContent).toBe('');
+  expect([...trigger.parentElement!.children].map(child => child.textContent)).toEqual(['before', '', 'after']);
+  expect(trigger.parentElement!.previousElementSibling?.textContent).toBe('١:١');
   fireEvent.click(trigger);
   const card = await screen.findByRole('article', { name: 'سورة ١ ١' });
   expect(card.querySelectorAll('[data-current]')).toHaveLength(1);
@@ -78,7 +78,7 @@ it('reports a loading failure and lets the learner retry', async () => {
 });
 
 it('shows the node\'s own ayat first with a branch label, then its siblings in the same grid', async () => {
-  render(wrap(<AyahContextButton ayahKeys={['94:6']} siblings={['94:5']} differentWords={[3]} names={{ 94: 'الشرح' }} leaf>Leaf</AyahContextButton>));
+  render(wrap(<AyahContextButton ayahKeys={['94:6']} siblings={['94:5']} differentWords={[3]} names={{ 94: 'الشرح' }}>Leaf</AyahContextButton>));
   fireEvent.click(screen.getByRole('button', { name: 'View spelling differences and context' }));
   const dialog = screen.getByRole('dialog');
   await within(dialog).findAllByRole('article');
@@ -89,7 +89,7 @@ it('shows the node\'s own ayat first with a branch label, then its siblings in t
 
 it('marks the words every card shares, exact and by root apart, on own and sibling cards alike', async () => {
   vi.mocked(fetch).mockResolvedValue({ ok: true, json: async () => [{ ...source[0], match: { exact: [1, 2, 3], rooted: [0] } }, { ...source[1], match: { exact: [1, 2, 3], rooted: [0] } }] } as Response);
-  render(wrap(<AyahContextButton ayahKeys={['94:6']} siblings={['94:5']} differentWords={[]} names={{ 94: 'الشرح' }} leaf>Leaf</AyahContextButton>));
+  render(wrap(<AyahContextButton ayahKeys={['94:6']} siblings={['94:5']} differentWords={[]} names={{ 94: 'الشرح' }}>Leaf</AyahContextButton>));
   fireEvent.click(screen.getByRole('button', { name: 'View ayat in context' }));
   const dialog = screen.getByRole('dialog');
   const own = await within(dialog).findByRole('article', { name: 'الشرح 6 · this branch' });
