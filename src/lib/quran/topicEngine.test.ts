@@ -1,5 +1,9 @@
-import { describe, expect, it } from 'vitest';
-import { sharedTopicsFromInstances, topicSurahPairs } from './topicEngine';
+import { describe, expect, it, vi } from 'vitest';
+import { getTopicSurahPairs, sharedTopicsFromInstances, topicSurahPairs } from './topicEngine';
+
+vi.mock('@/lib/prisma', () => ({
+  prisma: { quranTopic: { findMany: async () => [{ surah: 16, themeId: 't', ayahFrom: 3 }, { surah: 43, themeId: 't', ayahFrom: 9 }, { surah: 57, themeId: 't', ayahFrom: 1 }] } },
+}));
 import type { TopicInstance } from './topicTypes';
 
 function instance(overrides: Partial<TopicInstance>): TopicInstance {
@@ -80,5 +84,13 @@ describe('topicSurahPairs', () => {
       { surah: 2, themeId: null },
     ];
     expect(topicSurahPairs(rows)).toEqual([[16, 43], [16, 57], [16, 64], [57, 64]]);
+  });
+});
+
+describe('getTopicSurahPairs', () => {
+  it('pairs only the topics whose first ayah the caller keeps', async () => {
+    expect(await getTopicSurahPairs()).toEqual([[16, 43], [16, 57], [43, 57]]);
+    expect(await getTopicSurahPairs(surah => surah !== 57)).toEqual([[16, 43]]);
+    expect(await getTopicSurahPairs((surah, ayah) => ayah > 1)).toEqual([[16, 43]]);
   });
 });

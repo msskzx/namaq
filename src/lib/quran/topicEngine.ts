@@ -82,6 +82,7 @@ export function topicSurahPairs(rows: { surah: number; themeId: string | null }[
   });
 }
 
-export async function getTopicSurahPairs(): Promise<[number, number][]> {
-  return topicSurahPairs(await prisma.quranTopic.findMany({ where: { alternativeOf: null, themeId: { not: null } }, select: { surah: true, themeId: true } }));
+export async function getTopicSurahPairs(keep: (surah: number, ayah: number) => boolean = () => true): Promise<[number, number][]> {
+  const rows = await prisma.quranTopic.findMany({ where: { alternativeOf: null, themeId: { not: null } }, select: { surah: true, themeId: true, ayahFrom: true } });
+  return topicSurahPairs(rows.filter(row => keep(row.surah, row.ayahFrom)));
 }

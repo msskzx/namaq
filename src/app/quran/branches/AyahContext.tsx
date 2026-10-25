@@ -19,6 +19,11 @@ async function loadContext(url: string): Promise<AyahContext[]> {
   return response.json();
 }
 
+export function openFromNode(event: React.MouseEvent<HTMLElement>) {
+  if ((event.target as Element).closest('a, button, input, label, dialog') || window.getSelection()?.toString()) return;
+  event.currentTarget.querySelector<HTMLButtonElement>('[data-context-open]')?.click();
+}
+
 // docs/plans/quran-shared-openings.md
 export default function AyahContextButton({ children, ayahKeys, subject, siblings = [], spellings = [], spellingAt = 0, differentWords, names, references, leaf = false }: { leaf?: boolean; references?: React.ReactNode; children: React.ReactNode; ayahKeys: string[]; subject?: string; siblings?: string[]; spellings?: { words: string[]; keys: string[] }[]; spellingAt?: number; differentWords: number[]; names: Record<number, string> }) {
   const dialog = useRef<HTMLDialogElement>(null);
@@ -71,7 +76,7 @@ export default function AyahContextButton({ children, ayahKeys, subject, sibling
     <>
       <span id={`${titleId}-subject`} className="contents">{children}</span>
       <span className="mt-1 flex flex-wrap items-center gap-2" dir="rtl">
-        <Button size="sm" className="max-w-full" variant={leaf ? 'ghost' : differing ? 'highlight' : 'outline'} aria-label={leaf && references ? undefined : subject ? `${label}: ${subject}` : label} aria-labelledby={leaf && references ? `${titleId}-action ${titleId}-subject ${titleId}-refs` : undefined} title={label} aria-haspopup="dialog" onClick={() => { setOpen(true); dialog.current?.showModal(); }}>
+        <Button data-context-open size="sm" className="max-w-full" variant={leaf ? 'ghost' : differing ? 'highlight' : 'outline'} aria-label={leaf && references ? undefined : subject ? `${label}: ${subject}` : label} aria-labelledby={leaf && references ? `${titleId}-action ${titleId}-subject ${titleId}-refs` : undefined} title={label} aria-haspopup="dialog" onClick={() => { setOpen(true); dialog.current?.showModal(); }}>
           {leaf && references && <span id={`${titleId}-action`} className="sr-only">{label}</span>}
           {leaf && differing ? <span data-differing className={styles.differenceIcon}><TextSearch size={16} aria-hidden /></span> : <TextSearch size={16} aria-hidden />}
           {leaf && references && <span id={`${titleId}-refs`}>{references}</span>}

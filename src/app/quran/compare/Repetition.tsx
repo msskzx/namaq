@@ -20,7 +20,7 @@ const run = (at: Occ, len: number) => Object.fromEntries(Array.from({ length: le
 function Tile({ value, label }: { value: number; label: string }) {
   return (
     <div className={PANEL}>
-      <div className="text-3xl text-amber-600 dark:text-amber-400">{num(value)}</div>
+      <div className="text-3xl text-[var(--home-accent)]">{num(value)}</div>
       <div className={NOTE}>{label}</div>
     </div>
   );
@@ -34,15 +34,15 @@ function Ticks({ at, count, selected, onSelect, label }: { at: Occ[]; count: num
   return (
     <div className="overflow-x-auto">
       <svg viewBox={`0 0 ${count * step} ${h}`} className="w-full" style={{ minWidth: Math.min(count * step, 960) }} role="group" aria-label={label}>
-        <line x1={0} x2={count * step} y1={barH} y2={barH} className="stroke-gray-300 dark:stroke-gray-700" />
+        <line x1={0} x2={count * step} y1={barH} y2={barH} className="stroke-[var(--home-rule)]" />
         {at.map((o, k) => (
           <g key={k}>
             <rect x={xOf(o.ayah)} y={2} width={Math.max(step * 0.7, 4)} height={barH - 2} role="button" tabIndex={0} aria-label={`الآية ${num(o.ayah)}`} aria-pressed={k === selected}
-              className={`cursor-pointer outline-none focus-visible:stroke-2 focus-visible:stroke-gray-900 dark:focus-visible:stroke-white ${k === selected ? 'fill-amber-600 dark:fill-amber-300' : 'fill-amber-400 dark:fill-amber-600'}`}
+              className={`cursor-pointer outline-none focus-visible:stroke-2 focus-visible:stroke-[var(--home-ink)] ${k === selected ? 'fill-[var(--home-accent)]' : 'fill-[color-mix(in_srgb,var(--home-accent)_45%,transparent)]'}`}
               onClick={() => onSelect(k)} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect(k); } }}>
               <title>{`الآية ${num(o.ayah)}`}</title>
             </rect>
-            <text x={xOf(o.ayah) + Math.max(step * 0.7, 4) / 2} y={barH + 12} textAnchor="middle" fontSize={10} className="fill-gray-600 dark:fill-gray-400">{num(o.ayah)}</text>
+            <text x={xOf(o.ayah) + Math.max(step * 0.7, 4) / 2} y={barH + 12} textAnchor="middle" fontSize={10} className="fill-[var(--home-muted)]">{num(o.ayah)}</text>
           </g>
         ))}
       </svg>
@@ -150,9 +150,6 @@ export function SurahRepetition({ surah }: { surah: number }) {
   const { data } = useContext(RepetitionContext);
   if (!data) return <Status />;
   return (
-    <div className="flex flex-col gap-4">
-      <p className={NOTE}>لم يراجع هذا العرض أحد من أهل العلم. النص برواية حفص. يدل التطابق على اشتراك اللفظ وحده.</p>
-      <Within key={surah} data={data} surah={data.surahs[surah - 1]} />
-    </div>
+    <Within key={surah} data={data} surah={data.surahs[surah - 1]} />
   );
 }

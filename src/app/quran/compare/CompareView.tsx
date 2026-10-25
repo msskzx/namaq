@@ -8,11 +8,11 @@ import Button from '@/components/common/Button';
 import PageSpread, { MatchLegend, type SpreadAyah, type SpreadMark } from '@/components/quran/PageSpread';
 import { groupPairs, KEEP_RUN, MAX_STEP_GAP, MIN_RUN, TAIL_COUNT, wordSlots, type Group, type Pair, type Range, type Row } from '@/lib/quran/compare';
 import { num } from '@/lib/quran/arabicNumber';
+import { NOTE, PANEL } from '../panel';
+import ViewHeader from './ViewHeader';
 
 type Side = { number: number; name: string; plain: string; words: string[]; range?: Range };
 
-const PANEL = 'bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4';
-const NOTE = 'text-sm text-gray-600 dark:text-gray-400';
 const span = (r: NonNullable<Range>) => (r.from === r.to ? num(r.from) : `${num(r.from)}–${num(r.to)}`);
 const ayat = (n: number) => (n === 0 ? 'لا آيات' : n === 1 ? 'آية واحدة' : n === 2 ? 'آيتان' : n >= 3 && n <= 10 ? `${num(n)} آيات` : `${num(n)} آية`);
 const label = (s: Side, r: Range) => (r ? `${s.plain} ${span(r)}` : '—');
@@ -66,30 +66,26 @@ function BlockSpread({ a, b, pairs }: { a: Side; b: Side; pairs: Pair[] }) {
       <PageSpread ruled pages={[page(a, range('a'), rows(a, 'a')), page(b, range('b'), rows(b, 'b'))]} />
       <ul className="mt-3 flex flex-wrap gap-2">
         {pairs.map((p, k) => (
-          <li key={k}><Badge size="sm" color={p.run >= MIN_RUN ? 'amber' : 'gray'} text={pairs.length > 1 ? `${num(p.a)} و${num(p.b)}: ${pairLabel(p)}` : pairLabel(p)} /></li>
+          <li key={k}><Badge size="sm" color={p.run >= MIN_RUN ? 'rose' : 'gray'} text={pairs.length > 1 ? `${num(p.a)} و${num(p.b)}: ${pairLabel(p)}` : pairLabel(p)} /></li>
         ))}
       </ul>
     </>
   );
 }
 
-export default function CompareView({ a, b, rows }: { a: Side; b: Side; rows: Row[] }) {
+export default function CompareView({ a, b, rows, controls }: { a: Side; b: Side; rows: Row[]; controls?: React.ReactNode }) {
   const words = rows.filter(r => r.type === 'block' && r.block.kind === 'words').length;
   return (
     <div className="flex flex-col gap-4">
-      <header>
-        <div className="flex flex-wrap items-center gap-3 mb-2">
-          <h1 className="text-3xl">{`${title(a)} و${title(b)}`}</h1>
-        </div>
-        <p className={NOTE}>
-          لم يراجع هذا العرض أحد من أهل العلم. النص برواية حفص. تُذكر آيتان معًا حين تشتركان في تتابع من {num(MIN_RUN)} كلمات فأكثر
-          بعد حذف التشكيل وتوحيد صور بعض الحروف، وتُقابل الكلمة بجذرها والأداة بأصلها، فتلتقي «ولأصلبنكم» و«لأصلبنكم» و«سحّار» و«ساحر»، وتُعدّ الكلمة مشتركة ولو تغيّر موضعها في الآية. تُضم الأزواج في كتلة إن كانت الفجوة بينها واحدة في السورتين ولا تزيد على {num(MAX_STEP_GAP)} آيات،
-          وتبقى الكتلة إن كان فيها زوجان فيهما نص مشترك أو زوج فيه تتابع {num(KEEP_RUN)} كلمات فأكثر، أو أي زوج إن اخترت آيات بعينها، وإن تساوى عدد الآيات المختارة في الجانبين قوبلت كل آية بنظيرتها. الصيغ المتكررة تُقرن بإحدى مواضعها اعتباطًا. إن وافقت آية أكثر من آية في السورة الأخرى عُرضت مرة واحدة وإلى جانبها مقابلاتها، ولكل مقابلة لون لكلماتها المشتركة.
-          والملوّنة بلون آخر مسطَّرة بنقاط كلمة من جذر مشترك بلفظ مختلف.
-        </p>
-        <MatchLegend exact="كلمة مشتركة بلفظها" root={ROOT_TITLE} />
-        <p className={NOTE}>{`وُجدت ${num(words)} كتلة مبنية على النص.`}</p>
-      </header>
+      <ViewHeader title={`${title(a)} و${title(b)}`} sub={words === 0 ? 'لا كتل مبنية على النص' : words === 1 ? 'كتلة واحدة مبنية على النص' : words === 2 ? 'كتلتان مبنيتان على النص' : `${num(words)} ${words <= 10 ? 'كتل مبنية' : 'كتلة مبنية'} على النص`} method={<>
+        النص برواية حفص. تُذكر آيتان معًا حين تشتركان في تتابع من {num(MIN_RUN)} كلمات فأكثر
+        بعد حذف التشكيل وتوحيد صور بعض الحروف، وتُقابل الكلمة بجذرها والأداة بأصلها، فتلتقي «ولأصلبنكم» و«لأصلبنكم» و«سحّار» و«ساحر»، وتُعدّ الكلمة مشتركة ولو تغيّر موضعها في الآية. تُضم الأزواج في كتلة إن كانت الفجوة بينها واحدة في السورتين ولا تزيد على {num(MAX_STEP_GAP)} آيات،
+        وتبقى الكتلة إن كان فيها زوجان فيهما نص مشترك أو زوج فيه تتابع {num(KEEP_RUN)} كلمات فأكثر، أو أي زوج إن اخترت آيات بعينها، وإن تساوى عدد الآيات المختارة في الجانبين قوبلت كل آية بنظيرتها. الصيغ المتكررة تُقرن بإحدى مواضعها اعتباطًا. إن وافقت آية أكثر من آية في السورة الأخرى عُرضت مرة واحدة وإلى جانبها مقابلاتها، ولكل مقابلة لون لكلماتها المشتركة.
+        والملوّنة بلون آخر مسطَّرة بنقاط كلمة من جذر مشترك بلفظ مختلف.
+      </>}>
+        {controls}
+      </ViewHeader>
+      <MatchLegend exact="كلمة مشتركة بلفظها" root={ROOT_TITLE} />
       {rows.map((row, i) => {
         if (row.type === 'gap') return <Gap key={i} a={a} b={b} ra={row.a} rb={row.b} />;
         const { block } = row;
@@ -99,9 +95,9 @@ export default function CompareView({ a, b, rows }: { a: Side; b: Side; rows: Ro
         return (
           <section key={i} className={`${PANEL} ${count ? 'border-dashed' : ''}`}>
             <div className="flex flex-wrap items-center gap-2 mb-1">
-              <h2 className="text-xl text-amber-600 dark:text-amber-400">
+              <h3 className="text-xl text-[var(--home-accent)]">
                 {`${a.plain} ${span({ from: first.a, to: end.a })} و${b.plain} ${span({ from: first.b, to: end.b })}`}
-              </h2>
+              </h3>
               <Badge size="sm" color="gray" text={count ? 'محاذاة بالعدّ من نهاية السورتين' : `${ayat(block.anchors)} فيها نص مشترك`} />
             </div>
             {count && (
