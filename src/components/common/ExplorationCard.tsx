@@ -1,4 +1,5 @@
-import Link from 'next/link';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
+import Button from './Button';
 import styles from './ExplorationCard.module.css';
 
 interface ExplorationCardProps {
@@ -10,11 +11,17 @@ interface ExplorationCardProps {
 }
 
 export default function ExplorationCard({ title, desc, url, number, language = 'ar' }: ExplorationCardProps) {
+  const ar = language === 'ar';
+  const Forward = ar ? ArrowLeft : ArrowRight;
   return (
-    <Link href={url} className={styles.card}>
+    <article className={styles.card}>
       {number !== undefined && <span className={styles.number}>{number.toLocaleString(language === 'ar' ? 'ar-u-nu-arab' : 'en', { minimumIntegerDigits: 2 })}</span>}
-      <div><h3>{title}</h3><p>{desc}</p></div>
+      <div><h3>{title}</h3><p>{desc}</p>
+        <Button size="sm" variant="ghost" href={url} aria-label={`${ar ? 'افتح' : 'Open'} ${title}`} className="mt-2">
+          {ar ? 'افتح' : 'Open'}<Forward size={16} aria-hidden />
+        </Button>
+      </div>
       <span className={styles.rule} aria-hidden="true" />
-    </Link>
+    </article>
   );
 }

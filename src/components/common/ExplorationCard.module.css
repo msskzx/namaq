@@ -1,8 +1,7 @@
 .grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 4rem; list-style: none; padding: 0; margin-top: 1rem; }
 .card { display: flex; align-items: baseline; gap: 1rem; padding-block: 1.1rem; }
 .number { color: var(--home-accent); font-size: 1rem; font-variant-numeric: tabular-nums; }
-.card h3 { font-size: 1.5rem; line-height: 1.5; }
+.card h3 { font-size: 1.5rem; line-height: 1.5; color: var(--home-accent); }
 .card p { color: var(--home-muted); font-size: 1.0625rem; line-height: 1.6; }
 .rule { flex: 1; min-width: 1rem; border-bottom: 1px dotted var(--home-rule); }
-.card:hover h3 { color: var(--home-accent); text-decoration: underline; text-underline-offset: 0.2em; }
 @media (max-width: 800px) { .grid { grid-template-columns: 1fr; gap: 1.5rem; } }

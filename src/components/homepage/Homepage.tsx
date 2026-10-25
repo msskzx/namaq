@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, type ReactNode } from 'react';
-import Link from 'next/link';
-import { BookOpen, Circle, CircleCheck, CircleX, RotateCcw } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BookOpen, Circle, CircleCheck, CircleX, RotateCcw } from 'lucide-react';
 import { useLanguage } from '../language/LanguageContext';
 import Button from '../common/Button';
 import BranchTree from '@/app/quran/branches/BranchTree';
@@ -19,12 +18,18 @@ import styles from './Home.module.css';
 
 function Feature({ id, n, title, description, example, href, children }: { id: string; n: number; title: string; description: string; example: string; href: string; children: ReactNode }) {
   const ar = useLanguage().language === 'ar';
+  const Forward = ar ? ArrowLeft : ArrowRight;
   return (
     <section id={id} className={styles.feature} aria-labelledby={`${id}-title`}>
       <header className={styles.featureHeading}>
         <span className={styles.indexNumber}>{n.toLocaleString(ar ? 'ar-u-nu-arab' : 'en', { minimumIntegerDigits: 2 })}</span>
         <div>
-          <h2 id={`${id}-title`}><Link href={href}>{title}</Link></h2>
+          <div className={styles.featureTitle}>
+            <h2 id={`${id}-title`}>{title}</h2>
+            <Button size="sm" variant="ghost" href={href} aria-label={`${ar ? 'افتح' : 'Open'} ${title}`} className="shrink-0">
+              {ar ? 'افتح' : 'Open'}<Forward size={16} aria-hidden />
+            </Button>
+          </div>
           <p>{description}</p>
           <p className={styles.exampleCaption}>{example}</p>
         </div>
@@ -43,13 +48,13 @@ function QuizPreview({ question }: { question: NonNullable<HomePreviews['questio
       <p className={styles.quizPrompt} dir="rtl" lang="ar">{question.prompt}</p>
       <div className={styles.choices}>
         {question.choices.map(choice => (
-          <Button key={choice.value} onClick={() => answer === null && setAnswer(choice.value)} aria-pressed={answer === choice.value} aria-disabled={answer !== null}>
+          <Button key={choice.value} onClick={() => answer === null && setAnswer(choice.value)} aria-pressed={answer === choice.value} aria-disabled={answer !== null} data-result={answer !== null ? choice.value === question.answer ? 'correct' : answer === choice.value ? 'incorrect' : undefined : undefined}>
             {answer !== null && choice.value === question.answer ? <CircleCheck size={16} aria-hidden /> : answer === choice.value ? <CircleX size={16} aria-hidden /> : <Circle size={16} aria-hidden />}
             <span lang="ar" dir="rtl">{choice.labelArabic}</span>
           </Button>
         ))}
       </div>
-      <div role="status" className={styles.answer}>
+      <div role="status" className={styles.answer} data-result={answer === null ? undefined : correct ? 'correct' : 'incorrect'}>
         {answer !== null && <p>{correct ? (ar ? 'إجابة صحيحة.' : 'Correct.') : (ar ? 'الإجابة الصحيحة: ' : 'The correct answer is: ')}{!correct && <span lang="ar" dir="rtl">{question.choices.find(choice => choice.value === question.answer)?.labelArabic}</span>}</p>}
       </div>
       <div className={styles.previewActions}>

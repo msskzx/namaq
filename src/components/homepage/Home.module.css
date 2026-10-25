@@ -21,15 +21,15 @@
 
 .exploration { margin-top: 4.5rem; }
 .sectionHeading { display: flex; align-items: center; gap: 1.5rem; border-top: 1px solid var(--home-rule); padding-top: 1.25rem; }
-.sectionHeading h2 { font-size: 1rem; color: var(--home-muted); }
+.sectionHeading h2 { font-size: 1rem; color: var(--home-accent); }
 .sectionHeading > span { color: var(--home-accent); }
 .indexNumber { color: var(--home-accent); font-size: 1rem; font-variant-numeric: tabular-nums; }
 
 
 .feature { padding-block: 2.5rem; border-top: 1px solid var(--home-rule); scroll-margin-top: 6rem; }
 .featureHeading { display: flex; gap: 1.25rem; align-items: baseline; margin-bottom: 1.5rem; }
-.featureHeading h2 { font-size: 1.875rem; line-height: 1.5; }
-.featureHeading h2 a:hover { color: var(--home-accent); }
+.featureTitle { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem 1rem; }
+.featureHeading h2 { font-size: 1.875rem; line-height: 1.5; color: var(--home-accent); }
 .featureHeading .exampleCaption { font-size: 1rem; margin-top: 0.5rem; }
 .featureHeading p { color: var(--home-muted); max-width: 50rem; font-size: 1.125rem; line-height: 1.7; margin-top: 0.25rem; }
 .previewActions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem; }
@@ -45,7 +45,7 @@
 .timeline li { position: relative; width: 15rem; border-top: 1px solid var(--home-rule); padding: 2rem 1.5rem 1rem 0; }
 .page[dir='rtl'] .timeline li { padding-inline: 0 1.5rem; }
 .timelineDot { position: absolute; top: -0.85rem; background: var(--home-paper); color: var(--home-accent); padding-inline: 0.5rem; }
-.timeline h3 { font-size: 1.375rem; line-height: 1.5; margin-block: 0.75rem; }
+.timeline h3 { font-size: 1.375rem; line-height: 1.5; margin-block: 0.75rem; color: var(--home-accent); }
 .surahCount { color: var(--home-muted); font-size: 1rem; }
 .familyCanvas { height: 520px; min-width: 0; }
 .hadithExample [class*='overflow-x-auto'] { overflow: visible; }
@@ -65,6 +65,12 @@
 .page .choices button:not([aria-disabled='true']):hover { background: var(--home-accent); color: var(--home-paper); }
 .page .choices button[aria-disabled='true'] { cursor: default; }
 .answer { min-height: 2.5rem; margin-top: 1rem; color: var(--home-ink); }
+.quiz [data-result='correct'] { color: var(--home-green); }
+.quiz [data-result='incorrect'] { color: var(--home-accent); }
+.choices [data-result] { border-color: currentColor; }
+.choices [data-result='correct'] { background: color-mix(in srgb, var(--home-green) 12%, var(--home-paper)); }
+.choices [data-result='incorrect'] { background: color-mix(in srgb, var(--home-accent) 12%, var(--home-paper)); }
+.choices button[aria-disabled='true']:not([data-result]) { color: var(--home-muted); }
 
 @media (max-width: 800px) {
   .content { padding-block: 2.5rem 2rem; }

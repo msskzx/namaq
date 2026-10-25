@@ -5,7 +5,7 @@ Namaq gives the source text the most space and contrast. Warm paper, ink, fine r
 `src/app/theme.css` owns the palette for light and dark modes. Read the values there. Use its `--home-*` variables in pages, portals, SVGs, charts and graphs. Derive transparency from those tokens instead of adding colors. The signed brand files in `public/brand/` retain their original colors because editing them breaks their content credentials.
 
 - Paper and deeper paper distinguish reading surfaces. Ink is primary text, muted ink is secondary text, and rules separate content.
-- Terracotta identifies actions and exact word matches. Purple identifies root matches. In branches, joined ف is purple and joined و is green. Keep the text or symbol that explains each distinction.
+- Terracotta identifies headings, actions and exact word matches. Quiz feedback uses palette green for correct answers and terracotta red for incorrect answers, alongside text and icons. Purple identifies root matches. In branches, joined ف is purple and joined و is green. Keep the text or symbol that explains each distinction.
 - Amber highlights differing marks that need inspection. It is not the default button color. Slot and bubble colors distinguish content groups, without assigning new meanings to those colors.
 - Use the shared Button, Badge, Toggle and ExplorationCard. Homepage and hub navigation share ExplorationCard. Lucide icons use a consistent stroke, an action label and an accessible name when the label is hidden. Mirror directional arrows in RTL.
 - Keep existing routes and essential information. Prefer clear headings, restrained borders and space over nested cards. Collapse secondary details when they compete with the main reading task.
