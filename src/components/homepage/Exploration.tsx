@@ -10,7 +10,7 @@ export default function Exploration() {
   const descriptions: Record<string, string> = {
     '/quran': ar ? 'القراءة والموضوعات والمقارنات' : 'Reading, themes and comparisons',
     '/hadith': ar ? 'استكشف النصوص والأسانيد' : 'Explore texts and chains of transmission',
-    '/people': ar ? 'السير والأنساب والأحداث وشبكة العلاقات' : 'Biographies, lineages, events and the relationship graph',
+    '/biographies': ar ? 'السير والأنساب والأحداث وشبكة العلاقات' : 'Biographies, lineages, events and the relationship graph',
     '/sources': ar ? 'اقرأ النصوص الأصلية وتتبّع الشواهد' : 'Read original texts and follow the evidence',
     '/quizzes': ar ? 'أسئلة مع إحالات إلى المصادر' : 'Questions with references to the sources',
   };

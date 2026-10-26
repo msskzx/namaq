@@ -10,7 +10,7 @@ import {
 
 export const dynamic = 'force-dynamic';
 
-const STATIC_ROUTES = ['/', '/about', '/people', '/events', '/battles', '/sources', '/titles', '/graphs', '/nasab', '/quizzes', '/attributions'];
+const STATIC_ROUTES = ['/', '/about', '/biographies', '/people', '/events', '/battles', '/sources', '/titles', '/graphs', '/nasab', '/quizzes', '/attributions'];
 
 function toSitemapEntries(basePath: string, entries: SitemapEntry[]): MetadataRoute.Sitemap {
   return entries.map(({ slug, updatedAt }) => ({

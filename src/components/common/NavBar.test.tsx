@@ -75,9 +75,9 @@ describe('NavBar shelves', () => {
     state.path = '/quran/compare';
     render(<NavBar />);
     expect(screen.getAllByRole('link', { name: 'Quran' })[0].getAttribute('aria-current')).toBe('page');
-    expect(activeSection('/people/prophet-muhammad')).toBe('/people');
-    expect(activeSection('/nasab')).toBe('/people');
-    expect(activeSection('/graphs')).toBe('/people');
+    expect(activeSection('/people/prophet-muhammad')).toBe('/biographies');
+    expect(activeSection('/nasab')).toBe('/biographies');
+    expect(activeSection('/graphs')).toBe('/biographies');
     expect(activeSection('/attributions')).toBe('/sources');
     expect(activeSection('/')).toBeUndefined();
   });

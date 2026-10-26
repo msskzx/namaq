@@ -44,7 +44,7 @@ export const NAV_SECTIONS: NavSection[] = [
     { href: '/hadith/muslim-jibril', label: { ar: 'صحيح مسلم', en: 'Sahih Muslim' }, purpose: { ar: 'الحديث بإسناده وحواره', en: 'Hadith with their isnad and dialogue' } },
     { href: '/hadith/fath-iman-50', label: { ar: 'فتح الباري', en: 'Fath al-Bari' }, purpose: { ar: 'شرح ابن حجر لصحيح البخاري', en: 'Ibn Hajar’s commentary on Sahih al-Bukhari' } },
   ] }] },
-  { href: '/people', label: { ar: 'التراجم', en: 'Biographies' }, groups: [
+  { href: '/biographies', label: { ar: 'التراجم', en: 'Biographies' }, groups: [
     { title: { ar: 'الأشخاص والأحداث', en: 'People and events' }, items: [
       { href: '/people', label: { ar: 'الأعلام', en: 'Notable people' }, purpose: { ar: 'الأسماء والأنساب والأحوال مع مصادرها', en: 'Names, lineage and lives, with their sources' } },
       { href: '/titles', label: { ar: 'الألقاب', en: 'Titles' }, purpose: { ar: 'الألقاب ومن عُرف بها', en: 'Titles and the people known by them' } },

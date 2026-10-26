@@ -32,6 +32,13 @@ export default function SourcesPage() {
           <FontAwesomeIcon icon={faBookOpen} className="w-8 h-8 text-amber-500 mx-2" />
           {language === 'ar' ? 'المصادر' : 'Source material'}
         </h1>
+        <p className="mb-6 text-gray-600 dark:text-gray-400">
+          {language === 'ar' ? 'وانظر أيضًا ' : 'See also '}
+          <Link href="/attributions" className="text-amber-600 hover:underline dark:text-amber-400">
+            {language === 'ar' ? 'العزو' : 'Attributions'}
+          </Link>
+          {language === 'ar' ? ': مصادر البيانات وتراخيصها.' : ': where the data comes from and its licences.'}
+        </p>
 
         {error && (
           <ErrorMessage
