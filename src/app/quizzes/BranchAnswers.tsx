@@ -128,7 +128,7 @@ export function BranchFeedback({ question, typed, names, juz, ar }: { question: 
       <ol className="flex flex-col gap-2" aria-label={ar ? "تصحيح الأطراف" : "Leaf corrections"}>
         {[...rows].sort((a, b) => Number(a.correct) - Number(b.correct) || a.number - b.number).map(row => (
           <li key={row.index} data-correction={row.correct ? "correct" : "incorrect"} className="rounded-md border border-[var(--home-rule)] bg-[var(--home-paper-deep)] px-3 py-2">
-            <p className="mb-1 flex items-center gap-2 text-sm font-semibold text-[var(--home-ink)]"><Badge row={row} ar={ar} />{verdict(row, ar)}</p>
+            <p className="mb-1 flex items-center gap-2 text-sm font-semibold text-[var(--home-ink)]"><Badge row={row} ar={ar} /><span className="sr-only">{ar ? `الطرف ${num(row.number)}: ` : `Leaf ${row.number}: `}</span>{verdict(row, ar)}</p>
             <dl className="grid grid-cols-[auto_1fr] items-baseline gap-x-3 gap-y-1">
               <dt className="text-sm text-[var(--home-muted)]">{ar ? "كتبتَ" : "You typed"}</dt>
               <dd><TypedWords row={row} ar={ar} /></dd>

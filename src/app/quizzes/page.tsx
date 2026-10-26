@@ -151,7 +151,7 @@ export default function QuizzesPage() {
 
   const questions = useMemo(() => data?.questions ?? [], [data]);
   // A tree question scores one point per asked leaf, any other question one point.
-  const points = useMemo(() => questions.map((question, index) => question.branches
+  const points = useMemo(() => questions.map((question, index) => question.tree
     ? branchPoints(question, typed[index] ?? emptyBranchAnswers(question))
     : { earned: Number(answers[index] === question.correctAnswer), total: 1 }), [questions, answers, typed]);
   const score = points.reduce((sum, point) => sum + point.earned, 0);
