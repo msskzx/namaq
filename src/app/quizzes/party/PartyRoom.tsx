@@ -70,7 +70,7 @@ function Countdown({ deadline, offset, ar }: { deadline: number; offset: number;
   </span>;
 }
 
-function Leaderboard({ players, you, hostId, ar, final }: { players: PlayerView[]; you: string; hostId: string; ar: boolean; final?: boolean }) {
+function Leaderboard({ players, you, ar, final }: { players: PlayerView[]; you: string; ar: boolean; final?: boolean }) {
   const ranked = leaderboard(players);
   return (
     <section className={styles.panel} aria-label={ar ? "الترتيب" : "Leaderboard"}>
@@ -81,7 +81,7 @@ function Leaderboard({ players, you, hostId, ar, final }: { players: PlayerView[
           return (
             <li key={player.id} data-player={player.name} className={`flex items-center gap-3 rounded-sm px-2 py-1.5 ${player.id === you ? "bg-[var(--home-paper-deep)]" : ""}`}>
               <span className={`inline-flex size-7 shrink-0 items-center justify-center rounded-full text-sm font-bold ${rank === 1 ? "bg-[var(--home-accent)] text-[var(--home-paper)]" : "border border-[var(--home-rule)] text-[var(--home-muted)]"}`}>{ar ? num(rank) : rank}</span>
-              <span className="min-w-0 flex-1 truncate text-[var(--home-ink)]">{player.name}{player.id === hostId && <FontAwesomeIcon icon={faCrown} className="ms-2 text-xs text-[var(--home-muted)]" title={ar ? "المضيف" : "Host"} />}</span>
+              <span className="min-w-0 flex-1 truncate text-[var(--home-ink)]">{player.name}</span>
               {player.earned !== null && !final && <span dir="ltr" className={`text-sm tabular-nums ${player.earned ? "text-[var(--home-green)]" : "text-[var(--home-muted)]"}`}>+{ar ? num(player.earned) : player.earned}</span>}
               <span className="w-10 text-end font-semibold tabular-nums">{ar ? num(player.score) : player.score}</span>
             </li>
@@ -249,7 +249,7 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
       )}
       {revealed && (
         <>
-          <Leaderboard players={view.players} you={view.you} hostId={view.hostId} ar={ar} />
+          <Leaderboard players={view.players} you={view.you} ar={ar} />
           {isHost
             ? <Button className="self-start" variant="primary" onClick={() => send({ type: "next" })}><FontAwesomeIcon icon={faPlay} />{last ? (ar ? "الترتيب النهائي" : "Final results") : (ar ? "السؤال التالي" : "Next question")}</Button>
             : <p className="text-sm text-[var(--home-muted)]">{ar ? "ينتظر المضيف ليكمل." : "Waiting for the host to go on."}</p>}
@@ -289,7 +289,7 @@ export default function PartyRoom({ code }: { code: string }) {
   else if (view.phase === "loading") body = <div className="flex flex-col items-center gap-3"><LoadingSpinner /><p className="text-[var(--home-muted)]">{ar ? "تُجهَّز الأسئلة…" : "Getting the questions ready…"}</p></div>;
   else if (view.phase === "final") body = (
     <div className="flex flex-col gap-5">
-      <Leaderboard players={view.players} you={view.you} hostId={view.hostId} ar={ar} final />
+      <Leaderboard players={view.players} you={view.you} ar={ar} final />
       {view.you === view.hostId && <Button className="self-start" variant="primary" onClick={() => send({ type: "again" })}><FontAwesomeIcon icon={faRotateLeft} />{ar ? "اختبار آخر بالفريق نفسه" : "Play again with this party"}</Button>}
     </div>
   );

@@ -110,10 +110,10 @@ describe('complete branch tree answers', () => {
     expect(onCheck).toHaveBeenCalledOnce();
     unmount();
     render(<BranchFeedback question={question} typed={partial} names={{}} juz={null} ar={false} />);
-    expect(screen.getAllByText('No answer')).toHaveLength(4);
+    expect(screen.getAllByText('No answer')).toHaveLength(2);
     expect(screen.getAllByText('Nothing typed')).toHaveLength(2);
-    const rows = within(screen.getByRole('list', { name: 'Leaf corrections' })).getAllByRole('listitem');
-    expect(rows.map(row => row.dataset.correction)).toEqual(['incorrect', 'incorrect', 'correct', 'correct']);
+    const nodes = [...within(screen.getByRole('region', { name: 'Answer tree' })).getAllByText(/Correct|No answer/)].map(verdict => verdict.closest<HTMLElement>('[data-answer]')!.dataset.answer);
+    expect(nodes).toEqual(['correct', 'correct', 'incorrect', 'incorrect']);
   });
 
   it('checks a completed tree through form submission', () => {
@@ -126,8 +126,8 @@ describe('complete branch tree answers', () => {
   it('shows corrections and each leaf reference as plain text', () => {
     render(<BranchFeedback question={question} typed={[typed[0], typed[1], typed[3], 'wrong']} names={{ 52: 'الطور' }} juz={null} ar={false} />);
     expect(screen.getByRole('region', { name: 'Answer tree' })).toBeTruthy();
-    expect(screen.getAllByText('Correct', { exact: true })).toHaveLength(6);
-    expect(screen.getAllByText('Wrong at word 1')).toHaveLength(2);
+    expect(screen.getAllByText('Correct', { exact: true })).toHaveLength(3);
+    expect(screen.getAllByText('Wrong at word 1')).toHaveLength(1);
     expect(screen.getByText('wrong').tagName).toBe('DEL');
     expect(screen.getAllByText('بِأَكْوَابٍ').length).toBeGreaterThan(0);
     expect(screen.getAllByText('إِذَا رَأَيْتَهُمْ').length).toBeGreaterThan(0);
