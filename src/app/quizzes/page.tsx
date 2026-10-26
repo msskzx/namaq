@@ -14,6 +14,7 @@ import {
   faCircleXmark,
   faPaperPlane,
   faRotateLeft,
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import styles from "@/components/common/PaperPage.module.css";
 import NumberInput from "@/components/common/NumberInput";
@@ -31,7 +32,10 @@ import { num } from "@/lib/quran/arabicNumber";
 import type { BranchAnswer, BranchQuestion } from "@/lib/quiz/branchQuestions";
 import { parseJuzRange } from "@/lib/quran/juz";
 import type { Branch, Variant } from "@/lib/quran/branches";
-import { BranchFeedback, BranchInputs, BranchPreview, branchesCorrect, branchPoints, emptyBranchAnswers } from "./BranchAnswers";
+import { BranchFeedback, BranchInputs, BranchPreview } from "./BranchAnswers";
+import { LEAF_LEVELS, TOPIC_GROUPS, TOPIC_LABELS } from "./labels";
+import PersonPicker from "./PersonPicker";
+import { branchesCorrect, emptyBranchAnswers, questionPoints } from "@/lib/quiz/score";
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import { useHideFooter } from '@/components/common/AppChrome';
 
@@ -50,26 +54,6 @@ interface QuizQuestionView {
   correctAnswer: string;
   evidence: { reference: QuizReference | null };
 }
-
-const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
-  PEOPLE: { en: "People", ar: "أشخاص" },
-  BATTLES: { en: "Battles", ar: "معارك" },
-  RELATIONSHIPS: { en: "Relationships", ar: "علاقات" },
-  AYAT: { en: "Revealed about whom", ar: "في من نزلت" },
-  EVENTS: { en: "Events", ar: "أحداث" },
-  PERSON_CIRCLE: { en: "A person's circle", ar: "دائرة شخص" },
-  BRANCHES: { en: "Shared openings", ar: "فواتح الآيات" },
-};
-
-const TOPIC_GROUPS: { en: string; ar: string; topics: QuizTopic[] }[] = [
-  { en: "Quran", ar: "القرآن", topics: ["BRANCHES", "AYAT"] },
-  { en: "Seerah and biographies", ar: "السيرة والتراجم", topics: ["PEOPLE", "BATTLES", "RELATIONSHIPS", "EVENTS", "PERSON_CIRCLE"] },
-];
-
-const LEAF_LEVELS: Record<number, { en: string; ar: string }> = {
-  3: { en: "easy", ar: "سهل" },
-  6: { en: "hard", ar: "صعب" },
-};
 
 function AskedAyah({ ayah }: { ayah: { text: string; reference: string } }) {
   return (
@@ -116,8 +100,6 @@ export default function QuizzesPage() {
   const [typed, setTyped] = useState<Record<number, string[]>>({});
   const [submitted, setSubmitted] = useState(false);
   const [referenceIndex, setReferenceIndex] = useState<number | null>(null);
-  const [personInput, setPersonInput] = useState(person);
-  const [personSuggestions, setPersonSuggestions] = useState<{ slug: string; name: string; nameTransliterated: string | null }[]>([]);
 
   useEffect(() => {
     setCurrent(0);
@@ -150,10 +132,7 @@ export default function QuizzesPage() {
   }, [pathname, router]);
 
   const questions = useMemo(() => data?.questions ?? [], [data]);
-  // A tree question scores one point per asked leaf, any other question one point.
-  const points = useMemo(() => questions.map((question, index) => question.tree
-    ? branchPoints(question, typed[index] ?? emptyBranchAnswers(question))
-    : { earned: Number(answers[index] === question.correctAnswer), total: 1 }), [questions, answers, typed]);
+  const points = useMemo(() => questions.map((question, index) => questionPoints(question, question.tree ? typed[index] : answers[index])), [questions, answers, typed]);
   const score = points.reduce((sum, point) => sum + point.earned, 0);
   const total = points.reduce((sum, point) => sum + point.total, 0);
   const percent = total === 0 ? 0 : Math.round((score / total) * 100);
@@ -181,17 +160,11 @@ export default function QuizzesPage() {
       length: undefined,
       person: value === "PERSON_CIRCLE" || topics.includes("PERSON_CIRCLE") ? person || undefined : undefined,
     });
-    const optionValue = (suggestion: (typeof personSuggestions)[number]) =>
-      personSuggestions.filter((other) => other.name === suggestion.name).length > 1 ? `${suggestion.name} (${suggestion.nameTransliterated ?? suggestion.slug})` : suggestion.name;
-    const commitPerson = () => {
-      const typedName = personInput.trim();
-      const match = personSuggestions.find((suggestion) => [optionValue(suggestion), suggestion.slug].includes(typedName));
-      setParam({ person: match?.slug ?? (typedName || undefined), length: undefined });
-    };
     return (
       <div className={styles.page}>
         <div className="mx-auto max-w-3xl px-4 py-8" dir={ar ? "rtl" : "ltr"}>
-          <header className={styles.heading}><p className={styles.eyebrow}>{ar ? "نمق · اختبر معرفتك" : "Namaq · Test your knowledge"}</p><h1>{ar ? "الاختبارات" : "Quizzes"}</h1><p>{ar ? "اختر المواضيع وعدد الأسئلة، ثم ابدأ الاختبار." : "Choose your topics and question count, then start a quiz."}</p></header>
+          <header className={styles.heading}><p className={styles.eyebrow}>{ar ? "نمق · اختبر معرفتك" : "Namaq · Test your knowledge"}</p><h1>{ar ? "الاختبارات" : "Quizzes"}</h1><p>{ar ? "اختر المواضيع وعدد الأسئلة، ثم ابدأ الاختبار." : "Choose your topics and question count, then start a quiz."}</p>
+            <Button className="mt-3" href="/quizzes/party"><FontAwesomeIcon icon={faUsers} />{ar ? "اختبار جماعي مع غيرك" : "Party quiz with others"}</Button></header>
           <fieldset className={`mb-6 min-w-0 ${styles.panel}`}>
             <legend className="mb-2 text-sm font-semibold text-[var(--home-ink)]">{ar ? "المواضيع، اختر واحدًا أو أكثر" : "Topics, choose one or more"}</legend>
             {TOPIC_GROUPS.map((group) => (
@@ -206,33 +179,7 @@ export default function QuizzesPage() {
                 </div>
               </div>
             ))}
-            {topics.includes("PERSON_CIRCLE") && (
-              <label className="mt-4 block">
-                <span className="mb-1 block text-sm font-semibold text-[var(--home-ink)]">{ar ? "الشخص" : "Person"}</span>
-                <input
-                  type="text"
-                  value={personInput}
-                  onChange={async (event) => {
-                    const value = event.target.value;
-                    setPersonInput(value);
-                    if (!value.trim()) {
-                      setPersonSuggestions([]);
-                      return;
-                    }
-                    const response = await fetch(`/api/people/suggest?q=${encodeURIComponent(value)}`);
-                    if (response.ok) setPersonSuggestions((await response.json()).data ?? []);
-                  }}
-                  onBlur={commitPerson}
-                  list="quiz-people"
-                  placeholder={ar ? "ابحث عن شخص" : "Search for a person"}
-                  className="w-full rounded border border-[var(--home-rule)] bg-transparent px-3 py-2 text-[var(--home-ink)]"
-                />
-                <datalist id="quiz-people">
-                  {personSuggestions.map((suggestion) => <option key={suggestion.slug} value={optionValue(suggestion)}>{suggestion.nameTransliterated ?? suggestion.name}</option>)}
-                </datalist>
-                <span className="mt-1 block text-xs text-[var(--home-muted)]">{ar ? "تُضاف أسئلة هذا الشخص إلى المواضيع الأخرى المختارة." : "This person's questions are added to the other topics you chose."}</span>
-              </label>
-            )}
+            {topics.includes("PERSON_CIRCLE") && <PersonPicker person={person} ar={ar} onCommit={(slug) => setParam({ person: slug, length: undefined })} />}
           </fieldset>
           {hasBranches && (
             <fieldset className={`mb-6 min-w-0 ${styles.panel}`}>

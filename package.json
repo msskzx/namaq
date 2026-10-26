@@ -59,6 +59,7 @@
     "quiz:review": "tsx scripts/quiz/reviewQuestion.ts",
     "quiz:validate": "tsx scripts/quiz/validateQuestions.ts",
     "quiz:project": "tsx scripts/quiz/projectQuestions.ts",
+    "party:dev": "npm --prefix party run dev",
     "sync:all": "tsx scripts/sync/syncAndGenerate.ts"
   },
   "dependencies": {
@@ -86,7 +87,8 @@
     "react-dom": "^19.0.0",
     "react-force-graph-2d": "^1.28.0",
     "react-intersection-observer": "^9.16.0",
-    "swr": "^2.3.4"
+    "swr": "^2.3.4",
+    "uqr": "^0.1.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
