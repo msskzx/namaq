@@ -30,6 +30,13 @@ export const emptyBranchAnswers = (question: Question) => question.tree ? branch
 export const branchesCorrect = (question: Question, typed: string[]) => Boolean(question.tree &&
   typed.length === branchNodes(question.tree).length && typed.length > 0 && matchTreeAnswers(question.tree, typed, given(question)).every(hit => hit?.correct));
 
+export function branchPoints(question: Question, typed: string[]) {
+  if (!question.tree) return { earned: 0, total: 0 };
+  const matches = matchTreeAnswers(question.tree, typed, given(question));
+  const asked = branchNodes(question.tree).flatMap((_, index) => isAsked(question, index) ? [index] : []);
+  return { earned: asked.filter(index => matches[index]?.correct).length, total: asked.length };
+}
+
 function nodeOffsets(tree: Branch) {
   const offsets = new Map<Branch, number>();
   const parents = new Map<Branch, Branch>();
