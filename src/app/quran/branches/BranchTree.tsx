@@ -12,7 +12,7 @@ import { Fan, PathBox, PathButton, PathProvider, Stub, useOuterPaths, usePaths, 
 import type { Surrounding } from '@/lib/quran/ayahContext';
 import { anchorOf, NeighbourBox, SurroundToggle, targetStyle, useSurrounding, type Around } from './Surroundings';
 
-type Props = { view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
+type Props = { view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; nodeTone?: (index: number) => string | undefined; label?: string; header?: React.ReactNode; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
 type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header' | 'surround'> & { around?: Around; anchors?: string; node: Branch; parent?: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
 
 const LIT = 'border-[var(--home-accent)] text-[var(--home-ink)]';
@@ -66,20 +66,21 @@ export function Marked({ node, ayahKeys, subject, siblings, names, children, ski
 
 const nodeId = (index: number) => `n${index}`;
 
-function Node({ node, parent, path, names, tags, lead, juz, renderNode, indices, showSpellings, view, around, anchors }: NodeProps) {
+function Node({ node, parent, path, names, tags, lead, juz, renderNode, nodeTone, indices, showSpellings, view, around, anchors }: NodeProps) {
   const root = path.length === 0;
   const words = [...path, ...node.words];
   const shownWords = node.words.slice(root ? lead : 0);
   const id = nodeId(indices.get(node)!);
   const subject = (root ? shownWords : node.words).join(' ');
+  const tone = root ? undefined : nodeTone?.(indices.get(node)!);
   const nexts: FanEntry[] = !around ? [] : node.ayat.flatMap(key => {
     const neighbour = around.data.after[around.ends[key]];
     return neighbour ? [{ key: `a${key}`, keys: [key], item: <NeighbourBox neighbour={neighbour} of={key} side="after" around={around} opens={id} /> }] : [];
   });
-  const entries: FanEntry[] = [...node.children.map((child, i) => ({ key: `n${i}`, keys: keys(child), item: <Node node={child} parent={node} path={words} names={names} tags={tags} lead={lead} juz={juz} renderNode={renderNode} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={anchors} /> })), ...nexts];
+  const entries: FanEntry[] = [...node.children.map((child, i) => ({ key: `n${i}`, keys: keys(child), item: <Node node={child} parent={node} path={words} names={names} tags={tags} lead={lead} juz={juz} renderNode={renderNode} nodeTone={nodeTone} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={anchors} /> })), ...nexts];
   return (
     <div className="flex items-center">
-      {(!root || shownWords.length > 0 || node.ayat.length > 0) && <PathBox id={id} keys={keys(node)} lit={LIT} tone={root ? 'border-[var(--home-accent)]' : 'border-[var(--home-rule)]'} className={`shrink-0 rounded border px-3 py-1.5 ${node.children.length === 0 ? 'max-w-sm' : 'max-w-xs'} ${root ? 'bg-[var(--home-paper-deep)] text-xl' : 'bg-[var(--home-paper)] text-lg'}`}>
+      {(!root || shownWords.length > 0 || node.ayat.length > 0) && <PathBox id={id} keys={keys(node)} lit={LIT} tone={root ? 'border-[var(--home-accent)]' : tone ?? 'border-[var(--home-rule)]'} className={`shrink-0 rounded ${tone ? 'border-2' : 'border'} px-3 py-1.5 ${node.children.length === 0 ? 'max-w-sm' : 'max-w-xs'} ${root ? 'bg-[var(--home-paper-deep)] text-xl' : 'bg-[var(--home-paper)] text-lg'}`}>
         {anchors && node.ayat.map(key => <span key={key} data-anchor id={anchorOf(anchors, key)} />)}
         {renderNode && !root ? renderNode(node, indices.get(node)!, tags) : <Marked node={node} ayahKeys={keys(node)} subject={subject} siblings={node.children.length === 0 && parent ? keys(parent) : undefined} names={names} offset={path.length} skip={root ? lead : 0} enabled={showSpellings}
           references={node.ayat.length > 0 && <AyahRefs keys={node.ayat} names={names} tags={tags} />}
@@ -106,7 +107,7 @@ function BeforeFan({ ayahKeys, around, opens }: { ayahKeys: string[]; around?: A
 }
 
 // docs/plans/quran-shared-openings.md
-export default function BranchTree({ tree, names, variants = [], showSpellings = true, juz = null, renderNode, label = 'شجرة الفواتح', header, view: given, surround }: Props) {
+export default function BranchTree({ tree, names, variants = [], showSpellings = true, juz = null, renderNode, nodeTone, label = 'شجرة الفواتح', header, view: given, surround }: Props) {
   const id = useId();
   const [on, setOn] = useState(() => (surround?.sync && typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('c') === '1' : surround?.on ?? false));
   const view = surround?.sync && given ? { ...given, context: on } : given;
@@ -147,7 +148,7 @@ export default function BranchTree({ tree, names, variants = [], showSpellings =
             </> }))} />
             <Stub keys={all} />
           </> : <BeforeFan ayahKeys={all} around={around} opens={rootId} />}
-          <Node node={tree} path={[]} names={names} tags={tags} lead={variants.length > 0 ? 1 : 0} juz={juz ?? undefined} renderNode={renderNode} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={surround ? id : undefined} />
+          <Node node={tree} path={[]} names={names} tags={tags} lead={variants.length > 0 ? 1 : 0} juz={juz ?? undefined} renderNode={renderNode} nodeTone={nodeTone} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={surround ? id : undefined} />
         </div>
       </div>
     </PathProvider>
