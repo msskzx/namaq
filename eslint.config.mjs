@@ -16,6 +16,8 @@ const eslintConfig = [
       "src/generated/**/*",
       "node_modules/**/*",
       ".next/**/*",
+      "party/node_modules/**/*",
+      "party/.wrangler/**/*",
     ],
   },
 ];

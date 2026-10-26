@@ -1,0 +1,14 @@
+name = "namaq-party"
+main = "src/index.ts"
+compatibility_date = "2025-09-01"
+
+[vars]
+APP_URL = "https://namaq.vercel.app"
+
+[[durable_objects.bindings]]
+name = "PARTY"
+class_name = "Party"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Party"]

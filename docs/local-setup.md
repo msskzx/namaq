@@ -63,6 +63,14 @@ npm run graph:layout -- --apply
 npm run dev
 ```
 
+The party quiz needs its Cloudflare Worker running beside the app
+([ADR 0031](adr/0031-a-live-party-runs-in-one-durable-object.md)). Run
+`npm install --prefix party` once, then `npm run party:dev` in a second
+terminal. It listens on http://localhost:8787, where the app looks when
+`NEXT_PUBLIC_PARTY_URL` is unset. It builds each party's questions with the live
+site's `/api/quiz`. To use your local app instead, run
+`npm run party:dev -- --var APP_URL:http://localhost:3000`.
+
 Open [http://localhost:3000](http://localhost:3000). Use `npm run build` for a production build and `npx tsc --noEmit` for a TypeScript check.
 
 The graph has no seed files of its own; every Person node and relation comes

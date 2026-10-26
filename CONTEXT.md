@@ -432,3 +432,50 @@ smaller groups of ayat; rootless particles match by wording alone.
 A group of ayat cut from an opening's tree for browsing together. An opening may
 contain several entries; a searchable shared phrase need not be one entry.
 _Avoid_: Opening (the broader group), search result (a shared phrase)
+
+### Party quiz
+
+**Party**:
+A quiz that several players take together, each on their own device, answering
+the same questions in the same order. A party lasts from its creation until its
+final leaderboard, and Namaq keeps nothing about it afterwards.
+_Avoid_: Room, lobby (the lobby is one stage of a party), multiplayer quiz
+
+**Party code**:
+The number that names a party while it is open. The host shares it as the
+number, a link or a QR code, and players join with it.
+_Avoid_: Room code, PIN
+
+**Host**:
+The player who created the party, or whoever took over when that player left.
+The host also plays. Only the host changes the party's settings, removes a
+player in the lobby, starts the party and moves on to the next question.
+_Avoid_: Admin, owner
+
+**Player**:
+Anyone in a party, the host included, known only by the name they typed. Names
+are unique within a party. A device that drops out rejoins as the same player
+with its score.
+_Avoid_: User (players have no account), guest
+
+**Lobby**:
+The stage before the host starts the party. Players join, see the settings the
+host chooses without being able to change them, and mark themselves ready. No
+new player can join once the host starts the party.
+
+**Ready**:
+A player's signal in the lobby that they are waiting to start. The host can
+start before everyone is ready, after confirming.
+
+**Reveal**:
+The moment a question's correct answer and each player's result are shown to
+the whole party. It happens when every player has submitted or the question's
+timer runs out, never earlier. A player who has not submitted by then scores
+nothing on that question.
+_Avoid_: Result (one player's outcome on a question)
+
+**Leaderboard**:
+The players ranked by total score, shown after every reveal and at the end of
+the party. A party scores answers as a quiz taken alone does. A shared-openings
+question earns one point per correct leaf the player was asked to type, and any
+other question earns one point. There is no speed bonus.

@@ -7,7 +7,7 @@ import Button from "@/components/common/Button";
 import BranchTree, { AyahRefs, Marked } from "@/app/quran/branches/BranchTree";
 import { PathButton } from "@/app/quran/branches/Paths";
 import { askedNodes, branchNodes, givenAnswer, LEAF_WORDS, matchTreeAnswers, rightWords, spoken } from "@/lib/quiz/branchAnswers";
-import type { BranchAnswer } from "@/lib/quiz/branchQuestions";
+import { emptyBranchAnswers, givenNodes, isAsked, type ScoredQuestion } from "@/lib/quiz/score";
 import { branchesHref, keys, type Branch, type Variant } from "@/lib/quran/branches";
 import type { JuzRange } from "@/lib/quran/juz";
 import { num } from "@/lib/quran/arabicNumber";
@@ -19,23 +19,8 @@ const differs = (node: Branch) => {
   return (forms[0] ?? []).some((_, i) => new Set(forms.map(words => words[i])).size > 1);
 };
 
-type Question = { phrase?: string; partition?: string; branches?: BranchAnswer[]; tree?: Branch; variants?: Variant[]; asked?: number[] };
+type Question = ScoredQuestion;
 type Names = Record<number, string>;
-
-const isAsked = (question: Question, index: number) => !question.asked || question.asked.includes(index);
-const given = (question: Question) => new Set(question.tree ? branchNodes(question.tree).flatMap((_, index) => isAsked(question, index) ? [] : [index]) : []);
-
-export const emptyBranchAnswers = (question: Question) => question.tree ? branchNodes(question.tree).map((node, index) => isAsked(question, index) ? "" : givenAnswer(node)) : [];
-
-export const branchesCorrect = (question: Question, typed: string[]) => Boolean(question.tree &&
-  typed.length === branchNodes(question.tree).length && typed.length > 0 && matchTreeAnswers(question.tree, typed, given(question)).every(hit => hit?.correct));
-
-export function branchPoints(question: Question, typed: string[]) {
-  if (!question.tree) return { earned: 0, total: 0 };
-  const matches = matchTreeAnswers(question.tree, typed, given(question));
-  const asked = branchNodes(question.tree).flatMap((_, index) => isAsked(question, index) ? [index] : []);
-  return { earned: asked.filter(index => matches[index]?.correct).length, total: asked.length };
-}
 
 function nodeOffsets(tree: Branch) {
   const offsets = new Map<Branch, number>();
@@ -100,11 +85,10 @@ const verdict = (row: Correction, ar: boolean) => {
 
 export function BranchFeedback({ question, typed, names, juz, ar }: { question: Question; typed: string[]; names: Names; juz: JuzRange | null; ar: boolean }) {
   if (!question.tree) return null;
-  const matches = matchTreeAnswers(question.tree, typed, given(question));
+  const matches = matchTreeAnswers(question.tree, typed, givenNodes(question));
   const { offsets, parents } = nodeOffsets(question.tree);
   const rows = corrections(question, typed, matches);
   const byIndex = new Map(rows.map(row => [row.index, row]));
-  const tags = Object.fromEntries((question.variants ?? []).flatMap(variant => variant.keys.map(key => [key, variant])));
   return (
     <div className="flex flex-col gap-3" dir="rtl">
       <BranchTree tree={question.tree} variants={question.variants} names={names} label={ar ? "شجرة الإجابة" : "Answer tree"}
@@ -115,30 +99,14 @@ export function BranchFeedback({ question, typed, names, juz, ar }: { question: 
           const row = byIndex.get(index);
           const marked = (text: React.ReactNode, references: React.ReactNode) => <Marked node={answer} ayahKeys={keys(answer)} {...context} names={names} offset={offsets.get(answer)} before={<PathButton id={`n${index}`} keys={keys(node)} subject={context.subject} />} references={references}>{text}</Marked>;
           if (!row) return marked(<span className="font-arabic text-lg leading-loose">{answer.words.join(" ")}</span>, answer.ayat.length > 0 && <AyahRefs keys={answer.ayat} names={names} tags={tags} />);
-          // The full leaf is in the correction list, so the tree keeps it short enough for a phone.
-          const short = answer.children.length === 0 && answer.words.length > LEAF_WORDS;
           return (
-            <div className="flex items-start gap-2" data-answer={row.correct ? "correct" : "incorrect"}>
-              <span className="mt-2"><Badge row={row} ar={ar} /></span>
-              <span className="sr-only">{verdict(row, ar)}</span>
-              <div className="flex flex-col">{marked(<span className="font-arabic text-lg leading-loose">{answer.words.slice(0, short ? LEAF_WORDS : undefined).join(" ")}{short ? " …" : ""}</span>, null)}</div>
+            <div className="flex max-w-60 flex-col gap-1" data-answer={row.correct ? "correct" : "incorrect"}>
+              <p className="flex items-center gap-2 text-sm font-semibold text-[var(--home-ink)]"><Badge row={row} ar={ar} />{verdict(row, ar)}</p>
+              {marked(<NeededWords words={answer.words} needed={row.needed} />, answer.ayat.length > 0 && <AyahRefs keys={answer.ayat} names={names} tags={tags} />)}
+              {!row.correct && <p className="text-sm"><span className="text-[var(--home-muted)]">{ar ? "كتبتَ: " : "You typed: "}</span><TypedWords row={row} ar={ar} /></p>}
             </div>
           );
         }} />
-      <ol className="flex flex-col gap-2" aria-label={ar ? "تصحيح الأطراف" : "Leaf corrections"}>
-        {[...rows].sort((a, b) => Number(a.correct) - Number(b.correct) || a.number - b.number).map(row => (
-          <li key={row.index} data-correction={row.correct ? "correct" : "incorrect"} className="rounded-md border border-[var(--home-rule)] bg-[var(--home-paper-deep)] px-3 py-2">
-            <p className="mb-1 flex items-center gap-2 text-sm font-semibold text-[var(--home-ink)]"><Badge row={row} ar={ar} /><span className="sr-only">{ar ? `الطرف ${num(row.number)}: ` : `Leaf ${row.number}: `}</span>{verdict(row, ar)}</p>
-            <dl className="grid grid-cols-[auto_1fr] items-baseline gap-x-3 gap-y-1">
-              <dt className="text-sm text-[var(--home-muted)]">{ar ? "كتبتَ" : "You typed"}</dt>
-              <dd><TypedWords row={row} ar={ar} /></dd>
-              <dt className="text-sm text-[var(--home-muted)]">{row.correct ? (ar ? "الطرف" : "Leaf") : (ar ? "الصواب" : "Answer")}</dt>
-              <dd><NeededWords words={row.node.words} needed={row.needed} /></dd>
-            </dl>
-            {row.node.ayat.length > 0 && <AyahRefs keys={row.node.ayat} names={names} tags={tags} />}
-          </li>
-        ))}
-      </ol>
       {question.phrase && (
         <Button className="self-start" size="sm" variant="outline" href={branchesHref(question.phrase, juz ?? undefined, { partition: question.partition })}>
           <FontAwesomeIcon icon={faCodeBranch} />
