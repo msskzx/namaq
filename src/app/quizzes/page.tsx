@@ -329,7 +329,7 @@ export default function QuizzesPage() {
                 const correct = given === question.correctAnswer;
                 return (
                   <li key={question.key} className={styles.panel}>
-                    <p className="mb-3 font-semibold text-[var(--home-ink)]">{question.promptArabic}</p>
+                    <p className={`mb-3 text-[var(--home-ink)] ${question.tree ? "text-base leading-relaxed" : "font-semibold"}`}>{question.promptArabic}</p>
                     {question.branches && <p className="mb-2 text-sm text-[var(--home-muted)]">{ar ? `${num(points[index].earned)} من ${num(points[index].total)} أطراف` : `${points[index].earned} of ${points[index].total} leaves`}</p>}
                     {question.ayah && <AskedAyah ayah={question.ayah} />}
                     {question.branches ? <BranchFeedback question={question} names={data?.surahNames ?? {}} juz={juz} typed={typed[index] ?? emptyBranchAnswers(question)} ar={ar} /> : <><div className="mb-2 flex items-center gap-2">
@@ -376,7 +376,7 @@ export default function QuizzesPage() {
               })}
             </div>
             <div className={styles.panel}>
-              <p dir="rtl" lang="ar" className="mb-4 text-xl leading-loose font-semibold">{questions[current].promptArabic}</p>
+              <p dir="rtl" lang="ar" className={`mb-4 ${questions[current].tree ? "text-base leading-relaxed" : "text-xl leading-loose font-semibold"}`}>{questions[current].promptArabic}</p>
               {questions[current].ayah && <AskedAyah ayah={questions[current].ayah} />}
               {questions[current].branches ? (
                 answers[current] !== undefined ? (
