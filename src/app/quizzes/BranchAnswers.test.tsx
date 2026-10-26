@@ -3,7 +3,8 @@ import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { branch, variants, type BranchAyah } from '@/lib/quran/branches';
-import { BranchFeedback, BranchInputs, branchesCorrect, emptyBranchAnswers } from './BranchAnswers';
+import { BranchFeedback, BranchInputs } from './BranchAnswers';
+import { branchesCorrect, emptyBranchAnswers } from '@/lib/quiz/score';
 
 const tree = {
   words: ['يَطُوفُ', 'عَلَيْهِمْ'], ayat: [], children: [

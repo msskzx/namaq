@@ -25,9 +25,11 @@ host plays like everyone else and also holds the party's controls.
   player who missed the ready button does not hold up the rest.
 - No one joins after the party starts.
 - A device that drops out rejoins as the same player with its score.
-- When the host leaves, the player who joined next after them becomes host.
+- When the host leaves, the player who joined next after them becomes host,
+  skipping players whose devices are away. A host whose device drops out for
+  30 seconds is replaced the same way.
 - Names are unique within a party, and the host can remove a player in the
-  lobby.
+  lobby. A removed device cannot join that party again.
 
 ## Considered options
 

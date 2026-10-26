@@ -7,7 +7,7 @@ import Button from "@/components/common/Button";
 import BranchTree, { AyahRefs, Marked } from "@/app/quran/branches/BranchTree";
 import { PathButton } from "@/app/quran/branches/Paths";
 import { askedNodes, branchNodes, givenAnswer, LEAF_WORDS, matchTreeAnswers, rightWords, spoken } from "@/lib/quiz/branchAnswers";
-import type { BranchAnswer } from "@/lib/quiz/branchQuestions";
+import { emptyBranchAnswers, givenNodes, isAsked, type ScoredQuestion } from "@/lib/quiz/score";
 import { branchesHref, keys, type Branch, type Variant } from "@/lib/quran/branches";
 import type { JuzRange } from "@/lib/quran/juz";
 import { num } from "@/lib/quran/arabicNumber";
@@ -19,23 +19,8 @@ const differs = (node: Branch) => {
   return (forms[0] ?? []).some((_, i) => new Set(forms.map(words => words[i])).size > 1);
 };
 
-type Question = { phrase?: string; partition?: string; branches?: BranchAnswer[]; tree?: Branch; variants?: Variant[]; asked?: number[] };
+type Question = ScoredQuestion;
 type Names = Record<number, string>;
-
-const isAsked = (question: Question, index: number) => !question.asked || question.asked.includes(index);
-const given = (question: Question) => new Set(question.tree ? branchNodes(question.tree).flatMap((_, index) => isAsked(question, index) ? [] : [index]) : []);
-
-export const emptyBranchAnswers = (question: Question) => question.tree ? branchNodes(question.tree).map((node, index) => isAsked(question, index) ? "" : givenAnswer(node)) : [];
-
-export const branchesCorrect = (question: Question, typed: string[]) => Boolean(question.tree &&
-  typed.length === branchNodes(question.tree).length && typed.length > 0 && matchTreeAnswers(question.tree, typed, given(question)).every(hit => hit?.correct));
-
-export function branchPoints(question: Question, typed: string[]) {
-  if (!question.tree) return { earned: 0, total: 0 };
-  const matches = matchTreeAnswers(question.tree, typed, given(question));
-  const asked = branchNodes(question.tree).flatMap((_, index) => isAsked(question, index) ? [index] : []);
-  return { earned: asked.filter(index => matches[index]?.correct).length, total: asked.length };
-}
 
 function nodeOffsets(tree: Branch) {
   const offsets = new Map<Branch, number>();
@@ -100,7 +85,7 @@ const verdict = (row: Correction, ar: boolean) => {
 
 export function BranchFeedback({ question, typed, names, juz, ar }: { question: Question; typed: string[]; names: Names; juz: JuzRange | null; ar: boolean }) {
   if (!question.tree) return null;
-  const matches = matchTreeAnswers(question.tree, typed, given(question));
+  const matches = matchTreeAnswers(question.tree, typed, givenNodes(question));
   const { offsets, parents } = nodeOffsets(question.tree);
   const rows = corrections(question, typed, matches);
   const byIndex = new Map(rows.map(row => [row.index, row]));

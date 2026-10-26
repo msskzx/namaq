@@ -11,7 +11,8 @@ cannot send a change to a device on its own. Each party therefore gets one
 Cloudflare Durable Object. It holds the party in memory, keeps a WebSocket open
 to each device, applies every action to the party's state and sends the new
 state to every device. Nothing writes the party to PostgreSQL, and the object
-discards it after the final leaderboard.
+discards it two hours after the last action, which leaves the host time to
+play again with the same players.
 
 The rules of a party are one pure function from state and action to new state,
 kept in this repo and covered by tests. The Durable Object only receives

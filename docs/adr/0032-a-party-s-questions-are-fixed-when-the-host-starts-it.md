@@ -32,6 +32,8 @@ network delay.
 
 ## Consequences
 
-The object sends a question's answer to devices only at its reveal. The lobby
+The object sends a choice question's correct answer to devices only at its
+reveal. A shared-openings question carries its whole tree from the start, as in
+a quiz taken alone, because the answer inputs are drawn on that tree. The lobby
 settings are the same settings `/api/quiz` accepts today, so a party can
 contain nothing a quiz taken alone cannot.
