@@ -31,8 +31,9 @@ import { num } from "@/lib/quran/arabicNumber";
 import type { BranchAnswer, BranchQuestion } from "@/lib/quiz/branchQuestions";
 import { parseJuzRange } from "@/lib/quran/juz";
 import type { Branch, Variant } from "@/lib/quran/branches";
-import { BranchFeedback, BranchInputs, BranchPreview, branchesCorrect, emptyBranchAnswers } from "./BranchAnswers";
+import { BranchFeedback, BranchInputs, BranchPreview, branchesCorrect, branchPoints, emptyBranchAnswers } from "./BranchAnswers";
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
+import { useHideFooter } from '@/components/common/AppChrome';
 
 interface QuizQuestionView {
   key: string;
@@ -108,6 +109,7 @@ export default function QuizzesPage() {
     revalidateOnReconnect: false,
     revalidateIfStale: false,
   });
+  useHideFooter(started);
   const [chosenLength, setChosenLength] = useState(5);
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
@@ -148,9 +150,14 @@ export default function QuizzesPage() {
   }, [pathname, router]);
 
   const questions = useMemo(() => data?.questions ?? [], [data]);
-  const score = useMemo(() => questions.filter((question, index) => answers[index] === question.correctAnswer).length, [questions, answers]);
-  const percent = questions.length === 0 ? 0 : Math.round((score / questions.length) * 100);
-  const passed = questions.length > 0 && score / questions.length >= 0.5;
+  // A tree question scores one point per asked leaf, any other question one point.
+  const points = useMemo(() => questions.map((question, index) => question.tree
+    ? branchPoints(question, typed[index] ?? emptyBranchAnswers(question))
+    : { earned: Number(answers[index] === question.correctAnswer), total: 1 }), [questions, answers, typed]);
+  const score = points.reduce((sum, point) => sum + point.earned, 0);
+  const total = points.reduce((sum, point) => sum + point.total, 0);
+  const percent = total === 0 ? 0 : Math.round((score / total) * 100);
+  const passed = total > 0 && score / total >= 0.5;
   const questionState = (index: number) => {
     const given = answers[index];
     if (given === undefined) return 'unanswered' as const;
@@ -263,8 +270,8 @@ export default function QuizzesPage() {
               <BranchPreview leaves={leaves} ar={ar} />
               <dl className="mt-4 space-y-2 text-sm leading-relaxed text-[var(--home-ink)]">
                 <div><dt className="inline font-semibold">{ar ? "التصحيح: " : "Grading: "}</dt><dd className="inline">{ar
-                  ? "تكفي من كل طرف كلمتاه الأوليان، ويجب أن تصح كل كلمة تكتبها وبترتيبها. اكتب بالإملاء المعتاد لا برسم المصحف، والهمزة على أي كرسي. يُحسب السؤال صحيحًا إذا صحت كل الأطراف المطلوبة، والأطراف المتشابهة في الشكل تقبل أي ترتيب."
-                  : "A leaf's first two words are enough, and every word you type must be right and in order. Type ordinary spelling, not the mushaf script; a hamza may sit on any seat. A question is correct when every asked leaf is correct, and leaves of the same shape can go in either order."}</dd></div>
+                  ? "تكفي من كل طرف كلمتاه الأوليان، ويجب أن تصح كل كلمة تكتبها وبترتيبها. اكتب بالإملاء المعتاد لا برسم المصحف، والهمزة على أي كرسي. لكل طرف صحيح نقطة، والأطراف المتشابهة في الشكل تقبل أي ترتيب."
+                  : "A leaf's first two words are enough, and every word you type must be right and in order. Type ordinary spelling, not the mushaf script; a hamza may sit on any seat. Each correct leaf scores a point, and leaves of the same shape can go in either order."}</dd></div>
                 <div><dt className="inline font-semibold">{ar ? "الزر الملوّن: " : "Coloured button: "}</dt><dd className="inline">{ar
                   ? "يظهر بعد التحقق على عقدة تجمع آيات تختلف كلماتها في علامات الضبط، مثل «إِن» و«إِنْ» أعلاه. اضغطه لترى كل آية في سياقها والكلمات المختلفة بارزة."
                   : "After checking, it marks a node whose ayat differ in the marks of its words, like «إِن» and «إِنْ» above. Press it to see each ayah in context with the differing words highlighted."}</dd></div>
@@ -311,7 +318,7 @@ export default function QuizzesPage() {
           <div className="text-center text-[var(--home-muted)]"><p>{ar ? "لا توجد أسئلة كافية لهذا الاختيار." : "Not enough approved questions for this choice."}</p><Button className="mt-4" variant="outline" onClick={reset}><FontAwesomeIcon icon={faRotateLeft} />{ar ? "العودة للإعداد" : "Back to setup"}</Button></div>
         ) : submitted ? (
           <div>
-            <h2 className="mb-2 text-xl font-bold text-[var(--home-ink)]">{ar ? `النتيجة: ${score} من ${questions.length} (${percent}٪)` : `Score: ${score} / ${questions.length} (${percent}%)`}</h2>
+            <h2 className="mb-2 text-xl font-bold text-[var(--home-ink)]">{ar ? `النتيجة: ${score} من ${total} (${percent}٪)` : `Score: ${score} / ${total} (${percent}%)`}</h2>
             <p className={`mb-4 flex items-center gap-2 font-semibold ${passed ? 'text-green-700 dark:text-green-300' : 'text-red-600 dark:text-red-400'}`}>
               <FontAwesomeIcon icon={passed ? faCircleCheck : faCircleXmark} />
               {ar ? (passed ? 'ناجح' : 'راسب') : passed ? 'Passed' : 'Not passed'}
@@ -322,7 +329,8 @@ export default function QuizzesPage() {
                 const correct = given === question.correctAnswer;
                 return (
                   <li key={question.key} className={styles.panel}>
-                    <p className="mb-3 font-semibold text-[var(--home-ink)]">{question.promptArabic}</p>
+                    <p className={`mb-3 text-[var(--home-ink)] ${question.tree ? "text-base leading-relaxed" : "font-semibold"}`}>{question.promptArabic}</p>
+                    {question.branches && <p className="mb-2 text-sm text-[var(--home-muted)]">{ar ? `${num(points[index].earned)} من ${num(points[index].total)} أطراف` : `${points[index].earned} of ${points[index].total} leaves`}</p>}
                     {question.ayah && <AskedAyah ayah={question.ayah} />}
                     {question.branches ? <BranchFeedback question={question} names={data?.surahNames ?? {}} juz={juz} typed={typed[index] ?? emptyBranchAnswers(question)} ar={ar} /> : <><div className="mb-2 flex items-center gap-2">
                       <FontAwesomeIcon icon={correct ? faCircleCheck : faCircleXmark} className={correct ? "text-green-600" : "text-red-500"} />
@@ -368,7 +376,7 @@ export default function QuizzesPage() {
               })}
             </div>
             <div className={styles.panel}>
-              <p dir="rtl" lang="ar" className="mb-4 text-xl leading-loose font-semibold">{questions[current].promptArabic}</p>
+              <p dir="rtl" lang="ar" className={`mb-4 ${questions[current].tree ? "text-base leading-relaxed" : "text-xl leading-loose font-semibold"}`}>{questions[current].promptArabic}</p>
               {questions[current].ayah && <AskedAyah ayah={questions[current].ayah} />}
               {questions[current].branches ? (
                 answers[current] !== undefined ? (

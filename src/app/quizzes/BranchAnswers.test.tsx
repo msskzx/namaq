@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { branch, variants, type BranchAyah } from '@/lib/quran/branches';
 import { BranchFeedback, BranchInputs, branchesCorrect, emptyBranchAnswers } from './BranchAnswers';
 
@@ -109,8 +109,10 @@ describe('complete branch tree answers', () => {
     expect(onCheck).toHaveBeenCalledOnce();
     unmount();
     render(<BranchFeedback question={question} typed={partial} names={{}} juz={null} ar={false} />);
-    expect(screen.getAllByText('No answer')).toHaveLength(2);
-    expect(screen.getAllByText('Incorrect')).toHaveLength(2);
+    expect(screen.getAllByText('No answer')).toHaveLength(4);
+    expect(screen.getAllByText('Nothing typed')).toHaveLength(2);
+    const rows = within(screen.getByRole('list', { name: 'Leaf corrections' })).getAllByRole('listitem');
+    expect(rows.map(row => row.dataset.correction)).toEqual(['incorrect', 'incorrect', 'correct', 'correct']);
   });
 
   it('checks a completed tree through form submission', () => {
@@ -123,12 +125,12 @@ describe('complete branch tree answers', () => {
   it('shows corrections and each leaf reference as plain text', () => {
     render(<BranchFeedback question={question} typed={[typed[0], typed[1], typed[3], 'wrong']} names={{ 52: 'الطور' }} juz={null} ar={false} />);
     expect(screen.getByRole('region', { name: 'Answer tree' })).toBeTruthy();
-    expect(screen.getAllByText('Correct', { exact: true })).toHaveLength(3);
-    expect(screen.getByText('Incorrect')).toBeTruthy();
-    expect(screen.getByText('بِأَكْوَابٍ')).toBeTruthy();
-    expect(screen.getByText('إِذَا رَأَيْتَهُمْ')).toBeTruthy();
-    expect(screen.getByText('الطور ٢٤').closest('button, a')).toBeNull();
-    expect(screen.getByText('٥٦:١٧').closest('button, a')).toBeNull();
+    expect(screen.getAllByText('Correct', { exact: true })).toHaveLength(6);
+    expect(screen.getAllByText('Wrong at word 1')).toHaveLength(2);
+    expect(screen.getByText('wrong').tagName).toBe('DEL');
+    expect(screen.getAllByText('بِأَكْوَابٍ').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('إِذَا رَأَيْتَهُمْ').length).toBeGreaterThan(0);
+    for (const ref of [...screen.getAllByText('الطور ٢٤'), ...screen.getAllByText('٥٦:١٧')]) expect(ref.closest('button, a')).toBeNull();
     expect(document.querySelector('a[href^="/quran/read/"]')).toBeNull();
   });
 

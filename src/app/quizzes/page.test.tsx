@@ -274,8 +274,11 @@ describe('QuizzesPage', () => {
 
       expect(screen.getByRole('button', { name: 'Question 1 - incorrect' })).toBeTruthy();
       for (const words of ['فَيُنَبِّئُهُمْ', 'بِمَا عَمِلُوا', 'عَلَى كُلِّ شَيْءٍ شَهِيدٌ', 'فَيَحْلِفُونَ لَهُ']) {
-        expect(screen.getAllByText(words).length).toBeGreaterThan(0);
+        expect(document.body.textContent).toContain(words);
       }
+      fireEvent.click(screen.getByRole('button', { name: 'Question 5 - unanswered' }));
+      fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
+      expect(screen.getByText('Score: 2 / 8 (25%)')).toBeTruthy();
     } finally {
       questions[0] = original;
     }
@@ -296,11 +299,12 @@ describe('QuizzesPage', () => {
       fireEvent.click(screen.getByRole('button', { name: 'Question 1 - correct' }));
       expect(screen.queryByRole('textbox')).toBeNull();
       for (const words of ['فَيُنَبِّئُهُمْ', 'بِمَا عَمِلُوا', 'عَلَى كُلِّ شَيْءٍ شَهِيدٌ', 'فَيَحْلِفُونَ لَهُ']) {
-        expect(screen.getAllByText(words).length).toBeGreaterThan(0);
+        expect(document.body.textContent).toContain(words);
       }
       fireEvent.click(screen.getByRole('button', { name: 'Question 5 - unanswered' }));
       fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
-      expect(screen.getByText('Score: 1 / 5 (20%)')).toBeTruthy();
+      expect(screen.getByText('Score: 4 / 8 (50%)')).toBeTruthy();
+      expect(screen.getByText('4 of 4 leaves')).toBeTruthy();
     } finally {
       questions[0] = original;
     }

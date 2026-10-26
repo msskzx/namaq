@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { leadingWords, matchBranches, matchedWords, matchTreeAnswers } from './branchAnswers';
+import { leadingWords, matchBranches, matchedWords, matchTreeAnswers, rightWords } from './branchAnswers';
 
 const one = (...branches: string[][]) => branches.map((words) => [words]);
 const heavens = one(['ٱلسَّمَـٰوَٰتِ', 'وَٱلْأَرْضَ'], ['ٱلْأَرْضِ', 'جَمِيعًۭا']);
@@ -125,5 +125,15 @@ describe('leadingWords', () => {
     expect(leadingWords('لم تحرم ما احل الرب', words)).toBe(4);
     expect(leadingWords('لن تحرم', words)).toBe(0);
     expect(leadingWords('', words)).toBe(0);
+  });
+});
+
+describe('rightWords', () => {
+  const words = ['مِّنَ', 'ٱلْأَنۢبَآءِ', 'مَا', 'فِيهِ'];
+  it('counts the typed words that are right from the start', () => {
+    expect(rightWords('من الانباء ما', words)).toBe(3);
+    expect(rightWords('من الاخبار', words)).toBe(1);
+    expect(rightWords('الاخبار من', words)).toBe(0);
+    expect(rightWords('', words)).toBe(0);
   });
 });

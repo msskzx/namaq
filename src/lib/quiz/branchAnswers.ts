@@ -45,16 +45,21 @@ export function matchedWords(given: string, words: string[]): number {
 
 export const LEAF_WORDS = 2;
 
-export function leadingWords(given: string, words: string[]): number {
-  const typed = given.trim().split(/\s+/);
+/** How many of the typed words, from the start, are right for these node words. */
+export function rightWords(given: string, words: string[]): number {
+  const typed = given.trim().split(/\s+/).filter(Boolean);
   for (let count = typed.length; count > 0; count--) {
-    const matched = matchedWords(typed.slice(0, count).join(' '), words);
-    if (matched) return matched;
+    if (matchedWords(typed.slice(0, count).join(' '), words)) return count;
   }
   return 0;
 }
 
-const spoken = (words: string[]) => words.filter(word => letters(word) !== '');
+export function leadingWords(given: string, words: string[]): number {
+  const typed = given.trim().split(/\s+/).filter(Boolean);
+  return matchedWords(typed.slice(0, rightWords(given, words)).join(' '), words);
+}
+
+export const spoken = (words: string[]) => words.filter(word => letters(word) !== '');
 
 const nodeCorrect = (given: string, node: Branch) => {
   const words = spoken(node.words);
