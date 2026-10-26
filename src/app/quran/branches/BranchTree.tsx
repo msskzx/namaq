@@ -110,6 +110,8 @@ function BeforeFan({ ayahKeys, around, opens }: { ayahKeys: string[]; around?: A
 // docs/plans/quran-shared-openings.md
 export default function BranchTree({ tree, names, variants = [], showSpellings = true, juz = null, renderNode, label = 'شجرة الفواتح', header, view: given, surround }: Props) {
   const id = useId();
+  // The page is right to left, so in Arabic the switch comes first and sits on the right.
+  const ar = useLanguage().language === 'ar';
   const [on, setOn] = useState(() => (surround?.sync && typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('c') === '1' : surround?.on ?? false));
   const view = surround?.sync && given ? { ...given, context: on } : given;
   const outer = useOuterPaths();
@@ -132,8 +134,9 @@ export default function BranchTree({ tree, names, variants = [], showSpellings =
       <div tabIndex={0} role="region" aria-label={label} data-tree={id} className="overflow-auto rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] p-4 text-[var(--home-ink)]">
         {around && <style>{targetStyle(id)}</style>}
         {(header || surround) && <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-          {header}
+          {!ar && header}
           {surround && <SurroundToggle on={on} onChange={setOn} sync={surround.sync} loading={isLoading} failed={!!error} />}
+          {ar && header}
         </div>}
         <div className="flex w-max items-center">
           {variants.length > 0 ? <>

@@ -182,6 +182,13 @@ describe('BranchTree', () => {
     expect(dialog.open).toBe(true);
   });
 
+  it('puts the surrounding-ayat switch before the header so it sits on the right in Arabic', () => {
+    const { container } = render(<BranchTree tree={tree} names={{}} header={<p>header</p>} surround={{ on: false }} />);
+    const row = container.querySelector('[data-tree] > div')!;
+    expect(row.firstElementChild!.querySelector('[role="switch"]')).not.toBeNull();
+    expect(row.lastElementChild!.textContent).toBe('header');
+  });
+
   it('gives every node the same plain border until its path is lit, the root too', () => {
     const { container } = render(<BranchTree tree={tree} names={{}} />);
     const nodes = [...container.querySelectorAll('[data-node]')];
