@@ -72,6 +72,7 @@ function Countdown({ deadline, offset, ar }: { deadline: number; offset: number;
 
 function Leaderboard({ players, you, ar, final }: { players: PlayerView[]; you: string; ar: boolean; final?: boolean }) {
   const ranked = leaderboard(players);
+  const top = Math.max(1, ...ranked.map((player) => player.score));
   return (
     <section className={styles.panel} aria-label={ar ? "الترتيب" : "Leaderboard"}>
       <h2 className="mb-3 text-lg font-semibold">{final ? (ar ? "الترتيب النهائي" : "Final leaderboard") : (ar ? "الترتيب" : "Leaderboard")}</h2>
@@ -81,7 +82,13 @@ function Leaderboard({ players, you, ar, final }: { players: PlayerView[]; you: 
           return (
             <li key={player.id} data-player={player.name} className={`flex items-center gap-3 rounded-sm px-2 py-1.5 ${player.id === you ? "bg-[var(--home-paper-deep)]" : ""}`}>
               <span className={`inline-flex size-7 shrink-0 items-center justify-center rounded-full text-sm font-bold ${rank === 1 ? "bg-[var(--home-accent)] text-[var(--home-paper)]" : "border border-[var(--home-rule)] text-[var(--home-muted)]"}`}>{ar ? num(rank) : rank}</span>
-              <span className="min-w-0 flex-1 truncate text-[var(--home-ink)]">{player.name}</span>
+              <span className="flex min-w-0 flex-1 flex-col gap-1">
+                <span className="truncate text-[var(--home-ink)]">{player.name}</span>
+                <span aria-hidden data-bar className="flex h-2 overflow-hidden rounded-full bg-[var(--home-rule)]">
+                  <span className="bg-[var(--home-accent)] transition-[width] duration-700" style={{ width: `${((player.score - (final ? 0 : player.earned ?? 0)) / top) * 100}%` }} />
+                  {!final && !!player.earned && <span className="bg-[var(--home-green)] transition-[width] duration-700" style={{ width: `${(player.earned / top) * 100}%` }} />}
+                </span>
+              </span>
               {player.earned !== null && !final && <span dir="ltr" className={`text-sm tabular-nums ${player.earned ? "text-[var(--home-green)]" : "text-[var(--home-muted)]"}`}>+{ar ? num(player.earned) : player.earned}</span>}
               <span className="w-10 text-end font-semibold tabular-nums">{ar ? num(player.score) : player.score}</span>
             </li>
