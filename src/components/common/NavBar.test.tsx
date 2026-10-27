@@ -27,6 +27,14 @@ describe('NavBar shelves', () => {
     expect(within(screen.getByRole('navigation')).getByRole('button', { name: 'Switch to dark mode' })).toBeTruthy();
     expect(screen.queryByRole('button', { name: 'Settings' })).toBeNull();
   });
+  it('keeps only the menu button in menu-only mode, and the menu still opens every section', () => {
+    render(<NavBar menuOnly />);
+    const nav = screen.getByRole('navigation');
+    expect(within(nav).getAllByRole('button')).toHaveLength(1);
+    expect(within(nav).queryByRole('link', { name: 'Namaq' })).toBeNull();
+    fireEvent.click(within(nav).getByRole('button', { name: 'Open menu' }));
+    for (const section of NAV_SECTIONS) expect(within(nav).getByText(section.label.en)).toBeTruthy();
+  });
   it('opens the Quran shelf from its toggle, listing every Quran page with what it is for', () => {
     render(<NavBar />);
     const toggle = screen.getByRole('button', { name: 'Quran pages' });

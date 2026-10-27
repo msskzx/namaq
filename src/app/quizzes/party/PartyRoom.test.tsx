@@ -13,7 +13,7 @@ vi.mock('@/lib/party/client', () => ({
   usePartySocket: () => ({ view: socket.view, error: socket.error, status: 'open', send: socket.send, offset: 0 }),
 }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'en' }) }));
-vi.mock('@/components/common/AppChrome', () => ({ useHideFooter: () => {} }));
+vi.mock('@/components/common/AppChrome', () => ({ useHideFooter: () => {}, useHideNavbar: () => {} }));
 vi.mock('swr', () => ({ default: () => ({ data: undefined }) }));
 
 const question = { key: 'q1', correctAnswer: 'a', promptArabic: 'من هو؟', choices: [{ value: 'a', labelArabic: 'أبو بكر' }, { value: 'b', labelArabic: 'عمر' }] };
@@ -62,11 +62,13 @@ describe('party lobby', () => {
 describe('party question', () => {
   const asked = () => party([{ type: 'start', playerId: 'p0', early: true }, { type: 'loaded', questions: [question, { ...question, key: 'q2' }], surahNames: {} }]);
 
-  it('sends a choice and then waits for the others without showing whether it was right', () => {
+  it('waits for the others with the timer and leaderboard, hiding the question and whether it was right', () => {
     show(reduce(asked(), { type: 'submit', playerId: 'p0', answer: 'b' }, 0).state);
     expect(screen.getByText('Waiting for Amina.')).toBeTruthy();
+    expect(screen.getByRole('timer', { name: 'Time left' })).toBeTruthy();
+    expect(screen.getByRole('region', { name: 'Leaderboard' })).toBeTruthy();
+    expect(screen.queryByText('من هو؟')).toBeNull();
     expect(screen.queryByText('Correct')).toBeNull();
-    expect(screen.queryByRole('region', { name: 'Leaderboard' })).toBeNull();
   });
 
   it('submits the chosen answer', () => {

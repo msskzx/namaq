@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookOpen, faCircle, faCircleCheck, faCircleXmark, faCopy, faCrown, faHourglassHalf, faPlay, faRightFromBracket, faRotateLeft, faUserCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { renderSVG } from "uqr";
@@ -9,7 +9,7 @@ import Button from "@/components/common/Button";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import QuizReferenceDialog from "@/components/common/QuizReferenceDialog";
 import type { QuizReference } from "@/lib/quiz/quizReference";
-import { useHideFooter } from "@/components/common/AppChrome";
+import { useHideFooter, useHideNavbar } from "@/components/common/AppChrome";
 import { useLanguage } from "@/components/language/LanguageContext";
 import { num } from "@/lib/quran/arabicNumber";
 import { parseJuzRange } from "@/lib/quran/juz";
@@ -57,7 +57,7 @@ export function NameForm({ initial, onSubmit, error, ar, label }: { initial: str
   );
 }
 
-function Countdown({ deadline, offset, ar }: { deadline: number; offset: number; ar: boolean }) {
+function Countdown({ deadline, total, offset, ar, big }: { deadline: number; total: number; offset: number; ar: boolean; big?: boolean }) {
   const [now, setNow] = useState(() => Date.now() + offset);
   useEffect(() => {
     const timer = setInterval(() => setNow(Date.now() + offset), 250);
@@ -65,9 +65,25 @@ function Countdown({ deadline, offset, ar }: { deadline: number; offset: number;
   }, [offset]);
   const left = Math.max(0, Math.ceil((deadline - now) / 1000));
   const text = `${Math.floor(left / 60)}:${String(left % 60).padStart(2, "0")}`;
-  return <span role="timer" aria-label={ar ? "الوقت المتبقي" : "Time left"} className={`inline-flex items-center gap-2 font-semibold tabular-nums ${left <= 10 ? "text-[var(--home-accent)]" : "text-[var(--home-ink)]"}`}>
-    <FontAwesomeIcon icon={faHourglassHalf} />{ar ? `${num(Math.floor(left / 60))}:${num(left % 60).padStart(2, "٠")}` : text}
-  </span>;
+  const urgent = left <= 10;
+  const anchor = useRef<HTMLSpanElement>(null);
+  const [floating, setFloating] = useState(false);
+  useEffect(() => {
+    const update = () => setFloating((anchor.current?.getBoundingClientRect().top ?? 0) < 0);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, []);
+  return (
+    <span ref={anchor} className={`inline-flex shrink-0 justify-end ${big ? "h-20 w-60" : "h-11 w-32"}`}>
+      <span role="timer" aria-label={ar ? "الوقت المتبقي" : "Time left"} className={`inline-flex items-center justify-center gap-2 overflow-hidden rounded-full border-2 border-[var(--home-accent)] font-bold ${big ? "w-60 py-3 text-5xl" : "w-32 py-1 text-2xl"} tabular-nums ${urgent ? "bg-[var(--home-accent)] text-[var(--home-paper)]" : "bg-[var(--home-paper)] text-[var(--home-ink)]"} ${floating ? "fixed inset-x-0 top-3 z-40 mx-auto shadow-[0_4px_10px_var(--home-shadow)]" : "relative"}`}>
+        <FontAwesomeIcon icon={faHourglassHalf} className={big ? "text-3xl" : "text-lg"} />{ar ? `${num(Math.floor(left / 60))}:${num(left % 60).padStart(2, "٠")}` : text}
+        <span aria-hidden className="absolute inset-x-0 bottom-0 h-1">
+          <span className={`block h-full transition-[width] duration-300 ease-linear ${urgent ? "bg-[var(--home-paper)]" : "bg-[var(--home-accent)]"}`} style={{ width: `${Math.min(1, Math.max(0, (deadline - now) / total)) * 100}%` }} />
+        </span>
+      </span>
+    </span>
+  );
 }
 
 function Leaderboard({ players, you, ar, final }: { players: PlayerView[]; you: string; ar: boolean; final?: boolean }) {
@@ -81,11 +97,11 @@ function Leaderboard({ players, you, ar, final }: { players: PlayerView[]; you: 
           const rank = ranked.findIndex((other) => other.score === player.score) + 1;
           return (
             <li key={player.id} data-player={player.name} className={`flex items-center gap-3 rounded-sm px-2 py-1.5 ${player.id === you ? "bg-[var(--home-paper-deep)]" : ""}`}>
-              <span className={`inline-flex size-7 shrink-0 items-center justify-center rounded-full text-sm font-bold ${rank === 1 ? "bg-[var(--home-accent)] text-[var(--home-paper)]" : "border border-[var(--home-rule)] text-[var(--home-muted)]"}`}>{ar ? num(rank) : rank}</span>
+              <span className={`inline-flex size-7 shrink-0 items-center justify-center rounded-full text-sm font-bold ${rank === 1 ? "bg-[var(--home-green)] text-[var(--home-paper)]" : "border border-[var(--home-rule)] text-[var(--home-muted)]"}`}>{ar ? num(rank) : rank}</span>
               <span className="flex min-w-0 flex-1 flex-col gap-1">
                 <span className="truncate text-[var(--home-ink)]">{player.name}</span>
                 <span aria-hidden data-bar className="flex h-2 overflow-hidden rounded-full bg-[var(--home-rule)]">
-                  <span className="bg-[var(--home-accent)] transition-[width] duration-700" style={{ width: `${((player.score - (final ? 0 : player.earned ?? 0)) / top) * 100}%` }} />
+                  <span className={`bg-[var(--home-green)] transition-[width] duration-700 ${final ? "" : "opacity-50"}`} style={{ width: `${((player.score - (final ? 0 : player.earned ?? 0)) / top) * 100}%` }} />
                   {!final && !!player.earned && <span className="bg-[var(--home-green)] transition-[width] duration-700" style={{ width: `${(player.earned / top) * 100}%` }} />}
                 </span>
               </span>
@@ -202,12 +218,22 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
   const juz = parseJuzRange(String(view.settings.juzFrom), String(view.settings.juzTo));
   const isHost = view.you === view.hostId;
   const last = view.index + 1 >= view.total;
+  const total = (question.tree ? view.settings.treeSeconds : view.settings.seconds) * 1000;
+  if (!revealed && sent) return (
+    <div className="flex flex-col gap-5">
+      <div className="flex flex-col items-center gap-4 py-6 text-center">
+        {view.deadline !== null && <Countdown big deadline={view.deadline} total={total} offset={offset} ar={ar} />}
+        <p className="font-semibold">{ar ? "أُرسلت إجابتك." : "Your answer is in."}</p>
+        <p className="text-sm text-[var(--home-muted)]" aria-live="polite">{ar
+          ? `ننتظر ${waiting.map((player) => player.name).join("، ")}.`
+          : `Waiting for ${waiting.map((player) => player.name).join(", ")}.`}</p>
+      </div>
+      <Leaderboard players={view.players} you={view.you} ar={ar} />
+    </div>
+  );
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-[var(--home-muted)]">{ar ? `السؤال ${num(view.index + 1)} من ${num(view.total)}` : `Question ${view.index + 1} of ${view.total}`}</p>
-        {!revealed && view.deadline !== null && <Countdown deadline={view.deadline} offset={offset} ar={ar} />}
-      </div>
+      {!revealed && view.deadline !== null && <div className="flex justify-center"><Countdown deadline={view.deadline} total={total} offset={offset} ar={ar} /></div>}
       <div className={styles.panel}>
         <p dir="rtl" lang="ar" className={`mb-4 ${question.tree ? "text-base leading-relaxed" : "text-xl leading-loose font-semibold"}`}>{question.promptArabic}</p>
         {question.ayah && (
@@ -218,7 +244,6 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
         )}
         {question.tree ? (
           revealed ? <BranchFeedback question={question} typed={Array.isArray(view.answer) ? view.answer : emptyBranchAnswers(question)} names={view.surahNames} juz={juz} ar={ar} />
-            : sent ? <p className="text-[var(--home-muted)]">{ar ? "أُرسلت إجابتك." : "Your answer is in."}</p>
             : <BranchInputs question={question} typed={typed} onChange={setTyped} onCheck={() => send({ type: "submit", answer: typed })} ar={ar} />
         ) : (
           <div className="flex flex-col gap-2">
@@ -249,11 +274,6 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
         )}
         <QuizReferenceDialog reference={source ? question.evidence?.reference ?? null : null} onClose={() => setSource(false)} />
       </div>
-      {!revealed && sent && (
-        <p className="text-sm text-[var(--home-muted)]" aria-live="polite">{ar
-          ? `ننتظر ${waiting.map((player) => player.name).join("، ")}.`
-          : `Waiting for ${waiting.map((player) => player.name).join(", ")}.`}</p>
-      )}
       {revealed && (
         <>
           <Leaderboard players={view.players} you={view.you} ar={ar} />
@@ -284,6 +304,7 @@ export default function PartyRoom({ code }: { code: string }) {
   }, []);
   const { view, error, status, send, offset } = usePartySocket(code, id, name);
   useHideFooter(true);
+  useHideNavbar(true);
   const joined = view !== null && view.players.some((player) => player.id === view.you);
   const nameError = !joined && error && ["name-taken", "name-empty"].includes(error) ? ERRORS[error][ar ? "ar" : "en"] : null;
 
@@ -304,12 +325,10 @@ export default function PartyRoom({ code }: { code: string }) {
 
   return (
     <div className={styles.page}>
-      <div className="mx-auto max-w-5xl px-4 py-8" dir={ar ? "rtl" : "ltr"}>
-        <header className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--home-rule)] pb-4">
-          <div>
-            <p className="text-[0.9375rem] text-[var(--home-accent)]">{ar ? "نمق · اختبار جماعي" : "Namaq · Party quiz"}</p>
-            <h1 className="text-2xl font-bold">{ar ? `الاختبار ${code}` : `Party ${code}`}</h1>
-          </div>
+      <div className="mx-auto max-w-5xl px-4 pt-3 pb-8" dir={ar ? "rtl" : "ltr"}>
+        <header className="mb-6 flex min-h-9 flex-wrap items-center justify-between gap-3 border-b border-[var(--home-rule)] pb-3 pe-14 lg:pe-0">
+          <h1 className="sr-only">{ar ? `الاختبار ${code}` : `Party ${code}`}</h1>
+          {view && (view.phase === "question" || view.phase === "reveal") ? <p className="text-sm text-[var(--home-muted)]">{ar ? `السؤال ${num(view.index + 1)} من ${num(view.total)}` : `Question ${view.index + 1} of ${view.total}`}</p> : <span />}
           <div className="flex items-center gap-3">
             {(status === "connecting" || status === "closed") && view && <span role="status" className="text-sm text-[var(--home-muted)]">{ar ? "يعيد الاتصال…" : "Reconnecting…"}</span>}
             {joined && <Button size="sm" variant="ghost" href="/quizzes/party" onClick={() => send({ type: "leave" })}><FontAwesomeIcon icon={faRightFromBracket} />{ar ? "غادر" : "Leave"}</Button>}

@@ -141,10 +141,11 @@ function Chapter({ section, language, active, path }: { section: NavSection; lan
   );
 }
 
-export default function NavBar() {
+export default function NavBar({ menuOnly = false }: { menuOnly?: boolean }) {
   const { language, languageLoaded, toggleLanguage } = useLanguage() as { language: Language; languageLoaded: boolean; toggleLanguage: () => void };
   const path = usePathname() ?? '/';
   const [menuOpen, setMenuOpen] = useState(false);
+  if (!languageLoaded && menuOnly) return null;
   if (!languageLoaded) {
     return (
       <>
@@ -159,19 +160,23 @@ export default function NavBar() {
 
   return (
     <>
-      <nav className={styles.bar} aria-label={ar ? 'الأبواب' : 'Main'} dir={ar ? 'rtl' : 'ltr'}>
+      <nav className={menuOnly ? styles.menuOnly : styles.bar} aria-label={ar ? 'الأبواب' : 'Main'} dir={ar ? 'rtl' : 'ltr'}>
         <div className={styles.band}>
+          {!menuOnly && <>
           <Link href="/" className={styles.wordmark} onClick={() => setMenuOpen(false)} aria-label={translations[language].appName}><Logo small className={styles.logo} /></Link>
           <ul className={styles.chapters}>
             {NAV_SECTIONS.map(section => (
               <Chapter key={section.href} section={section} language={language} active={section.href === active} path={path} />
             ))}
           </ul>
+          </>}
           <div className={styles.actions}>
+            {!menuOnly && <>
             <button type="button" className={styles.language} onClick={toggleLanguage} lang={ar ? 'en' : 'ar'} aria-label={ar ? 'Switch to English' : 'التبديل إلى العربية'}>
               {ar ? 'EN' : 'ع'}
             </button>
             <ThemeSwitcher palette="site" />
+            </>}
             <button
               type="button"
               className={`${styles.iconButton} ${styles.menuButton}`}
@@ -200,7 +205,7 @@ export default function NavBar() {
           </div>
         )}
       </nav>
-      <div className={styles.spacer} />
+      {!menuOnly && <div className={styles.spacer} />}
     </>
   );
 }
