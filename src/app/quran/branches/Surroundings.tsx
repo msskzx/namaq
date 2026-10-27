@@ -60,7 +60,7 @@ export function NeighbourBox({ neighbour, of, side, around, opens }: { neighbour
   const label = ar ? 'عرض الآيات في سياقها' : 'View ayat in context';
   const basmala = neighbour.basmala && <span className="block border-[var(--home-rule)] text-center first:border-b last:border-t first:pb-1 last:pt-1 border-dotted">{neighbour.basmala.join(' ')}</span>;
   return (
-    <PathBox id={id} ctx={of} keys={[of]} lit="border-solid border-[var(--home-accent)] text-[var(--home-ink)]" tone="border-dashed border-[var(--home-muted)] text-[var(--home-muted)]" className="w-64 max-w-[70vw] shrink-0 rounded border text-lg bg-[var(--home-paper)] px-3 py-1.5">
+    <PathBox id={id} ctx={of} keys={[of]} lit="border-dashed border-[var(--home-accent)] text-[var(--home-ink)]" tone="border-dashed border-[var(--home-muted)] text-[var(--home-muted)]" className="w-64 max-w-[70vw] shrink-0 rounded border text-lg bg-[var(--home-paper)] px-3 py-1.5">
       <span className="block font-arabic leading-loose">
         {side === 'after' && basmala}
         <span className="block">{neighbour.words.join(' ')}</span>

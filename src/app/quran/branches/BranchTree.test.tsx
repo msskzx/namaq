@@ -182,6 +182,23 @@ describe('BranchTree', () => {
     expect(dialog.open).toBe(true);
   });
 
+  it('puts the surrounding-ayat switch before the header so it sits on the right in Arabic', () => {
+    const { container } = render(<BranchTree tree={tree} names={{}} header={<p>header</p>} surround={{ on: false }} />);
+    const row = container.querySelector('[data-tree] > div')!;
+    expect(row.firstElementChild!.querySelector('[role="switch"]')).not.toBeNull();
+    expect(row.lastElementChild!.textContent).toBe('header');
+  });
+
+  it('gives every node the same plain border until its path is lit, the root too', () => {
+    const { container } = render(<BranchTree tree={tree} names={{}} />);
+    const nodes = [...container.querySelectorAll('[data-node]')];
+    nodes.forEach(node => expect(node.className).toContain('border-[var(--home-rule)]'));
+    const root = nodes[0];
+    fireEvent.mouseEnter(root);
+    expect(root.className).toContain('border-[var(--home-accent)]');
+    expect(root.className).not.toContain('border-[var(--home-rule)]');
+  });
+
   it('lights the path of a hovered node and keeps a pinned one lit after the pointer leaves', () => {
     const { container } = render(<BranchTree tree={tree} names={{}} />);
     const lit = () => [...container.querySelectorAll('[data-lit]')].map(node => node.querySelector('span.block')?.textContent);

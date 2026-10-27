@@ -92,7 +92,6 @@ export function BranchFeedback({ question, typed, names, juz, ar }: { question: 
   return (
     <div className="flex flex-col gap-3" dir="rtl">
       <BranchTree tree={question.tree} variants={question.variants} names={names} label={ar ? "شجرة الإجابة" : "Answer tree"}
-        nodeTone={(index) => byIndex.has(index) ? (byIndex.get(index)!.correct ? "border-[var(--home-green)]" : "border-[var(--home-accent)]") : undefined}
         renderNode={(node, index, tags) => {
           const answer = matches[index]?.node ?? node;
           const context = { subject: answer.words.join(" "), siblings: answer.children.length === 0 && parents.has(answer) ? keys(parents.get(answer)!) : undefined };
