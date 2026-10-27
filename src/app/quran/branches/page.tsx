@@ -107,8 +107,8 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
       <OpeningSearch key={query} query={query} top={openings.slice(0, TOP)} phrases={phrases} current={id} juz={range} unavailable={unavailable} view={state} alternatives={ambiguous ? matches : []} />
       <Scope>
       <CompareLayout title="السور" current={id ? 'سور هذه الشجرة' : surah ? names[surah] : 'كل السور'} change="اختر سورة" storageKey="branches-pane-hidden"
-        pane={<SurahPane counts={id ? ayatBySurah : counts} total={id ? drawn.length : found.length} names={names} surah={surah} juz={range} view={state} inTree={!!id} treeKeys={drawn.map(ayah => ayah.key)}
-          families={<ChapterFamilies families={built.families} juz={range} view={state} current={id} />} />}>
+        pane={<SurahPane key="surahs" counts={id ? ayatBySurah : counts} total={id ? drawn.length : found.length} names={names} surah={surah} juz={range} view={state} inTree={!!id} treeKeys={drawn.map(ayah => ayah.key)}
+          families={<ChapterFamilies key="families" families={built.families} juz={range} view={state} current={id} />} />}>
       {!id ? <>
         <div className="flex flex-wrap items-center gap-3">
           <JuzFilter range={range} phrase={id} view={state} />
