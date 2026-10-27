@@ -9,7 +9,7 @@ import Button from "@/components/common/Button";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import QuizReferenceDialog from "@/components/common/QuizReferenceDialog";
 import type { QuizReference } from "@/lib/quiz/quizReference";
-import { useHideFooter, useHideNavbar } from "@/components/common/AppChrome";
+import { useHideFooter } from "@/components/common/AppChrome";
 import { useLanguage } from "@/components/language/LanguageContext";
 import { num } from "@/lib/quran/arabicNumber";
 import { parseJuzRange } from "@/lib/quran/juz";
@@ -304,7 +304,6 @@ export default function PartyRoom({ code }: { code: string }) {
   }, []);
   const { view, error, status, send, offset } = usePartySocket(code, id, name);
   useHideFooter(true);
-  useHideNavbar(true);
   const joined = view !== null && view.players.some((player) => player.id === view.you);
   const nameError = !joined && error && ["name-taken", "name-empty"].includes(error) ? ERRORS[error][ar ? "ar" : "en"] : null;
 

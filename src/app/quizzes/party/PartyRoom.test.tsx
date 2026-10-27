@@ -13,7 +13,7 @@ vi.mock('@/lib/party/client', () => ({
   usePartySocket: () => ({ view: socket.view, error: socket.error, status: 'open', send: socket.send, offset: 0 }),
 }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'en' }) }));
-vi.mock('@/components/common/AppChrome', () => ({ useHideFooter: () => {}, useHideNavbar: () => {} }));
+vi.mock('@/components/common/AppChrome', () => ({ useHideFooter: () => {} }));
 vi.mock('swr', () => ({ default: () => ({ data: undefined }) }));
 
 const question = { key: 'q1', correctAnswer: 'a', promptArabic: 'من هو؟', choices: [{ value: 'a', labelArabic: 'أبو بكر' }, { value: 'b', labelArabic: 'عمر' }] };

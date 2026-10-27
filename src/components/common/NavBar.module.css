@@ -58,7 +58,7 @@
 .language, .iconButton { min-width: 2.25rem; height: 2.25rem; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--home-rule); border-radius: 2px; color: var(--home-accent); }
 .language { font-size: 1rem; padding-inline: 0.5rem; }
 .language:hover, .iconButton:hover { background: var(--home-paper-deep); }
-@media (min-width: 1024px) { .menuButton { display: none; } }
+@media (min-width: 1024px) { .menuButton, .menuOnly { display: none; } }
 
 .menuOnly { position: absolute; top: 0; inset-inline-end: 0; z-index: 50; color: var(--home-ink); }
 .menuOnly .band { min-height: 0; padding: 0.75rem; justify-content: flex-end; }

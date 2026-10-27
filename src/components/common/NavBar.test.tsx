@@ -27,8 +27,9 @@ describe('NavBar shelves', () => {
     expect(within(screen.getByRole('navigation')).getByRole('button', { name: 'Switch to dark mode' })).toBeTruthy();
     expect(screen.queryByRole('button', { name: 'Settings' })).toBeNull();
   });
-  it('keeps only the menu button in menu-only mode, and the menu still opens every section', () => {
-    render(<NavBar menuOnly />);
+  it('keeps only the menu button in a party room, and the menu still opens every section', () => {
+    state.path = '/quizzes/party/123456';
+    render(<NavBar />);
     const nav = screen.getByRole('navigation');
     expect(within(nav).getAllByRole('button')).toHaveLength(1);
     expect(within(nav).queryByRole('link', { name: 'Namaq' })).toBeNull();

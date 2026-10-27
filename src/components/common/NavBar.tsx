@@ -141,9 +141,10 @@ function Chapter({ section, language, active, path }: { section: NavSection; lan
   );
 }
 
-export default function NavBar({ menuOnly = false }: { menuOnly?: boolean }) {
+export default function NavBar() {
   const { language, languageLoaded, toggleLanguage } = useLanguage() as { language: Language; languageLoaded: boolean; toggleLanguage: () => void };
   const path = usePathname() ?? '/';
+  const menuOnly = /^\/quizzes\/party\/[^/]+/.test(path);
   const [menuOpen, setMenuOpen] = useState(false);
   if (!languageLoaded && menuOnly) return null;
   if (!languageLoaded) {
