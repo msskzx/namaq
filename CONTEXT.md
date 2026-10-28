@@ -428,6 +428,21 @@ An opening or a longer sequence of words shared from the start of at least two
 ayat under the same wording and root conditions. A phrase can contain several
 smaller groups of ayat; rootless particles match by wording alone.
 
+**Inside phrase**:
+A consecutive run shared by at least two ayat, with at least one occurrence
+inside an ayah. Two-word runs require roots on both words; runs of three or
+more may include rootless words. Matching uses the shared word rule with
+hamza-seat equivalence. A longer containing run shared by exactly the same
+ayat replaces the shorter run.
+
+**Phrase occurrence**:
+An ayah reference and the word offsets where an inside phrase begins and ends.
+Different occurrences can belong to the same ayah.
+
+**Phrase tree**:
+The existing multiple-start tree presentation anchored on an inside phrase.
+Whole prefixes join the shared phrase and its continuations branch left.
+
 **Opening entry**:
 A group of ayat cut from an opening's tree for browsing together. An opening may
 contain several entries; a searchable shared phrase need not be one entry.

@@ -15,7 +15,7 @@ export default function SearchSummary({ query, count, complete }: { query: strin
       <p className={NOTE}>{count === 0
         ? (ar ? `لا مجموعة تطابق «${query}».` : `No entry matches «${query}».`)
         : (ar ? `${counted(count, ['مجموعة', 'مجموعتان', 'مجموعات'])} تطابق «${query}»` : `${count} ${count === 1 ? 'entry matches' : 'entries match'} «${query}»`)}</p>
-      {complete.map(({ phrase, href }) => <Link key={`${phrase.id}:${phrase.partition ?? ''}`} href={href} className="text-sm text-[var(--home-accent)] hover:underline self-start">
+      {complete.map(({ phrase, href }) => <Link key={href} href={href} className="text-sm text-[var(--home-accent)] hover:underline self-start">
         {ar ? 'الشجرة كاملة: ' : 'Complete tree: '}
         <span className="font-arabic" dir="rtl">{`${phrase.text} (${ar ? num(phrase.count) : phrase.count})`}</span>
       </Link>)}

@@ -217,3 +217,27 @@ The build reads word roots from STEM annotations in `data/quran/quranic-corpus-m
 Each opening's tree is cut at the first node holding six ayat or fewer. A larger node stays one piece when none of its children contains two ayat. A larger group with multiple joined-first-word spellings is split into spellings that each hold at least two ayat. A singleton branch stays visible in its full opening tree.
 
 Pieces sort by longest shared phrase, then fewer ayat, then mushaf order. Grouped ordering places pieces under their opening before pagination. Each page contains ten expanded pieces. Pagination scrolls to the page start after a page change. A piece cut from a larger opening offers a link to that opening's full tree.
+
+## Phrases inside ayat
+
+The phrase-tree extension uses the existing multiple-start presentation. Whole
+prefixes on the right join a shared phrase; its continuations branch left.
+The original opening artifact and the Shared openings quiz keep their membership.
+
+`npm run quran:branches` also generates `phrases.json` from every reader ayah,
+with corpus roots and lemmas. A two-word run requires a root on both words;
+a longer run may include rootless words. At least two distinct ayat must share
+the run, and at least one occurrence must be inside its ayah. Phrase-only
+comparison folds hamza seats and otherwise follows the existing normalized
+letters, root, and spelling-or-lemma word classes. A longer containing run with
+the same ayah membership replaces its shorter run. Unrelated phrases in the
+same ayat remain distinct.
+
+Occurrences retain their original word offsets. When a phrase occurs more than
+once in one ayah, presentation anchors at the earliest occurrence and preserves
+the complete ayah in its prefix and continuation; matching retains all occurrences.
+Original spellings remain available in context. Large groups are cut into
+entries of at most six ayat. The scope switch selects all entries, openings,
+or inside phrases; phrase selections carry their kind in the URL.
+
+See [the implementation plan](quran-phrase-trees.md) for acceptance criteria.

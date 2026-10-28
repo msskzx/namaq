@@ -261,6 +261,15 @@ describe('BranchTree', () => {
       vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => around }));
     });
 
+    it('shows preceding neighbors for both prefixed and trunk-starting ayat', () => {
+      const { container } = render(<BranchTree tree={tree} names={names}
+        prefixes={[{ word: 'قالوا', conj: '', id: 'phrase', keys: ['15:45'] }, { word: '', conj: '', id: 'phrase', keys: ['51:15', '44:51'] }]}
+        surround={{ on: true, data: around }} />);
+      expect(container.querySelectorAll('[data-ctx]')).toHaveLength(5);
+      expect(screen.getByText('ذُوقُوا۟ فِتْنَتَكُمْ')).toBeTruthy();
+      expect(screen.getByText('إِنَّ هَـٰذَا')).toBeTruthy();
+    });
+
     it('draws the switch with one icon and one label', () => {
       render(<BranchTree tree={tree} names={names} surround={{ on: false }} />);
       const toggle = screen.getByRole('switch', { name: 'الآيات المحيطة' }).closest('label')!;
@@ -379,4 +388,14 @@ describe('BranchTree', () => {
     });
 
   });
+});
+
+it('joins whole prefixes to the complete phrase without removing its first word', () => {
+  render(<BranchTree tree={{ words: ['أَءِذَا', 'مِتْنَا', 'وَكُنَّا', 'تُرَابًا'], ayat: ['23:82', '37:16', '56:47'], children: [] }} names={{}}
+    prefixes={[{ word: 'قَالُوا', conj: '', keys: ['23:82'], id: 'phrase' }, { word: 'وَكَانُوا يَقُولُونَ', conj: '', keys: ['56:47'], id: 'phrase' }, { word: '', conj: '', keys: ['37:16'], id: 'phrase' }]} />);
+  expect(screen.getByRole('list', { name: 'ما قبل العبارة' }).children).toHaveLength(2);
+  expect(screen.getByText('وَكَانُوا يَقُولُونَ')).toBeTruthy();
+  expect(screen.getByText('أَءِذَا مِتْنَا وَكُنَّا تُرَابًا')).toBeTruthy();
+  expect(screen.getByText('٣٧:١٦')).toBeTruthy();
+  expect(screen.queryByRole('link')).toBeNull();
 });
