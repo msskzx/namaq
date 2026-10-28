@@ -57,6 +57,21 @@ describe('party lobby', () => {
     fireEvent.click(screen.getByRole('button', { name: /I'm ready/ }));
     expect(socket.send).toHaveBeenCalledWith({ type: 'ready', ready: true });
   });
+
+  it('shows the example tree to the host and the players when trees are chosen', () => {
+    const trees = reduce(party([]), { type: 'settings', playerId: 'p0', settings: { topics: ['BRANCHES'] } }, 0).state;
+    show(trees);
+    expect(screen.getByRole('region', { name: 'Example tree' })).toBeTruthy();
+    cleanup();
+    show(trees, 'p1');
+    expect(screen.getByRole('region', { name: 'Example tree' })).toBeTruthy();
+    expect(screen.getByText('Grading:')).toBeTruthy();
+  });
+
+  it('shows no example tree without the trees topic', () => {
+    show(reduce(party([]), { type: 'settings', playerId: 'p0', settings: { topics: ['PEOPLE'] } }, 0).state, 'p1');
+    expect(screen.queryByRole('region', { name: 'Example tree' })).toBeNull();
+  });
 });
 
 describe('party question', () => {

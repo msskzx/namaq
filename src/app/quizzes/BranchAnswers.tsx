@@ -166,3 +166,26 @@ export function BranchPreview({ leaves, ar }: { leaves: number; ar: boolean }) {
     </div>
   );
 }
+
+/** How a tree question works: what you type, an example tree, and how it is graded. */
+export function BranchExplainer({ leaves, ar }: { leaves: number; ar: boolean }) {
+  return (
+    <>
+      <p className="mb-4 text-sm leading-relaxed text-[var(--home-muted)]">{ar
+        ? `تكتب ${num(leaves)} من أطراف الشجرة، ويُعرض باقيها مكتوبًا. الشجرة التي أطرافها أقل تُطلب كل أطرافها.`
+        : `You type ${leaves} of the tree's leaves, and the rest of the tree is shown. A tree with fewer leaves asks for all of them.`}</p>
+      <BranchPreview leaves={leaves} ar={ar} />
+      <dl className="mt-4 space-y-2 text-sm leading-relaxed text-[var(--home-ink)]">
+        <div><dt className="inline font-semibold">{ar ? "التصحيح: " : "Grading: "}</dt><dd className="inline">{ar
+          ? "تكفي من كل طرف كلمتاه الأوليان، ويجب أن تصح كل كلمة تكتبها وبترتيبها. اكتب بالإملاء المعتاد لا برسم المصحف، والهمزة على أي كرسي. لكل طرف صحيح نقطة، والأطراف المتشابهة في الشكل تقبل أي ترتيب."
+          : "A leaf's first two words are enough, and every word you type must be right and in order. Type ordinary spelling, not the mushaf script; a hamza may sit on any seat. Each correct leaf scores a point, and leaves of the same shape can go in either order."}</dd></div>
+        <div><dt className="inline font-semibold">{ar ? "الزر الملوّن: " : "Coloured button: "}</dt><dd className="inline">{ar
+          ? "يظهر بعد التحقق على عقدة تجمع آيات تختلف كلماتها في علامات الضبط، مثل «إِن» و«إِنْ» أعلاه. اضغطه لترى كل آية في سياقها والكلمات المختلفة بارزة."
+          : "After checking, it marks a node whose ayat differ in the marks of its words, like «إِن» and «إِنْ» above. Press it to see each ayah in context with the differing words highlighted."}</dd></div>
+        <div><dt className="inline font-semibold">{ar ? "الكلمة الأولى: " : "First word: "}</dt><dd className="inline">{ar
+          ? "إذا بدأت بعض الآيات بالواو أو الفاء رُسمت كل صيغة وحدها، الخضراء بالواو والبنفسجية بالفاء."
+          : "When some ayat open with و or ف, each spelling is drawn on its own: green with و, purple with ف."}</dd></div>
+      </dl>
+    </>
+  );
+}

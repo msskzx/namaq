@@ -11,6 +11,7 @@ import { QUIZ_LEAVES, QUIZ_LENGTHS, type QuizLength, type QuizTopic } from "@/li
 import { QUESTION_SECONDS, TREE_SECONDS, quizQuery, type PartySettings } from "@/lib/party/rules";
 import { LEAF_LEVELS, TOPIC_GROUPS, TOPIC_LABELS } from "../labels";
 import PersonPicker from "../PersonPicker";
+import { BranchExplainer } from "../BranchAnswers";
 
 const n = (value: number, ar: boolean) => ar ? num(value) : String(value);
 const duration = (seconds: number, ar: boolean) => seconds < 60
@@ -55,6 +56,7 @@ export default function PartySettingsPanel({ settings, editable, onChange, ar }:
         <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-sm">
           {rows.map(([label, value]) => <React.Fragment key={label}><dt className="text-[var(--home-muted)]">{label}</dt><dd className="text-[var(--home-ink)]">{value}</dd></React.Fragment>)}
         </dl>
+        {branches && <div className="mt-4 border-t border-[var(--home-rule)] pt-4"><BranchExplainer leaves={settings.leaves} ar={ar} /></div>}
       </section>
     );
   }
@@ -90,6 +92,7 @@ export default function PartySettingsPanel({ settings, editable, onChange, ar }:
               </div>
             ))}
           </Row>
+          <div className="mb-4"><BranchExplainer leaves={settings.leaves} ar={ar} /></div>
           <Row label={ar ? "وقت سؤال الشجرة" : "Time per tree"}>
             {TREE_SECONDS.map((value) => <Button key={value} active={settings.treeSeconds === value} aria-pressed={settings.treeSeconds === value} onClick={() => onChange({ treeSeconds: value })}>{duration(value, ar)}</Button>)}
           </Row>
