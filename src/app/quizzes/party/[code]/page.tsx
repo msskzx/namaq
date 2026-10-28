@@ -6,7 +6,7 @@ export async function generateMetadata({ params }: { params: Promise<{ code: str
   const { code } = await params;
   const title = `مسابقة جماعية في ${SITE_NAME}`;
   const description = `انضم إلى المسابقة بالرمز ${code}`;
-  return { title, description, openGraph: { siteName: SITE_NAME, title, description, locale: "ar", type: "website", images: [SITE_IMAGE] } };
+  return { title, description, openGraph: { siteName: SITE_NAME, title, description, locale: "ar_AR", type: "website", images: [SITE_IMAGE] } };
 }
 
 export default async function PartyPage({ params }: { params: Promise<{ code: string }> }) {

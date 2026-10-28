@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: `${SITE_NAME} | ${SITE_DESCRIPTION}`,
   description: SITE_DESCRIPTION,
-  openGraph: { siteName: SITE_NAME, title: SITE_NAME, description: SITE_DESCRIPTION, locale: "ar", type: "website" },
+  openGraph: { siteName: SITE_NAME, title: SITE_NAME, description: SITE_DESCRIPTION, locale: "ar_AR", type: "website" },
 };
 
 export default function RootLayout({
