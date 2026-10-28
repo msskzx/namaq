@@ -229,10 +229,7 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
   const total = (question.tree ? view.settings.treeSeconds : view.settings.seconds) * 1000;
   if (!revealed && sent) return (
     <div className="flex flex-col gap-5">
-      <div className="flex flex-col items-center gap-4 py-6 text-center">
-        {view.deadline !== null && <Countdown big deadline={view.deadline} total={total} offset={offset} ar={ar} />}
-        <p className="font-semibold">{ar ? "أُرسلت إجابتك." : "Your answer is in."}</p>
-      </div>
+      {view.deadline !== null && <div className="flex justify-center py-6"><Countdown big deadline={view.deadline} total={total} offset={offset} ar={ar} /></div>}
       <Leaderboard players={view.players} you={view.you} ar={ar} answering />
     </div>
   );
