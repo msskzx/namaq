@@ -1,6 +1,6 @@
 # Namaq logo B
 
-نَمَق in Amiri Bold (SIL Open Font License), with the letters' dots redrawn as terracotta nodes: the dot of the ن and the two dots of the ق, joined, with two open branches leaving the ن. The letters are outlines, so no font is needed to show any file.
+نَمَق in Amiri Bold (SIL Open Font License), with the letters' dots redrawn as terracotta nodes: the dot of the ن and the two dots of the ق, joined. The branches it once had moved to the icon below. The letters are outlines, so no font is needed to show any file.
 
 | Place | File | Notes |
 |---|---|---|
@@ -12,7 +12,7 @@
 | Manifest | `icon-192.png`, `icon-512.png` | The icon, transparent, terracotta pair. |
 | Seal (optional) | `namaq-seal-light.svg`, `namaq-seal-dark.svg` | The mark in a double ring, for a stamp-style use such as a social card or the about page. |
 
-Colors follow [palette.md](palette.md). The dark logo and seal files keep the earlier dark ink #f5eddf and accent #eda183, since their content credentials sign each file.
+Colors follow [palette.md](palette.md). The files carry no content credentials; the ones that came with logo B were removed when the branches were taken out.
 Every file has a transparent background.
 
 Files live in `public/brand/`.
