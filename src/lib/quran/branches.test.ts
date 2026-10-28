@@ -146,6 +146,12 @@ describe('branch', () => {
     expect(ayahEnds(tree)).toEqual({ '56:74': '56:75', '56:96': '57:1', '69:52': '70:1' });
   });
 
+  it('runs on an ayah that is also in a chapter family, and marks no spelling difference for the end sign alone', () => {
+    const tree = branch(startingWith(all, 'الحمد لله'));
+    expect(ayahEnds(tree)).toMatchObject({ '1:2': '1:3', '37:182': '38:1' });
+    expect(branch(startingWith(all, 'فسبح باسم')).forms).toBeUndefined();
+  });
+
   it('keeps going while the following ayat are identical too', () => {
     const tree = branch(startingWith(all, 'والذين هم لفروجهم'));
     expect(tree.words.filter(word => word === '۝')).toHaveLength(4);

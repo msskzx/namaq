@@ -173,7 +173,7 @@ const plain = (forms: string[]) => {
   return letters[0].map((letter, i) => [...letter].filter((mark, at) => at === 0 || letters.every(other => other[i]?.includes(mark))).join('')).join('').normalize('NFC');
 };
 
-const originalForms = (entries: [string, string[]][]) => new Set(entries.map(([, words]) => words.join(' '))).size > 1
+const originalForms = (entries: [string, string[]][]) => new Set(entries.map(([, words]) => words.map(word => (isEnd(word) ? END : word)).join(' '))).size > 1
   ? Object.fromEntries(entries)
   : undefined;
 
@@ -378,7 +378,10 @@ export function withNext(groups: Map<string, BranchAyah[]>, all: BranchAyah[]): 
       };
     });
   });
-  return [...new Map(selected.map(ayah => [ayah.key, ayah])).values()];
+  // An ayah can sit in an opening group and a chapter family; the copy that runs on wins.
+  const byKey = new Map<string, BranchAyah>();
+  selected.forEach(ayah => { if (!byKey.get(ayah.key)?.next || ayah.next) byKey.set(ayah.key, ayah); });
+  return [...byKey.values()];
 }
 
 const through = (ayat: BranchAyah[]) => (ayat.length ? { through: Object.fromEntries(ayat.map(ayah => [ayah.key, ayah.through!])) } : {});
