@@ -47,6 +47,11 @@ describe('branchQuestions', () => {
     expect(keysOf(asked(questions, '69:38'))?.flat()).toContain('56:75');
   });
 
+  it('asks identical ayat by the ayah that follows each, but leaves the long refrains of one surah out', () => {
+    expect(keysOf(asked(questions, '56:74'))).toEqual([['56:74'], ['56:96'], ['69:52']]);
+    for (const refrain of ['55:13', '77:15']) expect(asked(questions, refrain)).toBeUndefined();
+  });
+
   it('asks one question per piece of the branches page', () => {
     expect(questions.length).toBeGreaterThan(500);
     expect(new Set(questions.map((question) => question.key)).size).toBe(questions.length);

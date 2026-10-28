@@ -5,25 +5,24 @@ import { Route } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 
-type Paths = { lit: Set<string>; pinned: Map<string, string[]>; hover(keys: string[] | null): void; pin(id: string, keys: string[]): void };
+// Only the path button lights a path: hover lit paths by accident on phones.
+type Paths = { lit: Set<string>; pinned: Map<string, string[]>; pin(id: string, keys: string[]): void };
 
 const PathContext = createContext<Paths | null>(null);
 const LINE = 'border-[var(--home-rule)]';
 const LIT = 'border-[var(--home-accent)]';
 
 export function usePaths() {
-  const [hovered, setHovered] = useState<string[] | null>(null);
   const [pinned, setPinned] = useState(new Map<string, string[]>());
   return useMemo<Paths>(() => ({
-    lit: new Set([...(hovered ?? []), ...[...pinned.values()].flat()]),
+    lit: new Set([...pinned.values()].flat()),
     pinned,
-    hover: setHovered,
     pin: (id, keys) => setPinned(current => {
       const next = new Map(current);
       if (!next.delete(id)) next.set(id, keys);
       return next;
     }),
-  }), [hovered, pinned]);
+  }), [pinned]);
 }
 
 export const PathProvider = PathContext.Provider;
@@ -39,11 +38,8 @@ export function useIsLit() {
 }
 
 export function PathBox({ id, keys, className, tone, lit, ctx, children }: { id: string; keys: string[]; className: string; tone: string; lit: string; ctx?: string; children: React.ReactNode }) {
-  const paths = useContext(PathContext);
   const on = useIsLit()(keys);
-  const enter = (event: React.SyntheticEvent) => { if (!(event.target as Element).closest('dialog')) paths?.hover(keys); };
-  const leave = () => paths?.hover(null);
-  return <div data-node={id} data-ctx={ctx} data-keys={keys.join(' ')} data-lit={on || undefined} onMouseEnter={enter} onMouseLeave={leave} onFocus={enter} onBlur={leave} className={`${className} ${on ? lit : tone}`}>{children}</div>;
+  return <div data-node={id} data-ctx={ctx} data-keys={keys.join(' ')} data-lit={on || undefined} className={`${className} ${on ? lit : tone}`}>{children}</div>;
 }
 
 export function PathButton({ id, keys, subject }: { id: string; keys: string[]; subject?: string }) {
