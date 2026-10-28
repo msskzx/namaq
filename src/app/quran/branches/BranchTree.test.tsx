@@ -162,14 +162,6 @@ describe('BranchTree', () => {
     expect(params.get('q')).toBe('13:25,2:27');
   });
 
-  it('keeps a node unlit while the pointer is inside its own overlay', () => {
-    const { container } = render(<BranchTree tree={tree} names={{}} />);
-    const leaf = screen.getByText('مَقَامٍ أَمِينٍۢ').closest('[data-node]')!;
-    fireEvent.mouseEnter(leaf.querySelector('dialog')!);
-    fireEvent.focus(within(leaf.querySelector('dialog') as HTMLElement).getByRole('button', { name: 'إغلاق', hidden: true }));
-    expect(container.querySelector('[data-lit]')).toBeNull();
-  });
-
   it('opens the overlay only from its button, never from the node text or box', () => {
     render(<BranchTree tree={tree} names={{}} />);
     const leafText = screen.getByText('مَقَامٍ أَمِينٍۢ');
@@ -194,20 +186,17 @@ describe('BranchTree', () => {
     const nodes = [...container.querySelectorAll('[data-node]')];
     nodes.forEach(node => expect(node.className).toContain('border-[var(--home-rule)]'));
     const root = nodes[0];
-    fireEvent.mouseEnter(root);
+    fireEvent.click(screen.getAllByRole('button', { name: /^إظهار المسار/ })[0]);
     expect(root.className).toContain('border-[var(--home-accent)]');
     expect(root.className).not.toContain('border-[var(--home-rule)]');
   });
 
-  it('lights the path of a hovered node and keeps a pinned one lit after the pointer leaves', () => {
+  it('lights a path only from its button, never on hover or focus, and keeps several pinned', () => {
     const { container } = render(<BranchTree tree={tree} names={{}} />);
     const lit = () => [...container.querySelectorAll('[data-lit]')].map(node => node.querySelector('span.block')?.textContent);
     const leaf = screen.getByText('مَقَامٍ أَمِينٍۢ').closest('[data-node]')!;
     fireEvent.mouseEnter(leaf);
-    expect(lit()).toEqual(['إِنَّ ٱلْمُتَّقِينَ فِى', 'مَقَامٍ أَمِينٍۢ']);
-    expect(leaf.className).toContain('border-[var(--home-accent)]');
-    expect(leaf.className).not.toContain('border-[var(--home-rule)]');
-    fireEvent.mouseLeave(leaf);
+    fireEvent.focus(leaf);
     expect(lit()).toEqual([]);
     expect(leaf.className).toContain('border-[var(--home-rule)]');
     expect(leaf.className).not.toContain('border-[var(--home-accent)]');
@@ -321,9 +310,9 @@ describe('BranchTree', () => {
       expect(target?.closest('[data-keys]')?.textContent).toContain('جَنَّـٰتٍۢ وَعُيُونٍ');
     });
 
-    it('lights the whole path of the hovered neighbour', async () => {
+    it('lights the whole path from a neighbour\'s path button', async () => {
       const { container } = render(<BranchTree tree={tree} names={names} surround={{ on: true }} />);
-      fireEvent.mouseEnter((await screen.findByText('إِنَّ هَـٰذَا')).closest('[data-node]')!);
+      fireEvent.click(within((await screen.findByText('إِنَّ هَـٰذَا')).closest('[data-node]') as HTMLElement).getByRole('button', { name: /^إظهار المسار/ }));
       expect([...container.querySelectorAll('[data-lit]')].map(node => node.textContent)).toEqual([expect.stringContaining('إِنَّ هَـٰذَا'), expect.stringContaining('إِنَّ ٱلْمُتَّقِينَ فِى'), expect.stringContaining('مَقَامٍ أَمِينٍۢ'), expect.stringContaining('إِنَّ ٱلْمُتَّقِينَ')]);
     });
 

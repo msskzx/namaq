@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import ayat from '@/app/quran/branches/ayat.json';
-import { branch, grown, keys, listPhrases, sharedOpenings, startingWith, searchPhrases, type Branch, type BranchAyah } from './branches';
+import { branch, grown, keys, linkable, listPhrases, sharedOpenings, startingWith, searchPhrases, type Branch, type BranchAyah } from './branches';
 import { chapterFamilies } from './chapterFamilies';
 import { inJuzRange } from './juz';
 import { normalizeWord } from './normalize';
@@ -56,7 +56,7 @@ describe('chapter opening families', () => {
       const group = family.keys.map(key => all.find(ayah => ayah.key === key)!);
       const walk = (node: Branch, path: string[]) => {
         const words = [...path, ...node.words];
-        if (path.length > 0 && node.children.length > 0) {
+        if (path.length > 0 && node.children.length > 0 && linkable(words)) {
           const id = words.map(normalizeWord).join(' ');
           const selected = startingWith(all, id, node.partition);
           expect(phrases.some(phrase => phrase.id === id && (!phrase.partition || phrase.partition === node.partition)), id).toBe(true);

@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import ayat from '@/app/quran/branches/ayat.json';
-import { ayahEnds, branch, branchesHref, conjunctions, listPage, PIECE_MAX, pieces, DEFAULT_PHRASE, keys, linkId, pickPhrase, stem, widerPhrases, listOpenings, listPhrases, openingId, readerAyat, searchKey, searchPieces, searchPhrases, sharedOpenings, spelledAs, startingWith, variants, withConjunctions, withRoots, withNext, type Branch, type BranchAyah } from './branches';
+import { ayahEnds, branch, branchesHref, conjunctions, linkable, listPage, PIECE_MAX, pieces, DEFAULT_PHRASE, keys, linkId, pickPhrase, stem, widerPhrases, listOpenings, listPhrases, openingId, readerAyat, searchKey, searchPieces, searchPhrases, sharedOpenings, spelledAs, startingWith, variants, withConjunctions, withRoots, withNext, type Branch, type BranchAyah } from './branches';
 import { chapterFamilies } from './chapterFamilies';
 import { inJuzRange } from './juz';
 import { normalizeWord } from './normalize';
@@ -63,8 +63,10 @@ describe('sharedOpenings', () => {
       expect(keys(tree).sort()).toEqual(group.map(ayah => ayah.key).sort());
       expect(group.every(ayah => ayah.next && ayah.next.length > 0)).toBe(true);
       expect(tree.words.join(' ')).toContain('﴿١﴾');
-      expect(ayahEnds(tree)).toEqual(Object.fromEntries(group.map(ayah => [ayah.key, ayah.key.replace(':1', ':2')])));
+      expect(ayahEnds(tree)).toEqual(Object.fromEntries(group.map(ayah => [ayah.key, ayah.through])));
     }
+    // طسم opens two surahs with the same next ayah, so both run on to the ayah after it.
+    expect(ayahEnds(branch(groups.get('طسم')!))).toEqual({ '26:1': '26:3', '28:1': '28:3' });
   });
 
   it('ignores the pause and section marks the reader keeps beside a word', () => {
@@ -107,7 +109,14 @@ describe('branch', () => {
           words: 'جنت',
           ayat: [],
           children: [
-            { words: 'وعيون', ayat: ['15:45', '51:15'], children: [] },
+            {
+              words: 'وعيون ',
+              ayat: [],
+              children: [
+                { words: 'ادخلوها بسلم ءامنين', ayat: ['15:45'], children: [] },
+                { words: 'ءاخذين ما ءاتيهم ربهم انهم كانوا قبل ذلك محسنين', ayat: ['51:15'], children: [] },
+              ],
+            },
             { words: 'ونعيم', ayat: ['52:17'], children: [] },
             { words: 'ونهر', ayat: ['54:54'], children: [] },
           ],
@@ -127,6 +136,34 @@ describe('branch', () => {
         { words: 'انصرني', ayat: ['1:3'], children: [] },
       ],
     });
+  });
+
+  it('runs identical ayat on into the ayat after them until they part, across surahs', () => {
+    const tree = branch(startingWith(all, 'فسبح باسم'));
+    expect(tree.words.map(normalizeWord).join(' ')).toBe('فسبح باسم ربك العظيم ');
+    expect(tree.children.map(child => [child.ayat, normalizeWord(child.words[0])])).toEqual([[['56:74'], 'فلا'], [['56:96'], 'سبح'], [['69:52'], 'سال']]);
+    // 56:96 and 69:52 close their surahs: the next surah's first ayah follows, without its basmala.
+    expect(ayahEnds(tree)).toEqual({ '56:74': '56:75', '56:96': '57:1', '69:52': '70:1' });
+  });
+
+  it('keeps going while the following ayat are identical too', () => {
+    const tree = branch(startingWith(all, 'والذين هم لفروجهم'));
+    expect(tree.words.filter(word => word === '۝')).toHaveLength(4);
+    expect(tree.children.map(child => child.ayat)).toEqual([['23:5'], ['70:29']]);
+    expect(ayahEnds(tree)).toEqual({ '23:5': '23:9', '70:29': '70:33' });
+  });
+
+  it('shows one end sign where runs end on different ayah numbers, and links no node past it', () => {
+    const tree = branch(startingWith(all, 'الا عباد الله'));
+    expect(tree.words.at(-1)).toBe('۝');
+    expect(linkable(tree.words)).toBe(false);
+    expect(linkable(['حم', '﴿١﴾', 'تنزيل'])).toBe(true);
+  });
+
+  it('grows a synthetic twin into the next surah', () => {
+    const read = [ayah('1:1', 'سبح ربك'), ayah('1:2', 'قل هو'), ayah('2:1', 'سبح ربك'), ayah('3:1', 'الم')];
+    const grownAyat = withNext(new Map([['سبح ربك', [read[0], read[2]]]]), read);
+    expect(grownAyat.map(a => [a.key, a.next, a.through])).toEqual([['1:1', ['قل', 'هو'], '1:2'], ['2:1', ['الم'], '3:1']]);
   });
 
   it('places every ayah of a group on exactly one node', () => {
@@ -155,7 +192,7 @@ describe('listPhrases', () => {
       const merged = Object.fromEntries(variants(group).flatMap(v => v.keys.map(key => [key, v.conj])));
       const visit = (node: Branch, path: string[], tags: Record<string, string>) => {
         const words = [...path, ...node.words];
-        if (path.length > 0 && node.children.length > 0) {
+        if (path.length > 0 && node.children.length > 0 && linkable(words)) {
           const id = linkId(words, keys(node).flatMap(key => (tags[key] !== undefined ? [tags[key]] : [])));
           const url = new URL(branchesHref(id, undefined, { partition: node.partition }), 'https://namaq.test');
           const partition = url.searchParams.get('r') ?? undefined;
@@ -452,9 +489,11 @@ describe('spellings and marks', () => {
 
   it('keeps one node for words that differ only in a Quranic annotation sign, shown without it', () => {
     const tree = branch(startingWith(all, 'ان مع العسر'));
-    expect(tree.children).toEqual([]);
-    expect(tree.ayat).toEqual(['94:5', '94:6']);
-    expect(tree.words.at(-1)).toBe('يُسْرًا');
+    expect(tree.ayat).toEqual([]);
+    expect(tree.words.slice(0, 4).at(-1)).toBe('يُسْرًا');
+    // The two ayat read the same, so each runs into the ayah after it: 94:5 into 94:6, 94:6 into 94:7.
+    expect(tree.children.map(child => child.ayat)).toEqual([['94:5'], ['94:6']]);
+    expect(ayahEnds(tree)).toEqual({ '94:5': '94:6', '94:6': '94:7' });
   });
 
   it('ignores the shadda an ayah\'s first letter carries over from the ayah before', () => {
