@@ -39,9 +39,9 @@ const ERRORS: Record<ActionError, { en: string; ar: string }> = {
   "wrong-phase": { en: "That isn't possible right now.", ar: "لا يمكن هذا الآن." },
 };
 
-export function NameForm({ initial, onSubmit, error, ar, label }: { initial: string; onSubmit: (name: string) => void; error?: string | null; ar: boolean; label: string }) {
+export function NameForm({ initial, onSubmit, error, ar, label, nameError }: { initial: string; onSubmit: (name: string) => void; error?: string | null; ar: boolean; label: string; nameError?: boolean }) {
   const [name, setName] = useState(initial);
-  // The error belongs to the name that was sent; editing it clears the error.
+  // A name error belongs to the name that was sent; editing the name clears it.
   const [sent, setSent] = useState(initial.trim());
   return (
     <form className="flex flex-col gap-2" onSubmit={(event) => {
@@ -55,7 +55,7 @@ export function NameForm({ initial, onSubmit, error, ar, label }: { initial: str
         <input value={name} maxLength={NAME_MAX} onChange={(event) => setName(event.target.value)} autoComplete="nickname"
           className="w-full max-w-xs rounded border border-[var(--home-rule)] bg-transparent px-3 py-2 text-[var(--home-ink)]" />
       </label>
-      {error && name.trim() === sent && <p role="alert" className="text-sm text-[var(--home-accent)]">{error}</p>}
+      {error && (!nameError || name.trim() === sent) && <p role="alert" className="text-sm text-[var(--home-accent)]">{error}</p>}
       <Button className="self-start" variant="primary" type="submit" disabled={!name.trim()}>{label}</Button>
     </form>
   );
@@ -223,12 +223,16 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
   const [typed, setTyped] = useState<string[]>(() => emptyBranchAnswers(question));
   const [source, setSource] = useState(false);
   const sent = view.answer !== null;
+  const waiting = view.players.filter((player) => !player.submitted);
   const juz = parseJuzRange(String(view.settings.juzFrom), String(view.settings.juzTo));
   const isHost = view.you === view.hostId;
   const last = view.index + 1 >= view.total;
   const total = (question.tree ? view.settings.treeSeconds : view.settings.seconds) * 1000;
   if (!revealed && sent) return (
     <div className="flex flex-col gap-5">
+      <p className="sr-only" aria-live="polite">{ar
+        ? `أُرسلت إجابتك. لم يجب بعد: ${waiting.map((player) => player.name).join("، ")}.`
+        : `Your answer is in. Still answering: ${waiting.map((player) => player.name).join(", ")}.`}</p>
       {view.deadline !== null && <div className="flex justify-center py-6"><Countdown big deadline={view.deadline} total={total} offset={offset} ar={ar} /></div>}
       <Leaderboard players={view.players} you={view.you} ar={ar} answering />
     </div>
@@ -312,7 +316,7 @@ export default function PartyRoom({ code }: { code: string }) {
   let body: React.ReactNode;
   if (status === "missing" || status === "removed") body = <Notice status={status} ar={ar} />;
   else if (!joined && error === "started") body = <Notice status="started" ar={ar} />;
-  else if (id && (!name || nameError)) body = <NameForm initial={name ?? ""} error={nameError} ar={ar} label={ar ? "انضم" : "Join"} onSubmit={(value) => { saveName(value); setName(value); }} />;
+  else if (id && (!name || nameError)) body = <NameForm initial={name ?? ""} error={nameError} ar={ar} label={ar ? "انضم" : "Join"} nameError onSubmit={(value) => { saveName(value); setName(value); }} />;
   else if (!view) body = <LoadingSpinner fill />;
   else if (view.phase === "lobby") body = <Lobby view={view} send={send} error={error} ar={ar} />;
   else if (view.phase === "loading") body = <div className="flex flex-col items-center gap-3"><LoadingSpinner /><p className="text-[var(--home-muted)]">{ar ? "تُجهَّز الأسئلة…" : "Getting the questions ready…"}</p></div>;

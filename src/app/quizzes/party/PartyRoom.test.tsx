@@ -84,6 +84,7 @@ describe('party question', () => {
     expect(status('Host')).toBe('answered');
     expect(status('Amina')).toBe('answering');
     expect(screen.queryByText(/Waiting for/)).toBeNull();
+    expect(screen.getByText('Your answer is in. Still answering: Amina.').getAttribute('aria-live')).toBe('polite');
     expect(screen.getByRole('timer', { name: 'Time left' })).toBeTruthy();
     expect(screen.getByRole('region', { name: 'Leaderboard' })).toBeTruthy();
     expect(screen.queryByText('من هو؟')).toBeNull();
@@ -109,12 +110,18 @@ describe('party question', () => {
 
 describe('name form', () => {
   it('hides the taken-name error once the name is edited, and shows it again for the same name', () => {
-    render(<NameForm initial="Amina" error="Someone in the party has that name." ar={false} label="Join" onSubmit={() => {}} />);
+    render(<NameForm initial="Amina" error="Someone in the party has that name." ar={false} label="Join" nameError onSubmit={() => {}} />);
     expect(screen.getByRole('alert')).toBeTruthy();
     const input = screen.getByRole('textbox', { name: 'Your name' });
     fireEvent.change(input, { target: { value: 'Amina K' } });
     expect(screen.queryByRole('alert')).toBeNull();
     fireEvent.change(input, { target: { value: 'Amina' } });
+    expect(screen.getByRole('alert')).toBeTruthy();
+  });
+
+  it('keeps other errors while the name is edited', () => {
+    render(<NameForm initial="Amina" error="Couldn't start a party." ar={false} label="Start" onSubmit={() => {}} />);
+    fireEvent.change(screen.getByRole('textbox', { name: 'Your name' }), { target: { value: 'Amina K' } });
     expect(screen.getByRole('alert')).toBeTruthy();
   });
 });
