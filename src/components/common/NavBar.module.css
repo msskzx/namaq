@@ -10,7 +10,8 @@
 .band { position: relative; max-width: var(--home-width); min-height: 72px; margin-inline: auto; padding-inline: var(--home-gutter); display: flex; align-items: center; gap: 1.5rem; }
 .spacer { height: 75px; }
 
-.wordmark { display: block; color: var(--home-ink); }
+.wordmark { display: flex; align-items: center; gap: 0.5rem; color: var(--home-ink); }
+.emblem { display: block; height: 2.75rem; width: auto; }
 .logo { display: block; height: 2.75rem; width: auto; }
 
 .chapters { display: none; flex: 1; gap: 0.25rem; }

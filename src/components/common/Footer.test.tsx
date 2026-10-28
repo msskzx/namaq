@@ -17,4 +17,10 @@ describe('Footer', () => {
     expect(sections.map(link => link.getAttribute('href'))).toEqual(NAV_SECTIONS.map(section => section.href));
     expect(sections).toHaveLength(5);
   });
+  it('shows only the wordless icon in its home link', () => {
+    render(<Footer />);
+    const svgs = screen.getAllByRole('link', { name: 'Namaq' }).at(-1)!.querySelectorAll('svg');
+    expect(svgs).toHaveLength(1);
+    expect(svgs[0].getAttribute('viewBox')).toBe('12 24.7 76 76');
+  });
 });

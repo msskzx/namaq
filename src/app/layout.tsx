@@ -11,6 +11,7 @@ import ConditionalAnalytics from "@/components/cookies/ConditionalAnalytics";
 import SWRProvider from "@/components/common/SWRProvider";
 import CustomThemeProvider from "@/components/theme/CustomThemeProvider";
 import { SITE_URL } from "@/lib/siteUrl";
+import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/siteMeta";
 
 config.autoAddCss = false;
 
@@ -28,8 +29,9 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Namaq - Data Driven Interactive Learning",
-  description: "Data driven interactive learning platform to learn about all kinds of useful topics",
+  title: `${SITE_NAME} | ${SITE_DESCRIPTION}`,
+  description: SITE_DESCRIPTION,
+  openGraph: { siteName: SITE_NAME, title: SITE_NAME, description: SITE_DESCRIPTION, locale: "ar", type: "website" },
 };
 
 export default function RootLayout({

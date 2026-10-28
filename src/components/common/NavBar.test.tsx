@@ -22,6 +22,12 @@ class TestPointerEvent extends MouseEvent {
 if (!('PointerEvent' in window)) Object.assign(window, { PointerEvent: TestPointerEvent });
 
 describe('NavBar shelves', () => {
+  it('shows the wordless icon beside the word in the home link', () => {
+    render(<NavBar />);
+    const home = within(screen.getByRole('navigation')).getByRole('link', { name: 'Namaq' });
+    expect(home.querySelectorAll('svg')).toHaveLength(2);
+    expect(home.querySelector('svg')!.getAttribute('viewBox')).toBe('12 24.7 76 76');
+  });
   it('shows the theme button directly in the navbar without a settings menu', () => {
     render(<NavBar />);
     expect(within(screen.getByRole('navigation')).getByRole('button', { name: 'Switch to dark mode' })).toBeTruthy();

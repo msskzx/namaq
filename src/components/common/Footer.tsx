@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useLanguage } from '../language/LanguageContext';
 import translations from '../language/translations';
 import WorkInProgressBanner from '../homepage/WorkInProgressBanner';
-import Logo from './Logo';
+import Emblem from './Emblem';
 import { NAV_SECTIONS } from './NavBar';
 
 // The footer repeats only the navbar's five sections, each leading to its hub,
@@ -21,7 +21,7 @@ function Footer() {
         <WorkInProgressBanner />
         <div className="flex flex-col gap-5 md:flex-row md:items-center md:gap-10 mb-6">
           <Link href="/" aria-label={translations[currentLanguage].appName} className="shrink-0 self-start md:self-center">
-            <Logo small className="h-10 w-auto" />
+            <Emblem className="h-12 w-auto" />
           </Link>
           <nav aria-label={ar ? 'الأبواب' : 'Sections'}>
             <ul className="grid grid-cols-2 gap-x-8 gap-y-2 md:flex md:flex-wrap md:gap-x-8">
