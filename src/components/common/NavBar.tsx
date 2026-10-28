@@ -9,6 +9,7 @@ import translations from '../language/translations';
 import ThemeSwitcher from '../theme/ThemeSwitcher';
 import { QURAN_CARDS } from '@/app/quran/QuranHub';
 import Logo from './Logo';
+import Emblem from './Emblem';
 import styles from './NavBar.module.css';
 
 type Language = 'en' | 'ar';
@@ -164,7 +165,7 @@ export default function NavBar() {
       <nav className={menuOnly ? styles.menuOnly : styles.bar} aria-label={ar ? 'الأبواب' : 'Main'} dir={ar ? 'rtl' : 'ltr'}>
         <div className={styles.band}>
           {!menuOnly && <>
-          <Link href="/" className={styles.wordmark} onClick={() => setMenuOpen(false)} aria-label={translations[language].appName}><Logo small className={styles.logo} /></Link>
+          <Link href="/" className={styles.wordmark} onClick={() => setMenuOpen(false)} aria-label={translations[language].appName}><Emblem className={styles.emblem} /><Logo small className={styles.logo} /></Link>
           <ul className={styles.chapters}>
             {NAV_SECTIONS.map(section => (
               <Chapter key={section.href} section={section} language={language} active={section.href === active} path={path} />

@@ -1,10 +1,13 @@
 import type { MetadataRoute } from 'next';
+import { SITE_DESCRIPTION } from '@/lib/siteMeta';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'Namaq — نَمَق',
     short_name: 'Namaq',
-    description: 'Data driven interactive learning platform to learn about all kinds of useful topics',
+    description: SITE_DESCRIPTION,
+    lang: 'ar',
+    dir: 'rtl',
     start_url: '/',
     display: 'standalone',
     background_color: '#f4ecdb',

@@ -2,7 +2,7 @@
 
 Namaq gives the source text the most space and contrast. Warm paper, ink, fine rules and restrained typography borrow from a printed reference book. Color draws attention to an action, a selection or a meaningful distinction in the content. Secondary information stays quiet and can be disclosed when needed.
 
-`src/app/theme.css` owns the palette for light and dark modes. Read the values there. Use its `--home-*` variables in pages, portals, SVGs, charts and graphs. Derive transparency from those tokens instead of adding colors. The signed brand files in `public/brand/` retain their original colors because editing them breaks their content credentials.
+`src/app/theme.css` owns the palette for light and dark modes. Read the values there. Use its `--home-*` variables in pages, portals, SVGs, charts and graphs. Derive transparency from those tokens instead of adding colors.
 
 - Paper and deeper paper distinguish reading surfaces. Ink is primary text, muted ink is secondary text, and rules separate content.
 - Terracotta identifies headings, actions and exact word matches. Quiz feedback uses palette green for correct answers and terracotta red for incorrect answers, alongside text and icons. Purple identifies root matches. In branches, joined ف is purple and joined و is green. Keep the text or symbol that explains each distinction.
