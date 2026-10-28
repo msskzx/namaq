@@ -3,7 +3,7 @@ import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { act as reduce, createParty, viewFor, type Action, type ActionError, type PartyState } from '@/lib/party/rules';
-import PartyRoom from './PartyRoom';
+import PartyRoom, { NameForm } from './PartyRoom';
 
 const socket = vi.hoisted(() => ({ view: null as unknown, error: null as ActionError | null, send: vi.fn() }));
 vi.mock('@/lib/party/client', () => ({
@@ -57,6 +57,21 @@ describe('party lobby', () => {
     fireEvent.click(screen.getByRole('button', { name: /I'm ready/ }));
     expect(socket.send).toHaveBeenCalledWith({ type: 'ready', ready: true });
   });
+
+  it('shows the example tree to the host and the players when trees are chosen', () => {
+    const trees = reduce(party([]), { type: 'settings', playerId: 'p0', settings: { topics: ['BRANCHES'] } }, 0).state;
+    show(trees);
+    expect(screen.getByRole('region', { name: 'Example tree' })).toBeTruthy();
+    cleanup();
+    show(trees, 'p1');
+    expect(screen.getByRole('region', { name: 'Example tree' })).toBeTruthy();
+    expect(screen.getByText('Grading:')).toBeTruthy();
+  });
+
+  it('shows no example tree without the trees topic', () => {
+    show(reduce(party([]), { type: 'settings', playerId: 'p0', settings: { topics: ['PEOPLE'] } }, 0).state, 'p1');
+    expect(screen.queryByRole('region', { name: 'Example tree' })).toBeNull();
+  });
 });
 
 describe('party question', () => {
@@ -64,7 +79,12 @@ describe('party question', () => {
 
   it('waits for the others with the timer and leaderboard, hiding the question and whether it was right', () => {
     show(reduce(asked(), { type: 'submit', playerId: 'p0', answer: 'b' }, 0).state);
-    expect(screen.getByText('Waiting for Amina.')).toBeTruthy();
+    const board = screen.getByRole('region', { name: 'Leaderboard' });
+    const status = (name: string) => board.querySelector(`[data-player="${name}"] [data-status]`)?.getAttribute('data-status');
+    expect(status('Host')).toBe('answered');
+    expect(status('Amina')).toBe('answering');
+    expect(screen.queryByText(/Waiting for/)).toBeNull();
+    expect(screen.getByText('Your answer is in. Still answering: Amina.').getAttribute('aria-live')).toBe('polite');
     expect(screen.getByRole('timer', { name: 'Time left' })).toBeTruthy();
     expect(screen.getByRole('region', { name: 'Leaderboard' })).toBeTruthy();
     expect(screen.queryByText('من هو؟')).toBeNull();
@@ -85,5 +105,23 @@ describe('party question', () => {
     expect(within(board).getAllByRole('listitem').map(item => item.getAttribute('data-player'))).toEqual(['Amina', 'Host']);
     fireEvent.click(screen.getByRole('button', { name: /Next question/ }));
     expect(socket.send).toHaveBeenCalledWith({ type: 'next' });
+  });
+});
+
+describe('name form', () => {
+  it('hides the taken-name error once the name is edited, and shows it again for the same name', () => {
+    render(<NameForm initial="Amina" error="Someone in the party has that name." ar={false} label="Join" nameError onSubmit={() => {}} />);
+    expect(screen.getByRole('alert')).toBeTruthy();
+    const input = screen.getByRole('textbox', { name: 'Your name' });
+    fireEvent.change(input, { target: { value: 'Amina K' } });
+    expect(screen.queryByRole('alert')).toBeNull();
+    fireEvent.change(input, { target: { value: 'Amina' } });
+    expect(screen.getByRole('alert')).toBeTruthy();
+  });
+
+  it('keeps other errors while the name is edited', () => {
+    render(<NameForm initial="Amina" error="Couldn't start a party." ar={false} label="Start" onSubmit={() => {}} />);
+    fireEvent.change(screen.getByRole('textbox', { name: 'Your name' }), { target: { value: 'Amina K' } });
+    expect(screen.getByRole('alert')).toBeTruthy();
   });
 });

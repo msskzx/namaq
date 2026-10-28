@@ -39,19 +39,23 @@ const ERRORS: Record<ActionError, { en: string; ar: string }> = {
   "wrong-phase": { en: "That isn't possible right now.", ar: "لا يمكن هذا الآن." },
 };
 
-export function NameForm({ initial, onSubmit, error, ar, label }: { initial: string; onSubmit: (name: string) => void; error?: string | null; ar: boolean; label: string }) {
+export function NameForm({ initial, onSubmit, error, ar, label, nameError }: { initial: string; onSubmit: (name: string) => void; error?: string | null; ar: boolean; label: string; nameError?: boolean }) {
   const [name, setName] = useState(initial);
+  // A name error belongs to the name that was sent; editing the name clears it.
+  const [sent, setSent] = useState(initial.trim());
   return (
     <form className="flex flex-col gap-2" onSubmit={(event) => {
       event.preventDefault();
-      if (name.trim()) onSubmit(name.trim());
+      if (!name.trim()) return;
+      setSent(name.trim());
+      onSubmit(name.trim());
     }}>
       <label className="flex flex-col gap-1">
         <span className="text-sm font-semibold text-[var(--home-ink)]">{ar ? "اسمك" : "Your name"}</span>
         <input value={name} maxLength={NAME_MAX} onChange={(event) => setName(event.target.value)} autoComplete="nickname"
           className="w-full max-w-xs rounded border border-[var(--home-rule)] bg-transparent px-3 py-2 text-[var(--home-ink)]" />
       </label>
-      {error && <p role="alert" className="text-sm text-[var(--home-accent)]">{error}</p>}
+      {error && (!nameError || name.trim() === sent) && <p role="alert" className="text-sm text-[var(--home-accent)]">{error}</p>}
       <Button className="self-start" variant="primary" type="submit" disabled={!name.trim()}>{label}</Button>
     </form>
   );
@@ -86,7 +90,7 @@ function Countdown({ deadline, total, offset, ar, big }: { deadline: number; tot
   );
 }
 
-function Leaderboard({ players, you, ar, final }: { players: PlayerView[]; you: string; ar: boolean; final?: boolean }) {
+function Leaderboard({ players, you, ar, final, answering }: { players: PlayerView[]; you: string; ar: boolean; final?: boolean; answering?: boolean }) {
   const ranked = leaderboard(players);
   const top = Math.max(1, ...ranked.map((player) => player.score));
   return (
@@ -99,7 +103,12 @@ function Leaderboard({ players, you, ar, final }: { players: PlayerView[]; you: 
             <li key={player.id} data-player={player.name} className={`flex items-center gap-3 rounded-sm px-2 py-1.5 ${player.id === you ? "bg-[var(--home-paper-deep)]" : ""}`}>
               <span className={`inline-flex size-7 shrink-0 items-center justify-center rounded-full text-sm font-bold ${rank === 1 ? "bg-[var(--home-green)] text-[var(--home-paper)]" : "border border-[var(--home-rule)] text-[var(--home-muted)]"}`}>{ar ? num(rank) : rank}</span>
               <span className="flex min-w-0 flex-1 flex-col gap-1">
-                <span className="truncate text-[var(--home-ink)]">{player.name}</span>
+                <span className="flex min-w-0 items-center gap-2">
+                  <span className="truncate text-[var(--home-ink)]">{player.name}</span>
+                  {answering && (player.submitted
+                    ? <span data-status="answered" className="text-sm text-[var(--home-green)]"><FontAwesomeIcon icon={faCircleCheck} /><span className="sr-only">{ar ? "أجاب" : "Answered"}</span></span>
+                    : <span data-status="answering" className="inline-flex items-center gap-1 pt-1">{[0, 1, 2].map((dot) => <span key={dot} aria-hidden className="animate-typing-dot size-2 rounded-full bg-[var(--home-muted)]" style={{ animationDelay: `${dot * 0.15}s` }} />)}<span className="sr-only">{ar ? "يكتب" : "Still answering"}</span></span>)}
+                </span>
                 <span aria-hidden data-bar className="flex h-2 overflow-hidden rounded-full bg-[var(--home-rule)]">
                   <span className={`bg-[var(--home-green)] transition-[width] duration-700 ${final ? "" : "opacity-50"}`} style={{ width: `${((player.score - (final ? 0 : player.earned ?? 0)) / top) * 100}%` }} />
                   {!final && !!player.earned && <span className="bg-[var(--home-green)] transition-[width] duration-700" style={{ width: `${(player.earned / top) * 100}%` }} />}
@@ -221,14 +230,11 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
   const total = (question.tree ? view.settings.treeSeconds : view.settings.seconds) * 1000;
   if (!revealed && sent) return (
     <div className="flex flex-col gap-5">
-      <div className="flex flex-col items-center gap-4 py-6 text-center">
-        {view.deadline !== null && <Countdown big deadline={view.deadline} total={total} offset={offset} ar={ar} />}
-        <p className="font-semibold">{ar ? "أُرسلت إجابتك." : "Your answer is in."}</p>
-        <p className="text-sm text-[var(--home-muted)]" aria-live="polite">{ar
-          ? `ننتظر ${waiting.map((player) => player.name).join("، ")}.`
-          : `Waiting for ${waiting.map((player) => player.name).join(", ")}.`}</p>
-      </div>
-      <Leaderboard players={view.players} you={view.you} ar={ar} />
+      <p className="sr-only" aria-live="polite">{ar
+        ? `أُرسلت إجابتك. لم يجب بعد: ${waiting.map((player) => player.name).join("، ")}.`
+        : `Your answer is in. Still answering: ${waiting.map((player) => player.name).join(", ")}.`}</p>
+      {view.deadline !== null && <div className="flex justify-center py-6"><Countdown big deadline={view.deadline} total={total} offset={offset} ar={ar} /></div>}
+      <Leaderboard players={view.players} you={view.you} ar={ar} answering />
     </div>
   );
   return (
@@ -310,7 +316,7 @@ export default function PartyRoom({ code }: { code: string }) {
   let body: React.ReactNode;
   if (status === "missing" || status === "removed") body = <Notice status={status} ar={ar} />;
   else if (!joined && error === "started") body = <Notice status="started" ar={ar} />;
-  else if (id && (!name || nameError)) body = <NameForm initial={name ?? ""} error={nameError} ar={ar} label={ar ? "انضم" : "Join"} onSubmit={(value) => { saveName(value); setName(value); }} />;
+  else if (id && (!name || nameError)) body = <NameForm initial={name ?? ""} error={nameError} ar={ar} label={ar ? "انضم" : "Join"} nameError onSubmit={(value) => { saveName(value); setName(value); }} />;
   else if (!view) body = <LoadingSpinner fill />;
   else if (view.phase === "lobby") body = <Lobby view={view} send={send} error={error} ar={ar} />;
   else if (view.phase === "loading") body = <div className="flex flex-col items-center gap-3"><LoadingSpinner /><p className="text-[var(--home-muted)]">{ar ? "تُجهَّز الأسئلة…" : "Getting the questions ready…"}</p></div>;
