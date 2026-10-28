@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookOpen, faCircle, faCircleCheck, faCircleXmark, faCopy, faCrown, faHourglassHalf, faPen, faPlay, faRightFromBracket, faRotateLeft, faUserCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faBookOpen, faCircle, faCircleCheck, faCircleXmark, faCopy, faCrown, faHourglassHalf, faPlay, faRightFromBracket, faRotateLeft, faUserCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { renderSVG } from "uqr";
 import styles from "@/components/common/PaperPage.module.css";
 import Button from "@/components/common/Button";
@@ -107,7 +107,7 @@ function Leaderboard({ players, you, ar, final, answering }: { players: PlayerVi
                   <span className="truncate text-[var(--home-ink)]">{player.name}</span>
                   {answering && (player.submitted
                     ? <span data-status="answered" className="text-sm text-[var(--home-green)]"><FontAwesomeIcon icon={faCircleCheck} /><span className="sr-only">{ar ? "أجاب" : "Answered"}</span></span>
-                    : <span data-status="answering" className="animate-pulse text-sm text-[var(--home-muted)]"><FontAwesomeIcon icon={faPen} /><span className="sr-only">{ar ? "يكتب" : "Still answering"}</span></span>)}
+                    : <span data-status="answering" className="inline-flex items-center gap-1 pt-1">{[0, 1, 2].map((dot) => <span key={dot} aria-hidden className="animate-typing-dot size-2 rounded-full bg-[var(--home-muted)]" style={{ animationDelay: `${dot * 0.15}s` }} />)}<span className="sr-only">{ar ? "يكتب" : "Still answering"}</span></span>)}
                 </span>
                 <span aria-hidden data-bar className="flex h-2 overflow-hidden rounded-full bg-[var(--home-rule)]">
                   <span className={`bg-[var(--home-green)] transition-[width] duration-700 ${final ? "" : "opacity-50"}`} style={{ width: `${((player.score - (final ? 0 : player.earned ?? 0)) / top) * 100}%` }} />

@@ -49,6 +49,28 @@ body {
   animation: fade-in-down 0.3s ease-out;
 }
 
+/* Chat-style "still typing" dots: each dot hops in turn. */
+@keyframes typing-dot {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+.animate-typing-dot {
+  animation: typing-dot 1.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-typing-dot {
+    animation: none;
+  }
+}
+
 /* docs/palette.md */
 @supports not selector(::-webkit-scrollbar) {
   * {
