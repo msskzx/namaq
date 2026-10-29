@@ -64,6 +64,7 @@ describe('complete branch tree answers', () => {
     ];
     const own = { tree: branch(group), variants: variants(group) };
     render(<BranchInputs question={own} typed={[]} onChange={vi.fn()} onCheck={vi.fn()} ar />);
+    expect(within(screen.getByRole('region', { name: 'أكمل الشجرة' })).getByRole('toolbar', { name: 'تكبير الشجرة' })).toBeTruthy();
     expect(screen.queryByRole('button', { name: /عرض اختلافات الضبط والسياق/ })).toBeNull();
     expect(screen.queryByRole('button', { name: /عرض الآيات في سياقها/ })).toBeNull();
     expect(screen.queryByRole('link')).toBeNull();
