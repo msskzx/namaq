@@ -5,6 +5,11 @@ import { GET } from './route';
 const search = (query: Record<string, string>) => GET(new NextRequest(`http://localhost/api/quran/branch-phrases?${new URLSearchParams(query)}`));
 
 describe('branch tree suggestions', () => {
+  it('finds the complete tree by wording absorbed from a smaller tree', async () => {
+    const { suggestions } = await search({ q: 'فذرهم يخوضوا ويلعبوا', juzFrom: '25', juzTo: '30' }).json();
+    expect(suggestions).toHaveLength(1);
+    expect(suggestions[0]).toMatchObject({ id: 'يومهم الذي', count: 4 });
+  });
   it('searches the unified tree inventory', async () => {
     const response = search({ q: 'وقعت الواقعة' });
     const body = await response.json();

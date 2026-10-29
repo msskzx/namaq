@@ -6,7 +6,7 @@ import type { ReaderPageData } from './readerPage';
 
 export type BranchAyah = { key: string; page: number; words: string[]; roots?: (string | null)[]; lemmas?: (string | null)[]; conjs?: (string | null)[]; conj?: string; next?: string[]; nextRoots?: (string | null)[]; nextLemmas?: (string | null)[]; through?: string };
 export type Branch = { words: string[]; ayat: string[]; children: Branch[]; forms?: Record<string, string[]>; partition?: string; through?: Record<string, string> };
-export type Opening = { id: string; text: string; count: number; partition?: string; textEn?: string };
+export type Opening = { id: string; text: string; count: number; partition?: string; textEn?: string; aliases?: string[] };
 export type Variant = { word: string; conj: string; keys: string[]; id: string; forms?: Record<string, string[]>; partition?: string };
 
 export const OPENING_WORDS = 2;
@@ -247,7 +247,7 @@ export const searchKey = (value: string) => normalizeWord(value.normalize('NFC')
 export function searchPhrases(phrases: Opening[], query: string) {
   const needle = searchKey(query);
   if (!needle) return [];
-  const keyed = phrases.map(phrase => ({ phrase, values: [phrase.id, phrase.text, phrase.textEn ?? ''].map(searchKey) }));
+  const keyed = phrases.map(phrase => ({ phrase, values: [phrase.id, phrase.text, phrase.textEn ?? '', ...(phrase.aliases ?? [])].map(searchKey) }));
   const starts = (candidate: typeof keyed[number]) => candidate.values.some(value => value.startsWith(needle));
   return [...keyed.filter(starts), ...keyed.filter(candidate => !starts(candidate) && candidate.values.some(value => value.includes(needle)))].map(candidate => candidate.phrase);
 }
