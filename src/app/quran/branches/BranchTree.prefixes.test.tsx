@@ -37,7 +37,7 @@ describe('preceding ayat as empty phrase prefixes', () => {
     const { container } = render(tree('62:4'), { wrapper });
     await screen.findByText(before['62:4'].words[0]);
     expect(screen.queryByText(before['62:3'].words[0])).toBeNull();
-    fireEvent.click(screen.getByRole('switch'));
+    fireEvent.click(screen.getByRole('switch', { name: 'الآيات المحيطة' }));
     await screen.findByText(before['62:3'].words[0]);
     expect(screen.getAllByText(before['62:4'].words[0])).toHaveLength(1);
     const previous = container.querySelector('[data-node="before62:4"]')!;
@@ -101,7 +101,7 @@ it('uses the actual wrapped predecessor for the extra step before al-Fatiha', as
   render(tree('1:2'), { wrapper });
   await screen.findByText('مِنَ الْجِنَّةِ وَالنَّاسِ');
   expect(screen.getByText('بِسْمِ اللَّهِ')).toBeTruthy();
-  fireEvent.click(screen.getByRole('switch'));
+  fireEvent.click(screen.getByRole('switch', { name: 'الآيات المحيطة' }));
   await screen.findByText('الَّذِي يُوَسْوِسُ');
   const last = new URL(fetch.mock.calls[fetch.mock.calls.length - 1][0], 'http://localhost');
   expect(last.searchParams.get('before')).toBe('114:6');

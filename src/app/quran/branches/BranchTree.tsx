@@ -3,6 +3,7 @@
 import React, { useEffect, useId, useRef, useState } from 'react';
 import { Maximize2, RotateCw, RotateCcw, ZoomIn, ZoomOut } from 'lucide-react';
 import Button from '@/components/common/Button';
+import Toggle from '@/components/common/Toggle';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@/lib/quran/arabicNumber';
 import { ayahEnds, branchesHref, keys, linkable, linkId, spell, type Branch, type BranchesView, type Variant } from '@/lib/quran/branches';
@@ -156,15 +157,11 @@ function TreeViewport({ children, controls, enabled, ar }: { children: React.Rea
   const scale = manualScale ?? fitted;
   const setScale = (next: number) => setManualScale(Math.min(MAX_SCALE, Math.max(MIN_SCALE, Number(next.toFixed(2)))));
   const labels = ar ? {
-    fit: 'ملاءمة الشجرة للشاشة',
     out: 'تصغير الشجرة',
     in: 'تكبير الشجرة',
-    actual: 'الحجم الأصلي',
   } : {
-    fit: 'Fit tree to screen',
     out: 'Zoom out',
     in: 'Zoom in',
-    actual: 'Actual size',
   };
   const frame = size ? { width: size.width * scale, height: size.height * scale } : undefined;
   const viewportHeight = size ? Math.min(frame!.height, size.availableHeight) : undefined;
@@ -173,14 +170,19 @@ function TreeViewport({ children, controls, enabled, ar }: { children: React.Rea
     <div className="mb-3 flex flex-wrap items-center gap-3">
       {controls}
       <div role="toolbar" aria-label={ar ? 'تكبير الشجرة' : 'Tree zoom'} className="flex flex-wrap items-center gap-2">
-        <Button size="sm" active={manualScale === null} onClick={() => setManualScale(null)} aria-label={labels.fit} title={labels.fit}><Maximize2 size={16} aria-hidden />{ar ? 'ملاءمة' : 'Fit'}</Button>
+        <Toggle
+          checked={manualScale !== null}
+          label={ar ? 'تكبير يدوي بدل ملاءمة الشجرة' : 'Manual zoom instead of fit'}
+          onChange={manual => setManualScale(manual ? 1 : null)}
+          offIcon={<Maximize2 className="size-3" />}
+          onIcon={<RotateCcw className="size-3" />}
+        />
         <Button size="icon" onClick={() => setScale(scale - SCALE_STEP)} disabled={scale <= MIN_SCALE} aria-label={labels.out} title={labels.out}><ZoomOut size={16} aria-hidden /></Button>
         <span className="min-w-12 text-center text-sm tabular-nums text-[var(--home-muted)]" aria-live="polite">{ar ? `${num(Math.round(scale * 100))}٪` : `${Math.round(scale * 100)}%`}</span>
         <Button size="icon" onClick={() => setScale(scale + SCALE_STEP)} disabled={scale >= MAX_SCALE} aria-label={labels.in} title={labels.in}><ZoomIn size={16} aria-hidden /></Button>
-        <Button size="sm" active={manualScale === 1} onClick={() => setManualScale(1)} aria-label={labels.actual} title={labels.actual}><RotateCcw size={16} aria-hidden />{ar ? '١٠٠٪' : '100%'}</Button>
       </div>
     </div>
-    <div ref={viewport} data-tree-viewport className="overflow-auto" style={{ height: viewportHeight }}>
+    <div ref={viewport} data-tree-viewport className={manualScale === null ? 'overflow-hidden' : 'overflow-auto'} style={{ height: viewportHeight }}>
       <div data-tree-frame className="relative" style={frame}>
         <div ref={content} data-tree-content className="absolute top-0 flex w-max items-center" style={{ insetInlineStart: 0, transform: `scale(${scale})`, transformOrigin: ar ? 'top right' : 'top left' }}>{children}</div>
       </div>
@@ -229,7 +231,7 @@ export default function BranchTree({ tree, names, variants = [], prefixes, subtr
   </> : undefined;
   return (
     <PathProvider value={paths}>
-      <div tabIndex={0} role="region" aria-label={label} data-tree={id} className="overflow-auto rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] p-4 text-[var(--home-ink)]">
+      <div tabIndex={0} role="region" aria-label={label} data-tree={id} className={`${zoomable ? 'overflow-hidden' : 'overflow-auto'} rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] p-4 text-[var(--home-ink)]`}>
         {around && <style>{targetStyle(id)}</style>}
         {mandatory.isLoading && <p role="status" className="text-sm text-[var(--home-muted)]">{ar ? 'جارٍ تحميل الآيات السابقة' : 'Loading preceding ayat'}</p>}
         {mandatory.error && <div role="alert" className="flex items-center gap-2 text-sm text-[var(--home-accent)]">

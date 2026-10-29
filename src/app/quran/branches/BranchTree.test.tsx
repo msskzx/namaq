@@ -34,7 +34,7 @@ describe('BranchTree', () => {
     expect(screen.getByText('مَقَامٍ أَمِينٍۢ')).toBeTruthy();
   });
 
-  it('fits the complete tree by default and lets the reader zoom or restore its actual size', () => {
+  it('fits the complete tree by default and switches between fit and manual zoom', () => {
     let resize: ResizeObserverCallback = () => {};
     vi.stubGlobal('ResizeObserver', class {
       constructor(callback: ResizeObserverCallback) { resize = callback; }
@@ -58,13 +58,21 @@ describe('BranchTree', () => {
     expect(firstRow.querySelector('[role="toolbar"]')).not.toBeNull();
     expect(content.style.transform).toBe('scale(0.5)');
     expect(viewport.style.height).toBe('400px');
+    expect(viewport.classList.contains('overflow-hidden')).toBe(true);
+    expect(container.querySelector('[data-tree]')!.classList.contains('overflow-hidden')).toBe(true);
     expect(screen.getByText('٥٠٪')).toBeTruthy();
+    const zoomMode = screen.getByRole('switch', { name: 'تكبير يدوي بدل ملاءمة الشجرة' }) as HTMLInputElement;
+    expect(zoomMode.checked).toBe(false);
     fireEvent.click(screen.getByRole('button', { name: 'تكبير الشجرة' }));
     expect(content.style.transform).toBe('scale(0.6)');
-    fireEvent.click(screen.getByRole('button', { name: 'الحجم الأصلي' }));
+    expect(viewport.classList.contains('overflow-auto')).toBe(true);
+    expect(zoomMode.checked).toBe(true);
+    fireEvent.click(zoomMode);
+    expect(content.style.transform).toBe('scale(0.5)');
+    fireEvent.click(zoomMode);
     expect(content.style.transform).toBe('scale(1)');
     expect(viewport.style.height).toBe('700px');
-    fireEvent.click(screen.getByRole('button', { name: 'ملاءمة الشجرة للشاشة' }));
+    fireEvent.click(zoomMode);
     expect(content.style.transform).toBe('scale(0.5)');
   });
 
@@ -320,9 +328,9 @@ describe('BranchTree', () => {
       expect(screen.getAllByText('الآيات المحيطة')).toHaveLength(1);
     });
 
-    it('has no switch unless the page asks for one', () => {
+    it('has no surrounding-ayat switch unless the page asks for one', () => {
       render(<BranchTree tree={tree} names={names} />);
-      expect(screen.queryByRole('switch')).toBeNull();
+      expect(screen.queryByRole('switch', { name: 'الآيات المحيطة' })).toBeNull();
     });
 
     it('loads nothing until the switch is turned on, then draws the ayah before and after every branch', async () => {
@@ -391,15 +399,15 @@ describe('BranchTree', () => {
     it('turns on from its visible label too', () => {
       render(<BranchTree tree={tree} names={names} surround={{ on: false }} />);
       fireEvent.click(screen.getByText('الآيات المحيطة'));
-      expect((screen.getByRole('switch') as HTMLInputElement).checked).toBe(true);
+      expect((screen.getByRole('switch', { name: 'الآيات المحيطة' }) as HTMLInputElement).checked).toBe(true);
     });
 
     it('keeps the switch in the address without asking the server for the page again', () => {
       window.history.replaceState(null, '', '/quran/branches?o=x');
       render(<BranchTree tree={tree} names={names} surround={{ on: false, sync: true }} />);
-      fireEvent.click(screen.getByRole('switch'));
+      fireEvent.click(screen.getByRole('switch', { name: 'الآيات المحيطة' }));
       expect(`${window.location.pathname}${window.location.search}`).toBe('/quran/branches?o=x&c=1');
-      fireEvent.click(screen.getByRole('switch'));
+      fireEvent.click(screen.getByRole('switch', { name: 'الآيات المحيطة' }));
       expect(`${window.location.pathname}${window.location.search}`).toBe('/quran/branches?o=x');
       expect(replace).not.toHaveBeenCalled();
     });
@@ -407,7 +415,7 @@ describe('BranchTree', () => {
     it('follows the address over a cached page when the browser goes back to a tree it switched on', async () => {
       window.history.replaceState(null, '', '/quran/branches?o=x&c=1');
       const { container } = render(<BranchTree tree={tree} names={names} surround={{ on: false, sync: true }} />);
-      expect((screen.getByRole('switch') as HTMLInputElement).checked).toBe(true);
+      expect((screen.getByRole('switch', { name: 'الآيات المحيطة' }) as HTMLInputElement).checked).toBe(true);
       await waitFor(() => expect(container.querySelectorAll('[data-ctx]')).toHaveLength(5));
       window.history.replaceState(null, '', '/');
     });
@@ -417,15 +425,15 @@ describe('BranchTree', () => {
       render(<BranchTree tree={branch(group)} names={names} view={{}} surround={{ on: false, sync: true }} />);
       const link = () => screen.getAllByRole('link').find(a => a.getAttribute('href')!.startsWith('/quran/branches?'))!;
       expect(new URL(link().getAttribute('href')!, 'http://localhost').searchParams.has('c')).toBe(false);
-      fireEvent.click(screen.getByRole('switch'));
+      fireEvent.click(screen.getByRole('switch', { name: 'الآيات المحيطة' }));
       expect(new URL(link().getAttribute('href')!, 'http://localhost').searchParams.get('c')).toBe('1');
     });
 
     it('draws the ayat the page already loaded without fetching them', () => {
       const { container } = render(<BranchTree tree={tree} names={names} surround={{ on: true, sync: true, data: around }} />);
       expect(container.querySelectorAll('[data-ctx]')).toHaveLength(5);
-      fireEvent.click(screen.getByRole('switch'));
-      fireEvent.click(screen.getByRole('switch'));
+      fireEvent.click(screen.getByRole('switch', { name: 'الآيات المحيطة' }));
+      fireEvent.click(screen.getByRole('switch', { name: 'الآيات المحيطة' }));
       expect(container.querySelectorAll('[data-ctx]')).toHaveLength(5);
       expect(fetch).not.toHaveBeenCalled();
     });
