@@ -1,5 +1,7 @@
 # Shared ayah openings
 
+> Superseded by [ADR 0034](../adr/0034-one-inventory-defines-quran-branch-trees.md). Openings and inside-ayah phrases now belong to one tree inventory.
+
 ## PR 422 follow-up handoff
 
 Status: the owner accepted the context overlay design and authorized

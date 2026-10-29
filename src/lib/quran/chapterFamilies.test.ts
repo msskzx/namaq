@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import ayat from '@/app/quran/branches/ayat.json';
+import data from '@/app/quran/branches/trees.json';
 import { branch, grown, keys, linkable, listPhrases, sharedOpenings, startingWith, searchPhrases, type Branch, type BranchAyah } from './branches';
 import { chapterFamilies } from './chapterFamilies';
 import { inJuzRange } from './juz';
 import { normalizeWord } from './normalize';
 
-const all = ayat as BranchAyah[];
+const all = data.ayat as BranchAyah[];
 const families = chapterFamilies(all);
 const expected = {
   hawamim: ['40:1', '41:1', '42:1', '43:1', '44:1', '45:1', '46:1'],

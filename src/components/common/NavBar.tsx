@@ -25,7 +25,7 @@ export const NAV_SECTIONS: NavSection[] = [
       quran('/quran/qiraat', { ar: 'القراءات', en: 'Readings' }),
     ] },
     { title: { ar: 'الألفاظ', en: 'Words' }, items: [
-      quran('/quran/branches', { ar: 'فواتح الآيات المشتركة', en: 'Shared ayah openings' }),
+      quran('/quran/branches', { ar: 'أشجار العبارات المشتركة', en: 'Shared phrase trees' }),
       quran('/quran/compare', { ar: 'مقارنة السور', en: 'Compare surahs' }),
       quran('/quran/words', { ar: 'ألفاظ القرآن', en: 'Words of the Quran' }),
     ] },

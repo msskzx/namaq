@@ -1,4 +1,4 @@
-import sharedAyat from '@/app/quran/branches/ayat.json';
+import treeData from '@/app/quran/branches/trees.json';
 import musaAyat from '@/app/quran/prophets/ayat/musa.json';
 import bank from '../../data/quiz/questions.json';
 import { branch, startingWith, type BranchAyah } from '@/lib/quran/branches';
@@ -24,7 +24,7 @@ const MUSA_EVENT_EN = [
 const MUSA_PHASE_EN = ['Early life', 'The mission', 'The exodus', 'The Children of Israel', 'Knowledge and scripture'];
 
 export async function getHomePreviews() {
-  const group = startingWith(sharedAyat as BranchAyah[], 'ان المتقين');
+  const group = startingWith(treeData.ayat as BranchAyah[], 'ان المتقين');
   const comparisons = Array.from({ length: 5 }, (_, index) => {
     const a = ayahWords(musaAyat.ayat[`26:${41 + index}` as keyof typeof musaAyat.ayat], false);
     const b = ayahWords(musaAyat.ayat[`7:${113 + index}` as keyof typeof musaAyat.ayat], false);

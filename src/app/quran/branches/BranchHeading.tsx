@@ -7,12 +7,12 @@ export default function BranchHeading() {
   const { language } = useLanguage();
   const ar = language === 'ar';
   return <header className={styles.heading} dir={ar ? 'rtl' : 'ltr'}>
-    <h1>{ar ? 'العبارات المشتركة في الآيات' : 'Shared ayah phrases'}</h1>
+    <h1>{ar ? 'أشجار العبارات المشتركة' : 'Shared phrase trees'}</h1>
     <details className="text-sm text-[var(--home-muted)]">
       <summary className="cursor-pointer select-none text-[var(--home-ink)]">{ar ? 'قواعد المطابقة' : 'Matching rules'}</summary>
       <p className="mt-2">{ar
-        ? 'تُجمع الآية المبدوءة بواو أو فاء عاطفة مع التي تبدأ بالكلمة نفسها دونها، وتظهر الصيغتان قبل الشجرة. تُجمع الفواتح بلا تشكيل ولا علامات وقف مع اتفاق جذور الكلمات، وفي الشجرة تصير الكلمة التي يختلف تشكيلها عقدة مستقلة، والنص برواية حفص كما في صفحة القراءة.'
-        : 'Initial conjunctions wa and fa are grouped with the same opening without the conjunction, with each form shown before the tree. Openings match without vowel and pause marks and must have matching word roots. Significant vowel differences create separate tree nodes. Text follows the Hafs reading used in the reader.'}</p>
+        ? 'تجمع كل شجرة عبارة تكررت في آيتين أو أكثر أينما وردت. لا تفصل واو أو فاء مثبتة صرفيًّا في أول العبارة، ولا اختلافات كرسي الهمزة، بين فروع الشجرة، مع إبقاء الصيغ الأصلية ظاهرة. وتظهر مجموعات السور المسماة في القائمة نفسها. النص برواية حفص كما في صفحة القراءة.'
+        : 'Each tree joins wording shared by two or more ayat wherever it occurs. A morphology-marked initial wa or fa and hamza seat differences do not split a tree; original forms remain visible. Named chapter families appear in the same list. Text follows the Hafs reading used in the reader.'}</p>
     </details>
   </header>;
 }

@@ -7,7 +7,7 @@ export const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
   AYAT: { en: "Revealed about whom", ar: "في من نزلت" },
   EVENTS: { en: "Events", ar: "أحداث" },
   PERSON_CIRCLE: { en: "A person's circle", ar: "دائرة شخص" },
-  BRANCHES: { en: "Shared openings", ar: "فواتح الآيات" },
+  BRANCHES: { en: "Phrase trees", ar: "أشجار العبارات" },
 };
 
 export const TOPIC_GROUPS: { en: string; ar: string; topics: QuizTopic[] }[] = [

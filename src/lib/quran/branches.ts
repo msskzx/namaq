@@ -4,7 +4,7 @@ import type { JuzRange } from './juz';
 import { normalizeWord } from './normalize';
 import type { ReaderPageData } from './readerPage';
 
-export type BranchAyah = { key: string; page: number; words: string[]; roots?: (string | null)[]; lemmas?: (string | null)[]; conj?: string; next?: string[]; nextRoots?: (string | null)[]; nextLemmas?: (string | null)[]; through?: string };
+export type BranchAyah = { key: string; page: number; words: string[]; roots?: (string | null)[]; lemmas?: (string | null)[]; conjs?: (string | null)[]; conj?: string; next?: string[]; nextRoots?: (string | null)[]; nextLemmas?: (string | null)[]; through?: string };
 export type Branch = { words: string[]; ayat: string[]; children: Branch[]; forms?: Record<string, string[]>; partition?: string; through?: Record<string, string> };
 export type Opening = { id: string; text: string; count: number; partition?: string; textEn?: string };
 export type Variant = { word: string; conj: string; keys: string[]; id: string; forms?: Record<string, string[]>; partition?: string };
@@ -34,21 +34,15 @@ const chapterOpening = (ayah: BranchAyah) => {
 };
 const openingLength = (ayah: BranchAyah) => chapterOpening(ayah)?.split(' ').length ?? OPENING_WORDS;
 
-export type BranchScope = 'all' | 'opening' | 'inside';
-export type BranchesView = { scope?: BranchScope; kind?: 'inside'; phraseId?: string; occurrences?: string[]; grouped?: boolean; page?: number; spelling?: string; partition?: string; context?: boolean; query?: string; surah?: number };
+export type BranchesView = { scope?: 'all' | 'opening' | 'inside'; kind?: 'inside'; phraseId?: string; occurrences?: string[]; grouped?: boolean; page?: number; spelling?: string; partition?: string; context?: boolean; query?: string; surah?: number };
 
 export function branchesHref(id: string, juz?: JuzRange, view: BranchesView = {}) {
   const params = new URLSearchParams();
-  if (view.scope && view.scope !== 'all') params.set('scope', view.scope);
-  if (id && view.kind === 'inside') params.set('kind', 'inside');
   if (id) params.set('o', id);
-  if (id && view.kind === 'inside' && view.occurrences?.length) params.set('at', view.occurrences.join(','));
+  if (id && view.occurrences?.length) params.set('at', view.occurrences.join(','));
   if (juz) params.set('juzFrom', `${juz.from}`);
   if (juz) params.set('juzTo', `${juz.to}`);
-  if (view.grouped) params.set('g', 'opening');
   if (view.page && view.page > 1) params.set('p', `${view.page}`);
-  if (id && view.spelling) params.set('w', view.spelling);
-  if (id && view.partition) params.set('r', view.partition);
   if (id && view.context) params.set('c', '1');
   if (!id && view.query) params.set('q', view.query);
   if (!id && view.surah) params.set('s', `${view.surah}`);
@@ -83,17 +77,21 @@ const CONJ: Record<string, string> = { w: 'و', f: 'ف' };
 
 export function conjunctions(morphology: string): Map<string, string> {
   const found = new Map<string, string>();
-  for (const match of morphology.matchAll(/^\((\d+:\d+):1:1\)\t[^\t]*\t[^\t]*\tPREFIX\|([wf]):(?!P\+)/gm)) found.set(match[1], CONJ[match[2]]);
+  for (const match of morphology.matchAll(/^\((\d+:\d+:\d+):1\)\t[^\t]*\t[^\t]*\tPREFIX\|([wf]):(?!P\+)/gm)) found.set(match[1], CONJ[match[2]]);
   return found;
 }
 
 export function withConjunctions(ayat: BranchAyah[], morphology: string): BranchAyah[] {
   const found = conjunctions(morphology);
   return ayat.map(ayah => {
-    const conj = found.get(ayah.key);
-    if (!conj) return ayah;
-    if (!normalizeWord(ayah.words[0]).startsWith(conj)) throw new Error(`${ayah.key} opens with ${ayah.words[0]}, not ${conj}`);
-    return { ...ayah, conj };
+    const conjs = ayah.words.map((word, i) => {
+      const location = `${ayah.key}:${i + 1}`;
+      const conj = found.get(location) ?? null;
+      if (conj && !normalizeWord(word).startsWith(conj)) throw new Error(`${location} starts with ${word}, not ${conj}`);
+      return conj;
+    });
+    if (!conjs.some(Boolean)) return ayah;
+    return { ...ayah, conjs, ...(conjs[0] ? { conj: conjs[0] } : {}) };
   });
 }
 

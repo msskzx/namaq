@@ -1,9 +1,10 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { readerAyat, withRoots, type Branch, type BranchAyah } from './branches';
+import { ayahEnds, readerAyat, withRoots, type Branch, type BranchAyah } from './branches';
 import { normalizeWord } from './normalize';
 import { buildPhraseGroups, phrasePieces, phrasePresentation, type PhraseGroup } from './phraseTrees';
+import treeData from '@/app/quran/branches/trees.json';
 
 const ayah = (key: string, text: string, roots?: (string | null)[], lemmas?: (string | null)[]): BranchAyah => {
   const words = text.split(' ');
@@ -27,12 +28,12 @@ describe('buildPhraseGroups', () => {
     expect(members(find(groups, 'وقعت الواقعة')!)).toEqual(['56:1', '69:15']);
   });
 
-  it('excludes a two-word phrase when either corresponding word is rootless', () => {
+  it('includes a two-word phrase when both corresponding words are rootless', () => {
     const groups = buildPhraseGroups([
       ayah('1:1', 'قل عن الذين', ['qwl', null, null]),
       ayah('1:2', 'عن الذين جاءوا', [null, null, 'jyA']),
     ]);
-    expect(groups).toEqual([]);
+    expect(members(find(groups, 'عن الذين')!)).toEqual(['1:1', '1:2']);
   });
 
   it('includes three consecutive words when the phrase contains a rootless word', () => {
@@ -43,11 +44,21 @@ describe('buildPhraseGroups', () => {
     expect(members(find(groups, 'في سبيل الله')!)).toEqual(['1:1', '1:2']);
   });
 
-  it('excludes a phrase when all occurrences begin their ayat', () => {
-    expect(buildPhraseGroups([
+  it('includes a phrase when all occurrences begin their ayat', () => {
+    expect(members(find(buildPhraseGroups([
       ayah('1:1', 'قال رب اغفر'),
       ayah('1:2', 'قال رب ارحم'),
-    ])).toEqual([]);
+    ]), 'قال رب')!)).toEqual(['1:1', '1:2']);
+  });
+
+  it('ignores a morphology-marked conjunction only at the start of an occurrence', () => {
+    const first = { ...ayah('2:3', 'وَيُقِيمُونَ ٱلصَّلَوٰةَ وَمِمَّا', ['qwm', 'Slw', null], ['qwm', 'Slw', 'mA']), conjs: ['و', null, 'و'] };
+    const second = { ...ayah('8:3', 'يُقِيمُونَ ٱلصَّلَوٰةَ وَمِمَّا', ['qwm', 'Slw', null], ['qwm', 'Slw', 'mA']), conjs: [null, null, 'و'] };
+    const built = buildPhraseGroups([first, second]);
+    expect(built.map(group => group.text)).toEqual(['يُقِيمُونَ ٱلصَّلَوٰةَ وَمِمَّا']);
+    const group = find(built, 'يُقِيمُونَ ٱلصَّلَوٰةَ وَمِمَّا');
+    expect(members(group!)).toEqual(['2:3', '8:3']);
+    expect(phrasePresentation(group!, [first, second]).prefixes.map(prefix => prefix.word).sort()).toEqual(['', 'و']);
   });
 
   it('requires two distinct ayat rather than two occurrences in one ayah', () => {
@@ -138,9 +149,33 @@ describe('buildPhraseGroups', () => {
       expect(normalized(entry.words.slice(occurrence.start, occurrence.end).join(' '))).toBe(normalized('أءذا متنا وكنا ترابا'));
     }
   });
+
+  it('puts all six يقيمون الصلاة occurrences in one generated tree', () => {
+    const group = (treeData.trees as PhraseGroup[]).find(tree => tree.id === 'يقيمون الصلوه')!;
+    expect(members(group)).toEqual(['27:3', '2:3', '31:4', '5:55', '8:3', '9:71']);
+    expect(group.occurrences.map(occurrence => occurrence.start)).toEqual([3, 7, 1, 10, 1, 1]);
+  });
+
+  it('keeps 43:83 ending at 43:84 in the unified artifact', () => {
+    const data = treeData as { ayat: BranchAyah[]; trees: PhraseGroup[] };
+    const group = data.trees.find(tree => tree.id === 'ذرهم يخوضوا ويلعبوا حتي يلقوا يومهم الذي يوعدون')!;
+    expect(ayahEnds(phrasePresentation(group, data.ayat).tree)['43:83']).toBe('43:84');
+    const members = [...new Set(group.occurrences.map(occurrence => occurrence.key))].map(key => data.ayat.find(ayah => ayah.key === key)!);
+    expect(ayahEnds(phrasePresentation(group, members, true, false).tree)['43:83']).toBe('43:84');
+  });
 });
 
 describe('phrasePresentation', () => {
+  it('does not treat another matching member as the following ayah', () => {
+    const ayat = [ayah('1:1', 'قال رب قول'), ayah('2:1', 'قال رب قول')];
+    const group: PhraseGroup = { id: 'قال رب', text: 'قال رب', occurrences: [
+      { key: '1:1', start: 0, end: 2 },
+      { key: '2:1', start: 0, end: 2 },
+    ] };
+    const tree = phrasePresentation(group, ayat, true, false).tree;
+    expect(ayahEnds(tree)).toEqual({ '1:1': '1:1', '2:1': '2:1' });
+  });
+
   it('preserves seated hamza in identical prefixes and singleton or identical continuation nodes', () => {
     const ayat = [
       ayah('1:1', 'سُئِلَ قال رب يُؤْمِنُونَ'),
@@ -152,7 +187,7 @@ describe('phrasePresentation', () => {
       { key: '1:2', start: 1, end: 3 },
       { key: '1:3', start: 0, end: 2 },
     ] };
-    const presentation = phrasePresentation(group, ayat);
+    const presentation = phrasePresentation(group, ayat, false);
     expect(presentation.prefixes.find(prefix => prefix.keys.length === 2)?.word).toBe('سُئِلَ');
     expect(presentation.tree.children.map(node => node.words.join(' '))).toEqual(['يُؤْمِنُونَ', 'يَئِسَ']);
     expect(presentation.tree.children.every(node => node.forms === undefined)).toBe(true);
