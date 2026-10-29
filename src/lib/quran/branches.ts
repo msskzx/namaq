@@ -35,13 +35,14 @@ const chapterOpening = (ayah: BranchAyah) => {
 const openingLength = (ayah: BranchAyah) => chapterOpening(ayah)?.split(' ').length ?? OPENING_WORDS;
 
 export type BranchScope = 'all' | 'opening' | 'inside';
-export type BranchesView = { scope?: BranchScope; kind?: 'inside'; phraseId?: string; grouped?: boolean; page?: number; spelling?: string; partition?: string; context?: boolean; query?: string; surah?: number };
+export type BranchesView = { scope?: BranchScope; kind?: 'inside'; phraseId?: string; occurrences?: string[]; grouped?: boolean; page?: number; spelling?: string; partition?: string; context?: boolean; query?: string; surah?: number };
 
 export function branchesHref(id: string, juz?: JuzRange, view: BranchesView = {}) {
   const params = new URLSearchParams();
   if (view.scope && view.scope !== 'all') params.set('scope', view.scope);
   if (id && view.kind === 'inside') params.set('kind', 'inside');
   if (id) params.set('o', id);
+  if (id && view.kind === 'inside' && view.occurrences?.length) params.set('at', view.occurrences.join(','));
   if (juz) params.set('juzFrom', `${juz.from}`);
   if (juz) params.set('juzTo', `${juz.to}`);
   if (view.grouped) params.set('g', 'opening');

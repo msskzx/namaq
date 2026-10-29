@@ -1,5 +1,5 @@
 // docs/plans/quran-phrase-trees.md
-import { PIECE_MAX, spell, type Branch, type BranchAyah, type Variant } from './branches';
+import { keys, PIECE_MAX, spell, type Branch, type BranchAyah, type Variant } from './branches';
 import { num } from './arabicNumber';
 import { normalizeWord } from './normalize';
 
@@ -7,7 +7,9 @@ export type PhraseOccurrence = { key: string; start: number; end: number };
 export type PhraseGroup = { id: string; text: string; occurrences: PhraseOccurrence[] };
 
 const letters = (word: string) => normalizeWord(word.normalize('NFC')).replace(/[ؤئ]/g, 'ء');
+const isEnd = (word: string) => word === '۝' || word.startsWith('﴿');
 const members = (occurrences: PhraseOccurrence[]) => [...new Set(occurrences.map(o => o.key))];
+const phraseId = (words: string[]) => words.map(letters).join(' ');
 
 function wordIds(ayat: BranchAyah[]) {
   const parent: number[] = [];
@@ -16,8 +18,9 @@ function wordIds(ayat: BranchAyah[]) {
   const ids = ayat.map(ayah => ayah.words.map((word, at) => {
     const i = parent.length;
     parent.push(i);
-    const base = JSON.stringify([letters(word), ayah.roots?.[at] ?? null]);
-    for (const key of [`${base}:s:${spell(word)}`, `${base}:l:${ayah.lemmas?.[at] ?? null}`]) {
+    const comparable = isEnd(word) ? '۝' : word;
+    const base = JSON.stringify([letters(comparable), ayah.roots?.[at] ?? null]);
+    for (const key of [`${base}:s:${spell(comparable)}`, `${base}:l:${ayah.lemmas?.[at] ?? null}`]) {
       const prior = seen.get(key);
       if (prior === undefined) seen.set(key, i);
       else parent[find(i)] = find(prior);
@@ -73,7 +76,7 @@ export function buildPhraseGroups(ayat: BranchAyah[]): PhraseGroup[] {
       if (!run.at.some(([, start]) => start > 0)) continue;
       const [first, start] = run.at[0];
       const words = ayat[first].words.slice(start, start + run.tokens.length);
-      result.push({ id: words.map(letters).join(' '), text: words.join(' '), occurrences: run.at.map(([a, begin]) => ({ key: ayat[a].key, start: begin, end: begin + run.tokens.length })) });
+      result.push({ id: phraseId(words), text: words.join(' '), occurrences: run.at.map(([a, begin]) => ({ key: ayat[a].key, start: begin, end: begin + run.tokens.length })) });
     }
   }
   const counts = new Map<string, number>();
@@ -84,6 +87,7 @@ export function buildPhraseGroups(ayat: BranchAyah[]): PhraseGroup[] {
 
 function sharedDisplay(forms: string[]) {
   if (forms.every(form => form === forms[0])) return forms[0];
+  if (forms.every(isEnd)) return '۝';
   const originals = forms.map(form => form.replace(/[\u0640\u2060]/g, '').normalize('NFC').match(/[^\p{M}\u06D6-\u06ED][\p{M}\u06D6-\u06ED]*/gu) ?? []);
   forms = originals.map(words => words.map((word, i) => {
     const bases = originals.map(other => other[i]?.[0]);
@@ -94,7 +98,7 @@ function sharedDisplay(forms: string[]) {
   return letters[0].map((letter, i) => [...letter].filter((mark, at) => at === 0 || letters.every(other => other[i]?.includes(mark))).join('')).join('').normalize('NFC');
 }
 
-export function phrasePresentation(group: PhraseGroup, ayat: BranchAyah[]): { tree: Branch; prefixes: Variant[]; offsets: Record<string, number> } {
+export function phrasePresentation(group: PhraseGroup, ayat: BranchAyah[], continueIdentical = false): { tree: Branch; prefixes: Variant[]; offsets: Record<string, number> } {
   const byKey = new Map(ayat.map(ayah => [ayah.key, ayah]));
   const seen = new Set<string>();
   const occurrences = group.occurrences.filter(o => {
@@ -108,7 +112,7 @@ export function phrasePresentation(group: PhraseGroup, ayat: BranchAyah[]): { tr
   });
   const sourceIds = wordIds(source);
   const expanded = source.map((ayah, i) => {
-    if (!ayah.next || !sourceIds.some(other => other.length > sourceIds[i].length && sourceIds[i].every((token, at) => token === other[at]))) return ayah;
+    if (!ayah.next || !sourceIds.some((other, at) => at !== i && (other.length > sourceIds[i].length || continueIdentical && other.length === sourceIds[i].length) && sourceIds[i].every((token, word) => token === other[word]))) return ayah;
     return {
       ...ayah,
       words: [...ayah.words, `﴿${num(Number(ayah.key.split(':')[1]))}﴾`, ...ayah.next],
@@ -152,6 +156,33 @@ export function phrasePresentation(group: PhraseGroup, ayat: BranchAyah[]): { tr
     return { ...prefix, word, ...(new Set(forms.map(words => words.join(' '))).size > 1 ? {} : { forms: undefined }) };
   });
   return { tree: grow(expanded.map((_, i) => i), 0), prefixes: variants, offsets: Object.fromEntries(occurrences.map(o => [o.key, o.start])) };
+}
+
+export function phraseSubtreeTargets(tree: Branch, groups: PhraseGroup[], ayat: BranchAyah[]): Record<string, PhraseGroup> {
+  const byKey = new Map(ayat.map(entry => [entry.key, entry]));
+  const targets: Record<string, PhraseGroup> = {};
+  const visit = (node: Branch) => {
+    const end = node.words.findIndex(word => word === '۝' || word.startsWith('﴿'));
+    const memberKeys = keys(node);
+    if (end >= 2 && node.children.length > 0) {
+      const id = phraseId(node.words.slice(0, end));
+      for (const group of groups) {
+        if (group.id !== id && !group.id.startsWith(`${id}~`)) continue;
+        const wanted = new Set(memberKeys);
+        const occurrences = group.occurrences.filter(occurrence => {
+          const entry = byKey.get(occurrence.key);
+          return wanted.has(occurrence.key) && occurrence.end === entry?.words.length && phraseId(entry.words.slice(occurrence.start, occurrence.end)) === id;
+        });
+        if (new Set(occurrences.map(occurrence => occurrence.key)).size === wanted.size) {
+          targets[memberKeys.join(' ')] = { ...group, occurrences };
+          break;
+        }
+      }
+    }
+    node.children.forEach(visit);
+  };
+  visit(tree);
+  return targets;
 }
 
 export function phrasePieces(group: PhraseGroup, ayat: BranchAyah[]): PhraseGroup[] {
