@@ -266,8 +266,17 @@ describe('BranchTree', () => {
         prefixes={[{ word: 'قالوا', conj: '', id: 'phrase', keys: ['15:45'] }, { word: '', conj: '', id: 'phrase', keys: ['51:15', '44:51'] }]}
         surround={{ on: true, data: around }} />);
       expect(container.querySelectorAll('[data-ctx]')).toHaveLength(5);
+      const before = screen.getByRole('list', { name: 'ما قبل العبارة' });
+      expect(before.children).toHaveLength(2);
+      expect(within(before.children[1] as HTMLElement).getByText('بداية الآية')).toBeTruthy();
+      expect(before.children[1].querySelectorAll('[data-ctx]')).toHaveLength(2);
       expect(screen.getByText('ذُوقُوا۟ فِتْنَتَكُمْ')).toBeTruthy();
       expect(screen.getByText('إِنَّ هَـٰذَا')).toBeTruthy();
+      const trunkContext = container.querySelector<HTMLButtonElement>('[data-node="n-1"] [data-context-open]')!;
+      const open = vi.spyOn(trunkContext, 'click').mockImplementation(() => {});
+      const neighbour = screen.getByText('ذُوقُوا۟ فِتْنَتَكُمْ').closest('[data-node]') as HTMLElement;
+      fireEvent.click(within(neighbour).getByRole('button', { name: /عرض الآيات في سياقها/ }));
+      expect(open).toHaveBeenCalledOnce();
     });
 
     it('draws the switch with one icon and one label', () => {
@@ -393,9 +402,11 @@ describe('BranchTree', () => {
 it('joins whole prefixes to the complete phrase without removing its first word', () => {
   render(<BranchTree tree={{ words: ['أَءِذَا', 'مِتْنَا', 'وَكُنَّا', 'تُرَابًا'], ayat: ['23:82', '37:16', '56:47'], children: [] }} names={{}}
     prefixes={[{ word: 'قَالُوا', conj: '', keys: ['23:82'], id: 'phrase' }, { word: 'وَكَانُوا يَقُولُونَ', conj: '', keys: ['56:47'], id: 'phrase' }, { word: '', conj: '', keys: ['37:16'], id: 'phrase' }]} />);
-  expect(screen.getByRole('list', { name: 'ما قبل العبارة' }).children).toHaveLength(2);
+  const before = screen.getByRole('list', { name: 'ما قبل العبارة' });
+  expect(before.children).toHaveLength(3);
+  expect(within(before.children[2] as HTMLElement).getByText('بداية الآية')).toBeTruthy();
+  expect(within(before.children[2] as HTMLElement).getByText('٣٧:١٦')).toBeTruthy();
   expect(screen.getByText('وَكَانُوا يَقُولُونَ')).toBeTruthy();
   expect(screen.getByText('أَءِذَا مِتْنَا وَكُنَّا تُرَابًا')).toBeTruthy();
-  expect(screen.getByText('٣٧:١٦')).toBeTruthy();
   expect(screen.queryByRole('link')).toBeNull();
 });

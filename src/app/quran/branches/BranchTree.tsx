@@ -140,16 +140,18 @@ export default function BranchTree({ tree, names, variants = [], prefixes, showS
         </div>}
         <div className="flex w-max items-center">
           {prefixes && prefixes.some(prefix => prefix.word) ? <>
-            <Fan side="end" label={ar ? 'ما قبل العبارة' : 'Before the phrase'} entries={prefixes.filter(prefix => prefix.word).map((prefix, i) => ({ key: `${prefix.word}:${i}`, keys: prefix.keys, item: <>
-              <BeforeFan ayahKeys={prefix.keys} around={around} opens={`p${i}`} />
+            <Fan side="end" label={ar ? 'ما قبل العبارة' : 'Before the phrase'} entries={prefixes.map((prefix, i) => ({ key: `${prefix.word}:${i}`, keys: prefix.keys, item: <>
+              <BeforeFan ayahKeys={prefix.keys} around={around} opens={prefix.word ? `p${i}` : rootId} />
               <PathBox id={`p${i}`} keys={prefix.keys} lit={LIT} tone={LINE} className="max-w-sm shrink-0 rounded border bg-[var(--home-paper)] px-3 py-1.5 text-xl font-arabic leading-loose">
-                <Marked node={prefix} ayahKeys={prefix.keys} subject={prefix.word} siblings={all} names={names} enabled={showSpellings} before={<PathButton id={`p${i}`} keys={prefix.keys} subject={prefix.word} />}>
+                {prefix.word ? <Marked node={prefix} ayahKeys={prefix.keys} subject={prefix.word} siblings={all} names={names} enabled={showSpellings} before={<PathButton id={`p${i}`} keys={prefix.keys} subject={prefix.word} />}>
                   <span className="block">{prefix.word}</span>
-                </Marked>
+                </Marked> : <>
+                  <span className="block text-base text-[var(--home-muted)]">{ar ? 'بداية الآية' : 'Start of the ayah'}</span>
+                  <AyahRefs keys={prefix.keys} names={names} />
+                </>}
               </PathBox>
             </> }))} />
             <Stub keys={all} />
-            <BeforeFan ayahKeys={prefixes.filter(prefix => !prefix.word).flatMap(prefix => prefix.keys)} around={around} opens={rootId} />
           </> : variants.length > 0 ? <>
             <Fan side="end" label="صيغ الكلمة الأولى" entries={variants.map((variant, i) => ({ key: variant.word, keys: variant.keys, item: <>
               <BeforeFan ayahKeys={variant.keys} around={around} opens={`v${i}`} />

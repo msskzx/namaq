@@ -86,7 +86,7 @@ export function Fan({ side, entries, label }: { side: 'start' | 'end'; entries: 
     <div className="relative shrink-0">
       <ul aria-label={label} className="flex flex-col">
         {entries.map((entry, i) => (
-          <li key={entry.key} className={`relative flex items-center py-1 ${start ? 'ps-6' : 'pe-6'}`}>
+          <li key={entry.key} className={`relative flex items-center py-1 ${start ? 'ps-6' : 'justify-end pe-6'}`}>
             <span aria-hidden data-line className={`absolute top-1/2 w-6 -translate-y-1/2 border-t-2 ${start ? 'start-0' : 'end-0'} ${lit.includes(i) ? LIT : LINE}`} />
             {entries.length > 1 && <span aria-hidden className={`absolute ${start ? 'start-0 border-s-2' : 'end-0 border-e-2'} ${LINE} ${i === 0 ? 'top-1/2' : 'top-0'} ${i === entries.length - 1 ? 'bottom-1/2' : 'bottom-0'}`} />}
             {entry.item}
