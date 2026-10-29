@@ -178,6 +178,20 @@ describe('phrasePresentation', () => {
     expect([...new Set(treeKeys(presentation.tree))].sort()).toEqual(['1:1', '2:1']);
   });
 
+  it('continues identical ayah endings and merges their different end numbers before they branch', () => {
+    const ayat = [
+      { ...ayah('1:2', 'الحمد لله رب العالمين'), next: ['الرحمن', 'الرحيم'] },
+      { ...ayah('37:182', 'والحمد لله رب العالمين'), next: ['ص', 'والقرآن'] },
+    ];
+    const group: PhraseGroup = { id: 'رب العالمين', text: 'رب العالمين', occurrences: [
+      { key: '1:2', start: 2, end: 4 },
+      { key: '37:182', start: 2, end: 4 },
+    ] };
+    const tree = phrasePresentation(group, ayat, true).tree;
+    expect(tree.words.join(' ')).toBe('رب العالمين ۝');
+    expect(tree.children.map(child => child.words.join(' '))).toEqual(['الرحمن الرحيم', 'ص والقرآن']);
+  });
+
   it('groups equivalent prefixes and retains their original spellings for context hints', () => {
     const ayat = [
       ayah('1:1', 'قَالُوا قال رب اغفر', ['qwl', 'qwl', 'rbb', 'gfr'], ['qAl', 'qAl', 'rbb', 'gfr']),

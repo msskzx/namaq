@@ -12,7 +12,7 @@ import { Fan, PathBox, PathButton, PathProvider, Stub, useOuterPaths, usePaths, 
 import type { Surrounding } from '@/lib/quran/ayahContext';
 import { anchorOf, NeighbourBox, SurroundToggle, targetStyle, useSurrounding, type Around } from './Surroundings';
 
-type Props = { prefixes?: Variant[]; offsets?: Record<string, number>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
+type Props = { prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
 type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header' | 'surround'> & { around?: Around; anchors?: string; node: Branch; parent?: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
 
 // Every tree node has the same thin border; only a pinned path is coloured.
@@ -68,17 +68,18 @@ export function Marked({ node, ayahKeys, subject, siblings, names, children, ski
 
 const nodeId = (index: number) => `n${index}`;
 
-function Node({ node, parent, path, names, tags, lead, juz, renderNode, indices, showSpellings, view, around, anchors }: NodeProps) {
+function Node({ node, parent, path, names, tags, lead, juz, renderNode, indices, showSpellings, view, around, anchors, subtreeLinks }: NodeProps) {
   const root = path.length === 0;
   const words = [...path, ...node.words];
   const shownWords = node.words.slice(root ? lead : 0);
   const id = nodeId(indices.get(node)!);
   const subject = (root ? shownWords : node.words).join(' ');
+  const subtreeHref = linkable(words) ? branchesHref(linkId(words, keys(node).flatMap(key => (tags[key] ? [tags[key].conj] : []))), juz, { ...view, partition: node.partition }) : subtreeLinks?.[keys(node).join(' ')];
   const nexts: FanEntry[] = !around ? [] : node.ayat.flatMap(key => {
     const neighbour = around.data.after[around.ends[key]];
     return neighbour ? [{ key: `a${key}`, keys: [key], item: <NeighbourBox neighbour={neighbour} of={key} side="after" around={around} opens={id} /> }] : [];
   });
-  const entries: FanEntry[] = [...node.children.map((child, i) => ({ key: `n${i}`, keys: keys(child), item: <Node node={child} parent={node} path={words} names={names} tags={tags} lead={lead} juz={juz} renderNode={renderNode} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={anchors} /> })), ...nexts];
+  const entries: FanEntry[] = [...node.children.map((child, i) => ({ key: `n${i}`, keys: keys(child), item: <Node node={child} parent={node} path={words} names={names} tags={tags} lead={lead} juz={juz} renderNode={renderNode} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={anchors} subtreeLinks={subtreeLinks} /> })), ...nexts];
   return (
     <div className="flex items-center">
       {(!root || shownWords.length > 0 || node.ayat.length > 0) && <PathBox id={id} keys={keys(node)} lit={LIT} tone={LINE} className={`shrink-0 rounded border px-3 py-1.5 ${node.children.length === 0 ? 'max-w-sm' : 'max-w-xs'} bg-[var(--home-paper)] ${root ? 'text-xl' : 'text-lg'}`}>
@@ -86,7 +87,7 @@ function Node({ node, parent, path, names, tags, lead, juz, renderNode, indices,
         {renderNode && !root ? renderNode(node, indices.get(node)!, tags) : <Marked node={node} ayahKeys={keys(node)} subject={subject} siblings={node.children.length === 0 && parent ? keys(parent) : undefined} names={names} offset={path.length} skip={root ? lead : 0} enabled={showSpellings}
           references={node.ayat.length > 0 && <AyahRefs keys={node.ayat} names={names} tags={tags} />}
           before={<PathButton id={id} keys={keys(node)} subject={subject} />}
-          after={!root && view?.kind !== 'inside' && node.children.length > 0 && linkable(words) && <SubtreeButton href={branchesHref(linkId(words, keys(node).flatMap(key => (tags[key] ? [tags[key].conj] : []))), juz, { ...view, partition: node.partition })} />}>
+          after={!root && view?.kind !== 'inside' && node.children.length > 0 && subtreeHref && <SubtreeButton href={subtreeHref} />}>
           <span className="block font-arabic leading-loose">{shownWords.join(' ')}</span>
         </Marked>}
       </PathBox>}
@@ -108,7 +109,7 @@ function BeforeFan({ ayahKeys, around, opens }: { ayahKeys: string[]; around?: A
 }
 
 // docs/plans/quran-shared-openings.md
-export default function BranchTree({ tree, names, variants = [], prefixes, showSpellings = true, juz = null, renderNode, label = 'شجرة الفواتح', header, view: given, surround }: Props) {
+export default function BranchTree({ tree, names, variants = [], prefixes, subtreeLinks, showSpellings = true, juz = null, renderNode, label = 'شجرة الفواتح', header, view: given, surround }: Props) {
   const id = useId();
   // The page is right to left, so in Arabic the switch comes first and sits on the right.
   const ar = useLanguage().language === 'ar';
@@ -192,7 +193,7 @@ export default function BranchTree({ tree, names, variants = [], prefixes, showS
             </> }))} />
             <Stub keys={all} />
           </> : <BeforeFan ayahKeys={all} around={around} opens={rootId} />}
-          <Node node={tree} path={[]} names={names} tags={tags} lead={!prefixes && variants.length > 0 ? 1 : 0} juz={juz ?? undefined} renderNode={renderNode} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={surround ? id : undefined} />
+          <Node node={tree} path={[]} names={names} tags={tags} lead={!prefixes && variants.length > 0 ? 1 : 0} juz={juz ?? undefined} renderNode={renderNode} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={surround ? id : undefined} subtreeLinks={subtreeLinks} />
         </div>
       </div>
     </PathProvider>

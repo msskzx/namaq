@@ -122,6 +122,29 @@ describe('Quran branches range selection', () => {
     expect(href.searchParams.has('q')).toBe(false);
   });
 
+  it('zooms an identical ayah ending to only its following branches', async () => {
+    const page = render(await open({ o: 'الحمد لله' }));
+    const ending = screen.getByText('رَبِّ ٱلْعَـٰلَمِينَ ۝').closest('[data-node]') as HTMLElement;
+    const href = new URL(within(ending).getByRole('link', { name: 'عرض هذا الجزء من الشجرة وحده' }).getAttribute('href')!, 'http://x');
+    expect(href.searchParams.get('kind')).toBe('inside');
+    expect(href.searchParams.get('at')).toBe('1:2:2,37:182:2');
+
+    page.rerender(await open(Object.fromEntries(href.searchParams)));
+    const tree = screen.getByRole('region', { name: 'شجرة الفواتح' });
+    expect(tree.textContent).toContain('رَبِّ ٱلْعَـٰلَمِينَ ۝');
+    expect(tree.textContent).toContain('ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ');
+    expect(tree.textContent).toContain('صٓ وَٱلْقُرْءَانِ ذِى ٱلذِّكْرِ');
+    expect(tree.textContent).not.toContain('ٱلْحَمْدُ لِلَّهِ');
+  });
+
+  it('keeps end-marker zoom available from the ayah-openings scope', async () => {
+    render(await open({ scope: 'opening', o: 'الحمد لله' }));
+    const ending = screen.getByText('رَبِّ ٱلْعَـٰلَمِينَ ۝').closest('[data-node]') as HTMLElement;
+    const href = new URL(within(ending).getByRole('link', { name: 'عرض هذا الجزء من الشجرة وحده' }).getAttribute('href')!, 'http://x');
+    expect(href.searchParams.get('kind')).toBe('inside');
+    expect(href.searchParams.has('scope')).toBe(false);
+  });
+
   it('says so when nothing matches, without the list', async () => {
     render(await open({ q: 'كهيعص' }));
     expect(screen.getByText('لا مجموعة تطابق «كهيعص».')).toBeTruthy();
