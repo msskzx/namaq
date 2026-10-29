@@ -18,6 +18,14 @@ afterEach(cleanup);
 const open = (values: Record<string, string>) => QuranBranchesPage({ searchParams: Promise.resolve(values) });
 
 describe('Quran branch trees', () => {
+  it('shows an ayah boundary between continuations without a separate phrase node', async () => {
+    render(await open({ o: 'يومهم الذي', juzFrom: '25', juzTo: '30', p: '3' }));
+    expect(screen.getByText('۝').closest('[data-node]')).toBeNull();
+    expect(screen.queryByRole('button', { name: 'إظهار المسار: ۝' })).toBeNull();
+    expect(screen.getByText(/^وَهُوَ ٱلَّذِى فِى ٱلسَّمَآءِ/)).toBeTruthy();
+    expect(screen.getByText(/^يَوْمَ يَخْرُجُونَ مِنَ ٱلْأَجْدَاثِ/)).toBeTruthy();
+    expect(screen.getByText('فِيهِ يُصْعَقُونَ')).toBeTruthy();
+  });
   it('suggests the retained tree when typing absorbed wording', async () => {
     render(await open({ juzFrom: '25', juzTo: '30', s: '43' }));
     fireEvent.change(screen.getByRole('combobox'), { target: { value: 'فذرهم يخوضوا ويلعبوا' } });
