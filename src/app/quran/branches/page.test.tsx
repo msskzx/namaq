@@ -58,15 +58,15 @@ describe('Quran branches range selection', () => {
   it('draws the switch from the address again when the page moves to another phrase', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({ before: {}, after: {} }) }));
     const { rerender } = render(await open({ o: 'ان المتقين' }));
-    fireEvent.click(screen.getByRole('switch'));
-    expect((screen.getByRole('switch') as HTMLInputElement).checked).toBe(true);
+    fireEvent.click(screen.getByRole('switch', { name: 'الآيات المحيطة' }));
+    expect((screen.getByRole('switch', { name: 'الآيات المحيطة' }) as HTMLInputElement).checked).toBe(true);
     rerender(await open({ o: 'قال رب' }));
-    expect((screen.getByRole('switch') as HTMLInputElement).checked).toBe(false);
+    expect((screen.getByRole('switch', { name: 'الآيات المحيطة' }) as HTMLInputElement).checked).toBe(false);
     rerender(await open({ o: 'ان المتقين', c: '1' }));
-    expect((screen.getByRole('switch') as HTMLInputElement).checked).toBe(true);
-    fireEvent.click(screen.getByRole('switch'));
+    expect((screen.getByRole('switch', { name: 'الآيات المحيطة' }) as HTMLInputElement).checked).toBe(true);
+    fireEvent.click(screen.getByRole('switch', { name: 'الآيات المحيطة' }));
     rerender(await open({ o: 'ان المتقين', c: '1', juzFrom: '1', juzTo: '29' }));
-    expect((screen.getByRole('switch') as HTMLInputElement).checked).toBe(true);
+    expect((screen.getByRole('switch', { name: 'الآيات المحيطة' }) as HTMLInputElement).checked).toBe(true);
     vi.unstubAllGlobals();
   });
 
