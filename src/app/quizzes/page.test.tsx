@@ -353,11 +353,12 @@ describe('QuizzesPage', () => {
     expect(screen.getAllByText('You type this')).toHaveLength(5);
   });
 
-  it('keeps the setup example free of buttons that would open ayat', () => {
+  it('keeps the setup example free of ayah controls while retaining tree zoom', () => {
     nav.reset('/quizzes?topic=BRANCHES');
     render(<QuizzesPage />);
     const tree = screen.getByRole('region', { name: 'Example tree' });
-    expect(within(tree).queryAllByRole('button')).toHaveLength(0);
+    expect(within(tree).getByRole('toolbar', { name: 'Tree zoom' })).toBeTruthy();
+    expect(within(tree).queryByRole('button', { name: /View ayat in context/ })).toBeNull();
     expect(within(tree).queryAllByRole('link')).toHaveLength(0);
     expect(tree.querySelector('[data-differing]')).toBeTruthy();
   });

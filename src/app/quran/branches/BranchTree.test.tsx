@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { branch, branchesHref, startingWith, variants, type BranchAyah } from '@/lib/quran/branches';
 import BranchTree from './BranchTree';
 import ayat from './ayat.json';
@@ -32,6 +32,40 @@ describe('BranchTree', () => {
     expect(screen.getAllByText('إِنَّ ٱلْمُتَّقِينَ فِى')).toHaveLength(1);
     expect(screen.getByText('جَنَّـٰتٍۢ وَعُيُونٍ')).toBeTruthy();
     expect(screen.getByText('مَقَامٍ أَمِينٍۢ')).toBeTruthy();
+  });
+
+  it('fits the complete tree by default and lets the reader zoom or restore its actual size', () => {
+    let resize: ResizeObserverCallback = () => {};
+    vi.stubGlobal('ResizeObserver', class {
+      constructor(callback: ResizeObserverCallback) { resize = callback; }
+      observe() {}
+      disconnect() {}
+      unobserve() {}
+    });
+    vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(1000);
+    const { container } = render(<BranchTree tree={tree} names={{}} surround={{ on: false }} />);
+    const viewport = container.querySelector('[data-tree-viewport]') as HTMLDivElement;
+    const content = container.querySelector('[data-tree-content]') as HTMLDivElement;
+    Object.defineProperties(viewport, { clientWidth: { configurable: true, value: 500 } });
+    Object.defineProperties(content, {
+      offsetWidth: { configurable: true, value: 1000 },
+      offsetHeight: { configurable: true, value: 800 },
+    });
+    act(() => resize([], {} as ResizeObserver));
+
+    const firstRow = container.querySelector('[data-tree]')!.firstElementChild!;
+    expect(firstRow.querySelector('[role="switch"]')).not.toBeNull();
+    expect(firstRow.querySelector('[role="toolbar"]')).not.toBeNull();
+    expect(content.style.transform).toBe('scale(0.5)');
+    expect(viewport.style.height).toBe('400px');
+    expect(screen.getByText('٥٠٪')).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'تكبير الشجرة' }));
+    expect(content.style.transform).toBe('scale(0.6)');
+    fireEvent.click(screen.getByRole('button', { name: 'الحجم الأصلي' }));
+    expect(content.style.transform).toBe('scale(1)');
+    expect(viewport.style.height).toBe('700px');
+    fireEvent.click(screen.getByRole('button', { name: 'ملاءمة الشجرة للشاشة' }));
+    expect(content.style.transform).toBe('scale(0.5)');
   });
 
   it('joins the juz 30 opening variants to their branches without an empty box', () => {
@@ -177,8 +211,8 @@ describe('BranchTree', () => {
   it('puts the surrounding-ayat switch before the header so it sits on the right in Arabic', () => {
     const { container } = render(<BranchTree tree={tree} names={{}} header={<p>header</p>} surround={{ on: false }} />);
     const row = container.querySelector('[data-tree] > div')!;
-    expect(row.firstElementChild!.querySelector('[role="switch"]')).not.toBeNull();
-    expect(row.lastElementChild!.textContent).toBe('header');
+    const children = [...row.children];
+    expect(children.findIndex(child => child.querySelector('[role="switch"]'))).toBeLessThan(children.findIndex(child => child.textContent === 'header'));
   });
 
   it('gives every node the same plain border until its path is lit, the root too', () => {
