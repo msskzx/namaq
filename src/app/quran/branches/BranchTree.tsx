@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useId, useState } from 'react';
-import { ZoomIn } from 'lucide-react';
+import { RotateCw, ZoomIn } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@/lib/quran/arabicNumber';
@@ -119,8 +119,19 @@ export default function BranchTree({ tree, names, variants = [], prefixes, showS
   const paths = outer ?? own;
   const all = keys(tree);
   const ends = ayahEnds(tree);
-  const { data, isLoading, error } = useSurrounding(!!surround && on, all, ends, surround?.data);
-  const around: Around | undefined = surround && on && data ? { data, ends, inTree: new Set(all), names, tree: id } : undefined;
+  const emptyKeys = (prefixes ?? []).filter(prefix => !prefix.word).flatMap(prefix => prefix.keys);
+  const previousKey = (key: string) => {
+    const [surah, ayah] = key.split(':').map(Number);
+    return ayah > 1 ? `${surah}:${ayah - 1}` : undefined;
+  };
+  const requiredKeys = emptyKeys.filter(key => previousKey(key));
+  const mandatory = useSurrounding(requiredKeys.length > 0, requiredKeys, {}, surround?.data);
+  const optionalKeys = all.flatMap(key => emptyKeys.includes(key) ? previousKey(key) ?? key : key);
+  const extraKeys = emptyKeys.flatMap(key => previousKey(key) ?? []);
+  const preloaded = surround?.data && extraKeys.every(key => Number(key.split(':')[1]) === 1 || Object.prototype.hasOwnProperty.call(surround.data!.before, key)) ? surround.data : undefined;
+  const { data, isLoading, error } = useSurrounding(!!surround && on, optionalKeys, ends, preloaded);
+  const around: Around | undefined = surround && on && (data ?? surround.data) ? { data: (data ?? surround.data)!, ends, inTree: new Set(all), names, tree: id } : undefined;
+  const mandatoryAround: Around | undefined = mandatory.data ? { data: mandatory.data, ends, inTree: new Set(all), names, tree: id } : undefined;
   const indices = new Map<Branch, number>();
   const visit = (node: Branch) => {
     indices.set(node, indices.size - 1);
@@ -138,19 +149,34 @@ export default function BranchTree({ tree, names, variants = [], prefixes, showS
           {surround && <SurroundToggle on={on} onChange={setOn} sync={surround.sync} loading={isLoading} failed={!!error} />}
           {ar && header}
         </div>}
+        {mandatory.isLoading && <p role="status" className="text-sm text-[var(--home-muted)]">{ar ? 'جارٍ تحميل الآيات السابقة' : 'Loading preceding ayat'}</p>}
+        {mandatory.error && <div role="alert" className="flex items-center gap-2 text-sm text-[var(--home-accent)]">
+          <span>{ar ? 'تعذّر تحميل الآيات السابقة.' : 'Could not load the preceding ayat.'}</span>
+          <Button size="sm" onClick={() => void mandatory.mutate()}><RotateCw size={16} aria-hidden />{ar ? 'حاول مجددًا' : 'Try again'}</Button>
+        </div>}
         <div className="flex w-max items-center">
-          {prefixes && prefixes.some(prefix => prefix.word) ? <>
-            <Fan side="end" label={ar ? 'ما قبل العبارة' : 'Before the phrase'} entries={prefixes.map((prefix, i) => ({ key: `${prefix.word}:${i}`, keys: prefix.keys, item: <>
-              <BeforeFan ayahKeys={prefix.keys} around={around} opens={prefix.word ? `p${i}` : rootId} />
+          {prefixes && prefixes.length > 0 ? <>
+            <Fan side="end" label={ar ? 'ما قبل العبارة' : 'Before the phrase'} entries={prefixes.flatMap((prefix, i): FanEntry[] => prefix.word ? [{ key: `${prefix.word}:${i}`, keys: prefix.keys, item: <>
+              <BeforeFan ayahKeys={prefix.keys} around={around} opens={`p${i}`} />
               <PathBox id={`p${i}`} keys={prefix.keys} lit={LIT} tone={LINE} className="max-w-sm shrink-0 rounded border bg-[var(--home-paper)] px-3 py-1.5 text-xl font-arabic leading-loose">
-                {prefix.word ? <Marked node={prefix} ayahKeys={prefix.keys} subject={prefix.word} siblings={all} names={names} enabled={showSpellings} before={<PathButton id={`p${i}`} keys={prefix.keys} subject={prefix.word} />}>
+                <Marked node={prefix} ayahKeys={prefix.keys} subject={prefix.word} siblings={all} names={names} enabled={showSpellings} before={<PathButton id={`p${i}`} keys={prefix.keys} subject={prefix.word} />}>
                   <span className="block">{prefix.word}</span>
-                </Marked> : <>
-                  <span className="block text-base text-[var(--home-muted)]">{ar ? 'بداية الآية' : 'Start of the ayah'}</span>
-                  <AyahRefs keys={prefix.keys} names={names} />
-                </>}
+                </Marked>
               </PathBox>
-            </> }))} />
+            </> }] : prefix.keys.flatMap(key => {
+              const previous = previousKey(key);
+              if (!previous) return [{ key, keys: [key], item: <PathBox id={`p${i}:${key}`} keys={[key]} lit={LIT} tone={LINE} className="shrink-0 rounded border bg-[var(--home-paper)] px-3 py-1.5">
+                <span className="block text-base text-[var(--home-muted)]">{ar ? 'بداية السورة' : 'Start of surah'}</span>
+                <AyahRefs keys={[key]} names={names} />
+              </PathBox> }];
+              const neighbour = mandatoryAround?.data.before[key];
+              if (!neighbour || !mandatoryAround) return [];
+              const earlier = around?.data.before[previous];
+              return [{ key, keys: [key], item: <>
+                {earlier && around && <><NeighbourBox neighbour={earlier} of={key} side="before" around={around} opens={rootId} nodeId={`earlier${key}`} /><Stub keys={[key]} /></>}
+                <NeighbourBox neighbour={neighbour} of={key} side="before" around={mandatoryAround} opens={rootId} />
+              </> }];
+            }))} />
             <Stub keys={all} />
           </> : variants.length > 0 ? <>
             <Fan side="end" label="صيغ الكلمة الأولى" entries={variants.map((variant, i) => ({ key: variant.word, keys: variant.keys, item: <>

@@ -442,6 +442,9 @@ Different occurrences can belong to the same ayah.
 **Phrase tree**:
 The existing multiple-start tree presentation anchored on an inside phrase.
 Whole prefixes join the shared phrase and its continuations branch left.
+An occurrence starting at the first word shows the preceding ayah as its
+starting branch. The surrounding-ayat control adds one earlier ayah to that
+branch where available in the same surah.
 
 **Opening entry**:
 A group of ayat cut from an opening's tree for browsing together. An opening may

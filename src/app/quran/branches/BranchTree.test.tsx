@@ -264,11 +264,11 @@ describe('BranchTree', () => {
     it('shows preceding neighbors for both prefixed and trunk-starting ayat', () => {
       const { container } = render(<BranchTree tree={tree} names={names}
         prefixes={[{ word: 'قالوا', conj: '', id: 'phrase', keys: ['15:45'] }, { word: '', conj: '', id: 'phrase', keys: ['51:15', '44:51'] }]}
-        surround={{ on: true, data: around }} />);
-      expect(container.querySelectorAll('[data-ctx]')).toHaveLength(5);
+        surround={{ on: true, data: { ...around, before: { ...around.before, '51:14': { key: '51:13', page: 521, words: ['يَوْمَ هُمْ عَلَى النَّارِ يُفْتَنُونَ'] }, '44:50': { key: '44:49', page: 498, words: ['ذُقْ إِنَّكَ أَنتَ الْعَزِيزُ الْكَرِيمُ'] } } } }} />);
+      expect(container.querySelectorAll('[data-ctx]')).toHaveLength(7);
       const before = screen.getByRole('list', { name: 'ما قبل العبارة' });
-      expect(before.children).toHaveLength(2);
-      expect(within(before.children[1] as HTMLElement).getByText('بداية الآية')).toBeTruthy();
+      expect(before.children).toHaveLength(3);
+      expect(screen.queryByText('بداية الآية')).toBeNull();
       expect(before.children[1].querySelectorAll('[data-ctx]')).toHaveLength(2);
       expect(screen.getByText('ذُوقُوا۟ فِتْنَتَكُمْ')).toBeTruthy();
       expect(screen.getByText('إِنَّ هَـٰذَا')).toBeTruthy();
@@ -401,11 +401,12 @@ describe('BranchTree', () => {
 
 it('joins whole prefixes to the complete phrase without removing its first word', () => {
   render(<BranchTree tree={{ words: ['أَءِذَا', 'مِتْنَا', 'وَكُنَّا', 'تُرَابًا'], ayat: ['23:82', '37:16', '56:47'], children: [] }} names={{}}
-    prefixes={[{ word: 'قَالُوا', conj: '', keys: ['23:82'], id: 'phrase' }, { word: 'وَكَانُوا يَقُولُونَ', conj: '', keys: ['56:47'], id: 'phrase' }, { word: '', conj: '', keys: ['37:16'], id: 'phrase' }]} />);
+    prefixes={[{ word: 'قَالُوا', conj: '', keys: ['23:82'], id: 'phrase' }, { word: 'وَكَانُوا يَقُولُونَ', conj: '', keys: ['56:47'], id: 'phrase' }, { word: '', conj: '', keys: ['37:16'], id: 'phrase' }]}
+    surround={{ on: false, data: { before: { '37:16': { key: '37:15', page: 446, words: ['وَقَالُوا إِنْ هَٰذَا إِلَّا سِحْرٌ مُبِينٌ'] } }, after: {} } }} />);
   const before = screen.getByRole('list', { name: 'ما قبل العبارة' });
   expect(before.children).toHaveLength(3);
-  expect(within(before.children[2] as HTMLElement).getByText('بداية الآية')).toBeTruthy();
-  expect(within(before.children[2] as HTMLElement).getByText('٣٧:١٦')).toBeTruthy();
+  expect(within(before.children[2] as HTMLElement).getByText('وَقَالُوا إِنْ هَٰذَا إِلَّا سِحْرٌ مُبِينٌ')).toBeTruthy();
+  expect(within(before.children[2] as HTMLElement).getByText('٣٧:١٥')).toBeTruthy();
   expect(screen.getByText('وَكَانُوا يَقُولُونَ')).toBeTruthy();
   expect(screen.getByText('أَءِذَا مِتْنَا وَكُنَّا تُرَابًا')).toBeTruthy();
   expect(screen.queryByRole('link')).toBeNull();

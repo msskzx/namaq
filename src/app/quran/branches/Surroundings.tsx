@@ -19,7 +19,7 @@ export const anchorOf = (tree: string, key: string) => `${tree}-${key.replace(':
 export function useSurrounding(on: boolean, keys: string[], ends: Record<string, string>, given?: Surrounding) {
   const url = `/api/quran/surrounding?${new URLSearchParams({ before: keys.join(','), after: [...new Set(Object.values(ends))].join(',') })}`;
   const fetched = useSWR<Surrounding>(on && !given && keys.length > 0 ? url : null, fetcher, { revalidateOnFocus: false });
-  return given ? { data: given, isLoading: false, error: undefined } : fetched;
+  return given ? { data: given, isLoading: false, error: undefined, mutate: fetched.mutate } : fetched;
 }
 
 type ToggleProps = { on: boolean; onChange(on: boolean): void; loading?: boolean; failed?: boolean };
@@ -51,11 +51,11 @@ function SurroundSwitch({ on, onChange, loading = false, failed = false }: Toggl
 
 export const SurroundToggle = ({ sync = false, ...props }: ToggleProps & { sync?: boolean }) => (sync ? <AddressToggle {...props} /> : <SurroundSwitch {...props} />);
 
-export function NeighbourBox({ neighbour, of, side, around, opens }: { neighbour: Neighbour; of: string; side: 'before' | 'after'; around: Around; opens: string }) {
+export function NeighbourBox({ neighbour, of, side, around, opens, nodeId }: { nodeId?: string; neighbour: Neighbour; of: string; side: 'before' | 'after'; around: Around; opens: string }) {
   const { language } = useLanguage();
   const ar = language === 'ar';
   const [surah, ayah] = neighbour.key.split(':').map(Number);
-  const id = `${side}${of}`;
+  const id = nodeId ?? `${side}${of}`;
   const ref = around.names[surah] ? `${around.names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`;
   const label = ar ? 'عرض الآيات في سياقها' : 'View ayat in context';
   const basmala = neighbour.basmala && <span className="block border-[var(--home-rule)] text-center first:border-b last:border-t first:pb-1 last:pt-1 border-dotted">{neighbour.basmala.join(' ')}</span>;

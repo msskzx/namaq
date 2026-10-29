@@ -222,6 +222,9 @@ Pieces sort by longest shared phrase, then fewer ayat, then mushaf order. Groupe
 
 The phrase-tree extension uses the existing multiple-start presentation. Whole
 prefixes on the right join a shared phrase; its continuations branch left.
+An occurrence with no prefix shows its preceding ayah instead. With surrounding
+ayat enabled, that branch adds one more preceding ayah before it. At a surah
+boundary, omit unavailable context and identify the start of the surah.
 The original opening artifact and the Shared openings quiz keep their membership.
 
 `npm run quran:branches` also generates `phrases.json` from every reader ayah,
