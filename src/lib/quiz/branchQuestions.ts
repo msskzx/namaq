@@ -28,7 +28,7 @@ export function branchQuestions(all: BranchAyah[], range: JuzRange | null = null
   const byKey = new Map(ayat.map(entry => [entry.key, entry]));
   const trees = range || !supplied ? buildTreeGroups(ayat) : supplied;
   return trees.filter(group => !group.family && new Set(group.occurrences.map(occurrence => occurrence.key)).size >= 5 && new Set(group.occurrences.map(occurrence => occurrence.key)).size <= PIECE_MAX && new Set(group.occurrences.map(occurrence => nextClass(byKey.get(occurrence.key)!, occurrence.end))).size >= 2).flatMap(group => {
-    const presentation = phrasePresentation(group, ayat);
+    const presentation = phrasePresentation(group, ayat, true, !range);
     const tree = presentation.tree;
     const memberKeys = [...new Set(group.occurrences.map(occurrence => occurrence.key))];
     if (!tree.words.length || tree.children.length < 2 || tree.children.length > PIECE_MAX || tree.ayat.length > 0 || memberKeys.length > PIECE_MAX) return [];

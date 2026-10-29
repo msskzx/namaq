@@ -161,11 +161,21 @@ describe('buildPhraseGroups', () => {
     const group = data.trees.find(tree => tree.id === 'ذرهم يخوضوا ويلعبوا حتي يلقوا يومهم الذي يوعدون')!;
     expect(ayahEnds(phrasePresentation(group, data.ayat).tree)['43:83']).toBe('43:84');
     const members = [...new Set(group.occurrences.map(occurrence => occurrence.key))].map(key => data.ayat.find(ayah => ayah.key === key)!);
-    expect(ayahEnds(phrasePresentation(group, members).tree)['43:83']).toBe('43:84');
+    expect(ayahEnds(phrasePresentation(group, members, true, false).tree)['43:83']).toBe('43:84');
   });
 });
 
 describe('phrasePresentation', () => {
+  it('does not treat another matching member as the following ayah', () => {
+    const ayat = [ayah('1:1', 'قال رب قول'), ayah('2:1', 'قال رب قول')];
+    const group: PhraseGroup = { id: 'قال رب', text: 'قال رب', occurrences: [
+      { key: '1:1', start: 0, end: 2 },
+      { key: '2:1', start: 0, end: 2 },
+    ] };
+    const tree = phrasePresentation(group, ayat, true, false).tree;
+    expect(ayahEnds(tree)).toEqual({ '1:1': '1:1', '2:1': '2:1' });
+  });
+
   it('preserves seated hamza in identical prefixes and singleton or identical continuation nodes', () => {
     const ayat = [
       ayah('1:1', 'سُئِلَ قال رب يُؤْمِنُونَ'),

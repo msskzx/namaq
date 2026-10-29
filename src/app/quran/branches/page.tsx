@@ -91,7 +91,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const treeGroup = scoped && new Set(scoped.occurrences.map(occurrence => occurrence.key)).size >= 2 ? scoped : undefined;
   const unavailable = !!id && !treeGroup;
   const drawn = treeGroup ? [...new Set(treeGroup.occurrences.map(occurrence => occurrence.key))].map(key => built.byKey.get(key)!) : [];
-  const presentation = treeGroup ? phrasePresentation(treeGroup, built.ayat) : undefined;
+  const presentation = treeGroup ? phrasePresentation(treeGroup, built.ayat, true, !range) : undefined;
   const tree = presentation?.tree ?? null;
   const subtreeLinks = tree ? Object.fromEntries(Object.entries(phraseSubtreeTargets(tree, built.trees, built.ayat)).map(([node, target]) => [node, branchesHref(target.id, juz, { occurrences: target.occurrences.map(occurrence => `${occurrence.key}:${occurrence.start}`) })])) : undefined;
   const around = tree && state.context ? surrounding(await loadReaderAyat(), keys(tree), [...new Set(Object.values(ayahEnds(tree)))]) : undefined;

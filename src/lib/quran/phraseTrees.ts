@@ -130,10 +130,9 @@ function sharedDisplay(forms: string[]) {
   return letters[0].map((letter, i) => [...letter].filter((mark, at) => at === 0 || letters.every(other => other[i]?.includes(mark))).join('')).join('').normalize('NFC');
 }
 
-export function phrasePresentation(group: PhraseGroup, ayat: BranchAyah[], continueIdentical = true): { tree: Branch; prefixes: Variant[]; offsets: Record<string, number> } {
+export function phrasePresentation(group: PhraseGroup, ayat: BranchAyah[], continueIdentical = true, followCorpus = true): { tree: Branch; prefixes: Variant[]; offsets: Record<string, number> } {
   const byKey = new Map(ayat.map(ayah => [ayah.key, ayah]));
   const positions = new Map(ayat.map((ayah, index) => [ayah.key, index]));
-  const completeCorpus = byKey.size === ayat.length;
   const seen = new Set<string>();
   const occurrences = group.occurrences.filter(o => {
     if (seen.has(o.key)) return false;
@@ -153,7 +152,7 @@ export function phrasePresentation(group: PhraseGroup, ayat: BranchAyah[], conti
       const position = positions.get(ayah.through!);
       const [surah, number] = ayah.through!.split(':').map(Number);
       const explicit = ayah.next ? { key: `${surah}:${number + 1}`, page: ayah.page, words: ayah.next, roots: ayah.nextRoots, lemmas: ayah.nextLemmas } : undefined;
-      const next = explicit ?? (completeCorpus && position !== undefined ? ayat[position + 1] : undefined);
+      const next = explicit ?? (followCorpus && position !== undefined ? ayat[position + 1] : undefined);
       if (!next) return undefined;
       const prefix = sourceIds.some((other, at) => at !== i && (other.length > sourceIds[i].length || continueIdentical && other.length === sourceIds[i].length) && sourceIds[i].every((token, word) => token === other[word]));
       return prefix ? next : undefined;

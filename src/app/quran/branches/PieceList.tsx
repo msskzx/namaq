@@ -20,7 +20,7 @@ function Entry({ piece, names, ayat, juz, view }: Props & { piece: SharedPiece }
   const { language } = useLanguage();
   const ar = language === 'ar';
   const group = piece.keys.map(key => ayat.get(key)!);
-  const presentation = piece.phrase ? phrasePresentation(piece.phrase, group, false) : undefined;
+  const presentation = piece.phrase ? phrasePresentation(piece.phrase, group, false, false) : undefined;
   return (
     <li>
       <BranchTree
