@@ -176,3 +176,16 @@ describe('Quran branches range selection', () => {
     expect(lit.every(node => node.getAttribute('data-keys')!.split(' ').some(key => key.startsWith(`${surahs[0]}:`)))).toBe(true);
   });
 });
+
+it('loads the an-Nas name for the wrapped predecessor of al-Fatiha', async () => {
+  loadReaderAyat.mockResolvedValueOnce([
+    { key: '1:1', page: 1, words: ['بِسْمِ اللَّهِ'] },
+    { key: '1:2', page: 1, words: ['الْحَمْدُ لِلَّهِ'] },
+    { key: '114:6', page: 604, words: ['مِنَ الْجِنَّةِ وَالنَّاسِ'] },
+  ]);
+  vi.mocked(prisma.surah.findMany).mockResolvedValueOnce([{ number: 114, name: 'سُورَةُ النَّاسِ' }] as never);
+  render(await open({ o: 'الحمد لله', c: '1' }));
+  expect(prisma.surah.findMany).toHaveBeenLastCalledWith(expect.objectContaining({ where: { number: { in: expect.arrayContaining([114]) } } }));
+  expect(screen.getByText('سُورَةُ النَّاسِ ٦')).toBeTruthy();
+  expect(screen.queryByText('١١٤:٦')).toBeNull();
+});

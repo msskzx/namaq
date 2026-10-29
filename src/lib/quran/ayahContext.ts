@@ -77,6 +77,13 @@ export function surrounding(all: BranchAyah[], before: string[], after: string[]
   const basmala = all.find(ayah => ayah.key === '1:1')?.words;
   const neighbour = (key: string, step: 1 | -1): Neighbour | null => {
     const i = at.get(key);
+    if (i !== undefined && step === -1 && (key === '1:1' || key === '1:2')) {
+      const last = at.get('114:6');
+      if (last !== undefined) {
+        const { key: previous, page, words } = all[last];
+        return { key: previous, page, words, ...(key === '1:2' && basmala && { basmala }) };
+      }
+    }
     const found = i === undefined ? undefined : all[i + step];
     if (!found) return null;
     const { page, words } = found;

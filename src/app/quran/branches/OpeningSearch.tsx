@@ -12,9 +12,11 @@ import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 const NOTE = 'text-sm text-[var(--home-muted)]';
 const SEARCH = 'w-full rounded-sm border border-[var(--home-rule)] bg-transparent ps-10 pe-3 py-2 text-[var(--home-ink)] placeholder:text-[var(--home-muted)]';
 
+type Suggestion = Opening & { kind?: 'inside' };
+
 export const SUGGESTIONS = 10;
 
-export default function OpeningSearch({ phrases, current, query: submitted = '', juz = null, unavailable = false, view = {}, alternatives = [] }: { top: Opening[]; phrases: Opening[]; current: string; query?: string; juz?: JuzRange | null; unavailable?: boolean; view?: BranchesView; alternatives?: Opening[] }) {
+export default function OpeningSearch({ phrases, current, query: submitted = '', juz = null, unavailable = false, view = {}, alternatives = [], remote = false, phraseCount }: { remote?: boolean; phraseCount?: number; top: Opening[]; phrases: Opening[]; current: string; query?: string; juz?: JuzRange | null; unavailable?: boolean; view?: BranchesView; alternatives?: Opening[] }) {
   const router = useNavigatingRouter();
   const { language } = useLanguage();
   const ar = language === 'ar';
@@ -23,10 +25,27 @@ export default function OpeningSearch({ phrases, current, query: submitted = '',
   const [dismissed, setDismissed] = useState(!!submitted);
   const [selected, setSelected] = useState(-1);
   useEffect(() => setSelected(-1), [phrases]);
-  const suggestions = searchPhrases(phrases, query).slice(0, SUGGESTIONS);
+  const from = juz?.from;
+  const to = juz?.to;
+  const request = new URLSearchParams({ q: query, scope: view.scope ?? 'all' });
+  if (from !== undefined && to !== undefined) { request.set('juzFrom', String(from)); request.set('juzTo', String(to)); }
+  const requestKey = request.toString();
+  const [fetched, setFetched] = useState<{ key: string; suggestions: Suggestion[] }>();
+  useEffect(() => {
+    if (!remote || !query.trim() || dismissed) return;
+    const controller = new AbortController();
+    const timer = setTimeout(() => {
+      fetch(`/api/quran/branch-phrases?${requestKey}`, { signal: controller.signal })
+        .then(response => { if (!response.ok) throw new Error('Search failed'); return response.json(); })
+        .then(data => { if (!controller.signal.aborted) setFetched({ key: requestKey, suggestions: data.suggestions }); })
+        .catch(() => {});
+    }, 150);
+    return () => { clearTimeout(timer); controller.abort(); };
+  }, [query, remote, dismissed, requestKey]);
+  const suggestions: Suggestion[] = remote && fetched?.key === requestKey ? fetched.suggestions : searchPhrases(phrases, query).slice(0, SUGGESTIONS);
   const visible = !!query.trim() && !dismissed;
-  const href = (phrase: Opening) => branchesHref(phrase.id, juz ?? undefined, { ...view, spelling: undefined, partition: phrase.partition });
-  const open = (phrase: Opening) => {
+  const href = (phrase: Suggestion) => branchesHref(phrase.id, juz ?? undefined, { ...view, spelling: undefined, partition: phrase.partition, kind: phrase.kind, phraseId: phrase.kind ? phrase.id : undefined });
+  const open = (phrase: Suggestion) => {
     setQuery('');
     setSelected(-1);
     router.push(href(phrase));
@@ -34,16 +53,16 @@ export default function OpeningSearch({ phrases, current, query: submitted = '',
   const search = () => {
     setDismissed(true);
     setSelected(-1);
-    router.push(branchesHref('', juz ?? undefined, { grouped: view.grouped, surah: view.surah, query: query.trim() }));
+    router.push(branchesHref('', juz ?? undefined, { scope: view.scope, grouped: view.grouped, surah: view.surah, query: query.trim() }));
   };
   return (
     <div className="flex flex-col gap-3">
       <label className="relative block">
-        <span className="sr-only">{ar ? 'ابحث عن عبارة تبدأ بها آيتان أو أكثر' : 'Search phrases shared by two or more ayat'}</span>
+        <span className="sr-only">{ar ? 'ابحث عن عبارة مشتركة بين آيتين أو أكثر' : 'Search phrases shared by two or more ayat'}</span>
         <Search aria-hidden className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--home-muted)]" />
         <input type="search" role="combobox" aria-autocomplete="list" aria-expanded={visible} aria-controls={listId} aria-activedescendant={visible && selected >= 0 && suggestions[selected] ? `${listId}-${selected}` : undefined} value={query}
           onChange={event => { setQuery(event.target.value); setSelected(-1); setDismissed(false); }}
-          placeholder={ar ? `ابحث بين ${num(phrases.length)} عبارة تبدأ بها آيتان أو أكثر` : `Search ${phrases.length} shared phrases`}
+          placeholder={ar ? `ابحث بين ${num(phraseCount ?? phrases.length)} عبارة مشتركة بين آيتين أو أكثر` : `Search ${phraseCount ?? phrases.length} shared phrases`}
           onKeyDown={event => {
             if (event.key === 'Escape') { setDismissed(true); setSelected(-1); }
             if ((event.key === 'ArrowDown' || event.key === 'ArrowUp') && suggestions.length) {
@@ -56,15 +75,16 @@ export default function OpeningSearch({ phrases, current, query: submitted = '',
       </label>
       {visible && <ul id={listId} role="listbox" aria-label={ar ? 'عبارات مقترحة' : 'Suggested phrases'} className="flex flex-col rounded border border-[var(--home-rule)]">
         {suggestions.length === 0 ? <li role="presentation" className={`${NOTE} px-3 py-2`}><span role="status">{ar ? 'لا عبارة مشتركة تطابق البحث.' : 'No shared phrase matches your search.'}</span></li> : suggestions.map((opening, index) => (
-          <li key={`${opening.id}:${opening.partition ?? ''}`} role="presentation">
+          <li key={`${opening.kind ?? 'opening'}:${opening.id}:${opening.partition ?? ''}`} role="presentation">
             <button id={`${listId}-${index}`} data-branch-navigation type="button" role="option" aria-selected={selected === index} onClick={() => open(opening)} className={`flex w-full items-baseline gap-2 px-3 py-2 text-start hover:bg-[var(--home-paper-deep)] ${selected === index ? 'bg-[var(--home-paper-deep)]' : ''}`}>
               <span className="text-lg font-arabic flex-1" dir="rtl">{ar ? opening.text : opening.textEn ?? opening.text}</span>
+              {(view.scope === 'all' || view.scope === 'inside') && <span className={NOTE}>{opening.kind === 'inside' ? (ar ? 'داخل الآية' : 'Inside ayah') : (ar ? 'أول الآية' : 'Ayah opening')}</span>}
               <span className="text-[var(--home-accent)]">{ar ? num(opening.count) : opening.count}</span>
             </button>
           </li>
         ))}
       </ul>}
-      {(current || submitted) && <Button size="sm" className="self-start" href={branchesHref('', juz ?? undefined, { grouped: view.grouped, page: submitted ? undefined : view.page })}>
+      {(current || submitted) && <Button size="sm" className="self-start" href={branchesHref('', juz ?? undefined, { scope: view.scope, grouped: view.grouped, page: submitted ? undefined : view.page })}>
         {ar ? <ArrowRight size={16} aria-hidden /> : <ArrowLeft size={16} aria-hidden />}
         {ar ? 'العودة إلى القائمة' : 'Return to list'}
       </Button>}

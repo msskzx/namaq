@@ -98,7 +98,8 @@ describe('surrounding', () => {
     expect(before['4:1']).toMatchObject({ key: '3:200', basmala });
     expect(before['9:1']).toMatchObject({ key: '8:75' });
     expect(before['9:1']).not.toHaveProperty('basmala');
-    expect(before['1:1']).toBeNull();
+    expect(before['1:1']).toMatchObject({ key: '114:6' });
+    expect(before['1:1']).not.toHaveProperty('basmala');
     expect(after['2:27']).toMatchObject({ key: '2:28' });
     expect(after['3:200']).toMatchObject({ key: '4:1', basmala });
     expect(after['8:75']).not.toHaveProperty('basmala');
@@ -110,6 +111,29 @@ describe('surrounding', () => {
   it('crosses from al-Fatiha into al-Baqarah after the basmala ayah ends the surah', async () => {
     const all = await loadReaderAyat();
     expect(surrounding(all, ['2:1'], []).before['2:1']).toMatchObject({ key: '1:7', basmala: all[0].words });
+  });
+
+  it('shows the end of an-Nas and then the basmala before al-Fatiha’s second ayah', async () => {
+    const all = await loadReaderAyat();
+    const last = all.find(entry => entry.key === '114:6')!;
+    const basmala = all.find(entry => entry.key === '1:1')!;
+    expect(surrounding(all, ['1:2'], []).before['1:2']).toEqual({
+      key: last.key, page: last.page, words: last.words, basmala: basmala.words,
+    });
+  });
+
+  it('wraps before the basmala ayah without repeating the basmala', async () => {
+    const all = await loadReaderAyat();
+    const last = all.find(entry => entry.key === '114:6')!;
+    expect(surrounding(all, ['1:1'], []).before['1:1']).toEqual({ key: last.key, page: last.page, words: last.words });
+  });
+
+  it('does not wrap a partial corpus without the actual final ayah of an-Nas', () => {
+    const all = [ayah('1:1'), ayah('1:2'), ayah('114:5')];
+    expect(surrounding(all, ['1:1', '1:2'], []).before).toEqual({
+      '1:1': null,
+      '1:2': { key: '1:1', page: 1, words: all[0].words },
+    });
   });
 
   it('gives no neighbour for an unknown ayah', () => {
