@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { ayahEnds, readerAyat, withRoots, type Branch, type BranchAyah } from './branches';
 import { normalizeWord } from './normalize';
-import { buildPhraseGroups, phrasePieces, phrasePresentation, type PhraseGroup } from './phraseTrees';
+import { buildPhraseGroups, buildTreeGroups, phrasePieces, phrasePresentation, type PhraseGroup } from './phraseTrees';
 import treeData from '@/app/quran/branches/trees.json';
 
 const ayah = (key: string, text: string, roots?: (string | null)[], lemmas?: (string | null)[]): BranchAyah => {
@@ -14,6 +14,43 @@ const members = (group: PhraseGroup) => [...new Set(group.occurrences.map(occurr
 const treeKeys = (tree: Branch): string[] => [...tree.ayat, ...tree.children.flatMap(treeKeys)];
 const normalized = (text: string) => normalizeWord(text).replace(/[ؤئء]/g, 'ا');
 const find = (groups: PhraseGroup[], text: string) => groups.find(group => normalized(group.text) === normalized(text));
+
+it('shows the three فذرهم passages once, with ف attached to its word', () => {
+  const wanted = ['43:83', '52:45', '70:42'];
+  const ayat = (treeData.ayat as BranchAyah[]).filter(entry => wanted.includes(entry.key));
+  const groups = buildTreeGroups(ayat);
+  expect(groups).toHaveLength(1);
+  expect(members(groups[0])).toEqual(wanted);
+  const presentation = phrasePresentation(groups[0], ayat, false, false);
+  expect(presentation.prefixes.map(prefix => normalized(prefix.word))).toEqual(['فذرهم يخوضوا ويلعبوا', 'فذرهم']);
+  expect(presentation.prefixes.every(prefix => !['ف', 'و'].includes(normalized(prefix.word)))).toBe(true);
+  const path = (node: Branch, key: string): string[] => [
+    ...(node.forms?.[key] ?? node.words),
+    ...node.children.filter(child => treeKeys(child).includes(key)).flatMap(child => path(child, key)),
+  ];
+  for (const ayah of ayat) {
+    const prefix = presentation.prefixes.find(prefix => prefix.keys.includes(ayah.key))!;
+    expect(normalized([prefix.word, ...path(presentation.tree, ayah.key)].join(' ').trim())).toBe(normalized(ayah.words.join(' ')));
+  }
+});
+
+it('keeps a shared initial ف attached to the trunk', () => {
+  const ayat = (treeData.ayat as BranchAyah[]).filter(entry => ['43:83', '70:42'].includes(entry.key));
+  const presentation = phrasePresentation(buildTreeGroups(ayat)[0], ayat, false, false);
+  expect(normalized(presentation.tree.words[0])).toBe('فذرهم');
+  expect(presentation.prefixes.map(prefix => prefix.word)).toEqual(['']);
+});
+
+it('retains disjoint phrases even when their ayah memberships are nested', () => {
+  const ayat = [
+    ayah('1:1', 'قال رب اغفر فاصل يومهم الذي'),
+    ayah('1:2', 'قال رب ارحم فاصل يومهم الذي'),
+    ayah('1:3', 'قال رب أعني'),
+  ];
+  const groups = buildTreeGroups(ayat);
+  expect(find(groups, 'قال رب')).toBeDefined();
+  expect(find(groups, 'فاصل يومهم الذي')).toBeDefined();
+});
 
 describe('buildPhraseGroups', () => {
   it('returns no phrase groups for an empty corpus', () => {
@@ -58,7 +95,10 @@ describe('buildPhraseGroups', () => {
     expect(built.map(group => group.text)).toEqual(['يُقِيمُونَ ٱلصَّلَوٰةَ وَمِمَّا']);
     const group = find(built, 'يُقِيمُونَ ٱلصَّلَوٰةَ وَمِمَّا');
     expect(members(group!)).toEqual(['2:3', '8:3']);
-    expect(phrasePresentation(group!, [first, second]).prefixes.map(prefix => prefix.word).sort()).toEqual(['', 'و']);
+    const presentation = phrasePresentation(group!, [first, second]);
+    expect(presentation.prefixes.map(prefix => prefix.word).sort()).toEqual(['وَيُقِيمُونَ', 'يُقِيمُونَ'].sort());
+    expect(presentation.tree.words).toEqual(['ٱلصَّلَوٰةَ', 'وَمِمَّا']);
+    expect(presentation.offsets).toEqual({ '2:3': 1, '8:3': 1 });
   });
 
   it('requires two distinct ayat rather than two occurrences in one ayah', () => {
@@ -158,7 +198,7 @@ describe('buildPhraseGroups', () => {
 
   it('keeps 43:83 ending at 43:84 in the unified artifact', () => {
     const data = treeData as { ayat: BranchAyah[]; trees: PhraseGroup[] };
-    const group = data.trees.find(tree => tree.id === 'ذرهم يخوضوا ويلعبوا حتي يلقوا يومهم الذي يوعدون')!;
+    const group = data.trees.find(tree => tree.id === 'يومهم الذي')!;
     expect(ayahEnds(phrasePresentation(group, data.ayat).tree)['43:83']).toBe('43:84');
     const members = [...new Set(group.occurrences.map(occurrence => occurrence.key))].map(key => data.ayat.find(ayah => ayah.key === key)!);
     expect(ayahEnds(phrasePresentation(group, members, true, false).tree)['43:83']).toBe('43:84');

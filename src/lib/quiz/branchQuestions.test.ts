@@ -9,9 +9,21 @@ const all = data.ayat as BranchAyah[];
 const trees = data.trees as TreeGroup[];
 
 describe('branchQuestions', () => {
+  it('starts answers after the shared trunk when first-word conjunctions differ', () => {
+    const ayat: BranchAyah[] = Array.from({ length: 5 }, (_, index) => ({
+      key: `1:${index + 1}`, page: 1,
+      words: [index % 2 ? 'وقال' : 'قال', 'رب', index < 2 ? 'اغفر' : 'ارحم', `عبدك${index}`],
+      roots: ['qwl', 'rbb', index < 2 ? 'gfr' : 'rHm', 'Ebd'],
+      lemmas: ['qAl', 'rbb', index < 2 ? 'gfr' : 'rHm', 'Ebd'],
+      conjs: [index % 2 ? 'و' : null, null, null, null],
+    }));
+    const question = branchQuestions(ayat).find(candidate => candidate.phrase === 'قال رب')!;
+    expect(question.tree.words).toEqual(['رب']);
+    expect(question.branches.map(branch => branch.ayat.map(ayah => ayah.words[0]))).toEqual([['اغفر', 'اغفر'], ['ارحم', 'ارحم', 'ارحم']]);
+  });
   it('draws questions from the unified tree inventory', () => {
     const questions = branchQuestions(all, null, trees);
-    expect(questions.length).toBeGreaterThan(500);
+    expect(questions.length).toBeGreaterThan(0);
     expect(new Set(questions.map(question => question.key)).size).toBe(questions.length);
     expect(questions.every(question => question.phrase && question.tree.children.length >= 2)).toBe(true);
     expect(questions.some(question => question.phrase === 'يقيمون الصلوه')).toBe(true);

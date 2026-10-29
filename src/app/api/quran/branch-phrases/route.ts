@@ -19,7 +19,7 @@ export function GET(request: NextRequest) {
     const data = treeData as { ayat: BranchAyah[]; trees: TreeGroup[] };
     const ayat = data.ayat.filter(within);
     const trees = range ? buildTreeGroups(ayat) : data.trees;
-    inventories.set(key, trees.map(tree => ({ id: tree.id, text: tree.text, textEn: tree.textEn, count: new Set(tree.occurrences.map(occurrence => occurrence.key)).size })));
+    inventories.set(key, trees.map(tree => ({ id: tree.id, text: tree.text, textEn: tree.textEn, aliases: tree.aliases, count: new Set(tree.occurrences.map(occurrence => occurrence.key)).size })));
   }
   return NextResponse.json({ suggestions: query.trim() ? searchPhrases(inventories.get(key)!, query).slice(0, 10) : [] }, { headers: { 'Cache-Control': 'public, max-age=3600' } });
 }

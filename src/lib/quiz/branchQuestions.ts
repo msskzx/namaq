@@ -33,7 +33,6 @@ export function branchQuestions(all: BranchAyah[], range: JuzRange | null = null
     const memberKeys = [...new Set(group.occurrences.map(occurrence => occurrence.key))];
     if (!tree.words.length || tree.children.length < 2 || tree.children.length > PIECE_MAX || tree.ayat.length > 0 || memberKeys.length > PIECE_MAX) return [];
     const opening = `«${tree.words.join(' ')}»`;
-    const starts = new Map(group.occurrences.map(occurrence => [occurrence.key, occurrence.start]));
     return [{
       key: `${BRANCH_FAMILY}:${group.id}`,
       family: BRANCH_FAMILY,
@@ -47,7 +46,7 @@ export function branchQuestions(all: BranchAyah[], range: JuzRange | null = null
         words: child.words,
         ayat: keys(child).map(key => {
           const entry = byKey.get(key)!;
-          return { key, page: entry.page, words: entry.words.slice((starts.get(key) ?? 0) + tree.words.length) };
+          return { key, page: entry.page, words: entry.words.slice((presentation.offsets[key] ?? 0) + tree.words.length) };
         }),
       })),
       evidence: { claimKeys: [] },

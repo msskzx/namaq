@@ -53,10 +53,11 @@ describe('approved quiz assembly', () => {
   });
 
   it('counts shared openings on top of the bank and beside a person circle', async () => {
+    const branches = await availableQuestionCount(['BRANCHES']);
     const both = await availableQuestionCount(['AYAT', 'BRANCHES']);
-    expect(both).toBeGreaterThan(500);
+    expect(both).toBe(branches + 1);
     expect(count).toHaveBeenCalledWith({ where: { status: 'APPROVED', topic: { in: ['AYAT'] } } });
-    expect(await availableQuestionCount(['PERSON_CIRCLE', 'BRANCHES'], 'abu-ubaydah')).toBeGreaterThan(500);
+    expect(await availableQuestionCount(['PERSON_CIRCLE', 'BRANCHES'], 'abu-ubaydah')).toBe(branches + 1);
     expect(count).toHaveBeenLastCalledWith({ where: { status: 'APPROVED', personSlugs: { has: 'abu-ubaydah' } } });
   });
 
