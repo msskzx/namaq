@@ -183,7 +183,7 @@ export default function QuizzesPage() {
           </fieldset>
           {hasBranches && (
             <fieldset className={`mb-6 min-w-0 ${styles.panel}`}>
-              <legend className="mb-2 text-sm font-semibold text-[var(--home-ink)]">{ar ? "فواتح الآيات" : "Shared openings"}</legend>
+              <legend className="mb-2 text-sm font-semibold text-[var(--home-ink)]">{ar ? "أشجار العبارات" : "Phrase trees"}</legend>
               <div className="mb-5 flex flex-wrap items-end gap-4">
                 {([["juzFrom", juz?.from ?? 1, ar ? "من الجزء" : "From juz'"], ["juzTo", juz?.to ?? 30, ar ? "إلى الجزء" : "To juz'"]] as const).map(([key, value, label]) => (
                   <div key={key} className="flex flex-col gap-1 text-sm text-[var(--home-ink)]">

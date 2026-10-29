@@ -1,10 +1,11 @@
 import type { Prisma } from '@/generated/prisma';
 import { prisma } from '@/lib/prisma';
-import ayat from '@/app/quran/branches/ayat.json';
+import treeData from '@/app/quran/branches/trees.json';
 import type { Branch, BranchAyah, Variant } from '@/lib/quran/branches';
 import type { JuzRange } from '@/lib/quran/juz';
 import { askedNodes } from './branchAnswers';
 import { branchQuestions, type BranchAnswer, type BranchQuestion } from './branchQuestions';
+import type { TreeGroup } from '@/lib/quran/phraseTrees';
 import { shuffle, type Random } from './random';
 import { DEFAULT_LEAVES } from './types';
 import type { QuestionChoice, QuestionFamily, QuizLength, QuizTopics } from './types';
@@ -37,7 +38,7 @@ const branchPools = new Map<string, BranchQuestion[]>();
 function branchesFor(topics: QuizTopics, juz: JuzRange | null = null) {
   if (!topics.includes('BRANCHES')) return [];
   const id = juz ? `${juz.from}-${juz.to}` : 'all';
-  if (!branchPools.has(id)) branchPools.set(id, branchQuestions(ayat as BranchAyah[], juz));
+  if (!branchPools.has(id)) branchPools.set(id, branchQuestions(treeData.ayat as BranchAyah[], juz, treeData.trees as TreeGroup[]));
   return branchPools.get(id) as BranchQuestion[];
 }
 

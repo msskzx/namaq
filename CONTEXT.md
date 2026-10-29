@@ -7,6 +7,20 @@ relationships and historical context.
 
 ### Shared Quran wording
 
+**Branch tree**:
+A Quran tree formed either by wording repeated across at least two ayat or by an
+explicitly named chapter-family rule. Its shared wording may begin anywhere in
+an ayah.
+_Avoid_: Opening tree, inside-ayah tree (these are positions, not different kinds)
+
+**Tree occurrence**:
+One place where a branch tree's shared wording occurs, identified by its ayah
+and word offsets.
+
+**Tree entry**:
+A list-sized view of a branch tree. A large tree can have several entries, but
+they all lead to the same complete tree.
+
 **Original spelling**:
 The exact spelling of a word or phrase in a particular ayah in Namaq's Quran
 reader, including its marks.

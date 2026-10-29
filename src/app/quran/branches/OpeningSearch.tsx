@@ -12,7 +12,7 @@ import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 const NOTE = 'text-sm text-[var(--home-muted)]';
 const SEARCH = 'w-full rounded-sm border border-[var(--home-rule)] bg-transparent ps-10 pe-3 py-2 text-[var(--home-ink)] placeholder:text-[var(--home-muted)]';
 
-type Suggestion = Opening & { kind?: 'inside' };
+type Suggestion = Opening;
 
 export const SUGGESTIONS = 10;
 
@@ -27,7 +27,7 @@ export default function OpeningSearch({ phrases, current, query: submitted = '',
   useEffect(() => setSelected(-1), [phrases]);
   const from = juz?.from;
   const to = juz?.to;
-  const request = new URLSearchParams({ q: query, scope: view.scope ?? 'all' });
+  const request = new URLSearchParams({ q: query });
   if (from !== undefined && to !== undefined) { request.set('juzFrom', String(from)); request.set('juzTo', String(to)); }
   const requestKey = request.toString();
   const [fetched, setFetched] = useState<{ key: string; suggestions: Suggestion[] }>();
@@ -44,7 +44,7 @@ export default function OpeningSearch({ phrases, current, query: submitted = '',
   }, [query, remote, dismissed, requestKey]);
   const suggestions: Suggestion[] = remote && fetched?.key === requestKey ? fetched.suggestions : searchPhrases(phrases, query).slice(0, SUGGESTIONS);
   const visible = !!query.trim() && !dismissed;
-  const href = (phrase: Suggestion) => branchesHref(phrase.id, juz ?? undefined, { ...view, spelling: undefined, partition: phrase.partition, kind: phrase.kind, phraseId: phrase.kind ? phrase.id : undefined, occurrences: undefined });
+  const href = (phrase: Suggestion) => branchesHref(phrase.id, juz ?? undefined, { ...view, occurrences: undefined });
   const open = (phrase: Suggestion) => {
     setQuery('');
     setSelected(-1);
@@ -53,7 +53,7 @@ export default function OpeningSearch({ phrases, current, query: submitted = '',
   const search = () => {
     setDismissed(true);
     setSelected(-1);
-    router.push(branchesHref('', juz ?? undefined, { scope: view.scope, grouped: view.grouped, surah: view.surah, query: query.trim() }));
+    router.push(branchesHref('', juz ?? undefined, { surah: view.surah, query: query.trim() }));
   };
   return (
     <div className="flex flex-col gap-3">
@@ -75,16 +75,15 @@ export default function OpeningSearch({ phrases, current, query: submitted = '',
       </label>
       {visible && <ul id={listId} role="listbox" aria-label={ar ? 'عبارات مقترحة' : 'Suggested phrases'} className="flex flex-col rounded border border-[var(--home-rule)]">
         {suggestions.length === 0 ? <li role="presentation" className={`${NOTE} px-3 py-2`}><span role="status">{ar ? 'لا عبارة مشتركة تطابق البحث.' : 'No shared phrase matches your search.'}</span></li> : suggestions.map((opening, index) => (
-          <li key={`${opening.kind ?? 'opening'}:${opening.id}:${opening.partition ?? ''}`} role="presentation">
+          <li key={opening.id} role="presentation">
             <button id={`${listId}-${index}`} data-branch-navigation type="button" role="option" aria-selected={selected === index} onClick={() => open(opening)} className={`flex w-full items-baseline gap-2 px-3 py-2 text-start hover:bg-[var(--home-paper-deep)] ${selected === index ? 'bg-[var(--home-paper-deep)]' : ''}`}>
               <span className="text-lg font-arabic flex-1" dir="rtl">{ar ? opening.text : opening.textEn ?? opening.text}</span>
-              {(view.scope === 'all' || view.scope === 'inside') && <span className={NOTE}>{opening.kind === 'inside' ? (ar ? 'داخل الآية' : 'Inside ayah') : (ar ? 'أول الآية' : 'Ayah opening')}</span>}
               <span className="text-[var(--home-accent)]">{ar ? num(opening.count) : opening.count}</span>
             </button>
           </li>
         ))}
       </ul>}
-      {(current || submitted) && <Button size="sm" className="self-start" href={branchesHref('', juz ?? undefined, { scope: view.scope, grouped: view.grouped, page: submitted ? undefined : view.page })}>
+      {(current || submitted) && <Button size="sm" className="self-start" href={branchesHref('', juz ?? undefined, { page: submitted ? undefined : view.page })}>
         {ar ? <ArrowRight size={16} aria-hidden /> : <ArrowLeft size={16} aria-hidden />}
         {ar ? 'العودة إلى القائمة' : 'Return to list'}
       </Button>}

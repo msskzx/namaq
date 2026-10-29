@@ -107,9 +107,9 @@ export function BranchFeedback({ question, typed, names, juz, ar }: { question: 
           );
         }} />
       {question.phrase && (
-        <Button className="self-start" size="sm" variant="outline" href={branchesHref(question.phrase, juz ?? undefined, { partition: question.partition })}>
+        <Button className="self-start" size="sm" variant="outline" href={branchesHref(question.phrase, juz ?? undefined)}>
           <FontAwesomeIcon icon={faCodeBranch} />
-          {ar ? "شجرة الفواتح" : "Openings tree"}
+          {ar ? "شجرة العبارة" : "Phrase tree"}
         </Button>
       )}
     </div>

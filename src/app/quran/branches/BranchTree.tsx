@@ -191,7 +191,7 @@ function TreeViewport({ children, controls, enabled, ar }: { children: React.Rea
 }
 
 // docs/plans/quran-shared-openings.md
-export default function BranchTree({ tree, names, variants = [], prefixes, subtreeLinks, showSpellings = true, zoomable = true, juz = null, renderNode, label = 'شجرة الفواتح', header, view: given, surround }: Props) {
+export default function BranchTree({ tree, names, variants = [], prefixes, subtreeLinks, showSpellings = true, zoomable = true, juz = null, renderNode, label = 'شجرة العبارات المشتركة', header, view: given, surround }: Props) {
   const id = useId();
   // The page is right to left, so in Arabic the switch comes first and sits on the right.
   const ar = useLanguage().language === 'ar';

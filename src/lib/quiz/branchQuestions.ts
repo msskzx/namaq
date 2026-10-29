@@ -1,7 +1,7 @@
 // docs/quiz-ayah-branches.md
-import { branch, keys, PIECE_MAX, pieces, sharedOpenings, shown, variants, type Branch, type BranchAyah, type Variant } from '@/lib/quran/branches';
+import { keys, PIECE_MAX, type Branch, type BranchAyah, type Variant } from '@/lib/quran/branches';
 import { inJuzRange, type JuzRange } from '@/lib/quran/juz';
-import { normalizeWord } from '@/lib/quran/normalize';
+import { buildTreeGroups, phrasePresentation, type TreeGroup } from '@/lib/quran/phraseTrees';
 
 export const BRANCH_FAMILY = 'AYAH_BRANCH';
 const COUNTS: Record<number, string> = { 2: 'فرعين', 3: 'ثلاثة فروع', 4: 'أربعة فروع', 5: 'خمسة فروع', 6: 'ستة فروع' };
@@ -13,7 +13,6 @@ export interface BranchQuestion {
   family: typeof BRANCH_FAMILY;
   promptArabic: string;
   phrase: string;
-  partition?: string;
   choices: [];
   correctAnswer: string;
   branches: BranchAnswer[];
@@ -22,39 +21,36 @@ export interface BranchQuestion {
   evidence: { claimKeys: string[] };
 }
 
-export function branchQuestions(all: BranchAyah[], range: JuzRange | null = null): BranchQuestion[] {
-  const ayat = range ? all.filter((ayah) => inJuzRange(ayah.key, range)) : all;
-  const byKey = new Map(ayat.map((ayah) => [ayah.key, ayah]));
-  const ask = (original: BranchAyah[], id: string, partition?: string, apart?: string): BranchQuestion[] => {
-    const sub = shown(original);
-    const subByKey = new Map(sub.map((ayah) => [ayah.key, ayah]));
-    const tree = branch(original);
-    if (tree.children.length < 2 || tree.ayat.length > 0) return [];
-    const phrase = tree.words.map(normalizeWord).join(' ');
-    const forms = variants(original).map((variant) => [variant.word, ...tree.words.slice(1)].join(' '));
-    const opening = (forms.length > 0 ? forms : [tree.words.join(' ')]).map((form) => `«${form}»`).join(' أو ');
+const nextClass = (ayah: BranchAyah, at: number) => at >= ayah.words.length ? '۝' : `${ayah.roots?.[at] ?? ''}:${ayah.words[at].replace(/[\u064B-\u065F\u0670\u06D6-\u06EDـ]/g, '')}`;
+
+export function branchQuestions(all: BranchAyah[], range: JuzRange | null = null, supplied?: TreeGroup[]): BranchQuestion[] {
+  const ayat = range ? all.filter(entry => inJuzRange(entry.key, range)) : all;
+  const byKey = new Map(ayat.map(entry => [entry.key, entry]));
+  const trees = range || !supplied ? buildTreeGroups(ayat) : supplied;
+  return trees.filter(group => !group.family && new Set(group.occurrences.map(occurrence => occurrence.key)).size >= 5 && new Set(group.occurrences.map(occurrence => occurrence.key)).size <= PIECE_MAX && new Set(group.occurrences.map(occurrence => nextClass(byKey.get(occurrence.key)!, occurrence.end))).size >= 2).flatMap(group => {
+    const presentation = phrasePresentation(group, ayat);
+    const tree = presentation.tree;
+    const memberKeys = [...new Set(group.occurrences.map(occurrence => occurrence.key))];
+    if (!tree.words.length || tree.children.length < 2 || tree.children.length > PIECE_MAX || tree.ayat.length > 0 || memberKeys.length > PIECE_MAX) return [];
+    const opening = `«${tree.words.join(' ')}»`;
+    const starts = new Map(group.occurrences.map(occurrence => [occurrence.key, occurrence.start]));
     return [{
-      key: `${BRANCH_FAMILY}:${id}${partition ? `:${partition}` : ''}${apart ? `:${apart}` : ''}`,
+      key: `${BRANCH_FAMILY}:${group.id}`,
       family: BRANCH_FAMILY,
-      promptArabic: `تفترق الآيات التي تبدأ بـ ${opening} إلى ${COUNTS[tree.children.length]}. أكمل الأطراف الفارغة، وتكفي من كل طرف كلمتاه الأوليان.`,
-      phrase: id,
-      ...(partition && { partition }),
+      promptArabic: `تتفرع شجرة العبارة ${opening} إلى ${COUNTS[tree.children.length]}. أكمل الأطراف الفارغة، وتكفي من كل طرف كلمتاه الأوليان.`,
+      phrase: group.id,
       choices: [],
-      correctAnswer: phrase,
+      correctAnswer: tree.words.join(' '),
       tree,
-      variants: variants(original),
-      branches: tree.children.map((child) => ({
+      variants: [],
+      branches: tree.children.map(child => ({
         words: child.words,
-        ayat: keys(child).map((key) => {
-          const ayah = subByKey.get(key) as BranchAyah;
-          return { key, page: ayah.page, words: ayah.words.slice(tree.words.length) };
+        ayat: keys(child).map(key => {
+          const entry = byKey.get(key)!;
+          return { key, page: entry.page, words: entry.words.slice((starts.get(key) ?? 0) + tree.words.length) };
         }),
       })),
       evidence: { claimKeys: [] },
     }];
-  };
-  const asked = pieces(sharedOpenings(ayat)).filter((piece) => piece.count <= PIECE_MAX);
-  const ids = new Map<string, number>();
-  asked.forEach((piece) => ids.set(`${piece.id}:${piece.partition ?? ''}`, (ids.get(`${piece.id}:${piece.partition ?? ''}`) ?? 0) + 1));
-  return asked.flatMap((piece) => ask(piece.keys.map((key) => byKey.get(key) as BranchAyah), piece.id, piece.partition, ids.get(`${piece.id}:${piece.partition ?? ''}`)! > 1 ? piece.keys[0] : undefined));
+  });
 }

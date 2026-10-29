@@ -1,62 +1,51 @@
-import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
-import { ZoomOut } from 'lucide-react';
-import Button from '@/components/common/Button';
-import { ayahEnds, branch, branchesHref, keys, listOpenings, listPage, listPhrases, pieces, searchKey, searchPieces, searchPhrases, sharedOpenings, spelledAs, startingWith, TOP, variants, widerPhrases, type BranchAyah, type Piece, type Opening, type BranchScope as ScopeType } from '@/lib/quran/branches';
+import { ayahEnds, branchesHref, keys, listPage, searchKey, searchPhrases, type BranchAyah, type BranchesView, type Opening } from '@/lib/quran/branches';
 import { inJuzRange, parseJuzRange, type JuzRange } from '@/lib/quran/juz';
 import { loadReaderAyat, surrounding } from '@/lib/quran/ayahContext';
-import ayat from './ayat.json';
+import { buildTreeGroups, phrasePresentation, phraseSubtreeTargets, type TreeGroup } from '@/lib/quran/phraseTrees';
+import treeData from './trees.json';
 import BranchTree from './BranchTree';
 import JuzFilter from './JuzFilter';
 import Pagination from '@/components/common/Pagination';
 import PieceList, { type SharedPiece } from './PieceList';
-import BranchScope from './BranchScope';
-import phraseData from './phrases.json';
-import { buildPhraseGroups, phrasePieces, phrasePresentation, phraseSubtreeTargets, type PhraseGroup } from '@/lib/quran/phraseTrees';
-import BranchOrdering from './BranchOrdering';
 import BranchHeading from './BranchHeading';
 import OpeningSearch from './OpeningSearch';
 import SearchSummary from './SearchSummary';
 import SurahPane from './SurahPane';
 import { PathScope } from './Paths';
 import CompareLayout from '../compare/CompareLayout';
-import { chapterFamilies } from '@/lib/quran/chapterFamilies';
-import ChapterFamilies from './ChapterFamilies';
-import { num } from '@/lib/quran/arabicNumber';
 import styles from '@/components/common/PaperPage.module.css';
 
 const PER_PAGE = 10;
 const SEARCHES = 50;
 
-export const metadata: Metadata = { title: 'القرآن: فواتح الآيات المشتركة' };
+export const metadata: Metadata = { title: 'القرآن: أشجار العبارات المشتركة' };
 
-const phraseViews = new Map<string, { ayat: BranchAyah[]; groups: PhraseGroup[]; pieces: SharedPiece[] }>();
-function insideView(range: JuzRange | null) {
-  const key = range ? `${range.from}-${range.to}` : '';
-  if (!phraseViews.has(key)) {
-    if (phraseViews.size >= 16) phraseViews.delete(phraseViews.keys().next().value!);
-    const ayat = (phraseData.ayat as BranchAyah[]).filter(ayah => !range || inJuzRange(ayah.key, range));
-    const groups = range ? buildPhraseGroups(ayat) : phraseData.groups as PhraseGroup[];
-    const pieces = groups.flatMap(group => phrasePieces(group, ayat).map(piece => ({ id: piece.id, text: piece.text, count: new Set(piece.occurrences.map(at => at.key)).size, shared: piece.occurrences[0].end - piece.occurrences[0].start, opening: { id: group.id, text: group.text, count: new Set(group.occurrences.map(at => at.key)).size, kind: 'inside' as const }, keys: [...new Set(piece.occurrences.map(at => at.key))], phrase: piece })));
-    phraseViews.set(key, { ayat, groups, pieces });
-  }
-  return phraseViews.get(key)!;
-}
-
+const source = treeData as { ayat: BranchAyah[]; trees: TreeGroup[] };
 const views = new Map<string, ReturnType<typeof build>>();
 
 function build(range: JuzRange | null) {
-  const shared = range ? (ayat as BranchAyah[]).filter(ayah => inJuzRange(ayah.key, range)) : (ayat as BranchAyah[]);
-  const groups = sharedOpenings(shared);
-  const families = chapterFamilies(shared);
-  const openings = [...listOpenings(groups), ...families];
-  const wording = listPhrases(groups);
-  const phrases = [...wording, ...families];
-  const familyPieces: Piece[] = families.map(family => ({ ...family, family: true, opening: family, shared: 0 }));
-  let cut: Piece[] | undefined;
-  return { shared, byKey: new Map(shared.map(ayah => [ayah.key, ayah])), openings, phrases, wording, families, familyPieces, get pieces() { return cut ??= pieces(groups, wording); }, searches: new Map<string, Piece[]>() };
+  const ayat = range ? source.ayat.filter(ayah => inJuzRange(ayah.key, range)) : source.ayat;
+  const trees = range ? buildTreeGroups(ayat) : source.trees;
+  return { ayat, byKey: new Map(ayat.map(ayah => [ayah.key, ayah])), trees, pieces: undefined as SharedPiece[] | undefined, searches: new Map<string, SharedPiece[]>() };
+}
+
+function piecesFor(built: ReturnType<typeof build>) {
+  return built.pieces ??= built.trees.map(tree => {
+    const keys = [...new Set(tree.occurrences.map(occurrence => occurrence.key))];
+    return {
+      id: tree.id,
+      text: tree.text,
+      count: keys.length,
+      shared: tree.occurrences[0].end - tree.occurrences[0].start,
+      opening: { id: tree.id, text: tree.text, textEn: tree.textEn, count: keys.length },
+      keys,
+      phrase: tree,
+      family: tree.family,
+    };
+  });
 }
 
 function view(range: JuzRange | null) {
@@ -71,98 +60,73 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const params = await searchParams;
   const range = parseJuzRange(first(params.juzFrom), first(params.juzTo));
   const juz = range ?? undefined;
-  const grouped = params.g === 'opening';
-  const scope: ScopeType = params.scope === 'opening' || params.scope === 'inside' ? params.scope : 'all';
-  const id = first(params.o) ?? '';
-  const inside = scope !== 'opening' || id ? insideView(range) : undefined;
-  const selectedInside = params.kind === 'inside';
-  const requestedOccurrences = selectedInside ? (first(params.at)?.split(',').filter(value => /^\d+:\d+:\d+$/.test(value)) ?? []) : [];
-  const requestedKeys = new Set(requestedOccurrences.map(value => value.split(':').slice(0, 2).join(':')));
-  if (params.v === 'list') redirect(branchesHref('', juz, { grouped, scope, page: Number(first(params.p)) || 1 }));
+  const requestedId = first(params.o) ?? '';
   const built = view(range);
-  const { shared, openings, phrases, searches } = built;
-  const byKey = new Map(built.byKey);
+  const requestedKey = searchKey(requestedId);
+  const withoutConjunction = /^[وف]/.test(requestedKey) ? requestedKey.slice(1) : requestedKey;
+  const resolved = built.trees.find(tree => tree.id === requestedId) ?? built.trees
+    .filter(tree => tree.id.startsWith(`${requestedKey} `) || tree.id === withoutConjunction || tree.id.startsWith(`${withoutConjunction} `))
+    .sort((a, b) => new Set(b.occurrences.map(occurrence => occurrence.key)).size - new Set(a.occurrences.map(occurrence => occurrence.key)).size)[0];
+  const id = resolved?.id ?? requestedId;
+  const requestedOccurrences = first(params.at)?.split(',').filter(value => /^\d+:\d+:\d+$/.test(value)) ?? [];
   const query = id ? '' : (first(params.q) ?? '').trim();
-  const needle = searchKey(query);
-  if (needle && !searches.has(needle)) {
-    if (searches.size >= SEARCHES) searches.delete(searches.keys().next().value!);
-    const families = new Set(searchPhrases(built.families, query).map(family => family.id));
-    searches.set(needle, [...built.familyPieces.filter(piece => families.has(piece.id)), ...searchPieces(built.pieces, built.wording, shared, query)]);
-  }
-  const openingFound = scope === 'inside' ? [] : needle ? searches.get(needle)! : [...built.pieces, ...built.familyPieces];
-  const phraseFound = (inside?.pieces ?? []).filter(piece => !needle || searchPhrases([piece.opening, piece], query).length > 0);
-  const found: SharedPiece[] = id ? [] : [...openingFound, ...phraseFound].sort((a, b) => needle ? Number(!searchKey(a.text).startsWith(needle)) - Number(!searchKey(b.text).startsWith(needle)) : b.shared - a.shared || a.count - b.count);
-  inside?.ayat.forEach(ayah => byKey.set(ayah.key, requestedKeys.has(ayah.key) ? built.byKey.get(ayah.key) ?? ayah : ayah));
   const picked = Number(first(params.s));
   const surah = !id && Number.isInteger(picked) && picked >= 1 && picked <= 114 ? picked : undefined;
+  const state: BranchesView = { occurrences: requestedOccurrences.length ? requestedOccurrences : undefined, page: Number(first(params.p)) || 1, context: params.c === '1', query: query || undefined, surah };
+  if (id !== requestedId || params.scope || params.kind || params.v || params.g || params.w || params.r || params.apply === 'juz') redirect(branchesHref(id, juz, state));
+  const pieces = piecesFor(built);
+  const needle = searchKey(query);
+  if (needle && !built.searches.has(needle)) {
+    if (built.searches.size >= SEARCHES) built.searches.delete(built.searches.keys().next().value!);
+    const bareNeedle = /^[وف]/.test(needle) ? needle.slice(1) : needle;
+    built.searches.set(needle, pieces.filter(piece => searchPhrases([piece.opening, piece], query).length > 0 || searchKey(piece.text).includes(bareNeedle)));
+  }
+  const found = needle ? built.searches.get(needle)! : pieces;
   const surahOf = (key: string) => Number(key.split(':')[0]);
   const counts: Record<number, number> = {};
-  found.forEach(piece => new Set(piece.keys.map(surahOf)).forEach(n => { counts[n] = (counts[n] ?? 0) + 1; }));
+  found.forEach(piece => new Set(piece.keys.map(surahOf)).forEach(number => { counts[number] = (counts[number] ?? 0) + 1; }));
   const cut = surah ? found.filter(piece => piece.keys.some(key => surahOf(key) === surah)) : found;
-  const exact: (Opening & { kind?: 'inside' })[] = needle ? [
-    ...(scope === 'inside' ? [] : phrases).filter(phrase => [phrase.id, phrase.text, phrase.textEn ?? ''].some(text => searchKey(text) === needle)),
-    ...(inside?.groups ?? []).filter(group => [group.id, group.text].some(text => searchKey(text) === needle)).map(group => ({ id: group.id, text: group.text, count: new Set(group.occurrences.map(at => at.key)).size, kind: 'inside' as const })),
-  ] : [];
-  const partition = first(params.r) ?? undefined;
-  const matches = phrases.filter(phrase => phrase.id === id && (partition === undefined || phrase.partition === partition || (!phrase.partition && startingWith(shared, id, partition).length >= 2)));
-  const ambiguous = !selectedInside && matches.length > 1;
-  const foundPhrase = selectedInside ? inside?.groups.find(group => group.id === id) ?? inside?.pieces.find(piece => piece.id === id)?.phrase : undefined;
-  const scopedPhrase = foundPhrase && requestedOccurrences.length > 0 ? { ...foundPhrase, occurrences: foundPhrase.occurrences.filter(occurrence => requestedOccurrences.includes(`${occurrence.key}:${occurrence.start}`)) } : foundPhrase;
-  const selectedPhrase = scopedPhrase && (!requestedOccurrences.length || new Set(scopedPhrase.occurrences.map(occurrence => occurrence.key)).size >= 2) ? scopedPhrase : undefined;
-  const unavailable = !!id && (selectedInside ? !selectedPhrase : scope === 'inside' || matches.length === 0);
-  const family = built.families.find(family => family.id === id);
-  const group = selectedPhrase ? [...new Set(selectedPhrase.occurrences.map(at => at.key))].map(key => byKey.get(key)!) : id && !unavailable && !ambiguous ? family ? family.keys.map(key => byKey.get(key)!) : startingWith(shared, id, partition ?? matches[0]?.partition) : [];
-  const own = selectedInside ? [] : spelledAs(group, first(params.w));
-  const drawn = own.length > 0 ? own : group;
-  const spelling = own.length > 0 ? first(params.w)! : undefined;
+  const selected = built.trees.find(tree => tree.id === id);
+  const scoped = selected && requestedOccurrences.length ? { ...selected, occurrences: selected.occurrences.filter(occurrence => requestedOccurrences.includes(`${occurrence.key}:${occurrence.start}`)) } : selected;
+  const treeGroup = scoped && new Set(scoped.occurrences.map(occurrence => occurrence.key)).size >= 2 ? scoped : undefined;
+  const unavailable = !!id && !treeGroup;
+  const drawn = treeGroup ? [...new Set(treeGroup.occurrences.map(occurrence => occurrence.key))].map(key => built.byKey.get(key)!) : [];
+  const presentation = treeGroup ? phrasePresentation(treeGroup, built.ayat) : undefined;
+  const tree = presentation?.tree ?? null;
+  const subtreeLinks = tree ? Object.fromEntries(Object.entries(phraseSubtreeTargets(tree, built.trees, built.ayat)).map(([node, target]) => [node, branchesHref(target.id, juz, { occurrences: target.occurrences.map(occurrence => `${occurrence.key}:${occurrence.start}`) })])) : undefined;
+  const around = tree && state.context ? surrounding(await loadReaderAyat(), keys(tree), [...new Set(Object.values(ayahEnds(tree)))]) : undefined;
+  const exact: Opening[] = needle ? built.trees.filter(candidate => [candidate.id, candidate.text, candidate.textEn ?? ''].some(text => searchKey(text) === needle)).map(candidate => ({ id: candidate.id, text: candidate.text, textEn: candidate.textEn, count: new Set(candidate.occurrences.map(occurrence => occurrence.key)).size })) : [];
   const { page, pageCount } = listPage(first(params.p), id ? Number.MAX_SAFE_INTEGER : cut.length, PER_PAGE);
-  const state = { scope, kind: selectedInside ? 'inside' as const : undefined, phraseId: selectedPhrase?.id, occurrences: requestedOccurrences.length > 0 ? requestedOccurrences : undefined, grouped, page, spelling, surah, query: query || undefined, context: params.c === '1', partition: matches.length === 1 ? (matches[0].partition ?? partition) : partition };
-  if (params.apply === 'juz') redirect(branchesHref(id, juz, state));
-  const wider = selectedInside || !group.length || family ? [] : [...(own.length > 0 ? matches : []), ...widerPhrases(phrases, id, group)];
-  const numbers = id ? [...new Set(group.flatMap(ayah => { const surah = Number(ayah.key.split(':')[0]); return [surah === 1 ? 114 : surah - 1, surah, surah === 114 ? 1 : surah + 1]; }))] : undefined;
+  state.page = page;
+  const numbers = id ? [...new Set(drawn.flatMap(ayah => {
+    const number = surahOf(ayah.key);
+    return [number === 1 ? 114 : number - 1, number, number === 114 ? 1 : number + 1];
+  }))] : undefined;
   const rows = await prisma.surah.findMany({ where: numbers ? { number: { in: numbers } } : undefined, select: { number: true, name: true } });
   const names = Object.fromEntries(rows.map(row => [row.number, row.name]));
-  const presentation = selectedPhrase ? phrasePresentation(selectedPhrase, group, requestedOccurrences.length > 0) : undefined;
-  const tree = presentation?.tree ?? (!unavailable && !ambiguous && drawn.length > 0 ? branch(drawn, !!family) : null);
-  const subtreeLinks = tree && inside && !selectedInside ? Object.fromEntries(Object.entries(phraseSubtreeTargets(tree, inside.groups, inside.ayat)).map(([node, target]) => [node, branchesHref(target.id, juz, { ...state, scope: state.scope === 'opening' ? 'all' : state.scope, kind: 'inside', occurrences: target.occurrences.map(occurrence => `${occurrence.key}:${occurrence.start}`), spelling: undefined, partition: undefined })])) : undefined;
-  const around = tree && state.context ? surrounding(await loadReaderAyat(), keys(tree), [...new Set(Object.values(ayahEnds(tree)))]) : undefined;
-  const heads: (Opening & { kind?: 'inside' })[] = [...new Map(cut.map(piece => [ `${piece.phrase ? 'inside' : 'opening'}:${piece.opening.id}:${piece.opening.partition ?? ''}`, { ...piece.opening, kind: piece.phrase ? 'inside' as const : undefined } ])).values()];
-  if (grouped && !needle) heads.sort((a, b) => b.count - a.count);
-  const ordered = grouped ? heads.flatMap(opening => cut.filter(piece => piece.opening.id === opening.id && piece.opening.partition === opening.partition && Boolean(piece.phrase) === (opening.kind === 'inside'))) : cut;
   const ayatBySurah: Record<number, number> = {};
   drawn.forEach(ayah => { ayatBySurah[surahOf(ayah.key)] = (ayatBySurah[surahOf(ayah.key)] ?? 0) + 1; });
-  const shown = ordered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
-  const shownAyat = new Map(shown.flatMap(piece => piece.keys.map(key => [key, byKey.get(key)!] as const)));
+  const shown = cut.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+  const shownAyat = new Map(shown.flatMap(piece => piece.keys.map(key => [key, built.byKey.get(key)!] as const)));
+  const Scope = id ? PathScope : 'div';
 
-  const Scope = id ? PathScope : Fragment;
   return (
     <div id="quran-branches" dir="rtl" className={`${styles.page} w-full max-w-6xl mx-auto px-4 py-8 flex flex-col gap-4`}>
       <BranchHeading />
-      <BranchScope scope={scope} juz={range} view={state} />
-      <OpeningSearch key={`${scope}:${query}`} query={query} top={openings.slice(0, TOP)} phrases={scope === 'inside' ? [] : phrases} remote={scope !== 'opening'} phraseCount={(scope === 'inside' ? 0 : phrases.length) + (inside?.groups.length ?? 0)} current={id} juz={range} unavailable={unavailable} view={state} alternatives={ambiguous ? matches : []} />
+      <OpeningSearch key={query} query={query} top={built.trees.slice(0, 8).map(tree => ({ id: tree.id, text: tree.text, textEn: tree.textEn, count: new Set(tree.occurrences.map(occurrence => occurrence.key)).size }))} phrases={built.trees.map(tree => ({ id: tree.id, text: tree.text, textEn: tree.textEn, count: new Set(tree.occurrences.map(occurrence => occurrence.key)).size }))} phraseCount={built.trees.length} current={id} juz={range} unavailable={unavailable} view={state} />
       <Scope>
-      <CompareLayout title="السور" current={id ? 'سور هذه الشجرة' : surah ? names[surah] : 'كل السور'} change="اختر سورة" storageKey="branches-pane-hidden"
-        pane={<SurahPane key="surahs" counts={id ? ayatBySurah : counts} total={id ? drawn.length : found.length} names={names} surah={surah} juz={range} view={state} inTree={!!id} treeKeys={drawn.map(ayah => ayah.key)}
-          families={scope === 'inside' ? undefined : <ChapterFamilies key="families" families={built.families} juz={range} view={state} current={id} />} />}>
-      {!id ? <>
-        <div className="flex flex-wrap items-center gap-3">
-          <JuzFilter range={range} phrase={id} view={state} />
-          <BranchOrdering grouped={grouped} juz={range} view={state} />
-        </div>
-        {needle && <SearchSummary query={query} count={cut.length} complete={exact.map(phrase => ({ phrase, href: branchesHref(phrase.id, juz, { ...state, spelling: undefined, partition: phrase.partition, kind: phrase.kind }) }))} />}
-        {(!needle || cut.length > 0) && <PieceList pieces={shown} openings={grouped ? heads : undefined} ayat={shownAyat} names={names} juz={range} view={state} />}
-        <Pagination iconFamily="lucide" scrollTarget="quran-branches" page={page} pageCount={pageCount} hrefs={Array.from({ length: pageCount }, (_, i) => branchesHref('', juz, { scope, grouped, query, surah, page: i + 1 }))} />
-      </> : <>
-        <JuzFilter range={range} phrase={id} view={state} />
-        {wider.length > 0 && <nav aria-label="عبارات أعم" className="flex flex-wrap items-center gap-2">
-          {wider.map(phrase => <Button key={`${phrase.id}:${phrase.partition ?? ''}`} size="sm" href={branchesHref(phrase.id, juz, { ...state, spelling: undefined, partition: phrase.partition })}>
-            <ZoomOut size={16} aria-hidden />
-            {`${phrase.text} (${num(phrase.count)})`}
-          </Button>)}
-        </nav>}
-        {tree && <BranchTree key={`${id}:${state.partition ?? ''}:${spelling ?? ''}:${range?.from}-${range?.to}:${state.context}`} tree={tree} prefixes={requestedOccurrences.length > 0 ? undefined : presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} variants={presentation ? [] : family ? [] : variants(drawn)} names={names} juz={range} view={state} surround={{ on: state.context, sync: true, data: around }} />}
-      </>}
-      </CompareLayout>
+        <CompareLayout title="السور" current={id ? 'سور هذه الشجرة' : surah ? names[surah] : 'كل السور'} change="اختر سورة" storageKey="branches-pane-hidden"
+          pane={<SurahPane counts={id ? ayatBySurah : counts} total={id ? drawn.length : found.length} names={names} surah={surah} juz={range} view={state} inTree={!!id} treeKeys={drawn.map(ayah => ayah.key)} />}>
+          {!id ? <>
+            <JuzFilter range={range} phrase={id} view={state} />
+            {needle && <SearchSummary query={query} count={cut.length} complete={exact.map(phrase => ({ phrase, href: branchesHref(phrase.id, juz) }))} />}
+            {(!needle || cut.length > 0) && <PieceList pieces={shown} ayat={shownAyat} names={names} juz={range} view={state} />}
+            <Pagination iconFamily="lucide" scrollTarget="quran-branches" page={page} pageCount={pageCount} hrefs={Array.from({ length: pageCount }, (_, index) => branchesHref('', juz, { query, surah, page: index + 1 }))} />
+          </> : <>
+            <JuzFilter range={range} phrase={id} view={state} />
+            {tree && <BranchTree key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}:${state.context}`} tree={tree} prefixes={requestedOccurrences.length ? undefined : presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} names={names} juz={range} view={state} surround={{ on: !!state.context, sync: true, data: around }} label="شجرة العبارات المشتركة" />}
+          </>}
+        </CompareLayout>
       </Scope>
     </div>
   );

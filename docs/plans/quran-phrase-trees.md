@@ -1,5 +1,7 @@
 # Phrase trees inside ayat
 
+> Implemented and extended by [ADR 0034](../adr/0034-one-inventory-defines-quran-branch-trees.md), which removes the opening/inside distinction and makes this the only tree inventory.
+
 Extend `/quran/branches` with shared wording at any word position. Reuse the current multiple-start layout: prefixes on the right converge on the shared phrase, and continuations branch left. The owner approved proceeding after identifying the existing يطوف عليهم layout as the visual model.
 
 ## Acceptance criteria

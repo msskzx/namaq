@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useId, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Search } from 'lucide-react';
 import { num } from '@/lib/quran/arabicNumber';
@@ -14,9 +14,8 @@ import { PathButton } from './Paths';
 
 const ROW = 'flex items-baseline gap-2 rounded px-2 py-1 hover:bg-[color-mix(in_srgb,var(--home-accent)_10%,transparent)] aria-[current=page]:bg-[color-mix(in_srgb,var(--home-accent)_16%,transparent)] aria-[current=page]:font-semibold';
 
-export default function SurahPane({ counts, total, names, surah, juz, view, families, inTree = false, treeKeys = [] }: { counts: Record<number, number>; total: number; names: Record<number, string>; surah?: number; juz: JuzRange | null; view: BranchesView; families?: React.ReactNode; inTree?: boolean; treeKeys?: string[] }) {
+export default function SurahPane({ counts, total, names, surah, juz, view, inTree = false, treeKeys = [] }: { counts: Record<number, number>; total: number; names: Record<number, string>; surah?: number; juz: JuzRange | null; view: BranchesView; inTree?: boolean; treeKeys?: string[] }) {
   const [search, setSearch] = useState('');
-  const titleId = useId();
   const list = useRef<HTMLUListElement>(null);
   useEffect(() => {
     const box = list.current;
@@ -26,14 +25,10 @@ export default function SurahPane({ counts, total, names, surah, juz, view, fami
   const { language } = useLanguage();
   const ar = language === 'ar';
   const label = ar ? 'ابحث عن سورة' : 'Find a surah';
-  const href = (next?: number) => branchesHref('', juz ?? undefined, inTree ? { grouped: view.grouped, scope: view.scope, surah: next } : { ...view, page: 1, surah: next });
+  const href = (next?: number) => branchesHref('', juz ?? undefined, inTree ? { surah: next } : { ...view, page: 1, surah: next });
   const shown = Object.keys(names).map(Number).sort((a, b) => a - b).filter(n => (inTree ? counts[n] : surahInRange(n, { unit: 'juz', range: juz })) && surahMatch(search, n, names[n]) !== null);
   return (
     <>
-      {families && <section aria-labelledby={`${titleId}-families`} className="flex flex-col gap-2 border-b border-[var(--home-rule)] pb-3">
-        <h3 id={`${titleId}-families`} className={NOTE}>{ar ? 'مجموعات فواتح السور' : 'Chapter opening families'}</h3>
-        {families}
-      </section>}
       <p className={NOTE}>{inTree
         ? (ar ? 'سور آيات هذه الشجرة بعدد آياتها فيها. اختر سورة لترى كل الأشجار التي فيها آية منها.' : 'The surahs of this tree with their ayat in it. Pick one to see every tree with an ayah from it.')
         : (ar ? 'كل سورة بعدد أشجارها. اختر سورة لترى الأشجار التي فيها آية منها.' : 'Each surah with its number of trees. Pick one to see the trees with an ayah from it.')}</p>

@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { branch, branchesHref, startingWith, variants, type BranchAyah } from '@/lib/quran/branches';
 import BranchTree from './BranchTree';
-import ayat from './ayat.json';
+import data from './trees.json';
 import { inJuzRange } from '@/lib/quran/juz';
 
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
@@ -77,7 +77,7 @@ describe('BranchTree', () => {
   });
 
   it('joins the juz 30 opening variants to their branches without an empty box', () => {
-    const group = startingWith(ayat as BranchAyah[], 'اما من').filter(a => inJuzRange(a.key, { from: 30, to: 30 }));
+    const group = startingWith(data.ayat as BranchAyah[], 'اما من').filter(a => inJuzRange(a.key, { from: 30, to: 30 }));
     const tree = branch(group);
     const { container } = render(<BranchTree tree={tree} variants={variants(group)} names={{}} />);
     expect(screen.getByRole('list', { name: 'صيغ الكلمة الأولى' }).children).toHaveLength(3);
@@ -149,7 +149,7 @@ describe('BranchTree', () => {
   });
 
   it('replaces repeated leaf originals with an amber button for every represented ayah', async () => {
-    const group = startingWith(ayat as BranchAyah[], 'ان مع العسر');
+    const group = startingWith(data.ayat as BranchAyah[], 'ان مع العسر');
     render(<BranchTree tree={branch(group)} variants={variants(group)} names={{ 94: 'الشرح' }} />);
     const button = screen.getByRole('button', { name: /عرض اختلافات الضبط والسياق/ });
     expect(button.getAttribute('data-variant')).toBe('highlight');
@@ -195,7 +195,7 @@ describe('BranchTree', () => {
   });
 
   it('opens a first-word box on its own ayat and then the other first words that share its child', async () => {
-    const group = startingWith(ayat as BranchAyah[], 'الذين ينقضون');
+    const group = startingWith(data.ayat as BranchAyah[], 'الذين ينقضون');
     render(<BranchTree tree={branch(group)} variants={variants(group)} names={{}} />);
     const firstWords = screen.getByRole('list', { name: 'صيغ الكلمة الأولى' });
     fireEvent.click(within(firstWords).getAllByRole('button', { name: /عرض/ })[1]);
@@ -275,7 +275,7 @@ describe('BranchTree', () => {
   });
 
   it('lists the differing marks of a merged node at the top of its overlay with the differing word highlighted', () => {
-    const group = startingWith(ayat as BranchAyah[], 'قال رب').filter(a => ['26:24', '26:28', '28:16'].includes(a.key));
+    const group = startingWith(data.ayat as BranchAyah[], 'قال رب').filter(a => ['26:24', '26:28', '28:16'].includes(a.key));
     render(<BranchTree tree={branch(group)} names={{}} />);
     const marks = screen.getByRole('region', { name: 'الضبط في هذه العقدة', hidden: true });
     expect(within(marks).getAllByRole('listitem', { hidden: true }).map(item => item.textContent)).toEqual([`${group[0].words.slice(0, 2).join(' ')}آيتان`, `${group[2].words.slice(0, 2).join(' ')}آية`]);
@@ -387,7 +387,7 @@ describe('BranchTree', () => {
     });
 
     it('shows, after a leaf that runs into the next ayah, the ayah after that one', async () => {
-      const group = startingWith(ayat as BranchAyah[], 'يطوف عليهم');
+      const group = startingWith(data.ayat as BranchAyah[], 'يطوف عليهم');
       vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({ before: {}, after: { '56:18': { key: '56:19', page: 535, words: ['لَّا', 'يُصَدَّعُونَ'] } } }) }));
       render(<BranchTree tree={branch(group)} variants={variants(group)} names={{ 56: 'الواقعة' }} surround={{ on: true }} />);
       const box = (await screen.findByText('لَّا يُصَدَّعُونَ')).closest('[data-ctx]')!;
@@ -421,7 +421,7 @@ describe('BranchTree', () => {
     });
 
     it('carries the switch into the branch links once it is turned on', () => {
-      const group = startingWith(ayat as BranchAyah[], 'ان المتقين');
+      const group = startingWith(data.ayat as BranchAyah[], 'ان المتقين');
       render(<BranchTree tree={branch(group)} names={names} view={{}} surround={{ on: false, sync: true }} />);
       const link = () => screen.getAllByRole('link').find(a => a.getAttribute('href')!.startsWith('/quran/branches?'))!;
       expect(new URL(link().getAttribute('href')!, 'http://localhost').searchParams.has('c')).toBe(false);
