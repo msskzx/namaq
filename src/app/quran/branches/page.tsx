@@ -115,7 +115,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const state = { scope, kind: selectedInside ? 'inside' as const : undefined, phraseId: selectedPhrase?.id, grouped, page, spelling, surah, query: query || undefined, context: params.c === '1', partition: matches.length === 1 ? (matches[0].partition ?? partition) : partition };
   if (params.apply === 'juz') redirect(branchesHref(id, juz, state));
   const wider = selectedInside || !group.length || family ? [] : [...(own.length > 0 ? matches : []), ...widerPhrases(phrases, id, group)];
-  const numbers = id ? [...new Set(group.flatMap(ayah => { const surah = Number(ayah.key.split(':')[0]); return [surah - 1, surah, surah + 1]; }))] : undefined;
+  const numbers = id ? [...new Set(group.flatMap(ayah => { const surah = Number(ayah.key.split(':')[0]); return [surah === 1 ? 114 : surah - 1, surah, surah === 114 ? 1 : surah + 1]; }))] : undefined;
   const rows = await prisma.surah.findMany({ where: numbers ? { number: { in: numbers } } : undefined, select: { number: true, name: true } });
   const names = Object.fromEntries(rows.map(row => [row.number, row.name]));
   const presentation = selectedPhrase ? phrasePresentation(selectedPhrase, group) : undefined;
