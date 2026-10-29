@@ -94,3 +94,16 @@ it('still loads the following ayah at the start of a surah when surrounding is e
   render(tree('34:1', true), { wrapper });
   expect(await screen.findByText('يَعْلَمُ مَا يَلِجُ')).toBeTruthy();
 });
+
+it('uses the actual wrapped predecessor for the extra step before al-Fatiha', async () => {
+  const fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ before: { '1:2': { key: '114:6', page: 604, words: ['مِنَ الْجِنَّةِ وَالنَّاسِ'], basmala: ['بِسْمِ اللَّهِ'] }, '114:6': { key: '114:5', page: 604, words: ['الَّذِي يُوَسْوِسُ'] } }, after: {} }) });
+  vi.stubGlobal('fetch', fetch);
+  render(tree('1:2'), { wrapper });
+  await screen.findByText('مِنَ الْجِنَّةِ وَالنَّاسِ');
+  expect(screen.getByText('بِسْمِ اللَّهِ')).toBeTruthy();
+  fireEvent.click(screen.getByRole('switch'));
+  await screen.findByText('الَّذِي يُوَسْوِسُ');
+  const last = new URL(fetch.mock.calls[fetch.mock.calls.length - 1][0], 'http://localhost');
+  expect(last.searchParams.get('before')).toBe('114:6');
+  expect(screen.getAllByText('مِنَ الْجِنَّةِ وَالنَّاسِ')).toHaveLength(1);
+});

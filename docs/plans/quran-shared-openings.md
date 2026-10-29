@@ -244,3 +244,8 @@ entries of at most six ayat. The scope switch selects all entries, openings,
 or inside phrases; phrase selections carry their kind in the URL.
 
 See [the implementation plan](quran-phrase-trees.md) for acceptance criteria.
+
+Before al-Fatiha, tree context wraps to an-Nas 6. For الحمد لله at 1:2,
+the preceding box includes an-Nas 6 followed by the basmala. Before 1:1,
+the preceding box contains an-Nas 6 without repeating the basmala. An extra
+backward step follows the actual preceding reference, including this wrap.

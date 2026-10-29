@@ -7,11 +7,7 @@ export default function BranchHeading() {
   const { language } = useLanguage();
   const ar = language === 'ar';
   return <header className={styles.heading} dir={ar ? 'rtl' : 'ltr'}>
-    <p className={styles.eyebrow}>{ar ? 'نمق · القرآن الكريم' : 'Namaq · Quran'}</p>
     <h1>{ar ? 'العبارات المشتركة في الآيات' : 'Shared ayah phrases'}</h1>
-    <p className="text-sm text-[var(--home-muted)]">{ar
-      ? 'عبارات مشتركة في أول الآية أو داخلها، تتفرع حيث تختلف كلماتها، ومجموعات من فواتح السور.'
-      : 'Explore shared phrases at the start or inside ayat and families of chapter openings, branching where their wording differs.'}</p>
     <details className="text-sm text-[var(--home-muted)]">
       <summary className="cursor-pointer select-none text-[var(--home-ink)]">{ar ? 'قواعد المطابقة' : 'Matching rules'}</summary>
       <p className="mt-2">{ar

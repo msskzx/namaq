@@ -444,7 +444,8 @@ The existing multiple-start tree presentation anchored on an inside phrase.
 Whole prefixes join the shared phrase and its continuations branch left.
 An occurrence starting at the first word shows the preceding ayah as its
 starting branch. The surrounding-ayat control adds one earlier ayah to that
-branch where available in the same surah.
+branch where available. Before al-Fatiha, context wraps to the end of an-Nas,
+with the basmala kept between the end and the opening الحمد لله.
 
 **Opening entry**:
 A group of ayat cut from an opening's tree for browsing together. An opening may

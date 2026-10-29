@@ -122,12 +122,13 @@ export default function BranchTree({ tree, names, variants = [], prefixes, showS
   const emptyKeys = (prefixes ?? []).filter(prefix => !prefix.word).flatMap(prefix => prefix.keys);
   const previousKey = (key: string) => {
     const [surah, ayah] = key.split(':').map(Number);
-    return ayah > 1 ? `${surah}:${ayah - 1}` : undefined;
+    return ayah > 1 ? `${surah}:${ayah - 1}` : surah === 1 ? '114:6' : undefined;
   };
   const requiredKeys = emptyKeys.filter(key => previousKey(key));
   const mandatory = useSurrounding(requiredKeys.length > 0, requiredKeys, {}, surround?.data);
-  const optionalKeys = all.flatMap(key => emptyKeys.includes(key) ? previousKey(key) ?? key : key);
-  const extraKeys = emptyKeys.flatMap(key => previousKey(key) ?? []);
+  const precedingKey = (key: string) => mandatory.data?.before[key]?.key ?? previousKey(key);
+  const optionalKeys = all.flatMap(key => emptyKeys.includes(key) ? precedingKey(key) ?? key : key);
+  const extraKeys = emptyKeys.flatMap(key => precedingKey(key) ?? []);
   const preloaded = surround?.data && extraKeys.every(key => Number(key.split(':')[1]) === 1 || Object.prototype.hasOwnProperty.call(surround.data!.before, key)) ? surround.data : undefined;
   const { data, isLoading, error } = useSurrounding(!!surround && on, optionalKeys, ends, preloaded);
   const around: Around | undefined = surround && on && (data ?? surround.data) ? { data: (data ?? surround.data)!, ends, inTree: new Set(all), names, tree: id } : undefined;
@@ -164,7 +165,7 @@ export default function BranchTree({ tree, names, variants = [], prefixes, showS
                 </Marked>
               </PathBox>
             </> }] : prefix.keys.flatMap(key => {
-              const previous = previousKey(key);
+              const previous = precedingKey(key);
               if (!previous) return [{ key, keys: [key], item: <PathBox id={`p${i}:${key}`} keys={[key]} lit={LIT} tone={LINE} className="shrink-0 rounded border bg-[var(--home-paper)] px-3 py-1.5">
                 <span className="block text-base text-[var(--home-muted)]">{ar ? 'بداية السورة' : 'Start of surah'}</span>
                 <AyahRefs keys={[key]} names={names} />
