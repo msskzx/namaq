@@ -2,6 +2,8 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import QuranBranchesPage from './page';
+import { Children, isValidElement, type ReactNode } from 'react';
+import CompareLayout from '../compare/CompareLayout';
 import { branchesHref } from '@/lib/quran/branches';
 
 const params = new URLSearchParams();
@@ -49,6 +51,17 @@ describe('Quran branch trees', () => {
     expect(trees[0].textContent).toContain('٥٢:٤٥');
     expect(trees[0].textContent).toContain('٧٠:٤٢');
     expect(trees[0].textContent).toContain('٤٣:٨٣');
+  });
+  it('gives the server-created sidebar a stable identity among client layout children', async () => {
+    const panes: ReactNode[] = [];
+    const visit = (nodes: ReactNode) => Children.forEach(nodes, node => {
+      if (!isValidElement<{ children?: ReactNode; pane?: ReactNode }>(node)) return;
+      if (node.type === CompareLayout) panes.push(node.props.pane);
+      visit(node.props.children);
+    });
+    visit(await open({}));
+    expect(panes).toHaveLength(1);
+    expect(panes.every(pane => isValidElement(pane) && pane.key !== null)).toBe(true);
   });
   it('canonicalizes a legacy opening URL to its unified tree', async () => {
     await expect(open({ o: 'فذرهم يخوضوا ويلعبوا حتي يلقوا يومهم الذي يوعدون', scope: 'opening' }))

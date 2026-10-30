@@ -7,8 +7,8 @@ import translations from '../language/translations';
 import Emblem from './Emblem';
 import { NAV_SECTIONS } from '@/lib/navigation';
 function Footer() {
-  const { language } = useLanguage();
-  const currentLanguage = (language || 'ar') as 'en' | 'ar';
+  const { language, languageLoaded } = useLanguage();
+  const currentLanguage = languageLoaded ? language : 'ar';
   const ar = currentLanguage === 'ar';
 
   return (
