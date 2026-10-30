@@ -61,19 +61,45 @@ describe('BranchTree', () => {
     expect(viewport.classList.contains('overflow-hidden')).toBe(true);
     expect(container.querySelector('[data-tree]')!.classList.contains('overflow-hidden')).toBe(true);
     expect(screen.getByText('٥٠٪')).toBeTruthy();
-    const zoomMode = screen.getByRole('switch', { name: 'تكبير يدوي بدل ملاءمة الشجرة' }) as HTMLInputElement;
-    expect(zoomMode.checked).toBe(false);
+    const fit = screen.getByRole('button', { name: 'ملاءمة الشجرة' });
+    expect(fit.getAttribute('aria-pressed')).toBe('true');
     fireEvent.click(screen.getByRole('button', { name: 'تكبير الشجرة' }));
     expect(content.style.transform).toBe('scale(0.6)');
     expect(viewport.classList.contains('overflow-auto')).toBe(true);
-    expect(zoomMode.checked).toBe(true);
-    fireEvent.click(zoomMode);
+    expect(fit.getAttribute('aria-pressed')).toBe('false');
+    fireEvent.click(fit);
     expect(content.style.transform).toBe('scale(0.5)');
-    fireEvent.click(zoomMode);
+    expect(fit.getAttribute('aria-pressed')).toBe('true');
+    fireEvent.click(screen.getByRole('button', { name: 'تصغير الشجرة' }));
+    expect(content.style.transform).toBe('scale(0.4)');
+    fireEvent.click(fit);
+    expect(content.style.transform).toBe('scale(0.5)');
+  });
+
+  it('keeps a fixed viewport while fitting and zooming different diagram sizes', () => {
+    let resize: ResizeObserverCallback = () => {};
+    vi.stubGlobal('ResizeObserver', class {
+      constructor(callback: ResizeObserverCallback) { resize = callback; }
+      observe() {}
+      disconnect() {}
+      unobserve() {}
+    });
+    const { container } = render(<BranchTree tree={tree} names={{}} viewportHeight="320px" />);
+    const viewport = container.querySelector<HTMLElement>('[data-tree-viewport]')!;
+    const content = container.querySelector<HTMLElement>('[data-tree-content]')!;
+    Object.defineProperties(viewport, { clientWidth: { configurable: true, value: 500 }, clientHeight: { configurable: true, value: 320 } });
+    Object.defineProperties(content, { offsetWidth: { configurable: true, value: 500 }, offsetHeight: { configurable: true, value: 800 } });
+    act(() => resize([], {} as ResizeObserver));
+    expect(content.style.transform).toBe('scale(0.4)');
+    expect(viewport.style.height).toBe('320px');
+    fireEvent.click(screen.getByRole('button', { name: 'تكبير الشجرة' }));
+    expect(content.style.transform).toBe('scale(0.5)');
+    expect(viewport.style.height).toBe('320px');
+    Object.defineProperty(content, 'offsetHeight', { configurable: true, value: 100 });
+    act(() => resize([], {} as ResizeObserver));
+    fireEvent.click(screen.getByRole('button', { name: 'ملاءمة الشجرة' }));
     expect(content.style.transform).toBe('scale(1)');
-    expect(viewport.style.height).toBe('700px');
-    fireEvent.click(zoomMode);
-    expect(content.style.transform).toBe('scale(0.5)');
+    expect(viewport.style.height).toBe('320px');
   });
 
   it('joins the juz 30 opening variants to their branches without an empty box', () => {
@@ -216,13 +242,6 @@ describe('BranchTree', () => {
     expect(dialog.open).toBe(true);
   });
 
-  it('puts the surrounding-ayat switch before the header so it sits on the right in Arabic', () => {
-    const { container } = render(<BranchTree tree={tree} names={{}} header={<p>header</p>} surround={{ on: false }} />);
-    const row = container.querySelector('[data-tree] > div')!;
-    const children = [...row.children];
-    expect(children.findIndex(child => child.querySelector('[role="switch"]'))).toBeLessThan(children.findIndex(child => child.textContent === 'header'));
-  });
-
   it('gives every node the same plain border until its path is lit, the root too', () => {
     const { container } = render(<BranchTree tree={tree} names={{}} />);
     const nodes = [...container.querySelectorAll('[data-node]')];
@@ -321,10 +340,9 @@ describe('BranchTree', () => {
       expect(open).toHaveBeenCalledOnce();
     });
 
-    it('draws the switch with one icon and one label', () => {
+    it('gives the surrounding-ayat switch one visible label', () => {
       render(<BranchTree tree={tree} names={names} surround={{ on: false }} />);
-      const toggle = screen.getByRole('switch', { name: 'الآيات المحيطة' }).closest('label')!;
-      expect(toggle.querySelectorAll('svg')).toHaveLength(1);
+      expect(screen.getByRole('switch', { name: 'الآيات المحيطة' })).toBeTruthy();
       expect(screen.getAllByText('الآيات المحيطة')).toHaveLength(1);
     });
 

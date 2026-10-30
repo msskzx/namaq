@@ -12,7 +12,7 @@ export default function ThemeSwitcher({ palette = 'default' }: { palette?: 'defa
   const { language } = useLanguage();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
-  if (!mounted) return <span className={`inline-block shrink-0 ${palette === 'site' ? 'size-9' : 'h-7 w-[52px]'}`} aria-hidden="true" />;
+  if (!mounted) return <span className={`inline-block shrink-0 ${palette === 'site' ? 'size-[1.875rem]' : 'h-7 w-[52px]'}`} aria-hidden="true" />;
   if (palette === 'site') {
     const dark = resolvedTheme === 'dark';
     const label = dark

@@ -1,9 +1,8 @@
 'use client';
 
 import React, { useEffect, useId, useRef, useState } from 'react';
-import { Maximize2, RotateCw, RotateCcw, ZoomIn, ZoomOut } from 'lucide-react';
+import { Maximize2, Minus, Plus, RotateCw, ZoomIn } from 'lucide-react';
 import Button from '@/components/common/Button';
-import Toggle from '@/components/common/Toggle';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@/lib/quran/arabicNumber';
 import { ayahEnds, branchesHref, keys, linkable, linkId, spell, type Branch, type BranchesView, type Variant } from '@/lib/quran/branches';
@@ -13,7 +12,7 @@ import { Fan, PathBox, PathButton, PathProvider, Stub, useOuterPaths, usePaths, 
 import type { Surrounding } from '@/lib/quran/ayahContext';
 import { anchorOf, NeighbourBox, SurroundToggle, targetStyle, useSurrounding, type Around } from './Surroundings';
 
-type Props = { prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
+type Props = { prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; viewportHeight?: string; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
 type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header' | 'surround'> & { around?: Around; anchors?: string; node: Branch; parent?: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
 
 // Every tree node has the same thin border; only a pinned path is coloured.
@@ -121,7 +120,7 @@ function fitTreeScale({ width, height, availableWidth, availableHeight }: Diagra
   return Math.min(1, availableWidth / width, availableHeight / height);
 }
 
-function TreeViewport({ children, controls, enabled, ar }: { children: React.ReactNode; controls?: React.ReactNode; enabled: boolean; ar: boolean }) {
+function TreeViewport({ children, controls, enabled, ar, height }: { children: React.ReactNode; controls?: React.ReactNode; enabled: boolean; ar: boolean; height?: string }) {
   const viewport = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState<DiagramSize | null>(null);
@@ -137,7 +136,7 @@ function TreeViewport({ children, controls, enabled, ar }: { children: React.Rea
         width: inner.offsetWidth,
         height: inner.offsetHeight,
         availableWidth: outer.clientWidth,
-        availableHeight: Math.max(240, Math.round(window.innerHeight * 0.7)),
+        availableHeight: height ? outer.clientHeight : Math.max(240, Math.round(window.innerHeight * 0.7)),
       };
       if (!next.width || !next.height || !next.availableWidth) return;
       setSize(previous => previous && Object.keys(next).every(key => previous[key as keyof DiagramSize] === next[key as keyof DiagramSize]) ? previous : next);
@@ -148,7 +147,7 @@ function TreeViewport({ children, controls, enabled, ar }: { children: React.Rea
     observer.observe(outer);
     observer.observe(inner);
     return () => observer.disconnect();
-  }, [enabled]);
+  }, [enabled, height]);
 
   if (!enabled) return <>
     {controls && <div className="mb-3 flex flex-wrap items-center justify-between gap-3">{controls}</div>}
@@ -166,22 +165,18 @@ function TreeViewport({ children, controls, enabled, ar }: { children: React.Rea
     in: 'Zoom in',
   };
   const frame = size ? { width: size.width * scale, height: size.height * scale } : undefined;
-  const viewportHeight = size ? Math.min(frame!.height, size.availableHeight) : undefined;
+  const viewportHeight = height ?? (size ? Math.min(frame!.height, size.availableHeight) : undefined);
 
   return <>
-    <div className="mb-3 flex flex-wrap items-center gap-3">
-      {controls}
+    <div dir={ar ? 'rtl' : 'ltr'} className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--home-rule)] pb-3">
+      {controls && <div className="flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-[var(--home-muted)]">{controls}</div>}
       <div role="toolbar" aria-label={ar ? 'تكبير الشجرة' : 'Tree zoom'} className="flex flex-wrap items-center gap-2">
-        <Toggle
-          checked={manualScale !== null}
-          label={ar ? 'تكبير يدوي بدل ملاءمة الشجرة' : 'Manual zoom instead of fit'}
-          onChange={manual => setManualScale(manual ? 1 : null)}
-          offIcon={<Maximize2 className="size-3" />}
-          onIcon={<RotateCcw className="size-3" />}
-        />
-        <Button size="icon" onClick={() => setScale(scale - SCALE_STEP)} disabled={scale <= MIN_SCALE} aria-label={labels.out} title={labels.out}><ZoomOut size={16} aria-hidden /></Button>
-        <span className="min-w-12 text-center text-sm tabular-nums text-[var(--home-muted)]" aria-live="polite">{ar ? `${num(Math.round(scale * 100))}٪` : `${Math.round(scale * 100)}%`}</span>
-        <Button size="icon" onClick={() => setScale(scale + SCALE_STEP)} disabled={scale >= MAX_SCALE} aria-label={labels.in} title={labels.in}><ZoomIn size={16} aria-hidden /></Button>
+        <Button aria-pressed={manualScale === null} onClick={() => setManualScale(null)}><Maximize2 size={16} aria-hidden />{ar ? 'ملاءمة الشجرة' : 'Fit tree'}</Button>
+        <div dir="ltr" className="flex items-center gap-1">
+          <Button size="icon" onClick={() => setScale(scale - SCALE_STEP)} disabled={scale <= MIN_SCALE} aria-label={labels.out} title={labels.out}><Minus size={16} aria-hidden /></Button>
+          <span className="min-w-12 text-center text-sm tabular-nums text-[var(--home-muted)]" aria-live="polite">{ar ? `${num(Math.round(scale * 100))}٪` : `${Math.round(scale * 100)}%`}</span>
+          <Button size="icon" onClick={() => setScale(scale + SCALE_STEP)} disabled={scale >= MAX_SCALE} aria-label={labels.in} title={labels.in}><Plus size={16} aria-hidden /></Button>
+        </div>
       </div>
     </div>
     <div ref={viewport} data-tree-viewport className={manualScale === null ? 'overflow-hidden' : 'overflow-auto'} style={{ height: viewportHeight }}>
@@ -193,9 +188,8 @@ function TreeViewport({ children, controls, enabled, ar }: { children: React.Rea
 }
 
 // docs/plans/quran-shared-openings.md
-export default function BranchTree({ tree, names, variants = [], prefixes, subtreeLinks, showSpellings = true, zoomable = true, juz = null, renderNode, label = 'شجرة العبارات المشتركة', header, view: given, surround }: Props) {
+export default function BranchTree({ tree, names, variants = [], prefixes, subtreeLinks, showSpellings = true, zoomable = true, viewportHeight, juz = null, renderNode, label = 'شجرة العبارات المشتركة', header, view: given, surround }: Props) {
   const id = useId();
-  // The page is right to left, so in Arabic the switch comes first and sits on the right.
   const ar = useLanguage().language === 'ar';
   const [on, setOn] = useState(() => (surround?.sync && typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('c') === '1' : surround?.on ?? false));
   const view = surround?.sync && given ? { ...given, context: on } : given;
@@ -227,9 +221,8 @@ export default function BranchTree({ tree, names, variants = [], prefixes, subtr
   const tags = Object.fromEntries(variants.flatMap(variant => variant.keys.map(key => [key, variant])));
   const rootId = nodeId(-1);
   const controls = (header || surround) ? <>
-    {!ar && header}
+    {header}
     {surround && <SurroundToggle on={on} onChange={setOn} sync={surround.sync} loading={isLoading} failed={!!error} />}
-    {ar && header}
   </> : undefined;
   return (
     <PathProvider value={paths}>
@@ -240,7 +233,7 @@ export default function BranchTree({ tree, names, variants = [], prefixes, subtr
           <span>{ar ? 'تعذّر تحميل الآيات السابقة.' : 'Could not load the preceding ayat.'}</span>
           <Button size="sm" onClick={() => void mandatory.mutate()}><RotateCw size={16} aria-hidden />{ar ? 'حاول مجددًا' : 'Try again'}</Button>
         </div>}
-        <TreeViewport controls={controls} enabled={zoomable} ar={ar}>
+        <TreeViewport controls={controls} enabled={zoomable} ar={ar} height={viewportHeight}>
           {prefixes && prefixes.length > 0 ? <>
             <Fan side="end" label={ar ? 'ما قبل العبارة' : 'Before the phrase'} entries={prefixes.flatMap((prefix, i): FanEntry[] => prefix.word ? [{ key: `${prefix.word}:${i}`, keys: prefix.keys, item: <>
               <BeforeFan ayahKeys={prefix.keys} around={around} opens={`p${i}`} />

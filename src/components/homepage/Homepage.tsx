@@ -1,38 +1,59 @@
 'use client';
 
-import { BookOpen, GitBranch, ListChecks, Users } from 'lucide-react';
+import { useState } from 'react';
+import { BookOpen, GitBranch, ListChecks, Shuffle, Users } from 'lucide-react';
 import { useLanguage } from '../language/LanguageContext';
 import Button from '../common/Button';
+import LoadingSpinner from '../common/LoadingSpinner';
 import BranchTree from '@/app/quran/branches/BranchTree';
 import type { HomePreviews } from '@/lib/homePreviewData';
-import Hero from './Hero';
 import WorkInProgressBanner from './WorkInProgressBanner';
-import { BRANCHES_HREF } from './homeLinks';
 import styles from './Home.module.css';
 
 export default function Homepage({ data, fontClass = '' }: { data: HomePreviews; fontClass?: string }) {
   const ar = useLanguage().language === 'ar';
+  const [preview, setPreview] = useState(data.branches);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const randomTree = async () => {
+    setLoading(true);
+    setError(false);
+    try {
+      const response = await fetch(`/api/quran/random-tree?${new URLSearchParams({ exclude: preview.id })}`, { cache: 'no-store' });
+      if (!response.ok) throw new Error('Could not load tree');
+      setPreview(await response.json());
+    } catch {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
   const steps = [
     { Icon: GitBranch, title: ar ? 'استكشف' : 'Explore', text: ar ? 'شاهد مواضع التشابه والاختلاف في العبارات المشتركة.' : 'See where shared phrases agree and where their wording differs.', href: '/quran/branches', action: ar ? 'أشجار العبارات' : 'Phrase trees' },
     { Icon: BookOpen, title: ar ? 'اقرأ في السياق' : 'Read in context', text: ar ? 'انتقل من العبارة إلى الآية، وواصل القراءة في المصحف.' : 'Move from a phrase to its ayah and continue reading in the mushaf.', href: '/quran/read', action: ar ? 'افتح المصحف' : 'Open the reader' },
     { Icon: ListChecks, title: ar ? 'اختبر ما لاحظته' : 'Test what you noticed', text: ar ? 'أجب عن أسئلة الأشجار، ثم راجع الإجابة والآيات المرتبطة بها.' : 'Answer questions about the trees, then review the answer and its ayat.', href: '/quizzes?topic=BRANCHES', action: ar ? 'اختبار فردي' : 'Solo quiz' },
+    { Icon: Users, title: ar ? 'تعلّموا معًا' : 'Learn together', text: ar ? 'ابدأ اختبارًا جماعيًا وشارك رقمه، أو انضم إلى غيرك من هاتفك.' : 'Start a party and share its number, or join others from your phone.', href: '/quizzes/party', action: ar ? 'اختبار جماعي' : 'Party quiz' },
   ];
   return (
     <div className={`${styles.page} ${fontClass}`} dir={ar ? 'rtl' : 'ltr'}>
       <WorkInProgressBanner />
       <div className={styles.content}>
-        <Hero />
         <section className={styles.feature} aria-labelledby="openings-title">
           <div className={styles.featureHeading}><div>
-            <p className={styles.eyebrow}>{ar ? 'ابدأ بملاحظة' : 'Start with a discovery'}</p>
-            <h2 id="openings-title">{ar ? 'بداية مشتركة، فكيف تتفرّع الكلمات؟' : 'A shared beginning. Where do the words branch?'}</h2>
-            <p>{ar ? 'ثلاث آيات تبدأ بعبارة «إن المتقين». تتبّع مسارًا، وافتح الآيات لتقرأها في سياقها.' : 'Three ayat begin with “Indeed, the righteous”. Follow a path and open the ayat to read them in context.'}</p>
-            <p className={styles.exampleCaption}>{ar ? 'استخدم أزرار المسار والآيات داخل الشجرة. مرّر أفقيًا لرؤية بقيتها.' : 'Use the path and ayat buttons inside the tree. Scroll sideways to see more.'}</p>
+            <h1 id="openings-title">{ar ? 'أشجار متشابهات القرآن' : 'Quran phrase trees'}</h1>
+            <p>{ar ? 'استكشف العبارات المشتركة بين الآيات في شجرة تفاعلية، واقرأ كل آية في سياقها.' : 'Explore shared Quranic phrases in an interactive tree, and read each ayah in context.'}</p>
+            <div className={styles.launchActions}>
+              <Button href="/quran/branches"><GitBranch size={18} aria-hidden />{ar ? 'جميع الأشجار' : 'All phrase trees'}</Button>
+              <Button onClick={randomTree} disabled={loading}><Shuffle size={18} aria-hidden />{ar ? 'شجرة عشوائية' : 'Random tree'}</Button>
+            </div>
+            {error && <p role="alert">{ar ? 'تعذّر تحميل الشجرة. حاول مجددًا.' : 'Could not load a tree. Try again.'}</p>}
           </div></div>
-          <div className={styles.launchTree} dir="rtl">
-            <BranchTree tree={data.branches.tree} names={{ 15: 'الحجر', 51: 'الذاريات', 52: 'الطور' }} zoomable={false} label={ar ? 'مثال تفاعلي لشجرة عبارات قرآنية' : 'Interactive Quran phrase tree example'} />
+          <div className={styles.launchTree} dir="rtl" aria-busy={loading}>
+            {loading && <LoadingSpinner className="absolute inset-0 z-10 bg-[var(--home-paper)]" />}
+            <div inert={loading}>
+              <BranchTree key={preview.id} viewportHeight="clamp(22rem, 70svh, 36rem)" tree={preview.tree} prefixes={preview.prefixes.filter(prefix => prefix.word)} offsets={preview.offsets} subtreeLinks={preview.subtreeLinks} names={preview.names} surround={{ on: false }} label={ar ? 'مثال تفاعلي لشجرة عبارات قرآنية' : 'Interactive Quran phrase tree example'} />
+            </div>
           </div>
-          <div className={styles.launchActions}><Button href={BRANCHES_HREF}><GitBranch size={18} aria-hidden />{ar ? 'استكشف الشجرة كاملة' : 'Explore the complete tree'}</Button></div>
         </section>
         <section className={styles.feature} aria-labelledby="journey-title">
           <div className={styles.featureHeading}><div>
@@ -42,11 +63,6 @@ export default function Homepage({ data, fontClass = '' }: { data: HomePreviews;
           <ol className={styles.learningSteps}>{steps.map(({ Icon, title, text, href, action }) => <li key={href}>
             <Icon aria-hidden /><h3>{title}</h3><p>{text}</p><Button href={href}><Icon size={16} aria-hidden />{action}</Button>
           </li>)}</ol>
-        </section>
-        <section className={styles.partyInvitation} aria-labelledby="party-title">
-          <Users size={28} aria-hidden />
-          <div><h2 id="party-title">{ar ? 'تعلّموا معًا' : 'Learn together'}</h2><p>{ar ? 'ابدأ اختبارًا جماعيًا وشارك رقمه، أو انضم إلى غيرك من هاتفك. أجيبوا ثم اكتشفوا الإجابة معًا.' : 'Start a party and share its number, or join others from your phone. Answer and discover the correct answer together.'}</p></div>
-          <Button href="/quizzes/party"><Users size={18} aria-hidden />{ar ? 'اختبار جماعي' : 'Party quiz'}</Button>
         </section>
       </div>
     </div>

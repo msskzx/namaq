@@ -28,7 +28,7 @@ export default function WorkInProgressBanner() {
   }, [languageLoaded]);
   if (!visible) return null;
   return (
-    <aside role="status" dir={language === 'ar' ? 'rtl' : 'ltr'} className="fixed top-24 inset-x-4 z-50 mx-auto flex max-w-xl items-start gap-3 rounded-sm border border-[var(--home-rule)] bg-[var(--home-paper-deep)] p-4 text-start text-sm leading-relaxed text-[var(--home-ink)] shadow-lg">
+    <aside role="status" dir={language === 'ar' ? 'rtl' : 'ltr'} className="fixed top-20 inset-x-4 z-50 mx-auto flex max-w-xl items-start gap-3 rounded-sm border border-[var(--home-rule)] bg-[var(--home-paper-deep)] p-4 text-start text-sm leading-relaxed text-[var(--home-ink)] shadow-lg">
       <TriangleAlert aria-hidden className="mt-1 size-4 shrink-0 text-[var(--home-accent)]" />
       <p>{translations[language].workInProgress}</p>
       <Button size="icon" onClick={() => setVisible(false)} aria-label={language === 'ar' ? 'إغلاق التنبيه' : 'Dismiss notice'} className="shrink-0"><X size={16} aria-hidden /></Button>
