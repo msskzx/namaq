@@ -1,45 +1,46 @@
-// @vitest-environment jsdom
-import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { StrictMode } from 'react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import WorkInProgressBanner from './WorkInProgressBanner';
+import translations from '../language/translations';
 
-const { language } = vi.hoisted(() => ({ language: { current: 'ar' as 'en' | 'ar' } }));
-vi.mock('@/components/language/LanguageContext', () => ({
-  useLanguage: () => ({ language: language.current }),
-}));
-
-afterEach(() => {
-  cleanup();
-  language.current = 'ar';
-});
-
-describe('WorkInProgressBanner', () => {
-  it('says in Arabic that the project is unreviewed', () => {
-    language.current = 'ar';
-
-    render(<WorkInProgressBanner />);
-
-    const note = screen.getByRole('note');
-    expect(note.textContent).toContain(
-      'هذا المشروع قيد التطوير ولم يُراجَع بعد من قِبل أهل العلم. قد تحتوي المعلومات على أخطاء، فلا تعتمد عليها دون الرجوع إلى المصادر.',
-    );
+const { state } = vi.hoisted(() => ({ state: { language: 'ar' as 'ar' | 'en', languageLoaded: true } }));
+vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => state }));
+beforeEach(() => { sessionStorage.clear(); vi.useFakeTimers(); state.languageLoaded = true; });
+afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.useRealTimers(); });
+describe('homepage review notice', () => {
+  it.each(['ar', 'en'] as const)('shows the existing disclaimer in %s and dismisses after five seconds in Strict Mode', language => {
+    state.language = language;
+    render(<StrictMode><WorkInProgressBanner /></StrictMode>);
+    expect(screen.getByRole('status').textContent).toContain(translations[language].workInProgress);
+    act(() => { vi.advanceTimersByTime(4999); });
+    expect(screen.getByRole('status')).toBeTruthy();
+    act(() => { vi.advanceTimersByTime(1); });
+    expect(screen.queryByRole('status')).toBeNull();
   });
-
-  it('says the same thing in English', () => {
-    language.current = 'en';
-
+  it('closes on demand and stays dismissed when revisiting during the session', () => {
+    state.language = 'en';
+    const view = render(<WorkInProgressBanner />);
+    fireEvent.click(screen.getByRole('button', { name: 'Dismiss notice' }));
+    expect(screen.queryByRole('status')).toBeNull();
+    view.unmount();
     render(<WorkInProgressBanner />);
-
-    const note = screen.getByRole('note');
-    expect(note.textContent).toContain(
-      'This project is a work in progress and has not yet been reviewed by scholars. The information may contain mistakes, so do not rely on it without checking the sources.',
-    );
+    expect(screen.queryByRole('status')).toBeNull();
   });
-
-  it('shows one notice with no way to dismiss it', () => {
+  it('waits for language readiness before starting the timer', () => {
+    state.languageLoaded = false;
+    const view = render(<WorkInProgressBanner />);
+    act(() => { vi.advanceTimersByTime(6000); });
+    expect(screen.queryByRole('status')).toBeNull();
+    state.languageLoaded = true;
+    view.rerender(<WorkInProgressBanner />);
+    expect(screen.getByRole('status')).toBeTruthy();
+  });
+  it('still displays and times out when session storage is unavailable', () => {
+    vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => { throw new Error('Blocked'); });
     render(<WorkInProgressBanner />);
-
-    expect(screen.getAllByRole('note')).toHaveLength(1);
-    expect(screen.queryByRole('button')).toBeNull();
+    expect(screen.getByRole('status')).toBeTruthy();
+    act(() => { vi.advanceTimersByTime(5000); });
+    expect(screen.queryByRole('status')).toBeNull();
   });
 });

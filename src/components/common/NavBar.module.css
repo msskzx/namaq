@@ -20,45 +20,11 @@
 .chapter > a { padding: 0.5rem 0.5rem; font-size: 1.125rem; color: var(--home-ink); text-underline-offset: 0.45em; }
 .chapter > a:hover, .chapter > a[aria-current] { color: var(--home-accent); }
 .chapter > a[aria-current] { text-decoration: underline; text-decoration-color: var(--home-accent); }
-.toggle svg { transition: transform 120ms ease; }
-.toggle { padding: 0.25rem; font-size: 0.6875rem; color: var(--home-muted); }
-.toggle:hover { color: var(--home-accent); }
-
-.shelf {
-  position: absolute;
-  top: calc(100% + 0.5rem);
-  inset-inline-start: 0;
-  display: flex;
-  gap: 2rem;
-  width: max-content;
-  max-width: min(52rem, 92vw);
-  padding: 1.25rem 1.5rem;
-  background: var(--home-paper);
-  border: 1px solid var(--home-rule);
-  outline: 1px solid var(--home-rule);
-  outline-offset: 3px;
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 120ms ease, visibility 0s linear 120ms;
-}
-.shelf::before { content: ''; position: absolute; inset-inline: 0; bottom: 100%; height: 0.75rem; }
-.chapter:hover > .shelf, .chapter[data-open] > .shelf { visibility: visible; opacity: 1; transition-delay: 0s; }
-.chapter[data-dismissed]:not([data-open]) > .shelf { visibility: hidden; opacity: 0; transition: none; }
-.chapter:hover > .toggle svg, .chapter[data-open] > .toggle svg { transform: rotate(180deg); }
-.shelfGroup { width: 15rem; }
-.shelfGroup h3 { font-size: 0.9375rem; color: var(--home-accent); border-bottom: 1px solid var(--home-rule); padding-bottom: 0.25rem; margin-bottom: 0.25rem; }
-.shelfGroup a { display: block; padding-block: 0.375rem; }
-.itemLabel { display: block; color: var(--home-ink); font-size: 1.0625rem; }
-.itemPurpose { display: block; color: var(--home-muted); font-size: 0.875rem; line-height: 1.5; }
-.shelfGroup a:hover .itemLabel, .shelfGroup a[aria-current] .itemLabel { color: var(--home-accent); }
-.shelfGroup a[aria-current] { border-inline-start: 2px solid var(--home-accent); padding-inline-start: 0.5rem; }
-.overview { align-self: flex-end; white-space: nowrap; font-size: 0.9375rem; color: var(--home-accent); }
-.overview:hover { text-decoration: underline; }
 
 .actions { margin-inline-start: auto; display: flex; align-items: center; gap: 0.5rem; }
-.language, .iconButton { min-width: 2.25rem; height: 2.25rem; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--home-rule); border-radius: 2px; color: var(--home-accent); }
+.language { min-width: 2.25rem; height: 2.25rem; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--home-rule); border-radius: 2px; color: var(--home-accent); }
 .language { font-size: 1rem; padding-inline: 0.5rem; }
-.language:hover, .iconButton:hover { background: var(--home-paper-deep); }
+.language:hover { background: var(--home-paper-deep); }
 @media (min-width: 1024px) { .menuButton, .menuOnly { display: none; } }
 
 .menuOnly { position: absolute; top: 0; inset-inline-end: 0; z-index: 50; color: var(--home-ink); }
@@ -70,8 +36,5 @@
 
 .mobile { max-height: calc(100dvh - 75px); overflow-y: auto; overscroll-behavior: contain; border-top: 1px solid var(--home-rule); padding: 0.5rem var(--home-gutter) 1.5rem; }
 @media (min-width: 1024px) { .mobile { display: none; } }
-.mobileChapter, .mobileSection > summary { display: block; padding-block: 0.75rem; font-size: 1.25rem; border-bottom: 1px solid var(--home-rule); color: var(--home-ink); cursor: pointer; }
-.mobileChapter[aria-current], .mobileSection > summary[aria-current] { color: var(--home-accent); }
-.mobileSection .shelf { position: static; transform: none; visibility: visible; opacity: 1; transition: none; flex-direction: column; gap: 1rem; width: auto; max-width: none; padding: 0.5rem 0 1rem; border: 0; outline: 0; background: transparent; }
-.mobileSection .shelfGroup { width: auto; }
-.mobileSection .overview { align-self: auto; }
+.mobileChapter { display: block; padding-block: 0.75rem; font-size: 1.25rem; border-bottom: 1px solid var(--home-rule); color: var(--home-ink); }
+.mobileChapter[aria-current] { color: var(--home-accent); }
