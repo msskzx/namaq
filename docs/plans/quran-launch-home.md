@@ -22,9 +22,13 @@ Searched local Distillate Namaq records for homepage, navigation, toast and sess
 
 ## Verification and review
 
-Lint, TypeScript, all 283 test files with 3,273 tests, and the production build pass. The homepage uses only static Quran tree data and no longer loads biography quiz or hadith data.
+Lint, TypeScript, all 283 test files with 3,287 tests, and the production build pass. The homepage no longer loads biography quiz or hadith data; random examples fetch Quran surah names through the existing database.
 
-Checked the production UI at desktop and 390px phone widths, including Arabic, English, light and dark themes, phone navigation, no phone footer, horizontal tree scrolling and the loaded verse-context dialog. The tree keeps readable text rather than shrinking the complete diagram to phone width.
+Checked the production UI at desktop and 390px phone widths, including Arabic, English, light and dark themes, phone navigation, no phone footer and the loaded verse-context dialog.
+
+The owner approved removing the hero, showing the complete six-ayah tree with all controls, four matching learning cards, smaller navigation controls, and a Quran-only site description. The homepage viewport has a fixed responsive height, fit and manual zoom, a surrounding-ayat switch, and a random-tree action with animation and retry handling. Previous ayat appear only on request. Experiments use grouped columns and reader juz headings use the shared accent.
+
+Rebased onto main's overlapping-tree and ayah-boundary fixes. The only conflict joined independently added tests, both retained. A fresh independent review of the approved refinements and integration found no defects.
 
 The independent reviewer found that the bottom cookie banner could obscure the first-visit disclaimer. Moved the disclaimer below the navbar. The second and final review found no further defects. Obsolete seven-feature homepage and shelf tests were replaced with launch destinations and path interaction tests; disclaimer tests cover both languages, Strict Mode, dismissal, revisits, language readiness and unavailable storage. Existing experimental preview component tests remain.
 
