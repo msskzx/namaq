@@ -5,15 +5,13 @@ import ExplorationCard from './ExplorationCard';
 import cards from './ExplorationCard.module.css';
 import styles from './PaperPage.module.css';
 import { useLanguage } from '../language/LanguageContext';
-import { NAV_SECTIONS } from './NavBar';
+import { EXPERIMENT_SECTIONS } from '@/lib/navigation';
 
 type Language = 'en' | 'ar';
 
-// The hub a navbar section's main link opens: every page on its shelf, as
-// cards under the shelf's group titles.
 export default function SectionHub({ href }: { href: string }) {
   const { language } = useLanguage() as { language: Language };
-  const section = NAV_SECTIONS.find(s => s.href === href)!;
+  const section = EXPERIMENT_SECTIONS.find(s => s.href === href)!;
   let number = 0;
   return (
     <div dir={language === 'ar' ? 'rtl' : 'ltr'} className={`${styles.page} w-full max-w-5xl mx-auto p-4`}>

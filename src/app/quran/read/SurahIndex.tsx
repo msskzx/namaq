@@ -153,7 +153,7 @@ export default function SurahIndex({ surahs, fontClass }: { surahs: IndexSurah[]
         {shown.map(group => (
           <section key={group.juz} aria-label={ar ? `الجزء ${num(group.juz)}` : `Juz' ${group.juz}`} className="mb-6 break-inside-avoid">
             <h2 className="flex items-baseline justify-between border-b border-[var(--home-rule)] pb-1">
-              <Link href={`/quran/read/${group.page}`} className="text-xl hover:text-[var(--home-accent)]">
+              <Link href={`/quran/read/${group.page}`} className="text-xl text-[var(--home-accent)] hover:underline underline-offset-4">
                 {ar ? `الجزء ${num(group.juz)}` : `Juz' ${group.juz}`}
               </Link>
               <span className={`${MUTED} text-sm`}>{ar ? `ص ${num(group.page)}` : `p. ${group.page}`}</span>

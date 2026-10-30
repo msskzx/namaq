@@ -4,21 +4,16 @@ import React from 'react';
 import Link from 'next/link';
 import { useLanguage } from '../language/LanguageContext';
 import translations from '../language/translations';
-import WorkInProgressBanner from '../homepage/WorkInProgressBanner';
 import Emblem from './Emblem';
-import { NAV_SECTIONS } from './NavBar';
-
-// The footer repeats only the navbar's five sections, each leading to its hub,
-// so it stays short on a phone (two columns there).
+import { NAV_SECTIONS } from '@/lib/navigation';
 function Footer() {
-  const { language } = useLanguage();
-  const currentLanguage = (language || 'ar') as 'en' | 'ar';
+  const { language, languageLoaded } = useLanguage();
+  const currentLanguage = languageLoaded ? language : 'ar';
   const ar = currentLanguage === 'ar';
 
   return (
-    <footer className="w-full bg-[var(--home-paper)] text-[var(--home-ink)] border-t border-[var(--home-rule)]">
+    <footer className="hidden md:block w-full bg-[var(--home-paper)] text-[var(--home-ink)] border-t border-[var(--home-rule)]">
       <div dir={ar ? 'rtl' : 'ltr'} className="w-full max-w-[var(--home-width)] mx-auto px-[var(--home-gutter)] py-6 md:py-8 text-start">
-        <WorkInProgressBanner />
         <div className="flex flex-col gap-5 md:flex-row md:items-center md:gap-10 mb-6">
           <Link href="/" aria-label={translations[currentLanguage].appName} className="shrink-0 self-start md:self-center">
             <Emblem className="h-12 w-auto" />

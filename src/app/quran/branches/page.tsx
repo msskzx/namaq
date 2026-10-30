@@ -117,7 +117,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
       <OpeningSearch key={query} query={query} top={built.trees.slice(0, 8).map(tree => ({ id: tree.id, text: tree.text, textEn: tree.textEn, count: new Set(tree.occurrences.map(occurrence => occurrence.key)).size }))} phrases={built.trees.map(tree => ({ id: tree.id, text: tree.text, textEn: tree.textEn, aliases: tree.aliases, count: new Set(tree.occurrences.map(occurrence => occurrence.key)).size }))} phraseCount={built.trees.length} current={id} juz={range} unavailable={unavailable} view={state} />
       <Scope>
         <CompareLayout title="السور" current={id ? 'سور هذه الشجرة' : surah ? names[surah] : 'كل السور'} change="اختر سورة" storageKey="branches-pane-hidden"
-          pane={<SurahPane counts={id ? ayatBySurah : counts} total={id ? drawn.length : found.length} names={names} surah={surah} juz={range} view={state} inTree={!!id} treeKeys={drawn.map(ayah => ayah.key)} />}>
+          pane={<SurahPane key="pane" counts={id ? ayatBySurah : counts} total={id ? drawn.length : found.length} names={names} surah={surah} juz={range} view={state} inTree={!!id} treeKeys={drawn.map(ayah => ayah.key)} />}>
           {!id ? <>
             <JuzFilter range={range} phrase={id} view={state} />
             {needle && <SearchSummary query={query} count={cut.length} complete={exact.map(phrase => ({ phrase, href: branchesHref(phrase.id, juz) }))} />}

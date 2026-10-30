@@ -5,9 +5,6 @@ export interface SiteLink {
   label: string;
 }
 
-// The full list of site pages, for the graph workspace's menu
-// (src/components/graph/GraphCanvas.tsx) and page titles on hubs. NavBar's
-// NAV_SECTIONS must reach every href here; its test checks that.
 export const getAllNavLinks = (language: 'en' | 'ar'): SiteLink[] => [
   { href: '/graphs', label: translations[language].allGraph },
   { href: '/nasab', label: language === 'ar' ? 'النسب' : 'Nasab' },

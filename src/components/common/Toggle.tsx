@@ -18,7 +18,7 @@ export default function Toggle({ checked, label, disabled = false, describedBy, 
   const lg = hasIcons && size === 'lg';
   const iconBox = lg ? 'size-7' : 'size-5';
   const track = 'border-[var(--home-rule)] bg-[var(--home-paper-deep)]';
-  const thumb = 'bg-[var(--home-accent)] peer-focus-visible:ring-[var(--home-accent)] peer-focus-visible:ring-offset-[var(--home-paper)]';
+  const thumb = 'bg-[var(--home-muted)] peer-checked:bg-[var(--home-accent)] peer-focus-visible:ring-[var(--home-accent)] peer-focus-visible:ring-offset-[var(--home-paper)]';
   const offColour = 'text-[var(--home-paper)] peer-checked:text-[var(--home-muted)]';
   const onColour = 'text-[var(--home-muted)] peer-checked:text-[var(--home-paper)]';
   return (
