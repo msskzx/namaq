@@ -24,8 +24,9 @@ function Tree() {
   </div>;
 }
 
-const leaf = () => document.querySelector<HTMLElement>('[data-node="n0"] .font-quran')!;
-const typed = () => document.querySelector('[data-node="n0"]')!.querySelectorAll('.font-quran')[1]?.textContent;
+const words = (node: string) => document.querySelector<HTMLElement>(`[data-node="${node}"] .font-quran`)!;
+const typed = (node: string) => document.querySelector(`[data-node="${node}"]`)!.querySelectorAll('.font-quran')[1]?.textContent;
+const branch = (node: string) => document.querySelector<HTMLElement>(`[data-node="${node}"]`)!.closest('li')!.style.opacity;
 const skip = () => screen.queryByRole('button', { name: 'تخطّ' });
 const advance = (ms: number) => act(async () => { await vi.advanceTimersByTimeAsync(ms); });
 
@@ -41,53 +42,54 @@ beforeEach(() => {
 });
 afterEach(() => { cleanup(); vi.useRealTimers(); });
 
-it('plays once on a first visit: draws every path, then lights each one, opens the root, retypes a leaf, then remembers', async () => {
+it('draws each path with its leaf typed in, then lights every path, points at the ayat button without opening it, and remembers', async () => {
   render(<Tree />);
   expect(skip()).toBeTruthy();
-  const branch = (node: string) => document.querySelector<HTMLElement>(`[data-node="${node}"]`)!.closest('li')!.style.opacity;
   await advance(100);
   expect([branch('n0'), branch('n1')]).toEqual(['', '0']);
+  expect(words('n0').style.visibility).toBe('hidden');
+  expect(typed('n0')).toBe('');
+  await advance(600);
+  expect(words('n0').style.visibility).toBe('');
+  expect(typed('n0')).toBeUndefined();
+  expect(branch('n1')).toBe('0');
+  await advance(300);
+  expect(branch('n1')).toBe('');
+  expect(words('n1').style.visibility).toBe('hidden');
   expect(lit).not.toHaveBeenCalled();
-  await advance(500);
-  expect([branch('n0'), branch('n1')]).toEqual(['', '']);
+  await advance(1100);
+  expect(typed('n1')).toBeUndefined();
   expect(lit).toHaveBeenCalledOnce();
-  expect(opened).not.toHaveBeenCalled();
-  await advance(2300);
+  await advance(1900);
   expect(lit).toHaveBeenCalledTimes(4);
-  expect(opened).toHaveBeenCalledOnce();
-  await advance(4400);
-  expect(leaf().style.visibility).toBe('hidden');
-  await advance(500);
-  expect(typed()?.length).toBeGreaterThan(0);
-  expect(typed()?.length).toBeLessThan(5);
-  await advance(4000);
+  expect(document.querySelectorAll('[aria-pressed="true"]')).toHaveLength(0);
+  await advance(3000);
+  expect(opened).not.toHaveBeenCalled();
   expect(skip()).toBeNull();
-  expect(leaf().style.visibility).toBe('');
-  expect(typed()).toBeUndefined();
   expect(localStorage.getItem(SEEN)).toBe('1');
 });
 
-it('skip restores the tree mid-play and stops the remaining scenes', async () => {
-  render(<Tree />);
-  await advance(7000);
-  expect(leaf().style.visibility).toBe('hidden');
-  fireEvent.click(skip()!);
-  expect(skip()).toBeNull();
-  expect(leaf().style.visibility).toBe('');
-  expect(typed()).toBeUndefined();
-  expect(localStorage.getItem(SEEN)).toBe('1');
-  await advance(5000);
-  expect(typed()).toBeUndefined();
-});
-
-it('skip during the growth shows the whole tree and never opens the overlay', async () => {
+it('skip while a leaf is being typed shows the whole tree with its words and never points at the overlay', async () => {
   render(<Tree />);
   await advance(100);
   fireEvent.click(skip()!);
+  expect(skip()).toBeNull();
+  expect(words('n0').style.visibility).toBe('');
+  expect(typed('n0')).toBeUndefined();
   expect(document.querySelectorAll('[data-tree-content] [style*="opacity"]')).toHaveLength(0);
-  expect(lit).not.toHaveBeenCalled();
+  expect(localStorage.getItem(SEEN)).toBe('1');
   await advance(14000);
+  expect(lit).not.toHaveBeenCalled();
   expect(opened).not.toHaveBeenCalled();
+});
+
+it('skip while a path is lit turns the light off', async () => {
+  render(<Tree />);
+  await advance(2100);
+  expect(lit).toHaveBeenCalledOnce();
+  fireEvent.click(skip()!);
+  expect(lit).toHaveBeenCalledTimes(2);
+  expect(document.querySelectorAll('[aria-pressed="true"]')).toHaveLength(0);
 });
 
 it('does not play again after a visit, or when the reader prefers reduced motion', () => {
@@ -109,11 +111,3 @@ it('replays with ?intro=1', () => {
   expect(skip()).toBeTruthy();
 });
 
-it('skip while a path is lit turns the light off', async () => {
-  render(<Tree />);
-  await advance(600);
-  expect(lit).toHaveBeenCalledOnce();
-  fireEvent.click(skip()!);
-  expect(lit).toHaveBeenCalledTimes(2);
-  expect(document.querySelectorAll('[aria-pressed="true"]')).toHaveLength(0);
-});
