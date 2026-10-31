@@ -9,7 +9,7 @@
 .edgeIcon { position: sticky; top: 1rem; bottom: 1rem; }
 .cell > div { display: block; height: 100%; }
 .cell article { display: block; height: 100%; padding: 0.75rem; }
-.cell article header { margin-bottom: 0.5rem; padding: 0.25rem; }
+.cell article header { display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; column-gap: 0.75rem; margin-bottom: 0.5rem; padding: 0.25rem; }
 .cell article h3 { font-size: 1.125rem; }
 .cell article > div { font-size: 1.25rem; line-height: 2.1; }
 @media (max-width: 600px) { .track { grid-template-columns: 2.5rem repeat(3, 86%) 2.5rem; padding-inline: max(0px, calc(7% - 3rem)); column-gap: 0.5rem; } }
