@@ -98,16 +98,11 @@ async function play(root: HTMLElement, marker: HTMLElement, bubble: HTMLElement,
       const type = own(piece) === leaf && leaf.dataset.node !== 'n-1' ? blank(leaf) : null;
       piece.style.opacity = '';
       await run(piece, [{ opacity: 0 }, { opacity: 1 }], { duration: STEP });
-      if (type) await lit(leaf, type);
+      if (type) await lit(leaf, async () => { await type(); await wait(HOLD); });
     }
     await wait(400);
   }
   pieces.forEach(piece => { piece.style.opacity = ''; });
-  await wait(600);
-  for (const { leaf } of leaves) {
-    await lit(leaf, () => wait(HOLD));
-    await wait(300);
-  }
   await wait(600);
 
   const seen = (button: HTMLElement) => {
