@@ -93,7 +93,7 @@ export default function AyahContextButton({ children, ayahKeys, subject, sibling
           <h3 id={`${titleId}-marks`}>{ar ? 'الضبط في هذه العقدة' : 'Marks in this node'}</h3>
           <ul>{spellings.map(spelling => <li key={spelling.words.join(' ')}><span className="font-quran">{spelling.words.map((word, i) => <React.Fragment key={i}>{i > 0 && ' '}{differentWords.includes(spellingAt + i) ? <mark><MushafText>{word}</MushafText></mark> : <MushafText>{word}</MushafText>}</React.Fragment>)}</span><span className={styles.note}>{ar ? ayatCount(spelling.keys.length) : `${spelling.keys.length} ${spelling.keys.length === 1 ? 'ayah' : 'ayat'}`}</span></li>)}</ul>
         </section>}
-        {open && data && several && <p className={styles.note}>{siblings.length > 0 ? (ar ? 'آيات هذا الفرع أولًا، ثم الآيات التي تلتقي معها في العقدة نفسها. ' : 'This branch\'s ayat come first, then the ayat that meet it at the same node. ') : ''}{ar ? 'تُعلَّم الكلمات الموجودة في كل الآيات المعروضة هنا فقط.' : 'Only words found in every ayah shown here are marked.'}</p>}
+        {open && data && several && siblings.length > 0 && <p className={styles.note}>{ar ? 'آيات هذا الفرع أولًا، ثم الآيات التي تلتقي معها في العقدة نفسها.' : 'This branch\'s ayat come first, then the ayat that meet it at the same node.'}</p>}
         {open && data && <div className={styles.cards}>
           {data.filter(context => ayahKeys.includes(context.ayah.key)).map(context => card(context, siblings.length > 0))}
           {data.filter(context => siblings.includes(context.ayah.key)).map(context => card(context))}
