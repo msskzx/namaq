@@ -48,7 +48,6 @@ const key = (name: string) => act(() => { window.dispatchEvent(new KeyboardEvent
 it('stacks every tree ayah as a row, its previous and next ayah beside it, the tree column current', async () => {
   show();
   await screen.findByRole('article', { name: 'الشرح ٥' });
-  expect([...document.querySelectorAll('[data-head]')].map(head => head.textContent)).toEqual(['الآية السابقة', 'آيات الشجرة', 'الآية التالية']);
   expect(document.querySelectorAll('[data-col]')).toHaveLength(9);
   expect(column()).toEqual(['الشرح ٥', 'الشرح ٦', 'الطلاق ٧']);
   const card = screen.getByRole('article', { name: 'الشرح ٥' });
@@ -58,7 +57,7 @@ it('stacks every tree ayah as a row, its previous and next ayah beside it, the t
   expect(within(screen.getByRole('article', { name: 'الشرح ٤' })).queryByRole('mark')).toBeNull();
 });
 
-it('moves every row together to the next or previous ayah with the arrow keys, headings and a click', async () => {
+it('moves every row together to the next or previous ayah with the arrow keys and a click on a side card', async () => {
   show();
   await screen.findByRole('article', { name: 'الشرح ٥' });
   key('ArrowLeft');
@@ -68,10 +67,10 @@ it('moves every row together to the next or previous ayah with the arrow keys, h
   key('ArrowRight');
   key('ArrowRight');
   expect(column()).toEqual(['الشرح ٤', '', '']);
-  fireEvent.click(screen.getByRole('button', { name: 'آيات الشجرة' }));
+  fireEvent.click(screen.getByRole('article', { name: 'الشرح ٥' }));
   expect(column()).toEqual(['الشرح ٥', 'الشرح ٦', 'الطلاق ٧']);
   fireEvent.click(screen.getByRole('article', { name: 'الشرح ٧' }));
-  expect(screen.getByRole('button', { name: 'الآية التالية' }).getAttribute('aria-pressed')).toBe('true');
+  expect(column()).toEqual(['', 'الشرح ٧', 'الطلاق ٨']);
 });
 
 it('steps between trees with the tree navigation', async () => {

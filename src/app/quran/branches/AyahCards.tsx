@@ -29,14 +29,15 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
   }, { revalidateOnFocus: false });
   const exactLabel = ar ? 'نفس الكلمة' : 'Same word';
   const rootLabel = ar ? 'نفس الجذر' : 'Same root';
-  const headings: Record<Column, string> = ar ? { before: 'الآية السابقة', ayah: 'آيات الشجرة', after: 'الآية التالية' } : { before: 'Previous ayah', ayah: 'Tree ayat', after: 'Next ayah' };
   const read = ar ? 'قراءة الآية' : 'Read ayah';
 
   const track = useRef<HTMLDivElement>(null);
-  const head = (i: number) => track.current?.querySelector<HTMLElement>(`[data-head="${i}"]`);
+  const head = (i: number) => track.current?.querySelector<HTMLElement>(`[data-col="${i}"]`);
   const goTo = (i: number, behavior: ScrollBehavior = 'smooth') => {
     setColumn(i);
-    head(i)?.scrollIntoView?.({ behavior, inline: 'center', block: 'nearest' });
+    const box = track.current?.getBoundingClientRect();
+    const rect = head(i)?.getBoundingClientRect();
+    if (box && rect) track.current?.scrollBy?.({ left: rect.left + rect.width / 2 - (box.left + box.width / 2), behavior });
   };
   const centred = () => {
     const box = track.current?.getBoundingClientRect();
@@ -59,7 +60,8 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
   };
   const ready = !!data && !!around;
   useEffect(() => {
-    if (ready) head(1)?.scrollIntoView?.({ behavior: 'instant', inline: 'center', block: 'nearest' });
+    if (ready) goTo(1, 'instant');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready]);
 
   const stepRef = useRef<(forward: boolean) => void>(() => {});
@@ -72,6 +74,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
       if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey || document.querySelector('dialog[open]')) return;
       if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
       if (event.target instanceof HTMLElement && event.target.closest('input, textarea, select, [contenteditable]')) return;
+      event.preventDefault();
       stepRef.current(event.key === 'ArrowLeft');
     };
     window.addEventListener('keydown', onKey);
@@ -112,7 +115,6 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
       {isLoading && <LoadingSpinner />}
       {(error || aroundError || missing) && <div role="alert"><p>{ar ? 'تعذّر تحميل الآيات.' : 'Could not load the ayat.'}</p><Button size="lg" onClick={() => { void mutate(); void retryAround(); }} aria-label={ar ? 'إعادة المحاولة' : 'Try again'} title={ar ? 'إعادة المحاولة' : 'Try again'}><RotateCcw aria-hidden /></Button></div>}
       {contexts && around && !missing && <div ref={track} dir="rtl" className={styles.track} onScroll={onScroll}>
-        {COLUMNS.map((at, i) => <button key={at} type="button" data-head={i} data-current={i === column || undefined} aria-pressed={i === column} className={styles.head} onClick={() => goTo(i)}>{headings[at]}</button>)}
         {contexts.map((context, row) => COLUMNS.map((at, i) => cell(context!, at, row, i)))}
       </div>}
     </section>
