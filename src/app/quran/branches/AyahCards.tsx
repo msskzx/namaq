@@ -12,7 +12,7 @@ import PageSpread, { MatchLegend } from '@/components/quran/PageSpread';
 import { num } from '@/lib/quran/arabicNumber';
 import type { AyahContext, Surrounding } from '@/lib/quran/ayahContext';
 import { loadContext, MAX_KEYS, sharedMarks } from './AyahContext';
-import TreeSteps, { type Steps } from './TreeSteps';
+import type { Steps } from './TreeSteps';
 import styles from './AyahCards.module.css';
 
 const COLUMNS = ['before', 'ayah', 'after'] as const;
@@ -166,7 +166,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
   return (
     <section aria-label={ar ? 'آيات الشجرة في سياقها' : 'Tree ayat in context'} className="flex flex-col gap-2">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        {steps && <TreeSteps steps={steps} />}
+        {steps && <span className="text-sm tabular-nums text-[var(--home-muted)]">{ar ? `${num(steps.position)} / ${num(steps.total)}` : `${steps.position} / ${steps.total}`}</span>}
         {shown.length > 1 && <details ref={keyRef} className="group relative shrink-0">
           <summary title={legend} className="flex size-8 cursor-pointer list-none items-center justify-center rounded-sm text-[var(--home-muted)] hover:bg-[var(--home-paper-deep)] hover:text-[var(--home-ink)] group-open:text-[var(--home-ink)] [&::-webkit-details-marker]:hidden">
             <CircleHelp size={16} aria-hidden /><span className="sr-only">{legend}</span>
