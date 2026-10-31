@@ -34,7 +34,7 @@ function Entry({ piece, names, ayat, juz, view }: Props & { piece: SharedPiece }
           <Button size="sm" href={branchesHref(piece.id, juz ?? undefined, { query: view?.query, surah: view?.surah })}><Expand size={16} aria-hidden />{ar ? 'افتح الشجرة' : 'Open tree'}</Button>
         </>}
         tree={presentation?.tree ?? branch(group, piece.family)} variants={presentation ? [] : piece.family ? [] : variants(group)} prefixes={presentation?.prefixes} offsets={presentation?.offsets} names={names}
-        juz={juz} view={view} surround={{ on: false }} label={ar ? 'شجرة العبارات المشتركة' : 'Shared phrase tree'}
+        juz={juz} view={{ ...view, query: undefined, surah: undefined }} surround={{ on: false }} label={ar ? 'شجرة العبارات المشتركة' : 'Shared phrase tree'}
       />
     </li>
   );

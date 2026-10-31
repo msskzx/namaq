@@ -124,4 +124,36 @@ describe('Quran branch trees', () => {
     const href = screen.getByRole('link', { name: 'افتح الشجرة' }).getAttribute('href')!;
     expect(new URL(href, 'http://localhost').searchParams.get('q')).toBe('فذرهم يخوضوا ويلعبوا');
   });
+
+  it('steps through a search result in its order, keeping the search', async () => {
+    const query = 'قال';
+    render(await open({ q: query }));
+    const opens = screen.getAllByRole('link', { name: 'افتح الشجرة' }).map(link => link.getAttribute('href')!);
+    expect(opens.length).toBeGreaterThan(2);
+    cleanup();
+    render(await open(Object.fromEntries(new URL(opens[1], 'http://localhost').searchParams)));
+    const steps = screen.getByRole('navigation', { name: 'التنقل بين الأشجار' });
+    expect(within(steps).getByRole('link', { name: 'الشجرة السابقة' }).getAttribute('href')).toBe(opens[0]);
+    expect(within(steps).getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')).toBe(opens[2]);
+    expect(new URL(opens[2], 'http://localhost').searchParams.get('q')).toBe(query);
+  });
+
+  it('gives a tree outside the list no steps', async () => {
+    render(await open({ o: 'لا اثم عليه' }));
+    const href = screen.getAllByRole('link', { name: 'عرض هذا الجزء من الشجرة وحده' })[0].getAttribute('href')!;
+    cleanup();
+    render(await open(Object.fromEntries(new URL(href, 'http://localhost').searchParams)));
+    expect(screen.getByRole('region', { name: 'شجرة العبارات المشتركة' })).toBeTruthy();
+    expect(screen.queryByRole('navigation', { name: 'التنقل بين الأشجار' })).toBeNull();
+  });
+
+  it('keeps the list filter off subtree links of an open tree', async () => {
+    render(await open({ o: 'لا اثم عليه', s: '2', q: 'لا' }));
+    const links = screen.getAllByRole('link', { name: 'عرض هذا الجزء من الشجرة وحده' });
+    expect(links.length).toBeGreaterThan(0);
+    links.forEach(link => {
+      const params = new URL(link.getAttribute('href')!, 'http://localhost').searchParams;
+      expect(params.has('s') || params.has('q')).toBe(false);
+    });
+  });
 });

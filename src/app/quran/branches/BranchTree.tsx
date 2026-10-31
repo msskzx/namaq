@@ -224,7 +224,7 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep }: { chi
       if (Math.abs(dx) >= SWIPE && Math.abs(dx) > 2 * Math.abs(dy)) stepRef.current?.(ar ? dx > 0 : dx < 0);
     };
     const onKey = (event: KeyboardEvent) => {
-      if (event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return;
+      if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey || document.querySelector('dialog[open]')) return;
       if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
       if (event.target instanceof HTMLElement && event.target.closest('input, textarea, select, [contenteditable]')) return;
       stepRef.current?.((event.key === 'ArrowLeft') === ar);

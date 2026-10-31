@@ -130,6 +130,34 @@ describe('BranchTree steps in Arabic', () => {
     expect(clicks).toEqual([]);
   });
 
+  it.each(['select'] as const)('ignores arrow keys whose target is a <%s> element', element => {
+    renderTree();
+    const clicks = recordStepClicks(AR);
+    const field = document.createElement(element);
+    document.body.appendChild(field);
+    fireEvent.keyDown(field, { key: 'ArrowLeft', bubbles: true });
+    expect(clicks).toEqual([]);
+  });
+
+  it('ignores arrow keys while a dialog is open', () => {
+    renderTree();
+    const clicks = recordStepClicks(AR);
+    const dialog = document.createElement('dialog');
+    document.body.appendChild(dialog);
+    dialog.showModal();
+    fireEvent.keyDown(window, { key: 'ArrowLeft' });
+    expect(clicks).toEqual([]);
+  });
+
+  it('ignores arrow keys another handler already took', () => {
+    renderTree();
+    const clicks = recordStepClicks(AR);
+    const event = new KeyboardEvent('keydown', { key: 'ArrowLeft', cancelable: true });
+    event.preventDefault();
+    window.dispatchEvent(event);
+    expect(clicks).toEqual([]);
+  });
+
   it('ignores arrow keys once the tree is zoomed in', () => {
     renderTree();
     const clicks = recordStepClicks(AR);
