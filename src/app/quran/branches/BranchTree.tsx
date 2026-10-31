@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useId, useRef, useState } from 'react';
+import React, { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { Maximize2, Minus, Plus, RotateCw, ZoomIn } from 'lucide-react';
 import Button from '@/components/common/Button';
 import MushafText from '@/components/common/MushafText';
@@ -150,14 +150,84 @@ function TreeViewport({ children, controls, enabled, ar, height }: { children: R
     return () => observer.disconnect();
   }, [enabled, height]);
 
+  const fitted = size ? fitTreeScale(size) : 1;
+  const scale = manualScale ?? fitted;
+  const clampScale = (next: number) => Math.min(MAX_SCALE, Math.max(MIN_SCALE, next));
+  const setScale = (next: number) => setManualScale(clampScale(Number(next.toFixed(2))));
+
+  // Pinch (two fingers on a touch screen, a trackpad pinch that browsers send
+  // as ctrl+wheel, or Safari's gesture events) zooms the tree, not the page.
+  // The point between the fingers stays put while the tree grows around it.
+  const scaleRef = useRef(scale);
+  scaleRef.current = scale;
+  const anchor = useRef<{ x: number; y: number; fx: number; fy: number } | null>(null);
+  useEffect(() => {
+    const outer = viewport.current;
+    if (!enabled || !outer) return;
+    const zoomAt = (next: number, x: number, y: number) => {
+      const frame = outer.querySelector<HTMLElement>('[data-tree-frame]')?.getBoundingClientRect();
+      if (frame?.width && frame.height) anchor.current = { x, y, fx: (x - frame.left) / frame.width, fy: (y - frame.top) / frame.height };
+      setManualScale(clampScale(next));
+    };
+    const onWheel = (event: WheelEvent) => {
+      if (!event.ctrlKey) return;
+      event.preventDefault();
+      zoomAt(scaleRef.current * Math.exp(-event.deltaY * 0.01), event.clientX, event.clientY);
+    };
+    let pinch: { distance: number; scale: number } | null = null;
+    const fingers = (event: TouchEvent) => {
+      const [a, b] = [event.touches[0], event.touches[1]];
+      return { distance: Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY), x: (a.clientX + b.clientX) / 2, y: (a.clientY + b.clientY) / 2 };
+    };
+    const onTouchStart = (event: TouchEvent) => {
+      pinch = event.touches.length === 2 ? { distance: fingers(event).distance, scale: scaleRef.current } : null;
+    };
+    const onTouchMove = (event: TouchEvent) => {
+      if (!pinch || event.touches.length !== 2) return;
+      event.preventDefault();
+      const now = fingers(event);
+      if (pinch.distance) zoomAt(pinch.scale * now.distance / pinch.distance, now.x, now.y);
+    };
+    const onTouchEnd = (event: TouchEvent) => { if (event.touches.length < 2) pinch = null; };
+    let gesture = 1;
+    const onGestureStart = (event: Event) => { event.preventDefault(); gesture = scaleRef.current; };
+    const onGestureChange = (event: Event) => {
+      event.preventDefault();
+      const { scale: ratio, clientX, clientY } = event as Event & { scale: number; clientX: number; clientY: number };
+      zoomAt(gesture * ratio, clientX, clientY);
+    };
+    outer.addEventListener('wheel', onWheel, { passive: false });
+    outer.addEventListener('touchstart', onTouchStart, { passive: true });
+    outer.addEventListener('touchmove', onTouchMove, { passive: false });
+    outer.addEventListener('touchend', onTouchEnd);
+    outer.addEventListener('touchcancel', onTouchEnd);
+    outer.addEventListener('gesturestart', onGestureStart);
+    outer.addEventListener('gesturechange', onGestureChange);
+    return () => {
+      outer.removeEventListener('wheel', onWheel);
+      outer.removeEventListener('touchstart', onTouchStart);
+      outer.removeEventListener('touchmove', onTouchMove);
+      outer.removeEventListener('touchend', onTouchEnd);
+      outer.removeEventListener('touchcancel', onTouchEnd);
+      outer.removeEventListener('gesturestart', onGestureStart);
+      outer.removeEventListener('gesturechange', onGestureChange);
+    };
+  }, [enabled]);
+  useLayoutEffect(() => {
+    const outer = viewport.current;
+    const point = anchor.current;
+    anchor.current = null;
+    const frame = outer?.querySelector<HTMLElement>('[data-tree-frame]')?.getBoundingClientRect();
+    if (!outer || !point || !frame) return;
+    outer.scrollLeft += frame.left - (point.x - point.fx * frame.width);
+    outer.scrollTop += frame.top - (point.y - point.fy * frame.height);
+  }, [scale]);
+
   if (!enabled) return <>
     {controls && <div className="mb-3 flex flex-wrap items-center justify-between gap-3">{controls}</div>}
     <div className="flex w-max items-center">{children}</div>
   </>;
 
-  const fitted = size ? fitTreeScale(size) : 1;
-  const scale = manualScale ?? fitted;
-  const setScale = (next: number) => setManualScale(Math.min(MAX_SCALE, Math.max(MIN_SCALE, Number(next.toFixed(2)))));
   const labels = ar ? {
     out: 'تصغير الشجرة',
     in: 'تكبير الشجرة',
@@ -180,7 +250,7 @@ function TreeViewport({ children, controls, enabled, ar, height }: { children: R
         </div>
       </div>
     </div>
-    <div ref={viewport} data-tree-viewport className={`flex ${manualScale === null ? 'overflow-hidden' : 'overflow-auto'}`} style={{ height: viewportHeight }}>
+    <div ref={viewport} data-tree-viewport className={`flex touch-pan-x touch-pan-y ${manualScale === null ? 'overflow-hidden' : 'overflow-auto'}`} style={{ height: viewportHeight }}>
       <div data-tree-frame className="relative m-auto shrink-0" style={frame}>
         <div ref={content} data-tree-content className="absolute top-0 flex w-max items-center" style={{ insetInlineStart: 0, transform: `scale(${scale})`, transformOrigin: ar ? 'top right' : 'top left' }}>{children}</div>
       </div>
