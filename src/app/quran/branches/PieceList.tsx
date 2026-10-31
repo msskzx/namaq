@@ -25,7 +25,7 @@ function Entry({ piece, names, ayat, juz, view }: Props & { piece: SharedPiece }
       <BranchTree
         header={piece.family ? <p className={NOTE}>{ar ? piece.opening.text : piece.opening.textEn}</p> : undefined}
         tree={presentation?.tree ?? branch(group, piece.family)} variants={presentation ? [] : piece.family ? [] : variants(group)} prefixes={presentation?.prefixes} offsets={presentation?.offsets} names={names}
-        juz={juz} view={view} surround={{ on: false }} label={ar ? 'شجرة العبارات المشتركة' : 'Shared phrase tree'}
+        juz={juz} view={{ ...view, query: undefined, surah: undefined }} surround={{ on: false }} label={ar ? 'شجرة العبارات المشتركة' : 'Shared phrase tree'}
       />
     </li>
   );

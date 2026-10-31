@@ -3,6 +3,9 @@
 import { useEffect, useRef, useState, type RefObject } from 'react';
 import { RotateCcw, SkipForward } from 'lucide-react';
 import Button from '../common/Button';
+import MushafText from '../common/MushafText';
+import { num } from '@/lib/quran/arabicNumber';
+import type { AyahContext } from '@/lib/quran/ayahContext';
 import styles from './Home.module.css';
 
 export const SEEN = 'home-tree-intro-seen';
@@ -10,6 +13,7 @@ const STEP = 450;
 const HOLD = 900;
 const TYPE = 110;
 const TYPING = 1800;
+const LEVEL = 500;
 
 function shouldPlay() {
   try {
@@ -23,7 +27,9 @@ function shouldPlay() {
 
 export type View = { visible: boolean; waiting: Set<() => void>; running: Set<Animation> };
 
-async function play(root: HTMLElement, marker: HTMLElement, bubble: HTMLElement, view: View, signal: AbortSignal, undo: (() => void)[]) {
+export type Peek = { context: AyahContext; top: number };
+
+async function play(root: HTMLElement, marker: HTMLElement, peek: (shown: Peek | null) => void, cardRef: () => HTMLElement | null, view: View, signal: AbortSignal, undo: (() => void)[]) {
   const sleep = (ms: number) => new Promise<void>((resolve, reject) => {
     if (signal.aborted) return reject(signal.reason);
     const abort = () => { clearTimeout(timer); reject(signal.reason); };
@@ -59,11 +65,14 @@ async function play(root: HTMLElement, marker: HTMLElement, bubble: HTMLElement,
     const was = surround.checked;
     if (was) surround.click();
     toggle.inert = true;
-    undo.push(() => { toggle.inert = false; if (was && !surround.checked) surround.click(); });
+    undo.push(() => { toggle.inert = false; if (surround.isConnected && surround.checked !== was) surround.click(); });
   }
 
-  const boxes = [...content.querySelectorAll<HTMLElement>('[data-node]')];
-  const right = (element: Element) => element.getBoundingClientRect().right;
+  const pins = [...content.querySelectorAll<HTMLButtonElement>('[data-node] button[aria-pressed="true"]')];
+  pins.forEach(pin => pin.click());
+  undo.push(() => pins.forEach(pin => { if (pin.isConnected && pin.getAttribute('aria-pressed') !== 'true') pin.click(); }));
+
+  const depth = (piece: HTMLElement) => { let count = piece.matches('li') ? 1 : 0; for (let at = piece.parentElement; at && at !== content; at = at.parentElement) if (at.matches('li')) count++; return count; };
   const own = (piece: HTMLElement) => piece.matches('[data-node]') ? piece : piece.querySelector<HTMLElement>('[data-node]');
   const pieces = [...content.querySelectorAll<HTMLElement>('li, [data-node="n-1"], [data-line]')].filter(piece => piece.matches('li, [data-node]') || !piece.closest('li'));
   pieces.forEach(piece => {
@@ -71,15 +80,12 @@ async function play(root: HTMLElement, marker: HTMLElement, bubble: HTMLElement,
     piece.style.opacity = '0';
     undo.push(() => { piece.style.opacity = opacity; });
   });
-  const deepest = (key: string) => boxes.filter(box => box.dataset.keys?.split(' ').includes(key)).at(-1)!;
-  const leaves = [...new Set(boxes.flatMap(box => box.dataset.keys?.split(' ') ?? []))].map(key => ({ key, leaf: deepest(key) })).sort((a, b) => a.leaf.getBoundingClientRect().top - b.leaf.getBoundingClientRect().top);
   const blank = (box: HTMLElement) => {
     const words = box.querySelector<HTMLElement>('.font-quran');
     if (!words?.textContent) return async () => {};
     const position = box.style.position;
     if (getComputedStyle(box).position === 'static') box.style.position = 'relative';
     const typed = words.cloneNode(false) as HTMLElement;
-    typed.className = `${words.className} ${styles.typing}`;
     Object.assign(typed.style, { position: 'absolute', top: `${words.offsetTop}px`, left: `${words.offsetLeft}px`, width: `${words.offsetWidth}px`, height: `${words.offsetHeight}px` });
     words.style.visibility = 'hidden';
     words.after(typed);
@@ -87,7 +93,6 @@ async function play(root: HTMLElement, marker: HTMLElement, bubble: HTMLElement,
     undo.push(restore);
     const letters = typeof Intl.Segmenter === 'function' ? [...new Intl.Segmenter('ar', { granularity: 'grapheme' }).segment(words.textContent)].map(part => part.segment) : Array.from(words.textContent);
     return async () => {
-      await wait(450);
       const step = Math.min(TYPE, TYPING / letters.length);
       for (let i = 1; i <= letters.length; i++) {
         typed.textContent = letters.slice(0, i).join('');
@@ -96,68 +101,112 @@ async function play(root: HTMLElement, marker: HTMLElement, bubble: HTMLElement,
       restore();
     };
   };
-  const lit = async (leaf: HTMLElement, during: () => Promise<void>) => {
-    const light = leaf.querySelector<HTMLButtonElement>('button[aria-pressed]');
-    if (!light) return during();
-    const was = light.getAttribute('aria-pressed') === 'true';
-    if (!was) light.click();
-    const restore = () => { if ((light.getAttribute('aria-pressed') === 'true') !== was) light.click(); };
-    undo.push(restore);
-    await during();
-    restore();
-  };
-  const shown = new Set<Element>();
-  for (const { key, leaf } of leaves) {
-    const path = pieces.filter(piece => !shown.has(piece) && (!own(piece) || own(piece)!.dataset.keys?.split(' ').includes(key))).sort((a, b) => right(b) - right(a));
-    if (path.length === 0) continue;
-    for (const piece of path) {
-      shown.add(piece);
-      const type = own(piece) === leaf && leaf.dataset.node !== 'n-1' ? blank(leaf) : null;
-      piece.style.opacity = '';
-      await run(piece, [{ opacity: 0 }, { opacity: 1 }], { duration: STEP });
-      if (type) await lit(leaf, async () => { await type(); await wait(HOLD); });
-    }
-    await wait(400);
+  // Breadth first: each level of the tree appears together and its words are typed together.
+  const levels = [...new Set(pieces.map(depth))].sort((a, b) => a - b);
+  for (const level of levels) {
+    const row = pieces.filter(piece => depth(piece) === level);
+    const typing = row.flatMap(piece => { const box = own(piece); return box ? [blank(box)] : []; });
+    row.forEach(piece => { piece.style.opacity = ''; });
+    await Promise.all(row.map(piece => run(piece, [{ opacity: 0 }, { opacity: 1 }], { duration: STEP })));
+    await Promise.all(typing.map(type => type()));
+    await wait(LEVEL);
   }
   pieces.forEach(piece => { piece.style.opacity = ''; });
-  await wait(600);
+  await wait(HOLD);
 
   const showing = (button: HTMLElement) => {
     const { left, top, width, height } = button.getBoundingClientRect();
     const hit = document.elementFromPoint?.(left + width / 2, top + height / 2);
     return !!hit && root.contains(hit);
   };
-  const open = [content.querySelector<HTMLElement>('[data-node="n-1"] [data-context-open]'), ...content.querySelectorAll<HTMLElement>('[data-context-open]')].find(button => button && showing(button));
-  if (!open) return;
-  const area = root.getBoundingClientRect();
+  const area = () => root.getBoundingClientRect();
+  const tap = async (button: HTMLElement) => {
+    const box = area();
+    const target = button.getBoundingClientRect();
+    const x = target.left + target.width / 2 - box.left;
+    const y = target.top + target.height / 2 - box.top;
+    await run(marker, [
+      { opacity: 0, transform: `translate(${x + 40}px, ${y + 40}px) scale(1)` },
+      { opacity: 1, transform: `translate(${x}px, ${y}px) scale(1)`, offset: 0.6 },
+      { opacity: 1, transform: `translate(${x}px, ${y}px) scale(0.7)`, offset: 0.8 },
+      { opacity: 0, transform: `translate(${x}px, ${y}px) scale(1.2)` },
+    ], { duration: 1800, fill: 'none' });
+  };
+
+  // The ayah before the tree and after each leaf.
+  if (surround && toggle && !surround.checked) {
+    const before = new Set(content.querySelectorAll('li, [data-line], [data-node]'));
+    toggle.inert = false;
+    surround.click();
+    toggle.inert = true;
+    for (let tries = 0; tries < 60 && content.querySelectorAll('[data-ctx]').length === 0; tries++) await wait(100);
+    const added = [...content.querySelectorAll<HTMLElement>('li, [data-line], [data-node]')].filter(piece => !before.has(piece) && !(piece.parentElement?.closest('li, [data-node]') && !before.has(piece.parentElement.closest('li, [data-node]')!)));
+    added.forEach(piece => {
+      const opacity = piece.style.opacity;
+      piece.style.opacity = '0';
+      undo.push(() => { piece.style.opacity = opacity; });
+    });
+    if (added.length > 0) {
+      added.forEach(piece => { piece.style.opacity = ''; });
+      await Promise.all(added.map(piece => run(piece, [{ opacity: 0 }, { opacity: 1 }], { duration: STEP * 2 })));
+      await wait(HOLD * 2);
+    }
+  }
+
+  // How to light a path: once, on a leaf.
+  const nodes = [...content.querySelectorAll<HTMLElement>('[data-node]:not([data-ctx])')];
+  const keysOf = (box: HTMLElement) => box.dataset.keys?.split(' ') ?? [];
+  const leaves = [...new Set(nodes.flatMap(keysOf))].map(key => nodes.filter(box => keysOf(box).includes(key)).at(-1)!);
+  const light = [...content.querySelectorAll<HTMLButtonElement>('[data-node]:not([data-ctx]) button[aria-pressed]')].find(button => showing(button) && leaves.some(leaf => leaf.contains(button)))
+    ?? [...content.querySelectorAll<HTMLButtonElement>('[data-node] button[aria-pressed]')].find(showing);
+  if (light) {
+    await tap(light);
+    light.click();
+    const restore = () => { if (light.getAttribute('aria-pressed') === 'true') light.click(); };
+    undo.push(restore);
+    await wait(HOLD * 3);
+    restore();
+    await wait(600);
+  }
+
+  // The ayah in its context, in a small card.
+  const open = [light?.closest<HTMLElement>('[data-node]')?.querySelector<HTMLElement>('[data-context-open]'), ...content.querySelectorAll<HTMLElement>('[data-context-open]')].find(button => button && showing(button));
+  const key = open?.closest<HTMLElement>('[data-node]')?.dataset.keys?.split(' ')[0];
+  if (!open || !key) return;
+  const context = await fetch(`/api/quran/context?${new URLSearchParams({ q: key })}`).then(response => response.ok ? response.json() as Promise<AyahContext[]> : []).then(found => found[0], () => undefined);
+  signal.throwIfAborted();
+  if (!context) return;
+  await tap(open);
+  const box = area();
   const target = open.getBoundingClientRect();
-  const x = target.left + target.width / 2 - area.left;
-  const y = target.top + target.height / 2 - area.top;
-  await run(marker, [
-    { opacity: 0, transform: `translate(${x + 40}px, ${y + 40}px) scale(1)` },
-    { opacity: 1, transform: `translate(${x}px, ${y}px) scale(1)`, offset: 0.6 },
-    { opacity: 1, transform: `translate(${x}px, ${y}px) scale(0.7)`, offset: 0.8 },
-    { opacity: 0, transform: `translate(${x}px, ${y}px) scale(1.2)` },
-  ], { duration: 1800, fill: 'none' });
-  const half = bubble.offsetWidth / 2;
-  const left = Math.min(Math.max(x, half + 8), area.width - half - 8);
-  const at = `translate(${left - half}px, ${target.bottom - area.top + 10}px)`;
-  bubble.style.setProperty('--tail', `${x - left + half}px`);
-  await run(bubble, [{ opacity: 0, transform: `${at} translateY(6px)` }, { opacity: 1, transform: at }], { duration: 300, fill: 'forwards' });
-  await wait(2800);
-  await run(bubble, [{ opacity: 1, transform: at }, { opacity: 0, transform: at }], { duration: 400, fill: 'forwards' });
+  peek({ context, top: Math.min(target.bottom - box.top + 10, Math.max(box.height - 260, 8)) });
+  undo.push(() => peek(null));
+  await wait(50);
+  const card = cardRef();
+  if (card) await run(card, [{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }], { duration: 300, fill: 'forwards' });
+  await wait(1600);
+  const scroller = card?.querySelector<HTMLElement>('[data-peek-scroll]');
+  const far = scroller ? scroller.scrollHeight - scroller.clientHeight : 0;
+  for (let i = 1; scroller && far > 0 && i <= 30; i++) {
+    scroller.scrollTop = (far * i) / 30;
+    await wait(60);
+  }
+  await wait(2400);
+  if (card) await run(card, [{ opacity: 1 }, { opacity: 0 }], { duration: 400, fill: 'forwards' });
+  peek(null);
   await wait(300);
 }
 
-export default function TreeIntro({ target, ar }: { target: RefObject<HTMLElement | null>; ar: boolean }) {
+export default function TreeIntro({ target, ar, names = {} }: { target: RefObject<HTMLElement | null>; ar: boolean; names?: Record<number, string> }) {
   const [playing, setPlaying] = useState(false);
   const [round, setRound] = useState(0);
+  const [shown, setShown] = useState<Peek | null>(null);
   const marker = useRef<HTMLSpanElement>(null);
-  const bubble = useRef<HTMLSpanElement>(null);
+  const card = useRef<HTMLDivElement>(null);
   const skip = useRef<() => void>(() => {});
   useEffect(() => {
     const root = target.current;
-    if (!root || !marker.current || !bubble.current || (round === 0 && !shouldPlay())) return;
+    if (!root || !marker.current || (round === 0 && !shouldPlay())) return;
     const controller = new AbortController();
     const undo: (() => void)[] = [];
     const view: View = { visible: round > 0 || typeof IntersectionObserver === 'undefined', waiting: new Set(), running: new Set() };
@@ -180,12 +229,23 @@ export default function TreeIntro({ target, ar }: { target: RefObject<HTMLElemen
     };
     skip.current = done;
     setPlaying(true);
-    play(root, marker.current, bubble.current, view, controller.signal, undo).then(done, () => {});
+    play(root, marker.current, setShown, () => card.current, view, controller.signal, undo).then(done, () => {});
     return stop;
   }, [target, round]);
+  const ref = (key: string) => {
+    const [surah, ayah] = key.split(':').map(Number);
+    return `${names[surah] ?? (ar ? `سورة ${num(surah)}` : `Surah ${surah}`)} ${ar ? num(ayah) : ayah}`;
+  };
   return <>
     <span ref={marker} aria-hidden className={styles.tapMarker} />
-    <span ref={bubble} aria-hidden className={styles.introBubble}>{ar ? 'الآيات في سياقها' : 'Ayat in context'}</span>
+    {shown && <div ref={card} aria-hidden className={styles.introPeek} style={{ top: shown.top, opacity: 0 }}>
+      <div className={styles.introPeekHead}><strong>{ar ? 'الآيات في سياقها' : 'Ayat in context'}</strong><span>{ref(shown.context.ayah.key)}</span></div>
+      <div data-peek-scroll className={styles.introPeekBody} dir="rtl">
+        {[shown.context.before, shown.context.ayah, shown.context.after].map(ayah => ayah && <p key={ayah.key} className={`font-quran ${ayah === shown.context.ayah ? styles.introPeekAyah : ''}`}>
+          <MushafText>{ayah.words.join(' ')}</MushafText> <span className={styles.introPeekNumber}>{num(Number(ayah.key.split(':')[1]))}</span>
+        </p>)}
+      </div>
+    </div>}
     {playing ? <Button size="icon" className={styles.skipIntro} onClick={() => skip.current()} aria-label={ar ? 'تخطّ' : 'Skip'} title={ar ? 'تخطّ' : 'Skip'}>
       <SkipForward size={16} aria-hidden className={ar ? '-scale-x-100' : undefined} />
     </Button> : <Button size="icon" className={styles.skipIntro} onClick={() => setRound(count => count + 1)} aria-label={ar ? 'إعادة العرض' : 'Replay'} title={ar ? 'إعادة العرض' : 'Replay'}>

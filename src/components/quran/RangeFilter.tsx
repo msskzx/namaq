@@ -13,7 +13,7 @@ export const announceNavigation = () => document.dispatchEvent(new Event(NAVIGAT
 
 export type RangeLabels = { from: string; to: string; all: string; form: string; invalid: (range: JuzRange) => string };
 
-export default function RangeFilter({ range, max, names, href, labels }: { range: JuzRange | null; max: number; names: [string, string]; href: (range?: JuzRange) => string; labels: RangeLabels }) {
+export default function RangeFilter({ range, max, names, href, labels, iconOnly = false }: { range: JuzRange | null; max: number; names: [string, string]; href: (range?: JuzRange) => string; labels: RangeLabels; iconOnly?: boolean }) {
   const router = useNavigatingRouter();
   const pathname = usePathname();
   const params = useSearchParams();
@@ -99,10 +99,12 @@ export default function RangeFilter({ range, max, names, href, labels }: { range
           <NumberInput name={names[index]} label={label(index)} iconFamily="lucide" draftValue={draft[index]} onDraftChange={value => update(index, value)} min={1} max={max} steppers={false} />
         </span>
       ))}
-      {range && <Button size="sm" href={href()} onClick={cancel}>
-        <RotateCcw size={16} aria-hidden />
-        {labels.all}
-      </Button>}
+      {range && (iconOnly
+        ? <Button size="lg" href={href()} onClick={cancel} aria-label={labels.all} title={labels.all}><RotateCcw aria-hidden /></Button>
+        : <Button size="sm" href={href()} onClick={cancel}>
+          <RotateCcw size={16} aria-hidden />
+          {labels.all}
+        </Button>)}
       {!valid && <p role="status" className="w-full text-sm text-[var(--home-muted)]">{labels.invalid(range ?? { from: 1, to: max })}</p>}
     </form>
   );

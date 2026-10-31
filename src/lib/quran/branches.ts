@@ -45,8 +45,8 @@ export function branchesHref(id: string, juz?: JuzRange, view: BranchesView = {}
   if (juz) params.set('juzTo', `${juz.to}`);
   if (view.page && view.page > 1) params.set('p', `${view.page}`);
   if (id && view.context) params.set('c', '1');
-  if (!id && view.query) params.set('q', view.query);
-  if (!id && view.surah) params.set('s', `${view.surah}`);
+  if (view.query) params.set('q', view.query);
+  if (view.surah) params.set('s', `${view.surah}`);
   return `/quran/branches${params.size ? `?${params}` : ''}`;
 }
 

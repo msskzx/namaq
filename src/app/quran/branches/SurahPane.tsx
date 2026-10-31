@@ -25,7 +25,7 @@ export default function SurahPane({ counts, total, names, surah, juz, view, inTr
   const { language } = useLanguage();
   const ar = language === 'ar';
   const label = ar ? 'ابحث عن سورة' : 'Find a surah';
-  const href = (next?: number) => branchesHref('', juz ?? undefined, inTree ? { surah: next } : { ...view, page: 1, surah: next });
+  const href = (next?: number) => branchesHref('', juz ?? undefined, inTree ? { surah: next, query: view?.query } : { ...view, page: 1, surah: next });
   const shown = Object.keys(names).map(Number).sort((a, b) => a - b).filter(n => (inTree ? counts[n] : surahInRange(n, { unit: 'juz', range: juz })) && matchesSurah({ number: n, name: names[n] }, search));
   return (
     <>
