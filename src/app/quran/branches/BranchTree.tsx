@@ -13,7 +13,7 @@ import { Fan, PathBox, PathButton, PathProvider, Stub, useOuterPaths, usePaths, 
 import type { Surrounding } from '@/lib/quran/ayahContext';
 import { anchorOf, NeighbourBox, SurroundToggle, targetStyle, useSurrounding, type Around } from './Surroundings';
 
-type Props = { prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; viewportHeight?: string; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
+type Props = { prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; viewportHeight?: string | null; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
 type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header' | 'surround'> & { around?: Around; anchors?: string; node: Branch; parent?: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
 
 // Every tree node has the same thin border; only a pinned path is coloured.
@@ -310,7 +310,7 @@ export default function BranchTree({ tree, names, variants = [], prefixes, subtr
           <span>{ar ? 'تعذّر تحميل الآيات السابقة.' : 'Could not load the preceding ayat.'}</span>
           <Button size="sm" onClick={() => void mandatory.mutate()}><RotateCw size={16} aria-hidden />{ar ? 'حاول مجددًا' : 'Try again'}</Button>
         </div>}
-        <TreeViewport controls={controls} enabled={zoomable} ar={ar} height={viewportHeight}>
+        <TreeViewport controls={controls} enabled={zoomable} ar={ar} height={viewportHeight ?? undefined}>
           {prefixes && prefixes.length > 0 ? <>
             <Fan side="end" label={ar ? 'ما قبل العبارة' : 'Before the phrase'} entries={prefixes.flatMap((prefix, i): FanEntry[] => prefix.word ? [{ key: `${prefix.word}:${i}`, keys: prefix.keys, item: <>
               <BeforeFan ayahKeys={prefix.keys} around={around} opens={`p${i}`} />

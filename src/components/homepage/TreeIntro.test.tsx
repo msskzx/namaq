@@ -144,3 +144,28 @@ it('replays from the replay button, which gives way to skip while playing', asyn
   fireEvent.click(skip()!);
   expect(screen.getByRole('button', { name: 'إعادة العرض' })).toBeTruthy();
 });
+
+it('waits for the tree to come into view, and pauses while it is out of view', async () => {
+  let report: (ratio: number) => void = () => {};
+  vi.stubGlobal('IntersectionObserver', class {
+    constructor(callback: IntersectionObserverCallback) { report = ratio => callback([{ intersectionRatio: ratio } as IntersectionObserverEntry], this as unknown as IntersectionObserver); }
+    observe() {}
+    disconnect() {}
+  });
+  render(<Tree />);
+  await advance(3000);
+  expect(lit).not.toHaveBeenCalled();
+  expect(words('n0').style.visibility).toBe('');
+  act(() => report(0.7));
+  await advance(100);
+  expect(lit).toHaveBeenCalledOnce();
+  expect(words('n0').style.visibility).toBe('hidden');
+  act(() => report(0.1));
+  await advance(5000);
+  expect(typed('n0')).not.toBeUndefined();
+  expect(lit).toHaveBeenCalledOnce();
+  act(() => report(0.7));
+  await advance(1000);
+  expect(typed('n0')).toBeUndefined();
+  vi.unstubAllGlobals();
+});

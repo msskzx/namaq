@@ -21,18 +21,32 @@ function shouldPlay() {
   }
 }
 
-async function play(root: HTMLElement, marker: HTMLElement, bubble: HTMLElement, signal: AbortSignal, undo: (() => void)[]) {
-  const wait = (ms: number) => new Promise<void>((resolve, reject) => {
+export type View = { visible: boolean; waiting: Set<() => void>; running: Set<Animation> };
+
+async function play(root: HTMLElement, marker: HTMLElement, bubble: HTMLElement, view: View, signal: AbortSignal, undo: (() => void)[]) {
+  const sleep = (ms: number) => new Promise<void>((resolve, reject) => {
     if (signal.aborted) return reject(signal.reason);
     const timer = setTimeout(resolve, ms);
     signal.addEventListener('abort', () => { clearTimeout(timer); reject(signal.reason); }, { once: true });
   });
+  const seen = () => view.visible ? Promise.resolve() : new Promise<void>(resolve => view.waiting.add(resolve));
+  const wait = async (ms: number) => {
+    for (let left = ms; left > 0;) {
+      await seen();
+      const start = Date.now();
+      await sleep(Math.min(left, 100));
+      left -= Date.now() - start;
+    }
+  };
   const content = root.querySelector<HTMLElement>('[data-tree-content]');
   if (!content || typeof content.animate !== 'function') return;
   const run = async (element: Element, keyframes: Keyframe[], options: KeyframeAnimationOptions) => {
+    await seen();
     const animation = element.animate(keyframes, { fill: 'backwards', easing: 'ease-out', ...options });
     undo.push(() => animation.cancel());
+    view.running.add(animation);
     await animation.finished.catch(() => {});
+    view.running.delete(animation);
     signal.throwIfAborted();
   };
   const pointer = content.style.pointerEvents;
@@ -105,12 +119,12 @@ async function play(root: HTMLElement, marker: HTMLElement, bubble: HTMLElement,
   pieces.forEach(piece => { piece.style.opacity = ''; });
   await wait(600);
 
-  const seen = (button: HTMLElement) => {
+  const showing = (button: HTMLElement) => {
     const { left, top, width, height } = button.getBoundingClientRect();
     const hit = document.elementFromPoint?.(left + width / 2, top + height / 2);
     return !!hit && root.contains(hit);
   };
-  const open = [content.querySelector<HTMLElement>('[data-node="n-1"] [data-context-open]'), ...content.querySelectorAll<HTMLElement>('[data-context-open]')].find(button => button && seen(button));
+  const open = [content.querySelector<HTMLElement>('[data-node="n-1"] [data-context-open]'), ...content.querySelectorAll<HTMLElement>('[data-context-open]')].find(button => button && showing(button));
   if (!open) return;
   const area = root.getBoundingClientRect();
   const target = open.getBoundingClientRect();
@@ -143,6 +157,15 @@ export default function TreeIntro({ target, ar }: { target: RefObject<HTMLElemen
     if (!root || !marker.current || !bubble.current || (round === 0 && !shouldPlay())) return;
     const controller = new AbortController();
     const undo: (() => void)[] = [];
+    const view: View = { visible: round > 0 || typeof IntersectionObserver === 'undefined', waiting: new Set(), running: new Set() };
+    const observer = typeof IntersectionObserver === 'undefined' ? null : new IntersectionObserver(([entry]) => {
+      view.visible = entry.intersectionRatio >= 0.6;
+      view.running.forEach(animation => (view.visible ? animation.play() : animation.pause()));
+      if (view.visible) view.waiting.forEach(resume => resume());
+      if (view.visible) view.waiting.clear();
+    }, { threshold: [0, 0.6] });
+    observer?.observe(root);
+    undo.push(() => observer?.disconnect());
     const stop = () => {
       controller.abort();
       undo.splice(0).reverse().forEach(restore => restore());
@@ -154,7 +177,7 @@ export default function TreeIntro({ target, ar }: { target: RefObject<HTMLElemen
     };
     skip.current = done;
     setPlaying(true);
-    play(root, marker.current, bubble.current, controller.signal, undo).then(done, () => {});
+    play(root, marker.current, bubble.current, view, controller.signal, undo).then(done, () => {});
     return stop;
   }, [target, round]);
   return <>
