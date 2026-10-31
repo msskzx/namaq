@@ -73,6 +73,14 @@ async function play(root: HTMLElement, marker: HTMLElement, bubble: HTMLElement,
       restore();
     };
   };
+  const lit = async (leaf: HTMLElement, during: () => Promise<void>) => {
+    const light = leaf.querySelector<HTMLButtonElement>('button[aria-pressed]');
+    if (!light) return during();
+    light.click();
+    undo.push(() => { if (light.getAttribute('aria-pressed') === 'true') light.click(); });
+    await during();
+    light.click();
+  };
   const shown = new Set<Element>();
   for (const { key, leaf } of leaves) {
     const path = pieces.filter(piece => !shown.has(piece) && (!own(piece) || own(piece)!.dataset.keys?.split(' ').includes(key))).sort((a, b) => right(b) - right(a));
@@ -82,24 +90,24 @@ async function play(root: HTMLElement, marker: HTMLElement, bubble: HTMLElement,
       const type = own(piece) === leaf && leaf.dataset.node !== 'n-1' ? blank(leaf) : null;
       piece.style.opacity = '';
       await run(piece, [{ opacity: 0 }, { opacity: 1 }], { duration: STEP });
-      await type?.();
+      if (type) await lit(leaf, type);
     }
     await wait(250);
   }
   pieces.forEach(piece => { piece.style.opacity = ''; });
   await wait(400);
   for (const { leaf } of leaves) {
-    const light = leaf.querySelector<HTMLButtonElement>('button[aria-pressed]');
-    if (!light) continue;
-    light.click();
-    undo.push(() => { if (light.getAttribute('aria-pressed') === 'true') light.click(); });
-    await wait(HOLD);
-    light.click();
+    await lit(leaf, () => wait(HOLD));
     await wait(200);
   }
   await wait(400);
 
-  const open = content.querySelector<HTMLElement>('[data-node="n-1"] [data-context-open]') ?? content.querySelector<HTMLElement>('[data-context-open]');
+  const seen = (button: HTMLElement) => {
+    const { left, top, width, height } = button.getBoundingClientRect();
+    const hit = document.elementFromPoint?.(left + width / 2, top + height / 2);
+    return !!hit && root.contains(hit);
+  };
+  const open = [content.querySelector<HTMLElement>('[data-node="n-1"] [data-context-open]'), ...content.querySelectorAll<HTMLElement>('[data-context-open]')].find(button => button && seen(button));
   if (!open) return;
   const area = root.getBoundingClientRect();
   const target = open.getBoundingClientRect();
