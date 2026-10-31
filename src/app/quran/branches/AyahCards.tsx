@@ -25,6 +25,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
   const ar = language === 'ar';
   const shown = ayahKeys.slice(0, MAX_KEYS);
   const [column, setColumn] = useState(1);
+  const [reading, setReading] = useState(0);
   const { data, error, isLoading, mutate } = useSWR<AyahContext[]>(`/api/quran/context?${new URLSearchParams({ q: shown.join(',') })}`, loadContext, { revalidateOnFocus: false });
   const { data: around, error: aroundError, mutate: retryAround } = useSWR<Surrounding>(`/api/quran/surrounding?${new URLSearchParams({ before: shown.join(','), after: shown.join(',') })}`, async (url: string) => {
     const response = await fetch(url);
@@ -63,6 +64,21 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
       if (gap < distance) { distance = gap; best = i; }
     });
     if (best !== column) setColumn(best);
+    const top = box.top + parseFloat(getComputedStyle(track.current!).scrollPaddingTop || '0');
+    let nearest = reading;
+    distance = Infinity;
+    track.current!.querySelectorAll<HTMLElement>(`[data-col="${best}"]`).forEach(cell => {
+      const gap = Math.abs(cell.getBoundingClientRect().top - top);
+      if (gap < distance) { distance = gap; nearest = Number(cell.dataset.row); }
+    });
+    if (nearest !== reading) setReading(nearest);
+  };
+  const goToRow = (r: number) => {
+    const box = track.current?.getBoundingClientRect();
+    const rect = track.current?.querySelector(`[data-col="${column}"][data-row="${r}"]`)?.getBoundingClientRect();
+    const top = box && rect ? rect.top - box.top - parseFloat(getComputedStyle(track.current!).scrollPaddingTop || '0') : 0;
+    if (Math.abs(top) > 1 && track.current?.scrollBy) track.current.scrollBy({ top, behavior: 'smooth' });
+    else setReading(r);
   };
   const settle = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const onScroll = () => {
@@ -136,7 +152,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
     const ayah = at === 'ayah' ? context.ayah : around![at === 'before' ? 'before' : 'after'][context.ayah.key];
     const current = i === column;
     const key = `${row}:${at}`;
-    const props = { 'data-col': i, 'data-first': row === 0 || undefined, 'data-current': current || undefined, className: styles.cell, onClick: current ? undefined : () => goTo(i) };
+    const props = { 'data-col': i, 'data-row': row, 'data-first': row === 0 || undefined, 'data-current': current || undefined, 'data-reading': row === reading || undefined, className: styles.cell, onClick: current && row === reading ? undefined : () => { if (!current) goTo(i); if (row !== reading) goToRow(row); } };
     if (!ayah) return <div key={key} {...props} />;
     const [surah, number] = ayah.key.split(':').map(Number);
     const name = names[surah] ?? (ar ? `سورة ${num(surah)}` : `Surah ${surah}`);

@@ -113,3 +113,15 @@ it('marks what the next ayat share with each other, as in the tree column', asyn
   await waitFor(() => expect(within(next).getByTitle('نفس الكلمة').textContent).toBe('فَإِذَا'));
   expect(within(screen.getByRole('article', { name: 'الشرح ٤' })).queryByTitle('نفس الكلمة')).toBeNull();
 });
+
+it('reads one row at a time, the rows above and below peeking, and moves to a row on a press', async () => {
+  show();
+  await screen.findByRole('article', { name: 'الشرح ٥' });
+  const reading = () => [...document.querySelectorAll<HTMLElement>('[data-col][data-current][data-reading]')].map(cell => cell.querySelector('article')?.getAttribute('aria-label'));
+  expect(reading()).toEqual(['الشرح ٥']);
+  fireEvent.click(screen.getByRole('article', { name: 'الطلاق ٧' }));
+  expect(reading()).toEqual(['الطلاق ٧']);
+  fireEvent.click(screen.getByRole('article', { name: 'الشرح ٧' }));
+  expect(column()).toEqual(['', 'الشرح ٧', 'الطلاق ٨']);
+  expect(reading()).toEqual(['الشرح ٧']);
+});
