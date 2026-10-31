@@ -1,8 +1,8 @@
-.track { display: grid; grid-template-columns: repeat(3, 84%); gap: 0.75rem 1rem; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; overscroll-behavior-x: contain; align-items: stretch; padding-inline: 8%; padding-block: 0.25rem; scrollbar-width: none; }
+.track { display: grid; grid-template-columns: repeat(3, 84%); gap: 0.75rem 1rem; overflow: auto; max-height: 75vh; scroll-snap-type: both mandatory; scroll-behavior: smooth; overscroll-behavior-x: contain; align-items: stretch; padding-inline: 8%; padding-bottom: 20vh; scrollbar-width: none; }
 .track::-webkit-scrollbar { display: none; }
-.head { scroll-snap-align: center; scroll-snap-stop: always; font-size: 0.875rem; color: var(--home-muted); padding-block: 0.25rem; transition: opacity 0.3s ease; }
+.head { position: sticky; top: 0; z-index: 1; background: var(--home-paper); font-size: 0.875rem; color: var(--home-muted); padding-block: 0.25rem; transition: opacity 0.3s ease; }
 .head[data-current] { color: inherit; font-weight: 600; }
-.cell { min-width: 0; transition: opacity 0.3s ease, transform 0.3s ease; }
+.cell { min-width: 0; scroll-snap-align: start center; scroll-snap-stop: always; scroll-margin-top: 2.5rem; transition: opacity 0.3s ease, transform 0.3s ease; }
 .cell:not([data-current]) { opacity: 0.45; transform: scale(0.97); cursor: pointer; }
 .cell > div { grid-template-columns: minmax(0, 1fr); height: 100%; }
 .cell article { padding: 0.75rem; }
