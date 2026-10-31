@@ -1,11 +1,12 @@
 import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
-import { prisma } from '@/lib/prisma';
+import { surahList } from '@/lib/quran/surahList';
 import { ayahEnds, branchesHref, keys, listPage, piecesHolding, searchKey, textIs, type BranchAyah, type BranchesView, type Opening } from '@/lib/quran/branches';
 import { searchQuery } from '@/lib/quran/searchText';
 import { inJuzRange, parseJuzRange, type JuzRange } from '@/lib/quran/juz';
-import { loadReaderAyat, surrounding } from '@/lib/quran/ayahContext';
+import { surrounding } from '@/lib/quran/ayahContext';
+import { loadReaderAyat } from '@/lib/quran/readerAyat';
 import { buildPhraseGroups, buildTreeGroups, phrasePresentation, phraseSubtreeTargets, type TreeGroup } from '@/lib/quran/phraseTrees';
 import treeData from './trees.json';
 import BranchTree from './BranchTree';
@@ -19,6 +20,7 @@ import OpeningSearch from './OpeningSearch';
 import SearchSummary from './SearchSummary';
 import SurahPane, { PaneNote } from './SurahPane';
 import { PathScope } from './Paths';
+import PreloadQuranText from '@/components/quran/PreloadQuranText';
 import CompareLayout from '../compare/CompareLayout';
 import styles from '@/components/common/PaperPage.module.css';
 
@@ -115,8 +117,8 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
     const number = surahOf(ayah.key);
     return [number === 1 ? 114 : number - 1, number, number === 114 ? 1 : number + 1];
   }))] : undefined;
-  const rows = await prisma.surah.findMany({ where: numbers ? { number: { in: numbers } } : undefined, select: { number: true, name: true } });
-  const names = Object.fromEntries(rows.map(row => [row.number, row.name]));
+  const wantedNames = numbers && new Set(numbers);
+  const names = Object.fromEntries((await surahList()).filter(row => !wantedNames || wantedNames.has(row.number)).map(row => [row.number, row.name]));
   const ayatBySurah: Record<number, number> = {};
   drawn.forEach(ayah => { ayatBySurah[surahOf(ayah.key)] = (ayatBySurah[surahOf(ayah.key)] ?? 0) + 1; });
   const shown = cut.slice((page - 1) * PER_PAGE, page * PER_PAGE);
@@ -125,11 +127,12 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
 
   return (
     <div id="quran-branches" dir="rtl" className={`${styles.page} w-full max-w-6xl mx-auto px-4 py-8 flex flex-col gap-4`}>
+      <PreloadQuranText />
       <BranchHeading />
       <Scope>
         <CompareLayout title="السور" hideTitle current={id ? 'سور هذه الشجرة' : surah ? names[surah] : 'كل السور'} change="اختر سورة" storageKey="branches-pane-hidden" paneToggleFirst
           bar={<div className="min-w-0 flex-1">
-            <OpeningSearch key={listQuery} query={listQuery} top={built.trees.slice(0, 8).map(tree => ({ id: tree.id, text: tree.text, textEn: tree.textEn, count: new Set(tree.occurrences.map(occurrence => occurrence.key)).size }))} phrases={built.trees.map(tree => ({ id: tree.id, text: tree.text, textEn: tree.textEn, aliases: tree.aliases, count: new Set(tree.occurrences.map(occurrence => occurrence.key)).size }))} phraseCount={built.trees.length} current={id} juz={range} unavailable={unavailable} view={id ? { ...treeView, mode: state.mode, query: state.query } : state} />
+            <OpeningSearch key={listQuery} query={listQuery} top={built.trees.slice(0, 8).map(tree => ({ id: tree.id, text: tree.text, textEn: tree.textEn, count: new Set(tree.occurrences.map(occurrence => occurrence.key)).size }))} phraseCount={built.trees.length} current={id} juz={range} unavailable={unavailable} view={id ? { ...treeView, mode: state.mode, query: state.query } : state} />
           </div>}
           pane={<Fragment key="pane">
             <div className="flex flex-wrap items-start gap-3">

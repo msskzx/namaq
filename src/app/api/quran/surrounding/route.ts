@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { isAyahKey, loadReaderAyat, surrounding } from '@/lib/quran/ayahContext';
+import { isAyahKey, surrounding } from '@/lib/quran/ayahContext';
+import { loadReaderAyat } from '@/lib/quran/readerAyat';
 
 const MAX_KEYS = 400;
 

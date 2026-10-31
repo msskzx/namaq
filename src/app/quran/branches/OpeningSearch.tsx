@@ -16,7 +16,23 @@ type Suggestion = Opening;
 
 export const SUGGESTIONS = 10;
 
-export default function OpeningSearch({ phrases, query: submitted = '', juz = null, unavailable = false, view = {}, alternatives = [], remote = false, phraseCount }: { remote?: boolean; phraseCount?: number; top: Opening[]; phrases: Opening[]; current?: string; query?: string; juz?: JuzRange | null; unavailable?: boolean; view?: BranchesView; alternatives?: Opening[] }) {
+const inventories = new Map<string, Promise<Opening[]>>();
+const NONE: Opening[] = [];
+
+function loadPhrases(juz: JuzRange | null): Promise<Opening[]> {
+  const params = new URLSearchParams({ all: '1', ...(juz && { juzFrom: String(juz.from), juzTo: String(juz.to) }) });
+  const key = params.toString();
+  if (!inventories.has(key)) inventories.set(key, fetch(`/api/quran/branch-phrases?${key}`)
+    .then(response => (response.ok ? response.json() : Promise.reject(new Error('Phrases failed'))))
+    .then((data: { phrases: Opening[] }) => data.phrases)
+    .catch(error => {
+      inventories.delete(key);
+      throw error;
+    }));
+  return inventories.get(key)!;
+}
+
+export default function OpeningSearch({ phrases: given, query: submitted = '', juz = null, unavailable = false, view = {}, alternatives = [], remote = false, phraseCount }: { remote?: boolean; phraseCount?: number; top: Opening[]; phrases?: Opening[]; current?: string; query?: string; juz?: JuzRange | null; unavailable?: boolean; view?: BranchesView; alternatives?: Opening[] }) {
   const router = useNavigatingRouter();
   const { language } = useLanguage();
   const ar = language === 'ar';
@@ -24,9 +40,20 @@ export default function OpeningSearch({ phrases, query: submitted = '', juz = nu
   const [query, setQuery] = useState(submitted);
   const [dismissed, setDismissed] = useState(!!submitted);
   const [selected, setSelected] = useState(-1);
-  useEffect(() => setSelected(-1), [phrases]);
   const from = juz?.from;
   const to = juz?.to;
+  const [loaded, setLoaded] = useState<{ range: string; phrases: Opening[] }>();
+  const range = `${from}-${to}`;
+  const ready = !!given || remote || loaded?.range === range;
+  const typed = !!query.trim();
+  useEffect(() => {
+    if (ready) return;
+    let live = true;
+    loadPhrases(from !== undefined && to !== undefined ? { from, to } : null).then(phrases => live && setLoaded({ range, phrases }), () => {});
+    return () => { live = false; };
+  }, [ready, from, to, range, typed]);
+  const phrases = given ?? (loaded?.range === range ? loaded.phrases : NONE);
+  useEffect(() => setSelected(-1), [phrases]);
   const request = new URLSearchParams({ q: query });
   if (from !== undefined && to !== undefined) { request.set('juzFrom', String(from)); request.set('juzTo', String(to)); }
   const requestKey = request.toString();
@@ -81,7 +108,7 @@ export default function OpeningSearch({ phrases, query: submitted = '', juz = nu
             }} className={SEARCH} />
         </label>
         {visible && <ul id={listId} role="listbox" aria-label={ar ? 'عبارات مقترحة' : 'Suggested phrases'} className="absolute inset-x-0 top-full z-20 mt-1 flex flex-col rounded border border-[var(--home-rule)] bg-[var(--home-paper)] shadow-lg">
-          {suggestions.length === 0 ? <li role="presentation" className={`${NOTE} px-3 py-2`}><span role="status">{ar ? 'لا عبارة مشتركة تطابق البحث.' : 'No shared phrase matches your search.'}</span></li> : suggestions.map((opening, index) => (
+          {suggestions.length === 0 ? <li role="presentation" className={`${NOTE} px-3 py-2`}><span role="status">{!ready ? (ar ? 'جارٍ تحميل العبارات…' : 'Loading phrases…') : ar ? 'لا عبارة مشتركة تطابق البحث.' : 'No shared phrase matches your search.'}</span></li> : suggestions.map((opening, index) => (
             <li key={opening.id} role="presentation">
               <button id={`${listId}-${index}`} data-branch-navigation type="button" role="option" aria-selected={selected === index} onClick={() => open(opening)} className={`flex w-full items-baseline gap-2 px-3 py-2 text-start hover:bg-[var(--home-paper-deep)] ${selected === index ? 'bg-[var(--home-paper-deep)]' : ''}`}>
                 <span className="text-lg font-arabic flex-1" dir="rtl">{ar ? opening.text : opening.textEn ?? opening.text}</span>
