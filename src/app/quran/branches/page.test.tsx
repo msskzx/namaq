@@ -191,7 +191,7 @@ describe('Quran branch trees', () => {
     const trees = buildTreeGroups((data.ayat as BranchAyah[]).filter(ayah => inJuzRange(ayah.key, { from: 30, to: 30 })));
     const juz = { from: 30, to: 30 };
     render(await open({ o: trees[1].id, juzFrom: '30', juzTo: '30', m: 'cards' }));
-    expect(screen.getByRole('region', { name: 'آيات الشجرة بطاقة بطاقة' })).toBeTruthy();
+    expect(screen.getByRole('region', { name: 'آيات الشجرة في سياقها' })).toBeTruthy();
     expect(screen.queryByRole('region', { name: 'شجرة العبارات المشتركة' })).toBeNull();
     const mode = screen.getByRole('group', { name: 'طريقة العرض' });
     expect(within(mode).getByRole('link', { name: 'بطاقات الآيات' }).getAttribute('aria-current')).toBe('page');

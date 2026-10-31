@@ -14,8 +14,8 @@ vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ 
 
 const ayah = (key: string, words: string[]) => ({ key, page: 1, words });
 const source: AyahContext[] = [
-  { before: null, after: null, ayah: ayah('94:5', ['فَإِنَّ', 'مَعَ', 'ٱلْعُسْرِ', 'يُسْرًا']), match: { exact: [1, 2], rooted: [3] } },
-  { before: null, after: null, ayah: ayah('94:6', ['إِنَّ', 'مَعَ', 'ٱلْعُسْرِ', 'يُسْرًۭا']), match: { exact: [1, 2], rooted: [3] } },
+  { before: ayah('94:4', ['وَرَفَعْنَا', 'لَكَ', 'ذِكْرَكَ']), after: null, ayah: ayah('94:5', ['فَإِنَّ', 'مَعَ', 'ٱلْعُسْرِ', 'يُسْرًا']), match: { exact: [1, 2], rooted: [3] } },
+  { before: null, after: ayah('94:7', ['فَإِذَا', 'فَرَغْتَ', 'فَٱنصَبْ']), ayah: ayah('94:6', ['إِنَّ', 'مَعَ', 'ٱلْعُسْرِ', 'يُسْرًۭا']), match: { exact: [1, 2], rooted: [3] } },
   { before: null, after: null, ayah: ayah('65:7', ['سَيَجْعَلُ', 'ٱللَّهُ', 'بَعْدَ', 'عُسْرٍۢ', 'يُسْرًۭا']), match: { exact: [], rooted: [3, 4] } },
 ];
 
@@ -29,83 +29,47 @@ beforeEach(() => {
 });
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); router.push.mockClear(); });
 
-const steps = { previous: '/quran/branches?o=a&m=cards&n=last', next: '/quran/branches?o=b&m=cards', position: 2, total: 3 };
+const steps = { previous: '/quran/branches?o=a&m=cards', next: '/quran/branches?o=b&m=cards', position: 2, total: 3 };
 const show = (keys = ['94:5', '94:6', '65:7']) => render(
   <SWRConfig value={{ provider: () => new Map(), dedupingInterval: 0, shouldRetryOnError: false }}>
     <AyahCards ayahKeys={keys} names={{ 94: 'الشرح', 65: 'الطلاق' }} steps={steps} />
   </SWRConfig>,
 );
-const card = () => document.querySelector('[data-lane][data-current] article')!;
-const step = (name: string) => {
-  const lane = document.querySelector<HTMLElement>('[data-lane][data-current]')!;
-  return within(lane).queryByRole('link', { name }) ?? within(lane).getByRole('button', { name });
-};
-const swipe = (dx: number) => {
-  const track = document.querySelector('[data-lane]')!.parentElement!;
-  fireEvent.touchStart(track, { touches: [{ clientX: 100, clientY: 100 }] });
-  fireEvent.touchEnd(track, { touches: [], changedTouches: [{ clientX: 100 + dx, clientY: 105 }] });
-};
+const column = () => [...document.querySelectorAll<HTMLElement>('[data-col][data-current]')].map(cell => cell.querySelector('article')?.getAttribute('aria-label') ?? '');
+const key = (name: string) => act(() => { window.dispatchEvent(new KeyboardEvent('keydown', { key: name })); });
 
-it('lays every ayah of the tree in one lane, only the current card live, with the overlay marks', async () => {
+it('stacks every tree ayah as a row, its previous and next ayah beside it, the tree column current', async () => {
   show();
   await screen.findByRole('article', { name: 'الشرح ٥' });
-  const lanes = document.querySelectorAll('[data-lane]');
-  expect(lanes).toHaveLength(3);
-  expect([...lanes].map(lane => lane.hasAttribute('data-current'))).toEqual([true, false, false]);
-  expect([...lanes].map(lane => lane.hasAttribute('inert'))).toEqual([false, true, true]);
-  expect(card().textContent).not.toContain('وَرَفَعْنَا');
-  expect(within(card() as HTMLElement).getAllByTitle('في كل الآيات بلفظها').map(mark => mark.textContent)).toEqual(['مَعَ', 'ٱلْعُسْرِ']);
-  expect(within(card() as HTMLElement).getByTitle('في كل الآيات بجذرها أو بضبط مختلف').textContent).toBe('يُسْرًا');
-  expect(step('قراءة الآية').getAttribute('href')).toBe('/quran/read/1?a=94:5');
+  expect([...document.querySelectorAll('[data-head]')].map(head => head.textContent)).toEqual(['الآية السابقة', 'آيات الشجرة', 'الآية التالية']);
+  expect(document.querySelectorAll('[data-col]')).toHaveLength(9);
+  expect(column()).toEqual(['الشرح ٥', 'الشرح ٦', 'الطلاق ٧']);
+  const card = screen.getByRole('article', { name: 'الشرح ٥' });
+  expect(within(card).getAllByTitle('في كل الآيات بلفظها').map(mark => mark.textContent)).toEqual(['مَعَ', 'ٱلْعُسْرِ']);
+  expect(within(card).getByTitle('في كل الآيات بجذرها أو بضبط مختلف').textContent).toBe('يُسْرًا');
+  expect(within(card).getByRole('link', { name: 'قراءة الآية' }).getAttribute('href')).toBe('/quran/read/1?a=94:5');
+  expect(within(screen.getByRole('article', { name: 'الشرح ٤' })).queryByRole('mark')).toBeNull();
 });
 
-it('steps along the lane with the card buttons and keeps the card in the address', async () => {
+it('moves every row together to the next or previous ayah with the arrow keys, headings and a click', async () => {
   show();
   await screen.findByRole('article', { name: 'الشرح ٥' });
-  expect(step('الآية السابقة').getAttribute('href')).toBe(steps.previous);
-  fireEvent.click(step('الآية التالية'));
-  expect(card().getAttribute('aria-label')).toBe('الشرح ٦');
-  expect(window.location.search).toContain('n=2');
-  fireEvent.click(step('الآية التالية'));
-  expect(card().getAttribute('aria-label')).toBe('الطلاق ٧');
-  expect(step('الآية التالية').getAttribute('href')).toBe(steps.next);
-  fireEvent.click(step('الآية السابقة'));
-  expect(card().getAttribute('aria-label')).toBe('الشرح ٦');
+  key('ArrowLeft');
+  expect(column()).toEqual(['', 'الشرح ٧', '']);
+  key('ArrowLeft');
+  expect(column()).toEqual(['', 'الشرح ٧', '']);
+  key('ArrowRight');
+  key('ArrowRight');
+  expect(column()).toEqual(['الشرح ٤', '', '']);
+  fireEvent.click(screen.getByRole('button', { name: 'آيات الشجرة' }));
+  expect(column()).toEqual(['الشرح ٥', 'الشرح ٦', 'الطلاق ٧']);
+  fireEvent.click(screen.getByRole('article', { name: 'الشرح ٧' }));
+  expect(screen.getByRole('button', { name: 'الآية التالية' }).getAttribute('aria-pressed')).toBe('true');
 });
 
-it('opens on the last card when arriving backwards; keys step and a swipe past the end opens the next tree', async () => {
-  params = new URLSearchParams('n=last');
-  show();
-  await screen.findByRole('article', { name: 'الطلاق ٧' });
-  act(() => { window.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight' })); });
-  expect(card().getAttribute('aria-label')).toBe('الشرح ٦');
-  swipe(120);
-  expect(router.push).not.toHaveBeenCalled();
-  act(() => { window.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft' })); });
-  expect(card().getAttribute('aria-label')).toBe('الطلاق ٧');
-  swipe(120);
-  expect(router.push).toHaveBeenCalledWith(steps.next, { scroll: false });
-});
-
-it('keeps focus on the step button after the card changes', async () => {
+it('steps between trees with the tree navigation', async () => {
   show();
   await screen.findByRole('article', { name: 'الشرح ٥' });
-  const next = step('الآية التالية');
-  next.focus();
-  fireEvent.click(next);
-  expect(card().getAttribute('aria-label')).toBe('الشرح ٦');
-  expect(document.activeElement).toBe(step('الآية التالية'));
-});
-
-it('stays on the last card the tree still has when the list shrinks', async () => {
-  params = new URLSearchParams('n=3');
-  const { rerender } = show();
-  await screen.findByRole('article', { name: 'الطلاق ٧' });
-  rerender(
-    <SWRConfig value={{ provider: () => new Map(), dedupingInterval: 0, shouldRetryOnError: false }}>
-      <AyahCards ayahKeys={['94:5', '94:6']} names={{ 94: 'الشرح', 65: 'الطلاق' }} steps={steps} />
-    </SWRConfig>,
-  );
-  await screen.findByRole('article', { name: 'الشرح ٦' });
-  expect(card().getAttribute('aria-label')).toBe('الشرح ٦');
+  expect(screen.getByRole('link', { name: 'الشجرة السابقة' }).getAttribute('href')).toBe(steps.previous);
+  expect(screen.getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')).toBe(steps.next);
 });

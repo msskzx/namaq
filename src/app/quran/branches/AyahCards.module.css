@@ -1,12 +1,14 @@
-.track { display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; overscroll-behavior-x: contain; align-items: flex-start; padding-inline: 8%; padding-block: 0.25rem; scrollbar-width: none; }
+.track { display: grid; grid-template-columns: repeat(3, 84%); gap: 0.75rem 1rem; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; overscroll-behavior-x: contain; align-items: stretch; padding-inline: 8%; padding-block: 0.25rem; scrollbar-width: none; }
 .track::-webkit-scrollbar { display: none; }
-.lane { flex: 0 0 84%; min-width: 0; scroll-snap-align: center; scroll-snap-stop: always; transition: opacity 0.3s ease, transform 0.3s ease; }
-.lane:not([data-current]) { opacity: 0.45; transform: scale(0.97); cursor: pointer; }
-.lane > div { grid-template-columns: minmax(0, 1fr); }
-.footer { display: flex; align-items: center; gap: 0.5rem; margin-top: 1.5rem; }
-.fromLeft { animation: from-left 0.28s ease-out; }
-.fromRight { animation: from-right 0.28s ease-out; }
-@keyframes from-left { from { opacity: 0; transform: translateX(-2.5rem); } }
-@keyframes from-right { from { opacity: 0; transform: translateX(2.5rem); } }
-@media (max-width: 600px) { .track { padding-inline: 7%; gap: 0.5rem; } .lane { flex-basis: 86%; } }
-@media (prefers-reduced-motion: reduce) { .track { scroll-behavior: auto; } .lane { transition: none; } .fromLeft, .fromRight { animation: none; } }
+.head { scroll-snap-align: center; scroll-snap-stop: always; font-size: 0.875rem; color: var(--home-muted); padding-block: 0.25rem; transition: opacity 0.3s ease; }
+.head[data-current] { color: inherit; font-weight: 600; }
+.cell { min-width: 0; transition: opacity 0.3s ease, transform 0.3s ease; }
+.cell:not([data-current]) { opacity: 0.45; transform: scale(0.97); cursor: pointer; }
+.cell > div { grid-template-columns: minmax(0, 1fr); height: 100%; }
+.cell article { padding: 0.75rem; }
+.cell article header { margin-bottom: 0.5rem; padding: 0.25rem; }
+.cell article h3 { font-size: 1.125rem; }
+.cell article > div { font-size: 1.25rem; line-height: 2.1; }
+.read { margin-top: 0.5rem; justify-self: start; }
+@media (max-width: 600px) { .track { grid-template-columns: repeat(3, 86%); padding-inline: 7%; column-gap: 0.5rem; } }
+@media (prefers-reduced-motion: reduce) { .track { scroll-behavior: auto; } .cell { transition: none; } }
