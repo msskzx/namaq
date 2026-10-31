@@ -83,6 +83,22 @@ describe('ReaderView', () => {
     expect(replace).toHaveBeenCalledWith('/quran/read/ayah/2/9');
   });
 
+  it('takes the first ayah named, moves the mark when the address changes, and ignores a malformed one', () => {
+    search = new URLSearchParams('a=2:2&a=2:9');
+    const marked = (container: HTMLElement) => [...container.querySelectorAll('[data-marked]')].map(span => span.textContent);
+    const { container, rerender } = render(<MarkedReaderView page={3} pages={one(3, opening)} names={names} />);
+    expect(marked(container)).toEqual(['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ٢']);
+    search = new URLSearchParams('a=2:1');
+    rerender(<MarkedReaderView page={3} pages={one(3, opening)} names={names} />);
+    expect(marked(container)).toContain('الٓمٓ ١');
+    for (const bad of ['x', '2:', ':1']) {
+      search = new URLSearchParams(`a=${bad}`);
+      rerender(<MarkedReaderView page={3} pages={one(3, opening)} names={names} />);
+      expect(marked(container)).toEqual([]);
+    }
+    expect(replace).not.toHaveBeenCalled();
+  });
+
   it('preloads the pages either side, a spread at a time', () => {
     media(false);
     const { unmount } = render(<ReaderView page={42} pages={one(42, opening)} names={names} />);
