@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { BookOpen, GitBranch, ListChecks, Shuffle, Users } from 'lucide-react';
 import { useLanguage } from '../language/LanguageContext';
 import Button from '../common/Button';
 import LoadingSpinner from '../common/LoadingSpinner';
 import BranchTree from '@/app/quran/branches/BranchTree';
 import type { HomePreviews } from '@/lib/homePreviewData';
-import WorkInProgressBanner from './WorkInProgressBanner';
+import TreeIntro from './TreeIntro';
 import styles from './Home.module.css';
 
 export default function Homepage({ data, fontClass = '' }: { data: HomePreviews; fontClass?: string }) {
@@ -15,6 +15,7 @@ export default function Homepage({ data, fontClass = '' }: { data: HomePreviews;
   const [preview, setPreview] = useState(data.branches);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const launchTree = useRef<HTMLDivElement>(null);
   const randomTree = async () => {
     setLoading(true);
     setError(false);
@@ -36,23 +37,23 @@ export default function Homepage({ data, fontClass = '' }: { data: HomePreviews;
   ];
   return (
     <div className={`${styles.page} ${fontClass}`} dir={ar ? 'rtl' : 'ltr'}>
-      <WorkInProgressBanner />
       <div className={styles.content}>
-        <section className={styles.feature} aria-labelledby="openings-title">
-          <div className={styles.featureHeading}><div>
-            <h1 id="openings-title">{ar ? 'متشابهات القرآن' : 'Quran phrase trees'}</h1>
+        <section className={`${styles.feature} ${styles.launch}`} aria-labelledby="openings-title">
+          <h1 id="openings-title" className={styles.launchTitle}>{ar ? 'متشابهات القرآن' : 'Quran phrase trees'}</h1>
+          <div className={styles.launchText}>
             <p>{ar ? 'استكشف العبارات المشتركة بين الآيات في شجرة تفاعلية، واقرأ كل آية في سياقها.' : 'Explore shared Quranic phrases in an interactive tree, and read each ayah in context.'}</p>
             <div className={styles.launchActions}>
-              <Button href="/quran/branches"><GitBranch size={18} aria-hidden />{ar ? 'جميع الأشجار' : 'All phrase trees'}</Button>
-              <Button onClick={randomTree} disabled={loading}><Shuffle size={18} aria-hidden />{ar ? 'شجرة عشوائية' : 'Random tree'}</Button>
+              <Button href="/quran/branches"><GitBranch size={18} aria-hidden />{ar ? 'تصفّح الكل' : 'Browse all'}</Button>
+              <Button onClick={randomTree} disabled={loading}><Shuffle size={18} aria-hidden />{ar ? 'عشوائي' : 'Random'}</Button>
             </div>
             {error && <p role="alert">{ar ? 'تعذّر تحميل الشجرة. حاول مجددًا.' : 'Could not load a tree. Try again.'}</p>}
-          </div></div>
-          <div className={styles.launchTree} dir="rtl" aria-busy={loading}>
+          </div>
+          <div ref={launchTree} className={styles.launchTree} dir="rtl" aria-busy={loading}>
             {loading && <LoadingSpinner className="absolute inset-0 z-10 bg-[var(--home-paper)]" />}
             <div inert={loading}>
-              <BranchTree key={preview.id} tree={preview.tree} prefixes={preview.prefixes.filter(prefix => prefix.word)} offsets={preview.offsets} subtreeLinks={preview.subtreeLinks} names={preview.names} surround={{ on: false }} label={ar ? 'مثال تفاعلي لشجرة عبارات قرآنية' : 'Interactive Quran phrase tree example'} />
+              <BranchTree key={preview.id} tree={preview.tree} prefixes={preview.prefixes.filter(prefix => prefix.word)} offsets={preview.offsets} subtreeLinks={preview.subtreeLinks} names={preview.names} surround={{ on: false }} viewportHeight={null} label={ar ? 'مثال تفاعلي لشجرة عبارات قرآنية' : 'Interactive Quran phrase tree example'} />
             </div>
+            <TreeIntro key={preview.id} target={launchTree} ar={ar} />
           </div>
         </section>
         <section className={styles.feature} aria-labelledby="journey-title">

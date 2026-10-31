@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import Homepage from './Homepage';
 import { getHomePreviews } from '@/lib/homePreviewData';
+import { SEEN } from './TreeIntro';
 
 const { state } = vi.hoisted(() => ({ state: { language: 'ar', languageLoaded: true } }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => state }));
@@ -14,8 +15,8 @@ describe('Quran learning homepage', () => {
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(language === 'ar' ? 'متشابهات القرآن' : 'Quran phrase trees');
     expect(screen.getByRole('switch', { name: language === 'ar' ? 'الآيات المحيطة' : 'Surrounding ayat' })).toHaveProperty('checked', false);
     expect(screen.queryByRole('list', { name: /ما قبل العبارة|Before the phrase/ })).toBeNull();
-    expect(screen.getByRole('button', { name: language === 'ar' ? 'تصغير الشجرة' : 'Zoom out' })).toBeTruthy();
-    expect(screen.getByRole('button', { name: language === 'ar' ? 'تكبير الشجرة' : 'Zoom in' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: language === 'ar' ? 'تصغير' : 'Zoom out' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: language === 'ar' ? 'تكبير' : 'Zoom in' })).toBeTruthy();
     expect(document.querySelector('[dir]')?.getAttribute('dir')).toBe(language === 'ar' ? 'rtl' : 'ltr');
     const hrefs = screen.getAllByRole('link').map(link => link.getAttribute('href')!);
     expect(hrefs).toContain('/quran/branches');
@@ -54,11 +55,11 @@ describe('Quran learning homepage', () => {
     const fetchTree = vi.fn(async () => ({ ok: true, json: async () => next.branches }));
     vi.stubGlobal('fetch', fetchTree);
     render(<Homepage data={data} />);
-    const all = screen.getByRole('link', { name: 'All phrase trees' });
+    const all = screen.getByRole('link', { name: 'Browse all' });
     const example = screen.getByRole('region', { name: 'Interactive Quran phrase tree example' });
     expect(all.compareDocumentPosition(example) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: 'Random tree' }));
-    expect(screen.getByRole('button', { name: 'Random tree' })).toHaveProperty('disabled', true);
+    fireEvent.click(screen.getByRole('button', { name: 'Random' }));
+    expect(screen.getByRole('button', { name: 'Random' })).toHaveProperty('disabled', true);
     expect(screen.getByText('Loading').closest('[role="status"]')).toBeTruthy();
     expect(await screen.findByRole('button', { name: `Show path: ${next.branches.tree.words.join(' ')}` })).toBeTruthy();
     expect(fetchTree).toHaveBeenCalledWith(`/api/quran/random-tree?${new URLSearchParams({ exclude: data.branches.id })}`, { cache: 'no-store' });
@@ -69,11 +70,38 @@ describe('Quran learning homepage', () => {
     const fetchTree = vi.fn().mockRejectedValueOnce(new Error('Network')).mockResolvedValueOnce({ ok: true, json: async () => data.branches });
     vi.stubGlobal('fetch', fetchTree);
     render(<Homepage data={data} />);
-    fireEvent.click(screen.getByRole('button', { name: 'Random tree' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Random' }));
     expect(await screen.findByRole('alert')).toHaveProperty('textContent', 'Could not load a tree. Try again.');
     expect(screen.getByRole('button', { name: `Show path: ${data.branches.tree.words.join(' ')}` })).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: 'Random tree' }));
-    expect(await screen.findByRole('button', { name: 'Random tree' })).toHaveProperty('disabled', false);
+    fireEvent.click(screen.getByRole('button', { name: 'Random' }));
+    expect(await screen.findByRole('button', { name: 'Random' })).toHaveProperty('disabled', false);
     expect(screen.queryByRole('alert')).toBeNull();
+  });
+  it('cleans up the old intro and animates the replacement random tree', async () => {
+    state.language = 'en';
+    localStorage.removeItem(SEEN);
+    const animate = vi.fn(() => ({ cancel: vi.fn(), finished: Promise.resolve() }) as unknown as Animation);
+    const original = Element.prototype.animate;
+    Element.prototype.animate = animate;
+    try {
+      const data = await getHomePreviews();
+      const next = await getHomePreviews(data.branches.id, () => 0);
+      vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, json: async () => next.branches })));
+      render(<Homepage data={data} />);
+      const oldContent = document.querySelector<HTMLElement>('[data-tree-content]')!;
+      expect(oldContent.inert).toBe(true);
+      fireEvent.click(screen.getByRole('button', { name: 'Random' }));
+      await screen.findByRole('button', { name: `Show path: ${next.branches.tree.words.join(' ')}` });
+      const newContent = document.querySelector<HTMLElement>('[data-tree-content]')!;
+      expect(newContent).not.toBe(oldContent);
+      expect(oldContent.inert).not.toBe(true);
+      expect(newContent.inert).toBe(true);
+      fireEvent.click(screen.getByRole('button', { name: 'Skip' }));
+      expect(newContent.inert).not.toBe(true);
+    } finally {
+      cleanup();
+      Element.prototype.animate = original;
+      localStorage.removeItem(SEEN);
+    }
   });
 });

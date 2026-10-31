@@ -1,7 +1,16 @@
 .page { font-family: var(--font-home-serif), var(--font-amiri), Georgia, serif; }
 .page[dir='rtl'] { font-family: var(--font-amiri), Georgia, serif; }
-.launchActions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }
-.launchTree { position: relative; min-width: 0; }
+.launch { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-areas: 'title' 'tree' 'text'; gap: 1rem; }
+.launchTitle { grid-area: title; font-size: 1.5rem; line-height: 1.5; color: var(--home-accent); }
+.launchText { grid-area: text; }
+.launchText p { color: var(--home-muted); font-size: 1.125rem; line-height: 1.7; }
+.launchActions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; }
+.launchTree { grid-area: tree; position: relative; min-width: 0; }
+.launchTree [data-tree-frame] { margin-top: 0; }
+@media (min-width: 1024px) {
+  .launch { grid-template-columns: 18rem minmax(0, 1fr); grid-template-rows: auto 1fr; grid-template-areas: 'title tree' 'text tree'; column-gap: 2rem; row-gap: 0.5rem; }
+  .launchTitle { font-size: 1.875rem; }
+}
 .learningSteps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; list-style: none; padding: 0; }
 .learningSteps li { display: flex; flex-direction: column; align-items: start; border: 1px solid var(--home-rule); border-radius: 2px; padding: 1.5rem; }
 .learningSteps li > svg { color: var(--home-accent); }
@@ -80,3 +89,8 @@
   .choices { grid-template-columns: 1fr; }
 }
 
+.tapMarker { position: absolute; top: 0; left: 0; z-index: 20; width: 2.5rem; height: 2.5rem; margin: -1.25rem 0 0 -1.25rem; border: 2px solid var(--home-accent); border-radius: 9999px; background: color-mix(in srgb, var(--home-accent) 18%, transparent); opacity: 0; pointer-events: none; }
+.skipIntro { position: absolute; top: 1.25rem; left: 50%; transform: translateX(-50%); z-index: 20; }
+.typing { border-bottom: 1px dashed var(--home-accent); }
+.introBubble { position: absolute; top: 0; left: 0; z-index: 20; padding: 0.25rem 0.75rem; border: 1px solid var(--home-accent); border-radius: 2px; background: var(--home-paper-deep); color: var(--home-ink); font-size: 0.875rem; white-space: nowrap; opacity: 0; pointer-events: none; }
+.introBubble::after { content: ''; position: absolute; top: 0; left: var(--tail, 50%); width: 0.5rem; height: 0.5rem; margin: -0.25rem 0 0 -0.25rem; border: solid var(--home-accent); border-width: 1px 0 0 1px; background: var(--home-paper-deep); transform: rotate(45deg); }
