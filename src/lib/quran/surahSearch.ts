@@ -35,6 +35,7 @@ const keysOf = (name: string) => {
  */
 export function surahRank(surah: SearchableSurah, query: string): number | null {
   const trimmed = westernDigits(query.trim());
+  if (!trimmed) return 0;
   if (/^\d+$/.test(trimmed)) return String(surah.number) === trimmed ? 0 : String(surah.number).startsWith(trimmed) ? 1 : null;
   if (/[؀-ۿ]/.test(trimmed)) {
     const wanted = compactQuery(trimmed).map(value => value.replace(SURAH, ''));
@@ -48,12 +49,12 @@ export function surahRank(surah: SearchableSurah, query: string): number | null 
     return best;
   }
   const latin = latinKey(trimmed);
-  if (!latin) return 0;
+  if (!latin) return null;
   const name = latinKey(surah.nameTransliterated ?? '');
   if (!name) return null;
   const bare = (value: string) => value.replace(/^al/, '');
   if (bare(name) === bare(latin)) return 0;
-  if (name.startsWith(latin) || bare(name).startsWith(bare(latin))) return 1;
+  if (name.startsWith(latin) || (bare(latin) && bare(name).startsWith(bare(latin)))) return 1;
   if (name.includes(latin)) return 2;
   return skeleton(latin).length >= 3 && skeleton(name).includes(skeleton(latin)) ? 3 : null;
 }

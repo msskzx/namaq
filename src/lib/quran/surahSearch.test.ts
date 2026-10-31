@@ -54,6 +54,13 @@ describe('surahSearch', () => {
     expect(searchSurahs(latin, 'baqarah').map(s => s.number)).toEqual([2]);
     expect(searchSurahs(latin, 'imran').map(s => s.number)).toEqual([3]);
     expect(matchesSurah(latin[0], 'nisa')).toBe(false);
+    const yasin = [...latin, { number: 36, name: 'يس', nameTransliterated: 'Yaseen' }];
+    expect(searchSurahs(yasin, 'al').map(s => s.number)).toEqual([2, 3]);
+    expect(searchSurahs(yasin, 'Al-').map(s => s.number)).toEqual([2, 3]);
+  });
+
+  it('matches nothing for digits with punctuation, as typed on the way to 2:255', () => {
+    for (const query of ['2:', '114.', '1-5']) expect(searchSurahs(surahs, query), query).toEqual([]);
   });
 
   it('reads stored names that carry the word surah or a tatweel', () => {
