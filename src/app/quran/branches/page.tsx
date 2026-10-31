@@ -95,6 +95,9 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const presentation = treeGroup ? phrasePresentation(treeGroup, built.ayat, true, !range) : undefined;
   const tree = presentation?.tree ?? null;
   const subtreeLinks = tree ? Object.fromEntries(Object.entries(phraseSubtreeTargets(tree, built.phrases ??= buildPhraseGroups(built.ayat), built.ayat)).map(([node, target]) => [node, branchesHref(target.id, juz, { occurrences: target.occurrences.map(occurrence => `${occurrence.key}:${occurrence.start}`) })])) : undefined;
+  const position = tree ? built.trees.findIndex(candidate => candidate.id === id) : -1;
+  const stepTo = (index: number) => built.trees[index] && branchesHref(built.trees[index].id, juz, { context: state.context });
+  const steps = position < 0 ? undefined : { previous: stepTo(position - 1), next: stepTo(position + 1), position: position + 1, total: built.trees.length };
   const around = tree && state.context ? surrounding(await loadReaderAyat(), keys(tree), [...new Set(Object.values(ayahEnds(tree)))]) : undefined;
   const exact: Opening[] = needle ? built.trees.filter(candidate => [candidate.id, candidate.text, candidate.textEn ?? ''].some(text => searchKey(text) === needle)).map(candidate => ({ id: candidate.id, text: candidate.text, textEn: candidate.textEn, count: new Set(candidate.occurrences.map(occurrence => occurrence.key)).size })) : [];
   const { page, pageCount } = listPage(first(params.p), id ? Number.MAX_SAFE_INTEGER : cut.length, PER_PAGE);
@@ -125,7 +128,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
             <Pagination iconFamily="lucide" scrollTarget="quran-branches" page={page} pageCount={pageCount} hrefs={Array.from({ length: pageCount }, (_, index) => branchesHref('', juz, { query, surah, page: index + 1 }))} />
           </> : <>
             <JuzFilter range={range} phrase={id} view={state} />
-            {tree && <BranchTree key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}:${state.context}`} tree={tree} prefixes={presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} names={names} juz={range} view={state} surround={{ on: !!state.context, sync: true, data: around }} label="شجرة العبارات المشتركة" />}
+            {tree && <BranchTree key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}:${state.context}`} tree={tree} prefixes={presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} names={names} juz={range} view={state} surround={{ on: !!state.context, sync: true, data: around }} steps={steps} label="شجرة العبارات المشتركة" />}
           </>}
         </CompareLayout>
       </Scope>

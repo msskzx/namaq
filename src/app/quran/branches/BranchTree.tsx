@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
-import { Maximize2, Minus, Plus, RotateCw, ZoomIn } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Maximize2, Minus, Plus, RotateCw, ZoomIn } from 'lucide-react';
 import Button from '@/components/common/Button';
 import MushafText from '@/components/common/MushafText';
 import { useLanguage } from '@/components/language/LanguageContext';
@@ -13,8 +13,9 @@ import { Fan, PathBox, PathButton, PathProvider, Stub, useOuterPaths, usePaths, 
 import type { Surrounding } from '@/lib/quran/ayahContext';
 import { anchorOf, NeighbourBox, SurroundToggle, targetStyle, useSurrounding, type Around } from './Surroundings';
 
-type Props = { prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; viewportHeight?: string; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
-type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header' | 'surround'> & { around?: Around; anchors?: string; node: Branch; parent?: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
+type Props = { prefixes?: Variant[]; offsets?: Record<string, number>; subtreeLinks?: Record<string, string>; view?: BranchesView; tree: Branch; names: Record<number, string>; variants?: Variant[]; showSpellings?: boolean; zoomable?: boolean; viewportHeight?: string; juz?: JuzRange | null; renderNode?: (node: Branch, index: number, tags: Record<string, Variant>) => React.ReactNode; label?: string; header?: React.ReactNode; steps?: Steps; surround?: { on: boolean; sync?: boolean; data?: Surrounding } };
+type Steps = { previous?: string; next?: string; position: number; total: number };
+type NodeProps = Omit<Props, 'tree' | 'variants' | 'juz' | 'header' | 'steps' | 'surround'> & { around?: Around; anchors?: string; node: Branch; parent?: Branch; path: string[]; tags: Record<string, Variant>; lead: number; juz?: JuzRange; indices: Map<Branch, number> };
 
 // Every tree node has the same thin border; only a pinned path is coloured.
 const LINE = 'border-[var(--home-rule)]';
@@ -114,6 +115,7 @@ function BeforeFan({ ayahKeys, around, opens }: { ayahKeys: string[]; around?: A
 const MIN_SCALE = 0.1;
 const MAX_SCALE = 2;
 const SCALE_STEP = 0.1;
+const SWIPE = 60;
 
 type DiagramSize = { width: number; height: number; availableWidth: number; availableHeight: number };
 
@@ -121,7 +123,21 @@ function fitTreeScale({ width, height, availableWidth, availableHeight }: Diagra
   return Math.min(MAX_SCALE, availableWidth / width, availableHeight / height);
 }
 
-function TreeViewport({ children, controls, enabled, ar, height }: { children: React.ReactNode; controls?: React.ReactNode; enabled: boolean; ar: boolean; height?: string }) {
+function TreeSteps({ steps, ar }: { steps: Steps; ar: boolean }) {
+  const Back = ar ? ArrowRight : ArrowLeft;
+  const Forward = ar ? ArrowLeft : ArrowRight;
+  const labels = ar ? { previous: 'الشجرة السابقة', next: 'الشجرة التالية' } : { previous: 'Previous tree', next: 'Next tree' };
+  const step = (href?: string) => href ? { href } : { disabled: true };
+  return (
+    <nav aria-label={ar ? 'التنقل بين الأشجار' : 'Tree navigation'} className="flex items-center gap-2">
+      <Button size="sm" data-step="previous" {...step(steps.previous)}><Back className="size-3" aria-hidden />{labels.previous}</Button>
+      <span className="text-sm tabular-nums text-[var(--home-muted)]">{ar ? `${num(steps.position)} من ${num(steps.total)}` : `${steps.position} of ${steps.total}`}</span>
+      <Button size="sm" data-step="next" {...step(steps.next)}>{labels.next}<Forward className="size-3" aria-hidden /></Button>
+    </nav>
+  );
+}
+
+function TreeViewport({ children, controls, enabled, ar, height, onStep }: { children: React.ReactNode; controls?: React.ReactNode; enabled: boolean; ar: boolean; height?: string; onStep?: (forward: boolean) => void }) {
   const viewport = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState<DiagramSize | null>(null);
@@ -163,6 +179,8 @@ function TreeViewport({ children, controls, enabled, ar, height }: { children: R
   // The point between the fingers stays put while the tree grows around it.
   const scaleRef = useRef(scale);
   scaleRef.current = scale;
+  const stepRef = useRef<((forward: boolean) => void) | undefined>(undefined);
+  stepRef.current = manualScale === null ? onStep : undefined;
   const anchor = useRef<{ x: number; y: number; fx: number; fy: number } | null>(null);
   useEffect(() => {
     const outer = viewport.current;
@@ -193,6 +211,24 @@ function TreeViewport({ children, controls, enabled, ar, height }: { children: R
       const now = fingers(event);
       if (pinch.distance) zoomAt(pinch.scale * now.distance / pinch.distance, now.x, now.y);
     };
+    let swipe: { x: number; y: number } | null = null;
+    const onSwipeStart = (event: TouchEvent) => {
+      swipe = event.touches.length === 1 ? { x: event.touches[0].clientX, y: event.touches[0].clientY } : null;
+    };
+    const onSwipeEnd = (event: TouchEvent) => {
+      const end = event.changedTouches[0];
+      if (!swipe || event.touches.length || !end) return;
+      const dx = end.clientX - swipe.x;
+      const dy = end.clientY - swipe.y;
+      swipe = null;
+      if (Math.abs(dx) >= SWIPE && Math.abs(dx) > 2 * Math.abs(dy)) stepRef.current?.(ar ? dx > 0 : dx < 0);
+    };
+    const onKey = (event: KeyboardEvent) => {
+      if (event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return;
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      if (event.target instanceof HTMLElement && event.target.closest('input, textarea, select, [contenteditable]')) return;
+      stepRef.current?.((event.key === 'ArrowLeft') === ar);
+    };
     let gesture = 1;
     const onGestureStart = (event: Event) => { event.preventDefault(); gesture = scaleRef.current; };
     const onGestureChange = (event: Event) => {
@@ -206,18 +242,24 @@ function TreeViewport({ children, controls, enabled, ar, height }: { children: R
     outer.addEventListener('touchmove', onTouchMove, { passive: false });
     outer.addEventListener('touchend', onTouches);
     outer.addEventListener('touchcancel', onTouches);
+    outer.addEventListener('touchstart', onSwipeStart, { passive: true });
+    outer.addEventListener('touchend', onSwipeEnd);
     outer.addEventListener('gesturestart', onGestureStart);
     outer.addEventListener('gesturechange', onGestureChange);
+    window.addEventListener('keydown', onKey);
     return () => {
+      window.removeEventListener('keydown', onKey);
       outer.removeEventListener('wheel', onWheel);
       outer.removeEventListener('touchstart', onTouches);
       outer.removeEventListener('touchmove', onTouchMove);
       outer.removeEventListener('touchend', onTouches);
       outer.removeEventListener('touchcancel', onTouches);
+      outer.removeEventListener('touchstart', onSwipeStart);
+      outer.removeEventListener('touchend', onSwipeEnd);
       outer.removeEventListener('gesturestart', onGestureStart);
       outer.removeEventListener('gesturechange', onGestureChange);
     };
-  }, [enabled]);
+  }, [enabled, ar]);
   useLayoutEffect(() => {
     const outer = viewport.current;
     const point = anchor.current;
@@ -264,8 +306,9 @@ function TreeViewport({ children, controls, enabled, ar, height }: { children: R
 }
 
 // docs/plans/quran-shared-openings.md
-export default function BranchTree({ tree, names, variants = [], prefixes, subtreeLinks, showSpellings = true, zoomable = true, viewportHeight = 'clamp(22rem, 70svh, 36rem)', juz = null, renderNode, label = 'شجرة العبارات المشتركة', header, view: given, surround }: Props) {
+export default function BranchTree({ tree, names, variants = [], prefixes, subtreeLinks, showSpellings = true, zoomable = true, viewportHeight = 'clamp(22rem, 70svh, 36rem)', juz = null, renderNode, label = 'شجرة العبارات المشتركة', header, steps, view: given, surround }: Props) {
   const id = useId();
+  const region = useRef<HTMLDivElement>(null);
   const ar = useLanguage().language === 'ar';
   const [on, setOn] = useState(() => (surround?.sync && typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('c') === '1' : surround?.on ?? false));
   const view = surround?.sync && given ? { ...given, context: on } : given;
@@ -296,20 +339,22 @@ export default function BranchTree({ tree, names, variants = [], prefixes, subtr
   visit(tree);
   const tags = Object.fromEntries(variants.flatMap(variant => variant.keys.map(key => [key, variant])));
   const rootId = nodeId(-1);
-  const controls = (header || surround) ? <>
+  const step = (forward: boolean) => region.current?.querySelector<HTMLAnchorElement>(`a[data-step="${forward ? 'next' : 'previous'}"]`)?.click();
+  const controls = (header || steps || surround) ? <>
     {header}
+    {steps && <TreeSteps steps={steps} ar={ar} />}
     {surround && <SurroundToggle on={on} onChange={setOn} sync={surround.sync} loading={isLoading} failed={!!error} />}
   </> : undefined;
   return (
     <PathProvider value={paths}>
-      <div tabIndex={0} role="region" aria-label={label} data-tree={id} className={`${zoomable ? 'overflow-hidden' : 'overflow-auto'} rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] p-4 text-[var(--home-ink)]`}>
+      <div ref={region} tabIndex={0} role="region" aria-label={label} data-tree={id} className={`${zoomable ? 'overflow-hidden' : 'overflow-auto'} rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] p-4 text-[var(--home-ink)]`}>
         {around && <style>{targetStyle(id)}</style>}
         {mandatory.isLoading && <p role="status" className="text-sm text-[var(--home-muted)]">{ar ? 'جارٍ تحميل الآيات السابقة' : 'Loading preceding ayat'}</p>}
         {mandatory.error && <div role="alert" className="flex items-center gap-2 text-sm text-[var(--home-accent)]">
           <span>{ar ? 'تعذّر تحميل الآيات السابقة.' : 'Could not load the preceding ayat.'}</span>
           <Button size="sm" onClick={() => void mandatory.mutate()}><RotateCw size={16} aria-hidden />{ar ? 'حاول مجددًا' : 'Try again'}</Button>
         </div>}
-        <TreeViewport controls={controls} enabled={zoomable} ar={ar} height={viewportHeight}>
+        <TreeViewport controls={controls} enabled={zoomable} ar={ar} height={viewportHeight} onStep={steps ? step : undefined}>
           {prefixes && prefixes.length > 0 ? <>
             <Fan side="end" label={ar ? 'ما قبل العبارة' : 'Before the phrase'} entries={prefixes.flatMap((prefix, i): FanEntry[] => prefix.word ? [{ key: `${prefix.word}:${i}`, keys: prefix.keys, item: <>
               <BeforeFan ayahKeys={prefix.keys} around={around} opens={`p${i}`} />

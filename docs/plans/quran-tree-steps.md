@@ -1,0 +1,47 @@
+# Moving between trees on /quran/branches
+
+An open tree has no way to reach the next one except going back to the list.
+This adds previous and next steps through the trees, in the order the list shows
+them.
+
+## Scope
+
+- The steps walk `built.trees` for the current juz filter, the list the page
+  shows when no search or surah is picked. An open tree's URL already drops the
+  search and the surah, so there is no narrower list to walk.
+- A tree reached through a subtree link, which is not in that list, gets no
+  steps. A tree scoped to some occurrences (`at=`) steps to whole trees.
+- The surroundings setting (`c=1`) carries over to the next tree.
+- Quizzes get no steps.
+
+## Behaviour
+
+- The tree heading shows previous and next buttons with the position, e.g.
+  `٣ من ١٢٠` / `3 of 120`. The first tree has no previous, the last no next.
+  Arrows follow writing direction, as in `Pagination.tsx`.
+- The left and right arrow keys step while the tree is fitted. In Arabic the
+  left arrow is next. Keys typed into a field do nothing, and keys with a
+  modifier do nothing.
+- A horizontal one-finger swipe on the tree steps while the tree is fitted,
+  the way Photos only turns the page at fit zoom. In Arabic a swipe to the
+  right is next. Once zoomed in, arrows and swipes pan instead.
+- The buttons are links, so the next and previous trees are prefetched.
+
+## Paths
+
+- `src/app/quran/branches/page.tsx`: work out the neighbours and pass them on.
+- `src/app/quran/branches/BranchTree.tsx`: a `steps` prop, the buttons, and
+  the keys and swipe in `TreeViewport`.
+
+## Acceptance
+
+- Previous and next link to the neighbouring trees, keeping the juz range and
+  `c=1`.
+- The first and last tree disable the missing step.
+- Arrow keys and a horizontal swipe step at fit zoom, mirrored in Arabic, and do
+  nothing when zoomed in, inside a field, or for a mostly vertical swipe.
+- Trees without steps (quizzes, subtree trees) show no step buttons.
+
+## Validation
+
+`npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`.

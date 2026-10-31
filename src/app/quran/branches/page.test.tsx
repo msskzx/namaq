@@ -5,7 +5,11 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import QuranBranchesPage from './page';
 import { Children, isValidElement, type ReactNode } from 'react';
 import CompareLayout from '../compare/CompareLayout';
-import { branchesHref } from '@/lib/quran/branches';
+import { branchesHref, type BranchAyah } from '@/lib/quran/branches';
+import { buildTreeGroups } from '@/lib/quran/phraseTrees';
+import { inJuzRange } from '@/lib/quran/juz';
+import { num } from '@/lib/quran/arabicNumber';
+import data from './trees.json';
 
 const params = new URLSearchParams();
 vi.mock('next/navigation', () => ({
@@ -83,5 +87,22 @@ describe('Quran branch trees', () => {
     expect(screen.queryByText('أول الآية')).toBeNull();
     expect(screen.queryByText('داخل الآية')).toBeNull();
     expect(within(screen.getByRole('list', { name: 'المتشابهات' })).getAllByRole('region', { name: 'شجرة العبارات المشتركة' })).toHaveLength(10);
+  });
+
+  it('steps to the neighbouring trees in list order, keeping the juz range and surroundings', async () => {
+    const trees = buildTreeGroups((data.ayat as BranchAyah[]).filter(ayah => inJuzRange(ayah.key, { from: 30, to: 30 })));
+    const juz = { from: 30, to: 30 };
+    render(await open({ o: trees[1].id, juzFrom: '30', juzTo: '30', c: '1' }));
+    const steps = screen.getByRole('navigation', { name: 'التنقل بين الأشجار' });
+    expect(within(steps).getByRole('link', { name: 'الشجرة السابقة' }).getAttribute('href')).toBe(branchesHref(trees[0].id, juz, { context: true }));
+    expect(within(steps).getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')).toBe(branchesHref(trees[2].id, juz, { context: true }));
+    expect(steps.textContent).toContain(`${num(2)} من ${num(trees.length)}`);
+  });
+
+  it('disables the previous step on the first tree', async () => {
+    render(await open({ o: data.trees[0].id }));
+    const steps = screen.getByRole('navigation', { name: 'التنقل بين الأشجار' });
+    expect(within(steps).getByRole('button', { name: 'الشجرة السابقة' }).hasAttribute('disabled')).toBe(true);
+    expect(within(steps).getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')).toBe(branchesHref(data.trees[1].id));
   });
 });
