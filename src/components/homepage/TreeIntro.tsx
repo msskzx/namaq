@@ -6,8 +6,8 @@ import Button from '../common/Button';
 import styles from './Home.module.css';
 
 export const SEEN = 'home-tree-intro-seen';
-const STEP = 400;
-const HOLD = 700;
+const STEP = 300;
+const HOLD = 600;
 
 function shouldPlay() {
   try {
@@ -48,7 +48,7 @@ async function play(root: HTMLElement, marker: HTMLElement, signal: AbortSignal,
   const deepest = (key: string) => boxes.filter(box => box.dataset.keys?.split(' ').includes(key)).at(-1)!;
   const leaves = [...new Set(boxes.flatMap(box => box.dataset.keys?.split(' ') ?? []))].map(key => ({ key, leaf: deepest(key) })).sort((a, b) => a.leaf.getBoundingClientRect().top - b.leaf.getBoundingClientRect().top);
   const shown = new Set<Element>();
-  for (const { key, leaf } of leaves) {
+  for (const { key } of leaves) {
     const path = pieces.filter(piece => !shown.has(piece) && (!own(piece) || own(piece)!.dataset.keys?.split(' ').includes(key))).sort((a, b) => right(b) - right(a));
     if (path.length === 0) continue;
     for (const piece of path) {
@@ -57,6 +57,10 @@ async function play(root: HTMLElement, marker: HTMLElement, signal: AbortSignal,
       await run(piece, [{ opacity: 0 }, { opacity: 1 }], { duration: STEP });
       signal.throwIfAborted();
     }
+    await wait(250);
+  }
+  pieces.forEach(piece => { piece.style.opacity = ''; });
+  for (const { leaf } of leaves) {
     const light = leaf.querySelector<HTMLButtonElement>('button[aria-pressed]');
     if (!light) continue;
     light.click();
@@ -65,7 +69,6 @@ async function play(root: HTMLElement, marker: HTMLElement, signal: AbortSignal,
     light.click();
     await wait(200);
   }
-  pieces.forEach(piece => { piece.style.opacity = ''; });
   await wait(400);
 
   const open = content.querySelector<HTMLElement>('[data-node="n-1"] [data-context-open]') ?? content.querySelector<HTMLElement>('[data-context-open]');
@@ -83,7 +86,7 @@ async function play(root: HTMLElement, marker: HTMLElement, signal: AbortSignal,
     signal.throwIfAborted();
     undo.push(() => document.querySelectorAll<HTMLDialogElement>('dialog[open]').forEach(dialog => dialog.close()));
     open.click();
-    await wait(2800);
+    await wait(2400);
     document.querySelectorAll<HTMLDialogElement>('dialog[open]').forEach(dialog => dialog.close());
     await wait(700);
   }

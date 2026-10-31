@@ -41,18 +41,19 @@ beforeEach(() => {
 });
 afterEach(() => { cleanup(); vi.useRealTimers(); });
 
-it('plays once on a first visit: grows the tree path by path, opens the root, retypes a leaf, then remembers', async () => {
+it('plays once on a first visit: draws every path, then lights each one, opens the root, retypes a leaf, then remembers', async () => {
   render(<Tree />);
   expect(skip()).toBeTruthy();
   const branch = (node: string) => document.querySelector<HTMLElement>(`[data-node="${node}"]`)!.closest('li')!.style.opacity;
   await advance(100);
   expect([branch('n0'), branch('n1')]).toEqual(['', '0']);
-  expect(lit).toHaveBeenCalledOnce();
-  await advance(1000);
+  expect(lit).not.toHaveBeenCalled();
+  await advance(500);
   expect([branch('n0'), branch('n1')]).toEqual(['', '']);
-  expect(lit).toHaveBeenCalledTimes(3);
+  expect(lit).toHaveBeenCalledOnce();
   expect(opened).not.toHaveBeenCalled();
-  await advance(1300);
+  await advance(2300);
+  expect(lit).toHaveBeenCalledTimes(4);
   expect(opened).toHaveBeenCalledOnce();
   await advance(4400);
   expect(leaf().style.visibility).toBe('hidden');
@@ -79,12 +80,12 @@ it('skip restores the tree mid-play and stops the remaining scenes', async () =>
   expect(typed()).toBeUndefined();
 });
 
-it('skip during the growth shows the whole tree, unlights the path and never opens the overlay', async () => {
+it('skip during the growth shows the whole tree and never opens the overlay', async () => {
   render(<Tree />);
   await advance(100);
   fireEvent.click(skip()!);
   expect(document.querySelectorAll('[data-tree-content] [style*="opacity"]')).toHaveLength(0);
-  expect(lit).toHaveBeenCalledTimes(2);
+  expect(lit).not.toHaveBeenCalled();
   await advance(14000);
   expect(opened).not.toHaveBeenCalled();
 });
@@ -106,4 +107,13 @@ it('replays with ?intro=1', () => {
   window.history.replaceState(null, '', '/?intro=1');
   render(<Tree />);
   expect(skip()).toBeTruthy();
+});
+
+it('skip while a path is lit turns the light off', async () => {
+  render(<Tree />);
+  await advance(600);
+  expect(lit).toHaveBeenCalledOnce();
+  fireEvent.click(skip()!);
+  expect(lit).toHaveBeenCalledTimes(2);
+  expect(document.querySelectorAll('[aria-pressed="true"]')).toHaveLength(0);
 });
