@@ -148,8 +148,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
             {(!needle || cut.length > 0) && <PieceList pieces={shown} ayat={shownAyat} names={names} juz={range} view={state} />}
             <Pagination iconOnly iconFamily="lucide" scrollTarget="quran-branches" page={page} pageCount={pageCount} hrefs={Array.from({ length: pageCount }, (_, index) => branchesHref('', juz, { query, surah, mode: 'list', page: index + 1 }))} />
           </> : cards ? <AyahCards key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} ayahKeys={drawn.map(ayah => ayah.key)} names={names} steps={steps} /> : <>
-            {steps && <TreeSteps steps={steps} />}
-            {tree && <BranchTree key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}:${state.context}`} tree={tree} prefixes={presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} names={names} juz={range} view={treeView} surround={{ on: !!state.context, sync: true, data: around }} steppable={!!steps} label="شجرة العبارات المشتركة" />}
+            {tree && <BranchTree key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}:${state.context}`} tree={tree} prefixes={presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} names={names} juz={range} view={treeView} header={steps && <TreeSteps steps={steps} />} surround={{ on: !!state.context, sync: true, data: around }} steppable={!!steps} label="شجرة العبارات المشتركة" />}
           </>}
         </CompareLayout>
       </Scope>
