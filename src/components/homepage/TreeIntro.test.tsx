@@ -6,12 +6,19 @@ import TreeIntro, { SEEN } from './TreeIntro';
 const opened = vi.fn();
 let reduced = false;
 
+const lit = vi.fn();
+const PathToggle = () => <button aria-pressed="false" onClick={event => { lit(); event.currentTarget.setAttribute('aria-pressed', String(event.currentTarget.getAttribute('aria-pressed') !== 'true')); }}>path</button>;
+
 function Tree() {
   const root = useRef<HTMLDivElement>(null);
   return <div ref={root}>
     <div data-tree-content>
-      <div data-node="n-1"><button data-context-open onClick={opened}>open</button></div>
-      <div data-node="n0"><span className="font-quran">جنات</span></div>
+      <div data-node="n-1" data-keys="1:1 1:2"><button data-context-open onClick={opened}>open</button></div>
+      <span data-line />
+      <ul>
+        <li><div data-node="n0" data-keys="1:1"><PathToggle /><span className="font-quran">جنات</span></div></li>
+        <li><div data-node="n1" data-keys="1:2"><PathToggle /><span className="font-quran">عيون</span></div></li>
+      </ul>
     </div>
     <TreeIntro target={root} ar />
   </div>;
@@ -28,16 +35,24 @@ beforeEach(() => {
   localStorage.clear();
   window.history.replaceState(null, '', '/');
   opened.mockClear();
+  lit.mockClear();
   Element.prototype.animate = vi.fn(() => ({ cancel: vi.fn(), finished: Promise.resolve() }) as unknown as Animation);
   window.matchMedia = vi.fn(() => ({ matches: reduced }) as MediaQueryList);
 });
 afterEach(() => { cleanup(); vi.useRealTimers(); });
 
-it('plays once on a first visit: grows the tree, opens an inner node, retypes a leaf, then remembers', async () => {
+it('plays once on a first visit: grows the tree path by path, opens the root, retypes a leaf, then remembers', async () => {
   render(<Tree />);
   expect(skip()).toBeTruthy();
-  await advance(3400);
-  expect(Element.prototype.animate).toHaveBeenCalled();
+  const branch = (node: string) => document.querySelector<HTMLElement>(`[data-node="${node}"]`)!.closest('li')!.style.opacity;
+  await advance(100);
+  expect([branch('n0'), branch('n1')]).toEqual(['', '0']);
+  expect(lit).toHaveBeenCalledOnce();
+  await advance(1000);
+  expect([branch('n0'), branch('n1')]).toEqual(['', '']);
+  expect(lit).toHaveBeenCalledTimes(3);
+  expect(opened).not.toHaveBeenCalled();
+  await advance(1300);
   expect(opened).toHaveBeenCalledOnce();
   await advance(4400);
   expect(leaf().style.visibility).toBe('hidden');
@@ -53,7 +68,7 @@ it('plays once on a first visit: grows the tree, opens an inner node, retypes a 
 
 it('skip restores the tree mid-play and stops the remaining scenes', async () => {
   render(<Tree />);
-  await advance(8200);
+  await advance(7000);
   expect(leaf().style.visibility).toBe('hidden');
   fireEvent.click(skip()!);
   expect(skip()).toBeNull();
@@ -64,10 +79,12 @@ it('skip restores the tree mid-play and stops the remaining scenes', async () =>
   expect(typed()).toBeUndefined();
 });
 
-it('skip during the growth never opens the overlay', async () => {
+it('skip during the growth shows the whole tree, unlights the path and never opens the overlay', async () => {
   render(<Tree />);
-  await advance(500);
+  await advance(100);
   fireEvent.click(skip()!);
+  expect(document.querySelectorAll('[data-tree-content] [style*="opacity"]')).toHaveLength(0);
+  expect(lit).toHaveBeenCalledTimes(2);
   await advance(14000);
   expect(opened).not.toHaveBeenCalled();
 });

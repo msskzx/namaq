@@ -6,7 +6,8 @@ import Button from '../common/Button';
 import styles from './Home.module.css';
 
 export const SEEN = 'home-tree-intro-seen';
-const GROW = 2800;
+const STEP = 400;
+const HOLD = 700;
 
 function shouldPlay() {
   try {
@@ -35,14 +36,37 @@ async function play(root: HTMLElement, marker: HTMLElement, signal: AbortSignal,
   content.style.pointerEvents = 'none';
   undo.push(() => { content.style.pointerEvents = pointer; });
 
-  const bounds = content.getBoundingClientRect();
   const boxes = [...content.querySelectorAll<HTMLElement>('[data-node]')];
-  run(content, [{ clipPath: 'inset(0 0 0 100%)' }, { clipPath: 'inset(0 0 0 0)' }], { duration: GROW });
-  boxes.forEach(box => run(box, [{ opacity: 0, transform: 'scale(0.92)' }, { opacity: 1, transform: 'none' }], {
-    duration: 600,
-    delay: ((bounds.right - box.getBoundingClientRect().right) / (bounds.width || 1)) * (GROW - 600),
-  }));
-  await wait(GROW + 600);
+  const right = (element: Element) => element.getBoundingClientRect().right;
+  const own = (piece: HTMLElement) => piece.matches('[data-node]') ? piece : piece.querySelector<HTMLElement>('[data-node]');
+  const pieces = [...content.querySelectorAll<HTMLElement>('li, [data-node="n-1"], [data-line]')].filter(piece => piece.matches('li, [data-node]') || !piece.closest('li'));
+  pieces.forEach(piece => {
+    const opacity = piece.style.opacity;
+    piece.style.opacity = '0';
+    undo.push(() => { piece.style.opacity = opacity; });
+  });
+  const deepest = (key: string) => boxes.filter(box => box.dataset.keys?.split(' ').includes(key)).at(-1)!;
+  const leaves = [...new Set(boxes.flatMap(box => box.dataset.keys?.split(' ') ?? []))].map(key => ({ key, leaf: deepest(key) })).sort((a, b) => a.leaf.getBoundingClientRect().top - b.leaf.getBoundingClientRect().top);
+  const shown = new Set<Element>();
+  for (const { key, leaf } of leaves) {
+    const path = pieces.filter(piece => !shown.has(piece) && (!own(piece) || own(piece)!.dataset.keys?.split(' ').includes(key))).sort((a, b) => right(b) - right(a));
+    if (path.length === 0) continue;
+    for (const piece of path) {
+      shown.add(piece);
+      piece.style.opacity = '';
+      await run(piece, [{ opacity: 0 }, { opacity: 1 }], { duration: STEP });
+      signal.throwIfAborted();
+    }
+    const light = leaf.querySelector<HTMLButtonElement>('button[aria-pressed]');
+    if (!light) continue;
+    light.click();
+    undo.push(() => { if (light.getAttribute('aria-pressed') === 'true') light.click(); });
+    await wait(HOLD);
+    light.click();
+    await wait(200);
+  }
+  pieces.forEach(piece => { piece.style.opacity = ''; });
+  await wait(400);
 
   const open = content.querySelector<HTMLElement>('[data-node="n-1"] [data-context-open]') ?? content.querySelector<HTMLElement>('[data-context-open]');
   if (open) {
