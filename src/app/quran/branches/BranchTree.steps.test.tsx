@@ -3,17 +3,19 @@ import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import BranchTree from './BranchTree';
+import TreeSteps from './TreeSteps';
 
 vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { children: React.ReactNode }) => children }));
 const lang = vi.hoisted(() => ({ language: 'ar' as 'ar' | 'en' }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: lang.language }) }));
-const { replace } = vi.hoisted(() => ({ replace: vi.fn() }));
-vi.mock('next/navigation', () => ({ useRouter: () => ({ replace }) }));
+const { replace, search } = vi.hoisted(() => ({ replace: vi.fn(), search: { params: new URLSearchParams() } }));
+vi.mock('next/navigation', () => ({ useRouter: () => ({ replace }), useSearchParams: () => search.params }));
 
-type Props = React.ComponentProps<typeof BranchTree>;
+type Props = React.ComponentProps<typeof BranchTree> & { steps?: React.ComponentProps<typeof TreeSteps>['steps'] | null };
 
 beforeEach(() => {
   lang.language = 'ar';
+  search.params = new URLSearchParams();
   HTMLDialogElement.prototype.showModal = function () { this.open = true; };
   vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => [] }));
 });
@@ -32,8 +34,8 @@ const steps = { previous: '/quran/branches?juz=2&tree=2', next: '/quran/branches
 const AR = { previous: 'الشجرة السابقة', next: 'الشجرة التالية', nav: 'التنقل بين الأشجار' };
 const EN = { previous: 'Previous tree', next: 'Next tree', nav: 'Tree navigation' };
 
-function renderTree(props: Partial<Props> = {}) {
-  return render(<BranchTree tree={tree} names={{}} steps={steps} {...props} />);
+function renderTree({ steps: given = steps, ...props }: Partial<Props> = {}) {
+  return render(<>{given && <TreeSteps steps={given} />}<BranchTree tree={tree} names={{}} steppable={!!given} {...props} /></>);
 }
 
 function recordStepClicks(names: { previous: string; next: string }) {
@@ -90,7 +92,7 @@ describe('BranchTree steps in Arabic', () => {
   });
 
   it('shows no step controls when the tree has no steps prop', () => {
-    renderTree({ steps: undefined });
+    renderTree({ steps: null });
     expect(screen.queryByRole('link', { name: AR.next })).toBeNull();
     expect(screen.queryByRole('button', { name: AR.next })).toBeNull();
     expect(screen.queryByRole('link', { name: AR.previous })).toBeNull();
@@ -276,13 +278,18 @@ describe('BranchTree swipe gestures that do not step', () => {
 });
 
 describe('BranchTree steps and the surrounding ayat', () => {
-  it('carries the surrounding-ayat choice into the step links when it is switched', () => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({ before: {}, after: {} }) }));
-    render(<BranchTree tree={tree} names={{}} steps={steps} surround={{ on: false }} />);
-    const nav = screen.getByRole('navigation', { name: AR.nav });
-    expect(new URL(within(nav).getByRole('link', { name: AR.next }).getAttribute('href')!, 'http://localhost').searchParams.get('c')).toBeNull();
-    fireEvent.click(screen.getByRole('switch'));
-    expect(new URL(within(nav).getByRole('link', { name: AR.next }).getAttribute('href')!, 'http://localhost').searchParams.get('c')).toBe('1');
-    expect(new URL(within(nav).getByRole('link', { name: AR.previous }).getAttribute('href')!, 'http://localhost').searchParams.get('c')).toBe('1');
+  const contextOf = (name: string) => new URL(within(screen.getByRole('navigation', { name: AR.nav })).getByRole('link', { name }).getAttribute('href')!, 'http://localhost').searchParams.get('c');
+
+  it('leaves the surrounding ayat off in the step links while the page has them off', () => {
+    renderTree({ steps: { ...steps, next: `${steps.next}&c=1` } });
+    expect(contextOf(AR.next)).toBeNull();
+    expect(contextOf(AR.previous)).toBeNull();
+  });
+
+  it('turns the surrounding ayat on in the step links while the page has them on', () => {
+    search.params = new URLSearchParams('c=1');
+    renderTree();
+    expect(contextOf(AR.next)).toBe('1');
+    expect(contextOf(AR.previous)).toBe('1');
   });
 });

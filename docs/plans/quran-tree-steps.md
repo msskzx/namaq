@@ -9,8 +9,10 @@ them.
 - The steps walk the list the page shows: the trees left by the juz range, the
   surah and the search, in list order. An open tree's link carries the search
   (`q`) and surah (`s`) so the steps know that list.
-- Each list entry gets an "Open tree" link, since the list draws trees inline
-  and had no way into the single-tree view except search.
+- A two-option switch, «قائمة» (list) and «تصفّح» (browse), sits in the
+  filters row beside the juz filter on both views. Browse opens the first tree
+  on the current list page with the same filter; list returns to the list page
+  that holds the current tree.
 - A tree reached through a subtree link, which is not in that list, gets no
   steps. A tree scoped to some occurrences (`at=`) steps to whole trees.
 - The surroundings setting (`c=1`) carries over to the next tree.
@@ -18,7 +20,8 @@ them.
 
 ## Behaviour
 
-- The tree heading shows previous and next buttons with the position, e.g.
+- In browse mode the filters row shows previous and next buttons beside the
+  switch, with the position, e.g.
   `٣ / ١٢٠` / `3 / 120`. The first tree has no previous, the last no next.
   Arrows follow writing direction, as in `Pagination.tsx`.
 - The left and right arrow keys step while the tree is fitted. In Arabic the
@@ -34,9 +37,10 @@ them.
 - `src/lib/quran/branches.ts`: `branchesHref` keeps `q` and `s` beside a tree id.
 - `src/app/quran/branches/page.tsx`: read the list filter with a tree open, work
   out the neighbours and pass them on.
-- `src/app/quran/branches/PieceList.tsx`: the "Open tree" link.
-- `src/app/quran/branches/BranchTree.tsx`: a `steps` prop, the buttons, and
-  the keys and swipe in `TreeViewport`.
+- `src/app/quran/branches/TreeSteps.tsx`: the switch and the step buttons.
+- `src/app/quran/branches/PieceList.tsx`: inline trees get no list filter.
+- `src/app/quran/branches/BranchTree.tsx`: a `steppable` prop and the keys and
+  swipe in `TreeViewport`, which click the step links.
 
 ## Acceptance
 

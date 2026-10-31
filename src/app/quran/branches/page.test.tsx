@@ -106,36 +106,45 @@ describe('Quran branch trees', () => {
     expect(within(steps).getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')).toBe(branchesHref(data.trees[1].id));
   });
 
-  it('steps through the trees a surah filter leaves, keeping the filter', async () => {
+  it('browses the trees a surah filter leaves from the first tree on the page, keeping the filter', async () => {
     render(await open({ juzFrom: '30', juzTo: '30', s: '78' }));
-    const opens = screen.getAllByRole('link', { name: 'افتح الشجرة' }).map(link => link.getAttribute('href')!);
-    expect(opens.length).toBeGreaterThan(2);
-    expect(opens.every(href => href.includes('s=78'))).toBe(true);
+    const mode = screen.getByRole('group', { name: 'طريقة العرض' });
+    expect(within(mode).getByRole('link', { name: 'قائمة' }).getAttribute('aria-current')).toBe('page');
+    const first = within(mode).getByRole('link', { name: 'تصفّح' }).getAttribute('href')!;
+    expect(new URL(first, 'http://localhost').searchParams.get('s')).toBe('78');
     cleanup();
-    render(await open(Object.fromEntries(new URL(opens[1], 'http://localhost').searchParams)));
-    const steps = screen.getByRole('navigation', { name: 'التنقل بين الأشجار' });
-    expect(within(steps).getByRole('link', { name: 'الشجرة السابقة' }).getAttribute('href')).toBe(opens[0]);
-    expect(within(steps).getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')).toBe(opens[2]);
+    render(await open(Object.fromEntries(new URL(first, 'http://localhost').searchParams)));
+    let steps = screen.getByRole('navigation', { name: 'التنقل بين الأشجار' });
+    expect(within(steps).getByRole('button', { name: 'الشجرة السابقة' }).hasAttribute('disabled')).toBe(true);
+    expect(steps.textContent).toContain(`${num(1)} / `);
+    expect(within(screen.getByRole('group', { name: 'طريقة العرض' })).getByRole('link', { name: 'تصفّح' }).getAttribute('aria-current')).toBe('page');
+    const second = within(steps).getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')!;
+    expect(new URL(second, 'http://localhost').searchParams.get('s')).toBe('78');
+    cleanup();
+    render(await open(Object.fromEntries(new URL(second, 'http://localhost').searchParams)));
+    steps = screen.getByRole('navigation', { name: 'التنقل بين الأشجار' });
+    expect(within(steps).getByRole('link', { name: 'الشجرة السابقة' }).getAttribute('href')).toBe(first);
     expect(steps.textContent).toContain(`${num(2)} / `);
   });
 
-  it('keeps the search in the open-tree links of a search result', async () => {
-    render(await open({ juzFrom: '25', juzTo: '30', s: '43', q: 'فذرهم يخوضوا ويلعبوا' }));
-    const href = screen.getByRole('link', { name: 'افتح الشجرة' }).getAttribute('href')!;
-    expect(new URL(href, 'http://localhost').searchParams.get('q')).toBe('فذرهم يخوضوا ويلعبوا');
+  it('returns from browsing to the list page holding the current tree', async () => {
+    const trees = buildTreeGroups((data.ayat as BranchAyah[]).filter(ayah => inJuzRange(ayah.key, { from: 30, to: 30 })));
+    render(await open({ o: trees[11].id, juzFrom: '30', juzTo: '30' }));
+    const list = within(screen.getByRole('group', { name: 'طريقة العرض' })).getByRole('link', { name: 'قائمة' }).getAttribute('href');
+    expect(list).toBe(branchesHref('', { from: 30, to: 30 }, { page: 2 }));
   });
 
-  it('steps through a search result in its order, keeping the search', async () => {
+  it('browses a search result in its order, keeping the search', async () => {
     const query = 'قال';
     render(await open({ q: query }));
-    const opens = screen.getAllByRole('link', { name: 'افتح الشجرة' }).map(link => link.getAttribute('href')!);
-    expect(opens.length).toBeGreaterThan(2);
+    const first = within(screen.getByRole('group', { name: 'طريقة العرض' })).getByRole('link', { name: 'تصفّح' }).getAttribute('href')!;
+    expect(new URL(first, 'http://localhost').searchParams.get('q')).toBe(query);
     cleanup();
-    render(await open(Object.fromEntries(new URL(opens[1], 'http://localhost').searchParams)));
+    render(await open(Object.fromEntries(new URL(first, 'http://localhost').searchParams)));
     const steps = screen.getByRole('navigation', { name: 'التنقل بين الأشجار' });
-    expect(within(steps).getByRole('link', { name: 'الشجرة السابقة' }).getAttribute('href')).toBe(opens[0]);
-    expect(within(steps).getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')).toBe(opens[2]);
-    expect(new URL(opens[2], 'http://localhost').searchParams.get('q')).toBe(query);
+    const second = within(steps).getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')!;
+    expect(new URL(second, 'http://localhost').searchParams.get('q')).toBe(query);
+    expect(steps.textContent).toContain(`${num(1)} / `);
   });
 
   it('gives a tree outside the list no steps', async () => {
