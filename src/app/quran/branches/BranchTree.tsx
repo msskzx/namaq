@@ -123,6 +123,14 @@ function fitTreeScale({ width, height, availableWidth, availableHeight }: Diagra
   return Math.min(MAX_SCALE, availableWidth / width, availableHeight / height);
 }
 
+function withContext(href: string | undefined, on: boolean) {
+  if (!href) return href;
+  const url = new URL(href, 'http://localhost');
+  if (on) url.searchParams.set('c', '1');
+  else url.searchParams.delete('c');
+  return `${url.pathname}${url.search}`;
+}
+
 function TreeSteps({ steps, ar }: { steps: Steps; ar: boolean }) {
   const Back = ar ? ArrowRight : ArrowLeft;
   const Forward = ar ? ArrowLeft : ArrowRight;
@@ -342,7 +350,7 @@ export default function BranchTree({ tree, names, variants = [], prefixes, subtr
   const step = (forward: boolean) => region.current?.querySelector<HTMLAnchorElement>(`a[data-step="${forward ? 'next' : 'previous'}"]`)?.click();
   const controls = (header || steps || surround) ? <>
     {header}
-    {steps && <TreeSteps steps={steps} ar={ar} />}
+    {steps && <TreeSteps steps={surround ? { ...steps, previous: withContext(steps.previous, on), next: withContext(steps.next, on) } : steps} ar={ar} />}
     {surround && <SurroundToggle on={on} onChange={setOn} sync={surround.sync} loading={isLoading} failed={!!error} />}
   </> : undefined;
   return (

@@ -89,13 +89,13 @@ describe('Quran branch trees', () => {
     expect(within(screen.getByRole('list', { name: 'المتشابهات' })).getAllByRole('region', { name: 'شجرة العبارات المشتركة' })).toHaveLength(10);
   });
 
-  it('steps to the neighbouring trees in list order, keeping the juz range and surroundings', async () => {
+  it('steps to the neighbouring trees in list order, keeping the juz range', async () => {
     const trees = buildTreeGroups((data.ayat as BranchAyah[]).filter(ayah => inJuzRange(ayah.key, { from: 30, to: 30 })));
     const juz = { from: 30, to: 30 };
-    render(await open({ o: trees[1].id, juzFrom: '30', juzTo: '30', c: '1' }));
+    render(await open({ o: trees[1].id, juzFrom: '30', juzTo: '30' }));
     const steps = screen.getByRole('navigation', { name: 'التنقل بين الأشجار' });
-    expect(within(steps).getByRole('link', { name: 'الشجرة السابقة' }).getAttribute('href')).toBe(branchesHref(trees[0].id, juz, { context: true }));
-    expect(within(steps).getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')).toBe(branchesHref(trees[2].id, juz, { context: true }));
+    expect(within(steps).getByRole('link', { name: 'الشجرة السابقة' }).getAttribute('href')).toBe(branchesHref(trees[0].id, juz));
+    expect(within(steps).getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')).toBe(branchesHref(trees[2].id, juz));
     expect(steps.textContent).toContain(`${num(2)} / ${num(trees.length)}`);
   });
 

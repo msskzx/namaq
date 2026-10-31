@@ -274,3 +274,15 @@ describe('BranchTree swipe gestures that do not step', () => {
     expect(clicks).toEqual([]);
   });
 });
+
+describe('BranchTree steps and the surrounding ayat', () => {
+  it('carries the surrounding-ayat choice into the step links when it is switched', () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({ before: {}, after: {} }) }));
+    render(<BranchTree tree={tree} names={{}} steps={steps} surround={{ on: false }} />);
+    const nav = screen.getByRole('navigation', { name: AR.nav });
+    expect(new URL(within(nav).getByRole('link', { name: AR.next }).getAttribute('href')!, 'http://localhost').searchParams.get('c')).toBeNull();
+    fireEvent.click(screen.getByRole('switch'));
+    expect(new URL(within(nav).getByRole('link', { name: AR.next }).getAttribute('href')!, 'http://localhost').searchParams.get('c')).toBe('1');
+    expect(new URL(within(nav).getByRole('link', { name: AR.previous }).getAttribute('href')!, 'http://localhost').searchParams.get('c')).toBe('1');
+  });
+});
