@@ -11,7 +11,7 @@ export default function BranchHeading({ children }: { children?: React.ReactNode
   return <header className="flex flex-wrap items-center gap-x-3 gap-y-2" dir={ar ? 'rtl' : 'ltr'}>
     <h1 className="text-xl">{ar ? 'متشابهات القرآن' : 'Shared phrase trees'}</h1>
     <details className="relative">
-      <summary title={rules} className="flex cursor-pointer list-none rounded-sm p-1.5 text-[var(--home-accent)] hover:bg-[var(--home-paper-deep)] [&::-webkit-details-marker]:hidden">
+      <summary title={rules} className="flex cursor-pointer list-none rounded-sm p-1.5 text-[var(--home-muted)] hover:bg-[var(--home-paper-deep)] hover:text-[var(--home-ink)] [&::-webkit-details-marker]:hidden">
         <Info size={18} aria-hidden /><span className="sr-only">{rules}</span>
       </summary>
       <p className="absolute start-0 top-full z-20 mt-1 w-80 max-w-[85vw] rounded-sm border border-[var(--home-rule)] bg-[var(--home-paper)] p-3 text-sm text-[var(--home-muted)] shadow-md">{ar
