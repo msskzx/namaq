@@ -21,7 +21,7 @@ const covered = (query: string, key: string) => {
 describe('searchAyat', () => {
   it('finds a phrase typed without tashkeel, with the words it covers', () => {
     const result = searchAyat(ayat, 'الحي القيوم');
-    expect(result.hits.map(hit => hit.key)).toEqual(['2:255', '3:2']);
+    expect(result.hits.map(hit => hit.key)).toEqual(['2:255', '3:2', '20:111']);
     const kursi = result.hits[0];
     expect(kursi.words.slice(kursi.from, kursi.to + 1).map(normalizeWord)).toEqual(['الحي', 'القيوم']);
   });
@@ -43,7 +43,7 @@ describe('searchAyat', () => {
   });
 
   it('ignores punctuation in the query and marks in the text', () => {
-    expect(searchAyat(ayat, 'الحي، القيوم؟').total).toBe(2);
+    expect(searchAyat(ayat, 'الحي، القيوم؟').total).toBe(3);
     const sajda = searchAyat(ayat, 'رب العرش العظيم').hits.find(hit => hit.key === '27:26');
     expect(sajda && [sajda.to - sajda.from, sajda.to]).toEqual([2, sajda!.words.length - 1]);
   });
@@ -96,11 +96,17 @@ describe('searchAyat', () => {
     expect(searchAyat(ayat, 'السموات').total).toBeGreaterThan(150);
   });
 
-  it('searches nothing shorter than two Arabic letters', () => {
+  it('finds hamza seated differently next to the same spelling (review: سأل, الملائكة)', () => {
+    const asked = searchAyat(ayat, 'سأل', 10000).hits.map(hit => hit.key);
+    expect(asked).toEqual(expect.arrayContaining(['70:1', '2:189', '2:215', '2:134']));
+    expect(searchAyat(ayat, 'الملائكة', 10000).hits.map(hit => hit.key)).toEqual(expect.arrayContaining(['2:30', '2:34', '2:31']));
+  });
+
+  it('searches nothing shorter than two Arabic letters (ءء is a real pair: ءَأَنذَرْتَهُمْ)', () => {
     expect(searchable('ق')).toBe(false);
     expect(searchable('baqara')).toBe(false);
     expect(searchAyat(ayat, 'ق').total).toBe(0);
-    expect(searchAyat(ayat, 'ءء').total).toBe(0);
+    expect(searchAyat(ayat, 'ء').total).toBe(0);
     expect(searchAyat(ayat, 'ا ا ا').total).toBe(0);
   });
 });

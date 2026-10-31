@@ -77,7 +77,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const state: BranchesView = { occurrences: requestedOccurrences.length ? requestedOccurrences : undefined, page: Number(first(params.p)) || 1, context: params.c === '1', query: query || undefined, surah };
   if (id !== requestedId || params.scope || params.kind || params.v || params.g || params.w || params.r || params.apply === 'juz') redirect(branchesHref(id, juz, state));
   const pieces = piecesFor(built);
-  const needle = query ? JSON.stringify(searchQuery(query)) + query.toLowerCase().replace(/[^a-z]/g, '') : '';
+  const needle = query ? (/[a-z]/i.test(query) ? query.toLowerCase() : JSON.stringify(searchQuery(query))) : '';
   if (needle && !built.searches.has(needle)) {
     if (built.searches.size >= SEARCHES) built.searches.delete(built.searches.keys().next().value!);
     built.searches.set(needle, piecesHolding(pieces, query));

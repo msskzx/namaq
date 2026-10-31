@@ -289,7 +289,7 @@ export function piecesHolding<T extends Opening & { opening: Opening }>(pieces: 
 export function textIs(text: string, query: string): boolean {
   const words = textKeys(text);
   const wanted = searchQuery(query);
-  return wanted.strict.length === words.length && (words.every((word, at) => word.strict.includes(wanted.strict[at])) || words.every((word, at) => word.loose.includes(wanted.loose[at])));
+  return wanted.strict.length === words.length && (['strict', 'seat', 'loose'] as const).some(field => words.every((word, at) => word[field].includes(wanted[field][at])));
 }
 
 export const startingWith = (ayat: BranchAyah[], phrase: string, partition?: string) => ayat.filter(ayah => opens(ayah, phrase) && (!partition || rootPartition(ayah, phrase.split(' ').length) === partition));

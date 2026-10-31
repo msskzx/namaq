@@ -38,12 +38,16 @@ describe('findText', () => {
     expect(findText(textKeys('ٱلْقُرْءَانُ'), searchQuery('القرآن'))).not.toBeNull();
   });
 
-  it('matches a hamza written another way only at the loose level', () => {
-    const asked = searchQuery('هءلاء');
-    expect(findText(textKeys('هَـٰٓؤُلَآءِ'), asked)).toBeNull();
-    expect(findText(textKeys('هَـٰٓؤُلَآءِ'), asked, 'loose')).not.toBeNull();
-    expect(findText(textKeys('يَسْـَٔلُونَكَ'), searchQuery('يسءلونك'))).not.toBeNull();
-    expect(findText(textKeys('جَآءُو'), searchQuery('جاءوا'), 'loose')).not.toBeNull();
+  it('matches hamza on any seat strictly, and a left-out hamza only loosely', () => {
+    expect(findText(textKeys('هَـٰٓؤُلَآءِ'), searchQuery('هءلاء'))).not.toBeNull();
+    expect(findText(textKeys('يَسْـَٔلُونَكَ'), searchQuery('يسألونك'))).not.toBeNull();
+    expect(findText(textKeys('جَآءُو'), searchQuery('جاءوا'))).not.toBeNull();
+    expect(findText(textKeys('يَسْـَٔلُونَكَ'), searchQuery('يسالونك'))).toBeNull();
+    expect(findText(textKeys('يَسْـَٔلُونَكَ'), searchQuery('يسالونك'), 'loose')).not.toBeNull();
+  });
+
+  it('lets a query opening with ال end a word written with لِ before it', () => {
+    expect(findText(textKeys('لِلْمَلَـٰٓئِكَةِ'), searchQuery('الملائكة'))).not.toBeNull();
   });
 
   it('tries the loose level only when the folded query keeps two letters', () => {
