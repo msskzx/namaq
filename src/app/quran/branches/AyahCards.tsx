@@ -152,7 +152,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
     const ayah = at === 'ayah' ? context.ayah : around![at === 'before' ? 'before' : 'after'][context.ayah.key];
     const current = i === column;
     const key = `${row}:${at}`;
-    const props = { 'data-col': i, 'data-row': row, 'data-first': row === 0 || undefined, 'data-current': current || undefined, 'data-reading': row === reading || undefined, className: styles.cell, onClick: current && row === reading ? undefined : () => { if (!current) goTo(i); if (row !== reading) goToRow(row); } };
+    const props = { 'data-col': i, 'data-row': row, 'data-first': row === 0 || undefined, 'data-current': current || undefined, 'data-reading': row === reading || undefined, className: styles.cell, style: { gridColumn: i + 2, gridRow: row + 1 }, onClick: current && row === reading ? undefined : () => { if (!current) goTo(i); if (row !== reading) goToRow(row); } };
     if (!ayah) return <div key={key} {...props} />;
     const [surah, number] = ayah.key.split(':').map(Number);
     const name = names[surah] ?? (ar ? `سورة ${num(surah)}` : `Surah ${surah}`);

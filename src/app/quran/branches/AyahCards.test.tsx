@@ -125,3 +125,14 @@ it('reads one row at a time, the rows above and below peeking, and moves to a ro
   expect(column()).toEqual(['', 'الشرح ٧', 'الطلاق ٨']);
   expect(reading()).toEqual(['الشرح ٧']);
 });
+
+it('keeps every card in its own row and column when the first tree has no previous tree', async () => {
+  render(
+    <SWRConfig value={{ provider: () => new Map(), dedupingInterval: 0, shouldRetryOnError: false }}>
+      <AyahCards ayahKeys={['94:5', '94:6']} names={{ 94: 'الشرح' }} steps={{ next: steps.next, position: 1, total: 3 }} />
+    </SWRConfig>,
+  );
+  await screen.findByRole('article', { name: 'الشرح ٥' });
+  expect(document.querySelector('[data-edge="previous"]')).toBeNull();
+  expect([...document.querySelectorAll<HTMLElement>('[data-col]')].map(cell => `${cell.style.gridRow}/${cell.style.gridColumn}`)).toEqual(['1/2', '1/3', '1/4', '2/2', '2/3', '2/4']);
+});
