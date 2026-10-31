@@ -3,7 +3,6 @@
 import { ArrowLeft, ArrowRight, GalleryHorizontal, GitBranch, List } from 'lucide-react';
 import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { PrefetchKind } from 'next/dist/client/components/router-reducer/router-reducer-types';
 import Button from '@/components/common/Button';
 import Segmented from '@/components/common/Segmented';
 import { useLanguage } from '@/components/language/LanguageContext';
@@ -23,7 +22,7 @@ export function usePreload(...hrefs: (string | undefined)[]) {
   const router = useRouter();
   const wanted = hrefs.filter(Boolean).join(' ');
   useEffect(() => {
-    for (const href of wanted.split(' ').filter(Boolean)) router.prefetch(href, { kind: PrefetchKind.FULL });
+    for (const href of wanted.split(' ').filter(Boolean)) router.prefetch(href, { kind: 'full' } as Parameters<typeof router.prefetch>[1]);
   }, [router, wanted]);
 }
 

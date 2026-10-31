@@ -66,3 +66,10 @@ describe('quranContexts and quranSurrounding', () => {
     expect(fetchMock).toHaveBeenCalledOnce();
   });
 });
+
+it('keeps asking the server while the whole text is still on its way', async () => {
+  const fetchMock = vi.fn((url: string) => url === '/api/quran/text' ? new Promise(() => {}) : Promise.resolve({ ok: true, json: async () => ({ url }) }));
+  vi.stubGlobal('fetch', fetchMock);
+  void load.loadQuranText();
+  expect(await load.quranSurrounding(['94:5'], [])).toEqual({ url: '/api/quran/surrounding?before=94%3A5&after=' });
+});

@@ -3,11 +3,16 @@ import type { AyahContext, Surrounding } from './ayahContext';
 import type { BranchAyah } from './branches';
 
 let text: Promise<BranchAyah[]> | undefined;
+let textReady = false;
 let index: Promise<IndexedAyah[]> | undefined;
 
 export function loadQuranText(): Promise<BranchAyah[]> {
   return (text ??= fetch('/api/quran/text')
     .then(response => (response.ok ? response.json() : Promise.reject(new Error(`Quran text: ${response.status}`))))
+    .then((ayat: BranchAyah[]) => {
+      textReady = true;
+      return ayat;
+    })
     .catch(error => {
       text = undefined;
       throw error;
@@ -32,7 +37,7 @@ export function preloadQuranSearch() {
   whenIdle(() => void loadIndex().catch(() => {}));
 }
 
-/** Pages that open many overlays fetch the whole text once; the rest ask the server for the few ayat they show. */
+/** Pages that open many overlays fetch the whole text once; until it has arrived, and on pages that don't, the server answers for the few ayat shown. */
 export function preloadQuranText() {
   whenIdle(() => void loadQuranText().catch(() => {}));
 }
@@ -45,7 +50,7 @@ async function ask<T>(url: string): Promise<T> {
 
 /** Each ayah with its neighbours, marking the words every one of them shares. */
 export async function quranContexts(wanted: string[]): Promise<AyahContext[]> {
-  if (!text) return ask(`/api/quran/context?${new URLSearchParams({ q: wanted.join(',') })}`);
+  if (!textReady) return ask(`/api/quran/context?${new URLSearchParams({ q: wanted.join(',') })}`);
   const [ayat, { ayahContexts, sharedByAll }] = await Promise.all([loadQuranText(), import('./ayahContext')]);
   const contexts = ayahContexts(ayat, wanted);
   if (contexts.length !== new Set(wanted).size) throw new Error('Ayah not found');
@@ -53,7 +58,7 @@ export async function quranContexts(wanted: string[]): Promise<AyahContext[]> {
 }
 
 export async function quranSurrounding(before: string[], after: string[]): Promise<Surrounding> {
-  if (!text) return ask(`/api/quran/surrounding?${new URLSearchParams({ before: before.join(','), after: after.join(',') })}`);
+  if (!textReady) return ask(`/api/quran/surrounding?${new URLSearchParams({ before: before.join(','), after: after.join(',') })}`);
   const [ayat, { surrounding }] = await Promise.all([loadQuranText(), import('./ayahContext')]);
   return surrounding(ayat, before, after);
 }

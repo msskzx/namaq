@@ -22,6 +22,6 @@ export function GET(request: NextRequest) {
     const trees = range ? buildTreeGroups(ayat) : data.trees;
     inventories.set(key, trees.map(tree => ({ id: tree.id, text: tree.text, textEn: tree.textEn, aliases: tree.aliases, count: new Set(tree.occurrences.map(occurrence => occurrence.key)).size })));
   }
-  if (all) return NextResponse.json({ phrases: inventories.get(key)! }, { headers: { 'Cache-Control': 'public, max-age=86400, s-maxage=31536000' } });
+  if (all) return NextResponse.json({ phrases: inventories.get(key)! }, { headers: { 'Cache-Control': 'public, max-age=3600, s-maxage=31536000' } });
   return NextResponse.json({ suggestions: query.trim() ? searchPhrases(inventories.get(key)!, query).slice(0, 10) : [] }, { headers: { 'Cache-Control': 'public, max-age=3600' } });
 }

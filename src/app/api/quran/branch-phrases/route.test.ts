@@ -25,7 +25,7 @@ describe('branch tree suggestions', () => {
     const { phrases } = await response.json();
     expect(phrases.length).toBeGreaterThan(5000);
     expect(phrases[0]).toEqual(expect.objectContaining({ id: expect.any(String), text: expect.any(String), count: expect.any(Number) }));
-    expect(response.headers.get('cache-control')).toContain('max-age=86400');
+    expect(response.headers.get('cache-control')).toContain('max-age=3600');
     const ranged = (await search({ all: '1', juzFrom: '25', juzTo: '30' }).json()).phrases;
     expect(ranged.length).toBeLessThan(phrases.length);
     expect(ranged.some((phrase: { id: string }) => phrase.id === 'يومهم الذي')).toBe(true);
