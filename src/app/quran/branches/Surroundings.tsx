@@ -4,6 +4,7 @@ import React, { useId } from 'react';
 import useSWR from 'swr';
 import { Network, TextSearch } from 'lucide-react';
 import Button from '@/components/common/Button';
+import MushafText from '@/components/common/MushafText';
 import { PathBox, PathButton } from './Paths';
 import { fetcher } from '@/lib/swr';
 import Toggle from '@/components/common/Toggle';
@@ -58,12 +59,12 @@ export function NeighbourBox({ neighbour, of, side, around, opens, nodeId }: { n
   const id = nodeId ?? `${side}${of}`;
   const ref = around.names[surah] ? `${around.names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`;
   const label = ar ? 'عرض الآيات في سياقها' : 'View ayat in context';
-  const basmala = neighbour.basmala && <span className="block border-[var(--home-rule)] text-center first:border-b last:border-t first:pb-1 last:pt-1 border-dotted">{neighbour.basmala.join(' ')}</span>;
+  const basmala = neighbour.basmala && <span className="block border-[var(--home-rule)] text-center first:border-b last:border-t first:pb-1 last:pt-1 border-dotted"><MushafText>{neighbour.basmala.join(' ')}</MushafText></span>;
   return (
     <PathBox id={id} ctx={of} keys={[of]} lit="border-dashed border-[var(--home-accent)] text-[var(--home-ink)]" tone="border-dashed border-[var(--home-muted)] text-[var(--home-muted)]" className="w-64 max-w-[70vw] shrink-0 rounded border text-lg bg-[var(--home-paper)] px-3 py-1.5">
-      <span className="block font-arabic leading-loose">
+      <span className="block font-quran leading-loose">
         {side === 'after' && basmala}
-        <span className="block">{neighbour.words.join(' ')}</span>
+        <span className="block"><MushafText>{neighbour.words.join(' ')}</MushafText></span>
         {side === 'before' && basmala}
       </span>
       <span className="mt-1 block text-xs">{ref}</span>

@@ -7,15 +7,14 @@ export const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
   AYAT: { en: "Revealed about whom", ar: "في من نزلت" },
   EVENTS: { en: "Events", ar: "أحداث" },
   PERSON_CIRCLE: { en: "A person's circle", ar: "دائرة شخص" },
-  BRANCHES: { en: "Phrase trees", ar: "أشجار العبارات" },
+  BRANCHES: { en: "Shared Quranic wording", ar: "متشابهات القرآن" },
 };
 
 export const TOPIC_GROUPS: { en: string; ar: string; topics: QuizTopic[] }[] = [
-  { en: "Quran", ar: "القرآن", topics: ["BRANCHES", "AYAT"] },
-  { en: "Seerah and biographies", ar: "السيرة والتراجم", topics: ["PEOPLE", "BATTLES", "RELATIONSHIPS", "EVENTS", "PERSON_CIRCLE"] },
+  { en: "Quran", ar: "القرآن", topics: ["BRANCHES"] },
 ];
 
 export const LEAF_LEVELS: Record<number, { en: string; ar: string }> = {
-  3: { en: "easy", ar: "سهل" },
-  6: { en: "hard", ar: "صعب" },
+  1: { en: "easy", ar: "سهل" },
+  10: { en: "hard", ar: "صعب" },
 };

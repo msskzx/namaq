@@ -12,7 +12,6 @@ import type { QuizReference } from "@/lib/quiz/quizReference";
 import { useHideFooter } from "@/components/common/AppChrome";
 import { useLanguage } from "@/components/language/LanguageContext";
 import { num } from "@/lib/quran/arabicNumber";
-import { parseJuzRange } from "@/lib/quran/juz";
 import { emptyBranchAnswers } from "@/lib/quiz/score";
 import type { QuestionChoice } from "@/lib/quiz/types";
 import { leaderboard, NAME_MAX, type ActionError, type PartyQuestion, type PartyView, type PlayerView } from "@/lib/party/rules";
@@ -158,7 +157,7 @@ function Lobby({ view, send, error, ar }: { view: PartyView; send: ReturnType<ty
   useEffect(() => { if (error === "not-ready") setConfirming(true); }, [error]);
   useEffect(() => { if (readyCount === others.length) setConfirming(false); }, [readyCount, others.length]);
   return (
-    <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
+    <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
       <div className="flex flex-col gap-5">
         <Share code={view.code} ar={ar} />
         <section className={styles.panel} aria-label={ar ? "اللاعبون" : "Players"}>
@@ -224,7 +223,6 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
   const [source, setSource] = useState(false);
   const sent = view.answer !== null;
   const waiting = view.players.filter((player) => !player.submitted);
-  const juz = parseJuzRange(String(view.settings.juzFrom), String(view.settings.juzTo));
   const isHost = view.you === view.hostId;
   const last = view.index + 1 >= view.total;
   const total = (question.tree ? view.settings.treeSeconds : view.settings.seconds) * 1000;
@@ -249,7 +247,7 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
           </blockquote>
         )}
         {question.tree ? (
-          revealed ? <BranchFeedback question={question} typed={Array.isArray(view.answer) ? view.answer : emptyBranchAnswers(question)} names={view.surahNames} juz={juz} ar={ar} />
+          revealed ? <BranchFeedback question={question} typed={Array.isArray(view.answer) ? view.answer : emptyBranchAnswers(question)} names={view.surahNames} ar={ar} />
             : <BranchInputs question={question} typed={typed} onChange={setTyped} onCheck={() => send({ type: "submit", answer: typed })} ar={ar} />
         ) : (
           <div className="flex flex-col gap-2">

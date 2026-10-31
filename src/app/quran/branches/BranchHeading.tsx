@@ -7,7 +7,7 @@ export default function BranchHeading() {
   const { language } = useLanguage();
   const ar = language === 'ar';
   return <header className={styles.heading} dir={ar ? 'rtl' : 'ltr'}>
-    <h1>{ar ? 'أشجار العبارات المشتركة' : 'Shared phrase trees'}</h1>
+    <h1>{ar ? 'متشابهات القرآن' : 'Shared phrase trees'}</h1>
     <details className="text-sm text-[var(--home-muted)]">
       <summary className="cursor-pointer select-none text-[var(--home-ink)]">{ar ? 'قواعد المطابقة' : 'Matching rules'}</summary>
       <p className="mt-2">{ar

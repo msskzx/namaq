@@ -1,3 +1,4 @@
+vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { children: React.ReactNode }) => children }));
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
@@ -11,10 +12,10 @@ const nav = vi.hoisted(() => {
       listeners.add(listener);
       return () => listeners.delete(listener);
     },
-    push: (next: string) => {
+    push: vi.fn<(next: string, options?: { scroll?: boolean }) => void>((next) => {
       url = next;
       listeners.forEach((listener) => listener());
-    },
+    }),
     reset: (next: string) => {
       url = next;
     },
@@ -166,15 +167,13 @@ describe('QuizzesPage', () => {
     expect(screen.queryByRole('button', { name: '5' })).toBeNull();
   });
 
-  it('toggles a unique multi-topic selection', () => {
-    nav.reset('/quizzes?topic=PEOPLE,BATTLES,RELATIONSHIPS,BATTLES');
+  it('offers only Quran similarities in the topic settings', () => {
+    nav.reset('/quizzes?topic=BRANCHES');
     render(<QuizzesPage />);
-
     for (const name of ['People', 'Battles', 'Relationships']) {
-      expect(screen.getByRole('button', { name }).getAttribute('aria-pressed')).toBe('true');
+      expect(screen.queryByRole('button', { name })).toBeNull();
     }
-    fireEvent.click(screen.getByRole('button', { name: 'Battles' }));
-    expect(new URLSearchParams(nav.getUrl().split('?')[1]).get('topic')).toBe('PEOPLE,RELATIONSHIPS');
+    expect(screen.getByRole('button', { name: 'Shared Quranic wording' }).getAttribute('aria-pressed')).toBe('true');
   });
 
   it('renders Quran text supplied for an ayah choice', () => {
@@ -341,16 +340,17 @@ describe('QuizzesPage', () => {
     expect(params.get('juzTo')).toBe('28');
   });
 
-  it('offers one to six answers per tree, defaulting to three, and sends the choice with the quiz', () => {
+  it('offers one to ten answers per tree, defaulting to three, and sends the choice with the quiz', () => {
     nav.reset('/quizzes?topic=BRANCHES');
     render(<QuizzesPage />);
     const group = screen.getByRole('group', { name: 'Answers per tree' });
-    expect(within(group).getAllByRole('button').map((button) => button.textContent)).toEqual(['1', '2', '3', '4', '5', '6']);
+    expect(within(group).getAllByRole('button').map((button) => button.textContent)).toEqual(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']);
     expect(within(group).getByRole('button', { name: '3' }).getAttribute('aria-pressed')).toBe('true');
     expect(screen.getAllByText('You type this')).toHaveLength(3);
-    fireEvent.click(within(group).getByRole('button', { name: '5' }));
-    expect(new URLSearchParams(nav.getUrl().split('?')[1]).get('leaves')).toBe('5');
-    expect(screen.getAllByText('You type this')).toHaveLength(5);
+    fireEvent.click(within(group).getByRole('button', { name: '10' }));
+    expect(new URLSearchParams(nav.getUrl().split('?')[1]).get('leaves')).toBe('10');
+    expect(nav.push).toHaveBeenLastCalledWith(expect.any(String), { scroll: false });
+    expect(screen.getAllByText('You type this')).toHaveLength(6);
   });
 
   it('keeps the setup example free of ayah controls while retaining tree zoom', () => {
@@ -360,7 +360,8 @@ describe('QuizzesPage', () => {
     expect(within(tree).getByRole('toolbar', { name: 'Tree zoom' })).toBeTruthy();
     expect(within(tree).queryByRole('button', { name: /View ayat in context/ })).toBeNull();
     expect(within(tree).queryAllByRole('link')).toHaveLength(0);
-    expect(tree.querySelector('[data-differing]')).toBeTruthy();
+    expect(tree.querySelector('[data-differing]')).toBeNull();
+    for (const node of tree.querySelectorAll('[data-node]')) expect(node.querySelector('button, a')).toBeNull();
   });
 
   it('types only the asked leaves and gives the rest of the tree', () => {

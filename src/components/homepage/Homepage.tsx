@@ -29,7 +29,7 @@ export default function Homepage({ data, fontClass = '' }: { data: HomePreviews;
     }
   };
   const steps = [
-    { Icon: GitBranch, title: ar ? 'استكشف' : 'Explore', text: ar ? 'شاهد مواضع التشابه والاختلاف في العبارات المشتركة.' : 'See where shared phrases agree and where their wording differs.', href: '/quran/branches', action: ar ? 'أشجار العبارات' : 'Phrase trees' },
+    { Icon: GitBranch, title: ar ? 'استكشف' : 'Explore', text: ar ? 'شاهد مواضع التشابه والاختلاف في العبارات المشتركة.' : 'See where shared phrases agree and where their wording differs.', href: '/quran/branches', action: ar ? 'متشابهات القرآن' : 'Phrase trees' },
     { Icon: BookOpen, title: ar ? 'اقرأ في السياق' : 'Read in context', text: ar ? 'انتقل من العبارة إلى الآية، وواصل القراءة في المصحف.' : 'Move from a phrase to its ayah and continue reading in the mushaf.', href: '/quran/read', action: ar ? 'افتح المصحف' : 'Open the reader' },
     { Icon: ListChecks, title: ar ? 'اختبر ما لاحظته' : 'Test what you noticed', text: ar ? 'أجب عن أسئلة الأشجار، ثم راجع الإجابة والآيات المرتبطة بها.' : 'Answer questions about the trees, then review the answer and its ayat.', href: '/quizzes?topic=BRANCHES', action: ar ? 'اختبار فردي' : 'Solo quiz' },
     { Icon: Users, title: ar ? 'تعلّموا معًا' : 'Learn together', text: ar ? 'ابدأ اختبارًا جماعيًا وشارك رقمه، أو انضم إلى غيرك من هاتفك.' : 'Start a party and share its number, or join others from your phone.', href: '/quizzes/party', action: ar ? 'اختبار جماعي' : 'Party quiz' },
@@ -40,7 +40,7 @@ export default function Homepage({ data, fontClass = '' }: { data: HomePreviews;
       <div className={styles.content}>
         <section className={styles.feature} aria-labelledby="openings-title">
           <div className={styles.featureHeading}><div>
-            <h1 id="openings-title">{ar ? 'أشجار متشابهات القرآن' : 'Quran phrase trees'}</h1>
+            <h1 id="openings-title">{ar ? 'متشابهات القرآن' : 'Quran phrase trees'}</h1>
             <p>{ar ? 'استكشف العبارات المشتركة بين الآيات في شجرة تفاعلية، واقرأ كل آية في سياقها.' : 'Explore shared Quranic phrases in an interactive tree, and read each ayah in context.'}</p>
             <div className={styles.launchActions}>
               <Button href="/quran/branches"><GitBranch size={18} aria-hidden />{ar ? 'جميع الأشجار' : 'All phrase trees'}</Button>
@@ -51,7 +51,7 @@ export default function Homepage({ data, fontClass = '' }: { data: HomePreviews;
           <div className={styles.launchTree} dir="rtl" aria-busy={loading}>
             {loading && <LoadingSpinner className="absolute inset-0 z-10 bg-[var(--home-paper)]" />}
             <div inert={loading}>
-              <BranchTree key={preview.id} viewportHeight="clamp(22rem, 70svh, 36rem)" tree={preview.tree} prefixes={preview.prefixes.filter(prefix => prefix.word)} offsets={preview.offsets} subtreeLinks={preview.subtreeLinks} names={preview.names} surround={{ on: false }} label={ar ? 'مثال تفاعلي لشجرة عبارات قرآنية' : 'Interactive Quran phrase tree example'} />
+              <BranchTree key={preview.id} tree={preview.tree} prefixes={preview.prefixes.filter(prefix => prefix.word)} offsets={preview.offsets} subtreeLinks={preview.subtreeLinks} names={preview.names} surround={{ on: false }} label={ar ? 'مثال تفاعلي لشجرة عبارات قرآنية' : 'Interactive Quran phrase tree example'} />
             </div>
           </div>
         </section>

@@ -76,14 +76,13 @@ export default function PartySettingsPanel({ settings, editable, onChange, ar }:
       {settings.topics.includes("PERSON_CIRCLE") && <div className="mb-4"><PersonPicker person={settings.person} ar={ar} onCommit={(person) => onChange({ person: person ?? "" })} /></div>}
       {branches && (
         <>
-          <div className="mb-4 flex flex-wrap items-end gap-4">
+          <div className="mb-4 flex flex-wrap items-start gap-x-6 gap-y-4">
             {([["juzFrom", settings.juzFrom, ar ? "من الجزء" : "From juz'"], ["juzTo", settings.juzTo, ar ? "إلى الجزء" : "To juz'"]] as const).map(([key, value, label]) => (
               <div key={key} className="flex flex-col gap-1 text-sm text-[var(--home-ink)]">
                 <span>{label}</span>
                 <NumberInput label={label} value={value} min={1} max={30} steppers={false} onChange={(next) => onChange({ [key]: next })} />
               </div>
             ))}
-          </div>
           <Row label={ar ? "عدد الإجابات في كل شجرة" : "Answers per tree"}>
             {QUIZ_LEAVES.map((value) => (
               <div key={value} className="flex flex-col items-center gap-0.5">
@@ -92,6 +91,7 @@ export default function PartySettingsPanel({ settings, editable, onChange, ar }:
               </div>
             ))}
           </Row>
+          </div>
           <div className="mb-4"><BranchExplainer leaves={settings.leaves} ar={ar} /></div>
           <Row label={ar ? "وقت سؤال الشجرة" : "Time per tree"}>
             {TREE_SECONDS.map((value) => <Button key={value} active={settings.treeSeconds === value} aria-pressed={settings.treeSeconds === value} onClick={() => onChange({ treeSeconds: value })}>{duration(value, ar)}</Button>)}

@@ -201,6 +201,10 @@ describe('party view', () => {
 });
 
 describe('party helpers', () => {
+  it('accepts difficulty ten and rejects values outside the range', () => {
+    expect(cleanSettings({ leaves: 10 }).leaves).toBe(10);
+    expect(cleanSettings({ leaves: 11 }).leaves).toBe(3);
+  });
   it('builds the solo quiz query from the settings', () => {
     expect(quizQuery(cleanSettings({ topics: ['BRANCHES', 'PEOPLE'], length: 10, juzFrom: 28, juzTo: 30, leaves: 4 }))).toBe('topic=BRANCHES&topic=PEOPLE&length=10&juzFrom=28&juzTo=30&leaves=4');
     expect(quizQuery(cleanSettings({ topics: ['PERSON_CIRCLE'], person: 'ali' }))).toBe('topic=PERSON_CIRCLE&length=5&person=ali');

@@ -21,7 +21,7 @@ export const getAllNavLinks = (language: 'en' | 'ar'): SiteLink[] => [
   { href: '/quran', label: language === 'ar' ? 'القرآن' : 'Quran' },
   { href: '/quran/compare', label: language === 'ar' ? 'مقارنة السور وتكرار العبارات' : 'Compare surahs and repeated phrases' },
   { href: '/quran/words', label: language === 'ar' ? 'ألفاظ القرآن' : 'Words of the Quran' },
-  { href: '/quran/branches', label: language === 'ar' ? 'أشجار العبارات المشتركة' : 'Shared phrase trees' },
+  { href: '/quran/branches', label: language === 'ar' ? 'متشابهات القرآن' : 'Shared phrase trees' },
   { href: '/quran/iltifat', label: language === 'ar' ? 'التفات: تحولات مختارة' : 'Iltifat: hand-picked shifts' },
   { href: '/quran/qiraat', label: language === 'ar' ? 'القراءات' : 'Readings' },
   { href: '/quran/order', label: language === 'ar' ? 'ترتيب السور' : 'Surah order' },

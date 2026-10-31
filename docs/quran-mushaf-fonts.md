@@ -4,6 +4,15 @@ The reader at `/quran/read` sets the Quran in the King Fahd Complex's KFGQPC
 HAFS Uthmanic Script font (version 18). It is one Unicode font for all pages.
 Its licence lets anyone use, copy and distribute it free of charge, unchanged.
 
+Trees use the same font with the reader's word encoding. The Quran.com text
+used by the tree engine has different mark encodings and cannot be set directly
+in this font. `node --import tsx scripts/quran/buildMushafWords.ts` rebuilds the
+display lookup from the stored tree and reader corpora, checking word counts and
+rejecting ambiguous mappings. Regenerate it when either corpus changes. Pause
+and sajda signs are excluded from the lookup; source text, grouping and grading
+stay unchanged. Synthetic shared forms absent from the lookup use the same font
+with explicit conversions for sukūn, silent-letter and tanwīn marks.
+
 The printed Madinah mushaf fills every line by stretching letters (kashida).
 A single web font cannot do that, so the reader stretches or squeezes each
 line slightly and lets a few short lines keep small gaps between words.

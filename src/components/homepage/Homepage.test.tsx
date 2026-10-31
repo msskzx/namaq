@@ -1,3 +1,4 @@
+vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { children: React.ReactNode }) => children }));
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import Homepage from './Homepage';
@@ -10,7 +11,7 @@ describe('Quran learning homepage', () => {
   it.each(['ar', 'en'])('offers exploration, reading and solo/party quizzes in %s', async language => {
     state.language = language;
     render(<Homepage data={await getHomePreviews()} />);
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(language === 'ar' ? 'أشجار متشابهات القرآن' : 'Quran phrase trees');
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(language === 'ar' ? 'متشابهات القرآن' : 'Quran phrase trees');
     expect(screen.getByRole('switch', { name: language === 'ar' ? 'الآيات المحيطة' : 'Surrounding ayat' })).toHaveProperty('checked', false);
     expect(screen.queryByRole('list', { name: /ما قبل العبارة|Before the phrase/ })).toBeNull();
     expect(screen.getByRole('button', { name: language === 'ar' ? 'تصغير الشجرة' : 'Zoom out' })).toBeTruthy();
@@ -59,7 +60,7 @@ describe('Quran learning homepage', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Random tree' }));
     expect(screen.getByRole('button', { name: 'Random tree' })).toHaveProperty('disabled', true);
     expect(screen.getByText('Loading').closest('[role="status"]')).toBeTruthy();
-    expect(await screen.findByText(next.branches.tree.words.join(' '))).toBeTruthy();
+    expect(await screen.findByRole('button', { name: `Show path: ${next.branches.tree.words.join(' ')}` })).toBeTruthy();
     expect(fetchTree).toHaveBeenCalledWith(`/api/quran/random-tree?${new URLSearchParams({ exclude: data.branches.id })}`, { cache: 'no-store' });
   });
   it('keeps the current example on failure and permits retry', async () => {
@@ -70,7 +71,7 @@ describe('Quran learning homepage', () => {
     render(<Homepage data={data} />);
     fireEvent.click(screen.getByRole('button', { name: 'Random tree' }));
     expect(await screen.findByRole('alert')).toHaveProperty('textContent', 'Could not load a tree. Try again.');
-    expect(screen.getByText(data.branches.tree.words.join(' '))).toBeTruthy();
+    expect(screen.getByRole('button', { name: `Show path: ${data.branches.tree.words.join(' ')}` })).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'Random tree' }));
     expect(await screen.findByRole('button', { name: 'Random tree' })).toHaveProperty('disabled', false);
     expect(screen.queryByRole('alert')).toBeNull();

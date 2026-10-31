@@ -13,7 +13,7 @@ export const EXPERIMENT_SECTIONS: NavSection[] = [
       quran('/quran/qiraat', { ar: 'القراءات', en: 'Readings' }),
     ] },
     { title: { ar: 'الألفاظ', en: 'Words' }, items: [
-      quran('/quran/branches', { ar: 'أشجار العبارات المشتركة', en: 'Shared phrase trees' }),
+      quran('/quran/branches', { ar: 'متشابهات القرآن', en: 'Shared phrase trees' }),
       quran('/quran/compare', { ar: 'مقارنة السور', en: 'Compare surahs' }),
       quran('/quran/words', { ar: 'ألفاظ القرآن', en: 'Words of the Quran' }),
     ] },
@@ -53,7 +53,7 @@ export const EXPERIMENT_SECTIONS: NavSection[] = [
 
 
 export const NAV_SECTIONS: NavSection[] = [
-  { href: '/quran/branches', label: { ar: 'أشجار متشابهات القرآن', en: 'Phrase trees' }, groups: [] },
+  { href: '/quran/branches', label: { ar: 'متشابهات القرآن', en: 'Phrase trees' }, groups: [] },
   { href: '/quran/read', label: { ar: 'المصحف', en: 'Quran reader' }, groups: [] },
   { href: '/quizzes?topic=BRANCHES', label: { ar: 'اختبار فردي', en: 'Solo quiz' }, groups: [] },
   { href: '/quizzes/party', label: { ar: 'اختبار جماعي', en: 'Party quiz' }, groups: [] },

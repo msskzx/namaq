@@ -14,7 +14,6 @@ import {
   faCircleXmark,
   faPaperPlane,
   faRotateLeft,
-  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import styles from "@/components/common/PaperPage.module.css";
 import NumberInput from "@/components/common/NumberInput";
@@ -48,6 +47,7 @@ interface QuizQuestionView {
   branches?: BranchAnswer[];
   tree?: Branch;
   variants?: Variant[];
+  prefixes?: Variant[];
   asked?: number[];
   ayah?: { text: string; reference: string } | null;
   choiceDetails: Record<string, { text: string; reference: string }>;
@@ -119,7 +119,7 @@ export default function QuizzesPage() {
       else next.delete(key);
     }
     pendingParams.current = next.toString();
-    router.push(`${pathname}?${next.toString()}`);
+    router.push(`${pathname}?${next.toString()}`, { scroll: Boolean(changes.length) });
   }, [pathname, router]);
 
   const reset = useCallback(() => {
@@ -163,8 +163,6 @@ export default function QuizzesPage() {
     return (
       <div className={styles.page}>
         <div className="mx-auto max-w-3xl px-4 py-8" dir={ar ? "rtl" : "ltr"}>
-          <header className={styles.heading}><p className={styles.eyebrow}>{ar ? "نمق · اختبر معرفتك" : "Namaq · Test your knowledge"}</p><h1>{ar ? "الاختبارات" : "Quizzes"}</h1><p>{ar ? "اختر المواضيع وعدد الأسئلة، ثم ابدأ الاختبار." : "Choose your topics and question count, then start a quiz."}</p>
-            <Button className="mt-3" href="/quizzes/party"><FontAwesomeIcon icon={faUsers} />{ar ? "اختبار جماعي مع غيرك" : "Party quiz with others"}</Button></header>
           <fieldset className={`mb-6 min-w-0 ${styles.panel}`}>
             <legend className="mb-2 text-sm font-semibold text-[var(--home-ink)]">{ar ? "المواضيع، اختر واحدًا أو أكثر" : "Topics, choose one or more"}</legend>
             {TOPIC_GROUPS.map((group) => (
@@ -183,8 +181,8 @@ export default function QuizzesPage() {
           </fieldset>
           {hasBranches && (
             <fieldset className={`mb-6 min-w-0 ${styles.panel}`}>
-              <legend className="mb-2 text-sm font-semibold text-[var(--home-ink)]">{ar ? "أشجار العبارات" : "Phrase trees"}</legend>
-              <div className="mb-5 flex flex-wrap items-end gap-4">
+              <legend className="mb-2 text-sm font-semibold text-[var(--home-ink)]">{ar ? "متشابهات القرآن" : "Phrase trees"}</legend>
+              <div className="mb-5 flex flex-wrap items-start gap-x-6 gap-y-4">
                 {([["juzFrom", juz?.from ?? 1, ar ? "من الجزء" : "From juz'"], ["juzTo", juz?.to ?? 30, ar ? "إلى الجزء" : "To juz'"]] as const).map(([key, value, label]) => (
                   <div key={key} className="flex flex-col gap-1 text-sm text-[var(--home-ink)]">
                     <span>{label}</span>
@@ -196,8 +194,7 @@ export default function QuizzesPage() {
                       }} />
                   </div>
                 ))}
-              </div>
-              <div role="group" aria-labelledby="quiz-leaves" className="mb-2">
+              <div role="group" aria-labelledby="quiz-leaves">
                 <p id="quiz-leaves" className="mb-1.5 text-sm font-semibold text-[var(--home-ink)]">{ar ? "عدد الإجابات في كل شجرة" : "Answers per tree"}</p>
                 <div className="flex flex-wrap items-start gap-2">
                   {QUIZ_LEAVES.map((value) => (
@@ -210,6 +207,7 @@ export default function QuizzesPage() {
                     </div>
                   ))}
                 </div>
+              </div>
               </div>
               <BranchExplainer leaves={leaves} ar={ar} />
             </fieldset>
@@ -265,7 +263,7 @@ export default function QuizzesPage() {
                     <p className={`mb-3 text-[var(--home-ink)] ${question.tree ? "text-base leading-relaxed" : "font-semibold"}`}>{question.promptArabic}</p>
                     {question.branches && <p className="mb-2 text-sm text-[var(--home-muted)]">{ar ? `${num(points[index].earned)} من ${num(points[index].total)} أطراف` : `${points[index].earned} of ${points[index].total} leaves`}</p>}
                     {question.ayah && <AskedAyah ayah={question.ayah} />}
-                    {question.branches ? <BranchFeedback question={question} names={data?.surahNames ?? {}} juz={juz} typed={typed[index] ?? emptyBranchAnswers(question)} ar={ar} /> : <><div className="mb-2 flex items-center gap-2">
+                    {question.branches ? <BranchFeedback question={question} names={data?.surahNames ?? {}} typed={typed[index] ?? emptyBranchAnswers(question)} ar={ar} /> : <><div className="mb-2 flex items-center gap-2">
                       <FontAwesomeIcon icon={correct ? faCircleCheck : faCircleXmark} className={correct ? "text-green-600" : "text-red-500"} />
                       <span>{given ? answerContent(question, given) : ar ? "بدون إجابة" : "No answer"}</span>
                     </div>
@@ -313,7 +311,7 @@ export default function QuizzesPage() {
               {questions[current].ayah && <AskedAyah ayah={questions[current].ayah} />}
               {questions[current].branches ? (
                 answers[current] !== undefined ? (
-                  <BranchFeedback question={questions[current]} names={data?.surahNames ?? {}} juz={juz} typed={typed[current] ?? emptyBranchAnswers(questions[current])} ar={ar} />
+                  <BranchFeedback question={questions[current]} names={data?.surahNames ?? {}} typed={typed[current] ?? emptyBranchAnswers(questions[current])} ar={ar} />
                 ) : (
                   <BranchInputs
                     question={questions[current]}

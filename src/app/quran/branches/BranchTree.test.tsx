@@ -1,3 +1,4 @@
+vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { children: React.ReactNode }) => children }));
 // @vitest-environment jsdom
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -46,7 +47,7 @@ describe('BranchTree', () => {
     const { container } = render(<BranchTree tree={tree} names={{}} surround={{ on: false }} />);
     const viewport = container.querySelector('[data-tree-viewport]') as HTMLDivElement;
     const content = container.querySelector('[data-tree-content]') as HTMLDivElement;
-    Object.defineProperties(viewport, { clientWidth: { configurable: true, value: 500 } });
+    Object.defineProperties(viewport, { clientWidth: { configurable: true, value: 500 }, clientHeight: { configurable: true, value: 576 } });
     Object.defineProperties(content, {
       offsetWidth: { configurable: true, value: 1000 },
       offsetHeight: { configurable: true, value: 800 },
@@ -57,7 +58,7 @@ describe('BranchTree', () => {
     expect(firstRow.querySelector('[role="switch"]')).not.toBeNull();
     expect(firstRow.querySelector('[role="toolbar"]')).not.toBeNull();
     expect(content.style.transform).toBe('scale(0.5)');
-    expect(viewport.style.height).toBe('400px');
+    expect(viewport.style.height).toBe('clamp(22rem, 70svh, 36rem)');
     expect(viewport.classList.contains('overflow-hidden')).toBe(true);
     expect(container.querySelector('[data-tree]')!.classList.contains('overflow-hidden')).toBe(true);
     expect(screen.getByText('٥٠٪')).toBeTruthy();
@@ -74,6 +75,9 @@ describe('BranchTree', () => {
     expect(content.style.transform).toBe('scale(0.4)');
     fireEvent.click(fit);
     expect(content.style.transform).toBe('scale(0.5)');
+    Object.defineProperty(content, 'offsetHeight', { configurable: true, value: 100 });
+    act(() => resize([], {} as ResizeObserver));
+    expect(viewport.style.height).toBe('clamp(22rem, 70svh, 36rem)');
   });
 
   it('keeps a fixed viewport while fitting and zooming different diagram sizes', () => {
@@ -100,6 +104,12 @@ describe('BranchTree', () => {
     fireEvent.click(screen.getByRole('button', { name: 'ملاءمة الشجرة' }));
     expect(content.style.transform).toBe('scale(1)');
     expect(viewport.style.height).toBe('320px');
+    Object.defineProperties(content, { offsetWidth: { configurable: true, value: 200 }, offsetHeight: { configurable: true, value: 100 } });
+    act(() => resize([], {} as ResizeObserver));
+    expect(content.style.transform).toBe('scale(2)');
+    Object.defineProperty(content, 'offsetHeight', { configurable: true, value: 200 });
+    act(() => resize([], {} as ResizeObserver));
+    expect(content.style.transform).toBe('scale(1.6)');
   });
 
   it('joins the juz 30 opening variants to their branches without an empty box', () => {
@@ -378,7 +388,7 @@ describe('BranchTree', () => {
     it('puts the reference under the ayah text, like the tree\'s own leaves', async () => {
       render(<BranchTree tree={tree} names={names} surround={{ on: true }} />);
       const box = (await screen.findByText('ٱدْخُلُوهَا بِسَلَـٰمٍ')).closest('[data-ctx]')!;
-      expect(box.textContent!.indexOf('ٱدْخُلُوهَا')).toBeLessThan(box.textContent!.indexOf('الحجر ٤٦'));
+      expect(box.textContent!.indexOf('ٱدۡخُلُوهَا')).toBeLessThan(box.textContent!.indexOf('الحجر ٤٦'));
     });
 
     it('tags a neighbour that is itself in the tree and links to its branch', async () => {

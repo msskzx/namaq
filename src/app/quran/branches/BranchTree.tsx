@@ -3,6 +3,7 @@
 import React, { useEffect, useId, useRef, useState } from 'react';
 import { Maximize2, Minus, Plus, RotateCw, ZoomIn } from 'lucide-react';
 import Button from '@/components/common/Button';
+import MushafText from '@/components/common/MushafText';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@/lib/quran/arabicNumber';
 import { ayahEnds, branchesHref, keys, linkable, linkId, spell, type Branch, type BranchesView, type Variant } from '@/lib/quran/branches';
@@ -35,7 +36,7 @@ export function AyahRefs({ keys, names, tags = {}, className = 'mt-1' }: Refs & 
           <span key={key} className="inline-flex items-center gap-1">
             {index > 0 && <span aria-hidden className="text-xs text-[var(--home-muted)]">·</span>}
             <span className="text-xs text-[var(--home-muted)]">{names[surah] ? `${names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`}</span>
-            {tags[key] && <span className={`text-xs font-arabic ${TONE[tags[key].conj]}`}>{tags[key].word}</span>}
+            {tags[key] && <span className={`text-xs font-quran ${TONE[tags[key].conj]}`}><MushafText>{tags[key].word}</MushafText></span>}
           </span>
         );
       })}
@@ -83,14 +84,14 @@ function Node({ node, parent, path, names, tags, lead, juz, renderNode, indices,
   const entries: FanEntry[] = [...node.children.map((child, i) => ({ key: `n${i}`, keys: keys(child), item: <Node node={child} parent={node} path={words} names={names} tags={tags} lead={lead} juz={juz} renderNode={renderNode} indices={indices} showSpellings={showSpellings} view={view} around={around} anchors={anchors} subtreeLinks={subtreeLinks} /> })), ...nexts];
   return (
     <div className="flex items-center">
-      {boundary && <span aria-hidden className="shrink-0 px-1 font-arabic text-lg text-[var(--home-muted)]">{shownWords.join(' ')}</span>}
+      {boundary && <span aria-hidden className="shrink-0 px-1 font-quran text-lg text-[var(--home-muted)]">{shownWords.join(' ')}</span>}
       {!boundary && (!root || shownWords.length > 0 || node.ayat.length > 0) && <PathBox id={id} keys={keys(node)} lit={LIT} tone={LINE} className={`shrink-0 rounded border px-3 py-1.5 ${node.children.length === 0 ? 'max-w-sm' : 'max-w-xs'} bg-[var(--home-paper)] ${root ? 'text-xl' : 'text-lg'}`}>
         {anchors && node.ayat.map(key => <span key={key} data-anchor id={anchorOf(anchors, key)} />)}
         {renderNode && !root ? renderNode(node, indices.get(node)!, tags) : <Marked node={node} ayahKeys={keys(node)} subject={subject} siblings={node.children.length === 0 && parent ? keys(parent) : undefined} names={names} offset={path.length} skip={root ? lead : 0} enabled={showSpellings}
           references={node.ayat.length > 0 && <AyahRefs keys={node.ayat} names={names} tags={tags} />}
           before={<PathButton id={id} keys={keys(node)} subject={subject} />}
           after={!root && view?.kind !== 'inside' && node.children.length > 0 && subtreeHref && <SubtreeButton href={subtreeHref} />}>
-          <span className="block font-arabic leading-loose">{shownWords.join(' ')}</span>
+          <span className="block font-quran leading-loose"><MushafText>{shownWords.join(' ')}</MushafText></span>
         </Marked>}
       </PathBox>}
       {entries.length > 0 && <>
@@ -117,7 +118,7 @@ const SCALE_STEP = 0.1;
 type DiagramSize = { width: number; height: number; availableWidth: number; availableHeight: number };
 
 function fitTreeScale({ width, height, availableWidth, availableHeight }: DiagramSize) {
-  return Math.min(1, availableWidth / width, availableHeight / height);
+  return Math.min(MAX_SCALE, availableWidth / width, availableHeight / height);
 }
 
 function TreeViewport({ children, controls, enabled, ar, height }: { children: React.ReactNode; controls?: React.ReactNode; enabled: boolean; ar: boolean; height?: string }) {
@@ -179,8 +180,8 @@ function TreeViewport({ children, controls, enabled, ar, height }: { children: R
         </div>
       </div>
     </div>
-    <div ref={viewport} data-tree-viewport className={manualScale === null ? 'overflow-hidden' : 'overflow-auto'} style={{ height: viewportHeight }}>
-      <div data-tree-frame className="relative" style={frame}>
+    <div ref={viewport} data-tree-viewport className={`flex ${manualScale === null ? 'overflow-hidden' : 'overflow-auto'}`} style={{ height: viewportHeight }}>
+      <div data-tree-frame className="relative m-auto shrink-0" style={frame}>
         <div ref={content} data-tree-content className="absolute top-0 flex w-max items-center" style={{ insetInlineStart: 0, transform: `scale(${scale})`, transformOrigin: ar ? 'top right' : 'top left' }}>{children}</div>
       </div>
     </div>
@@ -188,7 +189,7 @@ function TreeViewport({ children, controls, enabled, ar, height }: { children: R
 }
 
 // docs/plans/quran-shared-openings.md
-export default function BranchTree({ tree, names, variants = [], prefixes, subtreeLinks, showSpellings = true, zoomable = true, viewportHeight, juz = null, renderNode, label = 'شجرة العبارات المشتركة', header, view: given, surround }: Props) {
+export default function BranchTree({ tree, names, variants = [], prefixes, subtreeLinks, showSpellings = true, zoomable = true, viewportHeight = 'clamp(22rem, 70svh, 36rem)', juz = null, renderNode, label = 'شجرة العبارات المشتركة', header, view: given, surround }: Props) {
   const id = useId();
   const ar = useLanguage().language === 'ar';
   const [on, setOn] = useState(() => (surround?.sync && typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('c') === '1' : surround?.on ?? false));
@@ -237,9 +238,9 @@ export default function BranchTree({ tree, names, variants = [], prefixes, subtr
           {prefixes && prefixes.length > 0 ? <>
             <Fan side="end" label={ar ? 'ما قبل العبارة' : 'Before the phrase'} entries={prefixes.flatMap((prefix, i): FanEntry[] => prefix.word ? [{ key: `${prefix.word}:${i}`, keys: prefix.keys, item: <>
               <BeforeFan ayahKeys={prefix.keys} around={around} opens={`p${i}`} />
-              <PathBox id={`p${i}`} keys={prefix.keys} lit={LIT} tone={LINE} className="max-w-sm shrink-0 rounded border bg-[var(--home-paper)] px-3 py-1.5 text-xl font-arabic leading-loose">
+              <PathBox id={`p${i}`} keys={prefix.keys} lit={LIT} tone={LINE} className="max-w-sm shrink-0 rounded border bg-[var(--home-paper)] px-3 py-1.5 text-xl leading-loose">
                 <Marked node={prefix} ayahKeys={prefix.keys} subject={prefix.word} siblings={all} names={names} enabled={showSpellings} before={<PathButton id={`p${i}`} keys={prefix.keys} subject={prefix.word} />}>
-                  <span className="block">{prefix.word}</span>
+                  <span className="block font-quran"><MushafText>{prefix.word}</MushafText></span>
                 </Marked>
               </PathBox>
             </> }] : prefix.keys.flatMap(key => {
@@ -260,11 +261,11 @@ export default function BranchTree({ tree, names, variants = [], prefixes, subtr
           </> : variants.length > 0 ? <>
             <Fan side="end" label="صيغ الكلمة الأولى" entries={variants.map((variant, i) => ({ key: variant.word, keys: variant.keys, item: <>
               <BeforeFan ayahKeys={variant.keys} around={around} opens={`v${i}`} />
-              <PathBox id={`v${i}`} keys={variant.keys} lit={`${LIT} ${TONE[variant.conj]}`} tone={`${LINE} ${TONE[variant.conj]}`} className="shrink-0 rounded border bg-[var(--home-paper)] px-3 py-1.5 text-xl font-arabic leading-loose">
+              <PathBox id={`v${i}`} keys={variant.keys} lit={`${LIT} ${TONE[variant.conj]}`} tone={`${LINE} ${TONE[variant.conj]}`} className="shrink-0 rounded border bg-[var(--home-paper)] px-3 py-1.5 text-xl leading-loose">
                 <Marked node={variant} ayahKeys={variant.keys} subject={variant.word} siblings={variants.flatMap(other => other.keys)} names={names} enabled={showSpellings}
                   before={<PathButton id={`v${i}`} keys={variant.keys} subject={variant.word} />}
                   after={!renderNode && <SubtreeButton href={branchesHref(variant.id, juz ?? undefined, { ...view, spelling: spell(variant.word), partition: variant.partition })} />}>
-                  <span className="block">{variant.word}</span>
+                  <span className="block font-quran"><MushafText>{variant.word}</MushafText></span>
                 </Marked>
               </PathBox>
             </> }))} />

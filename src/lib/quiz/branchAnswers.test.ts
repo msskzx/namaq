@@ -5,6 +5,14 @@ const one = (...branches: string[][]) => branches.map((words) => [words]);
 const heavens = one(['ٱلسَّمَـٰوَٰتِ', 'وَٱلْأَرْضَ'], ['ٱلْأَرْضِ', 'جَمِيعًۭا']);
 const servants = one(['غِلْمَانٌۭ', 'لَّهُمْ', 'كَأَنَّهُمْ'], ['وِلْدَٰنٌۭ', 'مُّخَلَّدُونَ']);
 
+it('grades ten reordered leaves and keeps given leaves fixed', () => {
+  const words = ['واحد', 'اثنان', 'ثلاثة', 'أربعة', 'خمسة', 'ستة', 'سبعة', 'ثمانية', 'تسعة', 'عشرة'];
+  const tree = { words: ['قال'], ayat: [], children: words.map((word, index) => ({ words: [word], ayat: [`1:${index + 1}`], children: [] })) };
+  expect(matchTreeAnswers(tree, [...words].reverse()).every(match => match?.correct)).toBe(true);
+  expect(matchTreeAnswers(tree, [words[0], ...words.slice(1).reverse()], new Set([0])).every(match => match?.correct)).toBe(true);
+  expect(matchTreeAnswers(tree, [...words].reverse(), new Set([0]))[0]?.correct).toBe(false);
+});
+
 describe('matchedWords', () => {
   it('accepts the usual spelling of a word written in the Quran rasm', () => {
     const pairs: [string, string][] = [
