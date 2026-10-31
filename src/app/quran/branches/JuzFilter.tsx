@@ -13,6 +13,7 @@ export default function JuzFilter({ range, phrase, view }: { range: JuzRange | n
       labels={{
         from: ar ? 'من الجزء' : 'From juz',
         to: ar ? 'إلى الجزء' : 'To juz',
+        toText: ar ? 'إلى' : 'to',
         all: ar ? 'كل الأجزاء' : 'All juz',
         form: ar ? 'نطاق الأجزاء' : 'Juz range',
         invalid: shown => (ar

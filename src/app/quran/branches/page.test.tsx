@@ -205,5 +205,15 @@ describe('Quran branch trees', () => {
     const all = within(pane).getByRole('link', { name: /كل الأشجار/ }).getAttribute('href')!;
     expect(new URL(all, 'http://localhost').searchParams.get('m')).toBe('list');
   });
+
+  it('names the juz range once and keeps the pane explanation inside the rules button', async () => {
+    render(await open({ o: 'لا اثم عليه' }));
+    const form = screen.getByRole('form', { name: 'نطاق الأجزاء' });
+    expect(form.textContent!.match(/الجزء/g)).toHaveLength(1);
+    expect(screen.getByRole('spinbutton', { name: 'إلى الجزء' })).toBeTruthy();
+    const rules = screen.getByText('قواعد المطابقة').closest('details')!;
+    expect(rules.textContent).toContain('سور آيات هذه الشجرة بعدد آياتها فيها');
+    expect(within(screen.getByRole('complementary', { name: 'السور' })).getAllByText(/سور آيات هذه الشجرة/)).toHaveLength(1);
+  });
 });
 

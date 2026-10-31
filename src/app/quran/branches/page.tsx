@@ -17,7 +17,7 @@ import BranchHeading, { MatchingRules } from './BranchHeading';
 import AyahCards from './AyahCards';
 import OpeningSearch from './OpeningSearch';
 import SearchSummary from './SearchSummary';
-import SurahPane from './SurahPane';
+import SurahPane, { PaneNote } from './SurahPane';
 import { PathScope } from './Paths';
 import CompareLayout from '../compare/CompareLayout';
 import styles from '@/components/common/PaperPage.module.css';
@@ -136,7 +136,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
                 list={branchesHref('', juz, { query: state.query, surah: state.surah, mode: 'list', page: id ? (steps ? Math.ceil(steps.position / PER_PAGE) : 1) : page })}
                 tree={id ? branchesHref(id, juz, { ...state, mode: undefined }) : shown[0] && branchesHref(shown[0].id, juz, { query, surah })}
                 cards={id ? branchesHref(id, juz, { ...state, mode: 'cards' }) : shown[0] && branchesHref(shown[0].id, juz, { query, surah, mode: 'cards' })} />
-              <MatchingRules />
+              <MatchingRules><PaneNote inTree={!!id} /></MatchingRules>
             </div>
             <JuzFilter range={range} phrase={id} view={state} />
             <SurahPane counts={id ? ayatBySurah : counts} total={id ? drawn.length : found.length} names={names} surah={surah} juz={range} view={state} inTree={!!id} treeKeys={drawn.map(ayah => ayah.key)} />
