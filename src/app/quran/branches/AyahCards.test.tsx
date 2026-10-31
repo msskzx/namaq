@@ -5,7 +5,7 @@ import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { SWRConfig } from 'swr';
 import AyahCards from './AyahCards';
-import type { AyahContext } from '@/lib/quran/ayahContext';
+import type { AyahContext, Surrounding } from '@/lib/quran/ayahContext';
 
 const router = { push: vi.fn(), replace: vi.fn(), prefetch: vi.fn() };
 let params = new URLSearchParams();
@@ -14,16 +14,23 @@ vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ 
 
 const ayah = (key: string, words: string[]) => ({ key, page: 1, words });
 const source: AyahContext[] = [
-  { before: ayah('94:4', ['وَرَفَعْنَا', 'لَكَ', 'ذِكْرَكَ']), after: null, ayah: ayah('94:5', ['فَإِنَّ', 'مَعَ', 'ٱلْعُسْرِ', 'يُسْرًا']), match: { exact: [1, 2], rooted: [3] } },
-  { before: null, after: ayah('94:7', ['فَإِذَا', 'فَرَغْتَ', 'فَٱنصَبْ']), ayah: ayah('94:6', ['إِنَّ', 'مَعَ', 'ٱلْعُسْرِ', 'يُسْرًۭا']), match: { exact: [1, 2], rooted: [3] } },
+  { before: null, after: null, ayah: ayah('94:5', ['فَإِنَّ', 'مَعَ', 'ٱلْعُسْرِ', 'يُسْرًا']), match: { exact: [1, 2], rooted: [3] } },
+  { before: null, after: null, ayah: ayah('94:6', ['إِنَّ', 'مَعَ', 'ٱلْعُسْرِ', 'يُسْرًۭا']), match: { exact: [1, 2], rooted: [3] } },
   { before: null, after: null, ayah: ayah('65:7', ['سَيَجْعَلُ', 'ٱللَّهُ', 'بَعْدَ', 'عُسْرٍۢ', 'يُسْرًۭا']), match: { exact: [], rooted: [3, 4] } },
 ];
+const basmala = ['بِسْمِ', 'ٱللَّهِ', 'ٱلرَّحْمَٰنِ', 'ٱلرَّحِيمِ'];
+const around: Surrounding = {
+  before: { '94:5': ayah('94:4', ['وَرَفَعْنَا', 'لَكَ', 'ذِكْرَكَ']), '94:6': null, '65:7': null },
+  after: { '94:5': null, '94:6': ayah('94:7', ['فَإِذَا', 'فَرَغْتَ', 'فَٱنصَبْ']), '65:7': { ...ayah('65:8', ['وَكَأَيِّن']), basmala } },
+};
 
 beforeEach(() => {
   params = new URLSearchParams();
   window.history.replaceState(null, '', '/quran/branches?o=x&m=cards');
   vi.stubGlobal('fetch', vi.fn().mockImplementation(async (url: string) => {
-    const wanted = new URL(url, 'http://localhost').searchParams.get('q')!.split(',');
+    const { pathname, searchParams } = new URL(url, 'http://localhost');
+    if (pathname === '/api/quran/surrounding') return { ok: true, json: async () => around };
+    const wanted = searchParams.get('q')!.split(',');
     return { ok: true, json: async () => source.filter(context => wanted.includes(context.ayah.key)) };
   }));
 });
@@ -55,9 +62,9 @@ it('moves every row together to the next or previous ayah with the arrow keys, h
   show();
   await screen.findByRole('article', { name: 'الشرح ٥' });
   key('ArrowLeft');
-  expect(column()).toEqual(['', 'الشرح ٧', '']);
+  expect(column()).toEqual(['', 'الشرح ٧', 'الطلاق ٨']);
   key('ArrowLeft');
-  expect(column()).toEqual(['', 'الشرح ٧', '']);
+  expect(column()).toEqual(['', 'الشرح ٧', 'الطلاق ٨']);
   key('ArrowRight');
   key('ArrowRight');
   expect(column()).toEqual(['الشرح ٤', '', '']);
@@ -72,4 +79,12 @@ it('steps between trees with the tree navigation', async () => {
   await screen.findByRole('article', { name: 'الشرح ٥' });
   expect(screen.getByRole('link', { name: 'الشجرة السابقة' }).getAttribute('href')).toBe(steps.previous);
   expect(screen.getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')).toBe(steps.next);
+});
+
+it('opens a next ayah in the following surah under its basmala, without a seal on the basmala', async () => {
+  show();
+  const next = await screen.findByRole('article', { name: 'الطلاق ٨' });
+  expect(next.textContent).toContain(basmala.join(' '));
+  expect(next.textContent!.indexOf('بِسْمِ')).toBeLessThan(next.textContent!.indexOf('وَكَأَيِّن'));
+  expect(next.querySelectorAll('span[class*="verseSeal"]')).toHaveLength(1);
 });

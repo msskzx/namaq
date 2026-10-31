@@ -8,7 +8,7 @@ import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { useLanguage } from '@/components/language/LanguageContext';
 import PageSpread, { MatchLegend } from '@/components/quran/PageSpread';
 import { num } from '@/lib/quran/arabicNumber';
-import type { AyahContext } from '@/lib/quran/ayahContext';
+import type { AyahContext, Surrounding } from '@/lib/quran/ayahContext';
 import { loadContext, MAX_KEYS, sharedMarks } from './AyahContext';
 import TreeSteps, { type Steps } from './TreeSteps';
 import styles from './AyahCards.module.css';
@@ -22,6 +22,11 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
   const shown = ayahKeys.slice(0, MAX_KEYS);
   const [column, setColumn] = useState(1);
   const { data, error, isLoading, mutate } = useSWR<AyahContext[]>(`/api/quran/context?${new URLSearchParams({ q: shown.join(',') })}`, loadContext, { revalidateOnFocus: false });
+  const { data: around, error: aroundError, mutate: retryAround } = useSWR<Surrounding>(`/api/quran/surrounding?${new URLSearchParams({ before: shown.join(','), after: shown.join(',') })}`, async (url: string) => {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Could not load surrounding ayat');
+    return response.json();
+  }, { revalidateOnFocus: false });
   const exactLabel = ar ? 'في كل الآيات بلفظها' : 'In every ayah, same form';
   const rootLabel = ar ? 'في كل الآيات بجذرها أو بضبط مختلف' : 'In every ayah, by root or other marks';
   const headings: Record<Column, string> = ar ? { before: 'الآية السابقة', ayah: 'آيات الشجرة', after: 'الآية التالية' } : { before: 'Previous ayah', ayah: 'Tree ayat', after: 'Next ayah' };
@@ -52,7 +57,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
     clearTimeout(settle.current);
     settle.current = setTimeout(centred, 80);
   };
-  const ready = !!data;
+  const ready = !!data && !!around;
   useEffect(() => {
     if (ready) head(1)?.scrollIntoView?.({ behavior: 'instant', inline: 'center', block: 'nearest' });
   }, [ready]);
@@ -77,7 +82,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
   const missing = contexts?.some(context => !context);
 
   const cell = (context: AyahContext, at: Column, row: number, i: number) => {
-    const ayah = context[at];
+    const ayah = at === 'ayah' ? context.ayah : around![at === 'before' ? 'before' : 'after'][context.ayah.key];
     const current = i === column;
     const key = `${row}:${at}`;
     const props = { 'data-col': i, 'data-current': current || undefined, className: styles.cell, onClick: current ? undefined : () => goTo(i) };
@@ -89,7 +94,10 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
         title: name,
         subtitle: ar ? `الآية ${num(number)}` : `Ayah ${number}`,
         label: `${name} ${ar ? num(number) : number}`,
-        rows: [[{ number, words: ayah.words, current: at === 'ayah', marks: at === 'ayah' ? sharedMarks(context, exactLabel, rootLabel) : undefined }]],
+        rows: [
+          ...(at === 'after' && 'basmala' in ayah && ayah.basmala ? [[{ number: 0, words: ayah.basmala, bare: true }]] : []),
+          [{ number, words: ayah.words, current: at === 'ayah', marks: at === 'ayah' ? sharedMarks(context, exactLabel, rootLabel) : undefined }],
+        ],
         footer: current ? <Button size="sm" className={styles.read} href={`/quran/read/${ayah.page}?a=${ayah.key}`} aria-label={read} title={read}><BookOpen aria-hidden /></Button> : undefined,
       }]} />
     </div>;
@@ -102,8 +110,8 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
         {shown.length > 1 && <MatchLegend exact={exactLabel} root={rootLabel} />}
       </div>
       {isLoading && <LoadingSpinner />}
-      {(error || missing) && <div role="alert"><p>{ar ? 'تعذّر تحميل الآيات.' : 'Could not load the ayat.'}</p><Button size="lg" onClick={() => void mutate()} aria-label={ar ? 'إعادة المحاولة' : 'Try again'} title={ar ? 'إعادة المحاولة' : 'Try again'}><RotateCcw aria-hidden /></Button></div>}
-      {contexts && !missing && <div ref={track} dir="rtl" className={styles.track} onScroll={onScroll}>
+      {(error || aroundError || missing) && <div role="alert"><p>{ar ? 'تعذّر تحميل الآيات.' : 'Could not load the ayat.'}</p><Button size="lg" onClick={() => { void mutate(); void retryAround(); }} aria-label={ar ? 'إعادة المحاولة' : 'Try again'} title={ar ? 'إعادة المحاولة' : 'Try again'}><RotateCcw aria-hidden /></Button></div>}
+      {contexts && around && !missing && <div ref={track} dir="rtl" className={styles.track} onScroll={onScroll}>
         {COLUMNS.map((at, i) => <button key={at} type="button" data-head={i} data-current={i === column || undefined} aria-pressed={i === column} className={styles.head} onClick={() => goTo(i)}>{headings[at]}</button>)}
         {contexts.map((context, row) => COLUMNS.map((at, i) => cell(context!, at, row, i)))}
       </div>}
