@@ -2,10 +2,9 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import useSWR from 'swr';
-import { BookOpen, CircleHelp, GitBranch, RotateCcw } from 'lucide-react';
+import { BookOpen, GitBranch, RotateCcw } from 'lucide-react';
 import Button from '@/components/common/Button';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
-import useDismissable from '@/components/common/useDismissable';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import { useLanguage } from '@/components/language/LanguageContext';
 import PageSpread, { MatchLegend } from '@/components/quran/PageSpread';
@@ -19,6 +18,13 @@ const COLUMNS = ['before', 'ayah', 'after'] as const;
 const SWIPE = 50;
 const SETTLE = 600;
 type Column = typeof COLUMNS[number];
+
+const matchLabels = (ar: boolean) => ar ? { exact: 'نفس الكلمة', root: 'نفس الجذر' } : { exact: 'Same word', root: 'Same root' };
+
+export function CardsLegend() {
+  const { exact, root } = matchLabels(useLanguage().language === 'ar');
+  return <MatchLegend exact={exact} root={root} />;
+}
 
 export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string[]; names: Record<number, string>; steps?: Steps }) {
   const { language } = useLanguage();
@@ -37,11 +43,8 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
   const sideUrl = (keys?: string[]) => keys && keys.length > 1 ? `/api/quran/context?${new URLSearchParams({ q: keys.slice(0, MAX_KEYS).join(',') })}` : null;
   const { data: beforeMatch } = useSWR<AyahContext[]>(sideUrl(sideKeys('before')), loadContext, { revalidateOnFocus: false });
   const { data: afterMatch } = useSWR<AyahContext[]>(sideUrl(sideKeys('after')), loadContext, { revalidateOnFocus: false });
-  const exactLabel = ar ? 'نفس الكلمة' : 'Same word';
-  const rootLabel = ar ? 'نفس الجذر' : 'Same root';
+  const { exact: exactLabel, root: rootLabel } = matchLabels(ar);
   const read = ar ? 'قراءة الآية' : 'Read ayah';
-  const legend = ar ? 'دليل الألوان' : 'Colour key';
-  const keyRef = useDismissable();
 
   const track = useRef<HTMLDivElement>(null);
   const head = (i: number) => track.current?.querySelector<HTMLElement>(`[data-col="${i}"]`);
@@ -208,14 +211,6 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
 
   return (
     <section aria-label={ar ? 'آيات الشجرة في سياقها' : 'Tree ayat in context'} className="flex flex-col gap-2">
-      <div className="flex justify-end">
-        {shown.length > 1 && <details ref={keyRef} className="group relative shrink-0">
-          <summary title={legend} className="flex size-8 cursor-pointer list-none items-center justify-center rounded-sm text-[var(--home-muted)] hover:bg-[var(--home-paper-deep)] hover:text-[var(--home-ink)] group-open:text-[var(--home-ink)] [&::-webkit-details-marker]:hidden">
-            <CircleHelp size={16} aria-hidden /><span className="sr-only">{legend}</span>
-          </summary>
-          <div className="absolute end-0 top-full z-20 mt-1 whitespace-nowrap rounded-sm border border-[var(--home-rule)] bg-[var(--home-paper)] px-3 shadow-md"><MatchLegend exact={exactLabel} root={rootLabel} /></div>
-        </details>}
-      </div>
       {isLoading && <LoadingSpinner />}
       {(error || aroundError || missing) && <div role="alert"><p>{ar ? 'تعذّر تحميل الآيات.' : 'Could not load the ayat.'}</p><Button size="lg" onClick={() => { void mutate(); void retryAround(); }} aria-label={ar ? 'إعادة المحاولة' : 'Try again'} title={ar ? 'إعادة المحاولة' : 'Try again'}><RotateCcw aria-hidden /></Button></div>}
       {contexts && around && !missing && <div ref={track} dir="rtl" data-fits={fits || undefined} className={styles.track} onScroll={onScroll} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onWheel={onWheel}>

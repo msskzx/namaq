@@ -14,7 +14,7 @@ import JuzFilter from './JuzFilter';
 import Pagination from '@/components/common/Pagination';
 import PieceList, { type SharedPiece } from './PieceList';
 import BranchHeading, { MatchingRules } from './BranchHeading';
-import AyahCards from './AyahCards';
+import AyahCards, { CardsLegend } from './AyahCards';
 import OpeningSearch from './OpeningSearch';
 import SearchSummary from './SearchSummary';
 import SurahPane, { PaneNote } from './SurahPane';
@@ -126,7 +126,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
     <div id="quran-branches" dir="rtl" className={`${styles.page} w-full max-w-6xl mx-auto px-4 py-8 flex flex-col gap-4`}>
       <BranchHeading />
       <Scope>
-        <CompareLayout title="السور" current={id ? 'سور هذه الشجرة' : surah ? names[surah] : 'كل السور'} change="اختر سورة" storageKey="branches-pane-hidden" paneToggleFirst
+        <CompareLayout title="السور" hideTitle current={id ? 'سور هذه الشجرة' : surah ? names[surah] : 'كل السور'} change="اختر سورة" storageKey="branches-pane-hidden" paneToggleFirst
           bar={<div className="min-w-0 flex-1">
             <OpeningSearch key={query} query={query} top={built.trees.slice(0, 8).map(tree => ({ id: tree.id, text: tree.text, textEn: tree.textEn, count: new Set(tree.occurrences.map(occurrence => occurrence.key)).size }))} phrases={built.trees.map(tree => ({ id: tree.id, text: tree.text, textEn: tree.textEn, aliases: tree.aliases, count: new Set(tree.occurrences.map(occurrence => occurrence.key)).size }))} phraseCount={built.trees.length} current={id} juz={range} unavailable={unavailable} view={id ? { ...treeView, mode: state.mode } : state} />
           </div>}
@@ -138,6 +138,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
                 cards={id ? branchesHref(id, juz, { ...state, mode: 'cards' }) : shown[0] && branchesHref(shown[0].id, juz, { query, surah, mode: 'cards' })} />
               <MatchingRules><PaneNote inTree={!!id} /></MatchingRules>
             </div>
+            {cards && <CardsLegend />}
             <JuzFilter range={range} view={state} />
             <SurahPane counts={id ? ayatBySurah : counts} total={id ? drawn.length : found.length} names={names} surah={surah} juz={range} view={state} inTree={!!id} treeKeys={drawn.map(ayah => ayah.key)} />
           </Fragment>}>

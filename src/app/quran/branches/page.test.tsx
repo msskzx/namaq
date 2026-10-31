@@ -194,6 +194,18 @@ describe('Quran branch trees', () => {
     expect(within(mode).getByRole('link', { name: 'قائمة' }).getAttribute('href')).toBe(branchesHref('', juz, { mode: 'list' }));
   });
 
+  it('keeps the colour legend in the side pane in cards view only, under an unheaded pane', async () => {
+    const trees = buildTreeGroups((data.ayat as BranchAyah[]).filter(ayah => inJuzRange(ayah.key, { from: 30, to: 30 })));
+    render(await open({ o: trees[1].id, juzFrom: '30', juzTo: '30', m: 'cards' }));
+    const pane = screen.getByRole('complementary', { name: 'السور' });
+    expect(within(pane).getByText('نفس الكلمة')).toBeTruthy();
+    expect(within(pane).getByText('نفس الجذر')).toBeTruthy();
+    expect(within(pane).queryByRole('heading', { name: 'السور' })).toBeNull();
+    cleanup();
+    render(await open({ o: trees[1].id, juzFrom: '30', juzTo: '30' }));
+    expect(within(screen.getByRole('complementary', { name: 'السور' })).queryByText('نفس الكلمة')).toBeNull();
+  });
+
   it('sends surah picks inside a tree to the list of that surah', async () => {
     render(await open({ o: 'لا اثم عليه' }));
     const pane = screen.getByRole('complementary', { name: 'السور' });
