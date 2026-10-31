@@ -252,7 +252,6 @@ function TreeViewport({ children, controls, enabled, ar, height }: { children: R
         <Button size="icon" aria-pressed={manualScale === null} onClick={() => { anchor.current = null; setManualScale(null); }} aria-label={labels.fit} title={labels.fit}><Maximize2 size={16} aria-hidden /></Button>
         <div dir="ltr" className="flex items-center gap-1">
           <Button size="icon" onClick={() => setScale(scale - SCALE_STEP)} disabled={scale <= MIN_SCALE} aria-label={labels.out} title={labels.out}><Minus size={16} aria-hidden /></Button>
-          <span className="min-w-12 text-center text-sm tabular-nums text-[var(--home-muted)]" aria-live="polite">{ar ? `${num(Math.round(scale * 100))}٪` : `${Math.round(scale * 100)}%`}</span>
           <Button size="icon" onClick={() => setScale(scale + SCALE_STEP)} disabled={scale >= MAX_SCALE} aria-label={labels.in} title={labels.in}><Plus size={16} aria-hidden /></Button>
         </div>
       </div>
