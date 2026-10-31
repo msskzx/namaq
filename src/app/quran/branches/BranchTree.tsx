@@ -153,7 +153,10 @@ function TreeViewport({ children, controls, enabled, ar, height }: { children: R
   const fitted = size ? fitTreeScale(size) : 1;
   const scale = manualScale ?? fitted;
   const clampScale = (next: number) => Math.min(MAX_SCALE, Math.max(MIN_SCALE, next));
-  const setScale = (next: number) => setManualScale(clampScale(Number(next.toFixed(2))));
+  const setScale = (next: number) => {
+    anchor.current = null;
+    setManualScale(clampScale(Number(next.toFixed(2))));
+  };
 
   // Pinch (two fingers on a touch screen, a trackpad pinch that browsers send
   // as ctrl+wheel, or Safari's gesture events) zooms the tree, not the page.
@@ -164,10 +167,12 @@ function TreeViewport({ children, controls, enabled, ar, height }: { children: R
   useEffect(() => {
     const outer = viewport.current;
     if (!enabled || !outer) return;
-    const zoomAt = (next: number, x: number, y: number) => {
+    const zoomAt = (wanted: number, x: number, y: number) => {
+      const next = clampScale(wanted);
+      if (next === scaleRef.current) return;
       const frame = outer.querySelector<HTMLElement>('[data-tree-frame]')?.getBoundingClientRect();
       if (frame?.width && frame.height) anchor.current = { x, y, fx: (x - frame.left) / frame.width, fy: (y - frame.top) / frame.height };
-      setManualScale(clampScale(next));
+      setManualScale(next);
     };
     const onWheel = (event: WheelEvent) => {
       if (!event.ctrlKey) return;
@@ -179,7 +184,7 @@ function TreeViewport({ children, controls, enabled, ar, height }: { children: R
       const [a, b] = [event.touches[0], event.touches[1]];
       return { distance: Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY), x: (a.clientX + b.clientX) / 2, y: (a.clientY + b.clientY) / 2 };
     };
-    const onTouchStart = (event: TouchEvent) => {
+    const onTouches = (event: TouchEvent) => {
       pinch = event.touches.length === 2 ? { distance: fingers(event).distance, scale: scaleRef.current } : null;
     };
     const onTouchMove = (event: TouchEvent) => {
@@ -188,27 +193,27 @@ function TreeViewport({ children, controls, enabled, ar, height }: { children: R
       const now = fingers(event);
       if (pinch.distance) zoomAt(pinch.scale * now.distance / pinch.distance, now.x, now.y);
     };
-    const onTouchEnd = (event: TouchEvent) => { if (event.touches.length < 2) pinch = null; };
     let gesture = 1;
     const onGestureStart = (event: Event) => { event.preventDefault(); gesture = scaleRef.current; };
     const onGestureChange = (event: Event) => {
       event.preventDefault();
+      if ('ontouchstart' in window) return;
       const { scale: ratio, clientX, clientY } = event as Event & { scale: number; clientX: number; clientY: number };
       zoomAt(gesture * ratio, clientX, clientY);
     };
     outer.addEventListener('wheel', onWheel, { passive: false });
-    outer.addEventListener('touchstart', onTouchStart, { passive: true });
+    outer.addEventListener('touchstart', onTouches, { passive: true });
     outer.addEventListener('touchmove', onTouchMove, { passive: false });
-    outer.addEventListener('touchend', onTouchEnd);
-    outer.addEventListener('touchcancel', onTouchEnd);
+    outer.addEventListener('touchend', onTouches);
+    outer.addEventListener('touchcancel', onTouches);
     outer.addEventListener('gesturestart', onGestureStart);
     outer.addEventListener('gesturechange', onGestureChange);
     return () => {
       outer.removeEventListener('wheel', onWheel);
-      outer.removeEventListener('touchstart', onTouchStart);
+      outer.removeEventListener('touchstart', onTouches);
       outer.removeEventListener('touchmove', onTouchMove);
-      outer.removeEventListener('touchend', onTouchEnd);
-      outer.removeEventListener('touchcancel', onTouchEnd);
+      outer.removeEventListener('touchend', onTouches);
+      outer.removeEventListener('touchcancel', onTouches);
       outer.removeEventListener('gesturestart', onGestureStart);
       outer.removeEventListener('gesturechange', onGestureChange);
     };
@@ -242,7 +247,7 @@ function TreeViewport({ children, controls, enabled, ar, height }: { children: R
     <div dir={ar ? 'rtl' : 'ltr'} className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--home-rule)] pb-3">
       {controls && <div className="flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-[var(--home-muted)]">{controls}</div>}
       <div role="toolbar" aria-label={ar ? 'تكبير الشجرة' : 'Tree zoom'} className="flex flex-wrap items-center gap-2">
-        <Button aria-pressed={manualScale === null} onClick={() => setManualScale(null)}><Maximize2 size={16} aria-hidden />{ar ? 'ملاءمة الشجرة' : 'Fit tree'}</Button>
+        <Button aria-pressed={manualScale === null} onClick={() => { anchor.current = null; setManualScale(null); }}><Maximize2 size={16} aria-hidden />{ar ? 'ملاءمة الشجرة' : 'Fit tree'}</Button>
         <div dir="ltr" className="flex items-center gap-1">
           <Button size="icon" onClick={() => setScale(scale - SCALE_STEP)} disabled={scale <= MIN_SCALE} aria-label={labels.out} title={labels.out}><Minus size={16} aria-hidden /></Button>
           <span className="min-w-12 text-center text-sm tabular-nums text-[var(--home-muted)]" aria-live="polite">{ar ? `${num(Math.round(scale * 100))}٪` : `${Math.round(scale * 100)}%`}</span>
