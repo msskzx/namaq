@@ -2,7 +2,7 @@
 import React from 'react';
 vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { children: React.ReactNode }) => children }));
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
-import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { SWRConfig } from 'swr';
 import AyahCards from './AyahCards';
 import type { AyahContext, Surrounding } from '@/lib/quran/ayahContext';
@@ -23,6 +23,10 @@ const around: Surrounding = {
   before: { '94:5': ayah('94:4', ['وَرَفَعْنَا', 'لَكَ', 'ذِكْرَكَ']), '94:6': null, '65:7': null },
   after: { '94:5': null, '94:6': ayah('94:7', ['فَإِذَا', 'فَرَغْتَ', 'فَٱنصَبْ']), '65:7': { ...ayah('65:8', ['وَكَأَيِّن']), basmala } },
 };
+const side: AyahContext[] = [
+  { before: null, after: null, ayah: ayah('94:7', ['فَإِذَا', 'فَرَغْتَ', 'فَٱنصَبْ']), match: { exact: [0], rooted: [] } },
+  { before: null, after: null, ayah: ayah('65:8', ['وَكَأَيِّن']), match: { exact: [0], rooted: [] } },
+];
 
 beforeEach(() => {
   params = new URLSearchParams();
@@ -31,7 +35,7 @@ beforeEach(() => {
     const { pathname, searchParams } = new URL(url, 'http://localhost');
     if (pathname === '/api/quran/surrounding') return { ok: true, json: async () => around };
     const wanted = searchParams.get('q')!.split(',');
-    return { ok: true, json: async () => source.filter(context => wanted.includes(context.ayah.key)) };
+    return { ok: true, json: async () => [...source, ...side].filter(context => wanted.includes(context.ayah.key)) };
   }));
 });
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); router.push.mockClear(); });
@@ -100,4 +104,11 @@ it('opens a next ayah in the following surah under its basmala, without a seal o
   expect(next.textContent).toContain(basmala.join(' '));
   expect(next.textContent!.indexOf('بِسْمِ')).toBeLessThan(next.textContent!.indexOf('وَكَأَيِّن'));
   expect(next.querySelectorAll('span[class*="verseSeal"]')).toHaveLength(1);
+});
+
+it('marks what the next ayat share with each other, as in the tree column', async () => {
+  show();
+  const next = await screen.findByRole('article', { name: 'الشرح ٧' });
+  await waitFor(() => expect(within(next).getByTitle('نفس الكلمة').textContent).toBe('فَإِذَا'));
+  expect(within(screen.getByRole('article', { name: 'الشرح ٤' })).queryByTitle('نفس الكلمة')).toBeNull();
 });

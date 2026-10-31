@@ -30,6 +30,10 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
     if (!response.ok) throw new Error('Could not load surrounding ayat');
     return response.json();
   }, { revalidateOnFocus: false });
+  const sideKeys = (side: 'before' | 'after') => around && [...new Set(Object.values(around[side]).flatMap(ayah => ayah ? [ayah.key] : []))];
+  const sideUrl = (keys?: string[]) => keys && keys.length > 1 ? `/api/quran/context?${new URLSearchParams({ q: keys.slice(0, MAX_KEYS).join(',') })}` : null;
+  const { data: beforeMatch } = useSWR<AyahContext[]>(sideUrl(sideKeys('before')), loadContext, { revalidateOnFocus: false });
+  const { data: afterMatch } = useSWR<AyahContext[]>(sideUrl(sideKeys('after')), loadContext, { revalidateOnFocus: false });
   const exactLabel = ar ? 'نفس الكلمة' : 'Same word';
   const rootLabel = ar ? 'نفس الجذر' : 'Same root';
   const read = ar ? 'قراءة الآية' : 'Read ayah';
@@ -122,6 +126,10 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
   const contexts = data && shown.map(key => data.find(item => item.ayah.key === key));
   const missing = contexts?.some(context => !context);
 
+  const marksFor = (at: Column, context: AyahContext, key: string) => {
+    const match = at === 'ayah' ? context : (at === 'before' ? beforeMatch : afterMatch)?.find(item => item.ayah.key === key);
+    return match && sharedMarks(match, exactLabel, rootLabel);
+  };
   const cell = (context: AyahContext, at: Column, row: number, i: number) => {
     const ayah = at === 'ayah' ? context.ayah : around![at === 'before' ? 'before' : 'after'][context.ayah.key];
     const current = i === column;
@@ -137,7 +145,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
         label: `${name} ${ar ? num(number) : number}`,
         rows: [
           ...(at === 'after' && 'basmala' in ayah && ayah.basmala ? [[{ number: 0, words: ayah.basmala, bare: true }]] : []),
-          [{ number, words: ayah.words, current: at === 'ayah', marks: at === 'ayah' ? sharedMarks(context, exactLabel, rootLabel) : undefined }],
+          [{ number, words: ayah.words, current: at === 'ayah', marks: marksFor(at, context, ayah.key) }],
         ],
         action: current ? <Button size="icon" variant="muted" href={`/quran/read/${ayah.page}?a=${ayah.key}`} aria-label={read} title={read}><BookOpen size={16} aria-hidden /></Button> : undefined,
       }]} />
