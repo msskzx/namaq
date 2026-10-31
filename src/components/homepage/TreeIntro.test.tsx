@@ -45,60 +45,74 @@ beforeEach(() => {
 });
 afterEach(() => { cleanup(); vi.useRealTimers(); });
 
-it('draws each path with its leaf typed in while the path is lit, pauses on it, points at the ayat button without opening it, and remembers', async () => {
+const context = { ayah: { key: '1:2', words: ['عيون', 'ثانية'], page: 1 }, before: { key: '1:1', words: ['جنات', 'أولى'], page: 1 }, after: null };
+const showAll = () => { document.elementFromPoint = () => document.querySelector('[data-tree-content]'); };
+
+it('grows the tree level by level with every node typed, then shows the surrounding ayat, one lit path and a small ayah card, and remembers', async () => {
+  const fetched = vi.fn(async () => ({ ok: true, json: async () => [context] }));
+  vi.stubGlobal('fetch', fetched);
+  showAll();
   render(<Tree />);
   expect(skip()).toBeTruthy();
+  const toggle = screen.getByRole('switch', { name: 'الآيات المحيطة' }) as HTMLInputElement;
   const pressed = (node: string) => document.querySelector(`[data-node="${node}"] [aria-pressed]`)!.getAttribute('aria-pressed');
   await advance(100);
-  expect([branch('n0'), branch('n1')]).toEqual(['', '0']);
-  expect(words('n0').style.visibility).toBe('hidden');
-  expect(typed('n0')).toBe('');
+  expect([branch('n0'), branch('n1')]).toEqual(['0', '0']);
+  await advance(500);
+  expect([branch('n0'), branch('n1')]).toEqual(['', '']);
+  expect([words('n0').style.visibility, words('n1').style.visibility]).toEqual(['hidden', 'hidden']);
+  expect(document.querySelector('[data-node="n0"] .font-quran')!.className).toBe('font-quran');
+  await advance(500);
+  expect([typed('n0'), typed('n1')]).toEqual([undefined, undefined]);
+  expect([words('n0').style.visibility, words('n1').style.visibility]).toEqual(['', '']);
+  expect(lit).not.toHaveBeenCalled();
+  expect(toggle.checked).toBe(false);
+  await advance(1400);
+  expect(toggle.checked).toBe(true);
+  await advance(6000);
+  expect(lit).toHaveBeenCalledOnce();
   expect(pressed('n0')).toBe('true');
-  await advance(900);
-  expect(typed('n0')).toBeUndefined();
-  expect(words('n0').style.visibility).toBe('');
-  expect(pressed('n0')).toBe('true');
-  await advance(900);
+  await advance(2700);
+  expect(lit).toHaveBeenCalledTimes(2);
   expect(pressed('n0')).toBe('false');
-  expect(branch('n1')).toBe('0');
-  await advance(400);
-  expect(branch('n1')).toBe('');
-  expect(words('n1').style.visibility).toBe('hidden');
-  expect(pressed('n1')).toBe('true');
-  await advance(1800);
-  expect(typed('n1')).toBeUndefined();
-  expect(pressed('n1')).toBe('false');
-  expect(lit).toHaveBeenCalledTimes(4);
-  await advance(4900);
-  expect(lit).toHaveBeenCalledTimes(4);
+  await advance(700);
+  expect(fetched).toHaveBeenCalledWith('/api/quran/context?q=1%3A1');
+  expect(document.body.textContent).toContain('الآيات في سياقها');
+  expect(document.body.textContent).toContain('عيون ثانية');
   expect(opened).not.toHaveBeenCalled();
+  await advance(8000);
+  expect(document.body.textContent).not.toContain('عيون ثانية');
   expect(skip()).toBeNull();
+  expect(toggle.checked).toBe(false);
   expect(localStorage.getItem(SEEN)).toBe('1');
+  vi.unstubAllGlobals();
 });
 
-it('skip while a leaf is being typed shows the whole tree with its words and never points at the overlay', async () => {
+it('skip while nodes are being typed shows the whole tree with its words and lights nothing', async () => {
   render(<Tree />);
-  await advance(100);
+  await advance(700);
   fireEvent.click(skip()!);
   expect(skip()).toBeNull();
   expect(words('n0').style.visibility).toBe('');
   expect(typed('n0')).toBeUndefined();
   expect(document.querySelectorAll('[data-tree-content] [style*="opacity"]')).toHaveLength(0);
   expect(localStorage.getItem(SEEN)).toBe('1');
-  expect(lit).toHaveBeenCalledTimes(2);
-  expect(document.querySelectorAll('[aria-pressed="true"]')).toHaveLength(0);
-  await advance(14000);
-  expect(lit).toHaveBeenCalledTimes(2);
+  await advance(20000);
+  expect(lit).not.toHaveBeenCalled();
   expect(opened).not.toHaveBeenCalled();
 });
 
-it('skip while a path is lit turns the light off', async () => {
+it('skip while the path is lit turns the light off and puts the surrounding ayat back', async () => {
+  showAll();
   render(<Tree />);
-  await advance(1000);
+  const toggle = screen.getByRole('switch', { name: 'الآيات المحيطة' }) as HTMLInputElement;
+  await advance(2400 + 6000);
   expect(lit).toHaveBeenCalledOnce();
+  expect(toggle.checked).toBe(true);
   fireEvent.click(skip()!);
   expect(lit).toHaveBeenCalledTimes(2);
   expect(document.querySelectorAll('[aria-pressed="true"]')).toHaveLength(0);
+  expect(toggle.checked).toBe(false);
 });
 
 it.each([true, false])('preserves a pinned leaf when replay is skipped: %s', async skipped => {
@@ -108,9 +122,9 @@ it.each([true, false])('preserves a pinned leaf when replay is skipped: %s', asy
   fireEvent.click(path);
   fireEvent.click(screen.getByRole('button', { name: 'إعادة العرض' }));
   await advance(100);
-  expect(path.getAttribute('aria-pressed')).toBe('true');
+  expect(path.getAttribute('aria-pressed')).toBe('false');
   if (skipped) fireEvent.click(skip()!);
-  else await advance(14000);
+  else await advance(20000);
   expect(path.getAttribute('aria-pressed')).toBe('true');
 });
 
@@ -160,7 +174,7 @@ it('replays from the replay button, which gives way to skip while playing', asyn
   fireEvent.click(screen.getByRole('button', { name: 'إعادة العرض' }));
   expect(skip()).toBeTruthy();
   expect(screen.queryByRole('button', { name: 'إعادة العرض' })).toBeNull();
-  await advance(100);
+  await advance(600);
   expect(words('n0').style.visibility).toBe('hidden');
   fireEvent.click(skip()!);
   expect(screen.getByRole('button', { name: 'إعادة العرض' })).toBeTruthy();
@@ -175,16 +189,13 @@ it('waits for the tree to come into view, and pauses while it is out of view', a
   });
   render(<Tree />);
   await advance(3000);
-  expect(lit).not.toHaveBeenCalled();
-  expect(words('n0').style.visibility).toBe('');
+  expect(branch('n0')).toBe('0');
   act(() => report(0.7));
-  await advance(100);
-  expect(lit).toHaveBeenCalledOnce();
+  await advance(600);
   expect(words('n0').style.visibility).toBe('hidden');
   act(() => report(0.1));
   await advance(5000);
   expect(typed('n0')).not.toBeUndefined();
-  expect(lit).toHaveBeenCalledOnce();
   act(() => report(0.7));
   await advance(1000);
   expect(typed('n0')).toBeUndefined();

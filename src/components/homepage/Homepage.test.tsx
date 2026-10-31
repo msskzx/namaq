@@ -96,7 +96,7 @@ describe('Quran learning homepage', () => {
       expect(newContent).not.toBe(oldContent);
       expect(oldContent.inert).not.toBe(true);
       expect(newContent.inert).toBe(true);
-      fireEvent.click(screen.getByRole('button', { name: 'Skip' }));
+      fireEvent.click(await screen.findByRole('button', { name: 'Skip' }));
       expect(newContent.inert).not.toBe(true);
     } finally {
       cleanup();
