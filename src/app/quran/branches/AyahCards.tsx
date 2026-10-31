@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import useSWR from 'swr';
-import { ArrowLeft, ArrowRight, BookOpen, GitBranch, RotateCcw } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BookOpen, GitBranch, Highlighter, RotateCcw } from 'lucide-react';
 import Button from '@/components/common/Button';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
@@ -33,6 +33,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
   const exactLabel = ar ? 'نفس الكلمة' : 'Same word';
   const rootLabel = ar ? 'نفس الجذر' : 'Same root';
   const read = ar ? 'قراءة الآية' : 'Read ayah';
+  const legend = ar ? 'دليل الألوان' : 'Colour key';
 
   const track = useRef<HTMLDivElement>(null);
   const head = (i: number) => track.current?.querySelector<HTMLElement>(`[data-col="${i}"]`);
@@ -64,7 +65,14 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
   };
   const ready = !!data && !!around;
   useEffect(() => {
-    if (ready) goTo(1, 'instant');
+    const element = track.current;
+    if (!ready || !element) return;
+    const place = () => element.clientWidth > 0 && (goTo(1, 'instant'), true);
+    void document.fonts?.ready.then(() => { if (element.isConnected) place(); });
+    if (place() || typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(() => { if (place()) observer.disconnect(); });
+    observer.observe(element);
+    return () => observer.disconnect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready]);
 
@@ -118,7 +126,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
     const ayah = at === 'ayah' ? context.ayah : around![at === 'before' ? 'before' : 'after'][context.ayah.key];
     const current = i === column;
     const key = `${row}:${at}`;
-    const props = { 'data-col': i, 'data-current': current || undefined, className: styles.cell, onClick: current ? undefined : () => goTo(i) };
+    const props = { 'data-col': i, 'data-first': row === 0 || undefined, 'data-current': current || undefined, className: styles.cell, onClick: current ? undefined : () => goTo(i) };
     if (!ayah) return <div key={key} {...props} />;
     const [surah, number] = ayah.key.split(':').map(Number);
     const name = names[surah] ?? (ar ? `سورة ${num(surah)}` : `Surah ${surah}`);
@@ -150,7 +158,12 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
     <section aria-label={ar ? 'آيات الشجرة في سياقها' : 'Tree ayat in context'} className="flex flex-col gap-2">
       <div className="flex flex-wrap items-center justify-between gap-2">
         {steps && <TreeSteps steps={steps} />}
-        {shown.length > 1 && <MatchLegend exact={exactLabel} root={rootLabel} />}
+        {shown.length > 1 && <details className="group relative shrink-0">
+          <summary title={legend} className="flex size-8 cursor-pointer list-none items-center justify-center rounded-sm text-[var(--home-muted)] hover:bg-[var(--home-paper-deep)] hover:text-[var(--home-ink)] group-open:text-[var(--home-ink)] [&::-webkit-details-marker]:hidden">
+            <Highlighter size={16} aria-hidden /><span className="sr-only">{legend}</span>
+          </summary>
+          <div className="absolute end-0 top-full z-20 mt-1 whitespace-nowrap rounded-sm border border-[var(--home-rule)] bg-[var(--home-paper)] px-3 shadow-md"><MatchLegend exact={exactLabel} root={rootLabel} /></div>
+        </details>}
       </div>
       {isLoading && <LoadingSpinner />}
       {(error || aroundError || missing) && <div role="alert"><p>{ar ? 'تعذّر تحميل الآيات.' : 'Could not load the ayat.'}</p><Button size="lg" onClick={() => { void mutate(); void retryAround(); }} aria-label={ar ? 'إعادة المحاولة' : 'Try again'} title={ar ? 'إعادة المحاولة' : 'Try again'}><RotateCcw aria-hidden /></Button></div>}

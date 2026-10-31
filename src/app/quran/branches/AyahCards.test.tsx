@@ -49,6 +49,10 @@ it('stacks every tree ayah as a row, its previous and next ayah beside it, the t
   show();
   await screen.findByRole('article', { name: 'الشرح ٥' });
   expect(document.querySelectorAll('[data-col]')).toHaveLength(9);
+  const key = screen.getByText('دليل الألوان').closest('details')!;
+  expect(key.open).toBe(false);
+  expect(key.textContent).toContain('نفس الكلمة');
+  expect(key.textContent).toContain('نفس الجذر');
   expect(column()).toEqual(['الشرح ٥', 'الشرح ٦', 'الطلاق ٧']);
   const card = screen.getByRole('article', { name: 'الشرح ٥' });
   expect(within(card).getAllByTitle('نفس الكلمة').map(mark => mark.textContent)).toEqual(['مَعَ', 'ٱلْعُسْرِ']);
