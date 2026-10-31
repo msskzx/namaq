@@ -7,7 +7,8 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 import Button from '@/components/common/Button';
 import Segmented from '@/components/common/Segmented';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
-import { spreadOf, turn, type MushafPage as MushafPageData } from '@/lib/quran/readerPage';
+import { useSearchParams } from 'next/navigation';
+import { pageGroups, spreadOf, turn, type MushafPage as MushafPageData } from '@/lib/quran/readerPage';
 import { useLanguage } from '@/components/language/LanguageContext';
 import styles from '@/components/homepage/Home.module.css';
 import mushaf from './Mushaf.module.css';
@@ -63,6 +64,12 @@ export default function ReaderView({
     },
     [page, two, router],
   );
+  useEffect(() => {
+    for (const step of [1, -1] as const) {
+      const target = turn(page, two, step);
+      if (target !== page) router.prefetch(`/quran/read/${target}`);
+    }
+  }, [page, two, router]);
   const chooseSpread = useCallback((next: boolean) => {
     setSpread(next);
     write(SPREAD_KEY, next ? 'two' : 'one');
@@ -173,4 +180,18 @@ export default function ReaderView({
       </article>
     </div>
   );
+}
+
+type ReaderProps = Omit<React.ComponentProps<typeof ReaderView>, 'mark'>;
+
+export function MarkedReaderView(props: ReaderProps) {
+  const router = useNavigatingRouter();
+  const [surah, ayah] = String(useSearchParams().get('a') ?? '').split(':').map(Number);
+  const asked = surah > 0 && ayah > 0;
+  const shown = props.pages.find(entry => entry.page === props.page);
+  const holds = asked && !!shown && pageGroups(shown.data.items, shown.top).some(line => line?.some(group => group.surah === surah && group.ayah === ayah));
+  useEffect(() => {
+    if (asked && !holds) router.replace(`/quran/read/ayah/${surah}/${ayah}`);
+  }, [asked, holds, surah, ayah, router]);
+  return <ReaderView {...props} mark={holds ? { surah, ayah } : undefined} />;
 }

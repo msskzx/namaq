@@ -12,13 +12,14 @@ import { plainName } from '@/lib/quran/normalize';
 import { juzGroups, parseReference, type IndexSurah } from '@/lib/quran/juzIndex';
 import { matchesSurah } from '@/lib/quran/surahSearch';
 import { searchable, type AyahSearch } from '@/lib/quran/ayahSearch';
+import { preloadQuranSearch, searchQuran } from '@/lib/quran/quranText';
 import styles from '@/components/homepage/Home.module.css';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 const MUTED = 'text-[var(--home-muted)]';
 const AROUND = 6;
-const DELAY = 250;
+const DELAY = 100;
 
 export default function SurahIndex({ surahs, fontClass }: { surahs: IndexSurah[]; fontClass?: string }) {
   const { language, languageLoaded } = useLanguage();
@@ -37,20 +38,19 @@ export default function SurahIndex({ surahs, fontClass }: { surahs: IndexSurah[]
   const name = (surah: IndexSurah) => plainName(surah.name).replace(/^سورة\s*/, '');
   const wordSearch = !reference && searchable(query) ? query.trim() : '';
   const [ayat, setAyat] = useState<AyahSearch & { query: string; failed?: boolean }>({ query: '', total: 0, hits: [] });
+  useEffect(preloadQuranSearch, []);
   useEffect(() => {
     if (!wordSearch) return;
-    const controller = new AbortController();
+    let live = true;
     const timer = setTimeout(() => {
-      fetch(`/api/quran/search?q=${encodeURIComponent(wordSearch)}`, { signal: controller.signal })
-        .then(response => (response.ok ? response.json() : Promise.reject(response.status)))
-        .then((result: AyahSearch) => setAyat({ ...result, query: wordSearch }))
-        .catch(() => {
-          if (!controller.signal.aborted) setAyat({ query: wordSearch, total: 0, hits: [], failed: true });
-        });
+      searchQuran(wordSearch).then(
+        result => live && setAyat({ ...result, query: wordSearch }),
+        () => live && setAyat({ query: wordSearch, total: 0, hits: [], failed: true }),
+      );
     }, DELAY);
     return () => {
+      live = false;
       clearTimeout(timer);
-      controller.abort();
     };
   }, [wordSearch]);
   const ayahHits = wordSearch && ayat.query === wordSearch ? ayat : null;
