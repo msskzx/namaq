@@ -183,9 +183,8 @@ export default function TreeIntro({ target, ar }: { target: RefObject<HTMLElemen
   return <>
     <span ref={marker} aria-hidden className={styles.tapMarker} />
     <span ref={bubble} aria-hidden className={styles.introBubble}>{ar ? 'الآيات في سياقها' : 'Ayat in context'}</span>
-    {playing ? <Button size="sm" className={styles.skipIntro} onClick={() => skip.current()}>
+    {playing ? <Button size="icon" className={styles.skipIntro} onClick={() => skip.current()} aria-label={ar ? 'تخطّ' : 'Skip'} title={ar ? 'تخطّ' : 'Skip'}>
       <SkipForward size={16} aria-hidden className={ar ? '-scale-x-100' : undefined} />
-      {ar ? 'تخطّ' : 'Skip'}
     </Button> : <Button size="icon" className={styles.skipIntro} onClick={() => setRound(count => count + 1)} aria-label={ar ? 'إعادة العرض' : 'Replay'} title={ar ? 'إعادة العرض' : 'Replay'}>
       <RotateCcw size={16} aria-hidden />
     </Button>}
