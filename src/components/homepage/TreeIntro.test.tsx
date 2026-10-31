@@ -42,26 +42,29 @@ beforeEach(() => {
 });
 afterEach(() => { cleanup(); vi.useRealTimers(); });
 
-it('draws each path with its leaf typed in, then lights every path, points at the ayat button without opening it, and remembers', async () => {
+it('draws each path with its leaf typed in while the path is lit, then lights every path, points at the ayat button without opening it, and remembers', async () => {
   render(<Tree />);
   expect(skip()).toBeTruthy();
   await advance(100);
   expect([branch('n0'), branch('n1')]).toEqual(['', '0']);
   expect(words('n0').style.visibility).toBe('hidden');
   expect(typed('n0')).toBe('');
+  expect(lit).toHaveBeenCalledOnce();
+  expect(document.querySelector('[data-node="n0"] [aria-pressed]')!.getAttribute('aria-pressed')).toBe('true');
   await advance(600);
+  expect(lit).toHaveBeenCalledTimes(2);
   expect(words('n0').style.visibility).toBe('');
   expect(typed('n0')).toBeUndefined();
   expect(branch('n1')).toBe('0');
   await advance(300);
   expect(branch('n1')).toBe('');
   expect(words('n1').style.visibility).toBe('hidden');
-  expect(lit).not.toHaveBeenCalled();
+  expect(lit).toHaveBeenCalledTimes(3);
   await advance(1100);
   expect(typed('n1')).toBeUndefined();
-  expect(lit).toHaveBeenCalledOnce();
+  expect(lit).toHaveBeenCalledTimes(5);
   await advance(1900);
-  expect(lit).toHaveBeenCalledTimes(4);
+  expect(lit).toHaveBeenCalledTimes(8);
   expect(document.querySelectorAll('[aria-pressed="true"]')).toHaveLength(0);
   await advance(3000);
   expect(opened).not.toHaveBeenCalled();
@@ -78,17 +81,19 @@ it('skip while a leaf is being typed shows the whole tree with its words and nev
   expect(typed('n0')).toBeUndefined();
   expect(document.querySelectorAll('[data-tree-content] [style*="opacity"]')).toHaveLength(0);
   expect(localStorage.getItem(SEEN)).toBe('1');
+  expect(lit).toHaveBeenCalledTimes(2);
+  expect(document.querySelectorAll('[aria-pressed="true"]')).toHaveLength(0);
   await advance(14000);
-  expect(lit).not.toHaveBeenCalled();
+  expect(lit).toHaveBeenCalledTimes(2);
   expect(opened).not.toHaveBeenCalled();
 });
 
 it('skip while a path is lit turns the light off', async () => {
   render(<Tree />);
   await advance(2100);
-  expect(lit).toHaveBeenCalledOnce();
+  expect(lit).toHaveBeenCalledTimes(5);
   fireEvent.click(skip()!);
-  expect(lit).toHaveBeenCalledTimes(2);
+  expect(lit).toHaveBeenCalledTimes(6);
   expect(document.querySelectorAll('[aria-pressed="true"]')).toHaveLength(0);
 });
 
