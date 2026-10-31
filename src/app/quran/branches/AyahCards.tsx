@@ -157,9 +157,9 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
     if (!href) return null;
     const label = forward ? (ar ? 'الشجرة التالية' : 'Next tree') : (ar ? 'الشجرة السابقة' : 'Previous tree');
     const Arrow = forward ? ArrowLeft : ArrowRight;
-    return <div className={styles.edge} data-edge={forward ? 'next' : 'previous'} style={{ gridColumn: forward ? 5 : 1, gridRow: `1 / span ${shown.length}` }}>
-      <Button size="icon" variant="muted" className={styles.edgeButton} href={href} scroll={false} aria-label={label} title={label}><Arrow size={16} aria-hidden /><GitBranch size={16} aria-hidden /></Button>
-    </div>;
+    return <Button size="icon" variant="muted" className={styles.edge} data-edge={forward ? 'next' : 'previous'} style={{ gridColumn: forward ? 5 : 1, gridRow: `1 / span ${shown.length}` }} href={href} scroll={false} aria-label={label} title={label}>
+      <span className={styles.edgeIcons}><Arrow size={16} aria-hidden /><GitBranch size={16} aria-hidden /></span>
+    </Button>;
   };
 
   return (

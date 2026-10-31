@@ -84,8 +84,8 @@ it('moves every row together to the next or previous ayah with the arrow keys an
 it('steps between trees with the tree navigation, the edge links and one more step past a side column', async () => {
   show();
   await screen.findByRole('article', { name: 'الشرح ٥' });
-  expect(document.querySelector('[data-edge="next"] a')!.getAttribute('href')).toBe(steps.next);
-  expect(document.querySelector('[data-edge="previous"] a')!.getAttribute('href')).toBe(steps.previous);
+  expect(document.querySelector('a[data-edge="next"]')!.getAttribute('href')).toBe(steps.next);
+  expect(document.querySelector('a[data-edge="previous"]')!.getAttribute('href')).toBe(steps.previous);
   key('ArrowLeft');
   expect(router.push).not.toHaveBeenCalled();
   key('ArrowLeft');
