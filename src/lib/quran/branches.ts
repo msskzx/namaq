@@ -2,7 +2,7 @@
 import { num } from './arabicNumber';
 import type { JuzRange } from './juz';
 import { normalizeWord } from './normalize';
-import { findText, searchQuery, textKeys, type WordKeys } from './searchText';
+import { findText, firstLevel, searchQuery, textKeys, type Level, type SearchQuery } from './searchText';
 import type { ReaderPageData } from './readerPage';
 
 export type BranchAyah = { key: string; page: number; words: string[]; roots?: (string | null)[]; lemmas?: (string | null)[]; conjs?: (string | null)[]; conj?: string; next?: string[]; nextRoots?: (string | null)[]; nextLemmas?: (string | null)[]; through?: string };
@@ -245,44 +245,51 @@ export const opens = (ayah: BranchAyah, phrase: string) => {
 
 export const searchKey = (value: string) => normalizeWord(value.normalize('NFC')).replace(/[ؤئء]/g, 'ا').trim().split(/\s+/).join(' ').replace(/(^| )يا (?=\S)/g, '$1ي').replace(/ا+/g, 'ا');
 
-type KeyedPhrase = { phrase: Opening; texts: WordKeys[][]; english: string[] };
-const keyedPhrases = new WeakMap<Opening[], KeyedPhrase[]>();
-const keyPhrases = (phrases: Opening[]) => {
-  let keyed = keyedPhrases.get(phrases);
-  if (!keyed) keyedPhrases.set(phrases, keyed = phrases.map(phrase => ({ phrase, texts: [phrase.text, ...(phrase.aliases ?? [])].map(textKeys), english: phrase.textEn ? [phrase.textEn.toLowerCase()] : [] })));
-  return keyed;
-};
-
-/** Phrases holding the query (see searchText.ts), those that open with it first. */
-export function rankPhrases(phrases: Opening[], query: string): { phrase: Opening; start: boolean }[] {
-  const wanted = searchQuery(query);
-  const english = /[a-z]/i.test(query) ? query.trim().toLowerCase() : '';
-  if (!wanted.strict.length && !english) return [];
+/** Phrases holding the query at one level (see searchText.ts), those that open with it first. */
+function phrasesAt(phrases: Opening[], wanted: SearchQuery, english: string, level: Level) {
   const starts: Opening[] = [];
   const inside: Opening[] = [];
-  for (const { phrase, texts, english: values } of keyPhrases(phrases)) {
-    if (texts.some(words => findText(words, wanted, true)) || (english && values.some(value => value.startsWith(english)))) starts.push(phrase);
-    else if (texts.some(words => findText(words, wanted)) || (english && values.some(value => value.includes(english)))) inside.push(phrase);
+  for (const phrase of phrases) {
+    const texts = [phrase.text, ...(phrase.aliases ?? [])].map(textKeys);
+    const en = level === 'strict' && english && phrase.textEn ? phrase.textEn.toLowerCase() : '';
+    if (texts.some(words => findText(words, wanted, level, true)) || (en && en.startsWith(english))) starts.push(phrase);
+    else if (texts.some(words => findText(words, wanted, level)) || (en && en.includes(english))) inside.push(phrase);
   }
   return [...starts.map(phrase => ({ phrase, start: true })), ...inside.map(phrase => ({ phrase, start: false }))];
 }
 
+/** Phrases holding the query; hamza-loose matches only when nothing matches as typed. */
+export function rankPhrases(phrases: Opening[], query: string): { phrase: Opening; start: boolean }[] {
+  const wanted = searchQuery(query);
+  const english = /[a-z]/i.test(query) ? query.trim().toLowerCase() : '';
+  if (!wanted.strict.length && english) return phrasesAt(phrases, wanted, english, 'strict');
+  return firstLevel(wanted, level => phrasesAt(phrases, wanted, english, level));
+}
+
 export const searchPhrases = (phrases: Opening[], query: string) => rankPhrases(phrases, query).map(found => found.phrase);
 
-/** Does the text hold the query anywhere (a leading و / ف on the query may be dropped)? */
-export function textHolds(text: string, query: string): boolean {
+/** Does the text hold the query anywhere at this level (a leading و / ف on the query may be dropped)? */
+export function textHolds(text: string, query: string, level: Level = 'strict'): boolean {
   const words = textKeys(text);
   const wanted = searchQuery(query);
-  if (findText(words, wanted)) return true;
+  if (findText(words, wanted, level)) return true;
   const [head, ...rest] = wanted.strict;
-  return !!head && /^[وف]./.test(head) && !!findText(words, searchQuery([head.slice(1), ...rest].join(' ')));
+  return !!head && /^[وف]./.test(head) && !!findText(words, searchQuery([head.slice(1), ...rest].join(' ')), level);
+}
+
+/** Pieces whose opening phrase or text holds the query; hamza-loose only when nothing matches as typed. */
+export function piecesHolding<T extends Opening & { opening: Opening }>(pieces: T[], query: string): T[] {
+  const wanted = searchQuery(query);
+  const english = /[a-z]/i.test(query) ? query.trim().toLowerCase() : '';
+  const at = (level: Level) => pieces.filter(piece => phrasesAt([piece.opening, piece], wanted, english, level).length > 0 || textHolds(piece.text, query, level));
+  return !wanted.strict.length && english ? at('strict') : firstLevel(wanted, at);
 }
 
 /** Is the text exactly the query, word for word? */
 export function textIs(text: string, query: string): boolean {
   const words = textKeys(text);
   const wanted = searchQuery(query);
-  return wanted.strict.length === words.length && words.every((word, at) => word.strict.includes(wanted.strict[at]) || word.loose.includes(wanted.loose[at]));
+  return wanted.strict.length === words.length && (words.every((word, at) => word.strict.includes(wanted.strict[at])) || words.every((word, at) => word.loose.includes(wanted.loose[at])));
 }
 
 export const startingWith = (ayat: BranchAyah[], phrase: string, partition?: string) => ayat.filter(ayah => opens(ayah, phrase) && (!partition || rootPartition(ayah, phrase.split(' ').length) === partition));

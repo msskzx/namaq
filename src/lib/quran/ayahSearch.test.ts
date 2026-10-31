@@ -87,11 +87,20 @@ describe('searchAyat', () => {
     expect(covered('هؤلاء', '2:31')).toEqual(['هؤلاء']);
   });
 
+  it('finds madda words typed plainly without flooding (review: ماء, جاء, السماء)', () => {
+    for (const [query, most] of [['ماء', 200], ['جاء', 260], ['السماء', 130], ['سواء', 40]] as const) {
+      const result = searchAyat(ayat, query, 10000);
+      expect(result.total).toBeGreaterThan(0);
+      expect(result.total).toBeLessThan(most);
+    }
+    expect(searchAyat(ayat, 'السموات').total).toBeGreaterThan(150);
+  });
+
   it('searches nothing shorter than two Arabic letters', () => {
     expect(searchable('ق')).toBe(false);
     expect(searchable('baqara')).toBe(false);
     expect(searchAyat(ayat, 'ق').total).toBe(0);
-    expect(searchAyat(ayat, 'ء').total).toBe(0);
+    expect(searchAyat(ayat, 'ءء').total).toBe(0);
     expect(searchAyat(ayat, 'ا ا ا').total).toBe(0);
   });
 });

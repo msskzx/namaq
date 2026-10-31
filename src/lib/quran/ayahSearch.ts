@@ -1,5 +1,5 @@
 import type { BranchAyah } from './branches';
-import { findText, searchQuery, wordKeys, type WordKeys } from './searchText';
+import { findText, firstLevel, searchQuery, wordKeys, type WordKeys } from './searchText';
 
 export { searchable } from './searchText';
 
@@ -14,18 +14,13 @@ export const indexAyat = (ayat: BranchAyah[]): IndexedAyah[] =>
     return { ...ayah, keys: parts.map(([keys]) => keys), owner: parts.map(([, index]) => index) };
   });
 
-/** Ayat holding the query, mushaf order, spelling-exact matches before hamza-loose ones. */
+/** Ayat holding the query in mushaf order; hamza-loose matches only when nothing matches as typed. */
 export function searchAyat(ayat: IndexedAyah[], query: string, limit = 30): AyahSearch {
   const wanted = searchQuery(query);
   if (wanted.strict.join('').length < 2) return { total: 0, hits: [] };
-  const strict: AyahHit[] = [];
-  const loose: AyahHit[] = [];
-  for (const ayah of ayat) {
-    const found = findText(ayah.keys, wanted);
-    if (!found) continue;
-    const { key, page, words, owner } = ayah;
-    (found.strict ? strict : loose).push({ key, page, words, from: owner[found.from], to: owner[found.to] });
-  }
-  const hits = [...strict, ...loose];
+  const hits = firstLevel(wanted, level => ayat.flatMap(({ key, page, words, keys, owner }) => {
+    const found = findText(keys, wanted, level);
+    return found ? [{ key, page, words, from: owner[found.from], to: owner[found.to] }] : [];
+  }));
   return { total: hits.length, hits: hits.slice(0, limit) };
 }

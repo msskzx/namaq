@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
-import { ayahEnds, branchesHref, keys, listPage, searchKey, searchPhrases, textHolds, textIs, type BranchAyah, type BranchesView, type Opening } from '@/lib/quran/branches';
+import { ayahEnds, branchesHref, keys, listPage, piecesHolding, searchKey, textIs, type BranchAyah, type BranchesView, type Opening } from '@/lib/quran/branches';
+import { searchQuery } from '@/lib/quran/searchText';
 import { inJuzRange, parseJuzRange, type JuzRange } from '@/lib/quran/juz';
 import { loadReaderAyat, surrounding } from '@/lib/quran/ayahContext';
 import { buildPhraseGroups, buildTreeGroups, phrasePresentation, phraseSubtreeTargets, type TreeGroup } from '@/lib/quran/phraseTrees';
@@ -76,10 +77,10 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const state: BranchesView = { occurrences: requestedOccurrences.length ? requestedOccurrences : undefined, page: Number(first(params.p)) || 1, context: params.c === '1', query: query || undefined, surah };
   if (id !== requestedId || params.scope || params.kind || params.v || params.g || params.w || params.r || params.apply === 'juz') redirect(branchesHref(id, juz, state));
   const pieces = piecesFor(built);
-  const needle = searchKey(query);
+  const needle = query ? JSON.stringify(searchQuery(query)) + query.toLowerCase().replace(/[^a-z]/g, '') : '';
   if (needle && !built.searches.has(needle)) {
     if (built.searches.size >= SEARCHES) built.searches.delete(built.searches.keys().next().value!);
-    built.searches.set(needle, pieces.filter(piece => searchPhrases([piece.opening, piece], query).length > 0 || textHolds(piece.text, query)));
+    built.searches.set(needle, piecesHolding(pieces, query));
   }
   const found = needle ? built.searches.get(needle)! : pieces;
   const surahOf = (key: string) => Number(key.split(':')[0]);
