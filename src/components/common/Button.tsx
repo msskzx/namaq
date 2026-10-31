@@ -1,11 +1,12 @@
 import React from 'react';
 import Link from 'next/link';
 
-export type ButtonVariant = 'primary' | 'outline' | 'highlight' | 'ghost';
+export type ButtonVariant = 'primary' | 'outline' | 'highlight' | 'ghost' | 'muted';
 export type ButtonSize = 'sm' | 'md' | 'icon' | 'lg';
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
   ghost: 'text-[var(--home-accent)] hover:bg-[var(--home-paper-deep)]',
+  muted: 'text-[var(--home-muted)] hover:text-[var(--home-ink)] hover:bg-[var(--home-paper-deep)]',
   highlight: 'bg-[var(--home-highlight)] text-[var(--home-on-highlight)] hover:opacity-90',
   primary: 'bg-[var(--home-accent)] text-[var(--home-paper)] hover:opacity-90',
   outline: 'border border-[var(--home-rule)] text-[var(--home-accent)] hover:bg-[var(--home-paper-deep)]',

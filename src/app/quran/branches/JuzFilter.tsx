@@ -5,14 +5,15 @@ import RangeFilter from '@/components/quran/RangeFilter';
 import { branchesHref, type BranchesView } from '@/lib/quran/branches';
 import { JUZ_STARTS, type JuzRange } from '@/lib/quran/juz';
 
-export default function JuzFilter({ range, phrase, view }: { range: JuzRange | null; phrase: string; view: BranchesView }) {
+export default function JuzFilter({ range, view }: { range: JuzRange | null; view: BranchesView }) {
   const { language } = useLanguage();
   const ar = language === 'ar';
   return (
-    <RangeFilter iconOnly range={range} max={JUZ_STARTS.length} names={['juzFrom', 'juzTo']} href={next => branchesHref(phrase, next, { ...view, page: 1 })}
+    <RangeFilter iconOnly range={range} max={JUZ_STARTS.length} names={['juzFrom', 'juzTo']} href={next => branchesHref('', next, { query: view.query, surah: view.surah, mode: view.mode })}
       labels={{
         from: ar ? 'من الجزء' : 'From juz',
         to: ar ? 'إلى الجزء' : 'To juz',
+        toText: ar ? 'إلى' : 'to',
         all: ar ? 'كل الأجزاء' : 'All juz',
         form: ar ? 'نطاق الأجزاء' : 'Juz range',
         invalid: shown => (ar

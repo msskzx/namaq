@@ -12,24 +12,24 @@ vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ 
 afterEach(cleanup);
 
 describe('JuzFilter', () => {
-  it('shows the applied range and clears it without losing the selected phrase or ordering', () => {
-    render(<JuzFilter range={{ from: 25, to: 30 }} phrase="فلا اقسم" view={{ grouped: true, page: 4 }} />);
+  it('shows the applied range and clears it back to the first tree, keeping the view', () => {
+    render(<JuzFilter range={{ from: 25, to: 30 }} view={{ page: 4, mode: 'cards', query: 'قال' }} />);
     expect((screen.getByRole('spinbutton', { name: 'من الجزء' }) as HTMLInputElement).value).toBe('25');
     expect((screen.getByRole('spinbutton', { name: 'إلى الجزء' }) as HTMLInputElement).value).toBe('30');
     expect(screen.queryByRole('button', { name: 'تطبيق' })).toBeNull();
-    expect(screen.getByRole('link', { name: 'كل الأجزاء' }).getAttribute('href')).toBe(branchesHref('فلا اقسم', undefined, { grouped: true }));
+    expect(screen.getByRole('link', { name: 'كل الأجزاء' }).getAttribute('href')).toBe(branchesHref('', undefined, { mode: 'cards', query: 'قال' }));
   });
 
   it('starts on the whole mushaf with nothing to reset', () => {
-    render(<JuzFilter range={null} phrase="" view={{}} />);
+    render(<JuzFilter range={null} view={{}} />);
     expect((screen.getByRole('spinbutton', { name: 'من الجزء' }) as HTMLInputElement).value).toBe('1');
     expect((screen.getByRole('spinbutton', { name: 'إلى الجزء' }) as HTMLInputElement).value).toBe('30');
     expect(screen.queryByRole('link', { name: 'كل الأجزاء' })).toBeNull();
   });
 
   it('shows the whole mushaf again once the range is cleared', () => {
-    const { rerender } = render(<JuzFilter range={{ from: 25, to: 30 }} phrase="ان المتقين" view={{}} />);
-    rerender(<JuzFilter range={null} phrase="ان المتقين" view={{}} />);
+    const { rerender } = render(<JuzFilter range={{ from: 25, to: 30 }} view={{}} />);
+    rerender(<JuzFilter range={null} view={{}} />);
     expect((screen.getByRole('spinbutton', { name: 'من الجزء' }) as HTMLInputElement).value).toBe('1');
   });
 });

@@ -46,7 +46,7 @@ describe('opening search journey', () => {
     expect(suggestionOptions()[1].getAttribute('aria-selected')).toBe('true');
     rerender(<OpeningSearch top={[]} phrases={[first]} current="" juz={{ from: 25, to: 30 }} />);
     fireEvent.keyDown(box, { key: 'Enter' });
-    expect(navigation.push).toHaveBeenCalledWith(branchesHref('', { from: 25, to: 30 }, { query: 'قال' }));
+    expect(navigation.push).toHaveBeenCalledWith(branchesHref('', { from: 25, to: 30 }, { query: 'قال', mode: 'list' }));
   });
 
   it.each([

@@ -25,7 +25,7 @@ const subscribe = (listener: () => void) => {
   return () => listeners.delete(listener);
 };
 
-export default function CompareLayout({ title, current, pane, children, bar, storageKey = 'compare-pane-hidden', change = 'تغيير السورتين', paneToggleFirst = false }: { title: string; current: string; pane: React.ReactNode; children: React.ReactNode; bar?: React.ReactNode; storageKey?: string; change?: string; paneToggleFirst?: boolean }) {
+export default function CompareLayout({ title, current, pane, children, bar, storageKey = 'compare-pane-hidden', change = 'تغيير السورتين', paneToggleFirst = false, hideTitle = false }: { title: string; hideTitle?: boolean; current: string; pane: React.ReactNode; children: React.ReactNode; bar?: React.ReactNode; storageKey?: string; change?: string; paneToggleFirst?: boolean }) {
   const id = useId();
   const search = useSearchParams().toString();
   const hidden = useSyncExternalStore(subscribe, () => read(storageKey), () => false);
@@ -85,7 +85,7 @@ export default function CompareLayout({ title, current, pane, children, bar, sto
       <div className={`flex flex-col gap-4 lg:grid lg:items-start ${hidden ? '' : 'lg:grid-cols-[19rem_minmax(0,1fr)]'}`}>
         {!paneToggleFirst && phoneToggle}
         <aside id={id} aria-label={title} className={`${PANE} min-w-0 flex-col gap-3 ${open ? 'flex' : 'hidden'} ${hidden ? 'lg:hidden' : 'lg:flex'}`}>
-          <div className="flex items-center justify-between gap-2">
+          {!hideTitle && <div className="flex items-center justify-between gap-2">
             <h2 className="text-xl">{title}</h2>
             {!paneToggleFirst && <span ref={hide} className="hidden lg:block">
               <Button size="sm" onClick={() => toggle(true)}>
@@ -93,7 +93,7 @@ export default function CompareLayout({ title, current, pane, children, bar, sto
                 إخفاء القائمة
               </Button>
             </span>}
-          </div>
+          </div>}
           {pane}
         </aside>
         <div className="min-w-0 flex flex-col gap-4">

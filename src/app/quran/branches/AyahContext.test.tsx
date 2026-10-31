@@ -95,10 +95,10 @@ it('marks the words every card shares, exact and by root apart, on own and sibli
   const dialog = screen.getByRole('dialog');
   const own = await within(dialog).findByRole('article', { name: 'الشرح 6 · this branch' });
   const sibling = within(dialog).getByRole('article', { name: 'الشرح 5' });
-  expect(within(sibling).getAllByTitle('In every ayah, same form').map(word => word.textContent)).toEqual(source[0].ayah.words.slice(1));
-  expect(within(sibling).getAllByTitle('In every ayah, by root or other marks').map(word => word.textContent)).toEqual([source[0].ayah.words[0]]);
-  expect(within(own).getAllByTitle('In every ayah, same form').map(word => word.textContent)).toEqual(source[1].ayah.words.slice(1));
-  expect(within(own).getAllByTitle('In every ayah, by root or other marks').map(word => word.textContent)).toEqual([source[1].ayah.words[0]]);
+  expect(within(sibling).getAllByTitle('Same word').map(word => word.textContent)).toEqual(source[0].ayah.words.slice(1));
+  expect(within(sibling).getAllByTitle('Same root').map(word => word.textContent)).toEqual([source[0].ayah.words[0]]);
+  expect(within(own).getAllByTitle('Same word').map(word => word.textContent)).toEqual(source[1].ayah.words.slice(1));
+  expect(within(own).getAllByTitle('Same root').map(word => word.textContent)).toEqual([source[1].ayah.words[0]]);
   expect(within(dialog).getByText("This branch's ayat come first, then the ayat that meet it at the same node.")).toBeTruthy();
 });
 
@@ -107,7 +107,7 @@ it('marks shared words in an inner-node dialog too, and nothing in the neighbour
   render(wrap(<AyahContextButton ayahKeys={['94:5', '94:6']} differentWords={[]} names={{}}>Node</AyahContextButton>));
   fireEvent.click(screen.getByRole('button', { name: 'View ayat in context' }));
   await screen.findAllByRole('link', { name: 'Read ayah' });
-  expect(screen.getAllByTitle('In every ayah, same form').map(word => word.textContent)).toEqual(['مَعَ', 'ٱلْعُسْرِ', 'مَعَ', 'ٱلْعُسْرِ']);
+  expect(screen.getAllByTitle('Same word').map(word => word.textContent)).toEqual(['مَعَ', 'ٱلْعُسْرِ', 'مَعَ', 'ٱلْعُسْرِ']);
 });
 
 it('locks background scrolling until the dialog closes and restores existing styles on unmount', () => {

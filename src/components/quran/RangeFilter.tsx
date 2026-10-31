@@ -11,7 +11,7 @@ import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 export const NAVIGATING = 'range-filter:navigating';
 export const announceNavigation = () => document.dispatchEvent(new Event(NAVIGATING));
 
-export type RangeLabels = { from: string; to: string; all: string; form: string; invalid: (range: JuzRange) => string };
+export type RangeLabels = { from: string; to: string; toText?: string; all: string; form: string; invalid: (range: JuzRange) => string };
 
 export default function RangeFilter({ range, max, names, href, labels, iconOnly = false }: { range: JuzRange | null; max: number; names: [string, string]; href: (range?: JuzRange) => string; labels: RangeLabels; iconOnly?: boolean }) {
   const router = useNavigatingRouter();
@@ -95,7 +95,7 @@ export default function RangeFilter({ range, max, names, href, labels, iconOnly 
     <form onSubmit={event => event.preventDefault()} aria-label={labels.form} className="flex flex-wrap items-center gap-3 text-sm">
       {[0, 1].map(index => (
         <span key={index} className="flex items-center gap-2">
-          {label(index)}
+          {index === 1 ? labels.toText ?? labels.to : labels.from}
           <NumberInput name={names[index]} label={label(index)} iconFamily="lucide" draftValue={draft[index]} onDraftChange={value => update(index, value)} min={1} max={max} steppers={false} />
         </span>
       ))}

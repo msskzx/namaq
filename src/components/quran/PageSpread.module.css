@@ -1,6 +1,8 @@
 .spread { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1.5rem; row-gap: 0.75rem; }
 .page { display: grid; grid-template-rows: subgrid; padding: 1.5rem; border: 4px double var(--home-rule); background: var(--home-paper-deep); color: var(--home-ink); }
 .page header { border-block: 1px solid var(--home-rule); text-align: center; padding: 0.5rem; margin-bottom: 1.5rem; }
+.withAction { position: relative; padding-inline: 2.75rem; }
+.action { position: absolute; top: 50%; inset-inline-end: 0.25rem; transform: translateY(-50%); }
 .page h3 { font-family: var(--font-amiri), serif; font-size: 1.5rem; }
 .page header p { color: var(--home-muted); font-size: 0.9375rem; }
 .lines { display: contents; font-family: var(--font-quran); font-size: 1.5rem; line-height: 2.5; text-align: center; }
@@ -13,7 +15,7 @@
 .spread mark.slot4 { color: var(--home-slot-4); }
 .spread mark.root, .legend mark.root { color: var(--home-root); }
 .verseEnd { white-space: nowrap; }
-.verseSeal { display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--home-rule); border-radius: 50%; min-width: 1.75rem; height: 1.75rem; padding-inline: 0.25rem; color: var(--home-muted); font-size: 0.9375rem; line-height: 1; vertical-align: middle; white-space: nowrap; }
+.verseSeal { color: var(--home-muted); white-space: nowrap; }
 .legend { margin-block: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; font-size: 1rem; }
 
 @media (max-width: 600px) {

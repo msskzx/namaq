@@ -1,0 +1,17 @@
+.track { display: grid; grid-template-columns: 3rem repeat(3, 84%) 3rem; gap: 0.75rem 1rem; overflow: auto; max-height: 75vh; scroll-padding-top: 2.5rem; scroll-snap-type: both mandatory; scroll-behavior: smooth; overscroll-behavior-x: contain; align-items: stretch; padding-inline: max(0px, calc(8% - 4rem)); padding-bottom: 20vh; scrollbar-width: none; }
+.track::-webkit-scrollbar { display: none; }
+.track[data-fits] { padding-bottom: 0; }
+.cell { min-width: 0; max-height: calc(75vh - 6rem); transition: opacity 0.3s ease; }
+.cell[data-first] { scroll-snap-align: none center; scroll-snap-stop: always; }
+.cell[data-current] { scroll-snap-align: start none; scroll-snap-stop: always; }
+.cell[data-first][data-current] { scroll-snap-align: start center; }
+.cell:not([data-current]), .cell:not([data-reading]) { opacity: 0.45; cursor: pointer; }
+.edge { border-inline: 1px dashed var(--home-rule); }
+.edgeIcon { position: sticky; top: 1rem; bottom: 1rem; }
+.cell > div { display: block; height: 100%; }
+.cell article { display: block; height: 100%; overflow-y: auto; padding: 0.75rem; }
+.cell article header { display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; column-gap: 0.75rem; margin-bottom: 0.5rem; padding: 0.25rem; }
+.cell article h3 { font-size: 1.125rem; }
+.cell article > div { font-size: 1.25rem; line-height: 2.1; }
+@media (max-width: 600px) { .track { grid-template-columns: 2.5rem repeat(3, 86%) 2.5rem; padding-inline: max(0px, calc(7% - 3rem)); column-gap: 0.5rem; } }
+@media (prefers-reduced-motion: reduce) { .track { scroll-behavior: auto; } .cell { transition: none; } }
