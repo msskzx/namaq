@@ -38,6 +38,14 @@ async function play(root: HTMLElement, marker: HTMLElement, bubble: HTMLElement,
   const pointer = content.style.pointerEvents;
   content.style.pointerEvents = 'none';
   undo.push(() => { content.style.pointerEvents = pointer; });
+  const surround = root.querySelector<HTMLInputElement>('input[role="switch"]');
+  const toggle = surround?.closest('label');
+  if (surround && toggle) {
+    const was = surround.checked;
+    if (was) surround.click();
+    toggle.inert = true;
+    undo.push(() => { toggle.inert = false; if (was && !surround.checked) surround.click(); });
+  }
 
   const boxes = [...content.querySelectorAll<HTMLElement>('[data-node]')];
   const right = (element: Element) => element.getBoundingClientRect().right;

@@ -350,10 +350,12 @@ describe('BranchTree', () => {
       expect(open).toHaveBeenCalledOnce();
     });
 
-    it('gives the surrounding-ayat switch one visible label', () => {
+    it('names the surrounding-ayat and fit controls without visible labels', () => {
       render(<BranchTree tree={tree} names={names} surround={{ on: false }} />);
-      expect(screen.getByRole('switch', { name: 'الآيات المحيطة' })).toBeTruthy();
-      expect(screen.getAllByText('الآيات المحيطة')).toHaveLength(1);
+      expect(screen.getByRole('switch', { name: 'الآيات المحيطة' }).closest('[title]')?.getAttribute('title')).toBe('الآيات المحيطة');
+      expect(screen.getByRole('button', { name: 'ملاءمة' }).getAttribute('title')).toBe('ملاءمة');
+      expect(screen.queryByText('الآيات المحيطة')).toBeNull();
+      expect(screen.queryByText('ملاءمة')).toBeNull();
     });
 
     it('has no surrounding-ayat switch unless the page asks for one', () => {
@@ -424,11 +426,6 @@ describe('BranchTree', () => {
       expect(box.closest('li')!.parentElement!.closest('li')!.textContent).toContain('﴿١٧﴾');
     });
 
-    it('turns on from its visible label too', () => {
-      render(<BranchTree tree={tree} names={names} surround={{ on: false }} />);
-      fireEvent.click(screen.getByText('الآيات المحيطة'));
-      expect((screen.getByRole('switch', { name: 'الآيات المحيطة' }) as HTMLInputElement).checked).toBe(true);
-    });
 
     it('keeps the switch in the address without asking the server for the page again', () => {
       window.history.replaceState(null, '', '/quran/branches?o=x');
