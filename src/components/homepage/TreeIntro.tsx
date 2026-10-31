@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, type RefObject } from 'react';
-import { SkipForward } from 'lucide-react';
+import { RotateCcw, SkipForward } from 'lucide-react';
 import Button from '../common/Button';
 import styles from './Home.module.css';
 
@@ -139,12 +139,13 @@ async function play(root: HTMLElement, marker: HTMLElement, bubble: HTMLElement,
 
 export default function TreeIntro({ target, ar }: { target: RefObject<HTMLElement | null>; ar: boolean }) {
   const [playing, setPlaying] = useState(false);
+  const [round, setRound] = useState(0);
   const marker = useRef<HTMLSpanElement>(null);
   const bubble = useRef<HTMLSpanElement>(null);
   const skip = useRef<() => void>(() => {});
   useEffect(() => {
     const root = target.current;
-    if (!root || !marker.current || !bubble.current || !shouldPlay()) return;
+    if (!root || !marker.current || !bubble.current || (round === 0 && !shouldPlay())) return;
     const controller = new AbortController();
     const undo: (() => void)[] = [];
     const stop = () => {
@@ -160,13 +161,15 @@ export default function TreeIntro({ target, ar }: { target: RefObject<HTMLElemen
     setPlaying(true);
     play(root, marker.current, bubble.current, controller.signal, undo).then(done, () => {});
     return stop;
-  }, [target]);
+  }, [target, round]);
   return <>
     <span ref={marker} aria-hidden className={styles.tapMarker} />
     <span ref={bubble} aria-hidden className={styles.introBubble}>{ar ? 'الآيات في سياقها' : 'Ayat in context'}</span>
-    {playing && <Button size="sm" className={styles.skipIntro} onClick={() => skip.current()}>
+    {playing ? <Button size="sm" className={styles.skipIntro} onClick={() => skip.current()}>
       <SkipForward size={16} aria-hidden className={ar ? '-scale-x-100' : undefined} />
       {ar ? 'تخطّ' : 'Skip'}
+    </Button> : <Button size="icon" className={styles.skipIntro} onClick={() => setRound(count => count + 1)} aria-label={ar ? 'إعادة العرض' : 'Replay'} title={ar ? 'إعادة العرض' : 'Replay'}>
+      <RotateCcw size={16} aria-hidden />
     </Button>}
   </>;
 }

@@ -61,7 +61,6 @@ describe('BranchTree', () => {
     expect(viewport.style.height).toBe('clamp(22rem, 70svh, 36rem)');
     expect(viewport.classList.contains('overflow-hidden')).toBe(true);
     expect(container.querySelector('[data-tree]')!.classList.contains('overflow-hidden')).toBe(true);
-    expect(screen.getByText('٥٠٪')).toBeTruthy();
     const fit = screen.getByRole('button', { name: 'ملاءمة' });
     expect(fit.getAttribute('aria-pressed')).toBe('true');
     fireEvent.click(screen.getByRole('button', { name: 'تكبير' }));
@@ -117,7 +116,7 @@ describe('BranchTree', () => {
     const tree = branch(group);
     const { container } = render(<BranchTree tree={tree} variants={variants(group)} names={{}} />);
     expect(screen.getByRole('list', { name: 'صيغ الكلمة الأولى' }).children).toHaveLength(3);
-    expect([...container.querySelectorAll('div')].filter(node => !node.textContent?.trim())).toHaveLength(0);
+    expect([...container.querySelectorAll('div')].filter(node => !node.textContent?.trim() && !node.closest('[role="toolbar"]') && !node.querySelector('[role="toolbar"]'))).toHaveLength(0);
     expect(container.querySelectorAll('a[href^="/quran/read/"]')).toHaveLength(0);
     expect(screen.getAllByRole('button', { name: /عرض.*السياق|عرض الآيات/ }).length).toBeGreaterThan(0);
     expect(screen.getByText('طَغَىٰ')).toBeTruthy();

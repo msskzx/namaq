@@ -130,3 +130,16 @@ it('turns the surrounding ayat off and locks the switch while playing, then give
   expect(toggle.checked).toBe(true);
   expect(toggle.closest('label')!.inert).toBe(false);
 });
+
+it('replays from the replay button, which gives way to skip while playing', async () => {
+  localStorage.setItem(SEEN, '1');
+  render(<Tree />);
+  expect(skip()).toBeNull();
+  fireEvent.click(screen.getByRole('button', { name: 'إعادة العرض' }));
+  expect(skip()).toBeTruthy();
+  expect(screen.queryByRole('button', { name: 'إعادة العرض' })).toBeNull();
+  await advance(100);
+  expect(words('n0').style.visibility).toBe('hidden');
+  fireEvent.click(skip()!);
+  expect(screen.getByRole('button', { name: 'إعادة العرض' })).toBeTruthy();
+});
