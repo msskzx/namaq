@@ -64,14 +64,14 @@ describe('BranchTree', () => {
     expect(screen.getByText('٥٠٪')).toBeTruthy();
     const fit = screen.getByRole('button', { name: 'ملاءمة' });
     expect(fit.getAttribute('aria-pressed')).toBe('true');
-    fireEvent.click(screen.getByRole('button', { name: 'تكبير الشجرة' }));
+    fireEvent.click(screen.getByRole('button', { name: 'تكبير' }));
     expect(content.style.transform).toBe('scale(0.6)');
     expect(viewport.classList.contains('overflow-auto')).toBe(true);
     expect(fit.getAttribute('aria-pressed')).toBe('false');
     fireEvent.click(fit);
     expect(content.style.transform).toBe('scale(0.5)');
     expect(fit.getAttribute('aria-pressed')).toBe('true');
-    fireEvent.click(screen.getByRole('button', { name: 'تصغير الشجرة' }));
+    fireEvent.click(screen.getByRole('button', { name: 'تصغير' }));
     expect(content.style.transform).toBe('scale(0.4)');
     fireEvent.click(fit);
     expect(content.style.transform).toBe('scale(0.5)');
@@ -96,7 +96,7 @@ describe('BranchTree', () => {
     act(() => resize([], {} as ResizeObserver));
     expect(content.style.transform).toBe('scale(0.4)');
     expect(viewport.style.height).toBe('320px');
-    fireEvent.click(screen.getByRole('button', { name: 'تكبير الشجرة' }));
+    fireEvent.click(screen.getByRole('button', { name: 'تكبير' }));
     expect(content.style.transform).toBe('scale(0.5)');
     expect(viewport.style.height).toBe('320px');
     Object.defineProperty(content, 'offsetHeight', { configurable: true, value: 100 });
@@ -185,7 +185,7 @@ describe('BranchTree', () => {
   it('gives a branch a button to the tree of its own phrase, but not the root or a leaf, and no text links', () => {
     const deep = { ...tree, children: [{ words: ['جَنَّـٰتٍۢ'], ayat: [], children: tree.children }] };
     render(<BranchTree tree={deep} names={{}} />);
-    expect(screen.getAllByRole('link').map(link => [link.getAttribute('aria-label'), link.getAttribute('href')])).toEqual([['عرض هذا الجزء من الشجرة وحده', branchesHref('ان المتقين في جنت')]]);
+    expect(screen.getAllByRole('link').map(link => [link.getAttribute('aria-label'), link.getAttribute('href')])).toEqual([['عرض هذا الجزء وحده', branchesHref('ان المتقين في جنت')]]);
     expect(screen.getByText('جَنَّـٰتٍۢ').closest('a')).toBeNull();
   });
 
@@ -203,7 +203,7 @@ describe('BranchTree', () => {
     const firstWords = screen.getByRole('list', { name: 'صيغ الكلمة الأولى' });
     expect(within(firstWords).getAllByRole('listitem').map(item => item.querySelector('[data-node] span.block')?.textContent)).toEqual(['يَطُوفُ', 'وَيَطُوفُ']);
     expect(screen.getByText('عَلَيْهِمْ')).toBeTruthy();
-    expect(within(firstWords).getAllByRole('link', { name: 'عرض هذا الجزء من الشجرة وحده' }).map(link => link.getAttribute('href'))).toEqual([
+    expect(within(firstWords).getAllByRole('link', { name: 'عرض هذا الجزء وحده' }).map(link => link.getAttribute('href'))).toEqual([
       branchesHref('يطوف عليهم', { from: 26, to: 30 }, { spelling: 'يَطُوفُ' }),
       branchesHref('يطوف عليهم', { from: 26, to: 30 }, { spelling: 'وَيَطُوفُ' }),
     ]);

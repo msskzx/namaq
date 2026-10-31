@@ -40,7 +40,7 @@ describe('Quran branch trees', () => {
   it('keeps zoom links to an absorbed phrase after an ayah ending', async () => {
     render(await open({ o: 'لا اثم عليه' }));
     const href = branchesHref('ان الله غفور رحيم', undefined, { occurrences: ['2:173:21', '2:182:12'] });
-    expect(screen.getAllByRole('link', { name: 'عرض هذا الجزء من الشجرة وحده' }).some(link => link.getAttribute('href') === href)).toBe(true);
+    expect(screen.getAllByRole('link', { name: 'عرض هذا الجزء وحده' }).some(link => link.getAttribute('href') === href)).toBe(true);
   });
   it('shows the فذرهم passages together once in the reported range and surah', async () => {
     render(await open({ juzFrom: '25', juzTo: '30', s: '43', q: 'فذرهم يخوضوا ويلعبوا' }));

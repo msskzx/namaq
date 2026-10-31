@@ -25,7 +25,7 @@ const subscribe = (listener: () => void) => {
   return () => listeners.delete(listener);
 };
 
-export default function CompareLayout({ title, current, pane, children, storageKey = 'compare-pane-hidden', change = 'تغيير السورتين' }: { title: string; current: string; pane: React.ReactNode; children: React.ReactNode; storageKey?: string; change?: string }) {
+export default function CompareLayout({ title, current, pane, children, bar, storageKey = 'compare-pane-hidden', change = 'تغيير السورتين' }: { title: string; current: string; pane: React.ReactNode; children: React.ReactNode; bar?: React.ReactNode; storageKey?: string; change?: string }) {
   const id = useId();
   const search = useSearchParams().toString();
   const hidden = useSyncExternalStore(subscribe, () => read(storageKey), () => false);
@@ -44,28 +44,9 @@ export default function CompareLayout({ title, current, pane, children, storageK
     write(storageKey, next);
   };
   return (
-    <div className={`flex flex-col gap-4 lg:grid lg:items-start ${hidden ? '' : 'lg:grid-cols-[19rem_minmax(0,1fr)]'}`}>
-      <button type="button" aria-expanded={open} aria-controls={id} onClick={() => setOpenAt(open ? null : search)}
-        className="lg:hidden flex items-center justify-between gap-3 rounded-lg border border-[var(--home-accent)] px-3 py-2 text-start text-[var(--home-accent)]">
-        <span className="min-w-0 truncate">{current}</span>
-        <span className="flex shrink-0 items-center gap-1 text-sm">
-          {open ? 'إخفاء السور' : change}
-          <ChevronDown size={16} aria-hidden className={`transition-transform ${open ? 'rotate-180' : ''}`} />
-        </span>
-      </button>
-      <aside id={id} aria-label={title} className={`${PANE} min-w-0 flex-col gap-3 ${open ? 'flex' : 'hidden'} ${hidden ? 'lg:hidden' : 'lg:flex'}`}>
-        <div className="flex items-center justify-between gap-2">
-          <h2 className="text-xl">{title}</h2>
-          <span ref={hide} className="hidden lg:block">
-            <Button size="sm" onClick={() => toggle(true)}>
-              <PanelRightClose size={14} aria-hidden />
-              إخفاء القائمة
-            </Button>
-          </span>
-        </div>
-        {pane}
-      </aside>
-      <div className="min-w-0 flex flex-col gap-4">
+    <div className="flex flex-col gap-4">
+      {(bar || hidden) && <div className={`${bar ? 'flex' : 'hidden lg:flex'} flex-wrap items-start gap-x-4 gap-y-3`}>
+        {bar}
         {hidden && (
           <span ref={show} className="hidden lg:block">
             <Button size="sm" onClick={() => toggle(false)}>
@@ -74,7 +55,31 @@ export default function CompareLayout({ title, current, pane, children, storageK
             </Button>
           </span>
         )}
-        {children}
+      </div>}
+      <div className={`flex flex-col gap-4 lg:grid lg:items-start ${hidden ? '' : 'lg:grid-cols-[19rem_minmax(0,1fr)]'}`}>
+        <button type="button" aria-expanded={open} aria-controls={id} onClick={() => setOpenAt(open ? null : search)}
+          className="lg:hidden flex items-center justify-between gap-3 rounded-lg border border-[var(--home-accent)] px-3 py-2 text-start text-[var(--home-accent)]">
+          <span className="min-w-0 truncate">{current}</span>
+          <span className="flex shrink-0 items-center gap-1 text-sm">
+            {open ? 'إخفاء السور' : change}
+            <ChevronDown size={16} aria-hidden className={`transition-transform ${open ? 'rotate-180' : ''}`} />
+          </span>
+        </button>
+        <aside id={id} aria-label={title} className={`${PANE} min-w-0 flex-col gap-3 ${open ? 'flex' : 'hidden'} ${hidden ? 'lg:hidden' : 'lg:flex'}`}>
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="text-xl">{title}</h2>
+            <span ref={hide} className="hidden lg:block">
+              <Button size="sm" onClick={() => toggle(true)}>
+                <PanelRightClose size={14} aria-hidden />
+                إخفاء القائمة
+              </Button>
+            </span>
+          </div>
+          {pane}
+        </aside>
+        <div className="min-w-0 flex flex-col gap-4">
+          {children}
+        </div>
       </div>
     </div>
   );

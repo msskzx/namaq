@@ -57,32 +57,34 @@ export default function OpeningSearch({ phrases, current, query: submitted = '',
   };
   return (
     <div className="flex flex-col gap-3">
-      <label className="relative block">
-        <span className="sr-only">{ar ? 'ابحث عن عبارة مشتركة بين آيتين أو أكثر' : 'Search phrases shared by two or more ayat'}</span>
-        <Search aria-hidden className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--home-muted)]" />
-        <input type="search" role="combobox" aria-autocomplete="list" aria-expanded={visible} aria-controls={listId} aria-activedescendant={visible && selected >= 0 && suggestions[selected] ? `${listId}-${selected}` : undefined} value={query}
-          onChange={event => { setQuery(event.target.value); setSelected(-1); setDismissed(false); }}
-          placeholder={ar ? `ابحث بين ${num(phraseCount ?? phrases.length)} عبارة مشتركة بين آيتين أو أكثر` : `Search ${phraseCount ?? phrases.length} shared phrases`}
-          onKeyDown={event => {
-            if (event.key === 'Escape') { setDismissed(true); setSelected(-1); }
-            if ((event.key === 'ArrowDown' || event.key === 'ArrowUp') && suggestions.length) {
-              event.preventDefault();
-              setDismissed(false);
-              setSelected(index => event.key === 'ArrowDown' ? (index + 1) % suggestions.length : (index <= 0 ? suggestions.length - 1 : index - 1));
-            }
-            if (event.key === 'Enter' && query.trim()) { event.preventDefault(); if (visible && suggestions[selected]) open(suggestions[selected]); else search(); }
-          }} className={SEARCH} />
-      </label>
-      {visible && <ul id={listId} role="listbox" aria-label={ar ? 'عبارات مقترحة' : 'Suggested phrases'} className="flex flex-col rounded border border-[var(--home-rule)]">
-        {suggestions.length === 0 ? <li role="presentation" className={`${NOTE} px-3 py-2`}><span role="status">{ar ? 'لا عبارة مشتركة تطابق البحث.' : 'No shared phrase matches your search.'}</span></li> : suggestions.map((opening, index) => (
-          <li key={opening.id} role="presentation">
-            <button id={`${listId}-${index}`} data-branch-navigation type="button" role="option" aria-selected={selected === index} onClick={() => open(opening)} className={`flex w-full items-baseline gap-2 px-3 py-2 text-start hover:bg-[var(--home-paper-deep)] ${selected === index ? 'bg-[var(--home-paper-deep)]' : ''}`}>
-              <span className="text-lg font-arabic flex-1" dir="rtl">{ar ? opening.text : opening.textEn ?? opening.text}</span>
-              <span className="text-[var(--home-accent)]">{ar ? num(opening.count) : opening.count}</span>
-            </button>
-          </li>
-        ))}
-      </ul>}
+      <div className="relative">
+        <label className="relative block">
+          <span className="sr-only">{ar ? 'ابحث عن عبارة مشتركة بين آيتين أو أكثر' : 'Search phrases shared by two or more ayat'}</span>
+          <Search aria-hidden className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--home-muted)]" />
+          <input type="search" role="combobox" aria-autocomplete="list" aria-expanded={visible} aria-controls={listId} aria-activedescendant={visible && selected >= 0 && suggestions[selected] ? `${listId}-${selected}` : undefined} value={query}
+            onChange={event => { setQuery(event.target.value); setSelected(-1); setDismissed(false); }}
+            placeholder={ar ? `ابحث بين ${num(phraseCount ?? phrases.length)} عبارة مشتركة بين آيتين أو أكثر` : `Search ${phraseCount ?? phrases.length} shared phrases`}
+            onKeyDown={event => {
+              if (event.key === 'Escape') { setDismissed(true); setSelected(-1); }
+              if ((event.key === 'ArrowDown' || event.key === 'ArrowUp') && suggestions.length) {
+                event.preventDefault();
+                setDismissed(false);
+                setSelected(index => event.key === 'ArrowDown' ? (index + 1) % suggestions.length : (index <= 0 ? suggestions.length - 1 : index - 1));
+              }
+              if (event.key === 'Enter' && query.trim()) { event.preventDefault(); if (visible && suggestions[selected]) open(suggestions[selected]); else search(); }
+            }} className={SEARCH} />
+        </label>
+        {visible && <ul id={listId} role="listbox" aria-label={ar ? 'عبارات مقترحة' : 'Suggested phrases'} className="absolute inset-x-0 top-full z-20 mt-1 flex flex-col rounded border border-[var(--home-rule)] bg-[var(--home-paper)] shadow-lg">
+          {suggestions.length === 0 ? <li role="presentation" className={`${NOTE} px-3 py-2`}><span role="status">{ar ? 'لا عبارة مشتركة تطابق البحث.' : 'No shared phrase matches your search.'}</span></li> : suggestions.map((opening, index) => (
+            <li key={opening.id} role="presentation">
+              <button id={`${listId}-${index}`} data-branch-navigation type="button" role="option" aria-selected={selected === index} onClick={() => open(opening)} className={`flex w-full items-baseline gap-2 px-3 py-2 text-start hover:bg-[var(--home-paper-deep)] ${selected === index ? 'bg-[var(--home-paper-deep)]' : ''}`}>
+                <span className="text-lg font-arabic flex-1" dir="rtl">{ar ? opening.text : opening.textEn ?? opening.text}</span>
+                <span className="text-[var(--home-accent)]">{ar ? num(opening.count) : opening.count}</span>
+              </button>
+            </li>
+          ))}
+        </ul>}
+      </div>
       {(current || submitted) && <Button size="sm" className="self-start" href={branchesHref('', juz ?? undefined, { page: submitted ? undefined : view.page })}>
         {ar ? <ArrowRight size={16} aria-hidden /> : <ArrowLeft size={16} aria-hidden />}
         {ar ? 'العودة إلى القائمة' : 'Return to list'}
