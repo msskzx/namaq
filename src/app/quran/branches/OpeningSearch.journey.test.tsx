@@ -74,7 +74,7 @@ describe('opening search journey', () => {
     expect(suggestionOptions()[0].textContent).toContain('أَرَءَيْتُمْ');
     fireEvent.click(suggestionOptions()[0]);
 
-    expect(navigation.push).toHaveBeenCalledWith(branchesHref('ارءيتم', { from: 25, to: 30 }, { grouped: true, page: 4 }));
+    expect(navigation.push).toHaveBeenCalledWith(branchesHref('ارءيتم', { from: 25, to: 30 }, { grouped: true, page: 4, query: 'ارايتم' }));
   });
 
   it('uses arrow keys to select a suggestion and Enter to open it', () => {
@@ -86,7 +86,7 @@ describe('opening search journey', () => {
     fireEvent.keyDown(box, { key: 'ArrowDown' });
     fireEvent.keyDown(box, { key: 'Enter' });
 
-    expect(navigation.push).toHaveBeenCalledWith(branchesHref('قال رب اني', undefined, { partition: 'seven' }));
+    expect(navigation.push).toHaveBeenCalledWith(branchesHref('قال رب اني', undefined, { partition: 'seven', query: 'قال رب اني' }));
   });
 
   it('offers distinct vocalized choices and counts for an ambiguous legacy phrase', () => {

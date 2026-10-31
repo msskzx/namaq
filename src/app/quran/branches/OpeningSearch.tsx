@@ -44,7 +44,7 @@ export default function OpeningSearch({ phrases, query: submitted = '', juz = nu
   }, [query, remote, dismissed, requestKey]);
   const suggestions: Suggestion[] = remote && fetched?.key === requestKey ? fetched.suggestions : searchPhrases(phrases, query).slice(0, SUGGESTIONS);
   const visible = !!query.trim() && !dismissed;
-  const href = (phrase: Suggestion) => branchesHref(phrase.id, juz ?? undefined, { ...view, occurrences: undefined, query: query.trim() === view.query ? view.query : undefined });
+  const href = (phrase: Suggestion) => branchesHref(phrase.id, juz ?? undefined, { ...view, occurrences: undefined, query: query.trim() || view.query });
   const open = (phrase: Suggestion) => {
     setQuery('');
     setSelected(-1);

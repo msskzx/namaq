@@ -16,7 +16,9 @@ import styles from './AyahCards.module.css';
 
 const COLUMNS = ['before', 'ayah', 'after'] as const;
 const SWIPE = 50;
-const SETTLE = 600;
+const SLIDE = 250;
+const LOCK = 8;
+const WHEEL_GAP = 250;
 type Column = typeof COLUMNS[number];
 
 const matchLabels = (ar: boolean) => ar ? { exact: 'نفس الكلمة', root: 'نفس الجذر' } : { exact: 'Same word', root: 'Same root' };
@@ -52,12 +54,52 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
     setColumn(i);
   };
   const head = (i: number) => track.current?.querySelector<HTMLElement>(`[data-col="${i}"]`);
-  const goTo = (i: number, behavior: ScrollBehavior = 'smooth') => {
+  const dragged = useRef(0);
+  const sliding = useRef<{ timer: ReturnType<typeof setTimeout>; finish: () => void } | null>(null);
+  const setDrag = (x: number, animate = false) => {
+    const element = track.current;
+    if (!element) return;
+    dragged.current = x;
+    element.toggleAttribute('data-sliding', animate);
+    element.style.setProperty('--drag', `${x}px`);
+  };
+  /** How far column i's centre sits from the frame's centre, without the finger's drag. */
+  const offsetOf = (i: number) => {
     const box = track.current?.getBoundingClientRect();
     const rect = head(i)?.getBoundingClientRect();
-    const left = box && rect ? rect.left + rect.width / 2 - (box.left + box.width / 2) : 0;
-    if (Math.abs(left) > 1 && track.current?.scrollBy) track.current.scrollBy({ left, behavior });
-    else selectColumn(i);
+    return box && rect ? rect.left + rect.width / 2 - (box.left + box.width / 2) - dragged.current : 0;
+  };
+  const scrollAcross = (by: number) => {
+    const element = track.current;
+    if (!element || Math.abs(by) < 1) return;
+    element.style.scrollBehavior = 'auto';
+    element.scrollLeft += by;
+    element.style.scrollBehavior = '';
+  };
+  const flush = () => {
+    const slide = sliding.current;
+    if (!slide) return;
+    clearTimeout(slide.timer);
+    sliding.current = null;
+    slide.finish();
+  };
+  // Every column change slides the cards with a transform and only then moves the scroll position in one jump,
+  // so the rows never scroll sideways and up or down at once, and quick repeated steps never overshoot.
+  const goTo = (i: number) => {
+    flush();
+    const offset = offsetOf(i);
+    if (Math.abs(offset) <= 1) { setDrag(0); selectColumn(i); return; }
+    selectColumn(i);
+    const finish = () => { setDrag(0); scrollAcross(offset); };
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) { finish(); return; }
+    setDrag(-offset, true);
+    sliding.current = { timer: setTimeout(flush, SLIDE), finish };
+  };
+  const settleBack = () => {
+    flush();
+    if (!dragged.current) return;
+    setDrag(0, true);
+    sliding.current = { timer: setTimeout(flush, SLIDE), finish: () => setDrag(0) };
   };
   const centred = () => {
     const box = track.current?.getBoundingClientRect();
@@ -108,7 +150,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
   useEffect(() => {
     const element = track.current;
     if (!ready || !element) return;
-    const place = () => element.clientWidth > 0 && (goTo(1, 'instant'), true);
+    const place = () => element.clientWidth > 0 && (flush(), setDrag(0), scrollAcross(offsetOf(1)), selectColumn(1), true);
     void document.fonts?.ready.then(() => { if (element.isConnected) place(); });
     if (place() || typeof ResizeObserver === 'undefined') return;
     const observer = new ResizeObserver(() => { if (place()) observer.disconnect(); });
@@ -130,8 +172,6 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
   }, [ready]);
 
   const router = useNavigatingRouter();
-  const arrived = useRef(0);
-  useEffect(() => { arrived.current = Date.now(); }, [column]);
   const leave = (forward: boolean) => {
     const href = forward ? steps?.next : steps?.previous;
     if (!href || column !== (forward ? COLUMNS.length - 1 : 0)) return false;
@@ -142,24 +182,68 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
   stepRef.current = forward => {
     const i = column + (forward ? 1 : -1);
     if (i >= 0 && i < COLUMNS.length) goTo(i);
-    else leave(forward);
+    else if (!leave(forward)) settleBack();
   };
-  const swipe = useRef<{ x: number; y: number } | null>(null);
-  const onTouchStart = (event: React.TouchEvent) => {
-    swipe.current = event.touches.length === 1 ? { x: event.touches[0].clientX, y: event.touches[0].clientY } : null;
+  const canStep = (forward: boolean) => (forward ? column < COLUMNS.length - 1 || !!steps?.next : column > 0 || !!steps?.previous);
+  const touchRef = useRef<{ start: (event: TouchEvent) => void; move: (event: TouchEvent) => void; end: () => void }>(null!);
+  const swipe = useRef<{ x: number; y: number; axis?: 'x' | 'y' } | null>(null);
+  touchRef.current = {
+    start: event => {
+      flush();
+      swipe.current = event.touches.length === 1 ? { x: event.touches[0].clientX, y: event.touches[0].clientY } : null;
+    },
+    move: event => {
+      const start = swipe.current;
+      if (!start || event.touches.length !== 1) { swipe.current = null; if (dragged.current) settleBack(); return; }
+      const dx = event.touches[0].clientX - start.x;
+      const dy = event.touches[0].clientY - start.y;
+      if (!start.axis) {
+        if (Math.abs(dx) < LOCK && Math.abs(dy) < LOCK) return;
+        start.axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+      }
+      if (start.axis !== 'x') return;
+      if (event.cancelable) event.preventDefault();
+      setDrag(canStep(dx > 0) ? dx : dx / 4);
+    },
+    end: () => {
+      const start = swipe.current;
+      swipe.current = null;
+      if (start?.axis !== 'x') return;
+      const dx = dragged.current;
+      if (Math.abs(dx) >= SWIPE && canStep(dx > 0)) stepRef.current(dx > 0);
+      else settleBack();
+    },
   };
-  const onTouchEnd = (event: React.TouchEvent) => {
-    const start = swipe.current;
-    const end = event.changedTouches[0];
-    swipe.current = null;
-    if (!start || event.touches.length || !end || Date.now() - arrived.current < SETTLE) return;
-    const dx = end.clientX - start.x;
-    if (Math.abs(dx) >= SWIPE && Math.abs(dx) > 2 * Math.abs(end.clientY - start.y)) leave(dx > 0);
-  };
+  const wheel = useRef({ sum: 0, done: false, timer: undefined as ReturnType<typeof setTimeout> | undefined });
   const onWheel = (event: React.WheelEvent) => {
-    if (Math.abs(event.deltaX) < SWIPE || Math.abs(event.deltaX) < 2 * Math.abs(event.deltaY) || Date.now() - arrived.current < SETTLE) return;
-    if (leave(event.deltaX < 0)) arrived.current = Date.now();
+    if (Math.abs(event.deltaX) <= Math.abs(event.deltaY)) return;
+    const gesture = wheel.current;
+    clearTimeout(gesture.timer);
+    gesture.timer = setTimeout(() => { gesture.sum = 0; gesture.done = false; }, WHEEL_GAP);
+    if (gesture.done) return;
+    gesture.sum += event.deltaX;
+    if (Math.abs(gesture.sum) < SWIPE) return;
+    gesture.done = true;
+    stepRef.current(gesture.sum < 0);
   };
+  useEffect(() => {
+    const element = track.current;
+    if (!ready || !element) return;
+    const start = (event: TouchEvent) => touchRef.current.start(event);
+    const move = (event: TouchEvent) => touchRef.current.move(event);
+    const end = () => touchRef.current.end();
+    element.addEventListener('touchstart', start, { passive: true });
+    element.addEventListener('touchmove', move, { passive: false });
+    element.addEventListener('touchend', end);
+    element.addEventListener('touchcancel', end);
+    return () => {
+      element.removeEventListener('touchstart', start);
+      element.removeEventListener('touchmove', move);
+      element.removeEventListener('touchend', end);
+      element.removeEventListener('touchcancel', end);
+    };
+  }, [ready]);
+  useEffect(() => () => { const slide = sliding.current; if (slide) clearTimeout(slide.timer); }, []);
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey || document.querySelector('dialog[open]')) return;
@@ -216,7 +300,7 @@ export default function AyahCards({ ayahKeys, names, steps }: { ayahKeys: string
     <section aria-label={ar ? 'آيات الشجرة في سياقها' : 'Tree ayat in context'} className="flex flex-col gap-2">
       {isLoading && <LoadingSpinner />}
       {(error || aroundError || missing) && <div role="alert"><p>{ar ? 'تعذّر تحميل الآيات.' : 'Could not load the ayat.'}</p><Button size="lg" onClick={() => { void mutate(); void retryAround(); }} aria-label={ar ? 'إعادة المحاولة' : 'Try again'} title={ar ? 'إعادة المحاولة' : 'Try again'}><RotateCcw aria-hidden /></Button></div>}
-      {contexts && around && !missing && <div ref={track} tabIndex={0} role="region" aria-label={ar ? 'مصفوفة الآيات' : 'Ayah matrix'} dir="rtl" data-fits={fits || undefined} className={styles.track} onScroll={onScroll} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onWheel={onWheel}>
+      {contexts && around && !missing && <div ref={track} tabIndex={0} role="region" aria-label={ar ? 'مصفوفة الآيات' : 'Ayah matrix'} dir="rtl" data-fits={fits || undefined} className={styles.track} onScroll={onScroll} onWheel={onWheel}>
         {edge(false)}
         {edge(true)}
         {contexts.map((context, row) => COLUMNS.map((at, i) => cell(context!, at, row, i)))}

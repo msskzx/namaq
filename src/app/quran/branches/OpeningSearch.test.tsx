@@ -88,7 +88,7 @@ describe('OpeningSearch', () => {
     fireEvent.change(box, { target: { value: 'الم تر كيف' } });
     fireEvent.keyDown(box, { key: 'ArrowDown' });
     fireEvent.keyDown(box, { key: 'Enter' });
-    expect(router.push).toHaveBeenCalledWith(branchesHref('الم تر كيف'));
+    expect(router.push).toHaveBeenCalledWith(branchesHref('الم تر كيف', undefined, { query: 'الم تر كيف' }));
   });
 
   it('keeps the search in the box on the results, and clearing the box returns to the whole list', () => {
@@ -110,12 +110,12 @@ describe('OpeningSearch', () => {
     expect(router.push).toHaveBeenCalledWith(branchesHref('', undefined, { surah: 14 }));
   });
 
-  it('opens a suggestion without the earlier search once a new phrase is typed', () => {
+  it('opens a suggestion with the newly typed search, so other views and filters keep it', () => {
     render(<OpeningSearch top={top} phrases={phrases} current="" query="الم تر" view={{ page: 2, query: 'الم تر', surah: 14 }} />);
     fireEvent.change(screen.getByRole('combobox'), { target: { value: phrases[0].text } });
     fireEvent.click(within(screen.getByLabelText('عبارات مقترحة')).getAllByRole('option')[0]);
     expect(router.push).toHaveBeenCalledTimes(1);
-    expect(router.push.mock.calls[0][0]).not.toContain('q=');
+    expect(new URL(router.push.mock.calls[0][0], 'http://x').searchParams.get('q')).toBe(phrases[0].text);
   });
 
   it('does not navigate when a box that held no search is emptied', () => {

@@ -86,6 +86,11 @@ describe('Quran branch trees', () => {
     await expect(open({ juzFrom: '30', juzTo: '30', m: 'cards' })).rejects.toThrow(`REDIRECT ${branchesHref(trees[0].id, { from: 30, to: 30 }, { mode: 'cards' })}`);
   });
 
+  it('keeps the search when the juz range changes, opening the tree whose phrase is the search', async () => {
+    await expect(open({ q: 'ان المتقين في', juzFrom: '26', juzTo: '30', m: 'cards' }))
+      .rejects.toThrow(`REDIRECT ${branchesHref('ان المتقين في', { from: 26, to: 30 }, { query: 'ان المتقين في', mode: 'cards' })}`);
+  });
+
   it('does not render an opening-or-inside filter', async () => {
     render(await open({ m: 'list' }));
     expect(screen.getByRole('heading', { name: 'متشابهات القرآن' })).toBeTruthy();
