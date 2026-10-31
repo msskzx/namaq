@@ -45,7 +45,7 @@ export function branchesHref(id: string, juz?: JuzRange, view: BranchesView = {}
   if (juz) params.set('juzTo', `${juz.to}`);
   if (view.page && view.page > 1) params.set('p', `${view.page}`);
   if (id && view.context) params.set('c', '1');
-  if (id ? view.mode === 'cards' : view.mode === 'list') params.set('m', view.mode!);
+  if (view.mode === 'cards' || (view.mode === 'list' && !id)) params.set('m', view.mode);
   if (id && view.mode === 'cards' && view.card && view.card !== 1) params.set('n', `${view.card}`);
   if (view.query) params.set('q', view.query);
   if (view.surah) params.set('s', `${view.surah}`);

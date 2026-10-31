@@ -138,7 +138,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
                 cards={id ? branchesHref(id, juz, { ...state, mode: 'cards' }) : shown[0] && branchesHref(shown[0].id, juz, { query, surah, mode: 'cards' })} />
               <MatchingRules><PaneNote inTree={!!id} /></MatchingRules>
             </div>
-            <JuzFilter range={range} phrase={id} view={state} />
+            <JuzFilter range={range} view={state} />
             <SurahPane counts={id ? ayatBySurah : counts} total={id ? drawn.length : found.length} names={names} surah={surah} juz={range} view={state} inTree={!!id} treeKeys={drawn.map(ayah => ayah.key)} />
           </Fragment>}>
           {!id ? <>

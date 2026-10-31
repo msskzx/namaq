@@ -37,12 +37,12 @@ const input = (container: HTMLElement, name: string) => container.querySelector<
 describe('automatic juz range updates', () => {
   it('applies a valid edited range after the typing pause and resets pagination', async () => {
     vi.useFakeTimers();
-    const { container } = render(<JuzFilter range={{ from: 25, to: 30 }} phrase="قال رب اني" view={{ grouped: true, page: 3 }} />);
+    const { container } = render(<JuzFilter range={{ from: 25, to: 30 }} view={{ grouped: true, page: 3 }} />);
     fireEvent.change(input(container, 'juzFrom'), { target: { value: '27' } });
 
     await vi.advanceTimersByTimeAsync(350);
 
-    expect(navigation.replace).toHaveBeenCalledWith(branchesHref('قال رب اني', { from: 27, to: 30 }, { grouped: true, page: 1 }), { scroll: false });
+    expect(navigation.replace).toHaveBeenCalledWith(branchesHref('', { from: 27, to: 30 }), { scroll: false });
   });
 
   it.each([
@@ -52,7 +52,7 @@ describe('automatic juz range updates', () => {
     ['إلى الجزء', '0'],
   ])('keeps the applied range when %s is edited to %s', async (label, value) => {
     vi.useFakeTimers();
-    const { container } = render(<JuzFilter range={{ from: 25, to: 30 }} phrase="قال رب اني" view={{ grouped: true, page: 3 }} />);
+    const { container } = render(<JuzFilter range={{ from: 25, to: 30 }} view={{ grouped: true, page: 3 }} />);
     fireEvent.change(input(container, label === 'من الجزء' ? 'juzFrom' : 'juzTo'), { target: { value } });
 
     await vi.advanceTimersByTimeAsync(500);
@@ -65,7 +65,7 @@ describe('automatic juz range updates', () => {
 
   it('drops a pending range edit when another control announces a navigation', async () => {
     vi.useFakeTimers();
-    const { container } = render(<JuzFilter range={{ from: 25, to: 30 }} phrase="قال رب اني" view={{ grouped: true, page: 3 }} />);
+    const { container } = render(<JuzFilter range={{ from: 25, to: 30 }} view={{ grouped: true, page: 3 }} />);
     fireEvent.change(input(container, 'juzFrom'), { target: { value: '27' } });
     announceNavigation();
     await vi.advanceTimersByTimeAsync(500);
@@ -75,7 +75,7 @@ describe('automatic juz range updates', () => {
 
   it('uses only the latest valid range after rapid edits', async () => {
     vi.useFakeTimers();
-    const { container } = render(<JuzFilter range={{ from: 25, to: 30 }} phrase="قال رب اني" view={{ grouped: true, page: 3 }} />);
+    const { container } = render(<JuzFilter range={{ from: 25, to: 30 }} view={{ grouped: true, page: 3 }} />);
     const from = input(container, 'juzFrom');
     fireEvent.change(from, { target: { value: '26' } });
     await vi.advanceTimersByTimeAsync(200);
@@ -83,7 +83,7 @@ describe('automatic juz range updates', () => {
     await vi.advanceTimersByTimeAsync(350);
 
     expect(navigation.replace).toHaveBeenCalledTimes(1);
-    expect(navigation.replace).toHaveBeenCalledWith(branchesHref('قال رب اني', { from: 27, to: 30 }, { grouped: true, page: 1 }), { scroll: false });
+    expect(navigation.replace).toHaveBeenCalledWith(branchesHref('', { from: 27, to: 30 }), { scroll: false });
   });
 
   it('cancels a pending range update and restores the applied inputs when navigation changes the route', async () => {
@@ -92,7 +92,7 @@ describe('automatic juz range updates', () => {
     const { container, rerender } = render(<JuzFilter {...props} />);
     fireEvent.change(input(container, 'juzFrom'), { target: { value: '27' } });
     navigation.search = '?o=فلا اقسم&g=opening&p=1&juzFrom=25&juzTo=30';
-    rerender(<JuzFilter range={{ from: 25, to: 30 }} phrase="فلا اقسم" view={{ grouped: true, page: 1 }} />);
+    rerender(<JuzFilter range={{ from: 25, to: 30 }} view={{ grouped: true, page: 1 }} />);
 
     await vi.advanceTimersByTimeAsync(500);
 
@@ -105,7 +105,7 @@ describe('automatic juz range updates', () => {
     const view = { grouped: true, page: 3 };
     const juz = { from: 25, to: 30 };
     const { container } = render(<>
-      <JuzFilter range={juz} phrase="قال رب اني" view={view} />
+      <JuzFilter range={juz} view={view} />
       <OpeningSearch top={[]} phrases={[{ id: 'ارءيتم', text: 'أَرَءَيْتُمْ', count: 2 }]} current="قال رب اني" juz={juz} view={view} />
     </>);
     fireEvent.change(input(container, 'juzFrom'), { target: { value: '27' } });
