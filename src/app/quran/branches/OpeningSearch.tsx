@@ -10,7 +10,7 @@ import { branchesHref, searchPhrases, type BranchesView, type Opening } from '@/
 import type { JuzRange } from '@/lib/quran/juz';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 const NOTE = 'text-sm text-[var(--home-muted)]';
-const SEARCH = 'w-full rounded-sm border border-[var(--home-rule)] bg-transparent ps-10 pe-3 py-2 text-[var(--home-ink)] placeholder:text-[var(--home-muted)]';
+const SEARCH = 'w-full rounded-sm border border-[var(--home-rule)] bg-transparent ps-10 pe-3 h-11 text-[var(--home-ink)] placeholder:text-[var(--home-muted)]';
 
 type Suggestion = Opening;
 

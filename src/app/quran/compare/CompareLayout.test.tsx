@@ -56,13 +56,18 @@ describe('CompareLayout', () => {
     expect(within(screen.getByRole('complementary', { hidden: true })).queryByRole('button', { name: 'إخفاء القائمة' })).toBeNull();
     act(() => fireEvent.click(toggle));
     expect(localStorage.getItem('compare-pane-hidden')).toBe('1');
-    expect(toggle.textContent).toBe('اعرض قائمة السور');
+    expect(toggle.getAttribute('aria-label')).toBe('اعرض قائمة السور');
+    expect(toggle.textContent).toBe('');
     expect(toggle.getAttribute('aria-expanded')).toBe('false');
     expect(toggle.compareDocumentPosition(bar) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
-  it('with paneToggleFirst puts the phone surah button before the bar', () => {
+  it('with paneToggleFirst puts an icon-only phone surah button first in the bar, naming the current choice', () => {
     render(<CompareLayout title="السور" current="الواقعة والحاقة" pane={<p>القائمة</p>} bar={<button type="button">شريط</button>} paneToggleFirst><p>المقارنة</p></CompareLayout>);
-    expect(screen.getByRole('button', { name: /تغيير السورتين/ }).compareDocumentPosition(screen.getByRole('button', { name: 'شريط' })) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    const phone = screen.getByRole('button', { name: 'تغيير السورتين: الواقعة والحاقة' });
+    expect(phone.textContent).toBe('');
+    expect(phone.compareDocumentPosition(screen.getByRole('button', { name: 'شريط' })) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    fireEvent.click(phone);
+    expect(screen.getByRole('button', { name: 'إخفاء السور' }).getAttribute('aria-expanded')).toBe('true');
   });
 });

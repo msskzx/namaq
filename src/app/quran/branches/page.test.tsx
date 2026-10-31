@@ -165,4 +165,19 @@ describe('Quran branch trees', () => {
       expect(params.has('s') || params.has('q')).toBe(false);
     });
   });
+
+  it('shows the controls above the trees as named icons, with the title for screen readers only', async () => {
+    render(await open({ juzFrom: '30', juzTo: '30', p: '2' }));
+    expect(screen.getByRole('heading', { level: 1, name: 'متشابهات القرآن' }).className).toContain('sr-only');
+    const named = [
+      ...within(screen.getByRole('group', { name: 'طريقة العرض' })).getAllByRole('link'),
+      screen.getByRole('link', { name: 'كل الأجزاء' }),
+      screen.getByRole('link', { name: 'السابق' }),
+      screen.getByRole('link', { name: 'التالي' }),
+    ];
+    named.forEach(control => {
+      expect(control.textContent).toBe('');
+      expect(control.getAttribute('title')).toBe(control.getAttribute('aria-label'));
+    });
+  });
 });

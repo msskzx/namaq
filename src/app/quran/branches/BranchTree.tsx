@@ -276,10 +276,10 @@ function TreeViewport({ children, controls, enabled, ar, height, onStep }: { chi
     <div dir={ar ? 'rtl' : 'ltr'} className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--home-rule)] pb-3">
       {controls && <div className="flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-[var(--home-muted)]">{controls}</div>}
       <div role="toolbar" aria-label={ar ? 'تكبير الشجرة' : 'Tree zoom'} className="flex flex-wrap items-center gap-2">
-        <Button size="icon" aria-pressed={manualScale === null} onClick={() => { anchor.current = null; setManualScale(null); }} aria-label={labels.fit} title={labels.fit}><Maximize2 size={16} aria-hidden /></Button>
+        <Button size="lg" aria-pressed={manualScale === null} onClick={() => { anchor.current = null; setManualScale(null); }} aria-label={labels.fit} title={labels.fit}><Maximize2 size={16} aria-hidden /></Button>
         <div dir="ltr" className="flex items-center gap-1">
-          <Button size="icon" onClick={() => setScale(scale - SCALE_STEP)} disabled={scale <= MIN_SCALE} aria-label={labels.out} title={labels.out}><Minus size={16} aria-hidden /></Button>
-          <Button size="icon" onClick={() => setScale(scale + SCALE_STEP)} disabled={scale >= MAX_SCALE} aria-label={labels.in} title={labels.in}><Plus size={16} aria-hidden /></Button>
+          <Button size="lg" onClick={() => setScale(scale - SCALE_STEP)} disabled={scale <= MIN_SCALE} aria-label={labels.out} title={labels.out}><Minus size={16} aria-hidden /></Button>
+          <Button size="lg" onClick={() => setScale(scale + SCALE_STEP)} disabled={scale >= MAX_SCALE} aria-label={labels.in} title={labels.in}><Plus size={16} aria-hidden /></Button>
         </div>
       </div>
     </div>
@@ -336,7 +336,7 @@ export default function BranchTree({ tree, names, variants = [], prefixes, subtr
         {mandatory.isLoading && <p role="status" className="text-sm text-[var(--home-muted)]">{ar ? 'جارٍ تحميل الآيات السابقة' : 'Loading preceding ayat'}</p>}
         {mandatory.error && <div role="alert" className="flex items-center gap-2 text-sm text-[var(--home-accent)]">
           <span>{ar ? 'تعذّر تحميل الآيات السابقة.' : 'Could not load the preceding ayat.'}</span>
-          <Button size="sm" onClick={() => void mandatory.mutate()}><RotateCw size={16} aria-hidden />{ar ? 'حاول مجددًا' : 'Try again'}</Button>
+          <Button size="lg" onClick={() => void mandatory.mutate()} aria-label={ar ? 'حاول مجددًا' : 'Try again'} title={ar ? 'حاول مجددًا' : 'Try again'}><RotateCw aria-hidden /></Button>
         </div>}
         <TreeViewport controls={controls} enabled={zoomable} ar={ar} height={viewportHeight} onStep={steppable ? step : undefined}>
           {prefixes && prefixes.length > 0 ? <>

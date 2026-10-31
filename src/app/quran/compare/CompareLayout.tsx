@@ -61,19 +61,24 @@ export default function CompareLayout({ title, current, pane, children, bar, sto
       </span>
     </button>
   );
-  const paneButton = (
+  const paneLabel = hidden ? 'اعرض قائمة السور' : 'أخفِ قائمة السور';
+  const phoneLabel = open ? 'إخفاء السور' : `${change}: ${current}`;
+  const paneButtons = <>
     <span className="hidden lg:block">
-      <Button size="sm" aria-expanded={!hidden} aria-controls={id} onClick={() => toggle(!hidden)}>
-        {hidden ? <PanelRightOpen size={14} aria-hidden /> : <PanelRightClose size={14} aria-hidden />}
-        {hidden ? 'اعرض قائمة السور' : 'أخفِ قائمة السور'}
+      <Button size="lg" aria-expanded={!hidden} aria-controls={id} onClick={() => toggle(!hidden)} aria-label={paneLabel} title={paneLabel}>
+        {hidden ? <PanelRightOpen aria-hidden /> : <PanelRightClose aria-hidden />}
       </Button>
     </span>
-  );
+    <span className="lg:hidden">
+      <Button size="lg" active={open} aria-expanded={open} aria-controls={id} onClick={() => setOpenAt(open ? null : search)} aria-label={phoneLabel} title={phoneLabel}>
+        {open ? <PanelRightClose aria-hidden /> : <PanelRightOpen aria-hidden />}
+      </Button>
+    </span>
+  </>;
   return (
     <div className="flex flex-col gap-4">
-      {paneToggleFirst && phoneToggle}
       {(bar || hidden) && <div className={`${bar ? 'flex' : 'hidden lg:flex'} flex-wrap items-start gap-x-4 gap-y-3`}>
-        {paneToggleFirst && paneButton}
+        {paneToggleFirst && paneButtons}
         {bar}
         {!paneToggleFirst && showPane}
       </div>}

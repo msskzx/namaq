@@ -2,7 +2,7 @@
 
 import React from 'react';
 import useSWR from 'swr';
-import { Network, TextSearch } from 'lucide-react';
+import { LocateFixed, Network, TextSearch } from 'lucide-react';
 import Button from '@/components/common/Button';
 import MushafText from '@/components/common/MushafText';
 import { PathBox, PathButton } from './Paths';
@@ -71,8 +71,8 @@ export function NeighbourBox({ neighbour, of, side, around, opens, nodeId }: { n
         <Button size="sm" aria-haspopup="dialog" aria-label={`${label}: ${ref}`} title={label} onClick={event => event.currentTarget.closest('[data-tree]')?.querySelector<HTMLButtonElement>(`[data-node="${opens}"] [data-context-open]`)?.click()}>
           <TextSearch size={16} aria-hidden />
         </Button>
-        {around.inTree.has(neighbour.key) && <Button size="sm" href={`#${anchorOf(around.tree, neighbour.key)}`}>
-          {ar ? 'في هذه الشجرة' : 'In this tree'}
+        {around.inTree.has(neighbour.key) && <Button size="sm" href={`#${anchorOf(around.tree, neighbour.key)}`} aria-label={ar ? 'في هذه الشجرة' : 'In this tree'} title={ar ? 'في هذه الشجرة' : 'In this tree'}>
+          <LocateFixed size={16} aria-hidden />
         </Button>}
       </span>
     </PathBox>

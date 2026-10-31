@@ -136,7 +136,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
           {!id ? <>
             {needle && <SearchSummary query={query} count={cut.length} complete={exact.map(phrase => ({ phrase, href: branchesHref(phrase.id, juz, { query, surah }) }))} />}
             {(!needle || cut.length > 0) && <PieceList pieces={shown} ayat={shownAyat} names={names} juz={range} view={state} />}
-            <Pagination iconFamily="lucide" scrollTarget="quran-branches" page={page} pageCount={pageCount} hrefs={Array.from({ length: pageCount }, (_, index) => branchesHref('', juz, { query, surah, page: index + 1 }))} />
+            <Pagination iconOnly iconFamily="lucide" scrollTarget="quran-branches" page={page} pageCount={pageCount} hrefs={Array.from({ length: pageCount }, (_, index) => branchesHref('', juz, { query, surah, page: index + 1 }))} />
           </> : <>
             {tree && <BranchTree key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}:${state.context}`} tree={tree} prefixes={presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} names={names} juz={range} view={treeView} surround={{ on: !!state.context, sync: true, data: around }} steppable={!!steps} label="شجرة العبارات المشتركة" />}
           </>}
