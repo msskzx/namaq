@@ -205,38 +205,80 @@ it('dims every row when the visible rows are all cut by the frame edges', async 
   expect(within(track).queryByRole('link', { name: 'قراءة الآية' })).toBeNull();
 });
 
-it('waits for a horizontal scroll to settle before a further wheel or touch gesture opens a tree', async () => {
+
+const sideways = (track: HTMLElement) => {
+  let left = 0;
+  Object.defineProperty(track, 'scrollLeft', { configurable: true, get: () => left, set: value => { left = value; } });
+  track.getBoundingClientRect = () => new DOMRect(0, 0, 100, 500);
+  document.querySelectorAll<HTMLElement>('[data-col]').forEach(cell => {
+    cell.getBoundingClientRect = () => new DOMRect((1 - Number(cell.dataset.col)) * 100 - left, Number(cell.dataset.row) * 100, 100, 100);
+  });
+};
+
+it('slides the cards to the next column, then moves the scroll position in one jump', async () => {
   show();
   await screen.findByLabelText('الشرح ٥');
   const track = screen.getByRole('region', { name: 'مصفوفة الآيات' });
-  let offset = 0;
-  track.getBoundingClientRect = () => new DOMRect(0, 0, 100, 500);
-  document.querySelectorAll<HTMLElement>('[data-col]').forEach(cell => {
-    cell.getBoundingClientRect = () => new DOMRect((1 - Number(cell.dataset.col)) * 100 + offset, Number(cell.dataset.row) * 100, 100, 100);
-  });
-  track.scrollBy = vi.fn();
+  sideways(track);
   vi.useFakeTimers();
   key('ArrowLeft');
-  expect(track.scrollBy).toHaveBeenCalledWith({ left: -100, behavior: 'smooth' });
-  expect(column()).toEqual(['الشرح ٥', 'الشرح ٦', 'الطلاق ٧']);
-  fireEvent.wheel(track, { deltaX: -60, deltaY: 0 });
-  expect(router.push).not.toHaveBeenCalled();
-  offset = 100;
-  fireEvent.scroll(track);
-  act(() => vi.advanceTimersByTime(80));
   expect(column()).toEqual(['', 'الشرح ٧', 'الطلاق ٨']);
+  expect(track.hasAttribute('data-sliding')).toBe(true);
+  expect(track.style.getPropertyValue('--drag')).toBe('100px');
+  act(() => vi.advanceTimersByTime(250));
+  expect(track.scrollLeft).toBe(-100);
+  expect(track.style.getPropertyValue('--drag')).toBe('0px');
+  expect(track.hasAttribute('data-sliding')).toBe(false);
+  vi.useRealTimers();
+});
+
+it('steps once per sideways wheel gesture and opens the next tree only from the last column', async () => {
+  show();
+  await screen.findByLabelText('الشرح ٥');
+  const track = screen.getByRole('region', { name: 'مصفوفة الآيات' });
+  sideways(track);
+  vi.useFakeTimers();
+  fireEvent.wheel(track, { deltaX: -30, deltaY: 0 });
+  fireEvent.wheel(track, { deltaX: -30, deltaY: 0 });
   fireEvent.wheel(track, { deltaX: -60, deltaY: 0 });
+  expect(column()).toEqual(['', 'الشرح ٧', 'الطلاق ٨']);
   expect(router.push).not.toHaveBeenCalled();
-  act(() => vi.advanceTimersByTime(600));
+  act(() => vi.advanceTimersByTime(300));
   fireEvent.wheel(track, { deltaX: -60, deltaY: 100 });
-  fireEvent.touchStart(track, { touches: [{ clientX: 0, clientY: 0 }] });
-  fireEvent.touchEnd(track, { touches: [], changedTouches: [{ clientX: 60, clientY: 100 }] });
   expect(router.push).not.toHaveBeenCalled();
+  act(() => vi.advanceTimersByTime(300));
   fireEvent.wheel(track, { deltaX: -60, deltaY: 0 });
   expect(router.push).toHaveBeenCalledExactlyOnceWith(steps.next, { scroll: false });
-  act(() => vi.advanceTimersByTime(600));
-  router.push.mockClear();
+  vi.useRealTimers();
+});
+
+it('locks a touch gesture to one axis: an upward swipe never moves sideways, a sideways swipe follows the finger', async () => {
+  show();
+  await screen.findByLabelText('الشرح ٥');
+  const track = screen.getByRole('region', { name: 'مصفوفة الآيات' });
+  sideways(track);
+  vi.useFakeTimers();
   fireEvent.touchStart(track, { touches: [{ clientX: 0, clientY: 0 }] });
-  fireEvent.touchEnd(track, { touches: [], changedTouches: [{ clientX: 60, clientY: 0 }] });
+  expect(fireEvent.touchMove(track, { touches: [{ clientX: 20, clientY: 40 }] })).toBe(true);
+  fireEvent.touchMove(track, { touches: [{ clientX: 90, clientY: 50 }] });
+  fireEvent.touchEnd(track, { touches: [] });
+  expect(track.style.getPropertyValue('--drag')).toBe('');
+  expect(column()).toEqual(['الشرح ٥', 'الشرح ٦', 'الطلاق ٧']);
+  fireEvent.touchStart(track, { touches: [{ clientX: 0, clientY: 0 }] });
+  expect(fireEvent.touchMove(track, { touches: [{ clientX: 30, clientY: 5 }] })).toBe(false);
+  expect(track.style.getPropertyValue('--drag')).toBe('30px');
+  fireEvent.touchEnd(track, { touches: [] });
+  expect(column()).toEqual(['الشرح ٥', 'الشرح ٦', 'الطلاق ٧']);
+  act(() => vi.advanceTimersByTime(250));
+  expect(track.style.getPropertyValue('--drag')).toBe('0px');
+  fireEvent.touchStart(track, { touches: [{ clientX: 0, clientY: 0 }] });
+  fireEvent.touchMove(track, { touches: [{ clientX: 70, clientY: 5 }] });
+  fireEvent.touchEnd(track, { touches: [] });
+  expect(column()).toEqual(['', 'الشرح ٧', 'الطلاق ٨']);
+  act(() => vi.advanceTimersByTime(250));
+  fireEvent.touchStart(track, { touches: [{ clientX: 0, clientY: 0 }] });
+  fireEvent.touchMove(track, { touches: [{ clientX: 70, clientY: 5 }] });
+  fireEvent.touchEnd(track, { touches: [] });
   expect(router.push).toHaveBeenCalledExactlyOnceWith(steps.next, { scroll: false });
+  vi.useRealTimers();
 });

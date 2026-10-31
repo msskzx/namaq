@@ -92,7 +92,8 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const counts: Record<number, number> = {};
   found.forEach(piece => new Set(piece.keys.map(surahOf)).forEach(number => { counts[number] = (counts[number] ?? 0) + 1; }));
   const cut = listSurah ? found.filter(piece => piece.keys.some(key => surahOf(key) === listSurah)) : found;
-  if (!id && state.mode !== 'list' && cut[0]) redirect(branchesHref(cut[0].id, juz, { query: state.query, surah: state.surah, mode: state.mode }));
+  const opening = listQuery ? cut.find(piece => textIs(piece.text, listQuery)) ?? cut[0] : cut[0];
+  if (!id && state.mode !== 'list' && opening) redirect(branchesHref(opening.id, juz, { query: state.query, surah: state.surah, mode: state.mode }));
   const selected = resolved;
   const scoped = selected && requestedOccurrences.length ? { ...selected, occurrences: selected.occurrences.filter(occurrence => requestedOccurrences.includes(`${occurrence.key}:${occurrence.start}`)) } : selected;
   const treeGroup = scoped && new Set(scoped.occurrences.map(occurrence => occurrence.key)).size >= 2 ? scoped : undefined;
@@ -128,7 +129,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
       <Scope>
         <CompareLayout title="السور" hideTitle current={id ? 'سور هذه الشجرة' : surah ? names[surah] : 'كل السور'} change="اختر سورة" storageKey="branches-pane-hidden" paneToggleFirst
           bar={<div className="min-w-0 flex-1">
-            <OpeningSearch key={query} query={query} top={built.trees.slice(0, 8).map(tree => ({ id: tree.id, text: tree.text, textEn: tree.textEn, count: new Set(tree.occurrences.map(occurrence => occurrence.key)).size }))} phrases={built.trees.map(tree => ({ id: tree.id, text: tree.text, textEn: tree.textEn, aliases: tree.aliases, count: new Set(tree.occurrences.map(occurrence => occurrence.key)).size }))} phraseCount={built.trees.length} current={id} juz={range} unavailable={unavailable} view={id ? { ...treeView, mode: state.mode } : state} />
+            <OpeningSearch key={listQuery} query={listQuery} top={built.trees.slice(0, 8).map(tree => ({ id: tree.id, text: tree.text, textEn: tree.textEn, count: new Set(tree.occurrences.map(occurrence => occurrence.key)).size }))} phrases={built.trees.map(tree => ({ id: tree.id, text: tree.text, textEn: tree.textEn, aliases: tree.aliases, count: new Set(tree.occurrences.map(occurrence => occurrence.key)).size }))} phraseCount={built.trees.length} current={id} juz={range} unavailable={unavailable} view={id ? { ...treeView, mode: state.mode, query: state.query } : state} />
           </div>}
           pane={<Fragment key="pane">
             <div className="flex flex-wrap items-start gap-3">
