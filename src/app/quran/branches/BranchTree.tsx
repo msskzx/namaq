@@ -46,7 +46,7 @@ export function AyahRefs({ keys, names, tags = {}, className = 'mt-1' }: Refs & 
 
 function SubtreeButton({ href }: { href: string }) {
   const { language } = useLanguage();
-  const label = language === 'ar' ? 'عرض هذا الجزء من الشجرة وحده' : 'Show only this part of the tree';
+  const label = language === 'ar' ? 'عرض هذا الجزء وحده' : 'Show only this part of the tree';
   return <Button size="sm" href={href} aria-label={label} title={label}><ZoomIn size={16} aria-hidden /></Button>;
 }
 
@@ -159,8 +159,8 @@ function TreeViewport({ children, controls, enabled, ar, height }: { children: R
   const scale = manualScale ?? fitted;
   const setScale = (next: number) => setManualScale(Math.min(MAX_SCALE, Math.max(MIN_SCALE, Number(next.toFixed(2)))));
   const labels = ar ? {
-    out: 'تصغير الشجرة',
-    in: 'تكبير الشجرة',
+    out: 'تصغير',
+    in: 'تكبير',
   } : {
     out: 'Zoom out',
     in: 'Zoom in',

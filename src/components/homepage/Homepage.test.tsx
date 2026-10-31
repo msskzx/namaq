@@ -14,8 +14,8 @@ describe('Quran learning homepage', () => {
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(language === 'ar' ? 'متشابهات القرآن' : 'Quran phrase trees');
     expect(screen.getByRole('switch', { name: language === 'ar' ? 'الآيات المحيطة' : 'Surrounding ayat' })).toHaveProperty('checked', false);
     expect(screen.queryByRole('list', { name: /ما قبل العبارة|Before the phrase/ })).toBeNull();
-    expect(screen.getByRole('button', { name: language === 'ar' ? 'تصغير الشجرة' : 'Zoom out' })).toBeTruthy();
-    expect(screen.getByRole('button', { name: language === 'ar' ? 'تكبير الشجرة' : 'Zoom in' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: language === 'ar' ? 'تصغير' : 'Zoom out' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: language === 'ar' ? 'تكبير' : 'Zoom in' })).toBeTruthy();
     expect(document.querySelector('[dir]')?.getAttribute('dir')).toBe(language === 'ar' ? 'rtl' : 'ltr');
     const hrefs = screen.getAllByRole('link').map(link => link.getAttribute('href')!);
     expect(hrefs).toContain('/quran/branches');
