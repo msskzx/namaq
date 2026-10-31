@@ -247,7 +247,7 @@ function TreeViewport({ children, controls, enabled, ar, height }: { children: R
     <div dir={ar ? 'rtl' : 'ltr'} className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--home-rule)] pb-3">
       {controls && <div className="flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-[var(--home-muted)]">{controls}</div>}
       <div role="toolbar" aria-label={ar ? 'تكبير الشجرة' : 'Tree zoom'} className="flex flex-wrap items-center gap-2">
-        <Button aria-pressed={manualScale === null} onClick={() => { anchor.current = null; setManualScale(null); }}><Maximize2 size={16} aria-hidden />{ar ? 'ملاءمة الشجرة' : 'Fit tree'}</Button>
+        <Button aria-pressed={manualScale === null} onClick={() => { anchor.current = null; setManualScale(null); }}><Maximize2 size={16} aria-hidden />{ar ? 'ملاءمة' : 'Fit'}</Button>
         <div dir="ltr" className="flex items-center gap-1">
           <Button size="icon" onClick={() => setScale(scale - SCALE_STEP)} disabled={scale <= MIN_SCALE} aria-label={labels.out} title={labels.out}><Minus size={16} aria-hidden /></Button>
           <span className="min-w-12 text-center text-sm tabular-nums text-[var(--home-muted)]" aria-live="polite">{ar ? `${num(Math.round(scale * 100))}٪` : `${Math.round(scale * 100)}%`}</span>

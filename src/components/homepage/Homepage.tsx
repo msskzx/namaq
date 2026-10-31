@@ -43,8 +43,8 @@ export default function Homepage({ data, fontClass = '' }: { data: HomePreviews;
             <h1 id="openings-title">{ar ? 'متشابهات القرآن' : 'Quran phrase trees'}</h1>
             <p>{ar ? 'استكشف العبارات المشتركة بين الآيات في شجرة تفاعلية، واقرأ كل آية في سياقها.' : 'Explore shared Quranic phrases in an interactive tree, and read each ayah in context.'}</p>
             <div className={styles.launchActions}>
-              <Button href="/quran/branches"><GitBranch size={18} aria-hidden />{ar ? 'جميع الأشجار' : 'All phrase trees'}</Button>
-              <Button onClick={randomTree} disabled={loading}><Shuffle size={18} aria-hidden />{ar ? 'شجرة عشوائية' : 'Random tree'}</Button>
+              <Button href="/quran/branches"><GitBranch size={18} aria-hidden />{ar ? 'تصفّح الكل' : 'Browse all'}</Button>
+              <Button onClick={randomTree} disabled={loading}><Shuffle size={18} aria-hidden />{ar ? 'عشوائي' : 'Random'}</Button>
             </div>
             {error && <p role="alert">{ar ? 'تعذّر تحميل الشجرة. حاول مجددًا.' : 'Could not load a tree. Try again.'}</p>}
           </div></div>

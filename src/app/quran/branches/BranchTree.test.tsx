@@ -62,7 +62,7 @@ describe('BranchTree', () => {
     expect(viewport.classList.contains('overflow-hidden')).toBe(true);
     expect(container.querySelector('[data-tree]')!.classList.contains('overflow-hidden')).toBe(true);
     expect(screen.getByText('٥٠٪')).toBeTruthy();
-    const fit = screen.getByRole('button', { name: 'ملاءمة الشجرة' });
+    const fit = screen.getByRole('button', { name: 'ملاءمة' });
     expect(fit.getAttribute('aria-pressed')).toBe('true');
     fireEvent.click(screen.getByRole('button', { name: 'تكبير الشجرة' }));
     expect(content.style.transform).toBe('scale(0.6)');
@@ -101,7 +101,7 @@ describe('BranchTree', () => {
     expect(viewport.style.height).toBe('320px');
     Object.defineProperty(content, 'offsetHeight', { configurable: true, value: 100 });
     act(() => resize([], {} as ResizeObserver));
-    fireEvent.click(screen.getByRole('button', { name: 'ملاءمة الشجرة' }));
+    fireEvent.click(screen.getByRole('button', { name: 'ملاءمة' }));
     expect(content.style.transform).toBe('scale(1)');
     expect(viewport.style.height).toBe('320px');
     Object.defineProperties(content, { offsetWidth: { configurable: true, value: 200 }, offsetHeight: { configurable: true, value: 100 } });
